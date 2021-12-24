@@ -18,15 +18,13 @@ class Ui_DMatLib(object):
     def setupUi(self, DMatLib):
         if not DMatLib.objectName():
             DMatLib.setObjectName(u"DMatLib")
-        DMatLib.resize(575, 647)
+        DMatLib.resize(797, 647)
         icon = QIcon()
         icon.addFile(
             u":/images/images/icon/pyleecan_64.png", QSize(), QIcon.Normal, QIcon.Off
         )
         DMatLib.setWindowIcon(icon)
-        self.verticalLayout_2 = QVBoxLayout(DMatLib)
-        self.verticalLayout_2.setObjectName(u"verticalLayout_2")
-        self.horizontalLayout = QHBoxLayout()
+        self.horizontalLayout = QHBoxLayout(DMatLib)
         self.horizontalLayout.setObjectName(u"horizontalLayout")
         self.verticalLayout = QVBoxLayout()
         self.verticalLayout.setObjectName(u"verticalLayout")
@@ -75,6 +73,11 @@ class Ui_DMatLib(object):
 
         self.horizontalLayout_8.addItem(self.horizontalSpacer)
 
+        self.b_switch = QPushButton(DMatLib)
+        self.b_switch.setObjectName(u"b_switch")
+
+        self.horizontalLayout_8.addWidget(self.b_switch)
+
         self.b_new = QPushButton(DMatLib)
         self.b_new.setObjectName(u"b_new")
 
@@ -93,28 +96,6 @@ class Ui_DMatLib(object):
         self.w_setup.setObjectName(u"w_setup")
 
         self.horizontalLayout.addWidget(self.w_setup)
-
-        self.verticalLayout_2.addLayout(self.horizontalLayout)
-
-        self.horizontalLayout_2 = QHBoxLayout()
-        self.horizontalLayout_2.setObjectName(u"horizontalLayout_2")
-        self.horizontalSpacer_2 = QSpacerItem(
-            40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum
-        )
-
-        self.horizontalLayout_2.addItem(self.horizontalSpacer_2)
-
-        self.b_save = QPushButton(DMatLib)
-        self.b_save.setObjectName(u"b_save")
-
-        self.horizontalLayout_2.addWidget(self.b_save)
-
-        self.b_cancel = QPushButton(DMatLib)
-        self.b_cancel.setObjectName(u"b_cancel")
-
-        self.horizontalLayout_2.addWidget(self.b_cancel)
-
-        self.verticalLayout_2.addLayout(self.horizontalLayout_2)
 
         self.retranslateUi(DMatLib)
 
@@ -136,9 +117,10 @@ class Ui_DMatLib(object):
         self.in_machine_mat.setText(
             QCoreApplication.translate("DMatLib", u"Machine materials", None)
         )
+        self.b_switch.setText(
+            QCoreApplication.translate("DMatLib", u"Edit in Machine", None)
+        )
         self.b_new.setText(QCoreApplication.translate("DMatLib", u"New", None))
         self.b_copy.setText(QCoreApplication.translate("DMatLib", u"Copy", None))
-        self.b_save.setText(QCoreApplication.translate("DMatLib", u"Save All", None))
-        self.b_cancel.setText(QCoreApplication.translate("DMatLib", u"Cancel", None))
 
     # retranslateUi

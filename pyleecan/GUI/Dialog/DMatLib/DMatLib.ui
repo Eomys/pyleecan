@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>575</width>
+    <width>797</width>
     <height>647</height>
    </rect>
   </property>
@@ -17,126 +17,98 @@
    <iconset resource="../../Resources/pyleecan.qrc">
     <normaloff>:/images/images/icon/pyleecan_64.png</normaloff>:/images/images/icon/pyleecan_64.png</iconset>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout_2">
+  <layout class="QHBoxLayout" name="horizontalLayout">
    <item>
-    <layout class="QHBoxLayout" name="horizontalLayout">
+    <layout class="QVBoxLayout" name="verticalLayout">
      <item>
-      <layout class="QVBoxLayout" name="verticalLayout">
+      <layout class="QHBoxLayout" name="horizontalLayout_9">
        <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_9">
-         <item>
-          <widget class="QLineEdit" name="le_search">
-           <property name="placeholderText">
-            <string>Filter...</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QLabel" name="img_search">
-           <property name="text">
-            <string/>
-           </property>
-           <property name="pixmap">
-            <pixmap resource="../../Resources/pyleecan.qrc">:/images/images/icon/search.png</pixmap>
-           </property>
-           <property name="scaledContents">
-            <bool>true</bool>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-       <item>
-        <widget class="QLabel" name="in_reference_mat_lib">
-         <property name="text">
-          <string>Materials in Library</string>
+        <widget class="QLineEdit" name="le_search">
+         <property name="placeholderText">
+          <string>Filter...</string>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QListWidget" name="nav_mat"/>
-       </item>
-       <item>
-        <widget class="QLabel" name="in_machine_mat">
+        <widget class="QLabel" name="img_search">
          <property name="text">
-          <string>Machine materials</string>
+          <string/>
+         </property>
+         <property name="pixmap">
+          <pixmap resource="../../Resources/pyleecan.qrc">:/images/images/icon/search.png</pixmap>
+         </property>
+         <property name="scaledContents">
+          <bool>true</bool>
          </property>
         </widget>
-       </item>
-       <item>
-        <widget class="QListWidget" name="nav_mat_mach"/>
-       </item>
-       <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_8">
-         <property name="sizeConstraint">
-          <enum>QLayout::SetDefaultConstraint</enum>
-         </property>
-         <item>
-          <spacer name="horizontalSpacer">
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>40</width>
-             <height>20</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-         <item>
-          <widget class="QPushButton" name="b_new">
-           <property name="text">
-            <string>New</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QPushButton" name="b_copy">
-           <property name="text">
-            <string>Copy</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
        </item>
       </layout>
      </item>
      <item>
-      <widget class="DMatSetup" name="w_setup" native="true"/>
+      <widget class="QLabel" name="in_reference_mat_lib">
+       <property name="text">
+        <string>Materials in Library</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QListWidget" name="nav_mat"/>
+     </item>
+     <item>
+      <widget class="QLabel" name="in_machine_mat">
+       <property name="text">
+        <string>Machine materials</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QListWidget" name="nav_mat_mach"/>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout_8">
+       <property name="sizeConstraint">
+        <enum>QLayout::SetDefaultConstraint</enum>
+       </property>
+       <item>
+        <spacer name="horizontalSpacer">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item>
+        <widget class="QPushButton" name="b_switch">
+         <property name="text">
+          <string>Edit in Machine</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="b_new">
+         <property name="text">
+          <string>New</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="b_copy">
+         <property name="text">
+          <string>Copy</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
      </item>
     </layout>
    </item>
    <item>
-    <layout class="QHBoxLayout" name="horizontalLayout_2">
-     <item>
-      <spacer name="horizontalSpacer_2">
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>40</width>
-         <height>20</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-     <item>
-      <widget class="QPushButton" name="b_save">
-       <property name="text">
-        <string>Save All</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="b_cancel">
-       <property name="text">
-        <string>Cancel</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
+    <widget class="DMatSetup" name="w_setup" native="true"/>
    </item>
   </layout>
  </widget>

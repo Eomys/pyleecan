@@ -85,6 +85,7 @@ class DMatLib(Ui_DMatLib, QDialog):
 
         self.b_copy.clicked.connect(lambda: self.new_material(is_copy=True))
         self.b_new.clicked.connect(lambda: self.new_material(is_copy=False))
+        self.b_switch.clicked.connect(self.edit_in_machine)
 
         self.w_setup.materialToDelete.connect(self.delete_material)
         self.w_setup.materialToRename.connect(self.rename_material)
@@ -188,6 +189,10 @@ class DMatLib(Ui_DMatLib, QDialog):
             True: new current is from Library, False from machine
         """
         self.is_lib_mat = is_lib_mat
+        if self.is_lib_mat:
+            self.b_switch.setEnabled(True)
+        else:
+            self.b_switch.setEnabled(False)
         # Set the selected treeview currentRow (if needed)
         if index is not None:
             if self.is_lib_mat:
@@ -339,6 +344,50 @@ class DMatLib(Ui_DMatLib, QDialog):
         self.select_current_material(
             index=len(self.material_dict[key]) - 1, is_lib_mat=self.is_lib_mat
         )
+        # Signal set by WMatSelect to update Combobox
+        self.materialListChanged.emit()
+
+    def edit_in_machine(self):
+        """Copy the material to be edited in the machine only"""
+        # Create new material from unmodified version of material
+        current_mat, _, _ = self.get_current_material(is_reference=True)
+        new_mat = current_mat.copy()
+        if "_edit" not in new_mat.name:
+            new_mat.name = new_mat.name + "_edit"
+            new_mat.path = new_mat.path[:-5] + "_edit.json"
+
+        # Adapt name to be unique
+        name_list = [mat.name for mat in self.material_dict[LIB_KEY]]
+        name_list.extend([mat.name for mat in self.material_dict[MACH_KEY]])
+        if new_mat.name in name_list:
+            index = 1
+            while new_mat.name + "_" + str(index) in name_list:
+                index += 1
+            new_mat.name = new_mat.name + "_" + str(index)
+            new_mat.path = join(dirname(new_mat.path), new_mat.name + ".json")
+
+        # Add material to machine list
+        key = MACH_KEY
+        self.material_dict[key].append(new_mat)
+        self.material_dict_ref[key].append(new_mat)
+        # Update treeview and select current material
+        self.le_search.setText("")
+        self.update_treeview_material()
+        self.select_current_material(
+            index=len(self.material_dict[key]) - 1, is_lib_mat=False
+        )
+        # Update machine to use new material
+        if self.machine is not None:
+            mach_mat_dict = self.machine.get_material_dict(path="self.machine")
+            for mat_path, mach_mat in mach_mat_dict.items():
+                if mach_mat.name == current_mat.name:
+                    mat_path_split = mat_path.split(".")
+                    setattr(
+                        eval(".".join(mat_path_split[:-1])),
+                        mat_path_split[-1],
+                        new_mat.copy(),
+                    )
+                    self.saveNeeded.emit()
         # Signal set by WMatSelect to update Combobox
         self.materialListChanged.emit()
 

@@ -510,20 +510,21 @@ class TestDMatlibWF(object):
         assert dialog.nav_mat.count() == 4
         assert dialog.nav_mat_mach.count() == 2
         assert dialog.nav_mat.currentRow() == 2
-        assert dialog.w_setup.out_rho_elec.value() == 1
-        # Edit M400-50A material
-        dialog.b_edit.clicked.emit()
-        dialog.current_dialog.lf_rho_elec.setValue(2)
-        dialog.current_dialog.lf_rho_elec.editingFinished.emit()
-        dialog.current_dialog.b_add_matlib.clicked.emit()
+        assert dialog.w_setup.lf_rho_elec.value() == 1
+        # Create M400-50A_edit material
+        dialog.b_switch.clicked.emit()
         # Check modifications
         assert not dialog.is_lib_mat
         assert dialog.nav_mat.count() == 4
         assert dialog.nav_mat_mach.count() == 3
         assert dialog.nav_mat_mach.currentRow() == 2
         assert dialog.nav_mat_mach.item(2).text() == "007 - M400-50A_edit"
-        assert dialog.out_name.text() == "name: M400-50A_edit"
-        assert dialog.out_rho_elec.text() == "rho = 2 [ohm.m]"
+        assert dialog.w_setup.le_name.text() == "M400-50A_edit"
+        # Edit material
+        dialog.w_setup.lf_rho_elec.setValue(2)
+        dialog.w_setup.lf_rho_elec.editingFinished.emit()
+        assert self.widget.machine.stator.mat_type.elec.rho == 1
+        dialog.w_setup.b_save.clicked.emit()
         assert self.widget.machine.stator.mat_type.name == "M400-50A_edit"
         assert self.widget.machine.rotor.mat_type.name == "M400-50A_edit"
         assert self.widget.machine.shaft.mat_type.name == "M400-50A_edit"

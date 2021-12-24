@@ -19,7 +19,7 @@ class Ui_DMatSetup(object):
     def setupUi(self, DMatSetup):
         if not DMatSetup.objectName():
             DMatSetup.setObjectName(u"DMatSetup")
-        DMatSetup.resize(642, 409)
+        DMatSetup.resize(642, 413)
         icon = QIcon()
         icon.addFile(
             u":/images/images/icon/pyleecan_64.png", QSize(), QIcon.Normal, QIcon.Off
