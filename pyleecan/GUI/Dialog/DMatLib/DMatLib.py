@@ -9,7 +9,7 @@ from PySide2.QtWidgets import QDialog, QMessageBox
 
 from ....Classes.Material import Material
 
-from ....Functions.load import load_machine_materials, LIB_KEY, MACH_KEY
+from ....Functions.load import load_machine_materials, LIB_KEY, MACH_KEY, PATH_KEY
 from ....GUI.Dialog.DMatLib.Ui_DMatLib import Ui_DMatLib
 from ....loggers import GUI_LOG_NAME
 
@@ -89,7 +89,7 @@ class DMatLib(Ui_DMatLib, QDialog):
         self.w_setup.materialToDelete.connect(self.delete_material)
         self.w_setup.materialToRename.connect(self.rename_material)
         self.w_setup.materialToRevert.connect(self.revert_material)
-        self.w_setup.materialSaved.connect(self.update_reference)
+        self.w_setup.materialToSave.connect(self.save_material)
         self.w_setup.saveNeededChanged.connect(self.update_material_edit_status)
 
     def update_treeview_material(self):
@@ -111,7 +111,10 @@ class DMatLib(Ui_DMatLib, QDialog):
             ):
                 continue  # Skip add if not matching filter
             # Add material name as "005 - M400_50A"
-            self.nav_mat.addItem("%03d" % (ii + 1) + " - " + mat.name)
+            mat_text = "%03d" % (ii + 1) + " - " + mat.name
+            if mat in self.edited_material_list:
+                mat_text += " *"
+            self.nav_mat.addItem(mat_text)
         self.nav_mat.blockSignals(False)
 
         # Filter the Machine materials
@@ -123,9 +126,12 @@ class DMatLib(Ui_DMatLib, QDialog):
             ):
                 continue  # Skip add if not matching filter
             # Add material name as "005 - M400_50A"
-            self.nav_mat_mach.addItem(
+            mat_text = (
                 "%03d" % (len(material_dict[LIB_KEY]) + ii + 1) + " - " + mat.name
             )
+            if mat in self.edited_material_list:
+                mat_text += " *"
+            self.nav_mat_mach.addItem(mat_text)
         self.nav_mat_mach.blockSignals(False)
 
         # Hide the machine treeview if machine material list is empty
@@ -160,7 +166,11 @@ class DMatLib(Ui_DMatLib, QDialog):
         else:
             if self.nav_mat_mach.currentRow() == -1:  # No material selected
                 return None, None, None
-            index = int(self.nav_mat_mach.currentItem().text()[:3]) - 1
+            index = (
+                int(self.nav_mat_mach.currentItem().text()[:3])
+                - 1
+                - len(self.material_dict[LIB_KEY])
+            )
             key = MACH_KEY
 
         return mat_dict[key][index], key, index
@@ -202,11 +212,49 @@ class DMatLib(Ui_DMatLib, QDialog):
         self.w_setup.set_material(material=mat, is_save_needed=False)
         self.update_material_edit_status()  # Set Material to no longer edited
 
-    def update_reference(self):
+    def save_material(self):
         """Material have been saved => Update references"""
         mat, key, index = self.get_current_material()
+
+        # Saving material (if in Library only)
+        if self.is_lib_mat:
+            try:
+                mat.save(mat.path)
+            except Exception as e:
+                err_msg = (
+                    "Error while saving material "
+                    + mat.name
+                    + " at "
+                    + mat.path
+                    + ":\n"
+                    + str(e)
+                )
+                QMessageBox().critical(
+                    self,
+                    self.tr("Error"),
+                    self.tr(err_msg),
+                )
+                getLogger(GUI_LOG_NAME).error(err_msg)
+                return
+            getLogger(GUI_LOG_NAME).debug(mat.path + " saved")
+
+        # Updating reference
         getLogger(GUI_LOG_NAME).debug("DMatLib: Updating reference for " + mat.name)
         self.material_dict_ref[key][index] = mat.copy()
+
+        # Update materials in the machine
+        if self.machine is not None:
+            mach_mat_dict = self.machine.get_material_dict(path="self.machine")
+            for mat_path, mach_mat in mach_mat_dict.items():
+                if mach_mat.name == mat.name:  # Use original name
+                    mat_path_split = mat_path.split(".")
+                    setattr(
+                        eval(".".join(mat_path_split[:-1])),
+                        mat_path_split[-1],
+                        self.material_dict_ref[key][index],
+                    )
+                    self.saveNeeded.emit()
+        self.w_setup.set_save_needed(is_save_needed=False)
 
     def update_material_edit_status(self):
         """Keep track that the current material is different from the reference
@@ -244,24 +292,55 @@ class DMatLib(Ui_DMatLib, QDialog):
         if is_copy:
             current_mat, _, _ = self.get_current_material()
             new_mat = current_mat.copy()
-            new_mat.name = new_mat.name + "_copy"
-            new_mat.path = new_mat.path[:-5] + "_copy.json"
+            if "_copy" not in new_mat.name:
+                new_mat.name = new_mat.name + "_copy"
+                new_mat.path = new_mat.path[:-5] + "_copy.json"
         else:
             new_mat = Material()
             new_mat._set_None()
             new_mat.name = "New Material"
+            new_mat.path = join(self.material_dict[PATH_KEY], new_mat.name + ".json")
         # Adapt name to be unique
-        # TODO
+        name_list = [mat.name for mat in self.material_dict[LIB_KEY]]
+        name_list.extend([mat.name for mat in self.material_dict[MACH_KEY]])
+        if new_mat.name in name_list:
+            index = 1
+            while new_mat.name + "_" + str(index) in name_list:
+                index += 1
+            new_mat.name = new_mat.name + "_" + str(index)
+            new_mat.path = join(dirname(new_mat.path), new_mat.name + ".json")
+
+        # Save if in MatLib
+        if self.is_lib_mat:
+            try:
+                new_mat.save(new_mat.path)
+            except Exception as e:
+                err_msg = (
+                    "Error while saving new material at "
+                    + new_mat.path
+                    + ":\n"
+                    + str(e)
+                )
+                QMessageBox().critical(
+                    self,
+                    self.tr("Error"),
+                    self.tr(err_msg),
+                )
+                getLogger(GUI_LOG_NAME).error(err_msg)
+                return
 
         # Add material to proper list
-        key = MACH_KEY if self.is_lib_mat else LIB_KEY
+        key = LIB_KEY if self.is_lib_mat else MACH_KEY
         self.material_dict[key].append(new_mat)
+        self.material_dict_ref[key].append(new_mat)
         # Update treeview and select current material
         self.le_search.setText("")
         self.update_treeview_material()
         self.select_current_material(
             index=len(self.material_dict[key]) - 1, is_lib_mat=self.is_lib_mat
         )
+        # Signal set by WMatSelect to update Combobox
+        self.materialListChanged.emit()
 
     def delete_material(self):
         """Delete the selected material from the Library
@@ -288,36 +367,44 @@ class DMatLib(Ui_DMatLib, QDialog):
         if reply == QMessageBox.No:
             return
 
-        # Delete the material
-        try:
-            remove(current_mat.path)
-            self.material_dict[key].pop(index)
-            self.material_dict_ref[key].pop(index)
-        except Exception as e:
-            err_msg = (
-                "Error while deleting material from "
-                + current_mat.path
-                + ":\n"
-                + str(e)
-            )
-            QMessageBox().critical(
-                self,
-                self.tr("Error"),
-                self.tr(err_msg),
-            )
-            getLogger(GUI_LOG_NAME).error(err_msg)
-            return
-        getLogger(GUI_LOG_NAME).info(current_mat.name + " was deleted")
+        # Delete the material (only if in library)
+        if self.is_lib_mat:
+            try:
+                remove(current_mat.path)
+                self.material_dict[key].pop(index)
+                self.material_dict_ref[key].pop(index)
+            except Exception as e:
+                err_msg = (
+                    "Error while deleting material from "
+                    + current_mat.path
+                    + ":\n"
+                    + str(e)
+                )
+                QMessageBox().critical(
+                    self,
+                    self.tr("Error"),
+                    self.tr(err_msg),
+                )
+                getLogger(GUI_LOG_NAME).error(err_msg)
+                return
+            getLogger(GUI_LOG_NAME).info(current_mat.name + " was deleted")
 
         # Check that material was not part of the machine
         if self.machine is not None:
+            load_machine_materials(
+                machine=self.machine, material_dict=self.material_dict_ref
+            )
             load_machine_materials(
                 machine=self.machine, material_dict=self.material_dict
             )
         self.update_treeview_material()
         # Select first material (if any)
-        if self.nav_mat.count() > 1:
-            self.nav_mat.setCurrentRow(0)
+        if self.is_lib_mat:
+            if self.nav_mat.count() > 1:
+                self.nav_mat.setCurrentRow(0)
+        else:
+            if self.nav_mat_mach.count() > 1:
+                self.nav_mat_mach.setCurrentRow(0)
         self.select_current_material()
         # Signal set by WMatSelect to update Combobox
         self.materialListChanged.emit()
@@ -335,25 +422,27 @@ class DMatLib(Ui_DMatLib, QDialog):
         old_path = self.w_setup.init_path
         new_path = self.w_setup.mat.path
 
-        try:
-            remove(old_path)
-            self.w_setup.mat.save(new_path)
-        except Exception as e:
-            err_msg = (
-                "Error while renaming material from "
-                + self.w_setup.init_path
-                + " to "
-                + self.w_setup.mat.path
-                + ":\n"
-                + str(e)
-            )
-            QMessageBox().critical(
-                self,
-                self.tr("Error"),
-                self.tr(err_msg),
-            )
-            getLogger(GUI_LOG_NAME).error(err_msg)
-            return
+        # Rename file only if in Library
+        if self.is_lib_mat:
+            try:
+                remove(old_path)
+                self.w_setup.mat.save(new_path)
+            except Exception as e:
+                err_msg = (
+                    "Error while renaming material from "
+                    + self.w_setup.init_path
+                    + " to "
+                    + self.w_setup.mat.path
+                    + ":\n"
+                    + str(e)
+                )
+                QMessageBox().critical(
+                    self,
+                    self.tr("Error"),
+                    self.tr(err_msg),
+                )
+                getLogger(GUI_LOG_NAME).error(err_msg)
+                return
 
         getLogger(GUI_LOG_NAME).info(
             self.w_setup.init_name + " was renamed to " + self.w_setup.mat.name
@@ -362,6 +451,19 @@ class DMatLib(Ui_DMatLib, QDialog):
         mat, key, index = self.get_current_material()
         self.material_dict_ref[key][index] = mat.copy()
 
+        # Update materials in the machine
+        if self.machine is not None:
+            mach_mat_dict = self.machine.get_material_dict(path="self.machine")
+            for mat_path, mach_mat in mach_mat_dict.items():
+                if mach_mat.name == self.w_setup.init_name:
+                    mat_path_split = mat_path.split(".")
+                    setattr(
+                        eval(".".join(mat_path_split[:-1])),
+                        mat_path_split[-1],
+                        self.material_dict_ref[key][index],
+                    )
+                    self.saveNeeded.emit()
+
         # Update list of material from the machine
         if self.machine is not None:
             load_machine_materials(
@@ -369,98 +471,13 @@ class DMatLib(Ui_DMatLib, QDialog):
             )
         self.le_search.setText("")  # Remove filter
         self.update_treeview_material()
-        self.nav_mat.setCurrentRow(index)
+        if self.is_lib_mat:
+            self.nav_mat.setCurrentRow(index)
+        else:
+            self.nav_mat_mach.setCurrentRow(index)
 
         # Signal set by WMatSelect to update Combobox
         self.materialListChanged.emit()
-
-    #####################################################
-    def validate_setup(self, return_code):
-        is_lib_mat = self.current_dialog.is_lib_mat
-        index = self.current_dialog.index
-        mat_edit = self.current_dialog.mat
-        init_name = self.current_dialog.init_name
-        # Reset dialog
-        self.current_dialog = None
-        # 0: Cancel, 1: Save, 2: Add to Matlib (from Machine)
-        if return_code > 0:
-            if return_code == 2:  # Matlib=> machine or machine => Matlib
-                if is_lib_mat:  # Library to machine
-                    mat_edit.name = mat_edit.name + "_edit"
-                    self.material_dict[MACH_KEY].append(mat_edit)
-                    index = len(self.material_dict[MACH_KEY]) - 1
-                else:
-                    index = None  # will be handled as "New material" in Lib
-                    mat_edit.path = join(
-                        self.material_dict["MATLIB_PATH"], mat_edit.name + ".json"
-                    )
-                is_lib_mat = not is_lib_mat
-
-            # Update materials in the machine
-            if self.machine is not None:
-                mach_mat_dict = self.machine.get_material_dict(path="self.machine")
-                for mat_path, mach_mat in mach_mat_dict.items():
-                    if mach_mat.name == init_name:  # Use original name
-                        mat_path_split = mat_path.split(".")
-                        setattr(
-                            eval(".".join(mat_path_split[:-1])),
-                            mat_path_split[-1],
-                            mat_edit,
-                        )
-                        self.saveNeeded.emit()
-
-            if mat_edit.name != init_name and is_lib_mat and index is not None:
-                # Renaming a Library material => Delete original one
-                remove(join(dirname(mat_edit.path), init_name + ".json"))
-                self.material_dict[LIB_KEY][index] = mat_edit
-                mat_edit.save(mat_edit.path)
-                self.materialListChanged.emit()
-            elif is_lib_mat and index is not None:  # Update
-                self.material_dict[LIB_KEY][index] = mat_edit
-                mat_edit.save(mat_edit.path)
-            elif is_lib_mat and index is None:  # New in Library
-                self.material_dict[LIB_KEY].append(mat_edit)
-                index = len(self.material_dict[LIB_KEY]) - 1
-                mat_edit.save(mat_edit.path)
-                self.materialListChanged.emit()
-            elif not is_lib_mat and index is None:  # New in Machine
-                self.material_dict[MACH_KEY].append(mat_edit)
-                index = len(self.material_dict[MACH_KEY]) - 1
-                self.materialListChanged.emit()
-            else:
-                self.material_dict[MACH_KEY][index] = mat_edit
-                if mat_edit.name != init_name:  # Rename
-                    self.materialListChanged.emit()
-
-            # Update machine material (Machine => Lib)
-            if return_code == 2 and is_lib_mat:
-                load_machine_materials(
-                    machine=self.machine, material_dict=self.material_dict
-                )
-                self.materialListChanged.emit()
-            # Update material list
-            self.update_treeview_material()
-            if is_lib_mat:
-                self.nav_mat.setCurrentRow(index)
-            else:
-                self.nav_mat_mach.setCurrentRow(index)
-
-            # Signal set by WMatSelect to update Combobox
-            self.accepted.emit()
-
-    def closeEvent(self, event):
-        """Display a message before leaving
-
-        Parameters
-        ----------
-        self : DMatSetup
-            A DMatSetup object
-        event :
-            The closing event
-        """
-        # Close popup if needed
-        if self.current_dialog is not None:
-            self.current_dialog.close()
 
 
 def update_text(label, name, value, unit):

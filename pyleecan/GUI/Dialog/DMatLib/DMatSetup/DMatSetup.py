@@ -16,7 +16,7 @@ class DMatSetup(Gen_DMatSetup, QDialog):
     materialToDelete = Signal()  # Material will be deleted in DMatLib
     materialToRename = Signal()  # Material name/path has changed => rename in DMatLib
     materialToRevert = Signal()  # Revert reference from DMatLib
-    materialSaved = Signal()  # Material has been saved (update reference)
+    materialToSave = Signal()  # Material to save (update reference/file/machine)
 
     def __init__(self, parent=None, material=None):
         """Dialog for edit/show material properties
@@ -80,7 +80,7 @@ class DMatSetup(Gen_DMatSetup, QDialog):
 
         # Connect buttons
         self.b_delete.clicked.connect(lambda: self.materialToDelete.emit())
-        self.b_save.clicked.connect(self.save)
+        self.b_save.clicked.connect(lambda: self.materialToSave.emit())
         self.b_cancel.clicked.connect(lambda: self.materialToRevert.emit())
 
     def set_save_needed(self, is_save_needed=True):
@@ -103,30 +103,6 @@ class DMatSetup(Gen_DMatSetup, QDialog):
             # Raise signal only if value is different
             getLogger(GUI_LOG_NAME).debug("DMatSetup: Sending saveNeededChanged")
             self.saveNeededChanged.emit()
-
-    def save(self):
-        """Save the material"""
-        try:
-            self.mat.save(self.mat.path)
-        except Exception as e:
-            err_msg = (
-                "Error while saving material "
-                + self.mat.name
-                + " at "
-                + self.mat.path
-                + ":\n"
-                + str(e)
-            )
-            QMessageBox().critical(
-                self,
-                self.tr("Error"),
-                self.tr(err_msg),
-            )
-            getLogger(GUI_LOG_NAME).error(err_msg)
-            return
-        getLogger(GUI_LOG_NAME).debug(self.mat.path + " saved")
-        self.set_save_needed(is_save_needed=False)
-        self.materialSaved.emit()  # Update reference in DMatLib
 
     def set_material(self, material, is_save_needed=False):
         """Update the current material and setup all the widgets
