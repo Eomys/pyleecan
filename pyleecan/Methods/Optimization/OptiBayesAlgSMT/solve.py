@@ -15,6 +15,7 @@ from ....Functions.Optimization.update import update
 from ....Functions.Optimization.check_cstr import check_cstr
 from ....Functions.Optimization.tournamentDCD import tournamentDCD
 
+
 def create_setter(accessor, attribute):
     """
     Create a simulation setter
@@ -74,7 +75,6 @@ def solve(self):
 
         self.xoutput = xoutput
 
-
         # Set-up output data as list to be changed into ndarray at the end of the optimization
         paramexplorer_value = []
         xoutput.xoutput_dict["ngen"] = DataKeeper(
@@ -97,15 +97,15 @@ def solve(self):
         ego = EGO(n_iter=n_iter)
 
         x_opt, y_opt, _, x_data, y_data = ego.optimize(fun=obj_func)
-        xoutput.output_list.append(x_opt, y_opt,x_data, y_data)
-        
+        xoutput.output_list.append(x_opt, y_opt, x_data, y_data)
+
         return xoutput
 
     except KeyboardInterrupt:
         # Except keybord interruption to return the results already computed
         logger.info("Interrupted by the user.")
         # Change xoutput variables in ndarray
-        
+
         return xoutput
 
     except Exception as err:
