@@ -40,7 +40,7 @@ def solve(self):
     logger = self.get_logger()
 
     # Check input parameters
-    self.check_optimization_input()
+    #self.check_optimization_input()
 
     # Display information
     try:
@@ -49,23 +49,20 @@ def solve(self):
             "{} Starting optimization... \n\tLog file: {}\n\tNumber of generations: {}\n\tPopulation size: {}\n".format(
                 datetime.now().strftime("%H:%M:%S"),
                 filename,
-                self.nb_gen,
-                self.size_pop,
+                self.nb_iter
             )
         )
     except (AttributeError, IndexError):
         print(
-            "{} Starting optimization...\n\tNumber of generations: {}\n\tPopulation size: {}\n".format(
-                datetime.now().strftime("%H:%M:%S"), self.nb_gen, self.size_pop
+            "{} Starting optimization...\n\tNumber of iterations: {}\n\t".format(
+                datetime.now().strftime("%H:%M:%S"), self.nb_iter
             )
         )
 
     try:
         # Keep number of evalutation to create the shape
-        shape = self.size_pop
 
         # Create the toolbox
-        self.create_toolbox()
 
         # Add the reference output to multi_output
         if isinstance(self.problem.simu.parent, Output):
@@ -116,12 +113,7 @@ def solve(self):
 def print_gen_simu(time, gen_id, simu_id, size_pop, nb_error, to_eval):
     print(
         "\r{}  gen {:>5}: simu {}/{} ({:>5.2f}%), {:>4} errors.".format(
-            time,
-            gen_id,
-            (simu_id + 1),
-            size_pop,
-            (simu_id) * 100 / size_pop,
-            nb_error,
+            time, gen_id, (simu_id + 1), size_pop, (simu_id) * 100 / size_pop, nb_error,
         )
     )
     msg = "Design Variables: "
