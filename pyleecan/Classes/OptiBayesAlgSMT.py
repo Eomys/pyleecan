@@ -24,7 +24,6 @@ except ImportError as error:
 
 
 from ._check import InitUnKnowClassError
-from .string import string
 from .OptiProblem import OptiProblem
 from .XOutput import XOutput
 
@@ -52,7 +51,7 @@ class OptiBayesAlgSMT(OptiBayesAlg):
     def __init__(
         self,
         nb_iter=10,
-        criteria=EI,
+        criteria="EI",
         kernel=0,
         problem=-1,
         xoutput=-1,

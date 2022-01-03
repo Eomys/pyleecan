@@ -16,7 +16,6 @@ from ..Functions.Load.import_class import import_class
 from .OptiSolver import OptiSolver
 
 from ._check import InitUnKnowClassError
-from .string import string
 from .OptiProblem import OptiProblem
 from .XOutput import XOutput
 
@@ -35,7 +34,7 @@ class OptiBayesAlg(OptiSolver):
     def __init__(
         self,
         nb_iter=10,
-        criteria=EI,
+        criteria="EI",
         kernel=0,
         problem=-1,
         xoutput=-1,
@@ -94,11 +93,7 @@ class OptiBayesAlg(OptiSolver):
         # Get the properties inherited from OptiSolver
         OptiBayesAlg_str += super(OptiBayesAlg, self).__str__()
         OptiBayesAlg_str += "nb_iter = " + str(self.nb_iter) + linesep
-        if self.criteria is not None:
-            tmp = self.criteria.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            OptiBayesAlg_str += "criteria = " + tmp
-        else:
-            OptiBayesAlg_str += "criteria = None" + linesep + linesep
+        OptiBayesAlg_str += 'criteria = "' + str(self.criteria) + '"' + linesep
         OptiBayesAlg_str += "kernel = " + str(self.kernel) + linesep
         return OptiBayesAlg_str
 
@@ -132,14 +127,8 @@ class OptiBayesAlg(OptiSolver):
         diff_list.extend(super(OptiBayesAlg, self).compare(other, name=name))
         if other._nb_iter != self._nb_iter:
             diff_list.append(name + ".nb_iter")
-        if (other.criteria is None and self.criteria is not None) or (
-            other.criteria is not None and self.criteria is None
-        ):
-            diff_list.append(name + ".criteria None mismatch")
-        elif self.criteria is not None:
-            diff_list.extend(
-                self.criteria.compare(other.criteria, name=name + ".criteria")
-            )
+        if other._criteria != self._criteria:
+            diff_list.append(name + ".criteria")
         if other._kernel != self._kernel:
             diff_list.append(name + ".kernel")
         # Filter ignore differences
@@ -176,14 +165,7 @@ class OptiBayesAlg(OptiSolver):
             **kwargs
         )
         OptiBayesAlg_dict["nb_iter"] = self.nb_iter
-        if self.criteria is None:
-            OptiBayesAlg_dict["criteria"] = None
-        else:
-            OptiBayesAlg_dict["criteria"] = self.criteria.as_dict(
-                type_handle_ndarray=type_handle_ndarray,
-                keep_function=keep_function,
-                **kwargs
-            )
+        OptiBayesAlg_dict["criteria"] = self.criteria
         OptiBayesAlg_dict["kernel"] = self.kernel
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
@@ -194,8 +176,7 @@ class OptiBayesAlg(OptiSolver):
         """Set all the properties to None (except pyleecan object)"""
 
         self.nb_iter = None
-        if self.criteria is not None:
-            self.criteria._set_None()
+        self.criteria = None
         self.kernel = None
         # Set to None the properties inherited from OptiSolver
         super(OptiBayesAlg, self)._set_None()
@@ -224,27 +205,15 @@ class OptiBayesAlg(OptiSolver):
 
     def _set_criteria(self, value):
         """setter of criteria"""
-        if isinstance(value, str):  # Load from file
-            value = load_init_dict(value)[1]
-        if isinstance(value, dict) and "__class__" in value:
-            class_obj = import_class(
-                "pyleecan.Classes", value.get("__class__"), "criteria"
-            )
-            value = class_obj(init_dict=value)
-        elif type(value) is int and value == -1:  # Default constructor
-            value = string()
-        check_var("criteria", value, "string")
+        check_var("criteria", value, "str")
         self._criteria = value
-
-        if self._criteria is not None:
-            self._criteria.parent = self
 
     criteria = property(
         fget=_get_criteria,
         fset=_set_criteria,
         doc=u"""Point selection criteria
 
-        :Type: string
+        :Type: str
         """,
     )
 
