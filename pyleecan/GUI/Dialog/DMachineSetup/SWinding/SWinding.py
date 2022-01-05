@@ -3,7 +3,8 @@
 from PySide2.QtCore import Qt, Signal
 from PySide2.QtGui import QPixmap
 from PySide2.QtWidgets import QMessageBox, QWidget, QFileDialog
-
+from logging import getLogger
+from .....loggers import GUI_LOG_NAME
 from .....Classes.Winding import Winding
 from .....Classes.WindingUD import WindingUD
 from .....Classes.MachineSRM import MachineSRM
@@ -494,8 +495,17 @@ class SWinding(Gen_SWinding, QWidget):
                 is_lam_only=is_lam_only,
                 is_add_sign=True,
             )
-        except:
-            pass
+        except Exception as e:
+            if self.obj.is_stator:  # Adapt the text to the current lamination
+                err_msg = "Error while plotting machine in Stator Winding:\n" + str(e)
+            else:
+                err_msg = "Error while plotting machine in Rotor Winding:\n" + str(e)
+            getLogger(GUI_LOG_NAME).error(err_msg)
+            QMessageBox().critical(
+                self,
+                self.tr("Error"),
+                err_msg,
+            )
 
         # Update the Graph
         self.w_viewer.axes.set_axis_off()
@@ -514,7 +524,12 @@ class SWinding(Gen_SWinding, QWidget):
             self.obj.plot_winding()
             set_plot_gui_icon()
         except (AssertionError, WindingError) as e:
-            QMessageBox().critical(self, self.tr("Error"), str(e))
+            if self.obj.is_stator:  # Adapt the text to the current lamination
+                err_msg = "Error while plotting winding in Stator Winding:\n" + str(e)
+            else:
+                err_msg = "Error while plotting winding in Rotor Winding:\n" + str(e)
+            getLogger(GUI_LOG_NAME).error(err_msg)
+            QMessageBox().critical(self, self.tr("Error"), err_msg)
 
     @staticmethod
     def check(lamination):

@@ -3,7 +3,8 @@
 from numpy import pi
 from PySide2.QtCore import Signal
 from PySide2.QtWidgets import QMessageBox, QWidget
-
+from logging import getLogger
+from .....loggers import GUI_LOG_NAME
 from .....Classes.LamSlotWind import LamSlotWind
 from .....Classes.Slot import Slot
 from .....Classes.SlotM10 import SlotM10
@@ -227,12 +228,25 @@ class SMSlot(Ui_SMSlot, QWidget):
         """
         # We have to make sure the slot is right before trying to plot it
         error = self.check(self.obj)
+        if self.obj.is_stator:
+            name = "Stator"
+        else:
+            name = "Rotor"
 
         if error:  # Error => Display it
-            QMessageBox().critical(self, self.tr("Error"), error)
-        else:  # No error => Plot the slot (No winding for LamSquirrelCage)
-            self.obj.plot()
-            set_plot_gui_icon()
+            err_msg = "Error in " + name + " Slot definition:\n" + error
+            getLogger(GUI_LOG_NAME).debug(err_msg)
+            QMessageBox().critical(self, self.tr("Error"), err_msg)
+        else:  # No error => Plot the lamination
+            try:
+                self.obj.plot()
+                set_plot_gui_icon()
+            except Exception as e:
+                err_msg = (
+                    "Error while plotting " + name + " in Slot definition:\n" + str(e)
+                )
+                getLogger(GUI_LOG_NAME).error(err_msg)
+                QMessageBox().critical(self, self.tr("Error"), err_msg)
 
     @staticmethod
     def check(lam):
