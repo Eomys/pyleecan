@@ -22,6 +22,13 @@ try:
 except ImportError as error:
     solve = error
 
+try:
+    from ..Methods.Optimization.OptiBayesAlgSMT.check_optimization_input import (
+        check_optimization_input,
+    )
+except ImportError as error:
+    check_optimization_input = error
+
 
 from ._check import InitUnKnowClassError
 from .OptiProblem import OptiProblem
@@ -33,6 +40,7 @@ class OptiBayesAlgSMT(OptiBayesAlg):
 
     VERSION = 1
 
+    # Check ImportError to remove unnecessary dependencies in unused method
     # cf Methods.Optimization.OptiBayesAlgSMT.solve
     if isinstance(solve, ImportError):
         solve = property(
@@ -42,6 +50,18 @@ class OptiBayesAlgSMT(OptiBayesAlg):
         )
     else:
         solve = solve
+    # cf Methods.Optimization.OptiBayesAlgSMT.check_optimization_input
+    if isinstance(check_optimization_input, ImportError):
+        check_optimization_input = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use OptiBayesAlgSMT method check_optimization_input: "
+                    + str(check_optimization_input)
+                )
+            )
+        )
+    else:
+        check_optimization_input = check_optimization_input
     # save and copy methods are available in all object
     save = save
     copy = copy

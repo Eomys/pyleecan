@@ -1,10 +1,9 @@
 # -*- coding: utf-8 -*-
 
-from deap.tools import selNSGA2
+from smt.applications import EGO
 from copy import deepcopy
 from datetime import datetime
 import numpy as np
-from smt.applications import EGO
 
 from ....Classes.Output import Output
 from ....Classes.XOutput import XOutput
@@ -24,12 +23,12 @@ def create_setter(accessor, attribute):
 
 
 def solve(self):
-    """Method to perform NSGA-II using DEAP tools
+    """Method to perform Bayesian optimization using SMT tools
 
     Parameters
     ----------
-    self : OptiGenAlgNsga2Deap
-        Solver to perform NSGA-II
+    self : OptiBayesAlgSMT
+        Solver to perform Bayesian optimization
 
     Returns
     -------
@@ -40,16 +39,14 @@ def solve(self):
     logger = self.get_logger()
 
     # Check input parameters
-    #self.check_optimization_input()
+    self.check_optimization_input()
 
     # Display information
     try:
         filename = self.get_logger().handlers[0].stream.name
         print(
             "{} Starting optimization... \n\tLog file: {}\n\tNumber of generations: {}\n\tPopulation size: {}\n".format(
-                datetime.now().strftime("%H:%M:%S"),
-                filename,
-                self.nb_iter
+                datetime.now().strftime("%H:%M:%S"), filename, self.nb_iter
             )
         )
     except (AttributeError, IndexError):
@@ -60,7 +57,7 @@ def solve(self):
         )
 
     try:
-        # Keep number of evalutation to create the shape
+        # Keep number of evaluation to create the shape
 
         # Create the toolbox
 
@@ -89,11 +86,16 @@ def solve(self):
         for obj_func in self.problem.obj_func:
             # obj_func is a DataKeeper instance
             xoutput.xoutput_dict[obj_func.symbol] = obj_func
-        n_iter = 6
 
-        ego = EGO(n_iter=n_iter)
+        n_iter = self.nb_iter
+        xlimits = np.array([])
+        for var in self.problem.design_var:
+            np.append(xlimits, var.space)
+        xdoe = np.array([])
 
-        x_opt, y_opt, _, x_data, y_data = ego.optimize(fun=obj_func)
+        ego = EGO(n_iter=n_iter, criterion=self.criteria, xdoe=xdoe, xlimits=xlimits)
+
+        x_opt, y_opt, _, x_data, y_data = ego.optimize(fun=self.problem.eval_func)
         xoutput.output_list.append(x_opt, y_opt, x_data, y_data)
 
         return xoutput
@@ -105,15 +107,20 @@ def solve(self):
 
         return xoutput
 
-    except Exception as err:
+    """ except Exception as err:
         logger.error("{}: {}".format(type(err).__name__, err))
-        raise err
+        raise err """
 
 
 def print_gen_simu(time, gen_id, simu_id, size_pop, nb_error, to_eval):
     print(
         "\r{}  gen {:>5}: simu {}/{} ({:>5.2f}%), {:>4} errors.".format(
-            time, gen_id, (simu_id + 1), size_pop, (simu_id) * 100 / size_pop, nb_error,
+            time,
+            gen_id,
+            (simu_id + 1),
+            size_pop,
+            (simu_id) * 100 / size_pop,
+            nb_error,
         )
     )
     msg = "Design Variables: "
