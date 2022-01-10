@@ -67,6 +67,7 @@ class DMatLib(Ui_DMatLib, QDialog):
                 self.in_machine_mat.setText("Materials in " + self.machine.name)
         else:
             self.machine = None
+            self.b_switch.hide()  # No material in the machine
 
         # Scan material_dict to create treeview
         self.update_treeview_material()
