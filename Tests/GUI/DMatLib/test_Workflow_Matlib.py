@@ -1,7 +1,7 @@
 import sys
 from os.path import isdir, isfile, join
 from shutil import copytree, rmtree
-
+import pytest
 import mock
 from PySide2 import QtWidgets
 from pyleecan.Functions.load import LIB_KEY, MACH_KEY, load, load_matlib
@@ -551,6 +551,7 @@ class TestDMatlibWF(object):
         # Close the dialog
         dialog.close()
 
+    @pytest.mark.skip(reason="No longer available")
     def test_edit_machine_to_library(self):
         """Edit a material from the machine to the library"""
         # Check initial state
