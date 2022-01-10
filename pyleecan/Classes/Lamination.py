@@ -906,7 +906,7 @@ class Lamination(FrozenClass):
     L1 = property(
         fget=_get_L1,
         fset=_set_L1,
-        doc=u"""Lamination stack active length [m] without radial ventilation airducts but including insulation layers between lamination sheets
+        doc=u"""Lamination stack active length without radial ventilation airducts but including insulation layers between lamination sheets
 
         :Type: float
         :min: 0
