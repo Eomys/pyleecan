@@ -95,7 +95,7 @@ def solve(self):
 
         ego = EGO(n_iter=n_iter, criterion=self.criteria, xdoe=xdoe, xlimits=xlimits)
 
-        x_opt, y_opt, _, x_data, y_data = ego.optimize(fun=self.problem.eval_func)
+        x_opt, y_opt, _, x_data, y_data = ego.optimize(fun=self.evaluate)
         xoutput.output_list.append(x_opt, y_opt, x_data, y_data)
 
         return xoutput
