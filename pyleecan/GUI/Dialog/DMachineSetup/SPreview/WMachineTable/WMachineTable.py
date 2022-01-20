@@ -123,7 +123,7 @@ class WMachineTable(Ui_WMachineTable, QWidget):
         femm = _FEMMHandler()
         output = Output(simu=Simu1(machine=self.machine))
         # Periodicity
-        sym, is_antiper, _, _ = self.machine.comp_periodicity()
+        sym, is_antiper = self.machine.comp_periodicity_spatial()
         if is_antiper:
             sym *= 2
         # Set Current (constant J in a layer)
@@ -199,7 +199,7 @@ class WMachineTable(Ui_WMachineTable, QWidget):
         # Create the Simulation
         mySimu = Simu1(name="test_gmsh_ipm", machine=self.machine)
         myResults = Output(simu=mySimu)
-        sym, is_antiper, _, _ = self.machine.comp_periodicity()
+        sym, is_antiper = self.machine.comp_periodicity_spatial()
         if is_antiper:
             sym *= 2
         try:
