@@ -3,7 +3,6 @@
 from logging import getLogger
 from os.path import join
 
-import matplotlib.pyplot as plt
 from PySide2.QtWidgets import QFileDialog, QTableWidgetItem, QWidget, QMessageBox
 
 from ......Classes._FEMMHandler import _FEMMHandler
@@ -19,7 +18,6 @@ from ......Functions.Plot.set_plot_gui_icon import set_plot_gui_icon
 from ......GUI.Dialog.DMachineSetup.SPreview.WMachineTable.Ui_WMachineTable import (
     Ui_WMachineTable,
 )
-from SciDataTool import DataLinspace
 from ......Methods.Simulation.MagElmer import (
     MagElmer_BP_dict,
 )
