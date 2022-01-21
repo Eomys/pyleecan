@@ -73,6 +73,19 @@ def solve(self):
         xoutput.xoutput_dict["is_valid"] = DataKeeper(
             name="Individual validity", symbol="is_valid"
         )
+        xoutput.xoutput_dict["x_opt"] = DataKeeper( #need to put a better name here
+            name="x opt", symbol="x_opt"
+        )
+        xoutput.xoutput_dict["y_opt"] = DataKeeper( #need to put a better name here
+            name="y opt", symbol="y_opt"
+        )        
+        xoutput.xoutput_dict["x_data"] = DataKeeper( #need to put a better name here
+            name="x data", symbol="x_data"
+        )        
+        xoutput.xoutput_dict["y_data"] = DataKeeper( #need to put a better name here
+            name="y data", symbol="y_data"
+        )
+
         # Add datakeeper to XOutput to store additionnal values
         for dk in self.problem.datakeeper_list:
             assert dk.symbol not in xoutput.xoutput_dict
@@ -91,7 +104,14 @@ def solve(self):
 
         x_opt, y_opt, _, x_data, y_data = ego.optimize(fun=self.evaluate)
         print(x_opt, y_opt)
-        xoutput.output_list.append(x_opt, y_opt, x_data, y_data)
+        xoutput.xoutput_dict["x_opt"].result.append(x_opt)
+        xoutput.xoutput_dict["y_opt"].result.append(y_opt)
+        xoutput.xoutput_dict["x_data"].result.append(x_data)
+        xoutput.xoutput_dict["y_data"].result.append(y_data)
+       # xoutput.output_list.append(x_opt)
+        #xoutput.output_list.append(y_opt)
+        #xoutput.output_list.append(x_data)
+        #xoutput.output_list.append(y_data)
 
         return xoutput
 
