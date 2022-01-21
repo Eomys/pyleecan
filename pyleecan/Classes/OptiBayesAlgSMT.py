@@ -29,6 +29,11 @@ try:
 except ImportError as error:
     check_optimization_input = error
 
+try:
+    from ..Methods.Optimization.OptiBayesAlgSMT.evaluate import evaluate
+except ImportError as error:
+    evaluate = error
+
 
 from ._check import InitUnKnowClassError
 from .OptiProblem import OptiProblem
@@ -62,6 +67,17 @@ class OptiBayesAlgSMT(OptiBayesAlg):
         )
     else:
         check_optimization_input = check_optimization_input
+    # cf Methods.Optimization.OptiBayesAlgSMT.evaluate
+    if isinstance(evaluate, ImportError):
+        evaluate = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use OptiBayesAlgSMT method evaluate: " + str(evaluate)
+                )
+            )
+        )
+    else:
+        evaluate = evaluate
     # save and copy methods are available in all object
     save = save
     copy = copy

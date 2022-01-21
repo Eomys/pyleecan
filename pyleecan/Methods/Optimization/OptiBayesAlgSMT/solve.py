@@ -57,22 +57,18 @@ def solve(self):
         )
 
     try:
-        # Keep number of evaluation to create the shape
-
-        # Create the toolbox
-
         # Add the reference output to multi_output
         if isinstance(self.problem.simu.parent, Output):
             xoutput = XOutput(init_dict=self.problem.simu.parent.as_dict())
         else:
-            xoutput = XOutput(simu=self.problem.simu.copy())
+            xoutput = XOutput(simu=self.problem.simu)
 
         self.xoutput = xoutput
 
         # Set-up output data as list to be changed into ndarray at the end of the optimization
         paramexplorer_value = []
-        xoutput.xoutput_dict["ngen"] = DataKeeper(
-            name="Generation number", symbol="ngen"
+        xoutput.xoutput_dict["n_iter"] = DataKeeper(
+            name="Generation number", symbol="n_iter"
         )
         xoutput.xoutput_dict["is_valid"] = DataKeeper(
             name="Individual validity", symbol="is_valid"
@@ -88,14 +84,13 @@ def solve(self):
             xoutput.xoutput_dict[obj_func.symbol] = obj_func
 
         n_iter = self.nb_iter
-        xlimits = np.array([])
-        for var in self.problem.design_var:
-            np.append(xlimits, var.space)
-        xdoe = np.array([])
-
-        ego = EGO(n_iter=n_iter, criterion=self.criteria, xdoe=xdoe, xlimits=xlimits)
+        xlimits = np.array([var.space for var in self.problem.design_var])
+        """ xdoe = np.atleast_2d([np.random.uniform(var.space[0],var.space[1]) for var in self.problem.design_var])
+        print(xdoe.shape) """
+        ego = EGO(n_iter=n_iter, criterion=self.criteria, xlimits=xlimits) #xdoe = xdoe
 
         x_opt, y_opt, _, x_data, y_data = ego.optimize(fun=self.evaluate)
+        print(x_opt, y_opt)
         xoutput.output_list.append(x_opt, y_opt, x_data, y_data)
 
         return xoutput
