@@ -15,29 +15,6 @@ from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
 from .LUT import LUT
 
-# Import all class method
-# Try/catch to remove unnecessary dependencies in unused method
-try:
-    from ..Methods.Simulation.LUTslip.get_param_dict import get_param_dict
-except ImportError as error:
-    get_param_dict = error
-
-try:
-    from ..Methods.Simulation.LUTslip.get_Lm import get_Lm
-except ImportError as error:
-    get_Lm = error
-
-try:
-    from ..Methods.Simulation.LUTslip.comp_Lm_from_Phim import comp_Lm_from_Phim
-except ImportError as error:
-    comp_Lm_from_Phim = error
-
-try:
-    from ..Methods.Simulation.LUTslip.import_from_data import import_from_data
-except ImportError as error:
-    import_from_data = error
-
-
 from numpy import array, array_equal
 from ._check import InitUnKnowClassError
 
@@ -47,51 +24,6 @@ class LUTslip(LUT):
 
     VERSION = 1
 
-    # Check ImportError to remove unnecessary dependencies in unused method
-    # cf Methods.Simulation.LUTslip.get_param_dict
-    if isinstance(get_param_dict, ImportError):
-        get_param_dict = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use LUTslip method get_param_dict: " + str(get_param_dict)
-                )
-            )
-        )
-    else:
-        get_param_dict = get_param_dict
-    # cf Methods.Simulation.LUTslip.get_Lm
-    if isinstance(get_Lm, ImportError):
-        get_Lm = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use LUTslip method get_Lm: " + str(get_Lm))
-            )
-        )
-    else:
-        get_Lm = get_Lm
-    # cf Methods.Simulation.LUTslip.comp_Lm_from_Phim
-    if isinstance(comp_Lm_from_Phim, ImportError):
-        comp_Lm_from_Phim = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use LUTslip method comp_Lm_from_Phim: "
-                    + str(comp_Lm_from_Phim)
-                )
-            )
-        )
-    else:
-        comp_Lm_from_Phim = comp_Lm_from_Phim
-    # cf Methods.Simulation.LUTslip.import_from_data
-    if isinstance(import_from_data, ImportError):
-        import_from_data = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use LUTslip method import_from_data: "
-                    + str(import_from_data)
-                )
-            )
-        )
-    else:
-        import_from_data = import_from_data
     # save and copy methods are available in all object
     save = save
     copy = copy

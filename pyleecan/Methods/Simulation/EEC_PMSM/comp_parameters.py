@@ -1,9 +1,12 @@
 from numpy import isscalar
 
 
-def comp_parameters(self, machine, OP, Tsta=None, Trot=None):
+def comp_parameters(
+    self, machine, OP, Tsta=None, Trot=None, Id_array=None, Iq_array=None
+):
     """Compute the parameters dict for the equivalent electrical circuit:
     resistance, inductance and back electromotive force
+
     Parameters
     ----------
     self : EEC_PMSM
@@ -16,80 +19,93 @@ def comp_parameters(self, machine, OP, Tsta=None, Trot=None):
         Average stator temperature
     Trot : float
         Average rotor temperature
+    Id_array : ndarray
+        Array of Id currents for vectorized calculation
+    Iq_array : ndarray
+        Array of Iq currents for vectorized calculation
     """
-    # TODO maybe set currents to small value if I is 0 to compute inductance
 
-    # OPdq = N0, felec, Id, Iq, Ud, Uq, Tem, Pem
-    # OPslip = N0, felec, U0, slip, I0, Phi0, Tem, Pem
+    if self.parameters is None:
+        self.parameters = dict()
+    par = self.parameters
 
-    PAR = self.parameters
-    Cond = machine.stator.winding.conductor
+    is_LUT = self.LUT_enforced is not None
+    LUT = self.LUT_enforced
 
-    I_dict = OP.get_Id_Iq()
-    Id_ref, Iq_ref = I_dict["Id"], I_dict["Iq"]
+    # Store electrical frequency in parameters
+    par["felec"] = OP.get_felec()
 
-    U_dict = OP.get_Ud_Uq()
-    Ud_ref, Uq_ref = U_dict["Ud"], U_dict["Uq"]
+    # Store dqh voltages
+    par.update(OP.get_Ud_Uq())
 
-    # Update frequency with current OP and store frequency in EEC
-    self.freq0 = OP.get_felec()
-    felec = self.freq0
+    if Id_array is None and Iq_array is None:
+        # Store dqh currents
+        par.update(OP.get_Id_Iq())
+    else:
+        # Store arrays of Id / Iq
+        par["Id"] = Id_array
+        par["Iq"] = Iq_array
 
-    # compute skin_effect
-    Xkr_skinS, Xke_skinS = Cond.comp_skin_effect(T=Tsta, freq=felec)
+    # Get stator conductor
+    CondS = machine.stator.winding.conductor
+
+    # compute temperature effect on stator side
+    if LUT is not None:
+        T1_ref = LUT.T1_ref
+    else:
+        T1_ref = Tsta
+    Tfact1 = CondS.comp_temperature_effect(T_op=Tsta, T_ref=T1_ref)
+    # compute skin_effect on stator side
+    Xkr_skinS, Xke_skinS = CondS.comp_skin_effect(freq=par["felec"], Tfact=Tfact1)
 
     # Stator resistance
-    if "R20" not in PAR:
-        R20 = machine.stator.comp_resistance_wind()
-        PAR["R20"] = R20 * Xkr_skinS
+    if "R1" not in par:
+        if is_LUT and LUT.R1 is not None:
+            R10 = LUT.R1
+        else:
+            R10 = machine.stator.comp_resistance_wind()
+        par["R1"] = R10 * Tfact1 * Xkr_skinS
 
-    # Stator flux linkage
-    if "phi" not in PAR and Ud_ref is not None and Uq_ref is not None:
-        PAR["phi"] = self.fluxlink.comp_fluxlinkage(machine)
+    # Stator flux linkage only due to permanent magnets
+    if "Phid_mag" not in par or "Phiq_mag" not in par:
+        if is_LUT:
+            Phi_dqh_mag_mean = LUT.get_Phidqh_mag_mean()
+        else:
+            Phi_dqh_mag_mean = self.fluxlink.comp_fluxlinkage(machine)
+        par["Phid_mag"] = float(Phi_dqh_mag_mean[0])
+        par["Phiq_mag"] = float(Phi_dqh_mag_mean[1])
 
-    # Parameters which may vary for each simulation
-    is_comp_ind = False
-    # check for complete parameter set
-    # (there may be some redundancy here but it seems simplier to implement)
+    # Stator winding flux
     if (
-        Ud_ref is not None
-        and Uq_ref is not None
-        and not all(k in PAR for k in ("Phid", "Phiq", "Ld", "Lq"))
+        par["Id"] is not None
+        and par["Iq"] is not None
+        and ("Phid" not in par or "Phiq" not in par)
     ):
-        is_comp_ind = True
+        if is_LUT:
+            # Get dqh flux function of current
+            Phi_dqh_mean = LUT.interp_Phi_dqh(Id=par["Id"], Iq=par["Iq"])
+        else:
+            Phi_dqh_mean = self.indmag.comp_inductance(machine=machine, OP_ref=OP)
 
-    # check for d- and q-current (change)
-    if "Id" not in PAR or (isscalar(PAR["Id"]) and PAR["Id"] != Id_ref):
-        PAR["Id"] = Id_ref
-        is_comp_ind = True
-
-    if "Iq" not in PAR or (isscalar(PAR["Iq"]) and PAR["Iq"] != Iq_ref):
-        PAR["Iq"] = Iq_ref
-        is_comp_ind = True
-
-    # check for d- and q-voltage (change)
-    if Ud_ref is not None and (
-        "Ud" not in PAR or (isscalar(PAR["Ud"]) and PAR["Ud"] != Ud_ref)
-    ):
-        PAR["Ud"] = Ud_ref
-
-    if Uq_ref is not None and (
-        "Uq" not in PAR or (isscalar(PAR["Uq"]) and PAR["Uq"] != Uq_ref)
-    ):
-        PAR["Uq"] = Uq_ref
+        par["Phid"] = Phi_dqh_mean[0]  # * Xke_skinS
+        par["Phiq"] = Phi_dqh_mean[1]  # * Xke_skinS
+        if par["Phid"].size == 1:
+            par["Phid"] = float(par["Phid"])
+            par["Phiq"] = float(par["Phiq"])
 
     # compute inductance if necessary
-    if is_comp_ind:
-        (phid, phiq) = self.indmag.comp_inductance(machine=machine, OP_ref=OP)
-        PAR["Phid"] = phid * Xke_skinS
-        PAR["Phiq"] = phiq * Xke_skinS
+    if "Ld" not in par or "Lq" not in par:
 
-        if PAR["Id"] != 0 and "phi" in PAR and Ud_ref is not None:
-            PAR["Ld"] = (PAR["Phid"] - PAR["phi"]) / PAR["Id"]
-        else:
-            PAR["Ld"] = None  # to have the parameters complete though
+        if (
+            isscalar(par["Id"])
+            and par["Id"] != 0
+            and isscalar(par["Iq"])
+            and par["Iq"] != 0
+        ):
 
-        if PAR["Iq"] != 0 and Uq_ref is not None:
-            PAR["Lq"] = PAR["Phiq"] / PAR["Iq"]
+            par["Ld"] = (par["Phid"] - par["Phid_mag"]) / par["Id"]
+            par["Lq"] = (par["Phiq"] - par["Phiq_mag"]) / par["Iq"]
+
         else:
-            PAR["Lq"] = None  # to have the parameters complete though
+            par["Ld"] = None
+            par["Lq"] = None

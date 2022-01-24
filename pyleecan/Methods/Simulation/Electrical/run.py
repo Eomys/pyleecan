@@ -1,12 +1,12 @@
-from numpy.lib.shape_base import expand_dims
-from numpy import zeros, array
-from ....Methods.Simulation.Input import InputError
+from numpy import zeros, array, angle
+
 from ....Classes.EEC_SCIM import EEC_SCIM
 from ....Classes.EEC_PMSM import EEC_PMSM
-from ....Classes.EEC_ANL import EEC_ANL
 from ....Classes.MachineSCIM import MachineSCIM
 from ....Classes.MachineSIPMSM import MachineSIPMSM
 from ....Classes.MachineIPMSM import MachineIPMSM
+
+from ....Methods.Simulation.Input import InputError
 
 
 def run(self):
@@ -30,30 +30,16 @@ def run(self):
             self.eec = EEC_PMSM()
     else:
         # Check that EEC is consistent with machine type
-        if isinstance(machine, MachineSCIM) and (
-            not isinstance(self.eec, EEC_SCIM) and not isinstance(self.eec, EEC_ANL)
+        if isinstance(machine, MachineSCIM) and not isinstance(self.eec, EEC_SCIM):
+            raise Exception(
+                "Cannot run Electrical model if machine is SCIM and eec is not EEC_SCIM"
+            )
+        elif isinstance(machine, (MachineSIPMSM, MachineIPMSM)) and not isinstance(
+            self.eec, EEC_PMSM
         ):
             raise Exception(
-                "Cannot run Electrical model if machine is SCIM and eec is not EEC_SCIM or EEC_ANL"
+                "Cannot run Electrical model if machine is PMSM and eec is not EEC_PMSM"
             )
-        elif isinstance(machine, (MachineSIPMSM, MachineIPMSM)) and (
-            not isinstance(self.eec, EEC_PMSM) and not isinstance(self.eec, EEC_ANL)
-        ):
-            raise Exception(
-                "Cannot run Electrical model if machine is PMSM and eec is not EEC_PMSM or EEC_ANL"
-            )
-
-    if self.ELUT_enforced is not None:
-        # enforce parameters of EEC coming from enforced ELUT at right temperatures
-        if self.eec.parameters is None:
-            self.eec.parameters = dict()
-        self.eec.parameters.update(self.ELUT_enforced.get_param_dict(OP=output.elec.OP))
-
-    # Generate drive
-    # self.eec.gen_drive(output)
-    # self.eec.parameters["U0_ref"] = output.elec.U0_ref
-    # self.eec.parameters["Ud_ref"] = output.elec.OP.get_Ud_Uq()["Ud"]
-    # self.eec.parameters["Uq_ref"] = output.elec.OP.get_Ud_Uq()["Uq"]
 
     # Compute parameters of the electrical equivalent circuit if some parameters are missing in ELUT
     self.eec.comp_parameters(
@@ -63,30 +49,34 @@ def run(self):
         Trot=self.Trot,
     )
 
-    # Solve the electrical equivalent circuit
-    out_dict = self.eec.solve_EEC()
+    if output.elec.PWM is None:
+        # Solve the electrical equivalent circuit for fundamental only
+        out_dict = self.eec.solve()
+    else:
+        # Generate voltage signal (PWM signal generation is the only strategy for now)
+        if output.elec.PWM.U0 is None:
+            # Current driven mode
+            # Solve the electrical equivalent circuit for fundamental current
+            # to get fundamental phase voltage
+            out_dict = self.eec.solve()
+            U0c = out_dict["Ud"] + 1j * out_dict["Uq"]
+            output.elec.PWM.U0 = abs(U0c)
+            output.elec.PWM.Phi0 = angle(U0c)
 
-    # Solve for each harmonic in case of Us_PWM
-    out_dict_harm = dict()
-    if output.elec.Us_PWM is not None:
-        Us_harm = output.elec.get_Us_harm()
-        result = Us_harm.get_along("freqs", "phase")
-        Udqh = result[Us_harm.symbol]
-        freqs = result["freqs"].tolist()
-        Is_harm = zeros((len(freqs), machine.stator.winding.qs), dtype=complex)
-        # Remove Id/Iq from eec parameters
-        del self.eec.parameters["Id"]
-        del self.eec.parameters["Iq"]
-        for i, f in enumerate(freqs):
-            # Update eec paremeters
-            self.eec.freq0 = f
-            self.eec.parameters["Ud"] = Udqh[i, 0]
-            self.eec.parameters["Uq"] = Udqh[i, 1]
-            # Solve eec
-            out_dict_i = self.eec.solve_EEC()
-            Is_harm[i, :] = array([out_dict_i["Id"], out_dict_i["Iq"], 0])
-        out_dict_harm["Is_harm"] = Is_harm
-        out_dict_harm["axes_list"] = Us_harm.get_axes()
+            # Calculate PWM voltage
+            self.gen_drive(output)
+
+        else:
+            # Voltage driven mode
+            # Calculate PWM voltage first
+            self.gen_drive(output)
+
+            # Solve the electrical equivalent circuit for fundamental voltage
+            # to get fundamental current
+            out_dict = self.eec.solve()
+
+        # Solve for each voltage harmonics in case of PWM
+        out_dict["Is_PWM"] = self.eec.solve_PWM(output, freq_max=self.freq_max)
 
     # Compute losses due to Joule effects
     out_dict = self.eec.comp_joule_losses(out_dict, machine)
@@ -98,4 +88,4 @@ def run(self):
     self.comp_torque(out_dict, output.elec.OP.get_N0())
 
     # Store electrical quantities contained in out_dict in OutElec, as Data object if necessary
-    output.elec.store(out_dict, out_dict_harm)
+    output.elec.store(out_dict)

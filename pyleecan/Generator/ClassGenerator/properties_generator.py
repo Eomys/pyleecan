@@ -234,7 +234,14 @@ def generate_prop_setter(gen_dict, class_dict, prop, soft_name="pyleecan"):
         and prop["type"] != "function"
     ):  # pyleecan Type
         set_str += TAB2 + "if isinstance(value, str):  # Load from file\n"
-        set_str += TAB3 + "value = load_init_dict(value)[1]\n"
+        set_str += TAB3 + "try:\n"
+        set_str += TAB4 + "value = load_init_dict(value)[1]\n"
+        set_str += TAB3 + "except Exception as e:\n"
+        set_str += (
+            TAB4
+            + "self.get_logger().error('Error while loading '+value+', setting None instead')\n"
+        )
+        set_str += TAB4 + "value = None\n"
         set_str += TAB2 + "if isinstance(value, dict) and '__class__' in value:\n"
         if "SciDataTool" in prop["type"]:
             set_str += (

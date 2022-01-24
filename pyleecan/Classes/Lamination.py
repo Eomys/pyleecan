@@ -906,7 +906,7 @@ class Lamination(FrozenClass):
     L1 = property(
         fget=_get_L1,
         fset=_set_L1,
-        doc=u"""Lamination stack active length [m] without radial ventilation airducts but including insulation layers between lamination sheets
+        doc=u"""Lamination stack active length without radial ventilation airducts but including insulation layers between lamination sheets
 
         :Type: float
         :min: 0
@@ -920,7 +920,13 @@ class Lamination(FrozenClass):
     def _set_mat_type(self, value):
         """setter of mat_type"""
         if isinstance(value, str):  # Load from file
-            value = load_init_dict(value)[1]
+            try:
+                value = load_init_dict(value)[1]
+            except Exception as e:
+                self.get_logger().error(
+                    "Error while loading " + value + ", setting None instead"
+                )
+                value = None
         if isinstance(value, dict) and "__class__" in value:
             class_obj = import_class(
                 "pyleecan.Classes", value.get("__class__"), "mat_type"
@@ -1148,7 +1154,13 @@ class Lamination(FrozenClass):
     def _set_skew(self, value):
         """setter of skew"""
         if isinstance(value, str):  # Load from file
-            value = load_init_dict(value)[1]
+            try:
+                value = load_init_dict(value)[1]
+            except Exception as e:
+                self.get_logger().error(
+                    "Error while loading " + value + ", setting None instead"
+                )
+                value = None
         if isinstance(value, dict) and "__class__" in value:
             class_obj = import_class("pyleecan.Classes", value.get("__class__"), "skew")
             value = class_obj(init_dict=value)
@@ -1209,7 +1221,13 @@ class Lamination(FrozenClass):
     def _set_bore(self, value):
         """setter of bore"""
         if isinstance(value, str):  # Load from file
-            value = load_init_dict(value)[1]
+            try:
+                value = load_init_dict(value)[1]
+            except Exception as e:
+                self.get_logger().error(
+                    "Error while loading " + value + ", setting None instead"
+                )
+                value = None
         if isinstance(value, dict) and "__class__" in value:
             class_obj = import_class("pyleecan.Classes", value.get("__class__"), "bore")
             value = class_obj(init_dict=value)

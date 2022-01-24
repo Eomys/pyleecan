@@ -3,7 +3,6 @@
 from logging import getLogger
 from os.path import join
 
-import matplotlib.pyplot as plt
 from PySide2.QtWidgets import QFileDialog, QTableWidgetItem, QWidget, QMessageBox
 
 from ......Classes._FEMMHandler import _FEMMHandler
@@ -19,7 +18,6 @@ from ......Functions.Plot.set_plot_gui_icon import set_plot_gui_icon
 from ......GUI.Dialog.DMachineSetup.SPreview.WMachineTable.Ui_WMachineTable import (
     Ui_WMachineTable,
 )
-from SciDataTool import DataLinspace
 from ......Methods.Simulation.MagElmer import (
     MagElmer_BP_dict,
 )
@@ -123,7 +121,7 @@ class WMachineTable(Ui_WMachineTable, QWidget):
         femm = _FEMMHandler()
         output = Output(simu=Simu1(machine=self.machine))
         # Periodicity
-        sym, is_antiper, _, _ = self.machine.comp_periodicity()
+        sym, is_antiper = self.machine.comp_periodicity_spatial()
         if is_antiper:
             sym *= 2
         # Set Current (constant J in a layer)
@@ -133,23 +131,13 @@ class WMachineTable(Ui_WMachineTable, QWidget):
         Sphase = S_slot / (Nrad * Ntan)
         J = 5e6
         if self.machine.is_synchronous():
-            output.elec.OP = OPdq(felec=60)
+            op = OPdq(felec=60)
         else:
-            output.elec.OP = OPslip(felec=60)
-        output.elec.OP.set_Id_Iq(Id=J * Sphase / Ntcoil, Iq=0)
-        output.elec.Time = DataLinspace(
-            name="time",
-            unit="s",
-            initial=0,
-            final=60,
-            number=20,
-            include_endpoint=False,
-        )
-        time = output.elec.Time.get_values(
-            is_oneperiod=False,
-            is_antiperiod=False,
-        )
-        Is = output.elec.comp_I_mag(time, is_stator=True)
+            op = OPslip(felec=60)
+        op.set_Id_Iq(Id=J * Sphase / Ntcoil, Iq=0)
+        output.simu.input = InputCurrent(OP=op, Nt_tot=20)
+        output.simu.input.gen_input()
+        Is = output.elec.get_Is().get_along("phase", "time")["I_s"].transpose()
         alpha = output.get_angle_rotor_initial()
         try:
             # Draw the machine
@@ -199,7 +187,7 @@ class WMachineTable(Ui_WMachineTable, QWidget):
         # Create the Simulation
         mySimu = Simu1(name="test_gmsh_ipm", machine=self.machine)
         myResults = Output(simu=mySimu)
-        sym, is_antiper, _, _ = self.machine.comp_periodicity()
+        sym, is_antiper = self.machine.comp_periodicity_spatial()
         if is_antiper:
             sym *= 2
         try:

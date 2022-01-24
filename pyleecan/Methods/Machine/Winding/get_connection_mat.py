@@ -29,6 +29,10 @@ def get_connection_mat(self, Zs=None, p=None):
 
     if self.wind_mat is None:
         self.wind_mat = self.comp_connection_mat(Zs=Zs, p=p)
+    elif Zs is not None and self.wind_mat.shape[2] != Zs:
+        # Winding matrix is outdated
+        self.clean()
+        self.wind_mat = self.comp_connection_mat(Zs=Zs, p=p)
 
     wind_mat = self.wind_mat.copy()
     # Apply the transformations

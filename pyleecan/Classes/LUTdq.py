@@ -18,16 +18,6 @@ from .LUT import LUT
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
 try:
-    from ..Methods.Simulation.LUTdq.get_param_dict import get_param_dict
-except ImportError as error:
-    get_param_dict = error
-
-try:
-    from ..Methods.Simulation.LUTdq.get_bemf import get_bemf
-except ImportError as error:
-    get_bemf = error
-
-try:
     from ..Methods.Simulation.LUTdq.get_Ldqh import get_Ldqh
 except ImportError as error:
     get_Ldqh = error
@@ -36,11 +26,6 @@ try:
     from ..Methods.Simulation.LUTdq.get_Lmdqh import get_Lmdqh
 except ImportError as error:
     get_Lmdqh = error
-
-try:
-    from ..Methods.Simulation.LUTdq.import_from_data import import_from_data
-except ImportError as error:
-    import_from_data = error
 
 try:
     from ..Methods.Simulation.LUTdq.get_Phidqh_mean import get_Phidqh_mean
@@ -56,16 +41,6 @@ try:
     from ..Methods.Simulation.LUTdq.get_Phidqh_mag_mean import get_Phidqh_mag_mean
 except ImportError as error:
     get_Phidqh_mag_mean = error
-
-try:
-    from ..Methods.Simulation.LUTdq.get_Phidqh_mag_harm import get_Phidqh_mag_harm
-except ImportError as error:
-    get_Phidqh_mag_harm = error
-
-try:
-    from ..Methods.Simulation.LUTdq.get_orders_dqh import get_orders_dqh
-except ImportError as error:
-    get_orders_dqh = error
 
 try:
     from ..Methods.Simulation.LUTdq.interp_Phi_dqh import interp_Phi_dqh
@@ -90,26 +65,6 @@ class LUTdq(LUT):
     VERSION = 1
 
     # Check ImportError to remove unnecessary dependencies in unused method
-    # cf Methods.Simulation.LUTdq.get_param_dict
-    if isinstance(get_param_dict, ImportError):
-        get_param_dict = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use LUTdq method get_param_dict: " + str(get_param_dict)
-                )
-            )
-        )
-    else:
-        get_param_dict = get_param_dict
-    # cf Methods.Simulation.LUTdq.get_bemf
-    if isinstance(get_bemf, ImportError):
-        get_bemf = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use LUTdq method get_bemf: " + str(get_bemf))
-            )
-        )
-    else:
-        get_bemf = get_bemf
     # cf Methods.Simulation.LUTdq.get_Ldqh
     if isinstance(get_Ldqh, ImportError):
         get_Ldqh = property(
@@ -128,17 +83,6 @@ class LUTdq(LUT):
         )
     else:
         get_Lmdqh = get_Lmdqh
-    # cf Methods.Simulation.LUTdq.import_from_data
-    if isinstance(import_from_data, ImportError):
-        import_from_data = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use LUTdq method import_from_data: " + str(import_from_data)
-                )
-            )
-        )
-    else:
-        import_from_data = import_from_data
     # cf Methods.Simulation.LUTdq.get_Phidqh_mean
     if isinstance(get_Phidqh_mean, ImportError):
         get_Phidqh_mean = property(
@@ -173,29 +117,6 @@ class LUTdq(LUT):
         )
     else:
         get_Phidqh_mag_mean = get_Phidqh_mag_mean
-    # cf Methods.Simulation.LUTdq.get_Phidqh_mag_harm
-    if isinstance(get_Phidqh_mag_harm, ImportError):
-        get_Phidqh_mag_harm = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use LUTdq method get_Phidqh_mag_harm: "
-                    + str(get_Phidqh_mag_harm)
-                )
-            )
-        )
-    else:
-        get_Phidqh_mag_harm = get_Phidqh_mag_harm
-    # cf Methods.Simulation.LUTdq.get_orders_dqh
-    if isinstance(get_orders_dqh, ImportError):
-        get_orders_dqh = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use LUTdq method get_orders_dqh: " + str(get_orders_dqh)
-                )
-            )
-        )
-    else:
-        get_orders_dqh = get_orders_dqh
     # cf Methods.Simulation.LUTdq.interp_Phi_dqh
     if isinstance(interp_Phi_dqh, ImportError):
         interp_Phi_dqh = property(
@@ -513,7 +434,13 @@ class LUTdq(LUT):
     def _set_Phi_dqh_mag(self, value):
         """setter of Phi_dqh_mag"""
         if isinstance(value, str):  # Load from file
-            value = load_init_dict(value)[1]
+            try:
+                value = load_init_dict(value)[1]
+            except Exception as e:
+                self.get_logger().error(
+                    "Error while loading " + value + ", setting None instead"
+                )
+                value = None
         if isinstance(value, dict) and "__class__" in value:
             class_obj = import_class(
                 "SciDataTool.Classes", value.get("__class__"), "Phi_dqh_mag"

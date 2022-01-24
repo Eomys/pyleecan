@@ -1,16 +1,9 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Tue Jul 28 11:57:25 2020
-
-@author: Sijie
-"""
-
-
 import numpy as np
-from ....Functions.Electrical.comp_PWM import comp_volt_PWM_NUM
+
+import matplotlib.pyplot as plt
 
 
-def get_data(self, is_norm=True):
+def get_data(self, is_norm=True, is_plot=False, Time=None):
     """Generate the PWM matrix
 
     Parameters
@@ -33,25 +26,18 @@ def get_data(self, is_norm=True):
     Tpwmu : ndarray
         time vector
     """
-    N = int(self.fs * self.duration)  # Number of points
-    Tpwmu = np.linspace(0, N / self.fs, N, endpoint=False)  # Time vector
-    v_pwm, Vas, MI, carrier = comp_volt_PWM_NUM(
-        Tpwmu=Tpwmu,
-        freq0=self.f,
-        freq0_max=self.fmax,
-        fmode=self.fmode,
-        fswimode=self.fswimode,
-        fswi=self.fswi,
-        fswi_max=self.fswi_max,
-        qs=self.qs,
-        Vdc1=self.Vdc1,
-        U0=self.U0,
-        type_carrier=self.type_carrier,
-        rot_dir=self.rot_dir,
-        type_DPWM=self.typePWM,
-        PF_angle=0,
-        var_amp=self.var_amp,
-        is_norm=is_norm,
+
+    if Time is None:
+        # Number of points
+        N = int(self.fs * self.duration)
+        # Define time vector
+        Tpwmu = np.linspace(0, self.duration, N, endpoint=False)
+    else:
+        Tpwmu = Time.get_values(is_smallestperiod=True)
+
+    # Get PWM voltage values
+    v_pwm, Vas, MI, carrier = self.comp_voltage(
+        Tpwmu=Tpwmu, PF_angle=0, is_norm=is_norm, is_sin=False
     )
 
     if is_norm:
@@ -64,10 +50,28 @@ def get_data(self, is_norm=True):
         PWM2 = v_pwm[1]
         PWM3 = v_pwm[2]
     Vpwm = np.column_stack([PWM1, PWM2, PWM3])
+
     if self.is_star:  # star coupling
         mean = Vpwm.mean(axis=1)
         PWM1 = PWM1 - mean
         PWM2 = PWM2 - mean
         PWM3 = PWM3 - mean
         Vpwm = np.column_stack([PWM1, PWM2, PWM3])
+
+    if is_plot:
+        Nt = 10000
+        plt.figure()
+        plt.plot(Tpwmu[:Nt], carrier[:Nt])
+        plt.plot(Tpwmu[:Nt], v_pwm[0, :Nt])
+        plt.plot(Tpwmu[:Nt], Vas[:Nt])
+
+        plt.figure()
+        plt.plot(Tpwmu[:Nt], carrier[:Nt])
+        plt.plot(Tpwmu[:Nt], Vpwm[:Nt, 0])
+        plt.plot(Tpwmu[:Nt], Vas[:Nt])
+        plt.show()
+
+        plt.figure()
+        plt.plot(Tpwmu[:Nt], mean[:Nt])
+
     return Vpwm, Vas, MI, carrier, Tpwmu

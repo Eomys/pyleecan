@@ -127,6 +127,11 @@ try:
 except ImportError as error:
     plot_active = error
 
+try:
+    from ..Methods.Slot.Slot.set_label import set_label
+except ImportError as error:
+    set_label = error
+
 
 from ._check import InitUnKnowClassError
 
@@ -369,6 +374,15 @@ class Slot(FrozenClass):
         )
     else:
         plot_active = plot_active
+    # cf Methods.Slot.Slot.set_label
+    if isinstance(set_label, ImportError):
+        set_label = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use Slot method set_label: " + str(set_label))
+            )
+        )
+    else:
+        set_label = set_label
     # save and copy methods are available in all object
     save = save
     copy = copy

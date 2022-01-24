@@ -59,6 +59,13 @@ try:
 except ImportError as error:
     comp_skin_effect_round_wire = error
 
+try:
+    from ..Methods.Machine.Conductor.comp_temperature_effect import (
+        comp_temperature_effect,
+    )
+except ImportError as error:
+    comp_temperature_effect = error
+
 
 from ._check import InitUnKnowClassError
 from .Material import Material
@@ -156,6 +163,18 @@ class Conductor(FrozenClass):
         )
     else:
         comp_skin_effect_round_wire = comp_skin_effect_round_wire
+    # cf Methods.Machine.Conductor.comp_temperature_effect
+    if isinstance(comp_temperature_effect, ImportError):
+        comp_temperature_effect = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Conductor method comp_temperature_effect: "
+                    + str(comp_temperature_effect)
+                )
+            )
+        )
+    else:
+        comp_temperature_effect = comp_temperature_effect
     # save and copy methods are available in all object
     save = save
     copy = copy
@@ -304,7 +323,13 @@ class Conductor(FrozenClass):
     def _set_cond_mat(self, value):
         """setter of cond_mat"""
         if isinstance(value, str):  # Load from file
-            value = load_init_dict(value)[1]
+            try:
+                value = load_init_dict(value)[1]
+            except Exception as e:
+                self.get_logger().error(
+                    "Error while loading " + value + ", setting None instead"
+                )
+                value = None
         if isinstance(value, dict) and "__class__" in value:
             class_obj = import_class(
                 "pyleecan.Classes", value.get("__class__"), "cond_mat"
@@ -334,7 +359,13 @@ class Conductor(FrozenClass):
     def _set_ins_mat(self, value):
         """setter of ins_mat"""
         if isinstance(value, str):  # Load from file
-            value = load_init_dict(value)[1]
+            try:
+                value = load_init_dict(value)[1]
+            except Exception as e:
+                self.get_logger().error(
+                    "Error while loading " + value + ", setting None instead"
+                )
+                value = None
         if isinstance(value, dict) and "__class__" in value:
             class_obj = import_class(
                 "pyleecan.Classes", value.get("__class__"), "ins_mat"

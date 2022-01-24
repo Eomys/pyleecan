@@ -1,6 +1,4 @@
-from numpy import arange, searchsorted
-
-from SciDataTool import DataTime
+from numpy import arange, searchsorted, angle
 
 from ....Classes.OutElec import OutElec
 from ....Classes.Simulation import Simulation
@@ -42,6 +40,7 @@ def gen_input(self):
     outelec = OutElec()
     output.elec = outelec
     outgeo = output.geo
+
     # Replace N0=0 by 0.1 rpm
     if self.OP.N0 == 0:
         self.OP.N0 = 0.1
@@ -100,36 +99,34 @@ def gen_input(self):
     outelec.axes_dict = self.comp_axes(
         axes_list=["time", "phase_S", "phase_R"],
         axes_dict_in=outgeo.axes_dict,
-        is_periodicity_t=False,
+        is_periodicity_a=self.is_periodicity_a,
+        is_periodicity_t=self.is_periodicity_t,
     )
 
     # Generate PWM signal
     if self.PWM is not None:
+        outelec.PWM = self.PWM.copy()
+        Udq_dict = outelec.OP.get_Ud_Uq()
+        Ud_ref, Uq_ref = Udq_dict["Ud"], Udq_dict["Uq"]
+        # Check PWM phase voltage consistency in voltage driven mode
+        if Ud_ref is not None or Uq_ref is not None:
+            U0c = Ud_ref + 1j * Uq_ref
+            if (
+                self.PWM.U0 is not None
+                and outelec.PWM.Phi0 is not None
+                and (outelec.PWM.U0 != abs(U0c) or outelec.PWM.Phi0 != angle(U0c))
+            ):
+                logger.warning("Enforcing PWM.U0 = Ud_ref + jUq_ref")
+            outelec.PWM.U0 = abs(U0c)
+            outelec.PWM.Phi0 = angle(U0c)
         # Fill generator with simu data
         felec = self.OP.get_felec()
-        rot_dir = outgeo.rot_dir
         qs = simu.machine.stator.winding.qs
-        p = simu.machine.get_pole_pair_number()
-        self.PWM.f = felec
-        self.PWM.qs = qs
-        self.PWM.rot_dir = rot_dir
-        self.PWM.duration = 1 / felec
-        self.PWM.typePWM = 8
-        self.PWM.Vdc1 *= 2  # In comp_PWM, max is Vdc1/2
-        # Compute sampling frequency (even multiple of fswi + close to 2*fmax)
-        mult = arange(1, 100)
-        ind = searchsorted(2 * mult * self.PWM.fswi, 2 * self.PWM.fmax, side="right")
-        self.PWM.fs = 2 * mult[ind] * self.PWM.fswi
-        # Generate PWM signal
-        Uabc, _, _, _, time = self.PWM.get_data(is_norm=False)
-        # Create DataTime object
-        self.time = time
-        Time = self.comp_axis_time(p, per_t=1, is_antiper_t=False)
-        Phase = self.comp_axis_phase(simu.machine.stator)
-        outelec.Us_PWM = DataTime(
-            name="Stator voltage",
-            symbol="U_s",
-            unit="V",
-            axes=[Time, Phase],
-            values=Uabc,
-        )
+        outelec.PWM.f = felec
+        outelec.PWM.qs = qs
+        outelec.PWM.phase_dir = outelec.phase_dir
+        outelec.PWM.current_dir = outelec.current_dir
+        # Take sampling frequency as 2*fmax to catch fmax components
+        outelec.PWM.fs = 2 * outelec.PWM.fmax
+        # Set PWM duration as 2*p times the electrical period (to increase frequency resolution)
+        outelec.PWM.duration = 2 * simu.machine.get_pole_pair_number() / felec

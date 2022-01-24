@@ -16,10 +16,10 @@ def comp_joule_losses(self, out_dict, machine):
 
     qs = machine.stator.winding.qs
     Id, Iq = out_dict["Id"], out_dict["Iq"]
-    R = self.parameters["R20"]
+    R1 = self.parameters["R1"]
 
     # Id and Iq are in RMS
-    Pj_losses = qs * R * (Id ** 2 + Iq ** 2)
+    Pj_losses = qs * R1 * (Id ** 2 + Iq ** 2)
 
     out_dict["Pj_losses"] = Pj_losses
 

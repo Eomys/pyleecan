@@ -24,7 +24,7 @@ param_list = [
         "stator_d_axis": 1.3076,
         "rotor_d_axis": pi / 8,
         "mmf_dir": 1,
-        "Tem_av": 368.04,
+        "Tem_av": 368.45,
     },
     {
         "name": "Protean_InWheel",
@@ -32,7 +32,7 @@ param_list = [
         "stator_d_axis": 0.09817,
         "rotor_d_axis": pi / 64,
         "mmf_dir": -1,
-        "Tem_av": 806.31,
+        "Tem_av": 806.35,
     },
 ]
 
@@ -120,7 +120,7 @@ def test_mmf_dir(param_dict, nb_worker=int(cpu_count() / 2)):
         out = simu.run()
 
         # Check torque value
-        assert out.mag.Tem_av == pytest.approx(param_dict["Tem_av"], abs=0.01)
+        assert out.mag.Tem_av == pytest.approx(param_dict["Tem_av"], rel=0.01)
 
         if is_show_fig:
 
