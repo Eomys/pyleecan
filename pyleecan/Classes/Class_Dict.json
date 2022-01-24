@@ -4967,7 +4967,7 @@
         "path": "pyleecan/Generator/ClassesRef/Machine/Lamination.csv",
         "properties": [
             {
-                "desc": "Lamination stack active length [m] without radial ventilation airducts but including insulation layers between lamination sheets",
+                "desc": "Lamination stack active length without radial ventilation airducts but including insulation layers between lamination sheets",
                 "max": "",
                 "min": "0",
                 "name": "L1",

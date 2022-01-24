@@ -1,5 +1,7 @@
 from ...Functions.Load.import_class import import_class
 from ...Functions.labels import HOLEM_LAB, HOLEV_LAB
+from logging import getLogger
+from ...loggers import GUI_LOG_NAME
 
 
 def convert_init_dict(init_dict):
@@ -57,7 +59,9 @@ def is_HoleUD_dict(obj_dict):
 
 def convert_HoleUD(hole_dict):
     """Update the content of the dict"""
-    print("Old machine version detected, Updating the HoleUD object")
+    getLogger(GUI_LOG_NAME).info(
+        "Old machine version detected, Updating the HoleUD object"
+    )
     for ii in range(len(hole_dict["surf_list"])):
         if "HoleMagnet" in hole_dict["surf_list"][ii]["label"]:
             hole_dict["surf_list"][ii]["label"] = HOLEM_LAB
@@ -94,7 +98,9 @@ def is_Winding_dict(obj_dict):
 
 def convert_Winding(wind_dict):
     """Update the old Winding classes to WindingUD"""
-    print("Old machine version detected, Updating the Winding object")
+    getLogger(GUI_LOG_NAME).info(
+        "Old machine version detected, Updating the Winding object"
+    )
     # Update Npcpp
     if "Npcpp" in wind_dict.keys():
         wind_dict["Npcp"] = wind_dict.pop("Npcpp")

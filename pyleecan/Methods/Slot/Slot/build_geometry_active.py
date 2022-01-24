@@ -85,7 +85,10 @@ def build_geometry_active(self, Nrad, Ntan, is_simplified=False, alpha=0, delta=
             for jj in range(Nrad - 1):
                 X = X_list[jj]
                 top_surf, bot_surf = surf.split_line(
-                    X - 100j, X + 100j, is_join=True, prop_dict_join=None,
+                    X - 100j,
+                    X + 100j,
+                    is_join=True,
+                    prop_dict_join=None,
                 )
                 if self.is_outwards():
                     surf_list.append(top_surf)

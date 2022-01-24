@@ -79,7 +79,7 @@ def run_GUI(argv):
         window.addSubWindow("Plot", plt_widget, plt_widget.update)
 
         mat_widget.installEventFilter(window)
-        window.addSubWindow("MatLib", mat_widget, mat_widget.update_list_mat)
+        window.addSubWindow("MatLib", mat_widget, mat_widget.update_treeview_material)
 
         tree = WTreeEdit(c.machine)
         tree_fcn = lambda: tree.update(getattr(c, "machine"))

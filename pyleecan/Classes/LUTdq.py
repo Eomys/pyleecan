@@ -434,7 +434,13 @@ class LUTdq(LUT):
     def _set_Phi_dqh_mag(self, value):
         """setter of Phi_dqh_mag"""
         if isinstance(value, str):  # Load from file
-            value = load_init_dict(value)[1]
+            try:
+                value = load_init_dict(value)[1]
+            except Exception as e:
+                self.get_logger().error(
+                    "Error while loading " + value + ", setting None instead"
+                )
+                value = None
         if isinstance(value, dict) and "__class__" in value:
             class_obj = import_class(
                 "SciDataTool.Classes", value.get("__class__"), "Phi_dqh_mag"

@@ -1,7 +1,7 @@
 import sys
 from os.path import isdir, isfile, join
 from shutil import copytree, rmtree
-
+import pytest
 import mock
 from PySide2 import QtWidgets
 from pyleecan.Functions.load import LIB_KEY, MACH_KEY, load, load_matlib
@@ -153,15 +153,15 @@ class TestDMatlibWF(object):
         dialog = self.widget.w_step.w_mat.current_dialog
         assert dialog.is_lib_mat is True
         assert dialog.nav_mat.currentRow() == 2
-        assert dialog.out_rho_elec.text() == "rho = 1 [ohm.m]"
+        assert dialog.w_setup.lf_rho_elec.value() == 1
         # Edit M400-50A material
-        dialog.b_edit.clicked.emit()
-        dialog.current_dialog.lf_rho_elec.setValue(2)
-        dialog.current_dialog.lf_rho_elec.editingFinished.emit()
-        dialog.current_dialog.b_save.clicked.emit()
+        assert not dialog.w_setup.b_save.isEnabled()
+        dialog.w_setup.lf_rho_elec.setValue(2)
+        dialog.w_setup.lf_rho_elec.editingFinished.emit()
+        assert dialog.w_setup.b_save.isEnabled()
+        dialog.w_setup.b_save.clicked.emit()
         # Check modifications
         assert dialog.nav_mat.currentRow() == 2
-        assert dialog.out_rho_elec.text() == "rho = 2 [ohm.m]"
         assert self.widget.machine.stator.mat_type.elec.rho == 2
         assert self.widget.machine.rotor.mat_type.elec.rho == 2
         assert self.widget.machine.shaft.mat_type.elec.rho == 2
@@ -184,15 +184,15 @@ class TestDMatlibWF(object):
         dialog = w_mat.current_dialog
         assert dialog.is_lib_mat is False
         assert dialog.nav_mat_mach.currentRow() == 0
-        assert dialog.out_rho_meca.text() == "rho = 1.2044 [kg/m^3]"
+        assert dialog.w_setup.lf_rho_meca.value() == 1.2044
         # Edit M400-50A material
-        dialog.b_edit.clicked.emit()
-        dialog.current_dialog.lf_rho_meca.setValue(2.468)
-        dialog.current_dialog.lf_rho_meca.editingFinished.emit()
-        dialog.current_dialog.b_save.clicked.emit()
+        assert not dialog.w_setup.b_save.isEnabled()
+        dialog.w_setup.lf_rho_meca.setValue(2.468)
+        dialog.w_setup.lf_rho_meca.editingFinished.emit()
+        assert dialog.w_setup.b_save.isEnabled()
+        dialog.w_setup.b_save.clicked.emit()
         # Check modifications
         assert dialog.nav_mat_mach.currentRow() == 0
-        assert dialog.out_rho_meca.text() == "rho = 2.468 [kg/m^3]"
         assert self.widget.machine.rotor.hole[0].mat_void.struct.rho == 2.468
         # Close the dialog
         dialog.close()
@@ -224,15 +224,15 @@ class TestDMatlibWF(object):
         assert dialog.nav_mat.count() == 4
         assert dialog.nav_mat_mach.count() == 3
         assert dialog.nav_mat_mach.currentRow() == 0
-        assert dialog.out_rho_elec.text() == "rho = 12 [ohm.m]"
+        assert dialog.w_setup.lf_rho_elec.value() == 12
         # Edit M400-50A_old material
-        dialog.b_edit.clicked.emit()
-        dialog.current_dialog.lf_rho_elec.setValue(34)
-        dialog.current_dialog.lf_rho_elec.editingFinished.emit()
-        dialog.current_dialog.b_save.clicked.emit()
+        assert not dialog.w_setup.b_save.isEnabled()
+        dialog.w_setup.lf_rho_elec.setValue(34)
+        dialog.w_setup.lf_rho_elec.editingFinished.emit()
+        assert dialog.w_setup.b_save.isEnabled()
+        dialog.w_setup.b_save.clicked.emit()
         # Check modifications
         assert dialog.nav_mat_mach.currentRow() == 0
-        assert dialog.out_rho_elec.text() == "rho = 34 [ohm.m]"
         assert self.widget.machine.stator.mat_type.elec.rho == 34
         assert self.widget.machine.rotor.mat_type.elec.rho == 34
         assert self.widget.machine.shaft.mat_type.elec.rho == 34
@@ -259,19 +259,19 @@ class TestDMatlibWF(object):
         assert dialog.nav_mat.currentRow() == 2
         assert dialog.nav_mat.count() == 4
         assert dialog.nav_mat_mach.count() == 2
-        assert dialog.out_name.text() == "name: M400-50A"
+        assert dialog.w_setup.le_name.text() == "M400-50A"
         # Copy M400-50A material
-        dialog.b_duplicate.clicked.emit()
-        assert dialog.current_dialog.le_name.text() == "M400-50A_copy"
-        dialog.current_dialog.lf_rho_elec.setValue(2)
-        dialog.current_dialog.lf_rho_elec.editingFinished.emit()
-        dialog.current_dialog.b_save.clicked.emit()
+        dialog.b_copy.clicked.emit()
+        assert dialog.w_setup.le_name.text() == "M400-50A_copy"
+        dialog.w_setup.lf_rho_elec.setValue(2)
+        dialog.w_setup.lf_rho_elec.editingFinished.emit()
+        dialog.w_setup.b_save.clicked.emit()
         # Check modifications
         assert dialog.nav_mat.count() == 5
         assert dialog.nav_mat_mach.count() == 2
         assert dialog.nav_mat.currentRow() == 4
-        assert dialog.out_name.text() == "name: M400-50A_copy"
         assert isfile(join(WS_path, "M400-50A_copy.json"))
+
         combo = self.widget.w_step.w_mat.c_mat_type
         assert combo.currentText() == "M400-50A"
         exp_items = [
@@ -311,18 +311,17 @@ class TestDMatlibWF(object):
         assert dialog.nav_mat_mach.currentRow() == 1
         assert dialog.nav_mat.count() == 4
         assert dialog.nav_mat_mach.count() == 2
-        assert dialog.out_name.text() == "name: MagnetPrius_old"
+        assert dialog.w_setup.le_name.text() == "MagnetPrius_old"
         # Copy MagnetPrius_old material
-        dialog.b_duplicate.clicked.emit()
-        assert dialog.current_dialog.le_name.text() == "MagnetPrius_old_copy"
-        dialog.current_dialog.lf_rho_meca.setValue(3750)
-        dialog.current_dialog.lf_rho_meca.editingFinished.emit()
-        dialog.current_dialog.b_save.clicked.emit()
+        dialog.b_copy.clicked.emit()
+        assert dialog.w_setup.le_name.text() == "MagnetPrius_old_copy"
+        dialog.w_setup.lf_rho_meca.setValue(3750)
+        dialog.w_setup.lf_rho_meca.editingFinished.emit()
+        dialog.w_setup.b_save.clicked.emit()
         # Check modifications
         assert dialog.nav_mat.count() == 4
         assert dialog.nav_mat_mach.count() == 3
         assert dialog.nav_mat_mach.currentRow() == 2
-        assert dialog.out_name.text() == "name: MagnetPrius_old_copy"
         assert not isfile(join(WS_path, "MagnetPrius_old_copy.json"))
         combo = self.widget.w_step.tab_hole.widget(0).w_hole.w_mat_1.c_mat_type
         assert combo.currentText() == "MagnetPrius_old"
@@ -359,20 +358,23 @@ class TestDMatlibWF(object):
         dialog = self.widget.w_step.w_mat.current_dialog
         assert dialog.is_lib_mat is True
         assert dialog.nav_mat.currentRow() == 2
-        assert dialog.out_rho_elec.text() == "rho = 1 [ohm.m]"
-        assert dialog.out_name.text() == "name: M400-50A"
+        assert dialog.w_setup.lf_rho_elec.value() == 1
+        assert dialog.w_setup.le_name.text() == "M400-50A"
         # Edit M400-50A material
-        dialog.b_edit.clicked.emit()
-        dialog.current_dialog.le_name.setText("M400-50A_V2")
-        dialog.current_dialog.le_name.editingFinished.emit()
-        dialog.current_dialog.lf_rho_elec.setValue(2)
-        dialog.current_dialog.lf_rho_elec.editingFinished.emit()
-        dialog.current_dialog.b_save.clicked.emit()
+        assert not dialog.w_setup.b_save.isEnabled()
+        dialog.w_setup.lf_rho_elec.setValue(2)
+        dialog.w_setup.lf_rho_elec.editingFinished.emit()
+        assert dialog.w_setup.b_save.isEnabled()
+        with mock.patch(
+            "PySide2.QtWidgets.QMessageBox.question",
+            return_value=QtWidgets.QMessageBox.Yes,
+        ):
+            dialog.w_setup.le_name.setText("M400-50A_V2")
+            dialog.w_setup.le_name.editingFinished.emit()
+        assert not dialog.w_setup.b_save.isEnabled()
         # Check modifications
         assert dialog.nav_mat.currentRow() == 2
         assert dialog.nav_mat.item(2).text() == "003 - M400-50A_V2"
-        assert dialog.out_rho_elec.text() == "rho = 2 [ohm.m]"
-        assert dialog.out_name.text() == "name: M400-50A_V2"
         assert self.widget.machine.stator.mat_type.name == "M400-50A_V2"
         assert self.widget.machine.rotor.mat_type.name == "M400-50A_V2"
         assert self.widget.machine.shaft.mat_type.name == "M400-50A_V2"
@@ -412,20 +414,23 @@ class TestDMatlibWF(object):
         dialog = w_mat.current_dialog
         assert dialog.is_lib_mat is False
         assert dialog.nav_mat_mach.currentRow() == 0
-        assert dialog.out_rho_meca.text() == "rho = 1.2044 [kg/m^3]"
-        assert dialog.out_name.text() == "name: Air"
+        assert dialog.w_setup.lf_rho_meca.value() == 1.2044
+        assert dialog.w_setup.le_name.text() == "Air"
         # Rename Air material
-        dialog.b_edit.clicked.emit()
-        dialog.current_dialog.le_name.setText("Air-V2")
-        dialog.current_dialog.le_name.editingFinished.emit()
-        dialog.current_dialog.lf_rho_meca.setValue(2.468)
-        dialog.current_dialog.lf_rho_meca.editingFinished.emit()
-        dialog.current_dialog.b_save.clicked.emit()
+        assert not dialog.w_setup.b_save.isEnabled()
+        dialog.w_setup.lf_rho_meca.setValue(2.468)
+        dialog.w_setup.lf_rho_meca.editingFinished.emit()
+        assert dialog.w_setup.b_save.isEnabled()
+        with mock.patch(
+            "PySide2.QtWidgets.QMessageBox.question",
+            return_value=QtWidgets.QMessageBox.Yes,
+        ):
+            dialog.w_setup.le_name.setText("Air-V2")
+            dialog.w_setup.le_name.editingFinished.emit()
+        assert not dialog.w_setup.b_save.isEnabled()
         # Check modifications
         assert dialog.nav_mat_mach.currentRow() == 0
         assert dialog.nav_mat_mach.item(0).text() == "005 - Air-V2"
-        assert dialog.out_rho_meca.text() == "rho = 2.468 [kg/m^3]"
-        assert dialog.out_name.text() == "name: Air-V2"
         assert self.widget.machine.rotor.hole[0].mat_void.struct.rho == 2.468
         assert self.widget.machine.rotor.hole[0].mat_void.name == "Air-V2"
         assert not isfile(join(WS_path, "Air.json"))
@@ -459,18 +464,18 @@ class TestDMatlibWF(object):
         assert dialog.nav_mat.currentRow() == 2
         assert dialog.nav_mat.count() == 4
         assert dialog.nav_mat_mach.count() == 2
-        assert dialog.out_name.text() == "name: M400-50A"
+        assert dialog.w_setup.le_name.text() == "M400-50A"
         # Delete M400-50A material
         with mock.patch(
             "PySide2.QtWidgets.QMessageBox.question",
             return_value=QtWidgets.QMessageBox.Yes,
         ):
-            dialog.b_delete.clicked.emit()
+            dialog.w_setup.b_delete.clicked.emit()
         # Check modifications
         assert dialog.nav_mat.count() == 3
         assert dialog.nav_mat_mach.count() == 3  # M400-50A is now a machine mat
         assert dialog.nav_mat.currentRow() == 0
-        assert dialog.out_name.text() == "name: Copper1"
+        assert dialog.w_setup.le_name.text() == "Copper1"
         assert not isfile(join(WS_path, "M400-50A.json"))
         combo = self.widget.w_step.w_mat.c_mat_type
         assert combo.currentText() == "M400-50A"
@@ -505,20 +510,21 @@ class TestDMatlibWF(object):
         assert dialog.nav_mat.count() == 4
         assert dialog.nav_mat_mach.count() == 2
         assert dialog.nav_mat.currentRow() == 2
-        assert dialog.out_rho_elec.text() == "rho = 1 [ohm.m]"
-        # Edit M400-50A material
-        dialog.b_edit.clicked.emit()
-        dialog.current_dialog.lf_rho_elec.setValue(2)
-        dialog.current_dialog.lf_rho_elec.editingFinished.emit()
-        dialog.current_dialog.b_add_matlib.clicked.emit()
+        assert dialog.w_setup.lf_rho_elec.value() == 1
+        # Create M400-50A_edit material
+        dialog.b_switch.clicked.emit()
         # Check modifications
         assert not dialog.is_lib_mat
         assert dialog.nav_mat.count() == 4
         assert dialog.nav_mat_mach.count() == 3
         assert dialog.nav_mat_mach.currentRow() == 2
         assert dialog.nav_mat_mach.item(2).text() == "007 - M400-50A_edit"
-        assert dialog.out_name.text() == "name: M400-50A_edit"
-        assert dialog.out_rho_elec.text() == "rho = 2 [ohm.m]"
+        assert dialog.w_setup.le_name.text() == "M400-50A_edit"
+        # Edit material
+        dialog.w_setup.lf_rho_elec.setValue(2)
+        dialog.w_setup.lf_rho_elec.editingFinished.emit()
+        assert self.widget.machine.stator.mat_type.elec.rho == 1
+        dialog.w_setup.b_save.clicked.emit()
         assert self.widget.machine.stator.mat_type.name == "M400-50A_edit"
         assert self.widget.machine.rotor.mat_type.name == "M400-50A_edit"
         assert self.widget.machine.shaft.mat_type.name == "M400-50A_edit"
@@ -545,6 +551,7 @@ class TestDMatlibWF(object):
         # Close the dialog
         dialog.close()
 
+    @pytest.mark.skip(reason="No longer available")
     def test_edit_machine_to_library(self):
         """Edit a material from the machine to the library"""
         # Check initial state
@@ -610,5 +617,17 @@ if __name__ == "__main__":
     a = TestDMatlibWF()
     a.setup_class()
     a.setup_method()
-    a.test_delete_matlib()
+
+    # a.test_delete_matlib()
+    # a.test_rename_machine_material()
+    # a.test_rename_matlib()
+    # a.test_new_machine_material()
+    # a.test_new_matlib()
+    # a.test_edit_machine_to_library()
+    a.test_edit_matlib_to_machine()
+    # a.test_edit_machine_material_several()
+    # a.test_edit_machine_material()
+    # a.test_edit_matlib()
+    # a.test_init()
+
     print("Done")

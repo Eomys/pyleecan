@@ -2,7 +2,8 @@
 
 from PySide2.QtCore import Qt, Signal
 from PySide2.QtWidgets import QFileDialog, QMessageBox, QWidget
-
+from logging import getLogger
+from .....loggers import GUI_LOG_NAME
 from .....GUI import gui_option
 from .....GUI.Dialog.DMachineSetup.DAVDuct.DAVDuct import DAVDuct
 from .....GUI.Dialog.DMachineSetup.SLamShape.Gen_SLamShape import Gen_SLamShape
@@ -325,10 +326,20 @@ class SLamShape(Gen_SLamShape, QWidget):
                 ax=self.w_viewer.axes,
                 is_show_fig=False,
                 is_lam_only=is_lam_only,
-                is_add_sign=False,
             )
-        except:
-            pass
+        except Exception as e:
+            if self.obj.is_stator:  # Adapt the text to the current lamination
+                err_msg = "Error while plotting machine in Stator Lamination:\n" + str(
+                    e
+                )
+            else:
+                err_msg = "Error while plotting machine in Rotor Lamination:\n" + str(e)
+            getLogger(GUI_LOG_NAME).error(err_msg)
+            QMessageBox().critical(
+                self,
+                self.tr("Error"),
+                err_msg,
+            )
 
         # Update the Graph
         self.w_viewer.axes.set_axis_off()
