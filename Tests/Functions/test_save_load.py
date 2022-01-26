@@ -20,10 +20,11 @@ from pyleecan.Classes.Shaft import Shaft
 from pyleecan.Classes.Simu1 import Simu1
 from pyleecan.Classes.SlotM11 import SlotM11
 from pyleecan.Classes.SlotW10 import SlotW10
+from pyleecan.Classes.SlotUD import SlotUD
+from pyleecan.Classes.HoleUD import HoleUD
 from pyleecan.Classes.Winding import Winding
 from pyleecan.Classes.OPdq import OPdq
 from pyleecan.Functions.load import (
-    LoadSwitchError,
     LoadWrongDictClassError,
     LoadWrongTypeError,
     load,
@@ -247,6 +248,31 @@ def test_save_load_just_name():
     # remove(file_path)
 
 
+def test_save_load_DXF_flat():
+    """Check that you can save/load a machine with dxf slot/hole in flat mode"""
+    Prius_DXF = load(join(DATA_DIR, "Machine", "Toyota_Prius_DXF.json"))
+    save_dir = join(save_path, "Toyota_Prius_DXF")
+    # Check save
+    assert not isdir(save_dir)
+    Prius_DXF.save(save_path=save_dir, is_folder=True)
+    assert isdir(save_dir)
+    file_list = listdir(save_dir)
+    assert len(file_list) == 12
+    assert "hole.json" in file_list
+    assert "slot.json" in file_list
+    # Check load
+    Prius_2 = load(save_dir)
+    assert isinstance(Prius_2.stator.slot, SlotUD)
+    assert isinstance(Prius_2.rotor.hole[0], HoleUD)
+    assert len(Prius_DXF.compare(Prius_2)) == 0
+    # Remove file and check None
+    remove(join(save_dir, "hole.json"))
+    remove(join(save_dir, "slot.json"))
+    Prius_3 = load(save_dir)
+    assert Prius_3.stator.slot is None
+    assert Prius_3.rotor.hole[0] is None
+
+
 def test_load_error_missing():
     """Test that the load function can detect missing file"""
     with pytest.raises(LoadMissingFileError):
@@ -406,9 +432,8 @@ def test_save_load_simu(type_file):
 
 
 if __name__ == "__main__":
-    test_save_load_simu("json")
-    test_save_load_simu("h5")
-    test_save_load_simu("pkl")
-    # test_save_load_folder_path()
-    # test_save_load_json_compressed()
+    test_save_load_DXF_flat()
     print("Done")
+    # test_save_load_simu("json")
+    # test_save_load_simu("h5")
+    # test_save_load_simu("pkl")
