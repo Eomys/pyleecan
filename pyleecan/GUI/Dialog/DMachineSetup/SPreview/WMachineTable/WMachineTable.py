@@ -10,6 +10,7 @@ from ......Classes.Output import Output
 from ......Classes.Simu1 import Simu1
 from ......Classes.OPdq import OPdq
 from ......Classes.OPslip import OPslip
+from ......Classes.InputCurrent import InputCurrent
 from ......definitions import config_dict
 from ......loggers import GUI_LOG_NAME
 from ......Functions.FEMM.update_FEMM_simulation import update_FEMM_simulation
@@ -118,28 +119,28 @@ class WMachineTable(Ui_WMachineTable, QWidget):
         if save_file_path is [None, ""]:
             return
 
-        femm = _FEMMHandler()
-        output = Output(simu=Simu1(machine=self.machine))
-        # Periodicity
-        sym, is_antiper = self.machine.comp_periodicity_spatial()
-        if is_antiper:
-            sym *= 2
-        # Set Current (constant J in a layer)
-        S_slot = self.machine.stator.slot.comp_surface_active()
-        (Nrad, Ntan) = self.machine.stator.winding.get_dim_wind()
-        Ntcoil = self.machine.stator.winding.Ntcoil
-        Sphase = S_slot / (Nrad * Ntan)
-        J = 5e6
-        if self.machine.is_synchronous():
-            op = OPdq(felec=60)
-        else:
-            op = OPslip(felec=60)
-        op.set_Id_Iq(Id=J * Sphase / Ntcoil, Iq=0)
-        output.simu.input = InputCurrent(OP=op, Nt_tot=20)
-        output.simu.input.gen_input()
-        Is = output.elec.get_Is().get_along("phase", "time")["I_s"].transpose()
-        alpha = output.get_angle_rotor_initial()
         try:
+            femm = _FEMMHandler()
+            output = Output(simu=Simu1(machine=self.machine))
+            # Periodicity
+            sym, is_antiper = self.machine.comp_periodicity_spatial()
+            if is_antiper:
+                sym *= 2
+            # Set Current (constant J in a layer)
+            S_slot = self.machine.stator.slot.comp_surface_active()
+            (Nrad, Ntan) = self.machine.stator.winding.get_dim_wind()
+            Ntcoil = self.machine.stator.winding.Ntcoil
+            Sphase = S_slot / (Nrad * Ntan)
+            J = 5e6
+            if self.machine.is_synchronous():
+                op = OPdq(felec=60)
+            else:
+                op = OPslip(felec=60)
+            op.set_Id_Iq(Id=J * Sphase / Ntcoil, Iq=0)
+            output.simu.input = InputCurrent(OP=op, Nt_tot=20)
+            output.simu.input.gen_input()
+            Is = output.elec.get_Is().get_along("phase", "time")["I_s"].transpose()
+            alpha = output.get_angle_rotor_initial()
             # Draw the machine
             FEMM_dict = draw_FEMM(
                 femm,
@@ -185,12 +186,12 @@ class WMachineTable(Ui_WMachineTable, QWidget):
         if save_file_path is [None, ""]:
             return
         # Create the Simulation
-        mySimu = Simu1(name="test_gmsh_ipm", machine=self.machine)
-        myResults = Output(simu=mySimu)
-        sym, is_antiper = self.machine.comp_periodicity_spatial()
-        if is_antiper:
-            sym *= 2
         try:
+            mySimu = Simu1(name="test_gmsh_ipm", machine=self.machine)
+            myResults = Output(simu=mySimu)
+            sym, is_antiper = self.machine.comp_periodicity_spatial()
+            if is_antiper:
+                sym *= 2
             draw_GMSH(
                 output=myResults,
                 sym=sym,
