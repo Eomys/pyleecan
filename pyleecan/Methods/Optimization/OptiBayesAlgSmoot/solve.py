@@ -102,11 +102,12 @@ def solve(self):
         """ xdoe = np.atleast_2d([np.random.uniform(var.space[0],var.space[1]) for var in self.problem.design_var])
         print(xdoe.shape) """
         moo = MOO(
-            n_iter=5*n_iter,
+            n_iter=n_iter,
+            criterion = 'PI',
             n_start=20,
             xlimits=xlimits,
             n_gen=10*self.nb_gen,
-            pop_size=self.size_pop,
+            pop_size=4*self.size_pop
         )  # xdoe = xdoe
 
         moo.optimize(fun=self.evaluate) #x_opt, y_opt, _, x_data, y_data =

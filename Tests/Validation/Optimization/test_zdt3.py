@@ -145,3 +145,6 @@ def test_zdt3():
     axs[0].set_xlabel(r"$f_1(x)$")
     axs[0].set_ylabel(r"$f_2(x)$")
     fig.savefig(join(save_path, "test_zdt3.png"))
+
+if __name__ == "__main__":
+    test_zdt3()
