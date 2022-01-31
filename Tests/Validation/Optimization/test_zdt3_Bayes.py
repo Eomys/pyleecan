@@ -17,7 +17,7 @@ from pyleecan.Classes.OptiConstraint import OptiConstraint
 from pyleecan.Classes.OptiProblem import OptiProblem
 from pyleecan.Classes.ImportMatrixVal import ImportMatrixVal
 from pyleecan.Classes.ImportGenVectLin import ImportGenVectLin
-from pyleecan.Classes.OptiBayesAlgSMT import OptiBayesAlgSMT
+from pyleecan.Classes.OptiBayesAlgSmoot import OptiBayesAlgSmoot
 from Tests import save_validation_path as save_path
 import matplotlib.pyplot as plt
 import matplotlib.image as img
@@ -125,7 +125,7 @@ def test_zdt3_Bayes():
         simu=simu, design_var=my_vars, obj_func=objs, eval_func=evaluate
     )
 
-    solver = OptiBayesAlgSMT(problem=my_prob)
+    solver = OptiBayesAlgSmoot(problem=my_prob)
     res = solver.solve()
 
     #

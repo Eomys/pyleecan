@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
 
-from smt.applications import EGO
+from smoot.smoot import MOO
 from copy import deepcopy
 from datetime import datetime
 import numpy as np
+from pymoo.visualization.scatter import Scatter
 
 from ....Classes.Output import Output
 from ....Classes.XOutput import XOutput
@@ -27,8 +28,8 @@ def solve(self):
 
     Parameters
     ----------
-    self : OptiBayesAlgSMT
-        Solver to perform Bayesian optimization
+    self : OptiBayesAlgSmoot
+        Solver to perform Bayesian model creation, then use a genetic algorithm
 
     Returns
     -------
@@ -73,16 +74,16 @@ def solve(self):
         xoutput.xoutput_dict["is_valid"] = DataKeeper(
             name="Individual validity", symbol="is_valid"
         )
-        xoutput.xoutput_dict["x_opt"] = DataKeeper( #need to put a better name here
+        xoutput.xoutput_dict["x_opt"] = DataKeeper(  # need to put a better name here
             name="x opt", symbol="x_opt"
         )
-        xoutput.xoutput_dict["y_opt"] = DataKeeper( #need to put a better name here
+        xoutput.xoutput_dict["y_opt"] = DataKeeper(  # need to put a better name here
             name="y opt", symbol="y_opt"
-        )        
-        xoutput.xoutput_dict["x_data"] = DataKeeper( #need to put a better name here
+        )
+        xoutput.xoutput_dict["x_data"] = DataKeeper(  # need to put a better name here
             name="x data", symbol="x_data"
-        )        
-        xoutput.xoutput_dict["y_data"] = DataKeeper( #need to put a better name here
+        )
+        xoutput.xoutput_dict["y_data"] = DataKeeper(  # need to put a better name here
             name="y data", symbol="y_data"
         )
 
@@ -100,18 +101,30 @@ def solve(self):
         xlimits = np.array([var.space for var in self.problem.design_var])
         """ xdoe = np.atleast_2d([np.random.uniform(var.space[0],var.space[1]) for var in self.problem.design_var])
         print(xdoe.shape) """
-        ego = EGO(n_iter=n_iter, criterion=self.criteria, xlimits=xlimits) #xdoe = xdoe
+        moo = MOO(
+            n_iter=5*n_iter,
+            n_start=20,
+            xlimits=xlimits,
+            n_gen=10*self.nb_gen,
+            pop_size=self.size_pop,
+        )  # xdoe = xdoe
 
-        x_opt, y_opt, _, x_data, y_data = ego.optimize(fun=self.evaluate)
-        print(x_opt, y_opt)
+        moo.optimize(fun=self.evaluate) #x_opt, y_opt, _, x_data, y_data =
+
+        res = moo.result
+        plot = Scatter()
+        plot.add(res.F, color="red")
+        plot.show()
+
+        """ print(x_opt, y_opt)
         xoutput.xoutput_dict["x_opt"].result.append(x_opt)
         xoutput.xoutput_dict["y_opt"].result.append(y_opt)
         xoutput.xoutput_dict["x_data"].result.append(x_data)
-        xoutput.xoutput_dict["y_data"].result.append(y_data)
-       # xoutput.output_list.append(x_opt)
-        #xoutput.output_list.append(y_opt)
-        #xoutput.output_list.append(x_data)
-        #xoutput.output_list.append(y_data)
+        xoutput.xoutput_dict["y_data"].result.append(y_data) """
+        # xoutput.output_list.append(x_opt)
+        # xoutput.output_list.append(y_opt)
+        # xoutput.output_list.append(x_data)
+        # xoutput.output_list.append(y_data)
 
         return xoutput
 
@@ -122,9 +135,9 @@ def solve(self):
 
         return xoutput
 
-    """ except Exception as err:
+    except Exception as err:
         logger.error("{}: {}".format(type(err).__name__, err))
-        raise err """
+        raise err
 
 
 def print_gen_simu(time, gen_id, simu_id, size_pop, nb_error, to_eval):

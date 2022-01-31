@@ -21,7 +21,7 @@ from pyleecan.Classes.OptiConstraint import OptiConstraint
 from pyleecan.Classes.OptiProblem import OptiProblem
 from pyleecan.Classes.ImportMatrixVal import ImportMatrixVal
 from pyleecan.Classes.ImportGenVectLin import ImportGenVectLin
-from pyleecan.Classes.OptiBayesAlgSMT import OptiBayesAlgSMT
+from pyleecan.Classes.OptiBayesAlgSmoot import OptiBayesAlgSmoot
 
 import matplotlib.pyplot as plt
 import matplotlib.image as img
@@ -148,7 +148,7 @@ def test_Binh_and_Korn():
 
     # ### Solving the problem
 
-    solver = OptiBayesAlgSMT(problem=my_prob)
+    solver = OptiBayesAlgSmoot(problem=my_prob)
     res = solver.solve()
 
     # ### Plot results
