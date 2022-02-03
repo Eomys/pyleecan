@@ -434,7 +434,13 @@ class LUTdq(LUT):
     def _set_Phi_dqh_mag(self, value):
         """setter of Phi_dqh_mag"""
         if isinstance(value, str):  # Load from file
-            value = load_init_dict(value)[1]
+            try:
+                value = load_init_dict(value)[1]
+            except Exception as e:
+                self.get_logger().error(
+                    "Error while loading " + value + ", setting None instead"
+                )
+                value = None
         if isinstance(value, dict) and "__class__" in value:
             class_obj = import_class(
                 "SciDataTool.Classes", value.get("__class__"), "Phi_dqh_mag"
@@ -466,6 +472,15 @@ class LUTdq(LUT):
         """setter of Phi_wind"""
         if type(value) is list:
             for ii, obj in enumerate(value):
+                if isinstance(obj, str):  # Load from file
+                    try:
+                        obj = load_init_dict(obj)[1]
+                    except Exception as e:
+                        self.get_logger().error(
+                            "Error while loading " + obj + ", setting None instead"
+                        )
+                        obj = None
+                        value[ii] = None
                 if type(obj) is dict:
                     class_obj = import_class(
                         "SciDataTool.Classes", obj.get("__class__"), "Phi_wind"
@@ -493,6 +508,8 @@ class LUTdq(LUT):
 
     def _set_Phi_dqh_interp(self, value):
         """setter of Phi_dqh_interp"""
+        if value == -1:
+            value = RegularGridInterpolator()
         check_var("Phi_dqh_interp", value, "RegularGridInterpolator")
         self._Phi_dqh_interp = value
 

@@ -18,7 +18,7 @@ def get_logger(obj):
 
     if hasattr(obj, "logger_name"):  # Object logger
         return getLogger(obj.logger_name)
-    elif obj.parent != None:  # Parent logger
+    elif hasattr(obj, "parent") and obj.parent != None:  # Parent logger
         return obj.parent.get_logger()
     else:  # Default logger
         return getLogger(DEFAULT_LOG_NAME)

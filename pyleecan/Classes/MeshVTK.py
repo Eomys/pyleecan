@@ -401,6 +401,8 @@ class MeshVTK(Mesh):
 
     def _set_mesh(self, value):
         """setter of mesh"""
+        if value == -1:
+            value = vtkPointSet()
         check_var("mesh", value, "vtkPointSet")
         self._mesh = value
 
@@ -491,6 +493,8 @@ class MeshVTK(Mesh):
 
     def _set_surf(self, value):
         """setter of surf"""
+        if value == -1:
+            value = PolyData()
         check_var("surf", value, "PolyData")
         self._surf = value
 

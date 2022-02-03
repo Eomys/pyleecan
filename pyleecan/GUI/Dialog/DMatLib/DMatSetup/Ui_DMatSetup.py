@@ -19,7 +19,7 @@ class Ui_DMatSetup(object):
     def setupUi(self, DMatSetup):
         if not DMatSetup.objectName():
             DMatSetup.setObjectName(u"DMatSetup")
-        DMatSetup.resize(642, 451)
+        DMatSetup.resize(642, 413)
         icon = QIcon()
         icon.addFile(
             u":/images/images/icon/pyleecan_64.png", QSize(), QIcon.Normal, QIcon.Off
@@ -39,6 +39,27 @@ class Ui_DMatSetup(object):
 
         self.horizontalLayout.addWidget(self.le_name)
 
+        self.horizontalSpacer = QSpacerItem(
+            40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum
+        )
+
+        self.horizontalLayout.addItem(self.horizontalSpacer)
+
+        self.b_delete = QPushButton(DMatSetup)
+        self.b_delete.setObjectName(u"b_delete")
+
+        self.horizontalLayout.addWidget(self.b_delete)
+
+        self.b_save = QPushButton(DMatSetup)
+        self.b_save.setObjectName(u"b_save")
+
+        self.horizontalLayout.addWidget(self.b_save)
+
+        self.b_cancel = QPushButton(DMatSetup)
+        self.b_cancel.setObjectName(u"b_cancel")
+
+        self.horizontalLayout.addWidget(self.b_cancel)
+
         self.verticalLayout.addLayout(self.horizontalLayout)
 
         self.is_isotropic = QCheckBox(DMatSetup)
@@ -51,24 +72,27 @@ class Ui_DMatSetup(object):
         self.nav_phy.setMinimumSize(QSize(370, 0))
         self.tab_elec = QWidget()
         self.tab_elec.setObjectName(u"tab_elec")
-        self.gridLayout_2 = QGridLayout(self.tab_elec)
+        self.verticalLayout_5 = QVBoxLayout(self.tab_elec)
+        self.verticalLayout_5.setObjectName(u"verticalLayout_5")
+        self.gridLayout_2 = QGridLayout()
         self.gridLayout_2.setObjectName(u"gridLayout_2")
+        self.in_rho_elec = QLabel(self.tab_elec)
+        self.in_rho_elec.setObjectName(u"in_rho_elec")
+        font = QFont()
+        font.setPointSize(8)
+        font.setBold(False)
+        font.setWeight(50)
+        self.in_rho_elec.setFont(font)
+
+        self.gridLayout_2.addWidget(self.in_rho_elec, 0, 0, 1, 1)
+
         self.lf_rho_elec = FloatEdit(self.tab_elec)
         self.lf_rho_elec.setObjectName(u"lf_rho_elec")
 
         self.gridLayout_2.addWidget(self.lf_rho_elec, 0, 1, 1, 1)
 
-        self.lf_epsr = FloatEdit(self.tab_elec)
-        self.lf_epsr.setObjectName(u"lf_epsr")
-
-        self.gridLayout_2.addWidget(self.lf_epsr, 1, 1, 1, 1)
-
         self.unit_rho_elec = QLabel(self.tab_elec)
         self.unit_rho_elec.setObjectName(u"unit_rho_elec")
-        font = QFont()
-        font.setPointSize(8)
-        font.setBold(False)
-        font.setWeight(50)
         self.unit_rho_elec.setFont(font)
 
         self.gridLayout_2.addWidget(self.unit_rho_elec, 0, 2, 1, 1)
@@ -79,17 +103,18 @@ class Ui_DMatSetup(object):
 
         self.gridLayout_2.addWidget(self.in_epsr, 1, 0, 1, 1)
 
-        self.in_rho_elec = QLabel(self.tab_elec)
-        self.in_rho_elec.setObjectName(u"in_rho_elec")
-        self.in_rho_elec.setFont(font)
+        self.lf_epsr = FloatEdit(self.tab_elec)
+        self.lf_epsr.setObjectName(u"lf_epsr")
 
-        self.gridLayout_2.addWidget(self.in_rho_elec, 0, 0, 1, 1)
+        self.gridLayout_2.addWidget(self.lf_epsr, 1, 1, 1, 1)
+
+        self.verticalLayout_5.addLayout(self.gridLayout_2)
 
         self.verticalSpacer_2 = QSpacerItem(
             20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding
         )
 
-        self.gridLayout_2.addItem(self.verticalSpacer_2, 2, 1, 1, 1)
+        self.verticalLayout_5.addItem(self.verticalSpacer_2)
 
         self.nav_phy.addTab(self.tab_elec, "")
         self.tab_mag = QWidget()
@@ -325,56 +350,60 @@ class Ui_DMatSetup(object):
         self.nav_meca.addWidget(self.page_niso_mec)
         self.page_iso_mec = QWidget()
         self.page_iso_mec.setObjectName(u"page_iso_mec")
-        self.gridLayout_6 = QGridLayout(self.page_iso_mec)
-        self.gridLayout_6.setObjectName(u"gridLayout_6")
+        self.verticalLayout_7 = QVBoxLayout(self.page_iso_mec)
+        self.verticalLayout_7.setObjectName(u"verticalLayout_7")
+        self.gridLayout_4 = QGridLayout()
+        self.gridLayout_4.setObjectName(u"gridLayout_4")
         self.in_E = QLabel(self.page_iso_mec)
         self.in_E.setObjectName(u"in_E")
         self.in_E.setFont(font)
 
-        self.gridLayout_6.addWidget(self.in_E, 0, 0, 1, 1)
-
-        self.lf_G = FloatEdit(self.page_iso_mec)
-        self.lf_G.setObjectName(u"lf_G")
-
-        self.gridLayout_6.addWidget(self.lf_G, 2, 2, 1, 2)
-
-        self.verticalSpacer_6 = QSpacerItem(
-            20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding
-        )
-
-        self.gridLayout_6.addItem(self.verticalSpacer_6, 4, 3, 1, 1)
-
-        self.unit_G = QLabel(self.page_iso_mec)
-        self.unit_G.setObjectName(u"unit_G")
-
-        self.gridLayout_6.addWidget(self.unit_G, 2, 4, 1, 1)
+        self.gridLayout_4.addWidget(self.in_E, 0, 0, 1, 1)
 
         self.lf_E = FloatEdit(self.page_iso_mec)
         self.lf_E.setObjectName(u"lf_E")
 
-        self.gridLayout_6.addWidget(self.lf_E, 0, 1, 1, 3)
+        self.gridLayout_4.addWidget(self.lf_E, 0, 1, 1, 1)
 
-        self.in_G = QLabel(self.page_iso_mec)
-        self.in_G.setObjectName(u"in_G")
-        self.in_G.setFont(font)
+        self.unit_E = QLabel(self.page_iso_mec)
+        self.unit_E.setObjectName(u"unit_E")
 
-        self.gridLayout_6.addWidget(self.in_G, 2, 0, 1, 2)
+        self.gridLayout_4.addWidget(self.unit_E, 0, 2, 1, 1)
 
         self.in_nu = QLabel(self.page_iso_mec)
         self.in_nu.setObjectName(u"in_nu")
         self.in_nu.setFont(font)
 
-        self.gridLayout_6.addWidget(self.in_nu, 1, 0, 1, 3)
+        self.gridLayout_4.addWidget(self.in_nu, 1, 0, 1, 1)
 
         self.lf_nu = FloatEdit(self.page_iso_mec)
         self.lf_nu.setObjectName(u"lf_nu")
 
-        self.gridLayout_6.addWidget(self.lf_nu, 1, 3, 1, 1)
+        self.gridLayout_4.addWidget(self.lf_nu, 1, 1, 1, 1)
 
-        self.unit_E = QLabel(self.page_iso_mec)
-        self.unit_E.setObjectName(u"unit_E")
+        self.in_G = QLabel(self.page_iso_mec)
+        self.in_G.setObjectName(u"in_G")
+        self.in_G.setFont(font)
 
-        self.gridLayout_6.addWidget(self.unit_E, 0, 4, 1, 1)
+        self.gridLayout_4.addWidget(self.in_G, 2, 0, 1, 1)
+
+        self.lf_G = FloatEdit(self.page_iso_mec)
+        self.lf_G.setObjectName(u"lf_G")
+
+        self.gridLayout_4.addWidget(self.lf_G, 2, 1, 1, 1)
+
+        self.unit_G = QLabel(self.page_iso_mec)
+        self.unit_G.setObjectName(u"unit_G")
+
+        self.gridLayout_4.addWidget(self.unit_G, 2, 2, 1, 1)
+
+        self.verticalLayout_7.addLayout(self.gridLayout_4)
+
+        self.verticalSpacer_6 = QSpacerItem(
+            20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding
+        )
+
+        self.verticalLayout_7.addItem(self.verticalSpacer_6)
 
         self.nav_meca.addWidget(self.page_iso_mec)
 
@@ -529,37 +558,16 @@ class Ui_DMatSetup(object):
 
         self.verticalLayout.addWidget(self.nav_phy)
 
-        self.horizontalGroupBox = QGroupBox(DMatSetup)
-        self.horizontalGroupBox.setObjectName(u"horizontalGroupBox")
-        self.horizontalLayout_9 = QHBoxLayout(self.horizontalGroupBox)
-        self.horizontalLayout_9.setObjectName(u"horizontalLayout_9")
-        self.horizontalSpacer_2 = QSpacerItem(
-            40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum
+        self.verticalSpacer_7 = QSpacerItem(
+            20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding
         )
 
-        self.horizontalLayout_9.addItem(self.horizontalSpacer_2)
-
-        self.b_add_matlib = QPushButton(self.horizontalGroupBox)
-        self.b_add_matlib.setObjectName(u"b_add_matlib")
-
-        self.horizontalLayout_9.addWidget(self.b_add_matlib)
-
-        self.b_save = QPushButton(self.horizontalGroupBox)
-        self.b_save.setObjectName(u"b_save")
-
-        self.horizontalLayout_9.addWidget(self.b_save)
-
-        self.b_cancel = QPushButton(self.horizontalGroupBox)
-        self.b_cancel.setObjectName(u"b_cancel")
-
-        self.horizontalLayout_9.addWidget(self.b_cancel)
-
-        self.verticalLayout.addWidget(self.horizontalGroupBox)
+        self.verticalLayout.addItem(self.verticalSpacer_7)
 
         self.retranslateUi(DMatSetup)
 
-        self.nav_phy.setCurrentIndex(1)
-        self.nav_meca.setCurrentIndex(1)
+        self.nav_phy.setCurrentIndex(0)
+        self.nav_meca.setCurrentIndex(0)
         self.nav_ther.setCurrentIndex(1)
 
         QMetaObject.connectSlotsByName(DMatSetup)
@@ -570,16 +578,21 @@ class Ui_DMatSetup(object):
         DMatSetup.setWindowTitle(
             QCoreApplication.translate("DMatSetup", u"Edit Material", None)
         )
-        self.in_name.setText(QCoreApplication.translate("DMatSetup", u"name", None))
+        self.in_name.setText(
+            QCoreApplication.translate("DMatSetup", u"Material name", None)
+        )
         self.le_name.setText("")
+        self.b_delete.setText(QCoreApplication.translate("DMatSetup", u"Delete", None))
+        self.b_save.setText(QCoreApplication.translate("DMatSetup", u"Save", None))
+        self.b_cancel.setText(QCoreApplication.translate("DMatSetup", u"Cancel", None))
         self.is_isotropic.setText(
             QCoreApplication.translate("DMatSetup", u"is_isotropic", None)
         )
+        self.in_rho_elec.setText(QCoreApplication.translate("DMatSetup", u"rho", None))
         self.unit_rho_elec.setText(
             QCoreApplication.translate("DMatSetup", u"ohm.m", None)
         )
         self.in_epsr.setText(QCoreApplication.translate("DMatSetup", u"epsr", None))
-        self.in_rho_elec.setText(QCoreApplication.translate("DMatSetup", u"rho", None))
         self.nav_phy.setTabText(
             self.nav_phy.indexOf(self.tab_elec),
             QCoreApplication.translate("DMatSetup", u"Electrical", None),
@@ -625,10 +638,10 @@ class Ui_DMatSetup(object):
         self.in_Gxz.setText(QCoreApplication.translate("DMatSetup", u"Gxz", None))
         self.in_Gyz.setText(QCoreApplication.translate("DMatSetup", u"Gyz", None))
         self.in_E.setText(QCoreApplication.translate("DMatSetup", u"E", None))
-        self.unit_G.setText(QCoreApplication.translate("DMatSetup", u"Pa", None))
-        self.in_G.setText(QCoreApplication.translate("DMatSetup", u"G", None))
-        self.in_nu.setText(QCoreApplication.translate("DMatSetup", u"nu", None))
         self.unit_E.setText(QCoreApplication.translate("DMatSetup", u"Pa", None))
+        self.in_nu.setText(QCoreApplication.translate("DMatSetup", u"nu", None))
+        self.in_G.setText(QCoreApplication.translate("DMatSetup", u"G", None))
+        self.unit_G.setText(QCoreApplication.translate("DMatSetup", u"Pa", None))
         self.nav_phy.setTabText(
             self.nav_phy.indexOf(self.tab_mec),
             QCoreApplication.translate("DMatSetup", u"Mechanics", None),
@@ -660,10 +673,5 @@ class Ui_DMatSetup(object):
             self.nav_phy.indexOf(self.tab_eco),
             QCoreApplication.translate("DMatSetup", u"Economical", None),
         )
-        self.b_add_matlib.setText(
-            QCoreApplication.translate("DMatSetup", u"Add to MatLib", None)
-        )
-        self.b_save.setText(QCoreApplication.translate("DMatSetup", u"Save", None))
-        self.b_cancel.setText(QCoreApplication.translate("DMatSetup", u"Cancel", None))
 
     # retranslateUi

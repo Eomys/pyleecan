@@ -317,6 +317,8 @@ class OptiGenAlgNsga2Deap(OptiGenAlg):
 
     def _set_toolbox(self, value):
         """setter of toolbox"""
+        if value == -1:
+            value = Toolbox()
         check_var("toolbox", value, "Toolbox")
         self._toolbox = value
 

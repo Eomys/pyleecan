@@ -40,6 +40,9 @@ list_param = [
         "element_types": ["triangle", "quad"],
         "n_elements": [3, 1],
     },
+    {
+        "path": "Data\Mesh\mesh_test_quad_set82.unv",
+    },
 ]
 
 
