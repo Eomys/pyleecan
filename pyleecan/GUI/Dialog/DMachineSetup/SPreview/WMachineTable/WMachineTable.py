@@ -1,13 +1,13 @@
-# -*- coding: utf-8 -*-
-
 from logging import getLogger
 from os.path import join
 
 import matplotlib.pyplot as plt
 from PySide2.QtWidgets import QFileDialog, QTableWidgetItem, QWidget, QMessageBox
+from sympy import N
 
 from ......Classes._FEMMHandler import _FEMMHandler
 from ......Classes.Output import Output
+from ......Classes.InputCurrent import InputCurrent
 from ......Classes.Simu1 import Simu1
 from ......Classes.OPdq import OPdq
 from ......Classes.OPslip import OPslip
@@ -121,9 +121,9 @@ class WMachineTable(Ui_WMachineTable, QWidget):
             return
 
         femm = _FEMMHandler()
-        output = Output(simu=Simu1(machine=self.machine))
+
         # Periodicity
-        sym, is_antiper, _, _ = self.machine.comp_periodicity()
+        sym, is_antiper = self.machine.comp_periodicity_spatial()
         if is_antiper:
             sym *= 2
         # Set Current (constant J in a layer)
@@ -133,24 +133,37 @@ class WMachineTable(Ui_WMachineTable, QWidget):
         Sphase = S_slot / (Nrad * Ntan)
         J = 5e6
         if self.machine.is_synchronous():
-            output.elec.OP = OPdq(felec=60)
+            OP = OPdq(felec=60)
+            OP.set_Id_Iq(Id=0, Iq=J * Sphase / Ntcoil)
         else:
-            output.elec.OP = OPslip(felec=60)
-        output.elec.OP.set_Id_Iq(Id=J * Sphase / Ntcoil, Iq=0)
-        output.elec.Time = DataLinspace(
-            name="time",
-            unit="s",
-            initial=0,
-            final=60,
-            number=20,
-            include_endpoint=False,
+            OP = OPslip(felec=60)
+            OP.set_Id_Iq(Id=J * Sphase / Ntcoil, Iq=0)
+
+        output = Output(
+            simu=Simu1(
+                machine=self.machine, input=InputCurrent(OP=OP, Nt_tot=20, Na_tot=200)
+            )
         )
-        time = output.elec.Time.get_values(
-            is_oneperiod=False,
-            is_antiperiod=False,
+
+        # Generate time and phase vectors in OutElec
+        output.simu.input.gen_input()
+
+        # Get current values for given OP
+        Is = output.elec.get_Is().values
+
+        # Divide phase current by the number of parallel circuit per phase of winding
+        stator = self.machine.stator
+        if hasattr(stator.winding, "Npcp") and stator.winding.Npcp is not None:
+            Npcp = stator.winding.Npcp
+        else:
+            Npcp = 1
+        Is /= Npcp
+
+        # Get rotor angular position in degress
+        angle_rotor = output.elec.axes_dict["time"].get_values(
+            normalization="angle_rotor"
         )
-        Is = output.elec.comp_I_mag(time, is_stator=True)
-        alpha = output.get_angle_rotor_initial()
+
         try:
             # Draw the machine
             FEMM_dict = draw_FEMM(
@@ -170,7 +183,7 @@ class WMachineTable(Ui_WMachineTable, QWidget):
                 circuits=FEMM_dict["circuits"],
                 is_sliding_band=True,
                 is_internal_rotor=self.machine.rotor.is_internal,
-                angle_rotor=[alpha],
+                angle_rotor=angle_rotor,
                 Is=Is,
                 Ir=None,
                 ii=0,
@@ -199,7 +212,7 @@ class WMachineTable(Ui_WMachineTable, QWidget):
         # Create the Simulation
         mySimu = Simu1(name="test_gmsh_ipm", machine=self.machine)
         myResults = Output(simu=mySimu)
-        sym, is_antiper, _, _ = self.machine.comp_periodicity()
+        sym, is_antiper = self.machine.comp_periodicity_spatial()
         if is_antiper:
             sym *= 2
         try:
