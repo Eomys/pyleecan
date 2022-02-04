@@ -99,8 +99,7 @@ def solve(self):
 
         n_iter = self.nb_iter
         xlimits = np.array([var.space for var in self.problem.design_var])
-        """ xdoe = np.atleast_2d([np.random.uniform(var.space[0],var.space[1]) for var in self.problem.design_var])
-        print(xdoe.shape) """
+        
         moo = MOO(
             n_iter=n_iter,
             criterion = 'PI',
@@ -108,9 +107,9 @@ def solve(self):
             xlimits=xlimits,
             n_gen=10*self.nb_gen,
             pop_size=4*self.size_pop
-        )  # xdoe = xdoe
+        ) 
 
-        moo.optimize(fun=self.evaluate) #x_opt, y_opt, _, x_data, y_data =
+        moo.optimize(fun=self.evaluate)
 
         res = moo.result
         plot = Scatter()
