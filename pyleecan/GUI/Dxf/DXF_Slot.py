@@ -546,11 +546,16 @@ class DXF_Slot(Ui_DXF_Slot, QDialog):
             slot = self.get_slot()
             if slot is None:
                 return  # Uncorrect slot
-            if self.si_wind_begin_index.value() == 0 and self.si_wind_end_index.value() == 0:
+            if (
+                self.si_wind_begin_index.value() == 0
+                and self.si_wind_end_index.value() == 0
+            ):
                 QMessageBox().warning(
                     self,
                     self.tr("Warning"),
-                    self.tr("The winding was not defined. Please use plot to see the points indices"),
+                    self.tr(
+                        "The winding was not defined. Please use plot to see the points indices"
+                    ),
                 )
                 return
             save_file_path = QFileDialog.getSaveFileName(

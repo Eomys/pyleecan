@@ -63,9 +63,19 @@ except ImportError as error:
     comp_surface_active = error
 
 try:
+    from ..Methods.Slot.SlotW10.comp_surface_opening import comp_surface_opening
+except ImportError as error:
+    comp_surface_opening = error
+
+try:
     from ..Methods.Slot.SlotW10.get_surface_active import get_surface_active
 except ImportError as error:
     get_surface_active = error
+
+try:
+    from ..Methods.Slot.SlotW10.get_surface_opening import get_surface_opening
+except ImportError as error:
+    get_surface_opening = error
 
 try:
     from ..Methods.Slot.SlotW10.get_H1 import get_H1
@@ -188,6 +198,18 @@ class SlotW10(Slot):
         )
     else:
         comp_surface_active = comp_surface_active
+    # cf Methods.Slot.SlotW10.comp_surface_opening
+    if isinstance(comp_surface_opening, ImportError):
+        comp_surface_opening = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use SlotW10 method comp_surface_opening: "
+                    + str(comp_surface_opening)
+                )
+            )
+        )
+    else:
+        comp_surface_opening = comp_surface_opening
     # cf Methods.Slot.SlotW10.get_surface_active
     if isinstance(get_surface_active, ImportError):
         get_surface_active = property(
@@ -200,6 +222,18 @@ class SlotW10(Slot):
         )
     else:
         get_surface_active = get_surface_active
+    # cf Methods.Slot.SlotW10.get_surface_opening
+    if isinstance(get_surface_opening, ImportError):
+        get_surface_opening = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use SlotW10 method get_surface_opening: "
+                    + str(get_surface_opening)
+                )
+            )
+        )
+    else:
+        get_surface_opening = get_surface_opening
     # cf Methods.Slot.SlotW10.get_H1
     if isinstance(get_H1, ImportError):
         get_H1 = property(

@@ -1,8 +1,5 @@
-# -*- coding: utf-8 -*-
-
-
-def comp_surface_active(self, Ndisc=200):
-    """Compute the Slot active surface (by numerical computation).
+def comp_surface_opening(self, Ndisc=200):
+    """Compute the Slot opening surface (by numerical computation).
     Caution, the bottom of the Slot is an Arc
 
     Parameters
@@ -15,10 +12,10 @@ def comp_surface_active(self, Ndisc=200):
     Returns
     -------
     S: float
-        Slot active surface [m**2]
+        Slot opening surface [m**2]
 
     """
 
-    surf = self.get_surface_active()
+    surf = self.get_surface_opening()
 
     return surf.comp_surface(Ndisc=Ndisc)
