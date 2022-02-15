@@ -1,5 +1,5 @@
 from ....Classes.Segment import Segment
-from ....Classes.Segment import Arc1
+from ....Classes.Arc1 import Arc1
 
 
 def _comp_line_list(self):

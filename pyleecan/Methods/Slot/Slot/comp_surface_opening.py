@@ -16,6 +16,9 @@ def comp_surface_opening(self, Ndisc=200):
 
     """
 
-    surf = self.get_surface_opening()
+    surf_list = self.get_surface_opening()
 
-    return surf.comp_surface(Ndisc=Ndisc)
+    S = 0
+    for surf in surf_list:
+        S += surf.comp_surface(Ndisc=Ndisc)
+    return S

@@ -18,6 +18,11 @@ from .Slot import Slot
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
 try:
+    from ..Methods.Slot.SlotW10._comp_line_list import _comp_line_list
+except ImportError as error:
+    _comp_line_list = error
+
+try:
     from ..Methods.Slot.SlotW10._comp_point_coordinate import _comp_point_coordinate
 except ImportError as error:
     _comp_point_coordinate = error
@@ -98,6 +103,17 @@ class SlotW10(Slot):
     IS_SYMMETRICAL = 1
 
     # Check ImportError to remove unnecessary dependencies in unused method
+    # cf Methods.Slot.SlotW10._comp_line_list
+    if isinstance(_comp_line_list, ImportError):
+        _comp_line_list = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use SlotW10 method _comp_line_list: " + str(_comp_line_list)
+                )
+            )
+        )
+    else:
+        _comp_line_list = _comp_line_list
     # cf Methods.Slot.SlotW10._comp_point_coordinate
     if isinstance(_comp_point_coordinate, ImportError):
         _comp_point_coordinate = property(
