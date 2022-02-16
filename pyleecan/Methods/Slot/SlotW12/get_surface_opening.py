@@ -1,16 +1,11 @@
-# -*- coding: utf-8 -*-
-
-from numpy import arcsin, exp
-
-from ....Classes.Arc1 import Arc1
-from ....Classes.Arc3 import Arc3
 from ....Classes.Segment import Segment
+from ....Classes.Arc1 import Arc1
 from ....Classes.SurfLine import SurfLine
-from ....Functions.labels import WIND_LAB
+from ....Functions.labels import SOP_LAB
 
 
-def get_surface_active(self, alpha=0, delta=0):
-    """Return the full winding surface
+def get_surface_opening(self, alpha=0, delta=0):
+    """Return the list of surfaces defining the opening area of the Slot
 
     Parameters
     ----------
@@ -23,29 +18,32 @@ def get_surface_active(self, alpha=0, delta=0):
 
     Returns
     -------
-    surf_wind: Surface
-        Surface corresponding to the Winding Area
+    surf_list : list
+        list of surfaces objects
     """
-    # get the name of the lamination
+
+    # Create curve list
     line_dict = self._comp_line_dict()
     curve_list = [
-        line_dict["3-4"],
-        line_dict["4-5"],
-        line_dict["5-6"],
-        line_dict["6-3"],
+        line_dict["1-2"],
+        line_dict["2-3"],
+        line_dict["3-6"],
+        line_dict["6-7"],
+        line_dict["7-8"],
+        line_dict["8-1"],
     ]
     curve_list = [line for line in curve_list if line is not None]
 
     # Create surface
     if self.is_outwards():
-        Zmid = self.get_Rbo() + self.H0 + 2 * self.R1 + self.H1
+        Zmid = self.get_Rbo() + (self.H0 + self.R1 * 2) / 2
     else:
-        Zmid = self.get_Rbo() - self.H0 - 2 * self.R1 - self.H1
-    label = self.parent.get_label() + "_" + WIND_LAB + "_R0-T0-S0"
+        Zmid = self.get_Rbo() - (self.H0 + self.R1 * 2) / 2
+    label = self.parent.get_label() + "_" + SOP_LAB + "_R0-T0-S0"
     surface = SurfLine(line_list=curve_list, label=label, point_ref=Zmid)
 
     # Apply transformation
     surface.rotate(alpha)
     surface.translate(delta)
 
-    return surface
+    return [surface]
