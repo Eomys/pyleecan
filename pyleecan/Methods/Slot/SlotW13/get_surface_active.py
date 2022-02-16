@@ -4,6 +4,7 @@ from numpy import linspace, zeros
 
 from ....Classes.Segment import Segment
 from ....Classes.SurfLine import SurfLine
+from ....Functions.labels import WIND_LAB
 
 
 def get_surface_active(self, alpha=0, delta=0):
@@ -24,25 +25,24 @@ def get_surface_active(self, alpha=0, delta=0):
         Surface corresponding to the Winding Area
     """
 
-    # get the name of the lamination
-    st = self.get_name_lam()
-
     # Create curve list
-    curve_list = self.build_geometry()[3:-3]
-    curve_list.append(
-        Segment(begin=curve_list[-1].get_end(), end=curve_list[0].get_begin())
-    )
+    line_dict = self._comp_line_dict()
+    curve_list = [
+        line_dict["4-5"],
+        line_dict["5-6"],
+        line_dict["6-7"],
+        line_dict["7-4"],
+    ]
+    curve_list = [line for line in curve_list if line is not None]
 
     # Create surface
     H1 = self.get_H1()
-
     if self.is_outwards():
         Zmid = self.get_Rbo() + self.H0 + H1 + self.H2 / 2
     else:
         Zmid = self.get_Rbo() - self.H0 - H1 - self.H2 / 2
-    surface = SurfLine(
-        line_list=curve_list, label="Wind_" + st + "_R0_T0_S0", point_ref=Zmid
-    )
+    label = self.parent.get_label() + "_" + WIND_LAB + "_R0-T0-S0"
+    surface = SurfLine(line_list=curve_list, label=label, point_ref=Zmid)
 
     # Apply transformation
     surface.rotate(alpha)
