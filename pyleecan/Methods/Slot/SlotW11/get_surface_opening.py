@@ -23,8 +23,15 @@ def get_surface_opening(self, alpha=0, delta=0):
     """
 
     # Create curve list
-    line_list = self._comp_line_list()
-    curve_list = line_list[0:2] + line_list[-3:]
+    line_dict = self._comp_line_dict()
+    curve_list = [
+        line_dict["1-2"],
+        line_dict["2-3"],
+        line_dict["3-8"],
+        line_dict["8-9"],
+        line_dict["9-10"],
+        line_dict["10-1"],
+    ]
     curve_list = [line for line in curve_list if line is not None]
 
     # Create surface

@@ -22,10 +22,16 @@ def get_surface_active(self, alpha=0, delta=0):
     """
 
     # Create curve list
-    curve_list = [line for line in self._comp_line_list()[3:-4] if line is not None]
-    curve_list.append(
-        Segment(begin=curve_list[-1].get_end(), end=curve_list[0].get_begin())
-    )
+    line_dict = self._comp_line_dict()
+    curve_list = [
+        line_dict["3-4"],
+        line_dict["4-5"],
+        line_dict["5-6"],
+        line_dict["6-7"],
+        line_dict["7-8"],
+        line_dict["8-3"],
+    ]
+    curve_list = [line for line in curve_list if line is not None]
 
     # Create surface
     H1 = self.get_H1()

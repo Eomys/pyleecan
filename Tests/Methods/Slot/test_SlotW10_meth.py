@@ -266,6 +266,7 @@ class Test_SlotW10_meth(object):
 
 if __name__ == "__main__":
     a = Test_SlotW10_meth()
+    a.test_get_surface()
     for ii, test_dict in enumerate(slotW10_test):
         print("Running test for Slot[" + str(ii) + "]")
         a.test_schematics(test_dict)
@@ -279,4 +280,3 @@ if __name__ == "__main__":
         a.test_comp_angle_active_eq(test_dict)
         print("Done")
 
-    a.test_get_surface()
