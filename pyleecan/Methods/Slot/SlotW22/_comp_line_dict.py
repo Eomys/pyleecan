@@ -1,4 +1,3 @@
-from pyleecan.Methods.Slot.SlotW22.comp_surface_opening import comp_surface_opening
 from ....Classes.Arc2 import Arc2
 from ....Classes.Arc1 import Arc1
 from ....Classes.Segment import Segment
