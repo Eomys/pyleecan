@@ -11831,6 +11831,7 @@
             "comp_height",
             "comp_height_active",
             "comp_surface",
+            "comp_surface_opening",
             "get_surface_active",
             "get_surface_opening",
             "plot_schematics"
@@ -11928,6 +11929,7 @@
             "comp_height",
             "comp_height_active",
             "comp_surface",
+            "comp_surface_opening",
             "get_surface_active",
             "get_surface_opening",
             "plot_schematics"
