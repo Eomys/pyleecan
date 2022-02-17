@@ -19,6 +19,7 @@ slotW26_test.append(
         "S_exp": 7.7471e-4,
         "Ao": 0.10004,
         "Aw": 0.2362668,
+        "SO_exp": 0.000170169,
         "SW_exp": 6.7387e-4,
         "H_exp": 5.1285e-2,
     }
@@ -33,6 +34,7 @@ slotW26_test.append(
         "S_exp": 7.73044e-4,
         "Ao": 0.10004,
         "Aw": 0.1254996,
+        "SO_exp": 0.000170169,
         "SW_exp": 6.7387e-4,
         "H_exp": 5.103517e-2,
     }
@@ -135,6 +137,22 @@ class Test_SlotW26_meth(object):
         assert abs((a - b) / a - 0) < DELTA, msg
 
     @pytest.mark.parametrize("test_dict", slotW26_test)
+    def test_comp_surface_opening(self, test_dict):
+        """Check that the computation of the opening surface is correct"""
+        test_obj = test_dict["test_obj"]
+        result = test_obj.slot.comp_surface_opening()
+
+        a = result
+        # b = test_dict["SO_exp"]
+        # msg = "Return " + str(a) + " expected " + str(b)
+        # assert abs((a - b) / a - 0) < DELTA, msg
+
+        # Check that the analytical method returns the same result as the numerical one
+        b = Slot.comp_surface_opening(test_obj.slot, Ndisc=400)
+        msg = "Return " + str(a) + " expected " + str(b)
+        assert abs((a - b) / a - 0) < DELTA, msg
+
+    @pytest.mark.parametrize("test_dict", slotW26_test)
     def test_comp_height(self, test_dict):
         """Check that the computation of the height is correct"""
         test_obj = test_dict["test_obj"]
@@ -181,3 +199,18 @@ class Test_SlotW26_meth(object):
 
         result = lam.slot.build_geometry()
         assert len(result) == 5
+
+
+if __name__ == "__main__":
+    a = Test_SlotW26_meth()
+    for ii, test_dict in enumerate(slotW26_test):
+        print("Running test for Slot[" + str(ii) + "]")
+        a.test_schematics(test_dict)
+        a.test_comp_surface(test_dict)
+        a.test_comp_surface_active(test_dict)
+        a.test_comp_surface_opening(test_dict)
+        a.test_comp_height(test_dict)
+        a.test_build_geometry_active(test_dict)
+        a.test_comp_angle_opening(test_dict)
+        a.test_comp_angle_active_eq(test_dict)
+        print("Done")

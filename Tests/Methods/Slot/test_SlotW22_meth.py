@@ -19,14 +19,26 @@ slotW22_test = list()
 lam = LamSlot(is_internal=True, Rext=1)
 lam.slot = SlotW22(Zs=36, W0=pi / 72, W2=pi / 36, H0=6e-3, H2=40e-3)
 slotW22_test.append(
-    {"test_obj": lam, "S_exp": 3.660915e-03, "SW_exp": 3.3999e-03, "H_exp": 0.046}
+    {
+        "test_obj": lam,
+        "S_exp": 3.660915e-03,
+        "SO_exp": 0.000170169,
+        "SW_exp": 3.3999e-03,
+        "H_exp": 0.046,
+    }
 )
 
 # External Slot
 lam = LamSlot(is_internal=False, Rint=1)
 lam.slot = SlotW22(Zs=36, W0=pi / 72, W2=pi / 36, H0=6e-3, H2=40e-3)
 slotW22_test.append(
-    {"test_obj": lam, "S_exp": 3.844e-03, "SW_exp": 3.5814e-03, "H_exp": 0.046}
+    {
+        "test_obj": lam,
+        "S_exp": 3.844e-03,
+        "SO_exp": 0.000170169,
+        "SW_exp": 3.5814e-03,
+        "H_exp": 0.046,
+    }
 )
 
 
@@ -131,6 +143,22 @@ class Test_SlotW22_meth(object):
         assert abs((a - b) / a - 0) < DELTA, msg
 
     @pytest.mark.parametrize("test_dict", slotW22_test)
+    def test_comp_surface_opening(self, test_dict):
+        """Check that the computation of the opening surface is correct"""
+        test_obj = test_dict["test_obj"]
+        result = test_obj.slot.comp_surface_opening()
+
+        a = result
+        # b = test_dict["SO_exp"]
+        # msg = "Return " + str(a) + " expected " + str(b)
+        # assert abs((a - b) / a - 0) < DELTA, msg
+
+        # Check that the analytical method returns the same result as the numerical one
+        b = Slot.comp_surface_opening(test_obj.slot, Ndisc=400)
+        msg = "Return " + str(a) + " expected " + str(b)
+        assert abs((a - b) / a - 0) < DELTA, msg
+
+    @pytest.mark.parametrize("test_dict", slotW22_test)
     def test_comp_height(self, test_dict):
         """Check that the computation of the height is correct"""
         test_obj = test_dict["test_obj"]
@@ -189,3 +217,4 @@ if __name__ == "__main__":
         a.test_comp_height(test_dict)
         a.test_comp_surface(test_dict)
         a.test_comp_surface_active(test_dict)
+        a.test_comp_surface_opening(test_dict)

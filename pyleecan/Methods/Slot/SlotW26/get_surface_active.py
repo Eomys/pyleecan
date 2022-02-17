@@ -1,8 +1,4 @@
-# -*- coding: utf-8 -*-
-
-from ....Classes.Arc1 import Arc1
-from ....Classes.Arc3 import Arc3
-from ....Classes.Segment import Segment
+from ....Functions.labels import WIND_LAB
 from ....Classes.SurfLine import SurfLine
 
 
@@ -24,9 +20,6 @@ def get_surface_active(self, alpha=0, delta=0):
         Surface corresponding to the Winding Area
     """
 
-    # get the name of the lamination
-    st = self.get_name_lam()
-
     # Create curve list
     curve_list = self.build_geometry()[1:-1]
     curve_list.append(
@@ -38,9 +31,8 @@ def get_surface_active(self, alpha=0, delta=0):
         Zmid = self.get_Rbo() + self.R1 + self.H1 / 2
     else:
         Zmid = self.get_Rbo() - self.R1 - self.H1 / 2
-    surface = SurfLine(
-        line_list=curve_list, label="Wind_" + st + "_R0_T0_S0", point_ref=Zmid
-    )
+    label = self.parent.get_label() + "_" + WIND_LAB + "_R0-T0-S0"
+    surface = SurfLine(line_list=curve_list, label=label, point_ref=Zmid)
 
     # Apply transformation
     surface.rotate(alpha)

@@ -18,6 +18,11 @@ from .Slot import Slot
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
 try:
+    from ..Methods.Slot.SlotW27._comp_line_dict import _comp_line_dict
+except ImportError as error:
+    _comp_line_dict = error
+
+try:
     from ..Methods.Slot.SlotW27._comp_point_coordinate import _comp_point_coordinate
 except ImportError as error:
     _comp_point_coordinate = error
@@ -26,11 +31,6 @@ try:
     from ..Methods.Slot.SlotW27.build_geometry import build_geometry
 except ImportError as error:
     build_geometry = error
-
-try:
-    from ..Methods.Slot.SlotW27.get_surface_active import get_surface_active
-except ImportError as error:
-    get_surface_active = error
 
 try:
     from ..Methods.Slot.SlotW27.check import check
@@ -63,6 +63,21 @@ except ImportError as error:
     comp_surface_active = error
 
 try:
+    from ..Methods.Slot.SlotW27.comp_surface_opening import comp_surface_opening
+except ImportError as error:
+    comp_surface_opening = error
+
+try:
+    from ..Methods.Slot.SlotW27.get_surface_active import get_surface_active
+except ImportError as error:
+    get_surface_active = error
+
+try:
+    from ..Methods.Slot.SlotW27.get_surface_opening import get_surface_opening
+except ImportError as error:
+    get_surface_opening = error
+
+try:
     from ..Methods.Slot.SlotW27.plot_schematics import plot_schematics
 except ImportError as error:
     plot_schematics = error
@@ -78,6 +93,17 @@ class SlotW27(Slot):
     IS_SYMMETRICAL = 1
 
     # Check ImportError to remove unnecessary dependencies in unused method
+    # cf Methods.Slot.SlotW27._comp_line_dict
+    if isinstance(_comp_line_dict, ImportError):
+        _comp_line_dict = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use SlotW27 method _comp_line_dict: " + str(_comp_line_dict)
+                )
+            )
+        )
+    else:
+        _comp_line_dict = _comp_line_dict
     # cf Methods.Slot.SlotW27._comp_point_coordinate
     if isinstance(_comp_point_coordinate, ImportError):
         _comp_point_coordinate = property(
@@ -101,18 +127,6 @@ class SlotW27(Slot):
         )
     else:
         build_geometry = build_geometry
-    # cf Methods.Slot.SlotW27.get_surface_active
-    if isinstance(get_surface_active, ImportError):
-        get_surface_active = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use SlotW27 method get_surface_active: "
-                    + str(get_surface_active)
-                )
-            )
-        )
-    else:
-        get_surface_active = get_surface_active
     # cf Methods.Slot.SlotW27.check
     if isinstance(check, ImportError):
         check = property(
@@ -178,6 +192,42 @@ class SlotW27(Slot):
         )
     else:
         comp_surface_active = comp_surface_active
+    # cf Methods.Slot.SlotW27.comp_surface_opening
+    if isinstance(comp_surface_opening, ImportError):
+        comp_surface_opening = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use SlotW27 method comp_surface_opening: "
+                    + str(comp_surface_opening)
+                )
+            )
+        )
+    else:
+        comp_surface_opening = comp_surface_opening
+    # cf Methods.Slot.SlotW27.get_surface_active
+    if isinstance(get_surface_active, ImportError):
+        get_surface_active = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use SlotW27 method get_surface_active: "
+                    + str(get_surface_active)
+                )
+            )
+        )
+    else:
+        get_surface_active = get_surface_active
+    # cf Methods.Slot.SlotW27.get_surface_opening
+    if isinstance(get_surface_opening, ImportError):
+        get_surface_opening = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use SlotW27 method get_surface_opening: "
+                    + str(get_surface_opening)
+                )
+            )
+        )
+    else:
+        get_surface_opening = get_surface_opening
     # cf Methods.Slot.SlotW27.plot_schematics
     if isinstance(plot_schematics, ImportError):
         plot_schematics = property(

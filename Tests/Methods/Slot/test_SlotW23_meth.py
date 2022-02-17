@@ -22,6 +22,7 @@ slotW23_test.append(
         "test_obj": lam,
         "S_exp": 4.2080459e-4,
         "Aw": 0.112537,
+        "SO_exp": 0.000170169,
         "SW_exp": 3.8834260e-04,
         "H_exp": 0.032438,
     }
@@ -37,6 +38,7 @@ slotW23_test.append(
         "test_obj": lam,
         "S_exp": 4.2116997e-4,
         "Aw": 0.086598,
+        "SO_exp": 0.000170169,
         "SW_exp": 3.906568e-04,
         "H_exp": 0.032455,
     }
@@ -52,6 +54,7 @@ slotW23_test.append(
         "test_obj": lam,
         "S_exp": 0.010646,
         "Aw": 0.013918,
+        "SO_exp": 0.000170169,
         "SW_exp": 3.89935e-4,
         "H_exp": 0.81626,
     }
@@ -166,6 +169,22 @@ class Test_SlotW23_meth(object):
         assert abs((a - b) / a - 0) < DELTA, msg
 
     @pytest.mark.parametrize("test_dict", slotW23_test)
+    def test_comp_surface_opening(self, test_dict):
+        """Check that the computation of the opening surface is correct"""
+        test_obj = test_dict["test_obj"]
+        result = test_obj.slot.comp_surface_opening()
+
+        a = result
+        # b = test_dict["SO_exp"]
+        # msg = "Return " + str(a) + " expected " + str(b)
+        # assert abs((a - b) / a - 0) < DELTA, msg
+
+        # Check that the analytical method returns the same result as the numerical one
+        b = Slot.comp_surface_opening(test_obj.slot, Ndisc=400)
+        msg = "Return " + str(a) + " expected " + str(b)
+        assert abs((a - b) / a - 0) < DELTA, msg
+
+    @pytest.mark.parametrize("test_dict", slotW23_test)
     def test_comp_height(self, test_dict):
         """Check that the computation of the height is correct"""
         test_obj = test_dict["test_obj"]
@@ -238,3 +257,18 @@ class Test_SlotW23_meth(object):
         lam.slot._comp_W()
         assert lam.slot.W1 == 0.017303874301855315
         assert lam.slot.W2 == 0.022533218866714805
+
+
+if __name__ == "__main__":
+    a = Test_SlotW23_meth()
+    for ii, test_dict in enumerate(slotW23_test):
+        print("Running test for Slot[" + str(ii) + "]")
+        a.test_schematics(test_dict)
+        a.test_comp_surface(test_dict)
+        a.test_comp_surface_active(test_dict)
+        a.test_comp_surface_opening(test_dict)
+        a.test_comp_height(test_dict)
+        a.test_build_geometry_active(test_dict)
+        a.test_comp_angle_opening(test_dict)
+        a.test_comp_angle_active_eq(test_dict)
+        print("Done")
