@@ -3,7 +3,7 @@
 from numpy import sin
 
 
-def comp_surface(self):
+def comp_surface_opening(self):
     """Compute the Slot total surface (by analytical computation).
     Caution, the bottom of the Slot is an Arc
 
@@ -28,6 +28,6 @@ def comp_surface(self):
 
     # Because Slamination = S - Zs * Sslot
     if self.is_outwards():
-        return S1  - Sarc
+        return S1 - Sarc
     else:
         return S1 + Sarc

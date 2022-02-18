@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from tkinter import S
 import pytest
 
 from pyleecan.Classes.SlotW15 import SlotW15
@@ -222,19 +223,28 @@ class Test_SlotW15_meth(object):
         with pytest.raises(S15InnerError) as context:
             test_obj.slot._comp_point_coordinate()
 
-    def test_get_surface_active(self):
+    def test_get_surface_X(self):
         """Check that the get_surface_active works when stator = false"""
         lam = LamSlot(is_internal=False, Rint=0.3164, Rext=0.1325, is_stator=False)
         lam.slot = SlotW15(
             H0=0.1584, H1=5e-3, H2=20e-3, R1=0.15648, R2=4e-3, W0=5e-3, W3=10e-3
         )
         result = lam.slot.get_surface_active()
-        assert result.label == "Wind_Rotor_R0_T0_S0"
+        assert result.label == "Rotor_Winding_R0-T0-S0"
         assert len(result.get_lines()) == 10
+
+        result = lam.slot.get_surface_opening()
+        assert len(result) == 1
+        assert result[0].label == "Rotor_SlotOpening_R0-T0-S0"
+        assert len(result[0].get_lines()) == 4
+
+        # result = lam.slot.get_surface()
+        # assert len(result.get_lines()) == 12
 
 
 if __name__ == "__main__":
     a = Test_SlotW15_meth()
+    a.test_get_surface_X()
     for ii, test_dict in enumerate(slotW15_test):
         print("Running test for Slot[" + str(ii) + "]")
         a.test_schematics(test_dict)

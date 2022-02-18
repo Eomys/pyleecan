@@ -204,13 +204,24 @@ class Test_SlotW16_meth(object):
         with pytest.raises(S16OutterError) as context:
             test_obj.slot._comp_point_coordinate()
 
-    def test_get_surface_active(self):
-        """Check that the get_surface_active works when stator = false"""
+    def test_get_surface_X(self):
+        """Check that the get_surface_X works when stator = false"""
         lam = LamSlot(is_internal=True, Rext=0.1325, is_stator=False)
         lam.slot = SlotW16(Zs=8, H0=5e-3, H2=30e-3, R1=5e-3, W0=pi / 12, W3=10e-3)
         result = lam.slot.get_surface_active()
-        assert result.label == "Wind_Rotor_R0_T0_S0"
+        assert result.label == "Rotor_Winding_R0-T0-S0"
         assert len(result.get_lines()) == 8
+        assert result.is_inside(result.point_ref)
+
+        result = lam.slot.get_surface_opening()
+        assert len(result) == 1
+        assert result[0].label == "Rotor_SlotOpening_R0-T0-S0"
+        assert len(result[0].get_lines()) == 4
+        assert result[0].is_inside(result[0].point_ref)
+
+        result = lam.slot.get_surface()
+        assert len(result.get_lines()) == 10
+        assert result.is_inside(result.point_ref)
 
 
 if __name__ == "__main__":

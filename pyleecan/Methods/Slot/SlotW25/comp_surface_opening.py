@@ -1,7 +1,7 @@
 from numpy import pi, arcsin, sin
 
 
-def comp_surface(self):
+def comp_surface_opening(self):
     """Compute the Slot opening surface (by analytical computation).
     Caution, the bottom of the Slot is an Arc
 

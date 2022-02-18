@@ -248,8 +248,8 @@ class Test_SlotW13_meth(object):
         with pytest.raises(S13_H1rCheckError) as context:
             test_obj.check()
 
-    def test_get_surface_active(self):
-        """Check that the get_surface_active works when stator = false"""
+    def test_get_surface_X(self):
+        """Check that the get_surface_X works when stator = false"""
         lam = LamSlot(is_internal=True, Rext=0.1325, is_stator=False)
         lam.slot = SlotW13(
             H0=5e-3,
@@ -262,8 +262,20 @@ class Test_SlotW13_meth(object):
             H1_is_rad=False,
         )
         result = lam.slot.get_surface_active()
-        assert result.label == "Wind_Rotor_R0_T0_S0"
+        assert result.label == "Rotor_Winding_R0-T0-S0"
         assert len(result.get_lines()) == 4
+        assert result.is_inside(result.point_ref)
+
+        result = lam.slot.get_surface_opening()
+        assert len(result) == 1
+        assert result[0].label == "Rotor_SlotOpening_R0-T0-S0"
+        assert len(result[0].get_lines()) == 8
+        assert result[0].is_inside(result[0].point_ref)
+
+        result = lam.slot.get_surface()
+        assert len(result.get_lines()) == 10
+        assert result.is_inside(result.point_ref)
+
 
 if __name__ == "__main__":
     a = Test_SlotW13_meth()

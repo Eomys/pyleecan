@@ -22,7 +22,7 @@ slotW23_test.append(
         "test_obj": lam,
         "S_exp": 4.2080459e-4,
         "Aw": 0.112537,
-        "SO_exp": 0.000170169,
+        "SO_exp": 3.24619910e-05,
         "SW_exp": 3.8834260e-04,
         "H_exp": 0.032438,
     }
@@ -38,7 +38,7 @@ slotW23_test.append(
         "test_obj": lam,
         "S_exp": 4.2116997e-4,
         "Aw": 0.086598,
-        "SO_exp": 0.000170169,
+        "SO_exp": 3.051338972e-05,
         "SW_exp": 3.906568e-04,
         "H_exp": 0.032455,
     }
@@ -54,7 +54,7 @@ slotW23_test.append(
         "test_obj": lam,
         "S_exp": 0.010646,
         "Aw": 0.013918,
-        "SO_exp": 0.000170169,
+        "SO_exp": 0.0102566867,
         "SW_exp": 3.89935e-4,
         "H_exp": 0.81626,
     }
@@ -175,9 +175,9 @@ class Test_SlotW23_meth(object):
         result = test_obj.slot.comp_surface_opening()
 
         a = result
-        # b = test_dict["SO_exp"]
-        # msg = "Return " + str(a) + " expected " + str(b)
-        # assert abs((a - b) / a - 0) < DELTA, msg
+        b = test_dict["SO_exp"]
+        msg = "Return " + str(a) + " expected " + str(b)
+        assert abs((a - b) / a - 0) < DELTA, msg
 
         # Check that the analytical method returns the same result as the numerical one
         b = Slot.comp_surface_opening(test_obj.slot, Ndisc=400)
@@ -230,15 +230,26 @@ class Test_SlotW23_meth(object):
         with pytest.raises(S23_H1rCheckError) as context:
             lam.slot.check()
 
-    def test_get_surface_active(self):
-        """Check that the get_surface_active works when stator = false"""
+    def test_get_surface_X(self):
+        """Check that the get_surface_X works when stator = false"""
         lam = LamSlot(is_internal=True, Rext=0.1325, is_stator=False)
         lam.slot = SlotW23(
             H0=1e-3, H1=1.5e-3, H1_is_rad=False, H2=30e-3, W0=12e-3, W1=14e-3, W2=12e-3
         )
         result = lam.slot.get_surface_active()
-        assert result.label == "Wind_Rotor_R0_T0_S0"
+        assert result.label == "Rotor_Winding_R0-T0-S0"
         assert len(result.get_lines()) == 4
+        assert result.is_inside(result.point_ref)
+
+        result = lam.slot.get_surface_opening()
+        assert len(result) == 1
+        assert result[0].label == "Rotor_SlotOpening_R0-T0-S0"
+        assert len(result[0].get_lines()) == 6
+        assert result[0].is_inside(result[0].point_ref)
+
+        result = lam.slot.get_surface()
+        assert len(result.get_lines()) == 8
+        assert result.is_inside(result.point_ref)
 
     def test_comp_W(self):
         """Check that the computations of the Ws are right"""

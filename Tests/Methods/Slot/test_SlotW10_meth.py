@@ -243,8 +243,8 @@ class Test_SlotW10_meth(object):
         msg = "Return " + str(a) + " expected " + str(b)
         assert abs((a - b) / a - 0) < DELTA, msg
 
-    def test_get_surface(self):
-        """Check that the get_surface_active works when stator = false"""
+    def test_get_surface_X(self):
+        """Check that the get_surface_X works when stator = false"""
         lam = LamSlot(is_internal=True, Rext=0.1325, is_stator=False)
         lam.slot = SlotW10(
             H0=1e-3, H1=1.5e-3, H2=30e-3, W0=12e-3, W1=14e-3, W2=12e-3, H1_is_rad=False
@@ -252,21 +252,22 @@ class Test_SlotW10_meth(object):
         result = lam.slot.get_surface_active()
         assert result.label == "Rotor_Winding_R0-T0-S0"
         assert len(result.get_lines()) == 4
+        assert result.is_inside(result.point_ref)
 
         result = lam.slot.get_surface_opening()
         assert len(result) == 1
         assert result[0].label == "Rotor_SlotOpening_R0-T0-S0"
-        assert (
-            len(result[0].get_lines()) == 8
-        )  # TODO Add missing line (limit opening/winding)
+        assert len(result[0].get_lines()) == 8
+        assert result[0].is_inside(result[0].point_ref)
 
         result = lam.slot.get_surface()
         assert len(result.get_lines()) == 10
+        assert result.is_inside(result.point_ref)
 
 
 if __name__ == "__main__":
     a = Test_SlotW10_meth()
-    a.test_get_surface()
+    a.test_get_surface_X()
     for ii, test_dict in enumerate(slotW10_test):
         print("Running test for Slot[" + str(ii) + "]")
         a.test_schematics(test_dict)
@@ -279,4 +280,3 @@ if __name__ == "__main__":
         a.test_comp_width_opening(test_dict)
         a.test_comp_angle_active_eq(test_dict)
         print("Done")
-

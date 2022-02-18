@@ -24,7 +24,7 @@ slotW27_test.append(
         "S_exp": 1.3508e-3,
         "Ao": 0.10004,
         "Aw": 0.3853569,
-        "SO_exp": 0.000170169,
+        "SO_exp": 0.000100833,
         "SW_exp": 1.25e-3,
         "H_exp": 6.0125e-2,
     }
@@ -41,7 +41,7 @@ slotW27_test.append(
         "S_exp": 1.34916e-3,
         "Ao": 0.10004,
         "Aw": 0.184928,
-        "SO_exp": 0.000170169,
+        "SO_exp": 9.91660408e-05,
         "SW_exp": 1.25e-3,
         "H_exp": 6.0187e-2,
     }
@@ -138,9 +138,9 @@ class Test_SlotW27_meth(object):
         result = test_obj.slot.comp_surface_opening()
 
         a = result
-        # b = test_dict["SO_exp"]
-        # msg = "Return " + str(a) + " expected " + str(b)
-        # assert abs((a - b) / a - 0) < DELTA, msg
+        b = test_dict["SO_exp"]
+        msg = "Return " + str(a) + " expected " + str(b)
+        assert abs((a - b) / a - 0) < DELTA, msg
 
         # Check that the analytical method returns the same result as the numerical one
         b = Slot.comp_surface_opening(test_obj.slot, Ndisc=400)

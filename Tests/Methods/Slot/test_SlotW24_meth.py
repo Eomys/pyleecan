@@ -21,7 +21,6 @@ slotW24_test.append(
         "S_exp": 3.327419e-3,
         "Ao": 0.9566,
         "Aw": 0.94497,
-        "SO_exp": 0.000170169,
         "SW_exp": 3.327419e-3,
         "H_exp": 0.02996,
     }
@@ -36,7 +35,6 @@ slotW24_test.append(
         "S_exp": 4.26977e-3,
         "Ao": 0.9566,
         "Aw": 0.965887,
-        "SO_exp": 0.000170169,
         "SW_exp": 4.26977e-3,
         "H_exp": 0.029974,
     }
@@ -145,16 +143,11 @@ class Test_SlotW24_meth(object):
         """Check that the computation of the opening surface is correct"""
         test_obj = test_dict["test_obj"]
         result = test_obj.slot.comp_surface_opening()
-
-        a = result
-        # b = test_dict["SO_exp"]
-        # msg = "Return " + str(a) + " expected " + str(b)
-        # assert abs((a - b) / a - 0) < DELTA, msg
+        assert result == 0
 
         # Check that the analytical method returns the same result as the numerical one
         b = Slot.comp_surface_opening(test_obj.slot, Ndisc=400)
-        msg = "Return " + str(a) + " expected " + str(b)
-        assert abs((a - b) / a - 0) < DELTA, msg
+        assert b == 0
 
     @pytest.mark.parametrize("test_dict", slotW24_test)
     def test_comp_height(self, test_dict):
@@ -204,13 +197,21 @@ class Test_SlotW24_meth(object):
         with pytest.raises(S24_HWCheckError) as context:
             lam.slot.check()
 
-    def test_get_surface_active(self):
-        """Check that the get_surface_active works when stator = false"""
+    def test_get_surface_X(self):
+        """Check that the get_surface_X works when stator = false"""
         lam = LamSlot(is_internal=True, Rext=0.1325, is_stator=False)
         lam.slot = SlotW24(Zs=6, H2=30e-3, W3=12e-3)
         result = lam.slot.get_surface_active()
-        assert result.label == "Wind_Rotor_R0_T0_S0"
+        assert result.label == "Rotor_Winding_R0-T0-S0"
         assert len(result.get_lines()) == 4
+        assert result.is_inside(result.point_ref)
+
+        result = lam.slot.get_surface_opening()
+        assert len(result) == 0
+
+        result = lam.slot.get_surface()
+        assert len(result.get_lines()) == 4
+        assert result.is_inside(result.point_ref)
 
 
 if __name__ == "__main__":

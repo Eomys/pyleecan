@@ -12001,7 +12001,7 @@
         "desc": "semi-closed trapezoidal without fillet without wedge (flat bottom)",
         "is_internal": false,
         "methods": [
-            "_comp_line_list",
+            "_comp_line_dict",
             "_comp_point_coordinate",
             "build_geometry",
             "build_geometry_active",

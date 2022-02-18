@@ -1,5 +1,5 @@
 Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
-W0,m,Slot isthmus width.,0,float,3.00E-03,0,,,Slot,Slot,_comp_line_list,VERSION,1,semi-closed trapezoidal without fillet without wedge (flat bottom)
+W0,m,Slot isthmus width.,0,float,3.00E-03,0,,,Slot,Slot,_comp_line_dict,VERSION,1,semi-closed trapezoidal without fillet without wedge (flat bottom)
 H0,m,Slot isthmus height.,0,float,3.00E-03,0,,,,,_comp_point_coordinate,IS_SYMMETRICAL,1,
 H1,m/rad,height or angle  (See Schematics),0,float,0,0,,,,,build_geometry,,,
 H1_is_rad,,"H1 unit, 0 for m, 1 for rad",0,bool,0,,,,,,build_geometry_active,,,

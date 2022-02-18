@@ -32,4 +32,3 @@ def build_geometry(self):
         line_dict["7-8"],
     ]
     return [line for line in curve_list if line is not None]
-
