@@ -1,5 +1,3 @@
-from ....Classes.Segment import Segment
-from ....Classes.Arc1 import Arc1
 from ....Classes.SurfLine import SurfLine
 from ....Functions.labels import SOP_LAB
 

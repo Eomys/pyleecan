@@ -11219,9 +11219,10 @@
         "is_internal": false,
         "methods": [
             "build_geometry",
-            "set_from_point_list",
+            "check",
             "get_surface_active",
-            "check"
+            "get_surface_opening",
+            "set_from_point_list"
         ],
         "mother": "Slot",
         "name": "SlotUD",
