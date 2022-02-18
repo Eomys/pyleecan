@@ -8,8 +8,8 @@ def comp_surface_active(self):
 
     Parameters
     ----------
-    self : SlotW21
-        A SlotW21 object
+    self : SlotW23
+        A SlotW23 object
 
     Returns
     -------

@@ -32,20 +32,20 @@ def _comp_line_dict(self):
     # Creation of curve
     line_dict = dict()
     line_dict["1-2"] = Segment(Z1, Z2)
-    line_dict["1-2"] = Segment(Z2, Z3)
-    line_dict["1-2"] = Segment(Z3, Z4)
-    line_dict["1-2"] = Segment(Z4, Z5)
-    line_dict["1-2"] = Segment(Z5, Z6)
-    line_dict["1-2"] = Segment(Z6, Z7)
-    line_dict["1-2"] = Segment(Z7, Z8)
-    line_dict["1-2"] = Segment(Z8, Z9)
-    line_dict["1-2"] = Segment(Z9, Z10)
+    line_dict["2-3"] = Segment(Z2, Z3)
+    line_dict["3-4"] = Segment(Z3, Z4)
+    line_dict["4-5"] = Segment(Z4, Z5)
+    line_dict["5-6"] = Segment(Z5, Z6)
+    line_dict["6-7"] = Segment(Z6, Z7)
+    line_dict["7-8"] = Segment(Z7, Z8)
+    line_dict["8-9"] = Segment(Z8, Z9)
+    line_dict["9-10"] = Segment(Z9, Z10)
 
     # Closing Arc (Rbo)
-    line_dict["8-1"] = Arc1(Z8, Z1, -self.get_Rbo(), is_trigo_direction=False)
+    line_dict["10-1"] = Arc1(Z10, Z1, -self.get_Rbo(), is_trigo_direction=False)
 
     # Closing Active part
-    line_dict["3-6"] = Segment(Z3, Z6)
-    line_dict["6-3"] = Segment(Z6, Z3)
+    line_dict["2-9"] = Segment(Z2, Z9)
+    line_dict["9-2"] = Segment(Z9, Z2)
 
     return line_dict

@@ -29,18 +29,18 @@ def _comp_line_dict(self):
     # Creation of curve
     line_dict = dict()
     line_dict["1-2"] = Segment(Z1, Z2)
-    line_dict["1-2"] = Arc1(Z2, Z3, -abs(Z2), is_trigo_direction=False)
-    line_dict["1-2"] = Segment(Z3, Z4)
-    line_dict["1-2"] = Arc1(Z4, Z5, abs(Z5))
-    line_dict["1-2"] = Segment(Z5, Z6)
-    line_dict["1-2"] = Arc1(Z6, Z7, -abs(Z2), is_trigo_direction=False)
-    line_dict["1-2"] = Segment(Z7, Z8)
+    line_dict["2-3"] = Arc1(Z2, Z3, -abs(Z2), is_trigo_direction=False)
+    line_dict["3-4"] = Segment(Z3, Z4)
+    line_dict["4-5"] = Arc1(Z4, Z5, abs(Z5))
+    line_dict["5-6"] = Segment(Z5, Z6)
+    line_dict["6-7"] = Arc1(Z6, Z7, -abs(Z2), is_trigo_direction=False)
+    line_dict["7-8"] = Segment(Z7, Z8)
 
     # Closing Arc (Rbo)
     line_dict["8-1"] = Arc1(Z8, Z1, -self.get_Rbo(), is_trigo_direction=False)
 
     # Closing Active part
-    line_dict["3-6"] = Segment(Z3, Z6)
-    line_dict["6-3"] = Segment(Z6, Z3)
+    line_dict["2-7"] = Arc1(Z2, Z7, abs(Z2), is_trigo_direction=True)
+    line_dict["7-2"] = Arc1(Z7, Z2, -abs(Z2), is_trigo_direction=False)
 
     return line_dict

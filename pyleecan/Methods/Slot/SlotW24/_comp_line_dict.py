@@ -27,14 +27,13 @@ def _comp_line_dict(self):
     # Creation of curve
     line_dict = dict()
     line_dict["1-2"] = Segment(Z1, Z2)
-    line_dict["1-2"] = Arc1(Z2, Z3, abs(Z2))
-    line_dict["1-2"] = Segment(Z3, Z4)
+    line_dict["2-3"] = Arc1(Z2, Z3, abs(Z2))
+    line_dict["3-4"] = Segment(Z3, Z4)
 
     # Closing Arc (Rbo)
-    line_dict["8-1"] = Arc1(Z8, Z1, -self.get_Rbo(), is_trigo_direction=False)
+    line_dict["4-1"] = Arc1(Z4, Z1, -self.get_Rbo(), is_trigo_direction=False)
 
     # Closing Active part
-    line_dict["3-6"] = Segment(Z3, Z6)
-    line_dict["6-3"] = Segment(Z6, Z3)
+    line_dict["1-4"] = Arc1(Z1, Z4, self.get_Rbo(), is_trigo_direction=True)
 
     return line_dict

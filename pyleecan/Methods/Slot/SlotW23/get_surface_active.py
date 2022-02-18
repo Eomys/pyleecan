@@ -21,13 +21,14 @@ def get_surface_active(self, alpha=0, delta=0):
     """
 
     # Create curve list
-    curve_list = self.build_geometry()[2:-2]
-    curve_list.append(
-        Segment(
-            begin=curve_list[-1].get_end(),
-            end=curve_list[0].get_begin(),
-        )
-    )
+    line_dict = self._comp_line_dict()
+    curve_list = [
+        line_dict["3-4"],
+        line_dict["4-5"],
+        line_dict["5-6"],
+        line_dict["6-3"],
+    ]
+    curve_list = [line for line in curve_list if line is not None]
 
     # Create surface
     if self.is_outwards():
