@@ -4604,7 +4604,8 @@
             "get_Zs",
             "get_bore_desc",
             "set_pole_pair_number",
-            "comp_angle_d_axis"
+            "comp_angle_d_axis",
+            "get_surfaces_closing"
         ],
         "mother": "Lamination",
         "name": "LamSlot",
@@ -4959,7 +4960,8 @@
             "get_label",
             "get_yoke_side_line",
             "get_notches_surf",
-            "comp_periodicity_duct_spatial"
+            "comp_periodicity_duct_spatial",
+            "get_surfaces_closing"
         ],
         "mother": "",
         "name": "Lamination",

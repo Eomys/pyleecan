@@ -163,6 +163,11 @@ try:
 except ImportError as error:
     comp_periodicity_duct_spatial = error
 
+try:
+    from ..Methods.Machine.Lamination.get_surfaces_closing import get_surfaces_closing
+except ImportError as error:
+    get_surfaces_closing = error
+
 
 from ._check import InitUnKnowClassError
 from .Material import Material
@@ -486,6 +491,18 @@ class Lamination(FrozenClass):
         )
     else:
         comp_periodicity_duct_spatial = comp_periodicity_duct_spatial
+    # cf Methods.Machine.Lamination.get_surfaces_closing
+    if isinstance(get_surfaces_closing, ImportError):
+        get_surfaces_closing = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Lamination method get_surfaces_closing: "
+                    + str(get_surfaces_closing)
+                )
+            )
+        )
+    else:
+        get_surfaces_closing = get_surfaces_closing
     # save and copy methods are available in all object
     save = save
     copy = copy

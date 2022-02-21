@@ -156,12 +156,12 @@ def draw_FEMM(
         femm.mi_readdxf(rotor_dxf.file_path)
         surf_list.extend(rotor_dxf.get_surfaces())
     else:
-        surf_list.extend(machine.rotor.build_geometry(sym=sym))
+        surf_list.extend(machine.rotor.build_geometry(sym=sym, is_circular_radius=True))
     if stator_dxf is not None:
         femm.mi_readdxf(stator_dxf.file_path)
         surf_list.extend(stator_dxf.get_surfaces())
     else:
-        surf_list.extend(machine.stator.build_geometry(sym=sym))
+        surf_list.extend(machine.stator.build_geometry(sym=sym, is_circular_radius=True))
 
     # Applying user defined modifications
     for transform in transform_list:

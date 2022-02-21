@@ -18,7 +18,7 @@ from ....Functions.labels import (
 from ....Functions.Geometry.transform_hole_surf import transform_hole_surf
 
 
-def build_geometry(self, sym=1, alpha=0, delta=0):
+def build_geometry(self, sym=1, alpha=0, delta=0, is_circular_radius=False):
     """Build the geometry of the Lamination
 
     Parameters
@@ -31,6 +31,8 @@ def build_geometry(self, sym=1, alpha=0, delta=0):
         Angle for rotation [rad]
     delta : complex
         Complex value for translation
+    is_circular_radius : bool
+        True to add surfaces to "close" the Lamination radii
 
     Returns
     surf_list : list
@@ -85,6 +87,10 @@ def build_geometry(self, sym=1, alpha=0, delta=0):
                 )
             )
     surf_list.extend(vent_surf_list)
+
+    # Add the closing surfaces if requested
+    if is_circular_radius:
+        surf_list.extend(self.get_surfaces_closing(sym=sym))
 
     # Create the Lamination surfaces
     point_ref = self.comp_point_ref(sym=sym)
