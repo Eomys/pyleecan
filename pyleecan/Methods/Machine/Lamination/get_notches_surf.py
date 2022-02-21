@@ -3,7 +3,7 @@ from ....Classes.NotchEvenDist import NotchEvenDist
 from ....Functions.labels import NOTCH_LAB, YSNR_LAB, YSNL_LAB
 
 
-def get_notches_surf(self, sym, is_simplified=False):
+def get_notches_surf(self, sym):
     """Return the list of surfaces for notches
 
     Parameters
@@ -12,8 +12,6 @@ def get_notches_surf(self, sym, is_simplified=False):
         A Lamination object
     sym : int
         Symmetry factor (1= full machine, 2= half of the machine...)
-    is_simplified : bool
-        True to remove overlapping lines
 
     Return
     ------
@@ -31,7 +29,7 @@ def get_notches_surf(self, sym, is_simplified=False):
         # Method used for symetry (for now) so only NotchEvenDist
         assert isinstance(notch, NotchEvenDist)
         # Get the original surface
-        Nsurf = notch.notch_shape.get_surface(is_simplified=is_simplified)
+        Nsurf = notch.notch_shape.get_surface()
         Nsurf.label = self.get_label() + "_" + NOTCH_LAB + "_R" + str(ii) + "-T0-S0"
         Nsurf.rotate(angle=notch.alpha)
         # Label definition

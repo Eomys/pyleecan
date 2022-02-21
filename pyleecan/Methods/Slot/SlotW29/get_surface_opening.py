@@ -34,7 +34,7 @@ def get_surface_opening(self, alpha=0, delta=0):
     ]
     curve_list = [line for line in curve_list if line is not None]
 
-    # Only the closing arc (8-1) needs to be drawn (in FEMM)
+    # Only the closing arc (12-1) needs to be drawn (in FEMM)
     for curve in curve_list[:-1]:
         if curve.prop_dict is None:
             curve.prop_dict = dict()

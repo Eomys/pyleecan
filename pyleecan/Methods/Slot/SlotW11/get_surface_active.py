@@ -1,6 +1,5 @@
-from ....Classes.Segment import Segment
 from ....Classes.SurfLine import SurfLine
-from ....Functions.labels import WIND_LAB
+from ....Functions.labels import WIND_LAB, DRAW_PROP_LAB
 
 
 def get_surface_active(self, alpha=0, delta=0):
@@ -32,6 +31,12 @@ def get_surface_active(self, alpha=0, delta=0):
         line_dict["8-3"],
     ]
     curve_list = [line for line in curve_list if line is not None]
+
+    # Only the closing arc (8-3) needs to be drawn (in FEMM)
+    for curve in curve_list[:-1]:
+        if curve.prop_dict is None:
+            curve.prop_dict = dict()
+        curve.prop_dict.update({DRAW_PROP_LAB: False})
 
     # Create surface
     H1 = self.get_H1()
