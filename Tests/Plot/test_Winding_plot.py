@@ -184,9 +184,9 @@ class Test_Winding_plot(object):
     def test_plot_mmf_unit(self):
         """Test plot unit mmf"""
         Toyota_Prius = load(join(DATA_DIR, "Machine", "Toyota_Prius.json"))
-        Toyota_Prius.stator.plot_mmf_unit(is_show_fig=False)
-        fig = plt.gcf()
-        fig.savefig(join(save_path, "test_unit_mmf.png"))
+        Toyota_Prius.stator.plot_mmf_unit(
+            save_path=join(save_path, "test_unit_mmf.png")
+        )
 
 
 if __name__ == "__main__":
