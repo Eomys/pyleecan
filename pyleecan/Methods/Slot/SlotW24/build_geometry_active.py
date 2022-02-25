@@ -99,7 +99,7 @@ def build_geometry_active(self, Nrad, Ntan, alpha=0, delta=0):
                 + "-S0",
                 point_ref=point_ref,
             )
-        surf_list.append(surface)
+            surf_list.append(surface)
 
     for surf in surf_list:
         surf.rotate(alpha)

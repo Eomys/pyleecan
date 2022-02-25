@@ -22,6 +22,10 @@ def get_surface_opening(self, alpha=0, delta=0):
         list of surfaces objects
     """
 
+    # H0=0 no opening
+    if self.H0 == 0:
+        return []
+
     # Create curve list
     line_dict = self._comp_line_dict()
     curve_list = [
