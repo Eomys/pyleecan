@@ -49,7 +49,7 @@ def generate_code(root_path, gen_dict=None, soft_name="pyleecan", is_log=True):
     """
     CLASS_DIR = join(root_path, "Classes")
     FUNC_DIR = join(root_path, "Functions")
-    DOC_DIR = join(root_path, "Generator", "ClassesRef", "Slot")
+    DOC_DIR = join(root_path, "Generator", "ClassesRef")
     print("Reading classes csv in: " + DOC_DIR)
     print("Saving generated files in: " + CLASS_DIR)
 
