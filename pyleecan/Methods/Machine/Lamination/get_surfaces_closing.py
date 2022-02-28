@@ -14,4 +14,4 @@ def get_surfaces_closing(self, sym=1):
         List of the closing surfaces
     """
 
-    return list()
+    return self.get_notches_surf(sym=sym)

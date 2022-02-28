@@ -1,5 +1,6 @@
 from numpy import pi
 from ....Functions.labels import update_RTS_index
+from ....Classes.Lamination import Lamination
 
 
 def get_surfaces_closing(self, sym=1):
@@ -18,10 +19,11 @@ def get_surfaces_closing(self, sym=1):
         List of the closing surfaces
     """
 
+    # Get notches closing surfaces
+    close_list = Lamination.get_surfaces_closing(sym=sym)
     if not hasattr(self.slot, "get_surface_opening"):
-        return list()
-    else:
-        close_list = list()
+        return close_list
+    else:  # Get slot closing surfaces
         slot_pitch = 2 * pi / self.slot.Zs
         # for slot to draw
         for ii in range(self.slot.Zs // sym):
