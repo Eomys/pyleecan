@@ -20,7 +20,7 @@ def get_surfaces_closing(self, sym=1):
     """
 
     # Get notches closing surfaces
-    close_list = Lamination.get_surfaces_closing(sym=sym)
+    close_list = Lamination.get_surfaces_closing(self=self, sym=sym)
     if not hasattr(self.slot, "get_surface_opening"):
         return close_list
     else:  # Get slot closing surfaces

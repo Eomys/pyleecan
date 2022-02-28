@@ -1,9 +1,9 @@
 from ...Classes.Lamination import Lamination
 from ...Classes.Circle import Circle
-from ...Functions.FEMM import is_eddies
-from ...Functions.FEMM.assign_FEMM_surface import assign_FEMM_surface
+
+from ...Functions.FEMM.draw_FEMM_lamination import draw_FEMM_lamination
+from ...Functions.FEMM.draw_FEMM_surfaces import draw_FEMM_surfaces
 from ...Functions.FEMM.comp_FEMM_dict import comp_FEMM_dict
-from ...Functions.FEMM.create_FEMM_materials import create_FEMM_materials
 from ...Functions.FEMM.get_sliding_band import get_sliding_band
 from ...Functions.FEMM.get_airgap_surface import get_airgap_surface
 from ...Functions.labels import NO_MESH_LAB
@@ -41,14 +41,15 @@ def draw_FEMM(
     output : Output
         Output object
     is_mmfr : bool
-        1 to compute the rotor magnetomotive force / rotor
-        magnetic field
+        1 to compute the rotor magnetomotive force / rotor magnetic field
     is_mmfs : bool
-        1 to compute the stator magnetomotive force/stator
-        magnetic field
+        1 to compute the stator magnetomotive force/stator magnetic field
+    sym : int
+        the symmetry applied on the stator and the rotor (take into account antiperiodicity)
+    is_antiper: bool
+        To apply antiperiodicity boundary conditions
     type_calc_leakage : int
-        0 no leakage calculation
-        1 calculation using single slot
+        0 no leakage calculation, 1 calculation using single slot
     is_remove_ventS : bool
         True to remove the ventilation ducts on stator in FEMM (Default value = False)
     is_remove_ventR : bool
@@ -67,10 +68,14 @@ def draw_FEMM(
     kmesh_fineness : float
         global coefficient to adjust mesh fineness
         in FEMM (1: default ; > 1: finner ; < 1: less fine)
-    sym : int
-        the symmetry applied on the stator and the rotor (take into account antiperiodicity)
-    is_antiper: bool
-        To apply antiperiodicity boundary conditions
+    user_FEMM_dict : dict
+        To enforce parameters in the FEMM_dict
+    path_save : str
+        Path to save resulting fem file
+    is_sliding_band : bool
+        True to use sliding band else use airgap surface
+    transform_list : list
+        List of transfromation to apply on the surfaces
     rotor_dxf : DXFImport
         To use a dxf version of the rotor instead of build_geometry
     stator_dxf : DXFImport
@@ -78,7 +83,6 @@ def draw_FEMM(
 
     Returns
     -------
-
     FEMM_dict : dict
         dictionary containing the main parameters of FEMM (including circuits and materials)
     """
@@ -134,7 +138,26 @@ def draw_FEMM(
 
     # Draw all the laminations
     for lam in lam_list:
-        draw_FEMM_lamination(lam)
+        if lam.is_stator:
+            lam_dxf = stator_dxf
+        else:
+            lam_dxf = rotor_dxf
+        FEMM_dict = draw_FEMM_lamination(
+            machine,
+            lam,
+            sym,
+            femm,
+            FEMM_dict,
+            transform_list,
+            lam_dxf,
+            BC_dict,
+            Is,
+            Ir,
+            is_mmfs,
+            is_mmfr,
+            type_BH_stator,
+            type_BH_rotor,
+        )
 
     # List of the Non lamination related surfaces
     other_surf_list = list()
@@ -150,7 +173,7 @@ def draw_FEMM(
             )
         )
 
-    # adding the Airgap surface
+    # Adding the Airgap surface
     for ii in range(len(lam_list) - 1):
         if is_sliding_band:
             other_surf_list.extend(
@@ -163,17 +186,22 @@ def draw_FEMM(
                 get_airgap_surface(lam_int=lam_list[ii], lam_ext=lam_list[ii + 1])
             )
 
-    # Apply BC for DXF import
-    if rotor_dxf is not None:
-        for BC in rotor_dxf.BC_list:
-            if BC[1] is True:  # Select Arc
-                femm.mi_selectarcsegment(BC[0].real, BC[0].imag)
-                femm.mi_setarcsegmentprop(FEMM_dict["arcspan"], BC[2], False, None)
-            else:  # Select Line
-                femm.mi_selectsegment(BC[0].real, BC[0].imag)
-                femm.mi_setsegmentprop(BC[2], None, None, False, None)
-            femm.mi_clearselected()
+    # Draw the surfaces not related to lamination
+    draw_FEMM_surfaces(
+        femm,
+        machine,
+        other_surf_list,
+        FEMM_dict,
+        BC_dict,
+        Is,
+        Ir,
+        is_mmfs,
+        is_mmfr,
+        type_BH_stator,
+        type_BH_rotor,
+    )
 
+    # Define simulation parameters
     # femm.mi_zoomnatural()  # Zoom out
     femm.mi_probdef(
         FEMM_dict["freqpb"],

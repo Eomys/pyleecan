@@ -1,10 +1,59 @@
-def draw_FEMM_surfaces():
-    """Draw a list of surfaces in pyleecan"""
+from ...Functions.FEMM import is_eddies
+from ...Functions.FEMM.create_FEMM_materials import create_FEMM_materials
+from ...Functions.FEMM.assign_FEMM_surface import assign_FEMM_surface
+
+
+def draw_FEMM_surfaces(
+    femm,
+    machine,
+    surf_list,
+    FEMM_dict,
+    BC_dict,
+    Is,
+    Ir,
+    is_mmfs,
+    is_mmfr,
+    type_BH_stator,
+    type_BH_rotor,
+):
+    """Draw a list of surfaces in FEMM
+
+    Parameters
+    ----------
+    femm : FEMMHandler
+        client to send command to a FEMM instance
+    machine : Machine
+        Machine object to draw
+    surf_list : list
+        List of surfaces to draw
+    FEMM_dict : dict
+        dictionary containing the main parameters of FEMM
+    BC_dict : dict
+        Boundary condition dict ([line label] = BC name)
+    Is : ndarray
+        Stator current matrix [A]
+    Ir : ndarray
+        Rotor current matrix [A]
+    is_mmfs : bool
+        1 to compute the stator magnetomotive force/stator magnetic field
+    is_mmfr : bool
+        1 to compute the rotor magnetomotive force / rotor magnetic field
+    type_BH_stator: int
+        2 Infinite permeability, 1 to use linear B(H) curve according to mur_lin, 0 to use the B(H) curve
+    type_BH_rotor: int
+        2 Infinite permeability, 1 to use linear B(H) curve according to mur_lin, 0 to use the B(H) curve
+
+    Returns
+    -------
+    FEMM_dict : dict
+        dictionary containing the main parameters of FEMM
+    """
     # Creation of all the materials and circuit in FEMM
-    prop_dict, materials, circuits = create_FEMM_materials(
+    prop_dict, FEMM_dict = create_FEMM_materials(
         femm,
         machine,
         surf_list,
+        FEMM_dict,
         Is,
         Ir,
         is_mmfs,
@@ -28,8 +77,5 @@ def draw_FEMM_surfaces():
             BC_dict=BC_dict,
         )
         assign_FEMM_surface(femm, surf, prop_dict[label], FEMM_dict, machine)
-
-    FEMM_dict["materials"] = materials
-    FEMM_dict["circuits"] = circuits
 
     return FEMM_dict

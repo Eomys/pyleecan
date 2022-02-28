@@ -132,4 +132,8 @@ def comp_FEMM_dict(machine, Kgeo_fineness, Kmesh_fineness, type_calc_leakage=0):
     for grp in FEMM_GROUPS:
         FEMM_dict["groups"][grp] = FEMM_GROUPS[grp]["ID"]
 
+    # Init empty list
+    FEMM_dict["materials"] = list()
+    FEMM_dict["circuits"] = list()
+
     return FEMM_dict
