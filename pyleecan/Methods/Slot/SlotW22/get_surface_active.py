@@ -1,4 +1,4 @@
-from ....Classes.Arc1 import Arc1
+from ....Functions.labels import WIND_LAB, DRAW_PROP_LAB
 from ....Classes.SurfLine import SurfLine
 
 
@@ -20,28 +20,31 @@ def get_surface_active(self, alpha=0, delta=0):
         Surface corresponding to the Winding Area
     """
 
-    # get the name of the lamination
-    st = self.get_name_lam()
-
     # Create curve list
-    curve_list = self.build_geometry()[1:-1]
-    curve_list.append(
-        Arc1(
-            begin=curve_list[-1].get_end(),
-            end=curve_list[0].get_begin(),
-            radius=-abs(curve_list[-1].get_end()),
-            is_trigo_direction=False,
-        )
-    )
+    line_dict = self._comp_line_dict()
+    curve_list = [
+        line_dict["2-3"],
+        line_dict["3-4"],
+        line_dict["4-5"],
+        line_dict["5-6"],
+        line_dict["6-7"],
+        line_dict["7-2"],
+    ]
+    curve_list = [line for line in curve_list if line is not None]
+
+    # Only the closing arc (7-2) needs to be drawn (in FEMM)
+    for curve in curve_list[:-1]:
+        if curve.prop_dict is None:
+            curve.prop_dict = dict()
+        curve.prop_dict.update({DRAW_PROP_LAB: False})
 
     # Create surface
+    label = self.parent.get_label() + "_" + WIND_LAB + "_R0-T0-S0"
     if self.is_outwards():
         Zmid = self.get_Rbo() + self.H0 + self.H2 / 2
     else:
         Zmid = self.get_Rbo() - self.H0 - self.H2 / 2
-    surface = SurfLine(
-        line_list=curve_list, label="Wind_" + st + "_R0_T0_S0", point_ref=Zmid
-    )
+    surface = SurfLine(line_list=curve_list, label=label, point_ref=Zmid)
 
     # Apply transformation
     surface.rotate(alpha)

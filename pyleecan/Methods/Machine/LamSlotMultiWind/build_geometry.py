@@ -6,7 +6,7 @@ from ....Methods import NotImplementedYetError
 from ....Classes.LamSlot import LamSlot
 
 
-def build_geometry(self, sym=1, alpha=0, delta=0, is_simplified=False):
+def build_geometry(self, sym=1, alpha=0, delta=0, is_circular_radius=False):
     """Build the geometry of the LamSlotMulti with winding in slots
 
     Parameters
@@ -17,8 +17,8 @@ def build_geometry(self, sym=1, alpha=0, delta=0, is_simplified=False):
         Angle for rotation [rad]
     delta : complex
         Complex value for translation
-    is_simplified: bool
-        True to avoid line superposition
+    is_circular_radius : bool
+        True to add surfaces to "close" the Lamination radii
 
     Returns
     -------
@@ -28,7 +28,9 @@ def build_geometry(self, sym=1, alpha=0, delta=0, is_simplified=False):
     """
 
     # getting the Lamination surface
-    surf_lam = LamSlot.build_geometry(self, sym=sym, alpha=alpha, delta=delta)
+    surf_lam = LamSlot.build_geometry(
+        self, sym=sym, alpha=alpha, delta=delta, is_circular_radius=is_circular_radius
+    )
 
     # getting the winding surface
     surf_list = list()
@@ -54,7 +56,6 @@ def build_geometry(self, sym=1, alpha=0, delta=0, is_simplified=False):
                 surf_Wind = self.slot_list[ii].build_geometry_active(
                     Nrad=Nrad,
                     Ntan=Ntan,
-                    is_simplified=is_simplified,
                     alpha=alpha,
                     delta=delta,
                 )

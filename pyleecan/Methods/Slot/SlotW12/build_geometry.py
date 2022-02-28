@@ -23,33 +23,15 @@ def build_geometry(self):
 
     """
 
-    if self.is_outwards():
-        rot_sign = True
-    else:  # inward slot
-        rot_sign = False
+    line_dict = self._comp_line_dict()
 
-    point_dict = self._comp_point_coordinate()
-    Z1 = point_dict["Z1"]
-    Z2 = point_dict["Z2"]
-    Z3 = point_dict["Z3"]
-    Z4 = point_dict["Z4"]
-    Z5 = point_dict["Z5"]
-    Z6 = point_dict["Z6"]
-    Z7 = point_dict["Z7"]
-    Z8 = point_dict["Z8"]
-
-    # Creation of curve
-    curve_list = list()
-    curve_list.append(Segment(Z1, Z2))
-    if self.R1 > 0:  # R1=0 => Z2==Z3
-        curve_list.append(Arc3(Z2, Z3, rot_sign))
-    if self.H1 > 0:  # H1=0 => Z3==Z4
-        curve_list.append(Segment(Z3, Z4))
-    curve_list.append(Arc3(Z4, Z5, rot_sign))
-    if self.H1 > 0:  # H1=0 => Z5==Z6
-        curve_list.append(Segment(Z5, Z6))
-    if self.R1 > 0:  # R1=0 => Z6==Z7
-        curve_list.append(Arc3(Z6, Z7, rot_sign))
-    curve_list.append(Segment(Z7, Z8))
-
-    return curve_list
+    curve_list = [
+        line_dict["1-2"],
+        line_dict["2-3"],
+        line_dict["3-4"],
+        line_dict["4-5"],
+        line_dict["5-6"],
+        line_dict["6-7"],
+        line_dict["7-8"],
+    ]
+    return [line for line in curve_list if line is not None]

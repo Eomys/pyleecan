@@ -11,6 +11,7 @@ Zs,-,slot number,0,int,36,0,,,Slot,,build_geometry_active,VERSION,1,Generic clas
 ,,,,,,,,,,,comp_radius_mid_active,,,
 ,,,,,,,,,,,comp_surface,,,
 ,,,,,,,,,,,comp_surface_active,,,
+,,,,,,,,,,,comp_surface_opening,,,
 ,,,,,,,,,,,comp_width_opening,,,
 ,,,,,,,,,,,convert_to_SlotUD2,,,
 ,,,,,,,,,,,get_is_stator,,,

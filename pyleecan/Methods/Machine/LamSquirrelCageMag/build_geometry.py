@@ -4,7 +4,7 @@ from ....Classes.LamSquirrelCage import LamSquirrelCage
 from ....Functions.labels import HOLEV_LAB, HOLEM_LAB, update_RTS_index
 
 
-def build_geometry(self, sym=1, alpha=0, delta=0, is_simplified=False):
+def build_geometry(self, sym=1, alpha=0, delta=0, is_circular_radius=False):
     """Build geometry of the LamSquirrelCage
 
     Parameters
@@ -17,8 +17,8 @@ def build_geometry(self, sym=1, alpha=0, delta=0, is_simplified=False):
         Angle for rotation [rad]
     delta : complex
         Complex value for translation
-    is_simplified: bool
-        True to avoid line superposition
+    is_circular_radius : bool
+        True to add surfaces to "close" the Lamination radii
 
     Returns
     -------
@@ -34,7 +34,7 @@ def build_geometry(self, sym=1, alpha=0, delta=0, is_simplified=False):
         label = "Lamination_Rotor"
 
     surf_list = LamSquirrelCage.build_geometry(
-        self, sym=sym, is_simplified=is_simplified, alpha=alpha, delta=delta
+        self, sym=sym, is_circular_radius=is_circular_radius, alpha=alpha, delta=delta
     )
 
     # Holes surface(s)

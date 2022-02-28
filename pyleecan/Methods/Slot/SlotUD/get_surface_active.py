@@ -1,5 +1,4 @@
-from numpy import arcsin, exp
-
+from ....Functions.labels import WIND_LAB
 from ....Classes.Segment import Segment
 from ....Classes.Arc1 import Arc1
 from ....Classes.SurfLine import SurfLine
@@ -22,9 +21,7 @@ def get_surface_active(self, alpha=0, delta=0):
     surf_wind: Surface
         Surface corresponding to the Winding Area
     """
-    # get the name of the lamination
-    st = self.get_name_lam()
-
+    # get curve_list
     line_list = self.build_geometry()[self.wind_begin_index : self.wind_end_index]
     if self.type_line_wind == 0:
         line_list.append(
@@ -40,7 +37,8 @@ def get_surface_active(self, alpha=0, delta=0):
             )
         )
 
-    surface = SurfLine(line_list=line_list, label="Wind_" + st + "_R0_T0_S0")
+    label = self.parent.get_label() + "_" + WIND_LAB + "_R0-T0-S0"
+    surface = SurfLine(line_list=line_list, label=label)
     surface.comp_point_ref(is_set=True)
 
     # Apply transformation

@@ -27,6 +27,7 @@ slotW21_test.append(
         "S_exp": 2.390225015189331e-4,
         "Aw": 0.132201,
         "SW_exp": 2.3e-4,
+        "SO_exp": 9.02250e-06,
         "H_exp": 2.3011250632883697e-2,
     }
 )
@@ -42,6 +43,7 @@ slotW21_test.append(
         "S_exp": 2.3897749848106692e-4,
         "Aw": 0.10168861,
         "SW_exp": 2.3e-4,
+        "SO_exp": 8.977498e-06,
         "H_exp": 2.30903427198e-2,
     }
 )
@@ -57,6 +59,7 @@ slotW21_test.append(
         "S_exp": 2.7897749848106692e-4,
         "Aw": 0.097386,
         "SW_exp": 2.3e-4,
+        "SO_exp": 4.8977498e-05,
         "H_exp": 2.8086e-2,
     }
 )
@@ -174,6 +177,22 @@ class Test_SlotW21_meth(object):
         assert abs((a - b) / a - 0) < DELTA, msg
 
     @pytest.mark.parametrize("test_dict", slotW21_test)
+    def test_comp_surface_opening(self, test_dict):
+        """Check that the computation of the opening surface is correct"""
+        test_obj = test_dict["test_obj"]
+        result = test_obj.slot.comp_surface_opening()
+
+        a = result
+        b = test_dict["SO_exp"]
+        msg = "Return " + str(a) + " expected " + str(b)
+        assert abs((a - b) / a - 0) < DELTA, msg
+
+        # Check that the analytical method returns the same result as the numerical one
+        b = Slot.comp_surface_opening(test_obj.slot, Ndisc=400)
+        msg = "Return " + str(a) + " expected " + str(b)
+        assert abs((a - b) / a - 0) < DELTA, msg
+
+    @pytest.mark.parametrize("test_dict", slotW21_test)
     def test_comp_height(self, test_dict):
         """Check that the computation of the height is correct"""
         test_obj = test_dict["test_obj"]
@@ -219,12 +238,38 @@ class Test_SlotW21_meth(object):
         with pytest.raises(S21_H1rCheckError) as context:
             lam.slot.check()
 
-    def test_get_surface_active(self):
-        """Check that the get_surface_active works when stator = false"""
+    def test_get_surface_X(self):
+        """Check that the get_surface_X works when stator = false"""
         lam = LamSlot(is_internal=True, Rext=0.1325, is_stator=False)
         lam.slot = SlotW21(
             Zs=36, H0=3e-3, H1=0, H1_is_rad=False, H2=20e-3, W0=3e-3, W1=13e-3, W2=10e-3
         )
         result = lam.slot.get_surface_active()
-        assert result.label == "Wind_Rotor_R0_T0_S0"
+        assert result.label == "Rotor_Winding_R0-T0-S0"
         assert len(result.get_lines()) == 4
+        assert result.is_inside(result.point_ref)
+
+        result = lam.slot.get_surface_opening()
+        assert len(result) == 1
+        assert result[0].label == "Rotor_SlotOpening_R0-T0-S0"
+        assert len(result[0].get_lines()) == 6
+        assert result[0].is_inside(result[0].point_ref)
+
+        result = lam.slot.get_surface()
+        assert len(result.get_lines()) == 8
+        assert result.is_inside(result.point_ref)
+
+
+if __name__ == "__main__":
+    a = Test_SlotW21_meth()
+    for ii, test_dict in enumerate(slotW21_test):
+        print("Running test for Slot[" + str(ii) + "]")
+        a.test_schematics(test_dict)
+        a.test_comp_surface(test_dict)
+        a.test_comp_surface_active(test_dict)
+        a.test_comp_surface_opening(test_dict)
+        a.test_comp_height(test_dict)
+        a.test_build_geometry_active(test_dict)
+        a.test_comp_angle_opening(test_dict)
+        a.test_comp_angle_active_eq(test_dict)
+        print("Done")

@@ -142,8 +142,8 @@ def draw_FEMM(
         )
 
     # Add Bore notches surfaces
-    surf_list.extend(lam_int.get_notches_surf(sym=sym, is_simplified=True))
-    surf_list.extend(lam_ext.get_notches_surf(sym=sym, is_simplified=True))
+    surf_list.extend(lam_int.get_notches_surf(sym=sym))
+    surf_list.extend(lam_ext.get_notches_surf(sym=sym))
 
     # adding the Airgap surface
     if is_sliding_band:
@@ -156,12 +156,14 @@ def draw_FEMM(
         femm.mi_readdxf(rotor_dxf.file_path)
         surf_list.extend(rotor_dxf.get_surfaces())
     else:
-        surf_list.extend(machine.rotor.build_geometry(sym=sym))
+        surf_list.extend(machine.rotor.build_geometry(sym=sym, is_circular_radius=True))
     if stator_dxf is not None:
         femm.mi_readdxf(stator_dxf.file_path)
         surf_list.extend(stator_dxf.get_surfaces())
     else:
-        surf_list.extend(machine.stator.build_geometry(sym=sym))
+        surf_list.extend(
+            machine.stator.build_geometry(sym=sym, is_circular_radius=True)
+        )
 
     # Applying user defined modifications
     for transform in transform_list:

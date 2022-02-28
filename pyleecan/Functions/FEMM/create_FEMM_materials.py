@@ -15,6 +15,7 @@ from ...Functions.labels import (
     HOLEV_LAB,
     HOLEM_LAB,
     MAG_LAB,
+    SOP_LAB,
     WIND_LAB,
     BAR_LAB,
     SLID_LAB,
@@ -128,7 +129,9 @@ def create_FEMM_materials(
                 femm.mi_addmaterial("Airgap", 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0)
                 materials.append("Airgap")
             prop_dict[label_dict["full"]] = "Airgap"
-        elif NOTCH_LAB in label_dict["surf_type"]:  # Notches
+        elif (
+            SOP_LAB in label_dict["surf_type"] or NOTCH_LAB in label_dict["surf_type"]
+        ):  # Slot opening or Notches
             # Same material as Airgap but different mesh
             if "Air" not in materials:
                 femm.mi_addmaterial("Air", 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0)

@@ -212,9 +212,9 @@ def test_FEMM_compare_SCIM():
         OP=OPdq(N0=simu.input.OP.N0),
     )
 
-    out = simu.run()
-
     out2 = simu_sym.run()
+
+    out = simu.run()
 
     out3 = simu_load.run()
 
