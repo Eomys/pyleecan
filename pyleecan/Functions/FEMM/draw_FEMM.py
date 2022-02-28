@@ -126,9 +126,13 @@ def draw_FEMM(
         machine_edit.stator = Lamination(init_dict=lam_dict)
     # Remove ventilations
     if is_remove_ventR:
-        machine_edit.rotor.axial_vent = list()
+        for lam in machine_edit.get_lam_list(is_int_to_ext=True):
+            if not lam.is_stator:
+                lam.axial_vent = list()
     if is_remove_ventS:
-        machine_edit.stator.axial_vent = list()
+        for lam in machine_edit.get_lam_list(is_int_to_ext=True):
+            if lam.is_stator:
+                lam.axial_vent = list()
 
     # Lamination list organized from interior to exterior
     lam_list = machine_edit.get_lam_list(is_int_to_ext=True)
