@@ -13714,9 +13714,9 @@
         "desc": "Generate a multisimulation with InputCurrent at variable operating point",
         "is_internal": false,
         "methods": [
-            "get_input_list",
             "generate_simulation_list",
-            "get_elec_datakeeper"
+            "get_elec_datakeeper",
+            "get_input_list"
         ],
         "mother": "VarLoad",
         "name": "VarLoadCurrent",
