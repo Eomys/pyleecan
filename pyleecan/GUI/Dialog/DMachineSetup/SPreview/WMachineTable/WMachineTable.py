@@ -19,9 +19,7 @@ from ......Functions.Plot.set_plot_gui_icon import set_plot_gui_icon
 from ......GUI.Dialog.DMachineSetup.SPreview.WMachineTable.Ui_WMachineTable import (
     Ui_WMachineTable,
 )
-from ......Methods.Simulation.MagElmer import (
-    MagElmer_BP_dict,
-)
+from ......Methods.Simulation.MagElmer import MagElmer_BP_dict
 
 try:
     from ......Functions.GMSH.draw_GMSH import draw_GMSH
@@ -101,7 +99,7 @@ class WMachineTable(Ui_WMachineTable, QWidget):
 
     def plot_mmf(self):
         """Plot the unit mmf of the stator"""
-       try:
+        try:
             if self.machine is not None:
                 self.machine.stator.plot_mmf_unit(is_create_appli=False)
                 set_plot_gui_icon()
@@ -109,7 +107,7 @@ class WMachineTable(Ui_WMachineTable, QWidget):
             err_msg = "Error while plotting Stator mmf unit:\n" + str(e)
             getLogger(GUI_LOG_NAME).error(err_msg)
             QMessageBox().critical(self, self.tr("Error"), err_msg)
-                
+
     def plot_machine(self):
         """Plot the machine"""
         if self.machine is not None:
@@ -179,9 +177,7 @@ class WMachineTable(Ui_WMachineTable, QWidget):
             )
             getLogger(GUI_LOG_NAME).error(err_msg)
             QMessageBox().critical(
-                self,
-                self.tr("Error"),
-                self.tr(err_msg),
+                self, self.tr("Error"), self.tr(err_msg),
             )
         femm.closefemm()
 
@@ -217,9 +213,7 @@ class WMachineTable(Ui_WMachineTable, QWidget):
             )
             getLogger(GUI_LOG_NAME).error(err_msg)
             QMessageBox().critical(
-                self,
-                self.tr("Error"),
-                self.tr(err_msg),
+                self, self.tr("Error"), self.tr(err_msg),
             )
 
     def draw_GMSH_3D(self):
@@ -244,9 +238,7 @@ class WMachineTable(Ui_WMachineTable, QWidget):
             )
             getLogger(GUI_LOG_NAME).error(err_msg)
             QMessageBox().critical(
-                self,
-                self.tr("Error"),
-                self.tr(err_msg),
+                self, self.tr("Error"), self.tr(err_msg),
             )
 
     def get_save_path(self, ext=".fem", file_type="FEMM (*.fem)"):
