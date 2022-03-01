@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
-import os
-from os.path import join, isdir
+from os.path import join
 
 
 def get_path_save_fem(self, output):

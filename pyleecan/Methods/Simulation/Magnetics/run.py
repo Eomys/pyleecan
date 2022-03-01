@@ -39,7 +39,7 @@ def run(self):
     Nslices = len(unique_indices)
     if Nslices > 1:
         self.get_logger().info("Solving slice 1 / " + str(Nslices))
-    out_dict = self.comp_flux_airgap(output, axes_dict, Is=Is_val, Ir=Ir_val)
+    out_dict = self.comp_flux_airgap(output, axes_dict, Is_val=Is_val, Ir_val=Ir_val)
 
     if Nslices == 1:
         # Add one dimension to ndarray
