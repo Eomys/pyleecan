@@ -1,7 +1,8 @@
 from os import remove
 from os.path import splitext, isfile
+from os import remove, rename
 
-from numpy import zeros, pi, roll, cos, sin
+from numpy import zeros, pi, roll, cos, sin, max as np_max, abs as np_abs, all as np_all
 
 from ....Classes._FEMMHandler import _FEMMHandler
 from ....Functions.FEMM.update_FEMM_simulation import update_FEMM_simulation
@@ -25,6 +26,7 @@ def solve_FEMM(
     filename=None,
     start_t=0,
     end_t=None,
+    Nmess=4,
 ):
     """
     Solve FEMM model to calculate airgap flux density, torque instantaneous/average/ripple values,
@@ -100,7 +102,6 @@ def solve_FEMM(
             output.mag.internal.handler_list.append(femm)
             # Open a new FEMM instance associated to new handler
             femm.openfemm(1)
-
         # Open FEMM file
         femm.opendocument(filename)
     else:
@@ -116,6 +117,12 @@ def solve_FEMM(
             logger.debug("Delete existing result .ans file at: " + ans_file)
             remove(ans_file)
 
+    if not is_sliding_band:
+        fileinit_fem = self.get_path_save_fem(output)
+        fileinit_ans = fileinit_fem[:-4] + ".ans"
+        filetemp_fem = fileinit_fem[:-4] + "_temp.fem"
+        filetemp_ans = fileinit_fem[:-4] + "_temp.ans"
+
     # Take last time step at Nt by default
     if end_t is None:
         end_t = Nt
@@ -125,9 +132,12 @@ def solve_FEMM(
 
     # Loading parameters for readibility
     machine = output.simu.machine
-    Rag = self.Rag_enforced
-    if Rag is None:
-        Rag = machine.comp_Rgap_mec()
+
+    if self.Rag_enforced is not None:
+        # Take enforced value
+        Rag = self.Rag_enforced
+    else:
+        Rag = machine.comp_Rgap_mec(0)
 
     L1 = machine.stator.comp_length()
     L2 = machine.rotor.comp_length()
@@ -138,7 +148,7 @@ def solve_FEMM(
         Npcp = {}
         for key in out_dict["Phi_wind"].keys():
             lam = machine.get_lam_by_label(key)
-            qs[key] = lam.winding.qs  # Winding phase number
+            qs[key] = out_dict["Phi_wind"][key].shape[1]  # Winding phase number
             Npcp[key] = lam.winding.Npcp  # parallel paths
 
     # Account for initial angular shift of stator and rotor and apply it to the sliding band
@@ -151,19 +161,38 @@ def solve_FEMM(
     groups = None
     A_node = None
 
+    # Check current values
+    if np_all(Is == 0):
+        Is = None
+    if np_all(Ir == 0):
+        Ir = None
+
+    k1 = 0
+    k2 = 0
+    Nloop = end_t - start_t
     # Compute the data for each time step
     for ii in range(start_t, end_t):
-        if Nt > 1:
-            logger.info(
-                "Solving time step " + str(ii + 1) + " / " + str(Nt) + " in FEMM"
-            )
-        else:
+
+        if Nloop > Nmess:
+            if k1 >= round(k2 * Nloop / Nmess):
+                logger.info("Solving time steps: " + str(int(k2 / Nmess * 100)) + "%")
+                k2 += 1
+
+        elif ii == 0:
             logger.info("Computing Airgap Flux in FEMM")
+        k1 += 1
+
+        if not is_sliding_band:
+            # Reload model for each time step if no sliding band
+            if ii > start_t:
+                femm.opendocument(fileinit_fem)
+            femm.mi_saveas(filetemp_fem)
+
         # Update rotor position and currents
         update_FEMM_simulation(
             femm=femm,
-            circuits=FEMM_dict["circuits"],
-            is_sliding_band=self.is_sliding_band,
+            FEMM_dict=FEMM_dict,
+            is_sliding_band=is_sliding_band,
             is_internal_rotor=is_internal_rotor,
             angle_rotor=angle_rotor + angle_shift,
             Is=Is,
@@ -189,16 +218,21 @@ def solve_FEMM(
         femm.mi_loadsolution()
 
         # Get the flux result
-        if self.is_sliding_band:
+        if is_sliding_band:
             for jj in range(Na):
-                out_dict["Br"][ii, jj], out_dict["Bt"][ii, jj] = femm.mo_getgapb(
-                    "bc_ag2", angle[jj] * 180 / pi
-                )
+                (
+                    out_dict["B_{rad}"][ii, jj],
+                    out_dict["B_{circ}"][ii, jj],
+                ) = femm.mo_getgapb("bc_ag2", angle[jj] * 180 / pi)
         else:
             for jj in range(Na):
                 B = femm.mo_getb(Rag * cos(angle[jj]), Rag * sin(angle[jj]))
-                out_dict["Br"][ii, jj] = B[0] * cos(angle[jj]) + B[1] * sin(angle[jj])
-                out_dict["Bt"][ii, jj] = -B[0] * sin(angle[jj]) + B[1] * cos(angle[jj])
+                out_dict["B_{rad}"][ii, jj] = B[0] * cos(angle[jj]) + B[1] * sin(
+                    angle[jj]
+                )
+                out_dict["B_{circ}"][ii, jj] = -B[0] * sin(angle[jj]) + B[1] * cos(
+                    angle[jj]
+                )
 
         # Compute the torque
         out_dict["Tem"][ii] = comp_FEMM_torque(femm, FEMM_dict, sym=sym)
@@ -218,7 +252,7 @@ def solve_FEMM(
                 )
 
         # Load mesh data & solution
-        if self.is_get_meshsolution and (is_sliding_band or Nt == 1):
+        if self.is_get_meshsolution:
             # Get mesh data and magnetic quantities from .ans file
             tmpmeshFEMM, tmpB, tmpH, tmpmu, tmpA, tmpgroups = self.get_meshsolution(
                 femm,
@@ -250,11 +284,29 @@ def solve_FEMM(
             mu_elem[ii0, :] = tmpmu
             A_node[ii0, :] = tmpA
 
+        if not is_sliding_band:
+            femm.mi_close()
+            femm.mo_close
+
+    if Nloop > Nmess and Nt > 1 and k2 <= Nmess:
+        logger.info("Solving time step: 100%")
+
     # Shift to take into account stator position
     if self.angle_stator_shift != 0:
         roll_id = int(self.angle_stator_shift * Na / (2 * pi))
-        out_dict["Br"] = roll(out_dict["Br"], roll_id, axis=1)
-        out_dict["Bt"] = roll(out_dict["Bt"], roll_id, axis=1)
+        out_dict["B_{rad}"] = roll(out_dict["B_{rad}"], roll_id, axis=1)
+        out_dict["B_{circ}"] = roll(out_dict["B_{circ}"], roll_id, axis=1)
+
+    if not is_sliding_band:
+        # Remove initial .fem
+        if isfile(fileinit_fem):
+            remove(fileinit_fem)
+        # Remove initial .fem
+        if isfile(fileinit_ans):
+            remove(fileinit_ans)
+        # Rename .fem and .ans files to initial names
+        rename(filetemp_fem, fileinit_fem)
+        rename(filetemp_ans, fileinit_ans)
 
     # Close FEMM handler
     if is_close_femm:
