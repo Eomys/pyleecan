@@ -923,6 +923,15 @@
                 "type": "",
                 "unit": "-",
                 "value": null
+            },
+            {
+                "desc": "Physic of the tracked quantity",
+                "max": "",
+                "min": "",
+                "name": "physic",
+                "type": "str",
+                "unit": "-",
+                "value": "None"
             }
         ]
     },
