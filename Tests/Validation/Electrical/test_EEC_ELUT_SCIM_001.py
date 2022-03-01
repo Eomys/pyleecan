@@ -9,18 +9,13 @@ from pyleecan.Classes.Electrical import Electrical
 from pyleecan.Classes.EEC_SCIM import EEC_SCIM
 from pyleecan.Classes.LUTslip import LUTslip
 from pyleecan.Classes.InputVoltage import InputVoltage
+from pyleecan.Classes.ImportMatlab import ImportMatlab
 from pyleecan.Classes.Simu1 import Simu1
 from pyleecan.Classes.OPslip import OPslip
 
 from pyleecan.Functions.load import load
-from pyleecan.definitions import DATA_DIR
-from pyleecan.Classes.ImportMatlab import ImportMatlab
-from pyleecan.definitions import config_dict
 
-from pyleecan.definitions import TEST_DIR
-
-
-color_list = config_dict["PLOT"]["COLOR_DICT"]["CURVE_COLORS"]
+from pyleecan.definitions import DATA_DIR, TEST_DIR
 
 is_show_fig = False
 
@@ -68,10 +63,13 @@ def test_EEC_ELUT_SCIM_001():
             param_dict[param] = value
 
     # Prepare simulation
-    SCIM_001 = load(join(DATA_DIR, "Machine", "SCIM_001.json"))
+    SCIM_001 = load(join(DATA_DIR, "Machine", "Validation", "SCIM_001.json"))
 
     # Update material data
     # (#TODO check also difference of rotor bar section)
+    SCIM_001.stator.winding.conductor.cond_mat.elec.alpha = 0.0039
+    SCIM_001.stator.winding.conductor.cond_mat.elec.rho = 1.73e-8
+
     SCIM_001.stator.winding.conductor.cond_mat.elec.alpha = 0.0039
     SCIM_001.stator.winding.conductor.cond_mat.elec.rho = 1.73e-8
 
@@ -111,7 +109,7 @@ def test_EEC_ELUT_SCIM_001():
     # Run simulation
     out = simu.run()
 
-    eec_param = simu.elec.eec.parameters
+    eec_param = out.elec.eec_param
     assert_almost_equal(out.elec.Tem_av_ref, param_dict["Cem"], decimal=1)
     assert_almost_equal(eec_param["R1"], param_dict["R10"], decimal=4)
     assert_almost_equal(eec_param["R2"], param_dict["R20"], decimal=4)
