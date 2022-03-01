@@ -141,6 +141,7 @@ def comp_flux_airgap(self, output, axes_dict, Is=None, Ir=None):
             Is=Is,
             Ir=Ir,
             angle_rotor=angle_rotor,
+            filename=self.import_file,
         )
     else:
         # Without parallelization
