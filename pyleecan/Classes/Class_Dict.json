@@ -1057,6 +1057,15 @@
                 "type": "Drive",
                 "unit": "-",
                 "value": null
+            },
+            {
+                "desc": "Skin effect for resistance and inductance",
+                "max": "",
+                "min": "",
+                "name": "type_skin_effect",
+                "type": "int",
+                "unit": "-",
+                "value": 1
             }
         ]
     },
@@ -1260,15 +1269,6 @@
                 "type": "str",
                 "unit": "-",
                 "value": "Pyleecan.Electrical"
-            },
-            {
-                "desc": "Skin effect for resistance and inductance",
-                "max": "",
-                "min": "",
-                "name": "type_skin_effect",
-                "type": "int",
-                "unit": "-",
-                "value": 0
             },
             {
                 "desc": "Average stator temperature for operational EEC calculation",
