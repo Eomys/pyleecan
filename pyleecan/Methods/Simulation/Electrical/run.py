@@ -1,4 +1,4 @@
-from numpy import zeros, array, angle
+from numpy import angle
 
 from ....Classes.EEC_SCIM import EEC_SCIM
 from ....Classes.EEC_PMSM import EEC_PMSM
@@ -42,23 +42,20 @@ def run(self):
             )
 
     # Compute parameters of the electrical equivalent circuit if some parameters are missing in ELUT
-    self.eec.comp_parameters(
-        machine,
-        OP=output.elec.OP,
-        Tsta=self.Tsta,
-        Trot=self.Trot,
+    eec_param = self.eec.comp_parameters(
+        machine, OP=output.elec.OP, Tsta=self.Tsta, Trot=self.Trot
     )
 
     if output.elec.PWM is None:
         # Solve the electrical equivalent circuit for fundamental only
-        out_dict = self.eec.solve()
+        out_dict = self.eec.solve(eec_param)
     else:
         # Generate voltage signal (PWM signal generation is the only strategy for now)
         if output.elec.PWM.U0 is None:
             # Current driven mode
             # Solve the electrical equivalent circuit for fundamental current
             # to get fundamental phase voltage
-            out_dict = self.eec.solve()
+            out_dict = self.eec.solve(eec_param)
             U0c = out_dict["Ud"] + 1j * out_dict["Uq"]
             output.elec.PWM.U0 = abs(U0c)
             output.elec.PWM.Phi0 = angle(U0c)
@@ -73,10 +70,10 @@ def run(self):
 
             # Solve the electrical equivalent circuit for fundamental voltage
             # to get fundamental current
-            out_dict = self.eec.solve()
+            out_dict = self.eec.solve(eec_param)
 
         # Solve for each voltage harmonics in case of PWM
-        out_dict["Is_PWM"] = self.eec.solve_PWM(output, freq_max=self.freq_max)
+        out_dict["Is_PWM"] = self.eec.solve_PWM(output, eec_param)
 
     # Compute losses due to Joule effects
     out_dict = self.eec.comp_joule_losses(out_dict, machine)

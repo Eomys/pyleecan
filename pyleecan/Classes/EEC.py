@@ -36,6 +36,7 @@ class EEC(FrozenClass):
         parameters=None,
         LUT_enforced=None,
         drive=None,
+        type_skin_effect=1,
         init_dict=None,
         init_str=None,
     ):
@@ -60,11 +61,14 @@ class EEC(FrozenClass):
                 LUT_enforced = init_dict["LUT_enforced"]
             if "drive" in list(init_dict.keys()):
                 drive = init_dict["drive"]
+            if "type_skin_effect" in list(init_dict.keys()):
+                type_skin_effect = init_dict["type_skin_effect"]
         # Set the properties (value check and convertion are done in setter)
         self.parent = None
         self.parameters = parameters
         self.LUT_enforced = LUT_enforced
         self.drive = drive
+        self.type_skin_effect = type_skin_effect
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -92,6 +96,7 @@ class EEC(FrozenClass):
             EEC_str += "drive = " + tmp
         else:
             EEC_str += "drive = None" + linesep + linesep
+        EEC_str += "type_skin_effect = " + str(self.type_skin_effect) + linesep
         return EEC_str
 
     def __eq__(self, other):
@@ -104,6 +109,8 @@ class EEC(FrozenClass):
         if other.LUT_enforced != self.LUT_enforced:
             return False
         if other.drive != self.drive:
+            return False
+        if other.type_skin_effect != self.type_skin_effect:
             return False
         return True
 
@@ -133,6 +140,8 @@ class EEC(FrozenClass):
             diff_list.append(name + ".drive None mismatch")
         elif self.drive is not None:
             diff_list.extend(self.drive.compare(other.drive, name=name + ".drive"))
+        if other._type_skin_effect != self._type_skin_effect:
+            diff_list.append(name + ".type_skin_effect")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -146,6 +155,7 @@ class EEC(FrozenClass):
                 S += getsizeof(value) + getsizeof(key)
         S += getsizeof(self.LUT_enforced)
         S += getsizeof(self.drive)
+        S += getsizeof(self.type_skin_effect)
         return S
 
     def as_dict(self, type_handle_ndarray=0, keep_function=False, **kwargs):
@@ -179,6 +189,7 @@ class EEC(FrozenClass):
                 keep_function=keep_function,
                 **kwargs
             )
+        EEC_dict["type_skin_effect"] = self.type_skin_effect
         # The class name is added to the dict for deserialisation purpose
         EEC_dict["__class__"] = "EEC"
         return EEC_dict
@@ -191,6 +202,7 @@ class EEC(FrozenClass):
             self.LUT_enforced._set_None()
         if self.drive is not None:
             self.drive._set_None()
+        self.type_skin_effect = None
 
     def _get_parameters(self):
         """getter of parameters"""
@@ -281,5 +293,23 @@ class EEC(FrozenClass):
         doc=u"""Drive
 
         :Type: Drive
+        """,
+    )
+
+    def _get_type_skin_effect(self):
+        """getter of type_skin_effect"""
+        return self._type_skin_effect
+
+    def _set_type_skin_effect(self, value):
+        """setter of type_skin_effect"""
+        check_var("type_skin_effect", value, "int")
+        self._type_skin_effect = value
+
+    type_skin_effect = property(
+        fget=_get_type_skin_effect,
+        fset=_set_type_skin_effect,
+        doc=u"""Skin effect for resistance and inductance
+
+        :Type: int
         """,
     )

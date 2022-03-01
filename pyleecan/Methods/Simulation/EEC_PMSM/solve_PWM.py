@@ -5,7 +5,7 @@ from SciDataTool import DataFreq, Data1D
 from ....Functions.Electrical.dqh_transformation_freq import dqh2n_DataFreq
 
 
-def solve_PWM(self, output, freq_max=None, is_dqh_freq=False):
+def solve_PWM(self, output, eec_param, is_dqh_freq=False):
     """Get stator current harmonics due to PWM harmonics
     TODO: validation with transient FEA simulation
 
@@ -15,8 +15,8 @@ def solve_PWM(self, output, freq_max=None, is_dqh_freq=False):
         an EEC_PMSM object
     output: Output
         An Output object
-    freq_max: float
-        Maximum frequency
+    eec_param: dict
+        dictionnary containing EEC parameters
     is_dqh_freq: bool
         True to consider frequencies in dqh frame
 
@@ -35,22 +35,19 @@ def solve_PWM(self, output, freq_max=None, is_dqh_freq=False):
 
     # Get stator voltage harmonics in dqh frame
     Us_PWM = output.elec.get_Us(is_dqh=True, is_harm_only=True, is_freq=True)
-    result_dqh = Us_PWM.get_along("freqs<" + str(freq_max), "phase")
-    Udqh_val = result_dqh[Us_PWM.symbol]
-    freqs_dqh = result_dqh["freqs"]
+    result = Us_PWM.get_along("freqs", "phase")
+    Udqh_val = result[Us_PWM.symbol]
+    freqs_dqh = result["freqs"]
 
     # # Plot Us_n and U_dqh
-    # output.elec.Us.plot_2D_Data("freqs=[0,10000]", "phase[0]")
-    # Us_PWM.plot_2D_Data("freqs=[0,5000]", "phase[0]")
+    # output.elec.Us.plot_2D_Data("freqs=[0,2000]", "phase[0]")
+    # Us_PWM.plot_2D_Data("freqs=[0,200]", "phase[0]")
 
     # Filter Udqh_val zeros values
     Udqh_norm = np.linalg.norm(Udqh_val, axis=-1)
     Iamp = Udqh_norm > 1e-6 * Udqh_norm.max()
     freqs_dqh = freqs_dqh[Iamp]
     Udqh_val = Udqh_val[Iamp, :]
-
-    # Get parameters from eec
-    par = self.parameters
 
     # Init current harmonics matrix
     Idqh_val = np.zeros((freqs_dqh.size, qs), dtype=complex)
@@ -61,8 +58,8 @@ def solve_PWM(self, output, freq_max=None, is_dqh_freq=False):
     else:
         # Look for frequency value in n frame for each frequency in dqh frame
         fn_dqh = np.zeros(freqs_dqh.size)
-        fn_pos = freqs_dqh + par["felec"]
-        fn_neg = freqs_dqh - par["felec"]
+        fn_pos = freqs_dqh + eec_param["felec"]
+        fn_neg = freqs_dqh - eec_param["felec"]
         for ii, (fpos, fneg) in enumerate(zip(fn_pos, fn_neg)):
             fn_ii = None
             jj = 0
@@ -84,13 +81,15 @@ def solve_PWM(self, output, freq_max=None, is_dqh_freq=False):
             else:
                 fn_dqh[ii] = fn_ii
 
+        fn_dqh[np.abs(fn_dqh) < eec_param["felec"]] = eec_param["felec"]
+
     # Calculate impedances
-    we = 0 * 2 * np.pi * par["felec"]  # in static frame
+    we = 0 * 2 * np.pi * eec_param["felec"]
     wh = 2 * np.pi * fn_dqh
-    a = par["R1"] + 1j * wh * par["Ld"]
-    b = -we * par["Lq"]
-    c = we * par["Ld"]
-    d = par["R1"] + 1j * wh * par["Lq"]
+    a = eec_param["R1"] + 1j * wh * eec_param["Ld"]
+    b = -we * eec_param["Lq"]
+    c = we * eec_param["Ld"]
+    d = eec_param["R1"] + 1j * wh * eec_param["Lq"]
     det = a * d - c * b
     # Calculate current harmonics
     # Calculate Id

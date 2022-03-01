@@ -1,6 +1,10 @@
+from numpy import exp
+
+
 def comp_parameters(self, machine, OP, Tsta, Trot):
     """Compute the parameters dict for the equivalent electrical circuit:
     resistance, inductance
+
     Parameters
     ----------
     self : EEC_PMSM
@@ -13,11 +17,17 @@ def comp_parameters(self, machine, OP, Tsta, Trot):
         Average stator temperature
     Trot : float
         Average rotor temperature
+
+    Returns
+    ----------
+    eec_param: dict
+        dictionnary containing EEC parameters
     """
 
-    if self.parameters is None:
-        self.parameters = dict()
-    par = self.parameters
+    eec_param = dict()
+
+    if self.parameters is not None:
+        eec_param.update(self.parameters)
 
     # get some machine parameters
     Zsr = machine.rotor.slot.Zs
@@ -47,14 +57,14 @@ def comp_parameters(self, machine, OP, Tsta, Trot):
     K21I = (qs / Zsr) * K21
     # transformation ratio from secondary (2, rotor) to primary (1, stator) for current  in SCIM case
     K21Z = (qs / Zsr) * K21 ** 2
-    par["K21Z"] = K21Z
-    par["K21I"] = K21I
+    eec_param["K21Z"] = K21Z
+    eec_param["K21I"] = K21I
 
     # Store electrical frequency in parameters
-    par["felec"] = felec
+    eec_param["felec"] = felec
 
     # Store slip in parameters
-    par["slip"] = slip
+    eec_param["slip"] = slip
 
     # compute temperature effect on stator side
     if LUT is not None:
@@ -62,8 +72,11 @@ def comp_parameters(self, machine, OP, Tsta, Trot):
     else:
         T1_ref = Tsta
     Tfact1 = CondS.comp_temperature_effect(T_op=Tsta, T_ref=T1_ref)
-    # compute skin_effect on stator side
-    Xkr_skinS, Xke_skinS = CondS.comp_skin_effect(freq=felec, Tfact=Tfact1)
+    if self.type_skin_effect:
+        # compute skin_effect on stator side
+        Xkr_skinS, Xke_skinS = CondS.comp_skin_effect(freq=felec, Tfact=Tfact1)
+    else:
+        Xkr_skinS, Xke_skinS = 1, 1
 
     # compute temperature effect on rotor side
     if LUT is not None:
@@ -71,26 +84,38 @@ def comp_parameters(self, machine, OP, Tsta, Trot):
     else:
         T2_ref = Trot
     Tfact2 = CondR.comp_temperature_effect(T_op=Trot, T_ref=T2_ref)
-    # compute skin_effect on rotor side
-    Xkr_skinR, Xke_skinR = CondR.comp_skin_effect(
-        freq=felec * par["slip"], Tfact=Tfact2
-    )
+    if self.type_skin_effect and felec * eec_param["slip"] > 0:
+        # compute skin_effect on rotor side
+        Xkr_skinR, Xke_skinR = CondR.comp_skin_effect(
+            freq=felec * eec_param["slip"], Tfact=Tfact2
+        )
+    else:
+        Xkr_skinR, Xke_skinR = 1, 1
 
     # check that parameters are in ELUT, otherwise compute missing ones
-    if "U0_ref" not in par or par["U0_ref"] is None:
-        par["U0_ref"] = OP.U0_ref
+    if (
+        "U0_ref" not in eec_param or eec_param["U0_ref"] is None
+    ) and OP.U0_ref is not None:
+        UPhi0_ref = 0 if OP.UPhi0_ref is None else OP.UPhi0_ref
+        eec_param["U0_ref"] = OP.U0_ref * exp(1j * UPhi0_ref)
 
-    if "R1" not in par or par["R1"] is None:
+    elif (
+        "I0_ref" not in eec_param or eec_param["I0_ref"] is None
+    ) and OP.I0_ref is not None:
+        IPhi0_ref = 0 if OP.IPhi0_ref is None else OP.IPhi0_ref
+        eec_param["I0_ref"] = OP.I0_ref * exp(1j * IPhi0_ref)
+
+    if "R1" not in eec_param or eec_param["R1"] is None:
         if is_LUT and LUT.R1 is not None:
             R10 = LUT.R1
         else:
             # get resistance calculated analytically at simulation temperature
             R10 = machine.stator.comp_resistance_wind(T=Tsta)
 
-        # add temperature and skin effects
-        par["R1"] = R10 * Tfact1 * Xkr_skinS
+        # update resistance value including skin effect
+        eec_param["R1"] = R10 * Tfact1 * Xkr_skinS
 
-    if "L1" not in par or par["L1"] is None:
+    if "L1" not in eec_param or eec_param["L1"] is None:
         if is_LUT and LUT.L1 is not None:
             L10 = LUT.L1
         elif type_comp_Ls == 1:
@@ -102,13 +127,43 @@ def comp_parameters(self, machine, OP, Tsta, Trot):
             # L1 = machine.rotor.slot.comp_inductance_leakage_FEA() #TODO
             pass
 
+        eec_param["L1"] = L10 * Xke_skinS
+
+    if "Rfe" not in eec_param:
+        eec_param["Rfe"] = 1e12  # TODO calculate (or estimate at least)
+
+    if "R2" not in eec_param or eec_param["R2"] is None:
+        if is_LUT and LUT.R2 is not None:
+            R20 = LUT.R2
+        else:
+            # get resistance calculated analytically at simulation temperature
+            Rr = machine.rotor.comp_resistance_wind(T=Trot, qs=3)
+            # putting resistance on stator side in EEC
+            R20 = K21Z * Rr
+
+        # update resistance value including skin effect
+        eec_param["R2"] = R20 * Tfact2 * Xkr_skinR
+
+    if "L2" not in eec_param or eec_param["L2"] is None:
+        if is_LUT and LUT.L2 is not None:
+            L20 = LUT.L2
+            T2_ref = LUT.T2_ref
+        elif type_comp_Lr == 1:
+            # analytic calculation
+            # L10 = machine.stator.slot.comp_inductance_leakage_ANL() #TODO
+            pass
+        else:
+            # FEA calculation
+            # L1 = machine.rotor.slot.comp_inductance_leakage_FEA() #TODO
+            pass
+
         # add temperature and skin effects
-        par["L1"] = L10 * Xke_skinS
+        eec_param["L1"] = L10 * Xke_skinS
 
-    if "Rfe" not in par:
-        par["Rfe"] = 1e12  # TODO calculate (or estimate at least)
+    if "Rfe" not in eec_param:
+        eec_param["Rfe"] = 1e12  # TODO calculate (or estimate at least)
 
-    if "R2" not in par or par["R2"] is None:
+    if "R2" not in eec_param or eec_param["R2"] is None:
         if is_LUT and LUT.R2 is not None:
             R20 = LUT.R2
         else:
@@ -118,9 +173,9 @@ def comp_parameters(self, machine, OP, Tsta, Trot):
             R20 = K21Z * Rr
 
         # add temperature and skin effects
-        par["R2"] = R20 * Tfact2 * Xkr_skinR
+        eec_param["R2"] = R20 * Tfact2 * Xkr_skinR
 
-    if "L2" not in par or par["L2"] is None:
+    if "L2" not in eec_param or eec_param["L2"] is None:
         if is_LUT and LUT.L2 is not None:
             L20 = LUT.L2
             T2_ref = LUT.T2_ref
@@ -134,45 +189,23 @@ def comp_parameters(self, machine, OP, Tsta, Trot):
             pass
 
         # add temperature and skin effects
-        par["L2"] = L20 * Xke_skinR
+        eec_param["L2"] = L20 * Xke_skinR
 
     # check if inductances have to be calculated
-    if "Phi_m" not in par or par["Phi_m"] is None:
+    if "Phi_m" not in eec_param or eec_param["Phi_m"] is None:
         if is_LUT and LUT.Phi_m is not None:
-            par["Phi_m"] = LUT.Phi_m
-            par["I_m"] = LUT.I_m
+            eec_param["Phi_m"] = LUT.Phi_m
+            eec_param["I_m"] = LUT.I_m
         elif type_comp_Lm == 1:
             # analytic calculation
             # Phi_m, I_m = machine.comp_inductance_magnetization_ANL() #TODO
-            par["Phi_m"] = None
-            par["I_m"] = None
+            eec_param["Phi_m"] = None
+            eec_param["I_m"] = None
 
         else:
             # FEA calculation
             # Lm, Im =comp_Lm_FEA(self) #TODO
-            par["Phi_m"] = None
-            par["I_m"] = None
+            eec_param["Phi_m"] = None
+            eec_param["I_m"] = None
 
-    # alphasw = self.cond_mat.elec.alpha
-    # # stator winding phase resistance, skin effect correction
-    # if felec is None:
-    #     Rs_freq = self.Rs
-    # else:
-    #     Rs_dc = self.Rs  # DC resistance at Tsta_ref
-    #     K_RSE_sta = self.K_RSE_sta  # skin effect factor for resistance
-    #     Rs_freq = Rs_dc * interp(K_RSE_sta[0, :], K_RSE_sta[1, :], felec)
-
-    # # stator winding phase resistance, temperature correction
-    # if Tsta is not None:
-    #     Rs_freq_temp = Rs_freq
-    # else:
-    #     Tsta_ref = self.Tsta_ref  # ref temperature
-    #     Rs_freq_temp = Rs_freq * (1 + alphasw * (Tsta - Tsta_ref))
-
-    # # stator winding phase leakage inductance, skin effect correction
-    # if felec is None:
-    #     Ls_freq = self.Ls
-    # else:
-    #     Ls_dc = self.Ls  # DC resistance
-    #     K_ISE_sta = self.K_ISE_sta  # skin effect factor for leakage inductance
-    #     Ls_freq = Ls_dc * interp(K_ISE_sta[0, :], K_ISE_sta[1, :], felec)
+    return eec_param
