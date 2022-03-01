@@ -137,7 +137,7 @@ def solve_FEMM(
         # Take enforced value
         Rag = self.Rag_enforced
     else:
-        Rag = machine.comp_Rgap_mec(0)
+        Rag = machine.comp_Rgap_mec()
 
     L1 = machine.stator.comp_length()
     L2 = machine.rotor.comp_length()
