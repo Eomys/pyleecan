@@ -114,7 +114,9 @@ def draw_FEMM(
     # femm.main_minimize()
 
     # defining the problem
-    femm.mi_probdef(0, "meters", FEMM_dict["pbtype"], FEMM_dict["precision"])
+    femm.mi_probdef(
+        0, "meters", FEMM_dict["simu"]["pbtype"], FEMM_dict["simu"]["precision"]
+    )
 
     # Modifiy the machine to match the conditions
     machine_edit = machine.copy()
@@ -208,15 +210,15 @@ def draw_FEMM(
     # Define simulation parameters
     # femm.mi_zoomnatural()  # Zoom out
     femm.mi_probdef(
-        FEMM_dict["freqpb"],
+        FEMM_dict["simu"]["freqpb"],
         "meters",
-        FEMM_dict["pbtype"],
-        FEMM_dict["precision"],
-        FEMM_dict["Lfemm"],
-        FEMM_dict["minangle"],
-        FEMM_dict["acsolver"],
+        FEMM_dict["simu"]["pbtype"],
+        FEMM_dict["simu"]["precision"],
+        FEMM_dict["simu"]["Lfemm"],
+        FEMM_dict["simu"]["minangle"],
+        FEMM_dict["simu"]["acsolver"],
     )
-    femm.mi_smartmesh(FEMM_dict["smart_mesh"])
+    femm.mi_smartmesh(FEMM_dict["mesh"]["smart_mesh"])
     if path_save is not None:
         output.get_logger().debug("Saving FEMM file at: " + path_save)
         femm.mi_saveas(path_save)  # Save

@@ -71,7 +71,7 @@ def draw_FEMM_surfaces(
         surf.draw_FEMM(
             femm=femm,
             nodeprop="None",
-            maxseg=FEMM_dict["arcspan"],  # max span of arc element in degrees
+            maxseg=FEMM_dict["mesh"]["arcspan"],  # max span of arc element in degrees
             FEMM_dict=FEMM_dict,
             hide=False,
             BC_dict=BC_dict,

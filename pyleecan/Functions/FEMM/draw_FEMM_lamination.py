@@ -91,7 +91,9 @@ def draw_FEMM_lamination(
         for BC in lam_dxf.BC_list:
             if BC[1] is True:  # Select Arc
                 femm.mi_selectarcsegment(BC[0].real, BC[0].imag)
-                femm.mi_setarcsegmentprop(FEMM_dict["arcspan"], BC[2], False, None)
+                femm.mi_setarcsegmentprop(
+                    FEMM_dict["mesh"]["arcspan"], BC[2], False, None
+                )
             else:  # Select Line
                 femm.mi_selectsegment(BC[0].real, BC[0].imag)
                 femm.mi_setsegmentprop(BC[2], None, None, False, None)
