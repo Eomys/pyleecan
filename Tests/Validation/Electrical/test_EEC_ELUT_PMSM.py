@@ -6,7 +6,6 @@ from numpy.testing import assert_almost_equal
 import pytest
 
 from SciDataTool.Functions.Plot.plot_2D import plot_2D
-from SciDataTool.Functions.Plot.plot_3D import plot_3D
 
 from pyleecan.Classes.OPdq import OPdq
 from pyleecan.Classes.Simu1 import Simu1
@@ -14,8 +13,6 @@ from pyleecan.Classes.InputCurrent import InputCurrent
 from pyleecan.Classes.VarLoadCurrent import VarLoadCurrent
 from pyleecan.Classes.MagFEMM import MagFEMM
 from pyleecan.Classes.PostLUT import PostLUT
-from pyleecan.Classes.Electrical import Electrical
-from pyleecan.Classes.EEC_PMSM import EEC_PMSM
 
 from pyleecan.Functions.load import load
 from pyleecan.Functions.Plot import dict_2D
@@ -23,6 +20,8 @@ from pyleecan.Functions.Electrical.dqh_transformation import (
     get_phase_dir_DataTime,
     n2dqh_DataTime,
 )
+from pyleecan.Functions.Electrical.comp_MTPA import comp_MTPA
+
 from pyleecan.definitions import DATA_DIR
 
 from Tests import save_validation_path as save_path
@@ -110,29 +109,19 @@ def test_EEC_ELUT_PMSM_calc(n_Id=5, n_Iq=5):
         phase_dir=ELUT.get_phase_dir(),
     )
     Phi_dqh0_mean = Phi_dqh0.get_along("time=mean", "phase")[Phi_dqh0.symbol]
-    assert_almost_equal(Phi_dqh0_mean, Phi_dqh_mean[ii, :], decimal=20)
+    assert_almost_equal(Phi_dqh0_mean, Phi_dqh_mean[ii, :], decimal=15)
     assert_almost_equal(Phi_dqh0_mean[0], 0.141, decimal=3)
 
-    # Plot 3-phase current function of time
-    ELUT.Phi_wind[ii].plot_2D_Data(
-        "time",
-        "phase[]",
-        save_path=join(save_path, name + "_flux_linkage_abc.png"),
-        is_show_fig=is_show_fig,
-        **dict_2D,
-    )
-    Phi_dqh0.plot_2D_Data(
-        "time",
-        "phase[]",
-        save_path=join(save_path, name + "_flux_linkage_dqh.png"),
-        is_show_fig=is_show_fig,
-        **dict_2D,
-    )
+    if is_show_fig:
+        # Plot 3-phase current function of time
+        ELUT.Phi_wind[ii].plot_2D_Data("time", "phase[]", **dict_2D)
+        Phi_dqh0.plot_2D_Data("time", "phase[]", **dict_2D)
 
     return out, ELUT
 
 
 @pytest.mark.long_5s
+@pytest.mark.long_1m
 @pytest.mark.MagFEMM
 @pytest.mark.EEC_PMSM
 @pytest.mark.IPMSM
@@ -141,119 +130,7 @@ def test_EEC_ELUT_PMSM_MTPA(test_ELUT, n_Id=51, n_Iq=101):
     """Validation of the PMSM Electrical Equivalent Circuit with the Prius machine for MTPA calculation"""
 
     Toyota_Prius = load(join(DATA_DIR, "Machine", "Toyota_Prius.json"))
-    qs = Toyota_Prius.stator.winding.qs
-    p = Toyota_Prius.get_pole_pair_number()
-    Tsta = 20  # stator winding temperature
 
-    name = "test_EEC_ELUT_PMSM_MTPA"
-    simu_MTPA = Simu1(name=name, machine=Toyota_Prius)
-
-    # Definition of the input
-    OP_ref = OPdq(N0=1000, Id_ref=50, Iq_ref=100)
-    simu_MTPA.input = InputCurrent(
-        Na_tot=1024,
-        Nt_tot=1024,
-        OP=OP_ref,
-    )
-
-    OP_matrix = test_ELUT.OP_matrix
-    # Get Id_min, Id_max, Iq_min, Iq_max from OP_matrix
-    Id_min = np.min(OP_matrix[:, 1])
-    Id_max = np.max(OP_matrix[:, 1])
-    Iq_min = np.min(OP_matrix[:, 2])
-    Iq_max = np.max(OP_matrix[:, 2])
-
-    Id, Iq = np.meshgrid(
-        np.linspace(Id_min, Id_max, n_Id), np.linspace(Iq_min, Iq_max, n_Iq)
-    )
-    Id, Iq = Id.ravel(), Iq.ravel()
-    Imax_interp = np.sqrt(Id ** 2 + Iq ** 2)
-
-    elec_model = Electrical(eec=EEC_PMSM(LUT_enforced=test_ELUT), Tsta=Tsta)
-
-    # Interpolate stator winding flux in dqh frame for all Id/Iq
-    elec_model.eec.comp_parameters(
-        machine=Toyota_Prius, OP=OP_ref, Tsta=elec_model.Tsta, Id_array=Id, Iq_array=Iq
-    )
-
-    # Compute torque
-    Tem_sync, Tem_rel = elec_model.eec.comp_torque_sync_rel(qs, p)
-    Tem_interp = Tem_sync + Tem_rel
-
-    # Init plot map
-    dict_map = {
-        "Xdata": Id.reshape((n_Iq, n_Id))[0, :],
-        "Ydata": Iq.reshape((n_Iq, n_Id))[:, 0],
-        "xlabel": "d-axis current [Arms]",
-        "ylabel": "q-axis current [Arms]",
-        "type_plot": "pcolor",
-        "is_contour": True,
-        "is_show_fig": is_show_fig,
-    }
-
-    # Plot torque maps
-    plot_3D(
-        Zdata=Tem_interp.reshape((n_Iq, n_Id)).T,
-        zlabel="Average Torque [N.m]",
-        title="Torque map in dq plane",
-        save_path=join(save_path, name + "_torque_map.png"),
-        **dict_map,
-    )
-    # plot_3D(
-    #     Zdata=Id.reshape((n_Iq, n_Id)).T,
-    #     zlabel="Average Torque [N.m]",
-    #     title="Torque map in dq plane",
-    #     # save_path=join(save_path, name + "_torque_map.png"),
-    #     **dict_map,
-    # )
-    # plot_3D(
-    #     Zdata=Iq.reshape((n_Iq, n_Id)).T,
-    #     zlabel="Average Torque [N.m]",
-    #     title="Torque map in dq plane",
-    #     # save_path=join(save_path, name + "_torque_map.png"),
-    #     **dict_map,
-    # )
-    # plt.contour(
-    #     dict_map["Xdata"],
-    #     dict_map["Ydata"],
-    #     U_max_interp.reshape((n_Iq, n_Id)),
-    #     colors="blue",
-    #     linewidths=0.8,
-    # )
-    plot_3D(
-        Zdata=Tem_sync.reshape((n_Iq, n_Id)).T,
-        zlabel="Synchrnous Torque [N.m]",
-        title="Torque map in dq plane",
-        save_path=join(save_path, name + "_torque_sync_map.png"),
-        **dict_map,
-    )
-    plot_3D(
-        Zdata=Tem_rel.reshape((n_Iq, n_Id)).T,
-        zlabel="Reluctant Torque [N.m]",
-        title="Torque map in dq plane",
-        save_path=join(save_path, name + "_torque_rel_map.png"),
-        **dict_map,
-    )
-
-    # Plot Phi_d map
-    plot_3D(
-        Zdata=elec_model.eec.parameters["Phid"].reshape((n_Iq, n_Id)).T,
-        zlabel="$\Phi_d$ [Wb]",
-        title="Flux linkage map in dq plane (d-axis)",
-        save_path=join(save_path, name + "_phid_map.png"),
-        **dict_map,
-    )
-
-    # Plot Phi_q map
-    plot_3D(
-        Zdata=elec_model.eec.parameters["Phiq"].reshape((n_Iq, n_Id)).T,
-        zlabel="$\Phi_q$ [Wb]",
-        title="Flux linkage map in dq plane (q-axis)",
-        save_path=join(save_path, name + "_phiq_map.png"),
-        **dict_map,
-    )
-
-    # MTPA
     # Maximum current [Arms]
     I_max = 250 / np.sqrt(2)
     # Maximum voltage [Vrms]
@@ -262,121 +139,116 @@ def test_EEC_ELUT_PMSM_MTPA(test_ELUT, n_Id=51, n_Iq=101):
     Nspeed = 50
     N0_min = 50
     N0_max = 8000
-    N0_vect = np.linspace(N0_min, N0_max, Nspeed)
-    # Maximum load vector
-    Ntorque = 1
-    is_braking = False  # True to include negative torque (braking)
-    if is_braking:
-        Ntorque = (
-            2 * Ntorque + 1
-        )  # Take twice the number of torques + odd to include zero torque
-    if not is_braking and Ntorque == 1:
-        I_max_vect = np.array([I_max])
-    elif is_braking:
-        I_max_vect = np.linspace(-I_max, I_max, Ntorque)
-    else:
-        I_max_vect = np.linspace(0, I_max, Ntorque)
+    # Number of loads
+    Ntorque = 5
 
-    # Init OP_matrix
-    OP_matrix_MTPA = np.zeros((Nspeed, Ntorque, 4))
-    U_MTPA = np.zeros((Nspeed, Ntorque, 3))
-    I_MTPA = np.zeros((Nspeed, Ntorque, 3))
+    OP_matrix_MTPA, U_MTPA, I_MTPA = comp_MTPA(
+        machine=Toyota_Prius,
+        LUT=test_ELUT,
+        Nspeed=Nspeed,
+        N0_min=N0_min,
+        N0_max=N0_max,
+        Ntorque=Ntorque,
+        I_max=I_max,
+        U_max=U_max,
+        n_Id=n_Id,
+        n_Iq=n_Iq,
+    )
 
-    for ii, N0 in enumerate(N0_vect):
+    # Check torque values
+    assert_almost_equal(OP_matrix_MTPA[:, -1, 3].max(), 342, decimal=0)
+    assert_almost_equal(OP_matrix_MTPA[:, -1, 3].min(), 160, decimal=0)
+    assert_almost_equal(OP_matrix_MTPA[:, 0, 3].max(), 0, decimal=0)
+    assert_almost_equal(OP_matrix_MTPA[:, 0, 3].min(), 0, decimal=0)
 
-        print("Speed " + str(ii + 1) + "/" + str(Nspeed))
-
-        # Update operating point
-        OP_ref.N0 = N0
-        OP_ref.felec = None
-
-        # Update stator resistance with skin effect
-        elec_model.eec.comp_parameters(
-            Toyota_Prius,
-            OP=OP_ref,
-            Tsta=elec_model.Tsta,
-            Trot=elec_model.Trot,
-        )
-
-        # Calculate voltage
-        out_dict = elec_model.eec.solve()
-        U_max_interp = np.sqrt(out_dict["Ud"] ** 2 + out_dict["Uq"] ** 2)
-
-        for kk, I_max0 in enumerate(I_max_vect):
-
-            if I_max0 == 0:
-                # Finding indices of operating points satisfying Vmax voltage for Iq=0 (no torque production)
-                j0 = np.logical_and(U_max_interp <= U_max, np.abs(Iq) == 0)
-
-                # Finding index of operating point giving lowest current
-                jmax = np.argmin(np.abs(Imax_interp[j0]))
-
-            else:
-                # Finding indices of operating points satisfying Vmax and XImax(i) voltage and torque limitations
-                j0 = np.logical_and(
-                    U_max_interp <= U_max, Imax_interp <= np.abs(I_max0)
-                )
-
-                if I_max0 > 0:
-                    # Finding index of operating point giving maximum positive torque among feasible operating points
-                    jmax = np.argmax(Tem_interp[j0])
-                else:
-                    # Finding index of operating point giving maximum negative torque among feasible operating points
-                    jmax = np.argmin(Tem_interp[j0])
-
-            # Store values in MTPA
-            OP_matrix_MTPA[ii, kk, 0] = N0
-            OP_matrix_MTPA[ii, kk, 1] = Id[j0][jmax]
-            OP_matrix_MTPA[ii, kk, 2] = Iq[j0][jmax]
-            OP_matrix_MTPA[ii, kk, 3] = Tem_interp[j0][jmax]
-            U_MTPA[ii, kk, 0] = out_dict["Ud"][j0][jmax]
-            U_MTPA[ii, kk, 1] = out_dict["Uq"][j0][jmax]
-            U_MTPA[ii, kk, 2] = U_max_interp[j0][jmax]
-            I_MTPA[ii, kk, 0] = OP_matrix_MTPA[ii, kk, 1]
-            I_MTPA[ii, kk, 1] = OP_matrix_MTPA[ii, kk, 2]
-            I_MTPA[ii, kk, 2] = Imax_interp[j0][jmax]
-
-    if Ntorque > 1:
-        # Plot torque speed curve for each load level
-        y_list = list()
+    if is_show_fig:
+        # Build legend list for each load level
         legend_list = list()
         for i_load in range(Ntorque):
-            y_list.append(OP_matrix_MTPA[:, i_load, 3])
-            legend_list.append(
-                "Load level = " + str(int(round(100 * (i_load) / (Ntorque - 1)))) + " %"
-            )
+            if Ntorque > 1:
+                legend_list.append(
+                    "Load level = "
+                    + str(int(round(100 * (i_load) / (Ntorque - 1))))
+                    + " %"
+                )
+            else:
+                legend_list.append("Load level =  100%")
+
+        # Plot torque speed curve for each load level
+        y_list = [OP_matrix_MTPA[:, i_load, 3] for i_load in range(Ntorque)]
         plot_2D(
             [OP_matrix_MTPA[:, i_load, 0]],
             y_list,
             xlabel="Speed [rpm]",
             ylabel="Average torque [N.m]",
             legend_list=legend_list,
-            save_path=join(save_path, name + "_MTPA_torque_speed.png"),
             is_show_fig=is_show_fig,
         )
 
-    i_load = -1
-    plot_2D(
-        [OP_matrix_MTPA[:, i_load, 0]],
-        [I_MTPA[:, i_load, 0], I_MTPA[:, i_load, 1], I_MTPA[:, i_load, 2]],
-        xlabel="Speed [rpm]",
-        ylabel="Current [Arms]",
-        legend_list=["Id", "Iq", "Imax"],
-        save_path=join(save_path, name + "_current_MTPA_OP" + str(i_load) + ".png"),
-        is_show_fig=is_show_fig,
-    )
+        # Plot Id for each load level
+        y_list = [OP_matrix_MTPA[:, i_load, 1] for i_load in range(Ntorque)]
+        plot_2D(
+            [OP_matrix_MTPA[:, i_load, 0]],
+            y_list,
+            xlabel="Speed [rpm]",
+            ylabel="Id Current [Arms]",
+            legend_list=legend_list,
+            is_show_fig=is_show_fig,
+        )
 
-    plot_2D(
-        [OP_matrix_MTPA[:, i_load, 0]],
-        [U_MTPA[:, i_load, 0], U_MTPA[:, i_load, 1], U_MTPA[:, i_load, 2]],
-        xlabel="Speed [rpm]",
-        ylabel="Voltage [Vrms]",
-        legend_list=["Ud", "Uq", "Umax"],
-        save_path=join(save_path, name + "_voltage_MTPA_OP" + str(i_load) + ".png"),
-        is_show_fig=is_show_fig,
-    )
+        # Plot Iq for each load level
+        y_list = [OP_matrix_MTPA[:, i_load, 2] for i_load in range(Ntorque)]
+        plot_2D(
+            [OP_matrix_MTPA[:, i_load, 0]],
+            y_list,
+            xlabel="Speed [rpm]",
+            ylabel="Iq Current [Arms]",
+            legend_list=legend_list,
+            is_show_fig=is_show_fig,
+        )
 
-    pass
+        # Plot Ud for each load level
+        y_list = [U_MTPA[:, i_load, 0] for i_load in range(Ntorque)]
+        plot_2D(
+            [OP_matrix_MTPA[:, i_load, 0]],
+            y_list,
+            xlabel="Speed [rpm]",
+            ylabel="Ud Voltage [Vrms]",
+            legend_list=legend_list,
+            is_show_fig=is_show_fig,
+        )
+
+        # Plot Uq for each load level
+        y_list = [U_MTPA[:, i_load, 1] for i_load in range(Ntorque)]
+        plot_2D(
+            [OP_matrix_MTPA[:, i_load, 0]],
+            y_list,
+            xlabel="Speed [rpm]",
+            ylabel="Uq Voltage [Vrms]",
+            legend_list=legend_list,
+            is_show_fig=is_show_fig,
+        )
+
+        # Plot Id/Iq and Imax on a same graph at a specific load level
+        i_load = 0
+        plot_2D(
+            [OP_matrix_MTPA[:, i_load, 0]],
+            [I_MTPA[:, i_load, 0], I_MTPA[:, i_load, 1], I_MTPA[:, i_load, 2]],
+            xlabel="Speed [rpm]",
+            ylabel="Current [Arms]",
+            legend_list=["Id", "Iq", "Imax"],
+            is_show_fig=is_show_fig,
+        )
+
+        # Plot Ud/Uq and Umax on a same graph at a specific load level
+        plot_2D(
+            [OP_matrix_MTPA[:, i_load, 0]],
+            [U_MTPA[:, i_load, 0], U_MTPA[:, i_load, 1], U_MTPA[:, i_load, 2]],
+            xlabel="Speed [rpm]",
+            ylabel="Voltage [Vrms]",
+            legend_list=["Ud", "Uq", "Umax"],
+            is_show_fig=is_show_fig,
+        )
 
 
 # To run it without pytest
