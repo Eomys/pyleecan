@@ -52,31 +52,32 @@ def create_FEMM_boundary_conditions(femm, line_label, BC_dict):
     else:
         BdPr = 4
 
-    ## Dirichlet (no flux going out) (on ext lamination yoke)
+    # Dirichlet (no flux going out) (on ext lamination yoke)
     if LAM_LAB in line_label and YOKE_LAB in line_label:
-        femm.mi_addboundprop("bc_A0", 0, 0, 0, 0, 0, 0, 0, 0, 0)
+        if "bc_A0" not in BC_dict.values():
+            femm.mi_addboundprop("bc_A0", 0, 0, 0, 0, 0, 0, 0, 0, 0)
         BC_dict[line_label] = "bc_A0"
-    ## Sliding Band radius
+    # Sliding Band radius
     elif line_label in [SBR_B_LAB, SBR_T_LAB]:
         femm.mi_addboundprop("bc_ag2", 0, 0, 0, 0, 0, 0, 0, 0, BdPr + 2)
         BC_dict[SBR_B_LAB] = "bc_ag2"
         BC_dict[SBR_T_LAB] = "bc_ag2"
-    ## Sliding Band Bottom side
+    # Sliding Band Bottom side
     elif line_label in [SBS_BR_LAB, SBS_BL_LAB]:
         femm.mi_addboundprop("bc_ag1", 0, 0, 0, 0, 0, 0, 0, 0, BdPr)
         BC_dict[SBS_BR_LAB] = "bc_ag1"
         BC_dict[SBS_BL_LAB] = "bc_ag1"
-    ## Sliding Band Top side
+    # Sliding Band Top side
     elif line_label in [SBS_TR_LAB, SBS_TL_LAB]:
         femm.mi_addboundprop("bc_ag3", 0, 0, 0, 0, 0, 0, 0, 0, BdPr)
         BC_dict[SBS_TR_LAB] = "bc_ag3"
         BC_dict[SBS_TL_LAB] = "bc_ag3"
-    ##  Airgap Side
+    #  Airgap Side
     elif line_label in [AS_BR_LAB, AS_BL_LAB]:
         femm.mi_addboundprop("bc_ag1", 0, 0, 0, 0, 0, 0, 0, 0, BdPr)
         BC_dict[AS_BR_LAB] = "bc_ag1"
         BC_dict[AS_BL_LAB] = "bc_ag1"
-    ## Lamination YokeSide for Magnets
+    # Lamination YokeSide for Magnets
     elif YSM_LAB in line_label:
         # Create BC name (bc_ys_s0_N for instance - yoke side stator 0 Notche)
         label_dict = decode_label(line_label)
@@ -92,7 +93,7 @@ def create_FEMM_boundary_conditions(femm, line_label, BC_dict):
         # Update dict
         BC_dict[label_dict["lam_label"] + "_" + YSML_LAB] = bc_name
         BC_dict[label_dict["lam_label"] + "_" + YSMR_LAB] = bc_name
-    ## Lamination YokeSide for Notches
+    # Lamination YokeSide for Notches
     elif YSN_LAB in line_label:
         # Create BC name (bc_ys_s0_N for instance - yoke side stator 0 Notche)
         label_dict = decode_label(line_label)
@@ -108,7 +109,7 @@ def create_FEMM_boundary_conditions(femm, line_label, BC_dict):
         # Update dict
         BC_dict[label_dict["lam_label"] + "_" + YSNL_LAB] = bc_name
         BC_dict[label_dict["lam_label"] + "_" + YSNR_LAB] = bc_name
-    ## Lamination YokeSide
+    # Lamination YokeSide
     elif YS_LAB in line_label:
         # cf Lamination.get_yoke_side_line for label creation
         # Create BC name (bc_ys_s0_1 for instance - yoke side stator 0 line 1)
