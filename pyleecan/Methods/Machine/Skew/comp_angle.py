@@ -5,12 +5,10 @@ from ....Methods.Machine.Skew import TYPE_SKEW_LIST
 
 def comp_angle(self):
     """Compute skew angles and positions
-
     Parameters
     ----------
     self : Skew
         a Skew object
-
     """
 
     logger = self.get_logger()
