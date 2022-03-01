@@ -23,6 +23,7 @@ slotW29_test.append(
         "S_exp": 6.340874e-4,
         "Ao": 0.10004,
         "Aw": 0.174118,
+        "SO_exp": 3.408746e-05,
         "SW_exp": 6e-4,
         "H_exp": 3.26359e-2,
     }
@@ -37,6 +38,7 @@ slotW29_test.append(
         "S_exp": 6.31912e-4,
         "Ao": 0.10004,
         "Aw": 0.133185,
+        "SO_exp": 3.191253e-05,
         "SW_exp": 6e-4,
         "H_exp": 3.2667e-2,
     }
@@ -160,6 +162,22 @@ class Test_SlotW29_meth(object):
         assert abs((a - b) / a - 0) < DELTA, msg
 
     @pytest.mark.parametrize("test_dict", slotW29_test)
+    def test_comp_surface_opening(self, test_dict):
+        """Check that the computation of the opening surface is correct"""
+        test_obj = test_dict["test_obj"]
+        result = test_obj.slot.comp_surface_opening()
+
+        a = result
+        b = test_dict["SO_exp"]
+        msg = "Return " + str(a) + " expected " + str(b)
+        assert abs((a - b) / a - 0) < DELTA, msg
+
+        # Check that the analytical method returns the same result as the numerical one
+        b = Slot.comp_surface_opening(test_obj.slot, Ndisc=400)
+        msg = "Return " + str(a) + " expected " + str(b)
+        assert abs((a - b) / a - 0) < DELTA, msg
+
+    @pytest.mark.parametrize("test_dict", slotW29_test)
     def test_comp_height(self, test_dict):
         """Check that the computation of the height is correct"""
         test_obj = test_dict["test_obj"]
@@ -271,10 +289,36 @@ class Test_SlotW29_meth(object):
                 + ")"
             )
 
-    def test_get_surface_active(self):
-        """Check that the get_surface_active works when stator = false"""
+    def test_get_surface_X(self):
+        """Check that the get_surface_X works when stator = false"""
         lam = LamSlot(is_internal=True, Rext=0.1325, is_stator=False)
         lam.slot = SlotW29(H0=1e-3, H1=1.5e-3, H2=30e-3, W0=12e-3, W1=14e-3, W2=20e-3)
         result = lam.slot.get_surface_active()
-        assert result.label == "Wind_Rotor_R0_T0_S0"
+        assert result.label == "Rotor_Winding_R0-T0-S0"
         assert len(result.get_lines()) == 6
+        assert result.is_inside(result.point_ref)
+
+        result = lam.slot.get_surface_opening()
+        assert len(result) == 1
+        assert result[0].label == "Rotor_SlotOpening_R0-T0-S0"
+        assert len(result[0].get_lines()) == 8
+        assert result[0].is_inside(result[0].point_ref)
+
+        result = lam.slot.get_surface()
+        assert len(result.get_lines()) == 12
+        assert result.is_inside(result.point_ref)
+
+
+if __name__ == "__main__":
+    a = Test_SlotW29_meth()
+    for ii, test_dict in enumerate(slotW29_test):
+        print("Running test for Slot[" + str(ii) + "]")
+        a.test_schematics(test_dict)
+        a.test_comp_surface(test_dict)
+        a.test_comp_surface_active(test_dict)
+        a.test_comp_surface_opening(test_dict)
+        a.test_comp_height(test_dict)
+        a.test_build_geometry_active(test_dict)
+        a.test_comp_angle_opening(test_dict)
+        a.test_comp_angle_active_eq(test_dict)
+        print("Done")

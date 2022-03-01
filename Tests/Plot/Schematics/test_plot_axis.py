@@ -217,9 +217,9 @@ def test_axis_LamWind():
     fig = plt.gcf()
     fig.savefig(join(save_path, "test_axis_LamWind.png"))
 
-    SCIM_001.stator.plot_mmf_unit(is_show_fig=False)
-    fig = plt.gcf()
-    fig.savefig(join(save_path, "test_axis_LamWind_mmf.png"))
+    SCIM_001.stator.plot_mmf_unit(
+        save_path=join(save_path, "test_axis_LamWind_mmf.png")
+    )
 
     # Plot maximum of the fundamental of the mmf
     MMF = SCIM_001.stator.comp_mmf_unit(Na=600, Nt=1)[0]

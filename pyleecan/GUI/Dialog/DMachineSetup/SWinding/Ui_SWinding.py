@@ -47,7 +47,7 @@ class Ui_SWinding(object):
         self.scrollArea.setWidgetResizable(True)
         self.scrollAreaWidgetContents = QWidget()
         self.scrollAreaWidgetContents.setObjectName(u"scrollAreaWidgetContents")
-        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 268, 774))
+        self.scrollAreaWidgetContents.setGeometry(QRect(0, -31, 247, 805))
         self.verticalLayout_5 = QVBoxLayout(self.scrollAreaWidgetContents)
         self.verticalLayout_5.setObjectName(u"verticalLayout_5")
         self.g_pattern = QGroupBox(self.scrollAreaWidgetContents)
@@ -230,6 +230,11 @@ class Ui_SWinding(object):
         self.b_export.setObjectName(u"b_export")
 
         self.verticalLayout_3.addWidget(self.b_export)
+
+        self.b_plot_mmf = QPushButton(self.g_output)
+        self.b_plot_mmf.setObjectName(u"b_plot_mmf")
+
+        self.verticalLayout_3.addWidget(self.b_plot_mmf)
 
         self.verticalLayout_5.addWidget(self.g_output)
 
@@ -457,6 +462,9 @@ class Ui_SWinding(object):
         self.out_Ncspc.setText(QCoreApplication.translate("SWinding", u"Ncspc:", None))
         self.b_export.setText(
             QCoreApplication.translate("SWinding", u"Export to CSV", None)
+        )
+        self.b_plot_mmf.setText(
+            QCoreApplication.translate("SWinding", u"Plot Stator Unit MMF", None)
         )
         self.b_preview.setText(QCoreApplication.translate("SWinding", u"Preview", None))
         self.b_previous.setText(

@@ -67,6 +67,11 @@ try:
 except ImportError as error:
     comp_angle_d_axis = error
 
+try:
+    from ..Methods.Machine.LamSlot.get_surfaces_closing import get_surfaces_closing
+except ImportError as error:
+    get_surfaces_closing = error
+
 
 from ._check import InitUnKnowClassError
 from .Slot import Slot
@@ -191,6 +196,18 @@ class LamSlot(Lamination):
         )
     else:
         comp_angle_d_axis = comp_angle_d_axis
+    # cf Methods.Machine.LamSlot.get_surfaces_closing
+    if isinstance(get_surfaces_closing, ImportError):
+        get_surfaces_closing = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use LamSlot method get_surfaces_closing: "
+                    + str(get_surfaces_closing)
+                )
+            )
+        )
+    else:
+        get_surfaces_closing = get_surfaces_closing
     # save and copy methods are available in all object
     save = save
     copy = copy

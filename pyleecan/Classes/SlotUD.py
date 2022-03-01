@@ -23,9 +23,9 @@ except ImportError as error:
     build_geometry = error
 
 try:
-    from ..Methods.Slot.SlotUD.set_from_point_list import set_from_point_list
+    from ..Methods.Slot.SlotUD.check import check
 except ImportError as error:
-    set_from_point_list = error
+    check = error
 
 try:
     from ..Methods.Slot.SlotUD.get_surface_active import get_surface_active
@@ -33,9 +33,14 @@ except ImportError as error:
     get_surface_active = error
 
 try:
-    from ..Methods.Slot.SlotUD.check import check
+    from ..Methods.Slot.SlotUD.get_surface_opening import get_surface_opening
 except ImportError as error:
-    check = error
+    get_surface_opening = error
+
+try:
+    from ..Methods.Slot.SlotUD.set_from_point_list import set_from_point_list
+except ImportError as error:
+    set_from_point_list = error
 
 
 from ._check import InitUnKnowClassError
@@ -59,18 +64,15 @@ class SlotUD(Slot):
         )
     else:
         build_geometry = build_geometry
-    # cf Methods.Slot.SlotUD.set_from_point_list
-    if isinstance(set_from_point_list, ImportError):
-        set_from_point_list = property(
+    # cf Methods.Slot.SlotUD.check
+    if isinstance(check, ImportError):
+        check = property(
             fget=lambda x: raise_(
-                ImportError(
-                    "Can't use SlotUD method set_from_point_list: "
-                    + str(set_from_point_list)
-                )
+                ImportError("Can't use SlotUD method check: " + str(check))
             )
         )
     else:
-        set_from_point_list = set_from_point_list
+        check = check
     # cf Methods.Slot.SlotUD.get_surface_active
     if isinstance(get_surface_active, ImportError):
         get_surface_active = property(
@@ -83,15 +85,30 @@ class SlotUD(Slot):
         )
     else:
         get_surface_active = get_surface_active
-    # cf Methods.Slot.SlotUD.check
-    if isinstance(check, ImportError):
-        check = property(
+    # cf Methods.Slot.SlotUD.get_surface_opening
+    if isinstance(get_surface_opening, ImportError):
+        get_surface_opening = property(
             fget=lambda x: raise_(
-                ImportError("Can't use SlotUD method check: " + str(check))
+                ImportError(
+                    "Can't use SlotUD method get_surface_opening: "
+                    + str(get_surface_opening)
+                )
             )
         )
     else:
-        check = check
+        get_surface_opening = get_surface_opening
+    # cf Methods.Slot.SlotUD.set_from_point_list
+    if isinstance(set_from_point_list, ImportError):
+        set_from_point_list = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use SlotUD method set_from_point_list: "
+                    + str(set_from_point_list)
+                )
+            )
+        )
+    else:
+        set_from_point_list = set_from_point_list
     # save and copy methods are available in all object
     save = save
     copy = copy

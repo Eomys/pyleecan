@@ -14,6 +14,7 @@ from ..labels import (
     HOLEV_LAB,
     WIND_LAB,
     NOTCH_LAB,
+    SOP_LAB,
 )
 
 
@@ -88,7 +89,9 @@ def get_mesh_param(label_dict, FEMM_dict):
             mesh_dict["element_size"] = FEMM_dict["elementsize_slotR"]
             mesh_dict["meshsize"] = FEMM_dict["meshsize_slotR"]
             mesh_dict["group"] = FEMM_dict["groups"]["GROUP_RW"]
-    elif NOTCH_LAB in label_dict["surf_type"]:  # Notches
+    elif (
+        SOP_LAB in label_dict["surf_type"] or NOTCH_LAB in label_dict["surf_type"]
+    ):  # Slot opening or Notches
         if STATOR_LAB in label_dict["lam_type"]:  # if the notch is on the Stator
             mesh_dict["element_size"] = FEMM_dict["elementsize_slotS"]
             mesh_dict["meshsize"] = FEMM_dict["meshsize_slotS"]

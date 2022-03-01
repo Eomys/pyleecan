@@ -4,15 +4,13 @@ from ....Classes.SurfLine import SurfLine
 from ....Functions.labels import DRAW_PROP_LAB
 
 
-def get_surface(self, is_simplified=False):
+def get_surface(self):
     """Returns the surface delimiting the slot
 
     Parameters
     ----------
     self : Slot
         A Slot object
-    is_simplified : bool
-        True to remove overlapping lines
 
     Returns
     -------
@@ -23,12 +21,11 @@ def get_surface(self, is_simplified=False):
     Rbo = self.get_Rbo()
     curve_list = self.build_geometry()
 
-    # Remove line overlapping with bore/yoke lines
-    if is_simplified:
-        for line in curve_list:
-            if line.prop_dict is None:
-                line.prop_dict = dict()
-            line.prop_dict[DRAW_PROP_LAB] = False
+    # Remove line overlapping with bore/yoke lines (for FEMM)
+    for line in curve_list:
+        if line.prop_dict is None:
+            line.prop_dict = dict()
+        line.prop_dict[DRAW_PROP_LAB] = False
 
     # Add closing Arc
     Zbegin = curve_list[-1].get_end()

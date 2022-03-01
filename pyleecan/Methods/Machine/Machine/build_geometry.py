@@ -14,8 +14,6 @@ def build_geometry(self, sym=1, alpha=0, delta=0):
         Angle for rotation [rad]
     delta : complex
         Complex value for translation
-    is_simplified: bool
-        True to avoid line superposition
 
     Returns
     -------
