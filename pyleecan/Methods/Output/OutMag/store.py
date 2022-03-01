@@ -1,13 +1,12 @@
 from numpy import max as np_max, min as np_min, mean as np_mean
 
-from SciDataTool import DataTime, VectorField
+from SciDataTool import DataTime, VectorField, DataFreq, Norm_ref
 
 from ....Functions.labels import STATOR_LAB
 
 
 def store(self, out_dict, axes_dict):
     """Store the standard outputs of Magnetics that are temporarily in out_dict as arrays into OutMag as Data object
-
     Parameters
     ----------
     self : OutMag
@@ -16,64 +15,97 @@ def store(self, out_dict, axes_dict):
         Dict containing all magnetic quantities that have been calculated in comp_flux_airgap
     axes_dict: {Data}
         Dict of axes used for magnetic calculation
-
     """
 
-    # Store axes_dict
+    # Store axes dict
     self.axes_dict = axes_dict
 
-    # Get time axis
-    Time = axes_dict["time"]
+    # Get time/frequency axis
+    if "freqs" in axes_dict:
+        ax1 = axes_dict["freqs"]
+        if "freqs_Tem" in axes_dict:
+            ax1_Tem = axes_dict["freqs_Tem"]
+        else:
+            ax1_Tem = None
+    else:
+        ax1 = axes_dict["time"]
+        if "time_Tem" in axes_dict:
+            ax1_Tem = axes_dict["time_Tem"]
+        else:
+            ax1_Tem = None
+
+    # Get angle/wavenumber axis
+    if "wavenumber" in axes_dict:
+        ax2 = axes_dict["wavenumber"]
+    else:
+        ax2 = axes_dict["angle"]
 
     # Store airgap flux as VectorField object
     # Axes for each airgap flux component
-    axis_list = [Time, axes_dict["angle"], axes_dict["z"]]
+    axis_list = [ax1, ax2, axes_dict["z"]]
 
     # Create VectorField with empty components
-    if "Br" in out_dict or "Bt" in out_dict or "Bz" in out_dict:
+    if "B_{rad}" in out_dict or "B_{circ}" in out_dict or "B_{ax}" in out_dict:
         self.B = VectorField(
-            name="Airgap flux density",
+            name="Air gap flux density",
             symbol="B",
         )
 
     # Radial flux component
-    if "Br" in out_dict:
+    if "B_{rad}" in out_dict:
         self.B.components["radial"] = DataTime(
-            name="Airgap radial flux density",
+            name="Air gap radial flux density",
             unit="T",
-            symbol="B_r",
+            symbol="B_{rad}",
             axes=axis_list,
-            values=out_dict.pop("Br"),
+            values=out_dict.pop("B_{rad}"),
         )
     # Tangential flux component
-    if "Bt" in out_dict:
+    if "B_{circ}" in out_dict:
         self.B.components["tangential"] = DataTime(
-            name="Airgap circumferential flux density",
+            name="Air gap circumferential flux density",
             unit="T",
-            symbol="B_t",
+            symbol="B_{circ}",
             axes=axis_list,
-            values=out_dict.pop("Bt"),
+            values=out_dict.pop("B_{circ}"),
         )
     # Axial flux component
-    if "Bz" in out_dict:
+    if "B_{ax}" in out_dict:
         self.B.components["axial"] = DataTime(
-            name="Airgap axial flux density",
+            name="Air gap axial flux density",
             unit="T",
-            symbol="B_z",
+            symbol="B_{ax}",
             axes=axis_list,
-            values=out_dict.pop("Bz"),
+            values=out_dict.pop("B_{ax}"),
         )
 
     # Store electromagnetic torque over time, and global values: average, peak to peak and ripple
-    if "Tem" in out_dict:
+    if (
+        "Tem" in out_dict
+        or (
+            self.parent is not None
+            and self.parent.simu is not None
+            and self.parent.simu.machine is not None
+            and self.B is not None
+            and "radial" in self.B.components.keys()
+            and "tangential" in self.B.components.keys()
+        )
+        and ax1_Tem is not None
+    ):
+
+        if "Tem" in out_dict:
+            Tem_slice = out_dict.pop("Tem")
+        else:
+            Tem_slice = self.comp_torque_MT()
 
         # Store electromagnetic torque per slice (in Newton)
         self.Tem_slice = DataTime(
             name="Electromagnetic torque (axial density)",
             unit="N",
             symbol="T_{em}",
-            axes=[axes_dict["time_Tem"], axes_dict["z"]],
-            values=out_dict.pop("Tem"),
+            axes=[ax1_Tem, axes_dict["z"]],
+            values=Tem_slice,
+            normalizations={"ref": Norm_ref(ref=self.Tem_norm)},
         )
 
         # Integrate over slice axis to get overall torque (in Newton meter)
@@ -93,7 +125,7 @@ def store(self, out_dict, axes_dict):
         else:
             self.Tem_rip_norm = None
 
-    # Store list of winding fluxlinkage, stator winding fluxlinkage
+    # Store list of winding flux linkage, stator winding fluxlinkage
     # and calculate electromotive force
     if "Phi_wind" in out_dict:
         machine = self.parent.simu.machine
@@ -111,7 +143,7 @@ def store(self, out_dict, axes_dict):
                 name=prefix + " Winding Flux (axial density)",
                 unit="Wb/m",
                 symbol="Phi_{wind}",
-                axes=[Time, Phase, axes_dict["z"]],
+                axes=[ax1, Phase, axes_dict["z"]],
                 values=phi_wind,
             )
             # Integrate over slice axis to get overall winding flux linkage (in Weber)

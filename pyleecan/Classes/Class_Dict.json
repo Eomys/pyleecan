@@ -8710,7 +8710,8 @@
             "comp_emf",
             "comp_power",
             "get_demag",
-            "store"
+            "store",
+            "comp_torque_MT"
         ],
         "mother": "",
         "name": "OutMag",
@@ -8869,6 +8870,15 @@
                 "type": "{SciDataTool.Classes.DataND.DataND}",
                 "unit": "Wb/m",
                 "value": "None"
+            },
+            {
+                "desc": "Torque normalization",
+                "max": "",
+                "min": "",
+                "name": "Tem_norm",
+                "type": "float",
+                "unit": "N.m",
+                "value": 0.001
             }
         ]
     },

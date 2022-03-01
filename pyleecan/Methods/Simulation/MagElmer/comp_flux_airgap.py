@@ -110,9 +110,9 @@ def comp_flux_airgap(self, output, axes_dict, Is=None, Ir=None):
     )
 
     # Store standards Magnetics outputs in out_dict
-    out_dict["Br"] = Br
-    out_dict["Bt"] = Bt
-    out_dict["Bz"] = Bz
+    out_dict["B_{rad}"] = Br
+    out_dict["B_{circ}"] = Bt
+    out_dict["B_{ax}"] = Bz
     out_dict["Tem"] = Tem
     out_dict["Phi_wind_stator"] = Phi_wind_stator
 
