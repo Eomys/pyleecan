@@ -52,4 +52,10 @@ def log_datakeeper_step_result(simulation, datakeeper_list, index, simu_type):
             else:
                 msg += ", "
     msg = msg[:-2]
-    simulation.get_logger().info(msg)
+
+    # Get logger of the main simulation in parallel mode
+    if simulation.logger_name[0:8] == "Parallel":
+        log = getLogger(simulation.logger_name[9:])
+    else:
+        log = simulation.get_logger()
+    log.info(msg)
