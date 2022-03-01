@@ -23,9 +23,9 @@ from Tests import save_plot_path as save_path
 def test_SPMSM015_plot_contour_B_FEMM():
     """Validation of the implementaiton of periodic angle axis in Magnetic (MagFEMM) and Force (ForceMT) modules"""
 
-    SPMSM_015 = load(join(DATA_DIR, "Machine", "SPMSM_015.json"))
+    SPMSM_015 = load(join(DATA_DIR, "Machine", "Validation", "SPMSM_015.json"))
 
-    simu = Simu1(name="test_FEMM_periodicity_time_no_periodicity_a", machine=SPMSM_015)
+    simu = Simu1(name="test_plot_contour_SPMSM_015", machine=SPMSM_015)
 
     # Definition of the enforced output of the electrical module
     I0_rms = 250 / np.sqrt(2)
@@ -35,7 +35,9 @@ def test_SPMSM015_plot_contour_B_FEMM():
     Iq_ref = (I0_rms * np.exp(1j * Phi0)).imag
 
     simu.input = InputCurrent(
-        OP=OPdq(Id_ref=Id_ref, Iq_ref=Iq_ref, N0=1000), Na_tot=252 * 9, Nt_tot=4 * 9,
+        OP=OPdq(Id_ref=Id_ref, Iq_ref=Iq_ref, N0=1000),
+        Na_tot=252 * 9,
+        Nt_tot=4 * 9,
     )
 
     # Definition of the magnetic simulation: with periodicity
@@ -44,7 +46,7 @@ def test_SPMSM015_plot_contour_B_FEMM():
         type_BH_rotor=1,
         is_periodicity_a=False,
         is_periodicity_t=True,
-        nb_worker=cpu_count(),
+        nb_worker=int(0.5 * cpu_count()),
         is_get_meshsolution=True,
         Kmesh_fineness=0.5,
     )
@@ -69,14 +71,20 @@ def test_SPMSM015_plot_contour_B_FEMM():
     pass
 
 
+@pytest.mark.long_5s
+@pytest.mark.long_1m
+@pytest.mark.MagFEMM
+@pytest.mark.SPMSM
 def test_Benchmark_plot_contour_B_FEMM():
     """Validation of the implementaiton of periodic angle axis in Magnetic (MagFEMM) and Force (ForceMT) modules"""
 
     Benchmark = load(join(DATA_DIR, "Machine", "Benchmark.json"))
-    simu = Simu1(name="test_FEMM_compare_Toyota_Prius", machine=Benchmark)
+    simu = Simu1(name="test_plot_contour_Benchmark", machine=Benchmark)
 
     simu.input = InputCurrent(
-        OP=OPdq(Id_ref=0, Iq_ref=0, N0=2504), Na_tot=2048, Nt_tot=50,
+        OP=OPdq(Id_ref=0, Iq_ref=0, N0=2504),
+        Na_tot=2048,
+        Nt_tot=50,
     )
 
     # Definition of the magnetic simulation: with periodicity
@@ -86,7 +94,7 @@ def test_Benchmark_plot_contour_B_FEMM():
         is_periodicity_a=False,
         is_periodicity_t=True,
         is_get_meshsolution=True,
-        nb_worker=cpu_count(),
+        nb_worker=int(0.5 * cpu_count()),
     )
 
     out = simu.run()
@@ -110,5 +118,5 @@ def test_Benchmark_plot_contour_B_FEMM():
 
 
 if __name__ == "__main__":
-
+    test_SPMSM015_plot_contour_B_FEMM()
     test_Benchmark_plot_contour_B_FEMM()

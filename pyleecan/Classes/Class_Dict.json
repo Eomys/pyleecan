@@ -4605,7 +4605,8 @@
             "get_bore_desc",
             "set_pole_pair_number",
             "comp_angle_d_axis",
-            "get_surfaces_closing"
+            "get_surfaces_closing",
+            "has_magnet"
         ],
         "mother": "Lamination",
         "name": "LamSlot",
