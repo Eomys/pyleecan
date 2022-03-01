@@ -111,7 +111,7 @@ def plot(
                             break
                     # Create arrow coordinates
                     Zh = hole.Zh
-                    for ii in range(Zh):
+                    for ii in range(int(Zh / sym)):
                         off = pi if ii % 2 == 1 else 0
                         if mag is not None and mag.type_magnetization == 3:
                             off -= pi / 2
