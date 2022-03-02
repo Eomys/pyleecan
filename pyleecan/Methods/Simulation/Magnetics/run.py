@@ -65,6 +65,8 @@ def run(self):
         self.get_logger().info("Solving slice 1 / " + str(Nslices))
     out_dict = self.comp_flux_airgap(output, axes_dict, Is_val=Is_val, Ir_val=Ir_val)
 
+    is_loop = True
+
     if Nslices == 1:
         is_loop = False
         is_resize = True
