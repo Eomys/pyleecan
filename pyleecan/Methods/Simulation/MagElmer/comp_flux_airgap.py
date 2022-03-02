@@ -7,7 +7,7 @@ from ....Classes.OutMagElmer import OutMagElmer
 from ....Methods.Simulation.MagElmer import MagElmer_BP_dict
 
 
-def comp_flux_airgap(self, output, axes_dict, Is=None, Ir=None):
+def comp_flux_airgap(self, output, axes_dict, Is_val=None, Ir_val=None):
     """Build and solve Elmer model to calculate and store magnetic quantities
 
     Parameters
@@ -106,7 +106,7 @@ def comp_flux_airgap(self, output, axes_dict, Is=None, Ir=None):
 
     # Solve for all time step and store all the results in output
     Br, Bt, Bz, Tem, Phi_wind_stator = self.solve_FEA(
-        output, sym, angle, time, angle_rotor, Is, Ir
+        output, sym, angle, time, angle_rotor, Is_val, Ir_val
     )
 
     # Store standards Magnetics outputs in out_dict
