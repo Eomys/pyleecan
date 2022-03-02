@@ -57,6 +57,7 @@ def plot(
     LamSlotWind.plot(
         self,
         fig=fig,
+        ax=axes,
         is_lam_only=is_lam_only,
         sym=sym,
         alpha=alpha,
@@ -66,7 +67,7 @@ def plot(
     )
 
     # init figure again to get updated label_leg and patch_leg
-    (fig, axes, patch_leg, label_leg) = init_fig(fig)
+    (fig, axes, patch_leg, label_leg) = init_fig(fig, ax=axes)
 
     # setup the patch of the short circuit ring if needed
     patches = list()

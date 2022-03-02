@@ -448,22 +448,6 @@ class DXF_Slot(Ui_DXF_Slot, QDialog):
             )
             return None
 
-        # Create the Slot object
-        slot = SlotUD(line_list=curve_list)
-        slot.type_line_wind = self.c_type_line.currentIndex()
-        begin_id = self.si_wind_begin_index.value()
-        end_id = self.si_wind_end_index.value()
-        if (
-            begin_id < len(curve_list)
-            and end_id < len(curve_list)
-            and begin_id < end_id
-        ):
-            slot.wind_begin_index = begin_id
-            slot.wind_end_index = end_id
-        else:
-            slot.wind_begin_index = None
-            slot.wind_end_index = None
-
         # Rotation
         Z1 = curve_list[0].get_begin()
         Z2 = curve_list[-1].get_end()
@@ -482,7 +466,21 @@ class DXF_Slot(Ui_DXF_Slot, QDialog):
         if abs(Ze2 - Zend) > 1e-9:
             curve_list.append(Segment(begin=Zend, end=Ze2))
 
-        # Set metadata
+        # Create the Slot object
+        slot = SlotUD(line_list=curve_list)
+        slot.type_line_wind = self.c_type_line.currentIndex()
+        begin_id = self.si_wind_begin_index.value()
+        end_id = self.si_wind_end_index.value()
+        if (
+            begin_id < len(curve_list)
+            and end_id < len(curve_list)
+            # and begin_id < end_id
+        ):
+            slot.wind_begin_index = begin_id
+            slot.wind_end_index = end_id
+        else:
+            slot.wind_begin_index = None
+            slot.wind_end_index = None
         slot.Zs = self.si_Zs.value()
 
         return slot
