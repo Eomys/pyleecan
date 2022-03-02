@@ -51,6 +51,7 @@ except ImportError as error:
 from ._check import InitUnKnowClassError
 from .DXFImport import DXFImport
 from .SliceModel import SliceModel
+from .OP import OP
 
 
 class MagElmer(Magnetics):
@@ -162,6 +163,8 @@ class MagElmer(Magnetics):
         Nslices_enforced=None,
         type_distribution_enforced=None,
         is_current_harm=True,
+        OP_ref=None,
+        OP_rtol=0.0001,
         init_dict=None,
         init_str=None,
     ):
@@ -236,6 +239,10 @@ class MagElmer(Magnetics):
                 type_distribution_enforced = init_dict["type_distribution_enforced"]
             if "is_current_harm" in list(init_dict.keys()):
                 is_current_harm = init_dict["is_current_harm"]
+            if "OP_ref" in list(init_dict.keys()):
+                OP_ref = init_dict["OP_ref"]
+            if "OP_rtol" in list(init_dict.keys()):
+                OP_rtol = init_dict["OP_rtol"]
         # Set the properties (value check and convertion are done in setter)
         self.Kmesh_fineness = Kmesh_fineness
         self.Kgeo_fineness = Kgeo_fineness
@@ -267,6 +274,8 @@ class MagElmer(Magnetics):
             Nslices_enforced=Nslices_enforced,
             type_distribution_enforced=type_distribution_enforced,
             is_current_harm=is_current_harm,
+            OP_ref=OP_ref,
+            OP_rtol=OP_rtol,
         )
         # The class is frozen (in Magnetics init), for now it's impossible to
         # add new properties

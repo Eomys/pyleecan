@@ -40,6 +40,7 @@ except ImportError as error:
 
 from ._check import InitUnKnowClassError
 from .SliceModel import SliceModel
+from .OP import OP
 
 
 class Magnetics(FrozenClass):
@@ -112,6 +113,8 @@ class Magnetics(FrozenClass):
         Nslices_enforced=None,
         type_distribution_enforced=None,
         is_current_harm=True,
+        OP_ref=None,
+        OP_rtol=0.0001,
         init_dict=None,
         init_str=None,
     ):
@@ -164,6 +167,10 @@ class Magnetics(FrozenClass):
                 type_distribution_enforced = init_dict["type_distribution_enforced"]
             if "is_current_harm" in list(init_dict.keys()):
                 is_current_harm = init_dict["is_current_harm"]
+            if "OP_ref" in list(init_dict.keys()):
+                OP_ref = init_dict["OP_ref"]
+            if "OP_rtol" in list(init_dict.keys()):
+                OP_rtol = init_dict["OP_rtol"]
         # Set the properties (value check and convertion are done in setter)
         self.parent = None
         self.is_remove_slotS = is_remove_slotS
@@ -183,6 +190,8 @@ class Magnetics(FrozenClass):
         self.Nslices_enforced = Nslices_enforced
         self.type_distribution_enforced = type_distribution_enforced
         self.is_current_harm = is_current_harm
+        self.OP_ref = OP_ref
+        self.OP_rtol = OP_rtol
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -227,6 +236,12 @@ class Magnetics(FrozenClass):
             + linesep
         )
         Magnetics_str += "is_current_harm = " + str(self.is_current_harm) + linesep
+        if self.OP_ref is not None:
+            tmp = self.OP_ref.__str__().replace(linesep, linesep + "\t").rstrip("\t")
+            Magnetics_str += "OP_ref = " + tmp
+        else:
+            Magnetics_str += "OP_ref = None" + linesep + linesep
+        Magnetics_str += "OP_rtol = " + str(self.OP_rtol) + linesep
         return Magnetics_str
 
     def __eq__(self, other):
@@ -267,6 +282,10 @@ class Magnetics(FrozenClass):
         if other.type_distribution_enforced != self.type_distribution_enforced:
             return False
         if other.is_current_harm != self.is_current_harm:
+            return False
+        if other.OP_ref != self.OP_ref:
+            return False
+        if other.OP_rtol != self.OP_rtol:
             return False
         return True
 
@@ -320,6 +339,14 @@ class Magnetics(FrozenClass):
             diff_list.append(name + ".type_distribution_enforced")
         if other._is_current_harm != self._is_current_harm:
             diff_list.append(name + ".is_current_harm")
+        if (other.OP_ref is None and self.OP_ref is not None) or (
+            other.OP_ref is not None and self.OP_ref is None
+        ):
+            diff_list.append(name + ".OP_ref None mismatch")
+        elif self.OP_ref is not None:
+            diff_list.extend(self.OP_ref.compare(other.OP_ref, name=name + ".OP_ref"))
+        if other._OP_rtol != self._OP_rtol:
+            diff_list.append(name + ".OP_rtol")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -345,6 +372,8 @@ class Magnetics(FrozenClass):
         S += getsizeof(self.Nslices_enforced)
         S += getsizeof(self.type_distribution_enforced)
         S += getsizeof(self.is_current_harm)
+        S += getsizeof(self.OP_ref)
+        S += getsizeof(self.OP_rtol)
         return S
 
     def as_dict(self, type_handle_ndarray=0, keep_function=False, **kwargs):
@@ -383,6 +412,15 @@ class Magnetics(FrozenClass):
         Magnetics_dict["Nslices_enforced"] = self.Nslices_enforced
         Magnetics_dict["type_distribution_enforced"] = self.type_distribution_enforced
         Magnetics_dict["is_current_harm"] = self.is_current_harm
+        if self.OP_ref is None:
+            Magnetics_dict["OP_ref"] = None
+        else:
+            Magnetics_dict["OP_ref"] = self.OP_ref.as_dict(
+                type_handle_ndarray=type_handle_ndarray,
+                keep_function=keep_function,
+                **kwargs
+            )
+        Magnetics_dict["OP_rtol"] = self.OP_rtol
         # The class name is added to the dict for deserialisation purpose
         Magnetics_dict["__class__"] = "Magnetics"
         return Magnetics_dict
@@ -408,6 +446,9 @@ class Magnetics(FrozenClass):
         self.Nslices_enforced = None
         self.type_distribution_enforced = None
         self.is_current_harm = None
+        if self.OP_ref is not None:
+            self.OP_ref._set_None()
+        self.OP_rtol = None
 
     def _get_is_remove_slotS(self):
         """getter of is_remove_slotS"""
@@ -734,5 +775,59 @@ class Magnetics(FrozenClass):
         doc=u"""0 To compute only the airgap flux from fundamental current harmonics
 
         :Type: bool
+        """,
+    )
+
+    def _get_OP_ref(self):
+        """getter of OP_ref"""
+        return self._OP_ref
+
+    def _set_OP_ref(self, value):
+        """setter of OP_ref"""
+        if isinstance(value, str):  # Load from file
+            try:
+                value = load_init_dict(value)[1]
+            except Exception as e:
+                self.get_logger().error(
+                    "Error while loading " + value + ", setting None instead"
+                )
+                value = None
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class(
+                "pyleecan.Classes", value.get("__class__"), "OP_ref"
+            )
+            value = class_obj(init_dict=value)
+        elif type(value) is int and value == -1:  # Default constructor
+            value = OP()
+        check_var("OP_ref", value, "OP")
+        self._OP_ref = value
+
+        if self._OP_ref is not None:
+            self._OP_ref.parent = self
+
+    OP_ref = property(
+        fget=_get_OP_ref,
+        fset=_set_OP_ref,
+        doc=u"""Reference operating point
+
+        :Type: OP
+        """,
+    )
+
+    def _get_OP_rtol(self):
+        """getter of OP_rtol"""
+        return self._OP_rtol
+
+    def _set_OP_rtol(self, value):
+        """setter of OP_rtol"""
+        check_var("OP_rtol", value, "float")
+        self._OP_rtol = value
+
+    OP_rtol = property(
+        fget=_get_OP_rtol,
+        fset=_set_OP_rtol,
+        doc=u"""Relative tolerance under which two operating points are considered te be equal
+
+        :Type: float
         """,
     )
