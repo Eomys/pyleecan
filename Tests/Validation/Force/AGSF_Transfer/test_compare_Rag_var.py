@@ -159,7 +159,7 @@ def test_compare_Rag_variation_Nmax_sensitivity():
         is_periodicity_t=False,
         is_sliding_band=False,
         Kmesh_fineness=2,  # 4
-        nb_worker=cpu_count(),
+        # nb_worker=cpu_count(),
     )
 
     simu2 = simu.copy()
@@ -212,6 +212,6 @@ if __name__ == "__main__":
 
     # test_AC_IPMSM_AGSF_transfer_compare_Rag_variation()
 
-    test_compare_Rag_variation()
+    # test_compare_Rag_variation()
 
     test_compare_Rag_variation_Nmax_sensitivity()
