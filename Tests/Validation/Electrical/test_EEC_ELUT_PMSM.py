@@ -126,7 +126,7 @@ def test_EEC_ELUT_PMSM_calc(n_Id=5, n_Iq=5):
 @pytest.mark.EEC_PMSM
 @pytest.mark.IPMSM
 @pytest.mark.periodicity
-def test_EEC_ELUT_PMSM_MTPA(test_ELUT, n_Id=51, n_Iq=101):
+def test_EEC_ELUT_PMSM_MTPA(test_ELUT):
     """Validation of the PMSM Electrical Equivalent Circuit with the Prius machine for MTPA calculation"""
 
     Toyota_Prius = load(join(DATA_DIR, "Machine", "Toyota_Prius.json"))
@@ -151,13 +151,13 @@ def test_EEC_ELUT_PMSM_MTPA(test_ELUT, n_Id=51, n_Iq=101):
         Ntorque=Ntorque,
         I_max=I_max,
         U_max=U_max,
-        n_Id=n_Id,
-        n_Iq=n_Iq,
+        n_Id=501,
+        n_Iq=501,
     )
 
     # Check torque values
     assert_almost_equal(OP_matrix_MTPA[:, -1, 3].max(), 342, decimal=0)
-    assert_almost_equal(OP_matrix_MTPA[:, -1, 3].min(), 160, decimal=0)
+    assert_almost_equal(OP_matrix_MTPA[:, -1, 3].min(), 164, decimal=0)
     assert_almost_equal(OP_matrix_MTPA[:, 0, 3].max(), 0, decimal=0)
     assert_almost_equal(OP_matrix_MTPA[:, 0, 3].min(), 0, decimal=0)
 
@@ -230,7 +230,7 @@ def test_EEC_ELUT_PMSM_MTPA(test_ELUT, n_Id=51, n_Iq=101):
         )
 
         # Plot Id/Iq and Imax on a same graph at a specific load level
-        i_load = 0
+        i_load = -1
         plot_2D(
             [OP_matrix_MTPA[:, i_load, 0]],
             [I_MTPA[:, i_load, 0], I_MTPA[:, i_load, 1], I_MTPA[:, i_load, 2]],
