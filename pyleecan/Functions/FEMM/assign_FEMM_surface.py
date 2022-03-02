@@ -1,7 +1,7 @@
 from numpy import angle, pi, floor_divide
 
-from ...Methods import NotImplementedYetError
 from ...Functions.FEMM.get_mesh_param import get_mesh_param
+from ...Methods import NotImplementedYetError
 from ...Functions.Winding.find_wind_phase_color import get_phase_id
 from ...Functions.labels import (
     decode_label,
@@ -88,7 +88,8 @@ def assign_FEMM_surface(femm, surf, prop, FEMM_dict, machine):
                     mag = mag - 90
             else:
                 raise NotImplementedYetError(
-                    "Only parallele magnetization are available for HoleMagnet"
+                    "Only parallele magnetization are available for HoleMagnet found: "
+                    + label
                 )
         elif MAG_LAB in label_dict["surf_type"]:  # LamSlotMag
             mag_obj = get_obj_from_label(machine, label_dict=label_dict)

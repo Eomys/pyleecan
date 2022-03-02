@@ -1,8 +1,9 @@
-import win32com.client
 import os
-from six import string_types
-import pythoncom
 from math import exp
+
+import pythoncom
+import win32com.client
+from six import string_types
 
 
 class _FEMMHandler(object):
@@ -26,10 +27,6 @@ class _FEMMHandler(object):
         _FEMMHandler_dict["__class__"] = "_FEMMHandler"
         _FEMMHandler_dict["HandleToFEMM"] = None
         return _FEMMHandler_dict
-
-    def compare(self, other, name="self"):
-        """Compare two objects and return list of differences"""
-        return list()
 
     def fixpath(self, myPath):
         return myPath.replace("\\", "/").replace("//", "/")

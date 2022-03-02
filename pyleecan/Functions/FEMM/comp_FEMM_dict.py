@@ -3,8 +3,8 @@
 from ...Classes.LamHole import LamHole
 from ...Classes.LamSlotMag import LamSlotMag
 from ...Classes.MachineSIPMSM import MachineSIPMSM
-from ...Functions.FEMM import acsolver, pbtype, precision, minangle
 from ...Functions.FEMM import FEMM_GROUPS
+from ...Functions.FEMM import acsolver, pbtype, precision, minangle
 
 
 def comp_FEMM_dict(machine, Kgeo_fineness, Kmesh_fineness, type_calc_leakage=0):

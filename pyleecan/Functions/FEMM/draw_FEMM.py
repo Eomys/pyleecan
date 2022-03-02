@@ -1,11 +1,11 @@
-from ...Classes.Lamination import Lamination
 from ...Classes.Circle import Circle
+from ...Classes.Lamination import Lamination
 from ...Functions.FEMM import is_eddies
 from ...Functions.FEMM.assign_FEMM_surface import assign_FEMM_surface
 from ...Functions.FEMM.comp_FEMM_dict import comp_FEMM_dict
 from ...Functions.FEMM.create_FEMM_materials import create_FEMM_materials
-from ...Functions.FEMM.get_sliding_band import get_sliding_band
 from ...Functions.FEMM.get_airgap_surface import get_airgap_surface
+from ...Functions.FEMM.get_sliding_band import get_sliding_band
 from ...Functions.labels import NO_MESH_LAB
 
 
@@ -149,7 +149,13 @@ def draw_FEMM(
     if is_sliding_band:
         surf_list.extend(get_sliding_band(sym=sym, lam_int=lam_int, lam_ext=lam_ext))
     else:
-        surf_list.extend(get_airgap_surface(lam_int=lam_int, lam_ext=lam_ext))
+        surf_list_ag, point_ref_ag = get_airgap_surface(
+            lam_int=lam_int,
+            lam_ext=lam_ext,
+            sym=sym,
+        )
+        surf_list.extend(surf_list_ag)
+        FEMM_dict["point_ref_ag"] = point_ref_ag
 
     # adding Both laminations surfaces (or import from DXF)
     if rotor_dxf is not None:
