@@ -63,7 +63,7 @@ def test_EEC_ELUT_SCIM_001():
             param_dict[param] = value
 
     # Prepare simulation
-    SCIM_001 = load(join(DATA_DIR, "Machine", "Validation", "SCIM_001.json"))
+    SCIM_001 = load(join(DATA_DIR, "Machine", "SCIM_001.json"))
 
     # Update material data
     # (#TODO check also difference of rotor bar section)
