@@ -1,10 +1,9 @@
 import numpy as np
 
-from ....Functions.Electrical.dqh_transformation import n2dqh_DataTime
 
-
-def get_Lmdqh(self, Id, Iq, Phi_dqh=None, OP=None):
+def get_Lmdqh(self, Id, Iq, Phi_dqh=None):
     """Get the magnetizing dqh inductance
+
     Parameters
     ----------
     self : LUTdq
@@ -15,8 +14,7 @@ def get_Lmdqh(self, Id, Iq, Phi_dqh=None, OP=None):
         current Iq
     Phi_dqh: ndarray
         Stator winding dqh flux
-    OP: OP
-        Input operating point
+
     Returns
     ----------
     Lmdqh : ndarray

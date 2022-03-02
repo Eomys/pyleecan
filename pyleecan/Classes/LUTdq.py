@@ -146,11 +146,6 @@ class LUTdq(LUT):
         T1_ref=20,
         OP_matrix=None,
         phase_dir=None,
-        B=None,
-        Phi_wind_stator=None,
-        Tem=None,
-        axes_dict=None,
-        is_interp_along_curve=None,
         init_dict=None,
         init_str=None,
     ):
@@ -189,16 +184,6 @@ class LUTdq(LUT):
                 OP_matrix = init_dict["OP_matrix"]
             if "phase_dir" in list(init_dict.keys()):
                 phase_dir = init_dict["phase_dir"]
-            if "B" in list(init_dict.keys()):
-                B = init_dict["B"]
-            if "Phi_wind_stator" in list(init_dict.keys()):
-                Phi_wind_stator = init_dict["Phi_wind_stator"]
-            if "Tem" in list(init_dict.keys()):
-                Tem = init_dict["Tem"]
-            if "axes_dict" in list(init_dict.keys()):
-                axes_dict = init_dict["axes_dict"]
-            if "is_interp_along_curve" in list(init_dict.keys()):
-                is_interp_along_curve = init_dict["is_interp_along_curve"]
         # Set the properties (value check and convertion are done in setter)
         self.Phi_dqh_mean = Phi_dqh_mean
         self.Tmag_ref = Tmag_ref
@@ -207,16 +192,7 @@ class LUTdq(LUT):
         self.Phi_dqh_interp = Phi_dqh_interp
         # Call LUT init
         super(LUTdq, self).__init__(
-            R1=R1,
-            L1=L1,
-            T1_ref=T1_ref,
-            OP_matrix=OP_matrix,
-            phase_dir=phase_dir,
-            B=B,
-            Phi_wind_stator=Phi_wind_stator,
-            Tem=Tem,
-            axes_dict=axes_dict,
-            is_interp_along_curve=is_interp_along_curve,
+            R1=R1, L1=L1, T1_ref=T1_ref, OP_matrix=OP_matrix, phase_dir=phase_dir
         )
         # The class is frozen (in LUT init), for now it's impossible to
         # add new properties

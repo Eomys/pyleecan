@@ -4412,51 +4412,6 @@
                 "type": "int",
                 "unit": "",
                 "value": null
-            },
-            {
-                "desc": "Airgap flux density look-up table: list of VectorField objects whose (Id,Iq) is given by Idq list",
-                "max": "",
-                "min": "",
-                "name": "B",
-                "type": "[SciDataTool.Classes.VectorField.VectorField]",
-                "unit": "T",
-                "value": "None"
-            },
-            {
-                "desc": "Stator winding flux look-up table: list of DataTime objects whose (Id,Iq) is given by Idq list",
-                "max": "",
-                "min": "",
-                "name": "Phi_wind_stator",
-                "type": "[SciDataTool.Classes.DataND.DataND]",
-                "unit": "Wb",
-                "value": "None"
-            },
-            {
-                "desc": "Instaneous torque look-up table: list of DataTime objects whose (Id,Iq) is given by Idq list",
-                "max": "",
-                "min": "",
-                "name": "Tem",
-                "type": "[SciDataTool.Classes.DataND.DataND]",
-                "unit": "Nm",
-                "value": "None"
-            },
-            {
-                "desc": "Dict containing axes data used for Magnetics",
-                "max": "",
-                "min": "",
-                "name": "axes_dict",
-                "type": "{SciDataTool.Classes.DataND.Data}",
-                "unit": "",
-                "value": "None"
-            },
-            {
-                "desc": "True if interpolation can be performed along curve",
-                "max": "",
-                "min": "",
-                "name": "is_interp_along_curve",
-                "type": "bool",
-                "unit": "",
-                "value": null
             }
         ]
     },
@@ -6415,24 +6370,6 @@
                 "type": "bool",
                 "unit": "",
                 "value": 1
-            },
-            {
-                "desc": "Reference operating point",
-                "max": "",
-                "min": "",
-                "name": "OP_ref",
-                "type": "OP",
-                "unit": "",
-                "value": null
-            },
-            {
-                "desc": "Relative tolerance under which two operating points are considered te be equal",
-                "max": "",
-                "min": "",
-                "name": "OP_rtol",
-                "type": "float",
-                "unit": "-",
-                "value": 0.0001
             }
         ]
     },

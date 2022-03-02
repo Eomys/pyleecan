@@ -14,28 +14,6 @@ def run(self):
 
     output = self.parent.parent
 
-    if self.OP_ref is not None:
-        is_same_OP_ref = output.elec.is_same_OP_ref(self.OP_ref, self.OP_rtol)
-    else:
-        is_same_OP_ref = False
-
-    if is_same_OP_ref:
-        self.get_logger().debug(
-            "Skipping Magnetics module since OP is same as reference simulation"
-        )
-        # Propagate enforced output for DataKeeper using get_magnetics
-        if hasattr(self, "mmf_R0_enforced"):
-            output.mag.mmf_R0 = self.mmf_R0_enforced
-        if hasattr(self, "fl_R0_enforced"):
-            output.mag.fl_R0 = self.fl_R0_enforced
-        if hasattr(self, "fl_S0_enforced"):
-            output.mag.fl_S0 = self.fl_S0_enforced
-        if hasattr(self, "MLUT_enforced"):
-            output.mag.MLUT = self.MLUT_enforced
-
-        # Skip running the Magnetics model
-        return
-
     # Get slice model and store it in output
     slice_model = self.get_slice_model()
     output.mag.Slice = slice_model
