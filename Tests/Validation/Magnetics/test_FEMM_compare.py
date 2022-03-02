@@ -206,7 +206,7 @@ def test_FEMM_compare_SCIM():
     simu_load.input = InputFlux(
         time=time,
         angle=angle2,
-        B_dict={"Br": Br},
+        B_dict={"B_{rad}": Br},
         Is=Is,
         Ir=Ir,
         OP=OPdq(N0=simu.input.OP.N0),
@@ -307,7 +307,7 @@ def test_FEMM_compare_SIPMSM():
         time=time,
         Na_tot=Na_tot,
         Nt_tot=Nt_tot,
-        B_dict={"Br": Br, "Bt": Bt},
+        B_dict={"B_{rad}": Br, "B_{circ}": Bt},
         Is=Is,
         Ir=None,  # No winding on the rotor
         OP=OPdq(N0=simu.input.OP.N0),
@@ -393,7 +393,7 @@ def test_SPMSM_load():
     simu_load.input = InputFlux(
         time=time,
         Na_tot=Na_tot,
-        B_dict={"Br": Br, "Bt": Bt},
+        B_dict={"B_{rad}": Br, "B_{circ}": Bt},
         Is=Is,
         Ir=None,  # No winding on the rotor
         OP=OPdq(N0=simu.input.OP.N0),
@@ -484,7 +484,7 @@ def test_SPMSM_noload():
     simu_load.input = InputFlux(
         time=time,
         angle=angle2,
-        B_dict={"Br": Br, "Bt": Bt},
+        B_dict={"B_{rad}": Br, "B_{circ}": Bt},
         Is=Is,
         Ir=None,  # No winding on the rotor
         OP=OPdq(N0=simu.input.OP.N0),
@@ -511,5 +511,5 @@ if __name__ == "__main__":
     # test_FEMM_compare_Prius()
     test_FEMM_compare_SCIM()
     test_FEMM_compare_SIPMSM()
-    # test_SPMSM_load()
-    # test_SPMSM_noload()
+    test_SPMSM_load()
+    test_SPMSM_noload()
