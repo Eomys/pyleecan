@@ -19,8 +19,7 @@ def gen_input(self):
         raise InputError("Input AGSF are missing")
     else:
         # generate OutElec from parent InputCurrent
-        # Call InputCurrent.gen_input()
-        InputCurrent.gen_input(self)
+        super(type(self), self).gen_input()
 
         # generate OutForce
         outforce = OutForce()
