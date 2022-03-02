@@ -99,12 +99,13 @@ def solve(self):
 
         n_iter = self.nb_iter
         xlimits = np.array([var.space for var in self.problem.design_var])
-        
+
         moo = MOO(
-            n_iter=n_iter,
+            n_iter=5,
             criterion = 'PI',
-            n_start=20,
+            n_start=30,
             xlimits=xlimits,
+            verbose=True,
             n_gen=10*self.nb_gen,
             pop_size=4*self.size_pop
         ) 
@@ -138,34 +139,3 @@ def solve(self):
     except Exception as err:
         logger.error("{}: {}".format(type(err).__name__, err))
         raise err
-
-
-def print_gen_simu(time, gen_id, simu_id, size_pop, nb_error, to_eval):
-    print(
-        "\r{}  gen {:>5}: simu {}/{} ({:>5.2f}%), {:>4} errors.".format(
-            time,
-            gen_id,
-            (simu_id + 1),
-            size_pop,
-            (simu_id) * 100 / size_pop,
-            nb_error,
-        )
-    )
-    msg = "Design Variables: "
-    for ii in range(len(to_eval[simu_id])):
-        msg += (
-            to_eval[simu_id].design_var[ii].symbol
-            + ": "
-            + format(to_eval[simu_id][ii], ".2e")
-            + ", "
-        )
-    print(msg[:-2])
-
-
-def print_obj(obj_func, indiv):
-    msg = "Objectives: "
-    for ii in range(len(obj_func)):
-        msg += (
-            obj_func[ii].symbol + ": " + format(indiv.fitness.values[ii], ".2e") + ", "
-        )
-    print(msg[:-2] + "\n")

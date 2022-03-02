@@ -60,7 +60,7 @@ def test_Binh_and_Korn():
     Na_tot = 64
 
     # Definition of the simulation
-    simu = Simu1(name="test_Binh_and_Korn", machine=SCIM_001)
+    simu = Simu1(name="test_Binh_and_Korn_Bayes", machine=SCIM_001)
 
     simu.input = InputCurrent(
         Is=Is,
@@ -74,7 +74,7 @@ def test_Binh_and_Korn():
     # Definition of the magnetic simulation
     simu.mag = MagFEMM(type_BH_stator=2, type_BH_rotor=2, is_periodicity_a=True)
     simu.mag.Kmesh_fineness = 0.01
-    # simu.mag.Kgeo_fineness=0.02
+    # simu.mag.Kgeo_fineness = 0.02
     simu.struct = None
 
     # ### Design variable
