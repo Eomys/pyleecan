@@ -23,6 +23,7 @@ from Tests import save_validation_path as save_path
 @pytest.mark.long_1m
 @pytest.mark.periodicity
 @pytest.mark.SingleOP
+@pytest.mark.skip(reason="Research only")
 def test_compare_Rag_variation():
     """Validation of the AGSF transfer algorithm for SIPMSM benchmark machine"""
 
