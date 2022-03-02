@@ -67,11 +67,6 @@ except ImportError as error:
     comp_angle_d_axis = error
 
 try:
-    from ..Methods.Machine.LamSquirrelCage.comp_wind_function import comp_wind_function
-except ImportError as error:
-    comp_wind_function = error
-
-try:
     from ..Methods.Machine.LamSquirrelCage.comp_periodicity_spatial import (
         comp_periodicity_spatial,
     )
@@ -202,18 +197,6 @@ class LamSquirrelCage(LamSlotWind):
         )
     else:
         comp_angle_d_axis = comp_angle_d_axis
-    # cf Methods.Machine.LamSquirrelCage.comp_wind_function
-    if isinstance(comp_wind_function, ImportError):
-        comp_wind_function = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use LamSquirrelCage method comp_wind_function: "
-                    + str(comp_wind_function)
-                )
-            )
-        )
-    else:
-        comp_wind_function = comp_wind_function
     # cf Methods.Machine.LamSquirrelCage.comp_periodicity_spatial
     if isinstance(comp_periodicity_spatial, ImportError):
         comp_periodicity_spatial = property(
