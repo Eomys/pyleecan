@@ -6415,24 +6415,6 @@
                 "type": "bool",
                 "unit": "",
                 "value": 1
-            },
-            {
-                "desc": "Reference operating point",
-                "max": "",
-                "min": "",
-                "name": "OP_ref",
-                "type": "OP",
-                "unit": "",
-                "value": null
-            },
-            {
-                "desc": "Relative tolerance under which two operating points are considered te be equal",
-                "max": "",
-                "min": "",
-                "name": "OP_rtol",
-                "type": "float",
-                "unit": "-",
-                "value": 0.0001
             }
         ]
     },
