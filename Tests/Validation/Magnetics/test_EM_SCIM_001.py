@@ -37,7 +37,7 @@ def test_EM_SCIM_001_maxwell_current_enforced():
     comparison with Maxwell linear transient"""
 
     # Prepare simulation
-    SCIM_001 = load(join(DATA_DIR, "Machine", "Validation", "SCIM_001.json"))
+    SCIM_001 = load(join(DATA_DIR, "Machine", "SCIM_001.json"))
     SCIM_001.stator.winding.Ntcoil = 21
     # SCIM_001.plot()
 
