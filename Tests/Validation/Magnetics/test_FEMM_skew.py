@@ -79,6 +79,7 @@ def test_FEMM_skew():
         simu_skew_kseg.machine = SPMSM_skew_kseg
         simu_skew_kseg.name = name + "_" + str(k) + "seg"
         simu_skew_kseg.mag.Slice_enforced = None
+        simu_skew_kseg.mag.import_file = None  # Draw machine in FEMM again
 
         out_skew_kseg = simu_skew_kseg.run()
 
