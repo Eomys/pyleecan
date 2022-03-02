@@ -173,9 +173,7 @@ def test_EM_SCIM_001_varslip():
     OP_matrix[:, 1] = U0_ref
     OP_matrix[:, 2] = np.linspace(0, 0.1, Nspeed)
 
-    simu.var_simu = VarLoadVoltage(
-        OP_matrix=OP_matrix, type_OP_matrix=2, is_interp=False
-    )
+    simu.var_simu = VarLoadVoltage(OP_matrix=OP_matrix, type_OP_matrix=2)
 
     # Set values from V1
     Im = np.linspace(0, 200, 2)
@@ -230,5 +228,5 @@ def test_EM_SCIM_001_varslip():
 
 if __name__ == "__main__":
 
-    out = test_EM_SCIM_001_maxwell_current_enforced()
+    # out = test_EM_SCIM_001_maxwell_current_enforced()
     out = test_EM_SCIM_001_varslip()
