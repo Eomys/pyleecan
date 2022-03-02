@@ -24,14 +24,13 @@ def get_lam_list(self, is_int_to_ext=True, key=None):
     lam_list = []
     if hasattr(self, "lam_list"):
         lam_list = self.lam_list
-        # Sort by Rint by assuming the lamination are not colliding
     else:
         if hasattr(self, "stator"):
             lam_list.append(self.stator)
         if hasattr(self, "rotor"):
             lam_list.append(self.rotor)
 
-    # Sort all laminations according to Rint
+    # Sort all laminations according to Rint by assuming the lamination are not colliding
     if is_int_to_ext is not None:
         lam_list = sorted(lam_list, key=lambda x: x.Rint, reverse=not is_int_to_ext)
 

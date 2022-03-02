@@ -1,8 +1,3 @@
-# -*- coding: utf-8 -*-
-
-from numpy import exp, pi
-
-from ...Functions.FEMM.create_FEMM_bar import create_FEMM_bar
 from ...Functions.FEMM.create_FEMM_circuit_material import create_FEMM_circuit_material
 from ...Functions.FEMM.create_FEMM_magnet import create_FEMM_magnet
 from ...Functions.labels import (
@@ -23,13 +18,14 @@ from ...Functions.labels import (
     get_obj_from_label,
     decode_label,
 )
-from ...Functions.FEMM import LAM_MAT_NAME, AIRGAP_MAT_NAME
+from ...Functions.FEMM import LAM_MAT_NAME
 
 
 def create_FEMM_materials(
     femm,
     machine,
     surf_list,
+    FEMM_dict,
     Is,
     Ir,
     is_mmfs,
@@ -49,6 +45,8 @@ def create_FEMM_materials(
         the machine to simulate
     surf_list : list
         List of surface of the machine
+    FEMM_dict : dict
+        dictionary containing the main parameters of FEMM
     Is : ndarray
         Stator current matrix [A]
     Ir : ndarray
@@ -68,8 +66,8 @@ def create_FEMM_materials(
 
     Returns
     -------
-    Tuple: dict, list
-        Dictionary of properties and list containing the name of the circuits created
+    prop_dict, FEMM_dict : (dict, dict)
+        Dictionary of properties and dictionary containing the main parameters of FEMM
     """
 
     prop_dict = dict()  # Initialisation of the dictionary to return
@@ -77,8 +75,8 @@ def create_FEMM_materials(
     rotor = machine.rotor
     stator = machine.stator
 
-    materials = list()
-    circuits = list()
+    materials = FEMM_dict["materials"]
+    circuits = FEMM_dict["circuits"]
     # Starting creation of properties for each surface of the machine
     for surf in surf_list:
         label_dict = decode_label(surf.label)
@@ -182,4 +180,7 @@ def create_FEMM_materials(
             prop_dict[label_dict["full"]] = "<No Mesh>"
         else:
             raise Exception("Unknown label " + label_dict["full"])
-    return prop_dict, materials, circuits
+
+    FEMM_dict["materials"] = materials
+    FEMM_dict["circuits"] = circuits
+    return prop_dict, FEMM_dict
