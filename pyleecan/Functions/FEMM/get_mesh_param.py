@@ -76,10 +76,7 @@ def get_mesh_param(label_dict, FEMM_dict):
             mesh_dict["meshsize"] = FEMM_dict["meshsize_magnetS"]
             mesh_dict["group"] = FEMM_dict["groups"]["GROUP_SM"]
         else:  # if the Magnet is on the Rotor
-            if MAG_LAB in label_dict["surf_type"]:  # Surface Magnet
-                mesh_dict["element_size"] = FEMM_dict["elementsize_airgap"]
-            else:
-                mesh_dict["element_size"] = FEMM_dict["elementsize_magnetR"]
+            mesh_dict["element_size"] = FEMM_dict["elementsize_magnetR"]
             mesh_dict["meshsize"] = FEMM_dict["meshsize_magnetR"]
             mesh_dict["group"] = FEMM_dict["groups"]["GROUP_RM"]
     elif WIND_LAB in label_dict["surf_type"] or BAR_LAB in label_dict["surf_type"]:
