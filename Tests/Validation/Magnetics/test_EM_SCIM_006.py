@@ -170,7 +170,7 @@ def test_EM_SCIM_006_varslip():
     with current calculated with fundamental EEC"""
 
     # Prepare simulation
-    SCIM_006 = load(join(DATA_DIR, "Machine", "Validation", "SCIM_006.json"))
+    SCIM_006 = load(join(DATA_DIR, "Machine", "SCIM_006.json"))
     # SCIM_006.plot()
 
     simu = Simu1(name="test_EM_SCIM_006_varslip", machine=SCIM_006)
@@ -192,9 +192,7 @@ def test_EM_SCIM_006_varslip():
     OP_matrix[:, 1] = U0_ref
     OP_matrix[:, 2] = np.linspace(0.2, 0, Nspeed)
 
-    simu.var_simu = VarLoadVoltage(
-        OP_matrix=OP_matrix, type_OP_matrix=2, is_interp=False
-    )
+    simu.var_simu = VarLoadVoltage(OP_matrix=OP_matrix, type_OP_matrix=2)
 
     # Set values from V1
     Im = np.linspace(0, 200, 2)
@@ -249,5 +247,5 @@ def test_EM_SCIM_006_varslip():
 
 if __name__ == "__main__":
 
-    out = test_EM_SCIM_006_maxwell_current_enforced()
+    # out = test_EM_SCIM_006_maxwell_current_enforced()
     out = test_EM_SCIM_006_varslip()
