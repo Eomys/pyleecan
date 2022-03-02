@@ -1,16 +1,16 @@
-from numpy import zeros, nan
-
-from ....Classes.OPdq import OPdq
+from numpy import zeros
 
 from ....Functions.Electrical.dqh_transformation import n2dqh_DataTime
 
 
 def get_Phidqh_mean(self):
     """Get the mean value of stator flux along dqh axes
+
     Parameters
     ----------
     self : LUTdq
         a LUTdq object
+
     Returns
     ----------
     Phi_dqh_mean : ndarray

@@ -4,6 +4,7 @@ import scipy.interpolate as scp_int
 
 def interp_Phi_dqh(self, Id, Iq):
     """Get the magnets d-axis inductance
+
     Parameters
     ----------
     self : LUTdq
@@ -12,6 +13,7 @@ def interp_Phi_dqh(self, Id, Iq):
         current Id
     Iq : float or ndarray
         current Iq
+
     Returns
     ----------
     Phi_dqh : ndarray

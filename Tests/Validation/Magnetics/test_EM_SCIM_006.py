@@ -166,7 +166,7 @@ def test_EM_SCIM_006_maxwell_current_enforced():
 @pytest.mark.SCIM
 @pytest.mark.MagFEMM
 def test_EM_SCIM_006_varslip():
-    """Validation of pmmf / linear femm for SCIM_006 machine
+    """Validation of linear femm for SCIM_006 machine
     with current calculated with fundamental EEC"""
 
     # Prepare simulation
@@ -247,5 +247,5 @@ def test_EM_SCIM_006_varslip():
 
 if __name__ == "__main__":
 
-    # out = test_EM_SCIM_006_maxwell_current_enforced()
-    out = test_EM_SCIM_006_varslip()
+    out = test_EM_SCIM_006_maxwell_current_enforced()
+    # out = test_EM_SCIM_006_varslip()

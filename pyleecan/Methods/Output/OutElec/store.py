@@ -79,13 +79,13 @@ def store(self, out_dict):
             values=Ir_val,
         )
 
-        # Ir_pmmf = self.Ir.get_data_along(
+        # Ir = self.Ir.get_data_along(
         #     "time=axis_data",
         #     "phase[smallestperiod]",
         #     axis_data={"time": Time.get_values()},
         # )
 
-        # Ir_pmmf.plot_3D_Data("time", "phase", is_shading_flat=True)
+        # Ir.plot_3D_Data("time", "phase", is_shading_flat=True)
 
     if "Is_PWM" in out_dict:
         # Merge current PWM harmonics with fundamental current
