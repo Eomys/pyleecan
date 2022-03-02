@@ -14,6 +14,7 @@ def get_lines(self):
         list of lines delimiting the surface
 
     """
-    line_list = self.out_surf.get_lines()
+    line_list = list()
+    line_list.extend(self.out_surf.get_lines())
     line_list.extend(self.in_surf.get_lines())
     return line_list

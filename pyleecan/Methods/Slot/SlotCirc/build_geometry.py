@@ -1,5 +1,6 @@
-from ....Classes.Arc1 import Arc1
 from numpy import exp
+
+from ....Classes.Arc1 import Arc1
 
 
 def build_geometry(self):
@@ -30,9 +31,9 @@ def build_geometry(self):
 
     # Creation of curve
     if self.is_outwards():
-        full_arc = Arc1(begin=Z1, end=Z2, radius=-R0, is_trigo_direction=True)
+        full_arc = Arc1(begin=Z1, end=Z2, radius=R0, is_trigo_direction=True)
     else:
-        full_arc = Arc1(begin=Z1, end=Z2, radius=R0, is_trigo_direction=False)
+        full_arc = Arc1(begin=Z1, end=Z2, radius=-R0, is_trigo_direction=False)
     # Split arc to avoid angle > 180 deg (for FEMM)
     curve_list = list()
     curve_list.append(full_arc.copy())

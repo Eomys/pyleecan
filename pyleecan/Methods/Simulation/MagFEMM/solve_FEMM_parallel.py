@@ -21,6 +21,7 @@ def solve_FEMM_parallel(
     Is,
     Ir,
     angle_rotor,
+    filename,
 ):
     """
     Same as solve_FEMM including parallelization on several workers
@@ -57,6 +58,8 @@ def solve_FEMM_parallel(
         Stator current matrix (qs,Nt) [A]
     angle_rotor: ndarray
         Rotor angular position vector (Nt,)
+    filename: str
+        Path to FEMM model to open
 
     Returns
     -------
@@ -139,7 +142,10 @@ def solve_FEMM_parallel(
     )
 
     # Loading parameters for readibility
-    fem_file = self.get_path_save_fem(output)
+    if filename is not None:
+        fem_file = filename
+    else:
+        fem_file = self.get_path_save_fem(output)
     nb_worker = self.nb_worker
     logger = self.get_logger()
 
