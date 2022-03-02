@@ -5567,7 +5567,7 @@
                 "max": "",
                 "min": "",
                 "name": "stator",
-                "type": "LamSlotWind",
+                "type": "Lamination",
                 "unit": "",
                 "value": ""
             }
@@ -5769,7 +5769,8 @@
         "desc": "Abstract class for synchronous machine",
         "is_internal": false,
         "methods": [
-            "is_synchronous"
+            "is_synchronous",
+            "comp_angle_rotor_initial"
         ],
         "mother": "Machine",
         "name": "MachineSync",

@@ -7,6 +7,7 @@ from ....Functions.labels import STATOR_LAB
 
 def store(self, out_dict, axes_dict):
     """Store the standard outputs of Magnetics that are temporarily in out_dict as arrays into OutMag as Data object
+
     Parameters
     ----------
     self : OutMag
@@ -15,6 +16,7 @@ def store(self, out_dict, axes_dict):
         Dict containing all magnetic quantities that have been calculated in comp_flux_airgap
     axes_dict: {Data}
         Dict of axes used for magnetic calculation
+
     """
 
     # Store axes dict
