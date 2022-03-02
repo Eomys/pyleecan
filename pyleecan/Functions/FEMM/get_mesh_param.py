@@ -40,8 +40,8 @@ def get_mesh_param(label_dict, FEMM_dict):
     if LAM_LAB in label_dict["surf_type"] and STATOR_LAB in label_dict["lam_type"]:
         # Stator Lamination
         if BORE_LAB in label_dict["surf_type"]:
-            mesh_dict["element_size"] = FEMM_dict["elementsize_airgap"]
-            mesh_dict["meshsize"] = FEMM_dict["meshsize_airgap"]
+            mesh_dict["element_size"] = FEMM_dict["elementsize_slotS"]
+            mesh_dict["meshsize"] = FEMM_dict["meshsize_slotS"]
         else:  # Yoke or other lines
             mesh_dict["element_size"] = FEMM_dict["elementsize_yokeS"]
             mesh_dict["meshsize"] = FEMM_dict["meshsize_yokeS"]
@@ -49,8 +49,8 @@ def get_mesh_param(label_dict, FEMM_dict):
     elif LAM_LAB in label_dict["surf_type"] and ROTOR_LAB in label_dict["lam_type"]:
         # Rotor Lamination
         if BORE_LAB in label_dict["surf_type"]:
-            mesh_dict["element_size"] = FEMM_dict["elementsize_airgap"]
-            mesh_dict["meshsize"] = FEMM_dict["meshsize_airgap"]
+            mesh_dict["element_size"] = FEMM_dict["elementsize_slotR"]
+            mesh_dict["meshsize"] = FEMM_dict["meshsize_slotR"]
         else:  # Yoke or other lines
             mesh_dict["element_size"] = FEMM_dict["elementsize_yokeR"]
             mesh_dict["meshsize"] = FEMM_dict["meshsize_yokeR"]
@@ -76,10 +76,7 @@ def get_mesh_param(label_dict, FEMM_dict):
             mesh_dict["meshsize"] = FEMM_dict["meshsize_magnetS"]
             mesh_dict["group"] = FEMM_dict["groups"]["GROUP_SM"]
         else:  # if the Magnet is on the Rotor
-            if MAG_LAB in label_dict["surf_type"]:  # Surface Magnet
-                mesh_dict["element_size"] = FEMM_dict["elementsize_airgap"]
-            else:
-                mesh_dict["element_size"] = FEMM_dict["elementsize_magnetR"]
+            mesh_dict["element_size"] = FEMM_dict["elementsize_magnetR"]
             mesh_dict["meshsize"] = FEMM_dict["meshsize_magnetR"]
             mesh_dict["group"] = FEMM_dict["groups"]["GROUP_RM"]
     elif WIND_LAB in label_dict["surf_type"] or BAR_LAB in label_dict["surf_type"]:
