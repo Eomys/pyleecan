@@ -28,6 +28,10 @@ class _FEMMHandler(object):
         _FEMMHandler_dict["HandleToFEMM"] = None
         return _FEMMHandler_dict
 
+    def compare(self, other, name="self"):
+        """Compare two objects and return list of differences"""
+        return list()
+
     def fixpath(self, myPath):
         return myPath.replace("\\", "/").replace("//", "/")
 
