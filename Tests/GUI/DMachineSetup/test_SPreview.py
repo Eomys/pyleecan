@@ -9,9 +9,10 @@ from PySide2 import QtWidgets
 from Tests import TEST_DATA_DIR as data_test
 from pyleecan.GUI.Dialog.DMachineSetup.DMachineSetup import DMachineSetup
 from pyleecan.GUI.Dialog.DMachineSetup.SPreview.SPreview import SPreview
-from pyleecan.GUI.Dialog.DMatLib.DMatLib import DMatLib
 from pyleecan.definitions import MAIN_DIR
 from pyleecan.Functions.load import load_matlib
+from Tests import TEST_DATA_DIR as data_test, save_gui_path
+
 
 matlib_path = join(data_test, "Material")
 machine_path = join(MAIN_DIR, "Data", "Machine")
@@ -26,7 +27,7 @@ SCIM_dict = {
         ("Topology", "Inner Rotor"),
         ("Stator phase number", "3"),
         ("Stator winding resistance", "0.02392 Ohm"),
-        ("Machine total mass", "328.1 kg"),
+        ("Machine total mass", "342.8 kg"),
     ],
     "Nrow": 8,
 }
@@ -69,7 +70,6 @@ class TestSPreview(object):
         """Exit the app after all the test"""
         cls.app.quit()
 
-    @pytest.mark.skip(reason="Load button open machine selector")
     @pytest.mark.parametrize("test_dict", load_preview_test)
     def test_load(self, test_dict):
         """Check that you can load a machine"""
@@ -95,6 +95,22 @@ class TestSPreview(object):
                 self.widget.w_step.tab_machine.tab_param.item(ii, 1).text()
                 == content[1]
             )
+        # Check Draw FEMM
+        FEMM_dir = join(save_gui_path, "Draw_FEMM")
+        if not isdir(FEMM_dir):
+            makedirs(FEMM_dir)
+        femm_path = join(FEMM_dir, self.widget.machine.name + ".fem")
+        assert not isfile(femm_path)
+
+        return_value = (
+            femm_path,
+            "FEMM (*.fem)",
+        )
+        with mock.patch(
+            "PySide2.QtWidgets.QFileDialog.getSaveFileName", return_value=return_value
+        ):
+            self.widget.w_step.tab_machine.b_FEMM.clicked.emit()
+        assert isfile(femm_path)
 
 
 if __name__ == "__main__":
