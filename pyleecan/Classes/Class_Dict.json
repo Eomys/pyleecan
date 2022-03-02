@@ -4854,7 +4854,6 @@
             "comp_resistance_wind",
             "get_name_phase",
             "comp_angle_d_axis",
-            "comp_wind_function",
             "comp_periodicity_spatial",
             "comp_masses"
         ],
