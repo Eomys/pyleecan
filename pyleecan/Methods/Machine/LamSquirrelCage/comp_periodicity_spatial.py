@@ -3,10 +3,12 @@ from ....Functions.load import import_class
 
 def comp_periodicity_spatial(self):
     """Compute the periodicity factor of the lamination
+
     Parameters
     ----------
     self : LamSquirrelCage
         A LamSquirrelCage object
+
     Returns
     -------
     per_a : int

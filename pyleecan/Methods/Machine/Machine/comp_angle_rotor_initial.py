@@ -12,4 +12,4 @@ def comp_angle_rotor_initial(self):
         rotor initial angle set to 0 [rad]
     """
 
-        return 0
+    return 0
