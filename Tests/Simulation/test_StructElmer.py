@@ -108,7 +108,6 @@ class Test_StructElmer(object):
         machine = MachineSIPMSM()
         machine.stator = machine_1.stator.copy()
         machine.rotor = LamSlotMag()
-        machine.rotor.magnet = None
 
         machine.rotor.Rint = machine_1.rotor.Rint
         machine.rotor.Rext = machine_1.rotor.Rext
