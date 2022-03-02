@@ -54,6 +54,11 @@ class LUT(FrozenClass):
         T1_ref=20,
         OP_matrix=None,
         phase_dir=None,
+        B=None,
+        Phi_wind_stator=None,
+        Tem=None,
+        axes_dict=None,
+        is_interp_along_curve=None,
         init_dict=None,
         init_str=None,
     ):
@@ -82,6 +87,16 @@ class LUT(FrozenClass):
                 OP_matrix = init_dict["OP_matrix"]
             if "phase_dir" in list(init_dict.keys()):
                 phase_dir = init_dict["phase_dir"]
+            if "B" in list(init_dict.keys()):
+                B = init_dict["B"]
+            if "Phi_wind_stator" in list(init_dict.keys()):
+                Phi_wind_stator = init_dict["Phi_wind_stator"]
+            if "Tem" in list(init_dict.keys()):
+                Tem = init_dict["Tem"]
+            if "axes_dict" in list(init_dict.keys()):
+                axes_dict = init_dict["axes_dict"]
+            if "is_interp_along_curve" in list(init_dict.keys()):
+                is_interp_along_curve = init_dict["is_interp_along_curve"]
         # Set the properties (value check and convertion are done in setter)
         self.parent = None
         self.R1 = R1
@@ -89,6 +104,11 @@ class LUT(FrozenClass):
         self.T1_ref = T1_ref
         self.OP_matrix = OP_matrix
         self.phase_dir = phase_dir
+        self.B = B
+        self.Phi_wind_stator = Phi_wind_stator
+        self.Tem = Tem
+        self.axes_dict = axes_dict
+        self.is_interp_along_curve = is_interp_along_curve
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -112,6 +132,13 @@ class LUT(FrozenClass):
             + linesep
         )
         LUT_str += "phase_dir = " + str(self.phase_dir) + linesep
+        LUT_str += "B = " + str(self.B) + linesep + linesep
+        LUT_str += "Phi_wind_stator = " + str(self.Phi_wind_stator) + linesep + linesep
+        LUT_str += "Tem = " + str(self.Tem) + linesep + linesep
+        LUT_str += "axes_dict = " + str(self.axes_dict) + linesep + linesep
+        LUT_str += (
+            "is_interp_along_curve = " + str(self.is_interp_along_curve) + linesep
+        )
         return LUT_str
 
     def __eq__(self, other):
@@ -128,6 +155,16 @@ class LUT(FrozenClass):
         if not array_equal(other.OP_matrix, self.OP_matrix):
             return False
         if other.phase_dir != self.phase_dir:
+            return False
+        if other.B != self.B:
+            return False
+        if other.Phi_wind_stator != self.Phi_wind_stator:
+            return False
+        if other.Tem != self.Tem:
+            return False
+        if other.axes_dict != self.axes_dict:
+            return False
+        if other.is_interp_along_curve != self.is_interp_along_curve:
             return False
         return True
 
@@ -149,6 +186,67 @@ class LUT(FrozenClass):
             diff_list.append(name + ".OP_matrix")
         if other._phase_dir != self._phase_dir:
             diff_list.append(name + ".phase_dir")
+        if (other.B is None and self.B is not None) or (
+            other.B is not None and self.B is None
+        ):
+            diff_list.append(name + ".B None mismatch")
+        elif self.B is None:
+            pass
+        elif len(other.B) != len(self.B):
+            diff_list.append("len(" + name + ".B)")
+        else:
+            for ii in range(len(other.B)):
+                diff_list.extend(
+                    self.B[ii].compare(other.B[ii], name=name + ".B[" + str(ii) + "]")
+                )
+        if (other.Phi_wind_stator is None and self.Phi_wind_stator is not None) or (
+            other.Phi_wind_stator is not None and self.Phi_wind_stator is None
+        ):
+            diff_list.append(name + ".Phi_wind_stator None mismatch")
+        elif self.Phi_wind_stator is None:
+            pass
+        elif len(other.Phi_wind_stator) != len(self.Phi_wind_stator):
+            diff_list.append("len(" + name + ".Phi_wind_stator)")
+        else:
+            for ii in range(len(other.Phi_wind_stator)):
+                diff_list.extend(
+                    self.Phi_wind_stator[ii].compare(
+                        other.Phi_wind_stator[ii],
+                        name=name + ".Phi_wind_stator[" + str(ii) + "]",
+                    )
+                )
+        if (other.Tem is None and self.Tem is not None) or (
+            other.Tem is not None and self.Tem is None
+        ):
+            diff_list.append(name + ".Tem None mismatch")
+        elif self.Tem is None:
+            pass
+        elif len(other.Tem) != len(self.Tem):
+            diff_list.append("len(" + name + ".Tem)")
+        else:
+            for ii in range(len(other.Tem)):
+                diff_list.extend(
+                    self.Tem[ii].compare(
+                        other.Tem[ii], name=name + ".Tem[" + str(ii) + "]"
+                    )
+                )
+        if (other.axes_dict is None and self.axes_dict is not None) or (
+            other.axes_dict is not None and self.axes_dict is None
+        ):
+            diff_list.append(name + ".axes_dict None mismatch")
+        elif self.axes_dict is None:
+            pass
+        elif len(other.axes_dict) != len(self.axes_dict):
+            diff_list.append("len(" + name + "axes_dict)")
+        else:
+            for key in self.axes_dict:
+                diff_list.extend(
+                    self.axes_dict[key].compare(
+                        other.axes_dict[key], name=name + ".axes_dict"
+                    )
+                )
+        if other._is_interp_along_curve != self._is_interp_along_curve:
+            diff_list.append(name + ".is_interp_along_curve")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -162,6 +260,19 @@ class LUT(FrozenClass):
         S += getsizeof(self.T1_ref)
         S += getsizeof(self.OP_matrix)
         S += getsizeof(self.phase_dir)
+        if self.B is not None:
+            for value in self.B:
+                S += getsizeof(value)
+        if self.Phi_wind_stator is not None:
+            for value in self.Phi_wind_stator:
+                S += getsizeof(value)
+        if self.Tem is not None:
+            for value in self.Tem:
+                S += getsizeof(value)
+        if self.axes_dict is not None:
+            for key, value in self.axes_dict.items():
+                S += getsizeof(value) + getsizeof(key)
+        S += getsizeof(self.is_interp_along_curve)
         return S
 
     def as_dict(self, type_handle_ndarray=0, keep_function=False, **kwargs):
@@ -193,6 +304,65 @@ class LUT(FrozenClass):
                     "Unknown type_handle_ndarray: " + str(type_handle_ndarray)
                 )
         LUT_dict["phase_dir"] = self.phase_dir
+        if self.B is None:
+            LUT_dict["B"] = None
+        else:
+            LUT_dict["B"] = list()
+            for obj in self.B:
+                if obj is not None:
+                    LUT_dict["B"].append(
+                        obj.as_dict(
+                            type_handle_ndarray=type_handle_ndarray,
+                            keep_function=keep_function,
+                            **kwargs
+                        )
+                    )
+                else:
+                    LUT_dict["B"].append(None)
+        if self.Phi_wind_stator is None:
+            LUT_dict["Phi_wind_stator"] = None
+        else:
+            LUT_dict["Phi_wind_stator"] = list()
+            for obj in self.Phi_wind_stator:
+                if obj is not None:
+                    LUT_dict["Phi_wind_stator"].append(
+                        obj.as_dict(
+                            type_handle_ndarray=type_handle_ndarray,
+                            keep_function=keep_function,
+                            **kwargs
+                        )
+                    )
+                else:
+                    LUT_dict["Phi_wind_stator"].append(None)
+        if self.Tem is None:
+            LUT_dict["Tem"] = None
+        else:
+            LUT_dict["Tem"] = list()
+            for obj in self.Tem:
+                if obj is not None:
+                    LUT_dict["Tem"].append(
+                        obj.as_dict(
+                            type_handle_ndarray=type_handle_ndarray,
+                            keep_function=keep_function,
+                            **kwargs
+                        )
+                    )
+                else:
+                    LUT_dict["Tem"].append(None)
+        if self.axes_dict is None:
+            LUT_dict["axes_dict"] = None
+        else:
+            LUT_dict["axes_dict"] = dict()
+            for key, obj in self.axes_dict.items():
+                if obj is not None:
+                    LUT_dict["axes_dict"][key] = obj.as_dict(
+                        type_handle_ndarray=type_handle_ndarray,
+                        keep_function=keep_function,
+                        **kwargs
+                    )
+                else:
+                    LUT_dict["axes_dict"][key] = None
+        LUT_dict["is_interp_along_curve"] = self.is_interp_along_curve
         # The class name is added to the dict for deserialisation purpose
         LUT_dict["__class__"] = "LUT"
         return LUT_dict
@@ -205,6 +375,11 @@ class LUT(FrozenClass):
         self.T1_ref = None
         self.OP_matrix = None
         self.phase_dir = None
+        self.B = None
+        self.Phi_wind_stator = None
+        self.Tem = None
+        self.axes_dict = None
+        self.is_interp_along_curve = None
 
     def _get_R1(self):
         """getter of R1"""
@@ -302,5 +477,189 @@ class LUT(FrozenClass):
         :Type: int
         :min: -1
         :max: 1
+        """,
+    )
+
+    def _get_B(self):
+        """getter of B"""
+        if self._B is not None:
+            for obj in self._B:
+                if obj is not None:
+                    obj.parent = self
+        return self._B
+
+    def _set_B(self, value):
+        """setter of B"""
+        if type(value) is list:
+            for ii, obj in enumerate(value):
+                if isinstance(obj, str):  # Load from file
+                    try:
+                        obj = load_init_dict(obj)[1]
+                    except Exception as e:
+                        self.get_logger().error(
+                            "Error while loading " + obj + ", setting None instead"
+                        )
+                        obj = None
+                        value[ii] = None
+                if type(obj) is dict:
+                    class_obj = import_class(
+                        "SciDataTool.Classes", obj.get("__class__"), "B"
+                    )
+                    value[ii] = class_obj(init_dict=obj)
+                if value[ii] is not None:
+                    value[ii].parent = self
+        if value == -1:
+            value = list()
+        check_var("B", value, "[VectorField]")
+        self._B = value
+
+    B = property(
+        fget=_get_B,
+        fset=_set_B,
+        doc=u"""Airgap flux density look-up table: list of VectorField objects whose (Id,Iq) is given by Idq list
+
+        :Type: [SciDataTool.Classes.VectorField.VectorField]
+        """,
+    )
+
+    def _get_Phi_wind_stator(self):
+        """getter of Phi_wind_stator"""
+        if self._Phi_wind_stator is not None:
+            for obj in self._Phi_wind_stator:
+                if obj is not None:
+                    obj.parent = self
+        return self._Phi_wind_stator
+
+    def _set_Phi_wind_stator(self, value):
+        """setter of Phi_wind_stator"""
+        if type(value) is list:
+            for ii, obj in enumerate(value):
+                if isinstance(obj, str):  # Load from file
+                    try:
+                        obj = load_init_dict(obj)[1]
+                    except Exception as e:
+                        self.get_logger().error(
+                            "Error while loading " + obj + ", setting None instead"
+                        )
+                        obj = None
+                        value[ii] = None
+                if type(obj) is dict:
+                    class_obj = import_class(
+                        "SciDataTool.Classes", obj.get("__class__"), "Phi_wind_stator"
+                    )
+                    value[ii] = class_obj(init_dict=obj)
+                if value[ii] is not None:
+                    value[ii].parent = self
+        if value == -1:
+            value = list()
+        check_var("Phi_wind_stator", value, "[DataND]")
+        self._Phi_wind_stator = value
+
+    Phi_wind_stator = property(
+        fget=_get_Phi_wind_stator,
+        fset=_set_Phi_wind_stator,
+        doc=u"""Stator winding flux look-up table: list of DataTime objects whose (Id,Iq) is given by Idq list
+
+        :Type: [SciDataTool.Classes.DataND.DataND]
+        """,
+    )
+
+    def _get_Tem(self):
+        """getter of Tem"""
+        if self._Tem is not None:
+            for obj in self._Tem:
+                if obj is not None:
+                    obj.parent = self
+        return self._Tem
+
+    def _set_Tem(self, value):
+        """setter of Tem"""
+        if type(value) is list:
+            for ii, obj in enumerate(value):
+                if isinstance(obj, str):  # Load from file
+                    try:
+                        obj = load_init_dict(obj)[1]
+                    except Exception as e:
+                        self.get_logger().error(
+                            "Error while loading " + obj + ", setting None instead"
+                        )
+                        obj = None
+                        value[ii] = None
+                if type(obj) is dict:
+                    class_obj = import_class(
+                        "SciDataTool.Classes", obj.get("__class__"), "Tem"
+                    )
+                    value[ii] = class_obj(init_dict=obj)
+                if value[ii] is not None:
+                    value[ii].parent = self
+        if value == -1:
+            value = list()
+        check_var("Tem", value, "[DataND]")
+        self._Tem = value
+
+    Tem = property(
+        fget=_get_Tem,
+        fset=_set_Tem,
+        doc=u"""Instaneous torque look-up table: list of DataTime objects whose (Id,Iq) is given by Idq list
+
+        :Type: [SciDataTool.Classes.DataND.DataND]
+        """,
+    )
+
+    def _get_axes_dict(self):
+        """getter of axes_dict"""
+        if self._axes_dict is not None:
+            for key, obj in self._axes_dict.items():
+                if obj is not None:
+                    obj.parent = self
+        return self._axes_dict
+
+    def _set_axes_dict(self, value):
+        """setter of axes_dict"""
+        if type(value) is dict:
+            for key, obj in value.items():
+                if isinstance(obj, str):  # Load from file
+                    try:
+                        obj = load_init_dict(obj)[1]
+                    except Exception as e:
+                        self.get_logger().error(
+                            "Error while loading " + obj + ", setting None instead"
+                        )
+                        obj = None
+                        value[key] = None
+                if type(obj) is dict:
+                    class_obj = import_class(
+                        "SciDataTool.Classes", obj.get("__class__"), "axes_dict"
+                    )
+                    value[key] = class_obj(init_dict=obj)
+        if type(value) is int and value == -1:
+            value = dict()
+        check_var("axes_dict", value, "{Data}")
+        self._axes_dict = value
+
+    axes_dict = property(
+        fget=_get_axes_dict,
+        fset=_set_axes_dict,
+        doc=u"""Dict containing axes data used for Magnetics
+
+        :Type: {SciDataTool.Classes.DataND.Data}
+        """,
+    )
+
+    def _get_is_interp_along_curve(self):
+        """getter of is_interp_along_curve"""
+        return self._is_interp_along_curve
+
+    def _set_is_interp_along_curve(self, value):
+        """setter of is_interp_along_curve"""
+        check_var("is_interp_along_curve", value, "bool")
+        self._is_interp_along_curve = value
+
+    is_interp_along_curve = property(
+        fget=_get_is_interp_along_curve,
+        fset=_set_is_interp_along_curve,
+        doc=u"""True if interpolation can be performed along curve
+
+        :Type: bool
         """,
     )

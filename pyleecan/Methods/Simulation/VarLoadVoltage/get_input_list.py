@@ -10,7 +10,7 @@ def get_input_list(self):
     ref_simu = self.parent
     assert isinstance(ref_simu.input, InputVoltage)
 
-    OP_matrix = self.get_OP_matrix()
+    OP_matrix = self.OP_matrix
     N_simu = OP_matrix.shape[0]
 
     # Generate initial input_list

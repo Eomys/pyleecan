@@ -81,9 +81,7 @@ def comp_parameters(
     # Stator flux linkage only due to permanent magnets
     if "Phid_mag" not in eec_param or "Phiq_mag" not in eec_param:
         if is_LUT:
-            Phi_dqh_mag_mean = LUT.get_Phidqh_mag_mean(
-                is_skew=machine.rotor.skew is not None
-            )
+            Phi_dqh_mag_mean = LUT.get_Phidqh_mag_mean()
         else:
             Phi_dqh_mag_mean = self.fluxlink.comp_fluxlinkage(machine)
         eec_param["Phid_mag"] = float(Phi_dqh_mag_mean[0])

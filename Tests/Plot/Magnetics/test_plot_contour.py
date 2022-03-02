@@ -23,7 +23,7 @@ from Tests import save_plot_path as save_path
 def test_SPMSM015_plot_contour_B_FEMM():
     """Validation of the implementaiton of periodic angle axis in Magnetic (MagFEMM) and Force (ForceMT) modules"""
 
-    SPMSM_015 = load(join(DATA_DIR, "Machine", "Validation", "SPMSM_015.json"))
+    SPMSM_015 = load(join(DATA_DIR, "Machine", "SPMSM_015.json"))
 
     simu = Simu1(name="test_plot_contour_SPMSM_015", machine=SPMSM_015)
 

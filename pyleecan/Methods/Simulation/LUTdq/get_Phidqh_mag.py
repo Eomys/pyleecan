@@ -7,7 +7,6 @@ def get_Phidqh_mag(self):
     ----------
     self : LUTdq
         a LUTdq object
-
     Returns
     ----------
     Phi_dqh_mag : DataND

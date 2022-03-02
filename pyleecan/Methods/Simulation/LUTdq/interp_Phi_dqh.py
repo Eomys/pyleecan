@@ -12,7 +12,6 @@ def interp_Phi_dqh(self, Id, Iq):
         current Id
     Iq : float or ndarray
         current Iq
-
     Returns
     ----------
     Phi_dqh : ndarray
@@ -21,6 +20,7 @@ def interp_Phi_dqh(self, Id, Iq):
 
     # Compute interpolant at first call
     if self.Phi_dqh_interp is None:
+
         # Calculate average value of dqh flux linkage
         Phi_dqh_mean = self.get_Phidqh_mean()
 
