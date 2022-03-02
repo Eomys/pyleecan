@@ -409,7 +409,7 @@ def test_save_load_simu(type_file):
 
     # Definition of the magnetic simulation (no symmetry)
     simu.mag = MagFEMM(
-        type_BH_stator=2, type_BH_rotor=0, is_periodicity_a=True, is_sliding_band=False
+        type_BH_stator=2, type_BH_rotor=0, is_periodicity_a=True, is_sliding_band=True
     )
     simu.force = None
     simu.struct = None
@@ -432,8 +432,8 @@ def test_save_load_simu(type_file):
 
 
 if __name__ == "__main__":
-    test_save_load_DXF_flat()
-    print("Done")
-    # test_save_load_simu("json")
+    # test_save_load_DXF_flat()
+    test_save_load_simu("json")
     # test_save_load_simu("h5")
     # test_save_load_simu("pkl")
+    print("Done")
