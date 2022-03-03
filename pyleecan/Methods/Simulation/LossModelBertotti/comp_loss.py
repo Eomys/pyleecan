@@ -80,7 +80,7 @@ def comp_loss(self, output, part_label):
         LossDens, LossDensComps = self.comp_loss_density(meshsolution)
 
         # compute sum over frequencies
-        axes_list = [axis.name for axis in LossDens.axes]
+        axes_list = [axis.name for axis in LossDens.axes if axis.name != "z"]
         freqs_idx = axes_list.index("freqs")
 
         loss_dens_freq_sum = LossDens.get_along(*axes_list)["LossDens"].sum(
@@ -89,7 +89,9 @@ def comp_loss(self, output, part_label):
 
         time = Data1D(name="time", unit="", values=array([0, 1]))
         # time = Data1D(name="time", unit="", values=array([0]), ) # TODO squeeze issue
-        axes = [axis for axis in LossDens.axes if axis.name not in ["time", "freqs"]]
+        axes = [
+            axis for axis in LossDens.axes if axis.name not in ["time", "freqs", "z"]
+        ]
 
         # TODO utilize periodicity or use DataFreqs to reduce memory usage
         LossDensSum = DataTime(

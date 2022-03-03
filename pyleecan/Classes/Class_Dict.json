@@ -923,6 +923,15 @@
                 "type": "",
                 "unit": "-",
                 "value": null
+            },
+            {
+                "desc": "Physic of the tracked quantity",
+                "max": "",
+                "min": "",
+                "name": "physic",
+                "type": "str",
+                "unit": "-",
+                "value": "None"
             }
         ]
     },
@@ -1048,6 +1057,15 @@
                 "type": "Drive",
                 "unit": "-",
                 "value": null
+            },
+            {
+                "desc": "Skin effect for resistance and inductance",
+                "max": "",
+                "min": "",
+                "name": "type_skin_effect",
+                "type": "int",
+                "unit": "-",
+                "value": 1
             }
         ]
     },
@@ -1251,15 +1269,6 @@
                 "type": "str",
                 "unit": "-",
                 "value": "Pyleecan.Electrical"
-            },
-            {
-                "desc": "Skin effect for resistance and inductance",
-                "max": "",
-                "min": "",
-                "name": "type_skin_effect",
-                "type": "int",
-                "unit": "-",
-                "value": 0
             },
             {
                 "desc": "Average stator temperature for operational EEC calculation",
@@ -4605,7 +4614,8 @@
             "get_bore_desc",
             "set_pole_pair_number",
             "comp_angle_d_axis",
-            "get_surfaces_closing"
+            "get_surfaces_closing",
+            "has_magnet"
         ],
         "mother": "Lamination",
         "name": "LamSlot",
@@ -4843,7 +4853,9 @@
             "comp_surface_ring",
             "comp_resistance_wind",
             "get_name_phase",
-            "comp_angle_d_axis"
+            "comp_angle_d_axis",
+            "comp_periodicity_spatial",
+            "comp_masses"
         ],
         "mother": "LamSlotWind",
         "name": "LamSquirrelCage",
@@ -5554,7 +5566,7 @@
                 "max": "",
                 "min": "",
                 "name": "stator",
-                "type": "LamSlotWind",
+                "type": "Lamination",
                 "unit": "",
                 "value": ""
             }
@@ -5756,7 +5768,8 @@
         "desc": "Abstract class for synchronous machine",
         "is_internal": false,
         "methods": [
-            "is_synchronous"
+            "is_synchronous",
+            "comp_angle_rotor_initial"
         ],
         "mother": "Machine",
         "name": "MachineSync",
@@ -7627,7 +7640,9 @@
             "set_Id_Iq",
             "get_I0_Phi0",
             "set_Ud_Uq",
-            "set_I0_Phi0"
+            "set_I0_Phi0",
+            "get_U0_UPhi0",
+            "set_U0_UPhi0"
         ],
         "mother": "OP",
         "name": "OPdq",
@@ -7691,7 +7706,9 @@
             "get_I0_Phi0",
             "get_slip",
             "set_I0_Phi0",
-            "set_Ud_Uq"
+            "set_Ud_Uq",
+            "get_U0_UPhi0",
+            "set_U0_UPhi0"
         ],
         "mother": "OP",
         "name": "OPslip",
@@ -8696,7 +8713,8 @@
             "comp_emf",
             "comp_power",
             "get_demag",
-            "store"
+            "store",
+            "comp_torque_MT"
         ],
         "mother": "",
         "name": "OutMag",
@@ -8855,6 +8873,15 @@
                 "type": "{SciDataTool.Classes.DataND.DataND}",
                 "unit": "Wb/m",
                 "value": "None"
+            },
+            {
+                "desc": "Torque normalization",
+                "max": "",
+                "min": "",
+                "name": "Tem_norm",
+                "type": "float",
+                "unit": "N.m",
+                "value": 0.001
             }
         ]
     },
@@ -13713,9 +13740,9 @@
         "desc": "Generate a multisimulation with InputCurrent at variable operating point",
         "is_internal": false,
         "methods": [
-            "get_input_list",
             "generate_simulation_list",
-            "get_elec_datakeeper"
+            "get_elec_datakeeper",
+            "get_input_list"
         ],
         "mother": "VarLoad",
         "name": "VarLoadCurrent",

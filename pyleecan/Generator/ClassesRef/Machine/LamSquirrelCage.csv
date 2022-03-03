@@ -8,3 +8,5 @@ ring_mat,,Material of the Rotor short circuit ring,,Material,,,,,,,comp_length_r
 ,,,,,,,,,,,comp_resistance_wind,,,
 ,,,,,,,,,,,get_name_phase,,,
 ,,,,,,,,,,,comp_angle_d_axis,,,
+,,,,,,,,,,,comp_periodicity_spatial,,,
+,,,,,,,,,,,comp_masses,,,

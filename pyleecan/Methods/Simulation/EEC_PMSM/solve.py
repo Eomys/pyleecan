@@ -2,7 +2,7 @@ from numpy import array, pi
 import numpy.linalg as np_lin
 
 
-def solve(self, out_dict=None):
+def solve(self, eec_param):
     """Compute the parameters dict for the equivalent electrical circuit
     cf "Advanced Electrical Drives, analysis, modeling, control"
     Rik de doncker, Duco W.J. Pulle, Andre Veltman, Springer edition
@@ -28,46 +28,43 @@ def solve(self, out_dict=None):
         Dict containing all magnetic quantities that have been calculated in EEC
     """
 
-    par = self.parameters
+    out_dict = {"eec_param": eec_param}
 
-    ws = 2 * pi * par["felec"]
+    ws = 2 * pi * eec_param["felec"]
 
-    if out_dict is None:
-        out_dict = dict()
-
-    if "Ud" in par and par["Ud"] is not None:
+    if "Ud" in eec_param and eec_param["Ud"] is not None:
         # Voltage driven
         # Impedance matrix
         XR = array(
             [
-                [par["R1"], -ws * par["Lq"]],
-                [ws * par["Ld"], par["R1"]],
+                [eec_param["R1"], -ws * eec_param["Lq"]],
+                [ws * eec_param["Ld"], eec_param["R1"]],
             ]
         )
         # Back emf array
-        if "Phid_mag" in par:
-            XE = array([-ws * par["Phiq_mag"], ws * par["Phid_mag"]])
+        if "Phid_mag" in eec_param:
+            XE = array([-ws * eec_param["Phiq_mag"], ws * eec_param["Phid_mag"]])
         else:
             XE = array([0, 0])
         # Voltage array
-        XU = array([par["Ud"], par["Uq"]])
+        XU = array([eec_param["Ud"], eec_param["Uq"]])
         # Solve system to get current array
         XI = np_lin.solve(XR, XU - XE)
 
         # Store values in out_dict
         out_dict["Id"] = XI[0]
         out_dict["Iq"] = XI[1]
-        out_dict["Ud"] = par["Ud"]
-        out_dict["Uq"] = par["Uq"]
+        out_dict["Ud"] = eec_param["Ud"]
+        out_dict["Uq"] = eec_param["Uq"]
 
-    elif "Id" in par and par["Id"] is not None:
+    elif "Id" in eec_param and eec_param["Id"] is not None:
         # Current Driven
-        Ud = par["R1"] * par["Id"] - ws * par["Phiq"]
-        Uq = par["R1"] * par["Iq"] + ws * par["Phid"]
+        Ud = eec_param["R1"] * eec_param["Id"] - ws * eec_param["Phiq"]
+        Uq = eec_param["R1"] * eec_param["Iq"] + ws * eec_param["Phid"]
         out_dict["Ud"] = Ud
         out_dict["Uq"] = Uq
-        out_dict["Id"] = par["Id"]
-        out_dict["Iq"] = par["Iq"]
+        out_dict["Id"] = eec_param["Id"]
+        out_dict["Iq"] = eec_param["Iq"]
 
     else:
         raise Exception("Cannot solve EEC if both voltage or current are not given")

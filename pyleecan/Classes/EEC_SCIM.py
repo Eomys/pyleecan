@@ -142,6 +142,7 @@ class EEC_SCIM(EEC):
         parameters=None,
         LUT_enforced=None,
         drive=None,
+        type_skin_effect=1,
         init_dict=None,
         init_str=None,
     ):
@@ -178,6 +179,8 @@ class EEC_SCIM(EEC):
                 LUT_enforced = init_dict["LUT_enforced"]
             if "drive" in list(init_dict.keys()):
                 drive = init_dict["drive"]
+            if "type_skin_effect" in list(init_dict.keys()):
+                type_skin_effect = init_dict["type_skin_effect"]
         # Set the properties (value check and convertion are done in setter)
         self.I = I
         self.is_periodicity_a = is_periodicity_a
@@ -187,7 +190,10 @@ class EEC_SCIM(EEC):
         self.Nrev = Nrev
         # Call EEC init
         super(EEC_SCIM, self).__init__(
-            parameters=parameters, LUT_enforced=LUT_enforced, drive=drive
+            parameters=parameters,
+            LUT_enforced=LUT_enforced,
+            drive=drive,
+            type_skin_effect=type_skin_effect,
         )
         # The class is frozen (in EEC init), for now it's impossible to
         # add new properties

@@ -188,9 +188,13 @@ def draw_FEMM(
                 )
             )
         else:
-            other_surf_list.extend(
-                get_airgap_surface(lam_int=lam_list[ii], lam_ext=lam_list[ii + 1])
+            surf_list_ag, point_ref_ag = get_airgap_surface(
+                lam_int=lam_list[ii],
+                lam_ext=lam_list[ii + 1],
+                sym=sym,
             )
+            other_surf_list.extend(surf_list_ag)
+            # FEMM_dict["point_ref_ag"] = point_ref_ag Unused
 
     # Draw the surfaces not related to lamination
     draw_FEMM_surfaces(

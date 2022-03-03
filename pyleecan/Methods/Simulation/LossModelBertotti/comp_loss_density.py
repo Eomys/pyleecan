@@ -37,9 +37,10 @@ def comp_loss_density(self, meshsolution):
     HY, ED, EX = None, None, None
     for component in sol.field.components.values():
         axes_names = ["freqs" if x.name == "time" else x.name for x in component.axes]
+        axes_names2 = [name for name in axes_names if name != "z"]
 
         # TODO add filter function to limit max. order of harmonics
-        mag_dict = component.get_magnitude_along(*axes_names)
+        mag_dict = component.get_magnitude_along(*axes_names2)
         symbol = component.symbol
 
         # TODO better data check (axis size, ...)
@@ -64,6 +65,7 @@ def comp_loss_density(self, meshsolution):
     # setup loss density data
     Freq = Data1D(name="freqs", unit="", values=freqs)
     axes = [Freq if x.name == "time" else x for x in component.axes]
+    axes2 = [x for x in axes if x.name != "z"]
 
     loss_density = DataFreq(
         name="Loss Density", unit="W/kg", symbol="LossDens", axes=axes, values=loss
@@ -76,7 +78,7 @@ def comp_loss_density(self, meshsolution):
         values=["Hysteresis", "Eddy", "Excess"],
         is_components=True,
     )
-    axes = [axis.copy() for axis in axes]
+    axes = [axis.copy() for axis in axes2]
     axes.append(Comps)
 
     comps_data = stack([HY, ED, EX], axis=len(axes) - 1)

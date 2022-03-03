@@ -98,7 +98,6 @@ class Electrical(FrozenClass):
         self,
         eec=None,
         logger_name="Pyleecan.Electrical",
-        type_skin_effect=0,
         Tsta=20,
         Trot=20,
         Tmag=20,
@@ -125,8 +124,6 @@ class Electrical(FrozenClass):
                 eec = init_dict["eec"]
             if "logger_name" in list(init_dict.keys()):
                 logger_name = init_dict["logger_name"]
-            if "type_skin_effect" in list(init_dict.keys()):
-                type_skin_effect = init_dict["type_skin_effect"]
             if "Tsta" in list(init_dict.keys()):
                 Tsta = init_dict["Tsta"]
             if "Trot" in list(init_dict.keys()):
@@ -139,7 +136,6 @@ class Electrical(FrozenClass):
         self.parent = None
         self.eec = eec
         self.logger_name = logger_name
-        self.type_skin_effect = type_skin_effect
         self.Tsta = Tsta
         self.Trot = Trot
         self.Tmag = Tmag
@@ -162,7 +158,6 @@ class Electrical(FrozenClass):
         else:
             Electrical_str += "eec = None" + linesep + linesep
         Electrical_str += 'logger_name = "' + str(self.logger_name) + '"' + linesep
-        Electrical_str += "type_skin_effect = " + str(self.type_skin_effect) + linesep
         Electrical_str += "Tsta = " + str(self.Tsta) + linesep
         Electrical_str += "Trot = " + str(self.Trot) + linesep
         Electrical_str += "Tmag = " + str(self.Tmag) + linesep
@@ -177,8 +172,6 @@ class Electrical(FrozenClass):
         if other.eec != self.eec:
             return False
         if other.logger_name != self.logger_name:
-            return False
-        if other.type_skin_effect != self.type_skin_effect:
             return False
         if other.Tsta != self.Tsta:
             return False
@@ -206,8 +199,6 @@ class Electrical(FrozenClass):
             diff_list.extend(self.eec.compare(other.eec, name=name + ".eec"))
         if other._logger_name != self._logger_name:
             diff_list.append(name + ".logger_name")
-        if other._type_skin_effect != self._type_skin_effect:
-            diff_list.append(name + ".type_skin_effect")
         if other._Tsta != self._Tsta:
             diff_list.append(name + ".Tsta")
         if other._Trot != self._Trot:
@@ -226,7 +217,6 @@ class Electrical(FrozenClass):
         S = 0  # Full size of the object
         S += getsizeof(self.eec)
         S += getsizeof(self.logger_name)
-        S += getsizeof(self.type_skin_effect)
         S += getsizeof(self.Tsta)
         S += getsizeof(self.Trot)
         S += getsizeof(self.Tmag)
@@ -254,7 +244,6 @@ class Electrical(FrozenClass):
                 **kwargs
             )
         Electrical_dict["logger_name"] = self.logger_name
-        Electrical_dict["type_skin_effect"] = self.type_skin_effect
         Electrical_dict["Tsta"] = self.Tsta
         Electrical_dict["Trot"] = self.Trot
         Electrical_dict["Tmag"] = self.Tmag
@@ -269,7 +258,6 @@ class Electrical(FrozenClass):
         if self.eec is not None:
             self.eec._set_None()
         self.logger_name = None
-        self.type_skin_effect = None
         self.Tsta = None
         self.Trot = None
         self.Tmag = None
@@ -324,24 +312,6 @@ class Electrical(FrozenClass):
         doc=u"""Name of the logger to use
 
         :Type: str
-        """,
-    )
-
-    def _get_type_skin_effect(self):
-        """getter of type_skin_effect"""
-        return self._type_skin_effect
-
-    def _set_type_skin_effect(self, value):
-        """setter of type_skin_effect"""
-        check_var("type_skin_effect", value, "int")
-        self._type_skin_effect = value
-
-    type_skin_effect = property(
-        fget=_get_type_skin_effect,
-        fset=_set_type_skin_effect,
-        doc=u"""Skin effect for resistance and inductance
-
-        :Type: int
         """,
     )
 

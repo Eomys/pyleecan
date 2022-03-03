@@ -159,7 +159,7 @@ class WMachineTable(Ui_WMachineTable, QWidget):
             # Set the current
             update_FEMM_simulation(
                 femm=femm,
-                circuits=FEMM_dict["circuits"],
+                FEMM_dict=FEMM_dict,
                 is_sliding_band=True,
                 is_internal_rotor=self.machine.rotor.is_internal,
                 angle_rotor=[alpha],

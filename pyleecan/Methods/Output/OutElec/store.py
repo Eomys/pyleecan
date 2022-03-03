@@ -1,4 +1,4 @@
-from numpy import insert, where, abs as np_abs, argsort, array, exp, pi, arange
+import numpy as np
 
 from SciDataTool import DataFreq, Data1D
 
@@ -17,7 +17,10 @@ def store(self, out_dict):
 
     """
 
-    # Store Id, Iq, Ud, Uq
+    # Store electrical circuit parameters
+    self.eec_param = out_dict["eec_param"]
+
+    # Store Id, Iq, Ud, Uq in OP
     self.OP.set_Id_Iq(Id=out_dict["Id"], Iq=out_dict["Iq"])
     self.OP.set_Ud_Uq(Ud=out_dict["Ud"], Uq=out_dict["Uq"])
 
@@ -25,17 +28,33 @@ def store(self, out_dict):
     self.Tem_av_ref = out_dict["Tem_av_ref"]
     self.Pem_av_ref = out_dict["Pem_av_ref"]
 
-    if "Ir" in out_dict:
+    if "Ir" in out_dict and self.OP.get_slip() > 0:
+        output = self.parent
         # Calculate rotor currents for each bar
-        p = self.parent.simu.machine.get_pole_pair_number()
-        rotor_lab = self.parent.simu.machine.rotor.get_label()
+        p = output.simu.machine.get_pole_pair_number()
+        Zr = output.simu.machine.rotor.get_Zs()
+        rotor_lab = output.simu.machine.rotor.get_label()
         Phase = self.axes_dict["phase_" + rotor_lab]
 
         Time = self.axes_dict["time"]
 
         angle_bars = Phase.get_values(is_smallestperiod=True)
 
-        Ir = out_dict["Ir"] * exp(1j * p * angle_bars)
+        phase_dir = output.elec.phase_dir
+        d_angle = output.simu.machine.stator.comp_angle_d_axis()
+
+        # Get rotor current fundamental given by EEC
+        if phase_dir == -1:
+            Ir_fund = np.conj(out_dict["Ir"])
+        else:
+            Ir_fund = out_dict["Ir"]
+        # Get phase angle of stator mmf fundamental
+        phimax = 2 * np.pi - p * d_angle
+        # Mechanical phase of first bar: q-axis phase + half of rotor slot pitch
+        PhiMech = phimax + np.pi / 2 + p * np.pi / Zr
+
+        Ir_val = np.zeros((2, angle_bars.size), dtype=complex)
+        Ir_val[1, :] = Ir_fund * np.exp(-phase_dir * 1j * (p * angle_bars + PhiMech))
 
         felec_rot = self.OP.get_felec() * self.OP.get_slip()
 
@@ -46,9 +65,9 @@ def store(self, out_dict):
 
         Freqs = Data1D(
             name="freqs",
-            symbol="Freqs_PWM.symbol",
+            symbol="",
             unit="Hz",
-            values=array([felec_rot]),
+            values=np.array([0, felec_rot]),
             normalizations=norm_freq,
         )
 
@@ -57,12 +76,16 @@ def store(self, out_dict):
             unit="A",
             symbol="Ir",
             axes=[Freqs, Phase],
-            values=Ir[:, None],
+            values=Ir_val,
         )
 
-        # self.Ir.plot_2D_Data(
-        #     "time=axis_data", "phase[0,1,2]", axis_data={"time": Time.get_values()}
+        # Ir = self.Ir.get_data_along(
+        #     "time=axis_data",
+        #     "phase[smallestperiod]",
+        #     axis_data={"time": Time.get_values()},
         # )
+
+        # Ir.plot_3D_Data("time", "phase", is_shading_flat=True)
 
     if "Is_PWM" in out_dict:
         # Merge current PWM harmonics with fundamental current
@@ -75,14 +98,14 @@ def store(self, out_dict):
         Is_fund = Is.get_along("freqs=" + str(self.OP.felec), "phase")[Is.symbol]
         # Get PWM frequency vector
         freqs = Is_PWM.axes[0].get_values()
-        Ifund = where(np_abs(freqs - self.OP.felec) < 1e-4)[0]
+        Ifund = np.where(np.abs(freqs - self.OP.felec) < 1e-4)[0]
         if Ifund.size == 0:
             # Add felec at the first place
-            freqs = insert(freqs, 0, self.OP.felec, axis=0)
+            freqs = np.insert(freqs, 0, self.OP.felec, axis=0)
             # Add fundamental values
-            Is_val = insert(Is_PWM.values, 0, Is_fund, axis=0)
+            Is_val = np.insert(Is_PWM.values, 0, Is_fund, axis=0)
             # Store values in Is
-            Isort = argsort(freqs)
+            Isort = np.argsort(freqs)
             Is.axes[0].values = freqs[Isort]
             Is.values = Is_val[Isort, :]
         else:

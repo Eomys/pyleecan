@@ -3,8 +3,8 @@
 from ...Classes.LamHole import LamHole
 from ...Classes.LamSlotMag import LamSlotMag
 from ...Classes.MachineSIPMSM import MachineSIPMSM
-from ...Functions.FEMM import acsolver, pbtype, precision, minangle
 from ...Functions.FEMM import FEMM_GROUPS
+from ...Functions.FEMM import acsolver, pbtype, precision, minangle
 from ...Functions.labels import ROTOR_LAB
 
 

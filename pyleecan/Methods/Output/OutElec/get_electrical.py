@@ -76,7 +76,12 @@ def get_electrical(
             DataClass = DataFreq
         else:
             N = Time.get_length(is_smallestperiod=True)
-            axes_list = [Time, Phase]
+            Time_bis = Time.copy()
+            is_aper = False
+            if "antiperiod" in Time_bis.symmetries:
+                is_aper = True
+                Time_bis.symmetries["period"] = Time_bis.symmetries.pop("antiperiod")
+            axes_list = [Time_bis, Phase]
             DataClass = DataTime
 
         # Generate quantity according to Ad/Aq, Ah=0
@@ -115,6 +120,10 @@ def get_electrical(
             )
         else:
             obj = dqh2n_DataTime(A_dqh, n=qs, is_n_rms=False, phase_dir=self.phase_dir)
+            if is_aper:
+                obj.axes[0].symmetries["antiperiod"] = obj.axes[0].symmetries.pop(
+                    "period"
+                )
 
     else:
 
