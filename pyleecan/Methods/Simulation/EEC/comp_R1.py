@@ -14,6 +14,7 @@ def comp_R1(self, R1_ref=None, T_ref=None):
 
     if R1_ref is None:
         # Compute at correct temperature
+        machine = self.get_machine_from_parent()
         R1_ref = machine.stator.comp_resistance_wind(T=self.Tsta)
     elif T_ref is None:
         # Assume that the reference match EEC temperature (should not happend)

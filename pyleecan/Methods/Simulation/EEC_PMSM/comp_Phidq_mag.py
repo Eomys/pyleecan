@@ -16,5 +16,5 @@ def comp_Phidq_mag(self, OP_ref=None):
         machine=self.get_machine_from_parent()
     )
 
-    self.Phid = float(Phi_dqh_mag_mean[0])
-    self.Phiq = float(Phi_dqh_mag_mean[1])
+    self.Phid_mag = float(Phi_dqh_mag_mean[0])
+    self.Phiq_mag = float(Phi_dqh_mag_mean[1])

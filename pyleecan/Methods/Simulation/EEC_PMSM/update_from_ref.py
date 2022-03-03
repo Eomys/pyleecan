@@ -1,30 +1,44 @@
-def update_from_ref(self, EEC_ref):
+def update_from_ref(self, LUT_ref):
     """Compute the stator winding inductance along d-axis for the equivalent electrical circuit
 
     Parameters
     ----------
     self : EEC_PMSM
         an EEC_PMSM object
-    EEC_ref : EEC_PMSM
-        reference EEC_PMSM object
+    LUT_ref : LUTdq
+        a LUTdq object
 
     """
 
     # Update skin effect
     self.comp_skin_effect()
 
+    eec_ref = LUT_ref.eec
+    Tsta_ref, Trot_ref = eec_ref.Tsta, eec_ref.Trot
+    Xkr_skinS_ref, Xke_skinS_ref = eec_ref.Xkr_skinS, eec_ref.Xke_skinS
+    Xkr_skinR_ref, Xke_skinR_ref = eec_ref.Xkr_skinR, eec_ref.Xke_skinS
+
     # Update stator winding resistance
-    R1_ref = EEC_ref.R1 / EEC_ref.Xkr_skinS
-    self.comp_R1(R1_ref=R1_ref, T_ref=EEC_ref.Tsta)
+    if eec_ref.R1 is None:
+        self.comp_R1()
+    else:
+        self.comp_R1(R1_ref=eec_ref.R1 / Xkr_skinS_ref, T_ref=Tsta_ref)
 
     # Update stator winding flux in open-circuit
-    self.comp_Phidq_mag()
+    Phi_dqh_mag = LUT_ref.get_Phidqh_mag_mean()
+    self.Phid = Phi_dqh_mag[0]
+    self.Phiq = Phi_dqh_mag[1]
 
     # Compute stator winding flux
-    self.comp_Phidq()
+    Phi_dqh = LUT_ref.interp_Phi_dqh(
+        Id=self.OP.get_Id_Iq()["Id"], Iq=self.OP.get_Id_Iq()["Iq"]
+    )
+    self.Phid = Phi_dqh[0]
+    self.Phiq = Phi_dqh[1]
 
-    # Compute stator winding inductance along d-axis
-    self.comp_Ld()
-
-    # Compute stator winding inductance along q-axis
-    self.comp_Lq()
+    # Compute stator winding inductance
+    Ldqh = LUT_ref.get_Ldqh(
+        Id=self.OP.get_Id_Iq()["Id"], Iq=self.OP.get_Id_Iq()["Iq"], Phi_dqh=Phi_dqh
+    )
+    self.Ld = Ldqh[0]
+    self.Lq = Ldqh[1]
