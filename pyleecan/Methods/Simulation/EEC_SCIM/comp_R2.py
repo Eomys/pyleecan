@@ -17,7 +17,7 @@ def comp_R2(self, R2_ref=None, T_ref=None):
         machine = self.get_machine_from_parent()
         R2_ref = machine.rotor.comp_resistance_wind(T=self.Trot)
         # putting resistance on stator side in EEC
-        if self.self.K21Z is None:
+        if self.K21Z is None:
             self.comp_K21()
         R2_ref = R2_ref * self.K21Z
     elif T_ref is None:

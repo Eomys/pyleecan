@@ -41,24 +41,32 @@ def run(self):
                 "Cannot run Electrical model if machine is PMSM and eec is not EEC_PMSM"
             )
 
-    if self.LUT is not None:
-        eec = self.LUT.get_eec(Tsa=self.Tsta)
+    # Initialize all the parameters of the EEC
+    eec_out = self.eec.copy()  # Keep reference
+    output.elec.eec = eec_out  # For parent setup
+    # EEC will be computed on:
+    eec_out.Tsta = self.Tsta
+    eec_out.Trot = self.Trot
+    eec_out.OP = self.OP
 
-    # Compute parameters of the electrical equivalent circuit if some parameters are missing in ELUT
-    eec_param = self.eec.comp_parameters(
-        machine, OP=output.elec.OP, Tsta=self.Tsta, Trot=self.Trot
-    )
+    # LUT should contains a full EEC at given OP/T
+    if self.LUT is not None:
+        eec_out.clear_parameters()  # Remove eec enforced parameters to use LUT ones
+        eec_out.update_from_ref(self.LUT)
+    else:
+        # Compute/Enforce parameters of the electrical equivalent circuit
+        eec_out.comp_parameters()
 
     if output.elec.PWM is None:
         # Solve the electrical equivalent circuit for fundamental only
-        out_dict = self.eec.solve(eec_param)
+        out_dict = eec_out.solve()
     else:
         # Generate voltage signal (PWM signal generation is the only strategy for now)
         if output.elec.PWM.U0 is None:
             # Current driven mode
             # Solve the electrical equivalent circuit for fundamental current
             # to get fundamental phase voltage
-            out_dict = self.eec.solve(eec_param)
+            out_dict = eec_out.solve()
             U0c = out_dict["Ud"] + 1j * out_dict["Uq"]
             output.elec.PWM.U0 = abs(U0c)
             output.elec.PWM.Phi0 = angle(U0c)
@@ -73,13 +81,13 @@ def run(self):
 
             # Solve the electrical equivalent circuit for fundamental voltage
             # to get fundamental current
-            out_dict = self.eec.solve(eec_param)
+            out_dict = eec_out.solve()
 
         # Solve for each voltage harmonics in case of PWM
-        out_dict["Is_PWM"] = self.eec.solve_PWM(output, eec_param)
+        out_dict["Is_PWM"] = eec_out.solve_PWM(output)
 
     # Compute losses due to Joule effects
-    out_dict = self.eec.comp_joule_losses(out_dict, machine)
+    out_dict = eec_out.comp_joule_losses(out_dict, machine)
 
     # Compute electromagnetic power
     out_dict = self.comp_power(out_dict, machine)

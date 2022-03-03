@@ -22,6 +22,7 @@ def comp_parameters(self):
     # Check that OP and temperature are set
     assert self.OP is not None
     assert self.Tsta is not None
+    assert self.Trot is not None
 
     # Update skin effect
     self.comp_skin_effect()
@@ -51,5 +52,5 @@ def comp_parameters(self):
         self.comp_L2()
 
     # check if inductances have to be calculated
-    if self.Phi_m is None or self.I_m is None:
-        raise Exception("Phi_m and I_m must be enforced for EEC_SCIM")
+    if self.Lm_table is None or self.Im_table is None:
+        raise Exception("Lm_table and Im_table must be enforced for EEC_SCIM")

@@ -1179,7 +1179,7 @@
             "comp_Lq",
             "comp_Phidq",
             "comp_Phidq_mag",
-            "update"
+            "update_from_ref"
         ],
         "mother": "EEC",
         "name": "EEC_PMSM",
@@ -1271,13 +1271,18 @@
         "desc": "Electric module: Electrical Equivalent Circuit for Squirrel Cage Induction Machine",
         "is_internal": false,
         "methods": [
-            "comp_parameters",
-            "solve",
-            "comp_joule_losses",
-            "solve_elementary",
             "_comp_flux_mean",
             "_comp_Lm_FEA",
-            "comp_skin_effect"
+            "clear_parameters",
+            "comp_joule_losses",
+            "comp_K21",
+            "comp_L1",
+            "comp_L2",
+            "comp_parameters",
+            "comp_R2",
+            "comp_skin_effect",
+            "solve",
+            "solve_elementary"
         ],
         "mother": "EEC",
         "name": "EEC_SCIM",
@@ -1285,57 +1290,12 @@
         "path": "pyleecan/Generator/ClassesRef/Simulation/EEC_SCIM.csv",
         "properties": [
             {
-                "desc": "Stator phase current",
+                "desc": "Iron loss resistance",
                 "max": "",
                 "min": "",
-                "name": "I1",
+                "name": "Rfe",
                 "type": "float",
-                "unit": "Arms",
-                "value": null
-            },
-            {
-                "desc": "Rotor phase current",
-                "max": "",
-                "min": "",
-                "name": "I2",
-                "type": "float",
-                "unit": "Arms",
-                "value": null
-            },
-            {
-                "desc": "Magnetizing current",
-                "max": "",
-                "min": "",
-                "name": "Im",
-                "type": "float",
-                "unit": "Arms",
-                "value": null
-            },
-            {
-                "desc": "Iron loss current",
-                "max": "",
-                "min": "",
-                "name": "If",
-                "type": "float",
-                "unit": "Arms",
-                "value": null
-            },
-            {
-                "desc": "Stator phase voltage",
-                "max": "",
-                "min": "",
-                "name": "U1",
-                "type": "float",
-                "unit": "Vrms",
-                "value": null
-            },
-            {
-                "desc": "Rotor phase voltage",
-                "max": "",
-                "min": "",
-                "name": "U2",
-                "type": "float",
-                "unit": "Vrms",
+                "unit": "Ohm",
                 "value": null
             },
             {
@@ -1366,28 +1326,10 @@
                 "value": null
             },
             {
-                "desc": "Magnetizing inductance",
+                "desc": "transformation ratio from secondary (2, rotor) to primary (1, stator) for impedance",
                 "max": "",
                 "min": "",
-                "name": "Lm",
-                "type": "float",
-                "unit": "H",
-                "value": null
-            },
-            {
-                "desc": "Iron loss resistance",
-                "max": "",
-                "min": "",
-                "name": "Rfe",
-                "type": "float",
-                "unit": "Ohm",
-                "value": null
-            },
-            {
-                "desc": "winding transformation ratio",
-                "max": "",
-                "min": "",
-                "name": "K21",
+                "name": "K21Z",
                 "type": "float",
                 "unit": "",
                 "value": null
@@ -1417,6 +1359,69 @@
                 "name": "Lm_table",
                 "type": "ndarray",
                 "unit": "H",
+                "value": null
+            },
+            {
+                "desc": "Stator phase current (after solve)",
+                "max": "",
+                "min": "",
+                "name": "I1",
+                "type": "complex",
+                "unit": "Arms",
+                "value": null
+            },
+            {
+                "desc": "Rotor phase current (after solve)",
+                "max": "",
+                "min": "",
+                "name": "I2",
+                "type": "complex",
+                "unit": "Arms",
+                "value": null
+            },
+            {
+                "desc": "Stator phase voltage (after solve)",
+                "max": "",
+                "min": "",
+                "name": "U1",
+                "type": "complex",
+                "unit": "Vrms",
+                "value": null
+            },
+            {
+                "desc": "Rotor phase voltage (after solve)",
+                "max": "",
+                "min": "",
+                "name": "U2",
+                "type": "complex",
+                "unit": "Vrms",
+                "value": null
+            },
+            {
+                "desc": "Iron loss current (after solve)",
+                "max": "",
+                "min": "",
+                "name": "If",
+                "type": "complex",
+                "unit": "Arms",
+                "value": null
+            },
+            {
+                "desc": "Magnetizing inductance (after solve)",
+                "max": "",
+                "min": "",
+                "name": "Lm",
+                "type": "float",
+                "unit": "H",
+                "value": null
+            },
+            {
+                "desc": "Magnetizing current (after solve)",
+                "max": "",
+                "min": "",
+                "name": "Im",
+                "type": "complex",
+                "unit": "Arms",
                 "value": null
             }
         ]

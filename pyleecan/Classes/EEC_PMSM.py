@@ -68,9 +68,9 @@ except ImportError as error:
     comp_Phidq_mag = error
 
 try:
-    from ..Methods.Simulation.EEC_PMSM.update import update
+    from ..Methods.Simulation.EEC_PMSM.update_from_ref import update_from_ref
 except ImportError as error:
-    update = error
+    update_from_ref = error
 
 
 from ._check import InitUnKnowClassError
@@ -188,15 +188,17 @@ class EEC_PMSM(EEC):
         )
     else:
         comp_Phidq_mag = comp_Phidq_mag
-    # cf Methods.Simulation.EEC_PMSM.update
-    if isinstance(update, ImportError):
-        update = property(
+    # cf Methods.Simulation.EEC_PMSM.update_from_ref
+    if isinstance(update_from_ref, ImportError):
+        update_from_ref = property(
             fget=lambda x: raise_(
-                ImportError("Can't use EEC_PMSM method update: " + str(update))
+                ImportError(
+                    "Can't use EEC_PMSM method update_from_ref: " + str(update_from_ref)
+                )
             )
         )
     else:
-        update = update
+        update_from_ref = update_from_ref
     # save and copy methods are available in all object
     save = save
     copy = copy
