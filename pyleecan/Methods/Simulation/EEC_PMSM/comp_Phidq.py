@@ -16,8 +16,8 @@ def comp_Phidq(self, OP_ref=None):
         machine=self.get_machine_from_parent(), OP_ref=OP_ref
     )
 
-    Phid = Phi_dqh_mean[0]  # * Xke_skinS
-    Phiq = Phi_dqh_mean[1]  # * Xke_skinS
+    Phid = Phi_dqh_mean[0]  # * self.Xke_skinS
+    Phiq = Phi_dqh_mean[1]  # * self.Xke_skinS
     if Phid.size == 1:
         Phid = float(Phid)
         Phiq = float(Phiq)
