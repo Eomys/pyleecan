@@ -15,7 +15,6 @@ def comp_skin_effect(self):
     felec = self.OP.get_felec()
 
     # compute skin_effect on stator side
-    Tfact1 = CondS.comp_temperature_effect(T_op=self.Tsta, T_ref=20)
     self.Xkr_skinS, self.Xke_skinS = CondS.comp_skin_effect(
-        freq=felec, Tfact=Tfact1, type_skin_effect=self.type_skin_effect
+        freq=felec, T_op=self.Tsta, T_ref=20, type_skin_effect=self.type_skin_effect
     )
