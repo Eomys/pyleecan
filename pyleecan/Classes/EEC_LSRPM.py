@@ -95,6 +95,7 @@ class EEC_LSRPM(EEC):
         Xke_skinS=None,
         Xkr_skinR=None,
         Xke_skinR=None,
+        R1=None,
         init_dict=None,
         init_str=None,
     ):
@@ -133,6 +134,8 @@ class EEC_LSRPM(EEC):
                 Xkr_skinR = init_dict["Xkr_skinR"]
             if "Xke_skinR" in list(init_dict.keys()):
                 Xke_skinR = init_dict["Xke_skinR"]
+            if "R1" in list(init_dict.keys()):
+                R1 = init_dict["R1"]
         # Set the properties (value check and convertion are done in setter)
         self.fluxlink = fluxlink
         self.N0 = N0
@@ -146,6 +149,7 @@ class EEC_LSRPM(EEC):
             Xke_skinS=Xke_skinS,
             Xkr_skinR=Xkr_skinR,
             Xke_skinR=Xke_skinR,
+            R1=R1,
         )
         # The class is frozen (in EEC init), for now it's impossible to
         # add new properties

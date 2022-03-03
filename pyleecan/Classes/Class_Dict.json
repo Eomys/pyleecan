@@ -1026,7 +1026,8 @@
         "desc": "Equivalent Electrical Circuit abstract class",
         "is_internal": false,
         "methods": [
-            "get_machine_from_parent"
+            "get_machine_from_parent",
+            "comp_R1"
         ],
         "mother": "",
         "name": "EEC",
@@ -1104,6 +1105,15 @@
                 "type": "float",
                 "unit": "",
                 "value": null
+            },
+            {
+                "desc": "Stator phase resistance",
+                "max": "",
+                "min": "",
+                "name": "R1",
+                "type": "float",
+                "unit": "Ohm",
+                "value": null
             }
         ]
     },
@@ -1169,8 +1179,7 @@
             "comp_Phid",
             "comp_Phiq",
             "comp_Phid_mag",
-            "comp_Phiq_mag",
-            "comp_R1"
+            "comp_Phiq_mag"
         ],
         "mother": "EEC",
         "name": "EEC_PMSM",
@@ -1247,15 +1256,6 @@
                 "name": "Phiq_mag",
                 "type": "float",
                 "unit": "Wb",
-                "value": null
-            },
-            {
-                "desc": "Stator phase resistance",
-                "max": "",
-                "min": "",
-                "name": "R1",
-                "type": "float",
-                "unit": "Ohm",
                 "value": null
             }
         ]
@@ -1335,15 +1335,6 @@
                 "name": "U2",
                 "type": "float",
                 "unit": "Vrms",
-                "value": null
-            },
-            {
-                "desc": "Stator phase resistance",
-                "max": "",
-                "min": "",
-                "name": "R1",
-                "type": "float",
-                "unit": "Ohm",
                 "value": null
             },
             {

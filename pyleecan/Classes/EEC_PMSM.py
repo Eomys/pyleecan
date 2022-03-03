@@ -77,11 +77,6 @@ try:
 except ImportError as error:
     comp_Phiq_mag = error
 
-try:
-    from ..Methods.Simulation.EEC_PMSM.comp_R1 import comp_R1
-except ImportError as error:
-    comp_R1 = error
-
 
 from ._check import InitUnKnowClassError
 from .IndMag import IndMag
@@ -218,15 +213,6 @@ class EEC_PMSM(EEC):
         )
     else:
         comp_Phiq_mag = comp_Phiq_mag
-    # cf Methods.Simulation.EEC_PMSM.comp_R1
-    if isinstance(comp_R1, ImportError):
-        comp_R1 = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use EEC_PMSM method comp_R1: " + str(comp_R1))
-            )
-        )
-    else:
-        comp_R1 = comp_R1
     # save and copy methods are available in all object
     save = save
     copy = copy
@@ -243,7 +229,6 @@ class EEC_PMSM(EEC):
         Phiq=None,
         Phid_mag=None,
         Phiq_mag=None,
-        R1=None,
         type_skin_effect=1,
         OP=None,
         Tsta=20,
@@ -252,6 +237,7 @@ class EEC_PMSM(EEC):
         Xke_skinS=None,
         Xkr_skinR=None,
         Xke_skinR=None,
+        R1=None,
         init_dict=None,
         init_str=None,
     ):
@@ -286,8 +272,6 @@ class EEC_PMSM(EEC):
                 Phid_mag = init_dict["Phid_mag"]
             if "Phiq_mag" in list(init_dict.keys()):
                 Phiq_mag = init_dict["Phiq_mag"]
-            if "R1" in list(init_dict.keys()):
-                R1 = init_dict["R1"]
             if "type_skin_effect" in list(init_dict.keys()):
                 type_skin_effect = init_dict["type_skin_effect"]
             if "OP" in list(init_dict.keys()):
@@ -304,6 +288,8 @@ class EEC_PMSM(EEC):
                 Xkr_skinR = init_dict["Xkr_skinR"]
             if "Xke_skinR" in list(init_dict.keys()):
                 Xke_skinR = init_dict["Xke_skinR"]
+            if "R1" in list(init_dict.keys()):
+                R1 = init_dict["R1"]
         # Set the properties (value check and convertion are done in setter)
         self.indmag = indmag
         self.fluxlink = fluxlink
@@ -313,7 +299,6 @@ class EEC_PMSM(EEC):
         self.Phiq = Phiq
         self.Phid_mag = Phid_mag
         self.Phiq_mag = Phiq_mag
-        self.R1 = R1
         # Call EEC init
         super(EEC_PMSM, self).__init__(
             type_skin_effect=type_skin_effect,
@@ -324,6 +309,7 @@ class EEC_PMSM(EEC):
             Xke_skinS=Xke_skinS,
             Xkr_skinR=Xkr_skinR,
             Xke_skinR=Xke_skinR,
+            R1=R1,
         )
         # The class is frozen (in EEC init), for now it's impossible to
         # add new properties
@@ -350,7 +336,6 @@ class EEC_PMSM(EEC):
         EEC_PMSM_str += "Phiq = " + str(self.Phiq) + linesep
         EEC_PMSM_str += "Phid_mag = " + str(self.Phid_mag) + linesep
         EEC_PMSM_str += "Phiq_mag = " + str(self.Phiq_mag) + linesep
-        EEC_PMSM_str += "R1 = " + str(self.R1) + linesep
         return EEC_PMSM_str
 
     def __eq__(self, other):
@@ -377,8 +362,6 @@ class EEC_PMSM(EEC):
         if other.Phid_mag != self.Phid_mag:
             return False
         if other.Phiq_mag != self.Phiq_mag:
-            return False
-        if other.R1 != self.R1:
             return False
         return True
 
@@ -419,8 +402,6 @@ class EEC_PMSM(EEC):
             diff_list.append(name + ".Phid_mag")
         if other._Phiq_mag != self._Phiq_mag:
             diff_list.append(name + ".Phiq_mag")
-        if other._R1 != self._R1:
-            diff_list.append(name + ".R1")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -440,7 +421,6 @@ class EEC_PMSM(EEC):
         S += getsizeof(self.Phiq)
         S += getsizeof(self.Phid_mag)
         S += getsizeof(self.Phiq_mag)
-        S += getsizeof(self.R1)
         return S
 
     def as_dict(self, type_handle_ndarray=0, keep_function=False, **kwargs):
@@ -482,7 +462,6 @@ class EEC_PMSM(EEC):
         EEC_PMSM_dict["Phiq"] = self.Phiq
         EEC_PMSM_dict["Phid_mag"] = self.Phid_mag
         EEC_PMSM_dict["Phiq_mag"] = self.Phiq_mag
-        EEC_PMSM_dict["R1"] = self.R1
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         EEC_PMSM_dict["__class__"] = "EEC_PMSM"
@@ -501,7 +480,6 @@ class EEC_PMSM(EEC):
         self.Phiq = None
         self.Phid_mag = None
         self.Phiq_mag = None
-        self.R1 = None
         # Set to None the properties inherited from EEC
         super(EEC_PMSM, self)._set_None()
 
@@ -680,24 +658,6 @@ class EEC_PMSM(EEC):
         fget=_get_Phiq_mag,
         fset=_set_Phiq_mag,
         doc=u"""Stator winding flux along q-axis in open-circuit (rotor flux linkage)
-
-        :Type: float
-        """,
-    )
-
-    def _get_R1(self):
-        """getter of R1"""
-        return self._R1
-
-    def _set_R1(self, value):
-        """setter of R1"""
-        check_var("R1", value, "float")
-        self._R1 = value
-
-    R1 = property(
-        fget=_get_R1,
-        fset=_set_R1,
-        doc=u"""Stator phase resistance
 
         :Type: float
         """,

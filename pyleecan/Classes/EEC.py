@@ -22,6 +22,11 @@ try:
 except ImportError as error:
     get_machine_from_parent = error
 
+try:
+    from ..Methods.Simulation.EEC.comp_R1 import comp_R1
+except ImportError as error:
+    comp_R1 = error
+
 
 from ._check import InitUnKnowClassError
 from .OP import OP
@@ -32,6 +37,7 @@ class EEC(FrozenClass):
 
     VERSION = 1
 
+    # Check ImportError to remove unnecessary dependencies in unused method
     # cf Methods.Simulation.EEC.get_machine_from_parent
     if isinstance(get_machine_from_parent, ImportError):
         get_machine_from_parent = property(
@@ -44,6 +50,15 @@ class EEC(FrozenClass):
         )
     else:
         get_machine_from_parent = get_machine_from_parent
+    # cf Methods.Simulation.EEC.comp_R1
+    if isinstance(comp_R1, ImportError):
+        comp_R1 = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use EEC method comp_R1: " + str(comp_R1))
+            )
+        )
+    else:
+        comp_R1 = comp_R1
     # save and copy methods are available in all object
     save = save
     copy = copy
@@ -60,6 +75,7 @@ class EEC(FrozenClass):
         Xke_skinS=None,
         Xkr_skinR=None,
         Xke_skinR=None,
+        R1=None,
         init_dict=None,
         init_str=None,
     ):
@@ -94,6 +110,8 @@ class EEC(FrozenClass):
                 Xkr_skinR = init_dict["Xkr_skinR"]
             if "Xke_skinR" in list(init_dict.keys()):
                 Xke_skinR = init_dict["Xke_skinR"]
+            if "R1" in list(init_dict.keys()):
+                R1 = init_dict["R1"]
         # Set the properties (value check and convertion are done in setter)
         self.parent = None
         self.type_skin_effect = type_skin_effect
@@ -104,6 +122,7 @@ class EEC(FrozenClass):
         self.Xke_skinS = Xke_skinS
         self.Xkr_skinR = Xkr_skinR
         self.Xke_skinR = Xke_skinR
+        self.R1 = R1
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -128,6 +147,7 @@ class EEC(FrozenClass):
         EEC_str += "Xke_skinS = " + str(self.Xke_skinS) + linesep
         EEC_str += "Xkr_skinR = " + str(self.Xkr_skinR) + linesep
         EEC_str += "Xke_skinR = " + str(self.Xke_skinR) + linesep
+        EEC_str += "R1 = " + str(self.R1) + linesep
         return EEC_str
 
     def __eq__(self, other):
@@ -150,6 +170,8 @@ class EEC(FrozenClass):
         if other.Xkr_skinR != self.Xkr_skinR:
             return False
         if other.Xke_skinR != self.Xke_skinR:
+            return False
+        if other.R1 != self.R1:
             return False
         return True
 
@@ -181,6 +203,8 @@ class EEC(FrozenClass):
             diff_list.append(name + ".Xkr_skinR")
         if other._Xke_skinR != self._Xke_skinR:
             diff_list.append(name + ".Xke_skinR")
+        if other._R1 != self._R1:
+            diff_list.append(name + ".R1")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -197,6 +221,7 @@ class EEC(FrozenClass):
         S += getsizeof(self.Xke_skinS)
         S += getsizeof(self.Xkr_skinR)
         S += getsizeof(self.Xke_skinR)
+        S += getsizeof(self.R1)
         return S
 
     def as_dict(self, type_handle_ndarray=0, keep_function=False, **kwargs):
@@ -226,6 +251,7 @@ class EEC(FrozenClass):
         EEC_dict["Xke_skinS"] = self.Xke_skinS
         EEC_dict["Xkr_skinR"] = self.Xkr_skinR
         EEC_dict["Xke_skinR"] = self.Xke_skinR
+        EEC_dict["R1"] = self.R1
         # The class name is added to the dict for deserialisation purpose
         EEC_dict["__class__"] = "EEC"
         return EEC_dict
@@ -242,6 +268,7 @@ class EEC(FrozenClass):
         self.Xke_skinS = None
         self.Xkr_skinR = None
         self.Xke_skinR = None
+        self.R1 = None
 
     def _get_type_skin_effect(self):
         """getter of type_skin_effect"""
@@ -398,6 +425,24 @@ class EEC(FrozenClass):
         fget=_get_Xke_skinR,
         fset=_set_Xke_skinR,
         doc=u"""Skin effect coefficient for inductances at rotor side
+
+        :Type: float
+        """,
+    )
+
+    def _get_R1(self):
+        """getter of R1"""
+        return self._R1
+
+    def _set_R1(self, value):
+        """setter of R1"""
+        check_var("R1", value, "float")
+        self._R1 = value
+
+    R1 = property(
+        fget=_get_R1,
+        fset=_set_R1,
+        doc=u"""Stator phase resistance
 
         :Type: float
         """,

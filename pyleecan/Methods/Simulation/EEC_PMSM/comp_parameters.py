@@ -1,9 +1,7 @@
 from numpy import isscalar
 
 
-def comp_parameters(
-    self, machine, OP, Tsta=None, Trot=None, Id_array=None, Iq_array=None
-):
+def comp_parameters(self, OP, Tsta=None, Trot=None, Id_array=None, Iq_array=None):
     """Compute the parameters dict for the equivalent electrical circuit:
     resistance, inductance and back electromotive force
 
@@ -30,6 +28,9 @@ def comp_parameters(
         dictionnary containing EEC parameters
 
     """
+
+    if self.R1 is None:
+        self.comp_R1()
 
     eec_param = dict()
 

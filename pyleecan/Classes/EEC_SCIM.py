@@ -139,7 +139,6 @@ class EEC_SCIM(EEC):
         If=None,
         U1=None,
         U2=None,
-        R1=None,
         L1=None,
         R2=None,
         L2=None,
@@ -157,6 +156,7 @@ class EEC_SCIM(EEC):
         Xke_skinS=None,
         Xkr_skinR=None,
         Xke_skinR=None,
+        R1=None,
         init_dict=None,
         init_str=None,
     ):
@@ -187,8 +187,6 @@ class EEC_SCIM(EEC):
                 U1 = init_dict["U1"]
             if "U2" in list(init_dict.keys()):
                 U2 = init_dict["U2"]
-            if "R1" in list(init_dict.keys()):
-                R1 = init_dict["R1"]
             if "L1" in list(init_dict.keys()):
                 L1 = init_dict["L1"]
             if "R2" in list(init_dict.keys()):
@@ -223,6 +221,8 @@ class EEC_SCIM(EEC):
                 Xkr_skinR = init_dict["Xkr_skinR"]
             if "Xke_skinR" in list(init_dict.keys()):
                 Xke_skinR = init_dict["Xke_skinR"]
+            if "R1" in list(init_dict.keys()):
+                R1 = init_dict["R1"]
         # Set the properties (value check and convertion are done in setter)
         self.I1 = I1
         self.I2 = I2
@@ -230,7 +230,6 @@ class EEC_SCIM(EEC):
         self.If = If
         self.U1 = U1
         self.U2 = U2
-        self.R1 = R1
         self.L1 = L1
         self.R2 = R2
         self.L2 = L2
@@ -250,6 +249,7 @@ class EEC_SCIM(EEC):
             Xke_skinS=Xke_skinS,
             Xkr_skinR=Xkr_skinR,
             Xke_skinR=Xke_skinR,
+            R1=R1,
         )
         # The class is frozen (in EEC init), for now it's impossible to
         # add new properties
@@ -266,7 +266,6 @@ class EEC_SCIM(EEC):
         EEC_SCIM_str += "If = " + str(self.If) + linesep
         EEC_SCIM_str += "U1 = " + str(self.U1) + linesep
         EEC_SCIM_str += "U2 = " + str(self.U2) + linesep
-        EEC_SCIM_str += "R1 = " + str(self.R1) + linesep
         EEC_SCIM_str += "L1 = " + str(self.L1) + linesep
         EEC_SCIM_str += "R2 = " + str(self.R2) + linesep
         EEC_SCIM_str += "L2 = " + str(self.L2) + linesep
@@ -311,8 +310,6 @@ class EEC_SCIM(EEC):
             return False
         if other.U2 != self.U2:
             return False
-        if other.R1 != self.R1:
-            return False
         if other.L1 != self.L1:
             return False
         if other.R2 != self.R2:
@@ -356,8 +353,6 @@ class EEC_SCIM(EEC):
             diff_list.append(name + ".U1")
         if other._U2 != self._U2:
             diff_list.append(name + ".U2")
-        if other._R1 != self._R1:
-            diff_list.append(name + ".R1")
         if other._L1 != self._L1:
             diff_list.append(name + ".L1")
         if other._R2 != self._R2:
@@ -393,7 +388,6 @@ class EEC_SCIM(EEC):
         S += getsizeof(self.If)
         S += getsizeof(self.U1)
         S += getsizeof(self.U2)
-        S += getsizeof(self.R1)
         S += getsizeof(self.L1)
         S += getsizeof(self.R2)
         S += getsizeof(self.L2)
@@ -428,7 +422,6 @@ class EEC_SCIM(EEC):
         EEC_SCIM_dict["If"] = self.If
         EEC_SCIM_dict["U1"] = self.U1
         EEC_SCIM_dict["U2"] = self.U2
-        EEC_SCIM_dict["R1"] = self.R1
         EEC_SCIM_dict["L1"] = self.L1
         EEC_SCIM_dict["R2"] = self.R2
         EEC_SCIM_dict["L2"] = self.L2
@@ -476,7 +469,6 @@ class EEC_SCIM(EEC):
         self.If = None
         self.U1 = None
         self.U2 = None
-        self.R1 = None
         self.L1 = None
         self.R2 = None
         self.L2 = None
@@ -592,24 +584,6 @@ class EEC_SCIM(EEC):
         fget=_get_U2,
         fset=_set_U2,
         doc=u"""Rotor phase voltage
-
-        :Type: float
-        """,
-    )
-
-    def _get_R1(self):
-        """getter of R1"""
-        return self._R1
-
-    def _set_R1(self, value):
-        """setter of R1"""
-        check_var("R1", value, "float")
-        self._R1 = value
-
-    R1 = property(
-        fget=_get_R1,
-        fset=_set_R1,
-        doc=u"""Stator phase resistance
 
         :Type: float
         """,
