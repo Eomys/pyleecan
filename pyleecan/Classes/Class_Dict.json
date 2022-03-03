@@ -1027,7 +1027,8 @@
         "is_internal": false,
         "methods": [
             "get_machine_from_parent",
-            "comp_R1"
+            "comp_R1",
+            "comp_skin_effect"
         ],
         "mother": "",
         "name": "EEC",
@@ -1276,7 +1277,8 @@
             "comp_joule_losses",
             "solve_elementary",
             "_comp_flux_mean",
-            "_comp_Lm_FEA"
+            "_comp_Lm_FEA",
+            "comp_skin_effect"
         ],
         "mother": "EEC",
         "name": "EEC_SCIM",

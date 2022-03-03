@@ -27,6 +27,11 @@ try:
 except ImportError as error:
     comp_R1 = error
 
+try:
+    from ..Methods.Simulation.EEC.comp_skin_effect import comp_skin_effect
+except ImportError as error:
+    comp_skin_effect = error
+
 
 from ._check import InitUnKnowClassError
 from .OP import OP
@@ -59,6 +64,17 @@ class EEC(FrozenClass):
         )
     else:
         comp_R1 = comp_R1
+    # cf Methods.Simulation.EEC.comp_skin_effect
+    if isinstance(comp_skin_effect, ImportError):
+        comp_skin_effect = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use EEC method comp_skin_effect: " + str(comp_skin_effect)
+                )
+            )
+        )
+    else:
+        comp_skin_effect = comp_skin_effect
     # save and copy methods are available in all object
     save = save
     copy = copy

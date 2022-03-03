@@ -47,6 +47,11 @@ try:
 except ImportError as error:
     _comp_Lm_FEA = error
 
+try:
+    from ..Methods.Simulation.EEC_SCIM.comp_skin_effect import comp_skin_effect
+except ImportError as error:
+    comp_skin_effect = error
+
 
 from numpy import array, array_equal
 from ._check import InitUnKnowClassError
@@ -125,6 +130,18 @@ class EEC_SCIM(EEC):
         )
     else:
         _comp_Lm_FEA = _comp_Lm_FEA
+    # cf Methods.Simulation.EEC_SCIM.comp_skin_effect
+    if isinstance(comp_skin_effect, ImportError):
+        comp_skin_effect = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use EEC_SCIM method comp_skin_effect: "
+                    + str(comp_skin_effect)
+                )
+            )
+        )
+    else:
+        comp_skin_effect = comp_skin_effect
     # save and copy methods are available in all object
     save = save
     copy = copy
