@@ -41,6 +41,9 @@ def run(self):
                 "Cannot run Electrical model if machine is PMSM and eec is not EEC_PMSM"
             )
 
+    if self.LUT is not None:
+        eec = self.LUT.get_eec(Tsa=self.Tsta)
+
     # Compute parameters of the electrical equivalent circuit if some parameters are missing in ELUT
     eec_param = self.eec.comp_parameters(
         machine, OP=output.elec.OP, Tsta=self.Tsta, Trot=self.Trot

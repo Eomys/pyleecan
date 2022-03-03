@@ -98,9 +98,6 @@ class Electrical(FrozenClass):
         self,
         eec=None,
         logger_name="Pyleecan.Electrical",
-        Tsta=20,
-        Trot=20,
-        Tmag=20,
         freq_max=40000,
         init_dict=None,
         init_str=None,
@@ -124,21 +121,12 @@ class Electrical(FrozenClass):
                 eec = init_dict["eec"]
             if "logger_name" in list(init_dict.keys()):
                 logger_name = init_dict["logger_name"]
-            if "Tsta" in list(init_dict.keys()):
-                Tsta = init_dict["Tsta"]
-            if "Trot" in list(init_dict.keys()):
-                Trot = init_dict["Trot"]
-            if "Tmag" in list(init_dict.keys()):
-                Tmag = init_dict["Tmag"]
             if "freq_max" in list(init_dict.keys()):
                 freq_max = init_dict["freq_max"]
         # Set the properties (value check and convertion are done in setter)
         self.parent = None
         self.eec = eec
         self.logger_name = logger_name
-        self.Tsta = Tsta
-        self.Trot = Trot
-        self.Tmag = Tmag
         self.freq_max = freq_max
 
         # The class is frozen, for now it's impossible to add new properties
@@ -158,9 +146,6 @@ class Electrical(FrozenClass):
         else:
             Electrical_str += "eec = None" + linesep + linesep
         Electrical_str += 'logger_name = "' + str(self.logger_name) + '"' + linesep
-        Electrical_str += "Tsta = " + str(self.Tsta) + linesep
-        Electrical_str += "Trot = " + str(self.Trot) + linesep
-        Electrical_str += "Tmag = " + str(self.Tmag) + linesep
         Electrical_str += "freq_max = " + str(self.freq_max) + linesep
         return Electrical_str
 
@@ -172,12 +157,6 @@ class Electrical(FrozenClass):
         if other.eec != self.eec:
             return False
         if other.logger_name != self.logger_name:
-            return False
-        if other.Tsta != self.Tsta:
-            return False
-        if other.Trot != self.Trot:
-            return False
-        if other.Tmag != self.Tmag:
             return False
         if other.freq_max != self.freq_max:
             return False
@@ -199,12 +178,6 @@ class Electrical(FrozenClass):
             diff_list.extend(self.eec.compare(other.eec, name=name + ".eec"))
         if other._logger_name != self._logger_name:
             diff_list.append(name + ".logger_name")
-        if other._Tsta != self._Tsta:
-            diff_list.append(name + ".Tsta")
-        if other._Trot != self._Trot:
-            diff_list.append(name + ".Trot")
-        if other._Tmag != self._Tmag:
-            diff_list.append(name + ".Tmag")
         if other._freq_max != self._freq_max:
             diff_list.append(name + ".freq_max")
         # Filter ignore differences
@@ -217,9 +190,6 @@ class Electrical(FrozenClass):
         S = 0  # Full size of the object
         S += getsizeof(self.eec)
         S += getsizeof(self.logger_name)
-        S += getsizeof(self.Tsta)
-        S += getsizeof(self.Trot)
-        S += getsizeof(self.Tmag)
         S += getsizeof(self.freq_max)
         return S
 
@@ -244,9 +214,6 @@ class Electrical(FrozenClass):
                 **kwargs
             )
         Electrical_dict["logger_name"] = self.logger_name
-        Electrical_dict["Tsta"] = self.Tsta
-        Electrical_dict["Trot"] = self.Trot
-        Electrical_dict["Tmag"] = self.Tmag
         Electrical_dict["freq_max"] = self.freq_max
         # The class name is added to the dict for deserialisation purpose
         Electrical_dict["__class__"] = "Electrical"
@@ -258,9 +225,6 @@ class Electrical(FrozenClass):
         if self.eec is not None:
             self.eec._set_None()
         self.logger_name = None
-        self.Tsta = None
-        self.Trot = None
-        self.Tmag = None
         self.freq_max = None
 
     def _get_eec(self):
@@ -312,60 +276,6 @@ class Electrical(FrozenClass):
         doc=u"""Name of the logger to use
 
         :Type: str
-        """,
-    )
-
-    def _get_Tsta(self):
-        """getter of Tsta"""
-        return self._Tsta
-
-    def _set_Tsta(self, value):
-        """setter of Tsta"""
-        check_var("Tsta", value, "float")
-        self._Tsta = value
-
-    Tsta = property(
-        fget=_get_Tsta,
-        fset=_set_Tsta,
-        doc=u"""Average stator temperature for operational EEC calculation
-
-        :Type: float
-        """,
-    )
-
-    def _get_Trot(self):
-        """getter of Trot"""
-        return self._Trot
-
-    def _set_Trot(self, value):
-        """setter of Trot"""
-        check_var("Trot", value, "float")
-        self._Trot = value
-
-    Trot = property(
-        fget=_get_Trot,
-        fset=_set_Trot,
-        doc=u"""Average rotor temperature for operational EEC calculation
-
-        :Type: float
-        """,
-    )
-
-    def _get_Tmag(self):
-        """getter of Tmag"""
-        return self._Tmag
-
-    def _set_Tmag(self, value):
-        """setter of Tmag"""
-        check_var("Tmag", value, "float")
-        self._Tmag = value
-
-    Tmag = property(
-        fget=_get_Tmag,
-        fset=_set_Tmag,
-        doc=u"""Average magnet temperature for operational EEC calculation
-
-        :Type: float
         """,
     )
 

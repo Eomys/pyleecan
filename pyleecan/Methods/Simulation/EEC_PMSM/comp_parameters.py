@@ -71,12 +71,8 @@ def comp_parameters(
         Xkr_skinS, Xke_skinS = 1, 1
 
     # Stator resistance
-    if "R1" not in eec_param:
-        if is_LUT and LUT.R1 is not None:
-            R10 = LUT.R1
-        else:
-            R10 = machine.stator.comp_resistance_wind()
-        eec_param["R1"] = R10 * Tfact1 * Xkr_skinS
+    if self.R1 is None:
+        self.R1 = machine.stator.comp_resistance_wind()
 
     # Stator flux linkage only due to permanent magnets
     if "Phid_mag" not in eec_param or "Phiq_mag" not in eec_param:

@@ -1032,33 +1032,6 @@
         "path": "pyleecan/Generator/ClassesRef/Simulation/EEC.csv",
         "properties": [
             {
-                "desc": "Parameters of the EEC: computed if empty, or enforced",
-                "max": "",
-                "min": "",
-                "name": "parameters",
-                "type": "dict",
-                "unit": "-",
-                "value": null
-            },
-            {
-                "desc": "Electrical Look Up Table to be enforced ",
-                "max": "",
-                "min": "",
-                "name": "LUT_enforced",
-                "type": "LUT",
-                "unit": "-",
-                "value": null
-            },
-            {
-                "desc": "Drive",
-                "max": "",
-                "min": "",
-                "name": "drive",
-                "type": "Drive",
-                "unit": "-",
-                "value": null
-            },
-            {
                 "desc": "Skin effect for resistance and inductance",
                 "max": "",
                 "min": "",
@@ -1066,6 +1039,69 @@
                 "type": "int",
                 "unit": "-",
                 "value": 1
+            },
+            {
+                "desc": "Operating Point",
+                "max": "",
+                "min": "",
+                "name": "OP",
+                "type": "OP",
+                "unit": "-",
+                "value": null
+            },
+            {
+                "desc": "Average stator temperature for operational EEC calculation",
+                "max": "",
+                "min": "",
+                "name": "Tsta",
+                "type": "float",
+                "unit": "deg Celsius",
+                "value": 20
+            },
+            {
+                "desc": "Average rotor temperature for operational EEC calculation",
+                "max": "",
+                "min": "",
+                "name": "Trot",
+                "type": "float",
+                "unit": "deg Celsius",
+                "value": 20
+            },
+            {
+                "desc": "Skin effect coefficient for resistances at stator side",
+                "max": "",
+                "min": "",
+                "name": "Xkr_skinS",
+                "type": "float",
+                "unit": "",
+                "value": null
+            },
+            {
+                "desc": "Skin effect coefficient for inductances at stator side",
+                "max": "",
+                "min": "",
+                "name": "Xke_skinS",
+                "type": "float",
+                "unit": "",
+                "value": null
+            },
+            {
+                "desc": "Skin effect coefficient for resistances at rotor side",
+                "max": "",
+                "min": "",
+                "name": "Xkr_skinR",
+                "type": "float",
+                "unit": "",
+                "value": null
+            },
+            {
+                "desc": "Skin effect coefficient for inductances at rotor side",
+                "max": "",
+                "min": "",
+                "name": "Xke_skinR",
+                "type": "float",
+                "unit": "",
+                "value": null
             }
         ]
     },
@@ -1149,6 +1185,69 @@
                 "type": "FluxLink",
                 "unit": "-",
                 "value": null
+            },
+            {
+                "desc": "Stator winding inductance along d-axis",
+                "max": "",
+                "min": "",
+                "name": "Ld",
+                "type": "float",
+                "unit": "H",
+                "value": null
+            },
+            {
+                "desc": "Stator winding inductance along q-axis",
+                "max": "",
+                "min": "",
+                "name": "Lq",
+                "type": "float",
+                "unit": "H",
+                "value": null
+            },
+            {
+                "desc": "Stator winding flux along d-axis",
+                "max": "",
+                "min": "",
+                "name": "Phid",
+                "type": "float",
+                "unit": "Wb",
+                "value": null
+            },
+            {
+                "desc": "Stator winding flux along q-axis",
+                "max": "",
+                "min": "",
+                "name": "Phiq",
+                "type": "float",
+                "unit": "Wb",
+                "value": null
+            },
+            {
+                "desc": "Stator winding flux along d-axis in open-circuit (rotor flux linkage)",
+                "max": "",
+                "min": "",
+                "name": "Phid_mag",
+                "type": "float",
+                "unit": "Wb",
+                "value": null
+            },
+            {
+                "desc": "Stator winding flux along q-axis in open-circuit (rotor flux linkage)",
+                "max": "",
+                "min": "",
+                "name": "Phiq_mag",
+                "type": "float",
+                "unit": "Wb",
+                "value": null
+            },
+            {
+                "desc": "Stator phase resistance",
+                "max": "",
+                "min": "",
+                "name": "R1",
+                "type": "float",
+                "unit": "Ohm",
+                "value": null
             }
         ]
     },
@@ -1176,58 +1275,148 @@
         "path": "pyleecan/Generator/ClassesRef/Simulation/EEC_SCIM.csv",
         "properties": [
             {
-                "desc": "RMS current for parameter estimation",
+                "desc": "Stator phase current",
                 "max": "",
                 "min": "",
-                "name": "I",
+                "name": "I1",
                 "type": "float",
-                "unit": "-",
-                "value": 1
+                "unit": "Arms",
+                "value": null
             },
             {
-                "desc": "True to compute only on one angle periodicity (use periodicities defined in axes_dict[angle])",
+                "desc": "Rotor phase current",
                 "max": "",
                 "min": "",
-                "name": "is_periodicity_a",
-                "type": "bool",
-                "unit": "",
-                "value": 1
+                "name": "I2",
+                "type": "float",
+                "unit": "Arms",
+                "value": null
             },
             {
-                "desc": "To run FEMM in parallel (the parallelization is on the time loop)",
+                "desc": "Magnetizing current",
                 "max": "",
                 "min": "",
-                "name": "nb_worker",
-                "type": "int",
+                "name": "Im",
+                "type": "float",
+                "unit": "Arms",
+                "value": null
+            },
+            {
+                "desc": "Iron loss current",
+                "max": "",
+                "min": "",
+                "name": "If",
+                "type": "float",
+                "unit": "Arms",
+                "value": null
+            },
+            {
+                "desc": "Stator phase voltage",
+                "max": "",
+                "min": "",
+                "name": "U1",
+                "type": "float",
+                "unit": "Vrms",
+                "value": null
+            },
+            {
+                "desc": "Rotor phase voltage",
+                "max": "",
+                "min": "",
+                "name": "U2",
+                "type": "float",
+                "unit": "Vrms",
+                "value": null
+            },
+            {
+                "desc": "Stator phase resistance",
+                "max": "",
+                "min": "",
+                "name": "R1",
+                "type": "float",
+                "unit": "Ohm",
+                "value": null
+            },
+            {
+                "desc": "Stator phase inductance",
+                "max": "",
+                "min": "",
+                "name": "L1",
+                "type": "float",
+                "unit": "H",
+                "value": null
+            },
+            {
+                "desc": "Rotor phase resistance",
+                "max": "",
+                "min": "",
+                "name": "R2",
+                "type": "float",
+                "unit": "Ohm",
+                "value": null
+            },
+            {
+                "desc": "Rotor phase inductance",
+                "max": "",
+                "min": "",
+                "name": "L2",
+                "type": "float",
+                "unit": "H",
+                "value": null
+            },
+            {
+                "desc": "Magnetizing inductance",
+                "max": "",
+                "min": "",
+                "name": "Lm",
+                "type": "float",
+                "unit": "H",
+                "value": null
+            },
+            {
+                "desc": "Iron loss resistance",
+                "max": "",
+                "min": "",
+                "name": "Rfe",
+                "type": "float",
+                "unit": "Ohm",
+                "value": null
+            },
+            {
+                "desc": "winding transformation ratio",
+                "max": "",
+                "min": "",
+                "name": "K21",
+                "type": "float",
                 "unit": "",
                 "value": null
             },
             {
-                "desc": "Rotor speed",
+                "desc": "transformation ratio from secondary (2, rotor) to primary (1, stator) for current",
                 "max": "",
                 "min": "",
-                "name": "N0",
+                "name": "K21I",
                 "type": "float",
-                "unit": "rpm",
+                "unit": "",
                 "value": null
             },
             {
-                "desc": "Time discretization",
+                "desc": "Array of magnetizing current",
                 "max": "",
-                "min": "1",
-                "name": "Nt_tot",
-                "type": "int",
-                "unit": "-",
-                "value": 32
+                "min": "",
+                "name": "Im_table",
+                "type": "ndarray",
+                "unit": "Arms",
+                "value": null
             },
             {
-                "desc": "Number of rotor revolution (to compute the final time)",
+                "desc": "Array of magnetizing inductance function of Im_table",
                 "max": "",
-                "min": "0",
-                "name": "Nrev",
-                "type": "float",
-                "unit": "-",
-                "value": 1
+                "min": "",
+                "name": "Lm_table",
+                "type": "ndarray",
+                "unit": "H",
+                "value": null
             }
         ]
     },
@@ -1269,33 +1458,6 @@
                 "type": "str",
                 "unit": "-",
                 "value": "Pyleecan.Electrical"
-            },
-            {
-                "desc": "Average stator temperature for operational EEC calculation",
-                "max": "",
-                "min": "",
-                "name": "Tsta",
-                "type": "float",
-                "unit": "deg Celsius",
-                "value": 20
-            },
-            {
-                "desc": "Average rotor temperature for operational EEC calculation",
-                "max": "",
-                "min": "",
-                "name": "Trot",
-                "type": "float",
-                "unit": "deg Celsius",
-                "value": 20
-            },
-            {
-                "desc": "Average magnet temperature for operational EEC calculation",
-                "max": "",
-                "min": "",
-                "name": "Tmag",
-                "type": "float",
-                "unit": "deg Celsius",
-                "value": 20
             },
             {
                 "desc": "Maximum frequency to calculate voltage and current harmonics",
@@ -8276,11 +8438,11 @@
                 "value": null
             },
             {
-                "desc": "Dict containing parameters used in Electric Equivalent Circuit",
+                "desc": "Electric Equivalent Circuit used for OP resolution",
                 "max": "",
                 "min": "",
-                "name": "eec_param",
-                "type": "dict",
+                "name": "eec",
+                "type": "EEC",
                 "unit": "",
                 "value": null
             }

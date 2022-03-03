@@ -28,6 +28,8 @@ def solve(self, eec_param):
         Dict containing all magnetic quantities that have been calculated in EEC
     """
 
+    R1 = self.get_R1(T=self.Tsta)
+
     out_dict = {"eec_param": eec_param}
 
     ws = 2 * pi * eec_param["felec"]
