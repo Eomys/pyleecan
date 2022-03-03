@@ -1177,10 +1177,9 @@
             "comp_BEMF_harmonics",
             "comp_Ld",
             "comp_Lq",
-            "comp_Phid",
-            "comp_Phiq",
-            "comp_Phid_mag",
-            "comp_Phiq_mag"
+            "comp_Phidq",
+            "comp_Phidq_mag",
+            "update"
         ],
         "mother": "EEC",
         "name": "EEC_PMSM",

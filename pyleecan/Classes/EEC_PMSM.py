@@ -58,24 +58,19 @@ except ImportError as error:
     comp_Lq = error
 
 try:
-    from ..Methods.Simulation.EEC_PMSM.comp_Phid import comp_Phid
+    from ..Methods.Simulation.EEC_PMSM.comp_Phidq import comp_Phidq
 except ImportError as error:
-    comp_Phid = error
+    comp_Phidq = error
 
 try:
-    from ..Methods.Simulation.EEC_PMSM.comp_Phiq import comp_Phiq
+    from ..Methods.Simulation.EEC_PMSM.comp_Phidq_mag import comp_Phidq_mag
 except ImportError as error:
-    comp_Phiq = error
+    comp_Phidq_mag = error
 
 try:
-    from ..Methods.Simulation.EEC_PMSM.comp_Phid_mag import comp_Phid_mag
+    from ..Methods.Simulation.EEC_PMSM.update import update
 except ImportError as error:
-    comp_Phid_mag = error
-
-try:
-    from ..Methods.Simulation.EEC_PMSM.comp_Phiq_mag import comp_Phiq_mag
-except ImportError as error:
-    comp_Phiq_mag = error
+    update = error
 
 
 from ._check import InitUnKnowClassError
@@ -173,46 +168,35 @@ class EEC_PMSM(EEC):
         )
     else:
         comp_Lq = comp_Lq
-    # cf Methods.Simulation.EEC_PMSM.comp_Phid
-    if isinstance(comp_Phid, ImportError):
-        comp_Phid = property(
+    # cf Methods.Simulation.EEC_PMSM.comp_Phidq
+    if isinstance(comp_Phidq, ImportError):
+        comp_Phidq = property(
             fget=lambda x: raise_(
-                ImportError("Can't use EEC_PMSM method comp_Phid: " + str(comp_Phid))
+                ImportError("Can't use EEC_PMSM method comp_Phidq: " + str(comp_Phidq))
             )
         )
     else:
-        comp_Phid = comp_Phid
-    # cf Methods.Simulation.EEC_PMSM.comp_Phiq
-    if isinstance(comp_Phiq, ImportError):
-        comp_Phiq = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use EEC_PMSM method comp_Phiq: " + str(comp_Phiq))
-            )
-        )
-    else:
-        comp_Phiq = comp_Phiq
-    # cf Methods.Simulation.EEC_PMSM.comp_Phid_mag
-    if isinstance(comp_Phid_mag, ImportError):
-        comp_Phid_mag = property(
+        comp_Phidq = comp_Phidq
+    # cf Methods.Simulation.EEC_PMSM.comp_Phidq_mag
+    if isinstance(comp_Phidq_mag, ImportError):
+        comp_Phidq_mag = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use EEC_PMSM method comp_Phid_mag: " + str(comp_Phid_mag)
+                    "Can't use EEC_PMSM method comp_Phidq_mag: " + str(comp_Phidq_mag)
                 )
             )
         )
     else:
-        comp_Phid_mag = comp_Phid_mag
-    # cf Methods.Simulation.EEC_PMSM.comp_Phiq_mag
-    if isinstance(comp_Phiq_mag, ImportError):
-        comp_Phiq_mag = property(
+        comp_Phidq_mag = comp_Phidq_mag
+    # cf Methods.Simulation.EEC_PMSM.update
+    if isinstance(update, ImportError):
+        update = property(
             fget=lambda x: raise_(
-                ImportError(
-                    "Can't use EEC_PMSM method comp_Phiq_mag: " + str(comp_Phiq_mag)
-                )
+                ImportError("Can't use EEC_PMSM method update: " + str(update))
             )
         )
     else:
-        comp_Phiq_mag = comp_Phiq_mag
+        update = update
     # save and copy methods are available in all object
     save = save
     copy = copy
