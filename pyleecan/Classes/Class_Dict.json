@@ -1025,7 +1025,9 @@
         ],
         "desc": "Equivalent Electrical Circuit abstract class",
         "is_internal": false,
-        "methods": [],
+        "methods": [
+            "get_machine_from_parent"
+        ],
         "mother": "",
         "name": "EEC",
         "package": "Simulation",
@@ -1161,7 +1163,14 @@
             "solve_PWM",
             "comp_joule_losses",
             "comp_torque_sync_rel",
-            "comp_BEMF_harmonics"
+            "comp_BEMF_harmonics",
+            "comp_Ld",
+            "comp_Lq",
+            "comp_Phid",
+            "comp_Phiq",
+            "comp_Phid_mag",
+            "comp_Phiq_mag",
+            "comp_R1"
         ],
         "mother": "EEC",
         "name": "EEC_PMSM",

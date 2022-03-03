@@ -15,6 +15,14 @@ from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
 from ._frozen import FrozenClass
 
+# Import all class method
+# Try/catch to remove unnecessary dependencies in unused method
+try:
+    from ..Methods.Simulation.EEC.get_machine_from_parent import get_machine_from_parent
+except ImportError as error:
+    get_machine_from_parent = error
+
+
 from ._check import InitUnKnowClassError
 from .OP import OP
 
@@ -24,6 +32,18 @@ class EEC(FrozenClass):
 
     VERSION = 1
 
+    # cf Methods.Simulation.EEC.get_machine_from_parent
+    if isinstance(get_machine_from_parent, ImportError):
+        get_machine_from_parent = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use EEC method get_machine_from_parent: "
+                    + str(get_machine_from_parent)
+                )
+            )
+        )
+    else:
+        get_machine_from_parent = get_machine_from_parent
     # save and copy methods are available in all object
     save = save
     copy = copy
