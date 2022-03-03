@@ -1178,7 +1178,8 @@
             "comp_Ld",
             "comp_Lq",
             "comp_Phidq",
-            "comp_Phidq_mag"
+            "comp_Phidq_mag",
+            "update"
         ],
         "mother": "EEC",
         "name": "EEC_PMSM",
