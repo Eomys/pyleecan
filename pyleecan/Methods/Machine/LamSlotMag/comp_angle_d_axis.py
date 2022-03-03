@@ -17,5 +17,7 @@ def comp_angle_d_axis(self):
         angle between the X axis and the first d+ axis
     """
 
-    p = self.get_pole_pair_number()
-    return pi / p / 2
+    if self.has_magnet() and self.magnet.type_magnetization == 3:
+        return 0
+    else:
+        return pi / self.get_pole_pair_number() / 2

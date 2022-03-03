@@ -38,7 +38,7 @@ def get_connection_mat(self, Zs=None, p=None):
     # Apply the transformations
     if self.is_reverse_wind:
         wind_mat = reverse_wind_mat(wind_mat)
-    if self.Nslot_shift_wind > 0:
+    if self.Nslot_shift_wind not in [0, None]:
         wind_mat = shift_wind_mat(wind_mat, self.Nslot_shift_wind)
     if self.is_reverse_layer:
         wind_mat = reverse_layer(wind_mat)

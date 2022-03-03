@@ -4,6 +4,7 @@ import scipy.interpolate as scp_int
 
 def interp_Phi_dqh(self, Id, Iq):
     """Get the magnets d-axis inductance
+
     Parameters
     ----------
     self : LUTdq
@@ -21,6 +22,7 @@ def interp_Phi_dqh(self, Id, Iq):
 
     # Compute interpolant at first call
     if self.Phi_dqh_interp is None:
+
         # Calculate average value of dqh flux linkage
         Phi_dqh_mean = self.get_Phidqh_mean()
 

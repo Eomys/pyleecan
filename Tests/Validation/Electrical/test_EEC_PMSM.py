@@ -26,6 +26,8 @@ from pyleecan.definitions import DATA_DIR
 
 from Tests import save_validation_path as save_path
 
+is_show_fig = False
+
 
 @pytest.mark.long_5s
 @pytest.mark.MagFEMM
@@ -66,13 +68,14 @@ def test_EEC_PMSM(nb_worker=int(0.5 * cpu_count())):
     assert out_mag.mag.Tem_av == pytest.approx(82.7, rel=0.1)
 
     # Plot 3-phase current function of time
-    out.elec.get_Is().plot_2D_Data(
-        "time",
-        "phase[]",
-        save_path=join(save_path, "EEC_FEMM_IPMSM_currents.png"),
-        is_show_fig=False,
-        **dict_2D
-    )
+    if is_show_fig:
+        out.elec.get_Is().plot_2D_Data(
+            "time",
+            "phase[]",
+            # save_path=join(save_path, "EEC_FEMM_IPMSM_currents.png"),
+            # is_show_fig=False,
+            **dict_2D
+        )
 
     return out
 
@@ -89,10 +92,12 @@ def test_EEC_PMSM_sync_rel(nb_worker=int(0.5 * cpu_count())):
     """
 
     Toyota_Prius = load(join(DATA_DIR, "Machine", "Toyota_Prius.json"))
-    simu = Simu1(name="test_EEC_PMSM", machine=Toyota_Prius)
+    simu = Simu1(name="test_EEC_PMSM_sync_rel", machine=Toyota_Prius)
 
     # Definition of the input
-    simu.input = InputCurrent(OP=OPdq(N0=2000), Nt_tot=8 * 16, Na_tot=2048)
+    simu.input = InputCurrent(
+        OP=OPdq(N0=2000, Tem_av_ref=79), Nt_tot=8 * 16, Na_tot=2048
+    )
     simu.input.set_Id_Iq(I0=250 / sqrt(2), Phi0=60 * pi / 180)
 
     # Definition of the simulation (FEMM)
@@ -124,43 +129,47 @@ def test_EEC_PMSM_sync_rel(nb_worker=int(0.5 * cpu_count())):
 
     out = simu.run()
 
-    plot_2D(
-        array([x * 180 / pi for x in out.xoutput_dict["Phi0"].result]),
-        [out.xoutput_dict["Tem_av_ref"].result, Tem_av_ref],
-        legend_list=["Pyleecan", "Yang et al, 2013"],
-        xlabel="Current angle [deg]",
-        ylabel="Electrical torque [N.m]",
-        title="Electrical torque vs current angle",
-        save_path=join(save_path, "test_EEC_PMSM_validation.png"),
-        is_show_fig=False,
-        **dict_2D
-    )
+    Tem_eec = [out_ii.elec.Tem_av_ref for out_ii in out.output_list]
 
     qs = Toyota_Prius.stator.winding.qs
     p = Toyota_Prius.get_pole_pair_number()
     Tem_sync = zeros(N_simu)
     Tem_rel = zeros(N_simu)
-    phi_mag = out.output_list[0].simu.elec.eec.fluxlink.comp_fluxlinkage(Toyota_Prius)
+    phidqh_mean_mag = out.output_list[0].simu.elec.eec.fluxlink.comp_fluxlinkage(
+        Toyota_Prius
+    )
     for ii, out_ii in enumerate(out.output_list):
-        out_ii.simu.elec.eec.parameters["phi"] = phi_mag
+        eec_param = out_ii.elec.eec_param
+        eec_param["Phid_mag"] = phidqh_mean_mag[0]
+        eec_param["Phiq_mag"] = phidqh_mean_mag[1]
         Tem_sync[ii], Tem_rel[ii] = out_ii.simu.elec.eec.comp_torque_sync_rel(
-            qs, p, Toyota_Prius
+            eec_param, qs, p, Toyota_Prius
         )
 
     Tem2 = Tem_sync + Tem_rel
-    assert_almost_equal(out.xoutput_dict["Tem_av_ref"].result - Tem2, 0, decimal=13)
+    assert_almost_equal(Tem_eec - Tem2, 0, decimal=13)
 
-    plot_2D(
-        array([x * 180 / pi for x in out.xoutput_dict["Phi0"].result]),
-        [out.xoutput_dict["Tem_av_ref"].result, Tem_sync, Tem_rel],
-        legend_list=["Overall", "Synchronous", "Reluctant"],
-        xlabel="Current angle [deg]",
-        ylabel="Electrical torque [N.m]",
-        title="Electrical torque vs current angle",
-        save_path=join(save_path, "test_EEC_PMSM_sync_rel.png"),
-        is_show_fig=False,
-        **dict_2D
-    )
+    if is_show_fig:
+
+        plot_2D(
+            array([x * 180 / pi for x in out.xoutput_dict["Phi0"].result]),
+            [Tem_eec, Tem_av_ref],
+            legend_list=["Pyleecan", "Yang et al, 2013"],
+            xlabel="Current angle [deg]",
+            ylabel="Electrical torque [N.m]",
+            title="Electrical torque vs current angle",
+            **dict_2D
+        )
+
+        plot_2D(
+            array([x * 180 / pi for x in out.xoutput_dict["Phi0"].result]),
+            [Tem_eec, Tem_sync, Tem_rel],
+            legend_list=["Overall", "Synchronous", "Reluctant"],
+            xlabel="Current angle [deg]",
+            ylabel="Electrical torque [N.m]",
+            title="Electrical torque vs current angle",
+            **dict_2D
+        )
 
     return out
 

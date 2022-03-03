@@ -21,10 +21,10 @@ param_list = [
     {
         "name": "Toyota_Prius",
         "resistance": 0.035951,
-        "stator_d_axis": 1.3076,
+        "stator_d_axis": 1.3089,
         "rotor_d_axis": pi / 8,
         "mmf_dir": 1,
-        "Tem_av": 368.45,
+        "Tem_av": 364.89,
     },
     {
         "name": "Protean_InWheel",
@@ -32,7 +32,7 @@ param_list = [
         "stator_d_axis": 0.09817,
         "rotor_d_axis": pi / 64,
         "mmf_dir": -1,
-        "Tem_av": 806.35,
+        "Tem_av": 807.44,
     },
 ]
 
@@ -104,7 +104,7 @@ def test_mmf_dir(param_dict, nb_worker=int(cpu_count() / 2)):
 
         simu.input = InputCurrent(
             OP=OPdq(Id_ref=-100, Iq_ref=200, N0=1000),  # arbitrary current
-            Nt_tot=4 * nb_worker * per_t,
+            Nt_tot=4 * per_t,
             Na_tot=200 * per_a,
         )
 

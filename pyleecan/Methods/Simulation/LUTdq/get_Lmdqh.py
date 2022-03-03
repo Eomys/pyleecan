@@ -12,6 +12,8 @@ def get_Lmdqh(self, Id, Iq, Phi_dqh=None):
         current Id
     Iq : float
         current Iq
+    Phi_dqh: ndarray
+        Stator winding dqh flux
 
     Returns
     ----------
@@ -20,7 +22,6 @@ def get_Lmdqh(self, Id, Iq, Phi_dqh=None):
     """
 
     if Phi_dqh is None:
-        # Get dqh flux function of current
         Phi_dqh = self.interp_Phi_dqh(Id=Id, Iq=Iq)
 
     # Get dqh flux linkage (without currents, only due to PM)

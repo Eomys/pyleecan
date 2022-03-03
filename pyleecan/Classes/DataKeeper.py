@@ -77,6 +77,7 @@ class DataKeeper(FrozenClass):
         error_keeper=None,
         result=-1,
         result_ref=None,
+        physic=None,
         init_dict=None,
         init_str=None,
     ):
@@ -109,6 +110,8 @@ class DataKeeper(FrozenClass):
                 result = init_dict["result"]
             if "result_ref" in list(init_dict.keys()):
                 result_ref = init_dict["result_ref"]
+            if "physic" in list(init_dict.keys()):
+                physic = init_dict["physic"]
         # Set the properties (value check and convertion are done in setter)
         self.parent = None
         self.name = name
@@ -118,6 +121,7 @@ class DataKeeper(FrozenClass):
         self.error_keeper = error_keeper
         self.result = result
         self.result_ref = result_ref
+        self.physic = physic
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -152,6 +156,7 @@ class DataKeeper(FrozenClass):
             + linesep
         )
         DataKeeper_str += "result_ref = " + str(self.result_ref) + linesep + linesep
+        DataKeeper_str += 'physic = "' + str(self.physic) + '"' + linesep
         return DataKeeper_str
 
     def __eq__(self, other):
@@ -176,6 +181,8 @@ class DataKeeper(FrozenClass):
         ):
             return False
         elif other.result_ref != self.result_ref:
+            return False
+        if other.physic != self.physic:
             return False
         return True
 
@@ -215,6 +222,8 @@ class DataKeeper(FrozenClass):
             )
         elif other._result_ref != self._result_ref:
             diff_list.append(name + ".result_ref")
+        if other._physic != self._physic:
+            diff_list.append(name + ".physic")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -232,6 +241,7 @@ class DataKeeper(FrozenClass):
             for value in self.result:
                 S += getsizeof(value)
         S += getsizeof(self.result_ref)
+        S += getsizeof(self.physic)
         return S
 
     def _set_None(self):
@@ -247,6 +257,7 @@ class DataKeeper(FrozenClass):
             self.result_ref._set_None()
         else:
             self.result_ref = None
+        self.physic = None
 
     def _get_name(self):
         """getter of name"""
@@ -418,5 +429,23 @@ class DataKeeper(FrozenClass):
         doc=u"""Result for the reference simulation
 
         :Type: 
+        """,
+    )
+
+    def _get_physic(self):
+        """getter of physic"""
+        return self._physic
+
+    def _set_physic(self, value):
+        """setter of physic"""
+        check_var("physic", value, "str")
+        self._physic = value
+
+    physic = property(
+        fget=_get_physic,
+        fset=_set_physic,
+        doc=u"""Physic of the tracked quantity
+
+        :Type: str
         """,
     )

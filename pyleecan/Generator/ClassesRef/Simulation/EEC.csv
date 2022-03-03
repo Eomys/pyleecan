@@ -2,3 +2,4 @@ Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximu
 parameters,-,"Parameters of the EEC: computed if empty, or enforced",,dict,None,,,,Simulation,,,VERSION,1,Equivalent Electrical Circuit abstract class
 LUT_enforced,-,Electrical Look Up Table to be enforced ,,LUT,None,,,,,,,,,
 drive,-,Drive,,Drive,None,,,,,,,,,
+type_skin_effect,-,Skin effect for resistance and inductance,1,int,1,,,,,,,,,

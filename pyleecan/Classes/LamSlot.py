@@ -72,6 +72,11 @@ try:
 except ImportError as error:
     get_surfaces_closing = error
 
+try:
+    from ..Methods.Machine.LamSlot.has_magnet import has_magnet
+except ImportError as error:
+    has_magnet = error
+
 
 from ._check import InitUnKnowClassError
 from .Slot import Slot
@@ -208,6 +213,15 @@ class LamSlot(Lamination):
         )
     else:
         get_surfaces_closing = get_surfaces_closing
+    # cf Methods.Machine.LamSlot.has_magnet
+    if isinstance(has_magnet, ImportError):
+        has_magnet = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use LamSlot method has_magnet: " + str(has_magnet))
+            )
+        )
+    else:
+        has_magnet = has_magnet
     # save and copy methods are available in all object
     save = save
     copy = copy

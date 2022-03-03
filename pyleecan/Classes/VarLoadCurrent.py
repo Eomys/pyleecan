@@ -18,11 +18,6 @@ from .VarLoad import VarLoad
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
 try:
-    from ..Methods.Simulation.VarLoadCurrent.get_input_list import get_input_list
-except ImportError as error:
-    get_input_list = error
-
-try:
     from ..Methods.Simulation.VarLoadCurrent.generate_simulation_list import (
         generate_simulation_list,
     )
@@ -35,6 +30,11 @@ try:
     )
 except ImportError as error:
     get_elec_datakeeper = error
+
+try:
+    from ..Methods.Simulation.VarLoadCurrent.get_input_list import get_input_list
+except ImportError as error:
+    get_input_list = error
 
 
 from numpy import array, array_equal
@@ -50,18 +50,6 @@ class VarLoadCurrent(VarLoad):
     VERSION = 1
 
     # Check ImportError to remove unnecessary dependencies in unused method
-    # cf Methods.Simulation.VarLoadCurrent.get_input_list
-    if isinstance(get_input_list, ImportError):
-        get_input_list = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use VarLoadCurrent method get_input_list: "
-                    + str(get_input_list)
-                )
-            )
-        )
-    else:
-        get_input_list = get_input_list
     # cf Methods.Simulation.VarLoadCurrent.generate_simulation_list
     if isinstance(generate_simulation_list, ImportError):
         generate_simulation_list = property(
@@ -86,6 +74,18 @@ class VarLoadCurrent(VarLoad):
         )
     else:
         get_elec_datakeeper = get_elec_datakeeper
+    # cf Methods.Simulation.VarLoadCurrent.get_input_list
+    if isinstance(get_input_list, ImportError):
+        get_input_list = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use VarLoadCurrent method get_input_list: "
+                    + str(get_input_list)
+                )
+            )
+        )
+    else:
+        get_input_list = get_input_list
     # save and copy methods are available in all object
     save = save
     copy = copy

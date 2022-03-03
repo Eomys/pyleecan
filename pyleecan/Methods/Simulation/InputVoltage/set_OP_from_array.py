@@ -1,9 +1,9 @@
 from ....Classes.OPdq import OPdq
+from ....Classes.OPslip import OPslip
 
 
-def set_OP_from_array(self, OP_matrix, type_OP_matrix=1, index=0):
+def set_OP_from_array(self, OP_matrix, type_OP_matrix, index=0):
     """Extract the Operating Point from an OP_matrix
-
     Parameters
     ----------
     self : InputVoltage
@@ -20,17 +20,24 @@ def set_OP_from_array(self, OP_matrix, type_OP_matrix=1, index=0):
     assert len(OP_matrix.shape) == 2
     assert OP_matrix.shape[1] <= 5
     assert index < OP_matrix.shape[0]
-    assert type_OP_matrix in [0, 1]
+    assert type_OP_matrix in [0, 1, 2]
 
-    if type_OP_matrix == 1:
-        if self.OP is None:
+    if self.OP is None:
+        if type_OP_matrix in [0, 1]:
             self.OP = OPdq()
-        self.OP.Ud_ref = OP_matrix[index, 1]
-        self.OP.Uq_ref = OP_matrix[index, 2]
-    else:
-        if self.OP is None:
-            self.OP = OPdq()
-        self.set_Ud_Uq(U0=OP_matrix[index, 1], Phi0=OP_matrix[index, 2])
+        elif type_OP_matrix == 2:
+            self.OP = OPslip()
+
+    if type_OP_matrix == 0:
+        self.set_U0_UPhi0(U0=OP_matrix[index, 1], UPhi0=OP_matrix[index, 2])
+
+    elif type_OP_matrix == 1:
+        self.set_Ud_Uq(Ud=OP_matrix[index, 1], Uq=OP_matrix[index, 2])
+
+    elif type_OP_matrix == 2:
+        self.OP.set_U0_UPhi0(U0=OP_matrix[index, 1], UPhi0=0)
+        self.OP.slip_ref = OP_matrix[index, 2]
+
     self.OP.N0 = OP_matrix[index, 0]
     if OP_matrix.shape[1] > 3:
         self.OP.Tem_av_ref = OP_matrix[index, 3]

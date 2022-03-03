@@ -51,6 +51,8 @@ def comp_axis_phase(self, lamination, per_a=None, is_apera=None, Phase_in=None):
                     include_endpoint=False,
                     symmetries=sym_dict,
                     normalizations={"bar_id": Norm_indices()},
+                    is_overlay=True,
+                    # filter={"Phase": []},
                 )
             else:
                 # Creating the data object
@@ -59,6 +61,8 @@ def comp_axis_phase(self, lamination, per_a=None, is_apera=None, Phase_in=None):
                     unit="rad",
                     values=name_phase,
                     is_components=True,
+                    is_overlay=True,
+                    filter={"Phase": []},
                 )
 
     return Phase

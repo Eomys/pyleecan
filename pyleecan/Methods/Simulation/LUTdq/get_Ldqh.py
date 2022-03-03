@@ -1,5 +1,6 @@
 def get_Ldqh(self, Id, Iq, L_endwinding=0, Phi_dqh=None):
     """Get the total dqh inductance
+
     Parameters
     ----------
     self : LUTdq
@@ -10,6 +11,8 @@ def get_Ldqh(self, Id, Iq, L_endwinding=0, Phi_dqh=None):
         current Iq
     L_endwinding : float
         end winding inductance provided by user
+    Phi_dqh: ndarray
+        Stator winding dqh flux
 
     Returns
     ----------

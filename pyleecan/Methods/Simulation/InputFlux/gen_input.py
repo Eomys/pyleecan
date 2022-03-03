@@ -9,7 +9,7 @@ from ....Classes.Input import Input
 from ....Classes.InputCurrent import InputCurrent
 
 
-VERBOSE_KEY = {"Br": "Radial", "Bt": "Tangential", "Bz": "Axial"}
+VERBOSE_KEY = {"B_{rad}": "Radial", "B_{circ}": "Tangential", "B_{ax}": "Axial"}
 
 
 def gen_input(self):
@@ -27,6 +27,11 @@ def gen_input(self):
     # Get simulation and outputs
     simu = self.parent
     output = simu.parent
+
+    if simu.machine is not None:
+        machine = simu.machine
+    else:
+        raise Exception("Cannot import flux if simu.machine is None")
 
     logger = simu.get_logger()
 
@@ -89,7 +94,7 @@ def gen_input(self):
         )
 
         # Compute slices and angles
-        if "slice" in axes_values:
+        if "slice" in axes_values and len(axes_values["slice"]) > 1:
             Slice = DataPattern(
                 name="z",
                 unit="m",
