@@ -47,12 +47,12 @@ def run(self):
     # EEC will be computed on:
     eec_out.Tsta = self.Tsta
     eec_out.Trot = self.Trot
-    eec_out.OP = self.OP
+    eec_out.OP = output.elec.OP
 
     # LUT should contains a full EEC at given OP/T
-    if self.LUT is not None:
+    if self.LUT_enforced is not None:
         eec_out.clear_parameters()  # Remove eec enforced parameters to use LUT ones
-        eec_out.update_from_ref(self.LUT)
+        eec_out.update_from_ref(self.LUT_enforced)
     else:
         # Compute/Enforce parameters of the electrical equivalent circuit
         eec_out.comp_parameters()

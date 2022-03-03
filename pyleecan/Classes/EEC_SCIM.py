@@ -77,6 +77,11 @@ try:
 except ImportError as error:
     solve_elementary = error
 
+try:
+    from ..Methods.Simulation.EEC_SCIM.update_from_ref import update_from_ref
+except ImportError as error:
+    update_from_ref = error
+
 
 from numpy import array, array_equal
 from ._check import InitUnKnowClassError
@@ -215,6 +220,17 @@ class EEC_SCIM(EEC):
         )
     else:
         solve_elementary = solve_elementary
+    # cf Methods.Simulation.EEC_SCIM.update_from_ref
+    if isinstance(update_from_ref, ImportError):
+        update_from_ref = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use EEC_SCIM method update_from_ref: " + str(update_from_ref)
+                )
+            )
+        )
+    else:
+        update_from_ref = update_from_ref
     # save and copy methods are available in all object
     save = save
     copy = copy
@@ -242,10 +258,10 @@ class EEC_SCIM(EEC):
         OP=None,
         Tsta=20,
         Trot=20,
-        Xkr_skinS=None,
-        Xke_skinS=None,
-        Xkr_skinR=None,
-        Xke_skinR=None,
+        Xkr_skinS=1,
+        Xke_skinS=1,
+        Xkr_skinR=1,
+        Xke_skinR=1,
         R1=None,
         init_dict=None,
         init_str=None,

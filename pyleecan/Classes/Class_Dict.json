@@ -1078,7 +1078,7 @@
                 "name": "Xkr_skinS",
                 "type": "float",
                 "unit": "",
-                "value": null
+                "value": 1
             },
             {
                 "desc": "Skin effect coefficient for inductances at stator side",
@@ -1087,7 +1087,7 @@
                 "name": "Xke_skinS",
                 "type": "float",
                 "unit": "",
-                "value": null
+                "value": 1
             },
             {
                 "desc": "Skin effect coefficient for resistances at rotor side",
@@ -1096,7 +1096,7 @@
                 "name": "Xkr_skinR",
                 "type": "float",
                 "unit": "",
-                "value": null
+                "value": 1
             },
             {
                 "desc": "Skin effect coefficient for inductances at rotor side",
@@ -1105,7 +1105,7 @@
                 "name": "Xke_skinR",
                 "type": "float",
                 "unit": "",
-                "value": null
+                "value": 1
             },
             {
                 "desc": "Stator phase resistance",
@@ -1282,7 +1282,8 @@
             "comp_R2",
             "comp_skin_effect",
             "solve",
-            "solve_elementary"
+            "solve_elementary",
+            "update_from_ref"
         ],
         "mother": "EEC",
         "name": "EEC_SCIM",
@@ -1473,6 +1474,33 @@
                 "type": "float",
                 "unit": "Hz",
                 "value": 40000
+            },
+            {
+                "desc": "Look-Up Tables to update equivalent circuit parameters",
+                "max": "",
+                "min": "",
+                "name": "LUT_enforced",
+                "type": "LUT",
+                "unit": "-",
+                "value": null
+            },
+            {
+                "desc": "Average stator temperature for Electrical calculation",
+                "max": "",
+                "min": "",
+                "name": "Tsta",
+                "type": "float",
+                "unit": "deg Celsius",
+                "value": 20
+            },
+            {
+                "desc": "Average rotor temperature for Electrical calculation",
+                "max": "",
+                "min": "",
+                "name": "Trot",
+                "type": "float",
+                "unit": "deg Celsius",
+                "value": 20
             }
         ]
     },
@@ -4537,31 +4565,13 @@
         "path": "pyleecan/Generator/ClassesRef/Simulation/LUT.csv",
         "properties": [
             {
-                "desc": "DC phase winding resistance at T1_ref per phase ",
+                "desc": "Equivalent Electrical Circuit",
                 "max": "",
                 "min": "",
-                "name": "R1",
-                "type": "float",
-                "unit": "Ohm",
+                "name": "eec",
+                "type": "EEC",
+                "unit": "",
                 "value": null
-            },
-            {
-                "desc": "Phase winding leakage inductance ",
-                "max": "",
-                "min": "",
-                "name": "L1",
-                "type": "float",
-                "unit": "H",
-                "value": null
-            },
-            {
-                "desc": "Stator winding average temperature associated to R1, L1 parameters",
-                "max": "",
-                "min": "",
-                "name": "T1_ref",
-                "type": "float",
-                "unit": "degC",
-                "value": 20
             },
             {
                 "desc": "Array of operating point values of size (N,5) with N the number of operating points (Speed, Id, Iq, Torque, Power). OP values are set to nan if they are not given.",
@@ -4616,15 +4626,6 @@
                 "value": null
             },
             {
-                "desc": "Magnet average temperature at which Phi_dqh is given",
-                "max": "",
-                "min": "",
-                "name": "Tmag_ref",
-                "type": "float",
-                "unit": "degC",
-                "value": 20
-            },
-            {
                 "desc": "RMS stator winding flux linkage spectrum in dqh frame including harmonics (only magnets)",
                 "max": "",
                 "min": "",
@@ -4668,53 +4669,7 @@
         "name": "LUTslip",
         "package": "Simulation",
         "path": "pyleecan/Generator/ClassesRef/Simulation/LUTslip.csv",
-        "properties": [
-            {
-                "desc": "Magnetizing flux for a given magnetizing current I_m",
-                "max": "",
-                "min": "",
-                "name": "Phi_m",
-                "type": "ndarray",
-                "unit": "Wb",
-                "value": null
-            },
-            {
-                "desc": "Stator magnetizing current",
-                "max": "",
-                "min": "",
-                "name": "I_m",
-                "type": "ndarray",
-                "unit": "Arms",
-                "value": null
-            },
-            {
-                "desc": "Rotor bar average temperature at which Phi_m is given",
-                "max": "",
-                "min": "",
-                "name": "T2_ref",
-                "type": "float",
-                "unit": "degC",
-                "value": 20
-            },
-            {
-                "desc": "DC rotor winding resistance at T2_ref already expressed per phase in stator frame ",
-                "max": "",
-                "min": "",
-                "name": "R2",
-                "type": "float",
-                "unit": "Ohm",
-                "value": null
-            },
-            {
-                "desc": "Rotor winding leakage inductance",
-                "max": "",
-                "min": "",
-                "name": "L2",
-                "type": "float",
-                "unit": "H",
-                "value": null
-            }
-        ]
+        "properties": []
     },
     "LamHole": {
         "constants": [
