@@ -89,7 +89,7 @@ def test_EEC_ELUT_SCIM_001():
     )
 
     ELUT_SCIM_001 = LUTslip(
-        EEC_SCIM(
+        eec=EEC_SCIM(
             R1=param_dict["R1_20"],
             L1=param_dict["L10"],
             Tsta=20,
