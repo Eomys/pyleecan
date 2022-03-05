@@ -47,12 +47,36 @@ try:
 except ImportError as error:
     comp_BEMF_harmonics = error
 
+try:
+    from ..Methods.Simulation.EEC_PMSM.comp_Ld import comp_Ld
+except ImportError as error:
+    comp_Ld = error
+
+try:
+    from ..Methods.Simulation.EEC_PMSM.comp_Lq import comp_Lq
+except ImportError as error:
+    comp_Lq = error
+
+try:
+    from ..Methods.Simulation.EEC_PMSM.comp_Phidq import comp_Phidq
+except ImportError as error:
+    comp_Phidq = error
+
+try:
+    from ..Methods.Simulation.EEC_PMSM.comp_Phidq_mag import comp_Phidq_mag
+except ImportError as error:
+    comp_Phidq_mag = error
+
+try:
+    from ..Methods.Simulation.EEC_PMSM.update_from_ref import update_from_ref
+except ImportError as error:
+    update_from_ref = error
+
 
 from ._check import InitUnKnowClassError
 from .IndMag import IndMag
 from .FluxLink import FluxLink
-from .LUT import LUT
-from .Drive import Drive
+from .OP import OP
 
 
 class EEC_PMSM(EEC):
@@ -126,6 +150,55 @@ class EEC_PMSM(EEC):
         )
     else:
         comp_BEMF_harmonics = comp_BEMF_harmonics
+    # cf Methods.Simulation.EEC_PMSM.comp_Ld
+    if isinstance(comp_Ld, ImportError):
+        comp_Ld = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use EEC_PMSM method comp_Ld: " + str(comp_Ld))
+            )
+        )
+    else:
+        comp_Ld = comp_Ld
+    # cf Methods.Simulation.EEC_PMSM.comp_Lq
+    if isinstance(comp_Lq, ImportError):
+        comp_Lq = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use EEC_PMSM method comp_Lq: " + str(comp_Lq))
+            )
+        )
+    else:
+        comp_Lq = comp_Lq
+    # cf Methods.Simulation.EEC_PMSM.comp_Phidq
+    if isinstance(comp_Phidq, ImportError):
+        comp_Phidq = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use EEC_PMSM method comp_Phidq: " + str(comp_Phidq))
+            )
+        )
+    else:
+        comp_Phidq = comp_Phidq
+    # cf Methods.Simulation.EEC_PMSM.comp_Phidq_mag
+    if isinstance(comp_Phidq_mag, ImportError):
+        comp_Phidq_mag = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use EEC_PMSM method comp_Phidq_mag: " + str(comp_Phidq_mag)
+                )
+            )
+        )
+    else:
+        comp_Phidq_mag = comp_Phidq_mag
+    # cf Methods.Simulation.EEC_PMSM.update_from_ref
+    if isinstance(update_from_ref, ImportError):
+        update_from_ref = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use EEC_PMSM method update_from_ref: " + str(update_from_ref)
+                )
+            )
+        )
+    else:
+        update_from_ref = update_from_ref
     # save and copy methods are available in all object
     save = save
     copy = copy
@@ -136,10 +209,21 @@ class EEC_PMSM(EEC):
         self,
         indmag=None,
         fluxlink=None,
-        parameters=None,
-        LUT_enforced=None,
-        drive=None,
+        Ld=None,
+        Lq=None,
+        Phid=None,
+        Phiq=None,
+        Phid_mag=None,
+        Phiq_mag=None,
         type_skin_effect=1,
+        OP=None,
+        Tsta=20,
+        Trot=20,
+        Xkr_skinS=1,
+        Xke_skinS=1,
+        Xkr_skinR=1,
+        Xke_skinR=1,
+        R1=None,
         init_dict=None,
         init_str=None,
     ):
@@ -162,23 +246,56 @@ class EEC_PMSM(EEC):
                 indmag = init_dict["indmag"]
             if "fluxlink" in list(init_dict.keys()):
                 fluxlink = init_dict["fluxlink"]
-            if "parameters" in list(init_dict.keys()):
-                parameters = init_dict["parameters"]
-            if "LUT_enforced" in list(init_dict.keys()):
-                LUT_enforced = init_dict["LUT_enforced"]
-            if "drive" in list(init_dict.keys()):
-                drive = init_dict["drive"]
+            if "Ld" in list(init_dict.keys()):
+                Ld = init_dict["Ld"]
+            if "Lq" in list(init_dict.keys()):
+                Lq = init_dict["Lq"]
+            if "Phid" in list(init_dict.keys()):
+                Phid = init_dict["Phid"]
+            if "Phiq" in list(init_dict.keys()):
+                Phiq = init_dict["Phiq"]
+            if "Phid_mag" in list(init_dict.keys()):
+                Phid_mag = init_dict["Phid_mag"]
+            if "Phiq_mag" in list(init_dict.keys()):
+                Phiq_mag = init_dict["Phiq_mag"]
             if "type_skin_effect" in list(init_dict.keys()):
                 type_skin_effect = init_dict["type_skin_effect"]
+            if "OP" in list(init_dict.keys()):
+                OP = init_dict["OP"]
+            if "Tsta" in list(init_dict.keys()):
+                Tsta = init_dict["Tsta"]
+            if "Trot" in list(init_dict.keys()):
+                Trot = init_dict["Trot"]
+            if "Xkr_skinS" in list(init_dict.keys()):
+                Xkr_skinS = init_dict["Xkr_skinS"]
+            if "Xke_skinS" in list(init_dict.keys()):
+                Xke_skinS = init_dict["Xke_skinS"]
+            if "Xkr_skinR" in list(init_dict.keys()):
+                Xkr_skinR = init_dict["Xkr_skinR"]
+            if "Xke_skinR" in list(init_dict.keys()):
+                Xke_skinR = init_dict["Xke_skinR"]
+            if "R1" in list(init_dict.keys()):
+                R1 = init_dict["R1"]
         # Set the properties (value check and convertion are done in setter)
         self.indmag = indmag
         self.fluxlink = fluxlink
+        self.Ld = Ld
+        self.Lq = Lq
+        self.Phid = Phid
+        self.Phiq = Phiq
+        self.Phid_mag = Phid_mag
+        self.Phiq_mag = Phiq_mag
         # Call EEC init
         super(EEC_PMSM, self).__init__(
-            parameters=parameters,
-            LUT_enforced=LUT_enforced,
-            drive=drive,
             type_skin_effect=type_skin_effect,
+            OP=OP,
+            Tsta=Tsta,
+            Trot=Trot,
+            Xkr_skinS=Xkr_skinS,
+            Xke_skinS=Xke_skinS,
+            Xkr_skinR=Xkr_skinR,
+            Xke_skinR=Xke_skinR,
+            R1=R1,
         )
         # The class is frozen (in EEC init), for now it's impossible to
         # add new properties
@@ -199,6 +316,12 @@ class EEC_PMSM(EEC):
             EEC_PMSM_str += "fluxlink = " + tmp
         else:
             EEC_PMSM_str += "fluxlink = None" + linesep + linesep
+        EEC_PMSM_str += "Ld = " + str(self.Ld) + linesep
+        EEC_PMSM_str += "Lq = " + str(self.Lq) + linesep
+        EEC_PMSM_str += "Phid = " + str(self.Phid) + linesep
+        EEC_PMSM_str += "Phiq = " + str(self.Phiq) + linesep
+        EEC_PMSM_str += "Phid_mag = " + str(self.Phid_mag) + linesep
+        EEC_PMSM_str += "Phiq_mag = " + str(self.Phiq_mag) + linesep
         return EEC_PMSM_str
 
     def __eq__(self, other):
@@ -213,6 +336,18 @@ class EEC_PMSM(EEC):
         if other.indmag != self.indmag:
             return False
         if other.fluxlink != self.fluxlink:
+            return False
+        if other.Ld != self.Ld:
+            return False
+        if other.Lq != self.Lq:
+            return False
+        if other.Phid != self.Phid:
+            return False
+        if other.Phiq != self.Phiq:
+            return False
+        if other.Phid_mag != self.Phid_mag:
+            return False
+        if other.Phiq_mag != self.Phiq_mag:
             return False
         return True
 
@@ -241,6 +376,18 @@ class EEC_PMSM(EEC):
             diff_list.extend(
                 self.fluxlink.compare(other.fluxlink, name=name + ".fluxlink")
             )
+        if other._Ld != self._Ld:
+            diff_list.append(name + ".Ld")
+        if other._Lq != self._Lq:
+            diff_list.append(name + ".Lq")
+        if other._Phid != self._Phid:
+            diff_list.append(name + ".Phid")
+        if other._Phiq != self._Phiq:
+            diff_list.append(name + ".Phiq")
+        if other._Phid_mag != self._Phid_mag:
+            diff_list.append(name + ".Phid_mag")
+        if other._Phiq_mag != self._Phiq_mag:
+            diff_list.append(name + ".Phiq_mag")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -254,6 +401,12 @@ class EEC_PMSM(EEC):
         S += super(EEC_PMSM, self).__sizeof__()
         S += getsizeof(self.indmag)
         S += getsizeof(self.fluxlink)
+        S += getsizeof(self.Ld)
+        S += getsizeof(self.Lq)
+        S += getsizeof(self.Phid)
+        S += getsizeof(self.Phiq)
+        S += getsizeof(self.Phid_mag)
+        S += getsizeof(self.Phiq_mag)
         return S
 
     def as_dict(self, type_handle_ndarray=0, keep_function=False, **kwargs):
@@ -289,6 +442,12 @@ class EEC_PMSM(EEC):
                 keep_function=keep_function,
                 **kwargs
             )
+        EEC_PMSM_dict["Ld"] = self.Ld
+        EEC_PMSM_dict["Lq"] = self.Lq
+        EEC_PMSM_dict["Phid"] = self.Phid
+        EEC_PMSM_dict["Phiq"] = self.Phiq
+        EEC_PMSM_dict["Phid_mag"] = self.Phid_mag
+        EEC_PMSM_dict["Phiq_mag"] = self.Phiq_mag
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         EEC_PMSM_dict["__class__"] = "EEC_PMSM"
@@ -301,6 +460,12 @@ class EEC_PMSM(EEC):
             self.indmag._set_None()
         if self.fluxlink is not None:
             self.fluxlink._set_None()
+        self.Ld = None
+        self.Lq = None
+        self.Phid = None
+        self.Phiq = None
+        self.Phid_mag = None
+        self.Phiq_mag = None
         # Set to None the properties inherited from EEC
         super(EEC_PMSM, self)._set_None()
 
@@ -373,5 +538,113 @@ class EEC_PMSM(EEC):
         doc=u"""Flux Linkage
 
         :Type: FluxLink
+        """,
+    )
+
+    def _get_Ld(self):
+        """getter of Ld"""
+        return self._Ld
+
+    def _set_Ld(self, value):
+        """setter of Ld"""
+        check_var("Ld", value, "float")
+        self._Ld = value
+
+    Ld = property(
+        fget=_get_Ld,
+        fset=_set_Ld,
+        doc=u"""Stator winding inductance along d-axis
+
+        :Type: float
+        """,
+    )
+
+    def _get_Lq(self):
+        """getter of Lq"""
+        return self._Lq
+
+    def _set_Lq(self, value):
+        """setter of Lq"""
+        check_var("Lq", value, "float")
+        self._Lq = value
+
+    Lq = property(
+        fget=_get_Lq,
+        fset=_set_Lq,
+        doc=u"""Stator winding inductance along q-axis
+
+        :Type: float
+        """,
+    )
+
+    def _get_Phid(self):
+        """getter of Phid"""
+        return self._Phid
+
+    def _set_Phid(self, value):
+        """setter of Phid"""
+        check_var("Phid", value, "float")
+        self._Phid = value
+
+    Phid = property(
+        fget=_get_Phid,
+        fset=_set_Phid,
+        doc=u"""Stator winding flux along d-axis
+
+        :Type: float
+        """,
+    )
+
+    def _get_Phiq(self):
+        """getter of Phiq"""
+        return self._Phiq
+
+    def _set_Phiq(self, value):
+        """setter of Phiq"""
+        check_var("Phiq", value, "float")
+        self._Phiq = value
+
+    Phiq = property(
+        fget=_get_Phiq,
+        fset=_set_Phiq,
+        doc=u"""Stator winding flux along q-axis
+
+        :Type: float
+        """,
+    )
+
+    def _get_Phid_mag(self):
+        """getter of Phid_mag"""
+        return self._Phid_mag
+
+    def _set_Phid_mag(self, value):
+        """setter of Phid_mag"""
+        check_var("Phid_mag", value, "float")
+        self._Phid_mag = value
+
+    Phid_mag = property(
+        fget=_get_Phid_mag,
+        fset=_set_Phid_mag,
+        doc=u"""Stator winding flux along d-axis in open-circuit (rotor flux linkage)
+
+        :Type: float
+        """,
+    )
+
+    def _get_Phiq_mag(self):
+        """getter of Phiq_mag"""
+        return self._Phiq_mag
+
+    def _set_Phiq_mag(self, value):
+        """setter of Phiq_mag"""
+        check_var("Phiq_mag", value, "float")
+        self._Phiq_mag = value
+
+    Phiq_mag = property(
+        fget=_get_Phiq_mag,
+        fset=_set_Phiq_mag,
+        doc=u"""Stator winding flux along q-axis in open-circuit (rotor flux linkage)
+
+        :Type: float
         """,
     )

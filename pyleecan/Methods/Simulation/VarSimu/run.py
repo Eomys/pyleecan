@@ -172,6 +172,7 @@ def log_step_simu(index, nb_simu, paramexplorer_list, logger, layer):
     else:
         msg = ""
     InputCurrent = import_class("pyleecan.Classes", "InputCurrent")
+    InputVoltage = import_class("pyleecan.Classes", "InputVoltage")
     msg += "Running simulation " + str(index + 1) + "/" + str(nb_simu) + " with "
     for param_exp in paramexplorer_list:
         value = param_exp.get_value()[index]
@@ -179,6 +180,12 @@ def log_step_simu(index, nb_simu, paramexplorer_list, logger, layer):
             msg += "N0=" + format(value.OP.N0, ".6g") + " [rpm]"
             msg += ", Id=" + format(value.OP.Id_ref, ".4g") + " [Arms]"
             msg += ", Iq=" + format(value.OP.Iq_ref, ".4g") + " [Arms], "
+        elif isinstance(value, InputVoltage):
+            msg += "N0=" + format(value.OP.N0, ".6g") + " [rpm]"
+            msg += ", U0=" + format(value.OP.U0_ref, ".4g") + " [Vrms]"
+            msg += ", UPhi0=" + format(value.OP.UPhi0_ref, ".4g") + " [rad], "
+            if value.OP.slip_ref is not None:
+                msg += ", slip=" + format(value.OP.slip_ref, ".4g") + " [-], "
         elif isinstance(value, (list, np.ndarray)):
             msg += param_exp.symbol
             msg += "="

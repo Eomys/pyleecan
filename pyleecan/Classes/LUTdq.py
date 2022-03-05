@@ -57,6 +57,7 @@ try:
 except ImportError:
     RegularGridInterpolator = ImportError
 from ._check import InitUnKnowClassError
+from .EEC import EEC
 
 
 class LUTdq(LUT):
@@ -137,13 +138,10 @@ class LUTdq(LUT):
     def __init__(
         self,
         Phi_dqh_mean=None,
-        Tmag_ref=20,
         Phi_dqh_mag=None,
         Phi_wind=None,
         Phi_dqh_interp=None,
-        R1=None,
-        L1=None,
-        T1_ref=20,
+        eec=None,
         OP_matrix=None,
         phase_dir=None,
         init_dict=None,
@@ -166,34 +164,25 @@ class LUTdq(LUT):
             # Overwrite default value with init_dict content
             if "Phi_dqh_mean" in list(init_dict.keys()):
                 Phi_dqh_mean = init_dict["Phi_dqh_mean"]
-            if "Tmag_ref" in list(init_dict.keys()):
-                Tmag_ref = init_dict["Tmag_ref"]
             if "Phi_dqh_mag" in list(init_dict.keys()):
                 Phi_dqh_mag = init_dict["Phi_dqh_mag"]
             if "Phi_wind" in list(init_dict.keys()):
                 Phi_wind = init_dict["Phi_wind"]
             if "Phi_dqh_interp" in list(init_dict.keys()):
                 Phi_dqh_interp = init_dict["Phi_dqh_interp"]
-            if "R1" in list(init_dict.keys()):
-                R1 = init_dict["R1"]
-            if "L1" in list(init_dict.keys()):
-                L1 = init_dict["L1"]
-            if "T1_ref" in list(init_dict.keys()):
-                T1_ref = init_dict["T1_ref"]
+            if "eec" in list(init_dict.keys()):
+                eec = init_dict["eec"]
             if "OP_matrix" in list(init_dict.keys()):
                 OP_matrix = init_dict["OP_matrix"]
             if "phase_dir" in list(init_dict.keys()):
                 phase_dir = init_dict["phase_dir"]
         # Set the properties (value check and convertion are done in setter)
         self.Phi_dqh_mean = Phi_dqh_mean
-        self.Tmag_ref = Tmag_ref
         self.Phi_dqh_mag = Phi_dqh_mag
         self.Phi_wind = Phi_wind
         self.Phi_dqh_interp = Phi_dqh_interp
         # Call LUT init
-        super(LUTdq, self).__init__(
-            R1=R1, L1=L1, T1_ref=T1_ref, OP_matrix=OP_matrix, phase_dir=phase_dir
-        )
+        super(LUTdq, self).__init__(eec=eec, OP_matrix=OP_matrix, phase_dir=phase_dir)
         # The class is frozen (in LUT init), for now it's impossible to
         # add new properties
 
@@ -210,7 +199,6 @@ class LUTdq(LUT):
             + linesep
             + linesep
         )
-        LUTdq_str += "Tmag_ref = " + str(self.Tmag_ref) + linesep
         LUTdq_str += "Phi_dqh_mag = " + str(self.Phi_dqh_mag) + linesep + linesep
         LUTdq_str += "Phi_wind = " + str(self.Phi_wind) + linesep + linesep
         LUTdq_str += "Phi_dqh_interp = " + str(self.Phi_dqh_interp) + linesep + linesep
@@ -226,8 +214,6 @@ class LUTdq(LUT):
         if not super(LUTdq, self).__eq__(other):
             return False
         if not array_equal(other.Phi_dqh_mean, self.Phi_dqh_mean):
-            return False
-        if other.Tmag_ref != self.Tmag_ref:
             return False
         if other.Phi_dqh_mag != self.Phi_dqh_mag:
             return False
@@ -250,8 +236,6 @@ class LUTdq(LUT):
         diff_list.extend(super(LUTdq, self).compare(other, name=name))
         if not array_equal(other.Phi_dqh_mean, self.Phi_dqh_mean):
             diff_list.append(name + ".Phi_dqh_mean")
-        if other._Tmag_ref != self._Tmag_ref:
-            diff_list.append(name + ".Tmag_ref")
         if (other.Phi_dqh_mag is None and self.Phi_dqh_mag is not None) or (
             other.Phi_dqh_mag is not None and self.Phi_dqh_mag is None
         ):
@@ -296,7 +280,6 @@ class LUTdq(LUT):
         # Get size of the properties inherited from LUT
         S += super(LUTdq, self).__sizeof__()
         S += getsizeof(self.Phi_dqh_mean)
-        S += getsizeof(self.Tmag_ref)
         S += getsizeof(self.Phi_dqh_mag)
         if self.Phi_wind is not None:
             for value in self.Phi_wind:
@@ -334,7 +317,6 @@ class LUTdq(LUT):
                 raise Exception(
                     "Unknown type_handle_ndarray: " + str(type_handle_ndarray)
                 )
-        LUTdq_dict["Tmag_ref"] = self.Tmag_ref
         if self.Phi_dqh_mag is None:
             LUTdq_dict["Phi_dqh_mag"] = None
         else:
@@ -377,7 +359,6 @@ class LUTdq(LUT):
         """Set all the properties to None (except pyleecan object)"""
 
         self.Phi_dqh_mean = None
-        self.Tmag_ref = None
         self.Phi_dqh_mag = None
         self.Phi_wind = None
         self.Phi_dqh_interp = None
@@ -406,24 +387,6 @@ class LUTdq(LUT):
         doc=u"""RMS stator winding flux table in dqh frame (including magnets and currents given by I_dqh)
 
         :Type: ndarray
-        """,
-    )
-
-    def _get_Tmag_ref(self):
-        """getter of Tmag_ref"""
-        return self._Tmag_ref
-
-    def _set_Tmag_ref(self, value):
-        """setter of Tmag_ref"""
-        check_var("Tmag_ref", value, "float")
-        self._Tmag_ref = value
-
-    Tmag_ref = property(
-        fget=_get_Tmag_ref,
-        fset=_set_Tmag_ref,
-        doc=u"""Magnet average temperature at which Phi_dqh is given
-
-        :Type: float
         """,
     )
 
