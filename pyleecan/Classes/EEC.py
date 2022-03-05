@@ -32,6 +32,31 @@ try:
 except ImportError as error:
     comp_skin_effect = error
 
+try:
+    from ..Methods.Simulation.EEC.comp_parameters import comp_parameters
+except ImportError as error:
+    comp_parameters = error
+
+try:
+    from ..Methods.Simulation.EEC.update_from_ref import update_from_ref
+except ImportError as error:
+    update_from_ref = error
+
+try:
+    from ..Methods.Simulation.EEC.solve import solve
+except ImportError as error:
+    solve = error
+
+try:
+    from ..Methods.Simulation.EEC.solve_PWM import solve_PWM
+except ImportError as error:
+    solve_PWM = error
+
+try:
+    from ..Methods.Simulation.EEC.comp_joule_losses import comp_joule_losses
+except ImportError as error:
+    comp_joule_losses = error
+
 
 from ._check import InitUnKnowClassError
 from .OP import OP
@@ -75,6 +100,57 @@ class EEC(FrozenClass):
         )
     else:
         comp_skin_effect = comp_skin_effect
+    # cf Methods.Simulation.EEC.comp_parameters
+    if isinstance(comp_parameters, ImportError):
+        comp_parameters = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use EEC method comp_parameters: " + str(comp_parameters)
+                )
+            )
+        )
+    else:
+        comp_parameters = comp_parameters
+    # cf Methods.Simulation.EEC.update_from_ref
+    if isinstance(update_from_ref, ImportError):
+        update_from_ref = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use EEC method update_from_ref: " + str(update_from_ref)
+                )
+            )
+        )
+    else:
+        update_from_ref = update_from_ref
+    # cf Methods.Simulation.EEC.solve
+    if isinstance(solve, ImportError):
+        solve = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use EEC method solve: " + str(solve))
+            )
+        )
+    else:
+        solve = solve
+    # cf Methods.Simulation.EEC.solve_PWM
+    if isinstance(solve_PWM, ImportError):
+        solve_PWM = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use EEC method solve_PWM: " + str(solve_PWM))
+            )
+        )
+    else:
+        solve_PWM = solve_PWM
+    # cf Methods.Simulation.EEC.comp_joule_losses
+    if isinstance(comp_joule_losses, ImportError):
+        comp_joule_losses = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use EEC method comp_joule_losses: " + str(comp_joule_losses)
+                )
+            )
+        )
+    else:
+        comp_joule_losses = comp_joule_losses
     # save and copy methods are available in all object
     save = save
     copy = copy
