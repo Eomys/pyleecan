@@ -1,5 +1,6 @@
 def update_from_ref(self, LUT_ref):
-    """Compute the stator winding inductance along d-axis for the equivalent electrical circuit
+    """Compute and set the parameter attributes of the EEC from a reference LUT:
+    resistance, skin effect factors, inductance, fluxlinkage and back emf
 
     Parameters
     ----------

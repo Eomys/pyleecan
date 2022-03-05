@@ -2,8 +2,8 @@ from numpy import exp
 
 
 def comp_parameters(self):
-    """Compute the parameters of the equivalent electrical circuit:
-    resistance, inductance according to OP/T
+    """Compute and set the parameter attributes of the equivalent electrical circuit:
+    resistance, skin effect factors and inductance according to OP/T
 
     Parameters
     ----------

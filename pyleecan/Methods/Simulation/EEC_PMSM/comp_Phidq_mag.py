@@ -1,5 +1,5 @@
 def comp_Phidq_mag(self, OP_ref=None):
-    """Compute the stator winding flux in open-circuit for the equivalent electrical circuit
+    """Compute and set the stator winding flux in open-circuit for the EEC
 
     Parameters
     ----------
