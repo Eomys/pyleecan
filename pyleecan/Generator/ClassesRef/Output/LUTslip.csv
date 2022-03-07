@@ -1,2 +1,2 @@
 Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constante Name,Constante Value,Description classe,Classe fille
-,,,,,,,,,Simulation,LUT,,VERSION,1,Look Up Table class for u0/slip OP matrix,
+,,,,,,,,,Output,LUT,,VERSION,1,Look Up Table class for u0/slip OP matrix,

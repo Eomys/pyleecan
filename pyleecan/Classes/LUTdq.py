@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
-# File generated according to Generator/ClassesRef/Simulation/LUTdq.csv
+# File generated according to Generator/ClassesRef/Output/LUTdq.csv
 # WARNING! All changes made in this file will be lost!
-"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Simulation/LUTdq
+"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Output/LUTdq
 """
 
 from os import linesep
@@ -18,32 +18,32 @@ from .LUT import LUT
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
 try:
-    from ..Methods.Simulation.LUTdq.get_Ldqh import get_Ldqh
+    from ..Methods.Output.LUTdq.get_Ldqh import get_Ldqh
 except ImportError as error:
     get_Ldqh = error
 
 try:
-    from ..Methods.Simulation.LUTdq.get_Lmdqh import get_Lmdqh
+    from ..Methods.Output.LUTdq.get_Lmdqh import get_Lmdqh
 except ImportError as error:
     get_Lmdqh = error
 
 try:
-    from ..Methods.Simulation.LUTdq.get_Phidqh_mean import get_Phidqh_mean
+    from ..Methods.Output.LUTdq.get_Phidqh_mean import get_Phidqh_mean
 except ImportError as error:
     get_Phidqh_mean = error
 
 try:
-    from ..Methods.Simulation.LUTdq.get_Phidqh_mag import get_Phidqh_mag
+    from ..Methods.Output.LUTdq.get_Phidqh_mag import get_Phidqh_mag
 except ImportError as error:
     get_Phidqh_mag = error
 
 try:
-    from ..Methods.Simulation.LUTdq.get_Phidqh_mag_mean import get_Phidqh_mag_mean
+    from ..Methods.Output.LUTdq.get_Phidqh_mag_mean import get_Phidqh_mag_mean
 except ImportError as error:
     get_Phidqh_mag_mean = error
 
 try:
-    from ..Methods.Simulation.LUTdq.interp_Phi_dqh import interp_Phi_dqh
+    from ..Methods.Output.LUTdq.interp_Phi_dqh import interp_Phi_dqh
 except ImportError as error:
     interp_Phi_dqh = error
 
@@ -57,7 +57,17 @@ try:
 except ImportError:
     RegularGridInterpolator = ImportError
 from ._check import InitUnKnowClassError
-from .EEC import EEC
+from .ParamExplorer import ParamExplorer
+from .Output import Output
+from .DataKeeper import DataKeeper
+from .Simulation import Simulation
+from .OutGeo import OutGeo
+from .OutElec import OutElec
+from .OutMag import OutMag
+from .OutStruct import OutStruct
+from .OutPost import OutPost
+from .OutForce import OutForce
+from .OutLoss import OutLoss
 
 
 class LUTdq(LUT):
@@ -66,7 +76,7 @@ class LUTdq(LUT):
     VERSION = 1
 
     # Check ImportError to remove unnecessary dependencies in unused method
-    # cf Methods.Simulation.LUTdq.get_Ldqh
+    # cf Methods.Output.LUTdq.get_Ldqh
     if isinstance(get_Ldqh, ImportError):
         get_Ldqh = property(
             fget=lambda x: raise_(
@@ -75,7 +85,7 @@ class LUTdq(LUT):
         )
     else:
         get_Ldqh = get_Ldqh
-    # cf Methods.Simulation.LUTdq.get_Lmdqh
+    # cf Methods.Output.LUTdq.get_Lmdqh
     if isinstance(get_Lmdqh, ImportError):
         get_Lmdqh = property(
             fget=lambda x: raise_(
@@ -84,7 +94,7 @@ class LUTdq(LUT):
         )
     else:
         get_Lmdqh = get_Lmdqh
-    # cf Methods.Simulation.LUTdq.get_Phidqh_mean
+    # cf Methods.Output.LUTdq.get_Phidqh_mean
     if isinstance(get_Phidqh_mean, ImportError):
         get_Phidqh_mean = property(
             fget=lambda x: raise_(
@@ -95,7 +105,7 @@ class LUTdq(LUT):
         )
     else:
         get_Phidqh_mean = get_Phidqh_mean
-    # cf Methods.Simulation.LUTdq.get_Phidqh_mag
+    # cf Methods.Output.LUTdq.get_Phidqh_mag
     if isinstance(get_Phidqh_mag, ImportError):
         get_Phidqh_mag = property(
             fget=lambda x: raise_(
@@ -106,7 +116,7 @@ class LUTdq(LUT):
         )
     else:
         get_Phidqh_mag = get_Phidqh_mag
-    # cf Methods.Simulation.LUTdq.get_Phidqh_mag_mean
+    # cf Methods.Output.LUTdq.get_Phidqh_mag_mean
     if isinstance(get_Phidqh_mag_mean, ImportError):
         get_Phidqh_mag_mean = property(
             fget=lambda x: raise_(
@@ -118,7 +128,7 @@ class LUTdq(LUT):
         )
     else:
         get_Phidqh_mag_mean = get_Phidqh_mag_mean
-    # cf Methods.Simulation.LUTdq.interp_Phi_dqh
+    # cf Methods.Output.LUTdq.interp_Phi_dqh
     if isinstance(interp_Phi_dqh, ImportError):
         interp_Phi_dqh = property(
             fget=lambda x: raise_(
@@ -141,9 +151,22 @@ class LUTdq(LUT):
         Phi_dqh_mag=None,
         Phi_wind=None,
         Phi_dqh_interp=None,
-        eec=None,
-        OP_matrix=None,
-        phase_dir=None,
+        paramexplorer_list=-1,
+        output_list=-1,
+        xoutput_dict=-1,
+        nb_simu=0,
+        xoutput_ref=None,
+        xoutput_ref_index=None,
+        simu=-1,
+        path_result="",
+        geo=-1,
+        elec=-1,
+        mag=-1,
+        struct=-1,
+        post=-1,
+        logger_name="Pyleecan.Output",
+        force=-1,
+        loss=-1,
         init_dict=None,
         init_str=None,
     ):
@@ -170,19 +193,62 @@ class LUTdq(LUT):
                 Phi_wind = init_dict["Phi_wind"]
             if "Phi_dqh_interp" in list(init_dict.keys()):
                 Phi_dqh_interp = init_dict["Phi_dqh_interp"]
-            if "eec" in list(init_dict.keys()):
-                eec = init_dict["eec"]
-            if "OP_matrix" in list(init_dict.keys()):
-                OP_matrix = init_dict["OP_matrix"]
-            if "phase_dir" in list(init_dict.keys()):
-                phase_dir = init_dict["phase_dir"]
+            if "paramexplorer_list" in list(init_dict.keys()):
+                paramexplorer_list = init_dict["paramexplorer_list"]
+            if "output_list" in list(init_dict.keys()):
+                output_list = init_dict["output_list"]
+            if "xoutput_dict" in list(init_dict.keys()):
+                xoutput_dict = init_dict["xoutput_dict"]
+            if "nb_simu" in list(init_dict.keys()):
+                nb_simu = init_dict["nb_simu"]
+            if "xoutput_ref" in list(init_dict.keys()):
+                xoutput_ref = init_dict["xoutput_ref"]
+            if "xoutput_ref_index" in list(init_dict.keys()):
+                xoutput_ref_index = init_dict["xoutput_ref_index"]
+            if "simu" in list(init_dict.keys()):
+                simu = init_dict["simu"]
+            if "path_result" in list(init_dict.keys()):
+                path_result = init_dict["path_result"]
+            if "geo" in list(init_dict.keys()):
+                geo = init_dict["geo"]
+            if "elec" in list(init_dict.keys()):
+                elec = init_dict["elec"]
+            if "mag" in list(init_dict.keys()):
+                mag = init_dict["mag"]
+            if "struct" in list(init_dict.keys()):
+                struct = init_dict["struct"]
+            if "post" in list(init_dict.keys()):
+                post = init_dict["post"]
+            if "logger_name" in list(init_dict.keys()):
+                logger_name = init_dict["logger_name"]
+            if "force" in list(init_dict.keys()):
+                force = init_dict["force"]
+            if "loss" in list(init_dict.keys()):
+                loss = init_dict["loss"]
         # Set the properties (value check and convertion are done in setter)
         self.Phi_dqh_mean = Phi_dqh_mean
         self.Phi_dqh_mag = Phi_dqh_mag
         self.Phi_wind = Phi_wind
         self.Phi_dqh_interp = Phi_dqh_interp
         # Call LUT init
-        super(LUTdq, self).__init__(eec=eec, OP_matrix=OP_matrix, phase_dir=phase_dir)
+        super(LUTdq, self).__init__(
+            paramexplorer_list=paramexplorer_list,
+            output_list=output_list,
+            xoutput_dict=xoutput_dict,
+            nb_simu=nb_simu,
+            xoutput_ref=xoutput_ref,
+            xoutput_ref_index=xoutput_ref_index,
+            simu=simu,
+            path_result=path_result,
+            geo=geo,
+            elec=elec,
+            mag=mag,
+            struct=struct,
+            post=post,
+            logger_name=logger_name,
+            force=force,
+            loss=loss,
+        )
         # The class is frozen (in LUT init), for now it's impossible to
         # add new properties
 

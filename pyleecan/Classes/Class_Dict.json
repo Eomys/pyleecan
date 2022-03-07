@@ -4557,41 +4557,15 @@
         "desc": "Abstract class for Look Up Table (LUT)",
         "is_internal": false,
         "methods": [
-            "get_phase_dir"
+            "get_phase_dir",
+            "get_eec",
+            "get_OP_matrix"
         ],
-        "mother": "",
+        "mother": "XOutput",
         "name": "LUT",
-        "package": "Simulation",
-        "path": "pyleecan/Generator/ClassesRef/Simulation/LUT.csv",
-        "properties": [
-            {
-                "desc": "Equivalent Electrical Circuit",
-                "max": "",
-                "min": "",
-                "name": "eec",
-                "type": "EEC",
-                "unit": "",
-                "value": null
-            },
-            {
-                "desc": "Array of operating point values of size (N,5) with N the number of operating points (Speed, Id, Iq, Torque, Power). OP values are set to nan if they are not given.",
-                "max": "",
-                "min": "",
-                "name": "OP_matrix",
-                "type": "ndarray",
-                "unit": "",
-                "value": null
-            },
-            {
-                "desc": "Rotation direction of the stator phases (phase_dir*(n-1)*pi/qs, default value given by PHASE_DIR_REF)",
-                "max": "1",
-                "min": "-1",
-                "name": "phase_dir",
-                "type": "int",
-                "unit": "",
-                "value": null
-            }
-        ]
+        "package": "Output",
+        "path": "pyleecan/Generator/ClassesRef/Output/LUT.csv",
+        "properties": []
     },
     "LUTdq": {
         "constants": [
@@ -4613,8 +4587,8 @@
         ],
         "mother": "LUT",
         "name": "LUTdq",
-        "package": "Simulation",
-        "path": "pyleecan/Generator/ClassesRef/Simulation/LUTdq.csv",
+        "package": "Output",
+        "path": "pyleecan/Generator/ClassesRef/Output/LUTdq.csv",
         "properties": [
             {
                 "desc": "RMS stator winding flux table in dqh frame (including magnets and currents given by I_dqh)",
@@ -4667,8 +4641,8 @@
         "methods": [],
         "mother": "LUT",
         "name": "LUTslip",
-        "package": "Simulation",
-        "path": "pyleecan/Generator/ClassesRef/Simulation/LUTslip.csv",
+        "package": "Output",
+        "path": "pyleecan/Generator/ClassesRef/Output/LUTslip.csv",
         "properties": []
     },
     "LamHole": {
@@ -9173,6 +9147,9 @@
             }
         ],
         "daughters": [
+            "LUT",
+            "LUTdq",
+            "LUTslip",
             "XOutput"
         ],
         "desc": "Main Output object: gather all the outputs of all the modules",
@@ -10175,7 +10152,8 @@
         "is_internal": false,
         "methods": [
             "run",
-            "init_logger"
+            "init_logger",
+            "get_var_load"
         ],
         "mother": "",
         "name": "Simulation",
@@ -14479,7 +14457,11 @@
                 "value": "1"
             }
         ],
-        "daughters": [],
+        "daughters": [
+            "LUT",
+            "LUTdq",
+            "LUTslip"
+        ],
         "desc": "XOutput object: gather all the outputs of all the modules for multiple simulations",
         "is_internal": false,
         "methods": [

@@ -1,0 +1,4 @@
+Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constante Name,Constante Value,Description classe,Classe fille
+,,,,,,,,,Output,XOutput,get_phase_dir,VERSION,1,Abstract class for Look Up Table (LUT),
+,,,,,,,,,,,get_eec,,,,
+,,,,,,,,,,,get_OP_matrix,,,,

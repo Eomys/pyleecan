@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
-# File generated according to Generator/ClassesRef/Simulation/LUTslip.csv
+# File generated according to Generator/ClassesRef/Output/LUTslip.csv
 # WARNING! All changes made in this file will be lost!
-"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Simulation/LUTslip
+"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Output/LUTslip
 """
 
 from os import linesep
 from sys import getsizeof
 from logging import getLogger
-from ._check import set_array, check_var, raise_
+from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
 from ..Functions.copy import copy
@@ -15,9 +15,18 @@ from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
 from .LUT import LUT
 
-from numpy import array, array_equal
 from ._check import InitUnKnowClassError
-from .EEC import EEC
+from .ParamExplorer import ParamExplorer
+from .Output import Output
+from .DataKeeper import DataKeeper
+from .Simulation import Simulation
+from .OutGeo import OutGeo
+from .OutElec import OutElec
+from .OutMag import OutMag
+from .OutStruct import OutStruct
+from .OutPost import OutPost
+from .OutForce import OutForce
+from .OutLoss import OutLoss
 
 
 class LUTslip(LUT):
@@ -32,7 +41,25 @@ class LUTslip(LUT):
     get_logger = get_logger
 
     def __init__(
-        self, eec=None, OP_matrix=None, phase_dir=None, init_dict=None, init_str=None
+        self,
+        paramexplorer_list=-1,
+        output_list=-1,
+        xoutput_dict=-1,
+        nb_simu=0,
+        xoutput_ref=None,
+        xoutput_ref_index=None,
+        simu=-1,
+        path_result="",
+        geo=-1,
+        elec=-1,
+        mag=-1,
+        struct=-1,
+        post=-1,
+        logger_name="Pyleecan.Output",
+        force=-1,
+        loss=-1,
+        init_dict=None,
+        init_str=None,
     ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
@@ -49,15 +76,58 @@ class LUTslip(LUT):
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
-            if "eec" in list(init_dict.keys()):
-                eec = init_dict["eec"]
-            if "OP_matrix" in list(init_dict.keys()):
-                OP_matrix = init_dict["OP_matrix"]
-            if "phase_dir" in list(init_dict.keys()):
-                phase_dir = init_dict["phase_dir"]
+            if "paramexplorer_list" in list(init_dict.keys()):
+                paramexplorer_list = init_dict["paramexplorer_list"]
+            if "output_list" in list(init_dict.keys()):
+                output_list = init_dict["output_list"]
+            if "xoutput_dict" in list(init_dict.keys()):
+                xoutput_dict = init_dict["xoutput_dict"]
+            if "nb_simu" in list(init_dict.keys()):
+                nb_simu = init_dict["nb_simu"]
+            if "xoutput_ref" in list(init_dict.keys()):
+                xoutput_ref = init_dict["xoutput_ref"]
+            if "xoutput_ref_index" in list(init_dict.keys()):
+                xoutput_ref_index = init_dict["xoutput_ref_index"]
+            if "simu" in list(init_dict.keys()):
+                simu = init_dict["simu"]
+            if "path_result" in list(init_dict.keys()):
+                path_result = init_dict["path_result"]
+            if "geo" in list(init_dict.keys()):
+                geo = init_dict["geo"]
+            if "elec" in list(init_dict.keys()):
+                elec = init_dict["elec"]
+            if "mag" in list(init_dict.keys()):
+                mag = init_dict["mag"]
+            if "struct" in list(init_dict.keys()):
+                struct = init_dict["struct"]
+            if "post" in list(init_dict.keys()):
+                post = init_dict["post"]
+            if "logger_name" in list(init_dict.keys()):
+                logger_name = init_dict["logger_name"]
+            if "force" in list(init_dict.keys()):
+                force = init_dict["force"]
+            if "loss" in list(init_dict.keys()):
+                loss = init_dict["loss"]
         # Set the properties (value check and convertion are done in setter)
         # Call LUT init
-        super(LUTslip, self).__init__(eec=eec, OP_matrix=OP_matrix, phase_dir=phase_dir)
+        super(LUTslip, self).__init__(
+            paramexplorer_list=paramexplorer_list,
+            output_list=output_list,
+            xoutput_dict=xoutput_dict,
+            nb_simu=nb_simu,
+            xoutput_ref=xoutput_ref,
+            xoutput_ref_index=xoutput_ref_index,
+            simu=simu,
+            path_result=path_result,
+            geo=geo,
+            elec=elec,
+            mag=mag,
+            struct=struct,
+            post=post,
+            logger_name=logger_name,
+            force=force,
+            loss=loss,
+        )
         # The class is frozen (in LUT init), for now it's impossible to
         # add new properties
 
