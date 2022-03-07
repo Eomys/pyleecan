@@ -17,9 +17,6 @@ def store(self, out_dict):
 
     """
 
-    # Store electrical circuit parameters
-    self.eec_param = out_dict["eec_param"]
-
     # Store Id, Iq, Ud, Uq in OP
     self.OP.set_Id_Iq(Id=out_dict["Id"], Iq=out_dict["Iq"])
     self.OP.set_Ud_Uq(Ud=out_dict["Ud"], Uq=out_dict["Uq"])

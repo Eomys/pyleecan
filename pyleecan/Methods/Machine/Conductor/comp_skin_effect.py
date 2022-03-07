@@ -1,7 +1,7 @@
 from numpy import pi, sqrt, sin
 
 
-def comp_skin_effect(self, freq, Tfact=1, type_skin_effect=1):
+def comp_skin_effect(self, freq, T_op=20, T_ref=20, type_skin_effect=1):
     """Compute the skin effect factor for the conductor
 
     Parameters
@@ -10,8 +10,10 @@ def comp_skin_effect(self, freq, Tfact=1, type_skin_effect=1):
         an Conductor object
     freq: float
         electrical frequency [Hz]
-    T: float
-        Conductor temperature factor []
+    T_op: float
+        Conductor operational temperature [degC]
+    T_ref: float
+        Conductor reference temperature [degC]
     type_skin_effect: int
         Model type for skin effect calculation:
         - 1: analytical model (default)
@@ -24,19 +26,21 @@ def comp_skin_effect(self, freq, Tfact=1, type_skin_effect=1):
         skin effect coeff for inductance at freq
     """
 
-    rhosw20 = self.cond_mat.elec.rho
-    rho = rhosw20 * Tfact
-    sigmar = 1 / rho
-    mu0 = 4 * pi * 1e-7
-    ws = 2 * pi * freq
-    Slot = self.parent.parent.slot
-    # nsw = len(ws)
-
     # initialization
     Xkr_skinS = 1
     Xke_skinS = 1
 
     if type_skin_effect == 1:  # analytical calculations based on Pyrhonen
+
+        Tfact = self.comp_temperature_effect(T_op=T_op, T_ref=T_ref)
+        rhosw20 = self.cond_mat.elec.rho
+        rho = rhosw20 * Tfact
+        sigmar = 1 / rho
+        mu0 = 4 * pi * 1e-7
+        ws = 2 * pi * freq
+        Slot = self.parent.parent.slot
+        # nsw = len(ws)
+
         # case of preformed rectangular wire CondType11
         if hasattr(self, "Wwire") and hasattr(self, "Hwire"):
             Hwire = self.Hwire

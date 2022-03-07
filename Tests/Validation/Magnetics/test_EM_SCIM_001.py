@@ -174,25 +174,25 @@ def test_EM_SCIM_001_varslip():
 
     simu.var_simu = VarLoadVoltage(OP_matrix=OP_matrix, type_OP_matrix=2)
 
-    # Set values from V1
+    # Set values from Manatee V1
     Im = np.linspace(0, 200, 2)
+    Lm = 0.0774 * np.ones(2)
     ELUT_SCIM_001 = LUTslip(
-        R1=5.73,
-        L1=0,
-        T1_ref=20,
-        R2=0.1677,
-        L2=0.0109,
-        T2_ref=20,
-        Phi_m=0.0774 * Im,
-        I_m=Im,
+        eec=EEC_SCIM(
+            R1=5.73,
+            L1=0,
+            Tsta=20,
+            R2=0.1677,
+            L2=0.0109,
+            Trot=20,
+            Lm_table=Lm,
+            Im_table=Im,
+            type_skin_effect=0,
+        )
     )
 
     # Configure simulation
-    simu.elec = Electrical(
-        Tsta=20,
-        Trot=20,
-        eec=EEC_SCIM(LUT_enforced=ELUT_SCIM_001, type_skin_effect=0),
-    )
+    simu.elec = Electrical(Tsta=20, Trot=20, LUT_enforced=ELUT_SCIM_001)
 
     simu.mag = MagFEMM(
         is_periodicity_a=True,
@@ -227,5 +227,5 @@ def test_EM_SCIM_001_varslip():
 
 if __name__ == "__main__":
 
-    out = test_EM_SCIM_001_maxwell_current_enforced()
-    # out = test_EM_SCIM_001_varslip()
+    # out = test_EM_SCIM_001_maxwell_current_enforced()
+    out = test_EM_SCIM_001_varslip()

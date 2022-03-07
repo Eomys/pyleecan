@@ -15,9 +15,26 @@ from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
 from ._frozen import FrozenClass
 
+# Import all class method
+# Try/catch to remove unnecessary dependencies in unused method
+try:
+    from ..Methods.Simulation.EEC.get_machine_from_parent import get_machine_from_parent
+except ImportError as error:
+    get_machine_from_parent = error
+
+try:
+    from ..Methods.Simulation.EEC.comp_R1 import comp_R1
+except ImportError as error:
+    comp_R1 = error
+
+try:
+    from ..Methods.Simulation.EEC.comp_skin_effect import comp_skin_effect
+except ImportError as error:
+    comp_skin_effect = error
+
+
 from ._check import InitUnKnowClassError
-from .LUT import LUT
-from .Drive import Drive
+from .OP import OP
 
 
 class EEC(FrozenClass):
@@ -25,6 +42,39 @@ class EEC(FrozenClass):
 
     VERSION = 1
 
+    # Check ImportError to remove unnecessary dependencies in unused method
+    # cf Methods.Simulation.EEC.get_machine_from_parent
+    if isinstance(get_machine_from_parent, ImportError):
+        get_machine_from_parent = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use EEC method get_machine_from_parent: "
+                    + str(get_machine_from_parent)
+                )
+            )
+        )
+    else:
+        get_machine_from_parent = get_machine_from_parent
+    # cf Methods.Simulation.EEC.comp_R1
+    if isinstance(comp_R1, ImportError):
+        comp_R1 = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use EEC method comp_R1: " + str(comp_R1))
+            )
+        )
+    else:
+        comp_R1 = comp_R1
+    # cf Methods.Simulation.EEC.comp_skin_effect
+    if isinstance(comp_skin_effect, ImportError):
+        comp_skin_effect = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use EEC method comp_skin_effect: " + str(comp_skin_effect)
+                )
+            )
+        )
+    else:
+        comp_skin_effect = comp_skin_effect
     # save and copy methods are available in all object
     save = save
     copy = copy
@@ -33,10 +83,15 @@ class EEC(FrozenClass):
 
     def __init__(
         self,
-        parameters=None,
-        LUT_enforced=None,
-        drive=None,
         type_skin_effect=1,
+        OP=None,
+        Tsta=20,
+        Trot=20,
+        Xkr_skinS=1,
+        Xke_skinS=1,
+        Xkr_skinR=1,
+        Xke_skinR=1,
+        R1=None,
         init_dict=None,
         init_str=None,
     ):
@@ -55,20 +110,35 @@ class EEC(FrozenClass):
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
-            if "parameters" in list(init_dict.keys()):
-                parameters = init_dict["parameters"]
-            if "LUT_enforced" in list(init_dict.keys()):
-                LUT_enforced = init_dict["LUT_enforced"]
-            if "drive" in list(init_dict.keys()):
-                drive = init_dict["drive"]
             if "type_skin_effect" in list(init_dict.keys()):
                 type_skin_effect = init_dict["type_skin_effect"]
+            if "OP" in list(init_dict.keys()):
+                OP = init_dict["OP"]
+            if "Tsta" in list(init_dict.keys()):
+                Tsta = init_dict["Tsta"]
+            if "Trot" in list(init_dict.keys()):
+                Trot = init_dict["Trot"]
+            if "Xkr_skinS" in list(init_dict.keys()):
+                Xkr_skinS = init_dict["Xkr_skinS"]
+            if "Xke_skinS" in list(init_dict.keys()):
+                Xke_skinS = init_dict["Xke_skinS"]
+            if "Xkr_skinR" in list(init_dict.keys()):
+                Xkr_skinR = init_dict["Xkr_skinR"]
+            if "Xke_skinR" in list(init_dict.keys()):
+                Xke_skinR = init_dict["Xke_skinR"]
+            if "R1" in list(init_dict.keys()):
+                R1 = init_dict["R1"]
         # Set the properties (value check and convertion are done in setter)
         self.parent = None
-        self.parameters = parameters
-        self.LUT_enforced = LUT_enforced
-        self.drive = drive
         self.type_skin_effect = type_skin_effect
+        self.OP = OP
+        self.Tsta = Tsta
+        self.Trot = Trot
+        self.Xkr_skinS = Xkr_skinS
+        self.Xke_skinS = Xke_skinS
+        self.Xkr_skinR = Xkr_skinR
+        self.Xke_skinR = Xke_skinR
+        self.R1 = R1
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -81,22 +151,19 @@ class EEC(FrozenClass):
             EEC_str += "parent = None " + linesep
         else:
             EEC_str += "parent = " + str(type(self.parent)) + " object" + linesep
-        EEC_str += "parameters = " + str(self.parameters) + linesep
-        if self.LUT_enforced is not None:
-            tmp = (
-                self.LUT_enforced.__str__()
-                .replace(linesep, linesep + "\t")
-                .rstrip("\t")
-            )
-            EEC_str += "LUT_enforced = " + tmp
-        else:
-            EEC_str += "LUT_enforced = None" + linesep + linesep
-        if self.drive is not None:
-            tmp = self.drive.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            EEC_str += "drive = " + tmp
-        else:
-            EEC_str += "drive = None" + linesep + linesep
         EEC_str += "type_skin_effect = " + str(self.type_skin_effect) + linesep
+        if self.OP is not None:
+            tmp = self.OP.__str__().replace(linesep, linesep + "\t").rstrip("\t")
+            EEC_str += "OP = " + tmp
+        else:
+            EEC_str += "OP = None" + linesep + linesep
+        EEC_str += "Tsta = " + str(self.Tsta) + linesep
+        EEC_str += "Trot = " + str(self.Trot) + linesep
+        EEC_str += "Xkr_skinS = " + str(self.Xkr_skinS) + linesep
+        EEC_str += "Xke_skinS = " + str(self.Xke_skinS) + linesep
+        EEC_str += "Xkr_skinR = " + str(self.Xkr_skinR) + linesep
+        EEC_str += "Xke_skinR = " + str(self.Xke_skinR) + linesep
+        EEC_str += "R1 = " + str(self.R1) + linesep
         return EEC_str
 
     def __eq__(self, other):
@@ -104,13 +171,23 @@ class EEC(FrozenClass):
 
         if type(other) != type(self):
             return False
-        if other.parameters != self.parameters:
-            return False
-        if other.LUT_enforced != self.LUT_enforced:
-            return False
-        if other.drive != self.drive:
-            return False
         if other.type_skin_effect != self.type_skin_effect:
+            return False
+        if other.OP != self.OP:
+            return False
+        if other.Tsta != self.Tsta:
+            return False
+        if other.Trot != self.Trot:
+            return False
+        if other.Xkr_skinS != self.Xkr_skinS:
+            return False
+        if other.Xke_skinS != self.Xke_skinS:
+            return False
+        if other.Xkr_skinR != self.Xkr_skinR:
+            return False
+        if other.Xke_skinR != self.Xke_skinR:
+            return False
+        if other.R1 != self.R1:
             return False
         return True
 
@@ -122,26 +199,28 @@ class EEC(FrozenClass):
         if type(other) != type(self):
             return ["type(" + name + ")"]
         diff_list = list()
-        if other._parameters != self._parameters:
-            diff_list.append(name + ".parameters")
-        if (other.LUT_enforced is None and self.LUT_enforced is not None) or (
-            other.LUT_enforced is not None and self.LUT_enforced is None
-        ):
-            diff_list.append(name + ".LUT_enforced None mismatch")
-        elif self.LUT_enforced is not None:
-            diff_list.extend(
-                self.LUT_enforced.compare(
-                    other.LUT_enforced, name=name + ".LUT_enforced"
-                )
-            )
-        if (other.drive is None and self.drive is not None) or (
-            other.drive is not None and self.drive is None
-        ):
-            diff_list.append(name + ".drive None mismatch")
-        elif self.drive is not None:
-            diff_list.extend(self.drive.compare(other.drive, name=name + ".drive"))
         if other._type_skin_effect != self._type_skin_effect:
             diff_list.append(name + ".type_skin_effect")
+        if (other.OP is None and self.OP is not None) or (
+            other.OP is not None and self.OP is None
+        ):
+            diff_list.append(name + ".OP None mismatch")
+        elif self.OP is not None:
+            diff_list.extend(self.OP.compare(other.OP, name=name + ".OP"))
+        if other._Tsta != self._Tsta:
+            diff_list.append(name + ".Tsta")
+        if other._Trot != self._Trot:
+            diff_list.append(name + ".Trot")
+        if other._Xkr_skinS != self._Xkr_skinS:
+            diff_list.append(name + ".Xkr_skinS")
+        if other._Xke_skinS != self._Xke_skinS:
+            diff_list.append(name + ".Xke_skinS")
+        if other._Xkr_skinR != self._Xkr_skinR:
+            diff_list.append(name + ".Xkr_skinR")
+        if other._Xke_skinR != self._Xke_skinR:
+            diff_list.append(name + ".Xke_skinR")
+        if other._R1 != self._R1:
+            diff_list.append(name + ".R1")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -150,12 +229,15 @@ class EEC(FrozenClass):
         """Return the size in memory of the object (including all subobject)"""
 
         S = 0  # Full size of the object
-        if self.parameters is not None:
-            for key, value in self.parameters.items():
-                S += getsizeof(value) + getsizeof(key)
-        S += getsizeof(self.LUT_enforced)
-        S += getsizeof(self.drive)
         S += getsizeof(self.type_skin_effect)
+        S += getsizeof(self.OP)
+        S += getsizeof(self.Tsta)
+        S += getsizeof(self.Trot)
+        S += getsizeof(self.Xkr_skinS)
+        S += getsizeof(self.Xke_skinS)
+        S += getsizeof(self.Xkr_skinR)
+        S += getsizeof(self.Xke_skinR)
+        S += getsizeof(self.R1)
         return S
 
     def as_dict(self, type_handle_ndarray=0, keep_function=False, **kwargs):
@@ -170,26 +252,22 @@ class EEC(FrozenClass):
         """
 
         EEC_dict = dict()
-        EEC_dict["parameters"] = (
-            self.parameters.copy() if self.parameters is not None else None
-        )
-        if self.LUT_enforced is None:
-            EEC_dict["LUT_enforced"] = None
-        else:
-            EEC_dict["LUT_enforced"] = self.LUT_enforced.as_dict(
-                type_handle_ndarray=type_handle_ndarray,
-                keep_function=keep_function,
-                **kwargs
-            )
-        if self.drive is None:
-            EEC_dict["drive"] = None
-        else:
-            EEC_dict["drive"] = self.drive.as_dict(
-                type_handle_ndarray=type_handle_ndarray,
-                keep_function=keep_function,
-                **kwargs
-            )
         EEC_dict["type_skin_effect"] = self.type_skin_effect
+        if self.OP is None:
+            EEC_dict["OP"] = None
+        else:
+            EEC_dict["OP"] = self.OP.as_dict(
+                type_handle_ndarray=type_handle_ndarray,
+                keep_function=keep_function,
+                **kwargs
+            )
+        EEC_dict["Tsta"] = self.Tsta
+        EEC_dict["Trot"] = self.Trot
+        EEC_dict["Xkr_skinS"] = self.Xkr_skinS
+        EEC_dict["Xke_skinS"] = self.Xke_skinS
+        EEC_dict["Xkr_skinR"] = self.Xkr_skinR
+        EEC_dict["Xke_skinR"] = self.Xke_skinR
+        EEC_dict["R1"] = self.R1
         # The class name is added to the dict for deserialisation purpose
         EEC_dict["__class__"] = "EEC"
         return EEC_dict
@@ -197,104 +275,16 @@ class EEC(FrozenClass):
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""
 
-        self.parameters = None
-        if self.LUT_enforced is not None:
-            self.LUT_enforced._set_None()
-        if self.drive is not None:
-            self.drive._set_None()
         self.type_skin_effect = None
-
-    def _get_parameters(self):
-        """getter of parameters"""
-        return self._parameters
-
-    def _set_parameters(self, value):
-        """setter of parameters"""
-        if type(value) is int and value == -1:
-            value = dict()
-        check_var("parameters", value, "dict")
-        self._parameters = value
-
-    parameters = property(
-        fget=_get_parameters,
-        fset=_set_parameters,
-        doc=u"""Parameters of the EEC: computed if empty, or enforced
-
-        :Type: dict
-        """,
-    )
-
-    def _get_LUT_enforced(self):
-        """getter of LUT_enforced"""
-        return self._LUT_enforced
-
-    def _set_LUT_enforced(self, value):
-        """setter of LUT_enforced"""
-        if isinstance(value, str):  # Load from file
-            try:
-                value = load_init_dict(value)[1]
-            except Exception as e:
-                self.get_logger().error(
-                    "Error while loading " + value + ", setting None instead"
-                )
-                value = None
-        if isinstance(value, dict) and "__class__" in value:
-            class_obj = import_class(
-                "pyleecan.Classes", value.get("__class__"), "LUT_enforced"
-            )
-            value = class_obj(init_dict=value)
-        elif type(value) is int and value == -1:  # Default constructor
-            value = LUT()
-        check_var("LUT_enforced", value, "LUT")
-        self._LUT_enforced = value
-
-        if self._LUT_enforced is not None:
-            self._LUT_enforced.parent = self
-
-    LUT_enforced = property(
-        fget=_get_LUT_enforced,
-        fset=_set_LUT_enforced,
-        doc=u"""Electrical Look Up Table to be enforced 
-
-        :Type: LUT
-        """,
-    )
-
-    def _get_drive(self):
-        """getter of drive"""
-        return self._drive
-
-    def _set_drive(self, value):
-        """setter of drive"""
-        if isinstance(value, str):  # Load from file
-            try:
-                value = load_init_dict(value)[1]
-            except Exception as e:
-                self.get_logger().error(
-                    "Error while loading " + value + ", setting None instead"
-                )
-                value = None
-        if isinstance(value, dict) and "__class__" in value:
-            class_obj = import_class(
-                "pyleecan.Classes", value.get("__class__"), "drive"
-            )
-            value = class_obj(init_dict=value)
-        elif type(value) is int and value == -1:  # Default constructor
-            value = Drive()
-        check_var("drive", value, "Drive")
-        self._drive = value
-
-        if self._drive is not None:
-            self._drive.parent = self
-
-    drive = property(
-        fget=_get_drive,
-        fset=_set_drive,
-        doc=u"""Drive
-
-        :Type: Drive
-        """,
-    )
+        if self.OP is not None:
+            self.OP._set_None()
+        self.Tsta = None
+        self.Trot = None
+        self.Xkr_skinS = None
+        self.Xke_skinS = None
+        self.Xkr_skinR = None
+        self.Xke_skinR = None
+        self.R1 = None
 
     def _get_type_skin_effect(self):
         """getter of type_skin_effect"""
@@ -311,5 +301,165 @@ class EEC(FrozenClass):
         doc=u"""Skin effect for resistance and inductance
 
         :Type: int
+        """,
+    )
+
+    def _get_OP(self):
+        """getter of OP"""
+        return self._OP
+
+    def _set_OP(self, value):
+        """setter of OP"""
+        if isinstance(value, str):  # Load from file
+            try:
+                value = load_init_dict(value)[1]
+            except Exception as e:
+                self.get_logger().error(
+                    "Error while loading " + value + ", setting None instead"
+                )
+                value = None
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class("pyleecan.Classes", value.get("__class__"), "OP")
+            value = class_obj(init_dict=value)
+        elif type(value) is int and value == -1:  # Default constructor
+            value = OP()
+        check_var("OP", value, "OP")
+        self._OP = value
+
+        if self._OP is not None:
+            self._OP.parent = self
+
+    OP = property(
+        fget=_get_OP,
+        fset=_set_OP,
+        doc=u"""Operating Point
+
+        :Type: OP
+        """,
+    )
+
+    def _get_Tsta(self):
+        """getter of Tsta"""
+        return self._Tsta
+
+    def _set_Tsta(self, value):
+        """setter of Tsta"""
+        check_var("Tsta", value, "float")
+        self._Tsta = value
+
+    Tsta = property(
+        fget=_get_Tsta,
+        fset=_set_Tsta,
+        doc=u"""Average stator temperature for operational EEC calculation
+
+        :Type: float
+        """,
+    )
+
+    def _get_Trot(self):
+        """getter of Trot"""
+        return self._Trot
+
+    def _set_Trot(self, value):
+        """setter of Trot"""
+        check_var("Trot", value, "float")
+        self._Trot = value
+
+    Trot = property(
+        fget=_get_Trot,
+        fset=_set_Trot,
+        doc=u"""Average rotor temperature for operational EEC calculation
+
+        :Type: float
+        """,
+    )
+
+    def _get_Xkr_skinS(self):
+        """getter of Xkr_skinS"""
+        return self._Xkr_skinS
+
+    def _set_Xkr_skinS(self, value):
+        """setter of Xkr_skinS"""
+        check_var("Xkr_skinS", value, "float")
+        self._Xkr_skinS = value
+
+    Xkr_skinS = property(
+        fget=_get_Xkr_skinS,
+        fset=_set_Xkr_skinS,
+        doc=u"""Skin effect coefficient for resistances at stator side
+
+        :Type: float
+        """,
+    )
+
+    def _get_Xke_skinS(self):
+        """getter of Xke_skinS"""
+        return self._Xke_skinS
+
+    def _set_Xke_skinS(self, value):
+        """setter of Xke_skinS"""
+        check_var("Xke_skinS", value, "float")
+        self._Xke_skinS = value
+
+    Xke_skinS = property(
+        fget=_get_Xke_skinS,
+        fset=_set_Xke_skinS,
+        doc=u"""Skin effect coefficient for inductances at stator side
+
+        :Type: float
+        """,
+    )
+
+    def _get_Xkr_skinR(self):
+        """getter of Xkr_skinR"""
+        return self._Xkr_skinR
+
+    def _set_Xkr_skinR(self, value):
+        """setter of Xkr_skinR"""
+        check_var("Xkr_skinR", value, "float")
+        self._Xkr_skinR = value
+
+    Xkr_skinR = property(
+        fget=_get_Xkr_skinR,
+        fset=_set_Xkr_skinR,
+        doc=u"""Skin effect coefficient for resistances at rotor side
+
+        :Type: float
+        """,
+    )
+
+    def _get_Xke_skinR(self):
+        """getter of Xke_skinR"""
+        return self._Xke_skinR
+
+    def _set_Xke_skinR(self, value):
+        """setter of Xke_skinR"""
+        check_var("Xke_skinR", value, "float")
+        self._Xke_skinR = value
+
+    Xke_skinR = property(
+        fget=_get_Xke_skinR,
+        fset=_set_Xke_skinR,
+        doc=u"""Skin effect coefficient for inductances at rotor side
+
+        :Type: float
+        """,
+    )
+
+    def _get_R1(self):
+        """getter of R1"""
+        return self._R1
+
+    def _set_R1(self, value):
+        """setter of R1"""
+        check_var("R1", value, "float")
+        self._R1 = value
+
+    R1 = property(
+        fget=_get_R1,
+        fset=_set_R1,
+        doc=u"""Stator phase resistance
+
+        :Type: float
         """,
     )

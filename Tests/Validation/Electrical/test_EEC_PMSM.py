@@ -135,16 +135,14 @@ def test_EEC_PMSM_sync_rel(nb_worker=int(0.5 * cpu_count())):
     p = Toyota_Prius.get_pole_pair_number()
     Tem_sync = zeros(N_simu)
     Tem_rel = zeros(N_simu)
-    phidqh_mean_mag = out.output_list[0].simu.elec.eec.fluxlink.comp_fluxlinkage(
-        Toyota_Prius
-    )
+    # phidqh_mean_mag = out.output_list[0].simu.elec.eec.fluxlink.comp_fluxlinkage(
+    #     Toyota_Prius
+    # )
     for ii, out_ii in enumerate(out.output_list):
-        eec_param = out_ii.elec.eec_param
-        eec_param["Phid_mag"] = phidqh_mean_mag[0]
-        eec_param["Phiq_mag"] = phidqh_mean_mag[1]
-        Tem_sync[ii], Tem_rel[ii] = out_ii.simu.elec.eec.comp_torque_sync_rel(
-            eec_param, qs, p, Toyota_Prius
-        )
+        # eec_ii = out_ii.elec.eec
+        # eec_ii.Phid_mag = phidqh_mean_mag[0]
+        # eec_ii.Phiq_mag = phidqh_mean_mag[1]
+        Tem_sync[ii], Tem_rel[ii] = out_ii.elec.eec.comp_torque_sync_rel()
 
     Tem2 = Tem_sync + Tem_rel
     assert_almost_equal(Tem_eec - Tem2, 0, decimal=13)

@@ -25,6 +25,7 @@ except ImportError as error:
 
 from numpy import array, array_equal
 from ._check import InitUnKnowClassError
+from .EEC import EEC
 
 
 class LUT(FrozenClass):
@@ -48,14 +49,7 @@ class LUT(FrozenClass):
     get_logger = get_logger
 
     def __init__(
-        self,
-        R1=None,
-        L1=None,
-        T1_ref=20,
-        OP_matrix=None,
-        phase_dir=None,
-        init_dict=None,
-        init_str=None,
+        self, eec=None, OP_matrix=None, phase_dir=None, init_dict=None, init_str=None
     ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
@@ -72,21 +66,15 @@ class LUT(FrozenClass):
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
-            if "R1" in list(init_dict.keys()):
-                R1 = init_dict["R1"]
-            if "L1" in list(init_dict.keys()):
-                L1 = init_dict["L1"]
-            if "T1_ref" in list(init_dict.keys()):
-                T1_ref = init_dict["T1_ref"]
+            if "eec" in list(init_dict.keys()):
+                eec = init_dict["eec"]
             if "OP_matrix" in list(init_dict.keys()):
                 OP_matrix = init_dict["OP_matrix"]
             if "phase_dir" in list(init_dict.keys()):
                 phase_dir = init_dict["phase_dir"]
         # Set the properties (value check and convertion are done in setter)
         self.parent = None
-        self.R1 = R1
-        self.L1 = L1
-        self.T1_ref = T1_ref
+        self.eec = eec
         self.OP_matrix = OP_matrix
         self.phase_dir = phase_dir
 
@@ -101,9 +89,11 @@ class LUT(FrozenClass):
             LUT_str += "parent = None " + linesep
         else:
             LUT_str += "parent = " + str(type(self.parent)) + " object" + linesep
-        LUT_str += "R1 = " + str(self.R1) + linesep
-        LUT_str += "L1 = " + str(self.L1) + linesep
-        LUT_str += "T1_ref = " + str(self.T1_ref) + linesep
+        if self.eec is not None:
+            tmp = self.eec.__str__().replace(linesep, linesep + "\t").rstrip("\t")
+            LUT_str += "eec = " + tmp
+        else:
+            LUT_str += "eec = None" + linesep + linesep
         LUT_str += (
             "OP_matrix = "
             + linesep
@@ -119,11 +109,7 @@ class LUT(FrozenClass):
 
         if type(other) != type(self):
             return False
-        if other.R1 != self.R1:
-            return False
-        if other.L1 != self.L1:
-            return False
-        if other.T1_ref != self.T1_ref:
+        if other.eec != self.eec:
             return False
         if not array_equal(other.OP_matrix, self.OP_matrix):
             return False
@@ -139,12 +125,12 @@ class LUT(FrozenClass):
         if type(other) != type(self):
             return ["type(" + name + ")"]
         diff_list = list()
-        if other._R1 != self._R1:
-            diff_list.append(name + ".R1")
-        if other._L1 != self._L1:
-            diff_list.append(name + ".L1")
-        if other._T1_ref != self._T1_ref:
-            diff_list.append(name + ".T1_ref")
+        if (other.eec is None and self.eec is not None) or (
+            other.eec is not None and self.eec is None
+        ):
+            diff_list.append(name + ".eec None mismatch")
+        elif self.eec is not None:
+            diff_list.extend(self.eec.compare(other.eec, name=name + ".eec"))
         if not array_equal(other.OP_matrix, self.OP_matrix):
             diff_list.append(name + ".OP_matrix")
         if other._phase_dir != self._phase_dir:
@@ -157,9 +143,7 @@ class LUT(FrozenClass):
         """Return the size in memory of the object (including all subobject)"""
 
         S = 0  # Full size of the object
-        S += getsizeof(self.R1)
-        S += getsizeof(self.L1)
-        S += getsizeof(self.T1_ref)
+        S += getsizeof(self.eec)
         S += getsizeof(self.OP_matrix)
         S += getsizeof(self.phase_dir)
         return S
@@ -176,9 +160,14 @@ class LUT(FrozenClass):
         """
 
         LUT_dict = dict()
-        LUT_dict["R1"] = self.R1
-        LUT_dict["L1"] = self.L1
-        LUT_dict["T1_ref"] = self.T1_ref
+        if self.eec is None:
+            LUT_dict["eec"] = None
+        else:
+            LUT_dict["eec"] = self.eec.as_dict(
+                type_handle_ndarray=type_handle_ndarray,
+                keep_function=keep_function,
+                **kwargs
+            )
         if self.OP_matrix is None:
             LUT_dict["OP_matrix"] = None
         else:
@@ -200,63 +189,42 @@ class LUT(FrozenClass):
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""
 
-        self.R1 = None
-        self.L1 = None
-        self.T1_ref = None
+        if self.eec is not None:
+            self.eec._set_None()
         self.OP_matrix = None
         self.phase_dir = None
 
-    def _get_R1(self):
-        """getter of R1"""
-        return self._R1
+    def _get_eec(self):
+        """getter of eec"""
+        return self._eec
 
-    def _set_R1(self, value):
-        """setter of R1"""
-        check_var("R1", value, "float")
-        self._R1 = value
+    def _set_eec(self, value):
+        """setter of eec"""
+        if isinstance(value, str):  # Load from file
+            try:
+                value = load_init_dict(value)[1]
+            except Exception as e:
+                self.get_logger().error(
+                    "Error while loading " + value + ", setting None instead"
+                )
+                value = None
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class("pyleecan.Classes", value.get("__class__"), "eec")
+            value = class_obj(init_dict=value)
+        elif type(value) is int and value == -1:  # Default constructor
+            value = EEC()
+        check_var("eec", value, "EEC")
+        self._eec = value
 
-    R1 = property(
-        fget=_get_R1,
-        fset=_set_R1,
-        doc=u"""DC phase winding resistance at T1_ref per phase 
+        if self._eec is not None:
+            self._eec.parent = self
 
-        :Type: float
-        """,
-    )
+    eec = property(
+        fget=_get_eec,
+        fset=_set_eec,
+        doc=u"""Equivalent Electrical Circuit
 
-    def _get_L1(self):
-        """getter of L1"""
-        return self._L1
-
-    def _set_L1(self, value):
-        """setter of L1"""
-        check_var("L1", value, "float")
-        self._L1 = value
-
-    L1 = property(
-        fget=_get_L1,
-        fset=_set_L1,
-        doc=u"""Phase winding leakage inductance 
-
-        :Type: float
-        """,
-    )
-
-    def _get_T1_ref(self):
-        """getter of T1_ref"""
-        return self._T1_ref
-
-    def _set_T1_ref(self, value):
-        """setter of T1_ref"""
-        check_var("T1_ref", value, "float")
-        self._T1_ref = value
-
-    T1_ref = property(
-        fget=_get_T1_ref,
-        fset=_set_T1_ref,
-        doc=u"""Stator winding average temperature associated to R1, L1 parameters
-
-        :Type: float
+        :Type: EEC
         """,
     )
 

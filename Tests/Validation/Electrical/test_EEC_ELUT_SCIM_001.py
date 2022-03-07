@@ -89,32 +89,33 @@ def test_EEC_ELUT_SCIM_001():
     )
 
     ELUT_SCIM_001 = LUTslip(
-        R1=param_dict["R1_20"],
-        L1=param_dict["L10"],
-        T1_ref=20,
-        R2=param_dict["R2_20"],
-        L2=param_dict["L20"],
-        T2_ref=20,
-        Phi_m=np_abs(param_dict["Lm"] * param_dict["Im"]),
-        I_m=np_abs(param_dict["Im"]),
+        eec=EEC_SCIM(
+            R1=param_dict["R1_20"],
+            L1=param_dict["L10"],
+            Tsta=20,
+            R2=param_dict["R2_20"],
+            L2=param_dict["L20"],
+            Trot=20,
+            Lm_table=np_abs(param_dict["Lm"]),
+            Im_table=np_abs(param_dict["Im"]),
+        )
     )
 
     # Configure simulation
     simu.elec = Electrical(
         Tsta=param_dict["Tswind"],
         Trot=param_dict["Trwind"],
-        eec=EEC_SCIM(LUT_enforced=ELUT_SCIM_001),
+        LUT_enforced=ELUT_SCIM_001,
     )
 
     # Run simulation
     out = simu.run()
 
-    eec_param = out.elec.eec_param
     assert_almost_equal(out.elec.Tem_av_ref, param_dict["Cem"], decimal=1)
-    assert_almost_equal(eec_param["R1"], param_dict["R10"], decimal=4)
-    assert_almost_equal(eec_param["R2"], param_dict["R20"], decimal=4)
-    assert_almost_equal(eec_param["L1"], param_dict["L10"], decimal=4)
-    assert_almost_equal(eec_param["L2"], param_dict["L20"], decimal=4)
+    assert_almost_equal(out.elec.eec.R1, param_dict["R10"], decimal=4)
+    assert_almost_equal(out.elec.eec.R2, param_dict["R20"], decimal=4)
+    assert_almost_equal(out.elec.eec.L1, param_dict["L10"], decimal=4)
+    assert_almost_equal(out.elec.eec.L2, param_dict["L20"], decimal=4)
     assert_almost_equal(
         out.elec.Pj_losses / 100,
         (param_dict["Pjs0"] + param_dict["Pjr0"]) / 100,
@@ -127,3 +128,4 @@ def test_EEC_ELUT_SCIM_001():
 if __name__ == "__main__":
 
     out = test_EEC_ELUT_SCIM_001()
+    print("Done")

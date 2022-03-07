@@ -47,6 +47,7 @@ from ._check import InitUnKnowClassError
 from .OutInternal import OutInternal
 from .OP import OP
 from .ImportGenPWM import ImportGenPWM
+from .EEC import EEC
 
 
 class OutElec(FrozenClass):
@@ -123,7 +124,7 @@ class OutElec(FrozenClass):
         phase_dir=None,
         current_dir=None,
         PWM=None,
-        eec_param=None,
+        eec=None,
         init_dict=None,
         init_str=None,
     ):
@@ -168,8 +169,8 @@ class OutElec(FrozenClass):
                 current_dir = init_dict["current_dir"]
             if "PWM" in list(init_dict.keys()):
                 PWM = init_dict["PWM"]
-            if "eec_param" in list(init_dict.keys()):
-                eec_param = init_dict["eec_param"]
+            if "eec" in list(init_dict.keys()):
+                eec = init_dict["eec"]
         # Set the properties (value check and convertion are done in setter)
         self.parent = None
         self.axes_dict = axes_dict
@@ -185,7 +186,7 @@ class OutElec(FrozenClass):
         self.phase_dir = phase_dir
         self.current_dir = current_dir
         self.PWM = PWM
-        self.eec_param = eec_param
+        self.eec = eec
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -223,7 +224,11 @@ class OutElec(FrozenClass):
             OutElec_str += "PWM = " + tmp
         else:
             OutElec_str += "PWM = None" + linesep + linesep
-        OutElec_str += "eec_param = " + str(self.eec_param) + linesep
+        if self.eec is not None:
+            tmp = self.eec.__str__().replace(linesep, linesep + "\t").rstrip("\t")
+            OutElec_str += "eec = " + tmp
+        else:
+            OutElec_str += "eec = None" + linesep + linesep
         return OutElec_str
 
     def __eq__(self, other):
@@ -257,7 +262,7 @@ class OutElec(FrozenClass):
             return False
         if other.PWM != self.PWM:
             return False
-        if other.eec_param != self.eec_param:
+        if other.eec != self.eec:
             return False
         return True
 
@@ -334,8 +339,12 @@ class OutElec(FrozenClass):
             diff_list.append(name + ".PWM None mismatch")
         elif self.PWM is not None:
             diff_list.extend(self.PWM.compare(other.PWM, name=name + ".PWM"))
-        if other._eec_param != self._eec_param:
-            diff_list.append(name + ".eec_param")
+        if (other.eec is None and self.eec is not None) or (
+            other.eec is not None and self.eec is None
+        ):
+            diff_list.append(name + ".eec None mismatch")
+        elif self.eec is not None:
+            diff_list.extend(self.eec.compare(other.eec, name=name + ".eec"))
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -359,9 +368,7 @@ class OutElec(FrozenClass):
         S += getsizeof(self.phase_dir)
         S += getsizeof(self.current_dir)
         S += getsizeof(self.PWM)
-        if self.eec_param is not None:
-            for key, value in self.eec_param.items():
-                S += getsizeof(value) + getsizeof(key)
+        S += getsizeof(self.eec)
         return S
 
     def as_dict(self, type_handle_ndarray=0, keep_function=False, **kwargs):
@@ -443,9 +450,14 @@ class OutElec(FrozenClass):
                 keep_function=keep_function,
                 **kwargs
             )
-        OutElec_dict["eec_param"] = (
-            self.eec_param.copy() if self.eec_param is not None else None
-        )
+        if self.eec is None:
+            OutElec_dict["eec"] = None
+        else:
+            OutElec_dict["eec"] = self.eec.as_dict(
+                type_handle_ndarray=type_handle_ndarray,
+                keep_function=keep_function,
+                **kwargs
+            )
         # The class name is added to the dict for deserialisation purpose
         OutElec_dict["__class__"] = "OutElec"
         return OutElec_dict
@@ -469,7 +481,8 @@ class OutElec(FrozenClass):
         self.current_dir = None
         if self.PWM is not None:
             self.PWM._set_None()
-        self.eec_param = None
+        if self.eec is not None:
+            self.eec._set_None()
 
     def _get_axes_dict(self):
         """getter of axes_dict"""
@@ -826,22 +839,36 @@ class OutElec(FrozenClass):
         """,
     )
 
-    def _get_eec_param(self):
-        """getter of eec_param"""
-        return self._eec_param
+    def _get_eec(self):
+        """getter of eec"""
+        return self._eec
 
-    def _set_eec_param(self, value):
-        """setter of eec_param"""
-        if type(value) is int and value == -1:
-            value = dict()
-        check_var("eec_param", value, "dict")
-        self._eec_param = value
+    def _set_eec(self, value):
+        """setter of eec"""
+        if isinstance(value, str):  # Load from file
+            try:
+                value = load_init_dict(value)[1]
+            except Exception as e:
+                self.get_logger().error(
+                    "Error while loading " + value + ", setting None instead"
+                )
+                value = None
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class("pyleecan.Classes", value.get("__class__"), "eec")
+            value = class_obj(init_dict=value)
+        elif type(value) is int and value == -1:  # Default constructor
+            value = EEC()
+        check_var("eec", value, "EEC")
+        self._eec = value
 
-    eec_param = property(
-        fget=_get_eec_param,
-        fset=_set_eec_param,
-        doc=u"""Dict containing parameters used in Electric Equivalent Circuit
+        if self._eec is not None:
+            self._eec.parent = self
 
-        :Type: dict
+    eec = property(
+        fget=_get_eec,
+        fset=_set_eec,
+        doc=u"""Electric Equivalent Circuit used for OP resolution
+
+        :Type: EEC
         """,
     )

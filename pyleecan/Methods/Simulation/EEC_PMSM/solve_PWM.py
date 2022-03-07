@@ -5,7 +5,7 @@ from SciDataTool import DataFreq, Data1D
 from ....Functions.Electrical.dqh_transformation_freq import dqh2n_DataFreq
 
 
-def solve_PWM(self, output, eec_param, is_dqh_freq=False):
+def solve_PWM(self, output, is_dqh_freq=False):
     """Get stator current harmonics due to PWM harmonics
     TODO: validation with transient FEA simulation
 
@@ -15,8 +15,6 @@ def solve_PWM(self, output, eec_param, is_dqh_freq=False):
         an EEC_PMSM object
     output: Output
         An Output object
-    eec_param: dict
-        dictionnary containing EEC parameters
     is_dqh_freq: bool
         True to consider frequencies in dqh frame
 
@@ -26,6 +24,9 @@ def solve_PWM(self, output, eec_param, is_dqh_freq=False):
         Stator current harmonics as DataFreq
     """
     self.get_logger().info("Calculating PWM current harmonics")
+
+    # Get fundamental frequency
+    felec = self.OP.get_felec()
 
     # Get stator winding phase number
     qs = output.simu.machine.stator.winding.qs
@@ -58,8 +59,8 @@ def solve_PWM(self, output, eec_param, is_dqh_freq=False):
     else:
         # Look for frequency value in n frame for each frequency in dqh frame
         fn_dqh = np.zeros(freqs_dqh.size)
-        fn_pos = freqs_dqh + eec_param["felec"]
-        fn_neg = freqs_dqh - eec_param["felec"]
+        fn_pos = freqs_dqh + felec
+        fn_neg = freqs_dqh - felec
         for ii, (fpos, fneg) in enumerate(zip(fn_pos, fn_neg)):
             fn_ii = None
             jj = 0
@@ -81,15 +82,15 @@ def solve_PWM(self, output, eec_param, is_dqh_freq=False):
             else:
                 fn_dqh[ii] = fn_ii
 
-        fn_dqh[np.abs(fn_dqh) < eec_param["felec"]] = eec_param["felec"]
+        fn_dqh[np.abs(fn_dqh) < felec] = felec
 
     # Calculate impedances
-    we = 0 * 2 * np.pi * eec_param["felec"]
+    we = 0 * 2 * np.pi * felec
     wh = 2 * np.pi * fn_dqh
-    a = eec_param["R1"] + 1j * wh * eec_param["Ld"]
-    b = -we * eec_param["Lq"]
-    c = we * eec_param["Ld"]
-    d = eec_param["R1"] + 1j * wh * eec_param["Lq"]
+    a = self.R1 + 1j * wh * self.Ld
+    b = -we * self.Lq
+    c = we * self.Ld
+    d = self.R1 + 1j * wh * self.Lq
     det = a * d - c * b
     # Calculate current harmonics
     # Calculate Id
