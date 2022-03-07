@@ -34,10 +34,6 @@ except ImportError as error:
 
 
 from ._check import InitUnKnowClassError
-from .Machine import Machine
-from .Input import Input
-from .VarSimu import VarSimu
-from .Post import Post
 
 
 class Simulation(FrozenClass):
@@ -443,6 +439,7 @@ class Simulation(FrozenClass):
             )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
+            Machine = import_class("pyleecan.Classes", "Machine", "machine")
             value = Machine()
         check_var("machine", value, "Machine")
         self._machine = value
@@ -479,6 +476,7 @@ class Simulation(FrozenClass):
             )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
+            Input = import_class("pyleecan.Classes", "Input", "input")
             value = Input()
         check_var("input", value, "Input")
         self._input = value
@@ -533,6 +531,7 @@ class Simulation(FrozenClass):
             )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
+            VarSimu = import_class("pyleecan.Classes", "VarSimu", "var_simu")
             value = VarSimu()
         check_var("var_simu", value, "VarSimu")
         self._var_simu = value

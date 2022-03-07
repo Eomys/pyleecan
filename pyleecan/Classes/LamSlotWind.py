@@ -126,13 +126,6 @@ except ImportError as error:
 
 
 from ._check import InitUnKnowClassError
-from .Winding import Winding
-from .Slot import Slot
-from .Material import Material
-from .Hole import Hole
-from .Notch import Notch
-from .Skew import Skew
-from .Bore import Bore
 
 
 class LamSlotWind(LamSlot):
@@ -625,6 +618,7 @@ class LamSlotWind(LamSlot):
             )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
+            Winding = import_class("pyleecan.Classes", "Winding", "winding")
             value = Winding()
         check_var("winding", value, "Winding")
         self._winding = value

@@ -16,7 +16,6 @@ from ..Functions.Load.import_class import import_class
 from ._frozen import FrozenClass
 
 from ._check import InitUnKnowClassError
-from .OutGeoLam import OutGeoLam
 
 
 class OutGeo(FrozenClass):
@@ -382,6 +381,7 @@ class OutGeo(FrozenClass):
             )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
+            OutGeoLam = import_class("pyleecan.Classes", "OutGeoLam", "stator")
             value = OutGeoLam()
         check_var("stator", value, "OutGeoLam")
         self._stator = value
@@ -418,6 +418,7 @@ class OutGeo(FrozenClass):
             )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
+            OutGeoLam = import_class("pyleecan.Classes", "OutGeoLam", "rotor")
             value = OutGeoLam()
         check_var("rotor", value, "OutGeoLam")
         self._rotor = value

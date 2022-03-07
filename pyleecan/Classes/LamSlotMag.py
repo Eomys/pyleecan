@@ -59,13 +59,6 @@ except ImportError as error:
 
 
 from ._check import InitUnKnowClassError
-from .Magnet import Magnet
-from .Slot import Slot
-from .Material import Material
-from .Hole import Hole
-from .Notch import Notch
-from .Skew import Skew
-from .Bore import Bore
 
 
 class LamSlotMag(LamSlot):
@@ -372,6 +365,7 @@ class LamSlotMag(LamSlot):
             )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
+            Magnet = import_class("pyleecan.Classes", "Magnet", "magnet")
             value = Magnet()
         check_var("magnet", value, "Magnet")
         self._magnet = value

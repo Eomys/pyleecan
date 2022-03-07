@@ -29,7 +29,6 @@ except ImportError as error:
 
 
 from ._check import InitUnKnowClassError
-from .MeshSolution import MeshSolution
 
 
 class OutLoss(FrozenClass):

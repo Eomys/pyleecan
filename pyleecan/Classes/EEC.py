@@ -34,7 +34,6 @@ except ImportError as error:
 
 
 from ._check import InitUnKnowClassError
-from .OP import OP
 
 
 class EEC(FrozenClass):
@@ -322,6 +321,7 @@ class EEC(FrozenClass):
             class_obj = import_class("pyleecan.Classes", value.get("__class__"), "OP")
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
+            OP = import_class("pyleecan.Classes", "OP", "OP")
             value = OP()
         check_var("OP", value, "OP")
         self._OP = value

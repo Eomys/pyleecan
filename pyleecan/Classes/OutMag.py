@@ -49,9 +49,6 @@ except ImportError as error:
 
 
 from ._check import InitUnKnowClassError
-from .MeshSolution import MeshSolution
-from .OutInternal import OutInternal
-from .SliceModel import SliceModel
 
 
 class OutMag(FrozenClass):
@@ -905,6 +902,9 @@ class OutMag(FrozenClass):
             )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
+            MeshSolution = import_class(
+                "pyleecan.Classes", "MeshSolution", "meshsolution"
+            )
             value = MeshSolution()
         check_var("meshsolution", value, "MeshSolution")
         self._meshsolution = value
@@ -959,6 +959,7 @@ class OutMag(FrozenClass):
             )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
+            OutInternal = import_class("pyleecan.Classes", "OutInternal", "internal")
             value = OutInternal()
         check_var("internal", value, "OutInternal")
         self._internal = value
@@ -1031,6 +1032,7 @@ class OutMag(FrozenClass):
             )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
+            SliceModel = import_class("pyleecan.Classes", "SliceModel", "Slice")
             value = SliceModel()
         check_var("Slice", value, "SliceModel")
         self._Slice = value
