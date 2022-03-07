@@ -197,7 +197,9 @@ def test_EM_SCIM_006_varslip():
     # Set values from Manatee V1
     Im = np.linspace(0, 200, 2)
     Lm = 0.0437 * np.ones(2)
-    ELUT_SCIM_006 = LUTslip(
+    ELUT_SCIM_006 = LUTslip()
+    ELUT_SCIM_006.simu = Simu1(machine=SCIM_006)
+    ELUT_SCIM_006.simu.elec = Electrical(
         eec=EEC_SCIM(
             R1=0.57,
             L1=0.004,
@@ -212,11 +214,7 @@ def test_EM_SCIM_006_varslip():
     )
 
     # Configure simulation
-    simu.elec = Electrical(
-        Tsta=20,
-        Trot=20,
-        LUT_enforced=ELUT_SCIM_006
-    )
+    simu.elec = Electrical(Tsta=20, Trot=20, LUT_enforced=ELUT_SCIM_006)
 
     simu.mag = MagFEMM(
         is_periodicity_a=True,

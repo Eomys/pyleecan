@@ -13,7 +13,7 @@ def update_from_ref(self, LUT_ref):
     # Update skin effect
     self.comp_skin_effect()
 
-    eec_ref = LUT_ref.eec
+    eec_ref = LUT_ref.get_eec()
     Tsta_ref, Trot_ref = eec_ref.Tsta, eec_ref.Trot
     Xkr_skinS_ref, Xke_skinS_ref = eec_ref.Xkr_skinS, eec_ref.Xke_skinS
     Xkr_skinR_ref, Xke_skinR_ref = eec_ref.Xkr_skinR, eec_ref.Xke_skinS

@@ -16,7 +16,7 @@ def get_Phidqh_mag(self):
     if self.Phi_dqh_mag is None:
 
         # Find Id=Iq=0
-        OP_list = self.OP_matrix[:, 1:3].tolist()
+        OP_list = self.OP_matrix()[:, 1:3].tolist()
         if [0, 0] in OP_list:
             ii = OP_list.index([0, 0])
         else:

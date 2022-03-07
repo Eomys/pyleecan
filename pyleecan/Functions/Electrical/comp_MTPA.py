@@ -79,7 +79,7 @@ def comp_MTPA(
     else:
         parameters = None
 
-    OP_matrix = LUT.OP_matrix
+    OP_matrix = LUT.get_OP_matrix()
 
     # Get Id_min, Id_max, Iq_min, Iq_max from OP_matrix
     Id_min = OP_matrix[:, 1].min()

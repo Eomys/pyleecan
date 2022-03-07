@@ -177,7 +177,9 @@ def test_EM_SCIM_001_varslip():
     # Set values from Manatee V1
     Im = np.linspace(0, 200, 2)
     Lm = 0.0774 * np.ones(2)
-    ELUT_SCIM_001 = LUTslip(
+    ELUT_SCIM_001 = LUTslip()
+    ELUT_SCIM_001.simu = Simu1(machine=SCIM_001)
+    ELUT_SCIM_001.simu.elec = Electrical(
         eec=EEC_SCIM(
             R1=5.73,
             L1=0,
