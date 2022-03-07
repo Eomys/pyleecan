@@ -18,11 +18,6 @@ from .XOutput import XOutput
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
 try:
-    from ..Methods.Output.LUT.get_phase_dir import get_phase_dir
-except ImportError as error:
-    get_phase_dir = error
-
-try:
     from ..Methods.Output.LUT.get_eec import get_eec
 except ImportError as error:
     get_eec = error
@@ -53,15 +48,6 @@ class LUT(XOutput):
     VERSION = 1
 
     # Check ImportError to remove unnecessary dependencies in unused method
-    # cf Methods.Output.LUT.get_phase_dir
-    if isinstance(get_phase_dir, ImportError):
-        get_phase_dir = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use LUT method get_phase_dir: " + str(get_phase_dir))
-            )
-        )
-    else:
-        get_phase_dir = get_phase_dir
     # cf Methods.Output.LUT.get_eec
     if isinstance(get_eec, ImportError):
         get_eec = property(

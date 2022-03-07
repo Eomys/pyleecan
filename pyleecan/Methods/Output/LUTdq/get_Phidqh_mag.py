@@ -3,10 +3,12 @@ from ....Functions.Electrical.dqh_transformation import n2dqh_DataTime
 
 def get_Phidqh_mag(self):
     """Get the total d-axis inductance
+
     Parameters
     ----------
     self : LUTdq
         a LUTdq object
+
     Returns
     ----------
     Phi_dqh_mag : DataND
@@ -16,17 +18,19 @@ def get_Phidqh_mag(self):
     if self.Phi_dqh_mag is None:
 
         # Find Id=Iq=0
-        OP_list = self.OP_matrix()[:, 1:3].tolist()
+        OP_list = self.get_OP_matrix()[:, 1:3].tolist()
         if [0, 0] in OP_list:
             ii = OP_list.index([0, 0])
         else:
             raise Exception("Operating Point Id=Iq=0 is required to compute LUT")
 
+        stator_label = self.simu.machine.stator.get_label()
+
         # dqh transform
         Phi_dqh_mag = n2dqh_DataTime(
-            self.Phi_wind[ii],
+            self.output_list[ii].mag.Phi_wind[stator_label],
             is_dqh_rms=True,
-            phase_dir=self.get_phase_dir(),
+            phase_dir=self.elec.phase_dir,
         )
 
         # Store for next call

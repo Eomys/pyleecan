@@ -4557,7 +4557,6 @@
         "desc": "Abstract class for Look Up Table (LUT)",
         "is_internal": false,
         "methods": [
-            "get_phase_dir",
             "get_eec",
             "get_OP_matrix"
         ],

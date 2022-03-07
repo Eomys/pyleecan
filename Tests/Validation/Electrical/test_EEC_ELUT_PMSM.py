@@ -16,10 +16,7 @@ from pyleecan.Classes.PostLUT import PostLUT
 
 from pyleecan.Functions.load import load
 from pyleecan.Functions.Plot import dict_2D
-from pyleecan.Functions.Electrical.dqh_transformation import (
-    get_phase_dir_DataTime,
-    n2dqh_DataTime,
-)
+from pyleecan.Functions.Electrical.dqh_transformation import n2dqh_DataTime
 from pyleecan.Functions.Electrical.comp_MTPA import comp_MTPA
 
 from pyleecan.definitions import DATA_DIR
@@ -96,17 +93,15 @@ def test_EEC_ELUT_PMSM_calc(n_Id=5, n_Iq=5):
 
     ELUT = out.simu.var_simu.postproc_list[0].LUT
 
-    # Check phase_dir calculation
-    assert ELUT.get_phase_dir() == get_phase_dir_DataTime(ELUT.Phi_wind[0])
-
     # Check flux linkage dqh values
     Phi_dqh_mean = ELUT.get_Phidqh_mean()
     OP_list = OP_matrix[:, 1:3].tolist()
     ii = OP_list.index([0, 0])
+    stator_label = ELUT.simu.machine.stator.get_label()
     Phi_dqh0 = n2dqh_DataTime(
-        ELUT.Phi_wind[ii],
+        ELUT.output_list[ii].mag.Phi_wind[stator_label],
         is_dqh_rms=True,
-        phase_dir=ELUT.get_phase_dir(),
+        phase_dir=ELUT.elec.phase_dir,
     )
     Phi_dqh0_mean = Phi_dqh0.get_along("time=mean", "phase")[Phi_dqh0.symbol]
     assert_almost_equal(Phi_dqh0_mean, Phi_dqh_mean[ii, :], decimal=15)
@@ -253,7 +248,7 @@ def test_EEC_ELUT_PMSM_MTPA(test_ELUT):
 
 # To run it without pytest
 if __name__ == "__main__":
-    # out0, ELUT = test_EEC_ELUT_PMSM_calc()
-    # ELUT.save("ELUT_PMSM.h5")
-    ELUT = load("ELUT_PMSM.h5")
-    test_EEC_ELUT_PMSM_MTPA(ELUT)
+    out0, ELUT = test_EEC_ELUT_PMSM_calc(n_Id=3, n_Iq=3)
+    ELUT.save("ELUT_PMSM.h5")
+    # ELUT = load("ELUT_PMSM.h5")
+    # test_EEC_ELUT_PMSM_MTPA(ELUT)

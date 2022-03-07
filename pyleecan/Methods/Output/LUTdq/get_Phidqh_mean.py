@@ -19,20 +19,26 @@ def get_Phidqh_mean(self):
 
     if self.Phi_dqh_mean is None:
 
-        N_OP = len(self.Phi_wind)
+        N_OP = len(self.output_list)
 
         Phi_dqh_mean = zeros((N_OP, 3))
+
+        stator_label = self.simu.machine.stator.get_label()
 
         for ii in range(N_OP):
 
             # Integrate stator winding flux contained in LUT over z
-            Phi_wind = self.Phi_wind[ii].get_data_along("time", "phase", "z=integrate")
+            Phi_wind = (
+                self.output_list[ii]
+                .mag.Phi_wind[stator_label]
+                .get_data_along("time", "phase", "z=integrate")
+            )
 
             # dqh transform
             Phi_dqh = n2dqh_DataTime(
                 Phi_wind,
                 is_dqh_rms=True,
-                phase_dir=self.get_phase_dir(),
+                phase_dir=self.elec.phase_dir,
             )
             # mean over time axis
             Phi_dqh_mean[ii, :] = Phi_dqh.get_along("time=mean", "phase")[
