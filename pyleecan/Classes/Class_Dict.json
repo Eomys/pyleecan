@@ -4563,7 +4563,9 @@
         "is_internal": false,
         "methods": [
             "get_eec",
-            "get_OP_matrix"
+            "get_OP_matrix",
+            "set_default_simulation",
+            "get_phase_dir"
         ],
         "mother": "XOutput",
         "name": "LUT",

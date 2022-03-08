@@ -38,7 +38,7 @@ def get_Phidqh_mean(self):
             Phi_dqh = n2dqh_DataTime(
                 Phi_wind,
                 is_dqh_rms=True,
-                phase_dir=self.elec.phase_dir,
+                phase_dir=self.get_phase_dir(),
             )
             # mean over time axis
             Phi_dqh_mean[ii, :] = Phi_dqh.get_along("time=mean", "phase")[

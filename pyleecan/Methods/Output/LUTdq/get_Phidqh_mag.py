@@ -30,7 +30,7 @@ def get_Phidqh_mag(self):
         Phi_dqh_mag = n2dqh_DataTime(
             self.output_list[ii].mag.Phi_wind[stator_label],
             is_dqh_rms=True,
-            phase_dir=self.elec.phase_dir,
+            phase_dir=self.get_phase_dir(),
         )
 
         # Store for next call

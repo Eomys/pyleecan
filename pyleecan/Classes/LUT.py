@@ -27,6 +27,16 @@ try:
 except ImportError as error:
     get_OP_matrix = error
 
+try:
+    from ..Methods.Output.LUT.set_default_simulation import set_default_simulation
+except ImportError as error:
+    set_default_simulation = error
+
+try:
+    from ..Methods.Output.LUT.get_phase_dir import get_phase_dir
+except ImportError as error:
+    get_phase_dir = error
+
 
 from ._check import InitUnKnowClassError
 
@@ -55,6 +65,27 @@ class LUT(XOutput):
         )
     else:
         get_OP_matrix = get_OP_matrix
+    # cf Methods.Output.LUT.set_default_simulation
+    if isinstance(set_default_simulation, ImportError):
+        set_default_simulation = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use LUT method set_default_simulation: "
+                    + str(set_default_simulation)
+                )
+            )
+        )
+    else:
+        set_default_simulation = set_default_simulation
+    # cf Methods.Output.LUT.get_phase_dir
+    if isinstance(get_phase_dir, ImportError):
+        get_phase_dir = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use LUT method get_phase_dir: " + str(get_phase_dir))
+            )
+        )
+    else:
+        get_phase_dir = get_phase_dir
     # save and copy methods are available in all object
     save = save
     copy = copy
