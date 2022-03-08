@@ -1028,7 +1028,12 @@
         "methods": [
             "get_machine_from_parent",
             "comp_R1",
-            "comp_skin_effect"
+            "comp_skin_effect",
+            "comp_parameters",
+            "update_from_ref",
+            "solve",
+            "solve_PWM",
+            "comp_joule_losses"
         ],
         "mother": "",
         "name": "EEC",

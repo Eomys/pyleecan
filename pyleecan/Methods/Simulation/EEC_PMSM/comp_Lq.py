@@ -1,5 +1,5 @@
 def comp_Lq(self):
-    """Compute the stator winding inductance along q-axis for the equivalent electrical circuit
+    """Compute and set the stator winding inductance along q-axis for the EEC
 
     Parameters
     ----------

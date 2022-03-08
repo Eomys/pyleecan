@@ -1,5 +1,5 @@
 def comp_K21(self):
-    """Compute winding transformation ratios
+    """Compute and set winding transformation ratios
 
     Parameters
     ----------
