@@ -61,6 +61,11 @@ def draw_FEMM_lamination(
         femm.mi_readdxf(lam_dxf.file_path)
         surf_list = lam_dxf.get_surfaces()
     else:
+        sym_draw, is_antiper_a = lam.comp_periodicity_geo()
+
+        if is_antiper_a:
+            sym_draw *= 2
+
         surf_list = lam.build_geometry(sym=sym, is_circular_radius=True)
 
     # Applying user defined modifications
