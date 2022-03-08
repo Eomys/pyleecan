@@ -66,7 +66,7 @@ def draw_FEMM_lamination(
         if is_antiper_a:
             sym_draw *= 2
 
-        surf_list = lam.build_geometry(sym=sym, is_circular_radius=True)
+        surf_list = lam.build_geometry(sym=sym_draw, is_circular_radius=True)
 
     # Applying user defined modifications
     for transform in transform_list:
@@ -90,6 +90,15 @@ def draw_FEMM_lamination(
         type_BH_stator,
         type_BH_rotor,
     )
+
+    # Duplicate periodic parts if sym_draw > sym
+    # if sym != sym_draw:
+    #     femm.mi_seteditmode("group")
+    #     for key, val in FEMM_dict["groups"].items():
+    #         if "GROUP_AG" not in key:
+    #             femm.mi_selectgroup(val)
+    #     Ncopy = int(round(sym_draw / sym))
+    #     femm.mi_copyrotate(0, 0, 360 / Ncopy, Ncopy)
 
     # Apply BC for DXF import
     if lam_dxf is not None:
