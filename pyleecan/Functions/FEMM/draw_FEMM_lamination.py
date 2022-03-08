@@ -92,13 +92,14 @@ def draw_FEMM_lamination(
     )
 
     # Duplicate periodic parts if sym_draw > sym
-    # if sym != sym_draw:
-    #     femm.mi_seteditmode("group")
-    #     for key, val in FEMM_dict["groups"].items():
-    #         if "GROUP_AG" not in key:
-    #             femm.mi_selectgroup(val)
-    #     Ncopy = int(round(sym_draw / sym))
-    #     femm.mi_copyrotate(0, 0, 360 / Ncopy, Ncopy)
+    if sym != sym_draw:
+        femm.mi_seteditmode("group")
+        lam_label = lam.get_label()
+        for key, val in FEMM_dict["groups"].items():
+            if val in FEMM_dict["groups"]["lam_group_list"][lam_label]:
+                femm.mi_selectgroup(val)
+        Ncopy = int(round(sym_draw / sym))
+        femm.mi_copyrotate(0, 0, 360 / sym / Ncopy, Ncopy - 1)
 
     # Apply BC for DXF import
     if lam_dxf is not None:
