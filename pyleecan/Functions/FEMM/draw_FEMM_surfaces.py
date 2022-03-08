@@ -15,8 +15,7 @@ def draw_FEMM_surfaces(
     is_mmfr,
     type_BH_stator,
     type_BH_rotor,
-    is_assign=True,
-    is_draw=True,
+    type_assign=0,
 ):
     """Draw a list of surfaces in FEMM
 
@@ -44,10 +43,8 @@ def draw_FEMM_surfaces(
         2 Infinite permeability, 1 to use linear B(H) curve according to mur_lin, 0 to use the B(H) curve
     type_BH_rotor: int
         2 Infinite permeability, 1 to use linear B(H) curve according to mur_lin, 0 to use the B(H) curve
-    is_assign : bool
-        1 to assign the surfaces
-    is_draw : bool
-        1 to draw the surfaces
+    type_assign : int
+        2 to assign all but WIND and MAG, 1 to assign WIND and MAG and 0 to assign all
 
     Returns
     -------
@@ -74,20 +71,16 @@ def draw_FEMM_surfaces(
     for surf in surf_list:
         label = surf.label
 
-        if is_draw:
-            # Get the correct element size and group according to the label
-            surf.draw_FEMM(
-                femm=femm,
-                nodeprop="None",
-                maxseg=FEMM_dict["mesh"][
-                    "arcspan"
-                ],  # max span of arc element in degrees
-                FEMM_dict=FEMM_dict,
-                hide=False,
-                BC_dict=BC_dict,
-            )
+        # Get the correct element size and group according to the label
+        surf.draw_FEMM(
+            femm=femm,
+            nodeprop="None",
+            maxseg=FEMM_dict["mesh"]["arcspan"],  # max span of arc element in degrees
+            FEMM_dict=FEMM_dict,
+            hide=False,
+            BC_dict=BC_dict,
+        )
 
-        if is_assign:
-            assign_FEMM_surface(femm, surf, prop_dict[label], FEMM_dict, machine)
+        assign_FEMM_surface(femm, surf, prop_dict[label], FEMM_dict, machine)
 
     return FEMM_dict
