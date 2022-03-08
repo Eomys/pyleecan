@@ -16,6 +16,7 @@ def draw_FEMM_lamination(
     is_mmfr=True,
     type_BH_stator=0,
     type_BH_rotor=0,
+    is_fast_draw=True,
 ):
     """Draw a Lamination in FEMM
 
@@ -49,7 +50,8 @@ def draw_FEMM_lamination(
         2 Infinite permeability, 1 to use linear B(H) curve according to mur_lin, 0 to use the B(H) curve
     type_BH_rotor: int
         2 Infinite permeability, 1 to use linear B(H) curve according to mur_lin, 0 to use the B(H) curve
-
+    is_fast_draw: bool
+        True to draw the lamination using the highest periodicity
     Returns
     -------
     FEMM_dict : dict
@@ -61,10 +63,13 @@ def draw_FEMM_lamination(
         femm.mi_readdxf(lam_dxf.file_path)
         surf_list = lam_dxf.get_surfaces()
     else:
-        sym_draw, is_antiper_a = lam.comp_periodicity_geo()
+        if is_fast_draw:
+            sym_draw, is_antiper_a = lam.comp_periodicity_geo()
 
-        if is_antiper_a:
-            sym_draw *= 2
+            if is_antiper_a:
+                sym_draw *= 2
+        else:
+            sym_draw = sym
 
         surf_list = lam.build_geometry(sym=sym_draw, is_circular_radius=True)
 
