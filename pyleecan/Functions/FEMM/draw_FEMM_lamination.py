@@ -73,11 +73,14 @@ def draw_FEMM_lamination(
 
             surf_list = lam.build_geometry(sym=sym_draw, is_circular_radius=True)
             is_draw = False
+            is_set_BC = False
             # Disabling the assign on the build_geometry with sym_draw (done later on build_geometry with sym)
             type_assign = 2
         else:
             sym_draw = sym
             surf_list = lam.build_geometry(sym=sym, is_circular_radius=True)
+            is_draw = True
+            is_set_BC = True
             type_assign = 0
 
     # Applying user defined modifications
@@ -102,6 +105,7 @@ def draw_FEMM_lamination(
         type_BH_stator,
         type_BH_rotor,
         type_assign=type_assign,
+        is_set_BC=is_set_BC,
     )
 
     # Duplicate periodic parts if sym_draw > sym

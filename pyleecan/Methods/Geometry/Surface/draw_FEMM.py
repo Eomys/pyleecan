@@ -24,6 +24,7 @@ def draw_FEMM(
     FEMM_dict=None,
     hide=False,
     BC_dict=None,
+    is_set_BC=True,
 ):
     """draw the Surface in FEMM
 
@@ -44,6 +45,8 @@ def draw_FEMM(
         (Default value = False)
     BC_dict : dict
         Boundary condition dict ([line label] = BC name)
+    is_set_BC : bool
+        1 to set the boundary conditions of the surface
 
     Returns
     -------
@@ -74,7 +77,11 @@ def draw_FEMM(
         mesh_dict = get_mesh_param(label_dict, FEMM_dict)
 
         # Get or create the Boundary Condition (if any)
-        if line.prop_dict is not None and BOUNDARY_PROP_LAB in line.prop_dict:
+        if (
+            is_set_BC
+            and line.prop_dict is not None
+            and BOUNDARY_PROP_LAB in line.prop_dict
+        ):
             propname = get_FEMM_BC_propname(
                 femm=femm, line_label=line.prop_dict[BOUNDARY_PROP_LAB], BC_dict=BC_dict
             )

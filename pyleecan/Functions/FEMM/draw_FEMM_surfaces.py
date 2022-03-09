@@ -17,6 +17,7 @@ def draw_FEMM_surfaces(
     type_BH_rotor,
     type_assign=0,
     is_draw=True,
+    is_set_BC=True,
 ):
     """Draw a list of surfaces in FEMM
 
@@ -48,6 +49,8 @@ def draw_FEMM_surfaces(
         2 to assign all but WIND and MAG, 1 to assign WIND and MAG and 0 to assign all
     is_draw : bool
         1 to draw the list of surfaces given
+    is_set_BC : bool
+        1 to set the boundary conditions of the surface
     Returns
     -------
     FEMM_dict : dict
@@ -84,6 +87,7 @@ def draw_FEMM_surfaces(
                 FEMM_dict=FEMM_dict,
                 hide=False,
                 BC_dict=BC_dict,
+                is_set_BC=is_set_BC,
             )
 
         assign_FEMM_surface(
