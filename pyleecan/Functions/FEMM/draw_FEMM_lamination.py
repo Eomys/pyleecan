@@ -72,10 +72,9 @@ def draw_FEMM_lamination(
                 sym_draw *= 2
 
             surf_list = lam.build_geometry(sym=sym_draw, is_circular_radius=True)
-
-            # Disabling the assing on the build_geometry with sym_draw (done later on build_geometry with sym)
-            type_assign = 2
             is_draw = False
+            # Disabling the assign on the build_geometry with sym_draw (done later on build_geometry with sym)
+            type_assign = 2
         else:
             sym_draw = sym
             surf_list = lam.build_geometry(sym=sym, is_circular_radius=True)
