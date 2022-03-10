@@ -15,6 +15,19 @@ from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
 from ._frozen import FrozenClass
 
+# Import all class method
+# Try/catch to remove unnecessary dependencies in unused method
+try:
+    from ..Methods.Material.MatElectrical.get_conductivity import get_conductivity
+except ImportError as error:
+    get_conductivity = error
+
+try:
+    from ..Methods.Material.MatElectrical.get_resistivity import get_resistivity
+except ImportError as error:
+    get_resistivity = error
+
+
 from ._check import InitUnKnowClassError
 
 
@@ -23,13 +36,38 @@ class MatElectrical(FrozenClass):
 
     VERSION = 1
 
+    # Check ImportError to remove unnecessary dependencies in unused method
+    # cf Methods.Material.MatElectrical.get_conductivity
+    if isinstance(get_conductivity, ImportError):
+        get_conductivity = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use MatElectrical method get_conductivity: "
+                    + str(get_conductivity)
+                )
+            )
+        )
+    else:
+        get_conductivity = get_conductivity
+    # cf Methods.Material.MatElectrical.get_resistivity
+    if isinstance(get_resistivity, ImportError):
+        get_resistivity = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use MatElectrical method get_resistivity: "
+                    + str(get_resistivity)
+                )
+            )
+        )
+    else:
+        get_resistivity = get_resistivity
     # save and copy methods are available in all object
     save = save
     copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, rho=1, epsr=1, alpha=0, init_dict=None, init_str=None):
+    def __init__(self, rho=0, epsr=1, alpha=0, init_dict=None, init_str=None):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor

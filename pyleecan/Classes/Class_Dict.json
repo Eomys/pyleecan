@@ -6530,7 +6530,10 @@
         "daughters": [],
         "desc": "material electrical properties",
         "is_internal": false,
-        "methods": [],
+        "methods": [
+            "get_conductivity",
+            "get_resistivity"
+        ],
         "mother": "",
         "name": "MatElectrical",
         "package": "Material",
@@ -6543,7 +6546,7 @@
                 "name": "rho",
                 "type": "float",
                 "unit": "ohm.m",
-                "value": 1
+                "value": 0
             },
             {
                 "desc": "Relative dielectric constant",
