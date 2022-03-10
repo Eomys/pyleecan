@@ -3,21 +3,20 @@
 from numpy import pi, sin
 
 
-def comp_resistance_wind(self, T=20, qs=3):
+def comp_resistance_wind(self, T=20):
     """Computation of the equivalent rotor resistance per phase of a cage winding with 'qs' number of phases
 
     Parameters
     ----------
     self : LamSquirrelCage
         A LamSquirrelCage object
-    qs : int
-        number of the equivalent rotor winding phases, default value: 3 phases
+    T : float
+        mean winding temperature [°C], default value is 20°C
 
     Returns
     -------
     Rrot: float
-         resistance of the rotor[Ohm]
-
+        resistance of the rotor [Ohm]
     """
     # calculate resistance ring at T degC
     alpha = self.ring_mat.elec.alpha

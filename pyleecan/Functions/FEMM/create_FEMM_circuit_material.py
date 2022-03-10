@@ -3,8 +3,8 @@
 from numpy import pi, sign, sqrt
 
 from ...Functions.FEMM.set_FEMM_circuit_prop import set_FEMM_circuit_prop
-from ...Functions.Winding.find_wind_phase_color import get_phase_id
 from ...Functions.FEMM.set_FEMM_wind_material import set_FEMM_wind_material
+from ...Functions.Winding.find_wind_phase_color import get_phase_id
 from ...Functions.labels import ROTOR_LAB
 
 

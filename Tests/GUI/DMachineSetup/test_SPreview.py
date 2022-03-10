@@ -1,19 +1,18 @@
 import sys
-from random import uniform
 from os import makedirs
 from os.path import join, isfile, isdir
-import mock
 
+import mock
 import pytest
 from PySide2 import QtWidgets
-from PySide2.QtTest import QTest
 
-
+from Tests import TEST_DATA_DIR as data_test
 from pyleecan.GUI.Dialog.DMachineSetup.DMachineSetup import DMachineSetup
 from pyleecan.GUI.Dialog.DMachineSetup.SPreview.SPreview import SPreview
-from Tests import TEST_DATA_DIR as data_test, save_gui_path
 from pyleecan.definitions import MAIN_DIR
 from pyleecan.Functions.load import load_matlib
+from Tests import TEST_DATA_DIR as data_test, save_gui_path
+
 
 matlib_path = join(data_test, "Material")
 machine_path = join(MAIN_DIR, "Data", "Machine")
@@ -28,7 +27,7 @@ SCIM_dict = {
         ("Topology", "Inner Rotor"),
         ("Stator phase number", "3"),
         ("Stator winding resistance", "0.02392 Ohm"),
-        ("Machine total mass", "328.1 kg"),
+        ("Machine total mass", "342.8 kg"),
     ],
     "Nrow": 8,
 }
@@ -49,6 +48,13 @@ load_preview_test = [SCIM_dict, IPMSM_dict]
 
 
 class TestSPreview(object):
+    def setup_method(self):
+        """Setup the workspace and the GUI"""
+        # MatLib widget
+        material_dict = load_matlib(matlib_path=matlib_path)
+        self.widget = DMachineSetup(
+            material_dict=material_dict, machine_path=machine_path
+        )
 
     @classmethod
     def setup_class(cls):
@@ -59,15 +65,9 @@ class TestSPreview(object):
         else:
             cls.app = QtWidgets.QApplication.instance()
 
-    def setup_method(self):
-        """Run at the begining of every test to setup the gui"""
-        # MatLib widget
-        material_dict = load_matlib(matlib_path=matlib_path)
-        self.widget = DMachineSetup(material_dict=material_dict, machine_path=machine_path)
-
     @classmethod
     def teardown_class(cls):
-        """Exit the app after the test"""
+        """Exit the app after all the test"""
         cls.app.quit()
 
     @pytest.mark.parametrize("test_dict", load_preview_test)
@@ -85,9 +85,7 @@ class TestSPreview(object):
         # Check load MachineType
         assert type(self.widget.w_step) is SPreview
         # Check the table
-        assert (
-            self.widget.w_step.tab_machine.tab_param.rowCount() == test_dict["Nrow"]
-        )
+        assert self.widget.w_step.tab_machine.tab_param.rowCount() == test_dict["Nrow"]
         for ii, content in enumerate(test_dict["table"]):
             assert (
                 self.widget.w_step.tab_machine.tab_param.item(ii, 0).text()
@@ -101,7 +99,7 @@ class TestSPreview(object):
         FEMM_dir = join(save_gui_path, "Draw_FEMM")
         if not isdir(FEMM_dir):
             makedirs(FEMM_dir)
-        femm_path = join(FEMM_dir, self.widget.machine.name+".fem")
+        femm_path = join(FEMM_dir, self.widget.machine.name + ".fem")
         assert not isfile(femm_path)
 
         return_value = (
@@ -114,12 +112,12 @@ class TestSPreview(object):
             self.widget.w_step.tab_machine.b_FEMM.clicked.emit()
         assert isfile(femm_path)
 
+
 if __name__ == "__main__":
     a = TestSPreview()
     a.setup_class()
     a.setup_method()
-    for ii, test_dict in enumerate(load_preview_test):
-        print(ii)
+    for test_dict in load_preview_test:
         a.test_load(test_dict)
-    # a.test_load(load_preview_test[0])
+    a.teardown_class()
     print("Done")

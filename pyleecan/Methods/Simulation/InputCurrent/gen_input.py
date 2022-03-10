@@ -54,16 +54,20 @@ def gen_input(self):
             try:
                 # Get phase_dir from Is
                 phase_dir = get_phase_dir(Is_val, current_dir=outelec.current_dir)
+                if phase_dir != outelec.phase_dir:
+                    self.get_logger().warning(
+                        "Enforcing outelec.phase_dir="
+                        + str(phase_dir)
+                        + " to comply with input current"
+                    )
+                    outelec.phase_dir = phase_dir
             except Exception:
-                # Cannot calculate phase_dir, enforce phase_dir to -1
-                phase_dir = -1
-            if phase_dir != outelec.phase_dir:
+                # Cannot calculate phase_dir
                 self.get_logger().warning(
-                    "Enforcing outelec.phase_dir="
-                    + str(phase_dir)
-                    + " to comply with input current"
+                    "phase_dir cannot be calculated, please make sure that input.phase_dir="
+                    + str(outelec.phase_dir)
+                    + " is compliant with enforced currents"
                 )
-                outelec.phase_dir = phase_dir
             try:
                 # Creating the data object
                 Is = DataTime(

@@ -10,6 +10,7 @@ def as_dict(self, **kwargs):
 
     DataKeeper_dict = dict()
     DataKeeper_dict["name"] = self.name
+    DataKeeper_dict["physic"] = self.physic
     DataKeeper_dict["symbol"] = self.symbol
     DataKeeper_dict["unit"] = self.unit
     if self._keeper_str is not None:

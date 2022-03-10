@@ -1,26 +1,21 @@
 from os.path import join
 
-import pytest
 import matplotlib.pyplot as plt
-from numpy import exp, pi, ones, array, zeros
-from numpy import argmax, cos, abs as np_abs, angle as np_angle
+import pytest
+from numpy import argmax, cos, abs as np_abs, angle as np_angle, exp, pi, array, zeros
 from pyleecan.Classes.OPdq import OPdq
 
-from pyleecan.definitions import config_dict
 from Tests import save_plot_path as save_path
-from pyleecan.Classes.Simu1 import Simu1
-from pyleecan.Classes.InputCurrent import InputCurrent
-from pyleecan.Classes.InputFlux import InputFlux
 from pyleecan.Classes.ImportGenVectLin import ImportGenVectLin
 from pyleecan.Classes.ImportMatrixVal import ImportMatrixVal
-from pyleecan.Classes.ImportMatlab import ImportMatlab
-
+from pyleecan.Classes.InputCurrent import InputCurrent
 from pyleecan.Classes.MagFEMM import MagFEMM
 from pyleecan.Classes.Output import Output
+from pyleecan.Classes.Simu1 import Simu1
 from pyleecan.Functions.load import load
 from pyleecan.Functions.Plot import dict_2D
 from pyleecan.definitions import DATA_DIR
-from pyleecan.Functions.init_fig import init_subplot
+from pyleecan.definitions import config_dict
 
 
 CURVE_COLORS = config_dict["PLOT"]["COLOR_DICT"]["CURVE_COLORS"]

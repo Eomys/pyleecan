@@ -1,7 +1,6 @@
 from multiprocessing import cpu_count
 from multiprocessing.dummy import Pool
 from os import remove
-
 from shutil import copyfile
 
 from numpy import concatenate
@@ -193,12 +192,9 @@ def solve_FEMM_parallel(
 
     # append femm_handler to handler_list
     output.mag.internal.handler_list.extend(femm_handler)
-
     # Creating threads pool
-    pool = Pool(nb_worker)
-
-    # Computing FEMM in parallel
-    results = pool.starmap(solve_FEMM_single, args)
+    with Pool(nb_worker) as p:
+        results = p.starmap(solve_FEMM_single, args)
 
     # Building mesh solution
     if self.is_get_meshsolution:

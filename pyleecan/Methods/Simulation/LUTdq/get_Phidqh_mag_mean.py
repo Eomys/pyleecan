@@ -1,5 +1,6 @@
 def get_Phidqh_mag_mean(self):
     """Get the mean magnets flux linkage in DQH frame
+
     Parameters
     ----------
     self : LUTdq
@@ -18,4 +19,6 @@ def get_Phidqh_mag_mean(self):
     else:
         raise Exception("Operating Point Id=Iq=0 is required to compute LUT")
 
-    return self.get_Phidqh_mean()[ii, :]
+    Phi_dqh_mag_mean = self.get_Phidqh_mean()[ii, :]
+
+    return Phi_dqh_mag_mean

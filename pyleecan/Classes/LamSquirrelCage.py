@@ -66,6 +66,18 @@ try:
 except ImportError as error:
     comp_angle_d_axis = error
 
+try:
+    from ..Methods.Machine.LamSquirrelCage.comp_periodicity_spatial import (
+        comp_periodicity_spatial,
+    )
+except ImportError as error:
+    comp_periodicity_spatial = error
+
+try:
+    from ..Methods.Machine.LamSquirrelCage.comp_masses import comp_masses
+except ImportError as error:
+    comp_masses = error
+
 
 from ._check import InitUnKnowClassError
 from .Material import Material
@@ -185,6 +197,29 @@ class LamSquirrelCage(LamSlotWind):
         )
     else:
         comp_angle_d_axis = comp_angle_d_axis
+    # cf Methods.Machine.LamSquirrelCage.comp_periodicity_spatial
+    if isinstance(comp_periodicity_spatial, ImportError):
+        comp_periodicity_spatial = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use LamSquirrelCage method comp_periodicity_spatial: "
+                    + str(comp_periodicity_spatial)
+                )
+            )
+        )
+    else:
+        comp_periodicity_spatial = comp_periodicity_spatial
+    # cf Methods.Machine.LamSquirrelCage.comp_masses
+    if isinstance(comp_masses, ImportError):
+        comp_masses = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use LamSquirrelCage method comp_masses: " + str(comp_masses)
+                )
+            )
+        )
+    else:
+        comp_masses = comp_masses
     # save and copy methods are available in all object
     save = save
     copy = copy

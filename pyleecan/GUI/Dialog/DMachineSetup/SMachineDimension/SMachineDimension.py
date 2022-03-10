@@ -78,6 +78,11 @@ class SMachineDimension(Ui_SMachineDimension, QWidget):
         self.w_mat_1.setText("Frame Material")
         self.w_mat_1.def_mat = "M400-50A"
 
+        # Make sure that the Shaft/Frame is cleaned for Outer rotor
+        if not machine.rotor.is_internal:
+            machine.shaft = None
+            machine.frame = None
+
         if (
             machine.frame is None
             or machine.frame.Rint is None

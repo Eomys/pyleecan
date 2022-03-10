@@ -35,6 +35,6 @@ def comp_periodicity_time(self, slip=0):
     else:
         # In case of non-zero slip, rotor and fundamental field rotates asynchronously
         # so there is no (anti)-periodicity in time domain
-        pert_S, is_apert_S, pert_R, is_apert_R = None, False, None, False
+        pert_S, is_apert_S, pert_R, is_apert_R = 1, False, 1, False
 
     return pert_S, is_apert_S, pert_R, is_apert_R

@@ -35,8 +35,7 @@ except ImportError as error:
 
 from ._check import InitUnKnowClassError
 from .FluxLink import FluxLink
-from .LUT import LUT
-from .Drive import Drive
+from .OP import OP
 
 
 class EEC_LSRPM(EEC):
@@ -88,9 +87,15 @@ class EEC_LSRPM(EEC):
         self,
         fluxlink=None,
         N0=1500,
-        parameters=None,
-        LUT_enforced=None,
-        drive=None,
+        type_skin_effect=1,
+        OP=None,
+        Tsta=20,
+        Trot=20,
+        Xkr_skinS=1,
+        Xke_skinS=1,
+        Xkr_skinR=1,
+        Xke_skinR=1,
+        R1=None,
         init_dict=None,
         init_str=None,
     ):
@@ -113,18 +118,38 @@ class EEC_LSRPM(EEC):
                 fluxlink = init_dict["fluxlink"]
             if "N0" in list(init_dict.keys()):
                 N0 = init_dict["N0"]
-            if "parameters" in list(init_dict.keys()):
-                parameters = init_dict["parameters"]
-            if "LUT_enforced" in list(init_dict.keys()):
-                LUT_enforced = init_dict["LUT_enforced"]
-            if "drive" in list(init_dict.keys()):
-                drive = init_dict["drive"]
+            if "type_skin_effect" in list(init_dict.keys()):
+                type_skin_effect = init_dict["type_skin_effect"]
+            if "OP" in list(init_dict.keys()):
+                OP = init_dict["OP"]
+            if "Tsta" in list(init_dict.keys()):
+                Tsta = init_dict["Tsta"]
+            if "Trot" in list(init_dict.keys()):
+                Trot = init_dict["Trot"]
+            if "Xkr_skinS" in list(init_dict.keys()):
+                Xkr_skinS = init_dict["Xkr_skinS"]
+            if "Xke_skinS" in list(init_dict.keys()):
+                Xke_skinS = init_dict["Xke_skinS"]
+            if "Xkr_skinR" in list(init_dict.keys()):
+                Xkr_skinR = init_dict["Xkr_skinR"]
+            if "Xke_skinR" in list(init_dict.keys()):
+                Xke_skinR = init_dict["Xke_skinR"]
+            if "R1" in list(init_dict.keys()):
+                R1 = init_dict["R1"]
         # Set the properties (value check and convertion are done in setter)
         self.fluxlink = fluxlink
         self.N0 = N0
         # Call EEC init
         super(EEC_LSRPM, self).__init__(
-            parameters=parameters, LUT_enforced=LUT_enforced, drive=drive
+            type_skin_effect=type_skin_effect,
+            OP=OP,
+            Tsta=Tsta,
+            Trot=Trot,
+            Xkr_skinS=Xkr_skinS,
+            Xke_skinS=Xke_skinS,
+            Xkr_skinR=Xkr_skinR,
+            Xke_skinR=Xke_skinR,
+            R1=R1,
         )
         # The class is frozen (in EEC init), for now it's impossible to
         # add new properties

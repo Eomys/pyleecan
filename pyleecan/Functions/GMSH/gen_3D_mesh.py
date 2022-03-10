@@ -1,7 +1,9 @@
+from os import replace
 from numpy import pi
 from ...Classes.Arc import Arc
 import sys
 import gmsh
+from os.path import splitext
 
 
 def gen_3D_mesh(
@@ -135,8 +137,15 @@ def gen_3D_mesh(
 
     # Generate the 3D mesh
     factory.synchronize()
-    gmsh.model.mesh.generate(3)
+
+    filename, file_extension = splitext(save_path)
+    if file_extension == ".geo":
+        gmsh.write(filename + ".geo_unrolled")
+        replace(filename + ".geo_unrolled", filename + file_extension)
+    else:
+        gmsh.model.mesh.generate(3)
+        gmsh.write(save_path)
 
     # Save and close
-    gmsh.write(save_path)
+
     gmsh.finalize()

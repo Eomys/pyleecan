@@ -2,8 +2,7 @@ from numpy import zeros, ones, dot, squeeze
 
 from SciDataTool import DataTime
 
-from pyleecan.Classes.OPdq import OPdq
-from pyleecan.Classes.OPslip import OPslip
+from ....Classes.OPdq import OPdq
 
 from ....Functions.Electrical.dqh_transformation import dqh2n
 from ....Functions.Load.import_class import import_class
@@ -61,15 +60,11 @@ def comp_mmf_unit(self, Na=None, Nt=None, felec=1, current_dir=None, phase_dir=N
     elif phase_dir not in [-1, 1]:
         raise Exception("Cannot enforce phase_dir other than +1 or -1")
 
-    if machine.is_synchronous():
-        OPclass = OPdq
-    else:
-        OPclass = OPslip
     InputVoltage = import_class("pyleecan.Classes", "InputVoltage")
     input = InputVoltage(
         Na_tot=Na,
         Nt_tot=Nt,
-        OP=OPclass(felec=felec),
+        OP=OPdq(felec=felec),
         current_dir=current_dir,
         rot_dir=ROT_DIR_REF,  # rotor rotating dir has not impact on unit mmf
     )
@@ -77,8 +72,8 @@ def comp_mmf_unit(self, Na=None, Nt=None, felec=1, current_dir=None, phase_dir=N
     axes_dict = input.comp_axes(
         axes_list=["time", "angle", "phase_S", "phase_R"],
         machine=machine,
-        is_periodicity_t=True,
-        is_periodicity_a=True,
+        is_periodicity_t=bool(Nt > 1),
+        is_periodicity_a=bool(Na > 1),
         is_antiper_t=False,
         is_antiper_a=False,
     )
@@ -100,6 +95,7 @@ def comp_mmf_unit(self, Na=None, Nt=None, felec=1, current_dir=None, phase_dir=N
     mmf_u = squeeze(dot(I, wf))
 
     # Create a Data object
+
     MMF_U = DataTime(
         name="Overall MMF",
         unit="A",

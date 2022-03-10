@@ -53,14 +53,7 @@ def test_EEC_PWM(param_dict):
     )
 
     simu.elec = Electrical(
-        eec=EEC_PMSM(
-            parameters={
-                "Ld": 0.0005,
-                "Lq": 0.001,
-                "Phid_mag": 0.1,
-                "Phiq_mag": 0,
-            }
-        ),
+        eec=EEC_PMSM(Ld=0.0005, Lq=0.001, Phid_mag=0.1, Phiq_mag=0),
         freq_max=freq_max,
     )
 

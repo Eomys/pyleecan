@@ -159,7 +159,7 @@ class WMachineTable(Ui_WMachineTable, QWidget):
             # Set the current
             update_FEMM_simulation(
                 femm=femm,
-                circuits=FEMM_dict["circuits"],
+                FEMM_dict=FEMM_dict,
                 is_sliding_band=True,
                 is_internal_rotor=self.machine.rotor.is_internal,
                 angle_rotor=[alpha],
@@ -177,7 +177,9 @@ class WMachineTable(Ui_WMachineTable, QWidget):
             )
             getLogger(GUI_LOG_NAME).error(err_msg)
             QMessageBox().critical(
-                self, self.tr("Error"), self.tr(err_msg),
+                self,
+                self.tr("Error"),
+                self.tr(err_msg),
             )
         femm.closefemm()
 
@@ -213,7 +215,9 @@ class WMachineTable(Ui_WMachineTable, QWidget):
             )
             getLogger(GUI_LOG_NAME).error(err_msg)
             QMessageBox().critical(
-                self, self.tr("Error"), self.tr(err_msg),
+                self,
+                self.tr("Error"),
+                self.tr(err_msg),
             )
 
     def draw_GMSH_3D(self):
@@ -238,7 +242,9 @@ class WMachineTable(Ui_WMachineTable, QWidget):
             )
             getLogger(GUI_LOG_NAME).error(err_msg)
             QMessageBox().critical(
-                self, self.tr("Error"), self.tr(err_msg),
+                self,
+                self.tr("Error"),
+                self.tr(err_msg),
             )
 
     def get_save_path(self, ext=".fem", file_type="FEMM (*.fem)"):
