@@ -103,6 +103,7 @@ def comp_flux_airgap(self, output, axes_dict, Is=None, Ir=None):
             transform_list=self.transform_list,
             rotor_dxf=self.rotor_dxf,
             stator_dxf=self.stator_dxf,
+            is_fast_draw=self.is_fast_draw,
         )
     else:
         self.get_logger().debug("Reusing the FEMM file: " + self.import_file)
