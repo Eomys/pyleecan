@@ -5096,7 +5096,8 @@
             "get_yoke_side_line",
             "get_notches_surf",
             "comp_periodicity_duct_spatial",
-            "get_surfaces_closing"
+            "get_surfaces_closing",
+            "comp_periodicity_geo"
         ],
         "mother": "",
         "name": "Lamination",
@@ -6268,6 +6269,15 @@
                 "type": "bool",
                 "unit": "",
                 "value": 1
+            },
+            {
+                "desc": "True to use the symetry of the lamination to draw the machine faster",
+                "max": "",
+                "min": "",
+                "name": "is_fast_draw",
+                "type": "bool",
+                "unit": "",
+                "value": 0
             }
         ]
     },
