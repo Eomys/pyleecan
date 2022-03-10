@@ -16,7 +16,7 @@ def draw_FEMM_lamination(
     is_mmfr=True,
     type_BH_stator=0,
     type_BH_rotor=0,
-    is_fast_draw=True,
+    is_fast_draw=False,
 ):
     """Draw a Lamination in FEMM
 
