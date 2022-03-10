@@ -1,6 +1,3 @@
-# -*- coding: utf-8 -*-
-
-
 def comp_resistance_wind(self, T=20):
     """Compute the DC winding resistance per phase without skin effect at average temperature T degC
 
@@ -34,7 +31,7 @@ def comp_resistance_wind(self, T=20):
     Sact = self.winding.conductor.comp_surface_active()
 
     # temperature coefficient and electrical conductivity
-    rhow = self.winding.conductor.cond_mat.get_resistivity(T_op=T, T_ref=20)
+    rhow = self.winding.conductor.cond_mat.elec.get_resistivity(T_op=T, T_ref=20)
 
     # DC winding resistance per phase at specified temperature
     R = (1.0 / self.winding.Npcp) * rhow * (Ntspc * 2 * Lwht) / (Sact)

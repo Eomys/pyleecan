@@ -58,8 +58,8 @@ def comp_skin_effect_round_wire(self, f, rho=None, mu=None):
     r_w = d_w / 2
 
     # Resistance factor of skin effect (R_AC=R_DC*K)
-    K_R = 1 + 1 / 48(r_w / delta) ** 4
+    K_R = 1 + 1 / 48 * (r_w / delta) ** 4
     # Inductance factor of skin effect (I_AC=I_DC*K)
-    K_I = 1 - 1 / 96(r_w / delta) ** 4
+    K_I = 1 - 1 / 96 * (r_w / delta) ** 4
 
     return K_R, K_I
