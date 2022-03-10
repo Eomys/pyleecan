@@ -1,0 +1,10 @@
+Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constante Name,Constante Value,Description classe,Classe fille
+n_interp,,Number of id values used for interpolation,,int,10,1,,,Simulation,Electrical,run,VERSION,1,Electric module object for electrical equivalent circuit simulation,
+Id_min,Arms,Minimum Id for LUT calculation,,float,None,,,,,,comp_LUTdq,,,,
+Id_max,Arms,Maximum Id for LUT calculation,,float,None,,,,,,,,,,
+Iq_min,Arms,Minimum Iq for LUT calculation,,float,None,,,,,,,,,,
+Iq_max,Arms,Maximum Iq for LUT calculation,,float,None,,,,,,,,,,
+n_Id,,Number of Id for LUT calculation,,int,1,,,,,,,,,,
+n_Iq,,Number of Iq for LUT calculation,,int,1,,,,,,,,,,
+mag_model,,Magnetic model used for LUT calculation,,Magnetics,None,,,,,,,,,,
+loss_model,,Loss model used for LUT calculation,,Loss,None,,,,,,,,,,
