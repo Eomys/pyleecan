@@ -31,6 +31,7 @@ def draw_FEMM(
     transform_list=[],
     rotor_dxf=None,
     stator_dxf=None,
+    T_mag=20,
 ):
     """Draws and assigns the property of the machine in FEMM
 
@@ -80,6 +81,8 @@ def draw_FEMM(
         To use a dxf version of the rotor instead of build_geometry
     stator_dxf : DXFImport
         To use a dxf version of the stator instead of build_geometry
+    T_mag: float
+        Permanent magnet temperature [deg Celsius]
 
     Returns
     -------
@@ -94,7 +97,7 @@ def draw_FEMM(
 
     # Computing parameter (element size, arcspan...) needed to define the simulation
     FEMM_dict = comp_FEMM_dict(
-        machine, kgeo_fineness, kmesh_fineness, type_calc_leakage
+        machine, kgeo_fineness, kmesh_fineness, T_mag, type_calc_leakage
     )
     # Overwrite some values if needed
     for key, val in user_FEMM_dict.items():

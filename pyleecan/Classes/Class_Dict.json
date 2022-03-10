@@ -6759,6 +6759,15 @@
                 "type": "bool",
                 "unit": "",
                 "value": 1
+            },
+            {
+                "desc": "Permanent magnet temperature to adapt magnet remanent flux density",
+                "max": "",
+                "min": "",
+                "name": "T_mag",
+                "type": "float",
+                "unit": "deg Celsius",
+                "value": 20
             }
         ]
     },
@@ -6833,13 +6842,13 @@
                 "value": 1
             },
             {
-                "desc": "Thermal Coefficient",
+                "desc": "Thermal resistivity coefficient",
                 "max": "",
                 "min": "0",
                 "name": "alpha",
                 "type": "float",
                 "unit": "1/K",
-                "value": 1
+                "value": 0
             }
         ]
     },
@@ -6902,7 +6911,7 @@
                 "name": "alpha",
                 "type": "float",
                 "unit": "-",
-                "value": 0.00393
+                "value": 0
             }
         ]
     },
@@ -6918,7 +6927,9 @@
         "is_internal": false,
         "methods": [
             "get_BH",
-            "plot_BH"
+            "plot_BH",
+            "get_Hc",
+            "get_Brm"
         ],
         "mother": "",
         "name": "MatMagnetics",
@@ -6935,7 +6946,7 @@
                 "value": 1
             },
             {
-                "desc": "Coercitivity field",
+                "desc": "Coercitivity field at 20degC (calculated from mur_lin and Brm20 if not provided)",
                 "max": "",
                 "min": "0",
                 "name": "Hc",
@@ -6944,7 +6955,7 @@
                 "value": 0
             },
             {
-                "desc": "magnet remanence induction at 20degC",
+                "desc": "magnet remanence induction at 20degC (calculated from mur_lin and Hc if not provided)",
                 "max": "",
                 "min": "",
                 "name": "Brm20",

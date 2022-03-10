@@ -29,7 +29,7 @@ class MatElectrical(FrozenClass):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, rho=1, epsr=1, alpha=1, init_dict=None, init_str=None):
+    def __init__(self, rho=1, epsr=1, alpha=0, init_dict=None, init_str=None):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -191,7 +191,7 @@ class MatElectrical(FrozenClass):
     alpha = property(
         fget=_get_alpha,
         fset=_set_alpha,
-        doc=u"""Thermal Coefficient
+        doc=u"""Thermal resistivity coefficient
 
         :Type: float
         :min: 0

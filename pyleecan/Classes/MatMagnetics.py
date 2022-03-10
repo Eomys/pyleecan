@@ -27,6 +27,16 @@ try:
 except ImportError as error:
     plot_BH = error
 
+try:
+    from ..Methods.Material.MatMagnetics.get_Hc import get_Hc
+except ImportError as error:
+    get_Hc = error
+
+try:
+    from ..Methods.Material.MatMagnetics.get_Brm import get_Brm
+except ImportError as error:
+    get_Brm = error
+
 
 from ..Classes.ImportMatrixVal import ImportMatrixVal
 from numpy import ndarray
@@ -58,6 +68,24 @@ class MatMagnetics(FrozenClass):
         )
     else:
         plot_BH = plot_BH
+    # cf Methods.Material.MatMagnetics.get_Hc
+    if isinstance(get_Hc, ImportError):
+        get_Hc = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use MatMagnetics method get_Hc: " + str(get_Hc))
+            )
+        )
+    else:
+        get_Hc = get_Hc
+    # cf Methods.Material.MatMagnetics.get_Brm
+    if isinstance(get_Brm, ImportError):
+        get_Brm = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use MatMagnetics method get_Brm: " + str(get_Brm))
+            )
+        )
+    else:
+        get_Brm = get_Brm
     # save and copy methods are available in all object
     save = save
     copy = copy
@@ -342,7 +370,7 @@ class MatMagnetics(FrozenClass):
     Hc = property(
         fget=_get_Hc,
         fset=_set_Hc,
-        doc=u"""Coercitivity field
+        doc=u"""Coercitivity field at 20degC (calculated from mur_lin and Brm20 if not provided)
 
         :Type: float
         :min: 0
@@ -361,7 +389,7 @@ class MatMagnetics(FrozenClass):
     Brm20 = property(
         fget=_get_Brm20,
         fset=_set_Brm20,
-        doc=u"""magnet remanence induction at 20degC
+        doc=u"""magnet remanence induction at 20degC (calculated from mur_lin and Hc if not provided)
 
         :Type: float
         """,
