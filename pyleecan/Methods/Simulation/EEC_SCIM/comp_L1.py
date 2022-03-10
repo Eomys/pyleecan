@@ -1,5 +1,5 @@
 def comp_L1(self, L1_ref=None):
-    """Compute the Stator phase inductance for the equivalent electrical circuit
+    """Compute and set the Stator phase inductance for the equivalent electrical circuit
 
     Parameters
     ----------

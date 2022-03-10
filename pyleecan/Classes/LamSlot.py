@@ -79,12 +79,6 @@ except ImportError as error:
 
 
 from ._check import InitUnKnowClassError
-from .Slot import Slot
-from .Material import Material
-from .Hole import Hole
-from .Notch import Notch
-from .Skew import Skew
-from .Bore import Bore
 
 
 class LamSlot(Lamination):
@@ -428,6 +422,7 @@ class LamSlot(Lamination):
             class_obj = import_class("pyleecan.Classes", value.get("__class__"), "slot")
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
+            Slot = import_class("pyleecan.Classes", "Slot", "slot")
             value = Slot()
         check_var("slot", value, "Slot")
         self._slot = value

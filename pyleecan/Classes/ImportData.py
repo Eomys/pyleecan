@@ -24,7 +24,6 @@ except ImportError as error:
 
 
 from ._check import InitUnKnowClassError
-from .Import import Import
 
 
 class ImportData(FrozenClass):
@@ -331,6 +330,7 @@ class ImportData(FrozenClass):
             )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
+            Import = import_class("pyleecan.Classes", "Import", "field")
             value = Import()
         check_var("field", value, "Import")
         self._field = value

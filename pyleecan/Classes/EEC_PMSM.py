@@ -74,9 +74,6 @@ except ImportError as error:
 
 
 from ._check import InitUnKnowClassError
-from .IndMag import IndMag
-from .FluxLink import FluxLink
-from .OP import OP
 
 
 class EEC_PMSM(EEC):
@@ -489,6 +486,7 @@ class EEC_PMSM(EEC):
             )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
+            IndMag = import_class("pyleecan.Classes", "IndMag", "indmag")
             value = IndMag()
         check_var("indmag", value, "IndMag")
         self._indmag = value
@@ -525,6 +523,7 @@ class EEC_PMSM(EEC):
             )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
+            FluxLink = import_class("pyleecan.Classes", "FluxLink", "fluxlink")
             value = FluxLink()
         check_var("fluxlink", value, "FluxLink")
         self._fluxlink = value

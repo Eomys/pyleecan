@@ -84,8 +84,6 @@ except ImportError as error:
 
 
 from ._check import InitUnKnowClassError
-from .CellMat import CellMat
-from .NodeMat import NodeMat
 
 
 class MeshMat(Mesh):
@@ -489,6 +487,7 @@ class MeshMat(Mesh):
             class_obj = import_class("pyleecan.Classes", value.get("__class__"), "node")
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
+            NodeMat = import_class("pyleecan.Classes", "NodeMat", "node")
             value = NodeMat()
         check_var("node", value, "NodeMat")
         self._node = value

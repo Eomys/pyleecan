@@ -67,12 +67,6 @@ except ImportError as error:
 
 from numpy import array, array_equal
 from ._check import InitUnKnowClassError
-from .Slot import Slot
-from .Material import Material
-from .Hole import Hole
-from .Notch import Notch
-from .Skew import Skew
-from .Bore import Bore
 
 
 class LamSlotMulti(Lamination):

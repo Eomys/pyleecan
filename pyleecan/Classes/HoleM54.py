@@ -54,7 +54,6 @@ except ImportError as error:
 
 
 from ._check import InitUnKnowClassError
-from .Material import Material
 
 
 class HoleM54(Hole):

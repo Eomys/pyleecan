@@ -1,60 +1,39 @@
-from numpy import array, zeros, nan
 from os.path import join
-
-from ....Classes.LUTdq import LUTdq
-from ....Functions.Load.import_class import import_class
 
 
 def run(self, out):
-    """PostProcessing to generate a LUT after the corresponding simulation
+    """PostProcessing to clean a LUT from un-necessary output
+    after the corresponding simulation
 
     Parameters
     ----------
     self : PostLUT
         A PostLUT object
-    out: Output
-        Output object coming from LUT calculation workflow
-
+    out: LUT
+        LUT object coming from LUT calculation workflow to cleanup
     """
 
-    if out.simu.machine.is_synchronous():
-        # Init LUT object
-        LUT = LUTdq(phase_dir=out.elec.phase_dir)
+    assert out.simu.var_simu.is_keep_all_output is True
 
-        XOutput = import_class("pyleecan.Classes", "XOutput")
+    # Clean all reference Output (only use output_list)
+    out.elec = None
+    out.mag = None
+    out.struct = None
+    out.force = None
+    out.loss = None
 
-        if not isinstance(out, XOutput):
-            raise Exception("Need an XOutput to compute LUT")
-        else:
-            # Store data for each OP
-            # Number of columns in OP_matrix
-            ndim = out.simu.var_simu.OP_matrix.shape[1]
+    # Clean all un-necessary data from output_list
+    for out_single in out.output_list:
+        # out_single.elec is not cleaned
+        out_single.mag.clean(clean_level=5)
+        out_single.struct = None
+        out_single.force = None
+        out_single.loss = None
 
-            # Store operating point matrix in VarLoadCurrent object
-            LUT.OP_matrix = nan * zeros((out.nb_simu, 5))
-            LUT.OP_matrix[:, 0] = array(out["N0"].result)
-            LUT.OP_matrix[:, 1] = array(out["Id"].result)
-            LUT.OP_matrix[:, 2] = array(out["Iq"].result)
-            if ndim > 3:
-                for ii in range(3, ndim):
-                    LUT.OP_matrix[:, ii] = array(out.simu.var_simu.OP_matrix[:, ii])
-
-            # Fill LUT variables
-            if "Phi_{wind}" in out.keys():
-                LUT.Phi_wind = out["Phi_{wind}"].result
-            elif out.output_list is not None:
-                stator_label = out.simu.machine.stator.get_label()
-                LUT.Phi_wind = [o.mag.Phi_wind[stator_label] for o in out.output_list]
-
-            if self.is_save_LUT:
-                # Save LUT object
-                LUT.save(
-                    save_path=join(out.get_path_result(), "LUT.h5"),
-                )
-
-            if self.is_store_LUT:
-                # Store LUT in PostLUT object
-                self.LUT = LUT
-
-    else:
-        raise Exception("PostLUT for asynchronous machines not developed yet")
+    # Save/Store LUT object
+    if self.is_save_LUT:
+        out.save(
+            save_path=join(out.get_path_result(), "LUT.h5"),
+        )
+    if self.is_store_LUT:
+        self.LUT = out

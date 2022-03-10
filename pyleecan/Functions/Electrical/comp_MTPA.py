@@ -73,13 +73,8 @@ def comp_MTPA(
     p = machine.get_pole_pair_number()
     # Stator winding number of phases
     qs = machine.stator.winding.qs
-    # Stator winding resistance [Ohm]
-    if Rs is not None:
-        parameters = {"R1": Rs}
-    else:
-        parameters = None
 
-    OP_matrix = LUT.OP_matrix
+    OP_matrix = LUT.get_OP_matrix()
 
     # Get Id_min, Id_max, Iq_min, Iq_max from OP_matrix
     Id_min = OP_matrix[:, 1].min()
@@ -99,9 +94,9 @@ def comp_MTPA(
     OP_ref = OPdq(N0=OP_matrix[0, 0], Id_ref=OP_matrix[0, 1], Iq_ref=OP_matrix[0, 2])
     simu_MTPA.input = InputCurrent(OP=OP_ref)
 
-    simu_MTPA.elec = Electrical(
-        eec=EEC_PMSM(parameters=parameters, LUT_enforced=LUT), Tsta=Tsta
-    )
+    # Stator winding resistance [Ohm]
+    ecc = EEC_PMSM(R1=Rs)  # If Rs None => Compute
+    simu_MTPA.elec = Electrical(LUT_enforced=LUT, eec=ecc, Tsta=Tsta)
 
     # Interpolate stator winding flux in dqh frame for all Id/Iq
     eec_param = simu_MTPA.elec.eec.comp_parameters(

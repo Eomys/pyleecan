@@ -37,9 +37,6 @@ from ..Classes.ImportMatrixVal import ImportMatrixVal
 from numpy import ndarray
 from numpy import array, array_equal
 from ._check import InitUnKnowClassError
-from .ImportGenPWM import ImportGenPWM
-from .ImportMatrix import ImportMatrix
-from .OP import OP
 
 
 class InputVoltage(Input):
@@ -372,6 +369,7 @@ class InputVoltage(Input):
             class_obj = import_class("pyleecan.Classes", value.get("__class__"), "PWM")
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
+            ImportGenPWM = import_class("pyleecan.Classes", "ImportGenPWM", "PWM")
             value = ImportGenPWM()
         check_var("PWM", value, "ImportGenPWM")
         self._PWM = value

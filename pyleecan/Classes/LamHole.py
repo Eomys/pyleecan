@@ -79,11 +79,6 @@ except ImportError as error:
 
 
 from ._check import InitUnKnowClassError
-from .Hole import Hole
-from .Material import Material
-from .Notch import Notch
-from .Skew import Skew
-from .Bore import Bore
 
 
 class LamHole(Lamination):
