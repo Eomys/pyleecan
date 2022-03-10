@@ -140,7 +140,7 @@ def test_FEMM_compare_IPMSM_xxx_lam_sym():
         data_list=[out2.mag.B],
         legend_list=["WIthout lam symmetry", "With lam symmetry"],
         save_path=join(save_path, "test_FEMM_compare_IPMSM_xxx.png"),
-        is_show_fig=True,
+        is_show_fig=False,
         **dict_2D
     )
 

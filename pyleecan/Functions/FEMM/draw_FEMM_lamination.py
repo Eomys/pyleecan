@@ -62,6 +62,11 @@ def draw_FEMM_lamination(
     if lam_dxf is not None:
         femm.mi_readdxf(lam_dxf.file_path)
         surf_list = lam_dxf.get_surfaces()
+
+        sym_draw = sym
+        is_draw = True
+        is_set_BC = True
+        type_assign = 0
     else:
         # Drawing with smallest periodicities of the lamination depending on is_fast_draw
         if is_fast_draw:
