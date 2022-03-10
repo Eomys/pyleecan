@@ -6133,6 +6133,15 @@
                 "type": "bool",
                 "unit": "",
                 "value": 1
+            },
+            {
+                "desc": "True to use the symetry of the lamination to draw the machine faster",
+                "max": "",
+                "min": "",
+                "name": "is_fast_draw",
+                "type": "bool",
+                "unit": "",
+                "value": 0
             }
         ]
     },
