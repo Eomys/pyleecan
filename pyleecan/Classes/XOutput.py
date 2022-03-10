@@ -144,17 +144,6 @@ except ImportError as error:
 
 
 from ._check import InitUnKnowClassError
-from .ParamExplorer import ParamExplorer
-from .Output import Output
-from .DataKeeper import DataKeeper
-from .Simulation import Simulation
-from .OutGeo import OutGeo
-from .OutElec import OutElec
-from .OutMag import OutMag
-from .OutStruct import OutStruct
-from .OutPost import OutPost
-from .OutForce import OutForce
-from .OutLoss import OutLoss
 
 
 class XOutput(Output):
@@ -915,6 +904,7 @@ class XOutput(Output):
             )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
+            Output = import_class("pyleecan.Classes", "Output", "xoutput_ref")
             value = Output()
         check_var("xoutput_ref", value, "Output")
         self._xoutput_ref = value

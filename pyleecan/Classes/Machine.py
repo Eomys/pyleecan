@@ -135,8 +135,6 @@ except ImportError as error:
 
 
 from ._check import InitUnKnowClassError
-from .Frame import Frame
-from .Shaft import Shaft
 
 
 class Machine(FrozenClass):
@@ -603,6 +601,7 @@ class Machine(FrozenClass):
             )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
+            Frame = import_class("pyleecan.Classes", "Frame", "frame")
             value = Frame()
         check_var("frame", value, "Frame")
         self._frame = value
@@ -639,6 +638,7 @@ class Machine(FrozenClass):
             )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
+            Shaft = import_class("pyleecan.Classes", "Shaft", "shaft")
             value = Shaft()
         check_var("shaft", value, "Shaft")
         self._shaft = value

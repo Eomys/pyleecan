@@ -79,8 +79,6 @@ except ImportError as error:
 
 
 from ._check import InitUnKnowClassError
-from .Mesh import Mesh
-from .Solution import Solution
 
 
 class MeshSolution(FrozenClass):

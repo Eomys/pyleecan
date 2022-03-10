@@ -21,8 +21,6 @@ from ._check import CheckTypeError
 import numpy as np
 import random
 from ._check import InitUnKnowClassError
-from .OptiProblem import OptiProblem
-from .XOutput import XOutput
 
 
 class OptiGenAlg(OptiSolver):

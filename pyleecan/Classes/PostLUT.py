@@ -24,7 +24,6 @@ except ImportError as error:
 
 
 from ._check import InitUnKnowClassError
-from .LUT import LUT
 
 
 class PostLUT(PostMethod):
@@ -214,6 +213,7 @@ class PostLUT(PostMethod):
             class_obj = import_class("pyleecan.Classes", value.get("__class__"), "LUT")
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
+            LUT = import_class("pyleecan.Classes", "LUT", "LUT")
             value = LUT()
         check_var("LUT", value, "LUT")
         self._LUT = value

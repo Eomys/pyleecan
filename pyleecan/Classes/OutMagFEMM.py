@@ -24,7 +24,6 @@ except ImportError as error:
 
 
 from ._check import InitUnKnowClassError
-from ._FEMMHandler import _FEMMHandler
 
 
 class OutMagFEMM(OutInternal):

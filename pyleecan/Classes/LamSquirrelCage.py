@@ -80,13 +80,6 @@ except ImportError as error:
 
 
 from ._check import InitUnKnowClassError
-from .Material import Material
-from .Winding import Winding
-from .Slot import Slot
-from .Hole import Hole
-from .Notch import Notch
-from .Skew import Skew
-from .Bore import Bore
 
 
 class LamSquirrelCage(LamSlotWind):
@@ -504,6 +497,7 @@ class LamSquirrelCage(LamSlotWind):
             )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
+            Material = import_class("pyleecan.Classes", "Material", "ring_mat")
             value = Material()
         check_var("ring_mat", value, "Material")
         self._ring_mat = value

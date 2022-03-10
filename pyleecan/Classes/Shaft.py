@@ -34,7 +34,6 @@ except ImportError as error:
 
 
 from ._check import InitUnKnowClassError
-from .Material import Material
 
 
 class Shaft(FrozenClass):
@@ -247,6 +246,7 @@ class Shaft(FrozenClass):
             )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
+            Material = import_class("pyleecan.Classes", "Material", "mat_type")
             value = Material()
         check_var("mat_type", value, "Material")
         self._mat_type = value

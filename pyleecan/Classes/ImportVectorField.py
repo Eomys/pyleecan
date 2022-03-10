@@ -24,7 +24,6 @@ except ImportError as error:
 
 
 from ._check import InitUnKnowClassError
-from .ImportData import ImportData
 
 
 class ImportVectorField(FrozenClass):

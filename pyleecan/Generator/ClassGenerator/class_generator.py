@@ -185,12 +185,6 @@ def generate_class(
 
     # Import of all needed software type for empty init
     class_file.write("from ._check import InitUnKnowClassError\n")
-    for pyleecan_type in import_type_list:
-        if pyleecan_type:
-            if "." not in pyleecan_type and pyleecan_type != "FrozenClass":
-                class_file.write(
-                    "from ." + pyleecan_type + " import " + pyleecan_type + "\n"
-                )
 
     # Class declaration
     if class_dict["mother"] != "" and "." not in class_dict["mother"]:

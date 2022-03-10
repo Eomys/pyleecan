@@ -16,11 +16,6 @@ from ..Functions.Load.import_class import import_class
 from ._frozen import FrozenClass
 
 from ._check import InitUnKnowClassError
-from .MatElectrical import MatElectrical
-from .MatMagnetics import MatMagnetics
-from .MatStructural import MatStructural
-from .MatHT import MatHT
-from .MatEconomical import MatEconomical
 
 
 class Material(FrozenClass):
@@ -356,6 +351,7 @@ class Material(FrozenClass):
             class_obj = import_class("pyleecan.Classes", value.get("__class__"), "elec")
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
+            MatElectrical = import_class("pyleecan.Classes", "MatElectrical", "elec")
             value = MatElectrical()
         check_var("elec", value, "MatElectrical")
         self._elec = value
@@ -390,6 +386,7 @@ class Material(FrozenClass):
             class_obj = import_class("pyleecan.Classes", value.get("__class__"), "mag")
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
+            MatMagnetics = import_class("pyleecan.Classes", "MatMagnetics", "mag")
             value = MatMagnetics()
         check_var("mag", value, "MatMagnetics")
         self._mag = value
@@ -426,6 +423,7 @@ class Material(FrozenClass):
             )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
+            MatStructural = import_class("pyleecan.Classes", "MatStructural", "struct")
             value = MatStructural()
         check_var("struct", value, "MatStructural")
         self._struct = value
@@ -460,6 +458,7 @@ class Material(FrozenClass):
             class_obj = import_class("pyleecan.Classes", value.get("__class__"), "HT")
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
+            MatHT = import_class("pyleecan.Classes", "MatHT", "HT")
             value = MatHT()
         check_var("HT", value, "MatHT")
         self._HT = value
@@ -494,6 +493,7 @@ class Material(FrozenClass):
             class_obj = import_class("pyleecan.Classes", value.get("__class__"), "eco")
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
+            MatEconomical = import_class("pyleecan.Classes", "MatEconomical", "eco")
             value = MatEconomical()
         check_var("eco", value, "MatEconomical")
         self._eco = value

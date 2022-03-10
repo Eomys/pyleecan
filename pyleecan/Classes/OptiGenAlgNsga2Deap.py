@@ -63,8 +63,6 @@ try:
 except ImportError:
     Toolbox = ImportError
 from ._check import InitUnKnowClassError
-from .OptiProblem import OptiProblem
-from .XOutput import XOutput
 
 
 class OptiGenAlgNsga2Deap(OptiGenAlg):

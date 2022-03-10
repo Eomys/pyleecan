@@ -16,8 +16,6 @@ from ..Functions.Load.import_class import import_class
 from ._frozen import FrozenClass
 
 from ._check import InitUnKnowClassError
-from .OptiProblem import OptiProblem
-from .XOutput import XOutput
 
 
 class OptiSolver(FrozenClass):
@@ -218,6 +216,7 @@ class OptiSolver(FrozenClass):
             )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
+            OptiProblem = import_class("pyleecan.Classes", "OptiProblem", "problem")
             value = OptiProblem()
         check_var("problem", value, "OptiProblem")
         self._problem = value
@@ -254,6 +253,7 @@ class OptiSolver(FrozenClass):
             )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
+            XOutput = import_class("pyleecan.Classes", "XOutput", "xoutput")
             value = XOutput()
         check_var("xoutput", value, "XOutput")
         self._xoutput = value

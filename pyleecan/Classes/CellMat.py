@@ -40,7 +40,6 @@ except ImportError as error:
 
 from numpy import array, array_equal
 from ._check import InitUnKnowClassError
-from .Interpolation import Interpolation
 
 
 class CellMat(FrozenClass):
@@ -403,6 +402,9 @@ class CellMat(FrozenClass):
             )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
+            Interpolation = import_class(
+                "pyleecan.Classes", "Interpolation", "interpolation"
+            )
             value = Interpolation()
         check_var("interpolation", value, "Interpolation")
         self._interpolation = value

@@ -34,7 +34,6 @@ except ImportError as error:
 
 
 from ._check import InitUnKnowClassError
-from .LossModel import LossModel
 
 
 class Loss(FrozenClass):

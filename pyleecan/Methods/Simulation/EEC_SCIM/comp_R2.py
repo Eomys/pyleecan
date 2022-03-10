@@ -1,5 +1,5 @@
 def comp_R2(self, R2_ref=None, T_ref=None):
-    """Compute the rotor phase resistance for the equivalent electrical circuit
+    """Compute and set the rotor phase resistance for the equivalent electrical circuit
 
     Parameters
     ----------
