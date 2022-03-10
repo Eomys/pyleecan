@@ -25,7 +25,7 @@ def get_conductivity(self, T_op=None, T_ref=20):
     if self.rho is None:
         raise Exception("Cannot calculate conductivity if rh0 is None")
 
-    if self.rh0 == 0:
+    if self.rho == 0:
         sigma = inf
 
     else:
