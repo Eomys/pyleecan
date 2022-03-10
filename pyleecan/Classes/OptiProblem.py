@@ -21,11 +21,6 @@ from ._check import CheckTypeError
 import numpy as np
 import random
 from ._check import InitUnKnowClassError
-from .Simulation import Simulation
-from .OptiDesignVar import OptiDesignVar
-from .OptiObjective import OptiObjective
-from .OptiConstraint import OptiConstraint
-from .DataKeeper import DataKeeper
 
 
 class OptiProblem(FrozenClass):
@@ -416,6 +411,7 @@ class OptiProblem(FrozenClass):
             class_obj = import_class("pyleecan.Classes", value.get("__class__"), "simu")
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
+            Simulation = import_class("pyleecan.Classes", "Simulation", "simu")
             value = Simulation()
         check_var("simu", value, "Simulation")
         self._simu = value

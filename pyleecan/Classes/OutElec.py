@@ -44,10 +44,6 @@ except ImportError as error:
 
 
 from ._check import InitUnKnowClassError
-from .OutInternal import OutInternal
-from .OP import OP
-from .ImportGenPWM import ImportGenPWM
-from .EEC import EEC
 
 
 class OutElec(FrozenClass):
@@ -679,6 +675,7 @@ class OutElec(FrozenClass):
             )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
+            OutInternal = import_class("pyleecan.Classes", "OutInternal", "internal")
             value = OutInternal()
         check_var("internal", value, "OutInternal")
         self._internal = value
@@ -713,6 +710,7 @@ class OutElec(FrozenClass):
             class_obj = import_class("pyleecan.Classes", value.get("__class__"), "OP")
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
+            OP = import_class("pyleecan.Classes", "OP", "OP")
             value = OP()
         check_var("OP", value, "OP")
         self._OP = value
@@ -823,6 +821,7 @@ class OutElec(FrozenClass):
             class_obj = import_class("pyleecan.Classes", value.get("__class__"), "PWM")
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
+            ImportGenPWM = import_class("pyleecan.Classes", "ImportGenPWM", "PWM")
             value = ImportGenPWM()
         check_var("PWM", value, "ImportGenPWM")
         self._PWM = value
@@ -857,6 +856,7 @@ class OutElec(FrozenClass):
             class_obj = import_class("pyleecan.Classes", value.get("__class__"), "eec")
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
+            EEC = import_class("pyleecan.Classes", "EEC", "eec")
             value = EEC()
         check_var("eec", value, "EEC")
         self._eec = value

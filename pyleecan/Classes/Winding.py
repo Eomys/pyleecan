@@ -80,8 +80,6 @@ except ImportError as error:
 
 from numpy import array, array_equal
 from ._check import InitUnKnowClassError
-from .Conductor import Conductor
-from .EndWinding import EndWinding
 
 
 class Winding(FrozenClass):
@@ -753,6 +751,7 @@ class Winding(FrozenClass):
             )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
+            Conductor = import_class("pyleecan.Classes", "Conductor", "conductor")
             value = Conductor()
         check_var("conductor", value, "Conductor")
         self._conductor = value
@@ -888,6 +887,7 @@ class Winding(FrozenClass):
             )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
+            EndWinding = import_class("pyleecan.Classes", "EndWinding", "end_winding")
             value = EndWinding()
         check_var("end_winding", value, "EndWinding")
         self._end_winding = value

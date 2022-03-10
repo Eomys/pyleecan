@@ -140,6 +140,22 @@ def generate_prop_setter(gen_dict, class_dict, prop, soft_name="pyleecan"):
         set_str += TAB2 + "if type(value) is int and value == -1:\n"
         set_str += TAB3 + "value = list()\n"
     elif prop["type"] == "ImportMatrix":
+        set_str += (
+            TAB2
+            + "ImportMatrix = import_class('"
+            + soft_name
+            + ".Classes', 'ImportMatrix', '"
+            + prop["name"]
+            + "')\n"
+        )
+        set_str += (
+            TAB2
+            + "ImportMatrixVal = import_class('"
+            + soft_name
+            + ".Classes', 'ImportMatrixVal', '"
+            + prop["name"]
+            + "')\n"
+        )
         set_str += TAB2 + "if isinstance(value, str):  # Load from file\n"
         set_str += TAB3 + "value = load_init_dict(value)[1]\n"
         set_str += TAB2 + "if isinstance(value,ndarray):\n"
@@ -284,10 +300,32 @@ def generate_prop_setter(gen_dict, class_dict, prop, soft_name="pyleecan"):
             TAB2 + "elif type(value) is int and value == -1:  # Default constructor\n"
         )
         if prop["value"] is not None and "()" in prop["value"]:
+            set_str += (
+                TAB3
+                + prop["type"]
+                + " = import_class('"
+                + soft_name
+                + ".Classes', '"
+                + prop["type"]
+                + "', '"
+                + prop["name"]
+                + "')\n"
+            )
             set_str += TAB3 + "value = " + prop["value"] + "\n"
         elif "SciDataTool" in prop["type"]:
             set_str += TAB3 + "value = " + prop["type"].split(".")[-1] + "()\n"
         else:
+            set_str += (
+                TAB3
+                + prop["type"]
+                + " = import_class('"
+                + soft_name
+                + ".Classes', '"
+                + prop["type"]
+                + "', '"
+                + prop["name"]
+                + "')\n"
+            )
             set_str += TAB3 + "value = " + prop["type"] + "()\n"
     elif "." in prop["type"]:
         set_str += TAB2 + "if value == -1:\n"

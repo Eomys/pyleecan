@@ -39,7 +39,6 @@ except ImportError as error:
 
 
 from ._check import InitUnKnowClassError
-from .SliceModel import SliceModel
 
 
 class Magnetics(FrozenClass):
@@ -667,6 +666,9 @@ class Magnetics(FrozenClass):
             )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
+            SliceModel = import_class(
+                "pyleecan.Classes", "SliceModel", "Slice_enforced"
+            )
             value = SliceModel()
         check_var("Slice_enforced", value, "SliceModel")
         self._Slice_enforced = value

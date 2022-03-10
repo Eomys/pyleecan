@@ -29,10 +29,6 @@ except ImportError as error:
 
 
 from ._check import InitUnKnowClassError
-from .LamSquirrelCageMag import LamSquirrelCageMag
-from .LamSlotWind import LamSlotWind
-from .Frame import Frame
-from .Shaft import Shaft
 
 
 class MachineLSPM(MachineSync):
@@ -266,6 +262,9 @@ class MachineLSPM(MachineSync):
             )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
+            LamSquirrelCageMag = import_class(
+                "pyleecan.Classes", "LamSquirrelCageMag", "rotor"
+            )
             value = LamSquirrelCageMag()
         check_var("rotor", value, "LamSquirrelCageMag")
         self._rotor = value
@@ -302,6 +301,7 @@ class MachineLSPM(MachineSync):
             )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
+            LamSlotWind = import_class("pyleecan.Classes", "LamSlotWind", "stator")
             value = LamSlotWind()
         check_var("stator", value, "LamSlotWind")
         self._stator = value

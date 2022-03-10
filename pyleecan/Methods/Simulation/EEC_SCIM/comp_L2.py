@@ -1,5 +1,5 @@
 def comp_L2(self, L2_ref=None):
-    """Compute the Rotor phase inductance for the equivalent electrical circuit
+    """Compute and set the Rotor phase inductance for the equivalent electrical circuit
 
     Parameters
     ----------

@@ -29,10 +29,6 @@ except ImportError as error:
 
 
 from ._check import InitUnKnowClassError
-from .LamHole import LamHole
-from .LamSlotWind import LamSlotWind
-from .Frame import Frame
-from .Shaft import Shaft
 
 
 class MachineSyRM(MachineSync):
@@ -266,6 +262,7 @@ class MachineSyRM(MachineSync):
             )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
+            LamHole = import_class("pyleecan.Classes", "LamHole", "rotor")
             value = LamHole()
         check_var("rotor", value, "LamHole")
         self._rotor = value
@@ -302,6 +299,7 @@ class MachineSyRM(MachineSync):
             )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
+            LamSlotWind = import_class("pyleecan.Classes", "LamSlotWind", "stator")
             value = LamSlotWind()
         check_var("stator", value, "LamSlotWind")
         self._stator = value

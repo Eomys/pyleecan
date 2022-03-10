@@ -27,12 +27,13 @@ try:
 except ImportError as error:
     init_logger = error
 
+try:
+    from ..Methods.Simulation.Simulation.get_var_load import get_var_load
+except ImportError as error:
+    get_var_load = error
+
 
 from ._check import InitUnKnowClassError
-from .Machine import Machine
-from .Input import Input
-from .VarSimu import VarSimu
-from .Post import Post
 
 
 class Simulation(FrozenClass):
@@ -61,6 +62,17 @@ class Simulation(FrozenClass):
         )
     else:
         init_logger = init_logger
+    # cf Methods.Simulation.Simulation.get_var_load
+    if isinstance(get_var_load, ImportError):
+        get_var_load = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Simulation method get_var_load: " + str(get_var_load)
+                )
+            )
+        )
+    else:
+        get_var_load = get_var_load
     # save and copy methods are available in all object
     save = save
     copy = copy
@@ -427,6 +439,7 @@ class Simulation(FrozenClass):
             )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
+            Machine = import_class("pyleecan.Classes", "Machine", "machine")
             value = Machine()
         check_var("machine", value, "Machine")
         self._machine = value
@@ -463,6 +476,7 @@ class Simulation(FrozenClass):
             )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
+            Input = import_class("pyleecan.Classes", "Input", "input")
             value = Input()
         check_var("input", value, "Input")
         self._input = value
@@ -517,6 +531,7 @@ class Simulation(FrozenClass):
             )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
+            VarSimu = import_class("pyleecan.Classes", "VarSimu", "var_simu")
             value = VarSimu()
         check_var("var_simu", value, "VarSimu")
         self._var_simu = value

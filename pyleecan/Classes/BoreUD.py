@@ -24,7 +24,6 @@ except ImportError as error:
 
 
 from ._check import InitUnKnowClassError
-from .Line import Line
 
 
 class BoreUD(Bore):

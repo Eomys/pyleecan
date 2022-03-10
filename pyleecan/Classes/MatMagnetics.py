@@ -32,8 +32,6 @@ from ..Classes.ImportMatrixVal import ImportMatrixVal
 from numpy import ndarray
 from numpy import array, array_equal
 from ._check import InitUnKnowClassError
-from .ImportMatrix import ImportMatrix
-from .ModelBH import ModelBH
 
 
 class MatMagnetics(FrozenClass):
@@ -412,6 +410,10 @@ class MatMagnetics(FrozenClass):
 
     def _set_BH_curve(self, value):
         """setter of BH_curve"""
+        ImportMatrix = import_class("pyleecan.Classes", "ImportMatrix", "BH_curve")
+        ImportMatrixVal = import_class(
+            "pyleecan.Classes", "ImportMatrixVal", "BH_curve"
+        )
         if isinstance(value, str):  # Load from file
             value = load_init_dict(value)[1]
         if isinstance(value, ndarray):
@@ -446,6 +448,10 @@ class MatMagnetics(FrozenClass):
 
     def _set_LossData(self, value):
         """setter of LossData"""
+        ImportMatrix = import_class("pyleecan.Classes", "ImportMatrix", "LossData")
+        ImportMatrixVal = import_class(
+            "pyleecan.Classes", "ImportMatrixVal", "LossData"
+        )
         if isinstance(value, str):  # Load from file
             value = load_init_dict(value)[1]
         if isinstance(value, ndarray):
@@ -494,6 +500,7 @@ class MatMagnetics(FrozenClass):
             )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
+            ModelBH = import_class("pyleecan.Classes", "ModelBH", "ModelBH")
             value = ModelBH()
         check_var("ModelBH", value, "ModelBH")
         self._ModelBH = value

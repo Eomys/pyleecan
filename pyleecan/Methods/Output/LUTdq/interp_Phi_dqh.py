@@ -27,12 +27,13 @@ def interp_Phi_dqh(self, Id, Iq):
         Phi_dqh_mean = self.get_Phidqh_mean()
 
         # Get unique Id, Iq sorted in ascending order
-        XId, jd = np.unique(self.OP_matrix[:, 1], return_inverse=True)
-        XIq, jq = np.unique(self.OP_matrix[:, 2], return_inverse=True)
+        OP_matrix = self.get_OP_matrix()
+        XId, jd = np.unique(OP_matrix[:, 1], return_inverse=True)
+        XIq, jq = np.unique(OP_matrix[:, 2], return_inverse=True)
         nd, nq = XId.size, XIq.size
 
         # Perform 2D interpolation
-        if nd * nq == self.OP_matrix.shape[0]:
+        if nd * nq == OP_matrix.shape[0]:
             # sort flux linkage matrix and reshape to (nd, nq, 2)
             Phi_dqh_mean_reg = np.zeros((nd, nq, 2))
             for ii, (m, n) in enumerate(zip(jd, jq)):
@@ -47,7 +48,7 @@ def interp_Phi_dqh(self, Id, Iq):
             # scattered interpolation
             # not working since LinearNDInterpolator is not of same class as RegularGridInterpolator
             self.Phi_dqh_interp = scp_int.LinearNDInterpolator(
-                (self.OP_matrix[:, 1], self.OP_matrix[:, 2]), Phi_dqh_mean[:, 0:2]
+                (OP_matrix[:, 1], OP_matrix[:, 2]), Phi_dqh_mean[:, 0:2]
             )
 
     # Init dqh flux linkage

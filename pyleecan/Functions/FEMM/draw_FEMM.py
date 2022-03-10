@@ -96,14 +96,16 @@ def draw_FEMM(
     FEMM_dict = comp_FEMM_dict(
         machine, kgeo_fineness, kmesh_fineness, type_calc_leakage
     )
-    FEMM_dict.update(user_FEMM_dict)  # Overwrite some values if needed
+    # Overwrite some values if needed
+    for key, val in user_FEMM_dict.items():
+        FEMM_dict[key].update(val)
 
     # The package must be initialized with the openfemm command.
     try:
         femm.openfemm(1)  # 1 == open in background, 0 == open normally
     except Exception as e:
         raise FEMMError(
-            "ERROR: Unable to open FEMM, please check that FEMM is correctly installed\n"
+            "Unable to open FEMM, please check that FEMM is correctly installed\n"
             + str(e)
         )
 

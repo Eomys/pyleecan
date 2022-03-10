@@ -2,8 +2,8 @@ from numpy import isscalar
 
 
 def comp_parameters(self):
-    """Compute the parameters dict for the equivalent electrical circuit:
-    resistance, inductance and back electromotive force
+    """Compute and set the parameter attributes of the EEC that are not set:
+    resistance, skin effect factors, inductance, fluxlinkage and back emf
 
     Parameters
     ----------

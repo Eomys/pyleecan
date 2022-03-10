@@ -29,10 +29,6 @@ except ImportError as error:
 
 
 from ._check import InitUnKnowClassError
-from .LamSlotMag import LamSlotMag
-from .Lamination import Lamination
-from .Frame import Frame
-from .Shaft import Shaft
 
 
 class MachineSIPMSM(MachineSync):
@@ -266,6 +262,7 @@ class MachineSIPMSM(MachineSync):
             )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
+            LamSlotMag = import_class("pyleecan.Classes", "LamSlotMag", "rotor")
             value = LamSlotMag()
         check_var("rotor", value, "LamSlotMag")
         self._rotor = value
@@ -302,6 +299,7 @@ class MachineSIPMSM(MachineSync):
             )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
+            Lamination = import_class("pyleecan.Classes", "Lamination", "stator")
             value = Lamination()
         check_var("stator", value, "Lamination")
         self._stator = value
