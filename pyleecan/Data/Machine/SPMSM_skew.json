@@ -105,7 +105,7 @@
                 "__class__": "MatElectrical",
                 "alpha": 0,
                 "epsr": 1,
-                "rho": 1
+                "rho": 4.6e-07
             },
             "is_isotropic": false,
             "mag": {
@@ -361,7 +361,7 @@
                 "__class__": "MatElectrical",
                 "alpha": 0,
                 "epsr": 1,
-                "rho": 1
+                "rho": 4.6e-07
             },
             "is_isotropic": false,
             "mag": {
@@ -615,7 +615,7 @@
                 "__class__": "MatElectrical",
                 "alpha": 0,
                 "epsr": 1,
-                "rho": 1
+                "rho": 4.6e-07
             },
             "is_isotropic": false,
             "mag": {

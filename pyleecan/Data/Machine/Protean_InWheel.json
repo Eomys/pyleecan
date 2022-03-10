@@ -638,7 +638,7 @@
                     "elec": {
                         "__class__": "MatElectrical",
                         "alpha": 0.0038,
-                        "epsr": null,
+                        "epsr": 1,
                         "rho": 1.73e-08
                     },
                     "is_isotropic": true,

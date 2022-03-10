@@ -43,8 +43,8 @@
               },
               "elec": {
                 "__class__": "MatElectrical",
-                "alpha": 1,
-                "epsr": null,
+                "alpha": 0,
+                "epsr": 1,
                 "rho": 1.6e-06
               },
               "is_isotropic": true,
@@ -116,8 +116,8 @@
               },
               "elec": {
                 "__class__": "MatElectrical",
-                "alpha": 1,
-                "epsr": null,
+                "alpha": 0,
+                "epsr": 1,
                 "rho": 1.6e-06
               },
               "is_isotropic": true,
@@ -191,9 +191,9 @@
           },
           "elec": {
             "__class__": "MatElectrical",
-            "alpha": 1,
+            "alpha": 0,
             "epsr": 1,
-            "rho": 1
+            "rho": 0
           },
           "is_isotropic": true,
           "mag": {
@@ -455,9 +455,9 @@
       },
       "elec": {
         "__class__": "MatElectrical",
-        "alpha": 1,
+        "alpha": 0,
         "epsr": 1,
-        "rho": 1
+        "rho": 4.6e-07
       },
       "is_isotropic": false,
       "mag": {
@@ -703,9 +703,9 @@
       },
       "elec": {
         "__class__": "MatElectrical",
-        "alpha": 1,
+        "alpha": 0,
         "epsr": 1,
-        "rho": 1
+        "rho": 4.6e-07
       },
       "is_isotropic": false,
       "mag": {
@@ -957,9 +957,9 @@
       },
       "elec": {
         "__class__": "MatElectrical",
-        "alpha": 1,
+        "alpha": 0,
         "epsr": 1,
-        "rho": 1
+        "rho": 4.6e-07
       },
       "is_isotropic": false,
       "mag": {
@@ -1268,8 +1268,8 @@
           },
           "elec": {
             "__class__": "MatElectrical",
-            "alpha": 1,
-            "epsr": null,
+            "alpha": 0.0038,
+            "epsr": 1,
             "rho": 1.73e-08
           },
           "is_isotropic": true,
@@ -1336,9 +1336,9 @@
           },
           "elec": {
             "__class__": "MatElectrical",
-            "alpha": 1,
-            "epsr": null,
-            "rho": null
+            "alpha": 0,
+            "epsr": 1,
+            "rho": 0
           },
           "is_isotropic": true,
           "mag": {

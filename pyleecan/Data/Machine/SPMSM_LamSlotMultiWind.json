@@ -103,9 +103,9 @@
             },
             "elec": {
                 "__class__": "MatElectrical",
-                "alpha": 1,
+                "alpha": 0,
                 "epsr": 1,
-                "rho": 1
+                "rho": 4.6e-07
             },
             "is_isotropic": false,
             "mag": {
@@ -358,9 +358,9 @@
             },
             "elec": {
                 "__class__": "MatElectrical",
-                "alpha": 1,
+                "alpha": 0,
                 "epsr": 1,
-                "rho": 1
+                "rho": 4.6e-07
             },
             "is_isotropic": false,
             "mag": {
@@ -626,9 +626,9 @@
             },
             "elec": {
                 "__class__": "MatElectrical",
-                "alpha": 1,
+                "alpha": 0,
                 "epsr": 1,
-                "rho": 1
+                "rho": 4.6e-07
             },
             "is_isotropic": false,
             "mag": {
