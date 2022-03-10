@@ -29,7 +29,7 @@ def comp_skin_effect_round_wire(self, f, rho=None, mu=None):
 
     # Resistivity of wire material (Ohm meter)
     if rho is None:
-        rho = self.cond_mat.elec.rho
+        rho = self.cond_mat.elec.get_resistivity()
     # Wire diameter
     d_w = self.Wwire
     # Vaccum or air permeability

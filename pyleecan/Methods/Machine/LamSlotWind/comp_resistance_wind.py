@@ -34,9 +34,7 @@ def comp_resistance_wind(self, T=20):
     Sact = self.winding.conductor.comp_surface_active()
 
     # temperature coefficient and electrical conductivity
-    alpha = self.winding.conductor.cond_mat.elec.alpha
-    rhow20 = self.winding.conductor.cond_mat.elec.rho
-    rhow = rhow20 * (1 + alpha * (T - 20))
+    rhow = self.winding.conductor.cond_mat.get_resistivity(T_op=T, T_ref=20)
 
     # DC winding resistance per phase at specified temperature
     R = (1.0 / self.winding.Npcp) * rhow * (Ntspc * 2 * Lwht) / (Sact)
