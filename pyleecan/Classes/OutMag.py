@@ -47,6 +47,11 @@ try:
 except ImportError as error:
     comp_torque_MT = error
 
+try:
+    from ..Methods.Output.OutMag.get_fft_from_meshsol import get_fft_from_meshsol
+except ImportError as error:
+    get_fft_from_meshsol = error
+
 
 from ._check import InitUnKnowClassError
 
@@ -113,6 +118,18 @@ class OutMag(FrozenClass):
         )
     else:
         comp_torque_MT = comp_torque_MT
+    # cf Methods.Output.OutMag.get_fft_from_meshsol
+    if isinstance(get_fft_from_meshsol, ImportError):
+        get_fft_from_meshsol = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use OutMag method get_fft_from_meshsol: "
+                    + str(get_fft_from_meshsol)
+                )
+            )
+        )
+    else:
+        get_fft_from_meshsol = get_fft_from_meshsol
     # save and copy methods are available in all object
     save = save
     copy = copy

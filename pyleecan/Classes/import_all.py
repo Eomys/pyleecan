@@ -27,6 +27,7 @@ from ..Classes.EEC import EEC
 from ..Classes.EEC_LSRPM import EEC_LSRPM
 from ..Classes.EEC_PMSM import EEC_PMSM
 from ..Classes.EEC_SCIM import EEC_SCIM
+from ..Classes.ElecLUTdq import ElecLUTdq
 from ..Classes.Electrical import Electrical
 from ..Classes.Elmer import Elmer
 from ..Classes.ElmerResults import ElmerResults
@@ -75,6 +76,7 @@ from ..Classes.Input import Input
 from ..Classes.InputCurrent import InputCurrent
 from ..Classes.InputFlux import InputFlux
 from ..Classes.InputForce import InputForce
+from ..Classes.InputPower import InputPower
 from ..Classes.InputVoltage import InputVoltage
 from ..Classes.Interpolation import Interpolation
 from ..Classes.LUT import LUT
@@ -91,6 +93,8 @@ from ..Classes.LamSquirrelCageMag import LamSquirrelCageMag
 from ..Classes.Lamination import Lamination
 from ..Classes.Line import Line
 from ..Classes.Loss import Loss
+from ..Classes.LossFEMM import LossFEMM
+from ..Classes.LossLUTdq import LossLUTdq
 from ..Classes.LossModel import LossModel
 from ..Classes.LossModelBertotti import LossModelBertotti
 from ..Classes.LossModelWinding import LossModelWinding
@@ -145,6 +149,7 @@ from ..Classes.OutGeo import OutGeo
 from ..Classes.OutGeoLam import OutGeoLam
 from ..Classes.OutInternal import OutInternal
 from ..Classes.OutLoss import OutLoss
+from ..Classes.OutLossFEMM import OutLossFEMM
 from ..Classes.OutMag import OutMag
 from ..Classes.OutMagElmer import OutMagElmer
 from ..Classes.OutMagFEMM import OutMagFEMM

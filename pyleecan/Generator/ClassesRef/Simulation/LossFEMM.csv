@@ -1,0 +1,7 @@
+Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
+Ce,W/(m3*T2*Hz2),eddy current loss coefficients,,float,None,,,,Simulation,Loss,run,VERSION,1,Loss module dedicated to FEMM developed in https://www.femm.info/wiki/SPMLoss
+Ch,W/(m3*T2*Hz),hysteresis loss coefficients,,float,None,,,,,,comp_axes,,,
+Cp,W/(m3*T2*Hz2),proximity loss coefficients,,float,None,,,,,,comp_core_losses,,,
+is_get_meshsolution,,True to save loss density map as meshsolution,,bool,0,,,,,,comp_magnet_losses,,,
+Tsta,deg Celsius,Average stator temperature for Electrical calculation,0,float,20,,,,,,,,,
+Trot,deg Celsius,Average rotor temperature for Electrical calculation,0,float,20,,,,,,,,,

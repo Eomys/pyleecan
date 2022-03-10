@@ -1432,7 +1432,7 @@
             }
         ]
     },
-    "Electrical": {
+    "ElecLUTdq": {
         "constants": [
             {
                 "name": "VERSION",
@@ -1440,6 +1440,110 @@
             }
         ],
         "daughters": [],
+        "desc": "Electric module object for electrical equivalent circuit simulation",
+        "is_internal": false,
+        "methods": [
+            "run",
+            "comp_LUTdq"
+        ],
+        "mother": "Electrical",
+        "name": "ElecLUTdq",
+        "package": "Simulation",
+        "path": "pyleecan/Generator/ClassesRef/Simulation/ElecLUTdq.csv",
+        "properties": [
+            {
+                "desc": "Number of id values used for interpolation",
+                "max": "",
+                "min": "1",
+                "name": "n_interp",
+                "type": "int",
+                "unit": "",
+                "value": 10
+            },
+            {
+                "desc": "Minimum Id for LUT calculation",
+                "max": "",
+                "min": "",
+                "name": "Id_min",
+                "type": "float",
+                "unit": "Arms",
+                "value": null
+            },
+            {
+                "desc": "Maximum Id for LUT calculation",
+                "max": "",
+                "min": "",
+                "name": "Id_max",
+                "type": "float",
+                "unit": "Arms",
+                "value": null
+            },
+            {
+                "desc": "Minimum Iq for LUT calculation",
+                "max": "",
+                "min": "",
+                "name": "Iq_min",
+                "type": "float",
+                "unit": "Arms",
+                "value": null
+            },
+            {
+                "desc": "Maximum Iq for LUT calculation",
+                "max": "",
+                "min": "",
+                "name": "Iq_max",
+                "type": "float",
+                "unit": "Arms",
+                "value": null
+            },
+            {
+                "desc": "Number of Id for LUT calculation",
+                "max": "",
+                "min": "",
+                "name": "n_Id",
+                "type": "int",
+                "unit": "",
+                "value": 1
+            },
+            {
+                "desc": "Number of Iq for LUT calculation",
+                "max": "",
+                "min": "",
+                "name": "n_Iq",
+                "type": "int",
+                "unit": "",
+                "value": 1
+            },
+            {
+                "desc": "Magnetic model used for LUT calculation",
+                "max": "",
+                "min": "",
+                "name": "mag_model",
+                "type": "Magnetics",
+                "unit": "",
+                "value": null
+            },
+            {
+                "desc": "Loss model used for LUT calculation",
+                "max": "",
+                "min": "",
+                "name": "loss_model",
+                "type": "Loss",
+                "unit": "",
+                "value": null
+            }
+        ]
+    },
+    "Electrical": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [
+            "ElecLUTdq"
+        ],
         "desc": "Electric module object for electrical equivalent circuit simulation",
         "is_internal": false,
         "methods": [
@@ -4163,6 +4267,7 @@
             "InputCurrent",
             "InputFlux",
             "InputForce",
+            "InputPower",
             "InputVoltage"
         ],
         "desc": "Starting data of the simulation",
@@ -4411,6 +4516,89 @@
                 "name": "P",
                 "type": "ImportVectorField",
                 "unit": "N.m^2",
+                "value": null
+            }
+        ]
+    },
+    "InputPower": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Input to start the electrical module with power input",
+        "is_internal": false,
+        "methods": [
+            "gen_input"
+        ],
+        "mother": "Input",
+        "name": "InputPower",
+        "package": "Simulation",
+        "path": "pyleecan/Generator/ClassesRef/Simulation/InputPower.csv",
+        "properties": [
+            {
+                "desc": "Rotation direction of the rotor (rot_dir*N0, default value given by ROT_DIR_REF)",
+                "max": "1",
+                "min": "-1",
+                "name": "rot_dir",
+                "type": "int",
+                "unit": "-",
+                "value": null
+            },
+            {
+                "desc": "Rotation direction of the stator phase (phase_dir*(n-1)*pi/qs, default value given by PHASE_DIR_REF)",
+                "max": "1",
+                "min": "-1",
+                "name": "phase_dir",
+                "type": "int",
+                "unit": "",
+                "value": null
+            },
+            {
+                "desc": "Rotation direction of the stator currents (current_dir*2*pi*felec*time, default value given by CURRENT_DIR_REF)",
+                "max": "1",
+                "min": "-1",
+                "name": "current_dir",
+                "type": "int",
+                "unit": "-",
+                "value": null
+            },
+            {
+                "desc": "True to compute voltage/currents only on one time periodicity (use periodicities defined in axes_dict[time])",
+                "max": "",
+                "min": "",
+                "name": "is_periodicity_t",
+                "type": "bool",
+                "unit": "-",
+                "value": 0
+            },
+            {
+                "desc": "True to compute voltage/currents only on one angle periodicity (use periodicities defined in axes_dict[angle])",
+                "max": "",
+                "min": "",
+                "name": "is_periodicity_a",
+                "type": "bool",
+                "unit": "-",
+                "value": 0
+            },
+            {
+                "desc": "Maximum phase voltage",
+                "max": "",
+                "min": "0",
+                "name": "U_max",
+                "type": "float",
+                "unit": "Vrms",
+                "value": null
+            },
+            {
+                "desc": "Maximum current density",
+                "max": "",
+                "min": "0",
+                "name": "J_max",
+                "type": "float",
+                "unit": "A/m\u00c2\u00b2",
                 "value": null
             }
         ]
@@ -5253,7 +5441,9 @@
                 "value": "1"
             }
         ],
-        "daughters": [],
+        "daughters": [
+            "LossFEMM"
+        ],
         "desc": "Losses module object that containt the loss models. See method add_model for implementation details.",
         "is_internal": false,
         "methods": [
@@ -5294,6 +5484,103 @@
                 "value": "Pyleecan.Loss"
             }
         ]
+    },
+    "LossFEMM": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Loss module dedicated to FEMM developed in https://www.femm.info/wiki/SPMLoss",
+        "is_internal": false,
+        "methods": [
+            "run",
+            "comp_axes",
+            "comp_core_losses",
+            "comp_magnet_losses"
+        ],
+        "mother": "Loss",
+        "name": "LossFEMM",
+        "package": "Simulation",
+        "path": "pyleecan/Generator/ClassesRef/Simulation/LossFEMM.csv",
+        "properties": [
+            {
+                "desc": "eddy current loss coefficients",
+                "max": "",
+                "min": "",
+                "name": "Ce",
+                "type": "float",
+                "unit": "W/(m3*T2*Hz2)",
+                "value": null
+            },
+            {
+                "desc": "hysteresis loss coefficients",
+                "max": "",
+                "min": "",
+                "name": "Ch",
+                "type": "float",
+                "unit": "W/(m3*T2*Hz)",
+                "value": null
+            },
+            {
+                "desc": "proximity loss coefficients",
+                "max": "",
+                "min": "",
+                "name": "Cp",
+                "type": "float",
+                "unit": "W/(m3*T2*Hz2)",
+                "value": null
+            },
+            {
+                "desc": "True to save loss density map as meshsolution",
+                "max": "",
+                "min": "",
+                "name": "is_get_meshsolution",
+                "type": "bool",
+                "unit": "",
+                "value": 0
+            },
+            {
+                "desc": "Average stator temperature for Electrical calculation",
+                "max": "",
+                "min": "",
+                "name": "Tsta",
+                "type": "float",
+                "unit": "deg Celsius",
+                "value": 20
+            },
+            {
+                "desc": "Average rotor temperature for Electrical calculation",
+                "max": "",
+                "min": "",
+                "name": "Trot",
+                "type": "float",
+                "unit": "deg Celsius",
+                "value": 20
+            }
+        ]
+    },
+    "LossLUTdq": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Losses module object that containt the loss models. See method add_model for implementation details.",
+        "is_internal": false,
+        "methods": [
+            "run",
+            "interp_losses"
+        ],
+        "mother": "",
+        "name": "LossLUTdq",
+        "package": "Simulation",
+        "path": "pyleecan/Generator/ClassesRef/Simulation/LossLUTdq.csv",
+        "properties": []
     },
     "LossModel": {
         "constants": [
@@ -8751,7 +9038,9 @@
                 "value": "1"
             }
         ],
-        "daughters": [],
+        "daughters": [
+            "OutLossFEMM"
+        ],
         "desc": "Gather the loss module outputs",
         "is_internal": false,
         "methods": [
@@ -8801,6 +9090,110 @@
             }
         ]
     },
+    "OutLossFEMM": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Gather the loss module outputs after LossFEMM",
+        "is_internal": false,
+        "methods": [
+            "comp_dict",
+            "get_loss_overall",
+            "get_fft_dict",
+            "get_surf_dict"
+        ],
+        "mother": "OutLoss",
+        "name": "OutLossFEMM",
+        "package": "Output",
+        "path": "pyleecan/Generator/ClassesRef/Output/OutLossFEMM.csv",
+        "properties": [
+            {
+                "desc": "Dict containing axes data used for Magnetics",
+                "max": "",
+                "min": "",
+                "name": "axes_dict",
+                "type": "{SciDataTool.Classes.DataND.Data}",
+                "unit": "",
+                "value": "None"
+            },
+            {
+                "desc": "Stator core losses due to hysteresis and eddy currents",
+                "max": "",
+                "min": "",
+                "name": "Pstator",
+                "type": "float",
+                "unit": "W",
+                "value": null
+            },
+            {
+                "desc": "Rotor core losses due to hysteresis and eddy currents",
+                "max": "",
+                "min": "",
+                "name": "Protor",
+                "type": "float",
+                "unit": "W",
+                "value": null
+            },
+            {
+                "desc": "Magnet eddy current losses",
+                "max": "",
+                "min": "",
+                "name": "Pmagnet",
+                "type": "float",
+                "unit": "W",
+                "value": null
+            },
+            {
+                "desc": "Stator core losses",
+                "max": "",
+                "min": "",
+                "name": "Pprox",
+                "type": "float",
+                "unit": "W",
+                "value": null
+            },
+            {
+                "desc": "Stator core losses",
+                "max": "",
+                "min": "",
+                "name": "Pjoule",
+                "type": "float",
+                "unit": "W",
+                "value": null
+            },
+            {
+                "desc": "Dict containing fft of magnetic mesh values used for loss calculation",
+                "max": "",
+                "min": "",
+                "name": "fft_dict",
+                "type": "{ndarray}",
+                "unit": "",
+                "value": null
+            },
+            {
+                "desc": "Dict containing fft of element surface values used for loss calculation",
+                "max": "",
+                "min": "",
+                "name": "surf_dict",
+                "type": "{ndarray}",
+                "unit": "",
+                "value": null
+            },
+            {
+                "desc": "Meshsolution containing loss density map",
+                "max": "",
+                "min": "",
+                "name": "meshsolution",
+                "type": "MeshSolution",
+                "unit": "",
+                "value": null
+            }
+        ]
+    },
     "OutMag": {
         "constants": [
             {
@@ -8817,7 +9210,8 @@
             "comp_power",
             "get_demag",
             "store",
-            "comp_torque_MT"
+            "comp_torque_MT",
+            "get_fft_from_meshsol"
         ],
         "mother": "",
         "name": "OutMag",
