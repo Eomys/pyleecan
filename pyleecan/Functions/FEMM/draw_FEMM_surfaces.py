@@ -76,19 +76,17 @@ def draw_FEMM_surfaces(
     for surf in surf_list:
         label = surf.label
 
-        if is_draw:
-            # Get the correct element size and group according to the label
-            surf.draw_FEMM(
-                femm=femm,
-                nodeprop="None",
-                maxseg=FEMM_dict["mesh"][
-                    "arcspan"
-                ],  # max span of arc element in degrees
-                FEMM_dict=FEMM_dict,
-                hide=False,
-                BC_dict=BC_dict,
-                is_set_BC=is_set_BC,
-            )
+        # Get the correct element size and group according to the label
+        surf.draw_FEMM(
+            femm=femm,
+            nodeprop="None",
+            maxseg=FEMM_dict["mesh"]["arcspan"],  # max span of arc element in degrees
+            FEMM_dict=FEMM_dict,
+            hide=False,
+            BC_dict=BC_dict,
+            is_draw=is_draw,
+            is_set_BC=is_set_BC,
+        )
 
         assign_FEMM_surface(
             femm, surf, prop_dict[label], FEMM_dict, machine, type_assign

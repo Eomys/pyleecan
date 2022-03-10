@@ -24,6 +24,7 @@ def draw_FEMM(
     FEMM_dict=None,
     hide=False,
     BC_dict=None,
+    is_draw=True,
     is_set_BC=True,
 ):
     """draw the Surface in FEMM
@@ -45,6 +46,8 @@ def draw_FEMM(
         (Default value = False)
     BC_dict : dict
         Boundary condition dict ([line label] = BC name)
+    is_draw : bool
+        1 to draw the list of surfaces given
     is_set_BC : bool
         1 to set the boundary conditions of the surface
 
@@ -97,6 +100,7 @@ def draw_FEMM(
                 propname=propname,
                 hide=hide,
                 group=mesh_dict["group"],
+                is_draw=is_draw,
             )
         else:
             line.draw_FEMM(
@@ -107,4 +111,5 @@ def draw_FEMM(
                 automesh=mesh_dict["automesh"],
                 hide=hide,
                 group=mesh_dict["group"],
+                is_draw=is_draw,
             )
