@@ -342,10 +342,7 @@ def solve_FEA(self, output, sym, angle, time, angle_rotor, Is, Ir):
         Hcm20 = magnet_0.mat_type.mag.get_Hc()
         Br = magnet_0.mat_type.mag.get_Br(T_op=self.T_mag)
         magnet_permeability = magnet_0.mat_type.mag.mur_lin
-        rho20_m = magnet_0.mat_type.elec.rho
-        kt_m = magnet_0.mat_type.elec.alpha
-        rho_m = rho20_m * (1 + kt_m * (magnet_temp - 20.0))
-        conductivity_m = 0.0 * 1.0 / rho_m
+        conductivity_m =  magnet_0.mat_type.get_conductivity(T_op=magnet_temp, T_ref=20.0)
 
         skip_steps = 1  # Fixed for now
         degrees_step = 1  # Fixed for now

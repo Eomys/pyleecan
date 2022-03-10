@@ -23,6 +23,6 @@ def get_resistivity(self, T_op=None, T_ref=20):
         raise Exception("Cannot calculate resistivity if rho is None")
 
     # Update resistivity
-    Brm = self.rho20 * (1 + self.alpha * (T_op - T_ref))
+    rho = self.rho * (1 + self.alpha * (T_op - T_ref))
 
-    return Brm
+    return rho
