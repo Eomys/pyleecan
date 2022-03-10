@@ -1,6 +1,14 @@
 from ...Functions.FEMM import is_eddies
 from ...Functions.FEMM.create_FEMM_materials import create_FEMM_materials
 from ...Functions.FEMM.assign_FEMM_surface import assign_FEMM_surface
+from ...Functions.labels import (
+    decode_label,
+    get_obj_from_label,
+    WIND_LAB,
+    HOLEM_LAB,
+    MAG_LAB,
+    BAR_LAB,
+)
 
 
 def draw_FEMM_surfaces(
@@ -88,8 +96,23 @@ def draw_FEMM_surfaces(
             is_set_BC=is_set_BC,
         )
 
-        assign_FEMM_surface(
-            femm, surf, prop_dict[label], FEMM_dict, machine, type_assign
+        # Detecting if the property assigned is related to the magnet or the winding
+        label = surf.label
+        label_dict = decode_label(label)
+
+        is_mag_wind_lab = (
+            WIND_LAB in label_dict["surf_type"]
+            or BAR_LAB in label_dict["surf_type"]
+            or HOLEM_LAB in label_dict["surf_type"]
+            or MAG_LAB in label_dict["surf_type"]
         )
+
+        if (
+            type_assign == 0
+            or (type_assign == 1 and is_mag_wind_lab)
+            or (type_assign == 2 and not is_mag_wind_lab)
+        ):
+
+            assign_FEMM_surface(femm, surf, prop_dict[label], FEMM_dict, machine)
 
     return FEMM_dict

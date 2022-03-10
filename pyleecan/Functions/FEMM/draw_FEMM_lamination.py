@@ -118,7 +118,7 @@ def draw_FEMM_lamination(
         Ncopy = int(round(sym_draw / sym))
         femm.mi_copyrotate(0, 0, 360 / sym / Ncopy, Ncopy - 1)
 
-    # Assigning with the machine symetry instead of the lam symetry
+    # BC + Assigning surface with the machine symetry instead of the lam symetry
     if is_fast_draw:
         surf_list_2 = lam.build_geometry(sym=sym, is_circular_radius=True)
 
@@ -134,6 +134,7 @@ def draw_FEMM_lamination(
             is_mmfr,
             type_BH_stator,
             type_BH_rotor,
+            type_assign=1,
             is_draw=is_draw,
         )
 

@@ -16,7 +16,7 @@ from ...Functions.labels import (
 )
 
 
-def assign_FEMM_surface(femm, surf, prop, FEMM_dict, machine, type_assign=0):
+def assign_FEMM_surface(femm, surf, prop, FEMM_dict, machine):
     """Assign the property given in parameter to surface having the label given
     Parameters
     ----------
@@ -30,8 +30,7 @@ def assign_FEMM_surface(femm, surf, prop, FEMM_dict, machine, type_assign=0):
         dictionary containing the main parameters of FEMM
     machine : Machine
         Machine to draw
-    type_assign : int
-        2 to assign all but WIND and MAG, 1 to assign WIND and MAG and 0 to assign all
+
     Returns
     -------
     None
@@ -120,27 +119,14 @@ def assign_FEMM_surface(femm, surf, prop, FEMM_dict, machine, type_assign=0):
             hole_obj = get_obj_from_label(machine, label_dict=label_dict)
             prop = "Air"
 
-        # Detecting if the property assigned is related to the magnet or the winding
-        is_mag_wind_lab = (
-            WIND_LAB in label_dict["surf_type"]
-            or BAR_LAB in label_dict["surf_type"]
-            or HOLEM_LAB in label_dict["surf_type"]
-            or MAG_LAB in label_dict["surf_type"]
+        # Set the surface property
+        femm.mi_setblockprop(
+            prop,
+            mesh_dict["automesh"],
+            mesh_dict["meshsize"],
+            Clabel,
+            mag,
+            mesh_dict["group"],
+            Ntcoil,
         )
-
-        if (
-            type_assign == 0
-            or (type_assign == 1 and is_mag_wind_lab)
-            or (type_assign == 2 and not is_mag_wind_lab)
-        ):
-            # Set the surface property
-            femm.mi_setblockprop(
-                prop,
-                mesh_dict["automesh"],
-                mesh_dict["meshsize"],
-                Clabel,
-                mag,
-                mesh_dict["group"],
-                Ntcoil,
-            )
-            femm.mi_clearselected()
+        femm.mi_clearselected()
