@@ -29,7 +29,7 @@
               "HT": {
                 "Cp": 450.0,
                 "__class__": "MatHT",
-                "alpha": null,
+                "alpha": 0,
                 "lambda_x": 8.5,
                 "lambda_y": 8.5,
                 "lambda_z": 8.5
@@ -102,7 +102,7 @@
               "HT": {
                 "Cp": 450.0,
                 "__class__": "MatHT",
-                "alpha": null,
+                "alpha": 0,
                 "lambda_x": 8.5,
                 "lambda_y": 8.5,
                 "lambda_z": 8.5
@@ -441,7 +441,7 @@
       "HT": {
         "Cp": 1,
         "__class__": "MatHT",
-        "alpha": 0.00393,
+        "alpha": 0,
         "lambda_x": 1,
         "lambda_y": 1,
         "lambda_z": 1
@@ -689,7 +689,7 @@
       "HT": {
         "Cp": 1,
         "__class__": "MatHT",
-        "alpha": 0.00393,
+        "alpha": 0,
         "lambda_x": 1,
         "lambda_y": 1,
         "lambda_z": 1
@@ -943,7 +943,7 @@
       "HT": {
         "Cp": 1,
         "__class__": "MatHT",
-        "alpha": 0.00393,
+        "alpha": 0,
         "lambda_x": 1,
         "lambda_y": 1,
         "lambda_z": 1
@@ -1254,7 +1254,7 @@
           "HT": {
             "Cp": 381.0,
             "__class__": "MatHT",
-            "alpha": 0.00393,
+            "alpha": 0,
             "lambda_x": 385.0,
             "lambda_y": 385.0,
             "lambda_z": 385.0
@@ -1322,7 +1322,7 @@
           "HT": {
             "Cp": 671.0,
             "__class__": "MatHT",
-            "alpha": null,
+            "alpha": 0,
             "lambda_x": 0.2,
             "lambda_y": 0.2,
             "lambda_z": 0.2
