@@ -338,14 +338,12 @@ def solve_FEA(self, output, sym, angle, time, angle_rotor, Is, Ir):
         bodies[NO_LAM_LAB + "_" + SLID_LAB + BOT_LAB]["bf"] = 1  # Sliding band bottom
 
         No_Magnets = pm_index - 6
-        magnet_temp = 20.0  # Magnet Temperature Fixed for now
-        Hcm20 = magnet_0.mat_type.mag.Hc
-        Brm20 = magnet_0.mat_type.mag.Brm20
-        kt = 0.01  # Br Temperature Coefficient fixed for now
-        Br = Brm20 * (1 + kt * 0.01 * (magnet_temp - 20.0))
+        magnet_temp = self.T_mag
+        Hcm20 = magnet_0.mat_type.mag.get_Hc()
+        Br = magnet_0.mat_type.mag.get_Br(T_op=self.T_mag)
         magnet_permeability = magnet_0.mat_type.mag.mur_lin
         rho20_m = magnet_0.mat_type.elec.rho
-        kt_m = 0.01  # Rho Temperature Coefficient fixed for now
+        kt_m = magnet_0.mat_type.elec.alpha
         rho_m = rho20_m * (1 + kt_m * (magnet_temp - 20.0))
         conductivity_m = 0.0 * 1.0 / rho_m
 
@@ -360,7 +358,9 @@ def solve_FEA(self, output, sym, angle, time, angle_rotor, Is, Ir):
         qs = len(machine.stator.get_name_phase())
 
         fo.write(
-            "$ H_PM = {0}              ! Magnetization [A/m]\n".format(round(Hcm20, 2))
+            "$ H_PM = {0}              ! Magnetization at 20 deg C [A/m]\n".format(
+                round(Hcm20, 2)
+            )
         )
         fo.write("$ Shift = 2*pi/{0}        ! N-phase machine [rad]\n".format(qs))
         fo.write(
