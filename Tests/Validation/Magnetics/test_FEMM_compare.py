@@ -117,7 +117,7 @@ def test_FEMM_compare_IPMSM_xxx_lam_sym():
     simu.mag = MagFEMM(
         type_BH_stator=2,
         type_BH_rotor=2,
-        is_periodicity_a=False,
+        is_periodicity_a=True,
         nb_worker=cpu_count(),
         is_fast_draw=False,
     )
@@ -125,6 +125,9 @@ def test_FEMM_compare_IPMSM_xxx_lam_sym():
     simu.struct = None
 
     assert IPMSM_xxx.comp_periodicity_spatial() == (4, True)
+    assert IPMSM_xxx.stator.comp_periodicity_geo() == (48, False)
+    assert IPMSM_xxx.rotor.comp_periodicity_geo() == (8, False)
+
     # Copy the simu and activate the symmetry
     simu_sym = Simu1(init_dict=simu.as_dict())
     simu_sym.mag.is_fast_draw = True
@@ -577,5 +580,5 @@ if __name__ == "__main__":
     # test_FEMM_compare_Prius()
     # test_FEMM_compare_SCIM()
     # test_FEMM_compare_SIPMSM()
-    test_SPMSM_load()
-    test_SPMSM_noload()
+    # test_SPMSM_load()
+    # test_SPMSM_noload()
