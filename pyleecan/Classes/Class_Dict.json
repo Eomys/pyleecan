@@ -10564,6 +10564,15 @@
                 "type": "int",
                 "unit": "-",
                 "value": 36
+            },
+            {
+                "desc": "2 to close the slot with lamination iron, 1 to close with air and 0 to close with nothing (previous policy)",
+                "max": "2",
+                "min": "0",
+                "name": "type_close",
+                "type": "int",
+                "unit": "-",
+                "value": 1
             }
         ]
     },

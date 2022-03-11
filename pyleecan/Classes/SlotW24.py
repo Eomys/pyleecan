@@ -261,7 +261,9 @@ class SlotW24(Slot):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, W3=0.003, H2=0.003, Zs=36, init_dict=None, init_str=None):
+    def __init__(
+        self, W3=0.003, H2=0.003, Zs=36, type_close=1, init_dict=None, init_str=None
+    ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -283,11 +285,13 @@ class SlotW24(Slot):
                 H2 = init_dict["H2"]
             if "Zs" in list(init_dict.keys()):
                 Zs = init_dict["Zs"]
+            if "type_close" in list(init_dict.keys()):
+                type_close = init_dict["type_close"]
         # Set the properties (value check and convertion are done in setter)
         self.W3 = W3
         self.H2 = H2
         # Call Slot init
-        super(SlotW24, self).__init__(Zs=Zs)
+        super(SlotW24, self).__init__(Zs=Zs, type_close=type_close)
         # The class is frozen (in Slot init), for now it's impossible to
         # add new properties
 

@@ -203,6 +203,7 @@ class SlotM15(Slot):
         Hmag=0.001,
         Rtopm=0.001,
         Zs=36,
+        type_close=1,
         init_dict=None,
         init_str=None,
     ):
@@ -233,6 +234,8 @@ class SlotM15(Slot):
                 Rtopm = init_dict["Rtopm"]
             if "Zs" in list(init_dict.keys()):
                 Zs = init_dict["Zs"]
+            if "type_close" in list(init_dict.keys()):
+                type_close = init_dict["type_close"]
         # Set the properties (value check and convertion are done in setter)
         self.W0 = W0
         self.H0 = H0
@@ -240,7 +243,7 @@ class SlotM15(Slot):
         self.Hmag = Hmag
         self.Rtopm = Rtopm
         # Call Slot init
-        super(SlotM15, self).__init__(Zs=Zs)
+        super(SlotM15, self).__init__(Zs=Zs, type_close=type_close)
         # The class is frozen (in Slot init), for now it's impossible to
         # add new properties
 

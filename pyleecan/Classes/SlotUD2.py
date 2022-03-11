@@ -51,7 +51,7 @@ from .Surface import Surface
 
 
 class SlotUD2(Slot):
-    """"User defined" Slot from a line list and a surface"""
+    """ "User defined" Slot from a line list and a surface"""
 
     VERSION = 1
 
@@ -125,6 +125,7 @@ class SlotUD2(Slot):
         split_active_surf_dict=None,
         name="",
         Zs=36,
+        type_close=1,
         init_dict=None,
         init_str=None,
     ):
@@ -153,13 +154,15 @@ class SlotUD2(Slot):
                 name = init_dict["name"]
             if "Zs" in list(init_dict.keys()):
                 Zs = init_dict["Zs"]
+            if "type_close" in list(init_dict.keys()):
+                type_close = init_dict["type_close"]
         # Set the properties (value check and convertion are done in setter)
         self.line_list = line_list
         self.active_surf = active_surf
         self.split_active_surf_dict = split_active_surf_dict
         self.name = name
         # Call Slot init
-        super(SlotUD2, self).__init__(Zs=Zs)
+        super(SlotUD2, self).__init__(Zs=Zs, type_close=type_close)
         # The class is frozen (in Slot init), for now it's impossible to
         # add new properties
 
