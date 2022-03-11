@@ -97,7 +97,6 @@ def draw_FEMM_surfaces(
         )
 
         # Detecting if the property assigned is related to the magnet or the winding
-        label = surf.label
         label_dict = decode_label(label)
 
         is_mag_wind_lab = (
