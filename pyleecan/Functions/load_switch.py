@@ -96,7 +96,6 @@ load_switch = {
     "Line": Line,
     "Loss": Loss,
     "LossFEMM": LossFEMM,
-    "LossLUTdq": LossLUTdq,
     "LossModel": LossModel,
     "LossModelBertotti": LossModelBertotti,
     "LossModelWinding": LossModelWinding,

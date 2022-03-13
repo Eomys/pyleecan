@@ -5,4 +5,5 @@ current_dir,-,"Rotation direction of the stator currents (current_dir*2*pi*felec
 is_periodicity_t,-,True to compute voltage/currents only on one time periodicity (use periodicities defined in axes_dict[time]),0,bool,0,,,,,,,,,
 is_periodicity_a,-,True to compute voltage/currents only on one angle periodicity (use periodicities defined in axes_dict[angle]),0,bool,0,,,,,,,,,
 U_max,Vrms,Maximum phase voltage,0,float,None,0,,,,,,,,
-J_max,A/m²,Maximum current density,,float,None,0,,,,,,,,
+J_max,A/m²,Maximum current density in slot,,float,None,0,,,,,,,,
+I_max,A,Maximum phase current,0,float,None,0,,,,,,,,

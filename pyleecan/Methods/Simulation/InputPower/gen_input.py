@@ -1,6 +1,5 @@
-from numpy import pi, sqrt
+from numpy import pi
 
-from ....Classes.MagMEC import MagMEC
 from ....Classes.OutElec import OutElec
 from ....Classes.Simulation import Simulation
 
@@ -71,7 +70,7 @@ def gen_input(self):
         raise Exception("Cannot enforce phase_dir other than +1 or -1")
     outelec.phase_dir = self.phase_dir
 
-    if simu.mag is not None and not isinstance(simu.mag, MagMEC):
+    if simu.mag is not None:
         # Check if stator magnetomotive force direction is consistent with rotor direction
         mmf_dir = simu.machine.stator.comp_mmf_dir(
             current_dir=self.current_dir, phase_dir=self.phase_dir
@@ -107,3 +106,11 @@ def gen_input(self):
 
     # Get reference torque function of reference power, speed, and
     outelec.OP.Tem_av_ref = outelec.OP.Pem_av_ref / (2 * pi * outelec.OP.N0 / 60)
+
+    if self.I_max is None:
+        # Calculate maximum current function of current density
+        Swire = simu.machine.stator.winding.conductor.comp_surface_active()
+        Ntcoil = simu.machine.stator.winding.Ntcoil
+        Npcp = simu.machine.stator.winding.Npcp
+
+        self.I_max = self.J_max * Swire * Npcp * Ntcoil

@@ -1515,20 +1515,11 @@
                 "value": 1
             },
             {
-                "desc": "Magnetic model used for LUT calculation",
+                "desc": "Simulation object to run for LUT calculation",
                 "max": "",
                 "min": "",
-                "name": "mag_model",
-                "type": "Magnetics",
-                "unit": "",
-                "value": null
-            },
-            {
-                "desc": "Loss model used for LUT calculation",
-                "max": "",
-                "min": "",
-                "name": "loss_model",
-                "type": "Loss",
+                "name": "LUT_simu",
+                "type": "Simulation",
                 "unit": "",
                 "value": null
             }
@@ -4593,12 +4584,21 @@
                 "value": null
             },
             {
-                "desc": "Maximum current density",
+                "desc": "Maximum current density in slot",
                 "max": "",
                 "min": "0",
                 "name": "J_max",
                 "type": "float",
                 "unit": "A/m\u00c2\u00b2",
+                "value": null
+            },
+            {
+                "desc": "Maximum phase current",
+                "max": "",
+                "min": "0",
+                "name": "I_max",
+                "type": "float",
+                "unit": "A",
                 "value": null
             }
         ]
@@ -5561,26 +5561,6 @@
                 "value": 20
             }
         ]
-    },
-    "LossLUTdq": {
-        "constants": [
-            {
-                "name": "VERSION",
-                "value": "1"
-            }
-        ],
-        "daughters": [],
-        "desc": "Losses module object that containt the loss models. See method add_model for implementation details.",
-        "is_internal": false,
-        "methods": [
-            "run",
-            "interp_losses"
-        ],
-        "mother": "",
-        "name": "LossLUTdq",
-        "package": "Simulation",
-        "path": "pyleecan/Generator/ClassesRef/Simulation/LossLUTdq.csv",
-        "properties": []
     },
     "LossModel": {
         "constants": [
@@ -9965,28 +9945,10 @@
         "path": "pyleecan/Generator/ClassesRef/Post/PostLUT.csv",
         "properties": [
             {
-                "desc": "Look-Up Table to enforce",
-                "max": "",
-                "min": "",
-                "name": "LUT",
-                "type": "LUT",
-                "unit": "",
-                "value": null
-            },
-            {
                 "desc": "True to save LUT in PostLUT",
                 "max": "",
                 "min": "",
                 "name": "is_save_LUT",
-                "type": "bool",
-                "unit": "",
-                "value": 1
-            },
-            {
-                "desc": "True to store LUT in PostLUT",
-                "max": "",
-                "min": "",
-                "name": "is_store_LUT",
                 "type": "bool",
                 "unit": "",
                 "value": 1

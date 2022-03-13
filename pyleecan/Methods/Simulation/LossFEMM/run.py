@@ -25,10 +25,9 @@ def run(self):
 
     L1 = machine.stator.L1
     L2 = machine.rotor.L1
-    Lmag = machine.rotor.magnet.Lmag
+
     p = machine.get_pole_pair_number()
     Rs = machine.stator.comp_resistance_wind()
-    sigma_m = 1 / machine.rotor.magnet.mat_type.elec.rho  # conductivity in S/m
 
     OP = output.elec.OP
 
@@ -53,17 +52,28 @@ def run(self):
         fft_dict["B " + grp], freqs, surf_dict[grp], L2, p, Ce=self.Ce, Ch=self.Ch
     )
 
-    # Comp proximity losses in stator windings
+    # Comp proximity losses in stator windings (same expression as core losses with Ce=C)
     grp = "stator winding"
     Pprox, Pprox_density = self.comp_core_losses(
         fft_dict["B " + grp], freqs, surf_dict[grp], L2, p, Ce=self.Cp, Ch=0
     )
 
-    # Comp eddy current losses in rotor magnets
-    grp = "rotor magnets"
-    Pmagnet, Pmagnet_density = self.comp_magnet_losses(
-        fft_dict["A_z " + grp], freqs, surf_dict[grp], Lmag, p, sigma_m
-    )
+    if machine.is_synchronous() and machine.rotor.has_magnet():
+        if hasattr(machine.rotor, "magnet"):
+            magnet = machine.rotor.magnet
+        else:
+            hole = machine.rotor.hole[0]
+            if hasattr(hole, "magnet_0"):
+                magnet = hole.magnet_0
+        Lmag = magnet.Lmag
+        if Lmag is None:
+            Lmag = machine.rotor.L1
+        sigma_m = magnet.mat_type.elec.get_conductivity()  # conductivity in S/m
+        # Comp eddy current losses in rotor magnets
+        grp = "rotor magnets"
+        Pmagnet, Pmagnet_density = self.comp_magnet_losses(
+            fft_dict["A_z " + grp], freqs, surf_dict[grp], Lmag, p, sigma_m
+        )
 
     # Compute Joule losses in stator windings
     Pjoule = Rs * (OP.Id_ref ** 2 + OP.Iq_ref ** 2)

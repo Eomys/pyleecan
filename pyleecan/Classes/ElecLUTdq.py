@@ -70,8 +70,7 @@ class ElecLUTdq(Electrical):
         Iq_max=None,
         n_Id=1,
         n_Iq=1,
-        mag_model=None,
-        loss_model=None,
+        LUT_simu=None,
         eec=None,
         logger_name="Pyleecan.Electrical",
         freq_max=40000,
@@ -110,10 +109,8 @@ class ElecLUTdq(Electrical):
                 n_Id = init_dict["n_Id"]
             if "n_Iq" in list(init_dict.keys()):
                 n_Iq = init_dict["n_Iq"]
-            if "mag_model" in list(init_dict.keys()):
-                mag_model = init_dict["mag_model"]
-            if "loss_model" in list(init_dict.keys()):
-                loss_model = init_dict["loss_model"]
+            if "LUT_simu" in list(init_dict.keys()):
+                LUT_simu = init_dict["LUT_simu"]
             if "eec" in list(init_dict.keys()):
                 eec = init_dict["eec"]
             if "logger_name" in list(init_dict.keys()):
@@ -134,8 +131,7 @@ class ElecLUTdq(Electrical):
         self.Iq_max = Iq_max
         self.n_Id = n_Id
         self.n_Iq = n_Iq
-        self.mag_model = mag_model
-        self.loss_model = loss_model
+        self.LUT_simu = LUT_simu
         # Call Electrical init
         super(ElecLUTdq, self).__init__(
             eec=eec,
@@ -161,18 +157,11 @@ class ElecLUTdq(Electrical):
         ElecLUTdq_str += "Iq_max = " + str(self.Iq_max) + linesep
         ElecLUTdq_str += "n_Id = " + str(self.n_Id) + linesep
         ElecLUTdq_str += "n_Iq = " + str(self.n_Iq) + linesep
-        if self.mag_model is not None:
-            tmp = self.mag_model.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            ElecLUTdq_str += "mag_model = " + tmp
+        if self.LUT_simu is not None:
+            tmp = self.LUT_simu.__str__().replace(linesep, linesep + "\t").rstrip("\t")
+            ElecLUTdq_str += "LUT_simu = " + tmp
         else:
-            ElecLUTdq_str += "mag_model = None" + linesep + linesep
-        if self.loss_model is not None:
-            tmp = (
-                self.loss_model.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            )
-            ElecLUTdq_str += "loss_model = " + tmp
-        else:
-            ElecLUTdq_str += "loss_model = None" + linesep + linesep
+            ElecLUTdq_str += "LUT_simu = None" + linesep + linesep
         return ElecLUTdq_str
 
     def __eq__(self, other):
@@ -198,9 +187,7 @@ class ElecLUTdq(Electrical):
             return False
         if other.n_Iq != self.n_Iq:
             return False
-        if other.mag_model != self.mag_model:
-            return False
-        if other.loss_model != self.loss_model:
+        if other.LUT_simu != self.LUT_simu:
             return False
         return True
 
@@ -229,21 +216,13 @@ class ElecLUTdq(Electrical):
             diff_list.append(name + ".n_Id")
         if other._n_Iq != self._n_Iq:
             diff_list.append(name + ".n_Iq")
-        if (other.mag_model is None and self.mag_model is not None) or (
-            other.mag_model is not None and self.mag_model is None
+        if (other.LUT_simu is None and self.LUT_simu is not None) or (
+            other.LUT_simu is not None and self.LUT_simu is None
         ):
-            diff_list.append(name + ".mag_model None mismatch")
-        elif self.mag_model is not None:
+            diff_list.append(name + ".LUT_simu None mismatch")
+        elif self.LUT_simu is not None:
             diff_list.extend(
-                self.mag_model.compare(other.mag_model, name=name + ".mag_model")
-            )
-        if (other.loss_model is None and self.loss_model is not None) or (
-            other.loss_model is not None and self.loss_model is None
-        ):
-            diff_list.append(name + ".loss_model None mismatch")
-        elif self.loss_model is not None:
-            diff_list.extend(
-                self.loss_model.compare(other.loss_model, name=name + ".loss_model")
+                self.LUT_simu.compare(other.LUT_simu, name=name + ".LUT_simu")
             )
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
@@ -263,8 +242,7 @@ class ElecLUTdq(Electrical):
         S += getsizeof(self.Iq_max)
         S += getsizeof(self.n_Id)
         S += getsizeof(self.n_Iq)
-        S += getsizeof(self.mag_model)
-        S += getsizeof(self.loss_model)
+        S += getsizeof(self.LUT_simu)
         return S
 
     def as_dict(self, type_handle_ndarray=0, keep_function=False, **kwargs):
@@ -291,18 +269,10 @@ class ElecLUTdq(Electrical):
         ElecLUTdq_dict["Iq_max"] = self.Iq_max
         ElecLUTdq_dict["n_Id"] = self.n_Id
         ElecLUTdq_dict["n_Iq"] = self.n_Iq
-        if self.mag_model is None:
-            ElecLUTdq_dict["mag_model"] = None
+        if self.LUT_simu is None:
+            ElecLUTdq_dict["LUT_simu"] = None
         else:
-            ElecLUTdq_dict["mag_model"] = self.mag_model.as_dict(
-                type_handle_ndarray=type_handle_ndarray,
-                keep_function=keep_function,
-                **kwargs
-            )
-        if self.loss_model is None:
-            ElecLUTdq_dict["loss_model"] = None
-        else:
-            ElecLUTdq_dict["loss_model"] = self.loss_model.as_dict(
+            ElecLUTdq_dict["LUT_simu"] = self.LUT_simu.as_dict(
                 type_handle_ndarray=type_handle_ndarray,
                 keep_function=keep_function,
                 **kwargs
@@ -322,10 +292,8 @@ class ElecLUTdq(Electrical):
         self.Iq_max = None
         self.n_Id = None
         self.n_Iq = None
-        if self.mag_model is not None:
-            self.mag_model._set_None()
-        if self.loss_model is not None:
-            self.loss_model._set_None()
+        if self.LUT_simu is not None:
+            self.LUT_simu._set_None()
         # Set to None the properties inherited from Electrical
         super(ElecLUTdq, self)._set_None()
 
@@ -456,12 +424,12 @@ class ElecLUTdq(Electrical):
         """,
     )
 
-    def _get_mag_model(self):
-        """getter of mag_model"""
-        return self._mag_model
+    def _get_LUT_simu(self):
+        """getter of LUT_simu"""
+        return self._LUT_simu
 
-    def _set_mag_model(self, value):
-        """setter of mag_model"""
+    def _set_LUT_simu(self, value):
+        """setter of LUT_simu"""
         if isinstance(value, str):  # Load from file
             try:
                 value = load_init_dict(value)[1]
@@ -472,60 +440,23 @@ class ElecLUTdq(Electrical):
                 value = None
         if isinstance(value, dict) and "__class__" in value:
             class_obj = import_class(
-                "pyleecan.Classes", value.get("__class__"), "mag_model"
+                "pyleecan.Classes", value.get("__class__"), "LUT_simu"
             )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
-            Magnetics = import_class("pyleecan.Classes", "Magnetics", "mag_model")
-            value = Magnetics()
-        check_var("mag_model", value, "Magnetics")
-        self._mag_model = value
+            Simulation = import_class("pyleecan.Classes", "Simulation", "LUT_simu")
+            value = Simulation()
+        check_var("LUT_simu", value, "Simulation")
+        self._LUT_simu = value
 
-        if self._mag_model is not None:
-            self._mag_model.parent = self
+        if self._LUT_simu is not None:
+            self._LUT_simu.parent = self
 
-    mag_model = property(
-        fget=_get_mag_model,
-        fset=_set_mag_model,
-        doc=u"""Magnetic model used for LUT calculation
+    LUT_simu = property(
+        fget=_get_LUT_simu,
+        fset=_set_LUT_simu,
+        doc=u"""Simulation object to run for LUT calculation
 
-        :Type: Magnetics
-        """,
-    )
-
-    def _get_loss_model(self):
-        """getter of loss_model"""
-        return self._loss_model
-
-    def _set_loss_model(self, value):
-        """setter of loss_model"""
-        if isinstance(value, str):  # Load from file
-            try:
-                value = load_init_dict(value)[1]
-            except Exception as e:
-                self.get_logger().error(
-                    "Error while loading " + value + ", setting None instead"
-                )
-                value = None
-        if isinstance(value, dict) and "__class__" in value:
-            class_obj = import_class(
-                "pyleecan.Classes", value.get("__class__"), "loss_model"
-            )
-            value = class_obj(init_dict=value)
-        elif type(value) is int and value == -1:  # Default constructor
-            Loss = import_class("pyleecan.Classes", "Loss", "loss_model")
-            value = Loss()
-        check_var("loss_model", value, "Loss")
-        self._loss_model = value
-
-        if self._loss_model is not None:
-            self._loss_model.parent = self
-
-    loss_model = property(
-        fget=_get_loss_model,
-        fset=_set_loss_model,
-        doc=u"""Loss model used for LUT calculation
-
-        :Type: Loss
+        :Type: Simulation
         """,
     )

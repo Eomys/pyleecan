@@ -58,6 +58,7 @@ class InputPower(Input):
         is_periodicity_a=False,
         U_max=None,
         J_max=None,
+        I_max=None,
         time=None,
         angle=None,
         Nt_tot=2048,
@@ -97,6 +98,8 @@ class InputPower(Input):
                 U_max = init_dict["U_max"]
             if "J_max" in list(init_dict.keys()):
                 J_max = init_dict["J_max"]
+            if "I_max" in list(init_dict.keys()):
+                I_max = init_dict["I_max"]
             if "time" in list(init_dict.keys()):
                 time = init_dict["time"]
             if "angle" in list(init_dict.keys()):
@@ -119,6 +122,7 @@ class InputPower(Input):
         self.is_periodicity_a = is_periodicity_a
         self.U_max = U_max
         self.J_max = J_max
+        self.I_max = I_max
         # Call Input init
         super(InputPower, self).__init__(
             time=time,
@@ -145,6 +149,7 @@ class InputPower(Input):
         InputPower_str += "is_periodicity_a = " + str(self.is_periodicity_a) + linesep
         InputPower_str += "U_max = " + str(self.U_max) + linesep
         InputPower_str += "J_max = " + str(self.J_max) + linesep
+        InputPower_str += "I_max = " + str(self.I_max) + linesep
         return InputPower_str
 
     def __eq__(self, other):
@@ -169,6 +174,8 @@ class InputPower(Input):
         if other.U_max != self.U_max:
             return False
         if other.J_max != self.J_max:
+            return False
+        if other.I_max != self.I_max:
             return False
         return True
 
@@ -197,6 +204,8 @@ class InputPower(Input):
             diff_list.append(name + ".U_max")
         if other._J_max != self._J_max:
             diff_list.append(name + ".J_max")
+        if other._I_max != self._I_max:
+            diff_list.append(name + ".I_max")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -215,6 +224,7 @@ class InputPower(Input):
         S += getsizeof(self.is_periodicity_a)
         S += getsizeof(self.U_max)
         S += getsizeof(self.J_max)
+        S += getsizeof(self.I_max)
         return S
 
     def as_dict(self, type_handle_ndarray=0, keep_function=False, **kwargs):
@@ -241,6 +251,7 @@ class InputPower(Input):
         InputPower_dict["is_periodicity_a"] = self.is_periodicity_a
         InputPower_dict["U_max"] = self.U_max
         InputPower_dict["J_max"] = self.J_max
+        InputPower_dict["I_max"] = self.I_max
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         InputPower_dict["__class__"] = "InputPower"
@@ -256,6 +267,7 @@ class InputPower(Input):
         self.is_periodicity_a = None
         self.U_max = None
         self.J_max = None
+        self.I_max = None
         # Set to None the properties inherited from Input
         super(InputPower, self)._set_None()
 
@@ -386,7 +398,26 @@ class InputPower(Input):
     J_max = property(
         fget=_get_J_max,
         fset=_set_J_max,
-        doc=u"""Maximum current density
+        doc=u"""Maximum current density in slot
+
+        :Type: float
+        :min: 0
+        """,
+    )
+
+    def _get_I_max(self):
+        """getter of I_max"""
+        return self._I_max
+
+    def _set_I_max(self, value):
+        """setter of I_max"""
+        check_var("I_max", value, "float", Vmin=0)
+        self._I_max = value
+
+    I_max = property(
+        fget=_get_I_max,
+        fset=_set_I_max,
+        doc=u"""Maximum phase current
 
         :Type: float
         :min: 0

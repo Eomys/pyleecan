@@ -1,8 +1,6 @@
 from numpy import meshgrid, linspace, zeros
 
-from ....Classes.PostLUT import PostLUT
-
-from ....Functions.load import import_class
+from ....Classes.LUTdq import LUTdq
 
 
 def comp_LUTdq(self):
@@ -19,20 +17,10 @@ def comp_LUTdq(self):
         Calculated look-up table
     """
 
-    Simu1 = import_class("pyleecan.Classes", "Simu1")
-    OPdq = import_class("pyleecan.Classes", "OPdq")
-    VarLoadCurrent = import_class("pyleecan.Classes", "VarLoadCurrent")
-    InputCurrent = import_class("pyleecan.Classes", "InputCurrent")
-
-    if self.mag_model is None:
-        raise Exception("Cannot calculate LUTdq if self.mag_model is None")
+    if self.LUT_simu is None:
+        raise Exception("Cannot calculate LUTdq if self.LUT_simu is None")
     else:
-        mag_model = self.mag_model.copy()
-
-    if self.loss_model is None:
-        loss_model = None
-    else:
-        loss_model = self.loss_model.copy()
+        simu = self.LUT_simu.copy()
 
     N_OP = self.n_Id * self.n_Iq
     N0 = self.parent.input.OP.N0
@@ -46,27 +34,18 @@ def comp_LUTdq(self):
     OP_matrix[:, 1] = Id.ravel()
     OP_matrix[:, 2] = Iq.ravel()
 
-    simu = Simu1(
-        machine=self.parent.machine,
-        input=InputCurrent(OP=OPdq(N0=N0)),
-        var_simu=VarLoadCurrent(
-            type_OP_matrix=1,
-            OP_matrix=OP_matrix,
-            postproc_list=[PostLUT(is_store_LUT=True, is_save_LUT=False)],
-            is_keep_all_output=True,
-        ),
-        mag=mag_model,
-        loss=loss_model,
-    )
+    simu.machine = self.parent.machine
+    simu.var_simu.OP_matrix = OP_matrix
     simu.input.set_OP_from_array(type_OP_matrix=1, OP_matrix=OP_matrix)
 
-    out = simu.run()
+    LUT = LUTdq(simu=simu)
 
-    LUT = out.simu.var_simu.postproc_list[0].LUT
+    LUT.simu.run()
 
-    LUT.Phi_dqh_mean = zeros((N_OP, 3))
-    for ii, out_ii in enumerate(out.output_list):
-        LUT.Phi_dqh_mean[ii, 0] = out_ii.elec.eec.Phid
-        LUT.Phi_dqh_mean[ii, 1] = out_ii.elec.eec.Phiq
+    if simu.elec is not None and simu.elec.eec is not None:
+        LUT.Phi_dqh_mean = zeros((N_OP, 3))
+        for ii, out_ii in enumerate(LUT.output_list):
+            LUT.Phi_dqh_mean[ii, 0] = out_ii.elec.eec.Phid
+            LUT.Phi_dqh_mean[ii, 1] = out_ii.elec.eec.Phiq
 
     return LUT
