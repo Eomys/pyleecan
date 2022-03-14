@@ -21,7 +21,8 @@ def test_ElecLUTdq_InputPower():
 
     machine = load(join(DATA_DIR, "Machine", "Toyota_Prius.json"))
 
-    LUT_enforced = load("LUT.h5")
+    # LUT_enforced = load("LUT.h5")
+    LUT_enforced = None
 
     # First simulation creating femm file
     simu = Simu1(name="test_ElecLUTdq_InputPower", machine=machine)
@@ -54,7 +55,7 @@ def test_ElecLUTdq_InputPower():
             ),
             var_simu=VarLoadCurrent(
                 type_OP_matrix=1,
-                postproc_list=[PostLUT(is_save_LUT=True)],
+                postproc_list=[PostLUT(is_save_LUT=False)],
                 is_keep_all_output=True,
             ),
             mag=MagFEMM(

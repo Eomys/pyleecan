@@ -33,6 +33,16 @@ except ImportError as error:
     comp_core_losses = error
 
 try:
+    from ..Methods.Simulation.LossFEMM.comp_joule_losses import comp_joule_losses
+except ImportError as error:
+    comp_joule_losses = error
+
+try:
+    from ..Methods.Simulation.LossFEMM.comp_losses import comp_losses
+except ImportError as error:
+    comp_losses = error
+
+try:
     from ..Methods.Simulation.LossFEMM.comp_magnet_losses import comp_magnet_losses
 except ImportError as error:
     comp_magnet_losses = error
@@ -77,6 +87,29 @@ class LossFEMM(Loss):
         )
     else:
         comp_core_losses = comp_core_losses
+    # cf Methods.Simulation.LossFEMM.comp_joule_losses
+    if isinstance(comp_joule_losses, ImportError):
+        comp_joule_losses = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use LossFEMM method comp_joule_losses: "
+                    + str(comp_joule_losses)
+                )
+            )
+        )
+    else:
+        comp_joule_losses = comp_joule_losses
+    # cf Methods.Simulation.LossFEMM.comp_losses
+    if isinstance(comp_losses, ImportError):
+        comp_losses = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use LossFEMM method comp_losses: " + str(comp_losses)
+                )
+            )
+        )
+    else:
+        comp_losses = comp_losses
     # cf Methods.Simulation.LossFEMM.comp_magnet_losses
     if isinstance(comp_magnet_losses, ImportError):
         comp_magnet_losses = property(

@@ -18,9 +18,9 @@ from .OutLoss import OutLoss
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
 try:
-    from ..Methods.Output.OutLossFEMM.comp_dict import comp_dict
+    from ..Methods.Output.OutLossFEMM.get_loss_group import get_loss_group
 except ImportError as error:
-    comp_dict = error
+    get_loss_group = error
 
 try:
     from ..Methods.Output.OutLossFEMM.get_loss_overall import get_loss_overall
@@ -28,17 +28,11 @@ except ImportError as error:
     get_loss_overall = error
 
 try:
-    from ..Methods.Output.OutLossFEMM.get_fft_dict import get_fft_dict
+    from ..Methods.Output.OutLossFEMM.store import store
 except ImportError as error:
-    get_fft_dict = error
-
-try:
-    from ..Methods.Output.OutLossFEMM.get_surf_dict import get_surf_dict
-except ImportError as error:
-    get_surf_dict = error
+    store = error
 
 
-from numpy import array, array_equal
 from ._check import InitUnKnowClassError
 
 
@@ -48,15 +42,18 @@ class OutLossFEMM(OutLoss):
     VERSION = 1
 
     # Check ImportError to remove unnecessary dependencies in unused method
-    # cf Methods.Output.OutLossFEMM.comp_dict
-    if isinstance(comp_dict, ImportError):
-        comp_dict = property(
+    # cf Methods.Output.OutLossFEMM.get_loss_group
+    if isinstance(get_loss_group, ImportError):
+        get_loss_group = property(
             fget=lambda x: raise_(
-                ImportError("Can't use OutLossFEMM method comp_dict: " + str(comp_dict))
+                ImportError(
+                    "Can't use OutLossFEMM method get_loss_group: "
+                    + str(get_loss_group)
+                )
             )
         )
     else:
-        comp_dict = comp_dict
+        get_loss_group = get_loss_group
     # cf Methods.Output.OutLossFEMM.get_loss_overall
     if isinstance(get_loss_overall, ImportError):
         get_loss_overall = property(
@@ -69,28 +66,15 @@ class OutLossFEMM(OutLoss):
         )
     else:
         get_loss_overall = get_loss_overall
-    # cf Methods.Output.OutLossFEMM.get_fft_dict
-    if isinstance(get_fft_dict, ImportError):
-        get_fft_dict = property(
+    # cf Methods.Output.OutLossFEMM.store
+    if isinstance(store, ImportError):
+        store = property(
             fget=lambda x: raise_(
-                ImportError(
-                    "Can't use OutLossFEMM method get_fft_dict: " + str(get_fft_dict)
-                )
+                ImportError("Can't use OutLossFEMM method store: " + str(store))
             )
         )
     else:
-        get_fft_dict = get_fft_dict
-    # cf Methods.Output.OutLossFEMM.get_surf_dict
-    if isinstance(get_surf_dict, ImportError):
-        get_surf_dict = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use OutLossFEMM method get_surf_dict: " + str(get_surf_dict)
-                )
-            )
-        )
-    else:
-        get_surf_dict = get_surf_dict
+        store = store
     # save and copy methods are available in all object
     save = save
     copy = copy
@@ -105,9 +89,8 @@ class OutLossFEMM(OutLoss):
         Pmagnet=None,
         Pprox=None,
         Pjoule=None,
-        fft_dict=None,
-        surf_dict=None,
         meshsolution=None,
+        coeff_dict=-1,
         loss_list=None,
         meshsol_list=-1,
         loss_index=-1,
@@ -142,12 +125,10 @@ class OutLossFEMM(OutLoss):
                 Pprox = init_dict["Pprox"]
             if "Pjoule" in list(init_dict.keys()):
                 Pjoule = init_dict["Pjoule"]
-            if "fft_dict" in list(init_dict.keys()):
-                fft_dict = init_dict["fft_dict"]
-            if "surf_dict" in list(init_dict.keys()):
-                surf_dict = init_dict["surf_dict"]
             if "meshsolution" in list(init_dict.keys()):
                 meshsolution = init_dict["meshsolution"]
+            if "coeff_dict" in list(init_dict.keys()):
+                coeff_dict = init_dict["coeff_dict"]
             if "loss_list" in list(init_dict.keys()):
                 loss_list = init_dict["loss_list"]
             if "meshsol_list" in list(init_dict.keys()):
@@ -163,9 +144,8 @@ class OutLossFEMM(OutLoss):
         self.Pmagnet = Pmagnet
         self.Pprox = Pprox
         self.Pjoule = Pjoule
-        self.fft_dict = fft_dict
-        self.surf_dict = surf_dict
         self.meshsolution = meshsolution
+        self.coeff_dict = coeff_dict
         # Call OutLoss init
         super(OutLossFEMM, self).__init__(
             loss_list=loss_list,
@@ -188,23 +168,6 @@ class OutLossFEMM(OutLoss):
         OutLossFEMM_str += "Pmagnet = " + str(self.Pmagnet) + linesep
         OutLossFEMM_str += "Pprox = " + str(self.Pprox) + linesep
         OutLossFEMM_str += "Pjoule = " + str(self.Pjoule) + linesep
-        if len(self.fft_dict) == 0:
-            OutLossFEMM_str += "fft_dict = dict()"
-        for key, obj in self.fft_dict.items():
-            OutLossFEMM_str += (
-                "fft_dict[" + key + "] = " + str(self.fft_dict[key]) + linesep + linesep
-            )
-        if len(self.surf_dict) == 0:
-            OutLossFEMM_str += "surf_dict = dict()"
-        for key, obj in self.surf_dict.items():
-            OutLossFEMM_str += (
-                "surf_dict["
-                + key
-                + "] = "
-                + str(self.surf_dict[key])
-                + linesep
-                + linesep
-            )
         if self.meshsolution is not None:
             tmp = (
                 self.meshsolution.__str__()
@@ -214,6 +177,7 @@ class OutLossFEMM(OutLoss):
             OutLossFEMM_str += "meshsolution = " + tmp
         else:
             OutLossFEMM_str += "meshsolution = None" + linesep + linesep
+        OutLossFEMM_str += "coeff_dict = " + str(self.coeff_dict) + linesep
         return OutLossFEMM_str
 
     def __eq__(self, other):
@@ -237,35 +201,9 @@ class OutLossFEMM(OutLoss):
             return False
         if other.Pjoule != self.Pjoule:
             return False
-        if (other.fft_dict is None and self.fft_dict is not None) or (
-            other.fft_dict is not None and self.fft_dict is None
-        ):
-            return False
-        elif other.fft_dict is None and self.fft_dict is None:
-            pass
-        elif len(other.fft_dict) != len(self.fft_dict):
-            return False
-        else:
-            for key in other.fft_dict:
-                if key not in self.fft_dict or not array_equal(
-                    other.fft_dict[key], self.fft_dict[key]
-                ):
-                    return False
-        if (other.surf_dict is None and self.surf_dict is not None) or (
-            other.surf_dict is not None and self.surf_dict is None
-        ):
-            return False
-        elif other.surf_dict is None and self.surf_dict is None:
-            pass
-        elif len(other.surf_dict) != len(self.surf_dict):
-            return False
-        else:
-            for key in other.surf_dict:
-                if key not in self.surf_dict or not array_equal(
-                    other.surf_dict[key], self.surf_dict[key]
-                ):
-                    return False
         if other.meshsolution != self.meshsolution:
+            return False
+        if other.coeff_dict != self.coeff_dict:
             return False
         return True
 
@@ -305,34 +243,6 @@ class OutLossFEMM(OutLoss):
             diff_list.append(name + ".Pprox")
         if other._Pjoule != self._Pjoule:
             diff_list.append(name + ".Pjoule")
-        if (other.fft_dict is None and self.fft_dict is not None) or (
-            other.fft_dict is not None and self.fft_dict is None
-        ):
-            diff_list.append(name + ".fft_dict None mismatch")
-        elif self.fft_dict is None:
-            pass
-        elif len(other.fft_dict) != len(self.fft_dict):
-            diff_list.append("len(" + name + ".fft_dict)")
-        else:
-            for key in other.fft_dict:
-                if key not in self.fft_dict or not array_equal(
-                    other.fft_dict[key], self.fft_dict[key]
-                ):
-                    diff_list.append(name + ".fft_dict[" + str(key) + "]")
-        if (other.surf_dict is None and self.surf_dict is not None) or (
-            other.surf_dict is not None and self.surf_dict is None
-        ):
-            diff_list.append(name + ".surf_dict None mismatch")
-        elif self.surf_dict is None:
-            pass
-        elif len(other.surf_dict) != len(self.surf_dict):
-            diff_list.append("len(" + name + ".surf_dict)")
-        else:
-            for key in other.surf_dict:
-                if key not in self.surf_dict or not array_equal(
-                    other.surf_dict[key], self.surf_dict[key]
-                ):
-                    diff_list.append(name + ".surf_dict[" + str(key) + "]")
         if (other.meshsolution is None and self.meshsolution is not None) or (
             other.meshsolution is not None and self.meshsolution is None
         ):
@@ -343,6 +253,8 @@ class OutLossFEMM(OutLoss):
                     other.meshsolution, name=name + ".meshsolution"
                 )
             )
+        if other._coeff_dict != self._coeff_dict:
+            diff_list.append(name + ".coeff_dict")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -362,13 +274,10 @@ class OutLossFEMM(OutLoss):
         S += getsizeof(self.Pmagnet)
         S += getsizeof(self.Pprox)
         S += getsizeof(self.Pjoule)
-        if self.fft_dict is not None:
-            for key, value in self.fft_dict.items():
-                S += getsizeof(value) + getsizeof(key)
-        if self.surf_dict is not None:
-            for key, value in self.surf_dict.items():
-                S += getsizeof(value) + getsizeof(key)
         S += getsizeof(self.meshsolution)
+        if self.coeff_dict is not None:
+            for key, value in self.coeff_dict.items():
+                S += getsizeof(value) + getsizeof(key)
         return S
 
     def as_dict(self, type_handle_ndarray=0, keep_function=False, **kwargs):
@@ -406,36 +315,6 @@ class OutLossFEMM(OutLoss):
         OutLossFEMM_dict["Pmagnet"] = self.Pmagnet
         OutLossFEMM_dict["Pprox"] = self.Pprox
         OutLossFEMM_dict["Pjoule"] = self.Pjoule
-        if self.fft_dict is None:
-            OutLossFEMM_dict["fft_dict"] = None
-        else:
-            OutLossFEMM_dict["fft_dict"] = dict()
-            for key, obj in self.fft_dict.items():
-                if type_handle_ndarray == 0:
-                    OutLossFEMM_dict["fft_dict"][key] = obj.tolist()
-                elif type_handle_ndarray == 1:
-                    OutLossFEMM_dict["fft_dict"][key] = obj.copy()
-                elif type_handle_ndarray == 2:
-                    OutLossFEMM_dict["fft_dict"][key] = obj
-                else:
-                    raise Exception(
-                        "Unknown type_handle_ndarray: " + str(type_handle_ndarray)
-                    )
-        if self.surf_dict is None:
-            OutLossFEMM_dict["surf_dict"] = None
-        else:
-            OutLossFEMM_dict["surf_dict"] = dict()
-            for key, obj in self.surf_dict.items():
-                if type_handle_ndarray == 0:
-                    OutLossFEMM_dict["surf_dict"][key] = obj.tolist()
-                elif type_handle_ndarray == 1:
-                    OutLossFEMM_dict["surf_dict"][key] = obj.copy()
-                elif type_handle_ndarray == 2:
-                    OutLossFEMM_dict["surf_dict"][key] = obj
-                else:
-                    raise Exception(
-                        "Unknown type_handle_ndarray: " + str(type_handle_ndarray)
-                    )
         if self.meshsolution is None:
             OutLossFEMM_dict["meshsolution"] = None
         else:
@@ -444,6 +323,9 @@ class OutLossFEMM(OutLoss):
                 keep_function=keep_function,
                 **kwargs
             )
+        OutLossFEMM_dict["coeff_dict"] = (
+            self.coeff_dict.copy() if self.coeff_dict is not None else None
+        )
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         OutLossFEMM_dict["__class__"] = "OutLossFEMM"
@@ -458,10 +340,9 @@ class OutLossFEMM(OutLoss):
         self.Pmagnet = None
         self.Pprox = None
         self.Pjoule = None
-        self.fft_dict = None
-        self.surf_dict = None
         if self.meshsolution is not None:
             self.meshsolution._set_None()
+        self.coeff_dict = None
         # Set to None the properties inherited from OutLoss
         super(OutLossFEMM, self)._set_None()
 
@@ -595,60 +476,6 @@ class OutLossFEMM(OutLoss):
         """,
     )
 
-    def _get_fft_dict(self):
-        """getter of fft_dict"""
-        return self._fft_dict
-
-    def _set_fft_dict(self, value):
-        """setter of fft_dict"""
-        if type(value) is dict:
-            for key, obj in value.items():
-                if type(obj) is list:
-                    try:
-                        value[key] = array(obj)
-                    except:
-                        pass
-        elif type(value) is int and value == -1:
-            value = dict()
-        check_var("fft_dict", value, "{ndarray}")
-        self._fft_dict = value
-
-    fft_dict = property(
-        fget=_get_fft_dict,
-        fset=_set_fft_dict,
-        doc=u"""Dict containing fft of magnetic mesh values used for loss calculation
-
-        :Type: {ndarray}
-        """,
-    )
-
-    def _get_surf_dict(self):
-        """getter of surf_dict"""
-        return self._surf_dict
-
-    def _set_surf_dict(self, value):
-        """setter of surf_dict"""
-        if type(value) is dict:
-            for key, obj in value.items():
-                if type(obj) is list:
-                    try:
-                        value[key] = array(obj)
-                    except:
-                        pass
-        elif type(value) is int and value == -1:
-            value = dict()
-        check_var("surf_dict", value, "{ndarray}")
-        self._surf_dict = value
-
-    surf_dict = property(
-        fget=_get_surf_dict,
-        fset=_set_surf_dict,
-        doc=u"""Dict containing fft of element surface values used for loss calculation
-
-        :Type: {ndarray}
-        """,
-    )
-
     def _get_meshsolution(self):
         """getter of meshsolution"""
         return self._meshsolution
@@ -685,5 +512,25 @@ class OutLossFEMM(OutLoss):
         doc=u"""Meshsolution containing loss density map
 
         :Type: MeshSolution
+        """,
+    )
+
+    def _get_coeff_dict(self):
+        """getter of coeff_dict"""
+        return self._coeff_dict
+
+    def _set_coeff_dict(self, value):
+        """setter of coeff_dict"""
+        if type(value) is int and value == -1:
+            value = dict()
+        check_var("coeff_dict", value, "dict")
+        self._coeff_dict = value
+
+    coeff_dict = property(
+        fget=_get_coeff_dict,
+        fset=_set_coeff_dict,
+        doc=u"""Dict containing coefficients to rebuild loss polynom function of frequency
+
+        :Type: dict
         """,
     )

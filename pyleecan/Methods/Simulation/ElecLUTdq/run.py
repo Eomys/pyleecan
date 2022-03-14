@@ -1,5 +1,7 @@
 import numpy as np
 
+from ....Classes.OutLossFEMM import OutLossFEMM
+
 from ....Methods.Simulation.Input import InputError
 
 
@@ -59,6 +61,9 @@ def run(self):
         # Run method to calculate LUT
         LUT = self.comp_LUTdq()
 
+    # Create loss interpolant function from LUT
+    Ploss_dqh_interp = LUT.get_Ploss_dqh_interp(N0=OP.N0)
+
     # iteration until convergence is reached, and max number of iterations on EEC
     delta_Pem = 1e10
     delta_Pem_max = 0.1
@@ -88,17 +93,12 @@ def run(self):
         Uq = Rs * Iq + Phid * ws
         Umax_interp = np.sqrt(Ud ** 2 + Uq ** 2)
 
-        # TODO: interpolate iron losses from LUT
-        Piron = 0
-
-        # Calculate Joule losses
-        Plosses = Rs * (Id ** 2 + Iq ** 2) + Piron
+        # Interpolate losses from LUT
+        Plosses = Ploss_dqh_interp((Id, Iq))
+        Ploss_ovl = np.sum(Plosses, axis=1)
 
         # Calculate useful power by substracting losses
-        Pem_interp = qs * (Ud * Id + Uq * Iq) - Plosses
-
-        # Calculate electromagnetic torque
-        Tem_interp = Pem_interp / (2 * np.pi * OP.N0 / 60)
+        Pem_interp = qs * (Ud * Id + Uq * Iq) - Ploss_ovl
 
         # Finding indices of operating points satisfying maximum voltage/current and input power
         i0 = np.logical_and.reduce(
@@ -106,15 +106,7 @@ def run(self):
         )
 
         # Finding index of operating points with lowest losses among feasible operating points
-        imin = np.argmin(Plosses[i0])
-
-        # Store electrical quantities contained in out_dict in OutElec
-        output.elec.Pem_av_ref = Pem_interp[i0][imin]
-        output.elec.Tem_av_ref = Tem_interp[i0][imin]
-        output.elec.OP.Id_ref = Id[i0][imin]
-        output.elec.OP.Iq_ref = Iq[i0][imin]
-        output.elec.OP.Ud_ref = Ud[i0][imin]
-        output.elec.OP.Uq_ref = Uq[i0][imin]
+        imin = np.argmin(Ploss_ovl[i0])
 
         jd = np.where(Id_vect == Id[i0][imin])[0][0]
         jq = np.where(Iq_vect == Iq[i0][imin])[0][0]
@@ -131,3 +123,20 @@ def run(self):
 
         delta_Pem = Pem_interp[i0][imin] - Pem_av_ref
         niter_Pem = niter_Pem + 1
+
+    # Store electrical quantities
+    output.elec.Pem_av_ref = Pem_interp[i0][imin]
+    output.elec.Tem_av_ref = Pem_interp[i0][imin] / (2 * np.pi * OP.N0 / 60)
+    output.elec.OP.Id_ref = Id[i0][imin]
+    output.elec.OP.Iq_ref = Iq[i0][imin]
+    output.elec.OP.Ud_ref = Ud[i0][imin]
+    output.elec.OP.Uq_ref = Uq[i0][imin]
+
+    # Store losses
+    output.loss = OutLossFEMM(
+        Pjoule=Plosses[i0, 0][imin],
+        Pstator=Plosses[i0, 1][imin],
+        Pmagnet=Plosses[i0, 2][imin],
+        Protor=Plosses[i0, 3][imin],
+        Pprox=Plosses[i0, 4][imin],
+    )

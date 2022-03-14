@@ -4,4 +4,5 @@ Phi_dqh_mag,Wbrms,RMS stator winding flux linkage spectrum in dqh frame includin
 Phi_wind,Wb,Stator winding flux function of time and phases,"(Nt_tot, qs)",[SciDataTool.Classes.DataND.DataND],None,,,,,,get_Phidqh_mean,,,,
 Phi_dqh_interp,,Interpolant function of Phi_dqh,,scipy.interpolate.interpolate.RegularGridInterpolator,None,,,,,,get_Phidqh_mag,,,,
 ,,,,,,,,,,,get_Phidqh_mag_mean,,,,
+,,,,,,,,,,,get_Ploss_dqh_interp,,,,
 ,,,,,,,,,,,interp_Phi_dqh,,,,

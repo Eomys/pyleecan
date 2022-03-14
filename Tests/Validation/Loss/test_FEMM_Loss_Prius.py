@@ -1,5 +1,7 @@
 from os.path import join
 
+from numpy.testing import assert_almost_equal
+
 from pyleecan.Classes.InputCurrent import InputCurrent
 from pyleecan.Classes.Simu1 import Simu1
 from pyleecan.Classes.OPdq import OPdq
@@ -9,6 +11,8 @@ from pyleecan.Classes.LossFEMM import LossFEMM
 from pyleecan.Functions.load import load
 
 from pyleecan.definitions import DATA_DIR
+
+is_show_fig = False
 
 
 def test_FEMM_Loss_Prius():
@@ -41,28 +45,49 @@ def test_FEMM_Loss_Prius():
 
     out = simu.run()
 
+    freqs = out.loss.axes_dict["freqs"].get_values()
+
+    assert_almost_equal(
+        out.loss.Pstator, out.loss.get_loss_group("stator core", freqs)[0]
+    )
+    assert_almost_equal(
+        out.loss.Protor, out.loss.get_loss_group("rotor core", freqs)[0]
+    )
+    assert_almost_equal(
+        out.loss.Pprox, out.loss.get_loss_group("stator winding", freqs)[0]
+    )
+    assert_almost_equal(
+        out.loss.Pmagnet, out.loss.get_loss_group("rotor magnets", freqs)[0]
+    )
+
     ovl_loss = out.loss.get_loss_overall()
 
-    out.loss.meshsolution.plot_contour(
-        "freqs=sum",
-        label="Loss",
-        group_names=["stator core", "stator winding", "rotor core", "rotor magnets"],
-        # clim=[2e4, 2e7],
-    )
+    if is_show_fig:
+        out.loss.meshsolution.plot_contour(
+            "freqs=sum",
+            label="Loss",
+            group_names=[
+                "stator core",
+                "stator winding",
+                "rotor core",
+                "rotor magnets",
+            ],
+            # clim=[2e4, 2e7],
+        )
 
-    out.loss.meshsolution.plot_contour(
-        "freqs=sum",
-        label="Loss",
-        group_names=["stator core", "stator winding"],
-        # clim=[2e4, 2e7],
-    )
+    # out.loss.meshsolution.plot_contour(
+    #     "freqs=sum",
+    #     label="Loss",
+    #     group_names=["stator core", "stator winding"],
+    #     # clim=[2e4, 2e7],
+    # )
 
-    out.loss.meshsolution.plot_contour(
-        "freqs=sum",
-        label="Loss",
-        group_names=["rotor core", "rotor magnets"],
-        # clim=[2e4, 2e7],
-    )
+    # out.loss.meshsolution.plot_contour(
+    #     "freqs=sum",
+    #     label="Loss",
+    #     group_names=["rotor core", "rotor magnets"],
+    #     # clim=[2e4, 2e7],
+    # )
 
 
 # To run it without pytest

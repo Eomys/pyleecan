@@ -1,10 +1,9 @@
 Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
-axes_dict,,Dict containing axes data used for Magnetics,,{SciDataTool.Classes.DataND.Data},None,,,,Output,OutLoss,comp_dict,VERSION,1,Gather the loss module outputs after LossFEMM
+axes_dict,,Dict containing axes data used for Magnetics,,{SciDataTool.Classes.DataND.Data},None,,,,Output,OutLoss,get_loss_group,VERSION,1,Gather the loss module outputs after LossFEMM
 Pstator,W,Stator core losses due to hysteresis and eddy currents,,float,None,,,,,,get_loss_overall,,,
-Protor,W,Rotor core losses due to hysteresis and eddy currents,,float,None,,,,,,get_fft_dict,,,
-Pmagnet,W,Magnet eddy current losses,,float,None,,,,,,get_surf_dict,,,
+Protor,W,Rotor core losses due to hysteresis and eddy currents,,float,None,,,,,,store,,,
+Pmagnet,W,Magnet eddy current losses,,float,None,,,,,,,,,
 Pprox,W,Stator core losses,,float,None,,,,,,,,,
 Pjoule,W,Stator core losses,,float,None,,,,,,,,,
-fft_dict,,Dict containing fft of magnetic mesh values used for loss calculation,,{ndarray},None,,,,,,,,,
-surf_dict,,Dict containing fft of element surface values used for loss calculation,,{ndarray},None,,,,,,,,,
 meshsolution,,Meshsolution containing loss density map,,MeshSolution,None,,,,,,,,,
+coeff_dict,,Dict containing coefficients to rebuild loss polynom function of frequency,,dict,-1,,,,,,,,,

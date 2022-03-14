@@ -43,6 +43,11 @@ except ImportError as error:
     get_Phidqh_mag_mean = error
 
 try:
+    from ..Methods.Output.LUTdq.get_Ploss_dqh_interp import get_Ploss_dqh_interp
+except ImportError as error:
+    get_Ploss_dqh_interp = error
+
+try:
     from ..Methods.Output.LUTdq.interp_Phi_dqh import interp_Phi_dqh
 except ImportError as error:
     interp_Phi_dqh = error
@@ -117,6 +122,18 @@ class LUTdq(LUT):
         )
     else:
         get_Phidqh_mag_mean = get_Phidqh_mag_mean
+    # cf Methods.Output.LUTdq.get_Ploss_dqh_interp
+    if isinstance(get_Ploss_dqh_interp, ImportError):
+        get_Ploss_dqh_interp = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use LUTdq method get_Ploss_dqh_interp: "
+                    + str(get_Ploss_dqh_interp)
+                )
+            )
+        )
+    else:
+        get_Ploss_dqh_interp = get_Ploss_dqh_interp
     # cf Methods.Output.LUTdq.interp_Phi_dqh
     if isinstance(interp_Phi_dqh, ImportError):
         interp_Phi_dqh = property(

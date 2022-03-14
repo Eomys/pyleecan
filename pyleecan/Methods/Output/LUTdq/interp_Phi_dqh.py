@@ -40,9 +40,7 @@ def interp_Phi_dqh(self, Id, Iq):
                 Phi_dqh_mean_reg[m, n, :] = Phi_dqh_mean[ii, 0:2]
             # regular grid interpolation
             self.Phi_dqh_interp = scp_int.RegularGridInterpolator(
-                (XId, XIq),
-                Phi_dqh_mean_reg,
-                method="linear",
+                (XId, XIq), Phi_dqh_mean_reg, method="linear"
             )
         else:
             # scattered interpolation
