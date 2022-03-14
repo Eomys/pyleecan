@@ -73,13 +73,12 @@ def comp_magnet_losses(self, group, freqs):
     # Check if lambda function exists in coeff_dict
     coeff_dict = output.loss.coeff_dict
     if group not in coeff_dict:
-        # Create lambda function to recalculate overall losses function of frequency
+        # Calculate coefficients to evaluate magnet losses
         I0 = freqs != 0
         coeff = zeros(w.size)
         coeff[I0] = (
             Lmag * per_a * matmul(np_abs(Jm[I0, :] / w[I0, :]) ** 2, Se) / sigma_m
         )
         coeff_dict[group] = {"A": 0, "B": (2 * pi) ** 2 * coeff}
-        # coeff_dict[group] = lambda x: np_sum(coeff * (2 * pi * x) ** 2)
 
     return Pmagnet, Pmagnet_density

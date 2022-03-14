@@ -66,7 +66,7 @@ def comp_core_losses(self, group, freqs, Ce=None, Ch=None):
     # Check if coefficients exists in coeff_dict
     coeff_dict = output.loss.coeff_dict
     if group not in coeff_dict:
-        # Calculate coefficients to evaluate loss
+        # Calculate coefficients to evaluate core losses
         coeff = matmul(Bfft_square, Se)
         if Ch == 0:
             A = 0
