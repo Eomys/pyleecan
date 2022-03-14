@@ -50,7 +50,10 @@ def comp_joule_losses(self, group, freqs):
     if self.is_get_meshsolution:
 
         felec = OP.get_felec()
-        p = machine.get_pole_pair_number()
+        per_a = output.geo.per_a
+        if output.geo.is_antiper_a:
+            per_a *= 2
+
         Lst = lam.L1
 
         ms_group = output.mag.meshsolution.get_group(group)
@@ -59,7 +62,7 @@ def comp_joule_losses(self, group, freqs):
 
         # Constant component and twice the electrical frequency have same joule density values
         Pjoule_density = zeros((freqs.size, Se.size))
-        amp = Pjoule / (2 * p * Lst * np_sum(Se))
+        amp = Pjoule / (per_a * Lst * np_sum(Se))
         Pjoule_density[freqs == 0, :] = amp / 2
         Pjoule_density[freqs == 2 * felec, :] = amp / 2
     else:

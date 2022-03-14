@@ -20,18 +20,14 @@ def test_FEMM_Loss_SPMSM():
 
     machine = load(join(DATA_DIR, "Machine", "SPMSM_18s16p_loss.json"))
 
-    # machine.plot()
-
-    # machine.comp_periodicity_spatial()
-
     Ch = 143  # hysteresis loss coefficient [W/(m^3*T^2*Hz)]
     Ce = 0.530  # eddy current loss coefficients [W/(m^3*T^2*Hz^2)]
-    Cprox = 1  # sigma_w * cond.Hwire * cond.Wwire
+    Cprox = 4.1018  # sigma_w * cond.Hwire * cond.Wwire
 
-    simu = Simu1(name="test_FEMM_Loss_Prius", machine=machine)
+    simu = Simu1(name="test_FEMM_Loss_SPMSM", machine=machine)
 
     simu.input = InputCurrent(
-        Nt_tot=20 * 16,
+        Nt_tot=4 * 16,
         Na_tot=1000 * 2,
         OP=OPdq(N0=4000, Id_ref=0, Iq_ref=2),
         is_periodicity_t=True,
@@ -45,7 +41,7 @@ def test_FEMM_Loss_SPMSM():
         is_get_meshsolution=True,
     )
 
-    # simu.loss = LossFEMM(Ce=Ce, Cp=Cprox, Ch=Ch, is_get_meshsolution=True, Tsta=100)
+    simu.loss = LossFEMM(Ce=Ce, Cp=Cprox, Ch=Ch, is_get_meshsolution=True, Tsta=100)
 
     out = simu.run()
 

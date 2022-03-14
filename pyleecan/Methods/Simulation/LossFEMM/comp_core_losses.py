@@ -38,7 +38,9 @@ def comp_core_losses(self, group, freqs, Ce=None, Ch=None):
 
     machine = output.simu.machine
 
-    p = machine.get_pole_pair_number()
+    per_a = output.geo.per_a
+    if output.geo.is_antiper_a:
+        per_a *= 2
 
     if "stator" in group:
         Lst = machine.stator.L1
@@ -59,20 +61,18 @@ def comp_core_losses(self, group, freqs, Ce=None, Ch=None):
         Pcore_density += Ch * freqs[:, None] * Bfft_square
 
     # Integrate loss density over elements' volume and sum over frequency to get overall loss
-    Pcore = Lst * 2 * p * np_sum(matmul(Pcore_density, Se))
+    Pcore = Lst * per_a * np_sum(matmul(Pcore_density, Se))
 
-    # Check if lambda function exists in coeff_dict
+    # Check if coefficients exists in coeff_dict
     coeff_dict = output.loss.coeff_dict
     if group not in coeff_dict:
-        # Create lambda function to recalculate overall losses function of frequency
+        # Calculate coefficients to evaluate loss
         coeff = matmul(Bfft_square, Se)
         if Ch == 0:
             A = 0
         else:
-            A = Lst * 2 * p * Ch * coeff
-        B = Lst * 2 * p * Ce * coeff
+            A = Lst * per_a * Ch * coeff
+        B = Lst * per_a * Ce * coeff
         coeff_dict[group] = {"A": A, "B": B}
-
-        # lambda x: np_sum(A * x + B * x ** 2)
 
     return Pcore, Pcore_density

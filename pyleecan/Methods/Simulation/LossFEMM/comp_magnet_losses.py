@@ -34,7 +34,9 @@ def comp_magnet_losses(self, group, freqs):
 
     machine = output.simu.machine
 
-    p = machine.get_pole_pair_number()
+    per_a = output.geo.per_a
+    if output.geo.is_antiper_a:
+        per_a *= 2
 
     if hasattr(machine.rotor, "magnet"):
         magnet = machine.rotor.magnet
@@ -66,7 +68,7 @@ def comp_magnet_losses(self, group, freqs):
     Pmagnet_density = np_abs(Jm) ** 2 / sigma_m
 
     # Calculate overall losses
-    Pmagnet = Lmag * 2 * p * np_sum(matmul(Pmagnet_density, Se))
+    Pmagnet = Lmag * per_a * np_sum(matmul(Pmagnet_density, Se))
 
     # Check if lambda function exists in coeff_dict
     coeff_dict = output.loss.coeff_dict
@@ -75,7 +77,7 @@ def comp_magnet_losses(self, group, freqs):
         I0 = freqs != 0
         coeff = zeros(w.size)
         coeff[I0] = (
-            Lmag * 2 * p * matmul(np_abs(Jm[I0, :] / w[I0, :]) ** 2, Se) / sigma_m
+            Lmag * per_a * matmul(np_abs(Jm[I0, :] / w[I0, :]) ** 2, Se) / sigma_m
         )
         coeff_dict[group] = {"A": 0, "B": (2 * pi) ** 2 * coeff}
         # coeff_dict[group] = lambda x: np_sum(coeff * (2 * pi * x) ** 2)
