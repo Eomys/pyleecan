@@ -34,6 +34,11 @@ try:
 except ImportError as error:
     evaluate = error
 
+try:
+    from ..Methods.Optimization.OptiBayesAlgSmoot.eval_const import eval_const
+except ImportError as error:
+    eval_const = error
+
 
 from ._check import InitUnKnowClassError
 from .OptiProblem import OptiProblem
@@ -78,6 +83,17 @@ class OptiBayesAlgSmoot(OptiBayesAlg):
         )
     else:
         evaluate = evaluate
+    # cf Methods.Optimization.OptiBayesAlgSmoot.eval_const
+    if isinstance(eval_const, ImportError):
+        eval_const = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use OptiBayesAlgSmoot method eval_const: " + str(eval_const)
+                )
+            )
+        )
+    else:
+        eval_const = eval_const
     # save and copy methods are available in all object
     save = save
     copy = copy
@@ -89,7 +105,7 @@ class OptiBayesAlgSmoot(OptiBayesAlg):
         size_pop=10,
         nb_gen=10,
         nb_iter=10,
-        criteria="EI",
+        criterion="PI",
         kernel=0,
         problem=-1,
         xoutput=-1,
@@ -119,8 +135,8 @@ class OptiBayesAlgSmoot(OptiBayesAlg):
                 nb_gen = init_dict["nb_gen"]
             if "nb_iter" in list(init_dict.keys()):
                 nb_iter = init_dict["nb_iter"]
-            if "criteria" in list(init_dict.keys()):
-                criteria = init_dict["criteria"]
+            if "criterion" in list(init_dict.keys()):
+                criterion = init_dict["criterion"]
             if "kernel" in list(init_dict.keys()):
                 kernel = init_dict["kernel"]
             if "problem" in list(init_dict.keys()):
@@ -137,7 +153,7 @@ class OptiBayesAlgSmoot(OptiBayesAlg):
         # Call OptiBayesAlg init
         super(OptiBayesAlgSmoot, self).__init__(
             nb_iter=nb_iter,
-            criteria=criteria,
+            criterion=criterion,
             kernel=kernel,
             problem=problem,
             xoutput=xoutput,

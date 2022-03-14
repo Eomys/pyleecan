@@ -34,7 +34,7 @@ class OptiBayesAlg(OptiSolver):
     def __init__(
         self,
         nb_iter=10,
-        criteria="EI",
+        criterion="PI",
         kernel=0,
         problem=-1,
         xoutput=-1,
@@ -60,8 +60,8 @@ class OptiBayesAlg(OptiSolver):
             # Overwrite default value with init_dict content
             if "nb_iter" in list(init_dict.keys()):
                 nb_iter = init_dict["nb_iter"]
-            if "criteria" in list(init_dict.keys()):
-                criteria = init_dict["criteria"]
+            if "criterion" in list(init_dict.keys()):
+                criterion = init_dict["criterion"]
             if "kernel" in list(init_dict.keys()):
                 kernel = init_dict["kernel"]
             if "problem" in list(init_dict.keys()):
@@ -74,7 +74,7 @@ class OptiBayesAlg(OptiSolver):
                 is_keep_all_output = init_dict["is_keep_all_output"]
         # Set the properties (value check and convertion are done in setter)
         self.nb_iter = nb_iter
-        self.criteria = criteria
+        self.criterion = criterion
         self.kernel = kernel
         # Call OptiSolver init
         super(OptiBayesAlg, self).__init__(
@@ -93,7 +93,7 @@ class OptiBayesAlg(OptiSolver):
         # Get the properties inherited from OptiSolver
         OptiBayesAlg_str += super(OptiBayesAlg, self).__str__()
         OptiBayesAlg_str += "nb_iter = " + str(self.nb_iter) + linesep
-        OptiBayesAlg_str += 'criteria = "' + str(self.criteria) + '"' + linesep
+        OptiBayesAlg_str += 'criterion = "' + str(self.criterion) + '"' + linesep
         OptiBayesAlg_str += "kernel = " + str(self.kernel) + linesep
         return OptiBayesAlg_str
 
@@ -108,7 +108,7 @@ class OptiBayesAlg(OptiSolver):
             return False
         if other.nb_iter != self.nb_iter:
             return False
-        if other.criteria != self.criteria:
+        if other.criterion != self.criterion:
             return False
         if other.kernel != self.kernel:
             return False
@@ -127,8 +127,8 @@ class OptiBayesAlg(OptiSolver):
         diff_list.extend(super(OptiBayesAlg, self).compare(other, name=name))
         if other._nb_iter != self._nb_iter:
             diff_list.append(name + ".nb_iter")
-        if other._criteria != self._criteria:
-            diff_list.append(name + ".criteria")
+        if other._criterion != self._criterion:
+            diff_list.append(name + ".criterion")
         if other._kernel != self._kernel:
             diff_list.append(name + ".kernel")
         # Filter ignore differences
@@ -143,7 +143,7 @@ class OptiBayesAlg(OptiSolver):
         # Get size of the properties inherited from OptiSolver
         S += super(OptiBayesAlg, self).__sizeof__()
         S += getsizeof(self.nb_iter)
-        S += getsizeof(self.criteria)
+        S += getsizeof(self.criterion)
         S += getsizeof(self.kernel)
         return S
 
@@ -165,7 +165,7 @@ class OptiBayesAlg(OptiSolver):
             **kwargs
         )
         OptiBayesAlg_dict["nb_iter"] = self.nb_iter
-        OptiBayesAlg_dict["criteria"] = self.criteria
+        OptiBayesAlg_dict["criterion"] = self.criterion
         OptiBayesAlg_dict["kernel"] = self.kernel
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
@@ -176,7 +176,7 @@ class OptiBayesAlg(OptiSolver):
         """Set all the properties to None (except pyleecan object)"""
 
         self.nb_iter = None
-        self.criteria = None
+        self.criterion = None
         self.kernel = None
         # Set to None the properties inherited from OptiSolver
         super(OptiBayesAlg, self)._set_None()
@@ -199,18 +199,18 @@ class OptiBayesAlg(OptiSolver):
         """,
     )
 
-    def _get_criteria(self):
-        """getter of criteria"""
-        return self._criteria
+    def _get_criterion(self):
+        """getter of criterion"""
+        return self._criterion
 
-    def _set_criteria(self, value):
-        """setter of criteria"""
-        check_var("criteria", value, "str")
-        self._criteria = value
+    def _set_criterion(self, value):
+        """setter of criterion"""
+        check_var("criterion", value, "str")
+        self._criterion = value
 
-    criteria = property(
-        fget=_get_criteria,
-        fset=_set_criteria,
+    criterion = property(
+        fget=_get_criterion,
+        fset=_set_criterion,
         doc=u"""Point selection criteria
 
         :Type: str

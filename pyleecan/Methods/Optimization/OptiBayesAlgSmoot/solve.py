@@ -24,7 +24,7 @@ def create_setter(accessor, attribute):
 
 
 def solve(self):
-    """Method to perform Bayesian optimization using SMT tools
+    """Method to perform Bayesian optimization using Smoot tools
 
     Parameters
     ----------
@@ -100,15 +100,21 @@ def solve(self):
         n_iter = self.nb_iter
         xlimits = np.array([var.space for var in self.problem.design_var])
 
+        const = [
+            lambda x: self.eval_const(constraint, x)
+            for constraint in self.problem.constraint
+        ]
+
         moo = MOO(
             n_iter=5,
-            criterion = 'PI',
+            criterion=self.criterion,
             n_start=30,
             xlimits=xlimits,
+            const=const,
             verbose=True,
-            n_gen=10*self.nb_gen,
-            pop_size=4*self.size_pop
-        ) 
+            n_gen=10 * self.nb_gen,
+            pop_size=4 * self.size_pop,
+        )
 
         moo.optimize(fun=self.evaluate)
 

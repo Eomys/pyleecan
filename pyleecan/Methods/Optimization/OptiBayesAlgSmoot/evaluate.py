@@ -1,5 +1,6 @@
 import numpy as np
 
+
 def evaluate(solver, input_x):
 
     # Nettoyer les valeurs d'obj précédentes
@@ -22,8 +23,7 @@ def evaluate(solver, input_x):
         for obj in solver.problem.obj_func:
             obj.result.append(obj.keeper(solver.xoutput))
 
-    #Récupérer les (la) valeurs d'objectif souhaitées
+    # Récupérer les (la) valeurs d'objectif souhaitées
     result = np.atleast_2d([obj.result for obj in solver.problem.obj_func])
-    print(result)
 
     return result.T

@@ -2,3 +2,4 @@ Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximu
 size_pop,-,Number of individuals for each generation,1,int,10,1,,,Optimization,OptiBayesAlg,solve,VERSION,1,Multi-objectives optimization problem with some constraints,
 nb_gen,-,Number of generations for the genetic part,1,int,10,1,,,,,check_optimization_input,,,,
 ,,,,,,,,,,,evaluate,,,,
+,,,,,,,,,,,eval_const,,,,
