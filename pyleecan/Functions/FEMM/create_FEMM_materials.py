@@ -169,11 +169,12 @@ def create_FEMM_materials(
             )
             prop_dict[label_dict["full"]] = prop
         elif MAG_LAB in label_dict["surf_type"] or HOLEM_LAB in label_dict["surf_type"]:
+            T_mag = FEMM_dict["simu"]["T_mag"]
             is_stator = STATOR_LAB in label_dict["lam_type"]
             is_mmf = is_mmfs if is_stator else is_mmfr
             mag_obj = get_obj_from_label(machine, label_dict=label_dict)
             prop, materials = create_FEMM_magnet(
-                femm, is_mmf, is_eddies, materials, mag_obj
+                femm, is_mmf, is_eddies, materials, mag_obj, T_mag
             )
             prop_dict[label_dict["full"]] = prop
         elif NO_MESH_LAB in label_dict["surf_type"]:

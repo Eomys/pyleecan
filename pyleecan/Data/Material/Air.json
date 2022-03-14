@@ -18,9 +18,9 @@
     },
     "elec": {
         "__class__": "MatElectrical",
-        "alpha": 1,
+        "alpha": 0,
         "epsr": 1,
-        "rho": 1
+        "rho": 0
     },
     "is_isotropic": true,
     "mag": {

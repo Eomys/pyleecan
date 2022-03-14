@@ -1,0 +1,70 @@
+{
+  "HT": {
+    "Cp": 450.0,
+    "__class__": "MatHT",
+    "alpha": 0,
+    "lambda_x": 8.9,
+    "lambda_y": 8.9,
+    "lambda_z": null
+  },
+  "__class__": "Material",
+  "__save_date__": "2022_03_09 17h32min57s ",
+  "__version__": "pyleecan_1.3.8",
+  "desc": null,
+  "eco": {
+    "__class__": "MatEconomical",
+    "cost_unit": 194.4,
+    "unit_name": null
+  },
+  "elec": {
+    "__class__": "MatElectrical",
+    "alpha": 0,
+    "epsr": 1,
+    "rho": 1.6e-06
+  },
+  "is_isotropic": true,
+  "mag": {
+    "BH_curve": {
+      "__class__": "ImportMatrixXls",
+      "axes_colrows": null,
+      "file_path": null,
+      "is_allsheets": null,
+      "is_transpose": null,
+      "sheet": null,
+      "skiprows": null,
+      "usecols": null
+    },
+    "Brm20": 1.37,
+    "Hc": 1038296.5335042697,
+    "LossData": {
+      "__class__": "ImportMatrix",
+      "is_transpose": null
+    },
+    "ModelBH": {
+      "Bmax": null,
+      "Hmax": null,
+      "__class__": "ModelBH",
+      "delta": null
+    },
+    "Wlam": 0.0,
+    "__class__": "MatMagnetics",
+    "alpha_Br": -0.0011,
+    "is_BH_extrapolate": null,
+    "mur_lin": 1.05
+  },
+  "name": "Magnet_48M",
+  "path": "C:/Users/rapha/AppData/Roaming/pyleecan\\Material\\Magnet_48M.json",
+  "struct": {
+    "Ex": null,
+    "Ey": null,
+    "Ez": null,
+    "Gxy": null,
+    "Gxz": null,
+    "Gyz": null,
+    "__class__": "MatStructural",
+    "nu_xy": null,
+    "nu_xz": null,
+    "nu_yz": null,
+    "rho": 7450.0
+  }
+}

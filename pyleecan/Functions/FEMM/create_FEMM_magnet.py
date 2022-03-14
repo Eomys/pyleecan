@@ -1,8 +1,4 @@
-# -*- coding: utf-8 -*-
-from re import findall
-
-
-def create_FEMM_magnet(femm, is_mmf, is_eddies, materials, mag_obj):
+def create_FEMM_magnet(femm, is_mmf, is_eddies, materials, mag_obj, T_mag):
     """Set the material of the magnet in FEMM
 
     Parameters
@@ -17,6 +13,8 @@ def create_FEMM_magnet(femm, is_mmf, is_eddies, materials, mag_obj):
         list of materials already created in FEMM
     mag_obj : Magnet
         Magnet object to set the material
+    T_mag: float
+        Permanent magnet temperature [deg Celsius]
 
     Returns
     -------
@@ -26,8 +24,10 @@ def create_FEMM_magnet(femm, is_mmf, is_eddies, materials, mag_obj):
     """
 
     rho = mag_obj.mat_type.elec.rho  # Resistivity at 20°C
-    Hcm = mag_obj.mat_type.mag.Hc  # Magnet coercitivity field
+    Hcm_20 = mag_obj.mat_type.mag.get_Hc()  # Magnet coercitivity field
     mur = mag_obj.mat_type.mag.mur_lin
+
+    Hcm = Hcm_20
 
     mat_name = mag_obj.mat_type.name
     if mat_name not in materials:

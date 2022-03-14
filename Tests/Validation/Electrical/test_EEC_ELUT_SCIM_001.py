@@ -65,18 +65,14 @@ def test_EEC_ELUT_SCIM_001():
     # Prepare simulation
     SCIM_001 = load(join(DATA_DIR, "Machine", "SCIM_001.json"))
 
-    # Update material data
-    # (#TODO check also difference of rotor bar section)
-    SCIM_001.stator.winding.conductor.cond_mat.elec.alpha = 0.0039
-    SCIM_001.stator.winding.conductor.cond_mat.elec.rho = 1.73e-8
+    # Check material data
+    assert SCIM_001.stator.winding.conductor.cond_mat.elec.alpha == 0.00393
+    assert SCIM_001.stator.winding.conductor.cond_mat.elec.rho == 1.73e-8
 
-    SCIM_001.stator.winding.conductor.cond_mat.elec.alpha = 0.0039
-    SCIM_001.stator.winding.conductor.cond_mat.elec.rho = 1.73e-8
-
-    SCIM_001.rotor.winding.conductor.cond_mat.elec.alpha = 0.003
-    SCIM_001.rotor.winding.conductor.cond_mat.elec.rho = 2.2e-8
-    SCIM_001.rotor.ring_mat.elec.alpha = 0.003
-    SCIM_001.rotor.ring_mat.elec.rho = 2.2e-8
+    assert SCIM_001.rotor.winding.conductor.cond_mat.elec.alpha == 0.003
+    assert SCIM_001.rotor.winding.conductor.cond_mat.elec.rho == 2.2e-8
+    assert SCIM_001.rotor.ring_mat.elec.alpha == 0.003
+    assert SCIM_001.rotor.ring_mat.elec.rho == 2.2e-8
 
     simu = Simu1(name="test_EEC_ELUT_SCIM_001", machine=SCIM_001)
 

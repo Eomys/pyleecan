@@ -320,12 +320,6 @@ class DMatSetup(Gen_DMatSetup, QDialog):
         if self.mat.mag.mur_lin != self.lf_mur_lin.value():
             self.mat.mag.mur_lin = self.lf_mur_lin.value()
 
-            if self.mat.mag.Brm20 is not None:
-                # Update coercitive field
-                self.mat.mag.Hc = self.mat.mag.Brm20 / (
-                    4 * pi * 1e-7 * self.mat.mag.mur_lin
-                )
-
             self.set_save_needed(is_save_needed=True)
 
     def set_Brm20(self):
@@ -342,12 +336,6 @@ class DMatSetup(Gen_DMatSetup, QDialog):
         """
         if self.mat.mag.Brm20 != self.lf_Brm20.value():
             self.mat.mag.Brm20 = self.lf_Brm20.value()
-
-            if self.mat.mag.mur_lin is not None:
-                # Update coercitive field
-                self.mat.mag.Hc = self.mat.mag.Brm20 / (
-                    4 * pi * 1e-7 * self.mat.mag.mur_lin
-                )
 
             self.set_save_needed(is_save_needed=True)
 

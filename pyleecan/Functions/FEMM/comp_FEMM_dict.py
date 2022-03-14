@@ -1,14 +1,13 @@
-# -*- coding: utf-8 -*-
-
 from ...Classes.LamHole import LamHole
 from ...Classes.LamSlotMag import LamSlotMag
 from ...Classes.MachineSIPMSM import MachineSIPMSM
+
 from ...Functions.FEMM import FEMM_GROUPS
 from ...Functions.FEMM import acsolver, pbtype, precision, minangle
 from ...Functions.labels import ROTOR_LAB
 
 
-def comp_FEMM_dict(machine, Kgeo_fineness, Kmesh_fineness, type_calc_leakage=0):
+def comp_FEMM_dict(machine, Kgeo_fineness, Kmesh_fineness, T_mag, type_calc_leakage=0):
     """Compute the parameters needed for FEMM simulations
 
     Parameters
@@ -21,6 +20,8 @@ def comp_FEMM_dict(machine, Kgeo_fineness, Kmesh_fineness, type_calc_leakage=0):
     Kmesh_fineness : float
         global coefficient to adjust mesh fineness in FEMM
         (1 :default ; > 1 : finner ; < 1 : less fine)
+    T_mag: float
+        Permanent magnet temperature [deg Celsius]
     type_calc_leakage : int
         0 no leakage calculation
         1 calculation using single slot
@@ -46,6 +47,7 @@ def comp_FEMM_dict(machine, Kgeo_fineness, Kmesh_fineness, type_calc_leakage=0):
     FEMM_dict["simu"]["freqpb"] = 0  # setting 2D magnetostatic problem
     # assign unitary length to calculate torque and flux linkage per meter unit
     FEMM_dict["simu"]["Lfemm"] = 1
+    FEMM_dict["simu"]["T_mag"] = T_mag
 
     # Gather all mesh related parameters
     FEMM_dict["mesh"] = dict()
