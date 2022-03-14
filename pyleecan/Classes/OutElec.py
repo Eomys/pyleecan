@@ -115,12 +115,13 @@ class OutElec(FrozenClass):
         Us=None,
         internal=None,
         OP=None,
-        Pem_av_ref=None,
-        Tem_av_ref=None,
+        P_useful=None,
+        Tem_av=None,
         phase_dir=None,
         current_dir=None,
         PWM=None,
         eec=None,
+        P_absorbed=None,
         init_dict=None,
         init_str=None,
     ):
@@ -155,10 +156,10 @@ class OutElec(FrozenClass):
                 internal = init_dict["internal"]
             if "OP" in list(init_dict.keys()):
                 OP = init_dict["OP"]
-            if "Pem_av_ref" in list(init_dict.keys()):
-                Pem_av_ref = init_dict["Pem_av_ref"]
-            if "Tem_av_ref" in list(init_dict.keys()):
-                Tem_av_ref = init_dict["Tem_av_ref"]
+            if "P_useful" in list(init_dict.keys()):
+                P_useful = init_dict["P_useful"]
+            if "Tem_av" in list(init_dict.keys()):
+                Tem_av = init_dict["Tem_av"]
             if "phase_dir" in list(init_dict.keys()):
                 phase_dir = init_dict["phase_dir"]
             if "current_dir" in list(init_dict.keys()):
@@ -167,6 +168,8 @@ class OutElec(FrozenClass):
                 PWM = init_dict["PWM"]
             if "eec" in list(init_dict.keys()):
                 eec = init_dict["eec"]
+            if "P_absorbed" in list(init_dict.keys()):
+                P_absorbed = init_dict["P_absorbed"]
         # Set the properties (value check and convertion are done in setter)
         self.parent = None
         self.axes_dict = axes_dict
@@ -177,12 +180,13 @@ class OutElec(FrozenClass):
         self.Us = Us
         self.internal = internal
         self.OP = OP
-        self.Pem_av_ref = Pem_av_ref
-        self.Tem_av_ref = Tem_av_ref
+        self.P_useful = P_useful
+        self.Tem_av = Tem_av
         self.phase_dir = phase_dir
         self.current_dir = current_dir
         self.PWM = PWM
         self.eec = eec
+        self.P_absorbed = P_absorbed
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -211,8 +215,8 @@ class OutElec(FrozenClass):
             OutElec_str += "OP = " + tmp
         else:
             OutElec_str += "OP = None" + linesep + linesep
-        OutElec_str += "Pem_av_ref = " + str(self.Pem_av_ref) + linesep
-        OutElec_str += "Tem_av_ref = " + str(self.Tem_av_ref) + linesep
+        OutElec_str += "P_useful = " + str(self.P_useful) + linesep
+        OutElec_str += "Tem_av = " + str(self.Tem_av) + linesep
         OutElec_str += "phase_dir = " + str(self.phase_dir) + linesep
         OutElec_str += "current_dir = " + str(self.current_dir) + linesep
         if self.PWM is not None:
@@ -225,6 +229,7 @@ class OutElec(FrozenClass):
             OutElec_str += "eec = " + tmp
         else:
             OutElec_str += "eec = None" + linesep + linesep
+        OutElec_str += "P_absorbed = " + str(self.P_absorbed) + linesep
         return OutElec_str
 
     def __eq__(self, other):
@@ -248,9 +253,9 @@ class OutElec(FrozenClass):
             return False
         if other.OP != self.OP:
             return False
-        if other.Pem_av_ref != self.Pem_av_ref:
+        if other.P_useful != self.P_useful:
             return False
-        if other.Tem_av_ref != self.Tem_av_ref:
+        if other.Tem_av != self.Tem_av:
             return False
         if other.phase_dir != self.phase_dir:
             return False
@@ -259,6 +264,8 @@ class OutElec(FrozenClass):
         if other.PWM != self.PWM:
             return False
         if other.eec != self.eec:
+            return False
+        if other.P_absorbed != self.P_absorbed:
             return False
         return True
 
@@ -321,10 +328,10 @@ class OutElec(FrozenClass):
             diff_list.append(name + ".OP None mismatch")
         elif self.OP is not None:
             diff_list.extend(self.OP.compare(other.OP, name=name + ".OP"))
-        if other._Pem_av_ref != self._Pem_av_ref:
-            diff_list.append(name + ".Pem_av_ref")
-        if other._Tem_av_ref != self._Tem_av_ref:
-            diff_list.append(name + ".Tem_av_ref")
+        if other._P_useful != self._P_useful:
+            diff_list.append(name + ".P_useful")
+        if other._Tem_av != self._Tem_av:
+            diff_list.append(name + ".Tem_av")
         if other._phase_dir != self._phase_dir:
             diff_list.append(name + ".phase_dir")
         if other._current_dir != self._current_dir:
@@ -341,6 +348,8 @@ class OutElec(FrozenClass):
             diff_list.append(name + ".eec None mismatch")
         elif self.eec is not None:
             diff_list.extend(self.eec.compare(other.eec, name=name + ".eec"))
+        if other._P_absorbed != self._P_absorbed:
+            diff_list.append(name + ".P_absorbed")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -359,12 +368,13 @@ class OutElec(FrozenClass):
         S += getsizeof(self.Us)
         S += getsizeof(self.internal)
         S += getsizeof(self.OP)
-        S += getsizeof(self.Pem_av_ref)
-        S += getsizeof(self.Tem_av_ref)
+        S += getsizeof(self.P_useful)
+        S += getsizeof(self.Tem_av)
         S += getsizeof(self.phase_dir)
         S += getsizeof(self.current_dir)
         S += getsizeof(self.PWM)
         S += getsizeof(self.eec)
+        S += getsizeof(self.P_absorbed)
         return S
 
     def as_dict(self, type_handle_ndarray=0, keep_function=False, **kwargs):
@@ -434,8 +444,8 @@ class OutElec(FrozenClass):
                 keep_function=keep_function,
                 **kwargs
             )
-        OutElec_dict["Pem_av_ref"] = self.Pem_av_ref
-        OutElec_dict["Tem_av_ref"] = self.Tem_av_ref
+        OutElec_dict["P_useful"] = self.P_useful
+        OutElec_dict["Tem_av"] = self.Tem_av
         OutElec_dict["phase_dir"] = self.phase_dir
         OutElec_dict["current_dir"] = self.current_dir
         if self.PWM is None:
@@ -454,6 +464,7 @@ class OutElec(FrozenClass):
                 keep_function=keep_function,
                 **kwargs
             )
+        OutElec_dict["P_absorbed"] = self.P_absorbed
         # The class name is added to the dict for deserialisation purpose
         OutElec_dict["__class__"] = "OutElec"
         return OutElec_dict
@@ -471,14 +482,15 @@ class OutElec(FrozenClass):
             self.internal._set_None()
         if self.OP is not None:
             self.OP._set_None()
-        self.Pem_av_ref = None
-        self.Tem_av_ref = None
+        self.P_useful = None
+        self.Tem_av = None
         self.phase_dir = None
         self.current_dir = None
         if self.PWM is not None:
             self.PWM._set_None()
         if self.eec is not None:
             self.eec._set_None()
+        self.P_absorbed = None
 
     def _get_axes_dict(self):
         """getter of axes_dict"""
@@ -727,37 +739,37 @@ class OutElec(FrozenClass):
         """,
     )
 
-    def _get_Pem_av_ref(self):
-        """getter of Pem_av_ref"""
-        return self._Pem_av_ref
+    def _get_P_useful(self):
+        """getter of P_useful"""
+        return self._P_useful
 
-    def _set_Pem_av_ref(self, value):
-        """setter of Pem_av_ref"""
-        check_var("Pem_av_ref", value, "float")
-        self._Pem_av_ref = value
+    def _set_P_useful(self, value):
+        """setter of P_useful"""
+        check_var("P_useful", value, "float")
+        self._P_useful = value
 
-    Pem_av_ref = property(
-        fget=_get_Pem_av_ref,
-        fset=_set_Pem_av_ref,
-        doc=u"""Theoretical Average Electromagnetic Power
+    P_useful = property(
+        fget=_get_P_useful,
+        fset=_set_P_useful,
+        doc=u"""Useful power
 
         :Type: float
         """,
     )
 
-    def _get_Tem_av_ref(self):
-        """getter of Tem_av_ref"""
-        return self._Tem_av_ref
+    def _get_Tem_av(self):
+        """getter of Tem_av"""
+        return self._Tem_av
 
-    def _set_Tem_av_ref(self, value):
-        """setter of Tem_av_ref"""
-        check_var("Tem_av_ref", value, "float")
-        self._Tem_av_ref = value
+    def _set_Tem_av(self, value):
+        """setter of Tem_av"""
+        check_var("Tem_av", value, "float")
+        self._Tem_av = value
 
-    Tem_av_ref = property(
-        fget=_get_Tem_av_ref,
-        fset=_set_Tem_av_ref,
-        doc=u"""Theoretical Average Electromagnetic torque
+    Tem_av = property(
+        fget=_get_Tem_av,
+        fset=_set_Tem_av,
+        doc=u"""Average Electromagnetic torque
 
         :Type: float
         """,
@@ -870,5 +882,23 @@ class OutElec(FrozenClass):
         doc=u"""Electric Equivalent Circuit used for OP resolution
 
         :Type: EEC
+        """,
+    )
+
+    def _get_P_absorbed(self):
+        """getter of P_absorbed"""
+        return self._P_absorbed
+
+    def _set_P_absorbed(self, value):
+        """setter of P_absorbed"""
+        check_var("P_absorbed", value, "float")
+        self._P_absorbed = value
+
+    P_absorbed = property(
+        fget=_get_P_absorbed,
+        fset=_set_P_absorbed,
+        doc=u"""Absorbed power
+
+        :Type: float
         """,
     )

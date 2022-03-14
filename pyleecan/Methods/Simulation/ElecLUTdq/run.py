@@ -98,11 +98,11 @@ def run(self):
         Ploss_ovl = np.sum(Plosses, axis=1)
 
         # Calculate useful power by substracting losses
-        Pem_interp = qs * (Ud * Id + Uq * Iq) - Ploss_ovl
+        Puse_interp = qs * (Ud * Id + Uq * Iq) - Ploss_ovl
 
         # Finding indices of operating points satisfying maximum voltage/current and input power
         i0 = np.logical_and.reduce(
-            (Umax_interp <= U_max, Imax_interp <= I_max, Pem_interp >= Pem_av_ref)
+            (Umax_interp <= U_max, Imax_interp <= I_max, Puse_interp >= Pem_av_ref)
         )
 
         # Finding index of operating points with lowest losses among feasible operating points
@@ -121,12 +121,13 @@ def run(self):
         Iq_min = Iq_vect[jq_min]
         Iq_max = Iq_vect[jq_max]
 
-        delta_Pem = Pem_interp[i0][imin] - Pem_av_ref
+        delta_Pem = Puse_interp[i0][imin] - Pem_av_ref
         niter_Pem = niter_Pem + 1
 
     # Store electrical quantities
-    output.elec.Pem_av_ref = Pem_interp[i0][imin]
-    output.elec.Tem_av_ref = Pem_interp[i0][imin] / (2 * np.pi * OP.N0 / 60)
+    output.elec.P_useful = Puse_interp[i0][imin]
+    output.elec.Tem_av = Puse_interp[i0][imin] / (2 * np.pi * OP.N0 / 60)
+    output.elec.Pj_joules = Plosses[i0, 0][imin]
     output.elec.OP.Id_ref = Id[i0][imin]
     output.elec.OP.Iq_ref = Iq[i0][imin]
     output.elec.OP.Ud_ref = Ud[i0][imin]
@@ -140,3 +141,5 @@ def run(self):
         Protor=Plosses[i0, 3][imin],
         Pprox=Plosses[i0, 4][imin],
     )
+
+    output.elec.P_absorbed = output.elec.P_useful + output.loss.get_loss_overall()

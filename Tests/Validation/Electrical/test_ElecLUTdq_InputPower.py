@@ -55,7 +55,7 @@ def test_ElecLUTdq_InputPower():
             ),
             var_simu=VarLoadCurrent(
                 type_OP_matrix=1,
-                postproc_list=[PostLUT(is_save_LUT=False)],
+                postproc_list=[PostLUT(is_save_LUT=True)],
                 is_keep_all_output=True,
             ),
             mag=MagFEMM(

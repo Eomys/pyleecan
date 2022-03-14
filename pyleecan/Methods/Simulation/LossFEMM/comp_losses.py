@@ -25,7 +25,7 @@ def comp_losses(self, output, freqs):
     group = "stator core"
     if group in coeff_dict and not self.is_get_meshsolution:
         # Use coefficients stored in OutLoss
-        Pstator, Pstator_density = output.loss.get_loss_group(freqs)
+        Pstator, Pstator_density = output.loss.get_loss_group(group, freqs)
     else:
         Pstator, Pstator_density = self.comp_core_losses(
             group, freqs, Ce=self.Ce, Ch=self.Ch
@@ -35,7 +35,7 @@ def comp_losses(self, output, freqs):
     group = "rotor core"
     if group in coeff_dict and not self.is_get_meshsolution:
         # Use coefficients stored in OutLoss
-        Protor, Protor_density = output.loss.get_loss_group(freqs)
+        Protor, Protor_density = output.loss.get_loss_group(group, freqs)
     else:
         Protor, Protor_density = self.comp_core_losses(
             group, freqs, Ce=self.Ce, Ch=self.Ch
@@ -48,7 +48,7 @@ def comp_losses(self, output, freqs):
     # Comp proximity losses in stator windings (same expression as core losses with Ce=C)
     if group in coeff_dict and not self.is_get_meshsolution:
         # Use coefficients stored in OutLoss
-        Pprox, Pprox_density = output.loss.get_loss_group(freqs)
+        Pprox, Pprox_density = output.loss.get_loss_group(group, freqs)
     else:
         Pprox, Pprox_density = self.comp_core_losses(group, freqs, Ce=self.Cp, Ch=0)
 
@@ -57,7 +57,7 @@ def comp_losses(self, output, freqs):
         group = "rotor magnets"
         if group in coeff_dict and not self.is_get_meshsolution:
             # Use coefficients stored in OutLoss
-            Pmagnet, Pmagnet_density = output.loss.get_loss_group(freqs)
+            Pmagnet, Pmagnet_density = output.loss.get_loss_group(group, freqs)
         else:
             Pmagnet, Pmagnet_density = self.comp_magnet_losses(group, freqs)
     else:

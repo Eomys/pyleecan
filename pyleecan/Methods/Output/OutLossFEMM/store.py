@@ -83,4 +83,5 @@ def store(self, out_dict, axes_dict, is_get_meshsolution=False):
             is_same_mesh=True,
             mesh=meshsol.mesh,
             solution=[Loss_density_sd],
+            dimension=2,
         )

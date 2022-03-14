@@ -8618,19 +8618,19 @@
                 "value": null
             },
             {
-                "desc": "Theoretical Average Electromagnetic Power",
+                "desc": "Useful power",
                 "max": "",
                 "min": "",
-                "name": "Pem_av_ref",
+                "name": "P_useful",
                 "type": "float",
                 "unit": "W",
                 "value": null
             },
             {
-                "desc": "Theoretical Average Electromagnetic torque",
+                "desc": "Average Electromagnetic torque",
                 "max": "",
                 "min": "",
-                "name": "Tem_av_ref",
+                "name": "Tem_av",
                 "type": "float",
                 "unit": "N.m",
                 "value": null
@@ -8669,6 +8669,15 @@
                 "name": "eec",
                 "type": "EEC",
                 "unit": "",
+                "value": null
+            },
+            {
+                "desc": "Absorbed power",
+                "max": "",
+                "min": "",
+                "name": "P_absorbed",
+                "type": "float",
+                "unit": "W",
                 "value": null
             }
         ]

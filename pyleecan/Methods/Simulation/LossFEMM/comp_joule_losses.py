@@ -36,10 +36,6 @@ def comp_joule_losses(self, group, freqs):
 
     OP = output.elec.OP
 
-    felec = OP.get_felec()
-
-    p = machine.get_pole_pair_number()
-
     if "stator" in group:
         lam = machine.stator
     else:
@@ -47,12 +43,16 @@ def comp_joule_losses(self, group, freqs):
 
     Rs = lam.comp_resistance_wind(T=self.Tsta)
     qs = lam.winding.qs
-    Lst = lam.L1
 
     # Calculate overall joule losses
     Pjoule = qs * Rs * (OP.Id_ref ** 2 + OP.Iq_ref ** 2)
 
     if self.is_get_meshsolution:
+
+        felec = OP.get_felec()
+        p = machine.get_pole_pair_number()
+        Lst = lam.L1
+
         ms_group = output.mag.meshsolution.get_group(group)
 
         Se = ms_group.mesh[0].get_cell_area()
