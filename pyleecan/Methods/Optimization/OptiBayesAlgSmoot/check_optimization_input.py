@@ -27,15 +27,6 @@ def check_optimization_input(self):
             "The problem has not been defined, please add a problem to OptiGenAlgNsga2Deap."
         )
 
-    """ # Check population size
-    if self.size_pop % 4 > 0:
-        mess = "Change population size from {} to {} to fit with the tournament selection".format(
-            self.size_pop, self.size_pop + (self.size_pop % 4)
-        )
-        self.size_pop += self.size_pop % 4
-
-        logger.warning(mess) """
-
     # Check the problem contains at least one design variable
     if self.problem.obj_func == None or (
         isinstance(self.problem.obj_func, dict) and len(self.problem.obj_func) == 0
