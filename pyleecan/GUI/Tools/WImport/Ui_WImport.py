@@ -9,6 +9,8 @@ from PySide2.QtCore import *
 from PySide2.QtGui import *
 from PySide2.QtWidgets import *
 
+from ....GUI.Tools.WTableData.DTableData import DTableData
+
 from pyleecan.GUI.Resources import pyleecan_rc
 
 
@@ -32,17 +34,12 @@ class Ui_WImport(object):
 
         self.horizontalLayout.addWidget(self.in_param)
 
-        self.c_type_import = QComboBox(WImport)
-        self.c_type_import.setObjectName(u"c_type_import")
-
-        self.horizontalLayout.addWidget(self.c_type_import)
-
         self.main_layout.addLayout(self.horizontalLayout)
 
-        self.w_import = QWidget(WImport)
-        self.w_import.setObjectName(u"w_import")
+        self.tab_values = DTableData(WImport)
+        self.tab_values.setObjectName(u"tab_values")
 
-        self.main_layout.addWidget(self.w_import)
+        self.main_layout.addWidget(self.tab_values)
 
         self.retranslateUi(WImport)
 

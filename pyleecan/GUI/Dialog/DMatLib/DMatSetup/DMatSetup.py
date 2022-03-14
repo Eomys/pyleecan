@@ -184,6 +184,7 @@ class DMatSetup(Gen_DMatSetup, QDialog):
         self.w_BH_import.param_name = "BH_curve"
         self.w_BH_import.expected_shape = (None, 2)
         self.w_BH_import.update()
+        # self.mat.mag.BH_curve.get_data()
 
         # Hide useless widget
         self.in_epsr.hide()

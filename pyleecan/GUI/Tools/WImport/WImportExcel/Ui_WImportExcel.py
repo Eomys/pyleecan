@@ -9,8 +9,6 @@ from PySide2.QtCore import *
 from PySide2.QtGui import *
 from PySide2.QtWidgets import *
 
-from .....GUI.Tools.WPathSelector.WPathSelector import WPathSelector
-
 from pyleecan.GUI.Resources import pyleecan_rc
 
 
@@ -18,7 +16,7 @@ class Ui_WImportExcel(object):
     def setupUi(self, WImportExcel):
         if not WImportExcel.objectName():
             WImportExcel.setObjectName(u"WImportExcel")
-        WImportExcel.resize(509, 511)
+        WImportExcel.resize(509, 486)
         sizePolicy = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Minimum)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -27,11 +25,6 @@ class Ui_WImportExcel(object):
         WImportExcel.setMinimumSize(QSize(0, 0))
         self.verticalLayout_3 = QVBoxLayout(WImportExcel)
         self.verticalLayout_3.setObjectName(u"verticalLayout_3")
-        self.w_file_path = WPathSelector(WImportExcel)
-        self.w_file_path.setObjectName(u"w_file_path")
-
-        self.verticalLayout_3.addWidget(self.w_file_path)
-
         self.horizontalLayout_2 = QHBoxLayout()
         self.horizontalLayout_2.setObjectName(u"horizontalLayout_2")
         self.in_sheet = QLabel(WImportExcel)
@@ -73,80 +66,41 @@ class Ui_WImportExcel(object):
 
         self.verticalLayout_3.addLayout(self.horizontalLayout_2)
 
-        self.g_axe1 = QGroupBox(WImportExcel)
-        self.g_axe1.setObjectName(u"g_axe1")
-        self.verticalLayout = QVBoxLayout(self.g_axe1)
-        self.verticalLayout.setObjectName(u"verticalLayout")
-        self.horizontalLayout_3 = QHBoxLayout()
-        self.horizontalLayout_3.setObjectName(u"horizontalLayout_3")
-        self.c_axe1_name = QComboBox(self.g_axe1)
-        self.c_axe1_name.setObjectName(u"c_axe1_name")
-
-        self.horizontalLayout_3.addWidget(self.c_axe1_name)
-
-        self.c_axe1_type = QComboBox(self.g_axe1)
-        self.c_axe1_type.setObjectName(u"c_axe1_type")
-
-        self.horizontalLayout_3.addWidget(self.c_axe1_type)
-
-        self.verticalLayout.addLayout(self.horizontalLayout_3)
-
-        self.w_axe1 = QWidget(self.g_axe1)
-        self.w_axe1.setObjectName(u"w_axe1")
-
-        self.verticalLayout.addWidget(self.w_axe1)
-
-        self.verticalLayout_3.addWidget(self.g_axe1)
-
-        self.g_axe2 = QGroupBox(WImportExcel)
-        self.g_axe2.setObjectName(u"g_axe2")
-        self.verticalLayout_2 = QVBoxLayout(self.g_axe2)
-        self.verticalLayout_2.setObjectName(u"verticalLayout_2")
-        self.horizontalLayout_4 = QHBoxLayout()
-        self.horizontalLayout_4.setObjectName(u"horizontalLayout_4")
-        self.c_axe2_name = QComboBox(self.g_axe2)
-        self.c_axe2_name.setObjectName(u"c_axe2_name")
-
-        self.horizontalLayout_4.addWidget(self.c_axe2_name)
-
-        self.c_axe2_type = QComboBox(self.g_axe2)
-        self.c_axe2_type.setObjectName(u"c_axe2_type")
-
-        self.horizontalLayout_4.addWidget(self.c_axe2_type)
-
-        self.verticalLayout_2.addLayout(self.horizontalLayout_4)
-
-        self.w_axe2 = QWidget(self.g_axe2)
-        self.w_axe2.setObjectName(u"w_axe2")
-
-        self.verticalLayout_2.addWidget(self.w_axe2)
-
-        self.verticalLayout_3.addWidget(self.g_axe2)
-
         self.horizontalLayout = QHBoxLayout()
         self.horizontalLayout.setObjectName(u"horizontalLayout")
+        self.in_order = QLabel(WImportExcel)
+        self.in_order.setObjectName(u"in_order")
+
+        self.horizontalLayout.addWidget(self.in_order)
+
+        self.c_order = QComboBox(WImportExcel)
+        self.c_order.addItem("")
+        self.c_order.addItem("")
+        self.c_order.setObjectName(u"c_order")
+
+        self.horizontalLayout.addWidget(self.c_order)
+
+        self.verticalLayout_3.addLayout(self.horizontalLayout)
+
+        self.horizontalLayout_3 = QHBoxLayout()
+        self.horizontalLayout_3.setObjectName(u"horizontalLayout_3")
         self.horizontalSpacer = QSpacerItem(
             40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum
         )
 
-        self.horizontalLayout.addItem(self.horizontalSpacer)
+        self.horizontalLayout_3.addItem(self.horizontalSpacer)
 
-        self.b_convert = QPushButton(WImportExcel)
-        self.b_convert.setObjectName(u"b_convert")
+        self.b_ok = QPushButton(WImportExcel)
+        self.b_ok.setObjectName(u"b_ok")
 
-        self.horizontalLayout.addWidget(self.b_convert)
+        self.horizontalLayout_3.addWidget(self.b_ok)
 
-        self.b_tab = QPushButton(WImportExcel)
-        self.b_tab.setObjectName(u"b_tab")
+        self.b_cancel = QPushButton(WImportExcel)
+        self.b_cancel.setObjectName(u"b_cancel")
 
-        self.horizontalLayout.addWidget(self.b_tab)
+        self.horizontalLayout_3.addWidget(self.b_cancel)
 
-        self.b_plot = QPushButton(WImportExcel)
-        self.b_plot.setObjectName(u"b_plot")
-
-        self.horizontalLayout.addWidget(self.b_plot)
-
-        self.verticalLayout_3.addLayout(self.horizontalLayout)
+        self.verticalLayout_3.addLayout(self.horizontalLayout_3)
 
         self.retranslateUi(WImportExcel)
 
@@ -156,7 +110,7 @@ class Ui_WImportExcel(object):
 
     def retranslateUi(self, WImportExcel):
         WImportExcel.setWindowTitle(
-            QCoreApplication.translate("WImportExcel", u"Form", None)
+            QCoreApplication.translate("WImportExcel", u"Import from Excel", None)
         )
         self.in_sheet.setText(
             QCoreApplication.translate("WImportExcel", u"Sheet: ", None)
@@ -164,20 +118,24 @@ class Ui_WImportExcel(object):
         self.in_range.setText(
             QCoreApplication.translate("WImportExcel", u"Column range: ", None)
         )
-        self.g_axe1.setTitle(
-            QCoreApplication.translate("WImportExcel", u"First axe", None)
+        self.le_range.setPlaceholderText(
+            QCoreApplication.translate("WImportExcel", u"A6:B100", None)
         )
-        self.g_axe2.setTitle(
-            QCoreApplication.translate("WImportExcel", u"Second axe", None)
+        self.in_order.setText(
+            QCoreApplication.translate(
+                "WImportExcel", u"In which order is the data :", None
+            )
         )
-        self.b_convert.setText(
-            QCoreApplication.translate("WImportExcel", u"Convert to Table", None)
+        self.c_order.setItemText(
+            0, QCoreApplication.translate("WImportExcel", u"B(H)", None)
         )
-        self.b_tab.setText(
-            QCoreApplication.translate("WImportExcel", u"Preview Table", None)
+        self.c_order.setItemText(
+            1, QCoreApplication.translate("WImportExcel", u"H(B)", None)
         )
-        self.b_plot.setText(
-            QCoreApplication.translate("WImportExcel", u"Preview Plot", None)
+
+        self.b_ok.setText(QCoreApplication.translate("WImportExcel", u"Ok", None))
+        self.b_cancel.setText(
+            QCoreApplication.translate("WImportExcel", u"Cancel", None)
         )
 
     # retranslateUi
