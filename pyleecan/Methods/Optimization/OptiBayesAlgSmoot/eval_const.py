@@ -19,5 +19,4 @@ def eval_const(solver, constraint, input_x):
         elif constraint.type_const == ">=":
             constraint_values.append(constraint.value - const_value)
 
-    res = np.array(constraint_values)
-    return res.T
+    return constraint_values
