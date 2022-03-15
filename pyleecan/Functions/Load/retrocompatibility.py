@@ -72,10 +72,10 @@ def _search_and_update(obj_dict, parent=None, parent_index=None, update_dict=Non
 
 
 ############################################
-# V 1.3.8 => 1.3.9
+# V 1.3.7 => 1.3.8
 # Introducing OP object (assume all is OPdq)
 ############################################
-OP_VERSION = "1.3.9"
+OP_VERSION = "1.3.8"
 
 
 def is_OP_dict(obj_dict):
@@ -88,13 +88,17 @@ def is_OP_dict(obj_dict):
 
 
 def convert_OP(obj_dict):
-    N0 = obj_dict.pop("N0")
-    Id = obj_dict.pop("Id_ref")
-    Iq = obj_dict.pop("Iq_ref")
-    Tem = obj_dict.pop("Tem_av_ref")
+    obj_dict_new = obj_dict.copy()
+    Class_obj = import_class("pyleecan.Classes", obj_dict_new["__class__"])
+    N0 = obj_dict_new.pop("N0")
+    Id = obj_dict_new.pop("Id_ref")
+    Iq = obj_dict_new.pop("Iq_ref")
+    Tem = obj_dict_new.pop("Tem_av_ref")
+    class_obj = Class_obj(init_dict=obj_dict_new)
     OPdq = import_class("pyleecan.Classes", "OPdq")
     OP = OPdq(N0=N0, Id_ref=Id, Iq_ref=Iq, Tem_av_ref=Tem)
-    return OP
+    class_obj.OP = OP
+    return class_obj
 
 
 ############################################
