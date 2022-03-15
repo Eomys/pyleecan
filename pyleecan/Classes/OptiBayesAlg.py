@@ -33,7 +33,8 @@ class OptiBayesAlg(OptiSolver):
 
     def __init__(
         self,
-        nb_iter=10,
+        nb_iter=5,
+        nb_start=30,
         criterion="PI",
         kernel=0,
         problem=-1,
@@ -60,6 +61,8 @@ class OptiBayesAlg(OptiSolver):
             # Overwrite default value with init_dict content
             if "nb_iter" in list(init_dict.keys()):
                 nb_iter = init_dict["nb_iter"]
+            if "nb_start" in list(init_dict.keys()):
+                nb_start = init_dict["nb_start"]
             if "criterion" in list(init_dict.keys()):
                 criterion = init_dict["criterion"]
             if "kernel" in list(init_dict.keys()):
@@ -74,6 +77,7 @@ class OptiBayesAlg(OptiSolver):
                 is_keep_all_output = init_dict["is_keep_all_output"]
         # Set the properties (value check and convertion are done in setter)
         self.nb_iter = nb_iter
+        self.nb_start = nb_start
         self.criterion = criterion
         self.kernel = kernel
         # Call OptiSolver init
@@ -93,6 +97,7 @@ class OptiBayesAlg(OptiSolver):
         # Get the properties inherited from OptiSolver
         OptiBayesAlg_str += super(OptiBayesAlg, self).__str__()
         OptiBayesAlg_str += "nb_iter = " + str(self.nb_iter) + linesep
+        OptiBayesAlg_str += "nb_start = " + str(self.nb_start) + linesep
         OptiBayesAlg_str += 'criterion = "' + str(self.criterion) + '"' + linesep
         OptiBayesAlg_str += "kernel = " + str(self.kernel) + linesep
         return OptiBayesAlg_str
@@ -107,6 +112,8 @@ class OptiBayesAlg(OptiSolver):
         if not super(OptiBayesAlg, self).__eq__(other):
             return False
         if other.nb_iter != self.nb_iter:
+            return False
+        if other.nb_start != self.nb_start:
             return False
         if other.criterion != self.criterion:
             return False
@@ -127,6 +134,8 @@ class OptiBayesAlg(OptiSolver):
         diff_list.extend(super(OptiBayesAlg, self).compare(other, name=name))
         if other._nb_iter != self._nb_iter:
             diff_list.append(name + ".nb_iter")
+        if other._nb_start != self._nb_start:
+            diff_list.append(name + ".nb_start")
         if other._criterion != self._criterion:
             diff_list.append(name + ".criterion")
         if other._kernel != self._kernel:
@@ -143,6 +152,7 @@ class OptiBayesAlg(OptiSolver):
         # Get size of the properties inherited from OptiSolver
         S += super(OptiBayesAlg, self).__sizeof__()
         S += getsizeof(self.nb_iter)
+        S += getsizeof(self.nb_start)
         S += getsizeof(self.criterion)
         S += getsizeof(self.kernel)
         return S
@@ -165,6 +175,7 @@ class OptiBayesAlg(OptiSolver):
             **kwargs
         )
         OptiBayesAlg_dict["nb_iter"] = self.nb_iter
+        OptiBayesAlg_dict["nb_start"] = self.nb_start
         OptiBayesAlg_dict["criterion"] = self.criterion
         OptiBayesAlg_dict["kernel"] = self.kernel
         # The class name is added to the dict for deserialisation purpose
@@ -176,6 +187,7 @@ class OptiBayesAlg(OptiSolver):
         """Set all the properties to None (except pyleecan object)"""
 
         self.nb_iter = None
+        self.nb_start = None
         self.criterion = None
         self.kernel = None
         # Set to None the properties inherited from OptiSolver
@@ -187,7 +199,7 @@ class OptiBayesAlg(OptiSolver):
 
     def _set_nb_iter(self, value):
         """setter of nb_iter"""
-        check_var("nb_iter", value, "int")
+        check_var("nb_iter", value, "int", Vmin=1)
         self._nb_iter = value
 
     nb_iter = property(
@@ -196,6 +208,26 @@ class OptiBayesAlg(OptiSolver):
         doc=u"""Number of iterations
 
         :Type: int
+        :min: 1
+        """,
+    )
+
+    def _get_nb_start(self):
+        """getter of nb_start"""
+        return self._nb_start
+
+    def _set_nb_start(self, value):
+        """setter of nb_start"""
+        check_var("nb_start", value, "int", Vmin=1)
+        self._nb_start = value
+
+    nb_start = property(
+        fget=_get_nb_start,
+        fset=_set_nb_start,
+        doc=u"""Number of starting points
+
+        :Type: int
+        :min: 1
         """,
     )
 

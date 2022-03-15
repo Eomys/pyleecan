@@ -1,4 +1,5 @@
 Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constante Name,Constante Value,Description classe,Classe fille
-nb_iter,-,Number of iterations,1,int,10,,,,Optimization,OptiSolver,,VERSION,1,Bayesian algorithm class,
+nb_iter,-,Number of iterations,1,int,5,1,,,Optimization,OptiSolver,,VERSION,1,Bayesian algorithm class,
+nb_start,-,Number of starting points,1,int,30,1,,,,,,,,,
 criterion,-,Point selection criteria,1,str,PI,,,,,,,,,,
 kernel,-,Type of kernel,1,int,0,0,0,,,,,,,,

@@ -100,20 +100,19 @@ def solve(self):
         n_iter = self.nb_iter
         xlimits = np.array([var.space for var in self.problem.design_var])
 
-        const = [
-            lambda x: self.eval_const(constraint, x)
-            for constraint in self.problem.constraint
-        ]
+        const = []
+        for constraint in self.problem.constraint:
+            const.append(lambda x: self.eval_const(constraint, x))
 
         moo = MOO(
-            n_iter=5,
+            n_iter=self.nb_iter,
             criterion=self.criterion,
-            n_start=30,
+            n_start=self.nb_start,
             xlimits=xlimits,
             const=const,
             verbose=True,
-            n_gen=10 * self.nb_gen,
-            pop_size=4 * self.size_pop,
+            n_gen=self.nb_gen,
+            pop_size=self.size_pop,
         )
 
         moo.optimize(fun=self.evaluate)

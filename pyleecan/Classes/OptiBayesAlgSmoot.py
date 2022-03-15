@@ -104,7 +104,8 @@ class OptiBayesAlgSmoot(OptiBayesAlg):
         self,
         size_pop=10,
         nb_gen=10,
-        nb_iter=10,
+        nb_iter=5,
+        nb_start=30,
         criterion="PI",
         kernel=0,
         problem=-1,
@@ -135,6 +136,8 @@ class OptiBayesAlgSmoot(OptiBayesAlg):
                 nb_gen = init_dict["nb_gen"]
             if "nb_iter" in list(init_dict.keys()):
                 nb_iter = init_dict["nb_iter"]
+            if "nb_start" in list(init_dict.keys()):
+                nb_start = init_dict["nb_start"]
             if "criterion" in list(init_dict.keys()):
                 criterion = init_dict["criterion"]
             if "kernel" in list(init_dict.keys()):
@@ -153,6 +156,7 @@ class OptiBayesAlgSmoot(OptiBayesAlg):
         # Call OptiBayesAlg init
         super(OptiBayesAlgSmoot, self).__init__(
             nb_iter=nb_iter,
+            nb_start=nb_start,
             criterion=criterion,
             kernel=kernel,
             problem=problem,

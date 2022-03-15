@@ -125,7 +125,7 @@ def test_zdt3_Bayes():
         simu=simu, design_var=my_vars, obj_func=objs, eval_func=evaluate
     )
 
-    solver = OptiBayesAlgSmoot(problem=my_prob)
+    solver = OptiBayesAlgSmoot(problem=my_prob, nb_start=300, nb_iter=10, nb_gen=100, size_pop=40)
     res = solver.solve()
 
     #
@@ -144,7 +144,7 @@ def test_zdt3_Bayes():
     axs[0].set_title("Pyleecan results")
     axs[0].set_xlabel(r"$f_1(x)$")
     axs[0].set_ylabel(r"$f_2(x)$")
-    fig.savefig(join(save_path, "test_zdt3.png"))
+    fig.savefig(join(save_path, "test_zdt3_bayes.png"))
 
 if __name__ == "__main__":
     test_zdt3_Bayes()
