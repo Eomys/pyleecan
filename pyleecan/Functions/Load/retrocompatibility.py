@@ -5,42 +5,68 @@ from ...loggers import GUI_LOG_NAME
 
 
 def convert_init_dict(init_dict):
-    """Convert an init_dict from an old version of pyleecan to the current one"""
-    _search_(init_dict)
+    """Convert an init_dict from an old version of pyleecan to the current one
+    (modification in place)
 
-    # for obj_dict in convert_list:
-    #     if is_Winding_dict(obj_dict):
-    #         convert_Winding(obj_dict)
-    #     elif is_HoleUD_dict(obj_dict):
-    #         convert_HoleUD(obj_dict)
+    Parameters
+    ----------
+    init_dict : dict
+        The dictionnary to update
+    """
+    # Check file version to know what to update
+    if "__version__" in init_dict:
+        file_version = init_dict["__version__"]
+    else:
+        file_version = None
+    update_dict = create_update_dict(file_version)
+    # If nothing to update, search is not called
+    if any(update_dict.values()):
+        _search_and_update(init_dict, update_dict=update_dict)
 
 
-def _search_(obj, parent=None, parent_index=None):
+def _search_and_update(obj_dict, parent=None, parent_index=None, update_dict=None):
+    """Scan a dict and its sub dict to update the content
+    (update in place)
+
+    Parameters
+    ----------
+    obj_dict : dict
+        Dictionnary of the object to update
+    parent : dict/list
+        Object containing the obj_dict (to update)
+    parent_index : str/int
+        Key or index of the obj_dict in the parent
+    update_dict : dict
+        Dictionnary Key: What to update, value: is update needed
+
+    """
     # add to list for later conversion
-    if is_HoleUD_dict(obj):
-        parent[parent_index] = convert_HoleUD(obj)
-        # convert_list.append(obj)
-    elif is_Winding_dict(obj):
+    if update_dict["HoleUD"] and is_HoleUD_dict(obj_dict):
+        parent[parent_index] = convert_HoleUD(obj_dict)
+    elif update_dict["Winding"] and is_Winding_dict(obj_dict):
         if (
             parent is not None
             and "slot" in parent.keys()
             and "Zs" in parent["slot"].keys()
         ):
             # Add Zs for wind_mat generation
-            obj["Zs"] = parent["slot"]["Zs"]
-        parent[parent_index] = convert_Winding(obj)
-        # convert_list.append(obj)
+            obj_dict["Zs"] = parent["slot"]["Zs"]
+        parent[parent_index] = convert_Winding(obj_dict)
     else:
         # walk through the dict
-        for key, value in obj.items():
+        for key, value in obj_dict.items():
             if isinstance(value, dict):
                 # recursively search the dict
-                _search_(value, parent=obj, parent_index=key)
+                _search_and_update(
+                    value, parent=obj_dict, parent_index=key, update_dict=update_dict
+                )
             elif isinstance(value, list):
-                for i, item in enumerate(value):
+                for ii, item in enumerate(value):
                     if isinstance(item, dict):
                         # recursively search the dict
-                        _search_(item, parent=value, parent_index=i)
+                        _search_and_update(
+                            item, parent=value, parent_index=ii, update_dict=update_dict
+                        )
 
 
 ############################################
@@ -48,6 +74,9 @@ def _search_(obj, parent=None, parent_index=None):
 # Updating HoleUD surface label
 # Label reorganization
 ############################################
+HoleUD_VERSION = "1.4.0"
+
+
 def is_HoleUD_dict(obj_dict):
     """Check if the object need to be updated for HoleUD"""
     if "__class__" in obj_dict.keys() and obj_dict["__class__"] == "HoleUD":
@@ -79,6 +108,9 @@ def convert_HoleUD(hole_dict):
 # v 1.2.1 => 1.3.0
 # Winding star of slot
 ######################
+WIND_VERSION = "1.3.0"
+
+
 def is_Winding_dict(obj_dict):
     """Check if the object need to be updated for Winding"""
     return (
@@ -180,6 +212,7 @@ def convert_Winding(wind_dict):
         Winding_class = import_class("pyleecan.Classes", wind_dict_new["__class__"])
         return Winding_class(init_dict=wind_dict_new)
 
+
 def is_before_version(ref_version, check_version):
     """Check if a version str is before another version str
 
@@ -205,3 +238,26 @@ def is_before_version(ref_version, check_version):
             return True
         elif ref_list[ii] < check_list[ii]:
             return False
+
+
+def create_update_dict(file_version):
+    """Create a dict to know which parameter to update
+
+    Parameters
+    ----------
+    file_version : str
+        Version of the file to update
+
+    Returns
+    -------
+    update_dict : dict
+        Dictionnary Key: What to update, value: is update needed
+    """
+    update_dict = dict()
+    if file_version is None:
+        update_dict["Winding"] = True
+        update_dict["HoleUD"] = True
+    else:
+        update_dict["Winding"] = is_before_version(WIND_VERSION, file_version)
+        update_dict["HoleUD"] = is_before_version(HoleUD_VERSION, file_version)
+    return update_dict
