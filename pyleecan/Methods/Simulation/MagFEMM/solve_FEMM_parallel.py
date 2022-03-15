@@ -110,7 +110,7 @@ def solve_FEMM_parallel(
 
         """
 
-        B_elem, H_elem, mu_elem, A_node, meshFEMM, groups = self.solve_FEMM(
+        B_elem, H_elem, mu_elem, A_node, meshFEMM, groups, A_elem = self.solve_FEMM(
             femm_handler,
             output,
             out_dict,
@@ -127,11 +127,12 @@ def solve_FEMM_parallel(
             end_t=end_t,
         )
 
-        return B_elem, H_elem, mu_elem, A_node, meshFEMM, groups
+        return B_elem, H_elem, mu_elem, A_node, meshFEMM, groups, A_elem
 
     # Init mesh solution as None since array allocation can only be done once
     # number of elements is known, i.e. after first time step resolution
-    B_elem, H_elem, mu_elem, meshFEMM, groups, A_node = (
+    B_elem, H_elem, mu_elem, meshFEMM, groups, A_node, A_elem = (
+        None,
         None,
         None,
         None,
@@ -204,6 +205,7 @@ def solve_FEMM_parallel(
         A_node = concatenate([res[3] for res in results], axis=0)
         meshFEMM = results[0][4]
         groups = results[0][5]
+        A_elem = concatenate([res[6] for res in results], axis=0)
 
     # Remove temporary .fem and .ans files
     for w in range(nb_worker, 0, -1):
@@ -219,4 +221,4 @@ def solve_FEMM_parallel(
             filename = fem_file[:-4] + "_" + str(w) + ".ans"
             self.get_logger().warning("Could not remove file: " + filename)
 
-    return B_elem, H_elem, mu_elem, A_node, meshFEMM, groups
+    return B_elem, H_elem, mu_elem, A_node, meshFEMM, groups, A_elem

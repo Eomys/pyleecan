@@ -1,4 +1,6 @@
-from numpy import sum as np_sum, abs as np_abs, matmul
+from numpy import sum as np_sum, matmul
+
+from SciDataTool import DataTime
 
 
 def comp_core_losses(self, group, freqs, Ce=None, Ch=None):
@@ -33,9 +35,6 @@ def comp_core_losses(self, group, freqs, Ce=None, Ch=None):
     else:
         output = self.parent.parent
 
-    if output.mag is None:
-        raise Exception("Cannot calculate core losses if OutMag.mesholution is None")
-
     machine = output.simu.machine
 
     per_a = output.geo.per_a
@@ -47,11 +46,53 @@ def comp_core_losses(self, group, freqs, Ce=None, Ch=None):
     else:
         Lst = machine.rotor.L1
 
-    # Get magnetic flux density complex amplitude over frequency and for each element center in current group
-    Bval_fft, Se = output.mag.get_fft_from_meshsol(group, label="B")
+    if output.mag is None:
+        raise Exception("Cannot calculate core losses if OutMag is None")
 
-    # Squared flux density
-    Bfft_square = np_abs(Bval_fft) ** 2
+    if output.mag.meshsolution is None:
+        raise Exception("Cannot calculate core losses if OutMag.meshsolution is None")
+    else:
+        meshsol = output.mag.meshsolution
+
+    group_list = list(meshsol.group.keys())
+
+    if group not in group_list:
+        raise Exception("Cannot calculate core losses for group=" + group)
+
+    label_list = [sol.label for sol in meshsol.solution]
+
+    if "B" not in label_list:
+        raise Exception("Cannot calculate core losses if B is not in meshsolution")
+    else:
+        ind = label_list.index("B")
+
+    # Get element indices associated to group
+    Igrp = meshsol.group[group]
+
+    # Get element surface associated to group
+    Se = meshsol.mesh[0].get_cell_area()[Igrp]
+
+    # Get magnetic flux density complex amplitude over frequency and for each element center in current group
+    Bvect = meshsol.solution[ind].field
+    Bx = Bvect.components["comp_x"].values[:, Igrp, :]
+    By = Bvect.components["comp_y"].values[:, Igrp, :]
+    Bsquare = Bx ** 2 + By ** 2
+
+    # Put Bsquare in DataTime to take FFT over time
+    axes_list = Bvect.get_axes()
+    Time = axes_list[0].copy()
+    if "antiperiod" in axes_list[0].symmetries:
+        Time.symmetries = {"period": axes_list[0].symmetries["antiperiod"]}
+    Indice = axes_list[1].copy()
+    Indice.values = axes_list[1].values[Igrp]
+    Bsquare_dt = DataTime(
+        name=group + " flux density magnitude",
+        symbol="B",
+        unit="T",
+        axes=[Time, Indice, axes_list[2]],
+        values=Bsquare,
+    )
+    Bfft_square = Bsquare_dt.get_magnitude_along("freqs", "indice", "z[0]")["B"]
 
     # Eddy-current loss density (or proximity loss density) for each frequency and element
     Pcore_density = Ce * freqs[:, None] ** 2 * Bfft_square
