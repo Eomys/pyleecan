@@ -27,17 +27,6 @@
   </property>
   <layout class="QVBoxLayout" name="main_layout">
    <item>
-    <layout class="QHBoxLayout" name="horizontalLayout">
-     <item>
-      <widget class="QLabel" name="in_param">
-       <property name="text">
-        <string>Param_name: </string>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </item>
-   <item>
     <widget class="DTableData" name="tab_values" native="true"/>
    </item>
   </layout>
@@ -52,7 +41,6 @@
  </customwidgets>
  <resources>
   <include location="../../Resources/pyleecan.qrc"/>
-  <include location="../../../Resources/pyleecan.qrc"/>
   <include location="../../../Resources/pyleecan.qrc"/>
  </resources>
  <connections/>

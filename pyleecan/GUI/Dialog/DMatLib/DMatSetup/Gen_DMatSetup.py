@@ -372,17 +372,23 @@ class Gen_DMatSetup(Ui_DMatSetup):
         self.lf_mur_lin.setToolTip(txt)
 
         # Setup of in_Brm20
-        txt = self.tr(u"""magnet remanence induction at 20degC""")
+        txt = self.tr(
+            u"""magnet remanence induction at 20degC (calculated from mur_lin and Hc if not provided)"""
+        )
         self.in_Brm20.setWhatsThis(txt)
         self.in_Brm20.setToolTip(txt)
 
         # Setup of lf_Brm20
-        txt = self.tr(u"""magnet remanence induction at 20degC""")
+        txt = self.tr(
+            u"""magnet remanence induction at 20degC (calculated from mur_lin and Hc if not provided)"""
+        )
         self.lf_Brm20.setWhatsThis(txt)
         self.lf_Brm20.setToolTip(txt)
 
         # Setup of unit_Brm20
-        txt = self.tr(u"""magnet remanence induction at 20degC""")
+        txt = self.tr(
+            u"""magnet remanence induction at 20degC (calculated from mur_lin and Hc if not provided)"""
+        )
         self.unit_Brm20.setWhatsThis(txt)
         self.unit_Brm20.setToolTip(txt)
 

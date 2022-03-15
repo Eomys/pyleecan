@@ -8,9 +8,13 @@ from PySide2.QtWidgets import QMessageBox
 from ..WImport.WImportExcel.WImportExcel import WImportExcel
 import matplotlib.pyplot as plt
 from ....Functions.Plot.set_plot_gui_icon import set_plot_gui_icon
+from PySide2.QtCore import Signal
 
 
 class DTableData(Ui_DTableData, QDialog):
+
+    saveNeeded = Signal()
+
     def __init__(
         self,
         parent=None,
@@ -22,6 +26,7 @@ class DTableData(Ui_DTableData, QDialog):
         shape_max=(None, None),
         col_header=None,
         unit_order=None,
+        button_plot_title="",
     ):
         """Initialization of the widget
 
@@ -51,7 +56,7 @@ class DTableData(Ui_DTableData, QDialog):
         self.Vmax = Vmax
         self.def_value = 0  # Value to set in empty cell (get_data)
         self.title = title  # To change the dialog title
-        self.plot_title = None
+        self.button_plot_title = button_plot_title
         self.shape_min = shape_min
         self.shape_max = shape_max
         self.col_header = col_header
@@ -77,6 +82,7 @@ class DTableData(Ui_DTableData, QDialog):
         self.in_col.setText(self.N_col_txt)
         self.in_row.setText(self.N_row_txt)
 
+        self.b_plot.setText("Plot " + self.button_plot_title)
         # Set row shape limit
         Rmin = 1
         Rmax = 999999999
@@ -141,6 +147,8 @@ class DTableData(Ui_DTableData, QDialog):
 
         for ii in range(nrow):
             for jj in range(ncol):
+                if self.w_tab.cellWidget(ii, jj) is not None:
+                    self.w_tab.cellWidget(ii, jj).editingFinished.disconnect()
                 self.w_tab.setCellWidget(ii, jj, FloatEdit())
                 # Add the min/max to the widget
                 self.w_tab.cellWidget(ii, jj).validator().setBottom(self.Vmin)
@@ -150,7 +158,7 @@ class DTableData(Ui_DTableData, QDialog):
                 # Enable / Disable
                 self.w_tab.cellWidget(ii, jj).setEnabled(self.isEnabled_widget)
                 # Connect the slot
-                # self.w_tab.cellWidget(ii, jj).editingFinished.connect(self.set_data)
+                self.w_tab.cellWidget(ii, jj).editingFinished.connect(self.emit_save)
 
         if ncol == 2:
             self.b_plot.setHidden(False)
@@ -343,8 +351,8 @@ class DTableData(Ui_DTableData, QDialog):
             plt.ylabel(self.col_header[1])
             plt.xlabel(self.col_header[0])
             fig.show()
-        if self.plot_title is not None:
-            fig.canvas.manager.set_window_title( self.plot_title )
+        if self.col_header is not None:
+            fig.canvas.manager.set_window_title(self.unit_order[0] + " plot")
         set_plot_gui_icon()
 
     def accept(self):

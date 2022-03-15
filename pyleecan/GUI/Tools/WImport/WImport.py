@@ -18,31 +18,32 @@ class WImport(Ui_WImport, QWidget):
         QWidget.__init__(self, parent=parent)
         self.setupUi(self)
 
-        self.obj = None  # Object to edit
-        self.verbose_name = ""  # Name to display / adapt the GUI
-        self.plot_title = None  # Name to use for the plot
-        # List to enforce a shape, [None, 2] enforce 2D matrix with 2 columns
-        self.expected_shape = None
-        self.param_name = ""  # Name of the quantity to set
-        self.in_param.setText("B(H) curve definition")
-        # Setup tab values
-        self.tab_values.setWindowFlags(self.tab_values.windowFlags() & ~Qt.Dialog)
-        self.tab_values.title = self.in_param.text()
-        self.tab_values.N_row_txt = "Nb of Points"
-        self.tab_values.shape_max = (None, 2)
-        self.tab_values.col_header = ["B-curve(T)", "H-curve(A/m)"]
-        self.tab_values.unit_order = ["B(H)", "H(B)"]
-        self.tab_values.si_col.hide()
-        self.tab_values.in_col.hide()
-        self.tab_values.b_close.hide()
-        self.tab_values.b_import.setHidden(False)
-        self.tab_values.b_export.setHidden(False)
-        self.tab_values.update()
+    # NOT USED ANYMORE
 
-    def emit_save(self):
-        """Send a saveNeeded signal to the DMachineSetup"""
-        self.saveNeeded.emit()
+    #     self.obj = None  # Object to edit
+    #     self.verbose_name = ""  # Name to display / adapt the GUI
+    #     self.plot_title = None  # Name to use for the plot
+    #     # List to enforce a shape, [None, 2] enforce 2D matrix with 2 columns
+    #     self.expected_shape = None
+    #     self.param_name = ""  # Name of the quantity to set
+    #     # Setup tab values
+    #     self.tab_values.setWindowFlags(self.tab_values.windowFlags() & ~Qt.Dialog)
+    #     self.tab_values.title = self.in_param.text()
+    #     self.tab_values.N_row_txt = "Nb of Points"
+    #     self.tab_values.shape_max = (None, 2)
+    #     self.tab_values.col_header = ["B-curve(T)", "H-curve(A/m)"]
+    #     self.tab_values.unit_order = ["B(H)", "H(B)"]
+    #     self.tab_values.si_col.hide()
+    #     self.tab_values.in_col.hide()
+    #     self.tab_values.b_close.hide()
+    #     self.tab_values.b_import.setHidden(False)
+    #     self.tab_values.b_export.setHidden(False)
+    #     self.tab_values.update()
 
-    def set_plot_title(self, plot_title):
-        self.plot_title = plot_title
-        self.tab_values.plot_title = plot_title
+    # def emit_save(self):
+    #     """Send a saveNeeded signal to the DMachineSetup"""
+    #     self.saveNeeded.emit()
+
+    # def set_plot_title(self, plot_title):
+    #     self.plot_title = plot_title
+    #     self.tab_values.plot_title = plot_title

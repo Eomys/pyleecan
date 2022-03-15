@@ -10,7 +10,7 @@ from PySide2.QtGui import *
 from PySide2.QtWidgets import *
 
 from .....GUI.Tools.FloatEdit import FloatEdit
-from .....GUI.Tools.WImport.WImport import WImport
+from .....GUI.Tools.WTableData.DTableData import DTableData
 
 from pyleecan.GUI.Resources import pyleecan_rc
 
@@ -19,7 +19,7 @@ class Ui_DMatSetup(object):
     def setupUi(self, DMatSetup):
         if not DMatSetup.objectName():
             DMatSetup.setObjectName(u"DMatSetup")
-        DMatSetup.resize(642, 413)
+        DMatSetup.resize(958, 657)
         icon = QIcon()
         icon.addFile(
             u":/images/images/icon/pyleecan_64.png", QSize(), QIcon.Normal, QIcon.Off
@@ -108,6 +108,11 @@ class Ui_DMatSetup(object):
 
         self.gridLayout_2.addWidget(self.lf_epsr, 1, 1, 1, 1)
 
+        self.unit_epsr = QLabel(self.tab_elec)
+        self.unit_epsr.setObjectName(u"unit_epsr")
+
+        self.gridLayout_2.addWidget(self.unit_epsr, 1, 2, 1, 1)
+
         self.verticalLayout_5.addLayout(self.gridLayout_2)
 
         self.verticalSpacer_2 = QSpacerItem(
@@ -121,6 +126,25 @@ class Ui_DMatSetup(object):
         self.tab_mag.setObjectName(u"tab_mag")
         self.verticalLayout_3 = QVBoxLayout(self.tab_mag)
         self.verticalLayout_3.setObjectName(u"verticalLayout_3")
+        self.horizontalLayout_8 = QHBoxLayout()
+        self.horizontalLayout_8.setObjectName(u"horizontalLayout_8")
+        self.c_type_material = QComboBox(self.tab_mag)
+        self.c_type_material.addItem("")
+        self.c_type_material.addItem("")
+        self.c_type_material.addItem("")
+        self.c_type_material.setObjectName(u"c_type_material")
+        self.c_type_material.setMinimumSize(QSize(200, 0))
+
+        self.horizontalLayout_8.addWidget(self.c_type_material)
+
+        self.horizontalSpacer_2 = QSpacerItem(
+            40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum
+        )
+
+        self.horizontalLayout_8.addItem(self.horizontalSpacer_2)
+
+        self.verticalLayout_3.addLayout(self.horizontalLayout_8)
+
         self.gridLayout = QGridLayout()
         self.gridLayout.setObjectName(u"gridLayout")
         self.in_mur_lin = QLabel(self.tab_mag)
@@ -179,12 +203,29 @@ class Ui_DMatSetup(object):
 
         self.gridLayout.addWidget(self.unit_Wlam, 3, 2, 1, 1)
 
+        self.unit_mur_lin = QLabel(self.tab_mag)
+        self.unit_mur_lin.setObjectName(u"unit_mur_lin")
+
+        self.gridLayout.addWidget(self.unit_mur_lin, 0, 2, 1, 1)
+
+        self.unit_alpha_Br = QLabel(self.tab_mag)
+        self.unit_alpha_Br.setObjectName(u"unit_alpha_Br")
+
+        self.gridLayout.addWidget(self.unit_alpha_Br, 2, 2, 1, 1)
+
         self.verticalLayout_3.addLayout(self.gridLayout)
 
-        self.w_BH_import = WImport(self.tab_mag)
-        self.w_BH_import.setObjectName(u"w_BH_import")
+        self.g_BH_import = QGroupBox(self.tab_mag)
+        self.g_BH_import.setObjectName(u"g_BH_import")
+        self.g_BH_import.setCheckable(True)
+        self.verticalLayout_8 = QVBoxLayout(self.g_BH_import)
+        self.verticalLayout_8.setObjectName(u"verticalLayout_8")
+        self.tab_values = DTableData(self.g_BH_import)
+        self.tab_values.setObjectName(u"tab_values")
 
-        self.verticalLayout_3.addWidget(self.w_BH_import)
+        self.verticalLayout_8.addWidget(self.tab_values)
+
+        self.verticalLayout_3.addWidget(self.g_BH_import)
 
         self.verticalSpacer = QSpacerItem(
             20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding
@@ -397,6 +438,11 @@ class Ui_DMatSetup(object):
 
         self.gridLayout_4.addWidget(self.unit_G, 2, 2, 1, 1)
 
+        self.unit_nu = QLabel(self.page_iso_mec)
+        self.unit_nu.setObjectName(u"unit_nu")
+
+        self.gridLayout_4.addWidget(self.unit_nu, 1, 2, 1, 1)
+
         self.verticalLayout_7.addLayout(self.gridLayout_4)
 
         self.verticalSpacer_6 = QSpacerItem(
@@ -515,6 +561,11 @@ class Ui_DMatSetup(object):
 
         self.gridLayout_3.addWidget(self.lf_Cp, 0, 1, 1, 1)
 
+        self.unit_alpha = QLabel(self.tab_ther)
+        self.unit_alpha.setObjectName(u"unit_alpha")
+
+        self.gridLayout_3.addWidget(self.unit_alpha, 1, 2, 1, 1)
+
         self.verticalLayout_2.addLayout(self.gridLayout_3)
 
         self.verticalSpacer_3 = QSpacerItem(
@@ -566,9 +617,9 @@ class Ui_DMatSetup(object):
 
         self.retranslateUi(DMatSetup)
 
-        self.nav_phy.setCurrentIndex(0)
+        self.nav_phy.setCurrentIndex(4)
         self.nav_meca.setCurrentIndex(0)
-        self.nav_ther.setCurrentIndex(1)
+        self.nav_ther.setCurrentIndex(0)
 
         QMetaObject.connectSlotsByName(DMatSetup)
 
@@ -590,34 +641,52 @@ class Ui_DMatSetup(object):
         )
         self.in_rho_elec.setText(QCoreApplication.translate("DMatSetup", u"rho", None))
         self.unit_rho_elec.setText(
-            QCoreApplication.translate("DMatSetup", u"ohm.m", None)
+            QCoreApplication.translate("DMatSetup", u"[ohm.m]", None)
         )
         self.in_epsr.setText(QCoreApplication.translate("DMatSetup", u"epsr", None))
+        self.unit_epsr.setText(QCoreApplication.translate("DMatSetup", u"[ ]", None))
         self.nav_phy.setTabText(
             self.nav_phy.indexOf(self.tab_elec),
             QCoreApplication.translate("DMatSetup", u"Electrical", None),
         )
+        self.c_type_material.setItemText(
+            0, QCoreApplication.translate("DMatSetup", u"Non-magnetic material", None)
+        )
+        self.c_type_material.setItemText(
+            1, QCoreApplication.translate("DMatSetup", u"Magnet material", None)
+        )
+        self.c_type_material.setItemText(
+            2, QCoreApplication.translate("DMatSetup", u"Lamination material", None)
+        )
+
         self.in_mur_lin.setText(
             QCoreApplication.translate("DMatSetup", u"mur_lin", None)
         )
         self.in_Brm20.setText(QCoreApplication.translate("DMatSetup", u"Brm20", None))
-        self.unit_Brm20.setText(QCoreApplication.translate("DMatSetup", u"T", None))
+        self.unit_Brm20.setText(QCoreApplication.translate("DMatSetup", u"[T]", None))
         self.in_alpha_Br.setText(
             QCoreApplication.translate("DMatSetup", u"alphaBr", None)
         )
         self.in_Wlam.setText(QCoreApplication.translate("DMatSetup", u"Wlam", None))
-        self.unit_Wlam.setText(QCoreApplication.translate("DMatSetup", u"m", None))
+        self.unit_Wlam.setText(QCoreApplication.translate("DMatSetup", u"[m]", None))
+        self.unit_mur_lin.setText(QCoreApplication.translate("DMatSetup", u"[ ]", None))
+        self.unit_alpha_Br.setText(
+            QCoreApplication.translate("DMatSetup", u"[ ]", None)
+        )
+        self.g_BH_import.setTitle(
+            QCoreApplication.translate("DMatSetup", u"B(H) curve definition", None)
+        )
         self.nav_phy.setTabText(
             self.nav_phy.indexOf(self.tab_mag),
             QCoreApplication.translate("DMatSetup", u"Magnetics", None),
         )
         self.in_rho_meca.setText(QCoreApplication.translate("DMatSetup", u"rho", None))
         self.unit_rho_meca.setText(
-            QCoreApplication.translate("DMatSetup", u"kg/m^3", None)
+            QCoreApplication.translate("DMatSetup", u"[kg/m^3]", None)
         )
         self.g_young.setTitle(
             QCoreApplication.translate(
-                "DMatSetup", u"Equivalent Yong Modulus [Pa]", None
+                "DMatSetup", u"Equivalent Yong Modulus [GPa]", None
             )
         )
         self.in_Ex.setText(QCoreApplication.translate("DMatSetup", u"Ex", None))
@@ -632,16 +701,17 @@ class Ui_DMatSetup(object):
         self.in_nu_xz.setText(QCoreApplication.translate("DMatSetup", u"nu_xz", None))
         self.in_nu_yz.setText(QCoreApplication.translate("DMatSetup", u"nu_yz", None))
         self.g_shear.setTitle(
-            QCoreApplication.translate("DMatSetup", u"Shear modulus [Pa]", None)
+            QCoreApplication.translate("DMatSetup", u"Shear modulus [GPa]", None)
         )
         self.in_Gxy.setText(QCoreApplication.translate("DMatSetup", u"Gxy", None))
         self.in_Gxz.setText(QCoreApplication.translate("DMatSetup", u"Gxz", None))
         self.in_Gyz.setText(QCoreApplication.translate("DMatSetup", u"Gyz", None))
         self.in_E.setText(QCoreApplication.translate("DMatSetup", u"E", None))
-        self.unit_E.setText(QCoreApplication.translate("DMatSetup", u"Pa", None))
+        self.unit_E.setText(QCoreApplication.translate("DMatSetup", u"[GPa]", None))
         self.in_nu.setText(QCoreApplication.translate("DMatSetup", u"nu", None))
         self.in_G.setText(QCoreApplication.translate("DMatSetup", u"G", None))
-        self.unit_G.setText(QCoreApplication.translate("DMatSetup", u"Pa", None))
+        self.unit_G.setText(QCoreApplication.translate("DMatSetup", u"[GPa]", None))
+        self.unit_nu.setText(QCoreApplication.translate("DMatSetup", u"[ ]", None))
         self.nav_phy.setTabText(
             self.nav_phy.indexOf(self.tab_mec),
             QCoreApplication.translate("DMatSetup", u"Mechanics", None),
@@ -653,12 +723,13 @@ class Ui_DMatSetup(object):
         self.in_Ly.setText(QCoreApplication.translate("DMatSetup", u"Y", None))
         self.in_Lz.setText(QCoreApplication.translate("DMatSetup", u"Z", None))
         self.in_L.setText(QCoreApplication.translate("DMatSetup", u"Lambda", None))
-        self.unit_L.setText(QCoreApplication.translate("DMatSetup", u"W / K", None))
+        self.unit_L.setText(QCoreApplication.translate("DMatSetup", u"[W / K]", None))
         self.in_alpha.setText(QCoreApplication.translate("DMatSetup", u"alpha", None))
         self.in_Cp.setText(QCoreApplication.translate("DMatSetup", u"Cp", None))
         self.unit_Cp.setText(
-            QCoreApplication.translate("DMatSetup", u"W / kg / K", None)
+            QCoreApplication.translate("DMatSetup", u"[W / kg / K]", None)
         )
+        self.unit_alpha.setText(QCoreApplication.translate("DMatSetup", u"[ ]", None))
         self.nav_phy.setTabText(
             self.nav_phy.indexOf(self.tab_ther),
             QCoreApplication.translate("DMatSetup", u"Thermics", None),
@@ -667,7 +738,7 @@ class Ui_DMatSetup(object):
             QCoreApplication.translate("DMatSetup", u"cost_unit", None)
         )
         self.unit_cost_unit.setText(
-            QCoreApplication.translate("DMatSetup", u"\u20ac / kg", None)
+            QCoreApplication.translate("DMatSetup", u"[\u20ac / kg]", None)
         )
         self.nav_phy.setTabText(
             self.nav_phy.indexOf(self.tab_eco),
