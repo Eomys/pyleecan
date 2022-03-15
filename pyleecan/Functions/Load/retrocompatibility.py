@@ -168,3 +168,29 @@ def convert_Winding(wind_dict):
             except Exception:
                 # Not able to generate winding matrix => Star of Slot
                 wind_dict["__class__"] = "Winding"
+
+def is_before_version(ref_version, check_version):
+    """Check if a version str is before another version str
+
+    Parameters
+    ----------
+    ref_version : str
+        Reference version to compare with ("1.2.3" for instance)
+    check_version : str
+        Version to check if before reference ("1.3.4" for instance)
+
+    Returns
+    -------
+    is_before : bool
+        True if check_version is before ref_version
+    """
+    ref_list = [int(val) for val in ref_version.split(".")]
+    check_list = [int(val) for val in check_version.split(".")]
+
+    for ii in range(len(check_list)):
+        if len(ref_list) < ii + 1:
+            return False
+        if ref_list[ii] > check_list[ii]:
+            return True
+        elif ref_list[ii] < check_list[ii]:
+            return False

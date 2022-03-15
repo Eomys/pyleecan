@@ -7,6 +7,7 @@ import pytest
 from numpy import array_equal
 from pyleecan.definitions import DATA_DIR
 from pyleecan.Functions.load import load
+from pyleecan.Functions.Load.retrocompatibility import is_before_version
 from Tests import TEST_DATA_DIR
 
 
@@ -103,6 +104,15 @@ def test_save_load_wind_retro(file_dict):
         old.stator.winding.get_connection_mat(),
     ), msg
 
+def test_before_verson():
+    """Check that we can detect previous version"""
+    assert is_before_version("1.2.3", "1.2.1")
+    assert is_before_version("1.2.3", "1.1.3")
+    assert is_before_version("1.2.3", "0.2.3")
+    assert not is_before_version("1.2.3", "2.2.3")
+    assert not is_before_version("1.2.3", "1.3.0")
+    assert not is_before_version("1.2.3", "1.2.4")
+    assert not is_before_version("1.2.3", "1.2.3.2")
 
 if __name__ == "__main__":
     for file_dict in hole_list:
