@@ -15,7 +15,7 @@ def convert_init_dict(init_dict):
     """
     # Check file version to know what to update
     if "__version__" in init_dict:
-        file_version = init_dict["__version__"]
+        file_version = init_dict["__version__"].split("_")[1]
     else:
         file_version = None
     update_dict = create_update_dict(file_version)
@@ -43,6 +43,8 @@ def _search_and_update(obj_dict, parent=None, parent_index=None, update_dict=Non
     # add to list for later conversion
     if update_dict["HoleUD"] and is_HoleUD_dict(obj_dict):
         parent[parent_index] = convert_HoleUD(obj_dict)
+    elif update_dict["OP"] and is_OP_dict(obj_dict):
+        parent[parent_index] = convert_OP(obj_dict)
     elif update_dict["Winding"] and is_Winding_dict(obj_dict):
         if (
             parent is not None
@@ -70,11 +72,37 @@ def _search_and_update(obj_dict, parent=None, parent_index=None, update_dict=Non
 
 
 ############################################
-# V  1.3.2 = > 1.4.0
+# V 1.3.8 => 1.3.9
+# Introducing OP object (assume all is OPdq)
+############################################
+OP_VERSION = "1.3.9"
+
+
+def is_OP_dict(obj_dict):
+    """Check if the object need to be updated for OP"""
+    return (
+        "__class__" in obj_dict.keys()
+        and ("Input" in obj_dict["__class__"] or obj_dict["__class__"] == "OutElec")
+        and "Id_ref" in obj_dict.keys()
+    )
+
+
+def convert_OP(obj_dict):
+    N0 = obj_dict.pop("N0")
+    Id = obj_dict.pop("Id_ref")
+    Iq = obj_dict.pop("Iq_ref")
+    Tem = obj_dict.pop("Tem_av_ref")
+    OPdq = import_class("pyleecan.Classes", "OPdq")
+    OP = OPdq(N0=N0, Id_ref=Id, Iq_ref=Iq, Tem_av_ref=Tem)
+    return OP
+
+
+############################################
+# V  1.3.2 = > 1.3.3
 # Updating HoleUD surface label
 # Label reorganization
 ############################################
-HoleUD_VERSION = "1.4.0"
+HoleUD_VERSION = "1.3.3"
 
 
 def is_HoleUD_dict(obj_dict):
@@ -105,10 +133,10 @@ def convert_HoleUD(hole_dict):
 
 
 ######################
-# v 1.2.1 => 1.3.0
+# v 1.2.1 => 1.2.2
 # Winding star of slot
 ######################
-WIND_VERSION = "1.3.0"
+WIND_VERSION = "1.2.2"
 
 
 def is_Winding_dict(obj_dict):
@@ -257,7 +285,9 @@ def create_update_dict(file_version):
     if file_version is None:
         update_dict["Winding"] = True
         update_dict["HoleUD"] = True
+        update_dict["OP"] = True
     else:
         update_dict["Winding"] = is_before_version(WIND_VERSION, file_version)
         update_dict["HoleUD"] = is_before_version(HoleUD_VERSION, file_version)
+        update_dict["OP"] = is_before_version(OP_VERSION, file_version)
     return update_dict
