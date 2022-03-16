@@ -28,7 +28,7 @@ def test_FEMM_Loss_SPMSM():
     simu = Simu1(name="test_FEMM_Loss_SPMSM", machine=machine)
 
     simu.input = InputCurrent(
-        Nt_tot=8 * 16,
+        Nt_tot=20 * 16,
         Na_tot=1000 * 2,
         OP=OPdq(N0=4000, Id_ref=0, Iq_ref=np.sqrt(2)),
         is_periodicity_t=True,
@@ -41,9 +41,13 @@ def test_FEMM_Loss_SPMSM():
         nb_worker=4,
         is_get_meshsolution=True,
         FEMM_dict_enforced={
-            "mesh": {"meshsize_airgap": 0.00014, "elementsize_airgap": 0.00014}
+            "mesh": {
+                "meshsize_airgap": 0.00014,
+                "elementsize_airgap": 0.00014,
+                "smart_mesh": 0,
+            }
         },
-        is_close_femm=False,
+        # is_close_femm=False,
     )
 
     simu.loss = LossFEMM(Ce=Ce, Cp=Cprox, Ch=Ch, is_get_meshsolution=True, Tsta=120)
@@ -107,9 +111,9 @@ def test_FEMM_Loss_Prius():
     simu = Simu1(name="test_FEMM_Loss_Prius", machine=machine)
 
     simu.input = InputCurrent(
-        Nt_tot=80 * 8,
+        Nt_tot=40 * 8,
         Na_tot=200 * 8,
-        OP=OPdq(N0=1000, Id_ref=-100, Iq_ref=200),
+        OP=OPdq(N0=1000, Id_ref=-0 * 100, Iq_ref=0 * 200),
         is_periodicity_t=True,
         is_periodicity_a=True,
     )
@@ -173,6 +177,6 @@ def test_FEMM_Loss_Prius():
 # To run it without pytest
 if __name__ == "__main__":
 
-    # out = test_FEMM_Loss_SPMSM()
+    out = test_FEMM_Loss_SPMSM()
 
-    out = test_FEMM_Loss_Prius()
+    # out = test_FEMM_Loss_Prius()

@@ -25,8 +25,6 @@ def run(self):
 
     output.loss = OutLossFEMM()
 
-    freqs = axes_dict["freqs"].get_values()
-
-    out_dict = self.comp_losses(output, freqs)
+    out_dict = self.comp_losses(output, axes_dict)
 
     output.loss.store(out_dict, axes_dict, self.is_get_meshsolution)

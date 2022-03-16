@@ -1,7 +1,7 @@
-from numpy import sum as np_sum, zeros
+from numpy import sum as np_sum, zeros, array
 
 
-def comp_joule_losses(self, group, freqs):
+def comp_joule_losses(self, group):
     """Calculate joule losses in stator windings
 
     Parameters
@@ -10,8 +10,6 @@ def comp_joule_losses(self, group, freqs):
         a LossFEMM object
     group: str
         Name of part in which to calculate joule losses
-    freqs: ndarray
-        frequency vector [Hz]
 
     Returns
     -------
@@ -61,11 +59,10 @@ def comp_joule_losses(self, group, freqs):
         Se = ms_group.mesh[0].get_cell_area()
 
         # Constant component and twice the electrical frequency have same joule density values
+        freqs = array([felec])
         Pjoule_density = zeros((freqs.size, Se.size))
-        amp = Pjoule / (per_a * Lst * np_sum(Se))
-        Pjoule_density[freqs == 0, :] = amp / 2
-        Pjoule_density[freqs == 2 * felec, :] = amp / 2
+        Pjoule_density[0, :] = Pjoule / (per_a * Lst * np_sum(Se))
     else:
-        Pjoule_density = None
+        Pjoule_density, freqs = None, None
 
-    return Pjoule, Pjoule_density
+    return Pjoule, Pjoule_density, freqs
