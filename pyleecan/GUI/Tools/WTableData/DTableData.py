@@ -68,6 +68,8 @@ class DTableData(Ui_DTableData, QDialog):
         self.b_import.hide()
         self.b_export.hide()
 
+        self.wimport_excel = None
+
         self.update()
         self.si_row.valueChanged.connect(self.set_Nrow)
         self.si_col.valueChanged.connect(self.set_Ncol)
@@ -147,8 +149,6 @@ class DTableData(Ui_DTableData, QDialog):
 
         for ii in range(nrow):
             for jj in range(ncol):
-                if self.w_tab.cellWidget(ii, jj) is not None:
-                    self.w_tab.cellWidget(ii, jj).editingFinished.disconnect()
                 self.w_tab.setCellWidget(ii, jj, FloatEdit())
                 # Add the min/max to the widget
                 self.w_tab.cellWidget(ii, jj).validator().setBottom(self.Vmin)
@@ -273,6 +273,7 @@ class DTableData(Ui_DTableData, QDialog):
                     self.data = val
                     self.col_header = None
                     self.update()
+                    self.emit_save()
                 except Exception as e:
                     QMessageBox().critical(
                         self,
@@ -280,17 +281,17 @@ class DTableData(Ui_DTableData, QDialog):
                         self.tr("Error while loading csv file:\n" + str(e)),
                     )
             elif load_path.endswith(".xlsx"):
-                self.wimport = WImportExcel(
+                self.wimport_excel = WImportExcel(
                     load_path=load_path,
                     nb_cols=self.shape_max[1],
                     headers=self.unit_order,
                 )
-                self.wimport.accepted.connect(self.validate_wimport)
-                self.wimport.show()
+                self.wimport_excel.accepted.connect(self.validate_wimport_excel)
+                self.wimport_excel.show()
 
-    def validate_wimport(self):
+    def validate_wimport_excel(self):
         """UPDATE THE DATA IN THE TAB"""
-        val = self.wimport.datas
+        val = self.wimport_excel.datas
         # Check Shape
         shape = val.shape
 
@@ -302,6 +303,7 @@ class DTableData(Ui_DTableData, QDialog):
             old_data = self.data
             self.data = val
             self.update()
+            self.emit_save()
         except Exception as e:
             QMessageBox().critical(
                 self,
