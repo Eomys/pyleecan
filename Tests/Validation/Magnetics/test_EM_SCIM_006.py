@@ -212,11 +212,7 @@ def test_EM_SCIM_006_varslip():
     )
 
     # Configure simulation
-    simu.elec = Electrical(
-        Tsta=20,
-        Trot=20,
-        LUT_enforced=ELUT_SCIM_006
-    )
+    simu.elec = Electrical(Tsta=20, Trot=20, LUT_enforced=ELUT_SCIM_006)
 
     simu.mag = MagFEMM(
         is_periodicity_a=True,

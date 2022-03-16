@@ -15,7 +15,7 @@ from pyleecan.GUI.Resources import pyleecan_rc
 class Ui_WPathSelector(object):
     def setupUi(self, WPathSelector):
         if not WPathSelector.objectName():
-            WPathSelector.setObjectName("WPathSelector")
+            WPathSelector.setObjectName(u"WPathSelector")
         WPathSelector.resize(280, 32)
         sizePolicy = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Minimum)
         sizePolicy.setHorizontalStretch(0)
@@ -25,10 +25,10 @@ class Ui_WPathSelector(object):
         WPathSelector.setMinimumSize(QSize(0, 0))
         self.horizontalLayout = QHBoxLayout(WPathSelector)
         self.horizontalLayout.setSpacing(2)
-        self.horizontalLayout.setObjectName("horizontalLayout")
+        self.horizontalLayout.setObjectName(u"horizontalLayout")
         self.horizontalLayout.setContentsMargins(4, 2, 4, 2)
         self.in_path = QLabel(WPathSelector)
-        self.in_path.setObjectName("in_path")
+        self.in_path.setObjectName(u"in_path")
         sizePolicy1 = QSizePolicy(QSizePolicy.Minimum, QSizePolicy.Preferred)
         sizePolicy1.setHorizontalStretch(0)
         sizePolicy1.setVerticalStretch(0)
@@ -38,7 +38,7 @@ class Ui_WPathSelector(object):
         self.horizontalLayout.addWidget(self.in_path)
 
         self.le_path = QLineEdit(WPathSelector)
-        self.le_path.setObjectName("le_path")
+        self.le_path.setObjectName(u"le_path")
         sizePolicy2 = QSizePolicy(QSizePolicy.Maximum, QSizePolicy.Fixed)
         sizePolicy2.setHorizontalStretch(0)
         sizePolicy2.setVerticalStretch(0)
@@ -49,7 +49,7 @@ class Ui_WPathSelector(object):
         self.horizontalLayout.addWidget(self.le_path)
 
         self.b_path = QPushButton(WPathSelector)
-        self.b_path.setObjectName("b_path")
+        self.b_path.setObjectName(u"b_path")
 
         self.horizontalLayout.addWidget(self.b_path)
 
@@ -61,11 +61,11 @@ class Ui_WPathSelector(object):
 
     def retranslateUi(self, WPathSelector):
         WPathSelector.setWindowTitle(
-            QCoreApplication.translate("WPathSelector", "Form", None)
+            QCoreApplication.translate("WPathSelector", u"Form", None)
         )
-        self.in_path.setText(QCoreApplication.translate("WPathSelector", "path", None))
+        self.in_path.setText(QCoreApplication.translate("WPathSelector", u"path", None))
         self.b_path.setText(
-            QCoreApplication.translate("WPathSelector", "Select Path", None)
+            QCoreApplication.translate("WPathSelector", u"Select Path", None)
         )
 
     # retranslateUi

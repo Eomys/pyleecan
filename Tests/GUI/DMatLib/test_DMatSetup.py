@@ -189,9 +189,9 @@ class TestDMatSetup(object):
         """Check that you can change the name and the path"""
         self.widget.w_setup.le_name.setText("Magnet2")
         with mock.patch(
-                "PySide2.QtWidgets.QMessageBox.question",
-                return_value=QMessageBox.Yes,
-            ):
+            "PySide2.QtWidgets.QMessageBox.question",
+            return_value=QMessageBox.Yes,
+        ):
             self.widget.w_setup.le_name.editingFinished.emit()
         assert self.widget.w_setup.mat.name == "Magnet2"
         assert self.widget.w_setup.mat.path == join(self.work_path, "Magnet2.json")

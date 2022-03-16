@@ -94,7 +94,19 @@ class SMachineType(Gen_SMachineType, QWidget):
         self.si_p.editingFinished.connect(self.set_p)
         self.c_topology.currentIndexChanged.connect(self.set_inner_rotor)
         self.le_name.editingFinished.connect(self.s_set_name)
+        self.in_machine_desc.textChanged.connect(self.set_desc)
         self.c_type.currentIndexChanged.connect(self.set_machine_type)
+
+    def set_desc(self):
+        """Set the description of the machine
+
+        Parameters
+        ----------
+        self : SMachineType
+            A SMachineType object
+        """
+        self.machine.desc = self.in_machine_desc.toPlainText()
+        self.saveNeeded.emit()
 
     def s_set_name(self):
         """Set the name of the machine

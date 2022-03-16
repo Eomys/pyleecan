@@ -18,16 +18,16 @@ from pyleecan.GUI.Resources import pyleecan_rc
 class Ui_SMSlot(object):
     def setupUi(self, SMSlot):
         if not SMSlot.objectName():
-            SMSlot.setObjectName("SMSlot")
+            SMSlot.setObjectName(u"SMSlot")
         SMSlot.resize(650, 550)
         SMSlot.setMinimumSize(QSize(650, 0))
         self.main_layout = QVBoxLayout(SMSlot)
-        self.main_layout.setObjectName("main_layout")
+        self.main_layout.setObjectName(u"main_layout")
         self.horizontalLayout_2 = QHBoxLayout()
-        self.horizontalLayout_2.setObjectName("horizontalLayout_2")
+        self.horizontalLayout_2.setObjectName(u"horizontalLayout_2")
         self.b_help = HelpButton(SMSlot)
-        self.b_help.setObjectName("b_help")
-        self.b_help.setPixmap(QPixmap(":/images/images/icon/help_16.png"))
+        self.b_help.setObjectName(u"b_help")
+        self.b_help.setPixmap(QPixmap(u":/images/images/icon/help_16.png"))
 
         self.horizontalLayout_2.addWidget(self.b_help)
 
@@ -35,12 +35,12 @@ class Ui_SMSlot(object):
         self.c_slot_type.addItem("")
         self.c_slot_type.addItem("")
         self.c_slot_type.addItem("")
-        self.c_slot_type.setObjectName("c_slot_type")
+        self.c_slot_type.setObjectName(u"c_slot_type")
 
         self.horizontalLayout_2.addWidget(self.c_slot_type)
 
         self.out_Slot_pitch = QLabel(SMSlot)
-        self.out_Slot_pitch.setObjectName("out_Slot_pitch")
+        self.out_Slot_pitch.setObjectName(u"out_Slot_pitch")
 
         self.horizontalLayout_2.addWidget(self.out_Slot_pitch)
 
@@ -53,14 +53,14 @@ class Ui_SMSlot(object):
         self.main_layout.addLayout(self.horizontalLayout_2)
 
         self.horizontalLayout_3 = QHBoxLayout()
-        self.horizontalLayout_3.setObjectName("horizontalLayout_3")
+        self.horizontalLayout_3.setObjectName(u"horizontalLayout_3")
         self.w_mat = WMatSelect(SMSlot)
-        self.w_mat.setObjectName("w_mat")
+        self.w_mat.setObjectName(u"w_mat")
 
         self.horizontalLayout_3.addWidget(self.w_mat)
 
         self.in_type_magnetization = QLabel(SMSlot)
-        self.in_type_magnetization.setObjectName("in_type_magnetization")
+        self.in_type_magnetization.setObjectName(u"in_type_magnetization")
 
         self.horizontalLayout_3.addWidget(self.in_type_magnetization)
 
@@ -68,14 +68,14 @@ class Ui_SMSlot(object):
         self.c_type_magnetization.addItem("")
         self.c_type_magnetization.addItem("")
         self.c_type_magnetization.addItem("")
-        self.c_type_magnetization.setObjectName("c_type_magnetization")
+        self.c_type_magnetization.setObjectName(u"c_type_magnetization")
 
         self.horizontalLayout_3.addWidget(self.c_type_magnetization)
 
         self.main_layout.addLayout(self.horizontalLayout_3)
 
         self.w_slot = QWidget(SMSlot)
-        self.w_slot.setObjectName("w_slot")
+        self.w_slot.setObjectName(u"w_slot")
         sizePolicy = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Expanding)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -85,7 +85,7 @@ class Ui_SMSlot(object):
         self.main_layout.addWidget(self.w_slot)
 
         self.horizontalLayout = QHBoxLayout()
-        self.horizontalLayout.setObjectName("horizontalLayout")
+        self.horizontalLayout.setObjectName(u"horizontalLayout")
         self.horizontalSpacer = QSpacerItem(
             40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum
         )
@@ -93,17 +93,17 @@ class Ui_SMSlot(object):
         self.horizontalLayout.addItem(self.horizontalSpacer)
 
         self.b_plot = QPushButton(SMSlot)
-        self.b_plot.setObjectName("b_plot")
+        self.b_plot.setObjectName(u"b_plot")
 
         self.horizontalLayout.addWidget(self.b_plot)
 
         self.b_previous = QPushButton(SMSlot)
-        self.b_previous.setObjectName("b_previous")
+        self.b_previous.setObjectName(u"b_previous")
 
         self.horizontalLayout.addWidget(self.b_previous)
 
         self.b_next = QPushButton(SMSlot)
-        self.b_next.setObjectName("b_next")
+        self.b_next.setObjectName(u"b_next")
 
         self.horizontalLayout.addWidget(self.b_next)
 
@@ -116,36 +116,36 @@ class Ui_SMSlot(object):
     # setupUi
 
     def retranslateUi(self, SMSlot):
-        SMSlot.setWindowTitle(QCoreApplication.translate("SMSlot", "Form", None))
+        SMSlot.setWindowTitle(QCoreApplication.translate("SMSlot", u"Form", None))
         self.b_help.setText("")
         self.c_slot_type.setItemText(
-            0, QCoreApplication.translate("SMSlot", "Slot Type 10", None)
+            0, QCoreApplication.translate("SMSlot", u"Slot Type 10", None)
         )
         self.c_slot_type.setItemText(
-            1, QCoreApplication.translate("SMSlot", "Slot Type 11", None)
+            1, QCoreApplication.translate("SMSlot", u"Slot Type 11", None)
         )
         self.c_slot_type.setItemText(
-            2, QCoreApplication.translate("SMSlot", "Slot Type 12", None)
+            2, QCoreApplication.translate("SMSlot", u"Slot Type 12", None)
         )
 
         self.out_Slot_pitch.setText(
-            QCoreApplication.translate("SMSlot", "p = ? Slot pitch = 1.35 rad", None)
+            QCoreApplication.translate("SMSlot", u"p = ? Slot pitch = 1.35 rad", None)
         )
         self.in_type_magnetization.setText(
-            QCoreApplication.translate("SMSlot", "type_magnetization", None)
+            QCoreApplication.translate("SMSlot", u"type_magnetization", None)
         )
         self.c_type_magnetization.setItemText(
-            0, QCoreApplication.translate("SMSlot", "Radial", None)
+            0, QCoreApplication.translate("SMSlot", u"Radial", None)
         )
         self.c_type_magnetization.setItemText(
-            1, QCoreApplication.translate("SMSlot", "Parallel", None)
+            1, QCoreApplication.translate("SMSlot", u"Parallel", None)
         )
         self.c_type_magnetization.setItemText(
-            2, QCoreApplication.translate("SMSlot", "HallBach", None)
+            2, QCoreApplication.translate("SMSlot", u"HallBach", None)
         )
 
-        self.b_plot.setText(QCoreApplication.translate("SMSlot", "Preview", None))
-        self.b_previous.setText(QCoreApplication.translate("SMSlot", "Previous", None))
-        self.b_next.setText(QCoreApplication.translate("SMSlot", "Next", None))
+        self.b_plot.setText(QCoreApplication.translate("SMSlot", u"Preview", None))
+        self.b_previous.setText(QCoreApplication.translate("SMSlot", u"Previous", None))
+        self.b_next.setText(QCoreApplication.translate("SMSlot", u"Next", None))
 
     # retranslateUi
