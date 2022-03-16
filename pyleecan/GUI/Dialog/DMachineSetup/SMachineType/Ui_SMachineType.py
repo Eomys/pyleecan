@@ -48,6 +48,7 @@ class Ui_SMachineType(object):
         sizePolicy1.setVerticalStretch(0)
         sizePolicy1.setHeightForWidth(self.c_type.sizePolicy().hasHeightForWidth())
         self.c_type.setSizePolicy(sizePolicy1)
+        self.c_type.setMinimumSize(QSize(310, 0))
         self.c_type.setMaximumSize(QSize(310, 16777215))
 
         self.horizontalLayout_10.addWidget(self.c_type)
@@ -107,18 +108,6 @@ class Ui_SMachineType(object):
         self.verticalLayout_3.setObjectName("verticalLayout_3")
         self.gridLayout_2 = QGridLayout()
         self.gridLayout_2.setObjectName("gridLayout_2")
-        self.textEdit = QTextEdit(self.scrollAreaWidgetContents_2)
-        self.textEdit.setObjectName("textEdit")
-        self.textEdit.setEnabled(True)
-        sizePolicy4 = QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Preferred)
-        sizePolicy4.setHorizontalStretch(0)
-        sizePolicy4.setVerticalStretch(0)
-        sizePolicy4.setHeightForWidth(self.textEdit.sizePolicy().hasHeightForWidth())
-        self.textEdit.setSizePolicy(sizePolicy4)
-        self.textEdit.setMinimumSize(QSize(0, 0))
-
-        self.gridLayout_2.addWidget(self.textEdit, 2, 0, 1, 1)
-
         self.gridLayout = QGridLayout()
         self.gridLayout.setObjectName("gridLayout")
         self.c_topology = QComboBox(self.scrollAreaWidgetContents_2)
@@ -132,18 +121,18 @@ class Ui_SMachineType(object):
 
         self.in_name = QLabel(self.scrollAreaWidgetContents_2)
         self.in_name.setObjectName("in_name")
-        sizePolicy5 = QSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
-        sizePolicy5.setHorizontalStretch(0)
-        sizePolicy5.setVerticalStretch(0)
-        sizePolicy5.setHeightForWidth(self.in_name.sizePolicy().hasHeightForWidth())
-        self.in_name.setSizePolicy(sizePolicy5)
+        sizePolicy4 = QSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
+        sizePolicy4.setHorizontalStretch(0)
+        sizePolicy4.setVerticalStretch(0)
+        sizePolicy4.setHeightForWidth(self.in_name.sizePolicy().hasHeightForWidth())
+        self.in_name.setSizePolicy(sizePolicy4)
 
         self.gridLayout.addWidget(self.in_name, 0, 0, 1, 1)
 
         self.si_p = QSpinBox(self.scrollAreaWidgetContents_2)
         self.si_p.setObjectName("si_p")
-        sizePolicy5.setHeightForWidth(self.si_p.sizePolicy().hasHeightForWidth())
-        self.si_p.setSizePolicy(sizePolicy5)
+        sizePolicy4.setHeightForWidth(self.si_p.sizePolicy().hasHeightForWidth())
+        self.si_p.setSizePolicy(sizePolicy4)
         self.si_p.setMinimum(1)
         self.si_p.setMaximum(999999)
         self.si_p.setValue(1)
@@ -179,6 +168,26 @@ class Ui_SMachineType(object):
         self.gridLayout.addWidget(self.in_p, 2, 0, 1, 1)
 
         self.gridLayout_2.addLayout(self.gridLayout, 1, 0, 1, 1)
+
+        self.groupBox = QGroupBox(self.scrollAreaWidgetContents_2)
+        self.groupBox.setObjectName("groupBox")
+        self.verticalLayout_4 = QVBoxLayout(self.groupBox)
+        self.verticalLayout_4.setObjectName("verticalLayout_4")
+        self.in_machine_desc = QTextEdit(self.groupBox)
+        self.in_machine_desc.setObjectName("in_machine_desc")
+        self.in_machine_desc.setEnabled(True)
+        sizePolicy5 = QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Preferred)
+        sizePolicy5.setHorizontalStretch(0)
+        sizePolicy5.setVerticalStretch(0)
+        sizePolicy5.setHeightForWidth(
+            self.in_machine_desc.sizePolicy().hasHeightForWidth()
+        )
+        self.in_machine_desc.setSizePolicy(sizePolicy5)
+        self.in_machine_desc.setMinimumSize(QSize(0, 0))
+
+        self.verticalLayout_4.addWidget(self.in_machine_desc)
+
+        self.gridLayout_2.addWidget(self.groupBox, 2, 0, 1, 1)
 
         self.verticalLayout_3.addLayout(self.gridLayout_2)
 
@@ -270,14 +279,11 @@ class Ui_SMachineType(object):
         )
 
         self.img_type_machine.setText("")
-        self.textEdit.setPlaceholderText(
-            QCoreApplication.translate("SMachineType", "Machine Description", None)
+        self.c_topology.setItemText(
+            0, QCoreApplication.translate("SMachineType", "Internal Rotor", None)
         )
         self.c_topology.setItemText(
-            0, QCoreApplication.translate("SMachineType", "Internal rotor", None)
-        )
-        self.c_topology.setItemText(
-            1, QCoreApplication.translate("SMachineType", "External rotor", None)
+            1, QCoreApplication.translate("SMachineType", "External Rotor", None)
         )
 
         self.in_name.setText(
@@ -288,6 +294,12 @@ class Ui_SMachineType(object):
         )
         self.in_p.setText(
             QCoreApplication.translate("SMachineType", "Pole pair number :", None)
+        )
+        self.groupBox.setTitle(
+            QCoreApplication.translate("SMachineType", "Machine description ", None)
+        )
+        self.in_machine_desc.setPlaceholderText(
+            QCoreApplication.translate("SMachineType", "Machine Description", None)
         )
         self.b_previous.setText(
             QCoreApplication.translate("SMachineType", "Previous", None)

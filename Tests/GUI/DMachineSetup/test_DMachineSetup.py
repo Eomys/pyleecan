@@ -30,7 +30,7 @@ load_test.append(
     {"type": "SynRM", "index": 2, "name": "SynRM_001", "p": 2, "count": 10}
 )
 load_test.append(
-    {"type": "SPMSM", "index": 3, "name": "SIPMSM_008", "p": 4, "count": 10}
+    {"type": "SIPMSM", "index": 3, "name": "SIPMSM_008", "p": 4, "count": 10}
 )
 load_test.append(
     {"type": "IPMSM", "index": 4, "name": "machine_IPMSM_A", "p": 5, "count": 10}
@@ -120,7 +120,7 @@ class TestDMachineSetup(object):
         save_function(self.widget, "test_synrm_save")
         # SIPMSM
         self.widget.w_step.c_type.setCurrentIndex(3)
-        assert self.widget.w_step.c_type.currentText() == "SPMSM"
+        assert self.widget.w_step.c_type.currentText() == "SIPMSM"
         assert type(self.widget.machine) == MachineSIPMSM
         save_function(self.widget, "test_sipmsm_save")
         # IPMSM

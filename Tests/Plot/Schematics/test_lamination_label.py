@@ -36,12 +36,12 @@ def test_MachineUD():
         Zs=12, W0=2 * pi / 12 * 0.75, W2=2 * pi / 12 * 0.75, H0=0, H2=W1 * 0.65
     )
     lam1.winding = Winding(qs=3, p=3, Nlayer=2, coil_pitch=1)
-    # Outer rotor
+    # External Rotor
     lam2 = LamSlot(
         Rext=lam1.Rint - A1, Rint=lam1.Rint - A1 - W2, is_internal=True, is_stator=False
     )
     lam2.slot = SlotW10(Zs=22, W0=25e-3, W1=25e-3, W2=15e-3, H0=0, H1=0, H2=W2 * 0.75)
-    # Inner rotor
+    # Internal Rotor
     lam3 = LamSlot(
         Rext=lam2.Rint - A2,
         Rint=lam2.Rint - A2 - W3,

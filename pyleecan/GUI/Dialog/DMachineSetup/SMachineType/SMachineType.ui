@@ -46,6 +46,12 @@
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
+       <property name="minimumSize">
+        <size>
+         <width>310</width>
+         <height>0</height>
+        </size>
+       </property>
        <property name="maximumSize">
         <size>
          <width>310</width>
@@ -172,28 +178,6 @@
         <layout class="QVBoxLayout" name="verticalLayout_3">
          <item>
           <layout class="QGridLayout" name="gridLayout_2">
-           <item row="2" column="0">
-            <widget class="QTextEdit" name="textEdit">
-             <property name="enabled">
-              <bool>true</bool>
-             </property>
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="minimumSize">
-              <size>
-               <width>0</width>
-               <height>0</height>
-              </size>
-             </property>
-             <property name="placeholderText">
-              <string>Machine Description</string>
-             </property>
-            </widget>
-           </item>
            <item row="1" column="0">
             <layout class="QGridLayout" name="gridLayout">
              <item row="1" column="1">
@@ -206,12 +190,12 @@
                </property>
                <item>
                 <property name="text">
-                 <string>Internal rotor</string>
+                 <string>Internal Rotor</string>
                 </property>
                </item>
                <item>
                 <property name="text">
-                 <string>External rotor</string>
+                 <string>External Rotor</string>
                 </property>
                </item>
               </widget>
@@ -304,6 +288,37 @@
               </widget>
              </item>
             </layout>
+           </item>
+           <item row="2" column="0">
+            <widget class="QGroupBox" name="groupBox">
+             <property name="title">
+              <string>Machine description </string>
+             </property>
+             <layout class="QVBoxLayout" name="verticalLayout_4">
+              <item>
+               <widget class="QTextEdit" name="in_machine_desc">
+                <property name="enabled">
+                 <bool>true</bool>
+                </property>
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>0</width>
+                  <height>0</height>
+                 </size>
+                </property>
+                <property name="placeholderText">
+                 <string>Machine Description</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
            </item>
           </layout>
          </item>

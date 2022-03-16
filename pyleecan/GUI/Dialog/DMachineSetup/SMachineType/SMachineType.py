@@ -51,12 +51,13 @@ class SMachineType(Gen_SMachineType, QWidget):
         # Fill the combobox
         self.c_type.clear()
         self.c_type.addItems(
-            [self.mach_dict["txt"] for self.mach_dict in self.mach_list]
+            [self.mach_dict["name"] for self.mach_dict in self.mach_list]
         )
         # Update the GUI to the current machine type
         index = self.mach_index.index(type(self.machine))
         self.mach_dict = self.mach_list[index]
         self.img_type_machine.setPixmap(QPixmap(self.mach_dict["img"]))
+        self.in_machine_desc.setPlaceholderText(self.mach_dict["txt"])
         self.c_type.setCurrentIndex(index)
         if isinstance(self.machine, MachineSRM):
             # p is not meaningful for SRM
@@ -74,13 +75,13 @@ class SMachineType(Gen_SMachineType, QWidget):
         if machine.rotor.is_internal is None:
             self.machine.rotor.is_internal = True
             self.machine.stator.is_internal = False
-            self.c_topology.setCurrentText("Inner Rotor")
+            self.c_topology.setCurrentText("Internal Rotor")
         elif machine.rotor.is_internal:
-            self.c_topology.setCurrentText("Inner Rotor")
+            self.c_topology.setCurrentText("Internal Rotor")
         else:
-            self.c_topology.setCurrentText("Outer Rotor")
+            self.c_topology.setCurrentText("External Rotor")
 
-        # WRSM can only have inner rotor
+        # WRSM can only have Internal Rotor
         if self.machine.type_machine == 9:
             self.c_topology.setEnabled(False)
         else:
@@ -135,9 +136,11 @@ class SMachineType(Gen_SMachineType, QWidget):
             State of is_internal
         """
         self.machine.stator.is_internal = (
-            not self.c_topology.currentText() == "Inner Rotor"
+            not self.c_topology.currentText() == "Internal Rotor"
         )
-        self.machine.rotor.is_internal = self.c_topology.currentText() == "Inner Rotor"
+        self.machine.rotor.is_internal = (
+            self.c_topology.currentText() == "Internal Rotor"
+        )
         # Notify the machine GUI that the machine has changed
         self.saveNeeded.emit()
 
@@ -155,6 +158,7 @@ class SMachineType(Gen_SMachineType, QWidget):
         # Get the correct machine class
         mach = self.mach_list[index]["init_machine"]
         self.machine = type(mach)(init_dict=mach.as_dict())
+        self.in_machine_desc.setPlaceholderText(self.mach_list[index]["txt"])
         if p is not None:
             self.si_p.setValue(p)
             self.set_p()

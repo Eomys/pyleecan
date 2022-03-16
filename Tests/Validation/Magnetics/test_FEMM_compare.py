@@ -435,7 +435,7 @@ def test_SPMSM_load():
 @pytest.mark.periodicity
 @pytest.mark.SingleOP
 def test_SPMSM_noload():
-    """Validation of outer rotor SPMSM
+    """Validation of External Rotor SPMSM
     Open circuit (Null Stator currents)
 
     Machine B from Vu Xuan Hung thesis
