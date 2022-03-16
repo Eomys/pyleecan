@@ -16,17 +16,17 @@ from ......GUI.Dialog.DMachineSetup.SBar.WBarOut.WBarOut import WBarOut
 class Ui_PCondType22(object):
     def setupUi(self, PCondType22):
         if not PCondType22.objectName():
-            PCondType22.setObjectName(u"PCondType22")
+            PCondType22.setObjectName("PCondType22")
         PCondType22.resize(460, 124)
         self.horizontalLayout = QHBoxLayout(PCondType22)
-        self.horizontalLayout.setObjectName(u"horizontalLayout")
+        self.horizontalLayout.setObjectName("horizontalLayout")
         self.w_mat = WMatSelect(PCondType22)
-        self.w_mat.setObjectName(u"w_mat")
+        self.w_mat.setObjectName("w_mat")
 
         self.horizontalLayout.addWidget(self.w_mat)
 
         self.w_out = WBarOut(PCondType22)
-        self.w_out.setObjectName(u"w_out")
+        self.w_out.setObjectName("w_out")
 
         self.horizontalLayout.addWidget(self.w_out)
 
@@ -38,7 +38,7 @@ class Ui_PCondType22(object):
 
     def retranslateUi(self, PCondType22):
         PCondType22.setWindowTitle(
-            QCoreApplication.translate("PCondType22", u"Form", None)
+            QCoreApplication.translate("PCondType22", "Form", None)
         )
 
     # retranslateUi

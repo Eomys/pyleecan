@@ -192,9 +192,7 @@ class PHoleM52(Gen_PHoleM52, QWidget):
             self.out_magnet_surface.setText(
                 "Magnet surface: " + m_surf + " " + self.u.get_m2_name()
             )
-            self.out_alpha.setText(
-                "alpha: " + alpha_rad + u" rad (" + alpha_deg + u"°)"
-            )
+            self.out_alpha.setText("alpha: " + alpha_rad + " rad (" + alpha_deg + "°)")
             self.out_W1.setText("W1: " + W1 + " " + self.u.get_m_name())
 
         else:

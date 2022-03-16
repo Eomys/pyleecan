@@ -173,9 +173,9 @@ SIPMSM_dict = {
     "start_step": S_step,
     "stator_step": LSW_step,
     "rotor_step": LSM_step,
-    "name": "SPMSM",
-    "img": pixmap_dict["SPMSM"],
-    "txt": "SPMSM (Surface Permanent Magnet Synchronous Machine)",
+    "name": "SIPMSM",
+    "img": pixmap_dict["SIPMSM"],
+    "txt": "SIPMSM (Surface Inset Permanent Magnet Synchronous Machine)",
 }
 # dictionary with all the information to set a IPMSM
 IPMSM_dict = {

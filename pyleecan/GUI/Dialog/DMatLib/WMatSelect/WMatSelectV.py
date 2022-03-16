@@ -46,11 +46,11 @@ class WMatSelectV(QGroupBox):
 
         self.verticalLayout = QVBoxLayout(self)
         self.c_mat_type = QComboBox(self)
-        self.c_mat_type.setObjectName(u"c_mat_type")
+        self.c_mat_type.setObjectName("c_mat_type")
         self.verticalLayout.addWidget(self.c_mat_type)
 
         self.b_matlib = QPushButton(self)
-        self.b_matlib.setObjectName(u"b_matlib")
+        self.b_matlib.setObjectName("b_matlib")
         self.b_matlib.setText("Edit Materials")
         self.verticalLayout.addWidget(self.b_matlib)
 

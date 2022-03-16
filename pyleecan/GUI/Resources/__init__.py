@@ -9,7 +9,7 @@ pixmap_dict = {
     "SCIM": ":/images/images/MachineSetup/MachineType/machine_SCIM.png",
     "DFIM": ":/images/images/MachineSetup/MachineType/DFIM.png",
     "SynRM": ":/images/images/MachineSetup/MachineType/machine_SynRM.png",
-    "SPMSM": ":/images/images/MachineSetup/MachineType/machine_SPMSM.png",
+    "SIPMSM": ":/images/images/MachineSetup/MachineType/machine_SPMSM.png",
     "IPMSM": ":/images/images/MachineSetup/MachineType/machine_IPMSM.png",
     "LSPM": ":/images/images/MachineSetup/MachineType/machine_LSPM.png",
     "WRSM": ":/images/images/MachineSetup/MachineType/WRSM.png",

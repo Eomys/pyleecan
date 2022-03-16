@@ -13,20 +13,20 @@ from PySide2.QtWidgets import *
 class Ui_WVent(object):
     def setupUi(self, WVent):
         if not WVent.objectName():
-            WVent.setObjectName(u"WVent")
+            WVent.setObjectName("WVent")
         WVent.resize(630, 470)
         WVent.setMinimumSize(QSize(630, 470))
         self.main_layout = QVBoxLayout(WVent)
-        self.main_layout.setObjectName(u"main_layout")
+        self.main_layout.setObjectName("main_layout")
         self.horizontalLayout = QHBoxLayout()
-        self.horizontalLayout.setObjectName(u"horizontalLayout")
+        self.horizontalLayout.setObjectName("horizontalLayout")
         self.in_vent_type = QLabel(WVent)
-        self.in_vent_type.setObjectName(u"in_vent_type")
+        self.in_vent_type.setObjectName("in_vent_type")
 
         self.horizontalLayout.addWidget(self.in_vent_type)
 
         self.c_vent_type = QComboBox(WVent)
-        self.c_vent_type.setObjectName(u"c_vent_type")
+        self.c_vent_type.setObjectName("c_vent_type")
 
         self.horizontalLayout.addWidget(self.c_vent_type)
 
@@ -39,7 +39,7 @@ class Ui_WVent(object):
         self.main_layout.addLayout(self.horizontalLayout)
 
         self.w_vent = QWidget(WVent)
-        self.w_vent.setObjectName(u"w_vent")
+        self.w_vent.setObjectName("w_vent")
         self.w_vent.setMinimumSize(QSize(640, 480))
 
         self.main_layout.addWidget(self.w_vent)
@@ -51,9 +51,9 @@ class Ui_WVent(object):
     # setupUi
 
     def retranslateUi(self, WVent):
-        WVent.setWindowTitle(QCoreApplication.translate("WVent", u"Form", None))
+        WVent.setWindowTitle(QCoreApplication.translate("WVent", "Form", None))
         self.in_vent_type.setText(
-            QCoreApplication.translate("WVent", u"Cooling Duct Shape:", None)
+            QCoreApplication.translate("WVent", "Cooling Duct Shape:", None)
         )
 
     # retranslateUi
