@@ -302,7 +302,6 @@ class DMatSetup(Gen_DMatSetup, QDialog):
         self.mat.path = rel_file_path(
             join(dirname(self.mat.path), file_name + ".json"), "MATLIB_DIR"
         )
-        self.w_BH_import.set_plot_title(self.mat.name + " B(H) curve")
         self.set_save_needed(is_save_needed=False)
         self.materialToRename.emit()  # Update reference and treeview
 
