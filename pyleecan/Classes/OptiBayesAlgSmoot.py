@@ -102,10 +102,10 @@ class OptiBayesAlgSmoot(OptiBayesAlg):
 
     def __init__(
         self,
-        size_pop=10,
-        nb_gen=10,
-        nb_iter=5,
-        nb_start=30,
+        size_pop=40,
+        nb_gen=100,
+        nb_iter=15,
+        nb_start=300,
         criterion="PI",
         kernel=0,
         problem=-1,

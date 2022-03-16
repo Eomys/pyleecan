@@ -203,7 +203,7 @@ def test_Optimization_problem():
     my_prob = OptiProblem(simu=simu, design_var=my_vars, obj_func=my_objs)
 
     # Solve problem with NSGA-II
-    solver = OptiBayesAlgSmoot(problem=my_prob)
+    solver = OptiBayesAlgSmoot(problem=my_prob, nb_start=2, nb_iter=1)
     res = solver.solve()
 
     # ------------- #

@@ -33,8 +33,8 @@ class OptiBayesAlg(OptiSolver):
 
     def __init__(
         self,
-        nb_iter=5,
-        nb_start=30,
+        nb_iter=15,
+        nb_start=300,
         criterion="PI",
         kernel=0,
         problem=-1,

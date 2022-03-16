@@ -100,16 +100,18 @@ def solve(self):
         n_iter = self.nb_iter
         xlimits = np.array([var.space for var in self.problem.design_var])
 
-        const = []
+        """ const = []
         for constraint in self.problem.constraint:
-            const.append(lambda x: self.eval_const(constraint, x))
+            const.append(lambda x: self.eval_const(constraint, x)) """
+
+        time = datetime.now()
 
         moo = MOO(
             n_iter=self.nb_iter,
             criterion=self.criterion,
             n_start=self.nb_start,
             xlimits=xlimits,
-            const=const,
+            # const=const,
             verbose=True,
             n_gen=self.nb_gen,
             pop_size=self.size_pop,
@@ -117,12 +119,21 @@ def solve(self):
 
         moo.optimize(fun=self.evaluate)
 
+        final_time = datetime.now() - time
+
+        print(
+            "{} End of optimization, solved in {}.\n".format(
+                datetime.now().strftime("%H:%M:%S"), final_time
+            )
+        )
         res = moo.result
+        print(res.F)
         plot = Scatter()
         plot.add(res.F, color="red")
         plot.show()
 
-        """ print(x_opt, y_opt)
+        print(res.F, res.X)
+        """ 
         xoutput.xoutput_dict["x_opt"].result.append(x_opt)
         xoutput.xoutput_dict["y_opt"].result.append(y_opt)
         xoutput.xoutput_dict["x_data"].result.append(x_data)

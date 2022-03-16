@@ -125,7 +125,7 @@ def test_zdt3_Bayes():
         simu=simu, design_var=my_vars, obj_func=objs, eval_func=evaluate
     )
 
-    solver = OptiBayesAlgSmoot(problem=my_prob, nb_start=300, nb_iter=10, nb_gen=100, size_pop=40)
+    solver = OptiBayesAlgSmoot(problem=my_prob, criterion="PI", nb_start=300, nb_iter=10, nb_gen=100, size_pop=40)
     res = solver.solve()
 
     #
