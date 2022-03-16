@@ -114,7 +114,11 @@ class SWSlot(Gen_SWSlot, QWidget):
 
         self.set_slot_pitch(self.obj.slot.Zs)
 
-        self.c_type_close.setCurrentIndex(self.obj.slot.type_close + 1)
+        if self.obj.slot.type_close is None:
+            self.c_type_close.setCurrentIndex(0)
+            self.set_type_close()
+        else:
+            self.c_type_close.setCurrentIndex(self.obj.slot.type_close - 1)
 
         # Set the correct index for the type checkbox and display the object
         index = INIT_INDEX.index(type(self.obj.slot))
