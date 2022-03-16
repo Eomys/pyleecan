@@ -86,7 +86,7 @@ def test_FEMM_compare_IPMSM_xxx():
 @pytest.mark.periodicity
 @pytest.mark.SingleOP
 def test_FEMM_compare_IPMSM_xxx_lam_sym():
-    """Test compute the Flux in FEMM of machine IPMSM_xxx, with and without lamination symmetry used"""
+    """Test compute the Flux in FEMM of machine IPMSM_xxx, with is_fast_draw at True (with lamination symetry) or False (without)"""
     IPMSM_xxx = load(join(DATA_DIR, "Machine", "IPMSM_xxx.json"))
     simu = Simu1(name="test_FEMM_compare_IPMSM_xxx_lam_sym", machine=IPMSM_xxx)
 
