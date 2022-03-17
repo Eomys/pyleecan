@@ -203,7 +203,7 @@ class DMatSetup(Gen_DMatSetup, QDialog):
         self.tab_values.b_close.hide()
         self.tab_values.b_import.setHidden(False)
         self.tab_values.b_export.setHidden(False)
-        
+
         if isinstance(self.mat.mag.BH_curve, ImportMatrixXls):
             self.mat.mag.BH_curve = ImportMatrixVal(self.mat.mag.BH_curve.get_data())
             self.tab_values.data = self.mat.mag.BH_curve.get_data()
