@@ -77,7 +77,10 @@ class TestSMachineType(object):
         assert setup["widget"].c_type.currentIndex() == 1
         assert setup["widget"].c_type.currentText() == "DFIM"
         assert setup["widget"].c_topology.currentText() == "External Rotor"
-
+        assert (
+            setup["widget"].in_machine_desc.placeholderText()
+            == "DFIM (Doubly Fed Induction Machine)"
+        )
         # SynRM
         setup["test_obj"] = MachineSyRM(name="test_machine_synrm", type_machine=5)
         setup["test_obj"].stator = LamSlotWind(
@@ -96,6 +99,10 @@ class TestSMachineType(object):
         assert setup["widget"].c_type.currentIndex() == 2
         assert setup["widget"].c_type.currentText() == "SynRM"
         assert setup["widget"].c_topology.currentText() == "External Rotor"
+        assert (
+            setup["widget"].in_machine_desc.placeholderText()
+            == "SynRM (Synchronous Reluctance Machine)"
+        )
 
         # SPMSM
         setup["test_obj"] = MachineSIPMSM(name="test_machine_spmsm", type_machine=7)
@@ -113,8 +120,12 @@ class TestSMachineType(object):
         assert setup["widget"].le_name.text() == "test_machine_spmsm"
         assert setup["widget"].si_p.value() == 9
         assert setup["widget"].c_type.currentIndex() == 3
-        assert setup["widget"].c_type.currentText() == "SIPMSM"
+        assert setup["widget"].c_type.currentText() == "SPMSM"
         assert setup["widget"].c_topology.currentText() == "Internal Rotor"
+        assert (
+            setup["widget"].in_machine_desc.placeholderText()
+            == "SPMSM (Surface Permanent Magnet Synchronous Machine)"
+        )
 
         # IPMSM
         setup["test_obj"] = MachineIPMSM(name="test_machine_ipmsm", type_machine=8)
@@ -134,6 +145,10 @@ class TestSMachineType(object):
         assert setup["widget"].c_type.currentIndex() == 4
         assert setup["widget"].c_type.currentText() == "IPMSM"
         assert setup["widget"].c_topology.currentText() == "External Rotor"
+        assert (
+            setup["widget"].in_machine_desc.placeholderText()
+            == "IPMSM (Interior Permanent Magnet Synchronous Machine)"
+        )
 
         # WRSM
         setup["test_obj"] = MachineWRSM(name="test_machine_wrsm", type_machine=9)
@@ -153,6 +168,10 @@ class TestSMachineType(object):
         assert setup["widget"].c_type.currentIndex() == 5
         assert setup["widget"].c_type.currentText() == "WRSM"
         assert setup["widget"].c_topology.currentText() == "External Rotor"
+        assert (
+            setup["widget"].in_machine_desc.placeholderText()
+            == "WRSM (Wound Rotor Synchronous Machine)"
+        )
 
     def test_set_name(self, setup):
         """Check that the Widget allow to update name"""
@@ -163,6 +182,15 @@ class TestSMachineType(object):
         setup["widget"].le_name.editingFinished.emit()  # To trigger the slot
 
         assert setup["test_obj"].name == "test_" + str(value)
+
+    def test_set_desc(self, setup):
+        """Check if the machine description changes are updated into machine object"""
+        setup["widget"].in_machine_desc.clear()
+        value = round(uniform(0, 1), 4)
+        QTest.keyClicks(setup["widget"].in_machine_desc, "My machine_" + str(value))
+        setup["widget"].in_machine_desc.textChanged.emit()  # To trigger the slot
+
+        assert setup["test_obj"].desc == "My machine_" + str(value)
 
     def test_set_is_inner_rotor(self, setup):
         """Check that the Widget allow to update is_inner_rotor"""
