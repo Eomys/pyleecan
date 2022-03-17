@@ -42,8 +42,6 @@ from ..Classes.ImportMatrixVal import ImportMatrixVal
 from numpy import ndarray
 from numpy import array, array_equal
 from ._check import InitUnKnowClassError
-from .ImportMatrix import ImportMatrix
-from .OP import OP
 
 
 class Input(FrozenClass):
@@ -319,6 +317,8 @@ class Input(FrozenClass):
 
     def _set_time(self, value):
         """setter of time"""
+        ImportMatrix = import_class("pyleecan.Classes", "ImportMatrix", "time")
+        ImportMatrixVal = import_class("pyleecan.Classes", "ImportMatrixVal", "time")
         if isinstance(value, str):  # Load from file
             value = load_init_dict(value)[1]
         if isinstance(value, ndarray):
@@ -351,6 +351,8 @@ class Input(FrozenClass):
 
     def _set_angle(self, value):
         """setter of angle"""
+        ImportMatrix = import_class("pyleecan.Classes", "ImportMatrix", "angle")
+        ImportMatrixVal = import_class("pyleecan.Classes", "ImportMatrixVal", "angle")
         if isinstance(value, str):  # Load from file
             value = load_init_dict(value)[1]
         if isinstance(value, ndarray):
@@ -454,6 +456,7 @@ class Input(FrozenClass):
             class_obj = import_class("pyleecan.Classes", value.get("__class__"), "OP")
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
+            OP = import_class("pyleecan.Classes", "OP", "OP")
             value = OP()
         check_var("OP", value, "OP")
         self._OP = value

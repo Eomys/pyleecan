@@ -66,8 +66,6 @@ except ImportError as error:
 
 
 from ._check import InitUnKnowClassError
-from .DataKeeper import DataKeeper
-from .Post import Post
 
 
 class VarSimu(FrozenClass):
@@ -716,6 +714,7 @@ class VarSimu(FrozenClass):
             )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
+            VarSimu = import_class("pyleecan.Classes", "VarSimu", "var_simu")
             value = VarSimu()
         check_var("var_simu", value, "VarSimu")
         self._var_simu = value

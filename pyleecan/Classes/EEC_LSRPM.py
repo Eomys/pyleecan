@@ -34,8 +34,6 @@ except ImportError as error:
 
 
 from ._check import InitUnKnowClassError
-from .FluxLink import FluxLink
-from .OP import OP
 
 
 class EEC_LSRPM(EEC):
@@ -279,6 +277,7 @@ class EEC_LSRPM(EEC):
             )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
+            FluxLink = import_class("pyleecan.Classes", "FluxLink", "fluxlink")
             value = FluxLink()
         check_var("fluxlink", value, "FluxLink")
         self._fluxlink = value

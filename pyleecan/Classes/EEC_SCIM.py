@@ -85,7 +85,6 @@ except ImportError as error:
 
 from numpy import array, array_equal
 from ._check import InitUnKnowClassError
-from .OP import OP
 
 
 class EEC_SCIM(EEC):

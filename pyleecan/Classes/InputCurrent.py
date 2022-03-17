@@ -37,10 +37,6 @@ from ..Classes.ImportMatrixVal import ImportMatrixVal
 from numpy import ndarray
 from numpy import array, array_equal
 from ._check import InitUnKnowClassError
-from .ImportMatrix import ImportMatrix
-from .ImportData import ImportData
-from .ImportGenPWM import ImportGenPWM
-from .OP import OP
 
 
 class InputCurrent(InputVoltage):
@@ -335,6 +331,8 @@ class InputCurrent(InputVoltage):
 
     def _set_Is(self, value):
         """setter of Is"""
+        ImportMatrix = import_class("pyleecan.Classes", "ImportMatrix", "Is")
+        ImportMatrixVal = import_class("pyleecan.Classes", "ImportMatrixVal", "Is")
         if isinstance(value, str):  # Load from file
             value = load_init_dict(value)[1]
         if isinstance(value, ndarray):
@@ -367,6 +365,8 @@ class InputCurrent(InputVoltage):
 
     def _set_Ir(self, value):
         """setter of Ir"""
+        ImportMatrix = import_class("pyleecan.Classes", "ImportMatrix", "Ir")
+        ImportMatrixVal = import_class("pyleecan.Classes", "ImportMatrixVal", "Ir")
         if isinstance(value, str):  # Load from file
             value = load_init_dict(value)[1]
         if isinstance(value, ndarray):
@@ -413,6 +413,7 @@ class InputCurrent(InputVoltage):
             )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
+            ImportData = import_class("pyleecan.Classes", "ImportData", "Is_harm")
             value = ImportData()
         check_var("Is_harm", value, "ImportData")
         self._Is_harm = value

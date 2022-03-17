@@ -44,9 +44,6 @@ except ImportError as error:
 
 
 from ._check import InitUnKnowClassError
-from .Surface import Surface
-from .Magnet import Magnet
-from .Material import Material
 
 
 class HoleUD(HoleMag):

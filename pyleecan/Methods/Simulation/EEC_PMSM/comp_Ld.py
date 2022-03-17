@@ -1,5 +1,5 @@
 def comp_Ld(self):
-    """Compute the stator winding inductance along d-axis for the equivalent electrical circuit
+    """Compute and set the stator winding inductance along d-axis for the EEC
 
     Parameters
     ----------

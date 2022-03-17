@@ -1,4 +1,0 @@
-Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constante Name,Constante Value,Description classe,Classe fille
-eec,,Equivalent Electrical Circuit,,EEC,None,,,,Simulation,,get_phase_dir,VERSION,1,Abstract class for Look Up Table (LUT),
-OP_matrix,,"Array of operating point values of size (N,5) with N the number of operating points (Speed, Id, Iq, Torque, Power). OP values are set to nan if they are not given.",,ndarray,None,,,,,,,,,,
-phase_dir,,"Rotation direction of the stator phases (phase_dir*(n-1)*pi/qs, default value given by PHASE_DIR_REF)",0,int,None,-1,1,,,,,,,,

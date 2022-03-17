@@ -13,13 +13,11 @@ from pyleecan.Classes.InputCurrent import InputCurrent
 from pyleecan.Classes.VarLoadCurrent import VarLoadCurrent
 from pyleecan.Classes.MagFEMM import MagFEMM
 from pyleecan.Classes.PostLUT import PostLUT
+from pyleecan.Classes.LUTdq import LUTdq
 
 from pyleecan.Functions.load import load
 from pyleecan.Functions.Plot import dict_2D
-from pyleecan.Functions.Electrical.dqh_transformation import (
-    get_phase_dir_DataTime,
-    n2dqh_DataTime,
-)
+from pyleecan.Functions.Electrical.dqh_transformation import n2dqh_DataTime
 from pyleecan.Functions.Electrical.comp_MTPA import comp_MTPA
 
 from pyleecan.definitions import DATA_DIR
@@ -39,7 +37,7 @@ is_show_fig = False
 def test_ELUT():
     """Fixture to calculate ELUT and use it in all tests"""
 
-    _, ELUT = test_EEC_ELUT_PMSM_calc()
+    ELUT = test_EEC_ELUT_PMSM_calc()
 
     return ELUT
 
@@ -56,17 +54,6 @@ def test_EEC_ELUT_PMSM_calc(n_Id=5, n_Iq=5):
 
     Toyota_Prius = load(join(DATA_DIR, "Machine", "Toyota_Prius.json"))
 
-    # Generate ELUT
-    name = "test_EEC_ELUT_PMSM"
-    simu = Simu1(name=name, machine=Toyota_Prius)
-
-    # Definition of the input
-    simu.input = InputCurrent(
-        Nt_tot=8 * 12,
-        Na_tot=8 * 200,
-        OP=OPdq(N0=1000, Id_ref=0, Iq_ref=0),
-    )
-
     # Build OP_matrix with a meshgrid of Id/Iq
     Id_min, Id_max = -200, 200
     Iq_min, Iq_max = -200, 200
@@ -74,37 +61,28 @@ def test_EEC_ELUT_PMSM_calc(n_Id=5, n_Iq=5):
         np.linspace(Id_min, Id_max, n_Id), np.linspace(Iq_min, Iq_max, n_Iq)
     )
     OP_matrix = np.zeros((n_Id * n_Iq, 3))
-    OP_matrix[:, 0] = simu.input.OP.N0
+    OP_matrix[:, 0] = 1000
     OP_matrix[:, 1] = Id.ravel()
     OP_matrix[:, 2] = Iq.ravel()
 
-    # Set varspeed simulation
-    simu.var_simu = VarLoadCurrent(
-        type_OP_matrix=1,
+    # Init and run ELUT computation
+    ELUT = LUTdq()
+    ELUT._set_None()
+    ELUT.set_default_simulation(
+        machine=Toyota_Prius,
         OP_matrix=OP_matrix,
-        is_keep_all_output=True,
-        stop_if_error=True,
+        type_OP_matrix=1,
+        name="test_EEC_ELUT_PMSM",
     )
-
-    # Define second simu for FEMM comparison
-    simu.mag = MagFEMM(is_periodicity_a=True, is_periodicity_t=True, nb_worker=4)
-
-    # Postprocessing
-    simu.var_simu.postproc_list = [PostLUT(is_save_LUT=True)]
-
-    out = simu.run()
-
-    ELUT = out.simu.var_simu.postproc_list[0].LUT
-
-    # Check phase_dir calculation
-    assert ELUT.get_phase_dir() == get_phase_dir_DataTime(ELUT.Phi_wind[0])
+    ELUT.simu.run()
 
     # Check flux linkage dqh values
     Phi_dqh_mean = ELUT.get_Phidqh_mean()
     OP_list = OP_matrix[:, 1:3].tolist()
     ii = OP_list.index([0, 0])
+    stator_label = ELUT.simu.machine.stator.get_label()
     Phi_dqh0 = n2dqh_DataTime(
-        ELUT.Phi_wind[ii],
+        ELUT.output_list[ii].mag.Phi_wind[stator_label],
         is_dqh_rms=True,
         phase_dir=ELUT.get_phase_dir(),
     )
@@ -117,7 +95,7 @@ def test_EEC_ELUT_PMSM_calc(n_Id=5, n_Iq=5):
         ELUT.Phi_wind[ii].plot_2D_Data("time", "phase[]", **dict_2D)
         Phi_dqh0.plot_2D_Data("time", "phase[]", **dict_2D)
 
-    return out, ELUT
+    return ELUT
 
 
 @pytest.mark.long_5s
@@ -253,7 +231,7 @@ def test_EEC_ELUT_PMSM_MTPA(test_ELUT):
 
 # To run it without pytest
 if __name__ == "__main__":
-    # out0, ELUT = test_EEC_ELUT_PMSM_calc()
-    # ELUT.save("ELUT_PMSM.h5")
-    ELUT = load("ELUT_PMSM.h5")
-    test_EEC_ELUT_PMSM_MTPA(ELUT)
+    ELUT = test_EEC_ELUT_PMSM_calc(n_Id=3, n_Iq=3)
+    ELUT.save("ELUT_PMSM.h5")
+    # ELUT = load("ELUT_PMSM.h5")
+    # test_EEC_ELUT_PMSM_MTPA(ELUT)

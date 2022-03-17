@@ -39,9 +39,6 @@ except ImportError as error:
 
 from numpy import array, array_equal
 from ._check import InitUnKnowClassError
-from .DataKeeper import DataKeeper
-from .VarSimu import VarSimu
-from .Post import Post
 
 
 class VarLoadVoltage(VarLoad):

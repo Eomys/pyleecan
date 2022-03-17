@@ -31,6 +31,9 @@ def run(self):
     ref_simu.var_simu = self.var_simu  # var_simu default is None
     ref_simu.index = None
     ref_simu.layer = self.parent.layer + 1
+    # None clean-up
+    if xoutput.xoutput_dict is None:
+        xoutput.xoutput_dict = dict()
 
     # Generate simulation list and ParamExplorerValue list
     simu_dict = self.generate_simulation_list(ref_simu)

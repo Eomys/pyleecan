@@ -1,5 +1,5 @@
 def comp_skin_effect(self):
-    """Compute the skin effect factors (update value in object)
+    """Compute and set the skin effect factors (update value in object)
 
     Parameters
     ----------

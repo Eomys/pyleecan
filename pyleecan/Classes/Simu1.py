@@ -24,15 +24,6 @@ except ImportError as error:
 
 
 from ._check import InitUnKnowClassError
-from .Electrical import Electrical
-from .Magnetics import Magnetics
-from .Structural import Structural
-from .Force import Force
-from .Loss import Loss
-from .Machine import Machine
-from .Input import Input
-from .VarSimu import VarSimu
-from .Post import Post
 
 
 class Simu1(Simulation):
@@ -355,6 +346,7 @@ class Simu1(Simulation):
             class_obj = import_class("pyleecan.Classes", value.get("__class__"), "elec")
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
+            Electrical = import_class("pyleecan.Classes", "Electrical", "elec")
             value = Electrical()
         check_var("elec", value, "Electrical")
         self._elec = value
@@ -389,6 +381,7 @@ class Simu1(Simulation):
             class_obj = import_class("pyleecan.Classes", value.get("__class__"), "mag")
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
+            Magnetics = import_class("pyleecan.Classes", "Magnetics", "mag")
             value = Magnetics()
         check_var("mag", value, "Magnetics")
         self._mag = value
@@ -425,6 +418,7 @@ class Simu1(Simulation):
             )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
+            Structural = import_class("pyleecan.Classes", "Structural", "struct")
             value = Structural()
         check_var("struct", value, "Structural")
         self._struct = value
@@ -461,6 +455,7 @@ class Simu1(Simulation):
             )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
+            Force = import_class("pyleecan.Classes", "Force", "force")
             value = Force()
         check_var("force", value, "Force")
         self._force = value
@@ -495,6 +490,7 @@ class Simu1(Simulation):
             class_obj = import_class("pyleecan.Classes", value.get("__class__"), "loss")
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
+            Loss = import_class("pyleecan.Classes", "Loss", "loss")
             value = Loss()
         check_var("loss", value, "Loss")
         self._loss = value

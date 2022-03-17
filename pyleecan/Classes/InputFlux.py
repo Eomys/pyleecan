@@ -27,10 +27,6 @@ from ..Classes.ImportMatrixVal import ImportMatrixVal
 from numpy import ndarray
 from numpy import array, array_equal
 from ._check import InitUnKnowClassError
-from .ImportMatrix import ImportMatrix
-from .ImportData import ImportData
-from .ImportGenPWM import ImportGenPWM
-from .OP import OP
 
 
 class InputFlux(InputCurrent):

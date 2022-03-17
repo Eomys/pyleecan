@@ -2,17 +2,8 @@ from numpy import pi, interp, inf, exp
 
 
 def solve_elementary(self):
-    """Compute the parameters dict for the equivalent electrical circuit
-
-                  --->                     ---->
-     -----Rs------XsIs---- --- -----Rr'----XrIr----
-    |                     |   |                       |
-    |                    Rfe  Xm                    Rr*(s-1)/s
-    |                     |   |                       |
-     ---------Is---------- --- ---------Ir------------
-
-             --->
-              Us
+    """Solve the EEC, set the resulting currents and voltages and update the
+    magnetizing inductance.
 
     Parameters
     ----------
@@ -22,7 +13,9 @@ def solve_elementary(self):
     Returns
     ----------
     delta_Lm: float
-        convergence criterion for magnetizing inductance calculation [H]
+        convergence criterion for magnetizing inductance calculation,
+        i.e. relative difference between the recalculated magnetizing inductance
+        and the current magnetizing inductance
     """
 
     felec = self.OP.get_felec()

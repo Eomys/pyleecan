@@ -27,13 +27,10 @@ from ..Classes.ImportMatrixVal import ImportMatrixVal
 from numpy import ndarray
 from numpy import array, array_equal
 from ._check import InitUnKnowClassError
-from .ImportVectorField import ImportVectorField
-from .ImportMatrix import ImportMatrix
-from .OP import OP
 
 
 class InputForce(Input):
-    """Input to start with the structural one """
+    """Input to start with the structural one"""
 
     VERSION = 1
 
@@ -224,6 +221,9 @@ class InputForce(Input):
             class_obj = import_class("pyleecan.Classes", value.get("__class__"), "P")
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
+            ImportVectorField = import_class(
+                "pyleecan.Classes", "ImportVectorField", "P"
+            )
             value = ImportVectorField()
         check_var("P", value, "ImportVectorField")
         self._P = value

@@ -49,8 +49,6 @@ except ImportError as error:
 
 
 from ._check import InitUnKnowClassError
-from .DXFImport import DXFImport
-from .SliceModel import SliceModel
 
 
 class MagElmer(Magnetics):
@@ -631,6 +629,7 @@ class MagElmer(Magnetics):
             )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
+            DXFImport = import_class("pyleecan.Classes", "DXFImport", "rotor_dxf")
             value = DXFImport()
         check_var("rotor_dxf", value, "DXFImport")
         self._rotor_dxf = value
@@ -667,6 +666,7 @@ class MagElmer(Magnetics):
             )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
+            DXFImport = import_class("pyleecan.Classes", "DXFImport", "stator_dxf")
             value = DXFImport()
         check_var("stator_dxf", value, "DXFImport")
         self._stator_dxf = value

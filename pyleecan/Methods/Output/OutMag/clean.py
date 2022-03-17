@@ -9,12 +9,20 @@ def clean(self, clean_level=1):
     self : OutMag
         the OutMag object to update
     clean_level : int
-        Value to indicate which fields to clean in OutMag (default=1/min=0/max=4)
+        Value to indicate which fields to clean in OutMag (default=1/min=0/max=4/5=LUT)
 
     """
 
     # if clean_level = 0:
     # keep all outputs
+
+    if clean_level == 5:  # LUT
+        self.meshsolution = None
+        self.Phi_wind_stator = None  # Use Phi_wind
+        self.emf = None
+        self.internal = None
+        self.axes_dict = None
+        return
 
     if clean_level > 0:
         # clean meshsolution

@@ -39,8 +39,6 @@ except ImportError as error:
 
 
 from ._check import InitUnKnowClassError
-from .EEC import EEC
-from .LUT import LUT
 
 
 class Electrical(FrozenClass):
@@ -306,6 +304,7 @@ class Electrical(FrozenClass):
             class_obj = import_class("pyleecan.Classes", value.get("__class__"), "eec")
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
+            EEC = import_class("pyleecan.Classes", "EEC", "eec")
             value = EEC()
         check_var("eec", value, "EEC")
         self._eec = value
@@ -378,6 +377,7 @@ class Electrical(FrozenClass):
             )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
+            LUT = import_class("pyleecan.Classes", "LUT", "LUT_enforced")
             value = LUT()
         check_var("LUT_enforced", value, "LUT")
         self._LUT_enforced = value

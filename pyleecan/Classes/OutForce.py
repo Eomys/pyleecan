@@ -24,7 +24,6 @@ except ImportError as error:
 
 
 from ._check import InitUnKnowClassError
-from .MeshSolution import MeshSolution
 
 
 class OutForce(FrozenClass):
@@ -379,6 +378,9 @@ class OutForce(FrozenClass):
             )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
+            MeshSolution = import_class(
+                "pyleecan.Classes", "MeshSolution", "meshsolution"
+            )
             value = MeshSolution()
         check_var("meshsolution", value, "MeshSolution")
         self._meshsolution = value

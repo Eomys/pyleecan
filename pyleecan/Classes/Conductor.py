@@ -68,7 +68,6 @@ except ImportError as error:
 
 
 from ._check import InitUnKnowClassError
-from .Material import Material
 
 
 class Conductor(FrozenClass):
@@ -336,6 +335,7 @@ class Conductor(FrozenClass):
             )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
+            Material = import_class("pyleecan.Classes", "Material", "cond_mat")
             value = Material()
         check_var("cond_mat", value, "Material")
         self._cond_mat = value
@@ -372,6 +372,7 @@ class Conductor(FrozenClass):
             )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
+            Material = import_class("pyleecan.Classes", "Material", "ins_mat")
             value = Material()
         check_var("ins_mat", value, "Material")
         self._ins_mat = value

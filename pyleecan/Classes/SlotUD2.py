@@ -46,8 +46,6 @@ except ImportError as error:
 
 
 from ._check import InitUnKnowClassError
-from .Line import Line
-from .Surface import Surface
 
 
 class SlotUD2(Slot):
@@ -394,6 +392,7 @@ class SlotUD2(Slot):
             )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
+            Surface = import_class("pyleecan.Classes", "Surface", "active_surf")
             value = Surface()
         check_var("active_surf", value, "Surface")
         self._active_surf = value

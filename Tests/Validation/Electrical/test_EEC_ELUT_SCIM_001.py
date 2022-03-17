@@ -88,7 +88,9 @@ def test_EEC_ELUT_SCIM_001():
         Nt_tot=2016,
     )
 
-    ELUT_SCIM_001 = LUTslip(
+    ELUT_SCIM_001 = LUTslip()
+    ELUT_SCIM_001.simu = Simu1(machine=SCIM_001)
+    ELUT_SCIM_001.simu.elec = Electrical(
         eec=EEC_SCIM(
             R1=param_dict["R1_20"],
             L1=param_dict["L10"],

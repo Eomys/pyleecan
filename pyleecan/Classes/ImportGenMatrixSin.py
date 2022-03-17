@@ -29,7 +29,6 @@ except ImportError as error:
 
 
 from ._check import InitUnKnowClassError
-from .ImportGenVectSin import ImportGenVectSin
 
 
 class ImportGenMatrixSin(ImportMatrix):

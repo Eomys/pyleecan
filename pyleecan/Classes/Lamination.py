@@ -175,11 +175,6 @@ except ImportError as error:
 
 
 from ._check import InitUnKnowClassError
-from .Material import Material
-from .Hole import Hole
-from .Notch import Notch
-from .Skew import Skew
-from .Bore import Bore
 
 
 class Lamination(FrozenClass):
@@ -967,6 +962,7 @@ class Lamination(FrozenClass):
             )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
+            Material = import_class("pyleecan.Classes", "Material", "mat_type")
             value = Material()
         check_var("mat_type", value, "Material")
         self._mat_type = value
@@ -1217,6 +1213,7 @@ class Lamination(FrozenClass):
             class_obj = import_class("pyleecan.Classes", value.get("__class__"), "skew")
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
+            Skew = import_class("pyleecan.Classes", "Skew", "skew")
             value = Skew()
         check_var("skew", value, "Skew")
         self._skew = value
@@ -1293,6 +1290,7 @@ class Lamination(FrozenClass):
             class_obj = import_class("pyleecan.Classes", value.get("__class__"), "bore")
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
+            Bore = import_class("pyleecan.Classes", "Bore", "bore")
             value = Bore()
         check_var("bore", value, "Bore")
         self._bore = value
