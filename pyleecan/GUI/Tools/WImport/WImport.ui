@@ -27,20 +27,27 @@
   </property>
   <layout class="QVBoxLayout" name="main_layout">
    <item>
-    <widget class="DTableData" name="tab_values" native="true"/>
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <item>
+      <widget class="QLabel" name="in_param">
+       <property name="text">
+        <string>Param_name: </string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QComboBox" name="c_type_import"/>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <widget class="QWidget" name="w_import" native="true"/>
    </item>
   </layout>
  </widget>
- <customwidgets>
-  <customwidget>
-   <class>DTableData</class>
-   <extends>QWidget</extends>
-   <header>.....GUI.Tools.WTableData.DTableData.h</header>
-   <container>1</container>
-  </customwidget>
- </customwidgets>
  <resources>
-  <include location="../../Resources/pyleecan.qrc"/>
+  <include location="../../../Resources/pyleecan.qrc"/>
+  <include location="../../../Resources/pyleecan.qrc"/>
   <include location="../../../Resources/pyleecan.qrc"/>
  </resources>
  <connections/>
