@@ -23,6 +23,14 @@ class Ui_WImportExcel(object):
         sizePolicy.setHeightForWidth(WImportExcel.sizePolicy().hasHeightForWidth())
         WImportExcel.setSizePolicy(sizePolicy)
         WImportExcel.setMinimumSize(QSize(0, 0))
+        icon = QIcon()
+        icon.addFile(
+            u"../../../Resources/images/icon/pyleecan_64.png",
+            QSize(),
+            QIcon.Normal,
+            QIcon.Off,
+        )
+        WImportExcel.setWindowIcon(icon)
         self.verticalLayout_3 = QVBoxLayout(WImportExcel)
         self.verticalLayout_3.setObjectName(u"verticalLayout_3")
         self.horizontalLayout_2 = QHBoxLayout()
@@ -116,7 +124,7 @@ class Ui_WImportExcel(object):
             QCoreApplication.translate("WImportExcel", u"Sheet: ", None)
         )
         self.in_range.setText(
-            QCoreApplication.translate("WImportExcel", u"Column range: ", None)
+            QCoreApplication.translate("WImportExcel", u"Data range: ", None)
         )
         self.le_range.setPlaceholderText(
             QCoreApplication.translate("WImportExcel", u"A6:B100", None)

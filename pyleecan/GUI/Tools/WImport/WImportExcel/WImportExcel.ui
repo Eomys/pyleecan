@@ -25,6 +25,10 @@
   <property name="windowTitle">
    <string>Import from Excel</string>
   </property>
+  <property name="windowIcon">
+   <iconset>
+    <normaloff>../../../Resources/images/icon/pyleecan_64.png</normaloff>../../../Resources/images/icon/pyleecan_64.png</iconset>
+  </property>
   <layout class="QVBoxLayout" name="verticalLayout_3">
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout_2">
@@ -72,7 +76,7 @@
         </size>
        </property>
        <property name="text">
-        <string>Column range: </string>
+        <string>Data range: </string>
        </property>
       </widget>
      </item>
