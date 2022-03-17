@@ -617,7 +617,7 @@ class Ui_DMatSetup(object):
 
         self.retranslateUi(DMatSetup)
 
-        self.nav_phy.setCurrentIndex(4)
+        self.nav_phy.setCurrentIndex(1)
         self.nav_meca.setCurrentIndex(0)
         self.nav_ther.setCurrentIndex(0)
 
@@ -650,7 +650,7 @@ class Ui_DMatSetup(object):
             QCoreApplication.translate("DMatSetup", u"Electrical", None),
         )
         self.c_type_material.setItemText(
-            0, QCoreApplication.translate("DMatSetup", u"Non-magnetic material", None)
+            0, QCoreApplication.translate("DMatSetup", u"Linear material", None)
         )
         self.c_type_material.setItemText(
             1, QCoreApplication.translate("DMatSetup", u"Magnet material", None)

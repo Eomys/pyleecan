@@ -196,7 +196,7 @@ class DMatSetup(Gen_DMatSetup, QDialog):
         self.tab_values.N_row_txt = "Nb of Points"
         self.tab_values.shape_max = (None, 2)
         self.tab_values.col_header = ["B-curve(T)", "H-curve(A/m)"]
-        self.tab_values.unit_order = ["B(H)", "H(B)"]
+        self.tab_values.unit_order = ["First column B", "First column H"]
         self.tab_values.button_plot_title = "B(H)"
         self.tab_values.si_col.hide()
         self.tab_values.in_col.hide()
@@ -770,7 +770,7 @@ class DMatSetup(Gen_DMatSetup, QDialog):
         None
         """
 
-        if self.c_type_material.currentIndex() == 0:  # Non-Magnetic
+        if self.c_type_material.currentIndex() == 0:  # Linear
             self.in_mur_lin.setHidden(False)
             self.lf_mur_lin.setHidden(False)
             self.unit_mur_lin.setHidden(False)
@@ -786,9 +786,9 @@ class DMatSetup(Gen_DMatSetup, QDialog):
             self.g_BH_import.setHidden(True)
 
         elif self.c_type_material.currentIndex() == 1:  # Magnetic
-            self.in_mur_lin.setHidden(True)
-            self.lf_mur_lin.setHidden(True)
-            self.unit_mur_lin.setHidden(True)
+            self.in_mur_lin.setHidden(False)
+            self.lf_mur_lin.setHidden(False)
+            self.unit_mur_lin.setHidden(False)
             self.in_Brm20.setHidden(False)
             self.lf_Brm20.setHidden(False)
             self.unit_Brm20.setHidden(False)
