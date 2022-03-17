@@ -30,7 +30,7 @@ from ._check import InitUnKnowClassError
 
 
 class InputForce(Input):
-    """Input to start with the structural one """
+    """Input to start with the structural one"""
 
     VERSION = 1
 

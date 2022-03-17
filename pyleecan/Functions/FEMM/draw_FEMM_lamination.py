@@ -16,6 +16,7 @@ def draw_FEMM_lamination(
     is_mmfr=True,
     type_BH_stator=0,
     type_BH_rotor=0,
+    is_fast_draw=False,
 ):
     """Draw a Lamination in FEMM
 
@@ -49,7 +50,8 @@ def draw_FEMM_lamination(
         2 Infinite permeability, 1 to use linear B(H) curve according to mur_lin, 0 to use the B(H) curve
     type_BH_rotor: int
         2 Infinite permeability, 1 to use linear B(H) curve according to mur_lin, 0 to use the B(H) curve
-
+    is_fast_draw: bool
+        True to draw the lamination using the highest periodicity
     Returns
     -------
     FEMM_dict : dict
@@ -60,8 +62,31 @@ def draw_FEMM_lamination(
     if lam_dxf is not None:
         femm.mi_readdxf(lam_dxf.file_path)
         surf_list = lam_dxf.get_surfaces()
+
+        sym_draw = sym
+        is_draw = True
+        is_set_BC = True
+        type_assign = 0
     else:
-        surf_list = lam.build_geometry(sym=sym, is_circular_radius=True)
+        # Drawing with smallest periodicities of the lamination depending on is_fast_draw
+        if is_fast_draw:
+            # Getting the periodicity of the lamination
+            sym_draw, is_antiper_a = lam.comp_periodicity_geo()
+
+            if is_antiper_a:
+                sym_draw *= 2
+
+            surf_list = lam.build_geometry(sym=sym_draw, is_circular_radius=True)
+            is_draw = False
+            is_set_BC = False
+            # Disabling the assign on the build_geometry with sym_draw (done later on build_geometry with sym)
+            type_assign = 2
+        else:
+            sym_draw = sym
+            surf_list = lam.build_geometry(sym=sym, is_circular_radius=True)
+            is_draw = True
+            is_set_BC = True
+            type_assign = 0
 
     # Applying user defined modifications
     for transform in transform_list:
@@ -71,7 +96,7 @@ def draw_FEMM_lamination(
             elif transform["label"] in surf.label and transform["type"] == "translate":
                 surf.translate(transform["value"])
 
-    # Draw all the lamination related surfaces
+    # Draw all the lamination related surfaces with/without assigning the surfaces
     FEMM_dict = draw_FEMM_surfaces(
         femm,
         machine,
@@ -84,7 +109,39 @@ def draw_FEMM_lamination(
         is_mmfr,
         type_BH_stator,
         type_BH_rotor,
+        type_assign=type_assign,
+        is_set_BC=is_set_BC,
     )
+
+    # Duplicate periodic parts if sym_draw > sym
+    if sym != sym_draw:
+        femm.mi_seteditmode("group")
+        lam_label = lam.get_label()
+        for key, val in FEMM_dict["groups"].items():
+            if val in FEMM_dict["groups"]["lam_group_list"][lam_label]:
+                femm.mi_selectgroup(val)
+        Ncopy = int(round(sym_draw / sym))
+        femm.mi_copyrotate(0, 0, 360 / sym / Ncopy, Ncopy - 1)
+
+    # BC + Assigning surface with the machine symetry instead of the lam symetry
+    if is_fast_draw:
+        surf_list_2 = lam.build_geometry(sym=sym, is_circular_radius=True)
+
+        FEMM_dict = draw_FEMM_surfaces(
+            femm,
+            machine,
+            surf_list_2,
+            FEMM_dict,
+            BC_dict,
+            Is,
+            Ir,
+            is_mmfs,
+            is_mmfr,
+            type_BH_stator,
+            type_BH_rotor,
+            type_assign=1,
+            is_draw=is_draw,
+        )
 
     # Apply BC for DXF import
     if lam_dxf is not None:

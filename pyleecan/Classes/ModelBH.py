@@ -32,7 +32,7 @@ from ._check import InitUnKnowClassError
 
 
 class ModelBH(FrozenClass):
-    """Abstract class for BH curve model """
+    """Abstract class for BH curve model"""
 
     VERSION = 1
 

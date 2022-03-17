@@ -5076,7 +5076,8 @@
             "get_yoke_side_line",
             "get_notches_surf",
             "comp_periodicity_duct_spatial",
-            "get_surfaces_closing"
+            "get_surfaces_closing",
+            "comp_periodicity_geo"
         ],
         "mother": "",
         "name": "Lamination",
@@ -6248,6 +6249,15 @@
                 "type": "bool",
                 "unit": "",
                 "value": 1
+            },
+            {
+                "desc": "True to use the symetry of the lamination to draw the machine faster",
+                "max": "",
+                "min": "",
+                "name": "is_fast_draw",
+                "type": "bool",
+                "unit": "",
+                "value": 0
             }
         ]
     },
@@ -10538,6 +10548,15 @@
                 "type": "int",
                 "unit": "-",
                 "value": 36
+            },
+            {
+                "desc": "2 to close the slot with lamination iron, 1 to close with air and 0 to close with nothing (previous policy)",
+                "max": "2",
+                "min": "0",
+                "name": "type_close",
+                "type": "int",
+                "unit": "-",
+                "value": 1
             }
         ]
     },
