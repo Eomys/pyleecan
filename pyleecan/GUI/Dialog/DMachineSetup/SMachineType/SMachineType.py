@@ -57,7 +57,11 @@ class SMachineType(Gen_SMachineType, QWidget):
         index = self.mach_index.index(type(self.machine))
         self.mach_dict = self.mach_list[index]
         self.img_type_machine.setPixmap(QPixmap(self.mach_dict["img"]))
-        self.in_machine_desc.setPlaceholderText(self.mach_dict["txt"])
+        # Initialize the machine description
+        if machine.desc not in [None, ""]:
+            self.in_machine_desc.setPlainText(machine.desc)
+        else:
+            self.in_machine_desc.setPlaceholderText(self.mach_dict["txt"])
         self.c_type.setCurrentIndex(index)
         if isinstance(self.machine, MachineSRM):
             # p is not meaningful for SRM

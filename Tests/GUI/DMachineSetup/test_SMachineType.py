@@ -59,6 +59,9 @@ class TestSMachineType(object):
         assert setup["widget"].c_type.currentText() == "SCIM"
         assert setup["widget"].c_topology.currentText() == "Internal Rotor"
 
+        # Test Initialization widget
+        #############################
+
         # DFIM
         setup["test_obj"] = MachineDFIM(name="test_machine_dfim", type_machine=4)
         setup["test_obj"].stator = LamSlotWind(
@@ -172,6 +175,29 @@ class TestSMachineType(object):
             setup["widget"].in_machine_desc.placeholderText()
             == "WRSM (Wound Rotor Synchronous Machine)"
         )
+
+        # Test Initialization of the machine desc
+        ###########################################
+
+        setup["test_obj"] = MachineDFIM(name="test_machine_dfim", type_machine=4)
+        setup["test_obj"].desc = "DFIM Machine"
+        setup["test_obj"].stator = LamSlotWind(
+            is_stator=True, is_internal=True, Rint=0.21, Rext=0.22
+        )
+        setup["test_obj"].stator.winding.p = 7
+        setup["test_obj"].rotor = LamSlotWind(
+            is_stator=False, is_internal=False, Rint=0.11, Rext=0.12
+        )
+        setup["widget"] = SMachineType(
+            machine=setup["test_obj"], material_dict=dict(), is_stator=False
+        )
+
+        assert setup["widget"].le_name.text() == "test_machine_dfim"
+        assert setup["widget"].si_p.value() == 7
+        assert setup["widget"].c_type.currentIndex() == 1
+        assert setup["widget"].c_type.currentText() == "DFIM"
+        assert setup["widget"].c_topology.currentText() == "External Rotor"
+        assert setup["widget"].in_machine_desc.toPlainText() == "DFIM Machine"
 
     def test_set_name(self, setup):
         """Check that the Widget allow to update name"""
