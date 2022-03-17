@@ -59,9 +59,9 @@ def comp_desc_dict(self):
     )
     # is_inner_rotor
     if self.rotor.is_internal:
-        inner = "Inner Rotor"
+        inner = "Internal Rotor"
     else:
-        inner = "Outer Rotor"
+        inner = "External Rotor"
     desc_dict.append(
         dict(
             {

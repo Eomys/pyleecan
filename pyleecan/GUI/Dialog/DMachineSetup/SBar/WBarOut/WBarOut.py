@@ -64,6 +64,6 @@ class WBarOut(QGroupBox):
         txt_ratio = self.tr("Sbar / Sslot: ")
         try:
             ratio = "%.4g" % (float(Sbar) / float(Sslot) * 100)
-            self.out_ratio.setText(txt_ratio + ratio + u" %")
+            self.out_ratio.setText(txt_ratio + ratio + " %")
         except Exception:
             self.out_ratio.setText(txt_ratio + "?")

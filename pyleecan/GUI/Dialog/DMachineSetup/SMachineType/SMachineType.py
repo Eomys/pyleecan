@@ -56,8 +56,12 @@ class SMachineType(Gen_SMachineType, QWidget):
         # Update the GUI to the current machine type
         index = self.mach_index.index(type(self.machine))
         self.mach_dict = self.mach_list[index]
-        self.txt_type_machine.setText(self.mach_dict["txt"])
         self.img_type_machine.setPixmap(QPixmap(self.mach_dict["img"]))
+        # Initialize the machine description
+        if machine.desc not in [None, ""]:
+            self.in_machine_desc.setPlainText(machine.desc)
+        else:
+            self.in_machine_desc.setPlaceholderText(self.mach_dict["txt"])
         self.c_type.setCurrentIndex(index)
         if isinstance(self.machine, MachineSRM):
             # p is not meaningful for SRM
@@ -75,26 +79,38 @@ class SMachineType(Gen_SMachineType, QWidget):
         if machine.rotor.is_internal is None:
             self.machine.rotor.is_internal = True
             self.machine.stator.is_internal = False
-            self.is_inner_rotor.setCheckState(Qt.Checked)
+            self.c_topology.setCurrentText("Internal Rotor")
         elif machine.rotor.is_internal:
-            self.is_inner_rotor.setCheckState(Qt.Checked)
+            self.c_topology.setCurrentText("Internal Rotor")
         else:
-            self.is_inner_rotor.setCheckState(Qt.Unchecked)
+            self.c_topology.setCurrentText("External Rotor")
 
-        # WRSM can only have inner rotor
+        # WRSM can only have Internal Rotor
         if self.machine.type_machine == 9:
-            self.is_inner_rotor.setEnabled(False)
+            self.c_topology.setEnabled(False)
         else:
-            self.is_inner_rotor.setEnabled(True)
+            self.c_topology.setEnabled(True)
 
         if machine.name not in [None, ""]:
             self.le_name.setText(machine.name)
 
         # Connect the slot/signal
         self.si_p.editingFinished.connect(self.set_p)
-        self.is_inner_rotor.toggled.connect(self.set_inner_rotor)
+        self.c_topology.currentIndexChanged.connect(self.set_inner_rotor)
         self.le_name.editingFinished.connect(self.s_set_name)
+        self.in_machine_desc.textChanged.connect(self.set_desc)
         self.c_type.currentIndexChanged.connect(self.set_machine_type)
+
+    def set_desc(self):
+        """Set the description of the machine
+
+        Parameters
+        ----------
+        self : SMachineType
+            A SMachineType object
+        """
+        self.machine.desc = self.in_machine_desc.toPlainText()
+        self.saveNeeded.emit()
 
     def s_set_name(self):
         """Set the name of the machine
@@ -125,7 +141,7 @@ class SMachineType(Gen_SMachineType, QWidget):
         # Notify the machine GUI that the machine has changed
         self.saveNeeded.emit()
 
-    def set_inner_rotor(self, is_checked):
+    def set_inner_rotor(self):
         """Signal to update the value of is_internal according to the widget
 
         Parameters
@@ -135,9 +151,12 @@ class SMachineType(Gen_SMachineType, QWidget):
         is_checked : bool
             State of is_internal
         """
-
-        self.machine.stator.is_internal = not is_checked
-        self.machine.rotor.is_internal = is_checked
+        self.machine.stator.is_internal = (
+            not self.c_topology.currentText() == "Internal Rotor"
+        )
+        self.machine.rotor.is_internal = (
+            self.c_topology.currentText() == "Internal Rotor"
+        )
         # Notify the machine GUI that the machine has changed
         self.saveNeeded.emit()
 
@@ -155,6 +174,7 @@ class SMachineType(Gen_SMachineType, QWidget):
         # Get the correct machine class
         mach = self.mach_list[index]["init_machine"]
         self.machine = type(mach)(init_dict=mach.as_dict())
+        self.in_machine_desc.setPlaceholderText(self.mach_list[index]["txt"])
         if p is not None:
             self.si_p.setValue(p)
             self.set_p()

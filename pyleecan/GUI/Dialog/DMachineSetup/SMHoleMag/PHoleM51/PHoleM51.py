@@ -323,7 +323,7 @@ class PHoleM51(Gen_PHoleM51, QWidget):
                     "Magnet surface: " + m_surf + " " + self.u.get_m2_name()
                 )
                 self.out_alpha.setText(
-                    "alpha: " + alpha_rad + u" rad (" + alpha_deg + u"°)"
+                    "alpha: " + alpha_rad + " rad (" + alpha_deg + "°)"
                 )
                 self.out_Whole.setText("Wslot: " + Ws + " " + self.u.get_m_name())
             except:
