@@ -113,7 +113,9 @@ def test_before_version():
     assert not is_before_version("1.2.3", "2.2.3")
     assert not is_before_version("1.2.3", "1.3.0")
     assert not is_before_version("1.2.3", "1.2.4")
+    assert not is_before_version("1.2.3", "1.2.3")
     assert not is_before_version("1.2.3", "1.2.3.2")
+    assert is_before_version("1.2.3.2", "1.2.3")
 
 
 if __name__ == "__main__":

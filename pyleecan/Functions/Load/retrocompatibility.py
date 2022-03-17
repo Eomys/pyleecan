@@ -260,6 +260,9 @@ def is_before_version(ref_version, check_version):
     is_before : bool
         True if check_version is before ref_version
     """
+    if ref_version == check_version:
+        return False
+
     ref_list = [int(val) for val in ref_version.split(".")]
     check_list = [int(val) for val in check_version.split(".")]
 
@@ -270,6 +273,10 @@ def is_before_version(ref_version, check_version):
             return True
         elif ref_list[ii] < check_list[ii]:
             return False
+
+    # Case 2.1.14.2 vs 2.1.14
+    if len(ref_list) > len(check_list):
+        return True
 
 
 def create_update_dict(file_version):
