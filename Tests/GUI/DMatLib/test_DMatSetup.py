@@ -562,10 +562,6 @@ class TestDMatSetup(object):
         assert self.widget.w_setup.mat.mag.BH_curve.value[3, 1] == 5.36544
 
 
-
-
-
-
 if __name__ == "__main__":
     a = TestDMatSetup()
     a.setup_class()
@@ -573,48 +569,3 @@ if __name__ == "__main__":
     a.test_BH_setup()
     print("Done")
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        # assert (
-        #     self.widget.w_setup.w_BH_import.c_type_import.currentText()
-        #     == "Import from Excel"
-        # )
-        # w_imp = self.widget.w_setup.w_BH_import.w_import
-        # # Import the excel file
-        # with mock.patch(
-        #     "PySide2.QtWidgets.QFileDialog.getOpenFileName",
-        #     return_value=(excel_path, "Excel file (*.xls .*xlsx)"),
-        # ):
-        #     w_imp.w_file_path.b_path.clicked.emit()
-        # assert w_imp.w_file_path.le_path.text() == excel_path
-        # # Check table
-        # assert w_imp is None
-        # w_imp.b_tab.clicked.emit()
-        # assert w_imp.si_row.value() == 4
-        # assert w_imp.si_col.value() == 2
-        # assert w_imp.w_tab.cellWidget(0, 0).value() == 0
-        # assert w_imp.w_tab.cellWidget(0, 1).value() == 1
-        # assert w_imp.w_tab.cellWidget(1, 0).value() == 2
-        # assert w_imp.w_tab.cellWidget(1, 1).value() == 100
-        # assert w_imp.w_tab.cellWidget(2, 0).value() == 3
-        # assert w_imp.w_tab.cellWidget(2, 1).value() == 300
-        # assert w_imp.w_tab.cellWidget(3, 0).value() == 5
-        # assert w_imp.w_tab.cellWidget(3, 1).value() == 800
-        # w_imp.close()
