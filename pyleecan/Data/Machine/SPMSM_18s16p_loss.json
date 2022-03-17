@@ -1,11 +1,11 @@
 {
   "__class__": "MachineSIPMSM",
-  "__save_date__": "2022_03_15 11h41min49s ",
+  "__save_date__": "2022_03_16 13h38min24s ",
   "__version__": "pyleecan_1.3.8",
   "desc": null,
   "frame": null,
   "logger_name": null,
-  "name": "SPMSM_18s16p_loss",
+  "name": "SPMSM_18s16p_loss_mod",
   "rotor": {
     "Kf1": 0.95,
     "L1": 0.00762,
@@ -64,7 +64,7 @@
           "is_BH_extrapolate": false,
           "mur_lin": 1.0277
         },
-        "name": "N42UH",
+        "name": "N42UH_old",
         "path": "C:/Users/LAP10/AppData/Roaming/pyleecan/Material/N42UH.json",
         "struct": {
           "Ex": null,
@@ -318,7 +318,7 @@
         "is_BH_extrapolate": false,
         "mur_lin": 2500.0
       },
-      "name": "M19",
+      "name": "M19_old",
       "path": "C:/Users/emile/AppData/Roaming/pyleecan/Material/M19.json",
       "struct": {
         "Ex": 215000000000.0,
@@ -396,7 +396,7 @@
         "is_BH_extrapolate": false,
         "mur_lin": 1
       },
-      "name": "Air",
+      "name": "Air_old",
       "path": "C:/Users/emile/AppData/Roaming/pyleecan/Material/Air.json",
       "struct": {
         "Ex": 215000000000.0,
@@ -662,7 +662,7 @@
         "is_BH_extrapolate": false,
         "mur_lin": 2500.0
       },
-      "name": "M19",
+      "name": "M19_old",
       "path": "C:/Users/LAP10/AppData/Roaming/pyleecan/Material/M19.json",
       "struct": {
         "Ex": 215000000000.0,
@@ -731,7 +731,7 @@
       "wind_end_index": 5
     },
     "winding": {
-      "Lewout": 0,
+      "Lewout": 0.00508,
       "Nlayer": 2,
       "Npcp": 1,
       "Nslot_shift_wind": 0,
@@ -741,9 +741,9 @@
       "conductor": {
         "Kwoh": null,
         "Nwppc": 1,
-        "Wins_cond": 0.00035999999999999997,
+        "Wins_cond": 0.000455,
         "Wins_wire": 0,
-        "Wwire": 0.0003,
+        "Wwire": 0.000455,
         "__class__": "CondType12",
         "cond_mat": {
           "HT": {
@@ -809,7 +809,7 @@
           },
           "is_isotropic": true,
           "mag": null,
-          "name": "Insulator1",
+          "name": "Insulator1_old",
           "path": "C:/Users/LAP10/AppData/Roaming/pyleecan/Material/Insulator1.json",
           "struct": {
             "Ex": null,

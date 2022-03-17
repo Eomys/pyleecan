@@ -29,7 +29,7 @@ def test_FEMM_Loss_SPMSM():
     simu.input = InputCurrent(
         Nt_tot=4 * 16,
         Na_tot=1000 * 2,
-        OP=OPdq(N0=4000, Id_ref=0, Iq_ref=2),
+        OP=OPdq(N0=4000, Id_ref=0, Iq_ref=2**(1/2)),
         is_periodicity_t=True,
         is_periodicity_a=True,
     )
@@ -39,28 +39,46 @@ def test_FEMM_Loss_SPMSM():
         is_periodicity_t=True,
         nb_worker=4,
         is_get_meshsolution=True,
+        Kmesh_fineness=1,
+        FEMM_dict_enforced={
+            "mesh":{
+                "smartmesh":True,
+                "meshsize_airgap":0.0001,
+                "elementsize_airgap":0.0001
+            }
+        }
     )
 
-    simu.loss = LossFEMM(Ce=Ce, Cp=Cprox, Ch=Ch, is_get_meshsolution=True, Tsta=100)
+    simu.loss = LossFEMM(Ce=Ce, Cp=Cprox, Ch=Ch, is_get_meshsolution=True, Tsta=120)
 
     out = simu.run()
 
-    freqs = out.loss.axes_dict["freqs"].get_values()
+    # freqs = out.loss.axes_dict["freqs"].get_values()
 
-    assert_almost_equal(
-        out.loss.Pstator, out.loss.get_loss_group("stator core", freqs)[0]
-    )
-    assert_almost_equal(
-        out.loss.Protor, out.loss.get_loss_group("rotor core", freqs)[0]
-    )
-    assert_almost_equal(
-        out.loss.Pprox, out.loss.get_loss_group("stator winding", freqs)[0]
-    )
-    assert_almost_equal(
-        out.loss.Pmagnet, out.loss.get_loss_group("rotor magnets", freqs)[0]
-    )
+    # assert_almost_equal(
+    #     out.loss.Pstator, out.loss.get_loss_group("stator core", freqs)[0]
+    # )
+    # assert_almost_equal(
+    #     out.loss.Protor, out.loss.get_loss_group("rotor core", freqs)[0]
+    # )
+    # assert_almost_equal(
+    #     out.loss.Pprox, out.loss.get_loss_group("stator winding", freqs)[0]
+    # )
+    # assert_almost_equal(
+    #     out.loss.Pmagnet, out.loss.get_loss_group("rotor magnets", freqs)[0]
+    # )
 
-    ovl_loss = out.loss.get_loss_overall()
+    
+    power_dict={
+        "total_power":out.mag.Pem_av,
+        "overall_losses":out.loss.get_loss_overall(),
+        "stator_loss":out.loss.Pstator,
+        "copper_loss":out.loss.Pjoule,
+        "rotor_loss":out.loss.Protor,
+        "magnet_loss":out.loss.Pmagnet,
+        "proximity_loss":out.loss.Pprox
+    }
+    print(power_dict)
 
     if is_show_fig:
         out.loss.meshsolution.plot_contour(
