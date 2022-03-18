@@ -21,8 +21,8 @@ def test_ElecLUTdq_InputPower():
 
     machine = load(join(DATA_DIR, "Machine", "Toyota_Prius.json"))
 
-    # LUT_enforced = load("LUT.h5")
-    LUT_enforced = None
+    LUT_enforced = load("C:/pyleecan/pyleecan_B/pyleecan/pyleecan/Results/LUT.h5")
+    # LUT_enforced = None
 
     # First simulation creating femm file
     simu = Simu1(name="test_ElecLUTdq_InputPower", machine=machine)

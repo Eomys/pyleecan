@@ -42,10 +42,4 @@ def comp_LUTdq(self):
 
     LUT.simu.run()
 
-    if simu.elec is not None and simu.elec.eec is not None:
-        LUT.Phi_dqh_mean = zeros((N_OP, 3))
-        for ii, out_ii in enumerate(LUT.output_list):
-            LUT.Phi_dqh_mean[ii, 0] = out_ii.elec.eec.Phid
-            LUT.Phi_dqh_mean[ii, 1] = out_ii.elec.eec.Phiq
-
     return LUT
