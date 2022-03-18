@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>642</width>
-    <height>413</height>
+    <width>958</width>
+    <height>657</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -48,25 +48,30 @@
       </spacer>
      </item>
      <item>
-      <widget class="QPushButton" name="b_delete">
-       <property name="text">
-        <string>Delete</string>
+      <spacer name="horizontalSpacer_4">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
        </property>
-      </widget>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
      </item>
      <item>
-      <widget class="QPushButton" name="b_save">
-       <property name="text">
-        <string>Save</string>
+      <spacer name="horizontalSpacer_3">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
        </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="b_cancel">
-       <property name="text">
-        <string>Cancel</string>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
        </property>
-      </widget>
+      </spacer>
      </item>
     </layout>
    </item>
@@ -86,7 +91,7 @@
       </size>
      </property>
      <property name="currentIndex">
-      <number>0</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="tab_elec">
       <attribute name="title">
@@ -122,7 +127,7 @@
             </font>
            </property>
            <property name="text">
-            <string>ohm.m</string>
+            <string>[ohm.m]</string>
            </property>
           </widget>
          </item>
@@ -142,6 +147,13 @@
          </item>
          <item row="1" column="1">
           <widget class="FloatEdit" name="lf_epsr"/>
+         </item>
+         <item row="1" column="2">
+          <widget class="QLabel" name="unit_epsr">
+           <property name="text">
+            <string>[ ]</string>
+           </property>
+          </widget>
          </item>
         </layout>
        </item>
@@ -166,7 +178,72 @@
       </attribute>
       <layout class="QVBoxLayout" name="verticalLayout_3">
        <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_8">
+         <item>
+          <widget class="QComboBox" name="c_type_material">
+           <property name="minimumSize">
+            <size>
+             <width>200</width>
+             <height>0</height>
+            </size>
+           </property>
+           <item>
+            <property name="text">
+             <string>Linear material</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Magnet material</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Lamination material</string>
+            </property>
+           </item>
+          </widget>
+         </item>
+         <item>
+          <spacer name="horizontalSpacer_2">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+        </layout>
+       </item>
+       <item>
         <layout class="QGridLayout" name="gridLayout">
+         <item row="3" column="1">
+          <widget class="FloatEdit" name="lf_Wlam"/>
+         </item>
+         <item row="1" column="1">
+          <widget class="FloatEdit" name="lf_Brm20"/>
+         </item>
+         <item row="1" column="2">
+          <widget class="QLabel" name="unit_Brm20">
+           <property name="font">
+            <font>
+             <pointsize>8</pointsize>
+             <weight>50</weight>
+             <bold>false</bold>
+            </font>
+           </property>
+           <property name="text">
+            <string>[T]</string>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="1">
+          <widget class="FloatEdit" name="lf_alpha_Br"/>
+         </item>
          <item row="0" column="0">
           <widget class="QLabel" name="in_mur_lin">
            <property name="font">
@@ -180,9 +257,6 @@
             <string>mur_lin</string>
            </property>
           </widget>
-         </item>
-         <item row="0" column="1">
-          <widget class="FloatEdit" name="lf_mur_lin"/>
          </item>
          <item row="1" column="0">
           <widget class="QLabel" name="in_Brm20">
@@ -198,11 +272,8 @@
            </property>
           </widget>
          </item>
-         <item row="1" column="1">
-          <widget class="FloatEdit" name="lf_Brm20"/>
-         </item>
-         <item row="1" column="2">
-          <widget class="QLabel" name="unit_Brm20">
+         <item row="3" column="2">
+          <widget class="QLabel" name="unit_Wlam">
            <property name="font">
             <font>
              <pointsize>8</pointsize>
@@ -211,7 +282,7 @@
             </font>
            </property>
            <property name="text">
-            <string>T</string>
+            <string>[mm]</string>
            </property>
           </widget>
          </item>
@@ -229,9 +300,6 @@
            </property>
           </widget>
          </item>
-         <item row="2" column="1">
-          <widget class="FloatEdit" name="lf_alpha_Br"/>
-         </item>
          <item row="3" column="0">
           <widget class="QLabel" name="in_Wlam">
            <property name="font">
@@ -246,27 +314,91 @@
            </property>
           </widget>
          </item>
-         <item row="3" column="1">
-          <widget class="FloatEdit" name="lf_Wlam"/>
+         <item row="0" column="1">
+          <widget class="FloatEdit" name="lf_mur_lin"/>
          </item>
-         <item row="3" column="2">
-          <widget class="QLabel" name="unit_Wlam">
-           <property name="font">
-            <font>
-             <pointsize>8</pointsize>
-             <weight>50</weight>
-             <bold>false</bold>
-            </font>
-           </property>
+         <item row="2" column="2">
+          <widget class="QLabel" name="unit_alpha_Br">
            <property name="text">
-            <string>m</string>
+            <string>[ ]</string>
            </property>
           </widget>
+         </item>
+         <item row="0" column="2">
+          <widget class="QLabel" name="unit_mur_lin">
+           <property name="text">
+            <string>[ ]</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="3">
+          <spacer name="horizontalSpacer_6">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item row="1" column="3">
+          <spacer name="horizontalSpacer_7">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item row="2" column="3">
+          <spacer name="horizontalSpacer_8">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item row="3" column="3">
+          <spacer name="horizontalSpacer_9">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
          </item>
         </layout>
        </item>
        <item>
-        <widget class="WImport" name="w_BH_import" native="true"/>
+        <widget class="QGroupBox" name="g_BH_import">
+         <property name="title">
+          <string>B(H) curve definition</string>
+         </property>
+         <property name="checkable">
+          <bool>true</bool>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_8">
+          <item>
+           <widget class="DTableData" name="tab_values" native="true"/>
+          </item>
+         </layout>
+        </widget>
        </item>
        <item>
         <spacer name="verticalSpacer">
@@ -317,7 +449,7 @@
             </font>
            </property>
            <property name="text">
-            <string>kg/m^3</string>
+            <string>[kg/m^3]</string>
            </property>
           </widget>
          </item>
@@ -333,7 +465,7 @@
            <item>
             <widget class="QGroupBox" name="g_young">
              <property name="title">
-              <string>Equivalent Yong Modulus [Pa]</string>
+              <string>Equivalent Yong Modulus [GPa]</string>
              </property>
              <layout class="QHBoxLayout" name="horizontalLayout_2">
               <item>
@@ -453,7 +585,7 @@
            <item>
             <widget class="QGroupBox" name="g_shear">
              <property name="title">
-              <string>Shear modulus [Pa]</string>
+              <string>Shear modulus [GPa]</string>
              </property>
              <layout class="QHBoxLayout" name="horizontalLayout_4">
               <item>
@@ -549,7 +681,7 @@
              <item row="0" column="2">
               <widget class="QLabel" name="unit_E">
                <property name="text">
-                <string>Pa</string>
+                <string>[GPa]</string>
                </property>
               </widget>
              </item>
@@ -590,7 +722,14 @@
              <item row="2" column="2">
               <widget class="QLabel" name="unit_G">
                <property name="text">
-                <string>Pa</string>
+                <string>[GPa]</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="2">
+              <widget class="QLabel" name="unit_nu">
+               <property name="text">
+                <string>[ ]</string>
                </property>
               </widget>
              </item>
@@ -635,7 +774,7 @@
           <item>
            <widget class="QStackedWidget" name="nav_ther">
             <property name="currentIndex">
-             <number>1</number>
+             <number>0</number>
             </property>
             <widget class="QWidget" name="page_niso_ther">
              <layout class="QHBoxLayout" name="horizontalLayout_5">
@@ -714,7 +853,7 @@
               <item>
                <widget class="QLabel" name="unit_L">
                 <property name="text">
-                 <string>W / K</string>
+                 <string>[W / K]</string>
                 </property>
                </widget>
               </item>
@@ -768,12 +907,19 @@
             </font>
            </property>
            <property name="text">
-            <string>W / kg / K</string>
+            <string>[W / kg / K]</string>
            </property>
           </widget>
          </item>
          <item row="0" column="1">
           <widget class="FloatEdit" name="lf_Cp"/>
+         </item>
+         <item row="1" column="2">
+          <widget class="QLabel" name="unit_alpha">
+           <property name="text">
+            <string>[ ]</string>
+           </property>
+          </widget>
          </item>
         </layout>
        </item>
@@ -819,7 +965,7 @@
          <item>
           <widget class="QLabel" name="unit_cost_unit">
            <property name="text">
-            <string>€ / kg</string>
+            <string>[€ / kg]</string>
            </property>
           </widget>
          </item>
@@ -843,17 +989,42 @@
     </widget>
    </item>
    <item>
-    <spacer name="verticalSpacer_7">
-     <property name="orientation">
-      <enum>Qt::Vertical</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>20</width>
-       <height>40</height>
-      </size>
-     </property>
-    </spacer>
+    <layout class="QHBoxLayout" name="horizontalLayout_9">
+     <item>
+      <spacer name="horizontalSpacer_5">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QPushButton" name="b_delete">
+       <property name="text">
+        <string>Delete</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="b_save">
+       <property name="text">
+        <string>Save</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="b_cancel">
+       <property name="text">
+        <string>Cancel</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
    </item>
   </layout>
  </widget>
@@ -864,9 +1035,9 @@
    <header>.....GUI/Tools/FloatEdit.h</header>
   </customwidget>
   <customwidget>
-   <class>WImport</class>
+   <class>DTableData</class>
    <extends>QWidget</extends>
-   <header>.....GUI/Tools/WImport/WImport.h</header>
+   <header>.....GUI.Tools.WTableData.DTableData.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

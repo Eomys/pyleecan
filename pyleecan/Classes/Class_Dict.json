@@ -6942,15 +6942,6 @@
                 "value": 1
             },
             {
-                "desc": "Coercitivity field at 20degC (calculated from mur_lin and Brm20 if not provided)",
-                "max": "",
-                "min": "0",
-                "name": "Hc",
-                "type": "float",
-                "unit": "A/m",
-                "value": 0
-            },
-            {
                 "desc": "magnet remanence induction at 20degC (calculated from mur_lin and Hc if not provided)",
                 "max": "",
                 "min": "",

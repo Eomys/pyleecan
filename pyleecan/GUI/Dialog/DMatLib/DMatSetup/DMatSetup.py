@@ -2,10 +2,13 @@ from os.path import join, dirname, isfile
 from PySide2.QtWidgets import QDialog, QMessageBox
 from PySide2.QtCore import Qt, Signal
 from logging import getLogger
-from numpy import pi
+from numpy import pi, array, array_equal
 
 from .....GUI.Dialog.DMatLib.DMatSetup.Gen_DMatSetup import Gen_DMatSetup
 from .....Classes.Material import Material
+from .....Classes.ImportMatrixVal import ImportMatrixVal
+from .....Classes.ImportMatrix import ImportMatrix
+from .....Classes.ImportMatrixXls import ImportMatrixXls
 from .....Functions.path_tools import rel_file_path
 from .....loggers import GUI_LOG_NAME
 
@@ -77,6 +80,8 @@ class DMatSetup(Gen_DMatSetup, QDialog):
         self.lf_nu_xy.editingFinished.connect(self.set_nu_xy)
         self.lf_nu_xz.editingFinished.connect(self.set_nu_xz)
         self.lf_nu_yz.editingFinished.connect(self.set_nu_yz)
+        self.tab_values.saveNeeded.connect(self.set_table_values)
+        self.c_type_material.currentIndexChanged.connect(self.change_type_material)
 
         # Connect buttons
         self.b_delete.clicked.connect(lambda: self.materialToDelete.emit())
@@ -116,6 +121,7 @@ class DMatSetup(Gen_DMatSetup, QDialog):
         is_save_needed : bool
             True if the material is different from the reference
         """
+        old_mat = self.mat
         self.mat = material
         self.init_name = self.mat.name  # Keep to revert rename
         self.init_path = self.mat.path
@@ -173,21 +179,56 @@ class DMatSetup(Gen_DMatSetup, QDialog):
         # Magnetical
         if self.mat.mag is None:
             self.set_default("mag")
+
         self.lf_mur_lin.setValue(self.mat.mag.mur_lin)
         self.lf_Brm20.setValue(self.mat.mag.Brm20)
         self.lf_alpha_Br.setValue(self.mat.mag.alpha_Br)
         self.lf_Wlam.setValue(self.mat.mag.Wlam)
-        # Setup import B(H) widget
-        self.w_BH_import.verbose_name = "B(H) curve definition"
-        self.w_BH_import.plot_title = self.mat.name + " B(H) curve"
-        self.w_BH_import.obj = self.mat.mag
-        self.w_BH_import.param_name = "BH_curve"
-        self.w_BH_import.expected_shape = (None, 2)
-        self.w_BH_import.update()
+        # Setup tab values
+        if not isinstance(self.mat.mag.BH_curve, ImportMatrixVal):
+            self.g_BH_import.setChecked(False)
+        elif array_equal(self.mat.mag.BH_curve.value, array([[0, 0]])):
+            self.g_BH_import.setChecked(False)
+        else:
+            self.g_BH_import.setChecked(True)
+        self.tab_values.setWindowFlags(self.tab_values.windowFlags() & ~Qt.Dialog)
+        self.tab_values.title = self.g_BH_import.title()
+        self.tab_values.N_row_txt = "Nb of Points"
+        self.tab_values.shape_max = (None, 2)
+        self.tab_values.col_header = ["B-curve(T)", "H-curve(A/m)"]
+        self.tab_values.unit_order = ["First column B", "First column H"]
+        self.tab_values.button_plot_title = "B(H)"
+        self.tab_values.si_col.hide()
+        self.tab_values.in_col.hide()
+        self.tab_values.b_close.hide()
+        self.tab_values.b_import.setHidden(False)
+        self.tab_values.b_export.setHidden(False)
+
+        if isinstance(self.mat.mag.BH_curve, ImportMatrixXls):
+            self.mat.mag.BH_curve = ImportMatrixVal(self.mat.mag.BH_curve.get_data())
+            self.tab_values.data = self.mat.mag.BH_curve.get_data()
+        elif not isinstance(self.mat.mag.BH_curve, ImportMatrixVal):
+            self.tab_values.data = array([[0, 0]])
+        elif self.mat.mag.BH_curve.get_data() is not None:
+            self.tab_values.data = self.mat.mag.BH_curve.get_data()
+        else:
+            self.tab_values.data = array([[0, 0]])
+        self.tab_values.update()
+
+        if isinstance(self.mat.mag.BH_curve, ImportMatrixVal) and not array_equal(
+            self.mat.mag.BH_curve.value, array([[0, 0]])
+        ):
+            self.c_type_material.setCurrentIndex(2)
+        elif self.mat.mag.Brm20 != 0 and self.mat.mag.alpha_Br != 0:
+            self.c_type_material.setCurrentIndex(1)
+        else:
+            self.c_type_material.setCurrentIndex(0)
+        self.change_type_material()
 
         # Hide useless widget
         self.in_epsr.hide()
         self.lf_epsr.hide()
+        self.unit_epsr.hide()
         # Enable/Disable buttons
         self.blockSignals(True)
         self.set_save_needed(is_save_needed=is_save_needed)
@@ -265,7 +306,6 @@ class DMatSetup(Gen_DMatSetup, QDialog):
         self.mat.path = rel_file_path(
             join(dirname(self.mat.path), file_name + ".json"), "MATLIB_DIR"
         )
-        self.w_BH_import.set_plot_title(self.mat.name + " B(H) curve")
         self.set_save_needed(is_save_needed=False)
         self.materialToRename.emit()  # Update reference and treeview
 
@@ -697,3 +737,80 @@ class DMatSetup(Gen_DMatSetup, QDialog):
         if self.mat.struct.nu_yz != self.lf_nu_yz.value():
             self.mat.struct.nu_yz = self.lf_nu_yz.value()
             self.set_save_needed(is_save_needed=True)
+
+    def set_table_values(self):
+        """Signal to update the value of the table according to the table
+
+        Parameters
+        ----------
+        self :
+            A DMatSetup object
+
+        Returns
+        -------
+        None
+        """
+        if isinstance(self.mat.mag.BH_curve, ImportMatrixVal):
+            if not array_equal(self.mat.mag.BH_curve.value, self.tab_values.get_data()):
+                self.mat.mag.BH_curve.value = self.tab_values.get_data()
+                self.set_save_needed(is_save_needed=True)
+        elif isinstance(self.mat.mag.BH_curve, (ImportMatrixXls, ImportMatrix)):
+            self.mat.mag.BH_curve = ImportMatrixVal(self.tab_values.get_data())
+            self.set_save_needed(is_save_needed=True)
+
+    def change_type_material(self):
+        """Hide or show units that need to be defined depending on the type of the material
+        Parameters
+        ----------
+        self :
+            A DMatSetup object
+
+        Returns
+        -------
+        None
+        """
+
+        if self.c_type_material.currentIndex() == 0:  # Linear
+            self.in_mur_lin.setHidden(False)
+            self.lf_mur_lin.setHidden(False)
+            self.unit_mur_lin.setHidden(False)
+            self.in_Brm20.setHidden(True)
+            self.lf_Brm20.setHidden(True)
+            self.unit_Brm20.setHidden(True)
+            self.in_alpha_Br.setHidden(True)
+            self.lf_alpha_Br.setHidden(True)
+            self.unit_alpha_Br.setHidden(True)
+            self.in_Wlam.setHidden(True)
+            self.lf_Wlam.setHidden(True)
+            self.unit_Wlam.setHidden(True)
+            self.g_BH_import.setHidden(True)
+
+        elif self.c_type_material.currentIndex() == 1:  # Magnetic
+            self.in_mur_lin.setHidden(False)
+            self.lf_mur_lin.setHidden(False)
+            self.unit_mur_lin.setHidden(False)
+            self.in_Brm20.setHidden(False)
+            self.lf_Brm20.setHidden(False)
+            self.unit_Brm20.setHidden(False)
+            self.in_alpha_Br.setHidden(False)
+            self.lf_alpha_Br.setHidden(False)
+            self.unit_alpha_Br.setHidden(False)
+            self.in_Wlam.setHidden(True)
+            self.lf_Wlam.setHidden(True)
+            self.unit_Wlam.setHidden(True)
+            self.g_BH_import.setHidden(True)
+
+        else:  # Lamination
+            self.in_mur_lin.setHidden(True)
+            self.lf_mur_lin.setHidden(True)
+            self.unit_mur_lin.setHidden(True)
+            self.in_Brm20.setHidden(True)
+            self.lf_Brm20.setHidden(True)
+            self.unit_Brm20.setHidden(True)
+            self.in_alpha_Br.setHidden(True)
+            self.lf_alpha_Br.setHidden(True)
+            self.unit_alpha_Br.setHidden(True)
+            self.in_Wlam.setHidden(False)
+            self.lf_Wlam.setHidden(False)
+            self.unit_Wlam.setHidden(False)
+            self.g_BH_import.setHidden(False)
