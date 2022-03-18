@@ -233,7 +233,7 @@ class PWSlot60(Gen_PWSlot60, QWidget):
             self.out_tot_surface.setText(
                 TS_txt + tot_surf + " " + gui_option.unit.get_m2_name()
             )
-            self.out_op_angle.setText(AO_txt + op_angle + u" rad")
+            self.out_op_angle.setText(AO_txt + op_angle + " rad")
             # self.out_tooth_width.setText(TW_txt + tooth_width + " " +
             #                             gui_option.unit.get_m_name())
             self.out_slot_height.setText(

@@ -144,7 +144,11 @@ def comp_FEMM_dict(machine, Kgeo_fineness, Kmesh_fineness, T_mag, type_calc_leak
     # Set groups (to select area by type)
     FEMM_dict["groups"] = dict()
     for grp in FEMM_GROUPS:
-        FEMM_dict["groups"][grp] = FEMM_GROUPS[grp]["ID"]
+        if grp != "lam_group_list":
+            FEMM_dict["groups"][grp] = FEMM_GROUPS[grp]["ID"]
+
+    # Adding lam_group_list linking lam name to related ID
+    FEMM_dict["groups"]["lam_group_list"] = FEMM_GROUPS["lam_group_list"]
 
     # Init empty list
     FEMM_dict["materials"] = list()

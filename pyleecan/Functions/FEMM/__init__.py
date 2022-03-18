@@ -24,6 +24,11 @@ FEMM_GROUPS["GROUP_RH"] = {"name": "rotor holes", "ID": 26}
 FEMM_GROUPS["GROUP_IN"] = {"name": "inner shaft", "ID": 30}
 FEMM_GROUPS["GROUP_FM"] = {"name": "fictitious magnets", "ID": 31}
 FEMM_GROUPS["GROUP_FR"] = {"name": "frame", "ID": 32}
+# List of group needed to select a lamination
+FEMM_GROUPS["lam_group_list"] = {
+    "Stator-0": [10, 11, 12, 13, 14, 15, 16],
+    "Rotor-0": [20, 21, 22, 23, 24, 25, 26],
+}
 
 # global Values
 pbtype = "planar"  # problem type

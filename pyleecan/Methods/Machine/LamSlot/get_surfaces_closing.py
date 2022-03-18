@@ -23,7 +23,7 @@ def get_surfaces_closing(self, sym=1):
     close_list = Lamination.get_surfaces_closing(self=self, sym=sym)
     if not hasattr(self.slot, "get_surface_opening"):
         return close_list
-    else:  # Get slot closing surfaces
+    elif self.slot.type_close != 0:  # Get slot closing surfaces
         slot_pitch = 2 * pi / self.slot.Zs
         # for slot to draw
         for ii in range(self.slot.Zs // sym):
