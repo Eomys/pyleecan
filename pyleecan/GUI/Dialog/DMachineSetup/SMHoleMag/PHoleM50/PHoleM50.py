@@ -281,7 +281,7 @@ class PHoleM50(Gen_PHoleM50, QWidget):
                     "Magnet surf.: " + m_surf + " [" + self.u.get_m2_name() + "]"
                 )
                 self.out_alpha.setText(
-                    "alpha: " + alpha_rad + u" [rad] (" + alpha_deg + u"°)"
+                    "alpha: " + alpha_rad + " [rad] (" + alpha_deg + "°)"
                 )
                 self.out_W5.setText("W5: " + W5 + " [" + self.u.get_m_name() + "]")
                 is_set = True

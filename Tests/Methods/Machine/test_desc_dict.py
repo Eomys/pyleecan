@@ -28,7 +28,7 @@ def test_desc_SCIM():
     assert desc_dict[3]["value"] == 3
 
     assert desc_dict[4]["name"] == "Topology"
-    assert desc_dict[4]["value"] == "Inner Rotor"
+    assert desc_dict[4]["value"] == "Internal Rotor"
 
     assert desc_dict[5]["name"] == "qs"
     assert desc_dict[5]["value"] == 3
@@ -56,7 +56,7 @@ def test_desc_IPMSM():
     assert desc_dict[2]["value"] == 4
 
     assert desc_dict[3]["name"] == "Topology"
-    assert desc_dict[3]["value"] == "Inner Rotor"
+    assert desc_dict[3]["value"] == "Internal Rotor"
 
     assert desc_dict[4]["name"] == "qs"
     assert desc_dict[4]["value"] == 3
@@ -70,7 +70,7 @@ def test_desc_IPMSM():
 
 @pytest.mark.outer_rotor
 def test_desc_Outer_Rotor():
-    """Check that the description with Outer Rotor is correct"""
+    """Check that the description with External Rotor is correct"""
 
     test_obj = MachineIPMSM()
     test_obj.stator = LamSlotWind(is_stator=True, is_internal=True)
@@ -86,7 +86,7 @@ def test_desc_Outer_Rotor():
 
     desc_dict = test_obj.comp_desc_dict()
     assert desc_dict[3]["name"] == "Topology"
-    assert desc_dict[3]["value"] == "Outer Rotor"
+    assert desc_dict[3]["value"] == "External Rotor"
 
 
 if __name__ == "__main__":

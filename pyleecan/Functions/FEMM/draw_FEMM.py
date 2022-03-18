@@ -31,6 +31,7 @@ def draw_FEMM(
     transform_list=[],
     rotor_dxf=None,
     stator_dxf=None,
+    is_fast_draw=False,
     T_mag=20,
 ):
     """Draws and assigns the property of the machine in FEMM
@@ -81,6 +82,8 @@ def draw_FEMM(
         To use a dxf version of the rotor instead of build_geometry
     stator_dxf : DXFImport
         To use a dxf version of the stator instead of build_geometry
+    is_fast_draw : bool
+        True to use lamination symetry to accelerate the drawing of the machine
     T_mag: float
         Permanent magnet temperature [deg Celsius]
 
@@ -172,6 +175,7 @@ def draw_FEMM(
             is_mmfr,
             type_BH_stator,
             type_BH_rotor,
+            is_fast_draw,
         )
 
     # List of the Non lamination related surfaces

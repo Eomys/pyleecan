@@ -235,12 +235,12 @@ def test_MachineUD():
     )
     lam1.winding = WindingUD(qs=3, p=3)
     lam1.winding.init_as_CW2LT()
-    # Outer rotor
+    # External Rotor
     lam2 = LamSlot(
         Rext=lam1.Rint - A1, Rint=lam1.Rint - A1 - W2, is_internal=True, is_stator=False
     )
     lam2.slot = SlotW10(Zs=22, W0=25e-3, W1=25e-3, W2=15e-3, H0=0, H1=0, H2=W2 * 0.75)
-    # Inner rotor
+    # Internal Rotor
     lam3 = LamSlot(
         Rext=lam2.Rint - A2,
         Rint=lam2.Rint - A2 - W3,
@@ -687,7 +687,11 @@ def test_Optimization_problem():
     )
 
     # Definition of the magnetic simulation
-    simu.mag = MagFEMM(type_BH_stator=2, type_BH_rotor=2, is_periodicity_a=True,)
+    simu.mag = MagFEMM(
+        type_BH_stator=2,
+        type_BH_rotor=2,
+        is_periodicity_a=True,
+    )
 
     simu.struct = None
 

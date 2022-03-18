@@ -168,7 +168,7 @@ class SMSlot(Ui_SMSlot, QWidget):
         self.out_Slot_pitch.setText(
             sp_txt
             + "%.4g" % (Slot_pitch)
-            + u" [°] ("
+            + " [°] ("
             + "%.4g" % (Slot_pitch_rad)
             + " [rad])"
         )

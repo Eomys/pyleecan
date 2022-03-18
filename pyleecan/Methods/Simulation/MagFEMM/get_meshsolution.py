@@ -113,11 +113,12 @@ def get_meshsolution(self, femm, save_path, j_t0, id_worker=0, is_get_mesh=False
         # get all groups that are in the FEMM model
         groups = dict()
         for grp in FEMM_GROUPS:
-            idx = FEMM_GROUPS[grp]["ID"]
-            name = FEMM_GROUPS[grp]["name"]
-            ind = np.where(listElem0[:, 6] == idx)[0]
-            if ind.size > 0:
-                groups[name] = mesh.cell["triangle"].indice[ind].tolist()
+            if grp != "lam_group_list":
+                idx = FEMM_GROUPS[grp]["ID"]
+                name = FEMM_GROUPS[grp]["name"]
+                ind = np.where(listElem0[:, 6] == idx)[0]
+                if ind.size > 0:
+                    groups[name] = mesh.cell["triangle"].indice[ind].tolist()
     else:
         mesh = None
         groups = None

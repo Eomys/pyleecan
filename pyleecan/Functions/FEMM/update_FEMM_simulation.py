@@ -23,9 +23,9 @@ def update_FEMM_simulation(
     FEMM_dict : dict
         Dictionary containing main FEMM definition / properties
     is_internal_rotor: bool
-        True if it is an internal rotor topology
+        True if it is an Internal Rotor topology
     is_sliding_band: bool
-        True if it is an internal rotor topology
+        True if it is an Internal Rotor topology
     angle_rotor: ndarray
         Vector of rotor angular position over time [Nt,]
     Is : ndarray

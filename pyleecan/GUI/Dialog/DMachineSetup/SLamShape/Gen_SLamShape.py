@@ -11,7 +11,7 @@ class Gen_SLamShape(Ui_SLamShape):
         Ui_SLamShape.setupUi(self, SLamShape)
         # Setup of in_L1
         txt = self.tr(
-            u"""Lamination stack active length [m] without radial ventilation airducts but including insulation layers between lamination sheets"""
+            u"""Lamination stack active length without radial ventilation airducts but including insulation layers between lamination sheets"""
         )
         self.in_L1.setWhatsThis(txt)
         self.in_L1.setToolTip(txt)
@@ -19,7 +19,7 @@ class Gen_SLamShape(Ui_SLamShape):
         # Setup of lf_L1
         self.lf_L1.validator().setBottom(0)
         txt = self.tr(
-            u"""Lamination stack active length [m] without radial ventilation airducts but including insulation layers between lamination sheets"""
+            u"""Lamination stack active length without radial ventilation airducts but including insulation layers between lamination sheets"""
         )
         self.lf_L1.setWhatsThis(txt)
         self.lf_L1.setToolTip(txt)
