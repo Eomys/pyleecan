@@ -23,6 +23,10 @@ def test_FEMM_Loss_SPMSM():
     Ch = 143  # hysteresis loss coefficient [W/(m^3*T^2*Hz)]
     Ce = 0.530  # eddy current loss coefficients [W/(m^3*T^2*Hz^2)]
     Cprox = 4.1018  # sigma_w * cond.Hwire * cond.Wwire
+    
+    # Taking into account the stacking factor
+    Ch /= machine.stator.Kf1
+    Ce /= machine.stator.Kf1
 
     simu = Simu1(name="test_FEMM_Loss_SPMSM", machine=machine)
 
@@ -53,20 +57,20 @@ def test_FEMM_Loss_SPMSM():
 
     out = simu.run()
 
-    # freqs = out.loss.axes_dict["freqs"].get_values()
+    freqs = out.loss.axes_dict["freqs"].get_values()
 
-    # assert_almost_equal(
-    #     out.loss.Pstator, out.loss.get_loss_group("stator core", freqs)[0]
-    # )
-    # assert_almost_equal(
-    #     out.loss.Protor, out.loss.get_loss_group("rotor core", freqs)[0]
-    # )
-    # assert_almost_equal(
-    #     out.loss.Pprox, out.loss.get_loss_group("stator winding", freqs)[0]
-    # )
-    # assert_almost_equal(
-    #     out.loss.Pmagnet, out.loss.get_loss_group("rotor magnets", freqs)[0]
-    # )
+    assert_almost_equal(
+        out.loss.Pstator, out.loss.get_loss_group("stator core", freqs)[0]
+    )
+    assert_almost_equal(
+        out.loss.Protor, out.loss.get_loss_group("rotor core", freqs)[0]
+    )
+    assert_almost_equal(
+        out.loss.Pprox, out.loss.get_loss_group("stator winding", freqs)[0]
+    )
+    assert_almost_equal(
+        out.loss.Pmagnet, out.loss.get_loss_group("rotor magnets", freqs)[0]
+    )
 
     
     power_dict={

@@ -44,10 +44,8 @@ def comp_core_losses(self, group, freqs, Ce=None, Ch=None):
 
     if "stator" in group:
         Lst = machine.stator.L1
-        Kf1 = machine.stator.Kf1
     else:
         Lst = machine.rotor.L1
-        Kf1 = machine.rotor.Kf1
 
     # Get magnetic flux density complex amplitude over frequency and for each element center in current group
     Bval_fft, Se = output.mag.get_fft_from_meshsol(group, label="B")
@@ -62,8 +60,6 @@ def comp_core_losses(self, group, freqs, Ce=None, Ch=None):
         # Hysteretic loss density for each frequency and element
         Pcore_density += Ch * freqs[:, None] * Bfft_square
     
-    Pcore_density/=Kf1
-
     # Integrate loss density over elements' volume and sum over frequency to get overall loss
     Pcore = Lst * per_a * np_sum(matmul(Pcore_density, Se))
 
