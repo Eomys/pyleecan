@@ -22,9 +22,7 @@ def comp_Phidq(self):
 
         if Phid is None or Phiq is None:
             # Calculate Phid and Phiq for the given Id/Iq
-            Phi_dqh_mean = self.indmag.comp_inductance(
-                machine=self.get_machine_from_parent(), OP_ref=self.OP
-            )
+            Phi_dqh_mean = self.comp_fluxlinkage(OP=self.OP)[0]
 
         if Phid is None:
             Phid = Phi_dqh_mean[0]  # * self.Xke_skinS

@@ -14,8 +14,6 @@ from pyleecan.Classes.Simu1 import Simu1
 from pyleecan.Classes.InputCurrent import InputCurrent
 from pyleecan.Classes.Electrical import Electrical
 from pyleecan.Classes.EEC_PMSM import EEC_PMSM
-from pyleecan.Classes.FluxLinkFEMM import FluxLinkFEMM
-from pyleecan.Classes.IndMagFEMM import IndMagFEMM
 from pyleecan.Classes.MagFEMM import MagFEMM
 from pyleecan.Classes.VarLoadCurrent import VarLoadCurrent
 
@@ -48,15 +46,17 @@ def test_EEC_PMSM(nb_worker=int(0.5 * cpu_count())):
     # Definition of the magnetic simulation
     simu_mag = simu.copy()
     simu_mag.mag = MagFEMM(
-        is_periodicity_a=True, is_periodicity_t=True, nb_worker=nb_worker
+        is_periodicity_a=True, is_periodicity_t=True, nb_worker=nb_worker, T_mag=60
     )
 
     # Definition of the electrical simulation
     simu.elec = Electrical()
     simu.elec.eec = EEC_PMSM(
-        indmag=IndMagFEMM(is_periodicity_a=True, Nt_tot=8 * 16, nb_worker=nb_worker),
-        fluxlink=FluxLinkFEMM(
-            is_periodicity_a=True, Nt_tot=8 * 16, nb_worker=nb_worker
+        fluxlink=MagFEMM(
+            is_periodicity_t=True,
+            is_periodicity_a=True,
+            nb_worker=nb_worker,
+            T_mag=60,
         ),
     )
 
@@ -64,8 +64,8 @@ def test_EEC_PMSM(nb_worker=int(0.5 * cpu_count())):
     out_mag = simu_mag.run()
 
     # from Yang et al, 2013
-    assert out.elec.Tem_av_ref == pytest.approx(82.7, rel=0.1)
-    assert out_mag.mag.Tem_av == pytest.approx(82.7, rel=0.1)
+    assert_almost_equal(out.elec.Tem_av_ref, 82, decimal=1)
+    assert_almost_equal(out_mag.mag.Tem_av, 82, decimal=1)
 
     # Plot 3-phase current function of time
     if is_show_fig:
@@ -103,9 +103,11 @@ def test_EEC_PMSM_sync_rel(nb_worker=int(0.5 * cpu_count())):
     # Definition of the simulation (FEMM)
     simu.elec = Electrical()
     simu.elec.eec = EEC_PMSM(
-        indmag=IndMagFEMM(is_periodicity_a=True, Nt_tot=8 * 16, nb_worker=nb_worker),
-        fluxlink=FluxLinkFEMM(
-            is_periodicity_a=True, Nt_tot=8 * 16, nb_worker=nb_worker
+        fluxlink=MagFEMM(
+            is_periodicity_t=True,
+            is_periodicity_a=True,
+            nb_worker=nb_worker,
+            T_mag=60,
         ),
     )
 
@@ -131,17 +133,9 @@ def test_EEC_PMSM_sync_rel(nb_worker=int(0.5 * cpu_count())):
 
     Tem_eec = [out_ii.elec.Tem_av_ref for out_ii in out.output_list]
 
-    qs = Toyota_Prius.stator.winding.qs
-    p = Toyota_Prius.get_pole_pair_number()
     Tem_sync = zeros(N_simu)
     Tem_rel = zeros(N_simu)
-    # phidqh_mean_mag = out.output_list[0].simu.elec.eec.fluxlink.comp_fluxlinkage(
-    #     Toyota_Prius
-    # )
     for ii, out_ii in enumerate(out.output_list):
-        # eec_ii = out_ii.elec.eec
-        # eec_ii.Phid_mag = phidqh_mean_mag[0]
-        # eec_ii.Phiq_mag = phidqh_mean_mag[1]
         Tem_sync[ii], Tem_rel[ii] = out_ii.elec.eec.comp_torque_sync_rel()
 
     Tem2 = Tem_sync + Tem_rel

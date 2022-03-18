@@ -22,8 +22,6 @@ from pyleecan.Classes.ImportMatrixVal import ImportMatrixVal
 from pyleecan.Classes.MagFEMM import MagFEMM
 from pyleecan.Classes.ForceMT import ForceMT
 from pyleecan.Classes.EEC_PMSM import EEC_PMSM
-from pyleecan.Classes.FluxLinkFEMM import FluxLinkFEMM
-from pyleecan.Classes.IndMagFEMM import IndMagFEMM
 from pyleecan.Classes.DriveWave import DriveWave
 from pyleecan.Classes.Output import Output
 
