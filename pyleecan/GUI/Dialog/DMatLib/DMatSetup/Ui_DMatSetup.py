@@ -45,20 +45,17 @@ class Ui_DMatSetup(object):
 
         self.horizontalLayout.addItem(self.horizontalSpacer)
 
-        self.b_delete = QPushButton(DMatSetup)
-        self.b_delete.setObjectName(u"b_delete")
+        self.horizontalSpacer_4 = QSpacerItem(
+            40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum
+        )
 
-        self.horizontalLayout.addWidget(self.b_delete)
+        self.horizontalLayout.addItem(self.horizontalSpacer_4)
 
-        self.b_save = QPushButton(DMatSetup)
-        self.b_save.setObjectName(u"b_save")
+        self.horizontalSpacer_3 = QSpacerItem(
+            40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum
+        )
 
-        self.horizontalLayout.addWidget(self.b_save)
-
-        self.b_cancel = QPushButton(DMatSetup)
-        self.b_cancel.setObjectName(u"b_cancel")
-
-        self.horizontalLayout.addWidget(self.b_cancel)
+        self.horizontalLayout.addItem(self.horizontalSpacer_3)
 
         self.verticalLayout.addLayout(self.horizontalLayout)
 
@@ -147,22 +144,10 @@ class Ui_DMatSetup(object):
 
         self.gridLayout = QGridLayout()
         self.gridLayout.setObjectName(u"gridLayout")
-        self.in_mur_lin = QLabel(self.tab_mag)
-        self.in_mur_lin.setObjectName(u"in_mur_lin")
-        self.in_mur_lin.setFont(font)
+        self.lf_Wlam = FloatEdit(self.tab_mag)
+        self.lf_Wlam.setObjectName(u"lf_Wlam")
 
-        self.gridLayout.addWidget(self.in_mur_lin, 0, 0, 1, 1)
-
-        self.lf_mur_lin = FloatEdit(self.tab_mag)
-        self.lf_mur_lin.setObjectName(u"lf_mur_lin")
-
-        self.gridLayout.addWidget(self.lf_mur_lin, 0, 1, 1, 1)
-
-        self.in_Brm20 = QLabel(self.tab_mag)
-        self.in_Brm20.setObjectName(u"in_Brm20")
-        self.in_Brm20.setFont(font)
-
-        self.gridLayout.addWidget(self.in_Brm20, 1, 0, 1, 1)
+        self.gridLayout.addWidget(self.lf_Wlam, 3, 1, 1, 1)
 
         self.lf_Brm20 = FloatEdit(self.tab_mag)
         self.lf_Brm20.setObjectName(u"lf_Brm20")
@@ -175,27 +160,22 @@ class Ui_DMatSetup(object):
 
         self.gridLayout.addWidget(self.unit_Brm20, 1, 2, 1, 1)
 
-        self.in_alpha_Br = QLabel(self.tab_mag)
-        self.in_alpha_Br.setObjectName(u"in_alpha_Br")
-        self.in_alpha_Br.setFont(font)
-
-        self.gridLayout.addWidget(self.in_alpha_Br, 2, 0, 1, 1)
-
         self.lf_alpha_Br = FloatEdit(self.tab_mag)
         self.lf_alpha_Br.setObjectName(u"lf_alpha_Br")
 
         self.gridLayout.addWidget(self.lf_alpha_Br, 2, 1, 1, 1)
 
-        self.in_Wlam = QLabel(self.tab_mag)
-        self.in_Wlam.setObjectName(u"in_Wlam")
-        self.in_Wlam.setFont(font)
+        self.in_mur_lin = QLabel(self.tab_mag)
+        self.in_mur_lin.setObjectName(u"in_mur_lin")
+        self.in_mur_lin.setFont(font)
 
-        self.gridLayout.addWidget(self.in_Wlam, 3, 0, 1, 1)
+        self.gridLayout.addWidget(self.in_mur_lin, 0, 0, 1, 1)
 
-        self.lf_Wlam = FloatEdit(self.tab_mag)
-        self.lf_Wlam.setObjectName(u"lf_Wlam")
+        self.in_Brm20 = QLabel(self.tab_mag)
+        self.in_Brm20.setObjectName(u"in_Brm20")
+        self.in_Brm20.setFont(font)
 
-        self.gridLayout.addWidget(self.lf_Wlam, 3, 1, 1, 1)
+        self.gridLayout.addWidget(self.in_Brm20, 1, 0, 1, 1)
 
         self.unit_Wlam = QLabel(self.tab_mag)
         self.unit_Wlam.setObjectName(u"unit_Wlam")
@@ -203,15 +183,56 @@ class Ui_DMatSetup(object):
 
         self.gridLayout.addWidget(self.unit_Wlam, 3, 2, 1, 1)
 
-        self.unit_mur_lin = QLabel(self.tab_mag)
-        self.unit_mur_lin.setObjectName(u"unit_mur_lin")
+        self.in_alpha_Br = QLabel(self.tab_mag)
+        self.in_alpha_Br.setObjectName(u"in_alpha_Br")
+        self.in_alpha_Br.setFont(font)
 
-        self.gridLayout.addWidget(self.unit_mur_lin, 0, 2, 1, 1)
+        self.gridLayout.addWidget(self.in_alpha_Br, 2, 0, 1, 1)
+
+        self.in_Wlam = QLabel(self.tab_mag)
+        self.in_Wlam.setObjectName(u"in_Wlam")
+        self.in_Wlam.setFont(font)
+
+        self.gridLayout.addWidget(self.in_Wlam, 3, 0, 1, 1)
+
+        self.lf_mur_lin = FloatEdit(self.tab_mag)
+        self.lf_mur_lin.setObjectName(u"lf_mur_lin")
+
+        self.gridLayout.addWidget(self.lf_mur_lin, 0, 1, 1, 1)
 
         self.unit_alpha_Br = QLabel(self.tab_mag)
         self.unit_alpha_Br.setObjectName(u"unit_alpha_Br")
 
         self.gridLayout.addWidget(self.unit_alpha_Br, 2, 2, 1, 1)
+
+        self.unit_mur_lin = QLabel(self.tab_mag)
+        self.unit_mur_lin.setObjectName(u"unit_mur_lin")
+
+        self.gridLayout.addWidget(self.unit_mur_lin, 0, 2, 1, 1)
+
+        self.horizontalSpacer_6 = QSpacerItem(
+            40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum
+        )
+
+        self.gridLayout.addItem(self.horizontalSpacer_6, 0, 3, 1, 1)
+
+        self.horizontalSpacer_7 = QSpacerItem(
+            40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum
+        )
+
+        self.gridLayout.addItem(self.horizontalSpacer_7, 1, 3, 1, 1)
+
+        self.horizontalSpacer_8 = QSpacerItem(
+            40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum
+        )
+
+        self.gridLayout.addItem(self.horizontalSpacer_8, 2, 3, 1, 1)
+
+        self.horizontalSpacer_9 = QSpacerItem(
+            40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum
+        )
+
+        self.gridLayout.addItem(self.horizontalSpacer_9, 3, 3, 1, 1)
 
         self.verticalLayout_3.addLayout(self.gridLayout)
 
@@ -609,11 +630,30 @@ class Ui_DMatSetup(object):
 
         self.verticalLayout.addWidget(self.nav_phy)
 
-        self.verticalSpacer_7 = QSpacerItem(
-            20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding
+        self.horizontalLayout_9 = QHBoxLayout()
+        self.horizontalLayout_9.setObjectName(u"horizontalLayout_9")
+        self.horizontalSpacer_5 = QSpacerItem(
+            40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum
         )
 
-        self.verticalLayout.addItem(self.verticalSpacer_7)
+        self.horizontalLayout_9.addItem(self.horizontalSpacer_5)
+
+        self.b_delete = QPushButton(DMatSetup)
+        self.b_delete.setObjectName(u"b_delete")
+
+        self.horizontalLayout_9.addWidget(self.b_delete)
+
+        self.b_save = QPushButton(DMatSetup)
+        self.b_save.setObjectName(u"b_save")
+
+        self.horizontalLayout_9.addWidget(self.b_save)
+
+        self.b_cancel = QPushButton(DMatSetup)
+        self.b_cancel.setObjectName(u"b_cancel")
+
+        self.horizontalLayout_9.addWidget(self.b_cancel)
+
+        self.verticalLayout.addLayout(self.horizontalLayout_9)
 
         self.retranslateUi(DMatSetup)
 
@@ -633,9 +673,6 @@ class Ui_DMatSetup(object):
             QCoreApplication.translate("DMatSetup", u"Material name", None)
         )
         self.le_name.setText("")
-        self.b_delete.setText(QCoreApplication.translate("DMatSetup", u"Delete", None))
-        self.b_save.setText(QCoreApplication.translate("DMatSetup", u"Save", None))
-        self.b_cancel.setText(QCoreApplication.translate("DMatSetup", u"Cancel", None))
         self.is_isotropic.setText(
             QCoreApplication.translate("DMatSetup", u"is_isotropic", None)
         )
@@ -659,20 +696,20 @@ class Ui_DMatSetup(object):
             2, QCoreApplication.translate("DMatSetup", u"Lamination material", None)
         )
 
+        self.unit_Brm20.setText(QCoreApplication.translate("DMatSetup", u"[T]", None))
         self.in_mur_lin.setText(
             QCoreApplication.translate("DMatSetup", u"mur_lin", None)
         )
         self.in_Brm20.setText(QCoreApplication.translate("DMatSetup", u"Brm20", None))
-        self.unit_Brm20.setText(QCoreApplication.translate("DMatSetup", u"[T]", None))
+        self.unit_Wlam.setText(QCoreApplication.translate("DMatSetup", u"[mm]", None))
         self.in_alpha_Br.setText(
             QCoreApplication.translate("DMatSetup", u"alphaBr", None)
         )
         self.in_Wlam.setText(QCoreApplication.translate("DMatSetup", u"Wlam", None))
-        self.unit_Wlam.setText(QCoreApplication.translate("DMatSetup", u"[m]", None))
-        self.unit_mur_lin.setText(QCoreApplication.translate("DMatSetup", u"[ ]", None))
         self.unit_alpha_Br.setText(
             QCoreApplication.translate("DMatSetup", u"[ ]", None)
         )
+        self.unit_mur_lin.setText(QCoreApplication.translate("DMatSetup", u"[ ]", None))
         self.g_BH_import.setTitle(
             QCoreApplication.translate("DMatSetup", u"B(H) curve definition", None)
         )
@@ -744,5 +781,8 @@ class Ui_DMatSetup(object):
             self.nav_phy.indexOf(self.tab_eco),
             QCoreApplication.translate("DMatSetup", u"Economical", None),
         )
+        self.b_delete.setText(QCoreApplication.translate("DMatSetup", u"Delete", None))
+        self.b_save.setText(QCoreApplication.translate("DMatSetup", u"Save", None))
+        self.b_cancel.setText(QCoreApplication.translate("DMatSetup", u"Cancel", None))
 
     # retranslateUi
