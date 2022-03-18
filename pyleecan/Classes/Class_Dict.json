@@ -1033,7 +1033,8 @@
             "update_from_ref",
             "solve",
             "solve_PWM",
-            "comp_joule_losses"
+            "comp_joule_losses",
+            "comp_fluxlinkage"
         ],
         "mother": "",
         "name": "EEC",
@@ -1192,20 +1193,11 @@
         "path": "pyleecan/Generator/ClassesRef/Simulation/EEC_PMSM.csv",
         "properties": [
             {
-                "desc": "Magnetic inductance",
-                "max": "",
-                "min": "",
-                "name": "indmag",
-                "type": "IndMag",
-                "unit": "-",
-                "value": null
-            },
-            {
-                "desc": "Flux Linkage",
+                "desc": "Magnetic model for flux linkage calculation",
                 "max": "",
                 "min": "",
                 "name": "fluxlink",
-                "type": "FluxLink",
+                "type": "Magnetics",
                 "unit": "-",
                 "value": null
             },
@@ -1855,108 +1847,6 @@
                 "type": "int",
                 "unit": "",
                 "value": 3
-            }
-        ]
-    },
-    "FluxLink": {
-        "constants": [
-            {
-                "name": "VERSION",
-                "value": "1"
-            }
-        ],
-        "daughters": [
-            "FluxLinkFEMM"
-        ],
-        "desc": "Electric module: Flux Linkage",
-        "is_internal": false,
-        "methods": [],
-        "mother": "",
-        "name": "FluxLink",
-        "package": "Simulation",
-        "path": "pyleecan/Generator/ClassesRef/Simulation/FluxLink.csv",
-        "properties": []
-    },
-    "FluxLinkFEMM": {
-        "constants": [
-            {
-                "name": "VERSION",
-                "value": "1"
-            }
-        ],
-        "daughters": [],
-        "desc": "Electric module: Flux Linkage with FEMM",
-        "is_internal": false,
-        "methods": [
-            "comp_fluxlinkage"
-        ],
-        "mother": "FluxLink",
-        "name": "FluxLinkFEMM",
-        "package": "Simulation",
-        "path": "pyleecan/Generator/ClassesRef/Simulation/FluxLinkFEMM.csv",
-        "properties": [
-            {
-                "desc": "To enforce user-defined values for FEMM main parameters ",
-                "max": "",
-                "min": "",
-                "name": "FEMM_dict",
-                "type": "dict",
-                "unit": "",
-                "value": ""
-            },
-            {
-                "desc": "0 no leakage calculation /  1 calculation using single slot ",
-                "max": "1",
-                "min": "0",
-                "name": "type_calc_leakage",
-                "type": "int",
-                "unit": "",
-                "value": 0
-            },
-            {
-                "desc": "0 to desactivate the sliding band",
-                "max": "",
-                "min": "",
-                "name": "is_sliding_band",
-                "type": "bool",
-                "unit": "",
-                "value": 1
-            },
-            {
-                "desc": "True to take into account the spatial periodicity of the machine",
-                "max": "",
-                "min": "",
-                "name": "is_periodicity_a",
-                "type": "bool",
-                "unit": "",
-                "value": 0
-            },
-            {
-                "desc": "Number of time steps for the FEMM simulation",
-                "max": "",
-                "min": "",
-                "name": "Nt_tot",
-                "type": "int",
-                "unit": "-",
-                "value": 5
-            },
-            {
-                "desc": "global coefficient to adjust geometry fineness in FEMM (0.5 : default , > 1 : finner , < 1 : less fine)",
-                "max": "",
-                "min": "",
-                "name": "Kgeo_fineness",
-                "type": "float",
-                "unit": "",
-                "value": 0.5
-            },
-            {
-                "desc": "To run FEMM in parallel (the parallelization is on the time loop)",
-                "max": "",
-                "min": "",
-                "name": "nb_worker",
-                "type": "int",
-                "unit": "",
-                "value": 1
             }
         ]
     },
@@ -4142,108 +4032,6 @@
                 "type": "str",
                 "unit": "-",
                 "value": ""
-            }
-        ]
-    },
-    "IndMag": {
-        "constants": [
-            {
-                "name": "VERSION",
-                "value": "1"
-            }
-        ],
-        "daughters": [
-            "IndMagFEMM"
-        ],
-        "desc": "Electric module: Magnetic Inductance",
-        "is_internal": false,
-        "methods": [],
-        "mother": "",
-        "name": "IndMag",
-        "package": "Simulation",
-        "path": "pyleecan/Generator/ClassesRef/Simulation/IndMag.csv",
-        "properties": []
-    },
-    "IndMagFEMM": {
-        "constants": [
-            {
-                "name": "VERSION",
-                "value": "1"
-            }
-        ],
-        "daughters": [],
-        "desc": "Electric module: Magnetic Inductance with FEMM",
-        "is_internal": false,
-        "methods": [
-            "comp_inductance"
-        ],
-        "mother": "IndMag",
-        "name": "IndMagFEMM",
-        "package": "Simulation",
-        "path": "pyleecan/Generator/ClassesRef/Simulation/IndMagFEMM.csv",
-        "properties": [
-            {
-                "desc": "To enforce user-defined values for FEMM main parameters ",
-                "max": "",
-                "min": "",
-                "name": "FEMM_dict",
-                "type": "dict",
-                "unit": "",
-                "value": ""
-            },
-            {
-                "desc": "0 no leakage calculation /  1 calculation using single slot ",
-                "max": "1",
-                "min": "0",
-                "name": "type_calc_leakage",
-                "type": "int",
-                "unit": "",
-                "value": 0
-            },
-            {
-                "desc": "0 to desactivate the sliding band",
-                "max": "",
-                "min": "",
-                "name": "is_sliding_band",
-                "type": "bool",
-                "unit": "",
-                "value": 1
-            },
-            {
-                "desc": "True to take into account the spatial periodicity of the machine",
-                "max": "",
-                "min": "",
-                "name": "is_periodicity_a",
-                "type": "bool",
-                "unit": "",
-                "value": 0
-            },
-            {
-                "desc": "Number of time steps for the FEMM simulation",
-                "max": "",
-                "min": "",
-                "name": "Nt_tot",
-                "type": "int",
-                "unit": "-",
-                "value": 5
-            },
-            {
-                "desc": "global coefficient to adjust geometry fineness in FEMM (0.5 : default , > 1 : finner , < 1 : less fine)",
-                "max": "",
-                "min": "",
-                "name": "Kgeo_fineness",
-                "type": "float",
-                "unit": "",
-                "value": 0.5
-            },
-            {
-                "desc": "To run FEMM in parallel (the parallelization is on the time loop)",
-                "max": "",
-                "min": "",
-                "name": "nb_worker",
-                "type": "int",
-                "unit": "",
-                "value": 1
             }
         ]
     },

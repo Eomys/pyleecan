@@ -36,8 +36,6 @@ from ..Classes.EndWinding import EndWinding
 from ..Classes.EndWindingCirc import EndWindingCirc
 from ..Classes.FPGNSeg import FPGNSeg
 from ..Classes.FPGNTri import FPGNTri
-from ..Classes.FluxLink import FluxLink
-from ..Classes.FluxLinkFEMM import FluxLinkFEMM
 from ..Classes.Force import Force
 from ..Classes.ForceMT import ForceMT
 from ..Classes.ForceTensor import ForceTensor
@@ -70,8 +68,6 @@ from ..Classes.ImportMatrixXls import ImportMatrixXls
 from ..Classes.ImportMeshMat import ImportMeshMat
 from ..Classes.ImportMeshUnv import ImportMeshUnv
 from ..Classes.ImportVectorField import ImportVectorField
-from ..Classes.IndMag import IndMag
-from ..Classes.IndMagFEMM import IndMagFEMM
 from ..Classes.Input import Input
 from ..Classes.InputCurrent import InputCurrent
 from ..Classes.InputFlux import InputFlux

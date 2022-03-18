@@ -57,6 +57,11 @@ try:
 except ImportError as error:
     comp_joule_losses = error
 
+try:
+    from ..Methods.Simulation.EEC.comp_fluxlinkage import comp_fluxlinkage
+except ImportError as error:
+    comp_fluxlinkage = error
+
 
 from ._check import InitUnKnowClassError
 
@@ -150,6 +155,17 @@ class EEC(FrozenClass):
         )
     else:
         comp_joule_losses = comp_joule_losses
+    # cf Methods.Simulation.EEC.comp_fluxlinkage
+    if isinstance(comp_fluxlinkage, ImportError):
+        comp_fluxlinkage = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use EEC method comp_fluxlinkage: " + str(comp_fluxlinkage)
+                )
+            )
+        )
+    else:
+        comp_fluxlinkage = comp_fluxlinkage
     # save and copy methods are available in all object
     save = save
     copy = copy
