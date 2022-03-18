@@ -1,3 +1,5 @@
+from numpy import concatenate, unique
+
 from SciDataTool import Data1D
 
 
@@ -19,10 +21,14 @@ def comp_axes(self, output):
 
     axes_list = output.mag.meshsolution.solution[0].field.get_axes()
     Time = axes_list[0]
-    if "antiperiod" in Time.symmetries:
-        Time.symmetries = {"period": Time.symmetries["antiperiod"]}
 
     freqs = Time.get_values(is_oneperiod=True, operation="time_to_freqs")
+
+    if "antiperiod" in Time.symmetries:
+        Time_per = Time.copy()
+        Time_per.symmetries = {"period": Time.symmetries["antiperiod"]}
+        freqs_per = Time_per.get_values(is_oneperiod=True, operation="time_to_freqs")
+        freqs = unique(concatenate((freqs, freqs_per)))
 
     Freqs = Data1D(
         name="freqs", unit="Hz", values=freqs, normalizations=Time.normalizations.copy()

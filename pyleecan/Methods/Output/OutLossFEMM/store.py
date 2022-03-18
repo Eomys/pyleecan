@@ -42,33 +42,11 @@ def store(self, out_dict, axes_dict, is_get_meshsolution=False):
 
         meshsol = self.parent.mag.meshsolution
 
-        Nfreq = axes_dict["freqs"].get_values().size
-        Nelem = meshsol.mesh[0].cell["triangle"].nb_cell
-
-        loss_density = zeros((Nfreq, Nelem))
-
-        if "Pstator_density" in out_dict:
-            loss_density[:, meshsol.group["stator core"]] += out_dict["Pstator_density"]
-        if "Protor_density" in out_dict:
-            loss_density[:, meshsol.group["rotor core"]] += out_dict["Protor_density"]
-        if "Pjoule_density" in out_dict:
-            loss_density[:, meshsol.group["stator winding"]] += out_dict[
-                "Pjoule_density"
-            ]
-        if "Pprox_density" in out_dict:
-            loss_density[:, meshsol.group["stator winding"]] += out_dict[
-                "Pprox_density"
-            ]
-        if "Pmagnet_density" in out_dict:
-            loss_density[:, meshsol.group["rotor magnets"]] += out_dict[
-                "Pmagnet_density"
-            ]
-
         Loss_density_df = DataFreq(
             name="Loss density",
             unit="W/m3",
             symbol="L",
-            values=loss_density,
+            values=out_dict["loss_density"],
             is_real=True,
             axes=[axes_dict["freqs"], axes_dict["indice"]],
         )

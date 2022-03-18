@@ -50,7 +50,6 @@ def get_meshsolution(self, femm, save_path, j_t0, id_worker=0, is_get_mesh=False
     idworker = str(id_worker)  # For parallelization TODO
 
     path_txt = join(MAIN_DIR, "Functions", "FEMM") + "\\"
-    path_txt_lua = path_txt.replace("\\", "/")
     path_lua_in = join(path_txt, "get_mesh_data_FEMM.lua")
     path_lua_out = join(save_path, "get_mesh_data_FEMM" + idworker + ".lua")
     path_txt_out = save_path + "\\"
@@ -75,38 +74,25 @@ def get_meshsolution(self, femm, save_path, j_t0, id_worker=0, is_get_mesh=False
     # Delete the LUA script
     os.remove(path_lua_out)
 
-    # Read the nodes and elements files
+    # Save MeshMat for only 1 time step with sliding band
     path_node = join(save_path, "nodes" + idworker + ".txt")
     path_element = join(save_path, "elements" + idworker + ".txt")
     results_nodes = np.loadtxt(path_node, delimiter=" ")
-    listElem0 = np.loadtxt(path_element, dtype="i", delimiter=" ")
-    NbNd = len(results_nodes)
-    NbElem = len(listElem0)
-
-    # Node list
-    listNd = np.zeros(shape=(NbNd, 3))
-    listNd[:, 0] = results_nodes[:, 0]
-    listNd[:, 1] = results_nodes[:, 1]
-
-    # Element list
-    # listElem = np.zeros(shape=(NbElem, 3))
-    listElem = listElem0[:, 0:3] - 1
-
-    # Delete text files
-    os.remove(path_node)
-    os.remove(path_element)
-
-    # Read the results file
-    path_results = join(save_path, "results" + idworker + ".txt")
-    results = np.loadtxt(path_results, delimiter=" ")
-
-    # Delete text files
-    os.remove(path_results)
-
-    ## Create Mesh and Solution dictionaries
-
-    # Save MeshMat for only 1 time step with sliding band
     if is_get_mesh:
+        # Read the nodes and elements files
+        listElem0 = np.loadtxt(path_element, dtype="i", delimiter=" ")
+        NbNd = len(results_nodes)
+        NbElem = len(listElem0)
+
+        # Node list
+        listNd = np.zeros(shape=(NbNd, 3))
+        listNd[:, 0] = results_nodes[:, 0]
+        listNd[:, 1] = results_nodes[:, 1]
+
+        # Element list
+        # listElem = np.zeros(shape=(NbElem, 3))
+        listElem = listElem0[:, 0:3] - 1
+
         mesh = MeshMat()
         mesh.label = "FEMM"
         mesh.cell["triangle"] = CellMat(
@@ -136,9 +122,21 @@ def get_meshsolution(self, femm, save_path, j_t0, id_worker=0, is_get_mesh=False
         mesh = None
         groups = None
 
+    # Delete text files
+    os.remove(path_node)
+    os.remove(path_element)
+
+    # Read the results file
+    path_results = join(save_path, "results" + idworker + ".txt")
+    results = np.loadtxt(path_results, delimiter=" ")
+
+    # Delete text files
+    os.remove(path_results)
+
     B = results[:, 0:2]
     H = results[:, 2:4]
     mu = results[:, 4]
+    A_elem = results[:, 5]
     A = results_nodes[:, 2]
 
-    return mesh, B, H, mu, A, groups
+    return mesh, B, H, mu, A, groups, A_elem

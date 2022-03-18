@@ -254,7 +254,7 @@ def solve_FEMM(
         # Load mesh data & solution
         if self.is_get_meshsolution:
             # Get mesh data and magnetic quantities from .ans file
-            tmpmeshFEMM, tmpB, tmpH, tmpmu, tmpA, tmpgroups = self.get_meshsolution(
+            meshFEMMi, Bi, Hi, mui, Ani, groupsi, Aei = self.get_meshsolution(
                 femm,
                 save_path,
                 j_t0=ii,
@@ -266,8 +266,8 @@ def solve_FEMM(
 
             # Initialize mesh and magnetic quantities for first time step
             if ii == start_t:
-                meshFEMM = [tmpmeshFEMM]
-                groups = tmpgroups
+                meshFEMM = [meshFEMMi]
+                groups = groupsi
                 Nelem = meshFEMM[0].cell["triangle"].nb_cell
                 Nnode = meshFEMM[0].node.nb_node
                 Nt0 = end_t - start_t
@@ -275,14 +275,16 @@ def solve_FEMM(
                 H_elem = zeros([Nt0, Nelem, 3])
                 mu_elem = zeros([Nt0, Nelem])
                 A_node = zeros([Nt0, Nnode])
+                A_elem = zeros([Nt0, Nelem])
 
             # Shift time index ii in case start_t is not 0 (parallelization)
             ii0 = ii - start_t
 
-            B_elem[ii0, :, 0:2] = tmpB
-            H_elem[ii0, :, 0:2] = tmpH
-            mu_elem[ii0, :] = tmpmu
-            A_node[ii0, :] = tmpA
+            B_elem[ii0, :, 0:2] = Bi
+            H_elem[ii0, :, 0:2] = Hi
+            mu_elem[ii0, :] = mui
+            A_node[ii0, :] = Ani
+            A_elem[ii0, :] = Aei
 
         if not is_sliding_band:
             femm.mi_close()
@@ -315,4 +317,4 @@ def solve_FEMM(
 
     out_dict["Rag"] = Rag
 
-    return B_elem, H_elem, mu_elem, A_node, meshFEMM, groups
+    return B_elem, H_elem, mu_elem, A_node, meshFEMM, groups, A_elem
