@@ -146,6 +146,11 @@ def get_bore_desc(self, sym=1, prop_dict=None):
     bore_lines = list()
     for bore in bore_desc:
         if isinstance(bore["obj"], (Arc1, Arc3)):
+            # Set bore line properties
+            if bore["obj"].prop_dict is None:
+                bore["obj"].prop_dict = prop_dict
+            else:
+                bore["obj"].prop_dict.update(prop_dict)
             bore_lines.append(bore["obj"])
         elif "lines" in bore:  # Duplicated slot
             for line in bore["lines"]:
@@ -156,13 +161,5 @@ def get_bore_desc(self, sym=1, prop_dict=None):
             for line in lines:
                 line.rotate((bore["begin_angle"] + bore["end_angle"]) / 2)
             bore_lines.extend(lines)
-
-    # Set line properties
-    if prop_dict is not None:
-        for line in bore_lines:
-            if line.prop_dict is None:
-                line.prop_dict = prop_dict
-            else:
-                line.prop_dict.update(prop_dict)
 
     return bore_desc, bore_lines
