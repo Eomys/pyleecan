@@ -1,10 +1,8 @@
-from numpy import sum as np_sum, matmul, abs as np_abs, zeros, argmin
-
-from SciDataTool import DataTime
+from numpy import matmul, abs as np_abs, sum as np_sum
 
 
-def comp_core_losses(self, group, Ce=None, Ch=None, type_calc=1):
-    """Calculate losses in iron core given by group "stator core" or "rotor core"
+def comp_loss_density_core(self, group, coeff_dict):
+    """Calculate loss density in iron core given by group "stator core" or "rotor core"
     assuming power density is given by (cf. https://www.femm.info/wiki/SPMLoss):
 
         Pcore = Ph + Pe = Ch*f*B^2 + Ce*f^2*B^2
@@ -15,19 +13,15 @@ def comp_core_losses(self, group, Ce=None, Ch=None, type_calc=1):
         a LossFEMM object
     group: str
         Name of part in which to calculate core losses
-    freqs: ndarray
-        frequency vector [Hz]
-    Ch: float
-        hysteresis loss coefficients [W/(m^3*T^2*Hz)]
-    Ce: float
-        eddy current loss coefficients [W/(m^3*T^2*Hz^2)]
+    coeff_dict: dict
+        Dict containing coefficient A and B to calculate overall losses such as P = A*felec^2 + B*felec + C
 
     Returns
     -------
-    Pcore : float
-        Overall core losses [W]
     Pcore_density : ndarray
         Core loss density function of frequency and elements [W/m3]
+    freqs: ndarray
+        frequency vector [Hz]
     """
 
     if self.parent.parent is None:
@@ -41,10 +35,24 @@ def comp_core_losses(self, group, Ce=None, Ch=None, type_calc=1):
     if output.geo.is_antiper_a:
         per_a *= 2
 
+    # Taking into account the stacking factor
     if "stator" in group:
         Lst = machine.stator.L1
+        Kf = machine.stator.Kf1
     else:
         Lst = machine.rotor.L1
+        Kf = machine.rotor.Kf1
+
+    # Get hysteresis and eddy current loss coefficients
+    if "winding" in group:
+        Ch = 0
+        Ce = self.Cp
+    else:
+        Ch = self.Ch / Kf
+        Ce = self.Ce / Kf
+
+    # Get fundamental frequency
+    felec = output.elec.OP.get_felec()
 
     if output.mag is None:
         raise Exception("Cannot calculate core losses if OutMag is None")
@@ -72,23 +80,6 @@ def comp_core_losses(self, group, Ce=None, Ch=None, type_calc=1):
     # Get element surface associated to group
     Se = meshsol.mesh[0].get_cell_area()[Igrp]
 
-    # cell = meshsol.mesh[0].cell["triangle"].connectivity
-
-    # nodes_coord = meshsol.mesh[0].node.coordinate
-
-    # center_coord = np.zeros((cell.shape[0], cell.shape[1], 2))
-
-    # center_coord[:, :, 0] = nodes_coord[cell, 0]
-    # center_coord[:, :, 1] = nodes_coord[cell, 1]
-
-    # center_coord = np.mean(center_coord, axis=1)
-    # x = center_coord
-    # xi = [0.0273, 0.0101]
-    # xi = [0.0219, 0.0079]
-    # I0 = np.argmin((x[:, 0] - xi[0]) ** 2 + (x[:, 1] - xi[1]) ** 2)
-
-    # center_coord[I0, :]
-
     Bvect = meshsol.solution[ind].field
     axes_list = Bvect.get_axes()
     Time_orig = axes_list[0]
@@ -108,37 +99,12 @@ def comp_core_losses(self, group, Ce=None, Ch=None, type_calc=1):
         for comp in Bvect.components.values():
             comp.axes[0] = Time
 
-    if type_calc == 0:
-        # Get magnetic flux density complex amplitude over frequency and for each element center in current group
-        Bx = Bvect.components["comp_x"].values[:, Igrp, :]
-        By = Bvect.components["comp_y"].values[:, Igrp, :]
-        Bsquare = Bx ** 2 + By ** 2
+    # Compute magnetic flux density FFT
+    Bfft = Bvect.get_xyz_along("freqs", "indice=" + str(Igrp), "z[0]")
+    freqs = Bfft["freqs"]
 
-        # B = np.sqrt(Bsquare)
-
-        # B0 = np.sqrt(Bsquare[0, :, 0])
-
-        # Put Bsquare in DataTime to take FFT over time
-        Indice = axes_list[1].copy()
-        Indice.values = axes_list[1].values[Igrp]
-        Bsquare_dt = DataTime(
-            name=group + " flux density magnitude",
-            symbol="B",
-            unit="T",
-            axes=[Time, Indice, axes_list[2]],
-            values=Bsquare,
-        )
-        Bfft_square = Bsquare_dt.get_magnitude_along("freqs", "indice", "z[0]")["B"]
-    else:
-
-        Bfft = Bvect.get_xyz_along("freqs", "indice=" + str(Igrp), "z[0]")
-        freqs = Bfft["freqs"]
-        # Bfft_x = Bfft["comp_x"]
-        # Bfft_y = Bfft["comp_y"]
-
-        # Imax = np.argmax(Bfft_x[8, :])
-
-        Bfft_square = np_abs(Bfft["comp_x"]) ** 2 + np_abs(Bfft["comp_y"]) ** 2
+    # Compute FFT square of magnetic flux density
+    Bfft_square = np_abs(Bfft["comp_x"]) ** 2 + np_abs(Bfft["comp_y"]) ** 2
 
     # Eddy-current loss density (or proximity loss density) for each frequency and element
     Pcore_density = Ce * freqs[:, None] ** 2 * Bfft_square
@@ -146,25 +112,24 @@ def comp_core_losses(self, group, Ce=None, Ch=None, type_calc=1):
     if Ch != 0:
         # Hysteretic loss density for each frequency and element
         Pcore_density += Ch * freqs[:, None] * Bfft_square
-    
-    # Integrate loss density over elements' volume and sum over frequency to get overall loss
-    Pcore = Lst * per_a * np_sum(matmul(Pcore_density, Se))
 
     if is_change_Time:
         # Change periodicity back to original periodicity
         for comp in Bvect.components.values():
             comp.axes[0] = Time_orig
 
-    # Check if coefficients exists in coeff_dict
-    coeff_dict = output.loss.coeff_dict
-    if group not in coeff_dict:
-        # Calculate coefficients to evaluate core losses
-        coeff = matmul(Bfft_square, Se)
+    # Calculate coefficients to evaluate core losses for later use
+    if coeff_dict is not None:
+        # Integrate loss density over group volume
+        coeff = Lst * per_a * matmul(Bfft_square, Se)
+        # Get frequency orders
+        n = freqs / felec
+        # Get polynomial coefficients
+        A = np_sum(Ce * coeff * n ** 2)
         if Ch == 0:
-            A = 0
+            B = 0
         else:
-            A = Lst * per_a * Ch * coeff
-        B = Lst * per_a * Ce * coeff
-        coeff_dict[group] = {"A": A, "B": B}
+            B = np_sum(Ch * coeff * n)
+        coeff_dict[group] = {"A": A, "B": B, "C": 0}
 
-    return Pcore, Pcore_density, freqs
+    return Pcore_density, freqs

@@ -1,12 +1,10 @@
-from numpy import zeros
-
 from SciDataTool import DataFreq
 
 from ....Classes.SolutionData import SolutionData
 from ....Classes.MeshSolution import MeshSolution
 
 
-def store(self, out_dict, axes_dict, is_get_meshsolution=False):
+def store(self, out_dict, axes_dict=None, is_get_meshsolution=False, felec=None):
     """Store the outputs of LossFEMM model that are temporarily in out_dict
 
     Parameters
@@ -25,17 +23,19 @@ def store(self, out_dict, axes_dict, is_get_meshsolution=False):
     if axes_dict is not None:
         self.axes_dict = axes_dict
 
-    # Store scalar losses
-    if "Pstator" in out_dict:
-        self.Pstator = out_dict["Pstator"]
-    if "Protor" in out_dict:
-        self.Protor = out_dict["Protor"]
-    if "Pjoule" in out_dict:
-        self.Pjoule = out_dict["Pjoule"]
-    if "Pprox" in out_dict:
-        self.Pprox = out_dict["Pprox"]
-    if "Pmagnet" in out_dict:
-        self.Pmagnet = out_dict["Pmagnet"]
+    # Store coeff_dict
+    if "coeff_dict" in out_dict:
+        self.coeff_dict = out_dict.pop("coeff_dict")
+
+    if felec is None:
+        felec = self.parent.elec.OP.get_felec()
+
+    # Calculate and store scalar losses
+    self.Pstator = self.get_loss_group("stator core", felec)
+    self.Protor = self.get_loss_group("rotor core", felec)
+    self.Pprox = self.get_loss_group("stator winding", felec)
+    self.Pmagnet = self.get_loss_group("rotor magnets", felec)
+    self.Pjoule = self.get_loss_group("stator winding joule", felec)
 
     # Store loss density as meshsolution
     if is_get_meshsolution:

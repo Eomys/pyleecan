@@ -8,10 +8,14 @@ from pyleecan.Classes.Simu1 import Simu1
 from pyleecan.Classes.OPdq import OPdq
 from pyleecan.Classes.MagFEMM import MagFEMM
 from pyleecan.Classes.LossFEMM import LossFEMM
+from pyleecan.Classes.OutLossFEMM import OutLossFEMM
 
 from pyleecan.Functions.load import load
 
 from pyleecan.definitions import DATA_DIR
+
+from SciDataTool.Functions.Plot.plot_2D import plot_2D
+
 
 is_show_fig = False
 
@@ -24,15 +28,11 @@ def test_FEMM_Loss_SPMSM():
     Ch = 143  # hysteresis loss coefficient [W/(m^3*T^2*Hz)]
     Ce = 0.530  # eddy current loss coefficients [W/(m^3*T^2*Hz^2)]
     Cprox = 4.1018  # sigma_w * cond.Hwire * cond.Wwire
-    
-    # Taking into account the stacking factor
-    Ch /= machine.stator.Kf1
-    Ce /= machine.stator.Kf1
 
     simu = Simu1(name="test_FEMM_Loss_SPMSM", machine=machine)
 
     simu.input = InputCurrent(
-        Nt_tot=20 * 16,
+        Nt_tot=60 * 16,
         Na_tot=1000 * 2,
         OP=OPdq(N0=4000, Id_ref=0, Iq_ref=np.sqrt(2)),
         is_periodicity_t=True,
@@ -45,11 +45,12 @@ def test_FEMM_Loss_SPMSM():
         nb_worker=4,
         is_get_meshsolution=True,
         FEMM_dict_enforced={
+            "simu": {"minangle": 30},
             "mesh": {
                 "meshsize_airgap": 0.00014,
                 "elementsize_airgap": 0.00014,
-                "smart_mesh": 0,
-            }
+                "smart_mesh": 1,
+            },
         },
         # is_close_femm=False,
     )
@@ -57,6 +58,37 @@ def test_FEMM_Loss_SPMSM():
     simu.loss = LossFEMM(Ce=Ce, Cp=Cprox, Ch=Ch, is_get_meshsolution=True, Tsta=120)
 
     out = simu.run()
+
+    speed_array = np.linspace(10, 8000, 100)
+    p = machine.get_pole_pair_number()
+    outloss_list = list()
+    for speed in speed_array:
+        out_dict = {"coeff_dict": out.loss.coeff_dict}
+        outloss = OutLossFEMM()
+        outloss.store(out_dict, felec=speed / 60 * p)
+        outloss_list.append(outloss)
+
+    joule_list = [o.Pjoule for o in outloss_list]
+    sc_list = [o.Pstator for o in outloss_list]
+    rc_list = [o.Protor for o in outloss_list]
+    prox_list = [o.Pprox for o in outloss_list]
+    mag_list = [o.Pmagnet for o in outloss_list]
+    ovl_list = [o.get_loss_overall() for o in outloss_list]
+
+    plot_2D(
+        [speed_array],
+        [ovl_list, joule_list, sc_list, rc_list, prox_list, mag_list],
+        xlabel="Speed [rpm]",
+        ylabel="Losses [W]",
+        legend_list=[
+            "Overall",
+            "Winding Joule",
+            "Stator core",
+            "Rotor core",
+            "Winding proximity",
+            "Magnets",
+        ],
+    )
 
     freqs = out.loss.axes_dict["freqs"].get_values()
 
@@ -73,15 +105,14 @@ def test_FEMM_Loss_SPMSM():
         out.loss.Pmagnet, out.loss.get_loss_group("rotor magnets", freqs)[0]
     )
 
-    
-    power_dict={
-        "total_power":out.mag.Pem_av,
-        "overall_losses":out.loss.get_loss_overall(),
-        "stator_loss":out.loss.Pstator,
-        "copper_loss":out.loss.Pjoule,
-        "rotor_loss":out.loss.Protor,
-        "magnet_loss":out.loss.Pmagnet,
-        "proximity_loss":out.loss.Pprox
+    power_dict = {
+        "total_power": out.mag.Pem_av,
+        "overall_losses": out.loss.get_loss_overall(),
+        "stator_loss": out.loss.Pstator,
+        "copper_loss": out.loss.Pjoule,
+        "rotor_loss": out.loss.Protor,
+        "magnet_loss": out.loss.Pmagnet,
+        "proximity_loss": out.loss.Pprox,
     }
     print(power_dict)
 

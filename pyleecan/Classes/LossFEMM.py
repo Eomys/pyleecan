@@ -28,24 +28,30 @@ except ImportError as error:
     comp_axes = error
 
 try:
-    from ..Methods.Simulation.LossFEMM.comp_core_losses import comp_core_losses
+    from ..Methods.Simulation.LossFEMM.comp_loss import comp_loss
 except ImportError as error:
-    comp_core_losses = error
+    comp_loss = error
 
 try:
-    from ..Methods.Simulation.LossFEMM.comp_joule_losses import comp_joule_losses
+    from ..Methods.Simulation.LossFEMM.comp_loss_density_core import (
+        comp_loss_density_core,
+    )
 except ImportError as error:
-    comp_joule_losses = error
+    comp_loss_density_core = error
 
 try:
-    from ..Methods.Simulation.LossFEMM.comp_losses import comp_losses
+    from ..Methods.Simulation.LossFEMM.comp_loss_density_joule import (
+        comp_loss_density_joule,
+    )
 except ImportError as error:
-    comp_losses = error
+    comp_loss_density_joule = error
 
 try:
-    from ..Methods.Simulation.LossFEMM.comp_magnet_losses import comp_magnet_losses
+    from ..Methods.Simulation.LossFEMM.comp_loss_density_magnet import (
+        comp_loss_density_magnet,
+    )
 except ImportError as error:
-    comp_magnet_losses = error
+    comp_loss_density_magnet = error
 
 
 from ._check import InitUnKnowClassError
@@ -75,53 +81,51 @@ class LossFEMM(Loss):
         )
     else:
         comp_axes = comp_axes
-    # cf Methods.Simulation.LossFEMM.comp_core_losses
-    if isinstance(comp_core_losses, ImportError):
-        comp_core_losses = property(
+    # cf Methods.Simulation.LossFEMM.comp_loss
+    if isinstance(comp_loss, ImportError):
+        comp_loss = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use LossFEMM method comp_loss: " + str(comp_loss))
+            )
+        )
+    else:
+        comp_loss = comp_loss
+    # cf Methods.Simulation.LossFEMM.comp_loss_density_core
+    if isinstance(comp_loss_density_core, ImportError):
+        comp_loss_density_core = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use LossFEMM method comp_core_losses: "
-                    + str(comp_core_losses)
+                    "Can't use LossFEMM method comp_loss_density_core: "
+                    + str(comp_loss_density_core)
                 )
             )
         )
     else:
-        comp_core_losses = comp_core_losses
-    # cf Methods.Simulation.LossFEMM.comp_joule_losses
-    if isinstance(comp_joule_losses, ImportError):
-        comp_joule_losses = property(
+        comp_loss_density_core = comp_loss_density_core
+    # cf Methods.Simulation.LossFEMM.comp_loss_density_joule
+    if isinstance(comp_loss_density_joule, ImportError):
+        comp_loss_density_joule = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use LossFEMM method comp_joule_losses: "
-                    + str(comp_joule_losses)
+                    "Can't use LossFEMM method comp_loss_density_joule: "
+                    + str(comp_loss_density_joule)
                 )
             )
         )
     else:
-        comp_joule_losses = comp_joule_losses
-    # cf Methods.Simulation.LossFEMM.comp_losses
-    if isinstance(comp_losses, ImportError):
-        comp_losses = property(
+        comp_loss_density_joule = comp_loss_density_joule
+    # cf Methods.Simulation.LossFEMM.comp_loss_density_magnet
+    if isinstance(comp_loss_density_magnet, ImportError):
+        comp_loss_density_magnet = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use LossFEMM method comp_losses: " + str(comp_losses)
+                    "Can't use LossFEMM method comp_loss_density_magnet: "
+                    + str(comp_loss_density_magnet)
                 )
             )
         )
     else:
-        comp_losses = comp_losses
-    # cf Methods.Simulation.LossFEMM.comp_magnet_losses
-    if isinstance(comp_magnet_losses, ImportError):
-        comp_magnet_losses = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use LossFEMM method comp_magnet_losses: "
-                    + str(comp_magnet_losses)
-                )
-            )
-        )
-    else:
-        comp_magnet_losses = comp_magnet_losses
+        comp_loss_density_magnet = comp_loss_density_magnet
     # save and copy methods are available in all object
     save = save
     copy = copy

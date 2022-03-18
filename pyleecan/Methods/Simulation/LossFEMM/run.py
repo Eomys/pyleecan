@@ -1,9 +1,3 @@
-from numpy import zeros
-
-from SciDataTool import DataFreq
-
-from ....Classes.SolutionData import SolutionData
-from ....Classes.MeshSolution import MeshSolution
 from ....Classes.OutLossFEMM import OutLossFEMM
 
 from ....Methods.Simulation.Input import InputError
@@ -25,6 +19,6 @@ def run(self):
 
     output.loss = OutLossFEMM()
 
-    out_dict = self.comp_losses(output, axes_dict)
+    out_dict = self.comp_loss(output, axes_dict)
 
     output.loss.store(out_dict, axes_dict, self.is_get_meshsolution)

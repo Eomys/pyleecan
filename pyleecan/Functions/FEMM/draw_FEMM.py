@@ -101,7 +101,11 @@ def draw_FEMM(
     )
     # Overwrite some values if needed
     for key, val in user_FEMM_dict.items():
-        FEMM_dict[key].update(val)
+        for key1, val1 in val.items():
+            if isinstance(val1, dict):
+                FEMM_dict[key][key1].update(val1)
+            else:
+                FEMM_dict[key][key1] = val1
 
     # The package must be initialized with the openfemm command.
     try:

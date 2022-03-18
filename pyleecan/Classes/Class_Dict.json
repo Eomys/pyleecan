@@ -5499,10 +5499,10 @@
         "methods": [
             "run",
             "comp_axes",
-            "comp_core_losses",
-            "comp_joule_losses",
-            "comp_losses",
-            "comp_magnet_losses"
+            "comp_loss",
+            "comp_loss_density_core",
+            "comp_loss_density_joule",
+            "comp_loss_density_magnet"
         ],
         "mother": "Loss",
         "name": "LossFEMM",
@@ -9206,8 +9206,7 @@
             "comp_power",
             "get_demag",
             "store",
-            "comp_torque_MT",
-            "get_fft_from_meshsol"
+            "comp_torque_MT"
         ],
         "mother": "",
         "name": "OutMag",

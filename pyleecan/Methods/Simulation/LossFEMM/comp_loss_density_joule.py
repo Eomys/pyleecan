@@ -1,7 +1,7 @@
 from numpy import sum as np_sum, zeros, array
 
 
-def comp_joule_losses(self, group):
+def comp_loss_density_joule(self, group, coeff_dict):
     """Calculate joule losses in stator windings
 
     Parameters
@@ -10,13 +10,15 @@ def comp_joule_losses(self, group):
         a LossFEMM object
     group: str
         Name of part in which to calculate joule losses
+    coeff_dict: dict
+        Dict containing coefficient A and B to calculate overall losses such as P = sum(A*f^2 + B*f) + C
 
     Returns
     -------
-    Pjoule : float
-        Overall joule losses [W]
     Pjoule_density : ndarray
         Joule loss density function of frequency and elements [W/m3]
+    freqs: ndarray
+        frequency vector [Hz]
     """
 
     if self.parent.parent is None:
@@ -45,24 +47,23 @@ def comp_joule_losses(self, group):
     # Calculate overall joule losses
     Pjoule = qs * Rs * (OP.Id_ref ** 2 + OP.Iq_ref ** 2)
 
-    if self.is_get_meshsolution:
+    felec = OP.get_felec()
+    per_a = output.geo.per_a
+    if output.geo.is_antiper_a:
+        per_a *= 2
 
-        felec = OP.get_felec()
-        per_a = output.geo.per_a
-        if output.geo.is_antiper_a:
-            per_a *= 2
+    Lst = lam.L1
 
-        Lst = lam.L1
+    ms_group = output.mag.meshsolution.get_group(group)
 
-        ms_group = output.mag.meshsolution.get_group(group)
+    Se = ms_group.mesh[0].get_cell_area()
 
-        Se = ms_group.mesh[0].get_cell_area()
+    # Constant component and twice the electrical frequency have same joule density values
+    freqs = array([felec])
+    Pjoule_density = zeros((freqs.size, Se.size))
+    Pjoule_density[0, :] = Pjoule / (per_a * Lst * np_sum(Se))
 
-        # Constant component and twice the electrical frequency have same joule density values
-        freqs = array([felec])
-        Pjoule_density = zeros((freqs.size, Se.size))
-        Pjoule_density[0, :] = Pjoule / (per_a * Lst * np_sum(Se))
-    else:
-        Pjoule_density, freqs = None, None
+    # Store coefficient to get joule losses the same as for other losses
+    coeff_dict[group + " joule"] = {"A": 0, "B": 0, "C": Pjoule}
 
-    return Pjoule, Pjoule_density, freqs
+    return Pjoule_density, freqs
