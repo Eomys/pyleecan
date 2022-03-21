@@ -3,8 +3,8 @@ def get_loss_group(self, group, felec):
 
     Parameter
     ---------
-    self : OutLossFEMM
-        an OutLossFEMM object
+    self : OutLoss
+        an OutLoss object
     group: str
         Name of part for which to calculate loss function
 

@@ -1,10 +1,10 @@
 def get_loss_overall(self):
-    """Get overall loss by summing all losses in OutLossFEMM
+    """Get overall loss by summing all losses in OutLoss
 
     Parameter
     ---------
-    self : OutLossFEMM
-        an OutLossFEMM object
+    self : OutLoss
+        an OutLoss object
 
     Return
     ------

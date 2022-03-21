@@ -1,5 +1,3 @@
-from ....Classes.OutLossFEMM import OutLossFEMM
-
 from ....Methods.Simulation.Input import InputError
 
 
@@ -16,8 +14,6 @@ def run(self):
     output = self.parent.parent
 
     axes_dict = self.comp_axes(output)
-
-    output.loss = OutLossFEMM()
 
     out_dict = self.comp_loss(output, axes_dict)
 

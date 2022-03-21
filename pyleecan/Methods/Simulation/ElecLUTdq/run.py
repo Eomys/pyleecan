@@ -1,6 +1,6 @@
 import numpy as np
 
-from ....Classes.OutLossFEMM import OutLossFEMM
+from ....Classes.OutLoss import OutLoss
 
 from ....Methods.Simulation.Input import InputError
 
@@ -134,7 +134,7 @@ def run(self):
     output.elec.OP.Uq_ref = Uq[i0][imin]
 
     # Store losses
-    output.loss = OutLossFEMM(
+    output.loss = OutLoss(
         Pjoule=Plosses[i0, 0][imin],
         Pstator=Plosses[i0, 1][imin],
         Pmagnet=Plosses[i0, 2][imin],

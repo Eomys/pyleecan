@@ -1,9 +1,0 @@
-Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
-axes_dict,,Dict containing axes data used for Magnetics,,{SciDataTool.Classes.DataND.Data},None,,,,Output,OutLoss,get_loss_group,VERSION,1,Gather the loss module outputs after LossFEMM
-Pstator,W,Stator core losses due to hysteresis and eddy currents,,float,None,,,,,,get_loss_overall,,,
-Protor,W,Rotor core losses due to hysteresis and eddy currents,,float,None,,,,,,store,,,
-Pmagnet,W,Magnet eddy current losses,,float,None,,,,,,,,,
-Pprox,W,Stator core losses,,float,None,,,,,,,,,
-Pjoule,W,Stator core losses,,float,None,,,,,,,,,
-meshsolution,,Meshsolution containing loss density map,,MeshSolution,None,,,,,,,,,
-coeff_dict,,Dict containing coefficients to rebuild loss polynom function of frequency,,dict,-1,,,,,,,,,
