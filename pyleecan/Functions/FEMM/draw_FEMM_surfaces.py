@@ -24,8 +24,8 @@ def draw_FEMM_surfaces(
     type_BH_stator,
     type_BH_rotor,
     type_assign=0,
+    type_set_BC=0,
     is_draw=True,
-    is_set_BC=True,
 ):
     """Draw a list of surfaces in FEMM
 
@@ -55,10 +55,10 @@ def draw_FEMM_surfaces(
         2 Infinite permeability, 1 to use linear B(H) curve according to mur_lin, 0 to use the B(H) curve
     type_assign : int
         2 to assign all but WIND and MAG, 1 to assign WIND and MAG and 0 to assign all
+    type_set_BC : bool
+        1 to set BC of the yoke only, 0 to set all
     is_draw : bool
         1 to draw the list of surfaces given
-    is_set_BC : bool
-        1 to set the boundary conditions of the surface
     Returns
     -------
     FEMM_dict : dict
@@ -93,7 +93,7 @@ def draw_FEMM_surfaces(
             hide=False,
             BC_dict=BC_dict,
             is_draw=is_draw,
-            is_set_BC=is_set_BC,
+            type_set_BC=type_set_BC,
         )
 
         # Detecting if the property assigned is related to the magnet or the winding
