@@ -6060,7 +6060,7 @@
                 "name": "is_fast_draw",
                 "type": "bool",
                 "unit": "",
-                "value": 0
+                "value": 1
             }
         ]
     },

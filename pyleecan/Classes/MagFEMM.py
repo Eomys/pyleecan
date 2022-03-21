@@ -149,7 +149,7 @@ class MagFEMM(Magnetics):
         nb_worker=1,
         Rag_enforced=None,
         is_set_previous=True,
-        is_fast_draw=False,
+        is_fast_draw=True,
         is_remove_slotS=False,
         is_remove_slotR=False,
         is_remove_ventS=False,
