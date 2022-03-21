@@ -26,8 +26,8 @@
    <string>Import from Excel</string>
   </property>
   <property name="windowIcon">
-   <iconset>
-    <normaloff>../../../Resources/images/icon/pyleecan_64.png</normaloff>../../../Resources/images/icon/pyleecan_64.png</iconset>
+   <iconset resource="../../../Resources/pyleecan.qrc">
+    <normaloff>:/images/images/icon/pyleecan_64.png</normaloff>:/images/images/icon/pyleecan_64.png</iconset>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_3">
    <item>

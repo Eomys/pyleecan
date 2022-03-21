@@ -25,10 +25,7 @@ class Ui_WImportExcel(object):
         WImportExcel.setMinimumSize(QSize(0, 0))
         icon = QIcon()
         icon.addFile(
-            u"../../../Resources/images/icon/pyleecan_64.png",
-            QSize(),
-            QIcon.Normal,
-            QIcon.Off,
+            u":/images/images/icon/pyleecan_64.png", QSize(), QIcon.Normal, QIcon.Off
         )
         WImportExcel.setWindowIcon(icon)
         self.verticalLayout_3 = QVBoxLayout(WImportExcel)
