@@ -509,7 +509,12 @@
             "comp_surface",
             "comp_width",
             "plot",
-            "plot_schematics"
+            "plot_schematics",
+            "comp_width_wire",
+            "comp_height_wire",
+            "comp_nb_circumferential_wire",
+            "comp_nb_radial_wire",
+            "is_round_wire"
         ],
         "mother": "Conductor",
         "name": "CondType11",
@@ -607,7 +612,12 @@
             "comp_surface",
             "comp_width",
             "plot",
-            "plot_schematics"
+            "plot_schematics",
+            "comp_width_wire",
+            "comp_height_wire",
+            "comp_nb_circumferential_wire",
+            "comp_nb_radial_wire",
+            "is_round_wires"
         ],
         "mother": "Conductor",
         "name": "CondType12",
@@ -676,7 +686,12 @@
             "comp_height",
             "comp_surface",
             "comp_width",
-            "plot"
+            "plot",
+            "comp_width_wire",
+            "comp_height_wire",
+            "comp_nb_circumferential_wire",
+            "comp_nb_radial_wire",
+            "is_round_wires"
         ],
         "mother": "Conductor",
         "name": "CondType21",
@@ -724,7 +739,12 @@
         "is_internal": false,
         "methods": [
             "comp_surface_active",
-            "comp_surface"
+            "comp_surface",
+            "comp_width_wire",
+            "comp_height_wire",
+            "comp_nb_circumferential_wire",
+            "comp_nb_radial_wire",
+            "is_round_wires"
         ],
         "mother": "Conductor",
         "name": "CondType22",
@@ -759,13 +779,8 @@
         "is_internal": false,
         "methods": [
             "check",
-            "comp_phi_skin",
-            "comp_psi_skin",
-            "comp_phip_skin",
-            "comp_psip_skin",
-            "comp_skin_effect",
-            "comp_power",
-            "comp_skin_effect_round_wire",
+            "comp_skin_effect_resistance",
+            "comp_skin_effect_inductance",
             "comp_temperature_effect"
         ],
         "mother": "",
