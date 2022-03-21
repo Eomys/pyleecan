@@ -8,7 +8,7 @@ from pyleecan.Classes.Simu1 import Simu1
 from pyleecan.Classes.OPdq import OPdq
 from pyleecan.Classes.MagFEMM import MagFEMM
 from pyleecan.Classes.LossFEMM import LossFEMM
-from pyleecan.Classes.OutLossFEMM import OutLossFEMM
+from pyleecan.Classes.OutLoss import OutLoss
 
 from pyleecan.Functions.load import load
 
@@ -21,7 +21,7 @@ is_show_fig = False
 
 
 def test_FEMM_Loss_SPMSM():
-    """Test to calculate losses in SPMSM using LossFEMM model"""
+    """Test to calculate losses in SPMSM using LossFEMM model from https://www.femm.info/wiki/SPMLoss """
 
     machine = load(join(DATA_DIR, "Machine", "SPMSM_18s16p_loss.json"))
 
@@ -32,7 +32,7 @@ def test_FEMM_Loss_SPMSM():
     simu = Simu1(name="test_FEMM_Loss_SPMSM", machine=machine)
 
     simu.input = InputCurrent(
-        Nt_tot=60 * 16,
+        Nt_tot=4 * 10 * 16,
         Na_tot=1000 * 2,
         OP=OPdq(N0=4000, Id_ref=0, Iq_ref=np.sqrt(2)),
         is_periodicity_t=True,
@@ -64,7 +64,7 @@ def test_FEMM_Loss_SPMSM():
     outloss_list = list()
     for speed in speed_array:
         out_dict = {"coeff_dict": out.loss.coeff_dict}
-        outloss = OutLossFEMM()
+        outloss = OutLoss()
         outloss.store(out_dict, felec=speed / 60 * p)
         outloss_list.append(outloss)
 
@@ -74,21 +74,6 @@ def test_FEMM_Loss_SPMSM():
     prox_list = [o.Pprox for o in outloss_list]
     mag_list = [o.Pmagnet for o in outloss_list]
     ovl_list = [o.get_loss_overall() for o in outloss_list]
-
-    plot_2D(
-        [speed_array],
-        [ovl_list, joule_list, sc_list, rc_list, prox_list, mag_list],
-        xlabel="Speed [rpm]",
-        ylabel="Losses [W]",
-        legend_list=[
-            "Overall",
-            "Winding Joule",
-            "Stator core",
-            "Rotor core",
-            "Winding proximity",
-            "Magnets",
-        ],
-    )
 
     power_dict = {
         "total_power": out.mag.Pem_av,
@@ -101,8 +86,12 @@ def test_FEMM_Loss_SPMSM():
     }
     print(power_dict)
 
+    power_val_ref = [61.78, 9.25, 3.35, 4.39, 0.06, 1.40, 0.05]
+
+    assert_almost_equal(list(power_dict.values()), power_val_ref, decimal=2)
+
     if is_show_fig:
-        out.loss.meshsolution.plot_contour(
+        out.loss.meshsol_list[0].plot_contour(
             "freqs=sum",
             label="Loss",
             group_names=[
@@ -114,19 +103,20 @@ def test_FEMM_Loss_SPMSM():
             # clim=[1e4, 1e7],
         )
 
-    # out.loss.meshsolution.plot_contour(
-    #     "freqs=sum",
-    #     label="Loss",
-    #     group_names=["stator core", "stator winding"],
-    #     # clim=[2e4, 2e7],
-    # )
-
-    # out.loss.meshsolution.plot_contour(
-    #     "freqs=sum",
-    #     label="Loss",
-    #     group_names=["rotor core", "rotor magnets"],
-    #     # clim=[2e4, 2e7],
-    # )
+        plot_2D(
+            [speed_array],
+            [ovl_list, joule_list, sc_list, rc_list, prox_list, mag_list],
+            xlabel="Speed [rpm]",
+            ylabel="Losses [W]",
+            legend_list=[
+                "Overall",
+                "Winding Joule",
+                "Stator core",
+                "Rotor core",
+                "Winding proximity",
+                "Magnets",
+            ],
+        )
 
 
 def test_FEMM_Loss_Prius():
@@ -171,7 +161,7 @@ def test_FEMM_Loss_Prius():
     print(power_dict)
 
     if is_show_fig:
-        out.loss.meshsolution.plot_contour(
+        out.loss.meshsol_list[0].plot_contour(
             "freqs=sum",
             label="Loss",
             group_names=[
@@ -183,14 +173,14 @@ def test_FEMM_Loss_Prius():
             # clim=[2e4, 2e7],
         )
 
-    # out.loss.meshsolution.plot_contour(
+    # out.loss.meshsol_list[0].plot_contour(
     #     "freqs=sum",
     #     label="Loss",
     #     group_names=["stator core", "stator winding"],
     #     # clim=[2e4, 2e7],
     # )
 
-    # out.loss.meshsolution.plot_contour(
+    # out.loss.meshsol_list[0].plot_contour(
     #     "freqs=sum",
     #     label="Loss",
     #     group_names=["rotor core", "rotor magnets"],
@@ -201,6 +191,6 @@ def test_FEMM_Loss_Prius():
 # To run it without pytest
 if __name__ == "__main__":
 
-    # out = test_FEMM_Loss_SPMSM()
+    out = test_FEMM_Loss_SPMSM()
 
-    out = test_FEMM_Loss_Prius()
+    # out = test_FEMM_Loss_Prius()

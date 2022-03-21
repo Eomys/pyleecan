@@ -8833,14 +8833,15 @@
                 "value": "1"
             }
         ],
-        "daughters": [
-            "OutLossFEMM"
-        ],
+        "daughters": [],
         "desc": "Gather the loss module outputs",
         "is_internal": false,
         "methods": [
             "get_loss",
-            "get_loss_dist"
+            "get_loss_dist",
+            "get_loss_group",
+            "get_loss_overall",
+            "store"
         ],
         "mother": "",
         "name": "OutLoss",
@@ -8863,7 +8864,7 @@
                 "name": "meshsol_list",
                 "type": "[MeshSolution]",
                 "unit": "",
-                "value": ""
+                "value": null
             },
             {
                 "desc": "Internal dict to index losses",
@@ -8882,29 +8883,7 @@
                 "type": "str",
                 "unit": "-",
                 "value": "Pyleecan.Loss"
-            }
-        ]
-    },
-    "OutLossFEMM": {
-        "constants": [
-            {
-                "name": "VERSION",
-                "value": "1"
-            }
-        ],
-        "daughters": [],
-        "desc": "Gather the loss module outputs after LossFEMM",
-        "is_internal": false,
-        "methods": [
-            "get_loss_group",
-            "get_loss_overall",
-            "store"
-        ],
-        "mother": "OutLoss",
-        "name": "OutLossFEMM",
-        "package": "Output",
-        "path": "pyleecan/Generator/ClassesRef/Output/OutLossFEMM.csv",
-        "properties": [
+            },
             {
                 "desc": "Dict containing axes data used for Magnetics",
                 "max": "",
@@ -8957,15 +8936,6 @@
                 "name": "Pjoule",
                 "type": "float",
                 "unit": "W",
-                "value": null
-            },
-            {
-                "desc": "Meshsolution containing loss density map",
-                "max": "",
-                "min": "",
-                "name": "meshsolution",
-                "type": "MeshSolution",
-                "unit": "",
                 "value": null
             },
             {

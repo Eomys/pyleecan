@@ -9,8 +9,8 @@ def store(self, out_dict, axes_dict=None, is_get_meshsolution=False, felec=None)
 
     Parameters
     ----------
-    self : OutLossFEMM
-        the OutLossFEMM object to update
+    self : OutLoss
+        the OutLoss object to update
     out_dict : dict
         Dict containing all losses quantities that have been calculated in comp_losses
     axes_dict : dict
@@ -40,7 +40,7 @@ def store(self, out_dict, axes_dict=None, is_get_meshsolution=False, felec=None)
     # Store loss density as meshsolution
     if is_get_meshsolution:
 
-        meshsol = self.parent.mag.meshsolution
+        ms_mag = self.parent.mag.meshsolution
 
         Loss_density_df = DataFreq(
             name="Loss density",
@@ -55,11 +55,13 @@ def store(self, out_dict, axes_dict=None, is_get_meshsolution=False, felec=None)
             label=Loss_density_df.name, field=Loss_density_df, unit=Loss_density_df.unit
         )
 
-        self.meshsolution = MeshSolution(
+        ms_loss = MeshSolution(
             label=Loss_density_sd.label,
-            group=meshsol.group,
+            group=ms_mag.group,
             is_same_mesh=True,
-            mesh=meshsol.mesh,
+            mesh=ms_mag.mesh,
             solution=[Loss_density_sd],
             dimension=2,
         )
+
+        self.meshsol_list = [ms_loss]
