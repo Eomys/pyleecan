@@ -85,6 +85,74 @@ def test_FEMM_compare_IPMSM_xxx():
 @pytest.mark.IPMSM
 @pytest.mark.periodicity
 @pytest.mark.SingleOP
+def test_FEMM_compare_IPMSM_xxx_lam_sym():
+    """Test compute the Flux in FEMM of machine IPMSM_xxx, with is_fast_draw at True (with lamination symetry) or False (without)"""
+    IPMSM_xxx = load(join(DATA_DIR, "Machine", "IPMSM_xxx.json"))
+    simu = Simu1(name="test_FEMM_compare_IPMSM_xxx_lam_sym", machine=IPMSM_xxx)
+
+    # Initialization of the simulation starting point
+    simu.input = InputCurrent()
+    # Set time and space discretization
+    simu.input.time = ImportMatrixVal(
+        value=linspace(start=0, stop=0.015, num=4, endpoint=True)
+    )
+    simu.input.Na_tot = 1024
+
+    # Definition of the enforced output of the electrical module
+    simu.input.Is = ImportMatrixVal(
+        value=array(  # Stator currents as a function of time
+            [
+                [6.97244193e-06, 2.25353053e02, -2.25353060e02],
+                [-2.60215295e02, 1.30107654e02, 1.30107642e02],
+                [-6.97244208e-06, -2.25353053e02, 2.25353060e02],
+                [2.60215295e02, -1.30107654e02, -1.30107642e02],
+            ]
+        )
+    )
+    simu.input.Ir = None  # SPMSM machine => no rotor currents to define
+    simu.input.OP = OPdq(N0=3000)  # Rotor speed [rpm]
+    simu.input.angle_rotor_initial = 0.5216 + pi  # Rotor position at t=0 [rad]
+
+    # Definition of the magnetic simulation (no lam symmetry)
+    simu.mag = MagFEMM(
+        type_BH_stator=2,
+        type_BH_rotor=2,
+        is_periodicity_a=True,
+        nb_worker=cpu_count(),
+        is_fast_draw=False,
+    )
+    simu.force = None
+    simu.struct = None
+
+    assert IPMSM_xxx.comp_periodicity_spatial() == (4, True)
+    assert IPMSM_xxx.stator.comp_periodicity_geo() == (48, False)
+    assert IPMSM_xxx.rotor.comp_periodicity_geo() == (8, False)
+
+    # Copy the simu and activate the symmetry
+    simu_sym = Simu1(init_dict=simu.as_dict())
+    simu_sym.mag.is_fast_draw = True
+
+    out = simu.run()
+
+    out2 = simu_sym.run()
+
+    # Plot the result by comparing the two simulation
+    plt.close("all")
+    out.mag.B.plot_2D_Data(
+        "angle{°}",
+        data_list=[out2.mag.B],
+        legend_list=["WIthout lam symmetry", "With lam symmetry"],
+        save_path=join(save_path, "test_FEMM_compare_IPMSM_xxx.png"),
+        is_show_fig=False,
+        **dict_2D
+    )
+
+
+@pytest.mark.long_5s
+@pytest.mark.MagFEMM
+@pytest.mark.IPMSM
+@pytest.mark.periodicity
+@pytest.mark.SingleOP
 def test_FEMM_compare_Prius():
     """Validation of the TOYOTA Prius 2004 interior magnet (V shape) with distributed winding
     50 kW peak, 400 Nm peak at 1500 rpm from publication
@@ -435,7 +503,7 @@ def test_SPMSM_load():
 @pytest.mark.periodicity
 @pytest.mark.SingleOP
 def test_SPMSM_noload():
-    """Validation of outer rotor SPMSM
+    """Validation of External Rotor SPMSM
     Open circuit (Null Stator currents)
 
     Machine B from Vu Xuan Hung thesis
@@ -508,8 +576,9 @@ def test_SPMSM_noload():
 
 if __name__ == "__main__":
     # test_FEMM_compare_IPMSM_xxx()
+    test_FEMM_compare_IPMSM_xxx_lam_sym()
     # test_FEMM_compare_Prius()
-    test_FEMM_compare_SCIM()
-    test_FEMM_compare_SIPMSM()
-    test_SPMSM_load()
-    test_SPMSM_noload()
+    # test_FEMM_compare_SCIM()
+    # test_FEMM_compare_SIPMSM()
+    # test_SPMSM_load()
+    # test_SPMSM_noload()

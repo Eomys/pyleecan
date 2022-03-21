@@ -1,6 +1,6 @@
 {
     "__class__": "MachineSIPMSM",
-    "desc": "outer rotor SPMSM Machine B from Vu Xuan Hung thesis",
+    "desc": "External Rotor SPMSM Machine B from Vu Xuan Hung thesis",
     "frame": null,
     "logger_name": "Pyleecan.Machine",
     "name": "SPMSM_015",

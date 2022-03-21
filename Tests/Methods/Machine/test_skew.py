@@ -11,6 +11,10 @@ from pyleecan.Functions.load import load
 
 from pyleecan.definitions import DATA_DIR
 
+from Tests import save_path
+
+is_show_fig = False
+
 
 @pytest.mark.IPMSM
 @pytest.mark.SCIM
@@ -49,6 +53,10 @@ def test_skew_pattern():
     )
 
     assert max(angle_step_linear) - min(angle_step_linear) == 0.5 * ssp1
+    Toyota_Prius.rotor.skew.plot(
+        save_path=join(save_path, "test_IPMSM_plot_rotor_skew1"),
+        is_show_fig=is_show_fig,
+    )
 
     #%% 3-Stepped linear skew, one stator slot pitch
     Toyota_Prius.rotor.skew = Skew(type_skew="linear", is_step=True, Nstep=3, rate=1)
@@ -80,6 +88,10 @@ def test_skew_pattern():
     )
 
     assert max(angle_step_linear) - min(angle_step_linear) == ssp1
+    Toyota_Prius.rotor.skew.plot(
+        save_path=join(save_path, "test_IPMSM_plot_rotor_skew2"),
+        is_show_fig=is_show_fig,
+    )
 
     #%% 4-Stepped V-shape skew, one stator slot pitch
     Toyota_Prius.rotor.skew = Skew(type_skew="vshape", is_step=True, Nstep=4, rate=1)
@@ -106,6 +118,10 @@ def test_skew_pattern():
     )
 
     assert max(angle_step_vshape) - min(angle_step_vshape) == ssp1
+    Toyota_Prius.rotor.skew.plot(
+        save_path=join(save_path, "test_IPMSM_plot_rotor_skew3"),
+        is_show_fig=is_show_fig,
+    )
 
     #%% 3-Stepped V-shape skew, one stator slot pitch
     Toyota_Prius.rotor.skew = Skew(type_skew="vshape", is_step=True, Nstep=3, rate=1)
@@ -137,6 +153,10 @@ def test_skew_pattern():
     )
 
     assert max(angle_step_vshape) - min(angle_step_vshape) == ssp1
+    Toyota_Prius.rotor.skew.plot(
+        save_path=join(save_path, "test_IPMSM_plot_rotor_skew4"),
+        is_show_fig=is_show_fig,
+    )
 
     #%% 5-Stepped alternate skew, one stator slot pitch
     Toyota_Prius.rotor.skew = Skew(type_skew="zig-zag", is_step=True, Nstep=5, rate=0.8)
@@ -178,6 +198,10 @@ def test_skew_pattern():
     assert_almost_equal(
         max(angle_step_alternate) - min(angle_step_alternate), 0.8 * ssp1, decimal=12
     )
+    Toyota_Prius.rotor.skew.plot(
+        save_path=join(save_path, "test_IPMSM_plot_rotor_skew5"),
+        is_show_fig=is_show_fig,
+    )
 
     #%% 2-Stepped UD skew
     angle_list = [0.5, -0.2]
@@ -198,6 +222,10 @@ def test_skew_pattern():
     )
 
     assert max(angle_step_ud) - min(angle_step_ud) == max(angle_list) - min(angle_list)
+    Toyota_Prius.rotor.skew.plot(
+        save_path=join(save_path, "test_IPMSM_plot_rotor_skew6"),
+        is_show_fig=is_show_fig,
+    )
 
     #%% Continuous linear skew, one rotor slot pitch
     Audi_eTron.rotor.skew = Skew(type_skew="linear", is_step=False, rate=1)
@@ -215,6 +243,10 @@ def test_skew_pattern():
     )
 
     assert max(angle_cont_lin) - min(angle_cont_lin) == ssp2
+    Audi_eTron.rotor.skew.plot(
+        save_path=join(save_path, "test_SCIM_plot_rotor_skew1"),
+        is_show_fig=is_show_fig,
+    )
 
     return Toyota_Prius, Audi_eTron
 

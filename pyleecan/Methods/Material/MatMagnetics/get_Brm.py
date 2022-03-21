@@ -23,11 +23,9 @@ def get_Brm(self, T_op=None, T_ref=20):
     if T_op is None:
         T_op = T_ref
 
+    # Get magnetic remanent flux density at 20 degC from excitation coercitivity
     if self.Brm20 is None:
-        # Calculate magnetic remanent flux density at 20 degC from excitation coercitivity
-        if self.Hc is None or self.mur_lin is None:
-            raise Exception("Cannot calculate Brm20 if Hc or mur_lin is None")
-        Brm20 = 4 * pi * 1e-7 * self.mur_lin * self.Hc
+        raise Exception("Cannot calculate Brm20 if Hc or mur_lin is None")
     else:
         Brm20 = self.Brm20
 

@@ -406,7 +406,7 @@ class Slot(FrozenClass):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, Zs=36, init_dict=None, init_str=None):
+    def __init__(self, Zs=36, type_close=1, init_dict=None, init_str=None):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -424,9 +424,12 @@ class Slot(FrozenClass):
             # Overwrite default value with init_dict content
             if "Zs" in list(init_dict.keys()):
                 Zs = init_dict["Zs"]
+            if "type_close" in list(init_dict.keys()):
+                type_close = init_dict["type_close"]
         # Set the properties (value check and convertion are done in setter)
         self.parent = None
         self.Zs = Zs
+        self.type_close = type_close
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -440,6 +443,7 @@ class Slot(FrozenClass):
         else:
             Slot_str += "parent = " + str(type(self.parent)) + " object" + linesep
         Slot_str += "Zs = " + str(self.Zs) + linesep
+        Slot_str += "type_close = " + str(self.type_close) + linesep
         return Slot_str
 
     def __eq__(self, other):
@@ -448,6 +452,8 @@ class Slot(FrozenClass):
         if type(other) != type(self):
             return False
         if other.Zs != self.Zs:
+            return False
+        if other.type_close != self.type_close:
             return False
         return True
 
@@ -461,6 +467,8 @@ class Slot(FrozenClass):
         diff_list = list()
         if other._Zs != self._Zs:
             diff_list.append(name + ".Zs")
+        if other._type_close != self._type_close:
+            diff_list.append(name + ".type_close")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -470,6 +478,7 @@ class Slot(FrozenClass):
 
         S = 0  # Full size of the object
         S += getsizeof(self.Zs)
+        S += getsizeof(self.type_close)
         return S
 
     def as_dict(self, type_handle_ndarray=0, keep_function=False, **kwargs):
@@ -485,6 +494,7 @@ class Slot(FrozenClass):
 
         Slot_dict = dict()
         Slot_dict["Zs"] = self.Zs
+        Slot_dict["type_close"] = self.type_close
         # The class name is added to the dict for deserialisation purpose
         Slot_dict["__class__"] = "Slot"
         return Slot_dict
@@ -493,6 +503,7 @@ class Slot(FrozenClass):
         """Set all the properties to None (except pyleecan object)"""
 
         self.Zs = None
+        self.type_close = None
 
     def _get_Zs(self):
         """getter of Zs"""
@@ -510,5 +521,25 @@ class Slot(FrozenClass):
 
         :Type: int
         :min: 0
+        """,
+    )
+
+    def _get_type_close(self):
+        """getter of type_close"""
+        return self._type_close
+
+    def _set_type_close(self, value):
+        """setter of type_close"""
+        check_var("type_close", value, "int", Vmin=0, Vmax=2)
+        self._type_close = value
+
+    type_close = property(
+        fget=_get_type_close,
+        fset=_set_type_close,
+        doc=u"""2 to close the slot with lamination iron, 1 to close with air and 0 to close with nothing (previous policy)
+
+        :Type: int
+        :min: 0
+        :max: 2
         """,
     )

@@ -770,7 +770,7 @@
                     },
                     "elec": {
                         "__class__": "MatElectrical",
-                        "alpha": 10
+                        "alpha": 10,
                         "epsr": 1,
                         "rho": 0
                     },

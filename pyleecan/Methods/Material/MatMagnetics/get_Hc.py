@@ -23,15 +23,14 @@ def get_Hc(self, T_op=None, T_ref=20):
     if T_op is None:
         T_op = T_ref
 
-    if self.Hc is None:
-        # Calculate magnetic coercitivity at 20 degC from remanent flux density
-        if self.Brm20 is None or self.mur_lin is None:
-            raise Exception("Cannot calculate Hc if Brm20 or mur_lin is None")
-        Hc20 = self.Brm / (4 * pi * 1e-7 * self.mur_lin)
-    else:
-        Hc20 = self.Hc
+    # Calculate magnetic coercitivity at 20 degC from remanent flux density
+    if self.Brm20 is None or self.mur_lin is None:
+        raise Exception("Cannot calculate Hc if Brm20 or mur_lin is None")
+
+    # Magnet coercitivity
+    Hc20 = self.Brm20 / (4 * pi * 1e-7 * self.mur_lin)
 
     # Update magnetic coercitivity
-    Hc = Hc20 * (1 + self.alpha_Br * (T_op - T_ref) / (4 * pi * 1e-7 * self.mur_lin))
+    Hc = Hc20 * (1 + self.alpha_Br * (T_op - T_ref))
 
     return Hc

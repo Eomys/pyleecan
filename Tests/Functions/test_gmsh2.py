@@ -123,7 +123,7 @@ def test_gmsh_spm():
 
 @pytest.mark.long_5s
 @pytest.mark.GMSH
-#@pytest.mark.SPMSM
+# @pytest.mark.SPMSM
 @pytest.mark.SingleOP
 def test_gmsh_benchmark():
     """Check generation of the 2D mesh with gmsh"""
@@ -132,7 +132,7 @@ def test_gmsh_benchmark():
 
     # Import the machine from a script
     Benchmark = load(join(DATA_DIR, "Machine", "Benchmark.json"))
-    #Benchmark.stator.slot.H1 = 1e-3
+    # Benchmark.stator.slot.H1 = 1e-3
     save_path = join(save_plot_path, "GMSH")
     if not isdir(save_path):
         makedirs(save_path)

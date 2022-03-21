@@ -127,14 +127,34 @@ def create_FEMM_materials(
                 femm.mi_addmaterial("Airgap", 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0)
                 materials.append("Airgap")
             prop_dict[label_dict["full"]] = "Airgap"
-        elif (
-            SOP_LAB in label_dict["surf_type"] or NOTCH_LAB in label_dict["surf_type"]
-        ):  # Slot opening or Notches
+        elif SOP_LAB in label_dict["surf_type"]:  # Slot opening
+            # Material depending on slot.type_close
+            # Detecting the material used to close the slot opening
+            if STATOR_LAB in label_dict["lam_type"]:
+                type_close = stator.slot.type_close
+                lam_lab = STATOR_LAB
+            elif ROTOR_LAB in label_dict["lam_type"]:
+                type_close = rotor.slot.type_close
+                lam_lab = ROTOR_LAB
+
+            # Assigning air to the slot opening
+            if type_close == 1:
+                if "Air" not in materials:
+                    femm.mi_addmaterial("Air", 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0)
+                    materials.append("Air")
+                prop_dict[label_dict["full"]] = "Air"
+            # Assigning lamination iron to the slot opening (closed slot)
+            elif type_close == 2:
+                slot_op_mat = [mat for mat in materials if lam_lab in mat][0]
+                prop_dict[label_dict["full"]] = slot_op_mat
+
+        elif NOTCH_LAB in label_dict["surf_type"]:  # Notches
             # Same material as Airgap but different mesh
             if "Air" not in materials:
                 femm.mi_addmaterial("Air", 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0)
                 materials.append("Air")
             prop_dict[label_dict["full"]] = "Air"
+
         elif VENT_LAB in label_dict["surf_type"]:  # Ventilation
             vent = get_obj_from_label(machine, label_dict=label_dict)
             material = vent.mat_void
