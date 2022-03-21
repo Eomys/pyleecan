@@ -101,7 +101,7 @@ def test_EM_SCIM_006_maxwell_current_enforced():
     B_maxwell.components["radial"].values = param_dict["XBr_m_alpha"][:, :-1, None]
     B_maxwell.components["tangential"].values = param_dict["XBt_m_alpha"][:, :-1, None]
 
-    assert_almost_equal(out.mag.Tem.values, param_dict["Tem_m"][jt0_m], decimal=1)
+    assert_almost_equal(out.mag.Tem.values, param_dict["Tem_m"][jt0_m], decimal=0)
 
     assert_almost_equal(
         B_maxwell.components["radial"].values,
@@ -249,5 +249,6 @@ def test_EM_SCIM_006_varslip():
 
 if __name__ == "__main__":
 
-    # out = test_EM_SCIM_006_maxwell_current_enforced()
-    out = test_EM_SCIM_006_varslip()
+    out = test_EM_SCIM_006_maxwell_current_enforced()
+    # out = test_EM_SCIM_006_varslip()
+    print("Done")

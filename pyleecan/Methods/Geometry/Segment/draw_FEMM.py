@@ -7,6 +7,7 @@ def draw_FEMM(
     automesh=None,
     hide=False,
     group=None,
+    is_draw=True,
 ):
     """<   Draw the segment in FEMM and assign the property
 
@@ -34,22 +35,35 @@ def draw_FEMM(
     group :
         group the segment belongs
         (Default value = None)
-    """
+    is_draw : bool
+        1 to draw the list of surfaces given
 
-    # Add the nodes
+    Returns
+    -------
+    None
+    """
+    # Determine locations of the nodes
     X1, Y1 = self.begin.real, self.begin.imag
     X2, Y2 = self.end.real, self.end.imag
-    femm.mi_addnode(X1, Y1)
+
+    if is_draw:
+        # Adding nodes
+        femm.mi_addnode(X1, Y1)
+        femm.mi_addnode(X2, Y2)
+
+    # Adding property on the node
     femm.mi_selectnode(X1, Y1)
     femm.mi_setnodeprop(nodeprop, group)
     femm.mi_clearselected()
-    femm.mi_addnode(X2, Y2)
     femm.mi_selectnode(X2, Y2)
     femm.mi_setnodeprop(nodeprop, group)
     femm.mi_clearselected()
-    # add the segment
-    femm.mi_addsegment(X1, Y1, X2, Y2)
-    # Set property
+
+    if is_draw:
+        # Adding the segment
+        femm.mi_addsegment(X1, Y1, X2, Y2)
+
+    # Set property of the segment
     femm.mi_selectsegment((X1 + X2) / 2, (Y1 + Y2) / 2)
     femm.mi_setsegmentprop(propname, element_size, automesh, hide, group)
     femm.mi_clearselected()

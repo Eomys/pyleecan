@@ -30,6 +30,7 @@ def assign_FEMM_surface(femm, surf, prop, FEMM_dict, machine):
         dictionary containing the main parameters of FEMM
     machine : Machine
         Machine to draw
+
     Returns
     -------
     None
@@ -118,6 +119,7 @@ def assign_FEMM_surface(femm, surf, prop, FEMM_dict, machine):
         elif HOLEV_LAB in label_dict["surf_type"]:
             hole_obj = get_obj_from_label(machine, label_dict=label_dict)
             prop = "Air"
+
         # Set the surface property
         femm.mi_setblockprop(
             prop,

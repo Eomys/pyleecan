@@ -306,10 +306,10 @@ class DMachineSetup(Ui_DMachineSetup, QWidget):
         )
         self.w_step.b_previous.clicked.connect(self.s_previous)
         if index != len(step_list) - 1:
-            self.w_step.b_next.setText(self.tr(u"Next"))
+            self.w_step.b_next.setText(self.tr("Next"))
             self.w_step.b_next.clicked.connect(self.s_next)
         else:
-            self.w_step.b_next.setText(self.tr(u"Save and Close"))
+            self.w_step.b_next.setText(self.tr("Save and Close"))
             self.w_step.b_next.clicked.connect(self.s_save_close)
 
         self.w_step.saveNeeded.connect(self.save_needed)

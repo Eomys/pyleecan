@@ -235,6 +235,7 @@ class SlotW28(Slot):
         W3=0.005,
         H3=0.003,
         Zs=36,
+        type_close=1,
         init_dict=None,
         init_str=None,
     ):
@@ -265,6 +266,8 @@ class SlotW28(Slot):
                 H3 = init_dict["H3"]
             if "Zs" in list(init_dict.keys()):
                 Zs = init_dict["Zs"]
+            if "type_close" in list(init_dict.keys()):
+                type_close = init_dict["type_close"]
         # Set the properties (value check and convertion are done in setter)
         self.W0 = W0
         self.H0 = H0
@@ -272,7 +275,7 @@ class SlotW28(Slot):
         self.W3 = W3
         self.H3 = H3
         # Call Slot init
-        super(SlotW28, self).__init__(Zs=Zs)
+        super(SlotW28, self).__init__(Zs=Zs, type_close=type_close)
         # The class is frozen (in Slot init), for now it's impossible to
         # add new properties
 

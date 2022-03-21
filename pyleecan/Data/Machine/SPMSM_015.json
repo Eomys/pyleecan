@@ -2,7 +2,7 @@
     "__class__": "MachineSIPMSM",
     "__save_date__": "2021_05_03 21h57min41s ",
     "__version__": "pyleecan_1.2.1",
-    "desc": "outer rotor SPMSM Machine B from Vu Xuan Hung thesis",
+    "desc": "External Rotor SPMSM Machine B from Vu Xuan Hung thesis",
     "frame": null,
     "logger_name": "Pyleecan.Machine",
     "name": "SPMSM_015",

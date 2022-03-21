@@ -1,8 +1,0 @@
-Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constante Name,Constante Value,Description classe,Classe fille
-FEMM_dict,,To enforce user-defined values for FEMM main parameters ,0,dict,,,,,Simulation,FluxLink,comp_fluxlinkage,VERSION,1,Electric module: Flux Linkage with FEMM,
-type_calc_leakage,,0 no leakage calculation /  1 calculation using single slot ,0,int,0,0,1,,,,,,,,
-is_sliding_band,,0 to desactivate the sliding band,0,bool,1,,,,,,,,,,
-is_periodicity_a,,True to take into account the spatial periodicity of the machine,0,bool,0,,,,,,,,,,
-Nt_tot,-,Number of time steps for the FEMM simulation,0,int,5,,,,,,,,,,
-Kgeo_fineness,,"global coefficient to adjust geometry fineness in FEMM (0.5 : default , > 1 : finner , < 1 : less fine)",0,float,0.5,,,,,,,,,,
-nb_worker,,To run FEMM in parallel (the parallelization is on the time loop),,int,1,,,,,,,,,,

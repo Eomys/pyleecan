@@ -122,6 +122,7 @@ class SlotUD(Slot):
         type_line_wind=0,
         name="",
         Zs=36,
+        type_close=1,
         init_dict=None,
         init_str=None,
     ):
@@ -152,6 +153,8 @@ class SlotUD(Slot):
                 name = init_dict["name"]
             if "Zs" in list(init_dict.keys()):
                 Zs = init_dict["Zs"]
+            if "type_close" in list(init_dict.keys()):
+                type_close = init_dict["type_close"]
         # Set the properties (value check and convertion are done in setter)
         self.line_list = line_list
         self.wind_begin_index = wind_begin_index
@@ -159,7 +162,7 @@ class SlotUD(Slot):
         self.type_line_wind = type_line_wind
         self.name = name
         # Call Slot init
-        super(SlotUD, self).__init__(Zs=Zs)
+        super(SlotUD, self).__init__(Zs=Zs, type_close=type_close)
         # The class is frozen (in Slot init), for now it's impossible to
         # add new properties
 

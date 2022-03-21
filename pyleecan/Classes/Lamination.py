@@ -168,6 +168,11 @@ try:
 except ImportError as error:
     get_surfaces_closing = error
 
+try:
+    from ..Methods.Machine.Lamination.comp_periodicity_geo import comp_periodicity_geo
+except ImportError as error:
+    comp_periodicity_geo = error
+
 
 from ._check import InitUnKnowClassError
 
@@ -498,6 +503,18 @@ class Lamination(FrozenClass):
         )
     else:
         get_surfaces_closing = get_surfaces_closing
+    # cf Methods.Machine.Lamination.comp_periodicity_geo
+    if isinstance(comp_periodicity_geo, ImportError):
+        comp_periodicity_geo = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Lamination method comp_periodicity_geo: "
+                    + str(comp_periodicity_geo)
+                )
+            )
+        )
+    else:
+        comp_periodicity_geo = comp_periodicity_geo
     # save and copy methods are available in all object
     save = save
     copy = copy

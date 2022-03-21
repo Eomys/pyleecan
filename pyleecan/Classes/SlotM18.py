@@ -195,7 +195,7 @@ class SlotM18(Slot):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, Hmag=0.001, Zs=36, init_dict=None, init_str=None):
+    def __init__(self, Hmag=0.001, Zs=36, type_close=1, init_dict=None, init_str=None):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -215,10 +215,12 @@ class SlotM18(Slot):
                 Hmag = init_dict["Hmag"]
             if "Zs" in list(init_dict.keys()):
                 Zs = init_dict["Zs"]
+            if "type_close" in list(init_dict.keys()):
+                type_close = init_dict["type_close"]
         # Set the properties (value check and convertion are done in setter)
         self.Hmag = Hmag
         # Call Slot init
-        super(SlotM18, self).__init__(Zs=Zs)
+        super(SlotM18, self).__init__(Zs=Zs, type_close=type_close)
         # The class is frozen (in Slot init), for now it's impossible to
         # add new properties
 
