@@ -10478,6 +10478,7 @@
             "comp_surface",
             "comp_surface_active",
             "comp_surface_opening",
+            "comp_width",
             "comp_width_opening",
             "convert_to_SlotUD2",
             "get_is_stator",

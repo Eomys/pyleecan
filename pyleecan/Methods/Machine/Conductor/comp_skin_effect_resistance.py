@@ -36,7 +36,7 @@ def comp_skin_effect_resistance(self, freq, T_op=20, T_ref=20, b=None, zt=None):
         zt = self.parent.Ntcoil
 
     # check if wires are round or rectangular
-    is_round_wires = self.is_round_wire()
+    is_round_wire = self.is_round_wire()
 
     # conductor height
     hc0 = self.comp_height_wire()
@@ -66,7 +66,7 @@ def comp_skin_effect_resistance(self, freq, T_op=20, T_ref=20, b=None, zt=None):
     ksi = hc * sqrt((1 / 2) * w * mu0 * mur * sigma * za * bc0 / b)
 
     # average resistance factor
-    if is_round_wires:
+    if is_round_wire:
         # Use round wire approximation Eq(5.28) p.271
         kr_skin = 1 + 0.59 * ((zt ** 2 - 0.2) / 9) * ksi ** 2
     else:
