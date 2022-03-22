@@ -42,33 +42,6 @@ try:
 except ImportError as error:
     plot = error
 
-try:
-    from ..Methods.Machine.CondType21.comp_width_wire import comp_width_wire
-except ImportError as error:
-    comp_width_wire = error
-
-try:
-    from ..Methods.Machine.CondType21.comp_height_wire import comp_height_wire
-except ImportError as error:
-    comp_height_wire = error
-
-try:
-    from ..Methods.Machine.CondType21.comp_nb_circumferential_wire import (
-        comp_nb_circumferential_wire,
-    )
-except ImportError as error:
-    comp_nb_circumferential_wire = error
-
-try:
-    from ..Methods.Machine.CondType21.comp_nb_radial_wire import comp_nb_radial_wire
-except ImportError as error:
-    comp_nb_radial_wire = error
-
-try:
-    from ..Methods.Machine.CondType21.is_round_wires import is_round_wires
-except ImportError as error:
-    is_round_wires = error
-
 
 from ._check import InitUnKnowClassError
 
@@ -133,65 +106,6 @@ class CondType21(Conductor):
         )
     else:
         plot = plot
-    # cf Methods.Machine.CondType21.comp_width_wire
-    if isinstance(comp_width_wire, ImportError):
-        comp_width_wire = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use CondType21 method comp_width_wire: "
-                    + str(comp_width_wire)
-                )
-            )
-        )
-    else:
-        comp_width_wire = comp_width_wire
-    # cf Methods.Machine.CondType21.comp_height_wire
-    if isinstance(comp_height_wire, ImportError):
-        comp_height_wire = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use CondType21 method comp_height_wire: "
-                    + str(comp_height_wire)
-                )
-            )
-        )
-    else:
-        comp_height_wire = comp_height_wire
-    # cf Methods.Machine.CondType21.comp_nb_circumferential_wire
-    if isinstance(comp_nb_circumferential_wire, ImportError):
-        comp_nb_circumferential_wire = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use CondType21 method comp_nb_circumferential_wire: "
-                    + str(comp_nb_circumferential_wire)
-                )
-            )
-        )
-    else:
-        comp_nb_circumferential_wire = comp_nb_circumferential_wire
-    # cf Methods.Machine.CondType21.comp_nb_radial_wire
-    if isinstance(comp_nb_radial_wire, ImportError):
-        comp_nb_radial_wire = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use CondType21 method comp_nb_radial_wire: "
-                    + str(comp_nb_radial_wire)
-                )
-            )
-        )
-    else:
-        comp_nb_radial_wire = comp_nb_radial_wire
-    # cf Methods.Machine.CondType21.is_round_wires
-    if isinstance(is_round_wires, ImportError):
-        is_round_wires = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use CondType21 method is_round_wires: " + str(is_round_wires)
-                )
-            )
-        )
-    else:
-        is_round_wires = is_round_wires
     # save and copy methods are available in all object
     save = save
     copy = copy
