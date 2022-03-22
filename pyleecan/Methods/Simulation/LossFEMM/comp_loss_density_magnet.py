@@ -4,6 +4,8 @@ import numpy as np
 
 from SciDataTool.Functions.conversions import xy_to_rphi
 
+from ....Classes.CondType11 import CondType11
+
 
 def comp_loss_density_magnet(self, group, coeff_dict):
     """Calculate eddy-current losses in rotor permanent magnets assuming power density
@@ -43,6 +45,8 @@ def comp_loss_density_magnet(self, group, coeff_dict):
 
     if hasattr(machine.rotor, "magnet"):
         magnet = machine.rotor.magnet
+        Hmag = machine.rotor.slot.Hmag
+        Wmag = machine.rotor.slot.Wmag
     else:
         hole = machine.rotor.hole[0]
         if hasattr(hole, "magnet_0"):
@@ -51,7 +55,12 @@ def comp_loss_density_magnet(self, group, coeff_dict):
     Lmag = magnet.Lmag
     if Lmag is None:
         Lmag = machine.rotor.L1
-    # Get magnet conductivity
+
+    # Get magnet conductivity including skin effect
+    # magnet_cond = CondType11(Hwire=Hmag, Wwire=Wmag, cond_mat=magnet.mat_type)
+    # magnet_cond.parent = machine.rotor.slot
+    # Xkr_skinS, Xke_skinS = magnet_cond.comp_skin_effect(12 * felec)
+
     sigma_m = magnet.mat_type.elec.get_conductivity(T_op=self.Trot)
 
     # Get fundamental frequency
