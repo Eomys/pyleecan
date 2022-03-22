@@ -13603,7 +13603,8 @@
         "desc": "Abstract class to generate multi-simulation by changing the operating point",
         "is_internal": false,
         "methods": [
-            "get_ref_simu_index"
+            "get_ref_simu_index",
+            "get_OP_matrix"
         ],
         "mother": "VarSimu",
         "name": "VarLoad",
