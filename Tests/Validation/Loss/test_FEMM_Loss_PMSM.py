@@ -52,6 +52,7 @@ def test_FEMM_Loss_SPMSM():
                 "smart_mesh": 1,
             },
         },
+        is_fast_draw=True,
         # is_close_femm=False,
     )
 
@@ -141,8 +142,9 @@ def test_FEMM_Loss_Prius():
     simu.mag = MagFEMM(
         is_periodicity_a=True,
         is_periodicity_t=True,
-        nb_worker=1,
+        nb_worker=4,
         is_get_meshsolution=True,
+        # is_fast_draw=True,
     )
 
     simu.loss = LossFEMM(Ce=Ce, Cp=Cprox, Ch=Ch, is_get_meshsolution=True, Tsta=100)
@@ -191,6 +193,6 @@ def test_FEMM_Loss_Prius():
 # To run it without pytest
 if __name__ == "__main__":
 
-    out = test_FEMM_Loss_SPMSM()
+    # out = test_FEMM_Loss_SPMSM()
 
-    # out = test_FEMM_Loss_Prius()
+    out = test_FEMM_Loss_Prius()

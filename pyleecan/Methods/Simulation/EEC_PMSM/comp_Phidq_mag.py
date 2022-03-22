@@ -1,6 +1,3 @@
-from lib2to3.pgen2.token import OP
-
-
 def comp_Phidq_mag(self):
     """Compute and set the stator winding flux in open-circuit for the EEC
 

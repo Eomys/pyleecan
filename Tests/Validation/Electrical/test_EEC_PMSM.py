@@ -53,10 +53,7 @@ def test_EEC_PMSM(nb_worker=int(0.5 * cpu_count())):
     simu.elec = Electrical()
     simu.elec.eec = EEC_PMSM(
         fluxlink=MagFEMM(
-            is_periodicity_t=True,
-            is_periodicity_a=True,
-            nb_worker=nb_worker,
-            T_mag=60,
+            is_periodicity_t=True, is_periodicity_a=True, nb_worker=nb_worker, T_mag=60,
         ),
     )
 
@@ -64,7 +61,7 @@ def test_EEC_PMSM(nb_worker=int(0.5 * cpu_count())):
     out_mag = simu_mag.run()
 
     # from Yang et al, 2013
-    assert_almost_equal(out.elec.Tem_av_ref, 82, decimal=1)
+    assert_almost_equal(out.elec.Tem_av_ref, 81.7, decimal=1)
     assert_almost_equal(out_mag.mag.Tem_av, 82, decimal=1)
 
     # Plot 3-phase current function of time
@@ -104,10 +101,7 @@ def test_EEC_PMSM_sync_rel(nb_worker=int(0.5 * cpu_count())):
     simu.elec = Electrical()
     simu.elec.eec = EEC_PMSM(
         fluxlink=MagFEMM(
-            is_periodicity_t=True,
-            is_periodicity_a=True,
-            nb_worker=nb_worker,
-            T_mag=60,
+            is_periodicity_t=True, is_periodicity_a=True, nb_worker=nb_worker, T_mag=60,
         ),
     )
 
@@ -139,7 +133,7 @@ def test_EEC_PMSM_sync_rel(nb_worker=int(0.5 * cpu_count())):
         Tem_sync[ii], Tem_rel[ii] = out_ii.elec.eec.comp_torque_sync_rel()
 
     Tem2 = Tem_sync + Tem_rel
-    assert_almost_equal(Tem_eec - Tem2, 0, decimal=13)
+    assert_almost_equal(Tem_eec - Tem2, 0, decimal=12)
 
     if is_show_fig:
 

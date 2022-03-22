@@ -1,22 +1,22 @@
-# -*- coding: utf-8 -*-
-from numpy import pi
+from numpy import log, pi, sqrt
 
 from ....Classes.LamSlotWind import LamSlotWind
 
 
-def comp_length_endwinding(self):
-    """Compute the end winding conductor length on one side for a half-turn
-    excluding the straight conductor length outside of the lamination (winding.Lewout).
+def comp_inductance(self):
+    """Compute the end winding inductance from "Design of Brushless Permanent-Magnet Machines", J.R Henderson, 2010
 
     Parameters
     ----------
     self: EndWinding
         A EndWinding object
+
     Returns
     -------
-    end_wind_length : float
-        End-winding length on one side for a half-turn [m].
+    Lew : float
+        end winding inductance [H].
     """
+
     # ckeck that Endwinding is in Winding of a Lamination with slots
     if (
         self.parent is None
@@ -25,9 +25,9 @@ def comp_length_endwinding(self):
         or self.parent.parent.slot is None
     ):
         self.get_logger.warning(
-            "EndWindingCirc.comp_length_endwinding(): "
+            "EndWindingCirc.comp_inductance(): "
             + "EndWindingCirc has to be in a lamination with slot winding to calculate "
-            + "the end winding length. Returning zero lenght."
+            + "the end winding inductance. Returning zero inductance."
         )
         return 0
 
@@ -45,13 +45,20 @@ def comp_length_endwinding(self):
         if coil_pitch is None:
             coil_pitch = Zs / p / 2
             self.get_logger().warning(
-                "EndWindingCirc.comp_lenght_endwinding():"
-                + "Using a coil pitch of one pole pitch for EW length calculation."
+                "EndWindingCirc.comp_inductance():"
+                + "Using a coil pitch of one pole pitch for EW inductance calculation."
             )
 
-    # calculate the EW length as a quarter circle base on the circumferential length
-    # TODO do better aprox. based on tooth width / slot width for tooth coil winding
-    circ_length = 2 * pi * Rmid * coil_pitch / Zs
-    end_wind_length = pi * circ_length / 4
+    # End winding is a circle whose radius is half the coil pitch distance
+    Re = pi / Zs * Rmid * coil_pitch
 
-    return end_wind_length
+    # Eq(5.49) p.234
+    Scond = self.parent.conductor.comp_surface()
+    R = 0.4394 * sqrt(Scond)
+
+    # Eq (5.48) p 233
+    Ntcoil = self.parent.Ntcoil
+    mu0 = 4 * pi * 1e-7
+    Lw = mu0 * Re * Ntcoil ** 2 * (log(8 * Re / R) - 2)
+
+    return Lw
