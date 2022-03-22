@@ -671,6 +671,91 @@
             }
         ]
     },
+    "CondType13": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "parallel stranded conductor consisting of at least a single round wire",
+        "is_internal": false,
+        "methods": [
+            "check",
+            "comp_surface_active",
+            "comp_height",
+            "comp_surface",
+            "comp_width",
+            "plot",
+            "plot_schematics",
+            "comp_width_wire",
+            "comp_height_wire",
+            "comp_nb_circumferential_wire",
+            "comp_nb_radial_wire",
+            "is_round_wire"
+        ],
+        "mother": "Conductor",
+        "name": "CondType13",
+        "package": "Machine",
+        "path": "pyleecan/Generator/ClassesRef/Machine/CondType13.csv",
+        "properties": [
+            {
+                "desc": "cf schematics, single wire diameter without insulation [m]",
+                "max": "",
+                "min": "0",
+                "name": "Wwire",
+                "type": "float",
+                "unit": "m",
+                "value": 0.015
+            },
+            {
+                "desc": "(advanced) cf schematics, winding coil insulation diameter [m]",
+                "max": "",
+                "min": "0",
+                "name": "Wins_cond",
+                "type": "float",
+                "unit": "m",
+                "value": 0.015
+            },
+            {
+                "desc": "cf schematics, stator winding number of preformed wires (strands) in parallel per coil along radial (vertical) direction",
+                "max": "",
+                "min": "1",
+                "name": "Nwppc_rad",
+                "type": "int",
+                "unit": "-",
+                "value": 1
+            },
+            {
+                "desc": "cf schematics, stator winding number of preformed wires (strands) in parallel per coil along tangential (horizontal) direction",
+                "max": "",
+                "min": "1",
+                "name": "Nwppc_tan",
+                "type": "int",
+                "unit": "-",
+                "value": 1
+            },
+            {
+                "desc": "(advanced) cf schematics, winding strand insulation thickness [m]",
+                "max": "",
+                "min": "0",
+                "name": "Wins_wire",
+                "type": "float",
+                "unit": "m",
+                "value": 0
+            },
+            {
+                "desc": "winding overhang factor which describes the fact that random round wire end-windings can be more or less compressed (0.5 for small motors, 0.8 for large motors) - can be used to tune the average turn length (relevant if type_cond==1)",
+                "max": "",
+                "min": "0",
+                "name": "Kwoh",
+                "type": "float",
+                "unit": "-",
+                "value": 0.5
+            }
+        ]
+    },
     "CondType21": {
         "constants": [
             {
@@ -772,6 +857,7 @@
         "daughters": [
             "CondType11",
             "CondType12",
+            "CondType13",
             "CondType21",
             "CondType22"
         ],
@@ -1670,18 +1756,30 @@
             }
         ],
         "daughters": [
-            "EndWindingCirc"
+            "EndWindingCirc",
+            "EndWindingRect"
         ],
         "desc": "Abstract Class of the machine's end winding",
         "is_internal": false,
         "methods": [
-            "comp_length_endwinding"
+            "comp_length",
+            "comp_inductance"
         ],
         "mother": "",
         "name": "EndWinding",
         "package": "Machine",
         "path": "pyleecan/Generator/ClassesRef/Machine/EndWinding.csv",
-        "properties": []
+        "properties": [
+            {
+                "desc": "Enforced end-winding lekage inductance",
+                "max": "",
+                "min": "0",
+                "name": "Lew_enforced",
+                "type": "float",
+                "unit": "H",
+                "value": 0
+            }
+        ]
     },
     "EndWindingCirc": {
         "constants": [
@@ -1694,7 +1792,8 @@
         "desc": "Class of the machine's end winding assuming a circular shape",
         "is_internal": false,
         "methods": [
-            "comp_length_endwinding"
+            "comp_length",
+            "comp_inductance"
         ],
         "mother": "EndWinding",
         "name": "EndWindingCirc",
@@ -1709,6 +1808,54 @@
                 "type": "float",
                 "unit": "",
                 "value": null
+            }
+        ]
+    },
+    "EndWindingRect": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Class of the machine's end winding assuming a rectangular shape",
+        "is_internal": false,
+        "methods": [
+            "comp_length",
+            "comp_inductance"
+        ],
+        "mother": "EndWinding",
+        "name": "EndWindingRect",
+        "package": "Machine",
+        "path": "pyleecan/Generator/ClassesRef/Machine/EndWindingRect.csv",
+        "properties": [
+            {
+                "desc": "effective coil pitch (override) for length calculation",
+                "max": "",
+                "min": "",
+                "name": "coil_pitch",
+                "type": "float",
+                "unit": "",
+                "value": null
+            },
+            {
+                "desc": "permeance factor related to end winding length",
+                "max": "",
+                "min": "0",
+                "name": "lambda_length",
+                "type": "float",
+                "unit": "",
+                "value": 0
+            },
+            {
+                "desc": "permeance factor related to end winding width",
+                "max": "",
+                "min": "0",
+                "name": "lambda_width",
+                "type": "float",
+                "unit": "",
+                "value": 0
             }
         ]
     },
