@@ -61,7 +61,7 @@ def test_EEC_PMSM(nb_worker=int(0.5 * cpu_count())):
     out_mag = simu_mag.run()
 
     # from Yang et al, 2013
-    assert_almost_equal(out.elec.Tem_av_ref, 81.7, decimal=1)
+    assert_almost_equal(out.elec.Tem_av_ref, 81.9, decimal=1)
     assert_almost_equal(out_mag.mag.Tem_av, 82, decimal=1)
 
     # Plot 3-phase current function of time
