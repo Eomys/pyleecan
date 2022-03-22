@@ -10,4 +10,4 @@ Kwoh,-,"winding overhang factor which describes the fact that random round wire 
 ,,,,,,,,,,,comp_height_wire,,,
 ,,,,,,,,,,,comp_nb_circumferential_wire,,,
 ,,,,,,,,,,,comp_nb_radial_wire,,,
-,,,,,,,,,,,is_round_wires,,,
+,,,,,,,,,,,is_round_wire,,,

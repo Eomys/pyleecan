@@ -75,9 +75,9 @@ except ImportError as error:
     comp_nb_radial_wire = error
 
 try:
-    from ..Methods.Machine.CondType12.is_round_wires import is_round_wires
+    from ..Methods.Machine.CondType12.is_round_wire import is_round_wire
 except ImportError as error:
-    is_round_wires = error
+    is_round_wire = error
 
 
 from ._check import InitUnKnowClassError
@@ -212,17 +212,17 @@ class CondType12(Conductor):
         )
     else:
         comp_nb_radial_wire = comp_nb_radial_wire
-    # cf Methods.Machine.CondType12.is_round_wires
-    if isinstance(is_round_wires, ImportError):
-        is_round_wires = property(
+    # cf Methods.Machine.CondType12.is_round_wire
+    if isinstance(is_round_wire, ImportError):
+        is_round_wire = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use CondType12 method is_round_wires: " + str(is_round_wires)
+                    "Can't use CondType12 method is_round_wire: " + str(is_round_wire)
                 )
             )
         )
     else:
-        is_round_wires = is_round_wires
+        is_round_wire = is_round_wire
     # save and copy methods are available in all object
     save = save
     copy = copy

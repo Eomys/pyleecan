@@ -617,7 +617,7 @@
             "comp_height_wire",
             "comp_nb_circumferential_wire",
             "comp_nb_radial_wire",
-            "is_round_wires"
+            "is_round_wire"
         ],
         "mother": "Conductor",
         "name": "CondType12",
@@ -691,7 +691,7 @@
             "comp_height_wire",
             "comp_nb_circumferential_wire",
             "comp_nb_radial_wire",
-            "is_round_wires"
+            "is_round_wire"
         ],
         "mother": "Conductor",
         "name": "CondType21",
@@ -744,7 +744,7 @@
             "comp_height_wire",
             "comp_nb_circumferential_wire",
             "comp_nb_radial_wire",
-            "is_round_wires"
+            "is_round_wire"
         ],
         "mother": "Conductor",
         "name": "CondType22",

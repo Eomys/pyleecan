@@ -5,4 +5,4 @@ Sbar,m,Surface of the Slot,0,float,1.00E-02,0,,,Machine,Conductor,comp_surface_a
 ,,,,,,,,,,,comp_height_wire,,,
 ,,,,,,,,,,,comp_nb_circumferential_wire,,,
 ,,,,,,,,,,,comp_nb_radial_wire,,,
-,,,,,,,,,,,is_round_wires,,,
+,,,,,,,,,,,is_round_wire,,,
