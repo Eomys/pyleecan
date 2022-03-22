@@ -22,8 +22,9 @@ def store(self, out_dict):
     self.OP.set_Ud_Uq(Ud=out_dict["Ud"], Uq=out_dict["Uq"])
 
     self.Pj_losses = out_dict["Pj_losses"]
-    self.Tem_av_ref = out_dict["Tem_av_ref"]
-    self.Pem_av_ref = out_dict["Pem_av_ref"]
+    self.Tem_av = out_dict["Tem_av"]
+    self.Pem_av = out_dict["Pem_av"]
+    self.P_useful = self.Pem_av - self.Pj_losses
 
     if "Ir" in out_dict and self.OP.get_slip() > 0:
         output = self.parent

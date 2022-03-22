@@ -115,13 +115,13 @@ class OutElec(FrozenClass):
         Us=None,
         internal=None,
         OP=None,
-        P_useful=None,
+        Pem_av=None,
         Tem_av=None,
         phase_dir=None,
         current_dir=None,
         PWM=None,
         eec=None,
-        P_absorbed=None,
+        P_useful=None,
         init_dict=None,
         init_str=None,
     ):
@@ -156,8 +156,8 @@ class OutElec(FrozenClass):
                 internal = init_dict["internal"]
             if "OP" in list(init_dict.keys()):
                 OP = init_dict["OP"]
-            if "P_useful" in list(init_dict.keys()):
-                P_useful = init_dict["P_useful"]
+            if "Pem_av" in list(init_dict.keys()):
+                Pem_av = init_dict["Pem_av"]
             if "Tem_av" in list(init_dict.keys()):
                 Tem_av = init_dict["Tem_av"]
             if "phase_dir" in list(init_dict.keys()):
@@ -168,8 +168,8 @@ class OutElec(FrozenClass):
                 PWM = init_dict["PWM"]
             if "eec" in list(init_dict.keys()):
                 eec = init_dict["eec"]
-            if "P_absorbed" in list(init_dict.keys()):
-                P_absorbed = init_dict["P_absorbed"]
+            if "P_useful" in list(init_dict.keys()):
+                P_useful = init_dict["P_useful"]
         # Set the properties (value check and convertion are done in setter)
         self.parent = None
         self.axes_dict = axes_dict
@@ -180,13 +180,13 @@ class OutElec(FrozenClass):
         self.Us = Us
         self.internal = internal
         self.OP = OP
-        self.P_useful = P_useful
+        self.Pem_av = Pem_av
         self.Tem_av = Tem_av
         self.phase_dir = phase_dir
         self.current_dir = current_dir
         self.PWM = PWM
         self.eec = eec
-        self.P_absorbed = P_absorbed
+        self.P_useful = P_useful
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -215,7 +215,7 @@ class OutElec(FrozenClass):
             OutElec_str += "OP = " + tmp
         else:
             OutElec_str += "OP = None" + linesep + linesep
-        OutElec_str += "P_useful = " + str(self.P_useful) + linesep
+        OutElec_str += "Pem_av = " + str(self.Pem_av) + linesep
         OutElec_str += "Tem_av = " + str(self.Tem_av) + linesep
         OutElec_str += "phase_dir = " + str(self.phase_dir) + linesep
         OutElec_str += "current_dir = " + str(self.current_dir) + linesep
@@ -229,7 +229,7 @@ class OutElec(FrozenClass):
             OutElec_str += "eec = " + tmp
         else:
             OutElec_str += "eec = None" + linesep + linesep
-        OutElec_str += "P_absorbed = " + str(self.P_absorbed) + linesep
+        OutElec_str += "P_useful = " + str(self.P_useful) + linesep
         return OutElec_str
 
     def __eq__(self, other):
@@ -253,7 +253,7 @@ class OutElec(FrozenClass):
             return False
         if other.OP != self.OP:
             return False
-        if other.P_useful != self.P_useful:
+        if other.Pem_av != self.Pem_av:
             return False
         if other.Tem_av != self.Tem_av:
             return False
@@ -265,7 +265,7 @@ class OutElec(FrozenClass):
             return False
         if other.eec != self.eec:
             return False
-        if other.P_absorbed != self.P_absorbed:
+        if other.P_useful != self.P_useful:
             return False
         return True
 
@@ -328,8 +328,8 @@ class OutElec(FrozenClass):
             diff_list.append(name + ".OP None mismatch")
         elif self.OP is not None:
             diff_list.extend(self.OP.compare(other.OP, name=name + ".OP"))
-        if other._P_useful != self._P_useful:
-            diff_list.append(name + ".P_useful")
+        if other._Pem_av != self._Pem_av:
+            diff_list.append(name + ".Pem_av")
         if other._Tem_av != self._Tem_av:
             diff_list.append(name + ".Tem_av")
         if other._phase_dir != self._phase_dir:
@@ -348,8 +348,8 @@ class OutElec(FrozenClass):
             diff_list.append(name + ".eec None mismatch")
         elif self.eec is not None:
             diff_list.extend(self.eec.compare(other.eec, name=name + ".eec"))
-        if other._P_absorbed != self._P_absorbed:
-            diff_list.append(name + ".P_absorbed")
+        if other._P_useful != self._P_useful:
+            diff_list.append(name + ".P_useful")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -368,13 +368,13 @@ class OutElec(FrozenClass):
         S += getsizeof(self.Us)
         S += getsizeof(self.internal)
         S += getsizeof(self.OP)
-        S += getsizeof(self.P_useful)
+        S += getsizeof(self.Pem_av)
         S += getsizeof(self.Tem_av)
         S += getsizeof(self.phase_dir)
         S += getsizeof(self.current_dir)
         S += getsizeof(self.PWM)
         S += getsizeof(self.eec)
-        S += getsizeof(self.P_absorbed)
+        S += getsizeof(self.P_useful)
         return S
 
     def as_dict(self, type_handle_ndarray=0, keep_function=False, **kwargs):
@@ -444,7 +444,7 @@ class OutElec(FrozenClass):
                 keep_function=keep_function,
                 **kwargs
             )
-        OutElec_dict["P_useful"] = self.P_useful
+        OutElec_dict["Pem_av"] = self.Pem_av
         OutElec_dict["Tem_av"] = self.Tem_av
         OutElec_dict["phase_dir"] = self.phase_dir
         OutElec_dict["current_dir"] = self.current_dir
@@ -464,7 +464,7 @@ class OutElec(FrozenClass):
                 keep_function=keep_function,
                 **kwargs
             )
-        OutElec_dict["P_absorbed"] = self.P_absorbed
+        OutElec_dict["P_useful"] = self.P_useful
         # The class name is added to the dict for deserialisation purpose
         OutElec_dict["__class__"] = "OutElec"
         return OutElec_dict
@@ -482,7 +482,7 @@ class OutElec(FrozenClass):
             self.internal._set_None()
         if self.OP is not None:
             self.OP._set_None()
-        self.P_useful = None
+        self.Pem_av = None
         self.Tem_av = None
         self.phase_dir = None
         self.current_dir = None
@@ -490,7 +490,7 @@ class OutElec(FrozenClass):
             self.PWM._set_None()
         if self.eec is not None:
             self.eec._set_None()
-        self.P_absorbed = None
+        self.P_useful = None
 
     def _get_axes_dict(self):
         """getter of axes_dict"""
@@ -739,19 +739,19 @@ class OutElec(FrozenClass):
         """,
     )
 
-    def _get_P_useful(self):
-        """getter of P_useful"""
-        return self._P_useful
+    def _get_Pem_av(self):
+        """getter of Pem_av"""
+        return self._Pem_av
 
-    def _set_P_useful(self, value):
-        """setter of P_useful"""
-        check_var("P_useful", value, "float")
-        self._P_useful = value
+    def _set_Pem_av(self, value):
+        """setter of Pem_av"""
+        check_var("Pem_av", value, "float")
+        self._Pem_av = value
 
-    P_useful = property(
-        fget=_get_P_useful,
-        fset=_set_P_useful,
-        doc=u"""Useful power
+    Pem_av = property(
+        fget=_get_Pem_av,
+        fset=_set_Pem_av,
+        doc=u"""Average Electromagnetic power
 
         :Type: float
         """,
@@ -885,19 +885,19 @@ class OutElec(FrozenClass):
         """,
     )
 
-    def _get_P_absorbed(self):
-        """getter of P_absorbed"""
-        return self._P_absorbed
+    def _get_P_useful(self):
+        """getter of P_useful"""
+        return self._P_useful
 
-    def _set_P_absorbed(self, value):
-        """setter of P_absorbed"""
-        check_var("P_absorbed", value, "float")
-        self._P_absorbed = value
+    def _set_P_useful(self, value):
+        """setter of P_useful"""
+        check_var("P_useful", value, "float")
+        self._P_useful = value
 
-    P_absorbed = property(
-        fget=_get_P_absorbed,
-        fset=_set_P_absorbed,
-        doc=u"""Absorbed power
+    P_useful = property(
+        fget=_get_P_useful,
+        fset=_set_P_useful,
+        doc=u"""Useful power (Pem_av minus losses)
 
         :Type: float
         """,

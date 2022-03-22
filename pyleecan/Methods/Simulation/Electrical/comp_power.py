@@ -17,8 +17,8 @@ def comp_power(self, out_dict, machine):
     Ud, Uq = out_dict["Ud"], out_dict["Uq"]
 
     # All quantities are in RMS
-    Pem_av_ref = qs * (Ud * Id + Uq * Iq)
+    Pem_av = qs * (Ud * Id + Uq * Iq)
 
-    out_dict["Pem_av_ref"] = Pem_av_ref
+    out_dict["Pem_av"] = Pem_av
 
     return out_dict

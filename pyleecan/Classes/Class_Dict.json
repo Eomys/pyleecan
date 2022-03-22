@@ -8407,10 +8407,10 @@
                 "value": null
             },
             {
-                "desc": "Useful power",
+                "desc": "Average Electromagnetic power",
                 "max": "",
                 "min": "",
-                "name": "P_useful",
+                "name": "Pem_av",
                 "type": "float",
                 "unit": "W",
                 "value": null
@@ -8461,10 +8461,10 @@
                 "value": null
             },
             {
-                "desc": "Absorbed power",
+                "desc": "Useful power (Pem_av minus losses)",
                 "max": "",
                 "min": "",
-                "name": "P_absorbed",
+                "name": "P_useful",
                 "type": "float",
                 "unit": "W",
                 "value": null
