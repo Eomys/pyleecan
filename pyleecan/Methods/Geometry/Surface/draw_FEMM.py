@@ -82,6 +82,7 @@ def draw_FEMM(
         group = mesh_dict["group"]
         if isinstance(group, list):
             group = group[label_dict["S_id"]]
+            print(self.label)
 
         # Get or create the Boundary Condition (if any)
         if line.prop_dict is not None and BOUNDARY_PROP_LAB in line.prop_dict:

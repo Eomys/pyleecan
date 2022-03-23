@@ -140,7 +140,7 @@ def comp_loss_density_magnet(self, group, coeff_dict, is_skin_effect=True):
         Se_mag = Se[kmag]
 
         # derivation in frequency domain
-        Az_df = Az_dt.get_magnitude_along("freqs", "indice" + str(kmag), "z[0]")
+        Az_df = Az_dt.get_along("freqs", "indice" + str(kmag), "z[0]")
         if ii == 0:
             freqs = Az_df["freqs"]
             w = 2 * pi * freqs[:, None]
@@ -157,10 +157,12 @@ def comp_loss_density_magnet(self, group, coeff_dict, is_skin_effect=True):
         Az_fft = Az_df["A_z"]
         Az_mean = matmul(Az_fft, Se_mag)[:, None] / np_sum(Se_mag)
         Jm_fft = -1j * sigma_m * w * (Az_fft - Az_mean)
+        Pmagnet_density[:, jj : (jj + len(kmag))] = np_abs(Jm_fft) ** 2 / sigma_m
+        jj += len(kmag)
 
-        # # derivation in time domain
+        # # # derivation in time domain
         # dAz_dt = Az_dt.get_data_along("time=derivate", "indice" + str(kmag), "z[0]")
-        # dAz_df = dAz_dt.get_magnitude_along("freqs", "indice", "z[0]")
+        # dAz_df = dAz_dt.get_along("freqs", "indice", "z[0]")
         # dAz_fft = dAz_df["A_z"]
         # if ii == 0:
         #     freqs = dAz_df["freqs"]
@@ -178,7 +180,8 @@ def comp_loss_density_magnet(self, group, coeff_dict, is_skin_effect=True):
         # Jm_fft0 = sigma_m * (
         #     -dAz_fft + matmul(dAz_fft, Se_mag)[:, None] / np_sum(Se_mag)
         # )
-        # # Plot
+
+        # # # Plot
         # Az_df0 = Az_dt.get_data_along("freqs", "indice" + str(kmag), "z[0]")
         # dAz_df0 = Az_df0.copy()
         # dAz_df0.values *= 1j * w[:, :, None]
@@ -189,9 +192,28 @@ def comp_loss_density_magnet(self, group, coeff_dict, is_skin_effect=True):
         # dAz_df0.plot_2D_Data(
         #     "time", "indice[0]", data_list=[dAz_dt], legend_list=["df", "dt"]
         # )
+        # from SciDataTool import DataFreq
 
-        Pmagnet_density[:, jj : (jj + len(kmag))] = np_abs(Jm_fft) ** 2 / sigma_m
-        jj += len(kmag)
+        # Jm_df = DataFreq(
+        #     name="Current density",
+        #     symbol="J_m",
+        #     unit="A/m^2",
+        #     values=Jm_fft,
+        #     axes=Az_df0.axes,
+        # )
+        # Jm_df0 = DataFreq(
+        #     name="Current density",
+        #     symbol="J_m",
+        #     unit="A/m^2",
+        #     values=Jm_fft0,
+        #     axes=Az_df0.axes,
+        # )
+        # Jm_df.plot_2D_Data(
+        #     "time", "indice[0]", data_list=[Jm_df0], legend_list=["df", "dt"]
+        # )
+        # Jm_df.plot_2D_Data(
+        #     "freqs", "indice[0]", data_list=[Jm_df0], legend_list=["df", "dt"]
+        # )
 
     # Calculate coefficients to evaluate magnet losses
     if coeff_dict is not None:

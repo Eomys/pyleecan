@@ -90,9 +90,16 @@ def assign_FEMM_surface(femm, surf, prop, FEMM_dict, machine):
                 if mag_obj.type_magnetization == 3:  # Tangential
                     mag = mag - 90
 
-                # grp_id = label_dict["S_id"]
+                nb_hole = int(len(machine.rotor.hole))
+                nb_mag_per_hole = len(machine.rotor.hole[0].get_magnet_dict())
 
-                group = group[label_dict["S_id"]]
+                print(label)
+
+                grp_id = (
+                    label_dict["S_id"] * nb_hole * nb_mag_per_hole + label_dict["T_id"]
+                )
+                group = group[grp_id]
+
             else:
                 raise NotImplementedYetError(
                     "Only parallele magnetization are available for HoleMagnet found: "

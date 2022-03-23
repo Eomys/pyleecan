@@ -32,7 +32,7 @@ def test_FEMM_Loss_SPMSM():
     simu = Simu1(name="test_FEMM_Loss_SPMSM", machine=machine)
 
     simu.input = InputCurrent(
-        Nt_tot=10 * 10 * 16,
+        Nt_tot=4 * 100,
         Na_tot=1000 * 2,
         OP=OPdq(N0=4000, Id_ref=0, Iq_ref=np.sqrt(2)),
         is_periodicity_t=False,
@@ -45,11 +45,10 @@ def test_FEMM_Loss_SPMSM():
         nb_worker=4,
         is_get_meshsolution=True,
         FEMM_dict_enforced={
-            "simu": {"minangle": 30},
             "mesh": {
                 "meshsize_airgap": 0.00014,
                 "elementsize_airgap": 0.00014,
-                "smart_mesh": 1,
+                "smart_mesh": 0,
             },
         },
         is_fast_draw=True,
@@ -104,6 +103,16 @@ def test_FEMM_Loss_SPMSM():
             # clim=[1e4, 1e7],
         )
 
+        ms_loss.plot_contour(
+            "freqs=sum",
+            label="Loss",
+            group_names=[
+                "rotor core",
+                "rotor magnets",
+            ],
+            # clim=[1e4, 1e7],
+        )
+
         plot_2D(
             [speed_array],
             [ovl_list, joule_list, sc_list, rc_list, prox_list, mag_list],
@@ -142,11 +151,11 @@ def test_FEMM_Loss_Prius():
     )
 
     simu.mag = MagFEMM(
-        is_periodicity_a=True,
+        is_periodicity_a=False,
         is_periodicity_t=True,
         nb_worker=4,
         is_get_meshsolution=True,
-        # is_fast_draw=True,
+        is_fast_draw=True,
     )
 
     simu.loss = LossFEMM(Ce=Ce, Cp=Cprox, Ch=Ch, is_get_meshsolution=True, Tsta=100)
@@ -195,6 +204,6 @@ def test_FEMM_Loss_Prius():
 # To run it without pytest
 if __name__ == "__main__":
 
-    out = test_FEMM_Loss_SPMSM()
+    # out = test_FEMM_Loss_SPMSM()
 
-    # out = test_FEMM_Loss_Prius()
+    out = test_FEMM_Loss_Prius()
