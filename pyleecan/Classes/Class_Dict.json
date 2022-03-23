@@ -6658,7 +6658,7 @@
                 "value": "Material"
             },
             {
-                "desc": "If True, uniformity in all orientations",
+                "desc": "If Isotropic, uniformity in all orientations",
                 "max": "",
                 "min": "",
                 "name": "is_isotropic",

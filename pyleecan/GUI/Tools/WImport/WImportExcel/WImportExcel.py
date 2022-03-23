@@ -50,7 +50,8 @@ class WImportExcel(Ui_WImportExcel, QDialog):
         """
         QDialog.__init__(self, parent)
         self.setupUi(self)
-
+        self.setMaximumHeight(300)
+        self.setMaximumWidth(300)
         if data is None or not isinstance(data, ImportMatrixXls):
             self.data = ImportMatrixXls()
         else:

@@ -354,7 +354,7 @@ class DTableData(Ui_DTableData, QDialog):
             plt.xlabel(self.col_header[0])
             fig.show()
         if self.col_header is not None:
-            fig.canvas.manager.set_window_title(self.unit_order[0] + " plot")
+            fig.canvas.manager.set_window_title(self.col_header[0] + " plot")
         set_plot_gui_icon()
 
     def accept(self):
