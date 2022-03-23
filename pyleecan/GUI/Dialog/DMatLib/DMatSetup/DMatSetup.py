@@ -169,7 +169,7 @@ class DMatSetup(Gen_DMatSetup, QDialog):
         else:
             self.lf_Ey.setValue(self.mat.struct.Ey)
         if self.mat.struct.Ez not in [0, None]:
-            self.lf_Ey.setValue(self.mat.struct.Ez / 1e9)
+            self.lf_Ez.setValue(self.mat.struct.Ez / 1e9)
         else:
             self.lf_Ez.setValue(self.mat.struct.Ez)
         if self.mat.struct.Gxy not in [0, None]:

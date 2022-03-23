@@ -703,7 +703,7 @@ class Ui_DMatSetup(object):
 
         self.nav_phy.setCurrentIndex(2)
         self.nav_mag.setCurrentIndex(0)
-        self.nav_meca.setCurrentIndex(1)
+        self.nav_meca.setCurrentIndex(0)
         self.nav_ther.setCurrentIndex(0)
 
         QMetaObject.connectSlotsByName(DMatSetup)

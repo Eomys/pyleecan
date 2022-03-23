@@ -93,14 +93,14 @@ class TestDMatSetup(object):
         assert self.widget.w_setup.nav_ther.currentIndex() == 1
         assert self.widget.w_setup.nav_meca.currentIndex() == 1
         assert self.widget.w_setup.le_name.text() == "Magnet1"
-        assert self.widget.w_setup.is_isotropic.checkState() == Qt.Checked
+        assert self.widget.w_setup.cb_material_type.currentText() == "Isotropic"
         assert self.widget.w_setup.lf_rho_elec.value() == 0.11
         assert self.widget.w_setup.lf_mur_lin.value() == 0.12
         assert self.widget.w_setup.lf_Wlam.value() == 0.13
         assert self.widget.w_setup.lf_rho_meca.value() == 0.14
-        assert self.widget.w_setup.lf_E.value() == 0.15
+        assert self.widget.w_setup.lf_E.value() == 0.15/1e9
         assert self.widget.w_setup.lf_nu.value() == 0.16
-        assert self.widget.w_setup.lf_G.value() == 0.17
+        assert self.widget.w_setup.lf_G.value() == 0.17/1e9
         assert self.widget.w_setup.lf_L.value() == 0.18
         assert self.widget.w_setup.lf_Cp.value() == 0.19
         assert self.widget.w_setup.lf_alpha.value() == 0.2
@@ -113,12 +113,12 @@ class TestDMatSetup(object):
         assert self.widget.w_setup.nav_ther.currentIndex() == 1
         assert self.widget.w_setup.nav_meca.currentIndex() == 1
         assert self.widget.w_setup.le_name.text() == "Magnet1"
-        assert self.widget.w_setup.is_isotropic.checkState() == Qt.Checked
+        assert self.widget.w_setup.cb_material_type.currentText() == "Isotropic"
         assert self.widget.w_setup.lf_rho_elec.value() == 0.11
         assert self.widget.w_setup.lf_rho_meca.value() == 0.14
-        assert self.widget.w_setup.lf_E.value() == 0.15
+        assert self.widget.w_setup.lf_E.value() == 0.15/1e9
         assert self.widget.w_setup.lf_nu.value() == 0.16
-        assert self.widget.w_setup.lf_G.value() == 0.17
+        assert self.widget.w_setup.lf_G.value() == 0.17/1e9
         assert self.widget.w_setup.lf_L.value() == 0.18
         assert self.widget.w_setup.lf_Cp.value() == 0.19
         assert self.widget.w_setup.lf_alpha.value() == 0.2
@@ -134,24 +134,24 @@ class TestDMatSetup(object):
         assert self.widget.w_setup.nav_ther.currentIndex() == 0
         assert self.widget.w_setup.nav_meca.currentIndex() == 0
         assert self.widget.w_setup.le_name.text() == "Magnet1"
-        assert self.widget.w_setup.is_isotropic.checkState() == Qt.Unchecked
+        assert self.widget.w_setup.cb_material_type.currentText() == "Orthotropic"
         assert self.widget.w_setup.lf_rho_elec.value() == 0.11
         assert self.widget.w_setup.lf_mur_lin.value() == 0.22
         assert self.widget.w_setup.lf_Brm20.value() == 0.23
         assert self.widget.w_setup.lf_alpha_Br.value() == 0.24
         assert self.widget.w_setup.lf_rho_meca.value() == 0.14
 
-        assert self.widget.w_setup.lf_Ex.value() == 0.15
-        assert self.widget.w_setup.lf_Ey.value() == 0.152
-        assert self.widget.w_setup.lf_Ez.value() == 0.153
+        assert self.widget.w_setup.lf_Ex.value() == 0.15/1e9
+        assert self.widget.w_setup.lf_Ey.value() == 0.152/1e9
+        assert self.widget.w_setup.lf_Ez.value() == 0.153/1e9
 
         assert self.widget.w_setup.lf_nu_xy.value() == 0.16
         assert self.widget.w_setup.lf_nu_yz.value() == 0.162
         assert self.widget.w_setup.lf_nu_xz.value() == 0.163
 
-        assert self.widget.w_setup.lf_Gxy.value() == 0.17
-        assert self.widget.w_setup.lf_Gyz.value() == 0.172
-        assert self.widget.w_setup.lf_Gxz.value() == 0.173
+        assert self.widget.w_setup.lf_Gxy.value() == 0.17/1e9
+        assert self.widget.w_setup.lf_Gyz.value() == pytest.approx(0.172/1e9, 0.01)
+        assert self.widget.w_setup.lf_Gxz.value() == 0.173/1e9
 
         assert self.widget.w_setup.lf_Lx.value() == 0.18
         assert self.widget.w_setup.lf_Ly.value() == 0.182
@@ -269,9 +269,9 @@ class TestDMatSetup(object):
         QTest.keyClicks(self.widget.w_setup.lf_E, str(value))
         self.widget.w_setup.lf_E.editingFinished.emit()  # To trigger the slot
 
-        assert self.widget.w_setup.mat.struct.Ex == value
-        assert self.widget.w_setup.mat.struct.Ey == value
-        assert self.widget.w_setup.mat.struct.Ez == value
+        assert self.widget.w_setup.mat.struct.Ex/1e9 == value
+        assert self.widget.w_setup.mat.struct.Ey/1e9 == value
+        assert self.widget.w_setup.mat.struct.Ez/1e9 == value
 
     def test_set_Ex(self):
         """Check that the Widget allow to update Ex"""
@@ -280,7 +280,7 @@ class TestDMatSetup(object):
         QTest.keyClicks(self.widget.w_setup.lf_Ex, str(value))
         self.widget.w_setup.lf_Ex.editingFinished.emit()  # To trigger the slot
 
-        assert self.widget.w_setup.mat.struct.Ex == value
+        assert self.widget.w_setup.mat.struct.Ex/1e9 == value
 
     def test_set_Ey(self):
         """Check that the Widget allow to update Ey"""
@@ -289,7 +289,7 @@ class TestDMatSetup(object):
         QTest.keyClicks(self.widget.w_setup.lf_Ey, str(value))
         self.widget.w_setup.lf_Ey.editingFinished.emit()  # To trigger the slot
 
-        assert self.widget.w_setup.mat.struct.Ey == value
+        assert self.widget.w_setup.mat.struct.Ey/1e9 == value
 
     def test_set_Ez(self):
         """Check that the Widget allow to update Ez"""
@@ -298,7 +298,7 @@ class TestDMatSetup(object):
         QTest.keyClicks(self.widget.w_setup.lf_Ez, str(value))
         self.widget.w_setup.lf_Ez.editingFinished.emit()  # To trigger the slot
 
-        assert self.widget.w_setup.mat.struct.Ez == value
+        assert self.widget.w_setup.mat.struct.Ez/1e9 == value
 
     def test_set_nu(self):
         """Check that the Widget allow to update nu"""
@@ -345,9 +345,9 @@ class TestDMatSetup(object):
         QTest.keyClicks(self.widget.w_setup.lf_G, str(value))
         self.widget.w_setup.lf_G.editingFinished.emit()  # To trigger the slot
 
-        assert self.widget.w_setup.mat.struct.Gxy == value
-        assert self.widget.w_setup.mat.struct.Gyz == value
-        assert self.widget.w_setup.mat.struct.Gxz == value
+        assert self.widget.w_setup.mat.struct.Gxy/1e9 == value
+        assert self.widget.w_setup.mat.struct.Gyz/1e9 == value
+        assert self.widget.w_setup.mat.struct.Gxz/1e9 == value
 
     def test_set_Gxy(self):
         """Check that the Widget allow to update Gxy"""
@@ -356,7 +356,7 @@ class TestDMatSetup(object):
         QTest.keyClicks(self.widget.w_setup.lf_Gxy, str(value))
         self.widget.w_setup.lf_Gxy.editingFinished.emit()  # To trigger the slot
 
-        assert self.widget.w_setup.mat.struct.Gxy == value
+        assert self.widget.w_setup.mat.struct.Gxy/1e9 == value
 
     def test_set_Gyz(self):
         """Check that the Widget allow to update Gyz"""
@@ -365,7 +365,7 @@ class TestDMatSetup(object):
         QTest.keyClicks(self.widget.w_setup.lf_Gyz, str(value))
         self.widget.w_setup.lf_Gyz.editingFinished.emit()  # To trigger the slot
 
-        assert self.widget.w_setup.mat.struct.Gyz == value
+        assert self.widget.w_setup.mat.struct.Gyz/1e9 == value
 
     def test_set_Gxz(self):
         """Check that the Widget allow to update Gxz"""
@@ -374,21 +374,19 @@ class TestDMatSetup(object):
         QTest.keyClicks(self.widget.w_setup.lf_Gxz, str(value))
         self.widget.w_setup.lf_Gxz.editingFinished.emit()  # To trigger the slot
 
-        assert self.widget.w_setup.mat.struct.Gxz == value
+        assert self.widget.w_setup.mat.struct.Gxz/1e9 == value
 
     def test_set_is_isotropic(self):
         """Check that the Widget allow to change value of is_isotropic"""
-        QTest.mouseClick(
-            self.widget.w_setup.is_isotropic, Qt.LeftButton
-        )  # Clicking the checkbox with the leftbutton
+        self.widget.w_setup.cb_material_type.setCurrentIndex(0)
 
-        assert self.widget.w_setup.is_isotropic.isChecked() == False
+        assert self.widget.w_setup.cb_material_type.currentText() == "Orthotropic"
         assert self.widget.w_setup.nav_meca.currentIndex() == 0
         assert self.widget.w_setup.nav_ther.currentIndex() == 0
 
-        QTest.mouseClick(self.widget.w_setup.is_isotropic, Qt.LeftButton)
+        self.widget.w_setup.cb_material_type.setCurrentIndex(1)
 
-        assert self.widget.w_setup.is_isotropic.isChecked() == True
+        assert self.widget.w_setup.cb_material_type.currentText() == "Isotropic"
         assert self.widget.w_setup.nav_meca.currentIndex() == 1
         assert self.widget.w_setup.nav_ther.currentIndex() == 1
 
