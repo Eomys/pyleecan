@@ -21,21 +21,21 @@ def test_ElecLUTdq_InputPower():
 
     machine = load(join(DATA_DIR, "Machine", "Toyota_Prius.json"))
 
-    LUT_enforced = load("C:/pyleecan/pyleecan_B/pyleecan/pyleecan/Results/LUT.h5")
-    # LUT_enforced = None
+    # LUT_enforced = load("C:/pyleecan/pyleecan_B/pyleecan/pyleecan/Results/LUT.h5")
+    LUT_enforced = None
 
     # First simulation creating femm file
     simu = Simu1(name="test_ElecLUTdq_InputPower", machine=machine)
 
     # Initialization of the simulation starting point
     simu.input = InputPower(
-        OP=OPdq(N0=1000, Pem_av_ref=3.5e4),
+        OP=OPdq(N0=1200, Pem_av_ref=50e4),
         Nt_tot=20 * 8,
         Na_tot=200 * 8,
         is_periodicity_a=True,
         is_periodicity_t=True,
         U_max=500,
-        J_max=6e6,
+        J_max=30e6,
     )
 
     simu.elec = ElecLUTdq(

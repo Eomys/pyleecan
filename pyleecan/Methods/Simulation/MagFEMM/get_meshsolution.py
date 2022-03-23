@@ -14,7 +14,9 @@ from os.path import join
 from ....Functions.FEMM import FEMM_GROUPS
 
 
-def get_meshsolution(self, femm, save_path, j_t0, id_worker=0, is_get_mesh=False):
+def get_meshsolution(
+    self, femm, FEMM_dict, save_path, j_t0, id_worker=0, is_get_mesh=False
+):
     """Load the mesh data and solution data. FEMM must be working and a simulation must have been solved.
 
     Parameters
@@ -112,11 +114,27 @@ def get_meshsolution(self, femm, save_path, j_t0, id_worker=0, is_get_mesh=False
         )
         # get all groups that are in the FEMM model
         groups = dict()
-        for grp in FEMM_GROUPS:
+        for grp, val in FEMM_dict["groups"].items():
             if grp != "lam_group_list":
                 idx = FEMM_GROUPS[grp]["ID"]
                 name = FEMM_GROUPS[grp]["name"]
-                ind = np.where(listElem0[:, 6] == idx)[0]
+                if isinstance(val, list):
+                    # Create a sub group for each index of the list, e.g for magnets
+                    ind = np.array([], dtype=int)
+                    for ii, id_i in enumerate(val):
+                        name_i = name + "_" + str(ii)
+                        ind_i = np.where(listElem0[:, 6] == id_i)[0]
+                        if ind_i.size > 0:
+                            # Store the list of indices for the ith subgroup
+                            groups[name_i] = (
+                                mesh.cell["triangle"].indice[ind_i].tolist()
+                            )
+                            # Concatenate all sub groups to keep the main group of rotor magnets
+                            ind = np.concatenate((ind, ind_i))
+                else:
+                    # Create a group with all elements og group indice idx
+                    ind = np.where(listElem0[:, 6] == idx)[0]
+
                 if ind.size > 0:
                     groups[name] = mesh.cell["triangle"].indice[ind].tolist()
     else:

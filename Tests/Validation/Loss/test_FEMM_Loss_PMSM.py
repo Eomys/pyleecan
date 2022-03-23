@@ -32,16 +32,16 @@ def test_FEMM_Loss_SPMSM():
     simu = Simu1(name="test_FEMM_Loss_SPMSM", machine=machine)
 
     simu.input = InputCurrent(
-        Nt_tot=4 * 10 * 16,
+        Nt_tot=10 * 10 * 16,
         Na_tot=1000 * 2,
         OP=OPdq(N0=4000, Id_ref=0, Iq_ref=np.sqrt(2)),
-        is_periodicity_t=True,
+        is_periodicity_t=False,
         is_periodicity_a=True,
     )
 
     simu.mag = MagFEMM(
         is_periodicity_a=True,
-        is_periodicity_t=True,
+        is_periodicity_t=False,
         nb_worker=4,
         is_get_meshsolution=True,
         FEMM_dict_enforced={
@@ -123,7 +123,7 @@ def test_FEMM_Loss_SPMSM():
 def test_FEMM_Loss_Prius():
     """Test to calculate losses in Toyota_Prius using LossFEMM model"""
 
-    machine = load(join(DATA_DIR, "Machine", "Toyota_Prius.json"))
+    machine = load(join(DATA_DIR, "Machine", "Toyota_Prius_loss.json"))
 
     Ch = 143  # hysteresis loss coefficient [W/(m^3*T^2*Hz)]
     Ce = 0.530  # eddy current loss coefficients [W/(m^3*T^2*Hz^2)]
@@ -131,10 +131,12 @@ def test_FEMM_Loss_Prius():
 
     simu = Simu1(name="test_FEMM_Loss_Prius", machine=machine)
 
+    Ic = 230 * np.exp(1j * 140 * np.pi / 180)
+
     simu.input = InputCurrent(
-        Nt_tot=40 * 8,
+        Nt_tot=10 * 40 * 8,
         Na_tot=200 * 8,
-        OP=OPdq(N0=1000, Id_ref=-100, Iq_ref=200),
+        OP=OPdq(N0=1200, Id_ref=-100, Iq_ref=200),
         is_periodicity_t=True,
         is_periodicity_a=True,
     )
@@ -193,6 +195,6 @@ def test_FEMM_Loss_Prius():
 # To run it without pytest
 if __name__ == "__main__":
 
-    # out = test_FEMM_Loss_SPMSM()
+    out = test_FEMM_Loss_SPMSM()
 
-    out = test_FEMM_Loss_Prius()
+    # out = test_FEMM_Loss_Prius()

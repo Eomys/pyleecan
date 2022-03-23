@@ -17,6 +17,9 @@ def store(self, out_dict):
 
     """
 
+    output = self.parent
+    machine = output.simu.machine
+
     # Store Id, Iq, Ud, Uq in OP
     self.OP.set_Id_Iq(Id=out_dict["Id"], Iq=out_dict["Iq"])
     self.OP.set_Ud_Uq(Ud=out_dict["Ud"], Uq=out_dict["Uq"])
@@ -25,13 +28,13 @@ def store(self, out_dict):
     self.Tem_av = out_dict["Tem_av"]
     self.Pem_av = out_dict["Pem_av"]
     self.P_useful = self.Pem_av - self.Pj_losses
+    self.get_Jrms_max()
 
     if "Ir" in out_dict and self.OP.get_slip() > 0:
-        output = self.parent
         # Calculate rotor currents for each bar
-        p = output.simu.machine.get_pole_pair_number()
-        Zr = output.simu.machine.rotor.get_Zs()
-        rotor_lab = output.simu.machine.rotor.get_label()
+        p = machine.get_pole_pair_number()
+        Zr = machine.rotor.get_Zs()
+        rotor_lab = machine.rotor.get_label()
         Phase = self.axes_dict["phase_" + rotor_lab]
 
         Time = self.axes_dict["time"]
@@ -39,7 +42,7 @@ def store(self, out_dict):
         angle_bars = Phase.get_values(is_smallestperiod=True)
 
         phase_dir = output.elec.phase_dir
-        d_angle = output.simu.machine.stator.comp_angle_d_axis()
+        d_angle = machine.stator.comp_angle_d_axis()
 
         # Get rotor current fundamental given by EEC
         if phase_dir == -1:

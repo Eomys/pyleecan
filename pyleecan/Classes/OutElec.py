@@ -42,6 +42,11 @@ try:
 except ImportError as error:
     get_electrical = error
 
+try:
+    from ..Methods.Output.OutElec.get_Jrms_max import get_Jrms_max
+except ImportError as error:
+    get_Jrms_max = error
+
 
 from ._check import InitUnKnowClassError
 
@@ -99,6 +104,17 @@ class OutElec(FrozenClass):
         )
     else:
         get_electrical = get_electrical
+    # cf Methods.Output.OutElec.get_Jrms_max
+    if isinstance(get_Jrms_max, ImportError):
+        get_Jrms_max = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use OutElec method get_Jrms_max: " + str(get_Jrms_max)
+                )
+            )
+        )
+    else:
+        get_Jrms_max = get_Jrms_max
     # save and copy methods are available in all object
     save = save
     copy = copy
@@ -122,6 +138,7 @@ class OutElec(FrozenClass):
         PWM=None,
         eec=None,
         P_useful=None,
+        Jrms_max=None,
         init_dict=None,
         init_str=None,
     ):
@@ -170,6 +187,8 @@ class OutElec(FrozenClass):
                 eec = init_dict["eec"]
             if "P_useful" in list(init_dict.keys()):
                 P_useful = init_dict["P_useful"]
+            if "Jrms_max" in list(init_dict.keys()):
+                Jrms_max = init_dict["Jrms_max"]
         # Set the properties (value check and convertion are done in setter)
         self.parent = None
         self.axes_dict = axes_dict
@@ -187,6 +206,7 @@ class OutElec(FrozenClass):
         self.PWM = PWM
         self.eec = eec
         self.P_useful = P_useful
+        self.Jrms_max = Jrms_max
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -230,6 +250,7 @@ class OutElec(FrozenClass):
         else:
             OutElec_str += "eec = None" + linesep + linesep
         OutElec_str += "P_useful = " + str(self.P_useful) + linesep
+        OutElec_str += "Jrms_max = " + str(self.Jrms_max) + linesep
         return OutElec_str
 
     def __eq__(self, other):
@@ -266,6 +287,8 @@ class OutElec(FrozenClass):
         if other.eec != self.eec:
             return False
         if other.P_useful != self.P_useful:
+            return False
+        if other.Jrms_max != self.Jrms_max:
             return False
         return True
 
@@ -350,6 +373,8 @@ class OutElec(FrozenClass):
             diff_list.extend(self.eec.compare(other.eec, name=name + ".eec"))
         if other._P_useful != self._P_useful:
             diff_list.append(name + ".P_useful")
+        if other._Jrms_max != self._Jrms_max:
+            diff_list.append(name + ".Jrms_max")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -375,6 +400,7 @@ class OutElec(FrozenClass):
         S += getsizeof(self.PWM)
         S += getsizeof(self.eec)
         S += getsizeof(self.P_useful)
+        S += getsizeof(self.Jrms_max)
         return S
 
     def as_dict(self, type_handle_ndarray=0, keep_function=False, **kwargs):
@@ -465,6 +491,7 @@ class OutElec(FrozenClass):
                 **kwargs
             )
         OutElec_dict["P_useful"] = self.P_useful
+        OutElec_dict["Jrms_max"] = self.Jrms_max
         # The class name is added to the dict for deserialisation purpose
         OutElec_dict["__class__"] = "OutElec"
         return OutElec_dict
@@ -491,6 +518,7 @@ class OutElec(FrozenClass):
         if self.eec is not None:
             self.eec._set_None()
         self.P_useful = None
+        self.Jrms_max = None
 
     def _get_axes_dict(self):
         """getter of axes_dict"""
@@ -900,5 +928,24 @@ class OutElec(FrozenClass):
         doc=u"""Useful power (Pem_av minus losses)
 
         :Type: float
+        """,
+    )
+
+    def _get_Jrms_max(self):
+        """getter of Jrms_max"""
+        return self._Jrms_max
+
+    def _set_Jrms_max(self, value):
+        """setter of Jrms_max"""
+        check_var("Jrms_max", value, "float", Vmin=0)
+        self._Jrms_max = value
+
+    Jrms_max = property(
+        fget=_get_Jrms_max,
+        fset=_set_Jrms_max,
+        doc=u"""Maximum RMS current density in slots
+
+        :Type: float
+        :min: 0
         """,
     )

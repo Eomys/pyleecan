@@ -41,6 +41,8 @@ def assign_FEMM_surface(femm, surf, prop, FEMM_dict, machine):
     label_dict = decode_label(label)
     mesh_dict = get_mesh_param(label_dict, FEMM_dict)
 
+    group = mesh_dict["group"]
+
     Clabel = 0  # By default no circuit
     Ntcoil = 0  # By default no circuit
     mag = 0  # By default no magnetization
@@ -87,6 +89,10 @@ def assign_FEMM_surface(femm, surf, prop, FEMM_dict, machine):
                     mag = mag + 180
                 if mag_obj.type_magnetization == 3:  # Tangential
                     mag = mag - 90
+
+                # grp_id = label_dict["S_id"]
+
+                group = group[label_dict["S_id"]]
             else:
                 raise NotImplementedYetError(
                     "Only parallele magnetization are available for HoleMagnet found: "
@@ -113,6 +119,7 @@ def assign_FEMM_surface(femm, surf, prop, FEMM_dict, machine):
                 mag = (
                     angle(point_ref) * 180 / pi + 180 - 90
                 )  # Tangential South pole magnet
+            group = group[label_dict["S_id"]]
         elif VENT_LAB in label_dict["surf_type"]:
             vent_obj = get_obj_from_label(machine, label_dict=label_dict)
             prop = "Air"
@@ -127,7 +134,7 @@ def assign_FEMM_surface(femm, surf, prop, FEMM_dict, machine):
             mesh_dict["meshsize"],
             Clabel,
             mag,
-            mesh_dict["group"],
+            group,
             Ntcoil,
         )
         femm.mi_clearselected()

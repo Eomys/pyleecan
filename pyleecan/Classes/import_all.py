@@ -16,6 +16,7 @@ from ..Classes.CellMat import CellMat
 from ..Classes.Circle import Circle
 from ..Classes.CondType11 import CondType11
 from ..Classes.CondType12 import CondType12
+from ..Classes.CondType13 import CondType13
 from ..Classes.CondType21 import CondType21
 from ..Classes.CondType22 import CondType22
 from ..Classes.Conductor import Conductor
@@ -34,6 +35,7 @@ from ..Classes.ElmerResults import ElmerResults
 from ..Classes.ElmerResultsVTU import ElmerResultsVTU
 from ..Classes.EndWinding import EndWinding
 from ..Classes.EndWindingCirc import EndWindingCirc
+from ..Classes.EndWindingRect import EndWindingRect
 from ..Classes.FPGNSeg import FPGNSeg
 from ..Classes.FPGNTri import FPGNTri
 from ..Classes.Force import Force

@@ -8489,7 +8489,8 @@
             "get_Is",
             "get_Us",
             "store",
-            "get_electrical"
+            "get_electrical",
+            "get_Jrms_max"
         ],
         "mother": "",
         "name": "OutElec",
@@ -8629,6 +8630,15 @@
                 "name": "P_useful",
                 "type": "float",
                 "unit": "W",
+                "value": null
+            },
+            {
+                "desc": "Maximum RMS current density in slots",
+                "max": "",
+                "min": "0",
+                "name": "Jrms_max",
+                "type": "float",
+                "unit": "A/m\u00c2\u00b2",
                 "value": null
             }
         ]

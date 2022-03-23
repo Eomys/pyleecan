@@ -100,7 +100,12 @@ def draw_FEMM(
 
     # Computing parameter (element size, arcspan...) needed to define the simulation
     FEMM_dict = comp_FEMM_dict(
-        machine, kgeo_fineness, kmesh_fineness, T_mag, type_calc_leakage
+        machine,
+        kgeo_fineness,
+        kmesh_fineness,
+        T_mag,
+        type_calc_leakage,
+        sym,
     )
     # Overwrite some values if needed
     for key, val in user_FEMM_dict.items():
