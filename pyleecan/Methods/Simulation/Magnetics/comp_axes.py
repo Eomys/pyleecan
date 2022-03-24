@@ -27,6 +27,7 @@ def comp_axes(self, output):
         axes_dict_in=axes_dict_geo,
         is_periodicity_a=self.is_periodicity_a,
         is_periodicity_t=self.is_periodicity_t,
+        is_periodicity_rotor=self.is_periodicity_rotor,
     )
 
     # Check Time periodicities regarding Magnetics model input

@@ -65,7 +65,7 @@ def draw_FEMM_lamination(
 
         sym_draw = sym
         is_draw = True
-        is_set_BC = True
+        type_set_BC = 0
         type_assign = 0
     else:
         # Drawing with smallest periodicities of the lamination depending on is_fast_draw
@@ -78,14 +78,14 @@ def draw_FEMM_lamination(
 
             surf_list = lam.build_geometry(sym=sym_draw, is_circular_radius=True)
             is_draw = False
-            is_set_BC = False
+            type_set_BC = 1
             # Disabling the assign on the build_geometry with sym_draw (done later on build_geometry with sym)
             type_assign = 2
         else:
             sym_draw = sym
             surf_list = lam.build_geometry(sym=sym, is_circular_radius=True)
             is_draw = True
-            is_set_BC = True
+            type_set_BC = 0
             type_assign = 0
 
     # Applying user defined modifications
@@ -110,16 +110,15 @@ def draw_FEMM_lamination(
         type_BH_stator,
         type_BH_rotor,
         type_assign=type_assign,
-        is_set_BC=is_set_BC,
+        type_set_BC=type_set_BC,
     )
 
     # Duplicate periodic parts if sym_draw > sym
     if sym != sym_draw:
         femm.mi_seteditmode("group")
         lam_label = lam.get_label()
-        for key, val in FEMM_dict["groups"].items():
-            if val in FEMM_dict["groups"]["lam_group_list"][lam_label]:
-                femm.mi_selectgroup(val)
+        for val in FEMM_dict["groups"]["lam_group_list"][lam_label]:
+            femm.mi_selectgroup(val)
         Ncopy = int(round(sym_draw / sym))
         femm.mi_copyrotate(0, 0, 360 / sym / Ncopy, Ncopy - 1)
 
@@ -140,6 +139,7 @@ def draw_FEMM_lamination(
             type_BH_stator,
             type_BH_rotor,
             type_assign=1,
+            type_set_BC=0,
             is_draw=is_draw,
         )
 

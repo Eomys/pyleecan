@@ -21,7 +21,7 @@ def comp_lengths_winding(self):
     L1vd = self.comp_length()
 
     # end-winding length on one side for a half-turn
-    Lew = self.winding.comp_length_endwinding()
+    Lew = self.winding.comp_length()
 
     # total end-winding length
     Ntspc = self.winding.comp_Ntsp(self.get_Zs())

@@ -110,7 +110,5 @@ def gen_input(self):
     if self.I_max is None:
         # Calculate maximum current function of current density
         Swire = simu.machine.stator.winding.conductor.comp_surface_active()
-        Ntcoil = simu.machine.stator.winding.Ntcoil
         Npcp = simu.machine.stator.winding.Npcp
-
-        self.I_max = self.J_max * Swire * Npcp * Ntcoil
+        self.I_max = self.J_max * Swire * Npcp

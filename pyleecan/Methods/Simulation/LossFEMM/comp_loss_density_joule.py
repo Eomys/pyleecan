@@ -54,9 +54,9 @@ def comp_loss_density_joule(self, group, coeff_dict):
 
     Lst = lam.L1
 
-    ms_group = output.mag.meshsolution.get_group(group)
-
-    Se = ms_group.mesh[0].get_cell_area()
+    # Get surface cells for windings
+    ms = output.mag.meshsolution
+    Se = ms.mesh[0].get_cell_area()[ms.group[group]]
 
     # Constant component and twice the electrical frequency have same joule density values
     freqs = array([felec])

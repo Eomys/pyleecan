@@ -15,6 +15,10 @@ def comp_skin_effect(self):
     felec = self.OP.get_felec()
 
     # compute skin_effect on stator side
-    self.Xkr_skinS, self.Xke_skinS = CondS.comp_skin_effect(
-        freq=felec, T_op=self.Tsta, T_ref=20, type_skin_effect=self.type_skin_effect
+    self.Xkr_skinS = CondS.comp_skin_effect_resistance(
+        freq=felec, T_op=self.Tsta, T_ref=20
+    )
+
+    self.Xke_skinS = CondS.comp_skin_effect_inductance(
+        freq=felec, T_op=self.Tsta, T_ref=20
     )

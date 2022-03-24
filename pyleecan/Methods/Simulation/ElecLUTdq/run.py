@@ -97,8 +97,11 @@ def run(self):
         Plosses = Ploss_dqh_interp((Id, Iq))
         Ploss_ovl = np.sum(Plosses, axis=1)
 
+        # Calculate electromagnetic power
+        Pem_av_interp = qs * (Ud * Id + Uq * Iq)
+
         # Calculate useful power by substracting losses
-        Puse_interp = qs * (Ud * Id + Uq * Iq) - Ploss_ovl
+        Puse_interp = Pem_av_interp - Ploss_ovl
 
         # Finding indices of operating points satisfying maximum voltage/current and input power
         i0 = np.logical_and.reduce(
@@ -125,6 +128,7 @@ def run(self):
         niter_Pem = niter_Pem + 1
 
     # Store electrical quantities
+    output.elec.Pem_av = Pem_av_interp[i0][imin]
     output.elec.P_useful = Puse_interp[i0][imin]
     output.elec.Tem_av = Puse_interp[i0][imin] / (2 * np.pi * OP.N0 / 60)
     output.elec.Pj_joules = Plosses[i0, 0][imin]
@@ -141,5 +145,3 @@ def run(self):
         Protor=Plosses[i0, 3][imin],
         Pprox=Plosses[i0, 4][imin],
     )
-
-    output.elec.P_absorbed = output.elec.P_useful + output.loss.get_loss_overall()

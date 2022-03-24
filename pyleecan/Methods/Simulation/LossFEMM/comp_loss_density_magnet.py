@@ -2,10 +2,18 @@ from numpy import sum as np_sum, abs as np_abs, pi, matmul, zeros
 
 import numpy as np
 
-from SciDataTool.Functions.conversions import xy_to_rphi
+from ....Classes.CondType21 import CondType21
+from ....Classes.HoleM50 import HoleM50
+from ....Classes.HoleM51 import HoleM51
+from ....Classes.HoleM52 import HoleM52
+from ....Classes.HoleM53 import HoleM53
+from ....Classes.HoleM57 import HoleM57
+from ....Classes.HoleM58 import HoleM58
+from ....Classes.LamHole import LamHole
+from ....Classes.LamSlotMag import LamSlotMag
 
 
-def comp_loss_density_magnet(self, group, coeff_dict):
+def comp_loss_density_magnet(self, group, coeff_dict, is_skin_effect=True):
     """Calculate eddy-current losses in rotor permanent magnets assuming power density
     is given by (cf. https://www.femm.info/wiki/SPMLoss):
 
@@ -35,24 +43,38 @@ def comp_loss_density_magnet(self, group, coeff_dict):
 
     machine = output.simu.machine
 
-    p = machine.get_pole_pair_number()
-
     per_a = output.geo.per_a
     if output.geo.is_antiper_a:
         per_a *= 2
 
-    if hasattr(machine.rotor, "magnet"):
+    if isinstance(machine.rotor, LamSlotMag):
         magnet = machine.rotor.magnet
+        slot = machine.rotor.slot
+        if hasattr(slot, "Hmag"):
+            Hmag = slot.Hmag
+        else:
+            Hmag = np.sqrt(slot.comp_surface_active())
+
+    elif isinstance(machine.rotor, LamHole):
+        hole0 = machine.rotor.hole[0]
+        magnet = hole0.get_magnet_dict()["magnet_0"]
+        if isinstance(hole0, HoleM50):
+            Hmag = hole0.H3
+        elif isinstance(hole0, (HoleM51, HoleM53, HoleM57, HoleM58)):
+            Hmag = hole0.H2
+        elif isinstance(hole0, HoleM52):
+            Hmag = hole0.H1
+        else:
+            Hmag = np.sqrt(hole0.comp_surface_magnet_id(0))
     else:
-        hole = machine.rotor.hole[0]
-        if hasattr(hole, "magnet_0"):
-            magnet = hole.magnet_0
+        raise Exception(
+            "Cannot calculate magnet losses for rotor lamination other than LamSlotMag or LamHole"
+        )
+
     # Get magnet length
     Lmag = magnet.Lmag
     if Lmag is None:
         Lmag = machine.rotor.L1
-    # Get magnet conductivity
-    sigma_m = magnet.mat_type.elec.get_conductivity(T_op=self.Trot)
 
     # Get fundamental frequency
     felec = output.elec.OP.get_felec()
@@ -70,44 +92,18 @@ def comp_loss_density_magnet(self, group, coeff_dict):
     if group not in group_list:
         raise Exception("Cannot calculate magnet losses for group=" + group)
 
-    label_list = [sol.label for sol in meshsol.solution]
-
-    if "A_z" not in label_list:
-        raise Exception("Cannot calculate magnet losses if A_z is not in meshsolution")
-    else:
-        ind = label_list.index("A_z") + 1
-
-    # Get element indices associated to group
-    Igrp = meshsol.group[group]
-
-    # Get element surface associated to group
-    Se = meshsol.mesh[0].get_cell_area()[Igrp]
-
-    cell = meshsol.mesh[0].cell["triangle"].connectivity
-
-    nodes_coord = meshsol.mesh[0].node.coordinate
-
-    Pe = np.zeros((cell.shape[0], cell.shape[1], 2))
-
-    Pe[:, :, 0] = nodes_coord[cell, 0]
-    Pe[:, :, 1] = nodes_coord[cell, 1]
-
-    Pe = np.mean(Pe, axis=1)
-
-    r, phi = xy_to_rphi(Pe[Igrp, 0], Pe[Igrp, 1])
-
-    theta_mag = np.arange(0, 2 * pi / per_a, pi / p) + pi / p
-
-    list_Imag = list()
-    for ii, t in enumerate(theta_mag):
-        if ii == 0:
-            t0 = 0
-        else:
-            t0 = theta_mag[ii - 1]
-        list_Imag.append(np.where(np.logical_and(t0 <= phi, phi <= t))[0])
+    lab_ind = None
+    for ii, sol in enumerate(meshsol.solution):
+        if sol.label == "A_z" and sol.type_cell == "triangle":
+            lab_ind = ii
+            break
+    if lab_ind is None:
+        raise Exception(
+            "Cannot calculate magnet losses if A_z calculated on element center is not in meshsolution"
+        )
 
     # Get magnetic vector potential over time and for each element center in current group
-    Az_dt = meshsol.solution[ind].field
+    Az_dt = meshsol.solution[lab_ind].field
     axes_list = Az_dt.get_axes()
     Time_orig = axes_list[0]
     Time = Time_orig.copy()
@@ -125,20 +121,99 @@ def comp_loss_density_magnet(self, group, coeff_dict):
     if is_change_Time:
         Az_dt.axes[0] = Time
 
-    Igrp = np.array(Igrp)
+    # Get all element surfaces
+    Se = meshsol.mesh[0].get_cell_area()
+
+    # Get list of element indices for each magnet
+    list_Imag = list()
+    ind_list = list()
+    for key in meshsol.group:
+        if group in key and key != group:
+            ind = int(key.split("_")[-1])
+            ind_list.append(ind)
+            list_Imag.append(meshsol.group[key])
+    ind_all = meshsol.group[group]
+
+    # Calculate induced current density and loss density
+    jj = 0
     for ii, kmag in enumerate(list_Imag):
         Se_mag = Se[kmag]
-        Az_df = Az_dt.get_magnitude_along(
-            "freqs", "indice" + str(Igrp[kmag].tolist()), "z[0]"
-        )
+
+        # derivation in frequency domain
+        Az_df = Az_dt.get_along("freqs", "indice" + str(kmag), "z[0]")
         if ii == 0:
             freqs = Az_df["freqs"]
             w = 2 * pi * freqs[:, None]
-            Pmagnet_density = np.zeros((w.size, Se.size))
+            sigma_m = magnet.mat_type.elec.get_conductivity(T_op=self.Trot)
+            if is_skin_effect:
+                # Get magnet conductivity including skin effect
+                magnet_cond = CondType21(Hbar=Hmag, Wbar=1, cond_mat=magnet.mat_type)
+                kr_skin = magnet_cond.comp_skin_effect_resistance(
+                    freqs, T_op=self.Trot, b=1, zt=1
+                )
+                kr_skin[np.isnan(kr_skin)] = 1
+                sigma_m = sigma_m / kr_skin[:, None]
+            Pmagnet_density = np.zeros((freqs.size, len(ind_all)))
         Az_fft = Az_df["A_z"]
         Az_mean = matmul(Az_fft, Se_mag)[:, None] / np_sum(Se_mag)
         Jm_fft = -1j * sigma_m * w * (Az_fft - Az_mean)
-        Pmagnet_density[:, kmag] = np_abs(Jm_fft) ** 2 / sigma_m
+        Pmagnet_density[:, jj : (jj + len(kmag))] = np_abs(Jm_fft) ** 2 / sigma_m
+        jj += len(kmag)
+
+        # # # derivation in time domain
+        # dAz_dt = Az_dt.get_data_along("time=derivate", "indice" + str(kmag), "z[0]")
+        # dAz_df = dAz_dt.get_along("freqs", "indice", "z[0]")
+        # dAz_fft = dAz_df["A_z"]
+        # if ii == 0:
+        #     freqs = dAz_df["freqs"]
+        #     w = 2 * pi * freqs[:, None]
+        #     sigma_m = magnet.mat_type.elec.get_conductivity(T_op=self.Trot)
+        #     if is_skin_effect:
+        #         # Get magnet conductivity including skin effect
+        #         magnet_cond = CondType21(Hbar=Hmag, Wbar=1, cond_mat=magnet.mat_type)
+        #         kr_skin = magnet_cond.comp_skin_effect_resistance(
+        #             freqs, T_op=self.Trot, b=1, zt=1
+        #         )
+        #         kr_skin[np.isnan(kr_skin)] = 1
+        #         sigma_m = sigma_m / kr_skin[:, None]
+        #     Pmagnet_density = np.zeros((freqs.size, len(ind_all)))
+        # Jm_fft0 = sigma_m * (
+        #     -dAz_fft + matmul(dAz_fft, Se_mag)[:, None] / np_sum(Se_mag)
+        # )
+
+        # # # Plot
+        # Az_df0 = Az_dt.get_data_along("freqs", "indice" + str(kmag), "z[0]")
+        # dAz_df0 = Az_df0.copy()
+        # dAz_df0.values *= 1j * w[:, :, None]
+        # dAz_df0.unit = "Wb/ms"
+        # dAz_df0.plot_2D_Data(
+        #     "freqs", "indice[0]", data_list=[dAz_dt], legend_list=["df", "dt"]
+        # )
+        # dAz_df0.plot_2D_Data(
+        #     "time", "indice[0]", data_list=[dAz_dt], legend_list=["df", "dt"]
+        # )
+        # from SciDataTool import DataFreq
+
+        # Jm_df = DataFreq(
+        #     name="Current density",
+        #     symbol="J_m",
+        #     unit="A/m^2",
+        #     values=Jm_fft,
+        #     axes=Az_df0.axes,
+        # )
+        # Jm_df0 = DataFreq(
+        #     name="Current density",
+        #     symbol="J_m",
+        #     unit="A/m^2",
+        #     values=Jm_fft0,
+        #     axes=Az_df0.axes,
+        # )
+        # Jm_df.plot_2D_Data(
+        #     "time", "indice[0]", data_list=[Jm_df0], legend_list=["df", "dt"]
+        # )
+        # Jm_df.plot_2D_Data(
+        #     "freqs", "indice[0]", data_list=[Jm_df0], legend_list=["df", "dt"]
+        # )
 
     # Calculate coefficients to evaluate magnet losses
     if coeff_dict is not None:
@@ -148,7 +223,9 @@ def comp_loss_density_magnet(self, group, coeff_dict):
         I0 = n != 0
         Af = zeros(w.size)
         Af[I0] = (
-            Lmag * per_a * matmul(Pmagnet_density[I0, :] / freqs[I0, None] ** 2, Se)
+            Lmag
+            * per_a
+            * matmul(Pmagnet_density[I0, :] / freqs[I0, None] ** 2, Se[ind_all])
         )
         # Sum over orders
         A = np_sum(Af * n ** 2)

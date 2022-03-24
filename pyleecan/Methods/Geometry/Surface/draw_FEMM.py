@@ -25,7 +25,7 @@ def draw_FEMM(
     hide=False,
     BC_dict=None,
     is_draw=True,
-    is_set_BC=True,
+    type_set_BC=0,
 ):
     """draw the Surface in FEMM
 
@@ -48,8 +48,8 @@ def draw_FEMM(
         Boundary condition dict ([line label] = BC name)
     is_draw : bool
         1 to draw the list of surfaces given
-    is_set_BC : bool
-        1 to set the boundary conditions of the surface
+    type_set_BC : bool
+        1 to set BC of the yoke only, 0 to set all
 
     Returns
     -------
@@ -79,15 +79,25 @@ def draw_FEMM(
                 continue  #  This line should not be drawn
         mesh_dict = get_mesh_param(label_dict, FEMM_dict)
 
+        group = mesh_dict["group"]
+        if isinstance(group, list):
+            group = group[label_dict["S_id"]]
+
         # Get or create the Boundary Condition (if any)
-        if (
-            is_set_BC
-            and line.prop_dict is not None
-            and BOUNDARY_PROP_LAB in line.prop_dict
-        ):
-            propname = get_FEMM_BC_propname(
-                femm=femm, line_label=line.prop_dict[BOUNDARY_PROP_LAB], BC_dict=BC_dict
-            )
+        if line.prop_dict is not None and BOUNDARY_PROP_LAB in line.prop_dict:
+
+            is_yoke_BC = LAM_LAB + YOKE_LAB in line.prop_dict[BOUNDARY_PROP_LAB]
+
+            if type_set_BC == 0 or (type_set_BC == 1 and is_yoke_BC):
+
+                propname = get_FEMM_BC_propname(
+                    femm=femm,
+                    line_label=line.prop_dict[BOUNDARY_PROP_LAB],
+                    BC_dict=BC_dict,
+                )
+
+            else:
+                propname = "None"  # No BC to set
         else:
             propname = "None"  # No BC to set
         # Draw the Line
@@ -99,7 +109,7 @@ def draw_FEMM(
                 element_size=mesh_dict["element_size"],
                 propname=propname,
                 hide=hide,
-                group=mesh_dict["group"],
+                group=group,
                 is_draw=is_draw,
             )
         else:
@@ -110,6 +120,6 @@ def draw_FEMM(
                 element_size=mesh_dict["element_size"],
                 automesh=mesh_dict["automesh"],
                 hide=hide,
-                group=mesh_dict["group"],
+                group=group,
                 is_draw=is_draw,
             )

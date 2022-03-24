@@ -30,7 +30,7 @@ def get_Phidqh_mean(self):
             # Integrate stator winding flux contained in LUT over z
             Phi_wind = (
                 self.output_list[ii]
-                .mag.Phi_wind[stator_label]
+                .mag.Phi_wind_slice[stator_label]
                 .get_data_along("time", "phase", "z=integrate")
             )
 

@@ -87,7 +87,7 @@ def get_elec_datakeeper_dict():
         name="Average Torque from EEC",
         symbol="Tem_av_elec",
         unit="N.m",
-        keeper="lambda output: output.elec.Tem_av_ref",
+        keeper="lambda output: output.elec.Tem_av",
     )
 
     return dk_dict

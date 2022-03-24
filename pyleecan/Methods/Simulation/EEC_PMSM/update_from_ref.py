@@ -11,8 +11,9 @@ def update_from_ref(self, LUT_ref):
 
     """
 
-    # Update skin effect
-    self.comp_skin_effect()
+    if self.type_skin_effect:
+        # Update skin effect
+        self.comp_skin_effect()
 
     eec_ref = LUT_ref.get_eec()
     Tsta_ref, Trot_ref = eec_ref.Tsta, eec_ref.Trot

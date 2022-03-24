@@ -340,9 +340,9 @@ def solve_FEA(self, output, sym, angle, time, angle_rotor, Is, Ir):
         No_Magnets = pm_index - 6
         magnet_temp = self.T_mag
         Hcm20 = magnet_0.mat_type.mag.get_Hc()
-        Br = magnet_0.mat_type.mag.get_Br(T_op=self.T_mag)
+        Br = magnet_0.mat_type.mag.get_Brm(T_op=self.T_mag)
         magnet_permeability = magnet_0.mat_type.mag.mur_lin
-        conductivity_m = magnet_0.mat_type.get_conductivity(
+        conductivity_m = magnet_0.mat_type.elec.get_conductivity(
             T_op=magnet_temp, T_ref=20.0
         )
 
@@ -450,7 +450,7 @@ def solve_FEA(self, output, sym, angle, time, angle_rotor, Is, Ir):
 
         winding_temp = 20.0  # Fixed for Now
         conductivity = machine.stator.winding.conductor.cond_mat.elec.get_conductivity(
-            T_OP=winding_temp, T_ref=20
+            T_op=winding_temp, T_ref=20
         )
 
         fo.write(

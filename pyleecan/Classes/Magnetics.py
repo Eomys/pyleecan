@@ -112,6 +112,7 @@ class Magnetics(FrozenClass):
         type_distribution_enforced=None,
         is_current_harm=True,
         T_mag=20,
+        is_periodicity_rotor=False,
         init_dict=None,
         init_str=None,
     ):
@@ -166,6 +167,8 @@ class Magnetics(FrozenClass):
                 is_current_harm = init_dict["is_current_harm"]
             if "T_mag" in list(init_dict.keys()):
                 T_mag = init_dict["T_mag"]
+            if "is_periodicity_rotor" in list(init_dict.keys()):
+                is_periodicity_rotor = init_dict["is_periodicity_rotor"]
         # Set the properties (value check and convertion are done in setter)
         self.parent = None
         self.is_remove_slotS = is_remove_slotS
@@ -186,6 +189,7 @@ class Magnetics(FrozenClass):
         self.type_distribution_enforced = type_distribution_enforced
         self.is_current_harm = is_current_harm
         self.T_mag = T_mag
+        self.is_periodicity_rotor = is_periodicity_rotor
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -231,6 +235,9 @@ class Magnetics(FrozenClass):
         )
         Magnetics_str += "is_current_harm = " + str(self.is_current_harm) + linesep
         Magnetics_str += "T_mag = " + str(self.T_mag) + linesep
+        Magnetics_str += (
+            "is_periodicity_rotor = " + str(self.is_periodicity_rotor) + linesep
+        )
         return Magnetics_str
 
     def __eq__(self, other):
@@ -273,6 +280,8 @@ class Magnetics(FrozenClass):
         if other.is_current_harm != self.is_current_harm:
             return False
         if other.T_mag != self.T_mag:
+            return False
+        if other.is_periodicity_rotor != self.is_periodicity_rotor:
             return False
         return True
 
@@ -328,6 +337,8 @@ class Magnetics(FrozenClass):
             diff_list.append(name + ".is_current_harm")
         if other._T_mag != self._T_mag:
             diff_list.append(name + ".T_mag")
+        if other._is_periodicity_rotor != self._is_periodicity_rotor:
+            diff_list.append(name + ".is_periodicity_rotor")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -354,6 +365,7 @@ class Magnetics(FrozenClass):
         S += getsizeof(self.type_distribution_enforced)
         S += getsizeof(self.is_current_harm)
         S += getsizeof(self.T_mag)
+        S += getsizeof(self.is_periodicity_rotor)
         return S
 
     def as_dict(self, type_handle_ndarray=0, keep_function=False, **kwargs):
@@ -393,6 +405,7 @@ class Magnetics(FrozenClass):
         Magnetics_dict["type_distribution_enforced"] = self.type_distribution_enforced
         Magnetics_dict["is_current_harm"] = self.is_current_harm
         Magnetics_dict["T_mag"] = self.T_mag
+        Magnetics_dict["is_periodicity_rotor"] = self.is_periodicity_rotor
         # The class name is added to the dict for deserialisation purpose
         Magnetics_dict["__class__"] = "Magnetics"
         return Magnetics_dict
@@ -419,6 +432,7 @@ class Magnetics(FrozenClass):
         self.type_distribution_enforced = None
         self.is_current_harm = None
         self.T_mag = None
+        self.is_periodicity_rotor = None
 
     def _get_is_remove_slotS(self):
         """getter of is_remove_slotS"""
@@ -766,5 +780,23 @@ class Magnetics(FrozenClass):
         doc=u"""Permanent magnet temperature to adapt magnet remanent flux density
 
         :Type: float
+        """,
+    )
+
+    def _get_is_periodicity_rotor(self):
+        """getter of is_periodicity_rotor"""
+        return self._is_periodicity_rotor
+
+    def _set_is_periodicity_rotor(self, value):
+        """setter of is_periodicity_rotor"""
+        check_var("is_periodicity_rotor", value, "bool")
+        self._is_periodicity_rotor = value
+
+    is_periodicity_rotor = property(
+        fget=_get_is_periodicity_rotor,
+        fset=_set_is_periodicity_rotor,
+        doc=u"""True to consider rotor periodicity over time instead of stator
+
+        :Type: bool
         """,
     )
