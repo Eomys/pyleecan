@@ -15,6 +15,7 @@ def plot(
     is_show_fig=True,
     save_path=None,
     win_title=None,
+    is_max_sym=False,
 ):
     """Plot the Machine in a matplotlib fig
 
@@ -40,7 +41,15 @@ def plot(
         To call show at the end of the method
     save_path : str
         full path including folder, name and extension of the file to save if save_path is not None
+    win_title : str
+        Name of the Window (default machine name)
+    is_max_sym : bool
+        True: overwrite sym parameter with max periodicity of the machine
     """
+    # Get maximum symetry for plot
+    if is_max_sym:
+        pera, is_apera = self.comp_periodicity_spatial()
+        sym = 2 * pera if is_apera else pera
 
     (fig, ax, _, _) = init_fig(fig=fig, ax=ax, shape="rectangle")
 
