@@ -115,11 +115,11 @@ class Ui_SMachineType(object):
 
         self.scrollArea = QScrollArea(SMachineType)
         self.scrollArea.setObjectName(u"scrollArea")
-        self.scrollArea.setMaximumSize(QSize(340, 16777215))
+        self.scrollArea.setMaximumSize(QSize(370, 16777215))
         self.scrollArea.setWidgetResizable(True)
         self.scrollAreaWidgetContents_2 = QWidget()
         self.scrollAreaWidgetContents_2.setObjectName(u"scrollAreaWidgetContents_2")
-        self.scrollAreaWidgetContents_2.setGeometry(QRect(0, 0, 321, 554))
+        self.scrollAreaWidgetContents_2.setGeometry(QRect(0, 0, 332, 554))
         sizePolicy3 = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Preferred)
         sizePolicy3.setHorizontalStretch(0)
         sizePolicy3.setVerticalStretch(0)
@@ -153,18 +153,22 @@ class Ui_SMachineType(object):
 
         self.gridLayout = QGridLayout()
         self.gridLayout.setObjectName(u"gridLayout")
-        self.horizontalSpacer = QSpacerItem(
-            40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum
-        )
+        self.le_name = QLineEdit(self.scrollAreaWidgetContents_2)
+        self.le_name.setObjectName(u"le_name")
+        sizePolicy1.setHeightForWidth(self.le_name.sizePolicy().hasHeightForWidth())
+        self.le_name.setSizePolicy(sizePolicy1)
+        self.le_name.setMinimumSize(QSize(200, 0))
 
-        self.gridLayout.addItem(self.horizontalSpacer, 1, 2, 1, 1)
+        self.gridLayout.addWidget(self.le_name, 2, 1, 1, 1)
 
-        self.in_p = QLabel(self.scrollAreaWidgetContents_2)
-        self.in_p.setObjectName(u"in_p")
-        sizePolicy.setHeightForWidth(self.in_p.sizePolicy().hasHeightForWidth())
-        self.in_p.setSizePolicy(sizePolicy)
+        self.c_topology = QComboBox(self.scrollAreaWidgetContents_2)
+        self.c_topology.addItem("")
+        self.c_topology.addItem("")
+        self.c_topology.setObjectName(u"c_topology")
+        sizePolicy1.setHeightForWidth(self.c_topology.sizePolicy().hasHeightForWidth())
+        self.c_topology.setSizePolicy(sizePolicy1)
 
-        self.gridLayout.addWidget(self.in_p, 0, 0, 1, 1)
+        self.gridLayout.addWidget(self.c_topology, 1, 1, 1, 1)
 
         self.si_p = QSpinBox(self.scrollAreaWidgetContents_2)
         self.si_p.setObjectName(u"si_p")
@@ -179,22 +183,6 @@ class Ui_SMachineType(object):
 
         self.gridLayout.addWidget(self.si_p, 0, 1, 1, 1)
 
-        self.label = QLabel(self.scrollAreaWidgetContents_2)
-        self.label.setObjectName(u"label")
-        sizePolicy.setHeightForWidth(self.label.sizePolicy().hasHeightForWidth())
-        self.label.setSizePolicy(sizePolicy)
-
-        self.gridLayout.addWidget(self.label, 1, 0, 1, 1)
-
-        self.c_topology = QComboBox(self.scrollAreaWidgetContents_2)
-        self.c_topology.addItem("")
-        self.c_topology.addItem("")
-        self.c_topology.setObjectName(u"c_topology")
-        sizePolicy1.setHeightForWidth(self.c_topology.sizePolicy().hasHeightForWidth())
-        self.c_topology.setSizePolicy(sizePolicy1)
-
-        self.gridLayout.addWidget(self.c_topology, 1, 1, 1, 1)
-
         self.in_name = QLabel(self.scrollAreaWidgetContents_2)
         self.in_name.setObjectName(u"in_name")
         sizePolicy5.setHeightForWidth(self.in_name.sizePolicy().hasHeightForWidth())
@@ -202,13 +190,19 @@ class Ui_SMachineType(object):
 
         self.gridLayout.addWidget(self.in_name, 2, 0, 1, 1)
 
-        self.le_name = QLineEdit(self.scrollAreaWidgetContents_2)
-        self.le_name.setObjectName(u"le_name")
-        sizePolicy1.setHeightForWidth(self.le_name.sizePolicy().hasHeightForWidth())
-        self.le_name.setSizePolicy(sizePolicy1)
-        self.le_name.setMinimumSize(QSize(200, 0))
+        self.label = QLabel(self.scrollAreaWidgetContents_2)
+        self.label.setObjectName(u"label")
+        sizePolicy.setHeightForWidth(self.label.sizePolicy().hasHeightForWidth())
+        self.label.setSizePolicy(sizePolicy)
 
-        self.gridLayout.addWidget(self.le_name, 2, 1, 1, 1)
+        self.gridLayout.addWidget(self.label, 1, 0, 1, 1)
+
+        self.in_p = QLabel(self.scrollAreaWidgetContents_2)
+        self.in_p.setObjectName(u"in_p")
+        sizePolicy.setHeightForWidth(self.in_p.sizePolicy().hasHeightForWidth())
+        self.in_p.setSizePolicy(sizePolicy)
+
+        self.gridLayout.addWidget(self.in_p, 0, 0, 1, 1)
 
         self.gridLayout_2.addLayout(self.gridLayout, 1, 0, 1, 1)
 
@@ -302,12 +296,6 @@ class Ui_SMachineType(object):
         self.in_machine_desc.setPlaceholderText(
             QCoreApplication.translate("SMachineType", u"Machine Description", None)
         )
-        self.in_p.setText(
-            QCoreApplication.translate("SMachineType", u"Pole pair number :", None)
-        )
-        self.label.setText(
-            QCoreApplication.translate("SMachineType", u"Topology : ", None)
-        )
         self.c_topology.setItemText(
             0, QCoreApplication.translate("SMachineType", u"Internal Rotor", None)
         )
@@ -317,6 +305,12 @@ class Ui_SMachineType(object):
 
         self.in_name.setText(
             QCoreApplication.translate("SMachineType", u"Machine name :", None)
+        )
+        self.label.setText(
+            QCoreApplication.translate("SMachineType", u"Topology : ", None)
+        )
+        self.in_p.setText(
+            QCoreApplication.translate("SMachineType", u"Pole pair number :", None)
         )
         self.b_previous.setText(
             QCoreApplication.translate("SMachineType", u"Previous", None)
