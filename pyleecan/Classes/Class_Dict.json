@@ -6711,6 +6711,15 @@
                 "type": "float",
                 "unit": "deg Celsius",
                 "value": 20
+            },
+            {
+                "desc": "True to consider rotor periodicity over time instead of stator",
+                "max": "",
+                "min": "",
+                "name": "is_periodicity_rotor",
+                "type": "bool",
+                "unit": "",
+                "value": 0
             }
         ]
     },

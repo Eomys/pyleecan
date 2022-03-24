@@ -161,6 +161,7 @@ class MagElmer(Magnetics):
         type_distribution_enforced=None,
         is_current_harm=True,
         T_mag=20,
+        is_periodicity_rotor=False,
         init_dict=None,
         init_str=None,
     ):
@@ -237,6 +238,8 @@ class MagElmer(Magnetics):
                 is_current_harm = init_dict["is_current_harm"]
             if "T_mag" in list(init_dict.keys()):
                 T_mag = init_dict["T_mag"]
+            if "is_periodicity_rotor" in list(init_dict.keys()):
+                is_periodicity_rotor = init_dict["is_periodicity_rotor"]
         # Set the properties (value check and convertion are done in setter)
         self.Kmesh_fineness = Kmesh_fineness
         self.Kgeo_fineness = Kgeo_fineness
@@ -269,6 +272,7 @@ class MagElmer(Magnetics):
             type_distribution_enforced=type_distribution_enforced,
             is_current_harm=is_current_harm,
             T_mag=T_mag,
+            is_periodicity_rotor=is_periodicity_rotor,
         )
         # The class is frozen (in Magnetics init), for now it's impossible to
         # add new properties

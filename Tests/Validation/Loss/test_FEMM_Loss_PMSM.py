@@ -32,16 +32,16 @@ def test_FEMM_Loss_SPMSM():
     simu = Simu1(name="test_FEMM_Loss_SPMSM", machine=machine)
 
     simu.input = InputCurrent(
-        Nt_tot=4 * 100,
+        Nt_tot=4 * 200,
         Na_tot=1000 * 2,
         OP=OPdq(N0=4000, Id_ref=0, Iq_ref=np.sqrt(2)),
-        is_periodicity_t=False,
+        is_periodicity_t=True,
         is_periodicity_a=True,
     )
 
     simu.mag = MagFEMM(
         is_periodicity_a=True,
-        is_periodicity_t=False,
+        is_periodicity_t=True,
         nb_worker=4,
         is_get_meshsolution=True,
         FEMM_dict_enforced={
@@ -52,6 +52,7 @@ def test_FEMM_Loss_SPMSM():
             },
         },
         is_fast_draw=True,
+        is_periodicity_rotor=True,
         # is_close_femm=False,
     )
 
@@ -145,13 +146,13 @@ def test_FEMM_Loss_Prius():
     simu.input = InputCurrent(
         Nt_tot=10 * 40 * 8,
         Na_tot=200 * 8,
-        OP=OPdq(N0=1200, Id_ref=-100, Iq_ref=200),
+        OP=OPdq(N0=1200, Id_ref=Ic.real, Iq_ref=Ic.imag),
         is_periodicity_t=True,
         is_periodicity_a=True,
     )
 
     simu.mag = MagFEMM(
-        is_periodicity_a=False,
+        is_periodicity_a=True,
         is_periodicity_t=True,
         nb_worker=4,
         is_get_meshsolution=True,
@@ -179,7 +180,7 @@ def test_FEMM_Loss_Prius():
             label="Loss",
             group_names=[
                 "stator core",
-                "stator winding",
+                # "stator winding",
                 "rotor core",
                 "rotor magnets",
             ],
