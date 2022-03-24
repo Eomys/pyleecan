@@ -44,7 +44,7 @@ class Ui_SSkew(object):
         self.scrollArea.setWidgetResizable(True)
         self.scrollAreaWidgetContents = QWidget()
         self.scrollAreaWidgetContents.setObjectName(u"scrollAreaWidgetContents")
-        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 368, 514))
+        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 368, 524))
         self.verticalLayout_3 = QVBoxLayout(self.scrollAreaWidgetContents)
         self.verticalLayout_3.setObjectName(u"verticalLayout_3")
         self.g_activate = QGroupBox(self.scrollAreaWidgetContents)
@@ -201,7 +201,7 @@ class Ui_SSkew(object):
         )
 
         self.label_segments.setText(
-            QCoreApplication.translate("SSkew", u"Number of segments", None)
+            QCoreApplication.translate("SSkew", u"Number of steps", None)
         )
         self.label_rate.setText(
             QCoreApplication.translate("SSkew", u"Skew Angle ", None)
