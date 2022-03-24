@@ -211,8 +211,8 @@ class DMatSetup(Gen_DMatSetup, QDialog):
         self.tab_values.N_row_txt = "Nb of Points"
         self.tab_values.shape_max = (None, 2)
         self.tab_values.shape_min = (None, 2)
-        self.tab_values.col_header = ["B-curve(T)", "H-curve(A/m)"]
-        self.tab_values.unit_order = ["First column B", "First column H"]
+        self.tab_values.col_header = ["H-curve(A/m)", "B-curve(T)"]
+        self.tab_values.unit_order = ["First column H", "First column B"]
         self.tab_values.button_plot_title = "B(H)"
         self.tab_values.si_col.hide()
         self.tab_values.in_col.hide()
