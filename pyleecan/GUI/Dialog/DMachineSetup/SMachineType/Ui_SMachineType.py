@@ -47,12 +47,12 @@ class Ui_SMachineType(object):
         self.c_type.addItem("")
         self.c_type.addItem("")
         self.c_type.setObjectName(u"c_type")
-        sizePolicy1 = QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
+        sizePolicy1 = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Fixed)
         sizePolicy1.setHorizontalStretch(0)
         sizePolicy1.setVerticalStretch(0)
         sizePolicy1.setHeightForWidth(self.c_type.sizePolicy().hasHeightForWidth())
         self.c_type.setSizePolicy(sizePolicy1)
-        self.c_type.setMinimumSize(QSize(310, 0))
+        self.c_type.setMinimumSize(QSize(150, 0))
         self.c_type.setMaximumSize(QSize(16777215, 16777215))
 
         self.horizontalLayout_10.addWidget(self.c_type)
@@ -190,11 +190,8 @@ class Ui_SMachineType(object):
         self.c_topology.addItem("")
         self.c_topology.addItem("")
         self.c_topology.setObjectName(u"c_topology")
-        sizePolicy6 = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Fixed)
-        sizePolicy6.setHorizontalStretch(0)
-        sizePolicy6.setVerticalStretch(0)
-        sizePolicy6.setHeightForWidth(self.c_topology.sizePolicy().hasHeightForWidth())
-        self.c_topology.setSizePolicy(sizePolicy6)
+        sizePolicy1.setHeightForWidth(self.c_topology.sizePolicy().hasHeightForWidth())
+        self.c_topology.setSizePolicy(sizePolicy1)
 
         self.gridLayout.addWidget(self.c_topology, 1, 1, 1, 1)
 
@@ -207,8 +204,8 @@ class Ui_SMachineType(object):
 
         self.le_name = QLineEdit(self.scrollAreaWidgetContents_2)
         self.le_name.setObjectName(u"le_name")
-        sizePolicy6.setHeightForWidth(self.le_name.sizePolicy().hasHeightForWidth())
-        self.le_name.setSizePolicy(sizePolicy6)
+        sizePolicy1.setHeightForWidth(self.le_name.sizePolicy().hasHeightForWidth())
+        self.le_name.setSizePolicy(sizePolicy1)
         self.le_name.setMinimumSize(QSize(200, 0))
 
         self.gridLayout.addWidget(self.le_name, 2, 1, 1, 1)

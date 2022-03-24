@@ -45,14 +45,14 @@
          <item>
           <widget class="QComboBox" name="c_type">
            <property name="sizePolicy">
-            <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+            <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
            </property>
            <property name="minimumSize">
             <size>
-             <width>310</width>
+             <width>150</width>
              <height>0</height>
             </size>
            </property>
