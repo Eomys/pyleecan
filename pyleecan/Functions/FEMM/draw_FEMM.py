@@ -33,7 +33,6 @@ def draw_FEMM(
     stator_dxf=None,
     is_fast_draw=False,
     T_mag=20,
-    demag_dict={},
 ):
     """Draws and assigns the property of the machine in FEMM
 
@@ -94,9 +93,6 @@ def draw_FEMM(
         dictionary containing the main parameters of FEMM (including circuits and materials)
     """
 
-    if demag_dict not in [None, dict()] and sym != 1:
-        sym = 1
-        output.get_logger().debug("Removing sym for demag in FEMM")
     if transform_list not in [None, list()] and is_fast_draw:
         is_fast_draw = False
         output.get_logger().debug("Removing fast_draw for transform_list in FEMM")
