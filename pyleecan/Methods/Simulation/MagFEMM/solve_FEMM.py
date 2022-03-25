@@ -160,6 +160,7 @@ def solve_FEMM(
     meshFEMM = None
     groups = None
     A_node = None
+    A_elem = None
 
     # Check current values
     if np_all(Is == 0):
