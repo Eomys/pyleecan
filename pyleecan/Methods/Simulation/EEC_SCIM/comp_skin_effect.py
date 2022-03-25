@@ -26,7 +26,7 @@ def comp_skin_effect(self):
     )
 
     # compute skin_effect on rotor side
-    if felec * slip > 0:
+    if felec * slip != 0:
         self.Xkr_skinR = CondR.comp_skin_effect_resistance(
             freq=felec * slip, T_op=self.Trot, T_ref=20
         )
