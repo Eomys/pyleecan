@@ -35,9 +35,9 @@ except ImportError as error:
     evaluate = error
 
 try:
-    from ..Methods.Optimization.OptiBayesAlgSmoot.eval_const import eval_const
+    from ..Methods.Optimization.OptiBayesAlgSmoot.plot_pareto import plot_pareto
 except ImportError as error:
-    eval_const = error
+    plot_pareto = error
 
 
 from ._check import InitUnKnowClassError
@@ -83,17 +83,18 @@ class OptiBayesAlgSmoot(OptiBayesAlg):
         )
     else:
         evaluate = evaluate
-    # cf Methods.Optimization.OptiBayesAlgSmoot.eval_const
-    if isinstance(eval_const, ImportError):
-        eval_const = property(
+    # cf Methods.Optimization.OptiBayesAlgSmoot.plot_pareto
+    if isinstance(plot_pareto, ImportError):
+        plot_pareto = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use OptiBayesAlgSmoot method eval_const: " + str(eval_const)
+                    "Can't use OptiBayesAlgSmoot method plot_pareto: "
+                    + str(plot_pareto)
                 )
             )
         )
     else:
-        eval_const = eval_const
+        plot_pareto = plot_pareto
     # save and copy methods are available in all object
     save = save
     copy = copy

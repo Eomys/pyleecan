@@ -49,6 +49,11 @@ try:
 except ImportError as error:
     delete_toolbox = error
 
+try:
+    from ..Methods.Optimization.OptiGenAlgNsga2Deap.plot_pareto import plot_pareto
+except ImportError as error:
+    plot_pareto = error
+
 
 from ntpath import basename
 from os.path import isfile
@@ -138,6 +143,18 @@ class OptiGenAlgNsga2Deap(OptiGenAlg):
         )
     else:
         delete_toolbox = delete_toolbox
+    # cf Methods.Optimization.OptiGenAlgNsga2Deap.plot_pareto
+    if isinstance(plot_pareto, ImportError):
+        plot_pareto = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use OptiGenAlgNsga2Deap method plot_pareto: "
+                    + str(plot_pareto)
+                )
+            )
+        )
+    else:
+        plot_pareto = plot_pareto
     # save and copy methods are available in all object
     save = save
     copy = copy

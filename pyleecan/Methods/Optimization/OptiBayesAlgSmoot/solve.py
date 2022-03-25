@@ -71,20 +71,12 @@ def solve(self):
         xoutput.xoutput_dict["n_iter"] = DataKeeper(
             name="Generation number", symbol="n_iter"
         )
-        xoutput.xoutput_dict["is_valid"] = DataKeeper(
-            name="Individual validity", symbol="is_valid"
-        )
+
         xoutput.xoutput_dict["x_opt"] = DataKeeper(  # need to put a better name here
             name="x opt", symbol="x_opt"
         )
         xoutput.xoutput_dict["y_opt"] = DataKeeper(  # need to put a better name here
             name="y opt", symbol="y_opt"
-        )
-        xoutput.xoutput_dict["x_data"] = DataKeeper(  # need to put a better name here
-            name="x data", symbol="x_data"
-        )
-        xoutput.xoutput_dict["y_data"] = DataKeeper(  # need to put a better name here
-            name="y data", symbol="y_data"
         )
 
         # Add datakeeper to XOutput to store additionnal values
@@ -100,9 +92,10 @@ def solve(self):
         n_iter = self.nb_iter
         xlimits = np.array([var.space for var in self.problem.design_var])
 
-        """ const = []
-        for constraint in self.problem.constraint:
-            const.append(lambda x: self.eval_const(constraint, x)) """
+        const = [
+            lambda x, i=i: self.eval_const(self.problem.constraint[i], x)
+            for i in range(len(self.problem.constraint))
+        ]
 
         time = datetime.now()
 
@@ -127,21 +120,9 @@ def solve(self):
             )
         )
         res = moo.result
-        print(res.F)
-        plot = Scatter()
-        plot.add(res.F, color="red")
-        plot.show()
 
-        print(res.F, res.X)
-        """ 
-        xoutput.xoutput_dict["x_opt"].result.append(x_opt)
-        xoutput.xoutput_dict["y_opt"].result.append(y_opt)
-        xoutput.xoutput_dict["x_data"].result.append(x_data)
-        xoutput.xoutput_dict["y_data"].result.append(y_data) """
-        # xoutput.output_list.append(x_opt)
-        # xoutput.output_list.append(y_opt)
-        # xoutput.output_list.append(x_data)
-        # xoutput.output_list.append(y_data)
+        xoutput.xoutput_dict["x_opt"].result = res.X.tolist()
+        xoutput.xoutput_dict["y_opt"].result = res.F.tolist()
 
         return xoutput
 

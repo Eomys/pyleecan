@@ -148,7 +148,7 @@ def test_Binh_and_Korn():
 
     # ### Solving the problem
 
-    solver = OptiBayesAlgSmoot(problem=my_prob)
+    solver = OptiBayesAlgSmoot(problem=my_prob, nb_start=10, nb_iter=1)
     res = solver.solve()
 
     # ### Plot results

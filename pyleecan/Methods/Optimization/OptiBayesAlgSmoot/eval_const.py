@@ -1,7 +1,7 @@
 import numpy as np
 
 
-def eval_const(solver, constraint, input_x):
+def eval_const(self, constraint, input_x):
     """
     Evaluate the constraint at given points x
     """
@@ -9,11 +9,11 @@ def eval_const(solver, constraint, input_x):
 
     for x in input_x:
         i = 0
-        for var in solver.problem.design_var:
-            var.setter(solver.problem.simu, x[i])
+        for var in self.problem.design_var:
+            var.setter(self.xoutput.simu, x[i])
             i += 1
 
-        const_value = constraint.get_variable(solver.problem)
+        const_value = constraint.get_variable(self.xoutput)
         if constraint.type_const == "<=":
             constraint_values.append(const_value - constraint.value)
         elif constraint.type_const == ">=":
