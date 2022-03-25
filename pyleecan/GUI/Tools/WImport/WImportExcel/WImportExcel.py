@@ -1,18 +1,19 @@
 from os.path import isfile
 
-import matplotlib.pyplot as plt
+import numpy
+import re
 from pandas import ExcelFile, read_excel
 from PySide2.QtCore import Signal
-from PySide2.QtWidgets import QMessageBox, QWidget
+from PySide2.QtWidgets import QMessageBox, QDialog
 
 from .....Classes.ImportMatrixVal import ImportMatrixVal
 from .....Classes.ImportMatrixXls import ImportMatrixXls
-from .....Functions.Plot.set_plot_gui_icon import set_plot_gui_icon
-from .....GUI.Tools.WImport.WImportExcel.Gen_WImportExcel import Gen_WImportExcel
-from .....GUI.Tools.WTableData.DTableData import DTableData
+from .....GUI.Tools.WImport.WImportExcel.Ui_WImportExcel import Ui_WImportExcel
+
+pattern_validation_input = re.compile(r"[a-zA-Z]{1,}\d+:[a-zA-Z]{1,}\d+")
 
 
-class WImportExcel(Gen_WImportExcel, QWidget):
+class WImportExcel(Ui_WImportExcel, QDialog):
     """Widget to define an ImportMatrixXls"""
 
     import_name = "Import from Excel"
@@ -20,7 +21,16 @@ class WImportExcel(Gen_WImportExcel, QWidget):
     saveNeeded = Signal()
     dataTypeChanged = Signal()
 
-    def __init__(self, parent=None, data=None, plot_title=None, expected_shape=None):
+    def __init__(
+        self,
+        parent=None,
+        data=None,
+        plot_title=None,
+        expected_shape=None,
+        load_path=None,
+        nb_cols=None,
+        headers=None,
+    ):
         """Initialization of the widget
 
         Parameters
@@ -31,10 +41,17 @@ class WImportExcel(Gen_WImportExcel, QWidget):
             Name of the imported data
         expected_shape : list
             List to enforce a shape, [None, 2] enforce 2D matrix with 2 columns
+        load_path : str
+            Path of the excel file
+        nb_cols : int
+            Number of max columns in the table
+        headers : str
+            If specified, the user will be able to choose the order of the units for the plot
         """
-        QWidget.__init__(self, parent=parent)
+        QDialog.__init__(self, parent)
         self.setupUi(self)
-
+        self.setMaximumHeight(300)
+        self.setMaximumWidth(300)
         if data is None or not isinstance(data, ImportMatrixXls):
             self.data = ImportMatrixXls()
         else:
@@ -42,47 +59,41 @@ class WImportExcel(Gen_WImportExcel, QWidget):
         self.plot_title = plot_title
         self.expected_shape = expected_shape
         self.tab_window = None  # For table popup
+        self.load_path = load_path
+        self.int_row_list = None
+        self.cols = None
+        self.headers = headers
+        self.datas = None
+        self.b_ok.setEnabled(False)
 
-        # Not used yet
-        self.g_axe1.hide()
-        self.g_axe2.hide()
+        if nb_cols == 2:
+            self.c_order.setHidden(False)
+            self.c_order.setItemText(0, headers[0])
+            self.c_order.setItemText(1, headers[1])
+            self.in_order.setHidden(False)
+        else:
+            self.c_order.setHidden(True)
+            self.in_order.setHidden(True)
 
-        # Setup Path selector
-        self.w_file_path.is_file = True
-        self.w_file_path.obj = self.data
-        self.w_file_path.verbose_name = "Excel file path"
-        self.w_file_path.param_name = "file_path"
-        self.w_file_path.extension = "Excel File (*.xls *.xlsx)"
         # Display current state of ImportMatrixXls
         self.update()
 
         # Connect the slot/signal
-        self.w_file_path.pathChanged.connect(self.update)
         self.c_sheet.currentIndexChanged.connect(self.set_sheet)
-        self.le_range.editingFinished.connect(self.set_range)
-        self.b_plot.clicked.connect(self.s_plot)
-        self.b_tab.clicked.connect(self.s_table)
-        self.b_convert.clicked.connect(self.s_convert)
+        self.le_range.textChanged.connect(self.set_range)
+        self.b_ok.clicked.connect(self.save)
+        self.b_cancel.clicked.connect(self.cancel)
 
     def update(self):
         """Fill the widget with the current value of the data"""
-        self.w_file_path.update()
         self.set_sheet_list()
         self.le_range.setText(self.data.usecols)
-        if is_excel_file(self.data.file_path):
-            self.b_plot.setEnabled(True)
-            self.b_tab.setEnabled(True)
-            self.b_convert.setEnabled(True)
-        else:
-            self.b_plot.setEnabled(False)
-            self.b_tab.setEnabled(False)
-            self.b_convert.setEnabled(False)
 
     def set_sheet_list(self):
         """Complete the combobox with the sheet name from the Excel file"""
-        if is_excel_file(self.data.file_path):
+        if is_excel_file(self.load_path):
             # Get Sheet names
-            xls_file = ExcelFile(self.data.file_path)
+            xls_file = ExcelFile(self.load_path)
             # Disable combobox if only one sheet
             if len(xls_file.sheet_names) > 1:
                 self.c_sheet.setEnabled(True)
@@ -112,40 +123,16 @@ class WImportExcel(Gen_WImportExcel, QWidget):
 
     def set_range(self):
         """Change the range of data selected"""
-        self.data.usecols = self.le_range.text()
-        if self.data.usecols == "":
-            self.data.usecols = None
-
-    def s_table(self):
-        """display the data in a table"""
-        try:
-            data = self.data.get_data()
-        except Exception as e:
-            QMessageBox.critical(self, self.tr("Error"), str(e))
-            return
-        self.tab_window = DTableData(data=data, title=self.plot_title)
-        self.tab_window.show()
-
-    def s_plot(self):
-        """display the data in a plot"""
-        try:
-            data = self.data.get_data()
-        except Exception as e:
-            QMessageBox.critical(self, self.tr("Error"), str(e))
-            return
-        if len(data.shape) == 2 and data.shape[0] == 2:
-            # Data in line
-            fig, axes = plt.subplots()
-            axes.plot(data[0, :], data[1, :])
-            fig.show()
-        elif len(data.shape) == 2 and data.shape[1] == 2:
-            # Data in column
-            fig, axes = plt.subplots()
-            axes.plot(data[:, 0], data[:, 1])
-            fig.show()
-        if self.plot_title is not None:
-            fig.canvas.manager.set_window_title(self.plot_title)
-        set_plot_gui_icon()
+        if pattern_validation_input.match(self.le_range.text()) is not None:
+            self.b_ok.setEnabled(True)
+            pattern_row = r"\d+"
+            pattern_cols = r"[a-zA-Z]{1,}"
+            str_row_list = re.findall(pattern_row, self.le_range.text())
+            self.int_row_list = list(map(int, str_row_list))
+            str_col_list = re.findall(pattern_cols, self.le_range.text())
+            self.cols = str_col_list[0].upper() + ":" + str_col_list[1].upper()
+        else:
+            self.b_ok.setEnabled(False)
 
     def s_convert(self):
         """Convert data to ImportMatrixVal"""
@@ -156,6 +143,29 @@ class WImportExcel(Gen_WImportExcel, QWidget):
             return
         self.data = ImportMatrixVal(value=data)
         self.dataTypeChanged.emit()
+
+    def save(self):
+        """Update the data before closing"""
+        skipped_rows = self.int_row_list[0] - 1
+        data_excel = read_excel(
+            self.load_path,
+            sheet_name=self.c_sheet.currentText(),
+            skiprows=skipped_rows,
+            nrows=self.int_row_list[1] - skipped_rows,
+            usecols=self.cols,
+            header=None,
+        )
+        self.datas = data_excel.values
+        if self.c_order.currentIndex() == 1:
+            self.data_reversed = list()
+            for single_point in data_excel.values:
+                self.data_reversed.append(single_point[::-1])  # Reverse column
+            self.datas = numpy.array(self.data_reversed)
+        self.accept()
+
+    def cancel(self):
+        """Close"""
+        self.close()
 
 
 def is_excel_file(file_path):

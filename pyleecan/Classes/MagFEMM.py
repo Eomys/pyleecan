@@ -149,7 +149,7 @@ class MagFEMM(Magnetics):
         nb_worker=1,
         Rag_enforced=None,
         is_set_previous=True,
-        is_fast_draw=False,
+        is_fast_draw=True,
         is_remove_slotS=False,
         is_remove_slotR=False,
         is_remove_ventS=False,
@@ -167,6 +167,7 @@ class MagFEMM(Magnetics):
         Nslices_enforced=None,
         type_distribution_enforced=None,
         is_current_harm=True,
+        T_mag=20,
         init_dict=None,
         init_str=None,
     ):
@@ -253,6 +254,8 @@ class MagFEMM(Magnetics):
                 type_distribution_enforced = init_dict["type_distribution_enforced"]
             if "is_current_harm" in list(init_dict.keys()):
                 is_current_harm = init_dict["is_current_harm"]
+            if "T_mag" in list(init_dict.keys()):
+                T_mag = init_dict["T_mag"]
         # Set the properties (value check and convertion are done in setter)
         self.Kmesh_fineness = Kmesh_fineness
         self.Kgeo_fineness = Kgeo_fineness
@@ -290,6 +293,7 @@ class MagFEMM(Magnetics):
             Nslices_enforced=Nslices_enforced,
             type_distribution_enforced=type_distribution_enforced,
             is_current_harm=is_current_harm,
+            T_mag=T_mag,
         )
         # The class is frozen (in Magnetics init), for now it's impossible to
         # add new properties

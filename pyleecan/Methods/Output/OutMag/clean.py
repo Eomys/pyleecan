@@ -17,8 +17,11 @@ def clean(self, clean_level=1):
     # keep all outputs
 
     if clean_level == 5:  # LUT
+        # Keep B, Tem_slice, Phi_wind_slice
         self.meshsolution = None
-        self.Phi_wind_stator = None  # Use Phi_wind
+        self.Tem = None
+        self.Phi_wind = None
+        self.Phi_wind_stator = None
         self.emf = None
         self.internal = None
         self.axes_dict = None
@@ -33,8 +36,10 @@ def clean(self, clean_level=1):
         self.B = None
 
     if clean_level > 2:
-        # clean airgap flux density
+        # clean Tem/Phi_wind quantities
         self.Tem = None
+        self.Tem_slice = None
+        self.Phi_wind_slice = None
         self.Phi_wind_stator = None
         self.Phi_wind = None
         self.emf = None

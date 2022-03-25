@@ -64,7 +64,6 @@ class WImport(Ui_WImport, QWidget):
 
     def set_import_widget(self):
         """Update the import widget
-
         Parameters
         ----------
         self : WImport

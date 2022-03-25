@@ -47,8 +47,8 @@ def get_mesh_param(label_dict, FEMM_dict):
     # Lamination
     if LAM_LAB in label_dict["surf_type"]:
         if BORE_LAB in label_dict["surf_type"]:
-            mesh_dict["element_size"] = lam_mesh_dict["elementsize_slot"]
-            mesh_dict["meshsize"] = lam_mesh_dict["meshsize_slot"]
+            mesh_dict["element_size"] = FEMM_dict["mesh"]["elementsize_airgap"]
+            mesh_dict["meshsize"] = FEMM_dict["mesh"]["meshsize_airgap"]
         else:  # Yoke or other lines
             mesh_dict["element_size"] = lam_mesh_dict["elementsize_yoke"]
             mesh_dict["meshsize"] = lam_mesh_dict["meshsize_yoke"]

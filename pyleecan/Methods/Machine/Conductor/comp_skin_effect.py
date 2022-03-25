@@ -32,10 +32,7 @@ def comp_skin_effect(self, freq, T_op=20, T_ref=20, type_skin_effect=1):
 
     if type_skin_effect == 1:  # analytical calculations based on Pyrhonen
 
-        Tfact = self.comp_temperature_effect(T_op=T_op, T_ref=T_ref)
-        rhosw20 = self.cond_mat.elec.rho
-        rho = rhosw20 * Tfact
-        sigmar = 1 / rho
+        sigmar = self.cond_mat.elec.get_conductivity(T_op=T_op, T_ref=T_ref)
         mu0 = 4 * pi * 1e-7
         ws = 2 * pi * freq
         Slot = self.parent.parent.slot

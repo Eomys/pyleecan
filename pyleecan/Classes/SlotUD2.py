@@ -49,7 +49,7 @@ from ._check import InitUnKnowClassError
 
 
 class SlotUD2(Slot):
-    """ "User defined" Slot from a line list and a surface"""
+    """"User defined" Slot from a line list and a surface"""
 
     VERSION = 1
 

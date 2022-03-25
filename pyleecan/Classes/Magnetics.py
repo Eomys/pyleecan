@@ -111,6 +111,7 @@ class Magnetics(FrozenClass):
         Nslices_enforced=None,
         type_distribution_enforced=None,
         is_current_harm=True,
+        T_mag=20,
         init_dict=None,
         init_str=None,
     ):
@@ -163,6 +164,8 @@ class Magnetics(FrozenClass):
                 type_distribution_enforced = init_dict["type_distribution_enforced"]
             if "is_current_harm" in list(init_dict.keys()):
                 is_current_harm = init_dict["is_current_harm"]
+            if "T_mag" in list(init_dict.keys()):
+                T_mag = init_dict["T_mag"]
         # Set the properties (value check and convertion are done in setter)
         self.parent = None
         self.is_remove_slotS = is_remove_slotS
@@ -182,6 +185,7 @@ class Magnetics(FrozenClass):
         self.Nslices_enforced = Nslices_enforced
         self.type_distribution_enforced = type_distribution_enforced
         self.is_current_harm = is_current_harm
+        self.T_mag = T_mag
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -226,6 +230,7 @@ class Magnetics(FrozenClass):
             + linesep
         )
         Magnetics_str += "is_current_harm = " + str(self.is_current_harm) + linesep
+        Magnetics_str += "T_mag = " + str(self.T_mag) + linesep
         return Magnetics_str
 
     def __eq__(self, other):
@@ -266,6 +271,8 @@ class Magnetics(FrozenClass):
         if other.type_distribution_enforced != self.type_distribution_enforced:
             return False
         if other.is_current_harm != self.is_current_harm:
+            return False
+        if other.T_mag != self.T_mag:
             return False
         return True
 
@@ -319,6 +326,8 @@ class Magnetics(FrozenClass):
             diff_list.append(name + ".type_distribution_enforced")
         if other._is_current_harm != self._is_current_harm:
             diff_list.append(name + ".is_current_harm")
+        if other._T_mag != self._T_mag:
+            diff_list.append(name + ".T_mag")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -344,6 +353,7 @@ class Magnetics(FrozenClass):
         S += getsizeof(self.Nslices_enforced)
         S += getsizeof(self.type_distribution_enforced)
         S += getsizeof(self.is_current_harm)
+        S += getsizeof(self.T_mag)
         return S
 
     def as_dict(self, type_handle_ndarray=0, keep_function=False, **kwargs):
@@ -382,6 +392,7 @@ class Magnetics(FrozenClass):
         Magnetics_dict["Nslices_enforced"] = self.Nslices_enforced
         Magnetics_dict["type_distribution_enforced"] = self.type_distribution_enforced
         Magnetics_dict["is_current_harm"] = self.is_current_harm
+        Magnetics_dict["T_mag"] = self.T_mag
         # The class name is added to the dict for deserialisation purpose
         Magnetics_dict["__class__"] = "Magnetics"
         return Magnetics_dict
@@ -407,6 +418,7 @@ class Magnetics(FrozenClass):
         self.Nslices_enforced = None
         self.type_distribution_enforced = None
         self.is_current_harm = None
+        self.T_mag = None
 
     def _get_is_remove_slotS(self):
         """getter of is_remove_slotS"""
@@ -736,5 +748,23 @@ class Magnetics(FrozenClass):
         doc=u"""0 To compute only the airgap flux from fundamental current harmonics
 
         :Type: bool
+        """,
+    )
+
+    def _get_T_mag(self):
+        """getter of T_mag"""
+        return self._T_mag
+
+    def _set_T_mag(self, value):
+        """setter of T_mag"""
+        check_var("T_mag", value, "float")
+        self._T_mag = value
+
+    T_mag = property(
+        fget=_get_T_mag,
+        fset=_set_T_mag,
+        doc=u"""Permanent magnet temperature to adapt magnet remanent flux density
+
+        :Type: float
         """,
     )

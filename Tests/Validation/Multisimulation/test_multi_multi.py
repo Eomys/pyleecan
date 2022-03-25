@@ -7,13 +7,11 @@ from numpy import exp, linspace, ones, pi, sqrt, zeros
 from pyleecan.Classes.DataKeeper import DataKeeper
 from pyleecan.Classes.DriveWave import DriveWave
 from pyleecan.Classes.EEC_PMSM import EEC_PMSM
-from pyleecan.Classes.FluxLinkFEMM import FluxLinkFEMM
 from pyleecan.Classes.ForceMT import ForceMT
 from pyleecan.Classes.ImportGenMatrixSin import ImportGenMatrixSin
 from pyleecan.Classes.ImportGenVectLin import ImportGenVectLin
 from pyleecan.Classes.ImportGenVectSin import ImportGenVectSin
 from pyleecan.Classes.ImportMatrixVal import ImportMatrixVal
-from pyleecan.Classes.IndMagFEMM import IndMagFEMM
 from pyleecan.Classes.InputCurrent import InputCurrent
 from pyleecan.Classes.MagFEMM import MagFEMM
 from pyleecan.Classes.OPdq import OPdq
