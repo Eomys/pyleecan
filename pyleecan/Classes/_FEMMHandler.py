@@ -1,8 +1,9 @@
-import win32com.client
 import os
-from six import string_types
-import pythoncom
 from math import exp
+
+import pythoncom
+import win32com.client
+from six import string_types
 
 
 class _FEMMHandler(object):

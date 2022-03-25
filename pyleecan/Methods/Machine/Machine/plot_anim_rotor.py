@@ -7,7 +7,7 @@ from matplotlib.patches import Polygon, Circle
 
 def plot_anim_rotor(self, Nframe, Tanim, Nrot=1, is_loop=True):
     """Plot the machine with an animation of the rotor
-    (inner rotor for now ?)
+    (Internal Rotor for now ?)
 
     Parameters
     ----------

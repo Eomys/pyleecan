@@ -63,8 +63,6 @@ try:
 except ImportError:
     Toolbox = ImportError
 from ._check import InitUnKnowClassError
-from .OptiProblem import OptiProblem
-from .XOutput import XOutput
 
 
 class OptiGenAlgNsga2Deap(OptiGenAlg):
@@ -317,6 +315,8 @@ class OptiGenAlgNsga2Deap(OptiGenAlg):
 
     def _set_toolbox(self, value):
         """setter of toolbox"""
+        if value == -1:
+            value = Toolbox()
         check_var("toolbox", value, "Toolbox")
         self._toolbox = value
 

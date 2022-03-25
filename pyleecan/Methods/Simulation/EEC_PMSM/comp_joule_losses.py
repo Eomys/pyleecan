@@ -1,23 +1,28 @@
-# -*- coding: utf-8 -*-
-
-
-def comp_joule_losses(self, output):
+def comp_joule_losses(self, out_dict, machine):
     """Compute the electrical Joule losses
 
     Parameters
     ----------
-    self : Electrical
-        an Electrical object
-    output : Output
-        an Output object
+    self : EEC_PMSM
+        an EEC_PMSM object
+    out_dict : dict
+        Dict containing all magnetic quantities that have been calculated in comp_parameters of EEC
+    machine : Machine
+        a Machine object
+
+    Returns
+    ------
+    out_dict : dict
+        Dict containing all magnetic quantities that have been calculated in EEC
     """
 
-    qs = output.simu.machine.stator.winding.qs
-    Id = output.elec.Id_ref
-    Iq = output.elec.Iq_ref
-    R = self.parameters["R20"]
+    qs = machine.stator.winding.qs
+    Id, Iq = out_dict["Id"], out_dict["Iq"]
+    R1 = self.R1
 
     # Id and Iq are in RMS
-    Pj_losses = qs * R * (Id ** 2 + Iq ** 2)
+    Pj_losses = qs * R1 * (Id ** 2 + Iq ** 2)
 
-    output.elec.Pj_losses = Pj_losses
+    out_dict["Pj_losses"] = Pj_losses
+
+    return out_dict

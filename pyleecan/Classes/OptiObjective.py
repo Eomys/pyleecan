@@ -24,7 +24,7 @@ from ._check import InitUnKnowClassError
 
 
 class OptiObjective(DataKeeper):
-    """Class to distinguish normal DataKeeper from optimization objectives"""
+    """Class to distinguish normal DataKeeper from optimization objectives """
 
     VERSION = 1
 
@@ -43,6 +43,7 @@ class OptiObjective(DataKeeper):
         error_keeper=None,
         result=-1,
         result_ref=None,
+        physic=None,
         init_dict=None,
         init_str=None,
     ):
@@ -75,6 +76,8 @@ class OptiObjective(DataKeeper):
                 result = init_dict["result"]
             if "result_ref" in list(init_dict.keys()):
                 result_ref = init_dict["result_ref"]
+            if "physic" in list(init_dict.keys()):
+                physic = init_dict["physic"]
         # Set the properties (value check and convertion are done in setter)
         # Call DataKeeper init
         super(OptiObjective, self).__init__(
@@ -85,6 +88,7 @@ class OptiObjective(DataKeeper):
             error_keeper=error_keeper,
             result=result,
             result_ref=result_ref,
+            physic=physic,
         )
         # The class is frozen (in DataKeeper init), for now it's impossible to
         # add new properties

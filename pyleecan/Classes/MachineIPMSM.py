@@ -29,10 +29,6 @@ except ImportError as error:
 
 
 from ._check import InitUnKnowClassError
-from .LamHole import LamHole
-from .LamSlotWind import LamSlotWind
-from .Frame import Frame
-from .Shaft import Shaft
 
 
 class MachineIPMSM(MachineSync):
@@ -253,13 +249,20 @@ class MachineIPMSM(MachineSync):
     def _set_rotor(self, value):
         """setter of rotor"""
         if isinstance(value, str):  # Load from file
-            value = load_init_dict(value)[1]
+            try:
+                value = load_init_dict(value)[1]
+            except Exception as e:
+                self.get_logger().error(
+                    "Error while loading " + value + ", setting None instead"
+                )
+                value = None
         if isinstance(value, dict) and "__class__" in value:
             class_obj = import_class(
                 "pyleecan.Classes", value.get("__class__"), "rotor"
             )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
+            LamHole = import_class("pyleecan.Classes", "LamHole", "rotor")
             value = LamHole()
         check_var("rotor", value, "LamHole")
         self._rotor = value
@@ -283,15 +286,22 @@ class MachineIPMSM(MachineSync):
     def _set_stator(self, value):
         """setter of stator"""
         if isinstance(value, str):  # Load from file
-            value = load_init_dict(value)[1]
+            try:
+                value = load_init_dict(value)[1]
+            except Exception as e:
+                self.get_logger().error(
+                    "Error while loading " + value + ", setting None instead"
+                )
+                value = None
         if isinstance(value, dict) and "__class__" in value:
             class_obj = import_class(
                 "pyleecan.Classes", value.get("__class__"), "stator"
             )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
-            value = LamSlotWind()
-        check_var("stator", value, "LamSlotWind")
+            Lamination = import_class("pyleecan.Classes", "Lamination", "stator")
+            value = Lamination()
+        check_var("stator", value, "Lamination")
         self._stator = value
 
         if self._stator is not None:
@@ -302,6 +312,6 @@ class MachineIPMSM(MachineSync):
         fset=_set_stator,
         doc=u"""Machine's Stator
 
-        :Type: LamSlotWind
+        :Type: Lamination
         """,
     )

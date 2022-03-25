@@ -12,17 +12,17 @@ def get_group(self, group_names):
     """Return all attributes of a MeshSolution object with only the cells, nodes
     and corresponding solutions of the group.
 
-     Parameters
-     ----------
-     self : MeshSolution
-         an MeshSolution object
-     group_name : [str]
-         list of the name of the group(s) (e.g. ["stator"])
+    Parameters
+    ----------
+    self : MeshSolution
+        an MeshSolution object
+    group_name : [str]
+        list of the name of the group(s) (e.g. ["stator"])
 
-     Returns
-     -------
-     meshsol_grp: MeshSolution
-         a new MeshSolution object which is subpart of self
+    Returns
+    -------
+    meshsol_grp: MeshSolution
+        a new MeshSolution object which is subpart of self
     """
 
     is_same_mesh = self.is_same_mesh

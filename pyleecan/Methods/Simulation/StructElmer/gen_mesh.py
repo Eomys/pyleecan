@@ -25,7 +25,7 @@ def gen_mesh(self, output):
     """
     # readability
     machine = output.simu.machine
-    _, _, sym_r, is_antipert_r = machine.comp_periodicity()
+    sym_r, is_antipert_r = machine.comp_periodicity_spatial()
 
     sym_r = sym_r * (1 + is_antipert_r)
 

@@ -32,9 +32,13 @@ try:
 except ImportError as error:
     get_slice_model = error
 
+try:
+    from ..Methods.Simulation.Magnetics.comp_I_mag import comp_I_mag
+except ImportError as error:
+    comp_I_mag = error
+
 
 from ._check import InitUnKnowClassError
-from .SliceModel import SliceModel
 
 
 class Magnetics(FrozenClass):
@@ -73,6 +77,15 @@ class Magnetics(FrozenClass):
         )
     else:
         get_slice_model = get_slice_model
+    # cf Methods.Simulation.Magnetics.comp_I_mag
+    if isinstance(comp_I_mag, ImportError):
+        comp_I_mag = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use Magnetics method comp_I_mag: " + str(comp_I_mag))
+            )
+        )
+    else:
+        comp_I_mag = comp_I_mag
     # save and copy methods are available in all object
     save = save
     copy = copy
@@ -83,7 +96,8 @@ class Magnetics(FrozenClass):
         self,
         is_remove_slotS=False,
         is_remove_slotR=False,
-        is_remove_vent=False,
+        is_remove_ventS=False,
+        is_remove_ventR=False,
         is_mmfs=True,
         is_mmfr=True,
         type_BH_stator=0,
@@ -96,6 +110,8 @@ class Magnetics(FrozenClass):
         Slice_enforced=None,
         Nslices_enforced=None,
         type_distribution_enforced=None,
+        is_current_harm=True,
+        T_mag=20,
         init_dict=None,
         init_str=None,
     ):
@@ -118,8 +134,10 @@ class Magnetics(FrozenClass):
                 is_remove_slotS = init_dict["is_remove_slotS"]
             if "is_remove_slotR" in list(init_dict.keys()):
                 is_remove_slotR = init_dict["is_remove_slotR"]
-            if "is_remove_vent" in list(init_dict.keys()):
-                is_remove_vent = init_dict["is_remove_vent"]
+            if "is_remove_ventS" in list(init_dict.keys()):
+                is_remove_ventS = init_dict["is_remove_ventS"]
+            if "is_remove_ventR" in list(init_dict.keys()):
+                is_remove_ventR = init_dict["is_remove_ventR"]
             if "is_mmfs" in list(init_dict.keys()):
                 is_mmfs = init_dict["is_mmfs"]
             if "is_mmfr" in list(init_dict.keys()):
@@ -144,11 +162,16 @@ class Magnetics(FrozenClass):
                 Nslices_enforced = init_dict["Nslices_enforced"]
             if "type_distribution_enforced" in list(init_dict.keys()):
                 type_distribution_enforced = init_dict["type_distribution_enforced"]
+            if "is_current_harm" in list(init_dict.keys()):
+                is_current_harm = init_dict["is_current_harm"]
+            if "T_mag" in list(init_dict.keys()):
+                T_mag = init_dict["T_mag"]
         # Set the properties (value check and convertion are done in setter)
         self.parent = None
         self.is_remove_slotS = is_remove_slotS
         self.is_remove_slotR = is_remove_slotR
-        self.is_remove_vent = is_remove_vent
+        self.is_remove_ventS = is_remove_ventS
+        self.is_remove_ventR = is_remove_ventR
         self.is_mmfs = is_mmfs
         self.is_mmfr = is_mmfr
         self.type_BH_stator = type_BH_stator
@@ -161,6 +184,8 @@ class Magnetics(FrozenClass):
         self.Slice_enforced = Slice_enforced
         self.Nslices_enforced = Nslices_enforced
         self.type_distribution_enforced = type_distribution_enforced
+        self.is_current_harm = is_current_harm
+        self.T_mag = T_mag
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -175,7 +200,8 @@ class Magnetics(FrozenClass):
             Magnetics_str += "parent = " + str(type(self.parent)) + " object" + linesep
         Magnetics_str += "is_remove_slotS = " + str(self.is_remove_slotS) + linesep
         Magnetics_str += "is_remove_slotR = " + str(self.is_remove_slotR) + linesep
-        Magnetics_str += "is_remove_vent = " + str(self.is_remove_vent) + linesep
+        Magnetics_str += "is_remove_ventS = " + str(self.is_remove_ventS) + linesep
+        Magnetics_str += "is_remove_ventR = " + str(self.is_remove_ventR) + linesep
         Magnetics_str += "is_mmfs = " + str(self.is_mmfs) + linesep
         Magnetics_str += "is_mmfr = " + str(self.is_mmfr) + linesep
         Magnetics_str += "type_BH_stator = " + str(self.type_BH_stator) + linesep
@@ -203,6 +229,8 @@ class Magnetics(FrozenClass):
             + '"'
             + linesep
         )
+        Magnetics_str += "is_current_harm = " + str(self.is_current_harm) + linesep
+        Magnetics_str += "T_mag = " + str(self.T_mag) + linesep
         return Magnetics_str
 
     def __eq__(self, other):
@@ -214,7 +242,9 @@ class Magnetics(FrozenClass):
             return False
         if other.is_remove_slotR != self.is_remove_slotR:
             return False
-        if other.is_remove_vent != self.is_remove_vent:
+        if other.is_remove_ventS != self.is_remove_ventS:
+            return False
+        if other.is_remove_ventR != self.is_remove_ventR:
             return False
         if other.is_mmfs != self.is_mmfs:
             return False
@@ -240,6 +270,10 @@ class Magnetics(FrozenClass):
             return False
         if other.type_distribution_enforced != self.type_distribution_enforced:
             return False
+        if other.is_current_harm != self.is_current_harm:
+            return False
+        if other.T_mag != self.T_mag:
+            return False
         return True
 
     def compare(self, other, name="self", ignore_list=None):
@@ -254,8 +288,10 @@ class Magnetics(FrozenClass):
             diff_list.append(name + ".is_remove_slotS")
         if other._is_remove_slotR != self._is_remove_slotR:
             diff_list.append(name + ".is_remove_slotR")
-        if other._is_remove_vent != self._is_remove_vent:
-            diff_list.append(name + ".is_remove_vent")
+        if other._is_remove_ventS != self._is_remove_ventS:
+            diff_list.append(name + ".is_remove_ventS")
+        if other._is_remove_ventR != self._is_remove_ventR:
+            diff_list.append(name + ".is_remove_ventR")
         if other._is_mmfs != self._is_mmfs:
             diff_list.append(name + ".is_mmfs")
         if other._is_mmfr != self._is_mmfr:
@@ -288,6 +324,10 @@ class Magnetics(FrozenClass):
             diff_list.append(name + ".Nslices_enforced")
         if other._type_distribution_enforced != self._type_distribution_enforced:
             diff_list.append(name + ".type_distribution_enforced")
+        if other._is_current_harm != self._is_current_harm:
+            diff_list.append(name + ".is_current_harm")
+        if other._T_mag != self._T_mag:
+            diff_list.append(name + ".T_mag")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -298,7 +338,8 @@ class Magnetics(FrozenClass):
         S = 0  # Full size of the object
         S += getsizeof(self.is_remove_slotS)
         S += getsizeof(self.is_remove_slotR)
-        S += getsizeof(self.is_remove_vent)
+        S += getsizeof(self.is_remove_ventS)
+        S += getsizeof(self.is_remove_ventR)
         S += getsizeof(self.is_mmfs)
         S += getsizeof(self.is_mmfr)
         S += getsizeof(self.type_BH_stator)
@@ -311,6 +352,8 @@ class Magnetics(FrozenClass):
         S += getsizeof(self.Slice_enforced)
         S += getsizeof(self.Nslices_enforced)
         S += getsizeof(self.type_distribution_enforced)
+        S += getsizeof(self.is_current_harm)
+        S += getsizeof(self.T_mag)
         return S
 
     def as_dict(self, type_handle_ndarray=0, keep_function=False, **kwargs):
@@ -327,7 +370,8 @@ class Magnetics(FrozenClass):
         Magnetics_dict = dict()
         Magnetics_dict["is_remove_slotS"] = self.is_remove_slotS
         Magnetics_dict["is_remove_slotR"] = self.is_remove_slotR
-        Magnetics_dict["is_remove_vent"] = self.is_remove_vent
+        Magnetics_dict["is_remove_ventS"] = self.is_remove_ventS
+        Magnetics_dict["is_remove_ventR"] = self.is_remove_ventR
         Magnetics_dict["is_mmfs"] = self.is_mmfs
         Magnetics_dict["is_mmfr"] = self.is_mmfr
         Magnetics_dict["type_BH_stator"] = self.type_BH_stator
@@ -347,6 +391,8 @@ class Magnetics(FrozenClass):
             )
         Magnetics_dict["Nslices_enforced"] = self.Nslices_enforced
         Magnetics_dict["type_distribution_enforced"] = self.type_distribution_enforced
+        Magnetics_dict["is_current_harm"] = self.is_current_harm
+        Magnetics_dict["T_mag"] = self.T_mag
         # The class name is added to the dict for deserialisation purpose
         Magnetics_dict["__class__"] = "Magnetics"
         return Magnetics_dict
@@ -356,7 +402,8 @@ class Magnetics(FrozenClass):
 
         self.is_remove_slotS = None
         self.is_remove_slotR = None
-        self.is_remove_vent = None
+        self.is_remove_ventS = None
+        self.is_remove_ventR = None
         self.is_mmfs = None
         self.is_mmfr = None
         self.type_BH_stator = None
@@ -370,6 +417,8 @@ class Magnetics(FrozenClass):
             self.Slice_enforced._set_None()
         self.Nslices_enforced = None
         self.type_distribution_enforced = None
+        self.is_current_harm = None
+        self.T_mag = None
 
     def _get_is_remove_slotS(self):
         """getter of is_remove_slotS"""
@@ -407,19 +456,37 @@ class Magnetics(FrozenClass):
         """,
     )
 
-    def _get_is_remove_vent(self):
-        """getter of is_remove_vent"""
-        return self._is_remove_vent
+    def _get_is_remove_ventS(self):
+        """getter of is_remove_ventS"""
+        return self._is_remove_ventS
 
-    def _set_is_remove_vent(self, value):
-        """setter of is_remove_vent"""
-        check_var("is_remove_vent", value, "bool")
-        self._is_remove_vent = value
+    def _set_is_remove_ventS(self, value):
+        """setter of is_remove_ventS"""
+        check_var("is_remove_ventS", value, "bool")
+        self._is_remove_ventS = value
 
-    is_remove_vent = property(
-        fget=_get_is_remove_vent,
-        fset=_set_is_remove_vent,
-        doc=u"""1 to artificially remove the ventilations duct
+    is_remove_ventS = property(
+        fget=_get_is_remove_ventS,
+        fset=_set_is_remove_ventS,
+        doc=u"""1 to artificially remove the ventilations duct of the stator
+
+        :Type: bool
+        """,
+    )
+
+    def _get_is_remove_ventR(self):
+        """getter of is_remove_ventR"""
+        return self._is_remove_ventR
+
+    def _set_is_remove_ventR(self, value):
+        """setter of is_remove_ventR"""
+        check_var("is_remove_ventR", value, "bool")
+        self._is_remove_ventR = value
+
+    is_remove_ventR = property(
+        fget=_get_is_remove_ventR,
+        fset=_set_is_remove_ventR,
+        doc=u"""1 to artificially remove the ventilations duct of the rotor
 
         :Type: bool
         """,
@@ -513,7 +580,7 @@ class Magnetics(FrozenClass):
     is_periodicity_t = property(
         fget=_get_is_periodicity_t,
         fset=_set_is_periodicity_t,
-        doc=u"""True to compute only on one time periodicity (use periodicities defined in output.mag.Time)
+        doc=u"""True to compute only on one time periodicity (use periodicities defined in axes_dict[time])
 
         :Type: bool
         """,
@@ -531,7 +598,7 @@ class Magnetics(FrozenClass):
     is_periodicity_a = property(
         fget=_get_is_periodicity_a,
         fset=_set_is_periodicity_a,
-        doc=u"""True to compute only on one angle periodicity (use periodicities defined in output.mag.Angle)
+        doc=u"""True to compute only on one angle periodicity (use periodicities defined in axes_dict[angle])
 
         :Type: bool
         """,
@@ -598,13 +665,22 @@ class Magnetics(FrozenClass):
     def _set_Slice_enforced(self, value):
         """setter of Slice_enforced"""
         if isinstance(value, str):  # Load from file
-            value = load_init_dict(value)[1]
+            try:
+                value = load_init_dict(value)[1]
+            except Exception as e:
+                self.get_logger().error(
+                    "Error while loading " + value + ", setting None instead"
+                )
+                value = None
         if isinstance(value, dict) and "__class__" in value:
             class_obj = import_class(
                 "pyleecan.Classes", value.get("__class__"), "Slice_enforced"
             )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
+            SliceModel = import_class(
+                "pyleecan.Classes", "SliceModel", "Slice_enforced"
+            )
             value = SliceModel()
         check_var("Slice_enforced", value, "SliceModel")
         self._Slice_enforced = value
@@ -654,5 +730,41 @@ class Magnetics(FrozenClass):
         doc=u"""To enforce type of slice distribution to use for rotor skew if linear and continuous ("uniform", "gauss", "user-defined")
 
         :Type: str
+        """,
+    )
+
+    def _get_is_current_harm(self):
+        """getter of is_current_harm"""
+        return self._is_current_harm
+
+    def _set_is_current_harm(self, value):
+        """setter of is_current_harm"""
+        check_var("is_current_harm", value, "bool")
+        self._is_current_harm = value
+
+    is_current_harm = property(
+        fget=_get_is_current_harm,
+        fset=_set_is_current_harm,
+        doc=u"""0 To compute only the airgap flux from fundamental current harmonics
+
+        :Type: bool
+        """,
+    )
+
+    def _get_T_mag(self):
+        """getter of T_mag"""
+        return self._T_mag
+
+    def _set_T_mag(self, value):
+        """setter of T_mag"""
+        check_var("T_mag", value, "float")
+        self._T_mag = value
+
+    T_mag = property(
+        fget=_get_T_mag,
+        fset=_set_T_mag,
+        doc=u"""Permanent magnet temperature to adapt magnet remanent flux density
+
+        :Type: float
         """,
     )

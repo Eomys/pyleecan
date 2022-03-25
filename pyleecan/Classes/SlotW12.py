@@ -18,6 +18,11 @@ from .Slot import Slot
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
 try:
+    from ..Methods.Slot.SlotW12._comp_line_dict import _comp_line_dict
+except ImportError as error:
+    _comp_line_dict = error
+
+try:
     from ..Methods.Slot.SlotW12._comp_point_coordinate import _comp_point_coordinate
 except ImportError as error:
     _comp_point_coordinate = error
@@ -58,9 +63,19 @@ except ImportError as error:
     comp_surface_active = error
 
 try:
+    from ..Methods.Slot.SlotW12.comp_surface_opening import comp_surface_opening
+except ImportError as error:
+    comp_surface_opening = error
+
+try:
     from ..Methods.Slot.SlotW12.get_surface_active import get_surface_active
 except ImportError as error:
     get_surface_active = error
+
+try:
+    from ..Methods.Slot.SlotW12.get_surface_opening import get_surface_opening
+except ImportError as error:
+    get_surface_opening = error
 
 try:
     from ..Methods.Slot.SlotW12.plot_schematics import plot_schematics
@@ -77,6 +92,17 @@ class SlotW12(Slot):
     IS_SYMMETRICAL = 1
 
     # Check ImportError to remove unnecessary dependencies in unused method
+    # cf Methods.Slot.SlotW12._comp_line_dict
+    if isinstance(_comp_line_dict, ImportError):
+        _comp_line_dict = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use SlotW12 method _comp_line_dict: " + str(_comp_line_dict)
+                )
+            )
+        )
+    else:
+        _comp_line_dict = _comp_line_dict
     # cf Methods.Slot.SlotW12._comp_point_coordinate
     if isinstance(_comp_point_coordinate, ImportError):
         _comp_point_coordinate = property(
@@ -165,6 +191,18 @@ class SlotW12(Slot):
         )
     else:
         comp_surface_active = comp_surface_active
+    # cf Methods.Slot.SlotW12.comp_surface_opening
+    if isinstance(comp_surface_opening, ImportError):
+        comp_surface_opening = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use SlotW12 method comp_surface_opening: "
+                    + str(comp_surface_opening)
+                )
+            )
+        )
+    else:
+        comp_surface_opening = comp_surface_opening
     # cf Methods.Slot.SlotW12.get_surface_active
     if isinstance(get_surface_active, ImportError):
         get_surface_active = property(
@@ -177,6 +215,18 @@ class SlotW12(Slot):
         )
     else:
         get_surface_active = get_surface_active
+    # cf Methods.Slot.SlotW12.get_surface_opening
+    if isinstance(get_surface_opening, ImportError):
+        get_surface_opening = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use SlotW12 method get_surface_opening: "
+                    + str(get_surface_opening)
+                )
+            )
+        )
+    else:
+        get_surface_opening = get_surface_opening
     # cf Methods.Slot.SlotW12.plot_schematics
     if isinstance(plot_schematics, ImportError):
         plot_schematics = property(
@@ -195,7 +245,15 @@ class SlotW12(Slot):
     get_logger = get_logger
 
     def __init__(
-        self, H0=0.003, H1=0, R1=0.001, R2=0.001, Zs=36, init_dict=None, init_str=None
+        self,
+        H0=0.003,
+        H1=0,
+        R1=0.001,
+        R2=0.001,
+        Zs=36,
+        type_close=1,
+        init_dict=None,
+        init_str=None,
     ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
@@ -222,13 +280,15 @@ class SlotW12(Slot):
                 R2 = init_dict["R2"]
             if "Zs" in list(init_dict.keys()):
                 Zs = init_dict["Zs"]
+            if "type_close" in list(init_dict.keys()):
+                type_close = init_dict["type_close"]
         # Set the properties (value check and convertion are done in setter)
         self.H0 = H0
         self.H1 = H1
         self.R1 = R1
         self.R2 = R2
         # Call Slot init
-        super(SlotW12, self).__init__(Zs=Zs)
+        super(SlotW12, self).__init__(Zs=Zs, type_close=type_close)
         # The class is frozen (in Slot init), for now it's impossible to
         # add new properties
 

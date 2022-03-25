@@ -1,12 +1,5 @@
-# -*- coding: utf-8 -*-
-from numpy import array, linspace, pi
-import numpy as np
-from scipy.optimize import curve_fit, root_scalar
-
-
 def get_BH(self):
-    """
-    Return the B(H) curve of the material according to the Import object.
+    """Return the B(H) curve of the material according to the Import object.
     If there is no B(H) curve linear data are computed from mur_lin.
 
     Parameters

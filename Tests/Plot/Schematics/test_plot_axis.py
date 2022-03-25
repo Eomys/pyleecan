@@ -1,25 +1,21 @@
 from os.path import join
 
-import pytest
 import matplotlib.pyplot as plt
-from numpy import exp, pi, ones, array, zeros
-from numpy import argmax, cos, abs as np_abs, angle as np_angle
+import pytest
+from numpy import argmax, cos, abs as np_abs, angle as np_angle, exp, pi, array, zeros
+from pyleecan.Classes.OPdq import OPdq
 
-from pyleecan.definitions import config_dict
 from Tests import save_plot_path as save_path
-from pyleecan.Classes.Simu1 import Simu1
-from pyleecan.Classes.InputCurrent import InputCurrent
-from pyleecan.Classes.InputFlux import InputFlux
 from pyleecan.Classes.ImportGenVectLin import ImportGenVectLin
 from pyleecan.Classes.ImportMatrixVal import ImportMatrixVal
-from pyleecan.Classes.ImportMatlab import ImportMatlab
-
+from pyleecan.Classes.InputCurrent import InputCurrent
 from pyleecan.Classes.MagFEMM import MagFEMM
 from pyleecan.Classes.Output import Output
+from pyleecan.Classes.Simu1 import Simu1
 from pyleecan.Functions.load import load
 from pyleecan.Functions.Plot import dict_2D
 from pyleecan.definitions import DATA_DIR
-from pyleecan.Functions.init_fig import init_subplot
+from pyleecan.definitions import config_dict
 
 
 CURVE_COLORS = config_dict["PLOT"]["COLOR_DICT"]["CURVE_COLORS"]
@@ -216,9 +212,9 @@ def test_axis_LamWind():
     fig = plt.gcf()
     fig.savefig(join(save_path, "test_axis_LamWind.png"))
 
-    SCIM_001.stator.plot_mmf_unit(is_show_fig=False)
-    fig = plt.gcf()
-    fig.savefig(join(save_path, "test_axis_LamWind_mmf.png"))
+    SCIM_001.stator.plot_mmf_unit(
+        save_path=join(save_path, "test_axis_LamWind_mmf.png")
+    )
 
     # Plot maximum of the fundamental of the mmf
     MMF = SCIM_001.stator.comp_mmf_unit(Na=600, Nt=1)[0]
@@ -237,7 +233,7 @@ def test_axis_LamWind():
     mmf_waveform = magmax * cos(p * angle_rotor + phimax)
     ind_max = argmax(mmf_waveform)
     d_angle = angle_rotor[ind_max]
-    (per_a, _, _, _) = SCIM_001.stator.comp_periodicity()
+    per_a, _ = SCIM_001.stator.comp_periodicity_spatial()
     d_angle = d_angle % (2 * pi / per_a)
 
     fig = plt.figure("MMF fundamental")
@@ -252,7 +248,7 @@ def test_axis_LamWind():
 
     fig.savefig(join(save_path, "test_axis_LamWind_fund.png"))
 
-    simu = Simu1(name="test_flux", machine=SCIM_001)
+    simu = Simu1(name="test_axis_LamWind", machine=SCIM_001)
 
     # Definition of the enforced output of the electrical module
     N0 = 1500
@@ -264,8 +260,7 @@ def test_axis_LamWind():
     simu.input = InputCurrent(
         Is=Is,
         Ir=Ir,  # zero current for the rotor
-        N0=N0,
-        angle_rotor=None,  # Will be computed
+        OP=OPdq(N0=N0),
         Nt_tot=Nt_tot,
         Na_tot=Na_tot,
         angle_rotor_initial=0,

@@ -135,6 +135,13 @@ except ImportError as error:
     comp_point_ref = error
 
 try:
+    from ..Methods.Machine.Lamination.comp_periodicity_spatial import (
+        comp_periodicity_spatial,
+    )
+except ImportError as error:
+    comp_periodicity_spatial = error
+
+try:
     from ..Methods.Machine.Lamination.get_label import get_label
 except ImportError as error:
     get_label = error
@@ -144,13 +151,30 @@ try:
 except ImportError as error:
     get_yoke_side_line = error
 
+try:
+    from ..Methods.Machine.Lamination.get_notches_surf import get_notches_surf
+except ImportError as error:
+    get_notches_surf = error
+
+try:
+    from ..Methods.Machine.Lamination.comp_periodicity_duct_spatial import (
+        comp_periodicity_duct_spatial,
+    )
+except ImportError as error:
+    comp_periodicity_duct_spatial = error
+
+try:
+    from ..Methods.Machine.Lamination.get_surfaces_closing import get_surfaces_closing
+except ImportError as error:
+    get_surfaces_closing = error
+
+try:
+    from ..Methods.Machine.Lamination.comp_periodicity_geo import comp_periodicity_geo
+except ImportError as error:
+    comp_periodicity_geo = error
+
 
 from ._check import InitUnKnowClassError
-from .Material import Material
-from .Hole import Hole
-from .Notch import Notch
-from .Skew import Skew
-from .Bore import Bore
 
 
 class Lamination(FrozenClass):
@@ -410,6 +434,18 @@ class Lamination(FrozenClass):
         )
     else:
         comp_point_ref = comp_point_ref
+    # cf Methods.Machine.Lamination.comp_periodicity_spatial
+    if isinstance(comp_periodicity_spatial, ImportError):
+        comp_periodicity_spatial = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Lamination method comp_periodicity_spatial: "
+                    + str(comp_periodicity_spatial)
+                )
+            )
+        )
+    else:
+        comp_periodicity_spatial = comp_periodicity_spatial
     # cf Methods.Machine.Lamination.get_label
     if isinstance(get_label, ImportError):
         get_label = property(
@@ -431,6 +467,54 @@ class Lamination(FrozenClass):
         )
     else:
         get_yoke_side_line = get_yoke_side_line
+    # cf Methods.Machine.Lamination.get_notches_surf
+    if isinstance(get_notches_surf, ImportError):
+        get_notches_surf = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Lamination method get_notches_surf: "
+                    + str(get_notches_surf)
+                )
+            )
+        )
+    else:
+        get_notches_surf = get_notches_surf
+    # cf Methods.Machine.Lamination.comp_periodicity_duct_spatial
+    if isinstance(comp_periodicity_duct_spatial, ImportError):
+        comp_periodicity_duct_spatial = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Lamination method comp_periodicity_duct_spatial: "
+                    + str(comp_periodicity_duct_spatial)
+                )
+            )
+        )
+    else:
+        comp_periodicity_duct_spatial = comp_periodicity_duct_spatial
+    # cf Methods.Machine.Lamination.get_surfaces_closing
+    if isinstance(get_surfaces_closing, ImportError):
+        get_surfaces_closing = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Lamination method get_surfaces_closing: "
+                    + str(get_surfaces_closing)
+                )
+            )
+        )
+    else:
+        get_surfaces_closing = get_surfaces_closing
+    # cf Methods.Machine.Lamination.comp_periodicity_geo
+    if isinstance(comp_periodicity_geo, ImportError):
+        comp_periodicity_geo = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Lamination method comp_periodicity_geo: "
+                    + str(comp_periodicity_geo)
+                )
+            )
+        )
+    else:
+        comp_periodicity_geo = comp_periodicity_geo
     # save and copy methods are available in all object
     save = save
     copy = copy
@@ -851,7 +935,7 @@ class Lamination(FrozenClass):
     L1 = property(
         fget=_get_L1,
         fset=_set_L1,
-        doc=u"""Lamination stack active length [m] without radial ventilation airducts but including insulation layers between lamination sheets
+        doc=u"""Lamination stack active length without radial ventilation airducts but including insulation layers between lamination sheets
 
         :Type: float
         :min: 0
@@ -865,13 +949,20 @@ class Lamination(FrozenClass):
     def _set_mat_type(self, value):
         """setter of mat_type"""
         if isinstance(value, str):  # Load from file
-            value = load_init_dict(value)[1]
+            try:
+                value = load_init_dict(value)[1]
+            except Exception as e:
+                self.get_logger().error(
+                    "Error while loading " + value + ", setting None instead"
+                )
+                value = None
         if isinstance(value, dict) and "__class__" in value:
             class_obj = import_class(
                 "pyleecan.Classes", value.get("__class__"), "mat_type"
             )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
+            Material = import_class("pyleecan.Classes", "Material", "mat_type")
             value = Material()
         check_var("mat_type", value, "Material")
         self._mat_type = value
@@ -1032,6 +1123,15 @@ class Lamination(FrozenClass):
         """setter of axial_vent"""
         if type(value) is list:
             for ii, obj in enumerate(value):
+                if isinstance(obj, str):  # Load from file
+                    try:
+                        obj = load_init_dict(obj)[1]
+                    except Exception as e:
+                        self.get_logger().error(
+                            "Error while loading " + obj + ", setting None instead"
+                        )
+                        obj = None
+                        value[ii] = None
                 if type(obj) is dict:
                     class_obj = import_class(
                         "pyleecan.Classes", obj.get("__class__"), "axial_vent"
@@ -1065,6 +1165,15 @@ class Lamination(FrozenClass):
         """setter of notch"""
         if type(value) is list:
             for ii, obj in enumerate(value):
+                if isinstance(obj, str):  # Load from file
+                    try:
+                        obj = load_init_dict(obj)[1]
+                    except Exception as e:
+                        self.get_logger().error(
+                            "Error while loading " + obj + ", setting None instead"
+                        )
+                        obj = None
+                        value[ii] = None
                 if type(obj) is dict:
                     class_obj = import_class(
                         "pyleecan.Classes", obj.get("__class__"), "notch"
@@ -1093,11 +1202,18 @@ class Lamination(FrozenClass):
     def _set_skew(self, value):
         """setter of skew"""
         if isinstance(value, str):  # Load from file
-            value = load_init_dict(value)[1]
+            try:
+                value = load_init_dict(value)[1]
+            except Exception as e:
+                self.get_logger().error(
+                    "Error while loading " + value + ", setting None instead"
+                )
+                value = None
         if isinstance(value, dict) and "__class__" in value:
             class_obj = import_class("pyleecan.Classes", value.get("__class__"), "skew")
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
+            Skew = import_class("pyleecan.Classes", "Skew", "skew")
             value = Skew()
         check_var("skew", value, "Skew")
         self._skew = value
@@ -1126,6 +1242,15 @@ class Lamination(FrozenClass):
         """setter of yoke_notch"""
         if type(value) is list:
             for ii, obj in enumerate(value):
+                if isinstance(obj, str):  # Load from file
+                    try:
+                        obj = load_init_dict(obj)[1]
+                    except Exception as e:
+                        self.get_logger().error(
+                            "Error while loading " + obj + ", setting None instead"
+                        )
+                        obj = None
+                        value[ii] = None
                 if type(obj) is dict:
                     class_obj = import_class(
                         "pyleecan.Classes", obj.get("__class__"), "yoke_notch"
@@ -1154,11 +1279,18 @@ class Lamination(FrozenClass):
     def _set_bore(self, value):
         """setter of bore"""
         if isinstance(value, str):  # Load from file
-            value = load_init_dict(value)[1]
+            try:
+                value = load_init_dict(value)[1]
+            except Exception as e:
+                self.get_logger().error(
+                    "Error while loading " + value + ", setting None instead"
+                )
+                value = None
         if isinstance(value, dict) and "__class__" in value:
             class_obj = import_class("pyleecan.Classes", value.get("__class__"), "bore")
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
+            Bore = import_class("pyleecan.Classes", "Bore", "bore")
             value = Bore()
         check_var("bore", value, "Bore")
         self._bore = value

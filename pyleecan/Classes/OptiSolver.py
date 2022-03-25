@@ -16,8 +16,6 @@ from ..Functions.Load.import_class import import_class
 from ._frozen import FrozenClass
 
 from ._check import InitUnKnowClassError
-from .OptiProblem import OptiProblem
-from .XOutput import XOutput
 
 
 class OptiSolver(FrozenClass):
@@ -205,13 +203,20 @@ class OptiSolver(FrozenClass):
     def _set_problem(self, value):
         """setter of problem"""
         if isinstance(value, str):  # Load from file
-            value = load_init_dict(value)[1]
+            try:
+                value = load_init_dict(value)[1]
+            except Exception as e:
+                self.get_logger().error(
+                    "Error while loading " + value + ", setting None instead"
+                )
+                value = None
         if isinstance(value, dict) and "__class__" in value:
             class_obj = import_class(
                 "pyleecan.Classes", value.get("__class__"), "problem"
             )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
+            OptiProblem = import_class("pyleecan.Classes", "OptiProblem", "problem")
             value = OptiProblem()
         check_var("problem", value, "OptiProblem")
         self._problem = value
@@ -235,13 +240,20 @@ class OptiSolver(FrozenClass):
     def _set_xoutput(self, value):
         """setter of xoutput"""
         if isinstance(value, str):  # Load from file
-            value = load_init_dict(value)[1]
+            try:
+                value = load_init_dict(value)[1]
+            except Exception as e:
+                self.get_logger().error(
+                    "Error while loading " + value + ", setting None instead"
+                )
+                value = None
         if isinstance(value, dict) and "__class__" in value:
             class_obj = import_class(
                 "pyleecan.Classes", value.get("__class__"), "xoutput"
             )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
+            XOutput = import_class("pyleecan.Classes", "XOutput", "xoutput")
             value = XOutput()
         check_var("xoutput", value, "XOutput")
         self._xoutput = value

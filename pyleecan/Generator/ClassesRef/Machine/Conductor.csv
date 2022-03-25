@@ -1,5 +1,10 @@
 Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
 cond_mat,-,Material of the conductor,0,Material,,,,,Machine,,check,VERSION,1,abstact class for conductors
-ins_mat,-,Material of the insulation,0,Material,,,,,,,,,,
-,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,
+ins_mat,-,Material of the insulation,0,Material,,,,,,,comp_phi_skin,,,
+,,,,,,,,,,,comp_psi_skin,,,
+,,,,,,,,,,,comp_phip_skin,,,
+,,,,,,,,,,,comp_psip_skin,,,
+,,,,,,,,,,,comp_skin_effect,,,
+,,,,,,,,,,,comp_power,,,
+,,,,,,,,,,,comp_skin_effect_round_wire,,,
+,,,,,,,,,,,comp_temperature_effect,,,

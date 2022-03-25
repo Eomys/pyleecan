@@ -35,9 +35,9 @@ except ImportError as error:
     get_pole_pair_number = error
 
 try:
-    from ..Methods.Machine.LamSlotMultiWind.comp_rot_dir import comp_rot_dir
+    from ..Methods.Machine.LamSlotMultiWind.comp_mmf_dir import comp_mmf_dir
 except ImportError as error:
-    comp_rot_dir = error
+    comp_mmf_dir = error
 
 try:
     from ..Methods.Machine.LamSlotMultiWind.plot_mmf_unit import plot_mmf_unit
@@ -62,13 +62,6 @@ except ImportError as error:
 
 from numpy import array, array_equal
 from ._check import InitUnKnowClassError
-from .Winding import Winding
-from .Slot import Slot
-from .Material import Material
-from .Hole import Hole
-from .Notch import Notch
-from .Skew import Skew
-from .Bore import Bore
 
 
 class LamSlotMultiWind(LamSlotMulti):
@@ -110,18 +103,18 @@ class LamSlotMultiWind(LamSlotMulti):
         )
     else:
         get_pole_pair_number = get_pole_pair_number
-    # cf Methods.Machine.LamSlotMultiWind.comp_rot_dir
-    if isinstance(comp_rot_dir, ImportError):
-        comp_rot_dir = property(
+    # cf Methods.Machine.LamSlotMultiWind.comp_mmf_dir
+    if isinstance(comp_mmf_dir, ImportError):
+        comp_mmf_dir = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use LamSlotMultiWind method comp_rot_dir: "
-                    + str(comp_rot_dir)
+                    "Can't use LamSlotMultiWind method comp_mmf_dir: "
+                    + str(comp_mmf_dir)
                 )
             )
         )
     else:
-        comp_rot_dir = comp_rot_dir
+        comp_mmf_dir = comp_mmf_dir
     # cf Methods.Machine.LamSlotMultiWind.plot_mmf_unit
     if isinstance(plot_mmf_unit, ImportError):
         plot_mmf_unit = property(
@@ -411,13 +404,20 @@ class LamSlotMultiWind(LamSlotMulti):
     def _set_winding(self, value):
         """setter of winding"""
         if isinstance(value, str):  # Load from file
-            value = load_init_dict(value)[1]
+            try:
+                value = load_init_dict(value)[1]
+            except Exception as e:
+                self.get_logger().error(
+                    "Error while loading " + value + ", setting None instead"
+                )
+                value = None
         if isinstance(value, dict) and "__class__" in value:
             class_obj = import_class(
                 "pyleecan.Classes", value.get("__class__"), "winding"
             )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
+            Winding = import_class("pyleecan.Classes", "Winding", "winding")
             value = Winding()
         check_var("winding", value, "Winding")
         self._winding = value

@@ -7,7 +7,7 @@ def import_class(mod_name, class_name, prop_name=""):
     try:
         module = __import__(mod_name + "." + class_name, fromlist=[class_name])
         return getattr(module, class_name)
-    except:
+    except Exception:
         if prop_name != "":
             raise InitUnKnowClassError(
                 "Unknow class name "

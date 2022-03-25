@@ -54,6 +54,18 @@ class Ui_SWSlot(object):
 
         self.horizontalLayout_2.addWidget(self.out_Slot_pitch)
 
+        self.in_type_close = QLabel(SWSlot)
+        self.in_type_close.setObjectName(u"in_type_close")
+
+        self.horizontalLayout_2.addWidget(self.in_type_close)
+
+        self.c_type_close = QComboBox(SWSlot)
+        self.c_type_close.addItem("")
+        self.c_type_close.addItem("")
+        self.c_type_close.setObjectName(u"c_type_close")
+
+        self.horizontalLayout_2.addWidget(self.c_type_close)
+
         self.horizontalSpacer_3 = QSpacerItem(
             40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum
         )
@@ -120,6 +132,16 @@ class Ui_SWSlot(object):
         self.out_Slot_pitch.setText(
             QCoreApplication.translate("SWSlot", u"Slot pitch = 2*Pi / Zs = ", None)
         )
+        self.in_type_close.setText(
+            QCoreApplication.translate("SWSlot", u"Closing material", None)
+        )
+        self.c_type_close.setItemText(
+            0, QCoreApplication.translate("SWSlot", u"Air", None)
+        )
+        self.c_type_close.setItemText(
+            1, QCoreApplication.translate("SWSlot", u"Lamination iron", None)
+        )
+
         self.b_plot.setText(QCoreApplication.translate("SWSlot", u"Preview", None))
         self.b_previous.setText(QCoreApplication.translate("SWSlot", u"Previous", None))
         self.b_next.setText(QCoreApplication.translate("SWSlot", u"Next", None))

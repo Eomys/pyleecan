@@ -3,7 +3,8 @@
 from PySide2.QtCore import Qt, Signal
 from PySide2.QtGui import QPixmap
 from PySide2.QtWidgets import QMessageBox, QWidget, QFileDialog
-
+from logging import getLogger
+from .....loggers import GUI_LOG_NAME
 from .....Classes.Winding import Winding
 from .....Classes.WindingUD import WindingUD
 from .....Classes.MachineSRM import MachineSRM
@@ -50,8 +51,10 @@ class SWinding(Gen_SWinding, QWidget):
         # Fill the fields with the machine values (if they're filled)
         if self.is_stator:
             self.obj = machine.stator
+            self.b_plot_mmf.setText("Plot Stator Unit MMF")
         else:
             self.obj = machine.rotor
+            self.b_plot_mmf.setText("Plot Rotor Unit MMF")
         self.in_Zs.setText("Slot number=" + str(self.obj.get_Zs()))
         if isinstance(machine, MachineSRM):
             self.in_p.hide()  # p is not meaningful for SRM
@@ -150,6 +153,7 @@ class SWinding(Gen_SWinding, QWidget):
         self.b_edit_wind_mat.hide()
         self.b_generate.clicked.connect(self.s_generate)
         self.b_preview.clicked.connect(self.s_plot)
+        self.b_plot_mmf.clicked.connect(self.s_plot_mmf)
 
     def hide_star_widget(self, is_hide=True):
         """To display/hide the star of slot widgets"""
@@ -441,16 +445,16 @@ class SWinding(Gen_SWinding, QWidget):
         wind = self.obj.winding  # For readability
 
         try:
-            rot_dir = self.obj.comp_rot_dir()
-            if rot_dir == 1:
-                rot_dir = "CCW"
-            elif rot_dir == -1:
-                rot_dir = "CW"
+            mmf_dir = self.obj.comp_mmf_dir()
+            if mmf_dir == 1:
+                mmf_dir = "CCW"
+            elif mmf_dir == -1:
+                mmf_dir = "CW"
             else:
-                rot_dir = "?"
+                mmf_dir = "?"
         except Exception:  # Unable to compution the connection matrix
-            rot_dir = "?"
-        self.out_rot_dir.setText(self.tr("Rotation direction: ") + rot_dir)
+            mmf_dir = "?"
+        self.out_rot_dir.setText(self.tr("Rotation direction: ") + mmf_dir)
 
         try:
             ms = str(self.obj.slot.Zs / (wind.p * wind.qs * 2.0))
@@ -494,8 +498,17 @@ class SWinding(Gen_SWinding, QWidget):
                 is_lam_only=is_lam_only,
                 is_add_sign=True,
             )
-        except:
-            pass
+        except Exception as e:
+            if self.obj.is_stator:  # Adapt the text to the current lamination
+                err_msg = "Error while plotting machine in Stator Winding:\n" + str(e)
+            else:
+                err_msg = "Error while plotting machine in Rotor Winding:\n" + str(e)
+            getLogger(GUI_LOG_NAME).error(err_msg)
+            QMessageBox().critical(
+                self,
+                self.tr("Error"),
+                err_msg,
+            )
 
         # Update the Graph
         self.w_viewer.axes.set_axis_off()
@@ -514,7 +527,25 @@ class SWinding(Gen_SWinding, QWidget):
             self.obj.plot_winding()
             set_plot_gui_icon()
         except (AssertionError, WindingError) as e:
-            QMessageBox().critical(self, self.tr("Error"), str(e))
+            if self.obj.is_stator:  # Adapt the text to the current lamination
+                err_msg = "Error while plotting winding in Stator Winding:\n" + str(e)
+            else:
+                err_msg = "Error while plotting winding in Rotor Winding:\n" + str(e)
+            getLogger(GUI_LOG_NAME).error(err_msg)
+            QMessageBox().critical(self, self.tr("Error"), err_msg)
+
+    def s_plot_mmf(self):
+        """Plot the unit mmf of the stator"""
+        if self.machine is not None:
+            try:
+                self.plot_widget = self.obj.plot_mmf_unit(is_create_appli=False)
+            except Exception as e:
+                if self.obj.is_stator:  # Adapt the text to the current lamination
+                    err_msg = "Error while plotting Stator mmf unit:\n" + str(e)
+                else:
+                    err_msg = "Error while plotting Rotor mmf unit:\n" + str(e)
+                getLogger(GUI_LOG_NAME).error(err_msg)
+                QMessageBox().critical(self, self.tr("Error"), err_msg)
 
     @staticmethod
     def check(lamination):

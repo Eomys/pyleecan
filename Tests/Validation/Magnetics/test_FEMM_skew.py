@@ -6,6 +6,7 @@ from numpy import lcm, pi
 
 from pyleecan.Classes.InputCurrent import InputCurrent
 from pyleecan.Classes.MagFEMM import MagFEMM
+from pyleecan.Classes.OPdq import OPdq
 from pyleecan.Classes.Skew import Skew
 from pyleecan.Classes.Simu1 import Simu1
 
@@ -46,10 +47,7 @@ def test_FEMM_skew():
     simu_no_skew = Simu1(name=name + "_none", machine=SPMSM_no_skew)
 
     simu_no_skew.input = InputCurrent(
-        N0=1200,
-        Id_ref=0,
-        Iq_ref=0,
-        Tem_av_ref=0,
+        OP=OPdq(N0=1200, Id_ref=0, Iq_ref=0, Tem_av_ref=0),
         Na_tot=400 * 4,
         Nt_tot=40 * 4,
     )
@@ -81,6 +79,7 @@ def test_FEMM_skew():
         simu_skew_kseg.machine = SPMSM_skew_kseg
         simu_skew_kseg.name = name + "_" + str(k) + "seg"
         simu_skew_kseg.mag.Slice_enforced = None
+        simu_skew_kseg.mag.import_file = None  # Draw machine in FEMM again
 
         out_skew_kseg = simu_skew_kseg.run()
 

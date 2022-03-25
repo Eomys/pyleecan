@@ -57,20 +57,8 @@ try:
 except ImportError as error:
     comp_angle_d_axis = error
 
-try:
-    from ..Methods.Machine.LamSlotMag.comp_periodicity import comp_periodicity
-except ImportError as error:
-    comp_periodicity = error
-
 
 from ._check import InitUnKnowClassError
-from .Magnet import Magnet
-from .Slot import Slot
-from .Material import Material
-from .Hole import Hole
-from .Notch import Notch
-from .Skew import Skew
-from .Bore import Bore
 
 
 class LamSlotMag(LamSlot):
@@ -165,18 +153,6 @@ class LamSlotMag(LamSlot):
         )
     else:
         comp_angle_d_axis = comp_angle_d_axis
-    # cf Methods.Machine.LamSlotMag.comp_periodicity
-    if isinstance(comp_periodicity, ImportError):
-        comp_periodicity = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use LamSlotMag method comp_periodicity: "
-                    + str(comp_periodicity)
-                )
-            )
-        )
-    else:
-        comp_periodicity = comp_periodicity
     # save and copy methods are available in all object
     save = save
     copy = copy
@@ -376,13 +352,20 @@ class LamSlotMag(LamSlot):
     def _set_magnet(self, value):
         """setter of magnet"""
         if isinstance(value, str):  # Load from file
-            value = load_init_dict(value)[1]
+            try:
+                value = load_init_dict(value)[1]
+            except Exception as e:
+                self.get_logger().error(
+                    "Error while loading " + value + ", setting None instead"
+                )
+                value = None
         if isinstance(value, dict) and "__class__" in value:
             class_obj = import_class(
                 "pyleecan.Classes", value.get("__class__"), "magnet"
             )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
+            Magnet = import_class("pyleecan.Classes", "Magnet", "magnet")
             value = Magnet()
         check_var("magnet", value, "Magnet")
         self._magnet = value

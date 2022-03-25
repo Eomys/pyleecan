@@ -3,8 +3,8 @@
 from numpy import pi, sign, sqrt
 
 from ...Functions.FEMM.set_FEMM_circuit_prop import set_FEMM_circuit_prop
-from ...Functions.Winding.find_wind_phase_color import get_phase_id
 from ...Functions.FEMM.set_FEMM_wind_material import set_FEMM_wind_material
+from ...Functions.Winding.find_wind_phase_color import get_phase_id
 from ...Functions.labels import ROTOR_LAB
 
 
@@ -45,20 +45,7 @@ def create_FEMM_circuit_material(
     """
 
     # Load parameter for readibility
-    rho = lam.winding.conductor.cond_mat.elec.rho  # Resistivity at 20°C
-    if rho is None:
-        mat_name = (
-            " (" + lam.winding.conductor.cond_mat.name + ")"
-            if lam.winding.conductor.cond_mat.name
-            else ""
-        )
-        raise Exception(
-            "Error while defining the "
-            + lam.get_label()
-            + " winding material"
-            + mat_name
-            + " in FEMM: elec.rho is not defined"
-        )
+    rho = lam.winding.conductor.cond_mat.elec.get_resistivity()  # Resistivity at 20°C
     wind_mat = lam.winding.get_connection_mat(lam.get_Zs())
     Swire = lam.winding.conductor.comp_surface()
 

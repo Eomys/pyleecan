@@ -36,7 +36,6 @@ if __name__ == "__main__":
         import black
 
         system('"{}" -m black {}'.format(sys.executable, ui_folder_path))
-        # system('"{}" -m black .'.format(sys.executable))
         if black.__version__.split(".")[0] != "20":
             print("\n############################################")
             print(

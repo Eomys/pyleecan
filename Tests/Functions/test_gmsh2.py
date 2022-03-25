@@ -121,11 +121,52 @@ def test_gmsh_spm():
     return gmsh_dict
 
 
+@pytest.mark.long_5s
+@pytest.mark.GMSH
+# @pytest.mark.SPMSM
+@pytest.mark.SingleOP
+def test_gmsh_benchmark():
+    """Check generation of the 2D mesh with gmsh"""
+    if isinstance(draw_GMSH, ImportError):
+        raise ImportError("Fail to import draw_GMSH (gmsh package missing)")
+
+    # Import the machine from a script
+    Benchmark = load(join(DATA_DIR, "Machine", "Benchmark.json"))
+    # Benchmark.stator.slot.H1 = 1e-3
+    save_path = join(save_plot_path, "GMSH")
+    if not isdir(save_path):
+        makedirs(save_path)
+    # Plot the machine
+    # im = Toyota_Prius.plot()
+
+    # Create the Simulation
+    mySimu = Simu1(name="test_gmsh_benchmark", machine=Benchmark)
+    myResults = Output(simu=mySimu)
+
+    gmsh_dict = draw_GMSH(
+        output=myResults,
+        sym=1,
+        boundary_prop=MagElmer_BP_dict,
+        is_lam_only_S=False,
+        is_lam_only_R=False,
+        user_mesh_dict=mesh_dict,
+        is_sliding_band=True,
+        is_airbox=True,
+        path_save=join(save_path, "GSMH_model_benchmark.geo"),
+    )
+
+    with open("test_gmsh_ipm.json", "w") as fw:
+        json.dump(gmsh_dict, fw, default=encode_complex, indent=4)
+
+    return gmsh_dict
+
+
 def encode_complex(z):
     if isinstance(z, complex):
         return (z.real, z.imag)
 
 
 if __name__ == "__main__":
-    gmsh_dict = test_gmsh_ipm()
-    gmsh_dict = test_gmsh_spm()
+    # gmsh_dict = test_gmsh_ipm()
+    # gmsh_dict = test_gmsh_spm()
+    gmsh_dict = test_gmsh_benchmark()

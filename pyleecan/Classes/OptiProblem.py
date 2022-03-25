@@ -21,11 +21,6 @@ from ._check import CheckTypeError
 import numpy as np
 import random
 from ._check import InitUnKnowClassError
-from .Simulation import Simulation
-from .OptiDesignVar import OptiDesignVar
-from .OptiObjective import OptiObjective
-from .OptiConstraint import OptiConstraint
-from .DataKeeper import DataKeeper
 
 
 class OptiProblem(FrozenClass):
@@ -405,11 +400,18 @@ class OptiProblem(FrozenClass):
     def _set_simu(self, value):
         """setter of simu"""
         if isinstance(value, str):  # Load from file
-            value = load_init_dict(value)[1]
+            try:
+                value = load_init_dict(value)[1]
+            except Exception as e:
+                self.get_logger().error(
+                    "Error while loading " + value + ", setting None instead"
+                )
+                value = None
         if isinstance(value, dict) and "__class__" in value:
             class_obj = import_class("pyleecan.Classes", value.get("__class__"), "simu")
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
+            Simulation = import_class("pyleecan.Classes", "Simulation", "simu")
             value = Simulation()
         check_var("simu", value, "Simulation")
         self._simu = value
@@ -438,6 +440,15 @@ class OptiProblem(FrozenClass):
         """setter of design_var"""
         if type(value) is list:
             for ii, obj in enumerate(value):
+                if isinstance(obj, str):  # Load from file
+                    try:
+                        obj = load_init_dict(obj)[1]
+                    except Exception as e:
+                        self.get_logger().error(
+                            "Error while loading " + obj + ", setting None instead"
+                        )
+                        obj = None
+                        value[ii] = None
                 if type(obj) is dict:
                     class_obj = import_class(
                         "pyleecan.Classes", obj.get("__class__"), "design_var"
@@ -471,6 +482,15 @@ class OptiProblem(FrozenClass):
         """setter of obj_func"""
         if type(value) is list:
             for ii, obj in enumerate(value):
+                if isinstance(obj, str):  # Load from file
+                    try:
+                        obj = load_init_dict(obj)[1]
+                    except Exception as e:
+                        self.get_logger().error(
+                            "Error while loading " + obj + ", setting None instead"
+                        )
+                        obj = None
+                        value[ii] = None
                 if type(obj) is dict:
                     class_obj = import_class(
                         "pyleecan.Classes", obj.get("__class__"), "obj_func"
@@ -539,6 +559,15 @@ class OptiProblem(FrozenClass):
         """setter of constraint"""
         if type(value) is list:
             for ii, obj in enumerate(value):
+                if isinstance(obj, str):  # Load from file
+                    try:
+                        obj = load_init_dict(obj)[1]
+                    except Exception as e:
+                        self.get_logger().error(
+                            "Error while loading " + obj + ", setting None instead"
+                        )
+                        obj = None
+                        value[ii] = None
                 if type(obj) is dict:
                     class_obj = import_class(
                         "pyleecan.Classes", obj.get("__class__"), "constraint"
@@ -607,6 +636,15 @@ class OptiProblem(FrozenClass):
         """setter of datakeeper_list"""
         if type(value) is list:
             for ii, obj in enumerate(value):
+                if isinstance(obj, str):  # Load from file
+                    try:
+                        obj = load_init_dict(obj)[1]
+                    except Exception as e:
+                        self.get_logger().error(
+                            "Error while loading " + obj + ", setting None instead"
+                        )
+                        obj = None
+                        value[ii] = None
                 if type(obj) is dict:
                     class_obj = import_class(
                         "pyleecan.Classes", obj.get("__class__"), "datakeeper_list"

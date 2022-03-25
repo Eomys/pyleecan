@@ -1,23 +1,16 @@
-# -*- coding: utf-8 -*-
+from pyleecan.Classes.OPdq import OPdq
 from pyleecan.Functions.load import load
 from pyleecan.definitions import DATA_DIR
 
 from pyleecan.Classes.Simu1 import Simu1
 from pyleecan.Classes.InputCurrent import InputCurrent
-from pyleecan.Classes.ImportGenVectLin import ImportGenVectLin
-from pyleecan.Classes.ImportMatrixVal import ImportMatrixVal
 from pyleecan.Classes.MagFEMM import MagFEMM
-from pyleecan.Classes.Output import Output
 from pyleecan.Classes.ForceMT import ForceMT
 from pyleecan.Functions.Plot import dict_2D
 
 from Tests import save_plot_path
 from os.path import join
-from numpy import zeros, ones, pi, array
 
-import matplotlib.pyplot as plt
-import json
-import numpy as np
 import pytest
 
 
@@ -40,7 +33,7 @@ def test_AGSF_slotless():
     simu = Simu1(name="test_AGSF_slotless", machine=Slotless_CEFC)
 
     simu.input = InputCurrent(
-        Id_ref=0, Iq_ref=0, Ir=None, Na_tot=2 ** 6, Nt_tot=2, N0=1200
+        OP=OPdq(N0=1200, Id_ref=0, Iq_ref=0), Ir=None, Na_tot=2 ** 6, Nt_tot=2
     )
 
     simu.mag = MagFEMM(

@@ -18,7 +18,7 @@ from ....Functions.labels import (
 from ....Functions.Geometry.transform_hole_surf import transform_hole_surf
 
 
-def build_geometry(self, sym=1, alpha=0, delta=0):
+def build_geometry(self, sym=1, alpha=0, delta=0, is_circular_radius=False):
     """Build the geometry of the Lamination
 
     Parameters
@@ -31,6 +31,8 @@ def build_geometry(self, sym=1, alpha=0, delta=0):
         Angle for rotation [rad]
     delta : complex
         Complex value for translation
+    is_circular_radius : bool
+        True to add surfaces to "close" the Lamination radii
 
     Returns
     surf_list : list
@@ -86,6 +88,10 @@ def build_geometry(self, sym=1, alpha=0, delta=0):
             )
     surf_list.extend(vent_surf_list)
 
+    # Add the closing surfaces if requested
+    if is_circular_radius:
+        surf_list.extend(self.get_surfaces_closing(sym=sym))
+
     # Create the Lamination surfaces
     point_ref = self.comp_point_ref(sym=sym)
     if sym == 1:  # Complete lamination
@@ -111,8 +117,27 @@ def build_geometry(self, sym=1, alpha=0, delta=0):
             pass  # No surface to draw (SlotM17)
 
     elif sym != 1 and len(ext_line) > 0:  # Part of the lamination by symmetry
+        # Get limit point of the yoke side
+        if self.is_internal:
+            ZTR = ext_line[0].get_begin()  # Top Right
+            ZTL = ext_line[-1].get_end()  # Top Left
+            if len(int_line) > 0:
+                ZBR = int_line[-1].get_end()  # Bot Right
+                ZBL = int_line[0].get_begin()  # Bot Left
+            else:  # Machine without shaft for instance
+                ZBR = None
+                ZBL = None
+        else:
+            ZTR = ext_line[-1].get_end()  # Top Right
+            ZTL = ext_line[0].get_begin()  # Top Left
+            if len(int_line) > 0:
+                ZBL = int_line[-1].get_end()  # Bot Left
+                ZBR = int_line[0].get_begin()  # Bot Right
+            else:  # Machine without shaft for instance
+                ZBR = None
+                ZBL = None
         right_list, left_list = self.get_yoke_side_line(
-            sym=sym, vent_surf_list=vent_surf_list
+            sym=sym, vent_surf_list=vent_surf_list, ZBR=ZBR, ZTR=ZTR, ZBL=ZBL, ZTL=ZTL
         )
         # Create lines
         curve_list = list()

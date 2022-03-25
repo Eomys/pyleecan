@@ -197,6 +197,8 @@ discretize_test[7]["result"] = array(
 comp_length_test = list()
 comp_length_test.append({"begin": 1, "center": 0, "angle": pi / 2, "length": pi / 2})
 comp_length_test.append({"begin": 2, "center": 0, "angle": pi / 4, "length": pi / 2})
+comp_length_test.append({"begin": 1, "center": 0, "angle": -pi / 2, "length": pi / 2})
+comp_length_test.append({"begin": 2, "center": 0, "angle": -pi / 4, "length": pi / 2})
 # Dictionary to test get_middle
 comp_mid_test = list()
 comp_mid_test.append(

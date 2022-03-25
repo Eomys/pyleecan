@@ -553,7 +553,7 @@ split_half_test.append(
         "is_begin": False,
         "N_begin": -1j,
         "N_end": -1,
-        "N_radius": 1,
+        "N_radius": -1,
     }
 )
 split_half_test.append(
@@ -580,6 +580,19 @@ split_half_test.append(
         "N_begin": 2 * exp(3j * pi / 4) - 2j,
         "N_end": -2j - 2,
         "N_radius": 2,
+    }
+)
+split_half_test.append(
+    {
+        "begin": 1 * exp(1j * 5 * pi / 4),
+        "end": 1 * exp(-1j * pi / 4),
+        "radius": 1,
+        "center": 0,
+        "is_trigo": False,
+        "is_begin": False,
+        "N_begin": 1j,
+        "N_end": 1 * exp(-1j * pi / 4),
+        "N_radius": -1,
     }
 )
 
@@ -799,11 +812,16 @@ class Test_Arc1_meth(object):
         )
         assert round(abs(abs(Zc - test_dict["center"]) - 0), 7) == 0, msg
         # Check split
-        arc.split_half(is_begin=test_dict["is_begin"])
-        assert round(abs(arc.begin - test_dict["N_begin"]), 7) == 0
-        assert round(abs(arc.end - test_dict["N_end"]), 7) == 0
-        assert round(abs(arc.radius - test_dict["N_radius"]), 7) == 0
-        assert round(abs(arc.is_trigo_direction - test_dict["is_trigo"]), 7) == 0
+        arc_split = arc.copy()
+        arc_split.split_half(is_begin=test_dict["is_begin"])
+        assert round(abs(arc_split.begin - test_dict["N_begin"]), 7) == 0
+        assert round(abs(arc_split.end - test_dict["N_end"]), 7) == 0
+        assert round(abs(arc_split.radius - test_dict["N_radius"]), 7) == 0
+        assert round(abs(arc_split.is_trigo_direction - test_dict["is_trigo"]), 7) == 0
+        # Check center
+        assert round(abs(arc_split.get_center() - arc.get_center()), 7) == 0
+        # Check length
+        assert arc_split.comp_length() == pytest.approx(arc.comp_length() / 2)
 
     def test_plot_schematics(self):
         """Check that the schematics is correct"""
@@ -865,3 +883,11 @@ class Test_Arc1_meth(object):
         )
         with pytest.raises(PointTranslateArc1Error) as context:
             arc.translate("error")
+
+
+if __name__ == "__main__":
+    a = Test_Arc1_meth()
+    for ii, test_dict in enumerate(split_half_test):
+        print(ii)
+        a.test_split_half(test_dict)
+    print("Done")

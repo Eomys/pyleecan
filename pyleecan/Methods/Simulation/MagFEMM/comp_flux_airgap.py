@@ -1,16 +1,21 @@
+from os.path import isfile
+from shutil import copyfile
+
 from numpy import zeros
+
+from SciDataTool import Data1D
+
+from ....Classes._FEMMHandler import _FEMMHandler
+from ....Classes.OutMagFEMM import OutMagFEMM
 
 from ....Functions.labels import STATOR_LAB
 from ....Functions.FEMM.draw_FEMM import draw_FEMM
-from ....Classes._FEMMHandler import _FEMMHandler
-from ....Classes.OutMagFEMM import OutMagFEMM
 from ....Functions.MeshSolution.build_solution_data import build_solution_data
 from ....Functions.MeshSolution.build_meshsolution import build_meshsolution
 from ....Functions.MeshSolution.build_solution_vector import build_solution_vector
-from SciDataTool import Data1D
 
 
-def comp_flux_airgap(self, output, axes_dict):
+def comp_flux_airgap(self, output, axes_dict, Is_val=None, Ir_val=None):
     """Build and solve FEMM model to calculate and store magnetic quantities
 
     Parameters
@@ -40,14 +45,16 @@ def comp_flux_airgap(self, output, axes_dict):
                 MeshSolution object containing magnetic quantities B, H, mu for each time step
     """
 
+    logger = self.get_logger()
+
     # Init output
     out_dict = dict()
     if output.mag.internal is None:
         output.mag.internal = OutMagFEMM()
 
     # Get time and angular axes
-    Angle = axes_dict["Angle"]
-    Time = axes_dict["Time"]
+    Angle = axes_dict["angle"]
+    Time = axes_dict["time"]
 
     # Set the angular symmetry factor according to the machine and check if it is anti-periodic
     sym, is_antiper_a = Angle.get_periodicity()
@@ -72,25 +79,14 @@ def comp_flux_airgap(self, output, axes_dict):
     # Get rotor angular position
     angle_rotor = output.get_angle_rotor()[0:Nt]
 
-    # Interpolate current on magnetic model time axis
-    # Get stator current from elec out
-    if self.is_mmfs:
-        Is = output.elec.comp_I_mag(time, is_stator=True)
-    else:
-        Is = None
-    # Get rotor current from elec out
-    if self.is_mmfr:
-        Ir = output.elec.comp_I_mag(time, is_stator=False)
-    else:
-        Ir = None
-
     # Setup the FEMM simulation
     # Geometry building and assigning property in FEMM
     # Instanciate a new FEMM
     femm = _FEMMHandler()
     output.mag.internal.handler_list.append(femm)
     if self.import_file is None:
-        self.get_logger().debug("Drawing machine in FEMM...")
+        path_femm = self.get_path_save_fem(output)
+        logger.debug("Drawing machine in FEMM at " + path_femm)
         FEMM_dict = draw_FEMM(
             femm,
             output,
@@ -99,7 +95,8 @@ def comp_flux_airgap(self, output, axes_dict):
             sym=sym,
             is_antiper=is_antiper_a,
             type_calc_leakage=self.type_calc_leakage,
-            is_remove_vent=self.is_remove_vent,
+            is_remove_ventS=self.is_remove_ventS,
+            is_remove_ventR=self.is_remove_ventR,
             is_remove_slotS=self.is_remove_slotS,
             is_remove_slotR=self.is_remove_slotR,
             type_BH_stator=self.type_BH_stator,
@@ -107,30 +104,36 @@ def comp_flux_airgap(self, output, axes_dict):
             kgeo_fineness=self.Kgeo_fineness,
             kmesh_fineness=self.Kmesh_fineness,
             user_FEMM_dict=self.FEMM_dict_enforced,
-            path_save=self.get_path_save_fem(output),
+            path_save=path_femm,
             is_sliding_band=self.is_sliding_band,
             transform_list=self.transform_list,
             rotor_dxf=self.rotor_dxf,
             stator_dxf=self.stator_dxf,
+            is_fast_draw=self.is_fast_draw,
+            T_mag=self.T_mag,
         )
     else:
-        self.get_logger().debug("Reusing the FEMM file: " + self.import_file)
-        FEMM_dict = self.FEMM_dict_enforced
+        logger.debug("Reusing the FEMM file: " + self.import_file)
+        if output.mag.internal.FEMM_dict is not None:
+            FEMM_dict = output.mag.internal.FEMM_dict
+        else:
+            FEMM_dict = self.FEMM_dict_enforced
 
     # Init flux arrays in out_dict
-    out_dict["Br"] = zeros((Nt, Na))
-    out_dict["Bt"] = zeros((Nt, Na))
+    out_dict["B_{rad}"] = zeros((Nt, Na))
+    out_dict["B_{circ}"] = zeros((Nt, Na))
     # Init torque array in out_dict
     out_dict["Tem"] = zeros((Nt))
     # Init lamination winding flux list of arrays in out_dict
     machine = output.simu.machine
     out_dict["Phi_wind"] = {}
-    for label, lam in zip(machine.get_lam_list_label(), machine.get_lam_list()):
-        if hasattr(lam, "winding") and lam.winding is not None:
-            qs = lam.winding.qs  # Winding phase number
+    axes_dict_elec = output.elec.axes_dict
+    for label in machine.get_lam_list_label():
+        if "phase_" + label in axes_dict_elec:
+            qs = axes_dict_elec["phase_" + label].get_length(is_smallestperiod=True)
             out_dict["Phi_wind"][label] = zeros((Nt, qs))
     # delete 'Phi_wind' if empty
-    if not out_dict["Phi_wind"]:
+    if len(out_dict["Phi_wind"]) == 0:
         out_dict.pop("Phi_wind")
 
     # Solve for all time step and store all the results in out_dict
@@ -139,7 +142,7 @@ def comp_flux_airgap(self, output, axes_dict):
         femm.closefemm()
         output.mag.internal.handler_list.remove(femm)
         # With parallelization
-        B_elem, H_elem, mu_elem, meshFEMM, groups = self.solve_FEMM_parallel(
+        B_elem, H_elem, mu_elem, A_node, meshFEMM, groups = self.solve_FEMM_parallel(
             femm,
             output,
             out_dict,
@@ -147,13 +150,14 @@ def comp_flux_airgap(self, output, axes_dict):
             sym=sym,
             Nt=Nt,
             angle=angle,
-            Is=Is,
-            Ir=Ir,
+            Is=Is_val,
+            Ir=Ir_val,
             angle_rotor=angle_rotor,
+            filename=self.import_file,
         )
     else:
         # Without parallelization
-        B_elem, H_elem, mu_elem, meshFEMM, groups = self.solve_FEMM(
+        B_elem, H_elem, mu_elem, A_node, meshFEMM, groups = self.solve_FEMM(
             femm,
             output,
             out_dict,
@@ -161,8 +165,8 @@ def comp_flux_airgap(self, output, axes_dict):
             sym=sym,
             Nt=Nt,
             angle=angle,
-            Is=Is,
-            Ir=Ir,
+            Is=Is_val,
+            Ir=Ir_val,
             angle_rotor=angle_rotor,
             is_close_femm=self.is_close_femm,
             filename=self.import_file,
@@ -170,44 +174,64 @@ def comp_flux_airgap(self, output, axes_dict):
 
     # Store FEMM_dict in out_dict if FEMM file is not imported
     if self.import_file is None:
+        # Especially useful to avoid redrawing machine in case of skew
+        self.import_file = path_femm
         output.mag.internal.FEMM_dict = FEMM_dict
 
     # Store stator winding flux
     if STATOR_LAB + "-0" in out_dict["Phi_wind"].keys():
         out_dict["Phi_wind_stator"] = out_dict["Phi_wind"][STATOR_LAB + "-0"]
 
-        # Store mesh data & solution
+    # Store mesh data & solution
     if self.is_get_meshsolution and B_elem is not None:
 
         # Define axis
         Time = Time.copy()
+        meshFEMM[0].sym = sym
+        meshFEMM[0].is_antiper_a = is_antiper_a
         indices_cell = meshFEMM[0].cell["triangle"].indice
-        Indices_Cell = Data1D(name="indice", values=indices_cell, is_components=True)
-        axis_list = [Time, Indices_Cell]
+        Indices_Cell = Data1D(
+            name="indice", values=indices_cell, is_components=True, is_overlay=False
+        )
+        Slice = axes_dict["z"]
+        axis_list = [Time, Indices_Cell, Slice]
 
         B_sol = build_solution_vector(
-            field=B_elem,
+            field=B_elem[:, :, None, :],  # quick fix for slice issue
             axis_list=axis_list,
             name="Magnetic Flux Density",
             symbol="B",
             unit="T",
         )
         H_sol = build_solution_vector(
-            field=H_elem,
+            field=H_elem[:, :, None, :],
             axis_list=axis_list,
             name="Magnetic Field",
             symbol="H",
             unit="A/m",
         )
         mu_sol = build_solution_data(
-            field=mu_elem,
+            field=mu_elem[:, :, None],
             axis_list=axis_list,
             name="Magnetic Permeability",
             symbol="\mu",
             unit="H/m",
         )
 
-        list_solution = [B_sol, H_sol, mu_sol]
+        indices_nodes = meshFEMM[0].node.indice
+        Indices_Nodes = Data1D(name="indice", values=indices_nodes, is_components=True)
+        axis_list_node = [Time, Indices_Nodes]
+
+        A_sol = build_solution_data(
+            field=A_node,
+            axis_list=axis_list_node,
+            name="Magnetic Potential Vector",
+            symbol="A_z",
+            unit="T.m",
+        )
+        A_sol.type_cell = "node"
+
+        list_solution = [B_sol, H_sol, mu_sol, A_sol]
 
         out_dict["meshsolution"] = build_meshsolution(
             list_solution=list_solution,

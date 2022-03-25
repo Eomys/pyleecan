@@ -62,7 +62,7 @@ def get_yoke_desc(self, sym=1, is_reversed=False, prop_dict=None):
             ]
     else:
         # Get the notches
-        notch_list = self.get_notch_list(sym=sym, is_yoke=True)
+        notch_list = self.get_notch_list(sym=1, is_yoke=True)
 
         # Add all the yoke lines
         yoke_desc = list()
@@ -81,45 +81,20 @@ def get_yoke_desc(self, sym=1, is_reversed=False, prop_dict=None):
                 yoke_desc.append(yoke_dict)
 
         # Add last yoke line
-        if sym == 1 and len(notch_list) > 0:
-            yoke_dict = dict()
-            yoke_dict["begin_angle"] = notch_list[-1]["end_angle"]
-            yoke_dict["end_angle"] = notch_list[0]["begin_angle"]
-            yoke_dict["obj"] = Arc1(
-                begin=Ryoke * exp(1j * yoke_dict["begin_angle"]),
-                end=Ryoke * exp(1j * yoke_dict["end_angle"]),
-                radius=Ryoke,
-                is_trigo_direction=True,
-            )
-            if notch_list[0]["begin_angle"] < 0:
-                # First element is an slot or notch
-                yoke_desc.append(yoke_dict)
-            else:
-                # First element is a yoke line
-                yoke_desc.insert(0, yoke_dict)
-        elif sym != 1:  # With symmetry
-            # Add last yoke line
-            yoke_dict = dict()
-            yoke_dict["begin_angle"] = notch_list[-1]["end_angle"]
-            yoke_dict["end_angle"] = 2 * pi / sym
-            yoke_dict["obj"] = Arc1(
-                begin=Ryoke * exp(1j * yoke_dict["begin_angle"]),
-                end=Ryoke * exp(1j * yoke_dict["end_angle"]),
-                radius=Ryoke,
-                is_trigo_direction=True,
-            )
+        yoke_dict = dict()
+        yoke_dict["begin_angle"] = notch_list[-1]["end_angle"]
+        yoke_dict["end_angle"] = notch_list[0]["begin_angle"]
+        yoke_dict["obj"] = Arc1(
+            begin=Ryoke * exp(1j * yoke_dict["begin_angle"]),
+            end=Ryoke * exp(1j * yoke_dict["end_angle"]),
+            radius=Ryoke,
+            is_trigo_direction=True,
+        )
+        if notch_list[0]["begin_angle"] < 0:
+            # First element is an slot or notch
             yoke_desc.append(yoke_dict)
-
-            # Add first yoke line
-            yoke_dict = dict()
-            yoke_dict["begin_angle"] = 0
-            yoke_dict["end_angle"] = notch_list[0]["begin_angle"]
-            yoke_dict["obj"] = Arc1(
-                begin=Ryoke * exp(1j * yoke_dict["begin_angle"]),
-                end=Ryoke * exp(1j * yoke_dict["end_angle"]),
-                radius=Ryoke,
-                is_trigo_direction=True,
-            )
+        else:
+            # First element is a yoke line
             yoke_desc.insert(0, yoke_dict)
 
     # Convert the description to lines
@@ -138,6 +113,22 @@ def get_yoke_desc(self, sym=1, is_reversed=False, prop_dict=None):
             for line in lines:
                 line.rotate((yoke["begin_angle"] + yoke["end_angle"]) / 2)
             yoke_lines.extend(lines)
+
+    # Cut lines if sym and Notches
+    if sym != 1 and self.notch not in [None, list()]:
+        # First cut Ox
+        first_cut = list()
+        for line in yoke_lines:
+            top, _ = line.split_line(-1.2 * self.Rext, 1.2 * self.Rext)
+            first_cut.extend(top)
+        if sym > 2:
+            # Second cut 0Sym
+            yoke_lines = list()
+            for line in first_cut:
+                top, _ = line.split_line(1.2 * self.Rext * exp(1j * 2 * pi / sym), 0)
+                yoke_lines.extend(top)
+        else:  # Cutting lamination in half
+            yoke_lines = first_cut
 
     # Reverse the lines
     if is_reversed:

@@ -14,8 +14,6 @@ def build_geometry(self, sym=1, alpha=0, delta=0):
         Angle for rotation [rad]
     delta : complex
         Complex value for translation
-    is_simplified: bool
-        True to avoid line superposition
 
     Returns
     -------
@@ -33,7 +31,7 @@ def build_geometry(self, sym=1, alpha=0, delta=0):
         surf_list.extend(self.stator.build_geometry(sym=sym, alpha=alpha, delta=delta))
         # Adding the list of surfaces of the rotor
         surf_list.extend(self.rotor.build_geometry(sym=sym, alpha=alpha, delta=delta))
-        # Add the shaft only for internal rotor
+        # Add the shaft only for Internal Rotor
         if self.rotor.Rint > 0:
             surf_list.extend(
                 self.shaft.build_geometry(sym=sym, alpha=alpha, delta=delta)

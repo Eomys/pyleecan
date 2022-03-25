@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>509</width>
-    <height>511</height>
+    <height>486</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -23,12 +23,13 @@
    </size>
   </property>
   <property name="windowTitle">
-   <string>Form</string>
+   <string>Import from Excel</string>
+  </property>
+  <property name="windowIcon">
+   <iconset resource="../../../Resources/pyleecan.qrc">
+    <normaloff>:/images/images/icon/pyleecan_64.png</normaloff>:/images/images/icon/pyleecan_64.png</iconset>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_3">
-   <item>
-    <widget class="WPathSelector" name="w_file_path" native="true"/>
-   </item>
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout_2">
      <item>
@@ -60,6 +61,10 @@
        </property>
       </widget>
      </item>
+    </layout>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout_4">
      <item>
       <widget class="QLabel" name="in_range">
        <property name="minimumSize">
@@ -75,7 +80,7 @@
         </size>
        </property>
        <property name="text">
-        <string>Column range: </string>
+        <string>Data range: </string>
        </property>
       </widget>
      </item>
@@ -93,72 +98,40 @@
          <height>0</height>
         </size>
        </property>
+       <property name="placeholderText">
+        <string>A6:B100</string>
+       </property>
       </widget>
-     </item>
-     <item>
-      <spacer name="horizontalSpacer_2">
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-       <property name="sizeType">
-        <enum>QSizePolicy::Preferred</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>40</width>
-         <height>20</height>
-        </size>
-       </property>
-      </spacer>
      </item>
     </layout>
    </item>
    <item>
-    <widget class="QGroupBox" name="g_axe1">
-     <property name="title">
-      <string>First axe</string>
-     </property>
-     <layout class="QVBoxLayout" name="verticalLayout">
-      <item>
-       <layout class="QHBoxLayout" name="horizontalLayout_3">
-        <item>
-         <widget class="QComboBox" name="c_axe1_name"/>
-        </item>
-        <item>
-         <widget class="QComboBox" name="c_axe1_type"/>
-        </item>
-       </layout>
-      </item>
-      <item>
-       <widget class="QWidget" name="w_axe1" native="true"/>
-      </item>
-     </layout>
-    </widget>
-   </item>
-   <item>
-    <widget class="QGroupBox" name="g_axe2">
-     <property name="title">
-      <string>Second axe</string>
-     </property>
-     <layout class="QVBoxLayout" name="verticalLayout_2">
-      <item>
-       <layout class="QHBoxLayout" name="horizontalLayout_4">
-        <item>
-         <widget class="QComboBox" name="c_axe2_name"/>
-        </item>
-        <item>
-         <widget class="QComboBox" name="c_axe2_type"/>
-        </item>
-       </layout>
-      </item>
-      <item>
-       <widget class="QWidget" name="w_axe2" native="true"/>
-      </item>
-     </layout>
-    </widget>
-   </item>
-   <item>
     <layout class="QHBoxLayout" name="horizontalLayout">
+     <item>
+      <widget class="QLabel" name="in_order">
+       <property name="text">
+        <string>Data order :</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QComboBox" name="c_order">
+       <item>
+        <property name="text">
+         <string>B(H)</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>H(B)</string>
+        </property>
+       </item>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout_3">
      <item>
       <spacer name="horizontalSpacer">
        <property name="orientation">
@@ -173,23 +146,16 @@
       </spacer>
      </item>
      <item>
-      <widget class="QPushButton" name="b_convert">
+      <widget class="QPushButton" name="b_ok">
        <property name="text">
-        <string>Convert to Table</string>
+        <string>Ok</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="b_tab">
+      <widget class="QPushButton" name="b_cancel">
        <property name="text">
-        <string>Preview Table</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="b_plot">
-       <property name="text">
-        <string>Preview Plot</string>
+        <string>Cancel</string>
        </property>
       </widget>
      </item>
@@ -197,14 +163,6 @@
    </item>
   </layout>
  </widget>
- <customwidgets>
-  <customwidget>
-   <class>WPathSelector</class>
-   <extends>QWidget</extends>
-   <header>.....GUI.Tools.WPathSelector.WPathSelector.h</header>
-   <container>1</container>
-  </customwidget>
- </customwidgets>
  <resources>
   <include location="../../../Resources/pyleecan.qrc"/>
   <include location="../../../Resources/pyleecan.qrc"/>

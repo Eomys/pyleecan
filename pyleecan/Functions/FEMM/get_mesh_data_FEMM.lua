@@ -8,8 +8,9 @@ nnod=mo_numnodes();
 fp1=openfile(path_txt .. "nodes" .. tostring(idworker) .. ".txt","w")
 
 for k=1,nnod do
-    x,y=mo_getnode(k);	
-    write(fp1,x," ",y,"\n");
+    x,y=mo_getnode(k);
+	a,bx,by,o,nrg,hx,hy,Je,Js,mux,muy=mo_getpointvalues(x,y);	
+    write(fp1,x," ",y," ", a,"\n");
 end
 
 closefile(fp1);

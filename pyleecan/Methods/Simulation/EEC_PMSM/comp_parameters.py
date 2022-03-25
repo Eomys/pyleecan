@@ -1,54 +1,40 @@
-# -*- coding: utf-8 -*-
+from numpy import isscalar
 
 
-def comp_parameters(self, output):
-    """Compute the parameters dict for the equivalent electrical circuit:
-    resistance, inductance and back electromotive force
+def comp_parameters(self):
+    """Compute and set the parameter attributes of the EEC that are not set:
+    resistance, skin effect factors, inductance, fluxlinkage and back emf
+
     Parameters
     ----------
     self : EEC_PMSM
         an EEC_PMSM object
-    output : Output
-        an Output object
+
     """
-    # TODO maybe set currents to small value if I is 0 to compute inductance
 
-    PAR = self.parameters
+    # Check that OP and temperature are set
+    assert self.OP is not None
+    assert self.Tsta is not None
 
-    # Parameters to compute only once
-    if "R20" not in PAR:
-        PAR["R20"] = output.simu.machine.stator.comp_resistance_wind()
-    if "phi" not in PAR:
-        PAR["phi"] = self.fluxlink.comp_fluxlinkage(output)
+    # Update skin effect
+    self.comp_skin_effect()
 
-    # Parameters which may vary for each simulation
-    is_comp_ind = False
-    # check for complete parameter set
-    # (there may be some redundancy here but it seems simplier to implement)
-    if not all(k in PAR for k in ("Phid", "Phiq", "Ld", "Lq")):
-        is_comp_ind = True
+    # Compute stator winding resistance
+    if self.R1 is None:
+        self.comp_R1()
 
-    # check for d- and q-current (change)
-    if "Id" not in PAR or PAR["Id"] != output.elec.Id_ref:
-        PAR["Id"] = output.elec.Id_ref
-        is_comp_ind = True
+    # Compute stator winding flux in open-circuit
+    if self.Phid_mag is None or self.Phiq_mag is None:
+        self.comp_Phidq_mag()
 
-    if "Iq" not in PAR or PAR["Iq"] != output.elec.Iq_ref:
-        PAR["Iq"] = output.elec.Iq_ref
-        is_comp_ind = True
+    # Compute stator winding flux
+    if self.Phid is None or self.Phiq is None:
+        self.comp_Phidq()
 
-    # compute inductance if necessary
-    if is_comp_ind:
-        (phid, phiq) = self.indmag.comp_inductance(output)
-        if PAR["Id"] != 0:
-            PAR["Ld"] = (phid - PAR["phi"]) / PAR["Id"]
-        else:
-            PAR["Ld"] = None  # to have the parameters complete though
+    # Compute stator winding inductance along d-axis
+    if self.Ld is None:
+        self.comp_Ld()
 
-        if PAR["Iq"] != 0:
-            PAR["Lq"] = phiq / PAR["Iq"]
-        else:
-            PAR["Lq"] = None  # to have the parameters complete though
-
-        PAR["Phid"] = phid
-        PAR["Phiq"] = phiq
+    # Compute stator winding inductance along q-axis
+    if self.Lq is None:
+        self.comp_Lq()

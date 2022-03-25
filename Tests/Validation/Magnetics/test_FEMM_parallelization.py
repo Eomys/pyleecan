@@ -10,6 +10,7 @@ from pyleecan.Classes.ImportGenVectLin import ImportGenVectLin
 from pyleecan.Classes.ImportMatrixVal import ImportMatrixVal
 from pyleecan.Classes.InputCurrent import InputCurrent
 from pyleecan.Classes.MagFEMM import MagFEMM
+from pyleecan.Classes.OPdq import OPdq
 from pyleecan.Classes.Simu1 import Simu1
 from pyleecan.Functions.load import load
 from pyleecan.Functions.Plot import dict_2D
@@ -31,11 +32,9 @@ def test_FEMM_parallelization_mag():
 
     # Definition of a sinusoidal current
     simu.input = InputCurrent()
-    simu.input.Id_ref = -100  # [A]
-    simu.input.Iq_ref = 200  # [A]
+    simu.input.OP = OPdq(Id_ref=-100, Iq_ref=200, N0=2000)
     simu.input.Nt_tot = 16  # Number of time step
     simu.input.Na_tot = 1024  # Spatial discretization
-    simu.input.N0 = 2000  # Rotor speed [rpm]
 
     # Definition of the magnetic simulation
     simu.mag = MagFEMM(
@@ -46,6 +45,11 @@ def test_FEMM_parallelization_mag():
     )
     simu2 = simu.copy()
     simu2.mag.nb_worker = 2
+
+    # simlation with Nt_tot < nb_worker
+    simu3 = simu.copy()
+    simu3.mag.nb_worker = 8
+    simu3.input.Nt_tot = 4
 
     start = time()
     out = simu.run()
@@ -59,11 +63,6 @@ def test_FEMM_parallelization_mag():
             time1, simu2.mag.nb_worker, time2
         )
     )
-
-    # simlation with Nt_tot < nb_worker
-    simu3 = simu.copy()
-    simu3.mag.nb_worker = 8
-    simu3.input.Nt_tot = 4
     simu3.run()
 
     # Plot the result by comparing the first two simulation
@@ -98,7 +97,7 @@ def test_FEMM_parallelization_mag():
 
     out.mag.Phi_wind_stator.plot_2D_Data(
         "time",
-        "phase",
+        "phase[]",
         data_list=[out2.mag.Phi_wind_stator],
         legend_list=["Periodic", "Full"],
         save_path=join(save_path, simu.name + "_Phi_wind_stator.png"),
@@ -156,8 +155,7 @@ def test_FEMM_parallelization_meshsolution():
     simu.input = InputCurrent(
         Is=Is,
         Ir=None,  # No winding on the rotor
-        N0=N0,
-        angle_rotor=None,  # Will be computed
+        OP=OPdq(N0=N0),
         time=time,
         angle=angle,
         angle_rotor_initial=0.5216 + pi,

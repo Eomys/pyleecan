@@ -28,11 +28,11 @@ except ImportError as error:
     check = error
 
 try:
-    from ..Methods.Machine.Machine.comp_angle_offset_initial import (
-        comp_angle_offset_initial,
+    from ..Methods.Machine.Machine.comp_angle_rotor_initial import (
+        comp_angle_rotor_initial,
     )
 except ImportError as error:
-    comp_angle_offset_initial = error
+    comp_angle_rotor_initial = error
 
 try:
     from ..Methods.Machine.Machine.comp_desc_dict import comp_desc_dict
@@ -62,9 +62,11 @@ except ImportError as error:
     comp_Rgap_mec = error
 
 try:
-    from ..Methods.Machine.Machine.comp_periodicity import comp_periodicity
+    from ..Methods.Machine.Machine.comp_periodicity_spatial import (
+        comp_periodicity_spatial,
+    )
 except ImportError as error:
-    comp_periodicity = error
+    comp_periodicity_spatial = error
 
 try:
     from ..Methods.Machine.Machine.comp_width_airgap_mag import comp_width_airgap_mag
@@ -126,10 +128,13 @@ try:
 except ImportError as error:
     set_pole_pair_number = error
 
+try:
+    from ..Methods.Machine.Machine.comp_periodicity_time import comp_periodicity_time
+except ImportError as error:
+    comp_periodicity_time = error
+
 
 from ._check import InitUnKnowClassError
-from .Frame import Frame
-from .Shaft import Shaft
 
 
 class Machine(FrozenClass):
@@ -158,18 +163,18 @@ class Machine(FrozenClass):
         )
     else:
         check = check
-    # cf Methods.Machine.Machine.comp_angle_offset_initial
-    if isinstance(comp_angle_offset_initial, ImportError):
-        comp_angle_offset_initial = property(
+    # cf Methods.Machine.Machine.comp_angle_rotor_initial
+    if isinstance(comp_angle_rotor_initial, ImportError):
+        comp_angle_rotor_initial = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use Machine method comp_angle_offset_initial: "
-                    + str(comp_angle_offset_initial)
+                    "Can't use Machine method comp_angle_rotor_initial: "
+                    + str(comp_angle_rotor_initial)
                 )
             )
         )
     else:
-        comp_angle_offset_initial = comp_angle_offset_initial
+        comp_angle_rotor_initial = comp_angle_rotor_initial
     # cf Methods.Machine.Machine.comp_desc_dict
     if isinstance(comp_desc_dict, ImportError):
         comp_desc_dict = property(
@@ -224,18 +229,18 @@ class Machine(FrozenClass):
         )
     else:
         comp_Rgap_mec = comp_Rgap_mec
-    # cf Methods.Machine.Machine.comp_periodicity
-    if isinstance(comp_periodicity, ImportError):
-        comp_periodicity = property(
+    # cf Methods.Machine.Machine.comp_periodicity_spatial
+    if isinstance(comp_periodicity_spatial, ImportError):
+        comp_periodicity_spatial = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use Machine method comp_periodicity: "
-                    + str(comp_periodicity)
+                    "Can't use Machine method comp_periodicity_spatial: "
+                    + str(comp_periodicity_spatial)
                 )
             )
         )
     else:
-        comp_periodicity = comp_periodicity
+        comp_periodicity_spatial = comp_periodicity_spatial
     # cf Methods.Machine.Machine.comp_width_airgap_mag
     if isinstance(comp_width_airgap_mag, ImportError):
         comp_width_airgap_mag = property(
@@ -373,6 +378,18 @@ class Machine(FrozenClass):
         )
     else:
         set_pole_pair_number = set_pole_pair_number
+    # cf Methods.Machine.Machine.comp_periodicity_time
+    if isinstance(comp_periodicity_time, ImportError):
+        comp_periodicity_time = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Machine method comp_periodicity_time: "
+                    + str(comp_periodicity_time)
+                )
+            )
+        )
+    else:
+        comp_periodicity_time = comp_periodicity_time
     # save and copy methods are available in all object
     save = save
     copy = copy
@@ -571,13 +588,20 @@ class Machine(FrozenClass):
     def _set_frame(self, value):
         """setter of frame"""
         if isinstance(value, str):  # Load from file
-            value = load_init_dict(value)[1]
+            try:
+                value = load_init_dict(value)[1]
+            except Exception as e:
+                self.get_logger().error(
+                    "Error while loading " + value + ", setting None instead"
+                )
+                value = None
         if isinstance(value, dict) and "__class__" in value:
             class_obj = import_class(
                 "pyleecan.Classes", value.get("__class__"), "frame"
             )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
+            Frame = import_class("pyleecan.Classes", "Frame", "frame")
             value = Frame()
         check_var("frame", value, "Frame")
         self._frame = value
@@ -601,13 +625,20 @@ class Machine(FrozenClass):
     def _set_shaft(self, value):
         """setter of shaft"""
         if isinstance(value, str):  # Load from file
-            value = load_init_dict(value)[1]
+            try:
+                value = load_init_dict(value)[1]
+            except Exception as e:
+                self.get_logger().error(
+                    "Error while loading " + value + ", setting None instead"
+                )
+                value = None
         if isinstance(value, dict) and "__class__" in value:
             class_obj = import_class(
                 "pyleecan.Classes", value.get("__class__"), "shaft"
             )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
+            Shaft = import_class("pyleecan.Classes", "Shaft", "shaft")
             value = Shaft()
         check_var("shaft", value, "Shaft")
         self._shaft = value

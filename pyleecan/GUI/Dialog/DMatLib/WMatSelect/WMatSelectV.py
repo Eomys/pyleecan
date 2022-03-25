@@ -8,7 +8,7 @@ from PySide2.QtWidgets import (
     QVBoxLayout,
     QPushButton,
 )
-from .....Classes.Material import Material
+from .....Classes.Machine import Machine
 from PySide2.QtCore import Signal
 
 
@@ -46,19 +46,19 @@ class WMatSelectV(QGroupBox):
 
         self.verticalLayout = QVBoxLayout(self)
         self.c_mat_type = QComboBox(self)
-        self.c_mat_type.setObjectName(u"c_mat_type")
+        self.c_mat_type.setObjectName("c_mat_type")
         self.verticalLayout.addWidget(self.c_mat_type)
 
         self.b_matlib = QPushButton(self)
-        self.b_matlib.setObjectName(u"b_matlib")
+        self.b_matlib.setObjectName("b_matlib")
         self.b_matlib.setText("Edit Materials")
         self.verticalLayout.addWidget(self.b_matlib)
 
         # Create the property of the widget
-        self.mat_win = None  # DMatLib widget
+        self.current_dialog = None  # DMatLib widget
         self.obj = None  # object that has a material attribute
         self.mat_attr_name = ""  # material attribute name
-        self.material_dict = dict()  # Matlib
+        self.material_dict = dict()  #  Material library + machine
         self.def_mat = "M400-50A"  # Default material
         self.is_hide_button = False  # To hide the "Edit material" button
 
@@ -93,6 +93,12 @@ class WMatSelectV(QGroupBox):
         self.obj = obj
         self.mat_attr_name = mat_attr_name
         self.material_dict = material_dict
+
+        # Get machine object to update the materials
+        parent = obj.parent
+        while parent is not None and not isinstance(parent, Machine):
+            parent = parent.parent
+        self.machine = parent
 
         if self.is_hide_button:
             self.b_matlib.hide()
@@ -186,7 +192,10 @@ class WMatSelectV(QGroupBox):
             index = self.c_mat_type.currentIndex()
             is_lib_mat = True
         self.current_dialog = DMatLib(
-            material_dict=self.material_dict, is_lib_mat=is_lib_mat, selected_id=index
+            material_dict=self.material_dict,
+            machine=self.machine,
+            is_lib_mat=is_lib_mat,
+            selected_id=index,
         )
         self.current_dialog.materialListChanged.connect(self.update_mat_list)
         self.current_dialog.saveNeeded.connect(self.emit_save)

@@ -3,7 +3,8 @@
 from numpy import pi
 from PySide2.QtCore import Signal
 from PySide2.QtWidgets import QMessageBox, QWidget
-
+from logging import getLogger
+from .....loggers import GUI_LOG_NAME
 from .....Classes.LamSlotWind import LamSlotWind
 from .....Classes.Slot import Slot
 from .....Classes.SlotM10 import SlotM10
@@ -17,6 +18,7 @@ from .....GUI.Dialog.DMachineSetup.SMSlot.PMSlot14.PMSlot14 import PMSlot14
 from .....GUI.Dialog.DMachineSetup.SMSlot.PMSlot15.PMSlot15 import PMSlot15
 from .....GUI.Dialog.DMachineSetup.SMSlot.PMSlot16.PMSlot16 import PMSlot16
 from .....GUI.Dialog.DMachineSetup.SMSlot.PMSlot17.PMSlot17 import PMSlot17
+from .....GUI.Dialog.DMachineSetup.SMSlot.PMSlot18.PMSlot18 import PMSlot18
 from .....Functions.Plot.set_plot_gui_icon import set_plot_gui_icon
 
 # List to convert index of combobox to slot type
@@ -29,6 +31,7 @@ WIDGET_LIST = [
     PMSlot15,
     PMSlot16,
     PMSlot17,
+    PMSlot18,
 ]
 INIT_INDEX = [wid.slot_type for wid in WIDGET_LIST]
 SLOT_NAME = [wid.slot_name for wid in WIDGET_LIST]
@@ -165,7 +168,7 @@ class SMSlot(Ui_SMSlot, QWidget):
         self.out_Slot_pitch.setText(
             sp_txt
             + "%.4g" % (Slot_pitch)
-            + u" [°] ("
+            + " [°] ("
             + "%.4g" % (Slot_pitch_rad)
             + " [rad])"
         )
@@ -225,12 +228,25 @@ class SMSlot(Ui_SMSlot, QWidget):
         """
         # We have to make sure the slot is right before trying to plot it
         error = self.check(self.obj)
+        if self.obj.is_stator:
+            name = "Stator"
+        else:
+            name = "Rotor"
 
         if error:  # Error => Display it
-            QMessageBox().critical(self, self.tr("Error"), error)
-        else:  # No error => Plot the slot (No winding for LamSquirrelCage)
-            self.obj.plot()
-            set_plot_gui_icon()
+            err_msg = "Error in " + name + " Slot definition:\n" + error
+            getLogger(GUI_LOG_NAME).debug(err_msg)
+            QMessageBox().critical(self, self.tr("Error"), err_msg)
+        else:  # No error => Plot the lamination
+            try:
+                self.obj.plot()
+                set_plot_gui_icon()
+            except Exception as e:
+                err_msg = (
+                    "Error while plotting " + name + " in Slot definition:\n" + str(e)
+                )
+                getLogger(GUI_LOG_NAME).error(err_msg)
+                QMessageBox().critical(self, self.tr("Error"), err_msg)
 
     @staticmethod
     def check(lam):

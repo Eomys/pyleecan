@@ -272,7 +272,7 @@ def gen_case(self, output, mesh_names):
     boundaries.append(bnd)
 
     # --- body force ----------------------------------------------------------------- #
-    omega = 2 * pi * self.parent.input.N0 / 60
+    omega = 2 * pi * self.parent.input.OP.N0 / 60
     bfs = []
 
     ID_list = [

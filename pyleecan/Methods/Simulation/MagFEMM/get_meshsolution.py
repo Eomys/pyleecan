@@ -6,6 +6,8 @@ from ....Classes.MeshMat import MeshMat
 from ....Classes.CellMat import CellMat
 from ....Classes.NodeMat import NodeMat
 from ....Classes.RefTriangle3 import RefTriangle3
+from ....Classes.FPGNTri import FPGNTri
+from ....Classes.ScalarProductL2 import ScalarProductL2
 
 from os.path import join
 
@@ -76,15 +78,15 @@ def get_meshsolution(self, femm, save_path, j_t0, id_worker=0, is_get_mesh=False
     # Read the nodes and elements files
     path_node = join(save_path, "nodes" + idworker + ".txt")
     path_element = join(save_path, "elements" + idworker + ".txt")
-    listNd0 = np.loadtxt(path_node, delimiter=" ")
+    results_nodes = np.loadtxt(path_node, delimiter=" ")
     listElem0 = np.loadtxt(path_element, dtype="i", delimiter=" ")
-    NbNd = len(listNd0)
+    NbNd = len(results_nodes)
     NbElem = len(listElem0)
 
     # Node list
     listNd = np.zeros(shape=(NbNd, 3))
-    listNd[:, 0] = listNd0[:, 0]
-    listNd[:, 1] = listNd0[:, 1]
+    listNd[:, 0] = results_nodes[:, 0]
+    listNd[:, 1] = results_nodes[:, 1]
 
     # Element list
     # listElem = np.zeros(shape=(NbElem, 3))
@@ -114,6 +116,9 @@ def get_meshsolution(self, femm, save_path, j_t0, id_worker=0, is_get_mesh=False
             indice=np.linspace(0, NbElem - 1, NbElem, dtype=int),
         )
         mesh.cell["triangle"].interpolation.ref_cell = RefTriangle3(epsilon=1e-9)
+        mesh.cell["triangle"].interpolation.gauss_point = FPGNTri(nb_gauss_point=1)
+        mesh.cell["triangle"].interpolation.scalar_product = ScalarProductL2()
+
         mesh.node = NodeMat(
             coordinate=listNd[:, 0:2],
             nb_node=NbNd,
@@ -122,11 +127,12 @@ def get_meshsolution(self, femm, save_path, j_t0, id_worker=0, is_get_mesh=False
         # get all groups that are in the FEMM model
         groups = dict()
         for grp in FEMM_GROUPS:
-            idx = FEMM_GROUPS[grp]["ID"]
-            name = FEMM_GROUPS[grp]["name"]
-            ind = np.where(listElem0[:, 6] == idx)[0]
-            if ind.size > 0:
-                groups[name] = mesh.cell["triangle"].indice[ind].tolist()
+            if grp != "lam_group_list":
+                idx = FEMM_GROUPS[grp]["ID"]
+                name = FEMM_GROUPS[grp]["name"]
+                ind = np.where(listElem0[:, 6] == idx)[0]
+                if ind.size > 0:
+                    groups[name] = mesh.cell["triangle"].indice[ind].tolist()
     else:
         mesh = None
         groups = None
@@ -134,5 +140,6 @@ def get_meshsolution(self, femm, save_path, j_t0, id_worker=0, is_get_mesh=False
     B = results[:, 0:2]
     H = results[:, 2:4]
     mu = results[:, 4]
+    A = results_nodes[:, 2]
 
-    return mesh, B, H, mu, groups
+    return mesh, B, H, mu, A, groups

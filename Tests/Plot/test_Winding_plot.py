@@ -14,6 +14,8 @@ from pyleecan.Classes.WindingSC import WindingSC
 from pyleecan.Classes.SlotW21 import SlotW21
 from pyleecan.Classes.SlotW22 import SlotW22
 from Tests import save_plot_path as save_path
+from pyleecan.Functions.load import load
+from pyleecan.definitions import DATA_DIR
 
 
 class Test_Winding_plot(object):
@@ -181,25 +183,10 @@ class Test_Winding_plot(object):
 
     def test_plot_mmf_unit(self):
         """Test plot unit mmf"""
-        stator = LamSlotWind(
-            Rint=0.1325,
-            Rext=0.2,
-            Nrvd=0,
-            L1=0.35,
-            Kf1=0.95,
-            is_internal=False,
-            is_stator=True,
+        Toyota_Prius = load(join(DATA_DIR, "Machine", "Toyota_Prius.json"))
+        Toyota_Prius.stator.plot_mmf_unit(
+            save_path=join(save_path, "test_unit_mmf.png")
         )
-        stator.slot = SlotW10(
-            Zs=36, H0=1e-3, H1=1.5e-3, H2=30e-3, W0=12e-3, W1=14e-3, W2=12e-3
-        )
-        stator.winding = WindingUD(
-            qs=3, Lewout=15e-3, p=3, coil_pitch=5, Ntcoil=7, Npcp=2
-        )
-        stator.winding.init_as_DWL(nlay=2)
-        stator.plot_mmf_unit(is_show_fig=False)
-        fig = plt.gcf()
-        fig.savefig(join(save_path, "test_unit_mmf.png"))
 
 
 if __name__ == "__main__":

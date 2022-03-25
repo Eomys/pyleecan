@@ -7,6 +7,7 @@ import pytest
 from numpy import array_equal
 from pyleecan.definitions import DATA_DIR
 from pyleecan.Functions.load import load
+from pyleecan.Functions.Load.retrocompatibility import is_before_version
 from Tests import TEST_DATA_DIR
 
 
@@ -60,15 +61,6 @@ wind_list.append(  # WindingDW1L
     }
 )
 
-# 1: LamSlotMag convertion (magnet from slot to lamination)
-mag_list = list()
-mag_list.append(
-    {
-        "ref": join(DATA_DIR, "Machine", "SPMSM_001.json"),
-        "old": join(TEST_DATA_DIR, "Retrocompatibility", "Magnet", "SPMSM_001.json"),
-    }
-)
-
 
 @pytest.mark.parametrize("file_dict", hole_list)
 def test_save_load_hole_retro(file_dict):
@@ -82,23 +74,6 @@ def test_save_load_hole_retro(file_dict):
     # Check old file is converted to current version
     msg = "Error for " + ref.name + ": " + str(hole_ref.compare(hole_old, "hole"))
     assert hole_ref == hole_old, msg
-
-
-@pytest.mark.parametrize("file_dict", mag_list)
-def test_save_load_mag_retro(file_dict):
-    """Check that the LamSlotMag convertion works"""
-    ref = load(file_dict["ref"])
-    old = load(file_dict["old"])
-
-    # Don't track material update
-    ref.rotor.mat_type = None
-    ref.rotor.magnet.mat_type = None
-    old.rotor.mat_type = None
-    old.rotor.magnet.mat_type = None
-
-    # Check old file is converted to current version
-    msg = "Error for " + ref.name + ": " + str(ref.rotor.compare(old.rotor, "rotor"))
-    assert ref.rotor == old.rotor, msg
 
 
 @pytest.mark.parametrize("file_dict", wind_list)
@@ -130,11 +105,22 @@ def test_save_load_wind_retro(file_dict):
     ), msg
 
 
+def test_before_version():
+    """Check that we can detect previous version"""
+    assert is_before_version("1.2.3", "1.2.1")
+    assert is_before_version("1.2.3", "1.1.3")
+    assert is_before_version("1.2.3", "0.2.3")
+    assert not is_before_version("1.2.3", "2.2.3")
+    assert not is_before_version("1.2.3", "1.3.0")
+    assert not is_before_version("1.2.3", "1.2.4")
+    assert not is_before_version("1.2.3", "1.2.3")
+    assert not is_before_version("1.2.3", "1.2.3.2")
+    assert is_before_version("1.2.3.2", "1.2.3")
+
+
 if __name__ == "__main__":
     for file_dict in hole_list:
         test_save_load_hole_retro(file_dict)
-    for file_dict in mag_list:
-        test_save_load_mag_retro(file_dict)
 
     for file_dict in wind_list:
         test_save_load_wind_retro(file_dict)

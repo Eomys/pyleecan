@@ -43,19 +43,12 @@ except ImportError as error:
     get_path_save = error
 
 try:
-    from ..Methods.Simulation.MagElmer.comp_axes import comp_axes
-except ImportError as error:
-    comp_axes = error
-
-try:
     from ..Methods.Simulation.MagElmer.gen_elmer_mesh import gen_elmer_mesh
 except ImportError as error:
     gen_elmer_mesh = error
 
 
 from ._check import InitUnKnowClassError
-from .DXFImport import DXFImport
-from .SliceModel import SliceModel
 
 
 class MagElmer(Magnetics):
@@ -120,15 +113,6 @@ class MagElmer(Magnetics):
         )
     else:
         get_path_save = get_path_save
-    # cf Methods.Simulation.MagElmer.comp_axes
-    if isinstance(comp_axes, ImportError):
-        comp_axes = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use MagElmer method comp_axes: " + str(comp_axes))
-            )
-        )
-    else:
-        comp_axes = comp_axes
     # cf Methods.Simulation.MagElmer.gen_elmer_mesh
     if isinstance(gen_elmer_mesh, ImportError):
         gen_elmer_mesh = property(
@@ -161,7 +145,8 @@ class MagElmer(Magnetics):
         nb_worker=1,
         is_remove_slotS=False,
         is_remove_slotR=False,
-        is_remove_vent=False,
+        is_remove_ventS=False,
+        is_remove_ventR=False,
         is_mmfs=True,
         is_mmfr=True,
         type_BH_stator=0,
@@ -174,6 +159,8 @@ class MagElmer(Magnetics):
         Slice_enforced=None,
         Nslices_enforced=None,
         type_distribution_enforced=None,
+        is_current_harm=True,
+        T_mag=20,
         init_dict=None,
         init_str=None,
     ):
@@ -218,8 +205,10 @@ class MagElmer(Magnetics):
                 is_remove_slotS = init_dict["is_remove_slotS"]
             if "is_remove_slotR" in list(init_dict.keys()):
                 is_remove_slotR = init_dict["is_remove_slotR"]
-            if "is_remove_vent" in list(init_dict.keys()):
-                is_remove_vent = init_dict["is_remove_vent"]
+            if "is_remove_ventS" in list(init_dict.keys()):
+                is_remove_ventS = init_dict["is_remove_ventS"]
+            if "is_remove_ventR" in list(init_dict.keys()):
+                is_remove_ventR = init_dict["is_remove_ventR"]
             if "is_mmfs" in list(init_dict.keys()):
                 is_mmfs = init_dict["is_mmfs"]
             if "is_mmfr" in list(init_dict.keys()):
@@ -244,6 +233,10 @@ class MagElmer(Magnetics):
                 Nslices_enforced = init_dict["Nslices_enforced"]
             if "type_distribution_enforced" in list(init_dict.keys()):
                 type_distribution_enforced = init_dict["type_distribution_enforced"]
+            if "is_current_harm" in list(init_dict.keys()):
+                is_current_harm = init_dict["is_current_harm"]
+            if "T_mag" in list(init_dict.keys()):
+                T_mag = init_dict["T_mag"]
         # Set the properties (value check and convertion are done in setter)
         self.Kmesh_fineness = Kmesh_fineness
         self.Kgeo_fineness = Kgeo_fineness
@@ -260,7 +253,8 @@ class MagElmer(Magnetics):
         super(MagElmer, self).__init__(
             is_remove_slotS=is_remove_slotS,
             is_remove_slotR=is_remove_slotR,
-            is_remove_vent=is_remove_vent,
+            is_remove_ventS=is_remove_ventS,
+            is_remove_ventR=is_remove_ventR,
             is_mmfs=is_mmfs,
             is_mmfr=is_mmfr,
             type_BH_stator=type_BH_stator,
@@ -273,6 +267,8 @@ class MagElmer(Magnetics):
             Slice_enforced=Slice_enforced,
             Nslices_enforced=Nslices_enforced,
             type_distribution_enforced=type_distribution_enforced,
+            is_current_harm=is_current_harm,
+            T_mag=T_mag,
         )
         # The class is frozen (in Magnetics init), for now it's impossible to
         # add new properties
@@ -624,13 +620,20 @@ class MagElmer(Magnetics):
     def _set_rotor_dxf(self, value):
         """setter of rotor_dxf"""
         if isinstance(value, str):  # Load from file
-            value = load_init_dict(value)[1]
+            try:
+                value = load_init_dict(value)[1]
+            except Exception as e:
+                self.get_logger().error(
+                    "Error while loading " + value + ", setting None instead"
+                )
+                value = None
         if isinstance(value, dict) and "__class__" in value:
             class_obj = import_class(
                 "pyleecan.Classes", value.get("__class__"), "rotor_dxf"
             )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
+            DXFImport = import_class("pyleecan.Classes", "DXFImport", "rotor_dxf")
             value = DXFImport()
         check_var("rotor_dxf", value, "DXFImport")
         self._rotor_dxf = value
@@ -654,13 +657,20 @@ class MagElmer(Magnetics):
     def _set_stator_dxf(self, value):
         """setter of stator_dxf"""
         if isinstance(value, str):  # Load from file
-            value = load_init_dict(value)[1]
+            try:
+                value = load_init_dict(value)[1]
+            except Exception as e:
+                self.get_logger().error(
+                    "Error while loading " + value + ", setting None instead"
+                )
+                value = None
         if isinstance(value, dict) and "__class__" in value:
             class_obj = import_class(
                 "pyleecan.Classes", value.get("__class__"), "stator_dxf"
             )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
+            DXFImport = import_class("pyleecan.Classes", "DXFImport", "stator_dxf")
             value = DXFImport()
         check_var("stator_dxf", value, "DXFImport")
         self._stator_dxf = value

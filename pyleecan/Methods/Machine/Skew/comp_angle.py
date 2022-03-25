@@ -5,12 +5,10 @@ from ....Methods.Machine.Skew import TYPE_SKEW_LIST
 
 def comp_angle(self):
     """Compute skew angles and positions
-
     Parameters
     ----------
     self : Skew
         a Skew object
-
     """
 
     logger = self.get_logger()
@@ -67,18 +65,11 @@ def comp_angle(self):
 
             z_list = linspace(-0.5, 0.5, Nstep + 1)
 
-            if type_skew == "linear":
+            if type_skew == "linear" or Nstep == 2:
 
                 angle_list = linspace(-angle_overall / 2, angle_overall / 2, Nstep)
 
             elif type_skew == "vshape":
-
-                if Nstep in [None, 2]:
-                    raise Exception(
-                        "Number of steps= "
-                        + str(Nstep)
-                        + " must be defined and > 2 for vshape stepped skew"
-                    )
 
                 Nhalf = int(floor((Nstep + 1) / 2))
 
@@ -90,13 +81,6 @@ def comp_angle(self):
                     angle_list = concatenate((angles_half[:-1], flip(angles_half)))
 
             elif type_skew == "zig-zag":
-
-                if Nstep in [None, 2]:
-                    raise Exception(
-                        "Number of steps= "
-                        + str(Nstep)
-                        + " must be defined and > 2 for alternate stepped skew"
-                    )
 
                 angle_list = 0.5 * angle_overall * (-1) ** arange(Nstep)
 

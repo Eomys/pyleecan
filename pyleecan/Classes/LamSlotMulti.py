@@ -58,19 +58,15 @@ except ImportError as error:
     get_bore_desc = error
 
 try:
-    from ..Methods.Machine.LamSlotMulti.comp_periodicity import comp_periodicity
+    from ..Methods.Machine.LamSlotMulti.comp_periodicity_spatial import (
+        comp_periodicity_spatial,
+    )
 except ImportError as error:
-    comp_periodicity = error
+    comp_periodicity_spatial = error
 
 
 from numpy import array, array_equal
 from ._check import InitUnKnowClassError
-from .Slot import Slot
-from .Material import Material
-from .Hole import Hole
-from .Notch import Notch
-from .Skew import Skew
-from .Bore import Bore
 
 
 class LamSlotMulti(Lamination):
@@ -164,18 +160,18 @@ class LamSlotMulti(Lamination):
         )
     else:
         get_bore_desc = get_bore_desc
-    # cf Methods.Machine.LamSlotMulti.comp_periodicity
-    if isinstance(comp_periodicity, ImportError):
-        comp_periodicity = property(
+    # cf Methods.Machine.LamSlotMulti.comp_periodicity_spatial
+    if isinstance(comp_periodicity_spatial, ImportError):
+        comp_periodicity_spatial = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use LamSlotMulti method comp_periodicity: "
-                    + str(comp_periodicity)
+                    "Can't use LamSlotMulti method comp_periodicity_spatial: "
+                    + str(comp_periodicity_spatial)
                 )
             )
         )
     else:
-        comp_periodicity = comp_periodicity
+        comp_periodicity_spatial = comp_periodicity_spatial
     # save and copy methods are available in all object
     save = save
     copy = copy
@@ -445,6 +441,15 @@ class LamSlotMulti(Lamination):
         """setter of slot_list"""
         if type(value) is list:
             for ii, obj in enumerate(value):
+                if isinstance(obj, str):  # Load from file
+                    try:
+                        obj = load_init_dict(obj)[1]
+                    except Exception as e:
+                        self.get_logger().error(
+                            "Error while loading " + obj + ", setting None instead"
+                        )
+                        obj = None
+                        value[ii] = None
                 if type(obj) is dict:
                     class_obj = import_class(
                         "pyleecan.Classes", obj.get("__class__"), "slot_list"

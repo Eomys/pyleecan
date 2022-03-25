@@ -1,6 +1,5 @@
 Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
-Time,s,Force time Data object,Nt_tot,SciDataTool.Classes.DataND.Data,None,,,,Output,,store,VERSION,1,Gather the structural module outputs
-Angle,rad,Force position Data object,Na_tot,SciDataTool.Classes.DataND.Data,None,,,,,,,,,
+axes_dict,,Dict containing axes data used for Force,,{SciDataTool.Classes.DataND.Data},None,,,,Output,,store,VERSION,1,Gather the structural module outputs
 AGSF,N.m^2,Air Gap Surface Force (mainly computed with Maxwell stress tensor),"(Nt_tot ,Na_tot)",SciDataTool.Classes.VectorField.VectorField,None,,,,,,,,,
 logger_name,-,Name of the logger to use,0,str,Pyleecan.Force,,,,,,,,,
 Rag,-,Radius value for air-gap computation,0,float,None,,,,,,,,,

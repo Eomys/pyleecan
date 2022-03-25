@@ -53,6 +53,9 @@ class PCondType12(Gen_PCondType12, QWidget):
 
         # Fill the fields with the machine values (if they're filled)
         self.lam = lamination
+        if self.lam.winding.conductor is None:
+            self.lam.winding.conductor = CondType12()
+            self.lam.winding.conductor._set_None()
         self.cond = self.lam.winding.conductor
 
         # Make sure that isinstance(cond, CondType12)
@@ -68,8 +71,6 @@ class PCondType12(Gen_PCondType12, QWidget):
         if self.cond.Wins_wire is None:
             self.cond.Wins_wire = 0  # Default value
         self.lf_Wins_wire.setValue(self.cond.Wins_wire)
-        if self.cond.Wins_cond is None:
-            self.cond.Wins_cond = 0  # Default value
         self.lf_Wins_cond.setValue(self.cond.Wins_cond)
         self.lf_Lewout.validator().setBottom(0)
         if self.lam.winding.Lewout is None:
@@ -151,13 +152,14 @@ class PCondType12(Gen_PCondType12, QWidget):
         # Notify the machine GUI that the machine has changed
         self.saveNeeded.emit()
 
-    def check(self):
-        """Check that the current machine have all the needed field set
+    @staticmethod
+    def check(lam):
+        """Check that the current lamination have all the needed field set
 
         Parameters
         ----------
-        self : PCondType12
-            A PCondType12 object
+        lam: LamSlotWind
+            Lamination to check
 
         Returns
         -------
@@ -165,14 +167,17 @@ class PCondType12(Gen_PCondType12, QWidget):
             Error message (return None if no error)
         """
 
+        cond = lam.winding.conductor
         # Check that everything is set
-        if self.cond.Nwppc is None:
-            return self.tr("You must set Nwppc !")
-        elif self.cond.Wwire is None:
-            return self.tr("You must set Wwire !")
-        elif self.cond.Wins_wire is None:
-            return self.tr("You must set Wins_wire !")
-        elif self.cond.Wins_cond is None:
-            return self.tr("You must set Wins_cond !")
-        elif self.lam.winding.Lewout is None:
-            return self.tr("You must set Lewout !")
+        if cond.Nwppc is None:
+            return "You must set Nwppc !"
+        elif cond.Wwire is None:
+            return "You must set Wwire !"
+        elif cond.Wins_wire is None:
+            return "You must set Wins_wire !"
+        elif cond.Wins_cond is None:
+            return "You must set Wins_cond !"
+        elif cond.Wins_cond < cond.Wwire:
+            return "You must have Wins_cond >= Wwire !"
+        elif lam.winding.Lewout is None:
+            return "You must set Lewout !"

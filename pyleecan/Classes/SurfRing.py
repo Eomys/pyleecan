@@ -69,7 +69,6 @@ except ImportError as error:
 
 
 from ._check import InitUnKnowClassError
-from .Surface import Surface
 
 
 class SurfRing(Surface):
@@ -352,13 +351,20 @@ class SurfRing(Surface):
     def _set_out_surf(self, value):
         """setter of out_surf"""
         if isinstance(value, str):  # Load from file
-            value = load_init_dict(value)[1]
+            try:
+                value = load_init_dict(value)[1]
+            except Exception as e:
+                self.get_logger().error(
+                    "Error while loading " + value + ", setting None instead"
+                )
+                value = None
         if isinstance(value, dict) and "__class__" in value:
             class_obj = import_class(
                 "pyleecan.Classes", value.get("__class__"), "out_surf"
             )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
+            Surface = import_class("pyleecan.Classes", "Surface", "out_surf")
             value = Surface()
         check_var("out_surf", value, "Surface")
         self._out_surf = value
@@ -382,13 +388,20 @@ class SurfRing(Surface):
     def _set_in_surf(self, value):
         """setter of in_surf"""
         if isinstance(value, str):  # Load from file
-            value = load_init_dict(value)[1]
+            try:
+                value = load_init_dict(value)[1]
+            except Exception as e:
+                self.get_logger().error(
+                    "Error while loading " + value + ", setting None instead"
+                )
+                value = None
         if isinstance(value, dict) and "__class__" in value:
             class_obj = import_class(
                 "pyleecan.Classes", value.get("__class__"), "in_surf"
             )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
+            Surface = import_class("pyleecan.Classes", "Surface", "in_surf")
             value = Surface()
         check_var("in_surf", value, "Surface")
         self._in_surf = value

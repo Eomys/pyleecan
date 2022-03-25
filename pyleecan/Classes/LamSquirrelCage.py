@@ -45,11 +45,6 @@ except ImportError as error:
     comp_number_phase_eq = error
 
 try:
-    from ..Methods.Machine.LamSquirrelCage.comp_periodicity import comp_periodicity
-except ImportError as error:
-    comp_periodicity = error
-
-try:
     from ..Methods.Machine.LamSquirrelCage.comp_surface_ring import comp_surface_ring
 except ImportError as error:
     comp_surface_ring = error
@@ -61,15 +56,30 @@ try:
 except ImportError as error:
     comp_resistance_wind = error
 
+try:
+    from ..Methods.Machine.LamSquirrelCage.get_name_phase import get_name_phase
+except ImportError as error:
+    get_name_phase = error
+
+try:
+    from ..Methods.Machine.LamSquirrelCage.comp_angle_d_axis import comp_angle_d_axis
+except ImportError as error:
+    comp_angle_d_axis = error
+
+try:
+    from ..Methods.Machine.LamSquirrelCage.comp_periodicity_spatial import (
+        comp_periodicity_spatial,
+    )
+except ImportError as error:
+    comp_periodicity_spatial = error
+
+try:
+    from ..Methods.Machine.LamSquirrelCage.comp_masses import comp_masses
+except ImportError as error:
+    comp_masses = error
+
 
 from ._check import InitUnKnowClassError
-from .Material import Material
-from .Winding import Winding
-from .Slot import Slot
-from .Hole import Hole
-from .Notch import Notch
-from .Skew import Skew
-from .Bore import Bore
 
 
 class LamSquirrelCage(LamSlotWind):
@@ -132,18 +142,6 @@ class LamSquirrelCage(LamSlotWind):
         )
     else:
         comp_number_phase_eq = comp_number_phase_eq
-    # cf Methods.Machine.LamSquirrelCage.comp_periodicity
-    if isinstance(comp_periodicity, ImportError):
-        comp_periodicity = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use LamSquirrelCage method comp_periodicity: "
-                    + str(comp_periodicity)
-                )
-            )
-        )
-    else:
-        comp_periodicity = comp_periodicity
     # cf Methods.Machine.LamSquirrelCage.comp_surface_ring
     if isinstance(comp_surface_ring, ImportError):
         comp_surface_ring = property(
@@ -168,6 +166,53 @@ class LamSquirrelCage(LamSlotWind):
         )
     else:
         comp_resistance_wind = comp_resistance_wind
+    # cf Methods.Machine.LamSquirrelCage.get_name_phase
+    if isinstance(get_name_phase, ImportError):
+        get_name_phase = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use LamSquirrelCage method get_name_phase: "
+                    + str(get_name_phase)
+                )
+            )
+        )
+    else:
+        get_name_phase = get_name_phase
+    # cf Methods.Machine.LamSquirrelCage.comp_angle_d_axis
+    if isinstance(comp_angle_d_axis, ImportError):
+        comp_angle_d_axis = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use LamSquirrelCage method comp_angle_d_axis: "
+                    + str(comp_angle_d_axis)
+                )
+            )
+        )
+    else:
+        comp_angle_d_axis = comp_angle_d_axis
+    # cf Methods.Machine.LamSquirrelCage.comp_periodicity_spatial
+    if isinstance(comp_periodicity_spatial, ImportError):
+        comp_periodicity_spatial = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use LamSquirrelCage method comp_periodicity_spatial: "
+                    + str(comp_periodicity_spatial)
+                )
+            )
+        )
+    else:
+        comp_periodicity_spatial = comp_periodicity_spatial
+    # cf Methods.Machine.LamSquirrelCage.comp_masses
+    if isinstance(comp_masses, ImportError):
+        comp_masses = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use LamSquirrelCage method comp_masses: " + str(comp_masses)
+                )
+            )
+        )
+    else:
+        comp_masses = comp_masses
     # save and copy methods are available in all object
     save = save
     copy = copy
@@ -439,13 +484,20 @@ class LamSquirrelCage(LamSlotWind):
     def _set_ring_mat(self, value):
         """setter of ring_mat"""
         if isinstance(value, str):  # Load from file
-            value = load_init_dict(value)[1]
+            try:
+                value = load_init_dict(value)[1]
+            except Exception as e:
+                self.get_logger().error(
+                    "Error while loading " + value + ", setting None instead"
+                )
+                value = None
         if isinstance(value, dict) and "__class__" in value:
             class_obj = import_class(
                 "pyleecan.Classes", value.get("__class__"), "ring_mat"
             )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
+            Material = import_class("pyleecan.Classes", "Material", "ring_mat")
             value = Material()
         check_var("ring_mat", value, "Material")
         self._ring_mat = value

@@ -7,6 +7,7 @@ from pyleecan.Classes.ImportGenVectLin import ImportGenVectLin
 from pyleecan.Classes.ImportMatrixVal import ImportMatrixVal
 from pyleecan.Classes.InputCurrent import InputCurrent
 from pyleecan.Classes.MagFEMM import MagFEMM
+from pyleecan.Classes.OPdq import OPdq
 from pyleecan.Classes.Output import Output
 from pyleecan.Classes.Simu1 import Simu1
 from pyleecan.definitions import DATA_DIR
@@ -52,8 +53,7 @@ def test_FEMM_meshsolution_plots_SPMSM():
     simu.input = InputCurrent(
         Is=Is,
         Ir=None,  # No winding on the rotor
-        N0=N0,
-        angle_rotor=None,  # Will be computed
+        OP=OPdq(N0=N0),
         time=time,
         Na_tot=Na_tot,
         angle_rotor_initial=0.5216 + pi,
@@ -70,6 +70,7 @@ def test_FEMM_meshsolution_plots_SPMSM():
     simu.force = None
     simu.struct = None
     # Copy the simu and activate the symmetry
+    assert SPMSM_003.comp_periodicity_spatial() == (1, True)
     simu_sym = Simu1(init_dict=simu.as_dict())
     simu_sym.mag.is_periodicity_a = True
 
@@ -153,7 +154,10 @@ def test_FEMM_meshsolution_plots_slotless():
     simu = Simu1(name="test_meshsolution_plots_slotless", machine=Slotless_CEFC)
 
     simu.input = InputCurrent(
-        Id_ref=0, Iq_ref=0, Ir=None, Na_tot=2 ** 6, Nt_tot=1, N0=1200
+        OP=OPdq(N0=1200, Id_ref=0, Iq_ref=0),
+        Ir=None,
+        Na_tot=2 ** 6,
+        Nt_tot=1,
     )
 
     simu.mag = MagFEMM(
@@ -283,8 +287,7 @@ def test_FEMM_meshsolution_plots_Prius():
     simu.input = InputCurrent(
         Is=Is,
         Ir=None,  # No winding on the rotor
-        N0=N0,
-        angle_rotor=None,  # Will be computed
+        OP=OPdq(N0=N0),
         Nt_tot=Nt_tot,
         Na_tot=Na_tot,
         angle_rotor_initial=0.86,

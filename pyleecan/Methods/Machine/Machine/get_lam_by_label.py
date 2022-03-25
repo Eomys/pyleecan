@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from ....Functions.labels import STATOR_LAB, ROTOR_LAB, ROTOR_LAB_S, STATOR_LAB_S
 
 

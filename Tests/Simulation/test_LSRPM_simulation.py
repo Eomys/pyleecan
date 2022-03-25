@@ -1,5 +1,6 @@
 # Load the machine
 from os.path import join
+from pyleecan.Classes.OPdq import OPdq
 from pyleecan.Functions.load import load
 from pyleecan.definitions import DATA_DIR
 import matplotlib.pyplot as plt
@@ -29,11 +30,11 @@ def test_LSRPM_simulation():
     simu_femm.input = InputCurrent()
 
     # Rotor speed [rpm]
-    simu_femm.input.N0 = 750
+    simu_femm.input.OP = OPdq(N0=750)
 
     # time discretization [s]
     time = linspace(
-        start=0, stop=60 / simu_femm.input.N0, num=32 * p, endpoint=False
+        start=0, stop=60 / simu_femm.input.OP.N0, num=32 * p, endpoint=False
     )  # 32*p timesteps
     simu_femm.input.time = time
 
@@ -44,8 +45,8 @@ def test_LSRPM_simulation():
 
     # Stator currents as a function of time, each column correspond to one phase [A]
     I0_rms = 6.85
-    felec = p * simu_femm.input.N0 / 60  # [Hz]
-    rot_dir = simu_femm.machine.stator.comp_rot_dir()
+    felec = p * simu_femm.input.OP.N0 / 60  # [Hz]
+    rot_dir = simu_femm.machine.stator.comp_mmf_dir()
     Phi0 = 140 * pi / 180  # Maximum Torque Per Amp
 
     Ia = (

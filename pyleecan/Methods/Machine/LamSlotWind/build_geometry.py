@@ -7,7 +7,7 @@ from ....Classes.LamSlot import LamSlot
 from ....Functions.labels import update_RTS_index
 
 
-def build_geometry(self, sym=1, alpha=0, delta=0, is_simplified=False):
+def build_geometry(self, sym=1, alpha=0, delta=0, is_circular_radius=False):
     """Build the geometry of the Lamination with winding in slots
 
     Parameters
@@ -20,8 +20,8 @@ def build_geometry(self, sym=1, alpha=0, delta=0, is_simplified=False):
         Angle for rotation [rad]
     delta : complex
         Complex value for translation
-    is_simplified: bool
-        True to avoid line superposition
+    is_circular_radius : bool
+        True to add surfaces to "close" the Lamination radii
 
     Returns
     -------
@@ -30,7 +30,9 @@ def build_geometry(self, sym=1, alpha=0, delta=0, is_simplified=False):
 
     """
     # getting the Lamination surface
-    surf_lam = LamSlot.build_geometry(self, sym=sym, alpha=alpha, delta=delta)
+    surf_lam = LamSlot.build_geometry(
+        self, sym=sym, alpha=alpha, delta=delta, is_circular_radius=is_circular_radius
+    )
     surf_list = list()
     if self.slot is not None and self.slot.Zs != 0:
         # getting number of slot
@@ -50,7 +52,6 @@ def build_geometry(self, sym=1, alpha=0, delta=0, is_simplified=False):
             surf_Wind = self.slot.build_geometry_active(
                 Nrad=Nrad,
                 Ntan=Ntan,
-                is_simplified=is_simplified,
                 alpha=alpha,
                 delta=delta,
             )

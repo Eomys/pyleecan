@@ -17,9 +17,10 @@ pytest-qt>=3.3.0
 pyuff>=1.25
 pyvista>=0.25.3
 quadpy
-SciDataTool==1.4.9
+SciDataTool>=2.0.6
 scipy>=1.4.1
 setuptools
 swat_em>=0.6.3
 xlrd>=1.2.0
 xlwt>=1.3.0
+hypothesis

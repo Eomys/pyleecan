@@ -10,7 +10,9 @@ DELTA = 1e-6
 from ....Classes.Segment import Segment
 
 
-def get_yoke_side_line(self, sym, vent_surf_list):
+def get_yoke_side_line(
+    self, sym, vent_surf_list, ZBR=None, ZTR=None, ZBL=None, ZTL=None
+):
     """Define the Yoke Side lines of a Lamination by taking into account sym and vent
 
     Parameters:
@@ -20,6 +22,14 @@ def get_yoke_side_line(self, sym, vent_surf_list):
         Symmetry factor (1= full machine, 2= half of the machine...)
     vent_surf_list :
         List of the ventilation surfaces
+    ZBR : Complex
+        Yoke Side Limit point Bottom Right
+    ZTR : Complex
+        Yoke Side Limit point Top Right
+    ZBL : Complex
+        Yoke Side Limit point Bottom Left
+    ZTL : Complex
+        Yoke Side Limit point Top Left
 
     Returns:
     right_list, left_list: ([Line], [Line])
@@ -42,19 +52,28 @@ def get_yoke_side_line(self, sym, vent_surf_list):
                     inter_line_list_L.append(line)
 
     # Yoke Limit point
-    Z0 = self.Rint
-    Z1 = self.Rext
-    alpha = 2 * pi / sym
-    Z3 = Z0 * exp(1j * alpha)
-    Z2 = Z1 * exp(1j * alpha)
+    if ZBR is None:
+        alpha = 2 * pi / sym
+        ZBR = self.Rint
+        ZTR = self.Rext
+        ZBL = ZBR * exp(1j * alpha)
+        ZTL = ZTR * exp(1j * alpha)
 
     lam_lab = self.get_label()
     if self.is_internal:
-        right_list = merge_line_list(Z0, Z1, lam_lab + "_" + YSR_LAB, inter_line_list_R)
-        left_list = merge_line_list(Z2, Z3, lam_lab + "_" + YSL_LAB, inter_line_list_L)
+        right_list = merge_line_list(
+            ZBR, ZTR, lam_lab + "_" + YSR_LAB, inter_line_list_R
+        )
+        left_list = merge_line_list(
+            ZTL, ZBL, lam_lab + "_" + YSL_LAB, inter_line_list_L
+        )
     else:
-        left_list = merge_line_list(Z3, Z2, lam_lab + "_" + YSL_LAB, inter_line_list_L)
-        right_list = merge_line_list(Z1, Z0, lam_lab + "_" + YSR_LAB, inter_line_list_R)
+        left_list = merge_line_list(
+            ZBL, ZTL, lam_lab + "_" + YSL_LAB, inter_line_list_L
+        )
+        right_list = merge_line_list(
+            ZTR, ZBR, lam_lab + "_" + YSR_LAB, inter_line_list_R
+        )
 
     return right_list, left_list
 

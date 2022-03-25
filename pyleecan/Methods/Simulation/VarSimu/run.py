@@ -31,6 +31,9 @@ def run(self):
     ref_simu.var_simu = self.var_simu  # var_simu default is None
     ref_simu.index = None
     ref_simu.layer = self.parent.layer + 1
+    # None clean-up
+    if xoutput.xoutput_dict is None:
+        xoutput.xoutput_dict = dict()
 
     # Generate simulation list and ParamExplorerValue list
     simu_dict = self.generate_simulation_list(ref_simu)
@@ -172,13 +175,20 @@ def log_step_simu(index, nb_simu, paramexplorer_list, logger, layer):
     else:
         msg = ""
     InputCurrent = import_class("pyleecan.Classes", "InputCurrent")
+    InputVoltage = import_class("pyleecan.Classes", "InputVoltage")
     msg += "Running simulation " + str(index + 1) + "/" + str(nb_simu) + " with "
     for param_exp in paramexplorer_list:
         value = param_exp.get_value()[index]
         if isinstance(value, InputCurrent):
-            msg += "N0=" + format(value.N0, ".6g") + " [rpm]"
-            msg += ", Id=" + format(value.Id_ref, ".4g") + " [Arms]"
-            msg += ", Iq=" + format(value.Iq_ref, ".4g") + " [Arms], "
+            msg += "N0=" + format(value.OP.N0, ".6g") + " [rpm]"
+            msg += ", Id=" + format(value.OP.Id_ref, ".4g") + " [Arms]"
+            msg += ", Iq=" + format(value.OP.Iq_ref, ".4g") + " [Arms], "
+        elif isinstance(value, InputVoltage):
+            msg += "N0=" + format(value.OP.N0, ".6g") + " [rpm]"
+            msg += ", U0=" + format(value.OP.U0_ref, ".4g") + " [Vrms]"
+            msg += ", UPhi0=" + format(value.OP.UPhi0_ref, ".4g") + " [rad], "
+            if value.OP.slip_ref is not None:
+                msg += ", slip=" + format(value.OP.slip_ref, ".4g") + " [-], "
         elif isinstance(value, (list, np.ndarray)):
             msg += param_exp.symbol
             msg += "="

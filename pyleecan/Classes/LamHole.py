@@ -68,22 +68,17 @@ except ImportError as error:
     comp_angle_d_axis = error
 
 try:
-    from ..Methods.Machine.LamHole.comp_periodicity import comp_periodicity
-except ImportError as error:
-    comp_periodicity = error
-
-try:
     from ..Methods.Machine.LamHole.set_pole_pair_number import set_pole_pair_number
 except ImportError as error:
     set_pole_pair_number = error
 
+try:
+    from ..Methods.Machine.LamHole.get_Zs import get_Zs
+except ImportError as error:
+    get_Zs = error
+
 
 from ._check import InitUnKnowClassError
-from .Hole import Hole
-from .Material import Material
-from .Notch import Notch
-from .Skew import Skew
-from .Bore import Bore
 
 
 class LamHole(Lamination):
@@ -200,18 +195,6 @@ class LamHole(Lamination):
         )
     else:
         comp_angle_d_axis = comp_angle_d_axis
-    # cf Methods.Machine.LamHole.comp_periodicity
-    if isinstance(comp_periodicity, ImportError):
-        comp_periodicity = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use LamHole method comp_periodicity: "
-                    + str(comp_periodicity)
-                )
-            )
-        )
-    else:
-        comp_periodicity = comp_periodicity
     # cf Methods.Machine.LamHole.set_pole_pair_number
     if isinstance(set_pole_pair_number, ImportError):
         set_pole_pair_number = property(
@@ -224,6 +207,15 @@ class LamHole(Lamination):
         )
     else:
         set_pole_pair_number = set_pole_pair_number
+    # cf Methods.Machine.LamHole.get_Zs
+    if isinstance(get_Zs, ImportError):
+        get_Zs = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use LamHole method get_Zs: " + str(get_Zs))
+            )
+        )
+    else:
+        get_Zs = get_Zs
     # save and copy methods are available in all object
     save = save
     copy = copy
@@ -441,6 +433,15 @@ class LamHole(Lamination):
         """setter of hole"""
         if type(value) is list:
             for ii, obj in enumerate(value):
+                if isinstance(obj, str):  # Load from file
+                    try:
+                        obj = load_init_dict(obj)[1]
+                    except Exception as e:
+                        self.get_logger().error(
+                            "Error while loading " + obj + ", setting None instead"
+                        )
+                        obj = None
+                        value[ii] = None
                 if type(obj) is dict:
                     class_obj = import_class(
                         "pyleecan.Classes", obj.get("__class__"), "hole"

@@ -27,12 +27,10 @@ from ..Classes.ImportMatrixVal import ImportMatrixVal
 from numpy import ndarray
 from numpy import array, array_equal
 from ._check import InitUnKnowClassError
-from .ImportVectorField import ImportVectorField
-from .ImportMatrix import ImportMatrix
 
 
 class InputForce(Input):
-    """Input to start with the structural one"""
+    """Input to start with the structural one """
 
     VERSION = 1
 
@@ -57,9 +55,10 @@ class InputForce(Input):
         time=None,
         angle=None,
         Nt_tot=2048,
-        Nrev=1,
+        Nrev=None,
         Na_tot=2048,
-        N0=None,
+        OP=None,
+        t_final=None,
         init_dict=None,
         init_str=None,
     ):
@@ -90,13 +89,21 @@ class InputForce(Input):
                 Nrev = init_dict["Nrev"]
             if "Na_tot" in list(init_dict.keys()):
                 Na_tot = init_dict["Na_tot"]
-            if "N0" in list(init_dict.keys()):
-                N0 = init_dict["N0"]
+            if "OP" in list(init_dict.keys()):
+                OP = init_dict["OP"]
+            if "t_final" in list(init_dict.keys()):
+                t_final = init_dict["t_final"]
         # Set the properties (value check and convertion are done in setter)
         self.P = P
         # Call Input init
         super(InputForce, self).__init__(
-            time=time, angle=angle, Nt_tot=Nt_tot, Nrev=Nrev, Na_tot=Na_tot, N0=N0
+            time=time,
+            angle=angle,
+            Nt_tot=Nt_tot,
+            Nrev=Nrev,
+            Na_tot=Na_tot,
+            OP=OP,
+            t_final=t_final,
         )
         # The class is frozen (in Input init), for now it's impossible to
         # add new properties
@@ -203,11 +210,20 @@ class InputForce(Input):
     def _set_P(self, value):
         """setter of P"""
         if isinstance(value, str):  # Load from file
-            value = load_init_dict(value)[1]
+            try:
+                value = load_init_dict(value)[1]
+            except Exception as e:
+                self.get_logger().error(
+                    "Error while loading " + value + ", setting None instead"
+                )
+                value = None
         if isinstance(value, dict) and "__class__" in value:
             class_obj = import_class("pyleecan.Classes", value.get("__class__"), "P")
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
+            ImportVectorField = import_class(
+                "pyleecan.Classes", "ImportVectorField", "P"
+            )
             value = ImportVectorField()
         check_var("P", value, "ImportVectorField")
         self._P = value

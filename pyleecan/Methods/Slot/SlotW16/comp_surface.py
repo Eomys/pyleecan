@@ -1,6 +1,3 @@
-from numpy import pi
-
-
 def comp_surface(self):
     """Compute the Slot total surface (by analytical computation).
     Caution, the bottom of the Slot is an Arc
@@ -16,9 +13,7 @@ def comp_surface(self):
         Slot total surface [m**2]
 
     """
-    Rbo = self.get_Rbo()
-
-    Swind = self.comp_surface_active()
-    S0 = (pi * Rbo ** 2 - pi * (Rbo - self.H0) ** 2) * self.W0 / (2 * pi)
-
-    return Swind + S0
+    if self.type_close == 2:
+        return self.comp_surface_active()
+    else:
+        return self.comp_surface_active() + self.comp_surface_opening()

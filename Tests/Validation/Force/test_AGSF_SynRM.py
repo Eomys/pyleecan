@@ -1,26 +1,26 @@
 from numpy import pi, zeros, linspace, cos
 from os.path import join
 
-from Tests import save_validation_path as save_path
+import pytest
 
+import json
+
+from multiprocessing import cpu_count
+
+from pyleecan.Classes.OPdq import OPdq
 from pyleecan.Classes.Simu1 import Simu1
-
 from pyleecan.Classes.InputCurrent import InputCurrent
-
-from pyleecan.Classes.ImportGenVectLin import ImportGenVectLin
 from pyleecan.Classes.ImportMatrixVal import ImportMatrixVal
-
 from pyleecan.Classes.ForceMT import ForceMT
-
 from pyleecan.Classes.MagFEMM import MagFEMM
 from pyleecan.Classes.Output import Output
 
-import pytest
-import json
-
 from pyleecan.Functions.load import load
 from pyleecan.Functions.Plot import dict_2D, dict_3D
+
 from pyleecan.definitions import DATA_DIR
+
+from Tests import save_validation_path as save_path
 
 
 @pytest.mark.long_5s
@@ -30,7 +30,7 @@ from pyleecan.definitions import DATA_DIR
 @pytest.mark.SynRM
 @pytest.mark.periodicity
 @pytest.mark.SingleOP
-def test_AGSF_SynRM():
+def test_AGSF_SynRM(nb_worker=int(cpu_count() / 2)):
     """Validation of a SynRM machine from Syr-e r29 open source software
     https://sourceforge.net/projects/syr-e/
     Test compute air-gap surface force with Maxwell Tensor and load the results
@@ -53,19 +53,16 @@ def test_AGSF_SynRM():
 
     # Definition of the main simulation
     simu = Simu1(name="test_AGSF_SynRM", machine=SynRM_001)
-    time_obj = ImportMatrixVal(value=time)
+
     Na_tot = 2016
-    alpha_rotor = ImportGenVectLin(start=0, stop=2 * pi, num=Nt_tot, endpoint=False)
 
     simu.input = InputCurrent(
-        Is=None,
+        Is=ImportMatrixVal(value=Is),
         Ir=None,  # No winding on the rotor
-        N0=None,
-        angle_rotor=alpha_rotor,
-        time=time_obj,
+        OP=OPdq(N0=None, felec=freq0),
+        time=ImportMatrixVal(value=time),
         Na_tot=Na_tot,
-        angle_rotor_initial=0,
-        felec=freq0,
+        Nt_tot=Nt_tot,
     )
 
     # Definition of the magnetic simulation (1/2 symmetry)
@@ -73,16 +70,14 @@ def test_AGSF_SynRM():
         type_BH_stator=0,
         type_BH_rotor=0,
         is_periodicity_a=True,
+        nb_worker=nb_worker,
     )
 
     # Definition of the magnetic simulation (no symmetry)
     simu.force = ForceMT(is_periodicity_a=True)
 
-    simu.struct = None
-
-    simu.input.Is = ImportMatrixVal(value=Is)
-    out = Output(simu=simu)
-    simu.run()
+    # Run simulation
+    out = simu.run()
 
     # Test save with MeshSolution object in out
     out.save(save_path=save_path + "\Output.json")

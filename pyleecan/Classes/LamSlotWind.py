@@ -98,9 +98,9 @@ except ImportError as error:
     comp_mmf_unit = error
 
 try:
-    from ..Methods.Machine.LamSlotWind.comp_rot_dir import comp_rot_dir
+    from ..Methods.Machine.LamSlotWind.comp_mmf_dir import comp_mmf_dir
 except ImportError as error:
-    comp_rot_dir = error
+    comp_mmf_dir = error
 
 try:
     from ..Methods.Machine.LamSlotWind.comp_lengths_winding import comp_lengths_winding
@@ -113,9 +113,11 @@ except ImportError as error:
     comp_number_phase_eq = error
 
 try:
-    from ..Methods.Machine.LamSlotWind.comp_periodicity import comp_periodicity
+    from ..Methods.Machine.LamSlotWind.comp_periodicity_spatial import (
+        comp_periodicity_spatial,
+    )
 except ImportError as error:
-    comp_periodicity = error
+    comp_periodicity_spatial = error
 
 try:
     from ..Methods.Machine.LamSlotWind.set_pole_pair_number import set_pole_pair_number
@@ -124,13 +126,6 @@ except ImportError as error:
 
 
 from ._check import InitUnKnowClassError
-from .Winding import Winding
-from .Slot import Slot
-from .Material import Material
-from .Hole import Hole
-from .Notch import Notch
-from .Skew import Skew
-from .Bore import Bore
 
 
 class LamSlotWind(LamSlot):
@@ -318,17 +313,17 @@ class LamSlotWind(LamSlot):
         )
     else:
         comp_mmf_unit = comp_mmf_unit
-    # cf Methods.Machine.LamSlotWind.comp_rot_dir
-    if isinstance(comp_rot_dir, ImportError):
-        comp_rot_dir = property(
+    # cf Methods.Machine.LamSlotWind.comp_mmf_dir
+    if isinstance(comp_mmf_dir, ImportError):
+        comp_mmf_dir = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use LamSlotWind method comp_rot_dir: " + str(comp_rot_dir)
+                    "Can't use LamSlotWind method comp_mmf_dir: " + str(comp_mmf_dir)
                 )
             )
         )
     else:
-        comp_rot_dir = comp_rot_dir
+        comp_mmf_dir = comp_mmf_dir
     # cf Methods.Machine.LamSlotWind.comp_lengths_winding
     if isinstance(comp_lengths_winding, ImportError):
         comp_lengths_winding = property(
@@ -353,18 +348,18 @@ class LamSlotWind(LamSlot):
         )
     else:
         comp_number_phase_eq = comp_number_phase_eq
-    # cf Methods.Machine.LamSlotWind.comp_periodicity
-    if isinstance(comp_periodicity, ImportError):
-        comp_periodicity = property(
+    # cf Methods.Machine.LamSlotWind.comp_periodicity_spatial
+    if isinstance(comp_periodicity_spatial, ImportError):
+        comp_periodicity_spatial = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use LamSlotWind method comp_periodicity: "
-                    + str(comp_periodicity)
+                    "Can't use LamSlotWind method comp_periodicity_spatial: "
+                    + str(comp_periodicity_spatial)
                 )
             )
         )
     else:
-        comp_periodicity = comp_periodicity
+        comp_periodicity_spatial = comp_periodicity_spatial
     # cf Methods.Machine.LamSlotWind.set_pole_pair_number
     if isinstance(set_pole_pair_number, ImportError):
         set_pole_pair_number = property(
@@ -610,13 +605,20 @@ class LamSlotWind(LamSlot):
     def _set_winding(self, value):
         """setter of winding"""
         if isinstance(value, str):  # Load from file
-            value = load_init_dict(value)[1]
+            try:
+                value = load_init_dict(value)[1]
+            except Exception as e:
+                self.get_logger().error(
+                    "Error while loading " + value + ", setting None instead"
+                )
+                value = None
         if isinstance(value, dict) and "__class__" in value:
             class_obj = import_class(
                 "pyleecan.Classes", value.get("__class__"), "winding"
             )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
+            Winding = import_class("pyleecan.Classes", "Winding", "winding")
             value = Winding()
         check_var("winding", value, "Winding")
         self._winding = value

@@ -1,18 +1,18 @@
 import sys
-from random import uniform
-from os.path import join, isfile
-import mock
+from os import makedirs
+from os.path import join, isfile, isdir
 
+import mock
 import pytest
 from PySide2 import QtWidgets
-from PySide2.QtTest import QTest
 
-
+from Tests import TEST_DATA_DIR as data_test
 from pyleecan.GUI.Dialog.DMachineSetup.DMachineSetup import DMachineSetup
 from pyleecan.GUI.Dialog.DMachineSetup.SPreview.SPreview import SPreview
-from Tests import TEST_DATA_DIR as data_test
 from pyleecan.definitions import MAIN_DIR
 from pyleecan.Functions.load import load_matlib
+from Tests import TEST_DATA_DIR as data_test, save_gui_path
+
 
 matlib_path = join(data_test, "Material")
 machine_path = join(MAIN_DIR, "Data", "Machine")
@@ -24,10 +24,10 @@ SCIM_dict = {
         ("Stator slot number", "36"),
         ("Rotor slot number", "28"),
         ("Pole pair number", "3"),
-        ("Topology", "Inner Rotor"),
+        ("Topology", "Internal Rotor"),
         ("Stator phase number", "3"),
         ("Stator winding resistance", "0.02392 Ohm"),
-        ("Machine total mass", "328.1 kg"),
+        ("Machine total mass", "342.8 kg"),
     ],
     "Nrow": 8,
 }
@@ -37,7 +37,7 @@ IPMSM_dict = {
         ("Machine Type", "IPMSM"),
         ("Stator slot number", "48"),
         ("Pole pair number", "4"),
-        ("Topology", "Inner Rotor"),
+        ("Topology", "Internal Rotor"),
         ("Stator phase number", "3"),
         ("Stator winding resistance", "0.03595 Ohm"),
         ("Machine total mass", "33.38 kg"),
@@ -48,25 +48,30 @@ load_preview_test = [SCIM_dict, IPMSM_dict]
 
 
 class TestSPreview(object):
-    @pytest.fixture
-    def setup(self):
-        """Run at the begining of every test to setup the gui"""
-
-        if not QtWidgets.QApplication.instance():
-            self.app = QtWidgets.QApplication(sys.argv)
-        else:
-            self.app = QtWidgets.QApplication.instance()
-
+    def setup_method(self):
+        """Setup the workspace and the GUI"""
         # MatLib widget
         material_dict = load_matlib(matlib_path=matlib_path)
-        widget = DMachineSetup(material_dict=material_dict, machine_path=machine_path)
+        self.widget = DMachineSetup(
+            material_dict=material_dict, machine_path=machine_path
+        )
 
-        yield {"widget": widget}
+    @classmethod
+    def setup_class(cls):
+        """Start the app for the test"""
+        print("\nStart Test TestSPreview")
+        if not QtWidgets.QApplication.instance():
+            cls.app = QtWidgets.QApplication(sys.argv)
+        else:
+            cls.app = QtWidgets.QApplication.instance()
 
-        self.app.quit()
+    @classmethod
+    def teardown_class(cls):
+        """Exit the app after all the test"""
+        cls.app.quit()
 
     @pytest.mark.parametrize("test_dict", load_preview_test)
-    def test_load(self, setup, test_dict):
+    def test_load(self, test_dict):
         """Check that you can load a machine"""
         assert isfile(test_dict["file_path"])
 
@@ -75,20 +80,44 @@ class TestSPreview(object):
             "PySide2.QtWidgets.QFileDialog.getOpenFileName", return_value=return_value
         ):
             # To trigger the slot
-            setup["widget"].b_load.clicked.emit()
+            self.widget.b_load.clicked.emit()
 
         # Check load MachineType
-        assert type(setup["widget"].w_step) is SPreview
+        assert type(self.widget.w_step) is SPreview
         # Check the table
-        assert (
-            setup["widget"].w_step.tab_machine.tab_param.rowCount() == test_dict["Nrow"]
-        )
+        assert self.widget.w_step.tab_machine.tab_param.rowCount() == test_dict["Nrow"]
         for ii, content in enumerate(test_dict["table"]):
             assert (
-                setup["widget"].w_step.tab_machine.tab_param.item(ii, 0).text()
+                self.widget.w_step.tab_machine.tab_param.item(ii, 0).text()
                 == content[0]
             )
             assert (
-                setup["widget"].w_step.tab_machine.tab_param.item(ii, 1).text()
+                self.widget.w_step.tab_machine.tab_param.item(ii, 1).text()
                 == content[1]
             )
+        # Check Draw FEMM
+        FEMM_dir = join(save_gui_path, "Draw_FEMM")
+        if not isdir(FEMM_dir):
+            makedirs(FEMM_dir)
+        femm_path = join(FEMM_dir, self.widget.machine.name + ".fem")
+        assert not isfile(femm_path)
+
+        return_value = (
+            femm_path,
+            "FEMM (*.fem)",
+        )
+        with mock.patch(
+            "PySide2.QtWidgets.QFileDialog.getSaveFileName", return_value=return_value
+        ):
+            self.widget.w_step.tab_machine.b_FEMM.clicked.emit()
+        assert isfile(femm_path)
+
+
+if __name__ == "__main__":
+    a = TestSPreview()
+    a.setup_class()
+    a.setup_method()
+    for test_dict in load_preview_test:
+        a.test_load(test_dict)
+    a.teardown_class()
+    print("Done")

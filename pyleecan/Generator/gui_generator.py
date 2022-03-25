@@ -8,7 +8,14 @@ from re import match
 from subprocess import PIPE, Popen
 from json import load as jload
 import subprocess
-from ..definitions import GEN_DIR, GUI_DIR, RES_NAME, RES_PATH, PACKAGE_NAME
+from ..definitions import (
+    GEN_DIR,
+    GUI_DIR,
+    RES_NAME,
+    RES_PATH,
+    PACKAGE_NAME,
+    DEFAULT_FONT,
+)
 from ..Generator import TAB, TAB2, TAB3
 from ..Functions.short_filepath import short_filepath
 
@@ -541,6 +548,15 @@ def ui_to_py(path, file_name):
         else:
             data[index] = ""
         prev_index = index
+
+    # Use correct font in QTextEdit
+    for idx, line in enumerate(data):
+        new_line = line.replace("MS Shell Dlg 2", DEFAULT_FONT)
+        new_line = new_line.replace(
+            """span style=\\" font-size""",
+            """span style=\\" font-family:'""" + DEFAULT_FONT + """'; font-size""",
+        )
+        data[idx] = new_line
 
     with open(path_out, "w") as py_file:
         py_file.write(data[0])

@@ -53,11 +53,6 @@ except ImportError as error:
     get_Zs = error
 
 try:
-    from ..Methods.Machine.LamSlot.comp_periodicity import comp_periodicity
-except ImportError as error:
-    comp_periodicity = error
-
-try:
     from ..Methods.Machine.LamSlot.get_bore_desc import get_bore_desc
 except ImportError as error:
     get_bore_desc = error
@@ -72,14 +67,18 @@ try:
 except ImportError as error:
     comp_angle_d_axis = error
 
+try:
+    from ..Methods.Machine.LamSlot.get_surfaces_closing import get_surfaces_closing
+except ImportError as error:
+    get_surfaces_closing = error
+
+try:
+    from ..Methods.Machine.LamSlot.has_magnet import has_magnet
+except ImportError as error:
+    has_magnet = error
+
 
 from ._check import InitUnKnowClassError
-from .Slot import Slot
-from .Material import Material
-from .Hole import Hole
-from .Notch import Notch
-from .Skew import Skew
-from .Bore import Bore
 
 
 class LamSlot(Lamination):
@@ -161,18 +160,6 @@ class LamSlot(Lamination):
         )
     else:
         get_Zs = get_Zs
-    # cf Methods.Machine.LamSlot.comp_periodicity
-    if isinstance(comp_periodicity, ImportError):
-        comp_periodicity = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use LamSlot method comp_periodicity: "
-                    + str(comp_periodicity)
-                )
-            )
-        )
-    else:
-        comp_periodicity = comp_periodicity
     # cf Methods.Machine.LamSlot.get_bore_desc
     if isinstance(get_bore_desc, ImportError):
         get_bore_desc = property(
@@ -208,6 +195,27 @@ class LamSlot(Lamination):
         )
     else:
         comp_angle_d_axis = comp_angle_d_axis
+    # cf Methods.Machine.LamSlot.get_surfaces_closing
+    if isinstance(get_surfaces_closing, ImportError):
+        get_surfaces_closing = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use LamSlot method get_surfaces_closing: "
+                    + str(get_surfaces_closing)
+                )
+            )
+        )
+    else:
+        get_surfaces_closing = get_surfaces_closing
+    # cf Methods.Machine.LamSlot.has_magnet
+    if isinstance(has_magnet, ImportError):
+        has_magnet = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use LamSlot method has_magnet: " + str(has_magnet))
+            )
+        )
+    else:
+        has_magnet = has_magnet
     # save and copy methods are available in all object
     save = save
     copy = copy
@@ -403,11 +411,18 @@ class LamSlot(Lamination):
     def _set_slot(self, value):
         """setter of slot"""
         if isinstance(value, str):  # Load from file
-            value = load_init_dict(value)[1]
+            try:
+                value = load_init_dict(value)[1]
+            except Exception as e:
+                self.get_logger().error(
+                    "Error while loading " + value + ", setting None instead"
+                )
+                value = None
         if isinstance(value, dict) and "__class__" in value:
             class_obj = import_class("pyleecan.Classes", value.get("__class__"), "slot")
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
+            Slot = import_class("pyleecan.Classes", "Slot", "slot")
             value = Slot()
         check_var("slot", value, "Slot")
         self._slot = value

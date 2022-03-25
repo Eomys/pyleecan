@@ -24,6 +24,7 @@ from ..Classes.DataKeeper import DataKeeper
 from ..Classes.Drive import Drive
 from ..Classes.DriveWave import DriveWave
 from ..Classes.EEC import EEC
+from ..Classes.EEC_LSRPM import EEC_LSRPM
 from ..Classes.EEC_PMSM import EEC_PMSM
 from ..Classes.EEC_SCIM import EEC_SCIM
 from ..Classes.Electrical import Electrical
@@ -34,8 +35,6 @@ from ..Classes.EndWinding import EndWinding
 from ..Classes.EndWindingCirc import EndWindingCirc
 from ..Classes.FPGNSeg import FPGNSeg
 from ..Classes.FPGNTri import FPGNTri
-from ..Classes.FluxLink import FluxLink
-from ..Classes.FluxLinkFEMM import FluxLinkFEMM
 from ..Classes.Force import Force
 from ..Classes.ForceMT import ForceMT
 from ..Classes.ForceTensor import ForceTensor
@@ -68,14 +67,15 @@ from ..Classes.ImportMatrixXls import ImportMatrixXls
 from ..Classes.ImportMeshMat import ImportMeshMat
 from ..Classes.ImportMeshUnv import ImportMeshUnv
 from ..Classes.ImportVectorField import ImportVectorField
-from ..Classes.IndMag import IndMag
-from ..Classes.IndMagFEMM import IndMagFEMM
 from ..Classes.Input import Input
 from ..Classes.InputCurrent import InputCurrent
-from ..Classes.InputElec import InputElec
 from ..Classes.InputFlux import InputFlux
 from ..Classes.InputForce import InputForce
+from ..Classes.InputVoltage import InputVoltage
 from ..Classes.Interpolation import Interpolation
+from ..Classes.LUT import LUT
+from ..Classes.LUTdq import LUTdq
+from ..Classes.LUTslip import LUTslip
 from ..Classes.LamHole import LamHole
 from ..Classes.LamSlot import LamSlot
 from ..Classes.LamSlotMag import LamSlotMag
@@ -125,6 +125,9 @@ from ..Classes.ModelBH_linear_sat import ModelBH_linear_sat
 from ..Classes.NodeMat import NodeMat
 from ..Classes.Notch import Notch
 from ..Classes.NotchEvenDist import NotchEvenDist
+from ..Classes.OP import OP
+from ..Classes.OPdq import OPdq
+from ..Classes.OPslip import OPslip
 from ..Classes.OptiConstraint import OptiConstraint
 from ..Classes.OptiDesignVar import OptiDesignVar
 from ..Classes.OptiGenAlg import OptiGenAlg
@@ -150,6 +153,7 @@ from ..Classes.ParamExplorerSet import ParamExplorerSet
 from ..Classes.PolarArc import PolarArc
 from ..Classes.Post import Post
 from ..Classes.PostFunction import PostFunction
+from ..Classes.PostLUT import PostLUT
 from ..Classes.PostMethod import PostMethod
 from ..Classes.PostPlot import PostPlot
 from ..Classes.RefCell import RefCell
@@ -180,6 +184,7 @@ from ..Classes.SlotM14 import SlotM14
 from ..Classes.SlotM15 import SlotM15
 from ..Classes.SlotM16 import SlotM16
 from ..Classes.SlotM17 import SlotM17
+from ..Classes.SlotM18 import SlotM18
 from ..Classes.SlotUD import SlotUD
 from ..Classes.SlotUD2 import SlotUD2
 from ..Classes.SlotW10 import SlotW10
@@ -215,6 +220,7 @@ from ..Classes.Trapeze import Trapeze
 from ..Classes.Unit import Unit
 from ..Classes.VarLoad import VarLoad
 from ..Classes.VarLoadCurrent import VarLoadCurrent
+from ..Classes.VarLoadVoltage import VarLoadVoltage
 from ..Classes.VarParam import VarParam
 from ..Classes.VarSimu import VarSimu
 from ..Classes.VentilationCirc import VentilationCirc
