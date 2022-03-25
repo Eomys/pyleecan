@@ -10,24 +10,26 @@ FEMM_GROUPS["GROUP_SW"] = {"name": "stator winding", "ID": 11}
 FEMM_GROUPS["GROUP_SM"] = {"name": "stator magnets", "ID": 12}
 FEMM_GROUPS["GROUP_SN"] = {"name": "stator notches", "ID": 13}
 FEMM_GROUPS["GROUP_SV"] = {"name": "stator ventialtion duct", "ID": 14}
-FEMM_GROUPS["GROUP_SSI"] = {"name": "stator slot isthmus", "ID": 15}
+FEMM_GROUPS["GROUP_SSI"] = {"name": "stator slot isthmus", "ID": 15}  # Opening
 FEMM_GROUPS["GROUP_SH"] = {"name": "stator holes", "ID": 16}
+FEMM_GROUPS["GROUP_SWE"] = {"name": "stator wedges", "ID": 17}
 # rotor GROUPs
 FEMM_GROUPS["GROUP_RC"] = {"name": "rotor core", "ID": 20}
 FEMM_GROUPS["GROUP_RW"] = {"name": "rotor winding", "ID": 21}
 FEMM_GROUPS["GROUP_RM"] = {"name": "rotor magnets", "ID": 22}
 FEMM_GROUPS["GROUP_RN"] = {"name": "rotor notches", "ID": 23}
 FEMM_GROUPS["GROUP_RV"] = {"name": "rotor ventialtion duct", "ID": 24}
-FEMM_GROUPS["GROUP_RSI"] = {"name": "rotor slot isthmus", "ID": 25}
+FEMM_GROUPS["GROUP_RSI"] = {"name": "rotor slot isthmus", "ID": 25}  # Opening
 FEMM_GROUPS["GROUP_RH"] = {"name": "rotor holes", "ID": 26}
+FEMM_GROUPS["GROUP_RWE"] = {"name": "rotor wedges", "ID": 27}
 # other GROUPs
 FEMM_GROUPS["GROUP_IN"] = {"name": "inner shaft", "ID": 30}
 FEMM_GROUPS["GROUP_FM"] = {"name": "fictitious magnets", "ID": 31}
 FEMM_GROUPS["GROUP_FR"] = {"name": "frame", "ID": 32}
 # List of group needed to select a lamination
 FEMM_GROUPS["lam_group_list"] = {
-    "Stator-0": [10, 11, 12, 13, 14, 15, 16],
-    "Rotor-0": [20, 21, 22, 23, 24, 25, 26],
+    "Stator-0": [10, 11, 12, 13, 14, 15, 16, 17],
+    "Rotor-0": [20, 21, 22, 23, 24, 25, 26, 27],
 }
 
 # global Values

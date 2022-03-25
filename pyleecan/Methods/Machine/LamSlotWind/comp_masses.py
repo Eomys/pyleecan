@@ -28,8 +28,18 @@ def comp_masses(self):
         )
     else:
         Mwind = 0
+    if self.slot.wedge_mat is None:
+        M_dict["Mwedge"] = 0
+    else:
+        Lf = self.comp_length()  # Include radial ventilation ducts
+        M_dict["Mwedge"] = (
+            self.slot.wedge_mat.struct.rho
+            * Lf
+            * self.get_Zs()
+            * self.slot.comp_surface_wedges()
+        )
 
-    M_dict["Mtot"] += Mwind
+    M_dict["Mtot"] += Mwind + M_dict["Mwedge"]
     M_dict["Mwind"] = Mwind
 
     return M_dict

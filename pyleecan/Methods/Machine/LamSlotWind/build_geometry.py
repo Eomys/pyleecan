@@ -50,10 +50,7 @@ def build_geometry(self, sym=1, alpha=0, delta=0, is_circular_radius=False):
                 Nrad, Ntan = 1, 1
 
             surf_Wind = self.slot.build_geometry_active(
-                Nrad=Nrad,
-                Ntan=Ntan,
-                alpha=alpha,
-                delta=delta,
+                Nrad=Nrad, Ntan=Ntan, alpha=alpha, delta=delta,
             )
 
         st = self.get_label()
@@ -73,7 +70,17 @@ def build_geometry(self, sym=1, alpha=0, delta=0, is_circular_radius=False):
                 new_surf.label = update_RTS_index(label=surf.label, S_id=ii)
                 new_surf.rotate(ii * angle)
                 surf_list.append(new_surf)
-
+        # Add wedges if any
+        if self.slot.wedge_mat is not None:
+            wedge_list = self.slot.get_surface_wedges()
+            for ii in range(Zs // sym):  # for each slot
+                # for each wedges surface in the slot
+                for surf in wedge_list:
+                    new_surf = type(surf)(init_dict=surf.as_dict())
+                    # changing the slot reference number
+                    new_surf.label = update_RTS_index(label=surf.label, S_id=ii)
+                    new_surf.rotate(ii * angle)
+                    surf_list.append(new_surf)
         # Shift to have a tooth center on Ox
         for surf in surf_list:
             surf.rotate(pi / Zs)
