@@ -15,5 +15,11 @@ def get_Id_Iq(self):
         Dict with key "Id", "Iq"
     """
 
-    Z = self.I0_ref * exp(1j * self.IPhi0_ref)
+    if self.IPhi0_ref is None:
+        IPhi0_ref = 0
+    else:
+        IPhi0_ref = self.IPhi0_ref
+
+    Z = self.I0_ref * exp(1j * IPhi0_ref)
+
     return {"Id": Z.real, "Iq": Z.imag}
