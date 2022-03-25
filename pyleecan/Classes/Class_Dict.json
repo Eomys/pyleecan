@@ -1222,6 +1222,15 @@
                 "type": "float",
                 "unit": "Ohm",
                 "value": null
+            },
+            {
+                "desc": "Magnetic model for flux linkage calculation",
+                "max": "",
+                "min": "",
+                "name": "fluxlink",
+                "type": "Magnetics",
+                "unit": "-",
+                "value": null
             }
         ]
     },
@@ -1293,15 +1302,6 @@
         "package": "Simulation",
         "path": "pyleecan/Generator/ClassesRef/Simulation/EEC_PMSM.csv",
         "properties": [
-            {
-                "desc": "Magnetic model for flux linkage calculation",
-                "max": "",
-                "min": "",
-                "name": "fluxlink",
-                "type": "Magnetics",
-                "unit": "-",
-                "value": null
-            },
             {
                 "desc": "Stator winding inductance along d-axis",
                 "max": "",

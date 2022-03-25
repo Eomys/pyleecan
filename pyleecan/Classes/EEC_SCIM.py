@@ -262,6 +262,7 @@ class EEC_SCIM(EEC):
         Xkr_skinR=1,
         Xke_skinR=1,
         R1=None,
+        fluxlink=None,
         init_dict=None,
         init_str=None,
     ):
@@ -328,6 +329,8 @@ class EEC_SCIM(EEC):
                 Xke_skinR = init_dict["Xke_skinR"]
             if "R1" in list(init_dict.keys()):
                 R1 = init_dict["R1"]
+            if "fluxlink" in list(init_dict.keys()):
+                fluxlink = init_dict["fluxlink"]
         # Set the properties (value check and convertion are done in setter)
         self.Rfe = Rfe
         self.L1 = L1
@@ -355,6 +358,7 @@ class EEC_SCIM(EEC):
             Xkr_skinR=Xkr_skinR,
             Xke_skinR=Xke_skinR,
             R1=R1,
+            fluxlink=fluxlink,
         )
         # The class is frozen (in EEC init), for now it's impossible to
         # add new properties
