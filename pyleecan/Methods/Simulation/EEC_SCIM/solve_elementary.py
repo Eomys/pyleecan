@@ -68,7 +68,7 @@ def solve_elementary(self):
     # linear interpolation with nearest extrapolation if Im is outside Im_table
     Lm2 = interp(abs(Im), self.Im_table, self.Lm_table)
     # magnetizing inductance is the average of both to simulate the saturation increase
-    Lm = 0 * 0.5 * (Lm1 + Lm2)
+    Lm = 0.5 * (Lm1 + Lm2)
 
     # calculation of non linearity effect (should be ->0 when Lm(Im)=self.Lm"])
     delta_Lm = abs((Lm - self.Lm) / self.Lm)
