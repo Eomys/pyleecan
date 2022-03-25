@@ -17,7 +17,7 @@ def comp_width_wire(self):
     """
 
     if self.parent is not None and self.parent.parent is not None:
-        Wbar = self.parent.parent.comp_width()
+        Wbar = self.parent.parent.slot.comp_width()
 
     else:
         Wbar = sqrt(self.Sbar)

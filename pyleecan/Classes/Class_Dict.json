@@ -6478,6 +6478,15 @@
                 "type": "bool",
                 "unit": "",
                 "value": 1
+            },
+            {
+                "desc": "True to calculate torque from integration of energy derivate over rotor elements",
+                "max": "",
+                "min": "",
+                "name": "is_calc_torque_energy",
+                "type": "bool",
+                "unit": "",
+                "value": 1
             }
         ]
     },
@@ -7099,7 +7108,7 @@
                 "value": "Material"
             },
             {
-                "desc": "If True, uniformity in all orientations",
+                "desc": "If Isotropic, uniformity in all orientations",
                 "max": "",
                 "min": "",
                 "name": "is_isotropic",
@@ -14112,7 +14121,8 @@
         "desc": "Abstract class to generate multi-simulation by changing the operating point",
         "is_internal": false,
         "methods": [
-            "get_ref_simu_index"
+            "get_ref_simu_index",
+            "get_OP_matrix"
         ],
         "mother": "VarSimu",
         "name": "VarLoad",

@@ -35,6 +35,7 @@ def test_FEMM_import_dxf():
         type_BH_rotor=0,
         is_periodicity_a=True,
         Kgeo_fineness=0.75,
+        is_fast_draw=False
     )
     # Run only Magnetic module
     simu.force = None

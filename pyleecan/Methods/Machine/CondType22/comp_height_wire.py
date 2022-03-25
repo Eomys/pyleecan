@@ -17,7 +17,7 @@ def comp_height_wire(self):
     """
 
     if self.parent is not None and self.parent.parent is not None:
-        Hbar = self.parent.parent.comp_height()
+        Hbar = self.parent.parent.slot.comp_height()
 
     else:
         Hbar = sqrt(self.Sbar)

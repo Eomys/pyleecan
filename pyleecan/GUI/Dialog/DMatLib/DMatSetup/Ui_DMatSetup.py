@@ -59,11 +59,6 @@ class Ui_DMatSetup(object):
 
         self.verticalLayout.addLayout(self.horizontalLayout)
 
-        self.is_isotropic = QCheckBox(DMatSetup)
-        self.is_isotropic.setObjectName(u"is_isotropic")
-
-        self.verticalLayout.addWidget(self.is_isotropic)
-
         self.nav_phy = QTabWidget(DMatSetup)
         self.nav_phy.setObjectName(u"nav_phy")
         self.nav_phy.setMinimumSize(QSize(370, 0))
@@ -121,8 +116,8 @@ class Ui_DMatSetup(object):
         self.nav_phy.addTab(self.tab_elec, "")
         self.tab_mag = QWidget()
         self.tab_mag.setObjectName(u"tab_mag")
-        self.verticalLayout_3 = QVBoxLayout(self.tab_mag)
-        self.verticalLayout_3.setObjectName(u"verticalLayout_3")
+        self.mag_layout = QVBoxLayout(self.tab_mag)
+        self.mag_layout.setObjectName(u"mag_layout")
         self.horizontalLayout_8 = QHBoxLayout()
         self.horizontalLayout_8.setObjectName(u"horizontalLayout_8")
         self.c_type_material = QComboBox(self.tab_mag)
@@ -140,75 +135,43 @@ class Ui_DMatSetup(object):
 
         self.horizontalLayout_8.addItem(self.horizontalSpacer_2)
 
-        self.verticalLayout_3.addLayout(self.horizontalLayout_8)
+        self.mag_layout.addLayout(self.horizontalLayout_8)
 
+        self.nav_mag = QStackedWidget(self.tab_mag)
+        self.nav_mag.setObjectName(u"nav_mag")
+        self.page = QWidget()
+        self.page.setObjectName(u"page")
+        self.verticalLayout_9 = QVBoxLayout(self.page)
+        self.verticalLayout_9.setObjectName(u"verticalLayout_9")
         self.gridLayout = QGridLayout()
         self.gridLayout.setObjectName(u"gridLayout")
-        self.lf_Wlam = FloatEdit(self.tab_mag)
-        self.lf_Wlam.setObjectName(u"lf_Wlam")
-
-        self.gridLayout.addWidget(self.lf_Wlam, 3, 1, 1, 1)
-
-        self.lf_Brm20 = FloatEdit(self.tab_mag)
-        self.lf_Brm20.setObjectName(u"lf_Brm20")
-
-        self.gridLayout.addWidget(self.lf_Brm20, 1, 1, 1, 1)
-
-        self.unit_Brm20 = QLabel(self.tab_mag)
-        self.unit_Brm20.setObjectName(u"unit_Brm20")
-        self.unit_Brm20.setFont(font)
-
-        self.gridLayout.addWidget(self.unit_Brm20, 1, 2, 1, 1)
-
-        self.lf_alpha_Br = FloatEdit(self.tab_mag)
+        self.gridLayout.setSizeConstraint(QLayout.SetDefaultConstraint)
+        self.lf_alpha_Br = FloatEdit(self.page)
         self.lf_alpha_Br.setObjectName(u"lf_alpha_Br")
 
         self.gridLayout.addWidget(self.lf_alpha_Br, 2, 1, 1, 1)
 
-        self.in_mur_lin = QLabel(self.tab_mag)
-        self.in_mur_lin.setObjectName(u"in_mur_lin")
-        self.in_mur_lin.setFont(font)
+        self.unit_alpha_Br = QLabel(self.page)
+        self.unit_alpha_Br.setObjectName(u"unit_alpha_Br")
 
-        self.gridLayout.addWidget(self.in_mur_lin, 0, 0, 1, 1)
+        self.gridLayout.addWidget(self.unit_alpha_Br, 2, 2, 1, 1)
 
-        self.in_Brm20 = QLabel(self.tab_mag)
-        self.in_Brm20.setObjectName(u"in_Brm20")
-        self.in_Brm20.setFont(font)
+        self.unit_mur_lin = QLabel(self.page)
+        self.unit_mur_lin.setObjectName(u"unit_mur_lin")
 
-        self.gridLayout.addWidget(self.in_Brm20, 1, 0, 1, 1)
+        self.gridLayout.addWidget(self.unit_mur_lin, 0, 2, 1, 1)
 
-        self.unit_Wlam = QLabel(self.tab_mag)
-        self.unit_Wlam.setObjectName(u"unit_Wlam")
-        self.unit_Wlam.setFont(font)
-
-        self.gridLayout.addWidget(self.unit_Wlam, 3, 2, 1, 1)
-
-        self.in_alpha_Br = QLabel(self.tab_mag)
+        self.in_alpha_Br = QLabel(self.page)
         self.in_alpha_Br.setObjectName(u"in_alpha_Br")
         self.in_alpha_Br.setFont(font)
 
         self.gridLayout.addWidget(self.in_alpha_Br, 2, 0, 1, 1)
 
-        self.in_Wlam = QLabel(self.tab_mag)
-        self.in_Wlam.setObjectName(u"in_Wlam")
-        self.in_Wlam.setFont(font)
+        self.in_mur_lin = QLabel(self.page)
+        self.in_mur_lin.setObjectName(u"in_mur_lin")
+        self.in_mur_lin.setFont(font)
 
-        self.gridLayout.addWidget(self.in_Wlam, 3, 0, 1, 1)
-
-        self.lf_mur_lin = FloatEdit(self.tab_mag)
-        self.lf_mur_lin.setObjectName(u"lf_mur_lin")
-
-        self.gridLayout.addWidget(self.lf_mur_lin, 0, 1, 1, 1)
-
-        self.unit_alpha_Br = QLabel(self.tab_mag)
-        self.unit_alpha_Br.setObjectName(u"unit_alpha_Br")
-
-        self.gridLayout.addWidget(self.unit_alpha_Br, 2, 2, 1, 1)
-
-        self.unit_mur_lin = QLabel(self.tab_mag)
-        self.unit_mur_lin.setObjectName(u"unit_mur_lin")
-
-        self.gridLayout.addWidget(self.unit_mur_lin, 0, 2, 1, 1)
+        self.gridLayout.addWidget(self.in_mur_lin, 0, 0, 1, 1)
 
         self.horizontalSpacer_6 = QSpacerItem(
             40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum
@@ -228,15 +191,42 @@ class Ui_DMatSetup(object):
 
         self.gridLayout.addItem(self.horizontalSpacer_8, 2, 3, 1, 1)
 
-        self.horizontalSpacer_9 = QSpacerItem(
-            40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum
+        self.in_Brm20 = QLabel(self.page)
+        self.in_Brm20.setObjectName(u"in_Brm20")
+        self.in_Brm20.setFont(font)
+
+        self.gridLayout.addWidget(self.in_Brm20, 1, 0, 1, 1)
+
+        self.lf_mur_lin = FloatEdit(self.page)
+        self.lf_mur_lin.setObjectName(u"lf_mur_lin")
+
+        self.gridLayout.addWidget(self.lf_mur_lin, 0, 1, 1, 1)
+
+        self.lf_Brm20 = FloatEdit(self.page)
+        self.lf_Brm20.setObjectName(u"lf_Brm20")
+
+        self.gridLayout.addWidget(self.lf_Brm20, 1, 1, 1, 1)
+
+        self.unit_Brm20 = QLabel(self.page)
+        self.unit_Brm20.setObjectName(u"unit_Brm20")
+        self.unit_Brm20.setFont(font)
+
+        self.gridLayout.addWidget(self.unit_Brm20, 1, 2, 1, 1)
+
+        self.verticalLayout_9.addLayout(self.gridLayout)
+
+        self.verticalSpacer_7 = QSpacerItem(
+            20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding
         )
 
-        self.gridLayout.addItem(self.horizontalSpacer_9, 3, 3, 1, 1)
+        self.verticalLayout_9.addItem(self.verticalSpacer_7)
 
-        self.verticalLayout_3.addLayout(self.gridLayout)
-
-        self.g_BH_import = QGroupBox(self.tab_mag)
+        self.nav_mag.addWidget(self.page)
+        self.page_2 = QWidget()
+        self.page_2.setObjectName(u"page_2")
+        self.verticalLayout_3 = QVBoxLayout(self.page_2)
+        self.verticalLayout_3.setObjectName(u"verticalLayout_3")
+        self.g_BH_import = QGroupBox(self.page_2)
         self.g_BH_import.setObjectName(u"g_BH_import")
         self.g_BH_import.setCheckable(True)
         self.verticalLayout_8 = QVBoxLayout(self.g_BH_import)
@@ -248,17 +238,69 @@ class Ui_DMatSetup(object):
 
         self.verticalLayout_3.addWidget(self.g_BH_import)
 
+        self.gridLayout_5 = QGridLayout()
+        self.gridLayout_5.setObjectName(u"gridLayout_5")
+        self.lf_Wlam = FloatEdit(self.page_2)
+        self.lf_Wlam.setObjectName(u"lf_Wlam")
+
+        self.gridLayout_5.addWidget(self.lf_Wlam, 0, 1, 1, 1)
+
+        self.in_Wlam = QLabel(self.page_2)
+        self.in_Wlam.setObjectName(u"in_Wlam")
+
+        self.gridLayout_5.addWidget(self.in_Wlam, 0, 0, 1, 1)
+
+        self.unit_Wlam = QLabel(self.page_2)
+        self.unit_Wlam.setObjectName(u"unit_Wlam")
+
+        self.gridLayout_5.addWidget(self.unit_Wlam, 0, 2, 1, 1)
+
+        self.horizontalSpacer_10 = QSpacerItem(
+            40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum
+        )
+
+        self.gridLayout_5.addItem(self.horizontalSpacer_10, 0, 3, 1, 1)
+
+        self.verticalLayout_3.addLayout(self.gridLayout_5)
+
+        self.nav_mag.addWidget(self.page_2)
+
+        self.mag_layout.addWidget(self.nav_mag)
+
         self.verticalSpacer = QSpacerItem(
             20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding
         )
 
-        self.verticalLayout_3.addItem(self.verticalSpacer)
+        self.mag_layout.addItem(self.verticalSpacer)
 
         self.nav_phy.addTab(self.tab_mag, "")
         self.tab_mec = QWidget()
         self.tab_mec.setObjectName(u"tab_mec")
         self.verticalLayout_12 = QVBoxLayout(self.tab_mec)
         self.verticalLayout_12.setObjectName(u"verticalLayout_12")
+        self.horizontalLayout_10 = QHBoxLayout()
+        self.horizontalLayout_10.setObjectName(u"horizontalLayout_10")
+        self.in_material_type = QLabel(self.tab_mec)
+        self.in_material_type.setObjectName(u"in_material_type")
+
+        self.horizontalLayout_10.addWidget(self.in_material_type)
+
+        self.cb_material_type = QComboBox(self.tab_mec)
+        self.cb_material_type.addItem("")
+        self.cb_material_type.addItem("")
+        self.cb_material_type.setObjectName(u"cb_material_type")
+        self.cb_material_type.setMinimumSize(QSize(150, 0))
+
+        self.horizontalLayout_10.addWidget(self.cb_material_type)
+
+        self.horizontalSpacer_9 = QSpacerItem(
+            40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum
+        )
+
+        self.horizontalLayout_10.addItem(self.horizontalSpacer_9)
+
+        self.verticalLayout_12.addLayout(self.horizontalLayout_10)
+
         self.horizontalLayout_41 = QHBoxLayout()
         self.horizontalLayout_41.setObjectName(u"horizontalLayout_41")
         self.in_rho_meca = QLabel(self.tab_mec)
@@ -483,11 +525,13 @@ class Ui_DMatSetup(object):
         self.verticalLayout_2.setObjectName(u"verticalLayout_2")
         self.g_lambda = QGroupBox(self.tab_ther)
         self.g_lambda.setObjectName(u"g_lambda")
+        self.g_lambda.setMinimumSize(QSize(0, 90))
         self.g_lambda.setMaximumSize(QSize(16777215, 80))
         self.verticalLayout_11 = QVBoxLayout(self.g_lambda)
         self.verticalLayout_11.setObjectName(u"verticalLayout_11")
         self.nav_ther = QStackedWidget(self.g_lambda)
         self.nav_ther.setObjectName(u"nav_ther")
+        self.nav_ther.setMinimumSize(QSize(0, 50))
         self.page_niso_ther = QWidget()
         self.page_niso_ther.setObjectName(u"page_niso_ther")
         self.horizontalLayout_5 = QHBoxLayout(self.page_niso_ther)
@@ -657,7 +701,8 @@ class Ui_DMatSetup(object):
 
         self.retranslateUi(DMatSetup)
 
-        self.nav_phy.setCurrentIndex(1)
+        self.nav_phy.setCurrentIndex(2)
+        self.nav_mag.setCurrentIndex(0)
         self.nav_meca.setCurrentIndex(0)
         self.nav_ther.setCurrentIndex(0)
 
@@ -673,9 +718,6 @@ class Ui_DMatSetup(object):
             QCoreApplication.translate("DMatSetup", u"Material name", None)
         )
         self.le_name.setText("")
-        self.is_isotropic.setText(
-            QCoreApplication.translate("DMatSetup", u"is_isotropic", None)
-        )
         self.in_rho_elec.setText(QCoreApplication.translate("DMatSetup", u"rho", None))
         self.unit_rho_elec.setText(
             QCoreApplication.translate("DMatSetup", u"[ohm.m]", None)
@@ -696,27 +738,37 @@ class Ui_DMatSetup(object):
             2, QCoreApplication.translate("DMatSetup", u"Lamination material", None)
         )
 
-        self.unit_Brm20.setText(QCoreApplication.translate("DMatSetup", u"[T]", None))
-        self.in_mur_lin.setText(
-            QCoreApplication.translate("DMatSetup", u"mur_lin", None)
-        )
-        self.in_Brm20.setText(QCoreApplication.translate("DMatSetup", u"Brm20", None))
-        self.unit_Wlam.setText(QCoreApplication.translate("DMatSetup", u"[mm]", None))
-        self.in_alpha_Br.setText(
-            QCoreApplication.translate("DMatSetup", u"alphaBr", None)
-        )
-        self.in_Wlam.setText(QCoreApplication.translate("DMatSetup", u"Wlam", None))
         self.unit_alpha_Br.setText(
             QCoreApplication.translate("DMatSetup", u"[ ]", None)
         )
         self.unit_mur_lin.setText(QCoreApplication.translate("DMatSetup", u"[ ]", None))
+        self.in_alpha_Br.setText(
+            QCoreApplication.translate("DMatSetup", u"alphaBr", None)
+        )
+        self.in_mur_lin.setText(
+            QCoreApplication.translate("DMatSetup", u"mur_lin", None)
+        )
+        self.in_Brm20.setText(QCoreApplication.translate("DMatSetup", u"Brm20", None))
+        self.unit_Brm20.setText(QCoreApplication.translate("DMatSetup", u"[T]", None))
         self.g_BH_import.setTitle(
             QCoreApplication.translate("DMatSetup", u"B(H) curve definition", None)
         )
+        self.in_Wlam.setText(QCoreApplication.translate("DMatSetup", u"Wlam", None))
+        self.unit_Wlam.setText(QCoreApplication.translate("DMatSetup", u"[mm]", None))
         self.nav_phy.setTabText(
             self.nav_phy.indexOf(self.tab_mag),
             QCoreApplication.translate("DMatSetup", u"Magnetics", None),
         )
+        self.in_material_type.setText(
+            QCoreApplication.translate("DMatSetup", u"Material Type :", None)
+        )
+        self.cb_material_type.setItemText(
+            0, QCoreApplication.translate("DMatSetup", u"Orthotropic", None)
+        )
+        self.cb_material_type.setItemText(
+            1, QCoreApplication.translate("DMatSetup", u"Isotropic", None)
+        )
+
         self.in_rho_meca.setText(QCoreApplication.translate("DMatSetup", u"rho", None))
         self.unit_rho_meca.setText(
             QCoreApplication.translate("DMatSetup", u"[kg/m^3]", None)
@@ -769,7 +821,7 @@ class Ui_DMatSetup(object):
         self.unit_alpha.setText(QCoreApplication.translate("DMatSetup", u"[ ]", None))
         self.nav_phy.setTabText(
             self.nav_phy.indexOf(self.tab_ther),
-            QCoreApplication.translate("DMatSetup", u"Thermics", None),
+            QCoreApplication.translate("DMatSetup", u"Heat Transfer", None),
         )
         self.in_cost_unit.setText(
             QCoreApplication.translate("DMatSetup", u"cost_unit", None)
