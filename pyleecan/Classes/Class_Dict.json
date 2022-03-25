@@ -6208,6 +6208,15 @@
                 "type": "bool",
                 "unit": "",
                 "value": 1
+            },
+            {
+                "desc": "True to calculate torque from integration of energy derivate over rotor elements",
+                "max": "",
+                "min": "",
+                "name": "is_calc_torque_energy",
+                "type": "bool",
+                "unit": "",
+                "value": 1
             }
         ]
     },
