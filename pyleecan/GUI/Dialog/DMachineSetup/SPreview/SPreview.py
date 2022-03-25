@@ -47,6 +47,7 @@ class SPreview(Ui_SPreview, QWidget):
                 alpha=0,
                 delta=0,
                 is_show_fig=False,
+                is_max_sym=True,
             )
         except Exception as e:
             err_msg = "Error while plotting machine in Machine Summary:\n" + str(e)

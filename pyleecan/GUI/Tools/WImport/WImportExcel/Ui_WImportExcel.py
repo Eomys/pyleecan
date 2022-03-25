@@ -45,12 +45,16 @@ class Ui_WImportExcel(object):
 
         self.horizontalLayout_2.addWidget(self.c_sheet)
 
+        self.verticalLayout_3.addLayout(self.horizontalLayout_2)
+
+        self.horizontalLayout_4 = QHBoxLayout()
+        self.horizontalLayout_4.setObjectName(u"horizontalLayout_4")
         self.in_range = QLabel(WImportExcel)
         self.in_range.setObjectName(u"in_range")
         self.in_range.setMinimumSize(QSize(120, 0))
         self.in_range.setMaximumSize(QSize(120, 16777215))
 
-        self.horizontalLayout_2.addWidget(self.in_range)
+        self.horizontalLayout_4.addWidget(self.in_range)
 
         self.le_range = QLineEdit(WImportExcel)
         self.le_range.setObjectName(u"le_range")
@@ -61,15 +65,9 @@ class Ui_WImportExcel(object):
         self.le_range.setSizePolicy(sizePolicy1)
         self.le_range.setMinimumSize(QSize(100, 0))
 
-        self.horizontalLayout_2.addWidget(self.le_range)
+        self.horizontalLayout_4.addWidget(self.le_range)
 
-        self.horizontalSpacer_2 = QSpacerItem(
-            40, 20, QSizePolicy.Preferred, QSizePolicy.Minimum
-        )
-
-        self.horizontalLayout_2.addItem(self.horizontalSpacer_2)
-
-        self.verticalLayout_3.addLayout(self.horizontalLayout_2)
+        self.verticalLayout_3.addLayout(self.horizontalLayout_4)
 
         self.horizontalLayout = QHBoxLayout()
         self.horizontalLayout.setObjectName(u"horizontalLayout")
@@ -127,9 +125,7 @@ class Ui_WImportExcel(object):
             QCoreApplication.translate("WImportExcel", u"A6:B100", None)
         )
         self.in_order.setText(
-            QCoreApplication.translate(
-                "WImportExcel", u"In which order is the data :", None
-            )
+            QCoreApplication.translate("WImportExcel", u"Data order :", None)
         )
         self.c_order.setItemText(
             0, QCoreApplication.translate("WImportExcel", u"B(H)", None)
