@@ -146,11 +146,13 @@ class SWSlot(Gen_SWSlot, QWidget):
 
         # Call the corresponding constructor
         Zs = self.obj.slot.Zs
+        wedge_mat = self.obj.slot.wedge_mat
         if self.previous_slot[INIT_INDEX[index]] is None:
             # No previous slot of this type
             self.obj.slot = INIT_INDEX[index]()
             self.obj.slot._set_None()  # No default value
             self.obj.slot.Zs = Zs
+            self.obj.slot.wedge_mat = wedge_mat
         else:  # Load the previous slot of this type
             self.obj.slot = self.previous_slot[INIT_INDEX[index]]
             if self.obj.slot.Zs is not None:
