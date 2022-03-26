@@ -54,7 +54,6 @@ class PWSlotUD(Ui_PWSlotUD, QWidget):
 
         # Wedge setup
         self.g_wedge.setChecked(self.slot.wedge_mat is not None)
-        self.set_wedge()
         self.w_wedge_mat.setText("Wedge Material")
         if lamination.mat_type is not None and lamination.mat_type.name not in [
             "",
@@ -63,7 +62,7 @@ class PWSlotUD(Ui_PWSlotUD, QWidget):
             self.w_wedge_mat.def_mat = lamination.mat_type.name
         else:
             self.w_wedge_mat.def_mat = "M400-50A"
-        self.w_wedge_mat.update(self.slot, "wedge_mat", self.material_dict)
+        self.set_wedge()
 
         # Update the GUI according to the current slot
         self.update_graph()
@@ -78,6 +77,7 @@ class PWSlotUD(Ui_PWSlotUD, QWidget):
         """Setup the slot wedge according to the GUI"""
         if self.g_wedge.isChecked():
             self.w_wedge_mat.show()
+            self.w_wedge_mat.update(self.slot, "wedge_mat", self.material_dict)
         else:
             self.w_wedge_mat.hide()
             self.slot.wedge_mat = None
@@ -110,7 +110,9 @@ class PWSlotUD(Ui_PWSlotUD, QWidget):
             slot = load(self.w_path_json.get_path())
         except Exception as e:
             QMessageBox().critical(
-                self, self.tr("Error"), self.tr("Error when loading file:\n" + str(e)),
+                self,
+                self.tr("Error"),
+                self.tr("Error when loading file:\n" + str(e)),
             )
             return
         # Check that the json file contain a SlotUD

@@ -88,7 +88,6 @@ class PWSlot13(Gen_PWSlot13, QWidget):
 
         # Wedge setup
         self.g_wedge.setChecked(self.slot.wedge_mat is not None)
-        self.set_wedge()
         self.w_wedge_mat.setText("Wedge Material")
         if lamination.mat_type is not None and lamination.mat_type.name not in [
             "",
@@ -97,7 +96,7 @@ class PWSlot13(Gen_PWSlot13, QWidget):
             self.w_wedge_mat.def_mat = lamination.mat_type.name
         else:
             self.w_wedge_mat.def_mat = "M400-50A"
-        self.w_wedge_mat.update(self.slot, "wedge_mat", self.material_dict)
+        self.set_wedge()
 
         # Display the main output of the slot (surface, height...)
         self.w_out.comp_output()
@@ -120,6 +119,7 @@ class PWSlot13(Gen_PWSlot13, QWidget):
             self.img_slot.setPixmap(
                 QPixmap(u":/images/images/MachineSetup/WSlot/SlotW13_wedge_full.png")
             )
+            self.w_wedge_mat.update(self.slot, "wedge_mat", self.material_dict)
         else:
             self.w_wedge_mat.hide()
             self.slot.wedge_mat = None

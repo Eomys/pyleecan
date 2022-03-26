@@ -72,7 +72,6 @@ class PWSlot10(Gen_PWSlot10, QWidget):
 
         # Wedge setup
         self.g_wedge.setChecked(self.slot.wedge_mat is not None)
-        self.set_wedge()
         self.w_wedge_mat.setText("Wedge Material")
         if lamination.mat_type is not None and lamination.mat_type.name not in [
             "",
@@ -81,7 +80,7 @@ class PWSlot10(Gen_PWSlot10, QWidget):
             self.w_wedge_mat.def_mat = lamination.mat_type.name
         else:
             self.w_wedge_mat.def_mat = "M400-50A"
-        self.w_wedge_mat.update(self.slot, "wedge_mat", self.material_dict)
+        self.set_wedge()
 
         # Update the unit combobox with the current m unit name
         self.c_H1_unit.clear()
@@ -115,6 +114,7 @@ class PWSlot10(Gen_PWSlot10, QWidget):
             self.img_slot.setPixmap(
                 QPixmap(u":/images/images/MachineSetup/WSlot/SlotW10_wedge_full.png")
             )
+            self.w_wedge_mat.update(self.slot, "wedge_mat", self.material_dict)
         else:
             self.w_wedge_mat.hide()
             self.slot.wedge_mat = None
