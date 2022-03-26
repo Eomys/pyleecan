@@ -104,7 +104,7 @@ def plot_active(
             for ii in range(Zs):
                 surf2 = surf.copy()
                 surf2.rotate(angle=ii * (2 * pi) / self.Zs)
-                surf.plot(fig=fig, ax=axes, color=WEDGE_COLOR, is_show_fig=False)
+                surf2.plot(fig=fig, ax=axes, color=WEDGE_COLOR, is_show_fig=False)
         # Remove tmp blanck wedge
         if to_clean:
             self.wedge_mat = None
