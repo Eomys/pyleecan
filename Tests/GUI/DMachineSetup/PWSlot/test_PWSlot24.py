@@ -4,7 +4,9 @@ import sys
 
 from PySide2 import QtWidgets
 from PySide2.QtTest import QTest
-
+from pyleecan.Classes.Material import Material
+from pyleecan.GUI.Dialog.DMatLib.DMatLib import MACH_KEY, LIB_KEY
+from Tests.GUI import gui_option  # Set unit as [m]
 from pyleecan.Classes.LamSlotWind import LamSlotWind
 from pyleecan.Classes.SlotW24 import SlotW24
 from pyleecan.GUI.Dialog.DMachineSetup.SWSlot.PWSlot24.PWSlot24 import PWSlot24
@@ -19,7 +21,7 @@ class TestPWSlot24(object):
     @classmethod
     def setup_class(cls):
         """Start the app for the test"""
-        print("\nStart Test TestPMSlot10")
+        print("\nStart Test TestPWSlot24")
         if not QtWidgets.QApplication.instance():
             cls.app = QtWidgets.QApplication(sys.argv)
         else:
@@ -32,10 +34,22 @@ class TestPWSlot24(object):
 
     def setup_method(self):
         """Run at the begining of every test to setup the gui"""
-
-        self.test_obj = LamSlotWind(Rint=0.1, Rext=0.2)
+        self.material_dict = {LIB_KEY: list(), MACH_KEY: list()}
+        self.mat1 = Material(name="Mat1")
+        self.mat2 = Material(name="Mat2")
+        self.mat3 = Material(name="M400-50A")
+        self.mat4 = Material(name="Mat4")
+        self.material_dict[LIB_KEY] = [
+            self.mat1,
+            self.mat2,
+            self.mat3,
+        ]
+        self.material_dict[MACH_KEY] = [
+            self.mat4,
+        ]
+        self.test_obj = LamSlotWind(Rint=0.1, Rext=0.2, mat_type=self.mat3)
         self.test_obj.slot = SlotW24(H2=0.12, W3=0.15)
-        self.widget = PWSlot24(self.test_obj)
+        self.widget = PWSlot24(self.test_obj, self.material_dict)
 
     def test_init(self):
         """Check that the Widget spinbox initialise to the lamination value"""

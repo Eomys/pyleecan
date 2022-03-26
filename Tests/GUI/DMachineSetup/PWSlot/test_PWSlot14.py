@@ -5,7 +5,9 @@ from random import uniform
 
 from PySide2 import QtWidgets
 from PySide2.QtTest import QTest
-
+from pyleecan.Classes.Material import Material
+from pyleecan.GUI.Dialog.DMatLib.DMatLib import MACH_KEY, LIB_KEY
+from Tests.GUI import gui_option  # Set unit as [m]
 from pyleecan.Classes.LamSlotWind import LamSlotWind
 from pyleecan.Classes.SlotW14 import SlotW14
 from pyleecan.GUI.Dialog.DMachineSetup.SWSlot.PWSlot14.PWSlot14 import PWSlot14
@@ -20,7 +22,7 @@ class TestPWSlot14(object):
     @classmethod
     def setup_class(cls):
         """Start the app for the test"""
-        print("\nStart Test TestPMSlot10")
+        print("\nStart Test TestPWSlot14")
         if not QtWidgets.QApplication.instance():
             cls.app = QtWidgets.QApplication(sys.argv)
         else:
@@ -33,10 +35,22 @@ class TestPWSlot14(object):
 
     def setup_method(self):
         """Run at the begining of every test to setup the gui"""
-
-        self.test_obj = LamSlotWind(Rint=0.1, Rext=0.2)
+        self.material_dict = {LIB_KEY: list(), MACH_KEY: list()}
+        self.mat1 = Material(name="Mat1")
+        self.mat2 = Material(name="Mat2")
+        self.mat3 = Material(name="M400-50A")
+        self.mat4 = Material(name="Mat4")
+        self.material_dict[LIB_KEY] = [
+            self.mat1,
+            self.mat2,
+            self.mat3,
+        ]
+        self.material_dict[MACH_KEY] = [
+            self.mat4,
+        ]
+        self.test_obj = LamSlotWind(Rint=0.1, Rext=0.2, mat_type=self.mat3)
         self.test_obj.slot = SlotW14(H0=0.10, H1=0.11, H3=0.12, W0=0.13, W3=0.14)
-        self.widget = PWSlot14(self.test_obj)
+        self.widget = PWSlot14(self.test_obj, self.material_dict)
 
     def test_init(self):
         """Check that the Widget spinbox initialise to the lamination value"""
@@ -46,6 +60,7 @@ class TestPWSlot14(object):
         assert self.widget.lf_H3.value() == 0.12
         assert self.widget.lf_W0.value() == 0.13
         assert self.widget.lf_W3.value() == 0.14
+        assert not self.widget.g_wedge.isChecked()
 
     def test_set_H0(self):
         """Check that the Widget allow to update H0"""
@@ -117,6 +132,30 @@ class TestPWSlot14(object):
             self.widget.check(self.test_obj)
             == "The slot height is greater than the lamination !"
         )
+
+    def test_set_wedge(self):
+        """Check that the GUI enables to edit the wedges"""
+        assert self.test_obj.slot.wedge_mat is None
+        assert not self.widget.g_wedge.isChecked()
+        # Add new wedge
+        assert self.widget.w_wedge_mat.c_mat_type.count() == 0
+        self.widget.g_wedge.setChecked(True)
+        assert self.widget.w_wedge_mat.c_mat_type.count() == 4
+        assert self.test_obj.slot.wedge_mat is not None
+        assert self.test_obj.slot.wedge_mat.name == "M400-50A"
+        # Change material
+        assert self.widget.w_wedge_mat.c_mat_type.currentIndex() == 2
+        self.widget.w_wedge_mat.c_mat_type.setCurrentIndex(0)
+        assert self.test_obj.slot.wedge_mat is not None
+        assert self.test_obj.slot.wedge_mat.name == "Mat1"
+        # Remove wedge
+        self.widget.g_wedge.setChecked(False)
+        assert self.test_obj.slot.wedge_mat is None
+        # Add wedge again
+        self.widget.g_wedge.setChecked(True)
+        assert self.widget.w_wedge_mat.c_mat_type.count() == 4
+        assert self.test_obj.slot.wedge_mat is not None
+        assert self.test_obj.slot.wedge_mat.name == "M400-50A"
 
 
 if __name__ == "__main__":

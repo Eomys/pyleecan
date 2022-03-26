@@ -19,7 +19,7 @@ class TestPWSlot61(object):
     @classmethod
     def setup_class(cls):
         """Start the app for the test"""
-        print("\nStart Test TestPMSlot10")
+        print("\nStart Test TestPWSlot61")
         if not QtWidgets.QApplication.instance():
             cls.app = QtWidgets.QApplication(sys.argv)
         else:
