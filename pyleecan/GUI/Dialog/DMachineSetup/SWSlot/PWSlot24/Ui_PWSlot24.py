@@ -21,7 +21,7 @@ class Ui_PWSlot24(object):
             PWSlot24.setObjectName(u"PWSlot24")
         PWSlot24.resize(792, 470)
         PWSlot24.setMinimumSize(QSize(270, 470))
-        PWSlot24.setMaximumSize(QSize(1101, 16777215))
+        PWSlot24.setMaximumSize(QSize(16777215, 16777215))
         self.horizontalLayout = QHBoxLayout(PWSlot24)
         self.horizontalLayout.setObjectName(u"horizontalLayout")
         self.verticalLayout_2 = QVBoxLayout()
