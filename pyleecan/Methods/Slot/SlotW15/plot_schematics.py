@@ -99,7 +99,11 @@ def plot_schematics(
         if is_add_point_label:
             for name, Z in point_dict.items():
                 ax.text(
-                    Z.real, Z.imag, name, fontsize=P_FONT_SIZE, bbox=TEXT_BOX,
+                    Z.real,
+                    Z.imag,
+                    name,
+                    fontsize=P_FONT_SIZE,
+                    bbox=TEXT_BOX,
                 )
 
         # Adding schematics
@@ -354,7 +358,9 @@ def plot_schematics(
             self.plot_active(fig=fig, is_show_fig=False, is_add_wedge=is_add_wedge)
         elif type_add_active == 2:  # Magnet
             self.plot_active(
-                fig=fig, is_show_fig=False, enforced_default_color=MAGNET_COLOR,
+                fig=fig,
+                is_show_fig=False,
+                enforced_default_color=MAGNET_COLOR,
             )
 
         # Zooming and cleaning

@@ -50,7 +50,10 @@ def build_geometry(self, sym=1, alpha=0, delta=0, is_circular_radius=False):
                 Nrad, Ntan = 1, 1
 
             surf_Wind = self.slot.build_geometry_active(
-                Nrad=Nrad, Ntan=Ntan, alpha=alpha, delta=delta,
+                Nrad=Nrad,
+                Ntan=Ntan,
+                alpha=alpha,
+                delta=delta,
             )
 
         st = self.get_label()
