@@ -83,6 +83,11 @@ except ImportError as error:
     comp_surface_opening = error
 
 try:
+    from ..Methods.Slot.Slot.comp_surface_wedges import comp_surface_wedges
+except ImportError as error:
+    comp_surface_wedges = error
+
+try:
     from ..Methods.Slot.Slot.comp_width_opening import comp_width_opening
 except ImportError as error:
     comp_width_opening = error
@@ -296,6 +301,18 @@ class Slot(FrozenClass):
         )
     else:
         comp_surface_opening = comp_surface_opening
+    # cf Methods.Slot.Slot.comp_surface_wedges
+    if isinstance(comp_surface_wedges, ImportError):
+        comp_surface_wedges = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Slot method comp_surface_wedges: "
+                    + str(comp_surface_wedges)
+                )
+            )
+        )
+    else:
+        comp_surface_wedges = comp_surface_wedges
     # cf Methods.Slot.Slot.comp_width_opening
     if isinstance(comp_width_opening, ImportError):
         comp_width_opening = property(

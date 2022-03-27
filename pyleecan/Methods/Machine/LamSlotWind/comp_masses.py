@@ -28,7 +28,7 @@ def comp_masses(self):
         )
     else:
         Mwind = 0
-    if self.slot.wedge_mat is None:
+    if self.slot is None or self.slot.wedge_mat is None:
         M_dict["Mwedge"] = 0
     else:
         Lf = self.comp_length()  # Include radial ventilation ducts
