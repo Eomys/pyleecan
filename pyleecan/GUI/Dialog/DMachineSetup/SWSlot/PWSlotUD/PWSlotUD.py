@@ -44,6 +44,7 @@ class PWSlotUD(Ui_PWSlotUD, QWidget):
         self.slot = lamination.slot
         self.u = gui_option.unit
         self.material_dict = material_dict
+        self.dxf_gui = None  # Link to the popup
 
         # Setup Path selector for Json files
         self.w_path_json.obj = None
