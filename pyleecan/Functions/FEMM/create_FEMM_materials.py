@@ -11,6 +11,7 @@ from ...Functions.labels import (
     HOLEM_LAB,
     MAG_LAB,
     SOP_LAB,
+    WEDGE_LAB,
     WIND_LAB,
     BAR_LAB,
     SLID_LAB,
@@ -128,26 +129,50 @@ def create_FEMM_materials(
                 materials.append("Airgap")
             prop_dict[label_dict["full"]] = "Airgap"
         elif SOP_LAB in label_dict["surf_type"]:  # Slot opening
-            # Material depending on slot.type_close
-            # Detecting the material used to close the slot opening
-            if STATOR_LAB in label_dict["lam_type"]:
-                type_close = stator.slot.type_close
-                lam_lab = STATOR_LAB
-            elif ROTOR_LAB in label_dict["lam_type"]:
-                type_close = rotor.slot.type_close
-                lam_lab = ROTOR_LAB
-
             # Assigning air to the slot opening
-            if type_close == 1:
-                if "Air" not in materials:
-                    femm.mi_addmaterial("Air", 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0)
-                    materials.append("Air")
-                prop_dict[label_dict["full"]] = "Air"
-            # Assigning lamination iron to the slot opening (closed slot)
-            elif type_close == 2:
-                slot_op_mat = [mat for mat in materials if lam_lab in mat][0]
-                prop_dict[label_dict["full"]] = slot_op_mat
-
+            if "Air" not in materials:
+                femm.mi_addmaterial("Air", 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0)
+                materials.append("Air")
+            prop_dict[label_dict["full"]] = "Air"
+        elif WEDGE_LAB in label_dict["surf_type"]:  # Wedge
+            # Get the material used for the wedge
+            if STATOR_LAB in label_dict["lam_type"]:
+                wedge_mat = stator.slot.wedge_mat
+                lam_mat = stator.mat_type
+            elif ROTOR_LAB in label_dict["lam_type"]:
+                wedge_mat = rotor.slot.wedge_mat
+                lam_mat = rotor.mat_type
+            mat_name = wedge_mat.name
+            # Check if the wedge has the same material as the lamination
+            if mat_name == lam_mat.name:
+                mat_name = label_dict["lam_label"] + " " + LAM_MAT_NAME
+            elif mat_name not in materials:
+                # Create material if it doesn't already exist
+                femm.mi_addmaterial(
+                    mat_name,
+                    wedge_mat.mag.mur_lin,
+                    wedge_mat.mag.mur_lin,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    1,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                )
+                if (
+                    wedge_mat.mag.BH_curve is not None
+                    and wedge_mat.mag.BH_curve.get_data().shape[0] > 1
+                ):
+                    BH = lam_obj.mat_type.mag.get_BH()
+                    for ii in range(BH.shape[0]):
+                        femm.mi_addbhpoint(wedge_mat.name, BH[ii][1], BH[ii][0])
+                materials.append(mat_name)
+            prop_dict[label_dict["full"]] = mat_name
         elif NOTCH_LAB in label_dict["surf_type"]:  # Notches
             # Same material as Airgap but different mesh
             if "Air" not in materials:
@@ -189,11 +214,12 @@ def create_FEMM_materials(
             )
             prop_dict[label_dict["full"]] = prop
         elif MAG_LAB in label_dict["surf_type"] or HOLEM_LAB in label_dict["surf_type"]:
+            T_mag = FEMM_dict["simu"]["T_mag"]
             is_stator = STATOR_LAB in label_dict["lam_type"]
             is_mmf = is_mmfs if is_stator else is_mmfr
             mag_obj = get_obj_from_label(machine, label_dict=label_dict)
             prop, materials = create_FEMM_magnet(
-                femm, is_mmf, is_eddies, materials, mag_obj
+                femm, is_mmf, is_eddies, materials, mag_obj, T_mag
             )
             prop_dict[label_dict["full"]] = prop
         elif NO_MESH_LAB in label_dict["surf_type"]:

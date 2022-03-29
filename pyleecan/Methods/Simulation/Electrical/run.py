@@ -52,6 +52,7 @@ def run(self):
     # LUT should contains a full EEC at given OP/T
     if self.LUT_enforced is not None:
         eec_out.clear_parameters()  # Remove eec enforced parameters to use LUT ones
+        eec_out.type_skin_effect = self.LUT_enforced.simu.elec.eec.type_skin_effect
         eec_out.update_from_ref(self.LUT_enforced)
     else:
         # Compute/Enforce parameters of the electrical equivalent circuit

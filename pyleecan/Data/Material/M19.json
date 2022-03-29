@@ -18,7 +18,7 @@
     },
     "elec": {
         "__class__": "MatElectrical",
-        "alpha": 1,
+        "alpha": 0,
         "epsr": 1,
         "rho": 5.263e-07
     },

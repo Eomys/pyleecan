@@ -204,7 +204,6 @@ class EEC_PMSM(EEC):
 
     def __init__(
         self,
-        indmag=None,
         fluxlink=None,
         Ld=None,
         Lq=None,
@@ -239,8 +238,6 @@ class EEC_PMSM(EEC):
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
-            if "indmag" in list(init_dict.keys()):
-                indmag = init_dict["indmag"]
             if "fluxlink" in list(init_dict.keys()):
                 fluxlink = init_dict["fluxlink"]
             if "Ld" in list(init_dict.keys()):
@@ -274,7 +271,6 @@ class EEC_PMSM(EEC):
             if "R1" in list(init_dict.keys()):
                 R1 = init_dict["R1"]
         # Set the properties (value check and convertion are done in setter)
-        self.indmag = indmag
         self.fluxlink = fluxlink
         self.Ld = Ld
         self.Lq = Lq
@@ -303,11 +299,6 @@ class EEC_PMSM(EEC):
         EEC_PMSM_str = ""
         # Get the properties inherited from EEC
         EEC_PMSM_str += super(EEC_PMSM, self).__str__()
-        if self.indmag is not None:
-            tmp = self.indmag.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            EEC_PMSM_str += "indmag = " + tmp
-        else:
-            EEC_PMSM_str += "indmag = None" + linesep + linesep
         if self.fluxlink is not None:
             tmp = self.fluxlink.__str__().replace(linesep, linesep + "\t").rstrip("\t")
             EEC_PMSM_str += "fluxlink = " + tmp
@@ -329,8 +320,6 @@ class EEC_PMSM(EEC):
 
         # Check the properties inherited from EEC
         if not super(EEC_PMSM, self).__eq__(other):
-            return False
-        if other.indmag != self.indmag:
             return False
         if other.fluxlink != self.fluxlink:
             return False
@@ -359,12 +348,6 @@ class EEC_PMSM(EEC):
 
         # Check the properties inherited from EEC
         diff_list.extend(super(EEC_PMSM, self).compare(other, name=name))
-        if (other.indmag is None and self.indmag is not None) or (
-            other.indmag is not None and self.indmag is None
-        ):
-            diff_list.append(name + ".indmag None mismatch")
-        elif self.indmag is not None:
-            diff_list.extend(self.indmag.compare(other.indmag, name=name + ".indmag"))
         if (other.fluxlink is None and self.fluxlink is not None) or (
             other.fluxlink is not None and self.fluxlink is None
         ):
@@ -396,7 +379,6 @@ class EEC_PMSM(EEC):
 
         # Get size of the properties inherited from EEC
         S += super(EEC_PMSM, self).__sizeof__()
-        S += getsizeof(self.indmag)
         S += getsizeof(self.fluxlink)
         S += getsizeof(self.Ld)
         S += getsizeof(self.Lq)
@@ -423,14 +405,6 @@ class EEC_PMSM(EEC):
             keep_function=keep_function,
             **kwargs
         )
-        if self.indmag is None:
-            EEC_PMSM_dict["indmag"] = None
-        else:
-            EEC_PMSM_dict["indmag"] = self.indmag.as_dict(
-                type_handle_ndarray=type_handle_ndarray,
-                keep_function=keep_function,
-                **kwargs
-            )
         if self.fluxlink is None:
             EEC_PMSM_dict["fluxlink"] = None
         else:
@@ -453,8 +427,6 @@ class EEC_PMSM(EEC):
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""
 
-        if self.indmag is not None:
-            self.indmag._set_None()
         if self.fluxlink is not None:
             self.fluxlink._set_None()
         self.Ld = None
@@ -465,43 +437,6 @@ class EEC_PMSM(EEC):
         self.Phiq_mag = None
         # Set to None the properties inherited from EEC
         super(EEC_PMSM, self)._set_None()
-
-    def _get_indmag(self):
-        """getter of indmag"""
-        return self._indmag
-
-    def _set_indmag(self, value):
-        """setter of indmag"""
-        if isinstance(value, str):  # Load from file
-            try:
-                value = load_init_dict(value)[1]
-            except Exception as e:
-                self.get_logger().error(
-                    "Error while loading " + value + ", setting None instead"
-                )
-                value = None
-        if isinstance(value, dict) and "__class__" in value:
-            class_obj = import_class(
-                "pyleecan.Classes", value.get("__class__"), "indmag"
-            )
-            value = class_obj(init_dict=value)
-        elif type(value) is int and value == -1:  # Default constructor
-            IndMag = import_class("pyleecan.Classes", "IndMag", "indmag")
-            value = IndMag()
-        check_var("indmag", value, "IndMag")
-        self._indmag = value
-
-        if self._indmag is not None:
-            self._indmag.parent = self
-
-    indmag = property(
-        fget=_get_indmag,
-        fset=_set_indmag,
-        doc=u"""Magnetic inductance
-
-        :Type: IndMag
-        """,
-    )
 
     def _get_fluxlink(self):
         """getter of fluxlink"""
@@ -523,9 +458,9 @@ class EEC_PMSM(EEC):
             )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
-            FluxLink = import_class("pyleecan.Classes", "FluxLink", "fluxlink")
-            value = FluxLink()
-        check_var("fluxlink", value, "FluxLink")
+            Magnetics = import_class("pyleecan.Classes", "Magnetics", "fluxlink")
+            value = Magnetics()
+        check_var("fluxlink", value, "Magnetics")
         self._fluxlink = value
 
         if self._fluxlink is not None:
@@ -534,9 +469,9 @@ class EEC_PMSM(EEC):
     fluxlink = property(
         fget=_get_fluxlink,
         fset=_set_fluxlink,
-        doc=u"""Flux Linkage
+        doc=u"""Magnetic model for flux linkage calculation
 
-        :Type: FluxLink
+        :Type: Magnetics
         """,
     )
 

@@ -64,7 +64,7 @@
      <item>
       <widget class="QPushButton" name="b_import">
        <property name="text">
-        <string>Import from csv</string>
+        <string>Import from csv/xlsx</string>
        </property>
       </widget>
      </item>
@@ -72,6 +72,30 @@
    </item>
    <item>
     <widget class="QTableWidget" name="w_tab"/>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout_2">
+     <item>
+      <spacer name="horizontalSpacer">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QPushButton" name="b_plot">
+       <property name="text">
+        <string>Preview Plot</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
    </item>
    <item>
     <widget class="QDialogButtonBox" name="b_close">

@@ -15,6 +15,7 @@ from ..labels import (
     WIND_LAB,
     NOTCH_LAB,
     SOP_LAB,
+    WEDGE_LAB,
 )
 
 
@@ -47,8 +48,8 @@ def get_mesh_param(label_dict, FEMM_dict):
     # Lamination
     if LAM_LAB in label_dict["surf_type"]:
         if BORE_LAB in label_dict["surf_type"]:
-            mesh_dict["element_size"] = lam_mesh_dict["elementsize_slot"]
-            mesh_dict["meshsize"] = lam_mesh_dict["meshsize_slot"]
+            mesh_dict["element_size"] = FEMM_dict["mesh"]["elementsize_airgap"]
+            mesh_dict["meshsize"] = FEMM_dict["mesh"]["meshsize_airgap"]
         else:  # Yoke or other lines
             mesh_dict["element_size"] = lam_mesh_dict["elementsize_yoke"]
             mesh_dict["meshsize"] = lam_mesh_dict["meshsize_yoke"]
@@ -88,14 +89,30 @@ def get_mesh_param(label_dict, FEMM_dict):
             mesh_dict["group"] = FEMM_dict["groups"]["GROUP_SW"]
         else:  # if the winding is on the Rotor
             mesh_dict["group"] = FEMM_dict["groups"]["GROUP_RW"]
-    # Slot opening or Notches
-    elif SOP_LAB in label_dict["surf_type"] or NOTCH_LAB in label_dict["surf_type"]:
+    # Slot opening
+    elif SOP_LAB in label_dict["surf_type"]:
+        mesh_dict["element_size"] = lam_mesh_dict["elementsize_slot"]
+        mesh_dict["meshsize"] = lam_mesh_dict["meshsize_slot"]
+        if STATOR_LAB in label_dict["lam_type"]:  # if the opening is on the Stator
+            mesh_dict["group"] = FEMM_dict["groups"]["GROUP_SSI"]
+        else:
+            mesh_dict["group"] = FEMM_dict["groups"]["GROUP_RSI"]
+    # Slot Notches
+    elif NOTCH_LAB in label_dict["surf_type"]:
         mesh_dict["element_size"] = lam_mesh_dict["elementsize_slot"]
         mesh_dict["meshsize"] = lam_mesh_dict["meshsize_slot"]
         if STATOR_LAB in label_dict["lam_type"]:  # if the notch is on the Stator
             mesh_dict["group"] = FEMM_dict["groups"]["GROUP_SN"]
         else:  # if the notch is on the Rotor
             mesh_dict["group"] = FEMM_dict["groups"]["GROUP_RN"]
+    # Slot Wedges
+    elif WEDGE_LAB in label_dict["surf_type"]:
+        mesh_dict["element_size"] = lam_mesh_dict["elementsize_slot"]
+        mesh_dict["meshsize"] = lam_mesh_dict["meshsize_slot"]
+        if STATOR_LAB in label_dict["lam_type"]:
+            mesh_dict["group"] = FEMM_dict["groups"]["GROUP_SWE"]
+        else:
+            mesh_dict["group"] = FEMM_dict["groups"]["GROUP_RWE"]
     # Sliding Band / Airgap
     elif SLID_LAB in label_dict["surf_type"] or AIRGAP_LAB in label_dict["surf_type"]:
         mesh_dict["automesh"] = FEMM_dict["mesh"]["automesh_airgap"]

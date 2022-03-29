@@ -27,6 +27,16 @@ try:
 except ImportError as error:
     plot_BH = error
 
+try:
+    from ..Methods.Material.MatMagnetics.get_Hc import get_Hc
+except ImportError as error:
+    get_Hc = error
+
+try:
+    from ..Methods.Material.MatMagnetics.get_Brm import get_Brm
+except ImportError as error:
+    get_Brm = error
+
 
 from ..Classes.ImportMatrixVal import ImportMatrixVal
 from numpy import ndarray
@@ -58,6 +68,24 @@ class MatMagnetics(FrozenClass):
         )
     else:
         plot_BH = plot_BH
+    # cf Methods.Material.MatMagnetics.get_Hc
+    if isinstance(get_Hc, ImportError):
+        get_Hc = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use MatMagnetics method get_Hc: " + str(get_Hc))
+            )
+        )
+    else:
+        get_Hc = get_Hc
+    # cf Methods.Material.MatMagnetics.get_Brm
+    if isinstance(get_Brm, ImportError):
+        get_Brm = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use MatMagnetics method get_Brm: " + str(get_Brm))
+            )
+        )
+    else:
+        get_Brm = get_Brm
     # save and copy methods are available in all object
     save = save
     copy = copy
@@ -67,7 +95,6 @@ class MatMagnetics(FrozenClass):
     def __init__(
         self,
         mur_lin=1,
-        Hc=0,
         Brm20=0,
         alpha_Br=0,
         Wlam=0,
@@ -95,8 +122,6 @@ class MatMagnetics(FrozenClass):
             # Overwrite default value with init_dict content
             if "mur_lin" in list(init_dict.keys()):
                 mur_lin = init_dict["mur_lin"]
-            if "Hc" in list(init_dict.keys()):
-                Hc = init_dict["Hc"]
             if "Brm20" in list(init_dict.keys()):
                 Brm20 = init_dict["Brm20"]
             if "alpha_Br" in list(init_dict.keys()):
@@ -114,7 +139,6 @@ class MatMagnetics(FrozenClass):
         # Set the properties (value check and convertion are done in setter)
         self.parent = None
         self.mur_lin = mur_lin
-        self.Hc = Hc
         self.Brm20 = Brm20
         self.alpha_Br = alpha_Br
         self.Wlam = Wlam
@@ -137,7 +161,6 @@ class MatMagnetics(FrozenClass):
                 "parent = " + str(type(self.parent)) + " object" + linesep
             )
         MatMagnetics_str += "mur_lin = " + str(self.mur_lin) + linesep
-        MatMagnetics_str += "Hc = " + str(self.Hc) + linesep
         MatMagnetics_str += "Brm20 = " + str(self.Brm20) + linesep
         MatMagnetics_str += "alpha_Br = " + str(self.alpha_Br) + linesep
         MatMagnetics_str += "Wlam = " + str(self.Wlam) + linesep
@@ -168,8 +191,6 @@ class MatMagnetics(FrozenClass):
             return False
         if other.mur_lin != self.mur_lin:
             return False
-        if other.Hc != self.Hc:
-            return False
         if other.Brm20 != self.Brm20:
             return False
         if other.alpha_Br != self.alpha_Br:
@@ -196,8 +217,6 @@ class MatMagnetics(FrozenClass):
         diff_list = list()
         if other._mur_lin != self._mur_lin:
             diff_list.append(name + ".mur_lin")
-        if other._Hc != self._Hc:
-            diff_list.append(name + ".Hc")
         if other._Brm20 != self._Brm20:
             diff_list.append(name + ".Brm20")
         if other._alpha_Br != self._alpha_Br:
@@ -239,7 +258,6 @@ class MatMagnetics(FrozenClass):
 
         S = 0  # Full size of the object
         S += getsizeof(self.mur_lin)
-        S += getsizeof(self.Hc)
         S += getsizeof(self.Brm20)
         S += getsizeof(self.alpha_Br)
         S += getsizeof(self.Wlam)
@@ -262,7 +280,6 @@ class MatMagnetics(FrozenClass):
 
         MatMagnetics_dict = dict()
         MatMagnetics_dict["mur_lin"] = self.mur_lin
-        MatMagnetics_dict["Hc"] = self.Hc
         MatMagnetics_dict["Brm20"] = self.Brm20
         MatMagnetics_dict["alpha_Br"] = self.alpha_Br
         MatMagnetics_dict["Wlam"] = self.Wlam
@@ -299,7 +316,6 @@ class MatMagnetics(FrozenClass):
         """Set all the properties to None (except pyleecan object)"""
 
         self.mur_lin = None
-        self.Hc = None
         self.Brm20 = None
         self.alpha_Br = None
         self.Wlam = None
@@ -330,25 +346,6 @@ class MatMagnetics(FrozenClass):
         """,
     )
 
-    def _get_Hc(self):
-        """getter of Hc"""
-        return self._Hc
-
-    def _set_Hc(self, value):
-        """setter of Hc"""
-        check_var("Hc", value, "float", Vmin=0)
-        self._Hc = value
-
-    Hc = property(
-        fget=_get_Hc,
-        fset=_set_Hc,
-        doc=u"""Coercitivity field
-
-        :Type: float
-        :min: 0
-        """,
-    )
-
     def _get_Brm20(self):
         """getter of Brm20"""
         return self._Brm20
@@ -361,7 +358,7 @@ class MatMagnetics(FrozenClass):
     Brm20 = property(
         fget=_get_Brm20,
         fset=_set_Brm20,
-        doc=u"""magnet remanence induction at 20degC
+        doc=u"""magnet remanence induction at 20degC (calculated from mur_lin and Hc if not provided)
 
         :Type: float
         """,

@@ -12,7 +12,7 @@
             "HT": {
                 "Cp": 460.0,
                 "__class__": "MatHT",
-                "alpha": null,
+                "alpha": 0,
                 "lambda_x": 43.0,
                 "lambda_y": 43.0,
                 "lambda_z": 43.0
@@ -26,8 +26,8 @@
             },
             "elec": {
                 "__class__": "MatElectrical",
-                "alpha": null,
-                "epsr": null,
+                "alpha": 0,
+                "epsr": 1,
                 "rho": 1.43e-07
             },
             "is_isotropic": true,
@@ -104,7 +104,7 @@
                         "HT": {
                             "Cp": 1,
                             "__class__": "MatHT",
-                            "alpha": 0.00393,
+                            "alpha": 0,
                             "lambda_x": 1,
                             "lambda_y": 1,
                             "lambda_z": 1
@@ -118,7 +118,7 @@
                         },
                         "elec": {
                             "__class__": "MatElectrical",
-                            "alpha": 1,
+                            "alpha": 0,
                             "epsr": 1,
                             "rho": 1.6e-06
                         },
@@ -171,7 +171,7 @@
                         "HT": {
                             "Cp": 1,
                             "__class__": "MatHT",
-                            "alpha": 0.00393,
+                            "alpha": 0,
                             "lambda_x": 1,
                             "lambda_y": 1,
                             "lambda_z": 1
@@ -185,7 +185,7 @@
                         },
                         "elec": {
                             "__class__": "MatElectrical",
-                            "alpha": 1,
+                            "alpha": 0,
                             "epsr": 1,
                             "rho": 1.6e-06
                         },
@@ -250,9 +250,9 @@
                     },
                     "elec": {
                         "__class__": "MatElectrical",
-                        "alpha": 1,
+                        "alpha": 0,
                         "epsr": 1,
-                        "rho": 1
+                        "rho": 0
                     },
                     "is_isotropic": true,
                     "mag": {
@@ -302,7 +302,7 @@
             "HT": {
                 "Cp": 1,
                 "__class__": "MatHT",
-                "alpha": 0.00393,
+                "alpha": 0,
                 "lambda_x": 1,
                 "lambda_y": 1,
                 "lambda_z": 1
@@ -316,9 +316,9 @@
             },
             "elec": {
                 "__class__": "MatElectrical",
-                "alpha": 1,
+                "alpha": 0,
                 "epsr": 1,
-                "rho": 1
+                "rho": 4.6e-07
             },
             "is_isotropic": false,
             "mag": {
@@ -549,7 +549,7 @@
             "HT": {
                 "Cp": 1,
                 "__class__": "MatHT",
-                "alpha": 0.00393,
+                "alpha": 0,
                 "lambda_x": 1,
                 "lambda_y": 1,
                 "lambda_z": 1
@@ -563,9 +563,9 @@
             },
             "elec": {
                 "__class__": "MatElectrical",
-                "alpha": 1,
+                "alpha": 0,
                 "epsr": 1,
-                "rho": 1
+                "rho": 4.6e-07
             },
             "is_isotropic": false,
             "mag": {
@@ -802,7 +802,7 @@
             "HT": {
                 "Cp": 1,
                 "__class__": "MatHT",
-                "alpha": 0.00393,
+                "alpha": 0,
                 "lambda_x": 1,
                 "lambda_y": 1,
                 "lambda_z": 1
@@ -816,9 +816,9 @@
             },
             "elec": {
                 "__class__": "MatElectrical",
-                "alpha": 1,
+                "alpha": 0,
                 "epsr": 1,
-                "rho": 1
+                "rho": 4.6e-07
             },
             "is_isotropic": false,
             "mag": {
@@ -1069,7 +1069,7 @@
                     "HT": {
                         "Cp": 381.0,
                         "__class__": "MatHT",
-                        "alpha": 0.00393,
+                        "alpha": 1.6e-05,
                         "lambda_x": 385.0,
                         "lambda_y": 385.0,
                         "lambda_z": 385.0
@@ -1083,8 +1083,8 @@
                     },
                     "elec": {
                         "__class__": "MatElectrical",
-                        "alpha": 1,
-                        "epsr": null,
+                        "alpha": 0.00393,
+                        "epsr": 1,
                         "rho": 1.73e-08
                     },
                     "is_isotropic": true,
@@ -1109,7 +1109,7 @@
                     "HT": {
                         "Cp": 671.0,
                         "__class__": "MatHT",
-                        "alpha": null,
+                        "alpha": 0,
                         "lambda_x": 0.2,
                         "lambda_y": 0.2,
                         "lambda_z": 0.2
@@ -1123,9 +1123,9 @@
                     },
                     "elec": {
                         "__class__": "MatElectrical",
-                        "alpha": 1,
-                        "epsr": null,
-                        "rho": null
+                        "alpha": 0,
+                        "epsr": 1,
+                        "rho": 0
                     },
                     "is_isotropic": true,
                     "mag": null,

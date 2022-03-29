@@ -1,6 +1,6 @@
 Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
 Zs,-,slot number,0,int,36,0,,,Slot,,build_geometry_active,VERSION,1,Generic class for slot (abstract)
-type_close,-,"2 to close the slot with lamination iron, 1 to close with air and 0 to close with nothing (previous policy)",0,int,1,0,2,,,,build_geometry_half_tooth,,,
+wedge_mat,-,"Material for the wedge, if None no wedge",0,Material,None,,,,,,build_geometry_half_tooth,,,
 ,,,,,,,,,,,check,,,
 ,,,,,,,,,,,comp_angle_active_eq,,,
 ,,,,,,,,,,,comp_angle_opening,,,
@@ -12,6 +12,7 @@ type_close,-,"2 to close the slot with lamination iron, 1 to close with air and 
 ,,,,,,,,,,,comp_surface,,,
 ,,,,,,,,,,,comp_surface_active,,,
 ,,,,,,,,,,,comp_surface_opening,,,
+,,,,,,,,,,,comp_surface_wedges,,,
 ,,,,,,,,,,,comp_width_opening,,,
 ,,,,,,,,,,,convert_to_SlotUD2,,,
 ,,,,,,,,,,,get_is_stator,,,
@@ -19,6 +20,7 @@ type_close,-,"2 to close the slot with lamination iron, 1 to close with air and 
 ,,,,,,,,,,,get_Rbo,,,
 ,,,,,,,,,,,get_surface,,,
 ,,,,,,,,,,,get_surface_tooth,,,
+,,,,,,,,,,,get_surface_wedges,,,
 ,,,,,,,,,,,is_outwards,,,
 ,,,,,,,,,,,plot,,,
 ,,,,,,,,,,,plot_active,,,

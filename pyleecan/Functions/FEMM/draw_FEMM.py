@@ -32,6 +32,7 @@ def draw_FEMM(
     rotor_dxf=None,
     stator_dxf=None,
     is_fast_draw=False,
+    T_mag=20,
 ):
     """Draws and assigns the property of the machine in FEMM
 
@@ -83,12 +84,18 @@ def draw_FEMM(
         To use a dxf version of the stator instead of build_geometry
     is_fast_draw : bool
         True to use lamination symetry to accelerate the drawing of the machine
+    T_mag: float
+        Permanent magnet temperature [deg Celsius]
 
     Returns
     -------
     FEMM_dict : dict
         dictionary containing the main parameters of FEMM (including circuits and materials)
     """
+
+    if transform_list not in [None, list()] and is_fast_draw:
+        is_fast_draw = False
+        output.get_logger().debug("Removing fast_draw for transform_list in FEMM")
 
     # Initialization from output for readibility
     Is = output.elec.Is  # Stator currents waveforms
@@ -97,7 +104,7 @@ def draw_FEMM(
 
     # Computing parameter (element size, arcspan...) needed to define the simulation
     FEMM_dict = comp_FEMM_dict(
-        machine, kgeo_fineness, kmesh_fineness, type_calc_leakage
+        machine, kgeo_fineness, kmesh_fineness, T_mag, type_calc_leakage
     )
     # Overwrite some values if needed
     for key, val in user_FEMM_dict.items():
