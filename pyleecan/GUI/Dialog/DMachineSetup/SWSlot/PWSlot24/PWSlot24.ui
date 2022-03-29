@@ -18,7 +18,7 @@
   </property>
   <property name="maximumSize">
    <size>
-    <width>1101</width>
+    <width>16777215</width>
     <height>16777215</height>
    </size>
   </property>
@@ -46,7 +46,7 @@
         <string/>
        </property>
        <property name="pixmap">
-        <pixmap resource="../../../../Resources/pyleecan.qrc">:/images/images/MachineSetup/WSlot/SlotW24.png</pixmap>
+        <pixmap resource="../../../../Resources/pyleecan.qrc">:/images/images/MachineSetup/WSlot/SlotW24_wind.png</pixmap>
        </property>
        <property name="scaledContents">
         <bool>false</bool>

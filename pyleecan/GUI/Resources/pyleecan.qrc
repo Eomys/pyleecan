@@ -4,22 +4,54 @@
     <file>images/icon/search.png</file>
     <file>images/icon/check.png</file>
     <file>images/icon/cross.png</file>
-    <file>images/MachineSetup/WSlot/SlotW10.png</file>
-    <file>images/MachineSetup/WSlot/SlotW11.png</file>
-    <file>images/MachineSetup/WSlot/SlotW12.png</file>
-    <file>images/MachineSetup/WSlot/SlotW13.png</file>
-    <file>images/MachineSetup/WSlot/SlotW14.png</file>
-    <file>images/MachineSetup/WSlot/SlotW15.png</file>
-    <file>images/MachineSetup/WSlot/SlotW16.png</file>
-    <file>images/MachineSetup/WSlot/SlotW21.png</file>
-    <file>images/MachineSetup/WSlot/SlotW22.png</file>
-    <file>images/MachineSetup/WSlot/SlotW23.png</file>
-    <file>images/MachineSetup/WSlot/SlotW24.png</file>
-    <file>images/MachineSetup/WSlot/SlotW25.png</file>
-    <file>images/MachineSetup/WSlot/SlotW26.png</file>
-    <file>images/MachineSetup/WSlot/SlotW27.png</file>
-    <file>images/MachineSetup/WSlot/SlotW28.png</file>
-    <file>images/MachineSetup/WSlot/SlotW29.png</file>
+    <file>images/MachineSetup/WSlot/SlotW10_empty.png</file>
+    <file>images/MachineSetup/WSlot/SlotW10_wind.png</file>
+    <file>images/MachineSetup/WSlot/SlotW10_wedge_full.png</file>
+    <file>images/MachineSetup/WSlot/SlotW11_empty.png</file>
+    <file>images/MachineSetup/WSlot/SlotW11_wind.png</file>
+    <file>images/MachineSetup/WSlot/SlotW11_wedge_full.png</file>
+    <file>images/MachineSetup/WSlot/SlotW12_empty.png</file>
+    <file>images/MachineSetup/WSlot/SlotW12_wind.png</file>
+    <file>images/MachineSetup/WSlot/SlotW12_wedge_full.png</file>
+    <file>images/MachineSetup/WSlot/SlotW13_empty.png</file>
+    <file>images/MachineSetup/WSlot/SlotW13_wind.png</file>
+    <file>images/MachineSetup/WSlot/SlotW13_wedge_full.png</file>
+    <file>images/MachineSetup/WSlot/SlotW14_empty.png</file>
+    <file>images/MachineSetup/WSlot/SlotW14_wind.png</file>
+    <file>images/MachineSetup/WSlot/SlotW14_wedge_full.png</file>
+    <file>images/MachineSetup/WSlot/SlotW15_empty.png</file>
+    <file>images/MachineSetup/WSlot/SlotW15_wind.png</file>
+    <file>images/MachineSetup/WSlot/SlotW15_wedge_full.png</file>
+    <file>images/MachineSetup/WSlot/SlotW16_empty.png</file>
+    <file>images/MachineSetup/WSlot/SlotW16_wind.png</file>
+    <file>images/MachineSetup/WSlot/SlotW16_wedge_full.png</file>
+    <file>images/MachineSetup/WSlot/SlotW21_empty.png</file>
+    <file>images/MachineSetup/WSlot/SlotW21_wind.png</file>
+    <file>images/MachineSetup/WSlot/SlotW21_wedge_full.png</file>
+    <file>images/MachineSetup/WSlot/SlotW22_empty.png</file>
+    <file>images/MachineSetup/WSlot/SlotW22_wind.png</file>
+    <file>images/MachineSetup/WSlot/SlotW22_wedge_full.png</file>
+    <file>images/MachineSetup/WSlot/SlotW23_empty.png</file>
+    <file>images/MachineSetup/WSlot/SlotW23_wind.png</file>
+    <file>images/MachineSetup/WSlot/SlotW23_wedge_full.png</file>
+    <file>images/MachineSetup/WSlot/SlotW24_empty.png</file>
+    <file>images/MachineSetup/WSlot/SlotW24_wind.png</file>
+    <file>images/MachineSetup/WSlot/SlotW24_wedge_full.png</file>
+    <file>images/MachineSetup/WSlot/SlotW25_empty.png</file>
+    <file>images/MachineSetup/WSlot/SlotW25_wind.png</file>
+    <file>images/MachineSetup/WSlot/SlotW25_wedge_full.png</file>
+    <file>images/MachineSetup/WSlot/SlotW26_empty.png</file>
+    <file>images/MachineSetup/WSlot/SlotW26_wind.png</file>
+    <file>images/MachineSetup/WSlot/SlotW26_wedge_full.png</file>
+    <file>images/MachineSetup/WSlot/SlotW27_empty.png</file>
+    <file>images/MachineSetup/WSlot/SlotW27_wind.png</file>
+    <file>images/MachineSetup/WSlot/SlotW27_wedge_full.png</file>
+    <file>images/MachineSetup/WSlot/SlotW28_empty.png</file>
+    <file>images/MachineSetup/WSlot/SlotW28_wind.png</file>
+    <file>images/MachineSetup/WSlot/SlotW28_wedge_full.png</file>
+    <file>images/MachineSetup/WSlot/SlotW29_empty.png</file>
+    <file>images/MachineSetup/WSlot/SlotW29_wind.png</file>
+    <file>images/MachineSetup/WSlot/SlotW29_wedge_full.png</file>
     <file>images/MachineSetup/WMSlot/SlotM10.png</file>
     <file>images/MachineSetup/WMSlot/SlotM11.png</file>
     <file>images/MachineSetup/WMSlot/SlotM12.png</file>

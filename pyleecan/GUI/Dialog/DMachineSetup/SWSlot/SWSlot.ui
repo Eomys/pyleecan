@@ -73,27 +73,6 @@
       </widget>
      </item>
      <item>
-      <widget class="QLabel" name="in_type_close">
-       <property name="text">
-        <string>Closing material</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QComboBox" name="c_type_close">
-       <item>
-        <property name="text">
-         <string>Air</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Lamination iron</string>
-        </property>
-       </item>
-      </widget>
-     </item>
-     <item>
       <spacer name="horizontalSpacer_3">
        <property name="orientation">
         <enum>Qt::Horizontal</enum>

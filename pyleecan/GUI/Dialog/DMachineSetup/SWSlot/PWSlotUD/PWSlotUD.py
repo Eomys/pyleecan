@@ -23,7 +23,7 @@ class PWSlotUD(Ui_PWSlotUD, QWidget):
     slot_name = "Import from DXF"
     slot_type = SlotUD
 
-    def __init__(self, lamination=None):
+    def __init__(self, lamination=None, material_dict=None):
         """Initialize the widget according to lamination
 
         Parameters
@@ -32,6 +32,8 @@ class PWSlotUD(Ui_PWSlotUD, QWidget):
             A PWSlotUD widget
         lamination : Lamination
             current lamination to edit
+        material_dict: dict
+            Materials dictionary (library + machine)
         """
         # Build the interface according to the .ui file
         QWidget.__init__(self)
@@ -41,6 +43,8 @@ class PWSlotUD(Ui_PWSlotUD, QWidget):
         self.lamination = lamination
         self.slot = lamination.slot
         self.u = gui_option.unit
+        self.material_dict = material_dict
+        self.dxf_gui = None  # Link to the popup
 
         # Setup Path selector for Json files
         self.w_path_json.obj = None
@@ -49,6 +53,18 @@ class PWSlotUD(Ui_PWSlotUD, QWidget):
         self.w_path_json.extension = "JSON file (*.json)"
         self.w_path_json.update()
 
+        # Wedge setup
+        self.g_wedge.setChecked(self.slot.wedge_mat is not None)
+        self.w_wedge_mat.setText("Wedge Material")
+        if lamination.mat_type is not None and lamination.mat_type.name not in [
+            "",
+            None,
+        ]:
+            self.w_wedge_mat.def_mat = lamination.mat_type.name
+        else:
+            self.w_wedge_mat.def_mat = "M400-50A"
+        self.set_wedge()
+
         # Update the GUI according to the current slot
         self.update_graph()
         self.w_out.comp_output()
@@ -56,6 +72,17 @@ class PWSlotUD(Ui_PWSlotUD, QWidget):
         # Connect the signals
         self.b_dxf.clicked.connect(self.open_DXF_Slot)
         self.w_path_json.pathChanged.connect(self.load_slot)
+        self.g_wedge.toggled.connect(self.set_wedge)
+
+    def set_wedge(self):
+        """Setup the slot wedge according to the GUI"""
+        if self.g_wedge.isChecked():
+            self.w_wedge_mat.show()
+            self.w_wedge_mat.update(self.slot, "wedge_mat", self.material_dict)
+        else:
+            self.w_wedge_mat.hide()
+            self.slot.wedge_mat = None
+        self.update_graph()
 
     def update_graph(self):
         """Plot the lamination with/without the slot"""
