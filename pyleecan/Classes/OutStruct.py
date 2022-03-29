@@ -16,7 +16,6 @@ from ..Functions.Load.import_class import import_class
 from ._frozen import FrozenClass
 
 from ._check import InitUnKnowClassError
-from .MeshSolution import MeshSolution
 
 
 class OutStruct(FrozenClass):
@@ -226,6 +225,15 @@ class OutStruct(FrozenClass):
         """setter of axes_dict"""
         if type(value) is dict:
             for key, obj in value.items():
+                if isinstance(obj, str):  # Load from file
+                    try:
+                        obj = load_init_dict(obj)[1]
+                    except Exception as e:
+                        self.get_logger().error(
+                            "Error while loading " + obj + ", setting None instead"
+                        )
+                        obj = None
+                        value[key] = None
                 if type(obj) is dict:
                     class_obj = import_class(
                         "SciDataTool.Classes", obj.get("__class__"), "axes_dict"
@@ -270,13 +278,22 @@ class OutStruct(FrozenClass):
     def _set_meshsolution(self, value):
         """setter of meshsolution"""
         if isinstance(value, str):  # Load from file
-            value = load_init_dict(value)[1]
+            try:
+                value = load_init_dict(value)[1]
+            except Exception as e:
+                self.get_logger().error(
+                    "Error while loading " + value + ", setting None instead"
+                )
+                value = None
         if isinstance(value, dict) and "__class__" in value:
             class_obj = import_class(
                 "pyleecan.Classes", value.get("__class__"), "meshsolution"
             )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
+            MeshSolution = import_class(
+                "pyleecan.Classes", "MeshSolution", "meshsolution"
+            )
             value = MeshSolution()
         check_var("meshsolution", value, "MeshSolution")
         self._meshsolution = value

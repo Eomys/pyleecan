@@ -3,8 +3,10 @@
 from numpy import pi
 from PySide2.QtCore import Signal
 from PySide2.QtWidgets import QMessageBox, QWidget
-
+from logging import getLogger
+from .....loggers import GUI_LOG_NAME
 from .....Classes.LamSlotWind import LamSlotWind
+from .....Classes.LamSquirrelCage import LamSquirrelCage
 from .....Classes.Slot import Slot
 from .....Classes.SlotW10 import SlotW10
 from .....Classes.Slot import Slot
@@ -144,11 +146,13 @@ class SWSlot(Gen_SWSlot, QWidget):
 
         # Call the corresponding constructor
         Zs = self.obj.slot.Zs
+        wedge_mat = self.obj.slot.wedge_mat
         if self.previous_slot[INIT_INDEX[index]] is None:
             # No previous slot of this type
             self.obj.slot = INIT_INDEX[index]()
             self.obj.slot._set_None()  # No default value
             self.obj.slot.Zs = Zs
+            self.obj.slot.wedge_mat = wedge_mat
         else:  # Load the previous slot of this type
             self.obj.slot = self.previous_slot[INIT_INDEX[index]]
             if self.obj.slot.Zs is not None:
@@ -172,6 +176,11 @@ class SWSlot(Gen_SWSlot, QWidget):
         """
         value = self.si_Zs.value()
         self.obj.slot.Zs = value
+        # Clear previous winding matrix (if needed)
+        if hasattr(self.obj, "winding"):
+            self.obj.winding.clean()
+        if isinstance(self.obj, LamSquirrelCage):
+            self.obj.winding.qs = value
         self.set_slot_pitch(value)
         self.w_slot.w_out.comp_output()
         if isinstance(self.w_slot, PWSlotUD):
@@ -201,7 +210,7 @@ class SWSlot(Gen_SWSlot, QWidget):
             self.out_Slot_pitch.setText(
                 sp_txt
                 + "%.4g" % (Slot_pitch)
-                + u" [°] ("
+                + " [°] ("
                 + "%.4g" % (Slot_pitch_rad)
                 + " [rad])"
             )
@@ -217,7 +226,9 @@ class SWSlot(Gen_SWSlot, QWidget):
 
         # Regenerate the pages with the new values
         self.w_slot.setParent(None)
-        self.w_slot = WIDGET_LIST[self.c_slot_type.currentIndex()](self.obj)
+        self.w_slot = WIDGET_LIST[self.c_slot_type.currentIndex()](
+            self.obj, material_dict=self.material_dict
+        )
         self.w_slot.saveNeeded.connect(self.emit_save)
         # Refresh the GUI
         self.main_layout.removeWidget(self.w_slot)
@@ -247,12 +258,25 @@ class SWSlot(Gen_SWSlot, QWidget):
         """
         # We have to make sure the slot is right before trying to plot it
         error = self.check(self.obj)
+        if self.obj.is_stator:
+            name = "Stator"
+        else:
+            name = "Rotor"
 
         if error:  # Error => Display it
-            QMessageBox().critical(self, self.tr("Error"), error)
-        else:  # No error => Plot the slot (No winding for LamSquirrelCage)
-            self.obj.plot(is_lam_only=not (type(self.obj) is LamSlotWind))
-            set_plot_gui_icon()
+            err_msg = "Error in " + name + " Slot definition:\n" + error
+            getLogger(GUI_LOG_NAME).debug(err_msg)
+            QMessageBox().critical(self, self.tr("Error"), err_msg)
+        else:  # No error => Plot the lamination
+            try:
+                self.obj.plot(is_lam_only=not (type(self.obj) is LamSlotWind))
+                set_plot_gui_icon()
+            except Exception as e:
+                err_msg = (
+                    "Error while plotting " + name + " in Slot definition:\n" + str(e)
+                )
+                getLogger(GUI_LOG_NAME).error(err_msg)
+                QMessageBox().critical(self, self.tr("Error"), err_msg)
 
     @staticmethod
     def check(lam):

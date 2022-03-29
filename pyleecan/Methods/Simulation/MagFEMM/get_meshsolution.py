@@ -6,6 +6,8 @@ from ....Classes.MeshMat import MeshMat
 from ....Classes.CellMat import CellMat
 from ....Classes.NodeMat import NodeMat
 from ....Classes.RefTriangle3 import RefTriangle3
+from ....Classes.FPGNTri import FPGNTri
+from ....Classes.ScalarProductL2 import ScalarProductL2
 
 from os.path import join
 
@@ -114,6 +116,9 @@ def get_meshsolution(self, femm, save_path, j_t0, id_worker=0, is_get_mesh=False
             indice=np.linspace(0, NbElem - 1, NbElem, dtype=int),
         )
         mesh.cell["triangle"].interpolation.ref_cell = RefTriangle3(epsilon=1e-9)
+        mesh.cell["triangle"].interpolation.gauss_point = FPGNTri(nb_gauss_point=1)
+        mesh.cell["triangle"].interpolation.scalar_product = ScalarProductL2()
+
         mesh.node = NodeMat(
             coordinate=listNd[:, 0:2],
             nb_node=NbNd,
@@ -122,11 +127,12 @@ def get_meshsolution(self, femm, save_path, j_t0, id_worker=0, is_get_mesh=False
         # get all groups that are in the FEMM model
         groups = dict()
         for grp in FEMM_GROUPS:
-            idx = FEMM_GROUPS[grp]["ID"]
-            name = FEMM_GROUPS[grp]["name"]
-            ind = np.where(listElem0[:, 6] == idx)[0]
-            if ind.size > 0:
-                groups[name] = mesh.cell["triangle"].indice[ind].tolist()
+            if grp != "lam_group_list":
+                idx = FEMM_GROUPS[grp]["ID"]
+                name = FEMM_GROUPS[grp]["name"]
+                ind = np.where(listElem0[:, 6] == idx)[0]
+                if ind.size > 0:
+                    groups[name] = mesh.cell["triangle"].indice[ind].tolist()
     else:
         mesh = None
         groups = None

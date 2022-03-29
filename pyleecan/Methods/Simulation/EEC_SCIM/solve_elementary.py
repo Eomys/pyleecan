@@ -1,114 +1,77 @@
-from numpy import pi, interp
+from numpy import pi, interp, inf, exp
 
 
-def solve_elementary(self, Lm_init):
-    """Compute the parameters dict for the equivalent electrical circuit
-    TODO find ref. to cite
-    cf "Title"
-    Autor, Publisher
-
-                  --->                     ---->
-     -----Rs------XsIs---- --- -----Rr'----XrIr----
-    |                     |   |                       |
-    |                     par["Rfe"] Xm                      Rr*(s-1)/s
-    |                     |   |                       |
-     ---------Is---------- --- ---------Ir------------
-
-             --->
-              Us
-
-    Parameters
-    ----------
-
-
+def solve_elementary(self):
+    """Solve the EEC, set the resulting currents and voltages and update the
+    magnetizing inductance.
 
     Parameters
     ----------
     self : EEC_SCIM
         an EEC_SCIM object
-    Lm_init: float
-        Magnetizing inductance initial value [H]
 
     Returns
     ----------
-    I1: float
-        Stator phase current [Arms]
-    I2: float
-        Rotor bar current [Arms]
-    Im: float
-        Magnetizing current [Arms]
-    If: float
-        Iron loss current [Arms]
-    Lm: float
-        Magnetizing inductance [H]
     delta_Lm: float
-        Magnetizing inductance [H]
+        convergence criterion for magnetizing inductance calculation,
+        i.e. relative difference between the recalculated magnetizing inductance
+        and the current magnetizing inductance
     """
 
-    par = self.parameters
+    felec = self.OP.get_felec()
+    slip = self.OP.get_slip()
+    ws = 2 * pi * felec
 
-    ws = 2 * pi * par["felec"]
-
-    Xm = ws * Lm_init
-    X1 = ws * par["L1"]
-    X2 = ws * par["L2"]
+    Xm = ws * self.Lm
+    X1 = ws * self.L1
+    X2 = ws * self.L2
     Zm = 1j * Xm
     # magnetizing branch impedance, including iron loss resistance
-    Zmf = 1 / (1 / Zm + 1 / par["Rfe"])
+    Zmf = 1 / (1 / Zm + 1 / self.Rfe)
 
     # rotor impedance
-    Z2 = 1j * X2 + par["R2"] / par["slip"]
+    if slip == 0:
+        Z2 = inf
+    else:
+        Z2 = 1j * X2 + self.R2 / slip
 
     # stator impedance
-    Z1 = 1j * X1 + par["R1"]
+    Z1 = 1j * X1 + self.R1
 
     # total impedance
-    if par["slip"] != 0:
-        Ztot = Z1 + 1 / (1 / Zmf + 1 / Z2)
-    else:
-        Ztot = Z1 + Zmf
+    Ztot = Z1 + 1 / (1 / Zmf + 1 / Z2)
 
-    I1 = (par["U0_ref"] + 1j * 0) / Ztot
-    E = par["U0_ref"] - Z1 * I1
-    Im = E / Zm
-    If = E / par["Rfe"]
+    if self.OP.U0_ref is not None:  # Voltage driven
+        UPhi0_ref = 0 if self.OP.UPhi0_ref is None else self.OP.UPhi0_ref
+        U1 = self.OP.U0_ref * exp(1j * UPhi0_ref)
+        I1 = (U1 + 1j * 0) / Ztot
+        E = U1 - Z1 * I1
+        Im = E / Zm
+    elif self.OP.I0_ref is not None:  # Current driven
+        IPhi0_ref = 0 if self.OP.IPhi0_ref is None else self.OP.IPhi0_ref
+        I1 = self.OP.I0_ref * exp(1j * IPhi0_ref)
+        Im = I1 / (1 + Zm / Z2 + Zm / self.Rfe)
+        E = Zm * Im
+        U1 = E + Z1 * I1
+    else:
+        raise Exception("Either U0_ref or I0_ref must be set to solve EEC_SCIM")
+
+    If = E / self.Rfe
     I2 = I1 - (Im + If)
 
     # recalculating magnetizing inductance
-    Phim = interp(abs(Im), par["I_m"], par["Phi_m"])
+    Lm = interp(abs(Im), self.Im_table, self.Lm_table)
 
-    Lm = Phim / abs(Im)
+    # calculation of non linearity effect (should be ->0 when Lm(Im)=self.Lm"])
+    delta_Lm = abs((Lm - self.Lm) / self.Lm)
 
-    # calculation of non linearity effect (should be ->0 when Lm(Im)=Lm_init)
-    delta_Lm = abs((Lm - Lm_init) / Lm_init)
+    # Update eec parameters
+    self.I1 = I1
+    self.I2 = I2
+    self.Im = Im
+    self.If = If
+    self.U1 = U1
+    self.U2 = E
+    self.Lm = Lm
 
-    # A = array(
-    #         [
-    #             # sum of (real and imaginary) voltages equals the input voltage Us
-    #             [ 1,  0, Rs, -Xs,  0,   0,    0,    0,   0,   0, ],
-    #             [ 0,  1, Xs,  Rs,  0,   0,    0,    0,   0,   0, ],
-    #             # sum of (real and imaginary) currents are zeros
-    #             [ 0,  0, -1,   0,  1,   0,    1,    0,   1,   0, ],
-    #             [ 0,  0,  0,  -1,  0,   1,    0,    1,   0,   1, ],
-    #             # j*Xm*Im = Um
-    #             [-1,  0,  0,   0,  0, -Xm,    0,    0,   0,   0, ],
-    #             [ 0, -1,  0,   0, Xm,   0,    0,    0,   0,   0, ],
-    #             # (Rr'/s + j*Xr')*Ir' = Um
-    #             [-1,  0,  0,   0,  0,   0, Rr_s,  -Xr,   0,   0, ],
-    #             [ 0, -1,  0,   0,  0,   0,   Xr, Rr_s,   0,   0, ],
-    #             # par["Rfe"]*Ife = Um
-    #             [-1,  0,  0,   0,  0,   0,    0,    0, par["Rfe"],   0, ],
-    #             [ 0, -1,  0,   0,  0,   0,    0,    0,   0, par["Rfe"], ],
-    #         ]
-    #     )
-    #     # fmt: on
-    #     # delete last row and column if par["Rfe"] is None
-    #     if par["Rfe"] is None:
-    #         A = A[:-2, :-2]
-    #         b = b[:-2]
-
-    #     # print(b)
-    #     # print(A)
-    #     X = solve(A.astype(float), b.astype(float))
-
-    return I1, I2, Im, If, Lm, delta_Lm
+    return delta_Lm

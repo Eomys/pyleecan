@@ -42,11 +42,13 @@ try:
 except ImportError as error:
     store = error
 
+try:
+    from ..Methods.Output.OutMag.comp_torque_MT import comp_torque_MT
+except ImportError as error:
+    comp_torque_MT = error
+
 
 from ._check import InitUnKnowClassError
-from .MeshSolution import MeshSolution
-from .OutInternal import OutInternal
-from .SliceModel import SliceModel
 
 
 class OutMag(FrozenClass):
@@ -100,6 +102,17 @@ class OutMag(FrozenClass):
         )
     else:
         store = store
+    # cf Methods.Output.OutMag.comp_torque_MT
+    if isinstance(comp_torque_MT, ImportError):
+        comp_torque_MT = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use OutMag method comp_torque_MT: " + str(comp_torque_MT)
+                )
+            )
+        )
+    else:
+        comp_torque_MT = comp_torque_MT
     # save and copy methods are available in all object
     save = save
     copy = copy
@@ -125,6 +138,7 @@ class OutMag(FrozenClass):
         Slice=None,
         Tem_slice=None,
         Phi_wind_slice=None,
+        Tem_norm=0.001,
         init_dict=None,
         init_str=None,
     ):
@@ -177,6 +191,8 @@ class OutMag(FrozenClass):
                 Tem_slice = init_dict["Tem_slice"]
             if "Phi_wind_slice" in list(init_dict.keys()):
                 Phi_wind_slice = init_dict["Phi_wind_slice"]
+            if "Tem_norm" in list(init_dict.keys()):
+                Tem_norm = init_dict["Tem_norm"]
         # Set the properties (value check and convertion are done in setter)
         self.parent = None
         self.axes_dict = axes_dict
@@ -196,6 +212,7 @@ class OutMag(FrozenClass):
         self.Slice = Slice
         self.Tem_slice = Tem_slice
         self.Phi_wind_slice = Phi_wind_slice
+        self.Tem_norm = Tem_norm
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -243,6 +260,7 @@ class OutMag(FrozenClass):
             OutMag_str += "Slice = None" + linesep + linesep
         OutMag_str += "Tem_slice = " + str(self.Tem_slice) + linesep + linesep
         OutMag_str += "Phi_wind_slice = " + str(self.Phi_wind_slice) + linesep + linesep
+        OutMag_str += "Tem_norm = " + str(self.Tem_norm) + linesep
         return OutMag_str
 
     def __eq__(self, other):
@@ -283,6 +301,8 @@ class OutMag(FrozenClass):
         if other.Tem_slice != self.Tem_slice:
             return False
         if other.Phi_wind_slice != self.Phi_wind_slice:
+            return False
+        if other.Tem_norm != self.Tem_norm:
             return False
         return True
 
@@ -411,6 +431,8 @@ class OutMag(FrozenClass):
                         other.Phi_wind_slice[key], name=name + ".Phi_wind_slice"
                     )
                 )
+        if other._Tem_norm != self._Tem_norm:
+            diff_list.append(name + ".Tem_norm")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -442,6 +464,7 @@ class OutMag(FrozenClass):
         if self.Phi_wind_slice is not None:
             for key, value in self.Phi_wind_slice.items():
                 S += getsizeof(value) + getsizeof(key)
+        S += getsizeof(self.Tem_norm)
         return S
 
     def as_dict(self, type_handle_ndarray=0, keep_function=False, **kwargs):
@@ -565,6 +588,7 @@ class OutMag(FrozenClass):
                     )
                 else:
                     OutMag_dict["Phi_wind_slice"][key] = None
+        OutMag_dict["Tem_norm"] = self.Tem_norm
         # The class name is added to the dict for deserialisation purpose
         OutMag_dict["__class__"] = "OutMag"
         return OutMag_dict
@@ -592,6 +616,7 @@ class OutMag(FrozenClass):
             self.Slice._set_None()
         self.Tem_slice = None
         self.Phi_wind_slice = None
+        self.Tem_norm = None
 
     def _get_axes_dict(self):
         """getter of axes_dict"""
@@ -605,6 +630,15 @@ class OutMag(FrozenClass):
         """setter of axes_dict"""
         if type(value) is dict:
             for key, obj in value.items():
+                if isinstance(obj, str):  # Load from file
+                    try:
+                        obj = load_init_dict(obj)[1]
+                    except Exception as e:
+                        self.get_logger().error(
+                            "Error while loading " + obj + ", setting None instead"
+                        )
+                        obj = None
+                        value[key] = None
                 if type(obj) is dict:
                     class_obj = import_class(
                         "SciDataTool.Classes", obj.get("__class__"), "axes_dict"
@@ -631,7 +665,13 @@ class OutMag(FrozenClass):
     def _set_B(self, value):
         """setter of B"""
         if isinstance(value, str):  # Load from file
-            value = load_init_dict(value)[1]
+            try:
+                value = load_init_dict(value)[1]
+            except Exception as e:
+                self.get_logger().error(
+                    "Error while loading " + value + ", setting None instead"
+                )
+                value = None
         if isinstance(value, dict) and "__class__" in value:
             class_obj = import_class("SciDataTool.Classes", value.get("__class__"), "B")
             value = class_obj(init_dict=value)
@@ -656,7 +696,13 @@ class OutMag(FrozenClass):
     def _set_Tem(self, value):
         """setter of Tem"""
         if isinstance(value, str):  # Load from file
-            value = load_init_dict(value)[1]
+            try:
+                value = load_init_dict(value)[1]
+            except Exception as e:
+                self.get_logger().error(
+                    "Error while loading " + value + ", setting None instead"
+                )
+                value = None
         if isinstance(value, dict) and "__class__" in value:
             class_obj = import_class(
                 "SciDataTool.Classes", value.get("__class__"), "Tem"
@@ -737,7 +783,13 @@ class OutMag(FrozenClass):
     def _set_Phi_wind_stator(self, value):
         """setter of Phi_wind_stator"""
         if isinstance(value, str):  # Load from file
-            value = load_init_dict(value)[1]
+            try:
+                value = load_init_dict(value)[1]
+            except Exception as e:
+                self.get_logger().error(
+                    "Error while loading " + value + ", setting None instead"
+                )
+                value = None
         if isinstance(value, dict) and "__class__" in value:
             class_obj = import_class(
                 "SciDataTool.Classes", value.get("__class__"), "Phi_wind_stator"
@@ -769,6 +821,15 @@ class OutMag(FrozenClass):
         """setter of Phi_wind"""
         if type(value) is dict:
             for key, obj in value.items():
+                if isinstance(obj, str):  # Load from file
+                    try:
+                        obj = load_init_dict(obj)[1]
+                    except Exception as e:
+                        self.get_logger().error(
+                            "Error while loading " + obj + ", setting None instead"
+                        )
+                        obj = None
+                        value[key] = None
                 if type(obj) is dict:
                     class_obj = import_class(
                         "SciDataTool.Classes", obj.get("__class__"), "Phi_wind"
@@ -795,7 +856,13 @@ class OutMag(FrozenClass):
     def _set_emf(self, value):
         """setter of emf"""
         if isinstance(value, str):  # Load from file
-            value = load_init_dict(value)[1]
+            try:
+                value = load_init_dict(value)[1]
+            except Exception as e:
+                self.get_logger().error(
+                    "Error while loading " + value + ", setting None instead"
+                )
+                value = None
         if isinstance(value, dict) and "__class__" in value:
             class_obj = import_class(
                 "SciDataTool.Classes", value.get("__class__"), "emf"
@@ -822,13 +889,22 @@ class OutMag(FrozenClass):
     def _set_meshsolution(self, value):
         """setter of meshsolution"""
         if isinstance(value, str):  # Load from file
-            value = load_init_dict(value)[1]
+            try:
+                value = load_init_dict(value)[1]
+            except Exception as e:
+                self.get_logger().error(
+                    "Error while loading " + value + ", setting None instead"
+                )
+                value = None
         if isinstance(value, dict) and "__class__" in value:
             class_obj = import_class(
                 "pyleecan.Classes", value.get("__class__"), "meshsolution"
             )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
+            MeshSolution = import_class(
+                "pyleecan.Classes", "MeshSolution", "meshsolution"
+            )
             value = MeshSolution()
         check_var("meshsolution", value, "MeshSolution")
         self._meshsolution = value
@@ -870,13 +946,20 @@ class OutMag(FrozenClass):
     def _set_internal(self, value):
         """setter of internal"""
         if isinstance(value, str):  # Load from file
-            value = load_init_dict(value)[1]
+            try:
+                value = load_init_dict(value)[1]
+            except Exception as e:
+                self.get_logger().error(
+                    "Error while loading " + value + ", setting None instead"
+                )
+                value = None
         if isinstance(value, dict) and "__class__" in value:
             class_obj = import_class(
                 "pyleecan.Classes", value.get("__class__"), "internal"
             )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
+            OutInternal = import_class("pyleecan.Classes", "OutInternal", "internal")
             value = OutInternal()
         check_var("internal", value, "OutInternal")
         self._internal = value
@@ -936,13 +1019,20 @@ class OutMag(FrozenClass):
     def _set_Slice(self, value):
         """setter of Slice"""
         if isinstance(value, str):  # Load from file
-            value = load_init_dict(value)[1]
+            try:
+                value = load_init_dict(value)[1]
+            except Exception as e:
+                self.get_logger().error(
+                    "Error while loading " + value + ", setting None instead"
+                )
+                value = None
         if isinstance(value, dict) and "__class__" in value:
             class_obj = import_class(
                 "pyleecan.Classes", value.get("__class__"), "Slice"
             )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
+            SliceModel = import_class("pyleecan.Classes", "SliceModel", "Slice")
             value = SliceModel()
         check_var("Slice", value, "SliceModel")
         self._Slice = value
@@ -966,7 +1056,13 @@ class OutMag(FrozenClass):
     def _set_Tem_slice(self, value):
         """setter of Tem_slice"""
         if isinstance(value, str):  # Load from file
-            value = load_init_dict(value)[1]
+            try:
+                value = load_init_dict(value)[1]
+            except Exception as e:
+                self.get_logger().error(
+                    "Error while loading " + value + ", setting None instead"
+                )
+                value = None
         if isinstance(value, dict) and "__class__" in value:
             class_obj = import_class(
                 "SciDataTool.Classes", value.get("__class__"), "Tem_slice"
@@ -998,6 +1094,15 @@ class OutMag(FrozenClass):
         """setter of Phi_wind_slice"""
         if type(value) is dict:
             for key, obj in value.items():
+                if isinstance(obj, str):  # Load from file
+                    try:
+                        obj = load_init_dict(obj)[1]
+                    except Exception as e:
+                        self.get_logger().error(
+                            "Error while loading " + obj + ", setting None instead"
+                        )
+                        obj = None
+                        value[key] = None
                 if type(obj) is dict:
                     class_obj = import_class(
                         "SciDataTool.Classes", obj.get("__class__"), "Phi_wind_slice"
@@ -1014,5 +1119,23 @@ class OutMag(FrozenClass):
         doc=u"""Dict of lamination winding fluxlinkage DataTime objects per slice
 
         :Type: {SciDataTool.Classes.DataND.DataND}
+        """,
+    )
+
+    def _get_Tem_norm(self):
+        """getter of Tem_norm"""
+        return self._Tem_norm
+
+    def _set_Tem_norm(self, value):
+        """setter of Tem_norm"""
+        check_var("Tem_norm", value, "float")
+        self._Tem_norm = value
+
+    Tem_norm = property(
+        fget=_get_Tem_norm,
+        fset=_set_Tem_norm,
+        doc=u"""Torque normalization
+
+        :Type: float
         """,
     )

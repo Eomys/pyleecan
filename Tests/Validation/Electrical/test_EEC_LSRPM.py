@@ -11,8 +11,6 @@ from pyleecan.Classes.Simu1 import Simu1
 from pyleecan.Classes.InputCurrent import InputCurrent
 from pyleecan.Classes.Electrical import Electrical
 from pyleecan.Classes.EEC_LSRPM import EEC_LSRPM
-from pyleecan.Classes.FluxLinkFEMM import FluxLinkFEMM
-from pyleecan.Classes.IndMagFEMM import IndMagFEMM
 from pyleecan.Classes.MagFEMM import MagFEMM
 from pyleecan.Classes.Output import Output
 from pyleecan.Functions.load import load
@@ -56,10 +54,7 @@ def test_EEC_LSRPM():
 
     # Definition of the magnetic simulation (FEMM)
     simu2.mag = MagFEMM(
-        type_BH_stator=0,
-        type_BH_rotor=0,
-        is_periodicity_a=True,
-        nb_worker=cpu_count(),
+        type_BH_stator=0, type_BH_rotor=0, is_periodicity_a=True, nb_worker=cpu_count(),
     )
 
     out2 = Output(simu=simu2)

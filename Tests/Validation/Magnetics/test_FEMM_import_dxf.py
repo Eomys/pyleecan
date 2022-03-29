@@ -35,6 +35,7 @@ def test_FEMM_import_dxf():
         type_BH_rotor=0,
         is_periodicity_a=True,
         Kgeo_fineness=0.75,
+        is_fast_draw=False
     )
     # Run only Magnetic module
     simu.force = None
@@ -66,12 +67,12 @@ def test_FEMM_import_dxf():
     BC_list.append((0.067, False, "bc_r1"))
     simu.mag.rotor_dxf.BC_list = BC_list
 
-    # Run DXF simulation
-    out = simu.run()
-
-    # Run Normal simulation
+    # Same without Dxf
     simu2 = simu.copy()
     simu2.mag.rotor_dxf = None
+
+    # Run both simulations
+    out = simu.run()
     out2 = simu2.run()
 
     # Plot/compare the flux

@@ -3,7 +3,8 @@
 
 from PySide2.QtCore import Signal
 from PySide2.QtWidgets import QMessageBox, QWidget, QSizePolicy
-
+from logging import getLogger
+from .....loggers import GUI_LOG_NAME
 from .....Classes.HoleM50 import HoleM50
 from .....Classes.Material import Material
 from .....GUI.Dialog.DMachineSetup.SMHoleMag.Ui_SMHoleMag import Ui_SMHoleMag
@@ -96,7 +97,7 @@ class SMHoleMag(Ui_SMHoleMag, QWidget):
             self.out_hole_pitch.setText(Zh_txt + "?")
         else:
             hole_pitch = 360.0 / Zh
-            self.out_hole_pitch.setText(Zh_txt + "%.4g" % (hole_pitch) + u" °")
+            self.out_hole_pitch.setText(Zh_txt + "%.4g" % (hole_pitch) + " °")
 
     def s_add(self, hole=False):
         """Signal to add a new hole
@@ -161,10 +162,19 @@ class SMHoleMag(Ui_SMHoleMag, QWidget):
         # We have to make sure the hole is right before trying to plot it
         error = self.check(self.obj)
         if error:  # Error => Display it
-            QMessageBox().critical(self, self.tr("Error"), error)
+            err_msg = "Error in Hole definition:\n" + error
+            getLogger(GUI_LOG_NAME).debug(err_msg)
+            QMessageBox().critical(self, self.tr("Error"), err_msg)
         else:  # No error => Plot the lamination
-            self.obj.plot(is_show_fig=True)
-            set_plot_gui_icon()
+            try:
+                self.obj.plot(is_show_fig=True)
+                set_plot_gui_icon()
+            except Exception as e:
+                err_msg = "Error while plotting Lamination in Hole definition:\n" + str(
+                    e
+                )
+                getLogger(GUI_LOG_NAME).error(err_msg)
+                QMessageBox().critical(self, self.tr("Error"), err_msg)
 
     @staticmethod
     def check(lamination):

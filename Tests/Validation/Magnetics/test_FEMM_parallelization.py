@@ -46,6 +46,11 @@ def test_FEMM_parallelization_mag():
     simu2 = simu.copy()
     simu2.mag.nb_worker = 2
 
+    # simlation with Nt_tot < nb_worker
+    simu3 = simu.copy()
+    simu3.mag.nb_worker = 8
+    simu3.input.Nt_tot = 4
+
     start = time()
     out = simu.run()
     time1 = time() - start
@@ -58,11 +63,6 @@ def test_FEMM_parallelization_mag():
             time1, simu2.mag.nb_worker, time2
         )
     )
-
-    # simlation with Nt_tot < nb_worker
-    simu3 = simu.copy()
-    simu3.mag.nb_worker = 8
-    simu3.input.Nt_tot = 4
     simu3.run()
 
     # Plot the result by comparing the first two simulation

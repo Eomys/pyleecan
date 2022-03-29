@@ -12,6 +12,7 @@ from .Load.retrocompatibility import convert_init_dict
 # Matlib Keys
 LIB_KEY = "RefMatLib"
 MACH_KEY = "MachineMatLib"
+PATH_KEY = "MATLIB_PATH"
 
 
 def load(file_path):
@@ -237,7 +238,7 @@ def load_matlib(matlib_path=None, machine=None):
     material_dict: dict
         Materials dictionary (library + machine)
     """
-    material_dict = {LIB_KEY: list(), MACH_KEY: list(), "MATLIB_PATH": matlib_path}
+    material_dict = {LIB_KEY: list(), MACH_KEY: list(), PATH_KEY: matlib_path}
     if matlib_path is not None:
         material_dict[LIB_KEY] = load_matlib_folder(matlib_path)
     if machine is not None:

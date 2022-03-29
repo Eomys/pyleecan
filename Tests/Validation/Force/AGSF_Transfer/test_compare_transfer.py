@@ -140,23 +140,17 @@ def test_Benchmark():
         is_periodicity_a=False,
         is_periodicity_t=False,
         is_sliding_band=False,
-        nb_worker=cpu_count(),
     )
     simu.force = ForceMT(
         is_periodicity_a=False,
         is_periodicity_t=False,
     )
 
-    # Run simulation with Rag in the middle of the air-gap
-    out = simu.run()
-
     # Test 2 : with transfer
     simu2 = simu.copy()
     simu2.name = "test_compare_transfer_Benchmark_Rag_Transfer"
     simu2.force.is_agsf_transfer = True
     simu2.force.max_wavenumber_transfer = 100
-
-    out2 = simu2.run()
 
     # simu 3 directly at Rsbo
     Rsbo = 0.0480
@@ -167,6 +161,9 @@ def test_Benchmark():
     simu3 = simu.copy()
     simu2.name = "test_compare_transfer_Benchmark_Rsbo"
     simu3.mag.Rag_enforced = Rag
+    # Run simulation with Rag in the middle of the air-gap
+    out = simu.run()
+    out2 = simu2.run()
     out3 = simu3.run()
 
     out2.force.AGSF.plot_2D_Data(
@@ -197,5 +194,5 @@ def test_Benchmark():
 
 if __name__ == "__main__":
 
-    out, out2 = test_IPMSM()
+    # out, out2 = test_IPMSM()
     out3, out4, out5 = test_Benchmark()

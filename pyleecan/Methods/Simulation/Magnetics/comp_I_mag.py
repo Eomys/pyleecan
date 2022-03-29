@@ -82,11 +82,16 @@ def comp_I_mag(self, output, Time):
             logger.warning("Enforcing Npcp=1 at rotor side")
             Npcp = 1
 
+        if len(Ir.get_axes("phase")[0].symmetries) > 0 and self.is_periodicity_a:
+            str_phase = "phase[oneperiod]"
+        else:
+            str_phase = "phase"
+
         # Interpolate stator currents on input time vector
         Ir_val = transpose(
             Ir.get_along(
                 "time=axis_data",
-                "phase",
+                str_phase,
                 axis_data={"time": time},
                 is_squeeze=False,
             )[Ir.symbol]

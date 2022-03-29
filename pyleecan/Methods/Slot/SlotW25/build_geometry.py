@@ -19,22 +19,16 @@ def build_geometry(self):
     curve_list: list
         A list of 4 Segment and 3 Arc
     """
-    point_dict = self._comp_point_coordinate()
-    Z1 = point_dict["Z1"]
-    Z2 = point_dict["Z2"]
-    Z3 = point_dict["Z3"]
-    Z4 = point_dict["Z4"]
-    Z5 = point_dict["Z5"]
-    Z6 = point_dict["Z6"]
-    Z7 = point_dict["Z7"]
-    Z8 = point_dict["Z8"]
-    # Creation of curve
-    curve_list = list()
-    curve_list.append(Segment(Z1, Z2))
-    curve_list.append(Arc1(Z2, Z3, -abs(Z2), is_trigo_direction=False))
-    curve_list.append(Segment(Z3, Z4))
-    curve_list.append(Arc1(Z4, Z5, abs(Z5)))
-    curve_list.append(Segment(Z5, Z6))
-    curve_list.append(Arc1(Z6, Z7, -abs(Z2), is_trigo_direction=False))
-    curve_list.append(Segment(Z7, Z8))
-    return curve_list
+
+    line_dict = self._comp_line_dict()
+
+    curve_list = [
+        line_dict["1-2"],
+        line_dict["2-3"],
+        line_dict["3-4"],
+        line_dict["4-5"],
+        line_dict["5-6"],
+        line_dict["6-7"],
+        line_dict["7-8"],
+    ]
+    return [line for line in curve_list if line is not None]

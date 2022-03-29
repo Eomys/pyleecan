@@ -1,6 +1,7 @@
 import pytest
 
 from numpy import pi
+from numpy.testing import assert_almost_equal
 
 from os.path import join
 
@@ -21,10 +22,10 @@ param_list = [
     {
         "name": "Toyota_Prius",
         "resistance": 0.035951,
-        "stator_d_axis": 1.3076,
+        "stator_d_axis": 1.3089,
         "rotor_d_axis": pi / 8,
         "mmf_dir": 1,
-        "Tem_av": 368.45,
+        "Tem_av": 367.01,
     },
     {
         "name": "Protean_InWheel",
@@ -32,7 +33,7 @@ param_list = [
         "stator_d_axis": 0.09817,
         "rotor_d_axis": pi / 64,
         "mmf_dir": -1,
-        "Tem_av": 806.35,
+        "Tem_av": 811.65,
     },
 ]
 
@@ -53,19 +54,19 @@ def test_mmf_dir(param_dict, nb_worker=int(cpu_count() / 2)):
 
     # Check that resistance computation is correct
     resistance = machine.stator.comp_resistance_wind()
-    assert resistance == pytest.approx(param_dict["resistance"], abs=0.0001)
+    assert_almost_equal(resistance, param_dict["resistance"], decimal=5)
 
     # Check that the DQ axis are correct for the stator
     d_axis = machine.stator.comp_angle_d_axis()
-    assert d_axis == pytest.approx(param_dict["stator_d_axis"], abs=0.001)
+    assert_almost_equal(d_axis, param_dict["stator_d_axis"], decimal=4)
     q_axis = machine.stator.comp_angle_q_axis()
-    assert q_axis == pytest.approx(param_dict["stator_d_axis"] + pi / 2 / p, abs=0.001)
+    assert_almost_equal(q_axis, param_dict["stator_d_axis"] + pi / 2 / p, decimal=4)
 
     # Check that the DQ axis are correct for the rotor
     d_axis = machine.rotor.comp_angle_d_axis()
-    assert d_axis == pytest.approx(param_dict["rotor_d_axis"], abs=0.0001)
+    assert_almost_equal(d_axis, param_dict["rotor_d_axis"], decimal=4)
     q_axis = machine.rotor.comp_angle_q_axis()
-    assert q_axis == pytest.approx(param_dict["rotor_d_axis"] + pi / 2 / p, abs=0.0001)
+    assert_almost_equal(q_axis, param_dict["rotor_d_axis"] + pi / 2 / p, decimal=4)
 
     # Check mmf rotating direction with current rotating in default
     mmf_dir = machine.stator.comp_mmf_dir(is_plot=False, current_dir=current_dir_ref)
@@ -104,7 +105,7 @@ def test_mmf_dir(param_dict, nb_worker=int(cpu_count() / 2)):
 
         simu.input = InputCurrent(
             OP=OPdq(Id_ref=-100, Iq_ref=200, N0=1000),  # arbitrary current
-            Nt_tot=4 * nb_worker * per_t,
+            Nt_tot=4 * per_t,
             Na_tot=200 * per_a,
         )
 
@@ -114,13 +115,14 @@ def test_mmf_dir(param_dict, nb_worker=int(cpu_count() / 2)):
             is_periodicity_t=True,
             nb_worker=nb_worker,
             Kmesh_fineness=0.5,  # reduce mesh size to speed up calculation
+            T_mag=60,
         )
 
         # Run simulation
         out = simu.run()
 
         # Check torque value
-        assert out.mag.Tem_av == pytest.approx(param_dict["Tem_av"], rel=0.01)
+        assert_almost_equal(out.mag.Tem_av, param_dict["Tem_av"], decimal=2)
 
         if is_show_fig:
 

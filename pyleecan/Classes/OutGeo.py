@@ -16,7 +16,6 @@ from ..Functions.Load.import_class import import_class
 from ._frozen import FrozenClass
 
 from ._check import InitUnKnowClassError
-from .OutGeoLam import OutGeoLam
 
 
 class OutGeo(FrozenClass):
@@ -369,13 +368,20 @@ class OutGeo(FrozenClass):
     def _set_stator(self, value):
         """setter of stator"""
         if isinstance(value, str):  # Load from file
-            value = load_init_dict(value)[1]
+            try:
+                value = load_init_dict(value)[1]
+            except Exception as e:
+                self.get_logger().error(
+                    "Error while loading " + value + ", setting None instead"
+                )
+                value = None
         if isinstance(value, dict) and "__class__" in value:
             class_obj = import_class(
                 "pyleecan.Classes", value.get("__class__"), "stator"
             )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
+            OutGeoLam = import_class("pyleecan.Classes", "OutGeoLam", "stator")
             value = OutGeoLam()
         check_var("stator", value, "OutGeoLam")
         self._stator = value
@@ -399,13 +405,20 @@ class OutGeo(FrozenClass):
     def _set_rotor(self, value):
         """setter of rotor"""
         if isinstance(value, str):  # Load from file
-            value = load_init_dict(value)[1]
+            try:
+                value = load_init_dict(value)[1]
+            except Exception as e:
+                self.get_logger().error(
+                    "Error while loading " + value + ", setting None instead"
+                )
+                value = None
         if isinstance(value, dict) and "__class__" in value:
             class_obj = import_class(
                 "pyleecan.Classes", value.get("__class__"), "rotor"
             )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
+            OutGeoLam = import_class("pyleecan.Classes", "OutGeoLam", "rotor")
             value = OutGeoLam()
         check_var("rotor", value, "OutGeoLam")
         self._rotor = value
@@ -634,6 +647,15 @@ class OutGeo(FrozenClass):
         """setter of axes_dict"""
         if type(value) is dict:
             for key, obj in value.items():
+                if isinstance(obj, str):  # Load from file
+                    try:
+                        obj = load_init_dict(obj)[1]
+                    except Exception as e:
+                        self.get_logger().error(
+                            "Error while loading " + obj + ", setting None instead"
+                        )
+                        obj = None
+                        value[key] = None
                 if type(obj) is dict:
                     class_obj = import_class(
                         "SciDataTool.Classes", obj.get("__class__"), "axes_dict"

@@ -1,7 +1,6 @@
 from multiprocessing import cpu_count
 from multiprocessing.dummy import Pool
 from os import remove
-
 from shutil import copyfile
 
 from numpy import concatenate
@@ -21,6 +20,7 @@ def solve_FEMM_parallel(
     Is,
     Ir,
     angle_rotor,
+    filename,
 ):
     """
     Same as solve_FEMM including parallelization on several workers
@@ -57,6 +57,8 @@ def solve_FEMM_parallel(
         Stator current matrix (qs,Nt) [A]
     angle_rotor: ndarray
         Rotor angular position vector (Nt,)
+    filename: str
+        Path to FEMM model to open
 
     Returns
     -------
@@ -139,7 +141,10 @@ def solve_FEMM_parallel(
     )
 
     # Loading parameters for readibility
-    fem_file = self.get_path_save_fem(output)
+    if filename is not None:
+        fem_file = filename
+    else:
+        fem_file = self.get_path_save_fem(output)
     nb_worker = self.nb_worker
     logger = self.get_logger()
 
@@ -187,12 +192,9 @@ def solve_FEMM_parallel(
 
     # append femm_handler to handler_list
     output.mag.internal.handler_list.extend(femm_handler)
-
     # Creating threads pool
-    pool = Pool(nb_worker)
-
-    # Computing FEMM in parallel
-    results = pool.starmap(solve_FEMM_single, args)
+    with Pool(nb_worker) as p:
+        results = p.starmap(solve_FEMM_single, args)
 
     # Building mesh solution
     if self.is_get_meshsolution:

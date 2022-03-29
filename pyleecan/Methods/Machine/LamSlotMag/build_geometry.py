@@ -6,7 +6,9 @@ from ....Classes.SlotM18 import SlotM18
 from ....Functions.labels import BOUNDARY_PROP_LAB, MAG_LAB, YSMR_LAB, YSML_LAB
 
 
-def build_geometry(self, is_magnet=True, sym=1, alpha=0, delta=0, is_simplified=False):
+def build_geometry(
+    self, is_magnet=True, sym=1, alpha=0, delta=0, is_circular_radius=False
+):
     """Build the geometry of the LamSlotMag
 
     Parameters
@@ -21,8 +23,8 @@ def build_geometry(self, is_magnet=True, sym=1, alpha=0, delta=0, is_simplified=
         Angle for rotation [rad]
     delta : complex
         Complex value for translation
-    is_simplified: bool
-        True to avoid line superposition
+    is_circular_radius : bool
+        True to add surfaces to "close" the Lamination radii
 
     Returns
     -------
@@ -42,7 +44,9 @@ def build_geometry(self, is_magnet=True, sym=1, alpha=0, delta=0, is_simplified=
         + str(sym)
     )
     # getting the LamSlot surface
-    surf_list = LamSlot.build_geometry(self, sym=sym)
+    surf_list = LamSlot.build_geometry(
+        self, sym=sym, is_circular_radius=is_circular_radius
+    )
 
     Zs = self.slot.Zs
     slot_pitch = 2 * pi / Zs

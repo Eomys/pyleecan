@@ -1,8 +1,3 @@
-# -*- coding: utf-8 -*-
-
-from numpy import exp, pi
-
-from ...Functions.FEMM.create_FEMM_bar import create_FEMM_bar
 from ...Functions.FEMM.create_FEMM_circuit_material import create_FEMM_circuit_material
 from ...Functions.FEMM.create_FEMM_magnet import create_FEMM_magnet
 from ...Functions.labels import (
@@ -15,6 +10,8 @@ from ...Functions.labels import (
     HOLEV_LAB,
     HOLEM_LAB,
     MAG_LAB,
+    SOP_LAB,
+    WEDGE_LAB,
     WIND_LAB,
     BAR_LAB,
     SLID_LAB,
@@ -22,13 +19,14 @@ from ...Functions.labels import (
     get_obj_from_label,
     decode_label,
 )
-from ...Functions.FEMM import LAM_MAT_NAME, AIRGAP_MAT_NAME
+from ...Functions.FEMM import LAM_MAT_NAME
 
 
 def create_FEMM_materials(
     femm,
     machine,
     surf_list,
+    FEMM_dict,
     Is,
     Ir,
     is_mmfs,
@@ -48,6 +46,8 @@ def create_FEMM_materials(
         the machine to simulate
     surf_list : list
         List of surface of the machine
+    FEMM_dict : dict
+        dictionary containing the main parameters of FEMM
     Is : ndarray
         Stator current matrix [A]
     Ir : ndarray
@@ -67,8 +67,8 @@ def create_FEMM_materials(
 
     Returns
     -------
-    Tuple: dict, list
-        Dictionary of properties and list containing the name of the circuits created
+    prop_dict, FEMM_dict : (dict, dict)
+        Dictionary of properties and dictionary containing the main parameters of FEMM
     """
 
     prop_dict = dict()  # Initialisation of the dictionary to return
@@ -76,8 +76,8 @@ def create_FEMM_materials(
     rotor = machine.rotor
     stator = machine.stator
 
-    materials = list()
-    circuits = list()
+    materials = FEMM_dict["materials"]
+    circuits = FEMM_dict["circuits"]
     # Starting creation of properties for each surface of the machine
     for surf in surf_list:
         label_dict = decode_label(surf.label)
@@ -128,12 +128,58 @@ def create_FEMM_materials(
                 femm.mi_addmaterial("Airgap", 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0)
                 materials.append("Airgap")
             prop_dict[label_dict["full"]] = "Airgap"
+        elif SOP_LAB in label_dict["surf_type"]:  # Slot opening
+            # Assigning air to the slot opening
+            if "Air" not in materials:
+                femm.mi_addmaterial("Air", 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0)
+                materials.append("Air")
+            prop_dict[label_dict["full"]] = "Air"
+        elif WEDGE_LAB in label_dict["surf_type"]:  # Wedge
+            # Get the material used for the wedge
+            if STATOR_LAB in label_dict["lam_type"]:
+                wedge_mat = stator.slot.wedge_mat
+                lam_mat = stator.mat_type
+            elif ROTOR_LAB in label_dict["lam_type"]:
+                wedge_mat = rotor.slot.wedge_mat
+                lam_mat = rotor.mat_type
+            mat_name = wedge_mat.name
+            # Check if the wedge has the same material as the lamination
+            if mat_name == lam_mat.name:
+                mat_name = label_dict["lam_label"] + " " + LAM_MAT_NAME
+            elif mat_name not in materials:
+                # Create material if it doesn't already exist
+                femm.mi_addmaterial(
+                    mat_name,
+                    wedge_mat.mag.mur_lin,
+                    wedge_mat.mag.mur_lin,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    1,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                )
+                if (
+                    wedge_mat.mag.BH_curve is not None
+                    and wedge_mat.mag.BH_curve.get_data().shape[0] > 1
+                ):
+                    BH = lam_obj.mat_type.mag.get_BH()
+                    for ii in range(BH.shape[0]):
+                        femm.mi_addbhpoint(wedge_mat.name, BH[ii][1], BH[ii][0])
+                materials.append(mat_name)
+            prop_dict[label_dict["full"]] = mat_name
         elif NOTCH_LAB in label_dict["surf_type"]:  # Notches
             # Same material as Airgap but different mesh
             if "Air" not in materials:
                 femm.mi_addmaterial("Air", 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0)
                 materials.append("Air")
             prop_dict[label_dict["full"]] = "Air"
+
         elif VENT_LAB in label_dict["surf_type"]:  # Ventilation
             vent = get_obj_from_label(machine, label_dict=label_dict)
             material = vent.mat_void
@@ -168,15 +214,19 @@ def create_FEMM_materials(
             )
             prop_dict[label_dict["full"]] = prop
         elif MAG_LAB in label_dict["surf_type"] or HOLEM_LAB in label_dict["surf_type"]:
+            T_mag = FEMM_dict["simu"]["T_mag"]
             is_stator = STATOR_LAB in label_dict["lam_type"]
             is_mmf = is_mmfs if is_stator else is_mmfr
             mag_obj = get_obj_from_label(machine, label_dict=label_dict)
             prop, materials = create_FEMM_magnet(
-                femm, is_mmf, is_eddies, materials, mag_obj
+                femm, is_mmf, is_eddies, materials, mag_obj, T_mag
             )
             prop_dict[label_dict["full"]] = prop
         elif NO_MESH_LAB in label_dict["surf_type"]:
             prop_dict[label_dict["full"]] = "<No Mesh>"
         else:
             raise Exception("Unknown label " + label_dict["full"])
-    return prop_dict, materials, circuits
+
+    FEMM_dict["materials"] = materials
+    FEMM_dict["circuits"] = circuits
+    return prop_dict, FEMM_dict

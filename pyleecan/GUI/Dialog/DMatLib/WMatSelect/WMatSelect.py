@@ -38,8 +38,8 @@ class WMatSelect(Ui_WMatSelect, QWidget):
         QWidget.__init__(self, parent)
         self.setupUi(self)
 
-        self.current_dialog = None
         # Create the property of the widget
+        self.current_dialog = None  # DMatLib widget
         self.obj = None  # object that has a material attribute
         self.mat_attr_name = ""  # material attribute name
         self.material_dict = dict()  #  Material library + machine

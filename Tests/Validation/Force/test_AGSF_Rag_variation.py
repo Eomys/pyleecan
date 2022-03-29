@@ -25,6 +25,7 @@ DELTA = 1e-6
 @pytest.mark.long_1m
 @pytest.mark.periodicity
 @pytest.mark.SingleOP
+@pytest.mark.skip(reason="Research only")
 def test_Benchmark_AGSF_Rag():
     """Comparison of AGSF at different radius for the 12s10p benchmark
     machine from publication:

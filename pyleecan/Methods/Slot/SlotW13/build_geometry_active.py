@@ -1,13 +1,11 @@
-# -*- coding: utf-8 -*-
-
 from numpy import linspace, zeros
 
 from ....Classes.Segment import Segment
 from ....Classes.SurfLine import SurfLine
-from ....Functions.labels import WIND_LAB
+from ....Functions.labels import WIND_LAB, DRAW_PROP_LAB
 
 
-def build_geometry_active(self, Nrad, Ntan, is_simplified=False, alpha=0, delta=0):
+def build_geometry_active(self, Nrad, Ntan, alpha=0, delta=0):
     """Split the slot winding area in several zone
 
     Parameters
@@ -18,8 +16,6 @@ def build_geometry_active(self, Nrad, Ntan, is_simplified=False, alpha=0, delta=
         Number of radial layer
     Ntan : int
         Number of tangentiel layer
-    is_simplified : bool
-        boolean to specify if coincident lines are considered as one or different lines (Default value = False)
     alpha : float
         Angle for rotation (Default value = 0) [rad]
     delta : Complex
@@ -59,46 +55,42 @@ def build_geometry_active(self, Nrad, Ntan, is_simplified=False, alpha=0, delta=
                 Z[ii][jj] + Z[ii][jj + 1] + Z[ii + 1][jj + 1] + Z[ii + 1][jj]
             ) / 4  # tre reference point of the surface
             # With one zone the order would be [Z7,Z4,Z5,Z6]
-            if is_simplified:  # No doubling Line allowed
-                curve_list = list()
-                if ii == 0:
-                    curve_list.append(Segment(Z[ii][jj], Z[ii][jj + 1]))
-                if jj != Ntan - 1:
-                    curve_list.append(Segment(Z[ii][jj + 1], Z[ii + 1][jj + 1]))
-                if ii != Nrad - 1:
-                    curve_list.append(Segment(Z[ii + 1][jj + 1], Z[ii + 1][jj]))
-                surface = SurfLine(
-                    line_list=curve_list,
-                    label=lam_label
-                    + "_"
-                    + WIND_LAB
-                    + "_R"
-                    + str(ii)
-                    + "-T"
-                    + str(jj)
-                    + "-S0",
-                    point_ref=point_ref,
-                )  # surface in the winding area
-                surf_list.append(surface)
-            else:
-                curve_list = list()
-                curve_list.append(Segment(Z[ii][jj], Z[ii][jj + 1]))
-                curve_list.append(Segment(Z[ii][jj + 1], Z[ii + 1][jj + 1]))
-                curve_list.append(Segment(Z[ii + 1][jj + 1], Z[ii + 1][jj]))
-                curve_list.append(Segment(Z[ii + 1][jj], Z[ii][jj]))
-                surface = SurfLine(
-                    line_list=curve_list,
-                    label=lam_label
-                    + "_"
-                    + WIND_LAB
-                    + "_R"
-                    + str(ii)
-                    + "-T"
-                    + str(jj)
-                    + "-S0",
-                    point_ref=point_ref,
-                )  # surface in the winding area
-                surf_list.append(surface)
+            curve_list = list()
+            curve_list.append(Segment(Z[ii][jj], Z[ii][jj + 1]))
+            curve_list.append(
+                Segment(
+                    Z[ii][jj + 1],
+                    Z[ii + 1][jj + 1],
+                    prop_dict={DRAW_PROP_LAB: False},
+                )
+            )
+            curve_list.append(
+                Segment(
+                    Z[ii + 1][jj + 1],
+                    Z[ii + 1][jj],
+                    prop_dict={DRAW_PROP_LAB: False},
+                )
+            )
+            curve_list.append(
+                Segment(
+                    Z[ii + 1][jj],
+                    Z[ii][jj],
+                    prop_dict={DRAW_PROP_LAB: jj != 0},
+                )
+            )
+            surface = SurfLine(
+                line_list=curve_list,
+                label=lam_label
+                + "_"
+                + WIND_LAB
+                + "_R"
+                + str(ii)
+                + "-T"
+                + str(jj)
+                + "-S0",
+                point_ref=point_ref,
+            )  # surface in the winding area
+            surf_list.append(surface)
 
     for surf in surf_list:
         surf.rotate(alpha)  # rotation of each surface

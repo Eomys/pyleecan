@@ -78,14 +78,6 @@ except ImportError as error:
 
 
 from ._check import InitUnKnowClassError
-from .Simulation import Simulation
-from .OutGeo import OutGeo
-from .OutElec import OutElec
-from .OutMag import OutMag
-from .OutStruct import OutStruct
-from .OutPost import OutPost
-from .OutForce import OutForce
-from .OutLoss import OutLoss
 
 
 class Output(FrozenClass):
@@ -558,11 +550,18 @@ class Output(FrozenClass):
     def _set_simu(self, value):
         """setter of simu"""
         if isinstance(value, str):  # Load from file
-            value = load_init_dict(value)[1]
+            try:
+                value = load_init_dict(value)[1]
+            except Exception as e:
+                self.get_logger().error(
+                    "Error while loading " + value + ", setting None instead"
+                )
+                value = None
         if isinstance(value, dict) and "__class__" in value:
             class_obj = import_class("pyleecan.Classes", value.get("__class__"), "simu")
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
+            Simulation = import_class("pyleecan.Classes", "Simulation", "simu")
             value = Simulation()
         check_var("simu", value, "Simulation")
         self._simu = value
@@ -604,11 +603,18 @@ class Output(FrozenClass):
     def _set_geo(self, value):
         """setter of geo"""
         if isinstance(value, str):  # Load from file
-            value = load_init_dict(value)[1]
+            try:
+                value = load_init_dict(value)[1]
+            except Exception as e:
+                self.get_logger().error(
+                    "Error while loading " + value + ", setting None instead"
+                )
+                value = None
         if isinstance(value, dict) and "__class__" in value:
             class_obj = import_class("pyleecan.Classes", value.get("__class__"), "geo")
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
+            OutGeo = import_class("pyleecan.Classes", "OutGeo", "geo")
             value = OutGeo()
         check_var("geo", value, "OutGeo")
         self._geo = value
@@ -632,11 +638,18 @@ class Output(FrozenClass):
     def _set_elec(self, value):
         """setter of elec"""
         if isinstance(value, str):  # Load from file
-            value = load_init_dict(value)[1]
+            try:
+                value = load_init_dict(value)[1]
+            except Exception as e:
+                self.get_logger().error(
+                    "Error while loading " + value + ", setting None instead"
+                )
+                value = None
         if isinstance(value, dict) and "__class__" in value:
             class_obj = import_class("pyleecan.Classes", value.get("__class__"), "elec")
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
+            OutElec = import_class("pyleecan.Classes", "OutElec", "elec")
             value = OutElec()
         check_var("elec", value, "OutElec")
         self._elec = value
@@ -660,11 +673,18 @@ class Output(FrozenClass):
     def _set_mag(self, value):
         """setter of mag"""
         if isinstance(value, str):  # Load from file
-            value = load_init_dict(value)[1]
+            try:
+                value = load_init_dict(value)[1]
+            except Exception as e:
+                self.get_logger().error(
+                    "Error while loading " + value + ", setting None instead"
+                )
+                value = None
         if isinstance(value, dict) and "__class__" in value:
             class_obj = import_class("pyleecan.Classes", value.get("__class__"), "mag")
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
+            OutMag = import_class("pyleecan.Classes", "OutMag", "mag")
             value = OutMag()
         check_var("mag", value, "OutMag")
         self._mag = value
@@ -688,13 +708,20 @@ class Output(FrozenClass):
     def _set_struct(self, value):
         """setter of struct"""
         if isinstance(value, str):  # Load from file
-            value = load_init_dict(value)[1]
+            try:
+                value = load_init_dict(value)[1]
+            except Exception as e:
+                self.get_logger().error(
+                    "Error while loading " + value + ", setting None instead"
+                )
+                value = None
         if isinstance(value, dict) and "__class__" in value:
             class_obj = import_class(
                 "pyleecan.Classes", value.get("__class__"), "struct"
             )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
+            OutStruct = import_class("pyleecan.Classes", "OutStruct", "struct")
             value = OutStruct()
         check_var("struct", value, "OutStruct")
         self._struct = value
@@ -718,11 +745,18 @@ class Output(FrozenClass):
     def _set_post(self, value):
         """setter of post"""
         if isinstance(value, str):  # Load from file
-            value = load_init_dict(value)[1]
+            try:
+                value = load_init_dict(value)[1]
+            except Exception as e:
+                self.get_logger().error(
+                    "Error while loading " + value + ", setting None instead"
+                )
+                value = None
         if isinstance(value, dict) and "__class__" in value:
             class_obj = import_class("pyleecan.Classes", value.get("__class__"), "post")
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
+            OutPost = import_class("pyleecan.Classes", "OutPost", "post")
             value = OutPost()
         check_var("post", value, "OutPost")
         self._post = value
@@ -764,13 +798,20 @@ class Output(FrozenClass):
     def _set_force(self, value):
         """setter of force"""
         if isinstance(value, str):  # Load from file
-            value = load_init_dict(value)[1]
+            try:
+                value = load_init_dict(value)[1]
+            except Exception as e:
+                self.get_logger().error(
+                    "Error while loading " + value + ", setting None instead"
+                )
+                value = None
         if isinstance(value, dict) and "__class__" in value:
             class_obj = import_class(
                 "pyleecan.Classes", value.get("__class__"), "force"
             )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
+            OutForce = import_class("pyleecan.Classes", "OutForce", "force")
             value = OutForce()
         check_var("force", value, "OutForce")
         self._force = value
@@ -794,11 +835,18 @@ class Output(FrozenClass):
     def _set_loss(self, value):
         """setter of loss"""
         if isinstance(value, str):  # Load from file
-            value = load_init_dict(value)[1]
+            try:
+                value = load_init_dict(value)[1]
+            except Exception as e:
+                self.get_logger().error(
+                    "Error while loading " + value + ", setting None instead"
+                )
+                value = None
         if isinstance(value, dict) and "__class__" in value:
             class_obj = import_class("pyleecan.Classes", value.get("__class__"), "loss")
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
+            OutLoss = import_class("pyleecan.Classes", "OutLoss", "loss")
             value = OutLoss()
         check_var("loss", value, "OutLoss")
         self._loss = value

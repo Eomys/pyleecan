@@ -1,4 +1,10 @@
 Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constante Name,Constante Value,Description classe
-parameters,-,"Parameters of the EEC: computed if empty, or enforced",,dict,None,,,,Simulation,,,VERSION,1,Equivalent Electrical Circuit abstract class
-LUT_enforced,-,Electrical Look Up Table to be enforced ,,LUT,None,,,,,,,,,
-drive,-,Drive,,Drive,None,,,,,,,,,
+type_skin_effect,-,Skin effect for resistance and inductance,1,int,1,,,,Simulation,,get_machine_from_parent,VERSION,1,Equivalent Electrical Circuit abstract class
+OP,-,Operating Point,,OP,None,,,,,,comp_R1,,,
+Tsta,deg Celsius,Average stator temperature for operational EEC calculation,0,float,20,,,,,,comp_skin_effect,,,
+Trot,deg Celsius,Average rotor temperature for operational EEC calculation,0,float,20,,,,,,comp_parameters,,,
+Xkr_skinS,,Skin effect coefficient for resistances at stator side,,float,1,,,,,,update_from_ref,,,
+Xke_skinS,,Skin effect coefficient for inductances at stator side,,float,1,,,,,,solve,,,
+Xkr_skinR,,Skin effect coefficient for resistances at rotor side,,float,1,,,,,,solve_PWM,,,
+Xke_skinR,,Skin effect coefficient for inductances at rotor side,,float,1,,,,,,comp_joule_losses,,,
+R1,Ohm,Stator phase resistance,,float,None,,,,,,comp_fluxlinkage,,,

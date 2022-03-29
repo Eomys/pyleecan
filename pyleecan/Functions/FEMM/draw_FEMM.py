@@ -1,9 +1,9 @@
 from ...Classes.Lamination import Lamination
 from ...Classes.Circle import Circle
-from ...Functions.FEMM import is_eddies
-from ...Functions.FEMM.assign_FEMM_surface import assign_FEMM_surface
+
+from ...Functions.FEMM.draw_FEMM_lamination import draw_FEMM_lamination
+from ...Functions.FEMM.draw_FEMM_surfaces import draw_FEMM_surfaces
 from ...Functions.FEMM.comp_FEMM_dict import comp_FEMM_dict
-from ...Functions.FEMM.create_FEMM_materials import create_FEMM_materials
 from ...Functions.FEMM.get_sliding_band import get_sliding_band
 from ...Functions.FEMM.get_airgap_surface import get_airgap_surface
 from ...Functions.labels import NO_MESH_LAB
@@ -31,6 +31,8 @@ def draw_FEMM(
     transform_list=[],
     rotor_dxf=None,
     stator_dxf=None,
+    is_fast_draw=False,
+    T_mag=20,
 ):
     """Draws and assigns the property of the machine in FEMM
 
@@ -41,14 +43,15 @@ def draw_FEMM(
     output : Output
         Output object
     is_mmfr : bool
-        1 to compute the rotor magnetomotive force / rotor
-        magnetic field
+        1 to compute the rotor magnetomotive force / rotor magnetic field
     is_mmfs : bool
-        1 to compute the stator magnetomotive force/stator
-        magnetic field
+        1 to compute the stator magnetomotive force/stator magnetic field
+    sym : int
+        the symmetry applied on the stator and the rotor (take into account antiperiodicity)
+    is_antiper: bool
+        To apply antiperiodicity boundary conditions
     type_calc_leakage : int
-        0 no leakage calculation
-        1 calculation using single slot
+        0 no leakage calculation, 1 calculation using single slot
     is_remove_ventS : bool
         True to remove the ventilation ducts on stator in FEMM (Default value = False)
     is_remove_ventR : bool
@@ -67,21 +70,32 @@ def draw_FEMM(
     kmesh_fineness : float
         global coefficient to adjust mesh fineness
         in FEMM (1: default ; > 1: finner ; < 1: less fine)
-    sym : int
-        the symmetry applied on the stator and the rotor (take into account antiperiodicity)
-    is_antiper: bool
-        To apply antiperiodicity boundary conditions
+    user_FEMM_dict : dict
+        To enforce parameters in the FEMM_dict
+    path_save : str
+        Path to save resulting fem file
+    is_sliding_band : bool
+        True to use sliding band else use airgap surface
+    transform_list : list
+        List of transfromation to apply on the surfaces
     rotor_dxf : DXFImport
         To use a dxf version of the rotor instead of build_geometry
     stator_dxf : DXFImport
         To use a dxf version of the stator instead of build_geometry
+    is_fast_draw : bool
+        True to use lamination symetry to accelerate the drawing of the machine
+    T_mag: float
+        Permanent magnet temperature [deg Celsius]
 
     Returns
     -------
-
     FEMM_dict : dict
         dictionary containing the main parameters of FEMM (including circuits and materials)
     """
+
+    if transform_list not in [None, list()] and is_fast_draw:
+        is_fast_draw = False
+        output.get_logger().debug("Removing fast_draw for transform_list in FEMM")
 
     # Initialization from output for readibility
     Is = output.elec.Is  # Stator currents waveforms
@@ -90,16 +104,18 @@ def draw_FEMM(
 
     # Computing parameter (element size, arcspan...) needed to define the simulation
     FEMM_dict = comp_FEMM_dict(
-        machine, kgeo_fineness, kmesh_fineness, type_calc_leakage
+        machine, kgeo_fineness, kmesh_fineness, T_mag, type_calc_leakage
     )
-    FEMM_dict.update(user_FEMM_dict)  # Overwrite some values if needed
+    # Overwrite some values if needed
+    for key, val in user_FEMM_dict.items():
+        FEMM_dict[key].update(val)
 
     # The package must be initialized with the openfemm command.
     try:
         femm.openfemm(1)  # 1 == open in background, 0 == open normally
     except Exception as e:
         raise FEMMError(
-            "ERROR: Unable to open FEMM, please check that FEMM is correctly installed\n"
+            "Unable to open FEMM, please check that FEMM is correctly installed\n"
             + str(e)
         )
 
@@ -110,128 +126,121 @@ def draw_FEMM(
     # femm.main_minimize()
 
     # defining the problem
-    femm.mi_probdef(0, "meters", FEMM_dict["pbtype"], FEMM_dict["precision"])
+    femm.mi_probdef(
+        0, "meters", FEMM_dict["simu"]["pbtype"], FEMM_dict["simu"]["precision"]
+    )
 
     # Modifiy the machine to match the conditions
-    machine = machine.copy()
+    machine_edit = machine.copy()
     if is_remove_slotR:  # Remove all slots on the rotor
-        lam_dict = machine.rotor.as_dict()
-        machine.rotor = Lamination(init_dict=lam_dict)
+        lam_dict = machine_edit.rotor.as_dict()
+        machine_edit.rotor = Lamination(init_dict=lam_dict)
     if is_remove_slotS:  # Remove all slots on the stator
-        lam_dict = machine.stator.as_dict()
-        machine.stator = Lamination(init_dict=lam_dict)
+        lam_dict = machine_edit.stator.as_dict()
+        machine_edit.stator = Lamination(init_dict=lam_dict)
     # Remove ventilations
     if is_remove_ventR:
-        machine.rotor.axial_vent = list()
+        for lam in machine_edit.get_lam_list(is_int_to_ext=True):
+            if not lam.is_stator:
+                lam.axial_vent = list()
     if is_remove_ventS:
-        machine.stator.axial_vent = list()
+        for lam in machine_edit.get_lam_list(is_int_to_ext=True):
+            if lam.is_stator:
+                lam.axial_vent = list()
 
-    # Building geometry of the (modified) stator and the rotor
-    surf_list = list()
-    lam_list = machine.get_lam_list()
-    lam_int = lam_list[0]
-    lam_ext = lam_list[1]
+    # Lamination list organized from interior to exterior
+    lam_list = machine_edit.get_lam_list(is_int_to_ext=True)
+
+    # Init Boundary condition dict (will be filled while drawing Surface/Lines)
+    BC_dict = {"sym": sym, "is_antiper": is_antiper}
+
+    # Draw all the laminations
+    for lam in lam_list:
+        if lam.is_stator:
+            lam_dxf = stator_dxf
+        else:
+            lam_dxf = rotor_dxf
+        FEMM_dict = draw_FEMM_lamination(
+            machine,
+            lam,
+            sym,
+            femm,
+            FEMM_dict,
+            transform_list,
+            lam_dxf,
+            BC_dict,
+            Is,
+            Ir,
+            is_mmfs,
+            is_mmfr,
+            type_BH_stator,
+            type_BH_rotor,
+            is_fast_draw,
+        )
+
+    # List of the Non lamination related surfaces
+    other_surf_list = list()
 
     # Adding no_mesh for shaft if needed
-    if lam_int.Rint > 0 and sym == 1:
-        label_int = lam_int.get_label()
-        surf_list.append(
+    if lam_list[0].Rint > 0 and sym == 1:
+        label_int = lam_list[0].get_label()
+        other_surf_list.append(
             Circle(
-                point_ref=0, radius=lam_int.Rint, label=label_int + "_" + NO_MESH_LAB
+                point_ref=0,
+                radius=lam_list[0].Rint,
+                label=label_int + "_" + NO_MESH_LAB,
             )
         )
 
-    # Add Bore notches surfaces
-    surf_list.extend(lam_int.get_notches_surf(sym=sym, is_simplified=True))
-    surf_list.extend(lam_ext.get_notches_surf(sym=sym, is_simplified=True))
+    # Adding the Airgap surface
+    for ii in range(len(lam_list) - 1):
+        if is_sliding_band:
+            other_surf_list.extend(
+                get_sliding_band(
+                    sym=sym, lam_int=lam_list[ii], lam_ext=lam_list[ii + 1]
+                )
+            )
+        else:
+            surf_list_ag, point_ref_ag = get_airgap_surface(
+                lam_int=lam_list[ii],
+                lam_ext=lam_list[ii + 1],
+                sym=sym,
+            )
+            other_surf_list.extend(surf_list_ag)
+            # FEMM_dict["point_ref_ag"] = point_ref_ag Unused
 
-    # adding the Airgap surface
-    if is_sliding_band:
-        surf_list.extend(get_sliding_band(sym=sym, lam_int=lam_int, lam_ext=lam_ext))
-    else:
-        surf_list.extend(get_airgap_surface(lam_int=lam_int, lam_ext=lam_ext))
-
-    # adding Both laminations surfaces (or import from DXF)
-    if rotor_dxf is not None:
-        femm.mi_readdxf(rotor_dxf.file_path)
-        surf_list.extend(rotor_dxf.get_surfaces())
-    else:
-        surf_list.extend(machine.rotor.build_geometry(sym=sym))
-    if stator_dxf is not None:
-        femm.mi_readdxf(stator_dxf.file_path)
-        surf_list.extend(stator_dxf.get_surfaces())
-    else:
-        surf_list.extend(machine.stator.build_geometry(sym=sym))
-
-    # Applying user defined modifications
-    for transform in transform_list:
-        for surf in surf_list:
-            if transform["label"] in surf.label and transform["type"] == "rotate":
-                surf.rotate(transform["value"])
-            elif transform["label"] in surf.label and transform["type"] == "translate":
-                surf.translate(transform["value"])
-
-    # Creation of all the materials and circuit in FEMM
-    prop_dict, materials, circuits = create_FEMM_materials(
+    # Draw the surfaces not related to lamination
+    draw_FEMM_surfaces(
         femm,
         machine,
-        surf_list,
+        other_surf_list,
+        FEMM_dict,
+        BC_dict,
         Is,
         Ir,
         is_mmfs,
         is_mmfr,
         type_BH_stator,
         type_BH_rotor,
-        is_eddies,
-        j_t0=0,
     )
-    # Init Boundary condition dict (will be filled while drawing Surface/Lines)
-    BC_dict = {"sym": sym, "is_antiper": is_antiper}
 
-    # Draw and assign all the surfaces of the machine
-    for surf in surf_list:
-        label = surf.label
-        # Get the correct element size and group according to the label
-        surf.draw_FEMM(
-            femm=femm,
-            nodeprop="None",
-            maxseg=FEMM_dict["arcspan"],  # max span of arc element in degrees
-            FEMM_dict=FEMM_dict,
-            hide=False,
-            BC_dict=BC_dict,
-        )
-        assign_FEMM_surface(femm, surf, prop_dict[label], FEMM_dict, machine)
-
-    # Apply BC for DXF import
-    if rotor_dxf is not None:
-        for BC in rotor_dxf.BC_list:
-            if BC[1] is True:  # Select Arc
-                femm.mi_selectarcsegment(BC[0].real, BC[0].imag)
-                femm.mi_setarcsegmentprop(FEMM_dict["arcspan"], BC[2], False, None)
-            else:  # Select Line
-                femm.mi_selectsegment(BC[0].real, BC[0].imag)
-                femm.mi_setsegmentprop(BC[2], None, None, False, None)
-            femm.mi_clearselected()
-
+    # Define simulation parameters
     # femm.mi_zoomnatural()  # Zoom out
     femm.mi_probdef(
-        FEMM_dict["freqpb"],
+        FEMM_dict["simu"]["freqpb"],
         "meters",
-        FEMM_dict["pbtype"],
-        FEMM_dict["precision"],
-        FEMM_dict["Lfemm"],
-        FEMM_dict["minangle"],
-        FEMM_dict["acsolver"],
+        FEMM_dict["simu"]["pbtype"],
+        FEMM_dict["simu"]["precision"],
+        FEMM_dict["simu"]["Lfemm"],
+        FEMM_dict["simu"]["minangle"],
+        FEMM_dict["simu"]["acsolver"],
     )
-    femm.mi_smartmesh(FEMM_dict["smart_mesh"])
+    femm.mi_smartmesh(FEMM_dict["mesh"]["smart_mesh"])
     if path_save is not None:
         output.get_logger().debug("Saving FEMM file at: " + path_save)
         femm.mi_saveas(path_save)  # Save
         FEMM_dict["path_save"] = path_save
         # femm.mi_close()
-
-    FEMM_dict["materials"] = materials
-    FEMM_dict["circuits"] = circuits
 
     return FEMM_dict
 

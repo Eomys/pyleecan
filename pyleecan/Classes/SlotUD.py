@@ -23,9 +23,9 @@ except ImportError as error:
     build_geometry = error
 
 try:
-    from ..Methods.Slot.SlotUD.set_from_point_list import set_from_point_list
+    from ..Methods.Slot.SlotUD.check import check
 except ImportError as error:
-    set_from_point_list = error
+    check = error
 
 try:
     from ..Methods.Slot.SlotUD.get_surface_active import get_surface_active
@@ -33,13 +33,17 @@ except ImportError as error:
     get_surface_active = error
 
 try:
-    from ..Methods.Slot.SlotUD.check import check
+    from ..Methods.Slot.SlotUD.get_surface_opening import get_surface_opening
 except ImportError as error:
-    check = error
+    get_surface_opening = error
+
+try:
+    from ..Methods.Slot.SlotUD.set_from_point_list import set_from_point_list
+except ImportError as error:
+    set_from_point_list = error
 
 
 from ._check import InitUnKnowClassError
-from .Line import Line
 
 
 class SlotUD(Slot):
@@ -59,18 +63,15 @@ class SlotUD(Slot):
         )
     else:
         build_geometry = build_geometry
-    # cf Methods.Slot.SlotUD.set_from_point_list
-    if isinstance(set_from_point_list, ImportError):
-        set_from_point_list = property(
+    # cf Methods.Slot.SlotUD.check
+    if isinstance(check, ImportError):
+        check = property(
             fget=lambda x: raise_(
-                ImportError(
-                    "Can't use SlotUD method set_from_point_list: "
-                    + str(set_from_point_list)
-                )
+                ImportError("Can't use SlotUD method check: " + str(check))
             )
         )
     else:
-        set_from_point_list = set_from_point_list
+        check = check
     # cf Methods.Slot.SlotUD.get_surface_active
     if isinstance(get_surface_active, ImportError):
         get_surface_active = property(
@@ -83,15 +84,30 @@ class SlotUD(Slot):
         )
     else:
         get_surface_active = get_surface_active
-    # cf Methods.Slot.SlotUD.check
-    if isinstance(check, ImportError):
-        check = property(
+    # cf Methods.Slot.SlotUD.get_surface_opening
+    if isinstance(get_surface_opening, ImportError):
+        get_surface_opening = property(
             fget=lambda x: raise_(
-                ImportError("Can't use SlotUD method check: " + str(check))
+                ImportError(
+                    "Can't use SlotUD method get_surface_opening: "
+                    + str(get_surface_opening)
+                )
             )
         )
     else:
-        check = check
+        get_surface_opening = get_surface_opening
+    # cf Methods.Slot.SlotUD.set_from_point_list
+    if isinstance(set_from_point_list, ImportError):
+        set_from_point_list = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use SlotUD method set_from_point_list: "
+                    + str(set_from_point_list)
+                )
+            )
+        )
+    else:
+        set_from_point_list = set_from_point_list
     # save and copy methods are available in all object
     save = save
     copy = copy
@@ -106,6 +122,7 @@ class SlotUD(Slot):
         type_line_wind=0,
         name="",
         Zs=36,
+        wedge_mat=None,
         init_dict=None,
         init_str=None,
     ):
@@ -136,6 +153,8 @@ class SlotUD(Slot):
                 name = init_dict["name"]
             if "Zs" in list(init_dict.keys()):
                 Zs = init_dict["Zs"]
+            if "wedge_mat" in list(init_dict.keys()):
+                wedge_mat = init_dict["wedge_mat"]
         # Set the properties (value check and convertion are done in setter)
         self.line_list = line_list
         self.wind_begin_index = wind_begin_index
@@ -143,7 +162,7 @@ class SlotUD(Slot):
         self.type_line_wind = type_line_wind
         self.name = name
         # Call Slot init
-        super(SlotUD, self).__init__(Zs=Zs)
+        super(SlotUD, self).__init__(Zs=Zs, wedge_mat=wedge_mat)
         # The class is frozen (in Slot init), for now it's impossible to
         # add new properties
 
@@ -305,6 +324,15 @@ class SlotUD(Slot):
         """setter of line_list"""
         if type(value) is list:
             for ii, obj in enumerate(value):
+                if isinstance(obj, str):  # Load from file
+                    try:
+                        obj = load_init_dict(obj)[1]
+                    except Exception as e:
+                        self.get_logger().error(
+                            "Error while loading " + obj + ", setting None instead"
+                        )
+                        obj = None
+                        value[ii] = None
                 if type(obj) is dict:
                     class_obj = import_class(
                         "pyleecan.Classes", obj.get("__class__"), "line_list"

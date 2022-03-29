@@ -135,8 +135,6 @@ except ImportError as error:
 
 
 from ._check import InitUnKnowClassError
-from .Frame import Frame
-from .Shaft import Shaft
 
 
 class Machine(FrozenClass):
@@ -590,13 +588,20 @@ class Machine(FrozenClass):
     def _set_frame(self, value):
         """setter of frame"""
         if isinstance(value, str):  # Load from file
-            value = load_init_dict(value)[1]
+            try:
+                value = load_init_dict(value)[1]
+            except Exception as e:
+                self.get_logger().error(
+                    "Error while loading " + value + ", setting None instead"
+                )
+                value = None
         if isinstance(value, dict) and "__class__" in value:
             class_obj = import_class(
                 "pyleecan.Classes", value.get("__class__"), "frame"
             )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
+            Frame = import_class("pyleecan.Classes", "Frame", "frame")
             value = Frame()
         check_var("frame", value, "Frame")
         self._frame = value
@@ -620,13 +625,20 @@ class Machine(FrozenClass):
     def _set_shaft(self, value):
         """setter of shaft"""
         if isinstance(value, str):  # Load from file
-            value = load_init_dict(value)[1]
+            try:
+                value = load_init_dict(value)[1]
+            except Exception as e:
+                self.get_logger().error(
+                    "Error while loading " + value + ", setting None instead"
+                )
+                value = None
         if isinstance(value, dict) and "__class__" in value:
             class_obj = import_class(
                 "pyleecan.Classes", value.get("__class__"), "shaft"
             )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
+            Shaft = import_class("pyleecan.Classes", "Shaft", "shaft")
             value = Shaft()
         check_var("shaft", value, "Shaft")
         self._shaft = value

@@ -46,8 +46,6 @@ except ImportError as error:
 
 
 from ._check import InitUnKnowClassError
-from .Line import Line
-from .Surface import Surface
 
 
 class SlotUD2(Slot):
@@ -125,6 +123,7 @@ class SlotUD2(Slot):
         split_active_surf_dict=None,
         name="",
         Zs=36,
+        wedge_mat=None,
         init_dict=None,
         init_str=None,
     ):
@@ -153,13 +152,15 @@ class SlotUD2(Slot):
                 name = init_dict["name"]
             if "Zs" in list(init_dict.keys()):
                 Zs = init_dict["Zs"]
+            if "wedge_mat" in list(init_dict.keys()):
+                wedge_mat = init_dict["wedge_mat"]
         # Set the properties (value check and convertion are done in setter)
         self.line_list = line_list
         self.active_surf = active_surf
         self.split_active_surf_dict = split_active_surf_dict
         self.name = name
         # Call Slot init
-        super(SlotUD2, self).__init__(Zs=Zs)
+        super(SlotUD2, self).__init__(Zs=Zs, wedge_mat=wedge_mat)
         # The class is frozen (in Slot init), for now it's impossible to
         # add new properties
 
@@ -341,6 +342,15 @@ class SlotUD2(Slot):
         """setter of line_list"""
         if type(value) is list:
             for ii, obj in enumerate(value):
+                if isinstance(obj, str):  # Load from file
+                    try:
+                        obj = load_init_dict(obj)[1]
+                    except Exception as e:
+                        self.get_logger().error(
+                            "Error while loading " + obj + ", setting None instead"
+                        )
+                        obj = None
+                        value[ii] = None
                 if type(obj) is dict:
                     class_obj = import_class(
                         "pyleecan.Classes", obj.get("__class__"), "line_list"
@@ -369,13 +379,20 @@ class SlotUD2(Slot):
     def _set_active_surf(self, value):
         """setter of active_surf"""
         if isinstance(value, str):  # Load from file
-            value = load_init_dict(value)[1]
+            try:
+                value = load_init_dict(value)[1]
+            except Exception as e:
+                self.get_logger().error(
+                    "Error while loading " + value + ", setting None instead"
+                )
+                value = None
         if isinstance(value, dict) and "__class__" in value:
             class_obj = import_class(
                 "pyleecan.Classes", value.get("__class__"), "active_surf"
             )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
+            Surface = import_class("pyleecan.Classes", "Surface", "active_surf")
             value = Surface()
         check_var("active_surf", value, "Surface")
         self._active_surf = value

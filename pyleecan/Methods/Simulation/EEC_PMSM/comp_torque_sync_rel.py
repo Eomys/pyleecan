@@ -1,4 +1,4 @@
-def comp_torque_sync_rel(self, qs, p, machine=None):
+def comp_torque_sync_rel(self):
     """Calculate synchronous and reluctant torque
 
     Parameters
@@ -18,18 +18,20 @@ def comp_torque_sync_rel(self, qs, p, machine=None):
         Reluctant torque [N.m]
     """
 
-    Id = self.parameters["Id"]
-    Iq = self.parameters["Iq"]
-    Phid = self.parameters["Phid"]
-    Phiq = self.parameters["Phiq"]
+    machine = self.get_machine_from_parent()
+    qs = machine.stator.winding.qs
+    p = machine.get_pole_pair_number()
 
-    if "Phid_mag" not in self.parameters:
+    Id = self.OP.get_Id_Iq()["Id"]
+    Iq = self.OP.get_Id_Iq()["Iq"]
+    Phid = self.Phid
+    Phiq = self.Phiq
+
+    if self.Phid_mag is None:
         # Recalculate dqh flux due to permanent magnets
-        Phi_dqh_mag = self.fluxlink.comp_fluxlinkage(machine)
-        self.parameters["Phid_mag"] = float(Phi_dqh_mag[0])
-        self.parameters["Phiq_mag"] = float(Phi_dqh_mag[1])
+        self.comp_Phidq_mag()
 
-    Phid_mag = self.parameters["Phid_mag"]
+    Phid_mag = self.Phid_mag
 
     Tem_sync = qs * p * Phid_mag * Iq
 

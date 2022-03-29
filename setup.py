@@ -21,7 +21,7 @@ import platform
 # Release 1.1.0 : 1.1.0
 # First post release of the release 1.1.0 : 1.1.0.post1
 
-PYLEECAN_VERSION = "1.3.7"
+PYLEECAN_VERSION = "1.3.8"
 
 
 with open("README.md", "r") as fh:
@@ -43,7 +43,7 @@ install_requires = [
     "xlrd>=1.2.0",
     "xlwt>=1.3.0",
     "deap>=1.3.1",
-    "SciDataTool>=1.4.22",
+    "SciDataTool>=2.0.6",
     "pyvista>=0.25.3",
     "meshio>=4.0.15",
     "h5py>=3.2.1",

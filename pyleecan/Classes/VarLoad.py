@@ -22,12 +22,14 @@ try:
 except ImportError as error:
     get_ref_simu_index = error
 
+try:
+    from ..Methods.Simulation.VarLoad.get_OP_matrix import get_OP_matrix
+except ImportError as error:
+    get_OP_matrix = error
+
 
 from numpy import array, array_equal
 from ._check import InitUnKnowClassError
-from .DataKeeper import DataKeeper
-from .VarSimu import VarSimu
-from .Post import Post
 
 
 class VarLoad(VarSimu):
@@ -36,6 +38,7 @@ class VarLoad(VarSimu):
     VERSION = 1
     NAME = "Variable Load"
 
+    # Check ImportError to remove unnecessary dependencies in unused method
     # cf Methods.Simulation.VarLoad.get_ref_simu_index
     if isinstance(get_ref_simu_index, ImportError):
         get_ref_simu_index = property(
@@ -48,6 +51,17 @@ class VarLoad(VarSimu):
         )
     else:
         get_ref_simu_index = get_ref_simu_index
+    # cf Methods.Simulation.VarLoad.get_OP_matrix
+    if isinstance(get_OP_matrix, ImportError):
+        get_OP_matrix = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use VarLoad method get_OP_matrix: " + str(get_OP_matrix)
+                )
+            )
+        )
+    else:
+        get_OP_matrix = get_OP_matrix
     # save and copy methods are available in all object
     save = save
     copy = copy

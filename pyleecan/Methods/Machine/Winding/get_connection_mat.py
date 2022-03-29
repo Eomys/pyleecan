@@ -29,12 +29,16 @@ def get_connection_mat(self, Zs=None, p=None):
 
     if self.wind_mat is None:
         self.wind_mat = self.comp_connection_mat(Zs=Zs, p=p)
+    elif Zs is not None and self.wind_mat.shape[2] != Zs:
+        # Winding matrix is outdated
+        self.clean()
+        self.wind_mat = self.comp_connection_mat(Zs=Zs, p=p)
 
     wind_mat = self.wind_mat.copy()
     # Apply the transformations
     if self.is_reverse_wind:
         wind_mat = reverse_wind_mat(wind_mat)
-    if self.Nslot_shift_wind > 0:
+    if self.Nslot_shift_wind not in [0, None]:
         wind_mat = shift_wind_mat(wind_mat, self.Nslot_shift_wind)
     if self.is_reverse_layer:
         wind_mat = reverse_layer(wind_mat)

@@ -22,8 +22,6 @@ from pyleecan.Classes.ImportMatrixVal import ImportMatrixVal
 from pyleecan.Classes.MagFEMM import MagFEMM
 from pyleecan.Classes.ForceMT import ForceMT
 from pyleecan.Classes.EEC_PMSM import EEC_PMSM
-from pyleecan.Classes.FluxLinkFEMM import FluxLinkFEMM
-from pyleecan.Classes.IndMagFEMM import IndMagFEMM
 from pyleecan.Classes.DriveWave import DriveWave
 from pyleecan.Classes.Output import Output
 
@@ -124,7 +122,7 @@ def test_slot_scale():
             name="Radial Airgap flux density",
             unit="H",
             symbol="B",
-            keeper="lambda output: output.mag.B.components['radial'].get_along('time','angle')['B_r']",
+            keeper="lambda output: output.mag.B.components['radial'].get_along('time','angle')['B_{rad}']",
             error_keeper=error_keeper_mag_flux,
         ),
     ]

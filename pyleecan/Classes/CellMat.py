@@ -40,7 +40,6 @@ except ImportError as error:
 
 from numpy import array, array_equal
 from ._check import InitUnKnowClassError
-from .Interpolation import Interpolation
 
 
 class CellMat(FrozenClass):
@@ -390,13 +389,22 @@ class CellMat(FrozenClass):
     def _set_interpolation(self, value):
         """setter of interpolation"""
         if isinstance(value, str):  # Load from file
-            value = load_init_dict(value)[1]
+            try:
+                value = load_init_dict(value)[1]
+            except Exception as e:
+                self.get_logger().error(
+                    "Error while loading " + value + ", setting None instead"
+                )
+                value = None
         if isinstance(value, dict) and "__class__" in value:
             class_obj = import_class(
                 "pyleecan.Classes", value.get("__class__"), "interpolation"
             )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
+            Interpolation = import_class(
+                "pyleecan.Classes", "Interpolation", "interpolation"
+            )
             value = Interpolation()
         check_var("interpolation", value, "Interpolation")
         self._interpolation = value

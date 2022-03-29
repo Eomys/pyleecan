@@ -80,8 +80,6 @@ except ImportError as error:
 
 from numpy import array, array_equal
 from ._check import InitUnKnowClassError
-from .Conductor import Conductor
-from .EndWinding import EndWinding
 
 
 class Winding(FrozenClass):
@@ -740,13 +738,20 @@ class Winding(FrozenClass):
     def _set_conductor(self, value):
         """setter of conductor"""
         if isinstance(value, str):  # Load from file
-            value = load_init_dict(value)[1]
+            try:
+                value = load_init_dict(value)[1]
+            except Exception as e:
+                self.get_logger().error(
+                    "Error while loading " + value + ", setting None instead"
+                )
+                value = None
         if isinstance(value, dict) and "__class__" in value:
             class_obj = import_class(
                 "pyleecan.Classes", value.get("__class__"), "conductor"
             )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
+            Conductor = import_class("pyleecan.Classes", "Conductor", "conductor")
             value = Conductor()
         check_var("conductor", value, "Conductor")
         self._conductor = value
@@ -869,13 +874,20 @@ class Winding(FrozenClass):
     def _set_end_winding(self, value):
         """setter of end_winding"""
         if isinstance(value, str):  # Load from file
-            value = load_init_dict(value)[1]
+            try:
+                value = load_init_dict(value)[1]
+            except Exception as e:
+                self.get_logger().error(
+                    "Error while loading " + value + ", setting None instead"
+                )
+                value = None
         if isinstance(value, dict) and "__class__" in value:
             class_obj = import_class(
                 "pyleecan.Classes", value.get("__class__"), "end_winding"
             )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
+            EndWinding = import_class("pyleecan.Classes", "EndWinding", "end_winding")
             value = EndWinding()
         check_var("end_winding", value, "EndWinding")
         self._end_winding = value

@@ -16,9 +16,6 @@ from ..Functions.Load.import_class import import_class
 from ._frozen import FrozenClass
 
 from ._check import InitUnKnowClassError
-from .RefCell import RefCell
-from .GaussPoint import GaussPoint
-from .ScalarProduct import ScalarProduct
 
 
 class Interpolation(FrozenClass):
@@ -220,13 +217,20 @@ class Interpolation(FrozenClass):
     def _set_ref_cell(self, value):
         """setter of ref_cell"""
         if isinstance(value, str):  # Load from file
-            value = load_init_dict(value)[1]
+            try:
+                value = load_init_dict(value)[1]
+            except Exception as e:
+                self.get_logger().error(
+                    "Error while loading " + value + ", setting None instead"
+                )
+                value = None
         if isinstance(value, dict) and "__class__" in value:
             class_obj = import_class(
                 "pyleecan.Classes", value.get("__class__"), "ref_cell"
             )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
+            RefCell = import_class("pyleecan.Classes", "RefCell", "ref_cell")
             value = RefCell()
         check_var("ref_cell", value, "RefCell")
         self._ref_cell = value
@@ -250,13 +254,20 @@ class Interpolation(FrozenClass):
     def _set_gauss_point(self, value):
         """setter of gauss_point"""
         if isinstance(value, str):  # Load from file
-            value = load_init_dict(value)[1]
+            try:
+                value = load_init_dict(value)[1]
+            except Exception as e:
+                self.get_logger().error(
+                    "Error while loading " + value + ", setting None instead"
+                )
+                value = None
         if isinstance(value, dict) and "__class__" in value:
             class_obj = import_class(
                 "pyleecan.Classes", value.get("__class__"), "gauss_point"
             )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
+            GaussPoint = import_class("pyleecan.Classes", "GaussPoint", "gauss_point")
             value = GaussPoint()
         check_var("gauss_point", value, "GaussPoint")
         self._gauss_point = value
@@ -280,13 +291,22 @@ class Interpolation(FrozenClass):
     def _set_scalar_product(self, value):
         """setter of scalar_product"""
         if isinstance(value, str):  # Load from file
-            value = load_init_dict(value)[1]
+            try:
+                value = load_init_dict(value)[1]
+            except Exception as e:
+                self.get_logger().error(
+                    "Error while loading " + value + ", setting None instead"
+                )
+                value = None
         if isinstance(value, dict) and "__class__" in value:
             class_obj = import_class(
                 "pyleecan.Classes", value.get("__class__"), "scalar_product"
             )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
+            ScalarProduct = import_class(
+                "pyleecan.Classes", "ScalarProduct", "scalar_product"
+            )
             value = ScalarProduct()
         check_var("scalar_product", value, "ScalarProduct")
         self._scalar_product = value

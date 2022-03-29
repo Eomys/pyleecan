@@ -21,33 +21,19 @@ def build_geometry(self):
 
     """
 
-    point_dict = self._comp_point_coordinate()
-    Z1 = point_dict["Z1"]
-    Z2 = point_dict["Z2"]
-    Z3 = point_dict["Z3"]
-    Z4 = point_dict["Z4"]
-    Z5 = point_dict["Z5"]
-    Z6 = point_dict["Z6"]
-    Z7 = point_dict["Z7"]
-    Z8 = point_dict["Z8"]
-    Z9 = point_dict["Z9"]
-    Z10 = point_dict["Z10"]
-    Z11 = point_dict["Z11"]
-    Z12 = point_dict["Z12"]
-    Z13 = point_dict["Z13"]
+    line_dict = self._comp_line_dict()
 
-    # Creation of curve
-    curve_list = list()
-    curve_list.append(Segment(Z1, Z2))
-    curve_list.append(Segment(Z2, Z3))
-    curve_list.append(Arc1(Z3, Z4, self.R1))
-    curve_list.append(Segment(Z4, Z5))
-    curve_list.append(Arc1(Z5, Z6, self.R2))
-    curve_list.append(Arc1(Z6, Z8, abs(Z7)))
-    curve_list.append(Arc1(Z8, Z9, self.R2))
-    curve_list.append(Segment(Z9, Z10))
-    curve_list.append(Arc1(Z10, Z11, self.R1))
-    curve_list.append(Segment(Z11, Z12))
-    curve_list.append(Segment(Z12, Z13))
-
-    return curve_list
+    curve_list = [
+        line_dict["1-2"],
+        line_dict["2-3"],
+        line_dict["3-4"],
+        line_dict["4-5"],
+        line_dict["5-6"],
+        line_dict["6-8"],
+        line_dict["8-9"],
+        line_dict["9-10"],
+        line_dict["10-11"],
+        line_dict["11-12"],
+        line_dict["12-13"],
+    ]
+    return [line for line in curve_list if line is not None]

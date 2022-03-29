@@ -60,16 +60,15 @@ def test_compare_Kmesh():
     simu2.force.Rsbo_enforced_transfer = Rs
     simu2.force.max_wavenumber_transfer = 100
 
-    out2 = simu2.run()
-
     # Enforced Rag for ref
     simu.mag.Rag_enforced = Rs
-    out = simu.run()
 
     # Simu with low finesness
     simu3 = simu.copy()
     simu3.name = "test_compare_Kmesh_direct_fine"
     simu3.mag.Kmesh_fineness = 2  # 4
+    out = simu.run()
+    out2 = simu2.run()
     out3 = simu3.run()
 
     AGSF_list = list()

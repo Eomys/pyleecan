@@ -62,6 +62,16 @@ try:
 except ImportError as error:
     set_I0_Phi0 = error
 
+try:
+    from ..Methods.Simulation.OPdq.get_U0_UPhi0 import get_U0_UPhi0
+except ImportError as error:
+    get_U0_UPhi0 = error
+
+try:
+    from ..Methods.Simulation.OPdq.set_U0_UPhi0 import set_U0_UPhi0
+except ImportError as error:
+    set_U0_UPhi0 = error
+
 
 from ._check import InitUnKnowClassError
 
@@ -153,6 +163,24 @@ class OPdq(OP):
         )
     else:
         set_I0_Phi0 = set_I0_Phi0
+    # cf Methods.Simulation.OPdq.get_U0_UPhi0
+    if isinstance(get_U0_UPhi0, ImportError):
+        get_U0_UPhi0 = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use OPdq method get_U0_UPhi0: " + str(get_U0_UPhi0))
+            )
+        )
+    else:
+        get_U0_UPhi0 = get_U0_UPhi0
+    # cf Methods.Simulation.OPdq.set_U0_UPhi0
+    if isinstance(set_U0_UPhi0, ImportError):
+        set_U0_UPhi0 = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use OPdq method set_U0_UPhi0: " + str(set_U0_UPhi0))
+            )
+        )
+    else:
+        set_U0_UPhi0 = set_U0_UPhi0
     # save and copy methods are available in all object
     save = save
     copy = copy

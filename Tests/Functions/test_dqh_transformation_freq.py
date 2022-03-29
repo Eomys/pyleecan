@@ -100,9 +100,7 @@ def test_dqh_transformation_freq(param_dict):
     In_dt_val = In_dt.get_along("freqs", "phase[]")[In_dt.symbol]
     In_df_val = In_df.get_along("freqs", "phase[]")[In_df.symbol]
 
-    assert_array_almost_equal(
-        np_abs(In_dt_val[[1, 5, 7, 11, 13], :] - In_df_val), 0
-    )
+    assert_array_almost_equal(np_abs(In_dt_val[[1, 5, 7, 11, 13], :] - In_df_val), 0)
 
     # Check phase_dir calculation
     phase_dir_calc1 = get_phase_dir(In_dt_val, current_dir)

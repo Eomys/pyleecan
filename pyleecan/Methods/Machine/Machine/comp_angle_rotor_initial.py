@@ -1,5 +1,5 @@
 def comp_angle_rotor_initial(self):
-    """Compute rotor initial angle between rotor and stator d-axes
+    """Set rotor initial angle as 0
 
     Parameters
     ----------
@@ -9,7 +9,7 @@ def comp_angle_rotor_initial(self):
     Returns
     -------
     angle_rotor_initial: float
-        rotor initial angle given by the difference of rotor and stator d-axes [rad]
+        rotor initial angle set to 0 [rad]
     """
 
-    return self.stator.comp_angle_d_axis() - self.rotor.comp_angle_d_axis()
+    return 0

@@ -8,7 +8,14 @@ from re import match
 from subprocess import PIPE, Popen
 from json import load as jload
 import subprocess
-from ..definitions import GEN_DIR, GUI_DIR, RES_NAME, RES_PATH, PACKAGE_NAME
+from ..definitions import (
+    GEN_DIR,
+    GUI_DIR,
+    RES_NAME,
+    RES_PATH,
+    PACKAGE_NAME,
+    DEFAULT_FONT,
+)
 from ..Generator import TAB, TAB2, TAB3
 from ..Functions.short_filepath import short_filepath
 
@@ -17,7 +24,7 @@ MIN_SPIN = -999999
 MAX_SPIN = 999999
 
 
-def generate_gui(ui_folder_path, gen_dict, is_gen_resource=True):
+def generate_gui(ui_folder_path, gen_dict, is_gen_resource=True, IS_SDT=False):
     """Generate all the needed file for the GUI
 
     Parameters
@@ -46,6 +53,10 @@ def generate_gui(ui_folder_path, gen_dict, is_gen_resource=True):
     # Generate the resources
     if is_gen_resource:
         print("Generate GUI resources...")
+        if IS_SDT:
+            RES_PATH = join(ui_folder_path, "Resources").replace("\\", "/")
+            RES_NAME = "SDT.qrc"
+
         qrc_to_py(RES_PATH, RES_NAME)
     else:
         print("############################")
@@ -527,6 +538,25 @@ def ui_to_py(path, file_name):
         else:
             data[index] = ""
         prev_index = index
+
+    while "import SDT_rc\n" in data:
+        index = data.index("import SDT_rc\n")
+        if prev_index == 0:
+            data[index] = data[index].replace(
+                "import", "from SciDataTool.GUI.Resources import"
+            )
+        else:
+            data[index] = ""
+        prev_index = index
+
+    # Use correct font in QTextEdit
+    for idx, line in enumerate(data):
+        new_line = line.replace("MS Shell Dlg 2", DEFAULT_FONT)
+        new_line = new_line.replace(
+            """span style=\\" font-size""",
+            """span style=\\" font-family:'""" + DEFAULT_FONT + """'; font-size""",
+        )
+        data[idx] = new_line
 
     with open(path_out, "w") as py_file:
         py_file.write(data[0])

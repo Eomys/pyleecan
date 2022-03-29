@@ -8,15 +8,17 @@ from matplotlib.backends.backend_qt5agg import (
 )
 from ezdxf import readfile
 from numpy import angle as np_angle
-from numpy import argmin, array
-from PySide2.QtCore import QUrl
-from PySide2.QtGui import QDesktopServices, QIcon
-from PySide2.QtWidgets import QDialog, QFileDialog, QMessageBox
+from numpy import argmin, array, exp, angle
+from PySide2.QtCore import QSize, Qt, QUrl
+from PySide2.QtGui import QIcon, QPixmap, QFont, QDesktopServices
+from PySide2.QtWidgets import QComboBox, QDialog, QFileDialog, QMessageBox, QPushButton
 
 
 from ...Classes.LamSlot import LamSlot
 from ...Classes.SlotUD import SlotUD
+from ...Classes.Segment import Segment
 from ...definitions import config_dict
+from ...Functions.Plot.set_plot_gui_icon import set_plot_gui_icon
 from ...GUI.Dxf.dxf_to_pyleecan import dxf_to_pyleecan_list, convert_dxf_with_FEMM
 from ...GUI.Resources import pixmap_dict
 from ...GUI.Tools.MPLCanvas import MPLCanvas
@@ -29,6 +31,8 @@ TYPE_COL = 0
 DEL_COL = 1
 HL_COL = 2
 WIND_COLOR = config_dict["PLOT"]["COLOR_DICT"]["BAR_COLOR"]
+FONT_SIZE = 12
+FONT_NAME = config_dict["PLOT"]["FONT_NAME"]
 Z_TOL = 1e-4  # Point comparison tolerance
 
 
@@ -90,6 +94,12 @@ class DXF_Slot(Ui_DXF_Slot, QDialog):
         # Load the DXF file if provided
         if self.dxf_path is not None and isfile(self.dxf_path):
             self.open_document()
+
+        # Set font
+        font = QFont()
+        font.setFamily(FONT_NAME)
+        font.setPointSize(FONT_SIZE)
+        self.textBrowser.setFont(font)
 
         # Connect signals to slot
         self.w_path_selector.pathChanged.connect(self.open_document)
@@ -404,26 +414,39 @@ class DXF_Slot(Ui_DXF_Slot, QDialog):
                     break
             curve_list.append(line_list.pop(ii))
 
-        # Create the Slot object
-        slot = SlotUD(line_list=curve_list)
-        slot.type_line_wind = self.c_type_line.currentIndex()
-        begin_id = self.si_wind_begin_index.value()
-        end_id = self.si_wind_end_index.value()
-        if (
-            begin_id < len(curve_list)
-            and end_id < len(curve_list)
-            and begin_id < end_id
-        ):
-            slot.wind_begin_index = begin_id
-            slot.wind_end_index = end_id
-        else:
-            slot.wind_begin_index = None
-            slot.wind_end_index = None
-
         # Translate
         if self.Zcenter != 0:
             for line in curve_list:
                 line.translate(-self.Zcenter * self.lf_scaling.value())
+
+        # Check the first and last point are matching Rint
+        Rbo = self.lam.get_Rbo()
+        Zbegin = curve_list[0].get_begin()
+        Zend = curve_list[-1].get_end()
+        if abs(abs(Zbegin) - Rbo) > Z_TOL:
+            QMessageBox().critical(
+                self,
+                self.tr("Error"),
+                self.tr(
+                    "First point of the slot is not on the bore radius:\nBore radius="
+                    + str(Rbo)
+                    + ", abs(First point)="
+                    + str(abs(Zbegin))
+                ),
+            )
+            return None
+        if abs(abs(Zend) - Rbo) > Z_TOL:
+            QMessageBox().critical(
+                self,
+                self.tr("Error"),
+                self.tr(
+                    "Last point of the slot is not on the bore radius:\nBore radius="
+                    + str(Rbo)
+                    + ", abs(Last point)="
+                    + str(abs(Zend))
+                ),
+            )
+            return None
 
         # Rotation
         Z1 = curve_list[0].get_begin()
@@ -432,7 +455,32 @@ class DXF_Slot(Ui_DXF_Slot, QDialog):
         for line in curve_list:
             line.rotate(-1 * alpha)
 
-        # Set metadata
+        # Enforce perfect match with Bore radius by adding Segments in needed
+        Zbegin = curve_list[0].get_begin()
+        Zb2 = Rbo * exp(1j * angle(Zbegin))
+        if abs(Zb2 - Zbegin) > 1e-9:
+            curve_list.insert(0, Segment(begin=Zb2, end=Zbegin))
+
+        Zend = curve_list[-1].get_end()
+        Ze2 = Rbo * exp(1j * angle(Zend))
+        if abs(Ze2 - Zend) > 1e-9:
+            curve_list.append(Segment(begin=Zend, end=Ze2))
+
+        # Create the Slot object
+        slot = SlotUD(line_list=curve_list)
+        slot.type_line_wind = self.c_type_line.currentIndex()
+        begin_id = self.si_wind_begin_index.value()
+        end_id = self.si_wind_end_index.value()
+        if (
+            begin_id < len(curve_list)
+            and end_id < len(curve_list)
+            # and begin_id < end_id
+        ):
+            slot.wind_begin_index = begin_id
+            slot.wind_end_index = end_id
+        else:
+            slot.wind_begin_index = None
+            slot.wind_end_index = None
         slot.Zs = self.si_Zs.value()
 
         return slot
@@ -447,6 +495,8 @@ class DXF_Slot(Ui_DXF_Slot, QDialog):
         """
         if self.check_selection():
             slot = self.get_slot()
+            if slot is None:
+                return  # Uncorrect slot
             # Lamination definition
             if self.lam is None:
                 lam = LamSlot(slot=slot)
@@ -454,24 +504,32 @@ class DXF_Slot(Ui_DXF_Slot, QDialog):
             else:
                 lam = self.lam.copy()
                 lam.slot = slot
-            fig, (ax1, ax2) = plt.subplots(1, 2)
-            slot.plot(fig=fig, ax=ax1)
-            # Add the winding if defined
-            if slot.wind_begin_index is not None:
-                surf_wind = slot.get_surface_active()
-                surf_wind.plot(fig=fig, ax=ax1, color=WIND_COLOR, is_show_fig=False)
-            # Add point index
-            index = 0
-            for line in slot.line_list:
-                Zb = line.get_begin()
-                ax1.plot(Zb.real, Zb.imag, "rx", zorder=0)
-                ax1.text(Zb.real, Zb.imag, str(index))
-                index += 1
-            Ze = slot.line_list[-1].get_end()
-            ax1.plot(Ze.real, Ze.imag, "rx", zorder=0)
-            ax1.text(Ze.real, Ze.imag, str(index))
-            # Lamination point
-            lam.plot(fig=fig, ax=ax2)
+            try:
+                fig, (ax1, ax2) = plt.subplots(1, 2)
+                slot.plot(fig=fig, ax=ax1)
+                # Add the winding if defined
+                if slot.wind_begin_index is not None:
+                    surf_wind = slot.get_surface_active()
+                    surf_wind.plot(fig=fig, ax=ax1, color=WIND_COLOR, is_show_fig=False)
+                # Add point index
+                index = 0
+                for line in slot.line_list:
+                    Zb = line.get_begin()
+                    ax1.plot(Zb.real, Zb.imag, "rx", zorder=0)
+                    ax1.text(Zb.real, Zb.imag, str(index))
+                    index += 1
+                Ze = slot.line_list[-1].get_end()
+                ax1.plot(Ze.real, Ze.imag, "rx", zorder=0)
+                ax1.text(Ze.real, Ze.imag, str(index))
+                # Lamination point
+                lam.plot(fig=fig, ax=ax2)
+                set_plot_gui_icon()
+            except Exception as e:
+                QMessageBox().critical(
+                    self,
+                    self.tr("Error"),
+                    self.tr("Error while plotting slot:\n" + str(e)),
+                )
 
     def save(self):
         """Save the SlotUD object in a json file
@@ -484,7 +542,20 @@ class DXF_Slot(Ui_DXF_Slot, QDialog):
 
         if self.check_selection():
             slot = self.get_slot()
-
+            if slot is None:
+                return  # Uncorrect slot
+            if (
+                self.si_wind_begin_index.value() == 0
+                and self.si_wind_end_index.value() == 0
+            ):
+                QMessageBox().warning(
+                    self,
+                    self.tr("Warning"),
+                    self.tr(
+                        "The winding was not defined. Please use plot to see the points indices"
+                    ),
+                )
+                return
             save_file_path = QFileDialog.getSaveFileName(
                 self, self.tr("Save file"), dirname(self.dxf_path), "Json (*.json)"
             )[0]

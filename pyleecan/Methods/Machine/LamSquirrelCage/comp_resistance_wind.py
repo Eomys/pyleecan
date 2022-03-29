@@ -1,28 +1,23 @@
-# -*- coding: utf-8 -*-
-
 from numpy import pi, sin
 
 
-def comp_resistance_wind(self, T=20, qs=3):
+def comp_resistance_wind(self, T=20):
     """Computation of the equivalent rotor resistance per phase of a cage winding with 'qs' number of phases
 
     Parameters
     ----------
     self : LamSquirrelCage
         A LamSquirrelCage object
-    qs : int
-        number of the equivalent rotor winding phases, default value: 3 phases
+    T : float
+        mean winding temperature [°C], default value is 20°C
 
     Returns
     -------
     Rrot: float
-         resistance of the rotor[Ohm]
-
+        resistance of the rotor [Ohm]
     """
     # calculate resistance ring at T degC
-    alpha = self.ring_mat.elec.alpha
-    rho20 = self.ring_mat.elec.rho
-    rho = rho20 * (1 + alpha * (T - 20))
+    rho = self.ring_mat.elec.get_resistivity(T_op=T, T_ref=20)
 
     Sring = self.comp_surface_ring()
     lring = self.comp_length_ring()
@@ -32,9 +27,7 @@ def comp_resistance_wind(self, T=20, qs=3):
     Rring = rho * lring / Sring
 
     # calculate resistance rod at T degC
-    alpha = self.winding.conductor.cond_mat.elec.alpha
-    rho20 = self.winding.conductor.cond_mat.elec.rho
-    rho = rho20 * (1 + alpha * (T - 20))
+    rho = self.winding.conductor.cond_mat.elec.get_resistivity(T_op=T, T_ref=20)
 
     # active surface inside slot
     Srod = self.winding.conductor.comp_surface_active()

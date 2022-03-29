@@ -45,8 +45,6 @@ except ImportError as error:
 
 from numpy import array, array_equal
 from ._check import InitUnKnowClassError
-from .Conductor import Conductor
-from .EndWinding import EndWinding
 
 
 class WindingUD(Winding):

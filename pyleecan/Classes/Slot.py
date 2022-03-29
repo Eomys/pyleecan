@@ -78,6 +78,16 @@ except ImportError as error:
     comp_surface_active = error
 
 try:
+    from ..Methods.Slot.Slot.comp_surface_opening import comp_surface_opening
+except ImportError as error:
+    comp_surface_opening = error
+
+try:
+    from ..Methods.Slot.Slot.comp_surface_wedges import comp_surface_wedges
+except ImportError as error:
+    comp_surface_wedges = error
+
+try:
     from ..Methods.Slot.Slot.comp_width_opening import comp_width_opening
 except ImportError as error:
     comp_width_opening = error
@@ -111,6 +121,11 @@ try:
     from ..Methods.Slot.Slot.get_surface_tooth import get_surface_tooth
 except ImportError as error:
     get_surface_tooth = error
+
+try:
+    from ..Methods.Slot.Slot.get_surface_wedges import get_surface_wedges
+except ImportError as error:
+    get_surface_wedges = error
 
 try:
     from ..Methods.Slot.Slot.is_outwards import is_outwards
@@ -274,6 +289,30 @@ class Slot(FrozenClass):
         )
     else:
         comp_surface_active = comp_surface_active
+    # cf Methods.Slot.Slot.comp_surface_opening
+    if isinstance(comp_surface_opening, ImportError):
+        comp_surface_opening = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Slot method comp_surface_opening: "
+                    + str(comp_surface_opening)
+                )
+            )
+        )
+    else:
+        comp_surface_opening = comp_surface_opening
+    # cf Methods.Slot.Slot.comp_surface_wedges
+    if isinstance(comp_surface_wedges, ImportError):
+        comp_surface_wedges = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Slot method comp_surface_wedges: "
+                    + str(comp_surface_wedges)
+                )
+            )
+        )
+    else:
+        comp_surface_wedges = comp_surface_wedges
     # cf Methods.Slot.Slot.comp_width_opening
     if isinstance(comp_width_opening, ImportError):
         comp_width_opening = property(
@@ -347,6 +386,18 @@ class Slot(FrozenClass):
         )
     else:
         get_surface_tooth = get_surface_tooth
+    # cf Methods.Slot.Slot.get_surface_wedges
+    if isinstance(get_surface_wedges, ImportError):
+        get_surface_wedges = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Slot method get_surface_wedges: "
+                    + str(get_surface_wedges)
+                )
+            )
+        )
+    else:
+        get_surface_wedges = get_surface_wedges
     # cf Methods.Slot.Slot.is_outwards
     if isinstance(is_outwards, ImportError):
         is_outwards = property(
@@ -389,7 +440,7 @@ class Slot(FrozenClass):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, Zs=36, init_dict=None, init_str=None):
+    def __init__(self, Zs=36, wedge_mat=None, init_dict=None, init_str=None):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -407,9 +458,12 @@ class Slot(FrozenClass):
             # Overwrite default value with init_dict content
             if "Zs" in list(init_dict.keys()):
                 Zs = init_dict["Zs"]
+            if "wedge_mat" in list(init_dict.keys()):
+                wedge_mat = init_dict["wedge_mat"]
         # Set the properties (value check and convertion are done in setter)
         self.parent = None
         self.Zs = Zs
+        self.wedge_mat = wedge_mat
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -423,6 +477,11 @@ class Slot(FrozenClass):
         else:
             Slot_str += "parent = " + str(type(self.parent)) + " object" + linesep
         Slot_str += "Zs = " + str(self.Zs) + linesep
+        if self.wedge_mat is not None:
+            tmp = self.wedge_mat.__str__().replace(linesep, linesep + "\t").rstrip("\t")
+            Slot_str += "wedge_mat = " + tmp
+        else:
+            Slot_str += "wedge_mat = None" + linesep + linesep
         return Slot_str
 
     def __eq__(self, other):
@@ -431,6 +490,8 @@ class Slot(FrozenClass):
         if type(other) != type(self):
             return False
         if other.Zs != self.Zs:
+            return False
+        if other.wedge_mat != self.wedge_mat:
             return False
         return True
 
@@ -444,6 +505,14 @@ class Slot(FrozenClass):
         diff_list = list()
         if other._Zs != self._Zs:
             diff_list.append(name + ".Zs")
+        if (other.wedge_mat is None and self.wedge_mat is not None) or (
+            other.wedge_mat is not None and self.wedge_mat is None
+        ):
+            diff_list.append(name + ".wedge_mat None mismatch")
+        elif self.wedge_mat is not None:
+            diff_list.extend(
+                self.wedge_mat.compare(other.wedge_mat, name=name + ".wedge_mat")
+            )
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -453,6 +522,7 @@ class Slot(FrozenClass):
 
         S = 0  # Full size of the object
         S += getsizeof(self.Zs)
+        S += getsizeof(self.wedge_mat)
         return S
 
     def as_dict(self, type_handle_ndarray=0, keep_function=False, **kwargs):
@@ -468,6 +538,14 @@ class Slot(FrozenClass):
 
         Slot_dict = dict()
         Slot_dict["Zs"] = self.Zs
+        if self.wedge_mat is None:
+            Slot_dict["wedge_mat"] = None
+        else:
+            Slot_dict["wedge_mat"] = self.wedge_mat.as_dict(
+                type_handle_ndarray=type_handle_ndarray,
+                keep_function=keep_function,
+                **kwargs
+            )
         # The class name is added to the dict for deserialisation purpose
         Slot_dict["__class__"] = "Slot"
         return Slot_dict
@@ -476,6 +554,8 @@ class Slot(FrozenClass):
         """Set all the properties to None (except pyleecan object)"""
 
         self.Zs = None
+        if self.wedge_mat is not None:
+            self.wedge_mat._set_None()
 
     def _get_Zs(self):
         """getter of Zs"""
@@ -493,5 +573,42 @@ class Slot(FrozenClass):
 
         :Type: int
         :min: 0
+        """,
+    )
+
+    def _get_wedge_mat(self):
+        """getter of wedge_mat"""
+        return self._wedge_mat
+
+    def _set_wedge_mat(self, value):
+        """setter of wedge_mat"""
+        if isinstance(value, str):  # Load from file
+            try:
+                value = load_init_dict(value)[1]
+            except Exception as e:
+                self.get_logger().error(
+                    "Error while loading " + value + ", setting None instead"
+                )
+                value = None
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class(
+                "pyleecan.Classes", value.get("__class__"), "wedge_mat"
+            )
+            value = class_obj(init_dict=value)
+        elif type(value) is int and value == -1:  # Default constructor
+            Material = import_class("pyleecan.Classes", "Material", "wedge_mat")
+            value = Material()
+        check_var("wedge_mat", value, "Material")
+        self._wedge_mat = value
+
+        if self._wedge_mat is not None:
+            self._wedge_mat.parent = self
+
+    wedge_mat = property(
+        fget=_get_wedge_mat,
+        fset=_set_wedge_mat,
+        doc=u"""Material for the wedge, if None no wedge
+
+        :Type: Material
         """,
     )

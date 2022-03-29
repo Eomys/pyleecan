@@ -1,6 +1,3 @@
-# -*- coding: utf-8 -*-
-
-from matplotlib.pyplot import subplots
 from ....Functions.init_fig import init_fig
 
 
