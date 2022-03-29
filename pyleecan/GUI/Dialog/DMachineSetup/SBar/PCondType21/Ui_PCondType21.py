@@ -10,7 +10,7 @@ from PySide2.QtGui import *
 from PySide2.QtWidgets import *
 
 from ......GUI.Tools.FloatEdit import FloatEdit
-from ......GUI.Dialog.DMatLib.WMatSelect.WMatSelect import WMatSelect
+from ......GUI.Dialog.DMatLib.WMatSelect.WMatSelectV import WMatSelectV
 from ......GUI.Dialog.DMachineSetup.SBar.WBarOut.WBarOut import WBarOut
 
 
@@ -18,22 +18,27 @@ class Ui_PCondType21(object):
     def setupUi(self, PCondType21):
         if not PCondType21.objectName():
             PCondType21.setObjectName(u"PCondType21")
-        PCondType21.resize(416, 124)
-        self.horizontalLayout = QHBoxLayout(PCondType21)
-        self.horizontalLayout.setObjectName(u"horizontalLayout")
-        self.verticalLayout_2 = QVBoxLayout()
-        self.verticalLayout_2.setObjectName(u"verticalLayout_2")
+        PCondType21.resize(360, 124)
+        self.verticalLayout = QVBoxLayout(PCondType21)
+        self.verticalLayout.setObjectName(u"verticalLayout")
         self.gridLayout = QGridLayout()
         self.gridLayout.setObjectName(u"gridLayout")
         self.lf_Hbar = FloatEdit(PCondType21)
         self.lf_Hbar.setObjectName(u"lf_Hbar")
+        sizePolicy = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Preferred)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.lf_Hbar.sizePolicy().hasHeightForWidth())
+        self.lf_Hbar.setSizePolicy(sizePolicy)
         self.lf_Hbar.setMinimumSize(QSize(70, 0))
-        self.lf_Hbar.setMaximumSize(QSize(100, 20))
+        self.lf_Hbar.setMaximumSize(QSize(100, 16777215))
 
         self.gridLayout.addWidget(self.lf_Hbar, 0, 1, 1, 1)
 
         self.in_Hbar = QLabel(PCondType21)
         self.in_Hbar.setObjectName(u"in_Hbar")
+        sizePolicy.setHeightForWidth(self.in_Hbar.sizePolicy().hasHeightForWidth())
+        self.in_Hbar.setSizePolicy(sizePolicy)
         self.in_Hbar.setMinimumSize(QSize(40, 0))
 
         self.gridLayout.addWidget(self.in_Hbar, 0, 0, 1, 1)
@@ -46,8 +51,10 @@ class Ui_PCondType21(object):
 
         self.lf_Wbar = FloatEdit(PCondType21)
         self.lf_Wbar.setObjectName(u"lf_Wbar")
+        sizePolicy.setHeightForWidth(self.lf_Wbar.sizePolicy().hasHeightForWidth())
+        self.lf_Wbar.setSizePolicy(sizePolicy)
         self.lf_Wbar.setMinimumSize(QSize(70, 0))
-        self.lf_Wbar.setMaximumSize(QSize(100, 20))
+        self.lf_Wbar.setMaximumSize(QSize(100, 16777215))
 
         self.gridLayout.addWidget(self.lf_Wbar, 1, 1, 1, 1)
 
@@ -63,19 +70,18 @@ class Ui_PCondType21(object):
 
         self.gridLayout.addWidget(self.in_Wbar, 1, 0, 1, 1)
 
-        self.verticalLayout_2.addLayout(self.gridLayout)
+        self.verticalLayout.addLayout(self.gridLayout)
 
-        self.w_mat = WMatSelect(PCondType21)
+        self.w_mat = WMatSelectV(PCondType21)
         self.w_mat.setObjectName(u"w_mat")
+        self.w_mat.setMinimumSize(QSize(100, 0))
 
-        self.verticalLayout_2.addWidget(self.w_mat)
-
-        self.horizontalLayout.addLayout(self.verticalLayout_2)
+        self.verticalLayout.addWidget(self.w_mat)
 
         self.w_out = WBarOut(PCondType21)
         self.w_out.setObjectName(u"w_out")
 
-        self.horizontalLayout.addWidget(self.w_out)
+        self.verticalLayout.addWidget(self.w_out)
 
         QWidget.setTabOrder(self.lf_Hbar, self.lf_Wbar)
 
