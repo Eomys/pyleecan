@@ -189,10 +189,14 @@ class WTreeEdit(QWidget):
             widget.dataChanged.connect(self.dataChanged.emit)
 
         elif (
-            ref_typ is not None and "SciDataTool" in ref_typ
+            obj and ref_typ and ref_typ.startswith("SciDataTool")
         ) or "SciDataTool" in obj.__class__.__module__:
-            widget = obj.plot(is_create_appli=False)
-            # widget = WSciDataPlot(obj)
+            # check if object has plot method
+            try:
+                widget = obj.plot(is_create_appli=False)
+            except Exception as e:
+                widget = WTableParameterEdit(obj)
+                widget.dataChanged.connect(self.dataChanged.emit)
         # generic editor
         else:
             # widget = SimpleInputWidget().generate(obj)

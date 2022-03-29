@@ -85,12 +85,10 @@ class TreeEditModel(QAbstractItemModel):
                         self.setupModelData(item, name=it_name, index=ii, parent=child)
 
             # base python types
-            elif prop_type in ["float", "bool", "int", "str"]:
-                pass  # don't show base types in the tree
-            elif isinstance(prop, (float, bool, int, str)):
+            elif self.is_not_tree_type(prop, prop_type):
                 pass  # don't show base types in the tree
 
-            # numpy array
+            # numpy array # TODO only ndarrays with more than 2 dims
             elif prop_type == "ndarray":
                 self.setupModelData(prop, name=prop_name, index=index, parent=viewItem)
 
@@ -110,6 +108,13 @@ class TreeEditModel(QAbstractItemModel):
             # not implemented types
             else:
                 child = UnknownItem(prop, name=prop_name, index=index, parent=viewItem)
+
+    def is_not_tree_type(self, prop, prop_type):
+        if prop_type in ["float", "bool", "int", "str"]:
+            return True
+        if isinstance(prop, (float, bool, int, str)):
+            return True
+        return False
 
     def get_obj_info(self, item):
         """Get some information on the object in the context of its parent."""
@@ -243,7 +248,12 @@ class TreeEditModel(QAbstractItemModel):
         """Check if the view item still represent the respective object."""
         ref_obj = self._get_object(item)
         if isinstance(ref_obj, (list, dict)):
-            return True if len(ref_obj) == item.childCount() else False
+            nb_not_tree = 0
+            iter = enumerate(ref_obj) if isinstance(ref_obj, list) else ref_obj.items()
+            for ii, iter_item in iter:
+                if self.is_not_tree_type(iter_item, type(iter_item).__name__):
+                    nb_not_tree += 1
+            return True if len(ref_obj) - nb_not_tree == item.childCount() else False
         return True if ref_obj is item.object() else False
 
     def updateItem(self, index):
