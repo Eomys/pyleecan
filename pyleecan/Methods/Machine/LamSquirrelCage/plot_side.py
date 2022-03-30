@@ -1,14 +1,16 @@
-from matplotlib.patches import Rectangle
+from matplotlib.patches import Rectangle, Patch
 import matplotlib.pyplot as plt
 from ....Functions.init_fig import init_fig
 from ....definitions import config_dict
 
 ROTOR_COLOR = config_dict["PLOT"]["COLOR_DICT"]["ROTOR_COLOR"]
 STATOR_COLOR = config_dict["PLOT"]["COLOR_DICT"]["STATOR_COLOR"]
-
+BAR_COLOR = config_dict["PLOT"]["COLOR_DICT"]["BAR_COLOR"]
+SCR_COLOR = config_dict["PLOT"]["COLOR_DICT"]["SCR_COLOR"]
 
 def plot_side(self, fig=None, ax=None, is_show_fig=True, save_path=None):
     """Plot the side view of the Lamination in a matplotlib fig
+    (Z axis left to right)
 
     Parameters
     ----------
@@ -30,48 +32,114 @@ def plot_side(self, fig=None, ax=None, is_show_fig=True, save_path=None):
 
     # Lamination and ventilation ducts patches
     (fig, axes, patch_leg, label_leg) = init_fig(fig=fig, ax=ax, shape="rectangle")
-    Lt = self.comp_length()
+
     patches = list()  # List of patches to draw the lamination
     if self.is_stator:
         lam_color = STATOR_COLOR
     else:
         lam_color = ROTOR_COLOR
 
-    # Comp important point coordinates
-    ZBLext = -self.Rext - Lt / 2 * 1j  # Bottom Lamination Ext
-    ZBLint = self.Rint - Lt / 2 * 1j  # Bottom Lamination Int
+    # Comp all dimensions
+    Lt = self.comp_length()
+    Hs = self.slot.comp_height()
+    Ha = self.slot.comp_height_active()
+    Ho = Hs - Ha
+    Le = self.winding.Lewout
+    Lscr = self.Lscr
+    Hscr = self.Hscr
+
+    # Comp point coordinates
+    ZLamExt = -Lt / 2 - 1j * self.Rext  # Bottom Lamination Ext
+    ZLamInt = -Lt / 2 + 1j * self.Rint  # Bottom Lamination Int
+    ZBarTopR = Lt / 2 + 1j * (self.Rext - Hs)  # Top bar right
+    ZBarBotR = Lt / 2 + 1j * (-self.Rext + Ho)  # Bottom bar right
+    ZBarTopL = -Lt / 2 - Le + 1j * (self.Rext - Hs)  # Top bar left
+    ZBarBotL = -Lt / 2 - Le + 1j * (-self.Rext + Ho)  # Bottom bar left
+    ZscrRight = (
+        Lt / 2 + Le + 1j * (-self.Rext + Ho + Ha / 2 - Hscr / 2)
+    )  # Short Circuit Ring Right
+    ZscrLeft = (
+        -Lt / 2 - Le - Lscr + 1j * (-self.Rext + Ho + Ha / 2 - Hscr / 2)
+    )  # Short Circuit Ring Right
 
     # Draw Lamination rectangle(s)
     if self.Rint == 0:
         patches.append(
             Rectangle(
-                xy=(ZBLext.real, ZBLext.imag),
-                width=2 * self.Rext,
-                height=Lt,
+                xy=(ZLamExt.real, ZLamExt.imag),
+                width=Lt,
+                height=2 * self.Rext,
                 color=lam_color,
             )
         )
     else:
         patches.append(  # Left
             Rectangle(
-                xy=(ZBLext.real, ZBLext.imag),
-                width=self.Rext - self.Rint,
-                height=Lt,
+                xy=(ZLamExt.real, ZLamExt.imag),
+                width=Lt,
+                height=self.Rext - self.Rint,
                 color=lam_color,
             )
         )
         patches.append(  # Right
             Rectangle(
-                xy=(ZBLint.real, ZBLint.imag),
-                width=self.Rext - self.Rint,
-                height=Lt,
+                xy=(ZLamInt.real, ZLamInt.imag),
+                width=Lt,
+                height=self.Rext - self.Rint,
                 color=lam_color,
             )
         )
 
     # Add Lewout rectangles
-
+    patches.append(  # Top Right
+        Rectangle(
+            xy=(ZBarTopR.real, ZBarTopR.imag),
+            width=Le,
+            height=Ha,
+            color=BAR_COLOR,
+        )
+    )
+    patches.append(  # Bot Right
+        Rectangle(
+            xy=(ZBarBotR.real, ZBarBotR.imag),
+            width=Le,
+            height=Ha,
+            color=BAR_COLOR,
+        )
+    )
+    patches.append(  # Top Left
+        Rectangle(
+            xy=(ZBarTopL.real, ZBarTopL.imag),
+            width=Le,
+            height=Ha,
+            color=BAR_COLOR,
+        )
+    )
+    patches.append(  # Bot Left
+        Rectangle(
+            xy=(ZBarBotL.real, ZBarBotL.imag),
+            width=Le,
+            height=Ha,
+            color=BAR_COLOR,
+        )
+    )
     # Add short circuit ring rectangles
+    patches.append(
+        Rectangle(
+            xy=(ZscrRight.real, ZscrRight.imag),
+            width=Lscr,
+            height=abs(2 * ZscrRight.imag),
+            color=SCR_COLOR,
+        )
+    )
+    patches.append(
+        Rectangle(
+            xy=(ZscrLeft.real, ZscrLeft.imag),
+            width=Lscr,
+            height=abs(2 * ZscrLeft.imag),
+            color=SCR_COLOR,
+        )
+    )
 
     # Display the result
     axes.set_xlabel("[m]")
@@ -81,7 +149,19 @@ def plot_side(self, fig=None, ax=None, is_show_fig=True, save_path=None):
 
     # Axis Setup
     axes.axis("equal")
-
+    axes.set_title("Squirrel Cage Rotor side view")
+    # Set legend
+    if self.is_stator:
+        patch_leg.append(Patch(color=STATOR_COLOR))
+        label_leg.append("Stator")
+    elif not self.is_stator and "Rotor" not in label_leg:
+        patch_leg.append(Patch(color=ROTOR_COLOR))
+        label_leg.append("Rotor")
+    patch_leg.append(Patch(color=BAR_COLOR))
+    label_leg.append("Bar")
+    patch_leg.append(Patch(color=SCR_COLOR))
+    label_leg.append("Short Circuit Ring")
+    axes.legend(patch_leg, label_leg)
     if is_show_fig:
         fig.show()
     if save_path is not None:
