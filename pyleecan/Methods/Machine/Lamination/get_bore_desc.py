@@ -24,49 +24,27 @@ def get_bore_desc(self, sym=1, prop_dict=None):
     """
 
     Rbo = self.get_Rbo()
+    is_notch = not self.notch in [None, list()]
 
-    if self.notch is None:
-        self.notch = list()
-
-    if self.bore is not None and self.notch in [None, list()] and sym == 1:
+    if not is_notch and self.bore and sym == 1:
         return None, self.bore.get_bore_line(prop_dict=prop_dict)
-    elif self.notch is None or len(self.notch) == 0:
+
+    bore_desc = list()
+    if not is_notch:  # ... and (not self.bore or sym != 1):
         # No notches
         if sym == 1:
-            bore_desc = list()
-            bore_desc.append(
-                {
-                    "obj": Arc3(begin=Rbo, end=-Rbo, is_trigo_direction=True),
-                    "begin_angle": 0,
-                    "end_angle": pi,
-                }
-            )
-            bore_desc.append(
-                {
-                    "obj": Arc3(begin=-Rbo, end=Rbo, is_trigo_direction=True),
-                    "begin_angle": 0,
-                    "end_angle": pi,
-                }
-            )
+            arc1 = Arc3(begin=Rbo, end=-Rbo)
+            arc2 = Arc3(begin=-Rbo, end=Rbo)
+            bore_desc.append({"obj": arc1, "begin_angle": 0, "end_angle": pi})
+            bore_desc.append({"obj": arc2, "begin_angle": 0, "end_angle": pi})
         else:
-            bore_desc = [
-                {
-                    "obj": Arc1(
-                        begin=Rbo,
-                        end=Rbo * exp(1j * 2 * pi / sym),
-                        radius=Rbo,
-                        is_trigo_direction=True,
-                    ),
-                    "begin_angle": 0,
-                    "end_angle": 2 * pi / sym,
-                }
-            ]
+            arc = Arc1(begin=Rbo, end=Rbo * exp(1j * 2 * pi / sym), radius=Rbo)
+            bore_desc = [{"obj": arc, "begin_angle": 0, "end_angle": 2 * pi / sym}]
     else:  # Notches => Generate Full lines and cut (if needed)
         # Get the notches
         notch_list = self.get_notch_list(sym=sym)
 
         # Add all the bore lines
-        bore_desc = list()
         for ii, desc in enumerate(notch_list):
             bore_desc.append(desc)
             if ii != len(notch_list) - 1:
@@ -77,7 +55,6 @@ def get_bore_desc(self, sym=1, prop_dict=None):
                     begin=Rbo * exp(1j * bore_dict["begin_angle"]),
                     end=Rbo * exp(1j * bore_dict["end_angle"]),
                     radius=Rbo,
-                    is_trigo_direction=True,
                 )
                 bore_desc.append(bore_dict)
 
@@ -102,17 +79,15 @@ def get_bore_desc(self, sym=1, prop_dict=None):
                 bore_lines = first_cut
             return bore_desc, bore_lines
         elif sym == 1:
-            bore_dict = dict()
             bore_dict["begin_angle"] = notch_list[-1]["end_angle"]
             bore_dict["end_angle"] = notch_list[0]["begin_angle"]
             bore_dict["obj"] = Arc1(
                 begin=Rbo * exp(1j * bore_dict["begin_angle"]),
                 end=Rbo * exp(1j * bore_dict["end_angle"]),
                 radius=Rbo,
-                is_trigo_direction=True,
             )
             if notch_list[0]["begin_angle"] < 0:
-                # First element is an slot or notch
+                # First element is a slot or notch
                 bore_desc.append(bore_dict)
             else:
                 # First element is a bore line
@@ -126,7 +101,6 @@ def get_bore_desc(self, sym=1, prop_dict=None):
                 begin=Rbo * exp(1j * bore_dict["begin_angle"]),
                 end=Rbo * exp(1j * bore_dict["end_angle"]),
                 radius=Rbo,
-                is_trigo_direction=True,
             )
             bore_desc.append(bore_dict)
 
@@ -138,7 +112,6 @@ def get_bore_desc(self, sym=1, prop_dict=None):
                 begin=Rbo * exp(1j * bore_dict["begin_angle"]),
                 end=Rbo * exp(1j * bore_dict["end_angle"]),
                 radius=Rbo,
-                is_trigo_direction=True,
             )
             bore_desc.insert(0, bore_dict)
 

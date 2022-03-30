@@ -26,20 +26,12 @@ def get_bore_line(self, prop_dict=None):
         raise ParentMissingError("Error: The Bore object is not inside a Lamination")
 
     # Compute the shape
-    (alpha_lim, z_top_left, z_top_right) = comp_flower_arc(
-        2 * pi / self.N, self.Rarc, Rbo
-    )
+    (alpha_lim, zL, zR) = comp_flower_arc(2 * pi / self.N, self.Rarc, Rbo)
 
     # Create the lines
     bore_list = list()
     for ii in range(self.N):
-        bore_list.append(
-            Arc1(
-                begin=z_top_right * exp(1j * (2 * pi / self.N * (ii - 1) + self.alpha)),
-                end=z_top_left * exp(1j * (2 * pi / self.N * (ii - 1) + self.alpha)),
-                radius=self.Rarc,
-                is_trigo_direction=True,
-                prop_dict=prop_dict,
-            )
-        )
+        rot = exp(1j * (2 * pi / self.N * (ii - 1) + self.alpha))
+        arc = Arc1(begin=zR * rot, end=zL * rot, radius=self.Rarc, prop_dict=prop_dict)
+        bore_list.append(arc)
     return bore_list
