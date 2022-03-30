@@ -157,7 +157,7 @@ def comp_loss_density_magnet(self, group, coeff_dict, is_skin_effect=True):
         Az_fft = Az_df["A_z"]
         Az_mean = matmul(Az_fft, Se_mag)[:, None] / np_sum(Se_mag)
         Jm_fft = -1j * sigma_m * w * (Az_fft - Az_mean)
-        Pmagnet_density[:, jj : (jj + len(kmag))] = np_abs(Jm_fft) ** 2 / sigma_m
+        Pmagnet_density[:, jj : (jj + len(kmag))] = 0.5 * np_abs(Jm_fft) ** 2 / sigma_m
         jj += len(kmag)
 
         # # # derivation in time domain
