@@ -1,6 +1,8 @@
 import numpy as np
 import scipy.interpolate as scp_int
 
+from ....Functions.Electrical.comp_loss_joule import comp_loss_joule
+
 
 def get_Ploss_dqh_interp(self, N0):
     """Get the magnets d-axis inductance
@@ -24,9 +26,19 @@ def get_Ploss_dqh_interp(self, N0):
 
     felec = N0 / 60 * p
 
+    type_skin_effect = self.simu.loss.type_skin_effect
+    Tsta = self.simu.loss.Tsta
+
     Ploss_dqh = np.zeros((len(self.output_list), 5))
     for ii, out in enumerate(self.output_list):
-        Ploss_dqh[ii, 0] = out.loss.get_loss_group("stator winding joule", felec)
+        OP = out.elec.OP.copy()
+        OP.felec = felec
+        Ploss_dqh[ii, 0] = comp_loss_joule(
+            lam=self.simu.machine.stator,
+            OP=OP,
+            T_op=Tsta,
+            type_skin_effect=type_skin_effect,
+        )
         Ploss_dqh[ii, 1] = out.loss.get_loss_group("stator core", felec)
         Ploss_dqh[ii, 2] = out.loss.get_loss_group("rotor magnets", felec)
         Ploss_dqh[ii, 3] = out.loss.get_loss_group("rotor core", felec)
