@@ -1,5 +1,5 @@
 from os.path import join, dirname, isfile
-from PySide2.QtWidgets import QDialog, QMessageBox
+from PySide2.QtWidgets import QDialog, QMessageBox, QLayout
 from PySide2.QtCore import Qt, Signal
 from logging import getLogger
 from numpy import pi, array, array_equal
@@ -49,7 +49,7 @@ class DMatSetup(Gen_DMatSetup, QDialog):
         # === setup signals ===
         # General
         self.le_name.editingFinished.connect(self.set_name)
-        self.is_isotropic.toggled.connect(self.set_is_isotropic)
+        self.cb_material_type.currentIndexChanged.connect(self.set_is_isotropic)
         # Elec
         self.lf_rho_elec.editingFinished.connect(self.set_rho_elec)
         # Magnetics
@@ -128,16 +128,10 @@ class DMatSetup(Gen_DMatSetup, QDialog):
         getLogger(GUI_LOG_NAME).debug("DMatSetup: Setting material " + self.mat.name)
 
         self.le_name.setText(self.mat.name)
-        self.is_isotropic.blockSignals(True)
         if self.mat.is_isotropic:
-            self.is_isotropic.setCheckState(Qt.Checked)
-            self.nav_meca.setCurrentIndex(1)
-            self.nav_ther.setCurrentIndex(1)
+            self.cb_material_type.setCurrentIndex(1)
         else:
-            self.is_isotropic.setCheckState(Qt.Unchecked)
-            self.nav_meca.setCurrentIndex(0)
-            self.nav_ther.setCurrentIndex(0)
-        self.is_isotropic.blockSignals(False)
+            self.cb_material_type.setCurrentIndex(0)
 
         # === check material attribute and set values ===
         # Elec
@@ -163,14 +157,35 @@ class DMatSetup(Gen_DMatSetup, QDialog):
         if self.mat.struct is None:
             self.set_default("struct")
         self.lf_rho_meca.setValue(self.mat.struct.rho)
-        self.lf_E.setValue(self.mat.struct.Ex)
-        self.lf_Ex.setValue(self.mat.struct.Ex)
-        self.lf_Ey.setValue(self.mat.struct.Ey)
-        self.lf_Ez.setValue(self.mat.struct.Ez)
-        self.lf_G.setValue(self.mat.struct.Gxy)
-        self.lf_Gxy.setValue(self.mat.struct.Gxy)
-        self.lf_Gxz.setValue(self.mat.struct.Gxz)
-        self.lf_Gyz.setValue(self.mat.struct.Gyz)
+
+        if self.mat.struct.Ex not in [0, None]:
+            self.lf_E.setValue(self.mat.struct.Ex / 1e9)
+            self.lf_Ex.setValue(self.mat.struct.Ex / 1e9)
+        else:
+            self.lf_E.setValue(self.mat.struct.Ex)
+            self.lf_Ex.setValue(self.mat.struct.Ex)
+        if self.mat.struct.Ey not in [0, None]:
+            self.lf_Ey.setValue(self.mat.struct.Ey / 1e9)
+        else:
+            self.lf_Ey.setValue(self.mat.struct.Ey)
+        if self.mat.struct.Ez not in [0, None]:
+            self.lf_Ez.setValue(self.mat.struct.Ez / 1e9)
+        else:
+            self.lf_Ez.setValue(self.mat.struct.Ez)
+        if self.mat.struct.Gxy not in [0, None]:
+            self.lf_G.setValue(self.mat.struct.Gxy / 1e9)
+            self.lf_Gxy.setValue(self.mat.struct.Gxy / 1e9)
+        else:
+            self.lf_G.setValue(self.mat.struct.Gxy)
+            self.lf_Gxy.setValue(self.mat.struct.Gxy)
+        if self.mat.struct.Gxz not in [0, None]:
+            self.lf_Gxz.setValue(self.mat.struct.Gxz / 1e9)
+        else:
+            self.lf_Gxz.setValue(self.mat.struct.Gxz)
+        if self.mat.struct.Gyz not in [0, None]:
+            self.lf_Gyz.setValue(self.mat.struct.Gyz / 1e9)
+        else:
+            self.lf_Gyz.setValue(self.mat.struct.Gyz)
         self.lf_nu.setValue(self.mat.struct.nu_xy)
         self.lf_nu_xy.setValue(self.mat.struct.nu_xy)
         self.lf_nu_xz.setValue(self.mat.struct.nu_xz)
@@ -195,8 +210,9 @@ class DMatSetup(Gen_DMatSetup, QDialog):
         self.tab_values.title = self.g_BH_import.title()
         self.tab_values.N_row_txt = "Nb of Points"
         self.tab_values.shape_max = (None, 2)
-        self.tab_values.col_header = ["B-curve(T)", "H-curve(A/m)"]
-        self.tab_values.unit_order = ["First column B", "First column H"]
+        self.tab_values.shape_min = (None, 2)
+        self.tab_values.col_header = ["H-curve(A/m)", "B-curve(T)"]
+        self.tab_values.unit_order = ["First column H", "First column B"]
         self.tab_values.button_plot_title = "B(H)"
         self.tab_values.si_col.hide()
         self.tab_values.in_col.hide()
@@ -309,7 +325,7 @@ class DMatSetup(Gen_DMatSetup, QDialog):
         self.set_save_needed(is_save_needed=False)
         self.materialToRename.emit()  # Update reference and treeview
 
-    def set_is_isotropic(self, is_checked):
+    def set_is_isotropic(self):
         """Signal to update the value of is_isotropic according to the checkbox
 
         Parameters
@@ -323,9 +339,15 @@ class DMatSetup(Gen_DMatSetup, QDialog):
         -------
         None
         """
-        self.mat.is_isotropic = is_checked
-        self.nav_meca.setCurrentIndex(int(is_checked))
-        self.nav_ther.setCurrentIndex(int(is_checked))
+        if self.cb_material_type.currentText() == "Isotropic":
+            self.mat.is_isotropic = True
+            self.nav_meca.setCurrentIndex(1)
+            self.nav_ther.setCurrentIndex(1)
+        elif self.cb_material_type.currentText() == "Orthotropic":
+            self.mat.is_isotropic = False
+            self.nav_meca.setCurrentIndex(0)
+            self.nav_ther.setCurrentIndex(0)
+
         self.set_save_needed(is_save_needed=True)
 
     def set_rho_elec(self):
@@ -552,10 +574,10 @@ class DMatSetup(Gen_DMatSetup, QDialog):
         -------
         None
         """
-        if self.mat.struct.Ex != self.lf_E.value():
-            self.mat.struct.Ex = self.lf_E.value()
-            self.mat.struct.Ey = self.lf_E.value()
-            self.mat.struct.Ez = self.lf_E.value()
+        if self.mat.struct.Ex != self.lf_E.value() * 1e9:
+            self.mat.struct.Ex = self.lf_E.value() * 1e9
+            self.mat.struct.Ey = self.lf_E.value() * 1e9
+            self.mat.struct.Ez = self.lf_E.value() * 1e9
             self.set_save_needed(is_save_needed=True)
 
     def set_Ex(self):
@@ -570,8 +592,8 @@ class DMatSetup(Gen_DMatSetup, QDialog):
         -------
         None
         """
-        if self.mat.struct.Ex != self.lf_Ex.value():
-            self.mat.struct.Ex = self.lf_Ex.value()
+        if self.mat.struct.Ex != self.lf_Ex.value() * 1e9:
+            self.mat.struct.Ex = self.lf_Ex.value() * 1e9
             self.set_save_needed(is_save_needed=True)
 
     def set_Ey(self):
@@ -586,8 +608,8 @@ class DMatSetup(Gen_DMatSetup, QDialog):
         -------
         None
         """
-        if self.mat.struct.Ey != self.lf_Ey.value():
-            self.mat.struct.Ey = self.lf_Ey.value()
+        if self.mat.struct.Ey != self.lf_Ey.value() * 1e9:
+            self.mat.struct.Ey = self.lf_Ey.value() * 1e9
             self.set_save_needed(is_save_needed=True)
 
     def set_Ez(self):
@@ -602,8 +624,8 @@ class DMatSetup(Gen_DMatSetup, QDialog):
         -------
         None
         """
-        if self.mat.struct.Ez != self.lf_Ez.value():
-            self.mat.struct.Ez = self.lf_Ez.value()
+        if self.mat.struct.Ez != self.lf_Ez.value() * 1e9:
+            self.mat.struct.Ez = self.lf_Ez.value() * 1e9
             self.set_save_needed(is_save_needed=True)
 
     def set_G(self):
@@ -618,10 +640,10 @@ class DMatSetup(Gen_DMatSetup, QDialog):
         -------
         None
         """
-        if self.mat.struct.Gxy != self.lf_G.value():
-            self.mat.struct.Gxy = self.lf_G.value()
-            self.mat.struct.Gxz = self.lf_G.value()
-            self.mat.struct.Gyz = self.lf_G.value()
+        if self.mat.struct.Gxy != self.lf_G.value() * 1e9:
+            self.mat.struct.Gxy = self.lf_G.value() * 1e9
+            self.mat.struct.Gxz = self.lf_G.value() * 1e9
+            self.mat.struct.Gyz = self.lf_G.value() * 1e9
             self.set_save_needed(is_save_needed=True)
 
     def set_Gxy(self):
@@ -636,8 +658,8 @@ class DMatSetup(Gen_DMatSetup, QDialog):
         -------
         None
         """
-        if self.mat.struct.Gxy != self.lf_Gxy.value():
-            self.mat.struct.Gxy = self.lf_Gxy.value()
+        if self.mat.struct.Gxy != self.lf_Gxy.value() * 1e9:
+            self.mat.struct.Gxy = self.lf_Gxy.value() * 1e9
             self.set_save_needed(is_save_needed=True)
 
     def set_Gxz(self):
@@ -652,8 +674,8 @@ class DMatSetup(Gen_DMatSetup, QDialog):
         -------
         None
         """
-        if self.mat.struct.Gxz != self.lf_Gxz.value():
-            self.mat.struct.Gxz = self.lf_Gxz.value()
+        if self.mat.struct.Gxz != self.lf_Gxz.value() * 1e9:
+            self.mat.struct.Gxz = self.lf_Gxz.value() * 1e9
             self.set_save_needed(is_save_needed=True)
 
     def set_Gyz(self):
@@ -668,8 +690,8 @@ class DMatSetup(Gen_DMatSetup, QDialog):
         -------
         None
         """
-        if self.mat.struct.Gyz != self.lf_Gyz.value():
-            self.mat.struct.Gyz = self.lf_Gyz.value()
+        if self.mat.struct.Gyz != self.lf_Gyz.value() * 1e9:
+            self.mat.struct.Gyz = self.lf_Gyz.value() * 1e9
             self.set_save_needed(is_save_needed=True)
 
     def set_nu(self):
@@ -771,46 +793,22 @@ class DMatSetup(Gen_DMatSetup, QDialog):
         """
 
         if self.c_type_material.currentIndex() == 0:  # Linear
-            self.in_mur_lin.setHidden(False)
-            self.lf_mur_lin.setHidden(False)
-            self.unit_mur_lin.setHidden(False)
             self.in_Brm20.setHidden(True)
             self.lf_Brm20.setHidden(True)
             self.unit_Brm20.setHidden(True)
             self.in_alpha_Br.setHidden(True)
             self.lf_alpha_Br.setHidden(True)
             self.unit_alpha_Br.setHidden(True)
-            self.in_Wlam.setHidden(True)
-            self.lf_Wlam.setHidden(True)
-            self.unit_Wlam.setHidden(True)
-            self.g_BH_import.setHidden(True)
+            self.nav_mag.setCurrentIndex(0)
 
         elif self.c_type_material.currentIndex() == 1:  # Magnetic
-            self.in_mur_lin.setHidden(False)
-            self.lf_mur_lin.setHidden(False)
-            self.unit_mur_lin.setHidden(False)
             self.in_Brm20.setHidden(False)
             self.lf_Brm20.setHidden(False)
             self.unit_Brm20.setHidden(False)
             self.in_alpha_Br.setHidden(False)
             self.lf_alpha_Br.setHidden(False)
             self.unit_alpha_Br.setHidden(False)
-            self.in_Wlam.setHidden(True)
-            self.lf_Wlam.setHidden(True)
-            self.unit_Wlam.setHidden(True)
-            self.g_BH_import.setHidden(True)
+            self.nav_mag.setCurrentIndex(0)
 
         else:  # Lamination
-            self.in_mur_lin.setHidden(True)
-            self.lf_mur_lin.setHidden(True)
-            self.unit_mur_lin.setHidden(True)
-            self.in_Brm20.setHidden(True)
-            self.lf_Brm20.setHidden(True)
-            self.unit_Brm20.setHidden(True)
-            self.in_alpha_Br.setHidden(True)
-            self.lf_alpha_Br.setHidden(True)
-            self.unit_alpha_Br.setHidden(True)
-            self.in_Wlam.setHidden(False)
-            self.lf_Wlam.setHidden(False)
-            self.unit_Wlam.setHidden(False)
-            self.g_BH_import.setHidden(False)
+            self.nav_mag.setCurrentIndex(1)

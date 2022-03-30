@@ -327,7 +327,7 @@ class Material(FrozenClass):
     is_isotropic = property(
         fget=_get_is_isotropic,
         fset=_set_is_isotropic,
-        doc=u"""If True, uniformity in all orientations
+        doc=u"""If Isotropic, uniformity in all orientations
 
         :Type: bool
         """,

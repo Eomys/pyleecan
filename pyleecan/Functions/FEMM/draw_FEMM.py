@@ -93,6 +93,10 @@ def draw_FEMM(
         dictionary containing the main parameters of FEMM (including circuits and materials)
     """
 
+    if transform_list not in [None, list()] and is_fast_draw:
+        is_fast_draw = False
+        output.get_logger().debug("Removing fast_draw for transform_list in FEMM")
+
     # Initialization from output for readibility
     Is = output.elec.Is  # Stator currents waveforms
     Ir = output.elec.Ir  # Rotor currents waveforms

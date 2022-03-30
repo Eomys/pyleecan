@@ -195,7 +195,13 @@ class SSkew(Ui_SSkew, QWidget):
             else:
                 # continuous skew
                 self.sb_nslice.setEnabled(False)
+                size = self.sb_nslice.sizePolicy()
+                size.setRetainSizeWhenHidden(False)
+                self.sb_nslice.setSizePolicy(size)
                 self.sb_nslice.hide()
+                size = self.label_segments.sizePolicy()
+                size.setRetainSizeWhenHidden(False)
+                self.label_segments.setSizePolicy(size)
                 self.label_segments.hide()
 
             if self.type_skew == "user-defined":
@@ -218,10 +224,16 @@ class SSkew(Ui_SSkew, QWidget):
             # Hide all widgets
             self.cb_step.hide()
             self.cb_type.hide()
+            size = self.sb_nslice.sizePolicy()
+            size.setRetainSizeWhenHidden(False)
+            self.sb_nslice.setSizePolicy(size)
             self.sb_nslice.hide()
             self.lf_angle.hide()
             self.in_type.hide()
             self.in_step.hide()
+            size = self.label_segments.sizePolicy()
+            size.setRetainSizeWhenHidden(False)
+            self.label_segments.setSizePolicy(size)
             self.label_segments.hide()
             self.label_rate.hide()
             self.label_deg.hide()
@@ -268,6 +280,7 @@ class SSkew(Ui_SSkew, QWidget):
         """Check if values are consistent"""
 
         if not self.is_step:
+            # Continuous skew can only be linear
             self.type_skew = "linear"
             self.cb_type.setCurrentIndex(self.type_skew_list.index(self.type_skew))
 

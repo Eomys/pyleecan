@@ -19,10 +19,15 @@ class Gen_DMatSetup(Ui_DMatSetup):
         self.le_name.setWhatsThis(txt)
         self.le_name.setToolTip(txt)
 
-        # Setup of is_isotropic
-        txt = self.tr(u"""If True, uniformity in all orientations""")
-        self.is_isotropic.setWhatsThis(txt)
-        self.is_isotropic.setToolTip(txt)
+        # Setup of cb_material_type
+        txt = self.tr(u"""If Isotropic, uniformity in all orientations""")
+        self.cb_material_type.setWhatsThis(txt)
+        self.cb_material_type.setToolTip(txt)
+
+        # Setup of in_material_type
+        txt = self.tr(u"""If Isotropic, uniformity in all orientations""")
+        self.in_material_type.setWhatsThis(txt)
+        self.in_material_type.setToolTip(txt)
 
         # Setup of in_rho_elec
         txt = self.tr(u"""Resistivity at 20 deg C""")
