@@ -1,7 +1,7 @@
 from numpy import pi
 
 
-def get_notch_list(self, sym=1, is_yoke=False):
+def get_notch_list(self, sym=1):
     """Returns an ordered description of the notches
 
     Parameters
@@ -20,12 +20,7 @@ def get_notch_list(self, sym=1, is_yoke=False):
     """
 
     notch_list = list()
-    if is_yoke:
-        self.parent.is_internal = not self.parent.is_internal
-        op = self.notch_shape.comp_angle_opening()
-        self.parent.is_internal = not self.parent.is_internal
-    else:
-        op = self.notch_shape.comp_angle_opening()
+    op = self.notch_shape.comp_angle_opening()
 
     for ii in range(self.notch_shape.Zs // sym):
         notch_dict = dict()

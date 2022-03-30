@@ -213,7 +213,7 @@
                 "name": "is_trigo_direction",
                 "type": "bool",
                 "unit": "-",
-                "value": 0
+                "value": 1
             }
         ]
     },
@@ -4981,15 +4981,6 @@
                 "value": null
             },
             {
-                "desc": "Lamination yoke notches",
-                "max": "",
-                "min": "",
-                "name": "yoke_notch",
-                "type": "[Notch]",
-                "unit": "-",
-                "value": ""
-            },
-            {
                 "desc": "Bore Shape",
                 "max": "",
                 "min": "",
@@ -7427,7 +7418,17 @@
         "name": "Notch",
         "package": "Machine",
         "path": "pyleecan/Generator/ClassesRef/Machine/Notch.csv",
-        "properties": []
+        "properties": [
+            {
+                "desc": "True if Notch is on the Yoke",
+                "max": "",
+                "min": "",
+                "name": "is_yoke",
+                "type": "bool",
+                "unit": "",
+                "value": 0
+            }
+        ]
     },
     "NotchEvenDist": {
         "constants": [

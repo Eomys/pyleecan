@@ -233,7 +233,7 @@ class Arc3(Arc):
         self,
         begin=0,
         end=0,
-        is_trigo_direction=False,
+        is_trigo_direction=True,
         prop_dict=None,
         init_dict=None,
         init_str=None,

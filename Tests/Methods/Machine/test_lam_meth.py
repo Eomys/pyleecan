@@ -16,13 +16,15 @@ lam_list.append(lam1)
 
 # Lamintion with yoke notches
 lam2 = Lamination(Rint=0.5, Rext=1, is_internal=True)
-lam2.yoke_notch = [NotchEvenDist(notch_shape=SlotM10(Zs=16, W0=0.1, H0=0.05))]
+lam2.notch = [NotchEvenDist(notch_shape=SlotM10(Zs=16, W0=0.1, H0=0.05), is_yoke=True)]
 lam_list.append(lam2)
 
 # Lamination with both notches
 lam3 = Lamination(Rint=0.5, Rext=1, is_internal=True)
 lam3.notch = [NotchEvenDist(notch_shape=SlotM10(Zs=8, W0=0.05, H0=0.1))]
-lam3.yoke_notch = [NotchEvenDist(notch_shape=SlotM10(Zs=8, W0=0.2, H0=0.1))]
+lam3.notch.append(
+    [NotchEvenDist(notch_shape=SlotM10(Zs=8, W0=0.2, H0=0.1), is_yoke=True)]
+)
 lam_list.append(lam3)
 
 

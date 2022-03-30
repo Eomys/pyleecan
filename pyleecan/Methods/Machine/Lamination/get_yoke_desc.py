@@ -28,38 +28,22 @@ def get_yoke_desc(self, sym=1, is_reversed=False, prop_dict=None):
     """
 
     Ryoke = self.get_Ryoke()
+    is_notch = self.notch and any([notch.is_yoke for notch in self.notch])
 
-    if self.yoke_notch is None or len(self.yoke_notch) == 0:
+    if not is_notch:
         # No notches
         if sym == 1:
             yoke_desc = list()
-            yoke_desc.append(
-                {
-                    "obj": Arc3(begin=Ryoke, end=-Ryoke, is_trigo_direction=True),
-                    "begin_angle": 0,
-                    "end_angle": pi,
-                }
-            )
-            yoke_desc.append(
-                {
-                    "obj": Arc3(begin=-Ryoke, end=Ryoke, is_trigo_direction=True),
-                    "begin_angle": 0,
-                    "end_angle": pi,
-                }
-            )
+            arc = Arc3(begin=Ryoke, end=-Ryoke, is_trigo_direction=True)
+            yoke_desc.append({"obj": arc, "begin_angle": 0, "end_angle": pi})
+            arc = Arc3(begin=-Ryoke, end=Ryoke, is_trigo_direction=True)
+            yoke_desc.append({"obj": arc, "begin_angle": 0, "end_angle": pi})
         else:
-            yoke_desc = [
-                {
-                    "obj": Arc1(
-                        begin=Ryoke,
-                        end=Ryoke * exp(1j * 2 * pi / sym),
-                        radius=Ryoke,
-                        is_trigo_direction=True,
-                    ),
-                    "begin_angle": 0,
-                    "end_angle": 2 * pi / sym,
-                }
-            ]
+            rot = exp(1j * 2 * pi / sym)
+            arc = Arc1(
+                begin=Ryoke, end=Ryoke * rot, radius=Ryoke, is_trigo_direction=True
+            )
+            yoke_desc = [{"obj": arc, "begin_angle": 0, "end_angle": 2 * pi / sym}]
     else:
         # Get the notches
         notch_list = self.get_notch_list(sym=1, is_yoke=True)

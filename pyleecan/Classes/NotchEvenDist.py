@@ -66,7 +66,9 @@ class NotchEvenDist(Notch):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, alpha=0, notch_shape=-1, init_dict=None, init_str=None):
+    def __init__(
+        self, alpha=0, notch_shape=-1, is_yoke=False, init_dict=None, init_str=None
+    ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -86,11 +88,13 @@ class NotchEvenDist(Notch):
                 alpha = init_dict["alpha"]
             if "notch_shape" in list(init_dict.keys()):
                 notch_shape = init_dict["notch_shape"]
+            if "is_yoke" in list(init_dict.keys()):
+                is_yoke = init_dict["is_yoke"]
         # Set the properties (value check and convertion are done in setter)
         self.alpha = alpha
         self.notch_shape = notch_shape
         # Call Notch init
-        super(NotchEvenDist, self).__init__()
+        super(NotchEvenDist, self).__init__(is_yoke=is_yoke)
         # The class is frozen (in Notch init), for now it's impossible to
         # add new properties
 

@@ -17,6 +17,6 @@ def get_Rbo(self):
     """
 
     if self.parent is not None:
-        return self.parent.get_Rbo()
+        return self.parent.get_Ryoke() if self.is_yoke else self.parent.get_Rbo()
     else:
         raise ParentMissingError("Error: The notch is not inside a Lamination")

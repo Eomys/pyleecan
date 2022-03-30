@@ -60,7 +60,6 @@ def get_bore_desc(self, sym=1, prop_dict=None):
                 begin=Rbo * exp(1j * bore_dict["begin_angle"]),
                 end=Rbo * exp(1j * bore_dict["end_angle"]),
                 radius=Rbo,
-                is_trigo_direction=True,
             )
             bore_desc.append(bore_dict)
 
@@ -90,7 +89,6 @@ def get_bore_desc(self, sym=1, prop_dict=None):
             begin=Rbo * exp(1j * bore_dict["begin_angle"]),
             end=Rbo * exp(1j * bore_dict["end_angle"]),
             radius=Rbo,
-            is_trigo_direction=True,
         )
         if merged_list[0]["begin_angle"] < 0:
             # First element is an slot or notch
@@ -107,7 +105,6 @@ def get_bore_desc(self, sym=1, prop_dict=None):
             begin=Rbo * exp(1j * bore_dict["begin_angle"]),
             end=Rbo * exp(1j * bore_dict["end_angle"]),
             radius=Rbo,
-            is_trigo_direction=True,
         )
         bore_desc.append(bore_dict)
 
@@ -119,7 +116,6 @@ def get_bore_desc(self, sym=1, prop_dict=None):
             begin=Rbo * exp(1j * bore_dict["begin_angle"]),
             end=Rbo * exp(1j * bore_dict["end_angle"]),
             radius=Rbo,
-            is_trigo_direction=True,
         )
         bore_desc.insert(0, bore_dict)
 

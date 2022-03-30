@@ -239,7 +239,6 @@ class LamSquirrelCage(LamSlotWind):
         axial_vent=-1,
         notch=-1,
         skew=None,
-        yoke_notch=-1,
         bore=None,
         init_dict=None,
         init_str=None,
@@ -295,8 +294,6 @@ class LamSquirrelCage(LamSlotWind):
                 notch = init_dict["notch"]
             if "skew" in list(init_dict.keys()):
                 skew = init_dict["skew"]
-            if "yoke_notch" in list(init_dict.keys()):
-                yoke_notch = init_dict["yoke_notch"]
             if "bore" in list(init_dict.keys()):
                 bore = init_dict["bore"]
         # Set the properties (value check and convertion are done in setter)
@@ -320,7 +317,6 @@ class LamSquirrelCage(LamSlotWind):
             axial_vent=axial_vent,
             notch=notch,
             skew=skew,
-            yoke_notch=yoke_notch,
             bore=bore,
         )
         # The class is frozen (in LamSlotWind init), for now it's impossible to

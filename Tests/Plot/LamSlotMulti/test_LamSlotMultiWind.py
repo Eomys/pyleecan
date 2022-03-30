@@ -54,10 +54,10 @@ def test_LamSlotMultiWind():
     Slot3 = SlotW11(
         Zs=6, W0=0.006, H0=0.001, H1=0.001, W1=0.006, H2=0.001, W2=0.006, R1=0.0004
     )
-    notch_1 = NotchEvenDist(notch_shape=Slot3, alpha=pi / 6)
+    notch_1 = NotchEvenDist(notch_shape=Slot3, alpha=pi / 6, is_yoke=True)
     Slot4 = SlotCirc(Zs=6, W0=0.0035 * 2, H0=0.0035)
-    notch_2 = NotchEvenDist(notch_shape=Slot4, alpha=2 * pi / 6)
-    stator.yoke_notch = [notch_1, notch_2]
+    notch_2 = NotchEvenDist(notch_shape=Slot4, alpha=2 * pi / 6, is_yoke=True)
+    stator.notch = [notch_1, notch_2]
 
     # Assign stator to machine
     SPMSM_001.stator = stator
