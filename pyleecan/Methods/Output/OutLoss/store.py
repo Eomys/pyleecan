@@ -44,7 +44,7 @@ def store(
     if OP is None:
         OP = self.parent.elec.OP
 
-    felec = OP.get_felec()
+    felec = OP.get_felec(p=lam.get_pole_pair_number())
 
     # Calculate and store scalar losses
     self.Pstator = self.get_loss_group("stator core", felec)
