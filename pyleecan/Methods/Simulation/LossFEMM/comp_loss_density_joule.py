@@ -1,7 +1,9 @@
 from numpy import sum as np_sum, zeros, array
 
+from ....Functions.Electrical.comp_loss_joule import comp_loss_joule
 
-def comp_loss_density_joule(self, group, coeff_dict):
+
+def comp_loss_density_joule(self, group):
     """Calculate joule losses in stator windings
 
     Parameters
@@ -35,19 +37,18 @@ def comp_loss_density_joule(self, group, coeff_dict):
     machine = output.simu.machine
 
     OP = output.elec.OP
+    felec = OP.get_felec()
 
     if "stator" in group:
         lam = machine.stator
+        T_op = self.Tsta
     else:
         lam = machine.rotor
-
-    Rs = lam.comp_resistance_wind(T=self.Tsta)
-    qs = lam.winding.qs
+        T_op = self.Trot
 
     # Calculate overall joule losses
-    Pjoule = qs * Rs * (OP.Id_ref ** 2 + OP.Iq_ref ** 2)
+    Pjoule = comp_loss_joule(lam, T_op, OP, self.type_skin_effect)
 
-    felec = OP.get_felec()
     per_a = output.geo.per_a
     if output.geo.is_antiper_a:
         per_a *= 2
@@ -62,8 +63,5 @@ def comp_loss_density_joule(self, group, coeff_dict):
     freqs = array([felec])
     Pjoule_density = zeros((freqs.size, Se.size))
     Pjoule_density[0, :] = Pjoule / (per_a * Lst * np_sum(Se))
-
-    # Store coefficient to get joule losses the same as for other losses
-    coeff_dict[group + " joule"] = {"A": 0, "B": 0, "C": Pjoule}
 
     return Pjoule_density, freqs

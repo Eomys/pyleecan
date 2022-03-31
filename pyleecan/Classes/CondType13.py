@@ -18,11 +18,6 @@ from .Conductor import Conductor
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
 try:
-    from ..Methods.Machine.CondType13.check import check
-except ImportError as error:
-    check = error
-
-try:
     from ..Methods.Machine.CondType13.comp_surface_active import comp_surface_active
 except ImportError as error:
     comp_surface_active = error
@@ -89,15 +84,6 @@ class CondType13(Conductor):
     VERSION = 1
 
     # Check ImportError to remove unnecessary dependencies in unused method
-    # cf Methods.Machine.CondType13.check
-    if isinstance(check, ImportError):
-        check = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use CondType13 method check: " + str(check))
-            )
-        )
-    else:
-        check = check
     # cf Methods.Machine.CondType13.comp_surface_active
     if isinstance(comp_surface_active, ImportError):
         comp_surface_active = property(

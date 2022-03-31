@@ -5,7 +5,7 @@
   "desc": null,
   "frame": null,
   "logger_name": null,
-  "name": "SPMSM_18s16p_loss_mod",
+  "name": "SPMSM_18s16p_loss",
   "rotor": {
     "Kf1": 0.95,
     "L1": 0.00762,

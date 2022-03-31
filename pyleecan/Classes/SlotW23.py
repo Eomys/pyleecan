@@ -288,7 +288,7 @@ class SlotW23(Slot):
         H1_is_rad=False,
         is_cstt_tooth=False,
         Zs=36,
-        type_close=1,
+        wedge_mat=None,
         init_dict=None,
         init_str=None,
     ):
@@ -327,8 +327,8 @@ class SlotW23(Slot):
                 is_cstt_tooth = init_dict["is_cstt_tooth"]
             if "Zs" in list(init_dict.keys()):
                 Zs = init_dict["Zs"]
-            if "type_close" in list(init_dict.keys()):
-                type_close = init_dict["type_close"]
+            if "wedge_mat" in list(init_dict.keys()):
+                wedge_mat = init_dict["wedge_mat"]
         # Set the properties (value check and convertion are done in setter)
         self.W0 = W0
         self.H0 = H0
@@ -340,7 +340,7 @@ class SlotW23(Slot):
         self.H1_is_rad = H1_is_rad
         self.is_cstt_tooth = is_cstt_tooth
         # Call Slot init
-        super(SlotW23, self).__init__(Zs=Zs, type_close=type_close)
+        super(SlotW23, self).__init__(Zs=Zs, wedge_mat=wedge_mat)
         # The class is frozen (in Slot init), for now it's impossible to
         # add new properties
 

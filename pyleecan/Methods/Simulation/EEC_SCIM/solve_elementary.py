@@ -1,4 +1,5 @@
 from numpy import pi, interp, inf, exp
+import scipy.interpolate as scp_int
 
 
 def solve_elementary(self):
@@ -60,7 +61,14 @@ def solve_elementary(self):
     I2 = I1 - (Im + If)
 
     # recalculating magnetizing inductance
-    Lm = interp(abs(Im), self.Im_table, self.Lm_table)
+    # linear interpolation with linear extrapolation if Im is outside Im_table
+    Lm1 = scp_int.interp1d(
+        self.Im_table, self.Lm_table, kind="linear", fill_value="extrapolate"
+    )(abs(Im))
+    # linear interpolation with nearest extrapolation if Im is outside Im_table
+    Lm2 = interp(abs(Im), self.Im_table, self.Lm_table)
+    # magnetizing inductance is the average of both to simulate the saturation increase
+    Lm = 0.5 * (Lm1 + Lm2)
 
     # calculation of non linearity effect (should be ->0 when Lm(Im)=self.Lm"])
     delta_Lm = abs((Lm - self.Lm) / self.Lm)

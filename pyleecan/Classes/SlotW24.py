@@ -262,7 +262,7 @@ class SlotW24(Slot):
     get_logger = get_logger
 
     def __init__(
-        self, W3=0.003, H2=0.003, Zs=36, type_close=1, init_dict=None, init_str=None
+        self, W3=0.003, H2=0.003, Zs=36, wedge_mat=None, init_dict=None, init_str=None
     ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
@@ -285,13 +285,13 @@ class SlotW24(Slot):
                 H2 = init_dict["H2"]
             if "Zs" in list(init_dict.keys()):
                 Zs = init_dict["Zs"]
-            if "type_close" in list(init_dict.keys()):
-                type_close = init_dict["type_close"]
+            if "wedge_mat" in list(init_dict.keys()):
+                wedge_mat = init_dict["wedge_mat"]
         # Set the properties (value check and convertion are done in setter)
         self.W3 = W3
         self.H2 = H2
         # Call Slot init
-        super(SlotW24, self).__init__(Zs=Zs, type_close=type_close)
+        super(SlotW24, self).__init__(Zs=Zs, wedge_mat=wedge_mat)
         # The class is frozen (in Slot init), for now it's impossible to
         # add new properties
 

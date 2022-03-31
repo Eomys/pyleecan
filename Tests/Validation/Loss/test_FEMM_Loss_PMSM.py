@@ -32,7 +32,7 @@ def test_FEMM_Loss_SPMSM():
     simu = Simu1(name="test_FEMM_Loss_SPMSM", machine=machine)
 
     simu.input = InputCurrent(
-        Nt_tot=4 * 200,
+        Nt_tot=16 * 20,
         Na_tot=1000 * 2,
         OP=OPdq(N0=4000, Id_ref=0, Iq_ref=np.sqrt(2)),
         is_periodicity_t=True,
@@ -53,20 +53,25 @@ def test_FEMM_Loss_SPMSM():
         },
         is_fast_draw=True,
         is_periodicity_rotor=True,
+        is_calc_torque_energy=False,
         # is_close_femm=False,
     )
 
-    simu.loss = LossFEMM(Ce=Ce, Cp=Cprox, Ch=Ch, is_get_meshsolution=True, Tsta=120)
+    simu.loss = LossFEMM(
+        Ce=Ce, Cp=Cprox, Ch=Ch, is_get_meshsolution=True, Tsta=120, type_skin_effect=0
+    )
 
     out = simu.run()
 
     speed_array = np.linspace(10, 8000, 100)
     p = machine.get_pole_pair_number()
     outloss_list = list()
+    OP = out.elec.OP.copy()
     for speed in speed_array:
+        OP.felec = speed / 60 * p
         out_dict = {"coeff_dict": out.loss.coeff_dict}
         outloss = OutLoss()
-        outloss.store(out_dict, felec=speed / 60 * p)
+        outloss.store(out_dict, lam=machine.stator, OP=OP, type_skin_effect=0, Tsta=120)
         outloss_list.append(outloss)
 
     joule_list = [o.Pjoule for o in outloss_list]
@@ -87,7 +92,7 @@ def test_FEMM_Loss_SPMSM():
     }
     print(power_dict)
 
-    power_val_ref = [61.78, 9.25, 3.35, 4.39, 0.06, 1.40, 0.05]
+    power_val_ref = [61.87, 9.10, 3.32, 4.38, 0.04, 1.29, 0.05]
 
     assert_almost_equal(list(power_dict.values()), power_val_ref, decimal=2)
 
@@ -98,16 +103,6 @@ def test_FEMM_Loss_SPMSM():
             group_names=[
                 "stator core",
                 "stator winding",
-                "rotor core",
-                "rotor magnets",
-            ],
-            # clim=[1e4, 1e7],
-        )
-
-        ms_loss.plot_contour(
-            "freqs=sum",
-            label="Loss",
-            group_names=[
                 "rotor core",
                 "rotor magnets",
             ],
@@ -157,9 +152,12 @@ def test_FEMM_Loss_Prius():
         nb_worker=4,
         is_get_meshsolution=True,
         is_fast_draw=True,
+        is_calc_torque_energy=False,
     )
 
-    simu.loss = LossFEMM(Ce=Ce, Cp=Cprox, Ch=Ch, is_get_meshsolution=True, Tsta=100)
+    simu.loss = LossFEMM(
+        Ce=Ce, Cp=Cprox, Ch=Ch, is_get_meshsolution=True, Tsta=100, type_skin_effect=0
+    )
 
     out = simu.run()
 
@@ -205,6 +203,6 @@ def test_FEMM_Loss_Prius():
 # To run it without pytest
 if __name__ == "__main__":
 
-    # out = test_FEMM_Loss_SPMSM()
+    out = test_FEMM_Loss_SPMSM()
 
-    out = test_FEMM_Loss_Prius()
+    # out = test_FEMM_Loss_Prius()

@@ -90,5 +90,5 @@ def test_desc_Outer_Rotor():
 
 
 if __name__ == "__main__":
-    # test_desc_IPMSM()
+    test_desc_IPMSM()
     test_desc_SCIM()

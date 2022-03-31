@@ -17,4 +17,10 @@ def run(self):
 
     out_dict = self.comp_loss(output, axes_dict)
 
-    output.loss.store(out_dict, axes_dict, self.is_get_meshsolution)
+    output.loss.store(
+        out_dict,
+        axes_dict,
+        self.is_get_meshsolution,
+        type_skin_effect=self.type_skin_effect,
+        Tsta=self.Tsta,
+    )

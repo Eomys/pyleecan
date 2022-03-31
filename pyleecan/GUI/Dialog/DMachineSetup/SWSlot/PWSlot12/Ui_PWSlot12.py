@@ -11,6 +11,7 @@ from PySide2.QtWidgets import *
 
 from ......GUI.Tools.FloatEdit import FloatEdit
 from ......GUI.Dialog.DMachineSetup.SWSlot.WWSlotOut.WWSlotOut import WWSlotOut
+from ......GUI.Dialog.DMatLib.WMatSelect.WMatSelectV import WMatSelectV
 
 from pyleecan.GUI.Resources import pyleecan_rc
 
@@ -35,7 +36,7 @@ class Ui_PWSlot12(object):
         self.img_slot.setSizePolicy(sizePolicy)
         self.img_slot.setMaximumSize(QSize(16777215, 16777215))
         self.img_slot.setPixmap(
-            QPixmap(u":/images/images/MachineSetup/WSlot/SlotW12.png")
+            QPixmap(u":/images/images/MachineSetup/WSlot/SlotW12_wedge_full.png")
         )
         self.img_slot.setScaledContents(False)
         self.img_slot.setAlignment(Qt.AlignCenter)
@@ -118,6 +119,20 @@ class Ui_PWSlot12(object):
 
         self.verticalLayout_3.addLayout(self.gridLayout)
 
+        self.g_wedge = QGroupBox(self.scrollAreaWidgetContents)
+        self.g_wedge.setObjectName(u"g_wedge")
+        self.g_wedge.setCheckable(True)
+        self.g_wedge.setChecked(False)
+        self.verticalLayout = QVBoxLayout(self.g_wedge)
+        self.verticalLayout.setObjectName(u"verticalLayout")
+        self.w_wedge_mat = WMatSelectV(self.g_wedge)
+        self.w_wedge_mat.setObjectName(u"w_wedge_mat")
+        self.w_wedge_mat.setMinimumSize(QSize(100, 0))
+
+        self.verticalLayout.addWidget(self.w_wedge_mat)
+
+        self.verticalLayout_3.addWidget(self.g_wedge)
+
         self.verticalSpacer = QSpacerItem(
             20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding
         )
@@ -154,5 +169,6 @@ class Ui_PWSlot12(object):
         self.unit_H0.setText(QCoreApplication.translate("PWSlot12", u"m", None))
         self.in_H1.setText(QCoreApplication.translate("PWSlot12", u"H1", None))
         self.unit_H1.setText(QCoreApplication.translate("PWSlot12", u"m", None))
+        self.g_wedge.setTitle(QCoreApplication.translate("PWSlot12", u"Wedge", None))
 
     # retranslateUi

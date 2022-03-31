@@ -3,8 +3,19 @@ from SciDataTool import DataFreq
 from ....Classes.SolutionData import SolutionData
 from ....Classes.MeshSolution import MeshSolution
 
+from ....Functions.Electrical.comp_loss_joule import comp_loss_joule
 
-def store(self, out_dict, axes_dict=None, is_get_meshsolution=False, felec=None):
+
+def store(
+    self,
+    out_dict,
+    axes_dict=None,
+    is_get_meshsolution=False,
+    lam=None,
+    OP=None,
+    type_skin_effect=1,
+    Tsta=20,
+):
     """Store the outputs of LossFEMM model that are temporarily in out_dict
 
     Parameters
@@ -27,15 +38,20 @@ def store(self, out_dict, axes_dict=None, is_get_meshsolution=False, felec=None)
     if "coeff_dict" in out_dict:
         self.coeff_dict = out_dict.pop("coeff_dict")
 
-    if felec is None:
-        felec = self.parent.elec.OP.get_felec()
+    if lam is None:
+        lam = self.parent.simu.machine.stator
+
+    if OP is None:
+        OP = self.parent.elec.OP
+
+    felec = OP.get_felec(p=lam.get_pole_pair_number())
 
     # Calculate and store scalar losses
     self.Pstator = self.get_loss_group("stator core", felec)
     self.Protor = self.get_loss_group("rotor core", felec)
     self.Pprox = self.get_loss_group("stator winding", felec)
     self.Pmagnet = self.get_loss_group("rotor magnets", felec)
-    self.Pjoule = self.get_loss_group("stator winding joule", felec)
+    self.Pjoule = comp_loss_joule(lam, Tsta, OP, type_skin_effect)
 
     # Store loss density as meshsolution
     if is_get_meshsolution:

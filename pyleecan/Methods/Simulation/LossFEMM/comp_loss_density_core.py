@@ -91,13 +91,24 @@ def comp_loss_density_core(self, group, coeff_dict):
         if "antiperiod" in Time_orig.symmetries:
             Time.symmetries = {"period": Time_orig.symmetries["antiperiod"]}
             is_change_Time = True
-    elif "stator" in group:
-        if "period" in Time_orig.symmetries:
-            Time.symmetries = {"antiperiod": Time_orig.symmetries["period"]}
-            is_change_Time = True
     if is_change_Time:
         for comp in Bvect.components.values():
             comp.axes[0] = Time
+
+    # # Plot 2D to check periodicity
+    # Bvect.components["comp_x"].plot_2D_Data(
+    #     "time",
+    #     "indice[" + str(Igrp[0]) + "]",
+    #     data_list=[Bvect.components["comp_y"]],
+    #     legend_list=["Bx", "By"],
+    # )
+
+    # Bvect.components["comp_x"].plot_2D_Data(
+    #     "freqs",
+    #     "indice[" + str(Igrp[0]) + "]",
+    #     data_list=[Bvect.components["comp_y"]],
+    #     legend_list=["Bx", "By"],
+    # )
 
     # Compute magnetic flux density FFT
     Bfft = Bvect.get_xyz_along("freqs", "indice=" + str(Igrp), "z[0]")

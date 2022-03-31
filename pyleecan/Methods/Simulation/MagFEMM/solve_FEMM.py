@@ -239,7 +239,9 @@ def solve_FEMM(
         if self.is_calc_torque_energy:
             label_rot = machine.rotor.get_label()
             rotor_groups = FEMM_dict["groups"]["lam_group_list"][label_rot]
-            out_dict["Tem"][ii] = comp_FEMM_torque(femm, rotor_groups=rotor_groups, sym=sym)
+            out_dict["Tem"][ii] = comp_FEMM_torque(
+                femm, rotor_groups=rotor_groups, sym=sym
+            )
 
         if "Phi_wind" in out_dict:
             # Phi_wind computation

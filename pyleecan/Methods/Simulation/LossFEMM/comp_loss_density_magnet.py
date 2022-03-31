@@ -13,7 +13,7 @@ from ....Classes.LamHole import LamHole
 from ....Classes.LamSlotMag import LamSlotMag
 
 
-def comp_loss_density_magnet(self, group, coeff_dict, is_skin_effect=True):
+def comp_loss_density_magnet(self, group, coeff_dict):
     """Calculate eddy-current losses in rotor permanent magnets assuming power density
     is given by (cf. https://www.femm.info/wiki/SPMLoss):
 
@@ -145,7 +145,7 @@ def comp_loss_density_magnet(self, group, coeff_dict, is_skin_effect=True):
             freqs = Az_df["freqs"]
             w = 2 * pi * freqs[:, None]
             sigma_m = magnet.mat_type.elec.get_conductivity(T_op=self.Trot)
-            if is_skin_effect:
+            if self.type_skin_effect:
                 # Get magnet conductivity including skin effect
                 magnet_cond = CondType21(Hbar=Hmag, Wbar=1, cond_mat=magnet.mat_type)
                 kr_skin = magnet_cond.comp_skin_effect_resistance(
@@ -157,7 +157,7 @@ def comp_loss_density_magnet(self, group, coeff_dict, is_skin_effect=True):
         Az_fft = Az_df["A_z"]
         Az_mean = matmul(Az_fft, Se_mag)[:, None] / np_sum(Se_mag)
         Jm_fft = -1j * sigma_m * w * (Az_fft - Az_mean)
-        Pmagnet_density[:, jj : (jj + len(kmag))] = np_abs(Jm_fft) ** 2 / sigma_m
+        Pmagnet_density[:, jj : (jj + len(kmag))] = 0.5 * np_abs(Jm_fft) ** 2 / sigma_m
         jj += len(kmag)
 
         # # # derivation in time domain
