@@ -2,7 +2,7 @@ import matplotlib.pyplot as plt
 from numpy import pi, exp
 
 from ....Classes.Arc1 import Arc1
-from ....Classes.LamSlot import LamSlot
+from ....Classes.SlotW22 import SlotW22
 from ....Classes.Segment import Segment
 from ....definitions import config_dict
 from ....Functions.Plot import (
@@ -55,6 +55,8 @@ def plot_schematics_scr(
         lam = type(self)(
             is_stator=False, is_internal=True, Rint=0, Rext=1, Hscr=0.1, Lscr=0.2
         )
+        lam.slot = SlotW22(Zs=12, H0=0.02, H2=0.05)
+        lam.winding.Lewout = 0.07
         lam.plot_schematics_scr(
             is_default=False,
             is_add_schematics=is_add_schematics,
@@ -68,87 +70,73 @@ def plot_schematics_scr(
         fig = plt.gcf()
         ax = plt.gca()
         Lt = self.comp_length()
+        Hs = self.slot.comp_height()
+        Ha = self.slot.comp_height_active()
+        Ho = Hs - Ha
+        Le = self.winding.Lewout
+        Lscr = self.Lscr
+        Hscr = self.Hscr
 
         # Adding schematics
         if is_add_schematics:
-            # W0
-            line = Segment(point_dict["Z1"], point_dict["Z10"])
+            # Rext
+            line = Segment(Lt / 2 - Lt / 5, Lt / 2 - Lt / 5 + 1j * self.Rext)
             line.plot(
                 fig=fig,
                 ax=ax,
                 color=ARROW_COLOR,
                 linewidth=ARROW_WIDTH,
-                label="W0",
-                offset_label=self.H0 * 0.1 + 1j * self.W0 * 0.1,
+                label="Rext",
+                offset_label=-Le,
                 is_arrow=True,
                 fontsize=SC_FONT_SIZE,
             )
-            # W1
-            Zlim1 = point_dict["Z2"].real + 1j * point_dict["Z3"].imag
-            Zlim2 = point_dict["Z9"].real + 1j * point_dict["Z8"].imag
+            # Lewout
+            Zbar1 = Lt / 2 + 1j * (self.Rext - Hs + Ha)
+            Zbar2 = Lt / 2 + Le + 1j * (self.Rext - Hs + Ha)
+            Zlim1 = Zbar1 + 1j * Hs
+            Zlim2 = Zbar2 + 1j * Hs
             plot_quote(
-                point_dict["Z3"],
+                Zbar1,
                 Zlim1,
                 Zlim2,
-                point_dict["Z8"],
-                offset_label=self.get_H1() * 0.1 + 1j * self.W0 * 0.1,
+                Zbar2,
+                offset_label=1j * Le * 0.5,
                 fig=fig,
                 ax=ax,
-                label="W1",
+                label="Lewout",
             )
-            # W2
-            Zlim1 = point_dict["Z5"] + sign * 0.1 * self.H2
-            Zlim2 = point_dict["Z6"] + sign * 0.1 * self.H2
+            # Lscr
+            ZL1 = Lt / 2 + Le + 1j * (self.Rext - Hs + Ha / 2 + Hscr / 2)
+            ZL2 = Lt / 2 + Le + Lscr + 1j * (self.Rext - Hs + Ha / 2 + Hscr / 2)
+            Zlim1 = ZL1 + 1j * Hs
+            Zlim2 = ZL2 + 1j * Hs
             plot_quote(
-                point_dict["Z5"],
+                ZL1,
                 Zlim1,
                 Zlim2,
-                point_dict["Z6"],
-                offset_label=sign * 0.05 * self.H2,
+                ZL2,
+                offset_label=1j * Le * 0.5,
                 fig=fig,
                 ax=ax,
-                label="W2",
+                label="Lscr",
             )
-            # H0
-            line = Segment(point_dict["Z10"], point_dict["Z9"])
+            # Hscr
+            line = Segment(ZL2, ZL2 - 1j * Hscr)
             line.plot(
                 fig=fig,
                 ax=ax,
-                label="H0",
                 color=ARROW_COLOR,
                 linewidth=ARROW_WIDTH,
-                offset_label=1j * self.W0 * 0.1,
-                is_arrow=True,
-                fontsize=SC_FONT_SIZE,
-            )
-            # H1
-            line = Segment(point_dict["Z9"], point_dict["Z7"])
-            line.plot(
-                fig=fig,
-                ax=ax,
-                label="H1",
-                color=ARROW_COLOR,
-                linewidth=ARROW_WIDTH,
-                offset_label=1j * self.W0 * 0.1,
-                is_arrow=True,
-                fontsize=SC_FONT_SIZE,
-            )
-            # H2
-            line = Segment(point_dict["Z6"].real, point_dict["Z7"].real)
-            line.plot(
-                fig=fig,
-                ax=ax,
-                label="H2",
-                color=ARROW_COLOR,
-                linewidth=ARROW_WIDTH,
-                offset_label=1j * self.W0 * 0.1,
+                label="Hscr",
+                offset_label=0,
                 is_arrow=True,
                 fontsize=SC_FONT_SIZE,
             )
 
         if is_add_main_line:
             # Ox axis
-            line = Segment(0, lam.Rext * 1.5)
+            line = Segment(0, Lt + Le + Lscr)
             line.plot(
                 fig=fig,
                 ax=ax,
@@ -156,13 +144,8 @@ def plot_schematics_scr(
                 linestyle=MAIN_LINE_STYLE,
                 linewidth=MAIN_LINE_WIDTH,
             )
-            # Top arc
-            line = Arc1(
-                begin=point_dict["Z1"],
-                end=point_dict["Z10"],
-                radius=self.get_Rbo(),
-                is_trigo_direction=True,
-            )
+            # Hscr lines
+            line = Segment(ZL1 - 1j * Hscr, ZL2 - 1j * Hscr)
             line.plot(
                 fig=fig,
                 ax=ax,
@@ -170,28 +153,18 @@ def plot_schematics_scr(
                 linestyle=MAIN_LINE_STYLE,
                 linewidth=MAIN_LINE_WIDTH,
             )
-
-        if type_add_active in [1, 3]:  # Wind and Wedge
-            is_add_wedge = type_add_active == 3
-            self.plot_active(fig=fig, is_show_fig=False, is_add_wedge=is_add_wedge)
-        elif type_add_active == 2:  # Magnet
-            self.plot_active(
+            line = Segment(ZL1.conjugate() + 1j * Hscr, ZL2.conjugate() + 1j * Hscr)
+            line.plot(
                 fig=fig,
-                is_show_fig=False,
-                enforced_default_color=MAGNET_COLOR,
+                ax=ax,
+                color=MAIN_LINE_COLOR,
+                linestyle=MAIN_LINE_STYLE,
+                linewidth=MAIN_LINE_WIDTH,
             )
-
-        # Zooming and cleaning
-        W = (
-            max(point_dict["Z8"].imag, point_dict["Z6"].imag, point_dict["Z10"].imag)
-            * 1.1
-        )
-        Rint = min(point_dict["Z6"].real, point_dict["Z1"].real)
-        Rext = max(point_dict["Z6"].real, point_dict["Z1"].real)
 
         plt.axis("equal")
-        ax.set_xlim(Rint, Rext)
-        ax.set_ylim(-W, W)
+        ax.set_xlim(Lt / 4, (Lt + Le + Lscr))
+        ax.set_ylim(-self.Rext, self.Rext)
         manager = plt.get_current_fig_manager()
         if manager is not None:
             manager.set_window_title(type(self).__name__ + " Schematics")
