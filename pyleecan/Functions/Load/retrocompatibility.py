@@ -54,6 +54,8 @@ def _search_and_update(obj_dict, parent=None, parent_index=None, update_dict=Non
             # Add Zs for wind_mat generation
             obj_dict["Zs"] = parent["slot"]["Zs"]
         parent[parent_index] = convert_Winding(obj_dict)
+    elif update_dict["Yoke_Notch"] and is_yoke_notch(obj_dict):
+        move_yoke_notch(obj_dict)
     else:
         # walk through the dict
         for key, value in obj_dict.items():
@@ -69,6 +71,38 @@ def _search_and_update(obj_dict, parent=None, parent_index=None, update_dict=Non
                         _search_and_update(
                             item, parent=value, parent_index=ii, update_dict=update_dict
                         )
+
+
+############################################
+# V 1.3.8 => 1.3.9
+# moved yoke_notch to notch (list)
+############################################
+Yoke_Notch_VERSION = "1.3.8"
+
+
+def is_yoke_notch(obj_dict):
+    """Check if the object need to be updated for yoke_notch"""
+    return (
+        "__class__" in obj_dict.keys()
+        and "yoke_notch" in obj_dict.keys()
+        and "notch" in obj_dict.keys()
+        and obj_dict["yoke_notch"]
+    )
+
+
+def move_yoke_notch(obj_dict):
+    """Move all yoke notches to notch property and set notch.is_yoke property to True"""
+    # create notch list if not existent
+    if obj_dict["notch"] is None:
+        obj_dict["notch"] = []
+
+    # move yoke notches to notch property
+    while obj_dict["yoke_notch"]:
+        yoke_notch = obj_dict["yoke_notch"].pop(0)
+        obj_dict["notch"].append(yoke_notch)
+        # set is_yoke property to True
+        if isinstance(yoke_notch, dict):
+            yoke_notch["is_yoke"] = True
 
 
 ############################################
@@ -301,4 +335,5 @@ def create_update_dict(file_version):
         update_dict["Winding"] = is_before_version(WIND_VERSION, file_version)
         update_dict["HoleUD"] = is_before_version(HoleUD_VERSION, file_version)
         update_dict["OP"] = is_before_version(OP_VERSION, file_version)
+        update_dict["Yoke_Notch"] = is_before_version(Yoke_Notch_VERSION, file_version)
     return update_dict
