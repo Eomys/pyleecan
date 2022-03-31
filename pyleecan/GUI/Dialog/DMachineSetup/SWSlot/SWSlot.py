@@ -114,12 +114,6 @@ class SWSlot(Gen_SWSlot, QWidget):
 
         self.set_slot_pitch(self.obj.slot.Zs)
 
-        if self.obj.slot.type_close is None:
-            self.c_type_close.setCurrentIndex(0)
-            self.set_type_close()
-        else:
-            self.c_type_close.setCurrentIndex(self.obj.slot.type_close - 1)
-
         # Set the correct index for the type checkbox and display the object
         index = INIT_INDEX.index(type(self.obj.slot))
         self.c_slot_type.setCurrentIndex(index)
@@ -129,7 +123,6 @@ class SWSlot(Gen_SWSlot, QWidget):
 
         # Connect the slot
         self.c_slot_type.currentIndexChanged.connect(self.s_change_slot)
-        self.c_type_close.currentIndexChanged.connect(self.set_type_close)
         self.si_Zs.editingFinished.connect(self.set_Zs)
         self.b_plot.clicked.connect(self.s_plot)
 
@@ -153,11 +146,13 @@ class SWSlot(Gen_SWSlot, QWidget):
 
         # Call the corresponding constructor
         Zs = self.obj.slot.Zs
+        wedge_mat = self.obj.slot.wedge_mat
         if self.previous_slot[INIT_INDEX[index]] is None:
             # No previous slot of this type
             self.obj.slot = INIT_INDEX[index]()
             self.obj.slot._set_None()  # No default value
             self.obj.slot.Zs = Zs
+            self.obj.slot.wedge_mat = wedge_mat
         else:  # Load the previous slot of this type
             self.obj.slot = self.previous_slot[INIT_INDEX[index]]
             if self.obj.slot.Zs is not None:
@@ -167,20 +162,6 @@ class SWSlot(Gen_SWSlot, QWidget):
                 self.si_Zs.blockSignals(False)
 
                 self.set_slot_pitch(self.obj.slot.Zs)
-
-        # Notify the machine GUI that the machine has changed
-        self.saveNeeded.emit()
-
-    def set_type_close(self):
-        """Signal to update the value of type_close according to the combobox
-
-        Parameters
-        ----------
-        self : SWSlot
-            A SWSlot object
-        """
-        index = self.c_type_close.currentIndex()
-        self.obj.slot.type_close = index + 1
 
         # Notify the machine GUI that the machine has changed
         self.saveNeeded.emit()
@@ -245,7 +226,9 @@ class SWSlot(Gen_SWSlot, QWidget):
 
         # Regenerate the pages with the new values
         self.w_slot.setParent(None)
-        self.w_slot = WIDGET_LIST[self.c_slot_type.currentIndex()](self.obj)
+        self.w_slot = WIDGET_LIST[self.c_slot_type.currentIndex()](
+            self.obj, material_dict=self.material_dict
+        )
         self.w_slot.saveNeeded.connect(self.emit_save)
         # Refresh the GUI
         self.main_layout.removeWidget(self.w_slot)

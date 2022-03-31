@@ -4,7 +4,7 @@ import PySide2.QtCore
 from numpy import pi
 from PySide2.QtCore import Signal
 from PySide2.QtWidgets import QWidget
-
+from PySide2.QtGui import QPixmap
 from ......Classes.SlotW22 import SlotW22
 from ......GUI import gui_option
 from ......GUI.Dialog.DMachineSetup.SWSlot.PWSlot22.Gen_PWSlot22 import Gen_PWSlot22
@@ -22,7 +22,7 @@ class PWSlot22(Gen_PWSlot22, QWidget):
     slot_name = "Slot Type 22"
     slot_type = SlotW22
 
-    def __init__(self, lamination=None):
+    def __init__(self, lamination=None, material_dict=None):
         """Initialize the GUI according to current lamination
 
         Parameters
@@ -31,6 +31,8 @@ class PWSlot22(Gen_PWSlot22, QWidget):
             A PWSlot22 widget
         lamination : Lamination
             current lamination to edit
+        material_dict: dict
+            Materials dictionary (library + machine)
         """
 
         # Build the interface according to the .ui file
@@ -38,6 +40,8 @@ class PWSlot22(Gen_PWSlot22, QWidget):
         self.setupUi(self)
         self.lamination = lamination
         self.slot = lamination.slot
+        self.material_dict = material_dict
+
         # Set FloatEdit unit
         self.lf_H0.unit = "m"
         self.lf_H2.unit = "m"
@@ -55,6 +59,18 @@ class PWSlot22(Gen_PWSlot22, QWidget):
         self.c_W0_unit.setCurrentIndex(0)  # rad
         self.c_W2_unit.setCurrentIndex(0)  # rad
 
+        # Wedge setup
+        self.g_wedge.setChecked(self.slot.wedge_mat is not None)
+        self.w_wedge_mat.setText("Wedge Material")
+        if lamination.mat_type is not None and lamination.mat_type.name not in [
+            "",
+            None,
+        ]:
+            self.w_wedge_mat.def_mat = lamination.mat_type.name
+        else:
+            self.w_wedge_mat.def_mat = "M400-50A"
+        self.set_wedge()
+
         # Display the main output of the slot (surface, height...)
         self.w_out.comp_output()
 
@@ -65,6 +81,22 @@ class PWSlot22(Gen_PWSlot22, QWidget):
         self.lf_H2.editingFinished.connect(self.set_H2)
         self.c_W0_unit.currentIndexChanged.connect(self.set_W0_unit)
         self.c_W2_unit.currentIndexChanged.connect(self.set_W2_unit)
+        self.g_wedge.toggled.connect(self.set_wedge)
+
+    def set_wedge(self):
+        """Setup the slot wedge according to the GUI"""
+        if self.g_wedge.isChecked():
+            self.w_wedge_mat.show()
+            self.img_slot.setPixmap(
+                QPixmap(u":/images/images/MachineSetup/WSlot/SlotW22_wedge_full.png")
+            )
+            self.w_wedge_mat.update(self.slot, "wedge_mat", self.material_dict)
+        else:
+            self.w_wedge_mat.hide()
+            self.slot.wedge_mat = None
+            self.img_slot.setPixmap(
+                QPixmap(u":/images/images/MachineSetup/WSlot/SlotW22_wind.png")
+            )
 
     def set_W0(self):
         """Signal to update the value of W0 according to the line edit
