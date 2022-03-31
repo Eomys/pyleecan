@@ -682,7 +682,6 @@
         "desc": "parallel stranded conductor consisting of at least a single round wire",
         "is_internal": false,
         "methods": [
-            "check",
             "comp_surface_active",
             "comp_height",
             "comp_surface",
@@ -10842,6 +10841,7 @@
             "comp_surface",
             "comp_surface_active",
             "comp_surface_opening",
+            "comp_surface_wedges",
             "comp_width",
             "comp_width_opening",
             "convert_to_SlotUD2",
@@ -10850,6 +10850,7 @@
             "get_Rbo",
             "get_surface",
             "get_surface_tooth",
+            "get_surface_wedges",
             "is_outwards",
             "plot",
             "plot_active",
@@ -10870,13 +10871,13 @@
                 "value": 36
             },
             {
-                "desc": "2 to close the slot with lamination iron, 1 to close with air and 0 to close with nothing (previous policy)",
-                "max": "2",
-                "min": "0",
-                "name": "type_close",
-                "type": "int",
+                "desc": "Material for the wedge, if None no wedge",
+                "max": "",
+                "min": "",
+                "name": "wedge_mat",
+                "type": "Material",
                 "unit": "-",
-                "value": 1
+                "value": null
             }
         ]
     },

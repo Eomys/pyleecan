@@ -53,7 +53,10 @@ def test_EEC_PMSM(nb_worker=int(0.5 * cpu_count())):
     simu.elec = Electrical()
     simu.elec.eec = EEC_PMSM(
         fluxlink=MagFEMM(
-            is_periodicity_t=True, is_periodicity_a=True, nb_worker=nb_worker, T_mag=60,
+            is_periodicity_t=True,
+            is_periodicity_a=True,
+            nb_worker=nb_worker,
+            T_mag=60,
         ),
     )
 
@@ -61,8 +64,8 @@ def test_EEC_PMSM(nb_worker=int(0.5 * cpu_count())):
     out_mag = simu_mag.run()
 
     # from Yang et al, 2013
-    assert_almost_equal(out.elec.Tem_av_ref, 81.9, decimal=1)
-    assert_almost_equal(out_mag.mag.Tem_av, 82, decimal=1)
+    assert out.elec.Tem_av_ref == pytest.approx(82.1, rel=0.1)
+    assert out_mag.mag.Tem_av == pytest.approx(82, rel=0.1)
 
     # Plot 3-phase current function of time
     if is_show_fig:
@@ -101,8 +104,12 @@ def test_EEC_PMSM_sync_rel(nb_worker=int(0.5 * cpu_count())):
     simu.elec = Electrical()
     simu.elec.eec = EEC_PMSM(
         fluxlink=MagFEMM(
-            is_periodicity_t=True, is_periodicity_a=True, nb_worker=nb_worker, T_mag=60,
+            is_periodicity_t=True,
+            is_periodicity_a=True,
+            nb_worker=nb_worker,
+            T_mag=60,
         ),
+        type_skin_effect=0,
     )
 
     # Creating the Operating point matrix

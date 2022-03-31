@@ -24,7 +24,7 @@ MIN_SPIN = -999999
 MAX_SPIN = 999999
 
 
-def generate_gui(ui_folder_path, gen_dict, is_gen_resource=True):
+def generate_gui(ui_folder_path, gen_dict, is_gen_resource=True, IS_SDT=False):
     """Generate all the needed file for the GUI
 
     Parameters
@@ -53,6 +53,10 @@ def generate_gui(ui_folder_path, gen_dict, is_gen_resource=True):
     # Generate the resources
     if is_gen_resource:
         print("Generate GUI resources...")
+        if IS_SDT:
+            RES_PATH = join(ui_folder_path, "Resources").replace("\\", "/")
+            RES_NAME = "SDT.qrc"
+
         qrc_to_py(RES_PATH, RES_NAME)
     else:
         print("############################")
@@ -530,6 +534,16 @@ def ui_to_py(path, file_name):
         if prev_index == 0:
             data[index] = data[index].replace(
                 "import", "from " + PACKAGE_NAME + ".GUI.Resources import"
+            )
+        else:
+            data[index] = ""
+        prev_index = index
+
+    while "import SDT_rc\n" in data:
+        index = data.index("import SDT_rc\n")
+        if prev_index == 0:
+            data[index] = data[index].replace(
+                "import", "from SciDataTool.GUI.Resources import"
             )
         else:
             data[index] = ""

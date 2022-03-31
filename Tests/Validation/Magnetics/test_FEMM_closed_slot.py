@@ -20,14 +20,12 @@ def test_FEMM_closed_slot():
 
     # Loading the Toyota Prius then closing its slots
     Toyota_Prius = load(join(DATA_DIR, "Machine", "Toyota_Prius.json"))
-    Toyota_Prius.stator.slot.type_close = 2
+    M400 = load(join(DATA_DIR, "Material", "M400-50A.json"))
+    Toyota_Prius.stator.slot.wedge_mat = M400
     simu = Simu1(name="test_FEMM_closed_slot", machine=Toyota_Prius)
 
     simu.input = InputCurrent(
-        OP=OPdq(N0=1200, Id_ref=0, Iq_ref=0),
-        Ir=None,
-        Na_tot=2 ** 6,
-        Nt_tot=1,
+        OP=OPdq(N0=1200, Id_ref=0, Iq_ref=0), Ir=None, Na_tot=2 ** 6, Nt_tot=1,
     )
 
     simu.mag = MagFEMM(
