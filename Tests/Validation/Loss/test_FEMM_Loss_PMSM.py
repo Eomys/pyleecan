@@ -139,7 +139,7 @@ def test_FEMM_Loss_Prius():
     Ic = 230 * np.exp(1j * 140 * np.pi / 180)
 
     simu.input = InputCurrent(
-        Nt_tot=10 * 40 * 8,
+        Nt_tot=40 * 8,
         Na_tot=200 * 8,
         OP=OPdq(N0=1200, Id_ref=Ic.real, Iq_ref=Ic.imag),
         is_periodicity_t=True,
@@ -203,6 +203,6 @@ def test_FEMM_Loss_Prius():
 # To run it without pytest
 if __name__ == "__main__":
 
-    out = test_FEMM_Loss_SPMSM()
+    # out = test_FEMM_Loss_SPMSM()
 
-    # out = test_FEMM_Loss_Prius()
+    out = test_FEMM_Loss_Prius()

@@ -114,10 +114,6 @@ def comp_loss_density_magnet(self, group, coeff_dict):
         if "antiperiod" in Time_orig.symmetries:
             Time.symmetries = {"period": Time_orig.symmetries["antiperiod"]}
             is_change_Time = True
-    elif "stator" in group:
-        if "period" in Time_orig.symmetries:
-            Time.symmetries = {"antiperiod": Time_orig.symmetries["period"]}
-            is_change_Time = True
     if is_change_Time:
         Az_dt.axes[0] = Time
 
@@ -214,6 +210,10 @@ def comp_loss_density_magnet(self, group, coeff_dict):
         # Jm_df.plot_2D_Data(
         #     "freqs", "indice[0]", data_list=[Jm_df0], legend_list=["df", "dt"]
         # )
+
+    if is_change_Time:
+        # Change periodicity back to original periodicity
+        Az_dt.axes[0] = Time_orig
 
     # Calculate coefficients to evaluate magnet losses
     if coeff_dict is not None:
