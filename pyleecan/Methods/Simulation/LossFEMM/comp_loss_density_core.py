@@ -96,16 +96,18 @@ def comp_loss_density_core(self, group, coeff_dict):
             comp.axes[0] = Time
 
     # # Plot 2D to check periodicity
+    # # ii = Igrp[0]
+    # ii = 1560
     # Bvect.components["comp_x"].plot_2D_Data(
     #     "time",
-    #     "indice[" + str(Igrp[0]) + "]",
+    #     "indice[" + str(ii) + "]",
     #     data_list=[Bvect.components["comp_y"]],
     #     legend_list=["Bx", "By"],
     # )
 
     # Bvect.components["comp_x"].plot_2D_Data(
     #     "freqs",
-    #     "indice[" + str(Igrp[0]) + "]",
+    #     "indice[" + str(ii) + "]",
     #     data_list=[Bvect.components["comp_y"]],
     #     legend_list=["Bx", "By"],
     # )
