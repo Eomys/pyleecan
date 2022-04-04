@@ -50,7 +50,7 @@ def get_bore_desc(self, sym=1, prop_dict=None):
             return None, bore_lines_cut
 
     bore_desc = list()
-    if not is_notch:  # ... and (not self.bore or sym != 1):
+    if not is_notch and not self.bore:  # ... and (not self.bore or sym != 1):
         # No notches
         if sym == 1:
             arc1 = Arc3(begin=Rbo, end=-Rbo, is_trigo_direction=True)
@@ -62,29 +62,11 @@ def get_bore_desc(self, sym=1, prop_dict=None):
             arc = Arc1(begin=Rbo, end=Rbo * rot, radius=Rbo, is_trigo_direction=True)
             bore_desc = [{"obj": arc, "begin_angle": 0, "end_angle": 2 * pi / sym}]
 
-    else:  # Notches => Generate Full lines and cut (if needed)
-        if sym != 1:
-            # Notche and symetry => Generate full and cut
-            bore_desc, bore_lines = self.get_bore_desc(sym=1, prop_dict=prop_dict)
-            # First cut Ox
-            first_cut = list()
-            for line in bore_lines:
-                top, _ = line.split_line(-1.2 * self.Rext, 1.2 * self.Rext)
-                first_cut.extend(top)
-            if sym > 2:
-                # Second cut 0Sym
-                bore_lines = list()
-                for line in first_cut:
-                    top, _ = line.split_line(
-                        1.2 * self.Rext * exp(1j * 2 * pi / sym), 0
-                    )
-                    bore_lines.extend(top)
-            else:  # Cutting lamination in half
-                bore_lines = first_cut
-            return bore_desc, bore_lines
+        return bore_desc, _convert_desc(bore_desc, prop_dict)
 
-        # Get the notches
-        notch_list = self.get_notch_list(sym=sym, is_yoke=False)
+    if is_notch:  # Notches => Generate Full lines and cut (if needed)
+        # Get all the notches
+        notch_list = self.get_notch_list(sym=1, is_yoke=False)
 
         # Add all the bore lines
         for ii, desc in enumerate(notch_list):
@@ -115,6 +97,30 @@ def get_bore_desc(self, sym=1, prop_dict=None):
             # First element is a bore line
             bore_desc.insert(0, bore_dict)
 
+        bore_lines = _convert_desc(bore_desc, prop_dict)
+
+        # Cut the bore lines if needed
+        if sym != 1:
+            # First cut Ox
+            first_cut = list()
+            for line in bore_lines:
+                top, _ = line.split_line(-1.2 * self.Rext, 1.2 * self.Rext)
+                first_cut.extend(top)
+            if sym > 2:
+                # Second cut 0Sym
+                bore_lines = list()
+                for line in first_cut:
+                    top, _ = line.split_line(
+                        1.2 * self.Rext * exp(1j * 2 * pi / sym), 0
+                    )
+                    bore_lines.extend(top)
+            else:  # Cutting lamination in half
+                bore_lines = first_cut
+
+        return bore_desc, bore_lines
+
+
+def _convert_desc(bore_desc, prop_dict):
     # Convert the description to lines
     bore_lines = list()
     for bore in bore_desc:
@@ -134,5 +140,4 @@ def get_bore_desc(self, sym=1, prop_dict=None):
             for line in lines:
                 line.rotate((bore["begin_angle"] + bore["end_angle"]) / 2)
             bore_lines.extend(lines)
-
-    return bore_desc, bore_lines
+    return bore_lines
