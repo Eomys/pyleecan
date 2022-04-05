@@ -96,8 +96,9 @@ def create_FEMM_materials(
                 )
                 if type_BH_stator == 0:
                     BHs = lam_obj.mat_type.mag.get_BH()
-                    for ii in range(BHs.shape[0]):
-                        femm.mi_addbhpoint(mat_name, BHs[ii][1], BHs[ii][0])
+                    if BHs is not None:
+                        for ii in range(BHs.shape[0]):
+                            femm.mi_addbhpoint(mat_name, BHs[ii][1], BHs[ii][0])
                 materials.append(mat_name)
             prop_dict[label_dict["full"]] = mat_name
         elif LAM_LAB in label_dict["surf_type"] and ROTOR_LAB in label_dict["lam_type"]:
@@ -116,8 +117,9 @@ def create_FEMM_materials(
                 )
                 if type_BH_rotor == 0:
                     BHr = lam_obj.mat_type.mag.get_BH()
-                    for ii in range(BHr.shape[0]):
-                        femm.mi_addbhpoint(mat_name, BHr[ii][1], BHr[ii][0])
+                    if BHr is not None:
+                        for ii in range(BHr.shape[0]):
+                            femm.mi_addbhpoint(mat_name, BHr[ii][1], BHr[ii][0])
                 materials.append(mat_name)
             prop_dict[label_dict["full"]] = mat_name
         elif (
