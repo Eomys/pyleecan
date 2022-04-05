@@ -96,7 +96,7 @@ def create_FEMM_materials(
                 )
                 if type_BH_stator == 0:
                     BHs = lam_obj.mat_type.mag.get_BH()
-                    if BHs is not None:
+                    if BHs is not None and BHs.shape[0] > 1:
                         for ii in range(BHs.shape[0]):
                             femm.mi_addbhpoint(mat_name, BHs[ii][1], BHs[ii][0])
                 materials.append(mat_name)
@@ -117,7 +117,7 @@ def create_FEMM_materials(
                 )
                 if type_BH_rotor == 0:
                     BHr = lam_obj.mat_type.mag.get_BH()
-                    if BHr is not None:
+                    if BHr is not None and BHr.shape[0] > 1:
                         for ii in range(BHr.shape[0]):
                             femm.mi_addbhpoint(mat_name, BHr[ii][1], BHr[ii][0])
                 materials.append(mat_name)
@@ -171,8 +171,9 @@ def create_FEMM_materials(
                     and wedge_mat.mag.BH_curve.get_data().shape[0] > 1
                 ):
                     BH = lam_obj.mat_type.mag.get_BH()
-                    for ii in range(BH.shape[0]):
-                        femm.mi_addbhpoint(wedge_mat.name, BH[ii][1], BH[ii][0])
+                    if BH is not None and BH.shape[0] > 1:
+                        for ii in range(BH.shape[0]):
+                            femm.mi_addbhpoint(wedge_mat.name, BH[ii][1], BH[ii][0])
                 materials.append(mat_name)
             prop_dict[label_dict["full"]] = mat_name
         elif NOTCH_LAB in label_dict["surf_type"]:  # Notches
