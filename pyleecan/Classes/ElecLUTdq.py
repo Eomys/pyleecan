@@ -71,6 +71,7 @@ class ElecLUTdq(Electrical):
         n_Id=1,
         n_Iq=1,
         LUT_simu=None,
+        is_grid_dq=True,
         eec=None,
         logger_name="Pyleecan.Electrical",
         freq_max=40000,
@@ -111,6 +112,8 @@ class ElecLUTdq(Electrical):
                 n_Iq = init_dict["n_Iq"]
             if "LUT_simu" in list(init_dict.keys()):
                 LUT_simu = init_dict["LUT_simu"]
+            if "is_grid_dq" in list(init_dict.keys()):
+                is_grid_dq = init_dict["is_grid_dq"]
             if "eec" in list(init_dict.keys()):
                 eec = init_dict["eec"]
             if "logger_name" in list(init_dict.keys()):
@@ -132,6 +135,7 @@ class ElecLUTdq(Electrical):
         self.n_Id = n_Id
         self.n_Iq = n_Iq
         self.LUT_simu = LUT_simu
+        self.is_grid_dq = is_grid_dq
         # Call Electrical init
         super(ElecLUTdq, self).__init__(
             eec=eec,
@@ -162,6 +166,7 @@ class ElecLUTdq(Electrical):
             ElecLUTdq_str += "LUT_simu = " + tmp
         else:
             ElecLUTdq_str += "LUT_simu = None" + linesep + linesep
+        ElecLUTdq_str += "is_grid_dq = " + str(self.is_grid_dq) + linesep
         return ElecLUTdq_str
 
     def __eq__(self, other):
@@ -188,6 +193,8 @@ class ElecLUTdq(Electrical):
         if other.n_Iq != self.n_Iq:
             return False
         if other.LUT_simu != self.LUT_simu:
+            return False
+        if other.is_grid_dq != self.is_grid_dq:
             return False
         return True
 
@@ -224,6 +231,8 @@ class ElecLUTdq(Electrical):
             diff_list.extend(
                 self.LUT_simu.compare(other.LUT_simu, name=name + ".LUT_simu")
             )
+        if other._is_grid_dq != self._is_grid_dq:
+            diff_list.append(name + ".is_grid_dq")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -243,6 +252,7 @@ class ElecLUTdq(Electrical):
         S += getsizeof(self.n_Id)
         S += getsizeof(self.n_Iq)
         S += getsizeof(self.LUT_simu)
+        S += getsizeof(self.is_grid_dq)
         return S
 
     def as_dict(self, type_handle_ndarray=0, keep_function=False, **kwargs):
@@ -277,6 +287,7 @@ class ElecLUTdq(Electrical):
                 keep_function=keep_function,
                 **kwargs
             )
+        ElecLUTdq_dict["is_grid_dq"] = self.is_grid_dq
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         ElecLUTdq_dict["__class__"] = "ElecLUTdq"
@@ -294,6 +305,7 @@ class ElecLUTdq(Electrical):
         self.n_Iq = None
         if self.LUT_simu is not None:
             self.LUT_simu._set_None()
+        self.is_grid_dq = None
         # Set to None the properties inherited from Electrical
         super(ElecLUTdq, self)._set_None()
 
@@ -458,5 +470,23 @@ class ElecLUTdq(Electrical):
         doc=u"""Simulation object to run for LUT calculation
 
         :Type: Simulation
+        """,
+    )
+
+    def _get_is_grid_dq(self):
+        """getter of is_grid_dq"""
+        return self._is_grid_dq
+
+    def _set_is_grid_dq(self, value):
+        """setter of is_grid_dq"""
+        check_var("is_grid_dq", value, "bool")
+        self._is_grid_dq = value
+
+    is_grid_dq = property(
+        fget=_get_is_grid_dq,
+        fset=_set_is_grid_dq,
+        doc=u"""True to build a n_Id*n_Iq grid, otherwise calculate n_Id+n_Iq simulations and extrapolate to the dq plane
+
+        :Type: bool
         """,
     )

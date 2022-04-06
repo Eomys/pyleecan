@@ -1614,6 +1614,15 @@
                 "type": "Simulation",
                 "unit": "",
                 "value": null
+            },
+            {
+                "desc": "True to build a n_Id*n_Iq grid, otherwise calculate n_Id+n_Iq simulations and extrapolate to the dq plane",
+                "max": "",
+                "min": "",
+                "name": "is_grid_dq",
+                "type": "bool",
+                "unit": "",
+                "value": 1
             }
         ]
     },
