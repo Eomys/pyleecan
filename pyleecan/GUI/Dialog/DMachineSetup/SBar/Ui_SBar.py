@@ -28,7 +28,9 @@ class Ui_SBar(object):
         self.img_ring = QLabel(SBar)
         self.img_ring.setObjectName(u"img_ring")
         self.img_ring.setMaximumSize(QSize(16777215, 16777215))
-        self.img_ring.setPixmap(QPixmap(u":/images/images/MachineSetup/Bar/Ring.PNG"))
+        self.img_ring.setPixmap(
+            QPixmap(u":/images/images/MachineSetup/Bar/ShortCircuitRing_schematics.png")
+        )
         self.img_ring.setScaledContents(False)
         self.img_ring.setAlignment(Qt.AlignCenter)
 
@@ -40,7 +42,7 @@ class Ui_SBar(object):
         self.scrollArea.setWidgetResizable(True)
         self.scrollAreaWidgetContents = QWidget()
         self.scrollAreaWidgetContents.setObjectName(u"scrollAreaWidgetContents")
-        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 298, 687))
+        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 241, 687))
         self.verticalLayout_4 = QVBoxLayout(self.scrollAreaWidgetContents)
         self.verticalLayout_4.setObjectName(u"verticalLayout_4")
         self.g_ring = QGroupBox(self.scrollAreaWidgetContents)

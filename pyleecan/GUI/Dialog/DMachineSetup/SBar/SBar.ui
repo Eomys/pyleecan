@@ -34,7 +34,7 @@
         <string/>
        </property>
        <property name="pixmap">
-        <pixmap resource="../../../Resources/pyleecan.qrc">:/images/images/MachineSetup/Bar/Ring.PNG</pixmap>
+        <pixmap resource="../../../Resources/pyleecan.qrc">:/images/images/MachineSetup/Bar/ShortCircuitRing_schematics.png</pixmap>
        </property>
        <property name="scaledContents">
         <bool>false</bool>
@@ -60,7 +60,7 @@
          <rect>
           <x>0</x>
           <y>0</y>
-          <width>298</width>
+          <width>241</width>
           <height>687</height>
          </rect>
         </property>
@@ -368,7 +368,6 @@
   <tabstop>b_plot</tabstop>
  </tabstops>
  <resources>
-  <include location="../../../Resources/pyleecan.qrc"/>
   <include location="../../../Resources/pyleecan.qrc"/>
  </resources>
  <connections/>
