@@ -53,10 +53,16 @@ def plot_schematics_scr(
     # Use some default parameter
     if is_default:
         lam = type(self)(
-            is_stator=False, is_internal=True, Rint=0, Rext=1, Hscr=0.1, Lscr=0.2
+            is_stator=False,
+            is_internal=True,
+            Rint=0,
+            Rext=0.25,
+            L1=1,
+            Hscr=0.15,
+            Lscr=0.1,
         )
         lam.slot = SlotW22(Zs=12, H0=0.02, H2=0.05)
-        lam.winding.Lewout = 0.07
+        lam.winding.Lewout = 0.1
         lam.plot_schematics_scr(
             is_default=False,
             is_add_schematics=is_add_schematics,
@@ -87,7 +93,7 @@ def plot_schematics_scr(
                 color=ARROW_COLOR,
                 linewidth=ARROW_WIDTH,
                 label="Rext",
-                offset_label=-Le,
+                offset_label=-Le * 1.05,
                 is_arrow=True,
                 fontsize=SC_FONT_SIZE,
             )
@@ -101,7 +107,7 @@ def plot_schematics_scr(
                 Zlim1,
                 Zlim2,
                 Zbar2,
-                offset_label=1j * Le * 0.5,
+                offset_label=1j * Le * 0.4 - Le * 0.7,
                 fig=fig,
                 ax=ax,
                 label="Lewout",
@@ -116,7 +122,7 @@ def plot_schematics_scr(
                 Zlim1,
                 Zlim2,
                 ZL2,
-                offset_label=1j * Le * 0.5,
+                offset_label=1j * Le * 0.4 - Le * 0.3,
                 fig=fig,
                 ax=ax,
                 label="Lscr",
@@ -129,7 +135,7 @@ def plot_schematics_scr(
                 color=ARROW_COLOR,
                 linewidth=ARROW_WIDTH,
                 label="Hscr",
-                offset_label=0,
+                offset_label=Le * 0.3,
                 is_arrow=True,
                 fontsize=SC_FONT_SIZE,
             )
@@ -163,8 +169,8 @@ def plot_schematics_scr(
             )
 
         plt.axis("equal")
-        ax.set_xlim(Lt / 4, (Lt + Le + Lscr))
-        ax.set_ylim(-self.Rext, self.Rext)
+        ax.set_xlim(Lt / 4, (Lt / 2 + Le + Lscr) * 1.1)
+        # ax.set_ylim(-self.Rext, self.Rext)
         manager = plt.get_current_fig_manager()
         if manager is not None:
             manager.set_window_title(type(self).__name__ + " Schematics")

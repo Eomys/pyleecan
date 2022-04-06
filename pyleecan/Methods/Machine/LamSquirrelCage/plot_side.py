@@ -8,6 +8,7 @@ STATOR_COLOR = config_dict["PLOT"]["COLOR_DICT"]["STATOR_COLOR"]
 BAR_COLOR = config_dict["PLOT"]["COLOR_DICT"]["BAR_COLOR"]
 SCR_COLOR = config_dict["PLOT"]["COLOR_DICT"]["SCR_COLOR"]
 
+
 def plot_side(self, fig=None, ax=None, is_show_fig=True, save_path=None):
     """Plot the side view of the Lamination in a matplotlib fig
     (Z axis left to right)
@@ -31,7 +32,7 @@ def plot_side(self, fig=None, ax=None, is_show_fig=True, save_path=None):
     """
 
     # Lamination and ventilation ducts patches
-    (fig, axes, patch_leg, label_leg) = init_fig(fig=fig, ax=ax, shape="rectangle")
+    (fig, axes, patch_leg, label_leg) = init_fig(fig=fig, ax=ax)
 
     patches = list()  # List of patches to draw the lamination
     if self.is_stator:
@@ -93,34 +94,22 @@ def plot_side(self, fig=None, ax=None, is_show_fig=True, save_path=None):
     # Add Lewout rectangles
     patches.append(  # Top Right
         Rectangle(
-            xy=(ZBarTopR.real, ZBarTopR.imag),
-            width=Le,
-            height=Ha,
-            color=BAR_COLOR,
+            xy=(ZBarTopR.real, ZBarTopR.imag), width=Le, height=Ha, color=BAR_COLOR,
         )
     )
     patches.append(  # Bot Right
         Rectangle(
-            xy=(ZBarBotR.real, ZBarBotR.imag),
-            width=Le,
-            height=Ha,
-            color=BAR_COLOR,
+            xy=(ZBarBotR.real, ZBarBotR.imag), width=Le, height=Ha, color=BAR_COLOR,
         )
     )
     patches.append(  # Top Left
         Rectangle(
-            xy=(ZBarTopL.real, ZBarTopL.imag),
-            width=Le,
-            height=Ha,
-            color=BAR_COLOR,
+            xy=(ZBarTopL.real, ZBarTopL.imag), width=Le, height=Ha, color=BAR_COLOR,
         )
     )
     patches.append(  # Bot Left
         Rectangle(
-            xy=(ZBarBotL.real, ZBarBotL.imag),
-            width=Le,
-            height=Ha,
-            color=BAR_COLOR,
+            xy=(ZBarBotL.real, ZBarBotL.imag), width=Le, height=Ha, color=BAR_COLOR,
         )
     )
     # Add short circuit ring rectangles
