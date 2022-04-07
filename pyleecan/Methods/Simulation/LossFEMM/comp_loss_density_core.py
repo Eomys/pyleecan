@@ -39,9 +39,11 @@ def comp_loss_density_core(self, group, coeff_dict):
     if "stator" in group:
         Lst = machine.stator.L1
         Kf = machine.stator.Kf1
+        rho= machine.stator.mat_type.struct.rho
     else:
         Lst = machine.rotor.L1
         Kf = machine.rotor.Kf1
+        rho= machine.rotor.mat_type.struct.rho
 
     # Get hysteresis and eddy current loss coefficients
     if "winding" in group:
@@ -49,8 +51,8 @@ def comp_loss_density_core(self, group, coeff_dict):
         Ce = self.Cp
     else:
         lossModel = self.Loss_model_dict[group]
-        Ch = lossModel.k_hy / Kf
-        Ce = lossModel.k_ed / Kf
+        Ch = lossModel.k_hy / Kf * rho
+        Ce = lossModel.k_ed / Kf * rho
         alpha_f = lossModel.alpha_f
         alpha_B = lossModel.alpha_B
 
@@ -137,7 +139,7 @@ def comp_loss_density_core(self, group, coeff_dict):
     # Calculate coefficients to evaluate core losses for later use
     if coeff_dict is not None:
         # Integrate loss density over group volume
-        coeff = Lst * per_a * matmul(Bfft_magnitude, Se)
+        coeff = Lst * per_a * matmul(Bfft_magnitude**2, Se)
         # Get frequency orders
         n = freqs / felec
         # Get polynomial coefficients
@@ -145,7 +147,8 @@ def comp_loss_density_core(self, group, coeff_dict):
         if Ch == 0:
             B = 0
         else:
-            B = np_sum(Ch * coeff * n)
+            coeff = Lst * per_a * matmul(Bfft_magnitude**alpha_B, Se)
+            B = np_sum(Ch * coeff * n**alpha_f)
         coeff_dict[group] = {"A": A, "B": B, "C": 0}
 
     return Pcore_density, freqs

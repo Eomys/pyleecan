@@ -45,7 +45,7 @@ def comp_loss(self, output, axes_dict):
             "rotor magnets", coeff_dict=coeff_dict
         )
     else:
-        Pmagnet_density, fmagnet = None, None, None
+        Pmagnet_density, fmagnet = None, None
 
     # Init dict of outputs
     out_dict = {"coeff_dict": coeff_dict}

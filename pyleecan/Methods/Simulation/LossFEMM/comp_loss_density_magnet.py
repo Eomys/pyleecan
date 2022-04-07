@@ -47,7 +47,9 @@ def comp_loss_density_magnet(self, group, coeff_dict):
     if output.geo.is_antiper_a:
         per_a *= 2
 
-    Wmag = None
+    #####################################
+    Wmag = 0# Previously to None, but raises an error later. #TODO
+    #####################################
     if isinstance(machine.rotor, LamSlotMag):
         magnet = machine.rotor.magnet
         slot = machine.rotor.slot
