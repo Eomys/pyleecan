@@ -1702,6 +1702,15 @@
                 "type": "float",
                 "unit": "deg Celsius",
                 "value": 20
+            },
+            {
+                "desc": "Skin effect for resistance and inductance",
+                "max": "",
+                "min": "",
+                "name": "type_skin_effect",
+                "type": "int",
+                "unit": "-",
+                "value": 1
             }
         ]
     },

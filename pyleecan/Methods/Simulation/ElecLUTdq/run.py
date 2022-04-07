@@ -32,6 +32,13 @@ def run(self):
     # Get winding resistance
     Rs = machine.stator.comp_resistance_wind(T=self.Tsta)
 
+    if self.type_skin_effect > 0:
+        # Account for skin effect
+        kr_skin = machine.stator.winding.conductor.comp_skin_effect_resistance(
+            T_op=self.Tsta, freq=OP.get_felec()
+        )
+        Rs *= kr_skin
+
     # Maximum phase current
     I_max = output.simu.input.I_max
 
@@ -61,8 +68,12 @@ def run(self):
         # Run method to calculate LUT
         LUT = self.comp_LUTdq()
 
-    # Create loss interpolant function from LUT
-    Ploss_dqh_interp = LUT.get_Ploss_dqh_interp(N0=OP.N0)
+    # Check if there is a loss model
+    is_loss_model = LUT.simu.loss is not None
+
+    if is_loss_model:
+        # Create loss interpolant function from LUT
+        Ploss_dqh_interp = LUT.get_Ploss_dqh_interp(N0=OP.N0)
 
     # iteration until convergence is reached, and max number of iterations on EEC
     delta_Pem = 1e10
@@ -93,9 +104,13 @@ def run(self):
         Uq = Rs * Iq + Phid * ws
         Umax_interp = np.sqrt(Ud ** 2 + Uq ** 2)
 
-        # Interpolate losses from LUT
-        Plosses = Ploss_dqh_interp((Id, Iq))
-        Ploss_ovl = np.sum(Plosses, axis=1)
+        if is_loss_model:
+            # Interpolate losses from LUT
+            Plosses = Ploss_dqh_interp((Id, Iq))
+            Ploss_ovl = np.sum(Plosses, axis=1)
+        else:
+            # Only consider stator Joule losses
+            Ploss_ovl = qs * Rs * (Id ** 2 + Iq ** 2)
 
         # Calculate electromagnetic power
         Pem_av_interp = qs * (Ud * Id + Uq * Iq)
@@ -142,17 +157,21 @@ def run(self):
     output.elec.Pem_av = Pem_av_interp[i0][imin]
     output.elec.P_useful = Puse_interp[i0][imin]
     output.elec.Tem_av = Puse_interp[i0][imin] / (2 * np.pi * OP.N0 / 60)
-    output.elec.Pj_losses = Plosses[i0, 0][imin]
+    if is_loss_model:
+        output.elec.Pj_losses = Plosses[i0, 0][imin]
+    else:
+        output.elec.Pj_losses = Ploss_ovl[i0][imin]
     output.elec.OP.Id_ref = Id[i0][imin]
     output.elec.OP.Iq_ref = Iq[i0][imin]
     output.elec.OP.Ud_ref = Ud[i0][imin]
     output.elec.OP.Uq_ref = Uq[i0][imin]
 
-    # Store losses
-    output.loss = OutLoss(
-        Pjoule=Plosses[i0, 0][imin],
-        Pstator=Plosses[i0, 1][imin],
-        Pmagnet=Plosses[i0, 2][imin],
-        Protor=Plosses[i0, 3][imin],
-        Pprox=Plosses[i0, 4][imin],
-    )
+    if is_loss_model:
+        # Store losses
+        output.loss = OutLoss(
+            Pjoule=Plosses[i0, 0][imin],
+            Pstator=Plosses[i0, 1][imin],
+            Pmagnet=Plosses[i0, 2][imin],
+            Protor=Plosses[i0, 3][imin],
+            Pprox=Plosses[i0, 4][imin],
+        )

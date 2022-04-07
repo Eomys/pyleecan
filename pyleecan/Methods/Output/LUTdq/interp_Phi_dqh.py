@@ -41,6 +41,7 @@ def interp_Phi_dqh(self, Id, Iq):
         elif nd + nq - 1 == OP_matrix.shape[0]:
             # Rebuild 2D grid from xId and xIq
             is_rect_interp = True
+            Phi_dqh_mag = self.get_Phidqh_mag_mean()
             for m, x in enumerate(XId):
                 for n, y in enumerate(XIq):
                     # Find indice of current Id value in OP_matrix
@@ -55,8 +56,11 @@ def interp_Phi_dqh(self, Id, Iq):
                     else:
                         # Sum flux values for (Id, Iq): Phi_dq(Id, Iq) = Phi_dq(Id, 0) + Phi_dq(0, Iq)
                         Phi_dqh_mean_reg[m, n, :] = (
-                            Phi_dqh_mean[ii, 0:2] + Phi_dqh_mean[jj, 0:2]
+                            Phi_dqh_mean[ii, :2]
+                            + Phi_dqh_mean[jj, :2]
+                            - Phi_dqh_mag[:2]
                         )
+
         else:
             is_rect_interp = False
 
