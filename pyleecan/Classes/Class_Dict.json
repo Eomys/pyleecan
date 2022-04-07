@@ -6597,6 +6597,15 @@
                 "type": "float",
                 "unit": "-",
                 "value": 0.95
+            },
+            {
+                "desc": "Number of segments",
+                "max": "",
+                "min": "1",
+                "name": "Nseg",
+                "type": "int",
+                "unit": "",
+                "value": 1
             }
         ]
     },
