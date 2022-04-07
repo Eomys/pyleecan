@@ -8,6 +8,7 @@ from pyleecan.Classes.Simu1 import Simu1
 from pyleecan.Classes.OPdq import OPdq
 from pyleecan.Classes.MagFEMM import MagFEMM
 from pyleecan.Classes.LossFEMM import LossFEMM
+from pyleecan.Classes.LossModelSteinmetz import LossModelSteinmetz
 from pyleecan.Classes.OutLoss import OutLoss
 
 from pyleecan.Functions.load import load
@@ -130,8 +131,8 @@ def test_FEMM_Loss_Prius():
 
     machine = load(join(DATA_DIR, "Machine", "Toyota_Prius_loss.json"))
 
-    Ch = 143  # hysteresis loss coefficient [W/(m^3*T^2*Hz)]
-    Ce = 0.530  # eddy current loss coefficients [W/(m^3*T^2*Hz^2)]
+    # Ch = 143  # hysteresis loss coefficient [W/(m^3*T^2*Hz)]
+    # Ce = 0.530  # eddy current loss coefficients [W/(m^3*T^2*Hz^2)]
     Cprox = 1  # sigma_w * cond.Hwire * cond.Wwire
 
     simu = Simu1(name="test_FEMM_Loss_Prius", machine=machine)
@@ -155,8 +156,14 @@ def test_FEMM_Loss_Prius():
         is_calc_torque_energy=False,
     )
 
+    loss_model = LossModelSteinmetz(k_hy=0, k_ed=0, alpha_hy=1, alpha_ed=2)
+
     simu.loss = LossFEMM(
-        Ce=Ce, Cp=Cprox, Ch=Ch, is_get_meshsolution=True, Tsta=100, type_skin_effect=0
+        Cp=Cprox,
+        is_get_meshsolution=True,
+        Tsta=100,
+        type_skin_effect=0,
+        Loss_model_dict={"stator": loss_model, "rotor": loss_model},
     )
 
     out = simu.run()

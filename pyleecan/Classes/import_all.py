@@ -94,6 +94,7 @@ from ..Classes.Loss import Loss
 from ..Classes.LossFEMM import LossFEMM
 from ..Classes.LossModel import LossModel
 from ..Classes.LossModelBertotti import LossModelBertotti
+from ..Classes.LossModelSteinmetz import LossModelSteinmetz
 from ..Classes.LossModelWinding import LossModelWinding
 from ..Classes.Machine import Machine
 from ..Classes.MachineAsync import MachineAsync

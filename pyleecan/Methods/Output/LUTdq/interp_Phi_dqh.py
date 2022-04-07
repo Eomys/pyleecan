@@ -32,12 +32,36 @@ def interp_Phi_dqh(self, Id, Iq):
         XIq, jq = np.unique(OP_matrix[:, 2], return_inverse=True)
         nd, nq = XId.size, XIq.size
 
-        # Perform 2D interpolation
+        Phi_dqh_mean_reg = np.zeros((nd, nq, 2))
         if nd * nq == OP_matrix.shape[0]:
             # sort flux linkage matrix and reshape to (nd, nq, 2)
-            Phi_dqh_mean_reg = np.zeros((nd, nq, 2))
+            is_rect_interp = True
             for ii, (m, n) in enumerate(zip(jd, jq)):
                 Phi_dqh_mean_reg[m, n, :] = Phi_dqh_mean[ii, 0:2]
+        elif nd + nq - 1 == OP_matrix.shape[0]:
+            # Rebuild 2D grid from xId and xIq
+            is_rect_interp = True
+            for m, x in enumerate(XId):
+                for n, y in enumerate(XIq):
+                    # Find indice of current Id value in OP_matrix
+                    ii = np.where(OP_matrix[:, 1] == x)[0]
+                    # Find indice of current Iq value in OP_matrix
+                    jj = np.where(OP_matrix[:, 2] == y)[0]
+                    # check if (Id, Iq) is in OP_matrix
+                    kk = np.intersect1d(ii, jj)
+                    if kk.size > 0:
+                        # take values directly from Phi_dqh_mean if (Id, Iq) is in OP_matrix
+                        Phi_dqh_mean_reg[m, n, :] = Phi_dqh_mean[kk, 0:2]
+                    else:
+                        # Sum flux values for (Id, Iq): Phi_dq(Id, Iq) = Phi_dq(Id, 0) + Phi_dq(0, Iq)
+                        Phi_dqh_mean_reg[m, n, :] = (
+                            Phi_dqh_mean[ii, 0:2] + Phi_dqh_mean[jj, 0:2]
+                        )
+        else:
+            is_rect_interp = False
+
+        # Perform 2D interpolation
+        if is_rect_interp:
             # regular grid interpolation
             self.Phi_dqh_interp = scp_int.RegularGridInterpolator(
                 (XId, XIq), Phi_dqh_mean_reg, method="linear"

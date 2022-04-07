@@ -107,31 +107,42 @@ def run(self):
         i0 = np.logical_and.reduce(
             (Umax_interp <= U_max, Imax_interp <= I_max, Puse_interp >= Pem_av_ref)
         )
+        if np.any(i0):
+            # Finding index of operating point with lowest losses among feasible operating points
+            imin = np.argmin(Ploss_ovl[i0])
 
-        # Finding index of operating points with lowest losses among feasible operating points
-        imin = np.argmin(Ploss_ovl[i0])
+            jd = np.where(Id_vect == Id[i0][imin])[0][0]
+            jq = np.where(Iq_vect == Iq[i0][imin])[0][0]
 
-        jd = np.where(Id_vect == Id[i0][imin])[0][0]
-        jq = np.where(Iq_vect == Iq[i0][imin])[0][0]
+            jd_min = max([jd - 1, 0])
+            jd_max = min([jd + 1, Ndq - 1])
+            jq_min = max([jq - 1, 0])
+            jq_max = min([jq + 1, Ndq - 1])
 
-        jd_min = max([jd - 1, 0])
-        jd_max = min([jd + 1, Ndq - 1])
-        jq_min = max([jq - 1, 0])
-        jq_max = min([jq + 1, Ndq - 1])
+            Id_min = Id_vect[jd_min]
+            Id_max = Id_vect[jd_max]
+            Iq_min = Iq_vect[jq_min]
+            Iq_max = Iq_vect[jq_max]
 
-        Id_min = Id_vect[jd_min]
-        Id_max = Id_vect[jd_max]
-        Iq_min = Iq_vect[jq_min]
-        Iq_max = Iq_vect[jq_max]
+            delta_Pem = Puse_interp[i0][imin] - Pem_av_ref
+            niter_Pem = niter_Pem + 1
 
-        delta_Pem = Puse_interp[i0][imin] - Pem_av_ref
-        niter_Pem = niter_Pem + 1
+        else:
+            # Finding indices of operating points only satisfying maximum voltage/current
+            i0 = np.logical_and.reduce((Umax_interp <= U_max, Imax_interp <= I_max))
+            # Finding index of operating points that maximize the power
+            imin = np.argmax(Puse_interp[i0])
+            # Stop loop
+            delta_Pem = delta_Pem_max
+            self.get_logger().info(
+                "Input power cannot be reached within current and voltage constraints, taking maximum feasible power"
+            )
 
     # Store electrical quantities
     output.elec.Pem_av = Pem_av_interp[i0][imin]
     output.elec.P_useful = Puse_interp[i0][imin]
     output.elec.Tem_av = Puse_interp[i0][imin] / (2 * np.pi * OP.N0 / 60)
-    output.elec.Pj_joules = Plosses[i0, 0][imin]
+    output.elec.Pj_losses = Plosses[i0, 0][imin]
     output.elec.OP.Id_ref = Id[i0][imin]
     output.elec.OP.Iq_ref = Iq[i0][imin]
     output.elec.OP.Ud_ref = Ud[i0][imin]

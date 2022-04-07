@@ -1,8 +1,7 @@
 Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
-Ce,W/(m3*T2*Hz2),eddy current loss coefficients,,float,None,,,,Simulation,Loss,run,VERSION,1,Loss module dedicated to FEMM developed in https://www.femm.info/wiki/SPMLoss
-Ch,W/(m3*T2*Hz),hysteresis loss coefficients,,float,None,,,,,,comp_axes,,,
-Cp,W/(m3*T2*Hz2),proximity loss coefficients,,float,None,,,,,,comp_loss,,,
-is_get_meshsolution,,True to save loss density map as meshsolution,,bool,0,,,,,,comp_loss_density_core,,,
-Tsta,deg Celsius,Average stator temperature for Electrical calculation,0,float,20,,,,,,comp_loss_density_joule,,,
-Trot,deg Celsius,Average rotor temperature for Electrical calculation,0,float,20,,,,,,comp_loss_density_magnet,,,
-type_skin_effect,-,Skin effect for resistance calculation,1,int,1,,,,,,,,,
+is_get_meshsolution,,True to save loss density map as meshsolution,,bool,0,,,,Simulation,Loss,run,VERSION,1,Loss module dedicated to FEMM developed in https://www.femm.info/wiki/SPMLoss
+Tsta,deg Celsius,Average stator temperature for Electrical calculation,0,float,20,,,,,,comp_axes,,,
+Trot,deg Celsius,Average rotor temperature for Electrical calculation,0,float,20,,,,,,comp_loss,,,
+type_skin_effect,-,Skin effect for resistance calculation,1,int,1,,,,,,comp_loss_density_core,,,
+Loss_model_dict,,Dict of loss model whose key is a lamination and value is the associated loss model,,{LossModel},None,,,,,,comp_loss_density_joule,,,
+Cp,W/(m3*T2*Hz2),proximity loss coefficients,,float,None,,,,,,comp_loss_density_magnet,,,

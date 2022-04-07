@@ -1,5 +1,11 @@
 from os.path import join
 
+import numpy as np
+
+
+from SciDataTool.Functions.Plot.plot_3D import plot_3D
+
+
 from pyleecan.Classes.OPdq import OPdq
 from pyleecan.Classes.Simu1 import Simu1
 from pyleecan.Classes.InputPower import InputPower
@@ -21,8 +27,8 @@ def test_ElecLUTdq_InputPower():
 
     machine = load(join(DATA_DIR, "Machine", "Toyota_Prius.json"))
 
-    # LUT_enforced = load("C:/pyleecan/pyleecan_B/pyleecan/pyleecan/Results/LUT.h5")
-    LUT_enforced = None
+    LUT_enforced = load("C:/pyleecan/pyleecan_B/pyleecan/pyleecan/Results/LUT.h5")
+    # LUT_enforced = None
 
     # First simulation creating femm file
     simu = Simu1(name="test_ElecLUTdq_InputPower", machine=machine)
@@ -40,15 +46,16 @@ def test_ElecLUTdq_InputPower():
 
     simu.elec = ElecLUTdq(
         n_interp=100,
-        n_Id=2,
-        n_Iq=2,
+        n_Id=3,
+        n_Iq=3,
         Id_max=0,
         Iq_min=0,
         LUT_enforced=LUT_enforced,
+        is_grid_dq=True,
         LUT_simu=Simu1(
             input=InputCurrent(
                 OP=OPdq(),
-                Nt_tot=20 * 8,
+                Nt_tot=4 * 4 * 8,
                 Na_tot=200 * 8,
                 is_periodicity_a=True,
                 is_periodicity_t=True,
@@ -75,6 +82,71 @@ def test_ElecLUTdq_InputPower():
     )
 
     out = simu.run()
+
+    LUT_grid = out.simu.elec.LUT_enforced
+
+    # Get Id_min, Id_max, Iq_min, Iq_max from OP_matrix
+    OP_matrix = LUT_grid.get_OP_matrix()
+    Id_min = OP_matrix[:, 1].min()
+    Id_max = OP_matrix[:, 1].max()
+    Iq_min = OP_matrix[:, 2].min()
+    Iq_max = OP_matrix[:, 2].max()
+
+    nd, nq = 100, 100
+    Id_vect = np.linspace(Id_min, Id_max, nd)
+    Iq_vect = np.linspace(Iq_min, Iq_max, nq)
+    Id, Iq = np.meshgrid(Id_vect, Iq_vect)
+    Id, Iq = Id.ravel(), Iq.ravel()
+
+    # Interpolate Phid/Phiq on the refined mesh
+    Phi_dqh_grid = LUT_grid.interp_Phi_dqh(Id, Iq)
+
+    simu.elec.is_grid_dq = False
+    LUT_line = simu.elec.comp_LUTdq()
+
+    # Interpolate Phid/Phiq on the refined mesh
+    Phi_dqh_line = LUT_line.interp_Phi_dqh(Id, Iq)
+
+    dict_map = {
+        "Xdata": Id.reshape((nd, nq))[0, :],
+        "Ydata": Iq.reshape((nd, nq))[:, 0],
+        "xlabel": "d-axis current [Arms]",
+        "ylabel": "q-axis current [Arms]",
+        "type_plot": "pcolor",
+        "is_contour": True,
+    }
+
+    # Plot Phi_d map
+    plot_3D(
+        Zdata=Phi_dqh_grid[0, :].reshape((nd, nq)).T,
+        zlabel="$\Phi_d$ [Wb]",
+        title="Flux linkage map in dq plane (d-axis)",
+        **dict_map,
+    )
+
+    # Plot Phi_d map
+    plot_3D(
+        Zdata=Phi_dqh_line[0, :].reshape((nd, nq)).T,
+        zlabel="$\Phi_d$ [Wb]",
+        title="Flux linkage map in dq plane (d-axis)",
+        **dict_map,
+    )
+
+    # Plot Phi_q map
+    plot_3D(
+        Zdata=Phi_dqh_grid[1, :].reshape((nd, nq)).T,
+        zlabel="$\Phi_q$ [Wb]",
+        title="Flux linkage map in dq plane (q-axis)",
+        **dict_map,
+    )
+
+    # Plot Phi_q map
+    plot_3D(
+        Zdata=Phi_dqh_line[1, :].reshape((nd, nq)).T,
+        zlabel="$\Phi_q$ [Wb]",
+        title="Flux linkage map in dq plane (q-axis)",
+        **dict_map,
+    )
 
     return out
 
