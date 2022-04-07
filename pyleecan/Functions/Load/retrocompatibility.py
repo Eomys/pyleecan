@@ -331,6 +331,7 @@ def create_update_dict(file_version):
         update_dict["Winding"] = True
         update_dict["HoleUD"] = True
         update_dict["OP"] = True
+        update_dict["Yoke_Notch"] = True
     else:
         update_dict["Winding"] = is_before_version(WIND_VERSION, file_version)
         update_dict["HoleUD"] = is_before_version(HoleUD_VERSION, file_version)
