@@ -1,4 +1,4 @@
-from numpy import matmul, abs as np_abs, sum as np_sum
+from numpy import matmul, abs as np_abs, sum as np_sum, sqrt as np_sqrt
 
 
 def comp_loss_density_core(self, group, coeff_dict):
@@ -48,8 +48,11 @@ def comp_loss_density_core(self, group, coeff_dict):
         Ch = 0
         Ce = self.Cp
     else:
-        Ch = self.Ch / Kf
-        Ce = self.Ce / Kf
+        lossModel = self.Loss_model_dict[group]
+        Ch = lossModel.k_hy / Kf
+        Ce = lossModel.k_ed / Kf
+        alpha_f = lossModel.alpha_f
+        alpha_B = lossModel.alpha_B
 
     # Get fundamental frequency
     felec = output.elec.OP.get_felec()
@@ -117,14 +120,14 @@ def comp_loss_density_core(self, group, coeff_dict):
     freqs = Bfft["freqs"]
 
     # Compute FFT square of magnetic flux density
-    Bfft_square = np_abs(Bfft["comp_x"]) ** 2 + np_abs(Bfft["comp_y"]) ** 2
+    Bfft_magnitude = np_sqrt(np_abs(Bfft["comp_x"]) ** 2 + np_abs(Bfft["comp_y"]) ** 2)
 
     # Eddy-current loss density (or proximity loss density) for each frequency and element
-    Pcore_density = Ce * freqs[:, None] ** 2 * Bfft_square
+    Pcore_density = Ce * freqs[:, None] ** 2 * Bfft_magnitude ** 2
 
     if Ch != 0:
         # Hysteretic loss density for each frequency and element
-        Pcore_density += Ch * freqs[:, None] * Bfft_square
+        Pcore_density += Ch * freqs[:, None] ** alpha_f * Bfft_magnitude ** alpha_B
 
     if is_change_Time:
         # Change periodicity back to original periodicity
@@ -134,7 +137,7 @@ def comp_loss_density_core(self, group, coeff_dict):
     # Calculate coefficients to evaluate core losses for later use
     if coeff_dict is not None:
         # Integrate loss density over group volume
-        coeff = Lst * per_a * matmul(Bfft_square, Se)
+        coeff = Lst * per_a * matmul(Bfft_magnitude, Se)
         # Get frequency orders
         n = freqs / felec
         # Get polynomial coefficients

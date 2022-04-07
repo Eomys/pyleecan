@@ -52,8 +52,8 @@ class LossModelSteinmetz(LossModel):
         self,
         k_hy=None,
         k_ed=None,
-        alpha_hy=None,
-        alpha_ed=None,
+        alpha_f=None,
+        alpha_B=None,
         name="",
         init_dict=None,
         init_str=None,
@@ -77,17 +77,17 @@ class LossModelSteinmetz(LossModel):
                 k_hy = init_dict["k_hy"]
             if "k_ed" in list(init_dict.keys()):
                 k_ed = init_dict["k_ed"]
-            if "alpha_hy" in list(init_dict.keys()):
-                alpha_hy = init_dict["alpha_hy"]
-            if "alpha_ed" in list(init_dict.keys()):
-                alpha_ed = init_dict["alpha_ed"]
+            if "alpha_f" in list(init_dict.keys()):
+                alpha_f = init_dict["alpha_f"]
+            if "alpha_B" in list(init_dict.keys()):
+                alpha_B = init_dict["alpha_B"]
             if "name" in list(init_dict.keys()):
                 name = init_dict["name"]
         # Set the properties (value check and convertion are done in setter)
         self.k_hy = k_hy
         self.k_ed = k_ed
-        self.alpha_hy = alpha_hy
-        self.alpha_ed = alpha_ed
+        self.alpha_f = alpha_f
+        self.alpha_B = alpha_B
         # Call LossModel init
         super(LossModelSteinmetz, self).__init__(name=name)
         # The class is frozen (in LossModel init), for now it's impossible to
@@ -101,8 +101,8 @@ class LossModelSteinmetz(LossModel):
         LossModelSteinmetz_str += super(LossModelSteinmetz, self).__str__()
         LossModelSteinmetz_str += "k_hy = " + str(self.k_hy) + linesep
         LossModelSteinmetz_str += "k_ed = " + str(self.k_ed) + linesep
-        LossModelSteinmetz_str += "alpha_hy = " + str(self.alpha_hy) + linesep
-        LossModelSteinmetz_str += "alpha_ed = " + str(self.alpha_ed) + linesep
+        LossModelSteinmetz_str += "alpha_f = " + str(self.alpha_f) + linesep
+        LossModelSteinmetz_str += "alpha_B = " + str(self.alpha_B) + linesep
         return LossModelSteinmetz_str
 
     def __eq__(self, other):
@@ -118,9 +118,9 @@ class LossModelSteinmetz(LossModel):
             return False
         if other.k_ed != self.k_ed:
             return False
-        if other.alpha_hy != self.alpha_hy:
+        if other.alpha_f != self.alpha_f:
             return False
-        if other.alpha_ed != self.alpha_ed:
+        if other.alpha_B != self.alpha_B:
             return False
         return True
 
@@ -139,10 +139,10 @@ class LossModelSteinmetz(LossModel):
             diff_list.append(name + ".k_hy")
         if other._k_ed != self._k_ed:
             diff_list.append(name + ".k_ed")
-        if other._alpha_hy != self._alpha_hy:
-            diff_list.append(name + ".alpha_hy")
-        if other._alpha_ed != self._alpha_ed:
-            diff_list.append(name + ".alpha_ed")
+        if other._alpha_f != self._alpha_f:
+            diff_list.append(name + ".alpha_f")
+        if other._alpha_B != self._alpha_B:
+            diff_list.append(name + ".alpha_B")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -156,8 +156,8 @@ class LossModelSteinmetz(LossModel):
         S += super(LossModelSteinmetz, self).__sizeof__()
         S += getsizeof(self.k_hy)
         S += getsizeof(self.k_ed)
-        S += getsizeof(self.alpha_hy)
-        S += getsizeof(self.alpha_ed)
+        S += getsizeof(self.alpha_f)
+        S += getsizeof(self.alpha_B)
         return S
 
     def as_dict(self, type_handle_ndarray=0, keep_function=False, **kwargs):
@@ -179,8 +179,8 @@ class LossModelSteinmetz(LossModel):
         )
         LossModelSteinmetz_dict["k_hy"] = self.k_hy
         LossModelSteinmetz_dict["k_ed"] = self.k_ed
-        LossModelSteinmetz_dict["alpha_hy"] = self.alpha_hy
-        LossModelSteinmetz_dict["alpha_ed"] = self.alpha_ed
+        LossModelSteinmetz_dict["alpha_f"] = self.alpha_f
+        LossModelSteinmetz_dict["alpha_B"] = self.alpha_B
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         LossModelSteinmetz_dict["__class__"] = "LossModelSteinmetz"
@@ -191,8 +191,8 @@ class LossModelSteinmetz(LossModel):
 
         self.k_hy = None
         self.k_ed = None
-        self.alpha_hy = None
-        self.alpha_ed = None
+        self.alpha_f = None
+        self.alpha_B = None
         # Set to None the properties inherited from LossModel
         super(LossModelSteinmetz, self)._set_None()
 
@@ -232,37 +232,37 @@ class LossModelSteinmetz(LossModel):
         """,
     )
 
-    def _get_alpha_hy(self):
-        """getter of alpha_hy"""
-        return self._alpha_hy
+    def _get_alpha_f(self):
+        """getter of alpha_f"""
+        return self._alpha_f
 
-    def _set_alpha_hy(self, value):
-        """setter of alpha_hy"""
-        check_var("alpha_hy", value, "float")
-        self._alpha_hy = value
+    def _set_alpha_f(self, value):
+        """setter of alpha_f"""
+        check_var("alpha_f", value, "float")
+        self._alpha_f = value
 
-    alpha_hy = property(
-        fget=_get_alpha_hy,
-        fset=_set_alpha_hy,
-        doc=u"""Hysteresis loss power coefficient
+    alpha_f = property(
+        fget=_get_alpha_f,
+        fset=_set_alpha_f,
+        doc=u"""Hysteresis loss power coefficient for the frequency
 
         :Type: float
         """,
     )
 
-    def _get_alpha_ed(self):
-        """getter of alpha_ed"""
-        return self._alpha_ed
+    def _get_alpha_B(self):
+        """getter of alpha_B"""
+        return self._alpha_B
 
-    def _set_alpha_ed(self, value):
-        """setter of alpha_ed"""
-        check_var("alpha_ed", value, "float")
-        self._alpha_ed = value
+    def _set_alpha_B(self, value):
+        """setter of alpha_B"""
+        check_var("alpha_B", value, "float")
+        self._alpha_B = value
 
-    alpha_ed = property(
-        fget=_get_alpha_ed,
-        fset=_set_alpha_ed,
-        doc=u"""Eddy current loss power coefficient
+    alpha_B = property(
+        fget=_get_alpha_B,
+        fset=_set_alpha_B,
+        doc=u"""Hysteresis loss power coefficient for the flux density magnitude
 
         :Type: float
         """,

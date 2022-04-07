@@ -5703,19 +5703,19 @@
                 "value": null
             },
             {
-                "desc": "Hysteresis loss power coefficient",
+                "desc": "Hysteresis loss power coefficient for the frequency",
                 "max": "",
                 "min": "",
-                "name": "alpha_hy",
+                "name": "alpha_f",
                 "type": "float",
                 "unit": "-",
                 "value": null
             },
             {
-                "desc": "Eddy current loss power coefficient",
+                "desc": "Hysteresis loss power coefficient for the flux density magnitude",
                 "max": "",
                 "min": "",
-                "name": "alpha_ed",
+                "name": "alpha_B",
                 "type": "float",
                 "unit": "-",
                 "value": null

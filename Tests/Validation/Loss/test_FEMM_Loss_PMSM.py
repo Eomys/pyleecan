@@ -140,7 +140,7 @@ def test_FEMM_Loss_Prius():
     Ic = 230 * np.exp(1j * 140 * np.pi / 180)
 
     simu.input = InputCurrent(
-        Nt_tot=40 * 8,
+        Nt_tot=10 * 40 * 8,
         Na_tot=200 * 8,
         OP=OPdq(N0=1200, Id_ref=Ic.real, Iq_ref=Ic.imag),
         is_periodicity_t=True,
@@ -155,15 +155,20 @@ def test_FEMM_Loss_Prius():
         is_fast_draw=True,
         is_calc_torque_energy=False,
     )
+    
+    k_hy=machine.stator.mat_type.struct.rho*0.011381
+    k_ed=machine.stator.mat_type.struct.rho*4.67e-5
+    alpha_f=1.1499
+    alpha_B=1.7622
 
-    loss_model = LossModelSteinmetz(k_hy=0, k_ed=0, alpha_hy=1, alpha_ed=2)
+    loss_model = LossModelSteinmetz(k_hy=k_hy, k_ed=k_ed, alpha_f=alpha_f, alpha_B=alpha_B)
 
     simu.loss = LossFEMM(
         Cp=Cprox,
         is_get_meshsolution=True,
         Tsta=100,
         type_skin_effect=0,
-        Loss_model_dict={"stator": loss_model, "rotor": loss_model},
+        Loss_model_dict={"stator core": loss_model, "rotor core": loss_model},
     )
 
     out = simu.run()

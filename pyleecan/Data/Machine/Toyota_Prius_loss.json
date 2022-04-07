@@ -1,13 +1,13 @@
 {
   "__class__": "MachineIPMSM",
-  "__save_date__": "2022_03_23 11h19min31s ",
+  "__save_date__": "2022_04_06 16h56min35s ",
   "__version__": "pyleecan_1.3.8",
   "desc": "TOYOTA Prius 2004 interior magnet (V shape) with distributed winding",
   "frame": null,
   "logger_name": "Pyleecan.Machine",
   "name": "Toyota_Prius_loss",
   "rotor": {
-    "Kf1": 0.95,
+    "Kf1": 0.98,
     "L1": 0.0836,
     "Nrvd": 0,
     "Rext": 0.08025,
@@ -1324,7 +1324,7 @@
     }
   },
   "stator": {
-    "Kf1": 0.95,
+    "Kf1": 0.98,
     "Ksfill": null,
     "L1": 0.0836,
     "Nrvd": 0,
@@ -2157,10 +2157,10 @@
       "W3": 0.0076,
       "Zs": 48,
       "__class__": "SlotW28",
-      "type_close": 1
+      "wedge_mat": null
     },
     "winding": {
-      "Lewout": 0.005,
+      "Lewout": 0.0325,
       "Nlayer": 1,
       "Npcp": 1,
       "Nslot_shift_wind": 0,
