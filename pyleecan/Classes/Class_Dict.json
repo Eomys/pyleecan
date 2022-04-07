@@ -5469,33 +5469,6 @@
         "path": "pyleecan/Generator/ClassesRef/Simulation/LossFEMM.csv",
         "properties": [
             {
-                "desc": "eddy current loss coefficients",
-                "max": "",
-                "min": "",
-                "name": "Ce",
-                "type": "float",
-                "unit": "W/(m3*T2*Hz2)",
-                "value": null
-            },
-            {
-                "desc": "hysteresis loss coefficients",
-                "max": "",
-                "min": "",
-                "name": "Ch",
-                "type": "float",
-                "unit": "W/(m3*T2*Hz)",
-                "value": null
-            },
-            {
-                "desc": "proximity loss coefficients",
-                "max": "",
-                "min": "",
-                "name": "Cp",
-                "type": "float",
-                "unit": "W/(m3*T2*Hz2)",
-                "value": null
-            },
-            {
                 "desc": "True to save loss density map as meshsolution",
                 "max": "",
                 "min": "",
@@ -5530,6 +5503,24 @@
                 "type": "int",
                 "unit": "-",
                 "value": 1
+            },
+            {
+                "desc": "Dict of loss model whose key is a lamination and value is the associated loss model",
+                "max": "",
+                "min": "",
+                "name": "Loss_model_dict",
+                "type": "{LossModel}",
+                "unit": "",
+                "value": null
+            },
+            {
+                "desc": "proximity loss coefficients",
+                "max": "",
+                "min": "",
+                "name": "Cp",
+                "type": "float",
+                "unit": "W/(m3*T2*Hz2)",
+                "value": null
             }
         ]
     },
@@ -5542,6 +5533,7 @@
         ],
         "daughters": [
             "LossModelBertotti",
+            "LossModelSteinmetz",
             "LossModelWinding"
         ],
         "desc": "Abstract Loss Model Class",
@@ -5671,6 +5663,62 @@
                 "type": "list",
                 "unit": "rpm",
                 "value": []
+            }
+        ]
+    },
+    "LossModelSteinmetz": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Steinmetz Loss Model Class",
+        "is_internal": false,
+        "methods": [
+            "comp_coeff"
+        ],
+        "mother": "LossModel",
+        "name": "LossModelSteinmetz",
+        "package": "Simulation",
+        "path": "pyleecan/Generator/ClassesRef/Simulation/LossModelSteinmetz.csv",
+        "properties": [
+            {
+                "desc": "Hysteresis loss coefficient",
+                "max": "",
+                "min": "",
+                "name": "k_hy",
+                "type": "float",
+                "unit": "W/kg",
+                "value": null
+            },
+            {
+                "desc": "Eddy current loss coefficient",
+                "max": "",
+                "min": "",
+                "name": "k_ed",
+                "type": "float",
+                "unit": "W/kg",
+                "value": null
+            },
+            {
+                "desc": "Hysteresis loss power coefficient",
+                "max": "",
+                "min": "",
+                "name": "alpha_hy",
+                "type": "float",
+                "unit": "-",
+                "value": null
+            },
+            {
+                "desc": "Eddy current loss power coefficient",
+                "max": "",
+                "min": "",
+                "name": "alpha_ed",
+                "type": "float",
+                "unit": "-",
+                "value": null
             }
         ]
     },
