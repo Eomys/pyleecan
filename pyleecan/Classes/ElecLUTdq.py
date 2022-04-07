@@ -78,6 +78,7 @@ class ElecLUTdq(Electrical):
         LUT_enforced=None,
         Tsta=20,
         Trot=20,
+        type_skin_effect=1,
         init_dict=None,
         init_str=None,
     ):
@@ -126,6 +127,8 @@ class ElecLUTdq(Electrical):
                 Tsta = init_dict["Tsta"]
             if "Trot" in list(init_dict.keys()):
                 Trot = init_dict["Trot"]
+            if "type_skin_effect" in list(init_dict.keys()):
+                type_skin_effect = init_dict["type_skin_effect"]
         # Set the properties (value check and convertion are done in setter)
         self.n_interp = n_interp
         self.Id_min = Id_min
@@ -144,6 +147,7 @@ class ElecLUTdq(Electrical):
             LUT_enforced=LUT_enforced,
             Tsta=Tsta,
             Trot=Trot,
+            type_skin_effect=type_skin_effect,
         )
         # The class is frozen (in Electrical init), for now it's impossible to
         # add new properties

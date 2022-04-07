@@ -47,6 +47,7 @@ def comp_loss_density_magnet(self, group, coeff_dict):
     if output.geo.is_antiper_a:
         per_a *= 2
 
+    Wmag = None
     if isinstance(machine.rotor, LamSlotMag):
         magnet = machine.rotor.magnet
         slot = machine.rotor.slot
@@ -54,6 +55,10 @@ def comp_loss_density_magnet(self, group, coeff_dict):
             Hmag = slot.Hmag
         else:
             Hmag = np.sqrt(slot.comp_surface_active())
+        if hasattr(slot, "Wmag"):
+            Wmag = slot.Wmag
+        else:
+            Wmag = np.sqrt(slot.comp_surface_active())
 
     elif isinstance(machine.rotor, LamHole):
         hole0 = machine.rotor.hole[0]
@@ -71,10 +76,18 @@ def comp_loss_density_magnet(self, group, coeff_dict):
             "Cannot calculate magnet losses for rotor lamination other than LamSlotMag or LamHole"
         )
 
-    # Get magnet length
-    Lmag = magnet.Lmag
-    if Lmag is None:
-        Lmag = machine.rotor.L1
+    # Get rotor length
+    L1 = machine.rotor.L1
+
+    # Calculate segmentation coefficient from:
+    # "Effect of Eddy-Current Loss Reduction by Magnet Segmentation in Synchronous Motors With Concentrated Windings"
+    # Katsumi Yamazaki, Member, IEEE, and Yu Fukushima, Equation (9)
+    if magnet.Lmag is None:
+        kseg = 1
+    else:
+        Lmag = magnet.Lmag
+        Nseg = magnet.Nseg
+        kseg = ((Lmag + Wmag) / (Lmag * Nseg + Wmag)) ** 2
 
     # Get fundamental frequency
     felec = output.elec.OP.get_felec()
@@ -153,7 +166,9 @@ def comp_loss_density_magnet(self, group, coeff_dict):
         Az_fft = Az_df["A_z"]
         Az_mean = matmul(Az_fft, Se_mag)[:, None] / np_sum(Se_mag)
         Jm_fft = -1j * sigma_m * w * (Az_fft - Az_mean)
-        Pmagnet_density[:, jj : (jj + len(kmag))] = 0.5 * np_abs(Jm_fft) ** 2 / sigma_m
+        Pmagnet_density[:, jj : (jj + len(kmag))] = (
+            0.5 * kseg * np_abs(Jm_fft) ** 2 / sigma_m
+        )
         jj += len(kmag)
 
         # # # derivation in time domain
@@ -223,7 +238,7 @@ def comp_loss_density_magnet(self, group, coeff_dict):
         I0 = n != 0
         Af = zeros(w.size)
         Af[I0] = (
-            Lmag
+            L1
             * per_a
             * matmul(Pmagnet_density[I0, :] / freqs[I0, None] ** 2, Se[ind_all])
         )

@@ -139,8 +139,6 @@ def solve_FEMM(
     else:
         Rag = machine.comp_Rgap_mec()
 
-    L1 = machine.stator.comp_length()
-    L2 = machine.rotor.comp_length()
     save_path = self.get_path_save(output)
     is_internal_rotor = machine.rotor.is_internal
     if "Phi_wind" in out_dict:
@@ -252,8 +250,8 @@ def solve_FEMM(
                     qs[key],
                     Npcp[key],
                     is_stator=machine.get_lam_by_label(key).is_stator,
-                    L1=L1,
-                    L2=L2,
+                    L1=machine.stator.L1,
+                    L2=machine.rotor.L1,
                     sym=sym,
                 )
 

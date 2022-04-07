@@ -36,14 +36,15 @@ def comp_axes(self, output):
     if not is_periodicity_t0 and self.is_periodicity_t:
         # Remove time periodicity in Magnetic model
         self.is_periodicity_t = False
-        Nt_tot = axes_dict["time"].get_length(is_oneperiod=False)
-        self.get_logger().warning(
-            "In Magnetic model, Nt_tot="
-            + str(Nt_tot)
-            + " is not divisible by the machine time periodicity ("
-            + str(outgeo.per_t_S)
-            + "). Time periodicity removed"
-        )
+        if outgeo.per_t_S != 1:
+            Nt_tot = axes_dict["time"].get_length(is_oneperiod=False)
+            self.get_logger().warning(
+                "In Magnetic model, Nt_tot="
+                + str(Nt_tot)
+                + " is not divisible by the machine time periodicity ("
+                + str(outgeo.per_t_S)
+                + "). Time periodicity removed"
+            )
 
     # Check Angle periodicities regarding Magnetics model input
     per_a0, is_antiper_a0 = axes_dict["angle"].get_periodicity()
@@ -51,14 +52,15 @@ def comp_axes(self, output):
     if not is_periodicity_a0 and self.is_periodicity_a:
         # Remove time periodicity in Magnetic model
         self.is_periodicity_a = False
-        Na_tot = axes_dict["angle"].get_length(is_oneperiod=False)
-        self.get_logger().warning(
-            "In Magnetic model, Na_tot="
-            + str(Na_tot)
-            + " is not divisible by the machine angular periodicity ("
-            + str(outgeo.per_a)
-            + "). Angular periodicity removed"
-        )
+        if outgeo.per_a != 1:
+            Na_tot = axes_dict["angle"].get_length(is_oneperiod=False)
+            self.get_logger().warning(
+                "In Magnetic model, Na_tot="
+                + str(Na_tot)
+                + " is not divisible by the machine angular periodicity ("
+                + str(outgeo.per_a)
+                + "). Angular periodicity removed"
+            )
 
     # Compute slice axis
     Slice = self.Slice_enforced.get_data()

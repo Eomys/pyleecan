@@ -101,6 +101,7 @@ class Electrical(FrozenClass):
         LUT_enforced=None,
         Tsta=20,
         Trot=20,
+        type_skin_effect=1,
         init_dict=None,
         init_str=None,
     ):
@@ -131,6 +132,8 @@ class Electrical(FrozenClass):
                 Tsta = init_dict["Tsta"]
             if "Trot" in list(init_dict.keys()):
                 Trot = init_dict["Trot"]
+            if "type_skin_effect" in list(init_dict.keys()):
+                type_skin_effect = init_dict["type_skin_effect"]
         # Set the properties (value check and convertion are done in setter)
         self.parent = None
         self.eec = eec
@@ -139,6 +142,7 @@ class Electrical(FrozenClass):
         self.LUT_enforced = LUT_enforced
         self.Tsta = Tsta
         self.Trot = Trot
+        self.type_skin_effect = type_skin_effect
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -169,6 +173,7 @@ class Electrical(FrozenClass):
             Electrical_str += "LUT_enforced = None" + linesep + linesep
         Electrical_str += "Tsta = " + str(self.Tsta) + linesep
         Electrical_str += "Trot = " + str(self.Trot) + linesep
+        Electrical_str += "type_skin_effect = " + str(self.type_skin_effect) + linesep
         return Electrical_str
 
     def __eq__(self, other):
@@ -187,6 +192,8 @@ class Electrical(FrozenClass):
         if other.Tsta != self.Tsta:
             return False
         if other.Trot != self.Trot:
+            return False
+        if other.type_skin_effect != self.type_skin_effect:
             return False
         return True
 
@@ -222,6 +229,8 @@ class Electrical(FrozenClass):
             diff_list.append(name + ".Tsta")
         if other._Trot != self._Trot:
             diff_list.append(name + ".Trot")
+        if other._type_skin_effect != self._type_skin_effect:
+            diff_list.append(name + ".type_skin_effect")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -236,6 +245,7 @@ class Electrical(FrozenClass):
         S += getsizeof(self.LUT_enforced)
         S += getsizeof(self.Tsta)
         S += getsizeof(self.Trot)
+        S += getsizeof(self.type_skin_effect)
         return S
 
     def as_dict(self, type_handle_ndarray=0, keep_function=False, **kwargs):
@@ -270,6 +280,7 @@ class Electrical(FrozenClass):
             )
         Electrical_dict["Tsta"] = self.Tsta
         Electrical_dict["Trot"] = self.Trot
+        Electrical_dict["type_skin_effect"] = self.type_skin_effect
         # The class name is added to the dict for deserialisation purpose
         Electrical_dict["__class__"] = "Electrical"
         return Electrical_dict
@@ -285,6 +296,7 @@ class Electrical(FrozenClass):
             self.LUT_enforced._set_None()
         self.Tsta = None
         self.Trot = None
+        self.type_skin_effect = None
 
     def _get_eec(self):
         """getter of eec"""
@@ -427,5 +439,23 @@ class Electrical(FrozenClass):
         doc=u"""Average rotor temperature for Electrical calculation
 
         :Type: float
+        """,
+    )
+
+    def _get_type_skin_effect(self):
+        """getter of type_skin_effect"""
+        return self._type_skin_effect
+
+    def _set_type_skin_effect(self, value):
+        """setter of type_skin_effect"""
+        check_var("type_skin_effect", value, "int")
+        self._type_skin_effect = value
+
+    type_skin_effect = property(
+        fget=_get_type_skin_effect,
+        fset=_set_type_skin_effect,
+        doc=u"""Skin effect for resistance and inductance
+
+        :Type: int
         """,
     )
