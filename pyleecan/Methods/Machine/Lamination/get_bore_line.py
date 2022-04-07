@@ -6,17 +6,13 @@ from ....Classes.Arc3 import Arc3
 from ....Methods import NotImplementedYetError
 
 
-def get_bore_line(self, alpha1, alpha2, prop_dict=None, ignore_notches=False):
+def get_bore_line(self, sym=1, prop_dict=None):
     """
 
     Parameters
     ----------
     self : Lamination
         a Lamination object
-    alpha1 : float
-        Starting angle [rad]
-    alpha2 : float
-        Ending angle [rad]
     prop_dict : dict
         Property dictionary to apply on the lines
 
@@ -26,45 +22,20 @@ def get_bore_line(self, alpha1, alpha2, prop_dict=None, ignore_notches=False):
         list of bore line
 
     """
-    delta = alpha2 - alpha1
-
-    if delta == 0:
-        return []
-
-    elif delta > 2 * pi:
-        raise NotImplementedYetError(
-            "Only angle smaller/equal to 2*pi are implemented."
-        )
+    if self.bore:
+        # TODO: sym != 1
+        bore_lines = self.bore.get_bore_line(prop_dict=prop_dict)
     else:
-        # ignore_notches = 1
-        if not self.notch or ignore_notches:
-            Rbo = self.get_Rbo()
-            Z1 = Rbo * exp(1j * alpha1)
-            if delta == 2 * pi:
-                Z2 = Rbo * exp(1j * (alpha1 + delta / 2))
-                line1 = Arc3(
-                    begin=Z1, end=Z2, is_trigo_direction=True, prop_dict=prop_dict
-                )
-                line2 = Arc3(
-                    begin=Z2, end=Z1, is_trigo_direction=True, prop_dict=prop_dict
-                )
-                return [line1, line2]
-            else:
-                Z2 = Rbo * exp(1j * alpha2)
-                return [Arc1(begin=Z1, end=Z2, radius=Rbo, prop_dict=prop_dict)]
+        bore_lines = list()
+        Rbo = self.get_Rbo()
+        if sym == 1:
+            arc1 = Arc3(begin=Rbo, end=-Rbo, is_trigo_direction=True)
+            arc2 = Arc3(begin=-Rbo, end=Rbo, is_trigo_direction=True)
+            bore_lines.append(arc1)
+            bore_lines.append(arc2)
         else:
-            # === intermediate solution ========================================
-            # no check for intersection of different notches
-            line_list = self.notch[0].build_geometry(
-                alpha1, alpha2, prop_dict=prop_dict
-            )
-            # === later =======================================================
-            """
-            bore_line = self.get_bore_line(alpha1, alpha2, ignore_notches=True)
-            for notch in notch_shape:
-                notch_line = notch.build_geometry()
-                bore_line = build_intersect_geometry(bore_line, notch_line,
-                                            inwards=True)
-            """
+            rot = exp(1j * 2 * pi / sym)
+            arc = Arc1(begin=Rbo, end=Rbo * rot, radius=Rbo, is_trigo_direction=True)
+            bore_lines.append(arc)
 
-            return line_list
+    return bore_lines

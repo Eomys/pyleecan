@@ -24,8 +24,8 @@ def get_notch_list(self, sym=1, is_yoke=False):
     else:
         notch_list = [notch for notch in self.notch if notch.is_yoke == is_yoke]
         desc_list = notch_list[0].get_notch_list(sym=sym)
-        # If more than one notch list, we need to merge in order the description
-        # (check if notches are coliding)
+        # If more than one notch, we need to merge and order the description
+        # TODO: check if notches are coliding
         for ii in range(len(notch_list) - 1):
             desc_list = merge_notch_list(
                 desc_list, notch_list[ii + 1].get_notch_list(sym=sym)
