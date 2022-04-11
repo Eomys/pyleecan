@@ -26,16 +26,22 @@ def test_FEMM_Loss_SPMSM():
 
     machine = load(join(DATA_DIR, "Machine", "SPMSM_18s16p_loss.json"))
 
-    # Ch = 143  # hysteresis loss coefficient [W/(m^3*T^2*Hz)]
-    # Ce = 0.530  # eddy current loss coefficients [W/(m^3*T^2*Hz^2)]
     Cprox = 4.1018  # sigma_w * cond.Hwire * cond.Wwire
+    k_hy = 0.00844 / 0.453592
+    k_ed = 31.2e-6 / 0.453592
+    alpha_f = 1
+    alpha_B = 2
 
-    k_hy=0.00844/0.453592
-    k_ed=31.2e-6/0.453592
-    alpha_f=1
-    alpha_B=2
+    rho = machine.stator.mat_type.struct.rho
 
-    loss_model = LossModelSteinmetz(k_hy=k_hy, k_ed=k_ed, alpha_f=alpha_f, alpha_B=alpha_B)
+    # Check hysteresis loss coefficient [W/(m^3*T^2*Hz)]
+    assert_almost_equal(k_hy * rho, 143, decimal=0)
+    # Check eddy current loss coefficient [W/(m^3*T^2*Hz^2)]
+    assert_almost_equal(k_ed * rho, 0.53, decimal=3)
+
+    loss_model = LossModelSteinmetz(
+        k_hy=k_hy, k_ed=k_ed, alpha_f=alpha_f, alpha_B=alpha_B
+    )
 
     simu = Simu1(name="test_FEMM_Loss_SPMSM", machine=machine)
 
@@ -62,12 +68,14 @@ def test_FEMM_Loss_SPMSM():
         is_fast_draw=True,
         is_periodicity_rotor=True,
         is_calc_torque_energy=False,
-        
         # is_close_femm=False,
     )
 
     simu.loss = LossFEMM(
-        Cp=Cprox, is_get_meshsolution=True, Tsta=120, type_skin_effect=0,
+        Cp=Cprox,
+        is_get_meshsolution=True,
+        Tsta=120,
+        type_skin_effect=0,
         Loss_model_dict={"stator core": loss_model, "rotor core": loss_model},
     )
 
@@ -136,20 +144,17 @@ def test_FEMM_Loss_SPMSM():
 
 
 def test_FEMM_Loss_Prius():
-    """Test to calculate losses in Toyota_Prius using LossFEMM model"""
+    """Test to calculate losses in Toyota_Prius using LossFEMM model based on motoranalysis validation"""
 
     machine = load(join(DATA_DIR, "Machine", "Toyota_Prius_loss.json"))
 
-    # Ch = 143  # hysteresis loss coefficient [W/(m^3*T^2*Hz)]
-    # Ce = 0.530  # eddy current loss coefficients [W/(m^3*T^2*Hz^2)]
-    Cprox = 1  # sigma_w * cond.Hwire * cond.Wwire
-
     simu = Simu1(name="test_FEMM_Loss_Prius", machine=machine)
 
+    # Current for MTPA
     Ic = 230 * np.exp(1j * 140 * np.pi / 180)
 
     simu.input = InputCurrent(
-        Nt_tot= 40 * 8,
+        Nt_tot=40 * 8,
         Na_tot=200 * 8,
         OP=OPdq(N0=1200, Id_ref=Ic.real, Iq_ref=Ic.imag),
         is_periodicity_t=True,
@@ -164,13 +169,16 @@ def test_FEMM_Loss_Prius():
         is_fast_draw=True,
         is_calc_torque_energy=False,
     )
-    
-    k_hy=0.011381
-    k_ed=4.67e-5
-    alpha_f=1.1499
-    alpha_B=1.7622
 
-    loss_model = LossModelSteinmetz(k_hy=k_hy, k_ed=k_ed, alpha_f=alpha_f, alpha_B=alpha_B)
+    k_hy = 0.011381
+    k_ed = 4.67e-5
+    alpha_f = 1.1499
+    alpha_B = 1.7622
+    Cprox = 1  # Neglecting proximity effect
+
+    loss_model = LossModelSteinmetz(
+        k_hy=k_hy, k_ed=k_ed, alpha_f=alpha_f, alpha_B=alpha_B
+    )
 
     simu.loss = LossFEMM(
         Cp=Cprox,
@@ -224,6 +232,6 @@ def test_FEMM_Loss_Prius():
 # To run it without pytest
 if __name__ == "__main__":
 
-    # out = test_FEMM_Loss_SPMSM()
+    out = test_FEMM_Loss_SPMSM()
 
-    out = test_FEMM_Loss_Prius()
+    # out = test_FEMM_Loss_Prius()
