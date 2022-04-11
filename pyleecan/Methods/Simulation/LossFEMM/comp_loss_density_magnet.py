@@ -255,6 +255,6 @@ def comp_loss_density_magnet(self, group, coeff_dict):
         )
         # Sum over orders
         A = np_sum(Af * n ** 2)
-        coeff_dict[group] = {"A": A, "B": 0, "C": 0}
+        coeff_dict[group] = {"A": A, "B": 0, "C": 0, "a": 2, "b": 0, "c": 0}
 
     return Pmagnet_density, freqs
