@@ -47,9 +47,6 @@ def comp_loss_density_magnet(self, group, coeff_dict):
     if output.geo.is_antiper_a:
         per_a *= 2
 
-    #####################################
-    Wmag = 0 # Previously to None, but raises an error later. #TODO
-    #####################################
     if isinstance(machine.rotor, LamSlotMag):
         magnet = machine.rotor.magnet
         slot = machine.rotor.slot
@@ -70,10 +67,21 @@ def comp_loss_density_magnet(self, group, coeff_dict):
             Wmag = hole0.W4
         elif isinstance(hole0, (HoleM51, HoleM53, HoleM57, HoleM58)):
             Hmag = hole0.H2
+            if isinstance(hole0, HoleM51):
+                Wmag = (hole0.W3 + hole0.W5 + hole0.W7) / 3
+            elif isinstance(hole0, HoleM52):
+                Wmag = hole0.W0
+            elif isinstance(hole0, HoleM53):
+                Wmag = hole0.W3
+            elif isinstance(hole0, HoleM57):
+                Wmag = hole0.W4
+            elif isinstance(hole0, HoleM58):
+                Wmag = hole0.W1
         elif isinstance(hole0, HoleM52):
             Hmag = hole0.H1
         else:
             Hmag = np.sqrt(hole0.comp_surface_magnet_id(0))
+            Wmag = Hmag
     else:
         raise Exception(
             "Cannot calculate magnet losses for rotor lamination other than LamSlotMag or LamHole"
@@ -85,7 +93,7 @@ def comp_loss_density_magnet(self, group, coeff_dict):
     # Calculate segmentation coefficient from:
     # "Effect of Eddy-Current Loss Reduction by Magnet Segmentation in Synchronous Motors With Concentrated Windings"
     # Katsumi Yamazaki, Member, IEEE, and Yu Fukushima, Equation (9)
-    if magnet.Lmag is None:
+    if magnet.Lmag is None or magnet.Nseg is None or Wmag is None:
         kseg = 1
     else:
         Lmag = magnet.Lmag
