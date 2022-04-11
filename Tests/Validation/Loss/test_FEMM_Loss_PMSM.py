@@ -76,7 +76,7 @@ def test_FEMM_Loss_SPMSM():
         is_get_meshsolution=True,
         Tsta=120,
         type_skin_effect=0,
-        Loss_model_dict={"stator core": loss_model, "rotor core": loss_model},
+        model_dict={"stator core": loss_model, "rotor core": loss_model},
     )
 
     out = simu.run()
@@ -187,7 +187,7 @@ def test_FEMM_Loss_Prius():
         is_get_meshsolution=True,
         Tsta=100,
         type_skin_effect=0,
-        Loss_model_dict={"stator core": loss_model, "rotor core": loss_model},
+        model_dict={"stator core": loss_model, "rotor core": loss_model},
     )
 
     out = simu.run()

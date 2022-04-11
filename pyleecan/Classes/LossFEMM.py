@@ -138,11 +138,11 @@ class LossFEMM(Loss):
         Tsta=20,
         Trot=20,
         type_skin_effect=1,
-        Loss_model_dict=None,
         Cp=None,
         model_index=-1,
         model_list=-1,
         logger_name="Pyleecan.Loss",
+        model_dict=None,
         init_dict=None,
         init_str=None,
     ):
@@ -169,8 +169,6 @@ class LossFEMM(Loss):
                 Trot = init_dict["Trot"]
             if "type_skin_effect" in list(init_dict.keys()):
                 type_skin_effect = init_dict["type_skin_effect"]
-            if "Loss_model_dict" in list(init_dict.keys()):
-                Loss_model_dict = init_dict["Loss_model_dict"]
             if "Cp" in list(init_dict.keys()):
                 Cp = init_dict["Cp"]
             if "model_index" in list(init_dict.keys()):
@@ -179,16 +177,20 @@ class LossFEMM(Loss):
                 model_list = init_dict["model_list"]
             if "logger_name" in list(init_dict.keys()):
                 logger_name = init_dict["logger_name"]
+            if "model_dict" in list(init_dict.keys()):
+                model_dict = init_dict["model_dict"]
         # Set the properties (value check and convertion are done in setter)
         self.is_get_meshsolution = is_get_meshsolution
         self.Tsta = Tsta
         self.Trot = Trot
         self.type_skin_effect = type_skin_effect
-        self.Loss_model_dict = Loss_model_dict
         self.Cp = Cp
         # Call Loss init
         super(LossFEMM, self).__init__(
-            model_index=model_index, model_list=model_list, logger_name=logger_name
+            model_index=model_index,
+            model_list=model_list,
+            logger_name=logger_name,
+            model_dict=model_dict,
         )
         # The class is frozen (in Loss init), for now it's impossible to
         # add new properties
@@ -205,14 +207,6 @@ class LossFEMM(Loss):
         LossFEMM_str += "Tsta = " + str(self.Tsta) + linesep
         LossFEMM_str += "Trot = " + str(self.Trot) + linesep
         LossFEMM_str += "type_skin_effect = " + str(self.type_skin_effect) + linesep
-        if len(self.Loss_model_dict) == 0:
-            LossFEMM_str += "Loss_model_dict = dict()" + linesep
-        for key, obj in self.Loss_model_dict.items():
-            tmp = (
-                self.Loss_model_dict[key].__str__().replace(linesep, linesep + "\t")
-                + linesep
-            )
-            LossFEMM_str += "Loss_model_dict[" + key + "] =" + tmp + linesep + linesep
         LossFEMM_str += "Cp = " + str(self.Cp) + linesep
         return LossFEMM_str
 
@@ -232,8 +226,6 @@ class LossFEMM(Loss):
         if other.Trot != self.Trot:
             return False
         if other.type_skin_effect != self.type_skin_effect:
-            return False
-        if other.Loss_model_dict != self.Loss_model_dict:
             return False
         if other.Cp != self.Cp:
             return False
@@ -258,21 +250,6 @@ class LossFEMM(Loss):
             diff_list.append(name + ".Trot")
         if other._type_skin_effect != self._type_skin_effect:
             diff_list.append(name + ".type_skin_effect")
-        if (other.Loss_model_dict is None and self.Loss_model_dict is not None) or (
-            other.Loss_model_dict is not None and self.Loss_model_dict is None
-        ):
-            diff_list.append(name + ".Loss_model_dict None mismatch")
-        elif self.Loss_model_dict is None:
-            pass
-        elif len(other.Loss_model_dict) != len(self.Loss_model_dict):
-            diff_list.append("len(" + name + "Loss_model_dict)")
-        else:
-            for key in self.Loss_model_dict:
-                diff_list.extend(
-                    self.Loss_model_dict[key].compare(
-                        other.Loss_model_dict[key], name=name + ".Loss_model_dict"
-                    )
-                )
         if other._Cp != self._Cp:
             diff_list.append(name + ".Cp")
         # Filter ignore differences
@@ -290,9 +267,6 @@ class LossFEMM(Loss):
         S += getsizeof(self.Tsta)
         S += getsizeof(self.Trot)
         S += getsizeof(self.type_skin_effect)
-        if self.Loss_model_dict is not None:
-            for key, value in self.Loss_model_dict.items():
-                S += getsizeof(value) + getsizeof(key)
         S += getsizeof(self.Cp)
         return S
 
@@ -317,19 +291,6 @@ class LossFEMM(Loss):
         LossFEMM_dict["Tsta"] = self.Tsta
         LossFEMM_dict["Trot"] = self.Trot
         LossFEMM_dict["type_skin_effect"] = self.type_skin_effect
-        if self.Loss_model_dict is None:
-            LossFEMM_dict["Loss_model_dict"] = None
-        else:
-            LossFEMM_dict["Loss_model_dict"] = dict()
-            for key, obj in self.Loss_model_dict.items():
-                if obj is not None:
-                    LossFEMM_dict["Loss_model_dict"][key] = obj.as_dict(
-                        type_handle_ndarray=type_handle_ndarray,
-                        keep_function=keep_function,
-                        **kwargs
-                    )
-                else:
-                    LossFEMM_dict["Loss_model_dict"][key] = None
         LossFEMM_dict["Cp"] = self.Cp
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
@@ -343,7 +304,6 @@ class LossFEMM(Loss):
         self.Tsta = None
         self.Trot = None
         self.type_skin_effect = None
-        self.Loss_model_dict = None
         self.Cp = None
         # Set to None the properties inherited from Loss
         super(LossFEMM, self)._set_None()
@@ -417,46 +377,6 @@ class LossFEMM(Loss):
         doc=u"""Skin effect for resistance calculation
 
         :Type: int
-        """,
-    )
-
-    def _get_Loss_model_dict(self):
-        """getter of Loss_model_dict"""
-        if self._Loss_model_dict is not None:
-            for key, obj in self._Loss_model_dict.items():
-                if obj is not None:
-                    obj.parent = self
-        return self._Loss_model_dict
-
-    def _set_Loss_model_dict(self, value):
-        """setter of Loss_model_dict"""
-        if type(value) is dict:
-            for key, obj in value.items():
-                if isinstance(obj, str):  # Load from file
-                    try:
-                        obj = load_init_dict(obj)[1]
-                    except Exception as e:
-                        self.get_logger().error(
-                            "Error while loading " + obj + ", setting None instead"
-                        )
-                        obj = None
-                        value[key] = None
-                if type(obj) is dict:
-                    class_obj = import_class(
-                        "pyleecan.Classes", obj.get("__class__"), "Loss_model_dict"
-                    )
-                    value[key] = class_obj(init_dict=obj)
-        if type(value) is int and value == -1:
-            value = dict()
-        check_var("Loss_model_dict", value, "{LossModel}")
-        self._Loss_model_dict = value
-
-    Loss_model_dict = property(
-        fget=_get_Loss_model_dict,
-        fset=_set_Loss_model_dict,
-        doc=u"""Dict of loss model whose key is a lamination and value is the associated loss model
-
-        :Type: {LossModel}
         """,
     )
 
