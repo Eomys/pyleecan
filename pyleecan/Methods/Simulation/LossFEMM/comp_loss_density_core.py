@@ -150,6 +150,6 @@ def comp_loss_density_core(self, group, coeff_dict):
         else:
             coeff = Lst * per_a * matmul(Bfft_magnitude**alpha_B, Se)
             B = np_sum(Ch * coeff * n**alpha_f)
-        coeff_dict[group] = {"A": A, "B": B, "C": 0, "alpha": alpha_f}
+        coeff_dict[group] = {"A": A, "B": B, "C": 0, "a": 2, "b": alpha_f, "c": 0}
 
     return Pcore_density, freqs

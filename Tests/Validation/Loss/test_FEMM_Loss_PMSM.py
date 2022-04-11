@@ -140,7 +140,7 @@ def test_FEMM_Loss_SPMSM():
 def test_FEMM_Loss_Prius():
     """Test to calculate losses in Toyota_Prius using LossFEMM model"""
 
-    machine = load(join(DATA_DIR, "Machine", "Toyota_Prius.json"))
+    machine = load(join(DATA_DIR, "Machine", "Toyota_Prius_loss.json"))
 
     # Ch = 143  # hysteresis loss coefficient [W/(m^3*T^2*Hz)]
     # Ce = 0.530  # eddy current loss coefficients [W/(m^3*T^2*Hz^2)]
