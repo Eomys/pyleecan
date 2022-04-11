@@ -17,7 +17,7 @@ def get_loss_group(self, group, felec):
 
     if group in self.coeff_dict:
         coeff_dict = self.coeff_dict[group]
-        Ploss = coeff_dict["A"] * felec ** 2 + coeff_dict["B"] * felec + coeff_dict["C"]
+        Ploss = coeff_dict["A"] * felec ** 2 + coeff_dict["B"] * felec **coeff_dict["alpha"] + coeff_dict["C"]
     else:
         Ploss = 0
 

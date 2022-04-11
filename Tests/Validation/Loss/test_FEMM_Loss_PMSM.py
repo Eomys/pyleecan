@@ -133,12 +133,14 @@ def test_FEMM_Loss_SPMSM():
                 "Magnets",
             ],
         )
+    
+    return out
 
 
 def test_FEMM_Loss_Prius():
     """Test to calculate losses in Toyota_Prius using LossFEMM model"""
 
-    machine = load(join(DATA_DIR, "Machine", "Toyota_Prius_loss.json"))
+    machine = load(join(DATA_DIR, "Machine", "Toyota_Prius.json"))
 
     # Ch = 143  # hysteresis loss coefficient [W/(m^3*T^2*Hz)]
     # Ce = 0.530  # eddy current loss coefficients [W/(m^3*T^2*Hz^2)]
@@ -192,6 +194,24 @@ def test_FEMM_Loss_Prius():
         "proximity_loss": out.loss.Pprox,
     }
     print(power_dict)
+    
+    speed_array = np.linspace(10, 8000, 100)
+    p = machine.get_pole_pair_number()
+    outloss_list = list()
+    OP = out.elec.OP.copy()
+    for speed in speed_array:
+        OP.felec = speed / 60 * p
+        out_dict = {"coeff_dict": out.loss.coeff_dict}
+        outloss = OutLoss()
+        outloss.store(out_dict, lam=machine.stator, OP=OP, type_skin_effect=0, Tsta=120)
+        outloss_list.append(outloss)
+
+    joule_list = [o.Pjoule for o in outloss_list]
+    sc_list = [o.Pstator for o in outloss_list]
+    rc_list = [o.Protor for o in outloss_list]
+    prox_list = [o.Pprox for o in outloss_list]
+    mag_list = [o.Pmagnet for o in outloss_list]
+    ovl_list = [o.get_loss_overall() for o in outloss_list]
 
     if is_show_fig:
         out.loss.meshsol_list[0].plot_contour(
@@ -205,6 +225,20 @@ def test_FEMM_Loss_Prius():
             ],
             # clim=[2e4, 2e7],
         )
+        
+        plot_2D(
+        [speed_array],
+        [ovl_list, joule_list, sc_list, rc_list, prox_list, mag_list],
+        xlabel="Speed [rpm]",
+        ylabel="Losses [W]",
+        legend_list=[
+            "Overall",
+            "Winding Joule",
+            "Stator core",
+            "Rotor core",
+            "Winding proximity",
+            "Magnets",
+        ])
 
     # out.loss.meshsol_list[0].plot_contour(
     #     "freqs=sum",
@@ -219,7 +253,8 @@ def test_FEMM_Loss_Prius():
     #     group_names=["rotor core", "rotor magnets"],
     #     # clim=[2e4, 2e7],
     # )
-
+    
+    return out
 
 # To run it without pytest
 if __name__ == "__main__":

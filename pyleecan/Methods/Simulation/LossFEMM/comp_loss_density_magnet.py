@@ -48,7 +48,7 @@ def comp_loss_density_magnet(self, group, coeff_dict):
         per_a *= 2
 
     #####################################
-    Wmag = 0# Previously to None, but raises an error later. #TODO
+    Wmag = 0 # Previously to None, but raises an error later. #TODO
     #####################################
     if isinstance(machine.rotor, LamSlotMag):
         magnet = machine.rotor.magnet
@@ -67,6 +67,7 @@ def comp_loss_density_magnet(self, group, coeff_dict):
         magnet = hole0.get_magnet_dict()["magnet_0"]
         if isinstance(hole0, HoleM50):
             Hmag = hole0.H3
+            Wmag = hole0.W4
         elif isinstance(hole0, (HoleM51, HoleM53, HoleM57, HoleM58)):
             Hmag = hole0.H2
         elif isinstance(hole0, HoleM52):
@@ -246,6 +247,6 @@ def comp_loss_density_magnet(self, group, coeff_dict):
         )
         # Sum over orders
         A = np_sum(Af * n ** 2)
-        coeff_dict[group] = {"A": A, "B": 0, "C": 0}
+        coeff_dict[group] = {"A": A, "B": 0, "C": 0, "alpha": 0}
 
     return Pmagnet_density, freqs
