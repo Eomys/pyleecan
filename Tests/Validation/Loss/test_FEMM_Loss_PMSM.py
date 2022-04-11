@@ -141,7 +141,7 @@ def test_FEMM_Loss_SPMSM():
                 "Magnets",
             ],
         )
-    
+
     return out
 
 
@@ -202,7 +202,7 @@ def test_FEMM_Loss_Prius():
         "proximity_loss": out.loss.Pprox,
     }
     print(power_dict)
-    
+
     speed_array = np.linspace(10, 8000, 100)
     p = machine.get_pole_pair_number()
     outloss_list = list()
@@ -233,20 +233,21 @@ def test_FEMM_Loss_Prius():
             ],
             # clim=[2e4, 2e7],
         )
-        
+
         plot_2D(
-        [speed_array],
-        [ovl_list, joule_list, sc_list, rc_list, prox_list, mag_list],
-        xlabel="Speed [rpm]",
-        ylabel="Losses [W]",
-        legend_list=[
-            "Overall",
-            "Winding Joule",
-            "Stator core",
-            "Rotor core",
-            "Winding proximity",
-            "Magnets",
-        ])
+            [speed_array],
+            [ovl_list, joule_list, sc_list, rc_list, prox_list, mag_list],
+            xlabel="Speed [rpm]",
+            ylabel="Losses [W]",
+            legend_list=[
+                "Overall",
+                "Winding Joule",
+                "Stator core",
+                "Rotor core",
+                "Winding proximity",
+                "Magnets",
+            ],
+        )
 
     # out.loss.meshsol_list[0].plot_contour(
     #     "freqs=sum",
@@ -261,8 +262,9 @@ def test_FEMM_Loss_Prius():
     #     group_names=["rotor core", "rotor magnets"],
     #     # clim=[2e4, 2e7],
     # )
-    
+
     return out
+
 
 # To run it without pytest
 if __name__ == "__main__":
