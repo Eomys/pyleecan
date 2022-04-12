@@ -1,3 +1,4 @@
+from attr import has
 from numpy import gcd
 
 
@@ -22,6 +23,17 @@ def comp_periodicity_spatial(self):
         p = self.get_pole_pair_number()
 
         per_a = int(gcd(Zs, p))
+
+        # account for notches
+        for notch in self.notch:
+            per_a = int(gcd(notch.notch_shape.Zs, per_a))
+
+        # account for bore
+        if self.bore:
+            if hasattr(self.bore, "N"):
+                per_a = int(gcd(self.bore.N, per_a))
+            else:
+                per_a = 1
 
         if per_a == 1:
             is_antiper_a = bool(Zs % 2 == 0)
