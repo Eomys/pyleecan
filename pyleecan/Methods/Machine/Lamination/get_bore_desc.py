@@ -23,51 +23,36 @@ def get_bore_desc(self, sym=1, prop_dict=None):
         list of lines to draw the bore radius
     """
 
-    Rbo = self.get_Rbo()
-
     is_notch = self.notch and any([not notch.is_yoke for notch in self.notch])
 
-    if not is_notch and self.bore:
-        bore_lines = self.bore.get_bore_line(prop_dict=prop_dict)
-        if sym == 1:
-            return None, bore_lines
-        else:
+    if not is_notch:
+        bore_lines = self.get_bore_line(sym=1, prop_dict=prop_dict)
+
+        # Cut the bore lines for symmetry if needed
+        if sym != 1:
             # First cut Ox
-            bore_lines_top = list()
+            first_cut = list()
             for line in bore_lines:
                 top, _ = line.split_line(-1.2 * self.Rext, 1.2 * self.Rext)
-                bore_lines_top.extend(top)
+                first_cut.extend(top)
             if sym > 2:
                 # Second cut 0Sym
-                bore_lines_cut = list()
-                for line in bore_lines_top:
+                bore_lines = list()
+                for line in first_cut:
                     top, _ = line.split_line(
                         1.2 * self.Rext * exp(1j * 2 * pi / sym), 0
                     )
-                    bore_lines_cut.extend(top)
+                    bore_lines.extend(top)
             else:  # Cutting lamination in half
-                bore_lines_cut = bore_lines_top
-            return None, bore_lines_cut
+                bore_lines = first_cut
+
+        return None, bore_lines
 
     bore_desc = list()
-    if not is_notch and not self.bore:  # ... and (not self.bore or sym != 1):
-        # No notches
-        if sym == 1:
-            arc1 = Arc3(begin=Rbo, end=-Rbo, is_trigo_direction=True)
-            arc2 = Arc3(begin=-Rbo, end=Rbo, is_trigo_direction=True)
-            bore_desc.append({"obj": arc1, "begin_angle": 0, "end_angle": pi})
-            bore_desc.append({"obj": arc2, "begin_angle": 0, "end_angle": pi})
-        else:
-            rot = exp(1j * 2 * pi / sym)
-            arc = Arc1(begin=Rbo, end=Rbo * rot, radius=Rbo, is_trigo_direction=True)
-            bore_desc = [{"obj": arc, "begin_angle": 0, "end_angle": 2 * pi / sym}]
-
-        return bore_desc, _convert_desc(bore_desc, prop_dict)
-
     if is_notch:  # Notches => Generate Full lines and cut (if needed)
         # Get all the notches and bore lines
         notch_list = self.get_notch_list(sym=1, is_yoke=False)
-        bore_lines = self.get_bore_line()
+        bore_lines = self.get_bore_line(prop_dict=prop_dict)
 
         # generate bore_line description
         bore_list = list()
@@ -79,6 +64,7 @@ def get_bore_desc(self, sym=1, prop_dict=None):
             bore_list.append(desc)
 
         # cut the actual bore lines with the notches
+        # # TODO: case where starting or end points of bore and notch are the same
         for notch in notch_list:
             bore_list_new = list()
             for bore in bore_list:
@@ -104,7 +90,6 @@ def get_bore_desc(self, sym=1, prop_dict=None):
                         desc["obj"] = line
                         bore_list_new.append(desc)
 
-                # TODO: case where starting or end points of bore and notch are the same
             bore_list = bore_list_new
 
         # sort lists in the range from 0 to 2pi for later merge
@@ -127,7 +112,7 @@ def get_bore_desc(self, sym=1, prop_dict=None):
 
             bore_desc.append(line)
 
-        # move line that crosses x axis to first position otherwise split would not work
+        # move line that crosses x axis to first position otherwise split will not work
         if bore_desc[-1]["begin_angle"] < 0 and bore_desc[-1]["end_angle"] > 0:
             bore_desc.insert(0, bore_desc.pop(-1))
 
@@ -170,10 +155,6 @@ def _convert_desc(bore_desc, prop_dict):
                 bore_lines.append(line.copy())
                 bore_lines[-1].rotate((bore["begin_angle"] + bore["end_angle"]) / 2)
         else:  # Notches
-            # lines = bore["obj"].build_geometry()
-            # for line in lines:
-            #     line.rotate((bore["begin_angle"] + bore["end_angle"]) / 2)
-            # bore_lines.extend(lines)
             bore_lines.extend(bore["obj"])
     return bore_lines
 

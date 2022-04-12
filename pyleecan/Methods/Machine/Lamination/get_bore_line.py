@@ -1,9 +1,8 @@
 # -*- coding: utf-8 -*-
-from numpy import pi, exp, linspace
+from numpy import pi, exp
 
 from ....Classes.Arc1 import Arc1
 from ....Classes.Arc3 import Arc3
-from ....Methods import NotImplementedYetError
 
 
 def get_bore_line(self, sym=1, prop_dict=None):
@@ -37,5 +36,9 @@ def get_bore_line(self, sym=1, prop_dict=None):
             rot = exp(1j * 2 * pi / sym)
             arc = Arc1(begin=Rbo, end=Rbo * rot, radius=Rbo, is_trigo_direction=True)
             bore_lines.append(arc)
+
+        if prop_dict is not None:
+            for line in bore_lines:
+                line.prop_dict = prop_dict
 
     return bore_lines

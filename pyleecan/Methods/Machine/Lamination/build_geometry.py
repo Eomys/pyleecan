@@ -1,9 +1,4 @@
 # -*- coding: utf-8 -*-
-from numpy import pi, exp
-
-from ....Classes.Arc1 import Arc1
-from ....Classes.Circle import Circle
-from ....Classes.Segment import Segment
 from ....Classes.SurfLine import SurfLine
 from ....Classes.SurfRing import SurfRing
 from ....Functions.labels import (
@@ -12,9 +7,8 @@ from ....Functions.labels import (
     YOKE_LAB,
     RADIUS_PROP_LAB,
     BOUNDARY_PROP_LAB,
-    YSR_LAB,
-    YSL_LAB,
 )
+
 from ....Functions.Geometry.transform_hole_surf import transform_hole_surf
 
 
@@ -52,22 +46,17 @@ def build_geometry(self, sym=1, alpha=0, delta=0, is_circular_radius=False):
         label_int = label_bore
 
     # Get Radius lines
+    yoke_prop = {RADIUS_PROP_LAB: YOKE_LAB, BOUNDARY_PROP_LAB: label_yoke}
     if self.is_internal:
         if self.Rint > 0:
             _, int_line = self.get_yoke_desc(
-                sym=sym,
-                is_reversed=True,
-                prop_dict={RADIUS_PROP_LAB: YOKE_LAB, BOUNDARY_PROP_LAB: label_yoke},
+                sym=sym, is_reversed=True, prop_dict=yoke_prop
             )
         else:
             int_line = []
         _, ext_line = self.get_bore_desc(sym=sym, prop_dict={RADIUS_PROP_LAB: BORE_LAB})
     else:
-        _, ext_line = self.get_yoke_desc(
-            sym=sym,
-            is_reversed=True,
-            prop_dict={RADIUS_PROP_LAB: YOKE_LAB, BOUNDARY_PROP_LAB: label_yoke},
-        )
+        _, ext_line = self.get_yoke_desc(sym=sym, is_reversed=True, prop_dict=yoke_prop)
         _, int_line = self.get_bore_desc(sym=sym, prop_dict={RADIUS_PROP_LAB: BORE_LAB})
 
     # Add the ventilation ducts if there is any
@@ -75,17 +64,12 @@ def build_geometry(self, sym=1, alpha=0, delta=0, is_circular_radius=False):
     vent_surf_list = list()
     if self.axial_vent not in [None, []]:
         for vent in self.axial_vent:
-            vent_list = vent.build_geometry(alpha=0, delta=0)
-            vent_surf_list.extend(
-                transform_hole_surf(
-                    hole_surf_list=vent_list,
-                    Zh=vent.Zh,
-                    sym=sym,
-                    alpha=0,
-                    delta=0,
-                    is_split=True,
-                )
+            kwargs = dict(alpha=0, delta=0)
+            vent_list = vent.build_geometry(**kwargs)
+            surf = transform_hole_surf(
+                hole_surf_list=vent_list, Zh=vent.Zh, sym=sym, is_split=True, **kwargs
             )
+            vent_surf_list.extend(surf)
     surf_list.extend(vent_surf_list)
 
     # Add the closing surfaces if requested
@@ -95,11 +79,7 @@ def build_geometry(self, sym=1, alpha=0, delta=0, is_circular_radius=False):
     # Create the Lamination surfaces
     point_ref = self.comp_point_ref(sym=sym)
     if sym == 1:  # Complete lamination
-        ext_surf = SurfLine(
-            label=label_ext,
-            line_list=ext_line,
-            point_ref=point_ref,
-        )
+        ext_surf = SurfLine(label=label_ext, line_list=ext_line, point_ref=point_ref)
         int_surf = SurfLine(label=label_int, line_list=int_line, point_ref=0)
         if self.Rint > 0 and len(ext_line) > 0:
             surf_list.insert(
@@ -153,11 +133,7 @@ def build_geometry(self, sym=1, alpha=0, delta=0, is_circular_radius=False):
         if self.Rint > 0:
             curve_list.extend(int_line)
 
-        surf_yoke = SurfLine(
-            line_list=curve_list,
-            label=label_lam,
-            point_ref=point_ref,
-        )
+        surf_yoke = SurfLine(line_list=curve_list, label=label_lam, point_ref=point_ref)
         surf_list.insert(0, surf_yoke)  # First in list for plot
 
     # apply the transformation
