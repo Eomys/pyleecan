@@ -1,4 +1,4 @@
-from numpy import exp, pi
+from numpy import exp, pi, angle
 
 from ....Classes.Arc1 import Arc1
 from ....Classes.Arc3 import Arc3
@@ -65,41 +65,75 @@ def get_bore_desc(self, sym=1, prop_dict=None):
         return bore_desc, _convert_desc(bore_desc, prop_dict)
 
     if is_notch:  # Notches => Generate Full lines and cut (if needed)
-        # Get all the notches
+        # Get all the notches and bore lines
         notch_list = self.get_notch_list(sym=1, is_yoke=False)
+        bore_lines = self.get_bore_line()
 
-        # Add all the bore lines
-        for ii, desc in enumerate(notch_list):
-            bore_desc.append(desc)
-            if ii != len(notch_list) - 1:
-                bore_dict = dict()
-                bore_dict["begin_angle"] = notch_list[ii]["end_angle"]
-                bore_dict["end_angle"] = notch_list[ii + 1]["begin_angle"]
-                bore_dict["obj"] = Arc1(
-                    begin=Rbo * exp(1j * bore_dict["begin_angle"]),
-                    end=Rbo * exp(1j * bore_dict["end_angle"]),
-                    radius=Rbo,
-                )
-                bore_desc.append(bore_dict)
+        # generate bore_line description
+        bore_list = list()
+        for bore_line in bore_lines:
+            desc = dict()
+            desc["begin_angle"] = angle(bore_line.get_begin())
+            desc["end_angle"] = angle(bore_line.get_end())
+            desc["obj"] = bore_line
+            bore_list.append(desc)
 
-        bore_dict["begin_angle"] = notch_list[-1]["end_angle"]
-        bore_dict["end_angle"] = notch_list[0]["begin_angle"]
-        bore_dict["obj"] = Arc1(
-            begin=Rbo * exp(1j * bore_dict["begin_angle"]),
-            end=Rbo * exp(1j * bore_dict["end_angle"]),
-            radius=Rbo,
-            is_trigo_direction=True,
-        )
-        if notch_list[0]["begin_angle"] < 0:
-            # First element is a slot or notch
-            bore_desc.append(bore_dict)
-        else:
-            # First element is a bore line
-            bore_desc.insert(0, bore_dict)
+        # cut the actual bore lines with the notches
+        for notch in notch_list:
+            bore_list_new = list()
+            for bore in bore_list:
+                lines = list()
+                notch_begin, notch_end = notch["begin_angle"], notch["end_angle"]
+                bore_begin, bore_end = bore["begin_angle"], bore["end_angle"]
+                if is_angle_between(notch_begin, bore_begin, bore_end):
+                    _, line = bore["obj"].split_line(0, notch["obj"][0].get_begin())
+                    lines.extend(line)
+                if is_angle_between(notch_end, bore_begin, bore_end):
+                    line, _ = bore["obj"].split_line(0, notch["obj"][-1].get_end())
+                    lines.extend(line)
+
+                # TODO check that there is only one line per split
+
+                if not lines:
+                    bore_list_new.append(bore)
+                else:
+                    for line in lines:
+                        desc = dict()
+                        desc["begin_angle"] = angle(line.get_begin())
+                        desc["end_angle"] = angle(line.get_end())
+                        desc["obj"] = line
+                        bore_list_new.append(desc)
+
+                # TODO: case where starting or end points of bore and notch are the same
+            bore_list = bore_list_new
+
+        # sort lists in the range from 0 to 2pi for later merge
+        bore_list = sorted(bore_list, key=lambda k: k["begin_angle"] % (2 * pi))
+        notch_list = sorted(notch_list, key=lambda k: k["begin_angle"] % (2 * pi))
+
+        # merge bore and notch lists by angle
+        while notch_list or bore_list:
+            if notch_list and bore_list:
+                ang_notch = notch_list[0]["begin_angle"] % (2 * pi)
+                ang_bore = bore_list[0]["begin_angle"] % (2 * pi)
+                if ang_notch < ang_bore:
+                    line = notch_list.pop(0)
+                else:
+                    line = bore_list.pop(0)
+            elif not notch_list:
+                line = bore_list.pop(0)
+            else:
+                line = notch_list.pop(0)
+
+            bore_desc.append(line)
+
+        # move line that crosses x axis to first position otherwise split would not work
+        if bore_desc[-1]["begin_angle"] < 0 and bore_desc[-1]["end_angle"] > 0:
+            bore_desc.insert(0, bore_desc.pop(-1))
 
         bore_lines = _convert_desc(bore_desc, prop_dict)
 
-        # Cut the bore lines if needed
+        # Cut the bore lines for symmetry if needed
         if sym != 1:
             # First cut Ox
             first_cut = list()
@@ -136,8 +170,25 @@ def _convert_desc(bore_desc, prop_dict):
                 bore_lines.append(line.copy())
                 bore_lines[-1].rotate((bore["begin_angle"] + bore["end_angle"]) / 2)
         else:  # Notches
-            lines = bore["obj"].build_geometry()
-            for line in lines:
-                line.rotate((bore["begin_angle"] + bore["end_angle"]) / 2)
-            bore_lines.extend(lines)
+            # lines = bore["obj"].build_geometry()
+            # for line in lines:
+            #     line.rotate((bore["begin_angle"] + bore["end_angle"]) / 2)
+            # bore_lines.extend(lines)
+            bore_lines.extend(bore["obj"])
     return bore_lines
+
+
+def is_angle_between(angle, begin, end):
+    """
+    Check if angle is between begin and end
+    """
+    # normalize all angles to [0, 2pi]
+    angle = angle % (2 * pi)
+    begin = begin % (2 * pi)
+    end = end % (2 * pi)
+
+    if begin > end:
+        # check if angle is between [begin, 2pi] or [0, end]
+        return (angle > begin) or (angle < end)
+
+    return (angle > begin) and (angle < end)
