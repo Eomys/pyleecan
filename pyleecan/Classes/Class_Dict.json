@@ -4739,13 +4739,13 @@
         "desc": "Look Up Table class for dq OP matrix",
         "is_internal": false,
         "methods": [
-            "get_Ldqh",
-            "get_Lmdqh",
-            "get_Phidqh_mean",
-            "get_Phidqh_mag",
-            "get_Phidqh_mag_mean",
-            "get_Ploss_dqh_interp",
-            "interp_Phi_dqh"
+            "get_L_dqh",
+            "get_Lm_dqh",
+            "get_Phi_dqh_mean",
+            "get_Phi_dqh_mag",
+            "get_Phi_dqh_mag_mean",
+            "interp_Phi_dqh",
+            "interp_Ploss_dqh"
         ],
         "mother": "LUT",
         "name": "LUTdq",
@@ -4768,24 +4768,6 @@
                 "name": "Phi_dqh_mag",
                 "type": "SciDataTool.Classes.DataND.DataND",
                 "unit": "Wbrms",
-                "value": "None"
-            },
-            {
-                "desc": "Stator winding flux function of time and phases",
-                "max": "",
-                "min": "",
-                "name": "Phi_wind",
-                "type": "[SciDataTool.Classes.DataND.DataND]",
-                "unit": "Wb",
-                "value": "None"
-            },
-            {
-                "desc": "Interpolant function of Phi_dqh",
-                "max": "",
-                "min": "",
-                "name": "Phi_dqh_interp",
-                "type": "scipy.interpolate.interpolate.RegularGridInterpolator",
-                "unit": "",
                 "value": "None"
             }
         ]

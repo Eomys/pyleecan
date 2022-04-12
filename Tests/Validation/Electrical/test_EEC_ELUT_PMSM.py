@@ -77,7 +77,7 @@ def test_EEC_ELUT_PMSM_calc(n_Id=5, n_Iq=5):
     ELUT.simu.run()
 
     # Check flux linkage dqh values
-    Phi_dqh_mean = ELUT.get_Phidqh_mean()
+    Phi_dqh_mean = ELUT.get_Phi_dqh_mean()
     OP_list = OP_matrix[:, 1:3].tolist()
     ii = OP_list.index([0, 0])
     stator_label = ELUT.simu.machine.stator.get_label()

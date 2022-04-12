@@ -1,7 +1,7 @@
 from ....Functions.Electrical.dqh_transformation import n2dqh_DataTime
 
 
-def get_Phidqh_mag(self):
+def get_Phi_dqh_mag(self):
     """Get the total d-axis inductance
 
     Parameters

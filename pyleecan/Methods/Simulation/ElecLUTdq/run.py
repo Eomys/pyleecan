@@ -57,23 +57,31 @@ def run(self):
         # Run look up table calculation
         # Check dq current boundaries
         if self.Id_min is None:
-            self.Id_min = -I_max
+            if self.n_Id == 1 and self.Id_max is not None:
+                self.Id_min = self.Id_max
+            else:
+                self.Id_min = -I_max
         if self.Id_max is None:
-            self.Id_max = I_max
+            if self.n_Id == 1 and self.Id_min is not None:
+                self.Id_max = self.Id_min
+            else:
+                self.Id_max = I_max
         if self.Iq_min is None:
-            self.Iq_min = -I_max
+            if self.n_Iq == 1 and self.Iq_max is not None:
+                self.Iq_min = self.Iq_max
+            else:
+                self.Iq_min = -I_max
         if self.Iq_max is None:
-            self.Iq_max = I_max
+            if self.n_Iq == 1 and self.Iq_min is not None:
+                self.Iq_max = self.Iq_min
+            else:
+                self.Iq_max = I_max
 
         # Run method to calculate LUT
         LUT = self.comp_LUTdq()
 
     # Check if there is a loss model
     is_loss_model = LUT.simu.loss is not None
-
-    if is_loss_model:
-        # Create loss interpolant function from LUT
-        Ploss_dqh_interp = LUT.get_Ploss_dqh_interp(N0=OP.N0)
 
     # iteration until convergence is reached, and max number of iterations on EEC
     delta_Pem = 1e10
@@ -84,12 +92,13 @@ def run(self):
     Id_max = self.Id_max
     Iq_min = self.Iq_min
     Iq_max = self.Iq_max
-    Ndq = self.n_interp
+    Nd = self.n_Id if self.n_Id == 1 else self.n_interp
+    Nq = self.n_Iq if self.n_Iq == 1 else self.n_interp
     while abs(delta_Pem) > delta_Pem_max and niter_Pem < Nmax:
 
         # Refine Id/Iq mesh
-        Id_vect = np.linspace(Id_min, Id_max, Ndq)
-        Iq_vect = np.linspace(Iq_min, Iq_max, Ndq)
+        Id_vect = np.linspace(Id_min, Id_max, Nd)
+        Iq_vect = np.linspace(Iq_min, Iq_max, Nq)
         Id, Iq = np.meshgrid(Id_vect, Iq_vect)
         Id, Iq = Id.ravel(), Iq.ravel()
 
@@ -106,8 +115,8 @@ def run(self):
 
         if is_loss_model:
             # Interpolate losses from LUT
-            Plosses = Ploss_dqh_interp((Id, Iq))
-            Ploss_ovl = np.sum(Plosses, axis=1)
+            Ploss_dqh = LUT.interp_Ploss_dqh(Id, Iq, N0=OP.N0)
+            Ploss_ovl = np.sum(Ploss_dqh, axis=1)
         else:
             # Only consider stator Joule losses
             Ploss_ovl = qs * Rs * (Id ** 2 + Iq ** 2)
@@ -130,9 +139,9 @@ def run(self):
             jq = np.where(Iq_vect == Iq[i0][imin])[0][0]
 
             jd_min = max([jd - 1, 0])
-            jd_max = min([jd + 1, Ndq - 1])
+            jd_max = min([jd + 1, Nd - 1])
             jq_min = max([jq - 1, 0])
-            jq_max = min([jq + 1, Ndq - 1])
+            jq_max = min([jq + 1, Nq - 1])
 
             Id_min = Id_vect[jd_min]
             Id_max = Id_vect[jd_max]
@@ -158,7 +167,7 @@ def run(self):
     output.elec.P_useful = Puse_interp[i0][imin]
     output.elec.Tem_av = Puse_interp[i0][imin] / (2 * np.pi * OP.N0 / 60)
     if is_loss_model:
-        output.elec.Pj_losses = Plosses[i0, 0][imin]
+        output.elec.Pj_losses = Ploss_dqh[i0, 0][imin]
     else:
         output.elec.Pj_losses = Ploss_ovl[i0][imin]
     output.elec.OP.Id_ref = Id[i0][imin]
@@ -169,9 +178,9 @@ def run(self):
     if is_loss_model:
         # Store losses
         output.loss = OutLoss(
-            Pjoule=Plosses[i0, 0][imin],
-            Pstator=Plosses[i0, 1][imin],
-            Pmagnet=Plosses[i0, 2][imin],
-            Protor=Plosses[i0, 3][imin],
-            Pprox=Plosses[i0, 4][imin],
+            Pjoule=Ploss_dqh[i0, 0][imin],
+            Pstator=Ploss_dqh[i0, 1][imin],
+            Pmagnet=Ploss_dqh[i0, 2][imin],
+            Protor=Ploss_dqh[i0, 3][imin],
+            Pprox=Ploss_dqh[i0, 4][imin],
         )
