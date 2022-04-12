@@ -4,8 +4,10 @@ import re
 import matplotlib.pyplot as plt
 import numpy as np
 from scipy.optimize import curve_fit
+from itertools import groupby
+import textwrap
 
-def comp_coeff(self, file_path : str):
+def comp_coeff(self,material, is_show_fig=False):
     """Enables to compute the coefficients of the loss model with a curve fitting
     on loss data, provided in a text file
 
@@ -33,41 +35,56 @@ def comp_coeff(self, file_path : str):
         f=xdata[0]
         B=xdata[1]
         return Ch * f ** alpha_f * B ** alpha_B + Ce * (f * B) ** 2   
+    
+    def group_by_frequency(loss_data):
+        groups = []
+        uniquekeys = []
+        loss_data_T=loss_data.T
+        for k, g in groupby(loss_data_T, lambda x: x[0]):
+            groups.append(list(g))      # Store group iterator as a list
+            uniquekeys.append(k)
+        print(groups)
+        print(uniquekeys)
+        return groups, uniquekeys
 
-    with open(file_path,"r") as f:
-        data=f.readlines()
-
-    is_iron_loss = False
-    f, B, loss = [], [], []
-    for line in data:
-        line=line.rstrip()
-        if re.search("Iron loss",line, flags = re.I):
-            is_iron_loss = True
-        elif is_iron_loss:
-            line=re.split(r"[\t\n ]+",line)
-            if len(line)<3:
-                is_iron_loss = False
-            else:
-                f.append(float(line[0]))
-                B.append(float(line[1]))
-                loss.append(float(line[2]))
-
+    loss_data=material.mag.LossData.get_data()
+    f = loss_data[0]
+    B = loss_data[1]
+    loss = loss_data[2]
     xdata=np.array([f,B])
     ydata=np.array(loss)
     popt,pcov=curve_fit(comp_loss,xdata,ydata)
     print(popt)
 
-    B_check=np.linspace(0,2,1000)
-    f_check_2000=np.ones((1000,))*2000
-    f_check_50=np.ones((1000,))*50
-    xverif1=np.array([f_check_50, B_check])
-    xverif2=np.array([f_check_2000, B_check])
-    plt.plot(B[:17], loss[:17],color='blue',label='measurements with f=50Hz',marker='o')
-    plt.plot(B[155:], loss[155:],color='red',label='measurements with f=2000Hz',marker='o')
-    plt.plot(B_check, comp_loss(xverif1, *popt),color='blue',linestyle='dashed',label='fitting with f=50Hz')
-    plt.plot(B_check, comp_loss(xverif2, *popt),color='red',linestyle='dashed',label='fitting with f=2000Hz')
-    plt.legend()
-    plt.show()
+    if is_show_fig:
+        groups, uniquekeys=group_by_frequency(loss_data)
+        fig=plt.figure("Curve fitting for Iron losses")
+        B_check=np.linspace(0,2,1000)
+        ax = plt.gca()
+        for index, key in enumerate(uniquekeys):
+            f_check=np.ones((1000,))*key
+            xverif=np.array([f_check, B_check])
+            values=np.array(groups[index])
+            B_experimental=values[:,1]
+            loss_experimental=values[:,2]
+            color=next(ax._get_lines.prop_cycler)['color']
+            plt.plot(B_experimental, loss_experimental,color=color, label=f'measurements with f={key}Hz',marker='o')
+            plt.plot(B_check, comp_loss(xverif, *popt),color=color, linestyle='dashed',label=f'fitting with f={key}Hz')
+        plt.xlabel("Peak magnetic flux density (T)")
+        plt.ylabel("Iron loss (W/kg")
+        plt.title("Iron loss with respect to peak magnetic flux density for several frequencies")
+        text=textwrap.dedent(fr"""                    
+                                $P{{loss}}=k_{{hy}} f^{{\alpha_f}} B^{{\alpha_B}} + k_{{ed}} (fB)^2$
+                                where:
+                                $k_{{hy}}$ = {popt[0]:.5E}
+                                $k_{{ed}}$ = {popt[1]:.5E}
+                                $\alpha_f$ = {popt[2]:.5E}
+                                $\alpha_B$ = {popt[3]:.5E}
+                                """)
+        fig.text(0.02,0.5,text, fontsize=14)
+        plt.subplots_adjust(left=0.2)
+        plt.legend()
+        plt.show() 
 
     self.k_hy=popt[0]
     self.k_ed=popt[1]

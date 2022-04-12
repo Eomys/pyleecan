@@ -173,7 +173,6 @@ def test_FEMM_Loss_Prius():
     alpha_B=1.7622
 
     loss_model = LossModelSteinmetz()
-    loss_model.comp_coeff("C:\\Users\\LAP10\\Documents\\Stage\\M-19 29 Ga.txt")
     print(f"""k_hy={loss_model.k_hy}
           k_ed={loss_model.k_ed}
           alpha_f={loss_model.alpha_f}

@@ -1,4 +1,5 @@
 from numpy import zeros, argmin, abs as np_abs, array
+from pyleecan.Functions.load import load
 
 
 def comp_loss(self, output, axes_dict):
@@ -23,6 +24,10 @@ def comp_loss(self, output, axes_dict):
     machine = output.simu.machine
 
     coeff_dict = dict()
+    
+    mat_path="C:\\Users\\LAP10\\Documents\\Loss\\material.json"
+    material=load(mat_path)
+    self.Loss_model_dict["stator core"].comp_coeff(material, is_show_fig=True)
 
     # Comp stator core losses
     Pstator_density, fstator = self.comp_loss_density_core(
