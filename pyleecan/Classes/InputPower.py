@@ -56,9 +56,10 @@ class InputPower(Input):
         current_dir=None,
         is_periodicity_t=False,
         is_periodicity_a=False,
-        U_max=None,
-        J_max=None,
-        I_max=None,
+        Urms_max=None,
+        Jrms_max=None,
+        Irms_max=None,
+        is_generator=False,
         time=None,
         angle=None,
         Nt_tot=2048,
@@ -94,12 +95,14 @@ class InputPower(Input):
                 is_periodicity_t = init_dict["is_periodicity_t"]
             if "is_periodicity_a" in list(init_dict.keys()):
                 is_periodicity_a = init_dict["is_periodicity_a"]
-            if "U_max" in list(init_dict.keys()):
-                U_max = init_dict["U_max"]
-            if "J_max" in list(init_dict.keys()):
-                J_max = init_dict["J_max"]
-            if "I_max" in list(init_dict.keys()):
-                I_max = init_dict["I_max"]
+            if "Urms_max" in list(init_dict.keys()):
+                Urms_max = init_dict["Urms_max"]
+            if "Jrms_max" in list(init_dict.keys()):
+                Jrms_max = init_dict["Jrms_max"]
+            if "Irms_max" in list(init_dict.keys()):
+                Irms_max = init_dict["Irms_max"]
+            if "is_generator" in list(init_dict.keys()):
+                is_generator = init_dict["is_generator"]
             if "time" in list(init_dict.keys()):
                 time = init_dict["time"]
             if "angle" in list(init_dict.keys()):
@@ -120,9 +123,10 @@ class InputPower(Input):
         self.current_dir = current_dir
         self.is_periodicity_t = is_periodicity_t
         self.is_periodicity_a = is_periodicity_a
-        self.U_max = U_max
-        self.J_max = J_max
-        self.I_max = I_max
+        self.Urms_max = Urms_max
+        self.Jrms_max = Jrms_max
+        self.Irms_max = Irms_max
+        self.is_generator = is_generator
         # Call Input init
         super(InputPower, self).__init__(
             time=time,
@@ -147,9 +151,10 @@ class InputPower(Input):
         InputPower_str += "current_dir = " + str(self.current_dir) + linesep
         InputPower_str += "is_periodicity_t = " + str(self.is_periodicity_t) + linesep
         InputPower_str += "is_periodicity_a = " + str(self.is_periodicity_a) + linesep
-        InputPower_str += "U_max = " + str(self.U_max) + linesep
-        InputPower_str += "J_max = " + str(self.J_max) + linesep
-        InputPower_str += "I_max = " + str(self.I_max) + linesep
+        InputPower_str += "Urms_max = " + str(self.Urms_max) + linesep
+        InputPower_str += "Jrms_max = " + str(self.Jrms_max) + linesep
+        InputPower_str += "Irms_max = " + str(self.Irms_max) + linesep
+        InputPower_str += "is_generator = " + str(self.is_generator) + linesep
         return InputPower_str
 
     def __eq__(self, other):
@@ -171,11 +176,13 @@ class InputPower(Input):
             return False
         if other.is_periodicity_a != self.is_periodicity_a:
             return False
-        if other.U_max != self.U_max:
+        if other.Urms_max != self.Urms_max:
             return False
-        if other.J_max != self.J_max:
+        if other.Jrms_max != self.Jrms_max:
             return False
-        if other.I_max != self.I_max:
+        if other.Irms_max != self.Irms_max:
+            return False
+        if other.is_generator != self.is_generator:
             return False
         return True
 
@@ -200,12 +207,14 @@ class InputPower(Input):
             diff_list.append(name + ".is_periodicity_t")
         if other._is_periodicity_a != self._is_periodicity_a:
             diff_list.append(name + ".is_periodicity_a")
-        if other._U_max != self._U_max:
-            diff_list.append(name + ".U_max")
-        if other._J_max != self._J_max:
-            diff_list.append(name + ".J_max")
-        if other._I_max != self._I_max:
-            diff_list.append(name + ".I_max")
+        if other._Urms_max != self._Urms_max:
+            diff_list.append(name + ".Urms_max")
+        if other._Jrms_max != self._Jrms_max:
+            diff_list.append(name + ".Jrms_max")
+        if other._Irms_max != self._Irms_max:
+            diff_list.append(name + ".Irms_max")
+        if other._is_generator != self._is_generator:
+            diff_list.append(name + ".is_generator")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -222,9 +231,10 @@ class InputPower(Input):
         S += getsizeof(self.current_dir)
         S += getsizeof(self.is_periodicity_t)
         S += getsizeof(self.is_periodicity_a)
-        S += getsizeof(self.U_max)
-        S += getsizeof(self.J_max)
-        S += getsizeof(self.I_max)
+        S += getsizeof(self.Urms_max)
+        S += getsizeof(self.Jrms_max)
+        S += getsizeof(self.Irms_max)
+        S += getsizeof(self.is_generator)
         return S
 
     def as_dict(self, type_handle_ndarray=0, keep_function=False, **kwargs):
@@ -249,9 +259,10 @@ class InputPower(Input):
         InputPower_dict["current_dir"] = self.current_dir
         InputPower_dict["is_periodicity_t"] = self.is_periodicity_t
         InputPower_dict["is_periodicity_a"] = self.is_periodicity_a
-        InputPower_dict["U_max"] = self.U_max
-        InputPower_dict["J_max"] = self.J_max
-        InputPower_dict["I_max"] = self.I_max
+        InputPower_dict["Urms_max"] = self.Urms_max
+        InputPower_dict["Jrms_max"] = self.Jrms_max
+        InputPower_dict["Irms_max"] = self.Irms_max
+        InputPower_dict["is_generator"] = self.is_generator
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         InputPower_dict["__class__"] = "InputPower"
@@ -265,9 +276,10 @@ class InputPower(Input):
         self.current_dir = None
         self.is_periodicity_t = None
         self.is_periodicity_a = None
-        self.U_max = None
-        self.J_max = None
-        self.I_max = None
+        self.Urms_max = None
+        self.Jrms_max = None
+        self.Irms_max = None
+        self.is_generator = None
         # Set to None the properties inherited from Input
         super(InputPower, self)._set_None()
 
@@ -367,59 +379,77 @@ class InputPower(Input):
         """,
     )
 
-    def _get_U_max(self):
-        """getter of U_max"""
-        return self._U_max
+    def _get_Urms_max(self):
+        """getter of Urms_max"""
+        return self._Urms_max
 
-    def _set_U_max(self, value):
-        """setter of U_max"""
-        check_var("U_max", value, "float", Vmin=0)
-        self._U_max = value
+    def _set_Urms_max(self, value):
+        """setter of Urms_max"""
+        check_var("Urms_max", value, "float", Vmin=0)
+        self._Urms_max = value
 
-    U_max = property(
-        fget=_get_U_max,
-        fset=_set_U_max,
-        doc=u"""Maximum phase voltage
-
-        :Type: float
-        :min: 0
-        """,
-    )
-
-    def _get_J_max(self):
-        """getter of J_max"""
-        return self._J_max
-
-    def _set_J_max(self, value):
-        """setter of J_max"""
-        check_var("J_max", value, "float", Vmin=0)
-        self._J_max = value
-
-    J_max = property(
-        fget=_get_J_max,
-        fset=_set_J_max,
-        doc=u"""Maximum current density in slot
+    Urms_max = property(
+        fget=_get_Urms_max,
+        fset=_set_Urms_max,
+        doc=u"""Maximum rms phase voltage
 
         :Type: float
         :min: 0
         """,
     )
 
-    def _get_I_max(self):
-        """getter of I_max"""
-        return self._I_max
+    def _get_Jrms_max(self):
+        """getter of Jrms_max"""
+        return self._Jrms_max
 
-    def _set_I_max(self, value):
-        """setter of I_max"""
-        check_var("I_max", value, "float", Vmin=0)
-        self._I_max = value
+    def _set_Jrms_max(self, value):
+        """setter of Jrms_max"""
+        check_var("Jrms_max", value, "float", Vmin=0)
+        self._Jrms_max = value
 
-    I_max = property(
-        fget=_get_I_max,
-        fset=_set_I_max,
-        doc=u"""Maximum phase current
+    Jrms_max = property(
+        fget=_get_Jrms_max,
+        fset=_set_Jrms_max,
+        doc=u"""Maximum rms current density in slot
 
         :Type: float
         :min: 0
+        """,
+    )
+
+    def _get_Irms_max(self):
+        """getter of Irms_max"""
+        return self._Irms_max
+
+    def _set_Irms_max(self, value):
+        """setter of Irms_max"""
+        check_var("Irms_max", value, "float", Vmin=0)
+        self._Irms_max = value
+
+    Irms_max = property(
+        fget=_get_Irms_max,
+        fset=_set_Irms_max,
+        doc=u"""Maximum rms phase current
+
+        :Type: float
+        :min: 0
+        """,
+    )
+
+    def _get_is_generator(self):
+        """getter of is_generator"""
+        return self._is_generator
+
+    def _set_is_generator(self, value):
+        """setter of is_generator"""
+        check_var("is_generator", value, "bool")
+        self._is_generator = value
+
+    is_generator = property(
+        fget=_get_is_generator,
+        fset=_set_is_generator,
+        doc=u"""True if machine is used as a generator
+
+        :Type: bool
         """,
     )

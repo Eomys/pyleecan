@@ -20,7 +20,7 @@ def run(self):
     OP = output.elec.OP
 
     # Maximum voltage
-    U_max = output.simu.input.U_max
+    Urms_max = output.simu.input.Urms_max
     # Input useful power to reach
     Pem_av_ref = OP.Pem_av_ref
     # Electrical frequency
@@ -40,7 +40,7 @@ def run(self):
         Rs *= kr_skin
 
     # Maximum phase current
-    I_max = output.simu.input.I_max
+    Irms_max = output.simu.input.Irms_max
 
     if self.LUT_enforced is not None:
         # Take enforced LUT
@@ -60,22 +60,22 @@ def run(self):
             if self.n_Id == 1 and self.Id_max is not None:
                 self.Id_min = self.Id_max
             else:
-                self.Id_min = -I_max
+                self.Id_min = -Irms_max
         if self.Id_max is None:
             if self.n_Id == 1 and self.Id_min is not None:
                 self.Id_max = self.Id_min
             else:
-                self.Id_max = I_max
+                self.Id_max = Irms_max
         if self.Iq_min is None:
             if self.n_Iq == 1 and self.Iq_max is not None:
                 self.Iq_min = self.Iq_max
             else:
-                self.Iq_min = -I_max
+                self.Iq_min = -Irms_max
         if self.Iq_max is None:
             if self.n_Iq == 1 and self.Iq_min is not None:
                 self.Iq_max = self.Iq_min
             else:
-                self.Iq_max = I_max
+                self.Iq_max = Irms_max
 
         # Run method to calculate LUT
         LUT = self.comp_LUTdq()
@@ -129,7 +129,11 @@ def run(self):
 
         # Finding indices of operating points satisfying maximum voltage/current and input power
         i0 = np.logical_and.reduce(
-            (Umax_interp <= U_max, Imax_interp <= I_max, Puse_interp >= Pem_av_ref)
+            (
+                Umax_interp <= Urms_max,
+                Imax_interp <= Irms_max,
+                Puse_interp >= Pem_av_ref,
+            )
         )
         if np.any(i0):
             # Finding index of operating point with lowest losses among feasible operating points
@@ -153,7 +157,9 @@ def run(self):
 
         else:
             # Finding indices of operating points only satisfying maximum voltage/current
-            i0 = np.logical_and.reduce((Umax_interp <= U_max, Imax_interp <= I_max))
+            i0 = np.logical_and.reduce(
+                (Umax_interp <= Urms_max, Imax_interp <= Irms_max)
+            )
             # Finding index of operating points that maximize the power
             imin = np.argmax(Puse_interp[i0])
             # Stop loop

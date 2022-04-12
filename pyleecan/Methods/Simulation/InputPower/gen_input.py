@@ -47,7 +47,7 @@ def gen_input(self):
         logger.debug("Updating N0 from 0 [rpm] to 0.1 [rpm] in gen_input")
     # Check that felec/N0 can be computed
     self.OP.get_felec()
-    outelec.OP = self.OP
+    outelec.OP = self.OP.copy()
 
     # Set rotor rotation direction
     if self.rot_dir is None:
@@ -104,11 +104,14 @@ def gen_input(self):
             is_periodicity_t=self.is_periodicity_t,
         )
 
-    # Get reference torque function of reference power, speed, and
-    outelec.OP.Tem_av_ref = outelec.OP.Pem_av_ref / (2 * pi * outelec.OP.N0 / 60)
+    if outelec.OP.Tem_av_ref is None and outelec.OP.Pem_av_ref is not None:
+        # Get reference torque function of reference power and speed
+        outelec.OP.Tem_av_ref = outelec.OP.Pem_av_ref / (2 * pi * outelec.OP.N0 / 60)
 
-    if self.I_max is None:
+    if self.Irms_max is None:
+        if self.Jrms_max is None:
+            raise Exception("Irms_max and Jrms_max cannot be both None")
         # Calculate maximum current function of current density
         Swire = simu.machine.stator.winding.conductor.comp_surface_active()
         Npcp = simu.machine.stator.winding.Npcp
-        self.I_max = self.J_max * Swire * Npcp
+        self.Irms_max = self.Jrms_max * Swire * Npcp

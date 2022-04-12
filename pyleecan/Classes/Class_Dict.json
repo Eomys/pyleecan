@@ -4542,31 +4542,40 @@
                 "value": 0
             },
             {
-                "desc": "Maximum phase voltage",
+                "desc": "Maximum rms phase voltage",
                 "max": "",
                 "min": "0",
-                "name": "U_max",
+                "name": "Urms_max",
                 "type": "float",
                 "unit": "Vrms",
                 "value": null
             },
             {
-                "desc": "Maximum current density in slot",
+                "desc": "Maximum rms current density in slot",
                 "max": "",
                 "min": "0",
-                "name": "J_max",
+                "name": "Jrms_max",
                 "type": "float",
                 "unit": "A/m\u00c2\u00b2",
                 "value": null
             },
             {
-                "desc": "Maximum phase current",
+                "desc": "Maximum rms phase current",
                 "max": "",
                 "min": "0",
-                "name": "I_max",
+                "name": "Irms_max",
                 "type": "float",
                 "unit": "A",
                 "value": null
+            },
+            {
+                "desc": "True if machine is used as a generator",
+                "max": "",
+                "min": "",
+                "name": "is_generator",
+                "type": "bool",
+                "unit": "",
+                "value": 0
             }
         ]
     },
@@ -8023,7 +8032,7 @@
                 "value": null
             },
             {
-                "desc": "Theorical Average Electromagnetic torque",
+                "desc": "Output average electromagnetic torque",
                 "max": "",
                 "min": "",
                 "name": "Tem_av_ref",
@@ -8032,12 +8041,30 @@
                 "value": null
             },
             {
-                "desc": "Theorical Average Electromagnetic Power",
+                "desc": "Output average Electromagnetic Power",
                 "max": "",
                 "min": "",
                 "name": "Pem_av_ref",
                 "type": "float",
                 "unit": "W",
+                "value": null
+            },
+            {
+                "desc": "Input average power (e.g. for generator mode)",
+                "max": "",
+                "min": "",
+                "name": "Pem_av_in",
+                "type": "float",
+                "unit": "W",
+                "value": null
+            },
+            {
+                "desc": "Efficiency",
+                "max": "",
+                "min": "",
+                "name": "efficiency",
+                "type": "float",
+                "unit": "",
                 "value": null
             }
         ]
