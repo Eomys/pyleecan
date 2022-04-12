@@ -140,7 +140,7 @@ def test_FEMM_Loss_SPMSM():
 def test_FEMM_Loss_Prius():
     """Test to calculate losses in Toyota_Prius using LossFEMM model"""
 
-    machine = load(join(DATA_DIR, "Machine", "Toyota_Prius_loss.json"))
+    machine = load(join(DATA_DIR, "Machine", "Toyota_Prius.json"))
 
     # Ch = 143  # hysteresis loss coefficient [W/(m^3*T^2*Hz)]
     # Ce = 0.530  # eddy current loss coefficients [W/(m^3*T^2*Hz^2)]
@@ -172,8 +172,12 @@ def test_FEMM_Loss_Prius():
     alpha_f=1.1499
     alpha_B=1.7622
 
-    loss_model = LossModelSteinmetz(k_hy=k_hy, k_ed=k_ed, alpha_f=alpha_f, alpha_B=alpha_B)
-
+    loss_model = LossModelSteinmetz()
+    loss_model.comp_coeff("C:\\Users\\LAP10\\Documents\\Stage\\M-19 29 Ga.txt")
+    print(f"""k_hy={loss_model.k_hy}
+          k_ed={loss_model.k_ed}
+          alpha_f={loss_model.alpha_f}
+          alpha_B={loss_model.alpha_B}""")
     simu.loss = LossFEMM(
         Cp=Cprox,
         is_get_meshsolution=True,
@@ -261,4 +265,4 @@ if __name__ == "__main__":
 
     # out = test_FEMM_Loss_SPMSM()
 
-    out = test_FEMM_Loss_Prius()
+    out = test_FEMM_Loss_Prius() 

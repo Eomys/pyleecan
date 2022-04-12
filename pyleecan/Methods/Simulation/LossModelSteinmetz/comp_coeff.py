@@ -1,101 +1,77 @@
 # -*- coding: utf-8 -*-
 
-import numpy as np
+import re
 import matplotlib.pyplot as plt
-from scipy import optimize
+import numpy as np
+from scipy.optimize import curve_fit
 
-
-# TODO define one loss calculation function to use everywhere in class
-def _comp_loss(self, C, Cx, f, B):
-    f_norm = f / self.F_REF
-    B_norm = B / self.B_REF
-
-    ii = 0
-    _C = list(C)
-    for idx, c in enumerate(_C):
-        if c is None:
-            _C[idx] = Cx[ii]
-            ii += 1
-
-    loss = (
-        _C[0] * f_norm * B_norm ** _C[1]
-        + _C[2] * (f_norm * B_norm) ** _C[3]
-        + _C[4] * (f_norm * B_norm) ** _C[5]
-    )
-
-    return loss
-
-
-def comp_coeff(self, mat):
-    """
-    Compute the missing (i.e. None-valued) Bertotti loss coefficients from the
-    Material object data by data fitting.
+def comp_coeff(self, file_path : str):
+    """Enables to compute the coefficients of the loss model with a curve fitting
+    on loss data, provided in a text file
 
     Parameters
     ----------
-    self : LossModelBertotti
-        A LossModelBertotti object
+    file_path : str
+        the full path of the file containing the loss data.
+        Must contain 3 columns separated by spaces of tabulations :
+        1st column : frequency
+        2nd column : flux density magnitude
+        3rd column : power loss (W)
 
-    mat : Material
-        A Material object
+    Returns
+    -------
+    Bool
+        True if the curve fitting was succesfull, else False.
+    """    
+    
+    Ch=self.k_hy
+    Ce=self.k_ed
+    alpha_f=self.alpha_f
+    alpha_B=self.alpha_B
 
-    Return
-    ------
-    success : bool
-        Return 'True' if parameter fitting was successful.
+    def comp_loss(xdata, Ch, Ce, alpha_f, alpha_B):
+        f=xdata[0]
+        B=xdata[1]
+        return Ch * f ** alpha_f * B ** alpha_B + Ce * (f * B) ** 2   
 
-    """
-    # Get logger
-    logger = self.get_logger()
+    with open(file_path,"r") as f:
+        data=f.readlines()
 
-    # store loss model parameter
-    C = []
-    C.append(self.k_hy)
-    C.append(self.alpha_hy)
-    C.append(self.k_ed)
-    C.append(self.alpha_ed)
-    C.append(self.k_ex)
-    C.append(self.alpha_ex)
+    is_iron_loss = False
+    f, B, loss = [], [], []
+    for line in data:
+        line=line.rstrip()
+        if re.search("Iron loss",line, flags = re.I):
+            is_iron_loss = True
+        elif is_iron_loss:
+            line=re.split(r"[\t\n ]+",line)
+            if len(line)<3:
+                is_iron_loss = False
+            else:
+                f.append(float(line[0]))
+                B.append(float(line[1]))
+                loss.append(float(line[2]))
 
-    # check if parameters have to been estimated
-    n_est = sum(x is None for x in C)
-    if n_est == 0:
-        return True
+    xdata=np.array([f,B])
+    ydata=np.array(loss)
+    popt,pcov=curve_fit(comp_loss,xdata,ydata)
+    print(popt)
 
-    data = mat.mag.LossData.get_data()
-    f = data[:, 1]
-    B = data[:, 0]
-    Loss = data[:, 2]
+    B_check=np.linspace(0,2,1000)
+    f_check_2000=np.ones((1000,))*2000
+    f_check_50=np.ones((1000,))*50
+    xverif1=np.array([f_check_50, B_check])
+    xverif2=np.array([f_check_2000, B_check])
+    plt.plot(B[:17], loss[:17],color='blue',label='measurements with f=50Hz',marker='o')
+    plt.plot(B[155:], loss[155:],color='red',label='measurements with f=2000Hz',marker='o')
+    plt.plot(B_check, comp_loss(xverif1, *popt),color='blue',linestyle='dashed',label='fitting with f=50Hz')
+    plt.plot(B_check, comp_loss(xverif2, *popt),color='red',linestyle='dashed',label='fitting with f=2000Hz')
+    plt.legend()
+    plt.show()
 
-    # fit the data
-    # TODO Which normalization to use? 1/f or should it be user defined?
-    # TODO use constrained parameter estimation
-    _comp_err = lambda Cx: (_comp_loss(self, C, Cx, f, B) - Loss) / (f)
-    C0 = np.ones([n_est])  # initial values for the parameters
-    result = optimize.least_squares(_comp_err, C0[:], method="lm")
-
-    C1 = result.x
-    success = result.success
-
-    if success is None:
-        logger.warning(f"'{self.name}' LossModel: Parameter fitting failed.")
-        return False
-    else:
-        ii = 0
-        for idx, c in enumerate(C):
-            if c is None:
-                C[idx] = C1[ii]
-                ii += 1
-
-        # set the estimated fitting parameters
-        self.k_hy = C[0]
-        self.alpha_hy = C[1]
-        self.k_ed = C[2]
-        self.alpha_ed = C[3]
-        self.k_ex = C[4]
-        self.alpha_ex = C[5]
-
-        logger.debug(f"'{self.name}' LossModel: Parameters estimated coefficiants:")
-        logger.debug(C)
-
-        return True
+    self.k_hy=popt[0]
+    self.k_ed=popt[1]
+    self.alpha_f=popt[2]
+    self.alpha_B=popt[3]
+    
+    return True
