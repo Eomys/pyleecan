@@ -1,3 +1,4 @@
+from operator import is_
 from attr import has
 from numpy import gcd
 
@@ -23,10 +24,12 @@ def comp_periodicity_spatial(self):
         p = self.get_pole_pair_number()
 
         per_a = int(gcd(Zs, p))
+        is_antiper_a = True
 
         # account for notches
         for notch in self.notch:
             per_a = int(gcd(notch.notch_shape.Zs, per_a))
+            is_antiper_a = False
 
         # account for bore
         if self.bore:
@@ -34,11 +37,12 @@ def comp_periodicity_spatial(self):
                 per_a = int(gcd(self.bore.N, per_a))
             else:
                 per_a = 1
+            is_antiper_a = False
 
         if per_a == 1:
-            is_antiper_a = bool(Zs % 2 == 0)
+            is_antiper_a = bool(Zs % 2 == 0) and is_antiper_a  # TODO
         else:
-            is_antiper_a = bool(Zs / p % 2 == 0)
+            is_antiper_a = bool(Zs / p % 2 == 0) and is_antiper_a  # TODO
 
         # Account for duct periodicity
         per_a, is_antiper_a = self.comp_periodicity_duct_spatial(per_a, is_antiper_a)
