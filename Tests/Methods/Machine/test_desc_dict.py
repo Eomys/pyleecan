@@ -14,7 +14,7 @@ def test_desc_SCIM():
     """Check that the description of a SCIM is correct"""
     SCIM_001 = load(join(DATA_DIR, "Machine", "SCIM_001.json"))
     desc_dict = SCIM_001.comp_desc_dict()
-    assert len(desc_dict) == 8
+    assert len(desc_dict) == 9
     assert desc_dict[0]["name"] == "Type"
     assert desc_dict[0]["value"] == "SCIM"
 
@@ -39,13 +39,16 @@ def test_desc_SCIM():
     assert desc_dict[7]["name"] == "Mmachine"
     assert desc_dict[7]["value"] == pytest.approx(342.819, rel=0.1)
 
+    assert desc_dict[8]["name"] == "Mwind"
+    assert desc_dict[8]["value"] == pytest.approx(59.055, rel=0.1)
+
 
 @pytest.mark.IPMSM
 def test_desc_IPMSM():
     """Check that the description of an IPMSM is correct"""
     Toyota_Prius = load(join(DATA_DIR, "Machine", "Toyota_Prius.json"))
     desc_dict = Toyota_Prius.comp_desc_dict()
-    assert len(desc_dict) == 7
+    assert len(desc_dict) == 9
     assert desc_dict[0]["name"] == "Type"
     assert desc_dict[0]["value"] == "IPMSM"
 
@@ -66,6 +69,12 @@ def test_desc_IPMSM():
 
     assert desc_dict[6]["name"] == "Mmachine"
     assert desc_dict[6]["value"] == pytest.approx(33.37, rel=0.1)
+
+    assert desc_dict[7]["name"] == "Mwind"
+    assert desc_dict[7]["value"] == pytest.approx(4.0014, rel=0.1)
+
+    assert desc_dict[8]["name"] == "Mmag"
+    assert desc_dict[8]["value"] == pytest.approx(1.235, rel=0.1)
 
 
 @pytest.mark.outer_rotor
@@ -90,5 +99,7 @@ def test_desc_Outer_Rotor():
 
 
 if __name__ == "__main__":
-    # test_desc_IPMSM()
+    test_desc_IPMSM()
     test_desc_SCIM()
+    test_desc_Outer_Rotor()
+    print("Done")
