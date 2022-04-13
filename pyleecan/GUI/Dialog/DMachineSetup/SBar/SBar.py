@@ -65,10 +65,10 @@ class SBar(Gen_SBar, QWidget):
             self.machine.rotor.winding.qs = self.machine.rotor.slot.Zs
 
         # Set materials
-        self.w_mat.def_mat = "Copper1"
-        self.w_mat.setText("Ring material:")
-        self.w_mat.is_hide_button = True
-        self.w_mat.update(self.machine.rotor, "ring_mat", self.material_dict)
+        self.w_mat_scr.def_mat = "Copper1"
+        self.w_mat_scr.setText("Ring material")
+        # self.w_mat_scr.is_hide_button = True
+        self.w_mat_scr.update(self.machine.rotor, "ring_mat", self.material_dict)
 
         # Initialize the GUI with the current machine value
         self.lf_Hscr.setValue(machine.rotor.Hscr)
@@ -99,7 +99,7 @@ class SBar(Gen_SBar, QWidget):
         self.lf_Lewout.editingFinished.connect(self.set_Lewout)
         self.c_bar_type.currentIndexChanged.connect(self.s_set_bar_type)
         self.b_plot.clicked.connect(self.s_plot)
-        self.w_mat.saveNeeded.connect(self.emit_save)
+        self.w_mat_scr.saveNeeded.connect(self.emit_save)
 
     def emit_save(self):
         """Emit the saveNeeded signal"""
