@@ -169,10 +169,10 @@ def _get_radius_boundary(sym, lam_int, lam_ext):
             begin = line.get_begin()
             end = line.get_end()
             if begin.imag == 0:
-                if begin.real < Rext:
+                if abs(begin.real) < Rext:
                     Rext = begin.real
             if end.imag == 0:
-                if end.real < Rext:
+                if abs(end.real) < Rext:
                     Rext = end.real
 
     return Rint, Rext
