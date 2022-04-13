@@ -25,8 +25,8 @@ def comp_loss(self, output, axes_dict):
 
     coeff_dict = dict()
     
-    mat_path="C:\\Users\\LAP10\\Documents\\Loss\\material.json"
-    material=load(mat_path)
+    # #TODO Consider the case when rotor and stator material are not the same
+    material=machine.stator.mat_type
     self.Loss_model_dict["stator core"].comp_coeff(material, is_show_fig=True)
 
     # Comp stator core losses

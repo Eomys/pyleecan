@@ -166,17 +166,9 @@ def test_FEMM_Loss_Prius():
         is_fast_draw=True,
         is_calc_torque_energy=False,
     )
-    
-    k_hy=0.011381
-    k_ed=4.67e-5
-    alpha_f=1.1499
-    alpha_B=1.7622
+
 
     loss_model = LossModelSteinmetz()
-    print(f"""k_hy={loss_model.k_hy}
-          k_ed={loss_model.k_ed}
-          alpha_f={loss_model.alpha_f}
-          alpha_B={loss_model.alpha_B}""")
     simu.loss = LossFEMM(
         Cp=Cprox,
         is_get_meshsolution=True,
