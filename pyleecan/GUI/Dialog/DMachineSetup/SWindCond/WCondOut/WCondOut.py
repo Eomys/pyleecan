@@ -39,6 +39,16 @@ class WCondOut(QGroupBox):
         self.out_K.setObjectName("out_K")
         self.layout.addWidget(self.out_K)
 
+        self.out_MLT = QLabel(self)
+        self.out_MLT.setObjectName("out_MLT")
+        self.layout.addWidget(self.out_MLT)
+        self.out_MLT.setToolTip("Mean Length Turn")
+
+        self.out_Rwind = QLabel(self)
+        self.out_Rwind.setObjectName("out_Rwind")
+        self.layout.addWidget(self.out_Rwind)
+        self.out_Rwind.setToolTip("Winding resistance at 20°C")
+
     def comp_output(self):
         """Update the Output with the computed values
 
@@ -62,8 +72,10 @@ class WCondOut(QGroupBox):
             K_txt = self.tr("Ksfill = ")
         else:
             K_txt = self.tr("Krfill = ")
+        MLT_txt = "MLT = "
+        Rwind_txt = "Rwind 20°C= "
 
-        # We compute the output only if the slot is correctly set
+        # We compute the output only if the conductor is correctly set
         if parent.check(lam) is None:
             # Compute all the needed output as string
             H = format(self.u.get_m(lam.winding.conductor.comp_height()), ".4g")
@@ -77,12 +89,23 @@ class WCondOut(QGroupBox):
             except Exception:  # Unable to compute the fill factor (Not set)
                 K = "?"
 
+            try:
+                MLT = format(self.u.get_m(lam.comp_lengths_winding()["MLT"]), ".4g")
+            except Exception:  # Unable to compute MLT
+                MLT = "?"
+            try:
+                Rwind = format(lam.comp_resistance_wind(T=20), ".4g")
+            except Exception:  # Unable to compute MLT
+                Rwind = "?"
+
             # Update the GUI to display the Output
             self.out_H.setText(H_txt + H + " [" + self.u.get_m_name() + "]")
             self.out_W.setText(W_txt + W + " [" + self.u.get_m_name() + "]")
             self.out_S.setText(S_txt + S + " [" + self.u.get_m2_name() + "]")
             self.out_Sact.setText(Sa_txt + Sact + " [" + self.u.get_m2_name() + "]")
             self.out_K.setText(K_txt + K + " %")
+            self.out_MLT.setText(MLT_txt + MLT + " [" + self.u.get_m_name() + "]")
+            self.out_Rwind.setText(Rwind_txt + Rwind + " [Ohm]")
         else:
             # We can't compute the output => We erase the previous version
             # (that way the user know that something is wrong)
@@ -91,3 +114,5 @@ class WCondOut(QGroupBox):
             self.out_S.setText(S_txt + "?")
             self.out_Sact.setText(Sa_txt + "?")
             self.out_K.setText(K_txt + "? %")
+            self.out_MLT.setText(MLT_txt + "?")
+            self.out_Rwind.setText(Rwind_txt + "?")
