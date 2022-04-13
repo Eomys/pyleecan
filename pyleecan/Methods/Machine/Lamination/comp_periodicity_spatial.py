@@ -40,6 +40,7 @@ def comp_periodicity_spatial(self):
 
         # Account for duct periodicity
         per_a, is_antiper_a = self.comp_periodicity_duct_spatial(per_a, is_antiper_a)
+        per_a = int(per_a)
 
     else:
         per_a = None
