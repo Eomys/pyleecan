@@ -28,8 +28,9 @@ SCIM_dict = {
         ("Stator phase number", "3"),
         ("Stator winding resistance", "0.02392 Ohm"),
         ("Machine total mass", "342.8 kg"),
+        ("Stator winding mass", "59.06 kg"),
     ],
-    "Nrow": 8,
+    "Nrow": 9,
 }
 IPMSM_dict = {
     "file_path": join(machine_path, "Toyota_Prius.json").replace("\\", "/"),
@@ -41,8 +42,10 @@ IPMSM_dict = {
         ("Stator phase number", "3"),
         ("Stator winding resistance", "0.03595 Ohm"),
         ("Machine total mass", "33.38 kg"),
+        ("Stator winding mass", "4.001 kg"),
+        ("Rotor magnet mass", "1.236 kg"),
     ],
-    "Nrow": 7,
+    "Nrow": 9,
 }
 load_preview_test = [SCIM_dict, IPMSM_dict]
 

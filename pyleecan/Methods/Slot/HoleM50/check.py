@@ -71,3 +71,13 @@ def check(self):
     alpha_3 = 2 * arcsin(self.W3 / (2 * (Rext - self.H1)))  # W3 in rad
     if alpha_0 + alpha_3 > 2 * pi / self.Zh:
         raise S50_SpCheckError("Slot pitch too small for the slot, reduce Zh, W3 or W0")
+
+    point_dict = self._comp_point_coordinate()
+    if abs(point_dict["Z1"]) > abs(point_dict["Z11"]):
+        raise S50_W3CheckError(
+            "Points are colliding: unable to fulfill W3 constraints, for instance try increasing W3"
+        )
+    if abs(point_dict["Z2"]) > abs(point_dict["Z1"]):
+        raise S50_W3CheckError(
+            "Points are colliding: unable to fulfill W3 constraints, for instance try increasing W3"
+        )

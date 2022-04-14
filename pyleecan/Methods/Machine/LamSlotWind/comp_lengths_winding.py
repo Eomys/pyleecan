@@ -52,4 +52,5 @@ def comp_lengths_winding(self):
         "Lewt": Lewt,
         "Lwvent": Lwvent,
         "Lew": Lew,
+        "MLT": Lwht * 2,
     }
