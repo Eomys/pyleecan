@@ -6,8 +6,8 @@ def comp_nb_circumferential_wire(self):
 
     Parameters
     ----------
-    self : CondType11
-        A CondType11 object
+    self : CondType12
+        A CondType12 object
 
     Returns
     -------
