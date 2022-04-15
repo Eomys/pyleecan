@@ -10,7 +10,10 @@ def update_from_ref(self, LUT_ref):
     """
 
     # Update skin effect to OP/T
-    self.comp_skin_effect()
+    if self.type_skin_effect:
+        self.comp_skin_effect()
+
+    # Calculate transformation coefficients
     self.comp_K21()
 
     eec_ref = LUT_ref.get_eec()

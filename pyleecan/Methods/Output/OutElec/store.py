@@ -25,7 +25,7 @@ def store(self, out_dict):
     self.Tem_av_ref = out_dict["Tem_av_ref"]
     self.Pem_av_ref = out_dict["Pem_av_ref"]
 
-    if "Ir" in out_dict and self.OP.get_slip() > 0:
+    if "Ir" in out_dict and self.OP.get_slip() != 0:
         output = self.parent
         # Calculate rotor currents for each bar
         p = output.simu.machine.get_pole_pair_number()

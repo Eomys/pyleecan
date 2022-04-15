@@ -235,7 +235,8 @@ def solve_FEMM(
                 )
 
         # Compute the torque
-        out_dict["Tem"][ii] = comp_FEMM_torque(femm, FEMM_dict, sym=sym)
+        if self.is_calc_torque_energy:
+            out_dict["Tem"][ii] = comp_FEMM_torque(femm, FEMM_dict, sym=sym)
 
         if "Phi_wind" in out_dict:
             # Phi_wind computation

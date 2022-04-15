@@ -122,8 +122,9 @@ def comp_flux_airgap(self, output, axes_dict, Is_val=None, Ir_val=None):
     # Init flux arrays in out_dict
     out_dict["B_{rad}"] = zeros((Nt, Na))
     out_dict["B_{circ}"] = zeros((Nt, Na))
-    # Init torque array in out_dict
-    out_dict["Tem"] = zeros((Nt))
+    if self.is_calc_torque_energy:
+        # Init torque array in out_dict
+        out_dict["Tem"] = zeros((Nt))
     # Init lamination winding flux list of arrays in out_dict
     machine = output.simu.machine
     out_dict["Phi_wind"] = {}

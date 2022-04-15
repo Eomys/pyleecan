@@ -96,6 +96,7 @@ def test_EEC_ELUT_SCIM_001():
             Trot=20,
             Lm_table=np_abs(param_dict["Lm"]),
             Im_table=np_abs(param_dict["Im"]),
+            type_skin_effect=0,
         )
     )
 

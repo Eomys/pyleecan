@@ -17,17 +17,22 @@ def comp_skin_effect(self):
     slip = self.OP.get_slip()
 
     # compute skin_effect on stator side
-    self.Xkr_skinS, self.Xke_skinS = CondS.comp_skin_effect(
-        freq=felec, T_op=self.Tsta, T_ref=20, type_skin_effect=self.type_skin_effect
+    self.Xkr_skinS = CondS.comp_skin_effect_resistance(
+        freq=felec, T_op=self.Tsta, T_ref=20
+    )
+
+    self.Xke_skinS = CondS.comp_skin_effect_inductance(
+        freq=felec, T_op=self.Tsta, T_ref=20
     )
 
     # compute skin_effect on rotor side
-    if felec * slip > 0:
-        self.Xkr_skinR, self.Xke_skinR = CondR.comp_skin_effect(
-            freq=felec * slip,
-            T_op=self.Trot,
-            T_ref=20,
-            type_skin_effect=self.type_skin_effect,
+    if felec * slip != 0:
+        self.Xkr_skinR = CondR.comp_skin_effect_resistance(
+            freq=felec * slip, T_op=self.Trot, T_ref=20
+        )
+
+        self.Xke_skinR = CondR.comp_skin_effect_inductance(
+            freq=felec * slip, T_op=self.Trot, T_ref=20
         )
     else:
         self.Xkr_skinR, self.Xke_skinR = 1, 1

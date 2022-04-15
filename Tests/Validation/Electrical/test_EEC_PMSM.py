@@ -109,6 +109,7 @@ def test_EEC_PMSM_sync_rel(nb_worker=int(0.5 * cpu_count())):
             nb_worker=nb_worker,
             T_mag=60,
         ),
+        type_skin_effect=0,
     )
 
     # Creating the Operating point matrix

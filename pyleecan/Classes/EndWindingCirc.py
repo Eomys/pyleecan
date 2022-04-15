@@ -18,11 +18,14 @@ from .EndWinding import EndWinding
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
 try:
-    from ..Methods.Machine.EndWindingCirc.comp_length_endwinding import (
-        comp_length_endwinding,
-    )
+    from ..Methods.Machine.EndWindingCirc.comp_length import comp_length
 except ImportError as error:
-    comp_length_endwinding = error
+    comp_length = error
+
+try:
+    from ..Methods.Machine.EndWindingCirc.comp_inductance import comp_inductance
+except ImportError as error:
+    comp_inductance = error
 
 
 from ._check import InitUnKnowClassError
@@ -33,25 +36,37 @@ class EndWindingCirc(EndWinding):
 
     VERSION = 1
 
-    # cf Methods.Machine.EndWindingCirc.comp_length_endwinding
-    if isinstance(comp_length_endwinding, ImportError):
-        comp_length_endwinding = property(
+    # Check ImportError to remove unnecessary dependencies in unused method
+    # cf Methods.Machine.EndWindingCirc.comp_length
+    if isinstance(comp_length, ImportError):
+        comp_length = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use EndWindingCirc method comp_length_endwinding: "
-                    + str(comp_length_endwinding)
+                    "Can't use EndWindingCirc method comp_length: " + str(comp_length)
                 )
             )
         )
     else:
-        comp_length_endwinding = comp_length_endwinding
+        comp_length = comp_length
+    # cf Methods.Machine.EndWindingCirc.comp_inductance
+    if isinstance(comp_inductance, ImportError):
+        comp_inductance = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use EndWindingCirc method comp_inductance: "
+                    + str(comp_inductance)
+                )
+            )
+        )
+    else:
+        comp_inductance = comp_inductance
     # save and copy methods are available in all object
     save = save
     copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, coil_pitch=None, init_dict=None, init_str=None):
+    def __init__(self, coil_pitch=None, Lew_enforced=0, init_dict=None, init_str=None):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -69,10 +84,12 @@ class EndWindingCirc(EndWinding):
             # Overwrite default value with init_dict content
             if "coil_pitch" in list(init_dict.keys()):
                 coil_pitch = init_dict["coil_pitch"]
+            if "Lew_enforced" in list(init_dict.keys()):
+                Lew_enforced = init_dict["Lew_enforced"]
         # Set the properties (value check and convertion are done in setter)
         self.coil_pitch = coil_pitch
         # Call EndWinding init
-        super(EndWindingCirc, self).__init__()
+        super(EndWindingCirc, self).__init__(Lew_enforced=Lew_enforced)
         # The class is frozen (in EndWinding init), for now it's impossible to
         # add new properties
 

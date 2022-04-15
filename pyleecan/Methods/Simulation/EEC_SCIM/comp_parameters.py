@@ -24,8 +24,9 @@ def comp_parameters(self):
     assert self.Tsta is not None
     assert self.Trot is not None
 
-    # Update skin effect
-    self.comp_skin_effect()
+    if self.type_skin_effect:
+        # Update skin effect
+        self.comp_skin_effect()
 
     # Compute winding transformation ratios
     if self.K21I is None:

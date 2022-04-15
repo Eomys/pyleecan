@@ -1,6 +1,3 @@
-from numpy import isscalar
-
-
 def comp_parameters(self):
     """Compute and set the parameter attributes of the EEC that are not set:
     resistance, skin effect factors, inductance, fluxlinkage and back emf
@@ -16,8 +13,9 @@ def comp_parameters(self):
     assert self.OP is not None
     assert self.Tsta is not None
 
-    # Update skin effect
-    self.comp_skin_effect()
+    if self.type_skin_effect:
+        # Update skin effect
+        self.comp_skin_effect()
 
     # Compute stator winding resistance
     if self.R1 is None:
