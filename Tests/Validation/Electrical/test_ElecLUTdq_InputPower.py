@@ -42,8 +42,8 @@ def test_ElecLUTdq_InputPower():
         Na_tot=200 * 8,
         is_periodicity_a=True,
         is_periodicity_t=True,
-        U_max=500,
-        J_max=30e6,
+        Urms_max=800,
+        Jrms_max=30e6,
     )
 
     k_hy = 0.011381

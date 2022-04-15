@@ -1,7 +1,6 @@
-from numpy import arange, searchsorted, angle
+from numpy import angle
 
 from ....Classes.OutElec import OutElec
-from ....Classes.Simulation import Simulation
 
 from ....Methods.Simulation.Input import (
     CURRENT_DIR_REF,
@@ -19,6 +18,8 @@ def gen_input(self):
     self : InputVoltage
         An InputVoltage object
     """
+
+    from ....Classes.Simulation import Simulation
 
     # Get the simulation
     if isinstance(self.parent, Simulation):
