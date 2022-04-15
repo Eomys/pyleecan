@@ -6,12 +6,12 @@ def comp_nb_radial_wire(self):
 
     Parameters
     ----------
-    self : CondType11
-        A CondType11 object
+    self : CondType12
+        A CondType12 object
 
     Returns
     -------
-    Nwppc_tan: int
+    Nwppc_rad: int
         Number of adjacent wires in radial direction
 
     """
