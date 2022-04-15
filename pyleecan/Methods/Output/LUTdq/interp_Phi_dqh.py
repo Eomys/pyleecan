@@ -3,7 +3,7 @@ import scipy.interpolate as scp_int
 
 
 def interp_Phi_dqh(self, Id, Iq):
-    """Get the magnets d-axis inductance
+    """Interpolate stator winding dqh flux in dq plane
 
     Parameters
     ----------
@@ -16,7 +16,7 @@ def interp_Phi_dqh(self, Id, Iq):
 
     Returns
     ----------
-    Phi_dqh : ndarray
+    Phi_dqh : float or ndarray
         interpolated flux in dqh frame (3)
     """
 

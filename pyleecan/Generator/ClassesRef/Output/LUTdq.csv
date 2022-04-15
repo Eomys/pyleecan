@@ -6,3 +6,4 @@ Phi_dqh_mag,Wbrms,RMS stator winding flux linkage spectrum in dqh frame includin
 ,,,,,,,,,,,get_Phi_dqh_mag_mean,,,,
 ,,,,,,,,,,,interp_Phi_dqh,,,,
 ,,,,,,,,,,,interp_Ploss_dqh,,,,
+,,,,,,,,,,,interp_Tem_rip_dqh,,,,

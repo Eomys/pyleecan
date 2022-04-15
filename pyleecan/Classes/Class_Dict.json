@@ -4489,58 +4489,14 @@
         "desc": "Input to start the electrical module with power input",
         "is_internal": false,
         "methods": [
-            "gen_input"
+            "gen_input",
+            "set_OP_from_array"
         ],
-        "mother": "Input",
+        "mother": "InputVoltage",
         "name": "InputPower",
         "package": "Simulation",
         "path": "pyleecan/Generator/ClassesRef/Simulation/InputPower.csv",
         "properties": [
-            {
-                "desc": "Rotation direction of the rotor (rot_dir*N0, default value given by ROT_DIR_REF)",
-                "max": "1",
-                "min": "-1",
-                "name": "rot_dir",
-                "type": "int",
-                "unit": "-",
-                "value": null
-            },
-            {
-                "desc": "Rotation direction of the stator phase (phase_dir*(n-1)*pi/qs, default value given by PHASE_DIR_REF)",
-                "max": "1",
-                "min": "-1",
-                "name": "phase_dir",
-                "type": "int",
-                "unit": "",
-                "value": null
-            },
-            {
-                "desc": "Rotation direction of the stator currents (current_dir*2*pi*felec*time, default value given by CURRENT_DIR_REF)",
-                "max": "1",
-                "min": "-1",
-                "name": "current_dir",
-                "type": "int",
-                "unit": "-",
-                "value": null
-            },
-            {
-                "desc": "True to compute voltage/currents only on one time periodicity (use periodicities defined in axes_dict[time])",
-                "max": "",
-                "min": "",
-                "name": "is_periodicity_t",
-                "type": "bool",
-                "unit": "-",
-                "value": 0
-            },
-            {
-                "desc": "True to compute voltage/currents only on one angle periodicity (use periodicities defined in axes_dict[angle])",
-                "max": "",
-                "min": "",
-                "name": "is_periodicity_a",
-                "type": "bool",
-                "unit": "-",
-                "value": 0
-            },
             {
                 "desc": "Maximum rms phase voltage",
                 "max": "",
@@ -4588,7 +4544,8 @@
         ],
         "daughters": [
             "InputCurrent",
-            "InputFlux"
+            "InputFlux",
+            "InputPower"
         ],
         "desc": "Input to start the electrical module with voltage input",
         "is_internal": false,
@@ -4754,7 +4711,8 @@
             "get_Phi_dqh_mag",
             "get_Phi_dqh_mag_mean",
             "interp_Phi_dqh",
-            "interp_Ploss_dqh"
+            "interp_Ploss_dqh",
+            "interp_Tem_rip_dqh"
         ],
         "mother": "LUT",
         "name": "LUTdq",
@@ -8600,7 +8558,7 @@
             "get_Us",
             "store",
             "get_electrical",
-            "get_Jrms_max"
+            "get_Jrms"
         ],
         "mother": "",
         "name": "OutElec",
@@ -8734,21 +8692,48 @@
                 "value": null
             },
             {
-                "desc": "Useful power (Pem_av minus losses)",
+                "desc": "Output power",
                 "max": "",
                 "min": "",
-                "name": "P_useful",
+                "name": "P_out",
                 "type": "float",
                 "unit": "W",
                 "value": null
             },
             {
-                "desc": "Maximum RMS current density in slots",
+                "desc": "RMS current density in slots",
                 "max": "",
                 "min": "0",
-                "name": "Jrms_max",
+                "name": "Jrms",
                 "type": "float",
                 "unit": "A/m\u00c2\u00b2",
+                "value": null
+            },
+            {
+                "desc": "Input power",
+                "max": "",
+                "min": "",
+                "name": "P_in",
+                "type": "float",
+                "unit": "W",
+                "value": null
+            },
+            {
+                "desc": "RMS linear current density along airgap",
+                "max": "",
+                "min": "",
+                "name": "Arms",
+                "type": "float",
+                "unit": "A/m",
+                "value": null
+            },
+            {
+                "desc": "RMS back-emf",
+                "max": "",
+                "min": "",
+                "name": "Erms",
+                "type": "float",
+                "unit": "V",
                 "value": null
             }
         ]
@@ -9120,6 +9105,7 @@
         "is_internal": false,
         "methods": [
             "get_loss",
+            "get_loss_density_ag",
             "get_loss_dist",
             "get_loss_group",
             "get_loss_overall",
@@ -14210,6 +14196,7 @@
         ],
         "daughters": [
             "VarLoadCurrent",
+            "VarLoadPower",
             "VarLoadVoltage"
         ],
         "desc": "Abstract class to generate multi-simulation by changing the operating point",
@@ -14282,6 +14269,26 @@
         "path": "pyleecan/Generator/ClassesRef/Simulation/VarLoadCurrent.csv",
         "properties": []
     },
+    "VarLoadPower": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Generate a multisimulation with InputPower at variable operating point",
+        "is_internal": false,
+        "methods": [
+            "generate_simulation_list",
+            "get_input_list"
+        ],
+        "mother": "VarLoad",
+        "name": "VarLoadPower",
+        "package": "Simulation",
+        "path": "pyleecan/Generator/ClassesRef/Simulation/VarLoadPower.csv",
+        "properties": []
+    },
     "VarLoadVoltage": {
         "constants": [
             {
@@ -14348,6 +14355,7 @@
         "daughters": [
             "VarLoad",
             "VarLoadCurrent",
+            "VarLoadPower",
             "VarLoadVoltage",
             "VarParam"
         ],
@@ -14467,6 +14475,15 @@
                 "type": "[Post]",
                 "unit": "-",
                 "value": null
+            },
+            {
+                "desc": "True to reuse the look up table",
+                "max": "",
+                "min": "",
+                "name": "is_reuse_LUT",
+                "type": "bool",
+                "unit": "-",
+                "value": 1
             }
         ]
     },

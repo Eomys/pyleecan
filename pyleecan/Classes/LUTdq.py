@@ -52,6 +52,11 @@ try:
 except ImportError as error:
     interp_Ploss_dqh = error
 
+try:
+    from ..Methods.Output.LUTdq.interp_Tem_rip_dqh import interp_Tem_rip_dqh
+except ImportError as error:
+    interp_Tem_rip_dqh = error
+
 
 from numpy import array, array_equal
 from ._check import InitUnKnowClassError
@@ -137,6 +142,18 @@ class LUTdq(LUT):
         )
     else:
         interp_Ploss_dqh = interp_Ploss_dqh
+    # cf Methods.Output.LUTdq.interp_Tem_rip_dqh
+    if isinstance(interp_Tem_rip_dqh, ImportError):
+        interp_Tem_rip_dqh = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use LUTdq method interp_Tem_rip_dqh: "
+                    + str(interp_Tem_rip_dqh)
+                )
+            )
+        )
+    else:
+        interp_Tem_rip_dqh = interp_Tem_rip_dqh
     # save and copy methods are available in all object
     save = save
     copy = copy

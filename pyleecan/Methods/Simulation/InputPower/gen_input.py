@@ -1,7 +1,7 @@
 from numpy import pi
 
 from ....Classes.OutElec import OutElec
-from ....Classes.Simulation import Simulation
+
 
 from ....Methods.Simulation.Input import (
     CURRENT_DIR_REF,
@@ -19,6 +19,8 @@ def gen_input(self):
     self : InputPower
         An InputPower object
     """
+
+    from ....Classes.Simulation import Simulation
 
     # Get the simulation
     if isinstance(self.parent, Simulation):
@@ -87,7 +89,7 @@ def gen_input(self):
         if self.angle_rotor_initial in [0, None]:
             # Calculate initial position according to machine properties
             self.angle_rotor_initial = simu.machine.comp_angle_rotor_initial()
-        output.geo.angle_rotor_initial = self.angle_rotor_initial
+        output.geo.angle_rotor_initial = 0
 
         # Calculate time, angle and phase axes and store them in OutGeo
         outgeo.axes_dict = self.comp_axes(
@@ -104,7 +106,22 @@ def gen_input(self):
             is_periodicity_t=self.is_periodicity_t,
         )
 
-    if outelec.OP.Tem_av_ref is None and outelec.OP.Pem_av_ref is not None:
+    if outelec.OP.Pem_av_ref is None and outelec.OP.Pem_av_in is None:
+        raise Exception("OP.Pem_av_ref and OP.Pem_av_in cannot be both None")
+
+    if (
+        self.is_generator
+        and outelec.OP.Tem_av_ref is None
+        and outelec.OP.Pem_av_in is not None
+    ):
+        # Get reference torque function of reference power and speed
+        outelec.OP.Tem_av_ref = outelec.OP.Pem_av_in / (2 * pi * outelec.OP.N0 / 60)
+
+    if (
+        not self.is_generator
+        and outelec.OP.Tem_av_ref is None
+        and outelec.OP.Pem_av_ref is not None
+    ):
         # Get reference torque function of reference power and speed
         outelec.OP.Tem_av_ref = outelec.OP.Pem_av_ref / (2 * pi * outelec.OP.N0 / 60)
 

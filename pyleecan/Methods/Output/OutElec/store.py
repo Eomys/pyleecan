@@ -27,8 +27,7 @@ def store(self, out_dict):
     self.Pj_losses = out_dict["Pj_losses"]
     self.Tem_av = out_dict["Tem_av"]
     self.Pem_av = out_dict["Pem_av"]
-    self.P_useful = self.Pem_av - self.Pj_losses
-    self.get_Jrms_max()
+    self.get_Jrms()
 
     if "Ir" in out_dict and self.OP.get_slip() != 0:
         # Calculate rotor currents for each bar

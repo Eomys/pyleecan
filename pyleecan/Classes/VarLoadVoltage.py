@@ -106,6 +106,7 @@ class VarLoadVoltage(VarLoad):
         postproc_list=-1,
         pre_keeper_postproc_list=None,
         post_keeper_postproc_list=None,
+        is_reuse_LUT=True,
         init_dict=None,
         init_str=None,
     ):
@@ -154,6 +155,8 @@ class VarLoadVoltage(VarLoad):
                 pre_keeper_postproc_list = init_dict["pre_keeper_postproc_list"]
             if "post_keeper_postproc_list" in list(init_dict.keys()):
                 post_keeper_postproc_list = init_dict["post_keeper_postproc_list"]
+            if "is_reuse_LUT" in list(init_dict.keys()):
+                is_reuse_LUT = init_dict["is_reuse_LUT"]
         # Set the properties (value check and convertion are done in setter)
         # Call VarLoad init
         super(VarLoadVoltage, self).__init__(
@@ -172,6 +175,7 @@ class VarLoadVoltage(VarLoad):
             postproc_list=postproc_list,
             pre_keeper_postproc_list=pre_keeper_postproc_list,
             post_keeper_postproc_list=post_keeper_postproc_list,
+            is_reuse_LUT=is_reuse_LUT,
         )
         # The class is frozen (in VarLoad init), for now it's impossible to
         # add new properties

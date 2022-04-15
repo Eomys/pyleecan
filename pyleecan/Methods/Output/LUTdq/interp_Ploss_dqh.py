@@ -20,8 +20,13 @@ def interp_Ploss_dqh(self, Id, Iq, N0):
 
     Returns
     ----------
-    Ploss_dqh : ndarray
-        interpolated losses function of dq currents (5, N_OP)
+    Ploss_dqh : float or ndarray
+        interpolated losses function of dq currents (N_OP, 5)
+        - 1st column : Joule losses
+        - 2nd column : stator core losses
+        - 3rd column : magnet losses
+        - 4th column : rotor core losses
+        - 5th column : proximity losses
     """
 
     p = self.simu.machine.get_pole_pair_number()

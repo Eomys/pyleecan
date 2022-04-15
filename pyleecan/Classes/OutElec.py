@@ -43,9 +43,9 @@ except ImportError as error:
     get_electrical = error
 
 try:
-    from ..Methods.Output.OutElec.get_Jrms_max import get_Jrms_max
+    from ..Methods.Output.OutElec.get_Jrms import get_Jrms
 except ImportError as error:
-    get_Jrms_max = error
+    get_Jrms = error
 
 
 from ._check import InitUnKnowClassError
@@ -104,17 +104,15 @@ class OutElec(FrozenClass):
         )
     else:
         get_electrical = get_electrical
-    # cf Methods.Output.OutElec.get_Jrms_max
-    if isinstance(get_Jrms_max, ImportError):
-        get_Jrms_max = property(
+    # cf Methods.Output.OutElec.get_Jrms
+    if isinstance(get_Jrms, ImportError):
+        get_Jrms = property(
             fget=lambda x: raise_(
-                ImportError(
-                    "Can't use OutElec method get_Jrms_max: " + str(get_Jrms_max)
-                )
+                ImportError("Can't use OutElec method get_Jrms: " + str(get_Jrms))
             )
         )
     else:
-        get_Jrms_max = get_Jrms_max
+        get_Jrms = get_Jrms
     # save and copy methods are available in all object
     save = save
     copy = copy
@@ -137,8 +135,11 @@ class OutElec(FrozenClass):
         current_dir=None,
         PWM=None,
         eec=None,
-        P_useful=None,
-        Jrms_max=None,
+        P_out=None,
+        Jrms=None,
+        P_in=None,
+        Arms=None,
+        Erms=None,
         init_dict=None,
         init_str=None,
     ):
@@ -185,10 +186,16 @@ class OutElec(FrozenClass):
                 PWM = init_dict["PWM"]
             if "eec" in list(init_dict.keys()):
                 eec = init_dict["eec"]
-            if "P_useful" in list(init_dict.keys()):
-                P_useful = init_dict["P_useful"]
-            if "Jrms_max" in list(init_dict.keys()):
-                Jrms_max = init_dict["Jrms_max"]
+            if "P_out" in list(init_dict.keys()):
+                P_out = init_dict["P_out"]
+            if "Jrms" in list(init_dict.keys()):
+                Jrms = init_dict["Jrms"]
+            if "P_in" in list(init_dict.keys()):
+                P_in = init_dict["P_in"]
+            if "Arms" in list(init_dict.keys()):
+                Arms = init_dict["Arms"]
+            if "Erms" in list(init_dict.keys()):
+                Erms = init_dict["Erms"]
         # Set the properties (value check and convertion are done in setter)
         self.parent = None
         self.axes_dict = axes_dict
@@ -205,8 +212,11 @@ class OutElec(FrozenClass):
         self.current_dir = current_dir
         self.PWM = PWM
         self.eec = eec
-        self.P_useful = P_useful
-        self.Jrms_max = Jrms_max
+        self.P_out = P_out
+        self.Jrms = Jrms
+        self.P_in = P_in
+        self.Arms = Arms
+        self.Erms = Erms
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -249,8 +259,11 @@ class OutElec(FrozenClass):
             OutElec_str += "eec = " + tmp
         else:
             OutElec_str += "eec = None" + linesep + linesep
-        OutElec_str += "P_useful = " + str(self.P_useful) + linesep
-        OutElec_str += "Jrms_max = " + str(self.Jrms_max) + linesep
+        OutElec_str += "P_out = " + str(self.P_out) + linesep
+        OutElec_str += "Jrms = " + str(self.Jrms) + linesep
+        OutElec_str += "P_in = " + str(self.P_in) + linesep
+        OutElec_str += "Arms = " + str(self.Arms) + linesep
+        OutElec_str += "Erms = " + str(self.Erms) + linesep
         return OutElec_str
 
     def __eq__(self, other):
@@ -286,9 +299,15 @@ class OutElec(FrozenClass):
             return False
         if other.eec != self.eec:
             return False
-        if other.P_useful != self.P_useful:
+        if other.P_out != self.P_out:
             return False
-        if other.Jrms_max != self.Jrms_max:
+        if other.Jrms != self.Jrms:
+            return False
+        if other.P_in != self.P_in:
+            return False
+        if other.Arms != self.Arms:
+            return False
+        if other.Erms != self.Erms:
             return False
         return True
 
@@ -371,10 +390,16 @@ class OutElec(FrozenClass):
             diff_list.append(name + ".eec None mismatch")
         elif self.eec is not None:
             diff_list.extend(self.eec.compare(other.eec, name=name + ".eec"))
-        if other._P_useful != self._P_useful:
-            diff_list.append(name + ".P_useful")
-        if other._Jrms_max != self._Jrms_max:
-            diff_list.append(name + ".Jrms_max")
+        if other._P_out != self._P_out:
+            diff_list.append(name + ".P_out")
+        if other._Jrms != self._Jrms:
+            diff_list.append(name + ".Jrms")
+        if other._P_in != self._P_in:
+            diff_list.append(name + ".P_in")
+        if other._Arms != self._Arms:
+            diff_list.append(name + ".Arms")
+        if other._Erms != self._Erms:
+            diff_list.append(name + ".Erms")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -399,8 +424,11 @@ class OutElec(FrozenClass):
         S += getsizeof(self.current_dir)
         S += getsizeof(self.PWM)
         S += getsizeof(self.eec)
-        S += getsizeof(self.P_useful)
-        S += getsizeof(self.Jrms_max)
+        S += getsizeof(self.P_out)
+        S += getsizeof(self.Jrms)
+        S += getsizeof(self.P_in)
+        S += getsizeof(self.Arms)
+        S += getsizeof(self.Erms)
         return S
 
     def as_dict(self, type_handle_ndarray=0, keep_function=False, **kwargs):
@@ -490,8 +518,11 @@ class OutElec(FrozenClass):
                 keep_function=keep_function,
                 **kwargs
             )
-        OutElec_dict["P_useful"] = self.P_useful
-        OutElec_dict["Jrms_max"] = self.Jrms_max
+        OutElec_dict["P_out"] = self.P_out
+        OutElec_dict["Jrms"] = self.Jrms
+        OutElec_dict["P_in"] = self.P_in
+        OutElec_dict["Arms"] = self.Arms
+        OutElec_dict["Erms"] = self.Erms
         # The class name is added to the dict for deserialisation purpose
         OutElec_dict["__class__"] = "OutElec"
         return OutElec_dict
@@ -517,8 +548,11 @@ class OutElec(FrozenClass):
             self.PWM._set_None()
         if self.eec is not None:
             self.eec._set_None()
-        self.P_useful = None
-        self.Jrms_max = None
+        self.P_out = None
+        self.Jrms = None
+        self.P_in = None
+        self.Arms = None
+        self.Erms = None
 
     def _get_axes_dict(self):
         """getter of axes_dict"""
@@ -913,39 +947,93 @@ class OutElec(FrozenClass):
         """,
     )
 
-    def _get_P_useful(self):
-        """getter of P_useful"""
-        return self._P_useful
+    def _get_P_out(self):
+        """getter of P_out"""
+        return self._P_out
 
-    def _set_P_useful(self, value):
-        """setter of P_useful"""
-        check_var("P_useful", value, "float")
-        self._P_useful = value
+    def _set_P_out(self, value):
+        """setter of P_out"""
+        check_var("P_out", value, "float")
+        self._P_out = value
 
-    P_useful = property(
-        fget=_get_P_useful,
-        fset=_set_P_useful,
-        doc=u"""Useful power (Pem_av minus losses)
+    P_out = property(
+        fget=_get_P_out,
+        fset=_set_P_out,
+        doc=u"""Output power
 
         :Type: float
         """,
     )
 
-    def _get_Jrms_max(self):
-        """getter of Jrms_max"""
-        return self._Jrms_max
+    def _get_Jrms(self):
+        """getter of Jrms"""
+        return self._Jrms
 
-    def _set_Jrms_max(self, value):
-        """setter of Jrms_max"""
-        check_var("Jrms_max", value, "float", Vmin=0)
-        self._Jrms_max = value
+    def _set_Jrms(self, value):
+        """setter of Jrms"""
+        check_var("Jrms", value, "float", Vmin=0)
+        self._Jrms = value
 
-    Jrms_max = property(
-        fget=_get_Jrms_max,
-        fset=_set_Jrms_max,
-        doc=u"""Maximum RMS current density in slots
+    Jrms = property(
+        fget=_get_Jrms,
+        fset=_set_Jrms,
+        doc=u"""RMS current density in slots
 
         :Type: float
         :min: 0
+        """,
+    )
+
+    def _get_P_in(self):
+        """getter of P_in"""
+        return self._P_in
+
+    def _set_P_in(self, value):
+        """setter of P_in"""
+        check_var("P_in", value, "float")
+        self._P_in = value
+
+    P_in = property(
+        fget=_get_P_in,
+        fset=_set_P_in,
+        doc=u"""Input power
+
+        :Type: float
+        """,
+    )
+
+    def _get_Arms(self):
+        """getter of Arms"""
+        return self._Arms
+
+    def _set_Arms(self, value):
+        """setter of Arms"""
+        check_var("Arms", value, "float")
+        self._Arms = value
+
+    Arms = property(
+        fget=_get_Arms,
+        fset=_set_Arms,
+        doc=u"""RMS linear current density along airgap
+
+        :Type: float
+        """,
+    )
+
+    def _get_Erms(self):
+        """getter of Erms"""
+        return self._Erms
+
+    def _set_Erms(self, value):
+        """setter of Erms"""
+        check_var("Erms", value, "float")
+        self._Erms = value
+
+    Erms = property(
+        fget=_get_Erms,
+        fset=_set_Erms,
+        doc=u"""RMS back-emf
+
+        :Type: float
         """,
     )

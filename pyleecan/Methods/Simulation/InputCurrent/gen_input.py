@@ -138,9 +138,6 @@ def gen_input(self):
 
         outelec.Ir = Ir
 
-    # Calculate maximum current density rms
-    outelec.get_Jrms_max()
-
     if outelec.PWM is not None:
         Udq_dict = outelec.OP.get_Ud_Uq()
         Ud_ref, Uq_ref = Udq_dict["Ud"], Udq_dict["Uq"]

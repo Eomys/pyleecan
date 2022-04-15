@@ -1,10 +1,5 @@
 Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
-rot_dir,-,"Rotation direction of the rotor (rot_dir*N0, default value given by ROT_DIR_REF)",,int,None,-1,1,,Simulation,Input,gen_input,VERSION,1,Input to start the electrical module with power input
-phase_dir,,"Rotation direction of the stator phase (phase_dir*(n-1)*pi/qs, default value given by PHASE_DIR_REF)",0,int,None,-1,1,,,,,,,
-current_dir,-,"Rotation direction of the stator currents (current_dir*2*pi*felec*time, default value given by CURRENT_DIR_REF)",0,int,None,-1,1,,,,,,,
-is_periodicity_t,-,True to compute voltage/currents only on one time periodicity (use periodicities defined in axes_dict[time]),0,bool,0,,,,,,,,,
-is_periodicity_a,-,True to compute voltage/currents only on one angle periodicity (use periodicities defined in axes_dict[angle]),0,bool,0,,,,,,,,,
-Urms_max,Vrms,Maximum rms phase voltage,0,float,None,0,,,,,,,,
-Jrms_max,A/m²,Maximum rms current density in slot,,float,None,0,,,,,,,,
+Urms_max,Vrms,Maximum rms phase voltage,0,float,None,0,,,Simulation,InputVoltage,gen_input,VERSION,1,Input to start the electrical module with power input
+Jrms_max,A/m²,Maximum rms current density in slot,,float,None,0,,,,,set_OP_from_array,,,
 Irms_max,A,Maximum rms phase current,0,float,None,0,,,,,,,,
 is_generator,,True if machine is used as a generator,,bool,0,,,,,,,,,
