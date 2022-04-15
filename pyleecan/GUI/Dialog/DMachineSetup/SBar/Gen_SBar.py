@@ -56,7 +56,7 @@ class Gen_SBar(Ui_SBar):
         self.lf_Lewout.setWhatsThis(txt)
         self.lf_Lewout.setToolTip(txt)
 
-        # Setup of w_mat
+        # Setup of w_mat_scr
         txt = self.tr(u"""Material of the Rotor short circuit ring""")
-        self.w_mat.setWhatsThis(txt)
-        self.w_mat.setToolTip(txt)
+        self.w_mat_scr.setWhatsThis(txt)
+        self.w_mat_scr.setToolTip(txt)
