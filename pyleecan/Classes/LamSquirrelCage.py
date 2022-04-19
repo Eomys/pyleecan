@@ -78,6 +78,18 @@ try:
 except ImportError as error:
     comp_masses = error
 
+try:
+    from ..Methods.Machine.LamSquirrelCage.plot_schematics_scr import (
+        plot_schematics_scr,
+    )
+except ImportError as error:
+    plot_schematics_scr = error
+
+try:
+    from ..Methods.Machine.LamSquirrelCage.plot_side import plot_side
+except ImportError as error:
+    plot_side = error
+
 
 from ._check import InitUnKnowClassError
 
@@ -213,6 +225,29 @@ class LamSquirrelCage(LamSlotWind):
         )
     else:
         comp_masses = comp_masses
+    # cf Methods.Machine.LamSquirrelCage.plot_schematics_scr
+    if isinstance(plot_schematics_scr, ImportError):
+        plot_schematics_scr = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use LamSquirrelCage method plot_schematics_scr: "
+                    + str(plot_schematics_scr)
+                )
+            )
+        )
+    else:
+        plot_schematics_scr = plot_schematics_scr
+    # cf Methods.Machine.LamSquirrelCage.plot_side
+    if isinstance(plot_side, ImportError):
+        plot_side = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use LamSquirrelCage method plot_side: " + str(plot_side)
+                )
+            )
+        )
+    else:
+        plot_side = plot_side
     # save and copy methods are available in all object
     save = save
     copy = copy

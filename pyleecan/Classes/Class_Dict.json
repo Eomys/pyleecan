@@ -5063,7 +5063,9 @@
             "get_name_phase",
             "comp_angle_d_axis",
             "comp_periodicity_spatial",
-            "comp_masses"
+            "comp_masses",
+            "plot_schematics_scr",
+            "plot_side"
         ],
         "mother": "LamSlotWind",
         "name": "LamSquirrelCage",

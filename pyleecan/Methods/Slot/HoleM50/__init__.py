@@ -31,6 +31,12 @@ class S50_W5CheckError(SlotCheckError):
     pass
 
 
+class S50_W3CheckError(SlotCheckError):
+    """ """
+
+    pass
+
+
 class S50_SpCheckError(SlotCheckError):
     """ """
 
