@@ -6,7 +6,6 @@ import mock
 import pytest
 from PySide2 import QtWidgets
 
-from Tests import TEST_DATA_DIR as data_test
 from pyleecan.GUI.Dialog.DMachineSetup.DMachineSetup import DMachineSetup
 from pyleecan.GUI.Dialog.DMachineSetup.SPreview.SPreview import SPreview
 from pyleecan.definitions import MAIN_DIR
@@ -18,7 +17,7 @@ matlib_path = join(data_test, "Material")
 machine_path = join(MAIN_DIR, "Data", "Machine")
 
 SCIM_dict = {
-    "file_path": join(machine_path, "SCIM_001.json").replace("\\", "/"),
+    "file_path": join(machine_path, "Railway_Traction.json").replace("\\", "/"),
     "table": [
         ("Machine Type", "SCIM"),
         ("Stator slot number", "36"),

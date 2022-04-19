@@ -1252,26 +1252,7 @@
         "name": "EEC_LSRPM",
         "package": "Simulation",
         "path": "pyleecan/Generator/ClassesRef/Simulation/EEC_LSRPM.csv",
-        "properties": [
-            {
-                "desc": "Flux Linkage",
-                "max": "",
-                "min": "",
-                "name": "fluxlink",
-                "type": "FluxLink",
-                "unit": "-",
-                "value": null
-            },
-            {
-                "desc": "Rotation speed",
-                "max": "",
-                "min": "",
-                "name": "N0",
-                "type": "int",
-                "unit": "RPM",
-                "value": 1500
-            }
-        ]
+        "properties": []
     },
     "EEC_PMSM": {
         "constants": [

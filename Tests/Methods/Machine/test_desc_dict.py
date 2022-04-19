@@ -12,7 +12,7 @@ from pyleecan.Classes.LamSlotWind import LamSlotWind
 @pytest.mark.SCIM
 def test_desc_SCIM():
     """Check that the description of a SCIM is correct"""
-    SCIM_001 = load(join(DATA_DIR, "Machine", "SCIM_001.json"))
+    SCIM_001 = load(join(DATA_DIR, "Machine", "Railway_Traction.json"))
     desc_dict = SCIM_001.comp_desc_dict()
     assert len(desc_dict) == 9
     assert desc_dict[0]["name"] == "Type"

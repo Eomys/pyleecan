@@ -94,22 +94,34 @@ def plot_side(self, fig=None, ax=None, is_show_fig=True, save_path=None):
     # Add Lewout rectangles
     patches.append(  # Top Right
         Rectangle(
-            xy=(ZBarTopR.real, ZBarTopR.imag), width=Le, height=Ha, color=BAR_COLOR,
+            xy=(ZBarTopR.real, ZBarTopR.imag),
+            width=Le,
+            height=Ha,
+            color=BAR_COLOR,
         )
     )
     patches.append(  # Bot Right
         Rectangle(
-            xy=(ZBarBotR.real, ZBarBotR.imag), width=Le, height=Ha, color=BAR_COLOR,
+            xy=(ZBarBotR.real, ZBarBotR.imag),
+            width=Le,
+            height=Ha,
+            color=BAR_COLOR,
         )
     )
     patches.append(  # Top Left
         Rectangle(
-            xy=(ZBarTopL.real, ZBarTopL.imag), width=Le, height=Ha, color=BAR_COLOR,
+            xy=(ZBarTopL.real, ZBarTopL.imag),
+            width=Le,
+            height=Ha,
+            color=BAR_COLOR,
         )
     )
     patches.append(  # Bot Left
         Rectangle(
-            xy=(ZBarBotL.real, ZBarBotL.imag), width=Le, height=Ha, color=BAR_COLOR,
+            xy=(ZBarBotL.real, ZBarBotL.imag),
+            width=Le,
+            height=Ha,
+            color=BAR_COLOR,
         )
     )
     # Add short circuit ring rectangles

@@ -83,8 +83,6 @@ class EEC_LSRPM(EEC):
 
     def __init__(
         self,
-        fluxlink=None,
-        N0=1500,
         type_skin_effect=1,
         OP=None,
         Tsta=20,
@@ -113,10 +111,6 @@ class EEC_LSRPM(EEC):
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
-            if "fluxlink" in list(init_dict.keys()):
-                fluxlink = init_dict["fluxlink"]
-            if "N0" in list(init_dict.keys()):
-                N0 = init_dict["N0"]
             if "type_skin_effect" in list(init_dict.keys()):
                 type_skin_effect = init_dict["type_skin_effect"]
             if "OP" in list(init_dict.keys()):
@@ -138,8 +132,6 @@ class EEC_LSRPM(EEC):
             if "fluxlink" in list(init_dict.keys()):
                 fluxlink = init_dict["fluxlink"]
         # Set the properties (value check and convertion are done in setter)
-        self.fluxlink = fluxlink
-        self.N0 = N0
         # Call EEC init
         super(EEC_LSRPM, self).__init__(
             type_skin_effect=type_skin_effect,
@@ -162,12 +154,6 @@ class EEC_LSRPM(EEC):
         EEC_LSRPM_str = ""
         # Get the properties inherited from EEC
         EEC_LSRPM_str += super(EEC_LSRPM, self).__str__()
-        if self.fluxlink is not None:
-            tmp = self.fluxlink.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            EEC_LSRPM_str += "fluxlink = " + tmp
-        else:
-            EEC_LSRPM_str += "fluxlink = None" + linesep + linesep
-        EEC_LSRPM_str += "N0 = " + str(self.N0) + linesep
         return EEC_LSRPM_str
 
     def __eq__(self, other):
@@ -178,10 +164,6 @@ class EEC_LSRPM(EEC):
 
         # Check the properties inherited from EEC
         if not super(EEC_LSRPM, self).__eq__(other):
-            return False
-        if other.fluxlink != self.fluxlink:
-            return False
-        if other.N0 != self.N0:
             return False
         return True
 
@@ -196,16 +178,6 @@ class EEC_LSRPM(EEC):
 
         # Check the properties inherited from EEC
         diff_list.extend(super(EEC_LSRPM, self).compare(other, name=name))
-        if (other.fluxlink is None and self.fluxlink is not None) or (
-            other.fluxlink is not None and self.fluxlink is None
-        ):
-            diff_list.append(name + ".fluxlink None mismatch")
-        elif self.fluxlink is not None:
-            diff_list.extend(
-                self.fluxlink.compare(other.fluxlink, name=name + ".fluxlink")
-            )
-        if other._N0 != self._N0:
-            diff_list.append(name + ".N0")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -217,8 +189,6 @@ class EEC_LSRPM(EEC):
 
         # Get size of the properties inherited from EEC
         S += super(EEC_LSRPM, self).__sizeof__()
-        S += getsizeof(self.fluxlink)
-        S += getsizeof(self.N0)
         return S
 
     def as_dict(self, type_handle_ndarray=0, keep_function=False, **kwargs):
@@ -238,15 +208,6 @@ class EEC_LSRPM(EEC):
             keep_function=keep_function,
             **kwargs
         )
-        if self.fluxlink is None:
-            EEC_LSRPM_dict["fluxlink"] = None
-        else:
-            EEC_LSRPM_dict["fluxlink"] = self.fluxlink.as_dict(
-                type_handle_ndarray=type_handle_ndarray,
-                keep_function=keep_function,
-                **kwargs
-            )
-        EEC_LSRPM_dict["N0"] = self.N0
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         EEC_LSRPM_dict["__class__"] = "EEC_LSRPM"
@@ -255,63 +216,5 @@ class EEC_LSRPM(EEC):
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""
 
-        if self.fluxlink is not None:
-            self.fluxlink._set_None()
-        self.N0 = None
         # Set to None the properties inherited from EEC
         super(EEC_LSRPM, self)._set_None()
-
-    def _get_fluxlink(self):
-        """getter of fluxlink"""
-        return self._fluxlink
-
-    def _set_fluxlink(self, value):
-        """setter of fluxlink"""
-        if isinstance(value, str):  # Load from file
-            try:
-                value = load_init_dict(value)[1]
-            except Exception as e:
-                self.get_logger().error(
-                    "Error while loading " + value + ", setting None instead"
-                )
-                value = None
-        if isinstance(value, dict) and "__class__" in value:
-            class_obj = import_class(
-                "pyleecan.Classes", value.get("__class__"), "fluxlink"
-            )
-            value = class_obj(init_dict=value)
-        elif type(value) is int and value == -1:  # Default constructor
-            FluxLink = import_class("pyleecan.Classes", "FluxLink", "fluxlink")
-            value = FluxLink()
-        check_var("fluxlink", value, "FluxLink")
-        self._fluxlink = value
-
-        if self._fluxlink is not None:
-            self._fluxlink.parent = self
-
-    fluxlink = property(
-        fget=_get_fluxlink,
-        fset=_set_fluxlink,
-        doc=u"""Flux Linkage
-
-        :Type: FluxLink
-        """,
-    )
-
-    def _get_N0(self):
-        """getter of N0"""
-        return self._N0
-
-    def _set_N0(self, value):
-        """setter of N0"""
-        check_var("N0", value, "int")
-        self._N0 = value
-
-    N0 = property(
-        fget=_get_N0,
-        fset=_set_N0,
-        doc=u"""Rotation speed
-
-        :Type: int
-        """,
-    )

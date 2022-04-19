@@ -39,10 +39,10 @@ from pyleecan.definitions import DATA_DIR, TEST_DIR
 @pytest.mark.periodicity
 @pytest.mark.SingleOP
 def test_Binh_and_Korn():
-    SCIM_001 = load(join(DATA_DIR, "Machine", "SCIM_001.json"))
+    SCIM_001 = load(join(DATA_DIR, "Machine", "Railway_Traction.json"))
     # Defining reference Output
     # Definition of the enforced output of the electrical module
-    SCIM_001 = load(join(DATA_DIR, "Machine", "SCIM_001.json"))
+    SCIM_001 = load(join(DATA_DIR, "Machine", "Railway_Traction.json"))
     Nt = 2
     N0 = 3000
     Is = ImportMatrixVal(
