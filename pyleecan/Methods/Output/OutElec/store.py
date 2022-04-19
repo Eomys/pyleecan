@@ -12,8 +12,6 @@ def store(self, out_dict):
         the OutElec object to update
     out_dict : dict
         Dict containing all electrical quantities that have been calculated in EEC
-    out_dict_harm : dict
-        Dict containing harmonic quantities that have been calculated in EEC
 
     """
 

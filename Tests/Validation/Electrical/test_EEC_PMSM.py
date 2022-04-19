@@ -64,7 +64,7 @@ def test_EEC_PMSM(nb_worker=int(0.5 * cpu_count())):
     out_mag = simu_mag.run()
 
     # from Yang et al, 2013
-    assert out.elec.Tem_av_ref == pytest.approx(82.1, rel=0.1)
+    assert out.elec.Tem_av == pytest.approx(82.1, rel=0.1)
     assert out_mag.mag.Tem_av == pytest.approx(82, rel=0.1)
 
     # Plot 3-phase current function of time
@@ -132,7 +132,7 @@ def test_EEC_PMSM_sync_rel(nb_worker=int(0.5 * cpu_count())):
 
     out = simu.run()
 
-    Tem_eec = [out_ii.elec.Tem_av_ref for out_ii in out.output_list]
+    Tem_eec = [out_ii.elec.Tem_av for out_ii in out.output_list]
 
     Tem_sync = zeros(N_simu)
     Tem_rel = zeros(N_simu)

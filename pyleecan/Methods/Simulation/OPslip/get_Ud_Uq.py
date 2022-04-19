@@ -20,6 +20,6 @@ def get_Ud_Uq(self):
     else:
         UPhi0_ref = self.UPhi0_ref
 
-    Z = self.I0_ref * exp(1j * UPhi0_ref)
+    Z = self.U0_ref * exp(1j * UPhi0_ref)
 
     return {"Ud": Z.real, "Uq": Z.imag}

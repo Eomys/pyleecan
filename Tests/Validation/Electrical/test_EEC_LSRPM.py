@@ -73,7 +73,7 @@ def test_EEC_LSRPM():
     )
 
     # from Yang et al, 2013
-    assert_almost_equal(out.elec.Tem_av_ref, 81.81, decimal=1)
+    assert_almost_equal(out.elec.Tem_av, 81.81, decimal=1)
     assert_almost_equal(out2.mag.Tem_av, 81.70, decimal=1)
 
     return out, out2

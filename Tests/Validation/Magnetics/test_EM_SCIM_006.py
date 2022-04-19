@@ -192,7 +192,9 @@ def test_EM_SCIM_006_varslip():
     OP_matrix[:, 1] = U0_ref
     OP_matrix[:, 2] = np.linspace(0.2, 0, Nspeed)
 
-    simu.var_simu = VarLoadVoltage(OP_matrix=OP_matrix, type_OP_matrix=2)
+    simu.var_simu = VarLoadVoltage(
+        OP_matrix=OP_matrix, type_OP_matrix=2, is_keep_all_output=True
+    )
 
     # Set values from Manatee V1
     Im = np.linspace(0, 200, 2)
@@ -222,12 +224,13 @@ def test_EM_SCIM_006_varslip():
         nb_worker=4,
         type_BH_rotor=2,
         type_BH_stator=2,
+        is_calc_torque_energy=False,
     )
 
     # Run simulation
     out = simu.run()
 
-    Tem_eec = np.array([out_ii.elec.Tem_av_ref for out_ii in out.output_list])
+    Tem_eec = np.array([out_ii.elec.Tem_av for out_ii in out.output_list])
     Tem_fem = np.array([out_ii.mag.Tem_av for out_ii in out.output_list])
 
     assert_almost_equal(Tem_eec, 1.05 * Tem_fem, decimal=0)
@@ -235,10 +238,7 @@ def test_EM_SCIM_006_varslip():
     if is_show_fig:
         plot_2D(
             [[out_ii.elec.OP.slip_ref for out_ii in out.output_list]],
-            [
-                [out_ii.elec.Tem_av_ref for out_ii in out.output_list],
-                [out_ii.mag.Tem_av for out_ii in out.output_list],
-            ],
+            [Tem_eec, Tem_fem],
             xlabel="Mechanical slip",
             ylabel="Average torque [Nm]",
             legend_list=["EEC", "FEMM"],
@@ -250,5 +250,5 @@ def test_EM_SCIM_006_varslip():
 if __name__ == "__main__":
 
     out = test_EM_SCIM_006_maxwell_current_enforced()
-    # out = test_EM_SCIM_006_varslip()
+    out = test_EM_SCIM_006_varslip()
     print("Done")
