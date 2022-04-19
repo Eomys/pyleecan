@@ -8,7 +8,6 @@ from SciDataTool.Functions.Plot.plot_3D import plot_3D
 
 from pyleecan.Classes.OPdq import OPdq
 from pyleecan.Classes.Simu1 import Simu1
-from pyleecan.Classes.InputPower import InputPower
 from pyleecan.Classes.InputCurrent import InputCurrent
 from pyleecan.Classes.VarLoadCurrent import VarLoadCurrent
 from pyleecan.Classes.PostLUT import PostLUT
@@ -36,14 +35,12 @@ def test_LUTdq_grid_vect(is_load=True):
         simu = Simu1(name="test_LUTdq_grid_vect", machine=machine)
 
         # Initialization of the simulation starting point
-        simu.input = InputPower(
+        simu.input = InputCurrent(
             OP=OPdq(N0=1200, Pem_av_ref=30e4),
             Nt_tot=20 * 8,
             Na_tot=200 * 8,
             is_periodicity_a=True,
             is_periodicity_t=True,
-            U_max=500,
-            J_max=30e6,
         )
 
         simu.elec = ElecLUTdq(
@@ -53,6 +50,8 @@ def test_LUTdq_grid_vect(is_load=True):
             Id_max=0,
             Iq_min=0,
             is_grid_dq=True,
+            U_max=500,
+            J_max=30e6,
             LUT_simu=Simu1(
                 input=InputCurrent(
                     OP=OPdq(),
