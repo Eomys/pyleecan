@@ -127,7 +127,7 @@ def test_EEC_PMSM_sync_rel(nb_worker=int(0.5 * cpu_count())):
     OP_matrix[:, 3] = Tem_av_ref
 
     simu.var_simu = VarLoadCurrent(
-        is_torque=True, OP_matrix=OP_matrix, type_OP_matrix=0, is_keep_all_output=True
+        OP_matrix=OP_matrix, type_OP_matrix=0, is_keep_all_output=True
     )
 
     out = simu.run()

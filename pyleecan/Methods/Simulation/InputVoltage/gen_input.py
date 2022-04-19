@@ -1,4 +1,4 @@
-from numpy import angle
+from numpy import angle, pi
 
 from ....Classes.OutElec import OutElec
 
@@ -71,38 +71,55 @@ def gen_input(self):
         raise Exception("Cannot enforce phase_dir other than +1 or -1")
     outelec.phase_dir = self.phase_dir
 
-    # Check if stator magnetomotive force direction is consistent with rotor direction
-    mmf_dir = simu.machine.stator.comp_mmf_dir(
-        current_dir=self.current_dir, phase_dir=self.phase_dir
-    )
-    if mmf_dir != -self.rot_dir:
-        # Switch phase direction to reverse rotation direction
-        self.phase_dir = -self.phase_dir
-        logger.info(
-            "Reverse the two last stator current phases to reverse rotation direction of stator mmf fundamental according to rotor direction"
+    if simu.mag is not None:
+        # Check if stator magnetomotive force direction is consistent with rotor direction
+        mmf_dir = simu.machine.stator.comp_mmf_dir(
+            current_dir=self.current_dir, phase_dir=self.phase_dir
         )
-    outelec.phase_dir = self.phase_dir
+        if mmf_dir != -self.rot_dir:
+            # Switch phase direction to reverse rotation direction
+            self.phase_dir = -self.phase_dir
+            logger.info(
+                "Reverse the two last stator current phases to reverse rotation direction of stator mmf fundamental according to rotor direction"
+            )
+        outelec.phase_dir = self.phase_dir
 
-    # Set rotor initial angular position
-    if self.angle_rotor_initial in [0, None]:
-        # Calculate initial position according to machine properties
-        self.angle_rotor_initial = simu.machine.comp_angle_rotor_initial()
-    output.geo.angle_rotor_initial = self.angle_rotor_initial
+        # Set rotor initial angular position
+        if self.angle_rotor_initial in [0, None]:
+            # Calculate initial position according to machine properties
+            self.angle_rotor_initial = simu.machine.comp_angle_rotor_initial()
+        output.geo.angle_rotor_initial = self.angle_rotor_initial
 
-    # Calculate time, angle and phase axes and store them in OutGeo
-    outgeo.axes_dict = self.comp_axes(
-        axes_list=["time", "angle"],
-        is_periodicity_a=False,
-        is_periodicity_t=False,
-    )
+        # Calculate time, angle and phase axes and store them in OutGeo
+        outgeo.axes_dict = self.comp_axes(
+            axes_list=["time", "angle"],
+            is_periodicity_a=False,
+            is_periodicity_t=False,
+        )
 
-    # Create time axis for electrical model including periodicity
-    outelec.axes_dict = self.comp_axes(
-        axes_list=["time", "phase_S", "phase_R"],
-        axes_dict_in=outgeo.axes_dict,
-        is_periodicity_a=self.is_periodicity_a,
-        is_periodicity_t=self.is_periodicity_t,
-    )
+        # Create time axis for electrical model including periodicity
+        outelec.axes_dict = self.comp_axes(
+            axes_list=["time", "phase_S", "phase_R"],
+            axes_dict_in=outgeo.axes_dict,
+            is_periodicity_a=self.is_periodicity_a,
+            is_periodicity_t=self.is_periodicity_t,
+        )
+
+    if (
+        self.is_generator
+        and outelec.OP.Tem_av_ref is None
+        and outelec.OP.Pem_av_in is not None
+    ):
+        # Get reference torque function of reference power and speed
+        outelec.OP.Tem_av_ref = outelec.OP.Pem_av_in / (2 * pi * outelec.OP.N0 / 60)
+
+    if (
+        not self.is_generator
+        and outelec.OP.Tem_av_ref is None
+        and outelec.OP.Pem_av_ref is not None
+    ):
+        # Get reference torque function of reference power and speed
+        outelec.OP.Tem_av_ref = outelec.OP.Pem_av_ref / (2 * pi * outelec.OP.N0 / 60)
 
     # Generate PWM signal
     if self.PWM is not None:

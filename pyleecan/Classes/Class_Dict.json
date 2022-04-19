@@ -1517,7 +1517,9 @@
         "is_internal": false,
         "methods": [
             "run",
-            "comp_LUTdq"
+            "comp_LUTdq",
+            "solve_power",
+            "solve_MTPA"
         ],
         "mother": "Electrical",
         "name": "ElecLUTdq",
@@ -1602,6 +1604,42 @@
                 "min": "",
                 "name": "is_grid_dq",
                 "type": "bool",
+                "unit": "",
+                "value": 1
+            },
+            {
+                "desc": "Maximum rms phase voltage",
+                "max": "",
+                "min": "0",
+                "name": "Urms_max",
+                "type": "float",
+                "unit": "Vrms",
+                "value": null
+            },
+            {
+                "desc": "Maximum rms current density in slot",
+                "max": "",
+                "min": "0",
+                "name": "Jrms_max",
+                "type": "float",
+                "unit": "A/m\u00c2\u00b2",
+                "value": null
+            },
+            {
+                "desc": "Maximum rms phase current",
+                "max": "",
+                "min": "0",
+                "name": "Irms_max",
+                "type": "float",
+                "unit": "A",
+                "value": null
+            },
+            {
+                "desc": "Load rate between 0 (no-load) and 1 (full-load) for MTPA calculation",
+                "max": "1",
+                "min": "0",
+                "name": "load_rate",
+                "type": "float",
                 "unit": "",
                 "value": 1
             }
@@ -4206,7 +4244,6 @@
             "InputCurrent",
             "InputFlux",
             "InputForce",
-            "InputPower",
             "InputVoltage"
         ],
         "desc": "Starting data of the simulation",
@@ -4459,63 +4496,6 @@
             }
         ]
     },
-    "InputPower": {
-        "constants": [
-            {
-                "name": "VERSION",
-                "value": "1"
-            }
-        ],
-        "daughters": [],
-        "desc": "Input to start the electrical module with power input",
-        "is_internal": false,
-        "methods": [
-            "gen_input",
-            "set_OP_from_array"
-        ],
-        "mother": "InputVoltage",
-        "name": "InputPower",
-        "package": "Simulation",
-        "path": "pyleecan/Generator/ClassesRef/Simulation/InputPower.csv",
-        "properties": [
-            {
-                "desc": "Maximum rms phase voltage",
-                "max": "",
-                "min": "0",
-                "name": "Urms_max",
-                "type": "float",
-                "unit": "Vrms",
-                "value": null
-            },
-            {
-                "desc": "Maximum rms current density in slot",
-                "max": "",
-                "min": "0",
-                "name": "Jrms_max",
-                "type": "float",
-                "unit": "A/m\u00c2\u00b2",
-                "value": null
-            },
-            {
-                "desc": "Maximum rms phase current",
-                "max": "",
-                "min": "0",
-                "name": "Irms_max",
-                "type": "float",
-                "unit": "A",
-                "value": null
-            },
-            {
-                "desc": "True if machine is used as a generator",
-                "max": "",
-                "min": "",
-                "name": "is_generator",
-                "type": "bool",
-                "unit": "",
-                "value": 0
-            }
-        ]
-    },
     "InputVoltage": {
         "constants": [
             {
@@ -4525,8 +4505,7 @@
         ],
         "daughters": [
             "InputCurrent",
-            "InputFlux",
-            "InputPower"
+            "InputFlux"
         ],
         "desc": "Input to start the electrical module with voltage input",
         "is_internal": false,
@@ -4601,6 +4580,15 @@
                 "name": "is_periodicity_a",
                 "type": "bool",
                 "unit": "-",
+                "value": 0
+            },
+            {
+                "desc": "True if machine is used as a generator",
+                "max": "",
+                "min": "",
+                "name": "is_generator",
+                "type": "bool",
+                "unit": "",
                 "value": 0
             }
         ]
@@ -14179,7 +14167,6 @@
         ],
         "daughters": [
             "VarLoadCurrent",
-            "VarLoadPower",
             "VarLoadVoltage"
         ],
         "desc": "Abstract class to generate multi-simulation by changing the operating point",
@@ -14212,22 +14199,13 @@
                 "value": 0
             },
             {
-                "desc": "True if the Torque is defined in OP_matrix",
+                "desc": "True if power given in OP_matrix is the output power, False if it is the input power",
                 "max": "",
                 "min": "",
-                "name": "is_torque",
-                "type": "bool",
-                "unit": "-",
-                "value": 0
-            },
-            {
-                "desc": "True if the Power is defined in OP_matrix",
-                "max": "",
-                "min": "",
-                "name": "is_power",
+                "name": "is_output_power",
                 "type": "bool",
                 "unit": "",
-                "value": 0
+                "value": 1
             }
         ]
     },
@@ -14250,26 +14228,6 @@
         "name": "VarLoadCurrent",
         "package": "Simulation",
         "path": "pyleecan/Generator/ClassesRef/Simulation/VarLoadCurrent.csv",
-        "properties": []
-    },
-    "VarLoadPower": {
-        "constants": [
-            {
-                "name": "VERSION",
-                "value": "1"
-            }
-        ],
-        "daughters": [],
-        "desc": "Generate a multisimulation with InputPower at variable operating point",
-        "is_internal": false,
-        "methods": [
-            "generate_simulation_list",
-            "get_input_list"
-        ],
-        "mother": "VarLoad",
-        "name": "VarLoadPower",
-        "package": "Simulation",
-        "path": "pyleecan/Generator/ClassesRef/Simulation/VarLoadPower.csv",
         "properties": []
     },
     "VarLoadVoltage": {
@@ -14338,7 +14296,6 @@
         "daughters": [
             "VarLoad",
             "VarLoadCurrent",
-            "VarLoadPower",
             "VarLoadVoltage",
             "VarParam"
         ],

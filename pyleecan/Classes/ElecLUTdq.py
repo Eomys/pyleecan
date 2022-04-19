@@ -27,6 +27,16 @@ try:
 except ImportError as error:
     comp_LUTdq = error
 
+try:
+    from ..Methods.Simulation.ElecLUTdq.solve_power import solve_power
+except ImportError as error:
+    solve_power = error
+
+try:
+    from ..Methods.Simulation.ElecLUTdq.solve_MTPA import solve_MTPA
+except ImportError as error:
+    solve_MTPA = error
+
 
 from ._check import InitUnKnowClassError
 
@@ -55,6 +65,26 @@ class ElecLUTdq(Electrical):
         )
     else:
         comp_LUTdq = comp_LUTdq
+    # cf Methods.Simulation.ElecLUTdq.solve_power
+    if isinstance(solve_power, ImportError):
+        solve_power = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use ElecLUTdq method solve_power: " + str(solve_power)
+                )
+            )
+        )
+    else:
+        solve_power = solve_power
+    # cf Methods.Simulation.ElecLUTdq.solve_MTPA
+    if isinstance(solve_MTPA, ImportError):
+        solve_MTPA = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use ElecLUTdq method solve_MTPA: " + str(solve_MTPA))
+            )
+        )
+    else:
+        solve_MTPA = solve_MTPA
     # save and copy methods are available in all object
     save = save
     copy = copy
@@ -72,6 +102,10 @@ class ElecLUTdq(Electrical):
         n_Iq=1,
         LUT_simu=None,
         is_grid_dq=True,
+        Urms_max=None,
+        Jrms_max=None,
+        Irms_max=None,
+        load_rate=1,
         eec=None,
         logger_name="Pyleecan.Electrical",
         freq_max=40000,
@@ -115,6 +149,14 @@ class ElecLUTdq(Electrical):
                 LUT_simu = init_dict["LUT_simu"]
             if "is_grid_dq" in list(init_dict.keys()):
                 is_grid_dq = init_dict["is_grid_dq"]
+            if "Urms_max" in list(init_dict.keys()):
+                Urms_max = init_dict["Urms_max"]
+            if "Jrms_max" in list(init_dict.keys()):
+                Jrms_max = init_dict["Jrms_max"]
+            if "Irms_max" in list(init_dict.keys()):
+                Irms_max = init_dict["Irms_max"]
+            if "load_rate" in list(init_dict.keys()):
+                load_rate = init_dict["load_rate"]
             if "eec" in list(init_dict.keys()):
                 eec = init_dict["eec"]
             if "logger_name" in list(init_dict.keys()):
@@ -139,6 +181,10 @@ class ElecLUTdq(Electrical):
         self.n_Iq = n_Iq
         self.LUT_simu = LUT_simu
         self.is_grid_dq = is_grid_dq
+        self.Urms_max = Urms_max
+        self.Jrms_max = Jrms_max
+        self.Irms_max = Irms_max
+        self.load_rate = load_rate
         # Call Electrical init
         super(ElecLUTdq, self).__init__(
             eec=eec,
@@ -171,6 +217,10 @@ class ElecLUTdq(Electrical):
         else:
             ElecLUTdq_str += "LUT_simu = None" + linesep + linesep
         ElecLUTdq_str += "is_grid_dq = " + str(self.is_grid_dq) + linesep
+        ElecLUTdq_str += "Urms_max = " + str(self.Urms_max) + linesep
+        ElecLUTdq_str += "Jrms_max = " + str(self.Jrms_max) + linesep
+        ElecLUTdq_str += "Irms_max = " + str(self.Irms_max) + linesep
+        ElecLUTdq_str += "load_rate = " + str(self.load_rate) + linesep
         return ElecLUTdq_str
 
     def __eq__(self, other):
@@ -199,6 +249,14 @@ class ElecLUTdq(Electrical):
         if other.LUT_simu != self.LUT_simu:
             return False
         if other.is_grid_dq != self.is_grid_dq:
+            return False
+        if other.Urms_max != self.Urms_max:
+            return False
+        if other.Jrms_max != self.Jrms_max:
+            return False
+        if other.Irms_max != self.Irms_max:
+            return False
+        if other.load_rate != self.load_rate:
             return False
         return True
 
@@ -237,6 +295,14 @@ class ElecLUTdq(Electrical):
             )
         if other._is_grid_dq != self._is_grid_dq:
             diff_list.append(name + ".is_grid_dq")
+        if other._Urms_max != self._Urms_max:
+            diff_list.append(name + ".Urms_max")
+        if other._Jrms_max != self._Jrms_max:
+            diff_list.append(name + ".Jrms_max")
+        if other._Irms_max != self._Irms_max:
+            diff_list.append(name + ".Irms_max")
+        if other._load_rate != self._load_rate:
+            diff_list.append(name + ".load_rate")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -257,6 +323,10 @@ class ElecLUTdq(Electrical):
         S += getsizeof(self.n_Iq)
         S += getsizeof(self.LUT_simu)
         S += getsizeof(self.is_grid_dq)
+        S += getsizeof(self.Urms_max)
+        S += getsizeof(self.Jrms_max)
+        S += getsizeof(self.Irms_max)
+        S += getsizeof(self.load_rate)
         return S
 
     def as_dict(self, type_handle_ndarray=0, keep_function=False, **kwargs):
@@ -292,6 +362,10 @@ class ElecLUTdq(Electrical):
                 **kwargs
             )
         ElecLUTdq_dict["is_grid_dq"] = self.is_grid_dq
+        ElecLUTdq_dict["Urms_max"] = self.Urms_max
+        ElecLUTdq_dict["Jrms_max"] = self.Jrms_max
+        ElecLUTdq_dict["Irms_max"] = self.Irms_max
+        ElecLUTdq_dict["load_rate"] = self.load_rate
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         ElecLUTdq_dict["__class__"] = "ElecLUTdq"
@@ -310,6 +384,10 @@ class ElecLUTdq(Electrical):
         if self.LUT_simu is not None:
             self.LUT_simu._set_None()
         self.is_grid_dq = None
+        self.Urms_max = None
+        self.Jrms_max = None
+        self.Irms_max = None
+        self.load_rate = None
         # Set to None the properties inherited from Electrical
         super(ElecLUTdq, self)._set_None()
 
@@ -492,5 +570,82 @@ class ElecLUTdq(Electrical):
         doc=u"""True to build a n_Id*n_Iq grid, otherwise calculate n_Id+n_Iq simulations and extrapolate to the dq plane
 
         :Type: bool
+        """,
+    )
+
+    def _get_Urms_max(self):
+        """getter of Urms_max"""
+        return self._Urms_max
+
+    def _set_Urms_max(self, value):
+        """setter of Urms_max"""
+        check_var("Urms_max", value, "float", Vmin=0)
+        self._Urms_max = value
+
+    Urms_max = property(
+        fget=_get_Urms_max,
+        fset=_set_Urms_max,
+        doc=u"""Maximum rms phase voltage
+
+        :Type: float
+        :min: 0
+        """,
+    )
+
+    def _get_Jrms_max(self):
+        """getter of Jrms_max"""
+        return self._Jrms_max
+
+    def _set_Jrms_max(self, value):
+        """setter of Jrms_max"""
+        check_var("Jrms_max", value, "float", Vmin=0)
+        self._Jrms_max = value
+
+    Jrms_max = property(
+        fget=_get_Jrms_max,
+        fset=_set_Jrms_max,
+        doc=u"""Maximum rms current density in slot
+
+        :Type: float
+        :min: 0
+        """,
+    )
+
+    def _get_Irms_max(self):
+        """getter of Irms_max"""
+        return self._Irms_max
+
+    def _set_Irms_max(self, value):
+        """setter of Irms_max"""
+        check_var("Irms_max", value, "float", Vmin=0)
+        self._Irms_max = value
+
+    Irms_max = property(
+        fget=_get_Irms_max,
+        fset=_set_Irms_max,
+        doc=u"""Maximum rms phase current
+
+        :Type: float
+        :min: 0
+        """,
+    )
+
+    def _get_load_rate(self):
+        """getter of load_rate"""
+        return self._load_rate
+
+    def _set_load_rate(self, value):
+        """setter of load_rate"""
+        check_var("load_rate", value, "float", Vmin=0, Vmax=1)
+        self._load_rate = value
+
+    load_rate = property(
+        fget=_get_load_rate,
+        fset=_set_load_rate,
+        doc=u"""Load rate between 0 (no-load) and 1 (full-load) for MTPA calculation
+
+        :Type: float
+        :min: 0
+        :max: 1
         """,
     )

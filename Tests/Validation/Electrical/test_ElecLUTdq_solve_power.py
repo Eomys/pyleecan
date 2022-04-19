@@ -9,7 +9,7 @@ from pyleecan.Classes.LossModelSteinmetz import LossModelSteinmetz
 
 from pyleecan.Classes.OPdq import OPdq
 from pyleecan.Classes.Simu1 import Simu1
-from pyleecan.Classes.InputPower import InputPower
+from pyleecan.Classes.InputVoltage import InputVoltage
 from pyleecan.Classes.InputCurrent import InputCurrent
 from pyleecan.Classes.VarLoadCurrent import VarLoadCurrent
 from pyleecan.Classes.PostLUT import PostLUT
@@ -23,8 +23,8 @@ from pyleecan.definitions import DATA_DIR
 
 
 @pytest.mark.skip(reason="Work in progress")
-def test_ElecLUTdq_InputPower():
-    """Test to calculate Id/Iq in Toyota_Prius using InputPower
+def test_ElecLUTdq_solve_power():
+    """Test to calculate Id/Iq in Toyota_Prius using solve_power
     to get requested power while minimizing losses"""
 
     machine = load(join(DATA_DIR, "Machine", "Toyota_Prius_loss.json"))
@@ -33,17 +33,15 @@ def test_ElecLUTdq_InputPower():
     LUT_enforced = None
 
     # First simulation creating femm file
-    simu = Simu1(name="test_ElecLUTdq_InputPower", machine=machine)
+    simu = Simu1(name="test_ElecLUTdq_solve_power", machine=machine)
 
     # Initialization of the simulation starting point
-    simu.input = InputPower(
-        OP=OPdq(N0=1200, Pem_av_ref=50e4),
+    simu.input = InputVoltage(
+        OP=OPdq(N0=1200, Pem_av_ref=5e4),
         Nt_tot=4 * 8,
         Na_tot=200 * 8,
         is_periodicity_a=True,
         is_periodicity_t=True,
-        Urms_max=800,
-        Jrms_max=30e6,
     )
 
     k_hy = 0.011381
@@ -57,6 +55,8 @@ def test_ElecLUTdq_InputPower():
     )
 
     simu.elec = ElecLUTdq(
+        Urms_max=800,
+        Jrms_max=30e6,
         n_interp=100,
         n_Id=2,
         n_Iq=2,
@@ -143,4 +143,4 @@ def test_ElecLUTdq_InputPower():
 
 # To run it without pytest
 if __name__ == "__main__":
-    out = test_ElecLUTdq_InputPower()
+    out = test_ElecLUTdq_solve_power()

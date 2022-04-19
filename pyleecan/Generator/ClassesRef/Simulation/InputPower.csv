@@ -1,5 +1,0 @@
-Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
-Urms_max,Vrms,Maximum rms phase voltage,0,float,None,0,,,Simulation,InputVoltage,gen_input,VERSION,1,Input to start the electrical module with power input
-Jrms_max,A/m²,Maximum rms current density in slot,,float,None,0,,,,,set_OP_from_array,,,
-Irms_max,A,Maximum rms phase current,0,float,None,0,,,,,,,,
-is_generator,,True if machine is used as a generator,,bool,0,,,,,,,,,
