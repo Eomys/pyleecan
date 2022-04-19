@@ -1,5 +1,7 @@
 from os.path import join
 
+import pytest
+
 import numpy as np
 from numpy.testing import assert_almost_equal
 
@@ -21,6 +23,14 @@ from SciDataTool.Functions.Plot.plot_2D import plot_2D
 is_show_fig = False
 
 
+@pytest.mark.long_5s
+@pytest.mark.long_1m
+@pytest.mark.FEMM
+@pytest.mark.MagFEMM
+@pytest.mark.periodicity
+@pytest.mark.SPMSM
+@pytest.mark.SingleOP
+@pytest.mark.Loss
 def test_FEMM_Loss_SPMSM():
     """Test to calculate losses in SPMSM using LossFEMM model from https://www.femm.info/wiki/SPMLoss """
 
@@ -145,6 +155,14 @@ def test_FEMM_Loss_SPMSM():
     return out
 
 
+@pytest.mark.long_5s
+@pytest.mark.FEMM
+@pytest.mark.MagFEMM
+@pytest.mark.periodicity
+@pytest.mark.SPMSM
+@pytest.mark.SingleOP
+@pytest.mark.Loss
+@pytest.mark.skip(reason="Work in progress")
 def test_FEMM_Loss_Prius():
     """Test to calculate losses in Toyota_Prius using LossFEMM model based on motoranalysis validation"""
 

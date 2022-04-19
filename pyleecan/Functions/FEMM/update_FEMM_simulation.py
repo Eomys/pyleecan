@@ -46,9 +46,10 @@ def update_FEMM_simulation(
     else:
         # Select and rotate rotor groups
         femm.mi_seteditmode("group")
-        for key, val in FEMM_dict["groups"].items():
-            if "GROUP_R" in key:
-                femm.mi_selectgroup(val)
+        for key, val in FEMM_dict["groups"]["lam_group_list"].items():
+            if "Rotor" in key:
+                for ind in val:
+                    femm.mi_selectgroup(ind)
         femm.mi_moverotate(0, 0, 180 * angle_rotor[ii] / pi)
 
     # Update currents

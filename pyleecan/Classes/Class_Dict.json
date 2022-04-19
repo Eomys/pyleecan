@@ -9196,7 +9196,7 @@
                 "name": "coeff_dict",
                 "type": "dict",
                 "unit": "",
-                "value": -1
+                "value": {}
             }
         ]
     },
