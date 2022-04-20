@@ -72,17 +72,17 @@ def comp_coeff(self,material, is_show_fig=False):
             plt.plot(B_check, comp_loss(xverif, *popt),color=color, linestyle='dashed',label=f'fitting with f={key}Hz')
         plt.xlabel("Peak magnetic flux density (T)")
         plt.ylabel("Iron loss (W/kg")
-        plt.title("Iron loss with respect to peak magnetic flux density for several frequencies")
+        plt.title(f"Curve fitting for the iron loss of the {material.name} material")
         text=textwrap.dedent(fr"""                    
-                                $P{{loss}}=k_{{hy}} f^{{\alpha_f}} B^{{\alpha_B}} + k_{{ed}} (fB)^2$
+                                $P_{{loss}}=k_{{hy}} f^{{\alpha_f}} B^{{\alpha_B}} + k_{{ed}} (fB)^2$
                                 where:
                                 $k_{{hy}}$ = {popt[0]:.5E}
                                 $k_{{ed}}$ = {popt[1]:.5E}
                                 $\alpha_f$ = {popt[2]:.5E}
                                 $\alpha_B$ = {popt[3]:.5E}
                                 """)
-        fig.text(0.02,0.5,text, fontsize=14)
-        plt.subplots_adjust(left=0.2)
+        fig.text(0.02,0.5,text, fontsize=12)
+        plt.subplots_adjust(left=0.23)
         plt.legend()
         plt.show() 
 
