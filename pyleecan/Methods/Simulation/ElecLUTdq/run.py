@@ -95,7 +95,7 @@ def run(self):
     if "P_out" in out_dict:
         output.elec.P_out = out_dict["P_out"]
     if "P_in" in out_dict:
-        output.elec.P_out = out_dict["P_in"]
+        output.elec.P_in = out_dict["P_in"]
     if "efficiency" in out_dict:
         output.elec.OP.efficiency = out_dict["efficiency"]
     if "Tem_av" in out_dict:
