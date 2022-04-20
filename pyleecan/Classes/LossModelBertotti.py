@@ -18,23 +18,9 @@ from .LossModel import LossModel
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
 try:
-    from ..Methods.Simulation.LossModelBertotti.comp_loss import comp_loss
+    from ..Methods.Simulation.LossModelBertotti.comp_coeff import comp_coeff
 except ImportError as error:
-    comp_loss = error
-
-try:
-    from ..Methods.Simulation.LossModelBertotti.comp_coeff_Bertotti import (
-        comp_coeff_Bertotti,
-    )
-except ImportError as error:
-    comp_coeff_Bertotti = error
-
-try:
-    from ..Methods.Simulation.LossModelBertotti.comp_loss_density import (
-        comp_loss_density,
-    )
-except ImportError as error:
-    comp_loss_density = error
+    comp_coeff = error
 
 
 from ._check import InitUnKnowClassError
@@ -47,42 +33,17 @@ class LossModelBertotti(LossModel):
     F_REF = 50
     B_REF = 1.5
 
-    # Check ImportError to remove unnecessary dependencies in unused method
-    # cf Methods.Simulation.LossModelBertotti.comp_loss
-    if isinstance(comp_loss, ImportError):
-        comp_loss = property(
+    # cf Methods.Simulation.LossModelBertotti.comp_coeff
+    if isinstance(comp_coeff, ImportError):
+        comp_coeff = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use LossModelBertotti method comp_loss: " + str(comp_loss)
+                    "Can't use LossModelBertotti method comp_coeff: " + str(comp_coeff)
                 )
             )
         )
     else:
-        comp_loss = comp_loss
-    # cf Methods.Simulation.LossModelBertotti.comp_coeff_Bertotti
-    if isinstance(comp_coeff_Bertotti, ImportError):
-        comp_coeff_Bertotti = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use LossModelBertotti method comp_coeff_Bertotti: "
-                    + str(comp_coeff_Bertotti)
-                )
-            )
-        )
-    else:
-        comp_coeff_Bertotti = comp_coeff_Bertotti
-    # cf Methods.Simulation.LossModelBertotti.comp_loss_density
-    if isinstance(comp_loss_density, ImportError):
-        comp_loss_density = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use LossModelBertotti method comp_loss_density: "
-                    + str(comp_loss_density)
-                )
-            )
-        )
-    else:
-        comp_loss_density = comp_loss_density
+        comp_coeff = comp_coeff
     # save and copy methods are available in all object
     save = save
     copy = copy

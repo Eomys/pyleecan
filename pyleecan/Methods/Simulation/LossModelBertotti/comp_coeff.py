@@ -27,15 +27,14 @@ def comp_coeff(self, material, is_show_fig=False):
         True if the curve fitting was succesfull, else False.
     """
 
-    Ch = self.k_hy
-    Ce = self.k_ed
-    alpha_f = self.alpha_f
-    alpha_B = self.alpha_B
-
-    def comp_loss(xdata, Ch, Ce, alpha_f, alpha_B):
+    def comp_loss(xdata, k_hy, alpha_hy, k_ed, alpha_ed, k_ex, alpha_ex):
         f = xdata[0]
         B = xdata[1]
-        return Ch * f ** alpha_f * B ** alpha_B + Ce * (f * B) ** 2
+        return (
+            k_hy * f * B ** alpha_hy
+            + k_ed * (f * B) ** alpha_ed
+            + k_ex * (f * B) ** alpha_ex
+        )
 
     def group_by_frequency(loss_data):
         groups = []
@@ -54,7 +53,10 @@ def comp_coeff(self, material, is_show_fig=False):
     loss = loss_data[2]
     xdata = np.array([f, B])
     ydata = np.array(loss)
-    popt, pcov = curve_fit(comp_loss, xdata, ydata)
+    popt, pcov = curve_fit(comp_loss, xdata, ydata,
+                           p0=[1e-3, 1, 1e-3, 2, 1e-3, 1.5],
+                           bounds=(0,10),
+                           maxfev=1e3)
     print(popt)
 
     if is_show_fig:
@@ -88,12 +90,14 @@ def comp_coeff(self, material, is_show_fig=False):
         plt.title(f"Curve fitting for the iron loss of the {material.name} material")
         text = textwrap.dedent(
             fr"""                    
-                                $P_{{loss}}=k_{{hy}} f^{{\alpha_f}} B^{{\alpha_B}} + k_{{ed}} (fB)^2$
+                                $P_{{loss}}=k_{{hy}} f B^{{\alpha_{{hy}}}} + k_{{ed}} (fB)^{{\alpha_{{ed}}}} + k_{{ex}} (fB)^{{\alpha_{{ex}}}}$
                                 where:
                                 $k_{{hy}}$ = {popt[0]:.5E}
-                                $k_{{ed}}$ = {popt[1]:.5E}
-                                $\alpha_f$ = {popt[2]:.5E}
-                                $\alpha_B$ = {popt[3]:.5E}
+                                $\alpha_{{hy}}$ = {popt[1]:.5E}
+                                $k_{{ed}}$ = {popt[2]:.5E}
+                                $\alpha_{{ed}}$ = {popt[3]:.5E}
+                                $k_{{ex}}$ = {popt[4]:.5E}
+                                $\alpha_{{ex}}$ = {popt[5]:.5E}
                                 """
         )
         fig.text(0.02, 0.5, text, fontsize=12)
@@ -102,8 +106,10 @@ def comp_coeff(self, material, is_show_fig=False):
         plt.show()
 
     self.k_hy = popt[0]
-    self.k_ed = popt[1]
-    self.alpha_f = popt[2]
-    self.alpha_B = popt[3]
+    self.alpha_hy = popt[1]
+    self.k_ed = popt[2]
+    self.alpha_ed = popt[3]
+    self.k_ex = popt[4]
+    self.alpha_ex = popt[5]
 
     return True

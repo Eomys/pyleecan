@@ -5583,9 +5583,7 @@
         "desc": "Bertotti Loss Model Class",
         "is_internal": false,
         "methods": [
-            "comp_loss",
-            "comp_coeff_Bertotti",
-            "comp_loss_density"
+            "comp_coeff"
         ],
         "mother": "LossModel",
         "name": "LossModelBertotti",

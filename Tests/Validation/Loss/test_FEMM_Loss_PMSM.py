@@ -9,6 +9,7 @@ from pyleecan.Classes.OPdq import OPdq
 from pyleecan.Classes.MagFEMM import MagFEMM
 from pyleecan.Classes.LossFEMM import LossFEMM
 from pyleecan.Classes.LossModelSteinmetz import LossModelSteinmetz
+from pyleecan.Classes.LossModelBertotti import LossModelBertotti
 from pyleecan.Classes.OutLoss import OutLoss
 
 from pyleecan.Functions.load import load

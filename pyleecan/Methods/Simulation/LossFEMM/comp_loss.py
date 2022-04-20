@@ -24,9 +24,9 @@ def comp_loss(self, output, axes_dict):
     machine = output.simu.machine
 
     coeff_dict = dict()
-    
+
     # #TODO Consider the case when rotor and stator material are not the same
-    material=machine.stator.mat_type
+    material = machine.stator.mat_type
     self.Loss_model_dict["stator core"].comp_coeff(material, is_show_fig=True)
 
     # Comp stator core losses
