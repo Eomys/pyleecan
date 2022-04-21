@@ -15,6 +15,7 @@ def store(
     OP=None,
     type_skin_effect=1,
     Tsta=20,
+    Pem=None
 ):
     """Store the outputs of LossFEMM model that are temporarily in out_dict
 
@@ -43,6 +44,9 @@ def store(
 
     if OP is None:
         OP = self.parent.elec.OP
+    
+    if Pem is None:
+        Pem=self.parent.mag.Pem_av
 
     felec = OP.get_felec(p=lam.get_pole_pair_number())
 
@@ -52,6 +56,14 @@ def store(
     self.Pprox = self.get_loss_group("stator winding", felec)
     self.Pmagnet = self.get_loss_group("rotor magnets", felec)
     self.Pjoule = comp_loss_joule(lam, Tsta, OP, type_skin_effect)
+    self.efficiency = (
+        Pem
+        - (self.Pstator
+        + self.Protor
+        + self.Pprox
+        + self.Pmagnet
+        + self.Pjoule)
+    ) / Pem
 
     # Store loss density as meshsolution
     if is_get_meshsolution:

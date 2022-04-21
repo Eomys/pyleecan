@@ -9212,6 +9212,15 @@
                 "value": null
             },
             {
+                "desc": "Efficiency",
+                "max": "",
+                "min": "",
+                "name": "efficiency",
+                "type": "float",
+                "unit": "",
+                "value": null
+            },
+            {
                 "desc": "Dict containing coefficients to rebuild loss polynom function of frequency",
                 "max": "",
                 "min": "",

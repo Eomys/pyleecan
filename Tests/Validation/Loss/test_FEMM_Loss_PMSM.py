@@ -18,7 +18,7 @@ from pyleecan.definitions import DATA_DIR
 from SciDataTool.Functions.Plot.plot_2D import plot_2D
 
 
-is_show_fig = False
+is_show_fig = True
 
 
 def test_FEMM_Loss_SPMSM():
@@ -187,6 +187,7 @@ def test_FEMM_Loss_Prius():
         "rotor_loss": out.loss.Protor,
         "magnet_loss": out.loss.Pmagnet,
         "proximity_loss": out.loss.Pprox,
+        "efficiency": out.loss.efficiency
     }
     print(power_dict)
     
@@ -198,7 +199,7 @@ def test_FEMM_Loss_Prius():
         OP.felec = speed / 60 * p
         out_dict = {"coeff_dict": out.loss.coeff_dict}
         outloss = OutLoss()
-        outloss.store(out_dict, lam=machine.stator, OP=OP, type_skin_effect=0, Tsta=120)
+        outloss.store(out_dict, lam=machine.stator, OP=OP, type_skin_effect=0, Tsta=120, Pem=out.mag.Pem_av)
         outloss_list.append(outloss)
 
     joule_list = [o.Pjoule for o in outloss_list]
@@ -207,6 +208,7 @@ def test_FEMM_Loss_Prius():
     prox_list = [o.Pprox for o in outloss_list]
     mag_list = [o.Pmagnet for o in outloss_list]
     ovl_list = [o.get_loss_overall() for o in outloss_list]
+    eff_list = [o.efficiency for o in outloss_list]
 
     if is_show_fig:
         out.loss.meshsol_list[0].plot_contour(
@@ -234,6 +236,11 @@ def test_FEMM_Loss_Prius():
             "Winding proximity",
             "Magnets",
         ])
+        plot_2D(
+        [speed_array],
+        [eff_list],
+        xlabel="Speed [rpm]",
+        ylabel="Losses [W]")
 
     # out.loss.meshsol_list[0].plot_contour(
     #     "freqs=sum",

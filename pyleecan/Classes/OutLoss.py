@@ -122,6 +122,7 @@ class OutLoss(FrozenClass):
         Pmagnet=None,
         Pprox=None,
         Pjoule=None,
+        efficiency=None,
         coeff_dict=-1,
         init_dict=None,
         init_str=None,
@@ -161,6 +162,8 @@ class OutLoss(FrozenClass):
                 Pprox = init_dict["Pprox"]
             if "Pjoule" in list(init_dict.keys()):
                 Pjoule = init_dict["Pjoule"]
+            if "efficiency" in list(init_dict.keys()):
+                efficiency = init_dict["efficiency"]
             if "coeff_dict" in list(init_dict.keys()):
                 coeff_dict = init_dict["coeff_dict"]
         # Set the properties (value check and convertion are done in setter)
@@ -175,6 +178,7 @@ class OutLoss(FrozenClass):
         self.Pmagnet = Pmagnet
         self.Pprox = Pprox
         self.Pjoule = Pjoule
+        self.efficiency = efficiency
         self.coeff_dict = coeff_dict
 
         # The class is frozen, for now it's impossible to add new properties
@@ -205,6 +209,7 @@ class OutLoss(FrozenClass):
         OutLoss_str += "Pmagnet = " + str(self.Pmagnet) + linesep
         OutLoss_str += "Pprox = " + str(self.Pprox) + linesep
         OutLoss_str += "Pjoule = " + str(self.Pjoule) + linesep
+        OutLoss_str += "efficiency = " + str(self.efficiency) + linesep
         OutLoss_str += "coeff_dict = " + str(self.coeff_dict) + linesep
         return OutLoss_str
 
@@ -232,6 +237,8 @@ class OutLoss(FrozenClass):
         if other.Pprox != self.Pprox:
             return False
         if other.Pjoule != self.Pjoule:
+            return False
+        if other.efficiency != self.efficiency:
             return False
         if other.coeff_dict != self.coeff_dict:
             return False
@@ -305,6 +312,8 @@ class OutLoss(FrozenClass):
             diff_list.append(name + ".Pprox")
         if other._Pjoule != self._Pjoule:
             diff_list.append(name + ".Pjoule")
+        if other._efficiency != self._efficiency:
+            diff_list.append(name + ".efficiency")
         if other._coeff_dict != self._coeff_dict:
             diff_list.append(name + ".coeff_dict")
         # Filter ignore differences
@@ -333,6 +342,7 @@ class OutLoss(FrozenClass):
         S += getsizeof(self.Pmagnet)
         S += getsizeof(self.Pprox)
         S += getsizeof(self.Pjoule)
+        S += getsizeof(self.efficiency)
         if self.coeff_dict is not None:
             for key, value in self.coeff_dict.items():
                 S += getsizeof(value) + getsizeof(key)
@@ -402,6 +412,7 @@ class OutLoss(FrozenClass):
         OutLoss_dict["Pmagnet"] = self.Pmagnet
         OutLoss_dict["Pprox"] = self.Pprox
         OutLoss_dict["Pjoule"] = self.Pjoule
+        OutLoss_dict["efficiency"] = self.efficiency
         OutLoss_dict["coeff_dict"] = (
             self.coeff_dict.copy() if self.coeff_dict is not None else None
         )
@@ -422,6 +433,7 @@ class OutLoss(FrozenClass):
         self.Pmagnet = None
         self.Pprox = None
         self.Pjoule = None
+        self.efficiency = None
         self.coeff_dict = None
 
     def _get_loss_list(self):
@@ -671,6 +683,24 @@ class OutLoss(FrozenClass):
         fget=_get_Pjoule,
         fset=_set_Pjoule,
         doc=u"""Stator core losses
+
+        :Type: float
+        """,
+    )
+
+    def _get_efficiency(self):
+        """getter of efficiency"""
+        return self._efficiency
+
+    def _set_efficiency(self, value):
+        """setter of efficiency"""
+        check_var("efficiency", value, "float")
+        self._efficiency = value
+
+    efficiency = property(
+        fget=_get_efficiency,
+        fset=_set_efficiency,
+        doc=u"""Efficiency
 
         :Type: float
         """,
