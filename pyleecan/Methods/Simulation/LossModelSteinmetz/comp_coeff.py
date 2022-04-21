@@ -43,8 +43,6 @@ def comp_coeff(self,material, is_show_fig=False):
         for k, g in groupby(loss_data_T, lambda x: x[0]):
             groups.append(list(g))      # Store group iterator as a list
             uniquekeys.append(k)
-        print(groups)
-        print(uniquekeys)
         return groups, uniquekeys
 
     loss_data=material.mag.LossData.get_data()
@@ -54,7 +52,6 @@ def comp_coeff(self,material, is_show_fig=False):
     xdata=np.array([f,B])
     ydata=np.array(loss)
     popt,pcov=curve_fit(comp_loss,xdata,ydata)
-    print(popt)
 
     if is_show_fig:
         groups, uniquekeys=group_by_frequency(loss_data)
