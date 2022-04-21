@@ -158,9 +158,6 @@ def solve_MTPA(self, LUT, Rs):
     out_dict["Ud"] = Ud[i0][imin]
     out_dict["Uq"] = Uq[i0][imin]
 
-    if Id[i0][imin] != 0:
-        print("toto")
-
     # Store dq fluxes
     out_dict["Phid"] = Phid[i0][imin]
     out_dict["Phiq"] = Phiq[i0][imin]
