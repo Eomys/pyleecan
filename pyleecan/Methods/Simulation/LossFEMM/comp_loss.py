@@ -24,17 +24,27 @@ def comp_loss(self, output, axes_dict):
     machine = output.simu.machine
 
     coeff_dict = dict()
-    
+
     loss_model = self.Loss_model_dict["stator core"]
-    if None in [loss_model.k_hy, loss_model.k_ed, loss_model.alpha_f, loss_model.alpha_B]:
-        material=machine.stator.mat_type
+    if None in [
+        loss_model.k_hy,
+        loss_model.k_ed,
+        loss_model.alpha_f,
+        loss_model.alpha_B,
+    ]:
+        material = machine.stator.mat_type
         self.Loss_model_dict["stator core"].comp_coeff(material, is_show_fig=True)
 
     loss_model = self.Loss_model_dict["stator core"]
-    if None in [loss_model.k_hy, loss_model.k_ed, loss_model.alpha_f, loss_model.alpha_B]:
-        material=machine.rotor.mat_type
+    if None in [
+        loss_model.k_hy,
+        loss_model.k_ed,
+        loss_model.alpha_f,
+        loss_model.alpha_B,
+    ]:
+        material = machine.rotor.mat_type
         self.Loss_model_dict["rotor core"].comp_coeff(material, is_show_fig=True)
-    
+
     # Comp stator core losses
     Pstator_density, fstator = self.comp_loss_density_core(
         "stator core", coeff_dict=coeff_dict

@@ -168,7 +168,7 @@ def test_FEMM_Loss_Prius():
     )
 
 
-    loss_model = LossModelSteinmetz()
+    loss_model = LossModelSteinmetz(is_show_fig=True)
     simu.loss = LossFEMM(
         Cp=Cprox,
         is_get_meshsolution=True,
@@ -254,6 +254,6 @@ def test_FEMM_Loss_Prius():
 # To run it without pytest
 if __name__ == "__main__":
 
-    out = test_FEMM_Loss_SPMSM()
+    # out = test_FEMM_Loss_SPMSM()
 
-    # out = test_FEMM_Loss_Prius() 
+    out = test_FEMM_Loss_Prius() 

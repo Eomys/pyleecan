@@ -5561,6 +5561,15 @@
                 "type": "str",
                 "unit": "",
                 "value": ""
+            },
+            {
+                "desc": "True to show the plot of the curve fitting",
+                "max": "",
+                "min": "",
+                "name": "is_show_fig",
+                "type": "bool",
+                "unit": "",
+                "value": false
             }
         ]
     },
