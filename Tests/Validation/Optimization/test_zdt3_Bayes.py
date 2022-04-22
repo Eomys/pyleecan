@@ -17,7 +17,7 @@ from pyleecan.Classes.OptiConstraint import OptiConstraint
 from pyleecan.Classes.OptiProblem import OptiProblem
 from pyleecan.Classes.ImportMatrixVal import ImportMatrixVal
 from pyleecan.Classes.ImportGenVectLin import ImportGenVectLin
-from pyleecan.Classes.OptiGenAlgNsga2Deap import OptiGenAlgNsga2Deap
+from pyleecan.Classes.OptiBayesAlgSmoot import OptiBayesAlgSmoot
 from Tests import save_validation_path as save_path
 import matplotlib.pyplot as plt
 import matplotlib.image as img
@@ -33,7 +33,7 @@ from pyleecan.definitions import DATA_DIR, TEST_DIR
 @pytest.mark.MagFEMM
 @pytest.mark.periodicity
 @pytest.mark.SingleOP
-def test_zdt3():
+def test_zdt3_Bayes():
     # ### Defining reference Output
     SCIM_001 = load(join(DATA_DIR, "Machine", "SCIM_001.json"))
 
@@ -125,7 +125,7 @@ def test_zdt3():
         simu=simu, design_var=my_vars, obj_func=objs, eval_func=evaluate
     )
 
-    solver = OptiGenAlgNsga2Deap(problem=my_prob, size_pop=40, nb_gen=100, p_mutate=0.5)
+    solver = OptiBayesAlgSmoot(problem=my_prob, nb_start=300, nb_iter=1)
     res = solver.solve()
 
     #
@@ -144,7 +144,7 @@ def test_zdt3():
     axs[0].set_title("Pyleecan results")
     axs[0].set_xlabel(r"$f_1(x)$")
     axs[0].set_ylabel(r"$f_2(x)$")
-    fig.savefig(join(save_path, "test_zdt3.png"))
+    fig.savefig(join(save_path, "test_zdt3_bayes.png"))
 
 if __name__ == "__main__":
-    test_zdt3()
+    test_zdt3_Bayes()
