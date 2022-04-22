@@ -133,6 +133,8 @@ from ..Classes.NotchEvenDist import NotchEvenDist
 from ..Classes.OP import OP
 from ..Classes.OPdq import OPdq
 from ..Classes.OPslip import OPslip
+from ..Classes.OptiBayesAlg import OptiBayesAlg
+from ..Classes.OptiBayesAlgSmoot import OptiBayesAlgSmoot
 from ..Classes.OptiConstraint import OptiConstraint
 from ..Classes.OptiDesignVar import OptiDesignVar
 from ..Classes.OptiGenAlg import OptiGenAlg
