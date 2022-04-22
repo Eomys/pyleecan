@@ -3,3 +3,4 @@ size_pop,-,Number of individuals for each generation,1,int,40,1,,,Optimization,O
 nb_gen,-,Number of generations for the genetic part,1,int,100,1,,,,,check_optimization_input,,,,
 ,,,,,,,,,,,evaluate,,,,
 ,,,,,,,,,,,plot_pareto,,,,
+,,,,,,,,,,,eval_const,,,,

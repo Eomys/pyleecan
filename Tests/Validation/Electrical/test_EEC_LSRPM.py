@@ -54,7 +54,10 @@ def test_EEC_LSRPM():
 
     # Definition of the magnetic simulation (FEMM)
     simu2.mag = MagFEMM(
-        type_BH_stator=0, type_BH_rotor=0, is_periodicity_a=True, nb_worker=cpu_count(),
+        type_BH_stator=0,
+        type_BH_rotor=0,
+        is_periodicity_a=True,
+        nb_worker=cpu_count(),
     )
 
     out2 = Output(simu=simu2)

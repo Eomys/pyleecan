@@ -16,8 +16,6 @@ from ..Functions.Load.import_class import import_class
 from .OptiSolver import OptiSolver
 
 from ._check import InitUnKnowClassError
-from .OptiProblem import OptiProblem
-from .XOutput import XOutput
 
 
 class OptiBayesAlg(OptiSolver):

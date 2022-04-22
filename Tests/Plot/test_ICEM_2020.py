@@ -75,7 +75,9 @@ def test_FEMM_sym():
 
     # Definition of the magnetic simulation
     # 2 sym + antiperiodicity = 1/4 Lamination
-    simu.mag = MagFEMM(type_BH_stator=2, type_BH_rotor=2, is_periodicity_a=True, is_fast_draw=False)
+    simu.mag = MagFEMM(
+        type_BH_stator=2, type_BH_rotor=2, is_periodicity_a=True, is_fast_draw=False
+    )
     # Stop after magnetic computation
     simu.force = None
     simu.struct = None
@@ -567,7 +569,7 @@ def test_ecc_FEMM():
         is_periodicity_a=False,
         is_mmfs=False,
         is_get_meshsolution=True,
-        is_fast_draw=False
+        is_fast_draw=False,
     )
     simu.force = None
     simu.struct = None

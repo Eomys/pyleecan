@@ -7840,6 +7840,104 @@
             }
         ]
     },
+    "OptiBayesAlg": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [
+            "OptiBayesAlgSmoot"
+        ],
+        "desc": "Bayesian algorithm class",
+        "is_internal": false,
+        "methods": [],
+        "mother": "OptiSolver",
+        "name": "OptiBayesAlg",
+        "package": "Optimization",
+        "path": "pyleecan/Generator/ClassesRef/Optimization/OptiBayesAlg.csv",
+        "properties": [
+            {
+                "desc": "Number of iterations",
+                "max": "",
+                "min": "1",
+                "name": "nb_iter",
+                "type": "int",
+                "unit": "-",
+                "value": 15
+            },
+            {
+                "desc": "Number of starting points",
+                "max": "",
+                "min": "1",
+                "name": "nb_start",
+                "type": "int",
+                "unit": "-",
+                "value": 300
+            },
+            {
+                "desc": "Point selection criteria",
+                "max": "",
+                "min": "",
+                "name": "criterion",
+                "type": "str",
+                "unit": "-",
+                "value": "PI"
+            },
+            {
+                "desc": "Type of kernel",
+                "max": "0",
+                "min": "0",
+                "name": "kernel",
+                "type": "int",
+                "unit": "-",
+                "value": 0
+            }
+        ]
+    },
+    "OptiBayesAlgSmoot": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Multi-objectives optimization problem with some constraints",
+        "is_internal": false,
+        "methods": [
+            "solve",
+            "check_optimization_input",
+            "evaluate",
+            "plot_pareto",
+            "eval_const"
+        ],
+        "mother": "OptiBayesAlg",
+        "name": "OptiBayesAlgSmoot",
+        "package": "Optimization",
+        "path": "pyleecan/Generator/ClassesRef/Optimization/OptiBayesAlgSmoot.csv",
+        "properties": [
+            {
+                "desc": "Number of individuals for each generation",
+                "max": "",
+                "min": "1",
+                "name": "size_pop",
+                "type": "int",
+                "unit": "-",
+                "value": 40
+            },
+            {
+                "desc": "Number of generations for the genetic part",
+                "max": "",
+                "min": "1",
+                "name": "nb_gen",
+                "type": "int",
+                "unit": "-",
+                "value": 100
+            }
+        ]
+    },
     "OptiConstraint": {
         "constants": [
             {
@@ -8041,7 +8139,8 @@
             "cross",
             "create_toolbox",
             "check_optimization_input",
-            "delete_toolbox"
+            "delete_toolbox",
+            "plot_pareto"
         ],
         "mother": "OptiGenAlg",
         "name": "OptiGenAlgNsga2Deap",
@@ -8165,6 +8264,8 @@
             }
         ],
         "daughters": [
+            "OptiBayesAlg",
+            "OptiBayesAlgSmoot",
             "OptiGenAlg",
             "OptiGenAlgNsga2Deap"
         ],
