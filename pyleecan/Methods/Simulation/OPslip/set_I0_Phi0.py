@@ -1,6 +1,3 @@
-from numpy import exp
-
-
 def set_I0_Phi0(self, I0, Phi0):
     """Set the value for I0 and IPhi0
 

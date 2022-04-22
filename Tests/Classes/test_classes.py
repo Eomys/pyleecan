@@ -334,12 +334,19 @@ def test_class_type_float(class_dict):
             test_obj.__setattr__(prop["name"], value)
 
             assert test_obj.__getattribute__(prop["name"]) == value, msg
+        elif (
+            prop["type"] == "int"
+            and prop["min"] not in ["", None]
+            and prop["max"] not in ["", None]
+            and prop["min"] == prop["max"]
+        ):
+            # Integer with only one value possible => find_test_value returns this value as float so it passes
+            test_obj.__setattr__(prop["name"], value)
+            assert test_obj.__getattribute__(prop["name"]) == value, msg
         else:
             # CheckTypeError expected
-            with pytest.raises(
-                CheckTypeError,
-            ):
-                # print(msg)
+            with pytest.raises(CheckTypeError):
+                # print(msg + " value " + str(value) + " type " + str(type(value)))
                 test_obj.__setattr__(prop["name"], value)
 
 

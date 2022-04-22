@@ -48,8 +48,8 @@ class SLamShape(Gen_SLamShape, QWidget):
         self.lf_L1.unit = "m"
         self.lf_Wrvd.unit = "m"
         self.u = gui_option.unit
-        self.unit_L1.setText(self.u.get_m_name())
-        self.unit_Wrvd.setText(self.u.get_m_name())
+        self.unit_L1.setText("[" + self.u.get_m_name() + "]")
+        self.unit_Wrvd.setText("[" + self.u.get_m_name() + "]")
 
         # Get the correct object to set
         if self.is_stator:

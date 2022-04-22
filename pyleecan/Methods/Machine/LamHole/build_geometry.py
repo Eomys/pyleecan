@@ -35,7 +35,9 @@ def build_geometry(self, sym=1, alpha=0, delta=0, is_circular_radius=False):
     """
 
     # getting the Lamination surface
-    surf_list = Lamination.build_geometry(self, sym=sym, alpha=alpha, delta=delta)
+    surf_list = Lamination.build_geometry(
+        self, sym=sym, alpha=alpha, delta=delta, is_circular_radius=is_circular_radius
+    )
 
     # Holes surface(s)
     for hole in self.hole:

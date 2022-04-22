@@ -1,6 +1,3 @@
-from numpy import angle
-
-
 def get_I0_Phi0(self):
     """Return I0 and Phi0
 

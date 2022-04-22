@@ -50,7 +50,7 @@ mesh_dict_1 = {
 class Test_StructElmer(object):
     """Test some basic workflow of StructElmer simulations"""
 
-    def test_HoleM50(self):
+    def test_StructElmer_HoleM50(self):
         """Test StructElmer simulation with 2 magnets on HoleM50 rotor"""
 
         # copy the machine
@@ -74,7 +74,7 @@ class Test_StructElmer(object):
 
         return output
 
-    def test_HoleM50_no_magnets(self):
+    def test_StructElmer_HoleM50_no_magnets(self):
         """Test StructElmer simulation without magnets on HoleM50 rotor"""
 
         # get the machine
@@ -100,7 +100,7 @@ class Test_StructElmer(object):
 
         return output
 
-    def test_disk_geometry(self):
+    def test_StructElmer_disk(self):
         """Test StructElmer simulation with disc geometry (i.e. slotless rotor)"""
         # TODO compare to analytical values
 
@@ -138,11 +138,11 @@ if __name__ == "__main__":
     # create test object
     obj = Test_StructElmer()
     # test Toyota_Prius (HoleM50-Rotor) with minor modification
-    out = obj.test_HoleM50()
-    out = obj.test_HoleM50_wo_magnets()
+    out = obj.test_StructElmer_HoleM50()
+    out = obj.test_StructElmer_HoleM50_no_magnets()
 
     # test centrifugal force on a disc
-    out = obj.test_disk_geometry()
+    out = obj.test_StructElmer_disk()
 
     # # plot some results
     # out.struct.meshsolution.plot_deflection(label="disp", factor=20)

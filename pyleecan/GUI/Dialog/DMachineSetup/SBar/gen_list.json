@@ -32,7 +32,7 @@
         "cls": "LamSquirrelCage",
         "name": "ring_mat",
         "widget": [
-            "w_mat"
+            "w_mat_scr"
         ],
         "xls": "Machine"
     }

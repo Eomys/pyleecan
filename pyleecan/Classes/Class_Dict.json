@@ -1252,26 +1252,7 @@
         "name": "EEC_LSRPM",
         "package": "Simulation",
         "path": "pyleecan/Generator/ClassesRef/Simulation/EEC_LSRPM.csv",
-        "properties": [
-            {
-                "desc": "Flux Linkage",
-                "max": "",
-                "min": "",
-                "name": "fluxlink",
-                "type": "FluxLink",
-                "unit": "-",
-                "value": null
-            },
-            {
-                "desc": "Rotation speed",
-                "max": "",
-                "min": "",
-                "name": "N0",
-                "type": "int",
-                "unit": "RPM",
-                "value": 1500
-            }
-        ]
+        "properties": []
     },
     "EEC_PMSM": {
         "constants": [
@@ -1536,7 +1517,9 @@
         "is_internal": false,
         "methods": [
             "run",
-            "comp_LUTdq"
+            "comp_LUTdq",
+            "solve_power",
+            "solve_MTPA"
         ],
         "mother": "Electrical",
         "name": "ElecLUTdq",
@@ -1621,6 +1604,42 @@
                 "min": "",
                 "name": "is_grid_dq",
                 "type": "bool",
+                "unit": "",
+                "value": 1
+            },
+            {
+                "desc": "Maximum rms phase voltage",
+                "max": "",
+                "min": "0",
+                "name": "Urms_max",
+                "type": "float",
+                "unit": "Vrms",
+                "value": null
+            },
+            {
+                "desc": "Maximum rms current density in slot",
+                "max": "",
+                "min": "0",
+                "name": "Jrms_max",
+                "type": "float",
+                "unit": "A/m\u00c2\u00b2",
+                "value": null
+            },
+            {
+                "desc": "Maximum rms phase current",
+                "max": "",
+                "min": "0",
+                "name": "Irms_max",
+                "type": "float",
+                "unit": "A",
+                "value": null
+            },
+            {
+                "desc": "Load rate between 0 (no-load) and 1 (full-load) for MTPA calculation",
+                "max": "1",
+                "min": "0",
+                "name": "load_rate",
+                "type": "float",
                 "unit": "",
                 "value": 1
             }
@@ -4225,7 +4244,6 @@
             "InputCurrent",
             "InputFlux",
             "InputForce",
-            "InputPower",
             "InputVoltage"
         ],
         "desc": "Starting data of the simulation",
@@ -4478,98 +4496,6 @@
             }
         ]
     },
-    "InputPower": {
-        "constants": [
-            {
-                "name": "VERSION",
-                "value": "1"
-            }
-        ],
-        "daughters": [],
-        "desc": "Input to start the electrical module with power input",
-        "is_internal": false,
-        "methods": [
-            "gen_input"
-        ],
-        "mother": "Input",
-        "name": "InputPower",
-        "package": "Simulation",
-        "path": "pyleecan/Generator/ClassesRef/Simulation/InputPower.csv",
-        "properties": [
-            {
-                "desc": "Rotation direction of the rotor (rot_dir*N0, default value given by ROT_DIR_REF)",
-                "max": "1",
-                "min": "-1",
-                "name": "rot_dir",
-                "type": "int",
-                "unit": "-",
-                "value": null
-            },
-            {
-                "desc": "Rotation direction of the stator phase (phase_dir*(n-1)*pi/qs, default value given by PHASE_DIR_REF)",
-                "max": "1",
-                "min": "-1",
-                "name": "phase_dir",
-                "type": "int",
-                "unit": "",
-                "value": null
-            },
-            {
-                "desc": "Rotation direction of the stator currents (current_dir*2*pi*felec*time, default value given by CURRENT_DIR_REF)",
-                "max": "1",
-                "min": "-1",
-                "name": "current_dir",
-                "type": "int",
-                "unit": "-",
-                "value": null
-            },
-            {
-                "desc": "True to compute voltage/currents only on one time periodicity (use periodicities defined in axes_dict[time])",
-                "max": "",
-                "min": "",
-                "name": "is_periodicity_t",
-                "type": "bool",
-                "unit": "-",
-                "value": 0
-            },
-            {
-                "desc": "True to compute voltage/currents only on one angle periodicity (use periodicities defined in axes_dict[angle])",
-                "max": "",
-                "min": "",
-                "name": "is_periodicity_a",
-                "type": "bool",
-                "unit": "-",
-                "value": 0
-            },
-            {
-                "desc": "Maximum phase voltage",
-                "max": "",
-                "min": "0",
-                "name": "U_max",
-                "type": "float",
-                "unit": "Vrms",
-                "value": null
-            },
-            {
-                "desc": "Maximum current density in slot",
-                "max": "",
-                "min": "0",
-                "name": "J_max",
-                "type": "float",
-                "unit": "A/m\u00c2\u00b2",
-                "value": null
-            },
-            {
-                "desc": "Maximum phase current",
-                "max": "",
-                "min": "0",
-                "name": "I_max",
-                "type": "float",
-                "unit": "A",
-                "value": null
-            }
-        ]
-    },
     "InputVoltage": {
         "constants": [
             {
@@ -4655,6 +4581,15 @@
                 "type": "bool",
                 "unit": "-",
                 "value": 0
+            },
+            {
+                "desc": "True if machine is used as a generator",
+                "max": "",
+                "min": "",
+                "name": "is_generator",
+                "type": "bool",
+                "unit": "",
+                "value": 0
             }
         ]
     },
@@ -4739,13 +4674,14 @@
         "desc": "Look Up Table class for dq OP matrix",
         "is_internal": false,
         "methods": [
-            "get_Ldqh",
-            "get_Lmdqh",
-            "get_Phidqh_mean",
-            "get_Phidqh_mag",
-            "get_Phidqh_mag_mean",
-            "get_Ploss_dqh_interp",
-            "interp_Phi_dqh"
+            "get_L_dqh",
+            "get_Lm_dqh",
+            "get_Phi_dqh_mean",
+            "get_Phi_dqh_mag",
+            "get_Phi_dqh_mag_mean",
+            "interp_Phi_dqh",
+            "interp_Ploss_dqh",
+            "interp_Tem_rip_dqh"
         ],
         "mother": "LUT",
         "name": "LUTdq",
@@ -4768,24 +4704,6 @@
                 "name": "Phi_dqh_mag",
                 "type": "SciDataTool.Classes.DataND.DataND",
                 "unit": "Wbrms",
-                "value": "None"
-            },
-            {
-                "desc": "Stator winding flux function of time and phases",
-                "max": "",
-                "min": "",
-                "name": "Phi_wind",
-                "type": "[SciDataTool.Classes.DataND.DataND]",
-                "unit": "Wb",
-                "value": "None"
-            },
-            {
-                "desc": "Interpolant function of Phi_dqh",
-                "max": "",
-                "min": "",
-                "name": "Phi_dqh_interp",
-                "type": "scipy.interpolate.interpolate.RegularGridInterpolator",
-                "unit": "",
                 "value": "None"
             }
         ]
@@ -5114,7 +5032,9 @@
             "get_name_phase",
             "comp_angle_d_axis",
             "comp_periodicity_spatial",
-            "comp_masses"
+            "comp_masses",
+            "plot_schematics_scr",
+            "plot_side"
         ],
         "mother": "LamSlotWind",
         "name": "LamSquirrelCage",
@@ -5426,7 +5346,7 @@
         "path": "pyleecan/Generator/ClassesRef/Simulation/Loss.csv",
         "properties": [
             {
-                "desc": "Internal dict to strore model index",
+                "desc": "Internal dict to store model index",
                 "max": "",
                 "min": "",
                 "name": "model_index",
@@ -5451,6 +5371,15 @@
                 "type": "str",
                 "unit": "-",
                 "value": "Pyleecan.Loss"
+            },
+            {
+                "desc": "Dict of loss model whose key is a lamination and value is the associated loss model (alternative to model_index/model_list)",
+                "max": "",
+                "min": "",
+                "name": "model_dict",
+                "type": "{LossModel}",
+                "unit": "",
+                "value": null
             }
         ]
     },
@@ -5512,15 +5441,6 @@
                 "type": "int",
                 "unit": "-",
                 "value": 1
-            },
-            {
-                "desc": "Dict of loss model whose key is a lamination and value is the associated loss model",
-                "max": "",
-                "min": "",
-                "name": "Loss_model_dict",
-                "type": "{LossModel}",
-                "unit": "",
-                "value": null
             },
             {
                 "desc": "proximity loss coefficients",
@@ -8050,7 +7970,7 @@
                 "value": null
             },
             {
-                "desc": "Theorical Average Electromagnetic torque",
+                "desc": "Output average electromagnetic torque",
                 "max": "",
                 "min": "",
                 "name": "Tem_av_ref",
@@ -8059,12 +7979,30 @@
                 "value": null
             },
             {
-                "desc": "Theorical Average Electromagnetic Power",
+                "desc": "Output average Electromagnetic Power",
                 "max": "",
                 "min": "",
                 "name": "Pem_av_ref",
                 "type": "float",
                 "unit": "W",
+                "value": null
+            },
+            {
+                "desc": "Input average power (e.g. for generator mode)",
+                "max": "",
+                "min": "",
+                "name": "Pem_av_in",
+                "type": "float",
+                "unit": "W",
+                "value": null
+            },
+            {
+                "desc": "Efficiency",
+                "max": "",
+                "min": "",
+                "name": "efficiency",
+                "type": "float",
+                "unit": "",
                 "value": null
             }
         ]
@@ -8207,6 +8145,104 @@
                 "type": "float",
                 "unit": "rad",
                 "value": null
+            }
+        ]
+    },
+    "OptiBayesAlg": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [
+            "OptiBayesAlgSmoot"
+        ],
+        "desc": "Bayesian algorithm class",
+        "is_internal": false,
+        "methods": [],
+        "mother": "OptiSolver",
+        "name": "OptiBayesAlg",
+        "package": "Optimization",
+        "path": "pyleecan/Generator/ClassesRef/Optimization/OptiBayesAlg.csv",
+        "properties": [
+            {
+                "desc": "Number of iterations",
+                "max": "",
+                "min": "1",
+                "name": "nb_iter",
+                "type": "int",
+                "unit": "-",
+                "value": 15
+            },
+            {
+                "desc": "Number of starting points",
+                "max": "",
+                "min": "1",
+                "name": "nb_start",
+                "type": "int",
+                "unit": "-",
+                "value": 300
+            },
+            {
+                "desc": "Point selection criteria",
+                "max": "",
+                "min": "",
+                "name": "criterion",
+                "type": "str",
+                "unit": "-",
+                "value": "PI"
+            },
+            {
+                "desc": "Type of kernel",
+                "max": "0",
+                "min": "0",
+                "name": "kernel",
+                "type": "int",
+                "unit": "-",
+                "value": 0
+            }
+        ]
+    },
+    "OptiBayesAlgSmoot": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Multi-objectives optimization problem with some constraints",
+        "is_internal": false,
+        "methods": [
+            "solve",
+            "check_optimization_input",
+            "evaluate",
+            "plot_pareto",
+            "eval_const"
+        ],
+        "mother": "OptiBayesAlg",
+        "name": "OptiBayesAlgSmoot",
+        "package": "Optimization",
+        "path": "pyleecan/Generator/ClassesRef/Optimization/OptiBayesAlgSmoot.csv",
+        "properties": [
+            {
+                "desc": "Number of individuals for each generation",
+                "max": "",
+                "min": "1",
+                "name": "size_pop",
+                "type": "int",
+                "unit": "-",
+                "value": 40
+            },
+            {
+                "desc": "Number of generations for the genetic part",
+                "max": "",
+                "min": "1",
+                "name": "nb_gen",
+                "type": "int",
+                "unit": "-",
+                "value": 100
             }
         ]
     },
@@ -8411,7 +8447,8 @@
             "cross",
             "create_toolbox",
             "check_optimization_input",
-            "delete_toolbox"
+            "delete_toolbox",
+            "plot_pareto"
         ],
         "mother": "OptiGenAlg",
         "name": "OptiGenAlgNsga2Deap",
@@ -8535,6 +8572,8 @@
             }
         ],
         "daughters": [
+            "OptiBayesAlg",
+            "OptiBayesAlgSmoot",
             "OptiGenAlg",
             "OptiGenAlgNsga2Deap"
         ],
@@ -8600,7 +8639,7 @@
             "get_Us",
             "store",
             "get_electrical",
-            "get_Jrms_max"
+            "get_Jrms"
         ],
         "mother": "",
         "name": "OutElec",
@@ -8734,21 +8773,48 @@
                 "value": null
             },
             {
-                "desc": "Useful power (Pem_av minus losses)",
+                "desc": "Output power",
                 "max": "",
                 "min": "",
-                "name": "P_useful",
+                "name": "P_out",
                 "type": "float",
                 "unit": "W",
                 "value": null
             },
             {
-                "desc": "Maximum RMS current density in slots",
+                "desc": "RMS current density in slots",
                 "max": "",
                 "min": "0",
-                "name": "Jrms_max",
+                "name": "Jrms",
                 "type": "float",
                 "unit": "A/m\u00c2\u00b2",
+                "value": null
+            },
+            {
+                "desc": "Input power",
+                "max": "",
+                "min": "",
+                "name": "P_in",
+                "type": "float",
+                "unit": "W",
+                "value": null
+            },
+            {
+                "desc": "RMS linear current density along airgap",
+                "max": "",
+                "min": "",
+                "name": "Arms",
+                "type": "float",
+                "unit": "A/m",
+                "value": null
+            },
+            {
+                "desc": "RMS back-emf",
+                "max": "",
+                "min": "",
+                "name": "Erms",
+                "type": "float",
+                "unit": "V",
                 "value": null
             }
         ]
@@ -9120,6 +9186,7 @@
         "is_internal": false,
         "methods": [
             "get_loss",
+            "get_loss_density_ag",
             "get_loss_dist",
             "get_loss_group",
             "get_loss_overall",
@@ -9227,7 +9294,7 @@
                 "name": "coeff_dict",
                 "type": "dict",
                 "unit": "",
-                "value": -1
+                "value": {}
             }
         ]
     },
@@ -14242,22 +14309,13 @@
                 "value": 0
             },
             {
-                "desc": "True if the Torque is defined in OP_matrix",
+                "desc": "True if power given in OP_matrix is the output power, False if it is the input power",
                 "max": "",
                 "min": "",
-                "name": "is_torque",
-                "type": "bool",
-                "unit": "-",
-                "value": 0
-            },
-            {
-                "desc": "True if the Power is defined in OP_matrix",
-                "max": "",
-                "min": "",
-                "name": "is_power",
+                "name": "is_output_power",
                 "type": "bool",
                 "unit": "",
-                "value": 0
+                "value": 1
             }
         ]
     },
@@ -14467,6 +14525,15 @@
                 "type": "[Post]",
                 "unit": "-",
                 "value": null
+            },
+            {
+                "desc": "True to reuse the look up table",
+                "max": "",
+                "min": "",
+                "name": "is_reuse_LUT",
+                "type": "bool",
+                "unit": "-",
+                "value": 1
             }
         ]
     },

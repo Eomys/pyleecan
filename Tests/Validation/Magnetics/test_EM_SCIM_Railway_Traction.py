@@ -29,18 +29,19 @@ is_show_fig = False
 
 @pytest.mark.long_5s
 @pytest.mark.SCIM
+@pytest.mark.MagPMMF
 @pytest.mark.MagFEMM
 @pytest.mark.ImportMatlab
-def test_EM_SCIM_001_maxwell_current_enforced():
-    """Validation of linear femm for SCIM_001 machine with current enforced and
+def test_EM_Railway_Traction_maxwell_current_enforced():
+    """Validation of pmmf / linear femm for Railway_Traction machine with current enforced and
     comparison with Maxwell linear transient"""
 
     # Prepare simulation
-    SCIM_001 = load(join(DATA_DIR, "Machine", "SCIM_001.json"))
-    SCIM_001.stator.winding.Ntcoil = 21
-    # SCIM_001.plot()
+    Railway_Traction = load(join(DATA_DIR, "Machine", "Railway_Traction.json"))
+    Railway_Traction.stator.winding.Ntcoil = 21
+    # Railway_Traction.plot()
 
-    matlab_path = TEST_DIR + "/Data/Maxwell_SCIM_001.mat"
+    matlab_path = TEST_DIR + "/Data/Maxwell_Railway_Traction.mat"
 
     assert isfile(matlab_path)
 
@@ -72,7 +73,10 @@ def test_EM_SCIM_001_maxwell_current_enforced():
     # Convert Matlab index to python index
     jt0_m = [int(param_dict["jt0_m"] - 1)]
 
-    simu = Simu1(name="test_EM_SCIM_001_maxwell_current_enforced", machine=SCIM_001)
+    simu = Simu1(
+        name="test_EM_Railway_Traction_maxwell_current_enforced",
+        machine=Railway_Traction,
+    )
 
     simu.input = InputCurrent(
         OP=OPslip(I0_ref=40, IPhi0_ref=0, N0=1080, slip_ref=0.1),
@@ -85,7 +89,6 @@ def test_EM_SCIM_001_maxwell_current_enforced():
         time=np.array([9.9980e-05]),
         Ir=param_dict["Ibar_m_alpha"],  # enforce rotor currents from Maxwell simulation
     )
-
     simu.mag = MagFEMM(
         is_periodicity_a=True,
         is_periodicity_t=False,
@@ -94,7 +97,6 @@ def test_EM_SCIM_001_maxwell_current_enforced():
         type_BH_stator=2,
     )
 
-    # Run simulation
     out = simu.run()
 
     B_maxwell = out.mag.B.copy()
@@ -104,12 +106,12 @@ def test_EM_SCIM_001_maxwell_current_enforced():
     ]
 
     assert_almost_equal(out.mag.Tem.values - param_dict["Tem_m"][jt0_m], -2, decimal=0)
-
     assert_almost_equal(
         B_maxwell.components["radial"].values,
         out.mag.B.components["radial"].values,
         decimal=0,
     )
+
     assert_almost_equal(
         B_maxwell.components["tangential"].values,
         out.mag.B.components["tangential"].values,
@@ -123,7 +125,7 @@ def test_EM_SCIM_001_maxwell_current_enforced():
             component_list=["radial"],
             data_list=[out.mag.B],
             legend_list=["Maxwell", "FEMM"],
-            linestyles=["solid", "dashed"],
+            linestyles=["solid", "dashed", "dotted"],
             **dict_2D,
         )
 
@@ -144,16 +146,16 @@ def test_EM_SCIM_001_maxwell_current_enforced():
 @pytest.mark.long_1m
 @pytest.mark.SCIM
 @pytest.mark.MagFEMM
-def test_EM_SCIM_001_varslip():
-    """Validation of linear femm for SCIM_001 machine
+def test_EM_Railway_Traction_varslip():
+    """Validation of pmmf / linear femm for Railway_Traction machine
     with current calculated with fundamental EEC"""
 
     # Prepare simulation
-    SCIM_001 = load(join(DATA_DIR, "Machine", "SCIM_001.json"))
-    SCIM_001.stator.winding.Ntcoil = 21
-    # SCIM_001.plot()
+    Railway_Traction = load(join(DATA_DIR, "Machine", "Railway_Traction.json"))
+    Railway_Traction.stator.winding.Ntcoil = 21
+    # Railway_Traction.plot()
 
-    simu = Simu1(name="test_EM_SCIM_001_varslip", machine=SCIM_001)
+    simu = Simu1(name="test_EM_Railway_Traction_varslip", machine=Railway_Traction)
 
     U0_ref = 100
     N0 = 1080
@@ -172,14 +174,16 @@ def test_EM_SCIM_001_varslip():
     OP_matrix[:, 1] = U0_ref
     OP_matrix[:, 2] = np.linspace(0, 0.1, Nspeed)
 
-    simu.var_simu = VarLoadVoltage(OP_matrix=OP_matrix, type_OP_matrix=2)
+    simu.var_simu = VarLoadVoltage(
+        OP_matrix=OP_matrix, type_OP_matrix=2, is_keep_all_output=True
+    )
 
     # Set values from Manatee V1
     Im = np.linspace(0, 200, 2)
     Lm = 0.0774 * np.ones(2)
-    ELUT_SCIM_001 = LUTslip()
-    ELUT_SCIM_001.simu = Simu1(machine=SCIM_001)
-    ELUT_SCIM_001.simu.elec = Electrical(
+    ELUT_Railway_Traction = LUTslip()
+    ELUT_Railway_Traction.simu = Simu1(machine=Railway_Traction)
+    ELUT_Railway_Traction.simu.elec = Electrical(
         eec=EEC_SCIM(
             R1=5.73,
             L1=0,
@@ -194,7 +198,7 @@ def test_EM_SCIM_001_varslip():
     )
 
     # Configure simulation
-    simu.elec = Electrical(Tsta=20, Trot=20, LUT_enforced=ELUT_SCIM_001)
+    simu.elec = Electrical(Tsta=20, Trot=20, LUT_enforced=ELUT_Railway_Traction)
 
     simu.mag = MagFEMM(
         is_periodicity_a=True,
@@ -207,7 +211,7 @@ def test_EM_SCIM_001_varslip():
     # Run simulation
     out = simu.run()
 
-    Tem_eec = np.array([out_ii.elec.Tem_av_ref for out_ii in out.output_list])
+    Tem_eec = np.array([out_ii.elec.Tem_av for out_ii in out.output_list])
     Tem_fem = np.array([out_ii.mag.Tem_av for out_ii in out.output_list])
 
     assert_almost_equal(Tem_eec, 1.05 * Tem_fem, decimal=0)
@@ -215,10 +219,7 @@ def test_EM_SCIM_001_varslip():
     if is_show_fig:
         plot_2D(
             [[out_ii.elec.OP.slip_ref for out_ii in out.output_list]],
-            [
-                [out_ii.elec.Tem_av_ref for out_ii in out.output_list],
-                [out_ii.mag.Tem_av for out_ii in out.output_list],
-            ],
+            [Tem_eec, Tem_fem],
             xlabel="Mechanical slip",
             ylabel="Average torque [Nm]",
             legend_list=["EEC", "FEMM"],
@@ -229,5 +230,5 @@ def test_EM_SCIM_001_varslip():
 
 if __name__ == "__main__":
 
-    # out = test_EM_SCIM_001_maxwell_current_enforced()
-    out = test_EM_SCIM_001_varslip()
+    # out = test_EM_Railway_Traction_maxwell_current_enforced()
+    out = test_EM_Railway_Traction_varslip()

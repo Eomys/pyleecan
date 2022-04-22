@@ -40,7 +40,7 @@ def generate_simulation_list(self, ref_simu=None):
     #   Other parameters can be stored in a dedicated ParamExplorerSet if needed
     multisim_dict["paramexplorer_list"].append(
         ParamExplorerSet(
-            name="InputCurrent",
+            name="InputVoltage",
             symbol="In",
             unit="-",
             setter="simu.input",
