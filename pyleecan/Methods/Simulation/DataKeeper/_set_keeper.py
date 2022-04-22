@@ -4,38 +4,39 @@ from ....Functions.path_tools import abs_file_path
 from ....Generator import PYTHON_DEFAULT_ENCODING
 
 
-def _set_getter(self, value):
-    """setter of getter"""
-    # Create the function if getter is defined as a string (e.g. simu.machine.rotor.slot.W0)
+def _set_keeper(self, value):
+    """setter of keeper"""
+    # Create the function if setter is defined as a string (e.g. simu.machine.rotor.slot.W0)
     if isinstance(value, str) and value[:4] == "simu":
         value_split = value.split(".")
         value = (
-            "lambda simu: getattr(eval('"
+            "lambda simu, val: setattr(eval('"
             + ".".join(value_split[:-1])
             + "'), '"
             + value_split[-1]
-            + "')"
+            + "', val"
+            + ")"
         )
     if value is None:
-        self._getter_str = None
-        self._getter_func = None
+        self._keeper_str = None
+        self._keeper_func = None
     elif isinstance(value, str) and "lambda" in value:
-        self._getter_str = value
-        self._getter_func = eval(value)
+        self._keeper_str = value
+        self._keeper_func = eval(value)
     elif isinstance(value, str) and value[-3:] == ".py":
         if "<" in value and ">" in value:
-            # path like "<PARAM_DIR>/setter_rotor.py"
-            self._getter_str = value
+            # path like "<PARAM_DIR>/keeper_rotor.py"
+            self._keeper_str = value
             value = abs_file_path(value)
         f = open(value, "r", encoding=PYTHON_DEFAULT_ENCODING)
         exec(f.read(), globals())
         f.close()
-        self._getter_func = eval(basename(value[:-3]))
+        self._keeper_func = eval(basename(value[:-3]))
     elif callable(value):
-        self._getter_str = None
-        self._getter_func = value
+        self._keeper_str = None
+        self._keeper_func = value
     else:
         raise CheckTypeError(
-            "For property getter Expected function or str (path to python file or lambda), got: "
+            "For property keeper Expected function or str (path to python file or lambda), got: "
             + str(type(value))
         )

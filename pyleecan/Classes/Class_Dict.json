@@ -954,7 +954,8 @@
         "is_internal": false,
         "methods": [
             "as_dict",
-            "_set_result"
+            "_set_result",
+            "_set_keeper"
         ],
         "mother": "",
         "name": "DataKeeper",
