@@ -1,113 +1,111 @@
 from os.path import join
+
+import numpy as np
+from numpy.testing import assert_almost_equal
+
 from multiprocessing import cpu_count
 
 from pyleecan.Functions.load import load
 from pyleecan.definitions import DATA_DIR
 
-from pyleecan.Classes.Simu1 import Simu1
-from pyleecan.Classes.OPslip import OPslip
-from pyleecan.Classes.Electrical import Electrical
+from pyleecan.Classes.MagFEMM import MagFEMM
+from pyleecan.Classes.OPdq import OPdq
 from pyleecan.Classes.EEC_SCIM import EEC_SCIM
-from pyleecan.Classes.InputCurrent import InputCurrent
+
+
+from SciDataTool.Functions.Plot.plot_2D import plot_2D
 
 from numpy import angle, cos
 import pytest
 
+is_show_fig = False
 
-@pytest.mark.long_5s
-@pytest.mark.EEC_SCIM
-@pytest.mark.SCIM
-@pytest.mark.periodicity
-@pytest.mark.SingleOP
-@pytest.mark.skip(reason="Work in progress")
+
+@pytest.mark.skip
 def test_EEC_SCIM():
-    """Validation of the SCIM Electrical Equivalent Circuit with the 3kW SCIM
-    from 'Berechnung elektrischer Maschinen' (ISBN: 978-3-527-40525-1)
-    Note: conductor properties have been set to operation point temperature condition,
-    stator end winding length is adapted to ref. lenght
-    """
-    SCIM = load(join(DATA_DIR, "Machine", "SCIM_010.json"))
+    """Calculate magnetizing flux"""
 
-    # Definition of the electrical simulation
-    simu = Simu1(name="test_EEC_SCIM", machine=SCIM)
+    # Prepare simulation
+    machine = load(join(DATA_DIR, "Machine", "Audi_eTron_loss.json"))
 
-    # electrical parameter estimation (N0, felec, ... are independent of elec. simu.)
-    eec_scim = EEC_SCIM()
-    eec_scim.is_periodicity_a = True
-    eec_scim.I = 2
-    eec_scim.N0 = 1500
-    eec_scim.felec = 50
-    eec_scim.Nrev = 1 / 6
-    eec_scim.Nt_tot = 8
-    eec_scim.nb_worker = cpu_count()
+    Rs = machine.stator.comp_resistance_wind()
+    Rr = machine.rotor.comp_resistance_wind()
 
-    simu.elec = Electrical(
-        eec=eec_scim,
+    mag_model = MagFEMM(
+        is_periodicity_t=True,
+        is_periodicity_a=True,
+        is_sliding_band=True,  # self.is_sliding_band,
+        Kgeo_fineness=1,  # self.Kgeo_fineness
+        Kmesh_fineness=0.5,  # self.Kmesh_fineness
+        nb_worker=int(0.5 * cpu_count()),
     )
 
-    # direct input
-    # eec_scim.parameters = {
-    #     "Lm": 0.6106,
-    #     # 'Lm_': 0.6077,
-    #     "Lr_norm": 0.0211,
-    #     "Ls": 0.0154,
-    #     "Rfe": None,
-    #     "slip": None,
-    # }
+    Im_array = np.linspace(0.1, 300, 10)
+    Phi_m_list = list()
+    Phi_wind_list = list()
+    for Im in Im_array:
+        OP_I = OPdq(N0=1000, Id_ref=Im, Iq_ref=0)
+        eec = EEC_SCIM(fluxlink=mag_model)
+        Phi_m, Phi_wind = eec.comp_fluxlinkage(machine=machine, OP=OP_I)
+        Phi_m_list.append(Phi_m)
+        Phi_wind_list.append(Phi_wind)
 
-    # Run only Electrical module
-    simu.mag = None
-    simu.force = None
-    simu.struct = None
+    BH = machine.stator.mat_type.mag.BH_curve.get_data()
+    mu_r = BH[:, 1] / (4 * np.pi * 1e-7 * BH[:, 0])
 
-    # Definition of a sinusoidal current
-    simu.input = InputCurrent()
-    simu.input.OP = OPslip(
-        felec=50, Id_ref=None, Iq_ref=None, Ud_ref=400, Uq_ref=0, N0=1418
+    Lm_table = np.array(
+        [
+            0.00364256,
+            0.00364256,
+            0.00295137,
+            0.00213818,
+            0.00160483,
+            0.00128478,
+            0.00107101,
+            0.00091922,
+            0.00080651,
+            0.00071975,
+            0.00065101,
+        ]
     )
-    simu.input.Nt_tot = 360  # Number of time steps
-    simu.input.Na_tot = 2048  # Spatial discretization
-    simu.input.rot_dir = 1  # To enforce the rotation direction
-    simu.input.Nrev = 5
 
-    simu.run()
+    Im_table = np.array(
+        [
+            0,
+            1.00000000e-01,
+            3.34222222e01,
+            6.67444444e01,
+            1.00066667e02,
+            1.33388889e02,
+            1.66711111e02,
+            2.00033333e02,
+            2.33355556e02,
+            2.66677778e02,
+            3.00000000e02,
+        ]
+    )
+    assert_almost_equal(Rs, 0.0055, 0)
+    assert_almost_equal(Rr, 9.1e-5, 0)
+    assert_almost_equal(np.array(Phi_m_list)[:, 0] / Im_array, Lm_table[1:], 0)
 
-    # Reference
-    Lm = 0.6175  # Xm = 194 Ohm @ 50 Hz
-    Ls = 0.02203  # Xs = 6.92 Ohm
-    Lr_norm = 0.02365  # Xr_norm = 7.43 Ohm
-    Rs = 7.23
-    Rr_norm = 6.70
+    if is_show_fig:
+        plot_2D(
+            [BH[:, 1]],
+            [mu_r],
+            xlabel="Magnetic flux density [T]",
+            ylabel="Magnetic relative permeability []",
+        )
 
-    # check with arbitary 2% rel. diff.
-    assert abs(eec_scim.parameters["Lm"] - Lm) / Lm <= 0.02
-    assert abs(eec_scim.parameters["Lm_"] - Lm) / Lm <= 0.02
-    assert abs(eec_scim.parameters["Rr_norm"] - Rr_norm) / Rr_norm <= 0.02
-    assert abs(eec_scim.parameters["Rs"] - Rs) / Rs <= 0.02
+        plot_2D(
+            [Im_array],
+            [np.array(Phi_m_list)[:, 0] / Im_array],
+            xlabel="Magnetizing current [A]",
+            ylabel="Magnetizing inductance [H]",
+            legend_list=["LUT", "FEA"],
+        )
 
-    # TODO add stray parameter as soon as RMS is avialable
-    # TODO compare (joule) losses
-
-    """
-    # compute some quantites
-    Us = out.elec.Ud_ref + 1j * out.elec.Uq_ref
-    Is = out.elec.Id_ref + 1j * out.elec.Iq_ref
-
-    PF = cos(angle(Us) - angle(Is))
-
-    # --- Print voltage and torque ---
-    print("Ud: " + str(abs(Us)))
-    print("Uq: " + str(abs(Is)))
-    print("PF: " + str(PF))
-
-    print("Tem: " + str(out.elec.Tem_av_ref))
-
-    # Plot the currents and plot the voltages
-    out.elec.get_Is().plot_2D_Data("time", "phase")
-    out.elec.Ir.plot_2D_Data("time", "phase[0]")
-    out.elec.Us.plot_2D_Data("time", "phase")
-    """
+    return Phi_m_list, Phi_wind_list
 
 
 if __name__ == "__main__":
-    test_EEC_SCIM()
+    Phi_m_list, Phi_wind_list = test_EEC_SCIM()

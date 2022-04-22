@@ -3,7 +3,7 @@ from numpy import isnan
 from ....Classes.OPdq import OPdq
 
 
-def set_OP_from_array(self, OP_matrix, type_OP_matrix=1, index=0):
+def set_OP_from_array(self, OP_matrix, type_OP_matrix=1, index=0, is_output_power=True):
     """Extract the Operating Point from an OP_matrix
     Parameters
     ----------
@@ -15,6 +15,8 @@ def set_OP_from_array(self, OP_matrix, type_OP_matrix=1, index=0):
         Select which kind of OP_matrix is used 0: (N0,I0,Phi0,T,P), 1:(N0,Id,Iq,T,P)
     index : int
         To select the line of the OP_matrix to use (default=0)
+    is_output_power: bool
+        True if power given in OP_matrix is the output power, False if it is the input power
     """
 
     # Check OP_matrix
@@ -40,5 +42,7 @@ def set_OP_from_array(self, OP_matrix, type_OP_matrix=1, index=0):
     if OP_matrix.shape[1] > 4:
         if isnan(OP_matrix[index, 4]):
             self.OP.Pem_av_ref = None
-        else:
+        elif is_output_power:
             self.OP.Pem_av_ref = OP_matrix[index, 4]
+        else:
+            self.OP.Pem_av_in = OP_matrix[index, 4]

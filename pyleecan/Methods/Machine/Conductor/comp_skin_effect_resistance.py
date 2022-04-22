@@ -62,8 +62,12 @@ def comp_skin_effect_resistance(self, freq, T_op=20, T_ref=20, b=None, zt=None):
     # Electrical pulsation
     w = 2 * pi * freq
 
-    # reduced conductor height Eq(5.24) p.270 + addind relative permeatibility
+    # reduced conductor height Eq(5.24) p.270 + adding relative permeatibility
     ksi = hc * sqrt((1 / 2) * w * mu0 * mur * sigma * za * bc0 / b)
+
+    if not isinstance(ksi, float):
+        # Avoid numerical error with 0
+        ksi[ksi == 0] = 1e-4
 
     # average resistance factor
     if is_round_wire:

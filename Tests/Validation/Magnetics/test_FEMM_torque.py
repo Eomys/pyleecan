@@ -84,7 +84,7 @@ def test_FEMM_torque():
     simu = Simu1(name="test_FEMM_torque", machine=SynRM_001)
     Na_tot = 2016
 
-    varload = VarLoadCurrent(is_reuse_femm_file=True, is_torque=True)
+    varload = VarLoadCurrent(is_reuse_femm_file=True)
     varload.type_OP_matrix = 0  # Matrix N0, I0, Phi0, Tem_ref
 
     N_simu = Phi0.size

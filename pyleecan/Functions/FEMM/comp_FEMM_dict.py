@@ -7,7 +7,9 @@ from ...Functions.FEMM import acsolver, pbtype, precision, minangle
 from ...Functions.labels import ROTOR_LAB
 
 
-def comp_FEMM_dict(machine, Kgeo_fineness, Kmesh_fineness, T_mag, type_calc_leakage=0):
+def comp_FEMM_dict(
+    machine, Kgeo_fineness, Kmesh_fineness, T_mag, type_calc_leakage=0, sym=1
+):
     """Compute the parameters needed for FEMM simulations
 
     Parameters
@@ -146,9 +148,29 @@ def comp_FEMM_dict(machine, Kgeo_fineness, Kmesh_fineness, T_mag, type_calc_leak
     for grp in FEMM_GROUPS:
         if grp != "lam_group_list":
             FEMM_dict["groups"][grp] = FEMM_GROUPS[grp]["ID"]
+    grp_max = max(FEMM_dict["groups"].values())
 
     # Adding lam_group_list linking lam name to related ID
-    FEMM_dict["groups"]["lam_group_list"] = FEMM_GROUPS["lam_group_list"]
+    FEMM_dict["groups"]["lam_group_list"] = dict()
+    for key, val in FEMM_GROUPS["lam_group_list"].items():
+        FEMM_dict["groups"]["lam_group_list"][key] = list(val)
+
+    if isinstance(machine.rotor, (LamSlotMag, LamHole)):
+        p = machine.get_pole_pair_number()
+        if isinstance(machine.rotor, LamSlotMag):
+            nb_mag = int(2 * p / sym)
+        elif isinstance(machine.rotor, LamHole):
+            nb_hole = int(2 * p / sym * len(machine.rotor.hole))
+            nb_mag_per_hole = len(machine.rotor.hole[0].get_magnet_dict())
+            nb_mag = nb_hole * nb_mag_per_hole
+
+        ndigit = max(len(str(nb_mag)), len(str(grp_max)) - 1)
+        grp0 = FEMM_dict["groups"]["GROUP_RM"] * 10 ** ndigit
+        list_mag = [grp0 + ii for ii in range(nb_mag)]
+        FEMM_dict["groups"]["GROUP_RM"] = list_mag
+        FEMM_dict["groups"]["lam_group_list"][machine.rotor.get_label()].extend(
+            list_mag
+        )
 
     # Init empty list
     FEMM_dict["materials"] = list()

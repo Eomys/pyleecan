@@ -18,44 +18,47 @@ from .LUT import LUT
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
 try:
-    from ..Methods.Output.LUTdq.get_Ldqh import get_Ldqh
+    from ..Methods.Output.LUTdq.get_L_dqh import get_L_dqh
 except ImportError as error:
-    get_Ldqh = error
+    get_L_dqh = error
 
 try:
-    from ..Methods.Output.LUTdq.get_Lmdqh import get_Lmdqh
+    from ..Methods.Output.LUTdq.get_Lm_dqh import get_Lm_dqh
 except ImportError as error:
-    get_Lmdqh = error
+    get_Lm_dqh = error
 
 try:
-    from ..Methods.Output.LUTdq.get_Phidqh_mean import get_Phidqh_mean
+    from ..Methods.Output.LUTdq.get_Phi_dqh_mean import get_Phi_dqh_mean
 except ImportError as error:
-    get_Phidqh_mean = error
+    get_Phi_dqh_mean = error
 
 try:
-    from ..Methods.Output.LUTdq.get_Phidqh_mag import get_Phidqh_mag
+    from ..Methods.Output.LUTdq.get_Phi_dqh_mag import get_Phi_dqh_mag
 except ImportError as error:
-    get_Phidqh_mag = error
+    get_Phi_dqh_mag = error
 
 try:
-    from ..Methods.Output.LUTdq.get_Phidqh_mag_mean import get_Phidqh_mag_mean
+    from ..Methods.Output.LUTdq.get_Phi_dqh_mag_mean import get_Phi_dqh_mag_mean
 except ImportError as error:
-    get_Phidqh_mag_mean = error
+    get_Phi_dqh_mag_mean = error
 
 try:
     from ..Methods.Output.LUTdq.interp_Phi_dqh import interp_Phi_dqh
 except ImportError as error:
     interp_Phi_dqh = error
 
-
-from numpy import array, array_equal
-from cloudpickle import dumps, loads
-from ._check import CheckTypeError
+try:
+    from ..Methods.Output.LUTdq.interp_Ploss_dqh import interp_Ploss_dqh
+except ImportError as error:
+    interp_Ploss_dqh = error
 
 try:
-    from scipy.interpolate.interpolate import RegularGridInterpolator
-except ImportError:
-    RegularGridInterpolator = ImportError
+    from ..Methods.Output.LUTdq.interp_Tem_rip_dqh import interp_Tem_rip_dqh
+except ImportError as error:
+    interp_Tem_rip_dqh = error
+
+
+from numpy import array, array_equal
 from ._check import InitUnKnowClassError
 
 
@@ -65,58 +68,58 @@ class LUTdq(LUT):
     VERSION = 1
 
     # Check ImportError to remove unnecessary dependencies in unused method
-    # cf Methods.Output.LUTdq.get_Ldqh
-    if isinstance(get_Ldqh, ImportError):
-        get_Ldqh = property(
+    # cf Methods.Output.LUTdq.get_L_dqh
+    if isinstance(get_L_dqh, ImportError):
+        get_L_dqh = property(
             fget=lambda x: raise_(
-                ImportError("Can't use LUTdq method get_Ldqh: " + str(get_Ldqh))
+                ImportError("Can't use LUTdq method get_L_dqh: " + str(get_L_dqh))
             )
         )
     else:
-        get_Ldqh = get_Ldqh
-    # cf Methods.Output.LUTdq.get_Lmdqh
-    if isinstance(get_Lmdqh, ImportError):
-        get_Lmdqh = property(
+        get_L_dqh = get_L_dqh
+    # cf Methods.Output.LUTdq.get_Lm_dqh
+    if isinstance(get_Lm_dqh, ImportError):
+        get_Lm_dqh = property(
             fget=lambda x: raise_(
-                ImportError("Can't use LUTdq method get_Lmdqh: " + str(get_Lmdqh))
+                ImportError("Can't use LUTdq method get_Lm_dqh: " + str(get_Lm_dqh))
             )
         )
     else:
-        get_Lmdqh = get_Lmdqh
-    # cf Methods.Output.LUTdq.get_Phidqh_mean
-    if isinstance(get_Phidqh_mean, ImportError):
-        get_Phidqh_mean = property(
+        get_Lm_dqh = get_Lm_dqh
+    # cf Methods.Output.LUTdq.get_Phi_dqh_mean
+    if isinstance(get_Phi_dqh_mean, ImportError):
+        get_Phi_dqh_mean = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use LUTdq method get_Phidqh_mean: " + str(get_Phidqh_mean)
+                    "Can't use LUTdq method get_Phi_dqh_mean: " + str(get_Phi_dqh_mean)
                 )
             )
         )
     else:
-        get_Phidqh_mean = get_Phidqh_mean
-    # cf Methods.Output.LUTdq.get_Phidqh_mag
-    if isinstance(get_Phidqh_mag, ImportError):
-        get_Phidqh_mag = property(
+        get_Phi_dqh_mean = get_Phi_dqh_mean
+    # cf Methods.Output.LUTdq.get_Phi_dqh_mag
+    if isinstance(get_Phi_dqh_mag, ImportError):
+        get_Phi_dqh_mag = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use LUTdq method get_Phidqh_mag: " + str(get_Phidqh_mag)
+                    "Can't use LUTdq method get_Phi_dqh_mag: " + str(get_Phi_dqh_mag)
                 )
             )
         )
     else:
-        get_Phidqh_mag = get_Phidqh_mag
-    # cf Methods.Output.LUTdq.get_Phidqh_mag_mean
-    if isinstance(get_Phidqh_mag_mean, ImportError):
-        get_Phidqh_mag_mean = property(
+        get_Phi_dqh_mag = get_Phi_dqh_mag
+    # cf Methods.Output.LUTdq.get_Phi_dqh_mag_mean
+    if isinstance(get_Phi_dqh_mag_mean, ImportError):
+        get_Phi_dqh_mag_mean = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use LUTdq method get_Phidqh_mag_mean: "
-                    + str(get_Phidqh_mag_mean)
+                    "Can't use LUTdq method get_Phi_dqh_mag_mean: "
+                    + str(get_Phi_dqh_mag_mean)
                 )
             )
         )
     else:
-        get_Phidqh_mag_mean = get_Phidqh_mag_mean
+        get_Phi_dqh_mag_mean = get_Phi_dqh_mag_mean
     # cf Methods.Output.LUTdq.interp_Phi_dqh
     if isinstance(interp_Phi_dqh, ImportError):
         interp_Phi_dqh = property(
@@ -128,6 +131,29 @@ class LUTdq(LUT):
         )
     else:
         interp_Phi_dqh = interp_Phi_dqh
+    # cf Methods.Output.LUTdq.interp_Ploss_dqh
+    if isinstance(interp_Ploss_dqh, ImportError):
+        interp_Ploss_dqh = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use LUTdq method interp_Ploss_dqh: " + str(interp_Ploss_dqh)
+                )
+            )
+        )
+    else:
+        interp_Ploss_dqh = interp_Ploss_dqh
+    # cf Methods.Output.LUTdq.interp_Tem_rip_dqh
+    if isinstance(interp_Tem_rip_dqh, ImportError):
+        interp_Tem_rip_dqh = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use LUTdq method interp_Tem_rip_dqh: "
+                    + str(interp_Tem_rip_dqh)
+                )
+            )
+        )
+    else:
+        interp_Tem_rip_dqh = interp_Tem_rip_dqh
     # save and copy methods are available in all object
     save = save
     copy = copy
@@ -138,8 +164,6 @@ class LUTdq(LUT):
         self,
         Phi_dqh_mean=None,
         Phi_dqh_mag=None,
-        Phi_wind=None,
-        Phi_dqh_interp=None,
         paramexplorer_list=-1,
         output_list=-1,
         xoutput_dict=-1,
@@ -178,10 +202,6 @@ class LUTdq(LUT):
                 Phi_dqh_mean = init_dict["Phi_dqh_mean"]
             if "Phi_dqh_mag" in list(init_dict.keys()):
                 Phi_dqh_mag = init_dict["Phi_dqh_mag"]
-            if "Phi_wind" in list(init_dict.keys()):
-                Phi_wind = init_dict["Phi_wind"]
-            if "Phi_dqh_interp" in list(init_dict.keys()):
-                Phi_dqh_interp = init_dict["Phi_dqh_interp"]
             if "paramexplorer_list" in list(init_dict.keys()):
                 paramexplorer_list = init_dict["paramexplorer_list"]
             if "output_list" in list(init_dict.keys()):
@@ -217,8 +237,6 @@ class LUTdq(LUT):
         # Set the properties (value check and convertion are done in setter)
         self.Phi_dqh_mean = Phi_dqh_mean
         self.Phi_dqh_mag = Phi_dqh_mag
-        self.Phi_wind = Phi_wind
-        self.Phi_dqh_interp = Phi_dqh_interp
         # Call LUT init
         super(LUTdq, self).__init__(
             paramexplorer_list=paramexplorer_list,
@@ -255,8 +273,6 @@ class LUTdq(LUT):
             + linesep
         )
         LUTdq_str += "Phi_dqh_mag = " + str(self.Phi_dqh_mag) + linesep + linesep
-        LUTdq_str += "Phi_wind = " + str(self.Phi_wind) + linesep + linesep
-        LUTdq_str += "Phi_dqh_interp = " + str(self.Phi_dqh_interp) + linesep + linesep
         return LUTdq_str
 
     def __eq__(self, other):
@@ -271,10 +287,6 @@ class LUTdq(LUT):
         if not array_equal(other.Phi_dqh_mean, self.Phi_dqh_mean):
             return False
         if other.Phi_dqh_mag != self.Phi_dqh_mag:
-            return False
-        if other.Phi_wind != self.Phi_wind:
-            return False
-        if other.Phi_dqh_interp != self.Phi_dqh_interp:
             return False
         return True
 
@@ -299,30 +311,6 @@ class LUTdq(LUT):
             diff_list.extend(
                 self.Phi_dqh_mag.compare(other.Phi_dqh_mag, name=name + ".Phi_dqh_mag")
             )
-        if (other.Phi_wind is None and self.Phi_wind is not None) or (
-            other.Phi_wind is not None and self.Phi_wind is None
-        ):
-            diff_list.append(name + ".Phi_wind None mismatch")
-        elif self.Phi_wind is None:
-            pass
-        elif len(other.Phi_wind) != len(self.Phi_wind):
-            diff_list.append("len(" + name + ".Phi_wind)")
-        else:
-            for ii in range(len(other.Phi_wind)):
-                diff_list.extend(
-                    self.Phi_wind[ii].compare(
-                        other.Phi_wind[ii], name=name + ".Phi_wind[" + str(ii) + "]"
-                    )
-                )
-        if (other.Phi_dqh_interp is None and self.Phi_dqh_interp is not None) or (
-            other.Phi_dqh_interp is not None and self.Phi_dqh_interp is None
-        ):
-            diff_list.append(name + ".Phi_dqh_interp None mismatch")
-        elif (
-            self.Phi_dqh_interp is not None
-            and self.Phi_dqh_interp != other.Phi_dqh_interp
-        ):
-            diff_list.append(name + ".Phi_dqh_interp")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -336,10 +324,6 @@ class LUTdq(LUT):
         S += super(LUTdq, self).__sizeof__()
         S += getsizeof(self.Phi_dqh_mean)
         S += getsizeof(self.Phi_dqh_mag)
-        if self.Phi_wind is not None:
-            for value in self.Phi_wind:
-                S += getsizeof(value)
-        S += getsizeof(self.Phi_dqh_interp)
         return S
 
     def as_dict(self, type_handle_ndarray=0, keep_function=False, **kwargs):
@@ -380,31 +364,6 @@ class LUTdq(LUT):
                 keep_function=keep_function,
                 **kwargs
             )
-        if self.Phi_wind is None:
-            LUTdq_dict["Phi_wind"] = None
-        else:
-            LUTdq_dict["Phi_wind"] = list()
-            for obj in self.Phi_wind:
-                if obj is not None:
-                    LUTdq_dict["Phi_wind"].append(
-                        obj.as_dict(
-                            type_handle_ndarray=type_handle_ndarray,
-                            keep_function=keep_function,
-                            **kwargs
-                        )
-                    )
-                else:
-                    LUTdq_dict["Phi_wind"].append(None)
-        if self.Phi_dqh_interp is None:
-            LUTdq_dict["Phi_dqh_interp"] = None
-        else:
-            # Store serialized data (using cloudpickle) and str
-            # to read it in json save files
-            LUTdq_dict["Phi_dqh_interp"] = {
-                "__class__": str(type(self._Phi_dqh_interp)),
-                "__repr__": str(self._Phi_dqh_interp.__repr__()),
-                "serialized": dumps(self._Phi_dqh_interp).decode("ISO-8859-2"),
-            }
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         LUTdq_dict["__class__"] = "LUTdq"
@@ -415,8 +374,6 @@ class LUTdq(LUT):
 
         self.Phi_dqh_mean = None
         self.Phi_dqh_mag = None
-        self.Phi_wind = None
-        self.Phi_dqh_interp = None
         # Set to None the properties inherited from LUT
         super(LUTdq, self)._set_None()
 
@@ -475,67 +432,5 @@ class LUTdq(LUT):
         doc=u"""RMS stator winding flux linkage spectrum in dqh frame including harmonics (only magnets)
 
         :Type: SciDataTool.Classes.DataND.DataND
-        """,
-    )
-
-    def _get_Phi_wind(self):
-        """getter of Phi_wind"""
-        if self._Phi_wind is not None:
-            for obj in self._Phi_wind:
-                if obj is not None:
-                    obj.parent = self
-        return self._Phi_wind
-
-    def _set_Phi_wind(self, value):
-        """setter of Phi_wind"""
-        if type(value) is list:
-            for ii, obj in enumerate(value):
-                if isinstance(obj, str):  # Load from file
-                    try:
-                        obj = load_init_dict(obj)[1]
-                    except Exception as e:
-                        self.get_logger().error(
-                            "Error while loading " + obj + ", setting None instead"
-                        )
-                        obj = None
-                        value[ii] = None
-                if type(obj) is dict:
-                    class_obj = import_class(
-                        "SciDataTool.Classes", obj.get("__class__"), "Phi_wind"
-                    )
-                    value[ii] = class_obj(init_dict=obj)
-                if value[ii] is not None:
-                    value[ii].parent = self
-        if value == -1:
-            value = list()
-        check_var("Phi_wind", value, "[DataND]")
-        self._Phi_wind = value
-
-    Phi_wind = property(
-        fget=_get_Phi_wind,
-        fset=_set_Phi_wind,
-        doc=u"""Stator winding flux function of time and phases
-
-        :Type: [SciDataTool.Classes.DataND.DataND]
-        """,
-    )
-
-    def _get_Phi_dqh_interp(self):
-        """getter of Phi_dqh_interp"""
-        return self._Phi_dqh_interp
-
-    def _set_Phi_dqh_interp(self, value):
-        """setter of Phi_dqh_interp"""
-        if value == -1:
-            value = RegularGridInterpolator()
-        check_var("Phi_dqh_interp", value, "RegularGridInterpolator")
-        self._Phi_dqh_interp = value
-
-    Phi_dqh_interp = property(
-        fget=_get_Phi_dqh_interp,
-        fset=_set_Phi_dqh_interp,
-        doc=u"""Interpolant function of Phi_dqh
-
-        :Type: scipy.interpolate.interpolate.RegularGridInterpolator
         """,
     )

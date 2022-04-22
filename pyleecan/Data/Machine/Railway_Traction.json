@@ -5,7 +5,7 @@
     "desc": "",
     "frame": null,
     "logger_name": "Pyleecan.Machine",
-    "name": "SCIM_001",
+    "name": "Railway_Traction",
     "rotor": {
         "Hscr": 0.02,
         "Kf1": 0.95,

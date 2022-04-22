@@ -18,6 +18,7 @@ from pyleecan.Classes.MagFEMM import MagFEMM
 is_show_fig = False
 
 
+@pytest.mark.skip(reason="Work in progress")
 def test_LSRPM_simulation():
     # Create the Simulation
     LSRPM = load(join(DATA_DIR, "Machine", "LSRPM_001.json"))

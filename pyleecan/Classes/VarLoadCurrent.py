@@ -93,8 +93,7 @@ class VarLoadCurrent(VarLoad):
         self,
         OP_matrix=None,
         type_OP_matrix=0,
-        is_torque=False,
-        is_power=False,
+        is_output_power=True,
         name="",
         desc="",
         datakeeper_list=-1,
@@ -106,6 +105,7 @@ class VarLoadCurrent(VarLoad):
         postproc_list=-1,
         pre_keeper_postproc_list=None,
         post_keeper_postproc_list=None,
+        is_reuse_LUT=True,
         init_dict=None,
         init_str=None,
     ):
@@ -128,10 +128,8 @@ class VarLoadCurrent(VarLoad):
                 OP_matrix = init_dict["OP_matrix"]
             if "type_OP_matrix" in list(init_dict.keys()):
                 type_OP_matrix = init_dict["type_OP_matrix"]
-            if "is_torque" in list(init_dict.keys()):
-                is_torque = init_dict["is_torque"]
-            if "is_power" in list(init_dict.keys()):
-                is_power = init_dict["is_power"]
+            if "is_output_power" in list(init_dict.keys()):
+                is_output_power = init_dict["is_output_power"]
             if "name" in list(init_dict.keys()):
                 name = init_dict["name"]
             if "desc" in list(init_dict.keys()):
@@ -154,13 +152,14 @@ class VarLoadCurrent(VarLoad):
                 pre_keeper_postproc_list = init_dict["pre_keeper_postproc_list"]
             if "post_keeper_postproc_list" in list(init_dict.keys()):
                 post_keeper_postproc_list = init_dict["post_keeper_postproc_list"]
+            if "is_reuse_LUT" in list(init_dict.keys()):
+                is_reuse_LUT = init_dict["is_reuse_LUT"]
         # Set the properties (value check and convertion are done in setter)
         # Call VarLoad init
         super(VarLoadCurrent, self).__init__(
             OP_matrix=OP_matrix,
             type_OP_matrix=type_OP_matrix,
-            is_torque=is_torque,
-            is_power=is_power,
+            is_output_power=is_output_power,
             name=name,
             desc=desc,
             datakeeper_list=datakeeper_list,
@@ -172,6 +171,7 @@ class VarLoadCurrent(VarLoad):
             postproc_list=postproc_list,
             pre_keeper_postproc_list=pre_keeper_postproc_list,
             post_keeper_postproc_list=post_keeper_postproc_list,
+            is_reuse_LUT=is_reuse_LUT,
         )
         # The class is frozen (in VarLoad init), for now it's impossible to
         # add new properties

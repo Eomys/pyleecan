@@ -194,6 +194,7 @@ class VarSimu(FrozenClass):
         postproc_list=-1,
         pre_keeper_postproc_list=None,
         post_keeper_postproc_list=None,
+        is_reuse_LUT=True,
         init_dict=None,
         init_str=None,
     ):
@@ -234,6 +235,8 @@ class VarSimu(FrozenClass):
                 pre_keeper_postproc_list = init_dict["pre_keeper_postproc_list"]
             if "post_keeper_postproc_list" in list(init_dict.keys()):
                 post_keeper_postproc_list = init_dict["post_keeper_postproc_list"]
+            if "is_reuse_LUT" in list(init_dict.keys()):
+                is_reuse_LUT = init_dict["is_reuse_LUT"]
         # Set the properties (value check and convertion are done in setter)
         self.parent = None
         self.name = name
@@ -247,6 +250,7 @@ class VarSimu(FrozenClass):
         self.postproc_list = postproc_list
         self.pre_keeper_postproc_list = pre_keeper_postproc_list
         self.post_keeper_postproc_list = post_keeper_postproc_list
+        self.is_reuse_LUT = is_reuse_LUT
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -312,6 +316,7 @@ class VarSimu(FrozenClass):
             VarSimu_str += (
                 "post_keeper_postproc_list[" + str(ii) + "] =" + tmp + linesep + linesep
             )
+        VarSimu_str += "is_reuse_LUT = " + str(self.is_reuse_LUT) + linesep
         return VarSimu_str
 
     def __eq__(self, other):
@@ -340,6 +345,8 @@ class VarSimu(FrozenClass):
         if other.pre_keeper_postproc_list != self.pre_keeper_postproc_list:
             return False
         if other.post_keeper_postproc_list != self.post_keeper_postproc_list:
+            return False
+        if other.is_reuse_LUT != self.is_reuse_LUT:
             return False
         return True
 
@@ -445,6 +452,8 @@ class VarSimu(FrozenClass):
                         name=name + ".post_keeper_postproc_list[" + str(ii) + "]",
                     )
                 )
+        if other._is_reuse_LUT != self._is_reuse_LUT:
+            diff_list.append(name + ".is_reuse_LUT")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -472,6 +481,7 @@ class VarSimu(FrozenClass):
         if self.post_keeper_postproc_list is not None:
             for value in self.post_keeper_postproc_list:
                 S += getsizeof(value)
+        S += getsizeof(self.is_reuse_LUT)
         return S
 
     def as_dict(self, type_handle_ndarray=0, keep_function=False, **kwargs):
@@ -560,6 +570,7 @@ class VarSimu(FrozenClass):
                     )
                 else:
                     VarSimu_dict["post_keeper_postproc_list"].append(None)
+        VarSimu_dict["is_reuse_LUT"] = self.is_reuse_LUT
         # The class name is added to the dict for deserialisation purpose
         VarSimu_dict["__class__"] = "VarSimu"
         return VarSimu_dict
@@ -579,6 +590,7 @@ class VarSimu(FrozenClass):
         self.postproc_list = None
         self.pre_keeper_postproc_list = None
         self.post_keeper_postproc_list = None
+        self.is_reuse_LUT = None
 
     def _get_name(self):
         """getter of name"""
@@ -894,5 +906,23 @@ class VarSimu(FrozenClass):
         doc=u"""List of post-processing to run on output after each simulation (except reference one) after the datakeeper.
 
         :Type: [Post]
+        """,
+    )
+
+    def _get_is_reuse_LUT(self):
+        """getter of is_reuse_LUT"""
+        return self._is_reuse_LUT
+
+    def _set_is_reuse_LUT(self, value):
+        """setter of is_reuse_LUT"""
+        check_var("is_reuse_LUT", value, "bool")
+        self._is_reuse_LUT = value
+
+    is_reuse_LUT = property(
+        fget=_get_is_reuse_LUT,
+        fset=_set_is_reuse_LUT,
+        doc=u"""True to reuse the look up table
+
+        :Type: bool
         """,
     )

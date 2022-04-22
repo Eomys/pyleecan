@@ -4,13 +4,15 @@ from ....Functions.Electrical.dqh_transformation import n2dqh_DataTime
 from ....Functions.Load.import_class import import_class
 
 
-def comp_fluxlinkage(self, OP=None, Nt_tot=None):
+def comp_fluxlinkage(self, machine=None, OP=None, Nt_tot=None):
     """Compute flux linkage using magnetic model in self.fluxlink
 
     Parameters
     ----------
     self : EEC
         an EEC object
+    machine: Machine
+        a Machine object
     OP: OP
         an OP object
     Nt_tot:
@@ -35,7 +37,8 @@ def comp_fluxlinkage(self, OP=None, Nt_tot=None):
 
     self.get_logger().info("Compute flux linkage with FEMM")
 
-    machine = self.get_machine_from_parent()
+    if machine is None:
+        machine = self.get_machine_from_parent()
 
     # Get simulation name and result path
     if isinstance(machine.parent, Simu1) and machine.parent.name not in [None, ""]:
@@ -61,7 +64,7 @@ def comp_fluxlinkage(self, OP=None, Nt_tot=None):
     if Nt_tot is not None:
         simu.input.Nt_tot = Nt_tot
     else:
-        simu.input.Nt_tot = max(simu.mag.nb_worker * 5, 10) * p
+        simu.input.Nt_tot = int(max(simu.mag.nb_worker * 5, 10) * p)
 
     # Run Simulation
     out = simu.run()
