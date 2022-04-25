@@ -1,10 +1,5 @@
-# -*- coding: utf-8 -*-
-
-from numpy import arcsin, exp, angle
-
-from ....Classes.Segment import Segment
-
 from ....Classes.Arc1 import Arc1
+from ....Classes.Segment import Segment
 
 
 def build_geometry(self):

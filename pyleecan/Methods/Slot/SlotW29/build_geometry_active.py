@@ -1,4 +1,5 @@
 from numpy import zeros, linspace
+
 from ....Classes.Segment import Segment
 from ....Classes.SurfLine import SurfLine
 from ....Functions.labels import WIND_LAB, DRAW_PROP_LAB

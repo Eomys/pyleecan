@@ -1,8 +1,3 @@
-# -*- coding: utf-8 -*-
-
-from numpy import arcsin, exp, pi, sqrt
-
-
 def comp_height(self):
     """Compute the height of the Slot.
     Caution, the bottom of the Slot is an Arc

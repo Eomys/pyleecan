@@ -1,10 +1,8 @@
-# -*- coding: utf-8 -*-
+from numpy import exp, sqrt
 
-from numpy import exp, pi, sqrt
-
+from ....Classes.Arc1 import Arc1
 from ....Classes.Segment import Segment
 from ....Classes.SurfLine import SurfLine
-from ....Classes.Arc1 import Arc1
 from ....Functions.labels import HOLEV_LAB, HOLEM_LAB
 
 

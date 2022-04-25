@@ -1,8 +1,3 @@
-# -*- coding: utf-8 -*-
-
-from numpy import exp
-
-
 def comp_radius(self):
     """Compute the radius of the min and max circle that contains the hole
 

@@ -1,6 +1,4 @@
-# -*- coding: utf-8 -*-
-
-from numpy import arcsin, cos, pi, sin
+from numpy import sin
 
 
 def comp_surface(self):

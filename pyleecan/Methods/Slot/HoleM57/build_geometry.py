@@ -1,11 +1,8 @@
-# -*- coding: utf-8 -*-
+from numpy import arcsin, cos, exp, angle, pi, sin, tan
 
-from numpy import arcsin, cos, exp, angle, pi, sin, tan, array
-
-from pyleecan.Classes.Segment import Segment
-from pyleecan.Classes.SurfLine import SurfLine
-from pyleecan.Functions.Geometry.inter_line_line import inter_line_line
-import matplotlib.pyplot as plt
+from ....Classes.Segment import Segment
+from ....Classes.SurfLine import SurfLine
+from ....Functions.Geometry.inter_line_line import inter_line_line
 from ....Functions.labels import HOLEV_LAB, HOLEM_LAB
 
 
