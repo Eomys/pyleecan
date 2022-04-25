@@ -53,6 +53,12 @@ def test_FEMM_Loss_SPMSM():
         k_hy=k_hy, k_ed=k_ed, alpha_f=alpha_f, alpha_B=alpha_B
     )
 
+    assert (k_hy == loss_model.k_hy and
+        k_ed == loss_model.k_ed and
+        alpha_f == loss_model.alpha_f and
+        alpha_B == loss_model.alpha_B), (
+        "As we provided the coefficients, the loss model should not change them")
+
     simu = Simu1(name="test_FEMM_Loss_SPMSM", machine=machine)
 
     simu.input = InputCurrent(
@@ -169,6 +175,8 @@ def test_FEMM_Loss_Prius():
     machine = load(join(DATA_DIR, "Machine", "Toyota_Prius_loss.json"))
 
     simu = Simu1(name="test_FEMM_Loss_Prius", machine=machine)
+    
+    Cprox=1
 
     # Current for MTPA
     Ic = 230 * np.exp(1j * 140 * np.pi / 180)
@@ -190,20 +198,8 @@ def test_FEMM_Loss_Prius():
         is_calc_torque_energy=False,
     )
 
-<<<<<<< HEAD
-=======
-    k_hy = 0.011381
-    k_ed = 4.67e-5
-    alpha_f = 1.1499
-    alpha_B = 1.7622
-    Cprox = 1  # Neglecting proximity effect
 
-    loss_model = LossModelSteinmetz(
-        k_hy=k_hy, k_ed=k_ed, alpha_f=alpha_f, alpha_B=alpha_B
-    )
->>>>>>> Elec_Loss
-
-    loss_model = LossModelSteinmetz(is_show_fig=True)
+    loss_model = LossModelSteinmetz()
     simu.loss = LossFEMM(
         Cp=Cprox,
         is_get_meshsolution=True,
@@ -293,8 +289,4 @@ if __name__ == "__main__":
 
     out = test_FEMM_Loss_SPMSM()
 
-<<<<<<< HEAD
     out = test_FEMM_Loss_Prius() 
-=======
-    # out = test_FEMM_Loss_Prius()
->>>>>>> Elec_Loss
