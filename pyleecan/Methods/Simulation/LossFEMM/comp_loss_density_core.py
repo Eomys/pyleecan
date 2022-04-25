@@ -50,7 +50,7 @@ def comp_loss_density_core(self, group, coeff_dict):
         Ch = 0
         Ce = self.Cp
     else:
-        lossModel = self.Loss_model_dict[group]
+        lossModel = self.model_dict[group]
         Ch = lossModel.k_hy / Kf * rho
         Ce = lossModel.k_ed / Kf * rho
         alpha_f = lossModel.alpha_f

@@ -1,6 +1,7 @@
 import pytest
 from pyleecan.Classes.MachineUD import MachineUD
 from pyleecan.Classes.Lamination import Lamination
+from pyleecan.Classes.LamSquirrelCage import LamSquirrelCage
 from pyleecan.Classes.Shaft import Shaft
 from pyleecan.Classes.Frame import Frame
 from pyleecan.Classes.Segment import Segment
@@ -316,3 +317,22 @@ class Test_plot_dimensions(object):
         # Save Results
         fig.savefig(file_path)
         plt.close()
+
+    def test_plot_SCR_schematics(self):
+        """Generate the schematics for Short Circuit Ring"""
+        file_name = "ShortCircuitRing_schematics.png"
+        file_path = join(SCHEMATICS_PATH, file_name)
+        # Delete previous plot
+        if isfile(file_path):
+            remove(file_path)
+        # Plot schematics
+        test_obj = LamSquirrelCage()
+        test_obj.plot_schematics_scr(
+            is_default=True, is_show_fig=False, save_path=file_path
+        )
+
+
+if __name__ == "__main__":
+    a = Test_plot_dimensions()
+    a.test_plot_SCR_schematics()
+    print("Done")

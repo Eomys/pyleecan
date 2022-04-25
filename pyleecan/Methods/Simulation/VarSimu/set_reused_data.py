@@ -1,6 +1,5 @@
-# -*- coding: utf-8 -*-
-
 from ....Classes.MagFEMM import MagFEMM
+from ....Classes.ElecLUTdq import ElecLUTdq
 
 
 def set_reused_data(self, simu, output, is_log=True, simu_type="VarSimu"):
@@ -30,9 +29,16 @@ def set_reused_data(self, simu, output, is_log=True, simu_type="VarSimu"):
             self.get_logger().info(
                 TAB
                 + simu_type
-                + ": Using same FEMM file for all simulation ("
+                + ": Using same FEMM file for all simulations ("
                 + output.mag.internal.FEMM_dict["path_save"]
                 + ")"
             )
         simu.mag.import_file = output.mag.internal.FEMM_dict["path_save"]
         simu.mag.FEMM_dict_enforced = output.mag.internal.FEMM_dict
+
+    if self.is_reuse_LUT and isinstance(simu.elec, ElecLUTdq):
+        if is_log:
+            self.get_logger().info(
+                TAB + simu_type + ": Using same LUT for all simulations"
+            )
+        simu.elec.LUT_enforced = output.simu.elec.LUT_enforced

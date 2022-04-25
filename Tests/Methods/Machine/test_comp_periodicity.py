@@ -12,7 +12,7 @@ test_per_list = [
     {"machine": "Tesla_S", "exp": (2, False, 2, False)},
     {"machine": "Audi_eTron", "exp": (2, False, 2, False)},
     {"machine": "Benchmark", "exp": (1, True, 5, True)},
-    {"machine": "SCIM_001", "exp": (1, True, 1, True)},
+    {"machine": "Railway_Traction", "exp": (1, True, 1, True)},
     {"machine": "SCIM_006", "exp": (2, True, 2, True)},
     {"machine": "SPMSM_001", "exp": (4, False, 4, True)},
     {"machine": "SPMSM_003", "exp": (1, True, 1, True)},
@@ -82,7 +82,7 @@ TP7.stator.axial_vent = [v9]
 test_per_list.append({"machine": TP7, "exp": (1, False, 4, True)})
 
 # No sym, remove antiper
-SC = load(join(DATA_DIR, "Machine", "SCIM_001.json"))
+SC = load(join(DATA_DIR, "Machine", "Railway_Traction.json"))
 v9 = v9.copy()
 v9.H0 = 0.06
 v9.D0 = 0.01

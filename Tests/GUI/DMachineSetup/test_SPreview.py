@@ -6,7 +6,6 @@ import mock
 import pytest
 from PySide2 import QtWidgets
 
-from Tests import TEST_DATA_DIR as data_test
 from pyleecan.GUI.Dialog.DMachineSetup.DMachineSetup import DMachineSetup
 from pyleecan.GUI.Dialog.DMachineSetup.SPreview.SPreview import SPreview
 from pyleecan.definitions import MAIN_DIR
@@ -18,7 +17,7 @@ matlib_path = join(data_test, "Material")
 machine_path = join(MAIN_DIR, "Data", "Machine")
 
 SCIM_dict = {
-    "file_path": join(machine_path, "SCIM_001.json").replace("\\", "/"),
+    "file_path": join(machine_path, "Railway_Traction.json").replace("\\", "/"),
     "table": [
         ("Machine Type", "SCIM"),
         ("Stator slot number", "36"),
@@ -28,8 +27,9 @@ SCIM_dict = {
         ("Stator phase number", "3"),
         ("Stator winding resistance", "0.02392 Ohm"),
         ("Machine total mass", "342.8 kg"),
+        ("Stator winding mass", "59.06 kg"),
     ],
-    "Nrow": 8,
+    "Nrow": 9,
 }
 IPMSM_dict = {
     "file_path": join(machine_path, "Toyota_Prius.json").replace("\\", "/"),
@@ -41,8 +41,10 @@ IPMSM_dict = {
         ("Stator phase number", "3"),
         ("Stator winding resistance", "0.03595 Ohm"),
         ("Machine total mass", "33.38 kg"),
+        ("Stator winding mass", "4.001 kg"),
+        ("Rotor magnet mass", "1.236 kg"),
     ],
-    "Nrow": 7,
+    "Nrow": 9,
 }
 load_preview_test = [SCIM_dict, IPMSM_dict]
 

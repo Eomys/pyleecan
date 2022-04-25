@@ -170,7 +170,7 @@ def test_axis_LamHole():
 @pytest.mark.SingleOP
 def test_axis_LamWind():
     """Axis convention for LamWind"""
-    SCIM_001 = load(join(DATA_DIR, "Machine", "SCIM_001.json"))
+    SCIM_001 = load(join(DATA_DIR, "Machine", "Railway_Traction.json"))
     SCIM_001.stator.plot(is_show_fig=False)
     R1 = SCIM_001.stator.Rext * 1.1
     R2 = SCIM_001.stator.Rext * 1.2

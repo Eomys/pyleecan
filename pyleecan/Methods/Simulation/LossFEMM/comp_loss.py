@@ -25,24 +25,50 @@ def comp_loss(self, output, axes_dict):
 
     coeff_dict = dict()
 
-    # #TODO Consider the case when rotor and stator material are not the same
-    material = machine.stator.mat_type
-    self.Loss_model_dict["stator core"].comp_coeff(material, is_show_fig=True)
+    loss_model = self.model_dict["stator core"]
+    if None in [
+        loss_model.k_hy,
+        loss_model.k_ed,
+        loss_model.alpha_f,
+        loss_model.alpha_B,
+    ]:
+        material = machine.stator.mat_type
+        loss_model.comp_coeff(material, is_show_fig=True)
+
+    loss_model = self.model_dict["rotor core"]
+    if None in [
+        loss_model.k_hy,
+        loss_model.k_ed,
+        loss_model.alpha_f,
+        loss_model.alpha_B,
+    ]:
+        material = machine.rotor.mat_type
+        loss_model.comp_coeff(material, is_show_fig=True)
 
     # Comp stator core losses
-    Pstator_density, fstator = self.comp_loss_density_core(
-        "stator core", coeff_dict=coeff_dict
-    )
+    if "stator core" in self.model_dict:
+        # Comp stator core losses
+        Pstator_density, fstator = self.comp_loss_density_core(
+            "stator core", coeff_dict=coeff_dict
+        )
+    else:
+        Pstator_density, fstator = None, None
 
-    # Comp rotor core losses
-    Protor_density, frotor = self.comp_loss_density_core(
-        "rotor core", coeff_dict=coeff_dict
-    )
+    if "rotor core" in self.model_dict:
+        # Comp rotor core losses
+        Protor_density, frotor = self.comp_loss_density_core(
+            "rotor core", coeff_dict=coeff_dict
+        )
+    else:
+        Protor_density, frotor = None, None
 
-    # Comp proximity losses in stator windings (same expression as core losses with Ce=C)
-    Pprox_density, fprox = self.comp_loss_density_core(
-        "stator winding", coeff_dict=coeff_dict
-    )
+    if self.Cp > 0:
+        # Comp proximity losses in stator windings (same expression as core losses with Ce=C)
+        Pprox_density, fprox = self.comp_loss_density_core(
+            "stator winding", coeff_dict=coeff_dict
+        )
+    else:
+        Pprox_density, fprox = None, None
 
     if machine.is_synchronous() and machine.rotor.has_magnet():
         # Comp eddy current losses in rotor magnets

@@ -72,7 +72,7 @@ def test_varload():
     simu.input.Na_tot = 2048  # Spatial discretization
     simu.input.OP = OPdq(N0=2000)
 
-    varload = VarLoadCurrent(is_torque=True)
+    varload = VarLoadCurrent()
     varload.type_OP_matrix = 0  # Matrix N0, I0, Phi0, Tem_ref
 
     # creating the Operating point matrix

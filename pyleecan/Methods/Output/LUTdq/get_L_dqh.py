@@ -1,4 +1,4 @@
-def get_Ldqh(self, Id, Iq, L_endwinding=0, Phi_dqh=None):
+def get_L_dqh(self, Id, Iq, L_endwinding=0, Phi_dqh=None):
     """Get the total dqh inductance
 
     Parameters
@@ -20,6 +20,6 @@ def get_Ldqh(self, Id, Iq, L_endwinding=0, Phi_dqh=None):
         ddqh inductance
     """
 
-    Lmdqh = self.get_Lmdqh(Id=Id, Iq=Iq, Phi_dqh=Phi_dqh)
+    Lmdqh = self.get_Lm_dqh(Id=Id, Iq=Iq, Phi_dqh=Phi_dqh)
 
     return Lmdqh + L_endwinding

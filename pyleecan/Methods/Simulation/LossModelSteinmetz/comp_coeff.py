@@ -27,11 +27,6 @@ def comp_coeff(self, material, is_show_fig=False):
         True if the curve fitting was succesfull, else False.
     """
 
-    Ch = self.k_hy
-    Ce = self.k_ed
-    alpha_f = self.alpha_f
-    alpha_B = self.alpha_B
-
     def comp_loss(xdata, Ch, Ce, alpha_f, alpha_B):
         f = xdata[0]
         B = xdata[1]
@@ -54,7 +49,7 @@ def comp_coeff(self, material, is_show_fig=False):
     ydata = np.array(loss)
     popt, pcov = curve_fit(comp_loss, xdata, ydata)
 
-    if is_show_fig:
+    if self.is_show_fig:
         groups, uniquekeys = group_by_frequency(loss_data)
         fig = plt.figure("Curve fitting for Iron losses")
         B_check = np.linspace(0, 2, 1000)
