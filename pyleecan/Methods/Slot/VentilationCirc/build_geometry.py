@@ -1,10 +1,8 @@
-# -*- coding: utf-8 -*-
-
-
-from ....Classes.Circle import Circle
 from numpy import exp, pi
 from ....Methods.Slot.VentilationCirc import *
 from ....Functions.labels import VENT_LAB
+
+from ....Classes.Circle import Circle
 
 
 def build_geometry(self, alpha=0, delta=0):
