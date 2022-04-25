@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from matplotlib.patches import Patch
 from matplotlib.pyplot import axis, legend
 from numpy import exp
@@ -11,12 +9,14 @@ from ....definitions import config_dict
 from ....Methods import ParentMissingError
 
 MAGNET_COLOR = config_dict["PLOT"]["COLOR_DICT"]["MAGNET_COLOR"]
+ARROW_COLOR = config_dict["PLOT"]["COLOR_DICT"]["STATOR_COLOR"]
 
 
 def plot(
     self,
     fig=None,
     ax=None,
+    title=None,
     display_magnet=True,
     is_add_arrow=False,
     is_add_ref=False,
@@ -32,6 +32,8 @@ def plot(
     fig :
         if None, open a new fig and plot, else add to the current
         one (Default value = None)
+    title: str
+        Figure title
     display_magnet : bool
         if True, plot the magnet inside the hole, if there is any (Default value = True)
     is_add_arrow : bool
@@ -70,8 +72,10 @@ def plot(
     (fig, axes, patch_leg, label_leg) = init_fig(fig, ax)
     axes.set_xlabel("(m)")
     axes.set_ylabel("(m)")
-    axes.set_title("Hole")
-
+    if title is None:
+        axes.set_title("Hole")
+    else:
+        axes.set_title(title)
     # Add all the hole (and magnet) to fig
     for patch in patches:
         axes.add_patch(patch)
@@ -99,7 +103,7 @@ def plot(
                 text="",
                 xy=(Z2.real, Z2.imag),
                 xytext=(Z1.real, Z1.imag),
-                arrowprops=dict(arrowstyle="->", linewidth=1, color="b"),
+                arrowprops=dict(arrowstyle="->", linewidth=1, color=ARROW_COLOR),
             )
 
     # Add reference point
