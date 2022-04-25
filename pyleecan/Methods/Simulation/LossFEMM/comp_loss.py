@@ -3,17 +3,14 @@ from pyleecan.Functions.load import load
 
 
 def comp_loss(self, output, axes_dict):
-    """Calculate losses in electrical machine assuming power density is calculated as described given
-    by (cf. https://www.femm.info/wiki/SPMLoss)
+    """Computing the losses in electrical machines
 
     Parameters
     ----------
-    self: LossFEMM
-        a LossFEMM object
-    output: Output
-        an Output object
-    freqs: ndarray
-        frequency vector [Hz]
+    output : Output
+        an Output object with magnetic quantities previously computed
+    axes_dict : {axes}
+        A dict of axes
 
     Returns
     -------

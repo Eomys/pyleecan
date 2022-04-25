@@ -10,22 +10,19 @@ import textwrap
 
 def comp_coeff(self, material, is_show_fig=False):
     """Enables to compute the coefficients of the loss model with a curve fitting
-    on loss data, provided in a text file
+    on loss data stored in the material
 
     Parameters
     ----------
-    file_path : str
-        the full path of the file containing the loss data.
-        Must contain 3 columns separated by spaces of tabulations :
-        1st column : frequency
-        2nd column : flux density magnitude
-        3rd column : power loss (W)
-
-    Returns
-    -------
-    Bool
-        True if the curve fitting was succesfull, else False.
+    material : Material
+        A material object, corresponding to the material used in the electrical machine.
+        This material object must contain loss data as an ImportMatrixVal object.
+        This matrix must contain 3 rows, correspoding to the excitation frequency (Hz),
+        the peak magnetic flux density (T), and the loss density (W/kg) in this order.
+    is_show_fig : bool, optional
+        Tells whether to show or not the curve fitting figure, by default False
     """
+    
 
     def comp_loss(xdata, Ch, Ce, alpha_f, alpha_B):
         f = xdata[0]
@@ -51,7 +48,7 @@ def comp_coeff(self, material, is_show_fig=False):
 
     if self.is_show_fig:
         groups, uniquekeys = group_by_frequency(loss_data)
-        fig = plt.figure("Curve fitting for Iron losses")
+        fig = plt.figure("Curve fitting for iron losses")
         B_check = np.linspace(0, 2, 1000)
         ax = plt.gca()
         for index, key in enumerate(uniquekeys):
@@ -97,5 +94,3 @@ def comp_coeff(self, material, is_show_fig=False):
     self.k_ed = popt[1]
     self.alpha_f = popt[2]
     self.alpha_B = popt[3]
-
-    return True
