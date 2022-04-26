@@ -1,7 +1,3 @@
-# -*- coding: utf-8 -*-
-
-from matplotlib.pyplot import axis, legend
-
 from ....Functions.init_fig import init_fig
 from ....definitions import config_dict
 
@@ -44,23 +40,27 @@ def plot(
 
     Returns
     -------
-    None
+    fig : Matplotlib.figure.Figure
+        Figure containing the plot
+    ax : Matplotlib.axes.Axes object
+        Axis containing the plot
     """
 
-    (fig, axes, patch_leg, label_leg) = init_fig(fig, ax)
-    axes.set_xlabel("(m)")
-    axes.set_ylabel("(m)")
+    (fig, ax, patch_leg, label_leg) = init_fig(fig, ax)
+    ax.set_xlabel("(m)")
+    ax.set_ylabel("(m)")
 
     patches = self.get_patches(
         color=color, edgecolor=edgecolor, is_edge_only=is_edge_only, linestyle=linestyle
     )
     for patch in patches:
-        axes.add_patch(patch)
+        ax.add_patch(patch)
 
     if is_disp_point_ref:
-        axes.plot(self.point_ref.real, self.point_ref.imag, "kx")
+        ax.plot(self.point_ref.real, self.point_ref.imag, "kx")
     # Axis Setup
-    axes.axis("equal")
+    ax.axis("equal")
 
     if is_show_fig:
         fig.show()
+    return fig, ax

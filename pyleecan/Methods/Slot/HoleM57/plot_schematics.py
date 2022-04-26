@@ -344,7 +344,7 @@ def plot_schematics(
         Rint = self.parent.Rint
         Rext = self.parent.Rext
 
-        plt.axis("equal")
+        ax.axis("equal")
         ax.set_ylim(Rint, Rext)
         ax.set_xlim(-W, W)
         manager = plt.get_current_fig_manager()
@@ -357,7 +357,7 @@ def plot_schematics(
         # Save / Show
         if save_path is not None:
             fig.savefig(save_path)
-            plt.close()
+            plt.close(fig=fig)
 
         if is_show_fig:
             fig.show()

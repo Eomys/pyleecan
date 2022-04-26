@@ -251,7 +251,7 @@ def plot_schematics(
         W = point_dict["Z4"].imag * 1.2
         Rint, Rext = self.comp_radius()
 
-        plt.axis("equal")
+        ax.axis("equal")
         ax.set_xlim(Rint, Rext)
         ax.set_ylim(-W, W)
         manager = plt.get_current_fig_manager()
@@ -264,7 +264,7 @@ def plot_schematics(
         # Save / Show
         if save_path is not None:
             fig.savefig(save_path)
-            plt.close()
+            plt.close(fig=fig)
 
         if is_show_fig:
             fig.show()

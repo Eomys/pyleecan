@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from matplotlib.patches import Circle, Patch
-from matplotlib.pyplot import axis, legend, subplots
+from matplotlib.pyplot import subplots
 from numpy import exp, pi, sqrt
 
 from ....definitions import config_dict
@@ -27,7 +27,10 @@ def plot(self, is_show_fig=True):
 
     Returns
     -------
-    None
+    fig : Matplotlib.figure.Figure
+        Figure containing the plot
+    ax : Matplotlib.axes.Axes object
+        Axis containing the plot
 
     Raises
     _______
@@ -84,7 +87,7 @@ def plot(self, is_show_fig=True):
         ax.add_patch(patch)
 
     # Axis Setup
-    axis("equal")
+    ax.axis("equal")
 
     # The conductor is centered
     ax_lim = self.Wins_cond / 2 + self.Wins_cond / 10
@@ -101,9 +104,10 @@ def plot(self, is_show_fig=True):
     patch_leg.append(Patch(color=COND_COLOR))
     label_leg.append("Active wire section")
 
-    legend(patch_leg, label_leg)
+    ax.legend(patch_leg, label_leg)
     if is_show_fig:
         fig.show()
+    return fig, ax
 
 
 class NotPlotableError(Exception):

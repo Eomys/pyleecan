@@ -106,15 +106,13 @@ def plot_schematics(
             raise ParentMissingError("Error: The hole is not inside a Lamination")
         lam = self.parent
         alpha = 0  # To rotate the schematics
-        lam.plot(
+        fig, ax = lam.plot(
             alpha=pi / self.Zh + alpha,
             is_show_fig=False,
             is_lam_only=type_add_active == 0,
         )  # center hole on Ox axis
         sp = 2 * pi / self.Zh
         Rbo = self.get_Rbo()
-        fig = plt.gcf()
-        ax = plt.gca()
         point_dict = self._comp_point_coordinate()
 
         # Adding point label
@@ -336,7 +334,7 @@ def plot_schematics(
         Rint = self.R3 * 0.9
         Rext = self.parent.Rext * 1.2
 
-        # plt.axis("equal")
+        # ax.axis("equal")
         ax.set_xlim(Rint, Rext)
         ax.set_ylim(-W, W)
         manager = plt.get_current_fig_manager()
@@ -349,7 +347,7 @@ def plot_schematics(
         # Save / Show
         if save_path is not None:
             fig.savefig(save_path)
-            plt.close()
+            plt.close(fig=fig)
 
         if is_show_fig:
             fig.show()

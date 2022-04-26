@@ -1,7 +1,3 @@
-# -*- coding: utf-8 -*-
-
-from matplotlib.patches import Patch, Rectangle
-from matplotlib.pyplot import axis, legend, subplots
 from ....definitions import config_dict
 
 COND_COLOR = config_dict["PLOT"]["COLOR_DICT"]["PHASE_COLORS"][0].copy()
@@ -69,6 +65,7 @@ def plot(self, is_show_fig=True):
     # patch_leg.append(Patch(color=COND_COLOR))
     # label_leg.append("Active wire section")
 
-    # legend(patch_leg, label_leg)
+    # ax.legend(patch_leg, label_leg)
     # if is_show_fig:
     #     fig.show()
+    # return fig, ax
