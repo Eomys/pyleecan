@@ -14,6 +14,7 @@ def plot(
     alpha=0,
     delta=0,
     is_edge_only=False,
+    edgecolor=None,
     is_show_fig=True,
 ):
     """Plot the Shaft in a matplotlib fig
@@ -34,6 +35,8 @@ def plot(
         Complex value for translation
     is_edge_only: bool
         To plot transparent Patches
+    edgecolor:
+        Color of the edges if is_edge_only=True
     is_show_fig : bool
         To call show at the end of the method
 
@@ -50,7 +53,11 @@ def plot(
     surf_list = self.build_geometry(sym=sym, alpha=alpha, delta=delta)
     patches = list()
     for surf in surf_list:
-        patches.extend(surf.get_patches(color=SHAFT_COLOR, is_edge_only=is_edge_only))
+        patches.extend(
+            surf.get_patches(
+                color=SHAFT_COLOR, is_edge_only=is_edge_only, edgecolor=edgecolor
+            )
+        )
     ax.set_xlabel("(m)")
     ax.set_ylabel("(m)")
     ax.set_title("Shaft")

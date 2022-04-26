@@ -14,6 +14,7 @@ def plot(
     is_edge_only=False,
     linestyle=None,
     is_disp_point_ref=False,
+    is_disp_line_index=False,
     is_show_fig=True,
 ):
     """Plot the Surface patch in a matplotlib fig
@@ -35,6 +36,8 @@ def plot(
         Line style of the edge {'-', '--', '-.', ':', '', (offset, on-off-seq), ...}
     is_disp_point_ref : bool
         True to add the point_ref
+    is_disp_line_index : bool
+        True to add the index of the lines
     is_show_fig : bool
         To call show at the end of the methods
 
@@ -58,6 +61,11 @@ def plot(
 
     if is_disp_point_ref:
         ax.plot(self.point_ref.real, self.point_ref.imag, "kx")
+
+    if is_disp_line_index:
+        for ii, line in enumerate(self.get_lines()):
+            mid = line.get_middle()
+            ax.text(mid.real, mid.imag, str(ii))
     # Axis Setup
     ax.axis("equal")
 
