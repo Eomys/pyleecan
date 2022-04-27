@@ -25,31 +25,26 @@ def get_Phi_dqh_mean(self):
 
         stator_label = self.simu.machine.stator.get_label()
 
+        phase_dir = self.output_list[0].elec.phase_dir
+
         for ii in range(N_OP):
+            # Integrate stator winding flux contained in LUT over z
+            Phi_wind = (
+                self.output_list[ii]
+                .mag.Phi_wind_slice[stator_label]
+                .get_data_along("time", "phase", "z=integrate")
+            )
 
-            if self.output_list[ii].mag.Phi_wind_slice is None:
-
-                Phi_dqh_mean[ii, 0] = self.output_list[ii].elec.eec.Phid
-                Phi_dqh_mean[ii, 1] = self.output_list[ii].elec.eec.Phiq
-
-            else:
-                # Integrate stator winding flux contained in LUT over z
-                Phi_wind = (
-                    self.output_list[ii]
-                    .mag.Phi_wind_slice[stator_label]
-                    .get_data_along("time", "phase", "z=integrate")
-                )
-
-                # dqh transform
-                Phi_dqh = n2dqh_DataTime(
-                    Phi_wind,
-                    is_dqh_rms=True,
-                    phase_dir=self.get_phase_dir(),
-                )
-                # mean over time axis
-                Phi_dqh_mean[ii, :] = Phi_dqh.get_along("time=mean", "phase")[
-                    Phi_dqh.symbol
-                ]
+            # dqh transform
+            Phi_dqh = n2dqh_DataTime(
+                Phi_wind,
+                is_dqh_rms=True,
+                phase_dir=phase_dir,
+            )
+            # mean over time axis
+            Phi_dqh_mean[ii, :] = Phi_dqh.get_along("time=mean", "phase")[
+                Phi_dqh.symbol
+            ]
 
         # Store for next call
         self.Phi_dqh_mean = Phi_dqh_mean

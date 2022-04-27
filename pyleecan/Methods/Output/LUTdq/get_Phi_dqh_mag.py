@@ -2,7 +2,7 @@ from ....Functions.Electrical.dqh_transformation import n2dqh_DataTime
 
 
 def get_Phi_dqh_mag(self):
-    """Get the total d-axis inductance
+    """Get magnet flux linkage over time in DQH frame
 
     Parameters
     ----------
@@ -18,22 +18,28 @@ def get_Phi_dqh_mag(self):
     if self.Phi_dqh_mag is None:
 
         # Find Id=Iq=0
-        OP_list = self.get_OP_matrix()[:, 1:3].tolist()
-        if [0, 0] in OP_list:
-            ii = OP_list.index([0, 0])
-        else:
-            raise Exception("Operating Point Id=Iq=0 is required to compute LUT")
+        ii = self.get_index_open_circuit()
 
-        stator_label = self.simu.machine.stator.get_label()
+        if ii is not None:
+            stator_label = self.simu.machine.stator.get_label()
 
-        # dqh transform
-        Phi_dqh_mag = n2dqh_DataTime(
-            self.output_list[ii].mag.Phi_wind[stator_label],
-            is_dqh_rms=True,
-            phase_dir=self.get_phase_dir(),
-        )
+            phase_dir = self.output_list[ii].elec.phase_dir
 
-        # Store for next call
-        self.Phi_dqh_mag = Phi_dqh_mag
+            # Integrate stator winding flux contained in LUT over z
+            Phi_wind0 = (
+                self.output_list[ii]
+                .mag.Phi_wind_slice[stator_label]
+                .get_data_along("time", "phase", "z=integrate")
+            )
+
+            # dqh transform
+            Phi_dqh_mag = n2dqh_DataTime(
+                Phi_wind0,
+                is_dqh_rms=True,
+                phase_dir=phase_dir,
+            )
+
+            # Store for next call
+            self.Phi_dqh_mag = Phi_dqh_mag
 
     return self.Phi_dqh_mag
