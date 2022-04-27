@@ -613,7 +613,8 @@ class XOutput(Output):
             for key in self.xoutput_dict:
                 diff_list.extend(
                     self.xoutput_dict[key].compare(
-                        other.xoutput_dict[key], name=name + ".xoutput_dict"
+                        other.xoutput_dict[key],
+                        name=name + ".xoutput_dict[" + str(key) + "]",
                     )
                 )
         if other._nb_simu != self._nb_simu:

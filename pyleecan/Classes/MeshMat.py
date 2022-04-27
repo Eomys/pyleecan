@@ -337,7 +337,9 @@ class MeshMat(Mesh):
         else:
             for key in self.cell:
                 diff_list.extend(
-                    self.cell[key].compare(other.cell[key], name=name + ".cell")
+                    self.cell[key].compare(
+                        other.cell[key], name=name + ".cell[" + str(key) + "]"
+                    )
                 )
         if (other.node is None and self.node is not None) or (
             other.node is not None and self.node is None

@@ -128,7 +128,7 @@ class OutStruct(FrozenClass):
             for key in self.axes_dict:
                 diff_list.extend(
                     self.axes_dict[key].compare(
-                        other.axes_dict[key], name=name + ".axes_dict"
+                        other.axes_dict[key], name=name + ".axes_dict[" + str(key) + "]"
                     )
                 )
         if other._logger_name != self._logger_name:

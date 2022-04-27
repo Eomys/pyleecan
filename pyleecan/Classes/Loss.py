@@ -196,7 +196,8 @@ class Loss(FrozenClass):
             for key in self.model_dict:
                 diff_list.extend(
                     self.model_dict[key].compare(
-                        other.model_dict[key], name=name + ".model_dict"
+                        other.model_dict[key],
+                        name=name + ".model_dict[" + str(key) + "]",
                     )
                 )
         # Filter ignore differences

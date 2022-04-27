@@ -138,7 +138,8 @@ class ImportVectorField(FrozenClass):
             for key in self.components:
                 diff_list.extend(
                     self.components[key].compare(
-                        other.components[key], name=name + ".components"
+                        other.components[key],
+                        name=name + ".components[" + str(key) + "]",
                     )
                 )
         if other._name != self._name:

@@ -326,7 +326,7 @@ class OutMag(FrozenClass):
             for key in self.axes_dict:
                 diff_list.extend(
                     self.axes_dict[key].compare(
-                        other.axes_dict[key], name=name + ".axes_dict"
+                        other.axes_dict[key], name=name + ".axes_dict[" + str(key) + "]"
                     )
                 )
         if (other.B is None and self.B is not None) or (
@@ -369,7 +369,7 @@ class OutMag(FrozenClass):
             for key in self.Phi_wind:
                 diff_list.extend(
                     self.Phi_wind[key].compare(
-                        other.Phi_wind[key], name=name + ".Phi_wind"
+                        other.Phi_wind[key], name=name + ".Phi_wind[" + str(key) + "]"
                     )
                 )
         if (other.emf is None and self.emf is not None) or (
@@ -428,7 +428,8 @@ class OutMag(FrozenClass):
             for key in self.Phi_wind_slice:
                 diff_list.extend(
                     self.Phi_wind_slice[key].compare(
-                        other.Phi_wind_slice[key], name=name + ".Phi_wind_slice"
+                        other.Phi_wind_slice[key],
+                        name=name + ".Phi_wind_slice[" + str(key) + "]",
                     )
                 )
         if other._Tem_norm != self._Tem_norm:

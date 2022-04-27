@@ -286,7 +286,7 @@ def generate_compare(gen_dict, class_dict):
                 + prop["name"]
                 + "[key],name=name+'."
                 + prop["name"]
-                + "'))\n"
+                + "['+str(key)+']'))\n"
             )
         elif "." in prop["type"] and "SciDataTool" not in prop["type"]:
             # External type
