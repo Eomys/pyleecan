@@ -13,5 +13,4 @@ def check(self):
     -------
     None
     """
-    if self.H0 < self.W0 / 2:
-        raise SlotCheckError("You must have W0/2 <= H0")
+    pass
