@@ -48,6 +48,13 @@ def plot_schematics_scr(
         full path including folder, name and extension of the file to save if save_path is not None
     is_show_fig : bool
         To call show at the end of the method
+
+    Returns
+    -------
+    fig : Matplotlib.figure.Figure
+        Figure containing the plot
+    ax : Matplotlib.axes.Axes object
+        Axis containing the plot
     """
 
     # Use some default parameter
@@ -72,9 +79,7 @@ def plot_schematics_scr(
         )
     else:
         # Getting the main plot
-        self.plot_side(is_show_fig=False)
-        fig = plt.gcf()
-        ax = plt.gca()
+        fig, ax = self.plot_side(is_show_fig=False)
         Lt = self.comp_length()
         Hs = self.slot.comp_height()
         Ha = self.slot.comp_height_active()
@@ -168,7 +173,7 @@ def plot_schematics_scr(
                 linewidth=MAIN_LINE_WIDTH,
             )
 
-        plt.axis("equal")
+        ax.axis("equal")
         ax.set_xlim(Lt / 4, (Lt / 2 + Le + Lscr) * 1.1)
         # ax.set_ylim(-self.Rext, self.Rext)
         manager = plt.get_current_fig_manager()
@@ -181,7 +186,8 @@ def plot_schematics_scr(
         # Save / Show
         if save_path is not None:
             fig.savefig(save_path)
-            plt.close()
+            plt.close(fig=fig)
 
         if is_show_fig:
             fig.show()
+        return fig, ax

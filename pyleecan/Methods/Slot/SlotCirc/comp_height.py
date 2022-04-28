@@ -1,8 +1,3 @@
-# -*- coding: utf-8 -*-
-
-from numpy import cos, tan
-
-
 def comp_height(self):
     """Compute the height of the Slot.
     Caution, the top of the Slot is an Arc

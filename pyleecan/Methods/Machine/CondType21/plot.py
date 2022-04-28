@@ -1,7 +1,5 @@
-# -*- coding: utf-8 -*-
-
 from matplotlib.patches import Patch, Rectangle
-from matplotlib.pyplot import axis, legend, subplots
+from matplotlib.pyplot import subplots
 
 
 def plot(self):
@@ -14,7 +12,10 @@ def plot(self):
 
     Returns
     -------
-    None
+    fig : Matplotlib.figure.Figure
+        Figure containing the plot
+    ax : Matplotlib.axes.Axes object
+        Axis containing the plot
     """
 
     patches_list = []
@@ -35,7 +36,7 @@ def plot(self):
         ax.add_patch(patch)
 
     # Axis Setup
-    axis("equal")
+    ax.axis("equal")
 
     # The conductor is centered
     ax.set_xlim(0 - Wcond / 10, Wcond * 11.0 / 10.0)
@@ -50,5 +51,6 @@ def plot(self):
     patch_leg.append(Patch(color="r"))
     label_leg.append("Active bar section")
 
-    legend(patch_leg, label_leg)
+    ax.legend(patch_leg, label_leg)
     fig.show()
+    return fig, ax

@@ -52,6 +52,13 @@ def plot_schematics(
         full path including folder, name and extension of the file to save if save_path is not None
     is_show_fig : bool
         To call show at the end of the method
+
+    Returns
+    -------
+    fig : Matplotlib.figure.Figure
+        Figure containing the plot
+    ax : Matplotlib.axes.Axes object
+        Axis containing the plot
     """
 
     # Use some default parameter
@@ -81,13 +88,11 @@ def plot_schematics(
         if self.parent is None:
             raise ParentMissingError("Error: The hole is not inside a Lamination")
         lam = self.parent
-        lam.plot(
+        fig,ax=lam.plot(
             alpha=0,
             is_show_fig=False,
             is_lam_only=True,  # No magnet
         )  # center hole on Ox axis
-        fig = plt.gcf()
-        ax = plt.gca()
         point_dict = self._comp_point_coordinate()
 
         # Adding point label
@@ -196,7 +201,7 @@ def plot_schematics(
         Rint = self.parent.Rint
         Rext = self.parent.Rext
 
-        plt.axis("equal")
+        ax.axis("equal")
         ax.set_ylim(-Rext / 10, Rext * 0.9)
         ax.set_xlim(Rext / 10, Rext)
         manager = plt.get_current_fig_manager()
@@ -209,7 +214,8 @@ def plot_schematics(
         # Save / Show
         if save_path is not None:
             fig.savefig(save_path)
-            plt.close()
+            plt.close(fig=fig)
 
         if is_show_fig:
             fig.show()
+        return fig, ax

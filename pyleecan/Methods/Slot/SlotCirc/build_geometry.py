@@ -34,7 +34,7 @@ def build_geometry(self):
         full_arc = Arc1(begin=Z1, end=Z2, radius=R0, is_trigo_direction=True)
     else:
         full_arc = Arc1(begin=Z1, end=Z2, radius=-R0, is_trigo_direction=False)
-    # Split arc to avoid angle > 180 deg (for FEMM)
+    # Split arc to avoid angle > 180 ° (for FEMM)
     curve_list = list()
     curve_list.append(full_arc.copy())
     curve_list[-1].split_half(is_begin=True)

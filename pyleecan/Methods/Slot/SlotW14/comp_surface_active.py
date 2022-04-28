@@ -1,8 +1,3 @@
-# -*- coding: utf-8 -*-
-
-from numpy import arcsin, cos, exp, pi, sin, sqrt, tan
-
-
 def comp_surface_active(self):
     """Compute the Slot inner surface for winding (by analytical computation)
 

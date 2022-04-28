@@ -1,9 +1,3 @@
-# -*- coding: utf-8 -*-
-
-from numpy import cos, exp
-from numpy import abs as np_abs
-
-
 def comp_height(self):
     """Compute the height of the Hole (Rmax-Rmin)
 

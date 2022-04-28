@@ -33,6 +33,8 @@ def plot_schematics(
     type_add_active=1,
     save_path=None,
     is_show_fig=True,
+    fig=None,
+    ax=None,
 ):
     """Plot the schematics of the slot
 
@@ -54,6 +56,17 @@ def plot_schematics(
         full path including folder, name and extension of the file to save if save_path is not None
     is_show_fig : bool
         To call show at the end of the method
+    fig : Matplotlib.figure.Figure
+        existing figure to use if None create a new one
+    ax : Matplotlib.axes.Axes object
+        Axis on which to plot the data
+
+    Returns
+    -------
+    fig : Matplotlib.figure.Figure
+        Figure containing the schematics
+    ax : Matplotlib.axes.Axes object
+        Axis containing the schematics
     """
 
     # Use some default parameter
@@ -62,7 +75,7 @@ def plot_schematics(
         lam = LamSlot(
             Rint=0.135, Rext=0.3, is_internal=False, is_stator=True, slot=slot
         )
-        slot.plot_schematics(
+        return slot.plot_schematics(
             is_default=False,
             is_add_point_label=is_add_point_label,
             is_add_schematics=is_add_schematics,
@@ -70,15 +83,15 @@ def plot_schematics(
             type_add_active=type_add_active,
             save_path=save_path,
             is_show_fig=is_show_fig,
+            fig=fig,
+            ax=ax,
         )
     else:
         # Getting the main plot
         if self.parent is None:
             raise ParentMissingError("Error: The slot is not inside a Lamination")
         lam = self.parent
-        lam.plot(alpha=pi / self.Zs, is_show_fig=False)  # center slot on Ox axis
-        fig = plt.gcf()
-        ax = plt.gca()
+        fig,ax=lam.plot(alpha=pi / self.Zs, is_show_fig=False,fig=fig,ax=ax)  # center slot on Ox axis
         point_dict = self._comp_point_coordinate()
         if self.is_outwards():
             sign = 1
@@ -198,7 +211,7 @@ def plot_schematics(
         Rint = min(point_dict["Z2"].real, point_dict["Z1"].real)
         Rext = max(point_dict["Z2"].real, point_dict["Z1"].real)
 
-        plt.axis("equal")
+        ax.axis("equal")
         ax.set_xlim(Rint, Rext)
         ax.set_ylim(-W, W)
         manager = plt.get_current_fig_manager()
@@ -211,7 +224,8 @@ def plot_schematics(
         # Save / Show
         if save_path is not None:
             fig.savefig(save_path)
-            plt.close()
+            plt.close(fig=fig)
 
         if is_show_fig:
             fig.show()
+        return fig,ax

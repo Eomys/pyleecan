@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from matplotlib.patches import Patch, Rectangle
-from matplotlib.pyplot import axis, legend, subplots
+from matplotlib.pyplot import subplots
 from ....definitions import config_dict
 
 COND_COLOR = config_dict["PLOT"]["COLOR_DICT"]["PHASE_COLORS"][0].copy()
@@ -23,7 +23,10 @@ def plot(self, is_show_fig=True):
 
     Returns
     -------
-    None
+    fig : Matplotlib.figure.Figure
+        Figure containing the plot
+    ax : Matplotlib.axes.Axes object
+        Axis containing the plot
     """
 
     patches_list = []
@@ -49,7 +52,7 @@ def plot(self, is_show_fig=True):
         ax.add_patch(patch)
 
     # Axis Setup
-    axis("equal")
+    ax.axis("equal")
 
     # The conductor is centered
     ax.set_xlim(0 - Wcond / 10, Wcond * 11.0 / 10.0)
@@ -65,6 +68,7 @@ def plot(self, is_show_fig=True):
     patch_leg.append(Patch(color=COND_COLOR))
     label_leg.append("Active wire section")
 
-    legend(patch_leg, label_leg)
+    ax.legend(patch_leg, label_leg)
     if is_show_fig:
         fig.show()
+    return fig, ax

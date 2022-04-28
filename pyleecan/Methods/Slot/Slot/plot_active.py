@@ -1,7 +1,4 @@
-# -*- coding: utf-8 -*-
-
 from matplotlib.patches import Patch, Polygon
-from matplotlib.pyplot import axis, legend
 from numpy import array, exp, pi
 
 from ....definitions import config_dict
@@ -87,10 +84,10 @@ def plot_active(
             point_list = point_list * exp(1j * (2 * pi) / self.Zs)
 
     # Display the result
-    (fig, axes, patch_leg, label_leg) = init_fig(fig)
-    axes.set_xlabel("(m)")
-    axes.set_ylabel("(m)")
-    axes.set_title("Winding Pattern")
+    (fig, ax, patch_leg, label_leg) = init_fig(fig)
+    ax.set_xlabel("(m)")
+    ax.set_ylabel("(m)")
+    ax.set_title("Winding Pattern")
 
     # Add wedges
     if is_add_wedge:
@@ -104,22 +101,22 @@ def plot_active(
             for ii in range(Zs):
                 surf2 = surf.copy()
                 surf2.rotate(angle=ii * (2 * pi) / self.Zs)
-                surf2.plot(fig=fig, ax=axes, color=WEDGE_COLOR, is_show_fig=False)
+                surf2.plot(fig=fig, ax=ax, color=WEDGE_COLOR, is_show_fig=False)
         # Remove tmp blanck wedge
         if to_clean:
             self.wedge_mat = None
 
     # Add the magnet to the fig
     for patch in patches:
-        axes.add_patch(patch)
+        ax.add_patch(patch)
 
     # Axis Setup
-    axis("equal")
+    ax.axis("equal")
     Rbo = self.get_Rbo()
 
     Lim = Rbo * 1.2
-    axes.set_xlim(-Lim, Lim)
-    axes.set_ylim(-Lim, Lim)
+    ax.set_xlim(-Lim, Lim)
+    ax.set_ylim(-Lim, Lim)
 
     # Legend setup
     if wind_mat is None or len(surf_list) != Ntan * Nrad:
@@ -140,9 +137,10 @@ def plot_active(
                 patch_leg.append(Patch(color=PHASE_COLORS[index]))
                 label_leg.append("Phase " + qs_name[ii])
 
-    legend(patch_leg, label_leg)
+    ax.legend(patch_leg, label_leg)
     if is_show_fig:
         fig.show()
+    return fig, ax
 
 
 def get_color(wind_mat, Nrad, Ntan, Zs):

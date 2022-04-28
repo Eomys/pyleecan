@@ -42,7 +42,11 @@ def _comp_line_dict(self):
     else:
         line_dict["1-2"] = None
 
-    line_dict["2-3"] = Segment(Z2, Z3)
+    H1 = self.get_H1()
+    if H1== 0 and self.W1 == self.W0:
+        line_dict["2-3"] = None
+    else:
+        line_dict["2-3"] = Segment(Z2, Z3)
     line_dict["3-4"] = Segment(Z3, Z4)
 
     if self.R1 * 2 < self.W2:
@@ -59,7 +63,10 @@ def _comp_line_dict(self):
         line_dict["6-7"] = None
 
     line_dict["7-8"] = Segment(Z7, Z8)
-    line_dict["8-9"] = Segment(Z8, Z9)
+    if H1 == 0 and self.W1 == self.W0:
+        line_dict["8-9"] = None
+    else:
+        line_dict["8-9"] = Segment(Z8, Z9)
 
     if self.H0 > 0:
         line_dict["9-10"] = Segment(Z9, Z10)
