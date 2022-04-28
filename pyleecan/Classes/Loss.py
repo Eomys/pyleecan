@@ -34,7 +34,6 @@ except ImportError as error:
 
 
 from ._check import InitUnKnowClassError
-from .LossModel import LossModel
 
 
 class Loss(FrozenClass):
@@ -79,6 +78,7 @@ class Loss(FrozenClass):
         model_index=-1,
         model_list=-1,
         logger_name="Pyleecan.Loss",
+        model_dict=None,
         init_dict=None,
         init_str=None,
     ):
@@ -103,11 +103,14 @@ class Loss(FrozenClass):
                 model_list = init_dict["model_list"]
             if "logger_name" in list(init_dict.keys()):
                 logger_name = init_dict["logger_name"]
+            if "model_dict" in list(init_dict.keys()):
+                model_dict = init_dict["model_dict"]
         # Set the properties (value check and convertion are done in setter)
         self.parent = None
         self.model_index = model_index
         self.model_list = model_list
         self.logger_name = logger_name
+        self.model_dict = model_dict
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -129,6 +132,14 @@ class Loss(FrozenClass):
             )
             Loss_str += "model_list[" + str(ii) + "] =" + tmp + linesep + linesep
         Loss_str += 'logger_name = "' + str(self.logger_name) + '"' + linesep
+        if len(self.model_dict) == 0:
+            Loss_str += "model_dict = dict()" + linesep
+        for key, obj in self.model_dict.items():
+            tmp = (
+                self.model_dict[key].__str__().replace(linesep, linesep + "\t")
+                + linesep
+            )
+            Loss_str += "model_dict[" + key + "] =" + tmp + linesep + linesep
         return Loss_str
 
     def __eq__(self, other):
@@ -141,6 +152,8 @@ class Loss(FrozenClass):
         if other.model_list != self.model_list:
             return False
         if other.logger_name != self.logger_name:
+            return False
+        if other.model_dict != self.model_dict:
             return False
         return True
 
@@ -171,6 +184,22 @@ class Loss(FrozenClass):
                 )
         if other._logger_name != self._logger_name:
             diff_list.append(name + ".logger_name")
+        if (other.model_dict is None and self.model_dict is not None) or (
+            other.model_dict is not None and self.model_dict is None
+        ):
+            diff_list.append(name + ".model_dict None mismatch")
+        elif self.model_dict is None:
+            pass
+        elif len(other.model_dict) != len(self.model_dict):
+            diff_list.append("len(" + name + "model_dict)")
+        else:
+            for key in self.model_dict:
+                diff_list.extend(
+                    self.model_dict[key].compare(
+                        other.model_dict[key],
+                        name=name + ".model_dict[" + str(key) + "]",
+                    )
+                )
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -186,6 +215,9 @@ class Loss(FrozenClass):
             for value in self.model_list:
                 S += getsizeof(value)
         S += getsizeof(self.logger_name)
+        if self.model_dict is not None:
+            for key, value in self.model_dict.items():
+                S += getsizeof(value) + getsizeof(key)
         return S
 
     def as_dict(self, type_handle_ndarray=0, keep_function=False, **kwargs):
@@ -219,6 +251,19 @@ class Loss(FrozenClass):
                 else:
                     Loss_dict["model_list"].append(None)
         Loss_dict["logger_name"] = self.logger_name
+        if self.model_dict is None:
+            Loss_dict["model_dict"] = None
+        else:
+            Loss_dict["model_dict"] = dict()
+            for key, obj in self.model_dict.items():
+                if obj is not None:
+                    Loss_dict["model_dict"][key] = obj.as_dict(
+                        type_handle_ndarray=type_handle_ndarray,
+                        keep_function=keep_function,
+                        **kwargs
+                    )
+                else:
+                    Loss_dict["model_dict"][key] = None
         # The class name is added to the dict for deserialisation purpose
         Loss_dict["__class__"] = "Loss"
         return Loss_dict
@@ -229,6 +274,7 @@ class Loss(FrozenClass):
         self.model_index = None
         self.model_list = None
         self.logger_name = None
+        self.model_dict = None
 
     def _get_model_index(self):
         """getter of model_index"""
@@ -244,7 +290,7 @@ class Loss(FrozenClass):
     model_index = property(
         fget=_get_model_index,
         fset=_set_model_index,
-        doc=u"""Internal dict to strore model index
+        doc=u"""Internal dict to store model index
 
         :Type: dict
         """,
@@ -307,5 +353,45 @@ class Loss(FrozenClass):
         doc=u"""Name of the logger to use
 
         :Type: str
+        """,
+    )
+
+    def _get_model_dict(self):
+        """getter of model_dict"""
+        if self._model_dict is not None:
+            for key, obj in self._model_dict.items():
+                if obj is not None:
+                    obj.parent = self
+        return self._model_dict
+
+    def _set_model_dict(self, value):
+        """setter of model_dict"""
+        if type(value) is dict:
+            for key, obj in value.items():
+                if isinstance(obj, str):  # Load from file
+                    try:
+                        obj = load_init_dict(obj)[1]
+                    except Exception as e:
+                        self.get_logger().error(
+                            "Error while loading " + obj + ", setting None instead"
+                        )
+                        obj = None
+                        value[key] = None
+                if type(obj) is dict:
+                    class_obj = import_class(
+                        "pyleecan.Classes", obj.get("__class__"), "model_dict"
+                    )
+                    value[key] = class_obj(init_dict=obj)
+        if type(value) is int and value == -1:
+            value = dict()
+        check_var("model_dict", value, "{LossModel}")
+        self._model_dict = value
+
+    model_dict = property(
+        fget=_get_model_dict,
+        fset=_set_model_dict,
+        doc=u"""Dict of loss model whose key is a lamination and value is the associated loss model (alternative to model_index/model_list)
+
+        :Type: {LossModel}
         """,
     )

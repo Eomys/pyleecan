@@ -3,6 +3,7 @@ from numpy import zeros
 from SciDataTool import DataTime
 
 from ....Classes.InputVoltage import InputVoltage
+from ....Classes.ElecLUTdq import ElecLUTdq
 
 from ....Functions.Electrical.dqh_transformation import get_phase_dir, n2dqh_DataTime
 
@@ -34,16 +35,18 @@ def gen_input(self):
         qs = 0
         qr = 0
 
-    # Get time axis
-    Time = outelec.axes_dict["time"]
+    if outelec.axes_dict is not None and "time" in outelec.axes_dict:
+        # Get time axis
+        Time = outelec.axes_dict["time"]
 
     # Load and check Is
     if qs > 0:
         if self.Is is None:
             if self.OP.get_Id_Iq()["Id"] is None and self.OP.get_Id_Iq()["Iq"] is None:
-                raise InputError(
-                    "InputCurrent.Is, InputCurrent.OP.Id_ref, and InputCurrent.OP.Iq_ref missing"
-                )
+                if not isinstance(simu.elec, ElecLUTdq):
+                    raise InputError(
+                        "InputCurrent.Is, InputCurrent.OP.Id_ref, and InputCurrent.OP.Iq_ref missing"
+                    )
             else:
                 outelec.OP = self.OP
                 outelec.Is = None
@@ -101,7 +104,7 @@ def gen_input(self):
             # TODO: merge Is_harm and Is_fund
             outelec.Is_harm = self.Is_harm.get_data()
 
-    # Load and check Ir is needed
+    # Load and check if Ir is needed
     if qr > 0:
         Nt_per = Time.get_length(is_smallestperiod=True)
         Phase_R = outelec.axes_dict["phase_" + simu.machine.rotor.get_label()]

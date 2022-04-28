@@ -197,6 +197,8 @@ class OPdq(OP):
         felec=None,
         Tem_av_ref=None,
         Pem_av_ref=None,
+        Pem_av_in=None,
+        efficiency=None,
         init_dict=None,
         init_str=None,
     ):
@@ -231,6 +233,10 @@ class OPdq(OP):
                 Tem_av_ref = init_dict["Tem_av_ref"]
             if "Pem_av_ref" in list(init_dict.keys()):
                 Pem_av_ref = init_dict["Pem_av_ref"]
+            if "Pem_av_in" in list(init_dict.keys()):
+                Pem_av_in = init_dict["Pem_av_in"]
+            if "efficiency" in list(init_dict.keys()):
+                efficiency = init_dict["efficiency"]
         # Set the properties (value check and convertion are done in setter)
         self.Id_ref = Id_ref
         self.Iq_ref = Iq_ref
@@ -238,7 +244,12 @@ class OPdq(OP):
         self.Uq_ref = Uq_ref
         # Call OP init
         super(OPdq, self).__init__(
-            N0=N0, felec=felec, Tem_av_ref=Tem_av_ref, Pem_av_ref=Pem_av_ref
+            N0=N0,
+            felec=felec,
+            Tem_av_ref=Tem_av_ref,
+            Pem_av_ref=Pem_av_ref,
+            Pem_av_in=Pem_av_in,
+            efficiency=efficiency,
         )
         # The class is frozen (in OP init), for now it's impossible to
         # add new properties

@@ -49,9 +49,6 @@ except ImportError as error:
 
 
 from ._check import InitUnKnowClassError
-from .MeshSolution import MeshSolution
-from .OutInternal import OutInternal
-from .SliceModel import SliceModel
 
 
 class OutMag(FrozenClass):
@@ -329,7 +326,7 @@ class OutMag(FrozenClass):
             for key in self.axes_dict:
                 diff_list.extend(
                     self.axes_dict[key].compare(
-                        other.axes_dict[key], name=name + ".axes_dict"
+                        other.axes_dict[key], name=name + ".axes_dict[" + str(key) + "]"
                     )
                 )
         if (other.B is None and self.B is not None) or (
@@ -372,7 +369,7 @@ class OutMag(FrozenClass):
             for key in self.Phi_wind:
                 diff_list.extend(
                     self.Phi_wind[key].compare(
-                        other.Phi_wind[key], name=name + ".Phi_wind"
+                        other.Phi_wind[key], name=name + ".Phi_wind[" + str(key) + "]"
                     )
                 )
         if (other.emf is None and self.emf is not None) or (
@@ -431,7 +428,8 @@ class OutMag(FrozenClass):
             for key in self.Phi_wind_slice:
                 diff_list.extend(
                     self.Phi_wind_slice[key].compare(
-                        other.Phi_wind_slice[key], name=name + ".Phi_wind_slice"
+                        other.Phi_wind_slice[key],
+                        name=name + ".Phi_wind_slice[" + str(key) + "]",
                     )
                 )
         if other._Tem_norm != self._Tem_norm:
@@ -905,6 +903,9 @@ class OutMag(FrozenClass):
             )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
+            MeshSolution = import_class(
+                "pyleecan.Classes", "MeshSolution", "meshsolution"
+            )
             value = MeshSolution()
         check_var("meshsolution", value, "MeshSolution")
         self._meshsolution = value
@@ -959,6 +960,7 @@ class OutMag(FrozenClass):
             )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
+            OutInternal = import_class("pyleecan.Classes", "OutInternal", "internal")
             value = OutInternal()
         check_var("internal", value, "OutInternal")
         self._internal = value
@@ -1031,6 +1033,7 @@ class OutMag(FrozenClass):
             )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
+            SliceModel = import_class("pyleecan.Classes", "SliceModel", "Slice")
             value = SliceModel()
         check_var("Slice", value, "SliceModel")
         self._Slice = value

@@ -27,6 +27,11 @@ try:
 except ImportError as error:
     _set_result = error
 
+try:
+    from ..Methods.Simulation.DataKeeper._set_keeper import _set_keeper
+except ImportError as error:
+    _set_keeper = error
+
 
 from ntpath import basename
 from os.path import isfile
@@ -62,6 +67,17 @@ class DataKeeper(FrozenClass):
         )
     else:
         _set_result = _set_result
+    # cf Methods.Simulation.DataKeeper._set_keeper
+    if isinstance(_set_keeper, ImportError):
+        _set_keeper = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use DataKeeper method _set_keeper: " + str(_set_keeper)
+                )
+            )
+        )
+    else:
+        _set_keeper = _set_keeper
     # save and copy methods are available in all object
     save = save
     copy = copy
@@ -316,28 +332,6 @@ class DataKeeper(FrozenClass):
     def _get_keeper(self):
         """getter of keeper"""
         return self._keeper_func
-
-    def _set_keeper(self, value):
-        """setter of keeper"""
-        if value is None:
-            self._keeper_str = None
-            self._keeper_func = None
-        elif isinstance(value, str) and "lambda" in value:
-            self._keeper_str = value
-            self._keeper_func = eval(value)
-        elif isinstance(value, str) and isfile(value) and value[-3:] == ".py":
-            self._keeper_str = value
-            f = open(value, "r")
-            exec(f.read(), globals())
-            self._keeper_func = eval(basename(value[:-3]))
-        elif callable(value):
-            self._keeper_str = None
-            self._keeper_func = value
-        else:
-            raise CheckTypeError(
-                "For property keeper Expected function or str (path to python file or lambda), got: "
-                + str(type(value))
-            )
 
     keeper = property(
         fget=_get_keeper,

@@ -44,7 +44,6 @@ except ImportError as error:
 
 
 from ._check import InitUnKnowClassError
-from .Line import Line
 
 
 class SlotUD(Slot):
@@ -123,6 +122,7 @@ class SlotUD(Slot):
         type_line_wind=0,
         name="",
         Zs=36,
+        wedge_mat=None,
         init_dict=None,
         init_str=None,
     ):
@@ -153,6 +153,8 @@ class SlotUD(Slot):
                 name = init_dict["name"]
             if "Zs" in list(init_dict.keys()):
                 Zs = init_dict["Zs"]
+            if "wedge_mat" in list(init_dict.keys()):
+                wedge_mat = init_dict["wedge_mat"]
         # Set the properties (value check and convertion are done in setter)
         self.line_list = line_list
         self.wind_begin_index = wind_begin_index
@@ -160,7 +162,7 @@ class SlotUD(Slot):
         self.type_line_wind = type_line_wind
         self.name = name
         # Call Slot init
-        super(SlotUD, self).__init__(Zs=Zs)
+        super(SlotUD, self).__init__(Zs=Zs, wedge_mat=wedge_mat)
         # The class is frozen (in Slot init), for now it's impossible to
         # add new properties
 

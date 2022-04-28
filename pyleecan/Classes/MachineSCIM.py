@@ -29,9 +29,6 @@ except ImportError as error:
 
 
 from ._check import InitUnKnowClassError
-from .LamSlotWind import LamSlotWind
-from .Frame import Frame
-from .Shaft import Shaft
 
 
 class MachineSCIM(MachineDFIM):

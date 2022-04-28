@@ -24,7 +24,6 @@ except ImportError as error:
 
 
 from ._check import InitUnKnowClassError
-from .ImportData import ImportData
 
 
 class ImportVectorField(FrozenClass):
@@ -139,7 +138,8 @@ class ImportVectorField(FrozenClass):
             for key in self.components:
                 diff_list.extend(
                     self.components[key].compare(
-                        other.components[key], name=name + ".components"
+                        other.components[key],
+                        name=name + ".components[" + str(key) + "]",
                     )
                 )
         if other._name != self._name:

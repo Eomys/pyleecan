@@ -146,11 +146,13 @@ class SWSlot(Gen_SWSlot, QWidget):
 
         # Call the corresponding constructor
         Zs = self.obj.slot.Zs
+        wedge_mat = self.obj.slot.wedge_mat
         if self.previous_slot[INIT_INDEX[index]] is None:
             # No previous slot of this type
             self.obj.slot = INIT_INDEX[index]()
             self.obj.slot._set_None()  # No default value
             self.obj.slot.Zs = Zs
+            self.obj.slot.wedge_mat = wedge_mat
         else:  # Load the previous slot of this type
             self.obj.slot = self.previous_slot[INIT_INDEX[index]]
             if self.obj.slot.Zs is not None:
@@ -208,7 +210,7 @@ class SWSlot(Gen_SWSlot, QWidget):
             self.out_Slot_pitch.setText(
                 sp_txt
                 + "%.4g" % (Slot_pitch)
-                + u" [°] ("
+                + " [°] ("
                 + "%.4g" % (Slot_pitch_rad)
                 + " [rad])"
             )
@@ -224,7 +226,9 @@ class SWSlot(Gen_SWSlot, QWidget):
 
         # Regenerate the pages with the new values
         self.w_slot.setParent(None)
-        self.w_slot = WIDGET_LIST[self.c_slot_type.currentIndex()](self.obj)
+        self.w_slot = WIDGET_LIST[self.c_slot_type.currentIndex()](
+            self.obj, material_dict=self.material_dict
+        )
         self.w_slot.saveNeeded.connect(self.emit_save)
         # Refresh the GUI
         self.main_layout.removeWidget(self.w_slot)

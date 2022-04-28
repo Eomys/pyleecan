@@ -49,8 +49,6 @@ except ImportError as error:
 
 
 from ._check import InitUnKnowClassError
-from .DXFImport import DXFImport
-from .SliceModel import SliceModel
 
 
 class MagElmer(Magnetics):
@@ -162,6 +160,8 @@ class MagElmer(Magnetics):
         Nslices_enforced=None,
         type_distribution_enforced=None,
         is_current_harm=True,
+        T_mag=20,
+        is_periodicity_rotor=False,
         init_dict=None,
         init_str=None,
     ):
@@ -236,6 +236,10 @@ class MagElmer(Magnetics):
                 type_distribution_enforced = init_dict["type_distribution_enforced"]
             if "is_current_harm" in list(init_dict.keys()):
                 is_current_harm = init_dict["is_current_harm"]
+            if "T_mag" in list(init_dict.keys()):
+                T_mag = init_dict["T_mag"]
+            if "is_periodicity_rotor" in list(init_dict.keys()):
+                is_periodicity_rotor = init_dict["is_periodicity_rotor"]
         # Set the properties (value check and convertion are done in setter)
         self.Kmesh_fineness = Kmesh_fineness
         self.Kgeo_fineness = Kgeo_fineness
@@ -267,6 +271,8 @@ class MagElmer(Magnetics):
             Nslices_enforced=Nslices_enforced,
             type_distribution_enforced=type_distribution_enforced,
             is_current_harm=is_current_harm,
+            T_mag=T_mag,
+            is_periodicity_rotor=is_periodicity_rotor,
         )
         # The class is frozen (in Magnetics init), for now it's impossible to
         # add new properties
@@ -631,6 +637,7 @@ class MagElmer(Magnetics):
             )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
+            DXFImport = import_class("pyleecan.Classes", "DXFImport", "rotor_dxf")
             value = DXFImport()
         check_var("rotor_dxf", value, "DXFImport")
         self._rotor_dxf = value
@@ -667,6 +674,7 @@ class MagElmer(Magnetics):
             )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
+            DXFImport = import_class("pyleecan.Classes", "DXFImport", "stator_dxf")
             value = DXFImport()
         check_var("stator_dxf", value, "DXFImport")
         self._stator_dxf = value

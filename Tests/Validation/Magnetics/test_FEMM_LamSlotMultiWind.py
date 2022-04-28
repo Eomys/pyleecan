@@ -39,6 +39,7 @@ def test_FEMM_LamSlotMultiWind():
         type_BH_rotor=0,
         is_periodicity_a=True,
         is_periodicity_t=False,
+        is_fast_draw=False,
     )
     simu.elec = None
     simu.force = None

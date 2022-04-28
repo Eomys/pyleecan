@@ -39,7 +39,6 @@ except ImportError as error:
 
 
 from ._check import InitUnKnowClassError
-from .EEC import EEC
 
 
 class Electrical(FrozenClass):
@@ -98,10 +97,11 @@ class Electrical(FrozenClass):
         self,
         eec=None,
         logger_name="Pyleecan.Electrical",
+        freq_max=40000,
+        LUT_enforced=None,
         Tsta=20,
         Trot=20,
-        Tmag=20,
-        freq_max=40000,
+        type_skin_effect=1,
         init_dict=None,
         init_str=None,
     ):
@@ -124,22 +124,25 @@ class Electrical(FrozenClass):
                 eec = init_dict["eec"]
             if "logger_name" in list(init_dict.keys()):
                 logger_name = init_dict["logger_name"]
+            if "freq_max" in list(init_dict.keys()):
+                freq_max = init_dict["freq_max"]
+            if "LUT_enforced" in list(init_dict.keys()):
+                LUT_enforced = init_dict["LUT_enforced"]
             if "Tsta" in list(init_dict.keys()):
                 Tsta = init_dict["Tsta"]
             if "Trot" in list(init_dict.keys()):
                 Trot = init_dict["Trot"]
-            if "Tmag" in list(init_dict.keys()):
-                Tmag = init_dict["Tmag"]
-            if "freq_max" in list(init_dict.keys()):
-                freq_max = init_dict["freq_max"]
+            if "type_skin_effect" in list(init_dict.keys()):
+                type_skin_effect = init_dict["type_skin_effect"]
         # Set the properties (value check and convertion are done in setter)
         self.parent = None
         self.eec = eec
         self.logger_name = logger_name
+        self.freq_max = freq_max
+        self.LUT_enforced = LUT_enforced
         self.Tsta = Tsta
         self.Trot = Trot
-        self.Tmag = Tmag
-        self.freq_max = freq_max
+        self.type_skin_effect = type_skin_effect
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -158,10 +161,19 @@ class Electrical(FrozenClass):
         else:
             Electrical_str += "eec = None" + linesep + linesep
         Electrical_str += 'logger_name = "' + str(self.logger_name) + '"' + linesep
+        Electrical_str += "freq_max = " + str(self.freq_max) + linesep
+        if self.LUT_enforced is not None:
+            tmp = (
+                self.LUT_enforced.__str__()
+                .replace(linesep, linesep + "\t")
+                .rstrip("\t")
+            )
+            Electrical_str += "LUT_enforced = " + tmp
+        else:
+            Electrical_str += "LUT_enforced = None" + linesep + linesep
         Electrical_str += "Tsta = " + str(self.Tsta) + linesep
         Electrical_str += "Trot = " + str(self.Trot) + linesep
-        Electrical_str += "Tmag = " + str(self.Tmag) + linesep
-        Electrical_str += "freq_max = " + str(self.freq_max) + linesep
+        Electrical_str += "type_skin_effect = " + str(self.type_skin_effect) + linesep
         return Electrical_str
 
     def __eq__(self, other):
@@ -173,13 +185,15 @@ class Electrical(FrozenClass):
             return False
         if other.logger_name != self.logger_name:
             return False
+        if other.freq_max != self.freq_max:
+            return False
+        if other.LUT_enforced != self.LUT_enforced:
+            return False
         if other.Tsta != self.Tsta:
             return False
         if other.Trot != self.Trot:
             return False
-        if other.Tmag != self.Tmag:
-            return False
-        if other.freq_max != self.freq_max:
+        if other.type_skin_effect != self.type_skin_effect:
             return False
         return True
 
@@ -199,14 +213,24 @@ class Electrical(FrozenClass):
             diff_list.extend(self.eec.compare(other.eec, name=name + ".eec"))
         if other._logger_name != self._logger_name:
             diff_list.append(name + ".logger_name")
+        if other._freq_max != self._freq_max:
+            diff_list.append(name + ".freq_max")
+        if (other.LUT_enforced is None and self.LUT_enforced is not None) or (
+            other.LUT_enforced is not None and self.LUT_enforced is None
+        ):
+            diff_list.append(name + ".LUT_enforced None mismatch")
+        elif self.LUT_enforced is not None:
+            diff_list.extend(
+                self.LUT_enforced.compare(
+                    other.LUT_enforced, name=name + ".LUT_enforced"
+                )
+            )
         if other._Tsta != self._Tsta:
             diff_list.append(name + ".Tsta")
         if other._Trot != self._Trot:
             diff_list.append(name + ".Trot")
-        if other._Tmag != self._Tmag:
-            diff_list.append(name + ".Tmag")
-        if other._freq_max != self._freq_max:
-            diff_list.append(name + ".freq_max")
+        if other._type_skin_effect != self._type_skin_effect:
+            diff_list.append(name + ".type_skin_effect")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -217,10 +241,11 @@ class Electrical(FrozenClass):
         S = 0  # Full size of the object
         S += getsizeof(self.eec)
         S += getsizeof(self.logger_name)
+        S += getsizeof(self.freq_max)
+        S += getsizeof(self.LUT_enforced)
         S += getsizeof(self.Tsta)
         S += getsizeof(self.Trot)
-        S += getsizeof(self.Tmag)
-        S += getsizeof(self.freq_max)
+        S += getsizeof(self.type_skin_effect)
         return S
 
     def as_dict(self, type_handle_ndarray=0, keep_function=False, **kwargs):
@@ -244,10 +269,18 @@ class Electrical(FrozenClass):
                 **kwargs
             )
         Electrical_dict["logger_name"] = self.logger_name
+        Electrical_dict["freq_max"] = self.freq_max
+        if self.LUT_enforced is None:
+            Electrical_dict["LUT_enforced"] = None
+        else:
+            Electrical_dict["LUT_enforced"] = self.LUT_enforced.as_dict(
+                type_handle_ndarray=type_handle_ndarray,
+                keep_function=keep_function,
+                **kwargs
+            )
         Electrical_dict["Tsta"] = self.Tsta
         Electrical_dict["Trot"] = self.Trot
-        Electrical_dict["Tmag"] = self.Tmag
-        Electrical_dict["freq_max"] = self.freq_max
+        Electrical_dict["type_skin_effect"] = self.type_skin_effect
         # The class name is added to the dict for deserialisation purpose
         Electrical_dict["__class__"] = "Electrical"
         return Electrical_dict
@@ -258,10 +291,12 @@ class Electrical(FrozenClass):
         if self.eec is not None:
             self.eec._set_None()
         self.logger_name = None
+        self.freq_max = None
+        if self.LUT_enforced is not None:
+            self.LUT_enforced._set_None()
         self.Tsta = None
         self.Trot = None
-        self.Tmag = None
-        self.freq_max = None
+        self.type_skin_effect = None
 
     def _get_eec(self):
         """getter of eec"""
@@ -281,6 +316,7 @@ class Electrical(FrozenClass):
             class_obj = import_class("pyleecan.Classes", value.get("__class__"), "eec")
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
+            EEC = import_class("pyleecan.Classes", "EEC", "eec")
             value = EEC()
         check_var("eec", value, "EEC")
         self._eec = value
@@ -315,6 +351,61 @@ class Electrical(FrozenClass):
         """,
     )
 
+    def _get_freq_max(self):
+        """getter of freq_max"""
+        return self._freq_max
+
+    def _set_freq_max(self, value):
+        """setter of freq_max"""
+        check_var("freq_max", value, "float")
+        self._freq_max = value
+
+    freq_max = property(
+        fget=_get_freq_max,
+        fset=_set_freq_max,
+        doc=u"""Maximum frequency to calculate voltage and current harmonics
+
+        :Type: float
+        """,
+    )
+
+    def _get_LUT_enforced(self):
+        """getter of LUT_enforced"""
+        return self._LUT_enforced
+
+    def _set_LUT_enforced(self, value):
+        """setter of LUT_enforced"""
+        if isinstance(value, str):  # Load from file
+            try:
+                value = load_init_dict(value)[1]
+            except Exception as e:
+                self.get_logger().error(
+                    "Error while loading " + value + ", setting None instead"
+                )
+                value = None
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class(
+                "pyleecan.Classes", value.get("__class__"), "LUT_enforced"
+            )
+            value = class_obj(init_dict=value)
+        elif type(value) is int and value == -1:  # Default constructor
+            LUT = import_class("pyleecan.Classes", "LUT", "LUT_enforced")
+            value = LUT()
+        check_var("LUT_enforced", value, "LUT")
+        self._LUT_enforced = value
+
+        if self._LUT_enforced is not None:
+            self._LUT_enforced.parent = self
+
+    LUT_enforced = property(
+        fget=_get_LUT_enforced,
+        fset=_set_LUT_enforced,
+        doc=u"""Look-Up Tables to update equivalent circuit parameters
+
+        :Type: LUT
+        """,
+    )
+
     def _get_Tsta(self):
         """getter of Tsta"""
         return self._Tsta
@@ -327,7 +418,7 @@ class Electrical(FrozenClass):
     Tsta = property(
         fget=_get_Tsta,
         fset=_set_Tsta,
-        doc=u"""Average stator temperature for operational EEC calculation
+        doc=u"""Average stator temperature for Electrical calculation
 
         :Type: float
         """,
@@ -345,44 +436,26 @@ class Electrical(FrozenClass):
     Trot = property(
         fget=_get_Trot,
         fset=_set_Trot,
-        doc=u"""Average rotor temperature for operational EEC calculation
+        doc=u"""Average rotor temperature for Electrical calculation
 
         :Type: float
         """,
     )
 
-    def _get_Tmag(self):
-        """getter of Tmag"""
-        return self._Tmag
+    def _get_type_skin_effect(self):
+        """getter of type_skin_effect"""
+        return self._type_skin_effect
 
-    def _set_Tmag(self, value):
-        """setter of Tmag"""
-        check_var("Tmag", value, "float")
-        self._Tmag = value
+    def _set_type_skin_effect(self, value):
+        """setter of type_skin_effect"""
+        check_var("type_skin_effect", value, "int")
+        self._type_skin_effect = value
 
-    Tmag = property(
-        fget=_get_Tmag,
-        fset=_set_Tmag,
-        doc=u"""Average magnet temperature for operational EEC calculation
+    type_skin_effect = property(
+        fget=_get_type_skin_effect,
+        fset=_set_type_skin_effect,
+        doc=u"""Skin effect for resistance and inductance
 
-        :Type: float
-        """,
-    )
-
-    def _get_freq_max(self):
-        """getter of freq_max"""
-        return self._freq_max
-
-    def _set_freq_max(self, value):
-        """setter of freq_max"""
-        check_var("freq_max", value, "float")
-        self._freq_max = value
-
-    freq_max = property(
-        fget=_get_freq_max,
-        fset=_set_freq_max,
-        doc=u"""Maximum frequency to calculate voltage and current harmonics
-
-        :Type: float
+        :Type: int
         """,
     )

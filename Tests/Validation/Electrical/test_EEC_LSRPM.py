@@ -11,8 +11,6 @@ from pyleecan.Classes.Simu1 import Simu1
 from pyleecan.Classes.InputCurrent import InputCurrent
 from pyleecan.Classes.Electrical import Electrical
 from pyleecan.Classes.EEC_LSRPM import EEC_LSRPM
-from pyleecan.Classes.FluxLinkFEMM import FluxLinkFEMM
-from pyleecan.Classes.IndMagFEMM import IndMagFEMM
 from pyleecan.Classes.MagFEMM import MagFEMM
 from pyleecan.Classes.Output import Output
 from pyleecan.Functions.load import load
@@ -26,7 +24,7 @@ from pyleecan.Functions.Plot import dict_2D
 @pytest.mark.periodicity
 @pytest.mark.SingleOP
 @pytest.mark.skip(reason="Work in progress")
-def test_EEC_LSRPM():
+def test_EEC_LSRPM(nb_worker=int(0.5 * cpu_count())):
     """Validation of LSRPM EEC from Sijie's PhD thesis"""
 
     LSRPM = load("LSRPM_001.json")
@@ -43,8 +41,11 @@ def test_EEC_LSRPM():
     # Definition of the electrical simulation (FEMM)
     simu.elec = Electrical()
     simu.elec.eec = EEC_LSRPM(
-        indmag=IndMagFEMM(is_periodicity_a=True, Nt_tot=10),
-        fluxlink=FluxLinkFEMM(is_periodicity_a=True, Nt_tot=10),
+        fluxlink=MagFEMM(
+            is_periodicity_t=True,
+            is_periodicity_a=True,
+            nb_worker=nb_worker,
+        )
     )
 
     simu.mag = None
@@ -59,7 +60,7 @@ def test_EEC_LSRPM():
         type_BH_stator=0,
         type_BH_rotor=0,
         is_periodicity_a=True,
-        nb_worker=cpu_count(),
+        nb_worker=nb_worker,
     )
 
     out2 = Output(simu=simu2)
@@ -75,7 +76,7 @@ def test_EEC_LSRPM():
     )
 
     # from Yang et al, 2013
-    assert_almost_equal(out.elec.Tem_av_ref, 81.81, decimal=1)
+    assert_almost_equal(out.elec.Tem_av, 81.81, decimal=1)
     assert_almost_equal(out2.mag.Tem_av, 81.70, decimal=1)
 
     return out, out2

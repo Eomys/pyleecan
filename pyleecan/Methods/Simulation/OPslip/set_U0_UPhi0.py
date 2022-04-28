@@ -1,8 +1,6 @@
-from numpy import exp
-
-
 def set_U0_UPhi0(self, U0, UPhi0):
     """Set the value for I0 and IPhi0
+
     Parameters
     ----------
     self : OPslip

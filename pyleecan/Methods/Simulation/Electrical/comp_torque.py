@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from numpy import pi
 
 
@@ -16,10 +14,10 @@ def comp_torque(self, out_dict, N0):
 
     omega = 2 * pi * N0 / 60
 
-    P = out_dict["Pem_av_ref"]
+    P = out_dict["Pem_av"]
 
-    Tem_av_ref = (P - out_dict["Pj_losses"]) / omega
+    Tem_av = (P - out_dict["Pj_losses"]) / omega
 
-    out_dict["Tem_av_ref"] = Tem_av_ref
+    out_dict["Tem_av"] = Tem_av
 
     return out_dict

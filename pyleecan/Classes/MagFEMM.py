@@ -49,8 +49,6 @@ except ImportError as error:
 
 
 from ._check import InitUnKnowClassError
-from .DXFImport import DXFImport
-from .SliceModel import SliceModel
 
 
 class MagFEMM(Magnetics):
@@ -151,6 +149,8 @@ class MagFEMM(Magnetics):
         nb_worker=1,
         Rag_enforced=None,
         is_set_previous=True,
+        is_fast_draw=True,
+        is_calc_torque_energy=True,
         is_remove_slotS=False,
         is_remove_slotR=False,
         is_remove_ventS=False,
@@ -168,6 +168,8 @@ class MagFEMM(Magnetics):
         Nslices_enforced=None,
         type_distribution_enforced=None,
         is_current_harm=True,
+        T_mag=20,
+        is_periodicity_rotor=False,
         init_dict=None,
         init_str=None,
     ):
@@ -218,6 +220,10 @@ class MagFEMM(Magnetics):
                 Rag_enforced = init_dict["Rag_enforced"]
             if "is_set_previous" in list(init_dict.keys()):
                 is_set_previous = init_dict["is_set_previous"]
+            if "is_fast_draw" in list(init_dict.keys()):
+                is_fast_draw = init_dict["is_fast_draw"]
+            if "is_calc_torque_energy" in list(init_dict.keys()):
+                is_calc_torque_energy = init_dict["is_calc_torque_energy"]
             if "is_remove_slotS" in list(init_dict.keys()):
                 is_remove_slotS = init_dict["is_remove_slotS"]
             if "is_remove_slotR" in list(init_dict.keys()):
@@ -252,6 +258,10 @@ class MagFEMM(Magnetics):
                 type_distribution_enforced = init_dict["type_distribution_enforced"]
             if "is_current_harm" in list(init_dict.keys()):
                 is_current_harm = init_dict["is_current_harm"]
+            if "T_mag" in list(init_dict.keys()):
+                T_mag = init_dict["T_mag"]
+            if "is_periodicity_rotor" in list(init_dict.keys()):
+                is_periodicity_rotor = init_dict["is_periodicity_rotor"]
         # Set the properties (value check and convertion are done in setter)
         self.Kmesh_fineness = Kmesh_fineness
         self.Kgeo_fineness = Kgeo_fineness
@@ -269,6 +279,8 @@ class MagFEMM(Magnetics):
         self.nb_worker = nb_worker
         self.Rag_enforced = Rag_enforced
         self.is_set_previous = is_set_previous
+        self.is_fast_draw = is_fast_draw
+        self.is_calc_torque_energy = is_calc_torque_energy
         # Call Magnetics init
         super(MagFEMM, self).__init__(
             is_remove_slotS=is_remove_slotS,
@@ -288,6 +300,8 @@ class MagFEMM(Magnetics):
             Nslices_enforced=Nslices_enforced,
             type_distribution_enforced=type_distribution_enforced,
             is_current_harm=is_current_harm,
+            T_mag=T_mag,
+            is_periodicity_rotor=is_periodicity_rotor,
         )
         # The class is frozen (in Magnetics init), for now it's impossible to
         # add new properties
@@ -335,6 +349,10 @@ class MagFEMM(Magnetics):
         MagFEMM_str += "nb_worker = " + str(self.nb_worker) + linesep
         MagFEMM_str += "Rag_enforced = " + str(self.Rag_enforced) + linesep
         MagFEMM_str += "is_set_previous = " + str(self.is_set_previous) + linesep
+        MagFEMM_str += "is_fast_draw = " + str(self.is_fast_draw) + linesep
+        MagFEMM_str += (
+            "is_calc_torque_energy = " + str(self.is_calc_torque_energy) + linesep
+        )
         return MagFEMM_str
 
     def __eq__(self, other):
@@ -377,6 +395,10 @@ class MagFEMM(Magnetics):
         if other.Rag_enforced != self.Rag_enforced:
             return False
         if other.is_set_previous != self.is_set_previous:
+            return False
+        if other.is_fast_draw != self.is_fast_draw:
+            return False
+        if other.is_calc_torque_energy != self.is_calc_torque_energy:
             return False
         return True
 
@@ -435,6 +457,10 @@ class MagFEMM(Magnetics):
             diff_list.append(name + ".Rag_enforced")
         if other._is_set_previous != self._is_set_previous:
             diff_list.append(name + ".is_set_previous")
+        if other._is_fast_draw != self._is_fast_draw:
+            diff_list.append(name + ".is_fast_draw")
+        if other._is_calc_torque_energy != self._is_calc_torque_energy:
+            diff_list.append(name + ".is_calc_torque_energy")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -466,6 +492,8 @@ class MagFEMM(Magnetics):
         S += getsizeof(self.nb_worker)
         S += getsizeof(self.Rag_enforced)
         S += getsizeof(self.is_set_previous)
+        S += getsizeof(self.is_fast_draw)
+        S += getsizeof(self.is_calc_torque_energy)
         return S
 
     def as_dict(self, type_handle_ndarray=0, keep_function=False, **kwargs):
@@ -521,6 +549,8 @@ class MagFEMM(Magnetics):
         MagFEMM_dict["nb_worker"] = self.nb_worker
         MagFEMM_dict["Rag_enforced"] = self.Rag_enforced
         MagFEMM_dict["is_set_previous"] = self.is_set_previous
+        MagFEMM_dict["is_fast_draw"] = self.is_fast_draw
+        MagFEMM_dict["is_calc_torque_energy"] = self.is_calc_torque_energy
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         MagFEMM_dict["__class__"] = "MagFEMM"
@@ -547,6 +577,8 @@ class MagFEMM(Magnetics):
         self.nb_worker = None
         self.Rag_enforced = None
         self.is_set_previous = None
+        self.is_fast_draw = None
+        self.is_calc_torque_energy = None
         # Set to None the properties inherited from Magnetics
         super(MagFEMM, self)._set_None()
 
@@ -738,6 +770,7 @@ class MagFEMM(Magnetics):
             )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
+            DXFImport = import_class("pyleecan.Classes", "DXFImport", "rotor_dxf")
             value = DXFImport()
         check_var("rotor_dxf", value, "DXFImport")
         self._rotor_dxf = value
@@ -774,6 +807,7 @@ class MagFEMM(Magnetics):
             )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
+            DXFImport = import_class("pyleecan.Classes", "DXFImport", "stator_dxf")
             value = DXFImport()
         check_var("stator_dxf", value, "DXFImport")
         self._stator_dxf = value
@@ -875,6 +909,42 @@ class MagFEMM(Magnetics):
         fget=_get_is_set_previous,
         fset=_set_is_set_previous,
         doc=u"""True set previous .ans result file in current .fem to use it as initialization and speed up calculation time
+
+        :Type: bool
+        """,
+    )
+
+    def _get_is_fast_draw(self):
+        """getter of is_fast_draw"""
+        return self._is_fast_draw
+
+    def _set_is_fast_draw(self, value):
+        """setter of is_fast_draw"""
+        check_var("is_fast_draw", value, "bool")
+        self._is_fast_draw = value
+
+    is_fast_draw = property(
+        fget=_get_is_fast_draw,
+        fset=_set_is_fast_draw,
+        doc=u"""True to use the symetry of the lamination to draw the machine faster
+
+        :Type: bool
+        """,
+    )
+
+    def _get_is_calc_torque_energy(self):
+        """getter of is_calc_torque_energy"""
+        return self._is_calc_torque_energy
+
+    def _set_is_calc_torque_energy(self, value):
+        """setter of is_calc_torque_energy"""
+        check_var("is_calc_torque_energy", value, "bool")
+        self._is_calc_torque_energy = value
+
+    is_calc_torque_energy = property(
+        fget=_get_is_calc_torque_energy,
+        fset=_set_is_calc_torque_energy,
+        doc=u"""True to calculate torque from integration of energy derivate over rotor elements
 
         :Type: bool
         """,

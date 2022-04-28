@@ -12,9 +12,9 @@ from pyleecan.Classes.LamSlotWind import LamSlotWind
 @pytest.mark.SCIM
 def test_desc_SCIM():
     """Check that the description of a SCIM is correct"""
-    SCIM_001 = load(join(DATA_DIR, "Machine", "SCIM_001.json"))
+    SCIM_001 = load(join(DATA_DIR, "Machine", "Railway_Traction.json"))
     desc_dict = SCIM_001.comp_desc_dict()
-    assert len(desc_dict) == 8
+    assert len(desc_dict) == 9
     assert desc_dict[0]["name"] == "Type"
     assert desc_dict[0]["value"] == "SCIM"
 
@@ -28,7 +28,7 @@ def test_desc_SCIM():
     assert desc_dict[3]["value"] == 3
 
     assert desc_dict[4]["name"] == "Topology"
-    assert desc_dict[4]["value"] == "Inner Rotor"
+    assert desc_dict[4]["value"] == "Internal Rotor"
 
     assert desc_dict[5]["name"] == "qs"
     assert desc_dict[5]["value"] == 3
@@ -39,13 +39,16 @@ def test_desc_SCIM():
     assert desc_dict[7]["name"] == "Mmachine"
     assert desc_dict[7]["value"] == pytest.approx(342.819, rel=0.1)
 
+    assert desc_dict[8]["name"] == "Mwind"
+    assert desc_dict[8]["value"] == pytest.approx(59.055, rel=0.1)
+
 
 @pytest.mark.IPMSM
 def test_desc_IPMSM():
     """Check that the description of an IPMSM is correct"""
     Toyota_Prius = load(join(DATA_DIR, "Machine", "Toyota_Prius.json"))
     desc_dict = Toyota_Prius.comp_desc_dict()
-    assert len(desc_dict) == 7
+    assert len(desc_dict) == 9
     assert desc_dict[0]["name"] == "Type"
     assert desc_dict[0]["value"] == "IPMSM"
 
@@ -56,7 +59,7 @@ def test_desc_IPMSM():
     assert desc_dict[2]["value"] == 4
 
     assert desc_dict[3]["name"] == "Topology"
-    assert desc_dict[3]["value"] == "Inner Rotor"
+    assert desc_dict[3]["value"] == "Internal Rotor"
 
     assert desc_dict[4]["name"] == "qs"
     assert desc_dict[4]["value"] == 3
@@ -67,10 +70,16 @@ def test_desc_IPMSM():
     assert desc_dict[6]["name"] == "Mmachine"
     assert desc_dict[6]["value"] == pytest.approx(33.37, rel=0.1)
 
+    assert desc_dict[7]["name"] == "Mwind"
+    assert desc_dict[7]["value"] == pytest.approx(4.0014, rel=0.1)
+
+    assert desc_dict[8]["name"] == "Mmag"
+    assert desc_dict[8]["value"] == pytest.approx(1.235, rel=0.1)
+
 
 @pytest.mark.outer_rotor
 def test_desc_Outer_Rotor():
-    """Check that the description with Outer Rotor is correct"""
+    """Check that the description with External Rotor is correct"""
 
     test_obj = MachineIPMSM()
     test_obj.stator = LamSlotWind(is_stator=True, is_internal=True)
@@ -86,9 +95,11 @@ def test_desc_Outer_Rotor():
 
     desc_dict = test_obj.comp_desc_dict()
     assert desc_dict[3]["name"] == "Topology"
-    assert desc_dict[3]["value"] == "Outer Rotor"
+    assert desc_dict[3]["value"] == "External Rotor"
 
 
 if __name__ == "__main__":
-    # test_desc_IPMSM()
+    test_desc_IPMSM()
     test_desc_SCIM()
+    test_desc_Outer_Rotor()
+    print("Done")

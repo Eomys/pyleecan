@@ -204,6 +204,7 @@ class Test_SlotW14_meth(object):
         with pytest.raises(S14_Rbo1CheckError) as context:
             lam.slot.check()
 
+
 if __name__ == "__main__":
     a = Test_SlotW14_meth()
     for ii, test_dict in enumerate(slotW14_test):

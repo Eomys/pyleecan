@@ -164,7 +164,9 @@ class SlotCirc(Slot):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, W0=0.01, H0=0.03, Zs=36, init_dict=None, init_str=None):
+    def __init__(
+        self, W0=0.01, H0=0.03, Zs=36, wedge_mat=None, init_dict=None, init_str=None
+    ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -186,11 +188,13 @@ class SlotCirc(Slot):
                 H0 = init_dict["H0"]
             if "Zs" in list(init_dict.keys()):
                 Zs = init_dict["Zs"]
+            if "wedge_mat" in list(init_dict.keys()):
+                wedge_mat = init_dict["wedge_mat"]
         # Set the properties (value check and convertion are done in setter)
         self.W0 = W0
         self.H0 = H0
         # Call Slot init
-        super(SlotCirc, self).__init__(Zs=Zs)
+        super(SlotCirc, self).__init__(Zs=Zs, wedge_mat=wedge_mat)
         # The class is frozen (in Slot init), for now it's impossible to
         # add new properties
 

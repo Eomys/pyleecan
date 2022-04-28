@@ -9,6 +9,7 @@ def comp_axes(
     is_antiper_a=None,
     per_t=None,
     is_antiper_t=None,
+    is_periodicity_rotor=False,
 ):
     """Compute simulation axes such as time / angle / phase axes, with or without periodicities
     and including normalizations
@@ -35,6 +36,8 @@ def comp_axes(
         time periodicity
     is_antiper_t : bool
         if the time axis is antiperiodic
+    is_periodicity_rotor: bool
+        True to consider rotor periodicity over time instead of stator
 
     Returns
     -------
@@ -81,11 +84,14 @@ def comp_axes(
                 is_antiper_a_0,
                 per_t_0,
                 is_antiper_t_0,
-            ) = output.get_machine_periodicity()
+            ) = output.get_machine_periodicity(is_rotor_ref=is_periodicity_rotor)
         else:
             # Compute time and space (anti-)periodicities from the machine
             per_a_0, is_antiper_a_0 = machine.comp_periodicity_spatial()
-            per_t_0, is_antiper_t_0, _, _ = machine.comp_periodicity_time()
+            if is_periodicity_rotor:
+                _, _, per_t_0, is_antiper_t_0 = machine.comp_periodicity_time()
+            else:
+                per_t_0, is_antiper_t_0, _, _ = machine.comp_periodicity_time()
 
     if is_periodicity_t is None or is_periodicity_t:
         # Enforce None values to machine time periodicity

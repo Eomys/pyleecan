@@ -59,9 +59,9 @@ def comp_desc_dict(self):
     )
     # is_inner_rotor
     if self.rotor.is_internal:
-        inner = "Inner Rotor"
+        inner = "Internal Rotor"
     else:
-        inner = "Outer Rotor"
+        inner = "External Rotor"
     desc_dict.append(
         dict(
             {
@@ -107,10 +107,13 @@ def comp_desc_dict(self):
             }
         )
     )
-    # Machine mass
+
+    # Machine masses
     try:
-        Mmach = self.comp_masses()["All"]
+        M_dict = self.comp_masses()
+        Mmach = M_dict["All"]
     except Exception:
+        M_dict = None
         Mmach = None
     desc_dict.append(
         dict(
@@ -125,5 +128,41 @@ def comp_desc_dict(self):
             }
         )
     )
+
+    # Stator winding mass
+    if M_dict is not None and "Stator-0" in M_dict and "Mwind" in M_dict["Stator-0"]:
+        Mwind = M_dict["Stator-0"]["Mwind"]
+    else:
+        Mwind = None
+    desc_dict.append(
+        dict(
+            {
+                "name": "Mwind",
+                "path": "machine.comp_masses()['Stator-0']['Mwind']",
+                "verbose": "Stator winding mass",
+                "type": float,
+                "unit": "kg",
+                "is_input": False,
+                "value": Mwind,
+            }
+        )
+    )
+
+    # Magnet mass only if necessary
+    if M_dict is not None and "Rotor-0" in M_dict and "Mmag" in M_dict["Rotor-0"]:
+        Mmag = M_dict["Rotor-0"]["Mmag"]
+        desc_dict.append(
+            dict(
+                {
+                    "name": "Mmag",
+                    "path": "machine.comp_masses()['Rotor-0']['Mmag']",
+                    "verbose": "Rotor magnet mass",
+                    "type": float,
+                    "unit": "kg",
+                    "is_input": False,
+                    "value": Mmag,
+                }
+            )
+        )
 
     return desc_dict

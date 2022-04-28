@@ -78,15 +78,20 @@ try:
 except ImportError as error:
     comp_masses = error
 
+try:
+    from ..Methods.Machine.LamSquirrelCage.plot_schematics_scr import (
+        plot_schematics_scr,
+    )
+except ImportError as error:
+    plot_schematics_scr = error
+
+try:
+    from ..Methods.Machine.LamSquirrelCage.plot_side import plot_side
+except ImportError as error:
+    plot_side = error
+
 
 from ._check import InitUnKnowClassError
-from .Material import Material
-from .Winding import Winding
-from .Slot import Slot
-from .Hole import Hole
-from .Notch import Notch
-from .Skew import Skew
-from .Bore import Bore
 
 
 class LamSquirrelCage(LamSlotWind):
@@ -220,6 +225,29 @@ class LamSquirrelCage(LamSlotWind):
         )
     else:
         comp_masses = comp_masses
+    # cf Methods.Machine.LamSquirrelCage.plot_schematics_scr
+    if isinstance(plot_schematics_scr, ImportError):
+        plot_schematics_scr = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use LamSquirrelCage method plot_schematics_scr: "
+                    + str(plot_schematics_scr)
+                )
+            )
+        )
+    else:
+        plot_schematics_scr = plot_schematics_scr
+    # cf Methods.Machine.LamSquirrelCage.plot_side
+    if isinstance(plot_side, ImportError):
+        plot_side = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use LamSquirrelCage method plot_side: " + str(plot_side)
+                )
+            )
+        )
+    else:
+        plot_side = plot_side
     # save and copy methods are available in all object
     save = save
     copy = copy
@@ -504,6 +532,7 @@ class LamSquirrelCage(LamSlotWind):
             )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
+            Material = import_class("pyleecan.Classes", "Material", "ring_mat")
             value = Material()
         check_var("ring_mat", value, "Material")
         self._ring_mat = value

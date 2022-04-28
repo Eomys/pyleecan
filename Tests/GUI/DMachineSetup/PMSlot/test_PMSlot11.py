@@ -71,6 +71,18 @@ class TestPMSlot11(object):
         assert self.widget.slot.W0 == pi / 4
         assert self.test_obj.slot.W0 == pi / 4
 
+    def test_change_unit_W0(self):
+        """Check that the value of W0 is updated if the unit is changed"""
+        assert self.widget.lf_W0.value() == 0.13
+        assert self.widget.c_W0_unit.currentText() == "rad"
+
+        self.widget.c_W0_unit.setCurrentIndex(1)
+
+        assert self.widget.c_W0_unit.currentText() == "deg"
+        # Only objet is updated, widget value is the same
+        assert self.widget.lf_W0.value() == 0.13
+        assert self.test_obj.slot.W0 == pytest.approx(0.13 * pi / 180, rel=0.1)
+
     def test_set_Wmag(self):
         """Check that the Widget allow to update Wmag"""
         # Check Unit
@@ -95,6 +107,18 @@ class TestPMSlot11(object):
 
         assert self.widget.slot.Wmag == pi / 4
         assert self.test_obj.slot.Wmag == pi / 4
+
+    def test_change_unit_Wmag(self):
+        """Check that the value of Wmag is updated if the unit is changed"""
+        assert self.widget.lf_Wmag.value() == 0.14
+        assert self.widget.c_Wmag_unit.currentText() == "rad"
+
+        self.widget.c_Wmag_unit.setCurrentIndex(1)
+
+        assert self.widget.c_Wmag_unit.currentText() == "deg"
+        # Only objet is updated, widget value is the same
+        assert self.widget.lf_Wmag.value() == 0.14
+        assert self.test_obj.slot.Wmag == pytest.approx(0.14 * pi / 180, rel=0.1)
 
     def test_set_H0(self):
         """Check that the Widget allow to update H0"""

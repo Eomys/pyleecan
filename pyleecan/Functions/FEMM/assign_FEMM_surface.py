@@ -30,6 +30,7 @@ def assign_FEMM_surface(femm, surf, prop, FEMM_dict, machine):
         dictionary containing the main parameters of FEMM
     machine : Machine
         Machine to draw
+
     Returns
     -------
     None
@@ -39,6 +40,8 @@ def assign_FEMM_surface(femm, surf, prop, FEMM_dict, machine):
     label = surf.label
     label_dict = decode_label(label)
     mesh_dict = get_mesh_param(label_dict, FEMM_dict)
+
+    group = mesh_dict["group"]
 
     Clabel = 0  # By default no circuit
     Ntcoil = 0  # By default no circuit
@@ -86,6 +89,15 @@ def assign_FEMM_surface(femm, surf, prop, FEMM_dict, machine):
                     mag = mag + 180
                 if mag_obj.type_magnetization == 3:  # Tangential
                     mag = mag - 90
+
+                # Assign magnet group
+                nb_hole = int(len(machine.rotor.hole))
+                nb_mag_per_hole = len(machine.rotor.hole[0].get_magnet_dict())
+                grp_id = (
+                    label_dict["S_id"] * nb_hole * nb_mag_per_hole + label_dict["T_id"]
+                )
+                group = group[grp_id]
+
             else:
                 raise NotImplementedYetError(
                     "Only parallele magnetization are available for HoleMagnet found: "
@@ -93,6 +105,7 @@ def assign_FEMM_surface(femm, surf, prop, FEMM_dict, machine):
                 )
         elif MAG_LAB in label_dict["surf_type"]:  # LamSlotMag
             mag_obj = get_obj_from_label(machine, label_dict=label_dict)
+
             # type_magnetization: 0 for radial, 1 for parallel, 2 for Hallbach
             if mag_obj.type_magnetization == 0 and (label_dict["S_id"] % 2) == 0:
                 mag = "theta"  # Radial North pole magnet
@@ -112,12 +125,17 @@ def assign_FEMM_surface(femm, surf, prop, FEMM_dict, machine):
                 mag = (
                     angle(point_ref) * 180 / pi + 180 - 90
                 )  # Tangential South pole magnet
+
+            # Assign magnet group (assuming one magnet per pole)
+            group = group[label_dict["S_id"]]
+
         elif VENT_LAB in label_dict["surf_type"]:
             vent_obj = get_obj_from_label(machine, label_dict=label_dict)
             prop = "Air"
         elif HOLEV_LAB in label_dict["surf_type"]:
             hole_obj = get_obj_from_label(machine, label_dict=label_dict)
             prop = "Air"
+
         # Set the surface property
         femm.mi_setblockprop(
             prop,
@@ -125,7 +143,7 @@ def assign_FEMM_surface(femm, surf, prop, FEMM_dict, machine):
             mesh_dict["meshsize"],
             Clabel,
             mag,
-            mesh_dict["group"],
+            group,
             Ntcoil,
         )
         femm.mi_clearselected()

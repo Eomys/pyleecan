@@ -78,6 +78,11 @@ class SMachineDimension(Ui_SMachineDimension, QWidget):
         self.w_mat_1.setText("Frame Material")
         self.w_mat_1.def_mat = "M400-50A"
 
+        # Make sure that the Shaft/Frame is cleaned for External Rotor
+        if not machine.rotor.is_internal:
+            machine.shaft = None
+            machine.frame = None
+
         if (
             machine.frame is None
             or machine.frame.Rint is None
@@ -369,14 +374,12 @@ class SMachineDimension(Ui_SMachineDimension, QWidget):
             if machine.rotor.Rext <= machine.rotor.Rint:
                 return "The Rotor can't have an internal radius greater than the external one !"
             if machine.rotor.is_internal and machine.stator.Rint <= machine.rotor.Rext:
-                return (
-                    "For inner rotor machine, you must have: Rotor.Rext < Stator.Rint !"
-                )
+                return "For Internal Rotor machine, you must have: Rotor.Rext < Stator.Rint !"
             if (
                 not machine.rotor.is_internal
                 and machine.stator.Rext >= machine.rotor.Rint
             ):
-                return "For external rotor machine, you must have: Stator.Rext < Rotor.Rint !"
+                return "For External Rotor machine, you must have: Stator.Rext < Rotor.Rint !"
         except Exception as e:
             return str(e)
 

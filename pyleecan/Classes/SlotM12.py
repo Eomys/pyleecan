@@ -202,6 +202,7 @@ class SlotM12(Slot):
         Wmag=0.0122,
         Hmag=0.001,
         Zs=36,
+        wedge_mat=None,
         init_dict=None,
         init_str=None,
     ):
@@ -230,13 +231,15 @@ class SlotM12(Slot):
                 Hmag = init_dict["Hmag"]
             if "Zs" in list(init_dict.keys()):
                 Zs = init_dict["Zs"]
+            if "wedge_mat" in list(init_dict.keys()):
+                wedge_mat = init_dict["wedge_mat"]
         # Set the properties (value check and convertion are done in setter)
         self.W0 = W0
         self.H0 = H0
         self.Wmag = Wmag
         self.Hmag = Hmag
         # Call Slot init
-        super(SlotM12, self).__init__(Zs=Zs)
+        super(SlotM12, self).__init__(Zs=Zs, wedge_mat=wedge_mat)
         # The class is frozen (in Slot init), for now it's impossible to
         # add new properties
 

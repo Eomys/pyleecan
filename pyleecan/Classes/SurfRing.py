@@ -69,7 +69,6 @@ except ImportError as error:
 
 
 from ._check import InitUnKnowClassError
-from .Surface import Surface
 
 
 class SurfRing(Surface):
@@ -365,6 +364,7 @@ class SurfRing(Surface):
             )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
+            Surface = import_class("pyleecan.Classes", "Surface", "out_surf")
             value = Surface()
         check_var("out_surf", value, "Surface")
         self._out_surf = value
@@ -401,6 +401,7 @@ class SurfRing(Surface):
             )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
+            Surface = import_class("pyleecan.Classes", "Surface", "in_surf")
             value = Surface()
         check_var("in_surf", value, "Surface")
         self._in_surf = value

@@ -22,12 +22,14 @@ try:
 except ImportError as error:
     get_ref_simu_index = error
 
+try:
+    from ..Methods.Simulation.VarLoad.get_OP_matrix import get_OP_matrix
+except ImportError as error:
+    get_OP_matrix = error
+
 
 from numpy import array, array_equal
 from ._check import InitUnKnowClassError
-from .DataKeeper import DataKeeper
-from .VarSimu import VarSimu
-from .Post import Post
 
 
 class VarLoad(VarSimu):
@@ -36,6 +38,7 @@ class VarLoad(VarSimu):
     VERSION = 1
     NAME = "Variable Load"
 
+    # Check ImportError to remove unnecessary dependencies in unused method
     # cf Methods.Simulation.VarLoad.get_ref_simu_index
     if isinstance(get_ref_simu_index, ImportError):
         get_ref_simu_index = property(
@@ -48,6 +51,17 @@ class VarLoad(VarSimu):
         )
     else:
         get_ref_simu_index = get_ref_simu_index
+    # cf Methods.Simulation.VarLoad.get_OP_matrix
+    if isinstance(get_OP_matrix, ImportError):
+        get_OP_matrix = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use VarLoad method get_OP_matrix: " + str(get_OP_matrix)
+                )
+            )
+        )
+    else:
+        get_OP_matrix = get_OP_matrix
     # save and copy methods are available in all object
     save = save
     copy = copy
@@ -58,8 +72,7 @@ class VarLoad(VarSimu):
         self,
         OP_matrix=None,
         type_OP_matrix=0,
-        is_torque=False,
-        is_power=False,
+        is_output_power=True,
         name="",
         desc="",
         datakeeper_list=-1,
@@ -71,6 +84,7 @@ class VarLoad(VarSimu):
         postproc_list=-1,
         pre_keeper_postproc_list=None,
         post_keeper_postproc_list=None,
+        is_reuse_LUT=True,
         init_dict=None,
         init_str=None,
     ):
@@ -93,10 +107,8 @@ class VarLoad(VarSimu):
                 OP_matrix = init_dict["OP_matrix"]
             if "type_OP_matrix" in list(init_dict.keys()):
                 type_OP_matrix = init_dict["type_OP_matrix"]
-            if "is_torque" in list(init_dict.keys()):
-                is_torque = init_dict["is_torque"]
-            if "is_power" in list(init_dict.keys()):
-                is_power = init_dict["is_power"]
+            if "is_output_power" in list(init_dict.keys()):
+                is_output_power = init_dict["is_output_power"]
             if "name" in list(init_dict.keys()):
                 name = init_dict["name"]
             if "desc" in list(init_dict.keys()):
@@ -119,11 +131,12 @@ class VarLoad(VarSimu):
                 pre_keeper_postproc_list = init_dict["pre_keeper_postproc_list"]
             if "post_keeper_postproc_list" in list(init_dict.keys()):
                 post_keeper_postproc_list = init_dict["post_keeper_postproc_list"]
+            if "is_reuse_LUT" in list(init_dict.keys()):
+                is_reuse_LUT = init_dict["is_reuse_LUT"]
         # Set the properties (value check and convertion are done in setter)
         self.OP_matrix = OP_matrix
         self.type_OP_matrix = type_OP_matrix
-        self.is_torque = is_torque
-        self.is_power = is_power
+        self.is_output_power = is_output_power
         # Call VarSimu init
         super(VarLoad, self).__init__(
             name=name,
@@ -137,6 +150,7 @@ class VarLoad(VarSimu):
             postproc_list=postproc_list,
             pre_keeper_postproc_list=pre_keeper_postproc_list,
             post_keeper_postproc_list=post_keeper_postproc_list,
+            is_reuse_LUT=is_reuse_LUT,
         )
         # The class is frozen (in VarSimu init), for now it's impossible to
         # add new properties
@@ -155,8 +169,7 @@ class VarLoad(VarSimu):
             + linesep
         )
         VarLoad_str += "type_OP_matrix = " + str(self.type_OP_matrix) + linesep
-        VarLoad_str += "is_torque = " + str(self.is_torque) + linesep
-        VarLoad_str += "is_power = " + str(self.is_power) + linesep
+        VarLoad_str += "is_output_power = " + str(self.is_output_power) + linesep
         return VarLoad_str
 
     def __eq__(self, other):
@@ -172,9 +185,7 @@ class VarLoad(VarSimu):
             return False
         if other.type_OP_matrix != self.type_OP_matrix:
             return False
-        if other.is_torque != self.is_torque:
-            return False
-        if other.is_power != self.is_power:
+        if other.is_output_power != self.is_output_power:
             return False
         return True
 
@@ -193,10 +204,8 @@ class VarLoad(VarSimu):
             diff_list.append(name + ".OP_matrix")
         if other._type_OP_matrix != self._type_OP_matrix:
             diff_list.append(name + ".type_OP_matrix")
-        if other._is_torque != self._is_torque:
-            diff_list.append(name + ".is_torque")
-        if other._is_power != self._is_power:
-            diff_list.append(name + ".is_power")
+        if other._is_output_power != self._is_output_power:
+            diff_list.append(name + ".is_output_power")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -210,8 +219,7 @@ class VarLoad(VarSimu):
         S += super(VarLoad, self).__sizeof__()
         S += getsizeof(self.OP_matrix)
         S += getsizeof(self.type_OP_matrix)
-        S += getsizeof(self.is_torque)
-        S += getsizeof(self.is_power)
+        S += getsizeof(self.is_output_power)
         return S
 
     def as_dict(self, type_handle_ndarray=0, keep_function=False, **kwargs):
@@ -245,8 +253,7 @@ class VarLoad(VarSimu):
                     "Unknown type_handle_ndarray: " + str(type_handle_ndarray)
                 )
         VarLoad_dict["type_OP_matrix"] = self.type_OP_matrix
-        VarLoad_dict["is_torque"] = self.is_torque
-        VarLoad_dict["is_power"] = self.is_power
+        VarLoad_dict["is_output_power"] = self.is_output_power
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         VarLoad_dict["__class__"] = "VarLoad"
@@ -257,8 +264,7 @@ class VarLoad(VarSimu):
 
         self.OP_matrix = None
         self.type_OP_matrix = None
-        self.is_torque = None
-        self.is_power = None
+        self.is_output_power = None
         # Set to None the properties inherited from VarSimu
         super(VarLoad, self)._set_None()
 
@@ -307,37 +313,19 @@ class VarLoad(VarSimu):
         """,
     )
 
-    def _get_is_torque(self):
-        """getter of is_torque"""
-        return self._is_torque
+    def _get_is_output_power(self):
+        """getter of is_output_power"""
+        return self._is_output_power
 
-    def _set_is_torque(self, value):
-        """setter of is_torque"""
-        check_var("is_torque", value, "bool")
-        self._is_torque = value
+    def _set_is_output_power(self, value):
+        """setter of is_output_power"""
+        check_var("is_output_power", value, "bool")
+        self._is_output_power = value
 
-    is_torque = property(
-        fget=_get_is_torque,
-        fset=_set_is_torque,
-        doc=u"""True if the Torque is defined in OP_matrix
-
-        :Type: bool
-        """,
-    )
-
-    def _get_is_power(self):
-        """getter of is_power"""
-        return self._is_power
-
-    def _set_is_power(self, value):
-        """setter of is_power"""
-        check_var("is_power", value, "bool")
-        self._is_power = value
-
-    is_power = property(
-        fget=_get_is_power,
-        fset=_set_is_power,
-        doc=u"""True if the Power is defined in OP_matrix
+    is_output_power = property(
+        fget=_get_is_output_power,
+        fset=_set_is_output_power,
+        doc=u"""True if power given in OP_matrix is the output power, False if it is the input power
 
         :Type: bool
         """,

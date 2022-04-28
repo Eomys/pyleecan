@@ -31,6 +31,8 @@ def draw_FEMM(
     transform_list=[],
     rotor_dxf=None,
     stator_dxf=None,
+    is_fast_draw=False,
+    T_mag=20,
 ):
     """Draws and assigns the property of the machine in FEMM
 
@@ -80,12 +82,20 @@ def draw_FEMM(
         To use a dxf version of the rotor instead of build_geometry
     stator_dxf : DXFImport
         To use a dxf version of the stator instead of build_geometry
+    is_fast_draw : bool
+        True to use lamination symetry to accelerate the drawing of the machine
+    T_mag: float
+        Permanent magnet temperature [deg Celsius]
 
     Returns
     -------
     FEMM_dict : dict
         dictionary containing the main parameters of FEMM (including circuits and materials)
     """
+
+    if transform_list not in [None, list()] and is_fast_draw:
+        is_fast_draw = False
+        output.get_logger().debug("Removing fast_draw for transform_list in FEMM")
 
     # Initialization from output for readibility
     Is = output.elec.Is  # Stator currents waveforms
@@ -94,16 +104,27 @@ def draw_FEMM(
 
     # Computing parameter (element size, arcspan...) needed to define the simulation
     FEMM_dict = comp_FEMM_dict(
-        machine, kgeo_fineness, kmesh_fineness, type_calc_leakage
+        machine,
+        kgeo_fineness,
+        kmesh_fineness,
+        T_mag,
+        type_calc_leakage,
+        sym,
     )
-    FEMM_dict.update(user_FEMM_dict)  # Overwrite some values if needed
+    # Overwrite some values if needed
+    for key, val in user_FEMM_dict.items():
+        for key1, val1 in val.items():
+            if isinstance(val1, dict):
+                FEMM_dict[key][key1].update(val1)
+            else:
+                FEMM_dict[key][key1] = val1
 
     # The package must be initialized with the openfemm command.
     try:
         femm.openfemm(1)  # 1 == open in background, 0 == open normally
     except Exception as e:
         raise FEMMError(
-            "ERROR: Unable to open FEMM, please check that FEMM is correctly installed\n"
+            "Unable to open FEMM, please check that FEMM is correctly installed\n"
             + str(e)
         )
 
@@ -163,6 +184,7 @@ def draw_FEMM(
             is_mmfr,
             type_BH_stator,
             type_BH_rotor,
+            is_fast_draw,
         )
 
     # List of the Non lamination related surfaces

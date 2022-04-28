@@ -168,13 +168,13 @@ try:
 except ImportError as error:
     get_surfaces_closing = error
 
+try:
+    from ..Methods.Machine.Lamination.comp_periodicity_geo import comp_periodicity_geo
+except ImportError as error:
+    comp_periodicity_geo = error
+
 
 from ._check import InitUnKnowClassError
-from .Material import Material
-from .Hole import Hole
-from .Notch import Notch
-from .Skew import Skew
-from .Bore import Bore
 
 
 class Lamination(FrozenClass):
@@ -503,6 +503,18 @@ class Lamination(FrozenClass):
         )
     else:
         get_surfaces_closing = get_surfaces_closing
+    # cf Methods.Machine.Lamination.comp_periodicity_geo
+    if isinstance(comp_periodicity_geo, ImportError):
+        comp_periodicity_geo = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Lamination method comp_periodicity_geo: "
+                    + str(comp_periodicity_geo)
+                )
+            )
+        )
+    else:
+        comp_periodicity_geo = comp_periodicity_geo
     # save and copy methods are available in all object
     save = save
     copy = copy
@@ -950,6 +962,7 @@ class Lamination(FrozenClass):
             )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
+            Material = import_class("pyleecan.Classes", "Material", "mat_type")
             value = Material()
         check_var("mat_type", value, "Material")
         self._mat_type = value
@@ -1200,6 +1213,7 @@ class Lamination(FrozenClass):
             class_obj = import_class("pyleecan.Classes", value.get("__class__"), "skew")
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
+            Skew = import_class("pyleecan.Classes", "Skew", "skew")
             value = Skew()
         check_var("skew", value, "Skew")
         self._skew = value
@@ -1276,6 +1290,7 @@ class Lamination(FrozenClass):
             class_obj = import_class("pyleecan.Classes", value.get("__class__"), "bore")
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
+            Bore = import_class("pyleecan.Classes", "Bore", "bore")
             value = Bore()
         check_var("bore", value, "Bore")
         self._bore = value

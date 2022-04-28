@@ -5,6 +5,7 @@ import sys
 import gmsh
 from os.path import splitext
 
+
 def gen_3D_mesh(
     lamination,
     save_path="Lamination.msh",
@@ -146,5 +147,5 @@ def gen_3D_mesh(
         gmsh.write(save_path)
 
     # Save and close
-    
+
     gmsh.finalize()

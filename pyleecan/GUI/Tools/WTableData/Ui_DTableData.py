@@ -67,6 +67,21 @@ class Ui_DTableData(object):
 
         self.verticalLayout.addWidget(self.w_tab)
 
+        self.horizontalLayout_2 = QHBoxLayout()
+        self.horizontalLayout_2.setObjectName(u"horizontalLayout_2")
+        self.horizontalSpacer = QSpacerItem(
+            40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum
+        )
+
+        self.horizontalLayout_2.addItem(self.horizontalSpacer)
+
+        self.b_plot = QPushButton(DTableData)
+        self.b_plot.setObjectName(u"b_plot")
+
+        self.horizontalLayout_2.addWidget(self.b_plot)
+
+        self.verticalLayout.addLayout(self.horizontalLayout_2)
+
         self.b_close = QDialogButtonBox(DTableData)
         self.b_close.setObjectName(u"b_close")
         self.b_close.setOrientation(Qt.Horizontal)
@@ -94,7 +109,10 @@ class Ui_DTableData(object):
             QCoreApplication.translate("DTableData", u"Export to csv", None)
         )
         self.b_import.setText(
-            QCoreApplication.translate("DTableData", u"Import from csv", None)
+            QCoreApplication.translate("DTableData", u"Import from csv/xlsx", None)
+        )
+        self.b_plot.setText(
+            QCoreApplication.translate("DTableData", u"Preview Plot", None)
         )
 
     # retranslateUi

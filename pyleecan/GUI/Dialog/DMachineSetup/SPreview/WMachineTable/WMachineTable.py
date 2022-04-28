@@ -177,6 +177,7 @@ class WMachineTable(Ui_WMachineTable, QWidget):
                 type_calc_leakage=0,
                 path_save=None,
                 is_sliding_band=True,
+                is_fast_draw=True,
             )
             # Set the current
             update_FEMM_simulation(
@@ -199,7 +200,9 @@ class WMachineTable(Ui_WMachineTable, QWidget):
             )
             getLogger(GUI_LOG_NAME).error(err_msg)
             QMessageBox().critical(
-                self, self.tr("Error"), self.tr(err_msg),
+                self,
+                self.tr("Error"),
+                self.tr(err_msg),
             )
         femm.closefemm()
 
@@ -235,7 +238,9 @@ class WMachineTable(Ui_WMachineTable, QWidget):
             )
             getLogger(GUI_LOG_NAME).error(err_msg)
             QMessageBox().critical(
-                self, self.tr("Error"), self.tr(err_msg),
+                self,
+                self.tr("Error"),
+                self.tr(err_msg),
             )
 
     def draw_GMSH_3D(self):
@@ -260,7 +265,9 @@ class WMachineTable(Ui_WMachineTable, QWidget):
             )
             getLogger(GUI_LOG_NAME).error(err_msg)
             QMessageBox().critical(
-                self, self.tr("Error"), self.tr(err_msg),
+                self,
+                self.tr("Error"),
+                self.tr(err_msg),
             )
 
     def get_save_path(self, ext=".fem", file_type="FEMM (*.fem)"):

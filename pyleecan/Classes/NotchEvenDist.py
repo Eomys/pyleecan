@@ -29,7 +29,6 @@ except ImportError as error:
 
 
 from ._check import InitUnKnowClassError
-from .Slot import Slot
 
 
 class NotchEvenDist(Notch):
@@ -240,6 +239,7 @@ class NotchEvenDist(Notch):
             )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
+            Slot = import_class("pyleecan.Classes", "Slot", "notch_shape")
             value = Slot()
         check_var("notch_shape", value, "Slot")
         self._notch_shape = value

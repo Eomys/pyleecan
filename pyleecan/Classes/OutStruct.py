@@ -16,7 +16,6 @@ from ..Functions.Load.import_class import import_class
 from ._frozen import FrozenClass
 
 from ._check import InitUnKnowClassError
-from .MeshSolution import MeshSolution
 
 
 class OutStruct(FrozenClass):
@@ -129,7 +128,7 @@ class OutStruct(FrozenClass):
             for key in self.axes_dict:
                 diff_list.extend(
                     self.axes_dict[key].compare(
-                        other.axes_dict[key], name=name + ".axes_dict"
+                        other.axes_dict[key], name=name + ".axes_dict[" + str(key) + "]"
                     )
                 )
         if other._logger_name != self._logger_name:
@@ -292,6 +291,9 @@ class OutStruct(FrozenClass):
             )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
+            MeshSolution = import_class(
+                "pyleecan.Classes", "MeshSolution", "meshsolution"
+            )
             value = MeshSolution()
         check_var("meshsolution", value, "MeshSolution")
         self._meshsolution = value

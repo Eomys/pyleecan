@@ -256,6 +256,7 @@ class SlotW27(Slot):
         W3=0.003,
         is_trap_wind=False,
         Zs=36,
+        wedge_mat=None,
         init_dict=None,
         init_str=None,
     ):
@@ -292,6 +293,8 @@ class SlotW27(Slot):
                 is_trap_wind = init_dict["is_trap_wind"]
             if "Zs" in list(init_dict.keys()):
                 Zs = init_dict["Zs"]
+            if "wedge_mat" in list(init_dict.keys()):
+                wedge_mat = init_dict["wedge_mat"]
         # Set the properties (value check and convertion are done in setter)
         self.H0 = H0
         self.H1 = H1
@@ -302,7 +305,7 @@ class SlotW27(Slot):
         self.W3 = W3
         self.is_trap_wind = is_trap_wind
         # Call Slot init
-        super(SlotW27, self).__init__(Zs=Zs)
+        super(SlotW27, self).__init__(Zs=Zs, wedge_mat=wedge_mat)
         # The class is frozen (in Slot init), for now it's impossible to
         # add new properties
 

@@ -299,22 +299,80 @@ class Test_plot_schematics(object):
     @pytest.mark.parametrize("test_dict", slot_test)
     def test_slot(self, test_dict):
         """Slot Schematics"""
-        file_name = type(test_dict["test_obj"]).__name__ + ".png"
+        ## Empty
+        file_name = type(test_dict["test_obj"]).__name__ + "_empty.png"
         file_path = join(SCHEMATICS_PATH, file_name)
         # Delete previous plot
         if isfile(file_path):
             remove(file_path)
         # Plot / Save schematics
+        print("Generating " + file_name)
         test_obj = test_dict["test_obj"]
         test_obj.plot_schematics(
             is_default=True,
             is_add_point_label=False,
             is_add_schematics=True,
             is_add_main_line=True,
-            type_add_active=test_dict["type_add_active"],
+            type_add_active=0,
             save_path=file_path,
             is_show_fig=False,
         )
+        if test_dict["type_add_active"] == 1:
+            ## Wind only
+            file_name = type(test_dict["test_obj"]).__name__ + "_wind.png"
+            file_path = join(SCHEMATICS_PATH, file_name)
+            # Delete previous plot
+            if isfile(file_path):
+                remove(file_path)
+            # Plot / Save schematics
+            print("Generating " + file_name)
+            test_obj = test_dict["test_obj"]
+            test_obj.plot_schematics(
+                is_default=True,
+                is_add_point_label=False,
+                is_add_schematics=True,
+                is_add_main_line=True,
+                type_add_active=1,
+                save_path=file_path,
+                is_show_fig=False,
+            )
+            ## Wind and Wedge
+            file_name = type(test_dict["test_obj"]).__name__ + "_wedge_full.png"
+            file_path = join(SCHEMATICS_PATH, file_name)
+            # Delete previous plot
+            if isfile(file_path):
+                remove(file_path)
+            # Plot / Save schematics
+            print("Generating " + file_name)
+            test_obj = test_dict["test_obj"]
+            test_obj.plot_schematics(
+                is_default=True,
+                is_add_point_label=False,
+                is_add_schematics=True,
+                is_add_main_line=True,
+                type_add_active=3,
+                save_path=file_path,
+                is_show_fig=False,
+            )
+        elif test_dict["type_add_active"] == 2:
+            ## Magnet only
+            file_name = type(test_dict["test_obj"]).__name__ + "_mag.png"
+            file_path = join(SCHEMATICS_PATH, file_name)
+            # Delete previous plot
+            if isfile(file_path):
+                remove(file_path)
+            # Plot / Save
+            print("Generating " + file_name)
+            test_obj = test_dict["test_obj"]
+            test_obj.plot_schematics(
+                is_default=True,
+                is_add_point_label=False,
+                is_add_schematics=True,
+                is_add_main_line=True,
+                type_add_active=2,
+                save_path=file_path,
+                is_show_fig=False,
+            )
 
     @pytest.mark.parametrize("test_dict", slot_test)
     def test_slot_point(self, test_dict):
@@ -339,9 +397,9 @@ class Test_plot_schematics(object):
 
 if __name__ == "__main__":
     a = Test_plot_schematics()
-    # a.test_slot(slot_test[-1])
+    # a.test_slot(slot_test[9])
     # a.test_slot_point(slot_test[-1])
     for slot in slot_test:
         a.test_slot(slot)
-        a.test_slot_point(slot)
+    #     a.test_slot_point(slot)
     print("Done")

@@ -79,8 +79,6 @@ except ImportError as error:
 
 
 from ._check import InitUnKnowClassError
-from .Magnet import Magnet
-from .Material import Material
 
 
 class HoleM52(HoleMag):
@@ -540,6 +538,7 @@ class HoleM52(HoleMag):
             )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
+            Magnet = import_class("pyleecan.Classes", "Magnet", "magnet_0")
             value = Magnet()
         check_var("magnet_0", value, "Magnet")
         self._magnet_0 = value

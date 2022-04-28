@@ -4,7 +4,7 @@ from matplotlib.patches import Patch
 from matplotlib.pyplot import axis, legend
 import matplotlib.pyplot as plt
 
-from ....Functions.labels import decode_label, WIND_LAB, BAR_LAB, LAM_LAB
+from ....Functions.labels import decode_label, WIND_LAB, BAR_LAB, LAM_LAB, WEDGE_LAB
 from ....Functions.Winding.find_wind_phase_color import find_wind_phase_color
 from ....Functions.Winding.gen_phase_list import gen_name
 from ....Functions.init_fig import init_fig
@@ -15,6 +15,9 @@ from ....Classes.Winding import Winding
 PHASE_COLORS = config_dict["PLOT"]["COLOR_DICT"]["PHASE_COLORS"]
 ROTOR_COLOR = config_dict["PLOT"]["COLOR_DICT"]["ROTOR_COLOR"]
 STATOR_COLOR = config_dict["PLOT"]["COLOR_DICT"]["STATOR_COLOR"]
+if "WEDGE_COLOR" not in config_dict["PLOT"]["COLOR_DICT"]:
+    config_dict["PLOT"]["COLOR_DICT"]["WEDGE_COLOR"] = "y"
+WEDGE_COLOR = config_dict["PLOT"]["COLOR_DICT"]["WEDGE_COLOR"]
 PLUS_HATCH = "++"
 MINUS_HATCH = ".."
 
@@ -112,6 +115,8 @@ def plot(
                         color=color, is_edge_only=is_edge_only, hatch=hatch
                     )
                 )
+        elif WEDGE_LAB in label_dict["surf_type"] and not is_lam_only:
+            patches.extend(surf.get_patches(WEDGE_COLOR, is_edge_only=is_edge_only))
         else:
             patches.extend(surf.get_patches(is_edge_only=is_edge_only))
 
@@ -157,6 +162,14 @@ def plot(
                 patch_leg.append(Patch(color=ROTOR_COLOR))
                 label_leg.append("Rotor")
                 axes.set_title("Rotor with Winding")
+            # Add the wedges legend only if needed
+            if (
+                self.slot is not None
+                and self.slot.wedge_mat is not None
+                and not is_lam_only
+            ):
+                patch_leg.append(Patch(color=WEDGE_COLOR))
+                label_leg.append("Wedge")
             # Add the winding legend only if needed
             if not is_lam_only:
                 if isinstance(self.winding, WindingSC):

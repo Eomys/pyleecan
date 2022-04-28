@@ -39,7 +39,10 @@ def get_input_list(self):
             input_list[ii].OP.Iq_ref = OP_matrix[ii, 2]
         if self.OP_matrix.shape[1] > 3:
             input_list[ii].OP.Tem_av_ref = OP_matrix[ii, 3]
-        if self.is_power and self.OP_matrix.shape[1] > 4:
-            input_list[ii].OP.Pem_av_ref = self.OP_matrix[ii, 4]
+        if self.OP_matrix.shape[1] > 4:
+            if self.is_output_power:
+                input_list[ii].OP.Pem_av_ref = OP_matrix[ii, 4]
+            else:
+                input_list[ii].OP.Pem_av_in = OP_matrix[ii, 4]
 
     return input_list

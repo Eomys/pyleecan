@@ -13,5 +13,4 @@ def comp_surface(self):
         Slot total surface [m**2]
 
     """
-
     return self.comp_surface_active() + self.comp_surface_opening()

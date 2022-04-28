@@ -5,3 +5,4 @@ toolbox,,DEAP toolbox,,deap.base.Toolbox,None,,,,Optimization,OptiGenAlg,solve,V
 ,,,,,,,,,,,create_toolbox,,,,
 ,,,,,,,,,,,check_optimization_input,,,,
 ,,,,,,,,,,,delete_toolbox,,,,
+,,,,,,,,,,,plot_pareto,,,,

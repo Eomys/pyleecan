@@ -101,7 +101,7 @@ def test_EM_SCIM_006_maxwell_current_enforced():
     B_maxwell.components["radial"].values = param_dict["XBr_m_alpha"][:, :-1, None]
     B_maxwell.components["tangential"].values = param_dict["XBt_m_alpha"][:, :-1, None]
 
-    assert_almost_equal(out.mag.Tem.values, param_dict["Tem_m"][jt0_m], decimal=1)
+    assert_almost_equal(out.mag.Tem.values, param_dict["Tem_m"][jt0_m], decimal=0)
 
     assert_almost_equal(
         B_maxwell.components["radial"].values,
@@ -192,27 +192,31 @@ def test_EM_SCIM_006_varslip():
     OP_matrix[:, 1] = U0_ref
     OP_matrix[:, 2] = np.linspace(0.2, 0, Nspeed)
 
-    simu.var_simu = VarLoadVoltage(OP_matrix=OP_matrix, type_OP_matrix=2)
+    simu.var_simu = VarLoadVoltage(
+        OP_matrix=OP_matrix, type_OP_matrix=2, is_keep_all_output=True
+    )
 
-    # Set values from V1
+    # Set values from Manatee V1
     Im = np.linspace(0, 200, 2)
-    ELUT_SCIM_006 = LUTslip(
-        R1=0.57,
-        L1=0.004,
-        T1_ref=20,
-        R2=0.1283,
-        L2=0.00387,
-        T2_ref=20,
-        Phi_m=0.0437 * Im,
-        I_m=Im,
+    Lm = 0.0437 * np.ones(2)
+    ELUT_SCIM_006 = LUTslip()
+    ELUT_SCIM_006.simu = Simu1(machine=SCIM_006)
+    ELUT_SCIM_006.simu.elec = Electrical(
+        eec=EEC_SCIM(
+            R1=0.57,
+            L1=0.004,
+            Tsta=20,
+            R2=0.1283,
+            L2=0.00387,
+            Trot=20,
+            Lm_table=Lm,
+            Im_table=Im,
+            type_skin_effect=0,
+        )
     )
 
     # Configure simulation
-    simu.elec = Electrical(
-        Tsta=20,
-        Trot=20,
-        eec=EEC_SCIM(LUT_enforced=ELUT_SCIM_006, type_skin_effect=0),
-    )
+    simu.elec = Electrical(Tsta=20, Trot=20, LUT_enforced=ELUT_SCIM_006)
 
     simu.mag = MagFEMM(
         is_periodicity_a=True,
@@ -220,12 +224,13 @@ def test_EM_SCIM_006_varslip():
         nb_worker=4,
         type_BH_rotor=2,
         type_BH_stator=2,
+        is_calc_torque_energy=False,
     )
 
     # Run simulation
     out = simu.run()
 
-    Tem_eec = np.array([out_ii.elec.Tem_av_ref for out_ii in out.output_list])
+    Tem_eec = np.array([out_ii.elec.Tem_av for out_ii in out.output_list])
     Tem_fem = np.array([out_ii.mag.Tem_av for out_ii in out.output_list])
 
     assert_almost_equal(Tem_eec, 1.05 * Tem_fem, decimal=0)
@@ -233,10 +238,7 @@ def test_EM_SCIM_006_varslip():
     if is_show_fig:
         plot_2D(
             [[out_ii.elec.OP.slip_ref for out_ii in out.output_list]],
-            [
-                [out_ii.elec.Tem_av_ref for out_ii in out.output_list],
-                [out_ii.mag.Tem_av for out_ii in out.output_list],
-            ],
+            [Tem_eec, Tem_fem],
             xlabel="Mechanical slip",
             ylabel="Average torque [Nm]",
             legend_list=["EEC", "FEMM"],
@@ -248,4 +250,5 @@ def test_EM_SCIM_006_varslip():
 if __name__ == "__main__":
 
     out = test_EM_SCIM_006_maxwell_current_enforced()
-    # out = test_EM_SCIM_006_varslip()
+    out = test_EM_SCIM_006_varslip()
+    print("Done")

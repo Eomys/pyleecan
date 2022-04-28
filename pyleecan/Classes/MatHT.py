@@ -35,7 +35,7 @@ class MatHT(FrozenClass):
         lambda_y=1,
         lambda_z=1,
         Cp=1,
-        alpha=0.00393,
+        alpha=0,
         init_dict=None,
         init_str=None,
     ):

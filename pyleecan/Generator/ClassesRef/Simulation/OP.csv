@@ -1,5 +1,7 @@
 Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
 N0,rpm,Rotor speed,1,float,None,,,,Simulation,,get_machine_from_parent,VERSION,1,Define the Operating Point of the simulation
 felec,Hz,Electrical Frequency,1,float,None,,,,,,,,,
-Tem_av_ref,N.m,Theorical Average Electromagnetic torque,,float,None,,,,,,,,,
-Pem_av_ref,W,Theorical Average Electromagnetic Power,,float,None,,,,,,,,,
+Tem_av_ref,N.m,Output average electromagnetic torque,,float,None,,,,,,,,,
+Pem_av_ref,W,Output average Electromagnetic Power,,float,None,,,,,,,,,
+Pem_av_in,W,Input average power (e.g. for generator mode),,float,None,,,,,,,,,
+efficiency,,Efficiency,,float,None,,,,,,,,,

@@ -509,7 +509,12 @@
             "comp_surface",
             "comp_width",
             "plot",
-            "plot_schematics"
+            "plot_schematics",
+            "comp_width_wire",
+            "comp_height_wire",
+            "comp_nb_circumferential_wire",
+            "comp_nb_radial_wire",
+            "is_round_wire"
         ],
         "mother": "Conductor",
         "name": "CondType11",
@@ -607,7 +612,12 @@
             "comp_surface",
             "comp_width",
             "plot",
-            "plot_schematics"
+            "plot_schematics",
+            "comp_width_wire",
+            "comp_height_wire",
+            "comp_nb_circumferential_wire",
+            "comp_nb_radial_wire",
+            "is_round_wire"
         ],
         "mother": "Conductor",
         "name": "CondType12",
@@ -661,6 +671,90 @@
             }
         ]
     },
+    "CondType13": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "parallel stranded conductor consisting of at least a single round wire",
+        "is_internal": false,
+        "methods": [
+            "comp_surface_active",
+            "comp_height",
+            "comp_surface",
+            "comp_width",
+            "plot",
+            "plot_schematics",
+            "comp_width_wire",
+            "comp_height_wire",
+            "comp_nb_circumferential_wire",
+            "comp_nb_radial_wire",
+            "is_round_wire"
+        ],
+        "mother": "Conductor",
+        "name": "CondType13",
+        "package": "Machine",
+        "path": "pyleecan/Generator/ClassesRef/Machine/CondType13.csv",
+        "properties": [
+            {
+                "desc": "cf schematics, single wire diameter without insulation [m]",
+                "max": "",
+                "min": "0",
+                "name": "Wwire",
+                "type": "float",
+                "unit": "m",
+                "value": 0.015
+            },
+            {
+                "desc": "(advanced) cf schematics, winding coil insulation diameter [m]",
+                "max": "",
+                "min": "0",
+                "name": "Wins_cond",
+                "type": "float",
+                "unit": "m",
+                "value": 0.015
+            },
+            {
+                "desc": "cf schematics, stator winding number of preformed wires (strands) in parallel per coil along radial (vertical) direction",
+                "max": "",
+                "min": "1",
+                "name": "Nwppc_rad",
+                "type": "int",
+                "unit": "-",
+                "value": 1
+            },
+            {
+                "desc": "cf schematics, stator winding number of preformed wires (strands) in parallel per coil along tangential (horizontal) direction",
+                "max": "",
+                "min": "1",
+                "name": "Nwppc_tan",
+                "type": "int",
+                "unit": "-",
+                "value": 1
+            },
+            {
+                "desc": "(advanced) cf schematics, winding strand insulation thickness [m]",
+                "max": "",
+                "min": "0",
+                "name": "Wins_wire",
+                "type": "float",
+                "unit": "m",
+                "value": 0
+            },
+            {
+                "desc": "winding overhang factor which describes the fact that random round wire end-windings can be more or less compressed (0.5 for small motors, 0.8 for large motors) - can be used to tune the average turn length (relevant if type_cond==1)",
+                "max": "",
+                "min": "0",
+                "name": "Kwoh",
+                "type": "float",
+                "unit": "-",
+                "value": 0.5
+            }
+        ]
+    },
     "CondType21": {
         "constants": [
             {
@@ -676,7 +770,12 @@
             "comp_height",
             "comp_surface",
             "comp_width",
-            "plot"
+            "plot",
+            "comp_width_wire",
+            "comp_height_wire",
+            "comp_nb_circumferential_wire",
+            "comp_nb_radial_wire",
+            "is_round_wire"
         ],
         "mother": "Conductor",
         "name": "CondType21",
@@ -724,7 +823,12 @@
         "is_internal": false,
         "methods": [
             "comp_surface_active",
-            "comp_surface"
+            "comp_surface",
+            "comp_width_wire",
+            "comp_height_wire",
+            "comp_nb_circumferential_wire",
+            "comp_nb_radial_wire",
+            "is_round_wire"
         ],
         "mother": "Conductor",
         "name": "CondType22",
@@ -752,6 +856,7 @@
         "daughters": [
             "CondType11",
             "CondType12",
+            "CondType13",
             "CondType21",
             "CondType22"
         ],
@@ -759,13 +864,8 @@
         "is_internal": false,
         "methods": [
             "check",
-            "comp_phi_skin",
-            "comp_psi_skin",
-            "comp_phip_skin",
-            "comp_psip_skin",
-            "comp_skin_effect",
-            "comp_power",
-            "comp_skin_effect_round_wire",
+            "comp_skin_effect_resistance",
+            "comp_skin_effect_inductance",
             "comp_temperature_effect"
         ],
         "mother": "",
@@ -854,7 +954,8 @@
         "is_internal": false,
         "methods": [
             "as_dict",
-            "_set_result"
+            "_set_result",
+            "_set_keeper"
         ],
         "mother": "",
         "name": "DataKeeper",
@@ -1025,39 +1126,22 @@
         ],
         "desc": "Equivalent Electrical Circuit abstract class",
         "is_internal": false,
-        "methods": [],
+        "methods": [
+            "get_machine_from_parent",
+            "comp_R1",
+            "comp_skin_effect",
+            "comp_parameters",
+            "update_from_ref",
+            "solve",
+            "solve_PWM",
+            "comp_joule_losses",
+            "comp_fluxlinkage"
+        ],
         "mother": "",
         "name": "EEC",
         "package": "Simulation",
         "path": "pyleecan/Generator/ClassesRef/Simulation/EEC.csv",
         "properties": [
-            {
-                "desc": "Parameters of the EEC: computed if empty, or enforced",
-                "max": "",
-                "min": "",
-                "name": "parameters",
-                "type": "dict",
-                "unit": "-",
-                "value": null
-            },
-            {
-                "desc": "Electrical Look Up Table to be enforced ",
-                "max": "",
-                "min": "",
-                "name": "LUT_enforced",
-                "type": "LUT",
-                "unit": "-",
-                "value": null
-            },
-            {
-                "desc": "Drive",
-                "max": "",
-                "min": "",
-                "name": "drive",
-                "type": "Drive",
-                "unit": "-",
-                "value": null
-            },
             {
                 "desc": "Skin effect for resistance and inductance",
                 "max": "",
@@ -1066,6 +1150,87 @@
                 "type": "int",
                 "unit": "-",
                 "value": 1
+            },
+            {
+                "desc": "Operating Point",
+                "max": "",
+                "min": "",
+                "name": "OP",
+                "type": "OP",
+                "unit": "-",
+                "value": null
+            },
+            {
+                "desc": "Average stator temperature for operational EEC calculation",
+                "max": "",
+                "min": "",
+                "name": "Tsta",
+                "type": "float",
+                "unit": "deg Celsius",
+                "value": 20
+            },
+            {
+                "desc": "Average rotor temperature for operational EEC calculation",
+                "max": "",
+                "min": "",
+                "name": "Trot",
+                "type": "float",
+                "unit": "deg Celsius",
+                "value": 20
+            },
+            {
+                "desc": "Skin effect coefficient for resistances at stator side",
+                "max": "",
+                "min": "",
+                "name": "Xkr_skinS",
+                "type": "float",
+                "unit": "",
+                "value": 1
+            },
+            {
+                "desc": "Skin effect coefficient for inductances at stator side",
+                "max": "",
+                "min": "",
+                "name": "Xke_skinS",
+                "type": "float",
+                "unit": "",
+                "value": 1
+            },
+            {
+                "desc": "Skin effect coefficient for resistances at rotor side",
+                "max": "",
+                "min": "",
+                "name": "Xkr_skinR",
+                "type": "float",
+                "unit": "",
+                "value": 1
+            },
+            {
+                "desc": "Skin effect coefficient for inductances at rotor side",
+                "max": "",
+                "min": "",
+                "name": "Xke_skinR",
+                "type": "float",
+                "unit": "",
+                "value": 1
+            },
+            {
+                "desc": "Stator phase resistance",
+                "max": "",
+                "min": "",
+                "name": "R1",
+                "type": "float",
+                "unit": "Ohm",
+                "value": null
+            },
+            {
+                "desc": "Magnetic model for flux linkage calculation",
+                "max": "",
+                "min": "",
+                "name": "fluxlink",
+                "type": "Magnetics",
+                "unit": "-",
+                "value": null
             }
         ]
     },
@@ -1088,26 +1253,7 @@
         "name": "EEC_LSRPM",
         "package": "Simulation",
         "path": "pyleecan/Generator/ClassesRef/Simulation/EEC_LSRPM.csv",
-        "properties": [
-            {
-                "desc": "Flux Linkage",
-                "max": "",
-                "min": "",
-                "name": "fluxlink",
-                "type": "FluxLink",
-                "unit": "-",
-                "value": null
-            },
-            {
-                "desc": "Rotation speed",
-                "max": "",
-                "min": "",
-                "name": "N0",
-                "type": "int",
-                "unit": "RPM",
-                "value": 1500
-            }
-        ]
+        "properties": []
     },
     "EEC_PMSM": {
         "constants": [
@@ -1125,7 +1271,12 @@
             "solve_PWM",
             "comp_joule_losses",
             "comp_torque_sync_rel",
-            "comp_BEMF_harmonics"
+            "comp_BEMF_harmonics",
+            "comp_Ld",
+            "comp_Lq",
+            "comp_Phidq",
+            "comp_Phidq_mag",
+            "update_from_ref"
         ],
         "mother": "EEC",
         "name": "EEC_PMSM",
@@ -1133,21 +1284,57 @@
         "path": "pyleecan/Generator/ClassesRef/Simulation/EEC_PMSM.csv",
         "properties": [
             {
-                "desc": "Magnetic inductance",
+                "desc": "Stator winding inductance along d-axis",
                 "max": "",
                 "min": "",
-                "name": "indmag",
-                "type": "IndMag",
-                "unit": "-",
+                "name": "Ld",
+                "type": "float",
+                "unit": "H",
                 "value": null
             },
             {
-                "desc": "Flux Linkage",
+                "desc": "Stator winding inductance along q-axis",
                 "max": "",
                 "min": "",
-                "name": "fluxlink",
-                "type": "FluxLink",
-                "unit": "-",
+                "name": "Lq",
+                "type": "float",
+                "unit": "H",
+                "value": null
+            },
+            {
+                "desc": "Stator winding flux along d-axis",
+                "max": "",
+                "min": "",
+                "name": "Phid",
+                "type": "float",
+                "unit": "Wb",
+                "value": null
+            },
+            {
+                "desc": "Stator winding flux along q-axis",
+                "max": "",
+                "min": "",
+                "name": "Phiq",
+                "type": "float",
+                "unit": "Wb",
+                "value": null
+            },
+            {
+                "desc": "Stator winding flux along d-axis in open-circuit (rotor flux linkage)",
+                "max": "",
+                "min": "",
+                "name": "Phid_mag",
+                "type": "float",
+                "unit": "Wb",
+                "value": null
+            },
+            {
+                "desc": "Stator winding flux along q-axis in open-circuit (rotor flux linkage)",
+                "max": "",
+                "min": "",
+                "name": "Phiq_mag",
+                "type": "float",
+                "unit": "Wb",
                 "value": null
             }
         ]
@@ -1163,12 +1350,19 @@
         "desc": "Electric module: Electrical Equivalent Circuit for Squirrel Cage Induction Machine",
         "is_internal": false,
         "methods": [
-            "comp_parameters",
-            "solve",
-            "comp_joule_losses",
-            "solve_elementary",
             "_comp_flux_mean",
-            "_comp_Lm_FEA"
+            "_comp_Lm_FEA",
+            "clear_parameters",
+            "comp_joule_losses",
+            "comp_K21",
+            "comp_L1",
+            "comp_L2",
+            "comp_parameters",
+            "comp_R2",
+            "comp_skin_effect",
+            "solve",
+            "solve_elementary",
+            "update_from_ref"
         ],
         "mother": "EEC",
         "name": "EEC_SCIM",
@@ -1176,57 +1370,278 @@
         "path": "pyleecan/Generator/ClassesRef/Simulation/EEC_SCIM.csv",
         "properties": [
             {
-                "desc": "RMS current for parameter estimation",
+                "desc": "Iron loss resistance",
                 "max": "",
                 "min": "",
-                "name": "I",
+                "name": "Rfe",
                 "type": "float",
-                "unit": "-",
+                "unit": "Ohm",
+                "value": null
+            },
+            {
+                "desc": "Stator phase inductance",
+                "max": "",
+                "min": "",
+                "name": "L1",
+                "type": "float",
+                "unit": "H",
+                "value": null
+            },
+            {
+                "desc": "Rotor phase resistance",
+                "max": "",
+                "min": "",
+                "name": "R2",
+                "type": "float",
+                "unit": "Ohm",
+                "value": null
+            },
+            {
+                "desc": "Rotor phase inductance",
+                "max": "",
+                "min": "",
+                "name": "L2",
+                "type": "float",
+                "unit": "H",
+                "value": null
+            },
+            {
+                "desc": "transformation ratio from secondary (2, rotor) to primary (1, stator) for impedance",
+                "max": "",
+                "min": "",
+                "name": "K21Z",
+                "type": "float",
+                "unit": "",
+                "value": null
+            },
+            {
+                "desc": "transformation ratio from secondary (2, rotor) to primary (1, stator) for current",
+                "max": "",
+                "min": "",
+                "name": "K21I",
+                "type": "float",
+                "unit": "",
+                "value": null
+            },
+            {
+                "desc": "Array of magnetizing current",
+                "max": "",
+                "min": "",
+                "name": "Im_table",
+                "type": "ndarray",
+                "unit": "Arms",
+                "value": null
+            },
+            {
+                "desc": "Array of magnetizing inductance function of Im_table",
+                "max": "",
+                "min": "",
+                "name": "Lm_table",
+                "type": "ndarray",
+                "unit": "H",
+                "value": null
+            },
+            {
+                "desc": "Stator phase current (after solve)",
+                "max": "",
+                "min": "",
+                "name": "I1",
+                "type": "complex",
+                "unit": "Arms",
+                "value": null
+            },
+            {
+                "desc": "Rotor phase current (after solve)",
+                "max": "",
+                "min": "",
+                "name": "I2",
+                "type": "complex",
+                "unit": "Arms",
+                "value": null
+            },
+            {
+                "desc": "Stator phase voltage (after solve)",
+                "max": "",
+                "min": "",
+                "name": "U1",
+                "type": "complex",
+                "unit": "Vrms",
+                "value": null
+            },
+            {
+                "desc": "Rotor phase voltage (after solve)",
+                "max": "",
+                "min": "",
+                "name": "U2",
+                "type": "complex",
+                "unit": "Vrms",
+                "value": null
+            },
+            {
+                "desc": "Iron loss current (after solve)",
+                "max": "",
+                "min": "",
+                "name": "If",
+                "type": "complex",
+                "unit": "Arms",
+                "value": null
+            },
+            {
+                "desc": "Magnetizing inductance (after solve)",
+                "max": "",
+                "min": "",
+                "name": "Lm",
+                "type": "float",
+                "unit": "H",
+                "value": null
+            },
+            {
+                "desc": "Magnetizing current (after solve)",
+                "max": "",
+                "min": "",
+                "name": "Im",
+                "type": "complex",
+                "unit": "Arms",
+                "value": null
+            }
+        ]
+    },
+    "ElecLUTdq": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Electric module object for electrical equivalent circuit simulation",
+        "is_internal": false,
+        "methods": [
+            "run",
+            "comp_LUTdq",
+            "solve_power",
+            "solve_MTPA"
+        ],
+        "mother": "Electrical",
+        "name": "ElecLUTdq",
+        "package": "Simulation",
+        "path": "pyleecan/Generator/ClassesRef/Simulation/ElecLUTdq.csv",
+        "properties": [
+            {
+                "desc": "Number of id values used for interpolation",
+                "max": "",
+                "min": "1",
+                "name": "n_interp",
+                "type": "int",
+                "unit": "",
+                "value": 10
+            },
+            {
+                "desc": "Minimum Id for LUT calculation",
+                "max": "",
+                "min": "",
+                "name": "Id_min",
+                "type": "float",
+                "unit": "Arms",
+                "value": null
+            },
+            {
+                "desc": "Maximum Id for LUT calculation",
+                "max": "",
+                "min": "",
+                "name": "Id_max",
+                "type": "float",
+                "unit": "Arms",
+                "value": null
+            },
+            {
+                "desc": "Minimum Iq for LUT calculation",
+                "max": "",
+                "min": "",
+                "name": "Iq_min",
+                "type": "float",
+                "unit": "Arms",
+                "value": null
+            },
+            {
+                "desc": "Maximum Iq for LUT calculation",
+                "max": "",
+                "min": "",
+                "name": "Iq_max",
+                "type": "float",
+                "unit": "Arms",
+                "value": null
+            },
+            {
+                "desc": "Number of Id for LUT calculation",
+                "max": "",
+                "min": "",
+                "name": "n_Id",
+                "type": "int",
+                "unit": "",
                 "value": 1
             },
             {
-                "desc": "True to compute only on one angle periodicity (use periodicities defined in axes_dict[angle])",
+                "desc": "Number of Iq for LUT calculation",
                 "max": "",
                 "min": "",
-                "name": "is_periodicity_a",
+                "name": "n_Iq",
+                "type": "int",
+                "unit": "",
+                "value": 1
+            },
+            {
+                "desc": "Simulation object to run for LUT calculation",
+                "max": "",
+                "min": "",
+                "name": "LUT_simu",
+                "type": "Simulation",
+                "unit": "",
+                "value": null
+            },
+            {
+                "desc": "True to build a n_Id*n_Iq grid, otherwise calculate n_Id+n_Iq simulations and extrapolate to the dq plane",
+                "max": "",
+                "min": "",
+                "name": "is_grid_dq",
                 "type": "bool",
                 "unit": "",
                 "value": 1
             },
             {
-                "desc": "To run FEMM in parallel (the parallelization is on the time loop)",
-                "max": "",
-                "min": "",
-                "name": "nb_worker",
-                "type": "int",
-                "unit": "",
-                "value": null
-            },
-            {
-                "desc": "Rotor speed",
-                "max": "",
-                "min": "",
-                "name": "N0",
-                "type": "float",
-                "unit": "rpm",
-                "value": null
-            },
-            {
-                "desc": "Time discretization",
-                "max": "",
-                "min": "1",
-                "name": "Nt_tot",
-                "type": "int",
-                "unit": "-",
-                "value": 32
-            },
-            {
-                "desc": "Number of rotor revolution (to compute the final time)",
+                "desc": "Maximum rms phase voltage",
                 "max": "",
                 "min": "0",
-                "name": "Nrev",
+                "name": "Urms_max",
                 "type": "float",
-                "unit": "-",
+                "unit": "Vrms",
+                "value": null
+            },
+            {
+                "desc": "Maximum rms current density in slot",
+                "max": "",
+                "min": "0",
+                "name": "Jrms_max",
+                "type": "float",
+                "unit": "A/m\u00c2\u00b2",
+                "value": null
+            },
+            {
+                "desc": "Maximum rms phase current",
+                "max": "",
+                "min": "0",
+                "name": "Irms_max",
+                "type": "float",
+                "unit": "A",
+                "value": null
+            },
+            {
+                "desc": "Load rate between 0 (no-load) and 1 (full-load) for MTPA calculation",
+                "max": "1",
+                "min": "0",
+                "name": "load_rate",
+                "type": "float",
+                "unit": "",
                 "value": 1
             }
         ]
@@ -1238,7 +1653,9 @@
                 "value": "1"
             }
         ],
-        "daughters": [],
+        "daughters": [
+            "ElecLUTdq"
+        ],
         "desc": "Electric module object for electrical equivalent circuit simulation",
         "is_internal": false,
         "methods": [
@@ -1271,7 +1688,25 @@
                 "value": "Pyleecan.Electrical"
             },
             {
-                "desc": "Average stator temperature for operational EEC calculation",
+                "desc": "Maximum frequency to calculate voltage and current harmonics",
+                "max": "",
+                "min": "",
+                "name": "freq_max",
+                "type": "float",
+                "unit": "Hz",
+                "value": 40000
+            },
+            {
+                "desc": "Look-Up Tables to update equivalent circuit parameters",
+                "max": "",
+                "min": "",
+                "name": "LUT_enforced",
+                "type": "LUT",
+                "unit": "-",
+                "value": null
+            },
+            {
+                "desc": "Average stator temperature for Electrical calculation",
                 "max": "",
                 "min": "",
                 "name": "Tsta",
@@ -1280,7 +1715,7 @@
                 "value": 20
             },
             {
-                "desc": "Average rotor temperature for operational EEC calculation",
+                "desc": "Average rotor temperature for Electrical calculation",
                 "max": "",
                 "min": "",
                 "name": "Trot",
@@ -1289,22 +1724,13 @@
                 "value": 20
             },
             {
-                "desc": "Average magnet temperature for operational EEC calculation",
+                "desc": "Skin effect for resistance and inductance",
                 "max": "",
                 "min": "",
-                "name": "Tmag",
-                "type": "float",
-                "unit": "deg Celsius",
-                "value": 20
-            },
-            {
-                "desc": "Maximum frequency to calculate voltage and current harmonics",
-                "max": "",
-                "min": "",
-                "name": "freq_max",
-                "type": "float",
-                "unit": "Hz",
-                "value": 40000
+                "name": "type_skin_effect",
+                "type": "int",
+                "unit": "-",
+                "value": 1
             }
         ]
     },
@@ -1462,18 +1888,30 @@
             }
         ],
         "daughters": [
-            "EndWindingCirc"
+            "EndWindingCirc",
+            "EndWindingRect"
         ],
         "desc": "Abstract Class of the machine's end winding",
         "is_internal": false,
         "methods": [
-            "comp_length_endwinding"
+            "comp_length",
+            "comp_inductance"
         ],
         "mother": "",
         "name": "EndWinding",
         "package": "Machine",
         "path": "pyleecan/Generator/ClassesRef/Machine/EndWinding.csv",
-        "properties": []
+        "properties": [
+            {
+                "desc": "Enforced end-winding lekage inductance",
+                "max": "",
+                "min": "0",
+                "name": "Lew_enforced",
+                "type": "float",
+                "unit": "H",
+                "value": 0
+            }
+        ]
     },
     "EndWindingCirc": {
         "constants": [
@@ -1486,7 +1924,8 @@
         "desc": "Class of the machine's end winding assuming a circular shape",
         "is_internal": false,
         "methods": [
-            "comp_length_endwinding"
+            "comp_length",
+            "comp_inductance"
         ],
         "mother": "EndWinding",
         "name": "EndWindingCirc",
@@ -1501,6 +1940,54 @@
                 "type": "float",
                 "unit": "",
                 "value": null
+            }
+        ]
+    },
+    "EndWindingRect": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Class of the machine's end winding assuming a rectangular shape",
+        "is_internal": false,
+        "methods": [
+            "comp_length",
+            "comp_inductance"
+        ],
+        "mother": "EndWinding",
+        "name": "EndWindingRect",
+        "package": "Machine",
+        "path": "pyleecan/Generator/ClassesRef/Machine/EndWindingRect.csv",
+        "properties": [
+            {
+                "desc": "effective coil pitch (override) for length calculation",
+                "max": "",
+                "min": "",
+                "name": "coil_pitch",
+                "type": "float",
+                "unit": "",
+                "value": null
+            },
+            {
+                "desc": "permeance factor related to end winding length",
+                "max": "",
+                "min": "0",
+                "name": "lambda_length",
+                "type": "float",
+                "unit": "",
+                "value": 0
+            },
+            {
+                "desc": "permeance factor related to end winding width",
+                "max": "",
+                "min": "0",
+                "name": "lambda_width",
+                "type": "float",
+                "unit": "",
+                "value": 0
             }
         ]
     },
@@ -1559,108 +2046,6 @@
                 "type": "int",
                 "unit": "",
                 "value": 3
-            }
-        ]
-    },
-    "FluxLink": {
-        "constants": [
-            {
-                "name": "VERSION",
-                "value": "1"
-            }
-        ],
-        "daughters": [
-            "FluxLinkFEMM"
-        ],
-        "desc": "Electric module: Flux Linkage",
-        "is_internal": false,
-        "methods": [],
-        "mother": "",
-        "name": "FluxLink",
-        "package": "Simulation",
-        "path": "pyleecan/Generator/ClassesRef/Simulation/FluxLink.csv",
-        "properties": []
-    },
-    "FluxLinkFEMM": {
-        "constants": [
-            {
-                "name": "VERSION",
-                "value": "1"
-            }
-        ],
-        "daughters": [],
-        "desc": "Electric module: Flux Linkage with FEMM",
-        "is_internal": false,
-        "methods": [
-            "comp_fluxlinkage"
-        ],
-        "mother": "FluxLink",
-        "name": "FluxLinkFEMM",
-        "package": "Simulation",
-        "path": "pyleecan/Generator/ClassesRef/Simulation/FluxLinkFEMM.csv",
-        "properties": [
-            {
-                "desc": "To enforce user-defined values for FEMM main parameters ",
-                "max": "",
-                "min": "",
-                "name": "FEMM_dict",
-                "type": "dict",
-                "unit": "",
-                "value": ""
-            },
-            {
-                "desc": "0 no leakage calculation /  1 calculation using single slot ",
-                "max": "1",
-                "min": "0",
-                "name": "type_calc_leakage",
-                "type": "int",
-                "unit": "",
-                "value": 0
-            },
-            {
-                "desc": "0 to desactivate the sliding band",
-                "max": "",
-                "min": "",
-                "name": "is_sliding_band",
-                "type": "bool",
-                "unit": "",
-                "value": 1
-            },
-            {
-                "desc": "True to take into account the spatial periodicity of the machine",
-                "max": "",
-                "min": "",
-                "name": "is_periodicity_a",
-                "type": "bool",
-                "unit": "",
-                "value": 0
-            },
-            {
-                "desc": "Number of time steps for the FEMM simulation",
-                "max": "",
-                "min": "",
-                "name": "Nt_tot",
-                "type": "int",
-                "unit": "-",
-                "value": 5
-            },
-            {
-                "desc": "global coefficient to adjust geometry fineness in FEMM (0.5 : default , > 1 : finner , < 1 : less fine)",
-                "max": "",
-                "min": "",
-                "name": "Kgeo_fineness",
-                "type": "float",
-                "unit": "",
-                "value": 0.5
-            },
-            {
-                "desc": "To run FEMM in parallel (the parallelization is on the time loop)",
-                "max": "",
-                "min": "",
-                "name": "nb_worker",
-                "type": "int",
-                "unit": "",
-                "value": 1
             }
         ]
     },
@@ -3849,108 +4234,6 @@
             }
         ]
     },
-    "IndMag": {
-        "constants": [
-            {
-                "name": "VERSION",
-                "value": "1"
-            }
-        ],
-        "daughters": [
-            "IndMagFEMM"
-        ],
-        "desc": "Electric module: Magnetic Inductance",
-        "is_internal": false,
-        "methods": [],
-        "mother": "",
-        "name": "IndMag",
-        "package": "Simulation",
-        "path": "pyleecan/Generator/ClassesRef/Simulation/IndMag.csv",
-        "properties": []
-    },
-    "IndMagFEMM": {
-        "constants": [
-            {
-                "name": "VERSION",
-                "value": "1"
-            }
-        ],
-        "daughters": [],
-        "desc": "Electric module: Magnetic Inductance with FEMM",
-        "is_internal": false,
-        "methods": [
-            "comp_inductance"
-        ],
-        "mother": "IndMag",
-        "name": "IndMagFEMM",
-        "package": "Simulation",
-        "path": "pyleecan/Generator/ClassesRef/Simulation/IndMagFEMM.csv",
-        "properties": [
-            {
-                "desc": "To enforce user-defined values for FEMM main parameters ",
-                "max": "",
-                "min": "",
-                "name": "FEMM_dict",
-                "type": "dict",
-                "unit": "",
-                "value": ""
-            },
-            {
-                "desc": "0 no leakage calculation /  1 calculation using single slot ",
-                "max": "1",
-                "min": "0",
-                "name": "type_calc_leakage",
-                "type": "int",
-                "unit": "",
-                "value": 0
-            },
-            {
-                "desc": "0 to desactivate the sliding band",
-                "max": "",
-                "min": "",
-                "name": "is_sliding_band",
-                "type": "bool",
-                "unit": "",
-                "value": 1
-            },
-            {
-                "desc": "True to take into account the spatial periodicity of the machine",
-                "max": "",
-                "min": "",
-                "name": "is_periodicity_a",
-                "type": "bool",
-                "unit": "",
-                "value": 0
-            },
-            {
-                "desc": "Number of time steps for the FEMM simulation",
-                "max": "",
-                "min": "",
-                "name": "Nt_tot",
-                "type": "int",
-                "unit": "-",
-                "value": 5
-            },
-            {
-                "desc": "global coefficient to adjust geometry fineness in FEMM (0.5 : default , > 1 : finner , < 1 : less fine)",
-                "max": "",
-                "min": "",
-                "name": "Kgeo_fineness",
-                "type": "float",
-                "unit": "",
-                "value": 0.5
-            },
-            {
-                "desc": "To run FEMM in parallel (the parallelization is on the time loop)",
-                "max": "",
-                "min": "",
-                "name": "nb_worker",
-                "type": "int",
-                "unit": "",
-                "value": 1
-            }
-        ]
-    },
     "Input": {
         "constants": [
             {
@@ -4299,6 +4582,15 @@
                 "type": "bool",
                 "unit": "-",
                 "value": 0
+            },
+            {
+                "desc": "True if machine is used as a generator",
+                "max": "",
+                "min": "",
+                "name": "is_generator",
+                "type": "bool",
+                "unit": "",
+                "value": 0
             }
         ]
     },
@@ -4361,59 +4653,16 @@
         "desc": "Abstract class for Look Up Table (LUT)",
         "is_internal": false,
         "methods": [
+            "get_eec",
+            "get_OP_matrix",
+            "set_default_simulation",
             "get_phase_dir"
         ],
-        "mother": "",
+        "mother": "XOutput",
         "name": "LUT",
-        "package": "Simulation",
-        "path": "pyleecan/Generator/ClassesRef/Simulation/LUT.csv",
-        "properties": [
-            {
-                "desc": "DC phase winding resistance at T1_ref per phase ",
-                "max": "",
-                "min": "",
-                "name": "R1",
-                "type": "float",
-                "unit": "Ohm",
-                "value": null
-            },
-            {
-                "desc": "Phase winding leakage inductance ",
-                "max": "",
-                "min": "",
-                "name": "L1",
-                "type": "float",
-                "unit": "H",
-                "value": null
-            },
-            {
-                "desc": "Stator winding average temperature associated to R1, L1 parameters",
-                "max": "",
-                "min": "",
-                "name": "T1_ref",
-                "type": "float",
-                "unit": "degC",
-                "value": 20
-            },
-            {
-                "desc": "Array of operating point values of size (N,5) with N the number of operating points (Speed, Id, Iq, Torque, Power). OP values are set to nan if they are not given.",
-                "max": "",
-                "min": "",
-                "name": "OP_matrix",
-                "type": "ndarray",
-                "unit": "",
-                "value": null
-            },
-            {
-                "desc": "Rotation direction of the stator phases (phase_dir*(n-1)*pi/qs, default value given by PHASE_DIR_REF)",
-                "max": "1",
-                "min": "-1",
-                "name": "phase_dir",
-                "type": "int",
-                "unit": "",
-                "value": null
-            }
-        ]
+        "package": "Output",
+        "path": "pyleecan/Generator/ClassesRef/Output/LUT.csv",
+        "properties": []
     },
     "LUTdq": {
         "constants": [
@@ -4426,17 +4675,19 @@
         "desc": "Look Up Table class for dq OP matrix",
         "is_internal": false,
         "methods": [
-            "get_Ldqh",
-            "get_Lmdqh",
-            "get_Phidqh_mean",
-            "get_Phidqh_mag",
-            "get_Phidqh_mag_mean",
-            "interp_Phi_dqh"
+            "get_L_dqh",
+            "get_Lm_dqh",
+            "get_Phi_dqh_mean",
+            "get_Phi_dqh_mag",
+            "get_Phi_dqh_mag_mean",
+            "interp_Phi_dqh",
+            "interp_Ploss_dqh",
+            "interp_Tem_rip_dqh"
         ],
         "mother": "LUT",
         "name": "LUTdq",
-        "package": "Simulation",
-        "path": "pyleecan/Generator/ClassesRef/Simulation/LUTdq.csv",
+        "package": "Output",
+        "path": "pyleecan/Generator/ClassesRef/Output/LUTdq.csv",
         "properties": [
             {
                 "desc": "RMS stator winding flux table in dqh frame (including magnets and currents given by I_dqh)",
@@ -4448,39 +4699,12 @@
                 "value": null
             },
             {
-                "desc": "Magnet average temperature at which Phi_dqh is given",
-                "max": "",
-                "min": "",
-                "name": "Tmag_ref",
-                "type": "float",
-                "unit": "degC",
-                "value": 20
-            },
-            {
                 "desc": "RMS stator winding flux linkage spectrum in dqh frame including harmonics (only magnets)",
                 "max": "",
                 "min": "",
                 "name": "Phi_dqh_mag",
                 "type": "SciDataTool.Classes.DataND.DataND",
                 "unit": "Wbrms",
-                "value": "None"
-            },
-            {
-                "desc": "Stator winding flux function of time and phases",
-                "max": "",
-                "min": "",
-                "name": "Phi_wind",
-                "type": "[SciDataTool.Classes.DataND.DataND]",
-                "unit": "Wb",
-                "value": "None"
-            },
-            {
-                "desc": "Interpolant function of Phi_dqh",
-                "max": "",
-                "min": "",
-                "name": "Phi_dqh_interp",
-                "type": "scipy.interpolate.interpolate.RegularGridInterpolator",
-                "unit": "",
                 "value": "None"
             }
         ]
@@ -4498,55 +4722,9 @@
         "methods": [],
         "mother": "LUT",
         "name": "LUTslip",
-        "package": "Simulation",
-        "path": "pyleecan/Generator/ClassesRef/Simulation/LUTslip.csv",
-        "properties": [
-            {
-                "desc": "Magnetizing flux for a given magnetizing current I_m",
-                "max": "",
-                "min": "",
-                "name": "Phi_m",
-                "type": "ndarray",
-                "unit": "Wb",
-                "value": null
-            },
-            {
-                "desc": "Stator magnetizing current",
-                "max": "",
-                "min": "",
-                "name": "I_m",
-                "type": "ndarray",
-                "unit": "Arms",
-                "value": null
-            },
-            {
-                "desc": "Rotor bar average temperature at which Phi_m is given",
-                "max": "",
-                "min": "",
-                "name": "T2_ref",
-                "type": "float",
-                "unit": "degC",
-                "value": 20
-            },
-            {
-                "desc": "DC rotor winding resistance at T2_ref already expressed per phase in stator frame ",
-                "max": "",
-                "min": "",
-                "name": "R2",
-                "type": "float",
-                "unit": "Ohm",
-                "value": null
-            },
-            {
-                "desc": "Rotor winding leakage inductance",
-                "max": "",
-                "min": "",
-                "name": "L2",
-                "type": "float",
-                "unit": "H",
-                "value": null
-            }
-        ]
+        "package": "Output",
+        "path": "pyleecan/Generator/ClassesRef/Output/LUTslip.csv",
+        "properties": []
     },
     "LamHole": {
         "constants": [
@@ -4855,7 +5033,9 @@
             "get_name_phase",
             "comp_angle_d_axis",
             "comp_periodicity_spatial",
-            "comp_masses"
+            "comp_masses",
+            "plot_schematics_scr",
+            "plot_side"
         ],
         "mother": "LamSlotWind",
         "name": "LamSquirrelCage",
@@ -4973,7 +5153,8 @@
             "get_yoke_side_line",
             "get_notches_surf",
             "comp_periodicity_duct_spatial",
-            "get_surfaces_closing"
+            "get_surfaces_closing",
+            "comp_periodicity_geo"
         ],
         "mother": "",
         "name": "Lamination",
@@ -5150,7 +5331,9 @@
                 "value": "1"
             }
         ],
-        "daughters": [],
+        "daughters": [
+            "LossFEMM"
+        ],
         "desc": "Losses module object that containt the loss models. See method add_model for implementation details.",
         "is_internal": false,
         "methods": [
@@ -5164,7 +5347,7 @@
         "path": "pyleecan/Generator/ClassesRef/Simulation/Loss.csv",
         "properties": [
             {
-                "desc": "Internal dict to strore model index",
+                "desc": "Internal dict to store model index",
                 "max": "",
                 "min": "",
                 "name": "model_index",
@@ -5189,6 +5372,85 @@
                 "type": "str",
                 "unit": "-",
                 "value": "Pyleecan.Loss"
+            },
+            {
+                "desc": "Dict of loss model whose key is a lamination and value is the associated loss model (alternative to model_index/model_list)",
+                "max": "",
+                "min": "",
+                "name": "model_dict",
+                "type": "{LossModel}",
+                "unit": "",
+                "value": null
+            }
+        ]
+    },
+    "LossFEMM": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Loss module dedicated to FEMM developed in https://www.femm.info/wiki/SPMLoss",
+        "is_internal": false,
+        "methods": [
+            "run",
+            "comp_axes",
+            "comp_loss",
+            "comp_loss_density_core",
+            "comp_loss_density_joule",
+            "comp_loss_density_magnet"
+        ],
+        "mother": "Loss",
+        "name": "LossFEMM",
+        "package": "Simulation",
+        "path": "pyleecan/Generator/ClassesRef/Simulation/LossFEMM.csv",
+        "properties": [
+            {
+                "desc": "True to save loss density map as meshsolution",
+                "max": "",
+                "min": "",
+                "name": "is_get_meshsolution",
+                "type": "bool",
+                "unit": "",
+                "value": 0
+            },
+            {
+                "desc": "Average stator temperature for Electrical calculation",
+                "max": "",
+                "min": "",
+                "name": "Tsta",
+                "type": "float",
+                "unit": "deg Celsius",
+                "value": 20
+            },
+            {
+                "desc": "Average rotor temperature for Electrical calculation",
+                "max": "",
+                "min": "",
+                "name": "Trot",
+                "type": "float",
+                "unit": "deg Celsius",
+                "value": 20
+            },
+            {
+                "desc": "Skin effect for resistance calculation",
+                "max": "",
+                "min": "",
+                "name": "type_skin_effect",
+                "type": "int",
+                "unit": "-",
+                "value": 1
+            },
+            {
+                "desc": "proximity loss coefficients",
+                "max": "",
+                "min": "",
+                "name": "Cp",
+                "type": "float",
+                "unit": "W/(m3*T2*Hz2)",
+                "value": null
             }
         ]
     },
@@ -5201,6 +5463,7 @@
         ],
         "daughters": [
             "LossModelBertotti",
+            "LossModelSteinmetz",
             "LossModelWinding"
         ],
         "desc": "Abstract Loss Model Class",
@@ -5330,6 +5593,62 @@
                 "type": "list",
                 "unit": "rpm",
                 "value": []
+            }
+        ]
+    },
+    "LossModelSteinmetz": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Steinmetz Loss Model Class",
+        "is_internal": false,
+        "methods": [
+            "comp_coeff"
+        ],
+        "mother": "LossModel",
+        "name": "LossModelSteinmetz",
+        "package": "Simulation",
+        "path": "pyleecan/Generator/ClassesRef/Simulation/LossModelSteinmetz.csv",
+        "properties": [
+            {
+                "desc": "Hysteresis loss coefficient",
+                "max": "",
+                "min": "",
+                "name": "k_hy",
+                "type": "float",
+                "unit": "W/kg",
+                "value": null
+            },
+            {
+                "desc": "Eddy current loss coefficient",
+                "max": "",
+                "min": "",
+                "name": "k_ed",
+                "type": "float",
+                "unit": "W/kg",
+                "value": null
+            },
+            {
+                "desc": "Hysteresis loss power coefficient for the frequency",
+                "max": "",
+                "min": "",
+                "name": "alpha_f",
+                "type": "float",
+                "unit": "-",
+                "value": null
+            },
+            {
+                "desc": "Hysteresis loss power coefficient for the flux density magnitude",
+                "max": "",
+                "min": "",
+                "name": "alpha_B",
+                "type": "float",
+                "unit": "-",
+                "value": null
             }
         ]
     },
@@ -6145,6 +6464,24 @@
                 "type": "bool",
                 "unit": "",
                 "value": 1
+            },
+            {
+                "desc": "True to use the symetry of the lamination to draw the machine faster",
+                "max": "",
+                "min": "",
+                "name": "is_fast_draw",
+                "type": "bool",
+                "unit": "",
+                "value": 1
+            },
+            {
+                "desc": "True to calculate torque from integration of energy derivate over rotor elements",
+                "max": "",
+                "min": "",
+                "name": "is_calc_torque_energy",
+                "type": "bool",
+                "unit": "",
+                "value": 1
             }
         ]
     },
@@ -6190,6 +6527,15 @@
                 "type": "float",
                 "unit": "-",
                 "value": 0.95
+            },
+            {
+                "desc": "Number of segments",
+                "max": "",
+                "min": "1",
+                "name": "Nseg",
+                "type": "int",
+                "unit": "",
+                "value": 1
             }
         ]
     },
@@ -6369,6 +6715,24 @@
                 "type": "bool",
                 "unit": "",
                 "value": 1
+            },
+            {
+                "desc": "Permanent magnet temperature to adapt magnet remanent flux density",
+                "max": "",
+                "min": "",
+                "name": "T_mag",
+                "type": "float",
+                "unit": "deg Celsius",
+                "value": 20
+            },
+            {
+                "desc": "True to consider rotor periodicity over time instead of stator",
+                "max": "",
+                "min": "",
+                "name": "is_periodicity_rotor",
+                "type": "bool",
+                "unit": "",
+                "value": 0
             }
         ]
     },
@@ -6418,7 +6782,10 @@
         "daughters": [],
         "desc": "material electrical properties",
         "is_internal": false,
-        "methods": [],
+        "methods": [
+            "get_conductivity",
+            "get_resistivity"
+        ],
         "mother": "",
         "name": "MatElectrical",
         "package": "Material",
@@ -6431,7 +6798,7 @@
                 "name": "rho",
                 "type": "float",
                 "unit": "ohm.m",
-                "value": 1
+                "value": 0
             },
             {
                 "desc": "Relative dielectric constant",
@@ -6443,13 +6810,13 @@
                 "value": 1
             },
             {
-                "desc": "Thermal Coefficient",
+                "desc": "Thermal resistivity coefficient",
                 "max": "",
                 "min": "0",
                 "name": "alpha",
                 "type": "float",
                 "unit": "1/K",
-                "value": 1
+                "value": 0
             }
         ]
     },
@@ -6512,7 +6879,7 @@
                 "name": "alpha",
                 "type": "float",
                 "unit": "-",
-                "value": 0.00393
+                "value": 0
             }
         ]
     },
@@ -6528,7 +6895,9 @@
         "is_internal": false,
         "methods": [
             "get_BH",
-            "plot_BH"
+            "plot_BH",
+            "get_Hc",
+            "get_Brm"
         ],
         "mother": "",
         "name": "MatMagnetics",
@@ -6545,16 +6914,7 @@
                 "value": 1
             },
             {
-                "desc": "Coercitivity field",
-                "max": "",
-                "min": "0",
-                "name": "Hc",
-                "type": "float",
-                "unit": "A/m",
-                "value": 0
-            },
-            {
-                "desc": "magnet remanence induction at 20degC",
+                "desc": "magnet remanence induction at 20degC (calculated from mur_lin and Hc if not provided)",
                 "max": "",
                 "min": "",
                 "name": "Brm20",
@@ -6752,7 +7112,7 @@
                 "value": "Material"
             },
             {
-                "desc": "If True, uniformity in all orientations",
+                "desc": "If Isotropic, uniformity in all orientations",
                 "max": "",
                 "min": "",
                 "name": "is_isotropic",
@@ -7602,7 +7962,7 @@
                 "value": null
             },
             {
-                "desc": "Theorical Average Electromagnetic torque",
+                "desc": "Output average electromagnetic torque",
                 "max": "",
                 "min": "",
                 "name": "Tem_av_ref",
@@ -7611,12 +7971,30 @@
                 "value": null
             },
             {
-                "desc": "Theorical Average Electromagnetic Power",
+                "desc": "Output average Electromagnetic Power",
                 "max": "",
                 "min": "",
                 "name": "Pem_av_ref",
                 "type": "float",
                 "unit": "W",
+                "value": null
+            },
+            {
+                "desc": "Input average power (e.g. for generator mode)",
+                "max": "",
+                "min": "",
+                "name": "Pem_av_in",
+                "type": "float",
+                "unit": "W",
+                "value": null
+            },
+            {
+                "desc": "Efficiency",
+                "max": "",
+                "min": "",
+                "name": "efficiency",
+                "type": "float",
+                "unit": "",
                 "value": null
             }
         ]
@@ -7759,6 +8137,104 @@
                 "type": "float",
                 "unit": "rad",
                 "value": null
+            }
+        ]
+    },
+    "OptiBayesAlg": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [
+            "OptiBayesAlgSmoot"
+        ],
+        "desc": "Bayesian algorithm class",
+        "is_internal": false,
+        "methods": [],
+        "mother": "OptiSolver",
+        "name": "OptiBayesAlg",
+        "package": "Optimization",
+        "path": "pyleecan/Generator/ClassesRef/Optimization/OptiBayesAlg.csv",
+        "properties": [
+            {
+                "desc": "Number of iterations",
+                "max": "",
+                "min": "1",
+                "name": "nb_iter",
+                "type": "int",
+                "unit": "-",
+                "value": 15
+            },
+            {
+                "desc": "Number of starting points",
+                "max": "",
+                "min": "1",
+                "name": "nb_start",
+                "type": "int",
+                "unit": "-",
+                "value": 300
+            },
+            {
+                "desc": "Point selection criteria",
+                "max": "",
+                "min": "",
+                "name": "criterion",
+                "type": "str",
+                "unit": "-",
+                "value": "PI"
+            },
+            {
+                "desc": "Type of kernel",
+                "max": "0",
+                "min": "0",
+                "name": "kernel",
+                "type": "int",
+                "unit": "-",
+                "value": 0
+            }
+        ]
+    },
+    "OptiBayesAlgSmoot": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Multi-objectives optimization problem with some constraints",
+        "is_internal": false,
+        "methods": [
+            "solve",
+            "check_optimization_input",
+            "evaluate",
+            "plot_pareto",
+            "eval_const"
+        ],
+        "mother": "OptiBayesAlg",
+        "name": "OptiBayesAlgSmoot",
+        "package": "Optimization",
+        "path": "pyleecan/Generator/ClassesRef/Optimization/OptiBayesAlgSmoot.csv",
+        "properties": [
+            {
+                "desc": "Number of individuals for each generation",
+                "max": "",
+                "min": "1",
+                "name": "size_pop",
+                "type": "int",
+                "unit": "-",
+                "value": 40
+            },
+            {
+                "desc": "Number of generations for the genetic part",
+                "max": "",
+                "min": "1",
+                "name": "nb_gen",
+                "type": "int",
+                "unit": "-",
+                "value": 100
             }
         ]
     },
@@ -7963,7 +8439,8 @@
             "cross",
             "create_toolbox",
             "check_optimization_input",
-            "delete_toolbox"
+            "delete_toolbox",
+            "plot_pareto"
         ],
         "mother": "OptiGenAlg",
         "name": "OptiGenAlgNsga2Deap",
@@ -8087,6 +8564,8 @@
             }
         ],
         "daughters": [
+            "OptiBayesAlg",
+            "OptiBayesAlgSmoot",
             "OptiGenAlg",
             "OptiGenAlgNsga2Deap"
         ],
@@ -8151,7 +8630,8 @@
             "get_Is",
             "get_Us",
             "store",
-            "get_electrical"
+            "get_electrical",
+            "get_Jrms"
         ],
         "mother": "",
         "name": "OutElec",
@@ -8231,19 +8711,19 @@
                 "value": null
             },
             {
-                "desc": "Theoretical Average Electromagnetic Power",
+                "desc": "Average Electromagnetic power",
                 "max": "",
                 "min": "",
-                "name": "Pem_av_ref",
+                "name": "Pem_av",
                 "type": "float",
                 "unit": "W",
                 "value": null
             },
             {
-                "desc": "Theoretical Average Electromagnetic torque",
+                "desc": "Average Electromagnetic torque",
                 "max": "",
                 "min": "",
-                "name": "Tem_av_ref",
+                "name": "Tem_av",
                 "type": "float",
                 "unit": "N.m",
                 "value": null
@@ -8276,12 +8756,57 @@
                 "value": null
             },
             {
-                "desc": "Dict containing parameters used in Electric Equivalent Circuit",
+                "desc": "Electric Equivalent Circuit used for OP resolution",
                 "max": "",
                 "min": "",
-                "name": "eec_param",
-                "type": "dict",
+                "name": "eec",
+                "type": "EEC",
                 "unit": "",
+                "value": null
+            },
+            {
+                "desc": "Output power",
+                "max": "",
+                "min": "",
+                "name": "P_out",
+                "type": "float",
+                "unit": "W",
+                "value": null
+            },
+            {
+                "desc": "RMS current density in slots",
+                "max": "",
+                "min": "0",
+                "name": "Jrms",
+                "type": "float",
+                "unit": "A/m\u00c2\u00b2",
+                "value": null
+            },
+            {
+                "desc": "Input power",
+                "max": "",
+                "min": "",
+                "name": "P_in",
+                "type": "float",
+                "unit": "W",
+                "value": null
+            },
+            {
+                "desc": "RMS linear current density along airgap",
+                "max": "",
+                "min": "",
+                "name": "Arms",
+                "type": "float",
+                "unit": "A/m",
+                "value": null
+            },
+            {
+                "desc": "RMS back-emf",
+                "max": "",
+                "min": "",
+                "name": "Erms",
+                "type": "float",
+                "unit": "V",
                 "value": null
             }
         ]
@@ -8653,7 +9178,11 @@
         "is_internal": false,
         "methods": [
             "get_loss",
-            "get_loss_dist"
+            "get_loss_density_ag",
+            "get_loss_dist",
+            "get_loss_group",
+            "get_loss_overall",
+            "store"
         ],
         "mother": "",
         "name": "OutLoss",
@@ -8676,7 +9205,7 @@
                 "name": "meshsol_list",
                 "type": "[MeshSolution]",
                 "unit": "",
-                "value": ""
+                "value": null
             },
             {
                 "desc": "Internal dict to index losses",
@@ -8695,6 +9224,69 @@
                 "type": "str",
                 "unit": "-",
                 "value": "Pyleecan.Loss"
+            },
+            {
+                "desc": "Dict containing axes data used for Magnetics",
+                "max": "",
+                "min": "",
+                "name": "axes_dict",
+                "type": "{SciDataTool.Classes.DataND.Data}",
+                "unit": "",
+                "value": "None"
+            },
+            {
+                "desc": "Stator core losses due to hysteresis and eddy currents",
+                "max": "",
+                "min": "",
+                "name": "Pstator",
+                "type": "float",
+                "unit": "W",
+                "value": null
+            },
+            {
+                "desc": "Rotor core losses due to hysteresis and eddy currents",
+                "max": "",
+                "min": "",
+                "name": "Protor",
+                "type": "float",
+                "unit": "W",
+                "value": null
+            },
+            {
+                "desc": "Magnet eddy current losses",
+                "max": "",
+                "min": "",
+                "name": "Pmagnet",
+                "type": "float",
+                "unit": "W",
+                "value": null
+            },
+            {
+                "desc": "Stator core losses",
+                "max": "",
+                "min": "",
+                "name": "Pprox",
+                "type": "float",
+                "unit": "W",
+                "value": null
+            },
+            {
+                "desc": "Stator core losses",
+                "max": "",
+                "min": "",
+                "name": "Pjoule",
+                "type": "float",
+                "unit": "W",
+                "value": null
+            },
+            {
+                "desc": "Dict containing coefficients to rebuild loss polynom function of frequency",
+                "max": "",
+                "min": "",
+                "name": "coeff_dict",
+                "type": "dict",
+                "unit": "",
+                "value": {}
             }
         ]
     },
@@ -9050,6 +9642,9 @@
             }
         ],
         "daughters": [
+            "LUT",
+            "LUTdq",
+            "LUTslip",
             "XOutput"
         ],
         "desc": "Main Output object: gather all the outputs of all the modules",
@@ -9451,28 +10046,10 @@
         "path": "pyleecan/Generator/ClassesRef/Post/PostLUT.csv",
         "properties": [
             {
-                "desc": "Look-Up Table to enforce",
-                "max": "",
-                "min": "",
-                "name": "LUT",
-                "type": "LUT",
-                "unit": "",
-                "value": null
-            },
-            {
                 "desc": "True to save LUT in PostLUT",
                 "max": "",
                 "min": "",
                 "name": "is_save_LUT",
-                "type": "bool",
-                "unit": "",
-                "value": 1
-            },
-            {
-                "desc": "True to store LUT in PostLUT",
-                "max": "",
-                "min": "",
-                "name": "is_store_LUT",
                 "type": "bool",
                 "unit": "",
                 "value": 1
@@ -10052,7 +10629,8 @@
         "is_internal": false,
         "methods": [
             "run",
-            "init_logger"
+            "init_logger",
+            "get_var_load"
         ],
         "mother": "",
         "name": "Simulation",
@@ -10406,6 +10984,8 @@
             "comp_surface",
             "comp_surface_active",
             "comp_surface_opening",
+            "comp_surface_wedges",
+            "comp_width",
             "comp_width_opening",
             "convert_to_SlotUD2",
             "get_is_stator",
@@ -10413,6 +10993,7 @@
             "get_Rbo",
             "get_surface",
             "get_surface_tooth",
+            "get_surface_wedges",
             "is_outwards",
             "plot",
             "plot_active",
@@ -10431,6 +11012,15 @@
                 "type": "int",
                 "unit": "-",
                 "value": 36
+            },
+            {
+                "desc": "Material for the wedge, if None no wedge",
+                "max": "",
+                "min": "",
+                "name": "wedge_mat",
+                "type": "Material",
+                "unit": "-",
+                "value": null
             }
         ]
     },
@@ -13684,7 +14274,8 @@
         "desc": "Abstract class to generate multi-simulation by changing the operating point",
         "is_internal": false,
         "methods": [
-            "get_ref_simu_index"
+            "get_ref_simu_index",
+            "get_OP_matrix"
         ],
         "mother": "VarSimu",
         "name": "VarLoad",
@@ -13710,22 +14301,13 @@
                 "value": 0
             },
             {
-                "desc": "True if the Torque is defined in OP_matrix",
+                "desc": "True if power given in OP_matrix is the output power, False if it is the input power",
                 "max": "",
                 "min": "",
-                "name": "is_torque",
-                "type": "bool",
-                "unit": "-",
-                "value": 0
-            },
-            {
-                "desc": "True if the Power is defined in OP_matrix",
-                "max": "",
-                "min": "",
-                "name": "is_power",
+                "name": "is_output_power",
                 "type": "bool",
                 "unit": "",
-                "value": 0
+                "value": 1
             }
         ]
     },
@@ -13935,6 +14517,15 @@
                 "type": "[Post]",
                 "unit": "-",
                 "value": null
+            },
+            {
+                "desc": "True to reuse the look up table",
+                "max": "",
+                "min": "",
+                "name": "is_reuse_LUT",
+                "type": "bool",
+                "unit": "-",
+                "value": 1
             }
         ]
     },
@@ -14356,7 +14947,11 @@
                 "value": "1"
             }
         ],
-        "daughters": [],
+        "daughters": [
+            "LUT",
+            "LUTdq",
+            "LUTslip"
+        ],
         "desc": "XOutput object: gather all the outputs of all the modules for multiple simulations",
         "is_internal": false,
         "methods": [

@@ -44,9 +44,6 @@ except ImportError as error:
 
 
 from ._check import InitUnKnowClassError
-from .Surface import Surface
-from .Magnet import Magnet
-from .Material import Material
 
 
 class HoleUD(HoleMag):
@@ -248,7 +245,8 @@ class HoleUD(HoleMag):
             for key in self.magnet_dict:
                 diff_list.extend(
                     self.magnet_dict[key].compare(
-                        other.magnet_dict[key], name=name + ".magnet_dict"
+                        other.magnet_dict[key],
+                        name=name + ".magnet_dict[" + str(key) + "]",
                     )
                 )
         if other._name != self._name:

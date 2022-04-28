@@ -23,9 +23,9 @@ def update_FEMM_simulation(
     FEMM_dict : dict
         Dictionary containing main FEMM definition / properties
     is_internal_rotor: bool
-        True if it is an internal rotor topology
+        True if it is an Internal Rotor topology
     is_sliding_band: bool
-        True if it is an internal rotor topology
+        True if it is an Internal Rotor topology
     angle_rotor: ndarray
         Vector of rotor angular position over time [Nt,]
     Is : ndarray
@@ -46,9 +46,10 @@ def update_FEMM_simulation(
     else:
         # Select and rotate rotor groups
         femm.mi_seteditmode("group")
-        for key, val in FEMM_dict["groups"].items():
-            if "GROUP_R" in key:
-                femm.mi_selectgroup(val)
+        for key, val in FEMM_dict["groups"]["lam_group_list"].items():
+            if "Rotor" in key:
+                for ind in val:
+                    femm.mi_selectgroup(ind)
         femm.mi_moverotate(0, 0, 180 * angle_rotor[ii] / pi)
 
     # Update currents

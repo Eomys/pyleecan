@@ -1,7 +1,6 @@
-from numpy import arange, searchsorted, angle
+from numpy import angle, pi
 
 from ....Classes.OutElec import OutElec
-from ....Classes.Simulation import Simulation
 
 from ....Methods.Simulation.Input import (
     CURRENT_DIR_REF,
@@ -19,6 +18,8 @@ def gen_input(self):
     self : InputVoltage
         An InputVoltage object
     """
+
+    from ....Classes.Simulation import Simulation
 
     # Get the simulation
     if isinstance(self.parent, Simulation):
@@ -47,7 +48,7 @@ def gen_input(self):
         logger.debug("Updating N0 from 0 [rpm] to 0.1 [rpm] in gen_input")
     # Check that felec/N0 can be computed
     self.OP.get_felec()
-    outelec.OP = self.OP
+    outelec.OP = self.OP.copy()
 
     # Set rotor rotation direction
     if self.rot_dir is None:
@@ -102,6 +103,22 @@ def gen_input(self):
         is_periodicity_a=self.is_periodicity_a,
         is_periodicity_t=self.is_periodicity_t,
     )
+
+    if (
+        self.is_generator
+        and outelec.OP.Tem_av_ref is None
+        and outelec.OP.Pem_av_in is not None
+    ):
+        # Get reference torque function of reference power and speed
+        outelec.OP.Tem_av_ref = outelec.OP.Pem_av_in / (2 * pi * outelec.OP.N0 / 60)
+
+    if (
+        not self.is_generator
+        and outelec.OP.Tem_av_ref is None
+        and outelec.OP.Pem_av_ref is not None
+    ):
+        # Get reference torque function of reference power and speed
+        outelec.OP.Tem_av_ref = outelec.OP.Pem_av_ref / (2 * pi * outelec.OP.N0 / 60)
 
     # Generate PWM signal
     if self.PWM is not None:

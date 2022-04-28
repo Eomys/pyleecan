@@ -16,7 +16,6 @@ from ..Functions.Load.import_class import import_class
 from ._frozen import FrozenClass
 
 from ._check import InitUnKnowClassError
-from .Unit import Unit
 
 
 class GUIOption(FrozenClass):
@@ -151,6 +150,7 @@ class GUIOption(FrozenClass):
             class_obj = import_class("pyleecan.Classes", value.get("__class__"), "unit")
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
+            Unit = import_class("pyleecan.Classes", "Unit", "unit")
             value = Unit()
         check_var("unit", value, "Unit")
         self._unit = value

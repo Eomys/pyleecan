@@ -135,6 +135,15 @@ def plot_B_mesh(
     )
 
     if is_contour:
+        lab_ind = None
+        for ii, sol in enumerate(MS_B_plot.solution):
+            if sol.label == "A_z" and sol.type_cell == "node":
+                lab_ind = ii
+                break
+        if lab_ind is None:
+            raise Exception(
+                "Cannot field lines if A_z calculated on nodes is not in meshsolution"
+            )
         mesh_pv_Az, field_A, field_name_A = MS_B_plot.get_mesh_field_pv(
             *args,
             label="A_z",
@@ -143,6 +152,7 @@ def plot_B_mesh(
             is_radial=is_radial,
             is_center=is_center,
             field_name=field_name,
+            index=lab_ind,
         )
         mesh_pv_Az[field_name_A] = field_A
         contours = mesh_pv_Az.contour()

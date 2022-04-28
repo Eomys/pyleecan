@@ -1,6 +1,3 @@
-# -*- coding: utf-8 -*-
-
-from numpy import pi
 from ....Classes.LamSlot import LamSlot
 
 
@@ -20,10 +17,17 @@ def comp_masses(self):
     """
 
     M_dict = LamSlot.comp_masses(self)
+    p = self.get_pole_pair_number()
+
     Mmag = (
-        self.slot.comp_surface_active()
-        * self.magnet.Lmag
-        * self.magnet.mat_type.struct.rho
+        2
+        * p
+        * (
+            self.slot.comp_surface_active()
+            * self.magnet.Nseg
+            * self.magnet.Lmag
+            * self.magnet.mat_type.struct.rho
+        )
     )
 
     M_dict["Mmag"] = Mmag

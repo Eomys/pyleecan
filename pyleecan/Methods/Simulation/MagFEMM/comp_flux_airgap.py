@@ -109,6 +109,8 @@ def comp_flux_airgap(self, output, axes_dict, Is_val=None, Ir_val=None):
             transform_list=self.transform_list,
             rotor_dxf=self.rotor_dxf,
             stator_dxf=self.stator_dxf,
+            is_fast_draw=self.is_fast_draw,
+            T_mag=self.T_mag,
         )
     else:
         logger.debug("Reusing the FEMM file: " + self.import_file)
@@ -120,8 +122,9 @@ def comp_flux_airgap(self, output, axes_dict, Is_val=None, Ir_val=None):
     # Init flux arrays in out_dict
     out_dict["B_{rad}"] = zeros((Nt, Na))
     out_dict["B_{circ}"] = zeros((Nt, Na))
-    # Init torque array in out_dict
-    out_dict["Tem"] = zeros((Nt))
+    if self.is_calc_torque_energy:
+        # Init torque array in out_dict
+        out_dict["Tem"] = zeros((Nt))
     # Init lamination winding flux list of arrays in out_dict
     machine = output.simu.machine
     out_dict["Phi_wind"] = {}
@@ -140,7 +143,15 @@ def comp_flux_airgap(self, output, axes_dict, Is_val=None, Ir_val=None):
         femm.closefemm()
         output.mag.internal.handler_list.remove(femm)
         # With parallelization
-        B_elem, H_elem, mu_elem, A_node, meshFEMM, groups = self.solve_FEMM_parallel(
+        (
+            B_elem,
+            H_elem,
+            mu_elem,
+            A_node,
+            meshFEMM,
+            groups,
+            A_elem,
+        ) = self.solve_FEMM_parallel(
             femm,
             output,
             out_dict,
@@ -155,7 +166,7 @@ def comp_flux_airgap(self, output, axes_dict, Is_val=None, Ir_val=None):
         )
     else:
         # Without parallelization
-        B_elem, H_elem, mu_elem, A_node, meshFEMM, groups = self.solve_FEMM(
+        B_elem, H_elem, mu_elem, A_node, meshFEMM, groups, A_elem = self.solve_FEMM(
             femm,
             output,
             out_dict,
@@ -215,21 +226,28 @@ def comp_flux_airgap(self, output, axes_dict, Is_val=None, Ir_val=None):
             symbol="\mu",
             unit="H/m",
         )
+        Ae_sol = build_solution_data(
+            field=A_elem[:, :, None],
+            axis_list=axis_list,
+            name="Magnetic Potential Vector",
+            symbol="A_z",
+            unit="Wb/m",
+        )
 
         indices_nodes = meshFEMM[0].node.indice
         Indices_Nodes = Data1D(name="indice", values=indices_nodes, is_components=True)
         axis_list_node = [Time, Indices_Nodes]
 
-        A_sol = build_solution_data(
+        An_sol = build_solution_data(
             field=A_node,
             axis_list=axis_list_node,
             name="Magnetic Potential Vector",
             symbol="A_z",
-            unit="T.m",
+            unit="Wb/m",
         )
-        A_sol.type_cell = "node"
+        An_sol.type_cell = "node"
 
-        list_solution = [B_sol, H_sol, mu_sol, A_sol]
+        list_solution = [B_sol, H_sol, mu_sol, An_sol, Ae_sol]
 
         out_dict["meshsolution"] = build_meshsolution(
             list_solution=list_solution,
