@@ -341,6 +341,38 @@ class TestDMatlibWF(object):
         # Close the dialog
         dialog.close()
 
+    def test_copy_machine_material(self):
+        """Copy a material for the machine and check changes in the GUI"""
+        # Check initial state
+        assert self.widget.machine.rotor.hole[0].magnet_0.mat_type.struct.rho == 7500
+        assert not isfile(join(WS_path, "MagnetPrius_old.json"))
+        # Open DMatlib
+        self.widget.nav_step.setCurrentRow(6)  # Hole material
+        assert isinstance(self.widget.w_step, SMHoleMag)
+        w_mat = self.widget.w_step.tab_hole.widget(0).w_hole.w_mat_1
+        assert w_mat.current_dialog is None
+        w_mat.b_matlib.clicked.emit()
+        assert isinstance(w_mat.current_dialog, DMatLib)
+        dialog = w_mat.current_dialog
+        assert dialog.is_lib_mat is False
+        assert dialog.nav_mat_mach.currentRow() == 1
+        assert dialog.nav_mat.count() == 4
+        assert dialog.nav_mat_mach.count() == 2
+        assert dialog.w_setup.le_name.text() == "MagnetPrius_old"
+
+        # Copy MagnetPrius_old material once
+        dialog.b_copy.clicked.emit()
+        assert dialog.w_setup.le_name.text() == "MagnetPrius_old_copy"
+        dialog.w_setup.b_save.clicked.emit()
+
+        # Copy MagnetPrius_old material twice
+        dialog.b_copy.clicked.emit()
+        assert dialog.w_setup.le_name.text() == "MagnetPrius_old_copy_2"
+        dialog.w_setup.b_save.clicked.emit()
+
+        # Close the dialog
+        dialog.close()
+
     def test_rename_matlib(self):
         """rename a material in the Library and check changes in machine"""
         # Check initial state
@@ -622,9 +654,10 @@ if __name__ == "__main__":
     # a.test_rename_machine_material()
     # a.test_rename_matlib()
     # a.test_new_machine_material()
+    a.test_copy_machine_material()
     # a.test_new_matlib()
     # a.test_edit_machine_to_library()
-    a.test_edit_matlib_to_machine()
+    # a.test_edit_matlib_to_machine()
     # a.test_edit_machine_material_several()
     # a.test_edit_machine_material()
     # a.test_edit_matlib()
