@@ -7,7 +7,7 @@ COND_COLOR[3] = 1
 INS_COLOR[3] = 1
 
 
-def plot(self, is_show_fig=True):
+def plot(self, is_show_fig=True,fig=None,ax=None):
     """Plot a Conductor in a matplotlib fig
 
     Parameters
@@ -16,6 +16,10 @@ def plot(self, is_show_fig=True):
         A CondType13 object
     is_show_fig : bool
         To call show at the end of the method
+    fig : Matplotlib.figure.Figure
+        existing figure to use if None create a new one
+    ax : Matplotlib.axes.Axes object
+        Axis on which to plot the data
 
     Returns
     -------

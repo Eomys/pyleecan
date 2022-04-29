@@ -1,14 +1,18 @@
 from matplotlib.patches import Patch, Rectangle
-from matplotlib.pyplot import subplots
+from ....Functions.init_fig import init_fig
 
 
-def plot(self):
+def plot(self, fig=None, ax=None):
     """Plot a Conductor in a matplotlib fig
 
     Parameters
     ----------
     self : CondType21
         A CondType21 object
+    fig : Matplotlib.figure.Figure
+        existing figure to use if None create a new one
+    ax : Matplotlib.axes.Axes object
+        Axis on which to plot the data
 
     Returns
     -------
@@ -31,7 +35,7 @@ def plot(self):
     )
 
     # Display
-    fig, ax = subplots()
+    (fig, ax, _, _) = init_fig(fig=fig, ax=ax)
     for patch in patches_list:
         ax.add_patch(patch)
 

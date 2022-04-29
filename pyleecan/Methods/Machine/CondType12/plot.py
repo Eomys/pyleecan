@@ -1,7 +1,5 @@
-# -*- coding: utf-8 -*-
-
 from matplotlib.patches import Circle, Patch
-from matplotlib.pyplot import subplots
+from ....Functions.init_fig import init_fig
 from numpy import exp, pi, sqrt
 
 from ....definitions import config_dict
@@ -15,7 +13,7 @@ INS_COLOR[3] = 1
 COND_INS_COLOR[3] = 1
 
 
-def plot(self, is_show_fig=True):
+def plot(self, is_show_fig=True,fig=None,ax=None):
     """Plot a Conductor in a matplotlib fig
 
     Parameters
@@ -24,6 +22,10 @@ def plot(self, is_show_fig=True):
         A CondType12 object
     is_show_fig : bool
         To call show at the end of the method
+    fig : Matplotlib.figure.Figure
+        existing figure to use if None create a new one
+    ax : Matplotlib.axes.Axes object
+        Axis on which to plot the data
 
     Returns
     -------
@@ -82,7 +84,7 @@ def plot(self, is_show_fig=True):
         patches_list.append(Circle(center, self.Wwire / 2, color=COND_COLOR))
 
     # Display
-    fig, ax = subplots()
+    (fig, ax, _, _) = init_fig(fig=fig, ax=ax)
     for patch in patches_list:
         ax.add_patch(patch)
 
