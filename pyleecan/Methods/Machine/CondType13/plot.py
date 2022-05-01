@@ -1,5 +1,6 @@
 from ....definitions import config_dict
 from ....Functions.init_fig import init_fig
+
 COND_COLOR = config_dict["PLOT"]["COLOR_DICT"]["PHASE_COLORS"][0].copy()
 INS_COLOR = config_dict["PLOT"]["COLOR_DICT"]["PHASE_COLORS"][1].copy()
 # Remove alpha from phases
@@ -7,7 +8,7 @@ COND_COLOR[3] = 1
 INS_COLOR[3] = 1
 
 
-def plot(self, is_show_fig=True,fig=None,ax=None):
+def plot(self, is_show_fig=True, fig=None, ax=None):
     """Plot a Conductor in a matplotlib fig
 
     Parameters

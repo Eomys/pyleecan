@@ -91,7 +91,9 @@ def plot_schematics(
         if self.parent is None:
             raise ParentMissingError("Error: The slot is not inside a Lamination")
         lam = self.parent
-        fig,ax=lam.plot(alpha=pi / self.Zs, is_show_fig=False,fig=fig,ax=ax)  # center slot on Ox axis
+        fig, ax = lam.plot(
+            alpha=pi / self.Zs, is_show_fig=False, fig=fig, ax=ax
+        )  # center slot on Ox axis
 
         # Adding schematics
         if is_add_schematics:
@@ -158,4 +160,4 @@ def plot_schematics(
 
         if is_show_fig:
             fig.show()
-        return fig,ax
+        return fig, ax

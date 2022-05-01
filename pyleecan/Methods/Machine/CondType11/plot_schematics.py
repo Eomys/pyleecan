@@ -71,7 +71,7 @@ def plot_schematics(
         )
     else:
         # Getting the main plot
-        fig, ax = self.plot(is_show_fig=False, fig=fig,ax=ax)  # center slot on Ox axis
+        fig, ax = self.plot(is_show_fig=False, fig=fig, ax=ax)  # center slot on Ox axis
 
         # Adding schematics
         if is_add_schematics:

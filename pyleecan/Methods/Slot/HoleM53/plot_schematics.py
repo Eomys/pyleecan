@@ -117,13 +117,13 @@ def plot_schematics(
             raise ParentMissingError("Error: The hole is not inside a Lamination")
         lam = self.parent
         alpha = pi / 2  # To rotate the schematics
-        fig,ax=lam.plot(
+        fig, ax = lam.plot(
             alpha=pi / self.Zh + alpha,
             is_show_fig=False,
             is_lam_only=type_add_active == 0,
             fig=fig,
             ax=ax,
-        ) # center hole on Ox axis
+        )  # center hole on Ox axis
         sp = 2 * pi / self.Zh
         Rbo = self.get_Rbo()
         point_dict = self._comp_point_coordinate()
@@ -358,4 +358,4 @@ def plot_schematics(
 
         if is_show_fig:
             fig.show()
-        return fig,ax
+        return fig, ax

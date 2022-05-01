@@ -11,11 +11,10 @@ def plot_lines(self, fig=None, ax=None, is_show_fig=True):
     ----------
     self : SurfLine
         A SurfLine object
-    fig :
-        if None, open a new fig and plot, else add to the
-        current one (Default value = None)
-    ax : 
-        Axis to use
+    fig : Matplotlib.figure.Figure
+        existing figure to use if None create a new one
+    ax : Matplotlib.axes.Axes object
+        Axis on which to plot the data
     is_show_fig : bool
         To call show at the end of the method
 

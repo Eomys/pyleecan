@@ -87,7 +87,7 @@ def plot_schematics_scr(
         )
     else:
         # Getting the main plot
-        fig, ax = self.plot_side(is_show_fig=False,fig=fig,ax=ax)
+        fig, ax = self.plot_side(is_show_fig=False, fig=fig, ax=ax)
         Lt = self.comp_length()
         Hs = self.slot.comp_height()
         Ha = self.slot.comp_height_active()

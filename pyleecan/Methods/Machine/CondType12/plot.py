@@ -13,7 +13,7 @@ INS_COLOR[3] = 1
 COND_INS_COLOR[3] = 1
 
 
-def plot(self, is_show_fig=True,fig=None,ax=None):
+def plot(self, is_show_fig=True, fig=None, ax=None):
     """Plot a Conductor in a matplotlib fig
 
     Parameters

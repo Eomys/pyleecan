@@ -29,14 +29,14 @@ def _comp_line_dict(self):
         full_arc = Arc1(
             begin=point_dict["Z1"],
             end=point_dict["Z2"],
-            radius=-R0*sign,
+            radius=-R0 * sign,
             is_trigo_direction=True,
         )
     else:
         full_arc = Arc1(
             begin=point_dict["Z1"],
             end=point_dict["Z2"],
-            radius=R0*sign,
+            radius=R0 * sign,
             is_trigo_direction=False,
         )
 

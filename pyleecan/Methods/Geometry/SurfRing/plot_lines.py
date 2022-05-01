@@ -11,11 +11,10 @@ def plot_lines(self, fig=None, ax=None):
     ----------
     self : SurfRing
         A SurfRing object
-    fig :
-        if None, open a new fig and plot, else add to the
-        current one (Default value = None)
-    ax :
-        Axis to use
+    fig : Matplotlib.figure.Figure
+        existing figure to use if None create a new one
+    ax : Matplotlib.axes.Axes object
+        Axis on which to plot the data
 
     Returns
     -------
@@ -25,7 +24,7 @@ def plot_lines(self, fig=None, ax=None):
         Axis containing the plot
     """
 
-    (fig, ax, patch_leg, label_leg) = init_fig(fig,ax)
+    (fig, ax, patch_leg, label_leg) = init_fig(fig, ax)
     ax.set_xlabel("(m)")
     ax.set_ylabel("(m)")
 

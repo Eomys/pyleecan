@@ -13,6 +13,7 @@ from datetime import datetime
 from numpy import nan
 import numpy as np
 
+
 def evaluate(solver, indiv):
     """Evaluate the individual according to the solver method
 

@@ -43,7 +43,7 @@ def _comp_line_dict(self):
         line_dict["1-2"] = None
 
     H1 = self.get_H1()
-    if H1== 0 and self.W1 == self.W0:
+    if H1 == 0 and self.W1 == self.W0:
         line_dict["2-3"] = None
     else:
         line_dict["2-3"] = Segment(Z2, Z3)

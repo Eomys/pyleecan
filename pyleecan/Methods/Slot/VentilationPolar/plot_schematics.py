@@ -95,7 +95,7 @@ def plot_schematics(
         if self.parent is None:
             raise ParentMissingError("Error: The hole is not inside a Lamination")
         lam = self.parent
-        fig,ax=lam.plot(
+        fig, ax = lam.plot(
             alpha=0,
             is_show_fig=False,
             is_lam_only=True,  # No magnet
