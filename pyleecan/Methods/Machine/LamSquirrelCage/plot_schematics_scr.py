@@ -31,6 +31,8 @@ def plot_schematics_scr(
     is_add_main_line=True,
     save_path=None,
     is_show_fig=True,
+    fig=None,
+    ax=None,
 ):
     """Plot the schematics of the short circuit ring
 
@@ -48,6 +50,10 @@ def plot_schematics_scr(
         full path including folder, name and extension of the file to save if save_path is not None
     is_show_fig : bool
         To call show at the end of the method
+    fig : Matplotlib.figure.Figure
+        existing figure to use if None create a new one
+    ax : Matplotlib.axes.Axes object
+        Axis on which to plot the data
 
     Returns
     -------
@@ -76,10 +82,12 @@ def plot_schematics_scr(
             is_add_main_line=is_add_main_line,
             save_path=save_path,
             is_show_fig=is_show_fig,
+            fig=fig,
+            ax=ax,
         )
     else:
         # Getting the main plot
-        fig, ax = self.plot_side(is_show_fig=False)
+        fig, ax = self.plot_side(is_show_fig=False,fig=fig,ax=ax)
         Lt = self.comp_length()
         Hs = self.slot.comp_height()
         Ha = self.slot.comp_height_active()

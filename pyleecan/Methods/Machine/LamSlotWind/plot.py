@@ -68,6 +68,9 @@ def plot(
         full path including folder, name and extension of the file to save if save_path is not None
     win_title : str
         Title for the window
+    is_legend : bool
+        True to add the legend
+
     Returns
     -------
     patches : list

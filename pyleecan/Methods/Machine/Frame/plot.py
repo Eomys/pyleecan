@@ -25,7 +25,7 @@ def plot(
         A Frame object
     fig : Matplotlib.figure.Figure
         existing figure to use if None create a new one
-    ax : Matplotlib.ax.Axes object
+    ax : Matplotlib.axes.Axes object
         Axis on which to plot the data
     sym : int
         Symmetry factor (1= plot full machine, 2= half of the machine...)

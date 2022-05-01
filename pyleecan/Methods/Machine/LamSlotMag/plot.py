@@ -50,6 +50,8 @@ def plot(
         To call show at the end of the method
     win_title : str
         Window title
+    is_legend : bool
+        True to add the legend
 
     Returns
     -------

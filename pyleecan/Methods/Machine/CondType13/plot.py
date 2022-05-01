@@ -1,5 +1,5 @@
 from ....definitions import config_dict
-
+from ....Functions.init_fig import init_fig
 COND_COLOR = config_dict["PLOT"]["COLOR_DICT"]["PHASE_COLORS"][0].copy()
 INS_COLOR = config_dict["PLOT"]["COLOR_DICT"]["PHASE_COLORS"][1].copy()
 # Remove alpha from phases
