@@ -35,7 +35,7 @@ from pyleecan.definitions import DATA_DIR, TEST_DIR
 @pytest.mark.SingleOP
 def test_zdt3_Bayes():
     # ### Defining reference Output
-    SCIM_001 = load(join(DATA_DIR, "Machine", "SCIM_001.json"))
+    Railway_Traction = load(join(DATA_DIR, "Machine", "Railway_Traction.json"))
 
     # Definition of the enforced output of the electrical module
     Nt = 2
@@ -55,7 +55,7 @@ def test_zdt3_Bayes():
     Na_tot = 64
 
     # Definition of the simulation
-    simu = Simu1(name="test_zdt3", machine=SCIM_001)
+    simu = Simu1(name="test_zdt3", machine=Railway_Traction)
 
     simu.input = InputCurrent(
         Is=Is,
