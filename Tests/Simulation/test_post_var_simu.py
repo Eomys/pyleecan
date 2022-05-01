@@ -4,7 +4,7 @@ from os.path import join
 from copy import copy
 
 from numpy import sqrt
-
+import numpy as np
 from pyleecan.Classes.HoleM51 import HoleM51
 from pyleecan.Classes.HoleM52 import HoleM52
 from pyleecan.Classes.HoleM53 import HoleM53

@@ -2,7 +2,9 @@ from ....Classes._check import CheckTypeError
 from ntpath import basename
 from ....Functions.path_tools import abs_file_path
 from ....Generator import PYTHON_DEFAULT_ENCODING
-
+# Import numpy to be usable in the fct/lambda
+import numpy as np
+from numpy import sqrt, pi
 
 def _set_keeper(self, value):
     """setter of keeper"""
