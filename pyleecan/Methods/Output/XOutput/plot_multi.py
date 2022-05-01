@@ -66,6 +66,13 @@ def plot_multi(
     win_title : str
         Title of the plot window
 
+    Returns
+    -------
+    fig : Matplotlib.figure.Figure
+        Figure containing the plot
+    ax : Matplotlib.axes.Axes object
+        Axis containing the plot
+
     Raises
     ------
     PlotError
@@ -98,7 +105,7 @@ def plot_multi(
         cmap = COLORMAP
 
     # call plot_2D function
-    plot_2D(
+    fig, ax = plot_2D(
         Xdatas=[x_values],
         Ydatas=[y_values],
         xlabel=x_label,
@@ -117,3 +124,4 @@ def plot_multi(
         font_size_label=FONT_SIZE_LABEL,
         font_size_legend=FONT_SIZE_LEGEND,
     )
+    return fig, ax

@@ -31,6 +31,8 @@ def plot_schematics(
     type_add_active=True,
     save_path=None,
     is_show_fig=True,
+    fig=None,
+    ax=None,
 ):
     """Plot the schematics of the slot
 
@@ -52,6 +54,10 @@ def plot_schematics(
         full path including folder, name and extension of the file to save if save_path is not None
     is_show_fig : bool
         To call show at the end of the method
+    fig : Matplotlib.figure.Figure
+        existing figure to use if None create a new one
+    ax : Matplotlib.axes.Axes object
+        Axis on which to plot the data
 
     Returns
     -------
@@ -74,7 +80,7 @@ def plot_schematics(
         lam = LamHole(
             Rint=0.1, Rext=0.2, is_internal=True, is_stator=False, hole=[hole]
         )
-        hole.plot_schematics(
+        return hole.plot_schematics(
             is_default=False,
             is_add_point_label=is_add_point_label,
             is_add_schematics=is_add_schematics,
@@ -82,6 +88,8 @@ def plot_schematics(
             type_add_active=type_add_active,
             save_path=save_path,
             is_show_fig=is_show_fig,
+            fig=fig,
+            ax=ax,
         )
     else:
         # Getting the main plot
@@ -92,6 +100,8 @@ def plot_schematics(
             alpha=0,
             is_show_fig=False,
             is_lam_only=True,  # No magnet
+            fig=fig,
+            ax=ax,
         )  # center hole on Ox axis
         point_dict = self._comp_point_coordinate()
 
