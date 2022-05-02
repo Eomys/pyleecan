@@ -1,7 +1,7 @@
 from os.path import join
 from numpy import pi
 import pytest
-from Tests import save_path, TEST_DATA_DIR
+from Tests import save_validation_path as save_path, TEST_DATA_DIR
 from pyleecan.Classes.OPdq import OPdq
 from pyleecan.definitions import DATA_DIR
 
@@ -17,7 +17,7 @@ from pyleecan.Functions.load import load
 
 # get the machine
 machine_1 = load(join(DATA_DIR, "Machine", "Toyota_Prius.json"))
-
+save_path = join(save_path, "StructElmer")
 # mesh settings, original line label names have to be used (not the translated)
 n1 = 3
 n2 = 20

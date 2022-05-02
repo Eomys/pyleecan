@@ -28,11 +28,14 @@ def plot_side(self, fig=None, ax=None, is_show_fig=True, save_path=None):
 
     Returns
     -------
-    None
+    fig : Matplotlib.figure.Figure
+        Figure containing the plot
+    ax : Matplotlib.axes.Axes object
+        Axis containing the plot
     """
 
     # Lamination and ventilation ducts patches
-    (fig, axes, patch_leg, label_leg) = init_fig(fig=fig, ax=ax)
+    (fig, ax, patch_leg, label_leg) = init_fig(fig=fig, ax=ax)
 
     patches = list()  # List of patches to draw the lamination
     if self.is_stator:
@@ -143,14 +146,14 @@ def plot_side(self, fig=None, ax=None, is_show_fig=True, save_path=None):
     )
 
     # Display the result
-    axes.set_xlabel("[m]")
-    axes.set_ylabel("[m]")
+    ax.set_xlabel("[m]")
+    ax.set_ylabel("[m]")
     for patch in patches:
-        axes.add_patch(patch)
+        ax.add_patch(patch)
 
     # Axis Setup
-    axes.axis("equal")
-    axes.set_title("Squirrel Cage Rotor side view")
+    ax.axis("equal")
+    ax.set_title("Squirrel Cage Rotor side view")
     # Set legend
     if self.is_stator:
         patch_leg.append(Patch(color=STATOR_COLOR))
@@ -162,9 +165,10 @@ def plot_side(self, fig=None, ax=None, is_show_fig=True, save_path=None):
     label_leg.append("Bar")
     patch_leg.append(Patch(color=SCR_COLOR))
     label_leg.append("Short Circuit Ring")
-    axes.legend(patch_leg, label_leg)
+    ax.legend(patch_leg, label_leg)
     if is_show_fig:
         fig.show()
     if save_path is not None:
         fig.savefig(save_path)
-        plt.close()
+        plt.close(fig=fig)
+    return fig, ax

@@ -1,5 +1,6 @@
 from numpy import sqrt
 
+
 def _comp_R0(self):
     """Compute the radius of the circle
 

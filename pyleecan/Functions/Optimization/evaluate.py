@@ -11,6 +11,7 @@ else:
 from os import stat, remove
 from datetime import datetime
 from numpy import nan
+import numpy as np
 
 
 def evaluate(solver, indiv):

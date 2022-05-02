@@ -309,11 +309,19 @@ class DMatLib(Ui_DMatLib, QDialog):
         # Adapt name to be unique
         name_list = [mat.name for mat in self.material_dict[LIB_KEY]]
         name_list.extend([mat.name for mat in self.material_dict[MACH_KEY]])
+
+        # Renaming the material so that we have "_copy","_copy_2","_copy_3"...
         if new_mat.name in name_list:
-            index = 1
-            while new_mat.name + "_" + str(index) in name_list:
-                index += 1
-            new_mat.name = new_mat.name + "_" + str(index)
+            # Adding number after copy
+            if new_mat.name[-4:] == "copy":
+                new_mat.name = new_mat.name + "_2"
+            # Setting the index after the current one
+            else:
+                index = 1
+                while int(new_mat.name[-1]) >= index:
+                    index += 1
+                new_mat.name = new_mat.name[:-1]
+                new_mat.name = new_mat.name + str(index)
             new_mat.path = join(dirname(new_mat.path), new_mat.name + ".json")
 
         # Save if in MatLib

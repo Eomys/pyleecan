@@ -1,7 +1,3 @@
-# -*- coding: utf-8 -*-
-
-from numpy import pi
-
 from ....Methods.Slot.Slot import SlotCheckError
 from ....Methods.Slot.Slot19 import *
 

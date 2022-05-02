@@ -18,6 +18,7 @@ from Tests import save_plot_path as save_path
 
 def test_plot_radius():
     """Plot the min/max radius of the Hole"""
+    plt.close("all")
     BMW = load(join(DATA_DIR, "Machine", "BMW_i3.json"))
 
     # Modification for better visualization
@@ -25,10 +26,7 @@ def test_plot_radius():
     for surf in BMW.rotor.hole[0].surf_list:
         surf.translate(-5e-3)
 
-    BMW.rotor.plot(is_show_fig=False)
-    fig = plt.gcf()
-    ax = plt.gca()
-
+    fig, ax = BMW.rotor.plot(is_show_fig=False, edgecolor="k")
     # Top and Bottom arc
     (Rint, Rext) = BMW.rotor.hole[0].comp_radius()
     line = Arc1(
@@ -59,16 +57,16 @@ def test_plot_radius():
     )
     # Adding Label
     Zref = Rext * exp(1j * pi / 2)
-    plt.plot(Zref.real, Zref.imag, "xr")
-    plt.text(
+    ax.plot(Zref.real, Zref.imag, "xr")
+    ax.text(
         Zref.real,
         Zref.imag + 1e-3,
         "Rext",
         weight="bold",
     )
     Zref = Rint * exp(1j * pi / 2)
-    plt.plot(Zref.real, Zref.imag, "xr")
-    plt.text(
+    ax.plot(Zref.real, Zref.imag, "xr")
+    ax.text(
         Zref.real,
         Zref.imag + 1e-3,
         "Rint",
@@ -85,6 +83,7 @@ def test_plot_radius():
 
     fig.savefig(join(save_path, "Schematics", "Hole_radius.png"))
     # plt.show()
+    plt.close(fig=fig)
 
 
 def test_plot_magnet_id():
@@ -114,7 +113,7 @@ def test_plot_magnet_id():
         )
     )
 
-    rotor.plot(is_show_fig=False)
+    fig, ax = rotor.plot(is_show_fig=False, edgecolor="k")
 
     # Adding label
     surf_list = rotor.hole[0].build_geometry()
@@ -122,13 +121,12 @@ def test_plot_magnet_id():
         label_dict = decode_label(surf.label)
         if HOLEM_LAB in label_dict["surf_type"]:
             Zref = surf.point_ref * exp(1j * pi / 2)
-            plt.text(
+            ax.text(
                 Zref.real - 5e-3,
                 Zref.imag,
                 "magnet_" + str(label_dict["T_id"]),
                 weight="bold",
             )
-    ax = plt.gca()
     ax.set_xlim(-30e-3, 30e-3)
     ax.set_ylim(50e-3, 90e-3)
 
@@ -138,8 +136,8 @@ def test_plot_magnet_id():
     ax.get_legend().remove()
     ax.set_title("")
 
-    fig = plt.gcf()
     fig.savefig(join(save_path, "Schematics", "Hole_magnet_id.png"))
+    plt.close(fig=fig)
 
 
 def test_plot_hole_RTS():
@@ -188,24 +186,21 @@ def test_plot_hole_RTS():
         )
     )
 
-    rotor.plot(
-        is_show_fig=False
-    )  # , save_path=join(save_path, "Shematics", "Hole_RTS.png"))
+    fig, ax = rotor.plot(is_show_fig=False, edgecolor="k")
 
     # Adding label
     surf_list = rotor.hole[0].build_geometry()
     surf_list.extend(rotor.hole[1].build_geometry())
     for surf in surf_list:
         Zref = surf.point_ref * exp(1j * pi / 2)
-        plt.plot(Zref.real, Zref.imag, "xr")
+        ax.plot(Zref.real, Zref.imag, "xr")
         label_dict = decode_label(surf.label)
-        plt.text(
+        ax.text(
             Zref.real,
             Zref.imag,
             label_dict["surf_type"][4:] + "_" + label_dict["index"],
             weight="bold",
         )
-    ax = plt.gca()
     ax.set_xlim(-30e-3, 30e-3)
     ax.set_ylim(50e-3, 90e-3)
     # Set figure to full screen for readibility
@@ -216,11 +211,12 @@ def test_plot_hole_RTS():
     ax.set_axis_off()
     ax.get_legend().remove()
     ax.set_title("")
-    fig = plt.gcf()
     fig.savefig(join(save_path, "Schematics", "Hole_RTS.png"))
+    plt.close(fig=fig)
 
 
 if __name__ == "__main__":
     test_plot_radius()
-    # test_plot_magnet_id()
-    # test_plot_hole_RTS()
+    test_plot_magnet_id()
+    test_plot_hole_RTS()
+    print("Done")

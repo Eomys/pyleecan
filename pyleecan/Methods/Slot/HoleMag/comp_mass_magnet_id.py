@@ -1,6 +1,3 @@
-# -*- coding: utf-8 -*-
-
-
 def comp_mass_magnet_id(self, index):
     """Compute the mass of the hole magnet of the corresponding index
 
@@ -21,4 +18,8 @@ def comp_mass_magnet_id(self, index):
     if mag_list[index] is None:
         return 0
     else:
-        return self.comp_surface_magnet_id(index) * mag_list[index].Lmag
+        if mag_list[index].Lmag is None:
+            Lmag = self.parent.L1
+        else:
+            Lmag = mag_list[index].Lmag
+        return self.comp_surface_magnet_id(index) * Lmag
