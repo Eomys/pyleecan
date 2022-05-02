@@ -199,7 +199,7 @@ def test_FEMM_Loss_Prius():
     )
 
 
-    loss_model = LossModelSteinmetz()
+    loss_model = LossModelSteinmetz(is_show_fig=True)
     simu.loss = LossFEMM(
         Cp=Cprox,
         is_get_meshsolution=True,

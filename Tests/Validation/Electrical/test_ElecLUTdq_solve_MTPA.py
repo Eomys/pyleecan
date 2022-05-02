@@ -38,7 +38,7 @@ def test_ElecLUTdq_solve_MTPA():
 
     # LUT_enforced = None
 
-    LUT_enforced = load("C:/pyleecan/pyleecan_B/pyleecan/pyleecan/Results/LUT.h5")
+    LUT_enforced = load(r"C:\Users\LAP10\Documents\Loss\LUT_eff.h5")
 
     # Speed vector
     Nspeed = 50
