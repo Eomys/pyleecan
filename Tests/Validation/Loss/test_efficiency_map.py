@@ -1,4 +1,4 @@
-from os.path import join
+from os.path import join, split, exists
 
 import numpy as np
 from numpy.testing import assert_almost_equal
@@ -37,10 +37,18 @@ def test_ElecLUTdq_solve_MTPA():
     """Validation of the PMSM Electrical Equivalent Circuit with the Prius machine for MTPA calculation"""
 
     Toyota_Prius = load(join(DATA_DIR, "Machine", "Toyota_Prius.json"))
+    path_to_LUT = r"C:\Users\LAP10\Documents\Loss\LUT_eff2.h5"
 
-    # LUT_enforced = None
+    if not exists(split(path_to_LUT)[0]):
+        raise Exception("The path to LUT is not valid.")
+    try:
+        LUT_enforced = load(path_to_LUT)
+        is_LUT_exists = True
+    except FileNotFoundError:
+        print("The LUT could not be loaded, so it will be computed.")
+        LUT_enforced = None
+        is_LUT_exists = False
 
-    LUT_enforced = load(r"C:\Users\LAP10\Documents\Loss\LUT_eff.h5")
 
     # Speed vector
     Nspeed = 50
@@ -163,6 +171,9 @@ def test_ElecLUTdq_solve_MTPA():
     # assert_almost_equal(OP_matrix_MTPA[:, -1, 3].min(), 164, decimal=0)
     # assert_almost_equal(OP_matrix_MTPA[:, 0, 3].max(), 0, decimal=0)
     # assert_almost_equal(OP_matrix_MTPA[:, 0, 3].min(), 0, decimal=0)
+    
+    if not is_LUT_exists:
+        simu.elec.LUT_enforced.save(save_path=path_to_LUT)
 
     if is_show_fig:
         # Build legend list for each load level
