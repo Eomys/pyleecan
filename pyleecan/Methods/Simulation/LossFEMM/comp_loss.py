@@ -30,7 +30,7 @@ def comp_loss(self, output, axes_dict):
         loss_model.alpha_B,
     ]:
         material = machine.stator.mat_type
-        loss_model.comp_coeff(material, is_show_fig=True)
+        loss_model.comp_coeff(material)
 
     loss_model = self.model_dict["rotor core"]
     if None in [
@@ -40,7 +40,7 @@ def comp_loss(self, output, axes_dict):
         loss_model.alpha_B,
     ]:
         material = machine.rotor.mat_type
-        loss_model.comp_coeff(material, is_show_fig=True)
+        loss_model.comp_coeff(material)
 
     # Comp stator core losses
     if "stator core" in self.model_dict:

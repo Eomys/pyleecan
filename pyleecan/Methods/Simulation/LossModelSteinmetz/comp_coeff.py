@@ -8,7 +8,7 @@ from itertools import groupby
 import textwrap
 
 
-def comp_coeff(self, material, is_show_fig=False):
+def comp_coeff(self, material):
     """Enables to compute the coefficients of the loss model with a curve fitting
     on loss data stored in the material
 
@@ -19,8 +19,6 @@ def comp_coeff(self, material, is_show_fig=False):
         This material object must contain loss data as an ImportMatrixVal object.
         This matrix must contain 3 rows, correspoding to the excitation frequency (Hz),
         the peak magnetic flux density (T), and the loss density (W/kg) in this order.
-    is_show_fig : bool, optional
-        Tells whether to show or not the curve fitting figure, by default False
     """
     
 
@@ -48,7 +46,7 @@ def comp_coeff(self, material, is_show_fig=False):
 
     if self.is_show_fig:
         groups, uniquekeys = group_by_frequency(loss_data)
-        fig = plt.figure("Curve fitting for iron losses")
+        fig = plt.figure("Curve fitting for iron losses", figsize=(14,7))
         B_check = np.linspace(0, 2, 1000)
         ax = plt.gca()
         for index, key in enumerate(uniquekeys):
