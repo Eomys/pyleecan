@@ -51,7 +51,7 @@ def comp_coeff(self, material, is_show_fig=False):
 
     if self.is_show_fig:
         groups, uniquekeys = group_by_frequency(loss_data)
-        fig = plt.figure("Curve fitting for Iron losses")
+        fig = plt.figure("Curve fitting for Iron losses", figsize=(16,9))
         B_check = np.linspace(0, 2, 1000)
         ax = plt.gca()
         for index, key in enumerate(uniquekeys):

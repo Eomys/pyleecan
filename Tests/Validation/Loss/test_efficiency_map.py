@@ -361,14 +361,14 @@ def test_ElecLUTdq_solve_MTPA():
 
         # Plot torque maps
         plot_3D(
-            Zdata=OP_matrix_MTPA[:, :, -1],
+            Zdata=OP_matrix_MTPA[:, :, 3],
             zlabel="Average Torque [N.m]",
             title="Torque map in dq plane",
             **dict_map,
         )
 
         # plot_3D(
-        #     Zdata=Id.reshape((n_Iq, n_Id)).T,
+        #     Zdata=Id.reshape((nd, nq)).T,
         #     zlabel="Average Torque [N.m]",
         #     title="Torque map in dq plane",
         #     # save_path=join(save_path, name + "_torque_map.png"),
