@@ -23,6 +23,11 @@ except ImportError as error:
     get_loss = error
 
 try:
+    from ..Methods.Output.OutLoss.get_loss_density_ag import get_loss_density_ag
+except ImportError as error:
+    get_loss_density_ag = error
+
+try:
     from ..Methods.Output.OutLoss.get_loss_dist import get_loss_dist
 except ImportError as error:
     get_loss_dist = error
@@ -61,6 +66,18 @@ class OutLoss(FrozenClass):
         )
     else:
         get_loss = get_loss
+    # cf Methods.Output.OutLoss.get_loss_density_ag
+    if isinstance(get_loss_density_ag, ImportError):
+        get_loss_density_ag = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use OutLoss method get_loss_density_ag: "
+                    + str(get_loss_density_ag)
+                )
+            )
+        )
+    else:
+        get_loss_density_ag = get_loss_density_ag
     # cf Methods.Output.OutLoss.get_loss_dist
     if isinstance(get_loss_dist, ImportError):
         get_loss_dist = property(

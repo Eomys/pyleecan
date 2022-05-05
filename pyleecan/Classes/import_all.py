@@ -74,7 +74,6 @@ from ..Classes.Input import Input
 from ..Classes.InputCurrent import InputCurrent
 from ..Classes.InputFlux import InputFlux
 from ..Classes.InputForce import InputForce
-from ..Classes.InputPower import InputPower
 from ..Classes.InputVoltage import InputVoltage
 from ..Classes.Interpolation import Interpolation
 from ..Classes.LUT import LUT
@@ -134,6 +133,8 @@ from ..Classes.NotchEvenDist import NotchEvenDist
 from ..Classes.OP import OP
 from ..Classes.OPdq import OPdq
 from ..Classes.OPslip import OPslip
+from ..Classes.OptiBayesAlg import OptiBayesAlg
+from ..Classes.OptiBayesAlgSmoot import OptiBayesAlgSmoot
 from ..Classes.OptiConstraint import OptiConstraint
 from ..Classes.OptiDesignVar import OptiDesignVar
 from ..Classes.OptiGenAlg import OptiGenAlg

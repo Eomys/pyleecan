@@ -39,6 +39,8 @@ class PCondType22(Gen_PCondType22, QWidget):
         # Set material combobox according to matlib names
         self.material_dict = material_dict
         self.w_mat.def_mat = "Copper1"
+        self.w_mat.is_hide_button = True
+        self.w_mat.setText("Bar material")
 
         # Set unit name (m ou mm)
         self.u = gui_option.unit

@@ -1,7 +1,7 @@
 import numpy as np
 
 
-def get_Lmdqh(self, Id, Iq, Phi_dqh=None):
+def get_Lm_dqh(self, Id, Iq, Phi_dqh=None):
     """Get the magnetizing dqh inductance
 
     Parameters
@@ -25,7 +25,7 @@ def get_Lmdqh(self, Id, Iq, Phi_dqh=None):
         Phi_dqh = self.interp_Phi_dqh(Id=Id, Iq=Iq)
 
     # Get dqh flux linkage (without currents, only due to PM)
-    Phi_dqh_mag = self.get_Phidqh_mag_mean()[:, None]
+    Phi_dqh_mag = self.get_Phi_dqh_mag_mean()[:, None]
 
     # Init dqh current
     if np.isscalar(Id) and np.isscalar(Iq):

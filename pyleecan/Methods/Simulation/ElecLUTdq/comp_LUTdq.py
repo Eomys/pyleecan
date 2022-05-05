@@ -54,7 +54,4 @@ def comp_LUTdq(self):
 
     LUT.simu.run()
 
-    if self.LUT_enforced is None:
-        self.LUT_enforced = LUT
-
     return LUT

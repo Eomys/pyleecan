@@ -9,7 +9,7 @@ def is_round_wire(self):
     Returns
     -------
     is_round_wire: bool
-        is_round_wire is always False since wire is rectangular
+        is_round_wire is always True since wire is round
 
     """
 

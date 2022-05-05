@@ -1,6 +1,3 @@
-from ....Methods.Simulation.Input import InputError
-
-
 def get_slip(self):
     """Returns the Rotor mechanical slip
 
