@@ -5613,7 +5613,8 @@
         "desc": "Steinmetz Loss Model Class",
         "is_internal": false,
         "methods": [
-            "comp_coeff"
+            "comp_coeff",
+            "comp_loss"
         ],
         "mother": "LossModel",
         "name": "LossModelSteinmetz",

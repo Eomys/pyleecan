@@ -20,7 +20,6 @@ def comp_coeff(self, material):
         This matrix must contain 3 rows, correspoding to the excitation frequency (Hz),
         the peak magnetic flux density (T), and the loss density (W/kg) in this order.
     """
-    
 
     def comp_loss(xdata, Ch, Ce, alpha_f, alpha_B):
         f = xdata[0]
@@ -46,7 +45,7 @@ def comp_coeff(self, material):
 
     if self.is_show_fig:
         groups, uniquekeys = group_by_frequency(loss_data)
-        fig = plt.figure("Curve fitting for iron losses", figsize=(14,7))
+        fig = plt.figure("Curve fitting for iron losses", figsize=(14, 7))
         B_check = np.linspace(0, 2, 1000)
         ax = plt.gca()
         for index, key in enumerate(uniquekeys):

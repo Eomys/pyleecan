@@ -53,10 +53,14 @@ def comp_coeff(self, material, is_show_fig=False):
     loss = loss_data[2]
     xdata = np.array([f, B])
     ydata = np.array(loss)
-    popt, pcov = curve_fit(comp_loss, xdata, ydata,
-                           p0=[1e-3, 1, 1e-3, 2, 1e-3, 1.5],
-                           bounds=(0,10),
-                           maxfev=1e3)
+    popt, pcov = curve_fit(
+        comp_loss,
+        xdata,
+        ydata,
+        p0=[1e-3, 1, 1e-3, 2, 1e-3, 1.5],
+        bounds=(0, 10),
+        maxfev=1e3,
+    )
     print(popt)
 
     if is_show_fig:

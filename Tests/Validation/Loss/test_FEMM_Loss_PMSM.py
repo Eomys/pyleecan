@@ -199,14 +199,13 @@ def test_FEMM_Loss_Prius():
         is_calc_torque_energy=False,
     )
 
-
-    loss_model = LossModelSteinmetz()
     simu.loss = LossFEMM(
         Cp=Cprox,
         is_get_meshsolution=True,
         Tsta=100,
         type_skin_effect=0,
-        model_dict={"stator core": loss_model, "rotor core": loss_model},
+        model_dict={"stator core": LossModelSteinmetz(),
+                    "rotor core": LossModelSteinmetz()},
     )
 
     out = simu.run()
@@ -288,6 +287,6 @@ def test_FEMM_Loss_Prius():
 # To run it without pytest
 if __name__ == "__main__":
 
-    out = test_FEMM_Loss_SPMSM()
+    # out = test_FEMM_Loss_SPMSM()
 
     out = test_FEMM_Loss_Prius() 

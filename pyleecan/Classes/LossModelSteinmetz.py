@@ -22,6 +22,11 @@ try:
 except ImportError as error:
     comp_coeff = error
 
+try:
+    from ..Methods.Simulation.LossModelSteinmetz.comp_loss import comp_loss
+except ImportError as error:
+    comp_loss = error
+
 
 from ._check import InitUnKnowClassError
 
@@ -31,6 +36,7 @@ class LossModelSteinmetz(LossModel):
 
     VERSION = 1
 
+    # Check ImportError to remove unnecessary dependencies in unused method
     # cf Methods.Simulation.LossModelSteinmetz.comp_coeff
     if isinstance(comp_coeff, ImportError):
         comp_coeff = property(
@@ -42,6 +48,17 @@ class LossModelSteinmetz(LossModel):
         )
     else:
         comp_coeff = comp_coeff
+    # cf Methods.Simulation.LossModelSteinmetz.comp_loss
+    if isinstance(comp_loss, ImportError):
+        comp_loss = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use LossModelSteinmetz method comp_loss: " + str(comp_loss)
+                )
+            )
+        )
+    else:
+        comp_loss = comp_loss
     # save and copy methods are available in all object
     save = save
     copy = copy
