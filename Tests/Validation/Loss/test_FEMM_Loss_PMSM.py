@@ -12,6 +12,8 @@ from pyleecan.Classes.MagFEMM import MagFEMM
 from pyleecan.Classes.LossFEMM import LossFEMM
 from pyleecan.Classes.LossModelSteinmetz import LossModelSteinmetz
 from pyleecan.Classes.LossModelBertotti import LossModelBertotti
+from pyleecan.Classes.LossModelWinding import LossModelWinding
+from pyleecan.Classes.LossModelProximity import LossModelProximity
 from pyleecan.Classes.OutLoss import OutLoss
 
 from pyleecan.Functions.load import load
@@ -21,7 +23,7 @@ from pyleecan.definitions import DATA_DIR
 from SciDataTool.Functions.Plot.plot_2D import plot_2D 
 
 
-is_show_fig = False
+is_show_fig = True
 
 
 @pytest.mark.long_5s
@@ -205,7 +207,9 @@ def test_FEMM_Loss_Prius():
         Tsta=100,
         type_skin_effect=0,
         model_dict={"stator core": LossModelSteinmetz(),
-                    "rotor core": LossModelSteinmetz(is_show_fig=True)},
+                    "rotor core": LossModelSteinmetz(is_show_fig=True),
+                    "Joule": LossModelWinding(),
+                    "Proximity": LossModelProximity(k_p=Cprox)}
     )
 
     out = simu.run()
@@ -280,6 +284,7 @@ def test_FEMM_Loss_Prius():
     #     group_names=["rotor core", "rotor magnets"],
     #     # clim=[2e4, 2e7],
     # )
+
 
     return out
 

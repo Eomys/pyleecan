@@ -22,7 +22,6 @@ def comp_loss(self, output, axes_dict):
 
     coeff_dict = dict()
 
-
     # Comp stator core losses
     if "stator core" in self.model_dict:
         # Comp stator core losses
@@ -40,9 +39,9 @@ def comp_loss(self, output, axes_dict):
     else:
         Protor_density, frotor = None, None
 
-    if self.Cp > 0:
+    if "Proximity" in self.model_dict:
         # Comp proximity losses in stator windings (same expression as core losses with Ce=C)
-        Pprox_density, fprox = self.comp_loss_density_core(
+        Pprox_density, fprox = self.model_dict["Proximity"].comp_loss(
             "stator winding", coeff_dict=coeff_dict
         )
     else:
@@ -63,7 +62,7 @@ def comp_loss(self, output, axes_dict):
     if self.is_get_meshsolution:
 
         # Compute Joule losses in stator windings
-        Pjoule_density, fjoule = self.comp_loss_density_joule("stator winding")
+        Pjoule_density, fjoule = self.model_dict["Joule"].comp_loss("stator winding")
 
         meshsol = output.mag.meshsolution
         group = meshsol.group

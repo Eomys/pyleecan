@@ -93,6 +93,7 @@ from ..Classes.Loss import Loss
 from ..Classes.LossFEMM import LossFEMM
 from ..Classes.LossModel import LossModel
 from ..Classes.LossModelBertotti import LossModelBertotti
+from ..Classes.LossModelProximity import LossModelProximity
 from ..Classes.LossModelSteinmetz import LossModelSteinmetz
 from ..Classes.LossModelWinding import LossModelWinding
 from ..Classes.Machine import Machine

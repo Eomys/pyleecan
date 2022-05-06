@@ -5462,6 +5462,7 @@
         ],
         "daughters": [
             "LossModelBertotti",
+            "LossModelProximity",
             "LossModelSteinmetz",
             "LossModelWinding"
         ],
@@ -5599,6 +5600,36 @@
                 "type": "list",
                 "unit": "rpm",
                 "value": []
+            }
+        ]
+    },
+    "LossModelProximity": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Proximity Loss Model Class",
+        "is_internal": false,
+        "methods": [
+            "comp_coeff",
+            "comp_loss"
+        ],
+        "mother": "LossModel",
+        "name": "LossModelProximity",
+        "package": "Simulation",
+        "path": "pyleecan/Generator/ClassesRef/Simulation/LossModelProximity.csv",
+        "properties": [
+            {
+                "desc": "Proximity loss coefficient",
+                "max": "",
+                "min": "",
+                "name": "k_p",
+                "type": "float",
+                "unit": "W/kg",
+                "value": null
             }
         ]
     },

@@ -42,20 +42,13 @@ def comp_loss(self, group, coeff_dict):
     Kf = lamination.Kf1
     rho = lamination.mat_type.struct.rho
 
-    if None in [
-        self.k_hy,
-        self.k_ed,
-        self.alpha_f,
-        self.alpha_B,
-    ]:
+    if self.k_p is None:
         material = lamination.mat_type
+        # #TODO make comp_coef method
         self.comp_coeff(material)
 
     # Get hysteresis and eddy current loss coefficients
-    k_hy = self.k_hy / Kf * rho
-    k_ed = self.k_ed / Kf * rho
-    alpha_f = self.alpha_f
-    alpha_B = self.alpha_B
+    k_p = self.k_p
 
     # Get fundamental frequency
     felec = output.elec.OP.get_felec()
@@ -101,23 +94,6 @@ def comp_loss(self, group, coeff_dict):
         for comp in Bvect.components.values():
             comp.axes[0] = Time
 
-    # # Plot 2D to check periodicity
-    # # ii = Igrp[0]
-    # ii = 1560
-    # Bvect.components["comp_x"].plot_2D_Data(
-    #     "time",
-    #     "indice[" + str(ii) + "]",
-    #     data_list=[Bvect.components["comp_y"]],
-    #     legend_list=["Bx", "By"],
-    # )
-
-    # Bvect.components["comp_x"].plot_2D_Data(
-    #     "freqs",
-    #     "indice[" + str(ii) + "]",
-    #     data_list=[Bvect.components["comp_y"]],
-    #     legend_list=["Bx", "By"],
-    # )
-
     # Compute magnetic flux density FFT
     Bfft = Bvect.get_xyz_along("freqs", "indice=" + str(Igrp), "z[0]")
     freqs = Bfft["freqs"]
@@ -126,7 +102,7 @@ def comp_loss(self, group, coeff_dict):
     Bfft_magnitude = np_sqrt(np_abs(Bfft["comp_x"]) ** 2 + np_abs(Bfft["comp_y"]) ** 2)
 
     # Eddy-current loss density (or proximity loss density) for each frequency and element
-    Pcore_density = k_ed * freqs[:, None] ** 2 * Bfft_magnitude ** 2
+    Pcore_density = k_p * freqs[:, None] ** 2 * Bfft_magnitude ** 2
 
     if is_change_Time:
         # Change periodicity back to original periodicity
@@ -140,29 +116,9 @@ def comp_loss(self, group, coeff_dict):
         # Get frequency orders
         n = freqs / felec
         # Get polynomial coefficients
-        A = np_sum(k_ed * coeff * n ** 2)
-        if k_hy == 0:
-            B = 0
-            alpha_f = 0
-        else:
-            coeff = Lst * per_a * matmul(Bfft_magnitude ** alpha_B, Se)
-            B = np_sum(k_hy * coeff * n ** alpha_f)
+        A = np_sum(k_p * coeff * n ** 2)
+        B = 0
+        alpha_f = 0
         coeff_dict[group] = {"A": A, "B": B, "C": 0, "a": 2, "b": alpha_f, "c": 0}
-
-    with open("loss_models.txt", "w") as f:
-        f.write(
-            f"""
-k_hy: {self.k_hy}
-k_ed: {self.k_ed}
-alpha_f: {self.alpha_f}
-alpha_B: {self.alpha_B}
-coeff: {coeff}
-A: {A}
-B: {B}
-Lst: {Lst}
-Igrp: {Igrp}
-freqs: {freqs}
-"""
-        )
 
     return Pcore_density, freqs
