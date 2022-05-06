@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 
-class LossModelBertottiError(Exception):
-    """Raised when there is a Loss error"""
+class LossSteinmetzError(Exception):
+    """Raised when there is a Loss Steinmetz error"""
 
     pass

@@ -14,6 +14,7 @@ from pyleecan.Classes.LossModelSteinmetz import LossModelSteinmetz
 from pyleecan.Classes.LossModelBertotti import LossModelBertotti
 from pyleecan.Classes.LossModelWinding import LossModelWinding
 from pyleecan.Classes.LossModelProximity import LossModelProximity
+from pyleecan.Classes.LossModelMagnet import LossModelMagnet
 from pyleecan.Classes.OutLoss import OutLoss
 
 from pyleecan.Functions.load import load
@@ -209,7 +210,8 @@ def test_FEMM_Loss_Prius():
         model_dict={"stator core": LossModelSteinmetz(),
                     "rotor core": LossModelSteinmetz(is_show_fig=True),
                     "Joule": LossModelWinding(),
-                    "Proximity": LossModelProximity(k_p=Cprox)}
+                    "proximity": LossModelProximity(k_p=Cprox),
+                    "magnets": LossModelMagnet()}
     )
 
     out = simu.run()

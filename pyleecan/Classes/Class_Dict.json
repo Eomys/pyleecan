@@ -5462,6 +5462,7 @@
         ],
         "daughters": [
             "LossModelBertotti",
+            "LossModelMagnet",
             "LossModelProximity",
             "LossModelSteinmetz",
             "LossModelWinding"
@@ -5602,6 +5603,26 @@
                 "value": []
             }
         ]
+    },
+    "LossModelMagnet": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Magnet Loss Model Class",
+        "is_internal": false,
+        "methods": [
+            "comp_coeff",
+            "comp_loss"
+        ],
+        "mother": "LossModel",
+        "name": "LossModelMagnet",
+        "package": "Simulation",
+        "path": "pyleecan/Generator/ClassesRef/Simulation/LossModelMagnet.csv",
+        "properties": []
     },
     "LossModelProximity": {
         "constants": [
