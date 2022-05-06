@@ -52,11 +52,10 @@ def comp_loss(self, group, coeff_dict):
         self.comp_coeff(material)
 
     # Get hysteresis and eddy current loss coefficients
-    else:
-        self.k_hy = self.k_hy / Kf * rho
-        self.k_ed = self.k_ed / Kf * rho
-        alpha_f = self.alpha_f
-        alpha_B = self.alpha_B
+    k_hy = self.k_hy / Kf * rho
+    k_ed = self.k_ed / Kf * rho
+    alpha_f=self.alpha_f
+    alpha_B=self.alpha_B
 
     # Get fundamental frequency
     felec = output.elec.OP.get_felec()
@@ -127,7 +126,7 @@ def comp_loss(self, group, coeff_dict):
     Bfft_magnitude = np_sqrt(np_abs(Bfft["comp_x"]) ** 2 + np_abs(Bfft["comp_y"]) ** 2)
 
     # Eddy-current loss density (or proximity loss density) for each frequency and element
-    Pcore_density = self.k_ed * freqs[:, None] ** 2 * Bfft_magnitude ** 2
+    Pcore_density = k_ed * freqs[:, None] ** 2 * Bfft_magnitude ** 2
 
     if is_change_Time:
         # Change periodicity back to original periodicity
@@ -141,13 +140,27 @@ def comp_loss(self, group, coeff_dict):
         # Get frequency orders
         n = freqs / felec
         # Get polynomial coefficients
-        A = np_sum(self.k_ed * coeff * n ** 2)
-        if self.k_hy == 0:
+        A = np_sum(k_ed * coeff * n ** 2)
+        if k_hy == 0:
             B = 0
-            self.alpha_f = 0
+            alpha_f = 0
         else:
-            coeff = Lst * per_a * matmul(Bfft_magnitude ** self.alpha_B, Se)
-            B = np_sum(self.k_hy * coeff * n ** self.alpha_f)
-        coeff_dict[group] = {"A": A, "B": B, "C": 0, "a": 2, "b": self.alpha_f, "c": 0}
+            coeff = Lst * per_a * matmul(Bfft_magnitude ** alpha_B, Se)
+            B = np_sum(k_hy * coeff * n ** alpha_f)
+        coeff_dict[group] = {"A": A, "B": B, "C": 0, "a": 2, "b": alpha_f, "c": 0}
+    
+    with open("loss_models.txt",'w') as f:
+        f.write(f"""
+k_hy: {self.k_hy}
+k_ed: {self.k_ed}
+alpha_f: {self.alpha_f}
+alpha_B: {self.alpha_B}
+coeff: {coeff}
+A: {A}
+B: {B}
+Lst: {Lst}
+Igrp: {Igrp}
+freqs: {freqs}
+""")
 
     return Pcore_density, freqs
