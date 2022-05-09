@@ -1,5 +1,5 @@
 from numpy import exp
-from ....Methods.Simulation.OP_matrix import OPMatrixException
+from ....Methods.Simulation.OPMatrix import OPMatrixException
 
 
 def set_OP_matrix(self, OP_matrix, *arg_list):
@@ -10,8 +10,8 @@ def set_OP_matrix(self, OP_matrix, *arg_list):
 
     Parameters
     ----------
-    self : OP_matrix
-        OP_matrix object to update
+    self : OPMatrix
+        OPMatrix object to update
     OP_matrix : ndarray
         OP_matrix to set in the object
     *arg_list : list of str

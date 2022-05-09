@@ -3,8 +3,8 @@ def get_OP_list(self, type_OP=0):
 
     Parameters
     ----------
-    self : OP_matrix
-        An OP_matrix object
+    self : OPMatrix
+        An OPMatrix object
     type_OP : int
         0 OPdq, 1 OPslip
 
@@ -14,13 +14,10 @@ def get_OP_list(self, type_OP=0):
         List of OP objects
     """
 
-    if self.N0 is not None:
-        N = len(self.N0)
-    else:
-        N = len(self.Id)
+    N_OP = self.get_N_OP()
 
     OP_list = list()
-    for ii in range(N):
+    for ii in range(N_OP):
         OP_list.append(self.get_OP(ii, type_OP=type_OP))
 
     return OP_list

@@ -1,5 +1,5 @@
 from numpy import zeros, angle
-from ....Methods.Simulation.OP_matrix import OPMatrixException
+from ....Methods.Simulation.OPMatrix import OPMatrixException
 
 
 def get_OP_matrix(self, *arg_list):
@@ -10,8 +10,8 @@ def get_OP_matrix(self, *arg_list):
 
     Parameters
     ----------
-    self : OP_matrix
-        OP_matrix object to update
+    self : OPMatrix
+        OPMatrix object to update
     OP_matrix : ndarray
         OP_matrix to set in the object
     *arg_list : list of str
@@ -23,11 +23,8 @@ def get_OP_matrix(self, *arg_list):
         arg_list = arg_list[0]
 
     # Init OP_matrix
-    if self.N0 is not None:
-        N = len(self.N0)
-    else:
-        N = len(self.Id)
-    OP_matrix = zeros((N, len(arg_list)))
+    N_OP = self.get_N_OP()
+    OP_matrix = zeros((N_OP, len(arg_list)))
 
     # Setup default argument (N0, Id, Iq, Tem, Pem)
     if len(arg_list) == 0:

@@ -7,8 +7,8 @@ def get_OP(self, index, type_OP=0):
 
     Parameters
     ----------
-    self : OP_matrix
-        OP_matrix object to extrat the OP from
+    self : OPMatrix
+        OPMatrix object to extrat the OP from
     index : int
         Index of the OP to extract
     type_OP : int
@@ -34,7 +34,10 @@ def get_OP(self, index, type_OP=0):
     if self.Tem_av_ref is not None:
         OP.Tem_av_ref = self.Tem_av_ref[index]
     if self.Pem_av_ref is not None:
-        OP.Pem_av_ref = self.Pem_av_ref[index]
+        if self.is_output_power in [None, True]:
+            OP.Pem_av_ref = self.Pem_av_ref[index]
+        else:
+            OP.Pem_av_in = self.Pem_av_ref[index]
     if self.slip_ref is not None:
         OP.Pem_av_ref = self.slip_ref[index]
 

@@ -7999,6 +7999,112 @@
             }
         ]
     },
+    "OPMatrix": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Define the Operating Point of a variable speed simulation",
+        "is_internal": false,
+        "methods": [
+            "get_N_OP",
+            "get_OP",
+            "get_OP_list",
+            "get_OP_matrix",
+            "set_OP_matrix",
+            "_set_OP_matrix"
+        ],
+        "mother": "",
+        "name": "OPMatrix",
+        "package": "Simulation",
+        "path": "pyleecan/Generator/ClassesRef/Simulation/OPMatrix.csv",
+        "properties": [
+            {
+                "desc": "Rotor speed",
+                "max": "",
+                "min": "",
+                "name": "N0",
+                "type": "ndarray",
+                "unit": "rpm",
+                "value": null
+            },
+            {
+                "desc": "d-axis current rms value",
+                "max": "",
+                "min": "",
+                "name": "Id_ref",
+                "type": "ndarray",
+                "unit": "Arms",
+                "value": null
+            },
+            {
+                "desc": "q-axis current rms value",
+                "max": "",
+                "min": "",
+                "name": "Iq_ref",
+                "type": "ndarray",
+                "unit": "Arms",
+                "value": null
+            },
+            {
+                "desc": "d-axis voltage rms value",
+                "max": "",
+                "min": "",
+                "name": "Ud_ref",
+                "type": "ndarray",
+                "unit": "Vrms",
+                "value": null
+            },
+            {
+                "desc": "q-axis voltage rms value",
+                "max": "",
+                "min": "",
+                "name": "Uq_ref",
+                "type": "ndarray",
+                "unit": "Vrms",
+                "value": null
+            },
+            {
+                "desc": "Output average electromagnetic torque",
+                "max": "",
+                "min": "",
+                "name": "Tem_av_ref",
+                "type": "ndarray",
+                "unit": "N.m",
+                "value": null
+            },
+            {
+                "desc": "Output/Input average Electromagnetic Power",
+                "max": "",
+                "min": "",
+                "name": "Pem_av_ref",
+                "type": "ndarray",
+                "unit": "W",
+                "value": null
+            },
+            {
+                "desc": "Rotor mechanical slip",
+                "max": "",
+                "min": "",
+                "name": "slip_ref",
+                "type": "ndarray",
+                "unit": "",
+                "value": null
+            },
+            {
+                "desc": "True if power given in OP_matrix is the output power, False if it is the input power",
+                "max": "",
+                "min": "",
+                "name": "is_output_power",
+                "type": "bool",
+                "unit": "",
+                "value": 1
+            }
+        ]
+    },
     "OPdq": {
         "constants": [
             {
@@ -14280,7 +14386,9 @@
         "is_internal": false,
         "methods": [
             "get_ref_simu_index",
-            "get_OP_matrix"
+            "get_OP_matrix",
+            "set_OP_matrix",
+            "_set_OP_matrix"
         ],
         "mother": "VarSimu",
         "name": "VarLoad",
@@ -14292,27 +14400,9 @@
                 "max": "",
                 "min": "",
                 "name": "OP_matrix",
-                "type": "ndarray",
+                "type": "OPMatrix",
                 "unit": "-",
                 "value": null
-            },
-            {
-                "desc": "Select which kind of OP_matrix is used 0: (N0,I0,Phi0,T,P), 1:(N0,Id,Iq,T,P), 2:(N0,U0,s,T,P)",
-                "max": "2",
-                "min": "0",
-                "name": "type_OP_matrix",
-                "type": "int",
-                "unit": "-",
-                "value": 0
-            },
-            {
-                "desc": "True if power given in OP_matrix is the output power, False if it is the input power",
-                "max": "",
-                "min": "",
-                "name": "is_output_power",
-                "type": "bool",
-                "unit": "",
-                "value": 1
             }
         ]
     },

@@ -13,7 +13,7 @@ def get_Phi_dqh_mag_mean(self):
     """
 
     # Find Id=Iq=0
-    OP_list = self.get_OP_matrix()[:, 1:3].tolist()
+    OP_list = self.get_OP_matrix("Id", "Iq").tolist()
     if [0, 0] in OP_list:
         ii = OP_list.index([0, 0])
     else:

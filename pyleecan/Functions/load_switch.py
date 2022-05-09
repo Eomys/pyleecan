@@ -133,6 +133,7 @@ load_switch = {
     "Notch": Notch,
     "NotchEvenDist": NotchEvenDist,
     "OP": OP,
+    "OPMatrix": OPMatrix,
     "OPdq": OPdq,
     "OPslip": OPslip,
     "OptiBayesAlg": OptiBayesAlg,

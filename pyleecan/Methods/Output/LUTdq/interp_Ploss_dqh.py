@@ -52,7 +52,7 @@ def interp_Ploss_dqh(self, Id, Iq, N0):
         Ploss_dqh[ii, 4] = out.loss.get_loss_group("stator winding", felec)
 
     # Get unique Id, Iq sorted in ascending order
-    OP_matrix = self.get_OP_matrix()
+    OP_matrix = self.get_OP_matrix("N0", "Id", "Iq")
     XId, jd = np.unique(OP_matrix[:, 1], return_inverse=True)
     XIq, jq = np.unique(OP_matrix[:, 2], return_inverse=True)
     nd, nq = XId.size, XIq.size
@@ -68,7 +68,7 @@ def interp_Ploss_dqh(self, Id, Iq, N0):
         # Rebuild 2D grid from xId and xIq
         is_rect_interp = True
         # Find Id=Iq=0
-        OP_list = self.get_OP_matrix()[:, 1:3].tolist()
+        OP_list = OP_matrix[:, 1:3].tolist()
         if [0, 0] in OP_list:
             i0 = OP_list.index([0, 0])
         else:
