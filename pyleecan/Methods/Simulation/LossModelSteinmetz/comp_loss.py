@@ -1,7 +1,7 @@
 from numpy import matmul, abs as np_abs, sum as np_sum, sqrt as np_sqrt
 
 
-def comp_loss(self, group, coeff_dict):
+def comp_loss(self):
     """Calculate loss density in iron core given by group "stator core" or "rotor core"
     assuming power density is given by a Steinmetz model
 
@@ -36,7 +36,7 @@ def comp_loss(self, group, coeff_dict):
     if output.geo.is_antiper_a:
         per_a *= 2
 
-    lamination = machine.stator if "stator" in group else machine.rotor
+    lamination = machine.stator if "stator" in self.group else machine.rotor
     Lst = lamination.L1
     # Taking into account the stacking factor
     Kf = lamination.Kf1
@@ -70,8 +70,8 @@ def comp_loss(self, group, coeff_dict):
 
     group_list = list(meshsol.group.keys())
 
-    if group not in group_list:
-        raise Exception("Cannot calculate core losses for group=" + group)
+    if self.group not in group_list:
+        raise Exception("Cannot calculate core losses for group=" + self.group)
 
     label_list = [sol.label for sol in meshsol.solution]
 
@@ -81,7 +81,7 @@ def comp_loss(self, group, coeff_dict):
         ind = label_list.index("B")
 
     # Get element indices associated to group
-    Igrp = meshsol.group[group]
+    Igrp = meshsol.group[self.group]
 
     # Get element surface associated to group
     Se = meshsol.mesh[0].get_cell_area()[Igrp]
@@ -93,7 +93,7 @@ def comp_loss(self, group, coeff_dict):
 
     # Check Time axis periodicity in function of group
     is_change_Time = False
-    if "rotor" in group:
+    if "rotor" in self.group:
         if "antiperiod" in Time_orig.symmetries:
             Time.symmetries = {"period": Time_orig.symmetries["antiperiod"]}
             is_change_Time = True
@@ -133,21 +133,19 @@ def comp_loss(self, group, coeff_dict):
         for comp in Bvect.components.values():
             comp.axes[0] = Time_orig
 
-    # Calculate coefficients to evaluate core losses for later use
-    if coeff_dict is not None:
-        # Integrate loss density over group volume
-        coeff = Lst * per_a * matmul(Bfft_magnitude ** 2, Se)
-        # Get frequency orders
-        n = freqs / felec
-        # Get polynomial coefficients
-        A = np_sum(k_ed * coeff * n ** 2)
-        if k_hy == 0:
-            B = 0
-            alpha_f = 0
-        else:
-            coeff = Lst * per_a * matmul(Bfft_magnitude ** alpha_B, Se)
-            B = np_sum(k_hy * coeff * n ** alpha_f)
-        coeff_dict[group] = {"A": A, "B": B, "C": 0, "a": 2, "b": alpha_f, "c": 0}
+    # Integrate loss density over group volume
+    coeff = Lst * per_a * matmul(Bfft_magnitude ** 2, Se)
+    # Get frequency orders
+    n = freqs / felec
+    # Get polynomial coefficients
+    A = np_sum(k_ed * coeff * n ** 2)
+    if k_hy == 0:
+        B = 0
+        alpha_f = 0
+    else:
+        coeff = Lst * per_a * matmul(Bfft_magnitude ** alpha_B, Se)
+        B = np_sum(k_hy * coeff * n ** alpha_f)
+    self.coeff_dict = {"A": A, "B": B, "C": 0, "a": 2, "b": alpha_f, "c": 0}
 
     with open("loss_models.txt", "w") as f:
         f.write(

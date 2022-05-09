@@ -13,7 +13,7 @@ from ....Classes.LamHole import LamHole
 from ....Classes.LamSlotMag import LamSlotMag
 
 
-def comp_loss(self, group, coeff_dict):
+def comp_loss(self):
     """Calculate eddy-current losses in rotor permanent magnets assuming power density
     is given by (cf. https://www.femm.info/wiki/SPMLoss):
 
@@ -113,8 +113,8 @@ def comp_loss(self, group, coeff_dict):
 
     group_list = list(meshsol.group.keys())
 
-    if group not in group_list:
-        raise Exception("Cannot calculate magnet losses for group=" + group)
+    if self.group not in group_list:
+        raise Exception("Cannot calculate magnet losses for group=" + self.group)
 
     lab_ind = None
     for ii, sol in enumerate(meshsol.solution):
@@ -134,7 +134,7 @@ def comp_loss(self, group, coeff_dict):
 
     # Check Time axis periodicity in function of group
     is_change_Time = False
-    if "rotor" in group:
+    if "rotor" in self.group:
         if "antiperiod" in Time_orig.symmetries:
             Time.symmetries = {"period": Time_orig.symmetries["antiperiod"]}
             is_change_Time = True
@@ -148,11 +148,11 @@ def comp_loss(self, group, coeff_dict):
     list_Imag = list()
     ind_list = list()
     for key in meshsol.group:
-        if group in key and key != group:
+        if self.group in key and key != self.group:
             ind = int(key.split("_")[-1])
             ind_list.append(ind)
             list_Imag.append(meshsol.group[key])
-    ind_all = meshsol.group[group]
+    ind_all = meshsol.group[self.group]
 
     # Calculate induced current density and loss density
     jj = 0
@@ -241,20 +241,16 @@ def comp_loss(self, group, coeff_dict):
         # Change periodicity back to original periodicity
         Az_dt.axes[0] = Time_orig
 
-    # Calculate coefficients to evaluate magnet losses
-    if coeff_dict is not None:
-        # Get frequency orders
-        n = freqs / felec
-        # Integrate loss density over group volume
-        I0 = n != 0
-        Af = zeros(w.size)
-        Af[I0] = (
-            L1
-            * per_a
-            * matmul(Pmagnet_density[I0, :] / freqs[I0, None] ** 2, Se[ind_all])
-        )
-        # Sum over orders
-        A = np_sum(Af * n ** 2)
-        coeff_dict[group] = {"A": A, "B": 0, "C": 0, "a": 2, "b": 0, "c": 0}
+    # Get frequency orders
+    n = freqs / felec
+    # Integrate loss density over group volume
+    I0 = n != 0
+    Af = zeros(w.size)
+    Af[I0] = (
+        L1 * per_a * matmul(Pmagnet_density[I0, :] / freqs[I0, None] ** 2, Se[ind_all])
+    )
+    # Sum over orders
+    A = np_sum(Af * n ** 2)
+    self.coeff_dict = {"A": A, "B": 0, "C": 0, "a": 2, "b": 0, "c": 0}
 
     return Pmagnet_density, freqs

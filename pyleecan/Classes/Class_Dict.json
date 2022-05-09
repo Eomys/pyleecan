@@ -5485,6 +5485,15 @@
                 "value": ""
             },
             {
+                "desc": "Group in which the loss will be computed",
+                "max": "",
+                "min": "",
+                "name": "group",
+                "type": "str",
+                "unit": "",
+                "value": ""
+            },
+            {
                 "desc": "True to show the plot of the curve fitting",
                 "max": "",
                 "min": "",
@@ -5492,6 +5501,15 @@
                 "type": "bool",
                 "unit": "",
                 "value": false
+            },
+            {
+                "desc": "dict of coefficients to compute losses with respect to frequency",
+                "max": "",
+                "min": "",
+                "name": "coeff_dict",
+                "type": "dict",
+                "unit": "",
+                "value": null
             }
         ]
     },

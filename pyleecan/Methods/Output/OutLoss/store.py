@@ -54,7 +54,7 @@ def store(
     self.Pjoule = comp_loss_joule(lam, Tsta, OP, type_skin_effect)
 
     # Store loss density as meshsolution
-    if is_get_meshsolution:
+    if False:# is_get_meshsolution:
 
         ms_mag = self.parent.mag.meshsolution
 

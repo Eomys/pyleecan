@@ -1,3 +1,5 @@
 Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
 name,,Name of the loss simulation (has to be unique),,str,,,,,Simulation,,,VERSION,1,Abstract Loss Model Class
+group,,Group in which the loss will be computed,,str,,,,,,,,,,
 is_show_fig,,True to show the plot of the curve fitting,,bool,False,,,,,,,,,
+coeff_dict,,dict of coefficients to compute losses with respect to frequency,,dict,None,,,,,,,,,

@@ -3,7 +3,7 @@ from numpy import sum as np_sum, zeros, array
 from ....Functions.Electrical.comp_loss_joule import comp_loss_joule
 
 
-def comp_loss(self, group):
+def comp_loss(self):
     """Calculate joule losses in stator windings
 
     Parameters
@@ -37,12 +37,8 @@ def comp_loss(self, group):
     OP = output.elec.OP
     felec = OP.get_felec()
 
-    if "stator" in group:
-        lam = machine.stator
-        T_op = self.parent.Tsta
-    else:
-        lam = machine.rotor
-        T_op = self.parent.Trot
+    lam = machine.stator
+    T_op = self.parent.Tsta
 
     # Calculate overall joule losses
     Pjoule = comp_loss_joule(lam, T_op, OP, self.parent.type_skin_effect)
@@ -55,7 +51,7 @@ def comp_loss(self, group):
 
     # Get surface cells for windings
     ms = output.mag.meshsolution
-    Se = ms.mesh[0].get_cell_area()[ms.group[group]]
+    Se = ms.mesh[0].get_cell_area()[ms.group[self.group]]
 
     # Constant component and twice the electrical frequency have same joule density values
     freqs = array([felec])

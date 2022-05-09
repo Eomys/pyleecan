@@ -20,46 +20,49 @@ def comp_loss(self, output, axes_dict):
 
     machine = output.simu.machine
 
-    coeff_dict = dict()
+    out_dict = dict()
 
-    # Comp stator core losses
-    if "stator core" in self.model_dict:
-        # Comp stator core losses
-        Pstator_density, fstator = self.model_dict["stator core"].comp_loss(
-            "stator core", coeff_dict=coeff_dict
-        )
-    else:
-        Pstator_density, fstator = None, None
+    for key, model in self.model_dict.items():
+        P_density, f = model.comp_loss()
+        out_dict[key] = {
+            "loss_density": P_density,
+            "frequency": f,
+            "coefficients": model.coeff_dict,
+        }
 
-    if "rotor core" in self.model_dict:
-        # Comp rotor core losses
-        Protor_density, frotor = self.model_dict["rotor core"].comp_loss(
-            "rotor core", coeff_dict=coeff_dict
-        )
-    else:
-        Protor_density, frotor = None, None
+    # # Comp stator core losses
+    # if "stator core" in self.model_dict:
+    #     # Comp stator core losses
+    #     Pstator_density, fstator = self.model_dict["stator core"].comp_loss(
+    #         "stator core"
+    #     )
+    # else:
+    #     Pstator_density, fstator = None, None
 
-    if "Proximity" in self.model_dict:
-        # Comp proximity losses in stator windings (same expression as core losses with Ce=C)
-        Pprox_density, fprox = self.model_dict["proximity"].comp_loss(
-            "stator winding", coeff_dict=coeff_dict
-        )
-    else:
-        Pprox_density, fprox = None, None
+    # if "rotor core" in self.model_dict:
+    #     # Comp rotor core losses
+    #     Protor_density, frotor = self.model_dict["rotor core"].comp_loss(
+    #         "rotor core"
+    #     )
+    # else:
+    #     Protor_density, frotor = None, None
 
-    if machine.is_synchronous() and machine.rotor.has_magnet():
-        # Comp eddy current losses in rotor magnets
-        Pmagnet_density, fmagnet = self.model_dict["magnets"].comp_loss(
-            "rotor magnets", coeff_dict=coeff_dict
-        )
-    else:
-        Pmagnet_density, fmagnet = None, None
+    # if "proximity" in self.model_dict:
+    #     Pprox_density, fprox = self.model_dict["proximity"].comp_loss(
+    #         "stator winding"
+    #     )
+    # else:
+    #     Pprox_density, fprox = None, None
 
-    # Init dict of outputs
-    out_dict = {"coeff_dict": coeff_dict}
+    # if machine.is_synchronous() and machine.rotor.has_magnet():
+    #     Pmagnet_density, fmagnet = self.model_dict["magnets"].comp_loss(
+    #         "rotor magnets"
+    #     )
+    # else:
+    #     Pmagnet_density, fmagnet = None, None
 
     # Store loss density values
-    if self.is_get_meshsolution:
+    if False:  # self.is_get_meshsolution:
 
         # Compute Joule losses in stator windings
         Pjoule_density, fjoule = self.model_dict["Joule"].comp_loss("stator winding")

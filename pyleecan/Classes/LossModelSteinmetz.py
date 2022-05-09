@@ -72,7 +72,9 @@ class LossModelSteinmetz(LossModel):
         alpha_f=None,
         alpha_B=None,
         name="",
+        group="",
         is_show_fig=False,
+        coeff_dict=None,
         init_dict=None,
         init_str=None,
     ):
@@ -101,15 +103,21 @@ class LossModelSteinmetz(LossModel):
                 alpha_B = init_dict["alpha_B"]
             if "name" in list(init_dict.keys()):
                 name = init_dict["name"]
+            if "group" in list(init_dict.keys()):
+                group = init_dict["group"]
             if "is_show_fig" in list(init_dict.keys()):
                 is_show_fig = init_dict["is_show_fig"]
+            if "coeff_dict" in list(init_dict.keys()):
+                coeff_dict = init_dict["coeff_dict"]
         # Set the properties (value check and convertion are done in setter)
         self.k_hy = k_hy
         self.k_ed = k_ed
         self.alpha_f = alpha_f
         self.alpha_B = alpha_B
         # Call LossModel init
-        super(LossModelSteinmetz, self).__init__(name=name, is_show_fig=is_show_fig)
+        super(LossModelSteinmetz, self).__init__(
+            name=name, group=group, is_show_fig=is_show_fig, coeff_dict=coeff_dict
+        )
         # The class is frozen (in LossModel init), for now it's impossible to
         # add new properties
 

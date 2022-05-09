@@ -65,7 +65,15 @@ class LossModelMagnet(LossModel):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, name="", is_show_fig=False, init_dict=None, init_str=None):
+    def __init__(
+        self,
+        name="",
+        group="",
+        is_show_fig=False,
+        coeff_dict=None,
+        init_dict=None,
+        init_str=None,
+    ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -83,11 +91,17 @@ class LossModelMagnet(LossModel):
             # Overwrite default value with init_dict content
             if "name" in list(init_dict.keys()):
                 name = init_dict["name"]
+            if "group" in list(init_dict.keys()):
+                group = init_dict["group"]
             if "is_show_fig" in list(init_dict.keys()):
                 is_show_fig = init_dict["is_show_fig"]
+            if "coeff_dict" in list(init_dict.keys()):
+                coeff_dict = init_dict["coeff_dict"]
         # Set the properties (value check and convertion are done in setter)
         # Call LossModel init
-        super(LossModelMagnet, self).__init__(name=name, is_show_fig=is_show_fig)
+        super(LossModelMagnet, self).__init__(
+            name=name, group=group, is_show_fig=is_show_fig, coeff_dict=coeff_dict
+        )
         # The class is frozen (in LossModel init), for now it's impossible to
         # add new properties
 

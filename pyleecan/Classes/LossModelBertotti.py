@@ -62,7 +62,9 @@ class LossModelBertotti(LossModel):
         get_meshsolution=False,
         N0=-1,
         name="",
+        group="",
         is_show_fig=False,
+        coeff_dict=None,
         init_dict=None,
         init_str=None,
     ):
@@ -101,8 +103,12 @@ class LossModelBertotti(LossModel):
                 N0 = init_dict["N0"]
             if "name" in list(init_dict.keys()):
                 name = init_dict["name"]
+            if "group" in list(init_dict.keys()):
+                group = init_dict["group"]
             if "is_show_fig" in list(init_dict.keys()):
                 is_show_fig = init_dict["is_show_fig"]
+            if "coeff_dict" in list(init_dict.keys()):
+                coeff_dict = init_dict["coeff_dict"]
         # Set the properties (value check and convertion are done in setter)
         self.k_hy = k_hy
         self.k_ed = k_ed
@@ -114,7 +120,9 @@ class LossModelBertotti(LossModel):
         self.get_meshsolution = get_meshsolution
         self.N0 = N0
         # Call LossModel init
-        super(LossModelBertotti, self).__init__(name=name, is_show_fig=is_show_fig)
+        super(LossModelBertotti, self).__init__(
+            name=name, group=group, is_show_fig=is_show_fig, coeff_dict=coeff_dict
+        )
         # The class is frozen (in LossModel init), for now it's impossible to
         # add new properties
 
