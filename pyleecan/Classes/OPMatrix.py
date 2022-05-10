@@ -163,6 +163,7 @@ class OPMatrix(FrozenClass):
         Pem_av_ref=None,
         slip_ref=None,
         is_output_power=True,
+        If_ref=None,
         init_dict=None,
         init_str=None,
     ):
@@ -199,6 +200,8 @@ class OPMatrix(FrozenClass):
                 slip_ref = init_dict["slip_ref"]
             if "is_output_power" in list(init_dict.keys()):
                 is_output_power = init_dict["is_output_power"]
+            if "If_ref" in list(init_dict.keys()):
+                If_ref = init_dict["If_ref"]
         # Set the properties (value check and convertion are done in setter)
         self.parent = None
         self.N0 = N0
@@ -210,6 +213,7 @@ class OPMatrix(FrozenClass):
         self.Pem_av_ref = Pem_av_ref
         self.slip_ref = slip_ref
         self.is_output_power = is_output_power
+        self.If_ref = If_ref
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -279,6 +283,13 @@ class OPMatrix(FrozenClass):
             + linesep
         )
         OPMatrix_str += "is_output_power = " + str(self.is_output_power) + linesep
+        OPMatrix_str += (
+            "If_ref = "
+            + linesep
+            + str(self.If_ref).replace(linesep, linesep + "\t")
+            + linesep
+            + linesep
+        )
         return OPMatrix_str
 
     def __eq__(self, other):
@@ -303,6 +314,8 @@ class OPMatrix(FrozenClass):
         if not array_equal(other.slip_ref, self.slip_ref):
             return False
         if other.is_output_power != self.is_output_power:
+            return False
+        if not array_equal(other.If_ref, self.If_ref):
             return False
         return True
 
@@ -332,6 +345,8 @@ class OPMatrix(FrozenClass):
             diff_list.append(name + ".slip_ref")
         if other._is_output_power != self._is_output_power:
             diff_list.append(name + ".is_output_power")
+        if not array_equal(other.If_ref, self.If_ref):
+            diff_list.append(name + ".If_ref")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -349,6 +364,7 @@ class OPMatrix(FrozenClass):
         S += getsizeof(self.Pem_av_ref)
         S += getsizeof(self.slip_ref)
         S += getsizeof(self.is_output_power)
+        S += getsizeof(self.If_ref)
         return S
 
     def as_dict(self, type_handle_ndarray=0, keep_function=False, **kwargs):
@@ -468,6 +484,19 @@ class OPMatrix(FrozenClass):
                     "Unknown type_handle_ndarray: " + str(type_handle_ndarray)
                 )
         OPMatrix_dict["is_output_power"] = self.is_output_power
+        if self.If_ref is None:
+            OPMatrix_dict["If_ref"] = None
+        else:
+            if type_handle_ndarray == 0:
+                OPMatrix_dict["If_ref"] = self.If_ref.tolist()
+            elif type_handle_ndarray == 1:
+                OPMatrix_dict["If_ref"] = self.If_ref.copy()
+            elif type_handle_ndarray == 2:
+                OPMatrix_dict["If_ref"] = self.If_ref
+            else:
+                raise Exception(
+                    "Unknown type_handle_ndarray: " + str(type_handle_ndarray)
+                )
         # The class name is added to the dict for deserialisation purpose
         OPMatrix_dict["__class__"] = "OPMatrix"
         return OPMatrix_dict
@@ -484,6 +513,7 @@ class OPMatrix(FrozenClass):
         self.Pem_av_ref = None
         self.slip_ref = None
         self.is_output_power = None
+        self.If_ref = None
 
     def _get_N0(self):
         """getter of N0"""
@@ -700,5 +730,30 @@ class OPMatrix(FrozenClass):
         doc=u"""True if power given in OP_matrix is the output power, False if it is the input power
 
         :Type: bool
+        """,
+    )
+
+    def _get_If_ref(self):
+        """getter of If_ref"""
+        return self._If_ref
+
+    def _set_If_ref(self, value):
+        """setter of If_ref"""
+        if type(value) is int and value == -1:
+            value = array([])
+        elif type(value) is list:
+            try:
+                value = array(value)
+            except:
+                pass
+        check_var("If_ref", value, "ndarray")
+        self._If_ref = value
+
+    If_ref = property(
+        fget=_get_If_ref,
+        fset=_set_If_ref,
+        doc=u"""DC rotor current
+
+        :Type: ndarray
         """,
     )

@@ -106,6 +106,8 @@ def set_OP_matrix(self, OP_matrix, *arg_list):
             self.Uq_ref = OP_matrix[:, ii]
         elif arg_list[ii].lower() in ["slip", "slip_ref"]:
             self.slip_ref = OP_matrix[:, ii]
+        elif arg_list[ii].lower() in ["if", "fi"]:
+            self.If_ref = OP_matrix[:, ii]
         else:
             raise OPMatrixException(
                 "Error in OP_matrix.set_OP_matrix, unknow column name for index "

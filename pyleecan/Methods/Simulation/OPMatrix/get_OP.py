@@ -1,4 +1,5 @@
 from ....Classes.OPdq import OPdq
+from ....Classes.OPdqf import OPdqf
 from ....Classes.OPslip import OPslip
 
 
@@ -20,6 +21,8 @@ def get_OP(self, index):
 
     if self.has_slip():
         OP = OPslip()
+    elif self.If_ref is not None:
+        OP = OPdqf()
     else:
         OP = OPdq()
 
@@ -38,5 +41,7 @@ def get_OP(self, index):
             OP.Pem_av_in = self.Pem_av_ref[index]
     if self.slip_ref is not None:
         OP.slip_ref = self.slip_ref[index]
+    if self.If_ref is not None:
+        OP.If_ref = self.If_ref[index]
 
     return OP

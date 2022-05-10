@@ -135,6 +135,7 @@ load_switch = {
     "OP": OP,
     "OPMatrix": OPMatrix,
     "OPdq": OPdq,
+    "OPdqf": OPdqf,
     "OPslip": OPslip,
     "OptiBayesAlg": OptiBayesAlg,
     "OptiBayesAlgSmoot": OptiBayesAlgSmoot,

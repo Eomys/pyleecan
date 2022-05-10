@@ -7929,6 +7929,7 @@
         ],
         "daughters": [
             "OPdq",
+            "OPdqf",
             "OPslip"
         ],
         "desc": "Define the Operating Point of the simulation",
@@ -8102,6 +8103,15 @@
                 "type": "bool",
                 "unit": "",
                 "value": 1
+            },
+            {
+                "desc": "DC rotor current",
+                "max": "",
+                "min": "",
+                "name": "If_ref",
+                "type": "ndarray",
+                "unit": "Arms",
+                "value": null
             }
         ]
     },
@@ -8112,7 +8122,9 @@
                 "value": "1"
             }
         ],
-        "daughters": [],
+        "daughters": [
+            "OPdqf"
+        ],
         "desc": "Operating Point defined in DQH frame",
         "is_internal": false,
         "methods": [
@@ -8167,6 +8179,33 @@
                 "name": "Uq_ref",
                 "type": "float",
                 "unit": "Vrms",
+                "value": null
+            }
+        ]
+    },
+    "OPdqf": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Operating Point defined in DQH frame for WRSM",
+        "is_internal": false,
+        "methods": [],
+        "mother": "OPdq",
+        "name": "OPdqf",
+        "package": "Simulation",
+        "path": "pyleecan/Generator/ClassesRef/Simulation/OPdqf.csv",
+        "properties": [
+            {
+                "desc": "DC rotor current",
+                "max": "",
+                "min": "",
+                "name": "If_ref",
+                "type": "float",
+                "unit": "Arms",
                 "value": null
             }
         ]

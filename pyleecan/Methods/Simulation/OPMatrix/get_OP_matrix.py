@@ -82,6 +82,8 @@ def get_OP_matrix(self, *arg_list):
             OP_matrix[:, ii] = self.Ud_ref[:]
         elif arg_list[ii].lower() in ["uq", "qu", "uq_ref"]:
             OP_matrix[:, ii] = self.Uq_ref[:]
+        elif arg_list[ii].lower() in ["if", "fi"]:
+            OP_matrix[:, ii] = self.If_ref[:]
         else:
             raise OPMatrixException(
                 "Error in OP_matrix.set_OP_matrix, unknow column name for index "
