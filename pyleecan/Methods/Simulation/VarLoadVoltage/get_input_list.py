@@ -10,8 +10,8 @@ def get_input_list(self):
     ref_simu = self.parent
     assert isinstance(ref_simu.input, InputVoltage)
 
-    OP_matrix = self.get_OP_matrix()
-    N_simu = OP_matrix.shape[0]
+    OP_list = self.OP_matrix.get_OP_list()
+    N_simu = len(OP_list)
 
     # Generate initial input_list
     ref_input = ref_simu.input.copy()
@@ -25,26 +25,10 @@ def get_input_list(self):
 
     # Update OP according to OP_matrix
     for ii in range(N_simu):
-        input_list[ii].OP.N0 = OP_matrix[ii, 0]
+        input_list[ii].OP = OP_list[ii]
         # Edit time vector
         input_list[ii].time = None
         input_list[ii].Nt_tot = Nt_tot
         input_list[ii].Nrev = ref_input.Nrev
-        if self.type_OP_matrix == 0:  # U0, Phi0
-            input_list[ii].set_Ud_Uq(U0=OP_matrix[ii, 1], Phi0=OP_matrix[ii, 2])
-        elif self.type_OP_matrix == 1:  # Ud/Uq
-            input_list[ii].OP.Ud_ref = OP_matrix[ii, 1]
-            input_list[ii].OP.Uq_ref = OP_matrix[ii, 2]
-        elif self.type_OP_matrix == 2:  # U0/slip
-            input_list[ii].OP.set_U0_UPhi0(U0=OP_matrix[ii, 1], UPhi0=0)
-            input_list[ii].OP.slip_ref = OP_matrix[ii, 2]
-
-        if self.OP_matrix.shape[1] > 3:
-            input_list[ii].OP.Tem_av_ref = OP_matrix[ii, 3]
-        if self.OP_matrix.shape[1] > 4:
-            if self.is_output_power:
-                input_list[ii].OP.Pem_av_ref = OP_matrix[ii, 4]
-            else:
-                input_list[ii].OP.Pem_av_in = OP_matrix[ii, 4]
 
     return input_list

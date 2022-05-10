@@ -59,10 +59,10 @@ def test_ElecLUTdq_solve_MTPA():
 
     OP_matrix = np.zeros((Nspeed, 3))
     OP_matrix[:, 0] = np.linspace(50, 8000, Nspeed)
-    simu.var_simu = VarLoadCurrent(
-        OP_matrix=OP_matrix, type_OP_matrix=1, is_keep_all_output=True
+    simu.var_simu = VarLoadCurrent(is_keep_all_output=True)
+    simu.var_simu.set_OP_matrix(
+        OP_matrix, "N0", "Id", "Iq", input_index=0, is_update_input=True
     )
-    simu.input.set_OP_from_array(OP_matrix, type_OP_matrix=1)
 
     simu.elec = ElecLUTdq(
         Urms_max=400,
@@ -83,9 +83,7 @@ def test_ElecLUTdq_solve_MTPA():
                 is_periodicity_t=True,
             ),
             var_simu=VarLoadCurrent(
-                type_OP_matrix=1,
-                postproc_list=[PostLUT(is_save_LUT=False)],
-                is_keep_all_output=True,
+                postproc_list=[PostLUT(is_save_LUT=False)], is_keep_all_output=True,
             ),
             mag=MagFEMM(
                 is_periodicity_a=True,

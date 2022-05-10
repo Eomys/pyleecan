@@ -83,19 +83,6 @@ def test_FEMM_torque():
     # Definition of the main simulation
     simu = Simu1(name="test_FEMM_torque", machine=SynRM_001)
     Na_tot = 2016
-
-    varload = VarLoadCurrent(is_reuse_femm_file=True)
-    varload.type_OP_matrix = 0  # Matrix N0, I0, Phi0, Tem_ref
-
-    N_simu = Phi0.size
-    OP_matrix = zeros((N_simu, 4))
-    OP_matrix[:, 0] = ones(N_simu) * N0
-    OP_matrix[:, 1] = ones(N_simu) * Imax
-    OP_matrix[:, 2] = Phi0
-    OP_matrix[:, 3] = Tem
-    varload.OP_matrix = OP_matrix
-    simu.var_simu = varload
-
     simu.input = InputCurrent(
         Is=None,
         Ir=None,  # No winding on the rotor
@@ -104,8 +91,18 @@ def test_FEMM_torque():
         Nrev=1 / 6,
         Na_tot=Na_tot,
     )
-    # Select first OP as reference
-    simu.input.set_OP_from_array(OP_matrix, type_OP_matrix=varload.type_OP_matrix)
+    simu.var_simu = VarLoadCurrent(is_reuse_femm_file=True)
+
+    # Matrix N0, I0, Phi0, Tem_ref
+    N_simu = Phi0.size
+    OP_matrix = zeros((N_simu, 4))
+    OP_matrix[:, 0] = ones(N_simu) * N0
+    OP_matrix[:, 1] = ones(N_simu) * Imax
+    OP_matrix[:, 2] = Phi0
+    OP_matrix[:, 3] = Tem
+    simu.var_simu.set_OP_matrix(
+        OP_matrix, "N0", "I0", "Phi0", "Tem", input_index=0, is_update_input=True
+    )
 
     # Definition of the magnetic simulation (1/2 symmetry)
     assert SynRM_001.comp_periodicity_spatial() == (2, True)

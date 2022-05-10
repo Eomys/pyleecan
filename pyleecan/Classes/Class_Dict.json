@@ -4339,8 +4339,7 @@
         "is_internal": false,
         "methods": [
             "gen_input",
-            "set_Id_Iq",
-            "set_OP_from_array"
+            "set_Id_Iq"
         ],
         "mother": "InputVoltage",
         "name": "InputCurrent",
@@ -4512,7 +4511,6 @@
         "is_internal": false,
         "methods": [
             "gen_input",
-            "set_OP_from_array",
             "set_Ud_Uq"
         ],
         "mother": "Input",
@@ -8015,7 +8013,9 @@
             "get_OP_list",
             "get_OP_matrix",
             "set_OP_matrix",
-            "_set_OP_matrix"
+            "has_Pem",
+            "has_Tem",
+            "has_slip"
         ],
         "mother": "",
         "name": "OPMatrix",

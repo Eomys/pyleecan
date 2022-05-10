@@ -40,9 +40,7 @@ def test_varload():
 
     # Definition of the magnetic simulation (FEMM with symmetry and sliding band)
     simu.mag = MagFEMM(
-        is_periodicity_a=True,
-        is_periodicity_t=True,
-        nb_worker=cpu_count(),
+        is_periodicity_a=True, is_periodicity_t=True, nb_worker=cpu_count(),
     )
     # Run only Magnetic module
     simu.elec = None
@@ -72,9 +70,8 @@ def test_varload():
     simu.input.Na_tot = 2048  # Spatial discretization
     simu.input.OP = OPdq(N0=2000)
 
-    varload = VarLoadCurrent()
-    varload.type_OP_matrix = 0  # Matrix N0, I0, Phi0, Tem_ref
-
+    simu.var_simu = VarLoadCurrent()
+    # Matrix N0, I0, Phi0, Tem_ref
     # creating the Operating point matrix
     OP_matrix = zeros((N_simu, 4))
     # Set N0 = 2000 [rpm] for all simulation
@@ -85,13 +82,8 @@ def test_varload():
     OP_matrix[:, 2] = Phi0_ref[I_simu]
     # Set reference torque from Yang et al, 2013
     OP_matrix[:, 3] = Tem_av_ref[I_simu]
-
-    varload.OP_matrix = OP_matrix
-    simu.var_simu = varload
-
-    # Use first OP as reference (to skip one computation)
-    simu.input.set_OP_from_array(
-        OP_matrix=OP_matrix, type_OP_matrix=varload.type_OP_matrix, index=2
+    simu.var_simu.set_OP_matrix(
+        OP_matrix, "N0", "I0", "Phi0", "Tem", input_index=0, is_update_input=True
     )
 
     # Datakeepers
