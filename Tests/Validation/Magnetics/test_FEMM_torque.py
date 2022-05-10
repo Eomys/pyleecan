@@ -7,6 +7,7 @@ from pyleecan.Classes.MagFEMM import MagFEMM
 from pyleecan.Classes.OPdq import OPdq
 from pyleecan.Classes.Simu1 import Simu1
 from pyleecan.Classes.VarLoadCurrent import VarLoadCurrent
+from pyleecan.Classes.DataKeeper import DataKeeper
 from pyleecan.definitions import DATA_DIR
 from pyleecan.Functions.load import load
 from SciDataTool.Functions.Plot.plot_2D import plot_2D
@@ -115,7 +116,19 @@ def test_FEMM_torque():
     )
     simu.force = None
     simu.struct = None
-
+    I0_dk = DataKeeper(
+        name="Stator current rms amplitude",
+        symbol="I0",
+        unit="Arms",
+        keeper="lambda output: output.elec.OP.get_I0_Phi0()['I0']",
+    )
+    Phi0_dk = DataKeeper(
+        name="Stator current phase",
+        symbol="Phi0",
+        unit="rad",
+        keeper="lambda output: output.elec.OP.get_I0_Phi0()['Phi0']",
+    )
+    simu.var_simu.datakeeper_list = [I0_dk, Phi0_dk]
     Xout = simu.run()
 
     curve_colors = config_dict["PLOT"]["COLOR_DICT"]["CURVE_COLORS"]

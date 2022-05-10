@@ -1,5 +1,5 @@
 from os.path import join, isdir
-from os import mkdir, remove
+from os import makedirs, remove
 
 import numpy as np
 
@@ -14,8 +14,8 @@ from pyleecan.Classes.ParamExplorerSet import ParamExplorerSet
 
 from pyleecan.Functions.load import load
 
-
-from pyleecan.definitions import DATA_DIR, RESULT_DIR
+from Tests import save_validation_path as save_path
+from pyleecan.definitions import DATA_DIR
 
 
 def test_VarParam_fct_save_load():
@@ -27,9 +27,9 @@ def test_VarParam_fct_save_load():
     # First simulation creating femm file
     simu = Simu1(name="test_VarParam_fct_save_load", machine=machine)
 
-    result_folder = join(RESULT_DIR, simu.name)
+    result_folder = join(save_path, simu.name)
     if not isdir(result_folder):
-        mkdir(result_folder)
+        makedirs(result_folder)
 
     # Create function files
     keeper_path = join(result_folder, "keeper_fct.py")

@@ -1,4 +1,5 @@
 from os.path import join
+from os import makedirs
 from numpy import pi
 import pytest
 from Tests import save_validation_path as save_path, TEST_DATA_DIR
@@ -62,6 +63,7 @@ class Test_StructElmer(object):
         # setup the simulation
         simu = Simu1(name="test_StructElmer_HoleM50", machine=machine)
         output = Output(simu=simu)
+        makedirs(save_path)
         output.path_result = save_path
 
         simu.struct = StructElmer()

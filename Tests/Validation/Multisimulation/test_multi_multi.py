@@ -153,7 +153,6 @@ def test_multi_multi():
     OP_matrix[:, 0] = N0_MTPA[:Nspeed]
     OP_matrix[:, 1] = Id_MTPA[:Nspeed]
     OP_matrix[:, 2] = Iq_MTPA[:Nspeed]
-    varload.set_OP_matrix(OP_matrix, "N0", "Id", "Iq")
     varload.datakeeper_list = [
         DataKeeper(
             name="Average Torque",
@@ -230,6 +229,7 @@ def test_multi_multi():
     ]
     multisim.datakeeper_list = datakeeper_list
     multisim.var_simu = varload  # Setup Multisim of Multi_sim
+    varload.set_OP_matrix(OP_matrix, "N0", "Id", "Iq")
 
     # Post-process
     Post1 = PostFunction(join(dirname(__file__), "plot_save.py"))

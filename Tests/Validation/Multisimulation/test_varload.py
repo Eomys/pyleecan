@@ -83,10 +83,22 @@ def test_varload():
     # Set reference torque from Yang et al, 2013
     OP_matrix[:, 3] = Tem_av_ref[I_simu]
     simu.var_simu.set_OP_matrix(
-        OP_matrix, "N0", "I0", "Phi0", "Tem", input_index=0, is_update_input=True
+        OP_matrix, "N0", "I0", "Phi0", "Tem",
     )
 
     # Datakeepers
+    I0_dk = DataKeeper(
+        name="Stator current rms amplitude",
+        symbol="I0",
+        unit="Arms",
+        keeper="lambda output: output.elec.OP.get_I0_Phi0()['I0']",
+    )
+    Phi0_dk = DataKeeper(
+        name="Stator current phase",
+        symbol="Phi0",
+        unit="rad",
+        keeper="lambda output: output.elec.OP.get_I0_Phi0()['Phi0']",
+    )
     # Airgap flux density Datakeeper
     B_dk = DataKeeper(
         name="Airgap Flux Density", symbol="B", unit="T", keeper="lambda out: out.mag.B"
@@ -108,7 +120,7 @@ def test_varload():
         keeper="lambda out: out.mag.Tem",
     )
     # Store Datakeepers
-    simu.var_simu.datakeeper_list = [B_dk, Phi_wind_stator_dk, Tem_dk]
+    simu.var_simu.datakeeper_list = [I0_dk, Phi0_dk, B_dk, Phi_wind_stator_dk, Tem_dk]
 
     Xout = simu.run()
 
