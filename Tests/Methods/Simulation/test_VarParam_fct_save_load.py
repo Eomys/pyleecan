@@ -28,6 +28,7 @@ def test_VarParam_fct_save_load():
     simu = Simu1(name="test_VarParam_fct_save_load", machine=machine)
 
     result_folder = join(save_path, simu.name)
+    result_folder = result_folder.replace("\\", "/")
     if not isdir(result_folder):
         makedirs(result_folder)
 
@@ -62,7 +63,7 @@ def test_VarParam_fct_save_load():
                 name="Dummy result",
                 symbol="res",
                 unit="-",
-                keeper="<RESULT_DIR>/" + simu.name + "/keeper_fct.py",
+                keeper=result_folder + "/keeper_fct.py",
                 error_keeper="lambda simu: np.nan",
             )
         ],
@@ -71,8 +72,8 @@ def test_VarParam_fct_save_load():
                 name="Dummy variable",
                 symbol="X",
                 unit="-",
-                setter="<RESULT_DIR>/" + simu.name + "/setter_fct.py",
-                getter="<RESULT_DIR>/" + simu.name + "/getter_fct.py",
+                setter=result_folder + "/setter_fct.py",
+                getter=result_folder + "/getter_fct.py",
                 value=[ii for ii in range(2)],
             )
         ],
@@ -93,10 +94,10 @@ def test_VarParam_fct_save_load():
     assert len(diff_list) == 0
 
     # Delete files
-    remove(keeper_path)
-    remove(setter_path)
-    remove(getter_path)
-    remove(out_h5_path)
+    # remove(keeper_path)
+    # remove(setter_path)
+    # remove(getter_path)
+    # remove(out_h5_path)
 
 
 if __name__ == "__main__":
