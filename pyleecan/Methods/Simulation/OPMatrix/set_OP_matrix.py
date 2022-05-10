@@ -1,4 +1,4 @@
-from numpy import exp
+from numpy import exp, hstack, zeros
 from ....Methods.Simulation.OPMatrix import OPMatrixException
 
 
@@ -24,6 +24,7 @@ def set_OP_matrix(self, OP_matrix, *arg_list):
     # Extract arg_list it the function called from another script with *arg_list
     if len(arg_list) == 1 and type(arg_list[0]) == tuple:
         arg_list = arg_list[0]
+    arg_list = list(arg_list)
 
     # Setup default argument (N0, Id, Iq, Tem, Pem)
     if len(arg_list) == 0:
@@ -81,6 +82,11 @@ def set_OP_matrix(self, OP_matrix, *arg_list):
         OP_matrix[:, UPhi0_index] = Z.imag
         arg_list[U0_index] = "Ud"
         arg_list[UPhi0_index] = "Uq"
+    # Convertion U0 to Ud (assume UPhi0=0)
+    elif "u0" in arg_list_lower and "uphi0" not in arg_list_lower:
+        OP_matrix = hstack((OP_matrix, zeros((OP_matrix.shape[0], 1))))
+        arg_list[arg_list_lower.index("u0")] = "Ud"
+        arg_list.append("Uq")
 
     # Set column by column according to arg_list
     for ii in range(OP_matrix.shape[1]):
@@ -98,6 +104,8 @@ def set_OP_matrix(self, OP_matrix, *arg_list):
             self.Ud_ref = OP_matrix[:, ii]
         elif arg_list[ii].lower() in ["uq", "qu", "uq_ref"]:
             self.Uq_ref = OP_matrix[:, ii]
+        elif arg_list[ii].lower() in ["slip", "slip_ref"]:
+            self.slip_ref = OP_matrix[:, ii]
         else:
             raise OPMatrixException(
                 "Error in OP_matrix.set_OP_matrix, unknow column name for index "

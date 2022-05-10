@@ -35,9 +35,9 @@ def _set_OP_matrix(self, value):
             value_obj.set_OP_matrix(value, "N0", "Id", "Iq")
         value = value_obj
     elif type(value) is int and value == -1:  # Default constructor
-        OP_matrix = import_class("pyleecan.Classes", "OP_matrix", "OP_matrix")
+        OP_matrix = import_class("pyleecan.Classes", "OPMatrix", "OP_matrix")
         value = OP_matrix()
-    check_var("OP_matrix", value, "OP_matrix")
+    check_var("OP_matrix", value, "OPMatrix")
     self._OP_matrix = value
 
     if self._OP_matrix is not None:

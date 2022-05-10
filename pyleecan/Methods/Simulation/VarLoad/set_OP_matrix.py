@@ -1,7 +1,8 @@
 from numpy import ndarray
+from ....Classes.OPMatrix import OPMatrix
 
 
-def set_OP_matrix(self, OP_matrix, is_update_input=True, input_index=0, *arg_list):
+def set_OP_matrix(self, OP_matrix, *arg_list, is_update_input=True, input_index=0):
     """Set the OP_matrix and update the input if needed
     (To make sure that ref simu is in the OP_matrix)
 
@@ -20,7 +21,8 @@ def set_OP_matrix(self, OP_matrix, is_update_input=True, input_index=0, *arg_lis
     """
 
     if isinstance(OP_matrix, ndarray):
-        self.OP_matrix.set_OP_matrix(OP_matrix, arg_list)
+        self.OP_matrix = OPMatrix()
+        self.OP_matrix.set_OP_matrix(OP_matrix, *arg_list)
     else:
         self.OP_matrix = OP_matrix
 
@@ -38,7 +40,7 @@ def set_OP_matrix(self, OP_matrix, is_update_input=True, input_index=0, *arg_lis
     ):
         Sinput = self.parent.parent.input
     if Sinput is None:
-        self.get_logger.warning("Can't find input when setting OP_matrix")
+        self.get_logger().warning("Can't find input when setting OP_matrix")
         return
 
     # Set the input OP
@@ -51,4 +53,4 @@ def set_OP_matrix(self, OP_matrix, is_update_input=True, input_index=0, *arg_lis
             + " OP(s)"
         )
         input_index = 0
-    Sinput.OP = OP_matrix.get_OP(input_index)
+    Sinput.OP = self.OP_matrix.get_OP(input_index)

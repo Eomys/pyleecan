@@ -32,14 +32,14 @@ def get_elec_datakeeper(self, symbol_list, is_multi=False):
             and isinstance(self.parent, Simulation)
             and not self.parent.machine.is_synchronous()
         ):
-            quantity_list.extend("U0", "UPhi0")
+            quantity_list.extend(["U0", "UPhi0"])
         elif (
             self.parent is not None
             and self.parent is not None
             and isinstance(self.parent.parent, Simulation)
             and not self.parent.machine.is_synchronous()
         ):
-            quantity_list.extend("U0", "UPhi0")
+            quantity_list.extend(["U0", "UPhi0"])
         # Add slip if provided in the OP_matrix
         if self.OP_matrix is not None and self.OP_matrix.has_slip():
             quantity_list.append("slip")

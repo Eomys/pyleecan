@@ -1,12 +1,10 @@
-def get_OP_list(self, type_OP=0):
+def get_OP_list(self):
     """Return the list of Operating Point defined by the matrix
 
     Parameters
     ----------
     self : OPMatrix
         An OPMatrix object
-    type_OP : int
-        0 OPdq, 1 OPslip
 
     Returns
     -------
@@ -18,6 +16,6 @@ def get_OP_list(self, type_OP=0):
 
     OP_list = list()
     for ii in range(N_OP):
-        OP_list.append(self.get_OP(ii, type_OP=type_OP))
+        OP_list.append(self.get_OP(ii))
 
     return OP_list

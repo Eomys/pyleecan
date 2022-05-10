@@ -2,7 +2,7 @@ from ....Classes.OPdq import OPdq
 from ....Classes.OPslip import OPslip
 
 
-def get_OP(self, index, type_OP=0):
+def get_OP(self, index):
     """Return the OP at the corresponding index
 
     Parameters
@@ -11,8 +11,6 @@ def get_OP(self, index, type_OP=0):
         OPMatrix object to extrat the OP from
     index : int
         Index of the OP to extract
-    type_OP : int
-        0 OPdq, 1 OPslip
 
     Returns
     -------
@@ -20,10 +18,10 @@ def get_OP(self, index, type_OP=0):
         OP object
     """
 
-    if type_OP == 0:
-        OP = OPdq()
-    else:
+    if self.has_slip():
         OP = OPslip()
+    else:
+        OP = OPdq()
 
     if self.N0 is not None:
         OP.N0 = self.N0[index]
@@ -39,6 +37,6 @@ def get_OP(self, index, type_OP=0):
         else:
             OP.Pem_av_in = self.Pem_av_ref[index]
     if self.slip_ref is not None:
-        OP.Pem_av_ref = self.slip_ref[index]
+        OP.slip_ref = self.slip_ref[index]
 
     return OP
