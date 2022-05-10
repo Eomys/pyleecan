@@ -9259,6 +9259,7 @@
             "get_loss_dist",
             "get_loss_group",
             "get_loss_overall",
+            "get_loss_scalar",
             "store"
         ],
         "mother": "",
@@ -9312,58 +9313,13 @@
                 "value": "None"
             },
             {
-                "desc": "Stator core losses due to hysteresis and eddy currents",
+                "desc": "Dict containing loss data computed by the loss module",
                 "max": "",
                 "min": "",
-                "name": "Pstator",
-                "type": "float",
-                "unit": "W",
-                "value": null
-            },
-            {
-                "desc": "Rotor core losses due to hysteresis and eddy currents",
-                "max": "",
-                "min": "",
-                "name": "Protor",
-                "type": "float",
-                "unit": "W",
-                "value": null
-            },
-            {
-                "desc": "Magnet eddy current losses",
-                "max": "",
-                "min": "",
-                "name": "Pmagnet",
-                "type": "float",
-                "unit": "W",
-                "value": null
-            },
-            {
-                "desc": "Stator core losses",
-                "max": "",
-                "min": "",
-                "name": "Pprox",
-                "type": "float",
-                "unit": "W",
-                "value": null
-            },
-            {
-                "desc": "Stator core losses",
-                "max": "",
-                "min": "",
-                "name": "Pjoule",
-                "type": "float",
-                "unit": "W",
-                "value": null
-            },
-            {
-                "desc": "Dict containing coefficients to rebuild loss polynom function of frequency",
-                "max": "",
-                "min": "",
-                "name": "coeff_dict",
+                "name": "loss_dict",
                 "type": "dict",
                 "unit": "",
-                "value": {}
+                "value": null
             }
         ]
     },

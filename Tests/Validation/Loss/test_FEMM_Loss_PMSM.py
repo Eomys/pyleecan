@@ -15,6 +15,7 @@ from pyleecan.Classes.LossModelWinding import LossModelWinding
 from pyleecan.Classes.LossModelProximity import LossModelProximity
 from pyleecan.Classes.LossModelMagnet import LossModelMagnet
 from pyleecan.Classes.OutLoss import OutLoss
+from pyleecan.Functions.Electrical.comp_loss_joule import comp_loss_joule
 
 from pyleecan.Functions.load import load
 
@@ -23,7 +24,7 @@ from pyleecan.definitions import DATA_DIR
 from SciDataTool.Functions.Plot.plot_2D import plot_2D 
 
 
-is_show_fig = False
+is_show_fig = True
 
 
 @pytest.mark.long_5s
@@ -175,7 +176,7 @@ def test_FEMM_Loss_SPMSM():
 def test_FEMM_Loss_Prius():
     """Test to calculate losses in Toyota_Prius using LossFEMM model based on motoranalysis validation"""
 
-    machine = load(join(DATA_DIR, "Machine", "Toyota_Prius_loss.json"))
+    machine = load(join(DATA_DIR, "Machine", "Toyota_Prius.json"))
 
     simu = Simu1(name="test_FEMM_Loss_Prius", machine=machine)
     
@@ -207,7 +208,7 @@ def test_FEMM_Loss_Prius():
         Tsta=100,
         type_skin_effect=0,
         model_dict={"stator core": LossModelSteinmetz(group = "stator core"),
-                    "rotor core": LossModelSteinmetz(group = "rotor core", is_show_fig=True),
+                    "rotor core": LossModelSteinmetz(group = "rotor core"),
                     "Joule": LossModelWinding(group = "stator winding"),
                     "proximity": LossModelProximity(group = "stator winding", k_p=Cprox),
                     "magnets": LossModelMagnet(group = "rotor magnets")}
@@ -217,49 +218,45 @@ def test_FEMM_Loss_Prius():
 
     power_dict = {
         "total_power": out.mag.Pem_av,
-        "overall_losses": out.loss.get_loss_overall(),
-        "stator_loss": out.loss.Pstator,
-        "copper_loss": out.loss.Pjoule,
-        "rotor_loss": out.loss.Protor,
-        "magnet_loss": out.loss.Pmagnet,
-        "proximity_loss": out.loss.Pprox,
+        "overall_losses": out.loss.loss_dict["overall"]["scalar_value"],
+        "stator core": out.loss.loss_dict["stator core"]["scalar_value"],
+        "rotor core": out.loss.loss_dict["rotor core"]["scalar_value"],
+        "Joule": out.loss.loss_dict["Joule"]["scalar_value"],
+        "proximity": out.loss.loss_dict["proximity"]["scalar_value"],
+        "magnets": out.loss.loss_dict["magnets"]["scalar_value"]
     }
     print(power_dict)
 
     speed_array = np.linspace(10, 8000, 100)
     p = machine.get_pole_pair_number()
-    outloss_list = list()
-    OP = out.elec.OP.copy()
-    for speed in speed_array:
-        OP.felec = speed / 60 * p
-        out_dict = {"coeff_dict": out.loss.coeff_dict}
-        outloss = OutLoss()
-        outloss.store(out_dict, lam=machine.stator, OP=OP, type_skin_effect=0, Tsta=120)
-        outloss_list.append(outloss)
 
-    joule_list = [o.Pjoule for o in outloss_list]
-    sc_list = [o.Pstator for o in outloss_list]
-    rc_list = [o.Protor for o in outloss_list]
-    prox_list = [o.Pprox for o in outloss_list]
-    mag_list = [o.Pmagnet for o in outloss_list]
-    ovl_list = [o.get_loss_overall() for o in outloss_list]
+    joule_array = np.array([out.loss.loss_dict["Joule"]["scalar_value"] for speed in speed_array])
+    sc_array = np.array([out.loss.get_loss_group("stator core", speed / 60 *p) for speed in speed_array])
+    rc_array = np.array([out.loss.get_loss_group("rotor core", speed / 60 *p) for speed in speed_array])
+    prox_array = np.array([out.loss.get_loss_group("proximity", speed / 60 *p) for speed in speed_array])
+    mag_array = np.array([out.loss.get_loss_group("magnets", speed / 60 *p) for speed in speed_array])
+    ovl_array = (joule_array +
+                 sc_array +
+                 rc_array +
+                 prox_array +
+                 mag_array)
 
     if is_show_fig:
-        out.loss.meshsol_list[0].plot_contour(
-            "freqs=sum",
-            label="Loss",
-            group_names=[
-                "stator core",
-                # "stator winding",
-                "rotor core",
-                "rotor magnets",
-            ],
-            # clim=[2e4, 2e7],
-        )
+        # out.loss.meshsol_list[0].plot_contour(
+        #     "freqs=sum",
+        #     label="Loss",
+        #     group_names=[
+        #         "stator core",
+        #         # "stator winding",
+        #         "rotor core",
+        #         "rotor magnets",
+        #     ],
+        #     # clim=[2e4, 2e7],
+        # )
 
         plot_2D(
             [speed_array],
-            [ovl_list, joule_list, sc_list, rc_list, prox_list, mag_list],
+            [ovl_array, joule_array, sc_array, rc_array, prox_array, mag_array],
             xlabel="Speed [rpm]",
             ylabel="Losses [W]",
             legend_list=[

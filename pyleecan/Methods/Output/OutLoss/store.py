@@ -34,6 +34,8 @@ def store(
     if axes_dict is not None:
         self.axes_dict = axes_dict
 
+    self.loss_dict = out_dict
+
     # Store coeff_dict
     if "coeff_dict" in out_dict:
         self.coeff_dict = out_dict.pop("coeff_dict")
@@ -46,15 +48,16 @@ def store(
 
     felec = OP.get_felec(p=lam.get_pole_pair_number())
 
-    # Calculate and store scalar losses
-    self.Pstator = self.get_loss_group("stator core", felec)
-    self.Protor = self.get_loss_group("rotor core", felec)
-    self.Pprox = self.get_loss_group("stator winding", felec)
-    self.Pmagnet = self.get_loss_group("rotor magnets", felec)
-    self.Pjoule = comp_loss_joule(lam, Tsta, OP, type_skin_effect)
+    for key in out_dict.keys():
+        if key == "Joule":
+            self.loss_dict[key]["scalar_value"] = comp_loss_joule(lam, Tsta, OP, type_skin_effect)
+        elif key != "overall":
+            self.loss_dict[key]["scalar_value"] = self.get_loss_group(key, felec)
+
+    self.get_loss_overall()
 
     # Store loss density as meshsolution
-    if False:# is_get_meshsolution:
+    if False:  # is_get_meshsolution:
 
         ms_mag = self.parent.mag.meshsolution
 

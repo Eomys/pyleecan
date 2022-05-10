@@ -13,17 +13,10 @@ def get_loss_overall(self):
 
     """
 
-    loss = 0
+    overall_loss = 0
 
-    if self.Pstator is not None:
-        loss += self.Pstator
-    if self.Protor is not None:
-        loss += self.Protor
-    if self.Pprox is not None:
-        loss += self.Pprox
-    if self.Pmagnet is not None:
-        loss += self.Pmagnet
-    if self.Pjoule is not None:
-        loss += self.Pjoule
+    for loss in self.loss_dict.values():
+        if "scalar_value" in loss:
+            overall_loss += loss["scalar_value"]
 
-    return loss
+    self.loss_dict["overall"]["scalar_value"] = overall_loss

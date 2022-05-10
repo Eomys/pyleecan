@@ -22,6 +22,14 @@ def comp_loss(self, output, axes_dict):
 
     out_dict = dict()
 
+    if self.is_get_meshsolution:
+        meshsol = output.mag.meshsolution
+        group = meshsol.group
+        freqs = axes_dict["freqs"].get_values()
+        Nelem = meshsol.mesh[0].cell["triangle"].nb_cell
+
+        loss_density = zeros((freqs.size, Nelem))
+
     for key, model in self.model_dict.items():
         P_density, f = model.comp_loss()
         out_dict[key] = {
@@ -29,6 +37,11 @@ def comp_loss(self, output, axes_dict):
             "frequency": f,
             "coefficients": model.coeff_dict,
         }
+        if self.is_get_meshsolution:
+            If = argmin(np_abs(freqs[:, None] - f[None, :]), axis=0)[:, None]
+            Ie = array(group[model.group])[None, :]
+            loss_density[If, Ie] += P_density
+            out_dict["overall"] = {"loss_density": loss_density}
 
     # # Comp stator core losses
     # if "stator core" in self.model_dict:
