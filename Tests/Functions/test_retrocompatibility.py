@@ -10,6 +10,36 @@ from pyleecan.Functions.load import load
 from pyleecan.Functions.Load.retrocompatibility import is_before_version
 from Tests import TEST_DATA_DIR
 
+# 4: OP_matrix convertion (ndarray to object)
+OPM_list = list()
+OPM_list.append(  # VarParam of VarLoadCurrent (OP Id/Iq)
+    {
+        "ref": join(
+            TEST_DATA_DIR,
+            "Retrocompatibility",
+            "OP_matrix",
+            "new",
+            "test_multi_multi.json",
+        ),
+        "old": join(
+            TEST_DATA_DIR,
+            "Retrocompatibility",
+            "OP_matrix",
+            "old",
+            "test_multi_multi.json",
+        ),
+    }
+)
+OPM_list.append(  # VarLoadCurrent (I0/Phi0/Tem)
+    {
+        "ref": join(
+            TEST_DATA_DIR, "Retrocompatibility", "OP_matrix", "new", "test_varload.json"
+        ),
+        "old": join(
+            TEST_DATA_DIR, "Retrocompatibility", "OP_matrix", "old", "test_varload.json"
+        ),
+    }
+)
 
 # 3: HoleUD convertion (label update)
 hole_list = list()
@@ -60,6 +90,23 @@ wind_list.append(  # WindingDW1L
         ),
     }
 )
+
+
+@pytest.mark.parametrize("file_dict", OPM_list)
+def test_save_OPM_retro(file_dict):
+    """Check that the OP_matrix convertion works"""
+    ref = load(file_dict["ref"])
+    old = load(file_dict["old"])
+
+    ref_var = ref.get_var_load()
+    old_var = old.get_var_load()
+    # Datakeeper were added between the 2 versions
+    ref_var.datakeeper_list = None
+    old_var.datakeeper_list = None
+
+    # Check old file is converted to current version
+    msg = "Error for " + ref.name + ": " + str(ref_var.compare(old_var, "var_load"))
+    assert ref_var == old_var, msg
 
 
 @pytest.mark.parametrize("file_dict", hole_list)

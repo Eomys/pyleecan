@@ -11,6 +11,6 @@ if platform.system() == "Windows":
 else:
     USER_DIR = os.environ["HOME"] + "/.local/share/" + PACKAGE_NAME
 
-__version__ = "1.3.9"
+__version__ = "1.4.0"
 
 init_default_log()
