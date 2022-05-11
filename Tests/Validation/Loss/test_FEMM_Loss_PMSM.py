@@ -109,7 +109,7 @@ def test_FEMM_Loss_SPMSM():
         OP.felec = speed / 60 * p
         out_dict = {"coeff_dict": out.loss.coeff_dict}
         outloss = OutLoss()
-        outloss.store(out_dict, lam=machine.stator, OP=OP, type_skin_effect=0, Tsta=120)
+        outloss.store(out_dict, lam=machine.stator, OP=OP, type_skin_effect=0, Tsta=120,Pem=out.mag.Pem_av)
         outloss_list.append(outloss)
 
     joule_list = [o.Pjoule for o in outloss_list]
