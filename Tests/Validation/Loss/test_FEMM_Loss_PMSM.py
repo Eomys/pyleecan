@@ -96,43 +96,58 @@ def test_FEMM_Loss_SPMSM():
         is_get_meshsolution=True,
         Tsta=120,
         type_skin_effect=0,
-        model_dict={"stator core": loss_model, "rotor core": loss_model},
+        model_dict={"stator core": LossModelSteinmetz(group = "stator core",
+                                                      k_hy=k_hy,
+                                                      k_ed=k_ed,
+                                                      alpha_f=alpha_f,
+                                                      alpha_B=alpha_B),
+                    "rotor core": LossModelSteinmetz(group = "rotor core",
+                                                     k_hy=k_hy,
+                                                     k_ed=k_ed,
+                                                     alpha_f=alpha_f,
+                                                     alpha_B=alpha_B),
+                    "joule": LossModelWinding(group = "stator winding"),
+                    "proximity": LossModelProximity(group = "stator winding", k_p=Cprox),
+                    "magnets": LossModelMagnet(group = "rotor magnets")}
     )
 
     out = simu.run()
 
-    speed_array = np.linspace(10, 8000, 100)
-    p = machine.get_pole_pair_number()
-    outloss_list = list()
-    OP = out.elec.OP.copy()
-    for speed in speed_array:
-        OP.felec = speed / 60 * p
-        out_dict = {"coeff_dict": out.loss.coeff_dict}
-        outloss = OutLoss()
-        outloss.store(out_dict, lam=machine.stator, OP=OP, type_skin_effect=0, Tsta=120,Pem=out.mag.Pem_av)
-        outloss_list.append(outloss)
-
-    joule_list = [o.Pjoule for o in outloss_list]
-    sc_list = [o.Pstator for o in outloss_list]
-    rc_list = [o.Protor for o in outloss_list]
-    prox_list = [o.Pprox for o in outloss_list]
-    mag_list = [o.Pmagnet for o in outloss_list]
-    ovl_list = [o.get_loss_overall() for o in outloss_list]
-
     power_dict = {
         "total_power": out.mag.Pem_av,
-        "overall_losses": out.loss.get_loss_overall(),
-        "stator_loss": out.loss.Pstator,
-        "copper_loss": out.loss.Pjoule,
-        "rotor_loss": out.loss.Protor,
-        "magnet_loss": out.loss.Pmagnet,
-        "proximity_loss": out.loss.Pprox,
+        "rotor core": out.loss.loss_dict["rotor core"]["scalar_value"],
+        "stator core": out.loss.loss_dict["stator core"]["scalar_value"],
+        "proximity": out.loss.loss_dict["proximity"]["scalar_value"],
+        "Joule": out.loss.loss_dict["joule"]["scalar_value"],
+        "magnets": out.loss.loss_dict["magnets"]["scalar_value"],
+        "overall_losses": out.loss.loss_dict["overall"]["scalar_value"]
     }
     print(power_dict)
 
-    power_val_ref = [61.87, 9.10, 3.32, 4.38, 0.04, 1.29, 0.05]
+    speed_array = np.linspace(10, 8000, 100)
+    p = machine.get_pole_pair_number()
 
-    assert_almost_equal(list(power_dict.values()), power_val_ref, decimal=2)
+    sc_array = np.array([out.loss.get_loss_group("stator core", speed / 60 *p) for speed in speed_array])
+    rc_array = np.array([out.loss.get_loss_group("rotor core", speed / 60 *p) for speed in speed_array])
+    prox_array = np.array([out.loss.get_loss_group("proximity", speed / 60 *p) for speed in speed_array])
+    joule_array = np.array([out.loss.get_loss_group("joule", speed / 60 *p) for speed in speed_array])
+    mag_array = np.array([out.loss.get_loss_group("magnets", speed / 60 *p) for speed in speed_array])
+    ovl_array = (joule_array +
+                 sc_array +
+                 rc_array +
+                 prox_array +
+                 mag_array)
+
+    power_val_ref = {"mechanical power": 62.30,
+                     "rotor core loss": 0.057,
+                     "stator core loss": 3.41,
+                     "prox loss": 0.06,
+                     "joule loss": 4.37,
+                     "magnet loss": 1.38,
+                     "total loss": 9.27
+    }
+
+    assert_almost_equal(list(power_dict.values()), list(power_val_ref.values()), decimal=0)
 
     if is_show_fig:
         out.loss.meshsol_list[0].plot_contour(
@@ -149,7 +164,7 @@ def test_FEMM_Loss_SPMSM():
 
         plot_2D(
             [speed_array],
-            [ovl_list, joule_list, sc_list, rc_list, prox_list, mag_list],
+            [ovl_array, joule_array, sc_array, rc_array, prox_array, mag_array],
             xlabel="Speed [rpm]",
             ylabel="Losses [W]",
             legend_list=[
@@ -290,6 +305,6 @@ def test_FEMM_Loss_Prius():
 # To run it without pytest
 if __name__ == "__main__":
 
-    # out = test_FEMM_Loss_SPMSM()
+    out = test_FEMM_Loss_SPMSM()
 
     out = test_FEMM_Loss_Prius() 
