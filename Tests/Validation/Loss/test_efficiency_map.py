@@ -18,6 +18,9 @@ from pyleecan.Classes.MagFEMM import MagFEMM
 from pyleecan.Classes.PostLUT import PostLUT
 from pyleecan.Classes.LossFEMM import LossFEMM
 from pyleecan.Classes.LossModelSteinmetz import LossModelSteinmetz
+from pyleecan.Classes.LossModelWinding import LossModelWinding
+from pyleecan.Classes.LossModelProximity import LossModelProximity
+from pyleecan.Classes.LossModelMagnet import LossModelMagnet
 
 from pyleecan.Functions.load import load
 
@@ -37,7 +40,7 @@ def test_ElecLUTdq_solve_MTPA():
     """Validation of the PMSM Electrical Equivalent Circuit with the Prius machine for MTPA calculation"""
 
     Toyota_Prius = load(join(DATA_DIR, "Machine", "Toyota_Prius.json"))
-    path_to_LUT = r"C:\Users\LAP10\Documents\Loss\LUT_eff2.h5"
+    path_to_LUT = r"C:\Users\LAP10\Documents\Loss\LUT_eff_new_models.h5"
 
     if not exists(split(path_to_LUT)[0]):
         raise Exception("The path to LUT is not valid.")
@@ -81,7 +84,7 @@ def test_ElecLUTdq_solve_MTPA():
     # nb_worker=4,
     # is_get_meshsolution=True,
     # is_fast_draw=True,
-    # is_calc_torque_energy=False)
+    # is_calc_torque_energy=False)                
     
     loss_model = LossModelSteinmetz()
     # simu.loss = LossFEMM(
@@ -121,12 +124,16 @@ def test_ElecLUTdq_solve_MTPA():
                 nb_worker=4,
                 is_get_meshsolution=True,
             ),
-            loss=LossFEMM(
+            loss = LossFEMM(
                 Cp=1,
                 is_get_meshsolution=True,
                 Tsta=100,
-                type_skin_effect=1,
-                model_dict={"stator core": loss_model, "rotor core": loss_model},
+                type_skin_effect=0,
+                model_dict={"stator core": LossModelSteinmetz(group = "stator core"),
+                            "rotor core": LossModelSteinmetz(group = "rotor core"),
+                            "joule": LossModelWinding(group = "stator winding"),
+                            "proximity": LossModelProximity(group = "stator winding", k_p=1),
+                            "magnets": LossModelMagnet(group = "rotor magnets")}
             )
         ),
     )

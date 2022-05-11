@@ -40,16 +40,11 @@ def interp_Ploss_dqh(self, Id, Iq, N0):
     for ii, out in enumerate(self.output_list):
         OP = out.elec.OP.copy()
         OP.felec = felec
-        Ploss_dqh[ii, 0] = comp_loss_joule(
-            lam=self.simu.machine.stator,
-            OP=OP,
-            T_op=Tsta,
-            type_skin_effect=type_skin_effect,
-        )
+        Ploss_dqh[ii, 0] = out.loss.get_loss_group("joule", felec)
         Ploss_dqh[ii, 1] = out.loss.get_loss_group("stator core", felec)
-        Ploss_dqh[ii, 2] = out.loss.get_loss_group("rotor magnets", felec)
+        Ploss_dqh[ii, 2] = out.loss.get_loss_group("magnets", felec)
         Ploss_dqh[ii, 3] = out.loss.get_loss_group("rotor core", felec)
-        Ploss_dqh[ii, 4] = out.loss.get_loss_group("stator winding", felec)
+        Ploss_dqh[ii, 4] = out.loss.get_loss_group("proximity", felec)
 
     # Get unique Id, Iq sorted in ascending order
     OP_matrix = self.get_OP_matrix()
