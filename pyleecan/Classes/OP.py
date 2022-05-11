@@ -22,6 +22,11 @@ try:
 except ImportError as error:
     get_machine_from_parent = error
 
+try:
+    from ..Methods.Simulation.OP.get_OP_matrix import get_OP_matrix
+except ImportError as error:
+    get_OP_matrix = error
+
 
 from ._check import InitUnKnowClassError
 
@@ -31,6 +36,7 @@ class OP(FrozenClass):
 
     VERSION = 1
 
+    # Check ImportError to remove unnecessary dependencies in unused method
     # cf Methods.Simulation.OP.get_machine_from_parent
     if isinstance(get_machine_from_parent, ImportError):
         get_machine_from_parent = property(
@@ -43,6 +49,15 @@ class OP(FrozenClass):
         )
     else:
         get_machine_from_parent = get_machine_from_parent
+    # cf Methods.Simulation.OP.get_OP_matrix
+    if isinstance(get_OP_matrix, ImportError):
+        get_OP_matrix = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use OP method get_OP_matrix: " + str(get_OP_matrix))
+            )
+        )
+    else:
+        get_OP_matrix = get_OP_matrix
     # save and copy methods are available in all object
     save = save
     copy = copy

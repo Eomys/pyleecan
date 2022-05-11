@@ -7935,7 +7935,8 @@
         "desc": "Define the Operating Point of the simulation",
         "is_internal": false,
         "methods": [
-            "get_machine_from_parent"
+            "get_machine_from_parent",
+            "get_OP_matrix"
         ],
         "mother": "",
         "name": "OP",
@@ -10775,7 +10776,8 @@
         "methods": [
             "run",
             "init_logger",
-            "get_var_load"
+            "get_var_load",
+            "get_OP_matrix"
         ],
         "mother": "",
         "name": "Simulation",

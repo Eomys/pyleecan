@@ -14,5 +14,7 @@ def get_N_OP(self):
 
     if self.N0 is not None:
         return len(self.N0)
-    else:
-        return len(self.Id)
+    elif self.Id_ref is not None:
+        return len(self.Id_ref)
+    elif self.Ud_ref is not None:
+        return len(self.Ud_ref)

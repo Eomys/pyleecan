@@ -1,0 +1,92 @@
+from numpy import mean, pi, ones, array
+from numpy.testing import assert_array_almost_equal
+from sympy import Id
+from pyleecan.Classes.OPMatrix import OPMatrix
+from pyleecan.Classes.VarLoadCurrent import VarLoadCurrent
+from pyleecan.Classes.Simu1 import Simu1
+from pyleecan.Classes.OPdq import OPdq
+from pyleecan.definitions import DATA_DIR
+from pyleecan.Functions.load import load
+from pyleecan.Functions.Plot import dict_2D
+from pyleecan.Methods.Simulation.Input import CURRENT_DIR_REF, ROT_DIR_REF, InputError
+import pytest
+from Tests import save_plot_path as save_path
+
+
+class Test_OP_matrix_meth(object):
+    """unittest for OP_matrix object methods"""
+
+    def test_OP_matrix_out_of_order(self):
+        """Check that you can set/get an OP_matrix out of order"""
+        # Constant column matrix
+        OP_matrix = ones((10, 7))
+        for ii in range(OP_matrix.shape[1]):
+            OP_matrix[:, ii] *= ii + 1
+        # Set Parameters out of "normal" order
+        OP_obj = OPMatrix()
+        OP_obj.set_OP_matrix(OP_matrix, "Tem", "Pem", "Id", "Iq", "N0", "Ud", "Uq")
+        # Check that the set is correct
+        assert mean(OP_obj.Tem_av_ref) == 1
+        assert mean(OP_obj.Pem_av_ref) == 2
+        assert mean(OP_obj.Id_ref) == 3
+        assert mean(OP_obj.Iq_ref) == 4
+        assert mean(OP_obj.N0) == 5
+        assert mean(OP_obj.Ud_ref) == 6
+        assert mean(OP_obj.Uq_ref) == 7
+        # Check that getter works as well
+        OP_mat2 = OP_obj.get_OP_matrix("Uq", "Ud", "N0", "Iq", "Id", "Pem", "Tem")
+        assert OP_mat2.shape == (10, 7)
+        for ii in range(OP_mat2.shape[1]):
+            assert mean(OP_mat2[:, ii]) == 7 - ii
+
+    def test_OP_matrix_convert(self):
+        """Check that you can set/get an OP_matrix with convertion"""
+        # Constant column matrix
+        OP_matrix = ones((10, 4))
+        OP_matrix[:, 0] *= 2
+        OP_matrix[:, 1] *= pi / 2
+        OP_matrix[:, 2] *= 4
+        OP_matrix[:, 3] *= -pi / 2
+        # Set Parameters out of "normal" order
+        OP_obj = OPMatrix()
+        OP_obj.set_OP_matrix(OP_matrix, "I0", "Phi0", "U0", "UPhi0")
+        # Check that the set is correct
+        assert mean(OP_obj.Id_ref) == pytest.approx(0, rel=1e-4)
+        assert mean(OP_obj.Iq_ref) == 2
+        assert mean(OP_obj.Ud_ref) == pytest.approx(0, rel=1e-4)
+        assert mean(OP_obj.Uq_ref) == -4
+        # Check that getter works as well
+        OP_mat2 = OP_obj.get_OP_matrix("I0", "Phi0", "U0", "UPhi0")
+        assert OP_mat2.shape == (10, 4)
+        assert mean(OP_mat2[:, 0]) == 2
+        assert mean(OP_mat2[:, 1]) == pi / 2
+        assert mean(OP_mat2[:, 2]) == 4
+        assert mean(OP_mat2[:, 3]) == -pi / 2
+
+    def test_simu_get_OP_matrix(self):
+        """Check that you can set/get an OP_matrix from a simulation"""
+        simu = Simu1()
+        simu.input.OP = OPdq(Id_ref=1, Iq_ref=2, N0=3, Tem_av_ref=4)
+        OP_1 = simu.get_OP_matrix("Id", "Iq", "N0", "T")
+        assert_array_almost_equal(OP_1, array([[1, 2, 3, 4]]))
+
+        simu.var_simu = VarLoadCurrent()
+        OP_matrix = [[1, 2, 3, 4], [5, 6, 7, 8], [9, 10, 11, 12]]
+        simu.var_simu.set_OP_matrix(OP_matrix, "N0", "Id", "Iq", "T")
+        OP_2 = simu.get_OP_matrix("N0", "Id", "Iq", "T")
+        assert_array_almost_equal(OP_2, OP_matrix)
+        # Check input update by set_OP_matrix
+        assert simu.input.OP.N0 == 1
+        assert simu.input.OP.Id_ref == 2
+        assert simu.input.OP.Iq_ref == 3
+        assert simu.input.OP.Tem_av_ref == 4
+
+
+# To run it without pytest
+if __name__ == "__main__":
+
+    a = Test_OP_matrix_meth()
+    a.test_OP_matrix_out_of_order()
+    a.test_OP_matrix_convert()
+    a.test_simu_get_OP_matrix()
+    print("Done")

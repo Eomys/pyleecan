@@ -32,6 +32,11 @@ try:
 except ImportError as error:
     get_var_load = error
 
+try:
+    from ..Methods.Simulation.Simulation.get_OP_matrix import get_OP_matrix
+except ImportError as error:
+    get_OP_matrix = error
+
 
 from ._check import InitUnKnowClassError
 
@@ -73,6 +78,17 @@ class Simulation(FrozenClass):
         )
     else:
         get_var_load = get_var_load
+    # cf Methods.Simulation.Simulation.get_OP_matrix
+    if isinstance(get_OP_matrix, ImportError):
+        get_OP_matrix = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Simulation method get_OP_matrix: " + str(get_OP_matrix)
+                )
+            )
+        )
+    else:
+        get_OP_matrix = get_OP_matrix
     # save and copy methods are available in all object
     save = save
     copy = copy

@@ -1,11 +1,13 @@
 from ....Functions.load import load_init_dict
 from ....Functions.Load.import_class import import_class
 from ....Classes._check import check_var
-from numpy import ndarray
+from numpy import ndarray, array
 
 
 def _set_OP_matrix(self, value):
     """setter of OP_matrix"""
+    if isinstance(value, list):
+        value = array(value)
     if isinstance(value, str):  # Load from file
         try:
             value = load_init_dict(value)[1]
@@ -21,9 +23,7 @@ def _set_OP_matrix(self, value):
         value = class_obj(init_dict=value)
     elif isinstance(value, ndarray):
         # Conver matrix to OP_matrix object
-        class_obj = import_class(
-            "pyleecan.Classes", value.get("__class__"), "OP_matrix"
-        )
+        class_obj = import_class("pyleecan.Classes", "OPMatrix", "OP_matrix")
         value_obj = class_obj()
         value_obj._set_None()
         # N0, Id, Iq, Tem, Pem is the most commun OP_matrix format

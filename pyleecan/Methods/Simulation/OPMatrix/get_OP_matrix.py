@@ -5,15 +5,12 @@ from ....Methods.Simulation.OPMatrix import OPMatrixException
 def get_OP_matrix(self, *arg_list):
     """get the OP_matrix by identifying the columns
     Ex: get_OP_matrix("N0", "Iq", "Iq", "Tem")
-    set_OP_matrix(OP_matrix) calls set_OP_matrix(OP_matrix, "N0", "Id", "Iq", "Tem", "Pem")
-    I0/Phi0 are converted to Id, Iq, U0/UPhi0 are converted to Ud, Uq
+    get_OP_matrix() calls get_OP_matrix("N0", "Id", "Iq", "Tem", "Pem")
 
     Parameters
     ----------
     self : OPMatrix
         OPMatrix object to update
-    OP_matrix : ndarray
-        OP_matrix to set in the object
     *arg_list : list of str
         arguments to specify the OP_matrix columns name
     """
@@ -21,6 +18,7 @@ def get_OP_matrix(self, *arg_list):
     # Extract arg_list it the function called from another script with *arg_list
     if len(arg_list) == 1 and type(arg_list[0]) == tuple:
         arg_list = arg_list[0]
+    arg_list = list(arg_list)
 
     # Init OP_matrix
     N_OP = self.get_N_OP()
