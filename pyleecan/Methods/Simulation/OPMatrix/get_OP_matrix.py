@@ -12,7 +12,12 @@ def get_OP_matrix(self, *arg_list):
     self : OPMatrix
         OPMatrix object to update
     *arg_list : list of str
-        arguments to specify the OP_matrix columns name
+        arguments to select the OP_matrix columns name
+
+    Returns
+    -------
+    OP_matrix : ndarray
+        Operating point matrix with the selected columns (Array (N_OP, len(arg_list)))
     """
 
     # Extract arg_list it the function called from another script with *arg_list

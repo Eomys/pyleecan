@@ -14437,7 +14437,7 @@
         "path": "pyleecan/Generator/ClassesRef/Simulation/VarLoad.csv",
         "properties": [
             {
-                "desc": "Operating point matrix (N0,I0,Phi0,T,P) or (N0,Id,Iq,T,P) or (N0,U0,s,T,P)",
+                "desc": "Operating point matrix object",
                 "max": "",
                 "min": "",
                 "name": "OP_matrix",

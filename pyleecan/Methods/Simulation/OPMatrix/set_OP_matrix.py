@@ -68,6 +68,11 @@ def set_OP_matrix(self, OP_matrix, *arg_list):
         OP_matrix[:, Phi0_index] = Z.imag
         arg_list[I0_index] = "Id"
         arg_list[Phi0_index] = "Iq"
+    # Convertion I0 to Id (assume Phi0=0)
+    elif "i0" in arg_list_lower and "phi0" not in arg_list_lower:
+        OP_matrix = hstack((OP_matrix, zeros((OP_matrix.shape[0], 1))))
+        arg_list[arg_list_lower.index("i0")] = "Id"
+        arg_list.append("Iq")
 
     # Convertion U0/UPhi0 to Ud/Uq
     if "u0" in arg_list_lower and "uphi0" in arg_list_lower:

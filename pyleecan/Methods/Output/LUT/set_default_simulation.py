@@ -10,7 +10,7 @@ def set_default_simulation(self, machine, OP_matrix=None, name=None):
         A LUT object
     machine : Machine
         The machine to use in the simulation
-    OP_matrix : OP_matrix
+    OP_matrix : OP_matrix/ndarray
         OP_matrix to use for VarLoadCurrent
     name : str
         Name of the simulation

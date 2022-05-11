@@ -1,16 +1,10 @@
-from numpy import mean, pi, ones, array
-from numpy.testing import assert_array_almost_equal
-from sympy import Id
-from pyleecan.Classes.OPMatrix import OPMatrix
-from pyleecan.Classes.VarLoadCurrent import VarLoadCurrent
-from pyleecan.Classes.Simu1 import Simu1
-from pyleecan.Classes.OPdq import OPdq
-from pyleecan.definitions import DATA_DIR
-from pyleecan.Functions.load import load
-from pyleecan.Functions.Plot import dict_2D
-from pyleecan.Methods.Simulation.Input import CURRENT_DIR_REF, ROT_DIR_REF, InputError
 import pytest
-from Tests import save_plot_path as save_path
+from numpy import array, mean, ones, pi
+from numpy.testing import assert_array_almost_equal
+from pyleecan.Classes.OPdq import OPdq
+from pyleecan.Classes.OPMatrix import OPMatrix
+from pyleecan.Classes.Simu1 import Simu1
+from pyleecan.Classes.VarLoadCurrent import VarLoadCurrent
 
 
 class Test_OP_matrix_meth(object):

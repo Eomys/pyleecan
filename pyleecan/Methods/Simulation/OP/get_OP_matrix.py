@@ -5,14 +5,19 @@ from ....Methods.Simulation.OPMatrix import OPMatrixException
 def get_OP_matrix(self, *arg_list):
     """get the OP_matrix by identifying the columns
     Ex: get_OP_matrix("N0", "Iq", "Iq", "Tem")
-    get_OP_matrix(OP_matrix) calls get_OP_matrix(OP_matrix, "N0", "Id", "Iq", "Tem", "Pem")
+    get_OP_matrix(OP_matrix) calls get_OP_matrix("N0", "Id", "Iq", "Tem", "Pem")
 
     Parameters
     ----------
-    self : OPMatrix
-        OPMatrix object to update
+    self : OP
+        Operating Point object to convert to a matrix
     *arg_list : list of str
         arguments to specify the OP_matrix columns name
+
+    Returns
+    -------
+    OP_matrix: ndarray
+        Single line OP_matrix with the selected columns
     """
 
     # Extract arg_list it the function called from another script with *arg_list

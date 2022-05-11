@@ -5,6 +5,7 @@ from ....Classes.OPMatrix import OPMatrix
 def set_OP_matrix(self, OP_matrix, *arg_list, is_update_input=True, input_index=0):
     """Set the OP_matrix and update the input if needed
     (To make sure that ref simu is in the OP_matrix)
+    Ex: set_OP_matrix(OP_matrix, "N0", "Iq", "Iq", "Tem")
 
     Parameters
     ----------
@@ -12,12 +13,12 @@ def set_OP_matrix(self, OP_matrix, *arg_list, is_update_input=True, input_index=
         A VarLoad object
     OP_matrix : OP_matrix / ndarray
         OP_matrix to set
+    *arg_list : several str
+        To specify the OP_matrix column ("N0", "Id", "Iq"...)
     is_update_input : bool
         True to update the input
     input_index : int
-        Index of the OP from the OP_matrix to set in the input
-    arg_list : str
-        To specify the OP_matrix column ("N0", "Id", "Iq")
+        Index of the OP from the OP_matrix to set in the input (if is_update_input)
     """
 
     if isinstance(OP_matrix, ndarray):
