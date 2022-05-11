@@ -49,9 +49,9 @@ def store(
     felec = OP.get_felec(p=lam.get_pole_pair_number())
 
     for key in out_dict.keys():
-        if key == "Joule":
-            self.loss_dict[key]["scalar_value"] = comp_loss_joule(lam, Tsta, OP, type_skin_effect)
-        elif key != "overall":
+        # if key == "Joule":
+        #     self.loss_dict[key]["scalar_value"] = comp_loss_joule(lam, Tsta, OP, type_skin_effect)
+        if key != "overall":
             self.loss_dict[key]["scalar_value"] = self.get_loss_group(key, felec)
 
     self.get_loss_overall()

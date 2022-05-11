@@ -20,5 +20,5 @@ def get_loss_group(self, group, felec):
         + coeff_dict["B"] * felec ** coeff_dict["b"]
         + coeff_dict["C"] * felec ** coeff_dict["c"]
     )
-    
+
     return Ploss

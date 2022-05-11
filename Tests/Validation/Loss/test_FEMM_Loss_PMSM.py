@@ -209,7 +209,7 @@ def test_FEMM_Loss_Prius():
         type_skin_effect=0,
         model_dict={"stator core": LossModelSteinmetz(group = "stator core"),
                     "rotor core": LossModelSteinmetz(group = "rotor core"),
-                    "Joule": LossModelWinding(group = "stator winding"),
+                    "joule": LossModelWinding(group = "stator winding"),
                     "proximity": LossModelProximity(group = "stator winding", k_p=Cprox),
                     "magnets": LossModelMagnet(group = "rotor magnets")}
     )
@@ -221,7 +221,7 @@ def test_FEMM_Loss_Prius():
         "overall_losses": out.loss.loss_dict["overall"]["scalar_value"],
         "stator core": out.loss.loss_dict["stator core"]["scalar_value"],
         "rotor core": out.loss.loss_dict["rotor core"]["scalar_value"],
-        "Joule": out.loss.loss_dict["Joule"]["scalar_value"],
+        "Joule": out.loss.loss_dict["joule"]["scalar_value"],
         "proximity": out.loss.loss_dict["proximity"]["scalar_value"],
         "magnets": out.loss.loss_dict["magnets"]["scalar_value"]
     }
@@ -230,7 +230,7 @@ def test_FEMM_Loss_Prius():
     speed_array = np.linspace(10, 8000, 100)
     p = machine.get_pole_pair_number()
 
-    joule_array = np.array([out.loss.loss_dict["Joule"]["scalar_value"] for speed in speed_array])
+    joule_array = np.array([out.loss.get_loss_group("joule", speed / 60 *p) for speed in speed_array])
     sc_array = np.array([out.loss.get_loss_group("stator core", speed / 60 *p) for speed in speed_array])
     rc_array = np.array([out.loss.get_loss_group("rotor core", speed / 60 *p) for speed in speed_array])
     prox_array = np.array([out.loss.get_loss_group("proximity", speed / 60 *p) for speed in speed_array])

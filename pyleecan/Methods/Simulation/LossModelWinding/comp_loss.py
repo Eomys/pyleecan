@@ -40,8 +40,17 @@ def comp_loss(self):
     lam = machine.stator
     T_op = self.parent.Tsta
 
+    Rs = lam.comp_resistance_wind(T=T_op)
+    qs = lam.winding.qs
+
+    if self.type_skin_effect > 0:
+        # Account for skin effect
+        k, power = self.comp_coeff(
+            T_op=T_op,
+        )
+
     # Calculate overall joule losses
-    Pjoule = comp_loss_joule(lam, T_op, OP, self.parent.type_skin_effect)
+    Pjoule = qs * Rs * (OP.Id_ref ** 2 + OP.Iq_ref ** 2) * (1 + k * felec ** power)
 
     per_a = output.geo.per_a
     if output.geo.is_antiper_a:
@@ -57,5 +66,10 @@ def comp_loss(self):
     freqs = array([felec])
     Pjoule_density = zeros((freqs.size, Se.size))
     Pjoule_density[0, :] = Pjoule / (per_a * Lst * np_sum(Se))
+
+    coeff = qs * Rs * (OP.Id_ref ** 2 + OP.Iq_ref ** 2)
+    A= coeff * k
+    B = coeff 
+    self.coeff_dict = {"A": A, "B": B, "C": 0, "a": power, "b": 0, "c": 0}
 
     return Pjoule_density, freqs

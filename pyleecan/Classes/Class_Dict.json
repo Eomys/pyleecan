@@ -5740,7 +5740,8 @@
         "desc": "Winding loss model",
         "is_internal": false,
         "methods": [
-            "comp_loss"
+            "comp_loss",
+            "comp_coeff"
         ],
         "mother": "LossModel",
         "name": "LossModelWinding",
@@ -5755,6 +5756,15 @@
                 "type": "float",
                 "unit": "\u00c2\u00b0C",
                 "value": 20
+            },
+            {
+                "desc": "0 to ignore skin effect, 1 to consider it",
+                "max": "",
+                "min": "",
+                "name": "type_skin_effect",
+                "type": "int",
+                "unit": "",
+                "value": 1
             }
         ]
     },
