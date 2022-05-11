@@ -76,6 +76,9 @@ def plot(
 
     (fig, ax, _, _) = init_fig(fig=fig, ax=ax, shape="square")
 
+    if edgecolor is None:
+        edgecolor = "k"
+
     # Call each plot method to properly set the legend
     if self.frame is not None:
         self.frame.plot(
