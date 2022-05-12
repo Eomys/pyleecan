@@ -38,16 +38,12 @@ def comp_loss(self):
 
     lamination = machine.stator if "stator" in self.group else machine.rotor
     Lst = lamination.L1
-    # Taking into account the stacking factor
-    Kf = lamination.Kf1
-    rho = lamination.mat_type.struct.rho
 
     if self.k_p is None:
         material = lamination.mat_type
         # #TODO make comp_coef method
-        self.comp_coeff(material)
+        self.comp_coeff()
 
-    # Get hysteresis and eddy current loss coefficients
     k_p = self.k_p
 
     # Get fundamental frequency

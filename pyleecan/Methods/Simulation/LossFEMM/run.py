@@ -21,6 +21,5 @@ def run(self):
         out_dict,
         axes_dict,
         self.is_get_meshsolution,
-        type_skin_effect=self.type_skin_effect,
         Tsta=self.Tsta,
     )

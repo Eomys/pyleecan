@@ -165,11 +165,11 @@ def comp_loss(self):
             freqs = Az_df["freqs"]
             w = 2 * pi * freqs[:, None]
             sigma_m = magnet.mat_type.elec.get_conductivity(T_op=self.parent.Trot)
-            if self.parent.type_skin_effect:
+            if self.type_skin_effect:
                 # Get magnet conductivity including skin effect
                 magnet_cond = CondType21(Hbar=Hmag, Wbar=1, cond_mat=magnet.mat_type)
                 kr_skin = magnet_cond.comp_skin_effect_resistance(
-                    freqs, T_op=self.Trot, b=1, zt=1
+                    freqs, T_op=self.parent.Trot, b=1, zt=1
                 )
                 kr_skin[np.isnan(kr_skin)] = 1
                 sigma_m = sigma_m / kr_skin[:, None]

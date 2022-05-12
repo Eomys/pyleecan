@@ -13,7 +13,6 @@ def store(
     is_get_meshsolution=False,
     lam=None,
     OP=None,
-    type_skin_effect=1,
     Tsta=20,
     Pem=None,
 ):

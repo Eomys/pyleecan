@@ -5622,7 +5622,17 @@
         "name": "LossModelMagnet",
         "package": "Simulation",
         "path": "pyleecan/Generator/ClassesRef/Simulation/LossModelMagnet.csv",
-        "properties": []
+        "properties": [
+            {
+                "desc": "0 to ignore skin effect, 1 to consider it",
+                "max": "",
+                "min": "",
+                "name": "type_skin_effect",
+                "type": "int",
+                "unit": "",
+                "value": 1
+            }
+        ]
     },
     "LossModelProximity": {
         "constants": [

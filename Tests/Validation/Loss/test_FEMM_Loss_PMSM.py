@@ -92,10 +92,8 @@ def test_FEMM_Loss_SPMSM():
     )
 
     simu.loss = LossFEMM(
-        Cp=Cprox,
         is_get_meshsolution=True,
         Tsta=120,
-        type_skin_effect=0,
         model_dict={"stator core": LossModelSteinmetz(group = "stator core",
                                                       k_hy=k_hy,
                                                       k_ed=k_ed,
@@ -218,10 +216,8 @@ def test_FEMM_Loss_Prius():
     )
 
     simu.loss = LossFEMM(
-        Cp=Cprox,
         is_get_meshsolution=True,
         Tsta=100,
-        type_skin_effect=0,
         model_dict={"stator core": LossModelSteinmetz(group = "stator core"),
                     "rotor core": LossModelSteinmetz(group = "rotor core"),
                     "joule": LossModelWinding(group = "stator winding"),
@@ -305,6 +301,6 @@ def test_FEMM_Loss_Prius():
 # To run it without pytest
 if __name__ == "__main__":
 
-    out = test_FEMM_Loss_SPMSM()
+    # out = test_FEMM_Loss_SPMSM()
 
     out = test_FEMM_Loss_Prius() 
