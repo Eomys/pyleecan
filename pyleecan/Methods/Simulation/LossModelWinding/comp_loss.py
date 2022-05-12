@@ -48,6 +48,8 @@ def comp_loss(self):
         k, power = self.comp_coeff(
             T_op=T_op,
         )
+    else:
+        k, power = 0, 0
 
     # Calculate overall joule losses
     Pjoule = qs * Rs * (OP.Id_ref ** 2 + OP.Iq_ref ** 2) * (1 + k * felec ** power)
@@ -68,8 +70,8 @@ def comp_loss(self):
     Pjoule_density[0, :] = Pjoule / (per_a * Lst * np_sum(Se))
 
     coeff = qs * Rs * (OP.Id_ref ** 2 + OP.Iq_ref ** 2)
-    A= coeff * k
-    B = coeff 
+    A = coeff * k
+    B = coeff
     self.coeff_dict = {"A": A, "B": B, "C": 0, "a": power, "b": 0, "c": 0}
 
     return Pjoule_density, freqs

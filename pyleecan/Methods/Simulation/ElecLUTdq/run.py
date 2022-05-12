@@ -82,7 +82,7 @@ def run(self):
 
         # Run method to calculate LUT
         LUT = self.comp_LUTdq()
-        
+
         # LUT.save(save_path=r"C:\Users\LAP10\Documents\Loss\LUT_eff.h5")
 
         # Store LUT

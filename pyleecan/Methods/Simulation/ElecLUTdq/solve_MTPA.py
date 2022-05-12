@@ -60,10 +60,10 @@ def solve_MTPA(self, LUT, Rs):
         if self.n_Iq == 1
         else int(self.n_Iq * self.n_interp / (self.n_Id + self.n_Iq))
     )
-    
+
     # Check if there is a loss model
     is_loss_model = LUT.simu.loss is not None
-    
+
     while abs(delta_Tem) > delta_Tem_max and niter_Tem < Nmax:
 
         # Refine Id/Iq mesh
@@ -88,7 +88,7 @@ def solve_MTPA(self, LUT, Rs):
 
         # Set maximum voltage condition
         U_cond = Umax_interp <= Urms_max
-        
+
         if is_loss_model:
             # Interpolate losses from LUT:
             # - 1st column : Joule losses
@@ -172,7 +172,7 @@ def solve_MTPA(self, LUT, Rs):
         self.get_logger().warning("Current constraint cannot be reached")
 
     out_dict = dict()
-    
+
     # Calculate efficiency
     out_dict["P_in"] = P_in[i0][imin]
     out_dict["P_out"] = P_out[i0][imin]

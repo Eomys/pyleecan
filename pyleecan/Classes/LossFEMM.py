@@ -137,8 +137,6 @@ class LossFEMM(Loss):
         is_get_meshsolution=False,
         Tsta=20,
         Trot=20,
-        type_skin_effect=1,
-        Cp=None,
         model_index=-1,
         model_list=-1,
         logger_name="Pyleecan.Loss",
@@ -167,10 +165,6 @@ class LossFEMM(Loss):
                 Tsta = init_dict["Tsta"]
             if "Trot" in list(init_dict.keys()):
                 Trot = init_dict["Trot"]
-            if "type_skin_effect" in list(init_dict.keys()):
-                type_skin_effect = init_dict["type_skin_effect"]
-            if "Cp" in list(init_dict.keys()):
-                Cp = init_dict["Cp"]
             if "model_index" in list(init_dict.keys()):
                 model_index = init_dict["model_index"]
             if "model_list" in list(init_dict.keys()):
@@ -183,8 +177,6 @@ class LossFEMM(Loss):
         self.is_get_meshsolution = is_get_meshsolution
         self.Tsta = Tsta
         self.Trot = Trot
-        self.type_skin_effect = type_skin_effect
-        self.Cp = Cp
         # Call Loss init
         super(LossFEMM, self).__init__(
             model_index=model_index,
@@ -206,8 +198,6 @@ class LossFEMM(Loss):
         )
         LossFEMM_str += "Tsta = " + str(self.Tsta) + linesep
         LossFEMM_str += "Trot = " + str(self.Trot) + linesep
-        LossFEMM_str += "type_skin_effect = " + str(self.type_skin_effect) + linesep
-        LossFEMM_str += "Cp = " + str(self.Cp) + linesep
         return LossFEMM_str
 
     def __eq__(self, other):
@@ -224,10 +214,6 @@ class LossFEMM(Loss):
         if other.Tsta != self.Tsta:
             return False
         if other.Trot != self.Trot:
-            return False
-        if other.type_skin_effect != self.type_skin_effect:
-            return False
-        if other.Cp != self.Cp:
             return False
         return True
 
@@ -248,10 +234,6 @@ class LossFEMM(Loss):
             diff_list.append(name + ".Tsta")
         if other._Trot != self._Trot:
             diff_list.append(name + ".Trot")
-        if other._type_skin_effect != self._type_skin_effect:
-            diff_list.append(name + ".type_skin_effect")
-        if other._Cp != self._Cp:
-            diff_list.append(name + ".Cp")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -266,8 +248,6 @@ class LossFEMM(Loss):
         S += getsizeof(self.is_get_meshsolution)
         S += getsizeof(self.Tsta)
         S += getsizeof(self.Trot)
-        S += getsizeof(self.type_skin_effect)
-        S += getsizeof(self.Cp)
         return S
 
     def as_dict(self, type_handle_ndarray=0, keep_function=False, **kwargs):
@@ -290,8 +270,6 @@ class LossFEMM(Loss):
         LossFEMM_dict["is_get_meshsolution"] = self.is_get_meshsolution
         LossFEMM_dict["Tsta"] = self.Tsta
         LossFEMM_dict["Trot"] = self.Trot
-        LossFEMM_dict["type_skin_effect"] = self.type_skin_effect
-        LossFEMM_dict["Cp"] = self.Cp
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         LossFEMM_dict["__class__"] = "LossFEMM"
@@ -303,8 +281,6 @@ class LossFEMM(Loss):
         self.is_get_meshsolution = None
         self.Tsta = None
         self.Trot = None
-        self.type_skin_effect = None
-        self.Cp = None
         # Set to None the properties inherited from Loss
         super(LossFEMM, self)._set_None()
 
@@ -357,42 +333,6 @@ class LossFEMM(Loss):
         fget=_get_Trot,
         fset=_set_Trot,
         doc=u"""Average rotor temperature for Electrical calculation
-
-        :Type: float
-        """,
-    )
-
-    def _get_type_skin_effect(self):
-        """getter of type_skin_effect"""
-        return self._type_skin_effect
-
-    def _set_type_skin_effect(self, value):
-        """setter of type_skin_effect"""
-        check_var("type_skin_effect", value, "int")
-        self._type_skin_effect = value
-
-    type_skin_effect = property(
-        fget=_get_type_skin_effect,
-        fset=_set_type_skin_effect,
-        doc=u"""Skin effect for resistance calculation
-
-        :Type: int
-        """,
-    )
-
-    def _get_Cp(self):
-        """getter of Cp"""
-        return self._Cp
-
-    def _set_Cp(self, value):
-        """setter of Cp"""
-        check_var("Cp", value, "float")
-        self._Cp = value
-
-    Cp = property(
-        fget=_get_Cp,
-        fset=_set_Cp,
-        doc=u"""proximity loss coefficients
 
         :Type: float
         """,

@@ -5432,24 +5432,6 @@
                 "type": "float",
                 "unit": "deg Celsius",
                 "value": 20
-            },
-            {
-                "desc": "Skin effect for resistance calculation",
-                "max": "",
-                "min": "",
-                "name": "type_skin_effect",
-                "type": "int",
-                "unit": "-",
-                "value": 1
-            },
-            {
-                "desc": "proximity loss coefficients",
-                "max": "",
-                "min": "",
-                "name": "Cp",
-                "type": "float",
-                "unit": "W/(m3*T2*Hz2)",
-                "value": null
             }
         ]
     },
