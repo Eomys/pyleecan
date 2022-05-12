@@ -125,10 +125,8 @@ def test_ElecLUTdq_solve_MTPA():
                 is_get_meshsolution=True,
             ),
             loss = LossFEMM(
-                Cp=1,
                 is_get_meshsolution=True,
                 Tsta=100,
-                type_skin_effect=0,
                 model_dict={"stator core": LossModelSteinmetz(group = "stator core"),
                             "rotor core": LossModelSteinmetz(group = "rotor core"),
                             "joule": LossModelWinding(group = "stator winding"),

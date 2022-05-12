@@ -253,17 +253,27 @@ def test_FEMM_Loss_Prius():
                  mag_array)
 
     if is_show_fig:
-        # out.loss.meshsol_list[0].plot_contour(
-        #     "freqs=sum",
-        #     label="Loss",
-        #     group_names=[
-        #         "stator core",
-        #         # "stator winding",
-        #         "rotor core",
-        #         "rotor magnets",
-        #     ],
-        #     # clim=[2e4, 2e7],
-        # )
+        group_names = [
+            "stator core",
+            "rotor core",
+            "rotor magnets"
+        ]
+        for key, value in out.loss.meshsol_dict.items():
+            if "joule" in key or "proximity" in key :
+                group_names.append("stator winding")
+                value.plot_contour(
+                    "freqs=sum",
+                    label=f"{key} Loss",
+                    group_names = group_names
+                )
+                group_names.pop()
+            else:
+                
+                value.plot_contour(
+                    "freqs=sum",
+                    label=f"{key} Loss",
+                    group_names = group_names
+                )
 
         plot_2D(
             [speed_array],

@@ -9279,11 +9279,11 @@
                 "value": "None"
             },
             {
-                "desc": "Internal list of loss meshsolutions",
+                "desc": "Internal dict of loss meshsolutions",
                 "max": "",
                 "min": "",
-                "name": "meshsol_list",
-                "type": "[MeshSolution]",
+                "name": "meshsol_dict",
+                "type": "{MeshSolution}",
                 "unit": "",
                 "value": null
             },

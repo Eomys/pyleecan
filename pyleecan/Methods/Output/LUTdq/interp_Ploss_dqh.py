@@ -33,9 +33,6 @@ def interp_Ploss_dqh(self, Id, Iq, N0):
 
     felec = N0 / 60 * p
 
-    type_skin_effect = self.simu.loss.type_skin_effect
-    Tsta = self.simu.loss.Tsta
-
     Ploss_dqh = np.zeros((len(self.output_list), 5))
     for ii, out in enumerate(self.output_list):
         OP = out.elec.OP.copy()

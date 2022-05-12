@@ -40,8 +40,11 @@ def comp_loss(self, output, axes_dict):
         if self.is_get_meshsolution:
             If = argmin(np_abs(freqs[:, None] - f[None, :]), axis=0)[:, None]
             Ie = array(group[model.group])[None, :]
-            loss_density[If, Ie] += P_density
-            out_dict["overall"] = {"loss_density": loss_density}
+            temp_loss_density = zeros((freqs.size, Nelem))
+            temp_loss_density[If, Ie] += P_density
+            loss_density += temp_loss_density
+            out_dict[key]["global_loss_density"] = temp_loss_density
+    out_dict["overall"] = {"global_loss_density": loss_density}
 
     # # Comp stator core losses
     # if "stator core" in self.model_dict:

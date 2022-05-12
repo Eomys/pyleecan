@@ -146,7 +146,7 @@ class OutLoss(FrozenClass):
     def __init__(
         self,
         loss_list=None,
-        meshsol_list=None,
+        meshsol_dict=None,
         loss_index=-1,
         logger_name="Pyleecan.Loss",
         axes_dict=None,
@@ -171,8 +171,8 @@ class OutLoss(FrozenClass):
             # Overwrite default value with init_dict content
             if "loss_list" in list(init_dict.keys()):
                 loss_list = init_dict["loss_list"]
-            if "meshsol_list" in list(init_dict.keys()):
-                meshsol_list = init_dict["meshsol_list"]
+            if "meshsol_dict" in list(init_dict.keys()):
+                meshsol_dict = init_dict["meshsol_dict"]
             if "loss_index" in list(init_dict.keys()):
                 loss_index = init_dict["loss_index"]
             if "logger_name" in list(init_dict.keys()):
@@ -184,7 +184,7 @@ class OutLoss(FrozenClass):
         # Set the properties (value check and convertion are done in setter)
         self.parent = None
         self.loss_list = loss_list
-        self.meshsol_list = meshsol_list
+        self.meshsol_dict = meshsol_dict
         self.loss_index = loss_index
         self.logger_name = logger_name
         self.axes_dict = axes_dict
@@ -202,14 +202,14 @@ class OutLoss(FrozenClass):
         else:
             OutLoss_str += "parent = " + str(type(self.parent)) + " object" + linesep
         OutLoss_str += "loss_list = " + str(self.loss_list) + linesep + linesep
-        if len(self.meshsol_list) == 0:
-            OutLoss_str += "meshsol_list = []" + linesep
-        for ii in range(len(self.meshsol_list)):
+        if len(self.meshsol_dict) == 0:
+            OutLoss_str += "meshsol_dict = dict()" + linesep
+        for key, obj in self.meshsol_dict.items():
             tmp = (
-                self.meshsol_list[ii].__str__().replace(linesep, linesep + "\t")
+                self.meshsol_dict[key].__str__().replace(linesep, linesep + "\t")
                 + linesep
             )
-            OutLoss_str += "meshsol_list[" + str(ii) + "] =" + tmp + linesep + linesep
+            OutLoss_str += "meshsol_dict[" + key + "] =" + tmp + linesep + linesep
         OutLoss_str += "loss_index = " + str(self.loss_index) + linesep
         OutLoss_str += 'logger_name = "' + str(self.logger_name) + '"' + linesep
         OutLoss_str += "axes_dict = " + str(self.axes_dict) + linesep + linesep
@@ -223,7 +223,7 @@ class OutLoss(FrozenClass):
             return False
         if other.loss_list != self.loss_list:
             return False
-        if other.meshsol_list != self.meshsol_list:
+        if other.meshsol_dict != self.meshsol_dict:
             return False
         if other.loss_index != self.loss_index:
             return False
@@ -258,20 +258,19 @@ class OutLoss(FrozenClass):
                         other.loss_list[ii], name=name + ".loss_list[" + str(ii) + "]"
                     )
                 )
-        if (other.meshsol_list is None and self.meshsol_list is not None) or (
-            other.meshsol_list is not None and self.meshsol_list is None
+        if (other.meshsol_dict is None and self.meshsol_dict is not None) or (
+            other.meshsol_dict is not None and self.meshsol_dict is None
         ):
-            diff_list.append(name + ".meshsol_list None mismatch")
-        elif self.meshsol_list is None:
+            diff_list.append(name + ".meshsol_dict None mismatch")
+        elif self.meshsol_dict is None:
             pass
-        elif len(other.meshsol_list) != len(self.meshsol_list):
-            diff_list.append("len(" + name + ".meshsol_list)")
+        elif len(other.meshsol_dict) != len(self.meshsol_dict):
+            diff_list.append("len(" + name + "meshsol_dict)")
         else:
-            for ii in range(len(other.meshsol_list)):
+            for key in self.meshsol_dict:
                 diff_list.extend(
-                    self.meshsol_list[ii].compare(
-                        other.meshsol_list[ii],
-                        name=name + ".meshsol_list[" + str(ii) + "]",
+                    self.meshsol_dict[key].compare(
+                        other.meshsol_dict[key], name=name + ".meshsol_dict"
                     )
                 )
         if other._loss_index != self._loss_index:
@@ -306,9 +305,9 @@ class OutLoss(FrozenClass):
         if self.loss_list is not None:
             for value in self.loss_list:
                 S += getsizeof(value)
-        if self.meshsol_list is not None:
-            for value in self.meshsol_list:
-                S += getsizeof(value)
+        if self.meshsol_dict is not None:
+            for key, value in self.meshsol_dict.items():
+                S += getsizeof(value) + getsizeof(key)
         if self.loss_index is not None:
             for key, value in self.loss_index.items():
                 S += getsizeof(value) + getsizeof(key)
@@ -348,21 +347,19 @@ class OutLoss(FrozenClass):
                     )
                 else:
                     OutLoss_dict["loss_list"].append(None)
-        if self.meshsol_list is None:
-            OutLoss_dict["meshsol_list"] = None
+        if self.meshsol_dict is None:
+            OutLoss_dict["meshsol_dict"] = None
         else:
-            OutLoss_dict["meshsol_list"] = list()
-            for obj in self.meshsol_list:
+            OutLoss_dict["meshsol_dict"] = dict()
+            for key, obj in self.meshsol_dict.items():
                 if obj is not None:
-                    OutLoss_dict["meshsol_list"].append(
-                        obj.as_dict(
-                            type_handle_ndarray=type_handle_ndarray,
-                            keep_function=keep_function,
-                            **kwargs
-                        )
+                    OutLoss_dict["meshsol_dict"][key] = obj.as_dict(
+                        type_handle_ndarray=type_handle_ndarray,
+                        keep_function=keep_function,
+                        **kwargs
                     )
                 else:
-                    OutLoss_dict["meshsol_list"].append(None)
+                    OutLoss_dict["meshsol_dict"][key] = None
         OutLoss_dict["loss_index"] = (
             self.loss_index.copy() if self.loss_index is not None else None
         )
@@ -391,7 +388,7 @@ class OutLoss(FrozenClass):
         """Set all the properties to None (except pyleecan object)"""
 
         self.loss_list = None
-        self.meshsol_list = None
+        self.meshsol_dict = None
         self.loss_index = None
         self.logger_name = None
         self.axes_dict = None
@@ -439,18 +436,18 @@ class OutLoss(FrozenClass):
         """,
     )
 
-    def _get_meshsol_list(self):
-        """getter of meshsol_list"""
-        if self._meshsol_list is not None:
-            for obj in self._meshsol_list:
+    def _get_meshsol_dict(self):
+        """getter of meshsol_dict"""
+        if self._meshsol_dict is not None:
+            for key, obj in self._meshsol_dict.items():
                 if obj is not None:
                     obj.parent = self
-        return self._meshsol_list
+        return self._meshsol_dict
 
-    def _set_meshsol_list(self, value):
-        """setter of meshsol_list"""
-        if type(value) is list:
-            for ii, obj in enumerate(value):
+    def _set_meshsol_dict(self, value):
+        """setter of meshsol_dict"""
+        if type(value) is dict:
+            for key, obj in value.items():
                 if isinstance(obj, str):  # Load from file
                     try:
                         obj = load_init_dict(obj)[1]
@@ -459,25 +456,23 @@ class OutLoss(FrozenClass):
                             "Error while loading " + obj + ", setting None instead"
                         )
                         obj = None
-                        value[ii] = None
+                        value[key] = None
                 if type(obj) is dict:
                     class_obj = import_class(
-                        "pyleecan.Classes", obj.get("__class__"), "meshsol_list"
+                        "pyleecan.Classes", obj.get("__class__"), "meshsol_dict"
                     )
-                    value[ii] = class_obj(init_dict=obj)
-                if value[ii] is not None:
-                    value[ii].parent = self
-        if value == -1:
-            value = list()
-        check_var("meshsol_list", value, "[MeshSolution]")
-        self._meshsol_list = value
+                    value[key] = class_obj(init_dict=obj)
+        if type(value) is int and value == -1:
+            value = dict()
+        check_var("meshsol_dict", value, "{MeshSolution}")
+        self._meshsol_dict = value
 
-    meshsol_list = property(
-        fget=_get_meshsol_list,
-        fset=_set_meshsol_list,
-        doc=u"""Internal list of loss meshsolutions
+    meshsol_dict = property(
+        fget=_get_meshsol_dict,
+        fset=_set_meshsol_dict,
+        doc=u"""Internal dict of loss meshsolutions
 
-        :Type: [MeshSolution]
+        :Type: {MeshSolution}
         """,
     )
 
