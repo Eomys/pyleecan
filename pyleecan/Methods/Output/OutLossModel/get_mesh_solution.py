@@ -13,7 +13,7 @@ def get_mesh_solution(self):
     freqs = axes_dict["freqs"].get_values()
     Nelem = meshsol.mesh[0].cell["triangle"].nb_cell
 
-    If = np.argmin(np.abs(freqs[:, None] - self.frequency[None, :]), axis=0)[:, None]
+    If = np.argmin(np.abs(freqs[:, None] - self.freqs[None, :]), axis=0)[:, None]
     Ie = np.array(group[self.group])[None, :]
     global_loss_density = np.zeros((freqs.size, Nelem))
     global_loss_density[If, Ie] += self.loss_density

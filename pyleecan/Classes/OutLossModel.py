@@ -73,9 +73,10 @@ class OutLossModel(FrozenClass):
         name="",
         loss_density=None,
         coeff_dict=None,
-        frequency=None,
+        freqs=None,
         scalar_value=None,
-        group="",
+        group=None,
+        f=None,
         init_dict=None,
         init_str=None,
     ):
@@ -100,20 +101,23 @@ class OutLossModel(FrozenClass):
                 loss_density = init_dict["loss_density"]
             if "coeff_dict" in list(init_dict.keys()):
                 coeff_dict = init_dict["coeff_dict"]
-            if "frequency" in list(init_dict.keys()):
-                frequency = init_dict["frequency"]
+            if "freqs" in list(init_dict.keys()):
+                freqs = init_dict["freqs"]
             if "scalar_value" in list(init_dict.keys()):
                 scalar_value = init_dict["scalar_value"]
             if "group" in list(init_dict.keys()):
                 group = init_dict["group"]
+            if "f" in list(init_dict.keys()):
+                f = init_dict["f"]
         # Set the properties (value check and convertion are done in setter)
         self.parent = None
         self.name = name
         self.loss_density = loss_density
         self.coeff_dict = coeff_dict
-        self.frequency = frequency
+        self.freqs = freqs
         self.scalar_value = scalar_value
         self.group = group
+        self.f = f
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -138,14 +142,15 @@ class OutLossModel(FrozenClass):
         )
         OutLossModel_str += "coeff_dict = " + str(self.coeff_dict) + linesep
         OutLossModel_str += (
-            "frequency = "
+            "freqs = "
             + linesep
-            + str(self.frequency).replace(linesep, linesep + "\t")
+            + str(self.freqs).replace(linesep, linesep + "\t")
             + linesep
             + linesep
         )
         OutLossModel_str += "scalar_value = " + str(self.scalar_value) + linesep
         OutLossModel_str += 'group = "' + str(self.group) + '"' + linesep
+        OutLossModel_str += "f = " + str(self.f) + linesep
         return OutLossModel_str
 
     def __eq__(self, other):
@@ -159,11 +164,13 @@ class OutLossModel(FrozenClass):
             return False
         if other.coeff_dict != self.coeff_dict:
             return False
-        if not array_equal(other.frequency, self.frequency):
+        if not array_equal(other.freqs, self.freqs):
             return False
         if other.scalar_value != self.scalar_value:
             return False
         if other.group != self.group:
+            return False
+        if other.f != self.f:
             return False
         return True
 
@@ -181,12 +188,14 @@ class OutLossModel(FrozenClass):
             diff_list.append(name + ".loss_density")
         if other._coeff_dict != self._coeff_dict:
             diff_list.append(name + ".coeff_dict")
-        if not array_equal(other.frequency, self.frequency):
-            diff_list.append(name + ".frequency")
+        if not array_equal(other.freqs, self.freqs):
+            diff_list.append(name + ".freqs")
         if other._scalar_value != self._scalar_value:
             diff_list.append(name + ".scalar_value")
         if other._group != self._group:
             diff_list.append(name + ".group")
+        if other._f != self._f:
+            diff_list.append(name + ".f")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -200,9 +209,10 @@ class OutLossModel(FrozenClass):
         if self.coeff_dict is not None:
             for key, value in self.coeff_dict.items():
                 S += getsizeof(value) + getsizeof(key)
-        S += getsizeof(self.frequency)
+        S += getsizeof(self.freqs)
         S += getsizeof(self.scalar_value)
         S += getsizeof(self.group)
+        S += getsizeof(self.f)
         return S
 
     def as_dict(self, type_handle_ndarray=0, keep_function=False, **kwargs):
@@ -234,21 +244,22 @@ class OutLossModel(FrozenClass):
         OutLossModel_dict["coeff_dict"] = (
             self.coeff_dict.copy() if self.coeff_dict is not None else None
         )
-        if self.frequency is None:
-            OutLossModel_dict["frequency"] = None
+        if self.freqs is None:
+            OutLossModel_dict["freqs"] = None
         else:
             if type_handle_ndarray == 0:
-                OutLossModel_dict["frequency"] = self.frequency.tolist()
+                OutLossModel_dict["freqs"] = self.freqs.tolist()
             elif type_handle_ndarray == 1:
-                OutLossModel_dict["frequency"] = self.frequency.copy()
+                OutLossModel_dict["freqs"] = self.freqs.copy()
             elif type_handle_ndarray == 2:
-                OutLossModel_dict["frequency"] = self.frequency
+                OutLossModel_dict["freqs"] = self.freqs
             else:
                 raise Exception(
                     "Unknown type_handle_ndarray: " + str(type_handle_ndarray)
                 )
         OutLossModel_dict["scalar_value"] = self.scalar_value
         OutLossModel_dict["group"] = self.group
+        OutLossModel_dict["f"] = self.f
         # The class name is added to the dict for deserialisation purpose
         OutLossModel_dict["__class__"] = "OutLossModel"
         return OutLossModel_dict
@@ -259,9 +270,10 @@ class OutLossModel(FrozenClass):
         self.name = None
         self.loss_density = None
         self.coeff_dict = None
-        self.frequency = None
+        self.freqs = None
         self.scalar_value = None
         self.group = None
+        self.f = None
 
     def _get_name(self):
         """getter of name"""
@@ -326,12 +338,12 @@ class OutLossModel(FrozenClass):
         """,
     )
 
-    def _get_frequency(self):
-        """getter of frequency"""
-        return self._frequency
+    def _get_freqs(self):
+        """getter of freqs"""
+        return self._freqs
 
-    def _set_frequency(self, value):
-        """setter of frequency"""
+    def _set_freqs(self, value):
+        """setter of freqs"""
         if type(value) is int and value == -1:
             value = array([])
         elif type(value) is list:
@@ -339,12 +351,12 @@ class OutLossModel(FrozenClass):
                 value = array(value)
             except:
                 pass
-        check_var("frequency", value, "ndarray")
-        self._frequency = value
+        check_var("freqs", value, "ndarray")
+        self._freqs = value
 
-    frequency = property(
-        fget=_get_frequency,
-        fset=_set_frequency,
+    freqs = property(
+        fget=_get_freqs,
+        fset=_set_freqs,
         doc=u"""array of frequency to sum the losses of each one
 
         :Type: ndarray
@@ -384,5 +396,23 @@ class OutLossModel(FrozenClass):
         doc=u"""group to which the loss applies
 
         :Type: str
+        """,
+    )
+
+    def _get_f(self):
+        """getter of f"""
+        return self._f
+
+    def _set_f(self, value):
+        """setter of f"""
+        check_var("f", value, "float")
+        self._f = value
+
+    f = property(
+        fget=_get_f,
+        fset=_set_f,
+        doc=u"""Base electrical frequency of the simulation
+
+        :Type: float
         """,
     )

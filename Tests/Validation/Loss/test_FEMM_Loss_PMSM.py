@@ -237,7 +237,8 @@ def test_FEMM_Loss_Prius():
     speed_array = np.linspace(10, 8000, 100)
     p = machine.get_pole_pair_number()
 
-    array_list = [np.array([o.get_loss_scalar(speed / 60 *p) for speed in speed_array]) for o in out.loss.loss_list]
+    array_list = [np.array([o.get_loss_scalar(speed / 60 *p) for speed in speed_array])
+                  for o in out.loss.loss_list if o.name != 'overall']
     array_list.append(sum(array_list))
 
     if is_show_fig:

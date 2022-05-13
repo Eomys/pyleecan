@@ -1,3 +1,5 @@
+import numpy as np
+
 from SciDataTool import DataFreq
 
 from ....Classes.SolutionData import SolutionData
@@ -46,49 +48,34 @@ def store(
 
     felec = OP.get_felec(p=lam.get_pole_pair_number())
 
+    meshsol = self.parent.mag.meshsolution
+    group = meshsol.group
+    freqs = axes_dict["freqs"].get_values()
+    Nelem = meshsol.mesh[0].cell["triangle"].nb_cell
+    loss_density = np.zeros((freqs.size, Nelem))
 
     for key, model in model_dict.items():
-        P_density, f = model.comp_loss()
-        out_loss_model=OutLossModel(
+        P_density, f_array = model.comp_loss()
+        out_loss_model = OutLossModel(
             name=key,
             loss_density=P_density,
             coeff_dict=model.coeff_dict,
-            frequency=f,
+            freqs=f_array,
             group=model.group,
+            f = felec
         )
         out_loss_model.scalar_value = out_loss_model.get_loss_scalar(felec)
         self.loss_list.append(out_loss_model)
 
-        if False:  # is_get_meshsolution:
-
-            ms_mag = self.parent.mag.meshsolution
-
-            Loss_density_df = DataFreq(
-                name=f"{key} Loss density",
-                unit="W/m3",
-                symbol="L",
-                values=self.loss_dict[key]["global_loss_density"],
-                is_real=True,
-                axes=[axes_dict["freqs"], axes_dict["indice"]],
-            )
-
-            Loss_density_sd = SolutionData(
-                label=Loss_density_df.name,
-                field=Loss_density_df,
-                unit=Loss_density_df.unit,
-            )
-
-            ms_loss = MeshSolution(
-                label=Loss_density_sd.label,
-                group=ms_mag.group,
-                is_same_mesh=True,
-                mesh=ms_mag.mesh,
-                solution=[Loss_density_sd],
-                dimension=2,
-            )
-
-            self.meshsol_dict[key] = ms_loss
-
-    self.get_loss_overall()
-
-    # Store loss density as meshsolution
+        temp_loss_density = np.zeros((freqs.size, Nelem))
+        If = np.argmin(np.abs(freqs[:, None] - f_array[None, :]), axis=0)[:, None]
+        Ie = np.array(group[model.group])[None, :]
+        temp_loss_density[If, Ie] += P_density
+        loss_density += temp_loss_density
+    self.loss_list.append(
+        OutLossModel(name="overall",
+                     loss_density=loss_density,
+                     f=felec,
+                     freqs=freqs
+                     )
+    )

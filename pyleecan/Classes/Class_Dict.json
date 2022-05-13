@@ -9346,7 +9346,7 @@
                 "desc": "array of frequency to sum the losses of each one",
                 "max": "",
                 "min": "",
-                "name": "frequency",
+                "name": "freqs",
                 "type": "ndarray",
                 "unit": "",
                 "value": null
@@ -9367,7 +9367,16 @@
                 "name": "group",
                 "type": "str",
                 "unit": "",
-                "value": ""
+                "value": "None"
+            },
+            {
+                "desc": "Base electrical frequency of the simulation",
+                "max": "",
+                "min": "",
+                "name": "f",
+                "type": "float",
+                "unit": "",
+                "value": null
             }
         ]
     },
