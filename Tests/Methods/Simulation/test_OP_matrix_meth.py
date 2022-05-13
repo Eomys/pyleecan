@@ -57,6 +57,34 @@ class Test_OP_matrix_meth(object):
         assert mean(OP_mat2[:, 2]) == 4
         assert mean(OP_mat2[:, 3]) == -pi / 2
 
+    def test_get_all(self):
+        """Check that all the matrix can be extracted with all"""
+        # Constant column matrix
+        OP_matrix = ones((10, 5))
+        for ii in range(OP_matrix.shape[1]):
+            OP_matrix[:, ii] *= ii + 1
+        # Set Parameters out of "normal" order
+        OP_obj = OPMatrix()
+        OP_obj.set_OP_matrix(OP_matrix, "N0", "Id", "Iq", "Tem", "Pem")
+        # Check that the set is correct
+        assert mean(OP_obj.N0) == 1
+        assert mean(OP_obj.Id_ref) == 2
+        assert mean(OP_obj.Iq_ref) == 3
+        assert mean(OP_obj.Tem_av_ref) == 4
+        assert mean(OP_obj.Pem_av_ref) == 5
+        assert OP_obj.col_names == ["N0", "Id", "Iq", "Tem", "Pem"]
+        # Check that getter works as well
+        OP_mat2 = OP_obj.get_OP_matrix("all")
+        assert OP_mat2.shape == (10, 5)
+        for ii in range(OP_mat2.shape[1]):
+            assert mean(OP_mat2[:, ii]) == ii + 1
+        # Check without col_names for retro / flexibility
+        OP_obj.col_names = None
+        OP_mat3 = OP_obj.get_OP_matrix("all")
+        assert OP_mat3.shape == (10, 5)
+        for ii in range(OP_mat3.shape[1]):
+            assert mean(OP_mat3[:, ii]) == ii + 1
+
     def test_simu_get_OP_matrix(self):
         """Check that you can set/get an OP_matrix from a simulation"""
         simu = Simu1()
@@ -83,4 +111,5 @@ if __name__ == "__main__":
     a.test_OP_matrix_out_of_order()
     a.test_OP_matrix_convert()
     a.test_simu_get_OP_matrix()
+    a.test_get_all()
     print("Done")

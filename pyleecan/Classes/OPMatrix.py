@@ -164,6 +164,7 @@ class OPMatrix(FrozenClass):
         slip_ref=None,
         is_output_power=True,
         If_ref=None,
+        col_names=None,
         init_dict=None,
         init_str=None,
     ):
@@ -202,6 +203,8 @@ class OPMatrix(FrozenClass):
                 is_output_power = init_dict["is_output_power"]
             if "If_ref" in list(init_dict.keys()):
                 If_ref = init_dict["If_ref"]
+            if "col_names" in list(init_dict.keys()):
+                col_names = init_dict["col_names"]
         # Set the properties (value check and convertion are done in setter)
         self.parent = None
         self.N0 = N0
@@ -214,6 +217,7 @@ class OPMatrix(FrozenClass):
         self.slip_ref = slip_ref
         self.is_output_power = is_output_power
         self.If_ref = If_ref
+        self.col_names = col_names
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -290,6 +294,12 @@ class OPMatrix(FrozenClass):
             + linesep
             + linesep
         )
+        OPMatrix_str += (
+            "col_names = "
+            + linesep
+            + str(self.col_names).replace(linesep, linesep + "\t")
+            + linesep
+        )
         return OPMatrix_str
 
     def __eq__(self, other):
@@ -316,6 +326,8 @@ class OPMatrix(FrozenClass):
         if other.is_output_power != self.is_output_power:
             return False
         if not array_equal(other.If_ref, self.If_ref):
+            return False
+        if other.col_names != self.col_names:
             return False
         return True
 
@@ -347,6 +359,8 @@ class OPMatrix(FrozenClass):
             diff_list.append(name + ".is_output_power")
         if not array_equal(other.If_ref, self.If_ref):
             diff_list.append(name + ".If_ref")
+        if other._col_names != self._col_names:
+            diff_list.append(name + ".col_names")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -365,6 +379,9 @@ class OPMatrix(FrozenClass):
         S += getsizeof(self.slip_ref)
         S += getsizeof(self.is_output_power)
         S += getsizeof(self.If_ref)
+        if self.col_names is not None:
+            for value in self.col_names:
+                S += getsizeof(value)
         return S
 
     def as_dict(self, type_handle_ndarray=0, keep_function=False, **kwargs):
@@ -497,6 +514,9 @@ class OPMatrix(FrozenClass):
                 raise Exception(
                     "Unknown type_handle_ndarray: " + str(type_handle_ndarray)
                 )
+        OPMatrix_dict["col_names"] = (
+            self.col_names.copy() if self.col_names is not None else None
+        )
         # The class name is added to the dict for deserialisation purpose
         OPMatrix_dict["__class__"] = "OPMatrix"
         return OPMatrix_dict
@@ -514,6 +534,7 @@ class OPMatrix(FrozenClass):
         self.slip_ref = None
         self.is_output_power = None
         self.If_ref = None
+        self.col_names = None
 
     def _get_N0(self):
         """getter of N0"""
@@ -755,5 +776,25 @@ class OPMatrix(FrozenClass):
         doc=u"""DC rotor current
 
         :Type: ndarray
+        """,
+    )
+
+    def _get_col_names(self):
+        """getter of col_names"""
+        return self._col_names
+
+    def _set_col_names(self, value):
+        """setter of col_names"""
+        if type(value) is int and value == -1:
+            value = list()
+        check_var("col_names", value, "list")
+        self._col_names = value
+
+    col_names = property(
+        fget=_get_col_names,
+        fset=_set_col_names,
+        doc=u"""Name of the columns from set_OP_matrix
+
+        :Type: list
         """,
     )

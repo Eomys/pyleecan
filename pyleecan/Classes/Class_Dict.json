@@ -8113,6 +8113,15 @@
                 "type": "ndarray",
                 "unit": "Arms",
                 "value": null
+            },
+            {
+                "desc": "Name of the columns from set_OP_matrix",
+                "max": "",
+                "min": "",
+                "name": "col_names",
+                "type": "list",
+                "unit": "-",
+                "value": null
             }
         ]
     },

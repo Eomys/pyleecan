@@ -25,6 +25,23 @@ def get_OP_matrix(self, *arg_list):
         arg_list = arg_list[0]
     arg_list = list(arg_list)
 
+    # "all" returns all the columns set by the latest set_OP_matrix
+    if len(arg_list) == 1 and arg_list[0].lower() in ["all", "al", "a"]:
+        if self.col_names is not None and len(self.col_names) > 0:
+            arg_list = self.col_names
+        else:
+            arg_list = list()
+            if self.N0 is not None:
+                arg_list.append("N0")
+            if self.Id_ref is not None:
+                arg_list.append("Id")
+            if self.Iq_ref is not None:
+                arg_list.append("Iq_ref")
+            if self.Tem_av_ref is not None:
+                arg_list.append("Tem")
+            if self.Pem_av_ref is not None:
+                arg_list.append("Pem")
+
     # Init OP_matrix
     N_OP = self.get_N_OP()
     OP_matrix = zeros((N_OP, len(arg_list)))

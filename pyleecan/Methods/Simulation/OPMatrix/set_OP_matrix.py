@@ -120,3 +120,6 @@ def set_OP_matrix(self, OP_matrix, *arg_list):
                 + " in "
                 + str(arg_list)
             )
+
+    # Store column names for get_OP_matrix("all")
+    self.col_names = arg_list
