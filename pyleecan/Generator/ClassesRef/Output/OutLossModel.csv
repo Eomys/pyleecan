@@ -1,0 +1,7 @@
+Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
+name,,Name of the loss,,str,,,,,Output,,get_mesh_solution,VERSION,1,Gather the loss module outputs
+loss_density,,Loss density ,,ndarray,None,,,,,,get_loss_scalar,,,
+coeff_dict,,dict of coefficients to compute the scalar value with respcet to frequency,,dict,None,,,,,,,,,
+frequency,,array of frequency to sum the losses of each one,,ndarray,None,,,,,,,,,
+scalar_value,,Scalar value of the loss got by integrating the loss density over the machine,,float,None,,,,,,,,,
+group,,group to which the loss applies,,str,,,,,,,,,,

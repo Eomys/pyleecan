@@ -9259,9 +9259,7 @@
             "get_loss",
             "get_loss_density_ag",
             "get_loss_dist",
-            "get_loss_group",
             "get_loss_overall",
-            "get_loss_scalar",
             "store"
         ],
         "mother": "",
@@ -9269,42 +9267,6 @@
         "package": "Output",
         "path": "pyleecan/Generator/ClassesRef/Output/OutLoss.csv",
         "properties": [
-            {
-                "desc": "Internal list of loss data",
-                "max": "",
-                "min": "",
-                "name": "loss_list",
-                "type": "[SciDataTool.Classes.DataND.DataND]",
-                "unit": "",
-                "value": "None"
-            },
-            {
-                "desc": "Internal dict of loss meshsolutions",
-                "max": "",
-                "min": "",
-                "name": "meshsol_dict",
-                "type": "{MeshSolution}",
-                "unit": "",
-                "value": null
-            },
-            {
-                "desc": "Internal dict to index losses",
-                "max": "",
-                "min": "",
-                "name": "loss_index",
-                "type": "dict",
-                "unit": "",
-                "value": {}
-            },
-            {
-                "desc": "Name of the logger to use",
-                "max": "",
-                "min": "",
-                "name": "logger_name",
-                "type": "str",
-                "unit": "-",
-                "value": "Pyleecan.Loss"
-            },
             {
                 "desc": "Dict containing axes data used for Magnetics",
                 "max": "",
@@ -9315,13 +9277,97 @@
                 "value": "None"
             },
             {
-                "desc": "Dict containing loss data computed by the loss module",
+                "desc": "Lit containing OutLossModel obects for each type of loss",
                 "max": "",
                 "min": "",
-                "name": "loss_dict",
+                "name": "loss_list",
+                "type": "[OutLossModel]",
+                "unit": "",
+                "value": []
+            },
+            {
+                "desc": "Name of the logger to use",
+                "max": "",
+                "min": "",
+                "name": "logger_name",
+                "type": "str",
+                "unit": "-",
+                "value": "Pyleecan.Loss"
+            }
+        ]
+    },
+    "OutLossModel": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Gather the loss module outputs",
+        "is_internal": false,
+        "methods": [
+            "get_mesh_solution",
+            "get_loss_scalar"
+        ],
+        "mother": "",
+        "name": "OutLossModel",
+        "package": "Output",
+        "path": "pyleecan/Generator/ClassesRef/Output/OutLossModel.csv",
+        "properties": [
+            {
+                "desc": "Name of the loss",
+                "max": "",
+                "min": "",
+                "name": "name",
+                "type": "str",
+                "unit": "",
+                "value": ""
+            },
+            {
+                "desc": "Loss density ",
+                "max": "",
+                "min": "",
+                "name": "loss_density",
+                "type": "ndarray",
+                "unit": "",
+                "value": null
+            },
+            {
+                "desc": "dict of coefficients to compute the scalar value with respcet to frequency",
+                "max": "",
+                "min": "",
+                "name": "coeff_dict",
                 "type": "dict",
                 "unit": "",
                 "value": null
+            },
+            {
+                "desc": "array of frequency to sum the losses of each one",
+                "max": "",
+                "min": "",
+                "name": "frequency",
+                "type": "ndarray",
+                "unit": "",
+                "value": null
+            },
+            {
+                "desc": "Scalar value of the loss got by integrating the loss density over the machine",
+                "max": "",
+                "min": "",
+                "name": "scalar_value",
+                "type": "float",
+                "unit": "",
+                "value": null
+            },
+            {
+                "desc": "group to which the loss applies",
+                "max": "",
+                "min": "",
+                "name": "group",
+                "type": "str",
+                "unit": "",
+                "value": ""
             }
         ]
     },

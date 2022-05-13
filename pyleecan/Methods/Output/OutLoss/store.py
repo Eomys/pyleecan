@@ -2,13 +2,14 @@ from SciDataTool import DataFreq
 
 from ....Classes.SolutionData import SolutionData
 from ....Classes.MeshSolution import MeshSolution
+from pyleecan.Classes.OutLossModel import OutLossModel
 
 from ....Functions.Electrical.comp_loss_joule import comp_loss_joule
 
 
 def store(
     self,
-    out_dict,
+    model_dict,
     axes_dict=None,
     is_get_meshsolution=False,
     lam=None,
@@ -34,12 +35,6 @@ def store(
     if axes_dict is not None:
         self.axes_dict = axes_dict
 
-    self.loss_dict = out_dict
-
-    # Store coeff_dict
-    if "coeff_dict" in out_dict:
-        self.coeff_dict = out_dict.pop("coeff_dict")
-
     if lam is None:
         lam = self.parent.simu.machine.stator
 
@@ -51,15 +46,20 @@ def store(
 
     felec = OP.get_felec(p=lam.get_pole_pair_number())
 
-    if is_get_meshsolution:
-        self.meshsol_dict = dict()
 
-    for key in out_dict.keys():
-        # if key == "Joule":
-        #     self.loss_dict[key]["scalar_value"] = comp_loss_joule(lam, Tsta, OP, type_skin_effect)
-        if key != "overall":
-            self.loss_dict[key]["scalar_value"] = self.get_loss_group(key, felec)
-        if is_get_meshsolution:
+    for key, model in model_dict.items():
+        P_density, f = model.comp_loss()
+        out_loss_model=OutLossModel(
+            name=key,
+            loss_density=P_density,
+            coeff_dict=model.coeff_dict,
+            frequency=f,
+            group=model.group,
+        )
+        out_loss_model.scalar_value = out_loss_model.get_loss_scalar(felec)
+        self.loss_list.append(out_loss_model)
+
+        if False:  # is_get_meshsolution:
 
             ms_mag = self.parent.mag.meshsolution
 

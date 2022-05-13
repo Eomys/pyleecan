@@ -15,8 +15,8 @@ def get_loss_overall(self):
 
     overall_loss = 0
 
-    for loss in self.loss_dict.values():
-        if "scalar_value" in loss:
-            overall_loss += loss["scalar_value"]
+    for loss in self.loss_list:
+        if loss.scalar_value is not None:
+            overall_loss += loss.scalar_value
 
-    self.loss_dict["overall"]["scalar_value"] = overall_loss
+    return overall_loss

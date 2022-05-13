@@ -15,10 +15,10 @@ def run(self):
 
     axes_dict = self.comp_axes(output)
 
-    out_dict = self.comp_loss(output, axes_dict)
+    # out_dict = self.comp_loss(output, axes_dict)
 
     output.loss.store(
-        out_dict,
+        self.model_dict,
         axes_dict,
         self.is_get_meshsolution,
         Tsta=self.Tsta,

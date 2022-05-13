@@ -229,28 +229,16 @@ def test_FEMM_Loss_Prius():
 
     power_dict = {
         "total_power": out.mag.Pem_av,
-        "overall_losses": out.loss.loss_dict["overall"]["scalar_value"],
-        "stator core": out.loss.loss_dict["stator core"]["scalar_value"],
-        "rotor core": out.loss.loss_dict["rotor core"]["scalar_value"],
-        "Joule": out.loss.loss_dict["joule"]["scalar_value"],
-        "proximity": out.loss.loss_dict["proximity"]["scalar_value"],
-        "magnets": out.loss.loss_dict["magnets"]["scalar_value"]
+        "overall_losses": out.loss.get_loss_overall(),
+        **dict([(o.name,o.scalar_value) for o in out.loss.loss_list])
     }
     print(power_dict)
 
     speed_array = np.linspace(10, 8000, 100)
     p = machine.get_pole_pair_number()
 
-    joule_array = np.array([out.loss.get_loss_group("joule", speed / 60 *p) for speed in speed_array])
-    sc_array = np.array([out.loss.get_loss_group("stator core", speed / 60 *p) for speed in speed_array])
-    rc_array = np.array([out.loss.get_loss_group("rotor core", speed / 60 *p) for speed in speed_array])
-    prox_array = np.array([out.loss.get_loss_group("proximity", speed / 60 *p) for speed in speed_array])
-    mag_array = np.array([out.loss.get_loss_group("magnets", speed / 60 *p) for speed in speed_array])
-    ovl_array = (joule_array +
-                 sc_array +
-                 rc_array +
-                 prox_array +
-                 mag_array)
+    array_list = [np.array([o.get_loss_scalar(speed / 60 *p) for speed in speed_array]) for o in out.loss.loss_list]
+    array_list.append(sum(array_list))
 
     if is_show_fig:
         group_names = [
@@ -258,36 +246,29 @@ def test_FEMM_Loss_Prius():
             "rotor core",
             "rotor magnets"
         ]
-        for key, value in out.loss.meshsol_dict.items():
-            if "joule" in key or "proximity" in key :
+        for loss in out.loss.loss_list:
+            if "joule" in loss.name or "proximity" in loss.name :
                 group_names.append("stator winding")
-                value.plot_contour(
+                loss.get_mesh_solution().plot_contour(
                     "freqs=sum",
-                    label=f"{key} Loss",
+                    label=f"{loss.name} Loss",
                     group_names = group_names
                 )
                 group_names.pop()
             else:
                 
-                value.plot_contour(
+                loss.get_mesh_solution().plot_contour(
                     "freqs=sum",
-                    label=f"{key} Loss",
+                    label=f"{loss.name} Loss",
                     group_names = group_names
                 )
 
         plot_2D(
             [speed_array],
-            [ovl_array, joule_array, sc_array, rc_array, prox_array, mag_array],
+            array_list,
             xlabel="Speed [rpm]",
             ylabel="Losses [W]",
-            legend_list=[
-                "Overall",
-                "Winding Joule",
-                "Stator core",
-                "Rotor core",
-                "Winding proximity",
-                "Magnets",
-            ],
+            legend_list=[o.name for o in out.loss.loss_list] + ["overall loss"],
         )
 
     # out.loss.meshsol_list[0].plot_contour(
