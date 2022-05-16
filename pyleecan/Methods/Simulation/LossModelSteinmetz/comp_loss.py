@@ -145,7 +145,7 @@ def comp_loss(self):
     else:
         coeff = Lst * per_a * matmul(Bfft_magnitude ** alpha_B, Se)
         B = np_sum(k_hy * coeff * n ** alpha_f)
-    self.coeff_dict = {"A": A, "B": B, "C": 0, "a": 2, "b": alpha_f, "c": 0}
+    self.coeff_dict = {2: A, alpha_f: B}
 
     with open("loss_models.txt", "w") as f:
         f.write(

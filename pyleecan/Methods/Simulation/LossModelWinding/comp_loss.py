@@ -72,6 +72,6 @@ def comp_loss(self):
     coeff = qs * Rs * (OP.Id_ref ** 2 + OP.Iq_ref ** 2)
     A = coeff * k
     B = coeff
-    self.coeff_dict = {"A": A, "B": B, "C": 0, "a": power, "b": 0, "c": 0}
+    self.coeff_dict = {power: A, 0: B}
 
     return Pjoule_density, freqs

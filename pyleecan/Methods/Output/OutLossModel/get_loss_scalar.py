@@ -20,9 +20,7 @@ def get_loss_scalar(self, felec):
         else:
             return self.scalar_value
     else:
-        Ploss = (
-            self.coeff_dict["A"] * felec ** self.coeff_dict["a"]
-            + self.coeff_dict["B"] * felec ** self.coeff_dict["b"]
-            + self.coeff_dict["C"] * felec ** self.coeff_dict["c"]
-        )
+        Ploss = 0
+        for key, value in self.coeff_dict.items():
+            Ploss += value * felec ** key
     return Ploss

@@ -113,6 +113,6 @@ def comp_loss(self):
     A = np_sum(k_p * coeff * n ** 2)
     B = 0
     alpha_f = 0
-    self.coeff_dict = {"A": A, "B": B, "C": 0, "a": 2, "b": alpha_f, "c": 0}
+    self.coeff_dict = {2: A}
 
     return Pcore_density, freqs
