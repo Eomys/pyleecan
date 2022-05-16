@@ -36,9 +36,9 @@ def get_elec_datakeeper(self, symbol_list, is_multi=False):
             quantity_list.extend(["I0", "Phi0"])
         elif (
             self.parent is not None
-            and self.parent is not None
+            and self.parent.parent is not None
             and isinstance(self.parent.parent, Simulation)
-            and not self.parent.machine.is_synchronous()
+            and not self.parent.parent.machine.is_synchronous()
         ):
             quantity_list.extend(["I0", "Phi0"])
         # Add torque if provided in the OP_matrix
