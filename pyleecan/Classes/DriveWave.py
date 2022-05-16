@@ -111,7 +111,7 @@ class DriveWave(Drive):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -121,13 +121,24 @@ class DriveWave(Drive):
         diff_list = list()
 
         # Check the properties inherited from Drive
-        diff_list.extend(super(DriveWave, self).compare(other, name=name))
+        diff_list.extend(
+            super(DriveWave, self).compare(
+                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
+            )
+        )
         if (other.wave is None and self.wave is not None) or (
             other.wave is not None and self.wave is None
         ):
             diff_list.append(name + ".wave None mismatch")
         elif self.wave is not None:
-            diff_list.extend(self.wave.compare(other.wave, name=name + ".wave"))
+            diff_list.extend(
+                self.wave.compare(
+                    other.wave,
+                    name=name + ".wave",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
+            )
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list

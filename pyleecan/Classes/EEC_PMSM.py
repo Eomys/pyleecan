@@ -330,7 +330,7 @@ class EEC_PMSM(EEC):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -340,19 +340,105 @@ class EEC_PMSM(EEC):
         diff_list = list()
 
         # Check the properties inherited from EEC
-        diff_list.extend(super(EEC_PMSM, self).compare(other, name=name))
-        if other._Ld != self._Ld:
-            diff_list.append(name + ".Ld")
-        if other._Lq != self._Lq:
-            diff_list.append(name + ".Lq")
-        if other._Phid != self._Phid:
-            diff_list.append(name + ".Phid")
-        if other._Phiq != self._Phiq:
-            diff_list.append(name + ".Phiq")
-        if other._Phid_mag != self._Phid_mag:
-            diff_list.append(name + ".Phid_mag")
-        if other._Phiq_mag != self._Phiq_mag:
-            diff_list.append(name + ".Phiq_mag")
+        diff_list.extend(
+            super(EEC_PMSM, self).compare(
+                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
+            )
+        )
+        if (
+            other._Ld is not None
+            and self._Ld is not None
+            and isnan(other._Ld)
+            and isnan(self._Ld)
+        ):
+            pass
+        elif other._Ld != self._Ld:
+            if is_add_value:
+                val_str = " (self=" + str(self._Ld) + ", other=" + str(other._Ld) + ")"
+                diff_list.append(name + ".Ld" + val_str)
+            else:
+                diff_list.append(name + ".Ld")
+        if (
+            other._Lq is not None
+            and self._Lq is not None
+            and isnan(other._Lq)
+            and isnan(self._Lq)
+        ):
+            pass
+        elif other._Lq != self._Lq:
+            if is_add_value:
+                val_str = " (self=" + str(self._Lq) + ", other=" + str(other._Lq) + ")"
+                diff_list.append(name + ".Lq" + val_str)
+            else:
+                diff_list.append(name + ".Lq")
+        if (
+            other._Phid is not None
+            and self._Phid is not None
+            and isnan(other._Phid)
+            and isnan(self._Phid)
+        ):
+            pass
+        elif other._Phid != self._Phid:
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._Phid) + ", other=" + str(other._Phid) + ")"
+                )
+                diff_list.append(name + ".Phid" + val_str)
+            else:
+                diff_list.append(name + ".Phid")
+        if (
+            other._Phiq is not None
+            and self._Phiq is not None
+            and isnan(other._Phiq)
+            and isnan(self._Phiq)
+        ):
+            pass
+        elif other._Phiq != self._Phiq:
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._Phiq) + ", other=" + str(other._Phiq) + ")"
+                )
+                diff_list.append(name + ".Phiq" + val_str)
+            else:
+                diff_list.append(name + ".Phiq")
+        if (
+            other._Phid_mag is not None
+            and self._Phid_mag is not None
+            and isnan(other._Phid_mag)
+            and isnan(self._Phid_mag)
+        ):
+            pass
+        elif other._Phid_mag != self._Phid_mag:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._Phid_mag)
+                    + ", other="
+                    + str(other._Phid_mag)
+                    + ")"
+                )
+                diff_list.append(name + ".Phid_mag" + val_str)
+            else:
+                diff_list.append(name + ".Phid_mag")
+        if (
+            other._Phiq_mag is not None
+            and self._Phiq_mag is not None
+            and isnan(other._Phiq_mag)
+            and isnan(self._Phiq_mag)
+        ):
+            pass
+        elif other._Phiq_mag != self._Phiq_mag:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._Phiq_mag)
+                    + ", other="
+                    + str(other._Phiq_mag)
+                    + ")"
+                )
+                diff_list.append(name + ".Phiq_mag" + val_str)
+            else:
+                diff_list.append(name + ".Phiq_mag")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list

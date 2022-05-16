@@ -231,7 +231,7 @@ class LossFEMM(Loss):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -241,17 +241,78 @@ class LossFEMM(Loss):
         diff_list = list()
 
         # Check the properties inherited from Loss
-        diff_list.extend(super(LossFEMM, self).compare(other, name=name))
+        diff_list.extend(
+            super(LossFEMM, self).compare(
+                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
+            )
+        )
         if other._is_get_meshsolution != self._is_get_meshsolution:
-            diff_list.append(name + ".is_get_meshsolution")
-        if other._Tsta != self._Tsta:
-            diff_list.append(name + ".Tsta")
-        if other._Trot != self._Trot:
-            diff_list.append(name + ".Trot")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._is_get_meshsolution)
+                    + ", other="
+                    + str(other._is_get_meshsolution)
+                    + ")"
+                )
+                diff_list.append(name + ".is_get_meshsolution" + val_str)
+            else:
+                diff_list.append(name + ".is_get_meshsolution")
+        if (
+            other._Tsta is not None
+            and self._Tsta is not None
+            and isnan(other._Tsta)
+            and isnan(self._Tsta)
+        ):
+            pass
+        elif other._Tsta != self._Tsta:
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._Tsta) + ", other=" + str(other._Tsta) + ")"
+                )
+                diff_list.append(name + ".Tsta" + val_str)
+            else:
+                diff_list.append(name + ".Tsta")
+        if (
+            other._Trot is not None
+            and self._Trot is not None
+            and isnan(other._Trot)
+            and isnan(self._Trot)
+        ):
+            pass
+        elif other._Trot != self._Trot:
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._Trot) + ", other=" + str(other._Trot) + ")"
+                )
+                diff_list.append(name + ".Trot" + val_str)
+            else:
+                diff_list.append(name + ".Trot")
         if other._type_skin_effect != self._type_skin_effect:
-            diff_list.append(name + ".type_skin_effect")
-        if other._Cp != self._Cp:
-            diff_list.append(name + ".Cp")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._type_skin_effect)
+                    + ", other="
+                    + str(other._type_skin_effect)
+                    + ")"
+                )
+                diff_list.append(name + ".type_skin_effect" + val_str)
+            else:
+                diff_list.append(name + ".type_skin_effect")
+        if (
+            other._Cp is not None
+            and self._Cp is not None
+            and isnan(other._Cp)
+            and isnan(self._Cp)
+        ):
+            pass
+        elif other._Cp != self._Cp:
+            if is_add_value:
+                val_str = " (self=" + str(self._Cp) + ", other=" + str(other._Cp) + ")"
+                diff_list.append(name + ".Cp" + val_str)
+            else:
+                diff_list.append(name + ".Cp")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list

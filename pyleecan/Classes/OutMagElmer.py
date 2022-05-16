@@ -93,7 +93,7 @@ class OutMagElmer(OutInternal):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -103,9 +103,23 @@ class OutMagElmer(OutInternal):
         diff_list = list()
 
         # Check the properties inherited from OutInternal
-        diff_list.extend(super(OutMagElmer, self).compare(other, name=name))
+        diff_list.extend(
+            super(OutMagElmer, self).compare(
+                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
+            )
+        )
         if other._FEA_dict != self._FEA_dict:
-            diff_list.append(name + ".FEA_dict")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._FEA_dict)
+                    + ", other="
+                    + str(other._FEA_dict)
+                    + ")"
+                )
+                diff_list.append(name + ".FEA_dict" + val_str)
+            else:
+                diff_list.append(name + ".FEA_dict")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list

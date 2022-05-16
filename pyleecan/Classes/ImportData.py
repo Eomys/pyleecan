@@ -146,7 +146,7 @@ class ImportData(FrozenClass):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -166,7 +166,10 @@ class ImportData(FrozenClass):
             for ii in range(len(other.axes)):
                 diff_list.extend(
                     self.axes[ii].compare(
-                        other.axes[ii], name=name + ".axes[" + str(ii) + "]"
+                        other.axes[ii],
+                        name=name + ".axes[" + str(ii) + "]",
+                        ignore_list=ignore_list,
+                        is_add_value=is_add_value,
                     )
                 )
         if (other.field is None and self.field is not None) or (
@@ -174,17 +177,66 @@ class ImportData(FrozenClass):
         ):
             diff_list.append(name + ".field None mismatch")
         elif self.field is not None:
-            diff_list.extend(self.field.compare(other.field, name=name + ".field"))
+            diff_list.extend(
+                self.field.compare(
+                    other.field,
+                    name=name + ".field",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
+            )
         if other._unit != self._unit:
-            diff_list.append(name + ".unit")
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._unit) + ", other=" + str(other._unit) + ")"
+                )
+                diff_list.append(name + ".unit" + val_str)
+            else:
+                diff_list.append(name + ".unit")
         if other._name != self._name:
-            diff_list.append(name + ".name")
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._name) + ", other=" + str(other._name) + ")"
+                )
+                diff_list.append(name + ".name" + val_str)
+            else:
+                diff_list.append(name + ".name")
         if other._symbol != self._symbol:
-            diff_list.append(name + ".symbol")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._symbol)
+                    + ", other="
+                    + str(other._symbol)
+                    + ")"
+                )
+                diff_list.append(name + ".symbol" + val_str)
+            else:
+                diff_list.append(name + ".symbol")
         if other._normalizations != self._normalizations:
-            diff_list.append(name + ".normalizations")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._normalizations)
+                    + ", other="
+                    + str(other._normalizations)
+                    + ")"
+                )
+                diff_list.append(name + ".normalizations" + val_str)
+            else:
+                diff_list.append(name + ".normalizations")
         if other._symmetries != self._symmetries:
-            diff_list.append(name + ".symmetries")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._symmetries)
+                    + ", other="
+                    + str(other._symmetries)
+                    + ")"
+                )
+                diff_list.append(name + ".symmetries" + val_str)
+            else:
+                diff_list.append(name + ".symmetries")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list

@@ -156,7 +156,7 @@ class MachineIPMSM(MachineSync):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -166,19 +166,37 @@ class MachineIPMSM(MachineSync):
         diff_list = list()
 
         # Check the properties inherited from MachineSync
-        diff_list.extend(super(MachineIPMSM, self).compare(other, name=name))
+        diff_list.extend(
+            super(MachineIPMSM, self).compare(
+                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
+            )
+        )
         if (other.rotor is None and self.rotor is not None) or (
             other.rotor is not None and self.rotor is None
         ):
             diff_list.append(name + ".rotor None mismatch")
         elif self.rotor is not None:
-            diff_list.extend(self.rotor.compare(other.rotor, name=name + ".rotor"))
+            diff_list.extend(
+                self.rotor.compare(
+                    other.rotor,
+                    name=name + ".rotor",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
+            )
         if (other.stator is None and self.stator is not None) or (
             other.stator is not None and self.stator is None
         ):
             diff_list.append(name + ".stator None mismatch")
         elif self.stator is not None:
-            diff_list.extend(self.stator.compare(other.stator, name=name + ".stator"))
+            diff_list.extend(
+                self.stator.compare(
+                    other.stator,
+                    name=name + ".stator",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
+            )
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list

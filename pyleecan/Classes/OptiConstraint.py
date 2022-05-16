@@ -114,7 +114,7 @@ class OptiConstraint(FrozenClass):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -123,11 +123,40 @@ class OptiConstraint(FrozenClass):
             return ["type(" + name + ")"]
         diff_list = list()
         if other._name != self._name:
-            diff_list.append(name + ".name")
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._name) + ", other=" + str(other._name) + ")"
+                )
+                diff_list.append(name + ".name" + val_str)
+            else:
+                diff_list.append(name + ".name")
         if other._type_const != self._type_const:
-            diff_list.append(name + ".type_const")
-        if other._value != self._value:
-            diff_list.append(name + ".value")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._type_const)
+                    + ", other="
+                    + str(other._type_const)
+                    + ")"
+                )
+                diff_list.append(name + ".type_const" + val_str)
+            else:
+                diff_list.append(name + ".type_const")
+        if (
+            other._value is not None
+            and self._value is not None
+            and isnan(other._value)
+            and isnan(self._value)
+        ):
+            pass
+        elif other._value != self._value:
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._value) + ", other=" + str(other._value) + ")"
+                )
+                diff_list.append(name + ".value" + val_str)
+            else:
+                diff_list.append(name + ".value")
         if other._get_variable_str != self._get_variable_str:
             diff_list.append(name + ".get_variable")
         # Filter ignore differences

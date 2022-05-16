@@ -86,7 +86,7 @@ class PostFunction(Post):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -96,7 +96,11 @@ class PostFunction(Post):
         diff_list = list()
 
         # Check the properties inherited from Post
-        diff_list.extend(super(PostFunction, self).compare(other, name=name))
+        diff_list.extend(
+            super(PostFunction, self).compare(
+                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
+            )
+        )
         if other._run_str != self._run_str:
             diff_list.append(name + ".run")
         # Filter ignore differences

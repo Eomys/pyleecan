@@ -140,7 +140,7 @@ class Shaft(FrozenClass):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -148,18 +148,53 @@ class Shaft(FrozenClass):
         if type(other) != type(self):
             return ["type(" + name + ")"]
         diff_list = list()
-        if other._Lshaft != self._Lshaft:
-            diff_list.append(name + ".Lshaft")
+        if (
+            other._Lshaft is not None
+            and self._Lshaft is not None
+            and isnan(other._Lshaft)
+            and isnan(self._Lshaft)
+        ):
+            pass
+        elif other._Lshaft != self._Lshaft:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._Lshaft)
+                    + ", other="
+                    + str(other._Lshaft)
+                    + ")"
+                )
+                diff_list.append(name + ".Lshaft" + val_str)
+            else:
+                diff_list.append(name + ".Lshaft")
         if (other.mat_type is None and self.mat_type is not None) or (
             other.mat_type is not None and self.mat_type is None
         ):
             diff_list.append(name + ".mat_type None mismatch")
         elif self.mat_type is not None:
             diff_list.extend(
-                self.mat_type.compare(other.mat_type, name=name + ".mat_type")
+                self.mat_type.compare(
+                    other.mat_type,
+                    name=name + ".mat_type",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
             )
-        if other._Drsh != self._Drsh:
-            diff_list.append(name + ".Drsh")
+        if (
+            other._Drsh is not None
+            and self._Drsh is not None
+            and isnan(other._Drsh)
+            and isnan(self._Drsh)
+        ):
+            pass
+        elif other._Drsh != self._Drsh:
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._Drsh) + ", other=" + str(other._Drsh) + ")"
+                )
+                diff_list.append(name + ".Drsh" + val_str)
+            else:
+                diff_list.append(name + ".Drsh")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list

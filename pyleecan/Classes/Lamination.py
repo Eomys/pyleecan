@@ -690,7 +690,7 @@ class Lamination(FrozenClass):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -698,30 +698,124 @@ class Lamination(FrozenClass):
         if type(other) != type(self):
             return ["type(" + name + ")"]
         diff_list = list()
-        if other._L1 != self._L1:
-            diff_list.append(name + ".L1")
+        if (
+            other._L1 is not None
+            and self._L1 is not None
+            and isnan(other._L1)
+            and isnan(self._L1)
+        ):
+            pass
+        elif other._L1 != self._L1:
+            if is_add_value:
+                val_str = " (self=" + str(self._L1) + ", other=" + str(other._L1) + ")"
+                diff_list.append(name + ".L1" + val_str)
+            else:
+                diff_list.append(name + ".L1")
         if (other.mat_type is None and self.mat_type is not None) or (
             other.mat_type is not None and self.mat_type is None
         ):
             diff_list.append(name + ".mat_type None mismatch")
         elif self.mat_type is not None:
             diff_list.extend(
-                self.mat_type.compare(other.mat_type, name=name + ".mat_type")
+                self.mat_type.compare(
+                    other.mat_type,
+                    name=name + ".mat_type",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
             )
         if other._Nrvd != self._Nrvd:
-            diff_list.append(name + ".Nrvd")
-        if other._Wrvd != self._Wrvd:
-            diff_list.append(name + ".Wrvd")
-        if other._Kf1 != self._Kf1:
-            diff_list.append(name + ".Kf1")
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._Nrvd) + ", other=" + str(other._Nrvd) + ")"
+                )
+                diff_list.append(name + ".Nrvd" + val_str)
+            else:
+                diff_list.append(name + ".Nrvd")
+        if (
+            other._Wrvd is not None
+            and self._Wrvd is not None
+            and isnan(other._Wrvd)
+            and isnan(self._Wrvd)
+        ):
+            pass
+        elif other._Wrvd != self._Wrvd:
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._Wrvd) + ", other=" + str(other._Wrvd) + ")"
+                )
+                diff_list.append(name + ".Wrvd" + val_str)
+            else:
+                diff_list.append(name + ".Wrvd")
+        if (
+            other._Kf1 is not None
+            and self._Kf1 is not None
+            and isnan(other._Kf1)
+            and isnan(self._Kf1)
+        ):
+            pass
+        elif other._Kf1 != self._Kf1:
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._Kf1) + ", other=" + str(other._Kf1) + ")"
+                )
+                diff_list.append(name + ".Kf1" + val_str)
+            else:
+                diff_list.append(name + ".Kf1")
         if other._is_internal != self._is_internal:
-            diff_list.append(name + ".is_internal")
-        if other._Rint != self._Rint:
-            diff_list.append(name + ".Rint")
-        if other._Rext != self._Rext:
-            diff_list.append(name + ".Rext")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._is_internal)
+                    + ", other="
+                    + str(other._is_internal)
+                    + ")"
+                )
+                diff_list.append(name + ".is_internal" + val_str)
+            else:
+                diff_list.append(name + ".is_internal")
+        if (
+            other._Rint is not None
+            and self._Rint is not None
+            and isnan(other._Rint)
+            and isnan(self._Rint)
+        ):
+            pass
+        elif other._Rint != self._Rint:
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._Rint) + ", other=" + str(other._Rint) + ")"
+                )
+                diff_list.append(name + ".Rint" + val_str)
+            else:
+                diff_list.append(name + ".Rint")
+        if (
+            other._Rext is not None
+            and self._Rext is not None
+            and isnan(other._Rext)
+            and isnan(self._Rext)
+        ):
+            pass
+        elif other._Rext != self._Rext:
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._Rext) + ", other=" + str(other._Rext) + ")"
+                )
+                diff_list.append(name + ".Rext" + val_str)
+            else:
+                diff_list.append(name + ".Rext")
         if other._is_stator != self._is_stator:
-            diff_list.append(name + ".is_stator")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._is_stator)
+                    + ", other="
+                    + str(other._is_stator)
+                    + ")"
+                )
+                diff_list.append(name + ".is_stator" + val_str)
+            else:
+                diff_list.append(name + ".is_stator")
         if (other.axial_vent is None and self.axial_vent is not None) or (
             other.axial_vent is not None and self.axial_vent is None
         ):
@@ -734,7 +828,10 @@ class Lamination(FrozenClass):
             for ii in range(len(other.axial_vent)):
                 diff_list.extend(
                     self.axial_vent[ii].compare(
-                        other.axial_vent[ii], name=name + ".axial_vent[" + str(ii) + "]"
+                        other.axial_vent[ii],
+                        name=name + ".axial_vent[" + str(ii) + "]",
+                        ignore_list=ignore_list,
+                        is_add_value=is_add_value,
                     )
                 )
         if (other.notch is None and self.notch is not None) or (
@@ -749,7 +846,10 @@ class Lamination(FrozenClass):
             for ii in range(len(other.notch)):
                 diff_list.extend(
                     self.notch[ii].compare(
-                        other.notch[ii], name=name + ".notch[" + str(ii) + "]"
+                        other.notch[ii],
+                        name=name + ".notch[" + str(ii) + "]",
+                        ignore_list=ignore_list,
+                        is_add_value=is_add_value,
                     )
                 )
         if (other.skew is None and self.skew is not None) or (
@@ -757,7 +857,14 @@ class Lamination(FrozenClass):
         ):
             diff_list.append(name + ".skew None mismatch")
         elif self.skew is not None:
-            diff_list.extend(self.skew.compare(other.skew, name=name + ".skew"))
+            diff_list.extend(
+                self.skew.compare(
+                    other.skew,
+                    name=name + ".skew",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
+            )
         if (other.yoke_notch is None and self.yoke_notch is not None) or (
             other.yoke_notch is not None and self.yoke_notch is None
         ):
@@ -770,7 +877,10 @@ class Lamination(FrozenClass):
             for ii in range(len(other.yoke_notch)):
                 diff_list.extend(
                     self.yoke_notch[ii].compare(
-                        other.yoke_notch[ii], name=name + ".yoke_notch[" + str(ii) + "]"
+                        other.yoke_notch[ii],
+                        name=name + ".yoke_notch[" + str(ii) + "]",
+                        ignore_list=ignore_list,
+                        is_add_value=is_add_value,
                     )
                 )
         if (other.bore is None and self.bore is not None) or (
@@ -778,7 +888,14 @@ class Lamination(FrozenClass):
         ):
             diff_list.append(name + ".bore None mismatch")
         elif self.bore is not None:
-            diff_list.extend(self.bore.compare(other.bore, name=name + ".bore"))
+            diff_list.extend(
+                self.bore.compare(
+                    other.bore,
+                    name=name + ".bore",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
+            )
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
