@@ -126,7 +126,7 @@ class MatElectrical(FrozenClass):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -134,12 +134,51 @@ class MatElectrical(FrozenClass):
         if type(other) != type(self):
             return ["type(" + name + ")"]
         diff_list = list()
-        if other._rho != self._rho:
-            diff_list.append(name + ".rho")
-        if other._epsr != self._epsr:
-            diff_list.append(name + ".epsr")
-        if other._alpha != self._alpha:
-            diff_list.append(name + ".alpha")
+        if (
+            other._rho is not None
+            and self._rho is not None
+            and isnan(other._rho)
+            and isnan(self._rho)
+        ):
+            pass
+        elif other._rho != self._rho:
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._rho) + ", other=" + str(other._rho) + ")"
+                )
+                diff_list.append(name + ".rho" + val_str)
+            else:
+                diff_list.append(name + ".rho")
+        if (
+            other._epsr is not None
+            and self._epsr is not None
+            and isnan(other._epsr)
+            and isnan(self._epsr)
+        ):
+            pass
+        elif other._epsr != self._epsr:
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._epsr) + ", other=" + str(other._epsr) + ")"
+                )
+                diff_list.append(name + ".epsr" + val_str)
+            else:
+                diff_list.append(name + ".epsr")
+        if (
+            other._alpha is not None
+            and self._alpha is not None
+            and isnan(other._alpha)
+            and isnan(self._alpha)
+        ):
+            pass
+        elif other._alpha != self._alpha:
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._alpha) + ", other=" + str(other._alpha) + ")"
+                )
+                diff_list.append(name + ".alpha" + val_str)
+            else:
+                diff_list.append(name + ".alpha")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list

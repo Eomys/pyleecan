@@ -195,7 +195,7 @@ class Mode(SolutionMat):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -205,13 +205,54 @@ class Mode(SolutionMat):
         diff_list = list()
 
         # Check the properties inherited from SolutionMat
-        diff_list.extend(super(Mode, self).compare(other, name=name))
-        if other._nat_freq != self._nat_freq:
-            diff_list.append(name + ".nat_freq")
+        diff_list.extend(
+            super(Mode, self).compare(
+                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
+            )
+        )
+        if (
+            other._nat_freq is not None
+            and self._nat_freq is not None
+            and isnan(other._nat_freq)
+            and isnan(self._nat_freq)
+        ):
+            pass
+        elif other._nat_freq != self._nat_freq:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._nat_freq)
+                    + ", other="
+                    + str(other._nat_freq)
+                    + ")"
+                )
+                diff_list.append(name + ".nat_freq" + val_str)
+            else:
+                diff_list.append(name + ".nat_freq")
         if other._order_circ != self._order_circ:
-            diff_list.append(name + ".order_circ")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._order_circ)
+                    + ", other="
+                    + str(other._order_circ)
+                    + ")"
+                )
+                diff_list.append(name + ".order_circ" + val_str)
+            else:
+                diff_list.append(name + ".order_circ")
         if other._order_long != self._order_long:
-            diff_list.append(name + ".order_long")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._order_long)
+                    + ", other="
+                    + str(other._order_long)
+                    + ")"
+                )
+                diff_list.append(name + ".order_long" + val_str)
+            else:
+                diff_list.append(name + ".order_long")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list

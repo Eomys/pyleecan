@@ -204,7 +204,7 @@ class VarLoad(VarSimu):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -214,14 +214,23 @@ class VarLoad(VarSimu):
         diff_list = list()
 
         # Check the properties inherited from VarSimu
-        diff_list.extend(super(VarLoad, self).compare(other, name=name))
+        diff_list.extend(
+            super(VarLoad, self).compare(
+                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
+            )
+        )
         if (other.OP_matrix is None and self.OP_matrix is not None) or (
             other.OP_matrix is not None and self.OP_matrix is None
         ):
             diff_list.append(name + ".OP_matrix None mismatch")
         elif self.OP_matrix is not None:
             diff_list.extend(
-                self.OP_matrix.compare(other.OP_matrix, name=name + ".OP_matrix")
+                self.OP_matrix.compare(
+                    other.OP_matrix,
+                    name=name + ".OP_matrix",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
             )
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))

@@ -155,7 +155,7 @@ class ImportGenVectLin(ImportMatrix):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -165,15 +165,68 @@ class ImportGenVectLin(ImportMatrix):
         diff_list = list()
 
         # Check the properties inherited from ImportMatrix
-        diff_list.extend(super(ImportGenVectLin, self).compare(other, name=name))
-        if other._start != self._start:
-            diff_list.append(name + ".start")
-        if other._stop != self._stop:
-            diff_list.append(name + ".stop")
-        if other._num != self._num:
-            diff_list.append(name + ".num")
+        diff_list.extend(
+            super(ImportGenVectLin, self).compare(
+                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
+            )
+        )
+        if (
+            other._start is not None
+            and self._start is not None
+            and isnan(other._start)
+            and isnan(self._start)
+        ):
+            pass
+        elif other._start != self._start:
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._start) + ", other=" + str(other._start) + ")"
+                )
+                diff_list.append(name + ".start" + val_str)
+            else:
+                diff_list.append(name + ".start")
+        if (
+            other._stop is not None
+            and self._stop is not None
+            and isnan(other._stop)
+            and isnan(self._stop)
+        ):
+            pass
+        elif other._stop != self._stop:
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._stop) + ", other=" + str(other._stop) + ")"
+                )
+                diff_list.append(name + ".stop" + val_str)
+            else:
+                diff_list.append(name + ".stop")
+        if (
+            other._num is not None
+            and self._num is not None
+            and isnan(other._num)
+            and isnan(self._num)
+        ):
+            pass
+        elif other._num != self._num:
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._num) + ", other=" + str(other._num) + ")"
+                )
+                diff_list.append(name + ".num" + val_str)
+            else:
+                diff_list.append(name + ".num")
         if other._endpoint != self._endpoint:
-            diff_list.append(name + ".endpoint")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._endpoint)
+                    + ", other="
+                    + str(other._endpoint)
+                    + ")"
+                )
+                diff_list.append(name + ".endpoint" + val_str)
+            else:
+                diff_list.append(name + ".endpoint")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list

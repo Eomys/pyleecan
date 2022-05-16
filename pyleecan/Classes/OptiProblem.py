@@ -169,7 +169,7 @@ class OptiProblem(FrozenClass):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -182,7 +182,14 @@ class OptiProblem(FrozenClass):
         ):
             diff_list.append(name + ".simu None mismatch")
         elif self.simu is not None:
-            diff_list.extend(self.simu.compare(other.simu, name=name + ".simu"))
+            diff_list.extend(
+                self.simu.compare(
+                    other.simu,
+                    name=name + ".simu",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
+            )
         if (other.design_var is None and self.design_var is not None) or (
             other.design_var is not None and self.design_var is None
         ):
@@ -195,7 +202,10 @@ class OptiProblem(FrozenClass):
             for ii in range(len(other.design_var)):
                 diff_list.extend(
                     self.design_var[ii].compare(
-                        other.design_var[ii], name=name + ".design_var[" + str(ii) + "]"
+                        other.design_var[ii],
+                        name=name + ".design_var[" + str(ii) + "]",
+                        ignore_list=ignore_list,
+                        is_add_value=is_add_value,
                     )
                 )
         if (other.obj_func is None and self.obj_func is not None) or (
@@ -210,7 +220,10 @@ class OptiProblem(FrozenClass):
             for ii in range(len(other.obj_func)):
                 diff_list.extend(
                     self.obj_func[ii].compare(
-                        other.obj_func[ii], name=name + ".obj_func[" + str(ii) + "]"
+                        other.obj_func[ii],
+                        name=name + ".obj_func[" + str(ii) + "]",
+                        ignore_list=ignore_list,
+                        is_add_value=is_add_value,
                     )
                 )
         if other._eval_func_str != self._eval_func_str:
@@ -227,7 +240,10 @@ class OptiProblem(FrozenClass):
             for ii in range(len(other.constraint)):
                 diff_list.extend(
                     self.constraint[ii].compare(
-                        other.constraint[ii], name=name + ".constraint[" + str(ii) + "]"
+                        other.constraint[ii],
+                        name=name + ".constraint[" + str(ii) + "]",
+                        ignore_list=ignore_list,
+                        is_add_value=is_add_value,
                     )
                 )
         if other._preprocessing_str != self._preprocessing_str:
@@ -246,6 +262,8 @@ class OptiProblem(FrozenClass):
                     self.datakeeper_list[ii].compare(
                         other.datakeeper_list[ii],
                         name=name + ".datakeeper_list[" + str(ii) + "]",
+                        ignore_list=ignore_list,
+                        is_add_value=is_add_value,
                     )
                 )
         # Filter ignore differences

@@ -108,7 +108,7 @@ class ImportMatlab(ImportMatrix):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -118,11 +118,35 @@ class ImportMatlab(ImportMatrix):
         diff_list = list()
 
         # Check the properties inherited from ImportMatrix
-        diff_list.extend(super(ImportMatlab, self).compare(other, name=name))
+        diff_list.extend(
+            super(ImportMatlab, self).compare(
+                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
+            )
+        )
         if other._file_path != self._file_path:
-            diff_list.append(name + ".file_path")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._file_path)
+                    + ", other="
+                    + str(other._file_path)
+                    + ")"
+                )
+                diff_list.append(name + ".file_path" + val_str)
+            else:
+                diff_list.append(name + ".file_path")
         if other._var_name != self._var_name:
-            diff_list.append(name + ".var_name")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._var_name)
+                    + ", other="
+                    + str(other._var_name)
+                    + ")"
+                )
+                diff_list.append(name + ".var_name" + val_str)
+            else:
+                diff_list.append(name + ".var_name")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list

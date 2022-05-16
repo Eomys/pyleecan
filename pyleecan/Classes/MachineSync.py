@@ -139,7 +139,7 @@ class MachineSync(Machine):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -149,7 +149,11 @@ class MachineSync(Machine):
         diff_list = list()
 
         # Check the properties inherited from Machine
-        diff_list.extend(super(MachineSync, self).compare(other, name=name))
+        diff_list.extend(
+            super(MachineSync, self).compare(
+                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
+            )
+        )
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list

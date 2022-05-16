@@ -225,7 +225,7 @@ class VentilationCirc(Hole):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -235,11 +235,37 @@ class VentilationCirc(Hole):
         diff_list = list()
 
         # Check the properties inherited from Hole
-        diff_list.extend(super(VentilationCirc, self).compare(other, name=name))
-        if other._D0 != self._D0:
-            diff_list.append(name + ".D0")
-        if other._H0 != self._H0:
-            diff_list.append(name + ".H0")
+        diff_list.extend(
+            super(VentilationCirc, self).compare(
+                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
+            )
+        )
+        if (
+            other._D0 is not None
+            and self._D0 is not None
+            and isnan(other._D0)
+            and isnan(self._D0)
+        ):
+            pass
+        elif other._D0 != self._D0:
+            if is_add_value:
+                val_str = " (self=" + str(self._D0) + ", other=" + str(other._D0) + ")"
+                diff_list.append(name + ".D0" + val_str)
+            else:
+                diff_list.append(name + ".D0")
+        if (
+            other._H0 is not None
+            and self._H0 is not None
+            and isnan(other._H0)
+            and isnan(self._H0)
+        ):
+            pass
+        elif other._H0 != self._H0:
+            if is_add_value:
+                val_str = " (self=" + str(self._H0) + ", other=" + str(other._H0) + ")"
+                diff_list.append(name + ".H0" + val_str)
+            else:
+                diff_list.append(name + ".H0")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list

@@ -149,7 +149,7 @@ class OP(FrozenClass):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -157,18 +157,110 @@ class OP(FrozenClass):
         if type(other) != type(self):
             return ["type(" + name + ")"]
         diff_list = list()
-        if other._N0 != self._N0:
-            diff_list.append(name + ".N0")
-        if other._felec != self._felec:
-            diff_list.append(name + ".felec")
-        if other._Tem_av_ref != self._Tem_av_ref:
-            diff_list.append(name + ".Tem_av_ref")
-        if other._Pem_av_ref != self._Pem_av_ref:
-            diff_list.append(name + ".Pem_av_ref")
-        if other._Pem_av_in != self._Pem_av_in:
-            diff_list.append(name + ".Pem_av_in")
-        if other._efficiency != self._efficiency:
-            diff_list.append(name + ".efficiency")
+        if (
+            other._N0 is not None
+            and self._N0 is not None
+            and isnan(other._N0)
+            and isnan(self._N0)
+        ):
+            pass
+        elif other._N0 != self._N0:
+            if is_add_value:
+                val_str = " (self=" + str(self._N0) + ", other=" + str(other._N0) + ")"
+                diff_list.append(name + ".N0" + val_str)
+            else:
+                diff_list.append(name + ".N0")
+        if (
+            other._felec is not None
+            and self._felec is not None
+            and isnan(other._felec)
+            and isnan(self._felec)
+        ):
+            pass
+        elif other._felec != self._felec:
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._felec) + ", other=" + str(other._felec) + ")"
+                )
+                diff_list.append(name + ".felec" + val_str)
+            else:
+                diff_list.append(name + ".felec")
+        if (
+            other._Tem_av_ref is not None
+            and self._Tem_av_ref is not None
+            and isnan(other._Tem_av_ref)
+            and isnan(self._Tem_av_ref)
+        ):
+            pass
+        elif other._Tem_av_ref != self._Tem_av_ref:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._Tem_av_ref)
+                    + ", other="
+                    + str(other._Tem_av_ref)
+                    + ")"
+                )
+                diff_list.append(name + ".Tem_av_ref" + val_str)
+            else:
+                diff_list.append(name + ".Tem_av_ref")
+        if (
+            other._Pem_av_ref is not None
+            and self._Pem_av_ref is not None
+            and isnan(other._Pem_av_ref)
+            and isnan(self._Pem_av_ref)
+        ):
+            pass
+        elif other._Pem_av_ref != self._Pem_av_ref:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._Pem_av_ref)
+                    + ", other="
+                    + str(other._Pem_av_ref)
+                    + ")"
+                )
+                diff_list.append(name + ".Pem_av_ref" + val_str)
+            else:
+                diff_list.append(name + ".Pem_av_ref")
+        if (
+            other._Pem_av_in is not None
+            and self._Pem_av_in is not None
+            and isnan(other._Pem_av_in)
+            and isnan(self._Pem_av_in)
+        ):
+            pass
+        elif other._Pem_av_in != self._Pem_av_in:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._Pem_av_in)
+                    + ", other="
+                    + str(other._Pem_av_in)
+                    + ")"
+                )
+                diff_list.append(name + ".Pem_av_in" + val_str)
+            else:
+                diff_list.append(name + ".Pem_av_in")
+        if (
+            other._efficiency is not None
+            and self._efficiency is not None
+            and isnan(other._efficiency)
+            and isnan(self._efficiency)
+        ):
+            pass
+        elif other._efficiency != self._efficiency:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._efficiency)
+                    + ", other="
+                    + str(other._efficiency)
+                    + ")"
+                )
+                diff_list.append(name + ".efficiency" + val_str)
+            else:
+                diff_list.append(name + ".efficiency")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list

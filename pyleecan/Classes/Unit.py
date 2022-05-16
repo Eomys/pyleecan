@@ -173,7 +173,7 @@ class Unit(FrozenClass):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -182,11 +182,41 @@ class Unit(FrozenClass):
             return ["type(" + name + ")"]
         diff_list = list()
         if other._unit_m != self._unit_m:
-            diff_list.append(name + ".unit_m")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._unit_m)
+                    + ", other="
+                    + str(other._unit_m)
+                    + ")"
+                )
+                diff_list.append(name + ".unit_m" + val_str)
+            else:
+                diff_list.append(name + ".unit_m")
         if other._unit_rad != self._unit_rad:
-            diff_list.append(name + ".unit_rad")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._unit_rad)
+                    + ", other="
+                    + str(other._unit_rad)
+                    + ")"
+                )
+                diff_list.append(name + ".unit_rad" + val_str)
+            else:
+                diff_list.append(name + ".unit_rad")
         if other._unit_m2 != self._unit_m2:
-            diff_list.append(name + ".unit_m2")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._unit_m2)
+                    + ", other="
+                    + str(other._unit_m2)
+                    + ")"
+                )
+                diff_list.append(name + ".unit_m2" + val_str)
+            else:
+                diff_list.append(name + ".unit_m2")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list

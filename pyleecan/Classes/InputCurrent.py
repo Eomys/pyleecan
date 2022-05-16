@@ -207,7 +207,7 @@ class InputCurrent(InputVoltage):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -217,26 +217,49 @@ class InputCurrent(InputVoltage):
         diff_list = list()
 
         # Check the properties inherited from InputVoltage
-        diff_list.extend(super(InputCurrent, self).compare(other, name=name))
+        diff_list.extend(
+            super(InputCurrent, self).compare(
+                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
+            )
+        )
         if (other.Is is None and self.Is is not None) or (
             other.Is is not None and self.Is is None
         ):
             diff_list.append(name + ".Is None mismatch")
         elif self.Is is not None:
-            diff_list.extend(self.Is.compare(other.Is, name=name + ".Is"))
+            diff_list.extend(
+                self.Is.compare(
+                    other.Is,
+                    name=name + ".Is",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
+            )
         if (other.Ir is None and self.Ir is not None) or (
             other.Ir is not None and self.Ir is None
         ):
             diff_list.append(name + ".Ir None mismatch")
         elif self.Ir is not None:
-            diff_list.extend(self.Ir.compare(other.Ir, name=name + ".Ir"))
+            diff_list.extend(
+                self.Ir.compare(
+                    other.Ir,
+                    name=name + ".Ir",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
+            )
         if (other.Is_harm is None and self.Is_harm is not None) or (
             other.Is_harm is not None and self.Is_harm is None
         ):
             diff_list.append(name + ".Is_harm None mismatch")
         elif self.Is_harm is not None:
             diff_list.extend(
-                self.Is_harm.compare(other.Is_harm, name=name + ".Is_harm")
+                self.Is_harm.compare(
+                    other.Is_harm,
+                    name=name + ".Is_harm",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
             )
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))

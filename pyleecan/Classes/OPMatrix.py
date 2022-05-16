@@ -331,7 +331,7 @@ class OPMatrix(FrozenClass):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -356,11 +356,31 @@ class OPMatrix(FrozenClass):
         if not array_equal(other.slip_ref, self.slip_ref):
             diff_list.append(name + ".slip_ref")
         if other._is_output_power != self._is_output_power:
-            diff_list.append(name + ".is_output_power")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._is_output_power)
+                    + ", other="
+                    + str(other._is_output_power)
+                    + ")"
+                )
+                diff_list.append(name + ".is_output_power" + val_str)
+            else:
+                diff_list.append(name + ".is_output_power")
         if not array_equal(other.If_ref, self.If_ref):
             diff_list.append(name + ".If_ref")
         if other._col_names != self._col_names:
-            diff_list.append(name + ".col_names")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._col_names)
+                    + ", other="
+                    + str(other._col_names)
+                    + ")"
+                )
+                diff_list.append(name + ".col_names" + val_str)
+            else:
+                diff_list.append(name + ".col_names")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list

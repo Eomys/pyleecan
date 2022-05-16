@@ -122,7 +122,7 @@ class OPdqf(OPdq):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -132,9 +132,30 @@ class OPdqf(OPdq):
         diff_list = list()
 
         # Check the properties inherited from OPdq
-        diff_list.extend(super(OPdqf, self).compare(other, name=name))
-        if other._If_ref != self._If_ref:
-            diff_list.append(name + ".If_ref")
+        diff_list.extend(
+            super(OPdqf, self).compare(
+                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
+            )
+        )
+        if (
+            other._If_ref is not None
+            and self._If_ref is not None
+            and isnan(other._If_ref)
+            and isnan(self._If_ref)
+        ):
+            pass
+        elif other._If_ref != self._If_ref:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._If_ref)
+                    + ", other="
+                    + str(other._If_ref)
+                    + ")"
+                )
+                diff_list.append(name + ".If_ref" + val_str)
+            else:
+                diff_list.append(name + ".If_ref")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list

@@ -328,7 +328,7 @@ class MeshSolution(FrozenClass):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -337,7 +337,13 @@ class MeshSolution(FrozenClass):
             return ["type(" + name + ")"]
         diff_list = list()
         if other._label != self._label:
-            diff_list.append(name + ".label")
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._label) + ", other=" + str(other._label) + ")"
+                )
+                diff_list.append(name + ".label" + val_str)
+            else:
+                diff_list.append(name + ".label")
         if (other.mesh is None and self.mesh is not None) or (
             other.mesh is not None and self.mesh is None
         ):
@@ -350,11 +356,24 @@ class MeshSolution(FrozenClass):
             for ii in range(len(other.mesh)):
                 diff_list.extend(
                     self.mesh[ii].compare(
-                        other.mesh[ii], name=name + ".mesh[" + str(ii) + "]"
+                        other.mesh[ii],
+                        name=name + ".mesh[" + str(ii) + "]",
+                        ignore_list=ignore_list,
+                        is_add_value=is_add_value,
                     )
                 )
         if other._is_same_mesh != self._is_same_mesh:
-            diff_list.append(name + ".is_same_mesh")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._is_same_mesh)
+                    + ", other="
+                    + str(other._is_same_mesh)
+                    + ")"
+                )
+                diff_list.append(name + ".is_same_mesh" + val_str)
+            else:
+                diff_list.append(name + ".is_same_mesh")
         if (other.solution is None and self.solution is not None) or (
             other.solution is not None and self.solution is None
         ):
@@ -367,15 +386,40 @@ class MeshSolution(FrozenClass):
             for ii in range(len(other.solution)):
                 diff_list.extend(
                     self.solution[ii].compare(
-                        other.solution[ii], name=name + ".solution[" + str(ii) + "]"
+                        other.solution[ii],
+                        name=name + ".solution[" + str(ii) + "]",
+                        ignore_list=ignore_list,
+                        is_add_value=is_add_value,
                     )
                 )
         if other._group != self._group:
-            diff_list.append(name + ".group")
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._group) + ", other=" + str(other._group) + ")"
+                )
+                diff_list.append(name + ".group" + val_str)
+            else:
+                diff_list.append(name + ".group")
         if other._dimension != self._dimension:
-            diff_list.append(name + ".dimension")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._dimension)
+                    + ", other="
+                    + str(other._dimension)
+                    + ")"
+                )
+                diff_list.append(name + ".dimension" + val_str)
+            else:
+                diff_list.append(name + ".dimension")
         if other._path != self._path:
-            diff_list.append(name + ".path")
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._path) + ", other=" + str(other._path) + ")"
+                )
+                diff_list.append(name + ".path" + val_str)
+            else:
+                diff_list.append(name + ".path")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list

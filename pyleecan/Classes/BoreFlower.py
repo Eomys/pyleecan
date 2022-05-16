@@ -107,7 +107,7 @@ class BoreFlower(Bore):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -117,13 +117,47 @@ class BoreFlower(Bore):
         diff_list = list()
 
         # Check the properties inherited from Bore
-        diff_list.extend(super(BoreFlower, self).compare(other, name=name))
+        diff_list.extend(
+            super(BoreFlower, self).compare(
+                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
+            )
+        )
         if other._N != self._N:
-            diff_list.append(name + ".N")
-        if other._Rarc != self._Rarc:
-            diff_list.append(name + ".Rarc")
-        if other._alpha != self._alpha:
-            diff_list.append(name + ".alpha")
+            if is_add_value:
+                val_str = " (self=" + str(self._N) + ", other=" + str(other._N) + ")"
+                diff_list.append(name + ".N" + val_str)
+            else:
+                diff_list.append(name + ".N")
+        if (
+            other._Rarc is not None
+            and self._Rarc is not None
+            and isnan(other._Rarc)
+            and isnan(self._Rarc)
+        ):
+            pass
+        elif other._Rarc != self._Rarc:
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._Rarc) + ", other=" + str(other._Rarc) + ")"
+                )
+                diff_list.append(name + ".Rarc" + val_str)
+            else:
+                diff_list.append(name + ".Rarc")
+        if (
+            other._alpha is not None
+            and self._alpha is not None
+            and isnan(other._alpha)
+            and isnan(self._alpha)
+        ):
+            pass
+        elif other._alpha != self._alpha:
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._alpha) + ", other=" + str(other._alpha) + ")"
+                )
+                diff_list.append(name + ".alpha" + val_str)
+            else:
+                diff_list.append(name + ".alpha")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list

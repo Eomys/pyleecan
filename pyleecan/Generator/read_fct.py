@@ -274,6 +274,29 @@ def find_import_type(gen_dict, class_dict, pyleecan_type=[]):
     return pyleecan_type
 
 
+def is_dict_list_pyleecan_type(type_name):
+    """Check if the type is a dict of list of Pyleecan type ({[name]})
+
+    Parameters
+    ----------
+    type_name : str
+        Type of the property
+
+    Returns
+    -------
+    is_dict_list : bool
+        True if the type is a dict of list of pyleecan type
+    """
+    return (
+        type_name not in ["", None]
+        and type_name[0] == "{"
+        and type_name[-1] == "}"
+        and type_name[1] == "["
+        and type_name[-2] == "]"
+        and ("." not in type_name or "SciDataTool" in type_name)
+    )
+
+
 def is_list_pyleecan_type(type_name):
     """Check if the type is a list of Pyleecan type ([name])
 

@@ -108,7 +108,7 @@ class OutStruct(FrozenClass):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -128,11 +128,24 @@ class OutStruct(FrozenClass):
             for key in self.axes_dict:
                 diff_list.extend(
                     self.axes_dict[key].compare(
-                        other.axes_dict[key], name=name + ".axes_dict[" + str(key) + "]"
+                        other.axes_dict[key],
+                        name=name + ".axes_dict[" + str(key) + "]",
+                        ignore_list=ignore_list,
+                        is_add_value=is_add_value,
                     )
                 )
         if other._logger_name != self._logger_name:
-            diff_list.append(name + ".logger_name")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._logger_name)
+                    + ", other="
+                    + str(other._logger_name)
+                    + ")"
+                )
+                diff_list.append(name + ".logger_name" + val_str)
+            else:
+                diff_list.append(name + ".logger_name")
         if (other.meshsolution is None and self.meshsolution is not None) or (
             other.meshsolution is not None and self.meshsolution is None
         ):
@@ -140,11 +153,24 @@ class OutStruct(FrozenClass):
         elif self.meshsolution is not None:
             diff_list.extend(
                 self.meshsolution.compare(
-                    other.meshsolution, name=name + ".meshsolution"
+                    other.meshsolution,
+                    name=name + ".meshsolution",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
                 )
             )
         if other._FEA_dict != self._FEA_dict:
-            diff_list.append(name + ".FEA_dict")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._FEA_dict)
+                    + ", other="
+                    + str(other._FEA_dict)
+                    + ")"
+                )
+                diff_list.append(name + ".FEA_dict" + val_str)
+            else:
+                diff_list.append(name + ".FEA_dict")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list

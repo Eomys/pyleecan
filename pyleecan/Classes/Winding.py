@@ -412,7 +412,7 @@ class Winding(FrozenClass):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -421,53 +421,200 @@ class Winding(FrozenClass):
             return ["type(" + name + ")"]
         diff_list = list()
         if other._is_reverse_wind != self._is_reverse_wind:
-            diff_list.append(name + ".is_reverse_wind")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._is_reverse_wind)
+                    + ", other="
+                    + str(other._is_reverse_wind)
+                    + ")"
+                )
+                diff_list.append(name + ".is_reverse_wind" + val_str)
+            else:
+                diff_list.append(name + ".is_reverse_wind")
         if other._Nslot_shift_wind != self._Nslot_shift_wind:
-            diff_list.append(name + ".Nslot_shift_wind")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._Nslot_shift_wind)
+                    + ", other="
+                    + str(other._Nslot_shift_wind)
+                    + ")"
+                )
+                diff_list.append(name + ".Nslot_shift_wind" + val_str)
+            else:
+                diff_list.append(name + ".Nslot_shift_wind")
         if other._qs != self._qs:
-            diff_list.append(name + ".qs")
+            if is_add_value:
+                val_str = " (self=" + str(self._qs) + ", other=" + str(other._qs) + ")"
+                diff_list.append(name + ".qs" + val_str)
+            else:
+                diff_list.append(name + ".qs")
         if other._Ntcoil != self._Ntcoil:
-            diff_list.append(name + ".Ntcoil")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._Ntcoil)
+                    + ", other="
+                    + str(other._Ntcoil)
+                    + ")"
+                )
+                diff_list.append(name + ".Ntcoil" + val_str)
+            else:
+                diff_list.append(name + ".Ntcoil")
         if other._Npcp != self._Npcp:
-            diff_list.append(name + ".Npcp")
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._Npcp) + ", other=" + str(other._Npcp) + ")"
+                )
+                diff_list.append(name + ".Npcp" + val_str)
+            else:
+                diff_list.append(name + ".Npcp")
         if other._type_connection != self._type_connection:
-            diff_list.append(name + ".type_connection")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._type_connection)
+                    + ", other="
+                    + str(other._type_connection)
+                    + ")"
+                )
+                diff_list.append(name + ".type_connection" + val_str)
+            else:
+                diff_list.append(name + ".type_connection")
         if other._p != self._p:
-            diff_list.append(name + ".p")
-        if other._Lewout != self._Lewout:
-            diff_list.append(name + ".Lewout")
+            if is_add_value:
+                val_str = " (self=" + str(self._p) + ", other=" + str(other._p) + ")"
+                diff_list.append(name + ".p" + val_str)
+            else:
+                diff_list.append(name + ".p")
+        if (
+            other._Lewout is not None
+            and self._Lewout is not None
+            and isnan(other._Lewout)
+            and isnan(self._Lewout)
+        ):
+            pass
+        elif other._Lewout != self._Lewout:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._Lewout)
+                    + ", other="
+                    + str(other._Lewout)
+                    + ")"
+                )
+                diff_list.append(name + ".Lewout" + val_str)
+            else:
+                diff_list.append(name + ".Lewout")
         if (other.conductor is None and self.conductor is not None) or (
             other.conductor is not None and self.conductor is None
         ):
             diff_list.append(name + ".conductor None mismatch")
         elif self.conductor is not None:
             diff_list.extend(
-                self.conductor.compare(other.conductor, name=name + ".conductor")
+                self.conductor.compare(
+                    other.conductor,
+                    name=name + ".conductor",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
             )
         if other._coil_pitch != self._coil_pitch:
-            diff_list.append(name + ".coil_pitch")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._coil_pitch)
+                    + ", other="
+                    + str(other._coil_pitch)
+                    + ")"
+                )
+                diff_list.append(name + ".coil_pitch" + val_str)
+            else:
+                diff_list.append(name + ".coil_pitch")
         if not array_equal(other.wind_mat, self.wind_mat):
             diff_list.append(name + ".wind_mat")
         if other._Nlayer != self._Nlayer:
-            diff_list.append(name + ".Nlayer")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._Nlayer)
+                    + ", other="
+                    + str(other._Nlayer)
+                    + ")"
+                )
+                diff_list.append(name + ".Nlayer" + val_str)
+            else:
+                diff_list.append(name + ".Nlayer")
         if other._per_a != self._per_a:
-            diff_list.append(name + ".per_a")
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._per_a) + ", other=" + str(other._per_a) + ")"
+                )
+                diff_list.append(name + ".per_a" + val_str)
+            else:
+                diff_list.append(name + ".per_a")
         if other._is_aper_a != self._is_aper_a:
-            diff_list.append(name + ".is_aper_a")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._is_aper_a)
+                    + ", other="
+                    + str(other._is_aper_a)
+                    + ")"
+                )
+                diff_list.append(name + ".is_aper_a" + val_str)
+            else:
+                diff_list.append(name + ".is_aper_a")
         if (other.end_winding is None and self.end_winding is not None) or (
             other.end_winding is not None and self.end_winding is None
         ):
             diff_list.append(name + ".end_winding None mismatch")
         elif self.end_winding is not None:
             diff_list.extend(
-                self.end_winding.compare(other.end_winding, name=name + ".end_winding")
+                self.end_winding.compare(
+                    other.end_winding,
+                    name=name + ".end_winding",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
             )
         if other._is_reverse_layer != self._is_reverse_layer:
-            diff_list.append(name + ".is_reverse_layer")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._is_reverse_layer)
+                    + ", other="
+                    + str(other._is_reverse_layer)
+                    + ")"
+                )
+                diff_list.append(name + ".is_reverse_layer" + val_str)
+            else:
+                diff_list.append(name + ".is_reverse_layer")
         if other._is_change_layer != self._is_change_layer:
-            diff_list.append(name + ".is_change_layer")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._is_change_layer)
+                    + ", other="
+                    + str(other._is_change_layer)
+                    + ")"
+                )
+                diff_list.append(name + ".is_change_layer" + val_str)
+            else:
+                diff_list.append(name + ".is_change_layer")
         if other._is_permute_B_C != self._is_permute_B_C:
-            diff_list.append(name + ".is_permute_B_C")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._is_permute_B_C)
+                    + ", other="
+                    + str(other._is_permute_B_C)
+                    + ")"
+                )
+                diff_list.append(name + ".is_permute_B_C" + val_str)
+            else:
+                diff_list.append(name + ".is_permute_B_C")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
