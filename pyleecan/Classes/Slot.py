@@ -153,6 +153,7 @@ except ImportError as error:
     set_label = error
 
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 

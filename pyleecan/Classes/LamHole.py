@@ -78,6 +78,7 @@ except ImportError as error:
     get_Zs = error
 
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 

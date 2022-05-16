@@ -143,6 +143,7 @@ except ImportError as error:
     remove = error
 
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 

@@ -44,6 +44,7 @@ except ImportError as error:
     comp_temperature_effect = error
 
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 

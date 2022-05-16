@@ -23,6 +23,7 @@ except ImportError as error:
     build_meshsolution = error
 
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 

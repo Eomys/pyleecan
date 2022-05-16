@@ -28,6 +28,7 @@ except ImportError as error:
     get_machine_type = error
 
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 

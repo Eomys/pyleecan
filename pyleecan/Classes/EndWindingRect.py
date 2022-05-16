@@ -28,6 +28,7 @@ except ImportError as error:
     comp_inductance = error
 
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 

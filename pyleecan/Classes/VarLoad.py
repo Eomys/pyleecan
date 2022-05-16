@@ -38,6 +38,7 @@ except ImportError as error:
     _set_OP_matrix = error
 
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 

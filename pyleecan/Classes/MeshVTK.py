@@ -69,6 +69,7 @@ except ImportError as error:
 
 
 from numpy import array, array_equal
+from numpy import isnan
 from cloudpickle import dumps, loads
 from ._check import CheckTypeError
 

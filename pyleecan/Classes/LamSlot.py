@@ -78,6 +78,7 @@ except ImportError as error:
     has_magnet = error
 
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 

@@ -83,6 +83,7 @@ except ImportError as error:
     clear_cell = error
 
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 

@@ -48,6 +48,7 @@ except ImportError as error:
     store = error
 
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 

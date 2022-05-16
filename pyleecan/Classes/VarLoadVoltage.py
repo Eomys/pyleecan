@@ -37,6 +37,7 @@ except ImportError as error:
     get_input_list = error
 
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 

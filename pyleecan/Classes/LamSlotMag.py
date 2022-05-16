@@ -58,6 +58,7 @@ except ImportError as error:
     comp_angle_d_axis = error
 
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 

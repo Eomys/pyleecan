@@ -53,6 +53,7 @@ except ImportError as error:
     comp_surface = error
 
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 

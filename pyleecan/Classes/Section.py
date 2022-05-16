@@ -68,6 +68,7 @@ except ImportError as error:
     write = error
 
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 

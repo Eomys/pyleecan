@@ -63,6 +63,7 @@ except ImportError as error:
     comp_point_ref = error
 
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 

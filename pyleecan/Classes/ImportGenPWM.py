@@ -38,6 +38,7 @@ except ImportError as error:
     comp_carrier = error
 
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 

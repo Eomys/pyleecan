@@ -38,6 +38,7 @@ except ImportError as error:
     comp_I_mag = error
 
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 

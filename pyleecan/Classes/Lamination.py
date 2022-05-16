@@ -174,6 +174,7 @@ except ImportError as error:
     comp_periodicity_geo = error
 
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 

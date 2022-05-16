@@ -28,6 +28,7 @@ except ImportError as error:
     fit_model = error
 
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 

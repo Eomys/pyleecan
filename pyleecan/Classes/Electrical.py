@@ -38,6 +38,7 @@ except ImportError as error:
     gen_drive = error
 
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 

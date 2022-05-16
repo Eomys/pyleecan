@@ -88,6 +88,7 @@ except ImportError as error:
     get_R_id = error
 
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 
