@@ -1331,6 +1331,11 @@
         "Tem_av_ref": null,
         "Ud_ref": null,
         "Uq_ref": null,
+        "col_names": [
+          "N0",
+          "Id",
+          "Iq"
+        ],
         "__class__": "OPMatrix",
         "is_output_power": null,
         "slip_ref": null

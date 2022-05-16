@@ -105,7 +105,12 @@ def test_save_OPM_retro(file_dict):
     old_var.datakeeper_list = None
 
     # Check old file is converted to current version
-    msg = "Error for " + ref.name + ": " + str(ref_var.compare(old_var, "var_load"))
+    msg = (
+        "Error for "
+        + ref.name
+        + ": "
+        + str(ref_var.compare(old_var, "var_load", is_add_value=True))
+    )
     assert ref_var == old_var, msg
 
 
@@ -166,6 +171,9 @@ def test_before_version():
 
 
 if __name__ == "__main__":
+    for file_dict in OPM_list:
+        test_save_OPM_retro(file_dict)
+
     for file_dict in hole_list:
         test_save_load_hole_retro(file_dict)
 

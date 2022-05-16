@@ -1227,6 +1227,12 @@
         266.0,
         22.0
       ],
+      "col_names": [
+        "N0",
+        "Id",
+        "Iq",
+        "Tem"
+      ],
       "Ud_ref": null,
       "Uq_ref": null,
       "__class__": "OPMatrix",
