@@ -30,6 +30,7 @@ except ImportError as error:
     comp_angle_rotor_initial = error
 
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 

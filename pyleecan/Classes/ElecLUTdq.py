@@ -38,6 +38,7 @@ except ImportError as error:
     solve_MTPA = error
 
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 

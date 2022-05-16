@@ -16,6 +16,7 @@ from ..Functions.Load.import_class import import_class
 from ._frozen import FrozenClass
 
 from numpy import array, array_equal
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 

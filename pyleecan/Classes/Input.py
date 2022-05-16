@@ -41,6 +41,7 @@ except ImportError as error:
 from ..Classes.ImportMatrixVal import ImportMatrixVal
 from numpy import ndarray
 from numpy import array, array_equal
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 

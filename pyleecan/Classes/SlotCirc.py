@@ -83,6 +83,7 @@ except ImportError as error:
     get_surface_opening = error
 
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 

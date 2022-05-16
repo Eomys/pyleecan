@@ -28,6 +28,7 @@ except ImportError as error:
     init_vector = error
 
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 

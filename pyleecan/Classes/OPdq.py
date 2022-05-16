@@ -73,6 +73,7 @@ except ImportError as error:
     set_U0_UPhi0 = error
 
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 

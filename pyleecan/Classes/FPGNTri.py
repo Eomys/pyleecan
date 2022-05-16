@@ -23,6 +23,7 @@ except ImportError as error:
     get_gauss_points = error
 
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 

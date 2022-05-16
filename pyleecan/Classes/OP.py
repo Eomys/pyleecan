@@ -23,6 +23,7 @@ except ImportError as error:
     get_machine_from_parent = error
 
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 

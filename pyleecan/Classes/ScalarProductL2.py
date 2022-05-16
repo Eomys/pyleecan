@@ -23,6 +23,7 @@ except ImportError as error:
     scalar_product = error
 
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 

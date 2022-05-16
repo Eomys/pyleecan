@@ -28,6 +28,7 @@ except ImportError as error:
     comp_desc_dict = error
 
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 

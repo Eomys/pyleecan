@@ -77,6 +77,7 @@ except ImportError as error:
     print_memory = error
 
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 

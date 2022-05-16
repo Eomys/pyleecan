@@ -48,6 +48,7 @@ except ImportError as error:
     set_m2 = error
 
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 

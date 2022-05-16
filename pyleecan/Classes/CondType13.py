@@ -75,6 +75,7 @@ except ImportError as error:
     is_round_wire = error
 
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 

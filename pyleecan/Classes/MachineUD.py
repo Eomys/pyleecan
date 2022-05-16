@@ -28,6 +28,7 @@ except ImportError as error:
     is_synchronous = error
 
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 

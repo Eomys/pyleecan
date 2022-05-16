@@ -48,6 +48,7 @@ except ImportError as error:
     get_Jrms = error
 
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 

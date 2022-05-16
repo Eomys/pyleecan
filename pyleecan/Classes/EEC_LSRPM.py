@@ -33,6 +33,7 @@ except ImportError as error:
     comp_joule_losses = error
 
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 

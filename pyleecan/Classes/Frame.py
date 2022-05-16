@@ -53,6 +53,7 @@ except ImportError as error:
     plot = error
 
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 

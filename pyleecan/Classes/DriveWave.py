@@ -23,6 +23,7 @@ except ImportError as error:
     get_wave = error
 
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 

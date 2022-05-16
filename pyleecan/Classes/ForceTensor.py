@@ -40,6 +40,7 @@ except ImportError as error:
     element_loop = error
 
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 

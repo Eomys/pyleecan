@@ -48,6 +48,7 @@ except ImportError as error:
     solve_FEMM_parallel = error
 
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 

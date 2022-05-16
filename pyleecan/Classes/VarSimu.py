@@ -65,6 +65,7 @@ except ImportError as error:
     get_ref_simu_index = error
 
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 

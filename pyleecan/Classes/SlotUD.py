@@ -43,6 +43,7 @@ except ImportError as error:
     set_from_point_list = error
 
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 

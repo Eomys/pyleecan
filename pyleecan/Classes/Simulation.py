@@ -33,6 +33,7 @@ except ImportError as error:
     get_var_load = error
 
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 

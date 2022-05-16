@@ -73,6 +73,7 @@ except ImportError as error:
     update_from_ref = error
 
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 

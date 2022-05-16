@@ -23,6 +23,7 @@ except ImportError as error:
     run = error
 
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 

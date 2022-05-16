@@ -48,6 +48,7 @@ except ImportError as error:
     gen_elmer_mesh = error
 
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 

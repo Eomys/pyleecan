@@ -45,6 +45,7 @@ except ImportError as error:
     eval_const = error
 
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 

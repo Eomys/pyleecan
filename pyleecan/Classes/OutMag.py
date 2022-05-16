@@ -48,6 +48,7 @@ except ImportError as error:
     comp_torque_MT = error
 
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 

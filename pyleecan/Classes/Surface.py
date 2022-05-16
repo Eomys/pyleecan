@@ -43,6 +43,7 @@ except ImportError as error:
     is_inside = error
 
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 

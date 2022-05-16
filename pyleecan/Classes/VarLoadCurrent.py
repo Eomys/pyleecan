@@ -38,6 +38,7 @@ except ImportError as error:
 
 
 from numpy import array, array_equal
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 

@@ -37,6 +37,7 @@ except ImportError as error:
     comp_loss_density = error
 
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 

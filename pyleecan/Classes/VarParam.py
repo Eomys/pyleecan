@@ -35,6 +35,7 @@ except ImportError as error:
     get_simu_number = error
 
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 

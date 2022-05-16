@@ -91,6 +91,7 @@ except ImportError as error:
     plot_side = error
 
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 

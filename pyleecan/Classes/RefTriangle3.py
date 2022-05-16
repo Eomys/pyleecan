@@ -58,6 +58,7 @@ except ImportError as error:
     get_normal = error
 
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 

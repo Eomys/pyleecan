@@ -63,6 +63,7 @@ except ImportError as error:
     plot_schematics = error
 
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 

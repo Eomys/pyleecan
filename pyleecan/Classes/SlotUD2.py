@@ -45,6 +45,7 @@ except ImportError as error:
     _set_split_active_surf_dict = error
 
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 
