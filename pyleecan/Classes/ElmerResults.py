@@ -172,7 +172,7 @@ class ElmerResults(Elmer):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -182,17 +182,63 @@ class ElmerResults(Elmer):
         diff_list = list()
 
         # Check the properties inherited from Elmer
-        diff_list.extend(super(ElmerResults, self).compare(other, name=name))
+        diff_list.extend(
+            super(ElmerResults, self).compare(
+                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
+            )
+        )
         if other._data != self._data:
-            diff_list.append(name + ".data")
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._data) + ", other=" + str(other._data) + ")"
+                )
+                diff_list.append(name + ".data" + val_str)
+            else:
+                diff_list.append(name + ".data")
         if other._file != self._file:
-            diff_list.append(name + ".file")
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._file) + ", other=" + str(other._file) + ")"
+                )
+                diff_list.append(name + ".file" + val_str)
+            else:
+                diff_list.append(name + ".file")
         if other._usecols != self._usecols:
-            diff_list.append(name + ".usecols")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._usecols)
+                    + ", other="
+                    + str(other._usecols)
+                    + ")"
+                )
+                diff_list.append(name + ".usecols" + val_str)
+            else:
+                diff_list.append(name + ".usecols")
         if other._columns != self._columns:
-            diff_list.append(name + ".columns")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._columns)
+                    + ", other="
+                    + str(other._columns)
+                    + ")"
+                )
+                diff_list.append(name + ".columns" + val_str)
+            else:
+                diff_list.append(name + ".columns")
         if other._is_scalars != self._is_scalars:
-            diff_list.append(name + ".is_scalars")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._is_scalars)
+                    + ", other="
+                    + str(other._is_scalars)
+                    + ")"
+                )
+                diff_list.append(name + ".is_scalars" + val_str)
+            else:
+                diff_list.append(name + ".is_scalars")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list

@@ -112,7 +112,7 @@ class DXFImport(FrozenClass):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -121,11 +121,41 @@ class DXFImport(FrozenClass):
             return ["type(" + name + ")"]
         diff_list = list()
         if other._file_path != self._file_path:
-            diff_list.append(name + ".file_path")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._file_path)
+                    + ", other="
+                    + str(other._file_path)
+                    + ")"
+                )
+                diff_list.append(name + ".file_path" + val_str)
+            else:
+                diff_list.append(name + ".file_path")
         if other._surf_dict != self._surf_dict:
-            diff_list.append(name + ".surf_dict")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._surf_dict)
+                    + ", other="
+                    + str(other._surf_dict)
+                    + ")"
+                )
+                diff_list.append(name + ".surf_dict" + val_str)
+            else:
+                diff_list.append(name + ".surf_dict")
         if other._BC_list != self._BC_list:
-            diff_list.append(name + ".BC_list")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._BC_list)
+                    + ", other="
+                    + str(other._BC_list)
+                    + ")"
+                )
+                diff_list.append(name + ".BC_list" + val_str)
+            else:
+                diff_list.append(name + ".BC_list")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list

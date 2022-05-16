@@ -235,7 +235,7 @@ class Circle(Surface):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -245,13 +245,54 @@ class Circle(Surface):
         diff_list = list()
 
         # Check the properties inherited from Surface
-        diff_list.extend(super(Circle, self).compare(other, name=name))
-        if other._radius != self._radius:
-            diff_list.append(name + ".radius")
+        diff_list.extend(
+            super(Circle, self).compare(
+                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
+            )
+        )
+        if (
+            other._radius is not None
+            and self._radius is not None
+            and isnan(other._radius)
+            and isnan(self._radius)
+        ):
+            pass
+        elif other._radius != self._radius:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._radius)
+                    + ", other="
+                    + str(other._radius)
+                    + ")"
+                )
+                diff_list.append(name + ".radius" + val_str)
+            else:
+                diff_list.append(name + ".radius")
         if other._center != self._center:
-            diff_list.append(name + ".center")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._center)
+                    + ", other="
+                    + str(other._center)
+                    + ")"
+                )
+                diff_list.append(name + ".center" + val_str)
+            else:
+                diff_list.append(name + ".center")
         if other._prop_dict != self._prop_dict:
-            diff_list.append(name + ".prop_dict")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._prop_dict)
+                    + ", other="
+                    + str(other._prop_dict)
+                    + ")"
+                )
+                diff_list.append(name + ".prop_dict" + val_str)
+            else:
+                diff_list.append(name + ".prop_dict")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list

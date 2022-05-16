@@ -558,7 +558,7 @@ class XOutput(Output):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -568,7 +568,11 @@ class XOutput(Output):
         diff_list = list()
 
         # Check the properties inherited from Output
-        diff_list.extend(super(XOutput, self).compare(other, name=name))
+        diff_list.extend(
+            super(XOutput, self).compare(
+                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
+            )
+        )
         if (
             other.paramexplorer_list is None and self.paramexplorer_list is not None
         ) or (other.paramexplorer_list is not None and self.paramexplorer_list is None):
@@ -583,6 +587,8 @@ class XOutput(Output):
                     self.paramexplorer_list[ii].compare(
                         other.paramexplorer_list[ii],
                         name=name + ".paramexplorer_list[" + str(ii) + "]",
+                        ignore_list=ignore_list,
+                        is_add_value=is_add_value,
                     )
                 )
         if (other.output_list is None and self.output_list is not None) or (
@@ -599,6 +605,8 @@ class XOutput(Output):
                     self.output_list[ii].compare(
                         other.output_list[ii],
                         name=name + ".output_list[" + str(ii) + "]",
+                        ignore_list=ignore_list,
+                        is_add_value=is_add_value,
                     )
                 )
         if (other.xoutput_dict is None and self.xoutput_dict is not None) or (
@@ -615,20 +623,47 @@ class XOutput(Output):
                     self.xoutput_dict[key].compare(
                         other.xoutput_dict[key],
                         name=name + ".xoutput_dict[" + str(key) + "]",
+                        ignore_list=ignore_list,
+                        is_add_value=is_add_value,
                     )
                 )
         if other._nb_simu != self._nb_simu:
-            diff_list.append(name + ".nb_simu")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._nb_simu)
+                    + ", other="
+                    + str(other._nb_simu)
+                    + ")"
+                )
+                diff_list.append(name + ".nb_simu" + val_str)
+            else:
+                diff_list.append(name + ".nb_simu")
         if (other.xoutput_ref is None and self.xoutput_ref is not None) or (
             other.xoutput_ref is not None and self.xoutput_ref is None
         ):
             diff_list.append(name + ".xoutput_ref None mismatch")
         elif self.xoutput_ref is not None:
             diff_list.extend(
-                self.xoutput_ref.compare(other.xoutput_ref, name=name + ".xoutput_ref")
+                self.xoutput_ref.compare(
+                    other.xoutput_ref,
+                    name=name + ".xoutput_ref",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
             )
         if other._xoutput_ref_index != self._xoutput_ref_index:
-            diff_list.append(name + ".xoutput_ref_index")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._xoutput_ref_index)
+                    + ", other="
+                    + str(other._xoutput_ref_index)
+                    + ")"
+                )
+                diff_list.append(name + ".xoutput_ref_index" + val_str)
+            else:
+                diff_list.append(name + ".xoutput_ref_index")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list

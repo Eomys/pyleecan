@@ -315,7 +315,7 @@ class MeshMat(Mesh):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -325,7 +325,11 @@ class MeshMat(Mesh):
         diff_list = list()
 
         # Check the properties inherited from Mesh
-        diff_list.extend(super(MeshMat, self).compare(other, name=name))
+        diff_list.extend(
+            super(MeshMat, self).compare(
+                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
+            )
+        )
         if (other.cell is None and self.cell is not None) or (
             other.cell is not None and self.cell is None
         ):
@@ -338,7 +342,10 @@ class MeshMat(Mesh):
             for key in self.cell:
                 diff_list.extend(
                     self.cell[key].compare(
-                        other.cell[key], name=name + ".cell[" + str(key) + "]"
+                        other.cell[key],
+                        name=name + ".cell[" + str(key) + "]",
+                        ignore_list=ignore_list,
+                        is_add_value=is_add_value,
                     )
                 )
         if (other.node is None and self.node is not None) or (
@@ -346,13 +353,46 @@ class MeshMat(Mesh):
         ):
             diff_list.append(name + ".node None mismatch")
         elif self.node is not None:
-            diff_list.extend(self.node.compare(other.node, name=name + ".node"))
+            diff_list.extend(
+                self.node.compare(
+                    other.node,
+                    name=name + ".node",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
+            )
         if other.__is_renum != self.__is_renum:
-            diff_list.append(name + "._is_renum")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self.__is_renum)
+                    + ", other="
+                    + str(other.__is_renum)
+                    + ")"
+                )
+                diff_list.append(name + "._is_renum" + val_str)
+            else:
+                diff_list.append(name + "._is_renum")
         if other._sym != self._sym:
-            diff_list.append(name + ".sym")
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._sym) + ", other=" + str(other._sym) + ")"
+                )
+                diff_list.append(name + ".sym" + val_str)
+            else:
+                diff_list.append(name + ".sym")
         if other._is_antiper_a != self._is_antiper_a:
-            diff_list.append(name + ".is_antiper_a")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._is_antiper_a)
+                    + ", other="
+                    + str(other._is_antiper_a)
+                    + ")"
+                )
+                diff_list.append(name + ".is_antiper_a" + val_str)
+            else:
+                diff_list.append(name + ".is_antiper_a")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list

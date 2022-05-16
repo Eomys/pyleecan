@@ -118,7 +118,7 @@ class ModelBH(FrozenClass):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -126,12 +126,51 @@ class ModelBH(FrozenClass):
         if type(other) != type(self):
             return ["type(" + name + ")"]
         diff_list = list()
-        if other._Bmax != self._Bmax:
-            diff_list.append(name + ".Bmax")
-        if other._Hmax != self._Hmax:
-            diff_list.append(name + ".Hmax")
-        if other._delta != self._delta:
-            diff_list.append(name + ".delta")
+        if (
+            other._Bmax is not None
+            and self._Bmax is not None
+            and isnan(other._Bmax)
+            and isnan(self._Bmax)
+        ):
+            pass
+        elif other._Bmax != self._Bmax:
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._Bmax) + ", other=" + str(other._Bmax) + ")"
+                )
+                diff_list.append(name + ".Bmax" + val_str)
+            else:
+                diff_list.append(name + ".Bmax")
+        if (
+            other._Hmax is not None
+            and self._Hmax is not None
+            and isnan(other._Hmax)
+            and isnan(self._Hmax)
+        ):
+            pass
+        elif other._Hmax != self._Hmax:
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._Hmax) + ", other=" + str(other._Hmax) + ")"
+                )
+                diff_list.append(name + ".Hmax" + val_str)
+            else:
+                diff_list.append(name + ".Hmax")
+        if (
+            other._delta is not None
+            and self._delta is not None
+            and isnan(other._delta)
+            and isnan(self._delta)
+        ):
+            pass
+        elif other._delta != self._delta:
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._delta) + ", other=" + str(other._delta) + ")"
+                )
+                diff_list.append(name + ".delta" + val_str)
+            else:
+                diff_list.append(name + ".delta")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list

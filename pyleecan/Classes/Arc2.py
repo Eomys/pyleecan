@@ -298,7 +298,7 @@ class Arc2(Arc):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -308,13 +308,46 @@ class Arc2(Arc):
         diff_list = list()
 
         # Check the properties inherited from Arc
-        diff_list.extend(super(Arc2, self).compare(other, name=name))
+        diff_list.extend(
+            super(Arc2, self).compare(
+                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
+            )
+        )
         if other._begin != self._begin:
-            diff_list.append(name + ".begin")
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._begin) + ", other=" + str(other._begin) + ")"
+                )
+                diff_list.append(name + ".begin" + val_str)
+            else:
+                diff_list.append(name + ".begin")
         if other._center != self._center:
-            diff_list.append(name + ".center")
-        if other._angle != self._angle:
-            diff_list.append(name + ".angle")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._center)
+                    + ", other="
+                    + str(other._center)
+                    + ")"
+                )
+                diff_list.append(name + ".center" + val_str)
+            else:
+                diff_list.append(name + ".center")
+        if (
+            other._angle is not None
+            and self._angle is not None
+            and isnan(other._angle)
+            and isnan(self._angle)
+        ):
+            pass
+        elif other._angle != self._angle:
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._angle) + ", other=" + str(other._angle) + ")"
+                )
+                diff_list.append(name + ".angle" + val_str)
+            else:
+                diff_list.append(name + ".angle")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list

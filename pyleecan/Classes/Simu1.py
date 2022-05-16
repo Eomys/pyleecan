@@ -191,7 +191,7 @@ class Simu1(Simulation):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -201,37 +201,76 @@ class Simu1(Simulation):
         diff_list = list()
 
         # Check the properties inherited from Simulation
-        diff_list.extend(super(Simu1, self).compare(other, name=name))
+        diff_list.extend(
+            super(Simu1, self).compare(
+                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
+            )
+        )
         if (other.elec is None and self.elec is not None) or (
             other.elec is not None and self.elec is None
         ):
             diff_list.append(name + ".elec None mismatch")
         elif self.elec is not None:
-            diff_list.extend(self.elec.compare(other.elec, name=name + ".elec"))
+            diff_list.extend(
+                self.elec.compare(
+                    other.elec,
+                    name=name + ".elec",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
+            )
         if (other.mag is None and self.mag is not None) or (
             other.mag is not None and self.mag is None
         ):
             diff_list.append(name + ".mag None mismatch")
         elif self.mag is not None:
-            diff_list.extend(self.mag.compare(other.mag, name=name + ".mag"))
+            diff_list.extend(
+                self.mag.compare(
+                    other.mag,
+                    name=name + ".mag",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
+            )
         if (other.struct is None and self.struct is not None) or (
             other.struct is not None and self.struct is None
         ):
             diff_list.append(name + ".struct None mismatch")
         elif self.struct is not None:
-            diff_list.extend(self.struct.compare(other.struct, name=name + ".struct"))
+            diff_list.extend(
+                self.struct.compare(
+                    other.struct,
+                    name=name + ".struct",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
+            )
         if (other.force is None and self.force is not None) or (
             other.force is not None and self.force is None
         ):
             diff_list.append(name + ".force None mismatch")
         elif self.force is not None:
-            diff_list.extend(self.force.compare(other.force, name=name + ".force"))
+            diff_list.extend(
+                self.force.compare(
+                    other.force,
+                    name=name + ".force",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
+            )
         if (other.loss is None and self.loss is not None) or (
             other.loss is not None and self.loss is None
         ):
             diff_list.append(name + ".loss None mismatch")
         elif self.loss is not None:
-            diff_list.extend(self.loss.compare(other.loss, name=name + ".loss"))
+            diff_list.extend(
+                self.loss.compare(
+                    other.loss,
+                    name=name + ".loss",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
+            )
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list

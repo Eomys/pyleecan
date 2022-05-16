@@ -194,7 +194,7 @@ class Skew(FrozenClass):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -203,21 +203,97 @@ class Skew(FrozenClass):
             return ["type(" + name + ")"]
         diff_list = list()
         if other._type_skew != self._type_skew:
-            diff_list.append(name + ".type_skew")
-        if other._rate != self._rate:
-            diff_list.append(name + ".rate")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._type_skew)
+                    + ", other="
+                    + str(other._type_skew)
+                    + ")"
+                )
+                diff_list.append(name + ".type_skew" + val_str)
+            else:
+                diff_list.append(name + ".type_skew")
+        if (
+            other._rate is not None
+            and self._rate is not None
+            and isnan(other._rate)
+            and isnan(self._rate)
+        ):
+            pass
+        elif other._rate != self._rate:
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._rate) + ", other=" + str(other._rate) + ")"
+                )
+                diff_list.append(name + ".rate" + val_str)
+            else:
+                diff_list.append(name + ".rate")
         if other._is_step != self._is_step:
-            diff_list.append(name + ".is_step")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._is_step)
+                    + ", other="
+                    + str(other._is_step)
+                    + ")"
+                )
+                diff_list.append(name + ".is_step" + val_str)
+            else:
+                diff_list.append(name + ".is_step")
         if other._function_str != self._function_str:
             diff_list.append(name + ".function")
         if other._angle_list != self._angle_list:
-            diff_list.append(name + ".angle_list")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._angle_list)
+                    + ", other="
+                    + str(other._angle_list)
+                    + ")"
+                )
+                diff_list.append(name + ".angle_list" + val_str)
+            else:
+                diff_list.append(name + ".angle_list")
         if other._z_list != self._z_list:
-            diff_list.append(name + ".z_list")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._z_list)
+                    + ", other="
+                    + str(other._z_list)
+                    + ")"
+                )
+                diff_list.append(name + ".z_list" + val_str)
+            else:
+                diff_list.append(name + ".z_list")
         if other._Nstep != self._Nstep:
-            diff_list.append(name + ".Nstep")
-        if other._angle_overall != self._angle_overall:
-            diff_list.append(name + ".angle_overall")
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._Nstep) + ", other=" + str(other._Nstep) + ")"
+                )
+                diff_list.append(name + ".Nstep" + val_str)
+            else:
+                diff_list.append(name + ".Nstep")
+        if (
+            other._angle_overall is not None
+            and self._angle_overall is not None
+            and isnan(other._angle_overall)
+            and isnan(self._angle_overall)
+        ):
+            pass
+        elif other._angle_overall != self._angle_overall:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._angle_overall)
+                    + ", other="
+                    + str(other._angle_overall)
+                    + ")"
+                )
+                diff_list.append(name + ".angle_overall" + val_str)
+            else:
+                diff_list.append(name + ".angle_overall")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list

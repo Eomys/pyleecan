@@ -254,7 +254,7 @@ class SurfRing(Surface):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -264,14 +264,23 @@ class SurfRing(Surface):
         diff_list = list()
 
         # Check the properties inherited from Surface
-        diff_list.extend(super(SurfRing, self).compare(other, name=name))
+        diff_list.extend(
+            super(SurfRing, self).compare(
+                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
+            )
+        )
         if (other.out_surf is None and self.out_surf is not None) or (
             other.out_surf is not None and self.out_surf is None
         ):
             diff_list.append(name + ".out_surf None mismatch")
         elif self.out_surf is not None:
             diff_list.extend(
-                self.out_surf.compare(other.out_surf, name=name + ".out_surf")
+                self.out_surf.compare(
+                    other.out_surf,
+                    name=name + ".out_surf",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
             )
         if (other.in_surf is None and self.in_surf is not None) or (
             other.in_surf is not None and self.in_surf is None
@@ -279,7 +288,12 @@ class SurfRing(Surface):
             diff_list.append(name + ".in_surf None mismatch")
         elif self.in_surf is not None:
             diff_list.extend(
-                self.in_surf.compare(other.in_surf, name=name + ".in_surf")
+                self.in_surf.compare(
+                    other.in_surf,
+                    name=name + ".in_surf",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
             )
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))

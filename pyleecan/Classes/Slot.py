@@ -509,7 +509,7 @@ class Slot(FrozenClass):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -518,14 +518,23 @@ class Slot(FrozenClass):
             return ["type(" + name + ")"]
         diff_list = list()
         if other._Zs != self._Zs:
-            diff_list.append(name + ".Zs")
+            if is_add_value:
+                val_str = " (self=" + str(self._Zs) + ", other=" + str(other._Zs) + ")"
+                diff_list.append(name + ".Zs" + val_str)
+            else:
+                diff_list.append(name + ".Zs")
         if (other.wedge_mat is None and self.wedge_mat is not None) or (
             other.wedge_mat is not None and self.wedge_mat is None
         ):
             diff_list.append(name + ".wedge_mat None mismatch")
         elif self.wedge_mat is not None:
             diff_list.extend(
-                self.wedge_mat.compare(other.wedge_mat, name=name + ".wedge_mat")
+                self.wedge_mat.compare(
+                    other.wedge_mat,
+                    name=name + ".wedge_mat",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
             )
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))

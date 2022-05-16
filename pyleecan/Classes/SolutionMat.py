@@ -189,7 +189,7 @@ class SolutionMat(Solution):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -199,15 +199,39 @@ class SolutionMat(Solution):
         diff_list = list()
 
         # Check the properties inherited from Solution
-        diff_list.extend(super(SolutionMat, self).compare(other, name=name))
+        diff_list.extend(
+            super(SolutionMat, self).compare(
+                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
+            )
+        )
         if not array_equal(other.field, self.field):
             diff_list.append(name + ".field")
         if not array_equal(other.indice, self.indice):
             diff_list.append(name + ".indice")
         if other._axis_name != self._axis_name:
-            diff_list.append(name + ".axis_name")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._axis_name)
+                    + ", other="
+                    + str(other._axis_name)
+                    + ")"
+                )
+                diff_list.append(name + ".axis_name" + val_str)
+            else:
+                diff_list.append(name + ".axis_name")
         if other._axis_size != self._axis_size:
-            diff_list.append(name + ".axis_size")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._axis_size)
+                    + ", other="
+                    + str(other._axis_size)
+                    + ")"
+                )
+                diff_list.append(name + ".axis_size" + val_str)
+            else:
+                diff_list.append(name + ".axis_size")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list

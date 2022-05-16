@@ -340,7 +340,7 @@ class SlotW25(Slot):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -350,15 +350,63 @@ class SlotW25(Slot):
         diff_list = list()
 
         # Check the properties inherited from Slot
-        diff_list.extend(super(SlotW25, self).compare(other, name=name))
-        if other._W3 != self._W3:
-            diff_list.append(name + ".W3")
-        if other._H2 != self._H2:
-            diff_list.append(name + ".H2")
-        if other._W4 != self._W4:
-            diff_list.append(name + ".W4")
-        if other._H1 != self._H1:
-            diff_list.append(name + ".H1")
+        diff_list.extend(
+            super(SlotW25, self).compare(
+                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
+            )
+        )
+        if (
+            other._W3 is not None
+            and self._W3 is not None
+            and isnan(other._W3)
+            and isnan(self._W3)
+        ):
+            pass
+        elif other._W3 != self._W3:
+            if is_add_value:
+                val_str = " (self=" + str(self._W3) + ", other=" + str(other._W3) + ")"
+                diff_list.append(name + ".W3" + val_str)
+            else:
+                diff_list.append(name + ".W3")
+        if (
+            other._H2 is not None
+            and self._H2 is not None
+            and isnan(other._H2)
+            and isnan(self._H2)
+        ):
+            pass
+        elif other._H2 != self._H2:
+            if is_add_value:
+                val_str = " (self=" + str(self._H2) + ", other=" + str(other._H2) + ")"
+                diff_list.append(name + ".H2" + val_str)
+            else:
+                diff_list.append(name + ".H2")
+        if (
+            other._W4 is not None
+            and self._W4 is not None
+            and isnan(other._W4)
+            and isnan(self._W4)
+        ):
+            pass
+        elif other._W4 != self._W4:
+            if is_add_value:
+                val_str = " (self=" + str(self._W4) + ", other=" + str(other._W4) + ")"
+                diff_list.append(name + ".W4" + val_str)
+            else:
+                diff_list.append(name + ".W4")
+        if (
+            other._H1 is not None
+            and self._H1 is not None
+            and isnan(other._H1)
+            and isnan(self._H1)
+        ):
+            pass
+        elif other._H1 != self._H1:
+            if is_add_value:
+                val_str = " (self=" + str(self._H1) + ", other=" + str(other._H1) + ")"
+                diff_list.append(name + ".H1" + val_str)
+            else:
+                diff_list.append(name + ".H1")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list

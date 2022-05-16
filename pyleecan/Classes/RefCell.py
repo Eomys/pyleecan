@@ -93,7 +93,7 @@ class RefCell(FrozenClass):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -101,8 +101,25 @@ class RefCell(FrozenClass):
         if type(other) != type(self):
             return ["type(" + name + ")"]
         diff_list = list()
-        if other._epsilon != self._epsilon:
-            diff_list.append(name + ".epsilon")
+        if (
+            other._epsilon is not None
+            and self._epsilon is not None
+            and isnan(other._epsilon)
+            and isnan(self._epsilon)
+        ):
+            pass
+        elif other._epsilon != self._epsilon:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._epsilon)
+                    + ", other="
+                    + str(other._epsilon)
+                    + ")"
+                )
+                diff_list.append(name + ".epsilon" + val_str)
+            else:
+                diff_list.append(name + ".epsilon")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list

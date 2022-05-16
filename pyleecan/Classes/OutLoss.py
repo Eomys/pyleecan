@@ -254,7 +254,7 @@ class OutLoss(FrozenClass):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -274,7 +274,10 @@ class OutLoss(FrozenClass):
             for ii in range(len(other.loss_list)):
                 diff_list.extend(
                     self.loss_list[ii].compare(
-                        other.loss_list[ii], name=name + ".loss_list[" + str(ii) + "]"
+                        other.loss_list[ii],
+                        name=name + ".loss_list[" + str(ii) + "]",
+                        ignore_list=ignore_list,
+                        is_add_value=is_add_value,
                     )
                 )
         if (other.meshsol_list is None and self.meshsol_list is not None) or (
@@ -291,12 +294,34 @@ class OutLoss(FrozenClass):
                     self.meshsol_list[ii].compare(
                         other.meshsol_list[ii],
                         name=name + ".meshsol_list[" + str(ii) + "]",
+                        ignore_list=ignore_list,
+                        is_add_value=is_add_value,
                     )
                 )
         if other._loss_index != self._loss_index:
-            diff_list.append(name + ".loss_index")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._loss_index)
+                    + ", other="
+                    + str(other._loss_index)
+                    + ")"
+                )
+                diff_list.append(name + ".loss_index" + val_str)
+            else:
+                diff_list.append(name + ".loss_index")
         if other._logger_name != self._logger_name:
-            diff_list.append(name + ".logger_name")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._logger_name)
+                    + ", other="
+                    + str(other._logger_name)
+                    + ")"
+                )
+                diff_list.append(name + ".logger_name" + val_str)
+            else:
+                diff_list.append(name + ".logger_name")
         if (other.axes_dict is None and self.axes_dict is not None) or (
             other.axes_dict is not None and self.axes_dict is None
         ):
@@ -309,21 +334,115 @@ class OutLoss(FrozenClass):
             for key in self.axes_dict:
                 diff_list.extend(
                     self.axes_dict[key].compare(
-                        other.axes_dict[key], name=name + ".axes_dict[" + str(key) + "]"
+                        other.axes_dict[key],
+                        name=name + ".axes_dict[" + str(key) + "]",
+                        ignore_list=ignore_list,
+                        is_add_value=is_add_value,
                     )
                 )
-        if other._Pstator != self._Pstator:
-            diff_list.append(name + ".Pstator")
-        if other._Protor != self._Protor:
-            diff_list.append(name + ".Protor")
-        if other._Pmagnet != self._Pmagnet:
-            diff_list.append(name + ".Pmagnet")
-        if other._Pprox != self._Pprox:
-            diff_list.append(name + ".Pprox")
-        if other._Pjoule != self._Pjoule:
-            diff_list.append(name + ".Pjoule")
+        if (
+            other._Pstator is not None
+            and self._Pstator is not None
+            and isnan(other._Pstator)
+            and isnan(self._Pstator)
+        ):
+            pass
+        elif other._Pstator != self._Pstator:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._Pstator)
+                    + ", other="
+                    + str(other._Pstator)
+                    + ")"
+                )
+                diff_list.append(name + ".Pstator" + val_str)
+            else:
+                diff_list.append(name + ".Pstator")
+        if (
+            other._Protor is not None
+            and self._Protor is not None
+            and isnan(other._Protor)
+            and isnan(self._Protor)
+        ):
+            pass
+        elif other._Protor != self._Protor:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._Protor)
+                    + ", other="
+                    + str(other._Protor)
+                    + ")"
+                )
+                diff_list.append(name + ".Protor" + val_str)
+            else:
+                diff_list.append(name + ".Protor")
+        if (
+            other._Pmagnet is not None
+            and self._Pmagnet is not None
+            and isnan(other._Pmagnet)
+            and isnan(self._Pmagnet)
+        ):
+            pass
+        elif other._Pmagnet != self._Pmagnet:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._Pmagnet)
+                    + ", other="
+                    + str(other._Pmagnet)
+                    + ")"
+                )
+                diff_list.append(name + ".Pmagnet" + val_str)
+            else:
+                diff_list.append(name + ".Pmagnet")
+        if (
+            other._Pprox is not None
+            and self._Pprox is not None
+            and isnan(other._Pprox)
+            and isnan(self._Pprox)
+        ):
+            pass
+        elif other._Pprox != self._Pprox:
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._Pprox) + ", other=" + str(other._Pprox) + ")"
+                )
+                diff_list.append(name + ".Pprox" + val_str)
+            else:
+                diff_list.append(name + ".Pprox")
+        if (
+            other._Pjoule is not None
+            and self._Pjoule is not None
+            and isnan(other._Pjoule)
+            and isnan(self._Pjoule)
+        ):
+            pass
+        elif other._Pjoule != self._Pjoule:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._Pjoule)
+                    + ", other="
+                    + str(other._Pjoule)
+                    + ")"
+                )
+                diff_list.append(name + ".Pjoule" + val_str)
+            else:
+                diff_list.append(name + ".Pjoule")
         if other._coeff_dict != self._coeff_dict:
-            diff_list.append(name + ".coeff_dict")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._coeff_dict)
+                    + ", other="
+                    + str(other._coeff_dict)
+                    + ")"
+                )
+                diff_list.append(name + ".coeff_dict" + val_str)
+            else:
+                diff_list.append(name + ".coeff_dict")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list

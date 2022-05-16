@@ -243,7 +243,7 @@ class StructElmer(Structural):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -253,21 +253,102 @@ class StructElmer(Structural):
         diff_list = list()
 
         # Check the properties inherited from Structural
-        diff_list.extend(super(StructElmer, self).compare(other, name=name))
-        if other._Kmesh_fineness != self._Kmesh_fineness:
-            diff_list.append(name + ".Kmesh_fineness")
+        diff_list.extend(
+            super(StructElmer, self).compare(
+                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
+            )
+        )
+        if (
+            other._Kmesh_fineness is not None
+            and self._Kmesh_fineness is not None
+            and isnan(other._Kmesh_fineness)
+            and isnan(self._Kmesh_fineness)
+        ):
+            pass
+        elif other._Kmesh_fineness != self._Kmesh_fineness:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._Kmesh_fineness)
+                    + ", other="
+                    + str(other._Kmesh_fineness)
+                    + ")"
+                )
+                diff_list.append(name + ".Kmesh_fineness" + val_str)
+            else:
+                diff_list.append(name + ".Kmesh_fineness")
         if other._path_name != self._path_name:
-            diff_list.append(name + ".path_name")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._path_name)
+                    + ", other="
+                    + str(other._path_name)
+                    + ")"
+                )
+                diff_list.append(name + ".path_name" + val_str)
+            else:
+                diff_list.append(name + ".path_name")
         if other._FEA_dict_enforced != self._FEA_dict_enforced:
-            diff_list.append(name + ".FEA_dict_enforced")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._FEA_dict_enforced)
+                    + ", other="
+                    + str(other._FEA_dict_enforced)
+                    + ")"
+                )
+                diff_list.append(name + ".FEA_dict_enforced" + val_str)
+            else:
+                diff_list.append(name + ".FEA_dict_enforced")
         if other._is_get_mesh != self._is_get_mesh:
-            diff_list.append(name + ".is_get_mesh")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._is_get_mesh)
+                    + ", other="
+                    + str(other._is_get_mesh)
+                    + ")"
+                )
+                diff_list.append(name + ".is_get_mesh" + val_str)
+            else:
+                diff_list.append(name + ".is_get_mesh")
         if other._is_save_FEA != self._is_save_FEA:
-            diff_list.append(name + ".is_save_FEA")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._is_save_FEA)
+                    + ", other="
+                    + str(other._is_save_FEA)
+                    + ")"
+                )
+                diff_list.append(name + ".is_save_FEA" + val_str)
+            else:
+                diff_list.append(name + ".is_save_FEA")
         if other._transform_list != self._transform_list:
-            diff_list.append(name + ".transform_list")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._transform_list)
+                    + ", other="
+                    + str(other._transform_list)
+                    + ")"
+                )
+                diff_list.append(name + ".transform_list" + val_str)
+            else:
+                diff_list.append(name + ".transform_list")
         if other._include_magnets != self._include_magnets:
-            diff_list.append(name + ".include_magnets")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._include_magnets)
+                    + ", other="
+                    + str(other._include_magnets)
+                    + ")"
+                )
+                diff_list.append(name + ".include_magnets" + val_str)
+            else:
+                diff_list.append(name + ".include_magnets")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list

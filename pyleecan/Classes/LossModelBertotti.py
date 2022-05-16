@@ -204,7 +204,7 @@ class LossModelBertotti(LossModel):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -214,25 +214,139 @@ class LossModelBertotti(LossModel):
         diff_list = list()
 
         # Check the properties inherited from LossModel
-        diff_list.extend(super(LossModelBertotti, self).compare(other, name=name))
-        if other._k_hy != self._k_hy:
-            diff_list.append(name + ".k_hy")
-        if other._k_ed != self._k_ed:
-            diff_list.append(name + ".k_ed")
-        if other._k_ex != self._k_ex:
-            diff_list.append(name + ".k_ex")
-        if other._alpha_hy != self._alpha_hy:
-            diff_list.append(name + ".alpha_hy")
-        if other._alpha_ed != self._alpha_ed:
-            diff_list.append(name + ".alpha_ed")
-        if other._alpha_ex != self._alpha_ex:
-            diff_list.append(name + ".alpha_ex")
+        diff_list.extend(
+            super(LossModelBertotti, self).compare(
+                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
+            )
+        )
+        if (
+            other._k_hy is not None
+            and self._k_hy is not None
+            and isnan(other._k_hy)
+            and isnan(self._k_hy)
+        ):
+            pass
+        elif other._k_hy != self._k_hy:
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._k_hy) + ", other=" + str(other._k_hy) + ")"
+                )
+                diff_list.append(name + ".k_hy" + val_str)
+            else:
+                diff_list.append(name + ".k_hy")
+        if (
+            other._k_ed is not None
+            and self._k_ed is not None
+            and isnan(other._k_ed)
+            and isnan(self._k_ed)
+        ):
+            pass
+        elif other._k_ed != self._k_ed:
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._k_ed) + ", other=" + str(other._k_ed) + ")"
+                )
+                diff_list.append(name + ".k_ed" + val_str)
+            else:
+                diff_list.append(name + ".k_ed")
+        if (
+            other._k_ex is not None
+            and self._k_ex is not None
+            and isnan(other._k_ex)
+            and isnan(self._k_ex)
+        ):
+            pass
+        elif other._k_ex != self._k_ex:
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._k_ex) + ", other=" + str(other._k_ex) + ")"
+                )
+                diff_list.append(name + ".k_ex" + val_str)
+            else:
+                diff_list.append(name + ".k_ex")
+        if (
+            other._alpha_hy is not None
+            and self._alpha_hy is not None
+            and isnan(other._alpha_hy)
+            and isnan(self._alpha_hy)
+        ):
+            pass
+        elif other._alpha_hy != self._alpha_hy:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._alpha_hy)
+                    + ", other="
+                    + str(other._alpha_hy)
+                    + ")"
+                )
+                diff_list.append(name + ".alpha_hy" + val_str)
+            else:
+                diff_list.append(name + ".alpha_hy")
+        if (
+            other._alpha_ed is not None
+            and self._alpha_ed is not None
+            and isnan(other._alpha_ed)
+            and isnan(self._alpha_ed)
+        ):
+            pass
+        elif other._alpha_ed != self._alpha_ed:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._alpha_ed)
+                    + ", other="
+                    + str(other._alpha_ed)
+                    + ")"
+                )
+                diff_list.append(name + ".alpha_ed" + val_str)
+            else:
+                diff_list.append(name + ".alpha_ed")
+        if (
+            other._alpha_ex is not None
+            and self._alpha_ex is not None
+            and isnan(other._alpha_ex)
+            and isnan(self._alpha_ex)
+        ):
+            pass
+        elif other._alpha_ex != self._alpha_ex:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._alpha_ex)
+                    + ", other="
+                    + str(other._alpha_ex)
+                    + ")"
+                )
+                diff_list.append(name + ".alpha_ex" + val_str)
+            else:
+                diff_list.append(name + ".alpha_ex")
         if other._group != self._group:
-            diff_list.append(name + ".group")
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._group) + ", other=" + str(other._group) + ")"
+                )
+                diff_list.append(name + ".group" + val_str)
+            else:
+                diff_list.append(name + ".group")
         if other._get_meshsolution != self._get_meshsolution:
-            diff_list.append(name + ".get_meshsolution")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._get_meshsolution)
+                    + ", other="
+                    + str(other._get_meshsolution)
+                    + ")"
+                )
+                diff_list.append(name + ".get_meshsolution" + val_str)
+            else:
+                diff_list.append(name + ".get_meshsolution")
         if other._N0 != self._N0:
-            diff_list.append(name + ".N0")
+            if is_add_value:
+                val_str = " (self=" + str(self._N0) + ", other=" + str(other._N0) + ")"
+                diff_list.append(name + ".N0" + val_str)
+            else:
+                diff_list.append(name + ".N0")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list

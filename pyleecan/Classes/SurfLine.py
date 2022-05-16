@@ -254,7 +254,7 @@ class SurfLine(Surface):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -264,7 +264,11 @@ class SurfLine(Surface):
         diff_list = list()
 
         # Check the properties inherited from Surface
-        diff_list.extend(super(SurfLine, self).compare(other, name=name))
+        diff_list.extend(
+            super(SurfLine, self).compare(
+                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
+            )
+        )
         if (other.line_list is None and self.line_list is not None) or (
             other.line_list is not None and self.line_list is None
         ):
@@ -277,7 +281,10 @@ class SurfLine(Surface):
             for ii in range(len(other.line_list)):
                 diff_list.extend(
                     self.line_list[ii].compare(
-                        other.line_list[ii], name=name + ".line_list[" + str(ii) + "]"
+                        other.line_list[ii],
+                        name=name + ".line_list[" + str(ii) + "]",
+                        ignore_list=ignore_list,
+                        is_add_value=is_add_value,
                     )
                 )
         # Filter ignore differences
