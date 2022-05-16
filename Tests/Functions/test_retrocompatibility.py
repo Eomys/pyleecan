@@ -92,6 +92,14 @@ wind_list.append(  # WindingDW1L
 )
 
 
+def test_save_OPM_None_retro():
+    """Check that the OP_matrix convertion works with None"""
+    simu = load(
+        join(TEST_DATA_DIR, "Retrocompatibility", "OP_matrix", "test_OPM_None.json",),
+    )
+    assert simu.var_simu.OP_matrix is None
+
+
 @pytest.mark.parametrize("file_dict", OPM_list)
 def test_save_OPM_retro(file_dict):
     """Check that the OP_matrix convertion works"""
@@ -171,6 +179,7 @@ def test_before_version():
 
 
 if __name__ == "__main__":
+    test_save_OPM_None_retro()
     for file_dict in OPM_list:
         test_save_OPM_retro(file_dict)
 

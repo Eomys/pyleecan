@@ -109,13 +109,17 @@ def convert_OP_matrix(obj_dict):
             + str(type_OP_matrix)
             + " doesn't exist"
         )
-    OP_matrix = array(obj_dict.pop("OP_matrix"))
-    if OP_matrix.shape[1] == 4:
-        arg_list.append("Tem")
-    elif OP_matrix.shape[1] == 5:
-        arg_list.extend(["Tem", "Pem"])
-    OP_mat_obj.set_OP_matrix(OP_matrix, *arg_list)
-    obj_dict["OP_matrix"] = OP_mat_obj
+    OP_matrix = obj_dict.pop("OP_matrix")
+    if OP_matrix is None:
+        obj_dict["OP_matrix"] = None
+    else:
+        OP_matrix = array(OP_matrix)
+        if OP_matrix.shape[1] == 4:
+            arg_list.append("Tem")
+        elif OP_matrix.shape[1] == 5:
+            arg_list.extend(["Tem", "Pem"])
+        OP_mat_obj.set_OP_matrix(OP_matrix, *arg_list)
+        obj_dict["OP_matrix"] = OP_mat_obj
     return obj_dict
 
 
