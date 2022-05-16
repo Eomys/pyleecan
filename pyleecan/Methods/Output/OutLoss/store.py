@@ -52,13 +52,19 @@ def store(
     group = meshsol.group
     freqs = axes_dict["freqs"].get_values()
     Nelem = meshsol.mesh[0].cell["triangle"].nb_cell
-    loss_density = np.zeros((freqs.size, Nelem))
+    overall_loss_density = np.zeros((freqs.size, Nelem))
 
     for key, model in model_dict.items():
         P_density, f_array = model.comp_loss()
+
+        loss_density = np.zeros((freqs.size, Nelem))
+        If = np.argmin(np.abs(freqs[:, None] - f_array[None, :]), axis=0)[:, None]
+        Ie = np.array(group[model.group])[None, :]
+        loss_density[If, Ie] += P_density
+        overall_loss_density += loss_density
         out_loss_model = OutLossModel(
             name=key,
-            loss_density=P_density,
+            loss_density=loss_density,
             coeff_dict=model.coeff_dict,
             freqs=f_array,
             group=model.group,
@@ -67,14 +73,14 @@ def store(
         out_loss_model.scalar_value = out_loss_model.get_loss_scalar(felec)
         self.loss_list.append(out_loss_model)
 
-        temp_loss_density = np.zeros((freqs.size, Nelem))
-        If = np.argmin(np.abs(freqs[:, None] - f_array[None, :]), axis=0)[:, None]
-        Ie = np.array(group[model.group])[None, :]
-        temp_loss_density[If, Ie] += P_density
-        loss_density += temp_loss_density
+        # temp_loss_density = np.zeros((freqs.size, Nelem))
+        # If = np.argmin(np.abs(freqs[:, None] - f_array[None, :]), axis=0)[:, None]
+        # Ie = np.array(group[model.group])[None, :]
+        # temp_loss_density[If, Ie] += P_density
+        # loss_density += temp_loss_density
     self.loss_list.append(
         OutLossModel(name="overall",
-                     loss_density=loss_density,
+                     loss_density=overall_loss_density,
                      f=felec,
                      freqs=freqs
                      )
