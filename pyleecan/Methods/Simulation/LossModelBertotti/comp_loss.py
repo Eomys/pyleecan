@@ -45,8 +45,10 @@ def comp_loss(self):
     if None in [
         self.k_hy,
         self.k_ed,
-        self.alpha_f,
-        self.alpha_B,
+        self.k_ex,
+        self.alpha_hy,
+        self.alpha_ed,
+        self.alpha_ex,
     ]:
         material = lamination.mat_type
         self.comp_coeff(material)
@@ -129,6 +131,8 @@ def comp_loss(self):
 
     # Eddy-current loss density (or proximity loss density) for each frequency and element
     Pcore_density = k_ed * (freqs[:, None] * Bfft_magnitude) ** alpha_ed
+    Pcore_density += k_hy * freqs[:, None] * Bfft_magnitude ** alpha_hy
+    Pcore_density += k_ex * (freqs[:, None] * Bfft_magnitude) ** alpha_ex
 
     if is_change_Time:
         # Change periodicity back to original periodicity
@@ -141,15 +145,15 @@ def comp_loss(self):
     n = freqs / felec
     # Get polynomial coefficients
     B = np_sum(k_ed * coeff * n ** alpha_ed)
-    
+
     # Integrate loss density over group volume
     coeff = Lst * per_a * matmul(Bfft_magnitude ** alpha_ex, Se)
     # Get polynomial coefficients
     C = np_sum(k_ex * coeff * n ** alpha_ex)
-    
+
     coeff = Lst * per_a * matmul(Bfft_magnitude ** alpha_hy, Se)
     A = np_sum(k_hy * coeff * n)
-    
+
     self.coeff_dict = {1: A, alpha_ed: B, alpha_ex: C}
 
     return Pcore_density, freqs

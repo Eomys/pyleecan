@@ -8,7 +8,7 @@ from itertools import groupby
 import textwrap
 
 
-def comp_coeff(self, material, is_show_fig=False):
+def comp_coeff(self, material):
     """Enables to compute the coefficients of the loss model with a curve fitting
     on loss data, provided in a text file
 
@@ -43,8 +43,6 @@ def comp_coeff(self, material, is_show_fig=False):
         for k, g in groupby(loss_data_T, lambda x: x[0]):
             groups.append(list(g))  # Store group iterator as a list
             uniquekeys.append(k)
-        print(groups)
-        print(uniquekeys)
         return groups, uniquekeys
 
     loss_data = material.mag.LossData.get_data()
@@ -61,11 +59,10 @@ def comp_coeff(self, material, is_show_fig=False):
         bounds=(0, 10),
         maxfev=1e3,
     )
-    print(popt)
 
-    if is_show_fig:
+    if self.is_show_fig:
         groups, uniquekeys = group_by_frequency(loss_data)
-        fig = plt.figure("Curve fitting for Iron losses")
+        fig = plt.figure("Curve fitting for Iron losses", figsize=(14, 7))
         B_check = np.linspace(0, 2, 1000)
         ax = plt.gca()
         for index, key in enumerate(uniquekeys):

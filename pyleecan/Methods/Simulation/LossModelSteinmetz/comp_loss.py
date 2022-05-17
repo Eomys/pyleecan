@@ -127,6 +127,7 @@ def comp_loss(self):
 
     # Eddy-current loss density (or proximity loss density) for each frequency and element
     Pcore_density = k_ed * freqs[:, None] ** 2 * Bfft_magnitude ** 2
+    Pcore_density += k_hy * freqs[:,None] **alpha_f * Bfft_magnitude ** alpha_B
 
     if is_change_Time:
         # Change periodicity back to original periodicity

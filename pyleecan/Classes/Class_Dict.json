@@ -5514,7 +5514,8 @@
         "desc": "Bertotti Loss Model Class",
         "is_internal": false,
         "methods": [
-            "comp_coeff"
+            "comp_coeff",
+            "comp_loss"
         ],
         "mother": "LossModel",
         "name": "LossModelBertotti",
@@ -5574,33 +5575,6 @@
                 "type": "float",
                 "unit": "-",
                 "value": null
-            },
-            {
-                "desc": "String to override default FEA group to apply model",
-                "max": "",
-                "min": "",
-                "name": "group",
-                "type": "str",
-                "unit": "-",
-                "value": "core"
-            },
-            {
-                "desc": "Store the loss density",
-                "max": "",
-                "min": "",
-                "name": "get_meshsolution",
-                "type": "bool",
-                "unit": "-",
-                "value": false
-            },
-            {
-                "desc": "List of rotor speeds to override actual speed",
-                "max": "",
-                "min": "",
-                "name": "N0",
-                "type": "list",
-                "unit": "rpm",
-                "value": []
             }
         ]
     },
