@@ -7,7 +7,6 @@ from ....Classes.MeshSolution import MeshSolution
 
 def get_mesh_solution(self):
     output = self.parent.parent
-    meshsol = output.mag.meshsolution
     # group = meshsol.group
     axes_dict = self.parent.axes_dict
     # freqs = axes_dict["freqs"].get_values()

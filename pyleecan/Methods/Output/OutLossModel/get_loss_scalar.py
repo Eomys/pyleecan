@@ -13,7 +13,7 @@ def get_loss_scalar(self, felec):
         loss power for the specified frequency [W]
 
     """
-    
+
     if self.coeff_dict is None:
         if self.scalar_value is None:
             return None

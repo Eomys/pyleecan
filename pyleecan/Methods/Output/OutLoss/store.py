@@ -66,11 +66,8 @@ def store(
             name=key,
             loss_density=loss_density,
             coeff_dict=model.coeff_dict,
-            freqs=f_array,
             group=model.group,
-            f = felec
         )
-        out_loss_model.scalar_value = out_loss_model.get_loss_scalar(felec)
         self.loss_list.append(out_loss_model)
 
         # temp_loss_density = np.zeros((freqs.size, Nelem))
@@ -78,10 +75,4 @@ def store(
         # Ie = np.array(group[model.group])[None, :]
         # temp_loss_density[If, Ie] += P_density
         # loss_density += temp_loss_density
-    self.loss_list.append(
-        OutLossModel(name="overall",
-                     loss_density=overall_loss_density,
-                     f=felec,
-                     freqs=freqs
-                     )
-    )
+    self.loss_list.append(OutLossModel(**sum(self.loss_list), name="overall"))

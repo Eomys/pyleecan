@@ -11,11 +11,13 @@ from pyleecan.Classes.OPdq import OPdq
 from pyleecan.Classes.MagFEMM import MagFEMM
 from pyleecan.Classes.LossFEMM import LossFEMM
 from pyleecan.Classes.LossModelSteinmetz import LossModelSteinmetz
+from pyleecan.Classes.LossModelBertotti import LossModelBertotti
 from pyleecan.Classes.LossModelWinding import LossModelWinding
 from pyleecan.Classes.LossModelProximity import LossModelProximity
 from pyleecan.Classes.LossModelMagnet import LossModelMagnet
 from pyleecan.Classes.OutLoss import OutLoss
 from pyleecan.Functions.Electrical.comp_loss_joule import comp_loss_joule
+
 
 from pyleecan.Functions.load import load
 
@@ -219,8 +221,10 @@ def test_FEMM_Loss_Prius():
         is_get_meshsolution=True,
         Tsta=100,
         model_dict={"stator core": LossModelSteinmetz(group = "stator core"),
+                    "rotor core": LossModelBertotti(group = "stator core"),
                     "rotor core": LossModelSteinmetz(group = "rotor core"),
-                    "joule": LossModelWinding(group = "stator winding"),
+                    "joule": LossModelWinding(group = "stator winding",
+                                              type_skin_effect = 0),
                     "proximity": LossModelProximity(group = "stator winding", k_p=Cprox),
                     "magnets": LossModelMagnet(group = "rotor magnets")}
     )
@@ -229,8 +233,7 @@ def test_FEMM_Loss_Prius():
 
     power_dict = {
         "total_power": out.mag.Pem_av,
-        "overall_losses": out.loss.get_loss_overall(),
-        **dict([(o.name,o.scalar_value) for o in out.loss.loss_list])
+        **dict([(o.name,o.get_loss_scalar(out.elec.OP.felec)) for o in out.loss.loss_list])
     }
     print(power_dict)
 
@@ -285,7 +288,6 @@ def test_FEMM_Loss_Prius():
     #     group_names=["rotor core", "rotor magnets"],
     #     # clim=[2e4, 2e7],
     # )
-
 
     return out
 

@@ -9308,7 +9308,11 @@
         "is_internal": false,
         "methods": [
             "get_mesh_solution",
-            "get_loss_scalar"
+            "get_loss_scalar",
+            "__add__",
+            "__radd__",
+            "__sub__",
+            "__rsub__"
         ],
         "mother": "",
         "name": "OutLossModel",
@@ -9343,24 +9347,6 @@
                 "value": null
             },
             {
-                "desc": "array of frequency to sum the losses of each one",
-                "max": "",
-                "min": "",
-                "name": "freqs",
-                "type": "ndarray",
-                "unit": "",
-                "value": null
-            },
-            {
-                "desc": "Scalar value of the loss got by integrating the loss density over the machine",
-                "max": "",
-                "min": "",
-                "name": "scalar_value",
-                "type": "float",
-                "unit": "",
-                "value": null
-            },
-            {
                 "desc": "group to which the loss applies",
                 "max": "",
                 "min": "",
@@ -9368,15 +9354,6 @@
                 "type": "str",
                 "unit": "",
                 "value": "None"
-            },
-            {
-                "desc": "Base electrical frequency of the simulation",
-                "max": "",
-                "min": "",
-                "name": "f",
-                "type": "float",
-                "unit": "",
-                "value": null
             }
         ]
     },
