@@ -68,7 +68,7 @@ def test_FEMM_Loss_SPMSM():
     simu = Simu1(name="test_FEMM_Loss_SPMSM", machine=machine)
 
     simu.input = InputCurrent(
-        Nt_tot=16 * 20,
+        Nt_tot=16 * 2,
         Na_tot=1000 * 2,
         OP=OPdq(N0=4000, Id_ref=0, Iq_ref=np.sqrt(2)),
         is_periodicity_t=True,
@@ -107,11 +107,14 @@ def test_FEMM_Loss_SPMSM():
                                                      alpha_f=alpha_f,
                                                      alpha_B=alpha_B),
                     "joule": LossModelWinding(group = "stator winding"),
-                    "proximity": LossModelProximity(group = "stator winding", k_p=Cprox),
+                    "proximity": LossModelProximity(group = "stator winding"),
                     "magnets": LossModelMagnet(group = "rotor magnets")}
     )
 
+
     out = simu.run()
+
+    assert_almost_equal(Cprox, simu.loss.model_dict["proximity"].k_p, decimal=0)
 
     power_dict = {
         "total_power": out.mag.Pem_av,
@@ -323,6 +326,6 @@ def test_FEMM_Loss_Prius():
 # To run it without pytest
 if __name__ == "__main__":
 
-    # out = test_FEMM_Loss_SPMSM()
+    out = test_FEMM_Loss_SPMSM()
 
-    out = test_FEMM_Loss_Prius() 
+    # out = test_FEMM_Loss_Prius() 

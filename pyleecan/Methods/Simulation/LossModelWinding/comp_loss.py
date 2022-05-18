@@ -52,7 +52,9 @@ def comp_loss(self):
         k, power = 0, 0
 
     # Calculate overall joule losses
-    Pjoule = qs * Rs * (OP.Id_ref ** 2 + OP.Iq_ref ** 2) * (1 + k * felec ** power)
+    Id_Iq = OP.get_Id_Iq()
+    coeff = qs * Rs * (Id_Iq["Id"] ** 2 + Id_Iq["Iq"] ** 2)
+    Pjoule = coeff * (1 + k * felec ** power)
 
     per_a = output.geo.per_a
     if output.geo.is_antiper_a:
@@ -69,7 +71,6 @@ def comp_loss(self):
     Pjoule_density = zeros((freqs.size, Se.size))
     Pjoule_density[0, :] = Pjoule / (per_a * Lst * np_sum(Se))
 
-    coeff = qs * Rs * (OP.Id_ref ** 2 + OP.Iq_ref ** 2)
     A = coeff * k
     B = coeff
     self.coeff_dict = {power: A, 0: B}
