@@ -23,6 +23,7 @@ from pyleecan.Classes.LossModelProximity import LossModelProximity
 from pyleecan.Classes.LossModelMagnet import LossModelMagnet
 
 from pyleecan.Functions.load import load
+from pyleecan.Functions.Load.load_json import LoadMissingFileError
 
 from pyleecan.definitions import DATA_DIR
 
@@ -40,14 +41,14 @@ def test_ElecLUTdq_solve_MTPA():
     """Validation of the PMSM Electrical Equivalent Circuit with the Prius machine for MTPA calculation"""
 
     Toyota_Prius = load(join(DATA_DIR, "Machine", "Toyota_Prius.json"))
-    path_to_LUT = r"C:\Users\LAP10\Documents\Loss\LUT_eff_new_models.h5"
+    path_to_LUT = r"C:\Users\LAP10\Documents\Loss\LUT_eff.json"
 
     if not exists(split(path_to_LUT)[0]):
         raise Exception("The path to LUT is not valid.")
     try:
         LUT_enforced = load(path_to_LUT)
         is_LUT_exists = True
-    except FileNotFoundError:
+    except (FileNotFoundError, LoadMissingFileError):
         print("The LUT could not be loaded, so it will be computed.")
         LUT_enforced = None
         is_LUT_exists = False
@@ -130,7 +131,7 @@ def test_ElecLUTdq_solve_MTPA():
                 model_dict={"stator core": LossModelSteinmetz(group = "stator core"),
                             "rotor core": LossModelSteinmetz(group = "rotor core"),
                             "joule": LossModelWinding(group = "stator winding"),
-                            "proximity": LossModelProximity(group = "stator winding", k_p=1),
+                            "proximity": LossModelProximity(group = "stator winding"),
                             "magnets": LossModelMagnet(group = "rotor magnets")}
             )
         ),
@@ -314,11 +315,11 @@ def test_ElecLUTdq_solve_MTPA():
                 "type_plot": "pcolormesh",
                 "is_contour": True,
             }
-        loss_list = ["Joules losses",
-                     "Stator core losses",
-                     "Magnet losses",
-                     "Rotor core losses",
-                     "Proxmity losses"]
+        loss_list = ["stator core",
+                     "rotor core",
+                     "joule",
+                     "proximity",
+                     "magnets"]
         for i, loss in enumerate(loss_list):
             plot_3D(
                     Zdata=Ploss_dqh[:, i].reshape((nd, nq)),

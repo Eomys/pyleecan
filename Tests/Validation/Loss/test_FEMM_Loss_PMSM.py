@@ -26,7 +26,7 @@ from pyleecan.definitions import DATA_DIR
 from SciDataTool.Functions.Plot.plot_2D import plot_2D 
 
 
-is_show_fig = True
+is_show_fig = False
 
 
 @pytest.mark.long_5s
@@ -194,16 +194,15 @@ def test_FEMM_Loss_Prius():
     machine = load(join(DATA_DIR, "Machine", "Toyota_Prius.json"))
 
     simu = Simu1(name="test_FEMM_Loss_Prius", machine=machine)
-    
-    Cprox=1
 
     # Current for MTPA
     Ic = 230 * np.exp(1j * 140 * np.pi / 180)
+    SPEED = 1200
 
     simu.input = InputCurrent(
         Nt_tot=4 * 40 * 8,
         Na_tot=200 * 8,
-        OP=OPdq(N0=1200, Id_ref=Ic.real, Iq_ref=Ic.imag),
+        OP=OPdq(N0=SPEED, Id_ref=Ic.real, Iq_ref=Ic.imag),
         is_periodicity_t=True,
         is_periodicity_a=True,
     )
@@ -220,12 +219,12 @@ def test_FEMM_Loss_Prius():
     simu.loss = LossFEMM(
         is_get_meshsolution=True,
         Tsta=100,
-        model_dict={"stator core Steinmetz": LossModelSteinmetz(group = "stator core",is_show_fig=True),
-                    "stator core Bertotti": LossModelBertotti(group = "stator core", is_show_fig=True),
+        model_dict={"stator core Steinmetz": LossModelSteinmetz(group = "stator core"),
+                    "stator core Bertotti": LossModelBertotti(group = "stator core"),
                     "rotor core Steinmetz": LossModelSteinmetz(group = "rotor core"),
                     "joule": LossModelWinding(group = "stator winding",
                                               type_skin_effect = 0),
-                    "proximity": LossModelProximity(group = "stator winding", k_p=Cprox),
+                    "proximity": LossModelProximity(group = "stator winding"),
                     "magnets": LossModelMagnet(group = "rotor magnets")}
     )
 
@@ -308,6 +307,15 @@ def test_FEMM_Loss_Prius():
     #     group_names=["rotor core", "rotor magnets"],
     #     # clim=[2e4, 2e7],
     # )
+    # txt = f"total_power: {out.mag.Pem_av}\n"
+    # txt += F"speed = {SPEED} rpm\n"
+    # txt += "\n".join([f"{o.name}: {o.get_loss_scalar(out.elec.OP.felec)}" for o in out.loss.loss_list])
+    # txt += F"speed = {SPEED/3} rpm\n"
+    # txt += "\n".join([f"{o.name}: {o.get_loss_scalar(SPEED /3/60 * p)}" for o in out.loss.loss_list])
+
+    # with open(F"{SPEED} rpm.txt", "w") as f:
+    #     f.write(txt)
+
 
     return out
 

@@ -32,16 +32,14 @@ def interp_Ploss_dqh(self, Id, Iq, N0):
     p = self.simu.machine.get_pole_pair_number()
 
     felec = N0 / 60 * p
+    
 
-    Ploss_dqh = np.zeros((len(self.output_list), 5))
+    Ploss_dqh = np.zeros((len(self.output_list), len(self.output_list[0].loss.loss_list)-1))
     for ii, out in enumerate(self.output_list):
         OP = out.elec.OP.copy()
         OP.felec = felec
-        Ploss_dqh[ii, 0] = out.loss.get_loss_group("joule", felec)
-        Ploss_dqh[ii, 1] = out.loss.get_loss_group("stator core", felec)
-        Ploss_dqh[ii, 2] = out.loss.get_loss_group("magnets", felec)
-        Ploss_dqh[ii, 3] = out.loss.get_loss_group("rotor core", felec)
-        Ploss_dqh[ii, 4] = out.loss.get_loss_group("proximity", felec)
+        for kk, loss in enumerate(out.loss.loss_list[:-1]):
+            Ploss_dqh[ii, kk] = loss.get_loss_scalar(felec)
 
     # Get unique Id, Iq sorted in ascending order
     OP_matrix = self.get_OP_matrix()

@@ -41,7 +41,6 @@ def comp_loss(self):
 
     if self.k_p is None:
         material = lamination.mat_type
-        # #TODO make comp_coef method
         self.comp_coeff()
 
     k_p = self.k_p
@@ -111,8 +110,6 @@ def comp_loss(self):
     n = freqs / felec
     # Get polynomial coefficients
     A = np_sum(k_p * coeff * n ** 2)
-    B = 0
-    alpha_f = 0
     self.coeff_dict = {2: A}
 
     return Pcore_density, freqs
