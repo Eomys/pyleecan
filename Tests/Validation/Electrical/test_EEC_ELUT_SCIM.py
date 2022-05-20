@@ -20,7 +20,7 @@ from pyleecan.Functions.Plot import dict_2D
 
 from pyleecan.definitions import DATA_DIR, TEST_DIR
 
-is_show_fig = False
+is_show_fig = True
 
 
 param_list_Audi_eTron = [
