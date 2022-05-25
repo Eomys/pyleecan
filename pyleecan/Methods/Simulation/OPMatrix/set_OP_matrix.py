@@ -18,8 +18,10 @@ def set_OP_matrix(self, OP_matrix, *arg_list):
         arguments to specify the OP_matrix columns name
     """
 
-    # Clean previous data
+    # Clean previous data (keep is_output_power)
+    is_output_power = self.is_output_power
     self._set_None()
+    self.is_output_power = is_output_power
 
     # Extract arg_list it the function called from another script with *arg_list
     if len(arg_list) == 1 and type(arg_list[0]) == tuple:
@@ -101,9 +103,9 @@ def set_OP_matrix(self, OP_matrix, *arg_list):
             self.Id_ref = OP_matrix[:, ii]
         elif arg_list[ii].lower() in ["iq", "qi", "iq_ref"]:
             self.Iq_ref = OP_matrix[:, ii]
-        elif arg_list[ii].lower() in ["tem", "t", "tem_av", "tem_av_ref"]:
+        elif arg_list[ii].lower() in ["tem", "t", "tem_av", "tem_av_ref", "torque"]:
             self.Tem_av_ref = OP_matrix[:, ii]
-        elif arg_list[ii].lower() in ["pem", "p", "pem_av", "pem_av_ref"]:
+        elif arg_list[ii].lower() in ["pem", "p", "pem_av", "pem_av_ref", "power"]:
             self.Pem_av_ref = OP_matrix[:, ii]
         elif arg_list[ii].lower() in ["ud", "du", "ud_ref"]:
             self.Ud_ref = OP_matrix[:, ii]
