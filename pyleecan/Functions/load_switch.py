@@ -95,6 +95,7 @@ load_switch = {
     "LossFEMM": LossFEMM,
     "LossModel": LossModel,
     "LossModelBertotti": LossModelBertotti,
+    "LossModelJordan": LossModelJordan,
     "LossModelMagnet": LossModelMagnet,
     "LossModelProximity": LossModelProximity,
     "LossModelSteinmetz": LossModelSteinmetz,

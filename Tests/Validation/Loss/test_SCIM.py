@@ -140,7 +140,7 @@ def test_FEMM_loss_SCIM_L2EP():
             ylabel="Losses [W]",
             legend_list=[o.name for o in out.loss.loss_list] + ["overall loss"],
         )
-        
+            
          # Plot the flux
         out.mag.B.plot_2D_Data("angle", **dict_2D)
         # Plot the torque
@@ -412,5 +412,5 @@ def test_FEMM_loss_Audi_etron():
 # To run it without pytest
 if __name__ == "__main__":
 
-    # out = test_FEMM_loss_SCIM_L2EP() 
-    out = test_FEMM_loss_Audi_etron() 
+    out = test_FEMM_loss_SCIM_L2EP() 
+    # out = test_FEMM_loss_Audi_etron() 

@@ -32,9 +32,10 @@ def interp_Ploss_dqh(self, Id, Iq, N0):
     p = self.simu.machine.get_pole_pair_number()
 
     felec = N0 / 60 * p
-    
 
-    Ploss_dqh = np.zeros((len(self.output_list), len(self.output_list[0].loss.loss_list)-1))
+    Ploss_dqh = np.zeros(
+        (len(self.output_list), len(self.output_list[0].loss.loss_list) - 1)
+    )
     for ii, out in enumerate(self.output_list):
         OP = out.elec.OP.copy()
         OP.felec = felec

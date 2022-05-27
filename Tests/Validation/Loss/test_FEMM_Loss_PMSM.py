@@ -11,6 +11,7 @@ from pyleecan.Classes.OPdq import OPdq
 from pyleecan.Classes.MagFEMM import MagFEMM
 from pyleecan.Classes.LossFEMM import LossFEMM
 from pyleecan.Classes.LossModelSteinmetz import LossModelSteinmetz
+from pyleecan.Classes.LossModelJordan import LossModelJordan
 from pyleecan.Classes.LossModelBertotti import LossModelBertotti
 from pyleecan.Classes.LossModelWinding import LossModelWinding
 from pyleecan.Classes.LossModelProximity import LossModelProximity
@@ -46,11 +47,19 @@ def test_FEMM_Loss_SPMSM():
     AWG = 25
     TemperatureRise = 100
     WindingFill1 = machine.stator.Kf1
-    WindingFill2 = machine.stator.winding.comp_winding_factor()[0]
+    WindingFill2 = machine.stator.comp_fill_factor()
+    WindingFill=0.3882
     d = machine.stator.winding.conductor.Wwire
     dwire=0.324861*0.0254*np.exp(-0.115942*AWG) # wire diameter in meters as a function of AWG
     owire = (58*10**6)/(1+TemperatureRise*0.004) # conductivity of the wire in S/m at prescribed deltaT
-    cePhase = (np.pi**2/8)*dwire**2*WindingFill2*owire
+    cePhase = (np.pi**2/8)*dwire**2*WindingFill*owire
+    txt=f"""Meeker
+---------------
+d={dwire}
+cond={owire}
+kp={cePhase}
+windingfill={0.3882}
+"""
 
     Cprox = 4.1018  # sigma_w * cond.Hwire * cond.Wwire
     k_hy = 0.00844 / 0.453592
@@ -78,7 +87,7 @@ def test_FEMM_Loss_SPMSM():
     simu = Simu1(name="test_FEMM_Loss_SPMSM", machine=machine)
 
     simu.input = InputCurrent(
-        Nt_tot=16 * 20,
+        Nt_tot=16*20,
         Na_tot=1000 * 2,
         OP=OPdq(N0=4000, Id_ref=0, Iq_ref=np.sqrt(2)),
         is_periodicity_t=True,
@@ -130,9 +139,16 @@ def test_FEMM_Loss_SPMSM():
         "total_power": out.mag.Pem_av,
         **dict([(o.name,o.get_loss_scalar(out.elec.OP.felec)) for o in out.loss.loss_list])
     }
+    txt+=f"""
+Pyleecan
+---------------
+d={d}
+cond={machine.stator.winding.conductor.cond_mat.elec.get_conductivity(T_op=120)}
+kp={simu.loss.model_dict['proximity'].k_p}
+windingfill={WindingFill2}
+"""
     print(power_dict)
-    print(f"d pyleecan = {d}, dwire Meeker = {dwire}")
-    print(f"Cprox = {Cprox}, cePhase = {cePhase}, k_p = {simu.loss.model_dict['proximity'].k_p}")
+    print(txt)
 
     speed_array = np.linspace(10, 8000, 100)
     p = machine.get_pole_pair_number()
@@ -224,9 +240,8 @@ def test_FEMM_Loss_Prius():
     simu.loss = LossFEMM(
         is_get_meshsolution=True,
         Tsta=100,
-        model_dict={"stator core Steinmetz": LossModelSteinmetz(group = "stator core"),
-                    "stator core Bertotti": LossModelBertotti(group = "stator core"),
-                    "rotor core Steinmetz": LossModelSteinmetz(group = "rotor core"),
+        model_dict={"stator core": LossModelSteinmetz(group = "stator core"),
+                    "rotor core": LossModelSteinmetz(group = "rotor core"),
                     "joule": LossModelWinding(group = "stator winding",
                                               type_skin_effect = 0),
                     "proximity": LossModelProximity(group = "stator winding"),

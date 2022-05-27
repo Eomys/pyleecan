@@ -5444,6 +5444,7 @@
         ],
         "daughters": [
             "LossModelBertotti",
+            "LossModelJordan",
             "LossModelMagnet",
             "LossModelProximity",
             "LossModelSteinmetz",
@@ -5574,6 +5575,45 @@
                 "name": "alpha_ex",
                 "type": "float",
                 "unit": "-",
+                "value": null
+            }
+        ]
+    },
+    "LossModelJordan": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Jordan Loss Model Class",
+        "is_internal": false,
+        "methods": [
+            "comp_coeff",
+            "comp_loss"
+        ],
+        "mother": "LossModel",
+        "name": "LossModelJordan",
+        "package": "Simulation",
+        "path": "pyleecan/Generator/ClassesRef/Simulation/LossModelJordan.csv",
+        "properties": [
+            {
+                "desc": "Hysteresis loss coefficient",
+                "max": "",
+                "min": "",
+                "name": "k_hy",
+                "type": "float",
+                "unit": "W/kg",
+                "value": null
+            },
+            {
+                "desc": "Eddy current loss coefficient",
+                "max": "",
+                "min": "",
+                "name": "k_ed",
+                "type": "float",
+                "unit": "W/kg",
                 "value": null
             }
         ]

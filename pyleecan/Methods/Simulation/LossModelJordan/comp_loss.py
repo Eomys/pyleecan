@@ -45,8 +45,6 @@ def comp_loss(self):
     if None in [
         self.k_hy,
         self.k_ed,
-        self.alpha_f,
-        self.alpha_B,
     ]:
         material = lamination.mat_type
         self.comp_coeff(material)
@@ -54,8 +52,6 @@ def comp_loss(self):
     # Get hysteresis and eddy current loss coefficients
     k_hy = self.k_hy / Kf * rho
     k_ed = self.k_ed / Kf * rho
-    alpha_f = self.alpha_f
-    alpha_B = self.alpha_B
 
     # Get fundamental frequency
     felec = output.elec.OP.get_felec()
@@ -127,7 +123,7 @@ def comp_loss(self):
 
     # Eddy-current loss density (or proximity loss density) for each frequency and element
     Pcore_density = k_ed * freqs[:, None] ** 2 * Bfft_magnitude ** 2
-    Pcore_density += k_hy * freqs[:, None] ** alpha_f * Bfft_magnitude ** alpha_B
+    Pcore_density += k_hy * freqs[:, None] * Bfft_magnitude ** 2
 
     if is_change_Time:
         # Change periodicity back to original periodicity
@@ -140,28 +136,7 @@ def comp_loss(self):
     n = freqs / felec
     # Get polynomial coefficients
     A = np_sum(k_ed * coeff * n ** 2)
-    if k_hy == 0:
-        B = 0
-        alpha_f = 0
-    else:
-        coeff = Lst * per_a * matmul(Bfft_magnitude ** alpha_B, Se)
-        B = np_sum(k_hy * coeff * n ** alpha_f)
-    self.coeff_dict = {2: A, alpha_f: B}
-
-    with open("loss_models.txt", "w") as f:
-        f.write(
-            f"""
-k_hy: {self.k_hy}
-k_ed: {self.k_ed}
-alpha_f: {self.alpha_f}
-alpha_B: {self.alpha_B}
-coeff: {coeff}
-A: {A}
-B: {B}
-Lst: {Lst}
-Igrp: {Igrp}
-freqs: {freqs}
-"""
-        )
+    B = np_sum(k_hy * coeff * n)
+    self.coeff_dict = {2: A, 1: B}
 
     return Pcore_density, freqs
