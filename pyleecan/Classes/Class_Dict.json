@@ -5395,11 +5395,7 @@
         "is_internal": false,
         "methods": [
             "run",
-            "comp_axes",
-            "comp_loss",
-            "comp_loss_density_core",
-            "comp_loss_density_joule",
-            "comp_loss_density_magnet"
+            "comp_axes"
         ],
         "mother": "Loss",
         "name": "LossFEMM",
