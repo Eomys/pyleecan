@@ -43,6 +43,7 @@ except ImportError as error:
     remove_magnet = error
 
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 
@@ -207,7 +208,7 @@ class HoleUD(HoleMag):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -217,7 +218,11 @@ class HoleUD(HoleMag):
         diff_list = list()
 
         # Check the properties inherited from HoleMag
-        diff_list.extend(super(HoleUD, self).compare(other, name=name))
+        diff_list.extend(
+            super(HoleUD, self).compare(
+                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
+            )
+        )
         if (other.surf_list is None and self.surf_list is not None) or (
             other.surf_list is not None and self.surf_list is None
         ):
@@ -230,7 +235,10 @@ class HoleUD(HoleMag):
             for ii in range(len(other.surf_list)):
                 diff_list.extend(
                     self.surf_list[ii].compare(
-                        other.surf_list[ii], name=name + ".surf_list[" + str(ii) + "]"
+                        other.surf_list[ii],
+                        name=name + ".surf_list[" + str(ii) + "]",
+                        ignore_list=ignore_list,
+                        is_add_value=is_add_value,
                     )
                 )
         if (other.magnet_dict is None and self.magnet_dict is not None) or (
@@ -245,11 +253,20 @@ class HoleUD(HoleMag):
             for key in self.magnet_dict:
                 diff_list.extend(
                     self.magnet_dict[key].compare(
-                        other.magnet_dict[key], name=name + ".magnet_dict"
+                        other.magnet_dict[key],
+                        name=name + ".magnet_dict[" + str(key) + "]",
+                        ignore_list=ignore_list,
+                        is_add_value=is_add_value,
                     )
                 )
         if other._name != self._name:
-            diff_list.append(name + ".name")
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._name) + ", other=" + str(other._name) + ")"
+                )
+                diff_list.append(name + ".name" + val_str)
+            else:
+                diff_list.append(name + ".name")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list

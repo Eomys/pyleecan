@@ -48,6 +48,7 @@ except ImportError as error:
     solve_FEMM_parallel = error
 
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 
@@ -402,7 +403,7 @@ class MagFEMM(Magnetics):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -412,32 +413,145 @@ class MagFEMM(Magnetics):
         diff_list = list()
 
         # Check the properties inherited from Magnetics
-        diff_list.extend(super(MagFEMM, self).compare(other, name=name))
-        if other._Kmesh_fineness != self._Kmesh_fineness:
-            diff_list.append(name + ".Kmesh_fineness")
-        if other._Kgeo_fineness != self._Kgeo_fineness:
-            diff_list.append(name + ".Kgeo_fineness")
+        diff_list.extend(
+            super(MagFEMM, self).compare(
+                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
+            )
+        )
+        if (
+            other._Kmesh_fineness is not None
+            and self._Kmesh_fineness is not None
+            and isnan(other._Kmesh_fineness)
+            and isnan(self._Kmesh_fineness)
+        ):
+            pass
+        elif other._Kmesh_fineness != self._Kmesh_fineness:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._Kmesh_fineness)
+                    + ", other="
+                    + str(other._Kmesh_fineness)
+                    + ")"
+                )
+                diff_list.append(name + ".Kmesh_fineness" + val_str)
+            else:
+                diff_list.append(name + ".Kmesh_fineness")
+        if (
+            other._Kgeo_fineness is not None
+            and self._Kgeo_fineness is not None
+            and isnan(other._Kgeo_fineness)
+            and isnan(self._Kgeo_fineness)
+        ):
+            pass
+        elif other._Kgeo_fineness != self._Kgeo_fineness:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._Kgeo_fineness)
+                    + ", other="
+                    + str(other._Kgeo_fineness)
+                    + ")"
+                )
+                diff_list.append(name + ".Kgeo_fineness" + val_str)
+            else:
+                diff_list.append(name + ".Kgeo_fineness")
         if other._type_calc_leakage != self._type_calc_leakage:
-            diff_list.append(name + ".type_calc_leakage")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._type_calc_leakage)
+                    + ", other="
+                    + str(other._type_calc_leakage)
+                    + ")"
+                )
+                diff_list.append(name + ".type_calc_leakage" + val_str)
+            else:
+                diff_list.append(name + ".type_calc_leakage")
         if other._file_name != self._file_name:
-            diff_list.append(name + ".file_name")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._file_name)
+                    + ", other="
+                    + str(other._file_name)
+                    + ")"
+                )
+                diff_list.append(name + ".file_name" + val_str)
+            else:
+                diff_list.append(name + ".file_name")
         if other._FEMM_dict_enforced != self._FEMM_dict_enforced:
-            diff_list.append(name + ".FEMM_dict_enforced")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._FEMM_dict_enforced)
+                    + ", other="
+                    + str(other._FEMM_dict_enforced)
+                    + ")"
+                )
+                diff_list.append(name + ".FEMM_dict_enforced" + val_str)
+            else:
+                diff_list.append(name + ".FEMM_dict_enforced")
         if other._is_get_meshsolution != self._is_get_meshsolution:
-            diff_list.append(name + ".is_get_meshsolution")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._is_get_meshsolution)
+                    + ", other="
+                    + str(other._is_get_meshsolution)
+                    + ")"
+                )
+                diff_list.append(name + ".is_get_meshsolution" + val_str)
+            else:
+                diff_list.append(name + ".is_get_meshsolution")
         if other._is_save_meshsolution_as_file != self._is_save_meshsolution_as_file:
-            diff_list.append(name + ".is_save_meshsolution_as_file")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._is_save_meshsolution_as_file)
+                    + ", other="
+                    + str(other._is_save_meshsolution_as_file)
+                    + ")"
+                )
+                diff_list.append(name + ".is_save_meshsolution_as_file" + val_str)
+            else:
+                diff_list.append(name + ".is_save_meshsolution_as_file")
         if other._is_sliding_band != self._is_sliding_band:
-            diff_list.append(name + ".is_sliding_band")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._is_sliding_band)
+                    + ", other="
+                    + str(other._is_sliding_band)
+                    + ")"
+                )
+                diff_list.append(name + ".is_sliding_band" + val_str)
+            else:
+                diff_list.append(name + ".is_sliding_band")
         if other._transform_list != self._transform_list:
-            diff_list.append(name + ".transform_list")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._transform_list)
+                    + ", other="
+                    + str(other._transform_list)
+                    + ")"
+                )
+                diff_list.append(name + ".transform_list" + val_str)
+            else:
+                diff_list.append(name + ".transform_list")
         if (other.rotor_dxf is None and self.rotor_dxf is not None) or (
             other.rotor_dxf is not None and self.rotor_dxf is None
         ):
             diff_list.append(name + ".rotor_dxf None mismatch")
         elif self.rotor_dxf is not None:
             diff_list.extend(
-                self.rotor_dxf.compare(other.rotor_dxf, name=name + ".rotor_dxf")
+                self.rotor_dxf.compare(
+                    other.rotor_dxf,
+                    name=name + ".rotor_dxf",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
             )
         if (other.stator_dxf is None and self.stator_dxf is not None) or (
             other.stator_dxf is not None and self.stator_dxf is None
@@ -445,22 +559,104 @@ class MagFEMM(Magnetics):
             diff_list.append(name + ".stator_dxf None mismatch")
         elif self.stator_dxf is not None:
             diff_list.extend(
-                self.stator_dxf.compare(other.stator_dxf, name=name + ".stator_dxf")
+                self.stator_dxf.compare(
+                    other.stator_dxf,
+                    name=name + ".stator_dxf",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
             )
         if other._import_file != self._import_file:
-            diff_list.append(name + ".import_file")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._import_file)
+                    + ", other="
+                    + str(other._import_file)
+                    + ")"
+                )
+                diff_list.append(name + ".import_file" + val_str)
+            else:
+                diff_list.append(name + ".import_file")
         if other._is_close_femm != self._is_close_femm:
-            diff_list.append(name + ".is_close_femm")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._is_close_femm)
+                    + ", other="
+                    + str(other._is_close_femm)
+                    + ")"
+                )
+                diff_list.append(name + ".is_close_femm" + val_str)
+            else:
+                diff_list.append(name + ".is_close_femm")
         if other._nb_worker != self._nb_worker:
-            diff_list.append(name + ".nb_worker")
-        if other._Rag_enforced != self._Rag_enforced:
-            diff_list.append(name + ".Rag_enforced")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._nb_worker)
+                    + ", other="
+                    + str(other._nb_worker)
+                    + ")"
+                )
+                diff_list.append(name + ".nb_worker" + val_str)
+            else:
+                diff_list.append(name + ".nb_worker")
+        if (
+            other._Rag_enforced is not None
+            and self._Rag_enforced is not None
+            and isnan(other._Rag_enforced)
+            and isnan(self._Rag_enforced)
+        ):
+            pass
+        elif other._Rag_enforced != self._Rag_enforced:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._Rag_enforced)
+                    + ", other="
+                    + str(other._Rag_enforced)
+                    + ")"
+                )
+                diff_list.append(name + ".Rag_enforced" + val_str)
+            else:
+                diff_list.append(name + ".Rag_enforced")
         if other._is_set_previous != self._is_set_previous:
-            diff_list.append(name + ".is_set_previous")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._is_set_previous)
+                    + ", other="
+                    + str(other._is_set_previous)
+                    + ")"
+                )
+                diff_list.append(name + ".is_set_previous" + val_str)
+            else:
+                diff_list.append(name + ".is_set_previous")
         if other._is_fast_draw != self._is_fast_draw:
-            diff_list.append(name + ".is_fast_draw")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._is_fast_draw)
+                    + ", other="
+                    + str(other._is_fast_draw)
+                    + ")"
+                )
+                diff_list.append(name + ".is_fast_draw" + val_str)
+            else:
+                diff_list.append(name + ".is_fast_draw")
         if other._is_calc_torque_energy != self._is_calc_torque_energy:
-            diff_list.append(name + ".is_calc_torque_energy")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._is_calc_torque_energy)
+                    + ", other="
+                    + str(other._is_calc_torque_energy)
+                    + ")"
+                )
+                diff_list.append(name + ".is_calc_torque_energy" + val_str)
+            else:
+                diff_list.append(name + ".is_calc_torque_energy")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list

@@ -64,6 +64,7 @@ except ImportError as error:
 
 
 from numpy import array, array_equal
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 
@@ -307,7 +308,7 @@ class LUTdq(LUT):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -317,7 +318,11 @@ class LUTdq(LUT):
         diff_list = list()
 
         # Check the properties inherited from LUT
-        diff_list.extend(super(LUTdq, self).compare(other, name=name))
+        diff_list.extend(
+            super(LUTdq, self).compare(
+                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
+            )
+        )
         if not array_equal(other.Phi_dqh_mean, self.Phi_dqh_mean):
             diff_list.append(name + ".Phi_dqh_mean")
         if (other.Phi_dqh_mag is None and self.Phi_dqh_mag is not None) or (
@@ -326,7 +331,12 @@ class LUTdq(LUT):
             diff_list.append(name + ".Phi_dqh_mag None mismatch")
         elif self.Phi_dqh_mag is not None:
             diff_list.extend(
-                self.Phi_dqh_mag.compare(other.Phi_dqh_mag, name=name + ".Phi_dqh_mag")
+                self.Phi_dqh_mag.compare(
+                    other.Phi_dqh_mag,
+                    name=name + ".Phi_dqh_mag",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
             )
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))

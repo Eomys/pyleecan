@@ -48,6 +48,7 @@ except ImportError as error:
     gen_elmer_mesh = error
 
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 
@@ -344,7 +345,7 @@ class MagElmer(Magnetics):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -354,28 +355,121 @@ class MagElmer(Magnetics):
         diff_list = list()
 
         # Check the properties inherited from Magnetics
-        diff_list.extend(super(MagElmer, self).compare(other, name=name))
-        if other._Kmesh_fineness != self._Kmesh_fineness:
-            diff_list.append(name + ".Kmesh_fineness")
-        if other._Kgeo_fineness != self._Kgeo_fineness:
-            diff_list.append(name + ".Kgeo_fineness")
+        diff_list.extend(
+            super(MagElmer, self).compare(
+                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
+            )
+        )
+        if (
+            other._Kmesh_fineness is not None
+            and self._Kmesh_fineness is not None
+            and isnan(other._Kmesh_fineness)
+            and isnan(self._Kmesh_fineness)
+        ):
+            pass
+        elif other._Kmesh_fineness != self._Kmesh_fineness:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._Kmesh_fineness)
+                    + ", other="
+                    + str(other._Kmesh_fineness)
+                    + ")"
+                )
+                diff_list.append(name + ".Kmesh_fineness" + val_str)
+            else:
+                diff_list.append(name + ".Kmesh_fineness")
+        if (
+            other._Kgeo_fineness is not None
+            and self._Kgeo_fineness is not None
+            and isnan(other._Kgeo_fineness)
+            and isnan(self._Kgeo_fineness)
+        ):
+            pass
+        elif other._Kgeo_fineness != self._Kgeo_fineness:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._Kgeo_fineness)
+                    + ", other="
+                    + str(other._Kgeo_fineness)
+                    + ")"
+                )
+                diff_list.append(name + ".Kgeo_fineness" + val_str)
+            else:
+                diff_list.append(name + ".Kgeo_fineness")
         if other._file_name != self._file_name:
-            diff_list.append(name + ".file_name")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._file_name)
+                    + ", other="
+                    + str(other._file_name)
+                    + ")"
+                )
+                diff_list.append(name + ".file_name" + val_str)
+            else:
+                diff_list.append(name + ".file_name")
         if other._FEA_dict != self._FEA_dict:
-            diff_list.append(name + ".FEA_dict")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._FEA_dict)
+                    + ", other="
+                    + str(other._FEA_dict)
+                    + ")"
+                )
+                diff_list.append(name + ".FEA_dict" + val_str)
+            else:
+                diff_list.append(name + ".FEA_dict")
         if other._is_get_mesh != self._is_get_mesh:
-            diff_list.append(name + ".is_get_mesh")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._is_get_mesh)
+                    + ", other="
+                    + str(other._is_get_mesh)
+                    + ")"
+                )
+                diff_list.append(name + ".is_get_mesh" + val_str)
+            else:
+                diff_list.append(name + ".is_get_mesh")
         if other._is_save_FEA != self._is_save_FEA:
-            diff_list.append(name + ".is_save_FEA")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._is_save_FEA)
+                    + ", other="
+                    + str(other._is_save_FEA)
+                    + ")"
+                )
+                diff_list.append(name + ".is_save_FEA" + val_str)
+            else:
+                diff_list.append(name + ".is_save_FEA")
         if other._transform_list != self._transform_list:
-            diff_list.append(name + ".transform_list")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._transform_list)
+                    + ", other="
+                    + str(other._transform_list)
+                    + ")"
+                )
+                diff_list.append(name + ".transform_list" + val_str)
+            else:
+                diff_list.append(name + ".transform_list")
         if (other.rotor_dxf is None and self.rotor_dxf is not None) or (
             other.rotor_dxf is not None and self.rotor_dxf is None
         ):
             diff_list.append(name + ".rotor_dxf None mismatch")
         elif self.rotor_dxf is not None:
             diff_list.extend(
-                self.rotor_dxf.compare(other.rotor_dxf, name=name + ".rotor_dxf")
+                self.rotor_dxf.compare(
+                    other.rotor_dxf,
+                    name=name + ".rotor_dxf",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
             )
         if (other.stator_dxf is None and self.stator_dxf is not None) or (
             other.stator_dxf is not None and self.stator_dxf is None
@@ -383,12 +477,37 @@ class MagElmer(Magnetics):
             diff_list.append(name + ".stator_dxf None mismatch")
         elif self.stator_dxf is not None:
             diff_list.extend(
-                self.stator_dxf.compare(other.stator_dxf, name=name + ".stator_dxf")
+                self.stator_dxf.compare(
+                    other.stator_dxf,
+                    name=name + ".stator_dxf",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
             )
         if other._import_file != self._import_file:
-            diff_list.append(name + ".import_file")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._import_file)
+                    + ", other="
+                    + str(other._import_file)
+                    + ")"
+                )
+                diff_list.append(name + ".import_file" + val_str)
+            else:
+                diff_list.append(name + ".import_file")
         if other._nb_worker != self._nb_worker:
-            diff_list.append(name + ".nb_worker")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._nb_worker)
+                    + ", other="
+                    + str(other._nb_worker)
+                    + ")"
+                )
+                diff_list.append(name + ".nb_worker" + val_str)
+            else:
+                diff_list.append(name + ".nb_worker")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list

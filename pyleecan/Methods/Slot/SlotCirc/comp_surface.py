@@ -1,8 +1,3 @@
-# -*- coding: utf-8 -*-
-
-from numpy import sin, tan
-
-
 def comp_surface(self):
     """Compute the Slot total surface (by analytical computation).
     Caution, the bottom of the Slot is an Arc

@@ -38,6 +38,7 @@ except ImportError as error:
     gen_drive = error
 
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 
@@ -208,7 +209,7 @@ class Electrical(FrozenClass):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -221,11 +222,45 @@ class Electrical(FrozenClass):
         ):
             diff_list.append(name + ".eec None mismatch")
         elif self.eec is not None:
-            diff_list.extend(self.eec.compare(other.eec, name=name + ".eec"))
+            diff_list.extend(
+                self.eec.compare(
+                    other.eec,
+                    name=name + ".eec",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
+            )
         if other._logger_name != self._logger_name:
-            diff_list.append(name + ".logger_name")
-        if other._freq_max != self._freq_max:
-            diff_list.append(name + ".freq_max")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._logger_name)
+                    + ", other="
+                    + str(other._logger_name)
+                    + ")"
+                )
+                diff_list.append(name + ".logger_name" + val_str)
+            else:
+                diff_list.append(name + ".logger_name")
+        if (
+            other._freq_max is not None
+            and self._freq_max is not None
+            and isnan(other._freq_max)
+            and isnan(self._freq_max)
+        ):
+            pass
+        elif other._freq_max != self._freq_max:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._freq_max)
+                    + ", other="
+                    + str(other._freq_max)
+                    + ")"
+                )
+                diff_list.append(name + ".freq_max" + val_str)
+            else:
+                diff_list.append(name + ".freq_max")
         if (other.LUT_enforced is None and self.LUT_enforced is not None) or (
             other.LUT_enforced is not None and self.LUT_enforced is None
         ):
@@ -233,17 +268,66 @@ class Electrical(FrozenClass):
         elif self.LUT_enforced is not None:
             diff_list.extend(
                 self.LUT_enforced.compare(
-                    other.LUT_enforced, name=name + ".LUT_enforced"
+                    other.LUT_enforced,
+                    name=name + ".LUT_enforced",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
                 )
             )
-        if other._Tsta != self._Tsta:
-            diff_list.append(name + ".Tsta")
-        if other._Trot != self._Trot:
-            diff_list.append(name + ".Trot")
+        if (
+            other._Tsta is not None
+            and self._Tsta is not None
+            and isnan(other._Tsta)
+            and isnan(self._Tsta)
+        ):
+            pass
+        elif other._Tsta != self._Tsta:
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._Tsta) + ", other=" + str(other._Tsta) + ")"
+                )
+                diff_list.append(name + ".Tsta" + val_str)
+            else:
+                diff_list.append(name + ".Tsta")
+        if (
+            other._Trot is not None
+            and self._Trot is not None
+            and isnan(other._Trot)
+            and isnan(self._Trot)
+        ):
+            pass
+        elif other._Trot != self._Trot:
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._Trot) + ", other=" + str(other._Trot) + ")"
+                )
+                diff_list.append(name + ".Trot" + val_str)
+            else:
+                diff_list.append(name + ".Trot")
         if other._type_skin_effect != self._type_skin_effect:
-            diff_list.append(name + ".type_skin_effect")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._type_skin_effect)
+                    + ", other="
+                    + str(other._type_skin_effect)
+                    + ")"
+                )
+                diff_list.append(name + ".type_skin_effect" + val_str)
+            else:
+                diff_list.append(name + ".type_skin_effect")
         if other._is_skin_effect_inductance != self._is_skin_effect_inductance:
-            diff_list.append(name + ".is_skin_effect_inductance")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._is_skin_effect_inductance)
+                    + ", other="
+                    + str(other._is_skin_effect_inductance)
+                    + ")"
+                )
+                diff_list.append(name + ".is_skin_effect_inductance" + val_str)
+            else:
+                diff_list.append(name + ".is_skin_effect_inductance")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list

@@ -88,11 +88,9 @@ def test_VarParam_fct_save_load():
 
     out_load = load(out_h5_path)
 
-    test = out.compare(out_load)
+    diff_list = out.compare(out_load)
 
-    assert len(test) == 2
-    assert test[0] == "self.xoutput_dict.result"
-    assert test[1] == "self.xoutput_dict.result"
+    assert len(diff_list) == 0
 
     # Delete files
     remove(keeper_path)
@@ -104,5 +102,4 @@ def test_VarParam_fct_save_load():
 if __name__ == "__main__":
 
     test_VarParam_fct_save_load()
-
     print("Done")

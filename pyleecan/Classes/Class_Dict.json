@@ -11116,14 +11116,19 @@
         "desc": "Circular slot (for notches)",
         "is_internal": false,
         "methods": [
+            "_comp_line_dict",
+            "_comp_point_coordinate",
+            "_comp_R0",
             "build_geometry",
-            "get_surface_active",
             "check",
             "comp_angle_opening",
             "comp_height",
             "comp_height_active",
             "comp_surface",
-            "comp_surface_active"
+            "comp_surface_active",
+            "comp_surface_opening",
+            "get_surface_active",
+            "get_surface_opening"
         ],
         "mother": "Slot",
         "name": "SlotCirc",

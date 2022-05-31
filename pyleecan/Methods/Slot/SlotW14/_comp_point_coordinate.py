@@ -1,4 +1,4 @@
-from numpy import arcsin, cos, exp, pi, sin, tan, sqrt
+from numpy import arcsin, cos, exp, pi, sin
 
 
 def _comp_point_coordinate(self):

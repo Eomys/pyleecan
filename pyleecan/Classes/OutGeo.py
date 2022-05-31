@@ -15,6 +15,7 @@ from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
 from ._frozen import FrozenClass
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 
@@ -192,7 +193,7 @@ class OutGeo(FrozenClass):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -205,35 +206,186 @@ class OutGeo(FrozenClass):
         ):
             diff_list.append(name + ".stator None mismatch")
         elif self.stator is not None:
-            diff_list.extend(self.stator.compare(other.stator, name=name + ".stator"))
+            diff_list.extend(
+                self.stator.compare(
+                    other.stator,
+                    name=name + ".stator",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
+            )
         if (other.rotor is None and self.rotor is not None) or (
             other.rotor is not None and self.rotor is None
         ):
             diff_list.append(name + ".rotor None mismatch")
         elif self.rotor is not None:
-            diff_list.extend(self.rotor.compare(other.rotor, name=name + ".rotor"))
-        if other._Wgap_mec != self._Wgap_mec:
-            diff_list.append(name + ".Wgap_mec")
-        if other._Wgap_mag != self._Wgap_mag:
-            diff_list.append(name + ".Wgap_mag")
-        if other._Rgap_mec != self._Rgap_mec:
-            diff_list.append(name + ".Rgap_mec")
-        if other._Lgap != self._Lgap:
-            diff_list.append(name + ".Lgap")
+            diff_list.extend(
+                self.rotor.compare(
+                    other.rotor,
+                    name=name + ".rotor",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
+            )
+        if (
+            other._Wgap_mec is not None
+            and self._Wgap_mec is not None
+            and isnan(other._Wgap_mec)
+            and isnan(self._Wgap_mec)
+        ):
+            pass
+        elif other._Wgap_mec != self._Wgap_mec:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._Wgap_mec)
+                    + ", other="
+                    + str(other._Wgap_mec)
+                    + ")"
+                )
+                diff_list.append(name + ".Wgap_mec" + val_str)
+            else:
+                diff_list.append(name + ".Wgap_mec")
+        if (
+            other._Wgap_mag is not None
+            and self._Wgap_mag is not None
+            and isnan(other._Wgap_mag)
+            and isnan(self._Wgap_mag)
+        ):
+            pass
+        elif other._Wgap_mag != self._Wgap_mag:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._Wgap_mag)
+                    + ", other="
+                    + str(other._Wgap_mag)
+                    + ")"
+                )
+                diff_list.append(name + ".Wgap_mag" + val_str)
+            else:
+                diff_list.append(name + ".Wgap_mag")
+        if (
+            other._Rgap_mec is not None
+            and self._Rgap_mec is not None
+            and isnan(other._Rgap_mec)
+            and isnan(self._Rgap_mec)
+        ):
+            pass
+        elif other._Rgap_mec != self._Rgap_mec:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._Rgap_mec)
+                    + ", other="
+                    + str(other._Rgap_mec)
+                    + ")"
+                )
+                diff_list.append(name + ".Rgap_mec" + val_str)
+            else:
+                diff_list.append(name + ".Rgap_mec")
+        if (
+            other._Lgap is not None
+            and self._Lgap is not None
+            and isnan(other._Lgap)
+            and isnan(self._Lgap)
+        ):
+            pass
+        elif other._Lgap != self._Lgap:
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._Lgap) + ", other=" + str(other._Lgap) + ")"
+                )
+                diff_list.append(name + ".Lgap" + val_str)
+            else:
+                diff_list.append(name + ".Lgap")
         if other._logger_name != self._logger_name:
-            diff_list.append(name + ".logger_name")
-        if other._angle_rotor_initial != self._angle_rotor_initial:
-            diff_list.append(name + ".angle_rotor_initial")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._logger_name)
+                    + ", other="
+                    + str(other._logger_name)
+                    + ")"
+                )
+                diff_list.append(name + ".logger_name" + val_str)
+            else:
+                diff_list.append(name + ".logger_name")
+        if (
+            other._angle_rotor_initial is not None
+            and self._angle_rotor_initial is not None
+            and isnan(other._angle_rotor_initial)
+            and isnan(self._angle_rotor_initial)
+        ):
+            pass
+        elif other._angle_rotor_initial != self._angle_rotor_initial:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._angle_rotor_initial)
+                    + ", other="
+                    + str(other._angle_rotor_initial)
+                    + ")"
+                )
+                diff_list.append(name + ".angle_rotor_initial" + val_str)
+            else:
+                diff_list.append(name + ".angle_rotor_initial")
         if other._rot_dir != self._rot_dir:
-            diff_list.append(name + ".rot_dir")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._rot_dir)
+                    + ", other="
+                    + str(other._rot_dir)
+                    + ")"
+                )
+                diff_list.append(name + ".rot_dir" + val_str)
+            else:
+                diff_list.append(name + ".rot_dir")
         if other._per_a != self._per_a:
-            diff_list.append(name + ".per_a")
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._per_a) + ", other=" + str(other._per_a) + ")"
+                )
+                diff_list.append(name + ".per_a" + val_str)
+            else:
+                diff_list.append(name + ".per_a")
         if other._is_antiper_a != self._is_antiper_a:
-            diff_list.append(name + ".is_antiper_a")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._is_antiper_a)
+                    + ", other="
+                    + str(other._is_antiper_a)
+                    + ")"
+                )
+                diff_list.append(name + ".is_antiper_a" + val_str)
+            else:
+                diff_list.append(name + ".is_antiper_a")
         if other._per_t_S != self._per_t_S:
-            diff_list.append(name + ".per_t_S")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._per_t_S)
+                    + ", other="
+                    + str(other._per_t_S)
+                    + ")"
+                )
+                diff_list.append(name + ".per_t_S" + val_str)
+            else:
+                diff_list.append(name + ".per_t_S")
         if other._is_antiper_t_S != self._is_antiper_t_S:
-            diff_list.append(name + ".is_antiper_t_S")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._is_antiper_t_S)
+                    + ", other="
+                    + str(other._is_antiper_t_S)
+                    + ")"
+                )
+                diff_list.append(name + ".is_antiper_t_S" + val_str)
+            else:
+                diff_list.append(name + ".is_antiper_t_S")
         if (other.axes_dict is None and self.axes_dict is not None) or (
             other.axes_dict is not None and self.axes_dict is None
         ):
@@ -246,13 +398,36 @@ class OutGeo(FrozenClass):
             for key in self.axes_dict:
                 diff_list.extend(
                     self.axes_dict[key].compare(
-                        other.axes_dict[key], name=name + ".axes_dict"
+                        other.axes_dict[key],
+                        name=name + ".axes_dict[" + str(key) + "]",
+                        ignore_list=ignore_list,
+                        is_add_value=is_add_value,
                     )
                 )
         if other._per_t_R != self._per_t_R:
-            diff_list.append(name + ".per_t_R")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._per_t_R)
+                    + ", other="
+                    + str(other._per_t_R)
+                    + ")"
+                )
+                diff_list.append(name + ".per_t_R" + val_str)
+            else:
+                diff_list.append(name + ".per_t_R")
         if other._is_antiper_t_R != self._is_antiper_t_R:
-            diff_list.append(name + ".is_antiper_t_R")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._is_antiper_t_R)
+                    + ", other="
+                    + str(other._is_antiper_t_R)
+                    + ")"
+                )
+                diff_list.append(name + ".is_antiper_t_R" + val_str)
+            else:
+                diff_list.append(name + ".is_antiper_t_R")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list

@@ -15,6 +15,7 @@ from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
 from ._frozen import FrozenClass
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 
@@ -154,7 +155,7 @@ class Material(FrozenClass):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -163,43 +164,106 @@ class Material(FrozenClass):
             return ["type(" + name + ")"]
         diff_list = list()
         if other._name != self._name:
-            diff_list.append(name + ".name")
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._name) + ", other=" + str(other._name) + ")"
+                )
+                diff_list.append(name + ".name" + val_str)
+            else:
+                diff_list.append(name + ".name")
         if other._is_isotropic != self._is_isotropic:
-            diff_list.append(name + ".is_isotropic")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._is_isotropic)
+                    + ", other="
+                    + str(other._is_isotropic)
+                    + ")"
+                )
+                diff_list.append(name + ".is_isotropic" + val_str)
+            else:
+                diff_list.append(name + ".is_isotropic")
         if (other.elec is None and self.elec is not None) or (
             other.elec is not None and self.elec is None
         ):
             diff_list.append(name + ".elec None mismatch")
         elif self.elec is not None:
-            diff_list.extend(self.elec.compare(other.elec, name=name + ".elec"))
+            diff_list.extend(
+                self.elec.compare(
+                    other.elec,
+                    name=name + ".elec",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
+            )
         if (other.mag is None and self.mag is not None) or (
             other.mag is not None and self.mag is None
         ):
             diff_list.append(name + ".mag None mismatch")
         elif self.mag is not None:
-            diff_list.extend(self.mag.compare(other.mag, name=name + ".mag"))
+            diff_list.extend(
+                self.mag.compare(
+                    other.mag,
+                    name=name + ".mag",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
+            )
         if (other.struct is None and self.struct is not None) or (
             other.struct is not None and self.struct is None
         ):
             diff_list.append(name + ".struct None mismatch")
         elif self.struct is not None:
-            diff_list.extend(self.struct.compare(other.struct, name=name + ".struct"))
+            diff_list.extend(
+                self.struct.compare(
+                    other.struct,
+                    name=name + ".struct",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
+            )
         if (other.HT is None and self.HT is not None) or (
             other.HT is not None and self.HT is None
         ):
             diff_list.append(name + ".HT None mismatch")
         elif self.HT is not None:
-            diff_list.extend(self.HT.compare(other.HT, name=name + ".HT"))
+            diff_list.extend(
+                self.HT.compare(
+                    other.HT,
+                    name=name + ".HT",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
+            )
         if (other.eco is None and self.eco is not None) or (
             other.eco is not None and self.eco is None
         ):
             diff_list.append(name + ".eco None mismatch")
         elif self.eco is not None:
-            diff_list.extend(self.eco.compare(other.eco, name=name + ".eco"))
+            diff_list.extend(
+                self.eco.compare(
+                    other.eco,
+                    name=name + ".eco",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
+            )
         if other._desc != self._desc:
-            diff_list.append(name + ".desc")
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._desc) + ", other=" + str(other._desc) + ")"
+                )
+                diff_list.append(name + ".desc" + val_str)
+            else:
+                diff_list.append(name + ".desc")
         if other._path != self._path:
-            diff_list.append(name + ".path")
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._path) + ", other=" + str(other._path) + ")"
+                )
+                diff_list.append(name + ".path" + val_str)
+            else:
+                diff_list.append(name + ".path")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list

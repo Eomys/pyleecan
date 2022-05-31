@@ -23,6 +23,7 @@ except ImportError as error:
     comp_loss = error
 
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 
@@ -97,7 +98,7 @@ class LossModelWinding(LossModel):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -107,9 +108,30 @@ class LossModelWinding(LossModel):
         diff_list = list()
 
         # Check the properties inherited from LossModel
-        diff_list.extend(super(LossModelWinding, self).compare(other, name=name))
-        if other._temperature != self._temperature:
-            diff_list.append(name + ".temperature")
+        diff_list.extend(
+            super(LossModelWinding, self).compare(
+                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
+            )
+        )
+        if (
+            other._temperature is not None
+            and self._temperature is not None
+            and isnan(other._temperature)
+            and isnan(self._temperature)
+        ):
+            pass
+        elif other._temperature != self._temperature:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._temperature)
+                    + ", other="
+                    + str(other._temperature)
+                    + ")"
+                )
+                diff_list.append(name + ".temperature" + val_str)
+            else:
+                diff_list.append(name + ".temperature")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list

@@ -1,6 +1,4 @@
-# -*- coding: utf-8 -*-
-
-from numpy import arcsin, cos
+from numpy import cos
 
 
 def comp_height(self):

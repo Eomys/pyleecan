@@ -88,6 +88,7 @@ except ImportError as error:
     get_R_id = error
 
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 
@@ -321,7 +322,7 @@ class Hole(FrozenClass):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -330,19 +331,55 @@ class Hole(FrozenClass):
             return ["type(" + name + ")"]
         diff_list = list()
         if other._Zh != self._Zh:
-            diff_list.append(name + ".Zh")
+            if is_add_value:
+                val_str = " (self=" + str(self._Zh) + ", other=" + str(other._Zh) + ")"
+                diff_list.append(name + ".Zh" + val_str)
+            else:
+                diff_list.append(name + ".Zh")
         if (other.mat_void is None and self.mat_void is not None) or (
             other.mat_void is not None and self.mat_void is None
         ):
             diff_list.append(name + ".mat_void None mismatch")
         elif self.mat_void is not None:
             diff_list.extend(
-                self.mat_void.compare(other.mat_void, name=name + ".mat_void")
+                self.mat_void.compare(
+                    other.mat_void,
+                    name=name + ".mat_void",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
             )
         if other._magnetization_dict_offset != self._magnetization_dict_offset:
-            diff_list.append(name + ".magnetization_dict_offset")
-        if other._Alpha0 != self._Alpha0:
-            diff_list.append(name + ".Alpha0")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._magnetization_dict_offset)
+                    + ", other="
+                    + str(other._magnetization_dict_offset)
+                    + ")"
+                )
+                diff_list.append(name + ".magnetization_dict_offset" + val_str)
+            else:
+                diff_list.append(name + ".magnetization_dict_offset")
+        if (
+            other._Alpha0 is not None
+            and self._Alpha0 is not None
+            and isnan(other._Alpha0)
+            and isnan(self._Alpha0)
+        ):
+            pass
+        elif other._Alpha0 != self._Alpha0:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._Alpha0)
+                    + ", other="
+                    + str(other._Alpha0)
+                    + ")"
+                )
+                diff_list.append(name + ".Alpha0" + val_str)
+            else:
+                diff_list.append(name + ".Alpha0")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list

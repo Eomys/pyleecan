@@ -1,7 +1,3 @@
-# -*- coding: utf-8 -*-
-
-from numpy import linspace, zeros
-
 from ....Classes.Arc1 import Arc1
 from ....Classes.Segment import Segment
 from ....Classes.SurfLine import SurfLine

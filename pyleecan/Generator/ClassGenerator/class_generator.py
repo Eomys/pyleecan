@@ -156,6 +156,7 @@ def generate_class(
         class_file.write("import numpy as np\n")
         class_file.write("import random\n")
         import_type_list.remove("function")
+    class_file.write("from numpy import isnan\n")  # For compare
 
     # Import types from other package
     types_imported = []

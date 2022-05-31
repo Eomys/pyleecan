@@ -28,6 +28,7 @@ except ImportError as error:
     is_outwards = error
 
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 
@@ -97,7 +98,7 @@ class Notch(FrozenClass):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:

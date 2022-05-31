@@ -28,6 +28,7 @@ except ImportError as error:
     init_vector = error
 
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 
@@ -121,7 +122,7 @@ class ImportGenMatrixSin(ImportMatrix):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -131,7 +132,11 @@ class ImportGenMatrixSin(ImportMatrix):
         diff_list = list()
 
         # Check the properties inherited from ImportMatrix
-        diff_list.extend(super(ImportGenMatrixSin, self).compare(other, name=name))
+        diff_list.extend(
+            super(ImportGenMatrixSin, self).compare(
+                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
+            )
+        )
         if (other.sin_list is None and self.sin_list is not None) or (
             other.sin_list is not None and self.sin_list is None
         ):
@@ -144,7 +149,10 @@ class ImportGenMatrixSin(ImportMatrix):
             for ii in range(len(other.sin_list)):
                 diff_list.extend(
                     self.sin_list[ii].compare(
-                        other.sin_list[ii], name=name + ".sin_list[" + str(ii) + "]"
+                        other.sin_list[ii],
+                        name=name + ".sin_list[" + str(ii) + "]",
+                        ignore_list=ignore_list,
+                        is_add_value=is_add_value,
                     )
                 )
         # Filter ignore differences

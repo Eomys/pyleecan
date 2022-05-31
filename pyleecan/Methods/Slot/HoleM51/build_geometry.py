@@ -1,9 +1,7 @@
-# -*- coding: utf-8 -*-
-
 from numpy import exp, pi, cos, sin, tan
 
-from ....Classes.Segment import Segment
 from ....Classes.Arc1 import Arc1
+from ....Classes.Segment import Segment
 from ....Classes.SurfLine import SurfLine
 from ....Functions.labels import HOLEV_LAB, HOLEM_LAB
 

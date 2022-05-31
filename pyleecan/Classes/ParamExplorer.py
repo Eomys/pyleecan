@@ -38,6 +38,7 @@ from os.path import isfile
 from ._check import CheckTypeError
 import numpy as np
 import random
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 
@@ -174,7 +175,7 @@ class ParamExplorer(FrozenClass):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -183,11 +184,33 @@ class ParamExplorer(FrozenClass):
             return ["type(" + name + ")"]
         diff_list = list()
         if other._name != self._name:
-            diff_list.append(name + ".name")
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._name) + ", other=" + str(other._name) + ")"
+                )
+                diff_list.append(name + ".name" + val_str)
+            else:
+                diff_list.append(name + ".name")
         if other._symbol != self._symbol:
-            diff_list.append(name + ".symbol")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._symbol)
+                    + ", other="
+                    + str(other._symbol)
+                    + ")"
+                )
+                diff_list.append(name + ".symbol" + val_str)
+            else:
+                diff_list.append(name + ".symbol")
         if other._unit != self._unit:
-            diff_list.append(name + ".unit")
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._unit) + ", other=" + str(other._unit) + ")"
+                )
+                diff_list.append(name + ".unit" + val_str)
+            else:
+                diff_list.append(name + ".unit")
         if other._setter_str != self._setter_str:
             diff_list.append(name + ".setter")
         if other._getter_str != self._getter_str:

@@ -33,6 +33,7 @@ except ImportError as error:
     get_var_load = error
 
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 
@@ -220,7 +221,7 @@ class Simulation(FrozenClass):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -229,32 +230,71 @@ class Simulation(FrozenClass):
             return ["type(" + name + ")"]
         diff_list = list()
         if other._name != self._name:
-            diff_list.append(name + ".name")
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._name) + ", other=" + str(other._name) + ")"
+                )
+                diff_list.append(name + ".name" + val_str)
+            else:
+                diff_list.append(name + ".name")
         if other._desc != self._desc:
-            diff_list.append(name + ".desc")
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._desc) + ", other=" + str(other._desc) + ")"
+                )
+                diff_list.append(name + ".desc" + val_str)
+            else:
+                diff_list.append(name + ".desc")
         if (other.machine is None and self.machine is not None) or (
             other.machine is not None and self.machine is None
         ):
             diff_list.append(name + ".machine None mismatch")
         elif self.machine is not None:
             diff_list.extend(
-                self.machine.compare(other.machine, name=name + ".machine")
+                self.machine.compare(
+                    other.machine,
+                    name=name + ".machine",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
             )
         if (other.input is None and self.input is not None) or (
             other.input is not None and self.input is None
         ):
             diff_list.append(name + ".input None mismatch")
         elif self.input is not None:
-            diff_list.extend(self.input.compare(other.input, name=name + ".input"))
+            diff_list.extend(
+                self.input.compare(
+                    other.input,
+                    name=name + ".input",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
+            )
         if other._logger_name != self._logger_name:
-            diff_list.append(name + ".logger_name")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._logger_name)
+                    + ", other="
+                    + str(other._logger_name)
+                    + ")"
+                )
+                diff_list.append(name + ".logger_name" + val_str)
+            else:
+                diff_list.append(name + ".logger_name")
         if (other.var_simu is None and self.var_simu is not None) or (
             other.var_simu is not None and self.var_simu is None
         ):
             diff_list.append(name + ".var_simu None mismatch")
         elif self.var_simu is not None:
             diff_list.extend(
-                self.var_simu.compare(other.var_simu, name=name + ".var_simu")
+                self.var_simu.compare(
+                    other.var_simu,
+                    name=name + ".var_simu",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
             )
         if (other.postproc_list is None and self.postproc_list is not None) or (
             other.postproc_list is not None and self.postproc_list is None
@@ -270,16 +310,50 @@ class Simulation(FrozenClass):
                     self.postproc_list[ii].compare(
                         other.postproc_list[ii],
                         name=name + ".postproc_list[" + str(ii) + "]",
+                        ignore_list=ignore_list,
+                        is_add_value=is_add_value,
                     )
                 )
         if other._index != self._index:
-            diff_list.append(name + ".index")
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._index) + ", other=" + str(other._index) + ")"
+                )
+                diff_list.append(name + ".index" + val_str)
+            else:
+                diff_list.append(name + ".index")
         if other._path_result != self._path_result:
-            diff_list.append(name + ".path_result")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._path_result)
+                    + ", other="
+                    + str(other._path_result)
+                    + ")"
+                )
+                diff_list.append(name + ".path_result" + val_str)
+            else:
+                diff_list.append(name + ".path_result")
         if other._layer != self._layer:
-            diff_list.append(name + ".layer")
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._layer) + ", other=" + str(other._layer) + ")"
+                )
+                diff_list.append(name + ".layer" + val_str)
+            else:
+                diff_list.append(name + ".layer")
         if other._layer_log_warn != self._layer_log_warn:
-            diff_list.append(name + ".layer_log_warn")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._layer_log_warn)
+                    + ", other="
+                    + str(other._layer_log_warn)
+                    + ")"
+                )
+                diff_list.append(name + ".layer_log_warn" + val_str)
+            else:
+                diff_list.append(name + ".layer_log_warn")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list

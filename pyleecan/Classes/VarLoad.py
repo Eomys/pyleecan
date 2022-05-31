@@ -29,6 +29,7 @@ except ImportError as error:
 
 
 from numpy import array, array_equal
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 
@@ -189,7 +190,7 @@ class VarLoad(VarSimu):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -199,13 +200,37 @@ class VarLoad(VarSimu):
         diff_list = list()
 
         # Check the properties inherited from VarSimu
-        diff_list.extend(super(VarLoad, self).compare(other, name=name))
+        diff_list.extend(
+            super(VarLoad, self).compare(
+                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
+            )
+        )
         if not array_equal(other.OP_matrix, self.OP_matrix):
             diff_list.append(name + ".OP_matrix")
         if other._type_OP_matrix != self._type_OP_matrix:
-            diff_list.append(name + ".type_OP_matrix")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._type_OP_matrix)
+                    + ", other="
+                    + str(other._type_OP_matrix)
+                    + ")"
+                )
+                diff_list.append(name + ".type_OP_matrix" + val_str)
+            else:
+                diff_list.append(name + ".type_OP_matrix")
         if other._is_output_power != self._is_output_power:
-            diff_list.append(name + ".is_output_power")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._is_output_power)
+                    + ", other="
+                    + str(other._is_output_power)
+                    + ")"
+                )
+                diff_list.append(name + ".is_output_power" + val_str)
+            else:
+                diff_list.append(name + ".is_output_power")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
