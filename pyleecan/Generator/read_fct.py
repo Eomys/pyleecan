@@ -344,6 +344,22 @@ def is_dict_pyleecan_type(type_name):
     )
 
 
+def is_list_unknow_type(type_name):
+    """Check if the type is a list of unknow type (Frozen or ndarray or python) "[]"
+
+    Parameters
+    ----------
+    type_name : str
+        Type of the property
+
+    Returns
+    -------
+    is_list : bool
+        True if the type is a list of unknow type
+    """
+    return type_name == "[]"
+
+
 class NotAFile(Exception):
     """Raised when the code generator is call on a wrong path"""
 

@@ -1,5 +1,9 @@
 from ...Generator import PYTHON_TYPE, TAB, TAB2, TAB3, TAB4, TAB5, TAB6, TAB7
-from ...Generator.read_fct import is_list_pyleecan_type, is_dict_pyleecan_type
+from ...Generator.read_fct import (
+    is_list_pyleecan_type,
+    is_dict_pyleecan_type,
+    is_list_unknow_type,
+)
 
 T1 = "\n" + TAB
 T2 = "\n" + TAB2
@@ -58,6 +62,8 @@ def generate_as_dict(gen_dict, class_dict):
             var_str += _get_no_type_str(cls, prop)
         elif is_list_pyleecan_type(prop_type):
             var_str += _get_list_of_pyleecan_str(cls, prop, prop_type)
+        elif is_list_unknow_type(prop_type):
+            var_str += _get_list_of_unknow_str(cls, prop, prop_type)
         elif is_dict_pyleecan_type(prop_type):
             var_str += _get_dict_of_pyleecan_str(cls, prop, prop_type)
         elif prop_type == "function":
@@ -182,18 +188,46 @@ def _get_dict_of_pyleecan_str(cls, prop, prop_type):
 
 def _get_list_of_pyleecan_str(cls, prop, prop_type):
     var_str = ""
-    var_str += T2 + f"if self.{prop} is None:"
-    var_str += T3 + f'{cls}_dict["{prop}"] = None'
-    var_str += T2 + f"else:"
-    var_str += T3 + f'{cls}_dict["{prop}"] = list()'
-    var_str += T3 + f"for obj in self.{prop}:"
-    var_str += T4 + f"if obj is not None:"
+    var_str += T2 + "if self." + prop + " is None:"
+    var_str += T3 + cls + "_dict['" + prop + "'] = None"
+    var_str += T2 + "else:"
+    var_str += T3 + cls + "_dict['" + prop + "'] = list()"
+    var_str += T3 + "for obj in self." + prop + ":"
+    var_str += T4 + "if obj is not None:"
     var_str += (
         T5
-        + f'{cls}_dict["{prop}"].append(obj.as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs))'
+        + cls
+        + "_dict['"
+        + prop
+        + "'].append(obj.as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs))"
     )
-    var_str += T4 + f"else:"
-    var_str += T5 + f'{cls}_dict["{prop}"].append(None)'
+    var_str += T4 + "else:"
+    var_str += T5 + cls + "_dict['" + prop + "'].append(None)"
+    return var_str
+
+
+def _get_list_of_unknow_str(cls, prop, prop_type):
+    var_str = ""
+    var_str += T2 + "if self." + prop + " is None:"
+    var_str += T3 + cls + "_dict['" + prop + "'] = None"
+    var_str += T2 + "else:"
+    var_str += T3 + cls + "_dict['" + prop + "'] = list()"
+    var_str += T3 + "for obj in self." + prop + ":"
+    var_str += T4 + "if obj is None:"
+    var_str += T5 + cls + "_dict['" + prop + "'].append(None)"
+    var_str += T4 + "elif hasattr(obj, as_dict):"
+    var_str += (
+        T5
+        + cls
+        + "_dict['"
+        + prop
+        + "'].append(obj.as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs))"
+    )
+    var_str += T4 + "elif isinstance(obj, ndarray):"
+    var_str += T5 + cls + "_dict['" + prop + "'].append(obj.tolist())"
+    var_str += T4 + "else:"
+    var_str += T5 + cls + "_dict['" + prop + "'].append(obj)"
+
     return var_str
 
 

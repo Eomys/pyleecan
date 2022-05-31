@@ -23,11 +23,6 @@ except ImportError as error:
     get_value = error
 
 try:
-    from ..Methods.Simulation.ParamExplorerSet.as_dict import as_dict
-except ImportError as error:
-    as_dict = error
-
-try:
     from ..Methods.Simulation.ParamExplorerSet.get_min import get_min
 except ImportError as error:
     get_min = error
@@ -74,17 +69,6 @@ class ParamExplorerSet(ParamExplorer):
         )
     else:
         get_value = get_value
-    # cf Methods.Simulation.ParamExplorerSet.as_dict
-    if isinstance(as_dict, ImportError):
-        as_dict = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use ParamExplorerSet method as_dict: " + str(as_dict)
-                )
-            )
-        )
-    else:
-        as_dict = as_dict
     # cf Methods.Simulation.ParamExplorerSet.get_min
     if isinstance(get_min, ImportError):
         get_min = property(
@@ -185,12 +169,11 @@ class ParamExplorerSet(ParamExplorer):
         ParamExplorerSet_str = ""
         # Get the properties inherited from ParamExplorer
         ParamExplorerSet_str += super(ParamExplorerSet, self).__str__()
-        ParamExplorerSet_str += (
-            "value = "
-            + linesep
-            + str(self.value).replace(linesep, linesep + "\t")
-            + linesep
-        )
+        if len(self.value) == 0:
+            ParamExplorerSet_str += "value = []" + linesep
+        for ii in range(len(self.value)):
+            tmp = self.value[ii].__str__().replace(linesep, linesep + "\t") + linesep
+            ParamExplorerSet_str += "value[" + str(ii) + "] =" + tmp + linesep + linesep
         return ParamExplorerSet_str
 
     def __eq__(self, other):
@@ -221,14 +204,24 @@ class ParamExplorerSet(ParamExplorer):
                 other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
             )
         )
-        if other._value != self._value:
-            if is_add_value:
-                val_str = (
-                    " (self=" + str(self._value) + ", other=" + str(other._value) + ")"
+        if (other.value is None and self.value is not None) or (
+            other.value is not None and self.value is None
+        ):
+            diff_list.append(name + ".value None mismatch")
+        elif self.value is None:
+            pass
+        elif len(other.value) != len(self.value):
+            diff_list.append("len(" + name + ".value)")
+        else:
+            for ii in range(len(other.value)):
+                diff_list.extend(
+                    self.value[ii].compare(
+                        other.value[ii],
+                        name=name + ".value[" + str(ii) + "]",
+                        ignore_list=ignore_list,
+                        is_add_value=is_add_value,
+                    )
                 )
-                diff_list.append(name + ".value" + val_str)
-            else:
-                diff_list.append(name + ".value")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -245,6 +238,43 @@ class ParamExplorerSet(ParamExplorer):
                 S += getsizeof(value)
         return S
 
+    def as_dict(self, type_handle_ndarray=0, keep_function=False, **kwargs):
+        """
+        Convert this object in a json serializable dict (can be use in __init__).
+        type_handle_ndarray: int
+            How to handle ndarray (0: tolist, 1: copy, 2: nothing)
+        keep_function : bool
+            True to keep the function object, else return str
+        Optional keyword input parameter is for internal use only
+        and may prevent json serializability.
+        """
+
+        # Get the properties inherited from ParamExplorer
+        ParamExplorerSet_dict = super(ParamExplorerSet, self).as_dict(
+            type_handle_ndarray=type_handle_ndarray,
+            keep_function=keep_function,
+            **kwargs
+        )
+        if self.value is None:
+            ParamExplorerSet_dict["value"] = None
+        else:
+            ParamExplorerSet_dict["value"] = list()
+            for obj in self.value:
+                if obj is not None:
+                    ParamExplorerSet_dict["value"].append(
+                        obj.as_dict(
+                            type_handle_ndarray=type_handle_ndarray,
+                            keep_function=keep_function,
+                            **kwargs
+                        )
+                    )
+                else:
+                    ParamExplorerSet_dict["value"].append(None)
+        # The class name is added to the dict for deserialisation purpose
+        # Overwrite the mother class name
+        ParamExplorerSet_dict["__class__"] = "ParamExplorerSet"
+        return ParamExplorerSet_dict
+
     def copy(self):
         """Creates a deepcopy of the object"""
 
@@ -252,7 +282,9 @@ class ParamExplorerSet(ParamExplorer):
         if self.value is None:
             value_val = None
         else:
-            value_val = self.value.copy()
+            value_val = list()
+            for obj in self.value:
+                value_val.append(obj.copy())
         name_val = self.name
         symbol_val = self.symbol
         unit_val = self.unit
@@ -284,6 +316,10 @@ class ParamExplorerSet(ParamExplorer):
 
     def _get_value(self):
         """getter of value"""
+        if self._value is not None:
+            for obj in self._value:
+                if obj is not None:
+                    obj.parent = self
         return self._value
 
     value = property(
@@ -291,6 +327,6 @@ class ParamExplorerSet(ParamExplorer):
         fset=_set_value,
         doc=u"""List containing the different parameter values to explore
 
-        :Type: list
+        :Type: []
         """,
     )

@@ -10591,7 +10591,6 @@
         "is_internal": false,
         "methods": [
             "get_value",
-            "as_dict",
             "get_min",
             "get_max",
             "get_N",
@@ -10608,7 +10607,7 @@
                 "max": "",
                 "min": "",
                 "name": "value",
-                "type": "list",
+                "type": "[]",
                 "unit": "-",
                 "value": []
             }
