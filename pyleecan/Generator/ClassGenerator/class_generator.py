@@ -150,7 +150,8 @@ def generate_class(
         import_type_list.remove("[ndarray]")
     if "ndarray" in import_type_list:
         import_type_list.remove("ndarray")
-
+    if "[]" in import_type_list:
+        class_file.write("from numpy import array, ndarray\n")
     if "function" in import_type_list:
         class_file.write("from ntpath import basename\n")
         class_file.write("from os.path import isfile\n")

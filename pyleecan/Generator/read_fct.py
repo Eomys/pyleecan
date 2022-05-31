@@ -314,6 +314,7 @@ def is_list_pyleecan_type(type_name):
     """
     return (
         type_name not in ["", None]
+        and len(type_name) > 2  # No "[]" = List of Unknow type
         and type_name[0] == "["
         and type_name[-1] == "]"
         and type_name != "[ndarray]"

@@ -37,12 +37,8 @@ try:
 except ImportError as error:
     get_N = error
 
-try:
-    from ..Methods.Simulation.ParamExplorerSet._set_value import _set_value
-except ImportError as error:
-    _set_value = error
 
-
+from numpy import array, ndarray
 from ntpath import basename
 from os.path import isfile
 from ._check import CheckTypeError
@@ -100,17 +96,6 @@ class ParamExplorerSet(ParamExplorer):
         )
     else:
         get_N = get_N
-    # cf Methods.Simulation.ParamExplorerSet._set_value
-    if isinstance(_set_value, ImportError):
-        _set_value = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use ParamExplorerSet method _set_value: " + str(_set_value)
-                )
-            )
-        )
-    else:
-        _set_value = _set_value
     # generic save method is available in all object
     save = save
     # get_logger method is available in all object
@@ -118,7 +103,7 @@ class ParamExplorerSet(ParamExplorer):
 
     def __init__(
         self,
-        value=-1,
+        value=[],
         name="",
         symbol="",
         unit="",
@@ -169,11 +154,11 @@ class ParamExplorerSet(ParamExplorer):
         ParamExplorerSet_str = ""
         # Get the properties inherited from ParamExplorer
         ParamExplorerSet_str += super(ParamExplorerSet, self).__str__()
-        if len(self.value) == 0:
-            ParamExplorerSet_str += "value = []" + linesep
-        for ii in range(len(self.value)):
-            tmp = self.value[ii].__str__().replace(linesep, linesep + "\t") + linesep
-            ParamExplorerSet_str += "value[" + str(ii) + "] =" + tmp + linesep + linesep
+        if self.value is not None:
+            tmp = self.value.__str__().replace(linesep, linesep + "\t").rstrip("\t")
+            ParamExplorerSet_str += "value = " + tmp
+        else:
+            ParamExplorerSet_str += "value = None" + linesep + linesep
         return ParamExplorerSet_str
 
     def __eq__(self, other):
@@ -214,14 +199,17 @@ class ParamExplorerSet(ParamExplorer):
             diff_list.append("len(" + name + ".value)")
         else:
             for ii in range(len(other.value)):
-                diff_list.extend(
-                    self.value[ii].compare(
-                        other.value[ii],
-                        name=name + ".value[" + str(ii) + "]",
-                        ignore_list=ignore_list,
-                        is_add_value=is_add_value,
+                if hasattr(self.value[ii], "compare"):
+                    diff_list.extend(
+                        self.value[ii].compare(
+                            other.value[ii],
+                            name=name + ".value[" + str(ii) + "]",
+                            ignore_list=ignore_list,
+                            is_add_value=is_add_value,
+                        )
                     )
-                )
+                elif other._value[ii] != self._value[ii]:
+                    diff_list.append(name + ".value[" + str(ii) + "])")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -233,9 +221,7 @@ class ParamExplorerSet(ParamExplorer):
 
         # Get size of the properties inherited from ParamExplorer
         S += super(ParamExplorerSet, self).__sizeof__()
-        if self.value is not None:
-            for value in self.value:
-                S += getsizeof(value)
+        S += getsizeof(self.value)
         return S
 
     def as_dict(self, type_handle_ndarray=0, keep_function=False, **kwargs):
@@ -260,7 +246,9 @@ class ParamExplorerSet(ParamExplorer):
         else:
             ParamExplorerSet_dict["value"] = list()
             for obj in self.value:
-                if obj is not None:
+                if obj is None:
+                    ParamExplorerSet_dict["value"].append(None)
+                elif hasattr(obj, "as_dict"):
                     ParamExplorerSet_dict["value"].append(
                         obj.as_dict(
                             type_handle_ndarray=type_handle_ndarray,
@@ -268,8 +256,15 @@ class ParamExplorerSet(ParamExplorer):
                             **kwargs
                         )
                     )
+                elif isinstance(obj, ndarray):
+                    if type_handle_ndarray == 0:
+                        ParamExplorerSet_dict["value"].append(obj.tolist())
+                    elif type_handle_ndarray == 1:
+                        ParamExplorerSet_dict["value"].append(obj.copy())
+                    elif type_handle_ndarray == 2:
+                        ParamExplorerSet_dict["value"].append(obj)
                 else:
-                    ParamExplorerSet_dict["value"].append(None)
+                    ParamExplorerSet_dict["value"].append(obj)
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         ParamExplorerSet_dict["__class__"] = "ParamExplorerSet"
@@ -282,9 +277,7 @@ class ParamExplorerSet(ParamExplorer):
         if self.value is None:
             value_val = None
         else:
-            value_val = list()
-            for obj in self.value:
-                value_val.append(obj.copy())
+            value_val = self.value.copy()
         name_val = self.name
         symbol_val = self.symbol
         unit_val = self.unit
@@ -316,11 +309,37 @@ class ParamExplorerSet(ParamExplorer):
 
     def _get_value(self):
         """getter of value"""
-        if self._value is not None:
-            for obj in self._value:
-                if obj is not None:
-                    obj.parent = self
         return self._value
+
+    def _set_value(self, value):
+        """setter of value"""
+        if type(value) is list:
+            for ii, obj in enumerate(value):
+                if isinstance(obj, str) and ".json" in obj:
+                    try:  # pyleecan object from file
+                        obj = load_init_dict(obj)[1]
+                    except Exception as e:
+                        self.get_logger().error(
+                            "Error while loading " + obj + ", setting None instead"
+                        )
+                        obj = None
+                        value[ii] = None
+                if type(obj) is dict and "__class__" in obj:  # pyleecan object
+                    class_obj = import_class(
+                        "pyleecan.Classes", obj.get("__class__"), "value"
+                    )
+                    value[ii] = class_obj(init_dict=obj)
+                if value[ii] is not None and hasattr(value[ii], "parent"):
+                    value[ii].parent = self
+                if isinstance(obj, list):
+                    try:  # list to array (for list of list use 'list')
+                        value[ii] = array(obj)
+                    except Exception as e:
+                        pass
+        if value == -1:
+            value = list()
+        check_var("value", value, "[]")
+        self._value = value
 
     value = property(
         fget=_get_value,

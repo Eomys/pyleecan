@@ -60,10 +60,10 @@ def generate_as_dict(gen_dict, class_dict):
             var_str += _get_dict_of_ndarray_str(cls, prop)
         elif prop_type in [None, ""]:
             var_str += _get_no_type_str(cls, prop)
-        elif is_list_pyleecan_type(prop_type):
-            var_str += _get_list_of_pyleecan_str(cls, prop, prop_type)
         elif is_list_unknow_type(prop_type):
             var_str += _get_list_of_unknow_str(cls, prop, prop_type)
+        elif is_list_pyleecan_type(prop_type):
+            var_str += _get_list_of_pyleecan_str(cls, prop, prop_type)
         elif is_dict_pyleecan_type(prop_type):
             var_str += _get_dict_of_pyleecan_str(cls, prop, prop_type)
         elif prop_type == "function":
@@ -215,7 +215,7 @@ def _get_list_of_unknow_str(cls, prop, prop_type):
     var_str += T3 + "for obj in self." + prop + ":"
     var_str += T4 + "if obj is None:"
     var_str += T5 + cls + "_dict['" + prop + "'].append(None)"
-    var_str += T4 + "elif hasattr(obj, as_dict):"
+    var_str += T4 + "elif hasattr(obj, 'as_dict'):"
     var_str += (
         T5
         + cls
@@ -224,7 +224,12 @@ def _get_list_of_unknow_str(cls, prop, prop_type):
         + "'].append(obj.as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs))"
     )
     var_str += T4 + "elif isinstance(obj, ndarray):"
-    var_str += T5 + cls + "_dict['" + prop + "'].append(obj.tolist())"
+    var_str += T5 + "if type_handle_ndarray==0:"
+    var_str += T6 + f'{cls}_dict["{prop}"].append(obj.tolist())'
+    var_str += T5 + "elif type_handle_ndarray==1:"
+    var_str += T6 + f'{cls}_dict["{prop}"].append(obj.copy())'
+    var_str += T5 + "elif type_handle_ndarray==2:"
+    var_str += T6 + f'{cls}_dict["{prop}"].append(obj)'
     var_str += T4 + "else:"
     var_str += T5 + cls + "_dict['" + prop + "'].append(obj)"
 

@@ -10593,8 +10593,7 @@
             "get_value",
             "get_min",
             "get_max",
-            "get_N",
-            "_set_value"
+            "get_N"
         ],
         "mother": "ParamExplorer",
         "name": "ParamExplorerSet",

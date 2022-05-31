@@ -1,5 +1,9 @@
 from ...Generator import PYTHON_TYPE, TAB, TAB2, TAB3, TAB4, TAB5, TAB6
-from ...Generator.read_fct import is_list_pyleecan_type, is_dict_pyleecan_type
+from ...Generator.read_fct import (
+    is_list_pyleecan_type,
+    is_dict_pyleecan_type,
+    is_list_unknow_type,
+)
 
 
 def generate_properties(gen_dict, class_dict, soft_name="pyleecan"):
@@ -205,6 +209,48 @@ def generate_prop_setter(gen_dict, class_dict, prop, soft_name="pyleecan"):
         set_str += TAB5 + "value[key] = class_obj(init_dict=obj)\n"
         set_str += TAB2 + "if type(value) is int and value == -1:\n"
         set_str += TAB3 + "value = dict()\n"
+    elif is_list_unknow_type(prop["type"]):
+        set_str += TAB2 + "if type(value) is list:\n"
+        set_str += TAB3 + "for ii, obj in enumerate(value):\n"
+        set_str += TAB4 + "if isinstance(obj, str) and '.json' in obj:\n"
+        set_str += TAB5 + "try:  # pyleecan object from file\n"
+        set_str += TAB6 + "obj = load_init_dict(obj)[1]\n"
+        set_str += TAB5 + "except Exception as e:\n"
+        set_str += (
+            TAB6
+            + "self.get_logger().error('Error while loading '+obj+', setting None instead')\n"
+        )
+        set_str += TAB6 + "obj = None\n"
+        set_str += TAB6 + "value[ii] = None\n"
+        set_str += (
+            TAB4 + "if type(obj) is dict and '__class__' in obj:  # pyleecan object\n"
+        )
+        if "SciDataTool" in prop["type"]:
+            set_str += (
+                TAB5
+                + "class_obj = import_class('SciDataTool.Classes', obj.get('__class__'), '"
+                + prop["name"]
+                + "')\n"
+            )
+        else:
+            set_str += (
+                TAB5
+                + "class_obj = import_class('"
+                + soft_name
+                + ".Classes', obj.get('__class__'), '"
+                + prop["name"]
+                + "')\n"
+            )
+        set_str += TAB5 + "value[ii] = class_obj(init_dict=obj)\n"
+        set_str += TAB4 + "if value[ii] is not None and hasattr(value[ii], 'parent'):\n"
+        set_str += TAB5 + "value[ii].parent = self\n"
+        set_str += TAB4 + "if isinstance(obj, list):\n"
+        set_str += TAB5 + "try:  # list to array (for list of list use 'list')\n"
+        set_str += TAB6 + "value[ii] = array(obj)\n"
+        set_str += TAB5 + "except Exception as e:\n"
+        set_str += TAB6 + "pass\n"
+        set_str += TAB2 + "if value == -1:\n"
+        set_str += TAB3 + "value = list()\n"
     elif is_list_pyleecan_type(prop["type"]):
         set_str += TAB2 + "if type(value) is list:\n"
         set_str += TAB3 + "for ii, obj in enumerate(value):\n"
@@ -392,6 +438,7 @@ def generate_prop_setter(gen_dict, class_dict, prop, soft_name="pyleecan"):
         and prop["type"] not in ["ndarray", "function", "{ndarray}", "[ndarray]"]
         and not is_dict_pyleecan_type(prop["type"])
         and not is_list_pyleecan_type(prop["type"])
+        and not is_list_unknow_type(prop["type"])
         and "." not in prop["type"]
     ):
         # pyleecan type
