@@ -10,9 +10,9 @@ from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
-from ..Functions.copy import copy
 from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
+from copy import deepcopy
 from ._frozen import FrozenClass
 
 from ntpath import basename
@@ -29,9 +29,8 @@ class OptiProblem(FrozenClass):
 
     VERSION = 1
 
-    # save and copy methods are available in all object
+    # generic save method is available in all object
     save = save
-    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -399,6 +398,58 @@ class OptiProblem(FrozenClass):
         # The class name is added to the dict for deserialisation purpose
         OptiProblem_dict["__class__"] = "OptiProblem"
         return OptiProblem_dict
+
+    def copy(self):
+        """Creates a deepcopy of the object"""
+
+        # Handle deepcopy of all the properties
+        if self.simu is None:
+            simu_val = None
+        else:
+            simu_val = self.simu.copy()
+        if self.design_var is None:
+            design_var_val = None
+        else:
+            design_var_val = list()
+            for obj in self.design_var:
+                design_var_val.append(obj.copy())
+        if self.obj_func is None:
+            obj_func_val = None
+        else:
+            obj_func_val = list()
+            for obj in self.obj_func:
+                obj_func_val.append(obj.copy())
+        if self._eval_func_str is not None:
+            eval_func_val = self._eval_func_str
+        else:
+            eval_func_val = self._eval_func_func
+        if self.constraint is None:
+            constraint_val = None
+        else:
+            constraint_val = list()
+            for obj in self.constraint:
+                constraint_val.append(obj.copy())
+        if self._preprocessing_str is not None:
+            preprocessing_val = self._preprocessing_str
+        else:
+            preprocessing_val = self._preprocessing_func
+        if self.datakeeper_list is None:
+            datakeeper_list_val = None
+        else:
+            datakeeper_list_val = list()
+            for obj in self.datakeeper_list:
+                datakeeper_list_val.append(obj.copy())
+        # Creates new object of the same type with the copied properties
+        obj_copy = type(self)(
+            simu=simu_val,
+            design_var=design_var_val,
+            obj_func=obj_func_val,
+            eval_func=eval_func_val,
+            constraint=constraint_val,
+            preprocessing=preprocessing_val,
+            datakeeper_list=datakeeper_list_val,
+        )
+        return obj_copy
 
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""

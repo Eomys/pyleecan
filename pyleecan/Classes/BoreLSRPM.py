@@ -10,9 +10,9 @@ from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
-from ..Functions.copy import copy
 from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
+from copy import deepcopy
 from .Bore import Bore
 
 # Import all class method
@@ -43,9 +43,8 @@ class BoreLSRPM(Bore):
         )
     else:
         get_bore_line = get_bore_line
-    # save and copy methods are available in all object
+    # generic save method is available in all object
     save = save
-    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -222,6 +221,18 @@ class BoreLSRPM(Bore):
         # Overwrite the mother class name
         BoreLSRPM_dict["__class__"] = "BoreLSRPM"
         return BoreLSRPM_dict
+
+    def copy(self):
+        """Creates a deepcopy of the object"""
+
+        # Handle deepcopy of all the properties
+        N_val = self.N
+        Rarc_val = self.Rarc
+        W1_val = self.W1
+        alpha_val = self.alpha
+        # Creates new object of the same type with the copied properties
+        obj_copy = type(self)(N=N_val, Rarc=Rarc_val, W1=W1_val, alpha=alpha_val)
+        return obj_copy
 
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""

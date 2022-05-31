@@ -28,6 +28,9 @@ class _FEMMHandler(object):
         _FEMMHandler_dict["HandleToFEMM"] = None
         return _FEMMHandler_dict
 
+    def copy(self):
+        return _FEMMHandler(HandleToFEMM=None)
+
     def compare(self, other, name="self"):
         """Compare two objects and return list of differences"""
         return list()

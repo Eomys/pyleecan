@@ -10,9 +10,9 @@ from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
-from ..Functions.copy import copy
 from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
+from copy import deepcopy
 from .Import import Import
 
 # Import all class method
@@ -41,9 +41,8 @@ class ImportMeshUnv(Import):
         )
     else:
         get_data = get_data
-    # save and copy methods are available in all object
+    # generic save method is available in all object
     save = save
-    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -157,6 +156,15 @@ class ImportMeshUnv(Import):
         # Overwrite the mother class name
         ImportMeshUnv_dict["__class__"] = "ImportMeshUnv"
         return ImportMeshUnv_dict
+
+    def copy(self):
+        """Creates a deepcopy of the object"""
+
+        # Handle deepcopy of all the properties
+        file_path_val = self.file_path
+        # Creates new object of the same type with the copied properties
+        obj_copy = type(self)(file_path=file_path_val)
+        return obj_copy
 
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""

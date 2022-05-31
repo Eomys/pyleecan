@@ -10,9 +10,9 @@ from logging import getLogger
 from ._check import set_array, check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
-from ..Functions.copy import copy
 from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
+from copy import deepcopy
 from .ImportMatrix import ImportMatrix
 
 # Import all class method
@@ -44,9 +44,8 @@ class ImportMatrixVal(ImportMatrix):
         )
     else:
         get_data = get_data
-    # save and copy methods are available in all object
+    # generic save method is available in all object
     save = save
-    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -170,6 +169,19 @@ class ImportMatrixVal(ImportMatrix):
         # Overwrite the mother class name
         ImportMatrixVal_dict["__class__"] = "ImportMatrixVal"
         return ImportMatrixVal_dict
+
+    def copy(self):
+        """Creates a deepcopy of the object"""
+
+        # Handle deepcopy of all the properties
+        if self.value is None:
+            value_val = None
+        else:
+            value_val = self.value.copy()
+        is_transpose_val = self.is_transpose
+        # Creates new object of the same type with the copied properties
+        obj_copy = type(self)(value=value_val, is_transpose=is_transpose_val)
+        return obj_copy
 
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""

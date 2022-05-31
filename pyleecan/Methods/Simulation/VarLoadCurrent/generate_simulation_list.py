@@ -28,7 +28,7 @@ def generate_simulation_list(self, ref_simu=None):
     # Create Simulations 1 per load
     for input_obj in list_input:
         # Generate the simulation
-        new_simu = ref_simu.copy(keep_function=True)
+        new_simu = ref_simu.copy()
 
         # Edit simulation
         new_simu.input = input_obj

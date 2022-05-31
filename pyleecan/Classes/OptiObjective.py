@@ -10,9 +10,9 @@ from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
-from ..Functions.copy import copy
 from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
+from copy import deepcopy
 from .DataKeeper import DataKeeper
 
 from ntpath import basename
@@ -29,9 +29,8 @@ class OptiObjective(DataKeeper):
 
     VERSION = 1
 
-    # save and copy methods are available in all object
+    # generic save method is available in all object
     save = save
-    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -162,6 +161,43 @@ class OptiObjective(DataKeeper):
         # Overwrite the mother class name
         OptiObjective_dict["__class__"] = "OptiObjective"
         return OptiObjective_dict
+
+    def copy(self):
+        """Creates a deepcopy of the object"""
+
+        # Handle deepcopy of all the properties
+        name_val = self.name
+        symbol_val = self.symbol
+        unit_val = self.unit
+        if self._keeper_str is not None:
+            keeper_val = self._keeper_str
+        else:
+            keeper_val = self._keeper_func
+        if self._error_keeper_str is not None:
+            error_keeper_val = self._error_keeper_str
+        else:
+            error_keeper_val = self._error_keeper_func
+        if self.result is None:
+            result_val = None
+        else:
+            result_val = self.result.copy()
+        if hasattr(self.result_ref, "copy"):
+            result_ref_val = self.result_ref.copy()
+        else:
+            result_ref_val = self.result_ref
+        physic_val = self.physic
+        # Creates new object of the same type with the copied properties
+        obj_copy = type(self)(
+            name=name_val,
+            symbol=symbol_val,
+            unit=unit_val,
+            keeper=keeper_val,
+            error_keeper=error_keeper_val,
+            result=result_val,
+            result_ref=result_ref_val,
+            physic=physic_val,
+        )
+        return obj_copy
 
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""

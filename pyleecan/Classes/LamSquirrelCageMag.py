@@ -10,9 +10,9 @@ from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
-from ..Functions.copy import copy
 from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
+from copy import deepcopy
 from .LamSquirrelCage import LamSquirrelCage
 
 # Import all class method
@@ -128,9 +128,8 @@ class LamSquirrelCageMag(LamSquirrelCage):
         )
     else:
         set_pole_pair_number = set_pole_pair_number
-    # save and copy methods are available in all object
+    # generic save method is available in all object
     save = save
-    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -358,6 +357,95 @@ class LamSquirrelCageMag(LamSquirrelCage):
         # Overwrite the mother class name
         LamSquirrelCageMag_dict["__class__"] = "LamSquirrelCageMag"
         return LamSquirrelCageMag_dict
+
+    def copy(self):
+        """Creates a deepcopy of the object"""
+
+        # Handle deepcopy of all the properties
+        if self.hole is None:
+            hole_val = None
+        else:
+            hole_val = list()
+            for obj in self.hole:
+                hole_val.append(obj.copy())
+        Hscr_val = self.Hscr
+        Lscr_val = self.Lscr
+        if self.ring_mat is None:
+            ring_mat_val = None
+        else:
+            ring_mat_val = self.ring_mat.copy()
+        Ksfill_val = self.Ksfill
+        if self.winding is None:
+            winding_val = None
+        else:
+            winding_val = self.winding.copy()
+        if self.slot is None:
+            slot_val = None
+        else:
+            slot_val = self.slot.copy()
+        L1_val = self.L1
+        if self.mat_type is None:
+            mat_type_val = None
+        else:
+            mat_type_val = self.mat_type.copy()
+        Nrvd_val = self.Nrvd
+        Wrvd_val = self.Wrvd
+        Kf1_val = self.Kf1
+        is_internal_val = self.is_internal
+        Rint_val = self.Rint
+        Rext_val = self.Rext
+        is_stator_val = self.is_stator
+        if self.axial_vent is None:
+            axial_vent_val = None
+        else:
+            axial_vent_val = list()
+            for obj in self.axial_vent:
+                axial_vent_val.append(obj.copy())
+        if self.notch is None:
+            notch_val = None
+        else:
+            notch_val = list()
+            for obj in self.notch:
+                notch_val.append(obj.copy())
+        if self.skew is None:
+            skew_val = None
+        else:
+            skew_val = self.skew.copy()
+        if self.yoke_notch is None:
+            yoke_notch_val = None
+        else:
+            yoke_notch_val = list()
+            for obj in self.yoke_notch:
+                yoke_notch_val.append(obj.copy())
+        if self.bore is None:
+            bore_val = None
+        else:
+            bore_val = self.bore.copy()
+        # Creates new object of the same type with the copied properties
+        obj_copy = type(self)(
+            hole=hole_val,
+            Hscr=Hscr_val,
+            Lscr=Lscr_val,
+            ring_mat=ring_mat_val,
+            Ksfill=Ksfill_val,
+            winding=winding_val,
+            slot=slot_val,
+            L1=L1_val,
+            mat_type=mat_type_val,
+            Nrvd=Nrvd_val,
+            Wrvd=Wrvd_val,
+            Kf1=Kf1_val,
+            is_internal=is_internal_val,
+            Rint=Rint_val,
+            Rext=Rext_val,
+            is_stator=is_stator_val,
+            axial_vent=axial_vent_val,
+            notch=notch_val,
+            skew=skew_val,
+            yoke_notch=yoke_notch_val,
+            bore=bore_val,
+        )
+        return obj_copy
 
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""

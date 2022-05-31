@@ -10,9 +10,9 @@ from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
-from ..Functions.copy import copy
 from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
+from copy import deepcopy
 from ._frozen import FrozenClass
 
 # Import all class method
@@ -75,9 +75,8 @@ class Skew(FrozenClass):
         )
     else:
         plot = plot
-    # save and copy methods are available in all object
+    # generic save method is available in all object
     save = save
-    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -353,6 +352,40 @@ class Skew(FrozenClass):
         # The class name is added to the dict for deserialisation purpose
         Skew_dict["__class__"] = "Skew"
         return Skew_dict
+
+    def copy(self):
+        """Creates a deepcopy of the object"""
+
+        # Handle deepcopy of all the properties
+        type_skew_val = self.type_skew
+        rate_val = self.rate
+        is_step_val = self.is_step
+        if self._function_str is not None:
+            function_val = self._function_str
+        else:
+            function_val = self._function_func
+        if self.angle_list is None:
+            angle_list_val = None
+        else:
+            angle_list_val = self.angle_list.copy()
+        if self.z_list is None:
+            z_list_val = None
+        else:
+            z_list_val = self.z_list.copy()
+        Nstep_val = self.Nstep
+        angle_overall_val = self.angle_overall
+        # Creates new object of the same type with the copied properties
+        obj_copy = type(self)(
+            type_skew=type_skew_val,
+            rate=rate_val,
+            is_step=is_step_val,
+            function=function_val,
+            angle_list=angle_list_val,
+            z_list=z_list_val,
+            Nstep=Nstep_val,
+            angle_overall=angle_overall_val,
+        )
+        return obj_copy
 
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""

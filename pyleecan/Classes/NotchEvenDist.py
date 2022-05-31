@@ -10,9 +10,9 @@ from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
-from ..Functions.copy import copy
 from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
+from copy import deepcopy
 from .Notch import Notch
 
 # Import all class method
@@ -61,9 +61,8 @@ class NotchEvenDist(Notch):
         )
     else:
         comp_surface = comp_surface
-    # save and copy methods are available in all object
+    # generic save method is available in all object
     save = save
-    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -214,6 +213,19 @@ class NotchEvenDist(Notch):
         # Overwrite the mother class name
         NotchEvenDist_dict["__class__"] = "NotchEvenDist"
         return NotchEvenDist_dict
+
+    def copy(self):
+        """Creates a deepcopy of the object"""
+
+        # Handle deepcopy of all the properties
+        alpha_val = self.alpha
+        if self.notch_shape is None:
+            notch_shape_val = None
+        else:
+            notch_shape_val = self.notch_shape.copy()
+        # Creates new object of the same type with the copied properties
+        obj_copy = type(self)(alpha=alpha_val, notch_shape=notch_shape_val)
+        return obj_copy
 
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""

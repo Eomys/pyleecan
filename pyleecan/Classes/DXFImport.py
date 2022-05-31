@@ -10,9 +10,9 @@ from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
-from ..Functions.copy import copy
 from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
+from copy import deepcopy
 from ._frozen import FrozenClass
 
 # Import all class method
@@ -43,9 +43,8 @@ class DXFImport(FrozenClass):
         )
     else:
         get_surfaces = get_surfaces
-    # save and copy methods are available in all object
+    # generic save method is available in all object
     save = save
-    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -196,6 +195,25 @@ class DXFImport(FrozenClass):
         # The class name is added to the dict for deserialisation purpose
         DXFImport_dict["__class__"] = "DXFImport"
         return DXFImport_dict
+
+    def copy(self):
+        """Creates a deepcopy of the object"""
+
+        # Handle deepcopy of all the properties
+        file_path_val = self.file_path
+        if self.surf_dict is None:
+            surf_dict_val = None
+        else:
+            surf_dict_val = self.surf_dict.copy()
+        if self.BC_list is None:
+            BC_list_val = None
+        else:
+            BC_list_val = self.BC_list.copy()
+        # Creates new object of the same type with the copied properties
+        obj_copy = type(self)(
+            file_path=file_path_val, surf_dict=surf_dict_val, BC_list=BC_list_val
+        )
+        return obj_copy
 
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""

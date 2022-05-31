@@ -10,9 +10,9 @@ from logging import getLogger
 from ._check import set_array, check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
-from ..Functions.copy import copy
 from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
+from copy import deepcopy
 from ._frozen import FrozenClass
 
 # Import all class method
@@ -90,9 +90,8 @@ class CellMat(FrozenClass):
         )
     else:
         is_exist = is_exist
-    # save and copy methods are available in all object
+    # generic save method is available in all object
     save = save
-    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -309,6 +308,34 @@ class CellMat(FrozenClass):
         # The class name is added to the dict for deserialisation purpose
         CellMat_dict["__class__"] = "CellMat"
         return CellMat_dict
+
+    def copy(self):
+        """Creates a deepcopy of the object"""
+
+        # Handle deepcopy of all the properties
+        if self.connectivity is None:
+            connectivity_val = None
+        else:
+            connectivity_val = self.connectivity.copy()
+        nb_cell_val = self.nb_cell
+        nb_node_per_cell_val = self.nb_node_per_cell
+        if self.indice is None:
+            indice_val = None
+        else:
+            indice_val = self.indice.copy()
+        if self.interpolation is None:
+            interpolation_val = None
+        else:
+            interpolation_val = self.interpolation.copy()
+        # Creates new object of the same type with the copied properties
+        obj_copy = type(self)(
+            connectivity=connectivity_val,
+            nb_cell=nb_cell_val,
+            nb_node_per_cell=nb_node_per_cell_val,
+            indice=indice_val,
+            interpolation=interpolation_val,
+        )
+        return obj_copy
 
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""
