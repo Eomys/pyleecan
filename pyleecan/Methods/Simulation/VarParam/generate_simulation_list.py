@@ -47,7 +47,7 @@ def generate_simulation_list(self, ref_simu=None):
     # Cartesian product to generate every simulation
     for simu_param_values in itertools.product(*params_value_list):
         # Generate the simulation
-        new_simu = ref_simu.copy(keep_function=True)
+        new_simu = ref_simu.copy()
 
         # Edit it using setter
         for setter, value, symbol in zip(
