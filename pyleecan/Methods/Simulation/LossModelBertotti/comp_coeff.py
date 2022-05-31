@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 
-import re
 import matplotlib.pyplot as plt
 import numpy as np
 from scipy.optimize import curve_fit
@@ -10,22 +9,17 @@ import textwrap
 
 def comp_coeff(self, material):
     """Enables to compute the coefficients of the loss model with a curve fitting
-    on loss data, provided in a text file
+    on loss data stored in the material
 
     Parameters
     ----------
-    file_path : str
-        the full path of the file containing the loss data.
-        Must contain 3 columns separated by spaces of tabulations :
-        1st column : frequency
-        2nd column : flux density magnitude
-        3rd column : power loss (W)
-
-    Returns
-    -------
-    Bool
-        True if the curve fitting was succesfull, else False.
+    material : Material
+        A material object, corresponding to the material used in the electrical machine.
+        This material object must contain loss data as an ImportMatrixVal object.
+        This matrix must contain 3 rows, correspoding to the excitation frequency (Hz),
+        the peak magnetic flux density (T), and the loss density (W/kg) in this order.
     """
+
 
     def comp_loss(xdata, k_hy, alpha_hy, k_ed, alpha_ed, k_ex, alpha_ex):
         f = xdata[0]
@@ -51,7 +45,7 @@ def comp_coeff(self, material):
     loss = loss_data[2]
     xdata = np.array([f, B])
     ydata = np.array(loss)
-    popt, pcov = curve_fit(
+    popt, _ = curve_fit(
         comp_loss,
         xdata,
         ydata,
@@ -113,4 +107,3 @@ def comp_coeff(self, material):
     self.k_ex = popt[4]
     self.alpha_ex = popt[5]
 
-    return True

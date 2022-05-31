@@ -2,20 +2,14 @@ from numpy import matmul, abs as np_abs, sum as np_sum, sqrt as np_sqrt
 
 
 def comp_loss(self):
-    """Calculate loss density in iron core given by group "stator core" or "rotor core"
-    assuming power density is given by a Steinmetz model
+    """Calculate proximity loss density assuming it is given by:
 
-        Pcore = Ph + Pe = k_hy * f^alpha_f * B^self.alpha_B + k_ed * f^2 * B^2
+        P = k_p * f^2 * B^2
 
     Parameters
     ----------
     self: LossFEMM
         a LossFEMM object
-    group: str
-        Name of part in which to calculate core losses
-    coeff_dict: dict
-        Dict containing coefficient A, B, C, a, b, c to calculate overall losses
-        such as P = A * felec^a + B * felec^b + C * felec^c
 
     Returns
     -------
@@ -40,7 +34,6 @@ def comp_loss(self):
     Lst = lamination.L1
 
     if self.k_p is None:
-        material = lamination.mat_type
         self.comp_coeff()
 
     k_p = self.k_p
@@ -92,11 +85,9 @@ def comp_loss(self):
     # Compute magnetic flux density FFT
     Bfft = Bvect.get_xyz_along("freqs", "indice=" + str(Igrp), "z[0]")
     freqs = Bfft["freqs"]
-
-    # Compute FFT square of magnetic flux density
     Bfft_magnitude = np_sqrt(np_abs(Bfft["comp_x"]) ** 2 + np_abs(Bfft["comp_y"]) ** 2)
 
-    # Eddy-current loss density (or proximity loss density) for each frequency and element
+    # Proximity loss density for each frequency and element
     Pcore_density = k_p * freqs[:, None] ** 2 * Bfft_magnitude ** 2
 
     if is_change_Time:
@@ -104,11 +95,11 @@ def comp_loss(self):
         for comp in Bvect.components.values():
             comp.axes[0] = Time_orig
 
-    # Integrate loss density over group volume
-    coeff = Lst * per_a * matmul(Bfft_magnitude ** 2, Se)
     # Get frequency orders
     n = freqs / felec
-    # Get polynomial coefficients
+    
+    # Integrate loss density over group volume to get polynomial coefficients
+    coeff = Lst * per_a * matmul(Bfft_magnitude ** 2, Se)
     A = np_sum(k_p * coeff * n ** 2)
     self.coeff_dict = {2: A}
 

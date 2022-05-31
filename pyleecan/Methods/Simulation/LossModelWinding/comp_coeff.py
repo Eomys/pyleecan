@@ -1,9 +1,11 @@
 from numpy import pi, sqrt, sin, cos, sinh, cosh
 
 
-def comp_coeff(self, T_op=20, T_ref=20, b=None, zt=None):
+def comp_coeff(self, T_op=20, T_ref=20):
     """Compute the skin effect factor on resistance for the conductors from "Design of Rotating Electrical Machines", J. Pyrhonen, second edition
     All parameters are defined p.270 / 271
+    In this method, the returned value is the one from the reference divided by the frequency, as the effect of
+    frequency will be taken into account in the coeff_dict
 
     Parameters
     ----------
@@ -28,14 +30,12 @@ def comp_coeff(self, T_op=20, T_ref=20, b=None, zt=None):
 
     conductor = self.parent.parent.machine.stator.winding.conductor
 
-    if b is None:
-        # Compute slot average width
-        slot = conductor.parent.parent.slot
-        b = slot.comp_width()
+    # Compute slot average width
+    slot = conductor.parent.parent.slot
+    b = slot.comp_width()
 
-    if zt is None:
-        # Get number of turns in series per coil
-        zt = conductor.parent.Ntcoil
+    # Get number of turns in series per coil
+    zt = conductor.parent.Ntcoil
 
     # check if wires are round or rectangular
     is_round_wire = conductor.is_round_wire()
@@ -61,7 +61,7 @@ def comp_coeff(self, T_op=20, T_ref=20, b=None, zt=None):
     else:
         mur = conductor.cond_mat.mag.mur_lin
 
-    # reduced conductor height Eq(5.24) p.270 + adding relative permeatibility
+    # reduced conductor height Eq(5.24) p.270 divided by the frequency + adding relative permeatibility
     ksi = hc * sqrt(pi * mu0 * mur * sigma * za * bc0 / b)
 
     if not isinstance(ksi, float):
@@ -73,11 +73,13 @@ def comp_coeff(self, T_op=20, T_ref=20, b=None, zt=None):
         # Use round wire approximation Eq(5.28) p.271
         # --> kr_skin = 1 + 0.59 * ((zt ** 2 - 0.2) / 9) * ksi ** 2
         k = 0.59 * ((zt ** 2 - 0.2) / 9) * ksi ** 2
+        # The power of the frequency to get the same result as in the reference
         power = 1
     else:
         # Use rectangular wire approximation Eq(5.29) p.271
         # --> kr_skin = 1 + (zt ** 2 - 0.2) / 9 * ksi ** 4
         k = (zt ** 2 - 0.2) / 9 * ksi ** 4
+        # The power of the frequency to get the same result as in the reference
         power = 2
 
     return k, power

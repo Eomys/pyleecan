@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
-import re
 import matplotlib.pyplot as plt
 import numpy as np
+
 from scipy.optimize import curve_fit
 from itertools import groupby
 import textwrap
@@ -41,7 +41,7 @@ def comp_coeff(self, material):
     loss = loss_data[2]
     xdata = np.array([f, B])
     ydata = np.array(loss)
-    popt, pcov = curve_fit(comp_loss, xdata, ydata)
+    popt, _ = curve_fit(comp_loss, xdata, ydata)
 
     if self.is_show_fig:
         groups, uniquekeys = group_by_frequency(loss_data)

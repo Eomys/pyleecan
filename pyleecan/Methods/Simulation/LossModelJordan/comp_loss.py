@@ -5,17 +5,12 @@ def comp_loss(self):
     """Calculate loss density in iron core given by group "stator core" or "rotor core"
     assuming power density is given by a Steinmetz model
 
-        Pcore = Ph + Pe = k_hy * f^alpha_f * B^self.alpha_B + k_ed * f^2 * B^2
+        Pcore = Ph + Pe = k_hy * f * B^2 + k_ed * f^2 * B^2
 
     Parameters
     ----------
     self: LossFEMM
         a LossFEMM object
-    group: str
-        Name of part in which to calculate core losses
-    coeff_dict: dict
-        Dict containing coefficient A, B, C, a, b, c to calculate overall losses
-        such as P = A * felec^a + B * felec^b + C * felec^c
 
     Returns
     -------
@@ -117,11 +112,9 @@ def comp_loss(self):
     # Compute magnetic flux density FFT
     Bfft = Bvect.get_xyz_along("freqs", "indice=" + str(Igrp), "z[0]")
     freqs = Bfft["freqs"]
-
-    # Compute FFT square of magnetic flux density
     Bfft_magnitude = np_sqrt(np_abs(Bfft["comp_x"]) ** 2 + np_abs(Bfft["comp_y"]) ** 2)
 
-    # Eddy-current loss density (or proximity loss density) for each frequency and element
+    # Compute the loss density for each element and each frequency
     Pcore_density = k_ed * freqs[:, None] ** 2 * Bfft_magnitude ** 2
     Pcore_density += k_hy * freqs[:, None] * Bfft_magnitude ** 2
 
@@ -130,10 +123,11 @@ def comp_loss(self):
         for comp in Bvect.components.values():
             comp.axes[0] = Time_orig
 
-    # Integrate loss density over group volume
-    coeff = Lst * per_a * matmul(Bfft_magnitude ** 2, Se)
     # Get frequency orders
     n = freqs / felec
+    
+    # Integrate loss density over group volume to get polynomial coefficients
+    coeff = Lst * per_a * matmul(Bfft_magnitude ** 2, Se)
     # Get polynomial coefficients
     A = np_sum(k_ed * coeff * n ** 2)
     B = np_sum(k_hy * coeff * n)

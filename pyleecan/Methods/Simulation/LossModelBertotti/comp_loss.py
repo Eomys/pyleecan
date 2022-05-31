@@ -3,19 +3,14 @@ from numpy import matmul, abs as np_abs, sum as np_sum, sqrt as np_sqrt
 
 def comp_loss(self):
     """Calculate loss density in iron core given by group "stator core" or "rotor core"
-    assuming power density is given by a Betotti model
+    assuming power density is given by a Bertotti model
 
-        Pcore = k_hy * f^alpha_f * B^self.alpha_B + k_ed * f^2 * B^2
+        Pcore = k_hy * f * B^alpha_hy + k_ed * (f B)^alpha_ed + k_ex * (f B)^alpha_ex
 
     Parameters
     ----------
     self: LossFEMM
         a LossFEMM object
-    group: str
-        Name of part in which to calculate core losses
-    coeff_dict: dict
-        Dict containing coefficient A, B, C, a, b, c to calculate overall losses
-        such as P = A * felec^a + B * felec^b + C * felec^c
 
     Returns
     -------
@@ -41,7 +36,8 @@ def comp_loss(self):
     # Taking into account the stacking factor
     Kf = lamination.Kf1
     rho = lamination.mat_type.struct.rho
-
+    
+    # Compute the coefficients only if at least one is not provided
     if None in [
         self.k_hy,
         self.k_ed,
@@ -53,7 +49,7 @@ def comp_loss(self):
         material = lamination.mat_type
         self.comp_coeff(material)
 
-    # Get hysteresis and eddy current loss coefficients
+    # Get loss coefficients
     k_hy = self.k_hy / Kf * rho
     k_ed = self.k_ed / Kf * rho
     k_ex = self.k_ex / Kf * rho
@@ -125,11 +121,9 @@ def comp_loss(self):
     # Compute magnetic flux density FFT
     Bfft = Bvect.get_xyz_along("freqs", "indice=" + str(Igrp), "z[0]")
     freqs = Bfft["freqs"]
-
-    # Compute FFT square of magnetic flux density
     Bfft_magnitude = np_sqrt(np_abs(Bfft["comp_x"]) ** 2 + np_abs(Bfft["comp_y"]) ** 2)
 
-    # Eddy-current loss density (or proximity loss density) for each frequency and element
+    # Compute the loss density for each element and each frequency
     Pcore_density = k_ed * (freqs[:, None] * Bfft_magnitude) ** alpha_ed
     Pcore_density += k_hy * freqs[:, None] * Bfft_magnitude ** alpha_hy
     Pcore_density += k_ex * (freqs[:, None] * Bfft_magnitude) ** alpha_ex
@@ -139,19 +133,20 @@ def comp_loss(self):
         for comp in Bvect.components.values():
             comp.axes[0] = Time_orig
 
-    # Integrate loss density over group volume
-    coeff = Lst * per_a * matmul(Bfft_magnitude ** alpha_ed, Se)
     # Get frequency orders
     n = freqs / felec
-    # Get polynomial coefficients
+    
+    # Integrate loss density over group volume to get polynomial coefficients
+    coeff = Lst * per_a * matmul(Bfft_magnitude ** alpha_ed, Se)
+    # Get polynomial coefficient
     B = np_sum(k_ed * coeff * n ** alpha_ed)
 
-    # Integrate loss density over group volume
     coeff = Lst * per_a * matmul(Bfft_magnitude ** alpha_ex, Se)
-    # Get polynomial coefficients
+    # Get polynomial coefficient
     C = np_sum(k_ex * coeff * n ** alpha_ex)
 
     coeff = Lst * per_a * matmul(Bfft_magnitude ** alpha_hy, Se)
+    # Get polynomial coefficient
     A = np_sum(k_hy * coeff * n)
 
     self.coeff_dict = {1: A, alpha_ed: B, alpha_ex: C}

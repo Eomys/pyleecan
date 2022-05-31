@@ -10,8 +10,6 @@ def comp_loss(self):
     ----------
     self: LossFEMM
         a LossFEMM object
-    group: str
-        Name of part in which to calculate joule losses
 
     Returns
     -------
@@ -59,6 +57,7 @@ def comp_loss(self):
     per_a = output.geo.per_a
     if output.geo.is_antiper_a:
         per_a *= 2
+        
 
     Lst = lam.L1
 
