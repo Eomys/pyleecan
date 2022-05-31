@@ -15,6 +15,7 @@ TYPE_COL = 4  # type
 DEF_VAL_COL = 5  # default value
 MIN_VAL_COL = 6  # minimum value
 MAX_VAL_COL = 7  # maximum value
+AS_DICT_COL = 8  # To change as_dict/copy behavior
 
 PACK_COL = 9  # package
 HER_COL = 10  # mother class name
@@ -121,6 +122,7 @@ def read_file(file_path, soft_name=PACKAGE_NAME):
                 prop_dict["min"] = class_csv[rx][MIN_VAL_COL].replace(",", ".")
                 prop_dict["max"] = class_csv[rx][MAX_VAL_COL].replace(",", ".")
                 prop_dict["value"] = class_csv[rx][DEF_VAL_COL]
+                prop_dict["as_dict"] = class_csv[rx][AS_DICT_COL]
                 if prop_dict["type"] == "float":
                     prop_dict["value"] = prop_dict["value"].replace(",", ".")
                 if (

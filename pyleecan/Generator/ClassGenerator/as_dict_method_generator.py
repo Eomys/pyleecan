@@ -36,7 +36,13 @@ def generate_as_dict(gen_dict, class_dict):
     for prop_dict in class_dict["properties"]:
         prop = prop_dict["name"]
         prop_type = prop_dict["type"]
-        if prop_type in list(set(PYTHON_TYPE) - set(["dict", "list", "complex"])):
+        if "as_dict" in prop_dict and prop_dict["as_dict"] == "1":
+            # Property set to None both in as_dict and copy
+            var_str += T2 + cls + "_dict['" + prop + "'] = None"
+        elif "as_dict" in prop_dict and prop_dict["as_dict"] == "2":
+            # Property set to None both in as_dict and pointer in copy
+            var_str += T2 + cls + "_dict['" + prop + "'] = None"
+        elif prop_type in list(set(PYTHON_TYPE) - set(["dict", "list", "complex"])):
             var_str += _get_python_type_str(cls, prop)
         elif prop_type == "complex":
             var_str += _get_complex_str(cls, prop)
