@@ -231,7 +231,7 @@ class ModelBH_linear_sat(ModelBH):
     Bs = property(
         fget=_get_Bs,
         fset=_set_Bs,
-        doc=u"""Saturation flux density
+        doc=u"""Saturation flux density [T]
 
         :Type: float
         """,
@@ -249,7 +249,7 @@ class ModelBH_linear_sat(ModelBH):
     mu_a = property(
         fget=_get_mu_a,
         fset=_set_mu_a,
-        doc=u"""Linear permeability
+        doc=u"""Linear permeability [-]
 
         :Type: float
         """,
@@ -267,7 +267,7 @@ class ModelBH_linear_sat(ModelBH):
     param1 = property(
         fget=_get_param1,
         fset=_set_param1,
-        doc=u"""Init value for Bs for fitting algorithm
+        doc=u"""Init value for Bs for fitting algorithm [-]
 
         :Type: float
         """,
@@ -285,7 +285,7 @@ class ModelBH_linear_sat(ModelBH):
     param2 = property(
         fget=_get_param2,
         fset=_set_param2,
-        doc=u"""Init value for mu_a for fitting algorithm
+        doc=u"""Init value for mu_a for fitting algorithm [-]
 
         :Type: float
         """,

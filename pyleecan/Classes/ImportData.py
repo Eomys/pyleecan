@@ -304,7 +304,7 @@ class ImportData(FrozenClass):
     axes = property(
         fget=_get_axes,
         fset=_set_axes,
-        doc=u"""List of axes of the data
+        doc=u"""List of axes of the data [-]
 
         :Type: [ImportData]
         """,
@@ -341,7 +341,7 @@ class ImportData(FrozenClass):
     field = property(
         fget=_get_field,
         fset=_set_field,
-        doc=u"""Field (Import object)
+        doc=u"""Field (Import object) [-]
 
         :Type: Import
         """,
@@ -359,7 +359,7 @@ class ImportData(FrozenClass):
     unit = property(
         fget=_get_unit,
         fset=_set_unit,
-        doc=u"""Unit of the field
+        doc=u"""Unit of the field [-]
 
         :Type: str
         """,
@@ -377,7 +377,7 @@ class ImportData(FrozenClass):
     name = property(
         fget=_get_name,
         fset=_set_name,
-        doc=u"""Name of the field
+        doc=u"""Name of the field [-]
 
         :Type: str
         """,
@@ -395,7 +395,7 @@ class ImportData(FrozenClass):
     symbol = property(
         fget=_get_symbol,
         fset=_set_symbol,
-        doc=u"""Symbol of the field
+        doc=u"""Symbol of the field [-]
 
         :Type: str
         """,
@@ -415,7 +415,7 @@ class ImportData(FrozenClass):
     normalizations = property(
         fget=_get_normalizations,
         fset=_set_normalizations,
-        doc=u"""Dict of normalizations
+        doc=u"""Dict of normalizations [-]
 
         :Type: dict
         """,
@@ -435,7 +435,7 @@ class ImportData(FrozenClass):
     symmetries = property(
         fget=_get_symmetries,
         fset=_set_symmetries,
-        doc=u"""Dict of symmetries
+        doc=u"""Dict of symmetries [-]
 
         :Type: dict
         """,

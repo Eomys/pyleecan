@@ -389,7 +389,7 @@ class Arc2(Arc):
     begin = property(
         fget=_get_begin,
         fset=_set_begin,
-        doc=u"""begin point of the arc
+        doc=u"""begin point of the arc [-]
 
         :Type: complex
         """,
@@ -409,7 +409,7 @@ class Arc2(Arc):
     center = property(
         fget=_get_center,
         fset=_set_center,
-        doc=u"""center of the arc
+        doc=u"""center of the arc [-]
 
         :Type: complex
         """,
@@ -427,7 +427,7 @@ class Arc2(Arc):
     angle = property(
         fget=_get_angle,
         fset=_set_angle,
-        doc=u"""opening angle of the arc
+        doc=u"""opening angle of the arc [rad]
 
         :Type: float
         :min: -6.283185308

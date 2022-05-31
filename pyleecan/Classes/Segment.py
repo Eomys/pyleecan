@@ -416,7 +416,7 @@ class Segment(Line):
     begin = property(
         fget=_get_begin,
         fset=_set_begin,
-        doc=u"""begin point of the line
+        doc=u"""begin point of the line [-]
 
         :Type: complex
         """,
@@ -436,7 +436,7 @@ class Segment(Line):
     end = property(
         fget=_get_end,
         fset=_set_end,
-        doc=u"""end point of the line
+        doc=u"""end point of the line [-]
 
         :Type: complex
         """,

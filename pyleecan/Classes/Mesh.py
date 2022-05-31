@@ -140,7 +140,7 @@ class Mesh(FrozenClass):
     label = property(
         fget=_get_label,
         fset=_set_label,
-        doc=u"""Description of the mesh
+        doc=u"""Description of the mesh [-]
 
         :Type: str
         """,

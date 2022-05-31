@@ -370,7 +370,7 @@ class SlotM15(Slot):
     W0 = property(
         fget=_get_W0,
         fset=_set_W0,
-        doc=u"""Slot isthmus angular width.
+        doc=u"""Slot isthmus angular width. [rad]
 
         :Type: float
         :min: 0
@@ -389,7 +389,7 @@ class SlotM15(Slot):
     H0 = property(
         fget=_get_H0,
         fset=_set_H0,
-        doc=u"""Slot isthmus height.
+        doc=u"""Slot isthmus height. [m]
 
         :Type: float
         :min: 0
@@ -408,7 +408,7 @@ class SlotM15(Slot):
     Wmag = property(
         fget=_get_Wmag,
         fset=_set_Wmag,
-        doc=u"""Magnet width
+        doc=u"""Magnet width [m]
 
         :Type: float
         :min: 0
@@ -427,7 +427,7 @@ class SlotM15(Slot):
     Hmag = property(
         fget=_get_Hmag,
         fset=_set_Hmag,
-        doc=u"""Magnet Height
+        doc=u"""Magnet Height [m]
 
         :Type: float
         :min: 0
@@ -446,7 +446,7 @@ class SlotM15(Slot):
     Rtopm = property(
         fget=_get_Rtopm,
         fset=_set_Rtopm,
-        doc=u"""Radius of the magnet top
+        doc=u"""Radius of the magnet top [m]
 
         :Type: float
         :min: 0

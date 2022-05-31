@@ -171,7 +171,7 @@ class ModelBH_arctangent(ModelBH):
     k = property(
         fget=_get_k,
         fset=_set_k,
-        doc=u"""BH curve parameter
+        doc=u"""BH curve parameter [T]
 
         :Type: float
         """,
@@ -189,7 +189,7 @@ class ModelBH_arctangent(ModelBH):
     mu_a = property(
         fget=_get_mu_a,
         fset=_set_mu_a,
-        doc=u"""Saturation permeability parameter
+        doc=u"""Saturation permeability parameter [-]
 
         :Type: float
         """,

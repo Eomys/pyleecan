@@ -683,7 +683,7 @@ class OutMag(FrozenClass):
     B = property(
         fget=_get_B,
         fset=_set_B,
-        doc=u"""Airgap flux density VectorField object
+        doc=u"""Airgap flux density VectorField object [H]
 
         :Type: SciDataTool.Classes.VectorField.VectorField
         """,
@@ -716,7 +716,7 @@ class OutMag(FrozenClass):
     Tem = property(
         fget=_get_Tem,
         fset=_set_Tem,
-        doc=u"""Electromagnetic torque DataTime object
+        doc=u"""Electromagnetic torque DataTime object [N.m]
 
         :Type: SciDataTool.Classes.DataND.DataND
         """,
@@ -734,7 +734,7 @@ class OutMag(FrozenClass):
     Tem_av = property(
         fget=_get_Tem_av,
         fset=_set_Tem_av,
-        doc=u"""Average Electromagnetic torque
+        doc=u"""Average Electromagnetic torque [N.m]
 
         :Type: float
         """,
@@ -752,7 +752,7 @@ class OutMag(FrozenClass):
     Tem_rip_norm = property(
         fget=_get_Tem_rip_norm,
         fset=_set_Tem_rip_norm,
-        doc=u"""Peak to Peak Torque ripple normalized according to average torque (None if average torque=0)
+        doc=u"""Peak to Peak Torque ripple normalized according to average torque (None if average torque=0) [-]
 
         :Type: float
         """,
@@ -770,7 +770,7 @@ class OutMag(FrozenClass):
     Tem_rip_pp = property(
         fget=_get_Tem_rip_pp,
         fset=_set_Tem_rip_pp,
-        doc=u"""Peak to Peak Torque ripple
+        doc=u"""Peak to Peak Torque ripple [N.m]
 
         :Type: float
         """,
@@ -803,7 +803,7 @@ class OutMag(FrozenClass):
     Phi_wind_stator = property(
         fget=_get_Phi_wind_stator,
         fset=_set_Phi_wind_stator,
-        doc=u"""Stator winding flux DataTime object
+        doc=u"""Stator winding flux DataTime object [Wb]
 
         :Type: SciDataTool.Classes.DataND.DataND
         """,
@@ -843,7 +843,7 @@ class OutMag(FrozenClass):
     Phi_wind = property(
         fget=_get_Phi_wind,
         fset=_set_Phi_wind,
-        doc=u"""Dict of lamination winding fluxlinkage DataTime objects
+        doc=u"""Dict of lamination winding fluxlinkage DataTime objects [Wb]
 
         :Type: {SciDataTool.Classes.DataND.DataND}
         """,
@@ -876,7 +876,7 @@ class OutMag(FrozenClass):
     emf = property(
         fget=_get_emf,
         fset=_set_emf,
-        doc=u"""Electromotive force DataTime object
+        doc=u"""Electromotive force DataTime object [V]
 
         :Type: SciDataTool.Classes.DataND.DataND
         """,
@@ -933,7 +933,7 @@ class OutMag(FrozenClass):
     logger_name = property(
         fget=_get_logger_name,
         fset=_set_logger_name,
-        doc=u"""Name of the logger to use
+        doc=u"""Name of the logger to use [-]
 
         :Type: str
         """,
@@ -970,7 +970,7 @@ class OutMag(FrozenClass):
     internal = property(
         fget=_get_internal,
         fset=_set_internal,
-        doc=u"""OutInternal object containg outputs related to a specific model
+        doc=u"""OutInternal object containg outputs related to a specific model [-]
 
         :Type: OutInternal
         """,
@@ -988,7 +988,7 @@ class OutMag(FrozenClass):
     Rag = property(
         fget=_get_Rag,
         fset=_set_Rag,
-        doc=u"""Radius value for air-gap computation
+        doc=u"""Radius value for air-gap computation [-]
 
         :Type: float
         """,
@@ -1006,7 +1006,7 @@ class OutMag(FrozenClass):
     Pem_av = property(
         fget=_get_Pem_av,
         fset=_set_Pem_av,
-        doc=u"""Average Electromagnetic power
+        doc=u"""Average Electromagnetic power [W]
 
         :Type: float
         """,
@@ -1043,7 +1043,7 @@ class OutMag(FrozenClass):
     Slice = property(
         fget=_get_Slice,
         fset=_set_Slice,
-        doc=u"""Slice model to account for skew
+        doc=u"""Slice model to account for skew [-]
 
         :Type: SliceModel
         """,
@@ -1076,7 +1076,7 @@ class OutMag(FrozenClass):
     Tem_slice = property(
         fget=_get_Tem_slice,
         fset=_set_Tem_slice,
-        doc=u"""Electromagnetic torque DataTime object including torque per slice
+        doc=u"""Electromagnetic torque DataTime object including torque per slice [N]
 
         :Type: SciDataTool.Classes.DataND.DataND
         """,
@@ -1116,7 +1116,7 @@ class OutMag(FrozenClass):
     Phi_wind_slice = property(
         fget=_get_Phi_wind_slice,
         fset=_set_Phi_wind_slice,
-        doc=u"""Dict of lamination winding fluxlinkage DataTime objects per slice
+        doc=u"""Dict of lamination winding fluxlinkage DataTime objects per slice [Wb/m]
 
         :Type: {SciDataTool.Classes.DataND.DataND}
         """,
@@ -1134,7 +1134,7 @@ class OutMag(FrozenClass):
     Tem_norm = property(
         fget=_get_Tem_norm,
         fset=_set_Tem_norm,
-        doc=u"""Torque normalization
+        doc=u"""Torque normalization [N.m]
 
         :Type: float
         """,

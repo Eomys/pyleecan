@@ -208,7 +208,7 @@ class LossModelSteinmetz(LossModel):
     k_hy = property(
         fget=_get_k_hy,
         fset=_set_k_hy,
-        doc=u"""Hysteresis loss coefficient
+        doc=u"""Hysteresis loss coefficient [W/kg]
 
         :Type: float
         """,
@@ -226,7 +226,7 @@ class LossModelSteinmetz(LossModel):
     k_ed = property(
         fget=_get_k_ed,
         fset=_set_k_ed,
-        doc=u"""Eddy current loss coefficient
+        doc=u"""Eddy current loss coefficient [W/kg]
 
         :Type: float
         """,
@@ -244,7 +244,7 @@ class LossModelSteinmetz(LossModel):
     alpha_f = property(
         fget=_get_alpha_f,
         fset=_set_alpha_f,
-        doc=u"""Hysteresis loss power coefficient for the frequency
+        doc=u"""Hysteresis loss power coefficient for the frequency [-]
 
         :Type: float
         """,
@@ -262,7 +262,7 @@ class LossModelSteinmetz(LossModel):
     alpha_B = property(
         fget=_get_alpha_B,
         fset=_set_alpha_B,
-        doc=u"""Hysteresis loss power coefficient for the flux density magnitude
+        doc=u"""Hysteresis loss power coefficient for the flux density magnitude [-]
 
         :Type: float
         """,

@@ -392,7 +392,7 @@ class OutGeo(FrozenClass):
     stator = property(
         fget=_get_stator,
         fset=_set_stator,
-        doc=u"""Geometry output of the stator
+        doc=u"""Geometry output of the stator [-]
 
         :Type: OutGeoLam
         """,
@@ -429,7 +429,7 @@ class OutGeo(FrozenClass):
     rotor = property(
         fget=_get_rotor,
         fset=_set_rotor,
-        doc=u"""Geometry output of the rotor
+        doc=u"""Geometry output of the rotor [-]
 
         :Type: OutGeoLam
         """,
@@ -447,7 +447,7 @@ class OutGeo(FrozenClass):
     Wgap_mec = property(
         fget=_get_Wgap_mec,
         fset=_set_Wgap_mec,
-        doc=u"""mechanical airgap width (minimal distance between the lamination including magnet)
+        doc=u"""mechanical airgap width (minimal distance between the lamination including magnet) [m]
 
         :Type: float
         """,
@@ -465,7 +465,7 @@ class OutGeo(FrozenClass):
     Wgap_mag = property(
         fget=_get_Wgap_mag,
         fset=_set_Wgap_mag,
-        doc=u"""the magnetic airgap width (distance beetween the two Laminations bore radius)
+        doc=u"""the magnetic airgap width (distance beetween the two Laminations bore radius) [m]
 
         :Type: float
         """,
@@ -483,7 +483,7 @@ class OutGeo(FrozenClass):
     Rgap_mec = property(
         fget=_get_Rgap_mec,
         fset=_set_Rgap_mec,
-        doc=u"""radius of the center of the mecanical airgap
+        doc=u"""radius of the center of the mecanical airgap [m]
 
         :Type: float
         """,
@@ -501,7 +501,7 @@ class OutGeo(FrozenClass):
     Lgap = property(
         fget=_get_Lgap,
         fset=_set_Lgap,
-        doc=u"""Airgap active length
+        doc=u"""Airgap active length [m]
 
         :Type: float
         """,
@@ -519,7 +519,7 @@ class OutGeo(FrozenClass):
     logger_name = property(
         fget=_get_logger_name,
         fset=_set_logger_name,
-        doc=u"""Name of the logger to use
+        doc=u"""Name of the logger to use [-]
 
         :Type: str
         """,
@@ -537,7 +537,7 @@ class OutGeo(FrozenClass):
     angle_rotor_initial = property(
         fget=_get_angle_rotor_initial,
         fset=_set_angle_rotor_initial,
-        doc=u"""Difference between the d axis angle of the stator and the rotor
+        doc=u"""Difference between the d axis angle of the stator and the rotor [rad]
 
         :Type: float
         """,
@@ -555,7 +555,7 @@ class OutGeo(FrozenClass):
     rot_dir = property(
         fget=_get_rot_dir,
         fset=_set_rot_dir,
-        doc=u"""Rotation direction of the rotor (rot_dir*N0, default value given by ROT_DIR_REF)
+        doc=u"""Rotation direction of the rotor (rot_dir*N0, default value given by ROT_DIR_REF) [-]
 
         :Type: int
         :min: -1
@@ -575,7 +575,7 @@ class OutGeo(FrozenClass):
     per_a = property(
         fget=_get_per_a,
         fset=_set_per_a,
-        doc=u"""Number of spatial periodicities of the machine
+        doc=u"""Number of spatial periodicities of the machine [-]
 
         :Type: int
         """,
@@ -593,7 +593,7 @@ class OutGeo(FrozenClass):
     is_antiper_a = property(
         fget=_get_is_antiper_a,
         fset=_set_is_antiper_a,
-        doc=u"""True if an spatial anti-periodicity is possible after the periodicities
+        doc=u"""True if an spatial anti-periodicity is possible after the periodicities [-]
 
         :Type: bool
         """,
@@ -611,7 +611,7 @@ class OutGeo(FrozenClass):
     per_t_S = property(
         fget=_get_per_t_S,
         fset=_set_per_t_S,
-        doc=u"""Number of time periodicities of the machine in static referential
+        doc=u"""Number of time periodicities of the machine in static referential [-]
 
         :Type: int
         """,
@@ -629,7 +629,7 @@ class OutGeo(FrozenClass):
     is_antiper_t_S = property(
         fget=_get_is_antiper_t_S,
         fset=_set_is_antiper_t_S,
-        doc=u"""True if an time anti-periodicity is possible after the periodicities in static referential
+        doc=u"""True if an time anti-periodicity is possible after the periodicities in static referential [-]
 
         :Type: bool
         """,
@@ -687,7 +687,7 @@ class OutGeo(FrozenClass):
     per_t_R = property(
         fget=_get_per_t_R,
         fset=_set_per_t_R,
-        doc=u"""Number of time periodicities of the machine in rotating referential
+        doc=u"""Number of time periodicities of the machine in rotating referential [-]
 
         :Type: int
         """,
@@ -705,7 +705,7 @@ class OutGeo(FrozenClass):
     is_antiper_t_R = property(
         fget=_get_is_antiper_t_R,
         fset=_set_is_antiper_t_R,
-        doc=u"""True if an time anti-periodicity is possible after the periodicities in rotating referential
+        doc=u"""True if an time anti-periodicity is possible after the periodicities in rotating referential [-]
 
         :Type: bool
         """,

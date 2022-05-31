@@ -166,7 +166,7 @@ class EndWinding(FrozenClass):
     Lew_enforced = property(
         fget=_get_Lew_enforced,
         fset=_set_Lew_enforced,
-        doc=u"""Enforced end-winding lekage inductance
+        doc=u"""Enforced end-winding lekage inductance [H]
 
         :Type: float
         :min: 0

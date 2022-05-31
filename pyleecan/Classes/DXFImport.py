@@ -185,7 +185,7 @@ class DXFImport(FrozenClass):
     file_path = property(
         fget=_get_file_path,
         fset=_set_file_path,
-        doc=u"""Path to the DXF file to import
+        doc=u"""Path to the DXF file to import [-]
 
         :Type: str
         """,
@@ -205,7 +205,7 @@ class DXFImport(FrozenClass):
     surf_dict = property(
         fget=_get_surf_dict,
         fset=_set_surf_dict,
-        doc=u"""dictionary to assign the surfaces: key=complex reference point coordinate, value=label of the surface
+        doc=u"""dictionary to assign the surfaces: key=complex reference point coordinate, value=label of the surface [-]
 
         :Type: dict
         """,
@@ -225,7 +225,7 @@ class DXFImport(FrozenClass):
     BC_list = property(
         fget=_get_BC_list,
         fset=_set_BC_list,
-        doc=u"""List of tuple to apply boundary conditions (complex reference point coordinate, is_arc, label of the BC to apply)
+        doc=u"""List of tuple to apply boundary conditions (complex reference point coordinate, is_arc, label of the BC to apply) [-]
 
         :Type: list
         """,

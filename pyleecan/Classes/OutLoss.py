@@ -557,7 +557,7 @@ class OutLoss(FrozenClass):
     logger_name = property(
         fget=_get_logger_name,
         fset=_set_logger_name,
-        doc=u"""Name of the logger to use
+        doc=u"""Name of the logger to use [-]
 
         :Type: str
         """,
@@ -615,7 +615,7 @@ class OutLoss(FrozenClass):
     Pstator = property(
         fget=_get_Pstator,
         fset=_set_Pstator,
-        doc=u"""Stator core losses due to hysteresis and eddy currents
+        doc=u"""Stator core losses due to hysteresis and eddy currents [W]
 
         :Type: float
         """,
@@ -633,7 +633,7 @@ class OutLoss(FrozenClass):
     Protor = property(
         fget=_get_Protor,
         fset=_set_Protor,
-        doc=u"""Rotor core losses due to hysteresis and eddy currents
+        doc=u"""Rotor core losses due to hysteresis and eddy currents [W]
 
         :Type: float
         """,
@@ -651,7 +651,7 @@ class OutLoss(FrozenClass):
     Pmagnet = property(
         fget=_get_Pmagnet,
         fset=_set_Pmagnet,
-        doc=u"""Magnet eddy current losses
+        doc=u"""Magnet eddy current losses [W]
 
         :Type: float
         """,
@@ -669,7 +669,7 @@ class OutLoss(FrozenClass):
     Pprox = property(
         fget=_get_Pprox,
         fset=_set_Pprox,
-        doc=u"""Stator core losses
+        doc=u"""Stator core losses [W]
 
         :Type: float
         """,
@@ -687,7 +687,7 @@ class OutLoss(FrozenClass):
     Pjoule = property(
         fget=_get_Pjoule,
         fset=_set_Pjoule,
-        doc=u"""Stator core losses
+        doc=u"""Stator core losses [W]
 
         :Type: float
         """,

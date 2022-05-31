@@ -374,7 +374,7 @@ class SlotWLSRPM(Slot):
     W1 = property(
         fget=_get_W1,
         fset=_set_W1,
-        doc=u"""Slot bottom side width.
+        doc=u"""Slot bottom side width. [m]
 
         :Type: float
         :min: 0
@@ -393,7 +393,7 @@ class SlotWLSRPM(Slot):
     W3 = property(
         fget=_get_W3,
         fset=_set_W3,
-        doc=u"""Tooth width
+        doc=u"""Tooth width [m]
 
         :Type: float
         :min: 0
@@ -412,7 +412,7 @@ class SlotWLSRPM(Slot):
     H2 = property(
         fget=_get_H2,
         fset=_set_H2,
-        doc=u"""Slot height 
+        doc=u"""Slot height  [m]
 
         :Type: float
         :min: 0
@@ -431,7 +431,7 @@ class SlotWLSRPM(Slot):
     R1 = property(
         fget=_get_R1,
         fset=_set_R1,
-        doc=u"""Top radius
+        doc=u"""Top radius [m]
 
         :Type: float
         :min: 0
@@ -450,7 +450,7 @@ class SlotWLSRPM(Slot):
     H3 = property(
         fget=_get_H3,
         fset=_set_H3,
-        doc=u"""damper winding height
+        doc=u"""damper winding height [m]
 
         :Type: float
         :min: 0

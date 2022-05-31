@@ -214,7 +214,7 @@ class OP(FrozenClass):
     N0 = property(
         fget=_get_N0,
         fset=_set_N0,
-        doc=u"""Rotor speed
+        doc=u"""Rotor speed [rpm]
 
         :Type: float
         """,
@@ -232,7 +232,7 @@ class OP(FrozenClass):
     felec = property(
         fget=_get_felec,
         fset=_set_felec,
-        doc=u"""Electrical Frequency
+        doc=u"""Electrical Frequency [Hz]
 
         :Type: float
         """,
@@ -250,7 +250,7 @@ class OP(FrozenClass):
     Tem_av_ref = property(
         fget=_get_Tem_av_ref,
         fset=_set_Tem_av_ref,
-        doc=u"""Output average electromagnetic torque
+        doc=u"""Output average electromagnetic torque [N.m]
 
         :Type: float
         """,
@@ -268,7 +268,7 @@ class OP(FrozenClass):
     Pem_av_ref = property(
         fget=_get_Pem_av_ref,
         fset=_set_Pem_av_ref,
-        doc=u"""Output average Electromagnetic Power
+        doc=u"""Output average Electromagnetic Power [W]
 
         :Type: float
         """,
@@ -286,7 +286,7 @@ class OP(FrozenClass):
     Pem_av_in = property(
         fget=_get_Pem_av_in,
         fset=_set_Pem_av_in,
-        doc=u"""Input average power (e.g. for generator mode)
+        doc=u"""Input average power (e.g. for generator mode) [W]
 
         :Type: float
         """,

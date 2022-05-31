@@ -140,7 +140,7 @@ class OutPost(FrozenClass):
     legend_name = property(
         fget=_get_legend_name,
         fset=_set_legend_name,
-        doc=u"""Name to use in the legend in case of comparison
+        doc=u"""Name to use in the legend in case of comparison [-]
 
         :Type: str
         """,
@@ -158,7 +158,7 @@ class OutPost(FrozenClass):
     line_color = property(
         fget=_get_line_color,
         fset=_set_line_color,
-        doc=u"""Color to use in case of comparison
+        doc=u"""Color to use in case of comparison [-]
 
         :Type: str
         """,

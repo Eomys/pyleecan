@@ -1732,6 +1732,15 @@
                 "type": "int",
                 "unit": "-",
                 "value": 1
+            },
+            {
+                "desc": "True to include skin effect on inductance if type_skin_effect != 0",
+                "max": "",
+                "min": "",
+                "name": "is_skin_effect_inductance",
+                "type": "bool",
+                "unit": "",
+                "value": 1
             }
         ]
     },

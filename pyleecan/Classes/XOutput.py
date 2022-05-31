@@ -777,7 +777,7 @@ class XOutput(Output):
     paramexplorer_list = property(
         fget=_get_paramexplorer_list,
         fset=_set_paramexplorer_list,
-        doc=u"""List containing ParamExplorer
+        doc=u"""List containing ParamExplorer [-]
 
         :Type: [ParamExplorer]
         """,
@@ -819,7 +819,7 @@ class XOutput(Output):
     output_list = property(
         fget=_get_output_list,
         fset=_set_output_list,
-        doc=u"""List containing Output (or Xoutput) for each simulation
+        doc=u"""List containing Output (or Xoutput) for each simulation [-]
 
         :Type: [Output]
         """,
@@ -859,7 +859,7 @@ class XOutput(Output):
     xoutput_dict = property(
         fget=_get_xoutput_dict,
         fset=_set_xoutput_dict,
-        doc=u"""dictionary containing DataKeeper
+        doc=u"""dictionary containing DataKeeper [-]
 
         :Type: {DataKeeper}
         """,
@@ -877,7 +877,7 @@ class XOutput(Output):
     nb_simu = property(
         fget=_get_nb_simu,
         fset=_set_nb_simu,
-        doc=u"""Number of simulations excluding reference simulation
+        doc=u"""Number of simulations excluding reference simulation [-]
 
         :Type: int
         :min: 0
@@ -915,7 +915,7 @@ class XOutput(Output):
     xoutput_ref = property(
         fget=_get_xoutput_ref,
         fset=_set_xoutput_ref,
-        doc=u"""Xoutput (or Output) of the reference simulation (only if is_keep_all_output is True and not included in output_list)
+        doc=u"""Xoutput (or Output) of the reference simulation (only if is_keep_all_output is True and not included in output_list) [-]
 
         :Type: Output
         """,
@@ -933,7 +933,7 @@ class XOutput(Output):
     xoutput_ref_index = property(
         fget=_get_xoutput_ref_index,
         fset=_set_xoutput_ref_index,
-        doc=u"""Index of the Xoutput (or Output) of the reference simulation in the output_list (only if is_keep_all_output is True)
+        doc=u"""Index of the Xoutput (or Output) of the reference simulation in the output_list (only if is_keep_all_output is True) [-]
 
         :Type: int
         """,

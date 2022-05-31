@@ -223,7 +223,7 @@ class Surface(FrozenClass):
     point_ref = property(
         fget=_get_point_ref,
         fset=_set_point_ref,
-        doc=u"""Center of symmetry
+        doc=u"""Center of symmetry [-]
 
         :Type: complex
         """,
@@ -241,7 +241,7 @@ class Surface(FrozenClass):
     label = property(
         fget=_get_label,
         fset=_set_label,
-        doc=u"""Label of the surface
+        doc=u"""Label of the surface [-]
 
         :Type: str
         """,

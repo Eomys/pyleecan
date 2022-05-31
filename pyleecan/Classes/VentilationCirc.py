@@ -299,7 +299,7 @@ class VentilationCirc(Hole):
     D0 = property(
         fget=_get_D0,
         fset=_set_D0,
-        doc=u"""Hole diameters
+        doc=u"""Hole diameters [m]
 
         :Type: float
         :min: 0
@@ -318,7 +318,7 @@ class VentilationCirc(Hole):
     H0 = property(
         fget=_get_H0,
         fset=_set_H0,
-        doc=u"""Radius of the hole centers
+        doc=u"""Radius of the hole centers [m]
 
         :Type: float
         :min: 0

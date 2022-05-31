@@ -220,7 +220,7 @@ class ImportGenVectSin(ImportMatrix):
     f = property(
         fget=_get_f,
         fset=_set_f,
-        doc=u"""Frequency of the sinus to generate
+        doc=u"""Frequency of the sinus to generate [Hz]
 
         :Type: float
         :min: 0
@@ -239,7 +239,7 @@ class ImportGenVectSin(ImportMatrix):
     A = property(
         fget=_get_A,
         fset=_set_A,
-        doc=u"""Amplitude of the sinus to generate
+        doc=u"""Amplitude of the sinus to generate [-]
 
         :Type: float
         """,
@@ -257,7 +257,7 @@ class ImportGenVectSin(ImportMatrix):
     Phi = property(
         fget=_get_Phi,
         fset=_set_Phi,
-        doc=u"""Phase of the sinus to generate
+        doc=u"""Phase of the sinus to generate [-]
 
         :Type: float
         :min: -6.29
@@ -277,7 +277,7 @@ class ImportGenVectSin(ImportMatrix):
     N = property(
         fget=_get_N,
         fset=_set_N,
-        doc=u"""Length of the vector to generate
+        doc=u"""Length of the vector to generate [-]
 
         :Type: int
         :min: 0
@@ -296,7 +296,7 @@ class ImportGenVectSin(ImportMatrix):
     Tf = property(
         fget=_get_Tf,
         fset=_set_Tf,
-        doc=u"""End time of the sinus generation
+        doc=u"""End time of the sinus generation [s]
 
         :Type: float
         :min: 0

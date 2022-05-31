@@ -161,7 +161,7 @@ class GUIOption(FrozenClass):
     unit = property(
         fget=_get_unit,
         fset=_set_unit,
-        doc=u"""Unit options
+        doc=u"""Unit options [-]
 
         :Type: Unit
         """,

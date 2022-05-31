@@ -271,7 +271,7 @@ class ParamExplorer(FrozenClass):
     name = property(
         fget=_get_name,
         fset=_set_name,
-        doc="""Parameter name
+        doc="""Parameter name [-]
 
         :Type: str
         """,
@@ -289,7 +289,7 @@ class ParamExplorer(FrozenClass):
     symbol = property(
         fget=_get_symbol,
         fset=_set_symbol,
-        doc="""Parameter symbol
+        doc="""Parameter symbol [-]
 
         :Type: str
         """,
@@ -307,7 +307,7 @@ class ParamExplorer(FrozenClass):
     unit = property(
         fget=_get_unit,
         fset=_set_unit,
-        doc="""Parameter unit
+        doc="""Parameter unit [-]
 
         :Type: str
         """,
@@ -320,7 +320,7 @@ class ParamExplorer(FrozenClass):
     setter = property(
         fget=_get_setter,
         fset=_set_setter,
-        doc="""Function that takes a Simulation and a value in argument and modifiers the simulation
+        doc="""Function that takes a Simulation and a value in argument and modifiers the simulation [-]
 
         :Type: function
         """,
@@ -333,7 +333,7 @@ class ParamExplorer(FrozenClass):
     getter = property(
         fget=_get_getter,
         fset=_set_getter,
-        doc="""Function to return the reference value (simulation as argument)
+        doc="""Function to return the reference value (simulation as argument) [-]
 
         :Type: function
         """,

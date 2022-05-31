@@ -435,7 +435,7 @@ class HoleM52(HoleMag):
     H0 = property(
         fget=_get_H0,
         fset=_set_H0,
-        doc=u"""Slot depth
+        doc=u"""Slot depth [m]
 
         :Type: float
         :min: 0
@@ -454,7 +454,7 @@ class HoleM52(HoleMag):
     W0 = property(
         fget=_get_W0,
         fset=_set_W0,
-        doc=u"""Magnet width
+        doc=u"""Magnet width [m]
 
         :Type: float
         :min: 0
@@ -473,7 +473,7 @@ class HoleM52(HoleMag):
     H1 = property(
         fget=_get_H1,
         fset=_set_H1,
-        doc=u"""Magnet height
+        doc=u"""Magnet height [m]
 
         :Type: float
         :min: 0
@@ -492,7 +492,7 @@ class HoleM52(HoleMag):
     W3 = property(
         fget=_get_W3,
         fset=_set_W3,
-        doc=u"""Tooth width
+        doc=u"""Tooth width [m]
 
         :Type: float
         :min: 0
@@ -511,7 +511,7 @@ class HoleM52(HoleMag):
     H2 = property(
         fget=_get_H2,
         fset=_set_H2,
-        doc=u"""Additional depth for the magnet
+        doc=u"""Additional depth for the magnet [m]
 
         :Type: float
         :min: 0
@@ -549,7 +549,7 @@ class HoleM52(HoleMag):
     magnet_0 = property(
         fget=_get_magnet_0,
         fset=_set_magnet_0,
-        doc=u"""Magnet of the hole
+        doc=u"""Magnet of the hole [-]
 
         :Type: Magnet
         """,

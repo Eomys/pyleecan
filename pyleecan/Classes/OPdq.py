@@ -369,7 +369,7 @@ class OPdq(OP):
     Id_ref = property(
         fget=_get_Id_ref,
         fset=_set_Id_ref,
-        doc=u"""d-axis current rms value
+        doc=u"""d-axis current rms value [Arms]
 
         :Type: float
         """,
@@ -387,7 +387,7 @@ class OPdq(OP):
     Iq_ref = property(
         fget=_get_Iq_ref,
         fset=_set_Iq_ref,
-        doc=u"""q-axis current rms value
+        doc=u"""q-axis current rms value [Arms]
 
         :Type: float
         """,
@@ -405,7 +405,7 @@ class OPdq(OP):
     Ud_ref = property(
         fget=_get_Ud_ref,
         fset=_set_Ud_ref,
-        doc=u"""d-axis voltage rms value
+        doc=u"""d-axis voltage rms value [Vrms]
 
         :Type: float
         """,
@@ -423,7 +423,7 @@ class OPdq(OP):
     Uq_ref = property(
         fget=_get_Uq_ref,
         fset=_set_Uq_ref,
-        doc=u"""q-axis voltage rms value
+        doc=u"""q-axis voltage rms value [Vrms]
 
         :Type: float
         """,

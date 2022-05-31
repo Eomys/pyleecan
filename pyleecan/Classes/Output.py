@@ -572,7 +572,7 @@ class Output(FrozenClass):
     simu = property(
         fget=_get_simu,
         fset=_set_simu,
-        doc=u"""Simulation object that generated the Output
+        doc=u"""Simulation object that generated the Output [-]
 
         :Type: Simulation
         """,
@@ -590,7 +590,7 @@ class Output(FrozenClass):
     path_result = property(
         fget=_get_path_result,
         fset=_set_path_result,
-        doc=u"""Path to the folder to same the results
+        doc=u"""Path to the folder to same the results [-]
 
         :Type: str
         """,
@@ -625,7 +625,7 @@ class Output(FrozenClass):
     geo = property(
         fget=_get_geo,
         fset=_set_geo,
-        doc=u"""Geometry output
+        doc=u"""Geometry output [-]
 
         :Type: OutGeo
         """,
@@ -660,7 +660,7 @@ class Output(FrozenClass):
     elec = property(
         fget=_get_elec,
         fset=_set_elec,
-        doc=u"""Electrical module output
+        doc=u"""Electrical module output [-]
 
         :Type: OutElec
         """,
@@ -695,7 +695,7 @@ class Output(FrozenClass):
     mag = property(
         fget=_get_mag,
         fset=_set_mag,
-        doc=u"""Magnetic module output
+        doc=u"""Magnetic module output [-]
 
         :Type: OutMag
         """,
@@ -732,7 +732,7 @@ class Output(FrozenClass):
     struct = property(
         fget=_get_struct,
         fset=_set_struct,
-        doc=u"""Structural module output
+        doc=u"""Structural module output [-]
 
         :Type: OutStruct
         """,
@@ -767,7 +767,7 @@ class Output(FrozenClass):
     post = property(
         fget=_get_post,
         fset=_set_post,
-        doc=u"""Post-Processing settings
+        doc=u"""Post-Processing settings [-]
 
         :Type: OutPost
         """,
@@ -785,7 +785,7 @@ class Output(FrozenClass):
     logger_name = property(
         fget=_get_logger_name,
         fset=_set_logger_name,
-        doc=u"""Name of the logger to use
+        doc=u"""Name of the logger to use [-]
 
         :Type: str
         """,
@@ -822,7 +822,7 @@ class Output(FrozenClass):
     force = property(
         fget=_get_force,
         fset=_set_force,
-        doc=u"""Force module output
+        doc=u"""Force module output [-]
 
         :Type: OutForce
         """,
@@ -857,7 +857,7 @@ class Output(FrozenClass):
     loss = property(
         fget=_get_loss,
         fset=_set_loss,
-        doc=u"""Loss module output
+        doc=u"""Loss module output [-]
 
         :Type: OutLoss
         """,

@@ -376,7 +376,7 @@ class SurfLine(Surface):
     line_list = property(
         fget=_get_line_list,
         fset=_set_line_list,
-        doc=u"""List of Lines 
+        doc=u"""List of Lines  [-]
 
         :Type: [Line]
         """,

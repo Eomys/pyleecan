@@ -203,7 +203,7 @@ class OptiBayesAlg(OptiSolver):
     nb_iter = property(
         fget=_get_nb_iter,
         fset=_set_nb_iter,
-        doc=u"""Number of iterations
+        doc=u"""Number of iterations [-]
 
         :Type: int
         :min: 1
@@ -222,7 +222,7 @@ class OptiBayesAlg(OptiSolver):
     nb_start = property(
         fget=_get_nb_start,
         fset=_set_nb_start,
-        doc=u"""Number of starting points
+        doc=u"""Number of starting points [-]
 
         :Type: int
         :min: 1
@@ -241,7 +241,7 @@ class OptiBayesAlg(OptiSolver):
     criterion = property(
         fget=_get_criterion,
         fset=_set_criterion,
-        doc=u"""Point selection criteria
+        doc=u"""Point selection criteria [-]
 
         :Type: str
         """,
@@ -259,7 +259,7 @@ class OptiBayesAlg(OptiSolver):
     kernel = property(
         fget=_get_kernel,
         fset=_set_kernel,
-        doc=u"""Type of kernel
+        doc=u"""Type of kernel [-]
 
         :Type: int
         :min: 0

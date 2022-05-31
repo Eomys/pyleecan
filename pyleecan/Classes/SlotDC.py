@@ -390,7 +390,7 @@ class SlotDC(Slot):
     W1 = property(
         fget=_get_W1,
         fset=_set_W1,
-        doc=u"""Slot isthmus width.
+        doc=u"""Slot isthmus width. [m]
 
         :Type: float
         :min: 0
@@ -409,7 +409,7 @@ class SlotDC(Slot):
     H1 = property(
         fget=_get_H1,
         fset=_set_H1,
-        doc=u"""Distance upper rod center to bore
+        doc=u"""Distance upper rod center to bore [m]
 
         :Type: float
         :min: 0
@@ -428,7 +428,7 @@ class SlotDC(Slot):
     D1 = property(
         fget=_get_D1,
         fset=_set_D1,
-        doc=u"""Diameter upper rod
+        doc=u"""Diameter upper rod [m]
 
         :Type: float
         :min: 0
@@ -447,7 +447,7 @@ class SlotDC(Slot):
     W2 = property(
         fget=_get_W2,
         fset=_set_W2,
-        doc=u"""Middle connection width
+        doc=u"""Middle connection width [m]
 
         :Type: float
         :min: 0
@@ -466,7 +466,7 @@ class SlotDC(Slot):
     H2 = property(
         fget=_get_H2,
         fset=_set_H2,
-        doc=u"""Height between the first and second center
+        doc=u"""Height between the first and second center [m]
 
         :Type: float
         :min: 0
@@ -485,7 +485,7 @@ class SlotDC(Slot):
     D2 = property(
         fget=_get_D2,
         fset=_set_D2,
-        doc=u"""Diameter upper section lower rod
+        doc=u"""Diameter upper section lower rod [m]
 
         :Type: float
         :min: 0
@@ -504,7 +504,7 @@ class SlotDC(Slot):
     H3 = property(
         fget=_get_H3,
         fset=_set_H3,
-        doc=u"""Length of lower rod
+        doc=u"""Length of lower rod [m]
 
         :Type: float
         :min: 0
@@ -523,7 +523,7 @@ class SlotDC(Slot):
     R3 = property(
         fget=_get_R3,
         fset=_set_R3,
-        doc=u"""Radius lower section lower rod
+        doc=u"""Radius lower section lower rod [m]
 
         :Type: float
         :min: 0

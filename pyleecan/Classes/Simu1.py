@@ -357,7 +357,7 @@ class Simu1(Simulation):
     elec = property(
         fget=_get_elec,
         fset=_set_elec,
-        doc=u"""Electrical module
+        doc=u"""Electrical module [-]
 
         :Type: Electrical
         """,
@@ -392,7 +392,7 @@ class Simu1(Simulation):
     mag = property(
         fget=_get_mag,
         fset=_set_mag,
-        doc=u"""Magnetic module
+        doc=u"""Magnetic module [-]
 
         :Type: Magnetics
         """,
@@ -429,7 +429,7 @@ class Simu1(Simulation):
     struct = property(
         fget=_get_struct,
         fset=_set_struct,
-        doc=u"""Structural module
+        doc=u"""Structural module [-]
 
         :Type: Structural
         """,
@@ -466,7 +466,7 @@ class Simu1(Simulation):
     force = property(
         fget=_get_force,
         fset=_set_force,
-        doc=u"""Force moduale
+        doc=u"""Force moduale [-]
 
         :Type: Force
         """,
@@ -501,7 +501,7 @@ class Simu1(Simulation):
     loss = property(
         fget=_get_loss,
         fset=_set_loss,
-        doc=u"""Loss moduale
+        doc=u"""Loss moduale [-]
 
         :Type: Loss
         """,

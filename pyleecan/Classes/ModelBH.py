@@ -183,7 +183,7 @@ class ModelBH(FrozenClass):
     Bmax = property(
         fget=_get_Bmax,
         fset=_set_Bmax,
-        doc=u"""Max value of B for extrapolation
+        doc=u"""Max value of B for extrapolation [T]
 
         :Type: float
         """,
@@ -201,7 +201,7 @@ class ModelBH(FrozenClass):
     Hmax = property(
         fget=_get_Hmax,
         fset=_set_Hmax,
-        doc=u"""Max value of H for extrapolation
+        doc=u"""Max value of H for extrapolation [A/m]
 
         :Type: float
         """,
@@ -219,7 +219,7 @@ class ModelBH(FrozenClass):
     delta = property(
         fget=_get_delta,
         fset=_set_delta,
-        doc=u"""Step value for H
+        doc=u"""Step value for H [A/m]
 
         :Type: float
         """,

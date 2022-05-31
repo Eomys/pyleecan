@@ -413,7 +413,7 @@ class LUTdq(LUT):
     Phi_dqh_mean = property(
         fget=_get_Phi_dqh_mean,
         fset=_set_Phi_dqh_mean,
-        doc=u"""RMS stator winding flux table in dqh frame (including magnets and currents given by I_dqh)
+        doc=u"""RMS stator winding flux table in dqh frame (including magnets and currents given by I_dqh) [Wbrms]
 
         :Type: ndarray
         """,
@@ -446,7 +446,7 @@ class LUTdq(LUT):
     Phi_dqh_mag = property(
         fget=_get_Phi_dqh_mag,
         fset=_set_Phi_dqh_mag,
-        doc=u"""RMS stator winding flux linkage spectrum in dqh frame including harmonics (only magnets)
+        doc=u"""RMS stator winding flux linkage spectrum in dqh frame including harmonics (only magnets) [Wbrms]
 
         :Type: SciDataTool.Classes.DataND.DataND
         """,

@@ -186,7 +186,7 @@ class BoreFlower(Bore):
     N = property(
         fget=_get_N,
         fset=_set_N,
-        doc=u"""Number of flower arc
+        doc=u"""Number of flower arc [-]
 
         :Type: int
         :min: 0
@@ -205,7 +205,7 @@ class BoreFlower(Bore):
     Rarc = property(
         fget=_get_Rarc,
         fset=_set_Rarc,
-        doc=u"""Radius of the flower arc
+        doc=u"""Radius of the flower arc [m]
 
         :Type: float
         :min: 0
@@ -224,7 +224,7 @@ class BoreFlower(Bore):
     alpha = property(
         fget=_get_alpha,
         fset=_set_alpha,
-        doc=u"""Angular offset for the arc
+        doc=u"""Angular offset for the arc [rad]
 
         :Type: float
         """,

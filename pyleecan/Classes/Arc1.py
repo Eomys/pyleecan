@@ -457,7 +457,7 @@ class Arc1(Arc):
     is_trigo_direction = property(
         fget=_get_is_trigo_direction,
         fset=_set_is_trigo_direction,
-        doc=u"""Rotation direction of the arc
+        doc=u"""Rotation direction of the arc [-]
 
         :Type: bool
         """,

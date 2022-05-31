@@ -287,7 +287,7 @@ class VarLoad(VarSimu):
     OP_matrix = property(
         fget=_get_OP_matrix,
         fset=_set_OP_matrix,
-        doc=u"""Operating point matrix (N0,I0,Phi0,T,P) or (N0,Id,Iq,T,P) or (N0,U0,s,T,P)
+        doc=u"""Operating point matrix (N0,I0,Phi0,T,P) or (N0,Id,Iq,T,P) or (N0,U0,s,T,P) [-]
 
         :Type: ndarray
         """,
@@ -305,7 +305,7 @@ class VarLoad(VarSimu):
     type_OP_matrix = property(
         fget=_get_type_OP_matrix,
         fset=_set_type_OP_matrix,
-        doc=u"""Select which kind of OP_matrix is used 0: (N0,I0,Phi0,T,P), 1:(N0,Id,Iq,T,P), 2:(N0,U0,s,T,P)
+        doc=u"""Select which kind of OP_matrix is used 0: (N0,I0,Phi0,T,P), 1:(N0,Id,Iq,T,P), 2:(N0,U0,s,T,P) [-]
 
         :Type: int
         :min: 0

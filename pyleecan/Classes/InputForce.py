@@ -234,7 +234,7 @@ class InputForce(Input):
     P = property(
         fget=_get_P,
         fset=_set_P,
-        doc=u"""Magnetic air-gap surface force
+        doc=u"""Magnetic air-gap surface force [N.m^2]
 
         :Type: ImportVectorField
         """,

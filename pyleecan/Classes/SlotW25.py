@@ -424,7 +424,7 @@ class SlotW25(Slot):
     W3 = property(
         fget=_get_W3,
         fset=_set_W3,
-        doc=u"""Teeth bottom width
+        doc=u"""Teeth bottom width [m]
 
         :Type: float
         :min: 0
@@ -443,7 +443,7 @@ class SlotW25(Slot):
     H2 = property(
         fget=_get_H2,
         fset=_set_H2,
-        doc=u"""Slot bottom height
+        doc=u"""Slot bottom height [m]
 
         :Type: float
         :min: 0
@@ -462,7 +462,7 @@ class SlotW25(Slot):
     W4 = property(
         fget=_get_W4,
         fset=_set_W4,
-        doc=u"""Teeth top width
+        doc=u"""Teeth top width [m]
 
         :Type: float
         :min: 0
@@ -481,7 +481,7 @@ class SlotW25(Slot):
     H1 = property(
         fget=_get_H1,
         fset=_set_H1,
-        doc=u"""Slot top height
+        doc=u"""Slot top height [m]
 
         :Type: float
         :min: 0

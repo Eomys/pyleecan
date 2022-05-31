@@ -890,7 +890,7 @@ class MagFEMM(Magnetics):
     Rag_enforced = property(
         fget=_get_Rag_enforced,
         fset=_set_Rag_enforced,
-        doc=u"""To enforce a different radius value for air-gap outputs
+        doc=u"""To enforce a different radius value for air-gap outputs [m]
 
         :Type: float
         """,

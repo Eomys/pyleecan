@@ -592,7 +592,7 @@ class Winding(FrozenClass):
     is_reverse_wind = property(
         fget=_get_is_reverse_wind,
         fset=_set_is_reverse_wind,
-        doc=u"""1 to reverse the default winding algorithm along the airgap (c, b, a instead of a, b, c along the trigonometric direction)
+        doc=u"""1 to reverse the default winding algorithm along the airgap (c, b, a instead of a, b, c along the trigonometric direction) [-]
 
         :Type: bool
         """,
@@ -610,7 +610,7 @@ class Winding(FrozenClass):
     Nslot_shift_wind = property(
         fget=_get_Nslot_shift_wind,
         fset=_set_Nslot_shift_wind,
-        doc=u"""0 not to change the stator winding connection matrix built by pyleecan number of slots to shift the coils obtained with pyleecan winding algorithm (a, b, c becomes b, c, a with Nslot_shift_wind1=1)
+        doc=u"""0 not to change the stator winding connection matrix built by pyleecan number of slots to shift the coils obtained with pyleecan winding algorithm (a, b, c becomes b, c, a with Nslot_shift_wind1=1) [-]
 
         :Type: int
         """,
@@ -628,7 +628,7 @@ class Winding(FrozenClass):
     qs = property(
         fget=_get_qs,
         fset=_set_qs,
-        doc=u"""number of phases 
+        doc=u"""number of phases  [-]
 
         :Type: int
         :min: 0
@@ -647,7 +647,7 @@ class Winding(FrozenClass):
     Ntcoil = property(
         fget=_get_Ntcoil,
         fset=_set_Ntcoil,
-        doc=u"""number of turns per coil
+        doc=u"""number of turns per coil [-]
 
         :Type: int
         :min: 1
@@ -666,7 +666,7 @@ class Winding(FrozenClass):
     Npcp = property(
         fget=_get_Npcp,
         fset=_set_Npcp,
-        doc=u"""number of parallel circuits per phase
+        doc=u"""number of parallel circuits per phase [-]
 
         :Type: int
         :min: 1
@@ -685,7 +685,7 @@ class Winding(FrozenClass):
     type_connection = property(
         fget=_get_type_connection,
         fset=_set_type_connection,
-        doc=u"""Winding connection : 0 star (Y), 1 triangle (delta), -1 no connection
+        doc=u"""Winding connection : 0 star (Y), 1 triangle (delta), -1 no connection [-]
 
         :Type: int
         :min: -1
@@ -705,7 +705,7 @@ class Winding(FrozenClass):
     p = property(
         fget=_get_p,
         fset=_set_p,
-        doc=u"""pole pairs number
+        doc=u"""pole pairs number [-]
 
         :Type: int
         :min: 1
@@ -724,7 +724,7 @@ class Winding(FrozenClass):
     Lewout = property(
         fget=_get_Lewout,
         fset=_set_Lewout,
-        doc=u"""straight length of the conductors outside the lamination before the curved part of winding overhang [m] - can be negative to tune the average turn length 
+        doc=u"""straight length of the conductors outside the lamination before the curved part of winding overhang [m] - can be negative to tune the average turn length  [m]
 
         :Type: float
         :min: 0
@@ -762,7 +762,7 @@ class Winding(FrozenClass):
     conductor = property(
         fget=_get_conductor,
         fset=_set_conductor,
-        doc=u"""Winding's conductor
+        doc=u"""Winding's conductor [-]
 
         :Type: Conductor
         """,
@@ -805,7 +805,7 @@ class Winding(FrozenClass):
     wind_mat = property(
         fget=_get_wind_mat,
         fset=_set_wind_mat,
-        doc=u"""Winding matrix calculated with Star of slots (from SWAT_EM package)
+        doc=u"""Winding matrix calculated with Star of slots (from SWAT_EM package) [-]
 
         :Type: ndarray
         """,
@@ -898,7 +898,7 @@ class Winding(FrozenClass):
     end_winding = property(
         fget=_get_end_winding,
         fset=_set_end_winding,
-        doc=u"""End Winding's definition
+        doc=u"""End Winding's definition [-]
 
         :Type: EndWinding
         """,
@@ -916,7 +916,7 @@ class Winding(FrozenClass):
     is_reverse_layer = property(
         fget=_get_is_reverse_layer,
         fset=_set_is_reverse_layer,
-        doc=u"""1 to reverse the layers (rad from 0 to Nrad-1 => Nrad-1 to 0)
+        doc=u"""1 to reverse the layers (rad from 0 to Nrad-1 => Nrad-1 to 0) [-]
 
         :Type: bool
         """,
@@ -934,7 +934,7 @@ class Winding(FrozenClass):
     is_change_layer = property(
         fget=_get_is_change_layer,
         fset=_set_is_change_layer,
-        doc=u"""1 to change the layer from radial to tangential or tangential to radial
+        doc=u"""1 to change the layer from radial to tangential or tangential to radial [-]
 
         :Type: bool
         """,

@@ -632,7 +632,7 @@ class EEC_SCIM(EEC):
     Rfe = property(
         fget=_get_Rfe,
         fset=_set_Rfe,
-        doc=u"""Iron loss resistance
+        doc=u"""Iron loss resistance [Ohm]
 
         :Type: float
         """,
@@ -650,7 +650,7 @@ class EEC_SCIM(EEC):
     L1 = property(
         fget=_get_L1,
         fset=_set_L1,
-        doc=u"""Stator phase inductance
+        doc=u"""Stator phase inductance [H]
 
         :Type: float
         """,
@@ -668,7 +668,7 @@ class EEC_SCIM(EEC):
     R2 = property(
         fget=_get_R2,
         fset=_set_R2,
-        doc=u"""Rotor phase resistance
+        doc=u"""Rotor phase resistance [Ohm]
 
         :Type: float
         """,
@@ -686,7 +686,7 @@ class EEC_SCIM(EEC):
     L2 = property(
         fget=_get_L2,
         fset=_set_L2,
-        doc=u"""Rotor phase inductance
+        doc=u"""Rotor phase inductance [H]
 
         :Type: float
         """,
@@ -747,7 +747,7 @@ class EEC_SCIM(EEC):
     Im_table = property(
         fget=_get_Im_table,
         fset=_set_Im_table,
-        doc=u"""Array of magnetizing current
+        doc=u"""Array of magnetizing current [Arms]
 
         :Type: ndarray
         """,
@@ -772,7 +772,7 @@ class EEC_SCIM(EEC):
     Lm_table = property(
         fget=_get_Lm_table,
         fset=_set_Lm_table,
-        doc=u"""Array of magnetizing inductance function of Im_table
+        doc=u"""Array of magnetizing inductance function of Im_table [H]
 
         :Type: ndarray
         """,
@@ -792,7 +792,7 @@ class EEC_SCIM(EEC):
     I1 = property(
         fget=_get_I1,
         fset=_set_I1,
-        doc=u"""Stator phase current (after solve)
+        doc=u"""Stator phase current (after solve) [Arms]
 
         :Type: complex
         """,
@@ -812,7 +812,7 @@ class EEC_SCIM(EEC):
     I2 = property(
         fget=_get_I2,
         fset=_set_I2,
-        doc=u"""Rotor phase current (after solve)
+        doc=u"""Rotor phase current (after solve) [Arms]
 
         :Type: complex
         """,
@@ -832,7 +832,7 @@ class EEC_SCIM(EEC):
     U1 = property(
         fget=_get_U1,
         fset=_set_U1,
-        doc=u"""Stator phase voltage (after solve)
+        doc=u"""Stator phase voltage (after solve) [Vrms]
 
         :Type: complex
         """,
@@ -852,7 +852,7 @@ class EEC_SCIM(EEC):
     U2 = property(
         fget=_get_U2,
         fset=_set_U2,
-        doc=u"""Rotor phase voltage (after solve)
+        doc=u"""Rotor phase voltage (after solve) [Vrms]
 
         :Type: complex
         """,
@@ -872,7 +872,7 @@ class EEC_SCIM(EEC):
     If = property(
         fget=_get_If,
         fset=_set_If,
-        doc=u"""Iron loss current (after solve)
+        doc=u"""Iron loss current (after solve) [Arms]
 
         :Type: complex
         """,
@@ -890,7 +890,7 @@ class EEC_SCIM(EEC):
     Lm = property(
         fget=_get_Lm,
         fset=_set_Lm,
-        doc=u"""Magnetizing inductance (after solve)
+        doc=u"""Magnetizing inductance (after solve) [H]
 
         :Type: float
         """,
@@ -910,7 +910,7 @@ class EEC_SCIM(EEC):
     Im = property(
         fget=_get_Im,
         fset=_set_Im,
-        doc=u"""Magnetizing current (after solve)
+        doc=u"""Magnetizing current (after solve) [Arms]
 
         :Type: complex
         """,

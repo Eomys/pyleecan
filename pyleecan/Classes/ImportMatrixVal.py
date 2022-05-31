@@ -192,7 +192,7 @@ class ImportMatrixVal(ImportMatrix):
     value = property(
         fget=_get_value,
         fset=_set_value,
-        doc=u"""The matrix to return
+        doc=u"""The matrix to return [-]
 
         :Type: ndarray
         """,

@@ -166,7 +166,7 @@ class LossModelWinding(LossModel):
     temperature = property(
         fget=_get_temperature,
         fset=_set_temperature,
-        doc=u"""Winding temperature
+        doc=u"""Winding temperature [°C]
 
         :Type: float
         """,

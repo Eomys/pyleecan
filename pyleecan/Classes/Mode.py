@@ -274,7 +274,7 @@ class Mode(SolutionMat):
     nat_freq = property(
         fget=_get_nat_freq,
         fset=_set_nat_freq,
-        doc=u"""Natural frequency of the mode
+        doc=u"""Natural frequency of the mode [Hz]
 
         :Type: float
         """,
@@ -292,7 +292,7 @@ class Mode(SolutionMat):
     order_circ = property(
         fget=_get_order_circ,
         fset=_set_order_circ,
-        doc=u"""Circumferential order
+        doc=u"""Circumferential order [-]
 
         :Type: int
         :min: 0
@@ -311,7 +311,7 @@ class Mode(SolutionMat):
     order_long = property(
         fget=_get_order_long,
         fset=_set_order_long,
-        doc=u"""Longitudinal order
+        doc=u"""Longitudinal order [-]
 
         :Type: int
         :min: 0

@@ -406,7 +406,7 @@ class SlotW60(Slot):
     W1 = property(
         fget=_get_W1,
         fset=_set_W1,
-        doc=u"""Pole top width
+        doc=u"""Pole top width [m]
 
         :Type: float
         :min: 0
@@ -425,7 +425,7 @@ class SlotW60(Slot):
     W2 = property(
         fget=_get_W2,
         fset=_set_W2,
-        doc=u"""Pole bottom width
+        doc=u"""Pole bottom width [m]
 
         :Type: float
         :min: 0
@@ -444,7 +444,7 @@ class SlotW60(Slot):
     H1 = property(
         fget=_get_H1,
         fset=_set_H1,
-        doc=u"""Pole top height
+        doc=u"""Pole top height [m]
 
         :Type: float
         :min: 0
@@ -463,7 +463,7 @@ class SlotW60(Slot):
     H2 = property(
         fget=_get_H2,
         fset=_set_H2,
-        doc=u"""Pole bottom height
+        doc=u"""Pole bottom height [m]
 
         :Type: float
         :min: 0
@@ -482,7 +482,7 @@ class SlotW60(Slot):
     R1 = property(
         fget=_get_R1,
         fset=_set_R1,
-        doc=u"""Pole top radius
+        doc=u"""Pole top radius [m]
 
         :Type: float
         :min: 0
@@ -501,7 +501,7 @@ class SlotW60(Slot):
     H3 = property(
         fget=_get_H3,
         fset=_set_H3,
-        doc=u"""Top Distance Ploe-coil 
+        doc=u"""Top Distance Ploe-coil  [m]
 
         :Type: float
         :min: 0
@@ -520,7 +520,7 @@ class SlotW60(Slot):
     H4 = property(
         fget=_get_H4,
         fset=_set_H4,
-        doc=u"""Bottom Distance Ploe-coil 
+        doc=u"""Bottom Distance Ploe-coil  [m]
 
         :Type: float
         :min: 0
@@ -539,7 +539,7 @@ class SlotW60(Slot):
     W3 = property(
         fget=_get_W3,
         fset=_set_W3,
-        doc=u"""Edge Distance Ploe-coil 
+        doc=u"""Edge Distance Ploe-coil  [m]
 
         :Type: float
         :min: 0

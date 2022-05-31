@@ -223,7 +223,7 @@ class BoreUD(Bore):
     line_list = property(
         fget=_get_line_list,
         fset=_set_line_list,
-        doc=u"""List of line to draw the full bore
+        doc=u"""List of line to draw the full bore [-]
 
         :Type: [Line]
         """,

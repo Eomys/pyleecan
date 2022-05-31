@@ -113,6 +113,7 @@ class ElecLUTdq(Electrical):
         Tsta=20,
         Trot=20,
         type_skin_effect=1,
+        is_skin_effect_inductance=True,
         init_dict=None,
         init_str=None,
     ):
@@ -171,6 +172,8 @@ class ElecLUTdq(Electrical):
                 Trot = init_dict["Trot"]
             if "type_skin_effect" in list(init_dict.keys()):
                 type_skin_effect = init_dict["type_skin_effect"]
+            if "is_skin_effect_inductance" in list(init_dict.keys()):
+                is_skin_effect_inductance = init_dict["is_skin_effect_inductance"]
         # Set the properties (value check and convertion are done in setter)
         self.n_interp = n_interp
         self.Id_min = Id_min
@@ -194,6 +197,7 @@ class ElecLUTdq(Electrical):
             Tsta=Tsta,
             Trot=Trot,
             type_skin_effect=type_skin_effect,
+            is_skin_effect_inductance=is_skin_effect_inductance,
         )
         # The class is frozen (in Electrical init), for now it's impossible to
         # add new properties
@@ -422,7 +426,7 @@ class ElecLUTdq(Electrical):
     Id_min = property(
         fget=_get_Id_min,
         fset=_set_Id_min,
-        doc=u"""Minimum Id for LUT calculation
+        doc=u"""Minimum Id for LUT calculation [Arms]
 
         :Type: float
         """,
@@ -440,7 +444,7 @@ class ElecLUTdq(Electrical):
     Id_max = property(
         fget=_get_Id_max,
         fset=_set_Id_max,
-        doc=u"""Maximum Id for LUT calculation
+        doc=u"""Maximum Id for LUT calculation [Arms]
 
         :Type: float
         """,
@@ -458,7 +462,7 @@ class ElecLUTdq(Electrical):
     Iq_min = property(
         fget=_get_Iq_min,
         fset=_set_Iq_min,
-        doc=u"""Minimum Iq for LUT calculation
+        doc=u"""Minimum Iq for LUT calculation [Arms]
 
         :Type: float
         """,
@@ -476,7 +480,7 @@ class ElecLUTdq(Electrical):
     Iq_max = property(
         fget=_get_Iq_max,
         fset=_set_Iq_max,
-        doc=u"""Maximum Iq for LUT calculation
+        doc=u"""Maximum Iq for LUT calculation [Arms]
 
         :Type: float
         """,
@@ -585,7 +589,7 @@ class ElecLUTdq(Electrical):
     Urms_max = property(
         fget=_get_Urms_max,
         fset=_set_Urms_max,
-        doc=u"""Maximum rms phase voltage
+        doc=u"""Maximum rms phase voltage [Vrms]
 
         :Type: float
         :min: 0
@@ -604,7 +608,7 @@ class ElecLUTdq(Electrical):
     Jrms_max = property(
         fget=_get_Jrms_max,
         fset=_set_Jrms_max,
-        doc=u"""Maximum rms current density in slot
+        doc=u"""Maximum rms current density in slot [A/m²]
 
         :Type: float
         :min: 0
@@ -623,7 +627,7 @@ class ElecLUTdq(Electrical):
     Irms_max = property(
         fget=_get_Irms_max,
         fset=_set_Irms_max,
-        doc=u"""Maximum rms phase current
+        doc=u"""Maximum rms phase current [A]
 
         :Type: float
         :min: 0

@@ -213,7 +213,7 @@ class NotchEvenDist(Notch):
     alpha = property(
         fget=_get_alpha,
         fset=_set_alpha,
-        doc=u"""angular positon of the first notch
+        doc=u"""angular positon of the first notch [rad]
 
         :Type: float
         """,
@@ -250,7 +250,7 @@ class NotchEvenDist(Notch):
     notch_shape = property(
         fget=_get_notch_shape,
         fset=_set_notch_shape,
-        doc=u"""Shape of the Notch
+        doc=u"""Shape of the Notch [-]
 
         :Type: Slot
         """,

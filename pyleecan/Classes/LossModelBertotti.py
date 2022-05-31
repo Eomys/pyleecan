@@ -315,7 +315,7 @@ class LossModelBertotti(LossModel):
     k_hy = property(
         fget=_get_k_hy,
         fset=_set_k_hy,
-        doc=u"""Hysteresis loss coefficient
+        doc=u"""Hysteresis loss coefficient [W/kg]
 
         :Type: float
         """,
@@ -333,7 +333,7 @@ class LossModelBertotti(LossModel):
     k_ed = property(
         fget=_get_k_ed,
         fset=_set_k_ed,
-        doc=u"""Eddy current loss coefficient
+        doc=u"""Eddy current loss coefficient [W/kg]
 
         :Type: float
         """,
@@ -351,7 +351,7 @@ class LossModelBertotti(LossModel):
     k_ex = property(
         fget=_get_k_ex,
         fset=_set_k_ex,
-        doc=u"""Excess loss coefficient
+        doc=u"""Excess loss coefficient [W/kg]
 
         :Type: float
         """,
@@ -369,7 +369,7 @@ class LossModelBertotti(LossModel):
     alpha_hy = property(
         fget=_get_alpha_hy,
         fset=_set_alpha_hy,
-        doc=u"""Hysteresis loss power coefficient
+        doc=u"""Hysteresis loss power coefficient [-]
 
         :Type: float
         """,
@@ -387,7 +387,7 @@ class LossModelBertotti(LossModel):
     alpha_ed = property(
         fget=_get_alpha_ed,
         fset=_set_alpha_ed,
-        doc=u"""Eddy current loss power coefficient
+        doc=u"""Eddy current loss power coefficient [-]
 
         :Type: float
         """,
@@ -405,7 +405,7 @@ class LossModelBertotti(LossModel):
     alpha_ex = property(
         fget=_get_alpha_ex,
         fset=_set_alpha_ex,
-        doc=u"""Excess loss power coefficient
+        doc=u"""Excess loss power coefficient [-]
 
         :Type: float
         """,
@@ -423,7 +423,7 @@ class LossModelBertotti(LossModel):
     group = property(
         fget=_get_group,
         fset=_set_group,
-        doc=u"""String to override default FEA group to apply model
+        doc=u"""String to override default FEA group to apply model [-]
 
         :Type: str
         """,
@@ -441,7 +441,7 @@ class LossModelBertotti(LossModel):
     get_meshsolution = property(
         fget=_get_get_meshsolution,
         fset=_set_get_meshsolution,
-        doc=u"""Store the loss density
+        doc=u"""Store the loss density [-]
 
         :Type: bool
         """,
@@ -461,7 +461,7 @@ class LossModelBertotti(LossModel):
     N0 = property(
         fget=_get_N0,
         fset=_set_N0,
-        doc=u"""List of rotor speeds to override actual speed
+        doc=u"""List of rotor speeds to override actual speed [rpm]
 
         :Type: list
         """,

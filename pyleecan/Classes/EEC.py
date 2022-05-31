@@ -419,7 +419,7 @@ class EEC(FrozenClass):
     type_skin_effect = property(
         fget=_get_type_skin_effect,
         fset=_set_type_skin_effect,
-        doc=u"""Skin effect for resistance and inductance
+        doc=u"""Skin effect for resistance and inductance [-]
 
         :Type: int
         """,
@@ -454,7 +454,7 @@ class EEC(FrozenClass):
     OP = property(
         fget=_get_OP,
         fset=_set_OP,
-        doc=u"""Operating Point
+        doc=u"""Operating Point [-]
 
         :Type: OP
         """,
@@ -472,7 +472,7 @@ class EEC(FrozenClass):
     Tsta = property(
         fget=_get_Tsta,
         fset=_set_Tsta,
-        doc=u"""Average stator temperature for operational EEC calculation
+        doc=u"""Average stator temperature for operational EEC calculation [deg Celsius]
 
         :Type: float
         """,
@@ -490,7 +490,7 @@ class EEC(FrozenClass):
     Trot = property(
         fget=_get_Trot,
         fset=_set_Trot,
-        doc=u"""Average rotor temperature for operational EEC calculation
+        doc=u"""Average rotor temperature for operational EEC calculation [deg Celsius]
 
         :Type: float
         """,
@@ -580,7 +580,7 @@ class EEC(FrozenClass):
     R1 = property(
         fget=_get_R1,
         fset=_set_R1,
-        doc=u"""Stator phase resistance
+        doc=u"""Stator phase resistance [Ohm]
 
         :Type: float
         """,
@@ -617,7 +617,7 @@ class EEC(FrozenClass):
     fluxlink = property(
         fget=_get_fluxlink,
         fset=_set_fluxlink,
-        doc=u"""Magnetic model for flux linkage calculation
+        doc=u"""Magnetic model for flux linkage calculation [-]
 
         :Type: Magnetics
         """,

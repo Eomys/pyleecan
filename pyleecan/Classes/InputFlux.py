@@ -362,7 +362,7 @@ class InputFlux(InputCurrent):
     per_a = property(
         fget=_get_per_a,
         fset=_set_per_a,
-        doc=u"""Angle periodicity
+        doc=u"""Angle periodicity [-]
 
         :Type: int
         """,
@@ -380,7 +380,7 @@ class InputFlux(InputCurrent):
     per_t = property(
         fget=_get_per_t,
         fset=_set_per_t,
-        doc=u"""Time periodicity
+        doc=u"""Time periodicity [-]
 
         :Type: int
         """,
@@ -398,7 +398,7 @@ class InputFlux(InputCurrent):
     is_antiper_a = property(
         fget=_get_is_antiper_a,
         fset=_set_is_antiper_a,
-        doc=u"""If angle is antiperiodic
+        doc=u"""If angle is antiperiodic [-]
 
         :Type: bool
         """,
@@ -416,7 +416,7 @@ class InputFlux(InputCurrent):
     is_antiper_t = property(
         fget=_get_is_antiper_t,
         fset=_set_is_antiper_t,
-        doc=u"""If time is antiperiodic
+        doc=u"""If time is antiperiodic [-]
 
         :Type: bool
         """,
@@ -436,7 +436,7 @@ class InputFlux(InputCurrent):
     B_dict = property(
         fget=_get_B_dict,
         fset=_set_B_dict,
-        doc=u"""Dict of Import objects or lists for each component of the flux
+        doc=u"""Dict of Import objects or lists for each component of the flux [-]
 
         :Type: dict
         """,
@@ -454,7 +454,7 @@ class InputFlux(InputCurrent):
     unit = property(
         fget=_get_unit,
         fset=_set_unit,
-        doc=u"""Unit of the flux if not T
+        doc=u"""Unit of the flux if not T [-]
 
         :Type: str
         """,
@@ -479,7 +479,7 @@ class InputFlux(InputCurrent):
     slice = property(
         fget=_get_slice,
         fset=_set_slice,
-        doc=u"""Slice axis values
+        doc=u"""Slice axis values [m]
 
         :Type: ndarray
         """,

@@ -153,7 +153,7 @@ class Drive(FrozenClass):
     Umax = property(
         fget=_get_Umax,
         fset=_set_Umax,
-        doc=u"""Maximum RMS voltage of the Drive
+        doc=u"""Maximum RMS voltage of the Drive [V]
 
         :Type: float
         :min: 0
@@ -172,7 +172,7 @@ class Drive(FrozenClass):
     Imax = property(
         fget=_get_Imax,
         fset=_set_Imax,
-        doc=u"""Maximum RMS current of the Drive
+        doc=u"""Maximum RMS current of the Drive [A]
 
         :Type: float
         :min: 0
@@ -191,7 +191,7 @@ class Drive(FrozenClass):
     is_current = property(
         fget=_get_is_current,
         fset=_set_is_current,
-        doc=u"""True to generate current waveform, False for voltage
+        doc=u"""True to generate current waveform, False for voltage [-]
 
         :Type: bool
         """,

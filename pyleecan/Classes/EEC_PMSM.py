@@ -441,7 +441,7 @@ class EEC_PMSM(EEC):
     Ld = property(
         fget=_get_Ld,
         fset=_set_Ld,
-        doc=u"""Stator winding inductance along d-axis
+        doc=u"""Stator winding inductance along d-axis [H]
 
         :Type: float
         """,
@@ -459,7 +459,7 @@ class EEC_PMSM(EEC):
     Lq = property(
         fget=_get_Lq,
         fset=_set_Lq,
-        doc=u"""Stator winding inductance along q-axis
+        doc=u"""Stator winding inductance along q-axis [H]
 
         :Type: float
         """,
@@ -477,7 +477,7 @@ class EEC_PMSM(EEC):
     Phid = property(
         fget=_get_Phid,
         fset=_set_Phid,
-        doc=u"""Stator winding flux along d-axis
+        doc=u"""Stator winding flux along d-axis [Wb]
 
         :Type: float
         """,
@@ -495,7 +495,7 @@ class EEC_PMSM(EEC):
     Phiq = property(
         fget=_get_Phiq,
         fset=_set_Phiq,
-        doc=u"""Stator winding flux along q-axis
+        doc=u"""Stator winding flux along q-axis [Wb]
 
         :Type: float
         """,
@@ -513,7 +513,7 @@ class EEC_PMSM(EEC):
     Phid_mag = property(
         fget=_get_Phid_mag,
         fset=_set_Phid_mag,
-        doc=u"""Stator winding flux along d-axis in open-circuit (rotor flux linkage)
+        doc=u"""Stator winding flux along d-axis in open-circuit (rotor flux linkage) [Wb]
 
         :Type: float
         """,
@@ -531,7 +531,7 @@ class EEC_PMSM(EEC):
     Phiq_mag = property(
         fget=_get_Phiq_mag,
         fset=_set_Phiq_mag,
-        doc=u"""Stator winding flux along q-axis in open-circuit (rotor flux linkage)
+        doc=u"""Stator winding flux along q-axis in open-circuit (rotor flux linkage) [Wb]
 
         :Type: float
         """,

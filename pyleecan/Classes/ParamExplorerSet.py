@@ -249,7 +249,7 @@ class ParamExplorerSet(ParamExplorer):
     value = property(
         fget=_get_value,
         fset=_set_value,
-        doc=u"""List containing the different parameter values to explore
+        doc=u"""List containing the different parameter values to explore [-]
 
         :Type: list
         """,

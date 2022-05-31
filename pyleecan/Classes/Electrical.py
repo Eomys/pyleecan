@@ -102,6 +102,7 @@ class Electrical(FrozenClass):
         Tsta=20,
         Trot=20,
         type_skin_effect=1,
+        is_skin_effect_inductance=True,
         init_dict=None,
         init_str=None,
     ):
@@ -134,6 +135,8 @@ class Electrical(FrozenClass):
                 Trot = init_dict["Trot"]
             if "type_skin_effect" in list(init_dict.keys()):
                 type_skin_effect = init_dict["type_skin_effect"]
+            if "is_skin_effect_inductance" in list(init_dict.keys()):
+                is_skin_effect_inductance = init_dict["is_skin_effect_inductance"]
         # Set the properties (value check and convertion are done in setter)
         self.parent = None
         self.eec = eec
@@ -143,6 +146,7 @@ class Electrical(FrozenClass):
         self.Tsta = Tsta
         self.Trot = Trot
         self.type_skin_effect = type_skin_effect
+        self.is_skin_effect_inductance = is_skin_effect_inductance
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -174,6 +178,11 @@ class Electrical(FrozenClass):
         Electrical_str += "Tsta = " + str(self.Tsta) + linesep
         Electrical_str += "Trot = " + str(self.Trot) + linesep
         Electrical_str += "type_skin_effect = " + str(self.type_skin_effect) + linesep
+        Electrical_str += (
+            "is_skin_effect_inductance = "
+            + str(self.is_skin_effect_inductance)
+            + linesep
+        )
         return Electrical_str
 
     def __eq__(self, other):
@@ -194,6 +203,8 @@ class Electrical(FrozenClass):
         if other.Trot != self.Trot:
             return False
         if other.type_skin_effect != self.type_skin_effect:
+            return False
+        if other.is_skin_effect_inductance != self.is_skin_effect_inductance:
             return False
         return True
 
@@ -231,6 +242,8 @@ class Electrical(FrozenClass):
             diff_list.append(name + ".Trot")
         if other._type_skin_effect != self._type_skin_effect:
             diff_list.append(name + ".type_skin_effect")
+        if other._is_skin_effect_inductance != self._is_skin_effect_inductance:
+            diff_list.append(name + ".is_skin_effect_inductance")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -246,6 +259,7 @@ class Electrical(FrozenClass):
         S += getsizeof(self.Tsta)
         S += getsizeof(self.Trot)
         S += getsizeof(self.type_skin_effect)
+        S += getsizeof(self.is_skin_effect_inductance)
         return S
 
     def as_dict(self, type_handle_ndarray=0, keep_function=False, **kwargs):
@@ -281,6 +295,7 @@ class Electrical(FrozenClass):
         Electrical_dict["Tsta"] = self.Tsta
         Electrical_dict["Trot"] = self.Trot
         Electrical_dict["type_skin_effect"] = self.type_skin_effect
+        Electrical_dict["is_skin_effect_inductance"] = self.is_skin_effect_inductance
         # The class name is added to the dict for deserialisation purpose
         Electrical_dict["__class__"] = "Electrical"
         return Electrical_dict
@@ -297,6 +312,7 @@ class Electrical(FrozenClass):
         self.Tsta = None
         self.Trot = None
         self.type_skin_effect = None
+        self.is_skin_effect_inductance = None
 
     def _get_eec(self):
         """getter of eec"""
@@ -327,7 +343,7 @@ class Electrical(FrozenClass):
     eec = property(
         fget=_get_eec,
         fset=_set_eec,
-        doc=u"""Electrical Equivalent Circuit
+        doc=u"""Electrical Equivalent Circuit [-]
 
         :Type: EEC
         """,
@@ -345,7 +361,7 @@ class Electrical(FrozenClass):
     logger_name = property(
         fget=_get_logger_name,
         fset=_set_logger_name,
-        doc=u"""Name of the logger to use
+        doc=u"""Name of the logger to use [-]
 
         :Type: str
         """,
@@ -363,7 +379,7 @@ class Electrical(FrozenClass):
     freq_max = property(
         fget=_get_freq_max,
         fset=_set_freq_max,
-        doc=u"""Maximum frequency to calculate voltage and current harmonics
+        doc=u"""Maximum frequency to calculate voltage and current harmonics [Hz]
 
         :Type: float
         """,
@@ -400,7 +416,7 @@ class Electrical(FrozenClass):
     LUT_enforced = property(
         fget=_get_LUT_enforced,
         fset=_set_LUT_enforced,
-        doc=u"""Look-Up Tables to update equivalent circuit parameters
+        doc=u"""Look-Up Tables to update equivalent circuit parameters [-]
 
         :Type: LUT
         """,
@@ -418,7 +434,7 @@ class Electrical(FrozenClass):
     Tsta = property(
         fget=_get_Tsta,
         fset=_set_Tsta,
-        doc=u"""Average stator temperature for Electrical calculation
+        doc=u"""Average stator temperature for Electrical calculation [deg Celsius]
 
         :Type: float
         """,
@@ -436,7 +452,7 @@ class Electrical(FrozenClass):
     Trot = property(
         fget=_get_Trot,
         fset=_set_Trot,
-        doc=u"""Average rotor temperature for Electrical calculation
+        doc=u"""Average rotor temperature for Electrical calculation [deg Celsius]
 
         :Type: float
         """,
@@ -454,8 +470,26 @@ class Electrical(FrozenClass):
     type_skin_effect = property(
         fget=_get_type_skin_effect,
         fset=_set_type_skin_effect,
-        doc=u"""Skin effect for resistance and inductance
+        doc=u"""Skin effect for resistance and inductance [-]
 
         :Type: int
+        """,
+    )
+
+    def _get_is_skin_effect_inductance(self):
+        """getter of is_skin_effect_inductance"""
+        return self._is_skin_effect_inductance
+
+    def _set_is_skin_effect_inductance(self, value):
+        """setter of is_skin_effect_inductance"""
+        check_var("is_skin_effect_inductance", value, "bool")
+        self._is_skin_effect_inductance = value
+
+    is_skin_effect_inductance = property(
+        fget=_get_is_skin_effect_inductance,
+        fset=_set_is_skin_effect_inductance,
+        doc=u"""True to include skin effect on inductance if type_skin_effect != 0
+
+        :Type: bool
         """,
     )

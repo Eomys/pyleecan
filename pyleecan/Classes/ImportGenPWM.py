@@ -424,7 +424,7 @@ class ImportGenPWM(ImportMatrix):
     fs = property(
         fget=_get_fs,
         fset=_set_fs,
-        doc=u"""sample frequency
+        doc=u"""sample frequency [Hz]
 
         :Type: float
         :min: 0
@@ -443,7 +443,7 @@ class ImportGenPWM(ImportMatrix):
     duration = property(
         fget=_get_duration,
         fset=_set_duration,
-        doc=u"""duration
+        doc=u"""duration [s]
 
         :Type: float
         :min: 0
@@ -462,7 +462,7 @@ class ImportGenPWM(ImportMatrix):
     f = property(
         fget=_get_f,
         fset=_set_f,
-        doc=u"""fundamental frequency
+        doc=u"""fundamental frequency [Hz]
 
         :Type: float
         :min: 0
@@ -481,7 +481,7 @@ class ImportGenPWM(ImportMatrix):
     fmax = property(
         fget=_get_fmax,
         fset=_set_fmax,
-        doc=u"""maximal fundamental frequency
+        doc=u"""maximal fundamental frequency [Hz]
 
         :Type: float
         :min: 0
@@ -537,7 +537,7 @@ class ImportGenPWM(ImportMatrix):
     fswi = property(
         fget=_get_fswi,
         fset=_set_fswi,
-        doc=u"""switching frequency
+        doc=u"""switching frequency [Hz]
 
         :Type: float
         """,
@@ -555,7 +555,7 @@ class ImportGenPWM(ImportMatrix):
     fswi_max = property(
         fget=_get_fswi_max,
         fset=_set_fswi_max,
-        doc=u"""maximal switching frequency
+        doc=u"""maximal switching frequency [Hz]
 
         :Type: float
         """,
@@ -591,7 +591,7 @@ class ImportGenPWM(ImportMatrix):
     Vdc1 = property(
         fget=_get_Vdc1,
         fset=_set_Vdc1,
-        doc=u"""DC BUS voltage
+        doc=u"""DC BUS voltage [V]
 
         :Type: float
         """,
@@ -609,7 +609,7 @@ class ImportGenPWM(ImportMatrix):
     U0 = property(
         fget=_get_U0,
         fset=_set_U0,
-        doc=u"""reference voltage amplitude (rms)
+        doc=u"""reference voltage amplitude (rms) [V]
 
         :Type: float
         """,
@@ -645,7 +645,7 @@ class ImportGenPWM(ImportMatrix):
     var_amp = property(
         fget=_get_var_amp,
         fset=_set_var_amp,
-        doc=u"""percentage of variation of carrier amplitude
+        doc=u"""percentage of variation of carrier amplitude [%]
 
         :Type: int
         """,
@@ -719,7 +719,7 @@ class ImportGenPWM(ImportMatrix):
     current_dir = property(
         fget=_get_current_dir,
         fset=_set_current_dir,
-        doc=u"""Rotation direction of the stator currents (current_dir*2*pi*felec*time, default value given by CURRENT_DIR_REF)
+        doc=u"""Rotation direction of the stator currents (current_dir*2*pi*felec*time, default value given by CURRENT_DIR_REF) [-]
 
         :Type: int
         :min: -1

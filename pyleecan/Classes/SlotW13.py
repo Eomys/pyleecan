@@ -487,7 +487,7 @@ class SlotW13(Slot):
     W0 = property(
         fget=_get_W0,
         fset=_set_W0,
-        doc=u"""Slot isthmus width.
+        doc=u"""Slot isthmus width. [m]
 
         :Type: float
         :min: 0
@@ -506,7 +506,7 @@ class SlotW13(Slot):
     H0 = property(
         fget=_get_H0,
         fset=_set_H0,
-        doc=u"""Slot isthmus height.
+        doc=u"""Slot isthmus height. [m]
 
         :Type: float
         :min: 0
@@ -525,7 +525,7 @@ class SlotW13(Slot):
     H1 = property(
         fget=_get_H1,
         fset=_set_H1,
-        doc=u"""Slot wedge radial height or wedge angle .
+        doc=u"""Slot wedge radial height or wedge angle . [m/rad]
 
         :Type: float
         :min: 0
@@ -544,7 +544,7 @@ class SlotW13(Slot):
     W1 = property(
         fget=_get_W1,
         fset=_set_W1,
-        doc=u"""Slot wedge width.
+        doc=u"""Slot wedge width. [m]
 
         :Type: float
         :min: 0
@@ -563,7 +563,7 @@ class SlotW13(Slot):
     H2 = property(
         fget=_get_H2,
         fset=_set_H2,
-        doc=u"""Slot height below wedge 
+        doc=u"""Slot height below wedge  [m]
 
         :Type: float
         :min: 0
@@ -582,7 +582,7 @@ class SlotW13(Slot):
     W2 = property(
         fget=_get_W2,
         fset=_set_W2,
-        doc=u"""Slot width below wedge 
+        doc=u"""Slot width below wedge  [m]
 
         :Type: float
         :min: 0
@@ -601,7 +601,7 @@ class SlotW13(Slot):
     W3 = property(
         fget=_get_W3,
         fset=_set_W3,
-        doc=u"""Slot bottom width.
+        doc=u"""Slot bottom width. [m]
 
         :Type: float
         :min: 0

@@ -621,7 +621,7 @@ class OutElec(FrozenClass):
     Is = property(
         fget=_get_Is,
         fset=_set_Is,
-        doc=u"""Stator currents DataTime object
+        doc=u"""Stator currents DataTime object [A]
 
         :Type: SciDataTool.Classes.DataND.DataND
         """,
@@ -654,7 +654,7 @@ class OutElec(FrozenClass):
     Ir = property(
         fget=_get_Ir,
         fset=_set_Ir,
-        doc=u"""Rotor currents as a function of time (each column correspond to one phase)
+        doc=u"""Rotor currents as a function of time (each column correspond to one phase) [A]
 
         :Type: SciDataTool.Classes.DataND.DataND
         """,
@@ -672,7 +672,7 @@ class OutElec(FrozenClass):
     logger_name = property(
         fget=_get_logger_name,
         fset=_set_logger_name,
-        doc=u"""Name of the logger to use
+        doc=u"""Name of the logger to use [-]
 
         :Type: str
         """,
@@ -690,7 +690,7 @@ class OutElec(FrozenClass):
     Pj_losses = property(
         fget=_get_Pj_losses,
         fset=_set_Pj_losses,
-        doc=u"""Electrical Joule losses
+        doc=u"""Electrical Joule losses [W]
 
         :Type: float
         """,
@@ -723,7 +723,7 @@ class OutElec(FrozenClass):
     Us = property(
         fget=_get_Us,
         fset=_set_Us,
-        doc=u"""Stator voltage as a function of time (each column correspond to one phase)
+        doc=u"""Stator voltage as a function of time (each column correspond to one phase) [V]
 
         :Type: SciDataTool.Classes.DataND.DataND
         """,
@@ -760,7 +760,7 @@ class OutElec(FrozenClass):
     internal = property(
         fget=_get_internal,
         fset=_set_internal,
-        doc=u"""OutInternal object containg outputs related to a specific model
+        doc=u"""OutInternal object containg outputs related to a specific model [-]
 
         :Type: OutInternal
         """,
@@ -795,7 +795,7 @@ class OutElec(FrozenClass):
     OP = property(
         fget=_get_OP,
         fset=_set_OP,
-        doc=u"""Operating Point
+        doc=u"""Operating Point [-]
 
         :Type: OP
         """,
@@ -813,7 +813,7 @@ class OutElec(FrozenClass):
     Pem_av = property(
         fget=_get_Pem_av,
         fset=_set_Pem_av,
-        doc=u"""Average Electromagnetic power
+        doc=u"""Average Electromagnetic power [W]
 
         :Type: float
         """,
@@ -831,7 +831,7 @@ class OutElec(FrozenClass):
     Tem_av = property(
         fget=_get_Tem_av,
         fset=_set_Tem_av,
-        doc=u"""Average Electromagnetic torque
+        doc=u"""Average Electromagnetic torque [N.m]
 
         :Type: float
         """,
@@ -869,7 +869,7 @@ class OutElec(FrozenClass):
     current_dir = property(
         fget=_get_current_dir,
         fset=_set_current_dir,
-        doc=u"""Rotation direction of the stator currents (current_dir*2*pi*felec*time, default value given by CURRENT_DIR_REF)
+        doc=u"""Rotation direction of the stator currents (current_dir*2*pi*felec*time, default value given by CURRENT_DIR_REF) [-]
 
         :Type: int
         :min: -1
@@ -959,7 +959,7 @@ class OutElec(FrozenClass):
     P_out = property(
         fget=_get_P_out,
         fset=_set_P_out,
-        doc=u"""Output power
+        doc=u"""Output power [W]
 
         :Type: float
         """,
@@ -977,7 +977,7 @@ class OutElec(FrozenClass):
     Jrms = property(
         fget=_get_Jrms,
         fset=_set_Jrms,
-        doc=u"""RMS current density in slots
+        doc=u"""RMS current density in slots [A/m²]
 
         :Type: float
         :min: 0
@@ -996,7 +996,7 @@ class OutElec(FrozenClass):
     P_in = property(
         fget=_get_P_in,
         fset=_set_P_in,
-        doc=u"""Input power
+        doc=u"""Input power [W]
 
         :Type: float
         """,
@@ -1014,7 +1014,7 @@ class OutElec(FrozenClass):
     Arms = property(
         fget=_get_Arms,
         fset=_set_Arms,
-        doc=u"""RMS linear current density along airgap
+        doc=u"""RMS linear current density along airgap [A/m]
 
         :Type: float
         """,
@@ -1032,7 +1032,7 @@ class OutElec(FrozenClass):
     Erms = property(
         fget=_get_Erms,
         fset=_set_Erms,
-        doc=u"""RMS back-emf
+        doc=u"""RMS back-emf [V]
 
         :Type: float
         """,

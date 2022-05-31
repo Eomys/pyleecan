@@ -339,7 +339,7 @@ class MatMagnetics(FrozenClass):
     mur_lin = property(
         fget=_get_mur_lin,
         fset=_set_mur_lin,
-        doc=u"""Relative magnetic permeability
+        doc=u"""Relative magnetic permeability [-]
 
         :Type: float
         :min: 0
@@ -358,7 +358,7 @@ class MatMagnetics(FrozenClass):
     Brm20 = property(
         fget=_get_Brm20,
         fset=_set_Brm20,
-        doc=u"""magnet remanence induction at 20degC (calculated from mur_lin and Hc if not provided)
+        doc=u"""magnet remanence induction at 20degC (calculated from mur_lin and Hc if not provided) [T]
 
         :Type: float
         """,
@@ -376,7 +376,7 @@ class MatMagnetics(FrozenClass):
     alpha_Br = property(
         fget=_get_alpha_Br,
         fset=_set_alpha_Br,
-        doc=u"""temperature coefficient for remanent flux density /degC compared to 20degC
+        doc=u"""temperature coefficient for remanent flux density /degC compared to 20degC [-]
 
         :Type: float
         """,
@@ -394,7 +394,7 @@ class MatMagnetics(FrozenClass):
     Wlam = property(
         fget=_get_Wlam,
         fset=_set_Wlam,
-        doc=u"""lamination sheet width without insulation [m] (0 == not laminated)
+        doc=u"""lamination sheet width without insulation [m] (0 == not laminated) [m]
 
         :Type: float
         :min: 0
@@ -433,7 +433,7 @@ class MatMagnetics(FrozenClass):
     BH_curve = property(
         fget=_get_BH_curve,
         fset=_set_BH_curve,
-        doc=u"""nonlinear B(H) curve (two columns matrix, H and B(H))
+        doc=u"""nonlinear B(H) curve (two columns matrix, H and B(H)) [-]
 
         :Type: ImportMatrix
         """,
@@ -471,7 +471,7 @@ class MatMagnetics(FrozenClass):
     LossData = property(
         fget=_get_LossData,
         fset=_set_LossData,
-        doc=u"""specific loss data value triplets, i.e. B, f, P
+        doc=u"""specific loss data value triplets, i.e. B, f, P [W/kg]
 
         :Type: ImportMatrix
         """,
@@ -508,7 +508,7 @@ class MatMagnetics(FrozenClass):
     ModelBH = property(
         fget=_get_ModelBH,
         fset=_set_ModelBH,
-        doc=u"""a model of BH curve with an analytical expression
+        doc=u"""a model of BH curve with an analytical expression [-]
 
         :Type: ModelBH
         """,
@@ -526,7 +526,7 @@ class MatMagnetics(FrozenClass):
     is_BH_extrapolate = property(
         fget=_get_is_BH_extrapolate,
         fset=_set_is_BH_extrapolate,
-        doc=u"""1 to use ModelBH to fit input data and extrapolate BH curve
+        doc=u"""1 to use ModelBH to fit input data and extrapolate BH curve [-]
 
         :Type: bool
         """,

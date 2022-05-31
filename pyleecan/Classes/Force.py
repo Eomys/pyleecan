@@ -247,7 +247,7 @@ class Force(FrozenClass):
     is_periodicity_t = property(
         fget=_get_is_periodicity_t,
         fset=_set_is_periodicity_t,
-        doc=u"""True to compute only on one time periodicity (use periodicities defined in axes_dict[time]). If None, automatically calculated based on Magnetics periodicities.
+        doc=u"""True to compute only on one time periodicity (use periodicities defined in axes_dict[time]). If None, automatically calculated based on Magnetics periodicities. [-]
 
         :Type: bool
         """,
@@ -265,7 +265,7 @@ class Force(FrozenClass):
     is_periodicity_a = property(
         fget=_get_is_periodicity_a,
         fset=_set_is_periodicity_a,
-        doc=u"""True to compute only on one angle periodicity (use periodicities defined in axes_dict[angle]). If None, automatically calculated based on Magnetics periodicities.
+        doc=u"""True to compute only on one angle periodicity (use periodicities defined in axes_dict[angle]). If None, automatically calculated based on Magnetics periodicities. [-]
 
         :Type: bool
         """,
@@ -283,7 +283,7 @@ class Force(FrozenClass):
     is_agsf_transfer = property(
         fget=_get_is_agsf_transfer,
         fset=_set_is_agsf_transfer,
-        doc=u"""True to compute the AGSF transfer from air-gap to stator bore radius.
+        doc=u"""True to compute the AGSF transfer from air-gap to stator bore radius. [-]
 
         :Type: bool
         """,
@@ -301,7 +301,7 @@ class Force(FrozenClass):
     max_wavenumber_transfer = property(
         fget=_get_max_wavenumber_transfer,
         fset=_set_max_wavenumber_transfer,
-        doc=u"""Maximum value to apply agsf transfer (to be used with FEA to avoid numerical noise amplification)
+        doc=u"""Maximum value to apply agsf transfer (to be used with FEA to avoid numerical noise amplification) [-]
 
         :Type: int
         """,
@@ -319,7 +319,7 @@ class Force(FrozenClass):
     Rsbo_enforced_transfer = property(
         fget=_get_Rsbo_enforced_transfer,
         fset=_set_Rsbo_enforced_transfer,
-        doc=u"""To enforce the value of the radius for AGSF transfer
+        doc=u"""To enforce the value of the radius for AGSF transfer [-]
 
         :Type: float
         """,
@@ -337,7 +337,7 @@ class Force(FrozenClass):
     logger_name = property(
         fget=_get_logger_name,
         fset=_set_logger_name,
-        doc=u"""Name of the logger to use
+        doc=u"""Name of the logger to use [-]
 
         :Type: str
         """,

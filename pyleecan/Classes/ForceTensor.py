@@ -263,7 +263,7 @@ class ForceTensor(Force):
     group = property(
         fget=_get_group,
         fset=_set_group,
-        doc=u"""Name of the group selected for magnetic force computation. If None, all the domain is selected.
+        doc=u"""Name of the group selected for magnetic force computation. If None, all the domain is selected. [-]
 
         :Type: str
         """,
@@ -283,7 +283,7 @@ class ForceTensor(Force):
     tensor = property(
         fget=_get_tensor,
         fset=_set_tensor,
-        doc=u"""Force model(s) to be used
+        doc=u"""Force model(s) to be used [-]
 
         :Type: dict
         """,
