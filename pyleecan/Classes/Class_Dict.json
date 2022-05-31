@@ -1007,8 +1007,6 @@
         "desc": "Class for defining data to keep on a multi-simulation",
         "is_internal": false,
         "methods": [
-            "as_dict",
-            "_set_result",
             "_set_keeper"
         ],
         "mother": "",
@@ -1072,7 +1070,7 @@
                 "max": "",
                 "min": "",
                 "name": "result",
-                "type": "list",
+                "type": "[]",
                 "unit": "-",
                 "value": []
             },

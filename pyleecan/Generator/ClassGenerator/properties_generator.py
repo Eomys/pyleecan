@@ -225,22 +225,22 @@ def generate_prop_setter(gen_dict, class_dict, prop, soft_name="pyleecan"):
         set_str += (
             TAB4 + "if type(obj) is dict and '__class__' in obj:  # pyleecan object\n"
         )
-        if "SciDataTool" in prop["type"]:
-            set_str += (
-                TAB5
-                + "class_obj = import_class('SciDataTool.Classes', obj.get('__class__'), '"
-                + prop["name"]
-                + "')\n"
-            )
-        else:
-            set_str += (
-                TAB5
-                + "class_obj = import_class('"
-                + soft_name
-                + ".Classes', obj.get('__class__'), '"
-                + prop["name"]
-                + "')\n"
-            )
+        set_str += TAB5 + "try:\n"
+        set_str += (
+            TAB6
+            + "class_obj = import_class('SciDataTool.Classes', obj.get('__class__'), '"
+            + prop["name"]
+            + "')\n"
+        )
+        set_str += TAB5 + "except Exception:\n"
+        set_str += (
+            TAB6
+            + "class_obj = import_class('"
+            + soft_name
+            + ".Classes', obj.get('__class__'), '"
+            + prop["name"]
+            + "')\n"
+        )
         set_str += TAB5 + "value[ii] = class_obj(init_dict=obj)\n"
         set_str += TAB4 + "if value[ii] is not None and hasattr(value[ii], 'parent'):\n"
         set_str += TAB5 + "value[ii].parent = self\n"

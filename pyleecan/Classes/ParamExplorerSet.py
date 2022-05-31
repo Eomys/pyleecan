@@ -325,9 +325,14 @@ class ParamExplorerSet(ParamExplorer):
                         obj = None
                         value[ii] = None
                 if type(obj) is dict and "__class__" in obj:  # pyleecan object
-                    class_obj = import_class(
-                        "pyleecan.Classes", obj.get("__class__"), "value"
-                    )
+                    try:
+                        class_obj = import_class(
+                            "SciDataTool.Classes", obj.get("__class__"), "value"
+                        )
+                    except Exception:
+                        class_obj = import_class(
+                            "pyleecan.Classes", obj.get("__class__"), "value"
+                        )
                     value[ii] = class_obj(init_dict=obj)
                 if value[ii] is not None and hasattr(value[ii], "parent"):
                     value[ii].parent = self

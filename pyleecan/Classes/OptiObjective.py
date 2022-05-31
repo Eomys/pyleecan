@@ -15,6 +15,7 @@ from ..Functions.Load.import_class import import_class
 from copy import deepcopy
 from .DataKeeper import DataKeeper
 
+from numpy import array, ndarray
 from ntpath import basename
 from os.path import isfile
 from ._check import CheckTypeError
@@ -41,7 +42,7 @@ class OptiObjective(DataKeeper):
         unit="",
         keeper=None,
         error_keeper=None,
-        result=-1,
+        result=[],
         result_ref=None,
         physic=None,
         init_dict=None,
