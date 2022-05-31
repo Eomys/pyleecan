@@ -42,6 +42,9 @@ def comp_loss(self):
         self.k_hy,
         self.k_ed,
         self.k_ex,
+        self.alpha_hy,
+        self.alpha_ed,
+        self.alpha_ex,
     ]:
         material = lamination.mat_type
         self.comp_coeff(material)
@@ -50,6 +53,9 @@ def comp_loss(self):
     k_hy = self.k_hy / Kf * rho
     k_ed = self.k_ed / Kf * rho
     k_ex = self.k_ex / Kf * rho
+    alpha_hy = self.alpha_hy
+    alpha_ed = self.alpha_ed
+    alpha_ex = self.alpha_ex
 
     # Get fundamental frequency
     felec = output.elec.OP.get_felec()
@@ -118,9 +124,9 @@ def comp_loss(self):
     Bfft_magnitude = np_sqrt(np_abs(Bfft["comp_x"]) ** 2 + np_abs(Bfft["comp_y"]) ** 2)
 
     # Compute the loss density for each element and each frequency
-    Pcore_density = k_ed * (freqs[:, None] * Bfft_magnitude) ** 2
-    Pcore_density += k_hy * freqs[:, None] * Bfft_magnitude ** 2
-    Pcore_density += k_ex * (freqs[:, None] * Bfft_magnitude) ** 1.5
+    Pcore_density = k_ed * (freqs[:, None] * Bfft_magnitude) ** alpha_ed
+    Pcore_density += k_hy * freqs[:, None] * Bfft_magnitude ** alpha_hy
+    Pcore_density += k_ex * (freqs[:, None] * Bfft_magnitude) ** alpha_ex
 
     if is_change_Time:
         # Change periodicity back to original periodicity
@@ -131,18 +137,18 @@ def comp_loss(self):
     n = freqs / felec
 
     # Integrate loss density over group volume to get polynomial coefficients
-    coeff = Lst * per_a * matmul(Bfft_magnitude ** 2, Se)
+    coeff = Lst * per_a * matmul(Bfft_magnitude ** alpha_ed, Se)
     # Get polynomial coefficient
-    B = np_sum(k_ed * coeff * n ** 2)
+    B = np_sum(k_ed * coeff * n ** alpha_ed)
 
-    coeff = Lst * per_a * matmul(Bfft_magnitude ** 1.5, Se)
+    coeff = Lst * per_a * matmul(Bfft_magnitude ** alpha_ex, Se)
     # Get polynomial coefficient
-    C = np_sum(k_ex * coeff * n ** 1.5)
+    C = np_sum(k_ex * coeff * n ** alpha_ex)
 
-    coeff = Lst * per_a * matmul(Bfft_magnitude ** 2, Se)
+    coeff = Lst * per_a * matmul(Bfft_magnitude ** alpha_hy, Se)
     # Get polynomial coefficient
     A = np_sum(k_hy * coeff * n)
 
-    self.coeff_dict = {1: A, 2: B, 1.5: C}
+    self.coeff_dict = {1: A, alpha_ed: B, alpha_ex: C}
 
     return Pcore_density, freqs

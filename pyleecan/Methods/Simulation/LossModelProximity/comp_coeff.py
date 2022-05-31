@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from numpy import pi
 
+
 def comp_coeff(self):
     T_op = self.parent.Tsta
     winding = self.parent.parent.machine.stator.winding

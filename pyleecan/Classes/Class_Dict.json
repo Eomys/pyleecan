@@ -5440,6 +5440,7 @@
         ],
         "daughters": [
             "LossModelBertotti",
+            "LossModelIron",
             "LossModelJordan",
             "LossModelMagnet",
             "LossModelProximity",
@@ -5497,14 +5498,6 @@
             {
                 "name": "VERSION",
                 "value": "1"
-            },
-            {
-                "name": "F_REF",
-                "value": "50"
-            },
-            {
-                "name": "B_REF",
-                "value": "1.5"
             }
         ],
         "daughters": [],
@@ -5518,6 +5511,54 @@
         "name": "LossModelBertotti",
         "package": "Simulation",
         "path": "pyleecan/Generator/ClassesRef/Simulation/LossModelBertotti.csv",
+        "properties": [
+            {
+                "desc": "Hysteresis loss coefficient",
+                "max": "",
+                "min": "",
+                "name": "k_hy",
+                "type": "float",
+                "unit": "W/kg",
+                "value": null
+            },
+            {
+                "desc": "Eddy current loss coefficient",
+                "max": "",
+                "min": "",
+                "name": "k_ed",
+                "type": "float",
+                "unit": "W/kg",
+                "value": null
+            },
+            {
+                "desc": "Excess loss coefficient",
+                "max": "",
+                "min": "",
+                "name": "k_ex",
+                "type": "float",
+                "unit": "W/kg",
+                "value": null
+            }
+        ]
+    },
+    "LossModelIron": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "General iron Loss Model Class",
+        "is_internal": false,
+        "methods": [
+            "comp_coeff",
+            "comp_loss"
+        ],
+        "mother": "LossModel",
+        "name": "LossModelIron",
+        "package": "Simulation",
+        "path": "pyleecan/Generator/ClassesRef/Simulation/LossModelIron.csv",
         "properties": [
             {
                 "desc": "Hysteresis loss coefficient",

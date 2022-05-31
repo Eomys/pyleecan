@@ -20,10 +20,14 @@ def comp_coeff(self, material):
         the peak magnetic flux density (T), and the loss density (W/kg) in this order.
     """
 
-    def comp_loss(xdata, k_hy, k_ed, k_ex):
+    def comp_loss(xdata, k_hy, alpha_hy, k_ed, alpha_ed, k_ex, alpha_ex):
         f = xdata[0]
         B = xdata[1]
-        return k_hy * f * B ** 2 + k_ed * (f * B) ** 2 + k_ex * (f * B) ** 1.5
+        return (
+            k_hy * f * B ** alpha_hy
+            + k_ed * (f * B) ** alpha_ed
+            + k_ex * (f * B) ** alpha_ex
+        )
 
     def group_by_frequency(loss_data):
         groups = []
@@ -44,10 +48,9 @@ def comp_coeff(self, material):
         comp_loss,
         xdata,
         ydata,
-        bounds = (
-            [0,0,0],
-            [np.inf,np.inf,np.inf]
-        )
+        p0=[1e-3, 1, 1e-3, 2, 1e-3, 1.5],
+        bounds=(0, 10),
+        maxfev=1e3,
     )
 
     if self.is_show_fig:
@@ -81,11 +84,14 @@ def comp_coeff(self, material):
         plt.title(f"Curve fitting for the iron loss of the {material.name} material")
         text = textwrap.dedent(
             fr"""                    
-                                $P_{{loss}}=k_{{hy}} f B^2 + k_{{ed}} (fB)^2 + k_{{ex}} (fB)^1.5$
+                                $P_{{loss}}=k_{{hy}} f B^{{\alpha_{{hy}}}} + k_{{ed}} (fB)^{{\alpha_{{ed}}}} + k_{{ex}} (fB)^{{\alpha_{{ex}}}}$
                                 where:
                                 $k_{{hy}}$ = {popt[0]:.5E}
-                                $k_{{ed}}$ = {popt[1]:.5E}
-                                $k_{{ex}}$ = {popt[2]:.5E}
+                                $\alpha_{{hy}}$ = {popt[1]:.5E}
+                                $k_{{ed}}$ = {popt[2]:.5E}
+                                $\alpha_{{ed}}$ = {popt[3]:.5E}
+                                $k_{{ex}}$ = {popt[4]:.5E}
+                                $\alpha_{{ex}}$ = {popt[5]:.5E}
                                 """
         )
         fig.text(0.02, 0.5, text, fontsize=12)
@@ -94,5 +100,8 @@ def comp_coeff(self, material):
         plt.show()
 
     self.k_hy = popt[0]
-    self.k_ed = popt[1]
-    self.k_ex = popt[2]
+    self.alpha_hy = popt[1]
+    self.k_ed = popt[2]
+    self.alpha_ed = popt[3]
+    self.k_ex = popt[4]
+    self.alpha_ex = popt[5]

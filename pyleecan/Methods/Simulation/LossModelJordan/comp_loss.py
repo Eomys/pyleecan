@@ -125,7 +125,7 @@ def comp_loss(self):
 
     # Get frequency orders
     n = freqs / felec
-    
+
     # Integrate loss density over group volume to get polynomial coefficients
     coeff = Lst * per_a * matmul(Bfft_magnitude ** 2, Se)
     # Get polynomial coefficients

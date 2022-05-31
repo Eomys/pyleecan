@@ -27,7 +27,7 @@ from pyleecan.definitions import DATA_DIR
 from SciDataTool.Functions.Plot.plot_2D import plot_2D 
 
 
-is_show_fig = False
+is_show_fig = True
 
 
 @pytest.mark.long_5s
@@ -243,7 +243,7 @@ def test_FEMM_Loss_Prius():
         model_dict={"stator core": LossModelSteinmetz(group = "stator core"),
                     "rotor core": LossModelSteinmetz(group = "rotor core"),
                     "joule": LossModelWinding(group = "stator winding",
-                                              type_skin_effect = 0),
+                                              type_skin_effect = 1),
                     "proximity": LossModelProximity(group = "stator winding"),
                     "magnets": LossModelMagnet(group = "rotor magnets")}
     )

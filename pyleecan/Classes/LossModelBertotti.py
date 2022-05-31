@@ -35,8 +35,6 @@ class LossModelBertotti(LossModel):
     """Bertotti Loss Model Class"""
 
     VERSION = 1
-    F_REF = 50
-    B_REF = 1.5
 
     # Check ImportError to remove unnecessary dependencies in unused method
     # cf Methods.Simulation.LossModelBertotti.comp_coeff
@@ -72,9 +70,6 @@ class LossModelBertotti(LossModel):
         k_hy=None,
         k_ed=None,
         k_ex=None,
-        alpha_hy=None,
-        alpha_ed=None,
-        alpha_ex=None,
         name="",
         group="",
         is_show_fig=False,
@@ -103,12 +98,6 @@ class LossModelBertotti(LossModel):
                 k_ed = init_dict["k_ed"]
             if "k_ex" in list(init_dict.keys()):
                 k_ex = init_dict["k_ex"]
-            if "alpha_hy" in list(init_dict.keys()):
-                alpha_hy = init_dict["alpha_hy"]
-            if "alpha_ed" in list(init_dict.keys()):
-                alpha_ed = init_dict["alpha_ed"]
-            if "alpha_ex" in list(init_dict.keys()):
-                alpha_ex = init_dict["alpha_ex"]
             if "name" in list(init_dict.keys()):
                 name = init_dict["name"]
             if "group" in list(init_dict.keys()):
@@ -121,9 +110,6 @@ class LossModelBertotti(LossModel):
         self.k_hy = k_hy
         self.k_ed = k_ed
         self.k_ex = k_ex
-        self.alpha_hy = alpha_hy
-        self.alpha_ed = alpha_ed
-        self.alpha_ex = alpha_ex
         # Call LossModel init
         super(LossModelBertotti, self).__init__(
             name=name, group=group, is_show_fig=is_show_fig, coeff_dict=coeff_dict
@@ -140,9 +126,6 @@ class LossModelBertotti(LossModel):
         LossModelBertotti_str += "k_hy = " + str(self.k_hy) + linesep
         LossModelBertotti_str += "k_ed = " + str(self.k_ed) + linesep
         LossModelBertotti_str += "k_ex = " + str(self.k_ex) + linesep
-        LossModelBertotti_str += "alpha_hy = " + str(self.alpha_hy) + linesep
-        LossModelBertotti_str += "alpha_ed = " + str(self.alpha_ed) + linesep
-        LossModelBertotti_str += "alpha_ex = " + str(self.alpha_ex) + linesep
         return LossModelBertotti_str
 
     def __eq__(self, other):
@@ -159,12 +142,6 @@ class LossModelBertotti(LossModel):
         if other.k_ed != self.k_ed:
             return False
         if other.k_ex != self.k_ex:
-            return False
-        if other.alpha_hy != self.alpha_hy:
-            return False
-        if other.alpha_ed != self.alpha_ed:
-            return False
-        if other.alpha_ex != self.alpha_ex:
             return False
         return True
 
@@ -185,12 +162,6 @@ class LossModelBertotti(LossModel):
             diff_list.append(name + ".k_ed")
         if other._k_ex != self._k_ex:
             diff_list.append(name + ".k_ex")
-        if other._alpha_hy != self._alpha_hy:
-            diff_list.append(name + ".alpha_hy")
-        if other._alpha_ed != self._alpha_ed:
-            diff_list.append(name + ".alpha_ed")
-        if other._alpha_ex != self._alpha_ex:
-            diff_list.append(name + ".alpha_ex")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -205,9 +176,6 @@ class LossModelBertotti(LossModel):
         S += getsizeof(self.k_hy)
         S += getsizeof(self.k_ed)
         S += getsizeof(self.k_ex)
-        S += getsizeof(self.alpha_hy)
-        S += getsizeof(self.alpha_ed)
-        S += getsizeof(self.alpha_ex)
         return S
 
     def as_dict(self, type_handle_ndarray=0, keep_function=False, **kwargs):
@@ -230,9 +198,6 @@ class LossModelBertotti(LossModel):
         LossModelBertotti_dict["k_hy"] = self.k_hy
         LossModelBertotti_dict["k_ed"] = self.k_ed
         LossModelBertotti_dict["k_ex"] = self.k_ex
-        LossModelBertotti_dict["alpha_hy"] = self.alpha_hy
-        LossModelBertotti_dict["alpha_ed"] = self.alpha_ed
-        LossModelBertotti_dict["alpha_ex"] = self.alpha_ex
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         LossModelBertotti_dict["__class__"] = "LossModelBertotti"
@@ -244,9 +209,6 @@ class LossModelBertotti(LossModel):
         self.k_hy = None
         self.k_ed = None
         self.k_ex = None
-        self.alpha_hy = None
-        self.alpha_ed = None
-        self.alpha_ex = None
         # Set to None the properties inherited from LossModel
         super(LossModelBertotti, self)._set_None()
 
@@ -299,60 +261,6 @@ class LossModelBertotti(LossModel):
         fget=_get_k_ex,
         fset=_set_k_ex,
         doc=u"""Excess loss coefficient
-
-        :Type: float
-        """,
-    )
-
-    def _get_alpha_hy(self):
-        """getter of alpha_hy"""
-        return self._alpha_hy
-
-    def _set_alpha_hy(self, value):
-        """setter of alpha_hy"""
-        check_var("alpha_hy", value, "float")
-        self._alpha_hy = value
-
-    alpha_hy = property(
-        fget=_get_alpha_hy,
-        fset=_set_alpha_hy,
-        doc=u"""Hysteresis loss power coefficient
-
-        :Type: float
-        """,
-    )
-
-    def _get_alpha_ed(self):
-        """getter of alpha_ed"""
-        return self._alpha_ed
-
-    def _set_alpha_ed(self, value):
-        """setter of alpha_ed"""
-        check_var("alpha_ed", value, "float")
-        self._alpha_ed = value
-
-    alpha_ed = property(
-        fget=_get_alpha_ed,
-        fset=_set_alpha_ed,
-        doc=u"""Eddy current loss power coefficient
-
-        :Type: float
-        """,
-    )
-
-    def _get_alpha_ex(self):
-        """getter of alpha_ex"""
-        return self._alpha_ex
-
-    def _set_alpha_ex(self, value):
-        """setter of alpha_ex"""
-        check_var("alpha_ex", value, "float")
-        self._alpha_ex = value
-
-    alpha_ex = property(
-        fget=_get_alpha_ex,
-        fset=_set_alpha_ex,
-        doc=u"""Excess loss power coefficient
 
         :Type: float
         """,
