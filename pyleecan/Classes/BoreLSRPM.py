@@ -22,6 +22,13 @@ try:
 except ImportError as error:
     get_bore_line = error
 
+try:
+    from ..Methods.Machine.BoreLSRPM.comp_periodicity_spatial import (
+        comp_periodicity_spatial,
+    )
+except ImportError as error:
+    comp_periodicity_spatial = error
+
 
 from numpy import isnan
 from ._check import InitUnKnowClassError
@@ -32,6 +39,7 @@ class BoreLSRPM(Bore):
 
     VERSION = 1
 
+    # Check ImportError to remove unnecessary dependencies in unused method
     # cf Methods.Machine.BoreLSRPM.get_bore_line
     if isinstance(get_bore_line, ImportError):
         get_bore_line = property(
@@ -43,6 +51,18 @@ class BoreLSRPM(Bore):
         )
     else:
         get_bore_line = get_bore_line
+    # cf Methods.Machine.BoreLSRPM.comp_periodicity_spatial
+    if isinstance(comp_periodicity_spatial, ImportError):
+        comp_periodicity_spatial = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use BoreLSRPM method comp_periodicity_spatial: "
+                    + str(comp_periodicity_spatial)
+                )
+            )
+        )
+    else:
+        comp_periodicity_spatial = comp_periodicity_spatial
     # save and copy methods are available in all object
     save = save
     copy = copy
