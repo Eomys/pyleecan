@@ -58,7 +58,7 @@
           <height>788</height>
          </rect>
         </property>
-        <layout class="QVBoxLayout" name="verticalLayout_3">
+        <layout class="QVBoxLayout" name="verticalLayout_5">
          <item>
           <layout class="QGridLayout" name="gridLayout_2">
            <item row="1" column="0">
@@ -251,6 +251,22 @@
            <property name="checked">
             <bool>false</bool>
            </property>
+           <layout class="QVBoxLayout" name="verticalLayout_3">
+            <item>
+             <widget class="QLabel" name="out_notch">
+              <property name="text">
+               <string>0 set (0 notches)</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="b_notch">
+              <property name="text">
+               <string>set notches</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
           </widget>
          </item>
          <item>
