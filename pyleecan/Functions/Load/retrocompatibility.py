@@ -74,10 +74,10 @@ def _search_and_update(obj_dict, parent=None, parent_index=None, update_dict=Non
 
 
 ############################################
-# V 1.3.8 => 1.3.9
+# V 1.3.8 => 1.4.0
 # moved yoke_notch to notch (list)
 ############################################
-Yoke_Notch_VERSION = "1.3.8"
+Yoke_Notch_VERSION = "1.4.0"
 
 
 def is_yoke_notch(obj_dict):
@@ -100,9 +100,9 @@ def move_yoke_notch(obj_dict):
     while obj_dict["yoke_notch"]:
         yoke_notch = obj_dict["yoke_notch"].pop(0)
         obj_dict["notch"].append(yoke_notch)
-        # set is_yoke property to True
+        # set is_bore property to True
         if isinstance(yoke_notch, dict):
-            yoke_notch["is_yoke"] = True
+            yoke_notch["notch_shape"]["is_bore"] = False
 
 
 ############################################
