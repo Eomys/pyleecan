@@ -71,6 +71,6 @@ def comp_loss(self):
 
     A = coeff * k
     B = coeff
-    self.coeff_dict = {power: A, 0: B}
+    self.coeff_dict = {str(power): A, "0": B}
 
     return Pjoule_density, freqs

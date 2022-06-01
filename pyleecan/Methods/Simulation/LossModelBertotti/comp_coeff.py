@@ -81,7 +81,7 @@ def comp_coeff(self, material):
         plt.title(f"Curve fitting for the iron loss of the {material.name} material")
         text = textwrap.dedent(
             fr"""                    
-                                $P_{{loss}}=k_{{hy}} f B^2 + k_{{ed}} (fB)^2 + k_{{ex}} (fB)^1.5$
+                                $P_{{loss}}=k_{{hy}} f B^2 + k_{{ed}} (fB)^2 + k_{{ex}} (fB)^{{1.5}}$
                                 where:
                                 $k_{{hy}}$ = {popt[0]:.5E}
                                 $k_{{ed}}$ = {popt[1]:.5E}

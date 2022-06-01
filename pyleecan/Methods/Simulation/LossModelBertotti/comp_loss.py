@@ -5,7 +5,7 @@ def comp_loss(self):
     """Calculate loss density in iron core given by group "stator core" or "rotor core"
     assuming power density is given by a Bertotti model
 
-        Pcore = k_hy * f * B^alpha_hy + k_ed * (f B)^alpha_ed + k_ex * (f B)^alpha_ex
+        Pcore = k_hy * f * B^2 + k_ed * (f B)^2 + k_ex * (f B)^1.5
 
     Parameters
     ----------
@@ -143,6 +143,6 @@ def comp_loss(self):
     # Get polynomial coefficient
     A = np_sum(k_hy * coeff * n)
 
-    self.coeff_dict = {1: A, 2: B, 1.5: C}
+    self.coeff_dict = {"1": A, "2": B, "1.5": C}
 
     return Pcore_density, freqs

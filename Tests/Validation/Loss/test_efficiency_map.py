@@ -41,7 +41,7 @@ def test_ElecLUTdq_solve_MTPA():
     """Validation of the PMSM Electrical Equivalent Circuit with the Prius machine for MTPA calculation"""
 
     Toyota_Prius = load(join(DATA_DIR, "Machine", "Toyota_Prius.json"))
-    path_to_LUT = r"C:\Users\LAP10\Documents\Loss\LUT_eff.json"
+    path_to_LUT = r"C:\Users\LAP10\Documents\Loss\LUT_eff.h5"
 
     if not exists(split(path_to_LUT)[0]):
         raise Exception("The path to LUT is not valid.")
@@ -65,7 +65,7 @@ def test_ElecLUTdq_solve_MTPA():
     # Initialization of the simulation starting point
     simu.input = InputCurrent(
         OP=OPdq(),
-        Nt_tot=4 * 8,
+        Nt_tot=4 * 8 * 20,
         Na_tot=200 * 8,
         is_periodicity_a=True,
         is_periodicity_t=True,
@@ -106,10 +106,11 @@ def test_ElecLUTdq_solve_MTPA():
         Iq_min=0,
         LUT_enforced=LUT_enforced,
         is_grid_dq=True,
+        
         LUT_simu=Simu1(
             input=InputCurrent(
                 OP=OPdq(),
-                Nt_tot=4 * 8,
+                Nt_tot=4 * 8 * 20,
                 Na_tot=200 * 8,
                 is_periodicity_a=True,
                 is_periodicity_t=True,
@@ -306,7 +307,7 @@ def test_ElecLUTdq_solve_MTPA():
 
         # Interpolate Phid/Phiq on the refined mesh
 
-        Ploss_dqh = LUT_grid.interp_Ploss_dqh(Id, Iq, N0=3000)
+        Ploss_dqh = LUT_grid.interp_Ploss_dqh(Id, Iq, N0=1200)
         dict_map = {
                 "Xdata": Id.reshape((nd, nq))[0, :],
                 "Ydata": Iq.reshape((nd, nq))[:, 0],

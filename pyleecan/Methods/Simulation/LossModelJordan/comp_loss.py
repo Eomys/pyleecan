@@ -131,6 +131,6 @@ def comp_loss(self):
     # Get polynomial coefficients
     A = np_sum(k_ed * coeff * n ** 2)
     B = np_sum(k_hy * coeff * n)
-    self.coeff_dict = {2: A, 1: B}
+    self.coeff_dict = {"2": A, "1": B}
 
     return Pcore_density, freqs

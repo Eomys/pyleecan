@@ -16,7 +16,7 @@ from pyleecan.Classes.LossModelBertotti import LossModelBertotti
 from pyleecan.Classes.LossModelWinding import LossModelWinding
 from pyleecan.Classes.LossModelProximity import LossModelProximity
 from pyleecan.Classes.LossModelMagnet import LossModelMagnet
-from pyleecan.Classes.OutLoss import OutLoss
+from pyleecan.Classes.OutLossModel import OutLossModel
 from pyleecan.Functions.Electrical.comp_loss_joule import comp_loss_joule
 
 
@@ -241,7 +241,8 @@ def test_FEMM_Loss_Prius():
         is_get_meshsolution=True,
         Tsta=100,
         model_dict={"stator core": LossModelSteinmetz(group = "stator core"),
-                    "rotor core": LossModelSteinmetz(group = "rotor core"),
+                    "rotor core Bertotti": LossModelBertotti(group = "rotor core"),
+                    "rotor core Steinmetz": LossModelSteinmetz(group = "rotor core"),
                     "joule": LossModelWinding(group = "stator winding",
                                               type_skin_effect = 1),
                     "proximity": LossModelProximity(group = "stator winding"),
@@ -249,6 +250,9 @@ def test_FEMM_Loss_Prius():
     )
 
     out = simu.run()
+
+    out.loss.loss_list.append(OutLossModel(name='substraction',
+                                      **(out.loss.loss_list[1]-out.loss.loss_list[2])))
 
     power_dict = {
         "total_power": out.mag.Pem_av,

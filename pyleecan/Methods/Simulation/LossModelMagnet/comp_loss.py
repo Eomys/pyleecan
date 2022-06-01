@@ -251,6 +251,6 @@ def comp_loss(self):
     )
     # Sum over orders
     A = np_sum(Af * n ** 2)
-    self.coeff_dict = {2: A}
+    self.coeff_dict = {"2": A}
 
     return Pmagnet_density, freqs

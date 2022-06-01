@@ -101,6 +101,6 @@ def comp_loss(self):
     # Integrate loss density over group volume to get polynomial coefficients
     coeff = Lst * per_a * matmul(Bfft_magnitude ** 2, Se)
     A = np_sum(k_p * coeff * n ** 2)
-    self.coeff_dict = {2: A}
+    self.coeff_dict = {"2": A}
 
     return Pcore_density, freqs

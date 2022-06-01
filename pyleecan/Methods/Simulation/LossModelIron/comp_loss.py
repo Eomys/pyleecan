@@ -3,7 +3,7 @@ from numpy import matmul, abs as np_abs, sum as np_sum, sqrt as np_sqrt
 
 def comp_loss(self):
     """Calculate loss density in iron core given by group "stator core" or "rotor core"
-    assuming power density is given by a Bertotti model
+    assuming power density is given by:
 
         Pcore = k_hy * f * B^alpha_hy + k_ed * (f B)^alpha_ed + k_ex * (f B)^alpha_ex
 
@@ -149,6 +149,6 @@ def comp_loss(self):
     # Get polynomial coefficient
     A = np_sum(k_hy * coeff * n)
 
-    self.coeff_dict = {1: A, alpha_ed: B, alpha_ex: C}
+    self.coeff_dict = {"1": A, str(alpha_ed): B, str(alpha_ex): C}
 
     return Pcore_density, freqs
