@@ -23,12 +23,12 @@ def comp_periodicity_spatial(self):
 
         nb_list = [p, Zs]
         # account for notches and bore
-        for notch in self.notch:
-            nb_list.append(notch.notch_shape.Zs)
+        if self.notch is not None:
+            for notch in self.notch:
+                nb_list.append(notch.comp_periodicity_spatial()[0])
 
         if self.bore:
-            if hasattr(self.bore, "N"):
-                nb_list.append(self.bore.N)
+            nb_list.append(self.bore.comp_periodicity_spatial()[0])
 
         # compute the gcd of the list
         per_a = gcd(nb_list[0], nb_list[1])

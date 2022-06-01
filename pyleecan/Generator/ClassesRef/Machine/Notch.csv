@@ -1,3 +1,4 @@
 ﻿Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
-is_yoke,,True if Notch is on the Yoke,0,bool,0,,,,Machine,,get_Rbo,VERSION,1,Abstract class for notches
+,,,,,,,,,Machine,,get_Rbo,VERSION,1,Abstract class for notches
+,,,,,,,,,,,get_Ryoke,,,
 ,,,,,,,,,,,is_outwards,,,

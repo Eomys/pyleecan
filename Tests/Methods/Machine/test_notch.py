@@ -55,3 +55,4 @@ def test_notch():
 
 if __name__ == "__main__":
     Toyota_Prius, Audi_eTron = test_notch()
+    print("Done")

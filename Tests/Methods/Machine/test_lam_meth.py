@@ -16,14 +16,14 @@ lam_list.append(lam1)
 
 # Lamintion with yoke notches
 lam2 = Lamination(Rint=0.5, Rext=1, is_internal=True)
-lam2.notch = [NotchEvenDist(notch_shape=SlotM10(Zs=16, W0=0.1, H0=0.05), is_yoke=True)]
+lam2.notch = [NotchEvenDist(notch_shape=SlotM10(Zs=8, W0=0.05, H0=0.1, is_bore=False))]
 lam_list.append(lam2)
 
 # Lamination with both notches
 lam3 = Lamination(Rint=0.5, Rext=1, is_internal=True)
 lam3.notch = [NotchEvenDist(notch_shape=SlotM10(Zs=8, W0=0.05, H0=0.1))]
 lam3.notch.append(
-    [NotchEvenDist(notch_shape=SlotM10(Zs=8, W0=0.2, H0=0.1), is_yoke=True)]
+    NotchEvenDist(notch_shape=SlotM10(Zs=8, W0=0.2, H0=0.1, is_bore=False))
 )
 lam_list.append(lam3)
 
@@ -32,8 +32,9 @@ lam_list.append(lam3)
 def test_lam_comp_surface(test_obj):
     """Check that the Lamination surface is correctly computed"""
 
-    # test_obj.plot()
-    # plt.show()
+    # test_obj.notch[0].notch_shape.plot()
+    test_obj.plot()
+    plt.show()
     S1 = test_obj.comp_surfaces()["Slam"]
 
     # Numerical computation
@@ -44,7 +45,8 @@ def test_lam_comp_surface(test_obj):
 
 
 if __name__ == "__main__":
-    test_lam_comp_surface(lam_list[0])
-    test_lam_comp_surface(lam_list[1])
+    # test_lam_comp_surface(lam_list[0])
+    # test_lam_comp_surface(lam_list[1])
     test_lam_comp_surface(lam_list[2])
     test_lam_comp_surface(lam_list[3])
+    print("Done")

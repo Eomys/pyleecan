@@ -23,7 +23,7 @@ def get_bore_desc(self, sym=1, prop_dict=None):
         list of lines to draw the bore radius
     """
 
-    is_notch = self.notch and any([not notch.is_yoke for notch in self.notch])
+    is_notch = self.has_notch(is_bore=True)
 
     if not is_notch:
         bore_lines = self.get_bore_line(sym=1, prop_dict=prop_dict)
@@ -51,7 +51,7 @@ def get_bore_desc(self, sym=1, prop_dict=None):
     bore_desc = list()
     if is_notch:  # Notches => Generate Full lines and cut (if needed)
         # Get all the notches and bore lines
-        notch_list = self.get_notch_list(sym=1, is_yoke=False)
+        notch_list = self.get_notch_list(sym=1, is_bore=True)
         bore_lines = self.get_bore_line(prop_dict=prop_dict)
 
         # generate bore_line description

@@ -28,7 +28,7 @@ def get_yoke_desc(self, sym=1, is_reversed=False, prop_dict=None):
     """
 
     Ryoke = self.get_Ryoke()
-    is_notch = self.notch and any([notch.is_yoke for notch in self.notch])
+    is_notch = self.has_notch(is_bore=False)
 
     if not is_notch:
         # No notches
@@ -46,7 +46,7 @@ def get_yoke_desc(self, sym=1, is_reversed=False, prop_dict=None):
             yoke_desc = [{"obj": arc, "begin_angle": 0, "end_angle": 2 * pi / sym}]
     else:
         # Get the notches
-        notch_list = self.get_notch_list(sym=1, is_yoke=True)
+        notch_list = self.get_notch_list(sym=1, is_bore=False)
 
         # Add all the yoke lines
         yoke_desc = list()

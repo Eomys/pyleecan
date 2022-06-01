@@ -31,7 +31,7 @@ def get_notches_surf(self, sym):
     Rbo = self.get_Rbo()
 
     surf_list = list()
-    notch_list = self.get_notch_list(sym=1, is_yoke=False)
+    notch_list = self.get_notch_list(sym=1, is_bore=True)
     for ii, notch in enumerate(notch_list):
         # Add closing Line
         Zbegin = notch["obj"][-1].get_end()

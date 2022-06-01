@@ -43,7 +43,7 @@ def get_bore_desc(self, sym=1, prop_dict=None):
         slot_list.append(bore_dict)
 
     # Get the notches and set range for 0 to 2pi
-    notch_list = self.get_notch_list(sym=sym)
+    notch_list = self.get_notch_list(sym=sym, is_bore=True)
     for notch in notch_list:
         notch["begin_angle"] = notch["begin_angle"] % (2 * pi)
         notch["end_angle"] = notch["end_angle"] % (2 * pi)

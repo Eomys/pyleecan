@@ -5,8 +5,8 @@ from ....Methods import ParentMissingError
 
 def is_outwards(self):
     """Return if the notch is outwards (on an external lamination) or inwards
-    (on an internal lamination). If the notch is on the yoke, it is inwards or
-    outwards respectively.
+    (on an internal lamination).
+    (to make lam.notch[ii].notch_shape match lam.slot parent)
 
     Parameters
     ----------
@@ -20,6 +20,6 @@ def is_outwards(self):
         result is negated.
     """
     if self.parent is not None:
-        return self.is_yoke ^ self.parent.is_outwards()
+        return self.parent.is_outwards()
     else:
         raise ParentMissingError("Error: The notch is not inside a Lamination")

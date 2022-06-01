@@ -41,7 +41,7 @@ def get_bore_desc(self, sym=1, prop_dict=None):
         slot_list.append(bore_dict)
 
     # Get the notches
-    notch_list = self.get_notch_list(sym=sym)
+    notch_list = self.get_notch_list(sym=sym, is_bore=True)
 
     # Merge Slot and Notches
     merged_list = merge_notch_list(slot_list, notch_list)

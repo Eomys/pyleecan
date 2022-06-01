@@ -1,7 +1,7 @@
 from ....Functions.Geometry.merge_notch_list import merge_notch_list
 
 
-def get_notch_list(self, sym=1, is_yoke=False):
+def get_notch_list(self, is_bore, sym=1):
     """Returns an ordered description of the notches
 
     Parameters
@@ -10,7 +10,7 @@ def get_notch_list(self, sym=1, is_yoke=False):
         A Lamination object
     sym: int
         Number of symmetry
-    is_yoke : bool
+    is_bore : bool
         Selected yoke or bore notches
 
     Returns
@@ -19,13 +19,16 @@ def get_notch_list(self, sym=1, is_yoke=False):
         list of dictionary with key: "begin_angle", "end_angle", "obj"
     """
 
-    if self.notch is None or len(self.notch) == 0:  # No notch
+    if not self.has_notch(is_bore=is_bore):  # No notch on requested radius
         return list()
     else:
-        notch_list = [notch for notch in self.notch if notch.is_yoke == is_yoke]
+        # Get all the notch on the selected radius
+        notch_list = [
+            notch for notch in self.notch if notch.notch_shape.is_bore == is_bore
+        ]
+        # Get description of first notch
         desc_list = notch_list[0].get_notch_list(sym=sym)
         # If more than one notch, we need to merge and order the description
-        # TODO: check if notches are coliding
         for ii in range(len(notch_list) - 1):
             desc_list = merge_notch_list(
                 desc_list, notch_list[ii + 1].get_notch_list(sym=sym)

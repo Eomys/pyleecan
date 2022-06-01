@@ -34,8 +34,8 @@ def comp_point_ref(self, sym=1):
         else:
             Rref = (self.Rext + R2) / 2
 
-    # Find an angle without notches
-    if not self.notch or any([not notch.is_yoke for notch in self.notch]):
+    # Find an angle without notches on the yoke
+    if not self.has_notch(is_bore=False):
         angle = pi / sym
     else:
         yoke_desc, _ = self.get_yoke_desc(sym=sym, is_reversed=False)

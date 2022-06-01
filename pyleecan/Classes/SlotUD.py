@@ -124,6 +124,7 @@ class SlotUD(Slot):
         name="",
         Zs=36,
         wedge_mat=None,
+        is_bore=True,
         init_dict=None,
         init_str=None,
     ):
@@ -156,6 +157,8 @@ class SlotUD(Slot):
                 Zs = init_dict["Zs"]
             if "wedge_mat" in list(init_dict.keys()):
                 wedge_mat = init_dict["wedge_mat"]
+            if "is_bore" in list(init_dict.keys()):
+                is_bore = init_dict["is_bore"]
         # Set the properties (value check and convertion are done in setter)
         self.line_list = line_list
         self.wind_begin_index = wind_begin_index
@@ -163,7 +166,7 @@ class SlotUD(Slot):
         self.type_line_wind = type_line_wind
         self.name = name
         # Call Slot init
-        super(SlotUD, self).__init__(Zs=Zs, wedge_mat=wedge_mat)
+        super(SlotUD, self).__init__(Zs=Zs, wedge_mat=wedge_mat, is_bore=is_bore)
         # The class is frozen (in Slot init), for now it's impossible to
         # add new properties
 

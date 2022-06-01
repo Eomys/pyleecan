@@ -249,7 +249,8 @@
         "desc": "Class for Bore flower shape",
         "is_internal": false,
         "methods": [
-            "get_bore_line"
+            "get_bore_line",
+            "comp_periodicity_spatial"
         ],
         "mother": "Bore",
         "name": "BoreFlower",
@@ -296,7 +297,8 @@
         "desc": "Class for Bore LSRPM",
         "is_internal": false,
         "methods": [
-            "get_bore_line"
+            "get_bore_line",
+            "comp_periodicity_spatial"
         ],
         "mother": "Bore",
         "name": "BoreLSRPM",
@@ -5154,7 +5156,8 @@
             "get_notches_surf",
             "comp_periodicity_duct_spatial",
             "get_surfaces_closing",
-            "comp_periodicity_geo"
+            "comp_periodicity_geo",
+            "has_notch"
         ],
         "mother": "",
         "name": "Lamination",
@@ -7866,23 +7869,14 @@
         "is_internal": false,
         "methods": [
             "get_Rbo",
+            "get_Ryoke",
             "is_outwards"
         ],
         "mother": "",
         "name": "Notch",
         "package": "Machine",
         "path": "pyleecan/Generator/ClassesRef/Machine/Notch.csv",
-        "properties": [
-            {
-                "desc": "True if Notch is on the Yoke",
-                "max": "",
-                "min": "",
-                "name": "is_yoke",
-                "type": "bool",
-                "unit": "",
-                "value": 0
-            }
-        ]
+        "properties": []
     },
     "NotchEvenDist": {
         "constants": [
@@ -7896,7 +7890,8 @@
         "is_internal": false,
         "methods": [
             "get_notch_list",
-            "comp_surface"
+            "comp_surface",
+            "comp_periodicity_spatial"
         ],
         "mother": "Notch",
         "name": "NotchEvenDist",
@@ -11022,6 +11017,15 @@
                 "type": "Material",
                 "unit": "-",
                 "value": null
+            },
+            {
+                "desc": "True if the Slot is on the bore radius, False for yoke",
+                "max": "",
+                "min": "",
+                "name": "is_bore",
+                "type": "bool",
+                "unit": "-",
+                "value": 1
             }
         ]
     },

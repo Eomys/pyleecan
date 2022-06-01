@@ -1,8 +1,8 @@
 from ....Methods import ParentMissingError
 
 
-def get_Rbo(self):
-    """Return the parent lamination bore radius
+def get_Ryoke(self):
+    """Return the parent lamination yoke radius
     (to make lam.notch[ii].notch_shape match lam.slot parent)
 
     Parameters
@@ -12,12 +12,12 @@ def get_Rbo(self):
 
     Returns
     -------
-    Rbo: float
-        The parent lamination bore radius [m]
+    Ryoke: float
+        The parent lamination yoke radius [m]
 
     """
 
     if self.parent is not None:
-        return self.parent.get_Rbo()
+        return self.parent.get_Ryoke()
     else:
         raise ParentMissingError("Error: The notch is not inside a Lamination")

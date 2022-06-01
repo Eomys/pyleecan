@@ -98,13 +98,17 @@ def test_Lam_evenly_dist():
     test_obj.stator.notch = [notch]
 
     # Yoke notches
-    slot_r = SlotW10(Zs=6, W0=40e-3, W1=40e-3, W2=40e-3, H0=0, H1=0, H2=25e-3)
-    notch = NotchEvenDist(notch_shape=slot_r, alpha=0, is_yoke=True)
-    test_obj.rotor.notch.append([notch])
+    slot_r = SlotW10(
+        Zs=6, W0=40e-3, W1=40e-3, W2=40e-3, H0=0, H1=0, H2=25e-3, is_bore=False
+    )
+    notch = NotchEvenDist(notch_shape=slot_r, alpha=0)
+    test_obj.rotor.notch.append(notch)
 
-    slot_s = SlotW10(Zs=6, W0=80e-3, W1=80e-3, W2=80e-3, H0=0, H1=0, H2=30e-3)
-    notch = NotchEvenDist(notch_shape=slot_s, alpha=0.5 * pi / 6, is_yoke=True)
-    test_obj.stator.notch.append([notch])
+    slot_s = SlotW10(
+        Zs=6, W0=80e-3, W1=80e-3, W2=80e-3, H0=0, H1=0, H2=30e-3, is_bore=False
+    )
+    notch = NotchEvenDist(notch_shape=slot_s, alpha=0.5 * pi / 6)
+    test_obj.stator.notch.append(notch)
 
     # Plot, save and check
     test_obj.plot(
@@ -125,3 +129,4 @@ def test_Lam_evenly_dist():
 if __name__ == "__main__":
     test_LamHole_notch()
     test_Lam_evenly_dist()
+    print("Done")

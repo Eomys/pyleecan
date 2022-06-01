@@ -173,6 +173,11 @@ try:
 except ImportError as error:
     comp_periodicity_geo = error
 
+try:
+    from ..Methods.Machine.Lamination.has_notch import has_notch
+except ImportError as error:
+    has_notch = error
+
 
 from numpy import isnan
 from ._check import InitUnKnowClassError
@@ -516,6 +521,15 @@ class Lamination(FrozenClass):
         )
     else:
         comp_periodicity_geo = comp_periodicity_geo
+    # cf Methods.Machine.Lamination.has_notch
+    if isinstance(has_notch, ImportError):
+        has_notch = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use Lamination method has_notch: " + str(has_notch))
+            )
+        )
+    else:
+        has_notch = has_notch
     # save and copy methods are available in all object
     save = save
     copy = copy
