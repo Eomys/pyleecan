@@ -246,7 +246,7 @@ class ParamExplorer(FrozenClass):
         ParamExplorer_dict["unit"] = self.unit
         if self._setter_str is not None:
             ParamExplorer_dict["setter"] = self._setter_str
-        elif "keep_function" in kwargs and kwargs["keep_function"]:
+        elif keep_function:
             ParamExplorer_dict["setter"] = self.setter
         else:
             ParamExplorer_dict["setter"] = None
@@ -258,7 +258,7 @@ class ParamExplorer(FrozenClass):
                 )
         if self._getter_str is not None:
             ParamExplorer_dict["getter"] = self._getter_str
-        elif "keep_function" in kwargs and kwargs["keep_function"]:
+        elif keep_function:
             ParamExplorer_dict["getter"] = self.getter
         else:
             ParamExplorer_dict["getter"] = None

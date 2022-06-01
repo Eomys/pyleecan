@@ -343,7 +343,7 @@ class OptiProblem(FrozenClass):
                     OptiProblem_dict["obj_func"].append(None)
         if self._eval_func_str is not None:
             OptiProblem_dict["eval_func"] = self._eval_func_str
-        elif "keep_function" in kwargs and kwargs["keep_function"]:
+        elif keep_function:
             OptiProblem_dict["eval_func"] = self.eval_func
         else:
             OptiProblem_dict["eval_func"] = None
@@ -370,7 +370,7 @@ class OptiProblem(FrozenClass):
                     OptiProblem_dict["constraint"].append(None)
         if self._preprocessing_str is not None:
             OptiProblem_dict["preprocessing"] = self._preprocessing_str
-        elif "keep_function" in kwargs and kwargs["keep_function"]:
+        elif keep_function:
             OptiProblem_dict["preprocessing"] = self.preprocessing
         else:
             OptiProblem_dict["preprocessing"] = None

@@ -282,7 +282,7 @@ class OptiGenAlg(OptiSolver):
         )
         if self._selector_str is not None:
             OptiGenAlg_dict["selector"] = self._selector_str
-        elif "keep_function" in kwargs and kwargs["keep_function"]:
+        elif keep_function:
             OptiGenAlg_dict["selector"] = self.selector
         else:
             OptiGenAlg_dict["selector"] = None
@@ -294,7 +294,7 @@ class OptiGenAlg(OptiSolver):
                 )
         if self._crossover_str is not None:
             OptiGenAlg_dict["crossover"] = self._crossover_str
-        elif "keep_function" in kwargs and kwargs["keep_function"]:
+        elif keep_function:
             OptiGenAlg_dict["crossover"] = self.crossover
         else:
             OptiGenAlg_dict["crossover"] = None
@@ -306,7 +306,7 @@ class OptiGenAlg(OptiSolver):
                 )
         if self._mutator_str is not None:
             OptiGenAlg_dict["mutator"] = self._mutator_str
-        elif "keep_function" in kwargs and kwargs["keep_function"]:
+        elif keep_function:
             OptiGenAlg_dict["mutator"] = self.mutator
         else:
             OptiGenAlg_dict["mutator"] = None

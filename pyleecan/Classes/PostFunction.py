@@ -136,7 +136,7 @@ class PostFunction(Post):
         )
         if self._run_str is not None:
             PostFunction_dict["run"] = self._run_str
-        elif "keep_function" in kwargs and kwargs["keep_function"]:
+        elif keep_function:
             PostFunction_dict["run"] = self.run
         else:
             PostFunction_dict["run"] = None

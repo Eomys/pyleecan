@@ -205,7 +205,7 @@ class OptiDesignVar(ParamExplorer):
         )
         if self._get_value_str is not None:
             OptiDesignVar_dict["get_value"] = self._get_value_str
-        elif "keep_function" in kwargs and kwargs["keep_function"]:
+        elif keep_function:
             OptiDesignVar_dict["get_value"] = self.get_value
         else:
             OptiDesignVar_dict["get_value"] = None

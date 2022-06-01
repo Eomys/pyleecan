@@ -333,7 +333,7 @@ class Skew(FrozenClass):
         Skew_dict["is_step"] = self.is_step
         if self._function_str is not None:
             Skew_dict["function"] = self._function_str
-        elif "keep_function" in kwargs and kwargs["keep_function"]:
+        elif keep_function:
             Skew_dict["function"] = self.function
         else:
             Skew_dict["function"] = None

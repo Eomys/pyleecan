@@ -190,7 +190,7 @@ class OptiConstraint(FrozenClass):
         OptiConstraint_dict["value"] = self.value
         if self._get_variable_str is not None:
             OptiConstraint_dict["get_variable"] = self._get_variable_str
-        elif "keep_function" in kwargs and kwargs["keep_function"]:
+        elif keep_function:
             OptiConstraint_dict["get_variable"] = self.get_variable
         else:
             OptiConstraint_dict["get_variable"] = None

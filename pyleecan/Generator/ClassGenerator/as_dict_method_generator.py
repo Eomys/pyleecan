@@ -153,7 +153,7 @@ def _get_function_str(cls, prop):
     var_str = ""
     var_str += T2 + f"if self._{prop}_str is not None:"
     var_str += T3 + f'{cls}_dict["{prop}"] = self._{prop}_str'
-    var_str += T2 + f'elif "keep_function" in kwargs and kwargs["keep_function"]:'
+    var_str += T2 + f"elif keep_function:"
     var_str += T3 + f'{cls}_dict["{prop}"] = self.{prop}'
     var_str += T2 + f"else:"
     var_str += T3 + f'{cls}_dict["{prop}"] = None'

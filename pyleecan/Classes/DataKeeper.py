@@ -300,7 +300,7 @@ class DataKeeper(FrozenClass):
         DataKeeper_dict["unit"] = self.unit
         if self._keeper_str is not None:
             DataKeeper_dict["keeper"] = self._keeper_str
-        elif "keep_function" in kwargs and kwargs["keep_function"]:
+        elif keep_function:
             DataKeeper_dict["keeper"] = self.keeper
         else:
             DataKeeper_dict["keeper"] = None
@@ -312,7 +312,7 @@ class DataKeeper(FrozenClass):
                 )
         if self._error_keeper_str is not None:
             DataKeeper_dict["error_keeper"] = self._error_keeper_str
-        elif "keep_function" in kwargs and kwargs["keep_function"]:
+        elif keep_function:
             DataKeeper_dict["error_keeper"] = self.error_keeper
         else:
             DataKeeper_dict["error_keeper"] = None
