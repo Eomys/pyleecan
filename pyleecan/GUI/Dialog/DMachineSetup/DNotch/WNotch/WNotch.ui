@@ -19,11 +19,11 @@
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout">
+  <layout class="QVBoxLayout" name="main_layout">
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
-      <widget class="QComboBox" name="c_slot_type">
+      <widget class="QComboBox" name="c_notch_type">
        <item>
         <property name="text">
          <string>Slot Type 50</string>
@@ -125,7 +125,7 @@
   <customwidget>
    <class>FloatEdit</class>
    <extends>QLineEdit</extends>
-   <header>.....GUI/Tools/FloatEdit.h</header>
+   <header>......GUI/Tools/FloatEdit.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

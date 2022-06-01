@@ -3,8 +3,11 @@
 from PySide2.QtCore import Qt, Signal
 from PySide2.QtWidgets import QFileDialog, QMessageBox, QWidget
 from logging import getLogger
+
+
 from .....loggers import GUI_LOG_NAME
 from .....GUI import gui_option
+from .....GUI.Dialog.DMachineSetup.DNotch.DNotchTab import DNotchTab
 from .....GUI.Dialog.DMachineSetup.DAVDuct.DAVDuct import DAVDuct
 from .....GUI.Dialog.DMachineSetup.SLamShape.Gen_SLamShape import Gen_SLamShape
 
@@ -92,7 +95,6 @@ class SLamShape(Gen_SLamShape, QWidget):
             self.g_radial.setChecked(True)
 
         # Not available Yet
-        self.g_notches.hide()
         self.g_bore.hide()
 
         # Setup Output
@@ -105,6 +107,8 @@ class SLamShape(Gen_SLamShape, QWidget):
         self.g_radial.toggled.connect(self.enable_rad_vent)
         self.g_axial.toggled.connect(self.enable_ax_vent)
         self.b_axial_duct.clicked.connect(self.set_avd)
+        self.g_notches.toggled.connect(self.enable_notches)
+        self.b_notch.clicked.connect(self.set_notches)
         self.si_Nrvd.editingFinished.connect(self.set_Nrvd)
         self.lf_Wrvd.editingFinished.connect(self.set_Wrvd)
         self.w_mat.saveNeeded.connect(self.emit_save)
@@ -246,6 +250,50 @@ class SLamShape(Gen_SLamShape, QWidget):
         self.update_lenght()
         # Notify the machine GUI that the machine has changed
         self.saveNeeded.emit()
+
+    def enable_notches(self):
+        """Clear notches values if g_notches is unselected"""
+        if not self.g_notches.isChecked():
+            self.obj.notch_list = list()
+            self.update_notches_text()
+            self.update_graph()
+        # Notify the machine GUI that the machine has changed
+        self.saveNeeded.emit()
+
+    def set_notches(self):
+        """Opens widget to define notches to add to the lamination
+
+        Parameters
+        ----------
+        self : SLamShape
+            A SLamShape object
+        """
+        self.notches_win = DNotchTab(self.machine, self.is_stator)
+        self.notches_win.show()
+        self.notches_win.accepted.connect(self.validate_notches)
+
+    def validate_notches(self):
+        """validates the notches defined by the user
+        Parameters
+        ----------
+        self : SLamShape
+            A SLamShape object
+        """
+        self.update_notches_text()
+        self.update_graph()
+        # Notify the machine GUI that the machine has changed
+        self.saveNeeded.emit()
+
+    def update_notches_text(self):
+        """Update the text with the current number of notches
+
+        Parameters
+        ----------
+        self : SLamShape
+            A SLamShape object
+        """
+        Nset = len(self.obj.notch_list)
+        self.out_axial_duct.setText(str(Nset) + "set (" + str(Nset) + "notches)")
 
     def update_lenght(self):
         """Update the text of out_length

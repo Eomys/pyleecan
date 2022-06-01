@@ -22,7 +22,7 @@ class PMSlot10(Gen_PMSlot10, QWidget):
     slot_name = "Rectangular Magnet"
     slot_type = SlotM10
 
-    def __init__(self, lamination=None):
+    def __init__(self, lamination=None, is_notch=False):
         """Initialize the widget according to lamination
 
         Parameters

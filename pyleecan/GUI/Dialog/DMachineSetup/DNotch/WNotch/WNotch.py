@@ -4,38 +4,30 @@
 from PySide2.QtCore import Signal
 from PySide2.QtWidgets import QMessageBox, QWidget
 
-from ......GUI.Dialog.DMachineSetup.SMHoleMag.PHoleM50.PHoleM50 import PHoleM50
-from ......GUI.Dialog.DMachineSetup.SMHoleMag.PHoleM51.PHoleM51 import PHoleM51
-from ......GUI.Dialog.DMachineSetup.SMHoleMag.PHoleM52.PHoleM52 import PHoleM52
-from ......GUI.Dialog.DMachineSetup.SMHoleMag.PHoleM53.PHoleM53 import PHoleM53
-from ......GUI.Dialog.DMachineSetup.SMHoleMag.PHoleM54.PHoleM54 import PHoleM54
-from ......GUI.Dialog.DMachineSetup.SMHoleMag.PHoleM57.PHoleM57 import PHoleM57
-from ......GUI.Dialog.DMachineSetup.SMHoleMag.PHoleM58.PHoleM58 import PHoleM58
-from ......GUI.Dialog.DMachineSetup.SMHoleMag.PHoleMUD.PHoleMUD import PHoleMUD
-from ......GUI.Dialog.DMachineSetup.SMHoleMag.WHoleMag.Ui_WHoleMag import Ui_WHoleMag
+from pyleecan.Classes.LamSlot import LamSlot
+
+from ......GUI.Dialog.DMachineSetup.SMSlot.PMSlot10.PMSlot10 import PMSlot10
+from ......GUI.Dialog.DMachineSetup.SMSlot.PMSlot11.PMSlot11 import PMSlot11
+from ......GUI.Dialog.DMachineSetup.DNotch.WNotch.Ui_WNotch import Ui_WNotch
 
 
-class WHoleMag(Ui_WHoleMag, QWidget):
-    """Widget to Setup a single Hole in a list"""
+class WNotch(Ui_WNotch, QWidget):
+    """Widget to Setup a single notch in a list"""
 
     # Signal to DMachineSetup to know that the save popup is needed
     saveNeeded = Signal()
 
-    def __init__(self, parent, is_mag, index, material_dict):
+    def __init__(self, parent, index):
         """Initialize the GUI according to lamination
 
         Parameters
         ----------
-        self : WHoleMag
-            A WHoleMag object
+        self : WNotch
+            A WNotch object
         parent :
-            A parent object containing the lamination (LamHole) to edit
-        is_mag : bool
-            False: no magnet in the Hole (for the SyRM)
+            A parent object containing the lamination to edit
         index : int
-            Index of the hole to edit
-        material_dict: dict
-            Materials dictionary (library + machine)
+            Index of the notch to edit
         """
 
         # Build the interface according to the .ui file
@@ -43,105 +35,93 @@ class WHoleMag(Ui_WHoleMag, QWidget):
         self.setupUi(self)
 
         self.is_stator = False
+        # Lamination to edit
         self.obj = parent.obj
+        self.lam_notch = LamSlot(
+            is_stator=self.obj.is_stator,
+            is_internal=self.obj.is_internal,
+            Rint=self.obj.Rint,
+            Rext=self.obj.Rext,
+        )
+        self.lam_notch.slot = self.obj.notch[index].notch_shape
         self.index = index
-        self.is_mag = is_mag
         self.parent = parent
-        self.material_dict = material_dict
 
         # Adapt the GUI to the current machine
-        if is_mag:  # IPMSM
-            self.wid_list = [
-                PHoleM50,
-                PHoleM51,
-                PHoleM52,
-                PHoleM53,
-                PHoleM57,
-                PHoleM58,
-                PHoleMUD,
-            ]
-        else:  # SyRM
-            self.wid_list = [
-                PHoleM50,
-                PHoleM51,
-                PHoleM52,
-                PHoleM53,
-                PHoleM54,
-                PHoleM57,
-                PHoleM58,
-                PHoleMUD,
-            ]
-        self.type_list = [wid.hole_type for wid in self.wid_list]
-        self.name_list = [wid.hole_name for wid in self.wid_list]
+        self.wid_list = [PMSlot10, PMSlot11]
 
-        # Avoid erase all the parameters when navigating though the holes
-        self.previous_hole = dict()
-        for hole_type in self.type_list:
-            self.previous_hole[hole_type] = None
+        self.type_list = [wid.slot_type for wid in self.wid_list]
+        self.name_list = [wid.slot_name for wid in self.wid_list]
 
-        # Fill the combobox with the available hole
-        self.c_hole_type.clear()
-        for hole in self.name_list:
-            self.c_hole_type.addItem(hole)
-        self.c_hole_type.setCurrentIndex(
-            self.type_list.index(type(self.obj.hole[index]))
+        # Avoid erase all the parameters when navigating though the notchs
+        self.previous_notch = dict()
+        for notch_type in self.type_list:
+            self.previous_notch[notch_type] = None
+
+        # Fill the combobox with the available notch
+        self.c_notch_type.clear()
+        for notch in self.name_list:
+            self.c_notch_type.addItem(notch)
+        self.c_notch_type.setCurrentIndex(
+            self.type_list.index(type(self.obj.notch[index].notch_shape))
         )
 
         # Regenerate the pages with the new values
-        self.w_hole.setParent(None)
-        self.w_hole = self.wid_list[self.c_hole_type.currentIndex()](
-            hole=self.obj.hole[index], material_dict=self.material_dict
+        self.w_notch.setParent(None)
+        self.w_notch = self.wid_list[self.c_notch_type.currentIndex()](
+            lamination=self.lam_notch,
+            is_notch=True,
         )
         # Refresh the GUI
-        self.main_layout.removeWidget(self.w_hole)
-        self.main_layout.insertWidget(1, self.w_hole)
+        self.main_layout.removeWidget(self.w_notch)
+        self.main_layout.insertWidget(1, self.w_notch)
 
         # Connect the slot
-        self.c_hole_type.currentIndexChanged.connect(self.set_hole_type)
+        self.c_notch_type.currentIndexChanged.connect(self.set_notch_type)
 
     def emit_save(self):
         """Send a saveNeeded signal to the DMachineSetup"""
         self.saveNeeded.emit()
 
-    def set_hole_type(self, c_index):
-        """Initialize self.obj with the hole corresponding to index
+    def set_notch_type(self, c_index):
+        """Initialize self.obj with the notch corresponding to index
 
         Parameters
         ----------
-        self : WHoleMag
-            A WHoleMag object
+        self : WNotch
+            A WNotch object
         c_index : int
-            Index of the selected hole type in the combobox
+            Index of the selected notch type in the combobox
         """
 
-        # Save the hole
-        hole = self.obj.hole[self.index]
-        self.previous_hole[type(hole)] = hole
+        # Save the notch
+        notch = self.obj.notch[self.index]
+        self.previous_notch[type(notch)] = notch
 
         # Call the corresponding constructor
-        Zh = hole.Zh
-        if self.previous_hole[self.type_list[c_index]] is None:
-            # No previous hole of this type
-            self.obj.hole[self.index] = self.type_list[c_index]()
-            self.obj.hole[self.index]._set_None()  # No default value
-            self.obj.hole[self.index].Zh = Zh
-            if self.is_mag and self.obj.hole[self.index].has_magnet():  # IPMSM
-                magnet = hole.get_magnet_by_id(0)
-                self.obj.hole[self.index].set_magnet_by_id(0, magnet)
-            elif self.obj.hole[self.index].has_magnet():  # SyRM
-                self.obj.hole[self.index].remove_magnet()
-        else:  # Load the previous hole of this type
-            self.obj.hole[self.index] = self.previous_hole[self.type_list[c_index]]
+        Zh = notch.Zh
+        if self.previous_notch[self.type_list[c_index]] is None:
+            # No previous notch of this type
+            self.obj.notch[self.index] = self.type_list[c_index]()
+            self.obj.notch[self.index]._set_None()  # No default value
+            self.obj.notch[self.index].Zh = Zh
+            if self.is_mag and self.obj.notch[self.index].has_magnet():  # IPMSM
+                magnet = notch.get_magnet_by_id(0)
+                self.obj.notch[self.index].set_magnet_by_id(0, magnet)
+            elif self.obj.notch[self.index].has_magnet():  # SyRM
+                self.obj.notch[self.index].remove_magnet()
+        else:  # Load the previous notch of this type
+            self.obj.notch[self.index] = self.previous_notch[self.type_list[c_index]]
 
         # Update the GUI
-        self.w_hole.setParent(None)
-        self.w_hole = self.wid_list[c_index](
-            hole=self.obj.hole[self.index], material_dict=self.material_dict
+        self.w_notch.setParent(None)
+        self.w_notch = self.wid_list[c_index](
+            notch=self.obj.notch[self.index], material_dict=self.material_dict
         )
-        self.w_hole.saveNeeded.connect(self.emit_save)
+        self.w_notch.saveNeeded.connect(self.emit_save)
         # Refresh the GUI
-        self.main_layout.removeWidget(self.w_hole)
-        self.main_layout.insertWidget(1, self.w_hole)
+        self.main_layout.removeWidget(self.w_notch)
+        self.main_layout.insertWidget(1, self.w_notch)
 
         # Notify the machine GUI that the machine has changed
         self.saveNeeded.emit()
@@ -151,8 +131,8 @@ class WHoleMag(Ui_WHoleMag, QWidget):
 
         Parameters
         ----------
-        self : WHoleMag
-            A WHoleMag widget
+        self : WnotchMag
+            A WnotchMag widget
 
         Returns
         -------
@@ -160,4 +140,4 @@ class WHoleMag(Ui_WHoleMag, QWidget):
             Error message (return None if no error)
         """
 
-        return self.w_hole.check()
+        return self.w_notch.check()

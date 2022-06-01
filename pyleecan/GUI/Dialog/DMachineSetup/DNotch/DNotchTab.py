@@ -2,32 +2,33 @@
 
 
 from PySide2.QtCore import Signal
-from PySide2.QtWidgets import QMessageBox, QWidget, QSizePolicy
+from PySide2.QtWidgets import QMessageBox, QWidget, QDialog
 from logging import getLogger
+
+
 from .....loggers import GUI_LOG_NAME
-from .....Classes.HoleM50 import HoleM50
-from .....Classes.Material import Material
-from .....GUI.Dialog.DMachineSetup.SMHoleMag.Ui_SMHoleMag import Ui_SMHoleMag
-from .....GUI.Dialog.DMachineSetup.SMHoleMag.WHoleMag.WHoleMag import WHoleMag
 from .....Methods.Slot.Slot import SlotCheckError
+from .....GUI.Dialog.DMachineSetup.DNotch.WNotch.WNotch import WNotch
+from .....GUI.Dialog.DMachineSetup.DNotch.Ui_DNotchTab import Ui_DNotchTab
+from .....GUI.Dialog.DMachineSetup.SMSlot.PMSlot10.PMSlot10 import PMSlot10
 from .....Functions.Plot.set_plot_gui_icon import set_plot_gui_icon
+from .....Classes.NotchEvenDist import NotchEvenDist
+from .....Classes.SlotM10 import SlotM10
 
 
-class SMHoleMag(Ui_SMHoleMag, QWidget):
-    """Step to set several Holes"""
+class DNotchTab(Ui_DNotchTab, QDialog):
+    """Step to set several notches"""
 
     # Signal to DMachineSetup to know that the save popup is needed
     saveNeeded = Signal()
-    # Information for DMachineSetup
-    step_name = "Hole"
 
-    def __init__(self, machine, material_dict, is_stator=False):
+    def __init__(self, machine, is_stator=False):
         """Initialize the widget according to machine
 
         Parameters
         ----------
-        self : SMHoleMag
-            A SMHoleMag widget
+        self : DNotchTab
+            A DNotchTab widget
         machine : Machine
             current machine to edit
         material_dict: dict
@@ -36,12 +37,11 @@ class SMHoleMag(Ui_SMHoleMag, QWidget):
             To adapt the GUI to set either the stator or the rotor
         """
         # Build the interface according to the .ui file
-        QWidget.__init__(self)
+        QDialog.__init__(self)
         self.setupUi(self)
 
         # Saving arguments
         self.machine = machine
-        self.material_dict = material_dict
         self.is_stator = is_stator
 
         # Get the correct object to set
@@ -49,132 +49,75 @@ class SMHoleMag(Ui_SMHoleMag, QWidget):
             self.obj = machine.stator
         else:
             self.obj = machine.rotor
-        if self.obj.hole is None:
-            self.obj.hole = list()
+        if self.obj.notch is None:
+            self.obj.notch = list()
 
-        # If the hole is not set, initialize it with a HoleM50
-        if len(self.obj.hole) == 0:
-            self.obj.hole.append(HoleM50())
-            if self.machine.type_machine == 5:  # SyRM
-                self.obj.hole[0].remove_magnet()
-            self.obj.hole[0]._set_None()
-            self.obj.hole[0].Zh = machine.stator.winding.p * 2  # Default value
-        self.set_hole_pitch(self.obj.hole[0].Zh)
-
-        # Update all the hole tab
-        # (the current hole types will be initialized)
-        # print(type(self.obj.hole[0]).__name__)
-        self.tab_hole.clear()
-        for hole in self.obj.hole:
-            self.s_add(hole)
-        self.tab_hole.setCurrentIndex(0)
+        # Update all the notch tab
+        # (the current notches types will be initialized)
+        self.tab_notch.clear()
+        for notch in self.obj.notch:
+            self.s_add(notch)
+        self.tab_notch.setCurrentIndex(0)
 
         # Set Help URL
-        self.b_help.hide()
+        # self.b_help.hide()
 
         # Connect the slot
-        self.b_add.clicked.connect(self.s_add)
+        self.b_add.clicked.connect(lambda: self.s_add())
         self.b_remove.clicked.connect(self.s_remove)
-
-        self.b_plot.clicked.connect(self.s_plot)
+        self.b_ok.clicked.connect(self.accept)
+        self.b_cancel.clicked.connect(self.reject)
+        # self.b_plot.clicked.connect(self.s_plot)
 
     def emit_save(self):
         """Send a saveNeeded signal to the DMachineSetup"""
         self.saveNeeded.emit()
 
-    def set_hole_pitch(self, Zh):
-        """Update out_hole_pitch with the correct value
+    def s_add(self, notch=None):
+        """Signal to add a new notch
 
         Parameters
         ----------
-        self : SMHoleMag
-            A SMHoleMag object
-        Zh : int
-            The current value of Zh
+        self : DNotchTab
+            A DNotchTab widget
+        notch : Notch
+            Notch to initialize in the new page
+            if None create a new Notch
         """
-        Zh_txt = self.tr("Slot pitch = 360 / 2p = ")
-        if Zh in [None, 0]:
-            self.out_hole_pitch.setText(Zh_txt + "?")
+        # Create a new notch if needed
+        if notch is None:
+            self.obj.notch.append(
+                NotchEvenDist(alpha=0, notch_shape=SlotM10(Zs=self.obj.get_Zs()))
+            )
+            notch = self.obj.notch[-1]
+            notch_index = len(self.obj.notch) - 1
         else:
-            hole_pitch = 360.0 / Zh
-            self.out_hole_pitch.setText(Zh_txt + "%.4g" % (hole_pitch) + " °")
-
-    def s_add(self, hole=False):
-        """Signal to add a new hole
-
-        Parameters
-        ----------
-        self : SMHoleMag
-            a SMHoleMag object
-        hole : HoleMag
-            hole to initialize in the new page
-            if None create a new empty HoleM50
-        """
-        # Adapt the GUI according to the machine type
-        if self.machine.type_machine == 5:  # SyRM
-            is_mag = False
-        else:
-            is_mag = True
-        # Create a new hole if needed
-        if type(hole) is bool:
-            self.obj.hole.append(HoleM50())
-            hole = self.obj.hole[-1]
-            hole._set_None()
-            hole_index = len(self.obj.hole) - 1
-            if self.machine.type_machine == 5:
-                hole.remove_magnet()
-            else:
-                hole.set_magnet_by_id(0, self.obj.hole[0].get_magnet_by_id(0))
-            hole.Zh = self.obj.hole[0].Zh
-        else:
-            hole_index = self.obj.hole.index(hole)
-        tab = WHoleMag(
-            self, is_mag=is_mag, index=hole_index, material_dict=self.material_dict
-        )
+            notch_index = self.obj.notch.index(notch)
+        tab = WNotch(self, index=notch_index)
         tab.saveNeeded.connect(self.emit_save)
-        self.tab_hole.addTab(tab, "Hole " + str(hole_index + 1))
+        self.tab_notch.addTab(tab, "notch " + str(notch_index + 1))
 
     def s_remove(self):
-        """Signal to remove the last hole
+        """Signal to remove the last notch
 
         Parameters
         ----------
-        self : SMHoleMag
-            a SMHoleMag object
+        self : DNotchTab
+            A DNotchTab widget
         """
-        if len(self.obj.hole) > 1:
-            self.tab_hole.removeTab(len(self.obj.hole) - 1)
-            self.obj.hole.pop(-1)
+        if len(self.obj.notch) > 1:
+            self.tab_notch.removeTab(len(self.obj.notch) - 1)
+            self.obj.notch.pop(-1)
 
     def s_plot(self):
         """Try to plot the lamination
 
         Parameters
         ----------
-        self : SMHoleMag
-            a SMHoleMag object
+        self : DNotchTab
+            A DNotchTab widget
         """
-        # Update p
-        for hole in self.obj.hole:
-            hole.Zh = self.machine.stator.winding.p * 2
-        self.set_hole_pitch(self.obj.hole[0].Zh)
-
-        # We have to make sure the hole is right before trying to plot it
-        error = self.check(self.obj)
-        if error:  # Error => Display it
-            err_msg = "Error in Hole definition:\n" + error
-            getLogger(GUI_LOG_NAME).debug(err_msg)
-            QMessageBox().critical(self, self.tr("Error"), err_msg)
-        else:  # No error => Plot the lamination
-            try:
-                self.obj.plot(is_show_fig=True)
-                set_plot_gui_icon()
-            except Exception as e:
-                err_msg = "Error while plotting Lamination in Hole definition:\n" + str(
-                    e
-                )
-                getLogger(GUI_LOG_NAME).error(err_msg)
-                QMessageBox().critical(self, self.tr("Error"), err_msg)
+        pass
 
     @staticmethod
     def check(lamination):
@@ -192,8 +135,8 @@ class SMHoleMag(Ui_SMHoleMag, QWidget):
         """
 
         # Check that everything is set
-        for hole in lamination.hole:
+        for notch in lamination.notch:
             try:
-                hole.check()
+                notch.check()
             except SlotCheckError as error:
                 return str(error)
