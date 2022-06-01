@@ -23,6 +23,7 @@ except ImportError as error:
     comp_normal = error
 
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 
@@ -91,7 +92,7 @@ class Line(FrozenClass):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -100,7 +101,17 @@ class Line(FrozenClass):
             return ["type(" + name + ")"]
         diff_list = list()
         if other._prop_dict != self._prop_dict:
-            diff_list.append(name + ".prop_dict")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._prop_dict)
+                    + ", other="
+                    + str(other._prop_dict)
+                    + ")"
+                )
+                diff_list.append(name + ".prop_dict" + val_str)
+            else:
+                diff_list.append(name + ".prop_dict")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list

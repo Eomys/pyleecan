@@ -78,6 +78,7 @@ except ImportError as error:
     has_magnet = error
 
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 
@@ -331,7 +332,7 @@ class LamSlot(Lamination):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -341,13 +342,24 @@ class LamSlot(Lamination):
         diff_list = list()
 
         # Check the properties inherited from Lamination
-        diff_list.extend(super(LamSlot, self).compare(other, name=name))
+        diff_list.extend(
+            super(LamSlot, self).compare(
+                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
+            )
+        )
         if (other.slot is None and self.slot is not None) or (
             other.slot is not None and self.slot is None
         ):
             diff_list.append(name + ".slot None mismatch")
         elif self.slot is not None:
-            diff_list.extend(self.slot.compare(other.slot, name=name + ".slot"))
+            diff_list.extend(
+                self.slot.compare(
+                    other.slot,
+                    name=name + ".slot",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
+            )
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list

@@ -10,21 +10,16 @@ In Proceedings of the third international Conference on Genetic Algorithms (Mend
 from os.path import join
 import pytest
 from pyleecan.Classes.Simu1 import Simu1
-from pyleecan.Classes.Output import Output
 from pyleecan.Classes.DataKeeper import DataKeeper
 from pyleecan.Classes.OptiDesignVar import OptiDesignVar
 from pyleecan.Classes.OptiObjective import OptiObjective
 from pyleecan.Classes.OptiProblem import OptiProblem
-from pyleecan.Classes.ImportMatrixVal import ImportMatrixVal
-from pyleecan.Classes.ImportGenVectLin import ImportGenVectLin
 from pyleecan.Classes.OptiGenAlgNsga2Deap import OptiGenAlgNsga2Deap
-from itertools import repeat
 
-import numpy as np
 import random
 
 from pyleecan.Functions.load import load
-from pyleecan.definitions import DATA_DIR, TEST_DIR
+from pyleecan.definitions import DATA_DIR
 
 
 @pytest.mark.SCIM
@@ -33,10 +28,10 @@ from pyleecan.definitions import DATA_DIR, TEST_DIR
 def test_opti_datakeeper_list():
     # Defining reference Output
     # Definition of the enforced output of the electrical module
-    SCIM_001 = load(join(DATA_DIR, "Machine", "SCIM_001.json"))
+    Railway_Traction = load(join(DATA_DIR, "Machine", "Railway_Traction.json"))
 
     # Definition of the simulation
-    simu = Simu1(name="test_opti_datakeeper_list", machine=SCIM_001)
+    simu = Simu1(name="test_opti_datakeeper_list", machine=Railway_Traction)
 
     # Design variable
     my_vars = [

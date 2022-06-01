@@ -48,6 +48,7 @@ except ImportError as error:
     solve_FEMM_parallel = error
 
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 
@@ -150,6 +151,7 @@ class MagFEMM(Magnetics):
         Rag_enforced=None,
         is_set_previous=True,
         is_fast_draw=True,
+        is_calc_torque_energy=True,
         is_remove_slotS=False,
         is_remove_slotR=False,
         is_remove_ventS=False,
@@ -168,6 +170,7 @@ class MagFEMM(Magnetics):
         type_distribution_enforced=None,
         is_current_harm=True,
         T_mag=20,
+        is_periodicity_rotor=False,
         init_dict=None,
         init_str=None,
     ):
@@ -220,6 +223,8 @@ class MagFEMM(Magnetics):
                 is_set_previous = init_dict["is_set_previous"]
             if "is_fast_draw" in list(init_dict.keys()):
                 is_fast_draw = init_dict["is_fast_draw"]
+            if "is_calc_torque_energy" in list(init_dict.keys()):
+                is_calc_torque_energy = init_dict["is_calc_torque_energy"]
             if "is_remove_slotS" in list(init_dict.keys()):
                 is_remove_slotS = init_dict["is_remove_slotS"]
             if "is_remove_slotR" in list(init_dict.keys()):
@@ -256,6 +261,8 @@ class MagFEMM(Magnetics):
                 is_current_harm = init_dict["is_current_harm"]
             if "T_mag" in list(init_dict.keys()):
                 T_mag = init_dict["T_mag"]
+            if "is_periodicity_rotor" in list(init_dict.keys()):
+                is_periodicity_rotor = init_dict["is_periodicity_rotor"]
         # Set the properties (value check and convertion are done in setter)
         self.Kmesh_fineness = Kmesh_fineness
         self.Kgeo_fineness = Kgeo_fineness
@@ -274,6 +281,7 @@ class MagFEMM(Magnetics):
         self.Rag_enforced = Rag_enforced
         self.is_set_previous = is_set_previous
         self.is_fast_draw = is_fast_draw
+        self.is_calc_torque_energy = is_calc_torque_energy
         # Call Magnetics init
         super(MagFEMM, self).__init__(
             is_remove_slotS=is_remove_slotS,
@@ -294,6 +302,7 @@ class MagFEMM(Magnetics):
             type_distribution_enforced=type_distribution_enforced,
             is_current_harm=is_current_harm,
             T_mag=T_mag,
+            is_periodicity_rotor=is_periodicity_rotor,
         )
         # The class is frozen (in Magnetics init), for now it's impossible to
         # add new properties
@@ -342,6 +351,9 @@ class MagFEMM(Magnetics):
         MagFEMM_str += "Rag_enforced = " + str(self.Rag_enforced) + linesep
         MagFEMM_str += "is_set_previous = " + str(self.is_set_previous) + linesep
         MagFEMM_str += "is_fast_draw = " + str(self.is_fast_draw) + linesep
+        MagFEMM_str += (
+            "is_calc_torque_energy = " + str(self.is_calc_torque_energy) + linesep
+        )
         return MagFEMM_str
 
     def __eq__(self, other):
@@ -387,9 +399,11 @@ class MagFEMM(Magnetics):
             return False
         if other.is_fast_draw != self.is_fast_draw:
             return False
+        if other.is_calc_torque_energy != self.is_calc_torque_energy:
+            return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -399,32 +413,145 @@ class MagFEMM(Magnetics):
         diff_list = list()
 
         # Check the properties inherited from Magnetics
-        diff_list.extend(super(MagFEMM, self).compare(other, name=name))
-        if other._Kmesh_fineness != self._Kmesh_fineness:
-            diff_list.append(name + ".Kmesh_fineness")
-        if other._Kgeo_fineness != self._Kgeo_fineness:
-            diff_list.append(name + ".Kgeo_fineness")
+        diff_list.extend(
+            super(MagFEMM, self).compare(
+                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
+            )
+        )
+        if (
+            other._Kmesh_fineness is not None
+            and self._Kmesh_fineness is not None
+            and isnan(other._Kmesh_fineness)
+            and isnan(self._Kmesh_fineness)
+        ):
+            pass
+        elif other._Kmesh_fineness != self._Kmesh_fineness:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._Kmesh_fineness)
+                    + ", other="
+                    + str(other._Kmesh_fineness)
+                    + ")"
+                )
+                diff_list.append(name + ".Kmesh_fineness" + val_str)
+            else:
+                diff_list.append(name + ".Kmesh_fineness")
+        if (
+            other._Kgeo_fineness is not None
+            and self._Kgeo_fineness is not None
+            and isnan(other._Kgeo_fineness)
+            and isnan(self._Kgeo_fineness)
+        ):
+            pass
+        elif other._Kgeo_fineness != self._Kgeo_fineness:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._Kgeo_fineness)
+                    + ", other="
+                    + str(other._Kgeo_fineness)
+                    + ")"
+                )
+                diff_list.append(name + ".Kgeo_fineness" + val_str)
+            else:
+                diff_list.append(name + ".Kgeo_fineness")
         if other._type_calc_leakage != self._type_calc_leakage:
-            diff_list.append(name + ".type_calc_leakage")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._type_calc_leakage)
+                    + ", other="
+                    + str(other._type_calc_leakage)
+                    + ")"
+                )
+                diff_list.append(name + ".type_calc_leakage" + val_str)
+            else:
+                diff_list.append(name + ".type_calc_leakage")
         if other._file_name != self._file_name:
-            diff_list.append(name + ".file_name")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._file_name)
+                    + ", other="
+                    + str(other._file_name)
+                    + ")"
+                )
+                diff_list.append(name + ".file_name" + val_str)
+            else:
+                diff_list.append(name + ".file_name")
         if other._FEMM_dict_enforced != self._FEMM_dict_enforced:
-            diff_list.append(name + ".FEMM_dict_enforced")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._FEMM_dict_enforced)
+                    + ", other="
+                    + str(other._FEMM_dict_enforced)
+                    + ")"
+                )
+                diff_list.append(name + ".FEMM_dict_enforced" + val_str)
+            else:
+                diff_list.append(name + ".FEMM_dict_enforced")
         if other._is_get_meshsolution != self._is_get_meshsolution:
-            diff_list.append(name + ".is_get_meshsolution")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._is_get_meshsolution)
+                    + ", other="
+                    + str(other._is_get_meshsolution)
+                    + ")"
+                )
+                diff_list.append(name + ".is_get_meshsolution" + val_str)
+            else:
+                diff_list.append(name + ".is_get_meshsolution")
         if other._is_save_meshsolution_as_file != self._is_save_meshsolution_as_file:
-            diff_list.append(name + ".is_save_meshsolution_as_file")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._is_save_meshsolution_as_file)
+                    + ", other="
+                    + str(other._is_save_meshsolution_as_file)
+                    + ")"
+                )
+                diff_list.append(name + ".is_save_meshsolution_as_file" + val_str)
+            else:
+                diff_list.append(name + ".is_save_meshsolution_as_file")
         if other._is_sliding_band != self._is_sliding_band:
-            diff_list.append(name + ".is_sliding_band")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._is_sliding_band)
+                    + ", other="
+                    + str(other._is_sliding_band)
+                    + ")"
+                )
+                diff_list.append(name + ".is_sliding_band" + val_str)
+            else:
+                diff_list.append(name + ".is_sliding_band")
         if other._transform_list != self._transform_list:
-            diff_list.append(name + ".transform_list")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._transform_list)
+                    + ", other="
+                    + str(other._transform_list)
+                    + ")"
+                )
+                diff_list.append(name + ".transform_list" + val_str)
+            else:
+                diff_list.append(name + ".transform_list")
         if (other.rotor_dxf is None and self.rotor_dxf is not None) or (
             other.rotor_dxf is not None and self.rotor_dxf is None
         ):
             diff_list.append(name + ".rotor_dxf None mismatch")
         elif self.rotor_dxf is not None:
             diff_list.extend(
-                self.rotor_dxf.compare(other.rotor_dxf, name=name + ".rotor_dxf")
+                self.rotor_dxf.compare(
+                    other.rotor_dxf,
+                    name=name + ".rotor_dxf",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
             )
         if (other.stator_dxf is None and self.stator_dxf is not None) or (
             other.stator_dxf is not None and self.stator_dxf is None
@@ -432,20 +559,104 @@ class MagFEMM(Magnetics):
             diff_list.append(name + ".stator_dxf None mismatch")
         elif self.stator_dxf is not None:
             diff_list.extend(
-                self.stator_dxf.compare(other.stator_dxf, name=name + ".stator_dxf")
+                self.stator_dxf.compare(
+                    other.stator_dxf,
+                    name=name + ".stator_dxf",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
             )
         if other._import_file != self._import_file:
-            diff_list.append(name + ".import_file")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._import_file)
+                    + ", other="
+                    + str(other._import_file)
+                    + ")"
+                )
+                diff_list.append(name + ".import_file" + val_str)
+            else:
+                diff_list.append(name + ".import_file")
         if other._is_close_femm != self._is_close_femm:
-            diff_list.append(name + ".is_close_femm")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._is_close_femm)
+                    + ", other="
+                    + str(other._is_close_femm)
+                    + ")"
+                )
+                diff_list.append(name + ".is_close_femm" + val_str)
+            else:
+                diff_list.append(name + ".is_close_femm")
         if other._nb_worker != self._nb_worker:
-            diff_list.append(name + ".nb_worker")
-        if other._Rag_enforced != self._Rag_enforced:
-            diff_list.append(name + ".Rag_enforced")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._nb_worker)
+                    + ", other="
+                    + str(other._nb_worker)
+                    + ")"
+                )
+                diff_list.append(name + ".nb_worker" + val_str)
+            else:
+                diff_list.append(name + ".nb_worker")
+        if (
+            other._Rag_enforced is not None
+            and self._Rag_enforced is not None
+            and isnan(other._Rag_enforced)
+            and isnan(self._Rag_enforced)
+        ):
+            pass
+        elif other._Rag_enforced != self._Rag_enforced:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._Rag_enforced)
+                    + ", other="
+                    + str(other._Rag_enforced)
+                    + ")"
+                )
+                diff_list.append(name + ".Rag_enforced" + val_str)
+            else:
+                diff_list.append(name + ".Rag_enforced")
         if other._is_set_previous != self._is_set_previous:
-            diff_list.append(name + ".is_set_previous")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._is_set_previous)
+                    + ", other="
+                    + str(other._is_set_previous)
+                    + ")"
+                )
+                diff_list.append(name + ".is_set_previous" + val_str)
+            else:
+                diff_list.append(name + ".is_set_previous")
         if other._is_fast_draw != self._is_fast_draw:
-            diff_list.append(name + ".is_fast_draw")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._is_fast_draw)
+                    + ", other="
+                    + str(other._is_fast_draw)
+                    + ")"
+                )
+                diff_list.append(name + ".is_fast_draw" + val_str)
+            else:
+                diff_list.append(name + ".is_fast_draw")
+        if other._is_calc_torque_energy != self._is_calc_torque_energy:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._is_calc_torque_energy)
+                    + ", other="
+                    + str(other._is_calc_torque_energy)
+                    + ")"
+                )
+                diff_list.append(name + ".is_calc_torque_energy" + val_str)
+            else:
+                diff_list.append(name + ".is_calc_torque_energy")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -478,6 +689,7 @@ class MagFEMM(Magnetics):
         S += getsizeof(self.Rag_enforced)
         S += getsizeof(self.is_set_previous)
         S += getsizeof(self.is_fast_draw)
+        S += getsizeof(self.is_calc_torque_energy)
         return S
 
     def as_dict(self, type_handle_ndarray=0, keep_function=False, **kwargs):
@@ -534,6 +746,7 @@ class MagFEMM(Magnetics):
         MagFEMM_dict["Rag_enforced"] = self.Rag_enforced
         MagFEMM_dict["is_set_previous"] = self.is_set_previous
         MagFEMM_dict["is_fast_draw"] = self.is_fast_draw
+        MagFEMM_dict["is_calc_torque_energy"] = self.is_calc_torque_energy
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         MagFEMM_dict["__class__"] = "MagFEMM"
@@ -561,6 +774,7 @@ class MagFEMM(Magnetics):
         self.Rag_enforced = None
         self.is_set_previous = None
         self.is_fast_draw = None
+        self.is_calc_torque_energy = None
         # Set to None the properties inherited from Magnetics
         super(MagFEMM, self)._set_None()
 
@@ -909,6 +1123,24 @@ class MagFEMM(Magnetics):
         fget=_get_is_fast_draw,
         fset=_set_is_fast_draw,
         doc=u"""True to use the symetry of the lamination to draw the machine faster
+
+        :Type: bool
+        """,
+    )
+
+    def _get_is_calc_torque_energy(self):
+        """getter of is_calc_torque_energy"""
+        return self._is_calc_torque_energy
+
+    def _set_is_calc_torque_energy(self, value):
+        """setter of is_calc_torque_energy"""
+        check_var("is_calc_torque_energy", value, "bool")
+        self._is_calc_torque_energy = value
+
+    is_calc_torque_energy = property(
+        fget=_get_is_calc_torque_energy,
+        fset=_set_is_calc_torque_energy,
+        doc=u"""True to calculate torque from integration of energy derivate over rotor elements
 
         :Type: bool
         """,

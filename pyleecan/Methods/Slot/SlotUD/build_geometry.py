@@ -1,7 +1,3 @@
-# -*- coding: utf-8 -*-
-
-from ....Classes.Arc1 import Arc1
-from ....Classes.Arc3 import Arc3
 from ....Classes.Segment import Segment
 
 

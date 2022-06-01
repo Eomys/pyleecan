@@ -38,6 +38,7 @@ except ImportError as error:
     comp_I_mag = error
 
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 
@@ -112,6 +113,7 @@ class Magnetics(FrozenClass):
         type_distribution_enforced=None,
         is_current_harm=True,
         T_mag=20,
+        is_periodicity_rotor=False,
         init_dict=None,
         init_str=None,
     ):
@@ -166,6 +168,8 @@ class Magnetics(FrozenClass):
                 is_current_harm = init_dict["is_current_harm"]
             if "T_mag" in list(init_dict.keys()):
                 T_mag = init_dict["T_mag"]
+            if "is_periodicity_rotor" in list(init_dict.keys()):
+                is_periodicity_rotor = init_dict["is_periodicity_rotor"]
         # Set the properties (value check and convertion are done in setter)
         self.parent = None
         self.is_remove_slotS = is_remove_slotS
@@ -186,6 +190,7 @@ class Magnetics(FrozenClass):
         self.type_distribution_enforced = type_distribution_enforced
         self.is_current_harm = is_current_harm
         self.T_mag = T_mag
+        self.is_periodicity_rotor = is_periodicity_rotor
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -231,6 +236,9 @@ class Magnetics(FrozenClass):
         )
         Magnetics_str += "is_current_harm = " + str(self.is_current_harm) + linesep
         Magnetics_str += "T_mag = " + str(self.T_mag) + linesep
+        Magnetics_str += (
+            "is_periodicity_rotor = " + str(self.is_periodicity_rotor) + linesep
+        )
         return Magnetics_str
 
     def __eq__(self, other):
@@ -274,9 +282,11 @@ class Magnetics(FrozenClass):
             return False
         if other.T_mag != self.T_mag:
             return False
+        if other.is_periodicity_rotor != self.is_periodicity_rotor:
+            return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -285,31 +295,175 @@ class Magnetics(FrozenClass):
             return ["type(" + name + ")"]
         diff_list = list()
         if other._is_remove_slotS != self._is_remove_slotS:
-            diff_list.append(name + ".is_remove_slotS")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._is_remove_slotS)
+                    + ", other="
+                    + str(other._is_remove_slotS)
+                    + ")"
+                )
+                diff_list.append(name + ".is_remove_slotS" + val_str)
+            else:
+                diff_list.append(name + ".is_remove_slotS")
         if other._is_remove_slotR != self._is_remove_slotR:
-            diff_list.append(name + ".is_remove_slotR")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._is_remove_slotR)
+                    + ", other="
+                    + str(other._is_remove_slotR)
+                    + ")"
+                )
+                diff_list.append(name + ".is_remove_slotR" + val_str)
+            else:
+                diff_list.append(name + ".is_remove_slotR")
         if other._is_remove_ventS != self._is_remove_ventS:
-            diff_list.append(name + ".is_remove_ventS")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._is_remove_ventS)
+                    + ", other="
+                    + str(other._is_remove_ventS)
+                    + ")"
+                )
+                diff_list.append(name + ".is_remove_ventS" + val_str)
+            else:
+                diff_list.append(name + ".is_remove_ventS")
         if other._is_remove_ventR != self._is_remove_ventR:
-            diff_list.append(name + ".is_remove_ventR")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._is_remove_ventR)
+                    + ", other="
+                    + str(other._is_remove_ventR)
+                    + ")"
+                )
+                diff_list.append(name + ".is_remove_ventR" + val_str)
+            else:
+                diff_list.append(name + ".is_remove_ventR")
         if other._is_mmfs != self._is_mmfs:
-            diff_list.append(name + ".is_mmfs")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._is_mmfs)
+                    + ", other="
+                    + str(other._is_mmfs)
+                    + ")"
+                )
+                diff_list.append(name + ".is_mmfs" + val_str)
+            else:
+                diff_list.append(name + ".is_mmfs")
         if other._is_mmfr != self._is_mmfr:
-            diff_list.append(name + ".is_mmfr")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._is_mmfr)
+                    + ", other="
+                    + str(other._is_mmfr)
+                    + ")"
+                )
+                diff_list.append(name + ".is_mmfr" + val_str)
+            else:
+                diff_list.append(name + ".is_mmfr")
         if other._type_BH_stator != self._type_BH_stator:
-            diff_list.append(name + ".type_BH_stator")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._type_BH_stator)
+                    + ", other="
+                    + str(other._type_BH_stator)
+                    + ")"
+                )
+                diff_list.append(name + ".type_BH_stator" + val_str)
+            else:
+                diff_list.append(name + ".type_BH_stator")
         if other._type_BH_rotor != self._type_BH_rotor:
-            diff_list.append(name + ".type_BH_rotor")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._type_BH_rotor)
+                    + ", other="
+                    + str(other._type_BH_rotor)
+                    + ")"
+                )
+                diff_list.append(name + ".type_BH_rotor" + val_str)
+            else:
+                diff_list.append(name + ".type_BH_rotor")
         if other._is_periodicity_t != self._is_periodicity_t:
-            diff_list.append(name + ".is_periodicity_t")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._is_periodicity_t)
+                    + ", other="
+                    + str(other._is_periodicity_t)
+                    + ")"
+                )
+                diff_list.append(name + ".is_periodicity_t" + val_str)
+            else:
+                diff_list.append(name + ".is_periodicity_t")
         if other._is_periodicity_a != self._is_periodicity_a:
-            diff_list.append(name + ".is_periodicity_a")
-        if other._angle_stator_shift != self._angle_stator_shift:
-            diff_list.append(name + ".angle_stator_shift")
-        if other._angle_rotor_shift != self._angle_rotor_shift:
-            diff_list.append(name + ".angle_rotor_shift")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._is_periodicity_a)
+                    + ", other="
+                    + str(other._is_periodicity_a)
+                    + ")"
+                )
+                diff_list.append(name + ".is_periodicity_a" + val_str)
+            else:
+                diff_list.append(name + ".is_periodicity_a")
+        if (
+            other._angle_stator_shift is not None
+            and self._angle_stator_shift is not None
+            and isnan(other._angle_stator_shift)
+            and isnan(self._angle_stator_shift)
+        ):
+            pass
+        elif other._angle_stator_shift != self._angle_stator_shift:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._angle_stator_shift)
+                    + ", other="
+                    + str(other._angle_stator_shift)
+                    + ")"
+                )
+                diff_list.append(name + ".angle_stator_shift" + val_str)
+            else:
+                diff_list.append(name + ".angle_stator_shift")
+        if (
+            other._angle_rotor_shift is not None
+            and self._angle_rotor_shift is not None
+            and isnan(other._angle_rotor_shift)
+            and isnan(self._angle_rotor_shift)
+        ):
+            pass
+        elif other._angle_rotor_shift != self._angle_rotor_shift:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._angle_rotor_shift)
+                    + ", other="
+                    + str(other._angle_rotor_shift)
+                    + ")"
+                )
+                diff_list.append(name + ".angle_rotor_shift" + val_str)
+            else:
+                diff_list.append(name + ".angle_rotor_shift")
         if other._logger_name != self._logger_name:
-            diff_list.append(name + ".logger_name")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._logger_name)
+                    + ", other="
+                    + str(other._logger_name)
+                    + ")"
+                )
+                diff_list.append(name + ".logger_name" + val_str)
+            else:
+                diff_list.append(name + ".logger_name")
         if (other.Slice_enforced is None and self.Slice_enforced is not None) or (
             other.Slice_enforced is not None and self.Slice_enforced is None
         ):
@@ -317,17 +471,75 @@ class Magnetics(FrozenClass):
         elif self.Slice_enforced is not None:
             diff_list.extend(
                 self.Slice_enforced.compare(
-                    other.Slice_enforced, name=name + ".Slice_enforced"
+                    other.Slice_enforced,
+                    name=name + ".Slice_enforced",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
                 )
             )
         if other._Nslices_enforced != self._Nslices_enforced:
-            diff_list.append(name + ".Nslices_enforced")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._Nslices_enforced)
+                    + ", other="
+                    + str(other._Nslices_enforced)
+                    + ")"
+                )
+                diff_list.append(name + ".Nslices_enforced" + val_str)
+            else:
+                diff_list.append(name + ".Nslices_enforced")
         if other._type_distribution_enforced != self._type_distribution_enforced:
-            diff_list.append(name + ".type_distribution_enforced")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._type_distribution_enforced)
+                    + ", other="
+                    + str(other._type_distribution_enforced)
+                    + ")"
+                )
+                diff_list.append(name + ".type_distribution_enforced" + val_str)
+            else:
+                diff_list.append(name + ".type_distribution_enforced")
         if other._is_current_harm != self._is_current_harm:
-            diff_list.append(name + ".is_current_harm")
-        if other._T_mag != self._T_mag:
-            diff_list.append(name + ".T_mag")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._is_current_harm)
+                    + ", other="
+                    + str(other._is_current_harm)
+                    + ")"
+                )
+                diff_list.append(name + ".is_current_harm" + val_str)
+            else:
+                diff_list.append(name + ".is_current_harm")
+        if (
+            other._T_mag is not None
+            and self._T_mag is not None
+            and isnan(other._T_mag)
+            and isnan(self._T_mag)
+        ):
+            pass
+        elif other._T_mag != self._T_mag:
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._T_mag) + ", other=" + str(other._T_mag) + ")"
+                )
+                diff_list.append(name + ".T_mag" + val_str)
+            else:
+                diff_list.append(name + ".T_mag")
+        if other._is_periodicity_rotor != self._is_periodicity_rotor:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._is_periodicity_rotor)
+                    + ", other="
+                    + str(other._is_periodicity_rotor)
+                    + ")"
+                )
+                diff_list.append(name + ".is_periodicity_rotor" + val_str)
+            else:
+                diff_list.append(name + ".is_periodicity_rotor")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -354,6 +566,7 @@ class Magnetics(FrozenClass):
         S += getsizeof(self.type_distribution_enforced)
         S += getsizeof(self.is_current_harm)
         S += getsizeof(self.T_mag)
+        S += getsizeof(self.is_periodicity_rotor)
         return S
 
     def as_dict(self, type_handle_ndarray=0, keep_function=False, **kwargs):
@@ -393,6 +606,7 @@ class Magnetics(FrozenClass):
         Magnetics_dict["type_distribution_enforced"] = self.type_distribution_enforced
         Magnetics_dict["is_current_harm"] = self.is_current_harm
         Magnetics_dict["T_mag"] = self.T_mag
+        Magnetics_dict["is_periodicity_rotor"] = self.is_periodicity_rotor
         # The class name is added to the dict for deserialisation purpose
         Magnetics_dict["__class__"] = "Magnetics"
         return Magnetics_dict
@@ -419,6 +633,7 @@ class Magnetics(FrozenClass):
         self.type_distribution_enforced = None
         self.is_current_harm = None
         self.T_mag = None
+        self.is_periodicity_rotor = None
 
     def _get_is_remove_slotS(self):
         """getter of is_remove_slotS"""
@@ -766,5 +981,23 @@ class Magnetics(FrozenClass):
         doc=u"""Permanent magnet temperature to adapt magnet remanent flux density
 
         :Type: float
+        """,
+    )
+
+    def _get_is_periodicity_rotor(self):
+        """getter of is_periodicity_rotor"""
+        return self._is_periodicity_rotor
+
+    def _set_is_periodicity_rotor(self, value):
+        """setter of is_periodicity_rotor"""
+        check_var("is_periodicity_rotor", value, "bool")
+        self._is_periodicity_rotor = value
+
+    is_periodicity_rotor = property(
+        fget=_get_is_periodicity_rotor,
+        fset=_set_is_periodicity_rotor,
+        doc=u"""True to consider rotor periodicity over time instead of stator
+
+        :Type: bool
         """,
     )

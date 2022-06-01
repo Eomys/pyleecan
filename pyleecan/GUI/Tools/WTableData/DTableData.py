@@ -343,15 +343,15 @@ class DTableData(Ui_DTableData, QDialog):
             # Data in line
             fig, axes = plt.subplots()
             axes.plot(data[0, :], data[1, :])
-            plt.ylabel(self.col_header[1])
-            plt.xlabel(self.col_header[0])
+            axes.set_xlabel(self.col_header[0])
+            axes.set_ylabel(self.col_header[1])
             fig.show()
         elif len(data.shape) == 2 and data.shape[1] == 2:
             # Data in column
             fig, axes = plt.subplots()
             axes.plot(data[:, 0], data[:, 1])
-            plt.ylabel(self.col_header[1])
-            plt.xlabel(self.col_header[0])
+            axes.set_xlabel(self.col_header[0])
+            axes.set_ylabel(self.col_header[1])
             fig.show()
         if self.col_header is not None:
             fig.canvas.manager.set_window_title(self.col_header[0] + " plot")

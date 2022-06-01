@@ -23,6 +23,7 @@ except ImportError as error:
     run = error
 
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 
@@ -46,14 +47,7 @@ class PostLUT(PostMethod):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(
-        self,
-        LUT=None,
-        is_save_LUT=True,
-        is_store_LUT=True,
-        init_dict=None,
-        init_str=None,
-    ):
+    def __init__(self, is_save_LUT=True, init_dict=None, init_str=None):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -69,16 +63,10 @@ class PostLUT(PostMethod):
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
-            if "LUT" in list(init_dict.keys()):
-                LUT = init_dict["LUT"]
             if "is_save_LUT" in list(init_dict.keys()):
                 is_save_LUT = init_dict["is_save_LUT"]
-            if "is_store_LUT" in list(init_dict.keys()):
-                is_store_LUT = init_dict["is_store_LUT"]
         # Set the properties (value check and convertion are done in setter)
-        self.LUT = LUT
         self.is_save_LUT = is_save_LUT
-        self.is_store_LUT = is_store_LUT
         # Call PostMethod init
         super(PostLUT, self).__init__()
         # The class is frozen (in PostMethod init), for now it's impossible to
@@ -90,13 +78,7 @@ class PostLUT(PostMethod):
         PostLUT_str = ""
         # Get the properties inherited from PostMethod
         PostLUT_str += super(PostLUT, self).__str__()
-        if self.LUT is not None:
-            tmp = self.LUT.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            PostLUT_str += "LUT = " + tmp
-        else:
-            PostLUT_str += "LUT = None" + linesep + linesep
         PostLUT_str += "is_save_LUT = " + str(self.is_save_LUT) + linesep
-        PostLUT_str += "is_store_LUT = " + str(self.is_store_LUT) + linesep
         return PostLUT_str
 
     def __eq__(self, other):
@@ -108,15 +90,11 @@ class PostLUT(PostMethod):
         # Check the properties inherited from PostMethod
         if not super(PostLUT, self).__eq__(other):
             return False
-        if other.LUT != self.LUT:
-            return False
         if other.is_save_LUT != self.is_save_LUT:
-            return False
-        if other.is_store_LUT != self.is_store_LUT:
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -126,17 +104,23 @@ class PostLUT(PostMethod):
         diff_list = list()
 
         # Check the properties inherited from PostMethod
-        diff_list.extend(super(PostLUT, self).compare(other, name=name))
-        if (other.LUT is None and self.LUT is not None) or (
-            other.LUT is not None and self.LUT is None
-        ):
-            diff_list.append(name + ".LUT None mismatch")
-        elif self.LUT is not None:
-            diff_list.extend(self.LUT.compare(other.LUT, name=name + ".LUT"))
+        diff_list.extend(
+            super(PostLUT, self).compare(
+                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
+            )
+        )
         if other._is_save_LUT != self._is_save_LUT:
-            diff_list.append(name + ".is_save_LUT")
-        if other._is_store_LUT != self._is_store_LUT:
-            diff_list.append(name + ".is_store_LUT")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._is_save_LUT)
+                    + ", other="
+                    + str(other._is_save_LUT)
+                    + ")"
+                )
+                diff_list.append(name + ".is_save_LUT" + val_str)
+            else:
+                diff_list.append(name + ".is_save_LUT")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -148,9 +132,7 @@ class PostLUT(PostMethod):
 
         # Get size of the properties inherited from PostMethod
         S += super(PostLUT, self).__sizeof__()
-        S += getsizeof(self.LUT)
         S += getsizeof(self.is_save_LUT)
-        S += getsizeof(self.is_store_LUT)
         return S
 
     def as_dict(self, type_handle_ndarray=0, keep_function=False, **kwargs):
@@ -170,16 +152,7 @@ class PostLUT(PostMethod):
             keep_function=keep_function,
             **kwargs
         )
-        if self.LUT is None:
-            PostLUT_dict["LUT"] = None
-        else:
-            PostLUT_dict["LUT"] = self.LUT.as_dict(
-                type_handle_ndarray=type_handle_ndarray,
-                keep_function=keep_function,
-                **kwargs
-            )
         PostLUT_dict["is_save_LUT"] = self.is_save_LUT
-        PostLUT_dict["is_store_LUT"] = self.is_store_LUT
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         PostLUT_dict["__class__"] = "PostLUT"
@@ -188,47 +161,9 @@ class PostLUT(PostMethod):
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""
 
-        if self.LUT is not None:
-            self.LUT._set_None()
         self.is_save_LUT = None
-        self.is_store_LUT = None
         # Set to None the properties inherited from PostMethod
         super(PostLUT, self)._set_None()
-
-    def _get_LUT(self):
-        """getter of LUT"""
-        return self._LUT
-
-    def _set_LUT(self, value):
-        """setter of LUT"""
-        if isinstance(value, str):  # Load from file
-            try:
-                value = load_init_dict(value)[1]
-            except Exception as e:
-                self.get_logger().error(
-                    "Error while loading " + value + ", setting None instead"
-                )
-                value = None
-        if isinstance(value, dict) and "__class__" in value:
-            class_obj = import_class("pyleecan.Classes", value.get("__class__"), "LUT")
-            value = class_obj(init_dict=value)
-        elif type(value) is int and value == -1:  # Default constructor
-            LUT = import_class("pyleecan.Classes", "LUT", "LUT")
-            value = LUT()
-        check_var("LUT", value, "LUT")
-        self._LUT = value
-
-        if self._LUT is not None:
-            self._LUT.parent = self
-
-    LUT = property(
-        fget=_get_LUT,
-        fset=_set_LUT,
-        doc=u"""Look-Up Table to enforce
-
-        :Type: LUT
-        """,
-    )
 
     def _get_is_save_LUT(self):
         """getter of is_save_LUT"""
@@ -243,24 +178,6 @@ class PostLUT(PostMethod):
         fget=_get_is_save_LUT,
         fset=_set_is_save_LUT,
         doc=u"""True to save LUT in PostLUT
-
-        :Type: bool
-        """,
-    )
-
-    def _get_is_store_LUT(self):
-        """getter of is_store_LUT"""
-        return self._is_store_LUT
-
-    def _set_is_store_LUT(self, value):
-        """setter of is_store_LUT"""
-        check_var("is_store_LUT", value, "bool")
-        self._is_store_LUT = value
-
-    is_store_LUT = property(
-        fget=_get_is_store_LUT,
-        fset=_set_is_store_LUT,
-        doc=u"""True to store LUT in PostLUT
 
         :Type: bool
         """,

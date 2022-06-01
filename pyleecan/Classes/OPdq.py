@@ -73,6 +73,7 @@ except ImportError as error:
     set_U0_UPhi0 = error
 
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 
@@ -197,6 +198,8 @@ class OPdq(OP):
         felec=None,
         Tem_av_ref=None,
         Pem_av_ref=None,
+        Pem_av_in=None,
+        efficiency=None,
         init_dict=None,
         init_str=None,
     ):
@@ -231,6 +234,10 @@ class OPdq(OP):
                 Tem_av_ref = init_dict["Tem_av_ref"]
             if "Pem_av_ref" in list(init_dict.keys()):
                 Pem_av_ref = init_dict["Pem_av_ref"]
+            if "Pem_av_in" in list(init_dict.keys()):
+                Pem_av_in = init_dict["Pem_av_in"]
+            if "efficiency" in list(init_dict.keys()):
+                efficiency = init_dict["efficiency"]
         # Set the properties (value check and convertion are done in setter)
         self.Id_ref = Id_ref
         self.Iq_ref = Iq_ref
@@ -238,7 +245,12 @@ class OPdq(OP):
         self.Uq_ref = Uq_ref
         # Call OP init
         super(OPdq, self).__init__(
-            N0=N0, felec=felec, Tem_av_ref=Tem_av_ref, Pem_av_ref=Pem_av_ref
+            N0=N0,
+            felec=felec,
+            Tem_av_ref=Tem_av_ref,
+            Pem_av_ref=Pem_av_ref,
+            Pem_av_in=Pem_av_in,
+            efficiency=efficiency,
         )
         # The class is frozen (in OP init), for now it's impossible to
         # add new properties
@@ -274,7 +286,7 @@ class OPdq(OP):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -284,15 +296,87 @@ class OPdq(OP):
         diff_list = list()
 
         # Check the properties inherited from OP
-        diff_list.extend(super(OPdq, self).compare(other, name=name))
-        if other._Id_ref != self._Id_ref:
-            diff_list.append(name + ".Id_ref")
-        if other._Iq_ref != self._Iq_ref:
-            diff_list.append(name + ".Iq_ref")
-        if other._Ud_ref != self._Ud_ref:
-            diff_list.append(name + ".Ud_ref")
-        if other._Uq_ref != self._Uq_ref:
-            diff_list.append(name + ".Uq_ref")
+        diff_list.extend(
+            super(OPdq, self).compare(
+                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
+            )
+        )
+        if (
+            other._Id_ref is not None
+            and self._Id_ref is not None
+            and isnan(other._Id_ref)
+            and isnan(self._Id_ref)
+        ):
+            pass
+        elif other._Id_ref != self._Id_ref:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._Id_ref)
+                    + ", other="
+                    + str(other._Id_ref)
+                    + ")"
+                )
+                diff_list.append(name + ".Id_ref" + val_str)
+            else:
+                diff_list.append(name + ".Id_ref")
+        if (
+            other._Iq_ref is not None
+            and self._Iq_ref is not None
+            and isnan(other._Iq_ref)
+            and isnan(self._Iq_ref)
+        ):
+            pass
+        elif other._Iq_ref != self._Iq_ref:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._Iq_ref)
+                    + ", other="
+                    + str(other._Iq_ref)
+                    + ")"
+                )
+                diff_list.append(name + ".Iq_ref" + val_str)
+            else:
+                diff_list.append(name + ".Iq_ref")
+        if (
+            other._Ud_ref is not None
+            and self._Ud_ref is not None
+            and isnan(other._Ud_ref)
+            and isnan(self._Ud_ref)
+        ):
+            pass
+        elif other._Ud_ref != self._Ud_ref:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._Ud_ref)
+                    + ", other="
+                    + str(other._Ud_ref)
+                    + ")"
+                )
+                diff_list.append(name + ".Ud_ref" + val_str)
+            else:
+                diff_list.append(name + ".Ud_ref")
+        if (
+            other._Uq_ref is not None
+            and self._Uq_ref is not None
+            and isnan(other._Uq_ref)
+            and isnan(self._Uq_ref)
+        ):
+            pass
+        elif other._Uq_ref != self._Uq_ref:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._Uq_ref)
+                    + ", other="
+                    + str(other._Uq_ref)
+                    + ")"
+                )
+                diff_list.append(name + ".Uq_ref" + val_str)
+            else:
+                diff_list.append(name + ".Uq_ref")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list

@@ -65,6 +65,7 @@ except ImportError as error:
     get_ref_simu_index = error
 
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 
@@ -194,6 +195,7 @@ class VarSimu(FrozenClass):
         postproc_list=-1,
         pre_keeper_postproc_list=None,
         post_keeper_postproc_list=None,
+        is_reuse_LUT=True,
         init_dict=None,
         init_str=None,
     ):
@@ -234,6 +236,8 @@ class VarSimu(FrozenClass):
                 pre_keeper_postproc_list = init_dict["pre_keeper_postproc_list"]
             if "post_keeper_postproc_list" in list(init_dict.keys()):
                 post_keeper_postproc_list = init_dict["post_keeper_postproc_list"]
+            if "is_reuse_LUT" in list(init_dict.keys()):
+                is_reuse_LUT = init_dict["is_reuse_LUT"]
         # Set the properties (value check and convertion are done in setter)
         self.parent = None
         self.name = name
@@ -247,6 +251,7 @@ class VarSimu(FrozenClass):
         self.postproc_list = postproc_list
         self.pre_keeper_postproc_list = pre_keeper_postproc_list
         self.post_keeper_postproc_list = post_keeper_postproc_list
+        self.is_reuse_LUT = is_reuse_LUT
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -312,6 +317,7 @@ class VarSimu(FrozenClass):
             VarSimu_str += (
                 "post_keeper_postproc_list[" + str(ii) + "] =" + tmp + linesep + linesep
             )
+        VarSimu_str += "is_reuse_LUT = " + str(self.is_reuse_LUT) + linesep
         return VarSimu_str
 
     def __eq__(self, other):
@@ -341,9 +347,11 @@ class VarSimu(FrozenClass):
             return False
         if other.post_keeper_postproc_list != self.post_keeper_postproc_list:
             return False
+        if other.is_reuse_LUT != self.is_reuse_LUT:
+            return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -352,9 +360,21 @@ class VarSimu(FrozenClass):
             return ["type(" + name + ")"]
         diff_list = list()
         if other._name != self._name:
-            diff_list.append(name + ".name")
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._name) + ", other=" + str(other._name) + ")"
+                )
+                diff_list.append(name + ".name" + val_str)
+            else:
+                diff_list.append(name + ".name")
         if other._desc != self._desc:
-            diff_list.append(name + ".desc")
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._desc) + ", other=" + str(other._desc) + ")"
+                )
+                diff_list.append(name + ".desc" + val_str)
+            else:
+                diff_list.append(name + ".desc")
         if (other.datakeeper_list is None and self.datakeeper_list is not None) or (
             other.datakeeper_list is not None and self.datakeeper_list is None
         ):
@@ -369,24 +389,71 @@ class VarSimu(FrozenClass):
                     self.datakeeper_list[ii].compare(
                         other.datakeeper_list[ii],
                         name=name + ".datakeeper_list[" + str(ii) + "]",
+                        ignore_list=ignore_list,
+                        is_add_value=is_add_value,
                     )
                 )
         if other._is_keep_all_output != self._is_keep_all_output:
-            diff_list.append(name + ".is_keep_all_output")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._is_keep_all_output)
+                    + ", other="
+                    + str(other._is_keep_all_output)
+                    + ")"
+                )
+                diff_list.append(name + ".is_keep_all_output" + val_str)
+            else:
+                diff_list.append(name + ".is_keep_all_output")
         if other._stop_if_error != self._stop_if_error:
-            diff_list.append(name + ".stop_if_error")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._stop_if_error)
+                    + ", other="
+                    + str(other._stop_if_error)
+                    + ")"
+                )
+                diff_list.append(name + ".stop_if_error" + val_str)
+            else:
+                diff_list.append(name + ".stop_if_error")
         if (other.var_simu is None and self.var_simu is not None) or (
             other.var_simu is not None and self.var_simu is None
         ):
             diff_list.append(name + ".var_simu None mismatch")
         elif self.var_simu is not None:
             diff_list.extend(
-                self.var_simu.compare(other.var_simu, name=name + ".var_simu")
+                self.var_simu.compare(
+                    other.var_simu,
+                    name=name + ".var_simu",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
             )
         if other._nb_simu != self._nb_simu:
-            diff_list.append(name + ".nb_simu")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._nb_simu)
+                    + ", other="
+                    + str(other._nb_simu)
+                    + ")"
+                )
+                diff_list.append(name + ".nb_simu" + val_str)
+            else:
+                diff_list.append(name + ".nb_simu")
         if other._is_reuse_femm_file != self._is_reuse_femm_file:
-            diff_list.append(name + ".is_reuse_femm_file")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._is_reuse_femm_file)
+                    + ", other="
+                    + str(other._is_reuse_femm_file)
+                    + ")"
+                )
+                diff_list.append(name + ".is_reuse_femm_file" + val_str)
+            else:
+                diff_list.append(name + ".is_reuse_femm_file")
         if (other.postproc_list is None and self.postproc_list is not None) or (
             other.postproc_list is not None and self.postproc_list is None
         ):
@@ -401,6 +468,8 @@ class VarSimu(FrozenClass):
                     self.postproc_list[ii].compare(
                         other.postproc_list[ii],
                         name=name + ".postproc_list[" + str(ii) + "]",
+                        ignore_list=ignore_list,
+                        is_add_value=is_add_value,
                     )
                 )
         if (
@@ -421,6 +490,8 @@ class VarSimu(FrozenClass):
                     self.pre_keeper_postproc_list[ii].compare(
                         other.pre_keeper_postproc_list[ii],
                         name=name + ".pre_keeper_postproc_list[" + str(ii) + "]",
+                        ignore_list=ignore_list,
+                        is_add_value=is_add_value,
                     )
                 )
         if (
@@ -443,8 +514,22 @@ class VarSimu(FrozenClass):
                     self.post_keeper_postproc_list[ii].compare(
                         other.post_keeper_postproc_list[ii],
                         name=name + ".post_keeper_postproc_list[" + str(ii) + "]",
+                        ignore_list=ignore_list,
+                        is_add_value=is_add_value,
                     )
                 )
+        if other._is_reuse_LUT != self._is_reuse_LUT:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._is_reuse_LUT)
+                    + ", other="
+                    + str(other._is_reuse_LUT)
+                    + ")"
+                )
+                diff_list.append(name + ".is_reuse_LUT" + val_str)
+            else:
+                diff_list.append(name + ".is_reuse_LUT")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -472,6 +557,7 @@ class VarSimu(FrozenClass):
         if self.post_keeper_postproc_list is not None:
             for value in self.post_keeper_postproc_list:
                 S += getsizeof(value)
+        S += getsizeof(self.is_reuse_LUT)
         return S
 
     def as_dict(self, type_handle_ndarray=0, keep_function=False, **kwargs):
@@ -560,6 +646,7 @@ class VarSimu(FrozenClass):
                     )
                 else:
                     VarSimu_dict["post_keeper_postproc_list"].append(None)
+        VarSimu_dict["is_reuse_LUT"] = self.is_reuse_LUT
         # The class name is added to the dict for deserialisation purpose
         VarSimu_dict["__class__"] = "VarSimu"
         return VarSimu_dict
@@ -579,6 +666,7 @@ class VarSimu(FrozenClass):
         self.postproc_list = None
         self.pre_keeper_postproc_list = None
         self.post_keeper_postproc_list = None
+        self.is_reuse_LUT = None
 
     def _get_name(self):
         """getter of name"""
@@ -894,5 +982,23 @@ class VarSimu(FrozenClass):
         doc=u"""List of post-processing to run on output after each simulation (except reference one) after the datakeeper.
 
         :Type: [Post]
+        """,
+    )
+
+    def _get_is_reuse_LUT(self):
+        """getter of is_reuse_LUT"""
+        return self._is_reuse_LUT
+
+    def _set_is_reuse_LUT(self, value):
+        """setter of is_reuse_LUT"""
+        check_var("is_reuse_LUT", value, "bool")
+        self._is_reuse_LUT = value
+
+    is_reuse_LUT = property(
+        fget=_get_is_reuse_LUT,
+        fset=_set_is_reuse_LUT,
+        doc=u"""True to reuse the look up table
+
+        :Type: bool
         """,
     )

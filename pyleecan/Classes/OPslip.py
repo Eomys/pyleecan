@@ -73,6 +73,7 @@ except ImportError as error:
     set_U0_UPhi0 = error
 
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 
@@ -202,6 +203,8 @@ class OPslip(OP):
         felec=None,
         Tem_av_ref=None,
         Pem_av_ref=None,
+        Pem_av_in=None,
+        efficiency=None,
         init_dict=None,
         init_str=None,
     ):
@@ -238,6 +241,10 @@ class OPslip(OP):
                 Tem_av_ref = init_dict["Tem_av_ref"]
             if "Pem_av_ref" in list(init_dict.keys()):
                 Pem_av_ref = init_dict["Pem_av_ref"]
+            if "Pem_av_in" in list(init_dict.keys()):
+                Pem_av_in = init_dict["Pem_av_in"]
+            if "efficiency" in list(init_dict.keys()):
+                efficiency = init_dict["efficiency"]
         # Set the properties (value check and convertion are done in setter)
         self.I0_ref = I0_ref
         self.IPhi0_ref = IPhi0_ref
@@ -246,7 +253,12 @@ class OPslip(OP):
         self.UPhi0_ref = UPhi0_ref
         # Call OP init
         super(OPslip, self).__init__(
-            N0=N0, felec=felec, Tem_av_ref=Tem_av_ref, Pem_av_ref=Pem_av_ref
+            N0=N0,
+            felec=felec,
+            Tem_av_ref=Tem_av_ref,
+            Pem_av_ref=Pem_av_ref,
+            Pem_av_in=Pem_av_in,
+            efficiency=efficiency,
         )
         # The class is frozen (in OP init), for now it's impossible to
         # add new properties
@@ -285,7 +297,7 @@ class OPslip(OP):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -295,17 +307,106 @@ class OPslip(OP):
         diff_list = list()
 
         # Check the properties inherited from OP
-        diff_list.extend(super(OPslip, self).compare(other, name=name))
-        if other._I0_ref != self._I0_ref:
-            diff_list.append(name + ".I0_ref")
-        if other._IPhi0_ref != self._IPhi0_ref:
-            diff_list.append(name + ".IPhi0_ref")
-        if other._slip_ref != self._slip_ref:
-            diff_list.append(name + ".slip_ref")
-        if other._U0_ref != self._U0_ref:
-            diff_list.append(name + ".U0_ref")
-        if other._UPhi0_ref != self._UPhi0_ref:
-            diff_list.append(name + ".UPhi0_ref")
+        diff_list.extend(
+            super(OPslip, self).compare(
+                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
+            )
+        )
+        if (
+            other._I0_ref is not None
+            and self._I0_ref is not None
+            and isnan(other._I0_ref)
+            and isnan(self._I0_ref)
+        ):
+            pass
+        elif other._I0_ref != self._I0_ref:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._I0_ref)
+                    + ", other="
+                    + str(other._I0_ref)
+                    + ")"
+                )
+                diff_list.append(name + ".I0_ref" + val_str)
+            else:
+                diff_list.append(name + ".I0_ref")
+        if (
+            other._IPhi0_ref is not None
+            and self._IPhi0_ref is not None
+            and isnan(other._IPhi0_ref)
+            and isnan(self._IPhi0_ref)
+        ):
+            pass
+        elif other._IPhi0_ref != self._IPhi0_ref:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._IPhi0_ref)
+                    + ", other="
+                    + str(other._IPhi0_ref)
+                    + ")"
+                )
+                diff_list.append(name + ".IPhi0_ref" + val_str)
+            else:
+                diff_list.append(name + ".IPhi0_ref")
+        if (
+            other._slip_ref is not None
+            and self._slip_ref is not None
+            and isnan(other._slip_ref)
+            and isnan(self._slip_ref)
+        ):
+            pass
+        elif other._slip_ref != self._slip_ref:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._slip_ref)
+                    + ", other="
+                    + str(other._slip_ref)
+                    + ")"
+                )
+                diff_list.append(name + ".slip_ref" + val_str)
+            else:
+                diff_list.append(name + ".slip_ref")
+        if (
+            other._U0_ref is not None
+            and self._U0_ref is not None
+            and isnan(other._U0_ref)
+            and isnan(self._U0_ref)
+        ):
+            pass
+        elif other._U0_ref != self._U0_ref:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._U0_ref)
+                    + ", other="
+                    + str(other._U0_ref)
+                    + ")"
+                )
+                diff_list.append(name + ".U0_ref" + val_str)
+            else:
+                diff_list.append(name + ".U0_ref")
+        if (
+            other._UPhi0_ref is not None
+            and self._UPhi0_ref is not None
+            and isnan(other._UPhi0_ref)
+            and isnan(self._UPhi0_ref)
+        ):
+            pass
+        elif other._UPhi0_ref != self._UPhi0_ref:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._UPhi0_ref)
+                    + ", other="
+                    + str(other._UPhi0_ref)
+                    + ")"
+                )
+                diff_list.append(name + ".UPhi0_ref" + val_str)
+            else:
+                diff_list.append(name + ".UPhi0_ref")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list

@@ -36,6 +36,7 @@ except ImportError as error:
 from ..Classes.ImportMatrixVal import ImportMatrixVal
 from numpy import ndarray
 from numpy import array, array_equal
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 
@@ -97,6 +98,7 @@ class InputCurrent(InputVoltage):
         current_dir=None,
         is_periodicity_t=False,
         is_periodicity_a=False,
+        is_generator=False,
         time=None,
         angle=None,
         Nt_tot=2048,
@@ -142,6 +144,8 @@ class InputCurrent(InputVoltage):
                 is_periodicity_t = init_dict["is_periodicity_t"]
             if "is_periodicity_a" in list(init_dict.keys()):
                 is_periodicity_a = init_dict["is_periodicity_a"]
+            if "is_generator" in list(init_dict.keys()):
+                is_generator = init_dict["is_generator"]
             if "time" in list(init_dict.keys()):
                 time = init_dict["time"]
             if "angle" in list(init_dict.keys()):
@@ -169,6 +173,7 @@ class InputCurrent(InputVoltage):
             current_dir=current_dir,
             is_periodicity_t=is_periodicity_t,
             is_periodicity_a=is_periodicity_a,
+            is_generator=is_generator,
             time=time,
             angle=angle,
             Nt_tot=Nt_tot,
@@ -220,7 +225,7 @@ class InputCurrent(InputVoltage):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -230,26 +235,49 @@ class InputCurrent(InputVoltage):
         diff_list = list()
 
         # Check the properties inherited from InputVoltage
-        diff_list.extend(super(InputCurrent, self).compare(other, name=name))
+        diff_list.extend(
+            super(InputCurrent, self).compare(
+                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
+            )
+        )
         if (other.Is is None and self.Is is not None) or (
             other.Is is not None and self.Is is None
         ):
             diff_list.append(name + ".Is None mismatch")
         elif self.Is is not None:
-            diff_list.extend(self.Is.compare(other.Is, name=name + ".Is"))
+            diff_list.extend(
+                self.Is.compare(
+                    other.Is,
+                    name=name + ".Is",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
+            )
         if (other.Ir is None and self.Ir is not None) or (
             other.Ir is not None and self.Ir is None
         ):
             diff_list.append(name + ".Ir None mismatch")
         elif self.Ir is not None:
-            diff_list.extend(self.Ir.compare(other.Ir, name=name + ".Ir"))
+            diff_list.extend(
+                self.Ir.compare(
+                    other.Ir,
+                    name=name + ".Ir",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
+            )
         if (other.Is_harm is None and self.Is_harm is not None) or (
             other.Is_harm is not None and self.Is_harm is None
         ):
             diff_list.append(name + ".Is_harm None mismatch")
         elif self.Is_harm is not None:
             diff_list.extend(
-                self.Is_harm.compare(other.Is_harm, name=name + ".Is_harm")
+                self.Is_harm.compare(
+                    other.Is_harm,
+                    name=name + ".Is_harm",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
             )
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))

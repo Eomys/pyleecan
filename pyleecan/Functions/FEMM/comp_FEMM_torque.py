@@ -1,4 +1,4 @@
-def comp_FEMM_torque(femm, FEMM_dict, sym=1):
+def comp_FEMM_torque(femm, rotor_groups, sym=1):
     """Compute the torque of the current FEMM simulation result
     Parameters
     ----------
@@ -10,8 +10,10 @@ def comp_FEMM_torque(femm, FEMM_dict, sym=1):
 
     # Select rotor groups
     femm.mo_seteditmode("area")
-    femm.mo_groupselectblock(FEMM_dict["groups"]["GROUP_RC"])  # rotor core
-    femm.mo_groupselectblock(FEMM_dict["groups"]["GROUP_RW"])  # rotor winding
-    femm.mo_groupselectblock(FEMM_dict["groups"]["GROUP_RM"])  # rotor magnet
-    # sym = 2 => Only half the machine
-    return sym * femm.mo_blockintegral(22)
+    for grp in rotor_groups:
+        femm.mo_groupselectblock(grp)
+    Tem = sym * femm.mo_blockintegral(22)
+
+    femm.mo_clearblock()
+
+    return Tem

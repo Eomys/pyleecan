@@ -35,6 +35,7 @@ except ImportError as error:
     get_simu_number = error
 
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 
@@ -99,6 +100,7 @@ class VarParam(VarSimu):
         postproc_list=-1,
         pre_keeper_postproc_list=None,
         post_keeper_postproc_list=None,
+        is_reuse_LUT=True,
         init_dict=None,
         init_str=None,
     ):
@@ -141,6 +143,8 @@ class VarParam(VarSimu):
                 pre_keeper_postproc_list = init_dict["pre_keeper_postproc_list"]
             if "post_keeper_postproc_list" in list(init_dict.keys()):
                 post_keeper_postproc_list = init_dict["post_keeper_postproc_list"]
+            if "is_reuse_LUT" in list(init_dict.keys()):
+                is_reuse_LUT = init_dict["is_reuse_LUT"]
         # Set the properties (value check and convertion are done in setter)
         self.paramexplorer_list = paramexplorer_list
         # Call VarSimu init
@@ -156,6 +160,7 @@ class VarParam(VarSimu):
             postproc_list=postproc_list,
             pre_keeper_postproc_list=pre_keeper_postproc_list,
             post_keeper_postproc_list=post_keeper_postproc_list,
+            is_reuse_LUT=is_reuse_LUT,
         )
         # The class is frozen (in VarSimu init), for now it's impossible to
         # add new properties
@@ -191,7 +196,7 @@ class VarParam(VarSimu):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -201,7 +206,11 @@ class VarParam(VarSimu):
         diff_list = list()
 
         # Check the properties inherited from VarSimu
-        diff_list.extend(super(VarParam, self).compare(other, name=name))
+        diff_list.extend(
+            super(VarParam, self).compare(
+                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
+            )
+        )
         if (
             other.paramexplorer_list is None and self.paramexplorer_list is not None
         ) or (other.paramexplorer_list is not None and self.paramexplorer_list is None):
@@ -216,6 +225,8 @@ class VarParam(VarSimu):
                     self.paramexplorer_list[ii].compare(
                         other.paramexplorer_list[ii],
                         name=name + ".paramexplorer_list[" + str(ii) + "]",
+                        ignore_list=ignore_list,
+                        is_add_value=is_add_value,
                     )
                 )
         # Filter ignore differences

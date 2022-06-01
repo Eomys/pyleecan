@@ -11,8 +11,9 @@ def update_from_ref(self, LUT_ref):
 
     """
 
-    # Update skin effect
-    self.comp_skin_effect()
+    if self.type_skin_effect:
+        # Update skin effect
+        self.comp_skin_effect()
 
     eec_ref = LUT_ref.get_eec()
     Tsta_ref, Trot_ref = eec_ref.Tsta, eec_ref.Trot
@@ -26,7 +27,7 @@ def update_from_ref(self, LUT_ref):
         self.comp_R1(R1_ref=eec_ref.R1 / Xkr_skinS_ref, T_ref=Tsta_ref)
 
     # Update stator winding flux in open-circuit
-    Phi_dqh_mag = LUT_ref.get_Phidqh_mag_mean()
+    Phi_dqh_mag = LUT_ref.get_Phi_dqh_mag_mean()
     self.Phid = Phi_dqh_mag[0]
     self.Phiq = Phi_dqh_mag[1]
 
@@ -38,7 +39,7 @@ def update_from_ref(self, LUT_ref):
     self.Phiq = Phi_dqh[1]
 
     # Compute stator winding inductance
-    Ldqh = LUT_ref.get_Ldqh(
+    Ldqh = LUT_ref.get_L_dqh(
         Id=self.OP.get_Id_Iq()["Id"], Iq=self.OP.get_Id_Iq()["Iq"], Phi_dqh=Phi_dqh
     )
     self.Ld = Ldqh[0]

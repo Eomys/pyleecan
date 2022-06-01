@@ -1,7 +1,4 @@
-# -*- coding: utf-8 -*-
-
 from matplotlib.patches import Patch
-from matplotlib.pyplot import axis, legend
 from numpy import exp
 
 from ....Functions.init_fig import init_fig
@@ -11,12 +8,14 @@ from ....definitions import config_dict
 from ....Methods import ParentMissingError
 
 MAGNET_COLOR = config_dict["PLOT"]["COLOR_DICT"]["MAGNET_COLOR"]
+ARROW_COLOR = config_dict["PLOT"]["COLOR_DICT"]["STATOR_COLOR"]
 
 
 def plot(
     self,
     fig=None,
     ax=None,
+    title=None,
     display_magnet=True,
     is_add_arrow=False,
     is_add_ref=False,
@@ -32,6 +31,8 @@ def plot(
     fig :
         if None, open a new fig and plot, else add to the current
         one (Default value = None)
+    title: str
+        Figure title
     display_magnet : bool
         if True, plot the magnet inside the hole, if there is any (Default value = True)
     is_add_arrow : bool
@@ -43,8 +44,12 @@ def plot(
 
     Returns
     -------
-    None
+    fig : Matplotlib.figure.Figure
+        Figure containing the plot
+    ax : Matplotlib.axes.Axes object
+        Axis containing the plot
     """
+
     display = fig is None
     if display:
         color = "k"
@@ -67,14 +72,16 @@ def plot(
             patches.extend(surf.get_patches(color=color))
 
     # Display the result
-    (fig, axes, patch_leg, label_leg) = init_fig(fig, ax)
-    axes.set_xlabel("(m)")
-    axes.set_ylabel("(m)")
-    axes.set_title("Hole")
-
+    (fig, ax, patch_leg, label_leg) = init_fig(fig, ax)
+    ax.set_xlabel("(m)")
+    ax.set_ylabel("(m)")
+    if title is None:
+        ax.set_title("Hole")
+    else:
+        ax.set_title(title)
     # Add all the hole (and magnet) to fig
     for patch in patches:
-        axes.add_patch(patch)
+        ax.add_patch(patch)
 
     # Magnetization
     if is_add_arrow:
@@ -95,30 +102,31 @@ def plot(
             # Create arrow coordinates
             Z1 = mag_surf.point_ref
             Z2 = mag_surf.point_ref + H / 5 * exp(1j * mag_dir)
-            axes.annotate(
+            ax.annotate(
                 text="",
                 xy=(Z2.real, Z2.imag),
                 xytext=(Z1.real, Z1.imag),
-                arrowprops=dict(arrowstyle="->", linewidth=1, color="b"),
+                arrowprops=dict(arrowstyle="->", linewidth=1, color=ARROW_COLOR),
             )
 
     # Add reference point
     if is_add_ref:
         for surf in self.surf_list:
-            axes.plot(surf.point_ref.real, surf.point_ref.imag, "rx")
+            ax.plot(surf.point_ref.real, surf.point_ref.imag, "rx")
 
     # Axis Setup
-    axes.axis("equal")
+    ax.axis("equal")
     try:
         Lim = self.get_Rbo() * 1.2
-        axes.set_xlim(-Lim, Lim)
-        axes.set_ylim(-Lim, Lim)
+        ax.set_xlim(-Lim, Lim)
+        ax.set_ylim(-Lim, Lim)
     except ParentMissingError:
         pass
 
     if display_magnet and HOLEM_LAB in [surf.label for surf in surf_hole]:
         patch_leg.append(Patch(color=MAGNET_COLOR))
         label_leg.append("Magnet")
-        legend(patch_leg, label_leg)
+        ax.legend(patch_leg, label_leg)
     if is_show_fig:
         fig.show()
+    return fig, ax

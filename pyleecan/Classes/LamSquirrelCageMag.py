@@ -52,6 +52,7 @@ except ImportError as error:
     set_pole_pair_number = error
 
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 
@@ -268,7 +269,7 @@ class LamSquirrelCageMag(LamSquirrelCage):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -278,7 +279,11 @@ class LamSquirrelCageMag(LamSquirrelCage):
         diff_list = list()
 
         # Check the properties inherited from LamSquirrelCage
-        diff_list.extend(super(LamSquirrelCageMag, self).compare(other, name=name))
+        diff_list.extend(
+            super(LamSquirrelCageMag, self).compare(
+                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
+            )
+        )
         if (other.hole is None and self.hole is not None) or (
             other.hole is not None and self.hole is None
         ):
@@ -291,7 +296,10 @@ class LamSquirrelCageMag(LamSquirrelCage):
             for ii in range(len(other.hole)):
                 diff_list.extend(
                     self.hole[ii].compare(
-                        other.hole[ii], name=name + ".hole[" + str(ii) + "]"
+                        other.hole[ii],
+                        name=name + ".hole[" + str(ii) + "]",
+                        ignore_list=ignore_list,
+                        is_add_value=is_add_value,
                     )
                 )
         # Filter ignore differences

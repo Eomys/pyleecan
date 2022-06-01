@@ -1,7 +1,7 @@
 from os.path import join
 from numpy import pi
 import pytest
-from Tests import save_path, TEST_DATA_DIR
+from Tests import save_validation_path as save_path, TEST_DATA_DIR
 from pyleecan.Classes.OPdq import OPdq
 from pyleecan.definitions import DATA_DIR
 
@@ -17,7 +17,7 @@ from pyleecan.Functions.load import load
 
 # get the machine
 machine_1 = load(join(DATA_DIR, "Machine", "Toyota_Prius.json"))
-
+save_path = join(save_path, "StructElmer")
 # mesh settings, original line label names have to be used (not the translated)
 n1 = 3
 n2 = 20
@@ -50,7 +50,7 @@ mesh_dict_1 = {
 class Test_StructElmer(object):
     """Test some basic workflow of StructElmer simulations"""
 
-    def test_HoleM50(self):
+    def test_StructElmer_HoleM50(self):
         """Test StructElmer simulation with 2 magnets on HoleM50 rotor"""
 
         # copy the machine
@@ -74,7 +74,7 @@ class Test_StructElmer(object):
 
         return output
 
-    def test_HoleM50_no_magnets(self):
+    def test_StructElmer_HoleM50_no_magnets(self):
         """Test StructElmer simulation without magnets on HoleM50 rotor"""
 
         # get the machine
@@ -100,7 +100,7 @@ class Test_StructElmer(object):
 
         return output
 
-    def test_disk_geometry(self):
+    def test_StructElmer_disk(self):
         """Test StructElmer simulation with disc geometry (i.e. slotless rotor)"""
         # TODO compare to analytical values
 
@@ -138,11 +138,11 @@ if __name__ == "__main__":
     # create test object
     obj = Test_StructElmer()
     # test Toyota_Prius (HoleM50-Rotor) with minor modification
-    out = obj.test_HoleM50()
-    out = obj.test_HoleM50_wo_magnets()
+    out = obj.test_StructElmer_HoleM50()
+    out = obj.test_StructElmer_HoleM50_no_magnets()
 
     # test centrifugal force on a disc
-    out = obj.test_disk_geometry()
+    out = obj.test_StructElmer_disk()
 
     # # plot some results
     # out.struct.meshsolution.plot_deflection(label="disp", factor=20)

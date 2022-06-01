@@ -66,6 +66,7 @@ except ImportError as error:
 
 
 from numpy import array, array_equal
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 
@@ -311,7 +312,7 @@ class LamSlotMulti(Lamination):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -321,7 +322,11 @@ class LamSlotMulti(Lamination):
         diff_list = list()
 
         # Check the properties inherited from Lamination
-        diff_list.extend(super(LamSlotMulti, self).compare(other, name=name))
+        diff_list.extend(
+            super(LamSlotMulti, self).compare(
+                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
+            )
+        )
         if (other.slot_list is None and self.slot_list is not None) or (
             other.slot_list is not None and self.slot_list is None
         ):
@@ -334,13 +339,26 @@ class LamSlotMulti(Lamination):
             for ii in range(len(other.slot_list)):
                 diff_list.extend(
                     self.slot_list[ii].compare(
-                        other.slot_list[ii], name=name + ".slot_list[" + str(ii) + "]"
+                        other.slot_list[ii],
+                        name=name + ".slot_list[" + str(ii) + "]",
+                        ignore_list=ignore_list,
+                        is_add_value=is_add_value,
                     )
                 )
         if not array_equal(other.alpha, self.alpha):
             diff_list.append(name + ".alpha")
         if other._sym_dict_enforced != self._sym_dict_enforced:
-            diff_list.append(name + ".sym_dict_enforced")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._sym_dict_enforced)
+                    + ", other="
+                    + str(other._sym_dict_enforced)
+                    + ")"
+                )
+                diff_list.append(name + ".sym_dict_enforced" + val_str)
+            else:
+                diff_list.append(name + ".sym_dict_enforced")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list

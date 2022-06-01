@@ -15,6 +15,7 @@ from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
 from ._frozen import FrozenClass
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 
@@ -82,7 +83,7 @@ class MatEconomical(FrozenClass):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -90,10 +91,37 @@ class MatEconomical(FrozenClass):
         if type(other) != type(self):
             return ["type(" + name + ")"]
         diff_list = list()
-        if other._cost_unit != self._cost_unit:
-            diff_list.append(name + ".cost_unit")
+        if (
+            other._cost_unit is not None
+            and self._cost_unit is not None
+            and isnan(other._cost_unit)
+            and isnan(self._cost_unit)
+        ):
+            pass
+        elif other._cost_unit != self._cost_unit:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._cost_unit)
+                    + ", other="
+                    + str(other._cost_unit)
+                    + ")"
+                )
+                diff_list.append(name + ".cost_unit" + val_str)
+            else:
+                diff_list.append(name + ".cost_unit")
         if other._unit_name != self._unit_name:
-            diff_list.append(name + ".unit_name")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._unit_name)
+                    + ", other="
+                    + str(other._unit_name)
+                    + ")"
+                )
+                diff_list.append(name + ".unit_name" + val_str)
+            else:
+                diff_list.append(name + ".unit_name")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list

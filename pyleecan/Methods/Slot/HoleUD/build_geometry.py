@@ -1,13 +1,4 @@
-# -*- coding: utf-8 -*-
-
-from numpy import arcsin, arctan, cos, exp, array, angle, pi
-from numpy import imag as np_imag
-from scipy.optimize import fsolve
-
-from ....Classes.Segment import Segment
-from ....Classes.SurfLine import SurfLine
-from ....Classes.Arc1 import Arc1
-from ....Methods import ParentMissingError
+from numpy import pi
 from ....Functions.labels import HOLEV_LAB, HOLEM_LAB, LAM_LAB
 
 
@@ -25,7 +16,7 @@ def build_geometry(self, alpha=0, delta=0, is_simplified=False):
     delta : complex
         Complex to translate the slot (Default value = 0)
     is_simplified : bool
-       True to avoid line superposition (not used)
+        True to avoid line superposition (not used)
 
     Returns
     -------
@@ -33,7 +24,7 @@ def build_geometry(self, alpha=0, delta=0, is_simplified=False):
         List of SurfLine needed to draw the Hole
     """
 
-    surf_list = self.surf_list
+    surf_list = [surf.copy() for surf in self.surf_list]
 
     # Get correct label for surfaces
     if self.parent is not None:
@@ -61,12 +52,10 @@ def build_geometry(self, alpha=0, delta=0, is_simplified=False):
             hole_id += 1
 
     # Apply the transformations
-    return_list = list()
     # Modulo on Alpha0 for sym
     Alpha0 = self.Alpha0 % (2 * pi / self.Zh)
     for surf in surf_list:
-        return_list.append(surf.copy())
-        return_list[-1].rotate(alpha + Alpha0)
-        return_list[-1].translate(delta)
+        surf.rotate(alpha + Alpha0)
+        surf.translate(delta)
 
-    return return_list
+    return surf_list

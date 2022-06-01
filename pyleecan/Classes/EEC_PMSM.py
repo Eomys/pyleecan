@@ -73,6 +73,7 @@ except ImportError as error:
     update_from_ref = error
 
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 
@@ -204,7 +205,6 @@ class EEC_PMSM(EEC):
 
     def __init__(
         self,
-        fluxlink=None,
         Ld=None,
         Lq=None,
         Phid=None,
@@ -220,6 +220,7 @@ class EEC_PMSM(EEC):
         Xkr_skinR=1,
         Xke_skinR=1,
         R1=None,
+        fluxlink=None,
         init_dict=None,
         init_str=None,
     ):
@@ -238,8 +239,6 @@ class EEC_PMSM(EEC):
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
-            if "fluxlink" in list(init_dict.keys()):
-                fluxlink = init_dict["fluxlink"]
             if "Ld" in list(init_dict.keys()):
                 Ld = init_dict["Ld"]
             if "Lq" in list(init_dict.keys()):
@@ -270,8 +269,9 @@ class EEC_PMSM(EEC):
                 Xke_skinR = init_dict["Xke_skinR"]
             if "R1" in list(init_dict.keys()):
                 R1 = init_dict["R1"]
+            if "fluxlink" in list(init_dict.keys()):
+                fluxlink = init_dict["fluxlink"]
         # Set the properties (value check and convertion are done in setter)
-        self.fluxlink = fluxlink
         self.Ld = Ld
         self.Lq = Lq
         self.Phid = Phid
@@ -289,6 +289,7 @@ class EEC_PMSM(EEC):
             Xkr_skinR=Xkr_skinR,
             Xke_skinR=Xke_skinR,
             R1=R1,
+            fluxlink=fluxlink,
         )
         # The class is frozen (in EEC init), for now it's impossible to
         # add new properties
@@ -299,11 +300,6 @@ class EEC_PMSM(EEC):
         EEC_PMSM_str = ""
         # Get the properties inherited from EEC
         EEC_PMSM_str += super(EEC_PMSM, self).__str__()
-        if self.fluxlink is not None:
-            tmp = self.fluxlink.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            EEC_PMSM_str += "fluxlink = " + tmp
-        else:
-            EEC_PMSM_str += "fluxlink = None" + linesep + linesep
         EEC_PMSM_str += "Ld = " + str(self.Ld) + linesep
         EEC_PMSM_str += "Lq = " + str(self.Lq) + linesep
         EEC_PMSM_str += "Phid = " + str(self.Phid) + linesep
@@ -321,8 +317,6 @@ class EEC_PMSM(EEC):
         # Check the properties inherited from EEC
         if not super(EEC_PMSM, self).__eq__(other):
             return False
-        if other.fluxlink != self.fluxlink:
-            return False
         if other.Ld != self.Ld:
             return False
         if other.Lq != self.Lq:
@@ -337,7 +331,7 @@ class EEC_PMSM(EEC):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -347,27 +341,105 @@ class EEC_PMSM(EEC):
         diff_list = list()
 
         # Check the properties inherited from EEC
-        diff_list.extend(super(EEC_PMSM, self).compare(other, name=name))
-        if (other.fluxlink is None and self.fluxlink is not None) or (
-            other.fluxlink is not None and self.fluxlink is None
-        ):
-            diff_list.append(name + ".fluxlink None mismatch")
-        elif self.fluxlink is not None:
-            diff_list.extend(
-                self.fluxlink.compare(other.fluxlink, name=name + ".fluxlink")
+        diff_list.extend(
+            super(EEC_PMSM, self).compare(
+                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
             )
-        if other._Ld != self._Ld:
-            diff_list.append(name + ".Ld")
-        if other._Lq != self._Lq:
-            diff_list.append(name + ".Lq")
-        if other._Phid != self._Phid:
-            diff_list.append(name + ".Phid")
-        if other._Phiq != self._Phiq:
-            diff_list.append(name + ".Phiq")
-        if other._Phid_mag != self._Phid_mag:
-            diff_list.append(name + ".Phid_mag")
-        if other._Phiq_mag != self._Phiq_mag:
-            diff_list.append(name + ".Phiq_mag")
+        )
+        if (
+            other._Ld is not None
+            and self._Ld is not None
+            and isnan(other._Ld)
+            and isnan(self._Ld)
+        ):
+            pass
+        elif other._Ld != self._Ld:
+            if is_add_value:
+                val_str = " (self=" + str(self._Ld) + ", other=" + str(other._Ld) + ")"
+                diff_list.append(name + ".Ld" + val_str)
+            else:
+                diff_list.append(name + ".Ld")
+        if (
+            other._Lq is not None
+            and self._Lq is not None
+            and isnan(other._Lq)
+            and isnan(self._Lq)
+        ):
+            pass
+        elif other._Lq != self._Lq:
+            if is_add_value:
+                val_str = " (self=" + str(self._Lq) + ", other=" + str(other._Lq) + ")"
+                diff_list.append(name + ".Lq" + val_str)
+            else:
+                diff_list.append(name + ".Lq")
+        if (
+            other._Phid is not None
+            and self._Phid is not None
+            and isnan(other._Phid)
+            and isnan(self._Phid)
+        ):
+            pass
+        elif other._Phid != self._Phid:
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._Phid) + ", other=" + str(other._Phid) + ")"
+                )
+                diff_list.append(name + ".Phid" + val_str)
+            else:
+                diff_list.append(name + ".Phid")
+        if (
+            other._Phiq is not None
+            and self._Phiq is not None
+            and isnan(other._Phiq)
+            and isnan(self._Phiq)
+        ):
+            pass
+        elif other._Phiq != self._Phiq:
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._Phiq) + ", other=" + str(other._Phiq) + ")"
+                )
+                diff_list.append(name + ".Phiq" + val_str)
+            else:
+                diff_list.append(name + ".Phiq")
+        if (
+            other._Phid_mag is not None
+            and self._Phid_mag is not None
+            and isnan(other._Phid_mag)
+            and isnan(self._Phid_mag)
+        ):
+            pass
+        elif other._Phid_mag != self._Phid_mag:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._Phid_mag)
+                    + ", other="
+                    + str(other._Phid_mag)
+                    + ")"
+                )
+                diff_list.append(name + ".Phid_mag" + val_str)
+            else:
+                diff_list.append(name + ".Phid_mag")
+        if (
+            other._Phiq_mag is not None
+            and self._Phiq_mag is not None
+            and isnan(other._Phiq_mag)
+            and isnan(self._Phiq_mag)
+        ):
+            pass
+        elif other._Phiq_mag != self._Phiq_mag:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._Phiq_mag)
+                    + ", other="
+                    + str(other._Phiq_mag)
+                    + ")"
+                )
+                diff_list.append(name + ".Phiq_mag" + val_str)
+            else:
+                diff_list.append(name + ".Phiq_mag")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -379,7 +451,6 @@ class EEC_PMSM(EEC):
 
         # Get size of the properties inherited from EEC
         S += super(EEC_PMSM, self).__sizeof__()
-        S += getsizeof(self.fluxlink)
         S += getsizeof(self.Ld)
         S += getsizeof(self.Lq)
         S += getsizeof(self.Phid)
@@ -405,14 +476,6 @@ class EEC_PMSM(EEC):
             keep_function=keep_function,
             **kwargs
         )
-        if self.fluxlink is None:
-            EEC_PMSM_dict["fluxlink"] = None
-        else:
-            EEC_PMSM_dict["fluxlink"] = self.fluxlink.as_dict(
-                type_handle_ndarray=type_handle_ndarray,
-                keep_function=keep_function,
-                **kwargs
-            )
         EEC_PMSM_dict["Ld"] = self.Ld
         EEC_PMSM_dict["Lq"] = self.Lq
         EEC_PMSM_dict["Phid"] = self.Phid
@@ -427,8 +490,6 @@ class EEC_PMSM(EEC):
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""
 
-        if self.fluxlink is not None:
-            self.fluxlink._set_None()
         self.Ld = None
         self.Lq = None
         self.Phid = None
@@ -437,43 +498,6 @@ class EEC_PMSM(EEC):
         self.Phiq_mag = None
         # Set to None the properties inherited from EEC
         super(EEC_PMSM, self)._set_None()
-
-    def _get_fluxlink(self):
-        """getter of fluxlink"""
-        return self._fluxlink
-
-    def _set_fluxlink(self, value):
-        """setter of fluxlink"""
-        if isinstance(value, str):  # Load from file
-            try:
-                value = load_init_dict(value)[1]
-            except Exception as e:
-                self.get_logger().error(
-                    "Error while loading " + value + ", setting None instead"
-                )
-                value = None
-        if isinstance(value, dict) and "__class__" in value:
-            class_obj = import_class(
-                "pyleecan.Classes", value.get("__class__"), "fluxlink"
-            )
-            value = class_obj(init_dict=value)
-        elif type(value) is int and value == -1:  # Default constructor
-            Magnetics = import_class("pyleecan.Classes", "Magnetics", "fluxlink")
-            value = Magnetics()
-        check_var("fluxlink", value, "Magnetics")
-        self._fluxlink = value
-
-        if self._fluxlink is not None:
-            self._fluxlink.parent = self
-
-    fluxlink = property(
-        fget=_get_fluxlink,
-        fset=_set_fluxlink,
-        doc=u"""Magnetic model for flux linkage calculation
-
-        :Type: Magnetics
-        """,
-    )
 
     def _get_Ld(self):
         """getter of Ld"""

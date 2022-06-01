@@ -88,6 +88,11 @@ except ImportError as error:
     comp_surface_wedges = error
 
 try:
+    from ..Methods.Slot.Slot.comp_width import comp_width
+except ImportError as error:
+    comp_width = error
+
+try:
     from ..Methods.Slot.Slot.comp_width_opening import comp_width_opening
 except ImportError as error:
     comp_width_opening = error
@@ -148,6 +153,7 @@ except ImportError as error:
     set_label = error
 
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 
@@ -313,6 +319,15 @@ class Slot(FrozenClass):
         )
     else:
         comp_surface_wedges = comp_surface_wedges
+    # cf Methods.Slot.Slot.comp_width
+    if isinstance(comp_width, ImportError):
+        comp_width = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use Slot method comp_width: " + str(comp_width))
+            )
+        )
+    else:
+        comp_width = comp_width
     # cf Methods.Slot.Slot.comp_width_opening
     if isinstance(comp_width_opening, ImportError):
         comp_width_opening = property(
@@ -495,7 +510,7 @@ class Slot(FrozenClass):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -504,14 +519,23 @@ class Slot(FrozenClass):
             return ["type(" + name + ")"]
         diff_list = list()
         if other._Zs != self._Zs:
-            diff_list.append(name + ".Zs")
+            if is_add_value:
+                val_str = " (self=" + str(self._Zs) + ", other=" + str(other._Zs) + ")"
+                diff_list.append(name + ".Zs" + val_str)
+            else:
+                diff_list.append(name + ".Zs")
         if (other.wedge_mat is None and self.wedge_mat is not None) or (
             other.wedge_mat is not None and self.wedge_mat is None
         ):
             diff_list.append(name + ".wedge_mat None mismatch")
         elif self.wedge_mat is not None:
             diff_list.extend(
-                self.wedge_mat.compare(other.wedge_mat, name=name + ".wedge_mat")
+                self.wedge_mat.compare(
+                    other.wedge_mat,
+                    name=name + ".wedge_mat",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
             )
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))

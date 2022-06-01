@@ -1,4 +1,4 @@
-from numpy import arcsin, exp, sqrt
+from numpy import exp
 
 
 def _comp_point_coordinate(self):

@@ -48,7 +48,7 @@ class WBarOut(QGroupBox):
         txt_Sbar = self.tr("Sbar: ")
         try:
             Sbar = format(self.u.get_m2(obj.comp_surface_active()), ".4g")
-            self.out_Sbar.setText(txt_Sbar + Sbar + " " + self.u.get_m2_name())
+            self.out_Sbar.setText(txt_Sbar + Sbar + " [" + self.u.get_m2_name() + "]")
         except Exception:
             self.out_Sbar.setText(txt_Sbar + "?")
         # Update Slot surface if possible
@@ -57,13 +57,15 @@ class WBarOut(QGroupBox):
             Sslot = format(
                 self.u.get_m2(self.parent().machine.rotor.slot.comp_surface()), ".4g"
             )
-            self.out_Sslot.setText(txt_Sslot + Sslot + " " + self.u.get_m2_name())
+            self.out_Sslot.setText(
+                txt_Sslot + Sslot + " [" + self.u.get_m2_name() + "]"
+            )
         except Exception:
             self.out_Sslot.setText(txt_Sslot + " ?")
         # Update ratio if possible
         txt_ratio = self.tr("Sbar / Sslot: ")
         try:
             ratio = "%.4g" % (float(Sbar) / float(Sslot) * 100)
-            self.out_ratio.setText(txt_ratio + ratio + " %")
+            self.out_ratio.setText(txt_ratio + ratio + " [%]")
         except Exception:
             self.out_ratio.setText(txt_ratio + "?")

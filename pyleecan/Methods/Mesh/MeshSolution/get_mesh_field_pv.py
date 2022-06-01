@@ -1,5 +1,5 @@
-# -*- coding: utf-8 -*-
-from pyleecan.Classes.MeshVTK import MeshVTK
+from ....Classes.SolutionVector import SolutionVector
+from ....Classes.MeshVTK import MeshVTK
 
 
 def get_mesh_field_pv(
@@ -67,7 +67,8 @@ def get_mesh_field_pv(
         for a in args:
             args_list.append(a)
     args_list.append("indice")
-    args_list.append("components")
+    if isinstance(solution, SolutionVector):
+        args_list.append("components")
 
     field = self.get_field(
         *args_list,

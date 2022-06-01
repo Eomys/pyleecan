@@ -42,7 +42,35 @@ try:
 except ImportError as error:
     plot = error
 
+try:
+    from ..Methods.Machine.CondType21.comp_width_wire import comp_width_wire
+except ImportError as error:
+    comp_width_wire = error
 
+try:
+    from ..Methods.Machine.CondType21.comp_height_wire import comp_height_wire
+except ImportError as error:
+    comp_height_wire = error
+
+try:
+    from ..Methods.Machine.CondType21.comp_nb_circumferential_wire import (
+        comp_nb_circumferential_wire,
+    )
+except ImportError as error:
+    comp_nb_circumferential_wire = error
+
+try:
+    from ..Methods.Machine.CondType21.comp_nb_radial_wire import comp_nb_radial_wire
+except ImportError as error:
+    comp_nb_radial_wire = error
+
+try:
+    from ..Methods.Machine.CondType21.is_round_wire import is_round_wire
+except ImportError as error:
+    is_round_wire = error
+
+
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 
@@ -106,6 +134,65 @@ class CondType21(Conductor):
         )
     else:
         plot = plot
+    # cf Methods.Machine.CondType21.comp_width_wire
+    if isinstance(comp_width_wire, ImportError):
+        comp_width_wire = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use CondType21 method comp_width_wire: "
+                    + str(comp_width_wire)
+                )
+            )
+        )
+    else:
+        comp_width_wire = comp_width_wire
+    # cf Methods.Machine.CondType21.comp_height_wire
+    if isinstance(comp_height_wire, ImportError):
+        comp_height_wire = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use CondType21 method comp_height_wire: "
+                    + str(comp_height_wire)
+                )
+            )
+        )
+    else:
+        comp_height_wire = comp_height_wire
+    # cf Methods.Machine.CondType21.comp_nb_circumferential_wire
+    if isinstance(comp_nb_circumferential_wire, ImportError):
+        comp_nb_circumferential_wire = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use CondType21 method comp_nb_circumferential_wire: "
+                    + str(comp_nb_circumferential_wire)
+                )
+            )
+        )
+    else:
+        comp_nb_circumferential_wire = comp_nb_circumferential_wire
+    # cf Methods.Machine.CondType21.comp_nb_radial_wire
+    if isinstance(comp_nb_radial_wire, ImportError):
+        comp_nb_radial_wire = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use CondType21 method comp_nb_radial_wire: "
+                    + str(comp_nb_radial_wire)
+                )
+            )
+        )
+    else:
+        comp_nb_radial_wire = comp_nb_radial_wire
+    # cf Methods.Machine.CondType21.is_round_wire
+    if isinstance(is_round_wire, ImportError):
+        is_round_wire = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use CondType21 method is_round_wire: " + str(is_round_wire)
+                )
+            )
+        )
+    else:
+        is_round_wire = is_round_wire
     # save and copy methods are available in all object
     save = save
     copy = copy
@@ -184,7 +271,7 @@ class CondType21(Conductor):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -194,13 +281,56 @@ class CondType21(Conductor):
         diff_list = list()
 
         # Check the properties inherited from Conductor
-        diff_list.extend(super(CondType21, self).compare(other, name=name))
-        if other._Hbar != self._Hbar:
-            diff_list.append(name + ".Hbar")
-        if other._Wbar != self._Wbar:
-            diff_list.append(name + ".Wbar")
-        if other._Wins != self._Wins:
-            diff_list.append(name + ".Wins")
+        diff_list.extend(
+            super(CondType21, self).compare(
+                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
+            )
+        )
+        if (
+            other._Hbar is not None
+            and self._Hbar is not None
+            and isnan(other._Hbar)
+            and isnan(self._Hbar)
+        ):
+            pass
+        elif other._Hbar != self._Hbar:
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._Hbar) + ", other=" + str(other._Hbar) + ")"
+                )
+                diff_list.append(name + ".Hbar" + val_str)
+            else:
+                diff_list.append(name + ".Hbar")
+        if (
+            other._Wbar is not None
+            and self._Wbar is not None
+            and isnan(other._Wbar)
+            and isnan(self._Wbar)
+        ):
+            pass
+        elif other._Wbar != self._Wbar:
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._Wbar) + ", other=" + str(other._Wbar) + ")"
+                )
+                diff_list.append(name + ".Wbar" + val_str)
+            else:
+                diff_list.append(name + ".Wbar")
+        if (
+            other._Wins is not None
+            and self._Wins is not None
+            and isnan(other._Wins)
+            and isnan(self._Wins)
+        ):
+            pass
+        elif other._Wins != self._Wins:
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._Wins) + ", other=" + str(other._Wins) + ")"
+                )
+                diff_list.append(name + ".Wins" + val_str)
+            else:
+                diff_list.append(name + ".Wins")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list

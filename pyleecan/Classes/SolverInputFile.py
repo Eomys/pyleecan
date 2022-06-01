@@ -23,6 +23,7 @@ except ImportError as error:
     write = error
 
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 
@@ -102,7 +103,7 @@ class SolverInputFile(Elmer):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -112,9 +113,23 @@ class SolverInputFile(Elmer):
         diff_list = list()
 
         # Check the properties inherited from Elmer
-        diff_list.extend(super(SolverInputFile, self).compare(other, name=name))
+        diff_list.extend(
+            super(SolverInputFile, self).compare(
+                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
+            )
+        )
         if other._sections != self._sections:
-            diff_list.append(name + ".sections")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._sections)
+                    + ", other="
+                    + str(other._sections)
+                    + ")"
+                )
+                diff_list.append(name + ".sections" + val_str)
+            else:
+                diff_list.append(name + ".sections")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list

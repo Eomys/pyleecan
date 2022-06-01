@@ -39,6 +39,7 @@ except ImportError as error:
 
 
 from numpy import array, array_equal
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 
@@ -193,7 +194,7 @@ class CellMat(FrozenClass):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -204,9 +205,29 @@ class CellMat(FrozenClass):
         if not array_equal(other.connectivity, self.connectivity):
             diff_list.append(name + ".connectivity")
         if other._nb_cell != self._nb_cell:
-            diff_list.append(name + ".nb_cell")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._nb_cell)
+                    + ", other="
+                    + str(other._nb_cell)
+                    + ")"
+                )
+                diff_list.append(name + ".nb_cell" + val_str)
+            else:
+                diff_list.append(name + ".nb_cell")
         if other._nb_node_per_cell != self._nb_node_per_cell:
-            diff_list.append(name + ".nb_node_per_cell")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._nb_node_per_cell)
+                    + ", other="
+                    + str(other._nb_node_per_cell)
+                    + ")"
+                )
+                diff_list.append(name + ".nb_node_per_cell" + val_str)
+            else:
+                diff_list.append(name + ".nb_node_per_cell")
         if not array_equal(other.indice, self.indice):
             diff_list.append(name + ".indice")
         if (other.interpolation is None and self.interpolation is not None) or (
@@ -216,7 +237,10 @@ class CellMat(FrozenClass):
         elif self.interpolation is not None:
             diff_list.extend(
                 self.interpolation.compare(
-                    other.interpolation, name=name + ".interpolation"
+                    other.interpolation,
+                    name=name + ".interpolation",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
                 )
             )
         # Filter ignore differences

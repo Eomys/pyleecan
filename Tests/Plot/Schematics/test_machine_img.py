@@ -17,7 +17,7 @@ if not isdir(SCHEMATICS_PATH):
 MACH_PATH = join(DATA_DIR, "Machine")
 mach_test = list()
 mach_test.append(
-    {"json_path": join(MACH_PATH, "SCIM_001.json"), "machine_name": "SCIM"}
+    {"json_path": join(MACH_PATH, "Railway_Traction.json"), "machine_name": "SCIM"}
 )
 mach_test.append(
     {"json_path": join(MACH_PATH, "Toyota_Prius.json"), "machine_name": "IPMSM"}

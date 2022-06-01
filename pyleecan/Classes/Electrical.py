@@ -38,6 +38,7 @@ except ImportError as error:
     gen_drive = error
 
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 
@@ -101,6 +102,7 @@ class Electrical(FrozenClass):
         LUT_enforced=None,
         Tsta=20,
         Trot=20,
+        type_skin_effect=1,
         init_dict=None,
         init_str=None,
     ):
@@ -131,6 +133,8 @@ class Electrical(FrozenClass):
                 Tsta = init_dict["Tsta"]
             if "Trot" in list(init_dict.keys()):
                 Trot = init_dict["Trot"]
+            if "type_skin_effect" in list(init_dict.keys()):
+                type_skin_effect = init_dict["type_skin_effect"]
         # Set the properties (value check and convertion are done in setter)
         self.parent = None
         self.eec = eec
@@ -139,6 +143,7 @@ class Electrical(FrozenClass):
         self.LUT_enforced = LUT_enforced
         self.Tsta = Tsta
         self.Trot = Trot
+        self.type_skin_effect = type_skin_effect
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -169,6 +174,7 @@ class Electrical(FrozenClass):
             Electrical_str += "LUT_enforced = None" + linesep + linesep
         Electrical_str += "Tsta = " + str(self.Tsta) + linesep
         Electrical_str += "Trot = " + str(self.Trot) + linesep
+        Electrical_str += "type_skin_effect = " + str(self.type_skin_effect) + linesep
         return Electrical_str
 
     def __eq__(self, other):
@@ -188,9 +194,11 @@ class Electrical(FrozenClass):
             return False
         if other.Trot != self.Trot:
             return False
+        if other.type_skin_effect != self.type_skin_effect:
+            return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -203,11 +211,45 @@ class Electrical(FrozenClass):
         ):
             diff_list.append(name + ".eec None mismatch")
         elif self.eec is not None:
-            diff_list.extend(self.eec.compare(other.eec, name=name + ".eec"))
+            diff_list.extend(
+                self.eec.compare(
+                    other.eec,
+                    name=name + ".eec",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
+            )
         if other._logger_name != self._logger_name:
-            diff_list.append(name + ".logger_name")
-        if other._freq_max != self._freq_max:
-            diff_list.append(name + ".freq_max")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._logger_name)
+                    + ", other="
+                    + str(other._logger_name)
+                    + ")"
+                )
+                diff_list.append(name + ".logger_name" + val_str)
+            else:
+                diff_list.append(name + ".logger_name")
+        if (
+            other._freq_max is not None
+            and self._freq_max is not None
+            and isnan(other._freq_max)
+            and isnan(self._freq_max)
+        ):
+            pass
+        elif other._freq_max != self._freq_max:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._freq_max)
+                    + ", other="
+                    + str(other._freq_max)
+                    + ")"
+                )
+                diff_list.append(name + ".freq_max" + val_str)
+            else:
+                diff_list.append(name + ".freq_max")
         if (other.LUT_enforced is None and self.LUT_enforced is not None) or (
             other.LUT_enforced is not None and self.LUT_enforced is None
         ):
@@ -215,13 +257,54 @@ class Electrical(FrozenClass):
         elif self.LUT_enforced is not None:
             diff_list.extend(
                 self.LUT_enforced.compare(
-                    other.LUT_enforced, name=name + ".LUT_enforced"
+                    other.LUT_enforced,
+                    name=name + ".LUT_enforced",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
                 )
             )
-        if other._Tsta != self._Tsta:
-            diff_list.append(name + ".Tsta")
-        if other._Trot != self._Trot:
-            diff_list.append(name + ".Trot")
+        if (
+            other._Tsta is not None
+            and self._Tsta is not None
+            and isnan(other._Tsta)
+            and isnan(self._Tsta)
+        ):
+            pass
+        elif other._Tsta != self._Tsta:
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._Tsta) + ", other=" + str(other._Tsta) + ")"
+                )
+                diff_list.append(name + ".Tsta" + val_str)
+            else:
+                diff_list.append(name + ".Tsta")
+        if (
+            other._Trot is not None
+            and self._Trot is not None
+            and isnan(other._Trot)
+            and isnan(self._Trot)
+        ):
+            pass
+        elif other._Trot != self._Trot:
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._Trot) + ", other=" + str(other._Trot) + ")"
+                )
+                diff_list.append(name + ".Trot" + val_str)
+            else:
+                diff_list.append(name + ".Trot")
+        if other._type_skin_effect != self._type_skin_effect:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._type_skin_effect)
+                    + ", other="
+                    + str(other._type_skin_effect)
+                    + ")"
+                )
+                diff_list.append(name + ".type_skin_effect" + val_str)
+            else:
+                diff_list.append(name + ".type_skin_effect")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -236,6 +319,7 @@ class Electrical(FrozenClass):
         S += getsizeof(self.LUT_enforced)
         S += getsizeof(self.Tsta)
         S += getsizeof(self.Trot)
+        S += getsizeof(self.type_skin_effect)
         return S
 
     def as_dict(self, type_handle_ndarray=0, keep_function=False, **kwargs):
@@ -270,6 +354,7 @@ class Electrical(FrozenClass):
             )
         Electrical_dict["Tsta"] = self.Tsta
         Electrical_dict["Trot"] = self.Trot
+        Electrical_dict["type_skin_effect"] = self.type_skin_effect
         # The class name is added to the dict for deserialisation purpose
         Electrical_dict["__class__"] = "Electrical"
         return Electrical_dict
@@ -285,6 +370,7 @@ class Electrical(FrozenClass):
             self.LUT_enforced._set_None()
         self.Tsta = None
         self.Trot = None
+        self.type_skin_effect = None
 
     def _get_eec(self):
         """getter of eec"""
@@ -427,5 +513,23 @@ class Electrical(FrozenClass):
         doc=u"""Average rotor temperature for Electrical calculation
 
         :Type: float
+        """,
+    )
+
+    def _get_type_skin_effect(self):
+        """getter of type_skin_effect"""
+        return self._type_skin_effect
+
+    def _set_type_skin_effect(self, value):
+        """setter of type_skin_effect"""
+        check_var("type_skin_effect", value, "int")
+        self._type_skin_effect = value
+
+    type_skin_effect = property(
+        fget=_get_type_skin_effect,
+        fset=_set_type_skin_effect,
+        doc=u"""Skin effect for resistance and inductance
+
+        :Type: int
         """,
     )

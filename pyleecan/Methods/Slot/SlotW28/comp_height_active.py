@@ -1,8 +1,3 @@
-# -*- coding: utf-8 -*-
-
-from numpy import arcsin, exp, pi, sqrt
-
-
 def comp_height_active(self):
     """Compute the height of the winding area
 

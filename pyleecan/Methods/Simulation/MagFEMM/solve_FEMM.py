@@ -139,8 +139,6 @@ def solve_FEMM(
     else:
         Rag = machine.comp_Rgap_mec()
 
-    L1 = machine.stator.comp_length()
-    L2 = machine.rotor.comp_length()
     save_path = self.get_path_save(output)
     is_internal_rotor = machine.rotor.is_internal
     if "Phi_wind" in out_dict:
@@ -160,6 +158,7 @@ def solve_FEMM(
     meshFEMM = None
     groups = None
     A_node = None
+    A_elem = None
 
     # Check current values
     if np_all(Is == 0):
@@ -235,7 +234,12 @@ def solve_FEMM(
                 )
 
         # Compute the torque
-        out_dict["Tem"][ii] = comp_FEMM_torque(femm, FEMM_dict, sym=sym)
+        if self.is_calc_torque_energy:
+            label_rot = machine.rotor.get_label()
+            rotor_groups = FEMM_dict["groups"]["lam_group_list"][label_rot]
+            out_dict["Tem"][ii] = comp_FEMM_torque(
+                femm, rotor_groups=rotor_groups, sym=sym
+            )
 
         if "Phi_wind" in out_dict:
             # Phi_wind computation
@@ -246,16 +250,17 @@ def solve_FEMM(
                     qs[key],
                     Npcp[key],
                     is_stator=machine.get_lam_by_label(key).is_stator,
-                    L1=L1,
-                    L2=L2,
+                    L1=machine.stator.L1,
+                    L2=machine.rotor.L1,
                     sym=sym,
                 )
 
         # Load mesh data & solution
         if self.is_get_meshsolution:
             # Get mesh data and magnetic quantities from .ans file
-            tmpmeshFEMM, tmpB, tmpH, tmpmu, tmpA, tmpgroups = self.get_meshsolution(
+            meshFEMMi, Bi, Hi, mui, Ani, groupsi, Aei = self.get_meshsolution(
                 femm,
+                FEMM_dict,
                 save_path,
                 j_t0=ii,
                 id_worker=start_t,
@@ -266,8 +271,8 @@ def solve_FEMM(
 
             # Initialize mesh and magnetic quantities for first time step
             if ii == start_t:
-                meshFEMM = [tmpmeshFEMM]
-                groups = tmpgroups
+                meshFEMM = [meshFEMMi]
+                groups = groupsi
                 Nelem = meshFEMM[0].cell["triangle"].nb_cell
                 Nnode = meshFEMM[0].node.nb_node
                 Nt0 = end_t - start_t
@@ -275,14 +280,16 @@ def solve_FEMM(
                 H_elem = zeros([Nt0, Nelem, 3])
                 mu_elem = zeros([Nt0, Nelem])
                 A_node = zeros([Nt0, Nnode])
+                A_elem = zeros([Nt0, Nelem])
 
             # Shift time index ii in case start_t is not 0 (parallelization)
             ii0 = ii - start_t
 
-            B_elem[ii0, :, 0:2] = tmpB
-            H_elem[ii0, :, 0:2] = tmpH
-            mu_elem[ii0, :] = tmpmu
-            A_node[ii0, :] = tmpA
+            B_elem[ii0, :, 0:2] = Bi
+            H_elem[ii0, :, 0:2] = Hi
+            mu_elem[ii0, :] = mui
+            A_node[ii0, :] = Ani
+            A_elem[ii0, :] = Aei
 
         if not is_sliding_band:
             femm.mi_close()
@@ -315,4 +322,4 @@ def solve_FEMM(
 
     out_dict["Rag"] = Rag
 
-    return B_elem, H_elem, mu_elem, A_node, meshFEMM, groups
+    return B_elem, H_elem, mu_elem, A_node, meshFEMM, groups, A_elem

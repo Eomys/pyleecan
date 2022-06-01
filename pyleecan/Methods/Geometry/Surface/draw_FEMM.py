@@ -79,6 +79,10 @@ def draw_FEMM(
                 continue  #  This line should not be drawn
         mesh_dict = get_mesh_param(label_dict, FEMM_dict)
 
+        group = mesh_dict["group"]
+        if isinstance(group, list):
+            group = group[label_dict["S_id"]]
+
         # Get or create the Boundary Condition (if any)
         if line.prop_dict is not None and BOUNDARY_PROP_LAB in line.prop_dict:
 
@@ -105,7 +109,7 @@ def draw_FEMM(
                 element_size=mesh_dict["element_size"],
                 propname=propname,
                 hide=hide,
-                group=mesh_dict["group"],
+                group=group,
                 is_draw=is_draw,
             )
         else:
@@ -116,6 +120,6 @@ def draw_FEMM(
                 element_size=mesh_dict["element_size"],
                 automesh=mesh_dict["automesh"],
                 hide=hide,
-                group=mesh_dict["group"],
+                group=group,
                 is_draw=is_draw,
             )

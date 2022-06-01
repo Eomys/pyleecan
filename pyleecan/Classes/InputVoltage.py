@@ -36,6 +36,7 @@ except ImportError as error:
 from ..Classes.ImportMatrixVal import ImportMatrixVal
 from numpy import ndarray
 from numpy import array, array_equal
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 
@@ -94,6 +95,7 @@ class InputVoltage(Input):
         current_dir=None,
         is_periodicity_t=False,
         is_periodicity_a=False,
+        is_generator=False,
         time=None,
         angle=None,
         Nt_tot=2048,
@@ -133,6 +135,8 @@ class InputVoltage(Input):
                 is_periodicity_t = init_dict["is_periodicity_t"]
             if "is_periodicity_a" in list(init_dict.keys()):
                 is_periodicity_a = init_dict["is_periodicity_a"]
+            if "is_generator" in list(init_dict.keys()):
+                is_generator = init_dict["is_generator"]
             if "time" in list(init_dict.keys()):
                 time = init_dict["time"]
             if "angle" in list(init_dict.keys()):
@@ -155,6 +159,7 @@ class InputVoltage(Input):
         self.current_dir = current_dir
         self.is_periodicity_t = is_periodicity_t
         self.is_periodicity_a = is_periodicity_a
+        self.is_generator = is_generator
         # Call Input init
         super(InputVoltage, self).__init__(
             time=time,
@@ -187,6 +192,7 @@ class InputVoltage(Input):
         InputVoltage_str += "current_dir = " + str(self.current_dir) + linesep
         InputVoltage_str += "is_periodicity_t = " + str(self.is_periodicity_t) + linesep
         InputVoltage_str += "is_periodicity_a = " + str(self.is_periodicity_a) + linesep
+        InputVoltage_str += "is_generator = " + str(self.is_generator) + linesep
         return InputVoltage_str
 
     def __eq__(self, other):
@@ -212,9 +218,11 @@ class InputVoltage(Input):
             return False
         if other.is_periodicity_a != self.is_periodicity_a:
             return False
+        if other.is_generator != self.is_generator:
+            return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -224,25 +232,115 @@ class InputVoltage(Input):
         diff_list = list()
 
         # Check the properties inherited from Input
-        diff_list.extend(super(InputVoltage, self).compare(other, name=name))
+        diff_list.extend(
+            super(InputVoltage, self).compare(
+                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
+            )
+        )
         if other._rot_dir != self._rot_dir:
-            diff_list.append(name + ".rot_dir")
-        if other._angle_rotor_initial != self._angle_rotor_initial:
-            diff_list.append(name + ".angle_rotor_initial")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._rot_dir)
+                    + ", other="
+                    + str(other._rot_dir)
+                    + ")"
+                )
+                diff_list.append(name + ".rot_dir" + val_str)
+            else:
+                diff_list.append(name + ".rot_dir")
+        if (
+            other._angle_rotor_initial is not None
+            and self._angle_rotor_initial is not None
+            and isnan(other._angle_rotor_initial)
+            and isnan(self._angle_rotor_initial)
+        ):
+            pass
+        elif other._angle_rotor_initial != self._angle_rotor_initial:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._angle_rotor_initial)
+                    + ", other="
+                    + str(other._angle_rotor_initial)
+                    + ")"
+                )
+                diff_list.append(name + ".angle_rotor_initial" + val_str)
+            else:
+                diff_list.append(name + ".angle_rotor_initial")
         if (other.PWM is None and self.PWM is not None) or (
             other.PWM is not None and self.PWM is None
         ):
             diff_list.append(name + ".PWM None mismatch")
         elif self.PWM is not None:
-            diff_list.extend(self.PWM.compare(other.PWM, name=name + ".PWM"))
+            diff_list.extend(
+                self.PWM.compare(
+                    other.PWM,
+                    name=name + ".PWM",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
+            )
         if other._phase_dir != self._phase_dir:
-            diff_list.append(name + ".phase_dir")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._phase_dir)
+                    + ", other="
+                    + str(other._phase_dir)
+                    + ")"
+                )
+                diff_list.append(name + ".phase_dir" + val_str)
+            else:
+                diff_list.append(name + ".phase_dir")
         if other._current_dir != self._current_dir:
-            diff_list.append(name + ".current_dir")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._current_dir)
+                    + ", other="
+                    + str(other._current_dir)
+                    + ")"
+                )
+                diff_list.append(name + ".current_dir" + val_str)
+            else:
+                diff_list.append(name + ".current_dir")
         if other._is_periodicity_t != self._is_periodicity_t:
-            diff_list.append(name + ".is_periodicity_t")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._is_periodicity_t)
+                    + ", other="
+                    + str(other._is_periodicity_t)
+                    + ")"
+                )
+                diff_list.append(name + ".is_periodicity_t" + val_str)
+            else:
+                diff_list.append(name + ".is_periodicity_t")
         if other._is_periodicity_a != self._is_periodicity_a:
-            diff_list.append(name + ".is_periodicity_a")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._is_periodicity_a)
+                    + ", other="
+                    + str(other._is_periodicity_a)
+                    + ")"
+                )
+                diff_list.append(name + ".is_periodicity_a" + val_str)
+            else:
+                diff_list.append(name + ".is_periodicity_a")
+        if other._is_generator != self._is_generator:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._is_generator)
+                    + ", other="
+                    + str(other._is_generator)
+                    + ")"
+                )
+                diff_list.append(name + ".is_generator" + val_str)
+            else:
+                diff_list.append(name + ".is_generator")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -261,6 +359,7 @@ class InputVoltage(Input):
         S += getsizeof(self.current_dir)
         S += getsizeof(self.is_periodicity_t)
         S += getsizeof(self.is_periodicity_a)
+        S += getsizeof(self.is_generator)
         return S
 
     def as_dict(self, type_handle_ndarray=0, keep_function=False, **kwargs):
@@ -294,6 +393,7 @@ class InputVoltage(Input):
         InputVoltage_dict["current_dir"] = self.current_dir
         InputVoltage_dict["is_periodicity_t"] = self.is_periodicity_t
         InputVoltage_dict["is_periodicity_a"] = self.is_periodicity_a
+        InputVoltage_dict["is_generator"] = self.is_generator
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         InputVoltage_dict["__class__"] = "InputVoltage"
@@ -310,6 +410,7 @@ class InputVoltage(Input):
         self.current_dir = None
         self.is_periodicity_t = None
         self.is_periodicity_a = None
+        self.is_generator = None
         # Set to None the properties inherited from Input
         super(InputVoltage, self)._set_None()
 
@@ -457,6 +558,24 @@ class InputVoltage(Input):
         fget=_get_is_periodicity_a,
         fset=_set_is_periodicity_a,
         doc=u"""True to compute voltage/currents only on one angle periodicity (use periodicities defined in axes_dict[angle])
+
+        :Type: bool
+        """,
+    )
+
+    def _get_is_generator(self):
+        """getter of is_generator"""
+        return self._is_generator
+
+    def _set_is_generator(self, value):
+        """setter of is_generator"""
+        check_var("is_generator", value, "bool")
+        self._is_generator = value
+
+    is_generator = property(
+        fget=_get_is_generator,
+        fset=_set_is_generator,
+        doc=u"""True if machine is used as a generator
 
         :Type: bool
         """,

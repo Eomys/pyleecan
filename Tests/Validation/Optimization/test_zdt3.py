@@ -35,7 +35,7 @@ from pyleecan.definitions import DATA_DIR, TEST_DIR
 @pytest.mark.SingleOP
 def test_zdt3():
     # ### Defining reference Output
-    SCIM_001 = load(join(DATA_DIR, "Machine", "SCIM_001.json"))
+    SCIM_001 = load(join(DATA_DIR, "Machine", "Railway_Traction.json"))
 
     # Definition of the enforced output of the electrical module
     Nt = 2
@@ -145,3 +145,7 @@ def test_zdt3():
     axs[0].set_xlabel(r"$f_1(x)$")
     axs[0].set_ylabel(r"$f_2(x)$")
     fig.savefig(join(save_path, "test_zdt3.png"))
+
+
+if __name__ == "__main__":
+    test_zdt3()

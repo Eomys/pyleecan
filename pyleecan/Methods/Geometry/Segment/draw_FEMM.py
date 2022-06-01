@@ -42,6 +42,7 @@ def draw_FEMM(
     -------
     None
     """
+
     # Determine locations of the nodes
     X1, Y1 = self.begin.real, self.begin.imag
     X2, Y2 = self.end.real, self.end.imag

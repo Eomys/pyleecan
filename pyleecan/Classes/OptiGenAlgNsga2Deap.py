@@ -49,12 +49,18 @@ try:
 except ImportError as error:
     delete_toolbox = error
 
+try:
+    from ..Methods.Optimization.OptiGenAlgNsga2Deap.plot_pareto import plot_pareto
+except ImportError as error:
+    plot_pareto = error
+
 
 from ntpath import basename
 from os.path import isfile
 from ._check import CheckTypeError
 import numpy as np
 import random
+from numpy import isnan
 from cloudpickle import dumps, loads
 from ._check import CheckTypeError
 
@@ -136,6 +142,18 @@ class OptiGenAlgNsga2Deap(OptiGenAlg):
         )
     else:
         delete_toolbox = delete_toolbox
+    # cf Methods.Optimization.OptiGenAlgNsga2Deap.plot_pareto
+    if isinstance(plot_pareto, ImportError):
+        plot_pareto = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use OptiGenAlgNsga2Deap method plot_pareto: "
+                    + str(plot_pareto)
+                )
+            )
+        )
+    else:
+        plot_pareto = plot_pareto
     # save and copy methods are available in all object
     save = save
     copy = copy
@@ -239,7 +257,7 @@ class OptiGenAlgNsga2Deap(OptiGenAlg):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -249,7 +267,11 @@ class OptiGenAlgNsga2Deap(OptiGenAlg):
         diff_list = list()
 
         # Check the properties inherited from OptiGenAlg
-        diff_list.extend(super(OptiGenAlgNsga2Deap, self).compare(other, name=name))
+        diff_list.extend(
+            super(OptiGenAlgNsga2Deap, self).compare(
+                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
+            )
+        )
         if (other.toolbox is None and self.toolbox is not None) or (
             other.toolbox is not None and self.toolbox is None
         ):

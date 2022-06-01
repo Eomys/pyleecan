@@ -33,6 +33,8 @@ def plot_schematics(
     type_add_active=True,
     save_path=None,
     is_show_fig=True,
+    fig=None,
+    ax=None,
 ):
     """Plot the schematics of the slot
 
@@ -54,6 +56,17 @@ def plot_schematics(
         full path including folder, name and extension of the file to save if save_path is not None
     is_show_fig : bool
         To call show at the end of the method
+    fig : Matplotlib.figure.Figure
+        existing figure to use if None create a new one
+    ax : Matplotlib.axes.Axes object
+        Axis on which to plot the data
+
+    Returns
+    -------
+    fig : Matplotlib.figure.Figure
+        Figure containing the schematics
+    ax : Matplotlib.axes.Axes object
+        Axis containing the schematics
     """
 
     # Use some default parameter
@@ -74,7 +87,7 @@ def plot_schematics(
         lam = LamHole(
             Rint=0.05532, Rext=0.0812, is_internal=True, is_stator=False, hole=[hole]
         )
-        hole.plot_schematics(
+        return hole.plot_schematics(
             is_default=False,
             is_add_point_label=is_add_point_label,
             is_add_schematics=is_add_schematics,
@@ -82,12 +95,14 @@ def plot_schematics(
             type_add_active=type_add_active,
             save_path=save_path,
             is_show_fig=is_show_fig,
+            fig=fig,
+            ax=ax,
         )
     elif type_add_active == 0:
         # Remove magnets
         lam = self.parent.copy()
         lam.hole[0].remove_magnet()
-        lam.hole[0].plot_schematics(
+        return lam.hole[0].plot_schematics(
             is_default=False,
             is_add_point_label=is_add_point_label,
             is_add_schematics=is_add_schematics,
@@ -95,6 +110,8 @@ def plot_schematics(
             type_add_active=2,
             save_path=save_path,
             is_show_fig=is_show_fig,
+            fig=fig,
+            ax=ax,
         )
     else:
         # Getting the main plot
@@ -103,15 +120,15 @@ def plot_schematics(
         lam = self.parent
         alpha = pi / 2  # To rotate the schematics
         rot = exp(1j * alpha)
-        lam.plot(
+        fig, ax = lam.plot(
             alpha=pi / self.Zh + alpha,
             is_show_fig=False,
             is_lam_only=type_add_active == 0,
+            fig=fig,
+            ax=ax,
         )  # center hole on Ox axis
         sp = 2 * pi / self.Zh
         Rbo = self.get_Rbo()
-        fig = plt.gcf()
-        ax = plt.gca()
         point_dict = self._comp_point_coordinate()
 
         # Adding point label
@@ -219,7 +236,7 @@ def plot_schematics(
         Rint = self.parent.Rint
         Rext = self.parent.Rext
 
-        plt.axis("equal")
+        ax.axis("equal")
         ax.set_ylim(Rint, Rext)
         ax.set_xlim(-W, W)
         manager = plt.get_current_fig_manager()
@@ -232,7 +249,8 @@ def plot_schematics(
         # Save / Show
         if save_path is not None:
             fig.savefig(save_path)
-            plt.close()
+            plt.close(fig=fig)
 
         if is_show_fig:
             fig.show()
+        return fig, ax

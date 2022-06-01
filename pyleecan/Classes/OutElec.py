@@ -42,7 +42,13 @@ try:
 except ImportError as error:
     get_electrical = error
 
+try:
+    from ..Methods.Output.OutElec.get_Jrms import get_Jrms
+except ImportError as error:
+    get_Jrms = error
 
+
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 
@@ -99,6 +105,15 @@ class OutElec(FrozenClass):
         )
     else:
         get_electrical = get_electrical
+    # cf Methods.Output.OutElec.get_Jrms
+    if isinstance(get_Jrms, ImportError):
+        get_Jrms = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use OutElec method get_Jrms: " + str(get_Jrms))
+            )
+        )
+    else:
+        get_Jrms = get_Jrms
     # save and copy methods are available in all object
     save = save
     copy = copy
@@ -115,12 +130,17 @@ class OutElec(FrozenClass):
         Us=None,
         internal=None,
         OP=None,
-        Pem_av_ref=None,
-        Tem_av_ref=None,
+        Pem_av=None,
+        Tem_av=None,
         phase_dir=None,
         current_dir=None,
         PWM=None,
         eec=None,
+        P_out=None,
+        Jrms=None,
+        P_in=None,
+        Arms=None,
+        Erms=None,
         init_dict=None,
         init_str=None,
     ):
@@ -155,10 +175,10 @@ class OutElec(FrozenClass):
                 internal = init_dict["internal"]
             if "OP" in list(init_dict.keys()):
                 OP = init_dict["OP"]
-            if "Pem_av_ref" in list(init_dict.keys()):
-                Pem_av_ref = init_dict["Pem_av_ref"]
-            if "Tem_av_ref" in list(init_dict.keys()):
-                Tem_av_ref = init_dict["Tem_av_ref"]
+            if "Pem_av" in list(init_dict.keys()):
+                Pem_av = init_dict["Pem_av"]
+            if "Tem_av" in list(init_dict.keys()):
+                Tem_av = init_dict["Tem_av"]
             if "phase_dir" in list(init_dict.keys()):
                 phase_dir = init_dict["phase_dir"]
             if "current_dir" in list(init_dict.keys()):
@@ -167,6 +187,16 @@ class OutElec(FrozenClass):
                 PWM = init_dict["PWM"]
             if "eec" in list(init_dict.keys()):
                 eec = init_dict["eec"]
+            if "P_out" in list(init_dict.keys()):
+                P_out = init_dict["P_out"]
+            if "Jrms" in list(init_dict.keys()):
+                Jrms = init_dict["Jrms"]
+            if "P_in" in list(init_dict.keys()):
+                P_in = init_dict["P_in"]
+            if "Arms" in list(init_dict.keys()):
+                Arms = init_dict["Arms"]
+            if "Erms" in list(init_dict.keys()):
+                Erms = init_dict["Erms"]
         # Set the properties (value check and convertion are done in setter)
         self.parent = None
         self.axes_dict = axes_dict
@@ -177,12 +207,17 @@ class OutElec(FrozenClass):
         self.Us = Us
         self.internal = internal
         self.OP = OP
-        self.Pem_av_ref = Pem_av_ref
-        self.Tem_av_ref = Tem_av_ref
+        self.Pem_av = Pem_av
+        self.Tem_av = Tem_av
         self.phase_dir = phase_dir
         self.current_dir = current_dir
         self.PWM = PWM
         self.eec = eec
+        self.P_out = P_out
+        self.Jrms = Jrms
+        self.P_in = P_in
+        self.Arms = Arms
+        self.Erms = Erms
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -211,8 +246,8 @@ class OutElec(FrozenClass):
             OutElec_str += "OP = " + tmp
         else:
             OutElec_str += "OP = None" + linesep + linesep
-        OutElec_str += "Pem_av_ref = " + str(self.Pem_av_ref) + linesep
-        OutElec_str += "Tem_av_ref = " + str(self.Tem_av_ref) + linesep
+        OutElec_str += "Pem_av = " + str(self.Pem_av) + linesep
+        OutElec_str += "Tem_av = " + str(self.Tem_av) + linesep
         OutElec_str += "phase_dir = " + str(self.phase_dir) + linesep
         OutElec_str += "current_dir = " + str(self.current_dir) + linesep
         if self.PWM is not None:
@@ -225,6 +260,11 @@ class OutElec(FrozenClass):
             OutElec_str += "eec = " + tmp
         else:
             OutElec_str += "eec = None" + linesep + linesep
+        OutElec_str += "P_out = " + str(self.P_out) + linesep
+        OutElec_str += "Jrms = " + str(self.Jrms) + linesep
+        OutElec_str += "P_in = " + str(self.P_in) + linesep
+        OutElec_str += "Arms = " + str(self.Arms) + linesep
+        OutElec_str += "Erms = " + str(self.Erms) + linesep
         return OutElec_str
 
     def __eq__(self, other):
@@ -248,9 +288,9 @@ class OutElec(FrozenClass):
             return False
         if other.OP != self.OP:
             return False
-        if other.Pem_av_ref != self.Pem_av_ref:
+        if other.Pem_av != self.Pem_av:
             return False
-        if other.Tem_av_ref != self.Tem_av_ref:
+        if other.Tem_av != self.Tem_av:
             return False
         if other.phase_dir != self.phase_dir:
             return False
@@ -260,9 +300,19 @@ class OutElec(FrozenClass):
             return False
         if other.eec != self.eec:
             return False
+        if other.P_out != self.P_out:
+            return False
+        if other.Jrms != self.Jrms:
+            return False
+        if other.P_in != self.P_in:
+            return False
+        if other.Arms != self.Arms:
+            return False
+        if other.Erms != self.Erms:
+            return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -282,7 +332,10 @@ class OutElec(FrozenClass):
             for key in self.axes_dict:
                 diff_list.extend(
                     self.axes_dict[key].compare(
-                        other.axes_dict[key], name=name + ".axes_dict"
+                        other.axes_dict[key],
+                        name=name + ".axes_dict[" + str(key) + "]",
+                        ignore_list=ignore_list,
+                        is_add_value=is_add_value,
                     )
                 )
         if (other.Is is None and self.Is is not None) or (
@@ -290,57 +343,260 @@ class OutElec(FrozenClass):
         ):
             diff_list.append(name + ".Is None mismatch")
         elif self.Is is not None:
-            diff_list.extend(self.Is.compare(other.Is, name=name + ".Is"))
+            diff_list.extend(
+                self.Is.compare(
+                    other.Is,
+                    name=name + ".Is",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
+            )
         if (other.Ir is None and self.Ir is not None) or (
             other.Ir is not None and self.Ir is None
         ):
             diff_list.append(name + ".Ir None mismatch")
         elif self.Ir is not None:
-            diff_list.extend(self.Ir.compare(other.Ir, name=name + ".Ir"))
+            diff_list.extend(
+                self.Ir.compare(
+                    other.Ir,
+                    name=name + ".Ir",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
+            )
         if other._logger_name != self._logger_name:
-            diff_list.append(name + ".logger_name")
-        if other._Pj_losses != self._Pj_losses:
-            diff_list.append(name + ".Pj_losses")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._logger_name)
+                    + ", other="
+                    + str(other._logger_name)
+                    + ")"
+                )
+                diff_list.append(name + ".logger_name" + val_str)
+            else:
+                diff_list.append(name + ".logger_name")
+        if (
+            other._Pj_losses is not None
+            and self._Pj_losses is not None
+            and isnan(other._Pj_losses)
+            and isnan(self._Pj_losses)
+        ):
+            pass
+        elif other._Pj_losses != self._Pj_losses:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._Pj_losses)
+                    + ", other="
+                    + str(other._Pj_losses)
+                    + ")"
+                )
+                diff_list.append(name + ".Pj_losses" + val_str)
+            else:
+                diff_list.append(name + ".Pj_losses")
         if (other.Us is None and self.Us is not None) or (
             other.Us is not None and self.Us is None
         ):
             diff_list.append(name + ".Us None mismatch")
         elif self.Us is not None:
-            diff_list.extend(self.Us.compare(other.Us, name=name + ".Us"))
+            diff_list.extend(
+                self.Us.compare(
+                    other.Us,
+                    name=name + ".Us",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
+            )
         if (other.internal is None and self.internal is not None) or (
             other.internal is not None and self.internal is None
         ):
             diff_list.append(name + ".internal None mismatch")
         elif self.internal is not None:
             diff_list.extend(
-                self.internal.compare(other.internal, name=name + ".internal")
+                self.internal.compare(
+                    other.internal,
+                    name=name + ".internal",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
             )
         if (other.OP is None and self.OP is not None) or (
             other.OP is not None and self.OP is None
         ):
             diff_list.append(name + ".OP None mismatch")
         elif self.OP is not None:
-            diff_list.extend(self.OP.compare(other.OP, name=name + ".OP"))
-        if other._Pem_av_ref != self._Pem_av_ref:
-            diff_list.append(name + ".Pem_av_ref")
-        if other._Tem_av_ref != self._Tem_av_ref:
-            diff_list.append(name + ".Tem_av_ref")
+            diff_list.extend(
+                self.OP.compare(
+                    other.OP,
+                    name=name + ".OP",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
+            )
+        if (
+            other._Pem_av is not None
+            and self._Pem_av is not None
+            and isnan(other._Pem_av)
+            and isnan(self._Pem_av)
+        ):
+            pass
+        elif other._Pem_av != self._Pem_av:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._Pem_av)
+                    + ", other="
+                    + str(other._Pem_av)
+                    + ")"
+                )
+                diff_list.append(name + ".Pem_av" + val_str)
+            else:
+                diff_list.append(name + ".Pem_av")
+        if (
+            other._Tem_av is not None
+            and self._Tem_av is not None
+            and isnan(other._Tem_av)
+            and isnan(self._Tem_av)
+        ):
+            pass
+        elif other._Tem_av != self._Tem_av:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._Tem_av)
+                    + ", other="
+                    + str(other._Tem_av)
+                    + ")"
+                )
+                diff_list.append(name + ".Tem_av" + val_str)
+            else:
+                diff_list.append(name + ".Tem_av")
         if other._phase_dir != self._phase_dir:
-            diff_list.append(name + ".phase_dir")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._phase_dir)
+                    + ", other="
+                    + str(other._phase_dir)
+                    + ")"
+                )
+                diff_list.append(name + ".phase_dir" + val_str)
+            else:
+                diff_list.append(name + ".phase_dir")
         if other._current_dir != self._current_dir:
-            diff_list.append(name + ".current_dir")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._current_dir)
+                    + ", other="
+                    + str(other._current_dir)
+                    + ")"
+                )
+                diff_list.append(name + ".current_dir" + val_str)
+            else:
+                diff_list.append(name + ".current_dir")
         if (other.PWM is None and self.PWM is not None) or (
             other.PWM is not None and self.PWM is None
         ):
             diff_list.append(name + ".PWM None mismatch")
         elif self.PWM is not None:
-            diff_list.extend(self.PWM.compare(other.PWM, name=name + ".PWM"))
+            diff_list.extend(
+                self.PWM.compare(
+                    other.PWM,
+                    name=name + ".PWM",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
+            )
         if (other.eec is None and self.eec is not None) or (
             other.eec is not None and self.eec is None
         ):
             diff_list.append(name + ".eec None mismatch")
         elif self.eec is not None:
-            diff_list.extend(self.eec.compare(other.eec, name=name + ".eec"))
+            diff_list.extend(
+                self.eec.compare(
+                    other.eec,
+                    name=name + ".eec",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
+            )
+        if (
+            other._P_out is not None
+            and self._P_out is not None
+            and isnan(other._P_out)
+            and isnan(self._P_out)
+        ):
+            pass
+        elif other._P_out != self._P_out:
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._P_out) + ", other=" + str(other._P_out) + ")"
+                )
+                diff_list.append(name + ".P_out" + val_str)
+            else:
+                diff_list.append(name + ".P_out")
+        if (
+            other._Jrms is not None
+            and self._Jrms is not None
+            and isnan(other._Jrms)
+            and isnan(self._Jrms)
+        ):
+            pass
+        elif other._Jrms != self._Jrms:
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._Jrms) + ", other=" + str(other._Jrms) + ")"
+                )
+                diff_list.append(name + ".Jrms" + val_str)
+            else:
+                diff_list.append(name + ".Jrms")
+        if (
+            other._P_in is not None
+            and self._P_in is not None
+            and isnan(other._P_in)
+            and isnan(self._P_in)
+        ):
+            pass
+        elif other._P_in != self._P_in:
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._P_in) + ", other=" + str(other._P_in) + ")"
+                )
+                diff_list.append(name + ".P_in" + val_str)
+            else:
+                diff_list.append(name + ".P_in")
+        if (
+            other._Arms is not None
+            and self._Arms is not None
+            and isnan(other._Arms)
+            and isnan(self._Arms)
+        ):
+            pass
+        elif other._Arms != self._Arms:
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._Arms) + ", other=" + str(other._Arms) + ")"
+                )
+                diff_list.append(name + ".Arms" + val_str)
+            else:
+                diff_list.append(name + ".Arms")
+        if (
+            other._Erms is not None
+            and self._Erms is not None
+            and isnan(other._Erms)
+            and isnan(self._Erms)
+        ):
+            pass
+        elif other._Erms != self._Erms:
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._Erms) + ", other=" + str(other._Erms) + ")"
+                )
+                diff_list.append(name + ".Erms" + val_str)
+            else:
+                diff_list.append(name + ".Erms")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -359,12 +615,17 @@ class OutElec(FrozenClass):
         S += getsizeof(self.Us)
         S += getsizeof(self.internal)
         S += getsizeof(self.OP)
-        S += getsizeof(self.Pem_av_ref)
-        S += getsizeof(self.Tem_av_ref)
+        S += getsizeof(self.Pem_av)
+        S += getsizeof(self.Tem_av)
         S += getsizeof(self.phase_dir)
         S += getsizeof(self.current_dir)
         S += getsizeof(self.PWM)
         S += getsizeof(self.eec)
+        S += getsizeof(self.P_out)
+        S += getsizeof(self.Jrms)
+        S += getsizeof(self.P_in)
+        S += getsizeof(self.Arms)
+        S += getsizeof(self.Erms)
         return S
 
     def as_dict(self, type_handle_ndarray=0, keep_function=False, **kwargs):
@@ -434,8 +695,8 @@ class OutElec(FrozenClass):
                 keep_function=keep_function,
                 **kwargs
             )
-        OutElec_dict["Pem_av_ref"] = self.Pem_av_ref
-        OutElec_dict["Tem_av_ref"] = self.Tem_av_ref
+        OutElec_dict["Pem_av"] = self.Pem_av
+        OutElec_dict["Tem_av"] = self.Tem_av
         OutElec_dict["phase_dir"] = self.phase_dir
         OutElec_dict["current_dir"] = self.current_dir
         if self.PWM is None:
@@ -454,6 +715,11 @@ class OutElec(FrozenClass):
                 keep_function=keep_function,
                 **kwargs
             )
+        OutElec_dict["P_out"] = self.P_out
+        OutElec_dict["Jrms"] = self.Jrms
+        OutElec_dict["P_in"] = self.P_in
+        OutElec_dict["Arms"] = self.Arms
+        OutElec_dict["Erms"] = self.Erms
         # The class name is added to the dict for deserialisation purpose
         OutElec_dict["__class__"] = "OutElec"
         return OutElec_dict
@@ -471,14 +737,19 @@ class OutElec(FrozenClass):
             self.internal._set_None()
         if self.OP is not None:
             self.OP._set_None()
-        self.Pem_av_ref = None
-        self.Tem_av_ref = None
+        self.Pem_av = None
+        self.Tem_av = None
         self.phase_dir = None
         self.current_dir = None
         if self.PWM is not None:
             self.PWM._set_None()
         if self.eec is not None:
             self.eec._set_None()
+        self.P_out = None
+        self.Jrms = None
+        self.P_in = None
+        self.Arms = None
+        self.Erms = None
 
     def _get_axes_dict(self):
         """getter of axes_dict"""
@@ -727,37 +998,37 @@ class OutElec(FrozenClass):
         """,
     )
 
-    def _get_Pem_av_ref(self):
-        """getter of Pem_av_ref"""
-        return self._Pem_av_ref
+    def _get_Pem_av(self):
+        """getter of Pem_av"""
+        return self._Pem_av
 
-    def _set_Pem_av_ref(self, value):
-        """setter of Pem_av_ref"""
-        check_var("Pem_av_ref", value, "float")
-        self._Pem_av_ref = value
+    def _set_Pem_av(self, value):
+        """setter of Pem_av"""
+        check_var("Pem_av", value, "float")
+        self._Pem_av = value
 
-    Pem_av_ref = property(
-        fget=_get_Pem_av_ref,
-        fset=_set_Pem_av_ref,
-        doc=u"""Theoretical Average Electromagnetic Power
+    Pem_av = property(
+        fget=_get_Pem_av,
+        fset=_set_Pem_av,
+        doc=u"""Average Electromagnetic power
 
         :Type: float
         """,
     )
 
-    def _get_Tem_av_ref(self):
-        """getter of Tem_av_ref"""
-        return self._Tem_av_ref
+    def _get_Tem_av(self):
+        """getter of Tem_av"""
+        return self._Tem_av
 
-    def _set_Tem_av_ref(self, value):
-        """setter of Tem_av_ref"""
-        check_var("Tem_av_ref", value, "float")
-        self._Tem_av_ref = value
+    def _set_Tem_av(self, value):
+        """setter of Tem_av"""
+        check_var("Tem_av", value, "float")
+        self._Tem_av = value
 
-    Tem_av_ref = property(
-        fget=_get_Tem_av_ref,
-        fset=_set_Tem_av_ref,
-        doc=u"""Theoretical Average Electromagnetic torque
+    Tem_av = property(
+        fget=_get_Tem_av,
+        fset=_set_Tem_av,
+        doc=u"""Average Electromagnetic torque
 
         :Type: float
         """,
@@ -870,5 +1141,96 @@ class OutElec(FrozenClass):
         doc=u"""Electric Equivalent Circuit used for OP resolution
 
         :Type: EEC
+        """,
+    )
+
+    def _get_P_out(self):
+        """getter of P_out"""
+        return self._P_out
+
+    def _set_P_out(self, value):
+        """setter of P_out"""
+        check_var("P_out", value, "float")
+        self._P_out = value
+
+    P_out = property(
+        fget=_get_P_out,
+        fset=_set_P_out,
+        doc=u"""Output power
+
+        :Type: float
+        """,
+    )
+
+    def _get_Jrms(self):
+        """getter of Jrms"""
+        return self._Jrms
+
+    def _set_Jrms(self, value):
+        """setter of Jrms"""
+        check_var("Jrms", value, "float", Vmin=0)
+        self._Jrms = value
+
+    Jrms = property(
+        fget=_get_Jrms,
+        fset=_set_Jrms,
+        doc=u"""RMS current density in slots
+
+        :Type: float
+        :min: 0
+        """,
+    )
+
+    def _get_P_in(self):
+        """getter of P_in"""
+        return self._P_in
+
+    def _set_P_in(self, value):
+        """setter of P_in"""
+        check_var("P_in", value, "float")
+        self._P_in = value
+
+    P_in = property(
+        fget=_get_P_in,
+        fset=_set_P_in,
+        doc=u"""Input power
+
+        :Type: float
+        """,
+    )
+
+    def _get_Arms(self):
+        """getter of Arms"""
+        return self._Arms
+
+    def _set_Arms(self, value):
+        """setter of Arms"""
+        check_var("Arms", value, "float")
+        self._Arms = value
+
+    Arms = property(
+        fget=_get_Arms,
+        fset=_set_Arms,
+        doc=u"""RMS linear current density along airgap
+
+        :Type: float
+        """,
+    )
+
+    def _get_Erms(self):
+        """getter of Erms"""
+        return self._Erms
+
+    def _set_Erms(self, value):
+        """setter of Erms"""
+        check_var("Erms", value, "float")
+        self._Erms = value
+
+    Erms = property(
+        fget=_get_Erms,
+        fset=_set_Erms,
+        doc=u"""RMS back-emf
+
+        :Type: float
         """,
     )

@@ -23,6 +23,7 @@ except ImportError as error:
     build_meshsolution = error
 
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 
@@ -118,7 +119,7 @@ class ElmerResultsVTU(Elmer):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -128,13 +129,43 @@ class ElmerResultsVTU(Elmer):
         diff_list = list()
 
         # Check the properties inherited from Elmer
-        diff_list.extend(super(ElmerResultsVTU, self).compare(other, name=name))
+        diff_list.extend(
+            super(ElmerResultsVTU, self).compare(
+                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
+            )
+        )
         if other._label != self._label:
-            diff_list.append(name + ".label")
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._label) + ", other=" + str(other._label) + ")"
+                )
+                diff_list.append(name + ".label" + val_str)
+            else:
+                diff_list.append(name + ".label")
         if other._file_path != self._file_path:
-            diff_list.append(name + ".file_path")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._file_path)
+                    + ", other="
+                    + str(other._file_path)
+                    + ")"
+                )
+                diff_list.append(name + ".file_path" + val_str)
+            else:
+                diff_list.append(name + ".file_path")
         if other._store_dict != self._store_dict:
-            diff_list.append(name + ".store_dict")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._store_dict)
+                    + ", other="
+                    + str(other._store_dict)
+                    + ")"
+                )
+                diff_list.append(name + ".store_dict" + val_str)
+            else:
+                diff_list.append(name + ".store_dict")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
