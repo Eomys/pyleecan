@@ -5,7 +5,7 @@ from ......Classes.LamSlot import LamSlot
 
 from ......GUI.Dialog.DMachineSetup.SMSlot.PMSlot10.PMSlot10 import PMSlot10
 from ......GUI.Dialog.DMachineSetup.SMSlot.PMSlot11.PMSlot11 import PMSlot11
-from ......GUI.Dialog.DMachineSetup.DNotch.WNotch.Ui_WNotch import Ui_WNotch
+from ......GUI.Dialog.DMachineSetup.DNotchTab.WNotch.Ui_WNotch import Ui_WNotch
 
 
 class WNotch(Ui_WNotch, QWidget):

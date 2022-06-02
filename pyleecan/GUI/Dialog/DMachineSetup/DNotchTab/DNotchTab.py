@@ -2,15 +2,14 @@
 
 
 from PySide2.QtCore import Signal
-from PySide2.QtWidgets import QMessageBox, QWidget, QDialog
+from PySide2.QtWidgets import QMessageBox, QDialog
 from logging import getLogger
 
 
 from .....loggers import GUI_LOG_NAME
 from .....Methods.Slot.Slot import SlotCheckError
-from .....GUI.Dialog.DMachineSetup.DNotch.WNotch.WNotch import WNotch
-from .....GUI.Dialog.DMachineSetup.DNotch.Ui_DNotchTab import Ui_DNotchTab
-from .....GUI.Dialog.DMachineSetup.SMSlot.PMSlot10.PMSlot10 import PMSlot10
+from .....GUI.Dialog.DMachineSetup.DNotchTab.WNotch.WNotch import WNotch
+from .....GUI.Dialog.DMachineSetup.DNotchTab.Ui_DNotchTab import Ui_DNotchTab
 from .....Functions.Plot.set_plot_gui_icon import set_plot_gui_icon
 from .....Classes.NotchEvenDist import NotchEvenDist
 from .....Classes.SlotM10 import SlotM10
