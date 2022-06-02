@@ -17,7 +17,7 @@ from pyleecan.Functions.load import load
 
 from pyleecan.definitions import DATA_DIR
 
-from SciDataTool.Functions.Plot.plot_2D import plot_2D
+from SciDataTool.Functions.Plot.plot_2D import plot_2D 
 
 
 is_show_fig = False
@@ -52,6 +52,12 @@ def test_FEMM_Loss_SPMSM():
     loss_model = LossModelSteinmetz(
         k_hy=k_hy, k_ed=k_ed, alpha_f=alpha_f, alpha_B=alpha_B
     )
+
+    assert (k_hy == loss_model.k_hy and
+        k_ed == loss_model.k_ed and
+        alpha_f == loss_model.alpha_f and
+        alpha_B == loss_model.alpha_B), (
+        "As we provided the coefficients, the loss model should not change them")
 
     simu = Simu1(name="test_FEMM_Loss_SPMSM", machine=machine)
 
@@ -169,6 +175,8 @@ def test_FEMM_Loss_Prius():
     machine = load(join(DATA_DIR, "Machine", "Toyota_Prius_loss.json"))
 
     simu = Simu1(name="test_FEMM_Loss_Prius", machine=machine)
+    
+    Cprox=1
 
     # Current for MTPA
     Ic = 230 * np.exp(1j * 140 * np.pi / 180)
@@ -190,16 +198,8 @@ def test_FEMM_Loss_Prius():
         is_calc_torque_energy=False,
     )
 
-    k_hy = 0.011381
-    k_ed = 4.67e-5
-    alpha_f = 1.1499
-    alpha_B = 1.7622
-    Cprox = 1  # Neglecting proximity effect
 
-    loss_model = LossModelSteinmetz(
-        k_hy=k_hy, k_ed=k_ed, alpha_f=alpha_f, alpha_B=alpha_B
-    )
-
+    loss_model = LossModelSteinmetz()
     simu.loss = LossFEMM(
         Cp=Cprox,
         is_get_meshsolution=True,
@@ -289,4 +289,4 @@ if __name__ == "__main__":
 
     out = test_FEMM_Loss_SPMSM()
 
-    # out = test_FEMM_Loss_Prius()
+    out = test_FEMM_Loss_Prius() 
