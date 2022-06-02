@@ -1,4 +1,5 @@
 import pytest
+from pyleecan.Classes.SlotCirc import SlotCirc
 from pyleecan.Classes.SlotM10 import SlotM10
 from pyleecan.Classes.SlotM11 import SlotM11
 from pyleecan.Classes.SlotM12 import SlotM12
@@ -46,6 +47,14 @@ if not isdir(SCHEMATICS_PATH):
     makedirs(SCHEMATICS_PATH)
 
 slot_test = list()
+
+slot_test.append(
+    {
+        "test_obj": SlotCirc(),
+        "type_add_active": 0,
+    }
+)
+
 slot_test.append(
     {
         "test_obj": SlotM10(),
@@ -315,7 +324,7 @@ class Test_plot_schematics(object):
             is_add_main_line=True,
             type_add_active=0,
             save_path=file_path,
-            is_show_fig=False,
+            is_show_fig=True,
         )
         if test_dict["type_add_active"] == 1:
             ## Wind only
@@ -397,9 +406,9 @@ class Test_plot_schematics(object):
 
 if __name__ == "__main__":
     a = Test_plot_schematics()
-    # a.test_slot(slot_test[9])
+    a.test_slot(slot_test[0])
     # a.test_slot_point(slot_test[-1])
-    for slot in slot_test:
-        a.test_slot(slot)
+    # for slot in slot_test:
+    #     a.test_slot(slot)
     #     a.test_slot_point(slot)
     print("Done")
