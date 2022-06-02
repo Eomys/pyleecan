@@ -27,11 +27,12 @@ from pyleecan.Functions.load import load
 
 from pyleecan.definitions import DATA_DIR
 
-from SciDataTool.Functions.Plot.plot_2D import plot_2D 
+from SciDataTool.Functions.Plot.plot_2D import plot_2D
 from pyleecan.Functions.Plot import dict_2D
 
 
 is_show_fig = True
+
 
 @pytest.mark.long_5s
 @pytest.mark.FEMM
@@ -48,11 +49,10 @@ def test_FEMM_loss_SCIM_L2EP():
 
     simu = Simu1(name="test_FEMM_Loss_SCIM_L2EP", machine=machine)
 
-
     simu.input = InputCurrent(
-        Nt_tot=4 * 40 ,
+        Nt_tot=4 * 40,
         Na_tot=200 * 8,
-        OP=OPslip(felec = 50, slip_ref = 0.0, I0_ref=24.5, IPhi0_ref=140*np.pi/180),
+        OP=OPslip(felec=50, slip_ref=0.0, I0_ref=24.5, IPhi0_ref=140 * np.pi / 180),
         is_periodicity_t=True,
         is_periodicity_a=True,
     )
@@ -69,35 +69,41 @@ def test_FEMM_loss_SCIM_L2EP():
     simu.loss = LossFEMM(
         is_get_meshsolution=True,
         Tsta=100,
-        model_dict={"stator core Steinmetz": LossModelSteinmetz(group = "stator core"),
-                    "rotor core Steinmetz": LossModelSteinmetz(group = "rotor core"),
-                    "joule": LossModelWinding(group = "stator winding",
-                                              type_skin_effect = 0),
-                    "proximity": LossModelProximity(group = "stator winding")}
+        model_dict={
+            "stator core Steinmetz": LossModelSteinmetz(group="stator core"),
+            "rotor core Steinmetz": LossModelSteinmetz(group="rotor core"),
+            "joule": LossModelWinding(group="stator winding", type_skin_effect=0),
+            "proximity": LossModelProximity(group="stator winding"),
+        },
     )
 
     out = simu.run()
 
     power_dict = {
         "total_power": out.mag.Pem_av,
-        **dict([(o.name,o.get_loss_scalar(out.elec.OP.felec)) for o in out.loss.loss_list])
+        **dict(
+            [(o.name, o.get_loss_scalar(out.elec.OP.felec)) for o in out.loss.loss_list]
+        ),
     }
     print(power_dict)
 
     speed_array = np.linspace(10, 8000, 100)
     p = machine.get_pole_pair_number()
 
-    array_list = [np.array([o.get_loss_scalar(speed / 60 *p) for speed in speed_array])
-                  for o in out.loss.loss_list if o.name != 'overall']
+    array_list = [
+        np.array([o.get_loss_scalar(speed / 60 * p) for speed in speed_array])
+        for o in out.loss.loss_list
+        if o.name != "overall"
+    ]
     array_list.append(sum(array_list))
-    
+
     # def calc_loss(coeff, B):
     #     f=80
     #     if len(coeff)==4:
     #         return coeff[0] * 80 ** coeff[2] *B**coeff[3]+coeff[1]*(f*B)**2
     #     else:
     #         return coeff[0]*80*B**coeff[1]+coeff[2]*(80*B)**coeff[3]+coeff[4]*(80*B)**coeff[5]
-    
+
     # B_list=np.linspace(0,3.5,100)
     # loss=simu.loss.model_dict["stator core Steinmetz"]
     # coeffs = loss.k_hy, loss.k_ed, loss.alpha_f, loss.alpha_B
@@ -105,8 +111,8 @@ def test_FEMM_loss_SCIM_L2EP():
     # loss=simu.loss.model_dict["stator core Bertotti"]
     # coeffs = loss.k_hy, loss.alpha_hy, loss.k_ed, loss.alpha_ed, loss.k_ex, loss.alpha_ex
     # plot_loss_B=np.array([calc_loss(coeffs, B) for B in B_list])
-    # import matplotlib.pyplot as plt 
-    
+    # import matplotlib.pyplot as plt
+
     # plt.plot(B_list, plot_loss_S, color='red')
     # plt.plot(B_list, plot_loss_B, color='blue')
     # plt.show()
@@ -126,7 +132,7 @@ def test_FEMM_loss_SCIM_L2EP():
         #         )
         #         group_names.pop()
         #     else:
-                
+
         #         loss.get_mesh_solution().plot_contour(
         #             "freqs=sum",
         #             label=f"{loss.name} Loss",
@@ -140,8 +146,8 @@ def test_FEMM_loss_SCIM_L2EP():
             ylabel="Losses [W]",
             legend_list=[o.name for o in out.loss.loss_list] + ["overall loss"],
         )
-            
-         # Plot the flux
+
+        # Plot the flux
         out.mag.B.plot_2D_Data("angle", **dict_2D)
         # Plot the torque
         out.mag.Tem.plot_2D_Data("time", **dict_2D)
@@ -170,8 +176,6 @@ def test_FEMM_loss_SCIM_L2EP():
     # with open(F"{SPEED} rpm.txt", "w") as f:
     #     f.write(txt)
 
-
-
     return out
 
 
@@ -186,29 +190,29 @@ def test_FEMM_loss_SCIM_L2EP():
 def test_FEMM_loss_Audi_etron():
     """Test to calculate losses in Toyota_Prius using LossFEMM model based on motoranalysis validation"""
 
-    machine = load(join(DATA_DIR, "Machine", "Audi_etron_loss.json"))
+    machine = load(join(DATA_DIR, "Machine", "Audi_eTron.json"))
 
     simu = Simu1(name="test_FEMM_Loss_Audi_etron", machine=machine)
-    
+
     param_list = [
-    {
-        "U0_ref": 144,
-        "N0": 4832,
-        "slip_ref": 0.047,
-        "Tem_av": 247,
-        "I1_abs": 333,
-        "Pjoule_s": 6304,
-        "Pjoule_r": 6160,
-    },
-    {
-        "U0_ref": 200,
-        "N0": 9664,
-        "slip_ref": 0.018,
-        "Tem_av": 107,
-        "I1_abs": 181,
-        "Pjoule_s": 1869,
-        "Pjoule_r": 1979,
-    },
+        {
+            "U0_ref": 144,
+            "N0": 4832,
+            "slip_ref": 0.047,
+            "Tem_av": 247,
+            "I1_abs": 333,
+            "Pjoule_s": 6304,
+            "Pjoule_r": 6160,
+        },
+        {
+            "U0_ref": 200,
+            "N0": 9664,
+            "slip_ref": 0.018,
+            "Tem_av": 107,
+            "I1_abs": 181,
+            "Pjoule_s": 1869,
+            "Pjoule_r": 1979,
+        },
     ]
     param_dict = param_list[0]
 
@@ -242,7 +246,7 @@ def test_FEMM_loss_Audi_etron():
             2.66677778e02,
             3.00000000e02,
         ]
-    )    
+    )
 
     Lm_table = param_dict["Lm"]
     Im_table = param_dict["Im"]
@@ -254,19 +258,19 @@ def test_FEMM_loss_Audi_etron():
     #     is_periodicity_t=True,
     #     is_periodicity_a=True,
     # )
-    
+
     simu.input = InputVoltage(
-    OP=OPslip(
-        U0_ref=param_dict["U0_ref"],
-        N0=param_dict["N0"],
-        slip_ref=param_dict["slip_ref"],
-    ),
-    Na_tot=1000 * 2,
-    Nt_tot=400 * 2,
-    is_periodicity_a=True,
-    is_periodicity_t=False,
-    # Nrev=1,
-    angle_rotor_initial=0 * 0.02,
+        OP=OPslip(
+            U0_ref=param_dict["U0_ref"],
+            N0=param_dict["N0"],
+            slip_ref=param_dict["slip_ref"],
+        ),
+        Na_tot=1000 * 2,
+        Nt_tot=400 * 2,
+        is_periodicity_a=True,
+        is_periodicity_t=False,
+        # Nrev=1,
+        angle_rotor_initial=0 * 0.02,
     )
 
     ELUT_Audi_eTron = LUTslip()
@@ -305,35 +309,41 @@ def test_FEMM_loss_Audi_etron():
     simu.loss = LossFEMM(
         is_get_meshsolution=True,
         Tsta=100,
-        model_dict={"stator core Steinmetz": LossModelSteinmetz(group = "stator core"),
-                    "rotor core Steinmetz": LossModelSteinmetz(group = "rotor core"),
-                    "joule": LossModelWinding(group = "stator winding",
-                                              type_skin_effect = 1),
-                    "proximity": LossModelProximity(group = "stator winding")}
+        model_dict={
+            "stator core Steinmetz": LossModelSteinmetz(group="stator core"),
+            "rotor core Steinmetz": LossModelSteinmetz(group="rotor core"),
+            "joule": LossModelWinding(group="stator winding", type_skin_effect=1),
+            "proximity": LossModelProximity(group="stator winding"),
+        },
     )
 
     out = simu.run()
 
     power_dict = {
         "total_power": out.mag.Pem_av,
-        **dict([(o.name,o.get_loss_scalar(out.elec.OP.felec)) for o in out.loss.loss_list])
+        **dict(
+            [(o.name, o.get_loss_scalar(out.elec.OP.felec)) for o in out.loss.loss_list]
+        ),
     }
     print(power_dict)
 
     speed_array = np.linspace(10, 8000, 100)
     p = machine.get_pole_pair_number()
 
-    array_list = [np.array([o.get_loss_scalar(speed / 60 *p) for speed in speed_array])
-                  for o in out.loss.loss_list if o.name != 'overall']
+    array_list = [
+        np.array([o.get_loss_scalar(speed / 60 * p) for speed in speed_array])
+        for o in out.loss.loss_list
+        if o.name != "overall"
+    ]
     array_list.append(sum(array_list))
-    
+
     # def calc_loss(coeff, B):
     #     f=80
     #     if len(coeff)==4:
     #         return coeff[0] * 80 ** coeff[2] *B**coeff[3]+coeff[1]*(f*B)**2
     #     else:
     #         return coeff[0]*80*B**coeff[1]+coeff[2]*(80*B)**coeff[3]+coeff[4]*(80*B)**coeff[5]
-    
+
     # B_list=np.linspace(0,3.5,100)
     # loss=simu.loss.model_dict["stator core Steinmetz"]
     # coeffs = loss.k_hy, loss.k_ed, loss.alpha_f, loss.alpha_B
@@ -341,8 +351,8 @@ def test_FEMM_loss_Audi_etron():
     # loss=simu.loss.model_dict["stator core Bertotti"]
     # coeffs = loss.k_hy, loss.alpha_hy, loss.k_ed, loss.alpha_ed, loss.k_ex, loss.alpha_ex
     # plot_loss_B=np.array([calc_loss(coeffs, B) for B in B_list])
-    # import matplotlib.pyplot as plt 
-    
+    # import matplotlib.pyplot as plt
+
     # plt.plot(B_list, plot_loss_S, color='red')
     # plt.plot(B_list, plot_loss_B, color='blue')
     # plt.show()
@@ -362,7 +372,7 @@ def test_FEMM_loss_Audi_etron():
         #         )
         #         group_names.pop()
         #     else:
-                
+
         #         loss.get_mesh_solution().plot_contour(
         #             "freqs=sum",
         #             label=f"{loss.name} Loss",
@@ -376,8 +386,8 @@ def test_FEMM_loss_Audi_etron():
             ylabel="Losses [W]",
             legend_list=[o.name for o in out.loss.loss_list] + ["overall loss"],
         )
-        
-         # Plot the flux
+
+        # Plot the flux
         out.mag.B.plot_2D_Data("angle", **dict_2D)
         # Plot the torque
         out.mag.Tem.plot_2D_Data("time", **dict_2D)
@@ -406,12 +416,11 @@ def test_FEMM_loss_Audi_etron():
     # with open(F"{SPEED} rpm.txt", "w") as f:
     #     f.write(txt)
 
-
     return out
 
 
 # To run it without pytest
 if __name__ == "__main__":
 
-    out = test_FEMM_loss_SCIM_L2EP() 
-    # out = test_FEMM_loss_Audi_etron() 
+    out = test_FEMM_loss_SCIM_L2EP()
+    # out = test_FEMM_loss_Audi_etron()
