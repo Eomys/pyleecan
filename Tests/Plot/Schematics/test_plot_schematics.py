@@ -51,6 +51,7 @@ slot_test = list()
 slot_test.append(
     {
         "test_obj": SlotCirc(),
+        "type_add_active": 0,
     }
 )
 
@@ -323,7 +324,7 @@ class Test_plot_schematics(object):
             is_add_main_line=True,
             type_add_active=0,
             save_path=file_path,
-            is_show_fig=False,
+            is_show_fig=True,
         )
         if test_dict["type_add_active"] == 1:
             ## Wind only

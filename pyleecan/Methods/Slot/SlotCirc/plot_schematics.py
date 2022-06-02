@@ -17,7 +17,6 @@ from ....Functions.Plot import (
     SC_LINE_STYLE,
     SC_LINE_WIDTH,
     TEXT_BOX,
-    plot_quote,
 )
 from ....Methods import ParentMissingError
 
@@ -30,6 +29,7 @@ def plot_schematics(
     is_add_point_label=False,
     is_add_schematics=True,
     is_add_main_line=True,
+    type_add_active=0,
     save_path=None,
     is_show_fig=True,
     fig=None,
@@ -70,7 +70,7 @@ def plot_schematics(
 
     # Use some default parameter
     if is_default:
-        slot = type(self)(Zs=8, H0=20e-3, W0=45e-3)
+        slot = type(self)(Zs=8, H0=10e-3, W0=45e-3)
         lam = LamSlot(
             Rint=0.1, Rext=0.135, is_internal=True, is_stator=False, slot=slot
         )
@@ -79,6 +79,7 @@ def plot_schematics(
             is_add_point_label=is_add_point_label,
             is_add_schematics=is_add_schematics,
             is_add_main_line=is_add_main_line,
+            type_add_active=type_add_active,
             save_path=save_path,
             is_show_fig=is_show_fig,
             fig=fig,
@@ -119,12 +120,12 @@ def plot_schematics(
                 color=ARROW_COLOR,
                 linewidth=ARROW_WIDTH,
                 label="W0",
-                offset_label=self.Hmag * 0.1,
+                offset_label=self.H0 * 0.3,
                 is_arrow=True,
                 fontsize=SC_FONT_SIZE,
             )
             # H0
-            line = Segment(point_dict["Z1"], point_dict["ZM"])
+            line = Segment(point_dict["ZC"], point_dict["ZM"])
             line.plot(
                 fig=fig,
                 ax=ax,
