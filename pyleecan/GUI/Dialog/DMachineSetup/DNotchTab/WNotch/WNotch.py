@@ -79,6 +79,7 @@ class WNotch(Ui_WNotch, QWidget):
         self.c_notch_type.currentIndexChanged.connect(self.set_notch_type)
         self.si_Zs.editingFinished.connect(self.set_Zs)
         self.lf_alpha.editingFinished.connect(self.set_alpha)
+        self.c_alpha_unit.currentIndexChanged.connect(self.set_alpha_unit)
 
     def emit_save(self):
         """Send a saveNeeded signal to the DMachineSetup"""

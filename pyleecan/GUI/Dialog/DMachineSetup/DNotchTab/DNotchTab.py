@@ -104,7 +104,7 @@ class DNotchTab(Ui_DNotchTab, QDialog):
             notch_index = self.obj.notch.index(notch)
         tab = WNotch(self, index=notch_index)
         tab.saveNeeded.connect(self.emit_save)
-        self.tab_notch.addTab(tab, "notch " + str(notch_index + 1))
+        self.tab_notch.addTab(tab, "Notch " + str(notch_index + 1))
 
     def s_remove(self):
         """Signal to remove the last notch
@@ -128,7 +128,7 @@ class DNotchTab(Ui_DNotchTab, QDialog):
         """
 
         # We have to make sure the notches are right before trying to plot it
-        error = self.check(self.obj)
+        error = self.check()
         if error:  # Error => Display it
             err_msg = "Error in Notch definition:\n" + error
             getLogger(GUI_LOG_NAME).debug(err_msg)
