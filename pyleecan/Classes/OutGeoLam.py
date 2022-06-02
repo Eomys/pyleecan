@@ -16,6 +16,7 @@ from ..Functions.Load.import_class import import_class
 from ._frozen import FrozenClass
 
 from numpy import array, array_equal
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 
@@ -154,7 +155,7 @@ class OutGeoLam(FrozenClass):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -163,25 +164,135 @@ class OutGeoLam(FrozenClass):
             return ["type(" + name + ")"]
         diff_list = list()
         if other._name_phase != self._name_phase:
-            diff_list.append(name + ".name_phase")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._name_phase)
+                    + ", other="
+                    + str(other._name_phase)
+                    + ")"
+                )
+                diff_list.append(name + ".name_phase" + val_str)
+            else:
+                diff_list.append(name + ".name_phase")
         if not array_equal(other.BH_curve, self.BH_curve):
             diff_list.append(name + ".BH_curve")
-        if other._Ksfill != self._Ksfill:
-            diff_list.append(name + ".Ksfill")
-        if other._S_slot != self._S_slot:
-            diff_list.append(name + ".S_slot")
-        if other._S_slot_wind != self._S_slot_wind:
-            diff_list.append(name + ".S_slot_wind")
-        if other._S_wind_act != self._S_wind_act:
-            diff_list.append(name + ".S_wind_act")
+        if (
+            other._Ksfill is not None
+            and self._Ksfill is not None
+            and isnan(other._Ksfill)
+            and isnan(self._Ksfill)
+        ):
+            pass
+        elif other._Ksfill != self._Ksfill:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._Ksfill)
+                    + ", other="
+                    + str(other._Ksfill)
+                    + ")"
+                )
+                diff_list.append(name + ".Ksfill" + val_str)
+            else:
+                diff_list.append(name + ".Ksfill")
+        if (
+            other._S_slot is not None
+            and self._S_slot is not None
+            and isnan(other._S_slot)
+            and isnan(self._S_slot)
+        ):
+            pass
+        elif other._S_slot != self._S_slot:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._S_slot)
+                    + ", other="
+                    + str(other._S_slot)
+                    + ")"
+                )
+                diff_list.append(name + ".S_slot" + val_str)
+            else:
+                diff_list.append(name + ".S_slot")
+        if (
+            other._S_slot_wind is not None
+            and self._S_slot_wind is not None
+            and isnan(other._S_slot_wind)
+            and isnan(self._S_slot_wind)
+        ):
+            pass
+        elif other._S_slot_wind != self._S_slot_wind:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._S_slot_wind)
+                    + ", other="
+                    + str(other._S_slot_wind)
+                    + ")"
+                )
+                diff_list.append(name + ".S_slot_wind" + val_str)
+            else:
+                diff_list.append(name + ".S_slot_wind")
+        if (
+            other._S_wind_act is not None
+            and self._S_wind_act is not None
+            and isnan(other._S_wind_act)
+            and isnan(self._S_wind_act)
+        ):
+            pass
+        elif other._S_wind_act != self._S_wind_act:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._S_wind_act)
+                    + ", other="
+                    + str(other._S_wind_act)
+                    + ")"
+                )
+                diff_list.append(name + ".S_wind_act" + val_str)
+            else:
+                diff_list.append(name + ".S_wind_act")
         if other._per_a != self._per_a:
-            diff_list.append(name + ".per_a")
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._per_a) + ", other=" + str(other._per_a) + ")"
+                )
+                diff_list.append(name + ".per_a" + val_str)
+            else:
+                diff_list.append(name + ".per_a")
         if other._is_antiper_a != self._is_antiper_a:
-            diff_list.append(name + ".is_antiper_a")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._is_antiper_a)
+                    + ", other="
+                    + str(other._is_antiper_a)
+                    + ")"
+                )
+                diff_list.append(name + ".is_antiper_a" + val_str)
+            else:
+                diff_list.append(name + ".is_antiper_a")
         if other._per_t != self._per_t:
-            diff_list.append(name + ".per_t")
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._per_t) + ", other=" + str(other._per_t) + ")"
+                )
+                diff_list.append(name + ".per_t" + val_str)
+            else:
+                diff_list.append(name + ".per_t")
         if other._is_antiper_t != self._is_antiper_t:
-            diff_list.append(name + ".is_antiper_t")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._is_antiper_t)
+                    + ", other="
+                    + str(other._is_antiper_t)
+                    + ")"
+                )
+                diff_list.append(name + ".is_antiper_t" + val_str)
+            else:
+                diff_list.append(name + ".is_antiper_t")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -272,7 +383,7 @@ class OutGeoLam(FrozenClass):
     name_phase = property(
         fget=_get_name_phase,
         fset=_set_name_phase,
-        doc=u"""Name of the phases of the winding (if any)
+        doc=u"""Name of the phases of the winding (if any) [-]
 
         :Type: list
         """,
@@ -297,7 +408,7 @@ class OutGeoLam(FrozenClass):
     BH_curve = property(
         fget=_get_BH_curve,
         fset=_set_BH_curve,
-        doc=u"""B(H) curve (two columns matrix, H and B(H))
+        doc=u"""B(H) curve (two columns matrix, H and B(H)) [-]
 
         :Type: ndarray
         """,
@@ -315,7 +426,7 @@ class OutGeoLam(FrozenClass):
     Ksfill = property(
         fget=_get_Ksfill,
         fset=_set_Ksfill,
-        doc=u"""Slot fill factor
+        doc=u"""Slot fill factor [-]
 
         :Type: float
         """,
@@ -333,7 +444,7 @@ class OutGeoLam(FrozenClass):
     S_slot = property(
         fget=_get_S_slot,
         fset=_set_S_slot,
-        doc=u"""Slot surface
+        doc=u"""Slot surface [m^2]
 
         :Type: float
         """,
@@ -351,7 +462,7 @@ class OutGeoLam(FrozenClass):
     S_slot_wind = property(
         fget=_get_S_slot_wind,
         fset=_set_S_slot_wind,
-        doc=u"""Slot winding surface
+        doc=u"""Slot winding surface [m^2]
 
         :Type: float
         """,
@@ -369,7 +480,7 @@ class OutGeoLam(FrozenClass):
     S_wind_act = property(
         fget=_get_S_wind_act,
         fset=_set_S_wind_act,
-        doc=u"""Conductor active surface
+        doc=u"""Conductor active surface [m^2]
 
         :Type: float
         """,
@@ -387,7 +498,7 @@ class OutGeoLam(FrozenClass):
     per_a = property(
         fget=_get_per_a,
         fset=_set_per_a,
-        doc=u"""Number of spatial periodicities of the lamination
+        doc=u"""Number of spatial periodicities of the lamination [-]
 
         :Type: int
         """,
@@ -405,7 +516,7 @@ class OutGeoLam(FrozenClass):
     is_antiper_a = property(
         fget=_get_is_antiper_a,
         fset=_set_is_antiper_a,
-        doc=u"""True if an spatial anti-periodicity is possible after the periodicities
+        doc=u"""True if an spatial anti-periodicity is possible after the periodicities [-]
 
         :Type: bool
         """,
@@ -423,7 +534,7 @@ class OutGeoLam(FrozenClass):
     per_t = property(
         fget=_get_per_t,
         fset=_set_per_t,
-        doc=u"""Number of time periodicities of the lamination
+        doc=u"""Number of time periodicities of the lamination [-]
 
         :Type: int
         """,
@@ -441,7 +552,7 @@ class OutGeoLam(FrozenClass):
     is_antiper_t = property(
         fget=_get_is_antiper_t,
         fset=_set_is_antiper_t,
-        doc=u"""True if an time anti-periodicity is possible after the periodicities
+        doc=u"""True if an time anti-periodicity is possible after the periodicities [-]
 
         :Type: bool
         """,

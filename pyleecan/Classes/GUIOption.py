@@ -15,6 +15,7 @@ from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
 from ._frozen import FrozenClass
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 
@@ -77,7 +78,7 @@ class GUIOption(FrozenClass):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -90,7 +91,14 @@ class GUIOption(FrozenClass):
         ):
             diff_list.append(name + ".unit None mismatch")
         elif self.unit is not None:
-            diff_list.extend(self.unit.compare(other.unit, name=name + ".unit"))
+            diff_list.extend(
+                self.unit.compare(
+                    other.unit,
+                    name=name + ".unit",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
+            )
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -161,7 +169,7 @@ class GUIOption(FrozenClass):
     unit = property(
         fget=_get_unit,
         fset=_set_unit,
-        doc=u"""Unit options
+        doc=u"""Unit options [-]
 
         :Type: Unit
         """,

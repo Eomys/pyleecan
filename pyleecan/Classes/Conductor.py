@@ -44,6 +44,7 @@ except ImportError as error:
     comp_temperature_effect = error
 
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 
@@ -163,7 +164,7 @@ class Conductor(FrozenClass):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -177,7 +178,12 @@ class Conductor(FrozenClass):
             diff_list.append(name + ".cond_mat None mismatch")
         elif self.cond_mat is not None:
             diff_list.extend(
-                self.cond_mat.compare(other.cond_mat, name=name + ".cond_mat")
+                self.cond_mat.compare(
+                    other.cond_mat,
+                    name=name + ".cond_mat",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
             )
         if (other.ins_mat is None and self.ins_mat is not None) or (
             other.ins_mat is not None and self.ins_mat is None
@@ -185,7 +191,12 @@ class Conductor(FrozenClass):
             diff_list.append(name + ".ins_mat None mismatch")
         elif self.ins_mat is not None:
             diff_list.extend(
-                self.ins_mat.compare(other.ins_mat, name=name + ".ins_mat")
+                self.ins_mat.compare(
+                    other.ins_mat,
+                    name=name + ".ins_mat",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
             )
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
@@ -270,7 +281,7 @@ class Conductor(FrozenClass):
     cond_mat = property(
         fget=_get_cond_mat,
         fset=_set_cond_mat,
-        doc=u"""Material of the conductor
+        doc=u"""Material of the conductor [-]
 
         :Type: Material
         """,
@@ -307,7 +318,7 @@ class Conductor(FrozenClass):
     ins_mat = property(
         fget=_get_ins_mat,
         fset=_set_ins_mat,
-        doc=u"""Material of the insulation
+        doc=u"""Material of the insulation [-]
 
         :Type: Material
         """,

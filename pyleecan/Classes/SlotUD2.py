@@ -45,6 +45,7 @@ except ImportError as error:
     _set_split_active_surf_dict = error
 
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 
@@ -209,7 +210,7 @@ class SlotUD2(Slot):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -219,7 +220,11 @@ class SlotUD2(Slot):
         diff_list = list()
 
         # Check the properties inherited from Slot
-        diff_list.extend(super(SlotUD2, self).compare(other, name=name))
+        diff_list.extend(
+            super(SlotUD2, self).compare(
+                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
+            )
+        )
         if (other.line_list is None and self.line_list is not None) or (
             other.line_list is not None and self.line_list is None
         ):
@@ -232,7 +237,10 @@ class SlotUD2(Slot):
             for ii in range(len(other.line_list)):
                 diff_list.extend(
                     self.line_list[ii].compare(
-                        other.line_list[ii], name=name + ".line_list[" + str(ii) + "]"
+                        other.line_list[ii],
+                        name=name + ".line_list[" + str(ii) + "]",
+                        ignore_list=ignore_list,
+                        is_add_value=is_add_value,
                     )
                 )
         if (other.active_surf is None and self.active_surf is not None) or (
@@ -241,12 +249,33 @@ class SlotUD2(Slot):
             diff_list.append(name + ".active_surf None mismatch")
         elif self.active_surf is not None:
             diff_list.extend(
-                self.active_surf.compare(other.active_surf, name=name + ".active_surf")
+                self.active_surf.compare(
+                    other.active_surf,
+                    name=name + ".active_surf",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
             )
         if other._split_active_surf_dict != self._split_active_surf_dict:
-            diff_list.append(name + ".split_active_surf_dict")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._split_active_surf_dict)
+                    + ", other="
+                    + str(other._split_active_surf_dict)
+                    + ")"
+                )
+                diff_list.append(name + ".split_active_surf_dict" + val_str)
+            else:
+                diff_list.append(name + ".split_active_surf_dict")
         if other._name != self._name:
-            diff_list.append(name + ".name")
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._name) + ", other=" + str(other._name) + ")"
+                )
+                diff_list.append(name + ".name" + val_str)
+            else:
+                diff_list.append(name + ".name")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -366,7 +395,7 @@ class SlotUD2(Slot):
     line_list = property(
         fget=_get_line_list,
         fset=_set_line_list,
-        doc=u"""list of line to draw the edges of the slot
+        doc=u"""list of line to draw the edges of the slot [-]
 
         :Type: [Line]
         """,
@@ -403,7 +432,7 @@ class SlotUD2(Slot):
     active_surf = property(
         fget=_get_active_surf,
         fset=_set_active_surf,
-        doc=u"""Active surface of the Slot
+        doc=u"""Active surface of the Slot [-]
 
         :Type: Surface
         """,
@@ -416,7 +445,7 @@ class SlotUD2(Slot):
     split_active_surf_dict = property(
         fget=_get_split_active_surf_dict,
         fset=_set_split_active_surf_dict,
-        doc=u"""Dictionary to enforced the split active surface (key="Nrad=1, Ntan=2"). Labels set according to list order (loop on Nrad then Ntan)
+        doc=u"""Dictionary to enforced the split active surface (key="Nrad=1, Ntan=2"). Labels set according to list order (loop on Nrad then Ntan) [-]
 
         :Type: dict
         """,
@@ -434,7 +463,7 @@ class SlotUD2(Slot):
     name = property(
         fget=_get_name,
         fset=_set_name,
-        doc=u"""Name of the slot (for save)
+        doc=u"""Name of the slot (for save) [-]
 
         :Type: str
         """,

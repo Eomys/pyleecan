@@ -55,6 +55,7 @@ except ImportError as error:
     plot_schematics = error
 
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 
@@ -232,7 +233,7 @@ class VentilationPolar(Hole):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -242,13 +243,50 @@ class VentilationPolar(Hole):
         diff_list = list()
 
         # Check the properties inherited from Hole
-        diff_list.extend(super(VentilationPolar, self).compare(other, name=name))
-        if other._D0 != self._D0:
-            diff_list.append(name + ".D0")
-        if other._H0 != self._H0:
-            diff_list.append(name + ".H0")
-        if other._W1 != self._W1:
-            diff_list.append(name + ".W1")
+        diff_list.extend(
+            super(VentilationPolar, self).compare(
+                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
+            )
+        )
+        if (
+            other._D0 is not None
+            and self._D0 is not None
+            and isnan(other._D0)
+            and isnan(self._D0)
+        ):
+            pass
+        elif other._D0 != self._D0:
+            if is_add_value:
+                val_str = " (self=" + str(self._D0) + ", other=" + str(other._D0) + ")"
+                diff_list.append(name + ".D0" + val_str)
+            else:
+                diff_list.append(name + ".D0")
+        if (
+            other._H0 is not None
+            and self._H0 is not None
+            and isnan(other._H0)
+            and isnan(self._H0)
+        ):
+            pass
+        elif other._H0 != self._H0:
+            if is_add_value:
+                val_str = " (self=" + str(self._H0) + ", other=" + str(other._H0) + ")"
+                diff_list.append(name + ".H0" + val_str)
+            else:
+                diff_list.append(name + ".H0")
+        if (
+            other._W1 is not None
+            and self._W1 is not None
+            and isnan(other._W1)
+            and isnan(self._W1)
+        ):
+            pass
+        elif other._W1 != self._W1:
+            if is_add_value:
+                val_str = " (self=" + str(self._W1) + ", other=" + str(other._W1) + ")"
+                diff_list.append(name + ".W1" + val_str)
+            else:
+                diff_list.append(name + ".W1")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -311,7 +349,7 @@ class VentilationPolar(Hole):
     D0 = property(
         fget=_get_D0,
         fset=_set_D0,
-        doc=u"""Height of the hole
+        doc=u"""Height of the hole [m]
 
         :Type: float
         :min: 0
@@ -330,7 +368,7 @@ class VentilationPolar(Hole):
     H0 = property(
         fget=_get_H0,
         fset=_set_H0,
-        doc=u"""Radius of the bottom of Hole
+        doc=u"""Radius of the bottom of Hole [m]
 
         :Type: float
         :min: 0
@@ -349,7 +387,7 @@ class VentilationPolar(Hole):
     W1 = property(
         fget=_get_W1,
         fset=_set_W1,
-        doc=u"""Hole angular width
+        doc=u"""Hole angular width [rad]
 
         :Type: float
         :min: 0

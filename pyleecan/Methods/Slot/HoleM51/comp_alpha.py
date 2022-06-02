@@ -1,6 +1,4 @@
-# -*- coding: utf-8 -*-
-
-from numpy import arctan, cos, sin, pi
+from numpy import arctan, cos, sin
 
 
 def comp_alpha(self):

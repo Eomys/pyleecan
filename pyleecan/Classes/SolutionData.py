@@ -33,6 +33,7 @@ except ImportError as error:
     get_solution = error
 
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 
@@ -147,7 +148,7 @@ class SolutionData(Solution):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -157,13 +158,24 @@ class SolutionData(Solution):
         diff_list = list()
 
         # Check the properties inherited from Solution
-        diff_list.extend(super(SolutionData, self).compare(other, name=name))
+        diff_list.extend(
+            super(SolutionData, self).compare(
+                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
+            )
+        )
         if (other.field is None and self.field is not None) or (
             other.field is not None and self.field is None
         ):
             diff_list.append(name + ".field None mismatch")
         elif self.field is not None:
-            diff_list.extend(self.field.compare(other.field, name=name + ".field"))
+            diff_list.extend(
+                self.field.compare(
+                    other.field,
+                    name=name + ".field",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
+            )
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -242,7 +254,7 @@ class SolutionData(Solution):
     field = property(
         fget=_get_field,
         fset=_set_field,
-        doc=u"""Data object containing the numerical values of a solution. One of the axis must be "Indices", a list of indices. If the solution is a vector, one of the axis must be "Direction", values ['x','y'] for example.
+        doc=u"""Data object containing the numerical values of a solution. One of the axis must be "Indices", a list of indices. If the solution is a vector, one of the axis must be "Direction", values ['x','y'] for example. [-]
 
         :Type: SciDataTool.Classes.DataND.DataND
         """,

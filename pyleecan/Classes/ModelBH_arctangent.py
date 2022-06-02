@@ -15,6 +15,7 @@ from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
 from .ModelBH import ModelBH
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 
@@ -97,7 +98,7 @@ class ModelBH_arctangent(ModelBH):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -107,11 +108,39 @@ class ModelBH_arctangent(ModelBH):
         diff_list = list()
 
         # Check the properties inherited from ModelBH
-        diff_list.extend(super(ModelBH_arctangent, self).compare(other, name=name))
-        if other._k != self._k:
-            diff_list.append(name + ".k")
-        if other._mu_a != self._mu_a:
-            diff_list.append(name + ".mu_a")
+        diff_list.extend(
+            super(ModelBH_arctangent, self).compare(
+                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
+            )
+        )
+        if (
+            other._k is not None
+            and self._k is not None
+            and isnan(other._k)
+            and isnan(self._k)
+        ):
+            pass
+        elif other._k != self._k:
+            if is_add_value:
+                val_str = " (self=" + str(self._k) + ", other=" + str(other._k) + ")"
+                diff_list.append(name + ".k" + val_str)
+            else:
+                diff_list.append(name + ".k")
+        if (
+            other._mu_a is not None
+            and self._mu_a is not None
+            and isnan(other._mu_a)
+            and isnan(self._mu_a)
+        ):
+            pass
+        elif other._mu_a != self._mu_a:
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._mu_a) + ", other=" + str(other._mu_a) + ")"
+                )
+                diff_list.append(name + ".mu_a" + val_str)
+            else:
+                diff_list.append(name + ".mu_a")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -171,7 +200,7 @@ class ModelBH_arctangent(ModelBH):
     k = property(
         fget=_get_k,
         fset=_set_k,
-        doc=u"""BH curve parameter
+        doc=u"""BH curve parameter [T]
 
         :Type: float
         """,
@@ -189,7 +218,7 @@ class ModelBH_arctangent(ModelBH):
     mu_a = property(
         fget=_get_mu_a,
         fset=_set_mu_a,
-        doc=u"""Saturation permeability parameter
+        doc=u"""Saturation permeability parameter [-]
 
         :Type: float
         """,

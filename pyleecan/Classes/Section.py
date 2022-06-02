@@ -68,6 +68,7 @@ except ImportError as error:
     write = error
 
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 
@@ -258,7 +259,7 @@ class Section(Elmer):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -268,17 +269,65 @@ class Section(Elmer):
         diff_list = list()
 
         # Check the properties inherited from Elmer
-        diff_list.extend(super(Section, self).compare(other, name=name))
+        diff_list.extend(
+            super(Section, self).compare(
+                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
+            )
+        )
         if other._section != self._section:
-            diff_list.append(name + ".section")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._section)
+                    + ", other="
+                    + str(other._section)
+                    + ")"
+                )
+                diff_list.append(name + ".section" + val_str)
+            else:
+                diff_list.append(name + ".section")
         if other._id != self._id:
-            diff_list.append(name + ".id")
+            if is_add_value:
+                val_str = " (self=" + str(self._id) + ", other=" + str(other._id) + ")"
+                diff_list.append(name + ".id" + val_str)
+            else:
+                diff_list.append(name + ".id")
         if other._comment != self._comment:
-            diff_list.append(name + ".comment")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._comment)
+                    + ", other="
+                    + str(other._comment)
+                    + ")"
+                )
+                diff_list.append(name + ".comment" + val_str)
+            else:
+                diff_list.append(name + ".comment")
         if other.__statements != self.__statements:
-            diff_list.append(name + "._statements")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self.__statements)
+                    + ", other="
+                    + str(other.__statements)
+                    + ")"
+                )
+                diff_list.append(name + "._statements" + val_str)
+            else:
+                diff_list.append(name + "._statements")
         if other.__comments != self.__comments:
-            diff_list.append(name + "._comments")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self.__comments)
+                    + ", other="
+                    + str(other.__comments)
+                    + ")"
+                )
+                diff_list.append(name + "._comments" + val_str)
+            else:
+                diff_list.append(name + "._comments")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list

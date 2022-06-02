@@ -103,6 +103,7 @@ except ImportError as error:
     translate = error
 
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 
@@ -330,7 +331,7 @@ class Segment(Line):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -340,11 +341,27 @@ class Segment(Line):
         diff_list = list()
 
         # Check the properties inherited from Line
-        diff_list.extend(super(Segment, self).compare(other, name=name))
+        diff_list.extend(
+            super(Segment, self).compare(
+                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
+            )
+        )
         if other._begin != self._begin:
-            diff_list.append(name + ".begin")
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._begin) + ", other=" + str(other._begin) + ")"
+                )
+                diff_list.append(name + ".begin" + val_str)
+            else:
+                diff_list.append(name + ".begin")
         if other._end != self._end:
-            diff_list.append(name + ".end")
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._end) + ", other=" + str(other._end) + ")"
+                )
+                diff_list.append(name + ".end" + val_str)
+            else:
+                diff_list.append(name + ".end")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -416,7 +433,7 @@ class Segment(Line):
     begin = property(
         fget=_get_begin,
         fset=_set_begin,
-        doc=u"""begin point of the line
+        doc=u"""begin point of the line [-]
 
         :Type: complex
         """,
@@ -436,7 +453,7 @@ class Segment(Line):
     end = property(
         fget=_get_end,
         fset=_set_end,
-        doc=u"""end point of the line
+        doc=u"""end point of the line [-]
 
         :Type: complex
         """,

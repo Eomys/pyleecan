@@ -14,7 +14,7 @@ def _set_result(self, value):
                     class_obj = import_class(
                         "pyleecan.Classes", val.get("__class__"), "result_ref"
                     )
-                except:
+                except Exception:
                     class_obj = import_class(
                         "SciDataTool.Classes", val.get("__class__"), "result_ref"
                     )

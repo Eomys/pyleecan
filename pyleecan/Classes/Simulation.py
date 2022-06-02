@@ -33,6 +33,7 @@ except ImportError as error:
     get_var_load = error
 
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 
@@ -220,7 +221,7 @@ class Simulation(FrozenClass):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -229,32 +230,71 @@ class Simulation(FrozenClass):
             return ["type(" + name + ")"]
         diff_list = list()
         if other._name != self._name:
-            diff_list.append(name + ".name")
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._name) + ", other=" + str(other._name) + ")"
+                )
+                diff_list.append(name + ".name" + val_str)
+            else:
+                diff_list.append(name + ".name")
         if other._desc != self._desc:
-            diff_list.append(name + ".desc")
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._desc) + ", other=" + str(other._desc) + ")"
+                )
+                diff_list.append(name + ".desc" + val_str)
+            else:
+                diff_list.append(name + ".desc")
         if (other.machine is None and self.machine is not None) or (
             other.machine is not None and self.machine is None
         ):
             diff_list.append(name + ".machine None mismatch")
         elif self.machine is not None:
             diff_list.extend(
-                self.machine.compare(other.machine, name=name + ".machine")
+                self.machine.compare(
+                    other.machine,
+                    name=name + ".machine",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
             )
         if (other.input is None and self.input is not None) or (
             other.input is not None and self.input is None
         ):
             diff_list.append(name + ".input None mismatch")
         elif self.input is not None:
-            diff_list.extend(self.input.compare(other.input, name=name + ".input"))
+            diff_list.extend(
+                self.input.compare(
+                    other.input,
+                    name=name + ".input",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
+            )
         if other._logger_name != self._logger_name:
-            diff_list.append(name + ".logger_name")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._logger_name)
+                    + ", other="
+                    + str(other._logger_name)
+                    + ")"
+                )
+                diff_list.append(name + ".logger_name" + val_str)
+            else:
+                diff_list.append(name + ".logger_name")
         if (other.var_simu is None and self.var_simu is not None) or (
             other.var_simu is not None and self.var_simu is None
         ):
             diff_list.append(name + ".var_simu None mismatch")
         elif self.var_simu is not None:
             diff_list.extend(
-                self.var_simu.compare(other.var_simu, name=name + ".var_simu")
+                self.var_simu.compare(
+                    other.var_simu,
+                    name=name + ".var_simu",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
             )
         if (other.postproc_list is None and self.postproc_list is not None) or (
             other.postproc_list is not None and self.postproc_list is None
@@ -270,16 +310,50 @@ class Simulation(FrozenClass):
                     self.postproc_list[ii].compare(
                         other.postproc_list[ii],
                         name=name + ".postproc_list[" + str(ii) + "]",
+                        ignore_list=ignore_list,
+                        is_add_value=is_add_value,
                     )
                 )
         if other._index != self._index:
-            diff_list.append(name + ".index")
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._index) + ", other=" + str(other._index) + ")"
+                )
+                diff_list.append(name + ".index" + val_str)
+            else:
+                diff_list.append(name + ".index")
         if other._path_result != self._path_result:
-            diff_list.append(name + ".path_result")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._path_result)
+                    + ", other="
+                    + str(other._path_result)
+                    + ")"
+                )
+                diff_list.append(name + ".path_result" + val_str)
+            else:
+                diff_list.append(name + ".path_result")
         if other._layer != self._layer:
-            diff_list.append(name + ".layer")
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._layer) + ", other=" + str(other._layer) + ")"
+                )
+                diff_list.append(name + ".layer" + val_str)
+            else:
+                diff_list.append(name + ".layer")
         if other._layer_log_warn != self._layer_log_warn:
-            diff_list.append(name + ".layer_log_warn")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._layer_log_warn)
+                    + ", other="
+                    + str(other._layer_log_warn)
+                    + ")"
+                )
+                diff_list.append(name + ".layer_log_warn" + val_str)
+            else:
+                diff_list.append(name + ".layer_log_warn")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -395,7 +469,7 @@ class Simulation(FrozenClass):
     name = property(
         fget=_get_name,
         fset=_set_name,
-        doc=u"""Name of the simulation
+        doc=u"""Name of the simulation [-]
 
         :Type: str
         """,
@@ -413,7 +487,7 @@ class Simulation(FrozenClass):
     desc = property(
         fget=_get_desc,
         fset=_set_desc,
-        doc=u"""Simulation description
+        doc=u"""Simulation description [-]
 
         :Type: str
         """,
@@ -450,7 +524,7 @@ class Simulation(FrozenClass):
     machine = property(
         fget=_get_machine,
         fset=_set_machine,
-        doc=u"""Machine to simulate
+        doc=u"""Machine to simulate [-]
 
         :Type: Machine
         """,
@@ -487,7 +561,7 @@ class Simulation(FrozenClass):
     input = property(
         fget=_get_input,
         fset=_set_input,
-        doc=u"""Input of the simulation
+        doc=u"""Input of the simulation [-]
 
         :Type: Input
         """,
@@ -505,7 +579,7 @@ class Simulation(FrozenClass):
     logger_name = property(
         fget=_get_logger_name,
         fset=_set_logger_name,
-        doc=u"""Name of the logger to use
+        doc=u"""Name of the logger to use [-]
 
         :Type: str
         """,
@@ -542,7 +616,7 @@ class Simulation(FrozenClass):
     var_simu = property(
         fget=_get_var_simu,
         fset=_set_var_simu,
-        doc=u"""Multi-simulation definition
+        doc=u"""Multi-simulation definition [-]
 
         :Type: VarSimu
         """,
@@ -584,7 +658,7 @@ class Simulation(FrozenClass):
     postproc_list = property(
         fget=_get_postproc_list,
         fset=_set_postproc_list,
-        doc=u"""List of postprocessings to run on Output after the simulation
+        doc=u"""List of postprocessings to run on Output after the simulation [-]
 
         :Type: [Post]
         """,
@@ -602,7 +676,7 @@ class Simulation(FrozenClass):
     index = property(
         fget=_get_index,
         fset=_set_index,
-        doc=u"""Index of the simulation (if part of a multi-simulation)
+        doc=u"""Index of the simulation (if part of a multi-simulation) [-]
 
         :Type: int
         :min: 0
@@ -621,7 +695,7 @@ class Simulation(FrozenClass):
     path_result = property(
         fget=_get_path_result,
         fset=_set_path_result,
-        doc=u"""Path to the Result folder to use (None to use default one)
+        doc=u"""Path to the Result folder to use (None to use default one) [-]
 
         :Type: str
         """,
@@ -639,7 +713,7 @@ class Simulation(FrozenClass):
     layer = property(
         fget=_get_layer,
         fset=_set_layer,
-        doc=u"""Layer of the simulation in a multi-simulation (0 is top simulation)
+        doc=u"""Layer of the simulation in a multi-simulation (0 is top simulation) [-]
 
         :Type: int
         :min: 0
@@ -658,7 +732,7 @@ class Simulation(FrozenClass):
     layer_log_warn = property(
         fget=_get_layer_log_warn,
         fset=_set_layer_log_warn,
-        doc=u"""Enable to set the log console_handler to warning starting from a particular layer. layer_log_warn=2 => layer 0 and 1 info, layer 2 warning
+        doc=u"""Enable to set the log console_handler to warning starting from a particular layer. layer_log_warn=2 => layer 0 and 1 info, layer 2 warning [-]
 
         :Type: int
         :min: 0

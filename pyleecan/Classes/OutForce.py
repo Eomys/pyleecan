@@ -23,6 +23,7 @@ except ImportError as error:
     store = error
 
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 
@@ -132,7 +133,7 @@ class OutForce(FrozenClass):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -152,7 +153,10 @@ class OutForce(FrozenClass):
             for key in self.axes_dict:
                 diff_list.extend(
                     self.axes_dict[key].compare(
-                        other.axes_dict[key], name=name + ".axes_dict"
+                        other.axes_dict[key],
+                        name=name + ".axes_dict[" + str(key) + "]",
+                        ignore_list=ignore_list,
+                        is_add_value=is_add_value,
                     )
                 )
         if (other.AGSF is None and self.AGSF is not None) or (
@@ -160,11 +164,41 @@ class OutForce(FrozenClass):
         ):
             diff_list.append(name + ".AGSF None mismatch")
         elif self.AGSF is not None:
-            diff_list.extend(self.AGSF.compare(other.AGSF, name=name + ".AGSF"))
+            diff_list.extend(
+                self.AGSF.compare(
+                    other.AGSF,
+                    name=name + ".AGSF",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
+            )
         if other._logger_name != self._logger_name:
-            diff_list.append(name + ".logger_name")
-        if other._Rag != self._Rag:
-            diff_list.append(name + ".Rag")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._logger_name)
+                    + ", other="
+                    + str(other._logger_name)
+                    + ")"
+                )
+                diff_list.append(name + ".logger_name" + val_str)
+            else:
+                diff_list.append(name + ".logger_name")
+        if (
+            other._Rag is not None
+            and self._Rag is not None
+            and isnan(other._Rag)
+            and isnan(self._Rag)
+        ):
+            pass
+        elif other._Rag != self._Rag:
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._Rag) + ", other=" + str(other._Rag) + ")"
+                )
+                diff_list.append(name + ".Rag" + val_str)
+            else:
+                diff_list.append(name + ".Rag")
         if (other.meshsolution is None and self.meshsolution is not None) or (
             other.meshsolution is not None and self.meshsolution is None
         ):
@@ -172,7 +206,10 @@ class OutForce(FrozenClass):
         elif self.meshsolution is not None:
             diff_list.extend(
                 self.meshsolution.compare(
-                    other.meshsolution, name=name + ".meshsolution"
+                    other.meshsolution,
+                    name=name + ".meshsolution",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
                 )
             )
         # Filter ignore differences
@@ -316,7 +353,7 @@ class OutForce(FrozenClass):
     AGSF = property(
         fget=_get_AGSF,
         fset=_set_AGSF,
-        doc=u"""Air Gap Surface Force (mainly computed with Maxwell stress tensor)
+        doc=u"""Air Gap Surface Force (mainly computed with Maxwell stress tensor) [N.m^2]
 
         :Type: SciDataTool.Classes.VectorField.VectorField
         """,
@@ -334,7 +371,7 @@ class OutForce(FrozenClass):
     logger_name = property(
         fget=_get_logger_name,
         fset=_set_logger_name,
-        doc=u"""Name of the logger to use
+        doc=u"""Name of the logger to use [-]
 
         :Type: str
         """,
@@ -352,7 +389,7 @@ class OutForce(FrozenClass):
     Rag = property(
         fget=_get_Rag,
         fset=_set_Rag,
-        doc=u"""Radius value for air-gap computation
+        doc=u"""Radius value for air-gap computation [-]
 
         :Type: float
         """,
@@ -391,7 +428,7 @@ class OutForce(FrozenClass):
     meshsolution = property(
         fget=_get_meshsolution,
         fset=_set_meshsolution,
-        doc=u"""Force computed on a mesh
+        doc=u"""Force computed on a mesh [-]
 
         :Type: MeshSolution
         """,

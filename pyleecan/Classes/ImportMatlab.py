@@ -23,6 +23,7 @@ except ImportError as error:
     get_data = error
 
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 
@@ -108,7 +109,7 @@ class ImportMatlab(ImportMatrix):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -118,11 +119,35 @@ class ImportMatlab(ImportMatrix):
         diff_list = list()
 
         # Check the properties inherited from ImportMatrix
-        diff_list.extend(super(ImportMatlab, self).compare(other, name=name))
+        diff_list.extend(
+            super(ImportMatlab, self).compare(
+                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
+            )
+        )
         if other._file_path != self._file_path:
-            diff_list.append(name + ".file_path")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._file_path)
+                    + ", other="
+                    + str(other._file_path)
+                    + ")"
+                )
+                diff_list.append(name + ".file_path" + val_str)
+            else:
+                diff_list.append(name + ".file_path")
         if other._var_name != self._var_name:
-            diff_list.append(name + ".var_name")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._var_name)
+                    + ", other="
+                    + str(other._var_name)
+                    + ")"
+                )
+                diff_list.append(name + ".var_name" + val_str)
+            else:
+                diff_list.append(name + ".var_name")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -182,7 +207,7 @@ class ImportMatlab(ImportMatrix):
     file_path = property(
         fget=_get_file_path,
         fset=_set_file_path,
-        doc=u"""Path of the file to load
+        doc=u"""Path of the file to load [-]
 
         :Type: str
         """,
@@ -200,7 +225,7 @@ class ImportMatlab(ImportMatrix):
     var_name = property(
         fget=_get_var_name,
         fset=_set_var_name,
-        doc=u"""Name of the variable to load
+        doc=u"""Name of the variable to load [-]
 
         :Type: str
         """,

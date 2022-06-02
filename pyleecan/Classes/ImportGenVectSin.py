@@ -23,6 +23,7 @@ except ImportError as error:
     get_data = error
 
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 
@@ -131,7 +132,7 @@ class ImportGenVectSin(ImportMatrix):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -141,17 +142,71 @@ class ImportGenVectSin(ImportMatrix):
         diff_list = list()
 
         # Check the properties inherited from ImportMatrix
-        diff_list.extend(super(ImportGenVectSin, self).compare(other, name=name))
-        if other._f != self._f:
-            diff_list.append(name + ".f")
-        if other._A != self._A:
-            diff_list.append(name + ".A")
-        if other._Phi != self._Phi:
-            diff_list.append(name + ".Phi")
+        diff_list.extend(
+            super(ImportGenVectSin, self).compare(
+                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
+            )
+        )
+        if (
+            other._f is not None
+            and self._f is not None
+            and isnan(other._f)
+            and isnan(self._f)
+        ):
+            pass
+        elif other._f != self._f:
+            if is_add_value:
+                val_str = " (self=" + str(self._f) + ", other=" + str(other._f) + ")"
+                diff_list.append(name + ".f" + val_str)
+            else:
+                diff_list.append(name + ".f")
+        if (
+            other._A is not None
+            and self._A is not None
+            and isnan(other._A)
+            and isnan(self._A)
+        ):
+            pass
+        elif other._A != self._A:
+            if is_add_value:
+                val_str = " (self=" + str(self._A) + ", other=" + str(other._A) + ")"
+                diff_list.append(name + ".A" + val_str)
+            else:
+                diff_list.append(name + ".A")
+        if (
+            other._Phi is not None
+            and self._Phi is not None
+            and isnan(other._Phi)
+            and isnan(self._Phi)
+        ):
+            pass
+        elif other._Phi != self._Phi:
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._Phi) + ", other=" + str(other._Phi) + ")"
+                )
+                diff_list.append(name + ".Phi" + val_str)
+            else:
+                diff_list.append(name + ".Phi")
         if other._N != self._N:
-            diff_list.append(name + ".N")
-        if other._Tf != self._Tf:
-            diff_list.append(name + ".Tf")
+            if is_add_value:
+                val_str = " (self=" + str(self._N) + ", other=" + str(other._N) + ")"
+                diff_list.append(name + ".N" + val_str)
+            else:
+                diff_list.append(name + ".N")
+        if (
+            other._Tf is not None
+            and self._Tf is not None
+            and isnan(other._Tf)
+            and isnan(self._Tf)
+        ):
+            pass
+        elif other._Tf != self._Tf:
+            if is_add_value:
+                val_str = " (self=" + str(self._Tf) + ", other=" + str(other._Tf) + ")"
+                diff_list.append(name + ".Tf" + val_str)
+            else:
+                diff_list.append(name + ".Tf")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -220,7 +275,7 @@ class ImportGenVectSin(ImportMatrix):
     f = property(
         fget=_get_f,
         fset=_set_f,
-        doc=u"""Frequency of the sinus to generate
+        doc=u"""Frequency of the sinus to generate [Hz]
 
         :Type: float
         :min: 0
@@ -239,7 +294,7 @@ class ImportGenVectSin(ImportMatrix):
     A = property(
         fget=_get_A,
         fset=_set_A,
-        doc=u"""Amplitude of the sinus to generate
+        doc=u"""Amplitude of the sinus to generate [-]
 
         :Type: float
         """,
@@ -257,7 +312,7 @@ class ImportGenVectSin(ImportMatrix):
     Phi = property(
         fget=_get_Phi,
         fset=_set_Phi,
-        doc=u"""Phase of the sinus to generate
+        doc=u"""Phase of the sinus to generate [-]
 
         :Type: float
         :min: -6.29
@@ -277,7 +332,7 @@ class ImportGenVectSin(ImportMatrix):
     N = property(
         fget=_get_N,
         fset=_set_N,
-        doc=u"""Length of the vector to generate
+        doc=u"""Length of the vector to generate [-]
 
         :Type: int
         :min: 0
@@ -296,7 +351,7 @@ class ImportGenVectSin(ImportMatrix):
     Tf = property(
         fget=_get_Tf,
         fset=_set_Tf,
-        doc=u"""End time of the sinus generation
+        doc=u"""End time of the sinus generation [s]
 
         :Type: float
         :min: 0

@@ -33,6 +33,7 @@ except ImportError as error:
     get_data = error
 
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 
@@ -155,7 +156,7 @@ class ImportGenVectLin(ImportMatrix):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -165,15 +166,68 @@ class ImportGenVectLin(ImportMatrix):
         diff_list = list()
 
         # Check the properties inherited from ImportMatrix
-        diff_list.extend(super(ImportGenVectLin, self).compare(other, name=name))
-        if other._start != self._start:
-            diff_list.append(name + ".start")
-        if other._stop != self._stop:
-            diff_list.append(name + ".stop")
-        if other._num != self._num:
-            diff_list.append(name + ".num")
+        diff_list.extend(
+            super(ImportGenVectLin, self).compare(
+                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
+            )
+        )
+        if (
+            other._start is not None
+            and self._start is not None
+            and isnan(other._start)
+            and isnan(self._start)
+        ):
+            pass
+        elif other._start != self._start:
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._start) + ", other=" + str(other._start) + ")"
+                )
+                diff_list.append(name + ".start" + val_str)
+            else:
+                diff_list.append(name + ".start")
+        if (
+            other._stop is not None
+            and self._stop is not None
+            and isnan(other._stop)
+            and isnan(self._stop)
+        ):
+            pass
+        elif other._stop != self._stop:
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._stop) + ", other=" + str(other._stop) + ")"
+                )
+                diff_list.append(name + ".stop" + val_str)
+            else:
+                diff_list.append(name + ".stop")
+        if (
+            other._num is not None
+            and self._num is not None
+            and isnan(other._num)
+            and isnan(self._num)
+        ):
+            pass
+        elif other._num != self._num:
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._num) + ", other=" + str(other._num) + ")"
+                )
+                diff_list.append(name + ".num" + val_str)
+            else:
+                diff_list.append(name + ".num")
         if other._endpoint != self._endpoint:
-            diff_list.append(name + ".endpoint")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._endpoint)
+                    + ", other="
+                    + str(other._endpoint)
+                    + ")"
+                )
+                diff_list.append(name + ".endpoint" + val_str)
+            else:
+                diff_list.append(name + ".endpoint")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -239,7 +293,7 @@ class ImportGenVectLin(ImportMatrix):
     start = property(
         fget=_get_start,
         fset=_set_start,
-        doc=u"""Begin point of the linspace
+        doc=u"""Begin point of the linspace [-]
 
         :Type: float
         """,
@@ -257,7 +311,7 @@ class ImportGenVectLin(ImportMatrix):
     stop = property(
         fget=_get_stop,
         fset=_set_stop,
-        doc=u"""End point of the linspace
+        doc=u"""End point of the linspace [-]
 
         :Type: float
         """,
@@ -275,7 +329,7 @@ class ImportGenVectLin(ImportMatrix):
     num = property(
         fget=_get_num,
         fset=_set_num,
-        doc=u"""Number of value in the linspace
+        doc=u"""Number of value in the linspace [-]
 
         :Type: float
         """,
@@ -293,7 +347,7 @@ class ImportGenVectLin(ImportMatrix):
     endpoint = property(
         fget=_get_endpoint,
         fset=_set_endpoint,
-        doc=u"""If True, stop is the last sample. Otherwise, it is not included
+        doc=u"""If True, stop is the last sample. Otherwise, it is not included [-]
 
         :Type: bool
         """,

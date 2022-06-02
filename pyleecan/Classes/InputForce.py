@@ -26,6 +26,7 @@ except ImportError as error:
 from ..Classes.ImportMatrixVal import ImportMatrixVal
 from numpy import ndarray
 from numpy import array, array_equal
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 
@@ -134,7 +135,7 @@ class InputForce(Input):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -144,13 +145,24 @@ class InputForce(Input):
         diff_list = list()
 
         # Check the properties inherited from Input
-        diff_list.extend(super(InputForce, self).compare(other, name=name))
+        diff_list.extend(
+            super(InputForce, self).compare(
+                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
+            )
+        )
         if (other.P is None and self.P is not None) or (
             other.P is not None and self.P is None
         ):
             diff_list.append(name + ".P None mismatch")
         elif self.P is not None:
-            diff_list.extend(self.P.compare(other.P, name=name + ".P"))
+            diff_list.extend(
+                self.P.compare(
+                    other.P,
+                    name=name + ".P",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
+            )
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -234,7 +246,7 @@ class InputForce(Input):
     P = property(
         fget=_get_P,
         fset=_set_P,
-        doc=u"""Magnetic air-gap surface force
+        doc=u"""Magnetic air-gap surface force [N.m^2]
 
         :Type: ImportVectorField
         """,

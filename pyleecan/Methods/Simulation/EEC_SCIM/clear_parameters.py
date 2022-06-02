@@ -1,5 +1,5 @@
 def clear_parameters(self):
-    """Clear all the parameters of an EEC
+    """Clear all the parameters of an EEC_SCIM
 
     Parameters
     ----------

@@ -48,6 +48,7 @@ except ImportError as error:
     set_m2 = error
 
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 
@@ -173,7 +174,7 @@ class Unit(FrozenClass):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -182,11 +183,41 @@ class Unit(FrozenClass):
             return ["type(" + name + ")"]
         diff_list = list()
         if other._unit_m != self._unit_m:
-            diff_list.append(name + ".unit_m")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._unit_m)
+                    + ", other="
+                    + str(other._unit_m)
+                    + ")"
+                )
+                diff_list.append(name + ".unit_m" + val_str)
+            else:
+                diff_list.append(name + ".unit_m")
         if other._unit_rad != self._unit_rad:
-            diff_list.append(name + ".unit_rad")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._unit_rad)
+                    + ", other="
+                    + str(other._unit_rad)
+                    + ")"
+                )
+                diff_list.append(name + ".unit_rad" + val_str)
+            else:
+                diff_list.append(name + ".unit_rad")
         if other._unit_m2 != self._unit_m2:
-            diff_list.append(name + ".unit_m2")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._unit_m2)
+                    + ", other="
+                    + str(other._unit_m2)
+                    + ")"
+                )
+                diff_list.append(name + ".unit_m2" + val_str)
+            else:
+                diff_list.append(name + ".unit_m2")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -238,7 +269,7 @@ class Unit(FrozenClass):
     unit_m = property(
         fget=_get_unit_m,
         fset=_set_unit_m,
-        doc=u"""0: use m, 1: use mm
+        doc=u"""0: use m, 1: use mm [-]
 
         :Type: int
         :min: 0
@@ -258,7 +289,7 @@ class Unit(FrozenClass):
     unit_rad = property(
         fget=_get_unit_rad,
         fset=_set_unit_rad,
-        doc=u"""0: use rad, 1: use deg
+        doc=u"""0: use rad, 1: use deg [-]
 
         :Type: int
         :min: 0
@@ -278,7 +309,7 @@ class Unit(FrozenClass):
     unit_m2 = property(
         fget=_get_unit_m2,
         fset=_set_unit_m2,
-        doc=u"""0: use m^2, 1: use mm^2
+        doc=u"""0: use m^2, 1: use mm^2 [-]
 
         :Type: int
         :min: 0

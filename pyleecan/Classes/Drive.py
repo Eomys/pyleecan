@@ -15,6 +15,7 @@ from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
 from ._frozen import FrozenClass
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 
@@ -88,7 +89,7 @@ class Drive(FrozenClass):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -96,12 +97,48 @@ class Drive(FrozenClass):
         if type(other) != type(self):
             return ["type(" + name + ")"]
         diff_list = list()
-        if other._Umax != self._Umax:
-            diff_list.append(name + ".Umax")
-        if other._Imax != self._Imax:
-            diff_list.append(name + ".Imax")
+        if (
+            other._Umax is not None
+            and self._Umax is not None
+            and isnan(other._Umax)
+            and isnan(self._Umax)
+        ):
+            pass
+        elif other._Umax != self._Umax:
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._Umax) + ", other=" + str(other._Umax) + ")"
+                )
+                diff_list.append(name + ".Umax" + val_str)
+            else:
+                diff_list.append(name + ".Umax")
+        if (
+            other._Imax is not None
+            and self._Imax is not None
+            and isnan(other._Imax)
+            and isnan(self._Imax)
+        ):
+            pass
+        elif other._Imax != self._Imax:
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._Imax) + ", other=" + str(other._Imax) + ")"
+                )
+                diff_list.append(name + ".Imax" + val_str)
+            else:
+                diff_list.append(name + ".Imax")
         if other._is_current != self._is_current:
-            diff_list.append(name + ".is_current")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._is_current)
+                    + ", other="
+                    + str(other._is_current)
+                    + ")"
+                )
+                diff_list.append(name + ".is_current" + val_str)
+            else:
+                diff_list.append(name + ".is_current")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -153,7 +190,7 @@ class Drive(FrozenClass):
     Umax = property(
         fget=_get_Umax,
         fset=_set_Umax,
-        doc=u"""Maximum RMS voltage of the Drive
+        doc=u"""Maximum RMS voltage of the Drive [V]
 
         :Type: float
         :min: 0
@@ -172,7 +209,7 @@ class Drive(FrozenClass):
     Imax = property(
         fget=_get_Imax,
         fset=_set_Imax,
-        doc=u"""Maximum RMS current of the Drive
+        doc=u"""Maximum RMS current of the Drive [A]
 
         :Type: float
         :min: 0
@@ -191,7 +228,7 @@ class Drive(FrozenClass):
     is_current = property(
         fget=_get_is_current,
         fset=_set_is_current,
-        doc=u"""True to generate current waveform, False for voltage
+        doc=u"""True to generate current waveform, False for voltage [-]
 
         :Type: bool
         """,

@@ -48,6 +48,7 @@ except ImportError as error:
     comp_torque_MT = error
 
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 
@@ -306,7 +307,7 @@ class OutMag(FrozenClass):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -326,7 +327,10 @@ class OutMag(FrozenClass):
             for key in self.axes_dict:
                 diff_list.extend(
                     self.axes_dict[key].compare(
-                        other.axes_dict[key], name=name + ".axes_dict"
+                        other.axes_dict[key],
+                        name=name + ".axes_dict[" + str(key) + "]",
+                        ignore_list=ignore_list,
+                        is_add_value=is_add_value,
                     )
                 )
         if (other.B is None and self.B is not None) or (
@@ -334,19 +338,84 @@ class OutMag(FrozenClass):
         ):
             diff_list.append(name + ".B None mismatch")
         elif self.B is not None:
-            diff_list.extend(self.B.compare(other.B, name=name + ".B"))
+            diff_list.extend(
+                self.B.compare(
+                    other.B,
+                    name=name + ".B",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
+            )
         if (other.Tem is None and self.Tem is not None) or (
             other.Tem is not None and self.Tem is None
         ):
             diff_list.append(name + ".Tem None mismatch")
         elif self.Tem is not None:
-            diff_list.extend(self.Tem.compare(other.Tem, name=name + ".Tem"))
-        if other._Tem_av != self._Tem_av:
-            diff_list.append(name + ".Tem_av")
-        if other._Tem_rip_norm != self._Tem_rip_norm:
-            diff_list.append(name + ".Tem_rip_norm")
-        if other._Tem_rip_pp != self._Tem_rip_pp:
-            diff_list.append(name + ".Tem_rip_pp")
+            diff_list.extend(
+                self.Tem.compare(
+                    other.Tem,
+                    name=name + ".Tem",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
+            )
+        if (
+            other._Tem_av is not None
+            and self._Tem_av is not None
+            and isnan(other._Tem_av)
+            and isnan(self._Tem_av)
+        ):
+            pass
+        elif other._Tem_av != self._Tem_av:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._Tem_av)
+                    + ", other="
+                    + str(other._Tem_av)
+                    + ")"
+                )
+                diff_list.append(name + ".Tem_av" + val_str)
+            else:
+                diff_list.append(name + ".Tem_av")
+        if (
+            other._Tem_rip_norm is not None
+            and self._Tem_rip_norm is not None
+            and isnan(other._Tem_rip_norm)
+            and isnan(self._Tem_rip_norm)
+        ):
+            pass
+        elif other._Tem_rip_norm != self._Tem_rip_norm:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._Tem_rip_norm)
+                    + ", other="
+                    + str(other._Tem_rip_norm)
+                    + ")"
+                )
+                diff_list.append(name + ".Tem_rip_norm" + val_str)
+            else:
+                diff_list.append(name + ".Tem_rip_norm")
+        if (
+            other._Tem_rip_pp is not None
+            and self._Tem_rip_pp is not None
+            and isnan(other._Tem_rip_pp)
+            and isnan(self._Tem_rip_pp)
+        ):
+            pass
+        elif other._Tem_rip_pp != self._Tem_rip_pp:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._Tem_rip_pp)
+                    + ", other="
+                    + str(other._Tem_rip_pp)
+                    + ")"
+                )
+                diff_list.append(name + ".Tem_rip_pp" + val_str)
+            else:
+                diff_list.append(name + ".Tem_rip_pp")
         if (other.Phi_wind_stator is None and self.Phi_wind_stator is not None) or (
             other.Phi_wind_stator is not None and self.Phi_wind_stator is None
         ):
@@ -354,7 +423,10 @@ class OutMag(FrozenClass):
         elif self.Phi_wind_stator is not None:
             diff_list.extend(
                 self.Phi_wind_stator.compare(
-                    other.Phi_wind_stator, name=name + ".Phi_wind_stator"
+                    other.Phi_wind_stator,
+                    name=name + ".Phi_wind_stator",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
                 )
             )
         if (other.Phi_wind is None and self.Phi_wind is not None) or (
@@ -369,7 +441,10 @@ class OutMag(FrozenClass):
             for key in self.Phi_wind:
                 diff_list.extend(
                     self.Phi_wind[key].compare(
-                        other.Phi_wind[key], name=name + ".Phi_wind"
+                        other.Phi_wind[key],
+                        name=name + ".Phi_wind[" + str(key) + "]",
+                        ignore_list=ignore_list,
+                        is_add_value=is_add_value,
                     )
                 )
         if (other.emf is None and self.emf is not None) or (
@@ -377,7 +452,14 @@ class OutMag(FrozenClass):
         ):
             diff_list.append(name + ".emf None mismatch")
         elif self.emf is not None:
-            diff_list.extend(self.emf.compare(other.emf, name=name + ".emf"))
+            diff_list.extend(
+                self.emf.compare(
+                    other.emf,
+                    name=name + ".emf",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
+            )
         if (other.meshsolution is None and self.meshsolution is not None) or (
             other.meshsolution is not None and self.meshsolution is None
         ):
@@ -385,36 +467,96 @@ class OutMag(FrozenClass):
         elif self.meshsolution is not None:
             diff_list.extend(
                 self.meshsolution.compare(
-                    other.meshsolution, name=name + ".meshsolution"
+                    other.meshsolution,
+                    name=name + ".meshsolution",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
                 )
             )
         if other._logger_name != self._logger_name:
-            diff_list.append(name + ".logger_name")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._logger_name)
+                    + ", other="
+                    + str(other._logger_name)
+                    + ")"
+                )
+                diff_list.append(name + ".logger_name" + val_str)
+            else:
+                diff_list.append(name + ".logger_name")
         if (other.internal is None and self.internal is not None) or (
             other.internal is not None and self.internal is None
         ):
             diff_list.append(name + ".internal None mismatch")
         elif self.internal is not None:
             diff_list.extend(
-                self.internal.compare(other.internal, name=name + ".internal")
+                self.internal.compare(
+                    other.internal,
+                    name=name + ".internal",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
             )
-        if other._Rag != self._Rag:
-            diff_list.append(name + ".Rag")
-        if other._Pem_av != self._Pem_av:
-            diff_list.append(name + ".Pem_av")
+        if (
+            other._Rag is not None
+            and self._Rag is not None
+            and isnan(other._Rag)
+            and isnan(self._Rag)
+        ):
+            pass
+        elif other._Rag != self._Rag:
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._Rag) + ", other=" + str(other._Rag) + ")"
+                )
+                diff_list.append(name + ".Rag" + val_str)
+            else:
+                diff_list.append(name + ".Rag")
+        if (
+            other._Pem_av is not None
+            and self._Pem_av is not None
+            and isnan(other._Pem_av)
+            and isnan(self._Pem_av)
+        ):
+            pass
+        elif other._Pem_av != self._Pem_av:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._Pem_av)
+                    + ", other="
+                    + str(other._Pem_av)
+                    + ")"
+                )
+                diff_list.append(name + ".Pem_av" + val_str)
+            else:
+                diff_list.append(name + ".Pem_av")
         if (other.Slice is None and self.Slice is not None) or (
             other.Slice is not None and self.Slice is None
         ):
             diff_list.append(name + ".Slice None mismatch")
         elif self.Slice is not None:
-            diff_list.extend(self.Slice.compare(other.Slice, name=name + ".Slice"))
+            diff_list.extend(
+                self.Slice.compare(
+                    other.Slice,
+                    name=name + ".Slice",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
+            )
         if (other.Tem_slice is None and self.Tem_slice is not None) or (
             other.Tem_slice is not None and self.Tem_slice is None
         ):
             diff_list.append(name + ".Tem_slice None mismatch")
         elif self.Tem_slice is not None:
             diff_list.extend(
-                self.Tem_slice.compare(other.Tem_slice, name=name + ".Tem_slice")
+                self.Tem_slice.compare(
+                    other.Tem_slice,
+                    name=name + ".Tem_slice",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
             )
         if (other.Phi_wind_slice is None and self.Phi_wind_slice is not None) or (
             other.Phi_wind_slice is not None and self.Phi_wind_slice is None
@@ -428,11 +570,31 @@ class OutMag(FrozenClass):
             for key in self.Phi_wind_slice:
                 diff_list.extend(
                     self.Phi_wind_slice[key].compare(
-                        other.Phi_wind_slice[key], name=name + ".Phi_wind_slice"
+                        other.Phi_wind_slice[key],
+                        name=name + ".Phi_wind_slice[" + str(key) + "]",
+                        ignore_list=ignore_list,
+                        is_add_value=is_add_value,
                     )
                 )
-        if other._Tem_norm != self._Tem_norm:
-            diff_list.append(name + ".Tem_norm")
+        if (
+            other._Tem_norm is not None
+            and self._Tem_norm is not None
+            and isnan(other._Tem_norm)
+            and isnan(self._Tem_norm)
+        ):
+            pass
+        elif other._Tem_norm != self._Tem_norm:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._Tem_norm)
+                    + ", other="
+                    + str(other._Tem_norm)
+                    + ")"
+                )
+                diff_list.append(name + ".Tem_norm" + val_str)
+            else:
+                diff_list.append(name + ".Tem_norm")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -683,7 +845,7 @@ class OutMag(FrozenClass):
     B = property(
         fget=_get_B,
         fset=_set_B,
-        doc=u"""Airgap flux density VectorField object
+        doc=u"""Airgap flux density VectorField object [H]
 
         :Type: SciDataTool.Classes.VectorField.VectorField
         """,
@@ -716,7 +878,7 @@ class OutMag(FrozenClass):
     Tem = property(
         fget=_get_Tem,
         fset=_set_Tem,
-        doc=u"""Electromagnetic torque DataTime object
+        doc=u"""Electromagnetic torque DataTime object [N.m]
 
         :Type: SciDataTool.Classes.DataND.DataND
         """,
@@ -734,7 +896,7 @@ class OutMag(FrozenClass):
     Tem_av = property(
         fget=_get_Tem_av,
         fset=_set_Tem_av,
-        doc=u"""Average Electromagnetic torque
+        doc=u"""Average Electromagnetic torque [N.m]
 
         :Type: float
         """,
@@ -752,7 +914,7 @@ class OutMag(FrozenClass):
     Tem_rip_norm = property(
         fget=_get_Tem_rip_norm,
         fset=_set_Tem_rip_norm,
-        doc=u"""Peak to Peak Torque ripple normalized according to average torque (None if average torque=0)
+        doc=u"""Peak to Peak Torque ripple normalized according to average torque (None if average torque=0) [-]
 
         :Type: float
         """,
@@ -770,7 +932,7 @@ class OutMag(FrozenClass):
     Tem_rip_pp = property(
         fget=_get_Tem_rip_pp,
         fset=_set_Tem_rip_pp,
-        doc=u"""Peak to Peak Torque ripple
+        doc=u"""Peak to Peak Torque ripple [N.m]
 
         :Type: float
         """,
@@ -803,7 +965,7 @@ class OutMag(FrozenClass):
     Phi_wind_stator = property(
         fget=_get_Phi_wind_stator,
         fset=_set_Phi_wind_stator,
-        doc=u"""Stator winding flux DataTime object
+        doc=u"""Stator winding flux DataTime object [Wb]
 
         :Type: SciDataTool.Classes.DataND.DataND
         """,
@@ -843,7 +1005,7 @@ class OutMag(FrozenClass):
     Phi_wind = property(
         fget=_get_Phi_wind,
         fset=_set_Phi_wind,
-        doc=u"""Dict of lamination winding fluxlinkage DataTime objects
+        doc=u"""Dict of lamination winding fluxlinkage DataTime objects [Wb]
 
         :Type: {SciDataTool.Classes.DataND.DataND}
         """,
@@ -876,7 +1038,7 @@ class OutMag(FrozenClass):
     emf = property(
         fget=_get_emf,
         fset=_set_emf,
-        doc=u"""Electromotive force DataTime object
+        doc=u"""Electromotive force DataTime object [V]
 
         :Type: SciDataTool.Classes.DataND.DataND
         """,
@@ -933,7 +1095,7 @@ class OutMag(FrozenClass):
     logger_name = property(
         fget=_get_logger_name,
         fset=_set_logger_name,
-        doc=u"""Name of the logger to use
+        doc=u"""Name of the logger to use [-]
 
         :Type: str
         """,
@@ -970,7 +1132,7 @@ class OutMag(FrozenClass):
     internal = property(
         fget=_get_internal,
         fset=_set_internal,
-        doc=u"""OutInternal object containg outputs related to a specific model
+        doc=u"""OutInternal object containg outputs related to a specific model [-]
 
         :Type: OutInternal
         """,
@@ -988,7 +1150,7 @@ class OutMag(FrozenClass):
     Rag = property(
         fget=_get_Rag,
         fset=_set_Rag,
-        doc=u"""Radius value for air-gap computation
+        doc=u"""Radius value for air-gap computation [-]
 
         :Type: float
         """,
@@ -1006,7 +1168,7 @@ class OutMag(FrozenClass):
     Pem_av = property(
         fget=_get_Pem_av,
         fset=_set_Pem_av,
-        doc=u"""Average Electromagnetic power
+        doc=u"""Average Electromagnetic power [W]
 
         :Type: float
         """,
@@ -1043,7 +1205,7 @@ class OutMag(FrozenClass):
     Slice = property(
         fget=_get_Slice,
         fset=_set_Slice,
-        doc=u"""Slice model to account for skew
+        doc=u"""Slice model to account for skew [-]
 
         :Type: SliceModel
         """,
@@ -1076,7 +1238,7 @@ class OutMag(FrozenClass):
     Tem_slice = property(
         fget=_get_Tem_slice,
         fset=_set_Tem_slice,
-        doc=u"""Electromagnetic torque DataTime object including torque per slice
+        doc=u"""Electromagnetic torque DataTime object including torque per slice [N]
 
         :Type: SciDataTool.Classes.DataND.DataND
         """,
@@ -1116,7 +1278,7 @@ class OutMag(FrozenClass):
     Phi_wind_slice = property(
         fget=_get_Phi_wind_slice,
         fset=_set_Phi_wind_slice,
-        doc=u"""Dict of lamination winding fluxlinkage DataTime objects per slice
+        doc=u"""Dict of lamination winding fluxlinkage DataTime objects per slice [Wb/m]
 
         :Type: {SciDataTool.Classes.DataND.DataND}
         """,
@@ -1134,7 +1296,7 @@ class OutMag(FrozenClass):
     Tem_norm = property(
         fget=_get_Tem_norm,
         fset=_set_Tem_norm,
-        doc=u"""Torque normalization
+        doc=u"""Torque normalization [N.m]
 
         :Type: float
         """,

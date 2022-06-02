@@ -23,6 +23,7 @@ except ImportError as error:
     get_data = error
 
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 
@@ -138,7 +139,7 @@ class ImportMatrixXls(ImportMatrix):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -148,19 +149,79 @@ class ImportMatrixXls(ImportMatrix):
         diff_list = list()
 
         # Check the properties inherited from ImportMatrix
-        diff_list.extend(super(ImportMatrixXls, self).compare(other, name=name))
+        diff_list.extend(
+            super(ImportMatrixXls, self).compare(
+                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
+            )
+        )
         if other._file_path != self._file_path:
-            diff_list.append(name + ".file_path")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._file_path)
+                    + ", other="
+                    + str(other._file_path)
+                    + ")"
+                )
+                diff_list.append(name + ".file_path" + val_str)
+            else:
+                diff_list.append(name + ".file_path")
         if other._sheet != self._sheet:
-            diff_list.append(name + ".sheet")
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._sheet) + ", other=" + str(other._sheet) + ")"
+                )
+                diff_list.append(name + ".sheet" + val_str)
+            else:
+                diff_list.append(name + ".sheet")
         if other._skiprows != self._skiprows:
-            diff_list.append(name + ".skiprows")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._skiprows)
+                    + ", other="
+                    + str(other._skiprows)
+                    + ")"
+                )
+                diff_list.append(name + ".skiprows" + val_str)
+            else:
+                diff_list.append(name + ".skiprows")
         if other._usecols != self._usecols:
-            diff_list.append(name + ".usecols")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._usecols)
+                    + ", other="
+                    + str(other._usecols)
+                    + ")"
+                )
+                diff_list.append(name + ".usecols" + val_str)
+            else:
+                diff_list.append(name + ".usecols")
         if other._axes_colrows != self._axes_colrows:
-            diff_list.append(name + ".axes_colrows")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._axes_colrows)
+                    + ", other="
+                    + str(other._axes_colrows)
+                    + ")"
+                )
+                diff_list.append(name + ".axes_colrows" + val_str)
+            else:
+                diff_list.append(name + ".axes_colrows")
         if other._is_allsheets != self._is_allsheets:
-            diff_list.append(name + ".is_allsheets")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._is_allsheets)
+                    + ", other="
+                    + str(other._is_allsheets)
+                    + ")"
+                )
+                diff_list.append(name + ".is_allsheets" + val_str)
+            else:
+                diff_list.append(name + ".is_allsheets")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -236,7 +297,7 @@ class ImportMatrixXls(ImportMatrix):
     file_path = property(
         fget=_get_file_path,
         fset=_set_file_path,
-        doc=u"""Path of the file to load
+        doc=u"""Path of the file to load [-]
 
         :Type: str
         """,
@@ -254,7 +315,7 @@ class ImportMatrixXls(ImportMatrix):
     sheet = property(
         fget=_get_sheet,
         fset=_set_sheet,
-        doc=u"""Name of the sheet to load
+        doc=u"""Name of the sheet to load [-]
 
         :Type: str
         """,
@@ -272,7 +333,7 @@ class ImportMatrixXls(ImportMatrix):
     skiprows = property(
         fget=_get_skiprows,
         fset=_set_skiprows,
-        doc=u"""To skip some rows in the file (header)
+        doc=u"""To skip some rows in the file (header) [-]
 
         :Type: int
         :min: 0
@@ -291,7 +352,7 @@ class ImportMatrixXls(ImportMatrix):
     usecols = property(
         fget=_get_usecols,
         fset=_set_usecols,
-        doc=u"""list of Excel column letters and column ranges (e.g. "A:E" or "A,C,E:F")
+        doc=u"""list of Excel column letters and column ranges (e.g. "A:E" or "A,C,E:F") [-]
 
         :Type: str
         """,
@@ -311,7 +372,7 @@ class ImportMatrixXls(ImportMatrix):
     axes_colrows = property(
         fget=_get_axes_colrows,
         fset=_set_axes_colrows,
-        doc=u"""To read axes in first line/column
+        doc=u"""To read axes in first line/column [-]
 
         :Type: dict
         """,
@@ -329,7 +390,7 @@ class ImportMatrixXls(ImportMatrix):
     is_allsheets = property(
         fget=_get_is_allsheets,
         fset=_set_is_allsheets,
-        doc=u"""To read all sheets in a 3D matrix
+        doc=u"""To read all sheets in a 3D matrix [-]
 
         :Type: bool
         """,

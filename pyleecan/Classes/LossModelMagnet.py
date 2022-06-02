@@ -28,6 +28,7 @@ except ImportError as error:
     comp_loss = error
 
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 
@@ -133,7 +134,7 @@ class LossModelMagnet(LossModel):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -143,9 +144,23 @@ class LossModelMagnet(LossModel):
         diff_list = list()
 
         # Check the properties inherited from LossModel
-        diff_list.extend(super(LossModelMagnet, self).compare(other, name=name))
+        diff_list.extend(
+            super(LossModelMagnet, self).compare(
+                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
+            )
+        )
         if other._type_skin_effect != self._type_skin_effect:
-            diff_list.append(name + ".type_skin_effect")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._type_skin_effect)
+                    + ", other="
+                    + str(other._type_skin_effect)
+                    + ")"
+                )
+                diff_list.append(name + ".type_skin_effect" + val_str)
+            else:
+                diff_list.append(name + ".type_skin_effect")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list

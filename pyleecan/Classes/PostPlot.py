@@ -23,6 +23,7 @@ except ImportError as error:
     run = error
 
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 
@@ -138,7 +139,7 @@ class PostPlot(PostMethod):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -148,19 +149,79 @@ class PostPlot(PostMethod):
         diff_list = list()
 
         # Check the properties inherited from PostMethod
-        diff_list.extend(super(PostPlot, self).compare(other, name=name))
+        diff_list.extend(
+            super(PostPlot, self).compare(
+                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
+            )
+        )
         if other._method != self._method:
-            diff_list.append(name + ".method")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._method)
+                    + ", other="
+                    + str(other._method)
+                    + ")"
+                )
+                diff_list.append(name + ".method" + val_str)
+            else:
+                diff_list.append(name + ".method")
         if other._name != self._name:
-            diff_list.append(name + ".name")
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._name) + ", other=" + str(other._name) + ")"
+                )
+                diff_list.append(name + ".name" + val_str)
+            else:
+                diff_list.append(name + ".name")
         if other._param_list != self._param_list:
-            diff_list.append(name + ".param_list")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._param_list)
+                    + ", other="
+                    + str(other._param_list)
+                    + ")"
+                )
+                diff_list.append(name + ".param_list" + val_str)
+            else:
+                diff_list.append(name + ".param_list")
         if other._param_dict != self._param_dict:
-            diff_list.append(name + ".param_dict")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._param_dict)
+                    + ", other="
+                    + str(other._param_dict)
+                    + ")"
+                )
+                diff_list.append(name + ".param_dict" + val_str)
+            else:
+                diff_list.append(name + ".param_dict")
         if other._save_format != self._save_format:
-            diff_list.append(name + ".save_format")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._save_format)
+                    + ", other="
+                    + str(other._save_format)
+                    + ")"
+                )
+                diff_list.append(name + ".save_format" + val_str)
+            else:
+                diff_list.append(name + ".save_format")
         if other._quantity != self._quantity:
-            diff_list.append(name + ".quantity")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._quantity)
+                    + ", other="
+                    + str(other._quantity)
+                    + ")"
+                )
+                diff_list.append(name + ".quantity" + val_str)
+            else:
+                diff_list.append(name + ".quantity")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list

@@ -24,6 +24,7 @@ except ImportError as error:
 
 
 from numpy import array, array_equal
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 
@@ -104,7 +105,7 @@ class ImportMatrixVal(ImportMatrix):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -114,7 +115,11 @@ class ImportMatrixVal(ImportMatrix):
         diff_list = list()
 
         # Check the properties inherited from ImportMatrix
-        diff_list.extend(super(ImportMatrixVal, self).compare(other, name=name))
+        diff_list.extend(
+            super(ImportMatrixVal, self).compare(
+                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
+            )
+        )
         if not array_equal(other.value, self.value):
             diff_list.append(name + ".value")
         # Filter ignore differences
@@ -192,7 +197,7 @@ class ImportMatrixVal(ImportMatrix):
     value = property(
         fget=_get_value,
         fset=_set_value,
-        doc=u"""The matrix to return
+        doc=u"""The matrix to return [-]
 
         :Type: ndarray
         """,

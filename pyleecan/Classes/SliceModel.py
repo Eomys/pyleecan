@@ -34,6 +34,7 @@ except ImportError as error:
 
 
 from numpy import array, array_equal
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 
@@ -197,7 +198,7 @@ class SliceModel(FrozenClass):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -206,21 +207,82 @@ class SliceModel(FrozenClass):
             return ["type(" + name + ")"]
         diff_list = list()
         if other._type_distribution != self._type_distribution:
-            diff_list.append(name + ".type_distribution")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._type_distribution)
+                    + ", other="
+                    + str(other._type_distribution)
+                    + ")"
+                )
+                diff_list.append(name + ".type_distribution" + val_str)
+            else:
+                diff_list.append(name + ".type_distribution")
         if other._Nslices != self._Nslices:
-            diff_list.append(name + ".Nslices")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._Nslices)
+                    + ", other="
+                    + str(other._Nslices)
+                    + ")"
+                )
+                diff_list.append(name + ".Nslices" + val_str)
+            else:
+                diff_list.append(name + ".Nslices")
         if other._z_list != self._z_list:
-            diff_list.append(name + ".z_list")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._z_list)
+                    + ", other="
+                    + str(other._z_list)
+                    + ")"
+                )
+                diff_list.append(name + ".z_list" + val_str)
+            else:
+                diff_list.append(name + ".z_list")
         if not array_equal(other.angle_rotor, self.angle_rotor):
             diff_list.append(name + ".angle_rotor")
         if not array_equal(other.angle_stator, self.angle_stator):
             diff_list.append(name + ".angle_stator")
-        if other._L != self._L:
-            diff_list.append(name + ".L")
+        if (
+            other._L is not None
+            and self._L is not None
+            and isnan(other._L)
+            and isnan(self._L)
+        ):
+            pass
+        elif other._L != self._L:
+            if is_add_value:
+                val_str = " (self=" + str(self._L) + ", other=" + str(other._L) + ")"
+                diff_list.append(name + ".L" + val_str)
+            else:
+                diff_list.append(name + ".L")
         if other._is_step != self._is_step:
-            diff_list.append(name + ".is_step")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._is_step)
+                    + ", other="
+                    + str(other._is_step)
+                    + ")"
+                )
+                diff_list.append(name + ".is_step" + val_str)
+            else:
+                diff_list.append(name + ".is_step")
         if other._is_skew != self._is_skew:
-            diff_list.append(name + ".is_skew")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._is_skew)
+                    + ", other="
+                    + str(other._is_skew)
+                    + ")"
+                )
+                diff_list.append(name + ".is_skew" + val_str)
+            else:
+                diff_list.append(name + ".is_skew")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -315,7 +377,7 @@ class SliceModel(FrozenClass):
     type_distribution = property(
         fget=_get_type_distribution,
         fset=_set_type_distribution,
-        doc=u"""Type of slice distribution to use for rotor skew if linear and continuous ("uniform", "gauss", "user-defined")
+        doc=u"""Type of slice distribution to use for rotor skew if linear and continuous ("uniform", "gauss", "user-defined") [-]
 
         :Type: str
         """,
@@ -333,7 +395,7 @@ class SliceModel(FrozenClass):
     Nslices = property(
         fget=_get_Nslices,
         fset=_set_Nslices,
-        doc=u"""Number of slices
+        doc=u"""Number of slices [-]
 
         :Type: int
         """,
@@ -353,7 +415,7 @@ class SliceModel(FrozenClass):
     z_list = property(
         fget=_get_z_list,
         fset=_set_z_list,
-        doc=u"""List of slice positions
+        doc=u"""List of slice positions [m]
 
         :Type: list
         """,
@@ -378,7 +440,7 @@ class SliceModel(FrozenClass):
     angle_rotor = property(
         fget=_get_angle_rotor,
         fset=_set_angle_rotor,
-        doc=u"""Array of rotor skew angles in case of skew
+        doc=u"""Array of rotor skew angles in case of skew [rad]
 
         :Type: ndarray
         """,
@@ -403,7 +465,7 @@ class SliceModel(FrozenClass):
     angle_stator = property(
         fget=_get_angle_stator,
         fset=_set_angle_stator,
-        doc=u"""Array of stator skew angles in case of skew
+        doc=u"""Array of stator skew angles in case of skew [rad]
 
         :Type: ndarray
         """,
@@ -421,7 +483,7 @@ class SliceModel(FrozenClass):
     L = property(
         fget=_get_L,
         fset=_set_L,
-        doc=u"""Machine length (mean of rotor/stator lengths)
+        doc=u"""Machine length (mean of rotor/stator lengths) [m]
 
         :Type: float
         """,
@@ -439,7 +501,7 @@ class SliceModel(FrozenClass):
     is_step = property(
         fget=_get_is_step,
         fset=_set_is_step,
-        doc=u"""True to define slices as steps
+        doc=u"""True to define slices as steps [-]
 
         :Type: bool
         """,

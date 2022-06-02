@@ -33,6 +33,7 @@ except ImportError as error:
     comp_AGSF_transfer = error
 
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 
@@ -167,7 +168,7 @@ class Force(FrozenClass):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -176,17 +177,84 @@ class Force(FrozenClass):
             return ["type(" + name + ")"]
         diff_list = list()
         if other._is_periodicity_t != self._is_periodicity_t:
-            diff_list.append(name + ".is_periodicity_t")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._is_periodicity_t)
+                    + ", other="
+                    + str(other._is_periodicity_t)
+                    + ")"
+                )
+                diff_list.append(name + ".is_periodicity_t" + val_str)
+            else:
+                diff_list.append(name + ".is_periodicity_t")
         if other._is_periodicity_a != self._is_periodicity_a:
-            diff_list.append(name + ".is_periodicity_a")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._is_periodicity_a)
+                    + ", other="
+                    + str(other._is_periodicity_a)
+                    + ")"
+                )
+                diff_list.append(name + ".is_periodicity_a" + val_str)
+            else:
+                diff_list.append(name + ".is_periodicity_a")
         if other._is_agsf_transfer != self._is_agsf_transfer:
-            diff_list.append(name + ".is_agsf_transfer")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._is_agsf_transfer)
+                    + ", other="
+                    + str(other._is_agsf_transfer)
+                    + ")"
+                )
+                diff_list.append(name + ".is_agsf_transfer" + val_str)
+            else:
+                diff_list.append(name + ".is_agsf_transfer")
         if other._max_wavenumber_transfer != self._max_wavenumber_transfer:
-            diff_list.append(name + ".max_wavenumber_transfer")
-        if other._Rsbo_enforced_transfer != self._Rsbo_enforced_transfer:
-            diff_list.append(name + ".Rsbo_enforced_transfer")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._max_wavenumber_transfer)
+                    + ", other="
+                    + str(other._max_wavenumber_transfer)
+                    + ")"
+                )
+                diff_list.append(name + ".max_wavenumber_transfer" + val_str)
+            else:
+                diff_list.append(name + ".max_wavenumber_transfer")
+        if (
+            other._Rsbo_enforced_transfer is not None
+            and self._Rsbo_enforced_transfer is not None
+            and isnan(other._Rsbo_enforced_transfer)
+            and isnan(self._Rsbo_enforced_transfer)
+        ):
+            pass
+        elif other._Rsbo_enforced_transfer != self._Rsbo_enforced_transfer:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._Rsbo_enforced_transfer)
+                    + ", other="
+                    + str(other._Rsbo_enforced_transfer)
+                    + ")"
+                )
+                diff_list.append(name + ".Rsbo_enforced_transfer" + val_str)
+            else:
+                diff_list.append(name + ".Rsbo_enforced_transfer")
         if other._logger_name != self._logger_name:
-            diff_list.append(name + ".logger_name")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._logger_name)
+                    + ", other="
+                    + str(other._logger_name)
+                    + ")"
+                )
+                diff_list.append(name + ".logger_name" + val_str)
+            else:
+                diff_list.append(name + ".logger_name")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -247,7 +315,7 @@ class Force(FrozenClass):
     is_periodicity_t = property(
         fget=_get_is_periodicity_t,
         fset=_set_is_periodicity_t,
-        doc=u"""True to compute only on one time periodicity (use periodicities defined in axes_dict[time]). If None, automatically calculated based on Magnetics periodicities.
+        doc=u"""True to compute only on one time periodicity (use periodicities defined in axes_dict[time]). If None, automatically calculated based on Magnetics periodicities. [-]
 
         :Type: bool
         """,
@@ -265,7 +333,7 @@ class Force(FrozenClass):
     is_periodicity_a = property(
         fget=_get_is_periodicity_a,
         fset=_set_is_periodicity_a,
-        doc=u"""True to compute only on one angle periodicity (use periodicities defined in axes_dict[angle]). If None, automatically calculated based on Magnetics periodicities.
+        doc=u"""True to compute only on one angle periodicity (use periodicities defined in axes_dict[angle]). If None, automatically calculated based on Magnetics periodicities. [-]
 
         :Type: bool
         """,
@@ -283,7 +351,7 @@ class Force(FrozenClass):
     is_agsf_transfer = property(
         fget=_get_is_agsf_transfer,
         fset=_set_is_agsf_transfer,
-        doc=u"""True to compute the AGSF transfer from air-gap to stator bore radius.
+        doc=u"""True to compute the AGSF transfer from air-gap to stator bore radius. [-]
 
         :Type: bool
         """,
@@ -301,7 +369,7 @@ class Force(FrozenClass):
     max_wavenumber_transfer = property(
         fget=_get_max_wavenumber_transfer,
         fset=_set_max_wavenumber_transfer,
-        doc=u"""Maximum value to apply agsf transfer (to be used with FEA to avoid numerical noise amplification)
+        doc=u"""Maximum value to apply agsf transfer (to be used with FEA to avoid numerical noise amplification) [-]
 
         :Type: int
         """,
@@ -319,7 +387,7 @@ class Force(FrozenClass):
     Rsbo_enforced_transfer = property(
         fget=_get_Rsbo_enforced_transfer,
         fset=_set_Rsbo_enforced_transfer,
-        doc=u"""To enforce the value of the radius for AGSF transfer
+        doc=u"""To enforce the value of the radius for AGSF transfer [-]
 
         :Type: float
         """,
@@ -337,7 +405,7 @@ class Force(FrozenClass):
     logger_name = property(
         fget=_get_logger_name,
         fset=_set_logger_name,
-        doc=u"""Name of the logger to use
+        doc=u"""Name of the logger to use [-]
 
         :Type: str
         """,

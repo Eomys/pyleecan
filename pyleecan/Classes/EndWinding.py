@@ -28,6 +28,7 @@ except ImportError as error:
     comp_inductance = error
 
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 
@@ -111,7 +112,7 @@ class EndWinding(FrozenClass):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -119,8 +120,25 @@ class EndWinding(FrozenClass):
         if type(other) != type(self):
             return ["type(" + name + ")"]
         diff_list = list()
-        if other._Lew_enforced != self._Lew_enforced:
-            diff_list.append(name + ".Lew_enforced")
+        if (
+            other._Lew_enforced is not None
+            and self._Lew_enforced is not None
+            and isnan(other._Lew_enforced)
+            and isnan(self._Lew_enforced)
+        ):
+            pass
+        elif other._Lew_enforced != self._Lew_enforced:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._Lew_enforced)
+                    + ", other="
+                    + str(other._Lew_enforced)
+                    + ")"
+                )
+                diff_list.append(name + ".Lew_enforced" + val_str)
+            else:
+                diff_list.append(name + ".Lew_enforced")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -166,7 +184,7 @@ class EndWinding(FrozenClass):
     Lew_enforced = property(
         fget=_get_Lew_enforced,
         fset=_set_Lew_enforced,
-        doc=u"""Enforced end-winding lekage inductance
+        doc=u"""Enforced end-winding lekage inductance [H]
 
         :Type: float
         :min: 0

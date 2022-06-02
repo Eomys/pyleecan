@@ -1,5 +1,6 @@
 def get_L_dqh(self, Id, Iq, L_endwinding=0, Phi_dqh=None):
     """Get the total dqh inductance
+    TODO: calculate end-winding inductance from machine
 
     Parameters
     ----------
@@ -22,4 +23,7 @@ def get_L_dqh(self, Id, Iq, L_endwinding=0, Phi_dqh=None):
 
     Lmdqh = self.get_Lm_dqh(Id=Id, Iq=Iq, Phi_dqh=Phi_dqh)
 
-    return Lmdqh + L_endwinding
+    if Lmdqh is None:
+        return None
+    else:
+        return Lmdqh + L_endwinding

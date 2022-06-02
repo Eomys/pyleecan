@@ -40,6 +40,7 @@ except ImportError as error:
     element_loop = error
 
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 
@@ -185,7 +186,7 @@ class ForceTensor(Force):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -195,11 +196,31 @@ class ForceTensor(Force):
         diff_list = list()
 
         # Check the properties inherited from Force
-        diff_list.extend(super(ForceTensor, self).compare(other, name=name))
+        diff_list.extend(
+            super(ForceTensor, self).compare(
+                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
+            )
+        )
         if other._group != self._group:
-            diff_list.append(name + ".group")
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._group) + ", other=" + str(other._group) + ")"
+                )
+                diff_list.append(name + ".group" + val_str)
+            else:
+                diff_list.append(name + ".group")
         if other._tensor != self._tensor:
-            diff_list.append(name + ".tensor")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._tensor)
+                    + ", other="
+                    + str(other._tensor)
+                    + ")"
+                )
+                diff_list.append(name + ".tensor" + val_str)
+            else:
+                diff_list.append(name + ".tensor")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -263,7 +284,7 @@ class ForceTensor(Force):
     group = property(
         fget=_get_group,
         fset=_set_group,
-        doc=u"""Name of the group selected for magnetic force computation. If None, all the domain is selected.
+        doc=u"""Name of the group selected for magnetic force computation. If None, all the domain is selected. [-]
 
         :Type: str
         """,
@@ -283,7 +304,7 @@ class ForceTensor(Force):
     tensor = property(
         fget=_get_tensor,
         fset=_set_tensor,
-        doc=u"""Force model(s) to be used
+        doc=u"""Force model(s) to be used [-]
 
         :Type: dict
         """,

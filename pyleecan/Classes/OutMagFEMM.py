@@ -23,6 +23,7 @@ except ImportError as error:
     clean = error
 
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 
@@ -108,7 +109,7 @@ class OutMagFEMM(OutInternal):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -118,9 +119,23 @@ class OutMagFEMM(OutInternal):
         diff_list = list()
 
         # Check the properties inherited from OutInternal
-        diff_list.extend(super(OutMagFEMM, self).compare(other, name=name))
+        diff_list.extend(
+            super(OutMagFEMM, self).compare(
+                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
+            )
+        )
         if other._FEMM_dict != self._FEMM_dict:
-            diff_list.append(name + ".FEMM_dict")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._FEMM_dict)
+                    + ", other="
+                    + str(other._FEMM_dict)
+                    + ")"
+                )
+                diff_list.append(name + ".FEMM_dict" + val_str)
+            else:
+                diff_list.append(name + ".FEMM_dict")
         if (other.handler_list is None and self.handler_list is not None) or (
             other.handler_list is not None and self.handler_list is None
         ):
@@ -135,6 +150,8 @@ class OutMagFEMM(OutInternal):
                     self.handler_list[ii].compare(
                         other.handler_list[ii],
                         name=name + ".handler_list[" + str(ii) + "]",
+                        ignore_list=ignore_list,
+                        is_add_value=is_add_value,
                     )
                 )
         # Filter ignore differences

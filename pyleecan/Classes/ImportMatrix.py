@@ -23,6 +23,7 @@ except ImportError as error:
     edit_matrix = error
 
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 
@@ -95,7 +96,7 @@ class ImportMatrix(Import):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -105,9 +106,23 @@ class ImportMatrix(Import):
         diff_list = list()
 
         # Check the properties inherited from Import
-        diff_list.extend(super(ImportMatrix, self).compare(other, name=name))
+        diff_list.extend(
+            super(ImportMatrix, self).compare(
+                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
+            )
+        )
         if other._is_transpose != self._is_transpose:
-            diff_list.append(name + ".is_transpose")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._is_transpose)
+                    + ", other="
+                    + str(other._is_transpose)
+                    + ")"
+                )
+                diff_list.append(name + ".is_transpose" + val_str)
+            else:
+                diff_list.append(name + ".is_transpose")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -164,7 +179,7 @@ class ImportMatrix(Import):
     is_transpose = property(
         fget=_get_is_transpose,
         fset=_set_is_transpose,
-        doc=u"""1 to transpose the Imported/Generated matrix
+        doc=u"""1 to transpose the Imported/Generated matrix [-]
 
         :Type: bool
         """,
