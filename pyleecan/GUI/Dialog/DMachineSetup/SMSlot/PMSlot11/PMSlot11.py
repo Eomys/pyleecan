@@ -4,7 +4,7 @@ import PySide2.QtCore
 from numpy import pi
 from PySide2.QtCore import Signal
 from PySide2.QtWidgets import QWidget
-
+from PySide2.QtGui import QPixmap
 from ......Classes.SlotM11 import SlotM11
 from ......GUI import gui_option
 from ......GUI.Dialog.DMachineSetup.SMSlot.PMSlot11.Gen_PMSlot11 import Gen_PMSlot11
@@ -23,9 +23,10 @@ class PMSlot11(Gen_PMSlot11, QWidget):
     saveNeeded = Signal()
     # Information for Slot combobox
     slot_name = "Polar Magnet"
+    notch_name = "Polar"
     slot_type = SlotM11
 
-    def __init__(self, lamination=None):
+    def __init__(self, lamination=None, is_notch=False):
         """Initialize the widget according to lamination
 
         Parameters
@@ -34,6 +35,8 @@ class PMSlot11(Gen_PMSlot11, QWidget):
             A PMSlot11 widget
         lamination : Lamination
             current lamination to edit
+        is_notch : bool
+            True to adapt the slot GUI for the notch setup
         """
 
         # Build the interface according to the .ui file
@@ -41,6 +44,7 @@ class PMSlot11(Gen_PMSlot11, QWidget):
         self.setupUi(self)
         self.lamination = lamination
         self.slot = lamination.slot
+        self.is_notch = is_notch
 
         # Set FloatEdit unit
         self.lf_W0.unit = "rad"
@@ -54,6 +58,24 @@ class PMSlot11(Gen_PMSlot11, QWidget):
         ]
         for wid in wid_list:
             wid.setText("[" + gui_option.unit.get_m_name() + "]")
+
+        # Notch setup
+        if is_notch:
+            # Hide magnet related widget
+            wid_list = [self.in_Wmag, self.lf_Wmag, self.c_Wmag_unit]
+            wid_list += [self.in_Hmag, self.lf_Hmag, self.unit_Hmag]
+            wid_list += [self.txt_constraint]  # Constraint Wmag < W0
+            for wid in wid_list:
+                wid.hide()
+            # Set values for check
+            self.slot.Hmag = 0
+            self.slot.Wmag = 0
+            # Remove constraint
+
+            # Use schematics without magnet
+            self.img_slot.setPixmap(
+                QPixmap(u":/images/images/MachineSetup/WMSlot/SlotM10_empty.png")
+            )
 
         # Fill the fields with the machine values (if they're filled)
         self.lf_W0.setValue(self.slot.W0)
