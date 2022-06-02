@@ -279,6 +279,8 @@ class SLamShape(Gen_SLamShape, QWidget):
         self : SLamShape
             A SLamShape object
         """
+        self.obj.notch = self.notches_win.obj.notch
+        self.notches_win = None
         self.update_notches_text()
         self.update_graph()
         # Notify the machine GUI that the machine has changed
@@ -292,8 +294,11 @@ class SLamShape(Gen_SLamShape, QWidget):
         self : SLamShape
             A SLamShape object
         """
-        Nset = len(self.obj.notch_list)
-        self.out_axial_duct.setText(str(Nset) + "set (" + str(Nset) + "notches)")
+        Nset = len(self.obj.notch)
+        Nnotch = 0
+        for notch in self.obj.notch:
+            Nnotch += notch.notch_shape.Zs
+        self.out_axial_duct.setText(str(Nset) + "set (" + str(Nnotch) + "notches)")
 
     def update_lenght(self):
         """Update the text of out_length
@@ -384,9 +389,7 @@ class SLamShape(Gen_SLamShape, QWidget):
                 err_msg = "Error while plotting machine in Rotor Lamination:\n" + str(e)
             getLogger(GUI_LOG_NAME).error(err_msg)
             QMessageBox().critical(
-                self,
-                self.tr("Error"),
-                err_msg,
+                self, self.tr("Error"), err_msg,
             )
 
         # Update the Graph

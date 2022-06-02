@@ -41,16 +41,24 @@ class DNotchTab(Ui_DNotchTab, QDialog):
         self.setupUi(self)
 
         # Saving arguments
-        self.machine = machine
+        self.machine = machine.copy()
         self.is_stator = is_stator
 
         # Get the correct object to set
         if self.is_stator:
-            self.obj = machine.stator
+            self.obj = self.machine.stator
         else:
-            self.obj = machine.rotor
+            self.obj = self.machine.rotor
+
+        # Init notch
         if self.obj.notch is None:
             self.obj.notch = list()
+        if len(self.obj.notch) == 0:  # Add first notch
+            self.obj.notch.append(
+                NotchEvenDist(
+                    alpha=0, notch_shape=SlotM10(Zs=self.obj.get_Zs(), W0=None, H0=None)
+                )
+            )
 
         # Update all the notch tab
         # (the current notches types will be initialized)
@@ -67,7 +75,7 @@ class DNotchTab(Ui_DNotchTab, QDialog):
         self.b_remove.clicked.connect(self.s_remove)
         self.b_ok.clicked.connect(self.accept)
         self.b_cancel.clicked.connect(self.reject)
-        # self.b_plot.clicked.connect(self.s_plot)
+        self.b_plot.clicked.connect(self.s_plot)
 
     def emit_save(self):
         """Send a saveNeeded signal to the DMachineSetup"""
@@ -87,7 +95,9 @@ class DNotchTab(Ui_DNotchTab, QDialog):
         # Create a new notch if needed
         if notch is None:
             self.obj.notch.append(
-                NotchEvenDist(alpha=0, notch_shape=SlotM10(Zs=self.obj.get_Zs()))
+                NotchEvenDist(
+                    alpha=0, notch_shape=SlotM10(Zs=self.obj.get_Zs(), W0=None, H0=None)
+                )
             )
             notch = self.obj.notch[-1]
             notch_index = len(self.obj.notch) - 1
@@ -115,18 +125,33 @@ class DNotchTab(Ui_DNotchTab, QDialog):
         Parameters
         ----------
         self : DNotchTab
-            A DNotchTab widget
+            a DNotchTab object
         """
-        pass
 
-    @staticmethod
-    def check(lamination):
-        """Check that the current machine have all the needed field set
+        # We have to make sure the notches are right before trying to plot it
+        error = self.check(self.obj)
+        if error:  # Error => Display it
+            err_msg = "Error in Notch definition:\n" + error
+            getLogger(GUI_LOG_NAME).debug(err_msg)
+            QMessageBox().critical(self, self.tr("Error"), err_msg)
+        else:  # No error => Plot the lamination
+            try:
+                self.obj.plot(is_show_fig=True)
+                set_plot_gui_icon()
+            except Exception as e:
+                err_msg = (
+                    "Error while plotting Lamination in Notch definition:\n" + str(e)
+                )
+                getLogger(GUI_LOG_NAME).error(err_msg)
+                QMessageBox().critical(self, self.tr("Error"), err_msg)
+
+    def check(self):
+        """Check that the notches are correctly defined
 
         Parameters
         ----------
-        lamination : Lamination
-            Lamination to check
+        self : DNotchTab
+            A DNotchTab object
 
         Returns
         -------
@@ -135,8 +160,9 @@ class DNotchTab(Ui_DNotchTab, QDialog):
         """
 
         # Check that everything is set
-        for notch in lamination.notch:
+        for ii in range(self.obj.notch):
             try:
-                notch.check()
+                wid = self.tab_notch.widget(ii)
+                wid.check(wid.lam_notch)
             except SlotCheckError as error:
                 return str(error)

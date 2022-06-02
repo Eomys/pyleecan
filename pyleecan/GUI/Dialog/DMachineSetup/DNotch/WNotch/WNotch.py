@@ -1,10 +1,7 @@
-# -*- coding: utf-8 -*-
-
-
 from PySide2.QtCore import Signal
-from PySide2.QtWidgets import QMessageBox, QWidget
-
-from pyleecan.Classes.LamSlot import LamSlot
+from PySide2.QtWidgets import QWidget
+from numpy import pi
+from ......Classes.LamSlot import LamSlot
 
 from ......GUI.Dialog.DMachineSetup.SMSlot.PMSlot10.PMSlot10 import PMSlot10
 from ......GUI.Dialog.DMachineSetup.SMSlot.PMSlot11.PMSlot11 import PMSlot11
@@ -51,7 +48,7 @@ class WNotch(Ui_WNotch, QWidget):
         self.wid_list = [PMSlot10, PMSlot11]
 
         self.type_list = [wid.slot_type for wid in self.wid_list]
-        self.name_list = [wid.slot_name for wid in self.wid_list]
+        self.name_list = [wid.notch_name for wid in self.wid_list]
 
         # Avoid erase all the parameters when navigating though the notchs
         self.previous_notch = dict()
@@ -66,11 +63,13 @@ class WNotch(Ui_WNotch, QWidget):
             self.type_list.index(type(self.obj.notch[index].notch_shape))
         )
 
+        self.set_alpha_unit()
+        self.si_Zs.setValue(self.lam_notch.slot.Zs)
+
         # Regenerate the pages with the new values
         self.w_notch.setParent(None)
         self.w_notch = self.wid_list[self.c_notch_type.currentIndex()](
-            lamination=self.lam_notch,
-            is_notch=True,
+            lamination=self.lam_notch, is_notch=True,
         )
         # Refresh the GUI
         self.main_layout.removeWidget(self.w_notch)
@@ -78,10 +77,32 @@ class WNotch(Ui_WNotch, QWidget):
 
         # Connect the slot
         self.c_notch_type.currentIndexChanged.connect(self.set_notch_type)
+        self.si_Zs.editingFinished.connect(self.set_Zs)
+        self.lf_alpha.editingFinished.connect(self.set_alpha)
 
     def emit_save(self):
         """Send a saveNeeded signal to the DMachineSetup"""
         self.saveNeeded.emit()
+
+    def set_alpha(self):
+        """Set alpha value according to widgets"""
+        if self.c_alpha_unit.currentIndex() == 0:  # rad
+            self.obj.notch[self.index].alpha = self.lf_alpha.value()
+        else:  # deg
+            self.obj.notch[self.index].alpha = self.lf_alpha.value() * 180 / pi
+
+    def set_Zs(self):
+        """Set the value of Zs"""
+        self.lam_notch.slot.Zs = self.si_Zs.value()
+
+    def set_alpha_unit(self):
+        """Change the current unit of alpha"""
+        self.lf_alpha.blockSignals(True)
+        if self.c_alpha_unit.currentIndex() == 0:  # rad
+            self.lf_alpha.setValue(self.obj.notch[self.index].alpha)
+        else:
+            self.lf_alpha.setValue(self.obj.notch[self.index].alpha * 180 / pi)
+        self.lf_alpha.blockSignals(False)
 
     def set_notch_type(self, c_index):
         """Initialize self.obj with the notch corresponding to index
@@ -95,29 +116,22 @@ class WNotch(Ui_WNotch, QWidget):
         """
 
         # Save the notch
-        notch = self.obj.notch[self.index]
+        notch = self.lam_notch.slot
         self.previous_notch[type(notch)] = notch
 
         # Call the corresponding constructor
-        Zh = notch.Zh
         if self.previous_notch[self.type_list[c_index]] is None:
             # No previous notch of this type
-            self.obj.notch[self.index] = self.type_list[c_index]()
-            self.obj.notch[self.index]._set_None()  # No default value
-            self.obj.notch[self.index].Zh = Zh
-            if self.is_mag and self.obj.notch[self.index].has_magnet():  # IPMSM
-                magnet = notch.get_magnet_by_id(0)
-                self.obj.notch[self.index].set_magnet_by_id(0, magnet)
-            elif self.obj.notch[self.index].has_magnet():  # SyRM
-                self.obj.notch[self.index].remove_magnet()
+            self.lam_notch.slot = self.type_list[c_index]()
+            self.lam_notch.slot._set_None()  # No default value
         else:  # Load the previous notch of this type
-            self.obj.notch[self.index] = self.previous_notch[self.type_list[c_index]]
+            self.lam_notch.slot = self.previous_notch[self.type_list[c_index]]
+        self.set_alpha()
+        self.set_Zs()
 
         # Update the GUI
         self.w_notch.setParent(None)
-        self.w_notch = self.wid_list[c_index](
-            notch=self.obj.notch[self.index], material_dict=self.material_dict
-        )
+        self.w_notch = self.wid_list[c_index](lamination=self.lam_notch, is_notch=True,)
         self.w_notch.saveNeeded.connect(self.emit_save)
         # Refresh the GUI
         self.main_layout.removeWidget(self.w_notch)

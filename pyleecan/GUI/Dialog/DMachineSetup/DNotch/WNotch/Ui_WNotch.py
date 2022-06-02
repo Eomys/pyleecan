@@ -56,8 +56,16 @@ class Ui_WNotch(object):
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.lf_alpha.sizePolicy().hasHeightForWidth())
         self.lf_alpha.setSizePolicy(sizePolicy)
+        self.lf_alpha.setMaximumSize(QSize(80, 16777215))
 
         self.horizontalLayout.addWidget(self.lf_alpha)
+
+        self.c_alpha_unit = QComboBox(WNotch)
+        self.c_alpha_unit.addItem("")
+        self.c_alpha_unit.addItem("")
+        self.c_alpha_unit.setObjectName(u"c_alpha_unit")
+
+        self.horizontalLayout.addWidget(self.c_alpha_unit)
 
         self.horizontalSpacer = QSpacerItem(
             40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum
@@ -85,7 +93,9 @@ class Ui_WNotch(object):
     # setupUi
 
     def retranslateUi(self, WNotch):
-        WNotch.setWindowTitle(QCoreApplication.translate("WNotch", u"Form", None))
+        WNotch.setWindowTitle(
+            QCoreApplication.translate("WNotch", u"Notch setup", None)
+        )
         self.c_notch_type.setItemText(
             0, QCoreApplication.translate("WNotch", u"Slot Type 50", None)
         )
@@ -110,5 +120,11 @@ class Ui_WNotch(object):
 
         self.in_Zs.setText(QCoreApplication.translate("WNotch", u"Zs:", None))
         self.in_alpha.setText(QCoreApplication.translate("WNotch", u"Alpha:", None))
+        self.c_alpha_unit.setItemText(
+            0, QCoreApplication.translate("WNotch", u"[rad]", None)
+        )
+        self.c_alpha_unit.setItemText(
+            1, QCoreApplication.translate("WNotch", u"[deg]", None)
+        )
 
     # retranslateUi
