@@ -1,4 +1,5 @@
 import pytest
+from pyleecan.Classes.SlotCirc import SlotCirc
 from pyleecan.Classes.SlotM10 import SlotM10
 from pyleecan.Classes.SlotM11 import SlotM11
 from pyleecan.Classes.SlotM12 import SlotM12
@@ -46,6 +47,13 @@ if not isdir(SCHEMATICS_PATH):
     makedirs(SCHEMATICS_PATH)
 
 slot_test = list()
+
+slot_test.append(
+    {
+        "test_obj": SlotCirc(),
+    }
+)
+
 slot_test.append(
     {
         "test_obj": SlotM10(),
@@ -397,9 +405,9 @@ class Test_plot_schematics(object):
 
 if __name__ == "__main__":
     a = Test_plot_schematics()
-    # a.test_slot(slot_test[9])
+    a.test_slot(slot_test[0])
     # a.test_slot_point(slot_test[-1])
-    for slot in slot_test:
-        a.test_slot(slot)
+    # for slot in slot_test:
+    #     a.test_slot(slot)
     #     a.test_slot_point(slot)
     print("Done")

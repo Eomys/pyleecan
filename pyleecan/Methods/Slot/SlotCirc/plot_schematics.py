@@ -30,7 +30,6 @@ def plot_schematics(
     is_add_point_label=False,
     is_add_schematics=True,
     is_add_main_line=True,
-    type_add_active=True,
     save_path=None,
     is_show_fig=True,
     fig=None,
@@ -80,7 +79,6 @@ def plot_schematics(
             is_add_point_label=is_add_point_label,
             is_add_schematics=is_add_schematics,
             is_add_main_line=is_add_main_line,
-            type_add_active=type_add_active,
             save_path=save_path,
             is_show_fig=is_show_fig,
             fig=fig,
@@ -114,7 +112,7 @@ def plot_schematics(
         # Adding schematics
         if is_add_schematics:
             # W0
-            line = Segment(point_dict["Z3"], point_dict["Z2"])
+            line = Segment(point_dict["Z1"], point_dict["Z2"])
             line.plot(
                 fig=fig,
                 ax=ax,
@@ -126,7 +124,7 @@ def plot_schematics(
                 fontsize=SC_FONT_SIZE,
             )
             # H0
-            line = Segment(point_dict["Z1"], point_dict["Z2"])
+            line = Segment(point_dict["Z1"], point_dict["ZM"])
             line.plot(
                 fig=fig,
                 ax=ax,
@@ -139,19 +137,10 @@ def plot_schematics(
             )
 
         if is_add_main_line:
-            # Ox axis
-            line = Segment(0, lam.Rext * 1.5)
-            line.plot(
-                fig=fig,
-                ax=ax,
-                color=MAIN_LINE_COLOR,
-                linestyle=MAIN_LINE_STYLE,
-                linewidth=MAIN_LINE_WIDTH,
-            )
             # Top arc
             line = Arc1(
                 begin=point_dict["Z1"],
-                end=point_dict["Z4"],
+                end=point_dict["Z2"],
                 radius=self.get_Rbo(),
                 is_trigo_direction=True,
             )
@@ -161,13 +150,6 @@ def plot_schematics(
                 color=MAIN_LINE_COLOR,
                 linestyle=MAIN_LINE_STYLE,
                 linewidth=MAIN_LINE_WIDTH,
-            )
-
-        if type_add_active == 1:
-            self.plot_active(fig=fig, is_show_fig=False)
-        elif type_add_active == 2:
-            self.plot_active(
-                fig=fig, is_show_fig=False, enforced_default_color=MAGNET_COLOR
             )
 
         # Zooming and cleaning
