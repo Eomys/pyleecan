@@ -91,6 +91,7 @@ except ImportError as error:
     plot_side = error
 
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 
@@ -393,7 +394,7 @@ class LamSquirrelCage(LamSlotWind):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -403,18 +404,53 @@ class LamSquirrelCage(LamSlotWind):
         diff_list = list()
 
         # Check the properties inherited from LamSlotWind
-        diff_list.extend(super(LamSquirrelCage, self).compare(other, name=name))
-        if other._Hscr != self._Hscr:
-            diff_list.append(name + ".Hscr")
-        if other._Lscr != self._Lscr:
-            diff_list.append(name + ".Lscr")
+        diff_list.extend(
+            super(LamSquirrelCage, self).compare(
+                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
+            )
+        )
+        if (
+            other._Hscr is not None
+            and self._Hscr is not None
+            and isnan(other._Hscr)
+            and isnan(self._Hscr)
+        ):
+            pass
+        elif other._Hscr != self._Hscr:
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._Hscr) + ", other=" + str(other._Hscr) + ")"
+                )
+                diff_list.append(name + ".Hscr" + val_str)
+            else:
+                diff_list.append(name + ".Hscr")
+        if (
+            other._Lscr is not None
+            and self._Lscr is not None
+            and isnan(other._Lscr)
+            and isnan(self._Lscr)
+        ):
+            pass
+        elif other._Lscr != self._Lscr:
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._Lscr) + ", other=" + str(other._Lscr) + ")"
+                )
+                diff_list.append(name + ".Lscr" + val_str)
+            else:
+                diff_list.append(name + ".Lscr")
         if (other.ring_mat is None and self.ring_mat is not None) or (
             other.ring_mat is not None and self.ring_mat is None
         ):
             diff_list.append(name + ".ring_mat None mismatch")
         elif self.ring_mat is not None:
             diff_list.extend(
-                self.ring_mat.compare(other.ring_mat, name=name + ".ring_mat")
+                self.ring_mat.compare(
+                    other.ring_mat,
+                    name=name + ".ring_mat",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
             )
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))

@@ -38,6 +38,7 @@ except ImportError as error:
     solve_MTPA = error
 
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 
@@ -260,7 +261,7 @@ class ElecLUTdq(Electrical):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -270,39 +271,216 @@ class ElecLUTdq(Electrical):
         diff_list = list()
 
         # Check the properties inherited from Electrical
-        diff_list.extend(super(ElecLUTdq, self).compare(other, name=name))
+        diff_list.extend(
+            super(ElecLUTdq, self).compare(
+                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
+            )
+        )
         if other._n_interp != self._n_interp:
-            diff_list.append(name + ".n_interp")
-        if other._Id_min != self._Id_min:
-            diff_list.append(name + ".Id_min")
-        if other._Id_max != self._Id_max:
-            diff_list.append(name + ".Id_max")
-        if other._Iq_min != self._Iq_min:
-            diff_list.append(name + ".Iq_min")
-        if other._Iq_max != self._Iq_max:
-            diff_list.append(name + ".Iq_max")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._n_interp)
+                    + ", other="
+                    + str(other._n_interp)
+                    + ")"
+                )
+                diff_list.append(name + ".n_interp" + val_str)
+            else:
+                diff_list.append(name + ".n_interp")
+        if (
+            other._Id_min is not None
+            and self._Id_min is not None
+            and isnan(other._Id_min)
+            and isnan(self._Id_min)
+        ):
+            pass
+        elif other._Id_min != self._Id_min:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._Id_min)
+                    + ", other="
+                    + str(other._Id_min)
+                    + ")"
+                )
+                diff_list.append(name + ".Id_min" + val_str)
+            else:
+                diff_list.append(name + ".Id_min")
+        if (
+            other._Id_max is not None
+            and self._Id_max is not None
+            and isnan(other._Id_max)
+            and isnan(self._Id_max)
+        ):
+            pass
+        elif other._Id_max != self._Id_max:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._Id_max)
+                    + ", other="
+                    + str(other._Id_max)
+                    + ")"
+                )
+                diff_list.append(name + ".Id_max" + val_str)
+            else:
+                diff_list.append(name + ".Id_max")
+        if (
+            other._Iq_min is not None
+            and self._Iq_min is not None
+            and isnan(other._Iq_min)
+            and isnan(self._Iq_min)
+        ):
+            pass
+        elif other._Iq_min != self._Iq_min:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._Iq_min)
+                    + ", other="
+                    + str(other._Iq_min)
+                    + ")"
+                )
+                diff_list.append(name + ".Iq_min" + val_str)
+            else:
+                diff_list.append(name + ".Iq_min")
+        if (
+            other._Iq_max is not None
+            and self._Iq_max is not None
+            and isnan(other._Iq_max)
+            and isnan(self._Iq_max)
+        ):
+            pass
+        elif other._Iq_max != self._Iq_max:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._Iq_max)
+                    + ", other="
+                    + str(other._Iq_max)
+                    + ")"
+                )
+                diff_list.append(name + ".Iq_max" + val_str)
+            else:
+                diff_list.append(name + ".Iq_max")
         if other._n_Id != self._n_Id:
-            diff_list.append(name + ".n_Id")
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._n_Id) + ", other=" + str(other._n_Id) + ")"
+                )
+                diff_list.append(name + ".n_Id" + val_str)
+            else:
+                diff_list.append(name + ".n_Id")
         if other._n_Iq != self._n_Iq:
-            diff_list.append(name + ".n_Iq")
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._n_Iq) + ", other=" + str(other._n_Iq) + ")"
+                )
+                diff_list.append(name + ".n_Iq" + val_str)
+            else:
+                diff_list.append(name + ".n_Iq")
         if (other.LUT_simu is None and self.LUT_simu is not None) or (
             other.LUT_simu is not None and self.LUT_simu is None
         ):
             diff_list.append(name + ".LUT_simu None mismatch")
         elif self.LUT_simu is not None:
             diff_list.extend(
-                self.LUT_simu.compare(other.LUT_simu, name=name + ".LUT_simu")
+                self.LUT_simu.compare(
+                    other.LUT_simu,
+                    name=name + ".LUT_simu",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
             )
         if other._is_grid_dq != self._is_grid_dq:
-            diff_list.append(name + ".is_grid_dq")
-        if other._Urms_max != self._Urms_max:
-            diff_list.append(name + ".Urms_max")
-        if other._Jrms_max != self._Jrms_max:
-            diff_list.append(name + ".Jrms_max")
-        if other._Irms_max != self._Irms_max:
-            diff_list.append(name + ".Irms_max")
-        if other._load_rate != self._load_rate:
-            diff_list.append(name + ".load_rate")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._is_grid_dq)
+                    + ", other="
+                    + str(other._is_grid_dq)
+                    + ")"
+                )
+                diff_list.append(name + ".is_grid_dq" + val_str)
+            else:
+                diff_list.append(name + ".is_grid_dq")
+        if (
+            other._Urms_max is not None
+            and self._Urms_max is not None
+            and isnan(other._Urms_max)
+            and isnan(self._Urms_max)
+        ):
+            pass
+        elif other._Urms_max != self._Urms_max:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._Urms_max)
+                    + ", other="
+                    + str(other._Urms_max)
+                    + ")"
+                )
+                diff_list.append(name + ".Urms_max" + val_str)
+            else:
+                diff_list.append(name + ".Urms_max")
+        if (
+            other._Jrms_max is not None
+            and self._Jrms_max is not None
+            and isnan(other._Jrms_max)
+            and isnan(self._Jrms_max)
+        ):
+            pass
+        elif other._Jrms_max != self._Jrms_max:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._Jrms_max)
+                    + ", other="
+                    + str(other._Jrms_max)
+                    + ")"
+                )
+                diff_list.append(name + ".Jrms_max" + val_str)
+            else:
+                diff_list.append(name + ".Jrms_max")
+        if (
+            other._Irms_max is not None
+            and self._Irms_max is not None
+            and isnan(other._Irms_max)
+            and isnan(self._Irms_max)
+        ):
+            pass
+        elif other._Irms_max != self._Irms_max:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._Irms_max)
+                    + ", other="
+                    + str(other._Irms_max)
+                    + ")"
+                )
+                diff_list.append(name + ".Irms_max" + val_str)
+            else:
+                diff_list.append(name + ".Irms_max")
+        if (
+            other._load_rate is not None
+            and self._load_rate is not None
+            and isnan(other._load_rate)
+            and isnan(self._load_rate)
+        ):
+            pass
+        elif other._load_rate != self._load_rate:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._load_rate)
+                    + ", other="
+                    + str(other._load_rate)
+                    + ")"
+                )
+                diff_list.append(name + ".load_rate" + val_str)
+            else:
+                diff_list.append(name + ".load_rate")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list

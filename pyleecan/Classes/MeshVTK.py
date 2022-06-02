@@ -69,6 +69,7 @@ except ImportError as error:
 
 
 from numpy import array, array_equal
+from numpy import isnan
 from cloudpickle import dumps, loads
 from ._check import CheckTypeError
 
@@ -317,7 +318,7 @@ class MeshVTK(Mesh):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -327,7 +328,11 @@ class MeshVTK(Mesh):
         diff_list = list()
 
         # Check the properties inherited from Mesh
-        diff_list.extend(super(MeshVTK, self).compare(other, name=name))
+        diff_list.extend(
+            super(MeshVTK, self).compare(
+                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
+            )
+        )
         if (other.mesh is None and self.mesh is not None) or (
             other.mesh is not None and self.mesh is None
         ):
@@ -335,13 +340,45 @@ class MeshVTK(Mesh):
         elif self.mesh is not None and self.mesh != other.mesh:
             diff_list.append(name + ".mesh")
         if other._is_pyvista_mesh != self._is_pyvista_mesh:
-            diff_list.append(name + ".is_pyvista_mesh")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._is_pyvista_mesh)
+                    + ", other="
+                    + str(other._is_pyvista_mesh)
+                    + ")"
+                )
+                diff_list.append(name + ".is_pyvista_mesh" + val_str)
+            else:
+                diff_list.append(name + ".is_pyvista_mesh")
         if other._format != self._format:
-            diff_list.append(name + ".format")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._format)
+                    + ", other="
+                    + str(other._format)
+                    + ")"
+                )
+                diff_list.append(name + ".format" + val_str)
+            else:
+                diff_list.append(name + ".format")
         if other._path != self._path:
-            diff_list.append(name + ".path")
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._path) + ", other=" + str(other._path) + ")"
+                )
+                diff_list.append(name + ".path" + val_str)
+            else:
+                diff_list.append(name + ".path")
         if other._name != self._name:
-            diff_list.append(name + ".name")
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._name) + ", other=" + str(other._name) + ")"
+                )
+                diff_list.append(name + ".name" + val_str)
+            else:
+                diff_list.append(name + ".name")
         if (other.surf is None and self.surf is not None) or (
             other.surf is not None and self.surf is None
         ):
@@ -349,11 +386,41 @@ class MeshVTK(Mesh):
         elif self.surf is not None and self.surf != other.surf:
             diff_list.append(name + ".surf")
         if other._is_vtk_surf != self._is_vtk_surf:
-            diff_list.append(name + ".is_vtk_surf")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._is_vtk_surf)
+                    + ", other="
+                    + str(other._is_vtk_surf)
+                    + ")"
+                )
+                diff_list.append(name + ".is_vtk_surf" + val_str)
+            else:
+                diff_list.append(name + ".is_vtk_surf")
         if other._surf_path != self._surf_path:
-            diff_list.append(name + ".surf_path")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._surf_path)
+                    + ", other="
+                    + str(other._surf_path)
+                    + ")"
+                )
+                diff_list.append(name + ".surf_path" + val_str)
+            else:
+                diff_list.append(name + ".surf_path")
         if other._surf_name != self._surf_name:
-            diff_list.append(name + ".surf_name")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._surf_name)
+                    + ", other="
+                    + str(other._surf_name)
+                    + ")"
+                )
+                diff_list.append(name + ".surf_name" + val_str)
+            else:
+                diff_list.append(name + ".surf_name")
         if not array_equal(other.node_normals, self.node_normals):
             diff_list.append(name + ".node_normals")
         # Filter ignore differences

@@ -28,6 +28,7 @@ except ImportError as error:
     comp_inductance = error
 
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 
@@ -135,7 +136,7 @@ class EndWindingRect(EndWinding):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -145,13 +146,68 @@ class EndWindingRect(EndWinding):
         diff_list = list()
 
         # Check the properties inherited from EndWinding
-        diff_list.extend(super(EndWindingRect, self).compare(other, name=name))
-        if other._coil_pitch != self._coil_pitch:
-            diff_list.append(name + ".coil_pitch")
-        if other._lambda_length != self._lambda_length:
-            diff_list.append(name + ".lambda_length")
-        if other._lambda_width != self._lambda_width:
-            diff_list.append(name + ".lambda_width")
+        diff_list.extend(
+            super(EndWindingRect, self).compare(
+                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
+            )
+        )
+        if (
+            other._coil_pitch is not None
+            and self._coil_pitch is not None
+            and isnan(other._coil_pitch)
+            and isnan(self._coil_pitch)
+        ):
+            pass
+        elif other._coil_pitch != self._coil_pitch:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._coil_pitch)
+                    + ", other="
+                    + str(other._coil_pitch)
+                    + ")"
+                )
+                diff_list.append(name + ".coil_pitch" + val_str)
+            else:
+                diff_list.append(name + ".coil_pitch")
+        if (
+            other._lambda_length is not None
+            and self._lambda_length is not None
+            and isnan(other._lambda_length)
+            and isnan(self._lambda_length)
+        ):
+            pass
+        elif other._lambda_length != self._lambda_length:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._lambda_length)
+                    + ", other="
+                    + str(other._lambda_length)
+                    + ")"
+                )
+                diff_list.append(name + ".lambda_length" + val_str)
+            else:
+                diff_list.append(name + ".lambda_length")
+        if (
+            other._lambda_width is not None
+            and self._lambda_width is not None
+            and isnan(other._lambda_width)
+            and isnan(self._lambda_width)
+        ):
+            pass
+        elif other._lambda_width != self._lambda_width:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._lambda_width)
+                    + ", other="
+                    + str(other._lambda_width)
+                    + ")"
+                )
+                diff_list.append(name + ".lambda_width" + val_str)
+            else:
+                diff_list.append(name + ".lambda_width")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list

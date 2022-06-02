@@ -58,6 +58,7 @@ except ImportError as error:
     comp_angle_d_axis = error
 
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 
@@ -276,7 +277,7 @@ class LamSlotMag(LamSlot):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -286,13 +287,24 @@ class LamSlotMag(LamSlot):
         diff_list = list()
 
         # Check the properties inherited from LamSlot
-        diff_list.extend(super(LamSlotMag, self).compare(other, name=name))
+        diff_list.extend(
+            super(LamSlotMag, self).compare(
+                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
+            )
+        )
         if (other.magnet is None and self.magnet is not None) or (
             other.magnet is not None and self.magnet is None
         ):
             diff_list.append(name + ".magnet None mismatch")
         elif self.magnet is not None:
-            diff_list.extend(self.magnet.compare(other.magnet, name=name + ".magnet"))
+            diff_list.extend(
+                self.magnet.compare(
+                    other.magnet,
+                    name=name + ".magnet",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
+            )
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list

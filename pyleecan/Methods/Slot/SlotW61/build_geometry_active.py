@@ -1,5 +1,5 @@
-# -*- coding: utf-8 -*-
 from numpy import pi, exp
+
 from ....Classes.Segment import Segment
 from ....Classes.SurfLine import SurfLine
 from ....Methods.Slot.SlotW61 import S61_WindError

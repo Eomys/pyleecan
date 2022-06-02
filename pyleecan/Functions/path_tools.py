@@ -1,6 +1,5 @@
-# -*- coding: utf-8 -*-
-from os.path import isfile, join, normpath, abspath
 import re
+from os.path import isfile, join
 
 
 def importName(modulename, name, ignore_error=False):
@@ -8,7 +7,7 @@ def importName(modulename, name, ignore_error=False):
     try:
         module = __import__(modulename, globals(), locals(), [name])
         return vars(module)[name]
-    except:
+    except Exception:
         if ignore_error:
             return None
         else:
@@ -18,32 +17,34 @@ def importName(modulename, name, ignore_error=False):
             )
 
 
-def rel_file_path(file, wildcard):
+def rel_file_path(file_path, wildcard):
     """try to generate relative file path with given wildcard"""
     root_path = importName("..definitions", wildcard, ignore_error=True)
     if root_path:
         root_path = normpath(abspath(root_path))
-        file_ = normpath(abspath(file))
+        file_ = normpath(abspath(file_path))
         idx = len(root_path)
         # print(f"rel_file_path: {root_path}, <{wildcard}>")
         # print(f"file:          {file_[:idx]}")
         if file_[:idx].lower() == root_path.lower():
-            file = f"<{wildcard}>" + file_[idx:]
+            file_path = f"<{wildcard}>" + file_[idx:]
 
-    return file
+    return file_path
 
 
-def abs_file_path(file, is_check=True):
+def abs_file_path(file_path, is_check=True):
     """check a file path for a wildcard and replace it to get the abs path"""
-    if "<" in file and ">\\" in file:
-        wildcard = re.search(r"\<([A-Za-z0-9_]+)\>", file).group(1)
-        root_path = importName("..definitions", wildcard)
-        file = join(root_path, file.replace(f"<{wildcard}>\\", ""))
+    file_path = file_path.replace("\\", "/")
+    if "<" in file_path and ">" in file_path:
+        wildcard = re.search(r"\<([A-Za-z0-9_]+)\>", file_path).group(1)
+        root_path = importName("pyleecan.definitions", wildcard)
+        file_path = file_path.replace("<" + wildcard + ">/", "")
+        file_path = join(root_path, file_path).replace("\\", "/")
 
-    if not isfile(file) and is_check:
-        raise FileError("ERROR: The file doesn't exist " + file)
+    if not isfile(file_path) and is_check:
+        raise FileError("ERROR: The file doesn't exist " + file_path)
 
-    return file
+    return file_path
 
 
 class FileError(Exception):

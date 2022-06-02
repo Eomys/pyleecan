@@ -33,6 +33,7 @@ except ImportError as error:
     comp_AGSF_transfer = error
 
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 
@@ -167,7 +168,7 @@ class Force(FrozenClass):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -176,17 +177,84 @@ class Force(FrozenClass):
             return ["type(" + name + ")"]
         diff_list = list()
         if other._is_periodicity_t != self._is_periodicity_t:
-            diff_list.append(name + ".is_periodicity_t")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._is_periodicity_t)
+                    + ", other="
+                    + str(other._is_periodicity_t)
+                    + ")"
+                )
+                diff_list.append(name + ".is_periodicity_t" + val_str)
+            else:
+                diff_list.append(name + ".is_periodicity_t")
         if other._is_periodicity_a != self._is_periodicity_a:
-            diff_list.append(name + ".is_periodicity_a")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._is_periodicity_a)
+                    + ", other="
+                    + str(other._is_periodicity_a)
+                    + ")"
+                )
+                diff_list.append(name + ".is_periodicity_a" + val_str)
+            else:
+                diff_list.append(name + ".is_periodicity_a")
         if other._is_agsf_transfer != self._is_agsf_transfer:
-            diff_list.append(name + ".is_agsf_transfer")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._is_agsf_transfer)
+                    + ", other="
+                    + str(other._is_agsf_transfer)
+                    + ")"
+                )
+                diff_list.append(name + ".is_agsf_transfer" + val_str)
+            else:
+                diff_list.append(name + ".is_agsf_transfer")
         if other._max_wavenumber_transfer != self._max_wavenumber_transfer:
-            diff_list.append(name + ".max_wavenumber_transfer")
-        if other._Rsbo_enforced_transfer != self._Rsbo_enforced_transfer:
-            diff_list.append(name + ".Rsbo_enforced_transfer")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._max_wavenumber_transfer)
+                    + ", other="
+                    + str(other._max_wavenumber_transfer)
+                    + ")"
+                )
+                diff_list.append(name + ".max_wavenumber_transfer" + val_str)
+            else:
+                diff_list.append(name + ".max_wavenumber_transfer")
+        if (
+            other._Rsbo_enforced_transfer is not None
+            and self._Rsbo_enforced_transfer is not None
+            and isnan(other._Rsbo_enforced_transfer)
+            and isnan(self._Rsbo_enforced_transfer)
+        ):
+            pass
+        elif other._Rsbo_enforced_transfer != self._Rsbo_enforced_transfer:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._Rsbo_enforced_transfer)
+                    + ", other="
+                    + str(other._Rsbo_enforced_transfer)
+                    + ")"
+                )
+                diff_list.append(name + ".Rsbo_enforced_transfer" + val_str)
+            else:
+                diff_list.append(name + ".Rsbo_enforced_transfer")
         if other._logger_name != self._logger_name:
-            diff_list.append(name + ".logger_name")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._logger_name)
+                    + ", other="
+                    + str(other._logger_name)
+                    + ")"
+                )
+                diff_list.append(name + ".logger_name" + val_str)
+            else:
+                diff_list.append(name + ".logger_name")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list

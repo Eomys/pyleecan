@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from matplotlib.patches import Patch, Rectangle
-from matplotlib.pyplot import axis, legend, subplots
+from ....Functions.init_fig import init_fig
 from ....definitions import config_dict
 
 COND_COLOR = config_dict["PLOT"]["COLOR_DICT"]["PHASE_COLORS"][0].copy()
@@ -11,7 +11,7 @@ COND_COLOR[3] = 1
 INS_COLOR[3] = 1
 
 
-def plot(self, is_show_fig=True):
+def plot(self, is_show_fig=True, fig=None, ax=None):
     """Plot a Conductor in a matplotlib fig
 
     Parameters
@@ -20,10 +20,17 @@ def plot(self, is_show_fig=True):
         A CondType11 object
     is_show_fig : bool
         To call show at the end of the method
+    fig : Matplotlib.figure.Figure
+        existing figure to use if None create a new one
+    ax : Matplotlib.axes.Axes object
+        Axis on which to plot the data
 
     Returns
     -------
-    None
+    fig : Matplotlib.figure.Figure
+        Figure containing the plot
+    ax : Matplotlib.axes.Axes object
+        Axis containing the plot
     """
 
     patches_list = []
@@ -44,12 +51,12 @@ def plot(self, is_show_fig=True):
             )
 
     # Display
-    fig, ax = subplots()
+    (fig, ax, _, _) = init_fig(fig=fig, ax=ax)
     for patch in patches_list:
         ax.add_patch(patch)
 
     # Axis Setup
-    axis("equal")
+    ax.axis("equal")
 
     # The conductor is centered
     ax.set_xlim(0 - Wcond / 10, Wcond * 11.0 / 10.0)
@@ -65,6 +72,7 @@ def plot(self, is_show_fig=True):
     patch_leg.append(Patch(color=COND_COLOR))
     label_leg.append("Active wire section")
 
-    legend(patch_leg, label_leg)
+    ax.legend(patch_leg, label_leg)
     if is_show_fig:
         fig.show()
+    return fig, ax

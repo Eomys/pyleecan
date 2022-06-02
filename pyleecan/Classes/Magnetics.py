@@ -38,6 +38,7 @@ except ImportError as error:
     comp_I_mag = error
 
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 
@@ -285,7 +286,7 @@ class Magnetics(FrozenClass):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -294,31 +295,175 @@ class Magnetics(FrozenClass):
             return ["type(" + name + ")"]
         diff_list = list()
         if other._is_remove_slotS != self._is_remove_slotS:
-            diff_list.append(name + ".is_remove_slotS")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._is_remove_slotS)
+                    + ", other="
+                    + str(other._is_remove_slotS)
+                    + ")"
+                )
+                diff_list.append(name + ".is_remove_slotS" + val_str)
+            else:
+                diff_list.append(name + ".is_remove_slotS")
         if other._is_remove_slotR != self._is_remove_slotR:
-            diff_list.append(name + ".is_remove_slotR")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._is_remove_slotR)
+                    + ", other="
+                    + str(other._is_remove_slotR)
+                    + ")"
+                )
+                diff_list.append(name + ".is_remove_slotR" + val_str)
+            else:
+                diff_list.append(name + ".is_remove_slotR")
         if other._is_remove_ventS != self._is_remove_ventS:
-            diff_list.append(name + ".is_remove_ventS")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._is_remove_ventS)
+                    + ", other="
+                    + str(other._is_remove_ventS)
+                    + ")"
+                )
+                diff_list.append(name + ".is_remove_ventS" + val_str)
+            else:
+                diff_list.append(name + ".is_remove_ventS")
         if other._is_remove_ventR != self._is_remove_ventR:
-            diff_list.append(name + ".is_remove_ventR")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._is_remove_ventR)
+                    + ", other="
+                    + str(other._is_remove_ventR)
+                    + ")"
+                )
+                diff_list.append(name + ".is_remove_ventR" + val_str)
+            else:
+                diff_list.append(name + ".is_remove_ventR")
         if other._is_mmfs != self._is_mmfs:
-            diff_list.append(name + ".is_mmfs")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._is_mmfs)
+                    + ", other="
+                    + str(other._is_mmfs)
+                    + ")"
+                )
+                diff_list.append(name + ".is_mmfs" + val_str)
+            else:
+                diff_list.append(name + ".is_mmfs")
         if other._is_mmfr != self._is_mmfr:
-            diff_list.append(name + ".is_mmfr")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._is_mmfr)
+                    + ", other="
+                    + str(other._is_mmfr)
+                    + ")"
+                )
+                diff_list.append(name + ".is_mmfr" + val_str)
+            else:
+                diff_list.append(name + ".is_mmfr")
         if other._type_BH_stator != self._type_BH_stator:
-            diff_list.append(name + ".type_BH_stator")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._type_BH_stator)
+                    + ", other="
+                    + str(other._type_BH_stator)
+                    + ")"
+                )
+                diff_list.append(name + ".type_BH_stator" + val_str)
+            else:
+                diff_list.append(name + ".type_BH_stator")
         if other._type_BH_rotor != self._type_BH_rotor:
-            diff_list.append(name + ".type_BH_rotor")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._type_BH_rotor)
+                    + ", other="
+                    + str(other._type_BH_rotor)
+                    + ")"
+                )
+                diff_list.append(name + ".type_BH_rotor" + val_str)
+            else:
+                diff_list.append(name + ".type_BH_rotor")
         if other._is_periodicity_t != self._is_periodicity_t:
-            diff_list.append(name + ".is_periodicity_t")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._is_periodicity_t)
+                    + ", other="
+                    + str(other._is_periodicity_t)
+                    + ")"
+                )
+                diff_list.append(name + ".is_periodicity_t" + val_str)
+            else:
+                diff_list.append(name + ".is_periodicity_t")
         if other._is_periodicity_a != self._is_periodicity_a:
-            diff_list.append(name + ".is_periodicity_a")
-        if other._angle_stator_shift != self._angle_stator_shift:
-            diff_list.append(name + ".angle_stator_shift")
-        if other._angle_rotor_shift != self._angle_rotor_shift:
-            diff_list.append(name + ".angle_rotor_shift")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._is_periodicity_a)
+                    + ", other="
+                    + str(other._is_periodicity_a)
+                    + ")"
+                )
+                diff_list.append(name + ".is_periodicity_a" + val_str)
+            else:
+                diff_list.append(name + ".is_periodicity_a")
+        if (
+            other._angle_stator_shift is not None
+            and self._angle_stator_shift is not None
+            and isnan(other._angle_stator_shift)
+            and isnan(self._angle_stator_shift)
+        ):
+            pass
+        elif other._angle_stator_shift != self._angle_stator_shift:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._angle_stator_shift)
+                    + ", other="
+                    + str(other._angle_stator_shift)
+                    + ")"
+                )
+                diff_list.append(name + ".angle_stator_shift" + val_str)
+            else:
+                diff_list.append(name + ".angle_stator_shift")
+        if (
+            other._angle_rotor_shift is not None
+            and self._angle_rotor_shift is not None
+            and isnan(other._angle_rotor_shift)
+            and isnan(self._angle_rotor_shift)
+        ):
+            pass
+        elif other._angle_rotor_shift != self._angle_rotor_shift:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._angle_rotor_shift)
+                    + ", other="
+                    + str(other._angle_rotor_shift)
+                    + ")"
+                )
+                diff_list.append(name + ".angle_rotor_shift" + val_str)
+            else:
+                diff_list.append(name + ".angle_rotor_shift")
         if other._logger_name != self._logger_name:
-            diff_list.append(name + ".logger_name")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._logger_name)
+                    + ", other="
+                    + str(other._logger_name)
+                    + ")"
+                )
+                diff_list.append(name + ".logger_name" + val_str)
+            else:
+                diff_list.append(name + ".logger_name")
         if (other.Slice_enforced is None and self.Slice_enforced is not None) or (
             other.Slice_enforced is not None and self.Slice_enforced is None
         ):
@@ -326,19 +471,75 @@ class Magnetics(FrozenClass):
         elif self.Slice_enforced is not None:
             diff_list.extend(
                 self.Slice_enforced.compare(
-                    other.Slice_enforced, name=name + ".Slice_enforced"
+                    other.Slice_enforced,
+                    name=name + ".Slice_enforced",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
                 )
             )
         if other._Nslices_enforced != self._Nslices_enforced:
-            diff_list.append(name + ".Nslices_enforced")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._Nslices_enforced)
+                    + ", other="
+                    + str(other._Nslices_enforced)
+                    + ")"
+                )
+                diff_list.append(name + ".Nslices_enforced" + val_str)
+            else:
+                diff_list.append(name + ".Nslices_enforced")
         if other._type_distribution_enforced != self._type_distribution_enforced:
-            diff_list.append(name + ".type_distribution_enforced")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._type_distribution_enforced)
+                    + ", other="
+                    + str(other._type_distribution_enforced)
+                    + ")"
+                )
+                diff_list.append(name + ".type_distribution_enforced" + val_str)
+            else:
+                diff_list.append(name + ".type_distribution_enforced")
         if other._is_current_harm != self._is_current_harm:
-            diff_list.append(name + ".is_current_harm")
-        if other._T_mag != self._T_mag:
-            diff_list.append(name + ".T_mag")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._is_current_harm)
+                    + ", other="
+                    + str(other._is_current_harm)
+                    + ")"
+                )
+                diff_list.append(name + ".is_current_harm" + val_str)
+            else:
+                diff_list.append(name + ".is_current_harm")
+        if (
+            other._T_mag is not None
+            and self._T_mag is not None
+            and isnan(other._T_mag)
+            and isnan(self._T_mag)
+        ):
+            pass
+        elif other._T_mag != self._T_mag:
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._T_mag) + ", other=" + str(other._T_mag) + ")"
+                )
+                diff_list.append(name + ".T_mag" + val_str)
+            else:
+                diff_list.append(name + ".T_mag")
         if other._is_periodicity_rotor != self._is_periodicity_rotor:
-            diff_list.append(name + ".is_periodicity_rotor")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._is_periodicity_rotor)
+                    + ", other="
+                    + str(other._is_periodicity_rotor)
+                    + ")"
+                )
+                diff_list.append(name + ".is_periodicity_rotor" + val_str)
+            else:
+                diff_list.append(name + ".is_periodicity_rotor")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list

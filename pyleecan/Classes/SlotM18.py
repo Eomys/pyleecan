@@ -68,6 +68,7 @@ except ImportError as error:
     plot_schematics = error
 
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 
@@ -248,7 +249,7 @@ class SlotM18(Slot):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -258,9 +259,26 @@ class SlotM18(Slot):
         diff_list = list()
 
         # Check the properties inherited from Slot
-        diff_list.extend(super(SlotM18, self).compare(other, name=name))
-        if other._Hmag != self._Hmag:
-            diff_list.append(name + ".Hmag")
+        diff_list.extend(
+            super(SlotM18, self).compare(
+                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
+            )
+        )
+        if (
+            other._Hmag is not None
+            and self._Hmag is not None
+            and isnan(other._Hmag)
+            and isnan(self._Hmag)
+        ):
+            pass
+        elif other._Hmag != self._Hmag:
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._Hmag) + ", other=" + str(other._Hmag) + ")"
+                )
+                diff_list.append(name + ".Hmag" + val_str)
+            else:
+                diff_list.append(name + ".Hmag")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list

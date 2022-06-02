@@ -28,6 +28,7 @@ except ImportError as error:
     BH_func = error
 
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 
@@ -145,7 +146,7 @@ class ModelBH_Langevin(ModelBH):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -155,15 +156,75 @@ class ModelBH_Langevin(ModelBH):
         diff_list = list()
 
         # Check the properties inherited from ModelBH
-        diff_list.extend(super(ModelBH_Langevin, self).compare(other, name=name))
-        if other._Bs != self._Bs:
-            diff_list.append(name + ".Bs")
-        if other._a != self._a:
-            diff_list.append(name + ".a")
-        if other._param1 != self._param1:
-            diff_list.append(name + ".param1")
-        if other._param2 != self._param2:
-            diff_list.append(name + ".param2")
+        diff_list.extend(
+            super(ModelBH_Langevin, self).compare(
+                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
+            )
+        )
+        if (
+            other._Bs is not None
+            and self._Bs is not None
+            and isnan(other._Bs)
+            and isnan(self._Bs)
+        ):
+            pass
+        elif other._Bs != self._Bs:
+            if is_add_value:
+                val_str = " (self=" + str(self._Bs) + ", other=" + str(other._Bs) + ")"
+                diff_list.append(name + ".Bs" + val_str)
+            else:
+                diff_list.append(name + ".Bs")
+        if (
+            other._a is not None
+            and self._a is not None
+            and isnan(other._a)
+            and isnan(self._a)
+        ):
+            pass
+        elif other._a != self._a:
+            if is_add_value:
+                val_str = " (self=" + str(self._a) + ", other=" + str(other._a) + ")"
+                diff_list.append(name + ".a" + val_str)
+            else:
+                diff_list.append(name + ".a")
+        if (
+            other._param1 is not None
+            and self._param1 is not None
+            and isnan(other._param1)
+            and isnan(self._param1)
+        ):
+            pass
+        elif other._param1 != self._param1:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._param1)
+                    + ", other="
+                    + str(other._param1)
+                    + ")"
+                )
+                diff_list.append(name + ".param1" + val_str)
+            else:
+                diff_list.append(name + ".param1")
+        if (
+            other._param2 is not None
+            and self._param2 is not None
+            and isnan(other._param2)
+            and isnan(self._param2)
+        ):
+            pass
+        elif other._param2 != self._param2:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._param2)
+                    + ", other="
+                    + str(other._param2)
+                    + ")"
+                )
+                diff_list.append(name + ".param2" + val_str)
+            else:
+                diff_list.append(name + ".param2")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list

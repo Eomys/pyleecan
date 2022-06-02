@@ -48,6 +48,7 @@ except ImportError as error:
     comp_surface_gap = error
 
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 
@@ -205,7 +206,7 @@ class FrameBar(Frame):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -215,11 +216,34 @@ class FrameBar(Frame):
         diff_list = list()
 
         # Check the properties inherited from Frame
-        diff_list.extend(super(FrameBar, self).compare(other, name=name))
+        diff_list.extend(
+            super(FrameBar, self).compare(
+                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
+            )
+        )
         if other._Nbar != self._Nbar:
-            diff_list.append(name + ".Nbar")
-        if other._wbar != self._wbar:
-            diff_list.append(name + ".wbar")
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._Nbar) + ", other=" + str(other._Nbar) + ")"
+                )
+                diff_list.append(name + ".Nbar" + val_str)
+            else:
+                diff_list.append(name + ".Nbar")
+        if (
+            other._wbar is not None
+            and self._wbar is not None
+            and isnan(other._wbar)
+            and isnan(self._wbar)
+        ):
+            pass
+        elif other._wbar != self._wbar:
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._wbar) + ", other=" + str(other._wbar) + ")"
+                )
+                diff_list.append(name + ".wbar" + val_str)
+            else:
+                diff_list.append(name + ".wbar")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list

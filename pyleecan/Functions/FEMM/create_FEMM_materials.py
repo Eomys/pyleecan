@@ -166,12 +166,9 @@ def create_FEMM_materials(
                     0,
                     0,
                 )
-                if (
-                    wedge_mat.mag.BH_curve is not None
-                    and wedge_mat.mag.BH_curve.get_data().shape[0] > 1
-                ):
-                    BH = lam_obj.mat_type.mag.get_BH()
-                    if BH is not None and BH.shape[0] > 1:
+                if wedge_mat.mag.BH_curve is not None:
+                    BH = wedge_mat.mag.BH_curve.get_data()
+                    if BH.shape[0] > 1:
                         for ii in range(BH.shape[0]):
                             femm.mi_addbhpoint(wedge_mat.name, BH[ii][1], BH[ii][0])
                 materials.append(mat_name)

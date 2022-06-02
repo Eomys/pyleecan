@@ -78,6 +78,7 @@ except ImportError as error:
     plot_schematics = error
 
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 
@@ -313,7 +314,7 @@ class SlotW28(Slot):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -323,17 +324,76 @@ class SlotW28(Slot):
         diff_list = list()
 
         # Check the properties inherited from Slot
-        diff_list.extend(super(SlotW28, self).compare(other, name=name))
-        if other._W0 != self._W0:
-            diff_list.append(name + ".W0")
-        if other._H0 != self._H0:
-            diff_list.append(name + ".H0")
-        if other._R1 != self._R1:
-            diff_list.append(name + ".R1")
-        if other._W3 != self._W3:
-            diff_list.append(name + ".W3")
-        if other._H3 != self._H3:
-            diff_list.append(name + ".H3")
+        diff_list.extend(
+            super(SlotW28, self).compare(
+                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
+            )
+        )
+        if (
+            other._W0 is not None
+            and self._W0 is not None
+            and isnan(other._W0)
+            and isnan(self._W0)
+        ):
+            pass
+        elif other._W0 != self._W0:
+            if is_add_value:
+                val_str = " (self=" + str(self._W0) + ", other=" + str(other._W0) + ")"
+                diff_list.append(name + ".W0" + val_str)
+            else:
+                diff_list.append(name + ".W0")
+        if (
+            other._H0 is not None
+            and self._H0 is not None
+            and isnan(other._H0)
+            and isnan(self._H0)
+        ):
+            pass
+        elif other._H0 != self._H0:
+            if is_add_value:
+                val_str = " (self=" + str(self._H0) + ", other=" + str(other._H0) + ")"
+                diff_list.append(name + ".H0" + val_str)
+            else:
+                diff_list.append(name + ".H0")
+        if (
+            other._R1 is not None
+            and self._R1 is not None
+            and isnan(other._R1)
+            and isnan(self._R1)
+        ):
+            pass
+        elif other._R1 != self._R1:
+            if is_add_value:
+                val_str = " (self=" + str(self._R1) + ", other=" + str(other._R1) + ")"
+                diff_list.append(name + ".R1" + val_str)
+            else:
+                diff_list.append(name + ".R1")
+        if (
+            other._W3 is not None
+            and self._W3 is not None
+            and isnan(other._W3)
+            and isnan(self._W3)
+        ):
+            pass
+        elif other._W3 != self._W3:
+            if is_add_value:
+                val_str = " (self=" + str(self._W3) + ", other=" + str(other._W3) + ")"
+                diff_list.append(name + ".W3" + val_str)
+            else:
+                diff_list.append(name + ".W3")
+        if (
+            other._H3 is not None
+            and self._H3 is not None
+            and isnan(other._H3)
+            and isnan(self._H3)
+        ):
+            pass
+        elif other._H3 != self._H3:
+            if is_add_value:
+                val_str = " (self=" + str(self._H3) + ", other=" + str(other._H3) + ")"
+                diff_list.append(name + ".H3" + val_str)
+            else:
+                diff_list.append(name + ".H3")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list

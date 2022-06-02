@@ -1,5 +1,5 @@
-# -*- coding: utf-8 -*-
 from ....Methods.Slot.VentilationCirc import *
+from numpy import int32
 
 
 def check(self):
@@ -23,11 +23,11 @@ def check(self):
         Alpha0 must be a float ot int
     """
 
-    if not isinstance(self.Zh, int):
+    if not isinstance(self.Zh, (int, int32)):
         raise VentilationCircInstanceError("Zh must be an integer")
-    if not isinstance(self.H0, float) and not isinstance(self.H0, int):
+    if not isinstance(self.H0, (float, int)):
         raise VentilationCircInstanceError("H0 must be a float ot int ")
-    if not isinstance(self.D0, float) and not isinstance(self.D0, int):
+    if not isinstance(self.D0, (float, int)):
         raise VentilationCircInstanceError("D0 must be a float or int ")
-    if not isinstance(self.Alpha0, float) and not isinstance(self.Alpha0, int):
+    if not isinstance(self.Alpha0, (float, int)):
         raise VentilationCircInstanceError("Alpha0 must be a float ot int")

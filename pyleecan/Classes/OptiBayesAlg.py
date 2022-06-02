@@ -15,6 +15,7 @@ from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
 from .OptiSolver import OptiSolver
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 
@@ -119,7 +120,7 @@ class OptiBayesAlg(OptiSolver):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -129,15 +130,59 @@ class OptiBayesAlg(OptiSolver):
         diff_list = list()
 
         # Check the properties inherited from OptiSolver
-        diff_list.extend(super(OptiBayesAlg, self).compare(other, name=name))
+        diff_list.extend(
+            super(OptiBayesAlg, self).compare(
+                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
+            )
+        )
         if other._nb_iter != self._nb_iter:
-            diff_list.append(name + ".nb_iter")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._nb_iter)
+                    + ", other="
+                    + str(other._nb_iter)
+                    + ")"
+                )
+                diff_list.append(name + ".nb_iter" + val_str)
+            else:
+                diff_list.append(name + ".nb_iter")
         if other._nb_start != self._nb_start:
-            diff_list.append(name + ".nb_start")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._nb_start)
+                    + ", other="
+                    + str(other._nb_start)
+                    + ")"
+                )
+                diff_list.append(name + ".nb_start" + val_str)
+            else:
+                diff_list.append(name + ".nb_start")
         if other._criterion != self._criterion:
-            diff_list.append(name + ".criterion")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._criterion)
+                    + ", other="
+                    + str(other._criterion)
+                    + ")"
+                )
+                diff_list.append(name + ".criterion" + val_str)
+            else:
+                diff_list.append(name + ".criterion")
         if other._kernel != self._kernel:
-            diff_list.append(name + ".kernel")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._kernel)
+                    + ", other="
+                    + str(other._kernel)
+                    + ")"
+                )
+                diff_list.append(name + ".kernel" + val_str)
+            else:
+                diff_list.append(name + ".kernel")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list

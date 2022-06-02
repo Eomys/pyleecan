@@ -61,6 +61,7 @@ except ImportError as error:
 
 
 from numpy import array, array_equal
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 
@@ -301,7 +302,7 @@ class LamSlotMultiWind(LamSlotMulti):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -311,16 +312,42 @@ class LamSlotMultiWind(LamSlotMulti):
         diff_list = list()
 
         # Check the properties inherited from LamSlotMulti
-        diff_list.extend(super(LamSlotMultiWind, self).compare(other, name=name))
-        if other._Ksfill != self._Ksfill:
-            diff_list.append(name + ".Ksfill")
+        diff_list.extend(
+            super(LamSlotMultiWind, self).compare(
+                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
+            )
+        )
+        if (
+            other._Ksfill is not None
+            and self._Ksfill is not None
+            and isnan(other._Ksfill)
+            and isnan(self._Ksfill)
+        ):
+            pass
+        elif other._Ksfill != self._Ksfill:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._Ksfill)
+                    + ", other="
+                    + str(other._Ksfill)
+                    + ")"
+                )
+                diff_list.append(name + ".Ksfill" + val_str)
+            else:
+                diff_list.append(name + ".Ksfill")
         if (other.winding is None and self.winding is not None) or (
             other.winding is not None and self.winding is None
         ):
             diff_list.append(name + ".winding None mismatch")
         elif self.winding is not None:
             diff_list.extend(
-                self.winding.compare(other.winding, name=name + ".winding")
+                self.winding.compare(
+                    other.winding,
+                    name=name + ".winding",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
             )
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))

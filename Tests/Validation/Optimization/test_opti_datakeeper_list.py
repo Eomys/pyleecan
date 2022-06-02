@@ -28,10 +28,10 @@ from pyleecan.definitions import DATA_DIR
 def test_opti_datakeeper_list():
     # Defining reference Output
     # Definition of the enforced output of the electrical module
-    SCIM_001 = load(join(DATA_DIR, "Machine", "Railway_Traction.json"))
+    Railway_Traction = load(join(DATA_DIR, "Machine", "Railway_Traction.json"))
 
     # Definition of the simulation
-    simu = Simu1(name="test_opti_datakeeper_list", machine=SCIM_001)
+    simu = Simu1(name="test_opti_datakeeper_list", machine=Railway_Traction)
 
     # Design variable
     my_vars = [

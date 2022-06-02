@@ -1,20 +1,25 @@
-# -*- coding: utf-8 -*-
-
 from matplotlib.patches import Patch, Rectangle
-from matplotlib.pyplot import axis, legend, subplots
+from ....Functions.init_fig import init_fig
 
 
-def plot(self):
+def plot(self, fig=None, ax=None):
     """Plot a Conductor in a matplotlib fig
 
     Parameters
     ----------
     self : CondType21
         A CondType21 object
+    fig : Matplotlib.figure.Figure
+        existing figure to use if None create a new one
+    ax : Matplotlib.axes.Axes object
+        Axis on which to plot the data
 
     Returns
     -------
-    None
+    fig : Matplotlib.figure.Figure
+        Figure containing the plot
+    ax : Matplotlib.axes.Axes object
+        Axis containing the plot
     """
 
     patches_list = []
@@ -30,12 +35,12 @@ def plot(self):
     )
 
     # Display
-    fig, ax = subplots()
+    (fig, ax, _, _) = init_fig(fig=fig, ax=ax)
     for patch in patches_list:
         ax.add_patch(patch)
 
     # Axis Setup
-    axis("equal")
+    ax.axis("equal")
 
     # The conductor is centered
     ax.set_xlim(0 - Wcond / 10, Wcond * 11.0 / 10.0)
@@ -50,5 +55,6 @@ def plot(self):
     patch_leg.append(Patch(color="r"))
     label_leg.append("Active bar section")
 
-    legend(patch_leg, label_leg)
+    ax.legend(patch_leg, label_leg)
     fig.show()
+    return fig, ax

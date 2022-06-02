@@ -33,6 +33,7 @@ except ImportError as error:
     remove_model = error
 
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 
@@ -157,7 +158,7 @@ class Loss(FrozenClass):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -166,7 +167,17 @@ class Loss(FrozenClass):
             return ["type(" + name + ")"]
         diff_list = list()
         if other._model_index != self._model_index:
-            diff_list.append(name + ".model_index")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._model_index)
+                    + ", other="
+                    + str(other._model_index)
+                    + ")"
+                )
+                diff_list.append(name + ".model_index" + val_str)
+            else:
+                diff_list.append(name + ".model_index")
         if (other.model_list is None and self.model_list is not None) or (
             other.model_list is not None and self.model_list is None
         ):
@@ -179,11 +190,24 @@ class Loss(FrozenClass):
             for ii in range(len(other.model_list)):
                 diff_list.extend(
                     self.model_list[ii].compare(
-                        other.model_list[ii], name=name + ".model_list[" + str(ii) + "]"
+                        other.model_list[ii],
+                        name=name + ".model_list[" + str(ii) + "]",
+                        ignore_list=ignore_list,
+                        is_add_value=is_add_value,
                     )
                 )
         if other._logger_name != self._logger_name:
-            diff_list.append(name + ".logger_name")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._logger_name)
+                    + ", other="
+                    + str(other._logger_name)
+                    + ")"
+                )
+                diff_list.append(name + ".logger_name" + val_str)
+            else:
+                diff_list.append(name + ".logger_name")
         if (other.model_dict is None and self.model_dict is not None) or (
             other.model_dict is not None and self.model_dict is None
         ):
@@ -196,7 +220,10 @@ class Loss(FrozenClass):
             for key in self.model_dict:
                 diff_list.extend(
                     self.model_dict[key].compare(
-                        other.model_dict[key], name=name + ".model_dict"
+                        other.model_dict[key],
+                        name=name + ".model_dict[" + str(key) + "]",
+                        ignore_list=ignore_list,
+                        is_add_value=is_add_value,
                     )
                 )
         # Filter ignore differences

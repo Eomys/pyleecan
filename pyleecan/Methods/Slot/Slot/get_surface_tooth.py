@@ -1,6 +1,7 @@
-# -*- coding: utf-8 -*-
-from ....Classes.Segment import Segment
+from numpy import exp, pi
+
 from ....Classes.Arc1 import Arc1
+from ....Classes.Segment import Segment
 from ....Classes.SurfLine import SurfLine
 from ....Methods import ParentMissingError
 from ....Functions.labels import (

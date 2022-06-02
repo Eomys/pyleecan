@@ -39,10 +39,9 @@ from pyleecan.definitions import DATA_DIR, TEST_DIR
 @pytest.mark.periodicity
 @pytest.mark.SingleOP
 def test_Binh_and_Korn():
-    SCIM_001 = load(join(DATA_DIR, "Machine", "SCIM_001.json"))
     # Defining reference Output
     # Definition of the enforced output of the electrical module
-    SCIM_001 = load(join(DATA_DIR, "Machine", "SCIM_001.json"))
+    Railway_Traction = load(join(DATA_DIR, "Machine", "Railway_Traction.json"))
     Nt = 2
     N0 = 3000
     Is = ImportMatrixVal(
@@ -60,7 +59,7 @@ def test_Binh_and_Korn():
     Na_tot = 64
 
     # Definition of the simulation
-    simu = Simu1(name="test_Binh_and_Korn_Bayes", machine=SCIM_001)
+    simu = Simu1(name="test_Binh_and_Korn_Bayes", machine=Railway_Traction)
 
     simu.input = InputCurrent(
         Is=Is,

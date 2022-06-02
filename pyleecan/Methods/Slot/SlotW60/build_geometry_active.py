@@ -1,7 +1,6 @@
-# -*- coding: utf-8 -*-
-
 from ....Methods.Slot.Slot import SlotCheckError
 from numpy import pi, exp
+
 from ....Classes.Segment import Segment
 from ....Classes.SurfLine import SurfLine
 from ....Methods.Slot.SlotW60 import S60_WindError

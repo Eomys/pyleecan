@@ -1,7 +1,7 @@
-from os.path import isfile
-from importlib import import_module
 from ....Classes._check import CheckTypeError
 from ntpath import basename
+from ....Functions.path_tools import abs_file_path
+from ....Generator import PYTHON_DEFAULT_ENCODING
 
 
 def _set_getter(self, value):
@@ -22,10 +22,14 @@ def _set_getter(self, value):
     elif isinstance(value, str) and "lambda" in value:
         self._getter_str = value
         self._getter_func = eval(value)
-    elif isinstance(value, str) and isfile(value) and value[-3:] == ".py":
-        self._getter_str = value
-        f = open(value, "r")
+    elif isinstance(value, str) and value[-3:] == ".py":
+        if "<" in value and ">" in value:
+            # path like "<PARAM_DIR>/setter_rotor.py"
+            self._getter_str = value
+            value = abs_file_path(value)
+        f = open(value, "r", encoding=PYTHON_DEFAULT_ENCODING)
         exec(f.read(), globals())
+        f.close()
         self._getter_func = eval(basename(value[:-3]))
     elif callable(value):
         self._getter_str = None

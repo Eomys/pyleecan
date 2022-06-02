@@ -174,7 +174,7 @@ def plot_pareto(
 
     if save_path is not None:
         fig.savefig(save_path)
-        plt.close()
+        plt.close(fig=fig)
 
     if is_show_fig:
         fig.show()

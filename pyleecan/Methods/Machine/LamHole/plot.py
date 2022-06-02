@@ -1,9 +1,6 @@
-# -*- coding: utf-8 -*-
-
 from numpy import exp, pi
 import matplotlib.pyplot as plt
-from matplotlib.patches import Circle, Patch
-from matplotlib.pyplot import axis, legend
+from matplotlib.patches import Patch
 
 from ....definitions import config_dict
 from ....Functions.init_fig import init_fig
@@ -13,6 +10,8 @@ PATCH_COLOR = config_dict["PLOT"]["COLOR_DICT"]["PATCH_COLOR"]
 MAGNET_COLOR = config_dict["PLOT"]["COLOR_DICT"]["MAGNET_COLOR"]
 ROTOR_COLOR = config_dict["PLOT"]["COLOR_DICT"]["ROTOR_COLOR"]
 STATOR_COLOR = config_dict["PLOT"]["COLOR_DICT"]["STATOR_COLOR"]
+VENT_COLOR = config_dict["PLOT"]["COLOR_DICT"]["VENT_COLOR"]
+VENT_EDGE = config_dict["PLOT"]["COLOR_DICT"]["VENT_EDGE"]
 
 
 def plot(
@@ -24,7 +23,8 @@ def plot(
     alpha=0,
     delta=0,
     is_edge_only=False,
-    is_add_arrow=True,
+    edgecolor=None,
+    is_add_arrow=False,
     is_show_fig=True,
     win_title=None,
 ):
@@ -48,6 +48,8 @@ def plot(
         complex for translation (Default value = 0)
     is_edge_only: bool
         To plot transparent Patches
+    edgecolor:
+        Color of the edges if is_edge_only=True
     is_add_arrow : bool
         To add an arrow for the magnetization
     is_show_fig : bool
@@ -57,7 +59,10 @@ def plot(
 
     Returns
     -------
-    None
+    fig : Matplotlib.figure.Figure
+        Figure containing the plot
+    ax : Matplotlib.axes.Axes object
+        Axis containing the plot
     """
 
     # Lamination bore
@@ -74,21 +79,35 @@ def plot(
     for surf in surf_list:
         label_dict = decode_label(surf.label)
         if LAM_LAB in label_dict["surf_type"]:
-            patches.extend(surf.get_patches(color=lam_color, is_edge_only=is_edge_only))
+            patches.extend(
+                surf.get_patches(
+                    color=lam_color, is_edge_only=is_edge_only, edgecolor=edgecolor
+                )
+            )
         elif HOLEM_LAB in label_dict["surf_type"] and not is_lam_only:
             patches.extend(
-                surf.get_patches(color=MAGNET_COLOR, is_edge_only=is_edge_only)
+                surf.get_patches(
+                    color=MAGNET_COLOR, is_edge_only=is_edge_only, edgecolor=edgecolor
+                )
+            )
+        elif surf.label is not None and "Ventilation_" in surf.label:
+            patches.extend(
+                surf.get_patches(
+                    color=VENT_COLOR, edgecolor=edgecolor, is_edge_only=is_edge_only
+                )
             )
         else:
-            patches.extend(surf.get_patches(is_edge_only=is_edge_only))
+            patches.extend(
+                surf.get_patches(is_edge_only=is_edge_only, edgecolor=edgecolor)
+            )
 
-    (fig, axes, patch_leg, label_leg) = init_fig(fig=fig, ax=ax, shape="rectangle")
+    (fig, ax, patch_leg, label_leg) = init_fig(fig=fig, ax=ax, shape="rectangle")
 
-    axes.set_xlabel("(m)")
-    axes.set_ylabel("(m)")
+    ax.set_xlabel("(m)")
+    ax.set_ylabel("(m)")
 
     for patch in patches:
-        axes.add_patch(patch)
+        ax.add_patch(patch)
 
     # Add Magnetization arrow
     if is_add_arrow:
@@ -119,7 +138,7 @@ def plot(
                         Z2 = (
                             mag_surf.point_ref + H / 5 * exp(1j * (mag_dir + off))
                         ) * exp(1j * (ii * 2 * pi / Zh + pi / Zh))
-                        axes.annotate(
+                        ax.annotate(
                             text="",
                             xy=(Z2.real, Z2.imag),
                             xytext=(Z1.real, Z1.imag),
@@ -127,12 +146,12 @@ def plot(
                         )
 
     # Axis Setup
-    axes.axis("equal")
+    ax.axis("equal")
 
     # The Lamination is centered in the figure
     Lim = self.Rext * 1.5
-    axes.set_xlim(-Lim, Lim)
-    axes.set_ylim(-Lim, Lim)
+    ax.set_xlim(-Lim, Lim)
+    ax.set_ylim(-Lim, Lim)
 
     # Window title
     if (
@@ -152,14 +171,15 @@ def plot(
         if self.is_stator:
             patch_leg.append(Patch(color=STATOR_COLOR))
             label_leg.append("Stator")
-            axes.set_title("Stator with Interior Magnet")
+            ax.set_title("Stator with Interior Magnet")
         else:
             patch_leg.append(Patch(color=ROTOR_COLOR))
             label_leg.append("Rotor")
-            axes.set_title("Rotor with Interior Magnet")
+            ax.set_title("Rotor with Interior Magnet")
         if not is_lam_only:
             patch_leg.append(Patch(color=MAGNET_COLOR))
             label_leg.append("Magnet")
-        legend(patch_leg, label_leg)
+        ax.legend(patch_leg, label_leg)
     if is_show_fig:
         fig.show()
+    return fig, ax
