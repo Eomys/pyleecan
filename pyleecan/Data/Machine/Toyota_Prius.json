@@ -985,7 +985,7 @@
         "is_BH_extrapolate": false,
         "mur_lin": 2500.0
       },
-      "name": "M400-50A_old",
+      "name": "M400-50A",
       "path": "M400-50A.json",
       "struct": {
         "Ex": 215000000000.0,
