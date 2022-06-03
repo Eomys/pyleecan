@@ -92,7 +92,7 @@ class NodeMat(FrozenClass):
 
     def __init__(
         self,
-        coordinate=[],
+        coordinate=None,
         nb_node=0,
         delta=1e-10,
         indice=None,

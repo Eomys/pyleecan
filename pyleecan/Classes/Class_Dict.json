@@ -417,7 +417,7 @@
                 "name": "connectivity",
                 "type": "ndarray",
                 "unit": "",
-                "value": []
+                "value": "list()"
             },
             {
                 "as_dict": "",
@@ -447,7 +447,7 @@
                 "name": "indice",
                 "type": "ndarray",
                 "unit": "",
-                "value": []
+                "value": "list()"
             },
             {
                 "as_dict": "",
@@ -1072,7 +1072,7 @@
                 "name": "result",
                 "type": "[]",
                 "unit": "-",
-                "value": []
+                "value": "list()"
             },
             {
                 "as_dict": "",
@@ -8349,7 +8349,7 @@
                 "name": "coordinate",
                 "type": "ndarray",
                 "unit": "",
-                "value": []
+                "value": "list()"
             },
             {
                 "as_dict": "",
@@ -10606,7 +10606,7 @@
                 "name": "value",
                 "type": "[]",
                 "unit": "-",
-                "value": []
+                "value": "list()"
             }
         ]
     },

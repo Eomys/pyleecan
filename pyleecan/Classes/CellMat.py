@@ -97,10 +97,10 @@ class CellMat(FrozenClass):
 
     def __init__(
         self,
-        connectivity=[],
+        connectivity=None,
         nb_cell=0,
         nb_node_per_cell=0,
-        indice=[],
+        indice=None,
         interpolation=-1,
         init_dict=None,
         init_str=None,

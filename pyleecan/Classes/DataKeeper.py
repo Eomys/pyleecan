@@ -61,7 +61,7 @@ class DataKeeper(FrozenClass):
         unit="",
         keeper=None,
         error_keeper=None,
-        result=[],
+        result=-1,
         result_ref=None,
         physic=None,
         init_dict=None,
