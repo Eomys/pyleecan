@@ -5,6 +5,7 @@ from ......Classes.LamSlot import LamSlot
 
 from ......GUI.Dialog.DMachineSetup.SMSlot.PMSlot10.PMSlot10 import PMSlot10
 from ......GUI.Dialog.DMachineSetup.SMSlot.PMSlot11.PMSlot11 import PMSlot11
+from ......GUI.Dialog.DMachineSetup.SMSlot.WSlotCirc.WSlotCirc import WSlotCirc
 from ......GUI.Dialog.DMachineSetup.DNotchTab.WNotch.Gen_WNotch import Gen_WNotch
 
 
@@ -45,7 +46,7 @@ class WNotch(Gen_WNotch, QWidget):
         self.parent = parent
 
         # Adapt the GUI to the current machine
-        self.wid_list = [PMSlot10, PMSlot11]
+        self.wid_list = [PMSlot10, PMSlot11, WSlotCirc]
 
         self.type_list = [wid.slot_type for wid in self.wid_list]
         self.name_list = [wid.notch_name for wid in self.wid_list]
