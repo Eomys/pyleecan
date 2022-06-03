@@ -306,7 +306,7 @@ class SLamShape(Gen_SLamShape, QWidget):
         Nnotch = 0
         for notch in self.obj.notch:
             Nnotch += notch.notch_shape.Zs
-        self.out_notch.setText(str(Nset) + " set (" + str(Nnotch) + "notches)")
+        self.out_notch.setText(str(Nset) + " set (" + str(Nnotch) + " notches)")
 
     def update_lenght(self):
         """Update the text of out_length

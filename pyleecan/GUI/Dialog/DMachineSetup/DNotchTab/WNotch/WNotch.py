@@ -6,10 +6,10 @@ from ......Classes.LamSlot import LamSlot
 from ......GUI.Dialog.DMachineSetup.SMSlot.PMSlot10.PMSlot10 import PMSlot10
 from ......GUI.Dialog.DMachineSetup.SMSlot.PMSlot11.PMSlot11 import PMSlot11
 from ......GUI.Dialog.DMachineSetup.SMSlot.WSlotCirc.WSlotCirc import WSlotCirc
-from ......GUI.Dialog.DMachineSetup.DNotchTab.WNotch.Ui_WNotch import Ui_WNotch
+from ......GUI.Dialog.DMachineSetup.DNotchTab.WNotch.Gen_WNotch import Gen_WNotch
 
 
-class WNotch(Ui_WNotch, QWidget):
+class WNotch(Gen_WNotch, QWidget):
     """Widget to Setup a single notch in a list"""
 
     # Signal to DMachineSetup to know that the save popup is needed
@@ -70,8 +70,7 @@ class WNotch(Ui_WNotch, QWidget):
         # Regenerate the pages with the new values
         self.w_notch.setParent(None)
         self.w_notch = self.wid_list[self.c_notch_type.currentIndex()](
-            lamination=self.lam_notch,
-            is_notch=True,
+            lamination=self.lam_notch, is_notch=True,
         )
         # Refresh the GUI
         self.main_layout.removeWidget(self.w_notch)
@@ -82,17 +81,22 @@ class WNotch(Ui_WNotch, QWidget):
         self.si_Zs.editingFinished.connect(self.set_Zs)
         self.lf_alpha.editingFinished.connect(self.set_alpha)
         self.c_alpha_unit.currentIndexChanged.connect(self.set_alpha_unit)
+        self.b_plot.clicked.connect(self.preview_notch)
 
     def emit_save(self):
         """Send a saveNeeded signal to the DMachineSetup"""
         self.saveNeeded.emit()
+
+    def preview_notch(self):
+        """Preview the notch on the lamination"""
+        self.obj.plot_preview_notch(index=self.index)
 
     def set_alpha(self):
         """Set alpha value according to widgets"""
         if self.c_alpha_unit.currentIndex() == 0:  # rad
             self.obj.notch[self.index].alpha = self.lf_alpha.value()
         else:  # deg
-            self.obj.notch[self.index].alpha = self.lf_alpha.value() * 180 / pi
+            self.obj.notch[self.index].alpha = self.lf_alpha.value() * pi / 180
 
     def set_Zs(self):
         """Set the value of Zs"""
@@ -131,13 +135,11 @@ class WNotch(Ui_WNotch, QWidget):
             self.lam_notch.slot = self.previous_notch[self.type_list[c_index]]
         self.set_alpha()
         self.set_Zs()
+        self.obj.notch[self.index].notch_shape = self.lam_notch.slot
 
         # Update the GUI
         self.w_notch.setParent(None)
-        self.w_notch = self.wid_list[c_index](
-            lamination=self.lam_notch,
-            is_notch=True,
-        )
+        self.w_notch = self.wid_list[c_index](lamination=self.lam_notch, is_notch=True,)
         self.w_notch.saveNeeded.connect(self.emit_save)
         # Refresh the GUI
         self.main_layout.removeWidget(self.w_notch)
@@ -160,4 +162,4 @@ class WNotch(Ui_WNotch, QWidget):
             Error message (return None if no error)
         """
 
-        return self.w_notch.check()
+        return self.w_notch.check(self.lam_notch)

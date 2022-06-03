@@ -1,0 +1,20 @@
+[
+    {
+        "cls": "NotchEvenDist",
+        "name": "alpha",
+        "widget": [
+            "in_alpha",
+            "lf_alpha"
+        ],
+        "xls": "Machine"
+    },
+    {
+        "cls": "Slot",
+        "name": "Zs",
+        "widget": [
+            "in_Zs",
+            "si_Zs"
+        ],
+        "xls": "Slot"
+    }
+]
