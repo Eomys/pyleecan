@@ -1,14 +1,14 @@
 # -*- coding: utf-8 -*-
-"""File generated according to SlotCirc/gen_list.json
+"""File generated according to WSlotCirc/gen_list.json
 WARNING! All changes made in this file will be lost!
 """
-from pyleecan.GUI.Dialog.DMachineSetup.SMSlot.SlotCirc.Ui_SlotCirc import Ui_SlotCirc
+from pyleecan.GUI.Dialog.DMachineSetup.SMSlot.WSlotCirc.Ui_WSlotCirc import Ui_WSlotCirc
 
 
-class Gen_SlotCirc(Ui_SlotCirc):
-    def setupUi(self, SlotCirc):
+class Gen_WSlotCirc(Ui_WSlotCirc):
+    def setupUi(self, WSlotCirc):
         """Abstract class to update the widget according to the csv doc"""
-        Ui_SlotCirc.setupUi(self, SlotCirc)
+        Ui_WSlotCirc.setupUi(self, WSlotCirc)
         # Setup of in_W0
         txt = self.tr(u"""Slot isthmus width.""")
         self.in_W0.setWhatsThis(txt)

@@ -7,13 +7,13 @@ from PySide2.QtWidgets import QWidget
 from PySide2.QtGui import QPixmap
 from ......Classes.SlotCirc import SlotCirc
 from ......GUI import gui_option
-from ......GUI.Dialog.DMachineSetup.SMSlot.SlotCirc.Gen_SlotCirc import Gen_SlotCirc
+from ......GUI.Dialog.DMachineSetup.SMSlot.WSlotCirc.Gen_WSlotCirc import Gen_WSlotCirc
 from ......Methods.Slot.Slot import SlotCheckError
 
 translate = PySide2.QtCore.QCoreApplication.translate
 
 
-class SlotCirc(Gen_SlotCirc, QWidget):
+class WSlotCirc(Gen_WSlotCirc, QWidget):
     """Page to set the Slot Magnet Type 10"""
 
     # Signal to DMachineSetup to know that the save popup is needed

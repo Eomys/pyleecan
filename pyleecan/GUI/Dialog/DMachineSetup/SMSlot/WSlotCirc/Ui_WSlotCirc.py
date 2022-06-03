@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# File generated according to SlotCirc.ui
+# File generated according to WSlotCirc.ui
 # WARNING! All changes made in this file will be lost!
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
@@ -15,18 +15,18 @@ from ......GUI.Dialog.DMachineSetup.SWSlot.WWSlotOut.WWSlotOut import WWSlotOut
 from pyleecan.GUI.Resources import pyleecan_rc
 
 
-class Ui_SlotCirc(object):
-    def setupUi(self, SlotCirc):
-        if not SlotCirc.objectName():
-            SlotCirc.setObjectName(u"SlotCirc")
-        SlotCirc.resize(933, 470)
-        SlotCirc.setMinimumSize(QSize(630, 470))
-        SlotCirc.setMaximumSize(QSize(16777215, 16777215))
-        self.horizontalLayout = QHBoxLayout(SlotCirc)
+class Ui_WSlotCirc(object):
+    def setupUi(self, WSlotCirc):
+        if not WSlotCirc.objectName():
+            WSlotCirc.setObjectName(u"WSlotCirc")
+        WSlotCirc.resize(933, 470)
+        WSlotCirc.setMinimumSize(QSize(630, 470))
+        WSlotCirc.setMaximumSize(QSize(16777215, 16777215))
+        self.horizontalLayout = QHBoxLayout(WSlotCirc)
         self.horizontalLayout.setObjectName(u"horizontalLayout")
         self.verticalLayout_2 = QVBoxLayout()
         self.verticalLayout_2.setObjectName(u"verticalLayout_2")
-        self.img_slot = QLabel(SlotCirc)
+        self.img_slot = QLabel(WSlotCirc)
         self.img_slot.setObjectName(u"img_slot")
         sizePolicy = QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
         sizePolicy.setHorizontalStretch(0)
@@ -44,7 +44,7 @@ class Ui_SlotCirc(object):
 
         self.horizontalLayout.addLayout(self.verticalLayout_2)
 
-        self.scrollArea = QScrollArea(SlotCirc)
+        self.scrollArea = QScrollArea(WSlotCirc)
         self.scrollArea.setObjectName(u"scrollArea")
         self.scrollArea.setMinimumSize(QSize(270, 0))
         self.scrollArea.setMaximumSize(QSize(270, 16777215))
@@ -105,18 +105,18 @@ class Ui_SlotCirc(object):
 
         QWidget.setTabOrder(self.lf_W0, self.lf_H0)
 
-        self.retranslateUi(SlotCirc)
+        self.retranslateUi(WSlotCirc)
 
-        QMetaObject.connectSlotsByName(SlotCirc)
+        QMetaObject.connectSlotsByName(WSlotCirc)
 
     # setupUi
 
-    def retranslateUi(self, SlotCirc):
-        SlotCirc.setWindowTitle(QCoreApplication.translate("SlotCirc", u"Form", None))
+    def retranslateUi(self, WSlotCirc):
+        WSlotCirc.setWindowTitle(QCoreApplication.translate("WSlotCirc", u"Form", None))
         self.img_slot.setText("")
-        self.unit_H0.setText(QCoreApplication.translate("SlotCirc", u"[m]", None))
-        self.in_H0.setText(QCoreApplication.translate("SlotCirc", u"H0", None))
-        self.unit_W0.setText(QCoreApplication.translate("SlotCirc", u"[m]", None))
-        self.in_W0.setText(QCoreApplication.translate("SlotCirc", u"W0", None))
+        self.unit_H0.setText(QCoreApplication.translate("WSlotCirc", u"[m]", None))
+        self.in_H0.setText(QCoreApplication.translate("WSlotCirc", u"H0", None))
+        self.unit_W0.setText(QCoreApplication.translate("WSlotCirc", u"[m]", None))
+        self.in_W0.setText(QCoreApplication.translate("WSlotCirc", u"W0", None))
 
     # retranslateUi
