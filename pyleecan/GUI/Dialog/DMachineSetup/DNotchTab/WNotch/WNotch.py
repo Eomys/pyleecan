@@ -6,7 +6,7 @@ from ......Classes.LamSlot import LamSlot
 from ......GUI.Dialog.DMachineSetup.SMSlot.PMSlot10.PMSlot10 import PMSlot10
 from ......GUI.Dialog.DMachineSetup.SMSlot.PMSlot11.PMSlot11 import PMSlot11
 from ......GUI.Dialog.DMachineSetup.SMSlot.SlotCirc.SlotCirc import SlotCirc
-from ......GUI.Dialog.DMachineSetup.DNotch.WNotch.Ui_WNotch import Ui_WNotch
+from ......GUI.Dialog.DMachineSetup.DNotchTab.WNotch.Ui_WNotch import Ui_WNotch
 
 
 class WNotch(Ui_WNotch, QWidget):
@@ -70,7 +70,8 @@ class WNotch(Ui_WNotch, QWidget):
         # Regenerate the pages with the new values
         self.w_notch.setParent(None)
         self.w_notch = self.wid_list[self.c_notch_type.currentIndex()](
-            lamination=self.lam_notch, is_notch=True,
+            lamination=self.lam_notch,
+            is_notch=True,
         )
         # Refresh the GUI
         self.main_layout.removeWidget(self.w_notch)
@@ -133,7 +134,10 @@ class WNotch(Ui_WNotch, QWidget):
 
         # Update the GUI
         self.w_notch.setParent(None)
-        self.w_notch = self.wid_list[c_index](lamination=self.lam_notch, is_notch=True,)
+        self.w_notch = self.wid_list[c_index](
+            lamination=self.lam_notch,
+            is_notch=True,
+        )
         self.w_notch.saveNeeded.connect(self.emit_save)
         # Refresh the GUI
         self.main_layout.removeWidget(self.w_notch)
