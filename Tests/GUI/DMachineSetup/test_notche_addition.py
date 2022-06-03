@@ -2,10 +2,12 @@ from PySide2 import QtWidgets
 from os.path import join, isfile
 import mock
 import sys
+from numpy import pi
 from pyleecan.GUI.Dialog.DMachineSetup.DMachineSetup import DMachineSetup
 from pyleecan.GUI.Dialog.DMachineSetup.DNotchTab.DNotchTab import DNotchTab
 from pyleecan.GUI.Dialog.DMachineSetup.DNotchTab.WNotch.WNotch import WNotch
 from pyleecan.GUI.Dialog.DMachineSetup.SMSlot.PMSlot10.PMSlot10 import PMSlot10
+from pyleecan.GUI.Dialog.DMachineSetup.SMSlot.WSlotCirc.WSlotCirc import WSlotCirc
 from pyleecan.Functions.load import load_matlib
 from pyleecan.GUI.Dialog.DMachineSetup.SLamShape.SLamShape import SLamShape
 from pyleecan.definitions import DATA_DIR
@@ -77,22 +79,58 @@ class TestNotcheAddition(object):
 
         Zs = 48 // 4
         notche_wid.si_Zs.setValue(Zs)
+        notche_wid.si_Zs.editingFinished.emit()
         assert notche_wid.si_Zs.value() == Zs
 
-        H0 = 20e-3
-        W0 = 45e-3
+        H0 = 2e-3
+        W0 = 4e-3
         assert isinstance(notche_wid.w_notch, PMSlot10)
         notche_wid.w_notch.lf_H0.setValue(H0)
         notche_wid.w_notch.lf_W0.setValue(W0)
         assert notche_wid.w_notch.lf_H0.value() == H0
+        notche_wid.w_notch.lf_H0.editingFinished.emit()
         assert notche_wid.w_notch.lf_W0.value() == W0
-
+        notche_wid.w_notch.lf_W0.editingFinished.emit()
         # Checking plot/preview function
+        notche_wid.b_plot.clicked.emit()
         self.widget.w_step.notches_win.b_plot.clicked.emit()
 
         # Adding second notch (circular)
+        self.widget.w_step.notches_win.b_add.clicked.emit()
+        assert self.widget.w_step.notches_win.tab_notch.count() == 2
+
+        self.widget.w_step.notches_win.tab_notch.setCurrentIndex(1)
+        notche_wid = self.widget.w_step.notches_win.tab_notch.currentWidget()
+        assert isinstance(notche_wid, WNotch)
+
+        notche_wid.c_notch_type.setCurrentIndex(2)
+        assert notche_wid.c_notch_type.currentIndex() == 2
+
+        Zs = 48 // 4
+        notche_wid.si_Zs.setValue(Zs)
+        notche_wid.si_Zs.editingFinished.emit()
+        assert notche_wid.si_Zs.value() == Zs
+
+        alpha = 15
+        notche_wid.c_alpha_unit.setCurrentIndex(1)
+        notche_wid.lf_alpha.setValue(alpha)
+        notche_wid.lf_alpha.editingFinished.emit()
+        assert notche_wid.c_alpha_unit.currentIndex() == 1
+        assert notche_wid.lf_alpha.value() == alpha
+
+        H0 = 2e-3
+        W0 = 4e-3
+        assert isinstance(notche_wid.w_notch, WSlotCirc)
+        notche_wid.w_notch.lf_H0.setValue(H0)
+        notche_wid.w_notch.lf_W0.setValue(W0)
+        assert notche_wid.w_notch.lf_H0.value() == H0
+        notche_wid.w_notch.lf_H0.editingFinished.emit()
+        assert notche_wid.w_notch.lf_W0.value() == W0
+        notche_wid.w_notch.lf_W0.editingFinished.emit()
 
         # Checking plot/preview function
+        notche_wid.b_plot.clicked.emit()
+        self.widget.w_step.notches_win.b_plot.clicked.emit()
 
         # Clicking on OK then selecting rotor lamination tab
         self.widget.nav_step.setCurrentRow(7)
