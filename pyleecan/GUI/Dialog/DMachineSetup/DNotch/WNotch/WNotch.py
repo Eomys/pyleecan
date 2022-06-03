@@ -8,6 +8,7 @@ from pyleecan.Classes.LamSlot import LamSlot
 
 from ......GUI.Dialog.DMachineSetup.SMSlot.PMSlot10.PMSlot10 import PMSlot10
 from ......GUI.Dialog.DMachineSetup.SMSlot.PMSlot11.PMSlot11 import PMSlot11
+from ......GUI.Dialog.DMachineSetup.SMSlot.SlotCirc.SlotCirc import SlotCirc
 from ......GUI.Dialog.DMachineSetup.DNotch.WNotch.Ui_WNotch import Ui_WNotch
 
 
@@ -48,7 +49,7 @@ class WNotch(Ui_WNotch, QWidget):
         self.parent = parent
 
         # Adapt the GUI to the current machine
-        self.wid_list = [PMSlot10, PMSlot11]
+        self.wid_list = [PMSlot10, PMSlot11, SlotCirc]
 
         self.type_list = [wid.slot_type for wid in self.wid_list]
         self.name_list = [wid.slot_name for wid in self.wid_list]
