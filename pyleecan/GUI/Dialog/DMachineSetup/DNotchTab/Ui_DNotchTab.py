@@ -23,6 +23,11 @@ class Ui_DNotchTab(object):
         sizePolicy.setHeightForWidth(DNotchTab.sizePolicy().hasHeightForWidth())
         DNotchTab.setSizePolicy(sizePolicy)
         DNotchTab.setMinimumSize(QSize(780, 640))
+        icon = QIcon()
+        icon.addFile(
+            u":/images/images/icon/pyleecan_64.png", QSize(), QIcon.Normal, QIcon.Off
+        )
+        DNotchTab.setWindowIcon(icon)
         self.verticalLayout = QVBoxLayout(DNotchTab)
         self.verticalLayout.setObjectName(u"verticalLayout")
         self.horizontalLayout_3 = QHBoxLayout()
@@ -92,7 +97,9 @@ class Ui_DNotchTab(object):
     # setupUi
 
     def retranslateUi(self, DNotchTab):
-        DNotchTab.setWindowTitle(QCoreApplication.translate("DNotchTab", u"Form", None))
+        DNotchTab.setWindowTitle(
+            QCoreApplication.translate("DNotchTab", u"Notches Setup", None)
+        )
         self.b_add.setText(
             QCoreApplication.translate("DNotchTab", u"Add new notch", None)
         )

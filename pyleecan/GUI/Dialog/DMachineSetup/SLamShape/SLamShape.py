@@ -7,7 +7,7 @@ from logging import getLogger
 
 from .....loggers import GUI_LOG_NAME
 from .....GUI import gui_option
-from .....GUI.Dialog.DMachineSetup.DNotch.DNotchTab import DNotchTab
+from .....GUI.Dialog.DMachineSetup.DNotchTab.DNotchTab import DNotchTab
 from .....GUI.Dialog.DMachineSetup.DAVDuct.DAVDuct import DAVDuct
 from .....GUI.Dialog.DMachineSetup.SLamShape.Gen_SLamShape import Gen_SLamShape
 
@@ -93,6 +93,13 @@ class SLamShape(Gen_SLamShape, QWidget):
         else:
             self.lf_Wrvd.setValue(self.obj.Wrvd)
             self.g_radial.setChecked(True)
+
+        # Notches setup
+        if self.obj.notch is None:
+            self.obj.notch = list()
+        if len(self.obj.notch) > 0:
+            self.g_notches.setChecked(True)
+        self.update_notches_text()
 
         # Not available Yet
         self.g_bore.hide()
@@ -254,7 +261,8 @@ class SLamShape(Gen_SLamShape, QWidget):
     def enable_notches(self):
         """Clear notches values if g_notches is unselected"""
         if not self.g_notches.isChecked():
-            self.obj.notch_list = list()
+            # remove notches
+            self.obj.notch = list()
             self.update_notches_text()
             self.update_graph()
         # Notify the machine GUI that the machine has changed
@@ -279,6 +287,8 @@ class SLamShape(Gen_SLamShape, QWidget):
         self : SLamShape
             A SLamShape object
         """
+        self.obj.notch = self.notches_win.obj.notch
+        self.notches_win = None
         self.update_notches_text()
         self.update_graph()
         # Notify the machine GUI that the machine has changed
@@ -292,8 +302,11 @@ class SLamShape(Gen_SLamShape, QWidget):
         self : SLamShape
             A SLamShape object
         """
-        Nset = len(self.obj.notch_list)
-        self.out_axial_duct.setText(str(Nset) + "set (" + str(Nset) + "notches)")
+        Nset = len(self.obj.notch)
+        Nnotch = 0
+        for notch in self.obj.notch:
+            Nnotch += notch.notch_shape.Zs
+        self.out_notch.setText(str(Nset) + " set (" + str(Nnotch) + "notches)")
 
     def update_lenght(self):
         """Update the text of out_length
@@ -384,9 +397,7 @@ class SLamShape(Gen_SLamShape, QWidget):
                 err_msg = "Error while plotting machine in Rotor Lamination:\n" + str(e)
             getLogger(GUI_LOG_NAME).error(err_msg)
             QMessageBox().critical(
-                self,
-                self.tr("Error"),
-                err_msg,
+                self, self.tr("Error"), err_msg,
             )
 
         # Update the Graph

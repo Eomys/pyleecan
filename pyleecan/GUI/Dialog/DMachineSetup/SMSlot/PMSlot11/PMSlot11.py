@@ -70,11 +70,9 @@ class PMSlot11(Gen_PMSlot11, QWidget):
             # Set values for check
             self.slot.Hmag = 0
             self.slot.Wmag = 0
-            # Remove constraint
-
             # Use schematics without magnet
             self.img_slot.setPixmap(
-                QPixmap(u":/images/images/MachineSetup/WMSlot/SlotM10_empty.png")
+                QPixmap(u":/images/images/MachineSetup/WMSlot/SlotM11_empty.png")
             )
 
         # Fill the fields with the machine values (if they're filled)
