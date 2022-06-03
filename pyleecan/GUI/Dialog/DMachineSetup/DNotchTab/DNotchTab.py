@@ -159,9 +159,9 @@ class DNotchTab(Ui_DNotchTab, QDialog):
         """
 
         # Check that everything is set
-        for ii in range(self.obj.notch):
+        for ii in range(len(self.obj.notch)):
             try:
                 wid = self.tab_notch.widget(ii)
-                wid.check(wid.lam_notch)
+                wid.check()
             except SlotCheckError as error:
                 return str(error)

@@ -73,6 +73,11 @@ class Ui_WNotch(object):
 
         self.horizontalLayout.addItem(self.horizontalSpacer)
 
+        self.b_plot = QPushButton(WNotch)
+        self.b_plot.setObjectName(u"b_plot")
+
+        self.horizontalLayout.addWidget(self.b_plot)
+
         self.main_layout.addLayout(self.horizontalLayout)
 
         self.w_notch = QWidget(WNotch)
@@ -125,6 +130,10 @@ class Ui_WNotch(object):
         )
         self.c_alpha_unit.setItemText(
             1, QCoreApplication.translate("WNotch", u"[deg]", None)
+        )
+
+        self.b_plot.setText(
+            QCoreApplication.translate("WNotch", u"Preview Notch", None)
         )
 
     # retranslateUi

@@ -5154,7 +5154,8 @@
             "get_notches_surf",
             "comp_periodicity_duct_spatial",
             "get_surfaces_closing",
-            "comp_periodicity_geo"
+            "comp_periodicity_geo",
+            "plot_preview_notch"
         ],
         "mother": "",
         "name": "Lamination",
@@ -7903,7 +7904,7 @@
         "path": "pyleecan/Generator/ClassesRef/Machine/NotchEvenDist.csv",
         "properties": [
             {
-                "desc": "angular positon of the first notch",
+                "desc": "angular positon of the first notch (0 is middle of first tooth)",
                 "max": "",
                 "min": "",
                 "name": "alpha",
