@@ -135,6 +135,7 @@ class WNotch(Gen_WNotch, QWidget):
             self.lam_notch.slot = self.previous_notch[self.type_list[c_index]]
         self.set_alpha()
         self.set_Zs()
+        self.obj.notch[self.index].notch_shape = self.lam_notch.slot
 
         # Update the GUI
         self.w_notch.setParent(None)

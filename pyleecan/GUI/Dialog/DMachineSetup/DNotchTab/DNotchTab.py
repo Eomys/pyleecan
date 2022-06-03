@@ -162,6 +162,8 @@ class DNotchTab(Ui_DNotchTab, QDialog):
         for ii in range(len(self.obj.notch)):
             try:
                 wid = self.tab_notch.widget(ii)
-                wid.check()
+                err_msg = wid.check()
+                if err_msg is not None:
+                    return "Notch " + str(ii + 1) + ": " + err_msg
             except SlotCheckError as error:
-                return str(error)
+                return "Notch " + str(ii + 1) + ": " + str(error)
