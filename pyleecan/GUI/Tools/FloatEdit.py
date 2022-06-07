@@ -78,7 +78,10 @@ class FloatEdit(QLineEdit):
         """
         try:
             self.setText(self.validator().fixup_txt(self.text(), self.u, self.unit))
-            value = float(self.text())
+            if self.text() == "":
+                return None
+            else:
+                value = float(self.text())
             if self.unit == "m":
                 return self.u.set_m(value)
             else:
@@ -109,7 +112,7 @@ class FloatValidator(QDoubleValidator):
         match = search(r"^[+-]?($|(\d+\.?|\.?(\d+|$))\d*($|([eE][+-]?)?\d*$))", string)
         is_intermediate = True if match else False
 
-        if valid_float_string(string):
+        if valid_float_string(string) or string == "":
             state = QtGui.QValidator.Acceptable
         elif is_intermediate:
             state = QtGui.QValidator.Intermediate
