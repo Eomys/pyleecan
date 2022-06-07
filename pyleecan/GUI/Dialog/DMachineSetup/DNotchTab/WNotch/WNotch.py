@@ -49,6 +49,9 @@ class WNotch(Gen_WNotch, QWidget):
         self.index = index
         self.parent = parent
 
+        # String storing the last error message (used in test)
+        self.err_msg = None
+
         # Adapt the GUI to the current machine
         self.wid_list = [PMSlot10, PMSlot11, WSlotCirc]
 
@@ -98,9 +101,9 @@ class WNotch(Gen_WNotch, QWidget):
         error = None
         error = self.check()
         if error:  # Error => Display it
-            err_msg = "Unable to generate a preview:\n" + error
-            getLogger(GUI_LOG_NAME).debug(err_msg)
-            QMessageBox().critical(self, self.tr("Error"), err_msg)
+            self.err_msg = "Unable to generate a preview:\n" + error
+            getLogger(GUI_LOG_NAME).debug(self.err_msg)
+            QMessageBox().critical(self, self.tr("Error"), self.err_msg)
         else:
             # No error in the definition of the notche => the preview should be generated
             self.obj.plot_preview_notch(index=self.index)

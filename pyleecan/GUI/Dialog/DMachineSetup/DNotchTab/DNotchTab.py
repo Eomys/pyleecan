@@ -44,6 +44,9 @@ class DNotchTab(Ui_DNotchTab, QDialog):
         self.machine = machine.copy()
         self.is_stator = is_stator
 
+        # String storing the last error message (used in test)
+        self.err_msg = None
+
         # Get the correct object to set
         if self.is_stator:
             self.obj = self.machine.stator
@@ -131,19 +134,19 @@ class DNotchTab(Ui_DNotchTab, QDialog):
         # We have to make sure the notches are right before trying to plot it
         error = self.check()
         if error:  # Error => Display it
-            err_msg = "Error in Notch definition:\n" + error
-            getLogger(GUI_LOG_NAME).debug(err_msg)
-            QMessageBox().critical(self, self.tr("Error"), err_msg)
+            self.err_msg = "Error in Notch definition:\n" + error
+            getLogger(GUI_LOG_NAME).debug(self.err_msg)
+            QMessageBox().critical(self, self.tr("Error"), self.err_msg)
         else:  # No error => Plot the lamination
             try:
                 self.obj.plot(is_show_fig=True)
                 set_plot_gui_icon()
             except Exception as e:
-                err_msg = (
+                self.err_msg = (
                     "Error while plotting Lamination in Notch definition:\n" + str(e)
                 )
-                getLogger(GUI_LOG_NAME).error(err_msg)
-                QMessageBox().critical(self, self.tr("Error"), err_msg)
+                getLogger(GUI_LOG_NAME).error(self.err_msg)
+                QMessageBox().critical(self, self.tr("Error"), self.err_msg)
 
     def check(self):
         """Check that the notches are correctly defined
@@ -163,9 +166,11 @@ class DNotchTab(Ui_DNotchTab, QDialog):
         for ii in range(len(self.obj.notch)):
             try:
                 wid = self.tab_notch.widget(ii)
-                err_msg = wid.check()
-                if err_msg is not None:
-                    return "Notch " + str(ii + 1) + ": " + err_msg
+                error = wid.check()
+                if error != None:
+                    self.err_msg = error
+                if self.err_msg is not None:
+                    return "Notch " + str(ii + 1) + ": " + self.err_msg
             except SlotCheckError as error:
                 return "Notch " + str(ii + 1) + ": " + str(error)
 
@@ -190,9 +195,9 @@ class DNotchTab(Ui_DNotchTab, QDialog):
                 error = str(e)
 
         if error:  # Error => Display it
-            err_msg = "Error in Notch definition:\n" + error
-            getLogger(GUI_LOG_NAME).debug(err_msg)
-            QMessageBox().critical(self, self.tr("Error"), err_msg)
+            self.err_msg = "Error in Notch definition:\n" + error
+            getLogger(GUI_LOG_NAME).debug(self.err_msg)
+            QMessageBox().critical(self, self.tr("Error"), self.err_msg)
 
         else:  # No error => modification accepted
             self.accept()
