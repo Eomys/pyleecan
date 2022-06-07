@@ -63,7 +63,7 @@ class TestNotcheAddition(object):
 
         assert self.widget.machine.name == "Toyota_Prius"
 
-        # Checking notch and recovering dialog
+        # Step 1 : Checking notch groupBox and recovering dialog
         self.widget.nav_step.setCurrentRow(5)
         assert isinstance(self.widget.w_step, SLamShape)
         assert not self.widget.w_step.g_notches.isChecked()
@@ -75,7 +75,7 @@ class TestNotcheAddition(object):
 
         assert isinstance(self.widget.w_step.notches_win, DNotchTab)
 
-        # Adding first notch (rectangular)
+        # Step 1-1 : Adding first notch (rectangular)
         assert self.widget.w_step.notches_win.tab_notch.count() == 1
 
         notche_wid = self.widget.w_step.notches_win.tab_notch.currentWidget()
@@ -101,7 +101,7 @@ class TestNotcheAddition(object):
         notche_wid.b_plot.clicked.emit()
         self.widget.w_step.notches_win.b_plot.clicked.emit()
 
-        # Adding second notch (circular)
+        # Step 1-2 : Adding second notch (circular)
         self.widget.w_step.notches_win.b_add.clicked.emit()
         assert self.widget.w_step.notches_win.tab_notch.count() == 2
 
@@ -138,9 +138,25 @@ class TestNotcheAddition(object):
         notche_wid.b_plot.clicked.emit()
         self.widget.w_step.notches_win.b_plot.clicked.emit()
 
+        # Clicking on OK button
         self.widget.w_step.notches_win.b_ok.clicked.emit()
 
-        # Clicking on OK then selecting rotor lamination tab
+        # Step 1-3 : Making sure that the groupBox and the widget are updated according to the new stator (with notches)
+        self.widget.nav_step.setCurrentRow(7)
+        self.widget.nav_step.setCurrentRow(5)
+
+        assert isinstance(self.widget.w_step, SLamShape)
+        assert self.widget.w_step.g_notches.isChecked()
+        assert self.widget.w_step.b_notch.isEnabled()
+
+        assert self.widget.w_step.out_notch.text() == "2 set (24 notches)"
+
+        self.widget.w_step.b_notch.clicked.emit()
+        assert isinstance(self.widget.w_step.notches_win, DNotchTab)
+        assert self.widget.w_step.notches_win.tab_notch.count() == 2
+        self.widget.w_step.notches_win.b_cancel.clicked.emit()
+
+        # Step 2 : Adding notches on the rotor (polar)
         self.widget.nav_step.setCurrentRow(7)
 
         # Enabling notch on rotor
@@ -154,7 +170,7 @@ class TestNotcheAddition(object):
 
         assert isinstance(self.widget.w_step.notches_win, DNotchTab)
 
-        # Adding first notch polar
+        # Step 2-1 : Adding polar notches on the rotor
         assert self.widget.w_step.notches_win.tab_notch.count() == 1
 
         notche_wid = self.widget.w_step.notches_win.tab_notch.currentWidget()
@@ -181,10 +197,26 @@ class TestNotcheAddition(object):
         notche_wid.b_plot.clicked.emit()
         self.widget.w_step.notches_win.b_plot.clicked.emit()
 
-        # Clicking on OK then saving the machine
+        # Clicking on OK button
         self.widget.w_step.notches_win.b_ok.clicked.emit()
 
-        # Making sure that the machine was updated
+        # Step 2-2 : Making sure that the groupBox and the widget are updated according to the new stator (with notches)
+        self.widget.nav_step.setCurrentRow(5)
+        self.widget.nav_step.setCurrentRow(7)
+
+        assert isinstance(self.widget.w_step, SLamShape)
+        assert self.widget.w_step.g_notches.isChecked()
+        assert self.widget.w_step.b_notch.isEnabled()
+
+        assert self.widget.w_step.out_notch.text() == "1 set (8 notches)"
+
+        self.widget.w_step.b_notch.clicked.emit()
+        assert isinstance(self.widget.w_step.notches_win, DNotchTab)
+        assert self.widget.w_step.notches_win.tab_notch.count() == 1
+        self.widget.w_step.notches_win.b_cancel.clicked.emit()
+
+        # Step 3 : Saving the machine with notches
+        # Making sure that the updated machine was saved
         file_path = join(save_path, machine_name + ".json")
 
         # Check that the file didn't already exist
@@ -203,10 +235,6 @@ class TestNotcheAddition(object):
         assert isfile(file_path)
         remove(file_path)
         assert not isfile(file_path)
-        # Check that the GUI have been updated
-        self.widget.nav_step.setCurrentRow(0)
-        assert type(self.widget.w_step) == SMachineType
-        assert self.widget.w_step.le_name.text() == machine_name
 
 
 if __name__ == "__main__":
