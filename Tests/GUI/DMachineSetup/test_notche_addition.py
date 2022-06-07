@@ -321,11 +321,36 @@ class TestNotcheAddition(object):
         assert notche_wid.w_notch.lf_H0.value() == None
         assert notche_wid.w_notch.lf_W0.value() == None
 
+        # When clicking on preview buttons, a message box is displayed
+        with mock.patch(
+            "PySide2.QtWidgets.QMessageBox.critical",
+            return_value=QtWidgets.QMessageBox.Ok,
+        ):
+            self.widget.w_step.notches_win.b_plot.clicked.emit()
+
+        assert (
+            self.widget.w_step.notches_win.err_msg
+            == "Error in Notch definition:\nNotch 1: You must set W0 !"
+        )
+
+        with mock.patch(
+            "PySide2.QtWidgets.QMessageBox.critical",
+            return_value=QtWidgets.QMessageBox.Ok,
+        ):
+            notche_wid.b_plot.clicked.emit()
+
+        assert notche_wid.err_msg == "Unable to generate a preview:\nYou must set W0 !"
+
         with mock.patch(
             "PySide2.QtWidgets.QMessageBox.critical",
             return_value=QtWidgets.QMessageBox.Ok,
         ):
             self.widget.w_step.notches_win.b_ok.clicked.emit()
+
+        assert (
+            self.widget.w_step.notches_win.err_msg
+            == "Error in Notch definition:\nNotch 1: You must set W0 !"
+        )
 
         self.widget.w_step.notches_win.b_cancel.clicked.emit()
 
@@ -364,11 +389,29 @@ class TestNotcheAddition(object):
         assert notche_wid.w_notch.lf_W0.value() == W0
         notche_wid.w_notch.lf_W0.editingFinished.emit()
 
+        # When clicking on preview buttons, a message box is displayed
+        with mock.patch(
+            "PySide2.QtWidgets.QMessageBox.critical",
+            return_value=QtWidgets.QMessageBox.Ok,
+        ):
+            self.widget.w_step.notches_win.b_plot.clicked.emit()
+
+        assert (
+            self.widget.w_step.notches_win.err_msg
+            == "Error while plotting Lamination in Notch definition:\nNotches and/or Slots are colliding"
+        )
+
+        # When clicking on Ok button, a message box is displayed
         with mock.patch(
             "PySide2.QtWidgets.QMessageBox.critical",
             return_value=QtWidgets.QMessageBox.Ok,
         ):
             self.widget.w_step.notches_win.b_ok.clicked.emit()
+
+        assert (
+            self.widget.w_step.notches_win.err_msg
+            == "Error in Notch definition:\nNotches and/or Slots are colliding"
+        )
 
         self.widget.w_step.notches_win.b_cancel.clicked.emit()
 
@@ -379,7 +422,7 @@ if __name__ == "__main__":
     a.setup_method()
     # a.test_notch_addition()
     # a.test_cancel_button()
-    # a.test_notch_addition_without_input()
-    a.test_notch_addition_wrong_input()
+    a.test_notch_addition_without_input()
+    # a.test_notch_addition_wrong_input()
     a.teardown_class()
     print("Done")
