@@ -130,7 +130,7 @@ class DNotchTab(Ui_DNotchTab, QDialog):
         self : DNotchTab
             a DNotchTab object
         """
-
+        self.err_msg = None
         # We have to make sure the notches are right before trying to plot it
         error = self.check()
         if error:  # Error => Display it
@@ -161,14 +161,12 @@ class DNotchTab(Ui_DNotchTab, QDialog):
         error : str
             Error message (return None if no error)
         """
-
+        self.err_msg = None
         # Check that everything is set
         for ii in range(len(self.obj.notch)):
             try:
                 wid = self.tab_notch.widget(ii)
-                error = wid.check()
-                if error != None:
-                    self.err_msg = error
+                self.err_msg = wid.check()
                 if self.err_msg is not None:
                     return "Notch " + str(ii + 1) + ": " + self.err_msg
             except SlotCheckError as error:
@@ -183,6 +181,7 @@ class DNotchTab(Ui_DNotchTab, QDialog):
             A DNotchTab object
 
         """
+        self.err_msg = None
         error = None
 
         # We have to make sure the notches are correct before accepting it

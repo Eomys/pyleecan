@@ -97,8 +97,7 @@ class WNotch(Gen_WNotch, QWidget):
 
     def preview_notch(self):
         """Preview the notch on the lamination"""
-
-        error = None
+        self.err_msg = None
         error = self.check()
         if error:  # Error => Display it
             self.err_msg = "Unable to generate a preview:\n" + error
