@@ -42,14 +42,6 @@ class TestNotcheAddition(object):
             material_dict=material_dict, machine_path=join(DATA_DIR, "Machine")
         )
 
-    @classmethod
-    def teardown_class(cls):
-        """Exit the app after the test"""
-        cls.app.quit()
-
-    def test_notch_addition(self):
-        """Checking that the UI allow the definition and the addition to a machine"""
-
         # Loading Prius machine
         return_value = (
             join(DATA_DIR, "Machine", machine_name + ".json"),
@@ -60,6 +52,14 @@ class TestNotcheAddition(object):
         ):
             # To trigger the slot
             self.widget.b_load.clicked.emit()
+
+    @classmethod
+    def teardown_class(cls):
+        """Exit the app after the test"""
+        cls.app.quit()
+
+    def test_notch_addition(self):
+        """Checking that the UI allow the definition and the addition to a machine"""
 
         assert self.widget.machine.name == "Toyota_Prius"
 
@@ -236,10 +236,58 @@ class TestNotcheAddition(object):
         remove(file_path)
         assert not isfile(file_path)
 
+    def test_cancel_button(self):
+        """Checking that when clicking on cancel button, the machine is not update (no new notches added)"""
+
+        assert self.widget.machine.name == "Toyota_Prius"
+        assert self.widget.machine.stator.notch in [list(), None]
+
+        # Step 1 : Checking notch groupBox and recovering dialog
+        self.widget.nav_step.setCurrentRow(5)
+        assert isinstance(self.widget.w_step, SLamShape)
+        assert not self.widget.w_step.g_notches.isChecked()
+
+        self.widget.w_step.g_notches.setChecked(True)
+
+        assert self.widget.w_step.b_notch.isEnabled()
+        self.widget.w_step.b_notch.clicked.emit()
+
+        assert isinstance(self.widget.w_step.notches_win, DNotchTab)
+
+        # Step 2: Adding notch (rectangular)
+        assert self.widget.w_step.notches_win.tab_notch.count() == 1
+
+        notche_wid = self.widget.w_step.notches_win.tab_notch.currentWidget()
+        assert isinstance(notche_wid, WNotch)
+
+        assert notche_wid.c_notch_type.currentIndex() == 0
+
+        Zs = 48 // 4
+        notche_wid.si_Zs.setValue(Zs)
+        notche_wid.si_Zs.editingFinished.emit()
+        assert notche_wid.si_Zs.value() == Zs
+
+        H0 = 2e-3
+        W0 = 4e-3
+        assert isinstance(notche_wid.w_notch, PMSlot10)
+        notche_wid.w_notch.lf_H0.setValue(H0)
+        notche_wid.w_notch.lf_W0.setValue(W0)
+        assert notche_wid.w_notch.lf_H0.value() == H0
+        notche_wid.w_notch.lf_H0.editingFinished.emit()
+        assert notche_wid.w_notch.lf_W0.value() == W0
+        notche_wid.w_notch.lf_W0.editingFinished.emit()
+
+        # Step 3 : Clicking on cancel button
+        self.widget.w_step.notches_win.b_cancel.clicked.emit()
+
+        assert self.widget.machine.stator.notch in [list(), None]
+
 
 if __name__ == "__main__":
     a = TestNotcheAddition()
     a.setup_class()
     a.setup_method()
-    a.test_notch_addition()
+    # a.test_notch_addition()
+    a.test_cancel_button()
+    a.teardown_class()
     print("Done")
