@@ -1,6 +1,10 @@
 from PySide2.QtCore import Signal
-from PySide2.QtWidgets import QWidget
+from PySide2.QtWidgets import QWidget, QMessageBox
 from numpy import pi
+from logging import getLogger
+
+from ......loggers import GUI_LOG_NAME
+
 from ......Classes.LamSlot import LamSlot
 
 from ......GUI.Dialog.DMachineSetup.SMSlot.PMSlot10.PMSlot10 import PMSlot10
@@ -70,7 +74,8 @@ class WNotch(Gen_WNotch, QWidget):
         # Regenerate the pages with the new values
         self.w_notch.setParent(None)
         self.w_notch = self.wid_list[self.c_notch_type.currentIndex()](
-            lamination=self.lam_notch, is_notch=True,
+            lamination=self.lam_notch,
+            is_notch=True,
         )
         # Refresh the GUI
         self.main_layout.removeWidget(self.w_notch)
@@ -89,7 +94,16 @@ class WNotch(Gen_WNotch, QWidget):
 
     def preview_notch(self):
         """Preview the notch on the lamination"""
-        self.obj.plot_preview_notch(index=self.index)
+
+        error = None
+        error = self.check()
+        if error:  # Error => Display it
+            err_msg = "Unable to generate a preview:\n" + error
+            getLogger(GUI_LOG_NAME).debug(err_msg)
+            QMessageBox().critical(self, self.tr("Error"), err_msg)
+        else:
+            # No error in the definition of the notche => the preview should be generated
+            self.obj.plot_preview_notch(index=self.index)
 
     def set_alpha(self):
         """Set alpha value according to widgets"""
@@ -139,7 +153,10 @@ class WNotch(Gen_WNotch, QWidget):
 
         # Update the GUI
         self.w_notch.setParent(None)
-        self.w_notch = self.wid_list[c_index](lamination=self.lam_notch, is_notch=True,)
+        self.w_notch = self.wid_list[c_index](
+            lamination=self.lam_notch,
+            is_notch=True,
+        )
         self.w_notch.saveNeeded.connect(self.emit_save)
         # Refresh the GUI
         self.main_layout.removeWidget(self.w_notch)
