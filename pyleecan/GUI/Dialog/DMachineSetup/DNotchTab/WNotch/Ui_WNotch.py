@@ -34,15 +34,15 @@ class Ui_WNotch(object):
 
         self.horizontalLayout.addWidget(self.c_notch_type)
 
-        self.in_Zs = QLabel(WNotch)
-        self.in_Zs.setObjectName(u"in_Zs")
+        self.in_Zn = QLabel(WNotch)
+        self.in_Zn.setObjectName(u"in_Zn")
 
-        self.horizontalLayout.addWidget(self.in_Zs)
+        self.horizontalLayout.addWidget(self.in_Zn)
 
-        self.si_Zs = QSpinBox(WNotch)
-        self.si_Zs.setObjectName(u"si_Zs")
+        self.si_Zn = QSpinBox(WNotch)
+        self.si_Zn.setObjectName(u"si_Zn")
 
-        self.horizontalLayout.addWidget(self.si_Zs)
+        self.horizontalLayout.addWidget(self.si_Zn)
 
         self.in_alpha = QLabel(WNotch)
         self.in_alpha.setObjectName(u"in_alpha")
@@ -123,7 +123,7 @@ class Ui_WNotch(object):
             6, QCoreApplication.translate("WNotch", u"Slot Type 56", None)
         )
 
-        self.in_Zs.setText(QCoreApplication.translate("WNotch", u"Zs:", None))
+        self.in_Zn.setText(QCoreApplication.translate("WNotch", u"Zn:", None))
         self.in_alpha.setText(QCoreApplication.translate("WNotch", u"Alpha:", None))
         self.c_alpha_unit.setItemText(
             0, QCoreApplication.translate("WNotch", u"[rad]", None)

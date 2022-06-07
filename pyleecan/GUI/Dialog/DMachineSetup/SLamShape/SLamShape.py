@@ -397,7 +397,9 @@ class SLamShape(Gen_SLamShape, QWidget):
                 err_msg = "Error while plotting machine in Rotor Lamination:\n" + str(e)
             getLogger(GUI_LOG_NAME).error(err_msg)
             QMessageBox().critical(
-                self, self.tr("Error"), err_msg,
+                self,
+                self.tr("Error"),
+                err_msg,
             )
 
         # Update the Graph

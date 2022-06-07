@@ -62,14 +62,14 @@
       </widget>
      </item>
      <item>
-      <widget class="QLabel" name="in_Zs">
+      <widget class="QLabel" name="in_Zn">
        <property name="text">
-        <string>Zs:</string>
+        <string>Zn:</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QSpinBox" name="si_Zs"/>
+      <widget class="QSpinBox" name="si_Zn"/>
      </item>
      <item>
       <widget class="QLabel" name="in_alpha">
