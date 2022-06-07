@@ -329,6 +329,49 @@ class TestNotcheAddition(object):
 
         self.widget.w_step.notches_win.b_cancel.clicked.emit()
 
+    def test_notch_addition_wrong_input(self):
+        """Checking that if the UI is wrongly defined, then we can not add a notch and a error message is shown"""
+        assert self.widget.machine.name == "Toyota_Prius"
+
+        # Step 1 : Checking notch groupBox and recovering dialog
+        self.widget.nav_step.setCurrentRow(5)
+        assert isinstance(self.widget.w_step, SLamShape)
+        assert not self.widget.w_step.g_notches.isChecked()
+
+        self.widget.w_step.g_notches.setChecked(True)
+
+        assert self.widget.w_step.b_notch.isEnabled()
+        self.widget.w_step.b_notch.clicked.emit()
+
+        assert isinstance(self.widget.w_step.notches_win, DNotchTab)
+
+        # Step 1-1 : Adding first notch (rectangular)
+        assert self.widget.w_step.notches_win.tab_notch.count() == 1
+
+        notche_wid = self.widget.w_step.notches_win.tab_notch.currentWidget()
+        assert isinstance(notche_wid, WNotch)
+
+        assert notche_wid.c_notch_type.currentIndex() == 0
+
+        assert notche_wid.si_Zs.value() == 48
+        H0 = 5e-3
+        W0 = 10e-3
+        assert isinstance(notche_wid.w_notch, PMSlot10)
+        notche_wid.w_notch.lf_H0.setValue(H0)
+        notche_wid.w_notch.lf_W0.setValue(W0)
+        assert notche_wid.w_notch.lf_H0.value() == H0
+        notche_wid.w_notch.lf_H0.editingFinished.emit()
+        assert notche_wid.w_notch.lf_W0.value() == W0
+        notche_wid.w_notch.lf_W0.editingFinished.emit()
+
+        with mock.patch(
+            "PySide2.QtWidgets.QMessageBox.critical",
+            return_value=QtWidgets.QMessageBox.Ok,
+        ):
+            self.widget.w_step.notches_win.b_ok.clicked.emit()
+
+        self.widget.w_step.notches_win.b_cancel.clicked.emit()
+
 
 if __name__ == "__main__":
     a = TestNotcheAddition()
@@ -336,6 +379,7 @@ if __name__ == "__main__":
     a.setup_method()
     # a.test_notch_addition()
     # a.test_cancel_button()
-    a.test_notch_addition_without_input()
+    # a.test_notch_addition_without_input()
+    a.test_notch_addition_wrong_input()
     a.teardown_class()
     print("Done")
