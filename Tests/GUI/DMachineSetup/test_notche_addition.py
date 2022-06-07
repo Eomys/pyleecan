@@ -6,6 +6,9 @@ import sys
 from numpy import pi
 from numpy.testing import assert_almost_equal
 
+from pyleecan.Classes.SlotM10 import SlotM10
+from pyleecan.Classes.SlotM11 import SlotM11
+from pyleecan.Classes.SlotCirc import SlotCirc
 from pyleecan.definitions import DATA_DIR
 from pyleecan.Functions.load import load_matlib
 from pyleecan.GUI.Dialog.DMachineSetup.DMachineSetup import DMachineSetup
@@ -215,7 +218,15 @@ class TestNotcheAddition(object):
         assert self.widget.w_step.notches_win.tab_notch.count() == 1
         self.widget.w_step.notches_win.b_cancel.clicked.emit()
 
-        # Step 3 : Saving the machine with notches
+        # Step 3 : Making sure that the notches are added on the machine
+        assert len(self.widget.machine.stator.notch) == 2
+        assert isinstance(self.widget.machine.stator.notch[0].notch_shape, SlotM10)
+        assert isinstance(self.widget.machine.stator.notch[1].notch_shape, SlotCirc)
+
+        assert len(self.widget.machine.rotor.notch) == 1
+        assert isinstance(self.widget.machine.rotor.notch[0].notch_shape, SlotM11)
+
+        # Step 4 : Saving the machine with notches
         # Making sure that the updated machine was saved
         file_path = join(save_path, machine_name + ".json")
 
@@ -287,7 +298,7 @@ if __name__ == "__main__":
     a = TestNotcheAddition()
     a.setup_class()
     a.setup_method()
-    # a.test_notch_addition()
-    a.test_cancel_button()
+    a.test_notch_addition()
+    # a.test_cancel_button()
     a.teardown_class()
     print("Done")
