@@ -13,6 +13,7 @@ from .....GUI.Dialog.DMachineSetup.DNotchTab.Ui_DNotchTab import Ui_DNotchTab
 from .....Functions.Plot.set_plot_gui_icon import set_plot_gui_icon
 from .....Classes.NotchEvenDist import NotchEvenDist
 from .....Classes.SlotM10 import SlotM10
+from .....Functions.Geometry.merge_notch_list import NotchError
 
 
 class DNotchTab(Ui_DNotchTab, QDialog):
@@ -72,7 +73,7 @@ class DNotchTab(Ui_DNotchTab, QDialog):
         # Connect the slot
         self.b_add.clicked.connect(lambda: self.s_add())
         self.b_remove.clicked.connect(self.s_remove)
-        self.b_ok.clicked.connect(self.accept)
+        self.b_ok.clicked.connect(self.update_and_close)
         self.b_cancel.clicked.connect(self.reject)
         self.b_plot.clicked.connect(self.s_plot)
 
@@ -167,3 +168,31 @@ class DNotchTab(Ui_DNotchTab, QDialog):
                     return "Notch " + str(ii + 1) + ": " + err_msg
             except SlotCheckError as error:
                 return "Notch " + str(ii + 1) + ": " + str(error)
+
+    def update_and_close(self):
+        """Method called when clicking on ok button to check the machine before sending acceted signal
+
+        Parameters
+        ----------
+        self : DNotchTab
+            A DNotchTab object
+
+        """
+        error = None
+
+        # We have to make sure the notches are correct before accepting it
+        error = self.check()
+
+        if error == None:
+            try:
+                self.obj.build_geometry()
+            except NotchError as e:
+                error = str(e)
+
+        if error:  # Error => Display it
+            err_msg = "Error in Notch definition:\n" + error
+            getLogger(GUI_LOG_NAME).debug(err_msg)
+            QMessageBox().critical(self, self.tr("Error"), err_msg)
+
+        else:  # No error => modification accepted
+            self.accept()

@@ -34,10 +34,7 @@ def merge_notch_list(notch_list_1, notch_list_2):
             jj += 1
         else:
             raise NotchError(
-                "Notches and/or Slots are coliding:\n"
-                + str(notch_list_1[ii])
-                + "\n"
-                + str(notch_list_2[ii])
+                "Notches and/or Slots are colliding"
             )
 
     # One of the list is not "finished"
