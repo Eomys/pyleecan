@@ -139,7 +139,9 @@ class TestNotcheAddition(object):
 
         # Checking plot/preview function
         notche_wid.b_plot.clicked.emit()
+        assert notche_wid.err_msg == None
         self.widget.w_step.notches_win.b_plot.clicked.emit()
+        assert self.widget.w_step.notches_win.err_msg == None
 
         # Clicking on OK button
         self.widget.w_step.notches_win.b_ok.clicked.emit()
@@ -198,7 +200,9 @@ class TestNotcheAddition(object):
         notche_wid.w_notch.lf_W0.editingFinished.emit()
         # Checking plot/preview function
         notche_wid.b_plot.clicked.emit()
+        assert notche_wid.err_msg == None
         self.widget.w_step.notches_win.b_plot.clicked.emit()
+        assert self.widget.w_step.notches_win.err_msg == None
 
         # Clicking on OK button
         self.widget.w_step.notches_win.b_ok.clicked.emit()
@@ -321,7 +325,7 @@ class TestNotcheAddition(object):
         assert notche_wid.w_notch.lf_H0.value() == None
         assert notche_wid.w_notch.lf_W0.value() == None
 
-        # When clicking on preview buttons, a message box is displayed
+        # Detecting that an error is raised after clicking on preview of DNotchTab
         with mock.patch(
             "PySide2.QtWidgets.QMessageBox.critical",
             return_value=QtWidgets.QMessageBox.Ok,
@@ -333,6 +337,7 @@ class TestNotcheAddition(object):
             == "Error in Notch definition:\nNotch 1: You must set W0 !"
         )
 
+        # Detecting that an error is raised after clicking on preview of WNotch
         with mock.patch(
             "PySide2.QtWidgets.QMessageBox.critical",
             return_value=QtWidgets.QMessageBox.Ok,
@@ -341,6 +346,7 @@ class TestNotcheAddition(object):
 
         assert notche_wid.err_msg == "Unable to generate a preview:\nYou must set W0 !"
 
+        # Detecting that an error is raised after clicking on ok button of DNotchTab
         with mock.patch(
             "PySide2.QtWidgets.QMessageBox.critical",
             return_value=QtWidgets.QMessageBox.Ok,
@@ -389,7 +395,7 @@ class TestNotcheAddition(object):
         assert notche_wid.w_notch.lf_W0.value() == W0
         notche_wid.w_notch.lf_W0.editingFinished.emit()
 
-        # When clicking on preview buttons, a message box is displayed
+        # Detecting that an error is raised after clicking on preview of DNotchTab
         with mock.patch(
             "PySide2.QtWidgets.QMessageBox.critical",
             return_value=QtWidgets.QMessageBox.Ok,
@@ -401,7 +407,7 @@ class TestNotcheAddition(object):
             == "Error while plotting Lamination in Notch definition:\nNotches and/or Slots are colliding"
         )
 
-        # When clicking on Ok button, a message box is displayed
+        # Detecting that an error is raised after clicking on ok button of DNotchTab
         with mock.patch(
             "PySide2.QtWidgets.QMessageBox.critical",
             return_value=QtWidgets.QMessageBox.Ok,
