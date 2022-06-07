@@ -293,12 +293,49 @@ class TestNotcheAddition(object):
 
         assert self.widget.machine.stator.notch in [list(), None]
 
+    def test_notch_addition_without_input(self):
+        """Checking that if the UI is not completely defined, then we can not add a notch and a error message is shown"""
+        assert self.widget.machine.name == "Toyota_Prius"
+
+        # Step 1 : Checking notch groupBox and recovering dialog
+        self.widget.nav_step.setCurrentRow(5)
+        assert isinstance(self.widget.w_step, SLamShape)
+        assert not self.widget.w_step.g_notches.isChecked()
+
+        self.widget.w_step.g_notches.setChecked(True)
+
+        assert self.widget.w_step.b_notch.isEnabled()
+        self.widget.w_step.b_notch.clicked.emit()
+
+        assert isinstance(self.widget.w_step.notches_win, DNotchTab)
+
+        # Step 1-1 : Adding first notch (rectangular)
+        assert self.widget.w_step.notches_win.tab_notch.count() == 1
+
+        notche_wid = self.widget.w_step.notches_win.tab_notch.currentWidget()
+        assert isinstance(notche_wid, WNotch)
+
+        assert notche_wid.c_notch_type.currentIndex() == 0
+
+        assert notche_wid.si_Zs.value() == 48
+        assert notche_wid.w_notch.lf_H0.value() == None
+        assert notche_wid.w_notch.lf_W0.value() == None
+
+        with mock.patch(
+            "PySide2.QtWidgets.QMessageBox.critical",
+            return_value=QtWidgets.QMessageBox.Ok,
+        ):
+            self.widget.w_step.notches_win.b_ok.clicked.emit()
+
+        self.widget.w_step.notches_win.b_cancel.clicked.emit()
+
 
 if __name__ == "__main__":
     a = TestNotcheAddition()
     a.setup_class()
     a.setup_method()
-    a.test_notch_addition()
+    # a.test_notch_addition()
     # a.test_cancel_button()
+    a.test_notch_addition_without_input()
     a.teardown_class()
     print("Done")
