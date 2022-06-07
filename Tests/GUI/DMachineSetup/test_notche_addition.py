@@ -246,6 +246,8 @@ class TestNotcheAddition(object):
             # To trigger the slot
             self.widget.b_save.clicked.emit()
 
+        self.widget.close()
+
         # Check that the file now exist => delete for next test
         assert isfile(file_path)
         remove(file_path)
@@ -296,6 +298,12 @@ class TestNotcheAddition(object):
         self.widget.w_step.notches_win.b_cancel.clicked.emit()
 
         assert self.widget.machine.stator.notch in [list(), None]
+
+        with mock.patch(
+            "PySide2.QtWidgets.QMessageBox.question",
+            return_value=QtWidgets.QMessageBox.No,
+        ):
+            self.widget.close()
 
     def test_notch_addition_without_input(self):
         """Checking that if the UI is not completely defined, then we can not add a notch and a error message is shown"""
@@ -360,6 +368,12 @@ class TestNotcheAddition(object):
 
         self.widget.w_step.notches_win.b_cancel.clicked.emit()
 
+        with mock.patch(
+            "PySide2.QtWidgets.QMessageBox.question",
+            return_value=QtWidgets.QMessageBox.No,
+        ):
+            self.widget.close()
+
     def test_notch_addition_wrong_input(self):
         """Checking that if the UI is wrongly defined, then we can not add a notch and a error message is shown"""
         assert self.widget.machine.name == "Toyota_Prius"
@@ -421,6 +435,51 @@ class TestNotcheAddition(object):
 
         self.widget.w_step.notches_win.b_cancel.clicked.emit()
 
+        with mock.patch(
+            "PySide2.QtWidgets.QMessageBox.question",
+            return_value=QtWidgets.QMessageBox.No,
+        ):
+            self.widget.close()
+
+    def test_set_empty_floatedit(self):
+        """Test that if we set "" in one of the floatEdit then the value returned is None"""
+        assert self.widget.machine.name == "Toyota_Prius"
+
+        # Step 1 : Checking notch groupBox and recovering dialog
+        self.widget.nav_step.setCurrentRow(5)
+        assert isinstance(self.widget.w_step, SLamShape)
+        assert not self.widget.w_step.g_notches.isChecked()
+
+        self.widget.w_step.g_notches.setChecked(True)
+
+        assert self.widget.w_step.b_notch.isEnabled()
+        self.widget.w_step.b_notch.clicked.emit()
+
+        assert isinstance(self.widget.w_step.notches_win, DNotchTab)
+
+        # Adding  notch (rectangular)
+        assert self.widget.w_step.notches_win.tab_notch.count() == 1
+        notche_wid = self.widget.w_step.notches_win.tab_notch.currentWidget()
+        assert isinstance(notche_wid, WNotch)
+
+        H0 = ""
+        W0 = ""
+        assert notche_wid.c_notch_type.currentIndex() == 0
+        assert isinstance(notche_wid.w_notch, PMSlot10)
+        notche_wid.w_notch.lf_H0.setValue(H0)
+        notche_wid.w_notch.lf_W0.setValue(W0)
+        assert notche_wid.w_notch.lf_H0.value() == None
+        notche_wid.w_notch.lf_H0.editingFinished.emit()
+        assert notche_wid.w_notch.lf_W0.value() == None
+        notche_wid.w_notch.lf_W0.editingFinished.emit()
+
+        self.widget.w_step.notches_win.b_cancel.clicked.emit()
+        with mock.patch(
+            "PySide2.QtWidgets.QMessageBox.question",
+            return_value=QtWidgets.QMessageBox.No,
+        ):
+            self.widget.close()
+
 
 if __name__ == "__main__":
     a = TestNotcheAddition()
@@ -430,5 +489,6 @@ if __name__ == "__main__":
     # a.test_cancel_button()
     a.test_notch_addition_without_input()
     # a.test_notch_addition_wrong_input()
+    # a.test_set_empty_floatedit()
     a.teardown_class()
     print("Done")

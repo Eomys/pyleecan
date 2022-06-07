@@ -56,7 +56,7 @@ class FloatEdit(QLineEdit):
         -------
 
         """
-        if value is None:
+        if value in [None, ""]:
             self.clear()
         else:
             if self.unit == "m":
