@@ -7,6 +7,7 @@ from ......loggers import GUI_LOG_NAME
 
 from ......Classes.LamSlot import LamSlot
 
+from ......GUI.Dialog.DMachineSetup.SWSlot.PWSlotUD.PWSlotUD import PWSlotUD
 from ......GUI.Dialog.DMachineSetup.SMSlot.PMSlot10.PMSlot10 import PMSlot10
 from ......GUI.Dialog.DMachineSetup.SMSlot.PMSlot11.PMSlot11 import PMSlot11
 from ......GUI.Dialog.DMachineSetup.SMSlot.WSlotCirc.WSlotCirc import WSlotCirc
@@ -73,7 +74,7 @@ class WNotch(Ui_WNotch, QWidget):
         self.err_msg = None
 
         # Adapt the GUI to the current machine
-        self.wid_list = [PMSlot10, PMSlot11, WSlotCirc]
+        self.wid_list = [PMSlot10, PMSlot11, WSlotCirc, PWSlotUD]
 
         self.type_list = [wid.slot_type for wid in self.wid_list]
         self.name_list = [wid.notch_name for wid in self.wid_list]
@@ -97,8 +98,7 @@ class WNotch(Ui_WNotch, QWidget):
         # Regenerate the pages with the new values
         self.w_notch.setParent(None)
         self.w_notch = self.wid_list[self.c_notch_type.currentIndex()](
-            lamination=self.lam_notch,
-            is_notch=True,
+            lamination=self.lam_notch, is_notch=True,
         )
         # Refresh the GUI
         self.main_layout.removeWidget(self.w_notch)
@@ -133,10 +133,14 @@ class WNotch(Ui_WNotch, QWidget):
             self.obj.notch[self.index].alpha = self.lf_alpha.value()
         else:  # deg
             self.obj.notch[self.index].alpha = self.lf_alpha.value() * pi / 180
+        if isinstance(self.w_notch, PWSlotUD):
+            self.w_notch.update_graph()
 
     def set_Zn(self):
         """Set the value of Zn"""
         self.lam_notch.slot.Zs = self.si_Zn.value()
+        if isinstance(self.w_notch, PWSlotUD):
+            self.w_notch.update_graph()
 
     def set_alpha_unit(self):
         """Change the current unit of alpha"""
@@ -175,10 +179,7 @@ class WNotch(Ui_WNotch, QWidget):
 
         # Update the GUI
         self.w_notch.setParent(None)
-        self.w_notch = self.wid_list[c_index](
-            lamination=self.lam_notch,
-            is_notch=True,
-        )
+        self.w_notch = self.wid_list[c_index](lamination=self.lam_notch, is_notch=True,)
         self.w_notch.saveNeeded.connect(self.emit_save)
         # Refresh the GUI
         self.main_layout.removeWidget(self.w_notch)
