@@ -41,8 +41,8 @@ def plot_schematics(
     ----------
     self : SlotCirc
         A SlotCirc object
-    is_default : bool
-        True: plot default schematics, else use current slot values
+    is_default : int
+        0: current slot values, 1: default internal rotor schematics, 2: default external stator schematics
     is_add_point_label : bool
         True to display the name of the points (Z1, Z2....)
     is_add_schematics : bool
@@ -71,9 +71,14 @@ def plot_schematics(
     # Use some default parameter
     if is_default:
         slot = type(self)(Zs=8, H0=10e-3, W0=45e-3)
-        lam = LamSlot(
-            Rint=0.1, Rext=0.135, is_internal=True, is_stator=False, slot=slot
-        )
+        if is_default == 1:  # Internal rotor schematics
+            lam = LamSlot(
+                Rint=0.1, Rext=0.135, is_internal=True, is_stator=False, slot=slot
+            )
+        else:  # External stator schematics
+            lam = LamSlot(
+                Rint=0.1, Rext=0.135, is_internal=False, is_stator=True, slot=slot
+            )
         return slot.plot_schematics(
             is_default=False,
             is_add_point_label=is_add_point_label,
@@ -94,33 +99,29 @@ def plot_schematics(
             alpha=pi / self.Zs, is_show_fig=False, fig=fig, ax=ax
         )  # center slot on Ox axis
         point_dict = self._comp_point_coordinate()
-        if self.is_outwards():
-            sign = +1
-        else:
-            sign = -1
 
         # Adding point label
         if is_add_point_label:
             for name, Z in point_dict.items():
                 ax.text(
-                    Z.real,
-                    Z.imag,
-                    name,
-                    fontsize=P_FONT_SIZE,
-                    bbox=TEXT_BOX,
+                    Z.real, Z.imag, name, fontsize=P_FONT_SIZE, bbox=TEXT_BOX,
                 )
 
         # Adding schematics
         if is_add_schematics:
             # W0
             line = Segment(point_dict["Z1"], point_dict["Z2"])
+            if self.is_outwards():
+                offset_label = -1 * self.H0 * 0.7
+            else:
+                offset_label = self.H0 * 0.3
             line.plot(
                 fig=fig,
                 ax=ax,
                 color=ARROW_COLOR,
                 linewidth=ARROW_WIDTH,
                 label="W0",
-                offset_label=self.H0 * 0.3,
+                offset_label=offset_label,
                 is_arrow=True,
                 fontsize=SC_FONT_SIZE,
             )

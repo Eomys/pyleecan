@@ -42,8 +42,8 @@ def plot_schematics(
     ----------
     self : SlotM10
         A SlotM10 object
-    is_default : bool
-        True: plot default schematics, else use current slot values
+    is_default : int
+        0: current slot values, 1: default internal rotor schematics, 2: default external stator schematics
     is_add_point_label : bool
         True to display the name of the points (Z1, Z2....)
     is_add_schematics : bool
@@ -72,9 +72,14 @@ def plot_schematics(
     # Use some default parameter
     if is_default:
         slot = type(self)(Zs=8, H0=20e-3, W0=45e-3, Hmag=17.5e-3, Wmag=30e-3)
-        lam = LamSlot(
-            Rint=0.1, Rext=0.135, is_internal=True, is_stator=False, slot=slot
-        )
+        if is_default == 1:  # Internal Rotor schematics
+            lam = LamSlot(
+                Rint=0.1, Rext=0.135, is_internal=True, is_stator=False, slot=slot
+            )
+        else:  # External Stator schematics
+            lam = LamSlot(
+                Rint=0.1, Rext=0.135, is_internal=False, is_stator=True, slot=slot
+            )
         return slot.plot_schematics(
             is_default=False,
             is_add_point_label=is_add_point_label,
