@@ -23,14 +23,14 @@ class Gen_WNotch(Ui_WNotch):
         self.lf_alpha.setWhatsThis(txt)
         self.lf_alpha.setToolTip(txt)
 
-        # Setup of in_Zs
+        # Setup of in_Zn
         txt = self.tr(u"""slot number""")
-        self.in_Zs.setWhatsThis(txt)
-        self.in_Zs.setToolTip(txt)
+        self.in_Zn.setWhatsThis(txt)
+        self.in_Zn.setToolTip(txt)
 
-        # Setup of si_Zs
-        self.si_Zs.setMinimum(0)
-        self.si_Zs.setMaximum(999999)
+        # Setup of si_Zn
+        self.si_Zn.setMinimum(0)
+        self.si_Zn.setMaximum(999999)
         txt = self.tr(u"""slot number""")
-        self.si_Zs.setWhatsThis(txt)
-        self.si_Zs.setToolTip(txt)
+        self.si_Zn.setWhatsThis(txt)
+        self.si_Zn.setToolTip(txt)

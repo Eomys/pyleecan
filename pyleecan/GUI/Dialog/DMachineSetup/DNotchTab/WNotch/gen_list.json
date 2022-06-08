@@ -12,8 +12,8 @@
         "cls": "Slot",
         "name": "Zs",
         "widget": [
-            "in_Zs",
-            "si_Zs"
+            "in_Zn",
+            "si_Zn"
         ],
         "xls": "Slot"
     }
