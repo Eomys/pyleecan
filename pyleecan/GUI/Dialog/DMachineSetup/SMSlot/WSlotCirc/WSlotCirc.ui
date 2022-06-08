@@ -46,7 +46,7 @@
         <string/>
        </property>
        <property name="pixmap">
-        <pixmap resource="../../../../Resources/pyleecan.qrc">:/images/images/MachineSetup/WMSlot/SlotCirc.png</pixmap>
+        <pixmap resource="../../../../Resources/pyleecan.qrc">:/images/images/MachineSetup/WMSlot/SlotCirc_empty_int_rot.png</pixmap>
        </property>
        <property name="scaledContents">
         <bool>false</bool>

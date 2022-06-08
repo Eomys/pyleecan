@@ -42,6 +42,22 @@ class WSlotCirc(Gen_WSlotCirc, QWidget):
         self.lamination = lamination
         self.slot = lamination.slot
 
+        # Selecting the right image
+        if self.lamination.is_stator:
+            # Use schematics on the stator without magnet
+            self.img_slot.setPixmap(
+                QPixmap(
+                    u":/images/images/MachineSetup/WMSlot/SlotCirc_empty_ext_sta.png"
+                )
+            )
+        else:
+            # Use schematics on the rotor without magnet
+            self.img_slot.setPixmap(
+                QPixmap(
+                    u":/images/images/MachineSetup/WMSlot/SlotCirc_empty_int_rot.png"
+                )
+            )
+
         # Set FloatEdit unit
         self.lf_W0.unit = "m"
         self.lf_H0.unit = "m"

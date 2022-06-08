@@ -70,10 +70,21 @@ class PMSlot11(Gen_PMSlot11, QWidget):
             # Set values for check
             self.slot.Hmag = 0
             self.slot.Wmag = 0
-            # Use schematics without magnet
-            self.img_slot.setPixmap(
-                QPixmap(u":/images/images/MachineSetup/WMSlot/SlotM11_empty.png")
-            )
+            # Selecting the right image
+            if self.lamination.is_stator:
+                # Use schematics on the stator without magnet
+                self.img_slot.setPixmap(
+                    QPixmap(
+                        u":/images/images/MachineSetup/WMSlot/SlotM11_empty_ext_sta.png"
+                    )
+                )
+            else:
+                # Use schematics on the rotor without magnet
+                self.img_slot.setPixmap(
+                    QPixmap(
+                        u":/images/images/MachineSetup/WMSlot/SlotM11_empty_int_rot.png"
+                    )
+                )
 
         # Fill the fields with the machine values (if they're filled)
         self.lf_W0.setValue(self.slot.W0)
