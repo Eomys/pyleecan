@@ -3,6 +3,7 @@ from os.path import join, isfile
 from os import remove
 import mock
 import sys
+import logging
 from numpy import pi
 from numpy.testing import assert_almost_equal
 
@@ -23,6 +24,9 @@ from Tests import save_gui_path as save_path
 
 matlib_path = join(DATA_DIR, "Material")
 machine_name = "Toyota_Prius"
+
+mpl_logger = logging.getLogger("matplotlib")
+mpl_logger.setLevel(logging.WARNING)
 
 
 class TestNotcheAddition(object):
@@ -86,10 +90,10 @@ class TestNotcheAddition(object):
 
         assert notche_wid.c_notch_type.currentIndex() == 0
 
-        Zs = 48 // 4
-        notche_wid.si_Zs.setValue(Zs)
-        notche_wid.si_Zs.editingFinished.emit()
-        assert notche_wid.si_Zs.value() == Zs
+        Zn = 48 // 4
+        notche_wid.si_Zn.setValue(Zn)
+        notche_wid.si_Zn.editingFinished.emit()
+        assert notche_wid.si_Zn.value() == Zn
 
         H0 = 2e-3
         W0 = 4e-3
@@ -115,10 +119,10 @@ class TestNotcheAddition(object):
         notche_wid.c_notch_type.setCurrentIndex(2)
         assert notche_wid.c_notch_type.currentIndex() == 2
 
-        Zs = 48 // 4
-        notche_wid.si_Zs.setValue(Zs)
-        notche_wid.si_Zs.editingFinished.emit()
-        assert notche_wid.si_Zs.value() == Zs
+        Zn = 48 // 4
+        notche_wid.si_Zn.setValue(Zn)
+        notche_wid.si_Zn.editingFinished.emit()
+        assert notche_wid.si_Zn.value() == Zn
 
         alpha = 15
         notche_wid.c_alpha_unit.setCurrentIndex(1)
@@ -184,10 +188,10 @@ class TestNotcheAddition(object):
         assert notche_wid.c_notch_type.currentIndex() == 0
         notche_wid.c_notch_type.setCurrentIndex(1)
 
-        Zs = 8
-        notche_wid.si_Zs.setValue(Zs)
-        notche_wid.si_Zs.editingFinished.emit()
-        assert notche_wid.si_Zs.value() == Zs
+        Zn = 8
+        notche_wid.si_Zn.setValue(Zn)
+        notche_wid.si_Zn.editingFinished.emit()
+        assert notche_wid.si_Zn.value() == Zn
 
         H0 = 2e-3
         W0 = pi / 24
@@ -279,10 +283,10 @@ class TestNotcheAddition(object):
 
         assert notche_wid.c_notch_type.currentIndex() == 0
 
-        Zs = 48 // 4
-        notche_wid.si_Zs.setValue(Zs)
-        notche_wid.si_Zs.editingFinished.emit()
-        assert notche_wid.si_Zs.value() == Zs
+        Zn = 48 // 4
+        notche_wid.si_Zn.setValue(Zn)
+        notche_wid.si_Zn.editingFinished.emit()
+        assert notche_wid.si_Zn.value() == Zn
 
         H0 = 2e-3
         W0 = 4e-3
@@ -329,7 +333,7 @@ class TestNotcheAddition(object):
 
         assert notche_wid.c_notch_type.currentIndex() == 0
 
-        assert notche_wid.si_Zs.value() == 48
+        assert notche_wid.si_Zn.value() == 48
         assert notche_wid.w_notch.lf_H0.value() == None
         assert notche_wid.w_notch.lf_W0.value() == None
 
@@ -398,7 +402,7 @@ class TestNotcheAddition(object):
 
         assert notche_wid.c_notch_type.currentIndex() == 0
 
-        assert notche_wid.si_Zs.value() == 48
+        assert notche_wid.si_Zn.value() == 48
         H0 = 5e-3
         W0 = 10e-3
         assert isinstance(notche_wid.w_notch, PMSlot10)

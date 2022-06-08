@@ -35,7 +35,7 @@ class Ui_WSlotCirc(object):
         self.img_slot.setSizePolicy(sizePolicy)
         self.img_slot.setMaximumSize(QSize(16777215, 16777215))
         self.img_slot.setPixmap(
-            QPixmap(u":/images/images/MachineSetup/WMSlot/SlotCirc.png")
+            QPixmap(u":/images/images/MachineSetup/WMSlot/SlotCirc_empty_int_rot.png")
         )
         self.img_slot.setScaledContents(False)
         self.img_slot.setAlignment(Qt.AlignCenter)
