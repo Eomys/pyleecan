@@ -10,10 +10,10 @@ from ......Classes.LamSlot import LamSlot
 from ......GUI.Dialog.DMachineSetup.SMSlot.PMSlot10.PMSlot10 import PMSlot10
 from ......GUI.Dialog.DMachineSetup.SMSlot.PMSlot11.PMSlot11 import PMSlot11
 from ......GUI.Dialog.DMachineSetup.SMSlot.WSlotCirc.WSlotCirc import WSlotCirc
-from ......GUI.Dialog.DMachineSetup.DNotchTab.WNotch.Gen_WNotch import Gen_WNotch
+from ......GUI.Dialog.DMachineSetup.DNotchTab.WNotch.Ui_WNotch import Ui_WNotch
 
 
-class WNotch(Gen_WNotch, QWidget):
+class WNotch(Ui_WNotch, QWidget):
     """Widget to Setup a single notch in a list"""
 
     # Signal to DMachineSetup to know that the save popup is needed
@@ -49,6 +49,26 @@ class WNotch(Gen_WNotch, QWidget):
         self.index = index
         self.parent = parent
 
+        # Adding tooltip + setting the min and max value for si_Zn
+        txt = self.tr(u"""notch number""")
+        self.in_Zn.setWhatsThis(txt)
+        self.in_Zn.setToolTip(txt)
+        self.si_Zn.setWhatsThis(txt)
+        self.si_Zn.setToolTip(txt)
+        self.si_Zn.setMinimum(0)
+        self.si_Zn.setMaximum(999999)
+
+        if self.obj.is_stator:
+            txt = self.tr(
+                u"""angular position of the first notch (0 is middle of first tooth)"""
+            )
+        else:
+            txt = self.tr(u"""angular position of the first notch""")
+        self.in_alpha.setWhatsThis(txt)
+        self.in_alpha.setToolTip(txt)
+        self.lf_alpha.setWhatsThis(txt)
+        self.lf_alpha.setToolTip(txt)
+
         # String storing the last error message (used in test)
         self.err_msg = None
 
@@ -72,7 +92,7 @@ class WNotch(Gen_WNotch, QWidget):
         )
 
         self.set_alpha_unit()
-        self.si_Zs.setValue(self.lam_notch.slot.Zs)
+        self.si_Zn.setValue(self.lam_notch.slot.Zs)
 
         # Regenerate the pages with the new values
         self.w_notch.setParent(None)
@@ -86,7 +106,7 @@ class WNotch(Gen_WNotch, QWidget):
 
         # Connect the slot
         self.c_notch_type.currentIndexChanged.connect(self.set_notch_type)
-        self.si_Zs.editingFinished.connect(self.set_Zs)
+        self.si_Zn.editingFinished.connect(self.set_Zn)
         self.lf_alpha.editingFinished.connect(self.set_alpha)
         self.c_alpha_unit.currentIndexChanged.connect(self.set_alpha_unit)
         self.b_plot.clicked.connect(self.preview_notch)
@@ -114,9 +134,9 @@ class WNotch(Gen_WNotch, QWidget):
         else:  # deg
             self.obj.notch[self.index].alpha = self.lf_alpha.value() * pi / 180
 
-    def set_Zs(self):
-        """Set the value of Zs"""
-        self.lam_notch.slot.Zs = self.si_Zs.value()
+    def set_Zn(self):
+        """Set the value of Zn"""
+        self.lam_notch.slot.Zs = self.si_Zn.value()
 
     def set_alpha_unit(self):
         """Change the current unit of alpha"""
@@ -150,7 +170,7 @@ class WNotch(Gen_WNotch, QWidget):
         else:  # Load the previous notch of this type
             self.lam_notch.slot = self.previous_notch[self.type_list[c_index]]
         self.set_alpha()
-        self.set_Zs()
+        self.set_Zn()
         self.obj.notch[self.index].notch_shape = self.lam_notch.slot
 
         # Update the GUI
