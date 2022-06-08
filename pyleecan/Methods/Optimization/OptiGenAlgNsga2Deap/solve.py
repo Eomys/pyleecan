@@ -68,7 +68,9 @@ def solve(self):
 
         # Add the reference output to multi_output
         if isinstance(self.problem.simu.parent, Output):
-            xoutput = XOutput(init_dict=self.problem.simu.parent.as_dict(keep_function=True))
+            xoutput = XOutput(
+                init_dict=self.problem.simu.parent.as_dict(keep_function=True)
+            )
         else:
             xoutput = XOutput(simu=self.problem.simu.copy())
 
