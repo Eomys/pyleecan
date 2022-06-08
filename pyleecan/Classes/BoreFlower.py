@@ -69,7 +69,9 @@ class BoreFlower(Bore):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, N=8, Rarc=0.01, alpha=0, init_dict=None, init_str=None):
+    def __init__(
+        self, N=8, Rarc=0.01, alpha=0, type_merge_slot=0, init_dict=None, init_str=None
+    ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -91,12 +93,14 @@ class BoreFlower(Bore):
                 Rarc = init_dict["Rarc"]
             if "alpha" in list(init_dict.keys()):
                 alpha = init_dict["alpha"]
+            if "type_merge_slot" in list(init_dict.keys()):
+                type_merge_slot = init_dict["type_merge_slot"]
         # Set the properties (value check and convertion are done in setter)
         self.N = N
         self.Rarc = Rarc
         self.alpha = alpha
         # Call Bore init
-        super(BoreFlower, self).__init__()
+        super(BoreFlower, self).__init__(type_merge_slot=type_merge_slot)
         # The class is frozen (in Bore init), for now it's impossible to
         # add new properties
 

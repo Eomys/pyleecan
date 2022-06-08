@@ -49,15 +49,21 @@ def build_geometry(self, sym=1, alpha=0, delta=0, is_circular_radius=False):
     yoke_prop = {RADIUS_PROP_LAB: YOKE_LAB, BOUNDARY_PROP_LAB: label_yoke}
     if self.is_internal:
         if self.Rint > 0:
-            _, int_line = self.get_yoke_desc(
-                sym=sym, is_reversed=True, prop_dict=yoke_prop
+            int_line = self.build_radius_lines(
+                is_bore=False, sym=sym, is_reversed=True, prop_dict=yoke_prop
             )
         else:
             int_line = []
-        _, ext_line = self.get_bore_desc(sym=sym, prop_dict={RADIUS_PROP_LAB: BORE_LAB})
+        ext_line = self.build_radius_lines(
+            is_bore=True, sym=sym, prop_dict={RADIUS_PROP_LAB: BORE_LAB}
+        )
     else:
-        _, ext_line = self.get_yoke_desc(sym=sym, is_reversed=True, prop_dict=yoke_prop)
-        _, int_line = self.get_bore_desc(sym=sym, prop_dict={RADIUS_PROP_LAB: BORE_LAB})
+        ext_line = self.build_radius_lines(
+            is_bore=False, sym=sym, is_reversed=True, prop_dict=yoke_prop
+        )
+        int_line = self.build_radius_lines(
+            is_bore=True, sym=sym, prop_dict={RADIUS_PROP_LAB: BORE_LAB}
+        )
 
     # Add the ventilation ducts if there is any
     surf_list = list()
@@ -116,7 +122,7 @@ def build_geometry(self, sym=1, alpha=0, delta=0, is_circular_radius=False):
             else:  # Machine without shaft for instance
                 ZBR = None
                 ZBL = None
-        right_list, left_list = self.get_yoke_side_line(
+        right_list, left_list = self.build_yoke_side_line(
             sym=sym, vent_surf_list=vent_surf_list, ZBR=ZBR, ZTR=ZTR, ZBL=ZBL, ZTL=ZTL
         )
         # Create lines

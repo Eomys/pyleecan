@@ -70,7 +70,14 @@ class BoreLSRPM(Bore):
     get_logger = get_logger
 
     def __init__(
-        self, N=8, Rarc=0.0375, W1=0.0035, alpha=0, init_dict=None, init_str=None
+        self,
+        N=8,
+        Rarc=0.0375,
+        W1=0.0035,
+        alpha=0,
+        type_merge_slot=0,
+        init_dict=None,
+        init_str=None,
     ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
@@ -95,13 +102,15 @@ class BoreLSRPM(Bore):
                 W1 = init_dict["W1"]
             if "alpha" in list(init_dict.keys()):
                 alpha = init_dict["alpha"]
+            if "type_merge_slot" in list(init_dict.keys()):
+                type_merge_slot = init_dict["type_merge_slot"]
         # Set the properties (value check and convertion are done in setter)
         self.N = N
         self.Rarc = Rarc
         self.W1 = W1
         self.alpha = alpha
         # Call Bore init
-        super(BoreLSRPM, self).__init__()
+        super(BoreLSRPM, self).__init__(type_merge_slot=type_merge_slot)
         # The class is frozen (in Bore init), for now it's impossible to
         # add new properties
 

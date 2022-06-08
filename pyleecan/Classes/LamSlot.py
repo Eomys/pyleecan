@@ -53,11 +53,6 @@ except ImportError as error:
     get_Zs = error
 
 try:
-    from ..Methods.Machine.LamSlot.get_bore_desc import get_bore_desc
-except ImportError as error:
-    get_bore_desc = error
-
-try:
     from ..Methods.Machine.LamSlot.set_pole_pair_number import set_pole_pair_number
 except ImportError as error:
     set_pole_pair_number = error
@@ -76,6 +71,16 @@ try:
     from ..Methods.Machine.LamSlot.has_magnet import has_magnet
 except ImportError as error:
     has_magnet = error
+
+try:
+    from ..Methods.Machine.LamSlot.get_slot_desc_list import get_slot_desc_list
+except ImportError as error:
+    get_slot_desc_list = error
+
+try:
+    from ..Methods.Machine.LamSlot.has_slot import has_slot
+except ImportError as error:
+    has_slot = error
 
 
 from numpy import isnan
@@ -161,17 +166,6 @@ class LamSlot(Lamination):
         )
     else:
         get_Zs = get_Zs
-    # cf Methods.Machine.LamSlot.get_bore_desc
-    if isinstance(get_bore_desc, ImportError):
-        get_bore_desc = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use LamSlot method get_bore_desc: " + str(get_bore_desc)
-                )
-            )
-        )
-    else:
-        get_bore_desc = get_bore_desc
     # cf Methods.Machine.LamSlot.set_pole_pair_number
     if isinstance(set_pole_pair_number, ImportError):
         set_pole_pair_number = property(
@@ -217,6 +211,27 @@ class LamSlot(Lamination):
         )
     else:
         has_magnet = has_magnet
+    # cf Methods.Machine.LamSlot.get_slot_desc_list
+    if isinstance(get_slot_desc_list, ImportError):
+        get_slot_desc_list = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use LamSlot method get_slot_desc_list: "
+                    + str(get_slot_desc_list)
+                )
+            )
+        )
+    else:
+        get_slot_desc_list = get_slot_desc_list
+    # cf Methods.Machine.LamSlot.has_slot
+    if isinstance(has_slot, ImportError):
+        has_slot = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use LamSlot method has_slot: " + str(has_slot))
+            )
+        )
+    else:
+        has_slot = has_slot
     # save and copy methods are available in all object
     save = save
     copy = copy
@@ -239,6 +254,7 @@ class LamSlot(Lamination):
         notch=-1,
         skew=None,
         bore=None,
+        yoke=None,
         init_dict=None,
         init_str=None,
     ):
@@ -285,6 +301,8 @@ class LamSlot(Lamination):
                 skew = init_dict["skew"]
             if "bore" in list(init_dict.keys()):
                 bore = init_dict["bore"]
+            if "yoke" in list(init_dict.keys()):
+                yoke = init_dict["yoke"]
         # Set the properties (value check and convertion are done in setter)
         self.slot = slot
         # Call Lamination init
@@ -302,6 +320,7 @@ class LamSlot(Lamination):
             notch=notch,
             skew=skew,
             bore=bore,
+            yoke=yoke,
         )
         # The class is frozen (in Lamination init), for now it's impossible to
         # add new properties

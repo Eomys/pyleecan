@@ -49,7 +49,7 @@ class BoreUD(Bore):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, line_list=-1, init_dict=None, init_str=None):
+    def __init__(self, line_list=-1, type_merge_slot=0, init_dict=None, init_str=None):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -67,10 +67,12 @@ class BoreUD(Bore):
             # Overwrite default value with init_dict content
             if "line_list" in list(init_dict.keys()):
                 line_list = init_dict["line_list"]
+            if "type_merge_slot" in list(init_dict.keys()):
+                type_merge_slot = init_dict["type_merge_slot"]
         # Set the properties (value check and convertion are done in setter)
         self.line_list = line_list
         # Call Bore init
-        super(BoreUD, self).__init__()
+        super(BoreUD, self).__init__(type_merge_slot=type_merge_slot)
         # The class is frozen (in Bore init), for now it's impossible to
         # add new properties
 

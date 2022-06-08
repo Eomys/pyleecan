@@ -397,6 +397,7 @@ class LamSlotWind(LamSlot):
         notch=-1,
         skew=None,
         bore=None,
+        yoke=None,
         init_dict=None,
         init_str=None,
     ):
@@ -447,6 +448,8 @@ class LamSlotWind(LamSlot):
                 skew = init_dict["skew"]
             if "bore" in list(init_dict.keys()):
                 bore = init_dict["bore"]
+            if "yoke" in list(init_dict.keys()):
+                yoke = init_dict["yoke"]
         # Set the properties (value check and convertion are done in setter)
         self.Ksfill = Ksfill
         self.winding = winding
@@ -466,6 +469,7 @@ class LamSlotWind(LamSlot):
             notch=notch,
             skew=skew,
             bore=bore,
+            yoke=yoke,
         )
         # The class is frozen (in LamSlot init), for now it's impossible to
         # add new properties
