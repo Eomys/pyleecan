@@ -19,6 +19,8 @@ class PWSlotUD(Ui_PWSlotUD, QWidget):
 
     # Signal to DMachineSetup to know that the save popup is needed
     saveNeeded = Signal()
+    ZsChanged = Signal()  # Signal to update the slot number after loading a slot
+
     # Information for WslotMag
     slot_name = "Import from DXF"
     notch_name = "Import from DXF"
@@ -136,11 +138,14 @@ class PWSlotUD(Ui_PWSlotUD, QWidget):
             return
 
         # Update the slot object
-        Zs = self.slot.Zs
         parent = self.slot.parent
         self.slot.__init__(init_dict=slot.as_dict())  # keep pointer
-        self.slot.Zs = Zs
         self.slot.parent = parent
+        self.ZsChanged.emit()
+
+        # Update the new GUI according to the slot
+        self.update_graph()
+        self.w_out.comp_output()
 
         # Update the new GUI according to the slot
         self.update_graph()
