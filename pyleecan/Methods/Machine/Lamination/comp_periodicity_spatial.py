@@ -29,6 +29,8 @@ def comp_periodicity_spatial(self):
 
         if self.bore:
             nb_list.append(self.bore.comp_periodicity_spatial()[0])
+        if self.yoke:
+            nb_list.append(self.yoke.comp_periodicity_spatial()[0])
 
         # compute the gcd of the list
         per_a = gcd(nb_list[0], nb_list[1])
