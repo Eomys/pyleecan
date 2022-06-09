@@ -37,8 +37,10 @@ is_show_fig = True
 @pytest.mark.IPMSM
 @pytest.mark.periodicity
 @pytest.mark.skip(reason="Work in progress")
-def test_ElecLUTdq_solve_MTPA():
-    """Validation of the PMSM Electrical Equivalent Circuit with the Prius machine for MTPA calculation"""
+def test_efficiency_map_Prius():
+    """Validation of the efficiency map of the Toyota Prius motor, based on the one presented in 
+    "Electromagnetic Analysis and Design Methodology for Permanent Magnet Motors Using MotorAnalysis-PM Software",
+    available at https://www.mdpi.com/2075-1702/7/4/75."""
 
     Toyota_Prius = load(join(DATA_DIR, "Machine", "Toyota_Prius.json"))
     path_to_LUT = r"C:\Users\LAP10\Documents\Loss\LUT_eff.h5"
@@ -138,7 +140,7 @@ def test_ElecLUTdq_solve_MTPA():
         ),
     )
 
-    load_vect = np.linspace(0.1, 1, Nload)
+    load_vect = np.linspace(0.05, 1, Nload)
     OP_matrix_MTPA = np.zeros((Nspeed, Nload, 5))
     U_MTPA = np.zeros((Nspeed, Nload, 3))
     I_MTPA = np.zeros((Nspeed, Nload, 3))
@@ -290,89 +292,89 @@ def test_ElecLUTdq_solve_MTPA():
         #=============================================#
         
         #==============Plot losses in the d-q plane=======#
-        LUT_grid = out.simu.elec.LUT_enforced
+        # LUT_grid = out.simu.elec.LUT_enforced
 
-        # Get Id_min, Id_max, Iq_min, Iq_max from OP_matrix
-        OP_matrix = LUT_grid.get_OP_matrix()
-        Id_min = OP_matrix[:, 1].min()
-        Id_max = OP_matrix[:, 1].max()
-        Iq_min = OP_matrix[:, 2].min()
-        Iq_max = OP_matrix[:, 2].max()
+        # # Get Id_min, Id_max, Iq_min, Iq_max from OP_matrix
+        # OP_matrix = LUT_grid.get_OP_matrix()
+        # Id_min = OP_matrix[:, 1].min()
+        # Id_max = OP_matrix[:, 1].max()
+        # Iq_min = OP_matrix[:, 2].min()
+        # Iq_max = OP_matrix[:, 2].max()
 
-        nd, nq = 100, 100
-        Id_vect = np.linspace(Id_min, Id_max, nd)
-        Iq_vect = np.linspace(Iq_min, Iq_max, nq)
-        Id, Iq = np.meshgrid(Id_vect, Iq_vect)
-        Id, Iq = Id.ravel(), Iq.ravel()
+        # nd, nq = 100, 100
+        # Id_vect = np.linspace(Id_min, Id_max, nd)
+        # Iq_vect = np.linspace(Iq_min, Iq_max, nq)
+        # Id, Iq = np.meshgrid(Id_vect, Iq_vect)
+        # Id, Iq = Id.ravel(), Iq.ravel()
 
-        # Interpolate Phid/Phiq on the refined mesh
+        # # Interpolate Phid/Phiq on the refined mesh
 
-        Ploss_dqh = LUT_grid.interp_Ploss_dqh(Id, Iq, N0=1200)
-        dict_map = {
-                "Xdata": Id.reshape((nd, nq))[0, :],
-                "Ydata": Iq.reshape((nd, nq))[:, 0],
-                "xlabel": "d-axis current [Arms]",
-                "ylabel": "q-axis current [Arms]",
-                "type_plot": "pcolormesh",
-                "is_contour": True,
-            }
-        loss_list = ["stator core",
-                     "rotor core",
-                     "joule",
-                     "proximity",
-                     "magnets"]
-        for i, loss in enumerate(loss_list):
-            plot_3D(
-                    Zdata=Ploss_dqh[:, i].reshape((nd, nq)),
-                    zlabel=f"{loss} [W]",
-                    **dict_map,
-                )
+        # Ploss_dqh = LUT_grid.interp_Ploss_dqh(Id, Iq, N0=1200)
+        # dict_map = {
+        #         "Xdata": Id.reshape((nd, nq))[0, :],
+        #         "Ydata": Iq.reshape((nd, nq))[:, 0],
+        #         "xlabel": "d-axis current [Arms]",
+        #         "ylabel": "q-axis current [Arms]",
+        #         "type_plot": "pcolormesh",
+        #         "is_contour": True,
+        #     }
+        # loss_list = ["stator core",
+        #              "rotor core",
+        #              "joule",
+        #              "proximity",
+        #              "magnets"]
+        # for i, loss in enumerate(loss_list):
+        #     plot_3D(
+        #             Zdata=Ploss_dqh[:, i].reshape((nd, nq)),
+        #             zlabel=f"{loss} [W]",
+        #             **dict_map,
+        #         )
         #==================================================#
-        Tem_rip = LUT_grid.interp_Tem_rip_dqh(Id, Iq)
+        # Tem_rip = LUT_grid.interp_Tem_rip_dqh(Id, Iq)
         
-        # Plot Phi_d map
-        plot_3D(
-            Zdata=Tem_rip.reshape((nd, nq)),
-            zlabel="$\Phi_d$ [Wb]",
-            title="Flux linkage map in dq plane (d-axis)",
-            **dict_map,
-        )
+        # # Plot Phi_d map
+        # plot_3D(
+        #     Zdata=Tem_rip.reshape((nd, nq)),
+        #     zlabel="$\Phi_d$ [Wb]",
+        #     title="Flux linkage map in dq plane (d-axis)",
+        #     **dict_map,
+        # )
         
-        Phi_dqh_grid = LUT_grid.interp_Phi_dqh(Id, Iq)
+        # Phi_dqh_grid = LUT_grid.interp_Phi_dqh(Id, Iq)
         
-        # Plot Phi_d map
-        plot_3D(
-            Zdata=Phi_dqh_grid[0, :].reshape((nd, nq)).T,
-            zlabel="$\Phi_d$ [Wb]",
-            title="Flux linkage map in dq plane (d-axis)",
-            **dict_map,
-        )
+        # # Plot Phi_d map
+        # plot_3D(
+        #     Zdata=Phi_dqh_grid[0, :].reshape((nd, nq)).T,
+        #     zlabel="$\Phi_d$ [Wb]",
+        #     title="Flux linkage map in dq plane (d-axis)",
+        #     **dict_map,
+        # )
 
-        # Plot Phi_q map
-        plot_3D(
-            Zdata=Phi_dqh_grid[1, :].reshape((nd, nq)).T,
-            zlabel="$\Phi_q$ [Wb]",
-            title="Flux linkage map in dq plane (q-axis)",
-            **dict_map,
-        )
+        # # Plot Phi_q map
+        # plot_3D(
+        #     Zdata=Phi_dqh_grid[1, :].reshape((nd, nq)).T,
+        #     zlabel="$\Phi_q$ [Wb]",
+        #     title="Flux linkage map in dq plane (q-axis)",
+        #     **dict_map,
+        # )
     #======================================================#
-        # Init plot map
-        dict_map = {
-            "Xdata": I_MTPA[:, :, 0],  # Id
-            "Ydata": I_MTPA[:, :, 1],  # Iq
-            "xlabel": "d-axis current [Arms]",
-            "ylabel": "q-axis current [Arms]",
-            "type_plot": "pcolormesh",
-            "is_contour": True,
-        }
+        # # Init plot map
+        # dict_map = {
+        #     "Xdata": I_MTPA[:, :, 0],  # Id
+        #     "Ydata": I_MTPA[:, :, 1],  # Iq
+        #     "xlabel": "d-axis current [Arms]",
+        #     "ylabel": "q-axis current [Arms]",
+        #     "type_plot": "pcolormesh",
+        #     "is_contour": True,
+        # }
 
-        # Plot torque maps
-        plot_3D(
-            Zdata=OP_matrix_MTPA[:, :, 3],
-            zlabel="Average Torque [N.m]",
-            title="Torque map in dq plane",
-            **dict_map,
-        )
+        # # Plot torque maps
+        # plot_3D(
+        #     Zdata=OP_matrix_MTPA[:, :, 3],
+        #     zlabel="Average Torque [N.m]",
+        #     title="Torque map in dq plane",
+        #     **dict_map,
+        # )
 
         # plot_3D(
         #     Zdata=Id.reshape((nd, nq)).T,
@@ -414,7 +416,7 @@ def test_ElecLUTdq_solve_MTPA():
 # To run it without pytest
 if __name__ == "__main__":
 
-    out = test_ElecLUTdq_solve_MTPA()
+    out = test_efficiency_map_Prius()
 
     # ELUT = test_EEC_ELUT_PMSM_calc(n_Id=3, n_Iq=3)
     # ELUT.save("ELUT_PMSM.h5")

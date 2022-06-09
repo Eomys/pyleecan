@@ -176,6 +176,8 @@ def solve_MTPA(self, LUT, Rs):
     # Calculate efficiency
     out_dict["P_in"] = P_in[i0][imin]
     out_dict["P_out"] = P_out[i0][imin]
+    # eff = out_dict["P_out"] / out_dict["P_in"]
+    # out_dict["efficiency"] = eff if eff > 0 else 0
     out_dict["efficiency"] = out_dict["P_out"] / out_dict["P_in"]
 
     # Calculate torque from output power
