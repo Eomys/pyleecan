@@ -5345,36 +5345,17 @@
         "daughters": [
             "LossFEMM"
         ],
-        "desc": "Losses module object that containt the loss models. See method add_model for implementation details.",
+        "desc": "Loss module object that contain the loss models.",
         "is_internal": false,
         "methods": [
             "run",
-            "add_model",
-            "remove_model"
+            "comp_axes"
         ],
         "mother": "",
         "name": "Loss",
         "package": "Simulation",
         "path": "pyleecan/Generator/ClassesRef/Simulation/Loss.csv",
         "properties": [
-            {
-                "desc": "Internal dict to store model index",
-                "max": "",
-                "min": "",
-                "name": "model_index",
-                "type": "dict",
-                "unit": "",
-                "value": {}
-            },
-            {
-                "desc": "Internal list of loss models",
-                "max": "",
-                "min": "",
-                "name": "model_list",
-                "type": "[LossModel]",
-                "unit": "",
-                "value": ""
-            },
             {
                 "desc": "Name of the logger to use",
                 "max": "",
@@ -5392,36 +5373,6 @@
                 "type": "{LossModel}",
                 "unit": "",
                 "value": null
-            }
-        ]
-    },
-    "LossFEMM": {
-        "constants": [
-            {
-                "name": "VERSION",
-                "value": "1"
-            }
-        ],
-        "daughters": [],
-        "desc": "Loss module dedicated to FEMM developed in https://www.femm.info/wiki/SPMLoss",
-        "is_internal": false,
-        "methods": [
-            "run",
-            "comp_axes"
-        ],
-        "mother": "Loss",
-        "name": "LossFEMM",
-        "package": "Simulation",
-        "path": "pyleecan/Generator/ClassesRef/Simulation/LossFEMM.csv",
-        "properties": [
-            {
-                "desc": "True to save loss density map as meshsolution",
-                "max": "",
-                "min": "",
-                "name": "is_get_meshsolution",
-                "type": "bool",
-                "unit": "",
-                "value": 0
             },
             {
                 "desc": "Average stator temperature for Electrical calculation",
@@ -5440,8 +5391,40 @@
                 "type": "float",
                 "unit": "deg Celsius",
                 "value": 20
+            },
+            {
+                "desc": "True to save loss density map as meshsolution",
+                "max": "",
+                "min": "",
+                "name": "is_get_meshsolution",
+                "type": "bool",
+                "unit": "",
+                "value": 0
             }
         ]
+    },
+    "LossFEMM": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Loss module dedicated to FEMM developed in https://www.femm.info/wiki/SPMLoss",
+        "is_internal": false,
+        "methods": [
+            "run",
+            "comp_loss_density_core",
+            "comp_loss_density_joule",
+            "comp_loss_density_magnet",
+            "comp_loss"
+        ],
+        "mother": "Loss",
+        "name": "LossFEMM",
+        "package": "Simulation",
+        "path": "pyleecan/Generator/ClassesRef/Simulation/LossFEMM.csv",
+        "properties": []
     },
     "LossModel": {
         "constants": [

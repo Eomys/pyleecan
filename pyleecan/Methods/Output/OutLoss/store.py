@@ -69,11 +69,3 @@ def store(
             group=model.group,
         )
         self.loss_list.append(out_loss_model)
-
-        # temp_loss_density = np.zeros((freqs.size, Nelem))
-        # If = np.argmin(np.abs(freqs[:, None] - f_array[None, :]), axis=0)[:, None]
-        # Ie = np.array(group[model.group])[None, :]
-        # temp_loss_density[If, Ie] += P_density
-        # loss_density += temp_loss_density
-    self.loss_list.append(sum(self.loss_list))
-    self.loss_list[-1].name="overall"

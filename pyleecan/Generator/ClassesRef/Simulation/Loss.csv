@@ -1,5 +1,6 @@
 Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
-model_index,,Internal dict to store model index,,dict,{},,,,Simulation,,run,VERSION,1,Losses module object that containt the loss models. See method add_model for implementation details.
-model_list,,Internal list of loss models,,[LossModel],,,,,,,add_model,,,
-logger_name,-,Name of the logger to use,0,str,Pyleecan.Loss,,,,,,remove_model,,,
-model_dict,,Dict of loss model whose key is a lamination and value is the associated loss model (alternative to model_index/model_list),,{LossModel},None,,,,,,,,,
+logger_name,-,Name of the logger to use,0,str,Pyleecan.Loss,,,,Simulation,,run,VERSION,1,Loss module object that contain the loss models.
+model_dict,,Dict of loss model whose key is a lamination and value is the associated loss model (alternative to model_index/model_list),,{LossModel},None,,,,,,comp_axes,,,
+Tsta,deg Celsius,Average stator temperature for Electrical calculation,0,float,20,,,,,,,,,
+Trot,deg Celsius,Average rotor temperature for Electrical calculation,0,float,20,,,,,,,,,
+is_get_meshsolution,,True to save loss density map as meshsolution,,bool,0,,,,,,,,,

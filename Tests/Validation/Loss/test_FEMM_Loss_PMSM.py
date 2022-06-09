@@ -10,6 +10,7 @@ from pyleecan.Classes.Simu1 import Simu1
 from pyleecan.Classes.OPdq import OPdq
 from pyleecan.Classes.MagFEMM import MagFEMM
 from pyleecan.Classes.LossFEMM import LossFEMM
+from pyleecan.Classes.Loss import Loss
 from pyleecan.Classes.LossModelSteinmetz import LossModelSteinmetz
 from pyleecan.Classes.LossModelJordan import LossModelJordan
 from pyleecan.Classes.LossModelBertotti import LossModelBertotti
@@ -212,7 +213,7 @@ windingfill={WindingFill2}
 def test_FEMM_Loss_Prius():
     """Test to calculate losses in Toyota_Prius using LossFEMM model based on motoranalysis validation"""
 
-    machine = load(join(DATA_DIR, "Machine", "Toyota_Prius_loss.json"))
+    machine = load(join(DATA_DIR, "Machine", "Toyota_Prius.json"))
 
     simu = Simu1(name="test_FEMM_Loss_Prius", machine=machine)
 
@@ -237,7 +238,7 @@ def test_FEMM_Loss_Prius():
         is_calc_torque_energy=False,
     )
 
-    simu.loss = LossFEMM(
+    simu.loss = Loss(
         is_get_meshsolution=True,
         Tsta=100,
         model_dict={"stator core": LossModelSteinmetz(group = "stator core"),
@@ -248,6 +249,9 @@ def test_FEMM_Loss_Prius():
     )
 
     out = simu.run()
+    
+    out.loss.loss_list.append(sum(out.loss.loss_list))
+    out.loss.loss_list[-1].name = "overall"
 
     power_dict = {
         "total_power": out.mag.Pem_av,
@@ -259,8 +263,7 @@ def test_FEMM_Loss_Prius():
     p = machine.get_pole_pair_number()
 
     array_list = [np.array([o.get_loss_scalar(speed / 60 *p) for speed in speed_array])
-                  for o in out.loss.loss_list if o.name != 'overall']
-    array_list.append(sum(array_list))
+                  for o in out.loss.loss_list]
     
     # def calc_loss(coeff, B):
     #     f=80
@@ -310,7 +313,7 @@ def test_FEMM_Loss_Prius():
             array_list,
             xlabel="Speed [rpm]",
             ylabel="Losses [W]",
-            legend_list=[o.name for o in out.loss.loss_list] + ["overall loss"],
+            legend_list=[o.name for o in out.loss.loss_list],
         )
 
     # out.loss.meshsol_list[0].plot_contour(
@@ -349,7 +352,7 @@ def test_FEMM_Loss_Prius():
 def test_FEMM_Loss_diff():
     """Test to calculate losses in Toyota_Prius using LossFEMM model based on motoranalysis validation"""
 
-    machine = load(join(DATA_DIR, "Machine", "Toyota_Prius.json"))
+    machine = load(join(DATA_DIR, "Machine", "Toyota_Prius_loss.json"))
 
     simu = Simu1(name="test_FEMM_Loss_Prius", machine=machine)
 
@@ -374,7 +377,7 @@ def test_FEMM_Loss_diff():
         is_calc_torque_energy=False,
     )
 
-    simu.loss = LossFEMM(
+    simu.loss = Loss(
         is_get_meshsolution=True,
         Tsta=100,
         model_dict={"rotor core Bertotti": LossModelBertotti(group = "rotor core"),
@@ -383,7 +386,7 @@ def test_FEMM_Loss_diff():
 
     out = simu.run()
 
-    out.loss.loss_list.append((out.loss.loss_list[1]-out.loss.loss_list[2]))
+    out.loss.loss_list.append((out.loss.loss_list[0]-out.loss.loss_list[1]))
 
     power_dict = {
         "total_power": out.mag.Pem_av,
@@ -395,8 +398,7 @@ def test_FEMM_Loss_diff():
     p = machine.get_pole_pair_number()
 
     array_list = [np.array([o.get_loss_scalar(speed / 60 *p) for speed in speed_array])
-                  for o in out.loss.loss_list if o.name != 'overall']
-    array_list.append(sum(array_list))
+                  for o in out.loss.loss_list]
 
     if is_show_fig:
         group_names = [
@@ -416,7 +418,7 @@ def test_FEMM_Loss_diff():
             array_list,
             xlabel="Speed [rpm]",
             ylabel="Losses [W]",
-            legend_list=[o.name for o in out.loss.loss_list] + ["overall loss"],
+            legend_list=[o.name for o in out.loss.loss_list],
         )
 
     # out.loss.meshsol_list[0].plot_contour(
@@ -450,5 +452,5 @@ if __name__ == "__main__":
 
     # test_FEMM_Loss_SPMSM()
 
-    test_FEMM_Loss_Prius()
+    # test_FEMM_Loss_Prius()
     test_FEMM_Loss_diff()

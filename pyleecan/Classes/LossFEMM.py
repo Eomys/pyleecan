@@ -23,9 +23,30 @@ except ImportError as error:
     run = error
 
 try:
-    from ..Methods.Simulation.LossFEMM.comp_axes import comp_axes
+    from ..Methods.Simulation.LossFEMM.comp_loss_density_core import (
+        comp_loss_density_core,
+    )
 except ImportError as error:
-    comp_axes = error
+    comp_loss_density_core = error
+
+try:
+    from ..Methods.Simulation.LossFEMM.comp_loss_density_joule import (
+        comp_loss_density_joule,
+    )
+except ImportError as error:
+    comp_loss_density_joule = error
+
+try:
+    from ..Methods.Simulation.LossFEMM.comp_loss_density_magnet import (
+        comp_loss_density_magnet,
+    )
+except ImportError as error:
+    comp_loss_density_magnet = error
+
+try:
+    from ..Methods.Simulation.LossFEMM.comp_loss import comp_loss
+except ImportError as error:
+    comp_loss = error
 
 
 from numpy import isnan
@@ -47,15 +68,51 @@ class LossFEMM(Loss):
         )
     else:
         run = run
-    # cf Methods.Simulation.LossFEMM.comp_axes
-    if isinstance(comp_axes, ImportError):
-        comp_axes = property(
+    # cf Methods.Simulation.LossFEMM.comp_loss_density_core
+    if isinstance(comp_loss_density_core, ImportError):
+        comp_loss_density_core = property(
             fget=lambda x: raise_(
-                ImportError("Can't use LossFEMM method comp_axes: " + str(comp_axes))
+                ImportError(
+                    "Can't use LossFEMM method comp_loss_density_core: "
+                    + str(comp_loss_density_core)
+                )
             )
         )
     else:
-        comp_axes = comp_axes
+        comp_loss_density_core = comp_loss_density_core
+    # cf Methods.Simulation.LossFEMM.comp_loss_density_joule
+    if isinstance(comp_loss_density_joule, ImportError):
+        comp_loss_density_joule = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use LossFEMM method comp_loss_density_joule: "
+                    + str(comp_loss_density_joule)
+                )
+            )
+        )
+    else:
+        comp_loss_density_joule = comp_loss_density_joule
+    # cf Methods.Simulation.LossFEMM.comp_loss_density_magnet
+    if isinstance(comp_loss_density_magnet, ImportError):
+        comp_loss_density_magnet = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use LossFEMM method comp_loss_density_magnet: "
+                    + str(comp_loss_density_magnet)
+                )
+            )
+        )
+    else:
+        comp_loss_density_magnet = comp_loss_density_magnet
+    # cf Methods.Simulation.LossFEMM.comp_loss
+    if isinstance(comp_loss, ImportError):
+        comp_loss = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use LossFEMM method comp_loss: " + str(comp_loss))
+            )
+        )
+    else:
+        comp_loss = comp_loss
     # save and copy methods are available in all object
     save = save
     copy = copy
@@ -64,13 +121,11 @@ class LossFEMM(Loss):
 
     def __init__(
         self,
-        is_get_meshsolution=False,
-        Tsta=20,
-        Trot=20,
-        model_index=-1,
-        model_list=-1,
         logger_name="Pyleecan.Loss",
         model_dict=None,
+        Tsta=20,
+        Trot=20,
+        is_get_meshsolution=False,
         init_dict=None,
         init_str=None,
     ):
@@ -89,30 +144,24 @@ class LossFEMM(Loss):
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
-            if "is_get_meshsolution" in list(init_dict.keys()):
-                is_get_meshsolution = init_dict["is_get_meshsolution"]
-            if "Tsta" in list(init_dict.keys()):
-                Tsta = init_dict["Tsta"]
-            if "Trot" in list(init_dict.keys()):
-                Trot = init_dict["Trot"]
-            if "model_index" in list(init_dict.keys()):
-                model_index = init_dict["model_index"]
-            if "model_list" in list(init_dict.keys()):
-                model_list = init_dict["model_list"]
             if "logger_name" in list(init_dict.keys()):
                 logger_name = init_dict["logger_name"]
             if "model_dict" in list(init_dict.keys()):
                 model_dict = init_dict["model_dict"]
+            if "Tsta" in list(init_dict.keys()):
+                Tsta = init_dict["Tsta"]
+            if "Trot" in list(init_dict.keys()):
+                Trot = init_dict["Trot"]
+            if "is_get_meshsolution" in list(init_dict.keys()):
+                is_get_meshsolution = init_dict["is_get_meshsolution"]
         # Set the properties (value check and convertion are done in setter)
-        self.is_get_meshsolution = is_get_meshsolution
-        self.Tsta = Tsta
-        self.Trot = Trot
         # Call Loss init
         super(LossFEMM, self).__init__(
-            model_index=model_index,
-            model_list=model_list,
             logger_name=logger_name,
             model_dict=model_dict,
+            Tsta=Tsta,
+            Trot=Trot,
+            is_get_meshsolution=is_get_meshsolution,
         )
         # The class is frozen (in Loss init), for now it's impossible to
         # add new properties
@@ -123,11 +172,6 @@ class LossFEMM(Loss):
         LossFEMM_str = ""
         # Get the properties inherited from Loss
         LossFEMM_str += super(LossFEMM, self).__str__()
-        LossFEMM_str += (
-            "is_get_meshsolution = " + str(self.is_get_meshsolution) + linesep
-        )
-        LossFEMM_str += "Tsta = " + str(self.Tsta) + linesep
-        LossFEMM_str += "Trot = " + str(self.Trot) + linesep
         return LossFEMM_str
 
     def __eq__(self, other):
@@ -138,12 +182,6 @@ class LossFEMM(Loss):
 
         # Check the properties inherited from Loss
         if not super(LossFEMM, self).__eq__(other):
-            return False
-        if other.is_get_meshsolution != self.is_get_meshsolution:
-            return False
-        if other.Tsta != self.Tsta:
-            return False
-        if other.Trot != self.Trot:
             return False
         return True
 
@@ -162,48 +200,6 @@ class LossFEMM(Loss):
                 other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
             )
         )
-        if other._is_get_meshsolution != self._is_get_meshsolution:
-            if is_add_value:
-                val_str = (
-                    " (self="
-                    + str(self._is_get_meshsolution)
-                    + ", other="
-                    + str(other._is_get_meshsolution)
-                    + ")"
-                )
-                diff_list.append(name + ".is_get_meshsolution" + val_str)
-            else:
-                diff_list.append(name + ".is_get_meshsolution")
-        if (
-            other._Tsta is not None
-            and self._Tsta is not None
-            and isnan(other._Tsta)
-            and isnan(self._Tsta)
-        ):
-            pass
-        elif other._Tsta != self._Tsta:
-            if is_add_value:
-                val_str = (
-                    " (self=" + str(self._Tsta) + ", other=" + str(other._Tsta) + ")"
-                )
-                diff_list.append(name + ".Tsta" + val_str)
-            else:
-                diff_list.append(name + ".Tsta")
-        if (
-            other._Trot is not None
-            and self._Trot is not None
-            and isnan(other._Trot)
-            and isnan(self._Trot)
-        ):
-            pass
-        elif other._Trot != self._Trot:
-            if is_add_value:
-                val_str = (
-                    " (self=" + str(self._Trot) + ", other=" + str(other._Trot) + ")"
-                )
-                diff_list.append(name + ".Trot" + val_str)
-            else:
-                diff_list.append(name + ".Trot")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -215,9 +211,6 @@ class LossFEMM(Loss):
 
         # Get size of the properties inherited from Loss
         S += super(LossFEMM, self).__sizeof__()
-        S += getsizeof(self.is_get_meshsolution)
-        S += getsizeof(self.Tsta)
-        S += getsizeof(self.Trot)
         return S
 
     def as_dict(self, type_handle_ndarray=0, keep_function=False, **kwargs):
@@ -237,9 +230,6 @@ class LossFEMM(Loss):
             keep_function=keep_function,
             **kwargs
         )
-        LossFEMM_dict["is_get_meshsolution"] = self.is_get_meshsolution
-        LossFEMM_dict["Tsta"] = self.Tsta
-        LossFEMM_dict["Trot"] = self.Trot
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         LossFEMM_dict["__class__"] = "LossFEMM"
@@ -248,62 +238,5 @@ class LossFEMM(Loss):
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""
 
-        self.is_get_meshsolution = None
-        self.Tsta = None
-        self.Trot = None
         # Set to None the properties inherited from Loss
         super(LossFEMM, self)._set_None()
-
-    def _get_is_get_meshsolution(self):
-        """getter of is_get_meshsolution"""
-        return self._is_get_meshsolution
-
-    def _set_is_get_meshsolution(self, value):
-        """setter of is_get_meshsolution"""
-        check_var("is_get_meshsolution", value, "bool")
-        self._is_get_meshsolution = value
-
-    is_get_meshsolution = property(
-        fget=_get_is_get_meshsolution,
-        fset=_set_is_get_meshsolution,
-        doc=u"""True to save loss density map as meshsolution
-
-        :Type: bool
-        """,
-    )
-
-    def _get_Tsta(self):
-        """getter of Tsta"""
-        return self._Tsta
-
-    def _set_Tsta(self, value):
-        """setter of Tsta"""
-        check_var("Tsta", value, "float")
-        self._Tsta = value
-
-    Tsta = property(
-        fget=_get_Tsta,
-        fset=_set_Tsta,
-        doc=u"""Average stator temperature for Electrical calculation [deg Celsius]
-
-        :Type: float
-        """,
-    )
-
-    def _get_Trot(self):
-        """getter of Trot"""
-        return self._Trot
-
-    def _set_Trot(self, value):
-        """setter of Trot"""
-        check_var("Trot", value, "float")
-        self._Trot = value
-
-    Trot = property(
-        fget=_get_Trot,
-        fset=_set_Trot,
-        doc=u"""Average rotor temperature for Electrical calculation [deg Celsius]
-
-        :Type: float
-        """,
-    )

@@ -1,4 +1,6 @@
 Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
-is_get_meshsolution,,True to save loss density map as meshsolution,,bool,0,,,,Simulation,Loss,run,VERSION,1,Loss module dedicated to FEMM developed in https://www.femm.info/wiki/SPMLoss
-Tsta,deg Celsius,Average stator temperature for Electrical calculation,0,float,20,,,,,,comp_axes,,,
-Trot,deg Celsius,Average rotor temperature for Electrical calculation,0,float,20,,,,,,,,,
+,,,,,,,,,Simulation,Loss,run,VERSION,1,Loss module dedicated to FEMM developed in https://www.femm.info/wiki/SPMLoss
+,,,,,,,,,,,comp_loss_density_core,,,
+,,,,,,,,,,,comp_loss_density_joule,,,
+,,,,,,,,,,,comp_loss_density_magnet,,,
+,,,,,,,,,,,comp_loss,,,

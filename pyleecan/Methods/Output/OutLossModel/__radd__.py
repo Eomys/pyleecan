@@ -22,7 +22,9 @@ def __radd__(self, other):
         else:
             new_coeff_dict[key] = value
     new_group = self.group + " + " + other_group
-    return OutLossModel(name = "Addition",
-                        loss_density = new_loss_density,
-                        coeff_dict = new_coeff_dict,
-                        group = new_group)
+    return OutLossModel(
+        name="Addition",
+        loss_density=new_loss_density,
+        coeff_dict=new_coeff_dict,
+        group=new_group,
+    )

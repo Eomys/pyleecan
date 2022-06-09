@@ -1,5 +1,6 @@
 from ....Functions.Load.import_class import import_class
 
+
 def __add__(self, other):
     if other == 0:
         return self
@@ -21,7 +22,9 @@ def __add__(self, other):
         else:
             new_coeff_dict[key] = value
     new_group = self.group + " + " + other_group
-    return OutLossModel(name = "Addition",
-                        loss_density = new_loss_density,
-                        coeff_dict = new_coeff_dict,
-                        group = new_group)
+    return OutLossModel(
+        name="Addition",
+        loss_density=new_loss_density,
+        coeff_dict=new_coeff_dict,
+        group=new_group,
+    )

@@ -22,7 +22,9 @@ def __sub__(self, other):
         else:
             new_coeff_dict[key] = -value
     new_group = self.group + " - " + other_group
-    return OutLossModel(name = "Substraction",
-                        loss_density = new_loss_density,
-                        coeff_dict = new_coeff_dict,
-                        group = new_group)
+    return OutLossModel(
+        name="Subtraction",
+        loss_density=new_loss_density,
+        coeff_dict=new_coeff_dict,
+        group=new_group,
+    )
