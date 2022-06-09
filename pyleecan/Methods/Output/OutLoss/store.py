@@ -75,4 +75,5 @@ def store(
         # Ie = np.array(group[model.group])[None, :]
         # temp_loss_density[If, Ie] += P_density
         # loss_density += temp_loss_density
-    self.loss_list.append(OutLossModel(**sum(self.loss_list), name="overall"))
+    self.loss_list.append(sum(self.loss_list))
+    self.loss_list[-1].name="overall"

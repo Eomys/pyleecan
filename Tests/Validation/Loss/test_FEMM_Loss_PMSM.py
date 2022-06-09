@@ -383,8 +383,7 @@ def test_FEMM_Loss_diff():
 
     out = simu.run()
 
-    out.loss.loss_list.append(OutLossModel(name='substraction',
-                                      **(out.loss.loss_list[1]-out.loss.loss_list[2])))
+    out.loss.loss_list.append((out.loss.loss_list[1]-out.loss.loss_list[2]))
 
     power_dict = {
         "total_power": out.mag.Pem_av,
@@ -451,5 +450,5 @@ if __name__ == "__main__":
 
     # test_FEMM_Loss_SPMSM()
 
-    # test_FEMM_Loss_Prius()
+    test_FEMM_Loss_Prius()
     test_FEMM_Loss_diff()
