@@ -21,12 +21,15 @@ def get_bore_line(self, prop_dict=None):
     """
 
     if self.parent is not None:
-        Rbo = self.parent.get_Rbo()
+        if self.is_yoke():
+            R = self.parent.get_Ryoke()
+        else:
+            R = self.parent.get_Rbo()
     else:
         raise ParentMissingError("Error: The Bore object is not inside a Lamination")
 
     # Compute the shape
-    (alpha_lim, zL, zR) = comp_flower_arc(2 * pi / self.N, self.Rarc, Rbo)
+    (alpha_lim, zL, zR) = comp_flower_arc(2 * pi / self.N, self.Rarc, R)
 
     # Create the lines
     bore_list = list()

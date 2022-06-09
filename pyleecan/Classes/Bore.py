@@ -22,6 +22,11 @@ try:
 except ImportError as error:
     merge_slot = error
 
+try:
+    from ..Methods.Machine.Bore.is_yoke import is_yoke
+except ImportError as error:
+    is_yoke = error
+
 
 from numpy import isnan
 from ._check import InitUnKnowClassError
@@ -32,6 +37,7 @@ class Bore(FrozenClass):
 
     VERSION = 1
 
+    # Check ImportError to remove unnecessary dependencies in unused method
     # cf Methods.Machine.Bore.merge_slot
     if isinstance(merge_slot, ImportError):
         merge_slot = property(
@@ -41,6 +47,15 @@ class Bore(FrozenClass):
         )
     else:
         merge_slot = merge_slot
+    # cf Methods.Machine.Bore.is_yoke
+    if isinstance(is_yoke, ImportError):
+        is_yoke = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use Bore method is_yoke: " + str(is_yoke))
+            )
+        )
+    else:
+        is_yoke = is_yoke
     # save and copy methods are available in all object
     save = save
     copy = copy

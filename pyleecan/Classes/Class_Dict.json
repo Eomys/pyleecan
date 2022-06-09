@@ -232,7 +232,8 @@
         "desc": "Abstract class for Bore shape",
         "is_internal": false,
         "methods": [
-            "merge_slot"
+            "merge_slot",
+            "is_yoke"
         ],
         "mother": "",
         "name": "Bore",
