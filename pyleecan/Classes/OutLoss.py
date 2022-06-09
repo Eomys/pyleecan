@@ -43,6 +43,7 @@ except ImportError as error:
     store = error
 
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 
@@ -181,7 +182,7 @@ class OutLoss(FrozenClass):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -201,7 +202,10 @@ class OutLoss(FrozenClass):
             for key in self.axes_dict:
                 diff_list.extend(
                     self.axes_dict[key].compare(
-                        other.axes_dict[key], name=name + ".axes_dict"
+                        other.axes_dict[key],
+                        name=name + ".axes_dict[" + str(key) + "]",
+                        ignore_list=ignore_list,
+                        is_add_value=is_add_value,
                     )
                 )
         if (other.loss_list is None and self.loss_list is not None) or (
@@ -216,11 +220,24 @@ class OutLoss(FrozenClass):
             for ii in range(len(other.loss_list)):
                 diff_list.extend(
                     self.loss_list[ii].compare(
-                        other.loss_list[ii], name=name + ".loss_list[" + str(ii) + "]"
+                        other.loss_list[ii],
+                        name=name + ".loss_list[" + str(ii) + "]",
+                        ignore_list=ignore_list,
+                        is_add_value=is_add_value,
                     )
                 )
         if other._logger_name != self._logger_name:
-            diff_list.append(name + ".logger_name")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._logger_name)
+                    + ", other="
+                    + str(other._logger_name)
+                    + ")"
+                )
+                diff_list.append(name + ".logger_name" + val_str)
+            else:
+                diff_list.append(name + ".logger_name")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -384,7 +401,7 @@ class OutLoss(FrozenClass):
     logger_name = property(
         fget=_get_logger_name,
         fset=_set_logger_name,
-        doc=u"""Name of the logger to use
+        doc=u"""Name of the logger to use [-]
 
         :Type: str
         """,

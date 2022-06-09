@@ -15,6 +15,7 @@ from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
 from ._frozen import FrozenClass
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 
@@ -100,7 +101,7 @@ class Solution(FrozenClass):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -109,13 +110,45 @@ class Solution(FrozenClass):
             return ["type(" + name + ")"]
         diff_list = list()
         if other._type_cell != self._type_cell:
-            diff_list.append(name + ".type_cell")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._type_cell)
+                    + ", other="
+                    + str(other._type_cell)
+                    + ")"
+                )
+                diff_list.append(name + ".type_cell" + val_str)
+            else:
+                diff_list.append(name + ".type_cell")
         if other._label != self._label:
-            diff_list.append(name + ".label")
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._label) + ", other=" + str(other._label) + ")"
+                )
+                diff_list.append(name + ".label" + val_str)
+            else:
+                diff_list.append(name + ".label")
         if other._dimension != self._dimension:
-            diff_list.append(name + ".dimension")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._dimension)
+                    + ", other="
+                    + str(other._dimension)
+                    + ")"
+                )
+                diff_list.append(name + ".dimension" + val_str)
+            else:
+                diff_list.append(name + ".dimension")
         if other._unit != self._unit:
-            diff_list.append(name + ".unit")
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._unit) + ", other=" + str(other._unit) + ")"
+                )
+                diff_list.append(name + ".unit" + val_str)
+            else:
+                diff_list.append(name + ".unit")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -170,7 +203,7 @@ class Solution(FrozenClass):
     type_cell = property(
         fget=_get_type_cell,
         fset=_set_type_cell,
-        doc=u"""Type of cell (Point, Segment2, Triangle3, etc.)
+        doc=u"""Type of cell (Point, Segment2, Triangle3, etc.) [-]
 
         :Type: str
         """,
@@ -188,7 +221,7 @@ class Solution(FrozenClass):
     label = property(
         fget=_get_label,
         fset=_set_label,
-        doc=u"""Label to identify the solution
+        doc=u"""Label to identify the solution [-]
 
         :Type: str
         """,
@@ -206,7 +239,7 @@ class Solution(FrozenClass):
     dimension = property(
         fget=_get_dimension,
         fset=_set_dimension,
-        doc=u"""Dimension of the physical problem
+        doc=u"""Dimension of the physical problem [-]
 
         :Type: int
         :min: 1
@@ -226,7 +259,7 @@ class Solution(FrozenClass):
     unit = property(
         fget=_get_unit,
         fset=_set_unit,
-        doc=u"""Unit of the solution
+        doc=u"""Unit of the solution [-]
 
         :Type: str
         """,

@@ -84,6 +84,7 @@ except ImportError as error:
 
 
 from numpy import array, array_equal
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 
@@ -439,7 +440,7 @@ class EEC_SCIM(EEC):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -449,37 +450,148 @@ class EEC_SCIM(EEC):
         diff_list = list()
 
         # Check the properties inherited from EEC
-        diff_list.extend(super(EEC_SCIM, self).compare(other, name=name))
-        if other._Rfe != self._Rfe:
-            diff_list.append(name + ".Rfe")
-        if other._L1 != self._L1:
-            diff_list.append(name + ".L1")
-        if other._R2 != self._R2:
-            diff_list.append(name + ".R2")
-        if other._L2 != self._L2:
-            diff_list.append(name + ".L2")
-        if other._K21Z != self._K21Z:
-            diff_list.append(name + ".K21Z")
-        if other._K21I != self._K21I:
-            diff_list.append(name + ".K21I")
+        diff_list.extend(
+            super(EEC_SCIM, self).compare(
+                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
+            )
+        )
+        if (
+            other._Rfe is not None
+            and self._Rfe is not None
+            and isnan(other._Rfe)
+            and isnan(self._Rfe)
+        ):
+            pass
+        elif other._Rfe != self._Rfe:
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._Rfe) + ", other=" + str(other._Rfe) + ")"
+                )
+                diff_list.append(name + ".Rfe" + val_str)
+            else:
+                diff_list.append(name + ".Rfe")
+        if (
+            other._L1 is not None
+            and self._L1 is not None
+            and isnan(other._L1)
+            and isnan(self._L1)
+        ):
+            pass
+        elif other._L1 != self._L1:
+            if is_add_value:
+                val_str = " (self=" + str(self._L1) + ", other=" + str(other._L1) + ")"
+                diff_list.append(name + ".L1" + val_str)
+            else:
+                diff_list.append(name + ".L1")
+        if (
+            other._R2 is not None
+            and self._R2 is not None
+            and isnan(other._R2)
+            and isnan(self._R2)
+        ):
+            pass
+        elif other._R2 != self._R2:
+            if is_add_value:
+                val_str = " (self=" + str(self._R2) + ", other=" + str(other._R2) + ")"
+                diff_list.append(name + ".R2" + val_str)
+            else:
+                diff_list.append(name + ".R2")
+        if (
+            other._L2 is not None
+            and self._L2 is not None
+            and isnan(other._L2)
+            and isnan(self._L2)
+        ):
+            pass
+        elif other._L2 != self._L2:
+            if is_add_value:
+                val_str = " (self=" + str(self._L2) + ", other=" + str(other._L2) + ")"
+                diff_list.append(name + ".L2" + val_str)
+            else:
+                diff_list.append(name + ".L2")
+        if (
+            other._K21Z is not None
+            and self._K21Z is not None
+            and isnan(other._K21Z)
+            and isnan(self._K21Z)
+        ):
+            pass
+        elif other._K21Z != self._K21Z:
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._K21Z) + ", other=" + str(other._K21Z) + ")"
+                )
+                diff_list.append(name + ".K21Z" + val_str)
+            else:
+                diff_list.append(name + ".K21Z")
+        if (
+            other._K21I is not None
+            and self._K21I is not None
+            and isnan(other._K21I)
+            and isnan(self._K21I)
+        ):
+            pass
+        elif other._K21I != self._K21I:
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._K21I) + ", other=" + str(other._K21I) + ")"
+                )
+                diff_list.append(name + ".K21I" + val_str)
+            else:
+                diff_list.append(name + ".K21I")
         if not array_equal(other.Im_table, self.Im_table):
             diff_list.append(name + ".Im_table")
         if not array_equal(other.Lm_table, self.Lm_table):
             diff_list.append(name + ".Lm_table")
         if other._I1 != self._I1:
-            diff_list.append(name + ".I1")
+            if is_add_value:
+                val_str = " (self=" + str(self._I1) + ", other=" + str(other._I1) + ")"
+                diff_list.append(name + ".I1" + val_str)
+            else:
+                diff_list.append(name + ".I1")
         if other._I2 != self._I2:
-            diff_list.append(name + ".I2")
+            if is_add_value:
+                val_str = " (self=" + str(self._I2) + ", other=" + str(other._I2) + ")"
+                diff_list.append(name + ".I2" + val_str)
+            else:
+                diff_list.append(name + ".I2")
         if other._U1 != self._U1:
-            diff_list.append(name + ".U1")
+            if is_add_value:
+                val_str = " (self=" + str(self._U1) + ", other=" + str(other._U1) + ")"
+                diff_list.append(name + ".U1" + val_str)
+            else:
+                diff_list.append(name + ".U1")
         if other._U2 != self._U2:
-            diff_list.append(name + ".U2")
+            if is_add_value:
+                val_str = " (self=" + str(self._U2) + ", other=" + str(other._U2) + ")"
+                diff_list.append(name + ".U2" + val_str)
+            else:
+                diff_list.append(name + ".U2")
         if other._If != self._If:
-            diff_list.append(name + ".If")
-        if other._Lm != self._Lm:
-            diff_list.append(name + ".Lm")
+            if is_add_value:
+                val_str = " (self=" + str(self._If) + ", other=" + str(other._If) + ")"
+                diff_list.append(name + ".If" + val_str)
+            else:
+                diff_list.append(name + ".If")
+        if (
+            other._Lm is not None
+            and self._Lm is not None
+            and isnan(other._Lm)
+            and isnan(self._Lm)
+        ):
+            pass
+        elif other._Lm != self._Lm:
+            if is_add_value:
+                val_str = " (self=" + str(self._Lm) + ", other=" + str(other._Lm) + ")"
+                diff_list.append(name + ".Lm" + val_str)
+            else:
+                diff_list.append(name + ".Lm")
         if other._Im != self._Im:
-            diff_list.append(name + ".Im")
+            if is_add_value:
+                val_str = " (self=" + str(self._Im) + ", other=" + str(other._Im) + ")"
+                diff_list.append(name + ".Im" + val_str)
+            else:
+                diff_list.append(name + ".Im")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -632,7 +744,7 @@ class EEC_SCIM(EEC):
     Rfe = property(
         fget=_get_Rfe,
         fset=_set_Rfe,
-        doc=u"""Iron loss resistance
+        doc=u"""Iron loss resistance [Ohm]
 
         :Type: float
         """,
@@ -650,7 +762,7 @@ class EEC_SCIM(EEC):
     L1 = property(
         fget=_get_L1,
         fset=_set_L1,
-        doc=u"""Stator phase inductance
+        doc=u"""Stator phase inductance [H]
 
         :Type: float
         """,
@@ -668,7 +780,7 @@ class EEC_SCIM(EEC):
     R2 = property(
         fget=_get_R2,
         fset=_set_R2,
-        doc=u"""Rotor phase resistance
+        doc=u"""Rotor phase resistance [Ohm]
 
         :Type: float
         """,
@@ -686,7 +798,7 @@ class EEC_SCIM(EEC):
     L2 = property(
         fget=_get_L2,
         fset=_set_L2,
-        doc=u"""Rotor phase inductance
+        doc=u"""Rotor phase inductance [H]
 
         :Type: float
         """,
@@ -747,7 +859,7 @@ class EEC_SCIM(EEC):
     Im_table = property(
         fget=_get_Im_table,
         fset=_set_Im_table,
-        doc=u"""Array of magnetizing current
+        doc=u"""Array of magnetizing current [Arms]
 
         :Type: ndarray
         """,
@@ -772,7 +884,7 @@ class EEC_SCIM(EEC):
     Lm_table = property(
         fget=_get_Lm_table,
         fset=_set_Lm_table,
-        doc=u"""Array of magnetizing inductance function of Im_table
+        doc=u"""Array of magnetizing inductance function of Im_table [H]
 
         :Type: ndarray
         """,
@@ -792,7 +904,7 @@ class EEC_SCIM(EEC):
     I1 = property(
         fget=_get_I1,
         fset=_set_I1,
-        doc=u"""Stator phase current (after solve)
+        doc=u"""Stator phase current (after solve) [Arms]
 
         :Type: complex
         """,
@@ -812,7 +924,7 @@ class EEC_SCIM(EEC):
     I2 = property(
         fget=_get_I2,
         fset=_set_I2,
-        doc=u"""Rotor phase current (after solve)
+        doc=u"""Rotor phase current (after solve) [Arms]
 
         :Type: complex
         """,
@@ -832,7 +944,7 @@ class EEC_SCIM(EEC):
     U1 = property(
         fget=_get_U1,
         fset=_set_U1,
-        doc=u"""Stator phase voltage (after solve)
+        doc=u"""Stator phase voltage (after solve) [Vrms]
 
         :Type: complex
         """,
@@ -852,7 +964,7 @@ class EEC_SCIM(EEC):
     U2 = property(
         fget=_get_U2,
         fset=_set_U2,
-        doc=u"""Rotor phase voltage (after solve)
+        doc=u"""Rotor phase voltage (after solve) [Vrms]
 
         :Type: complex
         """,
@@ -872,7 +984,7 @@ class EEC_SCIM(EEC):
     If = property(
         fget=_get_If,
         fset=_set_If,
-        doc=u"""Iron loss current (after solve)
+        doc=u"""Iron loss current (after solve) [Arms]
 
         :Type: complex
         """,
@@ -890,7 +1002,7 @@ class EEC_SCIM(EEC):
     Lm = property(
         fget=_get_Lm,
         fset=_set_Lm,
-        doc=u"""Magnetizing inductance (after solve)
+        doc=u"""Magnetizing inductance (after solve) [H]
 
         :Type: float
         """,
@@ -910,7 +1022,7 @@ class EEC_SCIM(EEC):
     Im = property(
         fget=_get_Im,
         fset=_set_Im,
-        doc=u"""Magnetizing current (after solve)
+        doc=u"""Magnetizing current (after solve) [Arms]
 
         :Type: complex
         """,

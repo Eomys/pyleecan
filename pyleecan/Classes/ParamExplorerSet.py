@@ -53,6 +53,7 @@ from os.path import isfile
 from ._check import CheckTypeError
 import numpy as np
 import random
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 
@@ -206,7 +207,7 @@ class ParamExplorerSet(ParamExplorer):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -216,9 +217,19 @@ class ParamExplorerSet(ParamExplorer):
         diff_list = list()
 
         # Check the properties inherited from ParamExplorer
-        diff_list.extend(super(ParamExplorerSet, self).compare(other, name=name))
+        diff_list.extend(
+            super(ParamExplorerSet, self).compare(
+                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
+            )
+        )
         if other._value != self._value:
-            diff_list.append(name + ".value")
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._value) + ", other=" + str(other._value) + ")"
+                )
+                diff_list.append(name + ".value" + val_str)
+            else:
+                diff_list.append(name + ".value")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -249,7 +260,7 @@ class ParamExplorerSet(ParamExplorer):
     value = property(
         fget=_get_value,
         fset=_set_value,
-        doc=u"""List containing the different parameter values to explore
+        doc=u"""List containing the different parameter values to explore [-]
 
         :Type: list
         """,

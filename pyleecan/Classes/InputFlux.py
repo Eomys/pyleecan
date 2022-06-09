@@ -26,6 +26,7 @@ except ImportError as error:
 from ..Classes.ImportMatrixVal import ImportMatrixVal
 from numpy import ndarray
 from numpy import array, array_equal
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 
@@ -229,7 +230,7 @@ class InputFlux(InputCurrent):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -239,19 +240,71 @@ class InputFlux(InputCurrent):
         diff_list = list()
 
         # Check the properties inherited from InputCurrent
-        diff_list.extend(super(InputFlux, self).compare(other, name=name))
+        diff_list.extend(
+            super(InputFlux, self).compare(
+                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
+            )
+        )
         if other._per_a != self._per_a:
-            diff_list.append(name + ".per_a")
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._per_a) + ", other=" + str(other._per_a) + ")"
+                )
+                diff_list.append(name + ".per_a" + val_str)
+            else:
+                diff_list.append(name + ".per_a")
         if other._per_t != self._per_t:
-            diff_list.append(name + ".per_t")
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._per_t) + ", other=" + str(other._per_t) + ")"
+                )
+                diff_list.append(name + ".per_t" + val_str)
+            else:
+                diff_list.append(name + ".per_t")
         if other._is_antiper_a != self._is_antiper_a:
-            diff_list.append(name + ".is_antiper_a")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._is_antiper_a)
+                    + ", other="
+                    + str(other._is_antiper_a)
+                    + ")"
+                )
+                diff_list.append(name + ".is_antiper_a" + val_str)
+            else:
+                diff_list.append(name + ".is_antiper_a")
         if other._is_antiper_t != self._is_antiper_t:
-            diff_list.append(name + ".is_antiper_t")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._is_antiper_t)
+                    + ", other="
+                    + str(other._is_antiper_t)
+                    + ")"
+                )
+                diff_list.append(name + ".is_antiper_t" + val_str)
+            else:
+                diff_list.append(name + ".is_antiper_t")
         if other._B_dict != self._B_dict:
-            diff_list.append(name + ".B_dict")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._B_dict)
+                    + ", other="
+                    + str(other._B_dict)
+                    + ")"
+                )
+                diff_list.append(name + ".B_dict" + val_str)
+            else:
+                diff_list.append(name + ".B_dict")
         if other._unit != self._unit:
-            diff_list.append(name + ".unit")
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._unit) + ", other=" + str(other._unit) + ")"
+                )
+                diff_list.append(name + ".unit" + val_str)
+            else:
+                diff_list.append(name + ".unit")
         if not array_equal(other.slice, self.slice):
             diff_list.append(name + ".slice")
         if (other.B_enforced is None and self.B_enforced is not None) or (
@@ -260,7 +313,12 @@ class InputFlux(InputCurrent):
             diff_list.append(name + ".B_enforced None mismatch")
         elif self.B_enforced is not None:
             diff_list.extend(
-                self.B_enforced.compare(other.B_enforced, name=name + ".B_enforced")
+                self.B_enforced.compare(
+                    other.B_enforced,
+                    name=name + ".B_enforced",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
             )
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
@@ -362,7 +420,7 @@ class InputFlux(InputCurrent):
     per_a = property(
         fget=_get_per_a,
         fset=_set_per_a,
-        doc=u"""Angle periodicity
+        doc=u"""Angle periodicity [-]
 
         :Type: int
         """,
@@ -380,7 +438,7 @@ class InputFlux(InputCurrent):
     per_t = property(
         fget=_get_per_t,
         fset=_set_per_t,
-        doc=u"""Time periodicity
+        doc=u"""Time periodicity [-]
 
         :Type: int
         """,
@@ -398,7 +456,7 @@ class InputFlux(InputCurrent):
     is_antiper_a = property(
         fget=_get_is_antiper_a,
         fset=_set_is_antiper_a,
-        doc=u"""If angle is antiperiodic
+        doc=u"""If angle is antiperiodic [-]
 
         :Type: bool
         """,
@@ -416,7 +474,7 @@ class InputFlux(InputCurrent):
     is_antiper_t = property(
         fget=_get_is_antiper_t,
         fset=_set_is_antiper_t,
-        doc=u"""If time is antiperiodic
+        doc=u"""If time is antiperiodic [-]
 
         :Type: bool
         """,
@@ -436,7 +494,7 @@ class InputFlux(InputCurrent):
     B_dict = property(
         fget=_get_B_dict,
         fset=_set_B_dict,
-        doc=u"""Dict of Import objects or lists for each component of the flux
+        doc=u"""Dict of Import objects or lists for each component of the flux [-]
 
         :Type: dict
         """,
@@ -454,7 +512,7 @@ class InputFlux(InputCurrent):
     unit = property(
         fget=_get_unit,
         fset=_set_unit,
-        doc=u"""Unit of the flux if not T
+        doc=u"""Unit of the flux if not T [-]
 
         :Type: str
         """,
@@ -479,7 +537,7 @@ class InputFlux(InputCurrent):
     slice = property(
         fget=_get_slice,
         fset=_set_slice,
-        doc=u"""Slice axis values
+        doc=u"""Slice axis values [m]
 
         :Type: ndarray
         """,

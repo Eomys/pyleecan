@@ -21,7 +21,7 @@ import platform
 # Release 1.1.0 : 1.1.0
 # First post release of the release 1.1.0 : 1.1.0.post1
 
-PYLEECAN_VERSION = "1.3.8"
+PYLEECAN_VERSION = "1.3.9"
 
 
 with open("README.md", "r") as fh:
@@ -29,39 +29,43 @@ with open("README.md", "r") as fh:
 
 python_requires = ">= 3.6"
 
-# Pyleecan dependancies
+# Pyleecan main dependancies
 install_requires = [
-    "setuptools",
     "cloudpickle>=1.3.0",
+    "ezdxf==0.14.2",
+    "h5py>=3.2.1",
     "matplotlib>=3.3.2",
+    "meshio>=4.0.15",
     "numpy>1.19.5",
     "pandas>=1.0.3",
     'pyfemm>=0.1.1;platform_system=="Windows"',
     "PySide2>=5.15.2",
-    "swat_em>=0.6.3",
+    "pyuff>=1.25",
+    "pyvista>=0.25.3",
+    "quadpy",
+    "SciDataTool>=2.3.11",
     "scipy>=1.4.1",
+    "setuptools",
+    "swat_em>=0.6.3",
     "xlrd>=1.2.0",
     "xlwt>=1.3.0",
-    "deap>=1.3.1",
-    "SciDataTool>=2.0.6",
-    "pyvista>=0.25.3",
-    "meshio>=4.0.15",
-    "h5py>=3.2.1",
-    "nbformat",
-    "nbconvert",
-    "quadpy",
-    "ezdxf>=0.14.2",
-    "pytest-qt>=3.3.0",
-    "pyuff>=1.25",
+]
+# Pyleecan optional dependancies
+full_require = [
+    'deap>=1.3.1',
+    'smoot>=0.1.0',
+    'gmsh-sdk>=4.6.0',
 ]
 
+# Pyleecan Test dependancies
 tests_require = [
     "ddt>=1.3.1",
+    "hypothesis",
+    "mock>=4.0.2",
+    "nbconvert",
+    "nbformat",
     "pytest>=5.4.1",
     "pytest-qt>=3.3.0",
-    "mock>=4.0.2",
-    "nbformat",
-    "nbconvert",
 ]
 
 setuptools.setup(
@@ -91,6 +95,7 @@ setuptools.setup(
     python_requires=python_requires,
     install_requires=install_requires,
     extras_require={
-        "test": tests_require
+        "test": tests_require,
+        "full": full_require
     },  # Enables to install the test dependancies using pip install pyleecan[test]
 )

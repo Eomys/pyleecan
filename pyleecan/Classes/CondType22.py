@@ -55,6 +55,7 @@ except ImportError as error:
     is_round_wire = error
 
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 
@@ -205,7 +206,7 @@ class CondType22(Conductor):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -215,9 +216,26 @@ class CondType22(Conductor):
         diff_list = list()
 
         # Check the properties inherited from Conductor
-        diff_list.extend(super(CondType22, self).compare(other, name=name))
-        if other._Sbar != self._Sbar:
-            diff_list.append(name + ".Sbar")
+        diff_list.extend(
+            super(CondType22, self).compare(
+                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
+            )
+        )
+        if (
+            other._Sbar is not None
+            and self._Sbar is not None
+            and isnan(other._Sbar)
+            and isnan(self._Sbar)
+        ):
+            pass
+        elif other._Sbar != self._Sbar:
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._Sbar) + ", other=" + str(other._Sbar) + ")"
+                )
+                diff_list.append(name + ".Sbar" + val_str)
+            else:
+                diff_list.append(name + ".Sbar")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -274,7 +292,7 @@ class CondType22(Conductor):
     Sbar = property(
         fget=_get_Sbar,
         fset=_set_Sbar,
-        doc=u"""Surface of the Slot
+        doc=u"""Surface of the Slot [m]
 
         :Type: float
         :min: 0

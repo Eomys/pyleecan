@@ -45,6 +45,7 @@ except ImportError as error:
     eval_const = error
 
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 
@@ -207,7 +208,7 @@ class OptiBayesAlgSmoot(OptiBayesAlg):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -217,11 +218,35 @@ class OptiBayesAlgSmoot(OptiBayesAlg):
         diff_list = list()
 
         # Check the properties inherited from OptiBayesAlg
-        diff_list.extend(super(OptiBayesAlgSmoot, self).compare(other, name=name))
+        diff_list.extend(
+            super(OptiBayesAlgSmoot, self).compare(
+                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
+            )
+        )
         if other._size_pop != self._size_pop:
-            diff_list.append(name + ".size_pop")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._size_pop)
+                    + ", other="
+                    + str(other._size_pop)
+                    + ")"
+                )
+                diff_list.append(name + ".size_pop" + val_str)
+            else:
+                diff_list.append(name + ".size_pop")
         if other._nb_gen != self._nb_gen:
-            diff_list.append(name + ".nb_gen")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._nb_gen)
+                    + ", other="
+                    + str(other._nb_gen)
+                    + ")"
+                )
+                diff_list.append(name + ".nb_gen" + val_str)
+            else:
+                diff_list.append(name + ".nb_gen")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -281,7 +306,7 @@ class OptiBayesAlgSmoot(OptiBayesAlg):
     size_pop = property(
         fget=_get_size_pop,
         fset=_set_size_pop,
-        doc=u"""Number of individuals for each generation
+        doc=u"""Number of individuals for each generation [-]
 
         :Type: int
         :min: 1
@@ -300,7 +325,7 @@ class OptiBayesAlgSmoot(OptiBayesAlg):
     nb_gen = property(
         fget=_get_nb_gen,
         fset=_set_nb_gen,
-        doc=u"""Number of generations for the genetic part
+        doc=u"""Number of generations for the genetic part [-]
 
         :Type: int
         :min: 1

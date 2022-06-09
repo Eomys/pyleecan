@@ -23,6 +23,7 @@ except ImportError as error:
     get_surfaces = error
 
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 
@@ -112,7 +113,7 @@ class DXFImport(FrozenClass):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -121,11 +122,41 @@ class DXFImport(FrozenClass):
             return ["type(" + name + ")"]
         diff_list = list()
         if other._file_path != self._file_path:
-            diff_list.append(name + ".file_path")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._file_path)
+                    + ", other="
+                    + str(other._file_path)
+                    + ")"
+                )
+                diff_list.append(name + ".file_path" + val_str)
+            else:
+                diff_list.append(name + ".file_path")
         if other._surf_dict != self._surf_dict:
-            diff_list.append(name + ".surf_dict")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._surf_dict)
+                    + ", other="
+                    + str(other._surf_dict)
+                    + ")"
+                )
+                diff_list.append(name + ".surf_dict" + val_str)
+            else:
+                diff_list.append(name + ".surf_dict")
         if other._BC_list != self._BC_list:
-            diff_list.append(name + ".BC_list")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._BC_list)
+                    + ", other="
+                    + str(other._BC_list)
+                    + ")"
+                )
+                diff_list.append(name + ".BC_list" + val_str)
+            else:
+                diff_list.append(name + ".BC_list")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -185,7 +216,7 @@ class DXFImport(FrozenClass):
     file_path = property(
         fget=_get_file_path,
         fset=_set_file_path,
-        doc=u"""Path to the DXF file to import
+        doc=u"""Path to the DXF file to import [-]
 
         :Type: str
         """,
@@ -205,7 +236,7 @@ class DXFImport(FrozenClass):
     surf_dict = property(
         fget=_get_surf_dict,
         fset=_set_surf_dict,
-        doc=u"""dictionary to assign the surfaces: key=complex reference point coordinate, value=label of the surface
+        doc=u"""dictionary to assign the surfaces: key=complex reference point coordinate, value=label of the surface [-]
 
         :Type: dict
         """,
@@ -225,7 +256,7 @@ class DXFImport(FrozenClass):
     BC_list = property(
         fget=_get_BC_list,
         fset=_set_BC_list,
-        doc=u"""List of tuple to apply boundary conditions (complex reference point coordinate, is_arc, label of the BC to apply)
+        doc=u"""List of tuple to apply boundary conditions (complex reference point coordinate, is_arc, label of the BC to apply) [-]
 
         :Type: list
         """,

@@ -73,6 +73,7 @@ except ImportError as error:
     remove_magnet = error
 
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 
@@ -375,7 +376,7 @@ class HoleM51(HoleMag):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -385,36 +386,166 @@ class HoleM51(HoleMag):
         diff_list = list()
 
         # Check the properties inherited from HoleMag
-        diff_list.extend(super(HoleM51, self).compare(other, name=name))
-        if other._H0 != self._H0:
-            diff_list.append(name + ".H0")
-        if other._H1 != self._H1:
-            diff_list.append(name + ".H1")
-        if other._H2 != self._H2:
-            diff_list.append(name + ".H2")
-        if other._W0 != self._W0:
-            diff_list.append(name + ".W0")
-        if other._W1 != self._W1:
-            diff_list.append(name + ".W1")
-        if other._W2 != self._W2:
-            diff_list.append(name + ".W2")
-        if other._W3 != self._W3:
-            diff_list.append(name + ".W3")
-        if other._W4 != self._W4:
-            diff_list.append(name + ".W4")
-        if other._W5 != self._W5:
-            diff_list.append(name + ".W5")
-        if other._W6 != self._W6:
-            diff_list.append(name + ".W6")
-        if other._W7 != self._W7:
-            diff_list.append(name + ".W7")
+        diff_list.extend(
+            super(HoleM51, self).compare(
+                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
+            )
+        )
+        if (
+            other._H0 is not None
+            and self._H0 is not None
+            and isnan(other._H0)
+            and isnan(self._H0)
+        ):
+            pass
+        elif other._H0 != self._H0:
+            if is_add_value:
+                val_str = " (self=" + str(self._H0) + ", other=" + str(other._H0) + ")"
+                diff_list.append(name + ".H0" + val_str)
+            else:
+                diff_list.append(name + ".H0")
+        if (
+            other._H1 is not None
+            and self._H1 is not None
+            and isnan(other._H1)
+            and isnan(self._H1)
+        ):
+            pass
+        elif other._H1 != self._H1:
+            if is_add_value:
+                val_str = " (self=" + str(self._H1) + ", other=" + str(other._H1) + ")"
+                diff_list.append(name + ".H1" + val_str)
+            else:
+                diff_list.append(name + ".H1")
+        if (
+            other._H2 is not None
+            and self._H2 is not None
+            and isnan(other._H2)
+            and isnan(self._H2)
+        ):
+            pass
+        elif other._H2 != self._H2:
+            if is_add_value:
+                val_str = " (self=" + str(self._H2) + ", other=" + str(other._H2) + ")"
+                diff_list.append(name + ".H2" + val_str)
+            else:
+                diff_list.append(name + ".H2")
+        if (
+            other._W0 is not None
+            and self._W0 is not None
+            and isnan(other._W0)
+            and isnan(self._W0)
+        ):
+            pass
+        elif other._W0 != self._W0:
+            if is_add_value:
+                val_str = " (self=" + str(self._W0) + ", other=" + str(other._W0) + ")"
+                diff_list.append(name + ".W0" + val_str)
+            else:
+                diff_list.append(name + ".W0")
+        if (
+            other._W1 is not None
+            and self._W1 is not None
+            and isnan(other._W1)
+            and isnan(self._W1)
+        ):
+            pass
+        elif other._W1 != self._W1:
+            if is_add_value:
+                val_str = " (self=" + str(self._W1) + ", other=" + str(other._W1) + ")"
+                diff_list.append(name + ".W1" + val_str)
+            else:
+                diff_list.append(name + ".W1")
+        if (
+            other._W2 is not None
+            and self._W2 is not None
+            and isnan(other._W2)
+            and isnan(self._W2)
+        ):
+            pass
+        elif other._W2 != self._W2:
+            if is_add_value:
+                val_str = " (self=" + str(self._W2) + ", other=" + str(other._W2) + ")"
+                diff_list.append(name + ".W2" + val_str)
+            else:
+                diff_list.append(name + ".W2")
+        if (
+            other._W3 is not None
+            and self._W3 is not None
+            and isnan(other._W3)
+            and isnan(self._W3)
+        ):
+            pass
+        elif other._W3 != self._W3:
+            if is_add_value:
+                val_str = " (self=" + str(self._W3) + ", other=" + str(other._W3) + ")"
+                diff_list.append(name + ".W3" + val_str)
+            else:
+                diff_list.append(name + ".W3")
+        if (
+            other._W4 is not None
+            and self._W4 is not None
+            and isnan(other._W4)
+            and isnan(self._W4)
+        ):
+            pass
+        elif other._W4 != self._W4:
+            if is_add_value:
+                val_str = " (self=" + str(self._W4) + ", other=" + str(other._W4) + ")"
+                diff_list.append(name + ".W4" + val_str)
+            else:
+                diff_list.append(name + ".W4")
+        if (
+            other._W5 is not None
+            and self._W5 is not None
+            and isnan(other._W5)
+            and isnan(self._W5)
+        ):
+            pass
+        elif other._W5 != self._W5:
+            if is_add_value:
+                val_str = " (self=" + str(self._W5) + ", other=" + str(other._W5) + ")"
+                diff_list.append(name + ".W5" + val_str)
+            else:
+                diff_list.append(name + ".W5")
+        if (
+            other._W6 is not None
+            and self._W6 is not None
+            and isnan(other._W6)
+            and isnan(self._W6)
+        ):
+            pass
+        elif other._W6 != self._W6:
+            if is_add_value:
+                val_str = " (self=" + str(self._W6) + ", other=" + str(other._W6) + ")"
+                diff_list.append(name + ".W6" + val_str)
+            else:
+                diff_list.append(name + ".W6")
+        if (
+            other._W7 is not None
+            and self._W7 is not None
+            and isnan(other._W7)
+            and isnan(self._W7)
+        ):
+            pass
+        elif other._W7 != self._W7:
+            if is_add_value:
+                val_str = " (self=" + str(self._W7) + ", other=" + str(other._W7) + ")"
+                diff_list.append(name + ".W7" + val_str)
+            else:
+                diff_list.append(name + ".W7")
         if (other.magnet_0 is None and self.magnet_0 is not None) or (
             other.magnet_0 is not None and self.magnet_0 is None
         ):
             diff_list.append(name + ".magnet_0 None mismatch")
         elif self.magnet_0 is not None:
             diff_list.extend(
-                self.magnet_0.compare(other.magnet_0, name=name + ".magnet_0")
+                self.magnet_0.compare(
+                    other.magnet_0,
+                    name=name + ".magnet_0",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
             )
         if (other.magnet_1 is None and self.magnet_1 is not None) or (
             other.magnet_1 is not None and self.magnet_1 is None
@@ -422,7 +553,12 @@ class HoleM51(HoleMag):
             diff_list.append(name + ".magnet_1 None mismatch")
         elif self.magnet_1 is not None:
             diff_list.extend(
-                self.magnet_1.compare(other.magnet_1, name=name + ".magnet_1")
+                self.magnet_1.compare(
+                    other.magnet_1,
+                    name=name + ".magnet_1",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
             )
         if (other.magnet_2 is None and self.magnet_2 is not None) or (
             other.magnet_2 is not None and self.magnet_2 is None
@@ -430,7 +566,12 @@ class HoleM51(HoleMag):
             diff_list.append(name + ".magnet_2 None mismatch")
         elif self.magnet_2 is not None:
             diff_list.extend(
-                self.magnet_2.compare(other.magnet_2, name=name + ".magnet_2")
+                self.magnet_2.compare(
+                    other.magnet_2,
+                    name=name + ".magnet_2",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
             )
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
@@ -551,7 +692,7 @@ class HoleM51(HoleMag):
     H0 = property(
         fget=_get_H0,
         fset=_set_H0,
-        doc=u"""Hole depth
+        doc=u"""Hole depth [m]
 
         :Type: float
         :min: 0
@@ -570,7 +711,7 @@ class HoleM51(HoleMag):
     H1 = property(
         fget=_get_H1,
         fset=_set_H1,
-        doc=u"""Distance from the lamination Bore
+        doc=u"""Distance from the lamination Bore [m]
 
         :Type: float
         :min: 0
@@ -589,7 +730,7 @@ class HoleM51(HoleMag):
     H2 = property(
         fget=_get_H2,
         fset=_set_H2,
-        doc=u"""Hole width
+        doc=u"""Hole width [m]
 
         :Type: float
         :min: 0
@@ -608,7 +749,7 @@ class HoleM51(HoleMag):
     W0 = property(
         fget=_get_W0,
         fset=_set_W0,
-        doc=u"""Hole bottom width
+        doc=u"""Hole bottom width [m]
 
         :Type: float
         :min: 0
@@ -627,7 +768,7 @@ class HoleM51(HoleMag):
     W1 = property(
         fget=_get_W1,
         fset=_set_W1,
-        doc=u"""Hole angular width
+        doc=u"""Hole angular width [rad]
 
         :Type: float
         :min: 0
@@ -646,7 +787,7 @@ class HoleM51(HoleMag):
     W2 = property(
         fget=_get_W2,
         fset=_set_W2,
-        doc=u"""magnet_1 position
+        doc=u"""magnet_1 position [m]
 
         :Type: float
         :min: 0
@@ -665,7 +806,7 @@ class HoleM51(HoleMag):
     W3 = property(
         fget=_get_W3,
         fset=_set_W3,
-        doc=u"""magnet_1 width
+        doc=u"""magnet_1 width [m]
 
         :Type: float
         :min: 0
@@ -684,7 +825,7 @@ class HoleM51(HoleMag):
     W4 = property(
         fget=_get_W4,
         fset=_set_W4,
-        doc=u"""magnet_2 position
+        doc=u"""magnet_2 position [m]
 
         :Type: float
         :min: 0
@@ -703,7 +844,7 @@ class HoleM51(HoleMag):
     W5 = property(
         fget=_get_W5,
         fset=_set_W5,
-        doc=u"""magnet_2 width
+        doc=u"""magnet_2 width [m]
 
         :Type: float
         :min: 0
@@ -722,7 +863,7 @@ class HoleM51(HoleMag):
     W6 = property(
         fget=_get_W6,
         fset=_set_W6,
-        doc=u"""magnet_0 position
+        doc=u"""magnet_0 position [m]
 
         :Type: float
         :min: 0
@@ -741,7 +882,7 @@ class HoleM51(HoleMag):
     W7 = property(
         fget=_get_W7,
         fset=_set_W7,
-        doc=u"""magnet_0 width
+        doc=u"""magnet_0 width [m]
 
         :Type: float
         :min: 0
@@ -779,7 +920,7 @@ class HoleM51(HoleMag):
     magnet_0 = property(
         fget=_get_magnet_0,
         fset=_set_magnet_0,
-        doc=u"""First Magnet
+        doc=u"""First Magnet [-]
 
         :Type: Magnet
         """,
@@ -816,7 +957,7 @@ class HoleM51(HoleMag):
     magnet_1 = property(
         fget=_get_magnet_1,
         fset=_set_magnet_1,
-        doc=u"""Second Magnet
+        doc=u"""Second Magnet [-]
 
         :Type: Magnet
         """,
@@ -853,7 +994,7 @@ class HoleM51(HoleMag):
     magnet_2 = property(
         fget=_get_magnet_2,
         fset=_set_magnet_2,
-        doc=u"""Third Magnet
+        doc=u"""Third Magnet [-]
 
         :Type: Magnet
         """,

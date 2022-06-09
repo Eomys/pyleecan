@@ -77,6 +77,7 @@ except ImportError as error:
     print_memory = error
 
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 
@@ -359,7 +360,7 @@ class Output(FrozenClass):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -372,53 +373,129 @@ class Output(FrozenClass):
         ):
             diff_list.append(name + ".simu None mismatch")
         elif self.simu is not None:
-            diff_list.extend(self.simu.compare(other.simu, name=name + ".simu"))
+            diff_list.extend(
+                self.simu.compare(
+                    other.simu,
+                    name=name + ".simu",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
+            )
         if other._path_result != self._path_result:
-            diff_list.append(name + ".path_result")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._path_result)
+                    + ", other="
+                    + str(other._path_result)
+                    + ")"
+                )
+                diff_list.append(name + ".path_result" + val_str)
+            else:
+                diff_list.append(name + ".path_result")
         if (other.geo is None and self.geo is not None) or (
             other.geo is not None and self.geo is None
         ):
             diff_list.append(name + ".geo None mismatch")
         elif self.geo is not None:
-            diff_list.extend(self.geo.compare(other.geo, name=name + ".geo"))
+            diff_list.extend(
+                self.geo.compare(
+                    other.geo,
+                    name=name + ".geo",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
+            )
         if (other.elec is None and self.elec is not None) or (
             other.elec is not None and self.elec is None
         ):
             diff_list.append(name + ".elec None mismatch")
         elif self.elec is not None:
-            diff_list.extend(self.elec.compare(other.elec, name=name + ".elec"))
+            diff_list.extend(
+                self.elec.compare(
+                    other.elec,
+                    name=name + ".elec",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
+            )
         if (other.mag is None and self.mag is not None) or (
             other.mag is not None and self.mag is None
         ):
             diff_list.append(name + ".mag None mismatch")
         elif self.mag is not None:
-            diff_list.extend(self.mag.compare(other.mag, name=name + ".mag"))
+            diff_list.extend(
+                self.mag.compare(
+                    other.mag,
+                    name=name + ".mag",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
+            )
         if (other.struct is None and self.struct is not None) or (
             other.struct is not None and self.struct is None
         ):
             diff_list.append(name + ".struct None mismatch")
         elif self.struct is not None:
-            diff_list.extend(self.struct.compare(other.struct, name=name + ".struct"))
+            diff_list.extend(
+                self.struct.compare(
+                    other.struct,
+                    name=name + ".struct",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
+            )
         if (other.post is None and self.post is not None) or (
             other.post is not None and self.post is None
         ):
             diff_list.append(name + ".post None mismatch")
         elif self.post is not None:
-            diff_list.extend(self.post.compare(other.post, name=name + ".post"))
+            diff_list.extend(
+                self.post.compare(
+                    other.post,
+                    name=name + ".post",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
+            )
         if other._logger_name != self._logger_name:
-            diff_list.append(name + ".logger_name")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._logger_name)
+                    + ", other="
+                    + str(other._logger_name)
+                    + ")"
+                )
+                diff_list.append(name + ".logger_name" + val_str)
+            else:
+                diff_list.append(name + ".logger_name")
         if (other.force is None and self.force is not None) or (
             other.force is not None and self.force is None
         ):
             diff_list.append(name + ".force None mismatch")
         elif self.force is not None:
-            diff_list.extend(self.force.compare(other.force, name=name + ".force"))
+            diff_list.extend(
+                self.force.compare(
+                    other.force,
+                    name=name + ".force",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
+            )
         if (other.loss is None and self.loss is not None) or (
             other.loss is not None and self.loss is None
         ):
             diff_list.append(name + ".loss None mismatch")
         elif self.loss is not None:
-            diff_list.extend(self.loss.compare(other.loss, name=name + ".loss"))
+            diff_list.extend(
+                self.loss.compare(
+                    other.loss,
+                    name=name + ".loss",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
+            )
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -572,7 +649,7 @@ class Output(FrozenClass):
     simu = property(
         fget=_get_simu,
         fset=_set_simu,
-        doc=u"""Simulation object that generated the Output
+        doc=u"""Simulation object that generated the Output [-]
 
         :Type: Simulation
         """,
@@ -590,7 +667,7 @@ class Output(FrozenClass):
     path_result = property(
         fget=_get_path_result,
         fset=_set_path_result,
-        doc=u"""Path to the folder to same the results
+        doc=u"""Path to the folder to same the results [-]
 
         :Type: str
         """,
@@ -625,7 +702,7 @@ class Output(FrozenClass):
     geo = property(
         fget=_get_geo,
         fset=_set_geo,
-        doc=u"""Geometry output
+        doc=u"""Geometry output [-]
 
         :Type: OutGeo
         """,
@@ -660,7 +737,7 @@ class Output(FrozenClass):
     elec = property(
         fget=_get_elec,
         fset=_set_elec,
-        doc=u"""Electrical module output
+        doc=u"""Electrical module output [-]
 
         :Type: OutElec
         """,
@@ -695,7 +772,7 @@ class Output(FrozenClass):
     mag = property(
         fget=_get_mag,
         fset=_set_mag,
-        doc=u"""Magnetic module output
+        doc=u"""Magnetic module output [-]
 
         :Type: OutMag
         """,
@@ -732,7 +809,7 @@ class Output(FrozenClass):
     struct = property(
         fget=_get_struct,
         fset=_set_struct,
-        doc=u"""Structural module output
+        doc=u"""Structural module output [-]
 
         :Type: OutStruct
         """,
@@ -767,7 +844,7 @@ class Output(FrozenClass):
     post = property(
         fget=_get_post,
         fset=_set_post,
-        doc=u"""Post-Processing settings
+        doc=u"""Post-Processing settings [-]
 
         :Type: OutPost
         """,
@@ -785,7 +862,7 @@ class Output(FrozenClass):
     logger_name = property(
         fget=_get_logger_name,
         fset=_set_logger_name,
-        doc=u"""Name of the logger to use
+        doc=u"""Name of the logger to use [-]
 
         :Type: str
         """,
@@ -822,7 +899,7 @@ class Output(FrozenClass):
     force = property(
         fget=_get_force,
         fset=_set_force,
-        doc=u"""Force module output
+        doc=u"""Force module output [-]
 
         :Type: OutForce
         """,
@@ -857,7 +934,7 @@ class Output(FrozenClass):
     loss = property(
         fget=_get_loss,
         fset=_set_loss,
-        doc=u"""Loss module output
+        doc=u"""Loss module output [-]
 
         :Type: OutLoss
         """,

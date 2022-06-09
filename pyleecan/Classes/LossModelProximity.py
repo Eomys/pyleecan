@@ -28,6 +28,7 @@ except ImportError as error:
     comp_loss = error
 
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 
@@ -131,7 +132,7 @@ class LossModelProximity(LossModel):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -141,9 +142,26 @@ class LossModelProximity(LossModel):
         diff_list = list()
 
         # Check the properties inherited from LossModel
-        diff_list.extend(super(LossModelProximity, self).compare(other, name=name))
-        if other._k_p != self._k_p:
-            diff_list.append(name + ".k_p")
+        diff_list.extend(
+            super(LossModelProximity, self).compare(
+                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
+            )
+        )
+        if (
+            other._k_p is not None
+            and self._k_p is not None
+            and isnan(other._k_p)
+            and isnan(self._k_p)
+        ):
+            pass
+        elif other._k_p != self._k_p:
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._k_p) + ", other=" + str(other._k_p) + ")"
+                )
+                diff_list.append(name + ".k_p" + val_str)
+            else:
+                diff_list.append(name + ".k_p")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -200,7 +218,7 @@ class LossModelProximity(LossModel):
     k_p = property(
         fget=_get_k_p,
         fset=_set_k_p,
-        doc=u"""Proximity loss coefficient
+        doc=u"""Proximity loss coefficient [W/kg]
 
         :Type: float
         """,

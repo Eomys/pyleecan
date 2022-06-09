@@ -15,6 +15,7 @@ from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
 from ._frozen import FrozenClass
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 
@@ -80,7 +81,7 @@ class OutPost(FrozenClass):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -89,9 +90,29 @@ class OutPost(FrozenClass):
             return ["type(" + name + ")"]
         diff_list = list()
         if other._legend_name != self._legend_name:
-            diff_list.append(name + ".legend_name")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._legend_name)
+                    + ", other="
+                    + str(other._legend_name)
+                    + ")"
+                )
+                diff_list.append(name + ".legend_name" + val_str)
+            else:
+                diff_list.append(name + ".legend_name")
         if other._line_color != self._line_color:
-            diff_list.append(name + ".line_color")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._line_color)
+                    + ", other="
+                    + str(other._line_color)
+                    + ")"
+                )
+                diff_list.append(name + ".line_color" + val_str)
+            else:
+                diff_list.append(name + ".line_color")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -140,7 +161,7 @@ class OutPost(FrozenClass):
     legend_name = property(
         fget=_get_legend_name,
         fset=_set_legend_name,
-        doc=u"""Name to use in the legend in case of comparison
+        doc=u"""Name to use in the legend in case of comparison [-]
 
         :Type: str
         """,
@@ -158,7 +179,7 @@ class OutPost(FrozenClass):
     line_color = property(
         fget=_get_line_color,
         fset=_set_line_color,
-        doc=u"""Color to use in case of comparison
+        doc=u"""Color to use in case of comparison [-]
 
         :Type: str
         """,

@@ -63,6 +63,7 @@ except ImportError as error:
     comp_surface_active = error
 
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 
@@ -286,7 +287,7 @@ class SlotDC(Slot):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -296,23 +297,115 @@ class SlotDC(Slot):
         diff_list = list()
 
         # Check the properties inherited from Slot
-        diff_list.extend(super(SlotDC, self).compare(other, name=name))
-        if other._W1 != self._W1:
-            diff_list.append(name + ".W1")
-        if other._H1 != self._H1:
-            diff_list.append(name + ".H1")
-        if other._D1 != self._D1:
-            diff_list.append(name + ".D1")
-        if other._W2 != self._W2:
-            diff_list.append(name + ".W2")
-        if other._H2 != self._H2:
-            diff_list.append(name + ".H2")
-        if other._D2 != self._D2:
-            diff_list.append(name + ".D2")
-        if other._H3 != self._H3:
-            diff_list.append(name + ".H3")
-        if other._R3 != self._R3:
-            diff_list.append(name + ".R3")
+        diff_list.extend(
+            super(SlotDC, self).compare(
+                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
+            )
+        )
+        if (
+            other._W1 is not None
+            and self._W1 is not None
+            and isnan(other._W1)
+            and isnan(self._W1)
+        ):
+            pass
+        elif other._W1 != self._W1:
+            if is_add_value:
+                val_str = " (self=" + str(self._W1) + ", other=" + str(other._W1) + ")"
+                diff_list.append(name + ".W1" + val_str)
+            else:
+                diff_list.append(name + ".W1")
+        if (
+            other._H1 is not None
+            and self._H1 is not None
+            and isnan(other._H1)
+            and isnan(self._H1)
+        ):
+            pass
+        elif other._H1 != self._H1:
+            if is_add_value:
+                val_str = " (self=" + str(self._H1) + ", other=" + str(other._H1) + ")"
+                diff_list.append(name + ".H1" + val_str)
+            else:
+                diff_list.append(name + ".H1")
+        if (
+            other._D1 is not None
+            and self._D1 is not None
+            and isnan(other._D1)
+            and isnan(self._D1)
+        ):
+            pass
+        elif other._D1 != self._D1:
+            if is_add_value:
+                val_str = " (self=" + str(self._D1) + ", other=" + str(other._D1) + ")"
+                diff_list.append(name + ".D1" + val_str)
+            else:
+                diff_list.append(name + ".D1")
+        if (
+            other._W2 is not None
+            and self._W2 is not None
+            and isnan(other._W2)
+            and isnan(self._W2)
+        ):
+            pass
+        elif other._W2 != self._W2:
+            if is_add_value:
+                val_str = " (self=" + str(self._W2) + ", other=" + str(other._W2) + ")"
+                diff_list.append(name + ".W2" + val_str)
+            else:
+                diff_list.append(name + ".W2")
+        if (
+            other._H2 is not None
+            and self._H2 is not None
+            and isnan(other._H2)
+            and isnan(self._H2)
+        ):
+            pass
+        elif other._H2 != self._H2:
+            if is_add_value:
+                val_str = " (self=" + str(self._H2) + ", other=" + str(other._H2) + ")"
+                diff_list.append(name + ".H2" + val_str)
+            else:
+                diff_list.append(name + ".H2")
+        if (
+            other._D2 is not None
+            and self._D2 is not None
+            and isnan(other._D2)
+            and isnan(self._D2)
+        ):
+            pass
+        elif other._D2 != self._D2:
+            if is_add_value:
+                val_str = " (self=" + str(self._D2) + ", other=" + str(other._D2) + ")"
+                diff_list.append(name + ".D2" + val_str)
+            else:
+                diff_list.append(name + ".D2")
+        if (
+            other._H3 is not None
+            and self._H3 is not None
+            and isnan(other._H3)
+            and isnan(self._H3)
+        ):
+            pass
+        elif other._H3 != self._H3:
+            if is_add_value:
+                val_str = " (self=" + str(self._H3) + ", other=" + str(other._H3) + ")"
+                diff_list.append(name + ".H3" + val_str)
+            else:
+                diff_list.append(name + ".H3")
+        if (
+            other._R3 is not None
+            and self._R3 is not None
+            and isnan(other._R3)
+            and isnan(self._R3)
+        ):
+            pass
+        elif other._R3 != self._R3:
+            if is_add_value:
+                val_str = " (self=" + str(self._R3) + ", other=" + str(other._R3) + ")"
+                diff_list.append(name + ".R3" + val_str)
+            else:
+                diff_list.append(name + ".R3")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -390,7 +483,7 @@ class SlotDC(Slot):
     W1 = property(
         fget=_get_W1,
         fset=_set_W1,
-        doc=u"""Slot isthmus width.
+        doc=u"""Slot isthmus width. [m]
 
         :Type: float
         :min: 0
@@ -409,7 +502,7 @@ class SlotDC(Slot):
     H1 = property(
         fget=_get_H1,
         fset=_set_H1,
-        doc=u"""Distance upper rod center to bore
+        doc=u"""Distance upper rod center to bore [m]
 
         :Type: float
         :min: 0
@@ -428,7 +521,7 @@ class SlotDC(Slot):
     D1 = property(
         fget=_get_D1,
         fset=_set_D1,
-        doc=u"""Diameter upper rod
+        doc=u"""Diameter upper rod [m]
 
         :Type: float
         :min: 0
@@ -447,7 +540,7 @@ class SlotDC(Slot):
     W2 = property(
         fget=_get_W2,
         fset=_set_W2,
-        doc=u"""Middle connection width
+        doc=u"""Middle connection width [m]
 
         :Type: float
         :min: 0
@@ -466,7 +559,7 @@ class SlotDC(Slot):
     H2 = property(
         fget=_get_H2,
         fset=_set_H2,
-        doc=u"""Height between the first and second center
+        doc=u"""Height between the first and second center [m]
 
         :Type: float
         :min: 0
@@ -485,7 +578,7 @@ class SlotDC(Slot):
     D2 = property(
         fget=_get_D2,
         fset=_set_D2,
-        doc=u"""Diameter upper section lower rod
+        doc=u"""Diameter upper section lower rod [m]
 
         :Type: float
         :min: 0
@@ -504,7 +597,7 @@ class SlotDC(Slot):
     H3 = property(
         fget=_get_H3,
         fset=_set_H3,
-        doc=u"""Length of lower rod
+        doc=u"""Length of lower rod [m]
 
         :Type: float
         :min: 0
@@ -523,7 +616,7 @@ class SlotDC(Slot):
     R3 = property(
         fget=_get_R3,
         fset=_set_R3,
-        doc=u"""Radius lower section lower rod
+        doc=u"""Radius lower section lower rod [m]
 
         :Type: float
         :min: 0

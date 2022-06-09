@@ -28,6 +28,7 @@ except ImportError as error:
     BH_func = error
 
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 
@@ -147,7 +148,7 @@ class ModelBH_linear_sat(ModelBH):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -157,15 +158,77 @@ class ModelBH_linear_sat(ModelBH):
         diff_list = list()
 
         # Check the properties inherited from ModelBH
-        diff_list.extend(super(ModelBH_linear_sat, self).compare(other, name=name))
-        if other._Bs != self._Bs:
-            diff_list.append(name + ".Bs")
-        if other._mu_a != self._mu_a:
-            diff_list.append(name + ".mu_a")
-        if other._param1 != self._param1:
-            diff_list.append(name + ".param1")
-        if other._param2 != self._param2:
-            diff_list.append(name + ".param2")
+        diff_list.extend(
+            super(ModelBH_linear_sat, self).compare(
+                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
+            )
+        )
+        if (
+            other._Bs is not None
+            and self._Bs is not None
+            and isnan(other._Bs)
+            and isnan(self._Bs)
+        ):
+            pass
+        elif other._Bs != self._Bs:
+            if is_add_value:
+                val_str = " (self=" + str(self._Bs) + ", other=" + str(other._Bs) + ")"
+                diff_list.append(name + ".Bs" + val_str)
+            else:
+                diff_list.append(name + ".Bs")
+        if (
+            other._mu_a is not None
+            and self._mu_a is not None
+            and isnan(other._mu_a)
+            and isnan(self._mu_a)
+        ):
+            pass
+        elif other._mu_a != self._mu_a:
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._mu_a) + ", other=" + str(other._mu_a) + ")"
+                )
+                diff_list.append(name + ".mu_a" + val_str)
+            else:
+                diff_list.append(name + ".mu_a")
+        if (
+            other._param1 is not None
+            and self._param1 is not None
+            and isnan(other._param1)
+            and isnan(self._param1)
+        ):
+            pass
+        elif other._param1 != self._param1:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._param1)
+                    + ", other="
+                    + str(other._param1)
+                    + ")"
+                )
+                diff_list.append(name + ".param1" + val_str)
+            else:
+                diff_list.append(name + ".param1")
+        if (
+            other._param2 is not None
+            and self._param2 is not None
+            and isnan(other._param2)
+            and isnan(self._param2)
+        ):
+            pass
+        elif other._param2 != self._param2:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._param2)
+                    + ", other="
+                    + str(other._param2)
+                    + ")"
+                )
+                diff_list.append(name + ".param2" + val_str)
+            else:
+                diff_list.append(name + ".param2")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -231,7 +294,7 @@ class ModelBH_linear_sat(ModelBH):
     Bs = property(
         fget=_get_Bs,
         fset=_set_Bs,
-        doc=u"""Saturation flux density
+        doc=u"""Saturation flux density [T]
 
         :Type: float
         """,
@@ -249,7 +312,7 @@ class ModelBH_linear_sat(ModelBH):
     mu_a = property(
         fget=_get_mu_a,
         fset=_set_mu_a,
-        doc=u"""Linear permeability
+        doc=u"""Linear permeability [-]
 
         :Type: float
         """,
@@ -267,7 +330,7 @@ class ModelBH_linear_sat(ModelBH):
     param1 = property(
         fget=_get_param1,
         fset=_set_param1,
-        doc=u"""Init value for Bs for fitting algorithm
+        doc=u"""Init value for Bs for fitting algorithm [-]
 
         :Type: float
         """,
@@ -285,7 +348,7 @@ class ModelBH_linear_sat(ModelBH):
     param2 = property(
         fget=_get_param2,
         fset=_set_param2,
-        doc=u"""Init value for mu_a for fitting algorithm
+        doc=u"""Init value for mu_a for fitting algorithm [-]
 
         :Type: float
         """,

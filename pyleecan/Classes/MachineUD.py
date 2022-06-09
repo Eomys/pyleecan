@@ -28,6 +28,7 @@ except ImportError as error:
     is_synchronous = error
 
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 
@@ -153,7 +154,7 @@ class MachineUD(Machine):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -163,7 +164,11 @@ class MachineUD(Machine):
         diff_list = list()
 
         # Check the properties inherited from Machine
-        diff_list.extend(super(MachineUD, self).compare(other, name=name))
+        diff_list.extend(
+            super(MachineUD, self).compare(
+                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
+            )
+        )
         if (other.lam_list is None and self.lam_list is not None) or (
             other.lam_list is not None and self.lam_list is None
         ):
@@ -176,11 +181,24 @@ class MachineUD(Machine):
             for ii in range(len(other.lam_list)):
                 diff_list.extend(
                     self.lam_list[ii].compare(
-                        other.lam_list[ii], name=name + ".lam_list[" + str(ii) + "]"
+                        other.lam_list[ii],
+                        name=name + ".lam_list[" + str(ii) + "]",
+                        ignore_list=ignore_list,
+                        is_add_value=is_add_value,
                     )
                 )
         if other._is_sync != self._is_sync:
-            diff_list.append(name + ".is_sync")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._is_sync)
+                    + ", other="
+                    + str(other._is_sync)
+                    + ")"
+                )
+                diff_list.append(name + ".is_sync" + val_str)
+            else:
+                diff_list.append(name + ".is_sync")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list

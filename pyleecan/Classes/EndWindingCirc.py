@@ -28,6 +28,7 @@ except ImportError as error:
     comp_inductance = error
 
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 
@@ -115,7 +116,7 @@ class EndWindingCirc(EndWinding):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -125,9 +126,30 @@ class EndWindingCirc(EndWinding):
         diff_list = list()
 
         # Check the properties inherited from EndWinding
-        diff_list.extend(super(EndWindingCirc, self).compare(other, name=name))
-        if other._coil_pitch != self._coil_pitch:
-            diff_list.append(name + ".coil_pitch")
+        diff_list.extend(
+            super(EndWindingCirc, self).compare(
+                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
+            )
+        )
+        if (
+            other._coil_pitch is not None
+            and self._coil_pitch is not None
+            and isnan(other._coil_pitch)
+            and isnan(self._coil_pitch)
+        ):
+            pass
+        elif other._coil_pitch != self._coil_pitch:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._coil_pitch)
+                    + ", other="
+                    + str(other._coil_pitch)
+                    + ")"
+                )
+                diff_list.append(name + ".coil_pitch" + val_str)
+            else:
+                diff_list.append(name + ".coil_pitch")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list

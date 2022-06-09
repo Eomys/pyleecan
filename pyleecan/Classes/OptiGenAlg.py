@@ -20,6 +20,7 @@ from os.path import isfile
 from ._check import CheckTypeError
 import numpy as np
 import random
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 
@@ -160,7 +161,7 @@ class OptiGenAlg(OptiSolver):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -170,21 +171,79 @@ class OptiGenAlg(OptiSolver):
         diff_list = list()
 
         # Check the properties inherited from OptiSolver
-        diff_list.extend(super(OptiGenAlg, self).compare(other, name=name))
+        diff_list.extend(
+            super(OptiGenAlg, self).compare(
+                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
+            )
+        )
         if other._selector_str != self._selector_str:
             diff_list.append(name + ".selector")
         if other._crossover_str != self._crossover_str:
             diff_list.append(name + ".crossover")
         if other._mutator_str != self._mutator_str:
             diff_list.append(name + ".mutator")
-        if other._p_cross != self._p_cross:
-            diff_list.append(name + ".p_cross")
-        if other._p_mutate != self._p_mutate:
-            diff_list.append(name + ".p_mutate")
+        if (
+            other._p_cross is not None
+            and self._p_cross is not None
+            and isnan(other._p_cross)
+            and isnan(self._p_cross)
+        ):
+            pass
+        elif other._p_cross != self._p_cross:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._p_cross)
+                    + ", other="
+                    + str(other._p_cross)
+                    + ")"
+                )
+                diff_list.append(name + ".p_cross" + val_str)
+            else:
+                diff_list.append(name + ".p_cross")
+        if (
+            other._p_mutate is not None
+            and self._p_mutate is not None
+            and isnan(other._p_mutate)
+            and isnan(self._p_mutate)
+        ):
+            pass
+        elif other._p_mutate != self._p_mutate:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._p_mutate)
+                    + ", other="
+                    + str(other._p_mutate)
+                    + ")"
+                )
+                diff_list.append(name + ".p_mutate" + val_str)
+            else:
+                diff_list.append(name + ".p_mutate")
         if other._size_pop != self._size_pop:
-            diff_list.append(name + ".size_pop")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._size_pop)
+                    + ", other="
+                    + str(other._size_pop)
+                    + ")"
+                )
+                diff_list.append(name + ".size_pop" + val_str)
+            else:
+                diff_list.append(name + ".size_pop")
         if other._nb_gen != self._nb_gen:
-            diff_list.append(name + ".nb_gen")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._nb_gen)
+                    + ", other="
+                    + str(other._nb_gen)
+                    + ")"
+                )
+                diff_list.append(name + ".nb_gen" + val_str)
+            else:
+                diff_list.append(name + ".nb_gen")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -309,7 +368,7 @@ class OptiGenAlg(OptiSolver):
     selector = property(
         fget=_get_selector,
         fset=_set_selector,
-        doc="""Selector of the genetic algorithm
+        doc="""Selector of the genetic algorithm [-]
 
         :Type: function
         """,
@@ -344,7 +403,7 @@ class OptiGenAlg(OptiSolver):
     crossover = property(
         fget=_get_crossover,
         fset=_set_crossover,
-        doc="""Crossover of the genetic algorithm
+        doc="""Crossover of the genetic algorithm [-]
 
         :Type: function
         """,
@@ -379,7 +438,7 @@ class OptiGenAlg(OptiSolver):
     mutator = property(
         fget=_get_mutator,
         fset=_set_mutator,
-        doc="""Mutator of the genetic algorithm
+        doc="""Mutator of the genetic algorithm [-]
 
         :Type: function
         """,
@@ -397,7 +456,7 @@ class OptiGenAlg(OptiSolver):
     p_cross = property(
         fget=_get_p_cross,
         fset=_set_p_cross,
-        doc="""Probability of crossover
+        doc="""Probability of crossover [-]
 
         :Type: float
         :min: 0
@@ -417,7 +476,7 @@ class OptiGenAlg(OptiSolver):
     p_mutate = property(
         fget=_get_p_mutate,
         fset=_set_p_mutate,
-        doc="""Probability of mutation 
+        doc="""Probability of mutation  [-]
 
         :Type: float
         :min: 0
@@ -437,7 +496,7 @@ class OptiGenAlg(OptiSolver):
     size_pop = property(
         fget=_get_size_pop,
         fset=_set_size_pop,
-        doc="""Size of the population
+        doc="""Size of the population [-]
 
         :Type: int
         :min: 1
@@ -456,7 +515,7 @@ class OptiGenAlg(OptiSolver):
     nb_gen = property(
         fget=_get_nb_gen,
         fset=_set_nb_gen,
-        doc="""Number of generations
+        doc="""Number of generations [-]
 
         :Type: int
         :min: 1

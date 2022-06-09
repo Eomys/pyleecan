@@ -53,6 +53,7 @@ except ImportError as error:
     plot = error
 
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 
@@ -204,7 +205,7 @@ class Frame(FrozenClass):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -212,19 +213,63 @@ class Frame(FrozenClass):
         if type(other) != type(self):
             return ["type(" + name + ")"]
         diff_list = list()
-        if other._Lfra != self._Lfra:
-            diff_list.append(name + ".Lfra")
-        if other._Rint != self._Rint:
-            diff_list.append(name + ".Rint")
-        if other._Rext != self._Rext:
-            diff_list.append(name + ".Rext")
+        if (
+            other._Lfra is not None
+            and self._Lfra is not None
+            and isnan(other._Lfra)
+            and isnan(self._Lfra)
+        ):
+            pass
+        elif other._Lfra != self._Lfra:
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._Lfra) + ", other=" + str(other._Lfra) + ")"
+                )
+                diff_list.append(name + ".Lfra" + val_str)
+            else:
+                diff_list.append(name + ".Lfra")
+        if (
+            other._Rint is not None
+            and self._Rint is not None
+            and isnan(other._Rint)
+            and isnan(self._Rint)
+        ):
+            pass
+        elif other._Rint != self._Rint:
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._Rint) + ", other=" + str(other._Rint) + ")"
+                )
+                diff_list.append(name + ".Rint" + val_str)
+            else:
+                diff_list.append(name + ".Rint")
+        if (
+            other._Rext is not None
+            and self._Rext is not None
+            and isnan(other._Rext)
+            and isnan(self._Rext)
+        ):
+            pass
+        elif other._Rext != self._Rext:
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._Rext) + ", other=" + str(other._Rext) + ")"
+                )
+                diff_list.append(name + ".Rext" + val_str)
+            else:
+                diff_list.append(name + ".Rext")
         if (other.mat_type is None and self.mat_type is not None) or (
             other.mat_type is not None and self.mat_type is None
         ):
             diff_list.append(name + ".mat_type None mismatch")
         elif self.mat_type is not None:
             diff_list.extend(
-                self.mat_type.compare(other.mat_type, name=name + ".mat_type")
+                self.mat_type.compare(
+                    other.mat_type,
+                    name=name + ".mat_type",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
             )
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
@@ -288,7 +333,7 @@ class Frame(FrozenClass):
     Lfra = property(
         fget=_get_Lfra,
         fset=_set_Lfra,
-        doc=u"""frame length [m]
+        doc=u"""frame length [m] [m]
 
         :Type: float
         :min: 0
@@ -307,7 +352,7 @@ class Frame(FrozenClass):
     Rint = property(
         fget=_get_Rint,
         fset=_set_Rint,
-        doc=u"""frame internal radius
+        doc=u"""frame internal radius [m]
 
         :Type: float
         :min: 0
@@ -326,7 +371,7 @@ class Frame(FrozenClass):
     Rext = property(
         fget=_get_Rext,
         fset=_set_Rext,
-        doc=u"""Frame external radius
+        doc=u"""Frame external radius [m]
 
         :Type: float
         :min: 0

@@ -1,3 +1,4 @@
+from multiprocessing import cpu_count
 from os.path import join
 
 import numpy as np
@@ -36,9 +37,9 @@ def test_ElecLUTdq_solve_MTPA():
 
     Toyota_Prius = load(join(DATA_DIR, "Machine", "Toyota_Prius.json"))
 
-    # LUT_enforced = None
+    LUT_enforced = None
 
-    LUT_enforced = load(r"C:\Users\LAP10\Documents\Loss\LUT_eff.h5")
+    # LUT_enforced = load(r"C:\Users\LAP10\Documents\Loss\LUT_eff.h5")
 
     # Speed vector
     Nspeed = 50
@@ -84,13 +85,13 @@ def test_ElecLUTdq_solve_MTPA():
             ),
             var_simu=VarLoadCurrent(
                 type_OP_matrix=1,
-                postproc_list=[PostLUT(is_save_LUT=False)],
+                postproc_list=[PostLUT(is_save_LUT=True)],
                 is_keep_all_output=True,
             ),
             mag=MagFEMM(
                 is_periodicity_a=True,
                 is_periodicity_t=True,
-                nb_worker=4,
+                nb_worker=int(0.5 * cpu_count()),
                 is_get_meshsolution=True,
             ),
         ),

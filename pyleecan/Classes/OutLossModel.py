@@ -49,6 +49,7 @@ except ImportError as error:
 
 
 from numpy import array, array_equal
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 
@@ -203,7 +204,7 @@ class OutLossModel(FrozenClass):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -212,13 +213,35 @@ class OutLossModel(FrozenClass):
             return ["type(" + name + ")"]
         diff_list = list()
         if other._name != self._name:
-            diff_list.append(name + ".name")
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._name) + ", other=" + str(other._name) + ")"
+                )
+                diff_list.append(name + ".name" + val_str)
+            else:
+                diff_list.append(name + ".name")
         if not array_equal(other.loss_density, self.loss_density):
             diff_list.append(name + ".loss_density")
         if other._coeff_dict != self._coeff_dict:
-            diff_list.append(name + ".coeff_dict")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._coeff_dict)
+                    + ", other="
+                    + str(other._coeff_dict)
+                    + ")"
+                )
+                diff_list.append(name + ".coeff_dict" + val_str)
+            else:
+                diff_list.append(name + ".coeff_dict")
         if other._group != self._group:
-            diff_list.append(name + ".group")
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._group) + ", other=" + str(other._group) + ")"
+                )
+                diff_list.append(name + ".group" + val_str)
+            else:
+                diff_list.append(name + ".group")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list

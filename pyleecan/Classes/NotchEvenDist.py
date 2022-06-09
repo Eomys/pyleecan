@@ -28,6 +28,7 @@ except ImportError as error:
     comp_surface = error
 
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 
@@ -125,7 +126,7 @@ class NotchEvenDist(Notch):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -135,16 +136,38 @@ class NotchEvenDist(Notch):
         diff_list = list()
 
         # Check the properties inherited from Notch
-        diff_list.extend(super(NotchEvenDist, self).compare(other, name=name))
-        if other._alpha != self._alpha:
-            diff_list.append(name + ".alpha")
+        diff_list.extend(
+            super(NotchEvenDist, self).compare(
+                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
+            )
+        )
+        if (
+            other._alpha is not None
+            and self._alpha is not None
+            and isnan(other._alpha)
+            and isnan(self._alpha)
+        ):
+            pass
+        elif other._alpha != self._alpha:
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._alpha) + ", other=" + str(other._alpha) + ")"
+                )
+                diff_list.append(name + ".alpha" + val_str)
+            else:
+                diff_list.append(name + ".alpha")
         if (other.notch_shape is None and self.notch_shape is not None) or (
             other.notch_shape is not None and self.notch_shape is None
         ):
             diff_list.append(name + ".notch_shape None mismatch")
         elif self.notch_shape is not None:
             diff_list.extend(
-                self.notch_shape.compare(other.notch_shape, name=name + ".notch_shape")
+                self.notch_shape.compare(
+                    other.notch_shape,
+                    name=name + ".notch_shape",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
             )
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
@@ -213,7 +236,7 @@ class NotchEvenDist(Notch):
     alpha = property(
         fget=_get_alpha,
         fset=_set_alpha,
-        doc=u"""angular positon of the first notch
+        doc=u"""angular positon of the first notch [rad]
 
         :Type: float
         """,
@@ -250,7 +273,7 @@ class NotchEvenDist(Notch):
     notch_shape = property(
         fget=_get_notch_shape,
         fset=_set_notch_shape,
-        doc=u"""Shape of the Notch
+        doc=u"""Shape of the Notch [-]
 
         :Type: Slot
         """,

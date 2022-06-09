@@ -38,6 +38,7 @@ from os.path import isfile
 from ._check import CheckTypeError
 import numpy as np
 import random
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 
@@ -194,7 +195,7 @@ class Skew(FrozenClass):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -203,21 +204,97 @@ class Skew(FrozenClass):
             return ["type(" + name + ")"]
         diff_list = list()
         if other._type_skew != self._type_skew:
-            diff_list.append(name + ".type_skew")
-        if other._rate != self._rate:
-            diff_list.append(name + ".rate")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._type_skew)
+                    + ", other="
+                    + str(other._type_skew)
+                    + ")"
+                )
+                diff_list.append(name + ".type_skew" + val_str)
+            else:
+                diff_list.append(name + ".type_skew")
+        if (
+            other._rate is not None
+            and self._rate is not None
+            and isnan(other._rate)
+            and isnan(self._rate)
+        ):
+            pass
+        elif other._rate != self._rate:
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._rate) + ", other=" + str(other._rate) + ")"
+                )
+                diff_list.append(name + ".rate" + val_str)
+            else:
+                diff_list.append(name + ".rate")
         if other._is_step != self._is_step:
-            diff_list.append(name + ".is_step")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._is_step)
+                    + ", other="
+                    + str(other._is_step)
+                    + ")"
+                )
+                diff_list.append(name + ".is_step" + val_str)
+            else:
+                diff_list.append(name + ".is_step")
         if other._function_str != self._function_str:
             diff_list.append(name + ".function")
         if other._angle_list != self._angle_list:
-            diff_list.append(name + ".angle_list")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._angle_list)
+                    + ", other="
+                    + str(other._angle_list)
+                    + ")"
+                )
+                diff_list.append(name + ".angle_list" + val_str)
+            else:
+                diff_list.append(name + ".angle_list")
         if other._z_list != self._z_list:
-            diff_list.append(name + ".z_list")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._z_list)
+                    + ", other="
+                    + str(other._z_list)
+                    + ")"
+                )
+                diff_list.append(name + ".z_list" + val_str)
+            else:
+                diff_list.append(name + ".z_list")
         if other._Nstep != self._Nstep:
-            diff_list.append(name + ".Nstep")
-        if other._angle_overall != self._angle_overall:
-            diff_list.append(name + ".angle_overall")
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._Nstep) + ", other=" + str(other._Nstep) + ")"
+                )
+                diff_list.append(name + ".Nstep" + val_str)
+            else:
+                diff_list.append(name + ".Nstep")
+        if (
+            other._angle_overall is not None
+            and self._angle_overall is not None
+            and isnan(other._angle_overall)
+            and isnan(self._angle_overall)
+        ):
+            pass
+        elif other._angle_overall != self._angle_overall:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._angle_overall)
+                    + ", other="
+                    + str(other._angle_overall)
+                    + ")"
+                )
+                diff_list.append(name + ".angle_overall" + val_str)
+            else:
+                diff_list.append(name + ".angle_overall")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -301,7 +378,7 @@ class Skew(FrozenClass):
     type_skew = property(
         fget=_get_type_skew,
         fset=_set_type_skew,
-        doc="""Type of skew ("linear", "vshape", "function", "user-defined")
+        doc="""Type of skew ("linear", "vshape", "function", "user-defined") [-]
 
         :Type: str
         """,
@@ -319,7 +396,7 @@ class Skew(FrozenClass):
     rate = property(
         fget=_get_rate,
         fset=_set_rate,
-        doc="""Skew rate expressed in terms of slot pitch (stator slot pitch for SCIM, rotor slot pitch for PMSM)
+        doc="""Skew rate expressed in terms of slot pitch (stator slot pitch for SCIM, rotor slot pitch for PMSM) [-]
 
         :Type: float
         """,
@@ -337,7 +414,7 @@ class Skew(FrozenClass):
     is_step = property(
         fget=_get_is_step,
         fset=_set_is_step,
-        doc="""True to define skew as steps
+        doc="""True to define skew as steps [-]
 
         :Type: bool
         """,
@@ -372,7 +449,7 @@ class Skew(FrozenClass):
     function = property(
         fget=_get_function,
         fset=_set_function,
-        doc="""Function which describes skew pattern
+        doc="""Function which describes skew pattern [-]
 
         :Type: function
         """,
@@ -392,7 +469,7 @@ class Skew(FrozenClass):
     angle_list = property(
         fget=_get_angle_list,
         fset=_set_angle_list,
-        doc="""List of skew angles
+        doc="""List of skew angles [rad]
 
         :Type: list
         """,
@@ -412,7 +489,7 @@ class Skew(FrozenClass):
     z_list = property(
         fget=_get_z_list,
         fset=_set_z_list,
-        doc="""List of z axis positions for which skew angles are given
+        doc="""List of z axis positions for which skew angles are given [m]
 
         :Type: list
         """,
@@ -449,7 +526,7 @@ class Skew(FrozenClass):
     angle_overall = property(
         fget=_get_angle_overall,
         fset=_set_angle_overall,
-        doc="""Overall skewing angle
+        doc="""Overall skewing angle [rad]
 
         :Type: float
         :min: 0

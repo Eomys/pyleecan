@@ -1,7 +1,3 @@
-# -*- coding: utf-8 -*-
-
-from numpy import arcsin, pi
-
 from ....Methods.Slot.Slot import SlotCheckError
 from ....Methods.Slot.HoleM58 import *
 

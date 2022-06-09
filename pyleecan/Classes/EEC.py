@@ -63,6 +63,7 @@ except ImportError as error:
     comp_fluxlinkage = error
 
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 
@@ -293,7 +294,7 @@ class EEC(FrozenClass):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -302,34 +303,161 @@ class EEC(FrozenClass):
             return ["type(" + name + ")"]
         diff_list = list()
         if other._type_skin_effect != self._type_skin_effect:
-            diff_list.append(name + ".type_skin_effect")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._type_skin_effect)
+                    + ", other="
+                    + str(other._type_skin_effect)
+                    + ")"
+                )
+                diff_list.append(name + ".type_skin_effect" + val_str)
+            else:
+                diff_list.append(name + ".type_skin_effect")
         if (other.OP is None and self.OP is not None) or (
             other.OP is not None and self.OP is None
         ):
             diff_list.append(name + ".OP None mismatch")
         elif self.OP is not None:
-            diff_list.extend(self.OP.compare(other.OP, name=name + ".OP"))
-        if other._Tsta != self._Tsta:
-            diff_list.append(name + ".Tsta")
-        if other._Trot != self._Trot:
-            diff_list.append(name + ".Trot")
-        if other._Xkr_skinS != self._Xkr_skinS:
-            diff_list.append(name + ".Xkr_skinS")
-        if other._Xke_skinS != self._Xke_skinS:
-            diff_list.append(name + ".Xke_skinS")
-        if other._Xkr_skinR != self._Xkr_skinR:
-            diff_list.append(name + ".Xkr_skinR")
-        if other._Xke_skinR != self._Xke_skinR:
-            diff_list.append(name + ".Xke_skinR")
-        if other._R1 != self._R1:
-            diff_list.append(name + ".R1")
+            diff_list.extend(
+                self.OP.compare(
+                    other.OP,
+                    name=name + ".OP",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
+            )
+        if (
+            other._Tsta is not None
+            and self._Tsta is not None
+            and isnan(other._Tsta)
+            and isnan(self._Tsta)
+        ):
+            pass
+        elif other._Tsta != self._Tsta:
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._Tsta) + ", other=" + str(other._Tsta) + ")"
+                )
+                diff_list.append(name + ".Tsta" + val_str)
+            else:
+                diff_list.append(name + ".Tsta")
+        if (
+            other._Trot is not None
+            and self._Trot is not None
+            and isnan(other._Trot)
+            and isnan(self._Trot)
+        ):
+            pass
+        elif other._Trot != self._Trot:
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._Trot) + ", other=" + str(other._Trot) + ")"
+                )
+                diff_list.append(name + ".Trot" + val_str)
+            else:
+                diff_list.append(name + ".Trot")
+        if (
+            other._Xkr_skinS is not None
+            and self._Xkr_skinS is not None
+            and isnan(other._Xkr_skinS)
+            and isnan(self._Xkr_skinS)
+        ):
+            pass
+        elif other._Xkr_skinS != self._Xkr_skinS:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._Xkr_skinS)
+                    + ", other="
+                    + str(other._Xkr_skinS)
+                    + ")"
+                )
+                diff_list.append(name + ".Xkr_skinS" + val_str)
+            else:
+                diff_list.append(name + ".Xkr_skinS")
+        if (
+            other._Xke_skinS is not None
+            and self._Xke_skinS is not None
+            and isnan(other._Xke_skinS)
+            and isnan(self._Xke_skinS)
+        ):
+            pass
+        elif other._Xke_skinS != self._Xke_skinS:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._Xke_skinS)
+                    + ", other="
+                    + str(other._Xke_skinS)
+                    + ")"
+                )
+                diff_list.append(name + ".Xke_skinS" + val_str)
+            else:
+                diff_list.append(name + ".Xke_skinS")
+        if (
+            other._Xkr_skinR is not None
+            and self._Xkr_skinR is not None
+            and isnan(other._Xkr_skinR)
+            and isnan(self._Xkr_skinR)
+        ):
+            pass
+        elif other._Xkr_skinR != self._Xkr_skinR:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._Xkr_skinR)
+                    + ", other="
+                    + str(other._Xkr_skinR)
+                    + ")"
+                )
+                diff_list.append(name + ".Xkr_skinR" + val_str)
+            else:
+                diff_list.append(name + ".Xkr_skinR")
+        if (
+            other._Xke_skinR is not None
+            and self._Xke_skinR is not None
+            and isnan(other._Xke_skinR)
+            and isnan(self._Xke_skinR)
+        ):
+            pass
+        elif other._Xke_skinR != self._Xke_skinR:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._Xke_skinR)
+                    + ", other="
+                    + str(other._Xke_skinR)
+                    + ")"
+                )
+                diff_list.append(name + ".Xke_skinR" + val_str)
+            else:
+                diff_list.append(name + ".Xke_skinR")
+        if (
+            other._R1 is not None
+            and self._R1 is not None
+            and isnan(other._R1)
+            and isnan(self._R1)
+        ):
+            pass
+        elif other._R1 != self._R1:
+            if is_add_value:
+                val_str = " (self=" + str(self._R1) + ", other=" + str(other._R1) + ")"
+                diff_list.append(name + ".R1" + val_str)
+            else:
+                diff_list.append(name + ".R1")
         if (other.fluxlink is None and self.fluxlink is not None) or (
             other.fluxlink is not None and self.fluxlink is None
         ):
             diff_list.append(name + ".fluxlink None mismatch")
         elif self.fluxlink is not None:
             diff_list.extend(
-                self.fluxlink.compare(other.fluxlink, name=name + ".fluxlink")
+                self.fluxlink.compare(
+                    other.fluxlink,
+                    name=name + ".fluxlink",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
             )
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
@@ -419,7 +547,7 @@ class EEC(FrozenClass):
     type_skin_effect = property(
         fget=_get_type_skin_effect,
         fset=_set_type_skin_effect,
-        doc=u"""Skin effect for resistance and inductance
+        doc=u"""Skin effect for resistance and inductance [-]
 
         :Type: int
         """,
@@ -454,7 +582,7 @@ class EEC(FrozenClass):
     OP = property(
         fget=_get_OP,
         fset=_set_OP,
-        doc=u"""Operating Point
+        doc=u"""Operating Point [-]
 
         :Type: OP
         """,
@@ -472,7 +600,7 @@ class EEC(FrozenClass):
     Tsta = property(
         fget=_get_Tsta,
         fset=_set_Tsta,
-        doc=u"""Average stator temperature for operational EEC calculation
+        doc=u"""Average stator temperature for operational EEC calculation [deg Celsius]
 
         :Type: float
         """,
@@ -490,7 +618,7 @@ class EEC(FrozenClass):
     Trot = property(
         fget=_get_Trot,
         fset=_set_Trot,
-        doc=u"""Average rotor temperature for operational EEC calculation
+        doc=u"""Average rotor temperature for operational EEC calculation [deg Celsius]
 
         :Type: float
         """,
@@ -580,7 +708,7 @@ class EEC(FrozenClass):
     R1 = property(
         fget=_get_R1,
         fset=_set_R1,
-        doc=u"""Stator phase resistance
+        doc=u"""Stator phase resistance [Ohm]
 
         :Type: float
         """,
@@ -617,7 +745,7 @@ class EEC(FrozenClass):
     fluxlink = property(
         fget=_get_fluxlink,
         fset=_set_fluxlink,
-        doc=u"""Magnetic model for flux linkage calculation
+        doc=u"""Magnetic model for flux linkage calculation [-]
 
         :Type: Magnetics
         """,

@@ -43,6 +43,7 @@ except ImportError as error:
     is_inside = error
 
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 
@@ -156,7 +157,7 @@ class Surface(FrozenClass):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -165,9 +166,25 @@ class Surface(FrozenClass):
             return ["type(" + name + ")"]
         diff_list = list()
         if other._point_ref != self._point_ref:
-            diff_list.append(name + ".point_ref")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._point_ref)
+                    + ", other="
+                    + str(other._point_ref)
+                    + ")"
+                )
+                diff_list.append(name + ".point_ref" + val_str)
+            else:
+                diff_list.append(name + ".point_ref")
         if other._label != self._label:
-            diff_list.append(name + ".label")
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._label) + ", other=" + str(other._label) + ")"
+                )
+                diff_list.append(name + ".label" + val_str)
+            else:
+                diff_list.append(name + ".label")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -223,7 +240,7 @@ class Surface(FrozenClass):
     point_ref = property(
         fget=_get_point_ref,
         fset=_set_point_ref,
-        doc=u"""Center of symmetry
+        doc=u"""Center of symmetry [-]
 
         :Type: complex
         """,
@@ -241,7 +258,7 @@ class Surface(FrozenClass):
     label = property(
         fget=_get_label,
         fset=_set_label,
-        doc=u"""Label of the surface
+        doc=u"""Label of the surface [-]
 
         :Type: str
         """,

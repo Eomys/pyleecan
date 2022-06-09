@@ -1,5 +1,5 @@
 from numpy import arcsin, cos, exp, angle, pi, sin, tan, array
-from pyleecan.Functions.Geometry.inter_line_line import inter_line_line
+from ....Functions.Geometry.inter_line_line import inter_line_line
 
 
 def _comp_point_coordinate(self):

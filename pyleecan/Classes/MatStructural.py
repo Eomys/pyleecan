@@ -15,6 +15,7 @@ from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
 from ._frozen import FrozenClass
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 
@@ -144,7 +145,7 @@ class MatStructural(FrozenClass):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -152,26 +153,150 @@ class MatStructural(FrozenClass):
         if type(other) != type(self):
             return ["type(" + name + ")"]
         diff_list = list()
-        if other._rho != self._rho:
-            diff_list.append(name + ".rho")
-        if other._Ex != self._Ex:
-            diff_list.append(name + ".Ex")
-        if other._Ey != self._Ey:
-            diff_list.append(name + ".Ey")
-        if other._Ez != self._Ez:
-            diff_list.append(name + ".Ez")
-        if other._nu_xy != self._nu_xy:
-            diff_list.append(name + ".nu_xy")
-        if other._nu_xz != self._nu_xz:
-            diff_list.append(name + ".nu_xz")
-        if other._nu_yz != self._nu_yz:
-            diff_list.append(name + ".nu_yz")
-        if other._Gxz != self._Gxz:
-            diff_list.append(name + ".Gxz")
-        if other._Gxy != self._Gxy:
-            diff_list.append(name + ".Gxy")
-        if other._Gyz != self._Gyz:
-            diff_list.append(name + ".Gyz")
+        if (
+            other._rho is not None
+            and self._rho is not None
+            and isnan(other._rho)
+            and isnan(self._rho)
+        ):
+            pass
+        elif other._rho != self._rho:
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._rho) + ", other=" + str(other._rho) + ")"
+                )
+                diff_list.append(name + ".rho" + val_str)
+            else:
+                diff_list.append(name + ".rho")
+        if (
+            other._Ex is not None
+            and self._Ex is not None
+            and isnan(other._Ex)
+            and isnan(self._Ex)
+        ):
+            pass
+        elif other._Ex != self._Ex:
+            if is_add_value:
+                val_str = " (self=" + str(self._Ex) + ", other=" + str(other._Ex) + ")"
+                diff_list.append(name + ".Ex" + val_str)
+            else:
+                diff_list.append(name + ".Ex")
+        if (
+            other._Ey is not None
+            and self._Ey is not None
+            and isnan(other._Ey)
+            and isnan(self._Ey)
+        ):
+            pass
+        elif other._Ey != self._Ey:
+            if is_add_value:
+                val_str = " (self=" + str(self._Ey) + ", other=" + str(other._Ey) + ")"
+                diff_list.append(name + ".Ey" + val_str)
+            else:
+                diff_list.append(name + ".Ey")
+        if (
+            other._Ez is not None
+            and self._Ez is not None
+            and isnan(other._Ez)
+            and isnan(self._Ez)
+        ):
+            pass
+        elif other._Ez != self._Ez:
+            if is_add_value:
+                val_str = " (self=" + str(self._Ez) + ", other=" + str(other._Ez) + ")"
+                diff_list.append(name + ".Ez" + val_str)
+            else:
+                diff_list.append(name + ".Ez")
+        if (
+            other._nu_xy is not None
+            and self._nu_xy is not None
+            and isnan(other._nu_xy)
+            and isnan(self._nu_xy)
+        ):
+            pass
+        elif other._nu_xy != self._nu_xy:
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._nu_xy) + ", other=" + str(other._nu_xy) + ")"
+                )
+                diff_list.append(name + ".nu_xy" + val_str)
+            else:
+                diff_list.append(name + ".nu_xy")
+        if (
+            other._nu_xz is not None
+            and self._nu_xz is not None
+            and isnan(other._nu_xz)
+            and isnan(self._nu_xz)
+        ):
+            pass
+        elif other._nu_xz != self._nu_xz:
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._nu_xz) + ", other=" + str(other._nu_xz) + ")"
+                )
+                diff_list.append(name + ".nu_xz" + val_str)
+            else:
+                diff_list.append(name + ".nu_xz")
+        if (
+            other._nu_yz is not None
+            and self._nu_yz is not None
+            and isnan(other._nu_yz)
+            and isnan(self._nu_yz)
+        ):
+            pass
+        elif other._nu_yz != self._nu_yz:
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._nu_yz) + ", other=" + str(other._nu_yz) + ")"
+                )
+                diff_list.append(name + ".nu_yz" + val_str)
+            else:
+                diff_list.append(name + ".nu_yz")
+        if (
+            other._Gxz is not None
+            and self._Gxz is not None
+            and isnan(other._Gxz)
+            and isnan(self._Gxz)
+        ):
+            pass
+        elif other._Gxz != self._Gxz:
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._Gxz) + ", other=" + str(other._Gxz) + ")"
+                )
+                diff_list.append(name + ".Gxz" + val_str)
+            else:
+                diff_list.append(name + ".Gxz")
+        if (
+            other._Gxy is not None
+            and self._Gxy is not None
+            and isnan(other._Gxy)
+            and isnan(self._Gxy)
+        ):
+            pass
+        elif other._Gxy != self._Gxy:
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._Gxy) + ", other=" + str(other._Gxy) + ")"
+                )
+                diff_list.append(name + ".Gxy" + val_str)
+            else:
+                diff_list.append(name + ".Gxy")
+        if (
+            other._Gyz is not None
+            and self._Gyz is not None
+            and isnan(other._Gyz)
+            and isnan(self._Gyz)
+        ):
+            pass
+        elif other._Gyz != self._Gyz:
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._Gyz) + ", other=" + str(other._Gyz) + ")"
+                )
+                diff_list.append(name + ".Gyz" + val_str)
+            else:
+                diff_list.append(name + ".Gyz")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -244,7 +369,7 @@ class MatStructural(FrozenClass):
     rho = property(
         fget=_get_rho,
         fset=_set_rho,
-        doc=u"""mass per unit volume [kg/m3]
+        doc=u"""mass per unit volume [kg/m3] [kg/m^3]
 
         :Type: float
         :min: 0
@@ -263,7 +388,7 @@ class MatStructural(FrozenClass):
     Ex = property(
         fget=_get_Ex,
         fset=_set_Ex,
-        doc=u"""equivalent Young modulus (XY is lamination plane, Z is rotation axis)
+        doc=u"""equivalent Young modulus (XY is lamination plane, Z is rotation axis) [Pa]
 
         :Type: float
         :min: 0
@@ -282,7 +407,7 @@ class MatStructural(FrozenClass):
     Ey = property(
         fget=_get_Ey,
         fset=_set_Ey,
-        doc=u"""equivalent Young modulus (XY is lamination plane, Z is rotation axis)
+        doc=u"""equivalent Young modulus (XY is lamination plane, Z is rotation axis) [Pa]
 
         :Type: float
         :min: 0
@@ -301,7 +426,7 @@ class MatStructural(FrozenClass):
     Ez = property(
         fget=_get_Ez,
         fset=_set_Ez,
-        doc=u"""equivalent Young modulus (XY is lamination plane, Z is rotation axis)
+        doc=u"""equivalent Young modulus (XY is lamination plane, Z is rotation axis) [Pa]
 
         :Type: float
         :min: 0
@@ -320,7 +445,7 @@ class MatStructural(FrozenClass):
     nu_xy = property(
         fget=_get_nu_xy,
         fset=_set_nu_xy,
-        doc=u"""equivalent Poisson ratio in the XY plane (XY is lamination plane, Z is rotation axis)
+        doc=u"""equivalent Poisson ratio in the XY plane (XY is lamination plane, Z is rotation axis) [-]
 
         :Type: float
         :min: 0
@@ -339,7 +464,7 @@ class MatStructural(FrozenClass):
     nu_xz = property(
         fget=_get_nu_xz,
         fset=_set_nu_xz,
-        doc=u"""equivalent Poisson ratio in the XZ plane (XY is lamination plane, Z is rotation axis)
+        doc=u"""equivalent Poisson ratio in the XZ plane (XY is lamination plane, Z is rotation axis) [-]
 
         :Type: float
         :min: 0
@@ -358,7 +483,7 @@ class MatStructural(FrozenClass):
     nu_yz = property(
         fget=_get_nu_yz,
         fset=_set_nu_yz,
-        doc=u"""equivalent Poisson ratio in the YZ plane (XY is lamination plane, Z is rotation axis)
+        doc=u"""equivalent Poisson ratio in the YZ plane (XY is lamination plane, Z is rotation axis) [-]
 
         :Type: float
         :min: 0
@@ -377,7 +502,7 @@ class MatStructural(FrozenClass):
     Gxz = property(
         fget=_get_Gxz,
         fset=_set_Gxz,
-        doc=u"""shear modulus in XY plane (XY is lamination plane, Z is rotation axis)
+        doc=u"""shear modulus in XY plane (XY is lamination plane, Z is rotation axis) [Pa]
 
         :Type: float
         :min: 0
@@ -396,7 +521,7 @@ class MatStructural(FrozenClass):
     Gxy = property(
         fget=_get_Gxy,
         fset=_set_Gxy,
-        doc=u"""shear modulus in XZ plane (XY is lamination plane, Z is rotation axis)
+        doc=u"""shear modulus in XZ plane (XY is lamination plane, Z is rotation axis) [Pa]
 
         :Type: float
         :min: 0
@@ -415,7 +540,7 @@ class MatStructural(FrozenClass):
     Gyz = property(
         fget=_get_Gyz,
         fset=_set_Gyz,
-        doc=u"""shear modulus in YZ plane (XY is lamination plane, Z is rotation axis)
+        doc=u"""shear modulus in YZ plane (XY is lamination plane, Z is rotation axis) [Pa]
 
         :Type: float
         :min: 0

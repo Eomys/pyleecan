@@ -15,6 +15,7 @@ from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
 from .LUT import LUT
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 
@@ -139,7 +140,7 @@ class LUTslip(LUT):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -149,7 +150,11 @@ class LUTslip(LUT):
         diff_list = list()
 
         # Check the properties inherited from LUT
-        diff_list.extend(super(LUTslip, self).compare(other, name=name))
+        diff_list.extend(
+            super(LUTslip, self).compare(
+                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
+            )
+        )
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list

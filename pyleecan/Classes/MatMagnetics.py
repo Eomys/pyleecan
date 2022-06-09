@@ -41,6 +41,7 @@ except ImportError as error:
 from ..Classes.ImportMatrixVal import ImportMatrixVal
 from numpy import ndarray
 from numpy import array, array_equal
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 
@@ -207,7 +208,7 @@ class MatMagnetics(FrozenClass):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -215,21 +216,86 @@ class MatMagnetics(FrozenClass):
         if type(other) != type(self):
             return ["type(" + name + ")"]
         diff_list = list()
-        if other._mur_lin != self._mur_lin:
-            diff_list.append(name + ".mur_lin")
-        if other._Brm20 != self._Brm20:
-            diff_list.append(name + ".Brm20")
-        if other._alpha_Br != self._alpha_Br:
-            diff_list.append(name + ".alpha_Br")
-        if other._Wlam != self._Wlam:
-            diff_list.append(name + ".Wlam")
+        if (
+            other._mur_lin is not None
+            and self._mur_lin is not None
+            and isnan(other._mur_lin)
+            and isnan(self._mur_lin)
+        ):
+            pass
+        elif other._mur_lin != self._mur_lin:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._mur_lin)
+                    + ", other="
+                    + str(other._mur_lin)
+                    + ")"
+                )
+                diff_list.append(name + ".mur_lin" + val_str)
+            else:
+                diff_list.append(name + ".mur_lin")
+        if (
+            other._Brm20 is not None
+            and self._Brm20 is not None
+            and isnan(other._Brm20)
+            and isnan(self._Brm20)
+        ):
+            pass
+        elif other._Brm20 != self._Brm20:
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._Brm20) + ", other=" + str(other._Brm20) + ")"
+                )
+                diff_list.append(name + ".Brm20" + val_str)
+            else:
+                diff_list.append(name + ".Brm20")
+        if (
+            other._alpha_Br is not None
+            and self._alpha_Br is not None
+            and isnan(other._alpha_Br)
+            and isnan(self._alpha_Br)
+        ):
+            pass
+        elif other._alpha_Br != self._alpha_Br:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._alpha_Br)
+                    + ", other="
+                    + str(other._alpha_Br)
+                    + ")"
+                )
+                diff_list.append(name + ".alpha_Br" + val_str)
+            else:
+                diff_list.append(name + ".alpha_Br")
+        if (
+            other._Wlam is not None
+            and self._Wlam is not None
+            and isnan(other._Wlam)
+            and isnan(self._Wlam)
+        ):
+            pass
+        elif other._Wlam != self._Wlam:
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._Wlam) + ", other=" + str(other._Wlam) + ")"
+                )
+                diff_list.append(name + ".Wlam" + val_str)
+            else:
+                diff_list.append(name + ".Wlam")
         if (other.BH_curve is None and self.BH_curve is not None) or (
             other.BH_curve is not None and self.BH_curve is None
         ):
             diff_list.append(name + ".BH_curve None mismatch")
         elif self.BH_curve is not None:
             diff_list.extend(
-                self.BH_curve.compare(other.BH_curve, name=name + ".BH_curve")
+                self.BH_curve.compare(
+                    other.BH_curve,
+                    name=name + ".BH_curve",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
             )
         if (other.LossData is None and self.LossData is not None) or (
             other.LossData is not None and self.LossData is None
@@ -237,7 +303,12 @@ class MatMagnetics(FrozenClass):
             diff_list.append(name + ".LossData None mismatch")
         elif self.LossData is not None:
             diff_list.extend(
-                self.LossData.compare(other.LossData, name=name + ".LossData")
+                self.LossData.compare(
+                    other.LossData,
+                    name=name + ".LossData",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
             )
         if (other.ModelBH is None and self.ModelBH is not None) or (
             other.ModelBH is not None and self.ModelBH is None
@@ -245,10 +316,25 @@ class MatMagnetics(FrozenClass):
             diff_list.append(name + ".ModelBH None mismatch")
         elif self.ModelBH is not None:
             diff_list.extend(
-                self.ModelBH.compare(other.ModelBH, name=name + ".ModelBH")
+                self.ModelBH.compare(
+                    other.ModelBH,
+                    name=name + ".ModelBH",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
             )
         if other._is_BH_extrapolate != self._is_BH_extrapolate:
-            diff_list.append(name + ".is_BH_extrapolate")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._is_BH_extrapolate)
+                    + ", other="
+                    + str(other._is_BH_extrapolate)
+                    + ")"
+                )
+                diff_list.append(name + ".is_BH_extrapolate" + val_str)
+            else:
+                diff_list.append(name + ".is_BH_extrapolate")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -339,7 +425,7 @@ class MatMagnetics(FrozenClass):
     mur_lin = property(
         fget=_get_mur_lin,
         fset=_set_mur_lin,
-        doc=u"""Relative magnetic permeability
+        doc=u"""Relative magnetic permeability [-]
 
         :Type: float
         :min: 0
@@ -358,7 +444,7 @@ class MatMagnetics(FrozenClass):
     Brm20 = property(
         fget=_get_Brm20,
         fset=_set_Brm20,
-        doc=u"""magnet remanence induction at 20degC (calculated from mur_lin and Hc if not provided)
+        doc=u"""magnet remanence induction at 20degC (calculated from mur_lin and Hc if not provided) [T]
 
         :Type: float
         """,
@@ -376,7 +462,7 @@ class MatMagnetics(FrozenClass):
     alpha_Br = property(
         fget=_get_alpha_Br,
         fset=_set_alpha_Br,
-        doc=u"""temperature coefficient for remanent flux density /degC compared to 20degC
+        doc=u"""temperature coefficient for remanent flux density /degC compared to 20degC [-]
 
         :Type: float
         """,
@@ -394,7 +480,7 @@ class MatMagnetics(FrozenClass):
     Wlam = property(
         fget=_get_Wlam,
         fset=_set_Wlam,
-        doc=u"""lamination sheet width without insulation [m] (0 == not laminated)
+        doc=u"""lamination sheet width without insulation [m] (0 == not laminated) [m]
 
         :Type: float
         :min: 0
@@ -433,7 +519,7 @@ class MatMagnetics(FrozenClass):
     BH_curve = property(
         fget=_get_BH_curve,
         fset=_set_BH_curve,
-        doc=u"""nonlinear B(H) curve (two columns matrix, H and B(H))
+        doc=u"""nonlinear B(H) curve (two columns matrix, H and B(H)) [-]
 
         :Type: ImportMatrix
         """,
@@ -471,7 +557,7 @@ class MatMagnetics(FrozenClass):
     LossData = property(
         fget=_get_LossData,
         fset=_set_LossData,
-        doc=u"""specific loss data value triplets, i.e. B, f, P
+        doc=u"""specific loss data value triplets, i.e. B, f, P [W/kg]
 
         :Type: ImportMatrix
         """,
@@ -508,7 +594,7 @@ class MatMagnetics(FrozenClass):
     ModelBH = property(
         fget=_get_ModelBH,
         fset=_set_ModelBH,
-        doc=u"""a model of BH curve with an analytical expression
+        doc=u"""a model of BH curve with an analytical expression [-]
 
         :Type: ModelBH
         """,
@@ -526,7 +612,7 @@ class MatMagnetics(FrozenClass):
     is_BH_extrapolate = property(
         fget=_get_is_BH_extrapolate,
         fset=_set_is_BH_extrapolate,
-        doc=u"""1 to use ModelBH to fit input data and extrapolate BH curve
+        doc=u"""1 to use ModelBH to fit input data and extrapolate BH curve [-]
 
         :Type: bool
         """,

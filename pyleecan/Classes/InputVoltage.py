@@ -36,6 +36,7 @@ except ImportError as error:
 from ..Classes.ImportMatrixVal import ImportMatrixVal
 from numpy import ndarray
 from numpy import array, array_equal
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 
@@ -221,7 +222,7 @@ class InputVoltage(Input):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -231,27 +232,115 @@ class InputVoltage(Input):
         diff_list = list()
 
         # Check the properties inherited from Input
-        diff_list.extend(super(InputVoltage, self).compare(other, name=name))
+        diff_list.extend(
+            super(InputVoltage, self).compare(
+                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
+            )
+        )
         if other._rot_dir != self._rot_dir:
-            diff_list.append(name + ".rot_dir")
-        if other._angle_rotor_initial != self._angle_rotor_initial:
-            diff_list.append(name + ".angle_rotor_initial")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._rot_dir)
+                    + ", other="
+                    + str(other._rot_dir)
+                    + ")"
+                )
+                diff_list.append(name + ".rot_dir" + val_str)
+            else:
+                diff_list.append(name + ".rot_dir")
+        if (
+            other._angle_rotor_initial is not None
+            and self._angle_rotor_initial is not None
+            and isnan(other._angle_rotor_initial)
+            and isnan(self._angle_rotor_initial)
+        ):
+            pass
+        elif other._angle_rotor_initial != self._angle_rotor_initial:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._angle_rotor_initial)
+                    + ", other="
+                    + str(other._angle_rotor_initial)
+                    + ")"
+                )
+                diff_list.append(name + ".angle_rotor_initial" + val_str)
+            else:
+                diff_list.append(name + ".angle_rotor_initial")
         if (other.PWM is None and self.PWM is not None) or (
             other.PWM is not None and self.PWM is None
         ):
             diff_list.append(name + ".PWM None mismatch")
         elif self.PWM is not None:
-            diff_list.extend(self.PWM.compare(other.PWM, name=name + ".PWM"))
+            diff_list.extend(
+                self.PWM.compare(
+                    other.PWM,
+                    name=name + ".PWM",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
+            )
         if other._phase_dir != self._phase_dir:
-            diff_list.append(name + ".phase_dir")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._phase_dir)
+                    + ", other="
+                    + str(other._phase_dir)
+                    + ")"
+                )
+                diff_list.append(name + ".phase_dir" + val_str)
+            else:
+                diff_list.append(name + ".phase_dir")
         if other._current_dir != self._current_dir:
-            diff_list.append(name + ".current_dir")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._current_dir)
+                    + ", other="
+                    + str(other._current_dir)
+                    + ")"
+                )
+                diff_list.append(name + ".current_dir" + val_str)
+            else:
+                diff_list.append(name + ".current_dir")
         if other._is_periodicity_t != self._is_periodicity_t:
-            diff_list.append(name + ".is_periodicity_t")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._is_periodicity_t)
+                    + ", other="
+                    + str(other._is_periodicity_t)
+                    + ")"
+                )
+                diff_list.append(name + ".is_periodicity_t" + val_str)
+            else:
+                diff_list.append(name + ".is_periodicity_t")
         if other._is_periodicity_a != self._is_periodicity_a:
-            diff_list.append(name + ".is_periodicity_a")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._is_periodicity_a)
+                    + ", other="
+                    + str(other._is_periodicity_a)
+                    + ")"
+                )
+                diff_list.append(name + ".is_periodicity_a" + val_str)
+            else:
+                diff_list.append(name + ".is_periodicity_a")
         if other._is_generator != self._is_generator:
-            diff_list.append(name + ".is_generator")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._is_generator)
+                    + ", other="
+                    + str(other._is_generator)
+                    + ")"
+                )
+                diff_list.append(name + ".is_generator" + val_str)
+            else:
+                diff_list.append(name + ".is_generator")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -337,7 +426,7 @@ class InputVoltage(Input):
     rot_dir = property(
         fget=_get_rot_dir,
         fset=_set_rot_dir,
-        doc=u"""Rotation direction of the rotor (rot_dir*N0, default value given by ROT_DIR_REF)
+        doc=u"""Rotation direction of the rotor (rot_dir*N0, default value given by ROT_DIR_REF) [-]
 
         :Type: int
         :min: -1
@@ -430,7 +519,7 @@ class InputVoltage(Input):
     current_dir = property(
         fget=_get_current_dir,
         fset=_set_current_dir,
-        doc=u"""Rotation direction of the stator currents (current_dir*2*pi*felec*time, default value given by CURRENT_DIR_REF)
+        doc=u"""Rotation direction of the stator currents (current_dir*2*pi*felec*time, default value given by CURRENT_DIR_REF) [-]
 
         :Type: int
         :min: -1
@@ -450,7 +539,7 @@ class InputVoltage(Input):
     is_periodicity_t = property(
         fget=_get_is_periodicity_t,
         fset=_set_is_periodicity_t,
-        doc=u"""True to compute voltage/currents only on one time periodicity (use periodicities defined in axes_dict[time])
+        doc=u"""True to compute voltage/currents only on one time periodicity (use periodicities defined in axes_dict[time]) [-]
 
         :Type: bool
         """,
@@ -468,7 +557,7 @@ class InputVoltage(Input):
     is_periodicity_a = property(
         fget=_get_is_periodicity_a,
         fset=_set_is_periodicity_a,
-        doc=u"""True to compute voltage/currents only on one angle periodicity (use periodicities defined in axes_dict[angle])
+        doc=u"""True to compute voltage/currents only on one angle periodicity (use periodicities defined in axes_dict[angle]) [-]
 
         :Type: bool
         """,

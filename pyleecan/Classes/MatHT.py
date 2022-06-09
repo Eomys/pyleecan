@@ -15,6 +15,7 @@ from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
 from ._frozen import FrozenClass
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 
@@ -107,7 +108,7 @@ class MatHT(FrozenClass):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -115,16 +116,91 @@ class MatHT(FrozenClass):
         if type(other) != type(self):
             return ["type(" + name + ")"]
         diff_list = list()
-        if other._lambda_x != self._lambda_x:
-            diff_list.append(name + ".lambda_x")
-        if other._lambda_y != self._lambda_y:
-            diff_list.append(name + ".lambda_y")
-        if other._lambda_z != self._lambda_z:
-            diff_list.append(name + ".lambda_z")
-        if other._Cp != self._Cp:
-            diff_list.append(name + ".Cp")
-        if other._alpha != self._alpha:
-            diff_list.append(name + ".alpha")
+        if (
+            other._lambda_x is not None
+            and self._lambda_x is not None
+            and isnan(other._lambda_x)
+            and isnan(self._lambda_x)
+        ):
+            pass
+        elif other._lambda_x != self._lambda_x:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._lambda_x)
+                    + ", other="
+                    + str(other._lambda_x)
+                    + ")"
+                )
+                diff_list.append(name + ".lambda_x" + val_str)
+            else:
+                diff_list.append(name + ".lambda_x")
+        if (
+            other._lambda_y is not None
+            and self._lambda_y is not None
+            and isnan(other._lambda_y)
+            and isnan(self._lambda_y)
+        ):
+            pass
+        elif other._lambda_y != self._lambda_y:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._lambda_y)
+                    + ", other="
+                    + str(other._lambda_y)
+                    + ")"
+                )
+                diff_list.append(name + ".lambda_y" + val_str)
+            else:
+                diff_list.append(name + ".lambda_y")
+        if (
+            other._lambda_z is not None
+            and self._lambda_z is not None
+            and isnan(other._lambda_z)
+            and isnan(self._lambda_z)
+        ):
+            pass
+        elif other._lambda_z != self._lambda_z:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._lambda_z)
+                    + ", other="
+                    + str(other._lambda_z)
+                    + ")"
+                )
+                diff_list.append(name + ".lambda_z" + val_str)
+            else:
+                diff_list.append(name + ".lambda_z")
+        if (
+            other._Cp is not None
+            and self._Cp is not None
+            and isnan(other._Cp)
+            and isnan(self._Cp)
+        ):
+            pass
+        elif other._Cp != self._Cp:
+            if is_add_value:
+                val_str = " (self=" + str(self._Cp) + ", other=" + str(other._Cp) + ")"
+                diff_list.append(name + ".Cp" + val_str)
+            else:
+                diff_list.append(name + ".Cp")
+        if (
+            other._alpha is not None
+            and self._alpha is not None
+            and isnan(other._alpha)
+            and isnan(self._alpha)
+        ):
+            pass
+        elif other._alpha != self._alpha:
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._alpha) + ", other=" + str(other._alpha) + ")"
+                )
+                diff_list.append(name + ".alpha" + val_str)
+            else:
+                diff_list.append(name + ".alpha")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -182,7 +258,7 @@ class MatHT(FrozenClass):
     lambda_x = property(
         fget=_get_lambda_x,
         fset=_set_lambda_x,
-        doc=u"""thermal conductivity (XY is lamination plane, Z is rotation axis)
+        doc=u"""thermal conductivity (XY is lamination plane, Z is rotation axis) [W/K]
 
         :Type: float
         :min: 0
@@ -201,7 +277,7 @@ class MatHT(FrozenClass):
     lambda_y = property(
         fget=_get_lambda_y,
         fset=_set_lambda_y,
-        doc=u"""thermal conductivity (XY is lamination plane, Z is rotation axis)
+        doc=u"""thermal conductivity (XY is lamination plane, Z is rotation axis) [W/K]
 
         :Type: float
         :min: 0
@@ -220,7 +296,7 @@ class MatHT(FrozenClass):
     lambda_z = property(
         fget=_get_lambda_z,
         fset=_set_lambda_z,
-        doc=u"""thermal conductivity (XY is lamination plane, Z is rotation axis)
+        doc=u"""thermal conductivity (XY is lamination plane, Z is rotation axis) [W/K]
 
         :Type: float
         :min: 0
@@ -239,7 +315,7 @@ class MatHT(FrozenClass):
     Cp = property(
         fget=_get_Cp,
         fset=_set_Cp,
-        doc=u"""specific heat capacity
+        doc=u"""specific heat capacity [W/kg/K]
 
         :Type: float
         :min: 0
@@ -258,7 +334,7 @@ class MatHT(FrozenClass):
     alpha = property(
         fget=_get_alpha,
         fset=_set_alpha,
-        doc=u"""thermal expansion coefficient
+        doc=u"""thermal expansion coefficient [-]
 
         :Type: float
         :min: 0

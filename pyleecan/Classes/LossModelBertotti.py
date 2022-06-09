@@ -28,6 +28,7 @@ except ImportError as error:
     comp_loss = error
 
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 
@@ -145,7 +146,7 @@ class LossModelBertotti(LossModel):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -155,13 +156,56 @@ class LossModelBertotti(LossModel):
         diff_list = list()
 
         # Check the properties inherited from LossModel
-        diff_list.extend(super(LossModelBertotti, self).compare(other, name=name))
-        if other._k_hy != self._k_hy:
-            diff_list.append(name + ".k_hy")
-        if other._k_ed != self._k_ed:
-            diff_list.append(name + ".k_ed")
-        if other._k_ex != self._k_ex:
-            diff_list.append(name + ".k_ex")
+        diff_list.extend(
+            super(LossModelBertotti, self).compare(
+                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
+            )
+        )
+        if (
+            other._k_hy is not None
+            and self._k_hy is not None
+            and isnan(other._k_hy)
+            and isnan(self._k_hy)
+        ):
+            pass
+        elif other._k_hy != self._k_hy:
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._k_hy) + ", other=" + str(other._k_hy) + ")"
+                )
+                diff_list.append(name + ".k_hy" + val_str)
+            else:
+                diff_list.append(name + ".k_hy")
+        if (
+            other._k_ed is not None
+            and self._k_ed is not None
+            and isnan(other._k_ed)
+            and isnan(self._k_ed)
+        ):
+            pass
+        elif other._k_ed != self._k_ed:
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._k_ed) + ", other=" + str(other._k_ed) + ")"
+                )
+                diff_list.append(name + ".k_ed" + val_str)
+            else:
+                diff_list.append(name + ".k_ed")
+        if (
+            other._k_ex is not None
+            and self._k_ex is not None
+            and isnan(other._k_ex)
+            and isnan(self._k_ex)
+        ):
+            pass
+        elif other._k_ex != self._k_ex:
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._k_ex) + ", other=" + str(other._k_ex) + ")"
+                )
+                diff_list.append(name + ".k_ex" + val_str)
+            else:
+                diff_list.append(name + ".k_ex")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -224,7 +268,7 @@ class LossModelBertotti(LossModel):
     k_hy = property(
         fget=_get_k_hy,
         fset=_set_k_hy,
-        doc=u"""Hysteresis loss coefficient
+        doc=u"""Hysteresis loss coefficient [W/kg]
 
         :Type: float
         """,
@@ -242,7 +286,7 @@ class LossModelBertotti(LossModel):
     k_ed = property(
         fget=_get_k_ed,
         fset=_set_k_ed,
-        doc=u"""Eddy current loss coefficient
+        doc=u"""Eddy current loss coefficient [W/kg]
 
         :Type: float
         """,
@@ -260,7 +304,7 @@ class LossModelBertotti(LossModel):
     k_ex = property(
         fget=_get_k_ex,
         fset=_set_k_ex,
-        doc=u"""Excess loss coefficient
+        doc=u"""Excess loss coefficient [W/kg]
 
         :Type: float
         """,

@@ -15,6 +15,7 @@ from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
 from ._frozen import FrozenClass
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 
@@ -82,7 +83,7 @@ class ModelBH_exponential(FrozenClass):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -90,10 +91,34 @@ class ModelBH_exponential(FrozenClass):
         if type(other) != type(self):
             return ["type(" + name + ")"]
         diff_list = list()
-        if other._Bs != self._Bs:
-            diff_list.append(name + ".Bs")
-        if other._mu_a != self._mu_a:
-            diff_list.append(name + ".mu_a")
+        if (
+            other._Bs is not None
+            and self._Bs is not None
+            and isnan(other._Bs)
+            and isnan(self._Bs)
+        ):
+            pass
+        elif other._Bs != self._Bs:
+            if is_add_value:
+                val_str = " (self=" + str(self._Bs) + ", other=" + str(other._Bs) + ")"
+                diff_list.append(name + ".Bs" + val_str)
+            else:
+                diff_list.append(name + ".Bs")
+        if (
+            other._mu_a is not None
+            and self._mu_a is not None
+            and isnan(other._mu_a)
+            and isnan(self._mu_a)
+        ):
+            pass
+        elif other._mu_a != self._mu_a:
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._mu_a) + ", other=" + str(other._mu_a) + ")"
+                )
+                diff_list.append(name + ".mu_a" + val_str)
+            else:
+                diff_list.append(name + ".mu_a")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -142,7 +167,7 @@ class ModelBH_exponential(FrozenClass):
     Bs = property(
         fget=_get_Bs,
         fset=_set_Bs,
-        doc=u"""BH curve parameter
+        doc=u"""BH curve parameter [T]
 
         :Type: float
         """,
@@ -160,7 +185,7 @@ class ModelBH_exponential(FrozenClass):
     mu_a = property(
         fget=_get_mu_a,
         fset=_set_mu_a,
-        doc=u"""Saturation permeability parameter
+        doc=u"""Saturation permeability parameter [-]
 
         :Type: float
         """,

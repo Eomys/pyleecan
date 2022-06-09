@@ -75,6 +75,7 @@ except ImportError as error:
     is_round_wire = error
 
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 
@@ -324,7 +325,7 @@ class CondType11(Conductor):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -334,23 +335,134 @@ class CondType11(Conductor):
         diff_list = list()
 
         # Check the properties inherited from Conductor
-        diff_list.extend(super(CondType11, self).compare(other, name=name))
-        if other._Hwire != self._Hwire:
-            diff_list.append(name + ".Hwire")
-        if other._Wwire != self._Wwire:
-            diff_list.append(name + ".Wwire")
+        diff_list.extend(
+            super(CondType11, self).compare(
+                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
+            )
+        )
+        if (
+            other._Hwire is not None
+            and self._Hwire is not None
+            and isnan(other._Hwire)
+            and isnan(self._Hwire)
+        ):
+            pass
+        elif other._Hwire != self._Hwire:
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._Hwire) + ", other=" + str(other._Hwire) + ")"
+                )
+                diff_list.append(name + ".Hwire" + val_str)
+            else:
+                diff_list.append(name + ".Hwire")
+        if (
+            other._Wwire is not None
+            and self._Wwire is not None
+            and isnan(other._Wwire)
+            and isnan(self._Wwire)
+        ):
+            pass
+        elif other._Wwire != self._Wwire:
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._Wwire) + ", other=" + str(other._Wwire) + ")"
+                )
+                diff_list.append(name + ".Wwire" + val_str)
+            else:
+                diff_list.append(name + ".Wwire")
         if other._Nwppc_rad != self._Nwppc_rad:
-            diff_list.append(name + ".Nwppc_rad")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._Nwppc_rad)
+                    + ", other="
+                    + str(other._Nwppc_rad)
+                    + ")"
+                )
+                diff_list.append(name + ".Nwppc_rad" + val_str)
+            else:
+                diff_list.append(name + ".Nwppc_rad")
         if other._Nwppc_tan != self._Nwppc_tan:
-            diff_list.append(name + ".Nwppc_tan")
-        if other._Wins_wire != self._Wins_wire:
-            diff_list.append(name + ".Wins_wire")
-        if other._Wins_coil != self._Wins_coil:
-            diff_list.append(name + ".Wins_coil")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._Nwppc_tan)
+                    + ", other="
+                    + str(other._Nwppc_tan)
+                    + ")"
+                )
+                diff_list.append(name + ".Nwppc_tan" + val_str)
+            else:
+                diff_list.append(name + ".Nwppc_tan")
+        if (
+            other._Wins_wire is not None
+            and self._Wins_wire is not None
+            and isnan(other._Wins_wire)
+            and isnan(self._Wins_wire)
+        ):
+            pass
+        elif other._Wins_wire != self._Wins_wire:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._Wins_wire)
+                    + ", other="
+                    + str(other._Wins_wire)
+                    + ")"
+                )
+                diff_list.append(name + ".Wins_wire" + val_str)
+            else:
+                diff_list.append(name + ".Wins_wire")
+        if (
+            other._Wins_coil is not None
+            and self._Wins_coil is not None
+            and isnan(other._Wins_coil)
+            and isnan(self._Wins_coil)
+        ):
+            pass
+        elif other._Wins_coil != self._Wins_coil:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._Wins_coil)
+                    + ", other="
+                    + str(other._Wins_coil)
+                    + ")"
+                )
+                diff_list.append(name + ".Wins_coil" + val_str)
+            else:
+                diff_list.append(name + ".Wins_coil")
         if other._type_winding_shape != self._type_winding_shape:
-            diff_list.append(name + ".type_winding_shape")
-        if other._alpha_ew != self._alpha_ew:
-            diff_list.append(name + ".alpha_ew")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._type_winding_shape)
+                    + ", other="
+                    + str(other._type_winding_shape)
+                    + ")"
+                )
+                diff_list.append(name + ".type_winding_shape" + val_str)
+            else:
+                diff_list.append(name + ".type_winding_shape")
+        if (
+            other._alpha_ew is not None
+            and self._alpha_ew is not None
+            and isnan(other._alpha_ew)
+            and isnan(self._alpha_ew)
+        ):
+            pass
+        elif other._alpha_ew != self._alpha_ew:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._alpha_ew)
+                    + ", other="
+                    + str(other._alpha_ew)
+                    + ")"
+                )
+                diff_list.append(name + ".alpha_ew" + val_str)
+            else:
+                diff_list.append(name + ".alpha_ew")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -428,7 +540,7 @@ class CondType11(Conductor):
     Hwire = property(
         fget=_get_Hwire,
         fset=_set_Hwire,
-        doc=u"""cf schematics, single wire height without insulation [m]
+        doc=u"""cf schematics, single wire height without insulation [m] [m]
 
         :Type: float
         :min: 0
@@ -447,7 +559,7 @@ class CondType11(Conductor):
     Wwire = property(
         fget=_get_Wwire,
         fset=_set_Wwire,
-        doc=u"""cf schematics, single wire width without insulation [m]
+        doc=u"""cf schematics, single wire width without insulation [m] [m]
 
         :Type: float
         :min: 0
@@ -466,7 +578,7 @@ class CondType11(Conductor):
     Nwppc_rad = property(
         fget=_get_Nwppc_rad,
         fset=_set_Nwppc_rad,
-        doc=u"""cf schematics, stator winding number of preformed wires (strands) in parallel per coil along radial (vertical) direction
+        doc=u"""cf schematics, stator winding number of preformed wires (strands) in parallel per coil along radial (vertical) direction [-]
 
         :Type: int
         :min: 1
@@ -485,7 +597,7 @@ class CondType11(Conductor):
     Nwppc_tan = property(
         fget=_get_Nwppc_tan,
         fset=_set_Nwppc_tan,
-        doc=u"""cf schematics, stator winding number of preformed wires (strands) in parallel per coil along tangential (horizontal) direction
+        doc=u"""cf schematics, stator winding number of preformed wires (strands) in parallel per coil along tangential (horizontal) direction [-]
 
         :Type: int
         :min: 1
@@ -504,7 +616,7 @@ class CondType11(Conductor):
     Wins_wire = property(
         fget=_get_Wins_wire,
         fset=_set_Wins_wire,
-        doc=u"""(advanced) cf schematics, winding strand insulation thickness [m]
+        doc=u"""(advanced) cf schematics, winding strand insulation thickness [m] [m]
 
         :Type: float
         :min: 0
@@ -523,7 +635,7 @@ class CondType11(Conductor):
     Wins_coil = property(
         fget=_get_Wins_coil,
         fset=_set_Wins_coil,
-        doc=u"""(advanced) cf schematics, winding coil insulation  thickness [m]
+        doc=u"""(advanced) cf schematics, winding coil insulation  thickness [m] [m]
 
         :Type: float
         :min: 0
@@ -542,7 +654,7 @@ class CondType11(Conductor):
     type_winding_shape = property(
         fget=_get_type_winding_shape,
         fset=_set_type_winding_shape,
-        doc=u"""type of winding shape for end winding length calculation\n0 for hairpin windings\n1 for normal windings
+        doc=u"""type of winding shape for end winding length calculation\n0 for hairpin windings\n1 for normal windings [-]
 
         :Type: int
         :min: 0
@@ -562,7 +674,7 @@ class CondType11(Conductor):
     alpha_ew = property(
         fget=_get_alpha_ew,
         fset=_set_alpha_ew,
-        doc=u"""angle of winding overhang hairpin coils [deg]
+        doc=u"""angle of winding overhang hairpin coils [deg] [deg]
 
         :Type: float
         :min: 0

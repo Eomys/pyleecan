@@ -39,6 +39,7 @@ except ImportError as error:
 
 
 from numpy import array, array_equal
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 
@@ -173,7 +174,7 @@ class NodeMat(FrozenClass):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -184,9 +185,32 @@ class NodeMat(FrozenClass):
         if not array_equal(other.coordinate, self.coordinate):
             diff_list.append(name + ".coordinate")
         if other._nb_node != self._nb_node:
-            diff_list.append(name + ".nb_node")
-        if other._delta != self._delta:
-            diff_list.append(name + ".delta")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._nb_node)
+                    + ", other="
+                    + str(other._nb_node)
+                    + ")"
+                )
+                diff_list.append(name + ".nb_node" + val_str)
+            else:
+                diff_list.append(name + ".nb_node")
+        if (
+            other._delta is not None
+            and self._delta is not None
+            and isnan(other._delta)
+            and isnan(self._delta)
+        ):
+            pass
+        elif other._delta != self._delta:
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._delta) + ", other=" + str(other._delta) + ")"
+                )
+                diff_list.append(name + ".delta" + val_str)
+            else:
+                diff_list.append(name + ".delta")
         if not array_equal(other.indice, self.indice):
             diff_list.append(name + ".indice")
         # Filter ignore differences

@@ -22,8 +22,16 @@ def get_surface_active(self, alpha=0, delta=0):
         Surface corresponding to the Winding Area
     """
     # get curve_list
-    line_list = self.build_geometry()[self.wind_begin_index : self.wind_end_index]
-    if self.type_line_wind == 0:
+    type_line_wind = self.type_line_wind
+    if self.wind_begin_index is None and self.wind_end_index is None:
+        # Winding not define, use complete surface
+        line_list = self.build_geometry()
+        type_line_wind = 1  # Enforce Arc1
+    else:
+        line_list = self.build_geometry()[self.wind_begin_index : self.wind_end_index]
+
+    # Add closing line
+    if type_line_wind == 0:
         line_list.append(
             Segment(begin=line_list[-1].get_end(), end=line_list[0].get_begin())
         )

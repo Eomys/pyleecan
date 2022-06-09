@@ -15,6 +15,7 @@ from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
 from ._frozen import FrozenClass
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 
@@ -110,7 +111,7 @@ class OptiSolver(FrozenClass):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -124,7 +125,12 @@ class OptiSolver(FrozenClass):
             diff_list.append(name + ".problem None mismatch")
         elif self.problem is not None:
             diff_list.extend(
-                self.problem.compare(other.problem, name=name + ".problem")
+                self.problem.compare(
+                    other.problem,
+                    name=name + ".problem",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
             )
         if (other.xoutput is None and self.xoutput is not None) or (
             other.xoutput is not None and self.xoutput is None
@@ -132,12 +138,37 @@ class OptiSolver(FrozenClass):
             diff_list.append(name + ".xoutput None mismatch")
         elif self.xoutput is not None:
             diff_list.extend(
-                self.xoutput.compare(other.xoutput, name=name + ".xoutput")
+                self.xoutput.compare(
+                    other.xoutput,
+                    name=name + ".xoutput",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
             )
         if other._logger_name != self._logger_name:
-            diff_list.append(name + ".logger_name")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._logger_name)
+                    + ", other="
+                    + str(other._logger_name)
+                    + ")"
+                )
+                diff_list.append(name + ".logger_name" + val_str)
+            else:
+                diff_list.append(name + ".logger_name")
         if other._is_keep_all_output != self._is_keep_all_output:
-            diff_list.append(name + ".is_keep_all_output")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._is_keep_all_output)
+                    + ", other="
+                    + str(other._is_keep_all_output)
+                    + ")"
+                )
+                diff_list.append(name + ".is_keep_all_output" + val_str)
+            else:
+                diff_list.append(name + ".is_keep_all_output")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -227,7 +258,7 @@ class OptiSolver(FrozenClass):
     problem = property(
         fget=_get_problem,
         fset=_set_problem,
-        doc=u"""Problem to solve
+        doc=u"""Problem to solve [-]
 
         :Type: OptiProblem
         """,
@@ -264,7 +295,7 @@ class OptiSolver(FrozenClass):
     xoutput = property(
         fget=_get_xoutput,
         fset=_set_xoutput,
-        doc=u"""Optimization results containing every output
+        doc=u"""Optimization results containing every output [-]
 
         :Type: XOutput
         """,
@@ -282,7 +313,7 @@ class OptiSolver(FrozenClass):
     logger_name = property(
         fget=_get_logger_name,
         fset=_set_logger_name,
-        doc=u"""Name of the logger to use
+        doc=u"""Name of the logger to use [-]
 
         :Type: str
         """,
@@ -300,7 +331,7 @@ class OptiSolver(FrozenClass):
     is_keep_all_output = property(
         fget=_get_is_keep_all_output,
         fset=_set_is_keep_all_output,
-        doc=u"""Boolean to keep every output
+        doc=u"""Boolean to keep every output [-]
 
         :Type: bool
         """,

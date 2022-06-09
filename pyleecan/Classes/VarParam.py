@@ -35,6 +35,7 @@ except ImportError as error:
     get_simu_number = error
 
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 
@@ -195,7 +196,7 @@ class VarParam(VarSimu):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -205,7 +206,11 @@ class VarParam(VarSimu):
         diff_list = list()
 
         # Check the properties inherited from VarSimu
-        diff_list.extend(super(VarParam, self).compare(other, name=name))
+        diff_list.extend(
+            super(VarParam, self).compare(
+                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
+            )
+        )
         if (
             other.paramexplorer_list is None and self.paramexplorer_list is not None
         ) or (other.paramexplorer_list is not None and self.paramexplorer_list is None):
@@ -220,6 +225,8 @@ class VarParam(VarSimu):
                     self.paramexplorer_list[ii].compare(
                         other.paramexplorer_list[ii],
                         name=name + ".paramexplorer_list[" + str(ii) + "]",
+                        ignore_list=ignore_list,
+                        is_add_value=is_add_value,
                     )
                 )
         # Filter ignore differences
@@ -318,7 +325,7 @@ class VarParam(VarSimu):
     paramexplorer_list = property(
         fget=_get_paramexplorer_list,
         fset=_set_paramexplorer_list,
-        doc=u"""List containing ParamSetter to define every simulation
+        doc=u"""List containing ParamSetter to define every simulation [-]
 
         :Type: [ParamExplorer]
         """,

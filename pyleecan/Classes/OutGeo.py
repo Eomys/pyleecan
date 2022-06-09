@@ -15,6 +15,7 @@ from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
 from ._frozen import FrozenClass
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 
@@ -192,7 +193,7 @@ class OutGeo(FrozenClass):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -205,35 +206,186 @@ class OutGeo(FrozenClass):
         ):
             diff_list.append(name + ".stator None mismatch")
         elif self.stator is not None:
-            diff_list.extend(self.stator.compare(other.stator, name=name + ".stator"))
+            diff_list.extend(
+                self.stator.compare(
+                    other.stator,
+                    name=name + ".stator",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
+            )
         if (other.rotor is None and self.rotor is not None) or (
             other.rotor is not None and self.rotor is None
         ):
             diff_list.append(name + ".rotor None mismatch")
         elif self.rotor is not None:
-            diff_list.extend(self.rotor.compare(other.rotor, name=name + ".rotor"))
-        if other._Wgap_mec != self._Wgap_mec:
-            diff_list.append(name + ".Wgap_mec")
-        if other._Wgap_mag != self._Wgap_mag:
-            diff_list.append(name + ".Wgap_mag")
-        if other._Rgap_mec != self._Rgap_mec:
-            diff_list.append(name + ".Rgap_mec")
-        if other._Lgap != self._Lgap:
-            diff_list.append(name + ".Lgap")
+            diff_list.extend(
+                self.rotor.compare(
+                    other.rotor,
+                    name=name + ".rotor",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
+            )
+        if (
+            other._Wgap_mec is not None
+            and self._Wgap_mec is not None
+            and isnan(other._Wgap_mec)
+            and isnan(self._Wgap_mec)
+        ):
+            pass
+        elif other._Wgap_mec != self._Wgap_mec:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._Wgap_mec)
+                    + ", other="
+                    + str(other._Wgap_mec)
+                    + ")"
+                )
+                diff_list.append(name + ".Wgap_mec" + val_str)
+            else:
+                diff_list.append(name + ".Wgap_mec")
+        if (
+            other._Wgap_mag is not None
+            and self._Wgap_mag is not None
+            and isnan(other._Wgap_mag)
+            and isnan(self._Wgap_mag)
+        ):
+            pass
+        elif other._Wgap_mag != self._Wgap_mag:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._Wgap_mag)
+                    + ", other="
+                    + str(other._Wgap_mag)
+                    + ")"
+                )
+                diff_list.append(name + ".Wgap_mag" + val_str)
+            else:
+                diff_list.append(name + ".Wgap_mag")
+        if (
+            other._Rgap_mec is not None
+            and self._Rgap_mec is not None
+            and isnan(other._Rgap_mec)
+            and isnan(self._Rgap_mec)
+        ):
+            pass
+        elif other._Rgap_mec != self._Rgap_mec:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._Rgap_mec)
+                    + ", other="
+                    + str(other._Rgap_mec)
+                    + ")"
+                )
+                diff_list.append(name + ".Rgap_mec" + val_str)
+            else:
+                diff_list.append(name + ".Rgap_mec")
+        if (
+            other._Lgap is not None
+            and self._Lgap is not None
+            and isnan(other._Lgap)
+            and isnan(self._Lgap)
+        ):
+            pass
+        elif other._Lgap != self._Lgap:
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._Lgap) + ", other=" + str(other._Lgap) + ")"
+                )
+                diff_list.append(name + ".Lgap" + val_str)
+            else:
+                diff_list.append(name + ".Lgap")
         if other._logger_name != self._logger_name:
-            diff_list.append(name + ".logger_name")
-        if other._angle_rotor_initial != self._angle_rotor_initial:
-            diff_list.append(name + ".angle_rotor_initial")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._logger_name)
+                    + ", other="
+                    + str(other._logger_name)
+                    + ")"
+                )
+                diff_list.append(name + ".logger_name" + val_str)
+            else:
+                diff_list.append(name + ".logger_name")
+        if (
+            other._angle_rotor_initial is not None
+            and self._angle_rotor_initial is not None
+            and isnan(other._angle_rotor_initial)
+            and isnan(self._angle_rotor_initial)
+        ):
+            pass
+        elif other._angle_rotor_initial != self._angle_rotor_initial:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._angle_rotor_initial)
+                    + ", other="
+                    + str(other._angle_rotor_initial)
+                    + ")"
+                )
+                diff_list.append(name + ".angle_rotor_initial" + val_str)
+            else:
+                diff_list.append(name + ".angle_rotor_initial")
         if other._rot_dir != self._rot_dir:
-            diff_list.append(name + ".rot_dir")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._rot_dir)
+                    + ", other="
+                    + str(other._rot_dir)
+                    + ")"
+                )
+                diff_list.append(name + ".rot_dir" + val_str)
+            else:
+                diff_list.append(name + ".rot_dir")
         if other._per_a != self._per_a:
-            diff_list.append(name + ".per_a")
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._per_a) + ", other=" + str(other._per_a) + ")"
+                )
+                diff_list.append(name + ".per_a" + val_str)
+            else:
+                diff_list.append(name + ".per_a")
         if other._is_antiper_a != self._is_antiper_a:
-            diff_list.append(name + ".is_antiper_a")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._is_antiper_a)
+                    + ", other="
+                    + str(other._is_antiper_a)
+                    + ")"
+                )
+                diff_list.append(name + ".is_antiper_a" + val_str)
+            else:
+                diff_list.append(name + ".is_antiper_a")
         if other._per_t_S != self._per_t_S:
-            diff_list.append(name + ".per_t_S")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._per_t_S)
+                    + ", other="
+                    + str(other._per_t_S)
+                    + ")"
+                )
+                diff_list.append(name + ".per_t_S" + val_str)
+            else:
+                diff_list.append(name + ".per_t_S")
         if other._is_antiper_t_S != self._is_antiper_t_S:
-            diff_list.append(name + ".is_antiper_t_S")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._is_antiper_t_S)
+                    + ", other="
+                    + str(other._is_antiper_t_S)
+                    + ")"
+                )
+                diff_list.append(name + ".is_antiper_t_S" + val_str)
+            else:
+                diff_list.append(name + ".is_antiper_t_S")
         if (other.axes_dict is None and self.axes_dict is not None) or (
             other.axes_dict is not None and self.axes_dict is None
         ):
@@ -246,13 +398,36 @@ class OutGeo(FrozenClass):
             for key in self.axes_dict:
                 diff_list.extend(
                     self.axes_dict[key].compare(
-                        other.axes_dict[key], name=name + ".axes_dict"
+                        other.axes_dict[key],
+                        name=name + ".axes_dict[" + str(key) + "]",
+                        ignore_list=ignore_list,
+                        is_add_value=is_add_value,
                     )
                 )
         if other._per_t_R != self._per_t_R:
-            diff_list.append(name + ".per_t_R")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._per_t_R)
+                    + ", other="
+                    + str(other._per_t_R)
+                    + ")"
+                )
+                diff_list.append(name + ".per_t_R" + val_str)
+            else:
+                diff_list.append(name + ".per_t_R")
         if other._is_antiper_t_R != self._is_antiper_t_R:
-            diff_list.append(name + ".is_antiper_t_R")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._is_antiper_t_R)
+                    + ", other="
+                    + str(other._is_antiper_t_R)
+                    + ")"
+                )
+                diff_list.append(name + ".is_antiper_t_R" + val_str)
+            else:
+                diff_list.append(name + ".is_antiper_t_R")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -392,7 +567,7 @@ class OutGeo(FrozenClass):
     stator = property(
         fget=_get_stator,
         fset=_set_stator,
-        doc=u"""Geometry output of the stator
+        doc=u"""Geometry output of the stator [-]
 
         :Type: OutGeoLam
         """,
@@ -429,7 +604,7 @@ class OutGeo(FrozenClass):
     rotor = property(
         fget=_get_rotor,
         fset=_set_rotor,
-        doc=u"""Geometry output of the rotor
+        doc=u"""Geometry output of the rotor [-]
 
         :Type: OutGeoLam
         """,
@@ -447,7 +622,7 @@ class OutGeo(FrozenClass):
     Wgap_mec = property(
         fget=_get_Wgap_mec,
         fset=_set_Wgap_mec,
-        doc=u"""mechanical airgap width (minimal distance between the lamination including magnet)
+        doc=u"""mechanical airgap width (minimal distance between the lamination including magnet) [m]
 
         :Type: float
         """,
@@ -465,7 +640,7 @@ class OutGeo(FrozenClass):
     Wgap_mag = property(
         fget=_get_Wgap_mag,
         fset=_set_Wgap_mag,
-        doc=u"""the magnetic airgap width (distance beetween the two Laminations bore radius)
+        doc=u"""the magnetic airgap width (distance beetween the two Laminations bore radius) [m]
 
         :Type: float
         """,
@@ -483,7 +658,7 @@ class OutGeo(FrozenClass):
     Rgap_mec = property(
         fget=_get_Rgap_mec,
         fset=_set_Rgap_mec,
-        doc=u"""radius of the center of the mecanical airgap
+        doc=u"""radius of the center of the mecanical airgap [m]
 
         :Type: float
         """,
@@ -501,7 +676,7 @@ class OutGeo(FrozenClass):
     Lgap = property(
         fget=_get_Lgap,
         fset=_set_Lgap,
-        doc=u"""Airgap active length
+        doc=u"""Airgap active length [m]
 
         :Type: float
         """,
@@ -519,7 +694,7 @@ class OutGeo(FrozenClass):
     logger_name = property(
         fget=_get_logger_name,
         fset=_set_logger_name,
-        doc=u"""Name of the logger to use
+        doc=u"""Name of the logger to use [-]
 
         :Type: str
         """,
@@ -537,7 +712,7 @@ class OutGeo(FrozenClass):
     angle_rotor_initial = property(
         fget=_get_angle_rotor_initial,
         fset=_set_angle_rotor_initial,
-        doc=u"""Difference between the d axis angle of the stator and the rotor
+        doc=u"""Difference between the d axis angle of the stator and the rotor [rad]
 
         :Type: float
         """,
@@ -555,7 +730,7 @@ class OutGeo(FrozenClass):
     rot_dir = property(
         fget=_get_rot_dir,
         fset=_set_rot_dir,
-        doc=u"""Rotation direction of the rotor (rot_dir*N0, default value given by ROT_DIR_REF)
+        doc=u"""Rotation direction of the rotor (rot_dir*N0, default value given by ROT_DIR_REF) [-]
 
         :Type: int
         :min: -1
@@ -575,7 +750,7 @@ class OutGeo(FrozenClass):
     per_a = property(
         fget=_get_per_a,
         fset=_set_per_a,
-        doc=u"""Number of spatial periodicities of the machine
+        doc=u"""Number of spatial periodicities of the machine [-]
 
         :Type: int
         """,
@@ -593,7 +768,7 @@ class OutGeo(FrozenClass):
     is_antiper_a = property(
         fget=_get_is_antiper_a,
         fset=_set_is_antiper_a,
-        doc=u"""True if an spatial anti-periodicity is possible after the periodicities
+        doc=u"""True if an spatial anti-periodicity is possible after the periodicities [-]
 
         :Type: bool
         """,
@@ -611,7 +786,7 @@ class OutGeo(FrozenClass):
     per_t_S = property(
         fget=_get_per_t_S,
         fset=_set_per_t_S,
-        doc=u"""Number of time periodicities of the machine in static referential
+        doc=u"""Number of time periodicities of the machine in static referential [-]
 
         :Type: int
         """,
@@ -629,7 +804,7 @@ class OutGeo(FrozenClass):
     is_antiper_t_S = property(
         fget=_get_is_antiper_t_S,
         fset=_set_is_antiper_t_S,
-        doc=u"""True if an time anti-periodicity is possible after the periodicities in static referential
+        doc=u"""True if an time anti-periodicity is possible after the periodicities in static referential [-]
 
         :Type: bool
         """,
@@ -687,7 +862,7 @@ class OutGeo(FrozenClass):
     per_t_R = property(
         fget=_get_per_t_R,
         fset=_set_per_t_R,
-        doc=u"""Number of time periodicities of the machine in rotating referential
+        doc=u"""Number of time periodicities of the machine in rotating referential [-]
 
         :Type: int
         """,
@@ -705,7 +880,7 @@ class OutGeo(FrozenClass):
     is_antiper_t_R = property(
         fget=_get_is_antiper_t_R,
         fset=_set_is_antiper_t_R,
-        doc=u"""True if an time anti-periodicity is possible after the periodicities in rotating referential
+        doc=u"""True if an time anti-periodicity is possible after the periodicities in rotating referential [-]
 
         :Type: bool
         """,

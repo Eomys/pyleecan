@@ -18,34 +18,19 @@ from .EEC import EEC
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
 try:
-    from ..Methods.Simulation.EEC_PMSM.comp_parameters import comp_parameters
+    from ..Methods.Simulation.EEC_PMSM.clear_parameters import clear_parameters
 except ImportError as error:
-    comp_parameters = error
-
-try:
-    from ..Methods.Simulation.EEC_PMSM.solve import solve
-except ImportError as error:
-    solve = error
-
-try:
-    from ..Methods.Simulation.EEC_PMSM.solve_PWM import solve_PWM
-except ImportError as error:
-    solve_PWM = error
-
-try:
-    from ..Methods.Simulation.EEC_PMSM.comp_joule_losses import comp_joule_losses
-except ImportError as error:
-    comp_joule_losses = error
-
-try:
-    from ..Methods.Simulation.EEC_PMSM.comp_torque_sync_rel import comp_torque_sync_rel
-except ImportError as error:
-    comp_torque_sync_rel = error
+    clear_parameters = error
 
 try:
     from ..Methods.Simulation.EEC_PMSM.comp_BEMF_harmonics import comp_BEMF_harmonics
 except ImportError as error:
     comp_BEMF_harmonics = error
+
+try:
+    from ..Methods.Simulation.EEC_PMSM.comp_joule_losses import comp_joule_losses
+except ImportError as error:
+    comp_joule_losses = error
 
 try:
     from ..Methods.Simulation.EEC_PMSM.comp_Ld import comp_Ld
@@ -58,6 +43,11 @@ except ImportError as error:
     comp_Lq = error
 
 try:
+    from ..Methods.Simulation.EEC_PMSM.comp_parameters import comp_parameters
+except ImportError as error:
+    comp_parameters = error
+
+try:
     from ..Methods.Simulation.EEC_PMSM.comp_Phidq import comp_Phidq
 except ImportError as error:
     comp_Phidq = error
@@ -68,11 +58,27 @@ except ImportError as error:
     comp_Phidq_mag = error
 
 try:
+    from ..Methods.Simulation.EEC_PMSM.comp_torque_sync_rel import comp_torque_sync_rel
+except ImportError as error:
+    comp_torque_sync_rel = error
+
+try:
+    from ..Methods.Simulation.EEC_PMSM.solve import solve
+except ImportError as error:
+    solve = error
+
+try:
+    from ..Methods.Simulation.EEC_PMSM.solve_PWM import solve_PWM
+except ImportError as error:
+    solve_PWM = error
+
+try:
     from ..Methods.Simulation.EEC_PMSM.update_from_ref import update_from_ref
 except ImportError as error:
     update_from_ref = error
 
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 
@@ -82,59 +88,18 @@ class EEC_PMSM(EEC):
     VERSION = 1
 
     # Check ImportError to remove unnecessary dependencies in unused method
-    # cf Methods.Simulation.EEC_PMSM.comp_parameters
-    if isinstance(comp_parameters, ImportError):
-        comp_parameters = property(
+    # cf Methods.Simulation.EEC_PMSM.clear_parameters
+    if isinstance(clear_parameters, ImportError):
+        clear_parameters = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use EEC_PMSM method comp_parameters: " + str(comp_parameters)
+                    "Can't use EEC_PMSM method clear_parameters: "
+                    + str(clear_parameters)
                 )
             )
         )
     else:
-        comp_parameters = comp_parameters
-    # cf Methods.Simulation.EEC_PMSM.solve
-    if isinstance(solve, ImportError):
-        solve = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use EEC_PMSM method solve: " + str(solve))
-            )
-        )
-    else:
-        solve = solve
-    # cf Methods.Simulation.EEC_PMSM.solve_PWM
-    if isinstance(solve_PWM, ImportError):
-        solve_PWM = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use EEC_PMSM method solve_PWM: " + str(solve_PWM))
-            )
-        )
-    else:
-        solve_PWM = solve_PWM
-    # cf Methods.Simulation.EEC_PMSM.comp_joule_losses
-    if isinstance(comp_joule_losses, ImportError):
-        comp_joule_losses = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use EEC_PMSM method comp_joule_losses: "
-                    + str(comp_joule_losses)
-                )
-            )
-        )
-    else:
-        comp_joule_losses = comp_joule_losses
-    # cf Methods.Simulation.EEC_PMSM.comp_torque_sync_rel
-    if isinstance(comp_torque_sync_rel, ImportError):
-        comp_torque_sync_rel = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use EEC_PMSM method comp_torque_sync_rel: "
-                    + str(comp_torque_sync_rel)
-                )
-            )
-        )
-    else:
-        comp_torque_sync_rel = comp_torque_sync_rel
+        clear_parameters = clear_parameters
     # cf Methods.Simulation.EEC_PMSM.comp_BEMF_harmonics
     if isinstance(comp_BEMF_harmonics, ImportError):
         comp_BEMF_harmonics = property(
@@ -147,6 +112,18 @@ class EEC_PMSM(EEC):
         )
     else:
         comp_BEMF_harmonics = comp_BEMF_harmonics
+    # cf Methods.Simulation.EEC_PMSM.comp_joule_losses
+    if isinstance(comp_joule_losses, ImportError):
+        comp_joule_losses = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use EEC_PMSM method comp_joule_losses: "
+                    + str(comp_joule_losses)
+                )
+            )
+        )
+    else:
+        comp_joule_losses = comp_joule_losses
     # cf Methods.Simulation.EEC_PMSM.comp_Ld
     if isinstance(comp_Ld, ImportError):
         comp_Ld = property(
@@ -165,6 +142,17 @@ class EEC_PMSM(EEC):
         )
     else:
         comp_Lq = comp_Lq
+    # cf Methods.Simulation.EEC_PMSM.comp_parameters
+    if isinstance(comp_parameters, ImportError):
+        comp_parameters = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use EEC_PMSM method comp_parameters: " + str(comp_parameters)
+                )
+            )
+        )
+    else:
+        comp_parameters = comp_parameters
     # cf Methods.Simulation.EEC_PMSM.comp_Phidq
     if isinstance(comp_Phidq, ImportError):
         comp_Phidq = property(
@@ -185,6 +173,36 @@ class EEC_PMSM(EEC):
         )
     else:
         comp_Phidq_mag = comp_Phidq_mag
+    # cf Methods.Simulation.EEC_PMSM.comp_torque_sync_rel
+    if isinstance(comp_torque_sync_rel, ImportError):
+        comp_torque_sync_rel = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use EEC_PMSM method comp_torque_sync_rel: "
+                    + str(comp_torque_sync_rel)
+                )
+            )
+        )
+    else:
+        comp_torque_sync_rel = comp_torque_sync_rel
+    # cf Methods.Simulation.EEC_PMSM.solve
+    if isinstance(solve, ImportError):
+        solve = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use EEC_PMSM method solve: " + str(solve))
+            )
+        )
+    else:
+        solve = solve
+    # cf Methods.Simulation.EEC_PMSM.solve_PWM
+    if isinstance(solve_PWM, ImportError):
+        solve_PWM = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use EEC_PMSM method solve_PWM: " + str(solve_PWM))
+            )
+        )
+    else:
+        solve_PWM = solve_PWM
     # cf Methods.Simulation.EEC_PMSM.update_from_ref
     if isinstance(update_from_ref, ImportError):
         update_from_ref = property(
@@ -330,7 +348,7 @@ class EEC_PMSM(EEC):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -340,19 +358,105 @@ class EEC_PMSM(EEC):
         diff_list = list()
 
         # Check the properties inherited from EEC
-        diff_list.extend(super(EEC_PMSM, self).compare(other, name=name))
-        if other._Ld != self._Ld:
-            diff_list.append(name + ".Ld")
-        if other._Lq != self._Lq:
-            diff_list.append(name + ".Lq")
-        if other._Phid != self._Phid:
-            diff_list.append(name + ".Phid")
-        if other._Phiq != self._Phiq:
-            diff_list.append(name + ".Phiq")
-        if other._Phid_mag != self._Phid_mag:
-            diff_list.append(name + ".Phid_mag")
-        if other._Phiq_mag != self._Phiq_mag:
-            diff_list.append(name + ".Phiq_mag")
+        diff_list.extend(
+            super(EEC_PMSM, self).compare(
+                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
+            )
+        )
+        if (
+            other._Ld is not None
+            and self._Ld is not None
+            and isnan(other._Ld)
+            and isnan(self._Ld)
+        ):
+            pass
+        elif other._Ld != self._Ld:
+            if is_add_value:
+                val_str = " (self=" + str(self._Ld) + ", other=" + str(other._Ld) + ")"
+                diff_list.append(name + ".Ld" + val_str)
+            else:
+                diff_list.append(name + ".Ld")
+        if (
+            other._Lq is not None
+            and self._Lq is not None
+            and isnan(other._Lq)
+            and isnan(self._Lq)
+        ):
+            pass
+        elif other._Lq != self._Lq:
+            if is_add_value:
+                val_str = " (self=" + str(self._Lq) + ", other=" + str(other._Lq) + ")"
+                diff_list.append(name + ".Lq" + val_str)
+            else:
+                diff_list.append(name + ".Lq")
+        if (
+            other._Phid is not None
+            and self._Phid is not None
+            and isnan(other._Phid)
+            and isnan(self._Phid)
+        ):
+            pass
+        elif other._Phid != self._Phid:
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._Phid) + ", other=" + str(other._Phid) + ")"
+                )
+                diff_list.append(name + ".Phid" + val_str)
+            else:
+                diff_list.append(name + ".Phid")
+        if (
+            other._Phiq is not None
+            and self._Phiq is not None
+            and isnan(other._Phiq)
+            and isnan(self._Phiq)
+        ):
+            pass
+        elif other._Phiq != self._Phiq:
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._Phiq) + ", other=" + str(other._Phiq) + ")"
+                )
+                diff_list.append(name + ".Phiq" + val_str)
+            else:
+                diff_list.append(name + ".Phiq")
+        if (
+            other._Phid_mag is not None
+            and self._Phid_mag is not None
+            and isnan(other._Phid_mag)
+            and isnan(self._Phid_mag)
+        ):
+            pass
+        elif other._Phid_mag != self._Phid_mag:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._Phid_mag)
+                    + ", other="
+                    + str(other._Phid_mag)
+                    + ")"
+                )
+                diff_list.append(name + ".Phid_mag" + val_str)
+            else:
+                diff_list.append(name + ".Phid_mag")
+        if (
+            other._Phiq_mag is not None
+            and self._Phiq_mag is not None
+            and isnan(other._Phiq_mag)
+            and isnan(self._Phiq_mag)
+        ):
+            pass
+        elif other._Phiq_mag != self._Phiq_mag:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._Phiq_mag)
+                    + ", other="
+                    + str(other._Phiq_mag)
+                    + ")"
+                )
+                diff_list.append(name + ".Phiq_mag" + val_str)
+            else:
+                diff_list.append(name + ".Phiq_mag")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -424,7 +528,7 @@ class EEC_PMSM(EEC):
     Ld = property(
         fget=_get_Ld,
         fset=_set_Ld,
-        doc=u"""Stator winding inductance along d-axis
+        doc=u"""Stator winding inductance along d-axis [H]
 
         :Type: float
         """,
@@ -442,7 +546,7 @@ class EEC_PMSM(EEC):
     Lq = property(
         fget=_get_Lq,
         fset=_set_Lq,
-        doc=u"""Stator winding inductance along q-axis
+        doc=u"""Stator winding inductance along q-axis [H]
 
         :Type: float
         """,
@@ -460,7 +564,7 @@ class EEC_PMSM(EEC):
     Phid = property(
         fget=_get_Phid,
         fset=_set_Phid,
-        doc=u"""Stator winding flux along d-axis
+        doc=u"""Stator winding flux along d-axis [Wb]
 
         :Type: float
         """,
@@ -478,7 +582,7 @@ class EEC_PMSM(EEC):
     Phiq = property(
         fget=_get_Phiq,
         fset=_set_Phiq,
-        doc=u"""Stator winding flux along q-axis
+        doc=u"""Stator winding flux along q-axis [Wb]
 
         :Type: float
         """,
@@ -496,7 +600,7 @@ class EEC_PMSM(EEC):
     Phid_mag = property(
         fget=_get_Phid_mag,
         fset=_set_Phid_mag,
-        doc=u"""Stator winding flux along d-axis in open-circuit (rotor flux linkage)
+        doc=u"""Stator winding flux along d-axis in open-circuit (rotor flux linkage) [Wb]
 
         :Type: float
         """,
@@ -514,7 +618,7 @@ class EEC_PMSM(EEC):
     Phiq_mag = property(
         fget=_get_Phiq_mag,
         fset=_set_Phiq_mag,
-        doc=u"""Stator winding flux along q-axis in open-circuit (rotor flux linkage)
+        doc=u"""Stator winding flux along q-axis in open-circuit (rotor flux linkage) [Wb]
 
         :Type: float
         """,

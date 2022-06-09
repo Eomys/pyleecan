@@ -68,6 +68,7 @@ except ImportError as error:
     get_surface_active = error
 
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 
@@ -302,7 +303,7 @@ class SlotW60(Slot):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -312,23 +313,115 @@ class SlotW60(Slot):
         diff_list = list()
 
         # Check the properties inherited from Slot
-        diff_list.extend(super(SlotW60, self).compare(other, name=name))
-        if other._W1 != self._W1:
-            diff_list.append(name + ".W1")
-        if other._W2 != self._W2:
-            diff_list.append(name + ".W2")
-        if other._H1 != self._H1:
-            diff_list.append(name + ".H1")
-        if other._H2 != self._H2:
-            diff_list.append(name + ".H2")
-        if other._R1 != self._R1:
-            diff_list.append(name + ".R1")
-        if other._H3 != self._H3:
-            diff_list.append(name + ".H3")
-        if other._H4 != self._H4:
-            diff_list.append(name + ".H4")
-        if other._W3 != self._W3:
-            diff_list.append(name + ".W3")
+        diff_list.extend(
+            super(SlotW60, self).compare(
+                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
+            )
+        )
+        if (
+            other._W1 is not None
+            and self._W1 is not None
+            and isnan(other._W1)
+            and isnan(self._W1)
+        ):
+            pass
+        elif other._W1 != self._W1:
+            if is_add_value:
+                val_str = " (self=" + str(self._W1) + ", other=" + str(other._W1) + ")"
+                diff_list.append(name + ".W1" + val_str)
+            else:
+                diff_list.append(name + ".W1")
+        if (
+            other._W2 is not None
+            and self._W2 is not None
+            and isnan(other._W2)
+            and isnan(self._W2)
+        ):
+            pass
+        elif other._W2 != self._W2:
+            if is_add_value:
+                val_str = " (self=" + str(self._W2) + ", other=" + str(other._W2) + ")"
+                diff_list.append(name + ".W2" + val_str)
+            else:
+                diff_list.append(name + ".W2")
+        if (
+            other._H1 is not None
+            and self._H1 is not None
+            and isnan(other._H1)
+            and isnan(self._H1)
+        ):
+            pass
+        elif other._H1 != self._H1:
+            if is_add_value:
+                val_str = " (self=" + str(self._H1) + ", other=" + str(other._H1) + ")"
+                diff_list.append(name + ".H1" + val_str)
+            else:
+                diff_list.append(name + ".H1")
+        if (
+            other._H2 is not None
+            and self._H2 is not None
+            and isnan(other._H2)
+            and isnan(self._H2)
+        ):
+            pass
+        elif other._H2 != self._H2:
+            if is_add_value:
+                val_str = " (self=" + str(self._H2) + ", other=" + str(other._H2) + ")"
+                diff_list.append(name + ".H2" + val_str)
+            else:
+                diff_list.append(name + ".H2")
+        if (
+            other._R1 is not None
+            and self._R1 is not None
+            and isnan(other._R1)
+            and isnan(self._R1)
+        ):
+            pass
+        elif other._R1 != self._R1:
+            if is_add_value:
+                val_str = " (self=" + str(self._R1) + ", other=" + str(other._R1) + ")"
+                diff_list.append(name + ".R1" + val_str)
+            else:
+                diff_list.append(name + ".R1")
+        if (
+            other._H3 is not None
+            and self._H3 is not None
+            and isnan(other._H3)
+            and isnan(self._H3)
+        ):
+            pass
+        elif other._H3 != self._H3:
+            if is_add_value:
+                val_str = " (self=" + str(self._H3) + ", other=" + str(other._H3) + ")"
+                diff_list.append(name + ".H3" + val_str)
+            else:
+                diff_list.append(name + ".H3")
+        if (
+            other._H4 is not None
+            and self._H4 is not None
+            and isnan(other._H4)
+            and isnan(self._H4)
+        ):
+            pass
+        elif other._H4 != self._H4:
+            if is_add_value:
+                val_str = " (self=" + str(self._H4) + ", other=" + str(other._H4) + ")"
+                diff_list.append(name + ".H4" + val_str)
+            else:
+                diff_list.append(name + ".H4")
+        if (
+            other._W3 is not None
+            and self._W3 is not None
+            and isnan(other._W3)
+            and isnan(self._W3)
+        ):
+            pass
+        elif other._W3 != self._W3:
+            if is_add_value:
+                val_str = " (self=" + str(self._W3) + ", other=" + str(other._W3) + ")"
+                diff_list.append(name + ".W3" + val_str)
+            else:
+                diff_list.append(name + ".W3")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -406,7 +499,7 @@ class SlotW60(Slot):
     W1 = property(
         fget=_get_W1,
         fset=_set_W1,
-        doc=u"""Pole top width
+        doc=u"""Pole top width [m]
 
         :Type: float
         :min: 0
@@ -425,7 +518,7 @@ class SlotW60(Slot):
     W2 = property(
         fget=_get_W2,
         fset=_set_W2,
-        doc=u"""Pole bottom width
+        doc=u"""Pole bottom width [m]
 
         :Type: float
         :min: 0
@@ -444,7 +537,7 @@ class SlotW60(Slot):
     H1 = property(
         fget=_get_H1,
         fset=_set_H1,
-        doc=u"""Pole top height
+        doc=u"""Pole top height [m]
 
         :Type: float
         :min: 0
@@ -463,7 +556,7 @@ class SlotW60(Slot):
     H2 = property(
         fget=_get_H2,
         fset=_set_H2,
-        doc=u"""Pole bottom height
+        doc=u"""Pole bottom height [m]
 
         :Type: float
         :min: 0
@@ -482,7 +575,7 @@ class SlotW60(Slot):
     R1 = property(
         fget=_get_R1,
         fset=_set_R1,
-        doc=u"""Pole top radius
+        doc=u"""Pole top radius [m]
 
         :Type: float
         :min: 0
@@ -501,7 +594,7 @@ class SlotW60(Slot):
     H3 = property(
         fget=_get_H3,
         fset=_set_H3,
-        doc=u"""Top Distance Ploe-coil 
+        doc=u"""Top Distance Ploe-coil  [m]
 
         :Type: float
         :min: 0
@@ -520,7 +613,7 @@ class SlotW60(Slot):
     H4 = property(
         fget=_get_H4,
         fset=_set_H4,
-        doc=u"""Bottom Distance Ploe-coil 
+        doc=u"""Bottom Distance Ploe-coil  [m]
 
         :Type: float
         :min: 0
@@ -539,7 +632,7 @@ class SlotW60(Slot):
     W3 = property(
         fget=_get_W3,
         fset=_set_W3,
-        doc=u"""Edge Distance Ploe-coil 
+        doc=u"""Edge Distance Ploe-coil  [m]
 
         :Type: float
         :min: 0
