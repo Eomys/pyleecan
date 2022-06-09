@@ -9336,7 +9336,9 @@
                 "value": "1"
             }
         ],
-        "daughters": [],
+        "daughters": [
+            "OutLossMinimal"
+        ],
         "desc": "Gather the loss module outputs",
         "is_internal": false,
         "methods": [
@@ -9377,6 +9379,111 @@
                 "type": "str",
                 "unit": "-",
                 "value": "Pyleecan.Loss"
+            }
+        ]
+    },
+    "OutLossMinimal": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Gather the loss module outputs",
+        "is_internal": false,
+        "methods": [
+            "get_loss",
+            "get_loss_dist",
+            "get_loss_group",
+            "get_loss_overall",
+            "store"
+        ],
+        "mother": "OutLoss",
+        "name": "OutLossMinimal",
+        "package": "Output",
+        "path": "pyleecan/Generator/ClassesRef/Output/OutLossMinimal.csv",
+        "properties": [
+            {
+                "desc": "Internal list of loss data",
+                "max": "",
+                "min": "",
+                "name": "loss_list",
+                "type": "[SciDataTool.Classes.DataND.DataND]",
+                "unit": "",
+                "value": "None"
+            },
+            {
+                "desc": "Internal list of loss meshsolutions",
+                "max": "",
+                "min": "",
+                "name": "meshsol_list",
+                "type": "[MeshSolution]",
+                "unit": "",
+                "value": null
+            },
+            {
+                "desc": "Internal dict to index losses",
+                "max": "",
+                "min": "",
+                "name": "loss_index",
+                "type": "dict",
+                "unit": "",
+                "value": {}
+            },
+            {
+                "desc": "Stator core losses due to hysteresis and eddy currents",
+                "max": "",
+                "min": "",
+                "name": "Pstator",
+                "type": "float",
+                "unit": "W",
+                "value": null
+            },
+            {
+                "desc": "Rotor core losses due to hysteresis and eddy currents",
+                "max": "",
+                "min": "",
+                "name": "Protor",
+                "type": "float",
+                "unit": "W",
+                "value": null
+            },
+            {
+                "desc": "Magnet eddy current losses",
+                "max": "",
+                "min": "",
+                "name": "Pmagnet",
+                "type": "float",
+                "unit": "W",
+                "value": null
+            },
+            {
+                "desc": "Stator core losses",
+                "max": "",
+                "min": "",
+                "name": "Pprox",
+                "type": "float",
+                "unit": "W",
+                "value": null
+            },
+            {
+                "desc": "Stator core losses",
+                "max": "",
+                "min": "",
+                "name": "Pjoule",
+                "type": "float",
+                "unit": "W",
+                "value": null
+            },
+            {
+                "desc": "Dict containing coefficients to rebuild loss polynom function of frequency",
+                "max": "",
+                "min": "",
+                "name": "coeff_dict",
+                "type": "dict",
+                "unit": "",
+                "value": -1
             }
         ]
     },

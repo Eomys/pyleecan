@@ -1,4 +1,5 @@
 from ....Methods.Simulation.Input import InputError
+from pyleecan.Classes.OutLossMinimal import OutLossMinimal
 
 
 def run(self):
@@ -16,6 +17,8 @@ def run(self):
     axes_dict = self.comp_axes(output)
 
     out_dict = self.comp_loss(output, axes_dict)
+
+    output.loss = OutLossMinimal()
 
     output.loss.store(
         out_dict,
