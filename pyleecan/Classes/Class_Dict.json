@@ -5415,16 +5415,54 @@
         "is_internal": false,
         "methods": [
             "run",
+            "comp_axes",
+            "comp_loss",
             "comp_loss_density_core",
             "comp_loss_density_joule",
-            "comp_loss_density_magnet",
-            "comp_loss"
+            "comp_loss_density_magnet"
         ],
         "mother": "Loss",
         "name": "LossFEMM",
         "package": "Simulation",
         "path": "pyleecan/Generator/ClassesRef/Simulation/LossFEMM.csv",
-        "properties": []
+        "properties": [
+            {
+                "desc": "eddy current loss coefficients",
+                "max": "",
+                "min": "",
+                "name": "Ce",
+                "type": "float",
+                "unit": "W/(m3*T2*Hz2)",
+                "value": null
+            },
+            {
+                "desc": "hysteresis loss coefficients",
+                "max": "",
+                "min": "",
+                "name": "Ch",
+                "type": "float",
+                "unit": "W/(m3*T2*Hz)",
+                "value": null
+            },
+            {
+                "desc": "proximity loss coefficients",
+                "max": "",
+                "min": "",
+                "name": "Cp",
+                "type": "float",
+                "unit": "W/(m3*T2*Hz2)",
+                "value": null
+            },
+            {
+                "desc": "Skin effect for resistance calculation",
+                "max": "",
+                "min": "",
+                "name": "type_skin_effect",
+                "type": "int",
+                "unit": "-",
+                "value": 1
+            }
+        ]
     },
     "LossModel": {
         "constants": [

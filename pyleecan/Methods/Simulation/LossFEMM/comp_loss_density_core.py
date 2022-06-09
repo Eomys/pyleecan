@@ -1,4 +1,4 @@
-from numpy import matmul, abs as np_abs, sum as np_sum, sqrt as np_sqrt
+from numpy import matmul, abs as np_abs, sum as np_sum
 
 
 def comp_loss_density_core(self, group, coeff_dict):
@@ -39,22 +39,17 @@ def comp_loss_density_core(self, group, coeff_dict):
     if "stator" in group:
         Lst = machine.stator.L1
         Kf = machine.stator.Kf1
-        rho = machine.stator.mat_type.struct.rho
     else:
         Lst = machine.rotor.L1
         Kf = machine.rotor.Kf1
-        rho = machine.rotor.mat_type.struct.rho
 
     # Get hysteresis and eddy current loss coefficients
     if "winding" in group:
         Ch = 0
         Ce = self.Cp
     else:
-        lossModel = self.model_dict[group]
-        Ch = lossModel.k_hy / Kf * rho
-        Ce = lossModel.k_ed / Kf * rho
-        alpha_f = lossModel.alpha_f
-        alpha_B = lossModel.alpha_B
+        Ch = self.Ch / Kf
+        Ce = self.Ce / Kf
 
     # Get fundamental frequency
     felec = output.elec.OP.get_felec()
@@ -122,14 +117,14 @@ def comp_loss_density_core(self, group, coeff_dict):
     freqs = Bfft["freqs"]
 
     # Compute FFT square of magnetic flux density
-    Bfft_magnitude = np_sqrt(np_abs(Bfft["comp_x"]) ** 2 + np_abs(Bfft["comp_y"]) ** 2)
+    Bfft_square = np_abs(Bfft["comp_x"]) ** 2 + np_abs(Bfft["comp_y"]) ** 2
 
     # Eddy-current loss density (or proximity loss density) for each frequency and element
-    Pcore_density = Ce * freqs[:, None] ** 2 * Bfft_magnitude ** 2
+    Pcore_density = Ce * freqs[:, None] ** 2 * Bfft_square
 
     if Ch != 0:
         # Hysteretic loss density for each frequency and element
-        Pcore_density += Ch * freqs[:, None] ** alpha_f * Bfft_magnitude ** alpha_B
+        Pcore_density += Ch * freqs[:, None] * Bfft_square
 
     if is_change_Time:
         # Change periodicity back to original periodicity
@@ -139,17 +134,15 @@ def comp_loss_density_core(self, group, coeff_dict):
     # Calculate coefficients to evaluate core losses for later use
     if coeff_dict is not None:
         # Integrate loss density over group volume
-        coeff = Lst * per_a * matmul(Bfft_magnitude ** 2, Se)
+        coeff = Lst * per_a * matmul(Bfft_square, Se)
         # Get frequency orders
         n = freqs / felec
         # Get polynomial coefficients
         A = np_sum(Ce * coeff * n ** 2)
         if Ch == 0:
             B = 0
-            alpha_f = 0
         else:
-            coeff = Lst * per_a * matmul(Bfft_magnitude ** alpha_B, Se)
-            B = np_sum(Ch * coeff * n ** alpha_f)
-        coeff_dict[group] = {"A": A, "B": B, "C": 0, "a": 2, "b": alpha_f, "c": 0}
+            B = np_sum(Ch * coeff * n)
+        coeff_dict[group] = {"A": A, "B": B, "C": 0}
 
     return Pcore_density, freqs

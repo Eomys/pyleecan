@@ -23,6 +23,16 @@ except ImportError as error:
     run = error
 
 try:
+    from ..Methods.Simulation.LossFEMM.comp_axes import comp_axes
+except ImportError as error:
+    comp_axes = error
+
+try:
+    from ..Methods.Simulation.LossFEMM.comp_loss import comp_loss
+except ImportError as error:
+    comp_loss = error
+
+try:
     from ..Methods.Simulation.LossFEMM.comp_loss_density_core import (
         comp_loss_density_core,
     )
@@ -42,11 +52,6 @@ try:
     )
 except ImportError as error:
     comp_loss_density_magnet = error
-
-try:
-    from ..Methods.Simulation.LossFEMM.comp_loss import comp_loss
-except ImportError as error:
-    comp_loss = error
 
 
 from numpy import isnan
@@ -68,6 +73,24 @@ class LossFEMM(Loss):
         )
     else:
         run = run
+    # cf Methods.Simulation.LossFEMM.comp_axes
+    if isinstance(comp_axes, ImportError):
+        comp_axes = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use LossFEMM method comp_axes: " + str(comp_axes))
+            )
+        )
+    else:
+        comp_axes = comp_axes
+    # cf Methods.Simulation.LossFEMM.comp_loss
+    if isinstance(comp_loss, ImportError):
+        comp_loss = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use LossFEMM method comp_loss: " + str(comp_loss))
+            )
+        )
+    else:
+        comp_loss = comp_loss
     # cf Methods.Simulation.LossFEMM.comp_loss_density_core
     if isinstance(comp_loss_density_core, ImportError):
         comp_loss_density_core = property(
@@ -104,15 +127,6 @@ class LossFEMM(Loss):
         )
     else:
         comp_loss_density_magnet = comp_loss_density_magnet
-    # cf Methods.Simulation.LossFEMM.comp_loss
-    if isinstance(comp_loss, ImportError):
-        comp_loss = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use LossFEMM method comp_loss: " + str(comp_loss))
-            )
-        )
-    else:
-        comp_loss = comp_loss
     # save and copy methods are available in all object
     save = save
     copy = copy
@@ -121,6 +135,10 @@ class LossFEMM(Loss):
 
     def __init__(
         self,
+        Ce=None,
+        Ch=None,
+        Cp=None,
+        type_skin_effect=1,
         logger_name="Pyleecan.Loss",
         model_dict=None,
         Tsta=20,
@@ -144,6 +162,14 @@ class LossFEMM(Loss):
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
+            if "Ce" in list(init_dict.keys()):
+                Ce = init_dict["Ce"]
+            if "Ch" in list(init_dict.keys()):
+                Ch = init_dict["Ch"]
+            if "Cp" in list(init_dict.keys()):
+                Cp = init_dict["Cp"]
+            if "type_skin_effect" in list(init_dict.keys()):
+                type_skin_effect = init_dict["type_skin_effect"]
             if "logger_name" in list(init_dict.keys()):
                 logger_name = init_dict["logger_name"]
             if "model_dict" in list(init_dict.keys()):
@@ -155,6 +181,10 @@ class LossFEMM(Loss):
             if "is_get_meshsolution" in list(init_dict.keys()):
                 is_get_meshsolution = init_dict["is_get_meshsolution"]
         # Set the properties (value check and convertion are done in setter)
+        self.Ce = Ce
+        self.Ch = Ch
+        self.Cp = Cp
+        self.type_skin_effect = type_skin_effect
         # Call Loss init
         super(LossFEMM, self).__init__(
             logger_name=logger_name,
@@ -172,6 +202,10 @@ class LossFEMM(Loss):
         LossFEMM_str = ""
         # Get the properties inherited from Loss
         LossFEMM_str += super(LossFEMM, self).__str__()
+        LossFEMM_str += "Ce = " + str(self.Ce) + linesep
+        LossFEMM_str += "Ch = " + str(self.Ch) + linesep
+        LossFEMM_str += "Cp = " + str(self.Cp) + linesep
+        LossFEMM_str += "type_skin_effect = " + str(self.type_skin_effect) + linesep
         return LossFEMM_str
 
     def __eq__(self, other):
@@ -182,6 +216,14 @@ class LossFEMM(Loss):
 
         # Check the properties inherited from Loss
         if not super(LossFEMM, self).__eq__(other):
+            return False
+        if other.Ce != self.Ce:
+            return False
+        if other.Ch != self.Ch:
+            return False
+        if other.Cp != self.Cp:
+            return False
+        if other.type_skin_effect != self.type_skin_effect:
             return False
         return True
 
@@ -200,6 +242,57 @@ class LossFEMM(Loss):
                 other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
             )
         )
+        if (
+            other._Ce is not None
+            and self._Ce is not None
+            and isnan(other._Ce)
+            and isnan(self._Ce)
+        ):
+            pass
+        elif other._Ce != self._Ce:
+            if is_add_value:
+                val_str = " (self=" + str(self._Ce) + ", other=" + str(other._Ce) + ")"
+                diff_list.append(name + ".Ce" + val_str)
+            else:
+                diff_list.append(name + ".Ce")
+        if (
+            other._Ch is not None
+            and self._Ch is not None
+            and isnan(other._Ch)
+            and isnan(self._Ch)
+        ):
+            pass
+        elif other._Ch != self._Ch:
+            if is_add_value:
+                val_str = " (self=" + str(self._Ch) + ", other=" + str(other._Ch) + ")"
+                diff_list.append(name + ".Ch" + val_str)
+            else:
+                diff_list.append(name + ".Ch")
+        if (
+            other._Cp is not None
+            and self._Cp is not None
+            and isnan(other._Cp)
+            and isnan(self._Cp)
+        ):
+            pass
+        elif other._Cp != self._Cp:
+            if is_add_value:
+                val_str = " (self=" + str(self._Cp) + ", other=" + str(other._Cp) + ")"
+                diff_list.append(name + ".Cp" + val_str)
+            else:
+                diff_list.append(name + ".Cp")
+        if other._type_skin_effect != self._type_skin_effect:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._type_skin_effect)
+                    + ", other="
+                    + str(other._type_skin_effect)
+                    + ")"
+                )
+                diff_list.append(name + ".type_skin_effect" + val_str)
+            else:
+                diff_list.append(name + ".type_skin_effect")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -211,6 +304,10 @@ class LossFEMM(Loss):
 
         # Get size of the properties inherited from Loss
         S += super(LossFEMM, self).__sizeof__()
+        S += getsizeof(self.Ce)
+        S += getsizeof(self.Ch)
+        S += getsizeof(self.Cp)
+        S += getsizeof(self.type_skin_effect)
         return S
 
     def as_dict(self, type_handle_ndarray=0, keep_function=False, **kwargs):
@@ -230,6 +327,10 @@ class LossFEMM(Loss):
             keep_function=keep_function,
             **kwargs
         )
+        LossFEMM_dict["Ce"] = self.Ce
+        LossFEMM_dict["Ch"] = self.Ch
+        LossFEMM_dict["Cp"] = self.Cp
+        LossFEMM_dict["type_skin_effect"] = self.type_skin_effect
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         LossFEMM_dict["__class__"] = "LossFEMM"
@@ -238,5 +339,81 @@ class LossFEMM(Loss):
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""
 
+        self.Ce = None
+        self.Ch = None
+        self.Cp = None
+        self.type_skin_effect = None
         # Set to None the properties inherited from Loss
         super(LossFEMM, self)._set_None()
+
+    def _get_Ce(self):
+        """getter of Ce"""
+        return self._Ce
+
+    def _set_Ce(self, value):
+        """setter of Ce"""
+        check_var("Ce", value, "float")
+        self._Ce = value
+
+    Ce = property(
+        fget=_get_Ce,
+        fset=_set_Ce,
+        doc=u"""eddy current loss coefficients [W/(m3*T2*Hz2)]
+
+        :Type: float
+        """,
+    )
+
+    def _get_Ch(self):
+        """getter of Ch"""
+        return self._Ch
+
+    def _set_Ch(self, value):
+        """setter of Ch"""
+        check_var("Ch", value, "float")
+        self._Ch = value
+
+    Ch = property(
+        fget=_get_Ch,
+        fset=_set_Ch,
+        doc=u"""hysteresis loss coefficients [W/(m3*T2*Hz)]
+
+        :Type: float
+        """,
+    )
+
+    def _get_Cp(self):
+        """getter of Cp"""
+        return self._Cp
+
+    def _set_Cp(self, value):
+        """setter of Cp"""
+        check_var("Cp", value, "float")
+        self._Cp = value
+
+    Cp = property(
+        fget=_get_Cp,
+        fset=_set_Cp,
+        doc=u"""proximity loss coefficients [W/(m3*T2*Hz2)]
+
+        :Type: float
+        """,
+    )
+
+    def _get_type_skin_effect(self):
+        """getter of type_skin_effect"""
+        return self._type_skin_effect
+
+    def _set_type_skin_effect(self, value):
+        """setter of type_skin_effect"""
+        check_var("type_skin_effect", value, "int")
+        self._type_skin_effect = value
+
+    type_skin_effect = property(
+        fget=_get_type_skin_effect,
+        fset=_set_type_skin_effect,
+        doc=u"""Skin effect for resistance calculation [-]
+
+        :Type: int
+        """,
+    )
