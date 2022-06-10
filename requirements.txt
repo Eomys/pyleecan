@@ -10,7 +10,7 @@ PySide2>=5.15.2
 pyuff>=1.25
 pyvista>=0.25.3
 quadpy
-SciDataTool>=2.3.11
+SciDataTool>=2.4.4
 scipy>=1.4.1
 setuptools
 swat_em>=0.6.3

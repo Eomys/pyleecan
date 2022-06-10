@@ -19,9 +19,10 @@ from pyleecan.Classes.MachineLSPM import MachineLSPM
 from pyleecan.GUI.Dialog.DMachineSetup.DMachineSetup import DMachineSetup
 from pyleecan.Functions.load import load_matlib
 from Tests import save_gui_path as save_path
+from Tests import TEST_DATA_DIR
+from pyleecan.definitions import DATA_DIR
 
 from pyleecan.GUI.Dialog.DMachineSetup.SMachineType.SMachineType import SMachineType
-from Tests import TEST_DATA_DIR
 
 load_test = list()
 load_test.append({"type": "SCIM", "index": 0, "name": "SCIM_001", "p": 1, "count": 11})
@@ -48,7 +49,7 @@ ENABLE_ITEM = Qt.ItemIsSelectable | Qt.ItemIsEnabled
 import pytest
 
 
-matlib_path = join(TEST_DATA_DIR, "Material")
+matlib_path = join(DATA_DIR, "Material")
 
 
 class TestDMachineSetup(object):

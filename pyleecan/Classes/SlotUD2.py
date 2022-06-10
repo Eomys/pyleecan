@@ -10,9 +10,9 @@ from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
-from ..Functions.copy import copy
 from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
+from copy import deepcopy
 from .Slot import Slot
 
 # Import all class method
@@ -111,9 +111,8 @@ class SlotUD2(Slot):
         )
     else:
         _set_split_active_surf_dict = _set_split_active_surf_dict
-    # save and copy methods are available in all object
+    # generic save method is available in all object
     save = save
-    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -350,6 +349,43 @@ class SlotUD2(Slot):
         # Overwrite the mother class name
         SlotUD2_dict["__class__"] = "SlotUD2"
         return SlotUD2_dict
+
+    def copy(self):
+        """Creates a deepcopy of the object"""
+
+        # Handle deepcopy of all the properties
+        if self.line_list is None:
+            line_list_val = None
+        else:
+            line_list_val = list()
+            for obj in self.line_list:
+                line_list_val.append(obj.copy())
+        if self.active_surf is None:
+            active_surf_val = None
+        else:
+            active_surf_val = self.active_surf.copy()
+        if self.split_active_surf_dict is None:
+            split_active_surf_dict_val = None
+        else:
+            split_active_surf_dict_val = self.split_active_surf_dict.copy()
+        name_val = self.name
+        Zs_val = self.Zs
+        if self.wedge_mat is None:
+            wedge_mat_val = None
+        else:
+            wedge_mat_val = self.wedge_mat.copy()
+        is_bore_val = self.is_bore
+        # Creates new object of the same type with the copied properties
+        obj_copy = type(self)(
+            line_list=line_list_val,
+            active_surf=active_surf_val,
+            split_active_surf_dict=split_active_surf_dict_val,
+            name=name_val,
+            Zs=Zs_val,
+            wedge_mat=wedge_mat_val,
+            is_bore=is_bore_val,
+        )
+        return obj_copy
 
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""

@@ -10,9 +10,9 @@ from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
-from ..Functions.copy import copy
 from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
+from copy import deepcopy
 from .Slot import Slot
 
 # Import all class method
@@ -109,9 +109,8 @@ class SlotUD(Slot):
         )
     else:
         set_from_point_list = set_from_point_list
-    # save and copy methods are available in all object
+    # generic save method is available in all object
     save = save
-    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -347,6 +346,39 @@ class SlotUD(Slot):
         # Overwrite the mother class name
         SlotUD_dict["__class__"] = "SlotUD"
         return SlotUD_dict
+
+    def copy(self):
+        """Creates a deepcopy of the object"""
+
+        # Handle deepcopy of all the properties
+        if self.line_list is None:
+            line_list_val = None
+        else:
+            line_list_val = list()
+            for obj in self.line_list:
+                line_list_val.append(obj.copy())
+        wind_begin_index_val = self.wind_begin_index
+        wind_end_index_val = self.wind_end_index
+        type_line_wind_val = self.type_line_wind
+        name_val = self.name
+        Zs_val = self.Zs
+        if self.wedge_mat is None:
+            wedge_mat_val = None
+        else:
+            wedge_mat_val = self.wedge_mat.copy()
+        is_bore_val = self.is_bore
+        # Creates new object of the same type with the copied properties
+        obj_copy = type(self)(
+            line_list=line_list_val,
+            wind_begin_index=wind_begin_index_val,
+            wind_end_index=wind_end_index_val,
+            type_line_wind=type_line_wind_val,
+            name=name_val,
+            Zs=Zs_val,
+            wedge_mat=wedge_mat_val,
+            is_bore=is_bore_val,
+        )
+        return obj_copy
 
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""

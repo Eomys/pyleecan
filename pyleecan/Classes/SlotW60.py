@@ -10,9 +10,9 @@ from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
-from ..Functions.copy import copy
 from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
+from copy import deepcopy
 from .Slot import Slot
 
 # Import all class method
@@ -190,9 +190,8 @@ class SlotW60(Slot):
         )
     else:
         get_surface_active = get_surface_active
-    # save and copy methods are available in all object
+    # generic save method is available in all object
     save = save
-    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -475,6 +474,40 @@ class SlotW60(Slot):
         # Overwrite the mother class name
         SlotW60_dict["__class__"] = "SlotW60"
         return SlotW60_dict
+
+    def copy(self):
+        """Creates a deepcopy of the object"""
+
+        # Handle deepcopy of all the properties
+        W1_val = self.W1
+        W2_val = self.W2
+        H1_val = self.H1
+        H2_val = self.H2
+        R1_val = self.R1
+        H3_val = self.H3
+        H4_val = self.H4
+        W3_val = self.W3
+        Zs_val = self.Zs
+        if self.wedge_mat is None:
+            wedge_mat_val = None
+        else:
+            wedge_mat_val = self.wedge_mat.copy()
+        is_bore_val = self.is_bore
+        # Creates new object of the same type with the copied properties
+        obj_copy = type(self)(
+            W1=W1_val,
+            W2=W2_val,
+            H1=H1_val,
+            H2=H2_val,
+            R1=R1_val,
+            H3=H3_val,
+            H4=H4_val,
+            W3=W3_val,
+            Zs=Zs_val,
+            wedge_mat=wedge_mat_val,
+            is_bore=is_bore_val,
+        )
+        return obj_copy
 
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""

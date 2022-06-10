@@ -10,9 +10,9 @@ from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
-from ..Functions.copy import copy
 from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
+from copy import deepcopy
 from .OP import OP
 
 # Import all class method
@@ -186,9 +186,8 @@ class OPslip(OP):
         )
     else:
         set_U0_UPhi0 = set_U0_UPhi0
-    # save and copy methods are available in all object
+    # generic save method is available in all object
     save = save
-    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -451,6 +450,37 @@ class OPslip(OP):
         # Overwrite the mother class name
         OPslip_dict["__class__"] = "OPslip"
         return OPslip_dict
+
+    def copy(self):
+        """Creates a deepcopy of the object"""
+
+        # Handle deepcopy of all the properties
+        I0_ref_val = self.I0_ref
+        IPhi0_ref_val = self.IPhi0_ref
+        slip_ref_val = self.slip_ref
+        U0_ref_val = self.U0_ref
+        UPhi0_ref_val = self.UPhi0_ref
+        N0_val = self.N0
+        felec_val = self.felec
+        Tem_av_ref_val = self.Tem_av_ref
+        Pem_av_ref_val = self.Pem_av_ref
+        Pem_av_in_val = self.Pem_av_in
+        efficiency_val = self.efficiency
+        # Creates new object of the same type with the copied properties
+        obj_copy = type(self)(
+            I0_ref=I0_ref_val,
+            IPhi0_ref=IPhi0_ref_val,
+            slip_ref=slip_ref_val,
+            U0_ref=U0_ref_val,
+            UPhi0_ref=UPhi0_ref_val,
+            N0=N0_val,
+            felec=felec_val,
+            Tem_av_ref=Tem_av_ref_val,
+            Pem_av_ref=Pem_av_ref_val,
+            Pem_av_in=Pem_av_in_val,
+            efficiency=efficiency_val,
+        )
+        return obj_copy
 
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""

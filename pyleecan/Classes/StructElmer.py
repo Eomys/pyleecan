@@ -10,9 +10,9 @@ from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
-from ..Functions.copy import copy
 from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
+from copy import deepcopy
 from .Structural import Structural
 
 # Import all class method
@@ -134,9 +134,8 @@ class StructElmer(Structural):
         )
     else:
         process_mesh = process_mesh
-    # save and copy methods are available in all object
+    # generic save method is available in all object
     save = save
-    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -408,6 +407,37 @@ class StructElmer(Structural):
         # Overwrite the mother class name
         StructElmer_dict["__class__"] = "StructElmer"
         return StructElmer_dict
+
+    def copy(self):
+        """Creates a deepcopy of the object"""
+
+        # Handle deepcopy of all the properties
+        Kmesh_fineness_val = self.Kmesh_fineness
+        path_name_val = self.path_name
+        if self.FEA_dict_enforced is None:
+            FEA_dict_enforced_val = None
+        else:
+            FEA_dict_enforced_val = self.FEA_dict_enforced.copy()
+        is_get_mesh_val = self.is_get_mesh
+        is_save_FEA_val = self.is_save_FEA
+        if self.transform_list is None:
+            transform_list_val = None
+        else:
+            transform_list_val = self.transform_list.copy()
+        include_magnets_val = self.include_magnets
+        logger_name_val = self.logger_name
+        # Creates new object of the same type with the copied properties
+        obj_copy = type(self)(
+            Kmesh_fineness=Kmesh_fineness_val,
+            path_name=path_name_val,
+            FEA_dict_enforced=FEA_dict_enforced_val,
+            is_get_mesh=is_get_mesh_val,
+            is_save_FEA=is_save_FEA_val,
+            transform_list=transform_list_val,
+            include_magnets=include_magnets_val,
+            logger_name=logger_name_val,
+        )
+        return obj_copy
 
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""
