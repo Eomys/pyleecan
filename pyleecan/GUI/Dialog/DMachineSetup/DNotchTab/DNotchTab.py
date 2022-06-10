@@ -108,7 +108,7 @@ class DNotchTab(Ui_DNotchTab, QDialog):
             notch_index = self.obj.notch.index(notch)
         tab = WNotch(self, index=notch_index)
         tab.saveNeeded.connect(self.emit_save)
-        self.tab_notch.addTab(tab, "Notch " + str(notch_index + 1))
+        self.tab_notch.addTab(tab, "Notch Set " + str(notch_index + 1))
 
     def s_remove(self):
         """Signal to remove the last notch

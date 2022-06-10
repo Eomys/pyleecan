@@ -377,12 +377,12 @@ class DXF_Slot(Ui_DXF_Slot, QDialog):
             User defined slot according to selected lines
         """
 
-        if self.lf_scaling.value() == 0:  # Avoid error
+        if self.lf_scaling.value() in [0, None]:  # Avoid error
             self.lf_scaling.setValue(1)
 
-        # Get all the selected lines
+        # Get all the selected lines at proper scale
         line_list = list()
-        point_list = list()
+        point_list = list()  # List of all begin, end of all the lines
         for ii, line in enumerate(self.line_list):
             if self.selected_list[ii]:
                 line_list.append(line.copy())
@@ -392,6 +392,8 @@ class DXF_Slot(Ui_DXF_Slot, QDialog):
 
         # Find begin point
         single_list = list()
+        # In point list all point should be present twice
+        # except first and last point
         for p1 in point_list:
             count = 0
             for p2 in point_list:
@@ -399,9 +401,13 @@ class DXF_Slot(Ui_DXF_Slot, QDialog):
                     count += 1
             if count == 1:
                 single_list.append(p1)
-        assert len(single_list) == 2
+        assert (
+            len(single_list) == 2
+        ), "Unable to detect first and last point of the slot"
+        # Lines must be returned in trigo order center on Ox
+        # Begin selection can be wrong, corrected if needed after rotate
         Zbegin = single_list[argmin(np_angle(array(single_list)))]
-        # Get begin line
+        # Get First line
         id_list = list()
         id_list.extend(
             [
@@ -411,7 +417,7 @@ class DXF_Slot(Ui_DXF_Slot, QDialog):
                 or abs(line.get_end() - Zbegin) < Z_TOL
             ]
         )
-        # Sort the lines (begin = end)
+        # Sort the lines (find line with current.end == line.begin)
         curve_list = list()
         curve_list.append(line_list.pop(id_list[0]))
         if abs(curve_list[0].get_end() - Zbegin) < Z_TOL:
@@ -442,11 +448,12 @@ class DXF_Slot(Ui_DXF_Slot, QDialog):
                 self.tr("Error"),
                 self.tr(
                     "First point of the slot is not on the bore radius:\nBore radius="
-                    + str(Rbo)
+                    + format(Rbo, ".6g")
                     + ", abs(First point)="
-                    + str(abs(Zbegin))
+                    + format(abs(Zbegin), ".6g")
                 ),
             )
+
             return None
         if abs(abs(Zend) - Rbo) > Z_TOL:
             QMessageBox().critical(
@@ -454,9 +461,9 @@ class DXF_Slot(Ui_DXF_Slot, QDialog):
                 self.tr("Error"),
                 self.tr(
                     "Last point of the slot is not on the bore radius:\nBore radius="
-                    + str(Rbo)
+                    + format(Rbo, ".6g")
                     + ", abs(Last point)="
-                    + str(abs(Zend))
+                    + format(abs(Zend), ".6g")
                 ),
             )
             return None
@@ -479,19 +486,28 @@ class DXF_Slot(Ui_DXF_Slot, QDialog):
         if abs(Ze2 - Zend) > 1e-9:
             curve_list.append(Segment(begin=Zend, end=Ze2))
 
+        # Check that the lines are in trigo order (can be reversed for inner slot)
+        if angle(curve_list[0].get_begin()) > angle(curve_list[-1].get_end()):
+            curve_list = curve_list[::-1]
+            for line in curve_list:
+                line.reverse()
+
         # Create the Slot object
         slot = SlotUD(line_list=curve_list)
         slot.type_line_wind = self.c_type_line.currentIndex()
         begin_id = self.si_wind_begin_index.value()
         end_id = self.si_wind_end_index.value()
-        if (
+        if begin_id == 0 and end_id == 0:  # Not defined yet
+            slot.wind_begin_index = None
+            slot.wind_end_index = None
+        elif (
             begin_id < len(curve_list)
             and end_id < len(curve_list)
             # and begin_id < end_id
         ):
             slot.wind_begin_index = begin_id
             slot.wind_end_index = end_id
-        else:
+        else:  # Wrong definition
             slot.wind_begin_index = None
             slot.wind_end_index = None
         if self.is_notch:
@@ -510,7 +526,15 @@ class DXF_Slot(Ui_DXF_Slot, QDialog):
             a DXF_Slot object
         """
         if self.check_selection():
-            slot = self.get_slot()
+            try:
+                slot = self.get_slot()
+            except Exception as e:
+                err_msg = "Error in DXF slot definition:\n" + str(e)
+                QMessageBox().critical(
+                    self, self.tr("Error"), err_msg,
+                )
+                return
+
             if slot is None:
                 return  # Uncorrect slot
             # Lamination definition
@@ -543,11 +567,11 @@ class DXF_Slot(Ui_DXF_Slot, QDialog):
                 lam.plot(fig=fig, ax=ax2, is_lam_only=self.is_notch)
                 set_plot_gui_icon()
             except Exception as e:
+                err_msg = "Error while plotting DXF imported slot:\n" + str(e)
                 QMessageBox().critical(
-                    self,
-                    self.tr("Error"),
-                    self.tr("Error while plotting slot:\n" + str(e)),
+                    self, self.tr("Error"), err_msg,
                 )
+                return
 
     def save(self):
         """Save the SlotUD object in a json file
@@ -559,7 +583,14 @@ class DXF_Slot(Ui_DXF_Slot, QDialog):
         """
 
         if self.check_selection():
-            slot = self.get_slot()
+            try:
+                slot = self.get_slot()
+            except Exception as e:
+                err_msg = "Error in DXF slot definition:\n" + str(e)
+                QMessageBox().critical(
+                    self, self.tr("Error"), err_msg,
+                )
+                return
             if slot is None:
                 return  # Uncorrect slot
             if (
@@ -585,11 +616,11 @@ class DXF_Slot(Ui_DXF_Slot, QDialog):
                     slot.save(save_file_path)
                     self.accept()
                 except Exception as e:
+                    err_msg = "Error while saving DXF slot json file:\n" + str(e)
                     QMessageBox().critical(
-                        self,
-                        self.tr("Error"),
-                        self.tr("Error while saving slot json file:\n" + str(e)),
+                        self, self.tr("Error"), err_msg,
                     )
+                return
 
     def open_tuto(self):
         """Open the tutorial video in a web browser"""
