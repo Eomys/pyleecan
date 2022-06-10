@@ -10,9 +10,9 @@ from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
-from ..Functions.copy import copy
 from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
+from copy import deepcopy
 from ._frozen import FrozenClass
 
 from numpy import isnan
@@ -24,9 +24,8 @@ class OutGeo(FrozenClass):
 
     VERSION = 1
 
-    # save and copy methods are available in all object
+    # generic save method is available in all object
     save = save
-    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -513,6 +512,58 @@ class OutGeo(FrozenClass):
         # The class name is added to the dict for deserialisation purpose
         OutGeo_dict["__class__"] = "OutGeo"
         return OutGeo_dict
+
+    def copy(self):
+        """Creates a deepcopy of the object"""
+
+        # Handle deepcopy of all the properties
+        if self.stator is None:
+            stator_val = None
+        else:
+            stator_val = self.stator.copy()
+        if self.rotor is None:
+            rotor_val = None
+        else:
+            rotor_val = self.rotor.copy()
+        Wgap_mec_val = self.Wgap_mec
+        Wgap_mag_val = self.Wgap_mag
+        Rgap_mec_val = self.Rgap_mec
+        Lgap_val = self.Lgap
+        logger_name_val = self.logger_name
+        angle_rotor_initial_val = self.angle_rotor_initial
+        rot_dir_val = self.rot_dir
+        per_a_val = self.per_a
+        is_antiper_a_val = self.is_antiper_a
+        per_t_S_val = self.per_t_S
+        is_antiper_t_S_val = self.is_antiper_t_S
+        if self.axes_dict is None:
+            axes_dict_val = None
+        else:
+            axes_dict_val = dict()
+            for key, obj in self.axes_dict.items():
+                axes_dict_val[key] = obj.copy()
+        per_t_R_val = self.per_t_R
+        is_antiper_t_R_val = self.is_antiper_t_R
+        # Creates new object of the same type with the copied properties
+        obj_copy = type(self)(
+            stator=stator_val,
+            rotor=rotor_val,
+            Wgap_mec=Wgap_mec_val,
+            Wgap_mag=Wgap_mag_val,
+            Rgap_mec=Rgap_mec_val,
+            Lgap=Lgap_val,
+            logger_name=logger_name_val,
+            angle_rotor_initial=angle_rotor_initial_val,
+            rot_dir=rot_dir_val,
+            per_a=per_a_val,
+            is_antiper_a=is_antiper_a_val,
+            per_t_S=per_t_S_val,
+            is_antiper_t_S=is_antiper_t_S_val,
+            axes_dict=axes_dict_val,
+            per_t_R=per_t_R_val,
+            is_antiper_t_R=is_antiper_t_R_val,
+        )
+        return obj_copy
 
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""

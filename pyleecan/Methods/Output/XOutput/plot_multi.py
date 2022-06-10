@@ -6,6 +6,7 @@ from SciDataTool.Functions.Plot.plot_2D import plot_2D
 from ....definitions import config_dict
 from ....Methods.Output.XOutput import _get_symbol_data_
 from ....Functions.Plot import dict_2D, dict_3D
+from ....Functions.init_fig import init_fig
 
 COLORS = config_dict["PLOT"]["COLOR_DICT"]["COLOR_LIST"]
 COLORMAP = config_dict["PLOT"]["COLOR_DICT"]["COLOR_MAP"]
@@ -104,8 +105,10 @@ def plot_multi(
     if cmap is None:
         cmap = COLORMAP
 
+    (fig, ax, _, _) = init_fig(fig=fig, ax=ax, shape="rectangle")
+
     # call plot_2D function
-    fig, ax = plot_2D(
+    plot_2D(
         Xdatas=[x_values],
         Ydatas=[y_values],
         xlabel=x_label,

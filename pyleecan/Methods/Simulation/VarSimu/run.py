@@ -27,7 +27,7 @@ def run(self):
     xoutput = self.parent.parent
 
     # Create reference simulation
-    ref_simu = self.parent.copy(keep_function=True)
+    ref_simu = self.parent.copy()
     ref_simu.var_simu = self.var_simu  # var_simu default is None
     ref_simu.index = None
     ref_simu.layer = self.parent.layer + 1
@@ -53,7 +53,7 @@ def run(self):
         xoutput.output_list = [None] * self.nb_simu
     keeper_list = list()  # Copy keeper to store results in xoutput and not in simu
     for datakeeper in self.datakeeper_list:
-        keeper_list.append(datakeeper.copy(keep_function=True))
+        keeper_list.append(datakeeper.copy())
         xoutput.xoutput_dict[datakeeper.symbol] = keeper_list[-1]
         keeper_list[-1].result = [None] * self.nb_simu
 

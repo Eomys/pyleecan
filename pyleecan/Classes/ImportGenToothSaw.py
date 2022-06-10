@@ -10,9 +10,9 @@ from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
-from ..Functions.copy import copy
 from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
+from copy import deepcopy
 from .ImportMatrix import ImportMatrix
 
 # Import all class method
@@ -43,9 +43,8 @@ class ImportGenToothSaw(ImportMatrix):
         )
     else:
         get_data = get_data
-    # save and copy methods are available in all object
+    # generic save method is available in all object
     save = save
-    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -270,6 +269,29 @@ class ImportGenToothSaw(ImportMatrix):
         # Overwrite the mother class name
         ImportGenToothSaw_dict["__class__"] = "ImportGenToothSaw"
         return ImportGenToothSaw_dict
+
+    def copy(self):
+        """Creates a deepcopy of the object"""
+
+        # Handle deepcopy of all the properties
+        type_signal_val = self.type_signal
+        f_val = self.f
+        A_val = self.A
+        N_val = self.N
+        Tf_val = self.Tf
+        Dt_val = self.Dt
+        is_transpose_val = self.is_transpose
+        # Creates new object of the same type with the copied properties
+        obj_copy = type(self)(
+            type_signal=type_signal_val,
+            f=f_val,
+            A=A_val,
+            N=N_val,
+            Tf=Tf_val,
+            Dt=Dt_val,
+            is_transpose=is_transpose_val,
+        )
+        return obj_copy
 
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""

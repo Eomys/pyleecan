@@ -3,10 +3,6 @@ import sys
 from os.path import dirname, abspath, normpath, join
 
 from pyleecan.Classes.OPdq import OPdq
-
-sys.path.insert(0, normpath(abspath(join(dirname(__file__), "..", "..", ".."))))
-sys.path.insert(0, normpath(abspath(dirname(__file__))))
-
 import pytest
 
 from numpy import ones, zeros, linspace, pi, array, sqrt, arange, exp

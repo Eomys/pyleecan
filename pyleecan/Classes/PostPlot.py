@@ -10,9 +10,9 @@ from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
-from ..Functions.copy import copy
 from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
+from copy import deepcopy
 from .PostMethod import PostMethod
 
 # Import all class method
@@ -41,9 +41,8 @@ class PostPlot(PostMethod):
         )
     else:
         run = run
-    # save and copy methods are available in all object
+    # generic save method is available in all object
     save = save
-    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -276,6 +275,33 @@ class PostPlot(PostMethod):
         # Overwrite the mother class name
         PostPlot_dict["__class__"] = "PostPlot"
         return PostPlot_dict
+
+    def copy(self):
+        """Creates a deepcopy of the object"""
+
+        # Handle deepcopy of all the properties
+        method_val = self.method
+        name_val = self.name
+        if self.param_list is None:
+            param_list_val = None
+        else:
+            param_list_val = self.param_list.copy()
+        if self.param_dict is None:
+            param_dict_val = None
+        else:
+            param_dict_val = self.param_dict.copy()
+        save_format_val = self.save_format
+        quantity_val = self.quantity
+        # Creates new object of the same type with the copied properties
+        obj_copy = type(self)(
+            method=method_val,
+            name=name_val,
+            param_list=param_list_val,
+            param_dict=param_dict_val,
+            save_format=save_format_val,
+            quantity=quantity_val,
+        )
+        return obj_copy
 
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""

@@ -184,9 +184,16 @@ class WNotch(Ui_WNotch, QWidget):
         # Refresh the GUI
         self.main_layout.removeWidget(self.w_notch)
         self.main_layout.insertWidget(1, self.w_notch)
-
+        # Update Zs for PWSlotUD
+        if isinstance(self.w_notch, PWSlotUD):
+            self.w_notch.ZsChanged.connect(self.set_Zs_UD)
         # Notify the machine GUI that the machine has changed
         self.saveNeeded.emit()
+
+    def set_Zs_UD(self):
+        self.si_Zn.blockSignals(True)
+        self.si_Zn.setValue(self.w_notch.slot.Zs)
+        self.si_Zn.blockSignals(False)
 
     def check(self):
         """Check that the current machine have all the needed field set

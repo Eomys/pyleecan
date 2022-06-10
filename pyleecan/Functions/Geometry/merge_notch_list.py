@@ -33,9 +33,7 @@ def merge_notch_list(notch_list_1, notch_list_2):
             merged.append(notch_list_2[jj])
             jj += 1
         else:
-            raise NotchError(
-                "Notches and/or Slots are colliding"
-            )
+            raise NotchError("Notches and/or Slots are colliding")
 
     # One of the list is not "finished"
     merged = merged + notch_list_1[ii:] + notch_list_2[jj:]

@@ -10,9 +10,9 @@ from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
-from ..Functions.copy import copy
 from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
+from copy import deepcopy
 from ._frozen import FrozenClass
 
 # Import all class method
@@ -87,9 +87,8 @@ class Magnetics(FrozenClass):
         )
     else:
         comp_I_mag = comp_I_mag
-    # save and copy methods are available in all object
+    # generic save method is available in all object
     save = save
-    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -610,6 +609,56 @@ class Magnetics(FrozenClass):
         # The class name is added to the dict for deserialisation purpose
         Magnetics_dict["__class__"] = "Magnetics"
         return Magnetics_dict
+
+    def copy(self):
+        """Creates a deepcopy of the object"""
+
+        # Handle deepcopy of all the properties
+        is_remove_slotS_val = self.is_remove_slotS
+        is_remove_slotR_val = self.is_remove_slotR
+        is_remove_ventS_val = self.is_remove_ventS
+        is_remove_ventR_val = self.is_remove_ventR
+        is_mmfs_val = self.is_mmfs
+        is_mmfr_val = self.is_mmfr
+        type_BH_stator_val = self.type_BH_stator
+        type_BH_rotor_val = self.type_BH_rotor
+        is_periodicity_t_val = self.is_periodicity_t
+        is_periodicity_a_val = self.is_periodicity_a
+        angle_stator_shift_val = self.angle_stator_shift
+        angle_rotor_shift_val = self.angle_rotor_shift
+        logger_name_val = self.logger_name
+        if self.Slice_enforced is None:
+            Slice_enforced_val = None
+        else:
+            Slice_enforced_val = self.Slice_enforced.copy()
+        Nslices_enforced_val = self.Nslices_enforced
+        type_distribution_enforced_val = self.type_distribution_enforced
+        is_current_harm_val = self.is_current_harm
+        T_mag_val = self.T_mag
+        is_periodicity_rotor_val = self.is_periodicity_rotor
+        # Creates new object of the same type with the copied properties
+        obj_copy = type(self)(
+            is_remove_slotS=is_remove_slotS_val,
+            is_remove_slotR=is_remove_slotR_val,
+            is_remove_ventS=is_remove_ventS_val,
+            is_remove_ventR=is_remove_ventR_val,
+            is_mmfs=is_mmfs_val,
+            is_mmfr=is_mmfr_val,
+            type_BH_stator=type_BH_stator_val,
+            type_BH_rotor=type_BH_rotor_val,
+            is_periodicity_t=is_periodicity_t_val,
+            is_periodicity_a=is_periodicity_a_val,
+            angle_stator_shift=angle_stator_shift_val,
+            angle_rotor_shift=angle_rotor_shift_val,
+            logger_name=logger_name_val,
+            Slice_enforced=Slice_enforced_val,
+            Nslices_enforced=Nslices_enforced_val,
+            type_distribution_enforced=type_distribution_enforced_val,
+            is_current_harm=is_current_harm_val,
+            T_mag=T_mag_val,
+            is_periodicity_rotor=is_periodicity_rotor_val,
+        )
+        return obj_copy
 
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""
