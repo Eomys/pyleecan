@@ -10,9 +10,9 @@ from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
-from ..Functions.copy import copy
 from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
+from copy import deepcopy
 from .Post import Post
 
 from ntpath import basename
@@ -29,9 +29,8 @@ class PostFunction(Post):
 
     VERSION = 1
 
-    # save and copy methods are available in all object
+    # generic save method is available in all object
     save = save
-    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -137,7 +136,7 @@ class PostFunction(Post):
         )
         if self._run_str is not None:
             PostFunction_dict["run"] = self._run_str
-        elif "keep_function" in kwargs and kwargs["keep_function"]:
+        elif keep_function:
             PostFunction_dict["run"] = self.run
         else:
             PostFunction_dict["run"] = None
@@ -151,6 +150,18 @@ class PostFunction(Post):
         # Overwrite the mother class name
         PostFunction_dict["__class__"] = "PostFunction"
         return PostFunction_dict
+
+    def copy(self):
+        """Creates a deepcopy of the object"""
+
+        # Handle deepcopy of all the properties
+        if self._run_str is not None:
+            run_val = self._run_str
+        else:
+            run_val = self._run_func
+        # Creates new object of the same type with the copied properties
+        obj_copy = type(self)(run=run_val)
+        return obj_copy
 
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""

@@ -10,9 +10,9 @@ from logging import getLogger
 from ._check import set_array, check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
-from ..Functions.copy import copy
 from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
+from copy import deepcopy
 from .EEC import EEC
 
 # Import all class method
@@ -231,9 +231,8 @@ class EEC_SCIM(EEC):
         )
     else:
         update_from_ref = update_from_ref
-    # save and copy methods are available in all object
+    # generic save method is available in all object
     save = save
-    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -710,6 +709,77 @@ class EEC_SCIM(EEC):
         # Overwrite the mother class name
         EEC_SCIM_dict["__class__"] = "EEC_SCIM"
         return EEC_SCIM_dict
+
+    def copy(self):
+        """Creates a deepcopy of the object"""
+
+        # Handle deepcopy of all the properties
+        Rfe_val = self.Rfe
+        L1_val = self.L1
+        R2_val = self.R2
+        L2_val = self.L2
+        K21Z_val = self.K21Z
+        K21I_val = self.K21I
+        if self.Im_table is None:
+            Im_table_val = None
+        else:
+            Im_table_val = self.Im_table.copy()
+        if self.Lm_table is None:
+            Lm_table_val = None
+        else:
+            Lm_table_val = self.Lm_table.copy()
+        I1_val = self.I1
+        I2_val = self.I2
+        U1_val = self.U1
+        U2_val = self.U2
+        If_val = self.If
+        Lm_val = self.Lm
+        Im_val = self.Im
+        type_skin_effect_val = self.type_skin_effect
+        if self.OP is None:
+            OP_val = None
+        else:
+            OP_val = self.OP.copy()
+        Tsta_val = self.Tsta
+        Trot_val = self.Trot
+        Xkr_skinS_val = self.Xkr_skinS
+        Xke_skinS_val = self.Xke_skinS
+        Xkr_skinR_val = self.Xkr_skinR
+        Xke_skinR_val = self.Xke_skinR
+        R1_val = self.R1
+        if self.fluxlink is None:
+            fluxlink_val = None
+        else:
+            fluxlink_val = self.fluxlink.copy()
+        # Creates new object of the same type with the copied properties
+        obj_copy = type(self)(
+            Rfe=Rfe_val,
+            L1=L1_val,
+            R2=R2_val,
+            L2=L2_val,
+            K21Z=K21Z_val,
+            K21I=K21I_val,
+            Im_table=Im_table_val,
+            Lm_table=Lm_table_val,
+            I1=I1_val,
+            I2=I2_val,
+            U1=U1_val,
+            U2=U2_val,
+            If=If_val,
+            Lm=Lm_val,
+            Im=Im_val,
+            type_skin_effect=type_skin_effect_val,
+            OP=OP_val,
+            Tsta=Tsta_val,
+            Trot=Trot_val,
+            Xkr_skinS=Xkr_skinS_val,
+            Xke_skinS=Xke_skinS_val,
+            Xkr_skinR=Xkr_skinR_val,
+            Xke_skinR=Xke_skinR_val,
+            R1=R1_val,
+            fluxlink=fluxlink_val,
+        )
+        return obj_copy
 
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""

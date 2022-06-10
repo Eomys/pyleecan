@@ -30,7 +30,7 @@ def get_node2cell(self, node_indice):
         Ielem = np.where(connect == node_indice)[0]
         node_to_cell = ind[Ielem]
     else:
-        if sum(connect == node_indice) > 0:
+        if connect is not None and sum(connect == node_indice) > 0:
             node_to_cell = ind
 
     return node_to_cell

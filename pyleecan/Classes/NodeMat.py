@@ -10,9 +10,9 @@ from logging import getLogger
 from ._check import set_array, check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
-from ..Functions.copy import copy
 from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
+from copy import deepcopy
 from ._frozen import FrozenClass
 
 # Import all class method
@@ -85,15 +85,14 @@ class NodeMat(FrozenClass):
         )
     else:
         get_indice = get_indice
-    # save and copy methods are available in all object
+    # generic save method is available in all object
     save = save
-    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
     def __init__(
         self,
-        coordinate=[],
+        coordinate=None,
         nb_node=0,
         delta=1e-10,
         indice=None,
@@ -270,6 +269,29 @@ class NodeMat(FrozenClass):
         # The class name is added to the dict for deserialisation purpose
         NodeMat_dict["__class__"] = "NodeMat"
         return NodeMat_dict
+
+    def copy(self):
+        """Creates a deepcopy of the object"""
+
+        # Handle deepcopy of all the properties
+        if self.coordinate is None:
+            coordinate_val = None
+        else:
+            coordinate_val = self.coordinate.copy()
+        nb_node_val = self.nb_node
+        delta_val = self.delta
+        if self.indice is None:
+            indice_val = None
+        else:
+            indice_val = self.indice.copy()
+        # Creates new object of the same type with the copied properties
+        obj_copy = type(self)(
+            coordinate=coordinate_val,
+            nb_node=nb_node_val,
+            delta=delta_val,
+            indice=indice_val,
+        )
+        return obj_copy
 
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""
