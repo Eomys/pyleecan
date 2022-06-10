@@ -41,7 +41,7 @@ class DXF_Slot(Ui_DXF_Slot, QDialog):
 
     convert_dxf_with_FEMM = convert_dxf_with_FEMM
 
-    def __init__(self, dxf_path=None, Zs=None, lam=None):
+    def __init__(self, dxf_path=None, Zs=None, lam=None, is_notch=False):
         """Initialize the Dialog
 
         Parameters
@@ -50,6 +50,12 @@ class DXF_Slot(Ui_DXF_Slot, QDialog):
             a DXF_Slot object
         dxf_path : str
             Path to a dxf file to read
+        Zs : int
+            Number of slot/notch
+        lam : Lamination
+            Lamination to add the slot to
+        is_notch : bool
+            True if the DXF is meant for a notch
         """
         # Widget setup
         QDialog.__init__(self)
@@ -59,11 +65,18 @@ class DXF_Slot(Ui_DXF_Slot, QDialog):
         self.line_list = list()  # List of line from DXF
         self.selected_list = list()  # List of currently selected lines
         self.lam = lam
+        self.is_notch = is_notch
         self.Zcenter = 0  # For offset
 
         # Tutorial video link
         self.url = "https://pyleecan.org/videos.html#feature-tutorials"
         self.b_tuto.setEnabled(True)
+
+        # Adapt GUI for notches
+        if self.is_notch:
+            self.g_active.hide()
+            self.in_Zs.setText("Number of notches")
+            self.setWindowTitle("Define Notch from DXF")
 
         # Initialize the graph
         self.init_graph()
@@ -481,12 +494,15 @@ class DXF_Slot(Ui_DXF_Slot, QDialog):
         else:
             slot.wind_begin_index = None
             slot.wind_end_index = None
+        if self.is_notch:
+            slot.wind_begin_index = None
+            slot.wind_end_index = None
         slot.Zs = self.si_Zs.value()
 
         return slot
 
     def plot(self):
-        """Plot the current state of the hole
+        """Plot the current state of the slot
 
         Parameters
         ----------
@@ -505,24 +521,26 @@ class DXF_Slot(Ui_DXF_Slot, QDialog):
                 lam = self.lam.copy()
                 lam.slot = slot
             try:
+                # Left single slot with point index, Right Lamination with slot
                 fig, (ax1, ax2) = plt.subplots(1, 2)
                 slot.plot(fig=fig, ax=ax1)
-                # Add the winding if defined
-                if slot.wind_begin_index is not None:
+                # Add the winding to slot if defined
+                if not self.is_notch and slot.wind_begin_index is not None:
                     surf_wind = slot.get_surface_active()
                     surf_wind.plot(fig=fig, ax=ax1, color=WIND_COLOR, is_show_fig=False)
-                # Add point index
-                index = 0
-                for line in slot.line_list:
-                    Zb = line.get_begin()
-                    ax1.plot(Zb.real, Zb.imag, "rx", zorder=0)
-                    ax1.text(Zb.real, Zb.imag, str(index))
-                    index += 1
-                Ze = slot.line_list[-1].get_end()
-                ax1.plot(Ze.real, Ze.imag, "rx", zorder=0)
-                ax1.text(Ze.real, Ze.imag, str(index))
-                # Lamination point
-                lam.plot(fig=fig, ax=ax2)
+                if not self.is_notch:
+                    # Add point index for winding definition
+                    index = 0
+                    for line in slot.line_list:
+                        Zb = line.get_begin()
+                        ax1.plot(Zb.real, Zb.imag, "rx", zorder=0)
+                        ax1.text(Zb.real, Zb.imag, str(index))
+                        index += 1
+                    Ze = slot.line_list[-1].get_end()
+                    ax1.plot(Ze.real, Ze.imag, "rx", zorder=0)
+                    ax1.text(Ze.real, Ze.imag, str(index))
+                # Plot lamination with slot and winding (if needed)
+                lam.plot(fig=fig, ax=ax2, is_lam_only=self.is_notch)
                 set_plot_gui_icon()
             except Exception as e:
                 QMessageBox().critical(
@@ -547,6 +565,7 @@ class DXF_Slot(Ui_DXF_Slot, QDialog):
             if (
                 self.si_wind_begin_index.value() == 0
                 and self.si_wind_end_index.value() == 0
+                and not self.is_notch  # No winding for notch
             ):
                 QMessageBox().warning(
                     self,

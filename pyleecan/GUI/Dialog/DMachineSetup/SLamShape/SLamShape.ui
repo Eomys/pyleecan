@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <class>SLamShape</class>
- <widget class="QWidget" name="SLamShape">
+ <widget class="QDialog" name="SLamShape">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -55,10 +55,10 @@
           <x>0</x>
           <y>0</y>
           <width>268</width>
-          <height>788</height>
+          <height>793</height>
          </rect>
         </property>
-        <layout class="QVBoxLayout" name="verticalLayout_3">
+        <layout class="QVBoxLayout" name="verticalLayout_5">
          <item>
           <layout class="QGridLayout" name="gridLayout_2">
            <item row="1" column="0">
@@ -251,6 +251,22 @@
            <property name="checked">
             <bool>false</bool>
            </property>
+           <layout class="QVBoxLayout" name="verticalLayout_3">
+            <item>
+             <widget class="QLabel" name="out_notch">
+              <property name="text">
+               <string>0 set (0 notches)</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="b_notch">
+              <property name="text">
+               <string>set notches</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
           </widget>
          </item>
          <item>

@@ -173,6 +173,11 @@ try:
 except ImportError as error:
     comp_periodicity_geo = error
 
+try:
+    from ..Methods.Machine.Lamination.plot_preview_notch import plot_preview_notch
+except ImportError as error:
+    plot_preview_notch = error
+
 
 from numpy import isnan
 from ._check import InitUnKnowClassError
@@ -516,6 +521,18 @@ class Lamination(FrozenClass):
         )
     else:
         comp_periodicity_geo = comp_periodicity_geo
+    # cf Methods.Machine.Lamination.plot_preview_notch
+    if isinstance(plot_preview_notch, ImportError):
+        plot_preview_notch = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Lamination method plot_preview_notch: "
+                    + str(plot_preview_notch)
+                )
+            )
+        )
+    else:
+        plot_preview_notch = plot_preview_notch
     # generic save method is available in all object
     save = save
     # get_logger method is available in all object

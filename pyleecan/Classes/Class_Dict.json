@@ -5481,7 +5481,8 @@
             "get_notches_surf",
             "comp_periodicity_duct_spatial",
             "get_surfaces_closing",
-            "comp_periodicity_geo"
+            "comp_periodicity_geo",
+            "plot_preview_notch"
         ],
         "mother": "",
         "name": "Lamination",
@@ -8426,7 +8427,7 @@
         "properties": [
             {
                 "as_dict": "",
-                "desc": "angular positon of the first notch",
+                "desc": "angular positon of the first notch (0 is middle of first tooth)",
                 "max": "",
                 "min": "",
                 "name": "alpha",
@@ -11854,7 +11855,8 @@
             "comp_surface_active",
             "comp_surface_opening",
             "get_surface_active",
-            "get_surface_opening"
+            "get_surface_opening",
+            "plot_schematics"
         ],
         "mother": "Slot",
         "name": "SlotCirc",
