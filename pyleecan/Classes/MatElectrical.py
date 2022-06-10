@@ -10,9 +10,9 @@ from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
-from ..Functions.copy import copy
 from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
+from copy import deepcopy
 from ._frozen import FrozenClass
 
 # Import all class method
@@ -62,9 +62,8 @@ class MatElectrical(FrozenClass):
         )
     else:
         get_resistivity = get_resistivity
-    # save and copy methods are available in all object
+    # generic save method is available in all object
     save = save
-    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -211,6 +210,17 @@ class MatElectrical(FrozenClass):
         # The class name is added to the dict for deserialisation purpose
         MatElectrical_dict["__class__"] = "MatElectrical"
         return MatElectrical_dict
+
+    def copy(self):
+        """Creates a deepcopy of the object"""
+
+        # Handle deepcopy of all the properties
+        rho_val = self.rho
+        epsr_val = self.epsr
+        alpha_val = self.alpha
+        # Creates new object of the same type with the copied properties
+        obj_copy = type(self)(rho=rho_val, epsr=epsr_val, alpha=alpha_val)
+        return obj_copy
 
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""

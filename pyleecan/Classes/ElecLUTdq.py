@@ -10,9 +10,9 @@ from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
-from ..Functions.copy import copy
 from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
+from copy import deepcopy
 from .Electrical import Electrical
 
 # Import all class method
@@ -86,9 +86,8 @@ class ElecLUTdq(Electrical):
         )
     else:
         solve_MTPA = solve_MTPA
-    # save and copy methods are available in all object
+    # generic save method is available in all object
     save = save
-    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -548,6 +547,64 @@ class ElecLUTdq(Electrical):
         # Overwrite the mother class name
         ElecLUTdq_dict["__class__"] = "ElecLUTdq"
         return ElecLUTdq_dict
+
+    def copy(self):
+        """Creates a deepcopy of the object"""
+
+        # Handle deepcopy of all the properties
+        n_interp_val = self.n_interp
+        Id_min_val = self.Id_min
+        Id_max_val = self.Id_max
+        Iq_min_val = self.Iq_min
+        Iq_max_val = self.Iq_max
+        n_Id_val = self.n_Id
+        n_Iq_val = self.n_Iq
+        if self.LUT_simu is None:
+            LUT_simu_val = None
+        else:
+            LUT_simu_val = self.LUT_simu.copy()
+        is_grid_dq_val = self.is_grid_dq
+        Urms_max_val = self.Urms_max
+        Jrms_max_val = self.Jrms_max
+        Irms_max_val = self.Irms_max
+        load_rate_val = self.load_rate
+        if self.eec is None:
+            eec_val = None
+        else:
+            eec_val = self.eec.copy()
+        logger_name_val = self.logger_name
+        freq_max_val = self.freq_max
+        if self.LUT_enforced is None:
+            LUT_enforced_val = None
+        else:
+            LUT_enforced_val = self.LUT_enforced.copy()
+        Tsta_val = self.Tsta
+        Trot_val = self.Trot
+        type_skin_effect_val = self.type_skin_effect
+        # Creates new object of the same type with the copied properties
+        obj_copy = type(self)(
+            n_interp=n_interp_val,
+            Id_min=Id_min_val,
+            Id_max=Id_max_val,
+            Iq_min=Iq_min_val,
+            Iq_max=Iq_max_val,
+            n_Id=n_Id_val,
+            n_Iq=n_Iq_val,
+            LUT_simu=LUT_simu_val,
+            is_grid_dq=is_grid_dq_val,
+            Urms_max=Urms_max_val,
+            Jrms_max=Jrms_max_val,
+            Irms_max=Irms_max_val,
+            load_rate=load_rate_val,
+            eec=eec_val,
+            logger_name=logger_name_val,
+            freq_max=freq_max_val,
+            LUT_enforced=LUT_enforced_val,
+            Tsta=Tsta_val,
+            Trot=Trot_val,
+            type_skin_effect=type_skin_effect_val,
+        )
+        return obj_copy
 
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""

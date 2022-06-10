@@ -10,9 +10,9 @@ from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
-from ..Functions.copy import copy
 from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
+from copy import deepcopy
 from .RefCell import RefCell
 
 # Import all class method
@@ -121,9 +121,8 @@ class RefQuad9(RefCell):
         )
     else:
         is_inside = is_inside
-    # save and copy methods are available in all object
+    # generic save method is available in all object
     save = save
-    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -219,6 +218,15 @@ class RefQuad9(RefCell):
         # Overwrite the mother class name
         RefQuad9_dict["__class__"] = "RefQuad9"
         return RefQuad9_dict
+
+    def copy(self):
+        """Creates a deepcopy of the object"""
+
+        # Handle deepcopy of all the properties
+        epsilon_val = self.epsilon
+        # Creates new object of the same type with the copied properties
+        obj_copy = type(self)(epsilon=epsilon_val)
+        return obj_copy
 
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""
