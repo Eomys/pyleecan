@@ -525,7 +525,7 @@ def test_BoreFlower(is_show_fig=False):
     rotor.yoke = BoreFlower(N=8, Rarc=0.05 / 4, alpha=pi / 8)
 
     # Plot, check and save
-    fig, _ = rotor.plot(is_show_fig=is_show_fig, sym=8)
+    fig, _ = rotor.plot(is_show_fig=is_show_fig)
     fig.savefig(join(save_path, "fig_18_BoreFlower.png"))
     fig.savefig(join(save_path, "fig_18_BoreFlower.svg"), format="svg")
     # 2 for lam + 3*8 for holes + 16 vents
@@ -533,7 +533,8 @@ def test_BoreFlower(is_show_fig=False):
     fig, _ = rotor.plot(is_show_fig=is_show_fig, sym=8)
     fig.savefig(join(save_path, "fig_18_BoreFlower_sym.png"))
     fig.savefig(join(save_path, "fig_18_BoreFlower_sym.svg"), format="svg")
-
+    # 1 for lam + 3*1 for holes + 3 vents
+    assert len(fig.axes[0].patches) == 7
 
 @pytest.mark.SPMSM
 @pytest.mark.MagFEMM
