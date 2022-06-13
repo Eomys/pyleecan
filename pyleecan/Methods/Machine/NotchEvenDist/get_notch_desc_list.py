@@ -27,7 +27,8 @@ def get_notch_desc_list(self, sym=1):
     notch_list = list()
     op = self.notch_shape.comp_angle_opening()
     Zs = self.notch_shape.Zs
-    alpha = self.alpha
+    # No need to rotate more than a notch pitch
+    alpha = self.alpha % (2 * pi / Zs)
 
     for ii in range(Zs // sym):
         notch_dict = dict()

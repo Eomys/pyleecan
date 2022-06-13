@@ -1,23 +1,16 @@
 # -*- coding: utf-8 -*-
 from os.path import join
-
 import pytest
 
 import matplotlib.pyplot as plt
 from numpy import array, pi, zeros
 
-from pyleecan.Classes.Frame import Frame
 from pyleecan.Classes.LamSlotWind import LamSlotWind
-from pyleecan.Classes.LamSquirrelCage import LamSquirrelCage
 from pyleecan.Classes.MachineDFIM import MachineDFIM
 from pyleecan.Classes.Shaft import Shaft
-from pyleecan.Classes.VentilationCirc import VentilationCirc
-from pyleecan.Classes.VentilationPolar import VentilationPolar
-from pyleecan.Classes.VentilationTrap import VentilationTrap
-from pyleecan.Classes.Winding import Winding
+from pyleecan.Classes.SlotM10 import SlotM10
 from pyleecan.Classes.WindingUD import WindingUD
 from pyleecan.Classes.SlotW10 import SlotW10
-from pyleecan.Classes.SurfLine import SurfLine
 from pyleecan.Classes.NotchEvenDist import NotchEvenDist
 
 from Tests import save_plot_path as save_path
@@ -36,6 +29,33 @@ def test_LamHole_notch():
     Toyota_Prius.plot(
         sym=8, is_show_fig=False, save_path=join(save_path, "Toyota_notch_sym.png")
     )
+
+
+def test_LamHole_2_notch(is_show_fig=False):
+    Toyota_Prius = load(join(DATA_DIR, "Machine", "Toyota_Prius.json"))
+    slot1 = SlotM10(H0=0.005, Hmag=0, W0=0.004, Wmag=0, Zs=12)
+    # alpha=2*pi/Zs == alpha=0
+    notch1 = NotchEvenDist(alpha=2 * pi / 12, notch_shape=slot1)
+    slot2 = SlotM10(H0=0.007, Hmag=0, W0=0.004, Wmag=0, Zs=12)
+    # Offset -1 slot pitch
+    notch2 = NotchEvenDist(alpha=-2 * pi / 48, notch_shape=slot2)
+    Toyota_Prius.stator.notch = [notch1, notch2]
+    assert Toyota_Prius.stator.comp_periodicity_spatial()[0] == 4
+
+    Toyota_Prius.stator.plot(
+        is_show_fig=is_show_fig,
+        save_path=join(save_path, "Toyota_2_notch.png"),
+    )
+    Toyota_Prius.stator.plot(
+        sym=4,
+        is_show_fig=is_show_fig,
+        save_path=join(save_path, "Toyota_2_notch_sym.png"),
+    )
+
+    # Check surfaces
+    S1 = Toyota_Prius.stator.build_geometry(sym=4)[0].comp_surface()
+    S2 = Toyota_Prius.stator.comp_surfaces()["Slam"] / 4
+    assert S1 == pytest.approx(S2, rel=1e-4)
 
 
 def test_Lam_evenly_dist():
@@ -127,6 +147,7 @@ def test_Lam_evenly_dist():
 
 
 if __name__ == "__main__":
-    test_LamHole_notch()
-    test_Lam_evenly_dist()
+    test_LamHole_2_notch(is_show_fig=True)
+    # test_LamHole_notch()
+    # test_Lam_evenly_dist()
     print("Done")
