@@ -43,15 +43,15 @@ class WSlotCirc(Gen_WSlotCirc, QWidget):
         self.slot = lamination.slot
 
         # Selecting the right image
-        if self.lamination.is_stator:
-            # Use schematics on the stator without magnet
+        if not self.lamination.is_internal:
+            # Use schematics on the external without magnet
             self.img_slot.setPixmap(
                 QPixmap(
                     u":/images/images/MachineSetup/WMSlot/SlotCirc_empty_ext_sta.png"
                 )
             )
         else:
-            # Use schematics on the rotor without magnet
+            # Use schematics on the inner without magnet
             self.img_slot.setPixmap(
                 QPixmap(
                     u":/images/images/MachineSetup/WMSlot/SlotCirc_empty_int_rot.png"
