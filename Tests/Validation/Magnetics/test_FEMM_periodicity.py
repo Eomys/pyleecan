@@ -3,7 +3,7 @@ from multiprocessing import cpu_count
 
 import pytest
 from Tests import save_validation_path as save_path
-
+import matplotlib.pyplot as plt
 from numpy import exp, sqrt, pi, max as np_max
 from numpy.testing import assert_array_almost_equal
 
@@ -16,6 +16,7 @@ from pyleecan.Classes.SlotCirc import SlotCirc
 from pyleecan.Classes.SlotM10 import SlotM10
 from pyleecan.Classes.SlotM18 import SlotM18
 from pyleecan.Classes.NotchEvenDist import NotchEvenDist
+from pyleecan.Classes.BoreFlower import BoreFlower
 from pyleecan.Classes.MagFEMM import MagFEMM
 from pyleecan.Classes.ForceMT import ForceMT
 
@@ -517,6 +518,117 @@ def test_FEMM_periodicity_angle():
     return out, out2
 
 
+def test_Bore_sym():
+    """Check that angular periodicity can be applied on Bore shape"""
+    TP = load(join(DATA_DIR, "Machine", "Toyota_Prius.json"))
+    # Add Bore shape
+    TP.rotor.bore = BoreFlower(N=8, Rarc=TP.rotor.Rext * 0.75, alpha=pi / 8)
+    # Add Notch to merge with the Bore shape
+    # Zr = SPMSM_015.rotor.slot.Zs
+    # W0 = SPMSM_015.stator.slot.W0 * 0.1
+    # H0 = SPMSM_015.rotor.comp_height_yoke() * 0.05
+    # NBR = SlotCirc(Zs=Zr, W0=W0, H0=H0)
+    # SPMSM_015.rotor.notch = [NotchEvenDist(alpha=0.001, notch_shape=NBR)]
+    # NYR = SlotM10(Zs=Zr, W0=W0, H0=H0)
+
+    # TP.plot(sym=8)
+    # plt.show()
+
+    assert TP.comp_periodicity_spatial() == (4, True)
+
+    simu = Simu1(name="test_FEMM_periodicity_angle_Bore", machine=TP)
+    simu.path_result = join(save_path, simu.name)
+    simu.input = InputCurrent(
+        OP=OPdq(N0=1000, Id_ref=0, Iq_ref=0),
+        Na_tot=2048,
+        Nt_tot=1,
+    )
+
+    # Definition of the magnetic simulation: with periodicity
+    simu.mag = MagFEMM(
+        type_BH_stator=1,
+        type_BH_rotor=1,
+        is_periodicity_a=True,
+        is_periodicity_t=False,
+        nb_worker=cpu_count(),
+        # Kmesh_fineness=2,
+    )
+
+    # Definition of the magnetic simulation: no periodicity
+    # Definition of the magnetic simulation: no periodicity
+    simu2 = simu.copy()
+    simu2.name = simu.name + "_Full"
+    simu2.path_result = join(save_path, simu2.name)
+    simu2.mag.is_periodicity_a = False
+
+    # Run simulations
+    out = simu.run()
+    assert np_max(out.mag.B.components["radial"].values) == pytest.approx(
+        0.0524, rel=0.1
+    )
+
+    out2 = simu2.run()
+    assert np_max(out2.mag.B.components["radial"].values) == pytest.approx(
+        0.0524, rel=0.1
+    )
+
+    # Plot the result
+    out.mag.B.plot_2D_Data(
+        "time",
+        "angle[0]{°}",
+        data_list=[out2.mag.B],
+        legend_list=["Periodic", "Full"],
+        save_path=join(save_path, simu.name + "_B_time.png"),
+        is_show_fig=False,
+        **dict_2D
+    )
+
+    out.mag.B.plot_2D_Data(
+        "angle{°}",
+        "time[1]",
+        data_list=[out2.mag.B],
+        legend_list=["Periodic", "Full"],
+        save_path=join(save_path, simu.name + "_B_space.png"),
+        is_show_fig=False,
+        **dict_2D
+    )
+
+    out.mag.Tem.plot_2D_Data(
+        "time",
+        data_list=[out2.mag.Tem],
+        legend_list=["Periodic", "Full"],
+        save_path=join(save_path, simu.name + "_Tem_time.png"),
+        is_show_fig=False,
+        **dict_2D
+    )
+
+    out.mag.Phi_wind_stator.plot_2D_Data(
+        "time",
+        "phase[]",
+        data_list=[out2.mag.Phi_wind_stator],
+        legend_list=["Periodic", "Full"],
+        save_path=join(save_path, simu.name + "_Phi_wind_stator_time.png"),
+        is_show_fig=False,
+        **dict_2D
+    )
+
+    # Compare both simu
+    Bflux = out.mag.B
+    arg_list = ["angle"]
+    result = Bflux.get_rphiz_along(*arg_list)
+    Brad = result["radial"]
+    angle = result["angle"]
+
+    Bflux2 = out2.mag.B
+    arg_list = ["angle"]
+    result2 = Bflux2.get_rphiz_along(*arg_list)
+    Brad2 = result2["radial"]
+
+    assert_array_almost_equal(Brad, Brad2, decimal=1)
+
+    return out, out2
+
+
 @pytest.mark.long_5s
 @pytest.mark.long_1m
 @pytest.mark.MagFEMM
@@ -616,8 +728,8 @@ def test_Ring_Magnet():
 
 # To run it without pytest
 if __name__ == "__main__":
-
-    out, out2 = test_FEMM_periodicity_angle()
+    test_Bore_sym()
+    # out, out2 = test_FEMM_periodicity_angle()
     # out3, out4 = test_FEMM_periodicity_time()
     # out5, out6 = test_FEMM_periodicity_time_no_periodicity_a()
     # test_Ring_Magnet()
