@@ -171,9 +171,10 @@ class WNotch(Ui_WNotch, QWidget):
         if self.previous_notch[self.type_list[c_index]] is None:
             # No previous notch of this type
             self.lam_notch.slot = self.type_list[c_index]()
-            self.lam_notch.slot._set_None()  # No default value
+            self.lam_notch.slot._set_None()  # Clear default value
         else:  # Load the previous notch of this type
             self.lam_notch.slot = self.previous_notch[self.type_list[c_index]]
+        self.lam_notch.slot.is_bore = True  # Default value
         self.set_alpha()
         self.set_Zn()
         self.obj.notch[self.index].notch_shape = self.lam_notch.slot

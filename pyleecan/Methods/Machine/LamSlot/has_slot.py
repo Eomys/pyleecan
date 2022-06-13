@@ -15,4 +15,8 @@ def has_slot(self, is_bore=True):
         True if the lamination has slot on the requested radius
     """
 
-    return self.slot is not None and self.slot.Zs != 0 and self.slot.is_bore == is_bore
+    if self.slot is None:
+        return False
+    if self.slot.is_bore is None:
+        self.slot.is_bore = True  # Default value
+    return self.slot.Zs != 0 and self.slot.is_bore == is_bore

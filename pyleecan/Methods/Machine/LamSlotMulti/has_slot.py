@@ -18,7 +18,8 @@ def has_slot(self, is_bore=True):
     if self.slot_list is None or len(self.slot_list) == 0:
         return False
 
+    # notch_shape.is_bore = None => Default is True
     if is_bore:
-        return any([slot.is_bore for slot in self.slot_list])
+        return any([slot.is_bore in [None, True] for slot in self.slot_list])
     else:
-        return any([not slot.is_bore for slot in self.slot_list])
+        return any([slot.is_bore == False for slot in self.slot_list])

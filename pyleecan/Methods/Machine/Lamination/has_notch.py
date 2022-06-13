@@ -17,7 +17,8 @@ def has_notch(self, is_bore):
     if self.notch is None or len(self.notch) == 0:
         return False
 
+    # notch_shape.is_bore = None => Default is True
     if is_bore:
-        return any([notch.notch_shape.is_bore for notch in self.notch])
+        return any([notch.notch_shape.is_bore in [True, None] for notch in self.notch])
     else:
-        return any([not notch.notch_shape.is_bore for notch in self.notch])
+        return any([notch.notch_shape.is_bore == False for notch in self.notch])
