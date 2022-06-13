@@ -389,9 +389,9 @@ class TestSMHoleMag(object):
         assert type(setup["test_obj"].rotor.hole[2]) == HoleM50
         assert setup["test_obj"].rotor.hole[2].Zh == 8
         assert setup["widget"].tab_hole.count() == 3
-        assert setup["widget"].tab_hole.tabText(0) == "Hole 1"
-        assert setup["widget"].tab_hole.tabText(1) == "Hole 2"
-        assert setup["widget"].tab_hole.tabText(2) == "Hole 3"
+        assert setup["widget"].tab_hole.tabText(0) == "Hole Set 1"
+        assert setup["widget"].tab_hole.tabText(1) == "Hole Set 2"
+        assert setup["widget"].tab_hole.tabText(2) == "Hole Set 3"
 
         setup["widget"].b_remove.clicked.emit()
         assert len(setup["test_obj"].rotor.hole) == 2
