@@ -9336,9 +9336,7 @@
                 "value": "1"
             }
         ],
-        "daughters": [
-            "OutLossMinimal"
-        ],
+        "daughters": [],
         "desc": "Gather the loss module outputs",
         "is_internal": false,
         "methods": [
@@ -9399,7 +9397,7 @@
             "get_loss_overall",
             "store"
         ],
-        "mother": "OutLoss",
+        "mother": "",
         "name": "OutLossMinimal",
         "package": "Output",
         "path": "pyleecan/Generator/ClassesRef/Output/OutLossMinimal.csv",

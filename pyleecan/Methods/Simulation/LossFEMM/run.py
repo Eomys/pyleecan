@@ -1,5 +1,8 @@
+from pyleecan.Classes.LossModelMagnet import LossModelMagnet
+from pyleecan.Classes.LossModelProximity import LossModelProximity
+from pyleecan.Classes.LossModelSteinmetz import LossModelSteinmetz
+from pyleecan.Classes.LossModelWinding import LossModelWinding
 from ....Methods.Simulation.Input import InputError
-from pyleecan.Classes.OutLossMinimal import OutLossMinimal
 
 
 def run(self):
@@ -16,14 +19,15 @@ def run(self):
 
     axes_dict = self.comp_axes(output)
 
-    out_dict = self.comp_loss(output, axes_dict)
-
-    output.loss = OutLossMinimal()
+    self.model_dict={"stator core": LossModelSteinmetz(group = "stator core"),
+                "rotor core": LossModelSteinmetz(group = "rotor core"),
+                "joule": LossModelWinding(group = "stator winding"),
+                "proximity": LossModelProximity(group = "stator winding"),
+                "magnets": LossModelMagnet(group = "rotor magnets")}
 
     output.loss.store(
-        out_dict,
+        self.model_dict,
         axes_dict,
         self.is_get_meshsolution,
-        type_skin_effect=self.type_skin_effect,
         Tsta=self.Tsta,
     )

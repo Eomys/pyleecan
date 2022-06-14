@@ -13,7 +13,7 @@ from ..Functions.save import save
 from ..Functions.copy import copy
 from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
-from .OutLoss import OutLoss
+from ._frozen import FrozenClass
 
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
@@ -47,7 +47,7 @@ from numpy import isnan
 from ._check import InitUnKnowClassError
 
 
-class OutLossMinimal(OutLoss):
+class OutLossMinimal(FrozenClass):
     """Gather the loss module outputs"""
 
     VERSION = 1
@@ -126,9 +126,6 @@ class OutLossMinimal(OutLoss):
         Pprox=None,
         Pjoule=None,
         coeff_dict=-1,
-        axes_dict=None,
-        loss_list=-1,
-        logger_name="Pyleecan.Loss",
         init_dict=None,
         init_str=None,
     ):
@@ -165,13 +162,8 @@ class OutLossMinimal(OutLoss):
                 Pjoule = init_dict["Pjoule"]
             if "coeff_dict" in list(init_dict.keys()):
                 coeff_dict = init_dict["coeff_dict"]
-            if "axes_dict" in list(init_dict.keys()):
-                axes_dict = init_dict["axes_dict"]
-            if "loss_list" in list(init_dict.keys()):
-                loss_list = init_dict["loss_list"]
-            if "logger_name" in list(init_dict.keys()):
-                logger_name = init_dict["logger_name"]
         # Set the properties (value check and convertion are done in setter)
+        self.parent = None
         self.loss_list = loss_list
         self.meshsol_list = meshsol_list
         self.loss_index = loss_index
@@ -181,19 +173,20 @@ class OutLossMinimal(OutLoss):
         self.Pprox = Pprox
         self.Pjoule = Pjoule
         self.coeff_dict = coeff_dict
-        # Call OutLoss init
-        super(OutLossMinimal, self).__init__(
-            axes_dict=axes_dict, loss_list=loss_list, logger_name=logger_name
-        )
-        # The class is frozen (in OutLoss init), for now it's impossible to
-        # add new properties
+
+        # The class is frozen, for now it's impossible to add new properties
+        self._freeze()
 
     def __str__(self):
         """Convert this object in a readeable string (for print)"""
 
         OutLossMinimal_str = ""
-        # Get the properties inherited from OutLoss
-        OutLossMinimal_str += super(OutLossMinimal, self).__str__()
+        if self.parent is None:
+            OutLossMinimal_str += "parent = None " + linesep
+        else:
+            OutLossMinimal_str += (
+                "parent = " + str(type(self.parent)) + " object" + linesep
+            )
         OutLossMinimal_str += "loss_list = " + str(self.loss_list) + linesep + linesep
         if len(self.meshsol_list) == 0:
             OutLossMinimal_str += "meshsol_list = []" + linesep
@@ -218,10 +211,6 @@ class OutLossMinimal(OutLoss):
         """Compare two objects (skip parent)"""
 
         if type(other) != type(self):
-            return False
-
-        # Check the properties inherited from OutLoss
-        if not super(OutLossMinimal, self).__eq__(other):
             return False
         if other.loss_list != self.loss_list:
             return False
@@ -251,13 +240,6 @@ class OutLossMinimal(OutLoss):
         if type(other) != type(self):
             return ["type(" + name + ")"]
         diff_list = list()
-
-        # Check the properties inherited from OutLoss
-        diff_list.extend(
-            super(OutLossMinimal, self).compare(
-                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
-            )
-        )
         if (other.loss_list is None and self.loss_list is not None) or (
             other.loss_list is not None and self.loss_list is None
         ):
@@ -417,9 +399,6 @@ class OutLossMinimal(OutLoss):
         """Return the size in memory of the object (including all subobject)"""
 
         S = 0  # Full size of the object
-
-        # Get size of the properties inherited from OutLoss
-        S += super(OutLossMinimal, self).__sizeof__()
         if self.loss_list is not None:
             for value in self.loss_list:
                 S += getsizeof(value)
@@ -450,12 +429,7 @@ class OutLossMinimal(OutLoss):
         and may prevent json serializability.
         """
 
-        # Get the properties inherited from OutLoss
-        OutLossMinimal_dict = super(OutLossMinimal, self).as_dict(
-            type_handle_ndarray=type_handle_ndarray,
-            keep_function=keep_function,
-            **kwargs
-        )
+        OutLossMinimal_dict = dict()
         if self.loss_list is None:
             OutLossMinimal_dict["loss_list"] = None
         else:
@@ -498,7 +472,6 @@ class OutLossMinimal(OutLoss):
             self.coeff_dict.copy() if self.coeff_dict is not None else None
         )
         # The class name is added to the dict for deserialisation purpose
-        # Overwrite the mother class name
         OutLossMinimal_dict["__class__"] = "OutLossMinimal"
         return OutLossMinimal_dict
 
@@ -514,8 +487,6 @@ class OutLossMinimal(OutLoss):
         self.Pprox = None
         self.Pjoule = None
         self.coeff_dict = None
-        # Set to None the properties inherited from OutLoss
-        super(OutLossMinimal, self)._set_None()
 
     def _get_loss_list(self):
         """getter of loss_list"""
