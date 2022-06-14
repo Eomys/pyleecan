@@ -19,7 +19,7 @@ def build_radius_lines(self, is_bore, sym=1, is_reversed=False, prop_dict=None):
     sym : int
         Symmetry factor (1= full machine, 2= half of the machine...)
     prop_dict : dict
-        Property dictionary to apply on the lines
+        Property dictionary to apply on the radius lines (not on slot/notch)
 
     Returns
     -------

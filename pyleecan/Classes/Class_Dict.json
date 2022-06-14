@@ -243,7 +243,10 @@
         "is_internal": false,
         "methods": [
             "merge_slot",
-            "is_yoke"
+            "is_yoke",
+            "merge_slot_connect",
+            "merge_slot_intersect",
+            "merge_slot_translate"
         ],
         "mother": "",
         "name": "Bore",
@@ -252,7 +255,7 @@
         "properties": [
             {
                 "as_dict": "",
-                "desc": "how to merge slot/notch into the bore radius (0: error if colliding, 1: intersection, 2: translate)",
+                "desc": "how to merge slot/notch into the bore radius (0: connect the dot, 1: intersection, 2: translate)",
                 "max": "2",
                 "min": "0",
                 "name": "type_merge_slot",

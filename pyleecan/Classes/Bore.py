@@ -27,6 +27,21 @@ try:
 except ImportError as error:
     is_yoke = error
 
+try:
+    from ..Methods.Machine.Bore.merge_slot_connect import merge_slot_connect
+except ImportError as error:
+    merge_slot_connect = error
+
+try:
+    from ..Methods.Machine.Bore.merge_slot_intersect import merge_slot_intersect
+except ImportError as error:
+    merge_slot_intersect = error
+
+try:
+    from ..Methods.Machine.Bore.merge_slot_translate import merge_slot_translate
+except ImportError as error:
+    merge_slot_translate = error
+
 
 from numpy import isnan
 from ._check import InitUnKnowClassError
@@ -56,6 +71,42 @@ class Bore(FrozenClass):
         )
     else:
         is_yoke = is_yoke
+    # cf Methods.Machine.Bore.merge_slot_connect
+    if isinstance(merge_slot_connect, ImportError):
+        merge_slot_connect = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Bore method merge_slot_connect: "
+                    + str(merge_slot_connect)
+                )
+            )
+        )
+    else:
+        merge_slot_connect = merge_slot_connect
+    # cf Methods.Machine.Bore.merge_slot_intersect
+    if isinstance(merge_slot_intersect, ImportError):
+        merge_slot_intersect = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Bore method merge_slot_intersect: "
+                    + str(merge_slot_intersect)
+                )
+            )
+        )
+    else:
+        merge_slot_intersect = merge_slot_intersect
+    # cf Methods.Machine.Bore.merge_slot_translate
+    if isinstance(merge_slot_translate, ImportError):
+        merge_slot_translate = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Bore method merge_slot_translate: "
+                    + str(merge_slot_translate)
+                )
+            )
+        )
+    else:
+        merge_slot_translate = merge_slot_translate
     # generic save method is available in all object
     save = save
     # get_logger method is available in all object
@@ -180,7 +231,7 @@ class Bore(FrozenClass):
     type_merge_slot = property(
         fget=_get_type_merge_slot,
         fset=_set_type_merge_slot,
-        doc=u"""how to merge slot/notch into the bore radius (0: error if colliding, 1: intersection, 2: translate)
+        doc=u"""how to merge slot/notch into the bore radius (0: connect the dot, 1: intersection, 2: translate)
 
         :Type: int
         :min: 0
