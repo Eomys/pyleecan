@@ -148,31 +148,20 @@ def _get_radius_boundary(sym, lam_int, lam_ext):
     Rint, Rext: float
         Radii of the laminantions on the x axis
     """
-    geo_int = lam_int.build_geometry(sym=sym, is_circular_radius=True)
-    geo_ext = lam_ext.build_geometry(sym=sym, is_circular_radius=True)
+    # No bore => is_circular_radius make sure Rbo is Ok even
+    # with notch on Ox
+    if lam_int.bore is None:
+        Rint = lam_int.get_Rbo()
+    else:
+        # With bore shape even with notches, we compute the first point coordinate
+        bore_list = lam_int.build_radius_lines(sym=sym, is_bore=True)
+        Rint = abs(bore_list[0].get_begin())
 
-    # find the most external (or internal) point on the x axis
-    Rint, Rext = 0, 1e12
-    for surf in geo_int:
-        for line in surf.get_lines():
-            begin = line.get_begin()
-            end = line.get_end()
-            if begin.imag == 0:
-                if begin.real > Rint:
-                    Rint = begin.real
-            if end.imag == 0:
-                if end.real > Rint:
-                    Rint = end.real
-
-    for surf in geo_ext:
-        for line in surf.get_lines():
-            begin = line.get_begin()
-            end = line.get_end()
-            if begin.imag == 0:
-                if abs(begin.real) < Rext:
-                    Rext = begin.real
-            if end.imag == 0:
-                if abs(end.real) < Rext:
-                    Rext = end.real
+    # Same for external lamination
+    if lam_ext.bore is None:
+        Rext = lam_ext.get_Rbo()
+    else:
+        bore_list = lam_ext.build_radius_lines(sym=sym, is_bore=True)
+        Rext = abs(bore_list[0].get_begin())
 
     return Rint, Rext

@@ -563,51 +563,15 @@ def test_Bore_sym():
 
     # Run simulations
     out = simu.run()
-    assert np_max(out.mag.B.components["radial"].values) == pytest.approx(
-        0.0524, rel=0.1
-    )
-
     out2 = simu2.run()
-    assert np_max(out2.mag.B.components["radial"].values) == pytest.approx(
-        0.0524, rel=0.1
-    )
 
     # Plot the result
     out.mag.B.plot_2D_Data(
-        "time",
-        "angle[0]{°}",
-        data_list=[out2.mag.B],
-        legend_list=["Periodic", "Full"],
-        save_path=join(save_path, simu.name + "_B_time.png"),
-        is_show_fig=False,
-        **dict_2D
-    )
-
-    out.mag.B.plot_2D_Data(
         "angle{°}",
-        "time[1]",
+        "time[0]",
         data_list=[out2.mag.B],
         legend_list=["Periodic", "Full"],
         save_path=join(save_path, simu.name + "_B_space.png"),
-        is_show_fig=False,
-        **dict_2D
-    )
-
-    out.mag.Tem.plot_2D_Data(
-        "time",
-        data_list=[out2.mag.Tem],
-        legend_list=["Periodic", "Full"],
-        save_path=join(save_path, simu.name + "_Tem_time.png"),
-        is_show_fig=False,
-        **dict_2D
-    )
-
-    out.mag.Phi_wind_stator.plot_2D_Data(
-        "time",
-        "phase[]",
-        data_list=[out2.mag.Phi_wind_stator],
-        legend_list=["Periodic", "Full"],
-        save_path=join(save_path, simu.name + "_Phi_wind_stator_time.png"),
         is_show_fig=False,
         **dict_2D
     )
