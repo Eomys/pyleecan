@@ -11192,7 +11192,8 @@
             "scale",
             "split_half",
             "split_line",
-            "translate"
+            "translate",
+            "split_point"
         ],
         "mother": "Line",
         "name": "Segment",
