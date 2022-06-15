@@ -70,15 +70,15 @@ class PMSlot10(Gen_PMSlot10, QWidget):
             self.slot.Hmag = 0
             self.slot.Wmag = 0
             # Selecting the right image
-            if self.lamination.is_stator:
-                # Use schematics on the stator without magnet
+            if not self.lamination.is_internal:
+                # Use schematics on the external without magnet
                 self.img_slot.setPixmap(
                     QPixmap(
                         u":/images/images/MachineSetup/WMSlot/SlotM10_empty_ext_sta.png"
                     )
                 )
             else:
-                # Use schematics on the rotor without magnet
+                # Use schematics on the inner without magnet
                 self.img_slot.setPixmap(
                     QPixmap(
                         u":/images/images/MachineSetup/WMSlot/SlotM10_empty_int_rot.png"

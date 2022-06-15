@@ -8,7 +8,7 @@ pandas>=1.0.3
 pyfemm>=0.1.1;platform_system=="Windows"
 PySide2>=5.15.2
 pyuff>=1.25
-pyvista>=0.25.3
+pyvista>=0.25.3,<=0.31.3
 quadpy
 SciDataTool>=2.4.4
 scipy>=1.4.1
