@@ -522,13 +522,13 @@ def test_Bore_sym():
     """Check that angular periodicity can be applied on Bore shape"""
     TP = load(join(DATA_DIR, "Machine", "Toyota_Prius.json"))
     # Add Bore shape
-    TP.rotor.bore = BoreFlower(N=8, Rarc=TP.rotor.Rext * 0.75, alpha=pi / 8, type_merge_slot=0)
+    TP.rotor.bore = BoreFlower(N=8, Rarc=TP.rotor.Rext * 0.75, alpha=pi / 8, type_merge_slot=1)
     # Add Notch to merge with the Bore shape
     Zr = TP.rotor.hole[0].Zh
     W0 = TP.stator.slot.W0
     H0 = TP.stator.slot.H0
     NBR = SlotM10(Zs=Zr, W0=W0*5, H0=H0*3)
-    TP.rotor.notch = [NotchEvenDist(alpha=pi / 8, notch_shape=NBR),NotchEvenDist(alpha=0, notch_shape=NBR)]
+    TP.rotor.notch = [NotchEvenDist(alpha=pi / 8, notch_shape=NBR)]#,NotchEvenDist(alpha=0, notch_shape=NBR)]
 
     TP.plot(sym=8)
     plt.show()
