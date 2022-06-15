@@ -1,0 +1,22 @@
+{
+  "name": "pyleecan",
+  "version": "1.0.0",
+  "description": "[![PyPI version](https://badge.fury.io/py/pyleecan.svg)](https://badge.fury.io/py/pyleecan)\r [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)\r <a href=\"https://github.com/psf/black\"><img alt=\"Code style: black\" src=\"https://img.shields.io/badge/code%20style-black-000000.svg\"></a>",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Eomys/pyleecan.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Eomys/pyleecan/issues"
+  },
+  "homepage": "https://github.com/Eomys/pyleecan#readme",
+  "dependencies": {
+    "mermaid.cli": "^0.5.1"
+  }
+}
