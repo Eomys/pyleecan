@@ -20,7 +20,9 @@
             "split_line",
             "comp_distance",
             "plot",
-            "comp_maxseg"
+            "comp_maxseg",
+            "intersect_obj",
+            "is_arc"
         ],
         "mother": "Line",
         "name": "Arc",
@@ -52,7 +54,8 @@
             "rotate",
             "scale",
             "split_half",
-            "translate"
+            "translate",
+            "split_point"
         ],
         "mother": "Arc",
         "name": "Arc1",
@@ -125,7 +128,8 @@
             "rotate",
             "scale",
             "split_half",
-            "translate"
+            "translate",
+            "split_point"
         ],
         "mother": "Arc",
         "name": "Arc2",
@@ -188,7 +192,8 @@
             "rotate",
             "scale",
             "split_half",
-            "translate"
+            "translate",
+            "split_point"
         ],
         "mother": "Arc",
         "name": "Arc3",
@@ -11193,7 +11198,9 @@
             "split_half",
             "split_line",
             "translate",
-            "split_point"
+            "split_point",
+            "intersect_obj",
+            "is_arc"
         ],
         "mother": "Line",
         "name": "Segment",
