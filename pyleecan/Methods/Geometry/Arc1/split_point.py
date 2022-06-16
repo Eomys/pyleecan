@@ -19,12 +19,13 @@ def split_point(self, Z1, is_begin=True):
     -------
     """
 
-    if not self.is_on_line(Z1):
+    # Check if the point is on the circle
+    Zc = self.get_center()
+    R = self.comp_radius()
+    if abs(np_abs(Z1 - Zc) - R) > 1e-6:
         raise Exception("Point is not on the line")
 
     # Check that the center is the same
-    Zc = self.get_center()
-
     if is_begin:
         self.end = Z1
     else:

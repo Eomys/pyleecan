@@ -64,10 +64,11 @@ def merge_slot_connect(self, radius_desc_list, prop_dict, sym):
     for desc_dict in radius_desc_list:
         if desc_dict["label"] == "Radius":
             # Add prop_dict on all the Radius Lines
-            for line in desc_dict["lines"]:
-                if line.prop_dict is None:
-                    line.prop_dict = dict()
-                line.prop_dict.update(prop_dict)
+            if prop_dict is not None:
+                for line in desc_dict["lines"]:
+                    if line.prop_dict is None:
+                        line.prop_dict = dict()
+                    line.prop_dict.update(prop_dict)
             line_list.extend(desc_dict["lines"])
         else:  # Connect and add notch lines
             if len(line_list) > 0:

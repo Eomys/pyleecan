@@ -1,5 +1,5 @@
 from ....Classes.Arc1 import Arc1
-from numpy import pi
+from numpy import pi, abs as np_abs
 
 DELTA = 1e-9  # To remove computing noise
 
@@ -20,21 +20,24 @@ def split_point(self, Z1, is_begin=True):
     -------
     """
 
-    if not self.is_on_line(Z1):
+    # Check if the point is on the circle
+    Zc = self.get_center()
+    R = self.comp_radius()
+    if abs(np_abs(Z1 - Zc) - R) > 1e-6:
         raise Exception("Point is not on the line")
 
     if is_begin:
         arc = Arc1(
             begin=self.begin,
             end=Z1,
-            radius=self.comp_radius(),
+            radius=R,
             is_trigo_direction=self.is_trigo_direction,
         )
     else:
         arc = Arc1(
             begin=Z1,
             end=self.end,
-            radius=self.comp_radius(),
+            radius=R,
             is_trigo_direction=self.is_trigo_direction,
         )
     # Correct radius sign if needed

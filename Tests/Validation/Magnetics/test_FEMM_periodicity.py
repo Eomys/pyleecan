@@ -1,4 +1,5 @@
-from os.path import join
+from os import makedirs
+from os.path import join, isdir
 from multiprocessing import cpu_count
 
 import pytest
@@ -520,23 +521,37 @@ def test_FEMM_periodicity_angle():
 
 def test_Bore_sym():
     """Check that angular periodicity can be applied on Bore shape"""
+    res_path = join(save_path, "test_Bore_sym")
+    if not isdir(res_path):
+        makedirs(res_path)
     TP = load(join(DATA_DIR, "Machine", "Toyota_Prius.json"))
     # Add Bore shape
-    TP.rotor.bore = BoreFlower(N=8, Rarc=TP.rotor.Rext * 0.75, alpha=pi / 8, type_merge_slot=1)
-    # Add Notch to merge with the Bore shape
+    TP.rotor.bore = BoreFlower(
+        N=8, Rarc=TP.rotor.Rext * 0.75, alpha=pi / 8, type_merge_slot=1
+    )
+    # Add Notch to merge with the Bore shape (middle of pole)
     Zr = TP.rotor.hole[0].Zh
     W0 = TP.stator.slot.W0
     H0 = TP.stator.slot.H0
-    NBR = SlotM10(Zs=Zr, W0=W0*5, H0=H0*3)
-    TP.rotor.notch = [NotchEvenDist(alpha=pi / 8, notch_shape=NBR)]#,NotchEvenDist(alpha=0, notch_shape=NBR)]
+    NBR = SlotM10(Zs=Zr, W0=W0 * 5, H0=H0 * 3)
+    TP.rotor.notch = [
+        NotchEvenDist(alpha=pi / 8, notch_shape=NBR),
+    ]
 
-    TP.plot(sym=8)
-    plt.show()
-
+    TP.plot(sym=8, is_show_fig=False, save_path=join(res_path, "1_notch_sym.png"))
+    TP.plot(is_show_fig=False, save_path=join(res_path, "1_notch_full.png"))
     assert TP.comp_periodicity_spatial() == (4, True)
 
+    # Add notch on sym line
+    TP2 = TP.copy()
+    TP2.rotor.notch.append(NotchEvenDist(alpha=0, notch_shape=NBR))
+    TP2.plot(sym=8, is_show_fig=False, save_path=join(res_path, "2_notch_sym.png"))
+    TP2.plot(is_show_fig=False, save_path=join(res_path, "2_notch_full.png"))
+    assert TP2.comp_periodicity_spatial() == (4, True)
+
+    # Create all simulations
     simu = Simu1(name="test_FEMM_periodicity_angle_Bore", machine=TP)
-    simu.path_result = join(save_path, simu.name)
+    simu.path_result = join(res_path, simu.name)
     simu.input = InputCurrent(
         OP=OPdq(N0=1000, Id_ref=0, Iq_ref=0),
         Na_tot=2048,
@@ -554,15 +569,27 @@ def test_Bore_sym():
     )
 
     # Definition of the magnetic simulation: no periodicity
-    # Definition of the magnetic simulation: no periodicity
     simu2 = simu.copy()
     simu2.name = simu.name + "_Full"
-    simu2.path_result = join(save_path, simu2.name)
+    simu2.path_result = join(res_path, simu2.name)
     simu2.mag.is_periodicity_a = False
+
+    simu3 = simu.copy()
+    simu3.machine = TP2
+    simu3.name = simu.name + "_2_notch"
+    simu3.path_result = join(res_path, simu3.name)
+
+    simu4 = simu.copy()
+    simu4.machine = TP2
+    simu4.name = simu.name + "_2_notch_Full"
+    simu4.path_result = join(res_path, simu4.name)
+    simu4.mag.is_periodicity_a = False
 
     # Run simulations
     out = simu.run()
     out2 = simu2.run()
+    out3 = simu3.run()
+    out4 = simu4.run()
 
     # Plot the result
     out.mag.B.plot_2D_Data(
@@ -570,17 +597,25 @@ def test_Bore_sym():
         "time[0]",
         data_list=[out2.mag.B],
         legend_list=["Periodic", "Full"],
-        save_path=join(save_path, simu.name + "_B_space.png"),
+        save_path=join(res_path, simu.name + "_B_space.png"),
+        is_show_fig=False,
+        **dict_2D
+    )
+    out3.mag.B.plot_2D_Data(
+        "angle{°}",
+        "time[0]",
+        data_list=[out4.mag.B],
+        legend_list=["Periodic", "Full"],
+        save_path=join(res_path, simu3.name + "_B_space.png"),
         is_show_fig=False,
         **dict_2D
     )
 
-    # Compare both simu
+    # Compare simu
     Bflux = out.mag.B
     arg_list = ["angle"]
     result = Bflux.get_rphiz_along(*arg_list)
     Brad = result["radial"]
-    angle = result["angle"]
 
     Bflux2 = out2.mag.B
     arg_list = ["angle"]
@@ -589,7 +624,17 @@ def test_Bore_sym():
 
     assert_array_almost_equal(Brad, Brad2, decimal=1)
 
-    return out, out2
+    Bflux = out3.mag.B
+    arg_list = ["angle"]
+    result = Bflux.get_rphiz_along(*arg_list)
+    Brad = result["radial"]
+
+    Bflux2 = out4.mag.B
+    arg_list = ["angle"]
+    result2 = Bflux2.get_rphiz_along(*arg_list)
+    Brad2 = result2["radial"]
+
+    assert_array_almost_equal(Brad, Brad2, decimal=1)
 
 
 @pytest.mark.long_5s

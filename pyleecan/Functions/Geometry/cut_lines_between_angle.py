@@ -1,4 +1,4 @@
-from numpy import exp
+from numpy import exp, angle, pi
 
 
 def cut_lines_between_angles(line_list, begin_angle, end_angle):
@@ -31,5 +31,9 @@ def cut_lines_between_angles(line_list, begin_angle, end_angle):
     for line in first_cut:
         _, bot_split_list = line.split_line(0, exp(1j * end_angle))
         cut_lines.extend(bot_split_list)
+
+    # Check that lines are in the correct way
+    if (angle(cut_lines[0].get_begin()) % (2 * pi)) - (begin_angle % (2 * pi)) > 1e-6:
+        cut_lines = cut_lines[::-1]
 
     return cut_lines
