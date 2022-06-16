@@ -71,18 +71,20 @@ def merge_slot_intersect(self, radius_desc_list, prop_dict, sym):
             line_list.extend(desc_dict["lines"])
         else:  # Intersect and add slot/notch lines
             # Define First cutting line
-            Z1 = radius_desc_list[ii - 1]["lines"][-1].get_end()
-            Z2 = (Z1 * exp(-1j * angle(Z1)) + 1) * exp(1j * angle(Z1))
+            rad_line = radius_desc_list[ii - 1]["lines"][-1]
             # Find first line to intersect with cutting line
             for jj in range(len(desc_dict["lines"])):
-                inter_list = desc_dict["lines"][jj].intersect_line(Z1, Z2)
+                inter_list = desc_dict["lines"][jj].intersect_obj(
+                    rad_line, is_on_line=True
+                )
                 if len(inter_list) > 0:
                     break
             if jj < len(desc_dict["lines"]):
                 # Slot/notch was cut => Replace lines by cut ones
                 desc_dict["lines"] = desc_dict["lines"][jj:]  # Keep all lines after cut
-                # Update first line to start at cutting point
+                # Update lines to start/end at cutting point
                 desc_dict["lines"][0].split_point(inter_list[0], is_begin=False)
+                rad_line.split_point(inter_list[0], is_begin=True)
             else:  # The slot is above the shape => Use shape lines
                 desc_dict["lines"] = cut_lines_between_angles(
                     radius_lines, desc_dict["begin_angle"], desc_dict["end_angle"]
@@ -96,19 +98,23 @@ def merge_slot_intersect(self, radius_desc_list, prop_dict, sym):
                 continue  # No need to cut the other side
             # Second cut
             if ii != len(radius_desc_list) - 1:
-                Z1 = radius_desc_list[ii + 1]["lines"][0].get_begin()
+                rad_line = radius_desc_list[ii + 1]["lines"][0]
             else:
-                Z1 = radius_desc_list[0]["lines"][0].get_begin()
-            Z2 = (Z1 * exp(-1j * angle(Z1)) - 1) * exp(1j * angle(Z1))
+                rad_line = radius_desc_list[0]["lines"][0]
             for jj in range(len(desc_dict["lines"])):
-                inter_list = desc_dict["lines"][-(jj + 1)].intersect_line(Z1, Z2)
+                inter_list = desc_dict["lines"][-(jj + 1)].intersect_obj(
+                    rad_line, is_on_line=True
+                )
                 if len(inter_list) > 0:
                     break
             if jj < len(desc_dict["lines"]):
                 # Slot/notch was cut => Replace lines by cut ones
                 if jj != 0:  # Keep all the lines if last line is cut
-                    desc_dict["lines"] = desc_dict["lines"][: -jj]  # Keep all lines before cut
-                # Update last line to end at cutting point
+                    desc_dict["lines"] = desc_dict["lines"][
+                        :-jj
+                    ]  # Keep all lines before cut
+                # Update lines to start/end at cutting point
                 desc_dict["lines"][-1].split_point(inter_list[0], is_begin=True)
+                rad_line.split_point(inter_list[0], is_begin=False)
             line_list.extend(desc_dict["lines"])
     return line_list
