@@ -3,8 +3,8 @@ def get_Zs(self):
 
     Parameters
     ----------
-    self : LamHole
-        A LamHole object
+    self : LamH
+        A LamH object
 
     Returns
     -------
@@ -13,4 +13,4 @@ def get_Zs(self):
 
     """
 
-    return self.hole[0].Zh
+    return self.get_pole_pair_number() * 2

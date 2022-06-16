@@ -25,6 +25,18 @@ def get_R_id(self):
         and self in self.parent.hole
     ):
         return (self.parent.hole.index(self), HOLEV_LAB)
+    elif (
+        hasattr(self.parent, "hole_north")
+        and self.parent.hole_north is not None
+        and self in self.parent.hole_north
+    ):
+        return (self.parent.hole_north.index(self), HOLEV_LAB)
+    elif (
+        hasattr(self.parent, "hole_south")
+        and self.parent.hole_south is not None
+        and self in self.parent.hole_south
+    ):
+        return (self.parent.hole_south.index(self), HOLEV_LAB)
     elif self.parent.axial_vent is not None and self in self.parent.axial_vent:
         return (self.parent.axial_vent.index(self), VENT_LAB)
     else:

@@ -3,8 +3,8 @@ def has_magnet(self):
 
     Parameters
     ----------
-    self : LamHole
-        A LamHole object
+    self : LamH
+        A LamH object
 
     Returns
     -------
@@ -12,5 +12,5 @@ def has_magnet(self):
         True if any of the Holes have magnets
     """
 
-    has_mag = [hole.has_magnet() for hole in self.hole]
+    has_mag = [hole.has_magnet() for hole in self.get_hole_list()]
     return any(has_mag)

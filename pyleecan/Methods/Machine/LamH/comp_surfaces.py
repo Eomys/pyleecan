@@ -9,8 +9,8 @@ def comp_surfaces(self):
 
     Parameters
     ----------
-    self : LamHole
-        A LamHole object
+    self : LamH
+        A LamH object
 
     Returns
     -------
@@ -24,7 +24,7 @@ def comp_surfaces(self):
     # hole surface
     Shole = 0
     Smag = 0
-    for hole in self.hole:
+    for hole in self.get_hole_list():
         Shole += hole.Zh * hole.comp_surface()
         if hole.has_magnet():
             Smag += hole.Zh * hole.comp_surface_magnets()

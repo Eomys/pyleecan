@@ -9,8 +9,8 @@ def comp_masses(self):
 
     Parameters
     ----------
-    self : LamHole
-        A LamHole object
+    self : LamH
+        A LamH object
 
     Returns
     -------
@@ -22,7 +22,7 @@ def comp_masses(self):
     M_dict = Lamination.comp_masses(self)
 
     Mmag = 0
-    for hole in self.hole:
+    for hole in self.get_hole_list():
         if hole.has_magnet():
             Mmag += hole.Zh * hole.comp_mass_magnets()
 

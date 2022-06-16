@@ -6,8 +6,8 @@ def comp_height_yoke(self):
 
     Parameters
     ----------
-    self : LamHole
-        A LamHole object
+    self : LamH
+        A LamH object
 
     Returns
     -------
@@ -22,7 +22,7 @@ def comp_height_yoke(self):
         R = self.Rint
 
     # The yoke is define the greater cylinder without holes
-    for hole in self.hole:
+    for hole in self.get_hole_list():
         (Rmin, Rmax) = hole.comp_radius()
         if self.is_internal:
             R = min(R, Rmin)
