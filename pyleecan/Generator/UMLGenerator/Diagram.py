@@ -222,11 +222,11 @@ class Diagram():
         """This calls the mermaid CLI command to convert the diagram code to an svg file
         """
         subprocess.run(["powershell.exe",
-                        "./node_modules/.bin/mmdc",
+                        "./node_modules/.bin/mmdc.ps1",
                         "-i", join(self.folder_path_to_write_code, f"{self.name}.mmd"),# f"Diagrams_code/{self.name}.mmd",
                         "-o", join(self.folder_path_to_write_svg, f"{self.name}.svg"),#f"Diagrams_svg/{self.name}.svg",
                         "-t", "forest",
-                        f"--configFile={join(dirname(__file__),"config.json")}"])
+                        f"--configFile={join(dirname(__file__),'config.json')}"])
 
     def draw_diagram(self):
         """This calls all the methods necessary to get an svg diagram.

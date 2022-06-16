@@ -1,0 +1,175 @@
+classDiagram
+direction TB
+class LamHole{
+	hole : list~Hole~
+	build_geometry()
+	comp_height_yoke()
+	comp_masses()
+	comp_surfaces()
+	comp_volumes()
+	get_pole_pair_number()
+	plot()
+	comp_radius_mid_yoke()
+	has_magnet()
+	comp_angle_d_axis()
+	set_pole_pair_number()
+	get_Zs()
+}
+class LamSlot{
+	slot : Slot
+	check()
+	comp_radius_mec()
+	comp_surfaces()
+	get_pole_pair_number()
+	plot()
+	comp_height_yoke()
+	get_Zs()
+	get_bore_desc()
+	set_pole_pair_number()
+	comp_angle_d_axis()
+	get_surfaces_closing()
+	has_magnet()
+}
+class LamSlotMag{
+	magnet : Magnet
+	build_geometry()
+	check()
+	comp_masses()
+	comp_radius_mec()
+	comp_surfaces()
+	comp_volumes()
+	plot()
+	comp_angle_d_axis()
+}
+class LamSlotMulti{
+	slot_list : list~Slot~
+	alpha : ndarray
+	sym_dict_enforced : dict
+	check()
+	comp_radius_mec()
+	comp_surfaces()
+	get_pole_pair_number()
+	plot()
+	comp_height_yoke()
+	get_Zs()
+	get_bore_desc()
+	comp_periodicity_spatial()
+}
+class LamSlotMultiWind{
+	Ksfill : float
+	winding : Winding
+	plot()
+	build_geometry()
+	get_pole_pair_number()
+	comp_mmf_dir()
+	plot_mmf_unit()
+	comp_mmf_unit()
+	comp_wind_function()
+	comp_angle_d_axis()
+}
+class LamSlotWind{
+	Ksfill : float
+	winding : Winding
+	build_geometry()
+	check()
+	comp_masses()
+	comp_surfaces()
+	comp_volumes()
+	get_pole_pair_number()
+	plot()
+	plot_winding()
+	comp_fill_factor()
+	comp_output_geo()
+	get_polar_eq()
+	comp_wind_function()
+	plot_mmf_unit()
+	comp_resistance_wind()
+	comp_angle_d_axis()
+	comp_mmf_unit()
+	comp_mmf_dir()
+	comp_lengths_winding()
+	comp_number_phase_eq()
+	comp_periodicity_spatial()
+	set_pole_pair_number()
+}
+class LamSquirrelCage{
+	Hscr : float
+	Lscr : float
+	ring_mat : Material
+	build_geometry()
+	check()
+	comp_length_ring()
+	plot()
+	comp_number_phase_eq()
+	comp_surface_ring()
+	comp_resistance_wind()
+	get_name_phase()
+	comp_angle_d_axis()
+	comp_periodicity_spatial()
+	comp_masses()
+	plot_schematics_scr()
+	plot_side()
+}
+class LamSquirrelCageMag{
+	hole : list~Hole~
+	build_geometry()
+	check()
+	comp_surfaces()
+	plot()
+	get_pole_pair_number()
+	set_pole_pair_number()
+}
+class Lamination{
+	L1 : float
+	mat_type : Material
+	Nrvd : int
+	Wrvd : float
+	Kf1 : float
+	is_internal : bool
+	Rint : float
+	Rext : float
+	is_stator : bool
+	axial_vent : list~Hole~
+	notch : list~Notch~
+	skew : Skew
+	yoke_notch : list~Notch~
+	bore : Bore
+	build_geometry()
+	check()
+	comp_length()
+	comp_masses()
+	comp_radius_mec()
+	comp_surface_axial_vent()
+	comp_surfaces()
+	comp_volumes()
+	get_bore_line()
+	get_Rbo()
+	get_Ryoke()
+	get_name_phase()
+	plot()
+	comp_output_geo()
+	get_polar_eq()
+	is_outwards()
+	comp_height_yoke()
+	get_notch_list()
+	comp_angle_q_axis()
+	comp_radius_mid_yoke()
+	get_yoke_desc()
+	get_bore_desc()
+	comp_point_ref()
+	comp_periodicity_spatial()
+	get_label()
+	get_yoke_side_line()
+	get_notches_surf()
+	comp_periodicity_duct_spatial()
+	get_surfaces_closing()
+	comp_periodicity_geo()
+}
+LamSlot  <|--> LamSlotMag
+LamSlot  <|--> LamSlotWind
+LamSlotMulti  <|--> LamSlotMultiWind
+LamSlotWind  <|--> LamSquirrelCage
+LamSquirrelCage  <|--> LamSquirrelCageMag
+Lamination  <|--> LamHole
+Lamination  <|--> LamSlot
+Lamination  <|--> LamSlotMulti
