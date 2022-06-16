@@ -27,7 +27,7 @@ def _plot_arrow_mag(
         complex for translation (Default value = 0)
     """
 
-    for hole in self.hole:
+    for hole in self.hole_north:
         H = hole.comp_height()
         mag_dict = hole.comp_magnetization_dict()
         for magnet_name, mag_dir in mag_dict.items():
@@ -46,16 +46,52 @@ def _plot_arrow_mag(
                         break
                 # Create arrow coordinates
                 Zh = hole.Zh
-                for ii in range(int(Zh / sym)):
-                    off = pi if ii % 2 == 1 else 0
+                for ii in range(int(Zh / sym / 2)):
+                    off = 0  # All north
                     if mag is not None and mag.type_magnetization == 3:
                         off -= pi / 2
                     Z1 = (mag_surf.point_ref + delta) * exp(
-                        1j * (ii * 2 * pi / Zh + pi / Zh + alpha)
+                        1j * (ii * 4 * pi / Zh + pi / Zh + alpha)
                     )
                     Z2 = (
                         mag_surf.point_ref + delta + H / 5 * exp(1j * (mag_dir + off))
-                    ) * exp(1j * (ii * 2 * pi / Zh + pi / Zh + alpha))
+                    ) * exp(1j * (ii * 4 * pi / Zh + pi / Zh + alpha))
+                    ax.annotate(
+                        text="",
+                        xy=(Z2.real, Z2.imag),
+                        xytext=(Z1.real, Z1.imag),
+                        arrowprops=dict(arrowstyle="->", linewidth=1, color="b"),
+                    )
+
+    for hole in self.hole_south:
+        H = hole.comp_height()
+        mag_dict = hole.comp_magnetization_dict()
+        for magnet_name, mag_dir in mag_dict.items():
+            # Get the correct surface
+            mag_surf = None
+            mag_id = int(magnet_name.split("_")[-1])
+            mag = hole.get_magnet_by_id(mag_id)
+            if mag is not None:
+                for surf in hole.build_geometry():
+                    label_dict = decode_label(surf.label)
+                    if (
+                        HOLEM_LAB in label_dict["surf_type"]
+                        and label_dict["T_id"] == mag_id
+                    ):
+                        mag_surf = surf
+                        break
+                # Create arrow coordinates
+                Zh = hole.Zh
+                for ii in range(int(Zh / sym / 2)):
+                    off = pi  # All north
+                    if mag is not None and mag.type_magnetization == 3:
+                        off -= pi / 2
+                    Z1 = (mag_surf.point_ref + delta) * exp(
+                        1j * (ii * 4 * pi / Zh + 3 * pi / Zh + alpha)
+                    )
+                    Z2 = (
+                        mag_surf.point_ref + delta + H / 5 * exp(1j * (mag_dir + off))
+                    ) * exp(1j * (ii * 4 * pi / Zh + 3 * pi / Zh + alpha))
                     ax.annotate(
                         text="",
                         xy=(Z2.real, Z2.imag),

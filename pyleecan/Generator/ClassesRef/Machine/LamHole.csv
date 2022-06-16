@@ -2,5 +2,4 @@ Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximu
 hole,,lamination Hole,1,[Hole],,,,,Machine,LamH,_plot_arrow_mag,VERSION,1,Lamination with Hole with or without magnet or winding
 ,,,,,,,,,,,build_geometry,,,
 ,,,,,,,,,,,get_hole_list,,,
-,,,,,,,,,,,get_pole_pair_number,,,
-,,,,,,,,,,,set_pole_pair_number,,,
+,,,,,,,,,,,get_magnet_number,,,

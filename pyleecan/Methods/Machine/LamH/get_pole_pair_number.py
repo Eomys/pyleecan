@@ -3,8 +3,8 @@ def get_pole_pair_number(self):
 
     Parameters
     ----------
-    self : LamHole
-        A LamHole object
+    self : LamH
+        A LamH object
 
     Returns
     -------
@@ -13,4 +13,4 @@ def get_pole_pair_number(self):
 
     """
 
-    return self.hole[0].Zh // 2
+    return self.get_hole_list()[0].Zh // 2

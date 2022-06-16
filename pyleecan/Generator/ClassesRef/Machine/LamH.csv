@@ -5,6 +5,8 @@ Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximu
 ,,,,,,,,,,,comp_radius_mid_yoke,,,
 ,,,,,,,,,,,comp_surfaces,,,
 ,,,,,,,,,,,comp_volumes,,,
+,,,,,,,,,,,get_pole_pair_number,,,
 ,,,,,,,,,,,get_Zs,,,
 ,,,,,,,,,,,has_magnet,,,
 ,,,,,,,,,,,plot,,,
+,,,,,,,,,,,set_pole_pair_number,,,

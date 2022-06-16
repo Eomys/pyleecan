@@ -26,6 +26,7 @@ def plot(
     edgecolor=None,
     is_add_arrow=False,
     is_show_fig=True,
+    save_path=None,
     win_title=None,
 ):
     """Plot a Lamination with Buried Magnets in a matplotlib fig
@@ -54,6 +55,8 @@ def plot(
         To add an arrow for the magnetization
     is_show_fig : bool
         To call show at the end of the method
+    save_path : str
+        full path including folder, name and extension of the file to save if save_path is not None
     win_title : str
         Window title
 
@@ -150,4 +153,7 @@ def plot(
         ax.legend(patch_leg, label_leg)
     if is_show_fig:
         fig.show()
+    if save_path is not None:
+        fig.savefig(save_path)
+        plt.close(fig=fig)
     return fig, ax

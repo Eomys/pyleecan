@@ -33,14 +33,9 @@ except ImportError as error:
     get_hole_list = error
 
 try:
-    from ..Methods.Machine.LamHole.get_pole_pair_number import get_pole_pair_number
+    from ..Methods.Machine.LamHole.get_magnet_number import get_magnet_number
 except ImportError as error:
-    get_pole_pair_number = error
-
-try:
-    from ..Methods.Machine.LamHole.set_pole_pair_number import set_pole_pair_number
-except ImportError as error:
-    set_pole_pair_number = error
+    get_magnet_number = error
 
 
 from numpy import isnan
@@ -86,30 +81,18 @@ class LamHole(LamH):
         )
     else:
         get_hole_list = get_hole_list
-    # cf Methods.Machine.LamHole.get_pole_pair_number
-    if isinstance(get_pole_pair_number, ImportError):
-        get_pole_pair_number = property(
+    # cf Methods.Machine.LamHole.get_magnet_number
+    if isinstance(get_magnet_number, ImportError):
+        get_magnet_number = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use LamHole method get_pole_pair_number: "
-                    + str(get_pole_pair_number)
+                    "Can't use LamHole method get_magnet_number: "
+                    + str(get_magnet_number)
                 )
             )
         )
     else:
-        get_pole_pair_number = get_pole_pair_number
-    # cf Methods.Machine.LamHole.set_pole_pair_number
-    if isinstance(set_pole_pair_number, ImportError):
-        set_pole_pair_number = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use LamHole method set_pole_pair_number: "
-                    + str(set_pole_pair_number)
-                )
-            )
-        )
-    else:
-        set_pole_pair_number = set_pole_pair_number
+        get_magnet_number = get_magnet_number
     # generic save method is available in all object
     save = save
     # get_logger method is available in all object

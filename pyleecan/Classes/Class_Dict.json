@@ -5059,9 +5059,11 @@
             "comp_radius_mid_yoke",
             "comp_surfaces",
             "comp_volumes",
+            "get_pole_pair_number",
             "get_Zs",
             "has_magnet",
-            "plot"
+            "plot",
+            "set_pole_pair_number"
         ],
         "mother": "Lamination",
         "name": "LamH",
@@ -5083,8 +5085,7 @@
             "_plot_arrow_mag",
             "build_geometry",
             "get_hole_list",
-            "get_pole_pair_number",
-            "set_pole_pair_number"
+            "get_magnet_number"
         ],
         "mother": "LamH",
         "name": "LamHole",
@@ -5116,9 +5117,13 @@
         "methods": [
             "_plot_arrow_mag",
             "build_geometry",
+            "comp_masses",
+            "comp_periodicity_geo",
+            "comp_periodicity_spatial",
+            "comp_surfaces",
+            "comp_volumes",
             "get_hole_list",
-            "get_pole_pair_number",
-            "set_pole_pair_number"
+            "get_magnet_number"
         ],
         "mother": "LamH",
         "name": "LamHoleNS",
@@ -5211,7 +5216,8 @@
             "comp_surfaces",
             "comp_volumes",
             "plot",
-            "comp_angle_d_axis"
+            "comp_angle_d_axis",
+            "get_magnet_number"
         ],
         "mother": "LamSlot",
         "name": "LamSlotMag",

@@ -107,9 +107,26 @@ def decode_label(label):
     return label_dict
 
 
-def update_RTS_index(label=None, label_dict=None, R_id=None, T_id=None, S_id=None):
+def update_RTS_index(
+    label=None, label_dict=None, R_id=None, T_id=None, S_id=None, surf_type_label=None
+):
     """Update the index part of a label
     Stator_Winding_R0-T0-S0 => Stator_Winding_RX-TY-SZ
+
+    Parameters
+    ----------
+    label : str
+        Label to update
+    label_dict : dict
+        Split dict of the label (to avoid decoding twice)
+    R_id : int
+        Radial index to use
+    T_id : int
+        Tangantial index to use
+    S_id : int
+        Slot index to use
+    surf_type_label : str
+        To overwritte the surf_type part of the label
     """
     if label_dict is None:
         label_dict = decode_label(label)
@@ -120,6 +137,8 @@ def update_RTS_index(label=None, label_dict=None, R_id=None, T_id=None, S_id=Non
         label_dict["T_id"] = T_id
     if S_id is not None:
         label_dict["S_id"] = S_id
+    if surf_type_label is not None:
+        label_dict["surf_type"] = surf_type_label
 
     return (
         label_dict["lam_label"]
@@ -153,9 +172,9 @@ def get_obj_from_label(machine, label=None, label_dict=None):
     elif VENT_LAB in label_dict["surf_type"]:
         return lam_obj.axial_vent[label_dict["R_id"]]
     elif HOLEV_LAB in label_dict["surf_type"] or HOLEV_LAB_S in label_dict["surf_type"]:
-        return lam_obj.hole[label_dict["R_id"]]
+        return lam_obj.get_hole_list()[label_dict["R_id"]]
     elif HOLEM_LAB in label_dict["surf_type"] or HOLEM_LAB_S in label_dict["surf_type"]:
-        hole = lam_obj.hole[label_dict["R_id"]]
+        hole = lam_obj.get_hole_list()[label_dict["R_id"]]
         return hole.get_magnet_dict()["magnet_" + str(label_dict["T_id"])]
     elif MAG_LAB in label_dict["surf_type"]:
         return lam_obj.magnet

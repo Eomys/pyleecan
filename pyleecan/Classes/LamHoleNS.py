@@ -28,19 +28,41 @@ except ImportError as error:
     build_geometry = error
 
 try:
+    from ..Methods.Machine.LamHoleNS.comp_masses import comp_masses
+except ImportError as error:
+    comp_masses = error
+
+try:
+    from ..Methods.Machine.LamHoleNS.comp_periodicity_geo import comp_periodicity_geo
+except ImportError as error:
+    comp_periodicity_geo = error
+
+try:
+    from ..Methods.Machine.LamHoleNS.comp_periodicity_spatial import (
+        comp_periodicity_spatial,
+    )
+except ImportError as error:
+    comp_periodicity_spatial = error
+
+try:
+    from ..Methods.Machine.LamHoleNS.comp_surfaces import comp_surfaces
+except ImportError as error:
+    comp_surfaces = error
+
+try:
+    from ..Methods.Machine.LamHoleNS.comp_volumes import comp_volumes
+except ImportError as error:
+    comp_volumes = error
+
+try:
     from ..Methods.Machine.LamHoleNS.get_hole_list import get_hole_list
 except ImportError as error:
     get_hole_list = error
 
 try:
-    from ..Methods.Machine.LamHoleNS.get_pole_pair_number import get_pole_pair_number
+    from ..Methods.Machine.LamHoleNS.get_magnet_number import get_magnet_number
 except ImportError as error:
-    get_pole_pair_number = error
-
-try:
-    from ..Methods.Machine.LamHoleNS.set_pole_pair_number import set_pole_pair_number
-except ImportError as error:
-    set_pole_pair_number = error
+    get_magnet_number = error
 
 
 from numpy import isnan
@@ -76,6 +98,63 @@ class LamHoleNS(LamH):
         )
     else:
         build_geometry = build_geometry
+    # cf Methods.Machine.LamHoleNS.comp_masses
+    if isinstance(comp_masses, ImportError):
+        comp_masses = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use LamHoleNS method comp_masses: " + str(comp_masses)
+                )
+            )
+        )
+    else:
+        comp_masses = comp_masses
+    # cf Methods.Machine.LamHoleNS.comp_periodicity_geo
+    if isinstance(comp_periodicity_geo, ImportError):
+        comp_periodicity_geo = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use LamHoleNS method comp_periodicity_geo: "
+                    + str(comp_periodicity_geo)
+                )
+            )
+        )
+    else:
+        comp_periodicity_geo = comp_periodicity_geo
+    # cf Methods.Machine.LamHoleNS.comp_periodicity_spatial
+    if isinstance(comp_periodicity_spatial, ImportError):
+        comp_periodicity_spatial = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use LamHoleNS method comp_periodicity_spatial: "
+                    + str(comp_periodicity_spatial)
+                )
+            )
+        )
+    else:
+        comp_periodicity_spatial = comp_periodicity_spatial
+    # cf Methods.Machine.LamHoleNS.comp_surfaces
+    if isinstance(comp_surfaces, ImportError):
+        comp_surfaces = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use LamHoleNS method comp_surfaces: " + str(comp_surfaces)
+                )
+            )
+        )
+    else:
+        comp_surfaces = comp_surfaces
+    # cf Methods.Machine.LamHoleNS.comp_volumes
+    if isinstance(comp_volumes, ImportError):
+        comp_volumes = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use LamHoleNS method comp_volumes: " + str(comp_volumes)
+                )
+            )
+        )
+    else:
+        comp_volumes = comp_volumes
     # cf Methods.Machine.LamHoleNS.get_hole_list
     if isinstance(get_hole_list, ImportError):
         get_hole_list = property(
@@ -87,30 +166,18 @@ class LamHoleNS(LamH):
         )
     else:
         get_hole_list = get_hole_list
-    # cf Methods.Machine.LamHoleNS.get_pole_pair_number
-    if isinstance(get_pole_pair_number, ImportError):
-        get_pole_pair_number = property(
+    # cf Methods.Machine.LamHoleNS.get_magnet_number
+    if isinstance(get_magnet_number, ImportError):
+        get_magnet_number = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use LamHoleNS method get_pole_pair_number: "
-                    + str(get_pole_pair_number)
+                    "Can't use LamHoleNS method get_magnet_number: "
+                    + str(get_magnet_number)
                 )
             )
         )
     else:
-        get_pole_pair_number = get_pole_pair_number
-    # cf Methods.Machine.LamHoleNS.set_pole_pair_number
-    if isinstance(set_pole_pair_number, ImportError):
-        set_pole_pair_number = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use LamHoleNS method set_pole_pair_number: "
-                    + str(set_pole_pair_number)
-                )
-            )
-        )
-    else:
-        set_pole_pair_number = set_pole_pair_number
+        get_magnet_number = get_magnet_number
     # generic save method is available in all object
     save = save
     # get_logger method is available in all object

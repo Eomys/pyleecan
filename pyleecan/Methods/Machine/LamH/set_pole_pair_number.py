@@ -3,12 +3,12 @@ def set_pole_pair_number(self, p):
 
     Parameters
     ----------
-    self : LamHole
-        A LamHole object
+    self : LamH
+        A LamH object
     p: int
         Number of pair of pole
 
     """
 
-    for hole in self.hole:
+    for hole in self.get_hole_list():
         hole.Zh = 2 * p

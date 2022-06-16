@@ -48,6 +48,11 @@ except ImportError as error:
     comp_volumes = error
 
 try:
+    from ..Methods.Machine.LamH.get_pole_pair_number import get_pole_pair_number
+except ImportError as error:
+    get_pole_pair_number = error
+
+try:
     from ..Methods.Machine.LamH.get_Zs import get_Zs
 except ImportError as error:
     get_Zs = error
@@ -61,6 +66,11 @@ try:
     from ..Methods.Machine.LamH.plot import plot
 except ImportError as error:
     plot = error
+
+try:
+    from ..Methods.Machine.LamH.set_pole_pair_number import set_pole_pair_number
+except ImportError as error:
+    set_pole_pair_number = error
 
 
 from numpy import isnan
@@ -136,6 +146,18 @@ class LamH(Lamination):
         )
     else:
         comp_volumes = comp_volumes
+    # cf Methods.Machine.LamH.get_pole_pair_number
+    if isinstance(get_pole_pair_number, ImportError):
+        get_pole_pair_number = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use LamH method get_pole_pair_number: "
+                    + str(get_pole_pair_number)
+                )
+            )
+        )
+    else:
+        get_pole_pair_number = get_pole_pair_number
     # cf Methods.Machine.LamH.get_Zs
     if isinstance(get_Zs, ImportError):
         get_Zs = property(
@@ -163,6 +185,18 @@ class LamH(Lamination):
         )
     else:
         plot = plot
+    # cf Methods.Machine.LamH.set_pole_pair_number
+    if isinstance(set_pole_pair_number, ImportError):
+        set_pole_pair_number = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use LamH method set_pole_pair_number: "
+                    + str(set_pole_pair_number)
+                )
+            )
+        )
+    else:
+        set_pole_pair_number = set_pole_pair_number
     # generic save method is available in all object
     save = save
     # get_logger method is available in all object

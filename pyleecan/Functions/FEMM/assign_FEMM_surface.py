@@ -91,8 +91,10 @@ def assign_FEMM_surface(femm, surf, prop, FEMM_dict, machine):
                     mag = mag - 90
 
                 # Assign magnet group
-                nb_hole = int(len(machine.rotor.hole))
-                nb_mag_per_hole = len(machine.rotor.hole[0].get_magnet_dict())
+                nb_hole = int(len(machine.rotor.get_hole_list()))
+                nb_mag_per_hole = machine.rotor.get_magnet_number(
+                    sym=machine.rotor.get_Zs()
+                )
                 grp_id = (
                     label_dict["S_id"] * nb_hole * nb_mag_per_hole + label_dict["T_id"]
                 )
