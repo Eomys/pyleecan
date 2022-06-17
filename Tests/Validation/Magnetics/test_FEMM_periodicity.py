@@ -533,9 +533,10 @@ def test_Bore_sym():
     Zr = TP.rotor.hole[0].Zh
     W0 = TP.stator.slot.W0
     H0 = TP.stator.slot.H0
-    NBR = SlotM10(Zs=Zr, W0=W0 * 5, H0=H0 * 3)
+    NC = SlotCirc(Zs=Zr, W0=W0 * 5, H0=H0 * 5)
+    NR = SlotM10(Zs=Zr, W0=W0 * 5, H0=H0 * 3)
     TP.rotor.notch = [
-        NotchEvenDist(alpha=pi / 8, notch_shape=NBR),
+        NotchEvenDist(alpha=pi / 8, notch_shape=NC),
     ]
 
     TP.plot(sym=8, is_show_fig=False, save_path=join(res_path, "1_notch_sym.png"))
@@ -544,7 +545,7 @@ def test_Bore_sym():
 
     # Add notch on sym line
     TP2 = TP.copy()
-    TP2.rotor.notch.append(NotchEvenDist(alpha=0, notch_shape=NBR))
+    TP2.rotor.notch.append(NotchEvenDist(alpha=0, notch_shape=NR))
     TP2.plot(sym=8, is_show_fig=False, save_path=join(res_path, "2_notch_sym.png"))
     TP2.plot(is_show_fig=False, save_path=join(res_path, "2_notch_full.png"))
     assert TP2.comp_periodicity_spatial() == (4, True)
