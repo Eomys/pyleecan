@@ -1,4 +1,4 @@
-from ...Classes.LamHole import LamHole
+from ...Classes.LamH import LamH
 from ...Classes.LamSlotMag import LamSlotMag
 from ...Classes.MachineSIPMSM import MachineSIPMSM
 
@@ -27,6 +27,8 @@ def comp_FEMM_dict(
     type_calc_leakage : int
         0 no leakage calculation
         1 calculation using single slot
+    sym : int
+        Symmetry factor (1= full machine, 2= half of the machine...)
 
     Returns
     -------
@@ -100,7 +102,7 @@ def comp_FEMM_dict(
             )
         else:
             # rotor slot region mesh and segments max element size parameter
-            if isinstance(lam, (LamSlotMag, LamHole)):
+            if isinstance(lam, (LamSlotMag, LamH)):
                 FEMM_dict["mesh"][label]["meshsize_slot"] = Hsy / 4 / Kmesh_fineness
                 FEMM_dict["mesh"][label]["elementsize_slot"] = Hsy / 4 / Kmesh_fineness
             else:
@@ -123,8 +125,8 @@ def comp_FEMM_dict(
             Hmag = lam.slot.comp_height_active()
             FEMM_dict["mesh"][label]["meshsize_magnet"] = Hmag / 4 / Kmesh_fineness
             FEMM_dict["mesh"][label]["elementsize_magnet"] = Hmag / 4 / Kmesh_fineness
-        elif isinstance(lam, LamHole):
-            Hmag = lam.hole[0].comp_height()
+        elif isinstance(lam, LamH):
+            Hmag = lam.get_hole_list()[0].comp_height()
             FEMM_dict["mesh"][label]["meshsize_magnet"] = Hmag / 4 / Kmesh_fineness
             FEMM_dict["mesh"][label]["elementsize_magnet"] = Hmag / 4 / Kmesh_fineness
         else:
@@ -155,15 +157,9 @@ def comp_FEMM_dict(
     for key, val in FEMM_GROUPS["lam_group_list"].items():
         FEMM_dict["groups"]["lam_group_list"][key] = list(val)
 
-    if isinstance(machine.rotor, (LamSlotMag, LamHole)):
-        p = machine.get_pole_pair_number()
-        if isinstance(machine.rotor, LamSlotMag):
-            nb_mag = int(2 * p / sym)
-        elif isinstance(machine.rotor, LamHole):
-            nb_hole = int(2 * p / sym * len(machine.rotor.hole))
-            nb_mag_per_hole = len(machine.rotor.hole[0].get_magnet_dict())
-            nb_mag = nb_hole * nb_mag_per_hole
-
+    # Adding a group for each magnet on the lamination
+    if isinstance(machine.rotor, (LamSlotMag, LamH)):
+        nb_mag = machine.rotor.get_magnet_number(sym=sym)
         ndigit = max(len(str(nb_mag)), len(str(grp_max)) - 1)
         grp0 = FEMM_dict["groups"]["GROUP_RM"] * 10 ** ndigit
         list_mag = [grp0 + ii for ii in range(nb_mag)]

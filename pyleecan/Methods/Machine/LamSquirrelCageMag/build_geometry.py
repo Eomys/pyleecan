@@ -38,7 +38,7 @@ def build_geometry(self, sym=1, alpha=0, delta=0, is_circular_radius=False):
     )
 
     # Holes surface(s)
-    for hole in self.hole:
+    for hole in self.get_hole_list():
         Zh = hole.Zh
         assert (Zh % sym) == 0, (
             "ERROR, Wrong symmetry for "

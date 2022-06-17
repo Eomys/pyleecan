@@ -7,8 +7,8 @@ def comp_radius_mid_yoke(self):
 
     Parameters
     ----------
-    self : LamHole
-        A LamHole object
+    self : LamH
+        A LamH object
 
     Returns
     -------
@@ -19,7 +19,7 @@ def comp_radius_mid_yoke(self):
 
     Rmin = self.Rext
     Rmax = self.Rint
-    for hole in self.hole:
+    for hole in self.get_hole_list():
         if type(hole) is not Hole:
             (Rmin_hole, Rmax_hole) = hole.comp_radius()
             Rmin = min(Rmin, Rmin_hole)

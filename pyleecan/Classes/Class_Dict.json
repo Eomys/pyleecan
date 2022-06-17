@@ -5074,6 +5074,38 @@
         "path": "pyleecan/Generator/ClassesRef/Output/LUTslip.csv",
         "properties": []
     },
+    "LamH": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [
+            "LamHole",
+            "LamHoleNS"
+        ],
+        "desc": "Lamination with Hole (Abstract class)",
+        "is_internal": false,
+        "methods": [
+            "comp_angle_d_axis",
+            "comp_height_yoke",
+            "comp_masses",
+            "comp_radius_mid_yoke",
+            "comp_surfaces",
+            "comp_volumes",
+            "get_pole_pair_number",
+            "get_Zs",
+            "has_magnet",
+            "plot",
+            "set_pole_pair_number"
+        ],
+        "mother": "Lamination",
+        "name": "LamH",
+        "package": "Machine",
+        "path": "pyleecan/Generator/ClassesRef/Machine/LamH.csv",
+        "properties": []
+    },
     "LamHole": {
         "constants": [
             {
@@ -5085,20 +5117,12 @@
         "desc": "Lamination with Hole with or without magnet or winding",
         "is_internal": false,
         "methods": [
+            "_plot_arrow_mag",
             "build_geometry",
-            "comp_height_yoke",
-            "comp_masses",
-            "comp_surfaces",
-            "comp_volumes",
-            "get_pole_pair_number",
-            "plot",
-            "comp_radius_mid_yoke",
-            "has_magnet",
-            "comp_angle_d_axis",
-            "set_pole_pair_number",
-            "get_Zs"
+            "get_hole_list",
+            "get_magnet_number"
         ],
-        "mother": "Lamination",
+        "mother": "LamH",
         "name": "LamHole",
         "package": "Machine",
         "path": "pyleecan/Generator/ClassesRef/Machine/LamHole.csv",
@@ -5109,6 +5133,54 @@
                 "max": "",
                 "min": "",
                 "name": "hole",
+                "type": "[Hole]",
+                "unit": "",
+                "value": ""
+            }
+        ]
+    },
+    "LamHoleNS": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Lamination with Hole with or without magnet or winding with different hole for North/South pole",
+        "is_internal": false,
+        "methods": [
+            "_plot_arrow_mag",
+            "build_geometry",
+            "comp_masses",
+            "comp_periodicity_geo",
+            "comp_periodicity_spatial",
+            "comp_surfaces",
+            "comp_volumes",
+            "get_hole_list",
+            "get_magnet_number"
+        ],
+        "mother": "LamH",
+        "name": "LamHoleNS",
+        "package": "Machine",
+        "path": "pyleecan/Generator/ClassesRef/Machine/LamHoleNS.csv",
+        "properties": [
+            {
+                "as_dict": "",
+                "desc": "lamination Holes for North pole",
+                "max": "",
+                "min": "",
+                "name": "hole_north",
+                "type": "[Hole]",
+                "unit": "",
+                "value": ""
+            },
+            {
+                "as_dict": "",
+                "desc": "lamination Holes for South pole",
+                "max": "",
+                "min": "",
+                "name": "hole_south",
                 "type": "[Hole]",
                 "unit": "",
                 "value": ""
@@ -5180,7 +5252,8 @@
             "comp_surfaces",
             "comp_volumes",
             "plot",
-            "comp_angle_d_axis"
+            "comp_angle_d_axis",
+            "get_magnet_number"
         ],
         "mother": "LamSlot",
         "name": "LamSlotMag",
@@ -5450,7 +5523,8 @@
             "comp_surfaces",
             "plot",
             "get_pole_pair_number",
-            "set_pole_pair_number"
+            "set_pole_pair_number",
+            "get_hole_list"
         ],
         "mother": "LamSquirrelCage",
         "name": "LamSquirrelCageMag",
@@ -5477,7 +5551,9 @@
             }
         ],
         "daughters": [
+            "LamH",
             "LamHole",
+            "LamHoleNS",
             "LamSlot",
             "LamSlotMag",
             "LamSlotMulti",
@@ -6289,7 +6365,7 @@
                 "max": "",
                 "min": "",
                 "name": "rotor",
-                "type": "LamHole",
+                "type": "LamH",
                 "unit": "",
                 "value": ""
             },

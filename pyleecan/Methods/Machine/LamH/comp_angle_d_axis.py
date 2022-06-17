@@ -8,8 +8,8 @@ def comp_angle_d_axis(self):
 
     Parameters
     ----------
-    self : LamHole
-        A LamHole object
+    self : LamH
+        A LamH object
 
     Returns
     -------

@@ -9,8 +9,8 @@ def comp_volumes(self):
 
     Parameters
     ----------
-    self : LamHole
-        A LamHole object
+    self : LamH
+        A LamH object
 
     Returns
     -------
@@ -24,7 +24,7 @@ def comp_volumes(self):
 
     Vhole = 0
     Vmag = 0
-    for hole in self.hole:
+    for hole in self.get_hole_list():
         Vhole += hole.Zh * hole.comp_surface() * Lt
         if hole.has_magnet():
             Vmag += hole.Zh * hole.comp_volume_magnets()

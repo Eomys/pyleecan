@@ -51,6 +51,7 @@ def plot(
     save_path : str
         full path including folder, name and extension of the file to save if save_path is not None
 
+
     Returns
     -------
     fig : Matplotlib.figure.Figure

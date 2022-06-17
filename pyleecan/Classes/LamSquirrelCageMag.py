@@ -51,6 +51,11 @@ try:
 except ImportError as error:
     set_pole_pair_number = error
 
+try:
+    from ..Methods.Machine.LamSquirrelCageMag.get_hole_list import get_hole_list
+except ImportError as error:
+    get_hole_list = error
+
 
 from numpy import isnan
 from ._check import InitUnKnowClassError
@@ -128,6 +133,18 @@ class LamSquirrelCageMag(LamSquirrelCage):
         )
     else:
         set_pole_pair_number = set_pole_pair_number
+    # cf Methods.Machine.LamSquirrelCageMag.get_hole_list
+    if isinstance(get_hole_list, ImportError):
+        get_hole_list = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use LamSquirrelCageMag method get_hole_list: "
+                    + str(get_hole_list)
+                )
+            )
+        )
+    else:
+        get_hole_list = get_hole_list
     # generic save method is available in all object
     save = save
     # get_logger method is available in all object
