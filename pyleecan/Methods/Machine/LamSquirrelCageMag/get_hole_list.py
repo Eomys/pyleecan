@@ -3,8 +3,8 @@ def get_hole_list(self):
 
     Parameters
     ----------
-    self : LamHole
-        A LamHole object
+    self : LamSquirrelCageMag
+        A LamSquirrelCageMag object
 
     Returns
     -------
