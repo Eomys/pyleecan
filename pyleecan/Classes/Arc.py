@@ -52,6 +52,16 @@ try:
 except ImportError as error:
     comp_maxseg = error
 
+try:
+    from ..Methods.Geometry.Arc.intersect_obj import intersect_obj
+except ImportError as error:
+    intersect_obj = error
+
+try:
+    from ..Methods.Geometry.Arc.is_arc import is_arc
+except ImportError as error:
+    is_arc = error
+
 
 from numpy import isnan
 from ._check import InitUnKnowClassError
@@ -128,6 +138,24 @@ class Arc(Line):
         )
     else:
         comp_maxseg = comp_maxseg
+    # cf Methods.Geometry.Arc.intersect_obj
+    if isinstance(intersect_obj, ImportError):
+        intersect_obj = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use Arc method intersect_obj: " + str(intersect_obj))
+            )
+        )
+    else:
+        intersect_obj = intersect_obj
+    # cf Methods.Geometry.Arc.is_arc
+    if isinstance(is_arc, ImportError):
+        is_arc = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use Arc method is_arc: " + str(is_arc))
+            )
+        )
+    else:
+        is_arc = is_arc
     # generic save method is available in all object
     save = save
     # get_logger method is available in all object

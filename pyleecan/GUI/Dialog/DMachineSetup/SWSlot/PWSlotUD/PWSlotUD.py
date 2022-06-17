@@ -123,7 +123,9 @@ class PWSlotUD(Ui_PWSlotUD, QWidget):
             slot = load(self.w_path_json.get_path())
         except Exception as e:
             QMessageBox().critical(
-                self, self.tr("Error"), self.tr("Error when loading file:\n" + str(e)),
+                self,
+                self.tr("Error"),
+                self.tr("Error when loading file:\n" + str(e)),
             )
             return
         # Check that the json file contain a SlotUD

@@ -25,6 +25,6 @@ def rotate(self, angle):
     # check if Segment is correct"
     self.check()
 
-    # Modification from the rotation  of the object
+    # Modification from the rotation of the object
     self.begin = self.begin * exp(1j * angle)
     self.end = self.end * exp(1j * angle)

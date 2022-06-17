@@ -531,7 +531,9 @@ class DXF_Slot(Ui_DXF_Slot, QDialog):
             except Exception as e:
                 err_msg = "Error in DXF slot definition:\n" + str(e)
                 QMessageBox().critical(
-                    self, self.tr("Error"), err_msg,
+                    self,
+                    self.tr("Error"),
+                    err_msg,
                 )
                 return
 
@@ -569,7 +571,9 @@ class DXF_Slot(Ui_DXF_Slot, QDialog):
             except Exception as e:
                 err_msg = "Error while plotting DXF imported slot:\n" + str(e)
                 QMessageBox().critical(
-                    self, self.tr("Error"), err_msg,
+                    self,
+                    self.tr("Error"),
+                    err_msg,
                 )
                 return
 
@@ -588,7 +592,9 @@ class DXF_Slot(Ui_DXF_Slot, QDialog):
             except Exception as e:
                 err_msg = "Error in DXF slot definition:\n" + str(e)
                 QMessageBox().critical(
-                    self, self.tr("Error"), err_msg,
+                    self,
+                    self.tr("Error"),
+                    err_msg,
                 )
                 return
             if slot is None:
@@ -618,7 +624,9 @@ class DXF_Slot(Ui_DXF_Slot, QDialog):
                 except Exception as e:
                     err_msg = "Error while saving DXF slot json file:\n" + str(e)
                     QMessageBox().critical(
-                        self, self.tr("Error"), err_msg,
+                        self,
+                        self.tr("Error"),
+                        err_msg,
                     )
                 return
 

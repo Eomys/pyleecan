@@ -4,6 +4,7 @@ from os.path import join
 from pyleecan.Functions.load import load
 from pyleecan.definitions import DATA_DIR
 from pyleecan.Classes.VentilationCirc import VentilationCirc
+from pyleecan.Classes.BoreFlower import BoreFlower
 
 test_per_list = [
     {"machine": "Toyota_Prius", "exp": (4, True, 4, True)},
@@ -32,6 +33,10 @@ v4 = VentilationCirc(Zh=4, D0=D0, H0=H0)
 v8 = VentilationCirc(Zh=8, D0=D0, H0=H0)
 v9 = VentilationCirc(Zh=9, D0=D0, H0=H0)
 v16 = VentilationCirc(Zh=16, D0=D0, H0=H0)
+# Bore shape
+B8 = BoreFlower(N=8)
+B7 = BoreFlower(N=7)
+B4 = BoreFlower(N=4)
 
 # Rotor vent matches sym
 TP0 = TP.copy()
@@ -80,6 +85,30 @@ TP7 = TP.copy()
 TP7.name = TP7.name + "_7"
 TP7.stator.axial_vent = [v9]
 test_per_list.append({"machine": TP7, "exp": (1, False, 4, True)})
+
+# Rotor with Bore shape, same sym
+TP8 = TP.copy()
+TP8.name = TP8.name + "_8"
+TP8.rotor.bore = B8
+test_per_list.append({"machine": TP8, "exp": (4, True, 4, True)})
+
+# Rotor with Yoke shape, sym/2
+TP9 = TP.copy()
+TP9.name = TP9.name + "_9"
+TP9.rotor.yoke = B4
+test_per_list.append({"machine": TP9, "exp": (4, False, 4, False)})
+
+# Stator with Bore shape, sym/2
+TP10 = TP.copy()
+TP10.name = TP10.name + "_10"
+TP10.stator.bore = B4
+test_per_list.append({"machine": TP10, "exp": (4, False, 4, True)})
+
+# Rotor with Bore shape, no sym
+TP11 = TP.copy()
+TP11.name = TP11.name + "_11"
+TP11.rotor.bore = B7
+test_per_list.append({"machine": TP11, "exp": (1, False, 1, False)})
 
 # No sym, remove antiper
 SC = load(join(DATA_DIR, "Machine", "Railway_Traction.json"))

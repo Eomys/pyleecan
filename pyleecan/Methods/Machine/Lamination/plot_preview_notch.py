@@ -44,7 +44,11 @@ def plot_preview_notch(self, index, fig=None, ax=None):
     lam = self.copy()
     lam.notch = list()
 
-    fig, ax = lam.plot(fig=fig, ax=ax, is_lam_only=True,)
+    fig, ax = lam.plot(
+        fig=fig,
+        ax=ax,
+        is_lam_only=True,
+    )
 
     # Create equivalent LamSlot with notch as slot
     LamSlot = import_class("pyleecan.Classes", "LamSlot")
