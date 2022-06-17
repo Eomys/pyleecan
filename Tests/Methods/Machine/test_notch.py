@@ -1,20 +1,17 @@
 from os.path import join
 
+import matplotlib.pyplot as plt
 import pytest
-
 from numpy import pi
-
-from pyleecan.Classes.SlotCirc import SlotCirc
 from pyleecan.Classes.NotchEvenDist import NotchEvenDist
-
-from pyleecan.Functions.load import load
-
+from pyleecan.Classes.SlotCirc import SlotCirc
 from pyleecan.definitions import DATA_DIR
+from pyleecan.Functions.load import load
 
 
 @pytest.mark.IPMSM
 @pytest.mark.SCIM
-def test_notch():
+def test_notch(is_show_fig=False):
     """Validation of rotor and stator notches"""
 
     # Load machines
@@ -37,8 +34,8 @@ def test_notch():
         NotchEvenDist(alpha=0.5 * pi / p, notch_shape=NBd),
     ]
 
-    Toyota_Prius.plot(sym=8, is_show_fig=False)
-    Toyota_Prius.plot(is_show_fig=False)
+    Toyota_Prius.plot(sym=8, is_show_fig=is_show_fig)
+    Toyota_Prius.plot(is_show_fig=is_show_fig)
 
     # Add notches to Audi_eTron
     NBs = SlotCirc(Zs=16, W0=0.001, H0=0.0005)
@@ -47,11 +44,13 @@ def test_notch():
     Audi_eTron.stator.notch = [NotchEvenDist(alpha=0, notch_shape=NBs)]
     Audi_eTron.rotor.notch = [NotchEvenDist(alpha=0, notch_shape=NBr)]
 
-    Audi_eTron.plot(sym=2, is_show_fig=False)
-    Audi_eTron.plot(is_show_fig=False)
+    Audi_eTron.plot(sym=2, is_show_fig=is_show_fig)
+    Audi_eTron.plot(is_show_fig=is_show_fig)
 
     return Toyota_Prius, Audi_eTron
 
 
 if __name__ == "__main__":
-    Toyota_Prius, Audi_eTron = test_notch()
+    Toyota_Prius, Audi_eTron = test_notch(is_show_fig=True)
+    plt.show()
+    print("Done")

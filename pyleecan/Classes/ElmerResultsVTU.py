@@ -10,9 +10,9 @@ from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
-from ..Functions.copy import copy
 from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
+from copy import deepcopy
 from .Elmer import Elmer
 
 # Import all class method
@@ -44,9 +44,8 @@ class ElmerResultsVTU(Elmer):
         )
     else:
         build_meshsolution = build_meshsolution
-    # save and copy methods are available in all object
+    # generic save method is available in all object
     save = save
-    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -210,6 +209,26 @@ class ElmerResultsVTU(Elmer):
         # Overwrite the mother class name
         ElmerResultsVTU_dict["__class__"] = "ElmerResultsVTU"
         return ElmerResultsVTU_dict
+
+    def copy(self):
+        """Creates a deepcopy of the object"""
+
+        # Handle deepcopy of all the properties
+        label_val = self.label
+        file_path_val = self.file_path
+        if self.store_dict is None:
+            store_dict_val = None
+        else:
+            store_dict_val = self.store_dict.copy()
+        logger_name_val = self.logger_name
+        # Creates new object of the same type with the copied properties
+        obj_copy = type(self)(
+            label=label_val,
+            file_path=file_path_val,
+            store_dict=store_dict_val,
+            logger_name=logger_name_val,
+        )
+        return obj_copy
 
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""

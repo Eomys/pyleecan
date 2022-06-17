@@ -10,9 +10,9 @@ from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
-from ..Functions.copy import copy
 from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
+from copy import deepcopy
 from .Loss import Loss
 
 # Import all class method
@@ -127,9 +127,8 @@ class LossFEMM(Loss):
         )
     else:
         comp_loss_density_magnet = comp_loss_density_magnet
-    # save and copy methods are available in all object
+    # generic save method is available in all object
     save = save
-    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -358,6 +357,46 @@ class LossFEMM(Loss):
         # Overwrite the mother class name
         LossFEMM_dict["__class__"] = "LossFEMM"
         return LossFEMM_dict
+
+    def copy(self):
+        """Creates a deepcopy of the object"""
+
+        # Handle deepcopy of all the properties
+        is_get_meshsolution_val = self.is_get_meshsolution
+        Tsta_val = self.Tsta
+        Trot_val = self.Trot
+        type_skin_effect_val = self.type_skin_effect
+        Cp_val = self.Cp
+        if self.model_index is None:
+            model_index_val = None
+        else:
+            model_index_val = self.model_index.copy()
+        if self.model_list is None:
+            model_list_val = None
+        else:
+            model_list_val = list()
+            for obj in self.model_list:
+                model_list_val.append(obj.copy())
+        logger_name_val = self.logger_name
+        if self.model_dict is None:
+            model_dict_val = None
+        else:
+            model_dict_val = dict()
+            for key, obj in self.model_dict.items():
+                model_dict_val[key] = obj.copy()
+        # Creates new object of the same type with the copied properties
+        obj_copy = type(self)(
+            is_get_meshsolution=is_get_meshsolution_val,
+            Tsta=Tsta_val,
+            Trot=Trot_val,
+            type_skin_effect=type_skin_effect_val,
+            Cp=Cp_val,
+            model_index=model_index_val,
+            model_list=model_list_val,
+            logger_name=logger_name_val,
+            model_dict=model_dict_val,
+        )
+        return obj_copy
 
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""

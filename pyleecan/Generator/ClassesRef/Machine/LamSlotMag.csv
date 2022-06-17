@@ -7,3 +7,4 @@ magnet,-,Magnet of the lamination,,Magnet,,,,,Machine,LamSlot,build_geometry,VER
 ,,,,,,,,,,,comp_volumes,,,
 ,,,,,,,,,,,plot,,,
 ,,,,,,,,,,,comp_angle_d_axis,,,
+,,,,,,,,,,,get_magnet_number,,,

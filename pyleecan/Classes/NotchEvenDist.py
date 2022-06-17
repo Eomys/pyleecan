@@ -10,22 +10,29 @@ from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
-from ..Functions.copy import copy
 from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
+from copy import deepcopy
 from .Notch import Notch
 
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
 try:
-    from ..Methods.Machine.NotchEvenDist.get_notch_list import get_notch_list
-except ImportError as error:
-    get_notch_list = error
-
-try:
     from ..Methods.Machine.NotchEvenDist.comp_surface import comp_surface
 except ImportError as error:
     comp_surface = error
+
+try:
+    from ..Methods.Machine.NotchEvenDist.comp_periodicity_spatial import (
+        comp_periodicity_spatial,
+    )
+except ImportError as error:
+    comp_periodicity_spatial = error
+
+try:
+    from ..Methods.Machine.NotchEvenDist.get_notch_desc_list import get_notch_desc_list
+except ImportError as error:
+    get_notch_desc_list = error
 
 
 from numpy import isnan
@@ -38,18 +45,6 @@ class NotchEvenDist(Notch):
     VERSION = 1
 
     # Check ImportError to remove unnecessary dependencies in unused method
-    # cf Methods.Machine.NotchEvenDist.get_notch_list
-    if isinstance(get_notch_list, ImportError):
-        get_notch_list = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use NotchEvenDist method get_notch_list: "
-                    + str(get_notch_list)
-                )
-            )
-        )
-    else:
-        get_notch_list = get_notch_list
     # cf Methods.Machine.NotchEvenDist.comp_surface
     if isinstance(comp_surface, ImportError):
         comp_surface = property(
@@ -61,9 +56,32 @@ class NotchEvenDist(Notch):
         )
     else:
         comp_surface = comp_surface
-    # save and copy methods are available in all object
+    # cf Methods.Machine.NotchEvenDist.comp_periodicity_spatial
+    if isinstance(comp_periodicity_spatial, ImportError):
+        comp_periodicity_spatial = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use NotchEvenDist method comp_periodicity_spatial: "
+                    + str(comp_periodicity_spatial)
+                )
+            )
+        )
+    else:
+        comp_periodicity_spatial = comp_periodicity_spatial
+    # cf Methods.Machine.NotchEvenDist.get_notch_desc_list
+    if isinstance(get_notch_desc_list, ImportError):
+        get_notch_desc_list = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use NotchEvenDist method get_notch_desc_list: "
+                    + str(get_notch_desc_list)
+                )
+            )
+        )
+    else:
+        get_notch_desc_list = get_notch_desc_list
+    # generic save method is available in all object
     save = save
-    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -215,6 +233,19 @@ class NotchEvenDist(Notch):
         NotchEvenDist_dict["__class__"] = "NotchEvenDist"
         return NotchEvenDist_dict
 
+    def copy(self):
+        """Creates a deepcopy of the object"""
+
+        # Handle deepcopy of all the properties
+        alpha_val = self.alpha
+        if self.notch_shape is None:
+            notch_shape_val = None
+        else:
+            notch_shape_val = self.notch_shape.copy()
+        # Creates new object of the same type with the copied properties
+        obj_copy = type(self)(alpha=alpha_val, notch_shape=notch_shape_val)
+        return obj_copy
+
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""
 
@@ -236,7 +267,7 @@ class NotchEvenDist(Notch):
     alpha = property(
         fget=_get_alpha,
         fset=_set_alpha,
-        doc=u"""angular positon of the first notch
+        doc=u"""angular positon of the first notch (0 is middle of first tooth)
 
         :Type: float
         """,

@@ -33,11 +33,6 @@ def comp_surfaces(self):
     if self.notch is not None and len(self.notch) > 0:
         for notch in self.notch:
             Snotch += notch.comp_surface()
-    if self.yoke_notch is not None and len(self.yoke_notch) > 0:
-        self.is_internal = not self.is_internal  # To use Ryoke instead of Rbo
-        for yoke_notch in self.yoke_notch:
-            Snotch += yoke_notch.comp_surface()
-        self.is_internal = not self.is_internal  # Revert
 
     return {
         "Slam": Slam - Svent - Snotch,

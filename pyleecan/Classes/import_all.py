@@ -79,7 +79,9 @@ from ..Classes.Interpolation import Interpolation
 from ..Classes.LUT import LUT
 from ..Classes.LUTdq import LUTdq
 from ..Classes.LUTslip import LUTslip
+from ..Classes.LamH import LamH
 from ..Classes.LamHole import LamHole
+from ..Classes.LamHoleNS import LamHoleNS
 from ..Classes.LamSlot import LamSlot
 from ..Classes.LamSlotMag import LamSlotMag
 from ..Classes.LamSlotMulti import LamSlotMulti

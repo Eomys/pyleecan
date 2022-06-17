@@ -36,24 +36,33 @@ def plot(
         Complex value to shift the label from the middle
     fontsize : int
         Size of the font for the label (if any)
+
+    Returns
+    -------
+    fig : Matplotlib.figure.Figure
+        Figure containing the plot
+    ax : Matplotlib.axes.Axes object
+        Axis containing the plot
     """
 
     # Init fig
-    (fig, axes, patch_leg, label_leg) = init_fig(fig=fig, ax=ax, shape="rectangle")
+    (fig, ax, patch_leg, label_leg) = init_fig(fig=fig, ax=ax, shape="rectangle")
 
     # Plot the line
     points = self.discretize(nb_point=10000)
-    axes.plot(
+    ax.plot(
         points.real, points.imag, linestyle=linestyle, linewidth=linewidth, color=color
     )
 
     # Add the label (if needed)
     if label is not None:
         Zmid = self.get_middle()
-        axes.text(
+        ax.text(
             Zmid.real + offset_label.real,
             Zmid.imag + offset_label.imag,
             label,
             fontsize=fontsize,
             bbox=TEXT_BOX,
         )
+
+    return fig, ax

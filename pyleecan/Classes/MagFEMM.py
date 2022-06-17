@@ -10,9 +10,9 @@ from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
-from ..Functions.copy import copy
 from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
+from copy import deepcopy
 from .Magnetics import Magnetics
 
 # Import all class method
@@ -126,9 +126,8 @@ class MagFEMM(Magnetics):
         )
     else:
         solve_FEMM_parallel = solve_FEMM_parallel
-    # save and copy methods are available in all object
+    # generic save method is available in all object
     save = save
-    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -751,6 +750,104 @@ class MagFEMM(Magnetics):
         # Overwrite the mother class name
         MagFEMM_dict["__class__"] = "MagFEMM"
         return MagFEMM_dict
+
+    def copy(self):
+        """Creates a deepcopy of the object"""
+
+        # Handle deepcopy of all the properties
+        Kmesh_fineness_val = self.Kmesh_fineness
+        Kgeo_fineness_val = self.Kgeo_fineness
+        type_calc_leakage_val = self.type_calc_leakage
+        file_name_val = self.file_name
+        if self.FEMM_dict_enforced is None:
+            FEMM_dict_enforced_val = None
+        else:
+            FEMM_dict_enforced_val = self.FEMM_dict_enforced.copy()
+        is_get_meshsolution_val = self.is_get_meshsolution
+        is_save_meshsolution_as_file_val = self.is_save_meshsolution_as_file
+        is_sliding_band_val = self.is_sliding_band
+        if self.transform_list is None:
+            transform_list_val = None
+        else:
+            transform_list_val = self.transform_list.copy()
+        if self.rotor_dxf is None:
+            rotor_dxf_val = None
+        else:
+            rotor_dxf_val = self.rotor_dxf.copy()
+        if self.stator_dxf is None:
+            stator_dxf_val = None
+        else:
+            stator_dxf_val = self.stator_dxf.copy()
+        import_file_val = self.import_file
+        is_close_femm_val = self.is_close_femm
+        nb_worker_val = self.nb_worker
+        Rag_enforced_val = self.Rag_enforced
+        is_set_previous_val = self.is_set_previous
+        is_fast_draw_val = self.is_fast_draw
+        is_calc_torque_energy_val = self.is_calc_torque_energy
+        is_remove_slotS_val = self.is_remove_slotS
+        is_remove_slotR_val = self.is_remove_slotR
+        is_remove_ventS_val = self.is_remove_ventS
+        is_remove_ventR_val = self.is_remove_ventR
+        is_mmfs_val = self.is_mmfs
+        is_mmfr_val = self.is_mmfr
+        type_BH_stator_val = self.type_BH_stator
+        type_BH_rotor_val = self.type_BH_rotor
+        is_periodicity_t_val = self.is_periodicity_t
+        is_periodicity_a_val = self.is_periodicity_a
+        angle_stator_shift_val = self.angle_stator_shift
+        angle_rotor_shift_val = self.angle_rotor_shift
+        logger_name_val = self.logger_name
+        if self.Slice_enforced is None:
+            Slice_enforced_val = None
+        else:
+            Slice_enforced_val = self.Slice_enforced.copy()
+        Nslices_enforced_val = self.Nslices_enforced
+        type_distribution_enforced_val = self.type_distribution_enforced
+        is_current_harm_val = self.is_current_harm
+        T_mag_val = self.T_mag
+        is_periodicity_rotor_val = self.is_periodicity_rotor
+        # Creates new object of the same type with the copied properties
+        obj_copy = type(self)(
+            Kmesh_fineness=Kmesh_fineness_val,
+            Kgeo_fineness=Kgeo_fineness_val,
+            type_calc_leakage=type_calc_leakage_val,
+            file_name=file_name_val,
+            FEMM_dict_enforced=FEMM_dict_enforced_val,
+            is_get_meshsolution=is_get_meshsolution_val,
+            is_save_meshsolution_as_file=is_save_meshsolution_as_file_val,
+            is_sliding_band=is_sliding_band_val,
+            transform_list=transform_list_val,
+            rotor_dxf=rotor_dxf_val,
+            stator_dxf=stator_dxf_val,
+            import_file=import_file_val,
+            is_close_femm=is_close_femm_val,
+            nb_worker=nb_worker_val,
+            Rag_enforced=Rag_enforced_val,
+            is_set_previous=is_set_previous_val,
+            is_fast_draw=is_fast_draw_val,
+            is_calc_torque_energy=is_calc_torque_energy_val,
+            is_remove_slotS=is_remove_slotS_val,
+            is_remove_slotR=is_remove_slotR_val,
+            is_remove_ventS=is_remove_ventS_val,
+            is_remove_ventR=is_remove_ventR_val,
+            is_mmfs=is_mmfs_val,
+            is_mmfr=is_mmfr_val,
+            type_BH_stator=type_BH_stator_val,
+            type_BH_rotor=type_BH_rotor_val,
+            is_periodicity_t=is_periodicity_t_val,
+            is_periodicity_a=is_periodicity_a_val,
+            angle_stator_shift=angle_stator_shift_val,
+            angle_rotor_shift=angle_rotor_shift_val,
+            logger_name=logger_name_val,
+            Slice_enforced=Slice_enforced_val,
+            Nslices_enforced=Nslices_enforced_val,
+            type_distribution_enforced=type_distribution_enforced_val,
+            is_current_harm=is_current_harm_val,
+            T_mag=T_mag_val,
+            is_periodicity_rotor=is_periodicity_rotor_val,
+        )
+        return obj_copy
 
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""

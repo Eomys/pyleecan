@@ -10,9 +10,9 @@ from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
-from ..Functions.copy import copy
 from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
+from copy import deepcopy
 from .ImportMatrix import ImportMatrix
 
 # Import all class method
@@ -74,9 +74,8 @@ class ImportGenVectLin(ImportMatrix):
         )
     else:
         get_data = get_data
-    # save and copy methods are available in all object
+    # generic save method is available in all object
     save = save
-    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -270,6 +269,25 @@ class ImportGenVectLin(ImportMatrix):
         # Overwrite the mother class name
         ImportGenVectLin_dict["__class__"] = "ImportGenVectLin"
         return ImportGenVectLin_dict
+
+    def copy(self):
+        """Creates a deepcopy of the object"""
+
+        # Handle deepcopy of all the properties
+        start_val = self.start
+        stop_val = self.stop
+        num_val = self.num
+        endpoint_val = self.endpoint
+        is_transpose_val = self.is_transpose
+        # Creates new object of the same type with the copied properties
+        obj_copy = type(self)(
+            start=start_val,
+            stop=stop_val,
+            num=num_val,
+            endpoint=endpoint_val,
+            is_transpose=is_transpose_val,
+        )
+        return obj_copy
 
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""

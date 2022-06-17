@@ -10,9 +10,9 @@ from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
-from ..Functions.copy import copy
 from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
+from copy import deepcopy
 from .Slot import Slot
 
 # Import all class method
@@ -271,9 +271,8 @@ class SlotW10(Slot):
         )
     else:
         plot_schematics = plot_schematics
-    # save and copy methods are available in all object
+    # generic save method is available in all object
     save = save
-    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -288,6 +287,7 @@ class SlotW10(Slot):
         H1_is_rad=False,
         Zs=36,
         wedge_mat=None,
+        is_bore=True,
         init_dict=None,
         init_str=None,
     ):
@@ -324,6 +324,8 @@ class SlotW10(Slot):
                 Zs = init_dict["Zs"]
             if "wedge_mat" in list(init_dict.keys()):
                 wedge_mat = init_dict["wedge_mat"]
+            if "is_bore" in list(init_dict.keys()):
+                is_bore = init_dict["is_bore"]
         # Set the properties (value check and convertion are done in setter)
         self.W0 = W0
         self.H0 = H0
@@ -333,7 +335,7 @@ class SlotW10(Slot):
         self.W2 = W2
         self.H1_is_rad = H1_is_rad
         # Call Slot init
-        super(SlotW10, self).__init__(Zs=Zs, wedge_mat=wedge_mat)
+        super(SlotW10, self).__init__(Zs=Zs, wedge_mat=wedge_mat, is_bore=is_bore)
         # The class is frozen (in Slot init), for now it's impossible to
         # add new properties
 
@@ -530,6 +532,38 @@ class SlotW10(Slot):
         # Overwrite the mother class name
         SlotW10_dict["__class__"] = "SlotW10"
         return SlotW10_dict
+
+    def copy(self):
+        """Creates a deepcopy of the object"""
+
+        # Handle deepcopy of all the properties
+        W0_val = self.W0
+        H0_val = self.H0
+        H1_val = self.H1
+        W1_val = self.W1
+        H2_val = self.H2
+        W2_val = self.W2
+        H1_is_rad_val = self.H1_is_rad
+        Zs_val = self.Zs
+        if self.wedge_mat is None:
+            wedge_mat_val = None
+        else:
+            wedge_mat_val = self.wedge_mat.copy()
+        is_bore_val = self.is_bore
+        # Creates new object of the same type with the copied properties
+        obj_copy = type(self)(
+            W0=W0_val,
+            H0=H0_val,
+            H1=H1_val,
+            W1=W1_val,
+            H2=H2_val,
+            W2=W2_val,
+            H1_is_rad=H1_is_rad_val,
+            Zs=Zs_val,
+            wedge_mat=wedge_mat_val,
+            is_bore=is_bore_val,
+        )
+        return obj_copy
 
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""

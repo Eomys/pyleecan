@@ -1,5 +1,6 @@
 from numpy import angle, pi, floor_divide
-
+from ...Classes.LamHole import LamHole
+from ...Classes.LamHoleNS import LamHoleNS
 from ...Functions.FEMM.get_mesh_param import get_mesh_param
 from ...Methods import NotImplementedYetError
 from ...Functions.Winding.find_wind_phase_color import get_phase_id
@@ -71,11 +72,13 @@ def assign_FEMM_surface(femm, surf, prop, FEMM_dict, machine):
             Ntcoil = wind_mat[Nrad_id, Ntan_id, Zs_id, q_id]
         elif HOLEM_LAB in label_dict["surf_type"]:  # LamHole
             mag_obj = get_obj_from_label(machine, label_dict=label_dict)
-            if mag_obj.type_magnetization in [1, 3, None]:  # Parallel or Tangential
+            # Parallel (default) or Tangential
+            if mag_obj.type_magnetization in [1, 3, None]:
                 # calculate pole angle and angle of pole middle
                 T_id = label_dict["T_id"]
                 hole = mag_obj.parent
                 Zh = hole.Zh
+                lam = hole.parent
                 alpha_p = 360 / Zh
                 mag_0 = (
                     floor_divide(angle(point_ref, deg=True), alpha_p) + 0.5
@@ -85,14 +88,21 @@ def assign_FEMM_surface(femm, surf, prop, FEMM_dict, machine):
                 mag = mag_0 + mag_dict["magnet_" + str(T_id)] * 180 / pi
 
                 # modifiy magnetisation of south poles
-                if (label_dict["S_id"] % 2) == 1:
-                    mag = mag + 180
-                if mag_obj.type_magnetization == 3:  # Tangential
+                if isinstance(lam, LamHole):
+                    if (label_dict["S_id"] % 2) == 1:
+                        mag = mag + 180
+                elif isinstance(lam, LamHoleNS):
+                    if hole in lam.hole_south:
+                        mag = mag + 180
+                # Modify magnetisation for Tangential
+                if mag_obj.type_magnetization == 3:
                     mag = mag - 90
 
                 # Assign magnet group
-                nb_hole = int(len(machine.rotor.hole))
-                nb_mag_per_hole = len(machine.rotor.hole[0].get_magnet_dict())
+                nb_hole = int(len(machine.rotor.get_hole_list()))
+                nb_mag_per_hole = machine.rotor.get_magnet_number(
+                    sym=machine.rotor.get_Zs()
+                )
                 grp_id = (
                     label_dict["S_id"] * nb_hole * nb_mag_per_hole + label_dict["T_id"]
                 )

@@ -10,9 +10,9 @@ from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
-from ..Functions.copy import copy
 from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
+from copy import deepcopy
 from ._frozen import FrozenClass
 
 # Import all class method
@@ -90,9 +90,8 @@ class Simulation(FrozenClass):
         )
     else:
         get_OP_matrix = get_OP_matrix
-    # save and copy methods are available in all object
+    # generic save method is available in all object
     save = save
-    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -454,6 +453,51 @@ class Simulation(FrozenClass):
         # The class name is added to the dict for deserialisation purpose
         Simulation_dict["__class__"] = "Simulation"
         return Simulation_dict
+
+    def copy(self):
+        """Creates a deepcopy of the object"""
+
+        # Handle deepcopy of all the properties
+        name_val = self.name
+        desc_val = self.desc
+        if self.machine is None:
+            machine_val = None
+        else:
+            machine_val = self.machine.copy()
+        if self.input is None:
+            input_val = None
+        else:
+            input_val = self.input.copy()
+        logger_name_val = self.logger_name
+        if self.var_simu is None:
+            var_simu_val = None
+        else:
+            var_simu_val = self.var_simu.copy()
+        if self.postproc_list is None:
+            postproc_list_val = None
+        else:
+            postproc_list_val = list()
+            for obj in self.postproc_list:
+                postproc_list_val.append(obj.copy())
+        index_val = self.index
+        path_result_val = self.path_result
+        layer_val = self.layer
+        layer_log_warn_val = self.layer_log_warn
+        # Creates new object of the same type with the copied properties
+        obj_copy = type(self)(
+            name=name_val,
+            desc=desc_val,
+            machine=machine_val,
+            input=input_val,
+            logger_name=logger_name_val,
+            var_simu=var_simu_val,
+            postproc_list=postproc_list_val,
+            index=index_val,
+            path_result=path_result_val,
+            layer=layer_val,
+            layer_log_warn=layer_log_warn_val,
+        )
+        return obj_copy
 
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""

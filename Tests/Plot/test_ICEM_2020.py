@@ -492,7 +492,7 @@ def test_WindingUD_layer():
     assert len(fig.axes[0].patches) == 32
 
 
-def test_BoreFlower():
+def test_BoreFlower(is_show_fig=False):
     """Figure 18: LamHole with uneven bore shape
     From pyleecan/Tests/Plot/LamHole/test_Hole_50_plot.py
     """
@@ -522,15 +522,19 @@ def test_BoreFlower():
     rotor.hole[0].magnet_1 = None
     # Rotor bore shape
     rotor.bore = BoreFlower(N=8, Rarc=0.05, alpha=pi / 8)
+    rotor.yoke = BoreFlower(N=8, Rarc=0.05 / 4, alpha=pi / 8)
 
     # Plot, check and save
-    rotor.plot(is_show_fig=False)
-    fig = plt.gcf()
+    fig, _ = rotor.plot(is_show_fig=is_show_fig)
     fig.savefig(join(save_path, "fig_18_BoreFlower.png"))
     fig.savefig(join(save_path, "fig_18_BoreFlower.svg"), format="svg")
     # 2 for lam + 3*8 for holes + 16 vents
     assert len(fig.axes[0].patches) == 42
-
+    fig, _ = rotor.plot(is_show_fig=is_show_fig, sym=8)
+    fig.savefig(join(save_path, "fig_18_BoreFlower_sym.png"))
+    fig.savefig(join(save_path, "fig_18_BoreFlower_sym.svg"), format="svg")
+    # 1 for lam + 3*1 for holes + 3 vents
+    assert len(fig.axes[0].patches) == 7
 
 @pytest.mark.SPMSM
 @pytest.mark.MagFEMM
@@ -840,7 +844,10 @@ def test_Optimization_problem():
 
 
 if __name__ == "__main__":
+    test_BoreFlower(is_show_fig=True)
+    plt.show()
     # test_FEMM_sym()
     # test_WindingUD()
-    test_ecc_FEMM()
+    # test_ecc_FEMM()
     # test_WindingUD_layer()
+    print("Done")

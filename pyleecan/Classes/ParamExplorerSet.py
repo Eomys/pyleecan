@@ -10,9 +10,9 @@ from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
-from ..Functions.copy import copy
 from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
+from copy import deepcopy
 from .ParamExplorer import ParamExplorer
 
 # Import all class method
@@ -21,11 +21,6 @@ try:
     from ..Methods.Simulation.ParamExplorerSet.get_value import get_value
 except ImportError as error:
     get_value = error
-
-try:
-    from ..Methods.Simulation.ParamExplorerSet.as_dict import as_dict
-except ImportError as error:
-    as_dict = error
 
 try:
     from ..Methods.Simulation.ParamExplorerSet.get_min import get_min
@@ -42,12 +37,8 @@ try:
 except ImportError as error:
     get_N = error
 
-try:
-    from ..Methods.Simulation.ParamExplorerSet._set_value import _set_value
-except ImportError as error:
-    _set_value = error
 
-
+from numpy import array, ndarray
 from ntpath import basename
 from os.path import isfile
 from ._check import CheckTypeError
@@ -74,17 +65,6 @@ class ParamExplorerSet(ParamExplorer):
         )
     else:
         get_value = get_value
-    # cf Methods.Simulation.ParamExplorerSet.as_dict
-    if isinstance(as_dict, ImportError):
-        as_dict = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use ParamExplorerSet method as_dict: " + str(as_dict)
-                )
-            )
-        )
-    else:
-        as_dict = as_dict
     # cf Methods.Simulation.ParamExplorerSet.get_min
     if isinstance(get_min, ImportError):
         get_min = property(
@@ -116,20 +96,8 @@ class ParamExplorerSet(ParamExplorer):
         )
     else:
         get_N = get_N
-    # cf Methods.Simulation.ParamExplorerSet._set_value
-    if isinstance(_set_value, ImportError):
-        _set_value = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use ParamExplorerSet method _set_value: " + str(_set_value)
-                )
-            )
-        )
-    else:
-        _set_value = _set_value
-    # save and copy methods are available in all object
+    # generic save method is available in all object
     save = save
-    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -186,12 +154,11 @@ class ParamExplorerSet(ParamExplorer):
         ParamExplorerSet_str = ""
         # Get the properties inherited from ParamExplorer
         ParamExplorerSet_str += super(ParamExplorerSet, self).__str__()
-        ParamExplorerSet_str += (
-            "value = "
-            + linesep
-            + str(self.value).replace(linesep, linesep + "\t")
-            + linesep
-        )
+        if self.value is not None:
+            tmp = self.value.__str__().replace(linesep, linesep + "\t").rstrip("\t")
+            ParamExplorerSet_str += "value = " + tmp
+        else:
+            ParamExplorerSet_str += "value = None" + linesep + linesep
         return ParamExplorerSet_str
 
     def __eq__(self, other):
@@ -222,14 +189,27 @@ class ParamExplorerSet(ParamExplorer):
                 other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
             )
         )
-        if other._value != self._value:
-            if is_add_value:
-                val_str = (
-                    " (self=" + str(self._value) + ", other=" + str(other._value) + ")"
-                )
-                diff_list.append(name + ".value" + val_str)
-            else:
-                diff_list.append(name + ".value")
+        if (other.value is None and self.value is not None) or (
+            other.value is not None and self.value is None
+        ):
+            diff_list.append(name + ".value None mismatch")
+        elif self.value is None:
+            pass
+        elif len(other.value) != len(self.value):
+            diff_list.append("len(" + name + ".value)")
+        else:
+            for ii in range(len(other.value)):
+                if hasattr(self.value[ii], "compare"):
+                    diff_list.extend(
+                        self.value[ii].compare(
+                            other.value[ii],
+                            name=name + ".value[" + str(ii) + "]",
+                            ignore_list=ignore_list,
+                            is_add_value=is_add_value,
+                        )
+                    )
+                elif other._value[ii] != self._value[ii]:
+                    diff_list.append(name + ".value[" + str(ii) + "])")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -241,10 +221,84 @@ class ParamExplorerSet(ParamExplorer):
 
         # Get size of the properties inherited from ParamExplorer
         S += super(ParamExplorerSet, self).__sizeof__()
-        if self.value is not None:
-            for value in self.value:
-                S += getsizeof(value)
+        S += getsizeof(self.value)
         return S
+
+    def as_dict(self, type_handle_ndarray=0, keep_function=False, **kwargs):
+        """
+        Convert this object in a json serializable dict (can be use in __init__).
+        type_handle_ndarray: int
+            How to handle ndarray (0: tolist, 1: copy, 2: nothing)
+        keep_function : bool
+            True to keep the function object, else return str
+        Optional keyword input parameter is for internal use only
+        and may prevent json serializability.
+        """
+
+        # Get the properties inherited from ParamExplorer
+        ParamExplorerSet_dict = super(ParamExplorerSet, self).as_dict(
+            type_handle_ndarray=type_handle_ndarray,
+            keep_function=keep_function,
+            **kwargs
+        )
+        if self.value is None:
+            ParamExplorerSet_dict["value"] = None
+        else:
+            ParamExplorerSet_dict["value"] = list()
+            for obj in self.value:
+                if obj is None:
+                    ParamExplorerSet_dict["value"].append(None)
+                elif hasattr(obj, "as_dict"):
+                    ParamExplorerSet_dict["value"].append(
+                        obj.as_dict(
+                            type_handle_ndarray=type_handle_ndarray,
+                            keep_function=keep_function,
+                            **kwargs
+                        )
+                    )
+                elif isinstance(obj, ndarray):
+                    if type_handle_ndarray == 0:
+                        ParamExplorerSet_dict["value"].append(obj.tolist())
+                    elif type_handle_ndarray == 1:
+                        ParamExplorerSet_dict["value"].append(obj.copy())
+                    elif type_handle_ndarray == 2:
+                        ParamExplorerSet_dict["value"].append(obj)
+                else:
+                    ParamExplorerSet_dict["value"].append(obj)
+        # The class name is added to the dict for deserialisation purpose
+        # Overwrite the mother class name
+        ParamExplorerSet_dict["__class__"] = "ParamExplorerSet"
+        return ParamExplorerSet_dict
+
+    def copy(self):
+        """Creates a deepcopy of the object"""
+
+        # Handle deepcopy of all the properties
+        if self.value is None:
+            value_val = None
+        else:
+            value_val = self.value.copy()
+        name_val = self.name
+        symbol_val = self.symbol
+        unit_val = self.unit
+        if self._setter_str is not None:
+            setter_val = self._setter_str
+        else:
+            setter_val = self._setter_func
+        if self._getter_str is not None:
+            getter_val = self._getter_str
+        else:
+            getter_val = self._getter_func
+        # Creates new object of the same type with the copied properties
+        obj_copy = type(self)(
+            value=value_val,
+            name=name_val,
+            symbol=symbol_val,
+            unit=unit_val,
+            setter=setter_val,
+            getter=getter_val,
+        )
+        return obj_copy
 
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""
@@ -257,11 +311,46 @@ class ParamExplorerSet(ParamExplorer):
         """getter of value"""
         return self._value
 
+    def _set_value(self, value):
+        """setter of value"""
+        if type(value) is list:
+            for ii, obj in enumerate(value):
+                if isinstance(obj, str) and ".json" in obj:
+                    try:  # pyleecan object from file
+                        obj = load_init_dict(obj)[1]
+                    except Exception as e:
+                        self.get_logger().error(
+                            "Error while loading " + obj + ", setting None instead"
+                        )
+                        obj = None
+                        value[ii] = None
+                if type(obj) is dict and "__class__" in obj:  # pyleecan object
+                    try:
+                        class_obj = import_class(
+                            "SciDataTool.Classes", obj.get("__class__"), "value"
+                        )
+                    except Exception:
+                        class_obj = import_class(
+                            "pyleecan.Classes", obj.get("__class__"), "value"
+                        )
+                    value[ii] = class_obj(init_dict=obj)
+                if value[ii] is not None and hasattr(value[ii], "parent"):
+                    value[ii].parent = self
+                if isinstance(obj, list):
+                    try:  # list to array (for list of list use 'list')
+                        value[ii] = array(obj)
+                    except Exception as e:
+                        pass
+        if value == -1:
+            value = list()
+        check_var("value", value, "[]")
+        self._value = value
+
     value = property(
         fget=_get_value,
         fset=_set_value,
         doc=u"""List containing the different parameter values to explore
 
-        :Type: list
+        :Type: []
         """,
     )

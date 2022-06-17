@@ -10,9 +10,9 @@ from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
-from ..Functions.copy import copy
 from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
+from copy import deepcopy
 from .Input import Input
 
 # Import all class method
@@ -63,9 +63,8 @@ class InputVoltage(Input):
         )
     else:
         set_Ud_Uq = set_Ud_Uq
-    # save and copy methods are available in all object
+    # generic save method is available in all object
     save = save
-    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -381,6 +380,57 @@ class InputVoltage(Input):
         # Overwrite the mother class name
         InputVoltage_dict["__class__"] = "InputVoltage"
         return InputVoltage_dict
+
+    def copy(self):
+        """Creates a deepcopy of the object"""
+
+        # Handle deepcopy of all the properties
+        rot_dir_val = self.rot_dir
+        angle_rotor_initial_val = self.angle_rotor_initial
+        if self.PWM is None:
+            PWM_val = None
+        else:
+            PWM_val = self.PWM.copy()
+        phase_dir_val = self.phase_dir
+        current_dir_val = self.current_dir
+        is_periodicity_t_val = self.is_periodicity_t
+        is_periodicity_a_val = self.is_periodicity_a
+        is_generator_val = self.is_generator
+        if self.time is None:
+            time_val = None
+        else:
+            time_val = self.time.copy()
+        if self.angle is None:
+            angle_val = None
+        else:
+            angle_val = self.angle.copy()
+        Nt_tot_val = self.Nt_tot
+        Nrev_val = self.Nrev
+        Na_tot_val = self.Na_tot
+        if self.OP is None:
+            OP_val = None
+        else:
+            OP_val = self.OP.copy()
+        t_final_val = self.t_final
+        # Creates new object of the same type with the copied properties
+        obj_copy = type(self)(
+            rot_dir=rot_dir_val,
+            angle_rotor_initial=angle_rotor_initial_val,
+            PWM=PWM_val,
+            phase_dir=phase_dir_val,
+            current_dir=current_dir_val,
+            is_periodicity_t=is_periodicity_t_val,
+            is_periodicity_a=is_periodicity_a_val,
+            is_generator=is_generator_val,
+            time=time_val,
+            angle=angle_val,
+            Nt_tot=Nt_tot_val,
+            Nrev=Nrev_val,
+            Na_tot=Na_tot_val,
+            OP=OP_val,
+            t_final=t_final_val,
+        )
+        return obj_copy
 
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""

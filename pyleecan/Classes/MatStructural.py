@@ -10,9 +10,9 @@ from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
-from ..Functions.copy import copy
 from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
+from copy import deepcopy
 from ._frozen import FrozenClass
 
 from numpy import isnan
@@ -24,9 +24,8 @@ class MatStructural(FrozenClass):
 
     VERSION = 1
 
-    # save and copy methods are available in all object
+    # generic save method is available in all object
     save = save
-    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -342,6 +341,35 @@ class MatStructural(FrozenClass):
         # The class name is added to the dict for deserialisation purpose
         MatStructural_dict["__class__"] = "MatStructural"
         return MatStructural_dict
+
+    def copy(self):
+        """Creates a deepcopy of the object"""
+
+        # Handle deepcopy of all the properties
+        rho_val = self.rho
+        Ex_val = self.Ex
+        Ey_val = self.Ey
+        Ez_val = self.Ez
+        nu_xy_val = self.nu_xy
+        nu_xz_val = self.nu_xz
+        nu_yz_val = self.nu_yz
+        Gxz_val = self.Gxz
+        Gxy_val = self.Gxy
+        Gyz_val = self.Gyz
+        # Creates new object of the same type with the copied properties
+        obj_copy = type(self)(
+            rho=rho_val,
+            Ex=Ex_val,
+            Ey=Ey_val,
+            Ez=Ez_val,
+            nu_xy=nu_xy_val,
+            nu_xz=nu_xz_val,
+            nu_yz=nu_yz_val,
+            Gxz=Gxz_val,
+            Gxy=Gxy_val,
+            Gyz=Gyz_val,
+        )
+        return obj_copy
 
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""

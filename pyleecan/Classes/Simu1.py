@@ -10,9 +10,9 @@ from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
-from ..Functions.copy import copy
 from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
+from copy import deepcopy
 from .Simulation import Simulation
 
 # Import all class method
@@ -41,9 +41,8 @@ class Simu1(Simulation):
         )
     else:
         run_single = run_single
-    # save and copy methods are available in all object
+    # generic save method is available in all object
     save = save
-    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -351,6 +350,76 @@ class Simu1(Simulation):
         # Overwrite the mother class name
         Simu1_dict["__class__"] = "Simu1"
         return Simu1_dict
+
+    def copy(self):
+        """Creates a deepcopy of the object"""
+
+        # Handle deepcopy of all the properties
+        if self.elec is None:
+            elec_val = None
+        else:
+            elec_val = self.elec.copy()
+        if self.mag is None:
+            mag_val = None
+        else:
+            mag_val = self.mag.copy()
+        if self.struct is None:
+            struct_val = None
+        else:
+            struct_val = self.struct.copy()
+        if self.force is None:
+            force_val = None
+        else:
+            force_val = self.force.copy()
+        if self.loss is None:
+            loss_val = None
+        else:
+            loss_val = self.loss.copy()
+        name_val = self.name
+        desc_val = self.desc
+        if self.machine is None:
+            machine_val = None
+        else:
+            machine_val = self.machine.copy()
+        if self.input is None:
+            input_val = None
+        else:
+            input_val = self.input.copy()
+        logger_name_val = self.logger_name
+        if self.var_simu is None:
+            var_simu_val = None
+        else:
+            var_simu_val = self.var_simu.copy()
+        if self.postproc_list is None:
+            postproc_list_val = None
+        else:
+            postproc_list_val = list()
+            for obj in self.postproc_list:
+                postproc_list_val.append(obj.copy())
+        index_val = self.index
+        path_result_val = self.path_result
+        layer_val = self.layer
+        layer_log_warn_val = self.layer_log_warn
+        # Creates new object of the same type with the copied properties
+        obj_copy = type(self)(
+            elec=elec_val,
+            mag=mag_val,
+            struct=struct_val,
+            force=force_val,
+            loss=loss_val,
+            name=name_val,
+            desc=desc_val,
+            machine=machine_val,
+            input=input_val,
+            logger_name=logger_name_val,
+            var_simu=var_simu_val,
+            postproc_list=postproc_list_val,
+            index=index_val,
+            path_result=path_result_val,
+            layer=layer_val,
+            layer_log_warn=layer_log_warn_val,
+        )
+        return obj_copy
 
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""
