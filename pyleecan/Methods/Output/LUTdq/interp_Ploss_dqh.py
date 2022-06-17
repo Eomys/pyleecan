@@ -34,12 +34,12 @@ def interp_Ploss_dqh(self, Id, Iq, N0):
     felec = N0 / 60 * p
 
     Ploss_dqh = np.zeros(
-        (len(self.output_list), len(self.output_list[0].loss.loss_list) - 1)
+        (len(self.output_list), len(self.output_list[0].loss.loss_list))
     )
     for ii, out in enumerate(self.output_list):
         OP = out.elec.OP.copy()
         OP.felec = felec
-        for kk, loss in enumerate(out.loss.loss_list[:-1]):
+        for kk, loss in enumerate(out.loss.loss_list):
             Ploss_dqh[ii, kk] = loss.get_loss_scalar(felec)
 
     # Get unique Id, Iq sorted in ascending order

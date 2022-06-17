@@ -4,6 +4,8 @@ import numpy as np
 from numpy.testing import assert_almost_equal
 
 import pytest
+import SciDataTool
+print(SciDataTool.__version__)
 
 from SciDataTool.Functions.Plot.plot_2D import plot_2D
 from SciDataTool.Functions.Plot.plot_3D import plot_3D
@@ -43,7 +45,7 @@ def test_efficiency_map_Prius():
     available at https://www.mdpi.com/2075-1702/7/4/75."""
 
     Toyota_Prius = load(join(DATA_DIR, "Machine", "Toyota_Prius.json"))
-    path_to_LUT = r"C:\Users\LAP10\Documents\Loss\LUT_eff.h5"
+    path_to_LUT = r"C:\Users\LAP10\Documents\Loss\LUT_eff_320nt.h5"
 
     if not exists(split(path_to_LUT)[0]):
         raise Exception("The path to LUT is not valid.")
@@ -112,7 +114,7 @@ def test_efficiency_map_Prius():
         LUT_simu=Simu1(
             input=InputCurrent(
                 OP=OPdq(),
-                Nt_tot=4 * 8 * 20,
+                Nt_tot=4 * 8 *10,
                 Na_tot=200 * 8,
                 is_periodicity_a=True,
                 is_periodicity_t=True,
@@ -140,7 +142,7 @@ def test_efficiency_map_Prius():
         ),
     )
 
-    load_vect = np.linspace(0.05, 1, Nload)
+    load_vect = np.linspace(0.1, 1, Nload)
     OP_matrix_MTPA = np.zeros((Nspeed, Nload, 5))
     U_MTPA = np.zeros((Nspeed, Nload, 3))
     I_MTPA = np.zeros((Nspeed, Nload, 3))
@@ -186,92 +188,92 @@ def test_efficiency_map_Prius():
 
     if is_show_fig:
         # Build legend list for each load level
-        legend_list = list()
-        for i_load in range(Nload):
-            if Nload > 1:
-                legend_list.append(
-                    "Load level = "
-                    + str(int(round(100 * (i_load) / (Nload - 1))))
-                    + " %"
-                )
-            else:
-                legend_list.append("Load level =  100%")
+        # legend_list = list()
+        # for i_load in range(Nload):
+        #     if Nload > 1:
+        #         legend_list.append(
+        #             "Load level = "
+        #             + str(int(round(100 * (i_load) / (Nload - 1))))
+        #             + " %"
+        #         )
+        #     else:
+        #         legend_list.append("Load level =  100%")
 
-        # Plot torque speed curve for each load level
-        y_list = [OP_matrix_MTPA[:, i_load, 3] for i_load in range(Nload)]
-        plot_2D(
-            [OP_matrix_MTPA[:, i_load, 0]],
-            y_list,
-            xlabel="Speed [rpm]",
-            ylabel="Average torque [N.m]",
-            legend_list=legend_list,
-            is_show_fig=is_show_fig,
-        )
+        # # Plot torque speed curve for each load level
+        # y_list = [OP_matrix_MTPA[:, i_load, 3] for i_load in range(Nload)]
+        # plot_2D(
+        #     [OP_matrix_MTPA[:, i_load, 0]],
+        #     y_list,
+        #     xlabel="Speed [rpm]",
+        #     ylabel="Average torque [N.m]",
+        #     legend_list=legend_list,
+        #     is_show_fig=is_show_fig,
+        # )
 
-        # Plot Id for each load level
-        y_list = [OP_matrix_MTPA[:, i_load, 1] for i_load in range(Nload)]
-        plot_2D(
-            [OP_matrix_MTPA[:, i_load, 0]],
-            y_list,
-            xlabel="Speed [rpm]",
-            ylabel="Id Current [Arms]",
-            legend_list=legend_list,
-            is_show_fig=is_show_fig,
-        )
+        # # Plot Id for each load level
+        # y_list = [OP_matrix_MTPA[:, i_load, 1] for i_load in range(Nload)]
+        # plot_2D(
+        #     [OP_matrix_MTPA[:, i_load, 0]],
+        #     y_list,
+        #     xlabel="Speed [rpm]",
+        #     ylabel="Id Current [Arms]",
+        #     legend_list=legend_list,
+        #     is_show_fig=is_show_fig,
+        # )
 
-        # Plot Iq for each load level
-        y_list = [OP_matrix_MTPA[:, i_load, 2] for i_load in range(Nload)]
-        plot_2D(
-            [OP_matrix_MTPA[:, i_load, 0]],
-            y_list,
-            xlabel="Speed [rpm]",
-            ylabel="Iq Current [Arms]",
-            legend_list=legend_list,
-            is_show_fig=is_show_fig,
-        )
+        # # Plot Iq for each load level
+        # y_list = [OP_matrix_MTPA[:, i_load, 2] for i_load in range(Nload)]
+        # plot_2D(
+        #     [OP_matrix_MTPA[:, i_load, 0]],
+        #     y_list,
+        #     xlabel="Speed [rpm]",
+        #     ylabel="Iq Current [Arms]",
+        #     legend_list=legend_list,
+        #     is_show_fig=is_show_fig,
+        # )
 
-        # Plot Ud for each load level
-        y_list = [U_MTPA[:, i_load, 0] for i_load in range(Nload)]
-        plot_2D(
-            [OP_matrix_MTPA[:, i_load, 0]],
-            y_list,
-            xlabel="Speed [rpm]",
-            ylabel="Ud Voltage [Vrms]",
-            legend_list=legend_list,
-            is_show_fig=is_show_fig,
-        )
+        # # Plot Ud for each load level
+        # y_list = [U_MTPA[:, i_load, 0] for i_load in range(Nload)]
+        # plot_2D(
+        #     [OP_matrix_MTPA[:, i_load, 0]],
+        #     y_list,
+        #     xlabel="Speed [rpm]",
+        #     ylabel="Ud Voltage [Vrms]",
+        #     legend_list=legend_list,
+        #     is_show_fig=is_show_fig,
+        # )
 
-        # Plot Uq for each load level
-        y_list = [U_MTPA[:, i_load, 1] for i_load in range(Nload)]
-        plot_2D(
-            [OP_matrix_MTPA[:, i_load, 0]],
-            y_list,
-            xlabel="Speed [rpm]",
-            ylabel="Uq Voltage [Vrms]",
-            legend_list=legend_list,
-            is_show_fig=is_show_fig,
-        )
+        # # Plot Uq for each load level
+        # y_list = [U_MTPA[:, i_load, 1] for i_load in range(Nload)]
+        # plot_2D(
+        #     [OP_matrix_MTPA[:, i_load, 0]],
+        #     y_list,
+        #     xlabel="Speed [rpm]",
+        #     ylabel="Uq Voltage [Vrms]",
+        #     legend_list=legend_list,
+        #     is_show_fig=is_show_fig,
+        # )
 
-        # Plot Id/Iq and Imax on a same graph at a specific load level
-        i_load = -1
-        plot_2D(
-            [OP_matrix_MTPA[:, i_load, 0]],
-            [I_MTPA[:, i_load, 0], I_MTPA[:, i_load, 1], I_MTPA[:, i_load, 2]],
-            xlabel="Speed [rpm]",
-            ylabel="Current [Arms]",
-            legend_list=["Id", "Iq", "Imax"],
-            is_show_fig=is_show_fig,
-        )
+        # # Plot Id/Iq and Imax on a same graph at a specific load level
+        # i_load = -1
+        # plot_2D(
+        #     [OP_matrix_MTPA[:, i_load, 0]],
+        #     [I_MTPA[:, i_load, 0], I_MTPA[:, i_load, 1], I_MTPA[:, i_load, 2]],
+        #     xlabel="Speed [rpm]",
+        #     ylabel="Current [Arms]",
+        #     legend_list=["Id", "Iq", "Imax"],
+        #     is_show_fig=is_show_fig,
+        # )
 
-        # Plot Ud/Uq and Umax on a same graph at a specific load level
-        plot_2D(
-            [OP_matrix_MTPA[:, i_load, 0]],
-            [U_MTPA[:, i_load, 0], U_MTPA[:, i_load, 1], U_MTPA[:, i_load, 2]],
-            xlabel="Speed [rpm]",
-            ylabel="Voltage [Vrms]",
-            legend_list=["Ud", "Uq", "Umax"],
-            is_show_fig=is_show_fig,
-        )
+        # # Plot Ud/Uq and Umax on a same graph at a specific load level
+        # plot_2D(
+        #     [OP_matrix_MTPA[:, i_load, 0]],
+        #     [U_MTPA[:, i_load, 0], U_MTPA[:, i_load, 1], U_MTPA[:, i_load, 2]],
+        #     xlabel="Speed [rpm]",
+        #     ylabel="Voltage [Vrms]",
+        #     legend_list=["Ud", "Uq", "Umax"],
+        #     is_show_fig=is_show_fig,
+        # )
         #=============================================#
         #init plot map for efficiency
         dict_eff_map = {
@@ -292,43 +294,43 @@ def test_efficiency_map_Prius():
         #=============================================#
         
         #==============Plot losses in the d-q plane=======#
-        # LUT_grid = out.simu.elec.LUT_enforced
+        LUT_grid = out.simu.elec.LUT_enforced
 
-        # # Get Id_min, Id_max, Iq_min, Iq_max from OP_matrix
-        # OP_matrix = LUT_grid.get_OP_matrix()
-        # Id_min = OP_matrix[:, 1].min()
-        # Id_max = OP_matrix[:, 1].max()
-        # Iq_min = OP_matrix[:, 2].min()
-        # Iq_max = OP_matrix[:, 2].max()
+        # Get Id_min, Id_max, Iq_min, Iq_max from OP_matrix
+        OP_matrix = LUT_grid.get_OP_matrix()
+        Id_min = OP_matrix[:, 1].min()
+        Id_max = OP_matrix[:, 1].max()
+        Iq_min = OP_matrix[:, 2].min()
+        Iq_max = OP_matrix[:, 2].max()
 
-        # nd, nq = 100, 100
-        # Id_vect = np.linspace(Id_min, Id_max, nd)
-        # Iq_vect = np.linspace(Iq_min, Iq_max, nq)
-        # Id, Iq = np.meshgrid(Id_vect, Iq_vect)
-        # Id, Iq = Id.ravel(), Iq.ravel()
+        nd, nq = 100, 100
+        Id_vect = np.linspace(Id_min, Id_max, nd)
+        Iq_vect = np.linspace(Iq_min, Iq_max, nq)
+        Id, Iq = np.meshgrid(Id_vect, Iq_vect)
+        Id, Iq = Id.ravel(), Iq.ravel()
 
-        # # Interpolate Phid/Phiq on the refined mesh
+        # Interpolate Phid/Phiq on the refined mesh
 
-        # Ploss_dqh = LUT_grid.interp_Ploss_dqh(Id, Iq, N0=1200)
-        # dict_map = {
-        #         "Xdata": Id.reshape((nd, nq))[0, :],
-        #         "Ydata": Iq.reshape((nd, nq))[:, 0],
-        #         "xlabel": "d-axis current [Arms]",
-        #         "ylabel": "q-axis current [Arms]",
-        #         "type_plot": "pcolormesh",
-        #         "is_contour": True,
-        #     }
-        # loss_list = ["stator core",
-        #              "rotor core",
-        #              "joule",
-        #              "proximity",
-        #              "magnets"]
-        # for i, loss in enumerate(loss_list):
-        #     plot_3D(
-        #             Zdata=Ploss_dqh[:, i].reshape((nd, nq)),
-        #             zlabel=f"{loss} [W]",
-        #             **dict_map,
-        #         )
+        Ploss_dqh = LUT_grid.interp_Ploss_dqh(Id, Iq, N0=1200)
+        dict_map = {
+                "Xdata": Id.reshape((nd, nq))[0, :],
+                "Ydata": Iq.reshape((nd, nq))[:, 0],
+                "xlabel": "d-axis current [Arms]",
+                "ylabel": "q-axis current [Arms]",
+                "type_plot": "pcolormesh",
+                "is_contour": True,
+            }
+        loss_list = ["stator core",
+                     "rotor core",
+                     "joule",
+                     "proximity",
+                     "magnets"]
+        for i, loss in enumerate(loss_list):
+            plot_3D(
+                    Zdata=Ploss_dqh[:, i].reshape((nd, nq)),
+                    zlabel=f"{loss} [W]",
+                    **dict_map,
+                )
         #==================================================#
         # Tem_rip = LUT_grid.interp_Tem_rip_dqh(Id, Iq)
         
