@@ -20,7 +20,9 @@
             "split_line",
             "comp_distance",
             "plot",
-            "comp_maxseg"
+            "comp_maxseg",
+            "intersect_obj",
+            "is_arc"
         ],
         "mother": "Line",
         "name": "Arc",
@@ -52,7 +54,8 @@
             "rotate",
             "scale",
             "split_half",
-            "translate"
+            "translate",
+            "split_point"
         ],
         "mother": "Arc",
         "name": "Arc1",
@@ -125,7 +128,8 @@
             "rotate",
             "scale",
             "split_half",
-            "translate"
+            "translate",
+            "split_point"
         ],
         "mother": "Arc",
         "name": "Arc2",
@@ -188,7 +192,8 @@
             "rotate",
             "scale",
             "split_half",
-            "translate"
+            "translate",
+            "split_point"
         ],
         "mother": "Arc",
         "name": "Arc3",
@@ -223,7 +228,7 @@
                 "name": "is_trigo_direction",
                 "type": "bool",
                 "unit": "-",
-                "value": 0
+                "value": 1
             }
         ]
     },
@@ -241,12 +246,29 @@
         ],
         "desc": "Abstract class for Bore shape",
         "is_internal": false,
-        "methods": [],
+        "methods": [
+            "merge_slot",
+            "is_yoke",
+            "merge_slot_connect",
+            "merge_slot_intersect",
+            "merge_slot_translate"
+        ],
         "mother": "",
         "name": "Bore",
         "package": "Machine",
         "path": "pyleecan/Generator/ClassesRef/Machine/Bore.csv",
-        "properties": []
+        "properties": [
+            {
+                "as_dict": "",
+                "desc": "how to merge slot/notch into the bore radius (0: connect the dot, 1: intersection, 2: translate)",
+                "max": "2",
+                "min": "0",
+                "name": "type_merge_slot",
+                "type": "int",
+                "unit": "",
+                "value": 1
+            }
+        ]
     },
     "BoreFlower": {
         "constants": [
@@ -259,7 +281,8 @@
         "desc": "Class for Bore flower shape",
         "is_internal": false,
         "methods": [
-            "get_bore_line"
+            "get_bore_line",
+            "comp_periodicity_spatial"
         ],
         "mother": "Bore",
         "name": "BoreFlower",
@@ -309,7 +332,8 @@
         "desc": "Class for Bore LSRPM",
         "is_internal": false,
         "methods": [
-            "get_bore_line"
+            "get_bore_line",
+            "comp_periodicity_spatial"
         ],
         "mother": "Bore",
         "name": "BoreLSRPM",
@@ -369,7 +393,8 @@
         "desc": "User Defined Bore shape",
         "is_internal": false,
         "methods": [
-            "get_bore_line"
+            "get_bore_line",
+            "comp_periodicity_spatial"
         ],
         "mother": "Bore",
         "name": "BoreUD",
@@ -385,6 +410,16 @@
                 "type": "[Line]",
                 "unit": "-",
                 "value": ""
+            },
+            {
+                "as_dict": "",
+                "desc": "Symmetry factor (1= full machine, 2= half of the machine...)",
+                "max": "",
+                "min": "1",
+                "name": "sym",
+                "type": "int",
+                "unit": "-",
+                "value": 1
             }
         ]
     },
@@ -5175,11 +5210,12 @@
             "plot",
             "comp_height_yoke",
             "get_Zs",
-            "get_bore_desc",
             "set_pole_pair_number",
             "comp_angle_d_axis",
             "get_surfaces_closing",
-            "has_magnet"
+            "has_magnet",
+            "get_slot_desc_list",
+            "has_slot"
         ],
         "mother": "Lamination",
         "name": "LamSlot",
@@ -5256,8 +5292,9 @@
             "plot",
             "comp_height_yoke",
             "get_Zs",
-            "get_bore_desc",
-            "comp_periodicity_spatial"
+            "comp_periodicity_spatial",
+            "get_slot_desc_list",
+            "has_slot"
         ],
         "mother": "Lamination",
         "name": "LamSlotMulti",
@@ -5535,7 +5572,6 @@
             "comp_surface_axial_vent",
             "comp_surfaces",
             "comp_volumes",
-            "get_bore_line",
             "get_Rbo",
             "get_Ryoke",
             "get_name_phase",
@@ -5544,19 +5580,20 @@
             "get_polar_eq",
             "is_outwards",
             "comp_height_yoke",
-            "get_notch_list",
             "comp_angle_q_axis",
             "comp_radius_mid_yoke",
-            "get_yoke_desc",
-            "get_bore_desc",
             "comp_point_ref",
             "comp_periodicity_spatial",
             "get_label",
-            "get_yoke_side_line",
+            "build_yoke_side_line",
             "get_notches_surf",
             "comp_periodicity_duct_spatial",
             "get_surfaces_closing",
             "comp_periodicity_geo",
+            "has_notch",
+            "build_radius_lines",
+            "build_radius_desc",
+            "has_slot",
             "plot_preview_notch"
         ],
         "mother": "",
@@ -5686,20 +5723,20 @@
             },
             {
                 "as_dict": "",
-                "desc": "Lamination yoke notches",
-                "max": "",
-                "min": "",
-                "name": "yoke_notch",
-                "type": "[Notch]",
-                "unit": "-",
-                "value": ""
-            },
-            {
-                "as_dict": "",
                 "desc": "Bore Shape",
                 "max": "",
                 "min": "",
                 "name": "bore",
+                "type": "Bore",
+                "unit": "",
+                "value": null
+            },
+            {
+                "as_dict": "",
+                "desc": "Yoke Shape",
+                "max": "",
+                "min": "",
+                "name": "yoke",
                 "type": "Bore",
                 "unit": "",
                 "value": null
@@ -8473,6 +8510,7 @@
         "is_internal": false,
         "methods": [
             "get_Rbo",
+            "get_Ryoke",
             "is_outwards"
         ],
         "mother": "",
@@ -8492,8 +8530,9 @@
         "desc": "Class for evenly distributed notches (according to Zs)",
         "is_internal": false,
         "methods": [
-            "get_notch_list",
-            "comp_surface"
+            "comp_surface",
+            "comp_periodicity_spatial",
+            "get_notch_desc_list"
         ],
         "mother": "Notch",
         "name": "NotchEvenDist",
@@ -11244,7 +11283,10 @@
             "scale",
             "split_half",
             "split_line",
-            "translate"
+            "translate",
+            "split_point",
+            "intersect_obj",
+            "is_arc"
         ],
         "mother": "Line",
         "name": "Segment",
@@ -11830,6 +11872,16 @@
                 "type": "Material",
                 "unit": "-",
                 "value": null
+            },
+            {
+                "as_dict": "",
+                "desc": "True if the Slot is on the bore radius, False for yoke",
+                "max": "",
+                "min": "",
+                "name": "is_bore",
+                "type": "bool",
+                "unit": "-",
+                "value": 1
             }
         ]
     },

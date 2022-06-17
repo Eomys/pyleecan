@@ -39,15 +39,22 @@ def plot(
         Complex value to shift the label from the middle
     fontsize : int
         Size of the font for the label (if any)
+
+    Returns
+    -------
+    fig : Matplotlib.figure.Figure
+        Figure containing the plot
+    ax : Matplotlib.axes.Axes object
+        Axis containing the plot
     """
     begin = self.get_begin()
     end = self.get_end()
 
     # Init fig
-    (fig, axes, patch_leg, label_leg) = init_fig(fig=fig, ax=ax, shape="rectangle")
+    (fig, ax, patch_leg, label_leg) = init_fig(fig=fig, ax=ax, shape="rectangle")
 
     if is_arrow:  # Plot as double headed arrow
-        axes.annotate(
+        ax.annotate(
             text="",
             xy=(end.real, end.imag),
             xytext=(begin.real, begin.imag),
@@ -55,7 +62,7 @@ def plot(
         )
     else:  # Plot as a line
         points = array([begin, end])
-        axes.plot(
+        ax.plot(
             points.real,
             points.imag,
             linestyle=linestyle,
@@ -66,10 +73,12 @@ def plot(
     # Add the Label
     if label is not None:
         Zmid = self.get_middle()
-        axes.text(
+        ax.text(
             Zmid.real + offset_label.real,
             Zmid.imag + offset_label.imag,
             label,
             fontsize=fontsize,
             bbox=TEXT_BOX,
         )
+
+    return fig, ax

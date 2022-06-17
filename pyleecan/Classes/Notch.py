@@ -23,6 +23,11 @@ except ImportError as error:
     get_Rbo = error
 
 try:
+    from ..Methods.Machine.Notch.get_Ryoke import get_Ryoke
+except ImportError as error:
+    get_Ryoke = error
+
+try:
     from ..Methods.Machine.Notch.is_outwards import is_outwards
 except ImportError as error:
     is_outwards = error
@@ -47,6 +52,15 @@ class Notch(FrozenClass):
         )
     else:
         get_Rbo = get_Rbo
+    # cf Methods.Machine.Notch.get_Ryoke
+    if isinstance(get_Ryoke, ImportError):
+        get_Ryoke = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use Notch method get_Ryoke: " + str(get_Ryoke))
+            )
+        )
+    else:
+        get_Ryoke = get_Ryoke
     # cf Methods.Machine.Notch.is_outwards
     if isinstance(is_outwards, ImportError):
         is_outwards = property(

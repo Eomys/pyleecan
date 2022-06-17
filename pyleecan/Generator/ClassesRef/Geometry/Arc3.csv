@@ -1,7 +1,7 @@
 Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
 begin,-,begin point of the arc,0,complex,0,,,,Geometry,Arc,check,VERSION,1,Half circle define by two points
 end,-,end of the arc,0,complex,0,,,,,,comp_length,,,
-is_trigo_direction,-,Rotation direction of the arc,0,bool,0,,,,,,comp_radius,,,
+is_trigo_direction,-,Rotation direction of the arc,0,bool,1,,,,,,comp_radius,,,
 ,,,,,,,,,,,discretize,,,
 ,,,,,,,,,,,get_angle,,,
 ,,,,,,,,,,,get_begin,,,
@@ -13,3 +13,4 @@ is_trigo_direction,-,Rotation direction of the arc,0,bool,0,,,,,,comp_radius,,,
 ,,,,,,,,,,,scale,,,
 ,,,,,,,,,,,split_half,,,
 ,,,,,,,,,,,translate,,,
+,,,,,,,,,,,split_point,,,

@@ -10,7 +10,7 @@ DELTA = 1e-6
 from ....Classes.Segment import Segment
 
 
-def get_yoke_side_line(
+def build_yoke_side_line(
     self, sym, vent_surf_list, ZBR=None, ZTR=None, ZBL=None, ZTL=None
 ):
     """Define the Yoke Side lines of a Lamination by taking into account sym and vent

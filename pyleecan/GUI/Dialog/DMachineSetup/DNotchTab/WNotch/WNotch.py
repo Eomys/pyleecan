@@ -98,7 +98,8 @@ class WNotch(Ui_WNotch, QWidget):
         # Regenerate the pages with the new values
         self.w_notch.setParent(None)
         self.w_notch = self.wid_list[self.c_notch_type.currentIndex()](
-            lamination=self.lam_notch, is_notch=True,
+            lamination=self.lam_notch,
+            is_notch=True,
         )
         # Refresh the GUI
         self.main_layout.removeWidget(self.w_notch)
@@ -170,16 +171,20 @@ class WNotch(Ui_WNotch, QWidget):
         if self.previous_notch[self.type_list[c_index]] is None:
             # No previous notch of this type
             self.lam_notch.slot = self.type_list[c_index]()
-            self.lam_notch.slot._set_None()  # No default value
+            self.lam_notch.slot._set_None()  # Clear default value
         else:  # Load the previous notch of this type
             self.lam_notch.slot = self.previous_notch[self.type_list[c_index]]
+        self.lam_notch.slot.is_bore = True  # Default value
         self.set_alpha()
         self.set_Zn()
         self.obj.notch[self.index].notch_shape = self.lam_notch.slot
 
         # Update the GUI
         self.w_notch.setParent(None)
-        self.w_notch = self.wid_list[c_index](lamination=self.lam_notch, is_notch=True,)
+        self.w_notch = self.wid_list[c_index](
+            lamination=self.lam_notch,
+            is_notch=True,
+        )
         self.w_notch.saveNeeded.connect(self.emit_save)
         # Refresh the GUI
         self.main_layout.removeWidget(self.w_notch)

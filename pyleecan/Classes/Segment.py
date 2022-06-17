@@ -102,6 +102,21 @@ try:
 except ImportError as error:
     translate = error
 
+try:
+    from ..Methods.Geometry.Segment.split_point import split_point
+except ImportError as error:
+    split_point = error
+
+try:
+    from ..Methods.Geometry.Segment.intersect_obj import intersect_obj
+except ImportError as error:
+    intersect_obj = error
+
+try:
+    from ..Methods.Geometry.Segment.is_arc import is_arc
+except ImportError as error:
+    is_arc = error
+
 
 from numpy import isnan
 from ._check import InitUnKnowClassError
@@ -270,6 +285,35 @@ class Segment(Line):
         )
     else:
         translate = translate
+    # cf Methods.Geometry.Segment.split_point
+    if isinstance(split_point, ImportError):
+        split_point = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use Segment method split_point: " + str(split_point))
+            )
+        )
+    else:
+        split_point = split_point
+    # cf Methods.Geometry.Segment.intersect_obj
+    if isinstance(intersect_obj, ImportError):
+        intersect_obj = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Segment method intersect_obj: " + str(intersect_obj)
+                )
+            )
+        )
+    else:
+        intersect_obj = intersect_obj
+    # cf Methods.Geometry.Segment.is_arc
+    if isinstance(is_arc, ImportError):
+        is_arc = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use Segment method is_arc: " + str(is_arc))
+            )
+        )
+    else:
+        is_arc = is_arc
     # generic save method is available in all object
     save = save
     # get_logger method is available in all object

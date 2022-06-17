@@ -87,6 +87,11 @@ try:
 except ImportError as error:
     translate = error
 
+try:
+    from ..Methods.Geometry.Arc3.split_point import split_point
+except ImportError as error:
+    split_point = error
+
 
 from numpy import isnan
 from ._check import InitUnKnowClassError
@@ -224,6 +229,15 @@ class Arc3(Arc):
         )
     else:
         translate = translate
+    # cf Methods.Geometry.Arc3.split_point
+    if isinstance(split_point, ImportError):
+        split_point = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use Arc3 method split_point: " + str(split_point))
+            )
+        )
+    else:
+        split_point = split_point
     # generic save method is available in all object
     save = save
     # get_logger method is available in all object
@@ -233,7 +247,7 @@ class Arc3(Arc):
         self,
         begin=0,
         end=0,
-        is_trigo_direction=False,
+        is_trigo_direction=True,
         prop_dict=None,
         init_dict=None,
         init_str=None,
