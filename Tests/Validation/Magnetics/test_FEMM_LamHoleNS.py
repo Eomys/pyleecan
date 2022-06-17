@@ -1,4 +1,5 @@
-from os.path import join
+from os.path import join, isdir
+from os import makedirs
 from multiprocessing import cpu_count
 import matplotlib.pyplot as plt
 import pytest
@@ -29,7 +30,9 @@ from pyleecan.definitions import DATA_DIR
 @pytest.mark.SingleOP
 def test_FEMM_LamHoleNS():
     """Validation of LamHoleNS in FEMM"""
-
+    res_path = join(save_path, "LamHoleNS")
+    if not isdir(res_path):
+        makedirs(res_path)
     TP = load(join(DATA_DIR, "Machine", "Toyota_Prius.json"))
     TPNS = TP.copy()
     # Change rotor type to have different North/South Pole
@@ -45,12 +48,11 @@ def test_FEMM_LamHoleNS():
     TPNS.rotor.hole_south[0].magnet_0.mat_type.mag.mur_lin = 2
 
     # Check plot machine
-    TPNS.plot(sym=4, save_path=join(save_path, "machine_sym.png"), is_show_fig=False)
-    TPNS.plot(save_path=join(save_path, "machine_full.png"), is_show_fig=False)
+    TPNS.plot(sym=4, save_path=join(res_path, "machine_sym.png"), is_show_fig=False)
+    TPNS.plot(save_path=join(res_path, "machine_full.png"), is_show_fig=False)
     TPNS.rotor.plot(
-        is_add_arrow=True,  # save_path=join(save_path, "rotor.png"), is_show_fig=False
+        is_add_arrow=True, save_path=join(res_path, "rotor.png"), is_show_fig=False
     )
-    plt.show()
 
     # Check periodicity
     assert TPNS.comp_periodicity_spatial() == (4, False)
@@ -71,19 +73,41 @@ def test_FEMM_LamHoleNS():
         nb_worker=cpu_count(),
         # Kmesh_fineness=2,
     )
+    simu.path_result = join(res_path, simu.name)
+
+    # Same simu without symetry
+    simu2 = simu.copy()
+    simu2.name = simu.name + "_Full"
+    simu2.path_result = join(res_path, simu2.name)
+    simu2.mag.is_periodicity_a = False
 
     # Run simulations
     out = simu.run()
+    out2 = simu2.run()
 
     out.mag.B.plot_2D_Data(
         "angle{°}",
         "time[0]",
+        data_list=[out2.mag.B],
         legend_list=["Periodic", "Full"],
         save_path=join(save_path, simu.name + "_B_space.png"),
         is_show_fig=False,
         **dict_2D
     )
 
+    # Compare both simu
+    Bflux = out.mag.B
+    arg_list = ["angle"]
+    result = Bflux.get_rphiz_along(*arg_list)
+    Brad = result["radial"]
+    angle = result["angle"]
+
+    Bflux2 = out2.mag.B
+    arg_list = ["angle"]
+    result2 = Bflux2.get_rphiz_along(*arg_list)
+    Brad2 = result2["radial"]
+
+    assert_array_almost_equal(Brad, Brad2, decimal=1)
     return out
 
 
