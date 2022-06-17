@@ -266,7 +266,7 @@
                 "name": "type_merge_slot",
                 "type": "int",
                 "unit": "",
-                "value": 0
+                "value": 1
             }
         ]
     },
@@ -393,7 +393,8 @@
         "desc": "User Defined Bore shape",
         "is_internal": false,
         "methods": [
-            "get_bore_line"
+            "get_bore_line",
+            "comp_periodicity_spatial"
         ],
         "mother": "Bore",
         "name": "BoreUD",
@@ -409,6 +410,16 @@
                 "type": "[Line]",
                 "unit": "-",
                 "value": ""
+            },
+            {
+                "as_dict": "",
+                "desc": "Symmetry factor (1= full machine, 2= half of the machine...)",
+                "max": "",
+                "min": "1",
+                "name": "sym",
+                "type": "int",
+                "unit": "-",
+                "value": 1
             }
         ]
     },

@@ -102,7 +102,7 @@ def merge_slot_intersect(self, radius_desc_list, prop_dict, sym):
                     )
                     if len(inter_list) > 0:
                         break
-                if jj < len(desc_dict["lines"])-1:
+                if jj < len(desc_dict["lines"]) - 1:
                     # Slot/notch was cut => Replace lines by cut ones
                     desc_dict["lines"] = desc_dict["lines"][
                         jj:

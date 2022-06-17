@@ -74,7 +74,7 @@ class BoreLSRPM(Bore):
         Rarc=0.0375,
         W1=0.0035,
         alpha=0,
-        type_merge_slot=0,
+        type_merge_slot=1,
         init_dict=None,
         init_str=None,
     ):

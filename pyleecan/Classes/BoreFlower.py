@@ -69,7 +69,7 @@ class BoreFlower(Bore):
     get_logger = get_logger
 
     def __init__(
-        self, N=8, Rarc=0.01, alpha=0, type_merge_slot=0, init_dict=None, init_str=None
+        self, N=8, Rarc=0.01, alpha=0, type_merge_slot=1, init_dict=None, init_str=None
     ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values

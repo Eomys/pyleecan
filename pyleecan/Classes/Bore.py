@@ -112,7 +112,7 @@ class Bore(FrozenClass):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, type_merge_slot=0, init_dict=None, init_str=None):
+    def __init__(self, type_merge_slot=1, init_dict=None, init_str=None):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor

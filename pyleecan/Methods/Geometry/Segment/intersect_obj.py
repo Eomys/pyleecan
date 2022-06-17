@@ -22,7 +22,10 @@ def intersect_obj(self, other, is_on_line=True):
 
     if other.is_arc():
         inter_list = inter_line_circle(
-            Z1=self.begin, Z2=self.end, R=abs(other.comp_radius()), Zc=other.get_center()
+            Z1=self.begin,
+            Z2=self.end,
+            R=abs(other.comp_radius()),
+            Zc=other.get_center(),
         )
     else:
         inter_list = self.intersect_line(Z1=other.get_begin(), Z2=other.get_end())

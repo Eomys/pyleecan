@@ -10,6 +10,8 @@ from numpy.testing import assert_array_almost_equal
 
 from pyleecan.Classes.OPdq import OPdq
 from pyleecan.Classes.Simu1 import Simu1
+from pyleecan.Classes.Segment import Segment
+from pyleecan.Classes.BoreUD import BoreUD
 from pyleecan.Classes.InputCurrent import InputCurrent
 from pyleecan.Classes.VentilationCirc import VentilationCirc
 from pyleecan.Classes.VentilationPolar import VentilationPolar
@@ -525,14 +527,33 @@ def test_Bore_sym():
     if not isdir(res_path):
         makedirs(res_path)
     TP = load(join(DATA_DIR, "Machine", "Toyota_Prius.json"))
-    # Add Bore shape
+    # Add Bore shape with interset method
     TP.rotor.bore = BoreFlower(
         N=8, Rarc=TP.rotor.Rext * 0.75, alpha=pi / 8, type_merge_slot=1
     )
+    TP.stator.slot.H0 *= 4
+    TP.stator.Rint*=1.1
+    TP.stator.Rext*=1.05
+    # Generate "hexagonal Bore Radius"
+    line_list = list()
+    Rbo = TP.stator.Rint
+    Zs = TP.stator.slot.Zs
+    N = 6
+    for ii in range(Zs // N):
+        Z1 = Rbo * exp(1j * ii * 2 * pi / (Zs / N))
+        Z2 = Rbo * exp(1j * (ii * 2 * pi / (Zs / N) + pi / (Zs / N)))
+        Z3 = Rbo * exp(1j * (ii + 1) * 2 * pi / (Zs / N))
+        line_list.append(Segment(begin=Z1, end=Z2))
+        line_list.append(Segment(begin=Z2, end=Z3))
+    # Use connect method for merge
+    TP.stator.bore = BoreUD(line_list=line_list, sym=8, type_merge_slot=0)
+    # TP.stator.plot()
+    # TP.stator.plot(sym=8)
+    # plt.show()
     # Add Notch to merge with the Bore shape (middle of pole)
     Zr = TP.rotor.hole[0].Zh
     W0 = TP.stator.slot.W0
-    H0 = TP.stator.slot.H0
+    H0 = TP.stator.slot.H0 /4
     NC = SlotCirc(Zs=Zr, W0=W0 * 5, H0=H0 * 5)
     NR = SlotM10(Zs=Zr, W0=W0 * 5, H0=H0 * 3)
     TP.rotor.notch = [

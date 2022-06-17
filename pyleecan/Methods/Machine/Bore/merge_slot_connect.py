@@ -7,7 +7,8 @@ from ....Classes.Segment import Segment
 def merge_slot_connect(self, radius_desc_list, prop_dict, sym):
     """Merge the Bore shape with notches/slot on the bore/yoke
     Connect method: Add lines between radius and notch/slot
-    (To use when the radius shape have circular part matchine the radius)
+    (To use when the radius shape have circular part matchine the radius
+    or when radius lines are bellow normal radius)
 
     Parameters
     ----------
@@ -61,7 +62,7 @@ def merge_slot_connect(self, radius_desc_list, prop_dict, sym):
 
     # Apply merge strategy on slot/notch
     line_list = list()
-    for desc_dict in radius_desc_list:
+    for ii, desc_dict in enumerate(radius_desc_list):
         if desc_dict["label"] == "Radius":
             # Add prop_dict on all the Radius Lines
             if prop_dict is not None:
@@ -83,5 +84,18 @@ def merge_slot_connect(self, radius_desc_list, prop_dict, sym):
                         )
                     )
             line_list.extend(desc_dict["lines"])
-
+            # Connect slot/notch to next radius
+            if (
+                abs(
+                    radius_desc_list[ii + 1]["lines"][0].get_begin()
+                    - desc_dict["lines"][-1].get_end()
+                )
+                > 1e-6
+            ):
+                line_list.append(
+                    Segment(
+                        desc_dict["lines"][-1].get_end(),
+                        radius_desc_list[ii + 1]["lines"][0].get_begin(),
+                    )
+                )
     return line_list
