@@ -10,9 +10,9 @@ from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
-from ..Functions.copy import copy
 from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
+from copy import deepcopy
 from .ParamExplorer import ParamExplorer
 
 from ntpath import basename
@@ -29,9 +29,8 @@ class OptiDesignVar(ParamExplorer):
 
     VERSION = 1
 
-    # save and copy methods are available in all object
+    # generic save method is available in all object
     save = save
-    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -206,7 +205,7 @@ class OptiDesignVar(ParamExplorer):
         )
         if self._get_value_str is not None:
             OptiDesignVar_dict["get_value"] = self._get_value_str
-        elif "keep_function" in kwargs and kwargs["keep_function"]:
+        elif keep_function:
             OptiDesignVar_dict["get_value"] = self.get_value
         else:
             OptiDesignVar_dict["get_value"] = None
@@ -220,6 +219,43 @@ class OptiDesignVar(ParamExplorer):
         # Overwrite the mother class name
         OptiDesignVar_dict["__class__"] = "OptiDesignVar"
         return OptiDesignVar_dict
+
+    def copy(self):
+        """Creates a deepcopy of the object"""
+
+        # Handle deepcopy of all the properties
+        type_var_val = self.type_var
+        if self.space is None:
+            space_val = None
+        else:
+            space_val = self.space.copy()
+        if self._get_value_str is not None:
+            get_value_val = self._get_value_str
+        else:
+            get_value_val = self._get_value_func
+        name_val = self.name
+        symbol_val = self.symbol
+        unit_val = self.unit
+        if self._setter_str is not None:
+            setter_val = self._setter_str
+        else:
+            setter_val = self._setter_func
+        if self._getter_str is not None:
+            getter_val = self._getter_str
+        else:
+            getter_val = self._getter_func
+        # Creates new object of the same type with the copied properties
+        obj_copy = type(self)(
+            type_var=type_var_val,
+            space=space_val,
+            get_value=get_value_val,
+            name=name_val,
+            symbol=symbol_val,
+            unit=unit_val,
+            setter=setter_val,
+            getter=getter_val,
+        )
+        return obj_copy
 
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""

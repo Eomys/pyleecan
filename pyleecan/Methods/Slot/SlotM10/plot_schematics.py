@@ -42,8 +42,8 @@ def plot_schematics(
     ----------
     self : SlotM10
         A SlotM10 object
-    is_default : bool
-        True: plot default schematics, else use current slot values
+    is_default : int
+        0: current slot values, 1: default internal rotor schematics, 2: default external stator schematics
     is_add_point_label : bool
         True to display the name of the points (Z1, Z2....)
     is_add_schematics : bool
@@ -72,9 +72,14 @@ def plot_schematics(
     # Use some default parameter
     if is_default:
         slot = type(self)(Zs=8, H0=20e-3, W0=45e-3, Hmag=17.5e-3, Wmag=30e-3)
-        lam = LamSlot(
-            Rint=0.1, Rext=0.135, is_internal=True, is_stator=False, slot=slot
-        )
+        if is_default == 1:  # Internal Rotor schematics
+            lam = LamSlot(
+                Rint=0.1, Rext=0.135, is_internal=True, is_stator=False, slot=slot
+            )
+        else:  # External Stator schematics
+            lam = LamSlot(
+                Rint=0.1, Rext=0.135, is_internal=False, is_stator=True, slot=slot
+            )
         return slot.plot_schematics(
             is_default=False,
             is_add_point_label=is_add_point_label,
@@ -104,11 +109,7 @@ def plot_schematics(
         if is_add_point_label:
             for name, Z in point_dict.items():
                 ax.text(
-                    Z.real,
-                    Z.imag,
-                    name,
-                    fontsize=P_FONT_SIZE,
-                    bbox=TEXT_BOX,
+                    Z.real, Z.imag, name, fontsize=P_FONT_SIZE, bbox=TEXT_BOX,
                 )
 
         # Adding schematics
@@ -125,17 +126,6 @@ def plot_schematics(
                 is_arrow=True,
                 fontsize=SC_FONT_SIZE,
             )
-            # Wmag
-            plot_quote(
-                Z1=point_dict["ZM2"],
-                Zlim1=point_dict["ZM2"] - sign * 0.5 * self.Hmag,
-                Zlim2=point_dict["ZM3"] - sign * 0.5 * self.Hmag,
-                Z2=point_dict["ZM3"],
-                offset_label=0.25 * self.Hmag,
-                fig=fig,
-                ax=ax,
-                label="Wmag",
-            )
             # H0
             line = Segment(point_dict["Z1"], point_dict["Z2"])
             line.plot(
@@ -148,19 +138,31 @@ def plot_schematics(
                 is_arrow=True,
                 fontsize=SC_FONT_SIZE,
             )
-            # Hmag
-            Zlim1 = point_dict["Z3"] - sign * self.Hmag
-            Zlim2 = point_dict["Z3"]
-            plot_quote(
-                point_dict["ZM3"],
-                Zlim1,
-                Zlim2,
-                point_dict["ZM4"],
-                offset_label=1j * 0.2 * self.Hmag,
-                fig=fig,
-                ax=ax,
-                label="Hmag",
-            )
+            if type_add_active != 0:
+                # Wmag
+                plot_quote(
+                    Z1=point_dict["ZM2"],
+                    Zlim1=point_dict["ZM2"] - sign * 0.5 * self.Hmag,
+                    Zlim2=point_dict["ZM3"] - sign * 0.5 * self.Hmag,
+                    Z2=point_dict["ZM3"],
+                    offset_label=0.25 * self.Hmag,
+                    fig=fig,
+                    ax=ax,
+                    label="Wmag",
+                )
+                # Hmag
+                Zlim1 = point_dict["Z3"] - sign * self.Hmag
+                Zlim2 = point_dict["Z3"]
+                plot_quote(
+                    point_dict["ZM3"],
+                    Zlim1,
+                    Zlim2,
+                    point_dict["ZM4"],
+                    offset_label=1j * 0.2 * self.Hmag,
+                    fig=fig,
+                    ax=ax,
+                    label="Hmag",
+                )
 
         if is_add_main_line:
             # Ox axis

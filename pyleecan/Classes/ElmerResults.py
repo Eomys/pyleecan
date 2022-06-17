@@ -10,9 +10,9 @@ from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
-from ..Functions.copy import copy
 from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
+from copy import deepcopy
 from .Elmer import Elmer
 
 # Import all class method
@@ -74,9 +74,8 @@ class ElmerResults(Elmer):
         )
     else:
         get_data = get_data
-    # save and copy methods are available in all object
+    # generic save method is available in all object
     save = save
-    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -294,6 +293,36 @@ class ElmerResults(Elmer):
         # Overwrite the mother class name
         ElmerResults_dict["__class__"] = "ElmerResults"
         return ElmerResults_dict
+
+    def copy(self):
+        """Creates a deepcopy of the object"""
+
+        # Handle deepcopy of all the properties
+        if self.data is None:
+            data_val = None
+        else:
+            data_val = self.data.copy()
+        file_val = self.file
+        if self.usecols is None:
+            usecols_val = None
+        else:
+            usecols_val = self.usecols.copy()
+        if self.columns is None:
+            columns_val = None
+        else:
+            columns_val = self.columns.copy()
+        is_scalars_val = self.is_scalars
+        logger_name_val = self.logger_name
+        # Creates new object of the same type with the copied properties
+        obj_copy = type(self)(
+            data=data_val,
+            file=file_val,
+            usecols=usecols_val,
+            columns=columns_val,
+            is_scalars=is_scalars_val,
+            logger_name=logger_name_val,
+        )
+        return obj_copy
 
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""

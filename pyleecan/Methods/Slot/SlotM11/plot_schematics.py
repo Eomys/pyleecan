@@ -1,3 +1,4 @@
+from msilib import type_binary
 import matplotlib.pyplot as plt
 from numpy import pi, exp
 
@@ -42,8 +43,8 @@ def plot_schematics(
     ----------
     self : SlotM11
         A SlotM11 object
-    is_default : bool
-        True: plot default schematics, else use current slot values
+    is_default : int
+        0: current slot values, 1: default internal rotor schematics, 2: default external stator schematics
     is_add_point_label : bool
         True to display the name of the points (Z1, Z2....)
     is_add_schematics : bool
@@ -72,9 +73,14 @@ def plot_schematics(
     # Use some default parameter
     if is_default:
         slot = type(self)(Zs=8, H0=20e-3, W0=pi / 8, Hmag=15e-3, Wmag=pi / 8 * 0.75)
-        lam = LamSlot(
-            Rint=0.1, Rext=0.135, is_internal=True, is_stator=False, slot=slot
-        )
+        if is_default == 1:  # Internal Rotor schematics
+            lam = LamSlot(
+                Rint=0.1, Rext=0.135, is_internal=True, is_stator=False, slot=slot
+            )
+        else:  # External Stator schematics
+            lam = LamSlot(
+                Rint=0.1, Rext=0.135, is_internal=False, is_stator=True, slot=slot
+            )
         return slot.plot_schematics(
             is_default=False,
             is_add_point_label=is_add_point_label,
@@ -105,11 +111,7 @@ def plot_schematics(
         if is_add_point_label:
             for name, Z in point_dict.items():
                 ax.text(
-                    Z.real,
-                    Z.imag,
-                    name,
-                    fontsize=P_FONT_SIZE,
-                    bbox=TEXT_BOX,
+                    Z.real, Z.imag, name, fontsize=P_FONT_SIZE, bbox=TEXT_BOX,
                 )
 
         # Adding schematics
@@ -131,23 +133,6 @@ def plot_schematics(
                 offset_label=sign * self.H0 * 0.3,
                 fontsize=SC_FONT_SIZE,
             )
-            # Wmag
-            R = self.get_Rbo() + sign * (self.H0 - self.Hmag * 1.1)
-            line = Arc1(
-                begin=R * exp(-1j * self.Wmag / 2),
-                end=R * exp(1j * self.Wmag / 2),
-                radius=R,
-                is_trigo_direction=True,
-            )
-            line.plot(
-                fig=fig,
-                ax=ax,
-                color=ARROW_COLOR,
-                linewidth=ARROW_WIDTH,
-                label="Wmag",
-                offset_label=-1 * sign * self.H0 * 0.2,
-                fontsize=SC_FONT_SIZE,
-            )
             # H0
             line = Segment(point_dict["Z1"], point_dict["Z2"])
             line.plot(
@@ -160,18 +145,36 @@ def plot_schematics(
                 is_arrow=True,
                 fontsize=SC_FONT_SIZE,
             )
-            # Hmag
-            line = Segment(point_dict["ZM3"], point_dict["ZM4"])
-            line.plot(
-                fig=fig,
-                ax=ax,
-                color=ARROW_COLOR,
-                linewidth=ARROW_WIDTH,
-                label="Hmag",
-                offset_label=1j * point_dict["Z4"].imag * 0.2,
-                is_arrow=True,
-                fontsize=SC_FONT_SIZE,
-            )
+            if type_add_active != 0:
+                # Wmag
+                R = self.get_Rbo() + sign * (self.H0 - self.Hmag * 1.1)
+                line = Arc1(
+                    begin=R * exp(-1j * self.Wmag / 2),
+                    end=R * exp(1j * self.Wmag / 2),
+                    radius=R,
+                    is_trigo_direction=True,
+                )
+                line.plot(
+                    fig=fig,
+                    ax=ax,
+                    color=ARROW_COLOR,
+                    linewidth=ARROW_WIDTH,
+                    label="Wmag",
+                    offset_label=-1 * sign * self.H0 * 0.2,
+                    fontsize=SC_FONT_SIZE,
+                )
+                # Hmag
+                line = Segment(point_dict["ZM3"], point_dict["ZM4"])
+                line.plot(
+                    fig=fig,
+                    ax=ax,
+                    color=ARROW_COLOR,
+                    linewidth=ARROW_WIDTH,
+                    label="Hmag",
+                    offset_label=1j * point_dict["Z4"].imag * 0.2,
+                    is_arrow=True,
+                    fontsize=SC_FONT_SIZE,
+                )
 
         if is_add_main_line:
             # Ox axis
@@ -201,24 +204,25 @@ def plot_schematics(
                 linestyle=MAIN_LINE_STYLE,
                 linewidth=MAIN_LINE_WIDTH,
             )
-            # ZM1 Line
-            line = Segment(0, Rbo * 2 * exp(-1j * self.Wmag / 2))
-            line.plot(
-                fig=fig,
-                ax=ax,
-                color=MAIN_LINE_COLOR,
-                linestyle=MAIN_LINE_STYLE,
-                linewidth=MAIN_LINE_WIDTH,
-            )
-            # ZM2 Line
-            line = Segment(0, Rbo * 2 * exp(1j * self.Wmag / 2))
-            line.plot(
-                fig=fig,
-                ax=ax,
-                color=MAIN_LINE_COLOR,
-                linestyle=MAIN_LINE_STYLE,
-                linewidth=MAIN_LINE_WIDTH,
-            )
+            if type_add_active != 0:
+                # ZM1 Line
+                line = Segment(0, Rbo * 2 * exp(-1j * self.Wmag / 2))
+                line.plot(
+                    fig=fig,
+                    ax=ax,
+                    color=MAIN_LINE_COLOR,
+                    linestyle=MAIN_LINE_STYLE,
+                    linewidth=MAIN_LINE_WIDTH,
+                )
+                # ZM2 Line
+                line = Segment(0, Rbo * 2 * exp(1j * self.Wmag / 2))
+                line.plot(
+                    fig=fig,
+                    ax=ax,
+                    color=MAIN_LINE_COLOR,
+                    linestyle=MAIN_LINE_STYLE,
+                    linewidth=MAIN_LINE_WIDTH,
+                )
             # Top arc
             line = Arc1(
                 begin=point_dict["Z1"],
@@ -242,7 +246,10 @@ def plot_schematics(
             )
 
         # Zooming and cleaning
-        W = point_dict["Z4"].imag * 1.2
+        if self.is_outwards():
+            W = point_dict["Z4"].imag * 1.4
+        else:
+            W = point_dict["Z4"].imag * 1.2
         Rint, Rext = self.comp_radius()
 
         ax.axis("equal")

@@ -29,7 +29,7 @@ def get_node2cell(self, node_indice):
             Ielem = np.where(connect[key] == node_indice)[0]
             node_to_cell = np.concatenate((node_to_cell, indice_elem[key][Ielem]))
         else:
-            if sum(connect[key] == node_indice) > 0:
+            if connect[key] is not None and sum(connect[key] == node_indice) > 0:
                 node_to_cell = np.concatenate((node_to_cell, indice_elem[key]))
 
     return node_to_cell

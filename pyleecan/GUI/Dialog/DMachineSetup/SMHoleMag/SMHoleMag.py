@@ -132,7 +132,7 @@ class SMHoleMag(Ui_SMHoleMag, QWidget):
             self, is_mag=is_mag, index=hole_index, material_dict=self.material_dict
         )
         tab.saveNeeded.connect(self.emit_save)
-        self.tab_hole.addTab(tab, "Hole " + str(hole_index + 1))
+        self.tab_hole.addTab(tab, "Hole Set " + str(hole_index + 1))
 
     def s_remove(self):
         """Signal to remove the last hole
