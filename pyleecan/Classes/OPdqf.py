@@ -10,9 +10,9 @@ from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
-from ..Functions.copy import copy
 from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
+from copy import deepcopy
 from .OPdq import OPdq
 
 from numpy import isnan
@@ -24,9 +24,8 @@ class OPdqf(OPdq):
 
     VERSION = 1
 
-    # save and copy methods are available in all object
+    # generic save method is available in all object
     save = save
-    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -193,6 +192,37 @@ class OPdqf(OPdq):
         # Overwrite the mother class name
         OPdqf_dict["__class__"] = "OPdqf"
         return OPdqf_dict
+
+    def copy(self):
+        """Creates a deepcopy of the object"""
+
+        # Handle deepcopy of all the properties
+        If_ref_val = self.If_ref
+        Id_ref_val = self.Id_ref
+        Iq_ref_val = self.Iq_ref
+        Ud_ref_val = self.Ud_ref
+        Uq_ref_val = self.Uq_ref
+        N0_val = self.N0
+        felec_val = self.felec
+        Tem_av_ref_val = self.Tem_av_ref
+        Pem_av_ref_val = self.Pem_av_ref
+        Pem_av_in_val = self.Pem_av_in
+        efficiency_val = self.efficiency
+        # Creates new object of the same type with the copied properties
+        obj_copy = type(self)(
+            If_ref=If_ref_val,
+            Id_ref=Id_ref_val,
+            Iq_ref=Iq_ref_val,
+            Ud_ref=Ud_ref_val,
+            Uq_ref=Uq_ref_val,
+            N0=N0_val,
+            felec=felec_val,
+            Tem_av_ref=Tem_av_ref_val,
+            Pem_av_ref=Pem_av_ref_val,
+            Pem_av_in=Pem_av_in_val,
+            efficiency=efficiency_val,
+        )
+        return obj_copy
 
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""

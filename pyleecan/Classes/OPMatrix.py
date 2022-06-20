@@ -10,9 +10,9 @@ from logging import getLogger
 from ._check import set_array, check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
-from ..Functions.copy import copy
 from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
+from copy import deepcopy
 from ._frozen import FrozenClass
 
 # Import all class method
@@ -147,9 +147,8 @@ class OPMatrix(FrozenClass):
         )
     else:
         has_slip = has_slip
-    # save and copy methods are available in all object
+    # generic save method is available in all object
     save = save
-    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -541,6 +540,67 @@ class OPMatrix(FrozenClass):
         # The class name is added to the dict for deserialisation purpose
         OPMatrix_dict["__class__"] = "OPMatrix"
         return OPMatrix_dict
+
+    def copy(self):
+        """Creates a deepcopy of the object"""
+
+        # Handle deepcopy of all the properties
+        if self.N0 is None:
+            N0_val = None
+        else:
+            N0_val = self.N0.copy()
+        if self.Id_ref is None:
+            Id_ref_val = None
+        else:
+            Id_ref_val = self.Id_ref.copy()
+        if self.Iq_ref is None:
+            Iq_ref_val = None
+        else:
+            Iq_ref_val = self.Iq_ref.copy()
+        if self.Ud_ref is None:
+            Ud_ref_val = None
+        else:
+            Ud_ref_val = self.Ud_ref.copy()
+        if self.Uq_ref is None:
+            Uq_ref_val = None
+        else:
+            Uq_ref_val = self.Uq_ref.copy()
+        if self.Tem_av_ref is None:
+            Tem_av_ref_val = None
+        else:
+            Tem_av_ref_val = self.Tem_av_ref.copy()
+        if self.Pem_av_ref is None:
+            Pem_av_ref_val = None
+        else:
+            Pem_av_ref_val = self.Pem_av_ref.copy()
+        if self.slip_ref is None:
+            slip_ref_val = None
+        else:
+            slip_ref_val = self.slip_ref.copy()
+        is_output_power_val = self.is_output_power
+        if self.If_ref is None:
+            If_ref_val = None
+        else:
+            If_ref_val = self.If_ref.copy()
+        if self.col_names is None:
+            col_names_val = None
+        else:
+            col_names_val = self.col_names.copy()
+        # Creates new object of the same type with the copied properties
+        obj_copy = type(self)(
+            N0=N0_val,
+            Id_ref=Id_ref_val,
+            Iq_ref=Iq_ref_val,
+            Ud_ref=Ud_ref_val,
+            Uq_ref=Uq_ref_val,
+            Tem_av_ref=Tem_av_ref_val,
+            Pem_av_ref=Pem_av_ref_val,
+            slip_ref=slip_ref_val,
+            is_output_power=is_output_power_val,
+            If_ref=If_ref_val,
+            col_names=col_names_val,
+        )
+        return obj_copy
 
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""
