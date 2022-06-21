@@ -109,7 +109,7 @@ class SSkew(Ui_SSkew, QWidget):
                 self.rate = 1
                 self.tab_angle.clear()
                 self.set_table()
-
+            self.lf_angle.setValue(self.rate * self.slot_pitch)
             self.activate_skew()
 
         else:
@@ -397,10 +397,15 @@ class SSkew(Ui_SSkew, QWidget):
                 # if wid.currentIndex() == 1:
                 #     angle_list = [a * pi / 180 for a in angle_list]
 
+        angle_overall = (
+            self.lf_angle.value() * pi / 180
+            if self.lf_angle.value() is not None
+            else None
+        )
         self.skew_object = Skew(
             type_skew=self.type_skew,
             is_step=is_step,
-            angle_overall=self.lf_angle.value() * pi / 180,
+            angle_overall=angle_overall,
             rate=rate,
             Nstep=Nslices,
             angle_list=angle_list,
@@ -443,6 +448,9 @@ class SSkew(Ui_SSkew, QWidget):
         # Update the Graph
         # self.w_viewer.fig.set_size_inches(8, 4)
         self.w_viewer.draw()
+
+    def emit_save(self):
+        self.saveNeeded.emit()
 
     @staticmethod
     def check(lamination):
