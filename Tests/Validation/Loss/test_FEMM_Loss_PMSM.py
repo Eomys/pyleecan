@@ -665,12 +665,154 @@ def test_LossFEMM_Prius():
     
     return out
 
+@pytest.mark.long_5s
+@pytest.mark.FEMM
+@pytest.mark.MagFEMM
+@pytest.mark.periodicity
+@pytest.mark.SPMSM
+@pytest.mark.SingleOP
+@pytest.mark.Loss
+@pytest.mark.skip(reason="Work in progress")
+def test_FEMM_Loss_Jaguar():
+    """Test to calculate losses in Toyota_Prius using LossFEMM model based on motoranalysis validation"""
+
+    machine = load(join(DATA_DIR, "Machine", "Jaguar_I_Pace_wo_skew.json"))
+
+    simu = Simu1(name="test_FEMM_Loss_Jaguar_I_Pace", machine=machine)
+
+    # Current for MTPA
+    Ic = 450 * np.exp(1j * 140 * np.pi / 180)
+    Uc = 350 * np.exp(1j * 140 * np.pi / 180)
+    SPEED = 4000
+
+    simu.input = InputCurrent(
+        Nt_tot=4 * 40 * 8,
+        Na_tot=200 * 8,
+        OP=OPdq(N0=SPEED, Id_ref=Ic.real, Iq_ref=Ic.imag,Ud_ref=Uc.real, Uq_ref=Uc.imag),
+        is_periodicity_t=True,
+        is_periodicity_a=True,
+    )
+
+    simu.mag = MagFEMM(
+        is_periodicity_a=True,
+        is_periodicity_t=True,
+        nb_worker=4,
+        is_get_meshsolution=True,
+        is_fast_draw=True,
+        is_calc_torque_energy=False,
+    )
+
+    simu.loss = Loss(
+        is_get_meshsolution=True,
+        Tsta=100,
+        model_dict={"stator core": LossModelSteinmetz(group = "stator core"),
+                    "rotor core": LossModelSteinmetz(group = "rotor core"),
+                    "joule": LossModelWinding(group = "stator winding"),
+                    "proximity": LossModelProximity(group = "stator winding"),
+                    "magnets": LossModelMagnet(group = "rotor magnets")}
+    )
+
+    out = simu.run()
+    
+    out.loss.loss_list.append(sum(out.loss.loss_list))
+    out.loss.loss_list[-1].name = "overall"
+
+    power_dict = {
+        "total_power": out.mag.Pem_av,
+        **dict([(o.name,o.get_loss_scalar(out.elec.OP.felec)) for o in out.loss.loss_list])
+    }
+    print(power_dict)
+
+    speed_array = np.linspace(10, 8000, 100)
+    p = machine.get_pole_pair_number()
+
+    array_list = [np.array([o.get_loss_scalar(speed / 60 *p) for speed in speed_array])
+                  for o in out.loss.loss_list]
+    
+    # def calc_loss(coeff, B):
+    #     f=80
+    #     if len(coeff)==4:
+    #         return coeff[0] * 80 ** coeff[2] *B**coeff[3]+coeff[1]*(f*B)**2
+    #     else:
+    #         return coeff[0]*80*B**coeff[1]+coeff[2]*(80*B)**coeff[3]+coeff[4]*(80*B)**coeff[5]
+    
+    # B_list=np.linspace(0,3.5,100)
+    # loss=simu.loss.model_dict["stator core Steinmetz"]
+    # coeffs = loss.k_hy, loss.k_ed, loss.alpha_f, loss.alpha_B
+    # plot_loss_S=np.array([calc_loss(coeffs, B) for B in B_list])
+    # loss=simu.loss.model_dict["stator core Bertotti"]
+    # coeffs = loss.k_hy, loss.alpha_hy, loss.k_ed, loss.alpha_ed, loss.k_ex, loss.alpha_ex
+    # plot_loss_B=np.array([calc_loss(coeffs, B) for B in B_list])
+    # import matplotlib.pyplot as plt 
+    
+    # plt.plot(B_list, plot_loss_S, color='red')
+    # plt.plot(B_list, plot_loss_B, color='blue')
+    # plt.show()
+
+    if is_show_fig:
+        # group_names = [
+        #     "stator core",
+        #     "rotor core",
+        #     "rotor magnets"
+        # ]
+        # for loss in out.loss.loss_list:
+        #     if "joule" in loss.name or "proximity" in loss.name :
+        #         group_names.append("stator winding")
+        #         loss.get_mesh_solution().plot_contour(
+        #             "freqs=sum",
+        #             label=f"{loss.name} Loss",
+        #             group_names = group_names
+        #         )
+        #         group_names.pop()
+        #     else:
+                
+        #         loss.get_mesh_solution().plot_contour(
+        #             "freqs=sum",
+        #             label=f"{loss.name} Loss",
+        #             group_names = group_names
+        #         )
+
+        plot_2D(
+            [speed_array],
+            array_list,
+            xlabel="Speed [rpm]",
+            ylabel="Losses [W]",
+            legend_list=[o.name for o in out.loss.loss_list],
+        )
+
+    # out.loss.meshsol_list[0].plot_contour(
+    #     "freqs=sum",
+    #     label="Loss",
+    #     group_names=["stator core", "stator winding"],
+    #     # clim=[2e4, 2e7],
+    # )
+
+    # out.loss.meshsol_list[0].plot_contour(
+    #     "freqs=sum",
+    #     label="Loss",
+    #     group_names=["rotor core", "rotor magnets"],
+    #     # clim=[2e4, 2e7],
+    # )
+    # txt = f"total_power: {out.mag.Pem_av}\n"
+    # txt += F"speed = {SPEED} rpm\n"
+    # txt += "\n".join([f"{o.name}: {o.get_loss_scalar(out.elec.OP.felec)}" for o in out.loss.loss_list])
+    # txt += F"speed = {SPEED/3} rpm\n"
+    # txt += "\n".join([f"{o.name}: {o.get_loss_scalar(SPEED /3/60 * p)}" for o in out.loss.loss_list])
+
+    # with open(F"{SPEED} rpm.txt", "w") as f:
+    #     f.write(txt)
+
+
+
+    return out
+
 
 # To run it without pytest
 if __name__ == "__main__":
 
     # test_FEMM_Loss_SPMSM()
-    test_LossFEMM_SPMSM()
+    # test_LossFEMM_SPMSM()
     # test_FEMM_Loss_Prius()
+    test_FEMM_Loss_Jaguar()
     # test_FEMM_Loss_diff()
     # test_LossFEMM_Prius()

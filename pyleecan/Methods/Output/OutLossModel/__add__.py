@@ -8,10 +8,12 @@ def __add__(self, other):
         other_loss_density = other.loss_density
         other_coeff_dict = other.coeff_dict
         other_group = other.group
+        other_name = other.name
     except AttributeError:
         other_loss_density = other["loss_density"]
         other_coeff_dict = other["coeff_dict"]
         other_group = other["group"]
+        other_name = other["name"]
 
     OutLossModel = import_class("pyleecan.Classes", "OutLossModel")
     new_loss_density = self.loss_density + other_loss_density
@@ -22,8 +24,9 @@ def __add__(self, other):
         else:
             new_coeff_dict[key] = value
     new_group = self.group + " + " + other_group
+    new_name = self.name + " + " + other_name
     return OutLossModel(
-        name="Addition",
+        name = new_name,
         loss_density=new_loss_density,
         coeff_dict=new_coeff_dict,
         group=new_group,
