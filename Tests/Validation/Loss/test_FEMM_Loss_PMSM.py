@@ -665,6 +665,66 @@ def test_LossFEMM_Prius():
     
     return out
 
+def find_best_phi0_jaguar():
+    from pyleecan.Classes.VarLoadCurrent import VarLoadCurrent
+    from numpy import zeros, ones, linspace, array, sqrt, arange
+    from numpy import linspace, array, pi
+
+    Tem_av_ref = array([79, 125, 160, 192, 237, 281, 319, 343, 353, 332, 266, 164, 22]) # Yang et al, 2013
+    Phi0_ref = linspace(60 * pi / 180, 180 * pi / 180, Tem_av_ref.size)
+    N_speed = Tem_av_ref.size
+    varload = VarLoadCurrent()
+    varload.type_OP_matrix = 0 # Matrix N0, I0, Phi0
+
+    # Creating the Operating point matrix
+    OP_matrix = zeros((N_speed,4))
+
+    # Set N0 = 2000 [rpm] for all simulation
+    OP_matrix[:,0] = 2000 * ones((N_speed))
+
+    # Set I0 = 250 / sqrt(2) [A] (RMS) for all simulation
+    OP_matrix[:,1] = 250/sqrt(2) * ones((N_speed)) 
+
+    # Set Phi0 from 60° to 180°
+    OP_matrix[:,2] = Phi0_ref
+
+    varload.OP_matrix = OP_matrix
+    print(OP_matrix)
+
+    # All the simulation use the same machine
+    # No need to draw the machine for all OP
+    varload.is_reuse_femm_file=True
+    
+    machine = load(join(DATA_DIR, "Machine", "Jaguar_I_Pace_wo_skew.json"))
+    
+    simu = Simu1(name="test_FEMM_Loss_Jaguar_I_Pace", machine=machine)
+    Ic = 450 * np.exp(1j * 150 * np.pi / 180)
+    simu.input = InputCurrent(
+        Nt_tot=4 * 40 * 8,
+        Na_tot=200 * 8,
+        OP=OPdq(N0=1200, Id_ref=Ic.real, Iq_ref=Ic.imag), #,Ud_ref=Uc.real, Uq_ref=Uc.imag),
+        is_periodicity_t=True,
+        is_periodicity_a=True,
+    )
+
+    simu.mag = MagFEMM(
+        is_periodicity_a=True,
+        is_periodicity_t=True,
+        nb_worker=4,
+        is_get_meshsolution=True,
+        is_fast_draw=True,
+        is_calc_torque_energy=False,
+    )
+    
+    simu_vop = simu.copy()
+    simu_vop.var_simu = varload
+    simu_vop.var_simu.is_keep_all_output = True
+    
+    Xout_vop = simu_vop.run()
+    
+    fig = Xout_vop.plot_multi("Phi0", "Tem_av")
+
+    return Xout_vop
 @pytest.mark.long_5s
 @pytest.mark.FEMM
 @pytest.mark.MagFEMM
@@ -681,14 +741,14 @@ def test_FEMM_Loss_Jaguar():
     simu = Simu1(name="test_FEMM_Loss_Jaguar_I_Pace", machine=machine)
 
     # Current for MTPA
-    Ic = 450 * np.exp(1j * 140 * np.pi / 180)
-    Uc = 350 * np.exp(1j * 140 * np.pi / 180)
-    SPEED = 4000
+    Ic = 450 * np.exp(1j * 120 * np.pi / 180)
+    # Uc = 350 * np.exp(1j * 140 * np.pi / 180)
+    SPEED = 2000
 
     simu.input = InputCurrent(
         Nt_tot=4 * 40 * 8,
         Na_tot=200 * 8,
-        OP=OPdq(N0=SPEED, Id_ref=Ic.real, Iq_ref=Ic.imag,Ud_ref=Uc.real, Uq_ref=Uc.imag),
+        OP=OPdq(N0=SPEED, Id_ref=Ic.real, Iq_ref=Ic.imag), #,Ud_ref=Uc.real, Uq_ref=Uc.imag),
         is_periodicity_t=True,
         is_periodicity_a=True,
     )
@@ -718,6 +778,7 @@ def test_FEMM_Loss_Jaguar():
     out.loss.loss_list[-1].name = "overall"
 
     power_dict = {
+        "Torque": out.mag.Tem_av,
         "total_power": out.mag.Pem_av,
         **dict([(o.name,o.get_loss_scalar(out.elec.OP.felec)) for o in out.loss.loss_list])
     }
@@ -814,5 +875,6 @@ if __name__ == "__main__":
     # test_LossFEMM_SPMSM()
     # test_FEMM_Loss_Prius()
     test_FEMM_Loss_Jaguar()
+    # find_best_phi0_jaguar()
     # test_FEMM_Loss_diff()
     # test_LossFEMM_Prius()
