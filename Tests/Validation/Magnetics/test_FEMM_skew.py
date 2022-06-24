@@ -54,10 +54,7 @@ def test_FEMM_skew():
 
     # Definition of the magnetic simulation (direct calculation with permeance mmf)
     simu_no_skew.mag = MagFEMM(
-        is_periodicity_a=True,
-        is_periodicity_t=True,
-        nb_worker=4,
-        Kmesh_fineness=0.5,
+        is_periodicity_a=True, is_periodicity_t=True, nb_worker=4, Kmesh_fineness=0.5,
     )
 
     # Run reference simulation
@@ -70,16 +67,12 @@ def test_FEMM_skew():
         rate_kseg = comp_skew_angle(Zs, p, Nstep=k) / ssp
         SPMSM_skew_kseg = SPMSM_skew.copy()
         SPMSM_skew_kseg.rotor.skew = Skew(
-            type_skew="linear",
-            is_step=True,
-            rate=rate_kseg,
-            Nstep=k,
+            type_skew="linear", is_step=True, rate=rate_kseg, Nstep=k,
         )
         simu_skew_kseg = simu_no_skew.copy()
         simu_skew_kseg.machine = SPMSM_skew_kseg
         simu_skew_kseg.name = name + "_" + str(k) + "seg"
         simu_skew_kseg.mag.Slice_enforced = None
-        simu_skew_kseg.mag.import_file = None  # Draw machine in FEMM again
 
         out_skew_kseg = simu_skew_kseg.run()
 
@@ -105,8 +98,7 @@ def test_FEMM_skew():
             x_max=30,
             **dict_2D,
             save_path=join(
-                save_path,
-                "test_FEMM_skew_Tem_slice_Nstep" + str(Nstep) + ".png",
+                save_path, "test_FEMM_skew_Tem_slice_Nstep" + str(Nstep) + ".png",
             ),
             is_show_fig=is_show_fig,
         )
