@@ -10,9 +10,9 @@ from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
-from ..Functions.copy import copy
 from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
+from copy import deepcopy
 from .Arc import Arc
 
 # Import all class method
@@ -86,6 +86,11 @@ try:
     from ..Methods.Geometry.Arc2.translate import translate
 except ImportError as error:
     translate = error
+
+try:
+    from ..Methods.Geometry.Arc2.split_point import split_point
+except ImportError as error:
+    split_point = error
 
 
 from numpy import isnan
@@ -224,9 +229,17 @@ class Arc2(Arc):
         )
     else:
         translate = translate
-    # save and copy methods are available in all object
+    # cf Methods.Geometry.Arc2.split_point
+    if isinstance(split_point, ImportError):
+        split_point = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use Arc2 method split_point: " + str(split_point))
+            )
+        )
+    else:
+        split_point = split_point
+    # generic save method is available in all object
     save = save
-    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -399,6 +412,23 @@ class Arc2(Arc):
         # Overwrite the mother class name
         Arc2_dict["__class__"] = "Arc2"
         return Arc2_dict
+
+    def copy(self):
+        """Creates a deepcopy of the object"""
+
+        # Handle deepcopy of all the properties
+        begin_val = self.begin
+        center_val = self.center
+        angle_val = self.angle
+        if self.prop_dict is None:
+            prop_dict_val = None
+        else:
+            prop_dict_val = self.prop_dict.copy()
+        # Creates new object of the same type with the copied properties
+        obj_copy = type(self)(
+            begin=begin_val, center=center_val, angle=angle_val, prop_dict=prop_dict_val
+        )
+        return obj_copy
 
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""

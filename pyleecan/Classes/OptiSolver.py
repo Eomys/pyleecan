@@ -10,9 +10,9 @@ from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
-from ..Functions.copy import copy
 from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
+from copy import deepcopy
 from ._frozen import FrozenClass
 
 from numpy import isnan
@@ -24,9 +24,8 @@ class OptiSolver(FrozenClass):
 
     VERSION = 1
 
-    # save and copy methods are available in all object
+    # generic save method is available in all object
     save = save
-    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -216,6 +215,29 @@ class OptiSolver(FrozenClass):
         # The class name is added to the dict for deserialisation purpose
         OptiSolver_dict["__class__"] = "OptiSolver"
         return OptiSolver_dict
+
+    def copy(self):
+        """Creates a deepcopy of the object"""
+
+        # Handle deepcopy of all the properties
+        if self.problem is None:
+            problem_val = None
+        else:
+            problem_val = self.problem.copy()
+        if self.xoutput is None:
+            xoutput_val = None
+        else:
+            xoutput_val = self.xoutput.copy()
+        logger_name_val = self.logger_name
+        is_keep_all_output_val = self.is_keep_all_output
+        # Creates new object of the same type with the copied properties
+        obj_copy = type(self)(
+            problem=problem_val,
+            xoutput=xoutput_val,
+            logger_name=logger_name_val,
+            is_keep_all_output=is_keep_all_output_val,
+        )
+        return obj_copy
 
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""

@@ -3,6 +3,7 @@ from ...Generator.read_fct import (
     is_list_pyleecan_type,
     is_dict_pyleecan_type,
     is_dict_list_pyleecan_type,
+    is_list_unknow_type,
 )
 
 
@@ -346,6 +347,61 @@ def generate_compare(gen_dict, class_dict):
                 + "[ii],name=name+'."
                 + prop["name"]
                 + "['+str(ii)+']',ignore_list=ignore_list,is_add_value=is_add_value))\n"
+            )
+        elif is_list_unknow_type(prop["type"]):
+            compare_str += (
+                TAB2
+                + "if (other."
+                + prop["name"]
+                + " is None and self."
+                + prop["name"]
+                + " is not None) or (other."
+                + prop["name"]
+                + " is not None and self."
+                + prop["name"]
+                + " is None):\n"
+            )
+            compare_str += (
+                TAB3 + "diff_list.append(name+'." + prop["name"] + " None mismatch')\n"
+            )
+            compare_str += TAB2 + "elif self." + prop["name"] + " is None:\n"
+            compare_str += TAB3 + "pass\n"
+            compare_str += (
+                TAB2
+                + "elif len(other."
+                + prop["name"]
+                + ") != len(self."
+                + prop["name"]
+                + "):\n"
+            )
+            compare_str += (
+                TAB3 + "diff_list.append('len('+name+'." + prop["name"] + ")')\n"
+            )
+            compare_str += TAB2 + "else:\n"
+            compare_str += TAB3 + "for ii in range(len(other." + prop["name"] + ")):\n"
+            compare_str += (
+                TAB4 + "if hasattr(self." + prop["name"] + "[ii], 'compare'):\n"
+            )
+            compare_str += (
+                TAB5
+                + "diff_list.extend(self."
+                + prop["name"]
+                + "[ii].compare(other."
+                + prop["name"]
+                + "[ii],name=name+'."
+                + prop["name"]
+                + "['+str(ii)+']',ignore_list=ignore_list,is_add_value=is_add_value))\n"
+            )
+            compare_str += (
+                TAB4
+                + "elif other._"
+                + prop["name"]
+                + "[ii] != self._"
+                + prop["name"]
+                + "[ii]:\n"
+            )
+            compare_str += (
+                TAB5 + "diff_list.append(name+'." + prop["name"] + "['+str(ii)+'])')\n"
             )
         elif is_dict_pyleecan_type(prop["type"]):
             compare_str += (

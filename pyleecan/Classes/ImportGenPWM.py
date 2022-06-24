@@ -10,9 +10,9 @@ from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
-from ..Functions.copy import copy
 from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
+from copy import deepcopy
 from .ImportMatrix import ImportMatrix
 
 # Import all class method
@@ -91,9 +91,8 @@ class ImportGenPWM(ImportMatrix):
         )
     else:
         comp_carrier = comp_carrier
-    # save and copy methods are available in all object
+    # generic save method is available in all object
     save = save
-    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -591,6 +590,53 @@ class ImportGenPWM(ImportMatrix):
         # Overwrite the mother class name
         ImportGenPWM_dict["__class__"] = "ImportGenPWM"
         return ImportGenPWM_dict
+
+    def copy(self):
+        """Creates a deepcopy of the object"""
+
+        # Handle deepcopy of all the properties
+        fs_val = self.fs
+        duration_val = self.duration
+        f_val = self.f
+        fmax_val = self.fmax
+        fmode_val = self.fmode
+        fswimode_val = self.fswimode
+        fswi_val = self.fswi
+        fswi_max_val = self.fswi_max
+        typePWM_val = self.typePWM
+        Vdc1_val = self.Vdc1
+        U0_val = self.U0
+        type_carrier_val = self.type_carrier
+        var_amp_val = self.var_amp
+        qs_val = self.qs
+        is_star_val = self.is_star
+        phase_dir_val = self.phase_dir
+        current_dir_val = self.current_dir
+        Phi0_val = self.Phi0
+        is_transpose_val = self.is_transpose
+        # Creates new object of the same type with the copied properties
+        obj_copy = type(self)(
+            fs=fs_val,
+            duration=duration_val,
+            f=f_val,
+            fmax=fmax_val,
+            fmode=fmode_val,
+            fswimode=fswimode_val,
+            fswi=fswi_val,
+            fswi_max=fswi_max_val,
+            typePWM=typePWM_val,
+            Vdc1=Vdc1_val,
+            U0=U0_val,
+            type_carrier=type_carrier_val,
+            var_amp=var_amp_val,
+            qs=qs_val,
+            is_star=is_star_val,
+            phase_dir=phase_dir_val,
+            current_dir=current_dir_val,
+            Phi0=Phi0_val,
+            is_transpose=is_transpose_val,
+        )
+        return obj_copy
 
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""

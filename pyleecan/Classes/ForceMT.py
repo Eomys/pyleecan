@@ -10,9 +10,9 @@ from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
-from ..Functions.copy import copy
 from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
+from copy import deepcopy
 from .Force import Force
 
 # Import all class method
@@ -59,9 +59,8 @@ class ForceMT(Force):
         )
     else:
         comp_force_nodal = comp_force_nodal
-    # save and copy methods are available in all object
+    # generic save method is available in all object
     save = save
-    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -184,6 +183,27 @@ class ForceMT(Force):
         # Overwrite the mother class name
         ForceMT_dict["__class__"] = "ForceMT"
         return ForceMT_dict
+
+    def copy(self):
+        """Creates a deepcopy of the object"""
+
+        # Handle deepcopy of all the properties
+        is_periodicity_t_val = self.is_periodicity_t
+        is_periodicity_a_val = self.is_periodicity_a
+        is_agsf_transfer_val = self.is_agsf_transfer
+        max_wavenumber_transfer_val = self.max_wavenumber_transfer
+        Rsbo_enforced_transfer_val = self.Rsbo_enforced_transfer
+        logger_name_val = self.logger_name
+        # Creates new object of the same type with the copied properties
+        obj_copy = type(self)(
+            is_periodicity_t=is_periodicity_t_val,
+            is_periodicity_a=is_periodicity_a_val,
+            is_agsf_transfer=is_agsf_transfer_val,
+            max_wavenumber_transfer=max_wavenumber_transfer_val,
+            Rsbo_enforced_transfer=Rsbo_enforced_transfer_val,
+            logger_name=logger_name_val,
+        )
+        return obj_copy
 
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""

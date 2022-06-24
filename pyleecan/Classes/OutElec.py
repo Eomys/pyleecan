@@ -10,9 +10,9 @@ from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
-from ..Functions.copy import copy
 from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
+from copy import deepcopy
 from ._frozen import FrozenClass
 
 # Import all class method
@@ -114,9 +114,8 @@ class OutElec(FrozenClass):
         )
     else:
         get_Jrms = get_Jrms
-    # save and copy methods are available in all object
+    # generic save method is available in all object
     save = save
-    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -723,6 +722,79 @@ class OutElec(FrozenClass):
         # The class name is added to the dict for deserialisation purpose
         OutElec_dict["__class__"] = "OutElec"
         return OutElec_dict
+
+    def copy(self):
+        """Creates a deepcopy of the object"""
+
+        # Handle deepcopy of all the properties
+        if self.axes_dict is None:
+            axes_dict_val = None
+        else:
+            axes_dict_val = dict()
+            for key, obj in self.axes_dict.items():
+                axes_dict_val[key] = obj.copy()
+        if self.Is is None:
+            Is_val = None
+        else:
+            Is_val = self.Is.copy()
+        if self.Ir is None:
+            Ir_val = None
+        else:
+            Ir_val = self.Ir.copy()
+        logger_name_val = self.logger_name
+        Pj_losses_val = self.Pj_losses
+        if self.Us is None:
+            Us_val = None
+        else:
+            Us_val = self.Us.copy()
+        if self.internal is None:
+            internal_val = None
+        else:
+            internal_val = self.internal.copy()
+        if self.OP is None:
+            OP_val = None
+        else:
+            OP_val = self.OP.copy()
+        Pem_av_val = self.Pem_av
+        Tem_av_val = self.Tem_av
+        phase_dir_val = self.phase_dir
+        current_dir_val = self.current_dir
+        if self.PWM is None:
+            PWM_val = None
+        else:
+            PWM_val = self.PWM.copy()
+        if self.eec is None:
+            eec_val = None
+        else:
+            eec_val = self.eec.copy()
+        P_out_val = self.P_out
+        Jrms_val = self.Jrms
+        P_in_val = self.P_in
+        Arms_val = self.Arms
+        Erms_val = self.Erms
+        # Creates new object of the same type with the copied properties
+        obj_copy = type(self)(
+            axes_dict=axes_dict_val,
+            Is=Is_val,
+            Ir=Ir_val,
+            logger_name=logger_name_val,
+            Pj_losses=Pj_losses_val,
+            Us=Us_val,
+            internal=internal_val,
+            OP=OP_val,
+            Pem_av=Pem_av_val,
+            Tem_av=Tem_av_val,
+            phase_dir=phase_dir_val,
+            current_dir=current_dir_val,
+            PWM=PWM_val,
+            eec=eec_val,
+            P_out=P_out_val,
+            Jrms=Jrms_val,
+            P_in=P_in_val,
+            Arms=Arms_val,
+            Erms=Erms_val,
+        )
+        return obj_copy
 
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""

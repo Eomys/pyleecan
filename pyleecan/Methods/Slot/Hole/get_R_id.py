@@ -19,12 +19,8 @@ def get_R_id(self):
 
     if self.parent is None:  # Compatibility For plotting
         return (0, HOLEV_LAB)
-    elif (
-        hasattr(self.parent, "hole")
-        and self.parent.hole is not None
-        and self in self.parent.hole
-    ):
-        return (self.parent.hole.index(self), HOLEV_LAB)
+    elif hasattr(self.parent, "get_hole_list") and self in self.parent.get_hole_list():
+        return (self.parent.get_hole_list().index(self), HOLEV_LAB)
     elif self.parent.axial_vent is not None and self in self.parent.axial_vent:
         return (self.parent.axial_vent.index(self), VENT_LAB)
     else:

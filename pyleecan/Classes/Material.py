@@ -10,9 +10,9 @@ from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
-from ..Functions.copy import copy
 from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
+from copy import deepcopy
 from ._frozen import FrozenClass
 
 from numpy import isnan
@@ -23,9 +23,8 @@ class Material(FrozenClass):
 
     VERSION = 1
 
-    # save and copy methods are available in all object
+    # generic save method is available in all object
     save = save
-    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -342,6 +341,48 @@ class Material(FrozenClass):
         # The class name is added to the dict for deserialisation purpose
         Material_dict["__class__"] = "Material"
         return Material_dict
+
+    def copy(self):
+        """Creates a deepcopy of the object"""
+
+        # Handle deepcopy of all the properties
+        name_val = self.name
+        is_isotropic_val = self.is_isotropic
+        if self.elec is None:
+            elec_val = None
+        else:
+            elec_val = self.elec.copy()
+        if self.mag is None:
+            mag_val = None
+        else:
+            mag_val = self.mag.copy()
+        if self.struct is None:
+            struct_val = None
+        else:
+            struct_val = self.struct.copy()
+        if self.HT is None:
+            HT_val = None
+        else:
+            HT_val = self.HT.copy()
+        if self.eco is None:
+            eco_val = None
+        else:
+            eco_val = self.eco.copy()
+        desc_val = self.desc
+        path_val = self.path
+        # Creates new object of the same type with the copied properties
+        obj_copy = type(self)(
+            name=name_val,
+            is_isotropic=is_isotropic_val,
+            elec=elec_val,
+            mag=mag_val,
+            struct=struct_val,
+            HT=HT_val,
+            eco=eco_val,
+            desc=desc_val,
+            path=path_val,
+        )
+        return obj_copy
 
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""

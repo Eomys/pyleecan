@@ -10,9 +10,9 @@ from logging import getLogger
 from ._check import set_array, check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
-from ..Functions.copy import copy
 from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
+from copy import deepcopy
 from ._frozen import FrozenClass
 
 # Import all class method
@@ -74,9 +74,8 @@ class SliceModel(FrozenClass):
         )
     else:
         plot = plot
-    # save and copy methods are available in all object
+    # generic save method is available in all object
     save = save
-    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -352,6 +351,40 @@ class SliceModel(FrozenClass):
         # The class name is added to the dict for deserialisation purpose
         SliceModel_dict["__class__"] = "SliceModel"
         return SliceModel_dict
+
+    def copy(self):
+        """Creates a deepcopy of the object"""
+
+        # Handle deepcopy of all the properties
+        type_distribution_val = self.type_distribution
+        Nslices_val = self.Nslices
+        if self.z_list is None:
+            z_list_val = None
+        else:
+            z_list_val = self.z_list.copy()
+        if self.angle_rotor is None:
+            angle_rotor_val = None
+        else:
+            angle_rotor_val = self.angle_rotor.copy()
+        if self.angle_stator is None:
+            angle_stator_val = None
+        else:
+            angle_stator_val = self.angle_stator.copy()
+        L_val = self.L
+        is_step_val = self.is_step
+        is_skew_val = self.is_skew
+        # Creates new object of the same type with the copied properties
+        obj_copy = type(self)(
+            type_distribution=type_distribution_val,
+            Nslices=Nslices_val,
+            z_list=z_list_val,
+            angle_rotor=angle_rotor_val,
+            angle_stator=angle_stator_val,
+            L=L_val,
+            is_step=is_step_val,
+            is_skew=is_skew_val,
+        )
+        return obj_copy
 
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""

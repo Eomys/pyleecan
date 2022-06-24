@@ -10,9 +10,9 @@ from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
-from ..Functions.copy import copy
 from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
+from copy import deepcopy
 from ._frozen import FrozenClass
 
 # Import all class method
@@ -449,13 +449,14 @@ class Slot(FrozenClass):
         )
     else:
         set_label = set_label
-    # save and copy methods are available in all object
+    # generic save method is available in all object
     save = save
-    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, Zs=36, wedge_mat=None, init_dict=None, init_str=None):
+    def __init__(
+        self, Zs=36, wedge_mat=None, is_bore=True, init_dict=None, init_str=None
+    ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -475,10 +476,13 @@ class Slot(FrozenClass):
                 Zs = init_dict["Zs"]
             if "wedge_mat" in list(init_dict.keys()):
                 wedge_mat = init_dict["wedge_mat"]
+            if "is_bore" in list(init_dict.keys()):
+                is_bore = init_dict["is_bore"]
         # Set the properties (value check and convertion are done in setter)
         self.parent = None
         self.Zs = Zs
         self.wedge_mat = wedge_mat
+        self.is_bore = is_bore
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -497,6 +501,7 @@ class Slot(FrozenClass):
             Slot_str += "wedge_mat = " + tmp
         else:
             Slot_str += "wedge_mat = None" + linesep + linesep
+        Slot_str += "is_bore = " + str(self.is_bore) + linesep
         return Slot_str
 
     def __eq__(self, other):
@@ -507,6 +512,8 @@ class Slot(FrozenClass):
         if other.Zs != self.Zs:
             return False
         if other.wedge_mat != self.wedge_mat:
+            return False
+        if other.is_bore != self.is_bore:
             return False
         return True
 
@@ -537,6 +544,18 @@ class Slot(FrozenClass):
                     is_add_value=is_add_value,
                 )
             )
+        if other._is_bore != self._is_bore:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._is_bore)
+                    + ", other="
+                    + str(other._is_bore)
+                    + ")"
+                )
+                diff_list.append(name + ".is_bore" + val_str)
+            else:
+                diff_list.append(name + ".is_bore")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -547,6 +566,7 @@ class Slot(FrozenClass):
         S = 0  # Full size of the object
         S += getsizeof(self.Zs)
         S += getsizeof(self.wedge_mat)
+        S += getsizeof(self.is_bore)
         return S
 
     def as_dict(self, type_handle_ndarray=0, keep_function=False, **kwargs):
@@ -570,9 +590,24 @@ class Slot(FrozenClass):
                 keep_function=keep_function,
                 **kwargs
             )
+        Slot_dict["is_bore"] = self.is_bore
         # The class name is added to the dict for deserialisation purpose
         Slot_dict["__class__"] = "Slot"
         return Slot_dict
+
+    def copy(self):
+        """Creates a deepcopy of the object"""
+
+        # Handle deepcopy of all the properties
+        Zs_val = self.Zs
+        if self.wedge_mat is None:
+            wedge_mat_val = None
+        else:
+            wedge_mat_val = self.wedge_mat.copy()
+        is_bore_val = self.is_bore
+        # Creates new object of the same type with the copied properties
+        obj_copy = type(self)(Zs=Zs_val, wedge_mat=wedge_mat_val, is_bore=is_bore_val)
+        return obj_copy
 
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""
@@ -580,6 +615,7 @@ class Slot(FrozenClass):
         self.Zs = None
         if self.wedge_mat is not None:
             self.wedge_mat._set_None()
+        self.is_bore = None
 
     def _get_Zs(self):
         """getter of Zs"""
@@ -634,5 +670,23 @@ class Slot(FrozenClass):
         doc=u"""Material for the wedge, if None no wedge [-]
 
         :Type: Material
+        """,
+    )
+
+    def _get_is_bore(self):
+        """getter of is_bore"""
+        return self._is_bore
+
+    def _set_is_bore(self, value):
+        """setter of is_bore"""
+        check_var("is_bore", value, "bool")
+        self._is_bore = value
+
+    is_bore = property(
+        fget=_get_is_bore,
+        fset=_set_is_bore,
+        doc=u"""True if the Slot is on the bore radius, False for yoke
+
+        :Type: bool
         """,
     )

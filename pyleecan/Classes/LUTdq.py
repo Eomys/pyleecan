@@ -10,9 +10,9 @@ from logging import getLogger
 from ._check import set_array, check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
-from ..Functions.copy import copy
 from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
+from copy import deepcopy
 from .LUT import LUT
 
 # Import all class method
@@ -172,9 +172,8 @@ class LUTdq(LUT):
         )
     else:
         interp_Tem_rip_dqh = interp_Tem_rip_dqh
-    # save and copy methods are available in all object
+    # generic save method is available in all object
     save = save
-    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -395,6 +394,99 @@ class LUTdq(LUT):
         # Overwrite the mother class name
         LUTdq_dict["__class__"] = "LUTdq"
         return LUTdq_dict
+
+    def copy(self):
+        """Creates a deepcopy of the object"""
+
+        # Handle deepcopy of all the properties
+        if self.Phi_dqh_mean is None:
+            Phi_dqh_mean_val = None
+        else:
+            Phi_dqh_mean_val = self.Phi_dqh_mean.copy()
+        if self.Phi_dqh_mag is None:
+            Phi_dqh_mag_val = None
+        else:
+            Phi_dqh_mag_val = self.Phi_dqh_mag.copy()
+        if self.paramexplorer_list is None:
+            paramexplorer_list_val = None
+        else:
+            paramexplorer_list_val = list()
+            for obj in self.paramexplorer_list:
+                paramexplorer_list_val.append(obj.copy())
+        if self.output_list is None:
+            output_list_val = None
+        else:
+            output_list_val = list()
+            for obj in self.output_list:
+                output_list_val.append(obj.copy())
+        if self.xoutput_dict is None:
+            xoutput_dict_val = None
+        else:
+            xoutput_dict_val = dict()
+            for key, obj in self.xoutput_dict.items():
+                xoutput_dict_val[key] = obj.copy()
+        nb_simu_val = self.nb_simu
+        if self.xoutput_ref is None:
+            xoutput_ref_val = None
+        else:
+            xoutput_ref_val = self.xoutput_ref.copy()
+        xoutput_ref_index_val = self.xoutput_ref_index
+        if self.simu is None:
+            simu_val = None
+        else:
+            simu_val = self.simu.copy()
+        path_result_val = self.path_result
+        if self.geo is None:
+            geo_val = None
+        else:
+            geo_val = self.geo.copy()
+        if self.elec is None:
+            elec_val = None
+        else:
+            elec_val = self.elec.copy()
+        if self.mag is None:
+            mag_val = None
+        else:
+            mag_val = self.mag.copy()
+        if self.struct is None:
+            struct_val = None
+        else:
+            struct_val = self.struct.copy()
+        if self.post is None:
+            post_val = None
+        else:
+            post_val = self.post.copy()
+        logger_name_val = self.logger_name
+        if self.force is None:
+            force_val = None
+        else:
+            force_val = self.force.copy()
+        if self.loss is None:
+            loss_val = None
+        else:
+            loss_val = self.loss.copy()
+        # Creates new object of the same type with the copied properties
+        obj_copy = type(self)(
+            Phi_dqh_mean=Phi_dqh_mean_val,
+            Phi_dqh_mag=Phi_dqh_mag_val,
+            paramexplorer_list=paramexplorer_list_val,
+            output_list=output_list_val,
+            xoutput_dict=xoutput_dict_val,
+            nb_simu=nb_simu_val,
+            xoutput_ref=xoutput_ref_val,
+            xoutput_ref_index=xoutput_ref_index_val,
+            simu=simu_val,
+            path_result=path_result_val,
+            geo=geo_val,
+            elec=elec_val,
+            mag=mag_val,
+            struct=struct_val,
+            post=post_val,
+            logger_name=logger_name_val,
+            force=force_val,
+            loss=loss_val,
+        )
+        return obj_copy
 
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""

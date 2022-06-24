@@ -10,9 +10,9 @@ from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
-from ..Functions.copy import copy
 from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
+from copy import deepcopy
 from ._frozen import FrozenClass
 
 from numpy import isnan
@@ -24,9 +24,8 @@ class Magnet(FrozenClass):
 
     VERSION = 1
 
-    # save and copy methods are available in all object
+    # generic save method is available in all object
     save = save
-    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -201,6 +200,26 @@ class Magnet(FrozenClass):
         # The class name is added to the dict for deserialisation purpose
         Magnet_dict["__class__"] = "Magnet"
         return Magnet_dict
+
+    def copy(self):
+        """Creates a deepcopy of the object"""
+
+        # Handle deepcopy of all the properties
+        if self.mat_type is None:
+            mat_type_val = None
+        else:
+            mat_type_val = self.mat_type.copy()
+        type_magnetization_val = self.type_magnetization
+        Lmag_val = self.Lmag
+        Nseg_val = self.Nseg
+        # Creates new object of the same type with the copied properties
+        obj_copy = type(self)(
+            mat_type=mat_type_val,
+            type_magnetization=type_magnetization_val,
+            Lmag=Lmag_val,
+            Nseg=Nseg_val,
+        )
+        return obj_copy
 
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""

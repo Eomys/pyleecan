@@ -10,9 +10,9 @@ from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
-from ..Functions.copy import copy
 from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
+from copy import deepcopy
 from .ModelBH import ModelBH
 
 from numpy import isnan
@@ -24,9 +24,8 @@ class ModelBH_arctangent(ModelBH):
 
     VERSION = 1
 
-    # save and copy methods are available in all object
+    # generic save method is available in all object
     save = save
-    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -179,6 +178,21 @@ class ModelBH_arctangent(ModelBH):
         # Overwrite the mother class name
         ModelBH_arctangent_dict["__class__"] = "ModelBH_arctangent"
         return ModelBH_arctangent_dict
+
+    def copy(self):
+        """Creates a deepcopy of the object"""
+
+        # Handle deepcopy of all the properties
+        k_val = self.k
+        mu_a_val = self.mu_a
+        Bmax_val = self.Bmax
+        Hmax_val = self.Hmax
+        delta_val = self.delta
+        # Creates new object of the same type with the copied properties
+        obj_copy = type(self)(
+            k=k_val, mu_a=mu_a_val, Bmax=Bmax_val, Hmax=Hmax_val, delta=delta_val
+        )
+        return obj_copy
 
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""

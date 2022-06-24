@@ -10,9 +10,9 @@ from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
-from ..Functions.copy import copy
 from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
+from copy import deepcopy
 from .ModelBH import ModelBH
 
 # Import all class method
@@ -58,9 +58,8 @@ class ModelBH_Langevin(ModelBH):
         )
     else:
         BH_func = BH_func
-    # save and copy methods are available in all object
+    # generic save method is available in all object
     save = save
-    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -267,6 +266,29 @@ class ModelBH_Langevin(ModelBH):
         # Overwrite the mother class name
         ModelBH_Langevin_dict["__class__"] = "ModelBH_Langevin"
         return ModelBH_Langevin_dict
+
+    def copy(self):
+        """Creates a deepcopy of the object"""
+
+        # Handle deepcopy of all the properties
+        Bs_val = self.Bs
+        a_val = self.a
+        param1_val = self.param1
+        param2_val = self.param2
+        Bmax_val = self.Bmax
+        Hmax_val = self.Hmax
+        delta_val = self.delta
+        # Creates new object of the same type with the copied properties
+        obj_copy = type(self)(
+            Bs=Bs_val,
+            a=a_val,
+            param1=param1_val,
+            param2=param2_val,
+            Bmax=Bmax_val,
+            Hmax=Hmax_val,
+            delta=delta_val,
+        )
+        return obj_copy
 
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""

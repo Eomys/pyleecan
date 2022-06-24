@@ -10,9 +10,9 @@ from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
-from ..Functions.copy import copy
 from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
+from copy import deepcopy
 from .OptiBayesAlg import OptiBayesAlg
 
 # Import all class method
@@ -110,9 +110,8 @@ class OptiBayesAlgSmoot(OptiBayesAlg):
         )
     else:
         eval_const = eval_const
-    # save and copy methods are available in all object
+    # generic save method is available in all object
     save = save
-    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -285,6 +284,41 @@ class OptiBayesAlgSmoot(OptiBayesAlg):
         # Overwrite the mother class name
         OptiBayesAlgSmoot_dict["__class__"] = "OptiBayesAlgSmoot"
         return OptiBayesAlgSmoot_dict
+
+    def copy(self):
+        """Creates a deepcopy of the object"""
+
+        # Handle deepcopy of all the properties
+        size_pop_val = self.size_pop
+        nb_gen_val = self.nb_gen
+        nb_iter_val = self.nb_iter
+        nb_start_val = self.nb_start
+        criterion_val = self.criterion
+        kernel_val = self.kernel
+        if self.problem is None:
+            problem_val = None
+        else:
+            problem_val = self.problem.copy()
+        if self.xoutput is None:
+            xoutput_val = None
+        else:
+            xoutput_val = self.xoutput.copy()
+        logger_name_val = self.logger_name
+        is_keep_all_output_val = self.is_keep_all_output
+        # Creates new object of the same type with the copied properties
+        obj_copy = type(self)(
+            size_pop=size_pop_val,
+            nb_gen=nb_gen_val,
+            nb_iter=nb_iter_val,
+            nb_start=nb_start_val,
+            criterion=criterion_val,
+            kernel=kernel_val,
+            problem=problem_val,
+            xoutput=xoutput_val,
+            logger_name=logger_name_val,
+            is_keep_all_output=is_keep_all_output_val,
+        )
+        return obj_copy
 
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""

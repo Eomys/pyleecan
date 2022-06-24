@@ -10,9 +10,9 @@ from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
-from ..Functions.copy import copy
 from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
+from copy import deepcopy
 from ._frozen import FrozenClass
 
 # Import all class method
@@ -114,9 +114,8 @@ class OutMag(FrozenClass):
         )
     else:
         comp_torque_MT = comp_torque_MT
-    # save and copy methods are available in all object
+    # generic save method is available in all object
     save = save
-    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -754,6 +753,90 @@ class OutMag(FrozenClass):
         # The class name is added to the dict for deserialisation purpose
         OutMag_dict["__class__"] = "OutMag"
         return OutMag_dict
+
+    def copy(self):
+        """Creates a deepcopy of the object"""
+
+        # Handle deepcopy of all the properties
+        if self.axes_dict is None:
+            axes_dict_val = None
+        else:
+            axes_dict_val = dict()
+            for key, obj in self.axes_dict.items():
+                axes_dict_val[key] = obj.copy()
+        if self.B is None:
+            B_val = None
+        else:
+            B_val = self.B.copy()
+        if self.Tem is None:
+            Tem_val = None
+        else:
+            Tem_val = self.Tem.copy()
+        Tem_av_val = self.Tem_av
+        Tem_rip_norm_val = self.Tem_rip_norm
+        Tem_rip_pp_val = self.Tem_rip_pp
+        if self.Phi_wind_stator is None:
+            Phi_wind_stator_val = None
+        else:
+            Phi_wind_stator_val = self.Phi_wind_stator.copy()
+        if self.Phi_wind is None:
+            Phi_wind_val = None
+        else:
+            Phi_wind_val = dict()
+            for key, obj in self.Phi_wind.items():
+                Phi_wind_val[key] = obj.copy()
+        if self.emf is None:
+            emf_val = None
+        else:
+            emf_val = self.emf.copy()
+        if self.meshsolution is None:
+            meshsolution_val = None
+        else:
+            meshsolution_val = self.meshsolution.copy()
+        logger_name_val = self.logger_name
+        if self.internal is None:
+            internal_val = None
+        else:
+            internal_val = self.internal.copy()
+        Rag_val = self.Rag
+        Pem_av_val = self.Pem_av
+        if self.Slice is None:
+            Slice_val = None
+        else:
+            Slice_val = self.Slice.copy()
+        if self.Tem_slice is None:
+            Tem_slice_val = None
+        else:
+            Tem_slice_val = self.Tem_slice.copy()
+        if self.Phi_wind_slice is None:
+            Phi_wind_slice_val = None
+        else:
+            Phi_wind_slice_val = dict()
+            for key, obj in self.Phi_wind_slice.items():
+                Phi_wind_slice_val[key] = obj.copy()
+        Tem_norm_val = self.Tem_norm
+        # Creates new object of the same type with the copied properties
+        obj_copy = type(self)(
+            axes_dict=axes_dict_val,
+            B=B_val,
+            Tem=Tem_val,
+            Tem_av=Tem_av_val,
+            Tem_rip_norm=Tem_rip_norm_val,
+            Tem_rip_pp=Tem_rip_pp_val,
+            Phi_wind_stator=Phi_wind_stator_val,
+            Phi_wind=Phi_wind_val,
+            emf=emf_val,
+            meshsolution=meshsolution_val,
+            logger_name=logger_name_val,
+            internal=internal_val,
+            Rag=Rag_val,
+            Pem_av=Pem_av_val,
+            Slice=Slice_val,
+            Tem_slice=Tem_slice_val,
+            Phi_wind_slice=Phi_wind_slice_val,
+            Tem_norm=Tem_norm_val,
+        )
+        return obj_copy
 
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""

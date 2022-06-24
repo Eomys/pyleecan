@@ -10,9 +10,9 @@ from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
-from ..Functions.copy import copy
 from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
+from copy import deepcopy
 from ._frozen import FrozenClass
 
 # Import all class method
@@ -56,7 +56,6 @@ class Loss(FrozenClass):
         comp_axes = comp_axes
     # save and copy methods are available in all object
     save = save
-    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -274,6 +273,36 @@ class Loss(FrozenClass):
         # The class name is added to the dict for deserialisation purpose
         Loss_dict["__class__"] = "Loss"
         return Loss_dict
+
+    def copy(self):
+        """Creates a deepcopy of the object"""
+
+        # Handle deepcopy of all the properties
+        if self.model_index is None:
+            model_index_val = None
+        else:
+            model_index_val = self.model_index.copy()
+        if self.model_list is None:
+            model_list_val = None
+        else:
+            model_list_val = list()
+            for obj in self.model_list:
+                model_list_val.append(obj.copy())
+        logger_name_val = self.logger_name
+        if self.model_dict is None:
+            model_dict_val = None
+        else:
+            model_dict_val = dict()
+            for key, obj in self.model_dict.items():
+                model_dict_val[key] = obj.copy()
+        # Creates new object of the same type with the copied properties
+        obj_copy = type(self)(
+            model_index=model_index_val,
+            model_list=model_list_val,
+            logger_name=logger_name_val,
+            model_dict=model_dict_val,
+        )
+        return obj_copy
 
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""

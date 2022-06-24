@@ -39,9 +39,9 @@ class Ui_SLamShape(object):
         self.scrollArea.setWidgetResizable(True)
         self.scrollAreaWidgetContents = QWidget()
         self.scrollAreaWidgetContents.setObjectName(u"scrollAreaWidgetContents")
-        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 268, 788))
-        self.verticalLayout_3 = QVBoxLayout(self.scrollAreaWidgetContents)
-        self.verticalLayout_3.setObjectName(u"verticalLayout_3")
+        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 268, 793))
+        self.verticalLayout_5 = QVBoxLayout(self.scrollAreaWidgetContents)
+        self.verticalLayout_5.setObjectName(u"verticalLayout_5")
         self.gridLayout_2 = QGridLayout()
         self.gridLayout_2.setObjectName(u"gridLayout_2")
         self.in_L1 = QLabel(self.scrollAreaWidgetContents)
@@ -77,13 +77,13 @@ class Ui_SLamShape(object):
 
         self.gridLayout_2.addWidget(self.lf_Kf1, 2, 1, 1, 1)
 
-        self.verticalLayout_3.addLayout(self.gridLayout_2)
+        self.verticalLayout_5.addLayout(self.gridLayout_2)
 
         self.w_mat = WMatSelectV(self.scrollAreaWidgetContents)
         self.w_mat.setObjectName(u"w_mat")
         self.w_mat.setMinimumSize(QSize(100, 0))
 
-        self.verticalLayout_3.addWidget(self.w_mat)
+        self.verticalLayout_5.addWidget(self.w_mat)
 
         self.g_axial = QGroupBox(self.scrollAreaWidgetContents)
         self.g_axial.setObjectName(u"g_axial")
@@ -101,7 +101,7 @@ class Ui_SLamShape(object):
 
         self.verticalLayout.addWidget(self.b_axial_duct)
 
-        self.verticalLayout_3.addWidget(self.g_axial)
+        self.verticalLayout_5.addWidget(self.g_axial)
 
         self.g_radial = QGroupBox(self.scrollAreaWidgetContents)
         self.g_radial.setObjectName(u"g_radial")
@@ -148,27 +148,38 @@ class Ui_SLamShape(object):
 
         self.verticalLayout_2.addWidget(self.out_length)
 
-        self.verticalLayout_3.addWidget(self.g_radial)
+        self.verticalLayout_5.addWidget(self.g_radial)
 
         self.g_notches = QGroupBox(self.scrollAreaWidgetContents)
         self.g_notches.setObjectName(u"g_notches")
         self.g_notches.setCheckable(True)
         self.g_notches.setChecked(False)
+        self.verticalLayout_3 = QVBoxLayout(self.g_notches)
+        self.verticalLayout_3.setObjectName(u"verticalLayout_3")
+        self.out_notch = QLabel(self.g_notches)
+        self.out_notch.setObjectName(u"out_notch")
 
-        self.verticalLayout_3.addWidget(self.g_notches)
+        self.verticalLayout_3.addWidget(self.out_notch)
+
+        self.b_notch = QPushButton(self.g_notches)
+        self.b_notch.setObjectName(u"b_notch")
+
+        self.verticalLayout_3.addWidget(self.b_notch)
+
+        self.verticalLayout_5.addWidget(self.g_notches)
 
         self.g_bore = QGroupBox(self.scrollAreaWidgetContents)
         self.g_bore.setObjectName(u"g_bore")
         self.g_bore.setCheckable(True)
         self.g_bore.setChecked(False)
 
-        self.verticalLayout_3.addWidget(self.g_bore)
+        self.verticalLayout_5.addWidget(self.g_bore)
 
         self.verticalSpacer = QSpacerItem(
             20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding
         )
 
-        self.verticalLayout_3.addItem(self.verticalSpacer)
+        self.verticalLayout_5.addItem(self.verticalSpacer)
 
         self.scrollArea.setWidget(self.scrollAreaWidgetContents)
 
@@ -239,6 +250,12 @@ class Ui_SLamShape(object):
         )
         self.g_notches.setTitle(
             QCoreApplication.translate("SLamShape", u"Notches", None)
+        )
+        self.out_notch.setText(
+            QCoreApplication.translate("SLamShape", u"0 set (0 notches)", None)
+        )
+        self.b_notch.setText(
+            QCoreApplication.translate("SLamShape", u"set notches", None)
         )
         self.g_bore.setTitle(
             QCoreApplication.translate("SLamShape", u"Uneven bore shape", None)

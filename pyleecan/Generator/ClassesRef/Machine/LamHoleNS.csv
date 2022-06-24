@@ -1,0 +1,10 @@
+Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
+hole_north,,lamination Holes for North pole,1,[Hole],,,,,Machine,LamH,_plot_arrow_mag,VERSION,1,Lamination with Hole with or without magnet or winding with different hole for North/South pole
+hole_south,,lamination Holes for South pole,1,[Hole],,,,,,,build_geometry,,,
+,,,,,,,,,,,comp_masses,,,
+,,,,,,,,,,,comp_periodicity_geo,,,
+,,,,,,,,,,,comp_periodicity_spatial,,,
+,,,,,,,,,,,comp_surfaces,,,
+,,,,,,,,,,,comp_volumes,,,
+,,,,,,,,,,,get_hole_list,,,
+,,,,,,,,,,,get_magnet_number,,,

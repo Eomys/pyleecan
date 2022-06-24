@@ -10,9 +10,9 @@ from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
-from ..Functions.copy import copy
 from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
+from copy import deepcopy
 from .Surface import Surface
 
 # Import all class method
@@ -176,9 +176,8 @@ class SurfRing(Surface):
         )
     else:
         comp_point_ref = comp_point_ref
-    # save and copy methods are available in all object
+    # generic save method is available in all object
     save = save
-    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -348,6 +347,29 @@ class SurfRing(Surface):
         # Overwrite the mother class name
         SurfRing_dict["__class__"] = "SurfRing"
         return SurfRing_dict
+
+    def copy(self):
+        """Creates a deepcopy of the object"""
+
+        # Handle deepcopy of all the properties
+        if self.out_surf is None:
+            out_surf_val = None
+        else:
+            out_surf_val = self.out_surf.copy()
+        if self.in_surf is None:
+            in_surf_val = None
+        else:
+            in_surf_val = self.in_surf.copy()
+        point_ref_val = self.point_ref
+        label_val = self.label
+        # Creates new object of the same type with the copied properties
+        obj_copy = type(self)(
+            out_surf=out_surf_val,
+            in_surf=in_surf_val,
+            point_ref=point_ref_val,
+            label=label_val,
+        )
+        return obj_copy
 
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""

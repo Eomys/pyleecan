@@ -10,9 +10,9 @@ from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
-from ..Functions.copy import copy
 from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
+from copy import deepcopy
 from .Conductor import Conductor
 
 # Import all class method
@@ -210,9 +210,8 @@ class CondType11(Conductor):
         )
     else:
         is_round_wire = is_round_wire
-    # save and copy methods are available in all object
+    # generic save method is available in all object
     save = save
-    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -513,6 +512,41 @@ class CondType11(Conductor):
         # Overwrite the mother class name
         CondType11_dict["__class__"] = "CondType11"
         return CondType11_dict
+
+    def copy(self):
+        """Creates a deepcopy of the object"""
+
+        # Handle deepcopy of all the properties
+        Hwire_val = self.Hwire
+        Wwire_val = self.Wwire
+        Nwppc_rad_val = self.Nwppc_rad
+        Nwppc_tan_val = self.Nwppc_tan
+        Wins_wire_val = self.Wins_wire
+        Wins_coil_val = self.Wins_coil
+        type_winding_shape_val = self.type_winding_shape
+        alpha_ew_val = self.alpha_ew
+        if self.cond_mat is None:
+            cond_mat_val = None
+        else:
+            cond_mat_val = self.cond_mat.copy()
+        if self.ins_mat is None:
+            ins_mat_val = None
+        else:
+            ins_mat_val = self.ins_mat.copy()
+        # Creates new object of the same type with the copied properties
+        obj_copy = type(self)(
+            Hwire=Hwire_val,
+            Wwire=Wwire_val,
+            Nwppc_rad=Nwppc_rad_val,
+            Nwppc_tan=Nwppc_tan_val,
+            Wins_wire=Wins_wire_val,
+            Wins_coil=Wins_coil_val,
+            type_winding_shape=type_winding_shape_val,
+            alpha_ew=alpha_ew_val,
+            cond_mat=cond_mat_val,
+            ins_mat=ins_mat_val,
+        )
+        return obj_copy
 
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""
