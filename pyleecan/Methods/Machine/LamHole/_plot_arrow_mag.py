@@ -8,7 +8,11 @@ from ....Functions.labels import decode_label, HOLEM_LAB, LAM_LAB
 
 
 def _plot_arrow_mag(
-    self, ax=None, sym=1, alpha=0, delta=0,
+    self,
+    ax=None,
+    sym=1,
+    alpha=0,
+    delta=0,
 ):
     """Plot the magnetization direction as arrow on top of the lamination
     (meant to be called by LamHole.plot)

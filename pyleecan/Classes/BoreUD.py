@@ -307,7 +307,7 @@ class BoreUD(Bore):
     sym = property(
         fget=_get_sym,
         fset=_set_sym,
-        doc=u"""Symmetry factor (1= full machine, 2= half of the machine...)
+        doc=u"""Symmetry factor (1= full machine, 2= half of the machine...) [-]
 
         :Type: int
         :min: 1

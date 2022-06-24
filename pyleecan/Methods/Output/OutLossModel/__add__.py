@@ -26,7 +26,7 @@ def __add__(self, other):
     new_group = self.group + " + " + other_group
     new_name = self.name + " + " + other_name
     return OutLossModel(
-        name = new_name,
+        name=new_name,
         loss_density=new_loss_density,
         coeff_dict=new_coeff_dict,
         group=new_group,

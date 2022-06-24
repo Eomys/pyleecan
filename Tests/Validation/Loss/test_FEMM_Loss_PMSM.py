@@ -736,7 +736,7 @@ def find_best_phi0_jaguar():
 def test_FEMM_Loss_Jaguar():
     """Test to calculate losses in Toyota_Prius using LossFEMM model based on motoranalysis validation"""
 
-    machine = load(join(DATA_DIR, "Machine", "Jaguar_I_Pace_wo_skew.json"))
+    machine = load(join(DATA_DIR, "Machine", "Jaguar_I_Pace.json"))
 
     simu = Simu1(name="test_FEMM_Loss_Jaguar_I_Pace", machine=machine)
 

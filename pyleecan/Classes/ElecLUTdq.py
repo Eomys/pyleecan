@@ -585,6 +585,7 @@ class ElecLUTdq(Electrical):
         Tsta_val = self.Tsta
         Trot_val = self.Trot
         type_skin_effect_val = self.type_skin_effect
+        is_skin_effect_inductance_val = self.is_skin_effect_inductance
         # Creates new object of the same type with the copied properties
         obj_copy = type(self)(
             n_interp=n_interp_val,
@@ -607,6 +608,7 @@ class ElecLUTdq(Electrical):
             Tsta=Tsta_val,
             Trot=Trot_val,
             type_skin_effect=type_skin_effect_val,
+            is_skin_effect_inductance=is_skin_effect_inductance_val,
         )
         return obj_copy
 

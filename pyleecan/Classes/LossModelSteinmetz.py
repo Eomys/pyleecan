@@ -60,7 +60,7 @@ class LossModelSteinmetz(LossModel):
         )
     else:
         comp_loss = comp_loss
-    # save and copy methods are available in all object
+    # generic save method is available in all object
     save = save
     # get_logger method is available in all object
     get_logger = get_logger
@@ -287,6 +287,12 @@ class LossModelSteinmetz(LossModel):
         alpha_f_val = self.alpha_f
         alpha_B_val = self.alpha_B
         name_val = self.name
+        group_val = self.group
+        is_show_fig_val = self.is_show_fig
+        if self.coeff_dict is None:
+            coeff_dict_val = None
+        else:
+            coeff_dict_val = self.coeff_dict.copy()
         # Creates new object of the same type with the copied properties
         obj_copy = type(self)(
             k_hy=k_hy_val,
@@ -294,6 +300,9 @@ class LossModelSteinmetz(LossModel):
             alpha_f=alpha_f_val,
             alpha_B=alpha_B_val,
             name=name_val,
+            group=group_val,
+            is_show_fig=is_show_fig_val,
+            coeff_dict=coeff_dict_val,
         )
         return obj_copy
 

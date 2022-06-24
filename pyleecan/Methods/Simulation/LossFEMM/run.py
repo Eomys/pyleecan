@@ -19,19 +19,19 @@ def run(self):
 
     axes_dict = self.comp_axes(output)
 
-    self.model_dict={"stator core": LossModelSteinmetz(group = "stator core",
-                                                       k_hy = self.Ch,
-                                                       k_ed = self.Ce,
-                                                       alpha_f = 1,
-                                                       alpha_B = 2),
-                "rotor core": LossModelSteinmetz(group = "rotor core",
-                                                       k_hy = self.Ch,
-                                                       k_ed = self.Ce,
-                                                       alpha_f = 1,
-                                                       alpha_B = 2),
-                "joule": LossModelWinding(group = "stator winding", type_skin_effect = self.type_skin_effect),
-                "proximity": LossModelProximity(group = "stator winding"),
-                "magnets": LossModelMagnet(group = "rotor magnets")}
+    self.model_dict = {
+        "stator core": LossModelSteinmetz(
+            group="stator core", k_hy=self.Ch, k_ed=self.Ce, alpha_f=1, alpha_B=2
+        ),
+        "rotor core": LossModelSteinmetz(
+            group="rotor core", k_hy=self.Ch, k_ed=self.Ce, alpha_f=1, alpha_B=2
+        ),
+        "joule": LossModelWinding(
+            group="stator winding", type_skin_effect=self.type_skin_effect
+        ),
+        "proximity": LossModelProximity(group="stator winding"),
+        "magnets": LossModelMagnet(group="rotor magnets"),
+    }
 
     output.loss.store(
         self.model_dict,

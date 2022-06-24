@@ -60,7 +60,7 @@ class LossModelWinding(LossModel):
         )
     else:
         comp_coeff = comp_coeff
-    # save and copy methods are available in all object
+    # generic save method is available in all object
     save = save
     # get_logger method is available in all object
     get_logger = get_logger
@@ -230,9 +230,23 @@ class LossModelWinding(LossModel):
 
         # Handle deepcopy of all the properties
         temperature_val = self.temperature
+        type_skin_effect_val = self.type_skin_effect
         name_val = self.name
+        group_val = self.group
+        is_show_fig_val = self.is_show_fig
+        if self.coeff_dict is None:
+            coeff_dict_val = None
+        else:
+            coeff_dict_val = self.coeff_dict.copy()
         # Creates new object of the same type with the copied properties
-        obj_copy = type(self)(temperature=temperature_val, name=name_val)
+        obj_copy = type(self)(
+            temperature=temperature_val,
+            type_skin_effect=type_skin_effect_val,
+            name=name_val,
+            group=group_val,
+            is_show_fig=is_show_fig_val,
+            coeff_dict=coeff_dict_val,
+        )
         return obj_copy
 
     def _set_None(self):

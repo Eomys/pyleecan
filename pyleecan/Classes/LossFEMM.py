@@ -339,21 +339,10 @@ class LossFEMM(Loss):
         """Creates a deepcopy of the object"""
 
         # Handle deepcopy of all the properties
-        is_get_meshsolution_val = self.is_get_meshsolution
-        Tsta_val = self.Tsta
-        Trot_val = self.Trot
-        type_skin_effect_val = self.type_skin_effect
+        Ce_val = self.Ce
+        Ch_val = self.Ch
         Cp_val = self.Cp
-        if self.model_index is None:
-            model_index_val = None
-        else:
-            model_index_val = self.model_index.copy()
-        if self.model_list is None:
-            model_list_val = None
-        else:
-            model_list_val = list()
-            for obj in self.model_list:
-                model_list_val.append(obj.copy())
+        type_skin_effect_val = self.type_skin_effect
         logger_name_val = self.logger_name
         if self.model_dict is None:
             model_dict_val = None
@@ -361,17 +350,20 @@ class LossFEMM(Loss):
             model_dict_val = dict()
             for key, obj in self.model_dict.items():
                 model_dict_val[key] = obj.copy()
+        Tsta_val = self.Tsta
+        Trot_val = self.Trot
+        is_get_meshsolution_val = self.is_get_meshsolution
         # Creates new object of the same type with the copied properties
         obj_copy = type(self)(
-            is_get_meshsolution=is_get_meshsolution_val,
-            Tsta=Tsta_val,
-            Trot=Trot_val,
-            type_skin_effect=type_skin_effect_val,
+            Ce=Ce_val,
+            Ch=Ch_val,
             Cp=Cp_val,
-            model_index=model_index_val,
-            model_list=model_list_val,
+            type_skin_effect=type_skin_effect_val,
             logger_name=logger_name_val,
             model_dict=model_dict_val,
+            Tsta=Tsta_val,
+            Trot=Trot_val,
+            is_get_meshsolution=is_get_meshsolution_val,
         )
         return obj_copy
 

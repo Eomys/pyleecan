@@ -1406,48 +1406,6 @@ class Lamination(FrozenClass):
         """,
     )
 
-    def _get_yoke_notch(self):
-        """getter of yoke_notch"""
-        if self._yoke_notch is not None:
-            for obj in self._yoke_notch:
-                if obj is not None:
-                    obj.parent = self
-        return self._yoke_notch
-
-    def _set_yoke_notch(self, value):
-        """setter of yoke_notch"""
-        if type(value) is list:
-            for ii, obj in enumerate(value):
-                if isinstance(obj, str):  # Load from file
-                    try:
-                        obj = load_init_dict(obj)[1]
-                    except Exception as e:
-                        self.get_logger().error(
-                            "Error while loading " + obj + ", setting None instead"
-                        )
-                        obj = None
-                        value[ii] = None
-                if type(obj) is dict:
-                    class_obj = import_class(
-                        "pyleecan.Classes", obj.get("__class__"), "yoke_notch"
-                    )
-                    value[ii] = class_obj(init_dict=obj)
-                if value[ii] is not None:
-                    value[ii].parent = self
-        if value == -1:
-            value = list()
-        check_var("yoke_notch", value, "[Notch]")
-        self._yoke_notch = value
-
-    yoke_notch = property(
-        fget=_get_yoke_notch,
-        fset=_set_yoke_notch,
-        doc=u"""Lamination yoke notches [-]
-
-        :Type: [Notch]
-        """,
-    )
-
     def _get_bore(self):
         """getter of bore"""
         return self._bore

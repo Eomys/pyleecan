@@ -436,7 +436,7 @@ class DataKeeper(FrozenClass):
     name = property(
         fget=_get_name,
         fset=_set_name,
-        doc="""Data name
+        doc="""Data name [-]
 
         :Type: str
         """,
@@ -454,7 +454,7 @@ class DataKeeper(FrozenClass):
     symbol = property(
         fget=_get_symbol,
         fset=_set_symbol,
-        doc="""Data symbol
+        doc="""Data symbol [-]
 
         :Type: str
         """,
@@ -472,7 +472,7 @@ class DataKeeper(FrozenClass):
     unit = property(
         fget=_get_unit,
         fset=_set_unit,
-        doc="""Data unit
+        doc="""Data unit [-]
 
         :Type: str
         """,
@@ -485,7 +485,7 @@ class DataKeeper(FrozenClass):
     keeper = property(
         fget=_get_keeper,
         fset=_set_keeper,
-        doc="""Function that takes an Output in argument and return a value
+        doc="""Function that takes an Output in argument and return a value [-]
 
         :Type: function
         """,
@@ -520,7 +520,7 @@ class DataKeeper(FrozenClass):
     error_keeper = property(
         fget=_get_error_keeper,
         fset=_set_error_keeper,
-        doc="""Function that takes a Simulation in argument and returns a value, this attribute enables to handle errors and to put NaN values in the result matrices
+        doc="""Function that takes a Simulation in argument and returns a value, this attribute enables to handle errors and to put NaN values in the result matrices [-]
 
         :Type: function
         """,
@@ -568,7 +568,7 @@ class DataKeeper(FrozenClass):
     result = property(
         fget=_get_result,
         fset=_set_result,
-        doc="""List containing datakeeper results for each simulation
+        doc="""List containing datakeeper results for each simulation [-]
 
         :Type: []
         """,
@@ -604,7 +604,7 @@ class DataKeeper(FrozenClass):
     result_ref = property(
         fget=_get_result_ref,
         fset=_set_result_ref,
-        doc="""Result for the reference simulation
+        doc="""Result for the reference simulation [-]
 
         :Type: 
         """,
@@ -622,7 +622,7 @@ class DataKeeper(FrozenClass):
     physic = property(
         fget=_get_physic,
         fset=_set_physic,
-        doc="""Physic of the tracked quantity
+        doc="""Physic of the tracked quantity [-]
 
         :Type: str
         """,

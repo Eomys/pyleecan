@@ -191,8 +191,19 @@ class LossModel(FrozenClass):
 
         # Handle deepcopy of all the properties
         name_val = self.name
+        group_val = self.group
+        is_show_fig_val = self.is_show_fig
+        if self.coeff_dict is None:
+            coeff_dict_val = None
+        else:
+            coeff_dict_val = self.coeff_dict.copy()
         # Creates new object of the same type with the copied properties
-        obj_copy = type(self)(name=name_val)
+        obj_copy = type(self)(
+            name=name_val,
+            group=group_val,
+            is_show_fig=is_show_fig_val,
+            coeff_dict=coeff_dict_val,
+        )
         return obj_copy
 
     def _set_None(self):

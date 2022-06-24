@@ -156,7 +156,6 @@ load_switch = {
     "OutGeoLam": OutGeoLam,
     "OutInternal": OutInternal,
     "OutLoss": OutLoss,
-    "OutLossMinimal": OutLossMinimal,
     "OutLossModel": OutLossModel,
     "OutMag": OutMag,
     "OutMagElmer": OutMagElmer,

@@ -267,7 +267,7 @@ class NotchEvenDist(Notch):
     alpha = property(
         fget=_get_alpha,
         fset=_set_alpha,
-        doc=u"""angular positon of the first notch (0 is middle of first tooth)
+        doc=u"""angular positon of the first notch (0 is middle of first tooth) [rad]
 
         :Type: float
         """,

@@ -154,7 +154,6 @@ from ..Classes.OutGeo import OutGeo
 from ..Classes.OutGeoLam import OutGeoLam
 from ..Classes.OutInternal import OutInternal
 from ..Classes.OutLoss import OutLoss
-from ..Classes.OutLossMinimal import OutLossMinimal
 from ..Classes.OutLossModel import OutLossModel
 from ..Classes.OutMag import OutMag
 from ..Classes.OutMagElmer import OutMagElmer

@@ -10,9 +10,9 @@ from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
-from ..Functions.copy import copy
 from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
+from copy import deepcopy
 from .LossModel import LossModel
 
 # Import all class method
@@ -60,9 +60,8 @@ class LossModelProximity(LossModel):
         )
     else:
         comp_loss = comp_loss
-    # save and copy methods are available in all object
+    # generic save method is available in all object
     save = save
-    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -198,6 +197,28 @@ class LossModelProximity(LossModel):
         # Overwrite the mother class name
         LossModelProximity_dict["__class__"] = "LossModelProximity"
         return LossModelProximity_dict
+
+    def copy(self):
+        """Creates a deepcopy of the object"""
+
+        # Handle deepcopy of all the properties
+        k_p_val = self.k_p
+        name_val = self.name
+        group_val = self.group
+        is_show_fig_val = self.is_show_fig
+        if self.coeff_dict is None:
+            coeff_dict_val = None
+        else:
+            coeff_dict_val = self.coeff_dict.copy()
+        # Creates new object of the same type with the copied properties
+        obj_copy = type(self)(
+            k_p=k_p_val,
+            name=name_val,
+            group=group_val,
+            is_show_fig=is_show_fig_val,
+            coeff_dict=coeff_dict_val,
+        )
+        return obj_copy
 
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""

@@ -54,7 +54,7 @@ class Loss(FrozenClass):
         )
     else:
         comp_axes = comp_axes
-    # save and copy methods are available in all object
+    # generic save method is available in all object
     save = save
     # get_logger method is available in all object
     get_logger = get_logger
@@ -278,16 +278,6 @@ class Loss(FrozenClass):
         """Creates a deepcopy of the object"""
 
         # Handle deepcopy of all the properties
-        if self.model_index is None:
-            model_index_val = None
-        else:
-            model_index_val = self.model_index.copy()
-        if self.model_list is None:
-            model_list_val = None
-        else:
-            model_list_val = list()
-            for obj in self.model_list:
-                model_list_val.append(obj.copy())
         logger_name_val = self.logger_name
         if self.model_dict is None:
             model_dict_val = None
@@ -295,12 +285,16 @@ class Loss(FrozenClass):
             model_dict_val = dict()
             for key, obj in self.model_dict.items():
                 model_dict_val[key] = obj.copy()
+        Tsta_val = self.Tsta
+        Trot_val = self.Trot
+        is_get_meshsolution_val = self.is_get_meshsolution
         # Creates new object of the same type with the copied properties
         obj_copy = type(self)(
-            model_index=model_index_val,
-            model_list=model_list_val,
             logger_name=logger_name_val,
             model_dict=model_dict_val,
+            Tsta=Tsta_val,
+            Trot=Trot_val,
+            is_get_meshsolution=is_get_meshsolution_val,
         )
         return obj_copy
 

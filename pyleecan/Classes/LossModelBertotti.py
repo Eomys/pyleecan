@@ -60,30 +60,6 @@ class LossModelBertotti(LossModel):
         )
     else:
         comp_loss = comp_loss
-    # cf Methods.Simulation.LossModelBertotti.comp_coeff_Bertotti
-    if isinstance(comp_coeff_Bertotti, ImportError):
-        comp_coeff_Bertotti = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use LossModelBertotti method comp_coeff_Bertotti: "
-                    + str(comp_coeff_Bertotti)
-                )
-            )
-        )
-    else:
-        comp_coeff_Bertotti = comp_coeff_Bertotti
-    # cf Methods.Simulation.LossModelBertotti.comp_loss_density
-    if isinstance(comp_loss_density, ImportError):
-        comp_loss_density = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use LossModelBertotti method comp_loss_density: "
-                    + str(comp_loss_density)
-                )
-            )
-        )
-    else:
-        comp_loss_density = comp_loss_density
     # generic save method is available in all object
     save = save
     # get_logger method is available in all object
@@ -277,28 +253,22 @@ class LossModelBertotti(LossModel):
         k_hy_val = self.k_hy
         k_ed_val = self.k_ed
         k_ex_val = self.k_ex
-        alpha_hy_val = self.alpha_hy
-        alpha_ed_val = self.alpha_ed
-        alpha_ex_val = self.alpha_ex
-        group_val = self.group
-        get_meshsolution_val = self.get_meshsolution
-        if self.N0 is None:
-            N0_val = None
-        else:
-            N0_val = self.N0.copy()
         name_val = self.name
+        group_val = self.group
+        is_show_fig_val = self.is_show_fig
+        if self.coeff_dict is None:
+            coeff_dict_val = None
+        else:
+            coeff_dict_val = self.coeff_dict.copy()
         # Creates new object of the same type with the copied properties
         obj_copy = type(self)(
             k_hy=k_hy_val,
             k_ed=k_ed_val,
             k_ex=k_ex_val,
-            alpha_hy=alpha_hy_val,
-            alpha_ed=alpha_ed_val,
-            alpha_ex=alpha_ex_val,
-            group=group_val,
-            get_meshsolution=get_meshsolution_val,
-            N0=N0_val,
             name=name_val,
+            group=group_val,
+            is_show_fig=is_show_fig_val,
+            coeff_dict=coeff_dict_val,
         )
         return obj_copy
 

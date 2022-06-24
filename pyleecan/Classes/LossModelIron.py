@@ -10,9 +10,9 @@ from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
-from ..Functions.copy import copy
 from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
+from copy import deepcopy
 from .LossModel import LossModel
 
 # Import all class method
@@ -60,9 +60,8 @@ class LossModelIron(LossModel):
         )
     else:
         comp_loss = comp_loss
-    # save and copy methods are available in all object
+    # generic save method is available in all object
     save = save
-    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -330,6 +329,38 @@ class LossModelIron(LossModel):
         # Overwrite the mother class name
         LossModelIron_dict["__class__"] = "LossModelIron"
         return LossModelIron_dict
+
+    def copy(self):
+        """Creates a deepcopy of the object"""
+
+        # Handle deepcopy of all the properties
+        k_hy_val = self.k_hy
+        k_ed_val = self.k_ed
+        k_ex_val = self.k_ex
+        alpha_hy_val = self.alpha_hy
+        alpha_ed_val = self.alpha_ed
+        alpha_ex_val = self.alpha_ex
+        name_val = self.name
+        group_val = self.group
+        is_show_fig_val = self.is_show_fig
+        if self.coeff_dict is None:
+            coeff_dict_val = None
+        else:
+            coeff_dict_val = self.coeff_dict.copy()
+        # Creates new object of the same type with the copied properties
+        obj_copy = type(self)(
+            k_hy=k_hy_val,
+            k_ed=k_ed_val,
+            k_ex=k_ex_val,
+            alpha_hy=alpha_hy_val,
+            alpha_ed=alpha_ed_val,
+            alpha_ex=alpha_ex_val,
+            name=name_val,
+            group=group_val,
+            is_show_fig=is_show_fig_val,
+            coeff_dict=coeff_dict_val,
+        )
+        return obj_copy
 
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""
