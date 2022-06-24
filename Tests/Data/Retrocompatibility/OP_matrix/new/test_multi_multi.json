@@ -1337,7 +1337,7 @@
           "Iq"
         ],
         "__class__": "OPMatrix",
-        "is_output_power": null,
+        "is_output_power": true,
         "slip_ref": null
       },
       "__class__": "VarLoadCurrent",
