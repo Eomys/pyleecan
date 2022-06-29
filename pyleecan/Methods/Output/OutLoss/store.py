@@ -67,5 +67,6 @@ def store(
             loss_density=loss_density,
             coeff_dict=model.coeff_dict,
             group=model.group,
+            loss_model=type(model).__name__,
         )
         self.loss_list.append(out_loss_model)

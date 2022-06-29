@@ -10191,6 +10191,16 @@
                 "type": "str",
                 "unit": "",
                 "value": "None"
+            },
+            {
+                "as_dict": "",
+                "desc": "The name of the loss model used to compute the loss stored in this output",
+                "max": "",
+                "min": "",
+                "name": "loss_model",
+                "type": "str",
+                "unit": "",
+                "value": "None"
             }
         ]
     },

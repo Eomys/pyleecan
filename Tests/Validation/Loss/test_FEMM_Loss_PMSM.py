@@ -339,8 +339,8 @@ def test_FEMM_Loss_Prius():
     simu = Simu1(name="test_FEMM_Loss_Prius", machine=machine)
 
     # Current for MTPA
-    Ic = 230 * np.exp(1j * 140 * np.pi / 180)
-    SPEED = 1200
+    Ic = 0 * np.exp(1j * 140 * np.pi / 180)
+    SPEED = 500
 
     simu.input = InputCurrent(
         Nt_tot=4 * 40 * 8,
@@ -873,8 +873,8 @@ if __name__ == "__main__":
 
     # test_FEMM_Loss_SPMSM()
     # test_LossFEMM_SPMSM()
-    # test_FEMM_Loss_Prius()
-    test_FEMM_Loss_Jaguar()
+    test_FEMM_Loss_Prius()
+    # test_FEMM_Loss_Jaguar()
     # find_best_phi0_jaguar()
     # test_FEMM_Loss_diff()
     # test_LossFEMM_Prius()

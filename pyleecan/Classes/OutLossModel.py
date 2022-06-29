@@ -130,6 +130,7 @@ class OutLossModel(FrozenClass):
         loss_density=None,
         coeff_dict=None,
         group=None,
+        loss_model=None,
         init_dict=None,
         init_str=None,
     ):
@@ -156,12 +157,15 @@ class OutLossModel(FrozenClass):
                 coeff_dict = init_dict["coeff_dict"]
             if "group" in list(init_dict.keys()):
                 group = init_dict["group"]
+            if "loss_model" in list(init_dict.keys()):
+                loss_model = init_dict["loss_model"]
         # Set the properties (value check and convertion are done in setter)
         self.parent = None
         self.name = name
         self.loss_density = loss_density
         self.coeff_dict = coeff_dict
         self.group = group
+        self.loss_model = loss_model
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -186,6 +190,7 @@ class OutLossModel(FrozenClass):
         )
         OutLossModel_str += "coeff_dict = " + str(self.coeff_dict) + linesep
         OutLossModel_str += 'group = "' + str(self.group) + '"' + linesep
+        OutLossModel_str += 'loss_model = "' + str(self.loss_model) + '"' + linesep
         return OutLossModel_str
 
     def __eq__(self, other):
@@ -200,6 +205,8 @@ class OutLossModel(FrozenClass):
         if other.coeff_dict != self.coeff_dict:
             return False
         if other.group != self.group:
+            return False
+        if other.loss_model != self.loss_model:
             return False
         return True
 
@@ -241,6 +248,18 @@ class OutLossModel(FrozenClass):
                 diff_list.append(name + ".group" + val_str)
             else:
                 diff_list.append(name + ".group")
+        if other._loss_model != self._loss_model:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._loss_model)
+                    + ", other="
+                    + str(other._loss_model)
+                    + ")"
+                )
+                diff_list.append(name + ".loss_model" + val_str)
+            else:
+                diff_list.append(name + ".loss_model")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -255,6 +274,7 @@ class OutLossModel(FrozenClass):
             for key, value in self.coeff_dict.items():
                 S += getsizeof(value) + getsizeof(key)
         S += getsizeof(self.group)
+        S += getsizeof(self.loss_model)
         return S
 
     def as_dict(self, type_handle_ndarray=0, keep_function=False, **kwargs):
@@ -287,6 +307,7 @@ class OutLossModel(FrozenClass):
             self.coeff_dict.copy() if self.coeff_dict is not None else None
         )
         OutLossModel_dict["group"] = self.group
+        OutLossModel_dict["loss_model"] = self.loss_model
         # The class name is added to the dict for deserialisation purpose
         OutLossModel_dict["__class__"] = "OutLossModel"
         return OutLossModel_dict
@@ -305,12 +326,14 @@ class OutLossModel(FrozenClass):
         else:
             coeff_dict_val = self.coeff_dict.copy()
         group_val = self.group
+        loss_model_val = self.loss_model
         # Creates new object of the same type with the copied properties
         obj_copy = type(self)(
             name=name_val,
             loss_density=loss_density_val,
             coeff_dict=coeff_dict_val,
             group=group_val,
+            loss_model=loss_model_val,
         )
         return obj_copy
 
@@ -321,6 +344,7 @@ class OutLossModel(FrozenClass):
         self.loss_density = None
         self.coeff_dict = None
         self.group = None
+        self.loss_model = None
 
     def _get_name(self):
         """getter of name"""
@@ -398,6 +422,24 @@ class OutLossModel(FrozenClass):
         fget=_get_group,
         fset=_set_group,
         doc=u"""group to which the loss applies
+
+        :Type: str
+        """,
+    )
+
+    def _get_loss_model(self):
+        """getter of loss_model"""
+        return self._loss_model
+
+    def _set_loss_model(self, value):
+        """setter of loss_model"""
+        check_var("loss_model", value, "str")
+        self._loss_model = value
+
+    loss_model = property(
+        fget=_get_loss_model,
+        fset=_set_loss_model,
+        doc=u"""The name of the loss model used to compute the loss stored in this output
 
         :Type: str
         """,

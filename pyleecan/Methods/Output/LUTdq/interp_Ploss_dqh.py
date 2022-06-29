@@ -4,7 +4,7 @@ import scipy.interpolate as scp_int
 from ....Functions.Electrical.comp_loss_joule import comp_loss_joule
 
 
-def interp_Ploss_dqh(self, Id, Iq, N0):
+def interp_Ploss_dqh(self, Id, Iq, N0, exclude_models=[]):
     """Interpolate losses in function of Id and Iq and for given speed
 
     Parameters
@@ -17,6 +17,8 @@ def interp_Ploss_dqh(self, Id, Iq, N0):
         current Iq
     N0: float
         rotation speed [rpm]
+    exclude_models: list of strings
+        list of LossModel names to exclude from the interpolation
 
     Returns
     ----------
@@ -40,7 +42,9 @@ def interp_Ploss_dqh(self, Id, Iq, N0):
         OP = out.elec.OP.copy()
         OP.felec = felec
         for kk, loss in enumerate(out.loss.loss_list):
-            Ploss_dqh[ii, kk] = loss.get_loss_scalar(felec)
+            if loss.loss_model not in exclude_models:
+                print(loss.loss_model)
+                Ploss_dqh[ii, kk] = loss.get_loss_scalar(felec)
 
     # Get unique Id, Iq sorted in ascending order
     OP_matrix = self.get_OP_matrix()

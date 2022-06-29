@@ -45,7 +45,7 @@ def test_efficiency_map_Prius():
     available at https://www.mdpi.com/2075-1702/7/4/75."""
 
     Toyota_Prius = load(join(DATA_DIR, "Machine", "Toyota_Prius.json"))
-    path_to_LUT = r"C:\Users\LAP10\Documents\Loss\LUT_eff_320nt.h5"
+    path_to_LUT = r"C:\Users\LAP10\Documents\Loss\LUT_eff.h5"
 
     if not exists(split(path_to_LUT)[0]):
         raise Exception("The path to LUT is not valid.")
@@ -61,7 +61,7 @@ def test_efficiency_map_Prius():
     # Speed vector
     Nspeed = 50
     # Number of loads
-    Nload = 5
+    Nload = 9
 
     # First simulation creating femm file
     simu = Simu1(name="test_ElecLUTdq_efficiency_map", machine=Toyota_Prius)
@@ -142,7 +142,7 @@ def test_efficiency_map_Prius():
         ),
     )
 
-    load_vect = np.linspace(0.1, 1, Nload)
+    load_vect = np.linspace(0, 1, Nload)
     OP_matrix_MTPA = np.zeros((Nspeed, Nload, 5))
     U_MTPA = np.zeros((Nspeed, Nload, 3))
     I_MTPA = np.zeros((Nspeed, Nload, 3))
@@ -174,6 +174,10 @@ def test_efficiency_map_Prius():
         ]
         Phidq_MTPA[:, ii, 0] = [out_ii.elec.eec.Phid for out_ii in out.output_list]
         Phidq_MTPA[:, ii, 1] = [out_ii.elec.eec.Phiq for out_ii in out.output_list]
+        
+        for o in out.loss.loss_list:
+            print(o.loss_model)
+            
 
         out_load.append(out)
 
@@ -275,21 +279,19 @@ def test_efficiency_map_Prius():
         #     is_show_fig=is_show_fig,
         # )
         #=============================================#
-        #init plot map for efficiency
-        dict_eff_map = {
-            "Xdata": OP_matrix_MTPA[:, :, 0],  # Rotational speed
-            "Ydata": OP_matrix_MTPA[:, :, 3],  # Torque
-            "xlabel": "Rotational speed",
-            "ylabel": "Torque",
-            "type_plot": "pcolormesh",
-            "is_contour": True,
-        }
-        
+        # Plot efficiency map
         plot_3D(
-            Zdata=OP_matrix_MTPA[:, :, 4],
+            Xdata=OP_matrix_MTPA[:, :, 0],  # Rotational speed
+            Ydata=OP_matrix_MTPA[:, :, 3],  # Torque
+            Zdata=OP_matrix_MTPA[:, :, 4], # Efficiency
+            xlabel="Rotational speed",
+            ylabel="Torque",
             zlabel="Efficiency",
-            title="Efficiency map in torque, speed plane",
-            **dict_eff_map,
+            title="Efficiency map in torque, speed plane with 2",
+            type_plot="pcolormesh",
+            is_contour=True,
+            levels=[0.7,0.85,0.9,0.92,0.93,0.94,0.95],
+            gamma=5
         )
         #=============================================#
         
@@ -411,6 +413,7 @@ def test_efficiency_map_Prius():
         #     title="Torque map in dq plane",
         #     **dict_map,
         # )
+
 
     return out
 

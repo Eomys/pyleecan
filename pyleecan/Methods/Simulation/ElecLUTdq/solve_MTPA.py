@@ -90,16 +90,14 @@ def solve_MTPA(self, LUT, Rs):
         U_cond = Umax_interp <= Urms_max
 
         if is_loss_model:
-            # Interpolate losses from LUT:
-            # - 1st column : Joule losses
-            # - 2nd column : stator core losses
-            # - 3rd column : magnet losses
-            # - 4th column : rotor core losses
-            # - 5th column : proximity losses
+            # Interpolate losses from LUT
             Ploss_dqh = LUT.interp_Ploss_dqh(Id, Iq, N0=OP.N0)
             Ploss_ovl = np.sum(Ploss_dqh, axis=1)
+            Ploss_dqh_wo_Joule = LUT.interp_Ploss_dqh(
+                Id, Iq, N0=OP.N0, exclude_models=["LossModelWinding"]
+            )
             # The input power must cover electrical power + additional losses
-            P_in = qs * (Ud * Id + Uq * Iq) + np.sum(Ploss_dqh[:, 1:], axis=1)
+            P_in = qs * (Ud * Id + Uq * Iq) + np.sum(Ploss_dqh_wo_Joule, axis=1)
         else:
             # Only consider stator Joule losses
             Ploss_ovl = qs * Rs * (Id ** 2 + Iq ** 2)
@@ -176,9 +174,9 @@ def solve_MTPA(self, LUT, Rs):
     # Calculate efficiency
     out_dict["P_in"] = P_in[i0][imin]
     out_dict["P_out"] = P_out[i0][imin]
-    # eff = out_dict["P_out"] / out_dict["P_in"]
-    # out_dict["efficiency"] = eff if eff > 0 else 0
-    out_dict["efficiency"] = out_dict["P_out"] / out_dict["P_in"]
+    eff = out_dict["P_out"] / out_dict["P_in"]
+    out_dict["efficiency"] = eff if eff > 0 else 0
+    # out_dict["efficiency"] = out_dict["P_out"] / out_dict["P_in"]
 
     # Calculate torque from output power
     out_dict["Tem_av"] = Tem_interp[i0][imin]
