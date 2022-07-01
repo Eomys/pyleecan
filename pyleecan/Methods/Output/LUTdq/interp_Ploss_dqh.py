@@ -43,7 +43,6 @@ def interp_Ploss_dqh(self, Id, Iq, N0, exclude_models=[]):
         OP.felec = felec
         for kk, loss in enumerate(out.loss.loss_list):
             if loss.loss_model not in exclude_models:
-                print(loss.loss_model)
                 Ploss_dqh[ii, kk] = loss.get_loss_scalar(felec)
 
     # Get unique Id, Iq sorted in ascending order

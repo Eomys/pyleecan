@@ -23,6 +23,7 @@ from pyleecan.Classes.LossModelSteinmetz import LossModelSteinmetz
 from pyleecan.Classes.LossModelWinding import LossModelWinding
 from pyleecan.Classes.LossModelProximity import LossModelProximity
 from pyleecan.Classes.LossModelMagnet import LossModelMagnet
+from pyleecan.Classes.DataKeeper import DataKeeper
 
 from pyleecan.Functions.load import load
 from pyleecan.Functions.Load.load_json import LoadMissingFileError
@@ -44,7 +45,7 @@ def test_efficiency_map_Prius():
     "Electromagnetic Analysis and Design Methodology for Permanent Magnet Motors Using MotorAnalysis-PM Software",
     available at https://www.mdpi.com/2075-1702/7/4/75."""
 
-    Toyota_Prius = load(join(DATA_DIR, "Machine", "Toyota_Prius.json"))
+    Toyota_Prius = load(join(DATA_DIR, "Machine", "Toyota_Prius_loss.json"))
     path_to_LUT = r"C:\Users\LAP10\Documents\Loss\LUT_eff.h5"
 
     if not exists(split(path_to_LUT)[0]):
@@ -59,9 +60,9 @@ def test_efficiency_map_Prius():
 
 
     # Speed vector
-    Nspeed = 50
+    Nspeed = 30
     # Number of loads
-    Nload = 9
+    Nload = 3
 
     # First simulation creating femm file
     simu = Simu1(name="test_ElecLUTdq_efficiency_map", machine=Toyota_Prius)
@@ -74,11 +75,72 @@ def test_efficiency_map_Prius():
         is_periodicity_a=True,
         is_periodicity_t=True,
     )
+    
+    datakeeper_list=[
+        DataKeeper(
+            name = "Torque",
+            unit = "N.m", 
+            symbol = "T",
+            keeper = lambda output: output.elec.Tem_av,
+            error_keeper = lambda simu: np.nan
+        ),
+        DataKeeper(
+            name = "Efficiency",
+            unit = "", 
+            symbol = "eff",
+            keeper = lambda output: output.elec.OP.efficiency,
+            error_keeper = lambda simu: np.nan
+        ),
+        DataKeeper(
+            name = "Ud",
+            unit = "V", 
+            symbol = "Ud",
+            keeper = lambda output: output.elec.OP.Ud_ref,
+            error_keeper = lambda simu: np.nan
+        ),
+        DataKeeper(
+            name = "Uq",
+            unit = "V", 
+            symbol = "Uq",
+            keeper = lambda output: output.elec.OP.Uq_ref,
+            error_keeper = lambda simu: np.nan
+        ),
+        DataKeeper(
+            name = "U0",
+            unit = "V", 
+            symbol = "U0",
+            keeper = lambda output: output.elec.OP.get_U0_UPhi0()["U0"] ,
+            error_keeper = lambda simu: np.nan
+        ),
+        DataKeeper(
+            name = "I0",
+            unit = "A", 
+            symbol = "I0",
+            keeper = lambda output: output.elec.OP.get_I0_Phi0()["I0"] ,
+            error_keeper = lambda simu: np.nan
+        ),
+        DataKeeper(
+            name = "Phid",
+            unit = "Wb", 
+            symbol = "Phid",
+            keeper = lambda output: output.elec.eec.Phid,
+            error_keeper = lambda simu: np.nan
+        ),
+        DataKeeper(
+            name = "Phiq",
+            unit = "Wb", 
+            symbol = "Phiq",
+            keeper = lambda output: output.elec.eec.Phiq,
+            error_keeper = lambda simu: np.nan
+        ),
+    ]
 
     OP_matrix = np.zeros((Nspeed, 3))
     OP_matrix[:, 0] = np.linspace(500, 8000, Nspeed)
     simu.var_simu = VarLoadCurrent(
-        OP_matrix=OP_matrix, type_OP_matrix=1, is_keep_all_output=True
+        OP_matrix=OP_matrix, type_OP_matrix=1,
+        datakeeper_list = datakeeper_list
+            # is_keep_all_output=True
     )
     simu.input.set_OP_from_array(OP_matrix, type_OP_matrix=1)
 
@@ -101,7 +163,7 @@ def test_efficiency_map_Prius():
     # )
 
     simu.elec = ElecLUTdq(
-        Urms_max=400,
+        Urms_max=233,
         Jrms_max=30e6,
         n_interp=100,
         n_Id=5,
@@ -160,20 +222,31 @@ def test_efficiency_map_Prius():
         OP_matrix_MTPA[:, ii, 0] = out["N0"].result
         OP_matrix_MTPA[:, ii, 1] = out["Id"].result
         OP_matrix_MTPA[:, ii, 2] = out["Iq"].result
-        OP_matrix_MTPA[:, ii, 3] = [out_ii.elec.Tem_av for out_ii in out.output_list]
-        OP_matrix_MTPA[:, ii, 4] = [out_ii.elec.OP.efficiency for out_ii in out.output_list]
-        U_MTPA[:, ii, 0] = [out_ii.elec.OP.Ud_ref for out_ii in out.output_list]
-        U_MTPA[:, ii, 1] = [out_ii.elec.OP.Uq_ref for out_ii in out.output_list]
-        U_MTPA[:, ii, 2] = [
-            out_ii.elec.OP.get_U0_UPhi0()["U0"] for out_ii in out.output_list
-        ]
-        I_MTPA[:, ii, 0] = OP_matrix_MTPA[:, ii, 1]
-        I_MTPA[:, ii, 1] = OP_matrix_MTPA[:, ii, 2]
-        I_MTPA[:, ii, 2] = [
-            out_ii.elec.OP.get_I0_Phi0()["I0"] for out_ii in out.output_list
-        ]
-        Phidq_MTPA[:, ii, 0] = [out_ii.elec.eec.Phid for out_ii in out.output_list]
-        Phidq_MTPA[:, ii, 1] = [out_ii.elec.eec.Phiq for out_ii in out.output_list]
+        OP_matrix_MTPA[:, ii, 3] = out["T"].result
+        OP_matrix_MTPA[:, ii, 4] = out["eff"].result
+        # OP_matrix_MTPA[:, ii, 3] = [out_ii.elec.Tem_av for out_ii in out.output_list]
+        # OP_matrix_MTPA[:, ii, 4] = [out_ii.elec.OP.efficiency for out_ii in out.output_list]
+        
+        # U_MTPA[:, ii, 0] = [out_ii.elec.OP.Ud_ref for out_ii in out.output_list]
+        U_MTPA[:, ii, 0] = out["Ud"].result
+        U_MTPA[:, ii, 1] = out["Uq"].result
+        U_MTPA[:, ii, 2] = out["U0"].result
+        # U_MTPA[:, ii, 1] = [out_ii.elec.OP.Uq_ref for out_ii in out.output_list]
+        # U_MTPA[:, ii, 2] = [
+        #     out_ii.elec.OP.get_U0_UPhi0()["U0"] for out_ii in out.output_list
+        # ]
+        I_MTPA[:, ii, 0] = out["Id"].result
+        I_MTPA[:, ii, 1] = out["Iq"].result
+        I_MTPA[:, ii, 2] = out["I0"].result
+        # I_MTPA[:, ii, 0] = OP_matrix_MTPA[:, ii, 1]
+        # I_MTPA[:, ii, 1] = OP_matrix_MTPA[:, ii, 2]
+        # I_MTPA[:, ii, 2] = [
+        #     out_ii.elec.OP.get_I0_Phi0()["I0"] for out_ii in out.output_list
+        # ]
+        # Phidq_MTPA[:, ii, 0] = [out_ii.elec.eec.Phid for out_ii in out.output_list]
+        # Phidq_MTPA[:, ii, 1] = [out_ii.elec.eec.Phiq for out_ii in out.output_list]
+        Phidq_MTPA[:, ii, 0] = out["Phid"].result
+        Phidq_MTPA[:, ii, 1] = out["Phiq"].result
         
         for o in out.loss.loss_list:
             print(o.loss_model)

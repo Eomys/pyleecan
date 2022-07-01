@@ -109,11 +109,11 @@ def test_FEMM_Loss_Jaguar_wo_skew():
     simu = Simu1(name="test_FEMM_Loss_Jaguar_I_Pace", machine=machine)
 
     # Current for MTPA
-    Ic = 450 * np.exp(1j * 120 * np.pi / 180)
-    SPEED = 2000
+    Ic = 900 * np.exp(1j * 120 * np.pi / 180)
+    SPEED = 6000
 
     simu.input = InputCurrent(
-        Nt_tot=4 * 40 * 8,
+        Nt_tot=20,#4 * 40 * 8,
         Na_tot=200 * 8,
         OP=OPdq(N0=SPEED, Id_ref=Ic.real, Iq_ref=Ic.imag), #,Ud_ref=Uc.real, Uq_ref=Uc.imag),
         is_periodicity_t=True,
@@ -178,27 +178,27 @@ def test_FEMM_Loss_Jaguar_wo_skew():
     # plt.show()
 
     if is_show_fig:
-        # group_names = [
-        #     "stator core",
-        #     "rotor core",
-        #     "rotor magnets"
-        # ]
-        # for loss in out.loss.loss_list:
-        #     if "joule" in loss.name or "proximity" in loss.name :
-        #         group_names.append("stator winding")
-        #         loss.get_mesh_solution().plot_contour(
-        #             "freqs=sum",
-        #             label=f"{loss.name} Loss",
-        #             group_names = group_names
-        #         )
-        #         group_names.pop()
-        #     else:
+        group_names = [
+            "stator core",
+            "rotor core",
+            "rotor magnets"
+        ]
+        for loss in out.loss.loss_list:
+            if "joule" in loss.name or "proximity" in loss.name :
+                group_names.append("stator winding")
+                loss.get_mesh_solution().plot_contour(
+                    "freqs=sum",
+                    label=f"{loss.name} Loss",
+                    group_names = group_names
+                )
+                group_names.pop()
+            else:
                 
-        #         loss.get_mesh_solution().plot_contour(
-        #             "freqs=sum",
-        #             label=f"{loss.name} Loss",
-        #             group_names = group_names
-        #         )
+                loss.get_mesh_solution().plot_contour(
+                    "freqs=sum",
+                    label=f"{loss.name} Loss",
+                    group_names = group_names
+                )
 
         plot_2D(
             [speed_array],
@@ -289,35 +289,35 @@ def test_FEMM_Loss_Jaguar():
     simu.mag.Slice_enforced = None
     simu.mag.import_file = None  # Draw machine in FEMM again
 
-    simu.loss = Loss(
-        is_get_meshsolution=True,
-        Tsta=100,
-        model_dict={"stator core": LossModelSteinmetz(group = "stator core"),
-                    "rotor core": LossModelSteinmetz(group = "rotor core"),
-                    "joule": LossModelWinding(group = "stator winding"),
-                    "proximity": LossModelProximity(group = "stator winding"),
-                    "magnets": LossModelMagnet(group = "rotor magnets")}
-    )
+    # simu.loss = Loss(
+    #     is_get_meshsolution=False,
+    #     Tsta=100,
+    #     model_dict={"stator core": LossModelSteinmetz(group = "stator core"),
+    #                 "rotor core": LossModelSteinmetz(group = "rotor core"),
+    #                 "joule": LossModelWinding(group = "stator winding"),
+    #                 "proximity": LossModelProximity(group = "stator winding"),
+    #                 "magnets": LossModelMagnet(group = "rotor magnets")}
+    # )
 
     out = simu.run()
     
-    out.loss.loss_list.append(sum(out.loss.loss_list))
-    out.loss.loss_list[-1].name = "overall"
+    # out.loss.loss_list.append(sum(out.loss.loss_list))
+    # out.loss.loss_list[-1].name = "overall"
 
     power_dict = {
         "Torque": out.mag.Tem_av,
-        "total_power": out.mag.Pem_av,
-        **dict([(o.name,o.get_loss_scalar(out.elec.OP.felec)) for o in out.loss.loss_list])
-    }
+        "total_power": out.mag.Pem_av,}
+    #     **dict([(o.name,o.get_loss_scalar(out.elec.OP.felec)) for o in out.loss.loss_list])
+    # }
     print(power_dict)
 
-    speed_array = np.linspace(10, 8000, 100)
-    p = machine.get_pole_pair_number()
+    # speed_array = np.linspace(10, 8000, 100)
+    # p = machine.get_pole_pair_number()
 
-    array_list = [np.array([o.get_loss_scalar(speed / 60 *p) for speed in speed_array])
-                  for o in out.loss.loss_list]
+    # array_list = [np.array([o.get_loss_scalar(speed / 60 *p) for speed in speed_array])
+    #               for o in out.loss.loss_list]
 
-    if is_show_fig:
+    # if is_show_fig:
         # group_names = [
         #     "stator core",
         #     "rotor core",
@@ -338,15 +338,15 @@ def test_FEMM_Loss_Jaguar():
         #             "freqs=sum",
         #             label=f"{loss.name} Loss",
         #             group_names = group_names
-        #         )
+        # #         )
 
-        plot_2D(
-            [speed_array],
-            array_list,
-            xlabel="Speed [rpm]",
-            ylabel="Losses [W]",
-            legend_list=[o.name for o in out.loss.loss_list],
-        )
+        # plot_2D(
+        #     [speed_array],
+        #     array_list,
+        #     xlabel="Speed [rpm]",
+        #     ylabel="Losses [W]",
+        #     legend_list=[o.name for o in out.loss.loss_list],
+        # )
 
     return out
 
