@@ -3,6 +3,7 @@ from numpy import sum as np_sum, zeros, array, pi
 
 def comp_loss(self):
     """Calculate Windage losses
+    Equation from "Design of Rotating Electrical Machines", Second Edition, Pyrhönen, Jokinen, Hrabovcovà
 
     Parameters
     ----------
