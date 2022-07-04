@@ -1,9 +1,8 @@
 from os.path import join, split, exists
 
 import numpy as np
-from numpy.testing import assert_almost_equal
-
 import pytest
+
 import SciDataTool
 print(SciDataTool.__version__)
 
@@ -14,11 +13,12 @@ from pyleecan.Classes.ElecLUTdq import ElecLUTdq
 
 from pyleecan.Classes.OPdq import OPdq
 from pyleecan.Classes.Simu1 import Simu1
+
 from pyleecan.Classes.InputCurrent import InputCurrent
 from pyleecan.Classes.VarLoadCurrent import VarLoadCurrent
 from pyleecan.Classes.MagFEMM import MagFEMM
 from pyleecan.Classes.PostLUT import PostLUT
-from pyleecan.Classes.LossFEMM import LossFEMM
+from pyleecan.Classes.Loss import Loss
 from pyleecan.Classes.LossModelSteinmetz import LossModelSteinmetz
 from pyleecan.Classes.LossModelWinding import LossModelWinding
 from pyleecan.Classes.LossModelProximity import LossModelProximity
@@ -29,6 +29,7 @@ from pyleecan.Functions.load import load
 from pyleecan.Functions.Load.load_json import LoadMissingFileError
 
 from pyleecan.definitions import DATA_DIR
+from pyleecan.definitions import RESULT_DIR
 
 is_show_fig = True
 
@@ -46,23 +47,15 @@ def test_efficiency_map_Prius():
     available at https://www.mdpi.com/2075-1702/7/4/75."""
 
     Toyota_Prius = load(join(DATA_DIR, "Machine", "Toyota_Prius_loss.json"))
-    path_to_LUT = r"C:\Users\LAP10\Documents\Loss\LUT_eff.h5"
+    path_to_LUT = join(RESULT_DIR, "LUT.h5")
 
     if not exists(split(path_to_LUT)[0]):
         raise Exception("The path to LUT is not valid.")
-    try:
-        LUT_enforced = load(path_to_LUT)
-        is_LUT_exists = True
-    except (FileNotFoundError, LoadMissingFileError):
-        print("The LUT could not be loaded, so it will be computed.")
-        LUT_enforced = None
-        is_LUT_exists = False
-
 
     # Speed vector
-    Nspeed = 30
+    Nspeed = 50
     # Number of loads
-    Nload = 3
+    Nload = 7
 
     # First simulation creating femm file
     simu = Simu1(name="test_ElecLUTdq_efficiency_map", machine=Toyota_Prius)
@@ -144,24 +137,6 @@ def test_efficiency_map_Prius():
     )
     simu.input.set_OP_from_array(OP_matrix, type_OP_matrix=1)
 
-    # Initialization of the magnetic simulation
-    # simu.mag = MagFEMM(
-    # is_periodicity_a=True,
-    # is_periodicity_t=True,
-    # nb_worker=4,
-    # is_get_meshsolution=True,
-    # is_fast_draw=True,
-    # is_calc_torque_energy=False)                
-    
-    loss_model = LossModelSteinmetz()
-    # simu.loss = LossFEMM(
-    #     Cp=1,
-    #     is_get_meshsolution=True,
-    #     Tsta=100,
-    #     type_skin_effect=0,
-    #     model_dict={"stator core": loss_model, "rotor core": loss_model},
-    # )
-
     simu.elec = ElecLUTdq(
         Urms_max=233,
         Jrms_max=30e6,
@@ -170,7 +145,7 @@ def test_efficiency_map_Prius():
         n_Iq=5,
         Id_max=0,
         Iq_min=0,
-        LUT_enforced=LUT_enforced,
+        LUT_enforced=None,
         is_grid_dq=True,
         
         LUT_simu=Simu1(
@@ -183,7 +158,7 @@ def test_efficiency_map_Prius():
             ),
             var_simu=VarLoadCurrent(
                 type_OP_matrix=1,
-                postproc_list=[PostLUT(is_save_LUT=False)],
+                postproc_list=[PostLUT(is_save_LUT=True)],
                 is_keep_all_output=True,
             ),
             mag=MagFEMM(
@@ -192,7 +167,7 @@ def test_efficiency_map_Prius():
                 nb_worker=4,
                 is_get_meshsolution=True,
             ),
-            loss = LossFEMM(
+            loss = Loss(
                 is_get_meshsolution=True,
                 Tsta=100,
                 model_dict={"stator core": LossModelSteinmetz(group = "stator core"),
@@ -211,8 +186,15 @@ def test_efficiency_map_Prius():
     Phidq_MTPA = np.zeros((Nspeed, Nload, 2))
     out_load = list()
     for ii, load_rate in enumerate(load_vect):
-        if ii > 0 and LUT_enforced is None:
-            simu.elec.LUT_enforced = out.output_list[0].simu.elec.LUT_enforced
+    
+        try:
+            LUT_enforced = load(path_to_LUT)
+            is_LUT_exists = True
+            simu.elec.LUT_enforced = LUT_enforced
+        except (FileNotFoundError, LoadMissingFileError):
+            print("The LUT could not be loaded, so it will be computed.")
+            LUT_enforced = None
+            is_LUT_exists = False
 
         simu.elec.load_rate = load_rate
 
@@ -224,33 +206,14 @@ def test_efficiency_map_Prius():
         OP_matrix_MTPA[:, ii, 2] = out["Iq"].result
         OP_matrix_MTPA[:, ii, 3] = out["T"].result
         OP_matrix_MTPA[:, ii, 4] = out["eff"].result
-        # OP_matrix_MTPA[:, ii, 3] = [out_ii.elec.Tem_av for out_ii in out.output_list]
-        # OP_matrix_MTPA[:, ii, 4] = [out_ii.elec.OP.efficiency for out_ii in out.output_list]
-        
-        # U_MTPA[:, ii, 0] = [out_ii.elec.OP.Ud_ref for out_ii in out.output_list]
         U_MTPA[:, ii, 0] = out["Ud"].result
         U_MTPA[:, ii, 1] = out["Uq"].result
         U_MTPA[:, ii, 2] = out["U0"].result
-        # U_MTPA[:, ii, 1] = [out_ii.elec.OP.Uq_ref for out_ii in out.output_list]
-        # U_MTPA[:, ii, 2] = [
-        #     out_ii.elec.OP.get_U0_UPhi0()["U0"] for out_ii in out.output_list
-        # ]
         I_MTPA[:, ii, 0] = out["Id"].result
         I_MTPA[:, ii, 1] = out["Iq"].result
         I_MTPA[:, ii, 2] = out["I0"].result
-        # I_MTPA[:, ii, 0] = OP_matrix_MTPA[:, ii, 1]
-        # I_MTPA[:, ii, 1] = OP_matrix_MTPA[:, ii, 2]
-        # I_MTPA[:, ii, 2] = [
-        #     out_ii.elec.OP.get_I0_Phi0()["I0"] for out_ii in out.output_list
-        # ]
-        # Phidq_MTPA[:, ii, 0] = [out_ii.elec.eec.Phid for out_ii in out.output_list]
-        # Phidq_MTPA[:, ii, 1] = [out_ii.elec.eec.Phiq for out_ii in out.output_list]
         Phidq_MTPA[:, ii, 0] = out["Phid"].result
         Phidq_MTPA[:, ii, 1] = out["Phiq"].result
-        
-        for o in out.loss.loss_list:
-            print(o.loss_model)
-            
 
         out_load.append(out)
 
@@ -360,7 +323,7 @@ def test_efficiency_map_Prius():
             xlabel="Rotational speed",
             ylabel="Torque",
             zlabel="Efficiency",
-            title="Efficiency map in torque, speed plane with 2",
+            title="Efficiency map in torque, speed plane",
             type_plot="pcolormesh",
             is_contour=True,
             levels=[0.7,0.85,0.9,0.92,0.93,0.94,0.95],
@@ -495,8 +458,3 @@ def test_efficiency_map_Prius():
 if __name__ == "__main__":
 
     out = test_efficiency_map_Prius()
-
-    # ELUT = test_EEC_ELUT_PMSM_calc(n_Id=3, n_Iq=3)
-    # ELUT.save("ELUT_PMSM.h5")
-    # ELUT = load("ELUT_PMSM.h5")
-    # test_EEC_ELUT_PMSM_MTPA(ELUT)
