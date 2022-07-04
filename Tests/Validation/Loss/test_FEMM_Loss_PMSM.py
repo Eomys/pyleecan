@@ -18,6 +18,7 @@ from pyleecan.Classes.LossModelBertotti import LossModelBertotti
 from pyleecan.Classes.LossModelWinding import LossModelWinding
 from pyleecan.Classes.LossModelProximity import LossModelProximity
 from pyleecan.Classes.LossModelMagnet import LossModelMagnet
+from pyleecan.Classes.LossModelWindage import LossModelWindage
 from pyleecan.Classes.OutLossModel import OutLossModel
 from pyleecan.Functions.Electrical.comp_loss_joule import comp_loss_joule
 
@@ -29,7 +30,7 @@ from pyleecan.definitions import DATA_DIR
 from SciDataTool.Functions.Plot.plot_2D import plot_2D 
 
 
-is_show_fig = False
+is_show_fig = True
 
 
 @pytest.mark.long_5s
@@ -334,12 +335,12 @@ def test_LossFEMM_SPMSM():
 def test_FEMM_Loss_Prius():
     """Test to calculate losses in Toyota_Prius using LossFEMM model based on motoranalysis validation"""
 
-    machine = load(join(DATA_DIR, "Machine", "Toyota_Prius_loss.json"))
+    machine = load(join(DATA_DIR, "Machine", "Toyota_Prius.json"))
 
     simu = Simu1(name="test_FEMM_Loss_Prius", machine=machine)
 
     # Current for MTPA
-    Ic = 57.5 * np.exp(1j * 140 * np.pi / 180)
+    Ic = 230 * np.exp(1j * 140 * np.pi / 180)
     SPEED = 1200
 
     simu.input = InputCurrent(
@@ -366,7 +367,8 @@ def test_FEMM_Loss_Prius():
                     "rotor core": LossModelSteinmetz(group = "rotor core"),
                     "joule": LossModelWinding(group = "stator winding"),
                     "proximity": LossModelProximity(group = "stator winding"),
-                    "magnets": LossModelMagnet(group = "rotor magnets")}
+                    "magnets": LossModelMagnet(group = "rotor magnets"),
+                    "mechanical": LossModelWindage(group = "rotor core")}
     )
 
     out = simu.run()

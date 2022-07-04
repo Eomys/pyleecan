@@ -5944,6 +5944,7 @@
             "LossModelMagnet",
             "LossModelProximity",
             "LossModelSteinmetz",
+            "LossModelWindage",
             "LossModelWinding"
         ],
         "desc": "Abstract Loss Model Class",
@@ -6289,6 +6290,37 @@
                 "type": "float",
                 "unit": "-",
                 "value": null
+            }
+        ]
+    },
+    "LossModelWindage": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Windage loss model",
+        "is_internal": false,
+        "methods": [
+            "comp_loss",
+            "comp_coeff"
+        ],
+        "mother": "LossModel",
+        "name": "LossModelWindage",
+        "package": "Simulation",
+        "path": "pyleecan/Generator/ClassesRef/Simulation/LossModelWindage.csv",
+        "properties": [
+            {
+                "as_dict": "",
+                "desc": "Winding temperature",
+                "max": "",
+                "min": "",
+                "name": "temperature",
+                "type": "float",
+                "unit": "\u00c2\u00b0C",
+                "value": 20
             }
         ]
     },
