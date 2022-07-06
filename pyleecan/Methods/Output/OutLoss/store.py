@@ -13,7 +13,7 @@ def store(
     self,
     model_dict,
     axes_dict=None,
-    is_get_meshsolution=False,
+    is_get_meshsolution=True,
     lam=None,
     OP=None,
     Tsta=20,
@@ -56,12 +56,14 @@ def store(
 
     for key, model in model_dict.items():
         P_density, f_array = model.comp_loss()
-
-        loss_density = np.zeros((freqs.size, Nelem))
-        If = np.argmin(np.abs(freqs[:, None] - f_array[None, :]), axis=0)[:, None]
-        Ie = np.array(group[model.group])[None, :]
-        loss_density[If, Ie] += P_density
-        overall_loss_density += loss_density
+        if is_get_meshsolution:
+            loss_density = np.zeros((freqs.size, Nelem))
+            If = np.argmin(np.abs(freqs[:, None] - f_array[None, :]), axis=0)[:, None]
+            Ie = np.array(group[model.group])[None, :]
+            loss_density[If, Ie] += P_density
+        else:
+            loss_density = None
+        # overall_loss_density += loss_density
         out_loss_model = OutLossModel(
             name=key,
             loss_density=loss_density,

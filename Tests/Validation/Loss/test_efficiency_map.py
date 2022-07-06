@@ -168,7 +168,7 @@ def test_efficiency_map_Prius():
                 is_get_meshsolution=True,
             ),
             loss = Loss(
-                is_get_meshsolution=True,
+                is_get_meshsolution=False,
                 Tsta=100,
                 model_dict={"stator core": LossModelSteinmetz(group = "stator core"),
                             "rotor core": LossModelSteinmetz(group = "rotor core"),
