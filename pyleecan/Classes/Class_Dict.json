@@ -14289,6 +14289,7 @@
         "desc": "",
         "is_internal": false,
         "methods": [
+            "_comp_line_dict",
             "_comp_point_coordinate",
             "build_geometry",
             "build_geometry_active",
@@ -14402,6 +14403,7 @@
         "desc": "",
         "is_internal": false,
         "methods": [
+            "_comp_line_dict",
             "_comp_point_coordinate",
             "build_geometry",
             "build_geometry_active",

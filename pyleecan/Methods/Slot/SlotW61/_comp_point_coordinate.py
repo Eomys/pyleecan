@@ -12,8 +12,8 @@ def _comp_point_coordinate(self):
 
     Returns
     -------
-    point_list: list
-        A list of 11 complex
+    point_dict: dict
+        A dict of the slot point coordinates
 
     """
 
@@ -40,4 +40,17 @@ def _comp_point_coordinate(self):
     Z9 = Z2.conjugate()
     Z10 = Z1.conjugate()
 
-    return [Z1, Z2, Z3, Z4, Z5, Z6, Z7, Z8, Z9, Z10]
+    point_dict = dict()
+    # symetry
+    point_dict["Z1"] = Z1
+    point_dict["Z2"] = Z2
+    point_dict["Z3"] = Z3
+    point_dict["Z4"] = Z4
+    point_dict["Z5"] = Z5
+    point_dict["Z6"] = Z6
+    point_dict["Z7"] = Z7
+    point_dict["Z8"] = Z8
+    point_dict["Z9"] = Z9
+    point_dict["Z10"] = Z10
+
+    return point_dict
