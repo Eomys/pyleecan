@@ -23,14 +23,14 @@ except ImportError as error:
     get_ref_simu_index = error
 
 try:
-    from ..Methods.Simulation.VarLoad.get_OP_matrix import get_OP_matrix
+    from ..Methods.Simulation.VarLoad.get_OP_array import get_OP_array
 except ImportError as error:
-    get_OP_matrix = error
+    get_OP_array = error
 
 try:
-    from ..Methods.Simulation.VarLoad.set_OP_matrix import set_OP_matrix
+    from ..Methods.Simulation.VarLoad.set_OP_array import set_OP_array
 except ImportError as error:
-    set_OP_matrix = error
+    set_OP_array = error
 
 try:
     from ..Methods.Simulation.VarLoad._set_OP_matrix import _set_OP_matrix
@@ -61,28 +61,28 @@ class VarLoad(VarSimu):
         )
     else:
         get_ref_simu_index = get_ref_simu_index
-    # cf Methods.Simulation.VarLoad.get_OP_matrix
-    if isinstance(get_OP_matrix, ImportError):
-        get_OP_matrix = property(
+    # cf Methods.Simulation.VarLoad.get_OP_array
+    if isinstance(get_OP_array, ImportError):
+        get_OP_array = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use VarLoad method get_OP_matrix: " + str(get_OP_matrix)
+                    "Can't use VarLoad method get_OP_array: " + str(get_OP_array)
                 )
             )
         )
     else:
-        get_OP_matrix = get_OP_matrix
-    # cf Methods.Simulation.VarLoad.set_OP_matrix
-    if isinstance(set_OP_matrix, ImportError):
-        set_OP_matrix = property(
+        get_OP_array = get_OP_array
+    # cf Methods.Simulation.VarLoad.set_OP_array
+    if isinstance(set_OP_array, ImportError):
+        set_OP_array = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use VarLoad method set_OP_matrix: " + str(set_OP_matrix)
+                    "Can't use VarLoad method set_OP_array: " + str(set_OP_array)
                 )
             )
         )
     else:
-        set_OP_matrix = set_OP_matrix
+        set_OP_array = set_OP_array
     # cf Methods.Simulation.VarLoad._set_OP_matrix
     if isinstance(_set_OP_matrix, ImportError):
         _set_OP_matrix = property(

@@ -28,11 +28,11 @@ def _set_OP_matrix(self, value):
         value_obj._set_None()
         # N0, Id, Iq, Tem, Pem is the most commun OP_matrix format
         if value.shape[1] == 5:
-            value_obj.set_OP_matrix(value, "N0", "Id", "Iq", "Tem", "Pem")
+            value_obj.set_OP_array(value, "N0", "Id", "Iq", "Tem", "Pem")
         elif value.shape[1] == 4:
-            value_obj.set_OP_matrix(value, "N0", "Id", "Iq", "Tem")
+            value_obj.set_OP_array(value, "N0", "Id", "Iq", "Tem")
         else:
-            value_obj.set_OP_matrix(value, "N0", "Id", "Iq")
+            value_obj.set_OP_array(value, "N0", "Id", "Iq")
         value = value_obj
     elif type(value) is int and value == -1:  # Default constructor
         OP_matrix = import_class("pyleecan.Classes", "OPMatrix", "OP_matrix")

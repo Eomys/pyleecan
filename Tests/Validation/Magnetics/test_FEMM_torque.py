@@ -101,7 +101,7 @@ def test_FEMM_torque():
     OP_matrix[:, 1] = ones(N_simu) * Imax
     OP_matrix[:, 2] = Phi0
     OP_matrix[:, 3] = Tem
-    simu.var_simu.set_OP_matrix(
+    simu.var_simu.set_OP_array(
         OP_matrix, "N0", "I0", "Phi0", "Tem", input_index=0, is_update_input=True
     )
 

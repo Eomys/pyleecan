@@ -152,7 +152,7 @@ def convert_OP_matrix(obj_dict):
             arg_list.append("Tem")
         elif OP_matrix.shape[1] == 5:
             arg_list.extend(["Tem", "Pem"])
-        OP_mat_obj.set_OP_matrix(OP_matrix, *arg_list)
+        OP_mat_obj.set_OP_array(OP_matrix, *arg_list)
         obj_dict["OP_matrix"] = OP_mat_obj
     return obj_dict
 
@@ -242,12 +242,7 @@ def is_Winding_dict(obj_dict):
             "WindingDW2L",
         ]
         or "__class__" in obj_dict.keys()
-        and obj_dict["__class__"]
-        in [
-            "Winding",
-            "WindingUD",
-            "WindingSC",
-        ]
+        and obj_dict["__class__"] in ["Winding", "WindingUD", "WindingSC",]
         and "Npcpp" in obj_dict.keys()
     )
 

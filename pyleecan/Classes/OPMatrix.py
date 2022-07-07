@@ -33,14 +33,14 @@ except ImportError as error:
     get_OP_list = error
 
 try:
-    from ..Methods.Simulation.OPMatrix.get_OP_matrix import get_OP_matrix
+    from ..Methods.Simulation.OPMatrix.get_OP_array import get_OP_array
 except ImportError as error:
-    get_OP_matrix = error
+    get_OP_array = error
 
 try:
-    from ..Methods.Simulation.OPMatrix.set_OP_matrix import set_OP_matrix
+    from ..Methods.Simulation.OPMatrix.set_OP_array import set_OP_array
 except ImportError as error:
-    set_OP_matrix = error
+    set_OP_array = error
 
 try:
     from ..Methods.Simulation.OPMatrix.has_Pem import has_Pem
@@ -98,28 +98,28 @@ class OPMatrix(FrozenClass):
         )
     else:
         get_OP_list = get_OP_list
-    # cf Methods.Simulation.OPMatrix.get_OP_matrix
-    if isinstance(get_OP_matrix, ImportError):
-        get_OP_matrix = property(
+    # cf Methods.Simulation.OPMatrix.get_OP_array
+    if isinstance(get_OP_array, ImportError):
+        get_OP_array = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use OPMatrix method get_OP_matrix: " + str(get_OP_matrix)
+                    "Can't use OPMatrix method get_OP_array: " + str(get_OP_array)
                 )
             )
         )
     else:
-        get_OP_matrix = get_OP_matrix
-    # cf Methods.Simulation.OPMatrix.set_OP_matrix
-    if isinstance(set_OP_matrix, ImportError):
-        set_OP_matrix = property(
+        get_OP_array = get_OP_array
+    # cf Methods.Simulation.OPMatrix.set_OP_array
+    if isinstance(set_OP_array, ImportError):
+        set_OP_array = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use OPMatrix method set_OP_matrix: " + str(set_OP_matrix)
+                    "Can't use OPMatrix method set_OP_array: " + str(set_OP_array)
                 )
             )
         )
     else:
-        set_OP_matrix = set_OP_matrix
+        set_OP_array = set_OP_array
     # cf Methods.Simulation.OPMatrix.has_Pem
     if isinstance(has_Pem, ImportError):
         has_Pem = property(

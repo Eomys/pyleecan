@@ -33,9 +33,9 @@ except ImportError as error:
     get_var_load = error
 
 try:
-    from ..Methods.Simulation.Simulation.get_OP_matrix import get_OP_matrix
+    from ..Methods.Simulation.Simulation.get_OP_array import get_OP_array
 except ImportError as error:
-    get_OP_matrix = error
+    get_OP_array = error
 
 
 from numpy import isnan
@@ -79,17 +79,17 @@ class Simulation(FrozenClass):
         )
     else:
         get_var_load = get_var_load
-    # cf Methods.Simulation.Simulation.get_OP_matrix
-    if isinstance(get_OP_matrix, ImportError):
-        get_OP_matrix = property(
+    # cf Methods.Simulation.Simulation.get_OP_array
+    if isinstance(get_OP_array, ImportError):
+        get_OP_array = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use Simulation method get_OP_matrix: " + str(get_OP_matrix)
+                    "Can't use Simulation method get_OP_array: " + str(get_OP_array)
                 )
             )
         )
     else:
-        get_OP_matrix = get_OP_matrix
+        get_OP_array = get_OP_array
     # generic save method is available in all object
     save = save
     # get_logger method is available in all object

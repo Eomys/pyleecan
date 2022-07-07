@@ -2,8 +2,8 @@ Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximu
 N0,rpm,Rotor speed,1,ndarray,None,,,,Simulation,,get_N_OP,VERSION,1,Define the Operating Point of a variable speed simulation
 Id_ref,Arms,d-axis current rms value,1,ndarray,None,,,,,,get_OP,,,
 Iq_ref,Arms,q-axis current rms value,1,ndarray,None,,,,,,get_OP_list,,,
-Ud_ref,Vrms,d-axis voltage rms value,1,ndarray,None,,,,,,get_OP_matrix,,,
-Uq_ref,Vrms,q-axis voltage rms value,1,ndarray,None,,,,,,set_OP_matrix,,,
+Ud_ref,Vrms,d-axis voltage rms value,1,ndarray,None,,,,,,get_OP_array,,,
+Uq_ref,Vrms,q-axis voltage rms value,1,ndarray,None,,,,,,set_OP_array,,,
 Tem_av_ref,N.m,Output average electromagnetic torque,,ndarray,None,,,,,,has_Pem,,,
 Pem_av_ref,W,Output/Input average Electromagnetic Power,,ndarray,None,,,,,,has_Tem,,,
 slip_ref,,Rotor mechanical slip,,ndarray,None,,,,,,has_slip,,,

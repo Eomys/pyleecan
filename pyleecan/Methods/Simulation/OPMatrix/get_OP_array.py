@@ -1,11 +1,11 @@
 from numpy import zeros, angle
-from ....Methods.Simulation.OPMatrix import OPMatrixException
+from . import OPMatrixException
 
 
-def get_OP_matrix(self, *arg_list):
+def get_OP_array(self, *arg_list):
     """get the OP_matrix by identifying the columns
-    Ex: get_OP_matrix("N0", "Iq", "Iq", "Tem")
-    get_OP_matrix() calls get_OP_matrix("N0", "Id", "Iq", "Tem", "Pem")
+    Ex: get_OP_array("N0", "Iq", "Iq", "Tem")
+    get_OP_array() calls get_OP_array("N0", "Id", "Iq", "Tem", "Pem")
 
     Parameters
     ----------
@@ -25,7 +25,7 @@ def get_OP_matrix(self, *arg_list):
         arg_list = arg_list[0]
     arg_list = list(arg_list)
 
-    # "all" returns all the columns set by the latest set_OP_matrix
+    # "all" returns all the columns set by the latest set_OP_array
     if len(arg_list) == 1 and arg_list[0].lower() in ["all", "al", "a"]:
         if self.col_names is not None and len(self.col_names) > 0:
             arg_list = self.col_names
@@ -106,7 +106,7 @@ def get_OP_matrix(self, *arg_list):
             OP_matrix[:, ii] = self.If_ref[:]
         else:
             raise OPMatrixException(
-                "Error in OP_matrix.set_OP_matrix, unknow column name for index "
+                "Error in OP_matrix.get_OP_array, unknow column name for index "
                 + str(ii)
                 + " in "
                 + str(arg_list)

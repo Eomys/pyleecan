@@ -4998,7 +4998,8 @@
         "is_internal": false,
         "methods": [
             "get_eec",
-            "get_OP_matrix",
+            "get_OP_matrix_obj",
+            "get_OP_array",
             "set_default_simulation",
             "get_phase_dir"
         ],
@@ -8576,7 +8577,7 @@
         "is_internal": false,
         "methods": [
             "get_machine_from_parent",
-            "get_OP_matrix"
+            "get_OP_array"
         ],
         "mother": "",
         "name": "OP",
@@ -8659,8 +8660,8 @@
             "get_N_OP",
             "get_OP",
             "get_OP_list",
-            "get_OP_matrix",
-            "set_OP_matrix",
+            "get_OP_array",
+            "set_OP_array",
             "has_Pem",
             "has_Tem",
             "has_slip"
@@ -11621,7 +11622,7 @@
             "run",
             "init_logger",
             "get_var_load",
-            "get_OP_matrix"
+            "get_OP_array"
         ],
         "mother": "",
         "name": "Simulation",
@@ -15512,8 +15513,8 @@
         "is_internal": false,
         "methods": [
             "get_ref_simu_index",
-            "get_OP_matrix",
-            "set_OP_matrix",
+            "get_OP_array",
+            "set_OP_array",
             "_set_OP_matrix"
         ],
         "mother": "VarSimu",

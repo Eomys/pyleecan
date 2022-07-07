@@ -80,7 +80,7 @@ def test_LUTdq_grid_vect(is_load=True):
         LUT_vect = simu.elec.comp_LUTdq()
 
     # Get Id_min, Id_max, Iq_min, Iq_max from OP_matrix
-    OP_matrix = LUT_grid.get_OP_matrix("N0", "Id", "Iq")
+    OP_matrix = LUT_grid.get_OP_array("N0", "Id", "Iq")
     Id_min = OP_matrix[:, 1].min()
     Id_max = OP_matrix[:, 1].max()
     Iq_min = OP_matrix[:, 2].min()

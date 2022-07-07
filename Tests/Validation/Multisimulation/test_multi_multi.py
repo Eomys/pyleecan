@@ -229,7 +229,7 @@ def test_multi_multi():
     ]
     multisim.datakeeper_list = datakeeper_list
     multisim.var_simu = varload  # Setup Multisim of Multi_sim
-    varload.set_OP_matrix(OP_matrix, "N0", "Id", "Iq")
+    varload.set_OP_array(OP_matrix, "N0", "Id", "Iq")
 
     # Post-process
     Post1 = PostFunction(join(dirname(__file__), "plot_save.py"))

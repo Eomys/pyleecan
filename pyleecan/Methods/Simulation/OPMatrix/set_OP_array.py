@@ -1,11 +1,11 @@
 from numpy import exp, hstack, zeros
-from ....Methods.Simulation.OPMatrix import OPMatrixException
+from . import OPMatrixException
 
 
-def set_OP_matrix(self, OP_matrix, *arg_list):
+def set_OP_array(self, OP_matrix, *arg_list):
     """Set the OP_matrix by identifying the columns
-    Ex: set_OP_matrix(OP_matrix, "N0", "Iq", "Iq", "Tem")
-    set_OP_matrix(OP_matrix) calls set_OP_matrix(OP_matrix, "N0", "Id", "Iq", "Tem", "Pem")
+    Ex: set_OP_array(OP_matrix, "N0", "Iq", "Iq", "Tem")
+    set_OP_array(OP_matrix) calls set_OP_array(OP_matrix, "N0", "Id", "Iq", "Tem", "Pem")
     I0/Phi0 are converted to Id, Iq, U0/UPhi0 are converted to Ud, Uq
 
     Parameters
@@ -47,7 +47,7 @@ def set_OP_matrix(self, OP_matrix, *arg_list):
         arg_list.append("Pem")
     if len(arg_list) != OP_matrix.shape[1]:
         raise OPMatrixException(
-            "Error missing column name for OP_matrix.set_OP_matrix, "
+            "Error missing column name for OP_matrix.set_OP_array, "
             + str(OP_matrix.shape[1])
             + " expected "
             + str(arg_list)
@@ -117,11 +117,11 @@ def set_OP_matrix(self, OP_matrix, *arg_list):
             self.If_ref = OP_matrix[:, ii]
         else:
             raise OPMatrixException(
-                "Error in OP_matrix.set_OP_matrix, unknow column name for index "
+                "Error in OP_matrix.set_OP_array, unknow column name for index "
                 + str(ii)
                 + " in "
                 + str(arg_list)
             )
 
-    # Store column names for get_OP_matrix("all")
+    # Store column names for get_OP_array("all")
     self.col_names = arg_list

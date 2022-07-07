@@ -1,4 +1,4 @@
-def get_OP_matrix(self, *arg_list):
+def get_OP_array(self, *arg_list):
     """Return the OP matrix
 
     Parameters
@@ -12,4 +12,4 @@ def get_OP_matrix(self, *arg_list):
         Operating Points matrix
     """
 
-    return self.OP_matrix.get_OP_matrix(*arg_list)
+    return self.OP_matrix.get_OP_array(*arg_list)

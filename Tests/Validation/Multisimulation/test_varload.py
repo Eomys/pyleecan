@@ -78,7 +78,7 @@ def test_varload():
     OP_matrix[:, 2] = Phi0_ref[I_simu]
     # Set reference torque from Yang et al, 2013
     OP_matrix[:, 3] = Tem_av_ref[I_simu]
-    simu.var_simu.set_OP_matrix(
+    simu.var_simu.set_OP_array(
         OP_matrix, "N0", "I0", "Phi0", "Tem",
     )
 

@@ -48,7 +48,7 @@ def comp_LUTdq(self):
     OP_matrix[:, 2] = Iq.ravel()
 
     simu.machine = self.parent.machine
-    simu.var_simu.set_OP_matrix(
+    simu.var_simu.set_OP_array(
         OP_matrix, "N0", "Id", "Iq", is_update_input=True, input_index=0
     )
 
