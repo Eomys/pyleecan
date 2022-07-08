@@ -41,13 +41,14 @@ is_show_fig = True
 @pytest.mark.IPMSM
 @pytest.mark.periodicity
 @pytest.mark.skip(reason="Work in progress")
-def test_efficiency_map_Prius():
+def test_efficiency_map(machine_name,Umax, Jmax):
     """Validation of the efficiency map of the Toyota Prius motor, based on the one presented in 
     "Electromagnetic Analysis and Design Methodology for Permanent Magnet Motors Using MotorAnalysis-PM Software",
     available at https://www.mdpi.com/2075-1702/7/4/75."""
 
-    Toyota_Prius = load(join(DATA_DIR, "Machine", "Toyota_Prius_loss.json"))
-    path_to_LUT = join(RESULT_DIR, "LUT.h5")
+    Toyota_Prius = load(join(DATA_DIR, "Machine", f"{machine_name}.json"))
+    LUT_file_name = f"LUT_eff_{machine_name}.h5"
+    path_to_LUT = join(RESULT_DIR, LUT_file_name)
 
     if not exists(split(path_to_LUT)[0]):
         raise Exception("The path to LUT is not valid.")
@@ -129,7 +130,7 @@ def test_efficiency_map_Prius():
     ]
 
     OP_matrix = np.zeros((Nspeed, 3))
-    OP_matrix[:, 0] = np.linspace(500, 8000, Nspeed)
+    OP_matrix[:, 0] = np.linspace(500, 13000, Nspeed)
     simu.var_simu = VarLoadCurrent(
         OP_matrix=OP_matrix, type_OP_matrix=1,
         datakeeper_list = datakeeper_list
@@ -138,8 +139,8 @@ def test_efficiency_map_Prius():
     simu.input.set_OP_from_array(OP_matrix, type_OP_matrix=1)
 
     simu.elec = ElecLUTdq(
-        Urms_max=233,
-        Jrms_max=30e6,
+        Urms_max=Umax,
+        Jrms_max=Jmax,
         n_interp=100,
         n_Id=5,
         n_Iq=5,
@@ -158,7 +159,7 @@ def test_efficiency_map_Prius():
             ),
             var_simu=VarLoadCurrent(
                 type_OP_matrix=1,
-                postproc_list=[PostLUT(is_save_LUT=True)],
+                postproc_list=[PostLUT(is_save_LUT=True, file_name = LUT_file_name)],
                 is_keep_all_output=True,
             ),
             mag=MagFEMM(
@@ -223,8 +224,8 @@ def test_efficiency_map_Prius():
     # assert_almost_equal(OP_matrix_MTPA[:, 0, 3].max(), 0, decimal=0)
     # assert_almost_equal(OP_matrix_MTPA[:, 0, 3].min(), 0, decimal=0)
     
-    if not is_LUT_exists:
-        simu.elec.LUT_enforced.save(save_path=path_to_LUT)
+    # if not is_LUT_exists:
+    #     simu.elec.LUT_enforced.save(save_path=path_to_LUT)
 
     if is_show_fig:
         # Build legend list for each load level
@@ -370,33 +371,33 @@ def test_efficiency_map_Prius():
                     **dict_map,
                 )
         #==================================================#
-        # Tem_rip = LUT_grid.interp_Tem_rip_dqh(Id, Iq)
+        Tem_rip = LUT_grid.interp_Tem_rip_dqh(Id, Iq)
         
-        # # Plot Phi_d map
-        # plot_3D(
-        #     Zdata=Tem_rip.reshape((nd, nq)),
-        #     zlabel="$\Phi_d$ [Wb]",
-        #     title="Flux linkage map in dq plane (d-axis)",
-        #     **dict_map,
-        # )
+        # Plot T_em_rip map
+        plot_3D(
+            Zdata=Tem_rip.reshape((nd, nq)),
+            zlabel="T_emrip$ ",
+            title="Torque ripple map in dq plane",
+            **dict_map,
+        )
         
-        # Phi_dqh_grid = LUT_grid.interp_Phi_dqh(Id, Iq)
+        Phi_dqh_grid = LUT_grid.interp_Phi_dqh(Id, Iq)
         
-        # # Plot Phi_d map
-        # plot_3D(
-        #     Zdata=Phi_dqh_grid[0, :].reshape((nd, nq)).T,
-        #     zlabel="$\Phi_d$ [Wb]",
-        #     title="Flux linkage map in dq plane (d-axis)",
-        #     **dict_map,
-        # )
+        # Plot Phi_d map
+        plot_3D(
+            Zdata=Phi_dqh_grid[0, :].reshape((nd, nq)).T,
+            zlabel="$\Phi_d$ [Wb]",
+            title="Flux linkage map in dq plane (d-axis)",
+            **dict_map,
+        )
 
-        # # Plot Phi_q map
-        # plot_3D(
-        #     Zdata=Phi_dqh_grid[1, :].reshape((nd, nq)).T,
-        #     zlabel="$\Phi_q$ [Wb]",
-        #     title="Flux linkage map in dq plane (q-axis)",
-        #     **dict_map,
-        # )
+        # Plot Phi_q map
+        plot_3D(
+            Zdata=Phi_dqh_grid[1, :].reshape((nd, nq)).T,
+            zlabel="$\Phi_q$ [Wb]",
+            title="Flux linkage map in dq plane (q-axis)",
+            **dict_map,
+        )
     #======================================================#
         # # Init plot map
         # dict_map = {
@@ -457,4 +458,5 @@ def test_efficiency_map_Prius():
 # To run it without pytest
 if __name__ == "__main__":
 
-    out = test_efficiency_map_Prius()
+    out = test_efficiency_map("Toyota_Prius_loss",230,30e6)
+    # out = test_efficiency_map("Jaguar_I_Pace_wo_skew",100,17e6)

@@ -11049,6 +11049,16 @@
                 "type": "bool",
                 "unit": "",
                 "value": 1
+            },
+            {
+                "as_dict": "",
+                "desc": "File name of the file created if is_save_LUT is True",
+                "max": "",
+                "min": "",
+                "name": "file_name",
+                "type": "str",
+                "unit": "",
+                "value": "LUT"
             }
         ]
     },

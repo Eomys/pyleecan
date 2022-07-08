@@ -38,34 +38,34 @@ def comp_loss(self):
     L = machine.rotor.L1
     p = machine.get_pole_pair_number()
     rho = 1.225  # air density
-    k=1
-    omega = 2* pi /p*felec
+    k = 1
+    omega = 2 * pi / p * felec
     delta = machine.comp_length_airgap_active()
-    mu = 18.5e-6 # Dynamic viscosity of air
+    mu = 18.5e-6  # Dynamic viscosity of air
     # Couette Reynolds number
-    Re_delta = rho*omega*Dr*delta/(2*mu)
-    if Re_delta<64:
-        C_M=10*(2*delta/Dr)**0.3/Re_delta
-    elif Re_delta<5e2:
-        C_M=2*(2*delta/Dr)**0.3/Re_delta**0.6
-    elif Re_delta<1e4:
-        C_M=1.03*(2*delta/Dr)**0.3/Re_delta**0.5
+    Re_delta = rho * omega * Dr * delta / (2 * mu)
+    if Re_delta < 64:
+        C_M = 10 * (2 * delta / Dr) ** 0.3 / Re_delta
+    elif Re_delta < 5e2:
+        C_M = 2 * (2 * delta / Dr) ** 0.3 / Re_delta ** 0.6
+    elif Re_delta < 1e4:
+        C_M = 1.03 * (2 * delta / Dr) ** 0.3 / Re_delta ** 0.5
     else:
-        C_M=0.065*(2*delta/Dr)**0.3/Re_delta**0.2
-    
-    P1 = 1/32*k*C_M*pi* rho* omega**3*Dr**4*L 
+        C_M = 0.065 * (2 * delta / Dr) ** 0.3 / Re_delta ** 0.2
+
+    P1 = 1 / 32 * k * C_M * pi * rho * omega ** 3 * Dr ** 4 * L
 
     Dri = machine.rotor.Rint
-    
+
     # tip Reynolds number
-    Re_r = rho * omega * Dr**2/(4*mu)
-    
+    Re_r = rho * omega * Dr ** 2 / (4 * mu)
+
     if Re_r < 3e5:
-        C_M = 3.87/Re_r**0.5
+        C_M = 3.87 / Re_r ** 0.5
     else:
-        C_M = 0.146/Re_r**0.2
-    
-    P2 = 1/64 * C_M * rho * omega**3*(Dr**5-Dri**5)
+        C_M = 0.146 / Re_r ** 0.2
+
+    P2 = 1 / 64 * C_M * rho * omega ** 3 * (Dr ** 5 - Dri ** 5)
 
     Ploss = P1 + P2
 
