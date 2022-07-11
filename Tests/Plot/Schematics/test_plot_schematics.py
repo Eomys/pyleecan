@@ -388,6 +388,7 @@ class Test_plot_schematics(object):
                 save_path=file_path,
                 is_show_fig=False,
             )
+        assert False
 
     @pytest.mark.parametrize("test_dict", slot_test)
     def test_slot_point(self, test_dict):
@@ -408,6 +409,7 @@ class Test_plot_schematics(object):
             save_path=file_path,
             is_show_fig=False,
         )
+        assert False
 
 
 if __name__ == "__main__":

@@ -1,5 +1,6 @@
 import matplotlib.pyplot as plt
 from numpy import pi, exp
+import numpy as np
 
 from ....Classes.Arc1 import Arc1
 from ....Classes.LamSlot import LamSlot
@@ -76,13 +77,13 @@ def plot_schematics(
         slot = type(self)(
             Zs=12,
             H1=20e-3,
-            H2=30e-3,
-            W1=80e-3,
-            W2=40e-3,
+            H2=45e-3,
+            W1=100e-3,
+            W2=20e-3,
             R1=100e-3,
-            W3=0,
-            H3=0,
-            H4=0,
+            W3=17e-3,
+            H3=17e-3,
+            H4=17e-3,
         )
         lam = LamSlot(Rint=0.135, Rext=0.3, is_internal=True, is_stator=True, slot=slot)
         # lam = LamSlotWind(
@@ -166,10 +167,10 @@ def plot_schematics(
             Zlim2 = point_dict["Z7"]
             plot_quote(
                 point_dict["Z8"],
-                Zlim1 + (0.012 + 0j),
-                Zlim2 + (0.012 + 0j),
+                Zlim1 + (0.042 + 0j),
+                Zlim2 + (0.042 + 0j),
                 point_dict["Z7"],
-                offset_label=self.H1 * 0.6 + 1j * self.W1 * 0.05,
+                offset_label=self.H1 * 0.3 + 1j * self.W1 * 0.05,
                 fig=fig,
                 ax=ax,
                 label="H2",
@@ -185,7 +186,7 @@ def plot_schematics(
                 label="W2",
                 color=ARROW_COLOR,
                 linewidth=ARROW_WIDTH,
-                offset_label=-2.3j * self.W1 * 0.1,
+                offset_label=-2.3j * self.W1 * 0.1 - (0.007 + 0j),
                 is_arrow=True,
                 fontsize=SC_FONT_SIZE,
             )
@@ -218,6 +219,78 @@ def plot_schematics(
                 label="R1",
             )
 
+            # W5d
+            Zlim1 = point_dict["Zw5d"]
+            Zlim2 = point_dict["Zw5d"]
+            plot_quote(
+                point_dict["Z3d"],
+                Zlim1,
+                Zlim2,
+                point_dict["Z5d"],
+                offset_label=0,
+                fig=fig,
+                ax=ax,
+                label=None,
+            )
+            # W5
+            Zlim1 = point_dict["Zw5"]
+            Zlim2 = point_dict["Zw5"]
+            plot_quote(
+                point_dict["Z3"],
+                Zlim1,
+                Zlim2,
+                point_dict["Z5"],
+                offset_label=0,
+                fig=fig,
+                ax=ax,
+                label=None,
+            )
+            # H3
+            line = Segment(
+                ((point_dict["Z3d"] + point_dict["Z4d"]) / 2) + (0.008 + 0j),
+                ((point_dict["Zw4d"] + point_dict["Zw1d"]) / 2),
+            )
+            line.plot(
+                fig=fig,
+                ax=ax,
+                label="H3",
+                color=ARROW_COLOR,
+                linewidth=ARROW_WIDTH,
+                offset_label=(-0.2j * self.W1 * 0.1) - (0.020 + 0j),
+                is_arrow=True,
+                fontsize=SC_FONT_SIZE,
+            )
+            # H4
+            line = Segment(
+                ((point_dict["Z5d"] + point_dict["Zw5d"]) / 2) + (0.008 + 0j),
+                ((point_dict["Zw2d"] + point_dict["Zw3d"]) / 2),
+            )
+            line.plot(
+                fig=fig,
+                ax=ax,
+                label="H4",
+                color=ARROW_COLOR,
+                linewidth=ARROW_WIDTH,
+                offset_label=(-0.2j * self.W1 * 0.1) - (0.020 + 0j),
+                is_arrow=True,
+                fontsize=SC_FONT_SIZE,
+            )
+            # W3
+            line = Segment(
+                ((point_dict["Zw5"] + point_dict["Z3"]) / 2),
+                ((point_dict["Zw4"] + point_dict["Zw3"]) / 2),
+            )
+            line.plot(
+                fig=fig,
+                ax=ax,
+                label="W3",
+                color=ARROW_COLOR,
+                linewidth=ARROW_WIDTH,
+                offset_label=(-2.3j * self.W1 * 0.1) - (0.007 + 0j),
+                is_arrow=True,
+                fontsize=SC_FONT_SIZE,
+            )
+
         if is_add_main_line:
             # Ox axis
             line = Segment(0, lam.Rext * 1.5)
@@ -244,8 +317,12 @@ def plot_schematics(
             )
 
         if type_add_active in [1, 3]:  # Wind and Wedge
-            is_add_wedge = type_add_active == 3
-            self.plot_active(fig=fig, is_show_fig=False, is_add_wedge=is_add_wedge)
+            is_add_wedge = False # No wedge for this false
+            self.plot_active(fig=fig, is_show_fig=False, is_add_wedge=is_add_wedge, wind_mat=np.ones((1,2,self.Zs,1)), alpha=pi/self.Zs + 2 * pi / self.Zs)
+            self.plot_active(fig=fig, is_show_fig=False, is_add_wedge=is_add_wedge, wind_mat=np.ones((1,2,self.Zs,1)), alpha=pi/self.Zs + 4 * pi / self.Zs)
+            self.plot_active(fig=fig, is_show_fig=False, is_add_wedge=is_add_wedge, wind_mat=np.ones((1,2,self.Zs,1)), alpha=pi/self.Zs + 6 * pi / self.Zs)
+            self.plot_active(fig=fig, is_show_fig=False, is_add_wedge=is_add_wedge, wind_mat=np.ones((1,2,self.Zs,1)), alpha=pi/self.Zs + 8 * pi / self.Zs)
+
         elif type_add_active == 2:  # Magnet
             self.plot_active(
                 fig=fig,

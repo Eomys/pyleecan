@@ -320,7 +320,6 @@ def plot_schematics(
             self.plot_active(fig=fig, is_show_fig=False, is_add_wedge=is_add_wedge, wind_mat=np.ones((1,2,self.Zs,1)), alpha=pi/self.Zs + 4 * pi / self.Zs)
             self.plot_active(fig=fig, is_show_fig=False, is_add_wedge=is_add_wedge, wind_mat=np.ones((1,2,self.Zs,1)), alpha=pi/self.Zs + 6 * pi / self.Zs)
             self.plot_active(fig=fig, is_show_fig=False, is_add_wedge=is_add_wedge, wind_mat=np.ones((1,2,self.Zs,1)), alpha=pi/self.Zs + 8 * pi / self.Zs)
-            # exp(1j * (pi / self.Zs + 4 * pi / self.Zs))
         elif type_add_active == 2:  # Magnet
             self.plot_active(
                 fig=fig,
