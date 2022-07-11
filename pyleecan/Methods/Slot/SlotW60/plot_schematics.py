@@ -42,8 +42,8 @@ def plot_schematics(
 
     Parameters
     ----------
-    self : SlotW61
-        A SlotW61 object
+    self : SlotW60
+        A SlotW60 object
     is_default : bool
         True: plot default schematics, else use current slot values
     is_add_point_label : bool
@@ -75,12 +75,11 @@ def plot_schematics(
     if is_default:
         slot = type(self)(
             Zs=12,
-            H0=20e-3,
-            W0=40e-3,
             H1=20e-3,
             H2=30e-3,
             W1=80e-3,
             W2=40e-3,
+            R1=100e-3,
             W3=0,
             H3=0,
             H4=0,
@@ -115,6 +114,7 @@ def plot_schematics(
                 1j * (pi / self.Zs + 4 * pi / self.Zs)
             )
             point_dict[key + "d"] = point_dict[key] * exp(1j * (2 * pi / self.Zs))
+            point_dict[key + "dd"] = point_dict[key + "d"] * exp(1j * (2 * pi / self.Zs))
 
         if self.is_outwards():
             sign = 1
@@ -133,36 +133,35 @@ def plot_schematics(
 
         # Adding schematics
         if is_add_schematics:
-            # W0
-            Zlim1 = point_dict["Z1d"]+0.005j
-            Zlim2 = point_dict["Z10"]+0.005j
-            plot_quote(
-                point_dict["Z1d"],
-                Zlim1,
-                Zlim2,
-                point_dict["Z10"],
-                offset_label= self.H0 * 0.1 + 1j * self.W0 * 0.3,
-                fig=fig,
-                ax=ax,
-                label="W0",
-            )
-            # H0
-            Zlim1 = point_dict["Z2d"]
-            Zlim2 = point_dict["Z2d"].real + 1j * point_dict["Z1d"].imag
-            plot_quote(
-                point_dict["Z2d"],
-                Zlim1 - (0.006 + 0j),
-                Zlim2 - (0.006 + 0j),
-                point_dict["Z1d"],
-                offset_label=self.H0 * -1.2 + 1j * self.W0 * 0.05,
-                fig=fig,
-                ax=ax,
-                label="H0",
-            )
+        #     # W0
+        #     line = Segment(point_dict["Z1d"], point_dict["Z10"])
+        #     line.plot(
+        #         fig=fig,
+        #         ax=ax,
+        #         color=ARROW_COLOR,
+        #         linewidth=ARROW_WIDTH,
+        #         label="W0",
+        #         offset_label=self.H0 * 0.1 + 1j * self.W0 * 0.3,
+        #         is_arrow=True,
+        #         fontsize=SC_FONT_SIZE,
+        #     )
+        #     # H0
+        #     Zlim1 = point_dict["Z2d"]
+        #     Zlim2 = point_dict["Z2d"].real +1j * point_dict["Z1d"].imag
+        #     plot_quote(
+        #         point_dict["Z2d"],
+        #         Zlim1 - (0.006 + 0j),
+        #         Zlim2 - (0.006 + 0j),
+        #         point_dict["Z1d"],
+        #         offset_label=self.H0 * -1.2 + 1j * self.W0 * 0.05,
+        #         fig=fig,
+        #         ax=ax,
+        #         label="H0",
+        #     )
             # W1
             line = Segment(
                 (point_dict["Z2d"] + point_dict["Z3d"]) / 2,
-                (point_dict["Z9"] + point_dict["Z8"]) / 2,
+                (point_dict["Z9"] + point_dict["Z10"]) / 2,
             )
             line.plot(
                 fig=fig,
@@ -170,32 +169,32 @@ def plot_schematics(
                 label="W1",
                 color=ARROW_COLOR,
                 linewidth=ARROW_WIDTH,
-                offset_label=2.1j * self.W0 * 0.1,
+                offset_label=1.6j * self.W1 * 0.1,
                 is_arrow=True,
                 fontsize=SC_FONT_SIZE,
             )
             # H1
-            Zlim1 = point_dict["Z9"]
-            Zlim2 = point_dict["Z8"]
+            Zlim1 = point_dict["Z2d"]
+            Zlim2 = point_dict["Z3d"]
             plot_quote(
-                point_dict["Z9"],
-                Zlim1 + (0.006 + 0j),
-                Zlim2 + (0.006 + 0j),
-                point_dict["Z8"],
-                offset_label=self.H0 * 0.6 + 1j * self.W0 * 0.05,
+                point_dict["Z2d"],
+                Zlim1 - (0.006 + 0j),
+                Zlim2 - (0.006 + 0j),
+                point_dict["Z3d"],
+                offset_label=self.H1 * -1.0 + 1j * self.W1 * 0.05,
                 fig=fig,
                 ax=ax,
                 label="H1",
             )
             # H2
-            Zlim1 = point_dict["Z4d"]
-            Zlim2 = point_dict["Z5d"]
+            Zlim1 = point_dict["Z8"]
+            Zlim2 = point_dict["Z7"]
             plot_quote(
-                point_dict["Z4d"],
-                Zlim1 - (0.006 + 0j),
-                Zlim2 - (0.006 + 0j),
-                point_dict["Z5d"],
-                offset_label=self.H0 * -1.2 + 1j * self.W0 * 0.05,
+                point_dict["Z8"],
+                Zlim1 + (0.012 + 0j),
+                Zlim2 + (0.012 + 0j),
+                point_dict["Z7"],
+                offset_label=self.H1 * 0.6 + 1j * self.W1 * 0.05,
                 fig=fig,
                 ax=ax,
                 label="H2",
@@ -203,7 +202,7 @@ def plot_schematics(
             # W2
             line = Segment(
                 (point_dict["Z4d"] + point_dict["Z5d"]) / 2,
-                (point_dict["Z7"] + point_dict["Z6"]) / 2,
+                (point_dict["Z8"] + point_dict["Z7"]) / 2,
             )
             line.plot(
                 fig=fig,
@@ -211,9 +210,51 @@ def plot_schematics(
                 label="W2",
                 color=ARROW_COLOR,
                 linewidth=ARROW_WIDTH,
-                offset_label=-3.9j * self.W0 * 0.1,
+                offset_label=-2.3j * self.W1 * 0.1,
                 is_arrow=True,
                 fontsize=SC_FONT_SIZE,
+            )
+            # H3
+            line = Segment(
+                (point_dict["Z11d"]),
+                (point_dict["Z4dd"] + point_dict["Z8d"]) / 2,
+            )
+            line.plot(
+                fig=fig,
+                ax=ax,
+                label="H3",
+                color=ARROW_COLOR,
+                linewidth=ARROW_WIDTH,
+                offset_label= 0.009 + -0j * self.W1,
+                is_arrow=True,
+                fontsize=SC_FONT_SIZE,
+            )
+            # R1
+            # # # # line = Segment(
+            # # # #     (point_dict["Z2dd"]),
+            # # # #     (point_dict["Zcd"]),
+            # # # # )
+            # # # # line.plot(
+            # # # #     fig=fig,
+            # # # #     ax=ax,
+            # # # #     label="R1",
+            # # # #     color=ARROW_COLOR,
+            # # # #     linewidth=ARROW_WIDTH,
+            # # # #     offset_label= 0.009 + -0j * self.W1,
+            # # # #     is_arrow=True,
+            # # # #     fontsize=SC_FONT_SIZE,
+            # # # # )
+            Zlim1 = point_dict["Z2dd"]
+            Zlim2 = point_dict["Zcd"]
+            plot_quote(
+                point_dict["Zcd"],
+                Zlim1,
+                Zlim2,
+                point_dict["Z10d"],
+                offset_label= 0.009 + -0j * self.W1,
+                fig=fig,
+                ax=ax,
+                label="R1",
             )
 
         if is_add_main_line:
@@ -229,7 +270,7 @@ def plot_schematics(
             # Top arc
             line = Arc1(
                 begin=point_dict["Z1"],
-                end=point_dict["Z10d"],
+                end=point_dict["Z11d"],
                 radius=self.get_Rbo(),
                 is_trigo_direction=True,
             )
@@ -254,7 +295,7 @@ def plot_schematics(
         # Zooming and cleaning
         ax.axis("equal")
         ax.set_ylim(abs(point_dict["Z1"]) * 0.5, abs(point_dict["Z1"]) * 1.2)
-        ax.set_xlim(-2 * self.W0, 2 * self.W0)
+        ax.set_xlim(self.W1*-0.5, self.W1*0.5)
         manager = plt.get_current_fig_manager()
         if manager is not None:
             manager.set_window_title(type(self).__name__ + " Schematics")

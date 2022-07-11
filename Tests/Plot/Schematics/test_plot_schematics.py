@@ -202,7 +202,7 @@ slot_test.append(
 slot_test.append(
     {
         "test_obj": SlotW60(),
-        "type_add_active": 0,
+        "type_add_active": 1,
     }
 )
 
@@ -412,7 +412,7 @@ class Test_plot_schematics(object):
 
 if __name__ == "__main__":
     a = Test_plot_schematics()
-    a.test_slot_point(slot_test[25])
+    a.test_slot(slot_test[26])
     # a.test_slot_point(slot_test[-1])
     # for slot in slot_test:
     #     a.test_slot(slot)

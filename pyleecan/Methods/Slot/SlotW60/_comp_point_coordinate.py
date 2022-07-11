@@ -59,5 +59,6 @@ def _comp_point_coordinate(self):
     point_dict["Z9"] = Z9
     point_dict["Z10"] = Z10
     point_dict["Z11"] = Z11
+    point_dict["Zc"] = (Rbo - self.R1) * exp(1j * (pi / self.Zs))
 
     return point_dict
