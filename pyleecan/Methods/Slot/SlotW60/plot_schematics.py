@@ -133,31 +133,6 @@ def plot_schematics(
 
         # Adding schematics
         if is_add_schematics:
-        #     # W0
-        #     line = Segment(point_dict["Z1d"], point_dict["Z10"])
-        #     line.plot(
-        #         fig=fig,
-        #         ax=ax,
-        #         color=ARROW_COLOR,
-        #         linewidth=ARROW_WIDTH,
-        #         label="W0",
-        #         offset_label=self.H0 * 0.1 + 1j * self.W0 * 0.3,
-        #         is_arrow=True,
-        #         fontsize=SC_FONT_SIZE,
-        #     )
-        #     # H0
-        #     Zlim1 = point_dict["Z2d"]
-        #     Zlim2 = point_dict["Z2d"].real +1j * point_dict["Z1d"].imag
-        #     plot_quote(
-        #         point_dict["Z2d"],
-        #         Zlim1 - (0.006 + 0j),
-        #         Zlim2 - (0.006 + 0j),
-        #         point_dict["Z1d"],
-        #         offset_label=self.H0 * -1.2 + 1j * self.W0 * 0.05,
-        #         fig=fig,
-        #         ax=ax,
-        #         label="H0",
-        #     )
             # W1
             line = Segment(
                 (point_dict["Z2d"] + point_dict["Z3d"]) / 2,
@@ -230,20 +205,6 @@ def plot_schematics(
                 fontsize=SC_FONT_SIZE,
             )
             # R1
-            # # # # line = Segment(
-            # # # #     (point_dict["Z2dd"]),
-            # # # #     (point_dict["Zcd"]),
-            # # # # )
-            # # # # line.plot(
-            # # # #     fig=fig,
-            # # # #     ax=ax,
-            # # # #     label="R1",
-            # # # #     color=ARROW_COLOR,
-            # # # #     linewidth=ARROW_WIDTH,
-            # # # #     offset_label= 0.009 + -0j * self.W1,
-            # # # #     is_arrow=True,
-            # # # #     fontsize=SC_FONT_SIZE,
-            # # # # )
             Zlim1 = point_dict["Z2dd"]
             Zlim2 = point_dict["Zcd"]
             plot_quote(
