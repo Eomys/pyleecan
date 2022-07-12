@@ -17,6 +17,8 @@ def run(self):
     # get output
     output = self.parent.parent
 
+    machine = output.simu.machine
+
     axes_dict = self.comp_axes(output)
 
     self.model_dict = {
@@ -30,8 +32,10 @@ def run(self):
             group="stator winding", type_skin_effect=self.type_skin_effect
         ),
         "proximity": LossModelProximity(group="stator winding"),
-        "magnets": LossModelMagnet(group="rotor magnets"),
     }
+    
+    if machine.is_synchronous() and machine.rotor.has_magnet():
+        self.model_dict["magnets"]=LossModelMagnet(group="rotor magnets")
 
     output.loss.store(
         self.model_dict,
