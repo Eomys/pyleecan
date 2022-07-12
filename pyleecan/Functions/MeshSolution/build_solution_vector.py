@@ -3,7 +3,9 @@ from SciDataTool import DataTime, VectorField
 from numpy import all as np_all
 
 
-def build_solution_vector(field, axis_list, name="", symbol="", unit="", is_real=True):
+def build_solution_vector(
+    field, axis_list, name="", symbol="", unit="", is_real=True, type_cell="triangle"
+):
     """Build a SolutionVector object
 
     Parameters
@@ -54,6 +56,6 @@ def build_solution_vector(field, axis_list, name="", symbol="", unit="", is_real
 
     vectorfield = VectorField(name=name, symbol=symbol, components=components)
 
-    solution = SolutionVector(field=vectorfield, label=symbol)
+    solution = SolutionVector(field=vectorfield, label=symbol, type_cell=type_cell)
 
     return solution

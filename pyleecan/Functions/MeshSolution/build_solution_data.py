@@ -3,7 +3,9 @@ from SciDataTool import DataTime
 import numpy as np
 
 
-def build_solution_data(field, axis_list, name="", symbol="", unit="", is_real=True):
+def build_solution_data(
+    field, axis_list, name="", symbol="", unit="", is_real=True, type_cell="triangle"
+):
     """Build the MeshSolution objets from FEMM outputs.
 
     Parameters
@@ -28,4 +30,4 @@ def build_solution_data(field, axis_list, name="", symbol="", unit="", is_real=T
         is_real=is_real,
     )
 
-    return SolutionData(field=data, label=symbol)
+    return SolutionData(field=data, label=symbol, type_cell=type_cell)
