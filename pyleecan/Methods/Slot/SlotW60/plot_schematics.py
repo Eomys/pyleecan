@@ -77,19 +77,15 @@ def plot_schematics(
         slot = type(self)(
             Zs=12,
             H1=20e-3,
-            H2=45e-3,
+            H2=65e-3,
             W1=100e-3,
-            W2=20e-3,
+            W2=40e-3,
             R1=100e-3,
             W3=17e-3,
             H3=17e-3,
             H4=17e-3,
         )
         lam = LamSlot(Rint=0.135, Rext=0.3, is_internal=True, is_stator=True, slot=slot)
-        # lam = LamSlotWind(
-        #     Rint=0.135, Rext=0.3, is_internal=True, is_stator=True, slot=slot
-        # )
-        # lam.winding = Winding(p=int(slot.Zs/2), qs=2, Nlayer=2, )
 
         return slot.plot_schematics(
             is_default=False,
@@ -145,7 +141,7 @@ def plot_schematics(
                 label="W1",
                 color=ARROW_COLOR,
                 linewidth=ARROW_WIDTH,
-                offset_label=1.6j * self.W1 * 0.1,
+                offset_label=0.9j * self.W1 * 0.1 - (0.007 + 0j),
                 is_arrow=True,
                 fontsize=SC_FONT_SIZE,
             )
@@ -157,7 +153,7 @@ def plot_schematics(
                 Zlim1 - (0.006 + 0j),
                 Zlim2 - (0.006 + 0j),
                 point_dict["Z3d"],
-                offset_label=self.H1 * -1.0 + 1j * self.W1 * 0.05,
+                offset_label=self.H1 * -1.0 - 0.6j * self.W1 * 0.05,
                 fig=fig,
                 ax=ax,
                 label="H1",
@@ -167,10 +163,10 @@ def plot_schematics(
             Zlim2 = point_dict["Z7"]
             plot_quote(
                 point_dict["Z8"],
-                Zlim1 + (0.042 + 0j),
-                Zlim2 + (0.042 + 0j),
+                Zlim1 + (0.035 + 0j),
+                Zlim2 + (0.035 + 0j),
                 point_dict["Z7"],
-                offset_label=self.H1 * 0.3 + 1j * self.W1 * 0.05,
+                offset_label=self.H1 * 0.3 + 2j * self.W1 * 0.05,
                 fig=fig,
                 ax=ax,
                 label="H2",
@@ -186,22 +182,7 @@ def plot_schematics(
                 label="W2",
                 color=ARROW_COLOR,
                 linewidth=ARROW_WIDTH,
-                offset_label=-2.3j * self.W1 * 0.1 - (0.007 + 0j),
-                is_arrow=True,
-                fontsize=SC_FONT_SIZE,
-            )
-            # H3
-            line = Segment(
-                (point_dict["Z11d"]),
-                (point_dict["Z4dd"] + point_dict["Z8d"]) / 2,
-            )
-            line.plot(
-                fig=fig,
-                ax=ax,
-                label="H3",
-                color=ARROW_COLOR,
-                linewidth=ARROW_WIDTH,
-                offset_label= 0.009 + -0j * self.W1,
+                offset_label=-1.6j * self.W1 * 0.1 - (0.007 + 0j),
                 is_arrow=True,
                 fontsize=SC_FONT_SIZE,
             )
@@ -213,7 +194,7 @@ def plot_schematics(
                 Zlim1,
                 Zlim2,
                 point_dict["Z10d"],
-                offset_label= 0.009 + -0j * self.W1,
+                offset_label= 0.009 * self.W1 + 0.010j,
                 fig=fig,
                 ax=ax,
                 label="R1",
@@ -286,7 +267,7 @@ def plot_schematics(
                 label="W3",
                 color=ARROW_COLOR,
                 linewidth=ARROW_WIDTH,
-                offset_label=(-2.3j * self.W1 * 0.1) - (0.007 + 0j),
+                offset_label=(-1.8j * self.W1 * 0.1) - (0.007 + 0j),
                 is_arrow=True,
                 fontsize=SC_FONT_SIZE,
             )
@@ -303,8 +284,8 @@ def plot_schematics(
             )
             # Top arc
             line = Arc1(
-                begin=point_dict["Z1"],
-                end=point_dict["Z11d"],
+                begin=self.get_Rbo(),
+                end=-self.get_Rbo(),
                 radius=self.get_Rbo(),
                 is_trigo_direction=True,
             )
