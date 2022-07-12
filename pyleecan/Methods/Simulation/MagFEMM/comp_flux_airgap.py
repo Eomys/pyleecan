@@ -202,8 +202,8 @@ def comp_flux_airgap(self, output, axes_dict, Is_val=None, Ir_val=None):
         Indices_Cell = Data1D(
             name="indice", values=indices_cell, is_components=True, is_overlay=False
         )
-        Slice = axes_dict["z"]
-        axis_list = [Time, Indices_Cell, Slice]
+        # Slice = axes_dict["z"]
+        axis_list = [Time, Indices_Cell]
 
         B_sol = build_solution_vector(
             field=B_elem[:, :, None, :],  # quick fix for slice issue
@@ -229,8 +229,8 @@ def comp_flux_airgap(self, output, axes_dict, Is_val=None, Ir_val=None):
         Ae_sol = build_solution_data(
             field=A_elem[:, :, None],
             axis_list=axis_list,
-            name="Magnetic Potential Vector",
-            symbol="A_z",
+            name="Magnetic Potential Vector (per element)",
+            symbol="A_z^{element}",
             unit="Wb/m",
         )
 
@@ -241,7 +241,7 @@ def comp_flux_airgap(self, output, axes_dict, Is_val=None, Ir_val=None):
         An_sol = build_solution_data(
             field=A_node,
             axis_list=axis_list_node,
-            name="Magnetic Potential Vector",
+            name="Magnetic Potential Vector (nodal)",
             symbol="A_z",
             unit="Wb/m",
         )

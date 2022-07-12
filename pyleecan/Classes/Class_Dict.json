@@ -6827,7 +6827,8 @@
             "solve_FEMM",
             "get_meshsolution",
             "get_path_save_fem",
-            "solve_FEMM_parallel"
+            "solve_FEMM_parallel",
+            "build_MS_sliced"
         ],
         "mother": "Magnetics",
         "name": "MagFEMM",

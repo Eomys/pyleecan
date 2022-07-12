@@ -47,6 +47,11 @@ try:
 except ImportError as error:
     solve_FEMM_parallel = error
 
+try:
+    from ..Methods.Simulation.MagFEMM.build_MS_sliced import build_MS_sliced
+except ImportError as error:
+    build_MS_sliced = error
+
 
 from numpy import isnan
 from ._check import InitUnKnowClassError
@@ -126,6 +131,17 @@ class MagFEMM(Magnetics):
         )
     else:
         solve_FEMM_parallel = solve_FEMM_parallel
+    # cf Methods.Simulation.MagFEMM.build_MS_sliced
+    if isinstance(build_MS_sliced, ImportError):
+        build_MS_sliced = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use MagFEMM method build_MS_sliced: " + str(build_MS_sliced)
+                )
+            )
+        )
+    else:
+        build_MS_sliced = build_MS_sliced
     # generic save method is available in all object
     save = save
     # get_logger method is available in all object
