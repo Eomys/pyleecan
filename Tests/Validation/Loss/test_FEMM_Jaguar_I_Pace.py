@@ -93,6 +93,8 @@ def find_best_phi0_jaguar():
     fig = Xout_vop.plot_multi("Phi0", "Tem_av")
 
     return Xout_vop
+
+
 @pytest.mark.long_5s
 @pytest.mark.FEMM
 @pytest.mark.MagFEMM
@@ -101,10 +103,12 @@ def find_best_phi0_jaguar():
 @pytest.mark.SingleOP
 @pytest.mark.Loss
 @pytest.mark.skip(reason="Work in progress")
-def test_FEMM_Loss_Jaguar_wo_skew():
+def test_FEMM_Loss_Jaguar():
     """Test to calculate losses in Toyota_Prius using LossFEMM model based on motoranalysis validation"""
 
-    machine = load(join(DATA_DIR, "Machine", "Jaguar_I_Pace_wo_skew.json"))
+    machine = load(join(DATA_DIR, "Machine", "Jaguar_I_Pace.json"))
+    machine.plot()
+    
 
     simu = Simu1(name="test_FEMM_Loss_Jaguar_I_Pace", machine=machine)
 
@@ -113,7 +117,7 @@ def test_FEMM_Loss_Jaguar_wo_skew():
     SPEED = 6000
 
     simu.input = InputCurrent(
-        Nt_tot=20,#4 * 40 * 8,
+        Nt_tot = 4 * 40 * 8,
         Na_tot=200 * 8,
         OP=OPdq(N0=SPEED, Id_ref=Ic.real, Iq_ref=Ic.imag), #,Ud_ref=Uc.real, Uq_ref=Uc.imag),
         is_periodicity_t=True,
@@ -127,6 +131,7 @@ def test_FEMM_Loss_Jaguar_wo_skew():
         is_get_meshsolution=True,
         is_fast_draw=True,
         is_calc_torque_energy=False,
+        is_sliding_band=True
     )
 
     simu.loss = Loss(
@@ -230,165 +235,12 @@ def test_FEMM_Loss_Jaguar_wo_skew():
     # with open(F"{SPEED} rpm.txt", "w") as f:
     #     f.write(txt)
 
-
-
     return out
 
 
-@pytest.mark.long_5s
-@pytest.mark.FEMM
-@pytest.mark.MagFEMM
-@pytest.mark.periodicity
-@pytest.mark.SPMSM
-@pytest.mark.SingleOP
-@pytest.mark.Loss
-@pytest.mark.skip(reason="Work in progress")
-def test_FEMM_Loss_Jaguar():
-    """Test to calculate losses in Toyota_Prius using LossFEMM model based on motoranalysis validation"""
 
-    
-    def comp_skew_angle(Zs, p, Nstep):
-        return 2 * np.pi * (Nstep - 1) / (Nstep * np.lcm(Zs, 2 * p))
 
-    machine = load(join(DATA_DIR, "Machine", "Jaguar_I_Pace.json"))
-    Zs = machine.stator.get_Zs()  # Stator slot number
-    p = machine.get_pole_pair_number()  # Pole pair number
-    ssp = 2 * np.pi / Zs  # Stator slot pitch
-    k=7
-    rate_kseg = comp_skew_angle(Zs, p, Nstep=k) / ssp
-    machine.rotor.skew = Skew(
-        type_skew="vshape",
-        is_step=True,
-        rate=rate_kseg,
-        Nstep=k,
-    )
 
-    simu = Simu1(name="test_FEMM_Loss_Jaguar_I_Pace", machine=machine)
-    
-    # Current for MTPA
-    Ic = 450 * np.exp(1j * 120 * np.pi / 180)
-    # Uc = 350 * np.exp(1j * 140 * np.pi / 180)
-    SPEED = 2000
-
-    simu.input = InputCurrent(
-        Nt_tot=4 * 40 * 8,
-        Na_tot=200 * 8,
-        OP=OPdq(N0=SPEED, Id_ref=Ic.real, Iq_ref=Ic.imag), #,Ud_ref=Uc.real, Uq_ref=Uc.imag),
-        is_periodicity_t=True,
-        is_periodicity_a=True,
-    )
-
-    simu.mag = MagFEMM(
-        is_periodicity_a=True,
-        is_periodicity_t=True,
-        nb_worker=4,
-        is_get_meshsolution=False,
-        is_fast_draw=True,
-        is_calc_torque_energy=False,
-    )
-    simu.mag.Slice_enforced = None
-    simu.mag.import_file = None  # Draw machine in FEMM again
-
-    # simu.loss = Loss(
-    #     is_get_meshsolution=False,
-    #     Tsta=100,
-    #     model_dict={"stator core": LossModelSteinmetz(group = "stator core"),
-    #                 "rotor core": LossModelSteinmetz(group = "rotor core"),
-    #                 "joule": LossModelWinding(group = "stator winding"),
-    #                 "proximity": LossModelProximity(group = "stator winding"),
-    #                 "magnets": LossModelMagnet(group = "rotor magnets")}
-    # )
-
-    out = simu.run()
-    
-    # out.loss.loss_list.append(sum(out.loss.loss_list))
-    # out.loss.loss_list[-1].name = "overall"
-
-    power_dict = {
-        "Torque": out.mag.Tem_av,
-        "total_power": out.mag.Pem_av,}
-    #     **dict([(o.name,o.get_loss_scalar(out.elec.OP.felec)) for o in out.loss.loss_list])
-    # }
-    print(power_dict)
-
-    # speed_array = np.linspace(10, 8000, 100)
-    # p = machine.get_pole_pair_number()
-
-    # array_list = [np.array([o.get_loss_scalar(speed / 60 *p) for speed in speed_array])
-    #               for o in out.loss.loss_list]
-
-    # if is_show_fig:
-        # group_names = [
-        #     "stator core",
-        #     "rotor core",
-        #     "rotor magnets"
-        # ]
-        # for loss in out.loss.loss_list:
-        #     if "joule" in loss.name or "proximity" in loss.name :
-        #         group_names.append("stator winding")
-        #         loss.get_mesh_solution().plot_contour(
-        #             "freqs=sum",
-        #             label=f"{loss.name} Loss",
-        #             group_names = group_names
-        #         )
-        #         group_names.pop()
-        #     else:
-                
-        #         loss.get_mesh_solution().plot_contour(
-        #             "freqs=sum",
-        #             label=f"{loss.name} Loss",
-        #             group_names = group_names
-        # #         )
-
-        # plot_2D(
-        #     [speed_array],
-        #     array_list,
-        #     xlabel="Speed [rpm]",
-        #     ylabel="Losses [W]",
-        #     legend_list=[o.name for o in out.loss.loss_list],
-        # )
-
-    return out
-
-def test_FEMM_Jaguar_with_skew():
-
-    def comp_skew_angle(Zs, p, Nstep):
-        return 2 * np.pi * (Nstep - 1) / (Nstep * np.lcm(Zs, 2 * p))
-
-    machine = load(join(DATA_DIR, "Machine", "Jaguar_I_Pace.json"))
-    Zs = machine.stator.get_Zs()  # Stator slot number
-    p = machine.get_pole_pair_number()  # Pole pair number
-    ssp = 2 * np.pi / Zs  # Stator slot pitch
-    k=7
-    rate_kseg = comp_skew_angle(Zs, p, Nstep=k) / ssp
-    machine.rotor.skew = Skew(
-        type_skew="vshape",
-        is_step=True,
-        rate=rate_kseg,
-        Nstep=k,
-    )
-
-    simu = Simu1(name="test_Loss_FEMM_Jaguar", machine=machine)
-
-    simu.input = InputCurrent(
-        OP=OPdq(N0=1200, Id_ref=0, Iq_ref=0, Tem_av_ref=0),
-        Na_tot=400 * 4,
-        Nt_tot=40 * 4,
-    )
-
-    # Definition of the magnetic simulation (direct calculation with permeance mmf)
-    simu.mag = MagFEMM(
-        is_periodicity_a=True,
-        is_periodicity_t=True,
-        nb_worker=4,
-        Kmesh_fineness=0.5,
-    )
-    simu.mag.Slice_enforced = None
-    simu.mag.import_file = None  # Draw machine in FEMM again
-
-    out = simu.run()
-
-    return out
 
 @pytest.mark.long_5s
 @pytest.mark.FEMM
@@ -412,7 +264,7 @@ def test_FEMM_Loss_Jaguar_wo_skew():
     SPEED = 6000
 
     simu.input = InputCurrent(
-        Nt_tot=20,#4 * 40 * 8,
+        Nt_tot = 4 * 40 * 8,
         Na_tot=200 * 8,
         OP=OPdq(N0=SPEED, Id_ref=Ic.real, Iq_ref=Ic.imag), #,Ud_ref=Uc.real, Uq_ref=Uc.imag),
         is_periodicity_t=True,
@@ -426,6 +278,7 @@ def test_FEMM_Loss_Jaguar_wo_skew():
         is_get_meshsolution=True,
         is_fast_draw=True,
         is_calc_torque_energy=False,
+        # is_sliding_band=True
     )
 
     simu.loss = Loss(
@@ -528,8 +381,6 @@ def test_FEMM_Loss_Jaguar_wo_skew():
 
     # with open(F"{SPEED} rpm.txt", "w") as f:
     #     f.write(txt)
-
-
 
     return out
 

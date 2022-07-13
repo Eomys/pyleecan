@@ -1,6 +1,6 @@
 {
   "__class__": "MachineIPMSM",
-  "__save_date__": "2022_06_30 09h23min46s ",
+  "__save_date__": "2022_07_12 16h24min54s ",
   "__version__": "pyleecan_1.4.0",
   "desc": null,
   "frame": null,
@@ -8,98 +8,392 @@
   "name": "Jaguar_I_Pace",
   "rotor": {
     "Kf1": 0.95,
-    "L1": 0.134,
-    "Nrvd": null,
+    "L1": 0.1651,
+    "Nrvd": 0,
     "Rext": 0.068,
-    "Rint": 0.0327,
-    "Wrvd": null,
+    "Rint": 0.025,
+    "Wrvd": 0.0,
     "__class__": "LamHole",
-    "axial_vent": [],
+    "axial_vent": [
+      {
+        "Alpha0": 0.0,
+        "D0": 0.008289999999999999,
+        "H0": 0.031100000000000003,
+        "W1": 0.42,
+        "Zh": 8,
+        "__class__": "VentilationPolar",
+        "magnetization_dict_offset": null,
+        "mat_void": {
+          "HT": {
+            "Cp": null,
+            "__class__": "MatHT",
+            "alpha": null,
+            "lambda_x": null,
+            "lambda_y": null,
+            "lambda_z": null
+          },
+          "__class__": "Material",
+          "desc": null,
+          "eco": {
+            "__class__": "MatEconomical",
+            "cost_unit": null,
+            "unit_name": null
+          },
+          "elec": {
+            "__class__": "MatElectrical",
+            "alpha": null,
+            "epsr": null,
+            "rho": null
+          },
+          "is_isotropic": null,
+          "mag": {
+            "BH_curve": {
+              "__class__": "ImportMatrix",
+              "is_transpose": null
+            },
+            "Brm20": null,
+            "LossData": {
+              "__class__": "ImportMatrix",
+              "is_transpose": null
+            },
+            "ModelBH": {
+              "Bmax": null,
+              "Hmax": null,
+              "__class__": "ModelBH",
+              "delta": null
+            },
+            "Wlam": null,
+            "__class__": "MatMagnetics",
+            "alpha_Br": null,
+            "is_BH_extrapolate": null,
+            "mur_lin": null
+          },
+          "name": null,
+          "path": null,
+          "struct": {
+            "Ex": null,
+            "Ey": null,
+            "Ez": null,
+            "Gxy": null,
+            "Gxz": null,
+            "Gyz": null,
+            "__class__": "MatStructural",
+            "nu_xy": null,
+            "nu_xz": null,
+            "nu_yz": null,
+            "rho": null
+          }
+        }
+      },
+      {
+        "Alpha0": 6.144,
+        "Zh": 8,
+        "__class__": "HoleUD",
+        "magnet_dict": {},
+        "magnetization_dict_offset": null,
+        "mat_void": null,
+        "name": "duct1",
+        "surf_list": [
+          {
+            "__class__": "SurfLine",
+            "label": "HoleVoid",
+            "line_list": [
+              {
+                "__class__": "Arc1",
+                "begin": "(0.05529011403747237+0.0009177138170183875j)",
+                "end": "(0.05531813635519205-0.001261639359747456j)",
+                "is_trigo_direction": true,
+                "prop_dict": null,
+                "radius": 0.0011127243306745084
+              },
+              {
+                "__class__": "Segment",
+                "begin": "(0.05531813635519205-0.001261639359747456j)",
+                "end": "(0.058257524794027946-0.0017155050970850856j)",
+                "prop_dict": null
+              },
+              {
+                "__class__": "Segment",
+                "begin": "(0.058257524794027946-0.0017155050970850856j)",
+                "end": "(0.05858478787732251-0.0005409205200657061j)",
+                "prop_dict": null
+              },
+              {
+                "__class__": "Segment",
+                "begin": "(0.05858478787732251-0.0005409205200657061j)",
+                "end": "(0.06718324170762631-0.0007327009200104144j)",
+                "prop_dict": null
+              },
+              {
+                "__class__": "Segment",
+                "begin": "(0.06718324170762631-0.0007327009200104144j)",
+                "end": "(0.0670483020470249+0.003344467316889064j)",
+                "prop_dict": null
+              },
+              {
+                "__class__": "Segment",
+                "begin": "(0.0670483020470249+0.003344467316889064j)",
+                "end": "(0.05529011403747237+0.0009177138170183875j)",
+                "prop_dict": null
+              }
+            ],
+            "point_ref": "(0.06013238673377485+0j)"
+          }
+        ]
+      },
+      {
+        "Alpha0": 6.217,
+        "Zh": 8,
+        "__class__": "HoleUD",
+        "magnet_dict": {},
+        "magnetization_dict_offset": null,
+        "mat_void": null,
+        "name": "duct2",
+        "surf_list": [
+          {
+            "__class__": "SurfLine",
+            "label": "HoleVoid",
+            "line_list": [
+              {
+                "__class__": "Arc1",
+                "begin": "(0.04739915282714367+0.001889158883501012j)",
+                "end": "(0.046378237588059645-0.0020727072234119816j)",
+                "is_trigo_direction": true,
+                "prop_dict": null,
+                "radius": 0.00219577532647669
+              },
+              {
+                "__class__": "Segment",
+                "begin": "(0.046378237588059645-0.0020727072234119834j)",
+                "end": "(0.050106891434062356-0.0033179424060971706j)",
+                "prop_dict": null
+              },
+              {
+                "__class__": "Segment",
+                "begin": "(0.050106891434062356-0.0033179424060971706j)",
+                "end": "(0.05095869137396177-0.0007242757242110556j)",
+                "prop_dict": null
+              },
+              {
+                "__class__": "Segment",
+                "begin": "(0.05095869137396177-0.0007242757242110556j)",
+                "end": "(0.0669485513937563+0.0007539517557361222j)",
+                "prop_dict": null
+              },
+              {
+                "__class__": "Segment",
+                "begin": "(0.0669485513937563+0.0007539517557361222j)",
+                "end": "(0.06663859895159127+0.0031230166051450584j)",
+                "prop_dict": null
+              },
+              {
+                "__class__": "Segment",
+                "begin": "(0.06663859895159127+0.0031230166051450584j)",
+                "end": "(0.04739915282714367+0.001889158883501012j)",
+                "prop_dict": null
+              }
+            ],
+            "point_ref": "(0.05451275710499728-3.469446951953614e-18j)"
+          }
+        ]
+      },
+      {
+        "Alpha0": 0.066,
+        "Zh": 8,
+        "__class__": "HoleUD",
+        "magnet_dict": {},
+        "magnetization_dict_offset": null,
+        "mat_void": null,
+        "name": "duct3",
+        "surf_list": [
+          {
+            "__class__": "SurfLine",
+            "label": "HoleVoid",
+            "line_list": [
+              {
+                "__class__": "Arc1",
+                "begin": "(0.046328211107422794+0.002003394035450308j)",
+                "end": "(0.04738281134374746-0.0019496388908032056j)",
+                "is_trigo_direction": true,
+                "prop_dict": null,
+                "radius": 0.0021957753264767225
+              },
+              {
+                "__class__": "Segment",
+                "begin": "(0.04738281134374746-0.0019496388908032056j)",
+                "end": "(0.0666320626788762-0.00301969266974526j)",
+                "prop_dict": null
+              },
+              {
+                "__class__": "Segment",
+                "begin": "(0.0666320626788762-0.00301969266974526j)",
+                "end": "(0.06692183926507035-0.0006480754351977612j)",
+                "prop_dict": null
+              },
+              {
+                "__class__": "Segment",
+                "begin": "(0.06692183926507035-0.0006480754351977612j)",
+                "end": "(0.05091997633191619+0.0006939985581570461j)",
+                "prop_dict": null
+              },
+              {
+                "__class__": "Segment",
+                "begin": "(0.05091997633191619+0.0006939985581570461j)",
+                "end": "(0.0500461308901113+0.003280321070562652j)",
+                "prop_dict": null
+              },
+              {
+                "__class__": "Segment",
+                "begin": "(0.0500461308901113+0.003280321070562652j)",
+                "end": "(0.046328211107422794+0.002003394035450308j)",
+                "prop_dict": null
+              }
+            ],
+            "point_ref": "(0.054480078092607576+0j)"
+          }
+        ]
+      },
+      {
+        "Alpha0": 0.139,
+        "Zh": 8,
+        "__class__": "HoleUD",
+        "magnet_dict": {},
+        "magnetization_dict_offset": null,
+        "mat_void": null,
+        "name": "duct4",
+        "surf_list": [
+          {
+            "__class__": "SurfLine",
+            "label": "HoleVoid",
+            "line_list": [
+              {
+                "__class__": "Arc1",
+                "begin": "(0.05524251860028309+0.0012247314408419634j)",
+                "end": "(0.055231188124639535-0.0009547724338258012j)",
+                "is_trigo_direction": true,
+                "prop_dict": null,
+                "radius": 0.0011127243306745483
+              },
+              {
+                "__class__": "Segment",
+                "begin": "(0.055231188124639535-0.0009547724338258012j)",
+                "end": "(0.0670076170725102-0.003291402283175513j)",
+                "prop_dict": null
+              },
+              {
+                "__class__": "Segment",
+                "begin": "(0.0670076170725102-0.003291402283175513j)",
+                "end": "(0.06711132695211666+0.0007866798401830778j)",
+                "prop_dict": null
+              },
+              {
+                "__class__": "Segment",
+                "begin": "(0.06711132695211666+0.0007866798401830778j)",
+                "end": "(0.058514594089114774+0.0005290520547044271j)",
+                "prop_dict": null
+              },
+              {
+                "__class__": "Segment",
+                "begin": "(0.058514594089114774+0.0005290520547044271j)",
+                "end": "(0.05817834480864954+0.0017010957721679439j)",
+                "prop_dict": null
+              },
+              {
+                "__class__": "Segment",
+                "begin": "(0.05817834480864954+0.0017010957721679439j)",
+                "end": "(0.05524251860028309+0.0012247314408419634j)",
+                "prop_dict": null
+              }
+            ],
+            "point_ref": "(0.06006629030710774+0j)"
+          }
+        ]
+      }
+    ],
     "bore": null,
     "hole": [
       {
-        "Alpha0": null,
-        "H0": 0.00753,
-        "H1": 0.0031,
-        "H2": 0.0,
-        "W0": 0.023309999999999997,
-        "W3": 0.01272,
+        "Alpha0": 0,
         "Zh": 8,
-        "__class__": "HoleM52",
-        "magnet_0": {
-          "Lmag": null,
-          "Nseg": null,
-          "__class__": "Magnet",
-          "mat_type": {
-            "HT": {
-              "Cp": 450.0,
-              "__class__": "MatHT",
-              "alpha": 0,
-              "lambda_x": 8.9,
-              "lambda_y": 8.9,
-              "lambda_z": null
-            },
-            "__class__": "Material",
-            "desc": null,
-            "eco": {
-              "__class__": "MatEconomical",
-              "cost_unit": 190.5,
-              "unit_name": null
-            },
-            "elec": {
-              "__class__": "MatElectrical",
-              "alpha": 0,
-              "epsr": 1,
-              "rho": 1.6e-06
-            },
-            "is_isotropic": true,
-            "mag": {
-              "BH_curve": {
-                "__class__": "ImportMatrixXls",
-                "axes_colrows": null,
-                "file_path": null,
-                "is_allsheets": null,
-                "is_transpose": null,
-                "sheet": null,
-                "skiprows": null,
-                "usecols": null
+        "__class__": "HoleUD",
+        "magnet_dict": {
+          "magnet_0": {
+            "Lmag": 0.1651,
+            "Nseg": 1,
+            "__class__": "Magnet",
+            "mat_type": {
+              "HT": {
+                "Cp": 450.0,
+                "__class__": "MatHT",
+                "alpha": 0,
+                "lambda_x": 8.9,
+                "lambda_y": 8.9,
+                "lambda_z": null
               },
-              "Brm20": 1.45,
-              "LossData": {
-                "__class__": "ImportMatrix",
-                "is_transpose": null
+              "__class__": "Material",
+              "desc": null,
+              "eco": {
+                "__class__": "MatEconomical",
+                "cost_unit": 190.5,
+                "unit_name": null
               },
-              "ModelBH": {
-                "Bmax": null,
-                "Hmax": null,
-                "__class__": "ModelBH",
-                "delta": null
+              "elec": {
+                "__class__": "MatElectrical",
+                "alpha": 0,
+                "epsr": 1,
+                "rho": 1.6e-06
               },
-              "Wlam": 0.0,
-              "__class__": "MatMagnetics",
-              "alpha_Br": -0.0012,
-              "is_BH_extrapolate": null,
-              "mur_lin": 1.05
+              "is_isotropic": true,
+              "mag": {
+                "BH_curve": {
+                  "__class__": "ImportMatrixXls",
+                  "axes_colrows": null,
+                  "file_path": null,
+                  "is_allsheets": null,
+                  "is_transpose": null,
+                  "sheet": null,
+                  "skiprows": null,
+                  "usecols": null
+                },
+                "Brm20": 1.45,
+                "LossData": {
+                  "__class__": "ImportMatrix",
+                  "is_transpose": null
+                },
+                "ModelBH": {
+                  "Bmax": null,
+                  "Hmax": null,
+                  "__class__": "ModelBH",
+                  "delta": null
+                },
+                "Wlam": 0.0,
+                "__class__": "MatMagnetics",
+                "alpha_Br": -0.0012,
+                "is_BH_extrapolate": null,
+                "mur_lin": 1.05
+              },
+              "name": "Magnet_N54",
+              "path": "C:/Users/LAP10/Documents/Loss/pyleecan/pyleecan/Data/Material/Magnet_N54.json",
+              "struct": {
+                "Ex": null,
+                "Ey": null,
+                "Ez": null,
+                "Gxy": null,
+                "Gxz": null,
+                "Gyz": null,
+                "__class__": "MatStructural",
+                "nu_xy": null,
+                "nu_xz": null,
+                "nu_yz": null,
+                "rho": 7450.0
+              }
             },
-            "name": "Magnet_N54",
-            "path": "C:/Users/LAP10/Documents/Loss/pyleecan/pyleecan/Data/Material/Magnet_N54.json",
-            "struct": {
-              "Ex": null,
-              "Ey": null,
-              "Ez": null,
-              "Gxy": null,
-              "Gxz": null,
-              "Gyz": null,
-              "__class__": "MatStructural",
-              "nu_xy": null,
-              "nu_xz": null,
-              "nu_yz": null,
-              "rho": 7450.0
-            }
-          },
-          "type_magnetization": null
+            "type_magnetization": 1
+          }
         },
-        "magnetization_dict_offset": null,
+        "magnetization_dict_offset": {
+          "magnet_0": -0.0009363369127640222
+        },
         "mat_void": {
           "HT": {
             "Cp": 1007,
@@ -160,91 +454,234 @@
             "nu_yz": 0.03,
             "rho": 1.2044
           }
-        }
+        },
+        "name": "magnet1",
+        "surf_list": [
+          {
+            "__class__": "SurfLine",
+            "label": "HoleVoid",
+            "line_list": [
+              {
+                "__class__": "Arc1",
+                "begin": "(0.06312027950366096-0.01186681266694743j)",
+                "end": "(0.0638517146441133-0.010371911019545973j)",
+                "is_trigo_direction": true,
+                "prop_dict": null,
+                "radius": 0.0017046507716088261
+              },
+              {
+                "__class__": "Segment",
+                "begin": "(0.0638517146441133-0.010371911019545973j)",
+                "end": "(0.06610439769624817-0.010376683285031683j)",
+                "prop_dict": null
+              },
+              {
+                "__class__": "Segment",
+                "begin": "(0.06610439769624817-0.010376683285031683j)",
+                "end": "(0.06605788226660664-0.012251303592052487j)",
+                "prop_dict": null
+              },
+              {
+                "__class__": "Arc1",
+                "begin": "(0.06605788226660664-0.012251303592052485j)",
+                "end": "(0.06454252135426754-0.013261287444883887j)",
+                "is_trigo_direction": false,
+                "prop_dict": null,
+                "radius": -0.002124027252253756
+              },
+              {
+                "__class__": "Segment",
+                "begin": "(0.06454252135426754-0.013261287444883888j)",
+                "end": "(0.06347039529897529-0.013274885562715348j)",
+                "prop_dict": null
+              },
+              {
+                "__class__": "Arc1",
+                "begin": "(0.06347039529897529-0.013274885562715348j)",
+                "end": "(0.06312027950366096-0.01186681266694743j)",
+                "is_trigo_direction": false,
+                "prop_dict": null,
+                "radius": -0.000868471153580271
+              }
+            ],
+            "point_ref": "(0.06411207805010607-0.012953411554620046j)"
+          },
+          {
+            "__class__": "SurfLine",
+            "label": "HoleVoid",
+            "line_list": [
+              {
+                "__class__": "Arc1",
+                "begin": "(0.06375747885715159+0.010491593920063859j)",
+                "end": "(0.06310498705131673+0.011753279181111326j)",
+                "is_trigo_direction": true,
+                "prop_dict": null,
+                "radius": 0.0013005888700860033
+              },
+              {
+                "__class__": "Arc1",
+                "begin": "(0.06310498705131673+0.011753279181111326j)",
+                "end": "(0.0630316678470284+0.013152565860597038j)",
+                "is_trigo_direction": false,
+                "prop_dict": null,
+                "radius": -0.0008066167656751195
+              },
+              {
+                "__class__": "Segment",
+                "begin": "(0.0630316678470284+0.013152565860597038j)",
+                "end": "(0.0644959155897595+0.013175448237306719j)",
+                "prop_dict": null
+              },
+              {
+                "__class__": "Arc1",
+                "begin": "(0.0644959155897595+0.01317544823730672j)",
+                "end": "(0.06599280023928217+0.01210329347005853j)",
+                "is_trigo_direction": false,
+                "prop_dict": null,
+                "radius": -0.0021567736455830014
+              },
+              {
+                "__class__": "Segment",
+                "begin": "(0.06599280023928217+0.01210329347005853j)",
+                "end": "(0.0660446792733155+0.010488166454628254j)",
+                "prop_dict": null
+              },
+              {
+                "__class__": "Segment",
+                "begin": "(0.0660446792733155+0.010488166454628254j)",
+                "end": "(0.06375747885715159+0.010491593920063859j)",
+                "prop_dict": null
+              }
+            ],
+            "point_ref": "(0.06393010369676046+0.012800924113076j)"
+          },
+          {
+            "__class__": "SurfLine",
+            "label": "HoleMag",
+            "line_list": [
+              {
+                "__class__": "Segment",
+                "begin": "(0.0638517146441133-0.010371911019545973j)",
+                "end": "(0.06610439769624817-0.010376683285031683j)",
+                "prop_dict": null
+              },
+              {
+                "__class__": "Segment",
+                "begin": "(0.06610439769624817-0.010376683285031683j)",
+                "end": "(0.0660446792733155+0.010488166454628254j)",
+                "prop_dict": null
+              },
+              {
+                "__class__": "Segment",
+                "begin": "(0.0660446792733155+0.010488166454628254j)",
+                "end": "(0.06375747885715159+0.010491593920063859j)",
+                "prop_dict": null
+              },
+              {
+                "__class__": "Segment",
+                "begin": "(0.06375747885715159+0.010491593920063859j)",
+                "end": "(0.06255090451605252+0.010493402022152494j)",
+                "prop_dict": null
+              },
+              {
+                "__class__": "Segment",
+                "begin": "(0.06255090451605252+0.010493402022152494j)",
+                "end": "(0.06253137016659713-0.01036911389530193j)",
+                "prop_dict": null
+              },
+              {
+                "__class__": "Segment",
+                "begin": "(0.06253137016659713-0.01036911389530193j)",
+                "end": "(0.0638517146441133-0.010371911019545973j)",
+                "prop_dict": null
+              }
+            ],
+            "point_ref": "(0.06414009085891302+5.9242366160836596e-05j)"
+          }
+        ]
       },
       {
-        "Alpha0": null,
-        "H0": 0.01471,
-        "H1": 0.0030499999999999998,
-        "H2": 0.0,
-        "W0": 0.023309999999999997,
-        "W3": 0.01272,
+        "Alpha0": 0,
         "Zh": 8,
-        "__class__": "HoleM52",
-        "magnet_0": {
-          "Lmag": null,
-          "Nseg": null,
-          "__class__": "Magnet",
-          "mat_type": {
-            "HT": {
-              "Cp": 450.0,
-              "__class__": "MatHT",
-              "alpha": 0,
-              "lambda_x": 8.9,
-              "lambda_y": 8.9,
-              "lambda_z": null
-            },
-            "__class__": "Material",
-            "desc": null,
-            "eco": {
-              "__class__": "MatEconomical",
-              "cost_unit": 190.5,
-              "unit_name": null
-            },
-            "elec": {
-              "__class__": "MatElectrical",
-              "alpha": 0,
-              "epsr": 1,
-              "rho": 1.6e-06
-            },
-            "is_isotropic": true,
-            "mag": {
-              "BH_curve": {
-                "__class__": "ImportMatrixXls",
-                "axes_colrows": null,
-                "file_path": null,
-                "is_allsheets": null,
-                "is_transpose": null,
-                "sheet": null,
-                "skiprows": null,
-                "usecols": null
+        "__class__": "HoleUD",
+        "magnet_dict": {
+          "magnet_0": {
+            "Lmag": 0.1651,
+            "Nseg": 1,
+            "__class__": "Magnet",
+            "mat_type": {
+              "HT": {
+                "Cp": 450.0,
+                "__class__": "MatHT",
+                "alpha": 0,
+                "lambda_x": 8.9,
+                "lambda_y": 8.9,
+                "lambda_z": null
               },
-              "Brm20": 1.45,
-              "LossData": {
-                "__class__": "ImportMatrix",
-                "is_transpose": null
+              "__class__": "Material",
+              "desc": null,
+              "eco": {
+                "__class__": "MatEconomical",
+                "cost_unit": 190.5,
+                "unit_name": null
               },
-              "ModelBH": {
-                "Bmax": null,
-                "Hmax": null,
-                "__class__": "ModelBH",
-                "delta": null
+              "elec": {
+                "__class__": "MatElectrical",
+                "alpha": 0,
+                "epsr": 1,
+                "rho": 1.6e-06
               },
-              "Wlam": 0.0,
-              "__class__": "MatMagnetics",
-              "alpha_Br": -0.0012,
-              "is_BH_extrapolate": null,
-              "mur_lin": 1.05
+              "is_isotropic": true,
+              "mag": {
+                "BH_curve": {
+                  "__class__": "ImportMatrixXls",
+                  "axes_colrows": null,
+                  "file_path": null,
+                  "is_allsheets": null,
+                  "is_transpose": null,
+                  "sheet": null,
+                  "skiprows": null,
+                  "usecols": null
+                },
+                "Brm20": 1.45,
+                "LossData": {
+                  "__class__": "ImportMatrix",
+                  "is_transpose": null
+                },
+                "ModelBH": {
+                  "Bmax": null,
+                  "Hmax": null,
+                  "__class__": "ModelBH",
+                  "delta": null
+                },
+                "Wlam": 0.0,
+                "__class__": "MatMagnetics",
+                "alpha_Br": -0.0012,
+                "is_BH_extrapolate": null,
+                "mur_lin": 1.05
+              },
+              "name": "Magnet_N54",
+              "path": "C:/Users/LAP10/Documents/Loss/pyleecan/pyleecan/Data/Material/Magnet_N54.json",
+              "struct": {
+                "Ex": null,
+                "Ey": null,
+                "Ez": null,
+                "Gxy": null,
+                "Gxz": null,
+                "Gyz": null,
+                "__class__": "MatStructural",
+                "nu_xy": null,
+                "nu_xz": null,
+                "nu_yz": null,
+                "rho": 7450.0
+              }
             },
-            "name": "Magnet_N54",
-            "path": "C:/Users/LAP10/Documents/Loss/pyleecan/pyleecan/Data/Material/Magnet_N54.json",
-            "struct": {
-              "Ex": null,
-              "Ey": null,
-              "Ez": null,
-              "Gxy": null,
-              "Gxz": null,
-              "Gyz": null,
-              "__class__": "MatStructural",
-              "nu_xy": null,
-              "nu_xz": null,
-              "nu_yz": null,
-              "rho": 7450.0
-            }
-          },
-          "type_magnetization": null
+            "type_magnetization": 1
+          }
         },
-        "magnetization_dict_offset": null,
+        "magnetization_dict_offset": {
+          "magnet_0": -0.0002905405080431817
+        },
         "mat_void": {
           "HT": {
             "Cp": 1007,
@@ -305,91 +742,178 @@
             "nu_yz": 0.03,
             "rho": 1.2044
           }
-        }
+        },
+        "name": "magnet2",
+        "surf_list": [
+          {
+            "__class__": "SurfLine",
+            "label": "HoleVoid",
+            "line_list": [
+              {
+                "__class__": "Arc1",
+                "begin": "(0.05475087720462922-0.010378835581579092j)",
+                "end": "(0.05740750729446994-0.010375992978673238j)",
+                "is_trigo_direction": true,
+                "prop_dict": null,
+                "radius": 0.001332660870859795
+              },
+              {
+                "__class__": "Segment",
+                "begin": "(0.05740750729446994-0.010375992978673238j)",
+                "end": "(0.05475087720462922-0.010378835581579092j)",
+                "prop_dict": null
+              }
+            ],
+            "point_ref": "(0.056079629214948856-0.010785791906687632j)"
+          },
+          {
+            "__class__": "SurfLine",
+            "label": "HoleVoid",
+            "line_list": [
+              {
+                "__class__": "Arc1",
+                "begin": "(0.0574701069790897+0.010471544854593983j)",
+                "end": "(0.05484574991516286+0.010467832936323036j)",
+                "is_trigo_direction": true,
+                "prop_dict": null,
+                "radius": 0.001381114023753434
+              },
+              {
+                "__class__": "Segment",
+                "begin": "(0.05484574991516286+0.010467832936323036j)",
+                "end": "(0.0574701069790897+0.010471544854593985j)",
+                "prop_dict": null
+              }
+            ],
+            "point_ref": "(0.056157480441899006+0.01078643231409833j)"
+          },
+          {
+            "__class__": "SurfLine",
+            "label": "HoleMag",
+            "line_list": [
+              {
+                "__class__": "Segment",
+                "begin": "(0.05484574991516286+0.010467832936323036j)",
+                "end": "(0.05380669613459686+0.010466363287712476j)",
+                "prop_dict": null
+              },
+              {
+                "__class__": "Segment",
+                "begin": "(0.05380669613459686+0.010466363287712476j)",
+                "end": "(0.05380063946434746-0.010379852339076533j)",
+                "prop_dict": null
+              },
+              {
+                "__class__": "Segment",
+                "begin": "(0.05380063946434746-0.010379852339076533j)",
+                "end": "(0.05475087720462922-0.010378835581579092j)",
+                "prop_dict": null
+              },
+              {
+                "__class__": "Segment",
+                "begin": "(0.05475087720462922-0.010378835581579092j)",
+                "end": "(0.05740750729446994-0.010375992978673238j)",
+                "prop_dict": null
+              },
+              {
+                "__class__": "Segment",
+                "begin": "(0.05740750729446994-0.010375992978673238j)",
+                "end": "(0.0574701069790897+0.010471544854593985j)",
+                "prop_dict": null
+              },
+              {
+                "__class__": "Segment",
+                "begin": "(0.0574701069790897+0.010471544854593985j)",
+                "end": "(0.05484574991516286+0.010467832936323036j)",
+                "prop_dict": null
+              }
+            ],
+            "point_ref": "(0.05534692949871601+4.5176696550106225e-05j)"
+          }
+        ]
       },
       {
-        "Alpha0": null,
-        "H0": 0.00035999999999999997,
-        "H1": 0.0031,
-        "H2": 0.0,
-        "W0": 0.02239,
-        "W3": 0.02148,
+        "Alpha0": 0,
         "Zh": 8,
-        "__class__": "HoleM52",
-        "magnet_0": {
-          "Lmag": null,
-          "Nseg": null,
-          "__class__": "Magnet",
-          "mat_type": {
-            "HT": {
-              "Cp": 450.0,
-              "__class__": "MatHT",
-              "alpha": 0,
-              "lambda_x": 8.9,
-              "lambda_y": 8.9,
-              "lambda_z": null
-            },
-            "__class__": "Material",
-            "desc": null,
-            "eco": {
-              "__class__": "MatEconomical",
-              "cost_unit": 190.5,
-              "unit_name": null
-            },
-            "elec": {
-              "__class__": "MatElectrical",
-              "alpha": 0,
-              "epsr": 1,
-              "rho": 1.6e-06
-            },
-            "is_isotropic": true,
-            "mag": {
-              "BH_curve": {
-                "__class__": "ImportMatrixXls",
-                "axes_colrows": null,
-                "file_path": null,
-                "is_allsheets": null,
-                "is_transpose": null,
-                "sheet": null,
-                "skiprows": null,
-                "usecols": null
+        "__class__": "HoleUD",
+        "magnet_dict": {
+          "magnet_0": {
+            "Lmag": 0.1651,
+            "Nseg": 1,
+            "__class__": "Magnet",
+            "mat_type": {
+              "HT": {
+                "Cp": 450.0,
+                "__class__": "MatHT",
+                "alpha": 0,
+                "lambda_x": 8.9,
+                "lambda_y": 8.9,
+                "lambda_z": null
               },
-              "Brm20": 1.45,
-              "LossData": {
-                "__class__": "ImportMatrix",
-                "is_transpose": null
+              "__class__": "Material",
+              "desc": null,
+              "eco": {
+                "__class__": "MatEconomical",
+                "cost_unit": 190.5,
+                "unit_name": null
               },
-              "ModelBH": {
-                "Bmax": null,
-                "Hmax": null,
-                "__class__": "ModelBH",
-                "delta": null
+              "elec": {
+                "__class__": "MatElectrical",
+                "alpha": 0,
+                "epsr": 1,
+                "rho": 1.6e-06
               },
-              "Wlam": 0.0,
-              "__class__": "MatMagnetics",
-              "alpha_Br": -0.0012,
-              "is_BH_extrapolate": null,
-              "mur_lin": 1.05
+              "is_isotropic": true,
+              "mag": {
+                "BH_curve": {
+                  "__class__": "ImportMatrixXls",
+                  "axes_colrows": null,
+                  "file_path": null,
+                  "is_allsheets": null,
+                  "is_transpose": null,
+                  "sheet": null,
+                  "skiprows": null,
+                  "usecols": null
+                },
+                "Brm20": 1.45,
+                "LossData": {
+                  "__class__": "ImportMatrix",
+                  "is_transpose": null
+                },
+                "ModelBH": {
+                  "Bmax": null,
+                  "Hmax": null,
+                  "__class__": "ModelBH",
+                  "delta": null
+                },
+                "Wlam": 0.0,
+                "__class__": "MatMagnetics",
+                "alpha_Br": -0.0012,
+                "is_BH_extrapolate": null,
+                "mur_lin": 1.05
+              },
+              "name": "Magnet_N54",
+              "path": "C:/Users/LAP10/Documents/Loss/pyleecan/pyleecan/Data/Material/Magnet_N54.json",
+              "struct": {
+                "Ex": null,
+                "Ey": null,
+                "Ez": null,
+                "Gxy": null,
+                "Gxz": null,
+                "Gyz": null,
+                "__class__": "MatStructural",
+                "nu_xy": null,
+                "nu_xz": null,
+                "nu_yz": null,
+                "rho": 7450.0
+              }
             },
-            "name": "Magnet_N54",
-            "path": "C:/Users/LAP10/Documents/Loss/pyleecan/pyleecan/Data/Material/Magnet_N54.json",
-            "struct": {
-              "Ex": null,
-              "Ey": null,
-              "Ez": null,
-              "Gxy": null,
-              "Gxz": null,
-              "Gyz": null,
-              "__class__": "MatStructural",
-              "nu_xy": null,
-              "nu_xz": null,
-              "nu_yz": null,
-              "rho": 7450.0
-            }
-          },
-          "type_magnetization": null
+            "type_magnetization": 1
+          }
         },
-        "magnetization_dict_offset": null,
+        "magnetization_dict_offset": {
+          "magnet_0": -0.0022575875445810267
+        },
         "mat_void": {
           "HT": {
             "Cp": 1007,
@@ -450,7 +974,95 @@
             "nu_yz": 0.03,
             "rho": 1.2044
           }
-        }
+        },
+        "name": "magnet3",
+        "surf_list": [
+          {
+            "__class__": "SurfLine",
+            "label": "HoleVoid",
+            "line_list": [
+              {
+                "__class__": "Arc1",
+                "begin": "(0.04626912720303173-0.010456398602514943j)",
+                "end": "(0.048942273953035985-0.010445006662393994j)",
+                "is_trigo_direction": true,
+                "prop_dict": null,
+                "radius": 0.0013920828059826257
+              },
+              {
+                "__class__": "Segment",
+                "begin": "(0.048942273953035985-0.010445006662393994j)",
+                "end": "(0.04626912720303173-0.010456398602514943j)",
+                "prop_dict": null
+              }
+            ],
+            "point_ref": "(0.04760712527915112-0.010785012251438604j)"
+          },
+          {
+            "__class__": "SurfLine",
+            "label": "HoleVoid",
+            "line_list": [
+              {
+                "__class__": "Arc1",
+                "begin": "(0.04892758981080295+0.010541613907121189j)",
+                "end": "(0.04626647101198686+0.010538839010286597j)",
+                "is_trigo_direction": true,
+                "prop_dict": null,
+                "radius": 0.001568069568942866
+              },
+              {
+                "__class__": "Segment",
+                "begin": "(0.04626647101198686+0.0105388390102866j)",
+                "end": "(0.04892758981080295+0.010541613907121189j)",
+                "prop_dict": null
+              }
+            ],
+            "point_ref": "(0.047596773775612014+0.010786339502539726j)"
+          },
+          {
+            "__class__": "SurfLine",
+            "label": "HoleMag",
+            "line_list": [
+              {
+                "__class__": "Segment",
+                "begin": "(0.04626912720303173-0.010456398602514943j)",
+                "end": "(0.048942273953035985-0.010445006662393994j)",
+                "prop_dict": null
+              },
+              {
+                "__class__": "Segment",
+                "begin": "(0.048942273953035985-0.010445006662393994j)",
+                "end": "(0.04892758981080295+0.010541613907121189j)",
+                "prop_dict": null
+              },
+              {
+                "__class__": "Segment",
+                "begin": "(0.04892758981080295+0.010541613907121189j)",
+                "end": "(0.04626647101198686+0.0105388390102866j)",
+                "prop_dict": null
+              },
+              {
+                "__class__": "Segment",
+                "begin": "(0.04626647101198686+0.0105388390102866j)",
+                "end": "(0.045390119834046214+0.01053792519008784j)",
+                "prop_dict": null
+              },
+              {
+                "__class__": "Segment",
+                "begin": "(0.045390119834046214+0.01053792519008784j)",
+                "end": "(0.04534271431660429-0.010460346623748512j)",
+                "prop_dict": null
+              },
+              {
+                "__class__": "Segment",
+                "begin": "(0.04534271431660429-0.010460346623748512j)",
+                "end": "(0.04626912720303173-0.010456398602514943j)",
+                "prop_dict": null
+              }
+            ],
+            "point_ref": "(0.04685638268825135+4.2771036473029594e-05j)"
+          }
+        ]
       }
     ],
     "is_internal": true,
@@ -985,20 +1597,20 @@
       "rate": 1,
       "type_skew": "vshape",
       "z_list": [
-        -0.067,
-        -0.04785714285714286,
-        -0.028714285714285716,
-        -0.009571428571428574,
-        0.009571428571428568,
-        0.028714285714285703,
-        0.047857142857142855,
-        0.067
+        -0.08255,
+        -0.05896428571428571,
+        -0.03537857142857143,
+        -0.011792857142857147,
+        0.011792857142857138,
+        0.03537857142857141,
+        0.058964285714285705,
+        0.08255
       ]
     },
     "yoke": null
   },
   "shaft": {
-    "Drsh": 0.0654,
+    "Drsh": 0.05,
     "Lshaft": null,
     "__class__": "Shaft",
     "mat_type": {
@@ -1508,7 +2120,7 @@
         "is_BH_extrapolate": false,
         "mur_lin": 2500.0
       },
-      "name": "M400-50A_old",
+      "name": "M400-50A",
       "path": "C:/Users/LAP10/Documents/Loss/pyleecan/pyleecan/Data/Material/M400-50A.json",
       "struct": {
         "Ex": 215000000000.0,
@@ -1528,7 +2140,7 @@
   "stator": {
     "Kf1": 0.95,
     "Ksfill": null,
-    "L1": 0.134,
+    "L1": 0.1651,
     "Nrvd": null,
     "Rext": 0.102,
     "Rint": 0.0684,
@@ -2067,20 +2679,20 @@
       "wedge_mat": null
     },
     "winding": {
-      "Lewout": 0.034,
+      "Lewout": 0.052,
       "Nlayer": 1,
-      "Npcp": 1,
+      "Npcp": 4,
       "Nslot_shift_wind": 0,
       "Ntcoil": 4,
       "__class__": "Winding",
       "coil_pitch": 9,
       "conductor": {
-        "Hwire": 0.00366,
-        "Nwppc_rad": 1,
+        "Hwire": 0.0009,
+        "Nwppc_rad": 4,
         "Nwppc_tan": 1,
         "Wins_coil": null,
         "Wins_wire": 0,
-        "Wwire": 0.00382,
+        "Wwire": 0.00385,
         "__class__": "CondType11",
         "alpha_ew": null,
         "cond_mat": {
