@@ -31,7 +31,7 @@ from pyleecan.definitions import DATA_DIR
 from SciDataTool.Functions.Plot.plot_2D import plot_2D 
 
 
-is_show_fig = True
+is_show_fig = False
 
 def find_best_phi0_jaguar():
     from pyleecan.Classes.VarLoadCurrent import VarLoadCurrent
@@ -107,7 +107,6 @@ def test_FEMM_Loss_Jaguar():
     """Test to calculate losses in Toyota_Prius using LossFEMM model based on motoranalysis validation"""
 
     machine = load(join(DATA_DIR, "Machine", "Jaguar_I_Pace.json"))
-    machine.plot()
     
 
     simu = Simu1(name="test_FEMM_Loss_Jaguar_I_Pace", machine=machine)
@@ -254,14 +253,13 @@ def test_FEMM_Loss_Jaguar_wo_skew():
     """Test to calculate losses in Toyota_Prius using LossFEMM model based on motoranalysis validation"""
 
     machine = load(join(DATA_DIR, "Machine", "Jaguar_I_Pace_wo_skew.json"))
-    machine.plot()
     
 
     simu = Simu1(name="test_FEMM_Loss_Jaguar_I_Pace", machine=machine)
 
     # Current for MTPA
-    Ic = 900 * np.exp(1j * 120 * np.pi / 180)
-    SPEED = 6000
+    Ic = 1500* np.exp(1j * 120 * np.pi / 180)
+    SPEED = 2000
 
     simu.input = InputCurrent(
         Nt_tot = 4 * 40 * 8,
@@ -298,6 +296,7 @@ def test_FEMM_Loss_Jaguar_wo_skew():
 
     power_dict = {
         "Torque": out.mag.Tem_av,
+        "J":out.elec.get_Jrms(),
         "total_power": out.mag.Pem_av,
         **dict([(o.name,o.get_loss_scalar(out.elec.OP.felec)) for o in out.loss.loss_list])
     }
@@ -388,6 +387,6 @@ def test_FEMM_Loss_Jaguar_wo_skew():
 if __name__ == "__main__":
     
     # find_best_phi0_jaguar()
-    test_FEMM_Loss_Jaguar_wo_skew()
-    # test_FEMM_Loss_Jaguar()
+    # test_FEMM_Loss_Jaguar_wo_skew()
+    test_FEMM_Loss_Jaguar()
     # test_FEMM_Jaguar_with_skew()

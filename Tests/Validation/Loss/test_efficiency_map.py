@@ -229,92 +229,92 @@ def test_efficiency_map(machine_name,Umax, Jmax):
 
     if is_show_fig:
         # Build legend list for each load level
-        # legend_list = list()
-        # for i_load in range(Nload):
-        #     if Nload > 1:
-        #         legend_list.append(
-        #             "Load level = "
-        #             + str(int(round(100 * (i_load) / (Nload - 1))))
-        #             + " %"
-        #         )
-        #     else:
-        #         legend_list.append("Load level =  100%")
+        legend_list = list()
+        for i_load in range(Nload):
+            if Nload > 1:
+                legend_list.append(
+                    "Load level = "
+                    + str(int(round(100 * (i_load) / (Nload - 1))))
+                    + " %"
+                )
+            else:
+                legend_list.append("Load level =  100%")
 
-        # # Plot torque speed curve for each load level
-        # y_list = [OP_matrix_MTPA[:, i_load, 3] for i_load in range(Nload)]
-        # plot_2D(
-        #     [OP_matrix_MTPA[:, i_load, 0]],
-        #     y_list,
-        #     xlabel="Speed [rpm]",
-        #     ylabel="Average torque [N.m]",
-        #     legend_list=legend_list,
-        #     is_show_fig=is_show_fig,
-        # )
+        # Plot torque speed curve for each load level
+        y_list = [OP_matrix_MTPA[:, i_load, 3] for i_load in range(Nload)]
+        plot_2D(
+            [OP_matrix_MTPA[:, i_load, 0]],
+            y_list,
+            xlabel="Speed [rpm]",
+            ylabel="Average torque [N.m]",
+            legend_list=legend_list,
+            is_show_fig=is_show_fig,
+        )
 
-        # # Plot Id for each load level
-        # y_list = [OP_matrix_MTPA[:, i_load, 1] for i_load in range(Nload)]
-        # plot_2D(
-        #     [OP_matrix_MTPA[:, i_load, 0]],
-        #     y_list,
-        #     xlabel="Speed [rpm]",
-        #     ylabel="Id Current [Arms]",
-        #     legend_list=legend_list,
-        #     is_show_fig=is_show_fig,
-        # )
+        # Plot Id for each load level
+        y_list = [OP_matrix_MTPA[:, i_load, 1] for i_load in range(Nload)]
+        plot_2D(
+            [OP_matrix_MTPA[:, i_load, 0]],
+            y_list,
+            xlabel="Speed [rpm]",
+            ylabel="Id Current [Arms]",
+            legend_list=legend_list,
+            is_show_fig=is_show_fig,
+        )
 
-        # # Plot Iq for each load level
-        # y_list = [OP_matrix_MTPA[:, i_load, 2] for i_load in range(Nload)]
-        # plot_2D(
-        #     [OP_matrix_MTPA[:, i_load, 0]],
-        #     y_list,
-        #     xlabel="Speed [rpm]",
-        #     ylabel="Iq Current [Arms]",
-        #     legend_list=legend_list,
-        #     is_show_fig=is_show_fig,
-        # )
+        # Plot Iq for each load level
+        y_list = [OP_matrix_MTPA[:, i_load, 2] for i_load in range(Nload)]
+        plot_2D(
+            [OP_matrix_MTPA[:, i_load, 0]],
+            y_list,
+            xlabel="Speed [rpm]",
+            ylabel="Iq Current [Arms]",
+            legend_list=legend_list,
+            is_show_fig=is_show_fig,
+        )
 
-        # # Plot Ud for each load level
-        # y_list = [U_MTPA[:, i_load, 0] for i_load in range(Nload)]
-        # plot_2D(
-        #     [OP_matrix_MTPA[:, i_load, 0]],
-        #     y_list,
-        #     xlabel="Speed [rpm]",
-        #     ylabel="Ud Voltage [Vrms]",
-        #     legend_list=legend_list,
-        #     is_show_fig=is_show_fig,
-        # )
+        # Plot Ud for each load level
+        y_list = [U_MTPA[:, i_load, 0] for i_load in range(Nload)]
+        plot_2D(
+            [OP_matrix_MTPA[:, i_load, 0]],
+            y_list,
+            xlabel="Speed [rpm]",
+            ylabel="Ud Voltage [Vrms]",
+            legend_list=legend_list,
+            is_show_fig=is_show_fig,
+        )
 
-        # # Plot Uq for each load level
-        # y_list = [U_MTPA[:, i_load, 1] for i_load in range(Nload)]
-        # plot_2D(
-        #     [OP_matrix_MTPA[:, i_load, 0]],
-        #     y_list,
-        #     xlabel="Speed [rpm]",
-        #     ylabel="Uq Voltage [Vrms]",
-        #     legend_list=legend_list,
-        #     is_show_fig=is_show_fig,
-        # )
+        # Plot Uq for each load level
+        y_list = [U_MTPA[:, i_load, 1] for i_load in range(Nload)]
+        plot_2D(
+            [OP_matrix_MTPA[:, i_load, 0]],
+            y_list,
+            xlabel="Speed [rpm]",
+            ylabel="Uq Voltage [Vrms]",
+            legend_list=legend_list,
+            is_show_fig=is_show_fig,
+        )
 
-        # # Plot Id/Iq and Imax on a same graph at a specific load level
-        # i_load = -1
-        # plot_2D(
-        #     [OP_matrix_MTPA[:, i_load, 0]],
-        #     [I_MTPA[:, i_load, 0], I_MTPA[:, i_load, 1], I_MTPA[:, i_load, 2]],
-        #     xlabel="Speed [rpm]",
-        #     ylabel="Current [Arms]",
-        #     legend_list=["Id", "Iq", "Imax"],
-        #     is_show_fig=is_show_fig,
-        # )
+        # Plot Id/Iq and Imax on a same graph at a specific load level
+        i_load = -1
+        plot_2D(
+            [OP_matrix_MTPA[:, i_load, 0]],
+            [I_MTPA[:, i_load, 0], I_MTPA[:, i_load, 1], I_MTPA[:, i_load, 2]],
+            xlabel="Speed [rpm]",
+            ylabel="Current [Arms]",
+            legend_list=["Id", "Iq", "Imax"],
+            is_show_fig=is_show_fig,
+        )
 
-        # # Plot Ud/Uq and Umax on a same graph at a specific load level
-        # plot_2D(
-        #     [OP_matrix_MTPA[:, i_load, 0]],
-        #     [U_MTPA[:, i_load, 0], U_MTPA[:, i_load, 1], U_MTPA[:, i_load, 2]],
-        #     xlabel="Speed [rpm]",
-        #     ylabel="Voltage [Vrms]",
-        #     legend_list=["Ud", "Uq", "Umax"],
-        #     is_show_fig=is_show_fig,
-        # )
+        # Plot Ud/Uq and Umax on a same graph at a specific load level
+        plot_2D(
+            [OP_matrix_MTPA[:, i_load, 0]],
+            [U_MTPA[:, i_load, 0], U_MTPA[:, i_load, 1], U_MTPA[:, i_load, 2]],
+            xlabel="Speed [rpm]",
+            ylabel="Voltage [Vrms]",
+            legend_list=["Ud", "Uq", "Umax"],
+            is_show_fig=is_show_fig,
+        )
         #=============================================#
         # Plot efficiency map
         plot_3D(
@@ -458,5 +458,5 @@ def test_efficiency_map(machine_name,Umax, Jmax):
 # To run it without pytest
 if __name__ == "__main__":
 
-    out = test_efficiency_map("Toyota_Prius_loss",230,30e6)
-    # out = test_efficiency_map("Jaguar_I_Pace_wo_skew",100,17e6)
+    # out = test_efficiency_map("Toyota_Prius_loss",230,30e6)
+     out = test_efficiency_map("Jaguar_I_Pace_wo_skew",100,27e6)

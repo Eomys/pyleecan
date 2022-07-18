@@ -59,7 +59,7 @@ def build_MS_sliced(self, MS_sliced, MS, axes_dict, Nslices, ii):
             field_x = comp_x.values
             comp_y = solution.field.components["comp_y"]
             field_y = comp_y.values
-            field = concatenate((field_x[..., None], field_y[..., None]), axis=2)
+            field = concatenate((field_x[..., None], field_y[..., None]), axis=-1)
 
             axes_list = comp_x.axes
 
@@ -69,7 +69,7 @@ def build_MS_sliced(self, MS_sliced, MS, axes_dict, Nslices, ii):
             new_comp_y = new_solution.field.components["comp_y"]
             new_field_y = new_comp_y.values
             new_field = concatenate(
-                (new_field_x[..., None], new_field_y[..., None]), axis=2
+                (new_field_x[..., None], new_field_y[..., None]), axis=-1
             )
         else:
             data = solution.field
@@ -97,7 +97,7 @@ def build_MS_sliced(self, MS_sliced, MS, axes_dict, Nslices, ii):
                 field=new_field,
                 axis_list=new_axis_list,
                 name=comp_x.name,
-                symbol=comp_x.symbol,
+                symbol=solution.field.symbol,
                 unit=comp_x.unit,
                 type_cell=solution.type_cell,
             )
