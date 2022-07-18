@@ -8,6 +8,7 @@ from .....loggers import GUI_LOG_NAME
 from .....Classes.Winding import Winding
 from .....Classes.WindingUD import WindingUD
 from .....Classes.MachineSRM import MachineSRM
+from .....Classes.MachineWRSM import MachineWRSM
 from .....GUI.Dialog.DMachineSetup.SWinding.Gen_SWinding import Gen_SWinding
 from .....Methods.Machine.Winding import WindingError
 from .....Functions.Plot.set_plot_gui_icon import set_plot_gui_icon
@@ -63,14 +64,22 @@ class SWinding(Gen_SWinding, QWidget):
                 "Pole pair number=" + str(self.obj.get_pole_pair_number())
             )
 
-        # if machine.type_machine == 9 and not self.is_stator:
-        #     # Enforce tooth winding for WRSM rotor
-        #     self.obj.winding = WindingCW2LT(init_dict=self.obj.winding.as_dict())
-        #     self.obj.winding.qs = 1
-        #     self.b_preview.setEnabled(False)
-        #     self.si_qs.setEnabled(False)
-        #     self.c_wind_type.setEnabled(False)
-        #     self.c_wind_type.setCurrentIndex(0)
+        if isinstance(machine, MachineWRSM) and not self.is_stator:
+            # Enforce tooth winding for WRSM rotor
+            self.si_qs.setEnabled(False)
+            self.obj.winding.qs = 1
+            # Two tangential layer enforce
+            self.si_Nlayer.setEnabled(False)
+            self.obj.winding.Nlayer = 2
+            self.obj.winding.is_change_layer = False
+            self.is_change_layer.setEnabled(False)
+            self.obj.winding.coil_pitch = 1
+            self.si_coil_pitch.setEnabled(False)
+            self.in_Zs.hide()  # =2*p
+            self.b_preview.setEnabled(False)
+            # Enforce star of slot
+            self.c_wind_type.setEnabled(False)
+            self.c_wind_type.setCurrentIndex(0)
 
         # Pattern Group setup
         if self.obj.winding is None:
@@ -142,6 +151,7 @@ class SWinding(Gen_SWinding, QWidget):
         self.si_Nlayer.valueChanged.connect(self.show_layer_widget)
         self.si_Npcp.editingFinished.connect(self.set_Npcp)
         self.si_Nslot.valueChanged.connect(self.set_Nslot)
+        self.si_Ntcoil.valueChanged.connect(self.set_Ntcoil)
         self.is_reverse.stateChanged.connect(self.set_is_reverse_wind)
         self.is_reverse_layer.stateChanged.connect(self.set_is_reverse_layer)
         self.is_change_layer.stateChanged.connect(self.set_is_change_layer)
@@ -289,6 +299,19 @@ class SWinding(Gen_SWinding, QWidget):
             self.obj.winding = WindingUD(init_dict=init_dict)
             self.hide_star_widget(True)
         self.obj.winding.Npcp = self.si_Npcp.value()
+
+    def set_Ntcoil(self):
+        """Signal to update the value of Ntcoil according to the
+        spinbox
+
+        Parameters
+        ----------
+        self : SWinding
+            A SWinding object
+        """
+        self.obj.winding.Ntcoil = self.si_Ntcoil.value()
+        # Notify the machine GUI that the machine has changed
+        self.saveNeeded.emit()
 
     def set_Nslot(self):
         """Signal to update the value of Nslot_shift_wind according to the
@@ -505,9 +528,7 @@ class SWinding(Gen_SWinding, QWidget):
                 err_msg = "Error while plotting machine in Rotor Winding:\n" + str(e)
             getLogger(GUI_LOG_NAME).error(err_msg)
             QMessageBox().critical(
-                self,
-                self.tr("Error"),
-                err_msg,
+                self, self.tr("Error"), err_msg,
             )
 
         # Update the Graph
