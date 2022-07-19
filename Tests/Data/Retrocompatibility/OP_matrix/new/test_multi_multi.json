@@ -1192,13 +1192,8 @@
     "type_distribution_enforced": null
   },
   "name": "test_multi_multi",
-  "path_result": "D:/GitHub/pyleecan-public/Tests/Results/Validation\\test_multi_multi",
-  "postproc_list": [
-    {
-      "__class__": "PostFunction",
-      "run": "d:\\GitHub\\pyleecan-public\\Tests\\Validation\\Multisimulation\\plot_save.py"
-    }
-  ],
+  "path_result": "",
+  "postproc_list": [],
   "struct": null,
   "var_simu": {
     "__class__": "VarParam",
@@ -1266,7 +1261,7 @@
         "name": "[]",
         "param_dict": {
           "is_show_fig": false,
-          "save_path": "D:/GitHub/pyleecan-public/Tests/Results/Validation\\multi_multi\\Max_6fs.png"
+          "save_path": ""
         },
         "param_list": [
           "W0s",
@@ -1281,7 +1276,7 @@
         "name": "[]",
         "param_dict": {
           "is_show_fig": false,
-          "save_path": "D:/GitHub/pyleecan-public/Tests/Results/Validation\\multi_multi\\Max_12fs.png"
+          "save_path": ""
         },
         "param_list": [
           "W0s",
@@ -1289,10 +1284,6 @@
         ],
         "quantity": null,
         "save_format": "png"
-      },
-      {
-        "__class__": "PostFunction",
-        "run": "d:\\GitHub\\pyleecan-public\\Tests\\Validation\\Multisimulation\\make_gif.py"
       }
     ],
     "pre_keeper_postproc_list": null,

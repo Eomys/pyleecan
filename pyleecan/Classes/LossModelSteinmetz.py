@@ -55,6 +55,7 @@ class LossModelSteinmetz(LossModel):
         alpha_f=None,
         alpha_B=None,
         name="",
+        is_show_fig=False,
         init_dict=None,
         init_str=None,
     ):
@@ -83,13 +84,15 @@ class LossModelSteinmetz(LossModel):
                 alpha_B = init_dict["alpha_B"]
             if "name" in list(init_dict.keys()):
                 name = init_dict["name"]
+            if "is_show_fig" in list(init_dict.keys()):
+                is_show_fig = init_dict["is_show_fig"]
         # Set the properties (value check and convertion are done in setter)
         self.k_hy = k_hy
         self.k_ed = k_ed
         self.alpha_f = alpha_f
         self.alpha_B = alpha_B
         # Call LossModel init
-        super(LossModelSteinmetz, self).__init__(name=name)
+        super(LossModelSteinmetz, self).__init__(name=name, is_show_fig=is_show_fig)
         # The class is frozen (in LossModel init), for now it's impossible to
         # add new properties
 
@@ -259,6 +262,7 @@ class LossModelSteinmetz(LossModel):
         alpha_f_val = self.alpha_f
         alpha_B_val = self.alpha_B
         name_val = self.name
+        is_show_fig_val = self.is_show_fig
         # Creates new object of the same type with the copied properties
         obj_copy = type(self)(
             k_hy=k_hy_val,
@@ -266,6 +270,7 @@ class LossModelSteinmetz(LossModel):
             alpha_f=alpha_f_val,
             alpha_B=alpha_B_val,
             name=name_val,
+            is_show_fig=is_show_fig_val,
         )
         return obj_copy
 

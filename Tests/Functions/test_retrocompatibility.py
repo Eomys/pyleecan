@@ -183,9 +183,9 @@ if __name__ == "__main__":
     for file_dict in OPM_list:
         test_save_OPM_retro(file_dict)
 
-    for file_dict in hole_list:
-        test_save_load_hole_retro(file_dict)
+    # for file_dict in hole_list:
+    #     test_save_load_hole_retro(file_dict)
 
-    for file_dict in wind_list:
-        test_save_load_wind_retro(file_dict)
+    # for file_dict in wind_list:
+    #     test_save_load_wind_retro(file_dict)
     print("Done")

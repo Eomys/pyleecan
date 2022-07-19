@@ -242,7 +242,12 @@ def is_Winding_dict(obj_dict):
             "WindingDW2L",
         ]
         or "__class__" in obj_dict.keys()
-        and obj_dict["__class__"] in ["Winding", "WindingUD", "WindingSC",]
+        and obj_dict["__class__"]
+        in [
+            "Winding",
+            "WindingUD",
+            "WindingSC",
+        ]
         and "Npcpp" in obj_dict.keys()
     )
 
