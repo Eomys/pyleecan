@@ -57,6 +57,11 @@ try:
 except ImportError as error:
     comp_angle_d_axis = error
 
+try:
+    from ..Methods.Machine.LamSlotMag.get_magnet_number import get_magnet_number
+except ImportError as error:
+    get_magnet_number = error
+
 
 from numpy import isnan
 from ._check import InitUnKnowClassError
@@ -154,6 +159,18 @@ class LamSlotMag(LamSlot):
         )
     else:
         comp_angle_d_axis = comp_angle_d_axis
+    # cf Methods.Machine.LamSlotMag.get_magnet_number
+    if isinstance(get_magnet_number, ImportError):
+        get_magnet_number = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use LamSlotMag method get_magnet_number: "
+                    + str(get_magnet_number)
+                )
+            )
+        )
+    else:
+        get_magnet_number = get_magnet_number
     # generic save method is available in all object
     save = save
     # get_logger method is available in all object
@@ -175,8 +192,8 @@ class LamSlotMag(LamSlot):
         axial_vent=-1,
         notch=-1,
         skew=None,
-        yoke_notch=-1,
         bore=None,
+        yoke=None,
         init_dict=None,
         init_str=None,
     ):
@@ -223,10 +240,10 @@ class LamSlotMag(LamSlot):
                 notch = init_dict["notch"]
             if "skew" in list(init_dict.keys()):
                 skew = init_dict["skew"]
-            if "yoke_notch" in list(init_dict.keys()):
-                yoke_notch = init_dict["yoke_notch"]
             if "bore" in list(init_dict.keys()):
                 bore = init_dict["bore"]
+            if "yoke" in list(init_dict.keys()):
+                yoke = init_dict["yoke"]
         # Set the properties (value check and convertion are done in setter)
         self.magnet = magnet
         # Call LamSlot init
@@ -244,8 +261,8 @@ class LamSlotMag(LamSlot):
             axial_vent=axial_vent,
             notch=notch,
             skew=skew,
-            yoke_notch=yoke_notch,
             bore=bore,
+            yoke=yoke,
         )
         # The class is frozen (in LamSlot init), for now it's impossible to
         # add new properties
@@ -388,16 +405,14 @@ class LamSlotMag(LamSlot):
             skew_val = None
         else:
             skew_val = self.skew.copy()
-        if self.yoke_notch is None:
-            yoke_notch_val = None
-        else:
-            yoke_notch_val = list()
-            for obj in self.yoke_notch:
-                yoke_notch_val.append(obj.copy())
         if self.bore is None:
             bore_val = None
         else:
             bore_val = self.bore.copy()
+        if self.yoke is None:
+            yoke_val = None
+        else:
+            yoke_val = self.yoke.copy()
         # Creates new object of the same type with the copied properties
         obj_copy = type(self)(
             magnet=magnet_val,
@@ -414,8 +429,8 @@ class LamSlotMag(LamSlot):
             axial_vent=axial_vent_val,
             notch=notch_val,
             skew=skew_val,
-            yoke_notch=yoke_notch_val,
             bore=bore_val,
+            yoke=yoke_val,
         )
         return obj_copy
 

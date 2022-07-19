@@ -13,81 +13,52 @@ from ..Functions.save import save
 from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
 from copy import deepcopy
-from .Lamination import Lamination
+from .LamH import LamH
 
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
+try:
+    from ..Methods.Machine.LamHole._plot_arrow_mag import _plot_arrow_mag
+except ImportError as error:
+    _plot_arrow_mag = error
+
 try:
     from ..Methods.Machine.LamHole.build_geometry import build_geometry
 except ImportError as error:
     build_geometry = error
 
 try:
-    from ..Methods.Machine.LamHole.comp_height_yoke import comp_height_yoke
+    from ..Methods.Machine.LamHole.get_hole_list import get_hole_list
 except ImportError as error:
-    comp_height_yoke = error
+    get_hole_list = error
 
 try:
-    from ..Methods.Machine.LamHole.comp_masses import comp_masses
+    from ..Methods.Machine.LamHole.get_magnet_number import get_magnet_number
 except ImportError as error:
-    comp_masses = error
-
-try:
-    from ..Methods.Machine.LamHole.comp_surfaces import comp_surfaces
-except ImportError as error:
-    comp_surfaces = error
-
-try:
-    from ..Methods.Machine.LamHole.comp_volumes import comp_volumes
-except ImportError as error:
-    comp_volumes = error
-
-try:
-    from ..Methods.Machine.LamHole.get_pole_pair_number import get_pole_pair_number
-except ImportError as error:
-    get_pole_pair_number = error
-
-try:
-    from ..Methods.Machine.LamHole.plot import plot
-except ImportError as error:
-    plot = error
-
-try:
-    from ..Methods.Machine.LamHole.comp_radius_mid_yoke import comp_radius_mid_yoke
-except ImportError as error:
-    comp_radius_mid_yoke = error
-
-try:
-    from ..Methods.Machine.LamHole.has_magnet import has_magnet
-except ImportError as error:
-    has_magnet = error
-
-try:
-    from ..Methods.Machine.LamHole.comp_angle_d_axis import comp_angle_d_axis
-except ImportError as error:
-    comp_angle_d_axis = error
-
-try:
-    from ..Methods.Machine.LamHole.set_pole_pair_number import set_pole_pair_number
-except ImportError as error:
-    set_pole_pair_number = error
-
-try:
-    from ..Methods.Machine.LamHole.get_Zs import get_Zs
-except ImportError as error:
-    get_Zs = error
+    get_magnet_number = error
 
 
 from numpy import isnan
 from ._check import InitUnKnowClassError
 
 
-class LamHole(Lamination):
+class LamHole(LamH):
     """Lamination with Hole with or without magnet or winding"""
 
     VERSION = 1
 
     # Check ImportError to remove unnecessary dependencies in unused method
+    # cf Methods.Machine.LamHole._plot_arrow_mag
+    if isinstance(_plot_arrow_mag, ImportError):
+        _plot_arrow_mag = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use LamHole method _plot_arrow_mag: " + str(_plot_arrow_mag)
+                )
+            )
+        )
+    else:
+        _plot_arrow_mag = _plot_arrow_mag
     # cf Methods.Machine.LamHole.build_geometry
     if isinstance(build_geometry, ImportError):
         build_geometry = property(
@@ -99,124 +70,29 @@ class LamHole(Lamination):
         )
     else:
         build_geometry = build_geometry
-    # cf Methods.Machine.LamHole.comp_height_yoke
-    if isinstance(comp_height_yoke, ImportError):
-        comp_height_yoke = property(
+    # cf Methods.Machine.LamHole.get_hole_list
+    if isinstance(get_hole_list, ImportError):
+        get_hole_list = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use LamHole method comp_height_yoke: "
-                    + str(comp_height_yoke)
+                    "Can't use LamHole method get_hole_list: " + str(get_hole_list)
                 )
             )
         )
     else:
-        comp_height_yoke = comp_height_yoke
-    # cf Methods.Machine.LamHole.comp_masses
-    if isinstance(comp_masses, ImportError):
-        comp_masses = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use LamHole method comp_masses: " + str(comp_masses))
-            )
-        )
-    else:
-        comp_masses = comp_masses
-    # cf Methods.Machine.LamHole.comp_surfaces
-    if isinstance(comp_surfaces, ImportError):
-        comp_surfaces = property(
+        get_hole_list = get_hole_list
+    # cf Methods.Machine.LamHole.get_magnet_number
+    if isinstance(get_magnet_number, ImportError):
+        get_magnet_number = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use LamHole method comp_surfaces: " + str(comp_surfaces)
+                    "Can't use LamHole method get_magnet_number: "
+                    + str(get_magnet_number)
                 )
             )
         )
     else:
-        comp_surfaces = comp_surfaces
-    # cf Methods.Machine.LamHole.comp_volumes
-    if isinstance(comp_volumes, ImportError):
-        comp_volumes = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use LamHole method comp_volumes: " + str(comp_volumes)
-                )
-            )
-        )
-    else:
-        comp_volumes = comp_volumes
-    # cf Methods.Machine.LamHole.get_pole_pair_number
-    if isinstance(get_pole_pair_number, ImportError):
-        get_pole_pair_number = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use LamHole method get_pole_pair_number: "
-                    + str(get_pole_pair_number)
-                )
-            )
-        )
-    else:
-        get_pole_pair_number = get_pole_pair_number
-    # cf Methods.Machine.LamHole.plot
-    if isinstance(plot, ImportError):
-        plot = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use LamHole method plot: " + str(plot))
-            )
-        )
-    else:
-        plot = plot
-    # cf Methods.Machine.LamHole.comp_radius_mid_yoke
-    if isinstance(comp_radius_mid_yoke, ImportError):
-        comp_radius_mid_yoke = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use LamHole method comp_radius_mid_yoke: "
-                    + str(comp_radius_mid_yoke)
-                )
-            )
-        )
-    else:
-        comp_radius_mid_yoke = comp_radius_mid_yoke
-    # cf Methods.Machine.LamHole.has_magnet
-    if isinstance(has_magnet, ImportError):
-        has_magnet = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use LamHole method has_magnet: " + str(has_magnet))
-            )
-        )
-    else:
-        has_magnet = has_magnet
-    # cf Methods.Machine.LamHole.comp_angle_d_axis
-    if isinstance(comp_angle_d_axis, ImportError):
-        comp_angle_d_axis = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use LamHole method comp_angle_d_axis: "
-                    + str(comp_angle_d_axis)
-                )
-            )
-        )
-    else:
-        comp_angle_d_axis = comp_angle_d_axis
-    # cf Methods.Machine.LamHole.set_pole_pair_number
-    if isinstance(set_pole_pair_number, ImportError):
-        set_pole_pair_number = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use LamHole method set_pole_pair_number: "
-                    + str(set_pole_pair_number)
-                )
-            )
-        )
-    else:
-        set_pole_pair_number = set_pole_pair_number
-    # cf Methods.Machine.LamHole.get_Zs
-    if isinstance(get_Zs, ImportError):
-        get_Zs = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use LamHole method get_Zs: " + str(get_Zs))
-            )
-        )
-    else:
-        get_Zs = get_Zs
+        get_magnet_number = get_magnet_number
     # generic save method is available in all object
     save = save
     # get_logger method is available in all object
@@ -237,8 +113,8 @@ class LamHole(Lamination):
         axial_vent=-1,
         notch=-1,
         skew=None,
-        yoke_notch=-1,
         bore=None,
+        yoke=None,
         init_dict=None,
         init_str=None,
     ):
@@ -283,13 +159,13 @@ class LamHole(Lamination):
                 notch = init_dict["notch"]
             if "skew" in list(init_dict.keys()):
                 skew = init_dict["skew"]
-            if "yoke_notch" in list(init_dict.keys()):
-                yoke_notch = init_dict["yoke_notch"]
             if "bore" in list(init_dict.keys()):
                 bore = init_dict["bore"]
+            if "yoke" in list(init_dict.keys()):
+                yoke = init_dict["yoke"]
         # Set the properties (value check and convertion are done in setter)
         self.hole = hole
-        # Call Lamination init
+        # Call LamH init
         super(LamHole, self).__init__(
             L1=L1,
             mat_type=mat_type,
@@ -303,17 +179,17 @@ class LamHole(Lamination):
             axial_vent=axial_vent,
             notch=notch,
             skew=skew,
-            yoke_notch=yoke_notch,
             bore=bore,
+            yoke=yoke,
         )
-        # The class is frozen (in Lamination init), for now it's impossible to
+        # The class is frozen (in LamH init), for now it's impossible to
         # add new properties
 
     def __str__(self):
         """Convert this object in a readeable string (for print)"""
 
         LamHole_str = ""
-        # Get the properties inherited from Lamination
+        # Get the properties inherited from LamH
         LamHole_str += super(LamHole, self).__str__()
         if len(self.hole) == 0:
             LamHole_str += "hole = []" + linesep
@@ -328,7 +204,7 @@ class LamHole(Lamination):
         if type(other) != type(self):
             return False
 
-        # Check the properties inherited from Lamination
+        # Check the properties inherited from LamH
         if not super(LamHole, self).__eq__(other):
             return False
         if other.hole != self.hole:
@@ -344,7 +220,7 @@ class LamHole(Lamination):
             return ["type(" + name + ")"]
         diff_list = list()
 
-        # Check the properties inherited from Lamination
+        # Check the properties inherited from LamH
         diff_list.extend(
             super(LamHole, self).compare(
                 other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
@@ -377,7 +253,7 @@ class LamHole(Lamination):
 
         S = 0  # Full size of the object
 
-        # Get size of the properties inherited from Lamination
+        # Get size of the properties inherited from LamH
         S += super(LamHole, self).__sizeof__()
         if self.hole is not None:
             for value in self.hole:
@@ -395,7 +271,7 @@ class LamHole(Lamination):
         and may prevent json serializability.
         """
 
-        # Get the properties inherited from Lamination
+        # Get the properties inherited from LamH
         LamHole_dict = super(LamHole, self).as_dict(
             type_handle_ndarray=type_handle_ndarray,
             keep_function=keep_function,
@@ -459,16 +335,14 @@ class LamHole(Lamination):
             skew_val = None
         else:
             skew_val = self.skew.copy()
-        if self.yoke_notch is None:
-            yoke_notch_val = None
-        else:
-            yoke_notch_val = list()
-            for obj in self.yoke_notch:
-                yoke_notch_val.append(obj.copy())
         if self.bore is None:
             bore_val = None
         else:
             bore_val = self.bore.copy()
+        if self.yoke is None:
+            yoke_val = None
+        else:
+            yoke_val = self.yoke.copy()
         # Creates new object of the same type with the copied properties
         obj_copy = type(self)(
             hole=hole_val,
@@ -484,8 +358,8 @@ class LamHole(Lamination):
             axial_vent=axial_vent_val,
             notch=notch_val,
             skew=skew_val,
-            yoke_notch=yoke_notch_val,
             bore=bore_val,
+            yoke=yoke_val,
         )
         return obj_copy
 
@@ -493,7 +367,7 @@ class LamHole(Lamination):
         """Set all the properties to None (except pyleecan object)"""
 
         self.hole = None
-        # Set to None the properties inherited from Lamination
+        # Set to None the properties inherited from LamH
         super(LamHole, self)._set_None()
 
     def _get_hole(self):

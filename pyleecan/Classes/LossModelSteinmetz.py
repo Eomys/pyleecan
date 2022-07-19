@@ -262,6 +262,7 @@ class LossModelSteinmetz(LossModel):
         alpha_f_val = self.alpha_f
         alpha_B_val = self.alpha_B
         name_val = self.name
+        is_show_fig_val = self.is_show_fig
         # Creates new object of the same type with the copied properties
         obj_copy = type(self)(
             k_hy=k_hy_val,
@@ -269,6 +270,7 @@ class LossModelSteinmetz(LossModel):
             alpha_f=alpha_f_val,
             alpha_B=alpha_B_val,
             name=name_val,
+            is_show_fig=is_show_fig_val,
         )
         return obj_copy
 

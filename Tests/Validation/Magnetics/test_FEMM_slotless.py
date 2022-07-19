@@ -38,7 +38,7 @@ def test_FEMM_slotless():
         type_BH_stator=0,
         type_BH_rotor=0,
         is_get_meshsolution=True,
-        is_periodicity_a=True,
+        is_periodicity_a=False,
         is_periodicity_t=False,
         is_sliding_band=False,
     )

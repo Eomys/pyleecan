@@ -178,8 +178,11 @@ class LossModelWinding(LossModel):
         # Handle deepcopy of all the properties
         temperature_val = self.temperature
         name_val = self.name
+        is_show_fig_val = self.is_show_fig
         # Creates new object of the same type with the copied properties
-        obj_copy = type(self)(temperature=temperature_val, name=name_val)
+        obj_copy = type(self)(
+            temperature=temperature_val, name=name_val, is_show_fig=is_show_fig_val
+        )
         return obj_copy
 
     def _set_None(self):

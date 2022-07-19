@@ -201,3 +201,11 @@ class Test_Segment_meth(object):
         result = seg.comp_distance(Z=test_dict["Z"])
 
         assert round(abs(result - test_dict["result"]), 7) == 0
+
+
+if __name__ == "__main__":
+    a = Test_Segment_meth()
+    a.test_is_on(is_on_test[2])
+    # for test_dict in is_on_test:
+    #     a.test_is_on(test_dict)
+    print("Done")

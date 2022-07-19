@@ -18,14 +18,21 @@ from .Notch import Notch
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
 try:
-    from ..Methods.Machine.NotchEvenDist.get_notch_list import get_notch_list
-except ImportError as error:
-    get_notch_list = error
-
-try:
     from ..Methods.Machine.NotchEvenDist.comp_surface import comp_surface
 except ImportError as error:
     comp_surface = error
+
+try:
+    from ..Methods.Machine.NotchEvenDist.comp_periodicity_spatial import (
+        comp_periodicity_spatial,
+    )
+except ImportError as error:
+    comp_periodicity_spatial = error
+
+try:
+    from ..Methods.Machine.NotchEvenDist.get_notch_desc_list import get_notch_desc_list
+except ImportError as error:
+    get_notch_desc_list = error
 
 
 from numpy import isnan
@@ -38,18 +45,6 @@ class NotchEvenDist(Notch):
     VERSION = 1
 
     # Check ImportError to remove unnecessary dependencies in unused method
-    # cf Methods.Machine.NotchEvenDist.get_notch_list
-    if isinstance(get_notch_list, ImportError):
-        get_notch_list = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use NotchEvenDist method get_notch_list: "
-                    + str(get_notch_list)
-                )
-            )
-        )
-    else:
-        get_notch_list = get_notch_list
     # cf Methods.Machine.NotchEvenDist.comp_surface
     if isinstance(comp_surface, ImportError):
         comp_surface = property(
@@ -61,6 +56,30 @@ class NotchEvenDist(Notch):
         )
     else:
         comp_surface = comp_surface
+    # cf Methods.Machine.NotchEvenDist.comp_periodicity_spatial
+    if isinstance(comp_periodicity_spatial, ImportError):
+        comp_periodicity_spatial = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use NotchEvenDist method comp_periodicity_spatial: "
+                    + str(comp_periodicity_spatial)
+                )
+            )
+        )
+    else:
+        comp_periodicity_spatial = comp_periodicity_spatial
+    # cf Methods.Machine.NotchEvenDist.get_notch_desc_list
+    if isinstance(get_notch_desc_list, ImportError):
+        get_notch_desc_list = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use NotchEvenDist method get_notch_desc_list: "
+                    + str(get_notch_desc_list)
+                )
+            )
+        )
+    else:
+        get_notch_desc_list = get_notch_desc_list
     # generic save method is available in all object
     save = save
     # get_logger method is available in all object

@@ -22,6 +22,13 @@ try:
 except ImportError as error:
     get_bore_line = error
 
+try:
+    from ..Methods.Machine.BoreLSRPM.comp_periodicity_spatial import (
+        comp_periodicity_spatial,
+    )
+except ImportError as error:
+    comp_periodicity_spatial = error
+
 
 from numpy import isnan
 from ._check import InitUnKnowClassError
@@ -32,6 +39,7 @@ class BoreLSRPM(Bore):
 
     VERSION = 1
 
+    # Check ImportError to remove unnecessary dependencies in unused method
     # cf Methods.Machine.BoreLSRPM.get_bore_line
     if isinstance(get_bore_line, ImportError):
         get_bore_line = property(
@@ -43,13 +51,32 @@ class BoreLSRPM(Bore):
         )
     else:
         get_bore_line = get_bore_line
+    # cf Methods.Machine.BoreLSRPM.comp_periodicity_spatial
+    if isinstance(comp_periodicity_spatial, ImportError):
+        comp_periodicity_spatial = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use BoreLSRPM method comp_periodicity_spatial: "
+                    + str(comp_periodicity_spatial)
+                )
+            )
+        )
+    else:
+        comp_periodicity_spatial = comp_periodicity_spatial
     # generic save method is available in all object
     save = save
     # get_logger method is available in all object
     get_logger = get_logger
 
     def __init__(
-        self, N=8, Rarc=0.0375, W1=0.0035, alpha=0, init_dict=None, init_str=None
+        self,
+        N=8,
+        Rarc=0.0375,
+        W1=0.0035,
+        alpha=0,
+        type_merge_slot=1,
+        init_dict=None,
+        init_str=None,
     ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
@@ -74,13 +101,15 @@ class BoreLSRPM(Bore):
                 W1 = init_dict["W1"]
             if "alpha" in list(init_dict.keys()):
                 alpha = init_dict["alpha"]
+            if "type_merge_slot" in list(init_dict.keys()):
+                type_merge_slot = init_dict["type_merge_slot"]
         # Set the properties (value check and convertion are done in setter)
         self.N = N
         self.Rarc = Rarc
         self.W1 = W1
         self.alpha = alpha
         # Call Bore init
-        super(BoreLSRPM, self).__init__()
+        super(BoreLSRPM, self).__init__(type_merge_slot=type_merge_slot)
         # The class is frozen (in Bore init), for now it's impossible to
         # add new properties
 
@@ -230,8 +259,15 @@ class BoreLSRPM(Bore):
         Rarc_val = self.Rarc
         W1_val = self.W1
         alpha_val = self.alpha
+        type_merge_slot_val = self.type_merge_slot
         # Creates new object of the same type with the copied properties
-        obj_copy = type(self)(N=N_val, Rarc=Rarc_val, W1=W1_val, alpha=alpha_val)
+        obj_copy = type(self)(
+            N=N_val,
+            Rarc=Rarc_val,
+            W1=W1_val,
+            alpha=alpha_val,
+            type_merge_slot=type_merge_slot_val,
+        )
         return obj_copy
 
     def _set_None(self):

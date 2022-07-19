@@ -6,3 +6,5 @@ Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximu
 ,,,,,,,,,,,comp_distance,,,
 ,,,,,,,,,,,plot,,,
 ,,,,,,,,,,,comp_maxseg,,,
+,,,,,,,,,,,intersect_obj,,,
+,,,,,,,,,,,is_arc,,,

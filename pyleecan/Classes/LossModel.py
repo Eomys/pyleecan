@@ -143,8 +143,9 @@ class LossModel(FrozenClass):
 
         # Handle deepcopy of all the properties
         name_val = self.name
+        is_show_fig_val = self.is_show_fig
         # Creates new object of the same type with the copied properties
-        obj_copy = type(self)(name=name_val)
+        obj_copy = type(self)(name=name_val, is_show_fig=is_show_fig_val)
         return obj_copy
 
     def _set_None(self):
