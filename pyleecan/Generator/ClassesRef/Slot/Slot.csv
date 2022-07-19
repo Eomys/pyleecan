@@ -1,7 +1,7 @@
 Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
 Zs,-,slot number,0,int,36,0,,,Slot,,build_geometry_active,VERSION,1,Generic class for slot (abstract)
 wedge_mat,-,"Material for the wedge, if None no wedge",0,Material,None,,,,,,build_geometry_half_tooth,,,
-,,,,,,,,,,,check,,,
+is_bore,-,"True if the Slot is on the bore radius, False for yoke",0,bool,1,,,,,,check,,,
 ,,,,,,,,,,,comp_angle_active_eq,,,
 ,,,,,,,,,,,comp_angle_opening,,,
 ,,,,,,,,,,,comp_height,,,

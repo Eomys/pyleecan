@@ -144,20 +144,15 @@ def test_multi_multi():
         Kmesh_fineness=0.2,
         nb_worker=nb_worker,
     )
-    simu.force = ForceMT(
-        is_periodicity_a=True,
-        is_periodicity_t=True,
-    )
+    simu.force = ForceMT(is_periodicity_a=True, is_periodicity_t=True,)
 
     # VarSpeed Definition
     varload = VarLoadCurrent(is_reuse_femm_file=True)
-    varload.type_OP_matrix = 1  # Matrix N0, Id, Iq
-
+    # Matrix N0, Id, Iq
     OP_matrix = zeros((Nspeed, 3))
     OP_matrix[:, 0] = N0_MTPA[:Nspeed]
     OP_matrix[:, 1] = Id_MTPA[:Nspeed]
     OP_matrix[:, 2] = Iq_MTPA[:Nspeed]
-    varload.OP_matrix = OP_matrix
     varload.datakeeper_list = [
         DataKeeper(
             name="Average Torque",
@@ -184,10 +179,7 @@ def test_multi_multi():
     varload.is_keep_all_output = False
 
     # Multi-simulation to change machine parameters
-    multisim = VarParam(
-        stop_if_error=True,
-        is_reuse_femm_file=False,
-    )
+    multisim = VarParam(stop_if_error=True, is_reuse_femm_file=False,)
 
     simu.var_simu = multisim
 
@@ -237,6 +229,7 @@ def test_multi_multi():
     ]
     multisim.datakeeper_list = datakeeper_list
     multisim.var_simu = varload  # Setup Multisim of Multi_sim
+    varload.set_OP_array(OP_matrix, "N0", "Id", "Iq")
 
     # Post-process
     Post1 = PostFunction(join(dirname(__file__), "plot_save.py"))

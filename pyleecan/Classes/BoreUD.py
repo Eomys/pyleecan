@@ -10,9 +10,9 @@ from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
-from ..Functions.copy import copy
 from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
+from copy import deepcopy
 from .Bore import Bore
 
 # Import all class method
@@ -21,6 +21,13 @@ try:
     from ..Methods.Machine.BoreUD.get_bore_line import get_bore_line
 except ImportError as error:
     get_bore_line = error
+
+try:
+    from ..Methods.Machine.BoreUD.comp_periodicity_spatial import (
+        comp_periodicity_spatial,
+    )
+except ImportError as error:
+    comp_periodicity_spatial = error
 
 
 from numpy import isnan
@@ -32,6 +39,7 @@ class BoreUD(Bore):
 
     VERSION = 1
 
+    # Check ImportError to remove unnecessary dependencies in unused method
     # cf Methods.Machine.BoreUD.get_bore_line
     if isinstance(get_bore_line, ImportError):
         get_bore_line = property(
@@ -43,13 +51,26 @@ class BoreUD(Bore):
         )
     else:
         get_bore_line = get_bore_line
-    # save and copy methods are available in all object
+    # cf Methods.Machine.BoreUD.comp_periodicity_spatial
+    if isinstance(comp_periodicity_spatial, ImportError):
+        comp_periodicity_spatial = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use BoreUD method comp_periodicity_spatial: "
+                    + str(comp_periodicity_spatial)
+                )
+            )
+        )
+    else:
+        comp_periodicity_spatial = comp_periodicity_spatial
+    # generic save method is available in all object
     save = save
-    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, line_list=-1, init_dict=None, init_str=None):
+    def __init__(
+        self, line_list=-1, sym=1, type_merge_slot=1, init_dict=None, init_str=None
+    ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -67,10 +88,15 @@ class BoreUD(Bore):
             # Overwrite default value with init_dict content
             if "line_list" in list(init_dict.keys()):
                 line_list = init_dict["line_list"]
+            if "sym" in list(init_dict.keys()):
+                sym = init_dict["sym"]
+            if "type_merge_slot" in list(init_dict.keys()):
+                type_merge_slot = init_dict["type_merge_slot"]
         # Set the properties (value check and convertion are done in setter)
         self.line_list = line_list
+        self.sym = sym
         # Call Bore init
-        super(BoreUD, self).__init__()
+        super(BoreUD, self).__init__(type_merge_slot=type_merge_slot)
         # The class is frozen (in Bore init), for now it's impossible to
         # add new properties
 
@@ -87,6 +113,7 @@ class BoreUD(Bore):
                 self.line_list[ii].__str__().replace(linesep, linesep + "\t") + linesep
             )
             BoreUD_str += "line_list[" + str(ii) + "] =" + tmp + linesep + linesep
+        BoreUD_str += "sym = " + str(self.sym) + linesep
         return BoreUD_str
 
     def __eq__(self, other):
@@ -99,6 +126,8 @@ class BoreUD(Bore):
         if not super(BoreUD, self).__eq__(other):
             return False
         if other.line_list != self.line_list:
+            return False
+        if other.sym != self.sym:
             return False
         return True
 
@@ -135,6 +164,14 @@ class BoreUD(Bore):
                         is_add_value=is_add_value,
                     )
                 )
+        if other._sym != self._sym:
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._sym) + ", other=" + str(other._sym) + ")"
+                )
+                diff_list.append(name + ".sym" + val_str)
+            else:
+                diff_list.append(name + ".sym")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -149,6 +186,7 @@ class BoreUD(Bore):
         if self.line_list is not None:
             for value in self.line_list:
                 S += getsizeof(value)
+        S += getsizeof(self.sym)
         return S
 
     def as_dict(self, type_handle_ndarray=0, keep_function=False, **kwargs):
@@ -183,15 +221,35 @@ class BoreUD(Bore):
                     )
                 else:
                     BoreUD_dict["line_list"].append(None)
+        BoreUD_dict["sym"] = self.sym
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         BoreUD_dict["__class__"] = "BoreUD"
         return BoreUD_dict
 
+    def copy(self):
+        """Creates a deepcopy of the object"""
+
+        # Handle deepcopy of all the properties
+        if self.line_list is None:
+            line_list_val = None
+        else:
+            line_list_val = list()
+            for obj in self.line_list:
+                line_list_val.append(obj.copy())
+        sym_val = self.sym
+        type_merge_slot_val = self.type_merge_slot
+        # Creates new object of the same type with the copied properties
+        obj_copy = type(self)(
+            line_list=line_list_val, sym=sym_val, type_merge_slot=type_merge_slot_val
+        )
+        return obj_copy
+
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""
 
         self.line_list = None
+        self.sym = None
         # Set to None the properties inherited from Bore
         super(BoreUD, self)._set_None()
 
@@ -234,5 +292,24 @@ class BoreUD(Bore):
         doc=u"""List of line to draw the full bore [-]
 
         :Type: [Line]
+        """,
+    )
+
+    def _get_sym(self):
+        """getter of sym"""
+        return self._sym
+
+    def _set_sym(self, value):
+        """setter of sym"""
+        check_var("sym", value, "int", Vmin=1)
+        self._sym = value
+
+    sym = property(
+        fget=_get_sym,
+        fset=_set_sym,
+        doc=u"""Symmetry factor (1= full machine, 2= half of the machine...) [-]
+
+        :Type: int
+        :min: 1
         """,
     )

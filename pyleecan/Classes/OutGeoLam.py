@@ -10,9 +10,9 @@ from logging import getLogger
 from ._check import set_array, check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
-from ..Functions.copy import copy
 from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
+from copy import deepcopy
 from ._frozen import FrozenClass
 
 from numpy import array, array_equal
@@ -25,9 +25,8 @@ class OutGeoLam(FrozenClass):
 
     VERSION = 1
 
-    # save and copy methods are available in all object
+    # generic save method is available in all object
     save = save
-    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -354,6 +353,41 @@ class OutGeoLam(FrozenClass):
         # The class name is added to the dict for deserialisation purpose
         OutGeoLam_dict["__class__"] = "OutGeoLam"
         return OutGeoLam_dict
+
+    def copy(self):
+        """Creates a deepcopy of the object"""
+
+        # Handle deepcopy of all the properties
+        if self.name_phase is None:
+            name_phase_val = None
+        else:
+            name_phase_val = self.name_phase.copy()
+        if self.BH_curve is None:
+            BH_curve_val = None
+        else:
+            BH_curve_val = self.BH_curve.copy()
+        Ksfill_val = self.Ksfill
+        S_slot_val = self.S_slot
+        S_slot_wind_val = self.S_slot_wind
+        S_wind_act_val = self.S_wind_act
+        per_a_val = self.per_a
+        is_antiper_a_val = self.is_antiper_a
+        per_t_val = self.per_t
+        is_antiper_t_val = self.is_antiper_t
+        # Creates new object of the same type with the copied properties
+        obj_copy = type(self)(
+            name_phase=name_phase_val,
+            BH_curve=BH_curve_val,
+            Ksfill=Ksfill_val,
+            S_slot=S_slot_val,
+            S_slot_wind=S_slot_wind_val,
+            S_wind_act=S_wind_act_val,
+            per_a=per_a_val,
+            is_antiper_a=is_antiper_a_val,
+            per_t=per_t_val,
+            is_antiper_t=is_antiper_t_val,
+        )
+        return obj_copy
 
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""

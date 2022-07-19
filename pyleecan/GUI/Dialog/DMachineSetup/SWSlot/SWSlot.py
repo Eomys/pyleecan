@@ -233,6 +233,14 @@ class SWSlot(Gen_SWSlot, QWidget):
         # Refresh the GUI
         self.main_layout.removeWidget(self.w_slot)
         self.main_layout.insertWidget(1, self.w_slot)
+        # Update Zs for PWSlotUD
+        if isinstance(self.w_slot, PWSlotUD):
+            self.w_slot.ZsChanged.connect(self.set_Zs_UD)
+
+    def set_Zs_UD(self):
+        self.si_Zs.blockSignals(True)
+        self.si_Zs.setValue(self.obj.slot.Zs)
+        self.si_Zs.blockSignals(False)
 
     def s_change_slot(self, index):
         """Signal to update the slot object and widget

@@ -10,9 +10,9 @@ from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
-from ..Functions.copy import copy
 from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
+from copy import deepcopy
 from ._frozen import FrozenClass
 
 # Import all class method
@@ -88,9 +88,8 @@ class Electrical(FrozenClass):
         )
     else:
         gen_drive = gen_drive
-    # save and copy methods are available in all object
+    # generic save method is available in all object
     save = save
-    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -383,6 +382,37 @@ class Electrical(FrozenClass):
         # The class name is added to the dict for deserialisation purpose
         Electrical_dict["__class__"] = "Electrical"
         return Electrical_dict
+
+    def copy(self):
+        """Creates a deepcopy of the object"""
+
+        # Handle deepcopy of all the properties
+        if self.eec is None:
+            eec_val = None
+        else:
+            eec_val = self.eec.copy()
+        logger_name_val = self.logger_name
+        freq_max_val = self.freq_max
+        if self.LUT_enforced is None:
+            LUT_enforced_val = None
+        else:
+            LUT_enforced_val = self.LUT_enforced.copy()
+        Tsta_val = self.Tsta
+        Trot_val = self.Trot
+        type_skin_effect_val = self.type_skin_effect
+        is_skin_effect_inductance_val = self.is_skin_effect_inductance
+        # Creates new object of the same type with the copied properties
+        obj_copy = type(self)(
+            eec=eec_val,
+            logger_name=logger_name_val,
+            freq_max=freq_max_val,
+            LUT_enforced=LUT_enforced_val,
+            Tsta=Tsta_val,
+            Trot=Trot_val,
+            type_skin_effect=type_skin_effect_val,
+            is_skin_effect_inductance=is_skin_effect_inductance_val,
+        )
+        return obj_copy
 
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""

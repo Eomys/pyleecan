@@ -10,9 +10,9 @@ from logging import getLogger
 from ._check import set_array, check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
-from ..Functions.copy import copy
 from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
+from copy import deepcopy
 from .InputCurrent import InputCurrent
 
 # Import all class method
@@ -44,9 +44,8 @@ class InputFlux(InputCurrent):
         )
     else:
         gen_input = gen_input
-    # save and copy methods are available in all object
+    # generic save method is available in all object
     save = save
-    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -393,6 +392,97 @@ class InputFlux(InputCurrent):
         # Overwrite the mother class name
         InputFlux_dict["__class__"] = "InputFlux"
         return InputFlux_dict
+
+    def copy(self):
+        """Creates a deepcopy of the object"""
+
+        # Handle deepcopy of all the properties
+        per_a_val = self.per_a
+        per_t_val = self.per_t
+        is_antiper_a_val = self.is_antiper_a
+        is_antiper_t_val = self.is_antiper_t
+        if self.B_dict is None:
+            B_dict_val = None
+        else:
+            B_dict_val = self.B_dict.copy()
+        unit_val = self.unit
+        if self.slice is None:
+            slice_val = None
+        else:
+            slice_val = self.slice.copy()
+        if self.B_enforced is None:
+            B_enforced_val = None
+        else:
+            B_enforced_val = self.B_enforced.copy()
+        if self.Is is None:
+            Is_val = None
+        else:
+            Is_val = self.Is.copy()
+        if self.Ir is None:
+            Ir_val = None
+        else:
+            Ir_val = self.Ir.copy()
+        if self.Is_harm is None:
+            Is_harm_val = None
+        else:
+            Is_harm_val = self.Is_harm.copy()
+        rot_dir_val = self.rot_dir
+        angle_rotor_initial_val = self.angle_rotor_initial
+        if self.PWM is None:
+            PWM_val = None
+        else:
+            PWM_val = self.PWM.copy()
+        phase_dir_val = self.phase_dir
+        current_dir_val = self.current_dir
+        is_periodicity_t_val = self.is_periodicity_t
+        is_periodicity_a_val = self.is_periodicity_a
+        is_generator_val = self.is_generator
+        if self.time is None:
+            time_val = None
+        else:
+            time_val = self.time.copy()
+        if self.angle is None:
+            angle_val = None
+        else:
+            angle_val = self.angle.copy()
+        Nt_tot_val = self.Nt_tot
+        Nrev_val = self.Nrev
+        Na_tot_val = self.Na_tot
+        if self.OP is None:
+            OP_val = None
+        else:
+            OP_val = self.OP.copy()
+        t_final_val = self.t_final
+        # Creates new object of the same type with the copied properties
+        obj_copy = type(self)(
+            per_a=per_a_val,
+            per_t=per_t_val,
+            is_antiper_a=is_antiper_a_val,
+            is_antiper_t=is_antiper_t_val,
+            B_dict=B_dict_val,
+            unit=unit_val,
+            slice=slice_val,
+            B_enforced=B_enforced_val,
+            Is=Is_val,
+            Ir=Ir_val,
+            Is_harm=Is_harm_val,
+            rot_dir=rot_dir_val,
+            angle_rotor_initial=angle_rotor_initial_val,
+            PWM=PWM_val,
+            phase_dir=phase_dir_val,
+            current_dir=current_dir_val,
+            is_periodicity_t=is_periodicity_t_val,
+            is_periodicity_a=is_periodicity_a_val,
+            is_generator=is_generator_val,
+            time=time_val,
+            angle=angle_val,
+            Nt_tot=Nt_tot_val,
+            Nrev=Nrev_val,
+            Na_tot=Na_tot_val,
+            OP=OP_val,
+            t_final=t_final_val,
+        )
+        return obj_copy
 
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""

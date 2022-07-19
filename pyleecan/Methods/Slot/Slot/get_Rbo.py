@@ -17,6 +17,9 @@ def get_Rbo(self):
     """
 
     if self.parent is not None:
-        return self.parent.get_Rbo()
+        if self.is_bore in [True, None]:
+            return self.parent.get_Rbo()
+        else:
+            return self.parent.get_Ryoke()
     else:
         raise ParentMissingError("Error: The slot is not inside a Lamination")

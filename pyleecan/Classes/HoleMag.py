@@ -10,9 +10,9 @@ from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
-from ..Functions.copy import copy
 from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
+from copy import deepcopy
 from .Hole import Hole
 
 # Import all class method
@@ -126,9 +126,8 @@ class HoleMag(Hole):
         )
     else:
         has_magnet = has_magnet
-    # save and copy methods are available in all object
+    # generic save method is available in all object
     save = save
-    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -243,6 +242,29 @@ class HoleMag(Hole):
         # Overwrite the mother class name
         HoleMag_dict["__class__"] = "HoleMag"
         return HoleMag_dict
+
+    def copy(self):
+        """Creates a deepcopy of the object"""
+
+        # Handle deepcopy of all the properties
+        Zh_val = self.Zh
+        if self.mat_void is None:
+            mat_void_val = None
+        else:
+            mat_void_val = self.mat_void.copy()
+        if self.magnetization_dict_offset is None:
+            magnetization_dict_offset_val = None
+        else:
+            magnetization_dict_offset_val = self.magnetization_dict_offset.copy()
+        Alpha0_val = self.Alpha0
+        # Creates new object of the same type with the copied properties
+        obj_copy = type(self)(
+            Zh=Zh_val,
+            mat_void=mat_void_val,
+            magnetization_dict_offset=magnetization_dict_offset_val,
+            Alpha0=Alpha0_val,
+        )
+        return obj_copy
 
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""

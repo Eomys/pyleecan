@@ -8,9 +8,9 @@ from PySide2 import QtWidgets
 
 from pyleecan.GUI.Dialog.DMachineSetup.DMachineSetup import DMachineSetup
 from pyleecan.GUI.Dialog.DMachineSetup.SPreview.SPreview import SPreview
-from pyleecan.definitions import MAIN_DIR
+from pyleecan.definitions import DATA_DIR as data_test, MAIN_DIR
 from pyleecan.Functions.load import load_matlib
-from Tests import TEST_DATA_DIR as data_test, save_gui_path
+from Tests import save_gui_path
 
 
 matlib_path = join(data_test, "Material")

@@ -95,6 +95,6 @@ def create_indiv(create, output, design_var_list):
     ind.cstr_viol = 0
 
     # Output with the design variables set
-    ind.output = type(output)(simu=output.simu.as_dict())
+    ind.output = type(output)(simu=output.simu.as_dict(keep_function=True))
 
     return ind

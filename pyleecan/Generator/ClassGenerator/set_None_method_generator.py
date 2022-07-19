@@ -1,5 +1,9 @@
 from ...Generator import PYTHON_TYPE, TAB, TAB2, TAB3, TAB4, TAB5, TAB6, TAB7
-from ...Generator.read_fct import is_list_pyleecan_type, is_dict_pyleecan_type
+from ...Generator.read_fct import (
+    is_list_pyleecan_type,
+    is_dict_pyleecan_type,
+    is_list_unknow_type,
+)
 
 
 def generate_set_None(gen_dict, class_dict, soft_name="software"):
@@ -33,9 +37,11 @@ def generate_set_None(gen_dict, class_dict, soft_name="software"):
             or "." in prop["type"]
         ):
             var_str += TAB2 + "self." + prop["name"] + " = None\n"
-        elif is_list_pyleecan_type(prop["type"]):
-            var_str += TAB2 + "self." + prop["name"] + " = None\n"
-        elif is_dict_pyleecan_type(prop["type"]):
+        elif (
+            is_list_pyleecan_type(prop["type"])
+            or is_dict_pyleecan_type(prop["type"])
+            or is_list_unknow_type(prop["type"])
+        ):
             var_str += TAB2 + "self." + prop["name"] + " = None\n"
         elif prop["type"] in ["", None]:  # No type
             var_str += TAB2 + "if hasattr(self." + prop["name"] + ", '_set_None'):\n"

@@ -10,9 +10,9 @@ from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
-from ..Functions.copy import copy
 from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
+from copy import deepcopy
 from ._frozen import FrozenClass
 
 # Import all class method
@@ -87,9 +87,8 @@ class MatMagnetics(FrozenClass):
         )
     else:
         get_Brm = get_Brm
-    # save and copy methods are available in all object
+    # generic save method is available in all object
     save = save
-    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -397,6 +396,40 @@ class MatMagnetics(FrozenClass):
         # The class name is added to the dict for deserialisation purpose
         MatMagnetics_dict["__class__"] = "MatMagnetics"
         return MatMagnetics_dict
+
+    def copy(self):
+        """Creates a deepcopy of the object"""
+
+        # Handle deepcopy of all the properties
+        mur_lin_val = self.mur_lin
+        Brm20_val = self.Brm20
+        alpha_Br_val = self.alpha_Br
+        Wlam_val = self.Wlam
+        if self.BH_curve is None:
+            BH_curve_val = None
+        else:
+            BH_curve_val = self.BH_curve.copy()
+        if self.LossData is None:
+            LossData_val = None
+        else:
+            LossData_val = self.LossData.copy()
+        if self.ModelBH is None:
+            ModelBH_val = None
+        else:
+            ModelBH_val = self.ModelBH.copy()
+        is_BH_extrapolate_val = self.is_BH_extrapolate
+        # Creates new object of the same type with the copied properties
+        obj_copy = type(self)(
+            mur_lin=mur_lin_val,
+            Brm20=Brm20_val,
+            alpha_Br=alpha_Br_val,
+            Wlam=Wlam_val,
+            BH_curve=BH_curve_val,
+            LossData=LossData_val,
+            ModelBH=ModelBH_val,
+            is_BH_extrapolate=is_BH_extrapolate_val,
+        )
+        return obj_copy
 
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""

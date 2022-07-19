@@ -23,7 +23,7 @@ def is_on_line(self, Z):
     # Check if the points are aligned
     Z12 = Z1 - Z2
     Z13 = Z1 - Z3
-    if Z12.real * Z13.imag - Z12.imag * Z13.real == 0:
+    if abs(Z12.real * Z13.imag - Z12.imag * Z13.real) < 1e-10:
         K13 = Z12.real * Z13.real + Z12.imag * Z13.imag
         K12 = Z12.real * Z12.real + Z12.imag * Z12.imag
         if K13 >= 0 and K13 <= K12:
