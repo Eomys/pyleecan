@@ -30,16 +30,9 @@ def test_copy_out():
     simu.input.OP = OPdq(N0=3000, Id_ref=0, Iq_ref=0)
 
     varload = VarLoadCurrent()
-    varload.type_OP_matrix = 0  # Matrix N0, I0, Phi0, Tem_ref
-
-    # creating the Operating point matrix
-    OP_matrix = array([[10, 0, 0], [100, 0, 0], [1000, 0, 0]])
-    varload.OP_matrix = OP_matrix
     simu.var_simu = varload
-
-    # Use first OP as reference (to skip one computation)
-    simu.input.set_OP_from_array(
-        OP_matrix=OP_matrix, type_OP_matrix=varload.type_OP_matrix, index=1
+    varload.set_OP_array(
+        array([[10, 0, 0], [100, 0, 0], [1000, 0, 0]]), "N0", "I0", "Phi0"
     )
 
     # Definition of the magnetic simulation (no symmetry)

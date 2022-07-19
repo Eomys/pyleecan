@@ -32,6 +32,8 @@ def _set_keeper(self, value):
             # path like "<PARAM_DIR>/keeper_rotor.py"
             self._keeper_str = value
             value = abs_file_path(value)
+        else:  # Direct path
+            self._keeper_str = value
         f = open(value, "r", encoding=PYTHON_DEFAULT_ENCODING)
         exec(f.read(), globals())
         f.close()

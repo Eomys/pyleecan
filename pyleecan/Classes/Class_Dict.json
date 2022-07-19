@@ -4662,8 +4662,7 @@
         "is_internal": false,
         "methods": [
             "gen_input",
-            "set_Id_Iq",
-            "set_OP_from_array"
+            "set_Id_Iq"
         ],
         "mother": "InputVoltage",
         "name": "InputCurrent",
@@ -4847,7 +4846,6 @@
         "is_internal": false,
         "methods": [
             "gen_input",
-            "set_OP_from_array",
             "set_Ud_Uq"
         ],
         "mother": "Input",
@@ -5000,7 +4998,8 @@
         "is_internal": false,
         "methods": [
             "get_eec",
-            "get_OP_matrix",
+            "get_OP_matrix_obj",
+            "get_OP_array",
             "set_default_simulation",
             "get_phase_dir"
         ],
@@ -8571,12 +8570,14 @@
         ],
         "daughters": [
             "OPdq",
+            "OPdqf",
             "OPslip"
         ],
         "desc": "Define the Operating Point of the simulation",
         "is_internal": false,
         "methods": [
-            "get_machine_from_parent"
+            "get_machine_from_parent",
+            "get_OP_array"
         ],
         "mother": "",
         "name": "OP",
@@ -8645,7 +8646,7 @@
             }
         ]
     },
-    "OPdq": {
+    "OPMatrix": {
         "constants": [
             {
                 "name": "VERSION",
@@ -8653,6 +8654,145 @@
             }
         ],
         "daughters": [],
+        "desc": "Define the Operating Point of a variable speed simulation",
+        "is_internal": false,
+        "methods": [
+            "get_N_OP",
+            "get_OP",
+            "get_OP_list",
+            "get_OP_array",
+            "set_OP_array",
+            "has_Pem",
+            "has_Tem",
+            "has_slip"
+        ],
+        "mother": "",
+        "name": "OPMatrix",
+        "package": "Simulation",
+        "path": "pyleecan/Generator/ClassesRef/Simulation/OPMatrix.csv",
+        "properties": [
+            {
+                "as_dict": "",
+                "desc": "Rotor speed",
+                "max": "",
+                "min": "",
+                "name": "N0",
+                "type": "ndarray",
+                "unit": "rpm",
+                "value": null
+            },
+            {
+                "as_dict": "",
+                "desc": "d-axis current rms value",
+                "max": "",
+                "min": "",
+                "name": "Id_ref",
+                "type": "ndarray",
+                "unit": "Arms",
+                "value": null
+            },
+            {
+                "as_dict": "",
+                "desc": "q-axis current rms value",
+                "max": "",
+                "min": "",
+                "name": "Iq_ref",
+                "type": "ndarray",
+                "unit": "Arms",
+                "value": null
+            },
+            {
+                "as_dict": "",
+                "desc": "d-axis voltage rms value",
+                "max": "",
+                "min": "",
+                "name": "Ud_ref",
+                "type": "ndarray",
+                "unit": "Vrms",
+                "value": null
+            },
+            {
+                "as_dict": "",
+                "desc": "q-axis voltage rms value",
+                "max": "",
+                "min": "",
+                "name": "Uq_ref",
+                "type": "ndarray",
+                "unit": "Vrms",
+                "value": null
+            },
+            {
+                "as_dict": "",
+                "desc": "Output average electromagnetic torque",
+                "max": "",
+                "min": "",
+                "name": "Tem_av_ref",
+                "type": "ndarray",
+                "unit": "N.m",
+                "value": null
+            },
+            {
+                "as_dict": "",
+                "desc": "Output/Input average Electromagnetic Power",
+                "max": "",
+                "min": "",
+                "name": "Pem_av_ref",
+                "type": "ndarray",
+                "unit": "W",
+                "value": null
+            },
+            {
+                "as_dict": "",
+                "desc": "Rotor mechanical slip",
+                "max": "",
+                "min": "",
+                "name": "slip_ref",
+                "type": "ndarray",
+                "unit": "",
+                "value": null
+            },
+            {
+                "as_dict": "",
+                "desc": "True if power given in OP_matrix is the output power, False if it is the input power",
+                "max": "",
+                "min": "",
+                "name": "is_output_power",
+                "type": "bool",
+                "unit": "",
+                "value": 1
+            },
+            {
+                "as_dict": "",
+                "desc": "DC rotor current",
+                "max": "",
+                "min": "",
+                "name": "If_ref",
+                "type": "ndarray",
+                "unit": "Arms",
+                "value": null
+            },
+            {
+                "as_dict": "",
+                "desc": "Name of the columns from set_OP_matrix",
+                "max": "",
+                "min": "",
+                "name": "col_names",
+                "type": "list",
+                "unit": "-",
+                "value": null
+            }
+        ]
+    },
+    "OPdq": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [
+            "OPdqf"
+        ],
         "desc": "Operating Point defined in DQH frame",
         "is_internal": false,
         "methods": [
@@ -8711,6 +8851,34 @@
                 "name": "Uq_ref",
                 "type": "float",
                 "unit": "Vrms",
+                "value": null
+            }
+        ]
+    },
+    "OPdqf": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Operating Point defined in DQH frame for WRSM",
+        "is_internal": false,
+        "methods": [],
+        "mother": "OPdq",
+        "name": "OPdqf",
+        "package": "Simulation",
+        "path": "pyleecan/Generator/ClassesRef/Simulation/OPdqf.csv",
+        "properties": [
+            {
+                "as_dict": "",
+                "desc": "DC rotor current",
+                "max": "",
+                "min": "",
+                "name": "If_ref",
+                "type": "float",
+                "unit": "Arms",
                 "value": null
             }
         ]
@@ -11453,7 +11621,8 @@
         "methods": [
             "run",
             "init_logger",
-            "get_var_load"
+            "get_var_load",
+            "get_OP_array"
         ],
         "mother": "",
         "name": "Simulation",
@@ -15344,7 +15513,9 @@
         "is_internal": false,
         "methods": [
             "get_ref_simu_index",
-            "get_OP_matrix"
+            "get_OP_array",
+            "set_OP_array",
+            "_set_OP_matrix"
         ],
         "mother": "VarSimu",
         "name": "VarLoad",
@@ -15353,33 +15524,13 @@
         "properties": [
             {
                 "as_dict": "",
-                "desc": "Operating point matrix (N0,I0,Phi0,T,P) or (N0,Id,Iq,T,P) or (N0,U0,s,T,P)",
+                "desc": "Operating point matrix object",
                 "max": "",
                 "min": "",
                 "name": "OP_matrix",
-                "type": "ndarray",
+                "type": "OPMatrix",
                 "unit": "-",
                 "value": null
-            },
-            {
-                "as_dict": "",
-                "desc": "Select which kind of OP_matrix is used 0: (N0,I0,Phi0,T,P), 1:(N0,Id,Iq,T,P), 2:(N0,U0,s,T,P)",
-                "max": "2",
-                "min": "0",
-                "name": "type_OP_matrix",
-                "type": "int",
-                "unit": "-",
-                "value": 0
-            },
-            {
-                "as_dict": "",
-                "desc": "True if power given in OP_matrix is the output power, False if it is the input power",
-                "max": "",
-                "min": "",
-                "name": "is_output_power",
-                "type": "bool",
-                "unit": "",
-                "value": 1
             }
         ]
     },

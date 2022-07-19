@@ -133,7 +133,9 @@ from ..Classes.NodeMat import NodeMat
 from ..Classes.Notch import Notch
 from ..Classes.NotchEvenDist import NotchEvenDist
 from ..Classes.OP import OP
+from ..Classes.OPMatrix import OPMatrix
 from ..Classes.OPdq import OPdq
+from ..Classes.OPdqf import OPdqf
 from ..Classes.OPslip import OPslip
 from ..Classes.OptiBayesAlg import OptiBayesAlg
 from ..Classes.OptiBayesAlgSmoot import OptiBayesAlgSmoot

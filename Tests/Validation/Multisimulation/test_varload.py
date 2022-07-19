@@ -36,9 +36,7 @@ def test_varload():
 
     # Definition of the magnetic simulation (FEMM with symmetry and sliding band)
     simu.mag = MagFEMM(
-        is_periodicity_a=True,
-        is_periodicity_t=True,
-        nb_worker=cpu_count(),
+        is_periodicity_a=True, is_periodicity_t=True, nb_worker=cpu_count(),
     )
     # Run only Magnetic module
     simu.elec = None
@@ -68,9 +66,8 @@ def test_varload():
     simu.input.Na_tot = 2048  # Spatial discretization
     simu.input.OP = OPdq(N0=2000)
 
-    varload = VarLoadCurrent()
-    varload.type_OP_matrix = 0  # Matrix N0, I0, Phi0, Tem_ref
-
+    simu.var_simu = VarLoadCurrent()
+    # Matrix N0, I0, Phi0, Tem_ref
     # creating the Operating point matrix
     OP_matrix = zeros((N_simu, 4))
     # Set N0 = 2000 [rpm] for all simulation
@@ -81,16 +78,23 @@ def test_varload():
     OP_matrix[:, 2] = Phi0_ref[I_simu]
     # Set reference torque from Yang et al, 2013
     OP_matrix[:, 3] = Tem_av_ref[I_simu]
-
-    varload.OP_matrix = OP_matrix
-    simu.var_simu = varload
-
-    # Use first OP as reference (to skip one computation)
-    simu.input.set_OP_from_array(
-        OP_matrix=OP_matrix, type_OP_matrix=varload.type_OP_matrix, index=2
+    simu.var_simu.set_OP_array(
+        OP_matrix, "N0", "I0", "Phi0", "Tem",
     )
 
     # Datakeepers
+    I0_dk = DataKeeper(
+        name="Stator current rms amplitude",
+        symbol="I0",
+        unit="Arms",
+        keeper="lambda output: output.elec.OP.get_I0_Phi0()['I0']",
+    )
+    Phi0_dk = DataKeeper(
+        name="Stator current phase",
+        symbol="Phi0",
+        unit="rad",
+        keeper="lambda output: output.elec.OP.get_I0_Phi0()['Phi0']",
+    )
     # Airgap flux density Datakeeper
     B_dk = DataKeeper(
         name="Airgap Flux Density", symbol="B", unit="T", keeper="lambda out: out.mag.B"
@@ -112,7 +116,7 @@ def test_varload():
         keeper="lambda out: out.mag.Tem",
     )
     # Store Datakeepers
-    simu.var_simu.datakeeper_list = [B_dk, Phi_wind_stator_dk, Tem_dk]
+    simu.var_simu.datakeeper_list = [I0_dk, Phi0_dk, B_dk, Phi_wind_stator_dk, Tem_dk]
 
     Xout = simu.run()
 
