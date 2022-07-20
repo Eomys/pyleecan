@@ -18,7 +18,9 @@ def comp_height_active(self):
 
     """
 
-    [Z1, Z2, Z3, Z4, Z5, Z6, Z7, Z8, Z9, Z10] = self._comp_point_coordinate()
+    point_dict = self._comp_point_coordinate()
+    Z4 = point_dict["Z4"]
+    Z5 = point_dict["Z5"]
 
     # Compute the point in the tooth ref
     hsp = pi / self.Zs

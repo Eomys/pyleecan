@@ -96,12 +96,11 @@ def save_json(
         json_file = join(file_path, file_name)
 
         if type_compression == 1:
-            fp = gzip.open(json_file, mode="wt", encoding="utf-8")
+            with gzip.open(json_file, mode="wt", encoding="utf-8") as fp:
+                dump(save_obj, fp, **json_kwargs)
         else:
-            fp = open(json_file, "w")
-
-        with fp:
-            dump(save_obj, fp, **json_kwargs)
+            with open(json_file, "w") as fp:
+                dump(save_obj, fp, **json_kwargs)
 
     return obj
 

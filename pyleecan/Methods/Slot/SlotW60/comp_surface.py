@@ -19,7 +19,11 @@ def comp_surface(self):
 
     """
 
-    [Z1, Z2, Z3, Z4, Z5, Z6, Z7, Z8, Z9, Z10, Z11] = self._comp_point_coordinate()
+    point_dict = self._comp_point_coordinate()
+    Z5 = point_dict["Z5"]
+    Z6 = point_dict["Z6"]
+    Z7 = point_dict["Z7"]
+
     Rext = self.get_Rbo()
     Rint = abs(Z5)
 

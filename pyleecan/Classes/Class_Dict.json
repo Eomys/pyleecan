@@ -14610,6 +14610,7 @@
         "desc": "",
         "is_internal": false,
         "methods": [
+            "_comp_line_dict",
             "_comp_point_coordinate",
             "build_geometry",
             "build_geometry_active",
@@ -14619,7 +14620,8 @@
             "comp_height_active",
             "comp_surface",
             "comp_surface_active",
-            "get_surface_active"
+            "get_surface_active",
+            "plot_schematics"
         ],
         "mother": "Slot",
         "name": "SlotW60",
@@ -14723,6 +14725,7 @@
         "desc": "",
         "is_internal": false,
         "methods": [
+            "_comp_line_dict",
             "_comp_point_coordinate",
             "build_geometry",
             "build_geometry_active",
@@ -14732,7 +14735,8 @@
             "comp_height_active",
             "comp_surface",
             "comp_surface_active",
-            "get_surface_active"
+            "get_surface_active",
+            "plot_schematics"
         ],
         "mother": "Slot",
         "name": "SlotW61",
