@@ -5,7 +5,7 @@ from SciDataTool import DataFreq, Data1D
 from ....Functions.Electrical.dqh_transformation_freq import dqh2n_DataFreq
 
 
-def solve_PWM(self, output, is_dqh_freq=False):
+def solve_PWM(self, output, is_dqh_freq=False, is_skin_effect_inductance=False):
     """Get stator current harmonics due to PWM harmonics
     TODO: validation with transient FEA simulation
 
@@ -17,6 +17,8 @@ def solve_PWM(self, output, is_dqh_freq=False):
         An Output object
     is_dqh_freq: bool
         True to consider frequencies in dqh frame (generate resonances in current)
+    is_skin_effect_inductance : bool
+        True to include skin effect on inductance
 
     Returns
     ------
@@ -90,7 +92,7 @@ def solve_PWM(self, output, is_dqh_freq=False):
         Xkr_skinS = CondS.comp_skin_effect_resistance(
             freq=fn_dqh, T_op=self.Tsta, T_ref=20
         )
-        if self.is_skin_effect_inductance:
+        if is_skin_effect_inductance:
             # Calculate skin effect coefficient on stator inductances
             Xke_skinS = CondS.comp_skin_effect_inductance(
                 freq=fn_dqh, T_op=self.Tsta, T_ref=20
