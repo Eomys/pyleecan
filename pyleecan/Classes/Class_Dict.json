@@ -1375,16 +1375,17 @@
         "desc": "Electrical Equivalent Circuit of Permanent Magnet Synchronous Machines",
         "is_internal": false,
         "methods": [
-            "comp_parameters",
-            "solve",
-            "solve_PWM",
-            "comp_joule_losses",
-            "comp_torque_sync_rel",
+            "clear_parameters",
             "comp_BEMF_harmonics",
+            "comp_joule_losses",
             "comp_Ld",
             "comp_Lq",
+            "comp_parameters",
             "comp_Phidq",
             "comp_Phidq_mag",
+            "comp_torque_sync_rel",
+            "solve",
+            "solve_PWM",
             "update_from_ref"
         ],
         "mother": "EEC",
@@ -1880,6 +1881,16 @@
                 "name": "type_skin_effect",
                 "type": "int",
                 "unit": "-",
+                "value": 1
+            },
+            {
+                "as_dict": "",
+                "desc": "True to include skin effect on inductance if type_skin_effect != 0",
+                "max": "",
+                "min": "",
+                "name": "is_skin_effect_inductance",
+                "type": "bool",
+                "unit": "",
                 "value": 1
             }
         ]
@@ -5020,11 +5031,12 @@
         "desc": "Look Up Table class for dq OP matrix",
         "is_internal": false,
         "methods": [
+            "get_index_open_circuit",
             "get_L_dqh",
             "get_Lm_dqh",
-            "get_Phi_dqh_mean",
             "get_Phi_dqh_mag",
             "get_Phi_dqh_mag_mean",
+            "get_Phi_dqh_mean",
             "interp_Phi_dqh",
             "interp_Ploss_dqh",
             "interp_Tem_rip_dqh"

@@ -71,7 +71,6 @@ def interp_Phi_dqh(self, Id, Iq):
         )
     else:
         # 2D scattered interpolation
-        # not working since LinearNDInterpolator is not of same class as RegularGridInterpolator
         Phi_dqh_interp = scp_int.LinearNDInterpolator(
             (OP_matrix[:, 1], OP_matrix[:, 2]), Phi_dqh_mean[:, 0:2]
         )
