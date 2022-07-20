@@ -18,7 +18,10 @@ def is_outwards(self):
         True if the Lamination is not internal and false if not
     """
     if self.parent is not None:
-        return self.parent.is_outwards()
+        if self.is_bore in [True, None]:
+            return self.parent.is_outwards()
+        else:
+            return not self.parent.is_outwards()
     else:
         raise ParentMissingError(
             "Error: The slot is not inside a Lamination or a Notch"

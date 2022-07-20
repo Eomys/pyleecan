@@ -25,9 +25,12 @@ def _comp_point_coordinate(self):
     else:
         ZM = (Z1 + Z2) / 2 - self.H0
 
+    ZC = (Z1 + Z2) / 2
+
     point_dict = dict()
     # symetry
     point_dict["Z1"] = Z1
     point_dict["Z2"] = Z2
     point_dict["ZM"] = ZM
+    point_dict["ZC"] = ZC
     return point_dict

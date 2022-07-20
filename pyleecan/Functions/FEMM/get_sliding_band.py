@@ -37,10 +37,8 @@ def get_sliding_band(sym, lam_int, lam_ext):
         List of surface in the airgap including the sliding band surface
     """
 
-    Rgap_mec_int = lam_int.comp_radius_mec()
-    Rgap_mec_ext = lam_ext.comp_radius_mec()
-    Rgap_mag_int = lam_int.Rext
-    Rgap_mag_ext = lam_ext.Rint
+    Rgap_mec_int, Rgap_mec_ext = lam_int.comp_radius_mec(), lam_ext.comp_radius_mec()
+    Rgap_0_int, Rgap_0_ext = _get_radius_boundary(sym, lam_int, lam_ext)
     Wgap_mec = Rgap_mec_ext - Rgap_mec_int
     W_sb = Wgap_mec / 3  # Width sliding band
     surf_list = list()
@@ -78,7 +76,7 @@ def get_sliding_band(sym, lam_int, lam_ext):
         )
     else:  # Symmetry
         # Bottom line
-        Z1 = Rgap_mag_int
+        Z1 = Rgap_0_int
         Z2 = Rgap_mec_int + W_sb
         Z3 = Z2 * exp(1j * 2 * pi / sym)
         Z4 = Z1 * exp(1j * 2 * pi / sym)
@@ -105,7 +103,7 @@ def get_sliding_band(sym, lam_int, lam_ext):
             )
         )
         # Top line
-        Z5 = Rgap_mag_ext
+        Z5 = Rgap_0_ext
         Z6 = Rgap_mec_ext - W_sb
         Z7 = Z6 * exp(1j * 2 * pi / sym)
         Z8 = Z5 * exp(1j * 2 * pi / sym)
@@ -133,3 +131,37 @@ def get_sliding_band(sym, lam_int, lam_ext):
         )
 
     return surf_list
+
+
+def _get_radius_boundary(sym, lam_int, lam_ext):
+    """Returns the radii of the laminations on the x axis
+
+    Parameters
+    ----------
+    lam_int: LamSlot
+        Lamination on the internal side
+    lam_ext: LamSlot
+        Lamination on the external side
+
+    Returns
+    -------
+    Rint, Rext: float
+        Radii of the laminantions on the x axis
+    """
+    # No bore => is_circular_radius make sure Rbo is Ok even
+    # with notch on Ox
+    if lam_int.bore is None:
+        Rint = lam_int.get_Rbo()
+    else:
+        # With bore shape even with notches, we compute the first point coordinate
+        bore_list = lam_int.build_radius_lines(sym=sym, is_bore=True)
+        Rint = abs(bore_list[0].get_begin())
+
+    # Same for external lamination
+    if lam_ext.bore is None:
+        Rext = lam_ext.get_Rbo()
+    else:
+        bore_list = lam_ext.build_radius_lines(sym=sym, is_bore=True)
+        Rext = abs(bore_list[0].get_begin())
+
+    return Rint, Rext

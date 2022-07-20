@@ -58,17 +58,30 @@ class WWSlotOut(QGroupBox):
             obj = obj.parent()
         parent = obj.parent()
         lam = parent.lamination
+        if hasattr(parent, "is_notch"):
+            is_notch = parent.is_notch
+        else:
+            is_notch = False
 
         if lam.is_stator:
             lam_name = "Stator"
         else:
             lam_name = "Rotor"
 
-        WS_txt = self.tr("Active surface: ")
-        TS_txt = self.tr("Slot surface: ")
-        AO_txt = self.tr("Opening angle: ")
-        SH_txt = self.tr("Slot height: ")
-        YH_txt = self.tr("Yoke height: ")
+        if is_notch:
+            AO_txt = self.tr("Opening angle: ")
+            WS_txt = ""
+            self.out_wind_surface.hide()
+            TS_txt = self.tr("Notch surface: ")
+            SH_txt = self.tr("Notch height: ")
+            YH_txt = ""
+            self.out_yoke_height.hide()
+        else:
+            AO_txt = self.tr("Opening angle: ")
+            WS_txt = self.tr("Active surface: ")
+            TS_txt = self.tr("Slot surface: ")
+            SH_txt = self.tr("Slot height: ")
+            YH_txt = self.tr("Yoke height: ")
 
         Wlam = format(gui_option.unit.get_m(lam.Rext - lam.Rint), ".4g")
         self.out_Wlam.setText(

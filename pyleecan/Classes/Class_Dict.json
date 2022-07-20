@@ -20,7 +20,9 @@
             "split_line",
             "comp_distance",
             "plot",
-            "comp_maxseg"
+            "comp_maxseg",
+            "intersect_obj",
+            "is_arc"
         ],
         "mother": "Line",
         "name": "Arc",
@@ -52,7 +54,8 @@
             "rotate",
             "scale",
             "split_half",
-            "translate"
+            "translate",
+            "split_point"
         ],
         "mother": "Arc",
         "name": "Arc1",
@@ -125,7 +128,8 @@
             "rotate",
             "scale",
             "split_half",
-            "translate"
+            "translate",
+            "split_point"
         ],
         "mother": "Arc",
         "name": "Arc2",
@@ -188,7 +192,8 @@
             "rotate",
             "scale",
             "split_half",
-            "translate"
+            "translate",
+            "split_point"
         ],
         "mother": "Arc",
         "name": "Arc3",
@@ -223,7 +228,7 @@
                 "name": "is_trigo_direction",
                 "type": "bool",
                 "unit": "-",
-                "value": 0
+                "value": 1
             }
         ]
     },
@@ -241,12 +246,29 @@
         ],
         "desc": "Abstract class for Bore shape",
         "is_internal": false,
-        "methods": [],
+        "methods": [
+            "merge_slot",
+            "is_yoke",
+            "merge_slot_connect",
+            "merge_slot_intersect",
+            "merge_slot_translate"
+        ],
         "mother": "",
         "name": "Bore",
         "package": "Machine",
         "path": "pyleecan/Generator/ClassesRef/Machine/Bore.csv",
-        "properties": []
+        "properties": [
+            {
+                "as_dict": "",
+                "desc": "how to merge slot/notch into the bore radius (0: connect the dot, 1: intersection, 2: translate)",
+                "max": "2",
+                "min": "0",
+                "name": "type_merge_slot",
+                "type": "int",
+                "unit": "",
+                "value": 1
+            }
+        ]
     },
     "BoreFlower": {
         "constants": [
@@ -259,7 +281,8 @@
         "desc": "Class for Bore flower shape",
         "is_internal": false,
         "methods": [
-            "get_bore_line"
+            "get_bore_line",
+            "comp_periodicity_spatial"
         ],
         "mother": "Bore",
         "name": "BoreFlower",
@@ -309,7 +332,8 @@
         "desc": "Class for Bore LSRPM",
         "is_internal": false,
         "methods": [
-            "get_bore_line"
+            "get_bore_line",
+            "comp_periodicity_spatial"
         ],
         "mother": "Bore",
         "name": "BoreLSRPM",
@@ -369,7 +393,8 @@
         "desc": "User Defined Bore shape",
         "is_internal": false,
         "methods": [
-            "get_bore_line"
+            "get_bore_line",
+            "comp_periodicity_spatial"
         ],
         "mother": "Bore",
         "name": "BoreUD",
@@ -385,6 +410,16 @@
                 "type": "[Line]",
                 "unit": "-",
                 "value": ""
+            },
+            {
+                "as_dict": "",
+                "desc": "Symmetry factor (1= full machine, 2= half of the machine...)",
+                "max": "",
+                "min": "1",
+                "name": "sym",
+                "type": "int",
+                "unit": "-",
+                "value": 1
             }
         ]
     },
@@ -1340,16 +1375,17 @@
         "desc": "Electrical Equivalent Circuit of Permanent Magnet Synchronous Machines",
         "is_internal": false,
         "methods": [
-            "comp_parameters",
-            "solve",
-            "solve_PWM",
-            "comp_joule_losses",
-            "comp_torque_sync_rel",
+            "clear_parameters",
             "comp_BEMF_harmonics",
+            "comp_joule_losses",
             "comp_Ld",
             "comp_Lq",
+            "comp_parameters",
             "comp_Phidq",
             "comp_Phidq_mag",
+            "comp_torque_sync_rel",
+            "solve",
+            "solve_PWM",
             "update_from_ref"
         ],
         "mother": "EEC",
@@ -1845,6 +1881,16 @@
                 "name": "type_skin_effect",
                 "type": "int",
                 "unit": "-",
+                "value": 1
+            },
+            {
+                "as_dict": "",
+                "desc": "True to include skin effect on inductance if type_skin_effect != 0",
+                "max": "",
+                "min": "",
+                "name": "is_skin_effect_inductance",
+                "type": "bool",
+                "unit": "",
                 "value": 1
             }
         ]
@@ -4627,8 +4673,7 @@
         "is_internal": false,
         "methods": [
             "gen_input",
-            "set_Id_Iq",
-            "set_OP_from_array"
+            "set_Id_Iq"
         ],
         "mother": "InputVoltage",
         "name": "InputCurrent",
@@ -4812,7 +4857,6 @@
         "is_internal": false,
         "methods": [
             "gen_input",
-            "set_OP_from_array",
             "set_Ud_Uq"
         ],
         "mother": "Input",
@@ -4965,7 +5009,8 @@
         "is_internal": false,
         "methods": [
             "get_eec",
-            "get_OP_matrix",
+            "get_OP_matrix_obj",
+            "get_OP_array",
             "set_default_simulation",
             "get_phase_dir"
         ],
@@ -4986,11 +5031,12 @@
         "desc": "Look Up Table class for dq OP matrix",
         "is_internal": false,
         "methods": [
+            "get_index_open_circuit",
             "get_L_dqh",
             "get_Lm_dqh",
-            "get_Phi_dqh_mean",
             "get_Phi_dqh_mag",
             "get_Phi_dqh_mag_mean",
+            "get_Phi_dqh_mean",
             "interp_Phi_dqh",
             "interp_Ploss_dqh",
             "interp_Tem_rip_dqh"
@@ -5039,6 +5085,38 @@
         "path": "pyleecan/Generator/ClassesRef/Output/LUTslip.csv",
         "properties": []
     },
+    "LamH": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [
+            "LamHole",
+            "LamHoleNS"
+        ],
+        "desc": "Lamination with Hole (Abstract class)",
+        "is_internal": false,
+        "methods": [
+            "comp_angle_d_axis",
+            "comp_height_yoke",
+            "comp_masses",
+            "comp_radius_mid_yoke",
+            "comp_surfaces",
+            "comp_volumes",
+            "get_pole_pair_number",
+            "get_Zs",
+            "has_magnet",
+            "plot",
+            "set_pole_pair_number"
+        ],
+        "mother": "Lamination",
+        "name": "LamH",
+        "package": "Machine",
+        "path": "pyleecan/Generator/ClassesRef/Machine/LamH.csv",
+        "properties": []
+    },
     "LamHole": {
         "constants": [
             {
@@ -5050,20 +5128,12 @@
         "desc": "Lamination with Hole with or without magnet or winding",
         "is_internal": false,
         "methods": [
+            "_plot_arrow_mag",
             "build_geometry",
-            "comp_height_yoke",
-            "comp_masses",
-            "comp_surfaces",
-            "comp_volumes",
-            "get_pole_pair_number",
-            "plot",
-            "comp_radius_mid_yoke",
-            "has_magnet",
-            "comp_angle_d_axis",
-            "set_pole_pair_number",
-            "get_Zs"
+            "get_hole_list",
+            "get_magnet_number"
         ],
-        "mother": "Lamination",
+        "mother": "LamH",
         "name": "LamHole",
         "package": "Machine",
         "path": "pyleecan/Generator/ClassesRef/Machine/LamHole.csv",
@@ -5074,6 +5144,54 @@
                 "max": "",
                 "min": "",
                 "name": "hole",
+                "type": "[Hole]",
+                "unit": "",
+                "value": ""
+            }
+        ]
+    },
+    "LamHoleNS": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Lamination with Hole with or without magnet or winding with different hole for North/South pole",
+        "is_internal": false,
+        "methods": [
+            "_plot_arrow_mag",
+            "build_geometry",
+            "comp_masses",
+            "comp_periodicity_geo",
+            "comp_periodicity_spatial",
+            "comp_surfaces",
+            "comp_volumes",
+            "get_hole_list",
+            "get_magnet_number"
+        ],
+        "mother": "LamH",
+        "name": "LamHoleNS",
+        "package": "Machine",
+        "path": "pyleecan/Generator/ClassesRef/Machine/LamHoleNS.csv",
+        "properties": [
+            {
+                "as_dict": "",
+                "desc": "lamination Holes for North pole",
+                "max": "",
+                "min": "",
+                "name": "hole_north",
+                "type": "[Hole]",
+                "unit": "",
+                "value": ""
+            },
+            {
+                "as_dict": "",
+                "desc": "lamination Holes for South pole",
+                "max": "",
+                "min": "",
+                "name": "hole_south",
                 "type": "[Hole]",
                 "unit": "",
                 "value": ""
@@ -5103,11 +5221,12 @@
             "plot",
             "comp_height_yoke",
             "get_Zs",
-            "get_bore_desc",
             "set_pole_pair_number",
             "comp_angle_d_axis",
             "get_surfaces_closing",
-            "has_magnet"
+            "has_magnet",
+            "get_slot_desc_list",
+            "has_slot"
         ],
         "mother": "Lamination",
         "name": "LamSlot",
@@ -5144,7 +5263,8 @@
             "comp_surfaces",
             "comp_volumes",
             "plot",
-            "comp_angle_d_axis"
+            "comp_angle_d_axis",
+            "get_magnet_number"
         ],
         "mother": "LamSlot",
         "name": "LamSlotMag",
@@ -5183,8 +5303,9 @@
             "plot",
             "comp_height_yoke",
             "get_Zs",
-            "get_bore_desc",
-            "comp_periodicity_spatial"
+            "comp_periodicity_spatial",
+            "get_slot_desc_list",
+            "has_slot"
         ],
         "mother": "Lamination",
         "name": "LamSlotMulti",
@@ -5413,7 +5534,8 @@
             "comp_surfaces",
             "plot",
             "get_pole_pair_number",
-            "set_pole_pair_number"
+            "set_pole_pair_number",
+            "get_hole_list"
         ],
         "mother": "LamSquirrelCage",
         "name": "LamSquirrelCageMag",
@@ -5440,7 +5562,9 @@
             }
         ],
         "daughters": [
+            "LamH",
             "LamHole",
+            "LamHoleNS",
             "LamSlot",
             "LamSlotMag",
             "LamSlotMulti",
@@ -5460,7 +5584,6 @@
             "comp_surface_axial_vent",
             "comp_surfaces",
             "comp_volumes",
-            "get_bore_line",
             "get_Rbo",
             "get_Ryoke",
             "get_name_phase",
@@ -5469,19 +5592,21 @@
             "get_polar_eq",
             "is_outwards",
             "comp_height_yoke",
-            "get_notch_list",
             "comp_angle_q_axis",
             "comp_radius_mid_yoke",
-            "get_yoke_desc",
-            "get_bore_desc",
             "comp_point_ref",
             "comp_periodicity_spatial",
             "get_label",
-            "get_yoke_side_line",
+            "build_yoke_side_line",
             "get_notches_surf",
             "comp_periodicity_duct_spatial",
             "get_surfaces_closing",
-            "comp_periodicity_geo"
+            "comp_periodicity_geo",
+            "has_notch",
+            "build_radius_lines",
+            "build_radius_desc",
+            "has_slot",
+            "plot_preview_notch"
         ],
         "mother": "",
         "name": "Lamination",
@@ -5610,20 +5735,20 @@
             },
             {
                 "as_dict": "",
-                "desc": "Lamination yoke notches",
-                "max": "",
-                "min": "",
-                "name": "yoke_notch",
-                "type": "[Notch]",
-                "unit": "-",
-                "value": ""
-            },
-            {
-                "as_dict": "",
                 "desc": "Bore Shape",
                 "max": "",
                 "min": "",
                 "name": "bore",
+                "type": "Bore",
+                "unit": "",
+                "value": null
+            },
+            {
+                "as_dict": "",
+                "desc": "Yoke Shape",
+                "max": "",
+                "min": "",
+                "name": "yoke",
                 "type": "Bore",
                 "unit": "",
                 "value": null
@@ -5834,6 +5959,16 @@
                 "type": "str",
                 "unit": "",
                 "value": ""
+            },
+            {
+                "as_dict": "",
+                "desc": "True to show the plot of the curve fitting",
+                "max": "",
+                "min": "",
+                "name": "is_show_fig",
+                "type": "bool",
+                "unit": "",
+                "value": false
             }
         ]
     },
@@ -6251,7 +6386,7 @@
                 "max": "",
                 "min": "",
                 "name": "rotor",
-                "type": "LamHole",
+                "type": "LamH",
                 "unit": "",
                 "value": ""
             },
@@ -8397,6 +8532,7 @@
         "is_internal": false,
         "methods": [
             "get_Rbo",
+            "get_Ryoke",
             "is_outwards"
         ],
         "mother": "",
@@ -8416,8 +8552,9 @@
         "desc": "Class for evenly distributed notches (according to Zs)",
         "is_internal": false,
         "methods": [
-            "get_notch_list",
-            "comp_surface"
+            "comp_surface",
+            "comp_periodicity_spatial",
+            "get_notch_desc_list"
         ],
         "mother": "Notch",
         "name": "NotchEvenDist",
@@ -8426,7 +8563,7 @@
         "properties": [
             {
                 "as_dict": "",
-                "desc": "angular positon of the first notch",
+                "desc": "angular positon of the first notch (0 is middle of first tooth)",
                 "max": "",
                 "min": "",
                 "name": "alpha",
@@ -8455,12 +8592,14 @@
         ],
         "daughters": [
             "OPdq",
+            "OPdqf",
             "OPslip"
         ],
         "desc": "Define the Operating Point of the simulation",
         "is_internal": false,
         "methods": [
-            "get_machine_from_parent"
+            "get_machine_from_parent",
+            "get_OP_array"
         ],
         "mother": "",
         "name": "OP",
@@ -8529,7 +8668,7 @@
             }
         ]
     },
-    "OPdq": {
+    "OPMatrix": {
         "constants": [
             {
                 "name": "VERSION",
@@ -8537,6 +8676,145 @@
             }
         ],
         "daughters": [],
+        "desc": "Define the Operating Point of a variable speed simulation",
+        "is_internal": false,
+        "methods": [
+            "get_N_OP",
+            "get_OP",
+            "get_OP_list",
+            "get_OP_array",
+            "set_OP_array",
+            "has_Pem",
+            "has_Tem",
+            "has_slip"
+        ],
+        "mother": "",
+        "name": "OPMatrix",
+        "package": "Simulation",
+        "path": "pyleecan/Generator/ClassesRef/Simulation/OPMatrix.csv",
+        "properties": [
+            {
+                "as_dict": "",
+                "desc": "Rotor speed",
+                "max": "",
+                "min": "",
+                "name": "N0",
+                "type": "ndarray",
+                "unit": "rpm",
+                "value": null
+            },
+            {
+                "as_dict": "",
+                "desc": "d-axis current rms value",
+                "max": "",
+                "min": "",
+                "name": "Id_ref",
+                "type": "ndarray",
+                "unit": "Arms",
+                "value": null
+            },
+            {
+                "as_dict": "",
+                "desc": "q-axis current rms value",
+                "max": "",
+                "min": "",
+                "name": "Iq_ref",
+                "type": "ndarray",
+                "unit": "Arms",
+                "value": null
+            },
+            {
+                "as_dict": "",
+                "desc": "d-axis voltage rms value",
+                "max": "",
+                "min": "",
+                "name": "Ud_ref",
+                "type": "ndarray",
+                "unit": "Vrms",
+                "value": null
+            },
+            {
+                "as_dict": "",
+                "desc": "q-axis voltage rms value",
+                "max": "",
+                "min": "",
+                "name": "Uq_ref",
+                "type": "ndarray",
+                "unit": "Vrms",
+                "value": null
+            },
+            {
+                "as_dict": "",
+                "desc": "Output average electromagnetic torque",
+                "max": "",
+                "min": "",
+                "name": "Tem_av_ref",
+                "type": "ndarray",
+                "unit": "N.m",
+                "value": null
+            },
+            {
+                "as_dict": "",
+                "desc": "Output/Input average Electromagnetic Power",
+                "max": "",
+                "min": "",
+                "name": "Pem_av_ref",
+                "type": "ndarray",
+                "unit": "W",
+                "value": null
+            },
+            {
+                "as_dict": "",
+                "desc": "Rotor mechanical slip",
+                "max": "",
+                "min": "",
+                "name": "slip_ref",
+                "type": "ndarray",
+                "unit": "",
+                "value": null
+            },
+            {
+                "as_dict": "",
+                "desc": "True if power given in OP_matrix is the output power, False if it is the input power",
+                "max": "",
+                "min": "",
+                "name": "is_output_power",
+                "type": "bool",
+                "unit": "",
+                "value": 1
+            },
+            {
+                "as_dict": "",
+                "desc": "DC rotor current",
+                "max": "",
+                "min": "",
+                "name": "If_ref",
+                "type": "ndarray",
+                "unit": "Arms",
+                "value": null
+            },
+            {
+                "as_dict": "",
+                "desc": "Name of the columns from set_OP_matrix",
+                "max": "",
+                "min": "",
+                "name": "col_names",
+                "type": "list",
+                "unit": "-",
+                "value": null
+            }
+        ]
+    },
+    "OPdq": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [
+            "OPdqf"
+        ],
         "desc": "Operating Point defined in DQH frame",
         "is_internal": false,
         "methods": [
@@ -8595,6 +8873,34 @@
                 "name": "Uq_ref",
                 "type": "float",
                 "unit": "Vrms",
+                "value": null
+            }
+        ]
+    },
+    "OPdqf": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Operating Point defined in DQH frame for WRSM",
+        "is_internal": false,
+        "methods": [],
+        "mother": "OPdq",
+        "name": "OPdqf",
+        "package": "Simulation",
+        "path": "pyleecan/Generator/ClassesRef/Simulation/OPdqf.csv",
+        "properties": [
+            {
+                "as_dict": "",
+                "desc": "DC rotor current",
+                "max": "",
+                "min": "",
+                "name": "If_ref",
+                "type": "float",
+                "unit": "Arms",
                 "value": null
             }
         ]
@@ -11168,7 +11474,10 @@
             "scale",
             "split_half",
             "split_line",
-            "translate"
+            "translate",
+            "split_point",
+            "intersect_obj",
+            "is_arc"
         ],
         "mother": "Line",
         "name": "Segment",
@@ -11334,7 +11643,8 @@
         "methods": [
             "run",
             "init_logger",
-            "get_var_load"
+            "get_var_load",
+            "get_OP_array"
         ],
         "mother": "",
         "name": "Simulation",
@@ -11754,6 +12064,16 @@
                 "type": "Material",
                 "unit": "-",
                 "value": null
+            },
+            {
+                "as_dict": "",
+                "desc": "True if the Slot is on the bore radius, False for yoke",
+                "max": "",
+                "min": "",
+                "name": "is_bore",
+                "type": "bool",
+                "unit": "-",
+                "value": 1
             }
         ]
     },
@@ -11854,7 +12174,8 @@
             "comp_surface_active",
             "comp_surface_opening",
             "get_surface_active",
-            "get_surface_opening"
+            "get_surface_opening",
+            "plot_schematics"
         ],
         "mother": "Slot",
         "name": "SlotCirc",
@@ -15218,7 +15539,9 @@
         "is_internal": false,
         "methods": [
             "get_ref_simu_index",
-            "get_OP_matrix"
+            "get_OP_array",
+            "set_OP_array",
+            "_set_OP_matrix"
         ],
         "mother": "VarSimu",
         "name": "VarLoad",
@@ -15227,33 +15550,13 @@
         "properties": [
             {
                 "as_dict": "",
-                "desc": "Operating point matrix (N0,I0,Phi0,T,P) or (N0,Id,Iq,T,P) or (N0,U0,s,T,P)",
+                "desc": "Operating point matrix object",
                 "max": "",
                 "min": "",
                 "name": "OP_matrix",
-                "type": "ndarray",
+                "type": "OPMatrix",
                 "unit": "-",
                 "value": null
-            },
-            {
-                "as_dict": "",
-                "desc": "Select which kind of OP_matrix is used 0: (N0,I0,Phi0,T,P), 1:(N0,Id,Iq,T,P), 2:(N0,U0,s,T,P)",
-                "max": "2",
-                "min": "0",
-                "name": "type_OP_matrix",
-                "type": "int",
-                "unit": "-",
-                "value": 0
-            },
-            {
-                "as_dict": "",
-                "desc": "True if power given in OP_matrix is the output power, False if it is the input power",
-                "max": "",
-                "min": "",
-                "name": "is_output_power",
-                "type": "bool",
-                "unit": "",
-                "value": 1
             }
         ]
     },

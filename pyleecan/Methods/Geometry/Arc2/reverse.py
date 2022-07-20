@@ -11,4 +11,4 @@ def reverse(self):
     """
 
     self.begin = self.get_end()
-    self.radius = -self.radius
+    self.angle = -self.angle

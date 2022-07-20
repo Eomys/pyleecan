@@ -18,6 +18,11 @@ from .LUT import LUT
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
 try:
+    from ..Methods.Output.LUTdq.get_index_open_circuit import get_index_open_circuit
+except ImportError as error:
+    get_index_open_circuit = error
+
+try:
     from ..Methods.Output.LUTdq.get_L_dqh import get_L_dqh
 except ImportError as error:
     get_L_dqh = error
@@ -28,11 +33,6 @@ except ImportError as error:
     get_Lm_dqh = error
 
 try:
-    from ..Methods.Output.LUTdq.get_Phi_dqh_mean import get_Phi_dqh_mean
-except ImportError as error:
-    get_Phi_dqh_mean = error
-
-try:
     from ..Methods.Output.LUTdq.get_Phi_dqh_mag import get_Phi_dqh_mag
 except ImportError as error:
     get_Phi_dqh_mag = error
@@ -41,6 +41,11 @@ try:
     from ..Methods.Output.LUTdq.get_Phi_dqh_mag_mean import get_Phi_dqh_mag_mean
 except ImportError as error:
     get_Phi_dqh_mag_mean = error
+
+try:
+    from ..Methods.Output.LUTdq.get_Phi_dqh_mean import get_Phi_dqh_mean
+except ImportError as error:
+    get_Phi_dqh_mean = error
 
 try:
     from ..Methods.Output.LUTdq.interp_Phi_dqh import interp_Phi_dqh
@@ -69,6 +74,18 @@ class LUTdq(LUT):
     VERSION = 1
 
     # Check ImportError to remove unnecessary dependencies in unused method
+    # cf Methods.Output.LUTdq.get_index_open_circuit
+    if isinstance(get_index_open_circuit, ImportError):
+        get_index_open_circuit = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use LUTdq method get_index_open_circuit: "
+                    + str(get_index_open_circuit)
+                )
+            )
+        )
+    else:
+        get_index_open_circuit = get_index_open_circuit
     # cf Methods.Output.LUTdq.get_L_dqh
     if isinstance(get_L_dqh, ImportError):
         get_L_dqh = property(
@@ -87,17 +104,6 @@ class LUTdq(LUT):
         )
     else:
         get_Lm_dqh = get_Lm_dqh
-    # cf Methods.Output.LUTdq.get_Phi_dqh_mean
-    if isinstance(get_Phi_dqh_mean, ImportError):
-        get_Phi_dqh_mean = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use LUTdq method get_Phi_dqh_mean: " + str(get_Phi_dqh_mean)
-                )
-            )
-        )
-    else:
-        get_Phi_dqh_mean = get_Phi_dqh_mean
     # cf Methods.Output.LUTdq.get_Phi_dqh_mag
     if isinstance(get_Phi_dqh_mag, ImportError):
         get_Phi_dqh_mag = property(
@@ -121,6 +127,17 @@ class LUTdq(LUT):
         )
     else:
         get_Phi_dqh_mag_mean = get_Phi_dqh_mag_mean
+    # cf Methods.Output.LUTdq.get_Phi_dqh_mean
+    if isinstance(get_Phi_dqh_mean, ImportError):
+        get_Phi_dqh_mean = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use LUTdq method get_Phi_dqh_mean: " + str(get_Phi_dqh_mean)
+                )
+            )
+        )
+    else:
+        get_Phi_dqh_mean = get_Phi_dqh_mean
     # cf Methods.Output.LUTdq.interp_Phi_dqh
     if isinstance(interp_Phi_dqh, ImportError):
         interp_Phi_dqh = property(

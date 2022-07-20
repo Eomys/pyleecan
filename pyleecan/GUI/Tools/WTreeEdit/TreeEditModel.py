@@ -37,7 +37,7 @@ class TreeEditModel(QAbstractItemModel):
         """
         obj : an object (that should be modeled and shown)
         parent : a model item
-        name : name of the property (ot the parent that contains the object)
+        name : name of the property (or the parent that contains the object)
         id : list index or dict key if parent object is a list or a dict
         """
         if viewItem is None:
@@ -46,29 +46,38 @@ class TreeEditModel(QAbstractItemModel):
                 name = type(obj).__name__
             viewItem = ObjectItem(obj, name, index=index, parent=parent)
 
-        # get the objects properties and iterate them in case
-        props = dict()
+        # prepare the objects properties
+        props = []
         typ = type(obj).__name__
         if typ in self._class_dict:
-            props = self._class_dict[typ]["prop_dict"]
+            cls_props = self._class_dict[typ]["prop_dict"]
+            for prop_name, prop_info in cls_props.items():
+                prop = getattr(obj, prop_name)
+                props.append([prop, prop_name, prop_info["type"], None])
         elif hasattr(obj, "as_dict"):
             obj_dict = obj.as_dict()
             for prop_name in obj_dict.keys():
                 if not prop_name.startswith("_"):
                     prop = getattr(obj, prop_name)
-                    props[prop_name] = dict(type=type(prop).__name__)
+                    prop_type = type(prop).__name__
+                    props.append([prop, prop_name, prop_type, None])
+        elif isinstance(obj, (list, dict)):
+            iter = enumerate(obj) if isinstance(obj, list) else obj.items()
+            for ii, item in iter:
+                item_name = viewItem.name() + f"[{ii}]"
+                item_type = type(item).__name__
+                props.append([item, item_name, item_type, ii])
 
-        for prop_name, prop_info in props.items():
-            ref_typ = prop_info["type"]
-            prop = getattr(obj, prop_name)
+        # create the object properties
+        for prop, prop_name, prop_type, index in props:
 
             # pyleecan type properties
-            if prop_info["type"] in self._class_dict:
-                self.setupModelData(prop, name=prop_name, parent=viewItem)
+            if prop_type in self._class_dict:
+                self.setupModelData(prop, name=prop_name, index=index, parent=viewItem)
 
             # list or dict of pyleecan type
-            elif self.isListType(ref_typ) or self.isDictType(ref_typ):
-                child = ObjectItem(prop, name=prop_name, parent=viewItem)
+            elif self.isListType(prop_type) or self.isDictType(prop_type):
+                child = ObjectItem(prop, name=prop_name, index=index, parent=viewItem)
                 if prop is not None:
                     iter = enumerate(prop) if isinstance(prop, list) else prop.items()
                     for ii, item in iter:
@@ -76,18 +85,16 @@ class TreeEditModel(QAbstractItemModel):
                         self.setupModelData(item, name=it_name, index=ii, parent=child)
 
             # base python types
-            elif ref_typ in ["float", "bool", "int", "str"]:
-                pass  # don't show base types in the tree
-            elif isinstance(prop, (float, bool, int, str)):
+            elif self.is_not_tree_type(prop, prop_type):
                 pass  # don't show base types in the tree
 
-            # numpy array
-            elif ref_typ == "ndarray":
-                self.setupModelData(prop, name=prop_name, parent=viewItem)
+            # numpy array # TODO only ndarrays with more than 2 dims
+            elif prop_type == "ndarray":
+                self.setupModelData(prop, name=prop_name, index=index, parent=viewItem)
 
             # 'normal' lists or dicts, i.e. list or dicts with no pyleecan type
-            elif ref_typ in ["list", "dict"] or isinstance(prop, (list, dict)):
-                child = ObjectItem(prop, name=prop_name, parent=viewItem)
+            elif prop_type in ["list", "dict"] or isinstance(prop, (list, dict)):
+                child = ObjectItem(prop, name=prop_name, index=index, parent=viewItem)
                 if prop is not None:
                     iter = enumerate(prop) if isinstance(prop, list) else prop.items()
                     for ii, item in iter:
@@ -96,11 +103,18 @@ class TreeEditModel(QAbstractItemModel):
 
             # pyleecan compatible types
             elif prop is not None and hasattr(prop, "as_dict"):
-                self.setupModelData(prop, name=prop_name, parent=viewItem)
+                self.setupModelData(prop, name=prop_name, index=index, parent=viewItem)
 
             # not implemented types
             else:
-                child = UnknownItem(prop, name=prop_name, parent=viewItem)
+                child = UnknownItem(prop, name=prop_name, index=index, parent=viewItem)
+
+    def is_not_tree_type(self, prop, prop_type):
+        if prop_type in ["float", "bool", "int", "str"]:
+            return True
+        if isinstance(prop, (float, bool, int, str)):
+            return True
+        return False
 
     def get_obj_info(self, item):
         """Get some information on the object in the context of its parent."""
@@ -113,14 +127,14 @@ class TreeEditModel(QAbstractItemModel):
         index = item.index()
 
         # item must be the root if parent is None
-        if parent_obj is None:
-            obj_info = dict()
-            obj_info["obj"] = obj
-            obj_info["parent"] = None
-            obj_info["parent_typ"] = None
-            obj_info["property"] = name
-            obj_info["ref_typ"] = None
-            obj_info["index"] = None
+        # if parent_obj is None:
+        #     obj_info = dict()
+        #     obj_info["obj"] = obj
+        #     obj_info["parent"] = None
+        #     obj_info["parent_typ"] = None
+        #     obj_info["property"] = name
+        #     obj_info["ref_typ"] = None
+        #     obj_info["index"] = None
 
         # setup object information
         obj_info = dict()
@@ -131,7 +145,7 @@ class TreeEditModel(QAbstractItemModel):
         obj_info["ref_typ"] = None
         obj_info["index"] = index  # list index of dict key in case parent is list/dict
 
-        # add pyleecan type specific information
+        # add 'reference type' if parent is a pyleecan object
         if parent_typ in self._class_dict:
             props = self._class_dict[parent_typ]["prop_dict"]
             obj_info["ref_typ"] = props[name]["type"]
@@ -233,6 +247,13 @@ class TreeEditModel(QAbstractItemModel):
     def isValid(self, item):
         """Check if the view item still represent the respective object."""
         ref_obj = self._get_object(item)
+        if isinstance(ref_obj, (list, dict)):
+            nb_not_tree = 0
+            iter = enumerate(ref_obj) if isinstance(ref_obj, list) else ref_obj.items()
+            for ii, iter_item in iter:
+                if self.is_not_tree_type(iter_item, type(iter_item).__name__):
+                    nb_not_tree += 1
+            return True if len(ref_obj) - nb_not_tree == item.childCount() else False
         return True if ref_obj is item.object() else False
 
     def updateItem(self, index):

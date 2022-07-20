@@ -82,6 +82,11 @@ try:
 except ImportError as error:
     get_surface_opening = error
 
+try:
+    from ..Methods.Slot.SlotCirc.plot_schematics import plot_schematics
+except ImportError as error:
+    plot_schematics = error
+
 
 from numpy import isnan
 from ._check import InitUnKnowClassError
@@ -240,13 +245,31 @@ class SlotCirc(Slot):
         )
     else:
         get_surface_opening = get_surface_opening
+    # cf Methods.Slot.SlotCirc.plot_schematics
+    if isinstance(plot_schematics, ImportError):
+        plot_schematics = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use SlotCirc method plot_schematics: " + str(plot_schematics)
+                )
+            )
+        )
+    else:
+        plot_schematics = plot_schematics
     # generic save method is available in all object
     save = save
     # get_logger method is available in all object
     get_logger = get_logger
 
     def __init__(
-        self, W0=0.01, H0=0.03, Zs=36, wedge_mat=None, init_dict=None, init_str=None
+        self,
+        W0=0.01,
+        H0=0.03,
+        Zs=36,
+        wedge_mat=None,
+        is_bore=True,
+        init_dict=None,
+        init_str=None,
     ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
@@ -271,11 +294,13 @@ class SlotCirc(Slot):
                 Zs = init_dict["Zs"]
             if "wedge_mat" in list(init_dict.keys()):
                 wedge_mat = init_dict["wedge_mat"]
+            if "is_bore" in list(init_dict.keys()):
+                is_bore = init_dict["is_bore"]
         # Set the properties (value check and convertion are done in setter)
         self.W0 = W0
         self.H0 = H0
         # Call Slot init
-        super(SlotCirc, self).__init__(Zs=Zs, wedge_mat=wedge_mat)
+        super(SlotCirc, self).__init__(Zs=Zs, wedge_mat=wedge_mat, is_bore=is_bore)
         # The class is frozen (in Slot init), for now it's impossible to
         # add new properties
 
@@ -395,8 +420,15 @@ class SlotCirc(Slot):
             wedge_mat_val = None
         else:
             wedge_mat_val = self.wedge_mat.copy()
+        is_bore_val = self.is_bore
         # Creates new object of the same type with the copied properties
-        obj_copy = type(self)(W0=W0_val, H0=H0_val, Zs=Zs_val, wedge_mat=wedge_mat_val)
+        obj_copy = type(self)(
+            W0=W0_val,
+            H0=H0_val,
+            Zs=Zs_val,
+            wedge_mat=wedge_mat_val,
+            is_bore=is_bore_val,
+        )
         return obj_copy
 
     def _set_None(self):

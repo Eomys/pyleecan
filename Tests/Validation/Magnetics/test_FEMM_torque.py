@@ -7,6 +7,7 @@ from pyleecan.Classes.MagFEMM import MagFEMM
 from pyleecan.Classes.OPdq import OPdq
 from pyleecan.Classes.Simu1 import Simu1
 from pyleecan.Classes.VarLoadCurrent import VarLoadCurrent
+from pyleecan.Classes.DataKeeper import DataKeeper
 from pyleecan.definitions import DATA_DIR
 from pyleecan.Functions.load import load
 from SciDataTool.Functions.Plot.plot_2D import plot_2D
@@ -83,19 +84,6 @@ def test_FEMM_torque():
     # Definition of the main simulation
     simu = Simu1(name="test_FEMM_torque", machine=SynRM_001)
     Na_tot = 2016
-
-    varload = VarLoadCurrent(is_reuse_femm_file=True)
-    varload.type_OP_matrix = 0  # Matrix N0, I0, Phi0, Tem_ref
-
-    N_simu = Phi0.size
-    OP_matrix = zeros((N_simu, 4))
-    OP_matrix[:, 0] = ones(N_simu) * N0
-    OP_matrix[:, 1] = ones(N_simu) * Imax
-    OP_matrix[:, 2] = Phi0
-    OP_matrix[:, 3] = Tem
-    varload.OP_matrix = OP_matrix
-    simu.var_simu = varload
-
     simu.input = InputCurrent(
         Is=None,
         Ir=None,  # No winding on the rotor
@@ -104,8 +92,18 @@ def test_FEMM_torque():
         Nrev=1 / 6,
         Na_tot=Na_tot,
     )
-    # Select first OP as reference
-    simu.input.set_OP_from_array(OP_matrix, type_OP_matrix=varload.type_OP_matrix)
+    simu.var_simu = VarLoadCurrent(is_reuse_femm_file=True)
+
+    # Matrix N0, I0, Phi0, Tem_ref
+    N_simu = Phi0.size
+    OP_matrix = zeros((N_simu, 4))
+    OP_matrix[:, 0] = ones(N_simu) * N0
+    OP_matrix[:, 1] = ones(N_simu) * Imax
+    OP_matrix[:, 2] = Phi0
+    OP_matrix[:, 3] = Tem
+    simu.var_simu.set_OP_array(
+        OP_matrix, "N0", "I0", "Phi0", "Tem", input_index=0, is_update_input=True
+    )
 
     # Definition of the magnetic simulation (1/2 symmetry)
     assert SynRM_001.comp_periodicity_spatial() == (2, True)
@@ -118,7 +116,19 @@ def test_FEMM_torque():
     )
     simu.force = None
     simu.struct = None
-
+    I0_dk = DataKeeper(
+        name="Stator current rms amplitude",
+        symbol="I0",
+        unit="Arms",
+        keeper="lambda output: output.elec.OP.get_I0_Phi0()['I0']",
+    )
+    Phi0_dk = DataKeeper(
+        name="Stator current phase",
+        symbol="Phi0",
+        unit="rad",
+        keeper="lambda output: output.elec.OP.get_I0_Phi0()['Phi0']",
+    )
+    simu.var_simu.datakeeper_list = [I0_dk, Phi0_dk]
     Xout = simu.run()
 
     curve_colors = config_dict["PLOT"]["COLOR_DICT"]["CURVE_COLORS"]

@@ -253,6 +253,7 @@ class SlotW14(Slot):
         W3=0.0122,
         Zs=36,
         wedge_mat=None,
+        is_bore=True,
         init_dict=None,
         init_str=None,
     ):
@@ -285,6 +286,8 @@ class SlotW14(Slot):
                 Zs = init_dict["Zs"]
             if "wedge_mat" in list(init_dict.keys()):
                 wedge_mat = init_dict["wedge_mat"]
+            if "is_bore" in list(init_dict.keys()):
+                is_bore = init_dict["is_bore"]
         # Set the properties (value check and convertion are done in setter)
         self.W0 = W0
         self.H0 = H0
@@ -292,7 +295,7 @@ class SlotW14(Slot):
         self.H3 = H3
         self.W3 = W3
         # Call Slot init
-        super(SlotW14, self).__init__(Zs=Zs, wedge_mat=wedge_mat)
+        super(SlotW14, self).__init__(Zs=Zs, wedge_mat=wedge_mat, is_bore=is_bore)
         # The class is frozen (in Slot init), for now it's impossible to
         # add new properties
 
@@ -469,6 +472,7 @@ class SlotW14(Slot):
             wedge_mat_val = None
         else:
             wedge_mat_val = self.wedge_mat.copy()
+        is_bore_val = self.is_bore
         # Creates new object of the same type with the copied properties
         obj_copy = type(self)(
             W0=W0_val,
@@ -478,6 +482,7 @@ class SlotW14(Slot):
             W3=W3_val,
             Zs=Zs_val,
             wedge_mat=wedge_mat_val,
+            is_bore=is_bore_val,
         )
         return obj_copy
 

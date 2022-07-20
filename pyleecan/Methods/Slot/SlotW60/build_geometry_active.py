@@ -34,14 +34,12 @@ def build_geometry_active(self, Nrad, Ntan, is_simplified=False, alpha=0, delta=
     Raises
     -------
     S60_WindError
-        Slot 60 can use only for winding with Nrad=1 and Ntan 2
+        Slot 60 can use only for winding with Nrad=1 and Ntan=2
 
     """
 
     if Nrad != 1 or Ntan != 2:
-        raise S60_WindError(
-            "Slot 60 can use only for winding with Nrad=1 " + "and Ntan 2"
-        )
+        raise S60_WindError("Slot 60 can use only for winding with Nrad=1 and Ntan=2")
     self.check()
 
     # get the name of the lamination
