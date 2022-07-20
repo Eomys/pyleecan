@@ -1,4 +1,5 @@
 Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
-OP_matrix,-,"Operating point matrix (N0,I0,Phi0,T,P) or (N0,Id,Iq,T,P) or (N0,U0,s,T,P)","(Nsimu, 5)",ndarray,None,,,,Simulation,VarSimu,get_ref_simu_index,VERSION,1,Abstract class to generate multi-simulation by changing the operating point
-type_OP_matrix,-,"Select which kind of OP_matrix is used 0: (N0,I0,Phi0,T,P), 1:(N0,Id,Iq,T,P), 2:(N0,U0,s,T,P)",,int,0,0,2,,,,get_OP_matrix,NAME,"""Variable Load""",
-is_output_power,,"True if power given in OP_matrix is the output power, False if it is the input power",,bool,1,,,,,,,,,
+OP_matrix,-,Operating point matrix object,"(Nsimu, Nvalue)",OPMatrix,None,,,,Simulation,VarSimu,get_ref_simu_index,VERSION,1,Abstract class to generate multi-simulation by changing the operating point
+,,,,,,,,,,,get_OP_array,NAME,"""Variable Load""",
+,,,,,,,,,,,set_OP_array,,,
+,,,,,,,,,,,_set_OP_matrix,,,

@@ -98,7 +98,7 @@ def test_ElecLUTdq_solve_power():
     LUT_grid = out.simu.elec.LUT_enforced
 
     # Get Id_min, Id_max, Iq_min, Iq_max from OP_matrix
-    OP_matrix = LUT_grid.get_OP_matrix()
+    OP_matrix = LUT_grid.get_OP_array("N0", "Id", "Iq")
     Id_min = OP_matrix[:, 1].min()
     Id_max = OP_matrix[:, 1].max()
     Iq_min = OP_matrix[:, 2].min()

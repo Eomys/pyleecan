@@ -5,7 +5,7 @@ from SciDataTool import DataFreq, Data1D
 from ....Functions.Electrical.dqh_transformation_freq import dqh2n_DataFreq
 
 
-def solve_PWM(self, output, is_dqh_freq=False):
+def solve_PWM(self, output, is_dqh_freq=False, is_skin_effect_inductance=False):
     """Get stator current harmonics due to PWM harmonics
     TODO: validation with transient FEA simulation
 
@@ -16,7 +16,9 @@ def solve_PWM(self, output, is_dqh_freq=False):
     output: Output
         An Output object
     is_dqh_freq: bool
-        True to consider frequencies in dqh frame
+        True to consider frequencies in dqh frame (generate resonances in current)
+    is_skin_effect_inductance : bool
+        True to include skin effect on inductance
 
     Returns
     ------
@@ -32,7 +34,7 @@ def solve_PWM(self, output, is_dqh_freq=False):
     qs = output.simu.machine.stator.winding.qs
 
     # Get PWM frequencies in abc frame
-    freqs_n = output.elec.Us.axes_df[0].values
+    freqs_n = output.elec.Us.get_axes("freqs")[0].values
 
     # Get stator voltage harmonics in dqh frame
     Us_PWM = output.elec.get_Us(is_dqh=True, is_harm_only=True, is_freq=True)
@@ -41,7 +43,7 @@ def solve_PWM(self, output, is_dqh_freq=False):
     freqs_dqh = result["freqs"]
 
     # # Plot Us_n and U_dqh
-    # output.elec.Us.plot_2D_Data("freqs=[0,2000]", "phase[0]")
+    # output.elec.Us.plot_2D_Data("freqs", "phase[0]")
     # Us_PWM.plot_2D_Data("freqs=[0,200]", "phase[0]")
 
     # Filter Udqh_val zeros values
@@ -84,27 +86,37 @@ def solve_PWM(self, output, is_dqh_freq=False):
 
         fn_dqh[np.abs(fn_dqh) < felec] = felec
 
-    # Calculate impedances
-    we = 0 * 2 * np.pi * felec
+    if self.type_skin_effect:
+        CondS = output.simu.machine.stator.winding.conductor
+        # Calculate skin effect coefficient on stator resistance
+        Xkr_skinS = CondS.comp_skin_effect_resistance(
+            freq=fn_dqh, T_op=self.Tsta, T_ref=20
+        )
+        if is_skin_effect_inductance:
+            # Calculate skin effect coefficient on stator inductances
+            Xke_skinS = CondS.comp_skin_effect_inductance(
+                freq=fn_dqh, T_op=self.Tsta, T_ref=20
+            )
+        else:
+            Xke_skinS = 1
+    else:
+        Xkr_skinS, Xke_skinS = 1, 1
+
+    # Calculate impedances to solve linear system for all frequencies
+    # (from Wenli Liang thesis if is_dqh_freq=True but generate resonances in current harmonics at specific frequencies)
+    we = int(is_dqh_freq) * 2 * np.pi * felec
     wh = 2 * np.pi * fn_dqh
-    a = self.R1 + 1j * wh * self.Ld
-    b = -we * self.Lq
-    c = we * self.Ld
-    d = self.R1 + 1j * wh * self.Lq
+    a = self.R1 * Xkr_skinS + 1j * wh * self.Ld * Xke_skinS
+    b = -we * self.Lq * Xke_skinS
+    c = we * self.Ld * Xke_skinS
+    d = self.R1 * Xkr_skinS + 1j * wh * self.Lq * Xke_skinS
     det = a * d - c * b
+
     # Calculate current harmonics
     # Calculate Id
     Idqh_val[:, 0] = (d * Udqh_val[:, 0] - b * Udqh_val[:, 1]) / det
     # Calculate Iq
     Idqh_val[:, 1] = (-c * Udqh_val[:, 0] + a * Udqh_val[:, 1]) / det
-    # if np.any(np.abs(Idqh_val[:, 0]) > 20) or np.any(np.abs(Idqh_val[:, 1]) > 20):
-    #     print("problem")
-
-    # # Check
-    # Ud = a * Idqh_val[If, 0] + b * Idqh_val[If, 1]
-    # Uq = c * Idqh_val[If, 0] + d * Idqh_val[If, 1]
-    # check_d = Ud - Udqh_val[If, 0]
-    # check_q = Uq - Udqh_val[If, 1]
 
     # Create frequency axis
     Freqs_PWM = Us_PWM.axes[0]

@@ -1,6 +1,7 @@
 from numpy import meshgrid, linspace, zeros, array
 
 from ....Classes.LUTdq import LUTdq
+from ....Classes.OPMatrix import OPMatrix
 
 
 def comp_LUTdq(self):
@@ -47,8 +48,9 @@ def comp_LUTdq(self):
     OP_matrix[:, 2] = Iq.ravel()
 
     simu.machine = self.parent.machine
-    simu.var_simu.OP_matrix = OP_matrix
-    simu.input.set_OP_from_array(type_OP_matrix=1, OP_matrix=OP_matrix)
+    simu.var_simu.set_OP_array(
+        OP_matrix, "N0", "Id", "Iq", is_update_input=True, input_index=0
+    )
 
     LUT = LUTdq(simu=simu)
 

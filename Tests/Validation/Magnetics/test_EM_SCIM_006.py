@@ -192,8 +192,9 @@ def test_EM_SCIM_006_varslip():
     OP_matrix[:, 1] = U0_ref
     OP_matrix[:, 2] = np.linspace(0.2, 0, Nspeed)
 
-    simu.var_simu = VarLoadVoltage(
-        OP_matrix=OP_matrix, type_OP_matrix=2, is_keep_all_output=True
+    simu.var_simu = VarLoadVoltage(is_keep_all_output=True)
+    simu.var_simu.set_OP_array(
+        OP_matrix, "N0", "U0", "slip", input_index=0, is_update_input=True
     )
 
     # Set values from Manatee V1

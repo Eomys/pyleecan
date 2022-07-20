@@ -27,11 +27,6 @@ try:
 except ImportError as error:
     set_Id_Iq = error
 
-try:
-    from ..Methods.Simulation.InputCurrent.set_OP_from_array import set_OP_from_array
-except ImportError as error:
-    set_OP_from_array = error
-
 
 from ..Classes.ImportMatrixVal import ImportMatrixVal
 from numpy import ndarray
@@ -68,18 +63,6 @@ class InputCurrent(InputVoltage):
         )
     else:
         set_Id_Iq = set_Id_Iq
-    # cf Methods.Simulation.InputCurrent.set_OP_from_array
-    if isinstance(set_OP_from_array, ImportError):
-        set_OP_from_array = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use InputCurrent method set_OP_from_array: "
-                    + str(set_OP_from_array)
-                )
-            )
-        )
-    else:
-        set_OP_from_array = set_OP_from_array
     # generic save method is available in all object
     save = save
     # get_logger method is available in all object

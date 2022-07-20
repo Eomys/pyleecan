@@ -1,4 +1,4 @@
-def get_OP_matrix(self):
+def get_OP_matrix_obj(self):
     """Get the Operating Point Matrix
 
     Parameters
@@ -8,8 +8,8 @@ def get_OP_matrix(self):
 
     Returns
     ----------
-    OP_matrix : ndarray
-        Operating Point Matrix
+    OP_matrix : OPMatrix
+        Operating Point Matrix object
     """
 
     if self.simu is None:

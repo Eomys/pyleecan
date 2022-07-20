@@ -44,11 +44,11 @@ def load_json(file_path):
 
     # Get the data dictionary
     if file_path.endswith(".json.gz"):
-        fp = gzip.open(file_path, mode="rt", encoding="utf-8")
+        with gzip.open(file_path, mode="rt", encoding="utf-8") as fp:
+            json_data = jload(fp)
     else:
-        fp = open(file_path, "r")
-    with fp:
-        json_data = jload(fp)
+        with open(file_path, "r") as fp:
+            json_data = jload(fp)
 
     return file_path, json_data
 

@@ -102,6 +102,7 @@ class Electrical(FrozenClass):
         Tsta=20,
         Trot=20,
         type_skin_effect=1,
+        is_skin_effect_inductance=True,
         init_dict=None,
         init_str=None,
     ):
@@ -134,6 +135,8 @@ class Electrical(FrozenClass):
                 Trot = init_dict["Trot"]
             if "type_skin_effect" in list(init_dict.keys()):
                 type_skin_effect = init_dict["type_skin_effect"]
+            if "is_skin_effect_inductance" in list(init_dict.keys()):
+                is_skin_effect_inductance = init_dict["is_skin_effect_inductance"]
         # Set the properties (value check and convertion are done in setter)
         self.parent = None
         self.eec = eec
@@ -143,6 +146,7 @@ class Electrical(FrozenClass):
         self.Tsta = Tsta
         self.Trot = Trot
         self.type_skin_effect = type_skin_effect
+        self.is_skin_effect_inductance = is_skin_effect_inductance
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -174,6 +178,11 @@ class Electrical(FrozenClass):
         Electrical_str += "Tsta = " + str(self.Tsta) + linesep
         Electrical_str += "Trot = " + str(self.Trot) + linesep
         Electrical_str += "type_skin_effect = " + str(self.type_skin_effect) + linesep
+        Electrical_str += (
+            "is_skin_effect_inductance = "
+            + str(self.is_skin_effect_inductance)
+            + linesep
+        )
         return Electrical_str
 
     def __eq__(self, other):
@@ -194,6 +203,8 @@ class Electrical(FrozenClass):
         if other.Trot != self.Trot:
             return False
         if other.type_skin_effect != self.type_skin_effect:
+            return False
+        if other.is_skin_effect_inductance != self.is_skin_effect_inductance:
             return False
         return True
 
@@ -304,6 +315,18 @@ class Electrical(FrozenClass):
                 diff_list.append(name + ".type_skin_effect" + val_str)
             else:
                 diff_list.append(name + ".type_skin_effect")
+        if other._is_skin_effect_inductance != self._is_skin_effect_inductance:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._is_skin_effect_inductance)
+                    + ", other="
+                    + str(other._is_skin_effect_inductance)
+                    + ")"
+                )
+                diff_list.append(name + ".is_skin_effect_inductance" + val_str)
+            else:
+                diff_list.append(name + ".is_skin_effect_inductance")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -319,6 +342,7 @@ class Electrical(FrozenClass):
         S += getsizeof(self.Tsta)
         S += getsizeof(self.Trot)
         S += getsizeof(self.type_skin_effect)
+        S += getsizeof(self.is_skin_effect_inductance)
         return S
 
     def as_dict(self, type_handle_ndarray=0, keep_function=False, **kwargs):
@@ -354,6 +378,7 @@ class Electrical(FrozenClass):
         Electrical_dict["Tsta"] = self.Tsta
         Electrical_dict["Trot"] = self.Trot
         Electrical_dict["type_skin_effect"] = self.type_skin_effect
+        Electrical_dict["is_skin_effect_inductance"] = self.is_skin_effect_inductance
         # The class name is added to the dict for deserialisation purpose
         Electrical_dict["__class__"] = "Electrical"
         return Electrical_dict
@@ -375,6 +400,7 @@ class Electrical(FrozenClass):
         Tsta_val = self.Tsta
         Trot_val = self.Trot
         type_skin_effect_val = self.type_skin_effect
+        is_skin_effect_inductance_val = self.is_skin_effect_inductance
         # Creates new object of the same type with the copied properties
         obj_copy = type(self)(
             eec=eec_val,
@@ -384,6 +410,7 @@ class Electrical(FrozenClass):
             Tsta=Tsta_val,
             Trot=Trot_val,
             type_skin_effect=type_skin_effect_val,
+            is_skin_effect_inductance=is_skin_effect_inductance_val,
         )
         return obj_copy
 
@@ -399,6 +426,7 @@ class Electrical(FrozenClass):
         self.Tsta = None
         self.Trot = None
         self.type_skin_effect = None
+        self.is_skin_effect_inductance = None
 
     def _get_eec(self):
         """getter of eec"""
@@ -559,5 +587,23 @@ class Electrical(FrozenClass):
         doc=u"""Skin effect for resistance and inductance
 
         :Type: int
+        """,
+    )
+
+    def _get_is_skin_effect_inductance(self):
+        """getter of is_skin_effect_inductance"""
+        return self._is_skin_effect_inductance
+
+    def _set_is_skin_effect_inductance(self, value):
+        """setter of is_skin_effect_inductance"""
+        check_var("is_skin_effect_inductance", value, "bool")
+        self._is_skin_effect_inductance = value
+
+    is_skin_effect_inductance = property(
+        fget=_get_is_skin_effect_inductance,
+        fset=_set_is_skin_effect_inductance,
+        doc=u"""True to include skin effect on inductance if type_skin_effect != 0
+
+        :Type: bool
         """,
     )

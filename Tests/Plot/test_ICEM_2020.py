@@ -422,7 +422,7 @@ def test_WindingUD():
         Rint=0.2, Rext=0.5, is_internal=True, is_stator=False, L1=0.9, Nrvd=2, Wrvd=0.05
     )
     machine.rotor.axial_vent = [
-        VentilationPolar(Zh=6, Alpha0=pi / 6, W1=pi / 6, D0=100e-3, H0=0.3)
+        VentilationPolar(Zh=6, Alpha0=0, W1=pi / 6, D0=100e-3, H0=0.3)
     ]
     machine.rotor.slot = SlotW12(Zs=6, R2=35e-3, H0=20e-3, R1=17e-3, H1=130e-3)
     machine.rotor.winding = WindingUD(wind_mat=wind_mat, qs=4, p=4, Lewout=60e-3)
@@ -694,11 +694,7 @@ def test_Optimization_problem():
     )
 
     # Definition of the magnetic simulation
-    simu.mag = MagFEMM(
-        type_BH_stator=2,
-        type_BH_rotor=2,
-        is_periodicity_a=True,
-    )
+    simu.mag = MagFEMM(type_BH_stator=2, type_BH_rotor=2, is_periodicity_a=True,)
 
     simu.struct = None
 
