@@ -629,7 +629,7 @@ class Slot(FrozenClass):
     Zs = property(
         fget=_get_Zs,
         fset=_set_Zs,
-        doc=u"""slot number [-]
+        doc=u"""slot number
 
         :Type: int
         :min: 0
@@ -667,7 +667,7 @@ class Slot(FrozenClass):
     wedge_mat = property(
         fget=_get_wedge_mat,
         fset=_set_wedge_mat,
-        doc=u"""Material for the wedge, if None no wedge [-]
+        doc=u"""Material for the wedge, if None no wedge
 
         :Type: Material
         """,
@@ -685,7 +685,7 @@ class Slot(FrozenClass):
     is_bore = property(
         fget=_get_is_bore,
         fset=_set_is_bore,
-        doc=u"""True if the Slot is on the bore radius, False for yoke [-]
+        doc=u"""True if the Slot is on the bore radius, False for yoke
 
         :Type: bool
         """,

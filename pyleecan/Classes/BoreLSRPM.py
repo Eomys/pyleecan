@@ -292,7 +292,7 @@ class BoreLSRPM(Bore):
     N = property(
         fget=_get_N,
         fset=_set_N,
-        doc=u"""Number of flower arc [-]
+        doc=u"""Number of flower arc
 
         :Type: int
         :min: 0
@@ -311,7 +311,7 @@ class BoreLSRPM(Bore):
     Rarc = property(
         fget=_get_Rarc,
         fset=_set_Rarc,
-        doc=u"""Radius of the flower arc [m]
+        doc=u"""Radius of the flower arc
 
         :Type: float
         :min: 0
@@ -330,7 +330,7 @@ class BoreLSRPM(Bore):
     W1 = property(
         fget=_get_W1,
         fset=_set_W1,
-        doc=u"""Width of segement [m]
+        doc=u"""Width of segement
 
         :Type: float
         """,
@@ -348,7 +348,7 @@ class BoreLSRPM(Bore):
     alpha = property(
         fget=_get_alpha,
         fset=_set_alpha,
-        doc=u"""Angular offset [rad]
+        doc=u"""Angular offset
 
         :Type: float
         """,

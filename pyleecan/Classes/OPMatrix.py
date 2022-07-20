@@ -636,7 +636,7 @@ class OPMatrix(FrozenClass):
     N0 = property(
         fget=_get_N0,
         fset=_set_N0,
-        doc=u"""Rotor speed [rpm]
+        doc=u"""Rotor speed
 
         :Type: ndarray
         """,
@@ -661,7 +661,7 @@ class OPMatrix(FrozenClass):
     Id_ref = property(
         fget=_get_Id_ref,
         fset=_set_Id_ref,
-        doc=u"""d-axis current rms value [Arms]
+        doc=u"""d-axis current rms value
 
         :Type: ndarray
         """,
@@ -686,7 +686,7 @@ class OPMatrix(FrozenClass):
     Iq_ref = property(
         fget=_get_Iq_ref,
         fset=_set_Iq_ref,
-        doc=u"""q-axis current rms value [Arms]
+        doc=u"""q-axis current rms value
 
         :Type: ndarray
         """,
@@ -711,7 +711,7 @@ class OPMatrix(FrozenClass):
     Ud_ref = property(
         fget=_get_Ud_ref,
         fset=_set_Ud_ref,
-        doc=u"""d-axis voltage rms value [Vrms]
+        doc=u"""d-axis voltage rms value
 
         :Type: ndarray
         """,
@@ -736,7 +736,7 @@ class OPMatrix(FrozenClass):
     Uq_ref = property(
         fget=_get_Uq_ref,
         fset=_set_Uq_ref,
-        doc=u"""q-axis voltage rms value [Vrms]
+        doc=u"""q-axis voltage rms value
 
         :Type: ndarray
         """,
@@ -761,7 +761,7 @@ class OPMatrix(FrozenClass):
     Tem_av_ref = property(
         fget=_get_Tem_av_ref,
         fset=_set_Tem_av_ref,
-        doc=u"""Output average electromagnetic torque [N.m]
+        doc=u"""Output average electromagnetic torque
 
         :Type: ndarray
         """,
@@ -786,7 +786,7 @@ class OPMatrix(FrozenClass):
     Pem_av_ref = property(
         fget=_get_Pem_av_ref,
         fset=_set_Pem_av_ref,
-        doc=u"""Output/Input average Electromagnetic Power [W]
+        doc=u"""Output/Input average Electromagnetic Power
 
         :Type: ndarray
         """,
@@ -854,7 +854,7 @@ class OPMatrix(FrozenClass):
     If_ref = property(
         fget=_get_If_ref,
         fset=_set_If_ref,
-        doc=u"""DC rotor current [Arms]
+        doc=u"""DC rotor current
 
         :Type: ndarray
         """,
@@ -874,7 +874,7 @@ class OPMatrix(FrozenClass):
     col_names = property(
         fget=_get_col_names,
         fset=_set_col_names,
-        doc=u"""Name of the columns from set_OP_matrix [-]
+        doc=u"""Name of the columns from set_OP_matrix
 
         :Type: list
         """,

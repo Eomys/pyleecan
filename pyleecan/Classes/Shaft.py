@@ -268,7 +268,7 @@ class Shaft(FrozenClass):
     Lshaft = property(
         fget=_get_Lshaft,
         fset=_set_Lshaft,
-        doc=u"""length of the rotor shaft [m] (used for weight & cost estimation only) [m]
+        doc=u"""length of the rotor shaft [m] (used for weight & cost estimation only)
 
         :Type: float
         :min: 0
@@ -324,7 +324,7 @@ class Shaft(FrozenClass):
     Drsh = property(
         fget=_get_Drsh,
         fset=_set_Drsh,
-        doc=u"""diameter of the rotor shaft [m], used to estimate bearing diameter for friction losses [m]
+        doc=u"""diameter of the rotor shaft [m], used to estimate bearing diameter for friction losses
 
         :Type: float
         :min: 0

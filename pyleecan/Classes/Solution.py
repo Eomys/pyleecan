@@ -219,7 +219,7 @@ class Solution(FrozenClass):
     type_cell = property(
         fget=_get_type_cell,
         fset=_set_type_cell,
-        doc=u"""Type of cell (Point, Segment2, Triangle3, etc.) [-]
+        doc=u"""Type of cell (Point, Segment2, Triangle3, etc.)
 
         :Type: str
         """,
@@ -237,7 +237,7 @@ class Solution(FrozenClass):
     label = property(
         fget=_get_label,
         fset=_set_label,
-        doc=u"""Label to identify the solution [-]
+        doc=u"""Label to identify the solution
 
         :Type: str
         """,
@@ -255,7 +255,7 @@ class Solution(FrozenClass):
     dimension = property(
         fget=_get_dimension,
         fset=_set_dimension,
-        doc=u"""Dimension of the physical problem [-]
+        doc=u"""Dimension of the physical problem
 
         :Type: int
         :min: 1
@@ -275,7 +275,7 @@ class Solution(FrozenClass):
     unit = property(
         fget=_get_unit,
         fset=_set_unit,
-        doc=u"""Unit of the solution [-]
+        doc=u"""Unit of the solution
 
         :Type: str
         """,

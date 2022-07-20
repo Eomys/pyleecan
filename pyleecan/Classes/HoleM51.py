@@ -751,7 +751,7 @@ class HoleM51(HoleMag):
     H0 = property(
         fget=_get_H0,
         fset=_set_H0,
-        doc=u"""Hole depth [m]
+        doc=u"""Hole depth
 
         :Type: float
         :min: 0
@@ -770,7 +770,7 @@ class HoleM51(HoleMag):
     H1 = property(
         fget=_get_H1,
         fset=_set_H1,
-        doc=u"""Distance from the lamination Bore [m]
+        doc=u"""Distance from the lamination Bore
 
         :Type: float
         :min: 0
@@ -789,7 +789,7 @@ class HoleM51(HoleMag):
     H2 = property(
         fget=_get_H2,
         fset=_set_H2,
-        doc=u"""Hole width [m]
+        doc=u"""Hole width
 
         :Type: float
         :min: 0
@@ -808,7 +808,7 @@ class HoleM51(HoleMag):
     W0 = property(
         fget=_get_W0,
         fset=_set_W0,
-        doc=u"""Hole bottom width [m]
+        doc=u"""Hole bottom width
 
         :Type: float
         :min: 0
@@ -827,7 +827,7 @@ class HoleM51(HoleMag):
     W1 = property(
         fget=_get_W1,
         fset=_set_W1,
-        doc=u"""Hole angular width [rad]
+        doc=u"""Hole angular width
 
         :Type: float
         :min: 0
@@ -846,7 +846,7 @@ class HoleM51(HoleMag):
     W2 = property(
         fget=_get_W2,
         fset=_set_W2,
-        doc=u"""magnet_1 position [m]
+        doc=u"""magnet_1 position
 
         :Type: float
         :min: 0
@@ -865,7 +865,7 @@ class HoleM51(HoleMag):
     W3 = property(
         fget=_get_W3,
         fset=_set_W3,
-        doc=u"""magnet_1 width [m]
+        doc=u"""magnet_1 width
 
         :Type: float
         :min: 0
@@ -884,7 +884,7 @@ class HoleM51(HoleMag):
     W4 = property(
         fget=_get_W4,
         fset=_set_W4,
-        doc=u"""magnet_2 position [m]
+        doc=u"""magnet_2 position
 
         :Type: float
         :min: 0
@@ -903,7 +903,7 @@ class HoleM51(HoleMag):
     W5 = property(
         fget=_get_W5,
         fset=_set_W5,
-        doc=u"""magnet_2 width [m]
+        doc=u"""magnet_2 width
 
         :Type: float
         :min: 0
@@ -922,7 +922,7 @@ class HoleM51(HoleMag):
     W6 = property(
         fget=_get_W6,
         fset=_set_W6,
-        doc=u"""magnet_0 position [m]
+        doc=u"""magnet_0 position
 
         :Type: float
         :min: 0
@@ -941,7 +941,7 @@ class HoleM51(HoleMag):
     W7 = property(
         fget=_get_W7,
         fset=_set_W7,
-        doc=u"""magnet_0 width [m]
+        doc=u"""magnet_0 width
 
         :Type: float
         :min: 0
@@ -979,7 +979,7 @@ class HoleM51(HoleMag):
     magnet_0 = property(
         fget=_get_magnet_0,
         fset=_set_magnet_0,
-        doc=u"""First Magnet [-]
+        doc=u"""First Magnet
 
         :Type: Magnet
         """,
@@ -1016,7 +1016,7 @@ class HoleM51(HoleMag):
     magnet_1 = property(
         fget=_get_magnet_1,
         fset=_set_magnet_1,
-        doc=u"""Second Magnet [-]
+        doc=u"""Second Magnet
 
         :Type: Magnet
         """,
@@ -1053,7 +1053,7 @@ class HoleM51(HoleMag):
     magnet_2 = property(
         fget=_get_magnet_2,
         fset=_set_magnet_2,
-        doc=u"""Third Magnet [-]
+        doc=u"""Third Magnet
 
         :Type: Magnet
         """,

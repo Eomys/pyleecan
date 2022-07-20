@@ -439,7 +439,7 @@ class LossFEMM(Loss):
     Tsta = property(
         fget=_get_Tsta,
         fset=_set_Tsta,
-        doc=u"""Average stator temperature for Electrical calculation [deg Celsius]
+        doc=u"""Average stator temperature for Electrical calculation
 
         :Type: float
         """,
@@ -457,7 +457,7 @@ class LossFEMM(Loss):
     Trot = property(
         fget=_get_Trot,
         fset=_set_Trot,
-        doc=u"""Average rotor temperature for Electrical calculation [deg Celsius]
+        doc=u"""Average rotor temperature for Electrical calculation
 
         :Type: float
         """,
@@ -475,7 +475,7 @@ class LossFEMM(Loss):
     type_skin_effect = property(
         fget=_get_type_skin_effect,
         fset=_set_type_skin_effect,
-        doc=u"""Skin effect for resistance calculation [-]
+        doc=u"""Skin effect for resistance calculation
 
         :Type: int
         """,
@@ -493,7 +493,7 @@ class LossFEMM(Loss):
     Cp = property(
         fget=_get_Cp,
         fset=_set_Cp,
-        doc=u"""proximity loss coefficients [W/(m3*T2*Hz2)]
+        doc=u"""proximity loss coefficients
 
         :Type: float
         """,

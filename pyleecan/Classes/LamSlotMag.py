@@ -473,7 +473,7 @@ class LamSlotMag(LamSlot):
     magnet = property(
         fget=_get_magnet,
         fset=_set_magnet,
-        doc=u"""Magnet of the lamination [-]
+        doc=u"""Magnet of the lamination
 
         :Type: Magnet
         """,
