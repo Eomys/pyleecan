@@ -13,7 +13,7 @@ def comp_skin_effect_resistance(self, freq, T_op=20, T_ref=20, b=None, zt=None):
         Slot width [m]
     zt: int
         Number of turns in series per coil
-    freq: float
+    freq: float or ndarray
         electrical frequency [Hz]
     T_op: float
         Conductor operational temperature [degC]

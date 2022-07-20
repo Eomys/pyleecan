@@ -10,9 +10,9 @@ from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
-from ..Functions.copy import copy
 from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
+from copy import deepcopy
 from .ModelBH import ModelBH
 
 # Import all class method
@@ -28,6 +28,7 @@ except ImportError as error:
     BH_func = error
 
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 
@@ -57,9 +58,8 @@ class ModelBH_Langevin(ModelBH):
         )
     else:
         BH_func = BH_func
-    # save and copy methods are available in all object
+    # generic save method is available in all object
     save = save
-    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -145,7 +145,7 @@ class ModelBH_Langevin(ModelBH):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -155,15 +155,75 @@ class ModelBH_Langevin(ModelBH):
         diff_list = list()
 
         # Check the properties inherited from ModelBH
-        diff_list.extend(super(ModelBH_Langevin, self).compare(other, name=name))
-        if other._Bs != self._Bs:
-            diff_list.append(name + ".Bs")
-        if other._a != self._a:
-            diff_list.append(name + ".a")
-        if other._param1 != self._param1:
-            diff_list.append(name + ".param1")
-        if other._param2 != self._param2:
-            diff_list.append(name + ".param2")
+        diff_list.extend(
+            super(ModelBH_Langevin, self).compare(
+                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
+            )
+        )
+        if (
+            other._Bs is not None
+            and self._Bs is not None
+            and isnan(other._Bs)
+            and isnan(self._Bs)
+        ):
+            pass
+        elif other._Bs != self._Bs:
+            if is_add_value:
+                val_str = " (self=" + str(self._Bs) + ", other=" + str(other._Bs) + ")"
+                diff_list.append(name + ".Bs" + val_str)
+            else:
+                diff_list.append(name + ".Bs")
+        if (
+            other._a is not None
+            and self._a is not None
+            and isnan(other._a)
+            and isnan(self._a)
+        ):
+            pass
+        elif other._a != self._a:
+            if is_add_value:
+                val_str = " (self=" + str(self._a) + ", other=" + str(other._a) + ")"
+                diff_list.append(name + ".a" + val_str)
+            else:
+                diff_list.append(name + ".a")
+        if (
+            other._param1 is not None
+            and self._param1 is not None
+            and isnan(other._param1)
+            and isnan(self._param1)
+        ):
+            pass
+        elif other._param1 != self._param1:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._param1)
+                    + ", other="
+                    + str(other._param1)
+                    + ")"
+                )
+                diff_list.append(name + ".param1" + val_str)
+            else:
+                diff_list.append(name + ".param1")
+        if (
+            other._param2 is not None
+            and self._param2 is not None
+            and isnan(other._param2)
+            and isnan(self._param2)
+        ):
+            pass
+        elif other._param2 != self._param2:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._param2)
+                    + ", other="
+                    + str(other._param2)
+                    + ")"
+                )
+                diff_list.append(name + ".param2" + val_str)
+            else:
+                diff_list.append(name + ".param2")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -206,6 +266,29 @@ class ModelBH_Langevin(ModelBH):
         # Overwrite the mother class name
         ModelBH_Langevin_dict["__class__"] = "ModelBH_Langevin"
         return ModelBH_Langevin_dict
+
+    def copy(self):
+        """Creates a deepcopy of the object"""
+
+        # Handle deepcopy of all the properties
+        Bs_val = self.Bs
+        a_val = self.a
+        param1_val = self.param1
+        param2_val = self.param2
+        Bmax_val = self.Bmax
+        Hmax_val = self.Hmax
+        delta_val = self.delta
+        # Creates new object of the same type with the copied properties
+        obj_copy = type(self)(
+            Bs=Bs_val,
+            a=a_val,
+            param1=param1_val,
+            param2=param2_val,
+            Bmax=Bmax_val,
+            Hmax=Hmax_val,
+            delta=delta_val,
+        )
+        return obj_copy
 
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""

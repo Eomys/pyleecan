@@ -10,9 +10,9 @@ from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
-from ..Functions.copy import copy
 from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
+from copy import deepcopy
 from .Bore import Bore
 
 # Import all class method
@@ -22,7 +22,15 @@ try:
 except ImportError as error:
     get_bore_line = error
 
+try:
+    from ..Methods.Machine.BoreLSRPM.comp_periodicity_spatial import (
+        comp_periodicity_spatial,
+    )
+except ImportError as error:
+    comp_periodicity_spatial = error
 
+
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 
@@ -31,6 +39,7 @@ class BoreLSRPM(Bore):
 
     VERSION = 1
 
+    # Check ImportError to remove unnecessary dependencies in unused method
     # cf Methods.Machine.BoreLSRPM.get_bore_line
     if isinstance(get_bore_line, ImportError):
         get_bore_line = property(
@@ -42,14 +51,32 @@ class BoreLSRPM(Bore):
         )
     else:
         get_bore_line = get_bore_line
-    # save and copy methods are available in all object
+    # cf Methods.Machine.BoreLSRPM.comp_periodicity_spatial
+    if isinstance(comp_periodicity_spatial, ImportError):
+        comp_periodicity_spatial = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use BoreLSRPM method comp_periodicity_spatial: "
+                    + str(comp_periodicity_spatial)
+                )
+            )
+        )
+    else:
+        comp_periodicity_spatial = comp_periodicity_spatial
+    # generic save method is available in all object
     save = save
-    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
     def __init__(
-        self, N=8, Rarc=0.0375, W1=0.0035, alpha=0, init_dict=None, init_str=None
+        self,
+        N=8,
+        Rarc=0.0375,
+        W1=0.0035,
+        alpha=0,
+        type_merge_slot=1,
+        init_dict=None,
+        init_str=None,
     ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
@@ -74,13 +101,15 @@ class BoreLSRPM(Bore):
                 W1 = init_dict["W1"]
             if "alpha" in list(init_dict.keys()):
                 alpha = init_dict["alpha"]
+            if "type_merge_slot" in list(init_dict.keys()):
+                type_merge_slot = init_dict["type_merge_slot"]
         # Set the properties (value check and convertion are done in setter)
         self.N = N
         self.Rarc = Rarc
         self.W1 = W1
         self.alpha = alpha
         # Call Bore init
-        super(BoreLSRPM, self).__init__()
+        super(BoreLSRPM, self).__init__(type_merge_slot=type_merge_slot)
         # The class is frozen (in Bore init), for now it's impossible to
         # add new properties
 
@@ -115,7 +144,7 @@ class BoreLSRPM(Bore):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -125,15 +154,60 @@ class BoreLSRPM(Bore):
         diff_list = list()
 
         # Check the properties inherited from Bore
-        diff_list.extend(super(BoreLSRPM, self).compare(other, name=name))
+        diff_list.extend(
+            super(BoreLSRPM, self).compare(
+                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
+            )
+        )
         if other._N != self._N:
-            diff_list.append(name + ".N")
-        if other._Rarc != self._Rarc:
-            diff_list.append(name + ".Rarc")
-        if other._W1 != self._W1:
-            diff_list.append(name + ".W1")
-        if other._alpha != self._alpha:
-            diff_list.append(name + ".alpha")
+            if is_add_value:
+                val_str = " (self=" + str(self._N) + ", other=" + str(other._N) + ")"
+                diff_list.append(name + ".N" + val_str)
+            else:
+                diff_list.append(name + ".N")
+        if (
+            other._Rarc is not None
+            and self._Rarc is not None
+            and isnan(other._Rarc)
+            and isnan(self._Rarc)
+        ):
+            pass
+        elif other._Rarc != self._Rarc:
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._Rarc) + ", other=" + str(other._Rarc) + ")"
+                )
+                diff_list.append(name + ".Rarc" + val_str)
+            else:
+                diff_list.append(name + ".Rarc")
+        if (
+            other._W1 is not None
+            and self._W1 is not None
+            and isnan(other._W1)
+            and isnan(self._W1)
+        ):
+            pass
+        elif other._W1 != self._W1:
+            if is_add_value:
+                val_str = " (self=" + str(self._W1) + ", other=" + str(other._W1) + ")"
+                diff_list.append(name + ".W1" + val_str)
+            else:
+                diff_list.append(name + ".W1")
+        if (
+            other._alpha is not None
+            and self._alpha is not None
+            and isnan(other._alpha)
+            and isnan(self._alpha)
+        ):
+            pass
+        elif other._alpha != self._alpha:
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._alpha) + ", other=" + str(other._alpha) + ")"
+                )
+                diff_list.append(name + ".alpha" + val_str)
+            else:
+                diff_list.append(name + ".alpha")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -176,6 +250,25 @@ class BoreLSRPM(Bore):
         # Overwrite the mother class name
         BoreLSRPM_dict["__class__"] = "BoreLSRPM"
         return BoreLSRPM_dict
+
+    def copy(self):
+        """Creates a deepcopy of the object"""
+
+        # Handle deepcopy of all the properties
+        N_val = self.N
+        Rarc_val = self.Rarc
+        W1_val = self.W1
+        alpha_val = self.alpha
+        type_merge_slot_val = self.type_merge_slot
+        # Creates new object of the same type with the copied properties
+        obj_copy = type(self)(
+            N=N_val,
+            Rarc=Rarc_val,
+            W1=W1_val,
+            alpha=alpha_val,
+            type_merge_slot=type_merge_slot_val,
+        )
+        return obj_copy
 
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""

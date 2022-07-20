@@ -10,9 +10,9 @@ from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
-from ..Functions.copy import copy
 from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
+from copy import deepcopy
 from ._frozen import FrozenClass
 
 # Import all class method
@@ -23,6 +23,7 @@ except ImportError as error:
     store = error
 
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 
@@ -40,9 +41,8 @@ class OutForce(FrozenClass):
         )
     else:
         store = store
-    # save and copy methods are available in all object
+    # generic save method is available in all object
     save = save
-    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -132,7 +132,7 @@ class OutForce(FrozenClass):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -152,7 +152,10 @@ class OutForce(FrozenClass):
             for key in self.axes_dict:
                 diff_list.extend(
                     self.axes_dict[key].compare(
-                        other.axes_dict[key], name=name + ".axes_dict[" + str(key) + "]"
+                        other.axes_dict[key],
+                        name=name + ".axes_dict[" + str(key) + "]",
+                        ignore_list=ignore_list,
+                        is_add_value=is_add_value,
                     )
                 )
         if (other.AGSF is None and self.AGSF is not None) or (
@@ -160,11 +163,41 @@ class OutForce(FrozenClass):
         ):
             diff_list.append(name + ".AGSF None mismatch")
         elif self.AGSF is not None:
-            diff_list.extend(self.AGSF.compare(other.AGSF, name=name + ".AGSF"))
+            diff_list.extend(
+                self.AGSF.compare(
+                    other.AGSF,
+                    name=name + ".AGSF",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
+            )
         if other._logger_name != self._logger_name:
-            diff_list.append(name + ".logger_name")
-        if other._Rag != self._Rag:
-            diff_list.append(name + ".Rag")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._logger_name)
+                    + ", other="
+                    + str(other._logger_name)
+                    + ")"
+                )
+                diff_list.append(name + ".logger_name" + val_str)
+            else:
+                diff_list.append(name + ".logger_name")
+        if (
+            other._Rag is not None
+            and self._Rag is not None
+            and isnan(other._Rag)
+            and isnan(self._Rag)
+        ):
+            pass
+        elif other._Rag != self._Rag:
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._Rag) + ", other=" + str(other._Rag) + ")"
+                )
+                diff_list.append(name + ".Rag" + val_str)
+            else:
+                diff_list.append(name + ".Rag")
         if (other.meshsolution is None and self.meshsolution is not None) or (
             other.meshsolution is not None and self.meshsolution is None
         ):
@@ -172,7 +205,10 @@ class OutForce(FrozenClass):
         elif self.meshsolution is not None:
             diff_list.extend(
                 self.meshsolution.compare(
-                    other.meshsolution, name=name + ".meshsolution"
+                    other.meshsolution,
+                    name=name + ".meshsolution",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
                 )
             )
         # Filter ignore differences
@@ -238,6 +274,36 @@ class OutForce(FrozenClass):
         # The class name is added to the dict for deserialisation purpose
         OutForce_dict["__class__"] = "OutForce"
         return OutForce_dict
+
+    def copy(self):
+        """Creates a deepcopy of the object"""
+
+        # Handle deepcopy of all the properties
+        if self.axes_dict is None:
+            axes_dict_val = None
+        else:
+            axes_dict_val = dict()
+            for key, obj in self.axes_dict.items():
+                axes_dict_val[key] = obj.copy()
+        if self.AGSF is None:
+            AGSF_val = None
+        else:
+            AGSF_val = self.AGSF.copy()
+        logger_name_val = self.logger_name
+        Rag_val = self.Rag
+        if self.meshsolution is None:
+            meshsolution_val = None
+        else:
+            meshsolution_val = self.meshsolution.copy()
+        # Creates new object of the same type with the copied properties
+        obj_copy = type(self)(
+            axes_dict=axes_dict_val,
+            AGSF=AGSF_val,
+            logger_name=logger_name_val,
+            Rag=Rag_val,
+            meshsolution=meshsolution_val,
+        )
+        return obj_copy
 
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""

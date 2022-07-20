@@ -10,9 +10,9 @@ from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
-from ..Functions.copy import copy
 from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
+from copy import deepcopy
 from .ImportMatrix import ImportMatrix
 
 # Import all class method
@@ -38,6 +38,7 @@ except ImportError as error:
     comp_carrier = error
 
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 
@@ -90,9 +91,8 @@ class ImportGenPWM(ImportMatrix):
         )
     else:
         comp_carrier = comp_carrier
-    # save and copy methods are available in all object
+    # generic save method is available in all object
     save = save
-    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -270,7 +270,7 @@ class ImportGenPWM(ImportMatrix):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -280,43 +280,246 @@ class ImportGenPWM(ImportMatrix):
         diff_list = list()
 
         # Check the properties inherited from ImportMatrix
-        diff_list.extend(super(ImportGenPWM, self).compare(other, name=name))
-        if other._fs != self._fs:
-            diff_list.append(name + ".fs")
-        if other._duration != self._duration:
-            diff_list.append(name + ".duration")
-        if other._f != self._f:
-            diff_list.append(name + ".f")
-        if other._fmax != self._fmax:
-            diff_list.append(name + ".fmax")
+        diff_list.extend(
+            super(ImportGenPWM, self).compare(
+                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
+            )
+        )
+        if (
+            other._fs is not None
+            and self._fs is not None
+            and isnan(other._fs)
+            and isnan(self._fs)
+        ):
+            pass
+        elif other._fs != self._fs:
+            if is_add_value:
+                val_str = " (self=" + str(self._fs) + ", other=" + str(other._fs) + ")"
+                diff_list.append(name + ".fs" + val_str)
+            else:
+                diff_list.append(name + ".fs")
+        if (
+            other._duration is not None
+            and self._duration is not None
+            and isnan(other._duration)
+            and isnan(self._duration)
+        ):
+            pass
+        elif other._duration != self._duration:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._duration)
+                    + ", other="
+                    + str(other._duration)
+                    + ")"
+                )
+                diff_list.append(name + ".duration" + val_str)
+            else:
+                diff_list.append(name + ".duration")
+        if (
+            other._f is not None
+            and self._f is not None
+            and isnan(other._f)
+            and isnan(self._f)
+        ):
+            pass
+        elif other._f != self._f:
+            if is_add_value:
+                val_str = " (self=" + str(self._f) + ", other=" + str(other._f) + ")"
+                diff_list.append(name + ".f" + val_str)
+            else:
+                diff_list.append(name + ".f")
+        if (
+            other._fmax is not None
+            and self._fmax is not None
+            and isnan(other._fmax)
+            and isnan(self._fmax)
+        ):
+            pass
+        elif other._fmax != self._fmax:
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._fmax) + ", other=" + str(other._fmax) + ")"
+                )
+                diff_list.append(name + ".fmax" + val_str)
+            else:
+                diff_list.append(name + ".fmax")
         if other._fmode != self._fmode:
-            diff_list.append(name + ".fmode")
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._fmode) + ", other=" + str(other._fmode) + ")"
+                )
+                diff_list.append(name + ".fmode" + val_str)
+            else:
+                diff_list.append(name + ".fmode")
         if other._fswimode != self._fswimode:
-            diff_list.append(name + ".fswimode")
-        if other._fswi != self._fswi:
-            diff_list.append(name + ".fswi")
-        if other._fswi_max != self._fswi_max:
-            diff_list.append(name + ".fswi_max")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._fswimode)
+                    + ", other="
+                    + str(other._fswimode)
+                    + ")"
+                )
+                diff_list.append(name + ".fswimode" + val_str)
+            else:
+                diff_list.append(name + ".fswimode")
+        if (
+            other._fswi is not None
+            and self._fswi is not None
+            and isnan(other._fswi)
+            and isnan(self._fswi)
+        ):
+            pass
+        elif other._fswi != self._fswi:
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._fswi) + ", other=" + str(other._fswi) + ")"
+                )
+                diff_list.append(name + ".fswi" + val_str)
+            else:
+                diff_list.append(name + ".fswi")
+        if (
+            other._fswi_max is not None
+            and self._fswi_max is not None
+            and isnan(other._fswi_max)
+            and isnan(self._fswi_max)
+        ):
+            pass
+        elif other._fswi_max != self._fswi_max:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._fswi_max)
+                    + ", other="
+                    + str(other._fswi_max)
+                    + ")"
+                )
+                diff_list.append(name + ".fswi_max" + val_str)
+            else:
+                diff_list.append(name + ".fswi_max")
         if other._typePWM != self._typePWM:
-            diff_list.append(name + ".typePWM")
-        if other._Vdc1 != self._Vdc1:
-            diff_list.append(name + ".Vdc1")
-        if other._U0 != self._U0:
-            diff_list.append(name + ".U0")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._typePWM)
+                    + ", other="
+                    + str(other._typePWM)
+                    + ")"
+                )
+                diff_list.append(name + ".typePWM" + val_str)
+            else:
+                diff_list.append(name + ".typePWM")
+        if (
+            other._Vdc1 is not None
+            and self._Vdc1 is not None
+            and isnan(other._Vdc1)
+            and isnan(self._Vdc1)
+        ):
+            pass
+        elif other._Vdc1 != self._Vdc1:
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._Vdc1) + ", other=" + str(other._Vdc1) + ")"
+                )
+                diff_list.append(name + ".Vdc1" + val_str)
+            else:
+                diff_list.append(name + ".Vdc1")
+        if (
+            other._U0 is not None
+            and self._U0 is not None
+            and isnan(other._U0)
+            and isnan(self._U0)
+        ):
+            pass
+        elif other._U0 != self._U0:
+            if is_add_value:
+                val_str = " (self=" + str(self._U0) + ", other=" + str(other._U0) + ")"
+                diff_list.append(name + ".U0" + val_str)
+            else:
+                diff_list.append(name + ".U0")
         if other._type_carrier != self._type_carrier:
-            diff_list.append(name + ".type_carrier")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._type_carrier)
+                    + ", other="
+                    + str(other._type_carrier)
+                    + ")"
+                )
+                diff_list.append(name + ".type_carrier" + val_str)
+            else:
+                diff_list.append(name + ".type_carrier")
         if other._var_amp != self._var_amp:
-            diff_list.append(name + ".var_amp")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._var_amp)
+                    + ", other="
+                    + str(other._var_amp)
+                    + ")"
+                )
+                diff_list.append(name + ".var_amp" + val_str)
+            else:
+                diff_list.append(name + ".var_amp")
         if other._qs != self._qs:
-            diff_list.append(name + ".qs")
+            if is_add_value:
+                val_str = " (self=" + str(self._qs) + ", other=" + str(other._qs) + ")"
+                diff_list.append(name + ".qs" + val_str)
+            else:
+                diff_list.append(name + ".qs")
         if other._is_star != self._is_star:
-            diff_list.append(name + ".is_star")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._is_star)
+                    + ", other="
+                    + str(other._is_star)
+                    + ")"
+                )
+                diff_list.append(name + ".is_star" + val_str)
+            else:
+                diff_list.append(name + ".is_star")
         if other._phase_dir != self._phase_dir:
-            diff_list.append(name + ".phase_dir")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._phase_dir)
+                    + ", other="
+                    + str(other._phase_dir)
+                    + ")"
+                )
+                diff_list.append(name + ".phase_dir" + val_str)
+            else:
+                diff_list.append(name + ".phase_dir")
         if other._current_dir != self._current_dir:
-            diff_list.append(name + ".current_dir")
-        if other._Phi0 != self._Phi0:
-            diff_list.append(name + ".Phi0")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._current_dir)
+                    + ", other="
+                    + str(other._current_dir)
+                    + ")"
+                )
+                diff_list.append(name + ".current_dir" + val_str)
+            else:
+                diff_list.append(name + ".current_dir")
+        if (
+            other._Phi0 is not None
+            and self._Phi0 is not None
+            and isnan(other._Phi0)
+            and isnan(self._Phi0)
+        ):
+            pass
+        elif other._Phi0 != self._Phi0:
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._Phi0) + ", other=" + str(other._Phi0) + ")"
+                )
+                diff_list.append(name + ".Phi0" + val_str)
+            else:
+                diff_list.append(name + ".Phi0")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -387,6 +590,53 @@ class ImportGenPWM(ImportMatrix):
         # Overwrite the mother class name
         ImportGenPWM_dict["__class__"] = "ImportGenPWM"
         return ImportGenPWM_dict
+
+    def copy(self):
+        """Creates a deepcopy of the object"""
+
+        # Handle deepcopy of all the properties
+        fs_val = self.fs
+        duration_val = self.duration
+        f_val = self.f
+        fmax_val = self.fmax
+        fmode_val = self.fmode
+        fswimode_val = self.fswimode
+        fswi_val = self.fswi
+        fswi_max_val = self.fswi_max
+        typePWM_val = self.typePWM
+        Vdc1_val = self.Vdc1
+        U0_val = self.U0
+        type_carrier_val = self.type_carrier
+        var_amp_val = self.var_amp
+        qs_val = self.qs
+        is_star_val = self.is_star
+        phase_dir_val = self.phase_dir
+        current_dir_val = self.current_dir
+        Phi0_val = self.Phi0
+        is_transpose_val = self.is_transpose
+        # Creates new object of the same type with the copied properties
+        obj_copy = type(self)(
+            fs=fs_val,
+            duration=duration_val,
+            f=f_val,
+            fmax=fmax_val,
+            fmode=fmode_val,
+            fswimode=fswimode_val,
+            fswi=fswi_val,
+            fswi_max=fswi_max_val,
+            typePWM=typePWM_val,
+            Vdc1=Vdc1_val,
+            U0=U0_val,
+            type_carrier=type_carrier_val,
+            var_amp=var_amp_val,
+            qs=qs_val,
+            is_star=is_star_val,
+            phase_dir=phase_dir_val,
+            current_dir=current_dir_val,
+            Phi0=Phi0_val,
+            is_transpose=is_transpose_val,
+        )
+        return obj_copy
 
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""

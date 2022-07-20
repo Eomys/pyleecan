@@ -1,11 +1,7 @@
-# -*- coding: utf-8 -*-
-from numpy import imag, pi, exp
 from numpy import abs as np_abs
-from ....Classes.Circle import Circle
-from ....Classes.SurfLine import SurfLine
-from ....Classes.Arc import Arc
+from numpy import imag, pi, exp
+
 from ....Classes.Arc1 import Arc1
-from ....Classes.Segment import Segment
 from ....Functions.labels import BORE_LAB, BOUNDARY_PROP_LAB
 
 

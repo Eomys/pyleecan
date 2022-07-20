@@ -10,9 +10,9 @@ from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
-from ..Functions.copy import copy
 from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
+from copy import deepcopy
 from .PostMethod import PostMethod
 
 # Import all class method
@@ -23,6 +23,7 @@ except ImportError as error:
     run = error
 
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 
@@ -40,9 +41,8 @@ class PostPlot(PostMethod):
         )
     else:
         run = run
-    # save and copy methods are available in all object
+    # generic save method is available in all object
     save = save
-    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -138,7 +138,7 @@ class PostPlot(PostMethod):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -148,19 +148,79 @@ class PostPlot(PostMethod):
         diff_list = list()
 
         # Check the properties inherited from PostMethod
-        diff_list.extend(super(PostPlot, self).compare(other, name=name))
+        diff_list.extend(
+            super(PostPlot, self).compare(
+                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
+            )
+        )
         if other._method != self._method:
-            diff_list.append(name + ".method")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._method)
+                    + ", other="
+                    + str(other._method)
+                    + ")"
+                )
+                diff_list.append(name + ".method" + val_str)
+            else:
+                diff_list.append(name + ".method")
         if other._name != self._name:
-            diff_list.append(name + ".name")
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._name) + ", other=" + str(other._name) + ")"
+                )
+                diff_list.append(name + ".name" + val_str)
+            else:
+                diff_list.append(name + ".name")
         if other._param_list != self._param_list:
-            diff_list.append(name + ".param_list")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._param_list)
+                    + ", other="
+                    + str(other._param_list)
+                    + ")"
+                )
+                diff_list.append(name + ".param_list" + val_str)
+            else:
+                diff_list.append(name + ".param_list")
         if other._param_dict != self._param_dict:
-            diff_list.append(name + ".param_dict")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._param_dict)
+                    + ", other="
+                    + str(other._param_dict)
+                    + ")"
+                )
+                diff_list.append(name + ".param_dict" + val_str)
+            else:
+                diff_list.append(name + ".param_dict")
         if other._save_format != self._save_format:
-            diff_list.append(name + ".save_format")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._save_format)
+                    + ", other="
+                    + str(other._save_format)
+                    + ")"
+                )
+                diff_list.append(name + ".save_format" + val_str)
+            else:
+                diff_list.append(name + ".save_format")
         if other._quantity != self._quantity:
-            diff_list.append(name + ".quantity")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._quantity)
+                    + ", other="
+                    + str(other._quantity)
+                    + ")"
+                )
+                diff_list.append(name + ".quantity" + val_str)
+            else:
+                diff_list.append(name + ".quantity")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -215,6 +275,33 @@ class PostPlot(PostMethod):
         # Overwrite the mother class name
         PostPlot_dict["__class__"] = "PostPlot"
         return PostPlot_dict
+
+    def copy(self):
+        """Creates a deepcopy of the object"""
+
+        # Handle deepcopy of all the properties
+        method_val = self.method
+        name_val = self.name
+        if self.param_list is None:
+            param_list_val = None
+        else:
+            param_list_val = self.param_list.copy()
+        if self.param_dict is None:
+            param_dict_val = None
+        else:
+            param_dict_val = self.param_dict.copy()
+        save_format_val = self.save_format
+        quantity_val = self.quantity
+        # Creates new object of the same type with the copied properties
+        obj_copy = type(self)(
+            method=method_val,
+            name=name_val,
+            param_list=param_list_val,
+            param_dict=param_dict_val,
+            save_format=save_format_val,
+            quantity=quantity_val,
+        )
+        return obj_copy
 
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""

@@ -10,11 +10,12 @@ from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
-from ..Functions.copy import copy
 from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
+from copy import deepcopy
 from ._frozen import FrozenClass
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 
@@ -23,9 +24,8 @@ class Import(FrozenClass):
 
     VERSION = 1
 
-    # save and copy methods are available in all object
+    # generic save method is available in all object
     save = save
-    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -65,7 +65,7 @@ class Import(FrozenClass):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -98,6 +98,14 @@ class Import(FrozenClass):
         # The class name is added to the dict for deserialisation purpose
         Import_dict["__class__"] = "Import"
         return Import_dict
+
+    def copy(self):
+        """Creates a deepcopy of the object"""
+
+        # Handle deepcopy of all the properties
+        # Creates new object of the same type with the copied properties
+        obj_copy = type(self)()
+        return obj_copy
 
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""

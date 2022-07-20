@@ -1,6 +1,3 @@
-# -*- coding: utf-8 -*-
-
-from numpy import cos, exp
 from numpy import abs as np_abs
 
 

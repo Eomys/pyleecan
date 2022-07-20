@@ -13,9 +13,8 @@ import pytest
 class TestLamSlotMulti(object):
     """Test that the methods of LamSlotMulti behave like it should"""
 
-    @pytest.fixture
-    def setup(self):
-        """Run at the begining of every test to setup the gui"""
+    def test_build_geometry(self):
+        """Check that the build_geometry works"""
 
         rotor = LamSlotMulti(Rint=0.2, Rext=0.7, is_internal=True, is_stator=False)
 
@@ -39,16 +38,16 @@ class TestLamSlotMulti(object):
         # Set slots position
         rotor.alpha = array([0, 29, 60, 120, 150, 180, 210, 240, 300, 330]) * pi / 180
 
-        return rotor
-
-    def test_build_geometry(self, setup):
-        """Check that the build_geometry function"""
-
-        result = setup.build_geometry(sym=2)
+        result = rotor.build_geometry(sym=2)
         assert len(result) == 1
 
-        setup.is_internal = False
-        setup.is_stator = True
+        rotor.is_internal = False
+        rotor.is_stator = True
 
-        result = setup.build_geometry(sym=2)
+        result = rotor.build_geometry(sym=2)
         assert len(result) == 1
+
+if __name__ == "__main__":
+    a = TestLamSlotMulti()
+    a.test_build_geometry()
+    print("Done")

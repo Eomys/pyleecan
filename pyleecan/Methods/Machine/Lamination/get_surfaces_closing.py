@@ -14,4 +14,8 @@ def get_surfaces_closing(self, sym=1):
         List of the closing surfaces
     """
 
-    return self.get_notches_surf(sym=sym)
+    # No notch when bore shape
+    if self.bore is None:
+        return self.get_notches_surf(sym=sym)
+    else:
+        return list()

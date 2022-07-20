@@ -10,11 +10,12 @@ from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
-from ..Functions.copy import copy
 from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
+from copy import deepcopy
 from .OptiSolver import OptiSolver
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 
@@ -23,9 +24,8 @@ class OptiBayesAlg(OptiSolver):
 
     VERSION = 1
 
-    # save and copy methods are available in all object
+    # generic save method is available in all object
     save = save
-    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -119,7 +119,7 @@ class OptiBayesAlg(OptiSolver):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -129,15 +129,59 @@ class OptiBayesAlg(OptiSolver):
         diff_list = list()
 
         # Check the properties inherited from OptiSolver
-        diff_list.extend(super(OptiBayesAlg, self).compare(other, name=name))
+        diff_list.extend(
+            super(OptiBayesAlg, self).compare(
+                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
+            )
+        )
         if other._nb_iter != self._nb_iter:
-            diff_list.append(name + ".nb_iter")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._nb_iter)
+                    + ", other="
+                    + str(other._nb_iter)
+                    + ")"
+                )
+                diff_list.append(name + ".nb_iter" + val_str)
+            else:
+                diff_list.append(name + ".nb_iter")
         if other._nb_start != self._nb_start:
-            diff_list.append(name + ".nb_start")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._nb_start)
+                    + ", other="
+                    + str(other._nb_start)
+                    + ")"
+                )
+                diff_list.append(name + ".nb_start" + val_str)
+            else:
+                diff_list.append(name + ".nb_start")
         if other._criterion != self._criterion:
-            diff_list.append(name + ".criterion")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._criterion)
+                    + ", other="
+                    + str(other._criterion)
+                    + ")"
+                )
+                diff_list.append(name + ".criterion" + val_str)
+            else:
+                diff_list.append(name + ".criterion")
         if other._kernel != self._kernel:
-            diff_list.append(name + ".kernel")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._kernel)
+                    + ", other="
+                    + str(other._kernel)
+                    + ")"
+                )
+                diff_list.append(name + ".kernel" + val_str)
+            else:
+                diff_list.append(name + ".kernel")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -180,6 +224,37 @@ class OptiBayesAlg(OptiSolver):
         # Overwrite the mother class name
         OptiBayesAlg_dict["__class__"] = "OptiBayesAlg"
         return OptiBayesAlg_dict
+
+    def copy(self):
+        """Creates a deepcopy of the object"""
+
+        # Handle deepcopy of all the properties
+        nb_iter_val = self.nb_iter
+        nb_start_val = self.nb_start
+        criterion_val = self.criterion
+        kernel_val = self.kernel
+        if self.problem is None:
+            problem_val = None
+        else:
+            problem_val = self.problem.copy()
+        if self.xoutput is None:
+            xoutput_val = None
+        else:
+            xoutput_val = self.xoutput.copy()
+        logger_name_val = self.logger_name
+        is_keep_all_output_val = self.is_keep_all_output
+        # Creates new object of the same type with the copied properties
+        obj_copy = type(self)(
+            nb_iter=nb_iter_val,
+            nb_start=nb_start_val,
+            criterion=criterion_val,
+            kernel=kernel_val,
+            problem=problem_val,
+            xoutput=xoutput_val,
+            logger_name=logger_name_val,
+            is_keep_all_output=is_keep_all_output_val,
+        )
+        return obj_copy
 
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""

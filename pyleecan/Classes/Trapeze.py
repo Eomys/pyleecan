@@ -10,9 +10,9 @@ from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
-from ..Functions.copy import copy
 from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
+from copy import deepcopy
 from .Surface import Surface
 
 # Import all class method
@@ -63,6 +63,7 @@ except ImportError as error:
     comp_point_ref = error
 
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 
@@ -157,9 +158,8 @@ class Trapeze(Surface):
         )
     else:
         comp_point_ref = comp_point_ref
-    # save and copy methods are available in all object
+    # generic save method is available in all object
     save = save
-    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -228,7 +228,7 @@ class Trapeze(Surface):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -238,13 +238,56 @@ class Trapeze(Surface):
         diff_list = list()
 
         # Check the properties inherited from Surface
-        diff_list.extend(super(Trapeze, self).compare(other, name=name))
-        if other._height != self._height:
-            diff_list.append(name + ".height")
-        if other._W2 != self._W2:
-            diff_list.append(name + ".W2")
-        if other._W1 != self._W1:
-            diff_list.append(name + ".W1")
+        diff_list.extend(
+            super(Trapeze, self).compare(
+                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
+            )
+        )
+        if (
+            other._height is not None
+            and self._height is not None
+            and isnan(other._height)
+            and isnan(self._height)
+        ):
+            pass
+        elif other._height != self._height:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._height)
+                    + ", other="
+                    + str(other._height)
+                    + ")"
+                )
+                diff_list.append(name + ".height" + val_str)
+            else:
+                diff_list.append(name + ".height")
+        if (
+            other._W2 is not None
+            and self._W2 is not None
+            and isnan(other._W2)
+            and isnan(self._W2)
+        ):
+            pass
+        elif other._W2 != self._W2:
+            if is_add_value:
+                val_str = " (self=" + str(self._W2) + ", other=" + str(other._W2) + ")"
+                diff_list.append(name + ".W2" + val_str)
+            else:
+                diff_list.append(name + ".W2")
+        if (
+            other._W1 is not None
+            and self._W1 is not None
+            and isnan(other._W1)
+            and isnan(self._W1)
+        ):
+            pass
+        elif other._W1 != self._W1:
+            if is_add_value:
+                val_str = " (self=" + str(self._W1) + ", other=" + str(other._W1) + ")"
+                diff_list.append(name + ".W1" + val_str)
+            else:
+                diff_list.append(name + ".W1")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -285,6 +328,25 @@ class Trapeze(Surface):
         # Overwrite the mother class name
         Trapeze_dict["__class__"] = "Trapeze"
         return Trapeze_dict
+
+    def copy(self):
+        """Creates a deepcopy of the object"""
+
+        # Handle deepcopy of all the properties
+        height_val = self.height
+        W2_val = self.W2
+        W1_val = self.W1
+        point_ref_val = self.point_ref
+        label_val = self.label
+        # Creates new object of the same type with the copied properties
+        obj_copy = type(self)(
+            height=height_val,
+            W2=W2_val,
+            W1=W1_val,
+            point_ref=point_ref_val,
+            label=label_val,
+        )
+        return obj_copy
 
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""

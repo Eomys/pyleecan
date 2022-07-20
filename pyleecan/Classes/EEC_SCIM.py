@@ -10,9 +10,9 @@ from logging import getLogger
 from ._check import set_array, check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
-from ..Functions.copy import copy
 from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
+from copy import deepcopy
 from .EEC import EEC
 
 # Import all class method
@@ -84,6 +84,7 @@ except ImportError as error:
 
 
 from numpy import array, array_equal
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 
@@ -230,9 +231,8 @@ class EEC_SCIM(EEC):
         )
     else:
         update_from_ref = update_from_ref
-    # save and copy methods are available in all object
+    # generic save method is available in all object
     save = save
-    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -439,7 +439,7 @@ class EEC_SCIM(EEC):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -449,37 +449,148 @@ class EEC_SCIM(EEC):
         diff_list = list()
 
         # Check the properties inherited from EEC
-        diff_list.extend(super(EEC_SCIM, self).compare(other, name=name))
-        if other._Rfe != self._Rfe:
-            diff_list.append(name + ".Rfe")
-        if other._L1 != self._L1:
-            diff_list.append(name + ".L1")
-        if other._R2 != self._R2:
-            diff_list.append(name + ".R2")
-        if other._L2 != self._L2:
-            diff_list.append(name + ".L2")
-        if other._K21Z != self._K21Z:
-            diff_list.append(name + ".K21Z")
-        if other._K21I != self._K21I:
-            diff_list.append(name + ".K21I")
+        diff_list.extend(
+            super(EEC_SCIM, self).compare(
+                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
+            )
+        )
+        if (
+            other._Rfe is not None
+            and self._Rfe is not None
+            and isnan(other._Rfe)
+            and isnan(self._Rfe)
+        ):
+            pass
+        elif other._Rfe != self._Rfe:
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._Rfe) + ", other=" + str(other._Rfe) + ")"
+                )
+                diff_list.append(name + ".Rfe" + val_str)
+            else:
+                diff_list.append(name + ".Rfe")
+        if (
+            other._L1 is not None
+            and self._L1 is not None
+            and isnan(other._L1)
+            and isnan(self._L1)
+        ):
+            pass
+        elif other._L1 != self._L1:
+            if is_add_value:
+                val_str = " (self=" + str(self._L1) + ", other=" + str(other._L1) + ")"
+                diff_list.append(name + ".L1" + val_str)
+            else:
+                diff_list.append(name + ".L1")
+        if (
+            other._R2 is not None
+            and self._R2 is not None
+            and isnan(other._R2)
+            and isnan(self._R2)
+        ):
+            pass
+        elif other._R2 != self._R2:
+            if is_add_value:
+                val_str = " (self=" + str(self._R2) + ", other=" + str(other._R2) + ")"
+                diff_list.append(name + ".R2" + val_str)
+            else:
+                diff_list.append(name + ".R2")
+        if (
+            other._L2 is not None
+            and self._L2 is not None
+            and isnan(other._L2)
+            and isnan(self._L2)
+        ):
+            pass
+        elif other._L2 != self._L2:
+            if is_add_value:
+                val_str = " (self=" + str(self._L2) + ", other=" + str(other._L2) + ")"
+                diff_list.append(name + ".L2" + val_str)
+            else:
+                diff_list.append(name + ".L2")
+        if (
+            other._K21Z is not None
+            and self._K21Z is not None
+            and isnan(other._K21Z)
+            and isnan(self._K21Z)
+        ):
+            pass
+        elif other._K21Z != self._K21Z:
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._K21Z) + ", other=" + str(other._K21Z) + ")"
+                )
+                diff_list.append(name + ".K21Z" + val_str)
+            else:
+                diff_list.append(name + ".K21Z")
+        if (
+            other._K21I is not None
+            and self._K21I is not None
+            and isnan(other._K21I)
+            and isnan(self._K21I)
+        ):
+            pass
+        elif other._K21I != self._K21I:
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._K21I) + ", other=" + str(other._K21I) + ")"
+                )
+                diff_list.append(name + ".K21I" + val_str)
+            else:
+                diff_list.append(name + ".K21I")
         if not array_equal(other.Im_table, self.Im_table):
             diff_list.append(name + ".Im_table")
         if not array_equal(other.Lm_table, self.Lm_table):
             diff_list.append(name + ".Lm_table")
         if other._I1 != self._I1:
-            diff_list.append(name + ".I1")
+            if is_add_value:
+                val_str = " (self=" + str(self._I1) + ", other=" + str(other._I1) + ")"
+                diff_list.append(name + ".I1" + val_str)
+            else:
+                diff_list.append(name + ".I1")
         if other._I2 != self._I2:
-            diff_list.append(name + ".I2")
+            if is_add_value:
+                val_str = " (self=" + str(self._I2) + ", other=" + str(other._I2) + ")"
+                diff_list.append(name + ".I2" + val_str)
+            else:
+                diff_list.append(name + ".I2")
         if other._U1 != self._U1:
-            diff_list.append(name + ".U1")
+            if is_add_value:
+                val_str = " (self=" + str(self._U1) + ", other=" + str(other._U1) + ")"
+                diff_list.append(name + ".U1" + val_str)
+            else:
+                diff_list.append(name + ".U1")
         if other._U2 != self._U2:
-            diff_list.append(name + ".U2")
+            if is_add_value:
+                val_str = " (self=" + str(self._U2) + ", other=" + str(other._U2) + ")"
+                diff_list.append(name + ".U2" + val_str)
+            else:
+                diff_list.append(name + ".U2")
         if other._If != self._If:
-            diff_list.append(name + ".If")
-        if other._Lm != self._Lm:
-            diff_list.append(name + ".Lm")
+            if is_add_value:
+                val_str = " (self=" + str(self._If) + ", other=" + str(other._If) + ")"
+                diff_list.append(name + ".If" + val_str)
+            else:
+                diff_list.append(name + ".If")
+        if (
+            other._Lm is not None
+            and self._Lm is not None
+            and isnan(other._Lm)
+            and isnan(self._Lm)
+        ):
+            pass
+        elif other._Lm != self._Lm:
+            if is_add_value:
+                val_str = " (self=" + str(self._Lm) + ", other=" + str(other._Lm) + ")"
+                diff_list.append(name + ".Lm" + val_str)
+            else:
+                diff_list.append(name + ".Lm")
         if other._Im != self._Im:
-            diff_list.append(name + ".Im")
+            if is_add_value:
+                val_str = " (self=" + str(self._Im) + ", other=" + str(other._Im) + ")"
+                diff_list.append(name + ".Im" + val_str)
+            else:
+                diff_list.append(name + ".Im")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -598,6 +709,77 @@ class EEC_SCIM(EEC):
         # Overwrite the mother class name
         EEC_SCIM_dict["__class__"] = "EEC_SCIM"
         return EEC_SCIM_dict
+
+    def copy(self):
+        """Creates a deepcopy of the object"""
+
+        # Handle deepcopy of all the properties
+        Rfe_val = self.Rfe
+        L1_val = self.L1
+        R2_val = self.R2
+        L2_val = self.L2
+        K21Z_val = self.K21Z
+        K21I_val = self.K21I
+        if self.Im_table is None:
+            Im_table_val = None
+        else:
+            Im_table_val = self.Im_table.copy()
+        if self.Lm_table is None:
+            Lm_table_val = None
+        else:
+            Lm_table_val = self.Lm_table.copy()
+        I1_val = self.I1
+        I2_val = self.I2
+        U1_val = self.U1
+        U2_val = self.U2
+        If_val = self.If
+        Lm_val = self.Lm
+        Im_val = self.Im
+        type_skin_effect_val = self.type_skin_effect
+        if self.OP is None:
+            OP_val = None
+        else:
+            OP_val = self.OP.copy()
+        Tsta_val = self.Tsta
+        Trot_val = self.Trot
+        Xkr_skinS_val = self.Xkr_skinS
+        Xke_skinS_val = self.Xke_skinS
+        Xkr_skinR_val = self.Xkr_skinR
+        Xke_skinR_val = self.Xke_skinR
+        R1_val = self.R1
+        if self.fluxlink is None:
+            fluxlink_val = None
+        else:
+            fluxlink_val = self.fluxlink.copy()
+        # Creates new object of the same type with the copied properties
+        obj_copy = type(self)(
+            Rfe=Rfe_val,
+            L1=L1_val,
+            R2=R2_val,
+            L2=L2_val,
+            K21Z=K21Z_val,
+            K21I=K21I_val,
+            Im_table=Im_table_val,
+            Lm_table=Lm_table_val,
+            I1=I1_val,
+            I2=I2_val,
+            U1=U1_val,
+            U2=U2_val,
+            If=If_val,
+            Lm=Lm_val,
+            Im=Im_val,
+            type_skin_effect=type_skin_effect_val,
+            OP=OP_val,
+            Tsta=Tsta_val,
+            Trot=Trot_val,
+            Xkr_skinS=Xkr_skinS_val,
+            Xke_skinS=Xke_skinS_val,
+            Xkr_skinR=Xkr_skinR_val,
+            Xke_skinR=Xke_skinR_val,
+            R1=R1_val,
+            fluxlink=fluxlink_val,
+        )
+        return obj_copy
 
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""

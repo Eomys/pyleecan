@@ -1,4 +1,4 @@
 Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
 Is,A,Stator currents as a function of time (each column correspond to one phase) to import,"(Nt_tot, qs)",ImportMatrix,None,,,,Simulation,InputVoltage,gen_input,VERSION,1,Input to skip the electrical module and start with the magnetic one
 Ir,A,Rotor currents as a function of time (each column correspond to one phase) to import,"(Nt_tot, qs)",ImportMatrix,None,,,,,,set_Id_Iq,,,
-Is_harm,A,Stator harmonic currents,,ImportData,None,,,,,,set_OP_from_array,,,
+Is_harm,A,Stator harmonic currents,,ImportData,None,,,,,,,,,

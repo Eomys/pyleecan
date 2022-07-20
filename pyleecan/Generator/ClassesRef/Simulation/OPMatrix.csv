@@ -1,0 +1,12 @@
+Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
+N0,rpm,Rotor speed,1,ndarray,None,,,,Simulation,,get_N_OP,VERSION,1,Define the Operating Point of a variable speed simulation
+Id_ref,Arms,d-axis current rms value,1,ndarray,None,,,,,,get_OP,,,
+Iq_ref,Arms,q-axis current rms value,1,ndarray,None,,,,,,get_OP_list,,,
+Ud_ref,Vrms,d-axis voltage rms value,1,ndarray,None,,,,,,get_OP_array,,,
+Uq_ref,Vrms,q-axis voltage rms value,1,ndarray,None,,,,,,set_OP_array,,,
+Tem_av_ref,N.m,Output average electromagnetic torque,,ndarray,None,,,,,,has_Pem,,,
+Pem_av_ref,W,Output/Input average Electromagnetic Power,,ndarray,None,,,,,,has_Tem,,,
+slip_ref,,Rotor mechanical slip,,ndarray,None,,,,,,has_slip,,,
+is_output_power,,"True if power given in OP_matrix is the output power, False if it is the input power",,bool,1,,,,,,,,,
+If_ref,Arms,DC rotor current,,ndarray,None,,,,,,,,,
+col_names,-,Name of the columns from set_OP_matrix,,list,None,,,,,,,,,

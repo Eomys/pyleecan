@@ -10,9 +10,9 @@ from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
-from ..Functions.copy import copy
 from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
+from copy import deepcopy
 from ._frozen import FrozenClass
 
 # Import all class method
@@ -48,6 +48,7 @@ except ImportError as error:
     comp_torque_MT = error
 
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 
@@ -113,9 +114,8 @@ class OutMag(FrozenClass):
         )
     else:
         comp_torque_MT = comp_torque_MT
-    # save and copy methods are available in all object
+    # generic save method is available in all object
     save = save
-    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -306,7 +306,7 @@ class OutMag(FrozenClass):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -326,7 +326,10 @@ class OutMag(FrozenClass):
             for key in self.axes_dict:
                 diff_list.extend(
                     self.axes_dict[key].compare(
-                        other.axes_dict[key], name=name + ".axes_dict[" + str(key) + "]"
+                        other.axes_dict[key],
+                        name=name + ".axes_dict[" + str(key) + "]",
+                        ignore_list=ignore_list,
+                        is_add_value=is_add_value,
                     )
                 )
         if (other.B is None and self.B is not None) or (
@@ -334,19 +337,84 @@ class OutMag(FrozenClass):
         ):
             diff_list.append(name + ".B None mismatch")
         elif self.B is not None:
-            diff_list.extend(self.B.compare(other.B, name=name + ".B"))
+            diff_list.extend(
+                self.B.compare(
+                    other.B,
+                    name=name + ".B",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
+            )
         if (other.Tem is None and self.Tem is not None) or (
             other.Tem is not None and self.Tem is None
         ):
             diff_list.append(name + ".Tem None mismatch")
         elif self.Tem is not None:
-            diff_list.extend(self.Tem.compare(other.Tem, name=name + ".Tem"))
-        if other._Tem_av != self._Tem_av:
-            diff_list.append(name + ".Tem_av")
-        if other._Tem_rip_norm != self._Tem_rip_norm:
-            diff_list.append(name + ".Tem_rip_norm")
-        if other._Tem_rip_pp != self._Tem_rip_pp:
-            diff_list.append(name + ".Tem_rip_pp")
+            diff_list.extend(
+                self.Tem.compare(
+                    other.Tem,
+                    name=name + ".Tem",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
+            )
+        if (
+            other._Tem_av is not None
+            and self._Tem_av is not None
+            and isnan(other._Tem_av)
+            and isnan(self._Tem_av)
+        ):
+            pass
+        elif other._Tem_av != self._Tem_av:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._Tem_av)
+                    + ", other="
+                    + str(other._Tem_av)
+                    + ")"
+                )
+                diff_list.append(name + ".Tem_av" + val_str)
+            else:
+                diff_list.append(name + ".Tem_av")
+        if (
+            other._Tem_rip_norm is not None
+            and self._Tem_rip_norm is not None
+            and isnan(other._Tem_rip_norm)
+            and isnan(self._Tem_rip_norm)
+        ):
+            pass
+        elif other._Tem_rip_norm != self._Tem_rip_norm:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._Tem_rip_norm)
+                    + ", other="
+                    + str(other._Tem_rip_norm)
+                    + ")"
+                )
+                diff_list.append(name + ".Tem_rip_norm" + val_str)
+            else:
+                diff_list.append(name + ".Tem_rip_norm")
+        if (
+            other._Tem_rip_pp is not None
+            and self._Tem_rip_pp is not None
+            and isnan(other._Tem_rip_pp)
+            and isnan(self._Tem_rip_pp)
+        ):
+            pass
+        elif other._Tem_rip_pp != self._Tem_rip_pp:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._Tem_rip_pp)
+                    + ", other="
+                    + str(other._Tem_rip_pp)
+                    + ")"
+                )
+                diff_list.append(name + ".Tem_rip_pp" + val_str)
+            else:
+                diff_list.append(name + ".Tem_rip_pp")
         if (other.Phi_wind_stator is None and self.Phi_wind_stator is not None) or (
             other.Phi_wind_stator is not None and self.Phi_wind_stator is None
         ):
@@ -354,7 +422,10 @@ class OutMag(FrozenClass):
         elif self.Phi_wind_stator is not None:
             diff_list.extend(
                 self.Phi_wind_stator.compare(
-                    other.Phi_wind_stator, name=name + ".Phi_wind_stator"
+                    other.Phi_wind_stator,
+                    name=name + ".Phi_wind_stator",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
                 )
             )
         if (other.Phi_wind is None and self.Phi_wind is not None) or (
@@ -369,7 +440,10 @@ class OutMag(FrozenClass):
             for key in self.Phi_wind:
                 diff_list.extend(
                     self.Phi_wind[key].compare(
-                        other.Phi_wind[key], name=name + ".Phi_wind[" + str(key) + "]"
+                        other.Phi_wind[key],
+                        name=name + ".Phi_wind[" + str(key) + "]",
+                        ignore_list=ignore_list,
+                        is_add_value=is_add_value,
                     )
                 )
         if (other.emf is None and self.emf is not None) or (
@@ -377,7 +451,14 @@ class OutMag(FrozenClass):
         ):
             diff_list.append(name + ".emf None mismatch")
         elif self.emf is not None:
-            diff_list.extend(self.emf.compare(other.emf, name=name + ".emf"))
+            diff_list.extend(
+                self.emf.compare(
+                    other.emf,
+                    name=name + ".emf",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
+            )
         if (other.meshsolution is None and self.meshsolution is not None) or (
             other.meshsolution is not None and self.meshsolution is None
         ):
@@ -385,36 +466,96 @@ class OutMag(FrozenClass):
         elif self.meshsolution is not None:
             diff_list.extend(
                 self.meshsolution.compare(
-                    other.meshsolution, name=name + ".meshsolution"
+                    other.meshsolution,
+                    name=name + ".meshsolution",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
                 )
             )
         if other._logger_name != self._logger_name:
-            diff_list.append(name + ".logger_name")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._logger_name)
+                    + ", other="
+                    + str(other._logger_name)
+                    + ")"
+                )
+                diff_list.append(name + ".logger_name" + val_str)
+            else:
+                diff_list.append(name + ".logger_name")
         if (other.internal is None and self.internal is not None) or (
             other.internal is not None and self.internal is None
         ):
             diff_list.append(name + ".internal None mismatch")
         elif self.internal is not None:
             diff_list.extend(
-                self.internal.compare(other.internal, name=name + ".internal")
+                self.internal.compare(
+                    other.internal,
+                    name=name + ".internal",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
             )
-        if other._Rag != self._Rag:
-            diff_list.append(name + ".Rag")
-        if other._Pem_av != self._Pem_av:
-            diff_list.append(name + ".Pem_av")
+        if (
+            other._Rag is not None
+            and self._Rag is not None
+            and isnan(other._Rag)
+            and isnan(self._Rag)
+        ):
+            pass
+        elif other._Rag != self._Rag:
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._Rag) + ", other=" + str(other._Rag) + ")"
+                )
+                diff_list.append(name + ".Rag" + val_str)
+            else:
+                diff_list.append(name + ".Rag")
+        if (
+            other._Pem_av is not None
+            and self._Pem_av is not None
+            and isnan(other._Pem_av)
+            and isnan(self._Pem_av)
+        ):
+            pass
+        elif other._Pem_av != self._Pem_av:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._Pem_av)
+                    + ", other="
+                    + str(other._Pem_av)
+                    + ")"
+                )
+                diff_list.append(name + ".Pem_av" + val_str)
+            else:
+                diff_list.append(name + ".Pem_av")
         if (other.Slice is None and self.Slice is not None) or (
             other.Slice is not None and self.Slice is None
         ):
             diff_list.append(name + ".Slice None mismatch")
         elif self.Slice is not None:
-            diff_list.extend(self.Slice.compare(other.Slice, name=name + ".Slice"))
+            diff_list.extend(
+                self.Slice.compare(
+                    other.Slice,
+                    name=name + ".Slice",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
+            )
         if (other.Tem_slice is None and self.Tem_slice is not None) or (
             other.Tem_slice is not None and self.Tem_slice is None
         ):
             diff_list.append(name + ".Tem_slice None mismatch")
         elif self.Tem_slice is not None:
             diff_list.extend(
-                self.Tem_slice.compare(other.Tem_slice, name=name + ".Tem_slice")
+                self.Tem_slice.compare(
+                    other.Tem_slice,
+                    name=name + ".Tem_slice",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
             )
         if (other.Phi_wind_slice is None and self.Phi_wind_slice is not None) or (
             other.Phi_wind_slice is not None and self.Phi_wind_slice is None
@@ -430,10 +571,29 @@ class OutMag(FrozenClass):
                     self.Phi_wind_slice[key].compare(
                         other.Phi_wind_slice[key],
                         name=name + ".Phi_wind_slice[" + str(key) + "]",
+                        ignore_list=ignore_list,
+                        is_add_value=is_add_value,
                     )
                 )
-        if other._Tem_norm != self._Tem_norm:
-            diff_list.append(name + ".Tem_norm")
+        if (
+            other._Tem_norm is not None
+            and self._Tem_norm is not None
+            and isnan(other._Tem_norm)
+            and isnan(self._Tem_norm)
+        ):
+            pass
+        elif other._Tem_norm != self._Tem_norm:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._Tem_norm)
+                    + ", other="
+                    + str(other._Tem_norm)
+                    + ")"
+                )
+                diff_list.append(name + ".Tem_norm" + val_str)
+            else:
+                diff_list.append(name + ".Tem_norm")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -593,6 +753,90 @@ class OutMag(FrozenClass):
         # The class name is added to the dict for deserialisation purpose
         OutMag_dict["__class__"] = "OutMag"
         return OutMag_dict
+
+    def copy(self):
+        """Creates a deepcopy of the object"""
+
+        # Handle deepcopy of all the properties
+        if self.axes_dict is None:
+            axes_dict_val = None
+        else:
+            axes_dict_val = dict()
+            for key, obj in self.axes_dict.items():
+                axes_dict_val[key] = obj.copy()
+        if self.B is None:
+            B_val = None
+        else:
+            B_val = self.B.copy()
+        if self.Tem is None:
+            Tem_val = None
+        else:
+            Tem_val = self.Tem.copy()
+        Tem_av_val = self.Tem_av
+        Tem_rip_norm_val = self.Tem_rip_norm
+        Tem_rip_pp_val = self.Tem_rip_pp
+        if self.Phi_wind_stator is None:
+            Phi_wind_stator_val = None
+        else:
+            Phi_wind_stator_val = self.Phi_wind_stator.copy()
+        if self.Phi_wind is None:
+            Phi_wind_val = None
+        else:
+            Phi_wind_val = dict()
+            for key, obj in self.Phi_wind.items():
+                Phi_wind_val[key] = obj.copy()
+        if self.emf is None:
+            emf_val = None
+        else:
+            emf_val = self.emf.copy()
+        if self.meshsolution is None:
+            meshsolution_val = None
+        else:
+            meshsolution_val = self.meshsolution.copy()
+        logger_name_val = self.logger_name
+        if self.internal is None:
+            internal_val = None
+        else:
+            internal_val = self.internal.copy()
+        Rag_val = self.Rag
+        Pem_av_val = self.Pem_av
+        if self.Slice is None:
+            Slice_val = None
+        else:
+            Slice_val = self.Slice.copy()
+        if self.Tem_slice is None:
+            Tem_slice_val = None
+        else:
+            Tem_slice_val = self.Tem_slice.copy()
+        if self.Phi_wind_slice is None:
+            Phi_wind_slice_val = None
+        else:
+            Phi_wind_slice_val = dict()
+            for key, obj in self.Phi_wind_slice.items():
+                Phi_wind_slice_val[key] = obj.copy()
+        Tem_norm_val = self.Tem_norm
+        # Creates new object of the same type with the copied properties
+        obj_copy = type(self)(
+            axes_dict=axes_dict_val,
+            B=B_val,
+            Tem=Tem_val,
+            Tem_av=Tem_av_val,
+            Tem_rip_norm=Tem_rip_norm_val,
+            Tem_rip_pp=Tem_rip_pp_val,
+            Phi_wind_stator=Phi_wind_stator_val,
+            Phi_wind=Phi_wind_val,
+            emf=emf_val,
+            meshsolution=meshsolution_val,
+            logger_name=logger_name_val,
+            internal=internal_val,
+            Rag=Rag_val,
+            Pem_av=Pem_av_val,
+            Slice=Slice_val,
+            Tem_slice=Tem_slice_val,
+            Phi_wind_slice=Phi_wind_slice_val,
+            Tem_norm=Tem_norm_val,
+        )
+        return obj_copy
 
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""

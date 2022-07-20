@@ -10,9 +10,9 @@ from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
-from ..Functions.copy import copy
 from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
+from copy import deepcopy
 from .OP import OP
 
 # Import all class method
@@ -73,6 +73,7 @@ except ImportError as error:
     set_U0_UPhi0 = error
 
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 
@@ -181,9 +182,8 @@ class OPdq(OP):
         )
     else:
         set_U0_UPhi0 = set_U0_UPhi0
-    # save and copy methods are available in all object
+    # generic save method is available in all object
     save = save
-    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -285,7 +285,7 @@ class OPdq(OP):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -295,15 +295,87 @@ class OPdq(OP):
         diff_list = list()
 
         # Check the properties inherited from OP
-        diff_list.extend(super(OPdq, self).compare(other, name=name))
-        if other._Id_ref != self._Id_ref:
-            diff_list.append(name + ".Id_ref")
-        if other._Iq_ref != self._Iq_ref:
-            diff_list.append(name + ".Iq_ref")
-        if other._Ud_ref != self._Ud_ref:
-            diff_list.append(name + ".Ud_ref")
-        if other._Uq_ref != self._Uq_ref:
-            diff_list.append(name + ".Uq_ref")
+        diff_list.extend(
+            super(OPdq, self).compare(
+                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
+            )
+        )
+        if (
+            other._Id_ref is not None
+            and self._Id_ref is not None
+            and isnan(other._Id_ref)
+            and isnan(self._Id_ref)
+        ):
+            pass
+        elif other._Id_ref != self._Id_ref:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._Id_ref)
+                    + ", other="
+                    + str(other._Id_ref)
+                    + ")"
+                )
+                diff_list.append(name + ".Id_ref" + val_str)
+            else:
+                diff_list.append(name + ".Id_ref")
+        if (
+            other._Iq_ref is not None
+            and self._Iq_ref is not None
+            and isnan(other._Iq_ref)
+            and isnan(self._Iq_ref)
+        ):
+            pass
+        elif other._Iq_ref != self._Iq_ref:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._Iq_ref)
+                    + ", other="
+                    + str(other._Iq_ref)
+                    + ")"
+                )
+                diff_list.append(name + ".Iq_ref" + val_str)
+            else:
+                diff_list.append(name + ".Iq_ref")
+        if (
+            other._Ud_ref is not None
+            and self._Ud_ref is not None
+            and isnan(other._Ud_ref)
+            and isnan(self._Ud_ref)
+        ):
+            pass
+        elif other._Ud_ref != self._Ud_ref:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._Ud_ref)
+                    + ", other="
+                    + str(other._Ud_ref)
+                    + ")"
+                )
+                diff_list.append(name + ".Ud_ref" + val_str)
+            else:
+                diff_list.append(name + ".Ud_ref")
+        if (
+            other._Uq_ref is not None
+            and self._Uq_ref is not None
+            and isnan(other._Uq_ref)
+            and isnan(self._Uq_ref)
+        ):
+            pass
+        elif other._Uq_ref != self._Uq_ref:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._Uq_ref)
+                    + ", other="
+                    + str(other._Uq_ref)
+                    + ")"
+                )
+                diff_list.append(name + ".Uq_ref" + val_str)
+            else:
+                diff_list.append(name + ".Uq_ref")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -346,6 +418,35 @@ class OPdq(OP):
         # Overwrite the mother class name
         OPdq_dict["__class__"] = "OPdq"
         return OPdq_dict
+
+    def copy(self):
+        """Creates a deepcopy of the object"""
+
+        # Handle deepcopy of all the properties
+        Id_ref_val = self.Id_ref
+        Iq_ref_val = self.Iq_ref
+        Ud_ref_val = self.Ud_ref
+        Uq_ref_val = self.Uq_ref
+        N0_val = self.N0
+        felec_val = self.felec
+        Tem_av_ref_val = self.Tem_av_ref
+        Pem_av_ref_val = self.Pem_av_ref
+        Pem_av_in_val = self.Pem_av_in
+        efficiency_val = self.efficiency
+        # Creates new object of the same type with the copied properties
+        obj_copy = type(self)(
+            Id_ref=Id_ref_val,
+            Iq_ref=Iq_ref_val,
+            Ud_ref=Ud_ref_val,
+            Uq_ref=Uq_ref_val,
+            N0=N0_val,
+            felec=felec_val,
+            Tem_av_ref=Tem_av_ref_val,
+            Pem_av_ref=Pem_av_ref_val,
+            Pem_av_in=Pem_av_in_val,
+            efficiency=efficiency_val,
+        )
+        return obj_copy
 
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""

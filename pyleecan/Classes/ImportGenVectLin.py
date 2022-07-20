@@ -10,9 +10,9 @@ from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
-from ..Functions.copy import copy
 from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
+from copy import deepcopy
 from .ImportMatrix import ImportMatrix
 
 # Import all class method
@@ -33,6 +33,7 @@ except ImportError as error:
     get_data = error
 
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 
@@ -73,9 +74,8 @@ class ImportGenVectLin(ImportMatrix):
         )
     else:
         get_data = get_data
-    # save and copy methods are available in all object
+    # generic save method is available in all object
     save = save
-    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -155,7 +155,7 @@ class ImportGenVectLin(ImportMatrix):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -165,15 +165,68 @@ class ImportGenVectLin(ImportMatrix):
         diff_list = list()
 
         # Check the properties inherited from ImportMatrix
-        diff_list.extend(super(ImportGenVectLin, self).compare(other, name=name))
-        if other._start != self._start:
-            diff_list.append(name + ".start")
-        if other._stop != self._stop:
-            diff_list.append(name + ".stop")
-        if other._num != self._num:
-            diff_list.append(name + ".num")
+        diff_list.extend(
+            super(ImportGenVectLin, self).compare(
+                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
+            )
+        )
+        if (
+            other._start is not None
+            and self._start is not None
+            and isnan(other._start)
+            and isnan(self._start)
+        ):
+            pass
+        elif other._start != self._start:
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._start) + ", other=" + str(other._start) + ")"
+                )
+                diff_list.append(name + ".start" + val_str)
+            else:
+                diff_list.append(name + ".start")
+        if (
+            other._stop is not None
+            and self._stop is not None
+            and isnan(other._stop)
+            and isnan(self._stop)
+        ):
+            pass
+        elif other._stop != self._stop:
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._stop) + ", other=" + str(other._stop) + ")"
+                )
+                diff_list.append(name + ".stop" + val_str)
+            else:
+                diff_list.append(name + ".stop")
+        if (
+            other._num is not None
+            and self._num is not None
+            and isnan(other._num)
+            and isnan(self._num)
+        ):
+            pass
+        elif other._num != self._num:
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._num) + ", other=" + str(other._num) + ")"
+                )
+                diff_list.append(name + ".num" + val_str)
+            else:
+                diff_list.append(name + ".num")
         if other._endpoint != self._endpoint:
-            diff_list.append(name + ".endpoint")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._endpoint)
+                    + ", other="
+                    + str(other._endpoint)
+                    + ")"
+                )
+                diff_list.append(name + ".endpoint" + val_str)
+            else:
+                diff_list.append(name + ".endpoint")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -216,6 +269,25 @@ class ImportGenVectLin(ImportMatrix):
         # Overwrite the mother class name
         ImportGenVectLin_dict["__class__"] = "ImportGenVectLin"
         return ImportGenVectLin_dict
+
+    def copy(self):
+        """Creates a deepcopy of the object"""
+
+        # Handle deepcopy of all the properties
+        start_val = self.start
+        stop_val = self.stop
+        num_val = self.num
+        endpoint_val = self.endpoint
+        is_transpose_val = self.is_transpose
+        # Creates new object of the same type with the copied properties
+        obj_copy = type(self)(
+            start=start_val,
+            stop=stop_val,
+            num=num_val,
+            endpoint=endpoint_val,
+            is_transpose=is_transpose_val,
+        )
+        return obj_copy
 
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""

@@ -10,9 +10,9 @@ from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
-from ..Functions.copy import copy
 from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
+from copy import deepcopy
 from .LamSlotWind import LamSlotWind
 
 # Import all class method
@@ -91,6 +91,7 @@ except ImportError as error:
     plot_side = error
 
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 
@@ -248,9 +249,8 @@ class LamSquirrelCage(LamSlotWind):
         )
     else:
         plot_side = plot_side
-    # save and copy methods are available in all object
+    # generic save method is available in all object
     save = save
-    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -274,8 +274,8 @@ class LamSquirrelCage(LamSlotWind):
         axial_vent=-1,
         notch=-1,
         skew=None,
-        yoke_notch=-1,
         bore=None,
+        yoke=None,
         init_dict=None,
         init_str=None,
     ):
@@ -330,10 +330,10 @@ class LamSquirrelCage(LamSlotWind):
                 notch = init_dict["notch"]
             if "skew" in list(init_dict.keys()):
                 skew = init_dict["skew"]
-            if "yoke_notch" in list(init_dict.keys()):
-                yoke_notch = init_dict["yoke_notch"]
             if "bore" in list(init_dict.keys()):
                 bore = init_dict["bore"]
+            if "yoke" in list(init_dict.keys()):
+                yoke = init_dict["yoke"]
         # Set the properties (value check and convertion are done in setter)
         self.Hscr = Hscr
         self.Lscr = Lscr
@@ -355,8 +355,8 @@ class LamSquirrelCage(LamSlotWind):
             axial_vent=axial_vent,
             notch=notch,
             skew=skew,
-            yoke_notch=yoke_notch,
             bore=bore,
+            yoke=yoke,
         )
         # The class is frozen (in LamSlotWind init), for now it's impossible to
         # add new properties
@@ -393,7 +393,7 @@ class LamSquirrelCage(LamSlotWind):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -403,18 +403,53 @@ class LamSquirrelCage(LamSlotWind):
         diff_list = list()
 
         # Check the properties inherited from LamSlotWind
-        diff_list.extend(super(LamSquirrelCage, self).compare(other, name=name))
-        if other._Hscr != self._Hscr:
-            diff_list.append(name + ".Hscr")
-        if other._Lscr != self._Lscr:
-            diff_list.append(name + ".Lscr")
+        diff_list.extend(
+            super(LamSquirrelCage, self).compare(
+                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
+            )
+        )
+        if (
+            other._Hscr is not None
+            and self._Hscr is not None
+            and isnan(other._Hscr)
+            and isnan(self._Hscr)
+        ):
+            pass
+        elif other._Hscr != self._Hscr:
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._Hscr) + ", other=" + str(other._Hscr) + ")"
+                )
+                diff_list.append(name + ".Hscr" + val_str)
+            else:
+                diff_list.append(name + ".Hscr")
+        if (
+            other._Lscr is not None
+            and self._Lscr is not None
+            and isnan(other._Lscr)
+            and isnan(self._Lscr)
+        ):
+            pass
+        elif other._Lscr != self._Lscr:
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._Lscr) + ", other=" + str(other._Lscr) + ")"
+                )
+                diff_list.append(name + ".Lscr" + val_str)
+            else:
+                diff_list.append(name + ".Lscr")
         if (other.ring_mat is None and self.ring_mat is not None) or (
             other.ring_mat is not None and self.ring_mat is None
         ):
             diff_list.append(name + ".ring_mat None mismatch")
         elif self.ring_mat is not None:
             diff_list.extend(
-                self.ring_mat.compare(other.ring_mat, name=name + ".ring_mat")
+                self.ring_mat.compare(
+                    other.ring_mat,
+                    name=name + ".ring_mat",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
             )
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
@@ -463,6 +498,86 @@ class LamSquirrelCage(LamSlotWind):
         # Overwrite the mother class name
         LamSquirrelCage_dict["__class__"] = "LamSquirrelCage"
         return LamSquirrelCage_dict
+
+    def copy(self):
+        """Creates a deepcopy of the object"""
+
+        # Handle deepcopy of all the properties
+        Hscr_val = self.Hscr
+        Lscr_val = self.Lscr
+        if self.ring_mat is None:
+            ring_mat_val = None
+        else:
+            ring_mat_val = self.ring_mat.copy()
+        Ksfill_val = self.Ksfill
+        if self.winding is None:
+            winding_val = None
+        else:
+            winding_val = self.winding.copy()
+        if self.slot is None:
+            slot_val = None
+        else:
+            slot_val = self.slot.copy()
+        L1_val = self.L1
+        if self.mat_type is None:
+            mat_type_val = None
+        else:
+            mat_type_val = self.mat_type.copy()
+        Nrvd_val = self.Nrvd
+        Wrvd_val = self.Wrvd
+        Kf1_val = self.Kf1
+        is_internal_val = self.is_internal
+        Rint_val = self.Rint
+        Rext_val = self.Rext
+        is_stator_val = self.is_stator
+        if self.axial_vent is None:
+            axial_vent_val = None
+        else:
+            axial_vent_val = list()
+            for obj in self.axial_vent:
+                axial_vent_val.append(obj.copy())
+        if self.notch is None:
+            notch_val = None
+        else:
+            notch_val = list()
+            for obj in self.notch:
+                notch_val.append(obj.copy())
+        if self.skew is None:
+            skew_val = None
+        else:
+            skew_val = self.skew.copy()
+        if self.bore is None:
+            bore_val = None
+        else:
+            bore_val = self.bore.copy()
+        if self.yoke is None:
+            yoke_val = None
+        else:
+            yoke_val = self.yoke.copy()
+        # Creates new object of the same type with the copied properties
+        obj_copy = type(self)(
+            Hscr=Hscr_val,
+            Lscr=Lscr_val,
+            ring_mat=ring_mat_val,
+            Ksfill=Ksfill_val,
+            winding=winding_val,
+            slot=slot_val,
+            L1=L1_val,
+            mat_type=mat_type_val,
+            Nrvd=Nrvd_val,
+            Wrvd=Wrvd_val,
+            Kf1=Kf1_val,
+            is_internal=is_internal_val,
+            Rint=Rint_val,
+            Rext=Rext_val,
+            is_stator=is_stator_val,
+            axial_vent=axial_vent_val,
+            notch=notch_val,
+            skew=skew_val,
+            bore=bore_val,
+            yoke=yoke_val,
+        )
+        return obj_copy
 
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""

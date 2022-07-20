@@ -10,9 +10,9 @@ from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
-from ..Functions.copy import copy
 from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
+from copy import deepcopy
 from ._frozen import FrozenClass
 
 # Import all class method
@@ -48,6 +48,7 @@ except ImportError as error:
     get_Jrms = error
 
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 
@@ -113,9 +114,8 @@ class OutElec(FrozenClass):
         )
     else:
         get_Jrms = get_Jrms
-    # save and copy methods are available in all object
+    # generic save method is available in all object
     save = save
-    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -311,7 +311,7 @@ class OutElec(FrozenClass):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -331,7 +331,10 @@ class OutElec(FrozenClass):
             for key in self.axes_dict:
                 diff_list.extend(
                     self.axes_dict[key].compare(
-                        other.axes_dict[key], name=name + ".axes_dict[" + str(key) + "]"
+                        other.axes_dict[key],
+                        name=name + ".axes_dict[" + str(key) + "]",
+                        ignore_list=ignore_list,
+                        is_add_value=is_add_value,
                     )
                 )
         if (other.Is is None and self.Is is not None) or (
@@ -339,67 +342,260 @@ class OutElec(FrozenClass):
         ):
             diff_list.append(name + ".Is None mismatch")
         elif self.Is is not None:
-            diff_list.extend(self.Is.compare(other.Is, name=name + ".Is"))
+            diff_list.extend(
+                self.Is.compare(
+                    other.Is,
+                    name=name + ".Is",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
+            )
         if (other.Ir is None and self.Ir is not None) or (
             other.Ir is not None and self.Ir is None
         ):
             diff_list.append(name + ".Ir None mismatch")
         elif self.Ir is not None:
-            diff_list.extend(self.Ir.compare(other.Ir, name=name + ".Ir"))
+            diff_list.extend(
+                self.Ir.compare(
+                    other.Ir,
+                    name=name + ".Ir",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
+            )
         if other._logger_name != self._logger_name:
-            diff_list.append(name + ".logger_name")
-        if other._Pj_losses != self._Pj_losses:
-            diff_list.append(name + ".Pj_losses")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._logger_name)
+                    + ", other="
+                    + str(other._logger_name)
+                    + ")"
+                )
+                diff_list.append(name + ".logger_name" + val_str)
+            else:
+                diff_list.append(name + ".logger_name")
+        if (
+            other._Pj_losses is not None
+            and self._Pj_losses is not None
+            and isnan(other._Pj_losses)
+            and isnan(self._Pj_losses)
+        ):
+            pass
+        elif other._Pj_losses != self._Pj_losses:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._Pj_losses)
+                    + ", other="
+                    + str(other._Pj_losses)
+                    + ")"
+                )
+                diff_list.append(name + ".Pj_losses" + val_str)
+            else:
+                diff_list.append(name + ".Pj_losses")
         if (other.Us is None and self.Us is not None) or (
             other.Us is not None and self.Us is None
         ):
             diff_list.append(name + ".Us None mismatch")
         elif self.Us is not None:
-            diff_list.extend(self.Us.compare(other.Us, name=name + ".Us"))
+            diff_list.extend(
+                self.Us.compare(
+                    other.Us,
+                    name=name + ".Us",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
+            )
         if (other.internal is None and self.internal is not None) or (
             other.internal is not None and self.internal is None
         ):
             diff_list.append(name + ".internal None mismatch")
         elif self.internal is not None:
             diff_list.extend(
-                self.internal.compare(other.internal, name=name + ".internal")
+                self.internal.compare(
+                    other.internal,
+                    name=name + ".internal",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
             )
         if (other.OP is None and self.OP is not None) or (
             other.OP is not None and self.OP is None
         ):
             diff_list.append(name + ".OP None mismatch")
         elif self.OP is not None:
-            diff_list.extend(self.OP.compare(other.OP, name=name + ".OP"))
-        if other._Pem_av != self._Pem_av:
-            diff_list.append(name + ".Pem_av")
-        if other._Tem_av != self._Tem_av:
-            diff_list.append(name + ".Tem_av")
+            diff_list.extend(
+                self.OP.compare(
+                    other.OP,
+                    name=name + ".OP",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
+            )
+        if (
+            other._Pem_av is not None
+            and self._Pem_av is not None
+            and isnan(other._Pem_av)
+            and isnan(self._Pem_av)
+        ):
+            pass
+        elif other._Pem_av != self._Pem_av:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._Pem_av)
+                    + ", other="
+                    + str(other._Pem_av)
+                    + ")"
+                )
+                diff_list.append(name + ".Pem_av" + val_str)
+            else:
+                diff_list.append(name + ".Pem_av")
+        if (
+            other._Tem_av is not None
+            and self._Tem_av is not None
+            and isnan(other._Tem_av)
+            and isnan(self._Tem_av)
+        ):
+            pass
+        elif other._Tem_av != self._Tem_av:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._Tem_av)
+                    + ", other="
+                    + str(other._Tem_av)
+                    + ")"
+                )
+                diff_list.append(name + ".Tem_av" + val_str)
+            else:
+                diff_list.append(name + ".Tem_av")
         if other._phase_dir != self._phase_dir:
-            diff_list.append(name + ".phase_dir")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._phase_dir)
+                    + ", other="
+                    + str(other._phase_dir)
+                    + ")"
+                )
+                diff_list.append(name + ".phase_dir" + val_str)
+            else:
+                diff_list.append(name + ".phase_dir")
         if other._current_dir != self._current_dir:
-            diff_list.append(name + ".current_dir")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._current_dir)
+                    + ", other="
+                    + str(other._current_dir)
+                    + ")"
+                )
+                diff_list.append(name + ".current_dir" + val_str)
+            else:
+                diff_list.append(name + ".current_dir")
         if (other.PWM is None and self.PWM is not None) or (
             other.PWM is not None and self.PWM is None
         ):
             diff_list.append(name + ".PWM None mismatch")
         elif self.PWM is not None:
-            diff_list.extend(self.PWM.compare(other.PWM, name=name + ".PWM"))
+            diff_list.extend(
+                self.PWM.compare(
+                    other.PWM,
+                    name=name + ".PWM",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
+            )
         if (other.eec is None and self.eec is not None) or (
             other.eec is not None and self.eec is None
         ):
             diff_list.append(name + ".eec None mismatch")
         elif self.eec is not None:
-            diff_list.extend(self.eec.compare(other.eec, name=name + ".eec"))
-        if other._P_out != self._P_out:
-            diff_list.append(name + ".P_out")
-        if other._Jrms != self._Jrms:
-            diff_list.append(name + ".Jrms")
-        if other._P_in != self._P_in:
-            diff_list.append(name + ".P_in")
-        if other._Arms != self._Arms:
-            diff_list.append(name + ".Arms")
-        if other._Erms != self._Erms:
-            diff_list.append(name + ".Erms")
+            diff_list.extend(
+                self.eec.compare(
+                    other.eec,
+                    name=name + ".eec",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
+            )
+        if (
+            other._P_out is not None
+            and self._P_out is not None
+            and isnan(other._P_out)
+            and isnan(self._P_out)
+        ):
+            pass
+        elif other._P_out != self._P_out:
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._P_out) + ", other=" + str(other._P_out) + ")"
+                )
+                diff_list.append(name + ".P_out" + val_str)
+            else:
+                diff_list.append(name + ".P_out")
+        if (
+            other._Jrms is not None
+            and self._Jrms is not None
+            and isnan(other._Jrms)
+            and isnan(self._Jrms)
+        ):
+            pass
+        elif other._Jrms != self._Jrms:
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._Jrms) + ", other=" + str(other._Jrms) + ")"
+                )
+                diff_list.append(name + ".Jrms" + val_str)
+            else:
+                diff_list.append(name + ".Jrms")
+        if (
+            other._P_in is not None
+            and self._P_in is not None
+            and isnan(other._P_in)
+            and isnan(self._P_in)
+        ):
+            pass
+        elif other._P_in != self._P_in:
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._P_in) + ", other=" + str(other._P_in) + ")"
+                )
+                diff_list.append(name + ".P_in" + val_str)
+            else:
+                diff_list.append(name + ".P_in")
+        if (
+            other._Arms is not None
+            and self._Arms is not None
+            and isnan(other._Arms)
+            and isnan(self._Arms)
+        ):
+            pass
+        elif other._Arms != self._Arms:
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._Arms) + ", other=" + str(other._Arms) + ")"
+                )
+                diff_list.append(name + ".Arms" + val_str)
+            else:
+                diff_list.append(name + ".Arms")
+        if (
+            other._Erms is not None
+            and self._Erms is not None
+            and isnan(other._Erms)
+            and isnan(self._Erms)
+        ):
+            pass
+        elif other._Erms != self._Erms:
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._Erms) + ", other=" + str(other._Erms) + ")"
+                )
+                diff_list.append(name + ".Erms" + val_str)
+            else:
+                diff_list.append(name + ".Erms")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -526,6 +722,79 @@ class OutElec(FrozenClass):
         # The class name is added to the dict for deserialisation purpose
         OutElec_dict["__class__"] = "OutElec"
         return OutElec_dict
+
+    def copy(self):
+        """Creates a deepcopy of the object"""
+
+        # Handle deepcopy of all the properties
+        if self.axes_dict is None:
+            axes_dict_val = None
+        else:
+            axes_dict_val = dict()
+            for key, obj in self.axes_dict.items():
+                axes_dict_val[key] = obj.copy()
+        if self.Is is None:
+            Is_val = None
+        else:
+            Is_val = self.Is.copy()
+        if self.Ir is None:
+            Ir_val = None
+        else:
+            Ir_val = self.Ir.copy()
+        logger_name_val = self.logger_name
+        Pj_losses_val = self.Pj_losses
+        if self.Us is None:
+            Us_val = None
+        else:
+            Us_val = self.Us.copy()
+        if self.internal is None:
+            internal_val = None
+        else:
+            internal_val = self.internal.copy()
+        if self.OP is None:
+            OP_val = None
+        else:
+            OP_val = self.OP.copy()
+        Pem_av_val = self.Pem_av
+        Tem_av_val = self.Tem_av
+        phase_dir_val = self.phase_dir
+        current_dir_val = self.current_dir
+        if self.PWM is None:
+            PWM_val = None
+        else:
+            PWM_val = self.PWM.copy()
+        if self.eec is None:
+            eec_val = None
+        else:
+            eec_val = self.eec.copy()
+        P_out_val = self.P_out
+        Jrms_val = self.Jrms
+        P_in_val = self.P_in
+        Arms_val = self.Arms
+        Erms_val = self.Erms
+        # Creates new object of the same type with the copied properties
+        obj_copy = type(self)(
+            axes_dict=axes_dict_val,
+            Is=Is_val,
+            Ir=Ir_val,
+            logger_name=logger_name_val,
+            Pj_losses=Pj_losses_val,
+            Us=Us_val,
+            internal=internal_val,
+            OP=OP_val,
+            Pem_av=Pem_av_val,
+            Tem_av=Tem_av_val,
+            phase_dir=phase_dir_val,
+            current_dir=current_dir_val,
+            PWM=PWM_val,
+            eec=eec_val,
+            P_out=P_out_val,
+            Jrms=Jrms_val,
+            P_in=P_in_val,
+            Arms=Arms_val,
+            Erms=Erms_val,
+        )
+        return obj_copy
 
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""

@@ -2,7 +2,7 @@
 
 from matplotlib.lines import Line2D
 import matplotlib.pyplot as plt
-from matplotlib.pyplot import axis, legend, plot, subplots, title
+from matplotlib.pyplot import plot, subplots
 from numpy import array, linspace, meshgrid
 
 from ....Functions.Winding.gen_phase_list import gen_color, gen_name
@@ -118,9 +118,9 @@ def plot_winding(
     else:
         Lam_Name = "Rotor"
     if all_slot or Nperw == 1:
-        title(Lam_Name + "'s Winding (every slot)")
+        ax.set_title(Lam_Name + "'s Winding (every slot)")
     else:
-        title(Lam_Name + "'s Winding (periodicity 1/" + str(Nperw) + ")")
+        ax.set_title(Lam_Name + "'s Winding (periodicity 1/" + str(Nperw) + ")")
 
     # Window title
     if (
@@ -135,7 +135,7 @@ def plot_winding(
     if manager is not None:
         manager.set_window_title(win_title)
 
-    axis("equal")
+    ax.axis("equal")
     ax.get_yaxis().set_visible(False)
 
     # Legend qs
@@ -168,11 +168,12 @@ def plot_winding(
         )
         label_leg.append(qs_name[q] + "-")
 
-    legend(sym_leg, label_leg, ncol=2)
+    ax.legend(sym_leg, label_leg, ncol=2)
 
     if is_show_fig:
         fig.show()
 
     if save_path is not None:
         fig.savefig(save_path)
-        plt.close()
+        plt.close(fig=fig)
+    return fig, ax

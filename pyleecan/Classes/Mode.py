@@ -10,9 +10,9 @@ from logging import getLogger
 from ._check import set_array, check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
-from ..Functions.copy import copy
 from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
+from copy import deepcopy
 from .SolutionMat import SolutionMat
 
 # Import all class method
@@ -39,6 +39,7 @@ except ImportError as error:
 
 
 from numpy import array, array_equal
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 
@@ -90,9 +91,8 @@ class Mode(SolutionMat):
         )
     else:
         get_shape_pol = get_shape_pol
-    # save and copy methods are available in all object
+    # generic save method is available in all object
     save = save
-    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -195,7 +195,7 @@ class Mode(SolutionMat):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -205,13 +205,54 @@ class Mode(SolutionMat):
         diff_list = list()
 
         # Check the properties inherited from SolutionMat
-        diff_list.extend(super(Mode, self).compare(other, name=name))
-        if other._nat_freq != self._nat_freq:
-            diff_list.append(name + ".nat_freq")
+        diff_list.extend(
+            super(Mode, self).compare(
+                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
+            )
+        )
+        if (
+            other._nat_freq is not None
+            and self._nat_freq is not None
+            and isnan(other._nat_freq)
+            and isnan(self._nat_freq)
+        ):
+            pass
+        elif other._nat_freq != self._nat_freq:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._nat_freq)
+                    + ", other="
+                    + str(other._nat_freq)
+                    + ")"
+                )
+                diff_list.append(name + ".nat_freq" + val_str)
+            else:
+                diff_list.append(name + ".nat_freq")
         if other._order_circ != self._order_circ:
-            diff_list.append(name + ".order_circ")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._order_circ)
+                    + ", other="
+                    + str(other._order_circ)
+                    + ")"
+                )
+                diff_list.append(name + ".order_circ" + val_str)
+            else:
+                diff_list.append(name + ".order_circ")
         if other._order_long != self._order_long:
-            diff_list.append(name + ".order_long")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._order_long)
+                    + ", other="
+                    + str(other._order_long)
+                    + ")"
+                )
+                diff_list.append(name + ".order_long" + val_str)
+            else:
+                diff_list.append(name + ".order_long")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -252,6 +293,49 @@ class Mode(SolutionMat):
         # Overwrite the mother class name
         Mode_dict["__class__"] = "Mode"
         return Mode_dict
+
+    def copy(self):
+        """Creates a deepcopy of the object"""
+
+        # Handle deepcopy of all the properties
+        nat_freq_val = self.nat_freq
+        order_circ_val = self.order_circ
+        order_long_val = self.order_long
+        if self.field is None:
+            field_val = None
+        else:
+            field_val = self.field.copy()
+        if self.indice is None:
+            indice_val = None
+        else:
+            indice_val = self.indice.copy()
+        if self.axis_name is None:
+            axis_name_val = None
+        else:
+            axis_name_val = self.axis_name.copy()
+        if self.axis_size is None:
+            axis_size_val = None
+        else:
+            axis_size_val = self.axis_size.copy()
+        type_cell_val = self.type_cell
+        label_val = self.label
+        dimension_val = self.dimension
+        unit_val = self.unit
+        # Creates new object of the same type with the copied properties
+        obj_copy = type(self)(
+            nat_freq=nat_freq_val,
+            order_circ=order_circ_val,
+            order_long=order_long_val,
+            field=field_val,
+            indice=indice_val,
+            axis_name=axis_name_val,
+            axis_size=axis_size_val,
+            type_cell=type_cell_val,
+            label=label_val,
+            dimension=dimension_val,
+            unit=unit_val,
+        )
+        return obj_copy
 
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""

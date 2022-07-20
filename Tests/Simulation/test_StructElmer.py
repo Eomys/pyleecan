@@ -1,7 +1,8 @@
 from os.path import join
+from os import makedirs
 from numpy import pi
 import pytest
-from Tests import save_path, TEST_DATA_DIR
+from Tests import save_validation_path as save_path, TEST_DATA_DIR
 from pyleecan.Classes.OPdq import OPdq
 from pyleecan.definitions import DATA_DIR
 
@@ -17,7 +18,7 @@ from pyleecan.Functions.load import load
 
 # get the machine
 machine_1 = load(join(DATA_DIR, "Machine", "Toyota_Prius.json"))
-
+save_path = join(save_path, "StructElmer")
 # mesh settings, original line label names have to be used (not the translated)
 n1 = 3
 n2 = 20
@@ -62,7 +63,8 @@ class Test_StructElmer(object):
         # setup the simulation
         simu = Simu1(name="test_StructElmer_HoleM50", machine=machine)
         output = Output(simu=simu)
-        output.path_result = save_path
+        output.path_result = join(save_path, "Hole50")
+        makedirs(output.path_result)
 
         simu.struct = StructElmer()
         simu.struct.FEA_dict_enforced = mesh_dict_1
@@ -88,6 +90,8 @@ class Test_StructElmer(object):
         # setup the simulation
         simu = Simu1(name="test_StructElmer_HoleM50_no_magnets", machine=machine)
         output = Output(simu=simu)
+        output.path_result = join(save_path, "Hole50_no_mag")
+        makedirs(output.path_result)
 
         simu.struct = StructElmer()
         simu.struct.FEA_dict_enforced = mesh_dict_1
@@ -120,6 +124,8 @@ class Test_StructElmer(object):
         # setup the simulation
         simu = Simu1(name="test_StructElmer_disk", machine=machine)
         output = Output(simu=simu)
+        output.path_result = join(save_path, "disk")
+        makedirs(output.path_result)
 
         simu.struct = StructElmer()
         # simu.struct.FEA_dict_enforced = mesh_dict_1

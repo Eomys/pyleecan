@@ -1,5 +1,6 @@
 Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constante Name,Constante Value,Description classe,Classe fille
 ,,,,,,,,,Output,XOutput,get_eec,VERSION,1,Abstract class for Look Up Table (LUT),
-,,,,,,,,,,,get_OP_matrix,,,,
+,,,,,,,,,,,get_OP_matrix_obj,,,,
+,,,,,,,,,,,get_OP_array,,,,
 ,,,,,,,,,,,set_default_simulation,,,,
 ,,,,,,,,,,,get_phase_dir,,,,

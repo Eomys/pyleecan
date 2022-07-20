@@ -10,9 +10,9 @@ from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
-from ..Functions.copy import copy
 from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
+from copy import deepcopy
 from .Conductor import Conductor
 
 # Import all class method
@@ -70,6 +70,7 @@ except ImportError as error:
     is_round_wire = error
 
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 
@@ -192,9 +193,8 @@ class CondType21(Conductor):
         )
     else:
         is_round_wire = is_round_wire
-    # save and copy methods are available in all object
+    # generic save method is available in all object
     save = save
-    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -270,7 +270,7 @@ class CondType21(Conductor):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -280,13 +280,56 @@ class CondType21(Conductor):
         diff_list = list()
 
         # Check the properties inherited from Conductor
-        diff_list.extend(super(CondType21, self).compare(other, name=name))
-        if other._Hbar != self._Hbar:
-            diff_list.append(name + ".Hbar")
-        if other._Wbar != self._Wbar:
-            diff_list.append(name + ".Wbar")
-        if other._Wins != self._Wins:
-            diff_list.append(name + ".Wins")
+        diff_list.extend(
+            super(CondType21, self).compare(
+                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
+            )
+        )
+        if (
+            other._Hbar is not None
+            and self._Hbar is not None
+            and isnan(other._Hbar)
+            and isnan(self._Hbar)
+        ):
+            pass
+        elif other._Hbar != self._Hbar:
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._Hbar) + ", other=" + str(other._Hbar) + ")"
+                )
+                diff_list.append(name + ".Hbar" + val_str)
+            else:
+                diff_list.append(name + ".Hbar")
+        if (
+            other._Wbar is not None
+            and self._Wbar is not None
+            and isnan(other._Wbar)
+            and isnan(self._Wbar)
+        ):
+            pass
+        elif other._Wbar != self._Wbar:
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._Wbar) + ", other=" + str(other._Wbar) + ")"
+                )
+                diff_list.append(name + ".Wbar" + val_str)
+            else:
+                diff_list.append(name + ".Wbar")
+        if (
+            other._Wins is not None
+            and self._Wins is not None
+            and isnan(other._Wins)
+            and isnan(self._Wins)
+        ):
+            pass
+        elif other._Wins != self._Wins:
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._Wins) + ", other=" + str(other._Wins) + ")"
+                )
+                diff_list.append(name + ".Wins" + val_str)
+            else:
+                diff_list.append(name + ".Wins")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -327,6 +370,31 @@ class CondType21(Conductor):
         # Overwrite the mother class name
         CondType21_dict["__class__"] = "CondType21"
         return CondType21_dict
+
+    def copy(self):
+        """Creates a deepcopy of the object"""
+
+        # Handle deepcopy of all the properties
+        Hbar_val = self.Hbar
+        Wbar_val = self.Wbar
+        Wins_val = self.Wins
+        if self.cond_mat is None:
+            cond_mat_val = None
+        else:
+            cond_mat_val = self.cond_mat.copy()
+        if self.ins_mat is None:
+            ins_mat_val = None
+        else:
+            ins_mat_val = self.ins_mat.copy()
+        # Creates new object of the same type with the copied properties
+        obj_copy = type(self)(
+            Hbar=Hbar_val,
+            Wbar=Wbar_val,
+            Wins=Wins_val,
+            cond_mat=cond_mat_val,
+            ins_mat=ins_mat_val,
+        )
+        return obj_copy
 
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""

@@ -10,9 +10,9 @@ from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
-from ..Functions.copy import copy
 from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
+from copy import deepcopy
 from .InputVoltage import InputVoltage
 
 # Import all class method
@@ -27,15 +27,11 @@ try:
 except ImportError as error:
     set_Id_Iq = error
 
-try:
-    from ..Methods.Simulation.InputCurrent.set_OP_from_array import set_OP_from_array
-except ImportError as error:
-    set_OP_from_array = error
-
 
 from ..Classes.ImportMatrixVal import ImportMatrixVal
 from numpy import ndarray
 from numpy import array, array_equal
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 
@@ -67,21 +63,8 @@ class InputCurrent(InputVoltage):
         )
     else:
         set_Id_Iq = set_Id_Iq
-    # cf Methods.Simulation.InputCurrent.set_OP_from_array
-    if isinstance(set_OP_from_array, ImportError):
-        set_OP_from_array = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use InputCurrent method set_OP_from_array: "
-                    + str(set_OP_from_array)
-                )
-            )
-        )
-    else:
-        set_OP_from_array = set_OP_from_array
-    # save and copy methods are available in all object
+    # generic save method is available in all object
     save = save
-    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -224,7 +207,7 @@ class InputCurrent(InputVoltage):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -234,26 +217,49 @@ class InputCurrent(InputVoltage):
         diff_list = list()
 
         # Check the properties inherited from InputVoltage
-        diff_list.extend(super(InputCurrent, self).compare(other, name=name))
+        diff_list.extend(
+            super(InputCurrent, self).compare(
+                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
+            )
+        )
         if (other.Is is None and self.Is is not None) or (
             other.Is is not None and self.Is is None
         ):
             diff_list.append(name + ".Is None mismatch")
         elif self.Is is not None:
-            diff_list.extend(self.Is.compare(other.Is, name=name + ".Is"))
+            diff_list.extend(
+                self.Is.compare(
+                    other.Is,
+                    name=name + ".Is",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
+            )
         if (other.Ir is None and self.Ir is not None) or (
             other.Ir is not None and self.Ir is None
         ):
             diff_list.append(name + ".Ir None mismatch")
         elif self.Ir is not None:
-            diff_list.extend(self.Ir.compare(other.Ir, name=name + ".Ir"))
+            diff_list.extend(
+                self.Ir.compare(
+                    other.Ir,
+                    name=name + ".Ir",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
+            )
         if (other.Is_harm is None and self.Is_harm is not None) or (
             other.Is_harm is not None and self.Is_harm is None
         ):
             diff_list.append(name + ".Is_harm None mismatch")
         elif self.Is_harm is not None:
             diff_list.extend(
-                self.Is_harm.compare(other.Is_harm, name=name + ".Is_harm")
+                self.Is_harm.compare(
+                    other.Is_harm,
+                    name=name + ".Is_harm",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
             )
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
@@ -316,6 +322,72 @@ class InputCurrent(InputVoltage):
         # Overwrite the mother class name
         InputCurrent_dict["__class__"] = "InputCurrent"
         return InputCurrent_dict
+
+    def copy(self):
+        """Creates a deepcopy of the object"""
+
+        # Handle deepcopy of all the properties
+        if self.Is is None:
+            Is_val = None
+        else:
+            Is_val = self.Is.copy()
+        if self.Ir is None:
+            Ir_val = None
+        else:
+            Ir_val = self.Ir.copy()
+        if self.Is_harm is None:
+            Is_harm_val = None
+        else:
+            Is_harm_val = self.Is_harm.copy()
+        rot_dir_val = self.rot_dir
+        angle_rotor_initial_val = self.angle_rotor_initial
+        if self.PWM is None:
+            PWM_val = None
+        else:
+            PWM_val = self.PWM.copy()
+        phase_dir_val = self.phase_dir
+        current_dir_val = self.current_dir
+        is_periodicity_t_val = self.is_periodicity_t
+        is_periodicity_a_val = self.is_periodicity_a
+        is_generator_val = self.is_generator
+        if self.time is None:
+            time_val = None
+        else:
+            time_val = self.time.copy()
+        if self.angle is None:
+            angle_val = None
+        else:
+            angle_val = self.angle.copy()
+        Nt_tot_val = self.Nt_tot
+        Nrev_val = self.Nrev
+        Na_tot_val = self.Na_tot
+        if self.OP is None:
+            OP_val = None
+        else:
+            OP_val = self.OP.copy()
+        t_final_val = self.t_final
+        # Creates new object of the same type with the copied properties
+        obj_copy = type(self)(
+            Is=Is_val,
+            Ir=Ir_val,
+            Is_harm=Is_harm_val,
+            rot_dir=rot_dir_val,
+            angle_rotor_initial=angle_rotor_initial_val,
+            PWM=PWM_val,
+            phase_dir=phase_dir_val,
+            current_dir=current_dir_val,
+            is_periodicity_t=is_periodicity_t_val,
+            is_periodicity_a=is_periodicity_a_val,
+            is_generator=is_generator_val,
+            time=time_val,
+            angle=angle_val,
+            Nt_tot=Nt_tot_val,
+            Nrev=Nrev_val,
+            Na_tot=Na_tot_val,
+            OP=OP_val,
+            t_final=t_final_val,
+        )
+        return obj_copy
 
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""

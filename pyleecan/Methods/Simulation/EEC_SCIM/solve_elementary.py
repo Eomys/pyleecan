@@ -42,15 +42,16 @@ def solve_elementary(self):
     # total impedance
     Ztot = Z1 + 1 / (1 / Zmf + 1 / Z2)
 
-    if self.OP.U0_ref is not None:  # Voltage driven
-        UPhi0_ref = 0 if self.OP.UPhi0_ref is None else self.OP.UPhi0_ref
-        U1 = self.OP.U0_ref * exp(1j * UPhi0_ref)
+    U_dict, I_dict = self.OP.get_U0_UPhi0(), self.OP.get_I0_Phi0()
+    if U_dict["U0"] is not None:  # Voltage driven
+        UPhi0_ref = 0 if U_dict["UPhi0"] is None else U_dict["UPhi0"]
+        U1 = U_dict["U0"] * exp(1j * UPhi0_ref)
         I1 = (U1 + 1j * 0) / Ztot
         E = U1 - Z1 * I1
         Im = E / Zm
-    elif self.OP.I0_ref is not None:  # Current driven
-        IPhi0_ref = 0 if self.OP.IPhi0_ref is None else self.OP.IPhi0_ref
-        I1 = self.OP.I0_ref * exp(1j * IPhi0_ref)
+    elif I_dict["I0"] is not None:  # Current driven
+        IPhi0_ref = 0 if I_dict["Phi0"] is None else I_dict["Phi0"]
+        I1 = I_dict["I0"] * exp(1j * IPhi0_ref)
         Im = I1 / (1 + Zm / Z2 + Zm / self.Rfe)
         E = Zm * Im
         U1 = E + Z1 * I1

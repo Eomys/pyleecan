@@ -10,9 +10,9 @@ from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
-from ..Functions.copy import copy
 from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
+from copy import deepcopy
 from ._frozen import FrozenClass
 
 # Import all class method
@@ -22,7 +22,13 @@ try:
 except ImportError as error:
     get_machine_from_parent = error
 
+try:
+    from ..Methods.Simulation.OP.get_OP_array import get_OP_array
+except ImportError as error:
+    get_OP_array = error
 
+
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 
@@ -31,6 +37,7 @@ class OP(FrozenClass):
 
     VERSION = 1
 
+    # Check ImportError to remove unnecessary dependencies in unused method
     # cf Methods.Simulation.OP.get_machine_from_parent
     if isinstance(get_machine_from_parent, ImportError):
         get_machine_from_parent = property(
@@ -43,9 +50,17 @@ class OP(FrozenClass):
         )
     else:
         get_machine_from_parent = get_machine_from_parent
-    # save and copy methods are available in all object
+    # cf Methods.Simulation.OP.get_OP_array
+    if isinstance(get_OP_array, ImportError):
+        get_OP_array = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use OP method get_OP_array: " + str(get_OP_array))
+            )
+        )
+    else:
+        get_OP_array = get_OP_array
+    # generic save method is available in all object
     save = save
-    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -134,7 +149,7 @@ class OP(FrozenClass):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -142,18 +157,110 @@ class OP(FrozenClass):
         if type(other) != type(self):
             return ["type(" + name + ")"]
         diff_list = list()
-        if other._N0 != self._N0:
-            diff_list.append(name + ".N0")
-        if other._felec != self._felec:
-            diff_list.append(name + ".felec")
-        if other._Tem_av_ref != self._Tem_av_ref:
-            diff_list.append(name + ".Tem_av_ref")
-        if other._Pem_av_ref != self._Pem_av_ref:
-            diff_list.append(name + ".Pem_av_ref")
-        if other._Pem_av_in != self._Pem_av_in:
-            diff_list.append(name + ".Pem_av_in")
-        if other._efficiency != self._efficiency:
-            diff_list.append(name + ".efficiency")
+        if (
+            other._N0 is not None
+            and self._N0 is not None
+            and isnan(other._N0)
+            and isnan(self._N0)
+        ):
+            pass
+        elif other._N0 != self._N0:
+            if is_add_value:
+                val_str = " (self=" + str(self._N0) + ", other=" + str(other._N0) + ")"
+                diff_list.append(name + ".N0" + val_str)
+            else:
+                diff_list.append(name + ".N0")
+        if (
+            other._felec is not None
+            and self._felec is not None
+            and isnan(other._felec)
+            and isnan(self._felec)
+        ):
+            pass
+        elif other._felec != self._felec:
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._felec) + ", other=" + str(other._felec) + ")"
+                )
+                diff_list.append(name + ".felec" + val_str)
+            else:
+                diff_list.append(name + ".felec")
+        if (
+            other._Tem_av_ref is not None
+            and self._Tem_av_ref is not None
+            and isnan(other._Tem_av_ref)
+            and isnan(self._Tem_av_ref)
+        ):
+            pass
+        elif other._Tem_av_ref != self._Tem_av_ref:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._Tem_av_ref)
+                    + ", other="
+                    + str(other._Tem_av_ref)
+                    + ")"
+                )
+                diff_list.append(name + ".Tem_av_ref" + val_str)
+            else:
+                diff_list.append(name + ".Tem_av_ref")
+        if (
+            other._Pem_av_ref is not None
+            and self._Pem_av_ref is not None
+            and isnan(other._Pem_av_ref)
+            and isnan(self._Pem_av_ref)
+        ):
+            pass
+        elif other._Pem_av_ref != self._Pem_av_ref:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._Pem_av_ref)
+                    + ", other="
+                    + str(other._Pem_av_ref)
+                    + ")"
+                )
+                diff_list.append(name + ".Pem_av_ref" + val_str)
+            else:
+                diff_list.append(name + ".Pem_av_ref")
+        if (
+            other._Pem_av_in is not None
+            and self._Pem_av_in is not None
+            and isnan(other._Pem_av_in)
+            and isnan(self._Pem_av_in)
+        ):
+            pass
+        elif other._Pem_av_in != self._Pem_av_in:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._Pem_av_in)
+                    + ", other="
+                    + str(other._Pem_av_in)
+                    + ")"
+                )
+                diff_list.append(name + ".Pem_av_in" + val_str)
+            else:
+                diff_list.append(name + ".Pem_av_in")
+        if (
+            other._efficiency is not None
+            and self._efficiency is not None
+            and isnan(other._efficiency)
+            and isnan(self._efficiency)
+        ):
+            pass
+        elif other._efficiency != self._efficiency:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._efficiency)
+                    + ", other="
+                    + str(other._efficiency)
+                    + ")"
+                )
+                diff_list.append(name + ".efficiency" + val_str)
+            else:
+                diff_list.append(name + ".efficiency")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -191,6 +298,27 @@ class OP(FrozenClass):
         # The class name is added to the dict for deserialisation purpose
         OP_dict["__class__"] = "OP"
         return OP_dict
+
+    def copy(self):
+        """Creates a deepcopy of the object"""
+
+        # Handle deepcopy of all the properties
+        N0_val = self.N0
+        felec_val = self.felec
+        Tem_av_ref_val = self.Tem_av_ref
+        Pem_av_ref_val = self.Pem_av_ref
+        Pem_av_in_val = self.Pem_av_in
+        efficiency_val = self.efficiency
+        # Creates new object of the same type with the copied properties
+        obj_copy = type(self)(
+            N0=N0_val,
+            felec=felec_val,
+            Tem_av_ref=Tem_av_ref_val,
+            Pem_av_ref=Pem_av_ref_val,
+            Pem_av_in=Pem_av_in_val,
+            efficiency=efficiency_val,
+        )
+        return obj_copy
 
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""

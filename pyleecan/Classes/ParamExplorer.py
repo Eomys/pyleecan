@@ -10,9 +10,9 @@ from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
-from ..Functions.copy import copy
 from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
+from copy import deepcopy
 from ._frozen import FrozenClass
 
 # Import all class method
@@ -38,6 +38,7 @@ from os.path import isfile
 from ._check import CheckTypeError
 import numpy as np
 import random
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 
@@ -78,9 +79,8 @@ class ParamExplorer(FrozenClass):
         )
     else:
         get_desc = get_desc
-    # save and copy methods are available in all object
+    # generic save method is available in all object
     save = save
-    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -174,7 +174,7 @@ class ParamExplorer(FrozenClass):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -183,11 +183,33 @@ class ParamExplorer(FrozenClass):
             return ["type(" + name + ")"]
         diff_list = list()
         if other._name != self._name:
-            diff_list.append(name + ".name")
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._name) + ", other=" + str(other._name) + ")"
+                )
+                diff_list.append(name + ".name" + val_str)
+            else:
+                diff_list.append(name + ".name")
         if other._symbol != self._symbol:
-            diff_list.append(name + ".symbol")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._symbol)
+                    + ", other="
+                    + str(other._symbol)
+                    + ")"
+                )
+                diff_list.append(name + ".symbol" + val_str)
+            else:
+                diff_list.append(name + ".symbol")
         if other._unit != self._unit:
-            diff_list.append(name + ".unit")
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._unit) + ", other=" + str(other._unit) + ")"
+                )
+                diff_list.append(name + ".unit" + val_str)
+            else:
+                diff_list.append(name + ".unit")
         if other._setter_str != self._setter_str:
             diff_list.append(name + ".setter")
         if other._getter_str != self._getter_str:
@@ -224,7 +246,7 @@ class ParamExplorer(FrozenClass):
         ParamExplorer_dict["unit"] = self.unit
         if self._setter_str is not None:
             ParamExplorer_dict["setter"] = self._setter_str
-        elif "keep_function" in kwargs and kwargs["keep_function"]:
+        elif keep_function:
             ParamExplorer_dict["setter"] = self.setter
         else:
             ParamExplorer_dict["setter"] = None
@@ -236,7 +258,7 @@ class ParamExplorer(FrozenClass):
                 )
         if self._getter_str is not None:
             ParamExplorer_dict["getter"] = self._getter_str
-        elif "keep_function" in kwargs and kwargs["keep_function"]:
+        elif keep_function:
             ParamExplorer_dict["getter"] = self.getter
         else:
             ParamExplorer_dict["getter"] = None
@@ -249,6 +271,31 @@ class ParamExplorer(FrozenClass):
         # The class name is added to the dict for deserialisation purpose
         ParamExplorer_dict["__class__"] = "ParamExplorer"
         return ParamExplorer_dict
+
+    def copy(self):
+        """Creates a deepcopy of the object"""
+
+        # Handle deepcopy of all the properties
+        name_val = self.name
+        symbol_val = self.symbol
+        unit_val = self.unit
+        if self._setter_str is not None:
+            setter_val = self._setter_str
+        else:
+            setter_val = self._setter_func
+        if self._getter_str is not None:
+            getter_val = self._getter_str
+        else:
+            getter_val = self._getter_func
+        # Creates new object of the same type with the copied properties
+        obj_copy = type(self)(
+            name=name_val,
+            symbol=symbol_val,
+            unit=unit_val,
+            setter=setter_val,
+            getter=getter_val,
+        )
+        return obj_copy
 
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""

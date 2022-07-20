@@ -10,9 +10,9 @@ from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
-from ..Functions.copy import copy
 from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
+from copy import deepcopy
 from .ParamExplorer import ParamExplorer
 
 # Import all class method
@@ -43,6 +43,7 @@ from os.path import isfile
 from ._check import CheckTypeError
 import numpy as np
 import random
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 
@@ -97,9 +98,8 @@ class ParamExplorerInterval(ParamExplorer):
         )
     else:
         get_N = get_N
-    # save and copy methods are available in all object
+    # generic save method is available in all object
     save = save
-    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -202,7 +202,7 @@ class ParamExplorerInterval(ParamExplorer):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -212,17 +212,79 @@ class ParamExplorerInterval(ParamExplorer):
         diff_list = list()
 
         # Check the properties inherited from ParamExplorer
-        diff_list.extend(super(ParamExplorerInterval, self).compare(other, name=name))
-        if other._min_value != self._min_value:
-            diff_list.append(name + ".min_value")
-        if other._max_value != self._max_value:
-            diff_list.append(name + ".max_value")
+        diff_list.extend(
+            super(ParamExplorerInterval, self).compare(
+                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
+            )
+        )
+        if (
+            other._min_value is not None
+            and self._min_value is not None
+            and isnan(other._min_value)
+            and isnan(self._min_value)
+        ):
+            pass
+        elif other._min_value != self._min_value:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._min_value)
+                    + ", other="
+                    + str(other._min_value)
+                    + ")"
+                )
+                diff_list.append(name + ".min_value" + val_str)
+            else:
+                diff_list.append(name + ".min_value")
+        if (
+            other._max_value is not None
+            and self._max_value is not None
+            and isnan(other._max_value)
+            and isnan(self._max_value)
+        ):
+            pass
+        elif other._max_value != self._max_value:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._max_value)
+                    + ", other="
+                    + str(other._max_value)
+                    + ")"
+                )
+                diff_list.append(name + ".max_value" + val_str)
+            else:
+                diff_list.append(name + ".max_value")
         if other._N != self._N:
-            diff_list.append(name + ".N")
+            if is_add_value:
+                val_str = " (self=" + str(self._N) + ", other=" + str(other._N) + ")"
+                diff_list.append(name + ".N" + val_str)
+            else:
+                diff_list.append(name + ".N")
         if other._type_value_gen != self._type_value_gen:
-            diff_list.append(name + ".type_value_gen")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._type_value_gen)
+                    + ", other="
+                    + str(other._type_value_gen)
+                    + ")"
+                )
+                diff_list.append(name + ".type_value_gen" + val_str)
+            else:
+                diff_list.append(name + ".type_value_gen")
         if other._type_value != self._type_value:
-            diff_list.append(name + ".type_value")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._type_value)
+                    + ", other="
+                    + str(other._type_value)
+                    + ")"
+                )
+                diff_list.append(name + ".type_value" + val_str)
+            else:
+                diff_list.append(name + ".type_value")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -267,6 +329,41 @@ class ParamExplorerInterval(ParamExplorer):
         # Overwrite the mother class name
         ParamExplorerInterval_dict["__class__"] = "ParamExplorerInterval"
         return ParamExplorerInterval_dict
+
+    def copy(self):
+        """Creates a deepcopy of the object"""
+
+        # Handle deepcopy of all the properties
+        min_value_val = self.min_value
+        max_value_val = self.max_value
+        N_val = self.N
+        type_value_gen_val = self.type_value_gen
+        type_value_val = self.type_value
+        name_val = self.name
+        symbol_val = self.symbol
+        unit_val = self.unit
+        if self._setter_str is not None:
+            setter_val = self._setter_str
+        else:
+            setter_val = self._setter_func
+        if self._getter_str is not None:
+            getter_val = self._getter_str
+        else:
+            getter_val = self._getter_func
+        # Creates new object of the same type with the copied properties
+        obj_copy = type(self)(
+            min_value=min_value_val,
+            max_value=max_value_val,
+            N=N_val,
+            type_value_gen=type_value_gen_val,
+            type_value=type_value_val,
+            name=name_val,
+            symbol=symbol_val,
+            unit=unit_val,
+            setter=setter_val,
+            getter=getter_val,
+        )
+        return obj_copy
 
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""

@@ -10,11 +10,12 @@ from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
-from ..Functions.copy import copy
 from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
+from copy import deepcopy
 from ._frozen import FrozenClass
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 
@@ -23,9 +24,8 @@ class ModelBH_exponential(FrozenClass):
 
     VERSION = 1
 
-    # save and copy methods are available in all object
+    # generic save method is available in all object
     save = save
-    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -82,7 +82,7 @@ class ModelBH_exponential(FrozenClass):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -90,10 +90,34 @@ class ModelBH_exponential(FrozenClass):
         if type(other) != type(self):
             return ["type(" + name + ")"]
         diff_list = list()
-        if other._Bs != self._Bs:
-            diff_list.append(name + ".Bs")
-        if other._mu_a != self._mu_a:
-            diff_list.append(name + ".mu_a")
+        if (
+            other._Bs is not None
+            and self._Bs is not None
+            and isnan(other._Bs)
+            and isnan(self._Bs)
+        ):
+            pass
+        elif other._Bs != self._Bs:
+            if is_add_value:
+                val_str = " (self=" + str(self._Bs) + ", other=" + str(other._Bs) + ")"
+                diff_list.append(name + ".Bs" + val_str)
+            else:
+                diff_list.append(name + ".Bs")
+        if (
+            other._mu_a is not None
+            and self._mu_a is not None
+            and isnan(other._mu_a)
+            and isnan(self._mu_a)
+        ):
+            pass
+        elif other._mu_a != self._mu_a:
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._mu_a) + ", other=" + str(other._mu_a) + ")"
+                )
+                diff_list.append(name + ".mu_a" + val_str)
+            else:
+                diff_list.append(name + ".mu_a")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -123,6 +147,16 @@ class ModelBH_exponential(FrozenClass):
         # The class name is added to the dict for deserialisation purpose
         ModelBH_exponential_dict["__class__"] = "ModelBH_exponential"
         return ModelBH_exponential_dict
+
+    def copy(self):
+        """Creates a deepcopy of the object"""
+
+        # Handle deepcopy of all the properties
+        Bs_val = self.Bs
+        mu_a_val = self.mu_a
+        # Creates new object of the same type with the copied properties
+        obj_copy = type(self)(Bs=Bs_val, mu_a=mu_a_val)
+        return obj_copy
 
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""

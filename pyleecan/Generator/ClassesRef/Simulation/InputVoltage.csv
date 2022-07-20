@@ -1,7 +1,7 @@
 Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
 rot_dir,-,"Rotation direction of the rotor (rot_dir*N0, default value given by ROT_DIR_REF)",,int,None,-1,1,,Simulation,Input,gen_input,VERSION,1,Input to start the electrical module with voltage input
-angle_rotor_initial,,Initial angular position of the rotor at t=0,,float,0,,,,,,set_OP_from_array,,,
-PWM,,Object to generate PWM signal,,ImportGenPWM,None,,,,,,set_Ud_Uq,,,
+angle_rotor_initial,,Initial angular position of the rotor at t=0,,float,0,,,,,,set_Ud_Uq,,,
+PWM,,Object to generate PWM signal,,ImportGenPWM,None,,,,,,,,,
 phase_dir,,"Rotation direction of the stator phase (phase_dir*(n-1)*pi/qs, default value given by PHASE_DIR_REF)",0,int,None,-1,1,,,,,,,
 current_dir,-,"Rotation direction of the stator currents (current_dir*2*pi*felec*time, default value given by CURRENT_DIR_REF)",0,int,None,-1,1,,,,,,,
 is_periodicity_t,-,True to compute voltage/currents only on one time periodicity (use periodicities defined in axes_dict[time]),0,bool,0,,,,,,,,,

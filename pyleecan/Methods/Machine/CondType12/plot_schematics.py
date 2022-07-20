@@ -1,10 +1,5 @@
 import matplotlib.pyplot as plt
-from numpy import pi, exp
-
-from ....Classes.Arc1 import Arc1
-from ....Classes.LamSlot import LamSlot
 from ....Classes.Segment import Segment
-from ....definitions import config_dict
 from ....Functions.Plot import (
     ARROW_COLOR,
     ARROW_WIDTH,
@@ -28,6 +23,8 @@ def plot_schematics(
     is_add_main_line=True,
     save_path=None,
     is_show_fig=True,
+    fig=None,
+    ax=None,
 ):
     """Plot the schematics of the slot
 
@@ -45,6 +42,17 @@ def plot_schematics(
         full path including folder, name and extension of the file to save if save_path is not None
     is_show_fig : bool
         To call show at the end of the method
+    fig : Matplotlib.figure.Figure
+        existing figure to use if None create a new one
+    ax : Matplotlib.axes.Axes object
+        Axis on which to plot the data
+
+    Returns
+    -------
+    fig : Matplotlib.figure.Figure
+        Figure containing the plot
+    ax : Matplotlib.axes.Axes object
+        Axis containing the plot
     """
 
     # Use some default parameter
@@ -56,12 +64,12 @@ def plot_schematics(
             is_add_main_line=is_add_main_line,
             save_path=save_path,
             is_show_fig=is_show_fig,
+            fig=fig,
+            ax=ax,
         )
     else:
         # Getting the main plot
-        self.plot(is_show_fig=False)  # center slot on Ox axis
-        fig = plt.gcf()
-        ax = plt.gca()
+        fig, ax = self.plot(is_show_fig=False, fig=fig, ax=ax)  # center slot on Ox axis
         a = self.Wwire / 2 + self.Wins_wire
 
         # Adding schematics
@@ -117,7 +125,7 @@ def plot_schematics(
         # Zooming and cleaning
         W = self.comp_width() * 1.05
 
-        plt.axis("equal")
+        ax.axis("equal")
         ax.set_xlim(-W / 2, W / 2)
         ax.set_ylim(-W / 2, W / 2)
         manager = plt.get_current_fig_manager()
@@ -130,7 +138,8 @@ def plot_schematics(
         # Save / Show
         if save_path is not None:
             fig.savefig(save_path)
-            plt.close()
+            plt.close(fig=fig)
 
         if is_show_fig:
             fig.show()
+        return fig, ax

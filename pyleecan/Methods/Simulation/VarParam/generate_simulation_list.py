@@ -47,14 +47,14 @@ def generate_simulation_list(self, ref_simu=None):
     # Cartesian product to generate every simulation
     for simu_param_values in itertools.product(*params_value_list):
         # Generate the simulation
-        new_simu = ref_simu.copy(keep_function=True)
+        new_simu = ref_simu.copy()
 
         # Edit it using setter
         for setter, value, symbol in zip(
             setter_list, simu_param_values, params_symbol_list
         ):
-            setter(new_simu, value)
             params_value_dict[symbol].append(value)
+            setter(new_simu, value)
 
         # Add the simulation
         multisim_dict["simulation_list"].append(new_simu)
@@ -67,7 +67,7 @@ def generate_simulation_list(self, ref_simu=None):
     # Create ParamExplorerSet to be stored in XOutput
     for param_explorer in self.paramexplorer_list:
         multisim_dict["paramexplorer_list"].append(
-            ParamExplorerSet(init_dict=param_explorer.as_dict())
+            ParamExplorerSet(init_dict=param_explorer.as_dict(keep_function=True))
         )
         multisim_dict["paramexplorer_list"][-1].value = params_value_dict[
             param_explorer.symbol

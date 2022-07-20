@@ -27,6 +27,8 @@ def _set_getter(self, value):
             # path like "<PARAM_DIR>/setter_rotor.py"
             self._getter_str = value
             value = abs_file_path(value)
+        else:  # Direct path
+            self._getter_str = value
         f = open(value, "r", encoding=PYTHON_DEFAULT_ENCODING)
         exec(f.read(), globals())
         f.close()

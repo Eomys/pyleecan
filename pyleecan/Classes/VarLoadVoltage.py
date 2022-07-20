@@ -7,12 +7,12 @@
 from os import linesep
 from sys import getsizeof
 from logging import getLogger
-from ._check import set_array, check_var, raise_
+from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
-from ..Functions.copy import copy
 from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
+from copy import deepcopy
 from .VarLoad import VarLoad
 
 # Import all class method
@@ -37,7 +37,7 @@ except ImportError as error:
     get_input_list = error
 
 
-from numpy import array, array_equal
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 
@@ -83,17 +83,14 @@ class VarLoadVoltage(VarLoad):
         )
     else:
         get_input_list = get_input_list
-    # save and copy methods are available in all object
+    # generic save method is available in all object
     save = save
-    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
     def __init__(
         self,
         OP_matrix=None,
-        type_OP_matrix=0,
-        is_output_power=True,
         name="",
         desc="",
         datakeeper_list=-1,
@@ -126,10 +123,6 @@ class VarLoadVoltage(VarLoad):
             # Overwrite default value with init_dict content
             if "OP_matrix" in list(init_dict.keys()):
                 OP_matrix = init_dict["OP_matrix"]
-            if "type_OP_matrix" in list(init_dict.keys()):
-                type_OP_matrix = init_dict["type_OP_matrix"]
-            if "is_output_power" in list(init_dict.keys()):
-                is_output_power = init_dict["is_output_power"]
             if "name" in list(init_dict.keys()):
                 name = init_dict["name"]
             if "desc" in list(init_dict.keys()):
@@ -158,8 +151,6 @@ class VarLoadVoltage(VarLoad):
         # Call VarLoad init
         super(VarLoadVoltage, self).__init__(
             OP_matrix=OP_matrix,
-            type_OP_matrix=type_OP_matrix,
-            is_output_power=is_output_power,
             name=name,
             desc=desc,
             datakeeper_list=datakeeper_list,
@@ -195,7 +186,7 @@ class VarLoadVoltage(VarLoad):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -205,7 +196,11 @@ class VarLoadVoltage(VarLoad):
         diff_list = list()
 
         # Check the properties inherited from VarLoad
-        diff_list.extend(super(VarLoadVoltage, self).compare(other, name=name))
+        diff_list.extend(
+            super(VarLoadVoltage, self).compare(
+                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
+            )
+        )
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -240,6 +235,67 @@ class VarLoadVoltage(VarLoad):
         # Overwrite the mother class name
         VarLoadVoltage_dict["__class__"] = "VarLoadVoltage"
         return VarLoadVoltage_dict
+
+    def copy(self):
+        """Creates a deepcopy of the object"""
+
+        # Handle deepcopy of all the properties
+        if self.OP_matrix is None:
+            OP_matrix_val = None
+        else:
+            OP_matrix_val = self.OP_matrix.copy()
+        name_val = self.name
+        desc_val = self.desc
+        if self.datakeeper_list is None:
+            datakeeper_list_val = None
+        else:
+            datakeeper_list_val = list()
+            for obj in self.datakeeper_list:
+                datakeeper_list_val.append(obj.copy())
+        is_keep_all_output_val = self.is_keep_all_output
+        stop_if_error_val = self.stop_if_error
+        if self.var_simu is None:
+            var_simu_val = None
+        else:
+            var_simu_val = self.var_simu.copy()
+        nb_simu_val = self.nb_simu
+        is_reuse_femm_file_val = self.is_reuse_femm_file
+        if self.postproc_list is None:
+            postproc_list_val = None
+        else:
+            postproc_list_val = list()
+            for obj in self.postproc_list:
+                postproc_list_val.append(obj.copy())
+        if self.pre_keeper_postproc_list is None:
+            pre_keeper_postproc_list_val = None
+        else:
+            pre_keeper_postproc_list_val = list()
+            for obj in self.pre_keeper_postproc_list:
+                pre_keeper_postproc_list_val.append(obj.copy())
+        if self.post_keeper_postproc_list is None:
+            post_keeper_postproc_list_val = None
+        else:
+            post_keeper_postproc_list_val = list()
+            for obj in self.post_keeper_postproc_list:
+                post_keeper_postproc_list_val.append(obj.copy())
+        is_reuse_LUT_val = self.is_reuse_LUT
+        # Creates new object of the same type with the copied properties
+        obj_copy = type(self)(
+            OP_matrix=OP_matrix_val,
+            name=name_val,
+            desc=desc_val,
+            datakeeper_list=datakeeper_list_val,
+            is_keep_all_output=is_keep_all_output_val,
+            stop_if_error=stop_if_error_val,
+            var_simu=var_simu_val,
+            nb_simu=nb_simu_val,
+            is_reuse_femm_file=is_reuse_femm_file_val,
+            postproc_list=postproc_list_val,
+            pre_keeper_postproc_list=pre_keeper_postproc_list_val,
+            post_keeper_postproc_list=post_keeper_postproc_list_val,
+            is_reuse_LUT=is_reuse_LUT_val,
+        )
+        return obj_copy
 
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""

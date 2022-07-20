@@ -10,9 +10,9 @@ from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
-from ..Functions.copy import copy
 from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
+from copy import deepcopy
 from .OptiGenAlg import OptiGenAlg
 
 # Import all class method
@@ -60,6 +60,7 @@ from os.path import isfile
 from ._check import CheckTypeError
 import numpy as np
 import random
+from numpy import isnan
 from cloudpickle import dumps, loads
 from ._check import CheckTypeError
 
@@ -153,9 +154,8 @@ class OptiGenAlgNsga2Deap(OptiGenAlg):
         )
     else:
         plot_pareto = plot_pareto
-    # save and copy methods are available in all object
+    # generic save method is available in all object
     save = save
-    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -256,7 +256,7 @@ class OptiGenAlgNsga2Deap(OptiGenAlg):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -266,7 +266,11 @@ class OptiGenAlgNsga2Deap(OptiGenAlg):
         diff_list = list()
 
         # Check the properties inherited from OptiGenAlg
-        diff_list.extend(super(OptiGenAlgNsga2Deap, self).compare(other, name=name))
+        diff_list.extend(
+            super(OptiGenAlgNsga2Deap, self).compare(
+                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
+            )
+        )
         if (other.toolbox is None and self.toolbox is not None) or (
             other.toolbox is not None and self.toolbox is None
         ):
@@ -318,6 +322,57 @@ class OptiGenAlgNsga2Deap(OptiGenAlg):
         # Overwrite the mother class name
         OptiGenAlgNsga2Deap_dict["__class__"] = "OptiGenAlgNsga2Deap"
         return OptiGenAlgNsga2Deap_dict
+
+    def copy(self):
+        """Creates a deepcopy of the object"""
+
+        # Handle deepcopy of all the properties
+        if self.toolbox is None:
+            toolbox_val = None
+        else:
+            toolbox_val = self.toolbox.copy()
+        if self._selector_str is not None:
+            selector_val = self._selector_str
+        else:
+            selector_val = self._selector_func
+        if self._crossover_str is not None:
+            crossover_val = self._crossover_str
+        else:
+            crossover_val = self._crossover_func
+        if self._mutator_str is not None:
+            mutator_val = self._mutator_str
+        else:
+            mutator_val = self._mutator_func
+        p_cross_val = self.p_cross
+        p_mutate_val = self.p_mutate
+        size_pop_val = self.size_pop
+        nb_gen_val = self.nb_gen
+        if self.problem is None:
+            problem_val = None
+        else:
+            problem_val = self.problem.copy()
+        if self.xoutput is None:
+            xoutput_val = None
+        else:
+            xoutput_val = self.xoutput.copy()
+        logger_name_val = self.logger_name
+        is_keep_all_output_val = self.is_keep_all_output
+        # Creates new object of the same type with the copied properties
+        obj_copy = type(self)(
+            toolbox=toolbox_val,
+            selector=selector_val,
+            crossover=crossover_val,
+            mutator=mutator_val,
+            p_cross=p_cross_val,
+            p_mutate=p_mutate_val,
+            size_pop=size_pop_val,
+            nb_gen=nb_gen_val,
+            problem=problem_val,
+            xoutput=xoutput_val,
+            logger_name=logger_name_val,
+            is_keep_all_output=is_keep_all_output_val,
+        )
+        return obj_copy
 
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""

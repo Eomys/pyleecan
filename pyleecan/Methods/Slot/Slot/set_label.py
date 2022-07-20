@@ -2,7 +2,7 @@ from ....Functions.labels import WIND_LAB
 
 
 def set_label(self, surf_list, Nrad, Ntan, lam_label):
-    """Set the normalized label on the winding surface
+    """Set the normalized label on the active surface
     (internal method of build_geometry_active)
 
     Parameters

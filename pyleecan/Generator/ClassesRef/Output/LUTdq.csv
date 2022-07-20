@@ -1,9 +1,10 @@
 Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constante Name,Constante Value,Description classe,Classe fille
-Phi_dqh_mean,Wbrms,RMS stator winding flux table in dqh frame (including magnets and currents given by I_dqh),"(N_dq, 3)",ndarray,None,,,,Output,LUT,get_L_dqh,VERSION,1,Look Up Table class for dq OP matrix,
-Phi_dqh_mag,Wbrms,RMS stator winding flux linkage spectrum in dqh frame including harmonics (only magnets),"(Nharm, 3)",SciDataTool.Classes.DataND.DataND,None,,,,,,get_Lm_dqh,,,,
-,,,,,,,,,,,get_Phi_dqh_mean,,,,
+Phi_dqh_mean,Wbrms,RMS stator winding flux table in dqh frame (including magnets and currents given by I_dqh),"(N_dq, 3)",ndarray,None,,,,Output,LUT,get_index_open_circuit,VERSION,1,Look Up Table class for dq OP matrix,
+Phi_dqh_mag,Wbrms,RMS stator winding flux linkage spectrum in dqh frame including harmonics (only magnets),"(Nharm, 3)",SciDataTool.Classes.DataND.DataND,None,,,,,,get_L_dqh,,,,
+,,,,,,,,,,,get_Lm_dqh,,,,
 ,,,,,,,,,,,get_Phi_dqh_mag,,,,
 ,,,,,,,,,,,get_Phi_dqh_mag_mean,,,,
+,,,,,,,,,,,get_Phi_dqh_mean,,,,
 ,,,,,,,,,,,interp_Phi_dqh,,,,
 ,,,,,,,,,,,interp_Ploss_dqh,,,,
 ,,,,,,,,,,,interp_Tem_rip_dqh,,,,

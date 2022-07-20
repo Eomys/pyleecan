@@ -10,11 +10,12 @@ from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
-from ..Functions.copy import copy
 from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
+from copy import deepcopy
 from ._frozen import FrozenClass
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 
@@ -23,9 +24,8 @@ class Magnet(FrozenClass):
 
     VERSION = 1
 
-    # save and copy methods are available in all object
+    # generic save method is available in all object
     save = save
-    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -104,7 +104,7 @@ class Magnet(FrozenClass):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -118,14 +118,48 @@ class Magnet(FrozenClass):
             diff_list.append(name + ".mat_type None mismatch")
         elif self.mat_type is not None:
             diff_list.extend(
-                self.mat_type.compare(other.mat_type, name=name + ".mat_type")
+                self.mat_type.compare(
+                    other.mat_type,
+                    name=name + ".mat_type",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
             )
         if other._type_magnetization != self._type_magnetization:
-            diff_list.append(name + ".type_magnetization")
-        if other._Lmag != self._Lmag:
-            diff_list.append(name + ".Lmag")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._type_magnetization)
+                    + ", other="
+                    + str(other._type_magnetization)
+                    + ")"
+                )
+                diff_list.append(name + ".type_magnetization" + val_str)
+            else:
+                diff_list.append(name + ".type_magnetization")
+        if (
+            other._Lmag is not None
+            and self._Lmag is not None
+            and isnan(other._Lmag)
+            and isnan(self._Lmag)
+        ):
+            pass
+        elif other._Lmag != self._Lmag:
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._Lmag) + ", other=" + str(other._Lmag) + ")"
+                )
+                diff_list.append(name + ".Lmag" + val_str)
+            else:
+                diff_list.append(name + ".Lmag")
         if other._Nseg != self._Nseg:
-            diff_list.append(name + ".Nseg")
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._Nseg) + ", other=" + str(other._Nseg) + ")"
+                )
+                diff_list.append(name + ".Nseg" + val_str)
+            else:
+                diff_list.append(name + ".Nseg")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -166,6 +200,26 @@ class Magnet(FrozenClass):
         # The class name is added to the dict for deserialisation purpose
         Magnet_dict["__class__"] = "Magnet"
         return Magnet_dict
+
+    def copy(self):
+        """Creates a deepcopy of the object"""
+
+        # Handle deepcopy of all the properties
+        if self.mat_type is None:
+            mat_type_val = None
+        else:
+            mat_type_val = self.mat_type.copy()
+        type_magnetization_val = self.type_magnetization
+        Lmag_val = self.Lmag
+        Nseg_val = self.Nseg
+        # Creates new object of the same type with the copied properties
+        obj_copy = type(self)(
+            mat_type=mat_type_val,
+            type_magnetization=type_magnetization_val,
+            Lmag=Lmag_val,
+            Nseg=Nseg_val,
+        )
+        return obj_copy
 
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""

@@ -1,6 +1,4 @@
-# -*- coding: utf-8 -*-
-
-from numpy import sin, pi
+from numpy import sin
 
 
 def comp_surface(self):

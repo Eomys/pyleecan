@@ -10,9 +10,9 @@ from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
-from ..Functions.copy import copy
 from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
+from copy import deepcopy
 from ._frozen import FrozenClass
 
 # Import all class method
@@ -33,6 +33,7 @@ except ImportError as error:
     comp_AGSF_transfer = error
 
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 
@@ -72,9 +73,8 @@ class Force(FrozenClass):
         )
     else:
         comp_AGSF_transfer = comp_AGSF_transfer
-    # save and copy methods are available in all object
+    # generic save method is available in all object
     save = save
-    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -167,7 +167,7 @@ class Force(FrozenClass):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -176,17 +176,84 @@ class Force(FrozenClass):
             return ["type(" + name + ")"]
         diff_list = list()
         if other._is_periodicity_t != self._is_periodicity_t:
-            diff_list.append(name + ".is_periodicity_t")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._is_periodicity_t)
+                    + ", other="
+                    + str(other._is_periodicity_t)
+                    + ")"
+                )
+                diff_list.append(name + ".is_periodicity_t" + val_str)
+            else:
+                diff_list.append(name + ".is_periodicity_t")
         if other._is_periodicity_a != self._is_periodicity_a:
-            diff_list.append(name + ".is_periodicity_a")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._is_periodicity_a)
+                    + ", other="
+                    + str(other._is_periodicity_a)
+                    + ")"
+                )
+                diff_list.append(name + ".is_periodicity_a" + val_str)
+            else:
+                diff_list.append(name + ".is_periodicity_a")
         if other._is_agsf_transfer != self._is_agsf_transfer:
-            diff_list.append(name + ".is_agsf_transfer")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._is_agsf_transfer)
+                    + ", other="
+                    + str(other._is_agsf_transfer)
+                    + ")"
+                )
+                diff_list.append(name + ".is_agsf_transfer" + val_str)
+            else:
+                diff_list.append(name + ".is_agsf_transfer")
         if other._max_wavenumber_transfer != self._max_wavenumber_transfer:
-            diff_list.append(name + ".max_wavenumber_transfer")
-        if other._Rsbo_enforced_transfer != self._Rsbo_enforced_transfer:
-            diff_list.append(name + ".Rsbo_enforced_transfer")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._max_wavenumber_transfer)
+                    + ", other="
+                    + str(other._max_wavenumber_transfer)
+                    + ")"
+                )
+                diff_list.append(name + ".max_wavenumber_transfer" + val_str)
+            else:
+                diff_list.append(name + ".max_wavenumber_transfer")
+        if (
+            other._Rsbo_enforced_transfer is not None
+            and self._Rsbo_enforced_transfer is not None
+            and isnan(other._Rsbo_enforced_transfer)
+            and isnan(self._Rsbo_enforced_transfer)
+        ):
+            pass
+        elif other._Rsbo_enforced_transfer != self._Rsbo_enforced_transfer:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._Rsbo_enforced_transfer)
+                    + ", other="
+                    + str(other._Rsbo_enforced_transfer)
+                    + ")"
+                )
+                diff_list.append(name + ".Rsbo_enforced_transfer" + val_str)
+            else:
+                diff_list.append(name + ".Rsbo_enforced_transfer")
         if other._logger_name != self._logger_name:
-            diff_list.append(name + ".logger_name")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._logger_name)
+                    + ", other="
+                    + str(other._logger_name)
+                    + ")"
+                )
+                diff_list.append(name + ".logger_name" + val_str)
+            else:
+                diff_list.append(name + ".logger_name")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -224,6 +291,27 @@ class Force(FrozenClass):
         # The class name is added to the dict for deserialisation purpose
         Force_dict["__class__"] = "Force"
         return Force_dict
+
+    def copy(self):
+        """Creates a deepcopy of the object"""
+
+        # Handle deepcopy of all the properties
+        is_periodicity_t_val = self.is_periodicity_t
+        is_periodicity_a_val = self.is_periodicity_a
+        is_agsf_transfer_val = self.is_agsf_transfer
+        max_wavenumber_transfer_val = self.max_wavenumber_transfer
+        Rsbo_enforced_transfer_val = self.Rsbo_enforced_transfer
+        logger_name_val = self.logger_name
+        # Creates new object of the same type with the copied properties
+        obj_copy = type(self)(
+            is_periodicity_t=is_periodicity_t_val,
+            is_periodicity_a=is_periodicity_a_val,
+            is_agsf_transfer=is_agsf_transfer_val,
+            max_wavenumber_transfer=max_wavenumber_transfer_val,
+            Rsbo_enforced_transfer=Rsbo_enforced_transfer_val,
+            logger_name=logger_name_val,
+        )
+        return obj_copy
 
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""

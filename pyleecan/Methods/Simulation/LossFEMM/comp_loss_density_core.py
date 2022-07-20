@@ -3,9 +3,9 @@ from numpy import matmul, abs as np_abs, sum as np_sum, sqrt as np_sqrt
 
 def comp_loss_density_core(self, group, coeff_dict):
     """Calculate loss density in iron core given by group "stator core" or "rotor core"
-    assuming power density is given by (cf. https://www.femm.info/wiki/SPMLoss):
+    assuming power density is given by a Steinmetz model
 
-        Pcore = Ph + Pe = Ch*f*B^2 + Ce*f^2*B^2
+        Pcore = Ph + Pe = k_hy * f^alpha_f * B^alpha_B + k_ed * f^2 * B^2
 
     Parameters
     ----------
@@ -14,7 +14,8 @@ def comp_loss_density_core(self, group, coeff_dict):
     group: str
         Name of part in which to calculate core losses
     coeff_dict: dict
-        Dict containing coefficient A and B to calculate overall losses such as P = A*felec^2 + B*felec + C
+        Dict containing coefficient A, B, C, a, b, c to calculate overall losses
+        such as P = A * felec^a + B * felec^b + C * felec^c
 
     Returns
     -------

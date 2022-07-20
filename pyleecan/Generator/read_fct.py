@@ -15,6 +15,7 @@ TYPE_COL = 4  # type
 DEF_VAL_COL = 5  # default value
 MIN_VAL_COL = 6  # minimum value
 MAX_VAL_COL = 7  # maximum value
+AS_DICT_COL = 8  # To change as_dict/copy behavior
 
 PACK_COL = 9  # package
 HER_COL = 10  # mother class name
@@ -121,6 +122,7 @@ def read_file(file_path, soft_name=PACKAGE_NAME):
                 prop_dict["min"] = class_csv[rx][MIN_VAL_COL].replace(",", ".")
                 prop_dict["max"] = class_csv[rx][MAX_VAL_COL].replace(",", ".")
                 prop_dict["value"] = class_csv[rx][DEF_VAL_COL]
+                prop_dict["as_dict"] = class_csv[rx][AS_DICT_COL]
                 if prop_dict["type"] == "float":
                     prop_dict["value"] = prop_dict["value"].replace(",", ".")
                 if (
@@ -274,6 +276,29 @@ def find_import_type(gen_dict, class_dict, pyleecan_type=[]):
     return pyleecan_type
 
 
+def is_dict_list_pyleecan_type(type_name):
+    """Check if the type is a dict of list of Pyleecan type ({[name]})
+
+    Parameters
+    ----------
+    type_name : str
+        Type of the property
+
+    Returns
+    -------
+    is_dict_list : bool
+        True if the type is a dict of list of pyleecan type
+    """
+    return (
+        type_name not in ["", None]
+        and type_name[0] == "{"
+        and type_name[-1] == "}"
+        and type_name[1] == "["
+        and type_name[-2] == "]"
+        and ("." not in type_name or "SciDataTool" in type_name)
+    )
+
+
 def is_list_pyleecan_type(type_name):
     """Check if the type is a list of Pyleecan type ([name])
 
@@ -289,6 +314,7 @@ def is_list_pyleecan_type(type_name):
     """
     return (
         type_name not in ["", None]
+        and len(type_name) > 2  # No "[]" = List of Unknow type
         and type_name[0] == "["
         and type_name[-1] == "]"
         and type_name != "[ndarray]"
@@ -317,6 +343,22 @@ def is_dict_pyleecan_type(type_name):
         and type_name != "{ndarray}"
         and ("." not in type_name or "SciDataTool" in type_name)
     )
+
+
+def is_list_unknow_type(type_name):
+    """Check if the type is a list of unknow type (Frozen or ndarray or python) "[]"
+
+    Parameters
+    ----------
+    type_name : str
+        Type of the property
+
+    Returns
+    -------
+    is_list : bool
+        True if the type is a list of unknow type
+    """
+    return type_name == "[]"
 
 
 class NotAFile(Exception):

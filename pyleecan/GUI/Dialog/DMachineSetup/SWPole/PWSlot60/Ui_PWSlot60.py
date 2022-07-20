@@ -284,15 +284,15 @@ class Ui_PWSlot60(object):
         self.in_H2.setText(QCoreApplication.translate("PWSlot60", u"H2 :", None))
         self.unit_H2.setText(QCoreApplication.translate("PWSlot60", u"m", None))
         self.in_H3.setText(
-            QCoreApplication.translate("PWSlot60", u"d_coil_pole_top :", None)
+            QCoreApplication.translate("PWSlot60", u"H3 :", None)
         )
         self.unit_H3.setText(QCoreApplication.translate("PWSlot60", u"m", None))
         self.in_H4.setText(
-            QCoreApplication.translate("PWSlot60", u"d_coil_pole_bot :", None)
+            QCoreApplication.translate("PWSlot60", u"H4 :", None)
         )
         self.unit_H4.setText(QCoreApplication.translate("PWSlot60", u"m", None))
         self.in_W3.setText(
-            QCoreApplication.translate("PWSlot60", u"d_coil_pole_edg :", None)
+            QCoreApplication.translate("PWSlot60", u"W3 :", None)
         )
         self.unit_W3.setText(QCoreApplication.translate("PWSlot60", u"m", None))
         self.g_output.setTitle(QCoreApplication.translate("PWSlot60", u"Output", None))

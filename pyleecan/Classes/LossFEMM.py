@@ -10,9 +10,9 @@ from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
-from ..Functions.copy import copy
 from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
+from copy import deepcopy
 from .Loss import Loss
 
 # Import all class method
@@ -54,6 +54,7 @@ except ImportError as error:
     comp_loss_density_magnet = error
 
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 
@@ -126,9 +127,8 @@ class LossFEMM(Loss):
         )
     else:
         comp_loss_density_magnet = comp_loss_density_magnet
-    # save and copy methods are available in all object
+    # generic save method is available in all object
     save = save
-    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -231,7 +231,7 @@ class LossFEMM(Loss):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -241,17 +241,78 @@ class LossFEMM(Loss):
         diff_list = list()
 
         # Check the properties inherited from Loss
-        diff_list.extend(super(LossFEMM, self).compare(other, name=name))
+        diff_list.extend(
+            super(LossFEMM, self).compare(
+                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
+            )
+        )
         if other._is_get_meshsolution != self._is_get_meshsolution:
-            diff_list.append(name + ".is_get_meshsolution")
-        if other._Tsta != self._Tsta:
-            diff_list.append(name + ".Tsta")
-        if other._Trot != self._Trot:
-            diff_list.append(name + ".Trot")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._is_get_meshsolution)
+                    + ", other="
+                    + str(other._is_get_meshsolution)
+                    + ")"
+                )
+                diff_list.append(name + ".is_get_meshsolution" + val_str)
+            else:
+                diff_list.append(name + ".is_get_meshsolution")
+        if (
+            other._Tsta is not None
+            and self._Tsta is not None
+            and isnan(other._Tsta)
+            and isnan(self._Tsta)
+        ):
+            pass
+        elif other._Tsta != self._Tsta:
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._Tsta) + ", other=" + str(other._Tsta) + ")"
+                )
+                diff_list.append(name + ".Tsta" + val_str)
+            else:
+                diff_list.append(name + ".Tsta")
+        if (
+            other._Trot is not None
+            and self._Trot is not None
+            and isnan(other._Trot)
+            and isnan(self._Trot)
+        ):
+            pass
+        elif other._Trot != self._Trot:
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._Trot) + ", other=" + str(other._Trot) + ")"
+                )
+                diff_list.append(name + ".Trot" + val_str)
+            else:
+                diff_list.append(name + ".Trot")
         if other._type_skin_effect != self._type_skin_effect:
-            diff_list.append(name + ".type_skin_effect")
-        if other._Cp != self._Cp:
-            diff_list.append(name + ".Cp")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._type_skin_effect)
+                    + ", other="
+                    + str(other._type_skin_effect)
+                    + ")"
+                )
+                diff_list.append(name + ".type_skin_effect" + val_str)
+            else:
+                diff_list.append(name + ".type_skin_effect")
+        if (
+            other._Cp is not None
+            and self._Cp is not None
+            and isnan(other._Cp)
+            and isnan(self._Cp)
+        ):
+            pass
+        elif other._Cp != self._Cp:
+            if is_add_value:
+                val_str = " (self=" + str(self._Cp) + ", other=" + str(other._Cp) + ")"
+                diff_list.append(name + ".Cp" + val_str)
+            else:
+                diff_list.append(name + ".Cp")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -296,6 +357,46 @@ class LossFEMM(Loss):
         # Overwrite the mother class name
         LossFEMM_dict["__class__"] = "LossFEMM"
         return LossFEMM_dict
+
+    def copy(self):
+        """Creates a deepcopy of the object"""
+
+        # Handle deepcopy of all the properties
+        is_get_meshsolution_val = self.is_get_meshsolution
+        Tsta_val = self.Tsta
+        Trot_val = self.Trot
+        type_skin_effect_val = self.type_skin_effect
+        Cp_val = self.Cp
+        if self.model_index is None:
+            model_index_val = None
+        else:
+            model_index_val = self.model_index.copy()
+        if self.model_list is None:
+            model_list_val = None
+        else:
+            model_list_val = list()
+            for obj in self.model_list:
+                model_list_val.append(obj.copy())
+        logger_name_val = self.logger_name
+        if self.model_dict is None:
+            model_dict_val = None
+        else:
+            model_dict_val = dict()
+            for key, obj in self.model_dict.items():
+                model_dict_val[key] = obj.copy()
+        # Creates new object of the same type with the copied properties
+        obj_copy = type(self)(
+            is_get_meshsolution=is_get_meshsolution_val,
+            Tsta=Tsta_val,
+            Trot=Trot_val,
+            type_skin_effect=type_skin_effect_val,
+            Cp=Cp_val,
+            model_index=model_index_val,
+            model_list=model_list_val,
+            logger_name=logger_name_val,
+            model_dict=model_dict_val,
+        )
+        return obj_copy
 
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""

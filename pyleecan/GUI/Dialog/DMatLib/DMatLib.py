@@ -109,11 +109,11 @@ class DMatLib(Ui_DMatLib, QDialog):
         self.nav_mat.clear()
         for ii, mat in enumerate(material_dict[LIB_KEY]):
             if self.le_search.text() != "" and not match(
-                ".*" + self.le_search.text().lower() + ".*", mat.name.lower()
+                ".*" + self.le_search.text().lower() + ".*", str(mat.name).lower()
             ):
                 continue  # Skip add if not matching filter
             # Add material name as "005 - M400_50A"
-            mat_text = "%03d" % (ii + 1) + " - " + mat.name
+            mat_text = "%03d" % (ii + 1) + " - " + str(mat.name)
             if mat in self.edited_material_list:
                 mat_text += " *"
             self.nav_mat.addItem(mat_text)
@@ -124,12 +124,12 @@ class DMatLib(Ui_DMatLib, QDialog):
         self.nav_mat_mach.clear()
         for ii, mat in enumerate(material_dict[MACH_KEY]):
             if self.le_search.text() != "" and not match(
-                ".*" + self.le_search.text().lower() + ".*", mat.name.lower()
+                ".*" + self.le_search.text().lower() + ".*", str(mat.name).lower()
             ):
                 continue  # Skip add if not matching filter
             # Add material name as "005 - M400_50A"
             mat_text = (
-                "%03d" % (len(material_dict[LIB_KEY]) + ii + 1) + " - " + mat.name
+                "%03d" % (len(material_dict[LIB_KEY]) + ii + 1) + " - " + str(mat.name)
             )
             if mat in self.edited_material_list:
                 mat_text += " *"
@@ -213,7 +213,7 @@ class DMatLib(Ui_DMatLib, QDialog):
 
         mat_ref, key, index = self.get_current_material(is_reference=True)
         mat = mat_ref.copy()
-        getLogger(GUI_LOG_NAME).debug("DMatLib: reverting " + mat.name)
+        getLogger(GUI_LOG_NAME).debug("DMatLib: reverting " + str(mat.name))
         self.material_dict[key][index] = mat
         self.w_setup.set_material(material=mat, is_save_needed=False)
         self.update_material_edit_status()  # Set Material to no longer edited
@@ -229,9 +229,9 @@ class DMatLib(Ui_DMatLib, QDialog):
             except Exception as e:
                 err_msg = (
                     "Error while saving material "
-                    + mat.name
+                    + str(mat.name)
                     + " at "
-                    + mat.path
+                    + str(mat.path)
                     + ":\n"
                     + str(e)
                 )
@@ -245,7 +245,9 @@ class DMatLib(Ui_DMatLib, QDialog):
             getLogger(GUI_LOG_NAME).debug(mat.path + " saved")
 
         # Updating reference
-        getLogger(GUI_LOG_NAME).debug("DMatLib: Updating reference for " + mat.name)
+        getLogger(GUI_LOG_NAME).debug(
+            "DMatLib: Updating reference for " + str(mat.name)
+        )
         self.material_dict_ref[key][index] = mat.copy()
 
         # Update materials in the machine
@@ -298,8 +300,8 @@ class DMatLib(Ui_DMatLib, QDialog):
         if is_copy:
             current_mat, _, _ = self.get_current_material()
             new_mat = current_mat.copy()
-            if "_copy" not in new_mat.name:
-                new_mat.name = new_mat.name + "_copy"
+            if "_copy" not in str(new_mat.name):
+                new_mat.name = str(new_mat.name) + "_copy"
                 new_mat.path = new_mat.path[:-5] + "_copy.json"
         else:
             new_mat = Material()
@@ -309,11 +311,19 @@ class DMatLib(Ui_DMatLib, QDialog):
         # Adapt name to be unique
         name_list = [mat.name for mat in self.material_dict[LIB_KEY]]
         name_list.extend([mat.name for mat in self.material_dict[MACH_KEY]])
+
+        # Renaming the material so that we have "_copy","_copy_2","_copy_3"...
         if new_mat.name in name_list:
-            index = 1
-            while new_mat.name + "_" + str(index) in name_list:
-                index += 1
-            new_mat.name = new_mat.name + "_" + str(index)
+            # Adding number after copy
+            if new_mat.name[-4:] == "copy":
+                new_mat.name = new_mat.name + "_2"
+            # Setting the index after the current one
+            else:
+                index = 1
+                while int(new_mat.name[-1]) >= index:
+                    index += 1
+                new_mat.name = new_mat.name[:-1]
+                new_mat.name = new_mat.name + str(index)
             new_mat.path = join(dirname(new_mat.path), new_mat.name + ".json")
 
         # Save if in MatLib
@@ -323,7 +333,7 @@ class DMatLib(Ui_DMatLib, QDialog):
             except Exception as e:
                 err_msg = (
                     "Error while saving new material at "
-                    + new_mat.path
+                    + str(new_mat.path)
                     + ":\n"
                     + str(e)
                 )
@@ -353,8 +363,8 @@ class DMatLib(Ui_DMatLib, QDialog):
         # Create new material from unmodified version of material
         current_mat, _, _ = self.get_current_material(is_reference=True)
         new_mat = current_mat.copy()
-        if "_edit" not in new_mat.name:
-            new_mat.name = new_mat.name + "_edit"
+        if "_edit" not in str(new_mat.name):
+            new_mat.name = str(new_mat.name) + "_edit"
             new_mat.path = new_mat.path[:-5] + "_edit.json"
 
         # Adapt name to be unique
@@ -404,7 +414,9 @@ class DMatLib(Ui_DMatLib, QDialog):
 
         # Ask before delete
         msg = self.tr(
-            "Do you want to remove material " + current_mat.name + " from the library?"
+            "Do you want to remove material "
+            + str(current_mat.name)
+            + " from the library?"
         )
         reply = QMessageBox.question(
             self,
@@ -426,7 +438,7 @@ class DMatLib(Ui_DMatLib, QDialog):
             except Exception as e:
                 err_msg = (
                     "Error while deleting material from "
-                    + current_mat.path
+                    + str(current_mat.path)
                     + ":\n"
                     + str(e)
                 )
@@ -437,7 +449,7 @@ class DMatLib(Ui_DMatLib, QDialog):
                 )
                 getLogger(GUI_LOG_NAME).error(err_msg)
                 return
-            getLogger(GUI_LOG_NAME).info(current_mat.name + " was deleted")
+            getLogger(GUI_LOG_NAME).info(str(current_mat.name) + " was deleted")
 
         # Check that material was not part of the machine
         if self.machine is not None:
@@ -480,9 +492,9 @@ class DMatLib(Ui_DMatLib, QDialog):
             except Exception as e:
                 err_msg = (
                     "Error while renaming material from "
-                    + self.w_setup.init_path
+                    + str(self.w_setup.init_path)
                     + " to "
-                    + self.w_setup.mat.path
+                    + str(self.w_setup.mat.path)
                     + ":\n"
                     + str(e)
                 )
@@ -495,7 +507,7 @@ class DMatLib(Ui_DMatLib, QDialog):
                 return
 
         getLogger(GUI_LOG_NAME).info(
-            self.w_setup.init_name + " was renamed to " + self.w_setup.mat.name
+            self.w_setup.init_name + " was renamed to " + str(self.w_setup.mat.name)
         )
         # Update reference (material_dict is already updated)
         mat, key, index = self.get_current_material()

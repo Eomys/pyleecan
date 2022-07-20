@@ -1,7 +1,3 @@
-# -*- coding: utf-8 -*-
-
-from matplotlib.pyplot import axis
-
 from ....Functions.init_fig import init_fig
 from ....definitions import config_dict
 
@@ -22,15 +18,18 @@ def plot(self, fig=None, ax=None):
 
     Returns
     -------
-    None
+    fig : Matplotlib.figure.Figure
+        Figure containing the plot
+    ax : Matplotlib.axes.Axes object
+        Axis containing the plot
     """
     surf = self.get_surface()
 
     # Display the result
-    (fig, axes, patch_leg, label_leg) = init_fig(fig, ax)
-    axes.set_xlabel("(m)")
-    axes.set_ylabel("(m)")
-    axes.set_title("Slot")
+    (fig, ax, patch_leg, label_leg) = init_fig(fig, ax)
+    ax.set_xlabel("(m)")
+    ax.set_ylabel("(m)")
+    ax.set_title("Slot")
 
     # Add the slot to the fig
     if self.get_is_stator:
@@ -38,8 +37,9 @@ def plot(self, fig=None, ax=None):
     else:
         patches = surf.get_patch(color=ROTOR_COLOR)
     for patch in patches:
-        axes.add_patch(patch)
+        ax.add_patch(patch)
 
     # Axis Setup
-    axes.axis("equal")
+    ax.axis("equal")
     fig.show()
+    return fig, ax

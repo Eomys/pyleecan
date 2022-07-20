@@ -10,9 +10,9 @@ from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
-from ..Functions.copy import copy
 from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
+from copy import deepcopy
 from ._frozen import FrozenClass
 
 # Import all class method
@@ -28,6 +28,7 @@ except ImportError as error:
     comp_inductance = error
 
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 
@@ -60,9 +61,8 @@ class EndWinding(FrozenClass):
         )
     else:
         comp_inductance = comp_inductance
-    # save and copy methods are available in all object
+    # generic save method is available in all object
     save = save
-    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -111,7 +111,7 @@ class EndWinding(FrozenClass):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -119,8 +119,25 @@ class EndWinding(FrozenClass):
         if type(other) != type(self):
             return ["type(" + name + ")"]
         diff_list = list()
-        if other._Lew_enforced != self._Lew_enforced:
-            diff_list.append(name + ".Lew_enforced")
+        if (
+            other._Lew_enforced is not None
+            and self._Lew_enforced is not None
+            and isnan(other._Lew_enforced)
+            and isnan(self._Lew_enforced)
+        ):
+            pass
+        elif other._Lew_enforced != self._Lew_enforced:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._Lew_enforced)
+                    + ", other="
+                    + str(other._Lew_enforced)
+                    + ")"
+                )
+                diff_list.append(name + ".Lew_enforced" + val_str)
+            else:
+                diff_list.append(name + ".Lew_enforced")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -148,6 +165,15 @@ class EndWinding(FrozenClass):
         # The class name is added to the dict for deserialisation purpose
         EndWinding_dict["__class__"] = "EndWinding"
         return EndWinding_dict
+
+    def copy(self):
+        """Creates a deepcopy of the object"""
+
+        # Handle deepcopy of all the properties
+        Lew_enforced_val = self.Lew_enforced
+        # Creates new object of the same type with the copied properties
+        obj_copy = type(self)(Lew_enforced=Lew_enforced_val)
+        return obj_copy
 
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""

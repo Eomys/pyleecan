@@ -10,9 +10,9 @@ from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
-from ..Functions.copy import copy
 from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
+from copy import deepcopy
 from ._frozen import FrozenClass
 
 # Import all class method
@@ -41,6 +41,7 @@ except ImportError as error:
 from ..Classes.ImportMatrixVal import ImportMatrixVal
 from numpy import ndarray
 from numpy import array, array_equal
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 
@@ -86,9 +87,8 @@ class MatMagnetics(FrozenClass):
         )
     else:
         get_Brm = get_Brm
-    # save and copy methods are available in all object
+    # generic save method is available in all object
     save = save
-    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -207,7 +207,7 @@ class MatMagnetics(FrozenClass):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -215,21 +215,86 @@ class MatMagnetics(FrozenClass):
         if type(other) != type(self):
             return ["type(" + name + ")"]
         diff_list = list()
-        if other._mur_lin != self._mur_lin:
-            diff_list.append(name + ".mur_lin")
-        if other._Brm20 != self._Brm20:
-            diff_list.append(name + ".Brm20")
-        if other._alpha_Br != self._alpha_Br:
-            diff_list.append(name + ".alpha_Br")
-        if other._Wlam != self._Wlam:
-            diff_list.append(name + ".Wlam")
+        if (
+            other._mur_lin is not None
+            and self._mur_lin is not None
+            and isnan(other._mur_lin)
+            and isnan(self._mur_lin)
+        ):
+            pass
+        elif other._mur_lin != self._mur_lin:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._mur_lin)
+                    + ", other="
+                    + str(other._mur_lin)
+                    + ")"
+                )
+                diff_list.append(name + ".mur_lin" + val_str)
+            else:
+                diff_list.append(name + ".mur_lin")
+        if (
+            other._Brm20 is not None
+            and self._Brm20 is not None
+            and isnan(other._Brm20)
+            and isnan(self._Brm20)
+        ):
+            pass
+        elif other._Brm20 != self._Brm20:
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._Brm20) + ", other=" + str(other._Brm20) + ")"
+                )
+                diff_list.append(name + ".Brm20" + val_str)
+            else:
+                diff_list.append(name + ".Brm20")
+        if (
+            other._alpha_Br is not None
+            and self._alpha_Br is not None
+            and isnan(other._alpha_Br)
+            and isnan(self._alpha_Br)
+        ):
+            pass
+        elif other._alpha_Br != self._alpha_Br:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._alpha_Br)
+                    + ", other="
+                    + str(other._alpha_Br)
+                    + ")"
+                )
+                diff_list.append(name + ".alpha_Br" + val_str)
+            else:
+                diff_list.append(name + ".alpha_Br")
+        if (
+            other._Wlam is not None
+            and self._Wlam is not None
+            and isnan(other._Wlam)
+            and isnan(self._Wlam)
+        ):
+            pass
+        elif other._Wlam != self._Wlam:
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._Wlam) + ", other=" + str(other._Wlam) + ")"
+                )
+                diff_list.append(name + ".Wlam" + val_str)
+            else:
+                diff_list.append(name + ".Wlam")
         if (other.BH_curve is None and self.BH_curve is not None) or (
             other.BH_curve is not None and self.BH_curve is None
         ):
             diff_list.append(name + ".BH_curve None mismatch")
         elif self.BH_curve is not None:
             diff_list.extend(
-                self.BH_curve.compare(other.BH_curve, name=name + ".BH_curve")
+                self.BH_curve.compare(
+                    other.BH_curve,
+                    name=name + ".BH_curve",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
             )
         if (other.LossData is None and self.LossData is not None) or (
             other.LossData is not None and self.LossData is None
@@ -237,7 +302,12 @@ class MatMagnetics(FrozenClass):
             diff_list.append(name + ".LossData None mismatch")
         elif self.LossData is not None:
             diff_list.extend(
-                self.LossData.compare(other.LossData, name=name + ".LossData")
+                self.LossData.compare(
+                    other.LossData,
+                    name=name + ".LossData",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
             )
         if (other.ModelBH is None and self.ModelBH is not None) or (
             other.ModelBH is not None and self.ModelBH is None
@@ -245,10 +315,25 @@ class MatMagnetics(FrozenClass):
             diff_list.append(name + ".ModelBH None mismatch")
         elif self.ModelBH is not None:
             diff_list.extend(
-                self.ModelBH.compare(other.ModelBH, name=name + ".ModelBH")
+                self.ModelBH.compare(
+                    other.ModelBH,
+                    name=name + ".ModelBH",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
             )
         if other._is_BH_extrapolate != self._is_BH_extrapolate:
-            diff_list.append(name + ".is_BH_extrapolate")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._is_BH_extrapolate)
+                    + ", other="
+                    + str(other._is_BH_extrapolate)
+                    + ")"
+                )
+                diff_list.append(name + ".is_BH_extrapolate" + val_str)
+            else:
+                diff_list.append(name + ".is_BH_extrapolate")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -311,6 +396,40 @@ class MatMagnetics(FrozenClass):
         # The class name is added to the dict for deserialisation purpose
         MatMagnetics_dict["__class__"] = "MatMagnetics"
         return MatMagnetics_dict
+
+    def copy(self):
+        """Creates a deepcopy of the object"""
+
+        # Handle deepcopy of all the properties
+        mur_lin_val = self.mur_lin
+        Brm20_val = self.Brm20
+        alpha_Br_val = self.alpha_Br
+        Wlam_val = self.Wlam
+        if self.BH_curve is None:
+            BH_curve_val = None
+        else:
+            BH_curve_val = self.BH_curve.copy()
+        if self.LossData is None:
+            LossData_val = None
+        else:
+            LossData_val = self.LossData.copy()
+        if self.ModelBH is None:
+            ModelBH_val = None
+        else:
+            ModelBH_val = self.ModelBH.copy()
+        is_BH_extrapolate_val = self.is_BH_extrapolate
+        # Creates new object of the same type with the copied properties
+        obj_copy = type(self)(
+            mur_lin=mur_lin_val,
+            Brm20=Brm20_val,
+            alpha_Br=alpha_Br_val,
+            Wlam=Wlam_val,
+            BH_curve=BH_curve_val,
+            LossData=LossData_val,
+            ModelBH=ModelBH_val,
+            is_BH_extrapolate=is_BH_extrapolate_val,
+        )
+        return obj_copy
 
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""

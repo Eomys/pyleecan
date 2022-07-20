@@ -10,13 +10,18 @@ from logging import getLogger
 from ._check import set_array, check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
-from ..Functions.copy import copy
 from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
+from copy import deepcopy
 from .LUT import LUT
 
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
+try:
+    from ..Methods.Output.LUTdq.get_index_open_circuit import get_index_open_circuit
+except ImportError as error:
+    get_index_open_circuit = error
+
 try:
     from ..Methods.Output.LUTdq.get_L_dqh import get_L_dqh
 except ImportError as error:
@@ -28,11 +33,6 @@ except ImportError as error:
     get_Lm_dqh = error
 
 try:
-    from ..Methods.Output.LUTdq.get_Phi_dqh_mean import get_Phi_dqh_mean
-except ImportError as error:
-    get_Phi_dqh_mean = error
-
-try:
     from ..Methods.Output.LUTdq.get_Phi_dqh_mag import get_Phi_dqh_mag
 except ImportError as error:
     get_Phi_dqh_mag = error
@@ -41,6 +41,11 @@ try:
     from ..Methods.Output.LUTdq.get_Phi_dqh_mag_mean import get_Phi_dqh_mag_mean
 except ImportError as error:
     get_Phi_dqh_mag_mean = error
+
+try:
+    from ..Methods.Output.LUTdq.get_Phi_dqh_mean import get_Phi_dqh_mean
+except ImportError as error:
+    get_Phi_dqh_mean = error
 
 try:
     from ..Methods.Output.LUTdq.interp_Phi_dqh import interp_Phi_dqh
@@ -59,6 +64,7 @@ except ImportError as error:
 
 
 from numpy import array, array_equal
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 
@@ -68,6 +74,18 @@ class LUTdq(LUT):
     VERSION = 1
 
     # Check ImportError to remove unnecessary dependencies in unused method
+    # cf Methods.Output.LUTdq.get_index_open_circuit
+    if isinstance(get_index_open_circuit, ImportError):
+        get_index_open_circuit = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use LUTdq method get_index_open_circuit: "
+                    + str(get_index_open_circuit)
+                )
+            )
+        )
+    else:
+        get_index_open_circuit = get_index_open_circuit
     # cf Methods.Output.LUTdq.get_L_dqh
     if isinstance(get_L_dqh, ImportError):
         get_L_dqh = property(
@@ -86,17 +104,6 @@ class LUTdq(LUT):
         )
     else:
         get_Lm_dqh = get_Lm_dqh
-    # cf Methods.Output.LUTdq.get_Phi_dqh_mean
-    if isinstance(get_Phi_dqh_mean, ImportError):
-        get_Phi_dqh_mean = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use LUTdq method get_Phi_dqh_mean: " + str(get_Phi_dqh_mean)
-                )
-            )
-        )
-    else:
-        get_Phi_dqh_mean = get_Phi_dqh_mean
     # cf Methods.Output.LUTdq.get_Phi_dqh_mag
     if isinstance(get_Phi_dqh_mag, ImportError):
         get_Phi_dqh_mag = property(
@@ -120,6 +127,17 @@ class LUTdq(LUT):
         )
     else:
         get_Phi_dqh_mag_mean = get_Phi_dqh_mag_mean
+    # cf Methods.Output.LUTdq.get_Phi_dqh_mean
+    if isinstance(get_Phi_dqh_mean, ImportError):
+        get_Phi_dqh_mean = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use LUTdq method get_Phi_dqh_mean: " + str(get_Phi_dqh_mean)
+                )
+            )
+        )
+    else:
+        get_Phi_dqh_mean = get_Phi_dqh_mean
     # cf Methods.Output.LUTdq.interp_Phi_dqh
     if isinstance(interp_Phi_dqh, ImportError):
         interp_Phi_dqh = property(
@@ -154,9 +172,8 @@ class LUTdq(LUT):
         )
     else:
         interp_Tem_rip_dqh = interp_Tem_rip_dqh
-    # save and copy methods are available in all object
+    # generic save method is available in all object
     save = save
-    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -290,7 +307,7 @@ class LUTdq(LUT):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -300,7 +317,11 @@ class LUTdq(LUT):
         diff_list = list()
 
         # Check the properties inherited from LUT
-        diff_list.extend(super(LUTdq, self).compare(other, name=name))
+        diff_list.extend(
+            super(LUTdq, self).compare(
+                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
+            )
+        )
         if not array_equal(other.Phi_dqh_mean, self.Phi_dqh_mean):
             diff_list.append(name + ".Phi_dqh_mean")
         if (other.Phi_dqh_mag is None and self.Phi_dqh_mag is not None) or (
@@ -309,7 +330,12 @@ class LUTdq(LUT):
             diff_list.append(name + ".Phi_dqh_mag None mismatch")
         elif self.Phi_dqh_mag is not None:
             diff_list.extend(
-                self.Phi_dqh_mag.compare(other.Phi_dqh_mag, name=name + ".Phi_dqh_mag")
+                self.Phi_dqh_mag.compare(
+                    other.Phi_dqh_mag,
+                    name=name + ".Phi_dqh_mag",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
             )
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
@@ -368,6 +394,99 @@ class LUTdq(LUT):
         # Overwrite the mother class name
         LUTdq_dict["__class__"] = "LUTdq"
         return LUTdq_dict
+
+    def copy(self):
+        """Creates a deepcopy of the object"""
+
+        # Handle deepcopy of all the properties
+        if self.Phi_dqh_mean is None:
+            Phi_dqh_mean_val = None
+        else:
+            Phi_dqh_mean_val = self.Phi_dqh_mean.copy()
+        if self.Phi_dqh_mag is None:
+            Phi_dqh_mag_val = None
+        else:
+            Phi_dqh_mag_val = self.Phi_dqh_mag.copy()
+        if self.paramexplorer_list is None:
+            paramexplorer_list_val = None
+        else:
+            paramexplorer_list_val = list()
+            for obj in self.paramexplorer_list:
+                paramexplorer_list_val.append(obj.copy())
+        if self.output_list is None:
+            output_list_val = None
+        else:
+            output_list_val = list()
+            for obj in self.output_list:
+                output_list_val.append(obj.copy())
+        if self.xoutput_dict is None:
+            xoutput_dict_val = None
+        else:
+            xoutput_dict_val = dict()
+            for key, obj in self.xoutput_dict.items():
+                xoutput_dict_val[key] = obj.copy()
+        nb_simu_val = self.nb_simu
+        if self.xoutput_ref is None:
+            xoutput_ref_val = None
+        else:
+            xoutput_ref_val = self.xoutput_ref.copy()
+        xoutput_ref_index_val = self.xoutput_ref_index
+        if self.simu is None:
+            simu_val = None
+        else:
+            simu_val = self.simu.copy()
+        path_result_val = self.path_result
+        if self.geo is None:
+            geo_val = None
+        else:
+            geo_val = self.geo.copy()
+        if self.elec is None:
+            elec_val = None
+        else:
+            elec_val = self.elec.copy()
+        if self.mag is None:
+            mag_val = None
+        else:
+            mag_val = self.mag.copy()
+        if self.struct is None:
+            struct_val = None
+        else:
+            struct_val = self.struct.copy()
+        if self.post is None:
+            post_val = None
+        else:
+            post_val = self.post.copy()
+        logger_name_val = self.logger_name
+        if self.force is None:
+            force_val = None
+        else:
+            force_val = self.force.copy()
+        if self.loss is None:
+            loss_val = None
+        else:
+            loss_val = self.loss.copy()
+        # Creates new object of the same type with the copied properties
+        obj_copy = type(self)(
+            Phi_dqh_mean=Phi_dqh_mean_val,
+            Phi_dqh_mag=Phi_dqh_mag_val,
+            paramexplorer_list=paramexplorer_list_val,
+            output_list=output_list_val,
+            xoutput_dict=xoutput_dict_val,
+            nb_simu=nb_simu_val,
+            xoutput_ref=xoutput_ref_val,
+            xoutput_ref_index=xoutput_ref_index_val,
+            simu=simu_val,
+            path_result=path_result_val,
+            geo=geo_val,
+            elec=elec_val,
+            mag=mag_val,
+            struct=struct_val,
+            post=post_val,
+            logger_name=logger_name_val,
+            force=force_val,
+            loss=loss_val,
+        )
+        return obj_copy
 
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""

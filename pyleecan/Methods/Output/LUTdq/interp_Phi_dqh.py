@@ -24,7 +24,7 @@ def interp_Phi_dqh(self, Id, Iq):
     Phi_dqh_mean = self.get_Phi_dqh_mean()
 
     # Get unique Id, Iq sorted in ascending order
-    OP_matrix = self.get_OP_matrix()
+    OP_matrix = self.get_OP_array("N0", "Id", "Iq")
     XId, jd = np.unique(OP_matrix[:, 1], return_inverse=True)
     XIq, jq = np.unique(OP_matrix[:, 2], return_inverse=True)
     nd, nq = XId.size, XIq.size
@@ -71,7 +71,6 @@ def interp_Phi_dqh(self, Id, Iq):
         )
     else:
         # 2D scattered interpolation
-        # not working since LinearNDInterpolator is not of same class as RegularGridInterpolator
         Phi_dqh_interp = scp_int.LinearNDInterpolator(
             (OP_matrix[:, 1], OP_matrix[:, 2]), Phi_dqh_mean[:, 0:2]
         )

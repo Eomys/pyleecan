@@ -10,11 +10,12 @@ from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
-from ..Functions.copy import copy
 from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
+from copy import deepcopy
 from ._frozen import FrozenClass
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 
@@ -23,9 +24,8 @@ class OutStruct(FrozenClass):
 
     VERSION = 1
 
-    # save and copy methods are available in all object
+    # generic save method is available in all object
     save = save
-    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -108,7 +108,7 @@ class OutStruct(FrozenClass):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -128,11 +128,24 @@ class OutStruct(FrozenClass):
             for key in self.axes_dict:
                 diff_list.extend(
                     self.axes_dict[key].compare(
-                        other.axes_dict[key], name=name + ".axes_dict[" + str(key) + "]"
+                        other.axes_dict[key],
+                        name=name + ".axes_dict[" + str(key) + "]",
+                        ignore_list=ignore_list,
+                        is_add_value=is_add_value,
                     )
                 )
         if other._logger_name != self._logger_name:
-            diff_list.append(name + ".logger_name")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._logger_name)
+                    + ", other="
+                    + str(other._logger_name)
+                    + ")"
+                )
+                diff_list.append(name + ".logger_name" + val_str)
+            else:
+                diff_list.append(name + ".logger_name")
         if (other.meshsolution is None and self.meshsolution is not None) or (
             other.meshsolution is not None and self.meshsolution is None
         ):
@@ -140,11 +153,24 @@ class OutStruct(FrozenClass):
         elif self.meshsolution is not None:
             diff_list.extend(
                 self.meshsolution.compare(
-                    other.meshsolution, name=name + ".meshsolution"
+                    other.meshsolution,
+                    name=name + ".meshsolution",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
                 )
             )
         if other._FEA_dict != self._FEA_dict:
-            diff_list.append(name + ".FEA_dict")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._FEA_dict)
+                    + ", other="
+                    + str(other._FEA_dict)
+                    + ")"
+                )
+                diff_list.append(name + ".FEA_dict" + val_str)
+            else:
+                diff_list.append(name + ".FEA_dict")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -203,6 +229,34 @@ class OutStruct(FrozenClass):
         # The class name is added to the dict for deserialisation purpose
         OutStruct_dict["__class__"] = "OutStruct"
         return OutStruct_dict
+
+    def copy(self):
+        """Creates a deepcopy of the object"""
+
+        # Handle deepcopy of all the properties
+        if self.axes_dict is None:
+            axes_dict_val = None
+        else:
+            axes_dict_val = dict()
+            for key, obj in self.axes_dict.items():
+                axes_dict_val[key] = obj.copy()
+        logger_name_val = self.logger_name
+        if self.meshsolution is None:
+            meshsolution_val = None
+        else:
+            meshsolution_val = self.meshsolution.copy()
+        if self.FEA_dict is None:
+            FEA_dict_val = None
+        else:
+            FEA_dict_val = self.FEA_dict.copy()
+        # Creates new object of the same type with the copied properties
+        obj_copy = type(self)(
+            axes_dict=axes_dict_val,
+            logger_name=logger_name_val,
+            meshsolution=meshsolution_val,
+            FEA_dict=FEA_dict_val,
+        )
+        return obj_copy
 
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""

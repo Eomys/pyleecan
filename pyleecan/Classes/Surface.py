@@ -10,9 +10,9 @@ from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
-from ..Functions.copy import copy
 from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
+from copy import deepcopy
 from ._frozen import FrozenClass
 
 # Import all class method
@@ -43,6 +43,7 @@ except ImportError as error:
     is_inside = error
 
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 
@@ -99,9 +100,8 @@ class Surface(FrozenClass):
         )
     else:
         is_inside = is_inside
-    # save and copy methods are available in all object
+    # generic save method is available in all object
     save = save
-    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -156,7 +156,7 @@ class Surface(FrozenClass):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -165,9 +165,25 @@ class Surface(FrozenClass):
             return ["type(" + name + ")"]
         diff_list = list()
         if other._point_ref != self._point_ref:
-            diff_list.append(name + ".point_ref")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._point_ref)
+                    + ", other="
+                    + str(other._point_ref)
+                    + ")"
+                )
+                diff_list.append(name + ".point_ref" + val_str)
+            else:
+                diff_list.append(name + ".point_ref")
         if other._label != self._label:
-            diff_list.append(name + ".label")
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._label) + ", other=" + str(other._label) + ")"
+                )
+                diff_list.append(name + ".label" + val_str)
+            else:
+                diff_list.append(name + ".label")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -202,6 +218,16 @@ class Surface(FrozenClass):
         # The class name is added to the dict for deserialisation purpose
         Surface_dict["__class__"] = "Surface"
         return Surface_dict
+
+    def copy(self):
+        """Creates a deepcopy of the object"""
+
+        # Handle deepcopy of all the properties
+        point_ref_val = self.point_ref
+        label_val = self.label
+        # Creates new object of the same type with the copied properties
+        obj_copy = type(self)(point_ref=point_ref_val, label=label_val)
+        return obj_copy
 
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""

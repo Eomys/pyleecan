@@ -10,9 +10,9 @@ from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
-from ..Functions.copy import copy
 from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
+from copy import deepcopy
 from .LossModel import LossModel
 
 # Import all class method
@@ -23,6 +23,7 @@ except ImportError as error:
     comp_loss = error
 
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 
@@ -42,13 +43,14 @@ class LossModelWinding(LossModel):
         )
     else:
         comp_loss = comp_loss
-    # save and copy methods are available in all object
+    # generic save method is available in all object
     save = save
-    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, temperature=20, name="", init_dict=None, init_str=None):
+    def __init__(
+        self, temperature=20, name="", is_show_fig=False, init_dict=None, init_str=None
+    ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -68,10 +70,12 @@ class LossModelWinding(LossModel):
                 temperature = init_dict["temperature"]
             if "name" in list(init_dict.keys()):
                 name = init_dict["name"]
+            if "is_show_fig" in list(init_dict.keys()):
+                is_show_fig = init_dict["is_show_fig"]
         # Set the properties (value check and convertion are done in setter)
         self.temperature = temperature
         # Call LossModel init
-        super(LossModelWinding, self).__init__(name=name)
+        super(LossModelWinding, self).__init__(name=name, is_show_fig=is_show_fig)
         # The class is frozen (in LossModel init), for now it's impossible to
         # add new properties
 
@@ -97,7 +101,7 @@ class LossModelWinding(LossModel):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -107,9 +111,30 @@ class LossModelWinding(LossModel):
         diff_list = list()
 
         # Check the properties inherited from LossModel
-        diff_list.extend(super(LossModelWinding, self).compare(other, name=name))
-        if other._temperature != self._temperature:
-            diff_list.append(name + ".temperature")
+        diff_list.extend(
+            super(LossModelWinding, self).compare(
+                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
+            )
+        )
+        if (
+            other._temperature is not None
+            and self._temperature is not None
+            and isnan(other._temperature)
+            and isnan(self._temperature)
+        ):
+            pass
+        elif other._temperature != self._temperature:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._temperature)
+                    + ", other="
+                    + str(other._temperature)
+                    + ")"
+                )
+                diff_list.append(name + ".temperature" + val_str)
+            else:
+                diff_list.append(name + ".temperature")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -146,6 +171,19 @@ class LossModelWinding(LossModel):
         # Overwrite the mother class name
         LossModelWinding_dict["__class__"] = "LossModelWinding"
         return LossModelWinding_dict
+
+    def copy(self):
+        """Creates a deepcopy of the object"""
+
+        # Handle deepcopy of all the properties
+        temperature_val = self.temperature
+        name_val = self.name
+        is_show_fig_val = self.is_show_fig
+        # Creates new object of the same type with the copied properties
+        obj_copy = type(self)(
+            temperature=temperature_val, name=name_val, is_show_fig=is_show_fig_val
+        )
+        return obj_copy
 
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""

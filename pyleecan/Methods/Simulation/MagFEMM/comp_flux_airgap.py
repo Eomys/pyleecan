@@ -181,11 +181,8 @@ def comp_flux_airgap(self, output, axes_dict, Is_val=None, Ir_val=None):
             filename=self.import_file,
         )
 
-    # Store FEMM_dict in out_dict if FEMM file is not imported
-    if self.import_file is None:
-        # Especially useful to avoid redrawing machine in case of skew
-        self.import_file = path_femm
-        output.mag.internal.FEMM_dict = FEMM_dict
+    # Store FEMM_dict in to avoid drawing the machine several times
+    output.mag.internal.FEMM_dict = FEMM_dict
 
     # Store stator winding flux
     if STATOR_LAB + "-0" in out_dict["Phi_wind"].keys():

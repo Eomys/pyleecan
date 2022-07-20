@@ -10,9 +10,9 @@ from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
-from ..Functions.copy import copy
 from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
+from copy import deepcopy
 from .Surface import Surface
 
 # Import all class method
@@ -73,6 +73,7 @@ except ImportError as error:
     translate = error
 
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 
@@ -189,9 +190,8 @@ class SurfLine(Surface):
         )
     else:
         translate = translate
-    # save and copy methods are available in all object
+    # generic save method is available in all object
     save = save
-    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -254,7 +254,7 @@ class SurfLine(Surface):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -264,7 +264,11 @@ class SurfLine(Surface):
         diff_list = list()
 
         # Check the properties inherited from Surface
-        diff_list.extend(super(SurfLine, self).compare(other, name=name))
+        diff_list.extend(
+            super(SurfLine, self).compare(
+                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
+            )
+        )
         if (other.line_list is None and self.line_list is not None) or (
             other.line_list is not None and self.line_list is None
         ):
@@ -277,7 +281,10 @@ class SurfLine(Surface):
             for ii in range(len(other.line_list)):
                 diff_list.extend(
                     self.line_list[ii].compare(
-                        other.line_list[ii], name=name + ".line_list[" + str(ii) + "]"
+                        other.line_list[ii],
+                        name=name + ".line_list[" + str(ii) + "]",
+                        ignore_list=ignore_list,
+                        is_add_value=is_add_value,
                     )
                 )
         # Filter ignore differences
@@ -332,6 +339,24 @@ class SurfLine(Surface):
         # Overwrite the mother class name
         SurfLine_dict["__class__"] = "SurfLine"
         return SurfLine_dict
+
+    def copy(self):
+        """Creates a deepcopy of the object"""
+
+        # Handle deepcopy of all the properties
+        if self.line_list is None:
+            line_list_val = None
+        else:
+            line_list_val = list()
+            for obj in self.line_list:
+                line_list_val.append(obj.copy())
+        point_ref_val = self.point_ref
+        label_val = self.label
+        # Creates new object of the same type with the copied properties
+        obj_copy = type(self)(
+            line_list=line_list_val, point_ref=point_ref_val, label=label_val
+        )
+        return obj_copy
 
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""

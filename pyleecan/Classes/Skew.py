@@ -10,9 +10,9 @@ from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
-from ..Functions.copy import copy
 from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
+from copy import deepcopy
 from ._frozen import FrozenClass
 
 # Import all class method
@@ -38,6 +38,7 @@ from os.path import isfile
 from ._check import CheckTypeError
 import numpy as np
 import random
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 
@@ -74,9 +75,8 @@ class Skew(FrozenClass):
         )
     else:
         plot = plot
-    # save and copy methods are available in all object
+    # generic save method is available in all object
     save = save
-    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -194,7 +194,7 @@ class Skew(FrozenClass):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -203,21 +203,97 @@ class Skew(FrozenClass):
             return ["type(" + name + ")"]
         diff_list = list()
         if other._type_skew != self._type_skew:
-            diff_list.append(name + ".type_skew")
-        if other._rate != self._rate:
-            diff_list.append(name + ".rate")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._type_skew)
+                    + ", other="
+                    + str(other._type_skew)
+                    + ")"
+                )
+                diff_list.append(name + ".type_skew" + val_str)
+            else:
+                diff_list.append(name + ".type_skew")
+        if (
+            other._rate is not None
+            and self._rate is not None
+            and isnan(other._rate)
+            and isnan(self._rate)
+        ):
+            pass
+        elif other._rate != self._rate:
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._rate) + ", other=" + str(other._rate) + ")"
+                )
+                diff_list.append(name + ".rate" + val_str)
+            else:
+                diff_list.append(name + ".rate")
         if other._is_step != self._is_step:
-            diff_list.append(name + ".is_step")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._is_step)
+                    + ", other="
+                    + str(other._is_step)
+                    + ")"
+                )
+                diff_list.append(name + ".is_step" + val_str)
+            else:
+                diff_list.append(name + ".is_step")
         if other._function_str != self._function_str:
             diff_list.append(name + ".function")
         if other._angle_list != self._angle_list:
-            diff_list.append(name + ".angle_list")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._angle_list)
+                    + ", other="
+                    + str(other._angle_list)
+                    + ")"
+                )
+                diff_list.append(name + ".angle_list" + val_str)
+            else:
+                diff_list.append(name + ".angle_list")
         if other._z_list != self._z_list:
-            diff_list.append(name + ".z_list")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._z_list)
+                    + ", other="
+                    + str(other._z_list)
+                    + ")"
+                )
+                diff_list.append(name + ".z_list" + val_str)
+            else:
+                diff_list.append(name + ".z_list")
         if other._Nstep != self._Nstep:
-            diff_list.append(name + ".Nstep")
-        if other._angle_overall != self._angle_overall:
-            diff_list.append(name + ".angle_overall")
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._Nstep) + ", other=" + str(other._Nstep) + ")"
+                )
+                diff_list.append(name + ".Nstep" + val_str)
+            else:
+                diff_list.append(name + ".Nstep")
+        if (
+            other._angle_overall is not None
+            and self._angle_overall is not None
+            and isnan(other._angle_overall)
+            and isnan(self._angle_overall)
+        ):
+            pass
+        elif other._angle_overall != self._angle_overall:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._angle_overall)
+                    + ", other="
+                    + str(other._angle_overall)
+                    + ")"
+                )
+                diff_list.append(name + ".angle_overall" + val_str)
+            else:
+                diff_list.append(name + ".angle_overall")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -257,7 +333,7 @@ class Skew(FrozenClass):
         Skew_dict["is_step"] = self.is_step
         if self._function_str is not None:
             Skew_dict["function"] = self._function_str
-        elif "keep_function" in kwargs and kwargs["keep_function"]:
+        elif keep_function:
             Skew_dict["function"] = self.function
         else:
             Skew_dict["function"] = None
@@ -276,6 +352,40 @@ class Skew(FrozenClass):
         # The class name is added to the dict for deserialisation purpose
         Skew_dict["__class__"] = "Skew"
         return Skew_dict
+
+    def copy(self):
+        """Creates a deepcopy of the object"""
+
+        # Handle deepcopy of all the properties
+        type_skew_val = self.type_skew
+        rate_val = self.rate
+        is_step_val = self.is_step
+        if self._function_str is not None:
+            function_val = self._function_str
+        else:
+            function_val = self._function_func
+        if self.angle_list is None:
+            angle_list_val = None
+        else:
+            angle_list_val = self.angle_list.copy()
+        if self.z_list is None:
+            z_list_val = None
+        else:
+            z_list_val = self.z_list.copy()
+        Nstep_val = self.Nstep
+        angle_overall_val = self.angle_overall
+        # Creates new object of the same type with the copied properties
+        obj_copy = type(self)(
+            type_skew=type_skew_val,
+            rate=rate_val,
+            is_step=is_step_val,
+            function=function_val,
+            angle_list=angle_list_val,
+            z_list=z_list_val,
+            Nstep=Nstep_val,
+            angle_overall=angle_overall_val,
+        )
+        return obj_copy
 
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""
