@@ -23,7 +23,7 @@ from Tests import save_plot_path as save_path
 def test_SPMSM015_plot_contour_B_FEMM():
     """Validation of the implementaiton of periodic angle axis in Magnetic (MagFEMM) and Force (ForceMT) modules"""
 
-    SPMSM_015 = load(join(DATA_DIR, "Machine", "Validation", "SPMSM_015.json"))
+    SPMSM_015 = load(join(DATA_DIR, "Machine", "SPMSM_015.json"))
 
     simu = Simu1(name="test_plot_contour_SPMSM_015", machine=SPMSM_015)
 
@@ -35,9 +35,7 @@ def test_SPMSM015_plot_contour_B_FEMM():
     Iq_ref = (I0_rms * np.exp(1j * Phi0)).imag
 
     simu.input = InputCurrent(
-        OP=OPdq(Id_ref=Id_ref, Iq_ref=Iq_ref, N0=1000),
-        Na_tot=252 * 9,
-        Nt_tot=4 * 9,
+        OP=OPdq(Id_ref=Id_ref, Iq_ref=Iq_ref, N0=1000), Na_tot=252 * 9, Nt_tot=4 * 9,
     )
 
     # Definition of the magnetic simulation: with periodicity
@@ -54,12 +52,12 @@ def test_SPMSM015_plot_contour_B_FEMM():
     out = simu.run()
 
     out.mag.meshsolution.plot_contour(
-        is_show_fig=False, save_path=join(save_path, "plot_mesh.svg")
+        is_show_fig=False, save_path=join(save_path, "plot_mesh.png")
     )
     out.mag.meshsolution.plot_contour(
         group_names="stator core",
         is_show_fig=False,
-        save_path=join(save_path, "plot_mesh_stator.svg"),
+        save_path=join(save_path, "plot_mesh_stator.png"),
     )
     # out.mag.meshsolution.plot_contour(
     #     is_animated=True,
@@ -82,9 +80,7 @@ def test_Benchmark_plot_contour_B_FEMM():
     simu = Simu1(name="test_plot_contour_Benchmark", machine=Benchmark)
 
     simu.input = InputCurrent(
-        OP=OPdq(Id_ref=0, Iq_ref=0, N0=2504),
-        Na_tot=2048,
-        Nt_tot=50,
+        OP=OPdq(Id_ref=0, Iq_ref=0, N0=2504), Na_tot=2048, Nt_tot=50,
     )
 
     # Definition of the magnetic simulation: with periodicity
@@ -99,7 +95,7 @@ def test_Benchmark_plot_contour_B_FEMM():
 
     out = simu.run()
 
-    out.plot_B_mesh(save_path=join(save_path, "plot_B_mesh.svg"))
+    out.plot_B_mesh(save_path=join(save_path, "plot_B_mesh.png"))
 
     # out.plot_B_mesh(
     #     group_names="stator core",
@@ -111,10 +107,11 @@ def test_Benchmark_plot_contour_B_FEMM():
     out.mag.meshsolution.plot_contour(
         group_names=["rotor magnets", "rotor core"],
         is_show_fig=False,
-        save_path=join(save_path, "plot_mesh_stator.svg"),
+        save_path=join(save_path, "plot_mesh_stator.png"),
     )
 
     pass
+
 
 @pytest.mark.long_5s
 @pytest.mark.long_1m
@@ -127,9 +124,7 @@ def test_Benchmark_skew_plot_contour_B_FEMM():
     simu = Simu1(name="test_plot_contour_Benchmark", machine=Benchmark)
 
     simu.input = InputCurrent(
-        OP=OPdq(Id_ref=0, Iq_ref=0, N0=2504),
-        Na_tot=2048,
-        Nt_tot=50,
+        OP=OPdq(Id_ref=0, Iq_ref=0, N0=2504), Na_tot=2048, Nt_tot=50,
     )
 
     # Definition of the magnetic simulation: with periodicity
@@ -142,15 +137,13 @@ def test_Benchmark_skew_plot_contour_B_FEMM():
         nb_worker=int(0.5 * cpu_count()),
     )
 
-    simu.machine.rotor.skew = Skew(
-        type_skew="linear",
-        is_step=True,
-        Nstep=2,
-    )
+    simu.machine.rotor.skew = Skew(type_skew="linear", is_step=True, Nstep=2,)
 
     out = simu.run()
 
-    out.plot_B_mesh("time[2]", "indice", "z[1]", save_path=join(save_path, "plot_B_mesh.png"))
+    out.plot_B_mesh(
+        "time[2]", "indice", "z[1]", save_path=join(save_path, "plot_B_mesh.png")
+    )
 
     # out.plot_B_mesh(
     #     group_names="stator core",
@@ -162,12 +155,14 @@ def test_Benchmark_skew_plot_contour_B_FEMM():
     out.mag.meshsolution.plot_contour(
         group_names=["rotor magnets", "rotor core"],
         is_show_fig=False,
-        save_path=join(save_path, "plot_mesh_stator.svg"),
+        save_path=join(save_path, "plot_mesh_stator.png"),
     )
 
     pass
 
+
 if __name__ == "__main__":
-    # test_SPMSM015_plot_contour_B_FEMM()
-    # test_Benchmark_plot_contour_B_FEMM()
+    test_SPMSM015_plot_contour_B_FEMM()
+    test_Benchmark_plot_contour_B_FEMM()
     test_Benchmark_skew_plot_contour_B_FEMM()
+    print("Done")
