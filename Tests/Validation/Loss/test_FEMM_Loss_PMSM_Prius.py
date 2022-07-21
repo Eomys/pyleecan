@@ -53,9 +53,10 @@ def test_FEMM_Loss_Prius():
     SPEED = 1200
 
     simu.input = InputCurrent(
-        Nt_tot=4 * 40 * 8,
+        Nt_tot=4 * 10 * 8,
         Na_tot=200 * 8,
-        OP=OPdq(N0=SPEED, Id_ref=Ic.real, Iq_ref=Ic.imag),
+        OP=OPdq(N0=SPEED, Id_ref=-200, Iq_ref=0),
+        
         is_periodicity_t=True,
         is_periodicity_a=True,
     )
@@ -119,6 +120,8 @@ def test_FEMM_Loss_Prius():
     # plt.plot(B_list, plot_loss_S, color='red')
     # plt.plot(B_list, plot_loss_B, color='blue')
     # plt.show()
+    
+    out.plot_B_mesh()
 
     if is_show_fig:
         group_names = [

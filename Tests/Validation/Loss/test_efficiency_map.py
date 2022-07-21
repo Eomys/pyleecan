@@ -458,5 +458,5 @@ def test_efficiency_map(machine_name,Umax, Jmax):
 # To run it without pytest
 if __name__ == "__main__":
 
-    # out = test_efficiency_map("Toyota_Prius_loss",230,30e6)
-     out = test_efficiency_map("Jaguar_I_Pace_wo_skew",100,27e6)
+    out = test_efficiency_map("Toyota_Prius",150,27e6)
+    #  out = test_efficiency_map("Jaguar_I_Pace",150,17e6)
