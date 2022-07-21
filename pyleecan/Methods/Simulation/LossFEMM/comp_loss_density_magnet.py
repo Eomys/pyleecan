@@ -118,7 +118,7 @@ def comp_loss_density_magnet(self, group, coeff_dict):
 
     lab_ind = None
     for ii, sol in enumerate(meshsol.solution):
-        if sol.label == "A_z" and sol.type_cell == "triangle":
+        if sol.label == "A_z^{element}" and sol.type_cell == "triangle":
             lab_ind = ii
             break
     if lab_ind is None:
@@ -174,7 +174,7 @@ def comp_loss_density_magnet(self, group, coeff_dict):
                 kr_skin[np.isnan(kr_skin)] = 1
                 sigma_m = sigma_m / kr_skin[:, None]
             Pmagnet_density = np.zeros((freqs.size, len(ind_all)))
-        Az_fft = Az_df["A_z"]
+        Az_fft = Az_df["A_z^{element}"]
         Az_mean = matmul(Az_fft, Se_mag)[:, None] / np_sum(Se_mag)
         Jm_fft = -1j * sigma_m * w * (Az_fft - Az_mean)
         Pmagnet_density[:, jj : (jj + len(kmag))] = (
