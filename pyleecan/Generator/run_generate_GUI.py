@@ -30,7 +30,7 @@ if __name__ == "__main__":
     gen_dict = read_all(DOC_DIR, soft_name=soft_name)
     print("#############################\nGenerating gui....")
     generate_gui(
-        ui_folder_path, gen_dict=gen_dict, is_gen_resource=True, IS_SDT=IS_SDT
+        ui_folder_path, gen_dict=gen_dict, is_gen_resource=False, IS_SDT=IS_SDT
     )
 
     # Run black

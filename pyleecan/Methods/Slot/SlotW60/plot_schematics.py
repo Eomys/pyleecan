@@ -111,7 +111,9 @@ def plot_schematics(
                 1j * (pi / self.Zs + 4 * pi / self.Zs)
             )
             point_dict[key + "d"] = point_dict[key] * exp(1j * (2 * pi / self.Zs))
-            point_dict[key + "dd"] = point_dict[key + "d"] * exp(1j * (2 * pi / self.Zs))
+            point_dict[key + "dd"] = point_dict[key + "d"] * exp(
+                1j * (2 * pi / self.Zs)
+            )
 
         if self.is_outwards():
             sign = 1
@@ -121,11 +123,7 @@ def plot_schematics(
         if is_add_point_label:
             for name, Z in point_dict.items():
                 ax.text(
-                    Z.real,
-                    Z.imag,
-                    name,
-                    fontsize=P_FONT_SIZE,
-                    bbox=TEXT_BOX,
+                    Z.real, Z.imag, name, fontsize=P_FONT_SIZE, bbox=TEXT_BOX,
                 )
 
         # Adding schematics
@@ -194,7 +192,7 @@ def plot_schematics(
                 Zlim1,
                 Zlim2,
                 point_dict["Z10d"],
-                offset_label= 0.009 * self.W1 + 0.010j,
+                offset_label=0.009 * self.W1 + 0.010j,
                 fig=fig,
                 ax=ax,
                 label="R1",
@@ -298,23 +296,45 @@ def plot_schematics(
             )
 
         if type_add_active in [1, 3]:  # Wind and Wedge
-            is_add_wedge = False # No wedge for this false
-            self.plot_active(fig=fig, is_show_fig=False, is_add_wedge=is_add_wedge, wind_mat=np.ones((1,2,self.Zs,1)), alpha=pi/self.Zs + 2 * pi / self.Zs)
-            self.plot_active(fig=fig, is_show_fig=False, is_add_wedge=is_add_wedge, wind_mat=np.ones((1,2,self.Zs,1)), alpha=pi/self.Zs + 4 * pi / self.Zs)
-            self.plot_active(fig=fig, is_show_fig=False, is_add_wedge=is_add_wedge, wind_mat=np.ones((1,2,self.Zs,1)), alpha=pi/self.Zs + 6 * pi / self.Zs)
-            self.plot_active(fig=fig, is_show_fig=False, is_add_wedge=is_add_wedge, wind_mat=np.ones((1,2,self.Zs,1)), alpha=pi/self.Zs + 8 * pi / self.Zs)
-
-        elif type_add_active == 2:  # Magnet
+            is_add_wedge = False  # No wedge for this false
             self.plot_active(
                 fig=fig,
                 is_show_fig=False,
-                enforced_default_color=MAGNET_COLOR,
+                is_add_wedge=is_add_wedge,
+                wind_mat=np.ones((1, 2, self.Zs, 1)),
+                alpha=pi / self.Zs + 2 * pi / self.Zs,
+            )
+            self.plot_active(
+                fig=fig,
+                is_show_fig=False,
+                is_add_wedge=is_add_wedge,
+                wind_mat=np.ones((1, 2, self.Zs, 1)),
+                alpha=pi / self.Zs + 4 * pi / self.Zs,
+            )
+            self.plot_active(
+                fig=fig,
+                is_show_fig=False,
+                is_add_wedge=is_add_wedge,
+                wind_mat=np.ones((1, 2, self.Zs, 1)),
+                alpha=pi / self.Zs + 6 * pi / self.Zs,
+            )
+            self.plot_active(
+                fig=fig,
+                is_show_fig=False,
+                is_add_wedge=is_add_wedge,
+                wind_mat=np.ones((1, 2, self.Zs, 1)),
+                alpha=pi / self.Zs + 8 * pi / self.Zs,
+            )
+
+        elif type_add_active == 2:  # Magnet
+            self.plot_active(
+                fig=fig, is_show_fig=False, enforced_default_color=MAGNET_COLOR,
             )
 
         # Zooming and cleaning
         ax.axis("equal")
         ax.set_ylim(abs(point_dict["Z1"]) * 0.5, abs(point_dict["Z1"]) * 1.2)
-        ax.set_xlim(self.W1*-0.5, self.W1*0.5)
+        ax.set_xlim(self.W1 * -0.5, self.W1 * 0.5)
         manager = plt.get_current_fig_manager()
         if manager is not None:
             manager.set_window_title(type(self).__name__ + " Schematics")

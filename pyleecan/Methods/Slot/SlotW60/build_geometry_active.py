@@ -45,7 +45,6 @@ def build_geometry_active(self, Nrad, Ntan, is_simplified=False, alpha=0, delta=
     # get the name of the lamination
     lam_label = self.parent.get_label()
 
-
     point_dict = self._comp_point_coordinate()
     Z4 = point_dict["Z4"]
     Z5 = point_dict["Z5"]
@@ -57,7 +56,7 @@ def build_geometry_active(self, Nrad, Ntan, is_simplified=False, alpha=0, delta=
     Zw2s = point_dict["Zw2s"]
     Zw3s = point_dict["Zw3s"]
     Zw4s = point_dict["Zw4s"]
-    
+
     Ref1 = (Zw1 + Zw2 + Zw3 + Zw4) / 4
     Ref2 = (Zw1s + Zw2s + Zw3s + Zw4s) / 4
 
