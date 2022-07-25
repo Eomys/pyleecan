@@ -1,4 +1,5 @@
 from os.path import join
+from os import makedirs
 from numpy import pi
 import pytest
 from Tests import save_validation_path as save_path, TEST_DATA_DIR
@@ -62,7 +63,8 @@ class Test_StructElmer(object):
         # setup the simulation
         simu = Simu1(name="test_StructElmer_HoleM50", machine=machine)
         output = Output(simu=simu)
-        output.path_result = save_path
+        output.path_result = join(save_path, "Hole50")
+        makedirs(output.path_result)
 
         simu.struct = StructElmer()
         simu.struct.FEA_dict_enforced = mesh_dict_1
@@ -88,6 +90,8 @@ class Test_StructElmer(object):
         # setup the simulation
         simu = Simu1(name="test_StructElmer_HoleM50_no_magnets", machine=machine)
         output = Output(simu=simu)
+        output.path_result = join(save_path, "Hole50_no_mag")
+        makedirs(output.path_result)
 
         simu.struct = StructElmer()
         simu.struct.FEA_dict_enforced = mesh_dict_1
@@ -120,6 +124,8 @@ class Test_StructElmer(object):
         # setup the simulation
         simu = Simu1(name="test_StructElmer_disk", machine=machine)
         output = Output(simu=simu)
+        output.path_result = join(save_path, "disk")
+        makedirs(output.path_result)
 
         simu.struct = StructElmer()
         # simu.struct.FEA_dict_enforced = mesh_dict_1

@@ -10,9 +10,9 @@ from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
-from ..Functions.copy import copy
 from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
+from copy import deepcopy
 from ._frozen import FrozenClass
 
 # Import all class method
@@ -21,6 +21,11 @@ try:
     from ..Methods.Simulation.OP.get_machine_from_parent import get_machine_from_parent
 except ImportError as error:
     get_machine_from_parent = error
+
+try:
+    from ..Methods.Simulation.OP.get_OP_array import get_OP_array
+except ImportError as error:
+    get_OP_array = error
 
 
 from numpy import isnan
@@ -32,6 +37,7 @@ class OP(FrozenClass):
 
     VERSION = 1
 
+    # Check ImportError to remove unnecessary dependencies in unused method
     # cf Methods.Simulation.OP.get_machine_from_parent
     if isinstance(get_machine_from_parent, ImportError):
         get_machine_from_parent = property(
@@ -44,9 +50,17 @@ class OP(FrozenClass):
         )
     else:
         get_machine_from_parent = get_machine_from_parent
-    # save and copy methods are available in all object
+    # cf Methods.Simulation.OP.get_OP_array
+    if isinstance(get_OP_array, ImportError):
+        get_OP_array = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use OP method get_OP_array: " + str(get_OP_array))
+            )
+        )
+    else:
+        get_OP_array = get_OP_array
+    # generic save method is available in all object
     save = save
-    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -284,6 +298,27 @@ class OP(FrozenClass):
         # The class name is added to the dict for deserialisation purpose
         OP_dict["__class__"] = "OP"
         return OP_dict
+
+    def copy(self):
+        """Creates a deepcopy of the object"""
+
+        # Handle deepcopy of all the properties
+        N0_val = self.N0
+        felec_val = self.felec
+        Tem_av_ref_val = self.Tem_av_ref
+        Pem_av_ref_val = self.Pem_av_ref
+        Pem_av_in_val = self.Pem_av_in
+        efficiency_val = self.efficiency
+        # Creates new object of the same type with the copied properties
+        obj_copy = type(self)(
+            N0=N0_val,
+            felec=felec_val,
+            Tem_av_ref=Tem_av_ref_val,
+            Pem_av_ref=Pem_av_ref_val,
+            Pem_av_in=Pem_av_in_val,
+            efficiency=efficiency_val,
+        )
+        return obj_copy
 
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""

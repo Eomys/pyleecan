@@ -10,7 +10,6 @@ def inter_line_circle(Z1, Z2, R, Zc=0):
     ----------
     Z1 : complex
         Complex coordinate of a point on the line
-
     Z2 : complex
         Complex coordinate of another point on the line
     R : float

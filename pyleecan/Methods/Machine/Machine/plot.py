@@ -74,10 +74,9 @@ def plot(
         pera, is_apera = self.comp_periodicity_spatial()
         sym = 2 * pera if is_apera else pera
 
-    (fig, ax, _, _) = init_fig(fig=fig, ax=ax, shape="square")
-
     if edgecolor is None:
-        edgecolor = "k"
+        edgecolor = "k"  # Default is black
+    (fig, ax, _, _) = init_fig(fig=fig, ax=ax, shape="square")
 
     # Call each plot method to properly set the legend
     if self.frame is not None:

@@ -61,3 +61,6 @@ def check(self):
 
     if self.comp_W5() < 0:
         raise S53_W5CheckError("You must have W5 >=0")
+
+    if self.H2 < self.H3:
+        raise S53_W5CheckError("You must have H3 < H2")

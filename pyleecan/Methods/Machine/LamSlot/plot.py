@@ -83,7 +83,6 @@ def plot(
             )
     # Display the result
     if is_display:
-        (fig, ax, patch_leg, label_leg) = init_fig(fig)
         ax.set_xlabel("(m)")
         ax.set_ylabel("(m)")
         for patch in patches:

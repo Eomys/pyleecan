@@ -10,9 +10,9 @@ from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
-from ..Functions.copy import copy
 from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
+from copy import deepcopy
 from .Machine import Machine
 
 # Import all class method
@@ -60,9 +60,8 @@ class MachineUD(Machine):
         )
     else:
         is_synchronous = is_synchronous
-    # save and copy methods are available in all object
+    # generic save method is available in all object
     save = save
-    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -253,6 +252,42 @@ class MachineUD(Machine):
         # Overwrite the mother class name
         MachineUD_dict["__class__"] = "MachineUD"
         return MachineUD_dict
+
+    def copy(self):
+        """Creates a deepcopy of the object"""
+
+        # Handle deepcopy of all the properties
+        if self.lam_list is None:
+            lam_list_val = None
+        else:
+            lam_list_val = list()
+            for obj in self.lam_list:
+                lam_list_val.append(obj.copy())
+        is_sync_val = self.is_sync
+        if self.frame is None:
+            frame_val = None
+        else:
+            frame_val = self.frame.copy()
+        if self.shaft is None:
+            shaft_val = None
+        else:
+            shaft_val = self.shaft.copy()
+        name_val = self.name
+        desc_val = self.desc
+        type_machine_val = self.type_machine
+        logger_name_val = self.logger_name
+        # Creates new object of the same type with the copied properties
+        obj_copy = type(self)(
+            lam_list=lam_list_val,
+            is_sync=is_sync_val,
+            frame=frame_val,
+            shaft=shaft_val,
+            name=name_val,
+            desc=desc_val,
+            type_machine=type_machine_val,
+            logger_name=logger_name_val,
+        )
+        return obj_copy
 
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""

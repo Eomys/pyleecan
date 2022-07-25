@@ -30,7 +30,12 @@ def comp_periodicity(self, wind_mat=None):
     qs = wind_mat.shape[3]  # Number of phase
 
     # Summing on all the layers (Nlay_r and Nlay_theta)
-    wind_mat2 = squeeze(wind_mat)
+    wind_mat2 = wind_mat
+    # Avoid to squeeze qs=1 (WRSM)
+    if wind_mat.shape[1] == 1:
+        wind_mat2 = squeeze(wind_mat2, 1)
+    if wind_mat.shape[0] == 1:
+        wind_mat2 = squeeze(wind_mat2, 0)
 
     if wind_mat2.ndim == 4:  # rad and tan > 2
         Nlay = wind_mat2.shape[0] * wind_mat2.shape[1]

@@ -17,10 +17,6 @@ def get_name_lam(self):
     """
 
     if self.parent is not None:
-        if self.get_is_stator():
-            name = "Stator"
-        else:
-            name = "Rotor"
-        return name
+        return self.parent.get_label()
     else:
         return "NoLam"

@@ -119,6 +119,7 @@ def plot_schematics(
             raise ParentMissingError("Error: The hole is not inside a Lamination")
         lam = self.parent
         alpha = pi / 2  # To rotate the schematics
+        rot = exp(1j * alpha)
         fig, ax = lam.plot(
             alpha=pi / self.Zh + alpha,
             is_show_fig=False,
@@ -133,280 +134,104 @@ def plot_schematics(
         # Adding point label
         if is_add_point_label:
             for name, Z in point_dict.items():
-                Z = Z * exp(1j * alpha)
-                ax.text(
-                    Z.real,
-                    Z.imag,
-                    name,
-                    fontsize=P_FONT_SIZE,
-                    bbox=TEXT_BOX,
-                )
+                Z = Z * rot
+                ax.text(Z.real, Z.imag, name, fontsize=P_FONT_SIZE, bbox=TEXT_BOX)
 
         # Adding schematics
         if is_add_schematics:
-            # W0
-            line = Segment(
-                point_dict["Z9"] * exp(1j * alpha), point_dict["Z9s"] * exp(1j * alpha)
-            )
-            line.plot(
+            kwargs = dict(
                 fig=fig,
                 ax=ax,
                 color=ARROW_COLOR,
                 linewidth=ARROW_WIDTH,
-                label="W0",
-                offset_label=self.W0 * 0.3 + 1j * self.H3 * 0.2,
                 is_arrow=True,
                 fontsize=SC_FONT_SIZE,
+            )
+            # W0
+            line = Segment(point_dict["Z9"] * rot, point_dict["Z9s"] * rot)
+            line.plot(
+                label="W0", offset_label=self.W0 * 0.3 + 1j * self.H3 * 0.2, **kwargs
             )
             # W1
             line = Segment(
-                (point_dict["Z8"] + point_dict["Z7"]) / 2 * exp(1j * alpha),
-                (point_dict["Z8s"] + point_dict["Z7s"]) / 2 * exp(1j * alpha),
+                (point_dict["Z8"] + point_dict["Z7"]) / 2 * rot,
+                (point_dict["Z8s"] + point_dict["Z7s"]) / 2 * rot,
             )
-            line.plot(
-                fig=fig,
-                ax=ax,
-                color=ARROW_COLOR,
-                linewidth=ARROW_WIDTH,
-                label="W1",
-                offset_label=-1j * self.H3 * 0.4,
-                is_arrow=True,
-                fontsize=SC_FONT_SIZE,
-            )
+            line.plot(label="W1", offset_label=-1j * self.H3 * 0.4, **kwargs)
             # W2
-            line = Segment(
-                point_dict["Z8"] * exp(1j * alpha), point_dict["Z8b"] * exp(1j * alpha)
-            )
-            line.plot(
-                fig=fig,
-                ax=ax,
-                color=ARROW_COLOR,
-                linewidth=ARROW_WIDTH,
-                label="W2",
-                offset_label=1j * self.H3 * 0.2,
-                is_arrow=True,
-                fontsize=SC_FONT_SIZE,
-            )
+            line = Segment(point_dict["Z8"] * rot, point_dict["Z8b"] * rot)
+            line.plot(label="W2", offset_label=1j * self.H3 * 0.2, **kwargs)
             # W3
             line = Segment(
-                (point_dict["Z1s"] + point_dict["Z11s"]) * 0.5 * exp(1j * alpha),
-                (point_dict["Z1"] + point_dict["Z11"])
-                * 0.5
-                * exp(1j * sp)
-                * exp(1j * alpha),
+                (point_dict["Z1s"] + point_dict["Z11s"]) * 0.5 * rot,
+                (point_dict["Z1"] + point_dict["Z11"]) * 0.5 * rot * exp(1j * sp),
             )
-            line.plot(
-                fig=fig,
-                ax=ax,
-                color=ARROW_COLOR,
-                linewidth=ARROW_WIDTH,
-                label="W3",
-                offset_label=-1j * self.H3 * 0.3,
-                is_arrow=True,
-                fontsize=SC_FONT_SIZE,
-            )
+            line.plot(label="W3", offset_label=-1j * self.H3 * 0.3, **kwargs)
             # W4
-            line = Segment(
-                point_dict["Z5"] * exp(1j * alpha), point_dict["Z4"] * exp(1j * alpha)
-            )
-            line.plot(
-                fig=fig,
-                ax=ax,
-                color=ARROW_COLOR,
-                linewidth=ARROW_WIDTH,
-                label="W4",
-                offset_label=-1j * self.H3 * 0.3,
-                is_arrow=True,
-                fontsize=SC_FONT_SIZE,
-            )
+            line = Segment(point_dict["Z5"] * rot, point_dict["Z4"] * rot)
+            line.plot(label="W4", offset_label=-1j * self.H3 * 0.3, **kwargs)
             # H0
-            line = Segment(
-                Rbo * exp(1j * alpha), point_dict["Z8"].real * exp(1j * alpha)
-            )
+            line = Segment(Rbo * rot, point_dict["Z8"].real * rot)
             line.plot(
-                fig=fig,
-                ax=ax,
-                color=ARROW_COLOR,
-                linewidth=ARROW_WIDTH,
-                label="H0",
-                offset_label=self.W0 * 0.05 + 1j * self.H3 * 0.2,
-                is_arrow=True,
-                fontsize=SC_FONT_SIZE,
+                label="H0", offset_label=self.W0 * 0.05 + 1j * self.H3 * 0.2, **kwargs
             )
             # H1
             line = Segment(
-                Rbo * exp(-1j * sp / 2) * exp(1j * alpha),
-                (Rbo - self.H1) * exp(-1j * sp / 2) * exp(1j * alpha),
+                Rbo * exp(-1j * sp / 2) * rot,
+                (Rbo - self.H1) * exp(-1j * sp / 2) * rot,
             )
-            line.plot(
-                fig=fig,
-                ax=ax,
-                color=ARROW_COLOR,
-                linewidth=ARROW_WIDTH,
-                label="H1",
-                offset_label=self.H3 * 0.2,
-                is_arrow=True,
-                fontsize=SC_FONT_SIZE,
-            )
+            line.plot(label="H1", offset_label=self.H3 * 0.2, **kwargs)
             # H2
             line = Segment(
-                (point_dict["Z3s"] + point_dict["Z6s"]) * 0.5 * exp(1j * alpha),
-                (point_dict["Z4s"] + point_dict["Z5s"]) * 0.5 * exp(1j * alpha),
+                (point_dict["Z3s"] + point_dict["Z6s"]) * 0.5 * rot,
+                (point_dict["Z4s"] + point_dict["Z5s"]) * 0.5 * rot,
             )
-            line.plot(
-                fig=fig,
-                ax=ax,
-                color=ARROW_COLOR,
-                linewidth=ARROW_WIDTH,
-                label="H2",
-                offset_label=self.H3 * 0.2,
-                is_arrow=True,
-                fontsize=SC_FONT_SIZE,
-            )
+            line.plot(label="H2", offset_label=self.H3 * 0.2, **kwargs)
             # H3
-            line = Segment(
-                point_dict["Z4s"] * exp(1j * alpha),
-                point_dict["Z8cs"] * exp(1j * alpha),
-            )
-            line.plot(
-                fig=fig,
-                ax=ax,
-                color=ARROW_COLOR,
-                linewidth=ARROW_WIDTH,
-                label="H3",
-                offset_label=self.H3 * 0.2,
-                is_arrow=True,
-                fontsize=SC_FONT_SIZE,
-            )
+            line = Segment(point_dict["Z4s"] * rot, point_dict["Z8cs"] * rot)
+            line.plot(label="H3", offset_label=self.H3 * 0.2, **kwargs)
             # H4
-            line = Segment(
-                point_dict["Z9s"] * exp(1j * alpha),
-                point_dict["Z10s"] * exp(1j * alpha),
-            )
-            line.plot(
-                fig=fig,
-                ax=ax,
-                color=ARROW_COLOR,
-                linewidth=ARROW_WIDTH,
-                label="H4",
-                offset_label=self.H3 * 0.2,
-                is_arrow=True,
-                fontsize=SC_FONT_SIZE,
-            )
+            line = Segment(point_dict["Z9s"] * rot, point_dict["Z10s"] * rot)
+            line.plot(label="H4", offset_label=self.H3 * 0.2, **kwargs)
 
         if is_add_main_line:
+            lines = []
             # Ox axis
-            line = Segment(0, lam.Rext * 1.5 * exp(1j * alpha))
-            line.plot(
-                fig=fig,
-                ax=ax,
-                color=MAIN_LINE_COLOR,
-                linestyle=MAIN_LINE_STYLE,
-                linewidth=MAIN_LINE_WIDTH,
-            )
+            lines.append(Segment(0, lam.Rext * 1.5 * rot))
+
             # Tooth axis
-            line = Segment(0, lam.Rext * 1.5 * exp(1j * sp / 2) * exp(1j * alpha))
-            line.plot(
-                fig=fig,
-                ax=ax,
-                color=MAIN_LINE_COLOR,
-                linestyle=MAIN_LINE_STYLE,
-                linewidth=MAIN_LINE_WIDTH,
-            )
-            line = Segment(0, lam.Rext * 1.5 * exp(-1j * sp / 2) * exp(1j * alpha))
-            line.plot(
-                fig=fig,
-                ax=ax,
-                color=MAIN_LINE_COLOR,
-                linestyle=MAIN_LINE_STYLE,
-                linewidth=MAIN_LINE_WIDTH,
-            )
+            lines.append(Segment(0, lam.Rext * 1.5 * exp(1j * sp / 2) * rot))
+
+            lines.append(Segment(0, lam.Rext * 1.5 * exp(-1j * sp / 2) * rot))
             # H1 radius
-            line = Arc1(
-                begin=(Rbo - self.H1) * exp(-1j * pi / 2 * 0.9) * exp(1j * alpha),
-                end=(Rbo - self.H1) * exp(1j * pi / 2 * 0.9) * exp(1j * alpha),
-                radius=Rbo - self.H1,
-                is_trigo_direction=True,
-            )
-            line.plot(
-                fig=fig,
-                ax=ax,
-                color=MAIN_LINE_COLOR,
-                linestyle=MAIN_LINE_STYLE,
-                linewidth=MAIN_LINE_WIDTH,
+            R = Rbo - self.H1
+            rot_N = exp(-1j * pi / 2 * 0.9) * rot
+            rot_P = exp(1j * pi / 2 * 0.9) * rot
+            lines.append(
+                Arc1(begin=R * rot_N, end=R * rot_P, radius=R, is_trigo_direction=True)
             )
             # H4 radius
-            line = Arc1(
-                begin=(Rbo - self.H1 + self.H4)
-                * exp(-1j * pi / 2 * 0.9)
-                * exp(1j * alpha),
-                end=(Rbo - self.H1 + self.H4)
-                * exp(1j * pi / 2 * 0.9)
-                * exp(1j * alpha),
-                radius=Rbo - self.H1 + self.H4,
-                is_trigo_direction=True,
-            )
-            line.plot(
-                fig=fig,
-                ax=ax,
-                color=MAIN_LINE_COLOR,
-                linestyle=MAIN_LINE_STYLE,
-                linewidth=MAIN_LINE_WIDTH,
+            R = Rbo - self.H1 + self.H4
+            lines.append(
+                Arc1(begin=R * rot_N, end=R * rot_P, radius=R, is_trigo_direction=True)
             )
             # W1 lines
-            line = Segment(
-                point_dict["Z7"] * exp(1j * alpha), point_dict["Z7s"] * exp(1j * alpha)
-            )
-            line.plot(
-                fig=fig,
-                ax=ax,
-                color=MAIN_LINE_COLOR,
-                linestyle=MAIN_LINE_STYLE,
-                linewidth=MAIN_LINE_WIDTH,
-            )
-            line = Segment(
-                point_dict["Z8"] * exp(1j * alpha), point_dict["Z8s"] * exp(1j * alpha)
-            )
-            line.plot(
-                fig=fig,
-                ax=ax,
-                color=MAIN_LINE_COLOR,
-                linestyle=MAIN_LINE_STYLE,
-                linewidth=MAIN_LINE_WIDTH,
-            )
+            lines.append(Segment(point_dict["Z7"] * rot, point_dict["Z7s"] * rot))
+            lines.append(Segment(point_dict["Z8"] * rot, point_dict["Z8s"] * rot))
             # W2 lines
-            line = Segment(
-                point_dict["Z8"] * exp(1j * alpha), point_dict["Z8a"] * exp(1j * alpha)
-            )
-            line.plot(
-                fig=fig,
-                ax=ax,
-                color=MAIN_LINE_COLOR,
-                linestyle=MAIN_LINE_STYLE,
-                linewidth=MAIN_LINE_WIDTH,
-            )
-            line = Segment(
-                point_dict["Z8s"] * exp(1j * alpha),
-                point_dict["Z8as"] * exp(1j * alpha),
-            )
-            line.plot(
-                fig=fig,
-                ax=ax,
-                color=MAIN_LINE_COLOR,
-                linestyle=MAIN_LINE_STYLE,
-                linewidth=MAIN_LINE_WIDTH,
-            )
+            lines.append(Segment(point_dict["Z8"] * rot, point_dict["Z8a"] * rot))
+            lines.append(Segment(point_dict["Z8s"] * rot, point_dict["Z8as"] * rot))
             # H2 lines
-            line = Segment(
-                point_dict["Z3s"] * exp(1j * alpha), point_dict["Z6s"] * exp(1j * alpha)
-            )
-            line.plot(
-                fig=fig,
-                ax=ax,
-                color=MAIN_LINE_COLOR,
-                linestyle=MAIN_LINE_STYLE,
-                linewidth=MAIN_LINE_WIDTH,
-            )
+            lines.append(Segment(point_dict["Z3s"] * rot, point_dict["Z6s"] * rot))
+
+            for line in lines:
+                line.plot(
+                    fig=fig,
+                    ax=ax,
+                    color=MAIN_LINE_COLOR,
+                    linestyle=MAIN_LINE_STYLE,
+                    linewidth=MAIN_LINE_WIDTH,
+                )
 
         # Zooming and cleaning
         W = abs(point_dict["Z11s"].imag) * 1.3

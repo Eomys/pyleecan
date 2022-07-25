@@ -10,9 +10,9 @@ from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
-from ..Functions.copy import copy
 from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
+from copy import deepcopy
 from .OutInternal import OutInternal
 
 # Import all class method
@@ -41,9 +41,8 @@ class OutMagElmer(OutInternal):
         )
     else:
         clean = clean
-    # save and copy methods are available in all object
+    # generic save method is available in all object
     save = save
-    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -161,6 +160,18 @@ class OutMagElmer(OutInternal):
         # Overwrite the mother class name
         OutMagElmer_dict["__class__"] = "OutMagElmer"
         return OutMagElmer_dict
+
+    def copy(self):
+        """Creates a deepcopy of the object"""
+
+        # Handle deepcopy of all the properties
+        if self.FEA_dict is None:
+            FEA_dict_val = None
+        else:
+            FEA_dict_val = self.FEA_dict.copy()
+        # Creates new object of the same type with the copied properties
+        obj_copy = type(self)(FEA_dict=FEA_dict_val)
+        return obj_copy
 
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""

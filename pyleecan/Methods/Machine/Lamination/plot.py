@@ -1,5 +1,6 @@
 import matplotlib.pyplot as plt
 from matplotlib.patches import Patch
+from matplotlib.pyplot import legend
 
 from ....Functions.init_fig import init_fig
 from ....definitions import config_dict
@@ -50,6 +51,7 @@ def plot(
         To call show at the end of the method
     save_path : str
         full path including folder, name and extension of the file to save if save_path is not None
+
 
     Returns
     -------

@@ -27,7 +27,7 @@ def interp_Tem_rip_dqh(self, Id, Iq):
     Tem_rip_pp_dqh = np.array([out.mag.Tem_rip_pp for out in self.output_list])
 
     # Get unique Id, Iq sorted in ascending order
-    OP_matrix = self.get_OP_matrix()
+    OP_matrix = self.get_OP_array("N0", "Id", "Iq")
     XId, jd = np.unique(OP_matrix[:, 1], return_inverse=True)
     XIq, jq = np.unique(OP_matrix[:, 2], return_inverse=True)
     nd, nq = XId.size, XIq.size

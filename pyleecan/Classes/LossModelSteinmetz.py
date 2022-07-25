@@ -10,9 +10,9 @@ from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
-from ..Functions.copy import copy
 from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
+from copy import deepcopy
 from .LossModel import LossModel
 
 # Import all class method
@@ -43,9 +43,8 @@ class LossModelSteinmetz(LossModel):
         )
     else:
         comp_coeff = comp_coeff
-    # save and copy methods are available in all object
+    # generic save method is available in all object
     save = save
-    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -56,6 +55,7 @@ class LossModelSteinmetz(LossModel):
         alpha_f=None,
         alpha_B=None,
         name="",
+        is_show_fig=False,
         init_dict=None,
         init_str=None,
     ):
@@ -84,13 +84,15 @@ class LossModelSteinmetz(LossModel):
                 alpha_B = init_dict["alpha_B"]
             if "name" in list(init_dict.keys()):
                 name = init_dict["name"]
+            if "is_show_fig" in list(init_dict.keys()):
+                is_show_fig = init_dict["is_show_fig"]
         # Set the properties (value check and convertion are done in setter)
         self.k_hy = k_hy
         self.k_ed = k_ed
         self.alpha_f = alpha_f
         self.alpha_B = alpha_B
         # Call LossModel init
-        super(LossModelSteinmetz, self).__init__(name=name)
+        super(LossModelSteinmetz, self).__init__(name=name, is_show_fig=is_show_fig)
         # The class is frozen (in LossModel init), for now it's impossible to
         # add new properties
 
@@ -250,6 +252,27 @@ class LossModelSteinmetz(LossModel):
         # Overwrite the mother class name
         LossModelSteinmetz_dict["__class__"] = "LossModelSteinmetz"
         return LossModelSteinmetz_dict
+
+    def copy(self):
+        """Creates a deepcopy of the object"""
+
+        # Handle deepcopy of all the properties
+        k_hy_val = self.k_hy
+        k_ed_val = self.k_ed
+        alpha_f_val = self.alpha_f
+        alpha_B_val = self.alpha_B
+        name_val = self.name
+        is_show_fig_val = self.is_show_fig
+        # Creates new object of the same type with the copied properties
+        obj_copy = type(self)(
+            k_hy=k_hy_val,
+            k_ed=k_ed_val,
+            alpha_f=alpha_f_val,
+            alpha_B=alpha_B_val,
+            name=name_val,
+            is_show_fig=is_show_fig_val,
+        )
+        return obj_copy
 
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""

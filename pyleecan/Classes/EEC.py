@@ -10,9 +10,9 @@ from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
-from ..Functions.copy import copy
 from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
+from copy import deepcopy
 from ._frozen import FrozenClass
 
 # Import all class method
@@ -167,9 +167,8 @@ class EEC(FrozenClass):
         )
     else:
         comp_fluxlinkage = comp_fluxlinkage
-    # save and copy methods are available in all object
+    # generic save method is available in all object
     save = save
-    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -518,6 +517,41 @@ class EEC(FrozenClass):
         # The class name is added to the dict for deserialisation purpose
         EEC_dict["__class__"] = "EEC"
         return EEC_dict
+
+    def copy(self):
+        """Creates a deepcopy of the object"""
+
+        # Handle deepcopy of all the properties
+        type_skin_effect_val = self.type_skin_effect
+        if self.OP is None:
+            OP_val = None
+        else:
+            OP_val = self.OP.copy()
+        Tsta_val = self.Tsta
+        Trot_val = self.Trot
+        Xkr_skinS_val = self.Xkr_skinS
+        Xke_skinS_val = self.Xke_skinS
+        Xkr_skinR_val = self.Xkr_skinR
+        Xke_skinR_val = self.Xke_skinR
+        R1_val = self.R1
+        if self.fluxlink is None:
+            fluxlink_val = None
+        else:
+            fluxlink_val = self.fluxlink.copy()
+        # Creates new object of the same type with the copied properties
+        obj_copy = type(self)(
+            type_skin_effect=type_skin_effect_val,
+            OP=OP_val,
+            Tsta=Tsta_val,
+            Trot=Trot_val,
+            Xkr_skinS=Xkr_skinS_val,
+            Xke_skinS=Xke_skinS_val,
+            Xkr_skinR=Xkr_skinR_val,
+            Xke_skinR=Xke_skinR_val,
+            R1=R1_val,
+            fluxlink=fluxlink_val,
+        )
+        return obj_copy
 
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""

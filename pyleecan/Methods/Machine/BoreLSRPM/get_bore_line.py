@@ -22,19 +22,22 @@ def get_bore_line(self, prop_dict=None):
     """
 
     if self.parent is not None:
-        Rbo = self.parent.get_Rbo()
+        if self.is_yoke():
+            R = self.parent.get_Ryoke()
+        else:
+            R = self.parent.get_Rbo()
     else:
-        raise ParentMissingError("Error: The slot is not inside a Lamination")
+        raise ParentMissingError("Error: The Bore object is not inside a Lamination")
 
     # Compute the shape
 
     alpha1 = pi / self.N
 
     # Z1
-    Z1 = Rbo * exp(-1j * alpha1)
+    Z1 = R * exp(-1j * alpha1)
 
     # ZC1
-    ZC1 = (Rbo - self.Rarc) * exp(-1j * alpha1)
+    ZC1 = (R - self.Rarc) * exp(-1j * alpha1)
     XC1 = ZC1.real
     YC1 = ZC1.imag
 

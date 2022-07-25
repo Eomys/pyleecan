@@ -3,6 +3,7 @@ from ....Methods import ParentMissingError
 
 def get_Rbo(self):
     """Return the parent lamination bore radius
+    (to make lam.notch[ii].notch_shape match lam.slot parent)
 
     Parameters
     ----------

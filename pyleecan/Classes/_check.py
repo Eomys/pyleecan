@@ -134,6 +134,11 @@ def check_type(var_name, value, expect_type, type_value):
             raise CheckTypeError(
                 "For " + var_name + " : Integer expected, " + type_value + " given"
             )
+    elif expect_type == "[]":
+        if not isinstance(value, list):
+            raise CheckTypeError(
+                "For " + var_name + " : List expected, " + type_value + " given"
+            )
     elif expect_type[0] == "[" and expect_type[-1] == "]":  # List of type
         if not isinstance(value, list):
             raise CheckTypeError(

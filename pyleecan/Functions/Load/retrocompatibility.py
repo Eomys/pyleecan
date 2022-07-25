@@ -2,6 +2,7 @@ from ...Functions.Load.import_class import import_class
 from ...Functions.labels import HOLEM_LAB, HOLEV_LAB
 from logging import getLogger
 from ...loggers import GUI_LOG_NAME
+from numpy import array
 
 
 def convert_init_dict(init_dict):
@@ -45,6 +46,8 @@ def _search_and_update(obj_dict, parent=None, parent_index=None, update_dict=Non
         parent[parent_index] = convert_HoleUD(obj_dict)
     elif update_dict["OP"] and is_OP_dict(obj_dict):
         parent[parent_index] = convert_OP(obj_dict)
+    elif update_dict["OP_matrix"] and is_OP_matrix_dict(obj_dict):
+        parent[parent_index] = convert_OP_matrix(obj_dict)
     elif update_dict["Winding"] and is_Winding_dict(obj_dict):
         if (
             parent is not None
@@ -54,6 +57,8 @@ def _search_and_update(obj_dict, parent=None, parent_index=None, update_dict=Non
             # Add Zs for wind_mat generation
             obj_dict["Zs"] = parent["slot"]["Zs"]
         parent[parent_index] = convert_Winding(obj_dict)
+    elif update_dict["Yoke_Notch"] and is_yoke_notch(obj_dict):
+        move_yoke_notch(obj_dict)
     else:
         # walk through the dict
         for key, value in obj_dict.items():
@@ -69,6 +74,87 @@ def _search_and_update(obj_dict, parent=None, parent_index=None, update_dict=Non
                         _search_and_update(
                             item, parent=value, parent_index=ii, update_dict=update_dict
                         )
+
+
+############################################
+# V 1.3.8 => 1.4.0
+# moved yoke_notch to notch (list)
+############################################
+Yoke_Notch_VERSION = "1.4.0"
+
+
+def is_yoke_notch(obj_dict):
+    """Check if the object need to be updated for yoke_notch"""
+    return (
+        "__class__" in obj_dict.keys()
+        and "yoke_notch" in obj_dict.keys()
+        and "notch" in obj_dict.keys()
+        and obj_dict["yoke_notch"]
+    )
+
+
+def move_yoke_notch(obj_dict):
+    """Move all yoke notches to notch property and set notch.is_yoke property to True"""
+    # create notch list if not existent
+    if obj_dict["notch"] is None:
+        obj_dict["notch"] = []
+
+    # move yoke notches to notch property
+    while obj_dict["yoke_notch"]:
+        yoke_notch = obj_dict["yoke_notch"].pop(0)
+        obj_dict["notch"].append(yoke_notch)
+        # set is_bore property to True
+        if isinstance(yoke_notch, dict):
+            yoke_notch["notch_shape"]["is_bore"] = False
+
+
+############################################
+# V 1.3.9 => 1.4.0
+# Introducing OP_matrix object
+############################################
+OP_MAT_VERSION = "1.4.0"
+
+
+def is_OP_matrix_dict(obj_dict):
+    """Check if the object need to be updated for OP_matrix"""
+    return (
+        "__class__" in obj_dict.keys()
+        and "VarLoad" in obj_dict["__class__"]
+        and "type_OP_matrix" in obj_dict.keys()
+    )
+
+
+def convert_OP_matrix(obj_dict):
+    OPMatrix = import_class("pyleecan.Classes", "OPMatrix")
+    OP_mat_obj = OPMatrix()
+    type_OP_matrix = obj_dict.pop("type_OP_matrix")
+    if type_OP_matrix is None:
+        type_OP_matrix = 1  # Default is Id/Iq
+
+    if type_OP_matrix == 0:
+        arg_list = ["N0", "I0", "Phi0"]
+    elif type_OP_matrix == 1:
+        arg_list = ["N0", "Id", "Iq"]
+    elif type_OP_matrix == 2:
+        arg_list = ["N0", "U0", "slip"]
+    else:
+        raise Exception(
+            "Error in retrocompatibility: type_OP_matrix=="
+            + str(type_OP_matrix)
+            + " doesn't exist"
+        )
+    OP_matrix = obj_dict.pop("OP_matrix")
+    if OP_matrix is None:
+        obj_dict["OP_matrix"] = None
+    else:
+        OP_matrix = array(OP_matrix)
+        if OP_matrix.shape[1] == 4:
+            arg_list.append("Tem")
+        elif OP_matrix.shape[1] == 5:
+            arg_list.extend(["Tem", "Pem"])
+        OP_mat_obj.set_OP_array(OP_matrix, *arg_list)
+        obj_dict["OP_matrix"] = OP_mat_obj
+    return obj_dict
 
 
 ############################################
@@ -297,8 +383,12 @@ def create_update_dict(file_version):
         update_dict["Winding"] = True
         update_dict["HoleUD"] = True
         update_dict["OP"] = True
+        update_dict["OP_matrix"] = True
+        update_dict["Yoke_Notch"] = True
     else:
         update_dict["Winding"] = is_before_version(WIND_VERSION, file_version)
         update_dict["HoleUD"] = is_before_version(HoleUD_VERSION, file_version)
         update_dict["OP"] = is_before_version(OP_VERSION, file_version)
+        update_dict["OP_matrix"] = is_before_version(OP_MAT_VERSION, file_version)
+        update_dict["Yoke_Notch"] = is_before_version(Yoke_Notch_VERSION, file_version)
     return update_dict

@@ -10,9 +10,9 @@ from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
-from ..Functions.copy import copy
 from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
+from copy import deepcopy
 from .Bore import Bore
 
 # Import all class method
@@ -21,6 +21,13 @@ try:
     from ..Methods.Machine.BoreFlower.get_bore_line import get_bore_line
 except ImportError as error:
     get_bore_line = error
+
+try:
+    from ..Methods.Machine.BoreFlower.comp_periodicity_spatial import (
+        comp_periodicity_spatial,
+    )
+except ImportError as error:
+    comp_periodicity_spatial = error
 
 
 from numpy import isnan
@@ -32,6 +39,7 @@ class BoreFlower(Bore):
 
     VERSION = 1
 
+    # Check ImportError to remove unnecessary dependencies in unused method
     # cf Methods.Machine.BoreFlower.get_bore_line
     if isinstance(get_bore_line, ImportError):
         get_bore_line = property(
@@ -43,13 +51,26 @@ class BoreFlower(Bore):
         )
     else:
         get_bore_line = get_bore_line
-    # save and copy methods are available in all object
+    # cf Methods.Machine.BoreFlower.comp_periodicity_spatial
+    if isinstance(comp_periodicity_spatial, ImportError):
+        comp_periodicity_spatial = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use BoreFlower method comp_periodicity_spatial: "
+                    + str(comp_periodicity_spatial)
+                )
+            )
+        )
+    else:
+        comp_periodicity_spatial = comp_periodicity_spatial
+    # generic save method is available in all object
     save = save
-    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, N=8, Rarc=0.01, alpha=0, init_dict=None, init_str=None):
+    def __init__(
+        self, N=8, Rarc=0.01, alpha=0, type_merge_slot=1, init_dict=None, init_str=None
+    ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -71,12 +92,14 @@ class BoreFlower(Bore):
                 Rarc = init_dict["Rarc"]
             if "alpha" in list(init_dict.keys()):
                 alpha = init_dict["alpha"]
+            if "type_merge_slot" in list(init_dict.keys()):
+                type_merge_slot = init_dict["type_merge_slot"]
         # Set the properties (value check and convertion are done in setter)
         self.N = N
         self.Rarc = Rarc
         self.alpha = alpha
         # Call Bore init
-        super(BoreFlower, self).__init__()
+        super(BoreFlower, self).__init__(type_merge_slot=type_merge_slot)
         # The class is frozen (in Bore init), for now it's impossible to
         # add new properties
 
@@ -199,6 +222,20 @@ class BoreFlower(Bore):
         # Overwrite the mother class name
         BoreFlower_dict["__class__"] = "BoreFlower"
         return BoreFlower_dict
+
+    def copy(self):
+        """Creates a deepcopy of the object"""
+
+        # Handle deepcopy of all the properties
+        N_val = self.N
+        Rarc_val = self.Rarc
+        alpha_val = self.alpha
+        type_merge_slot_val = self.type_merge_slot
+        # Creates new object of the same type with the copied properties
+        obj_copy = type(self)(
+            N=N_val, Rarc=Rarc_val, alpha=alpha_val, type_merge_slot=type_merge_slot_val
+        )
+        return obj_copy
 
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""
