@@ -43,6 +43,7 @@ ICON_SIZE = 24
 COLOR_LIST = ["k", "r", "c"]
 Z_TOL = 1e-4  # Point comparison tolerance
 AUTO_SELECT = True
+IS_ADD_LINE_ID = False  # For debug
 
 
 class DXF_Hole(Ui_DXF_Hole, QDialog):
@@ -105,6 +106,14 @@ class DXF_Hole(Ui_DXF_Hole, QDialog):
         self.selected_line = np.array([])  # Array of selected lines indices
         self.surf_list = list()  # List of defined surfaces
         self.Zcenter = 0  # For translate offset
+
+        # Connection related variables
+        # matrix of points coordinates (ndarray[Npoint, 2])
+        self.point_coord = None
+        # start point id (in point_coord) and end point id for each line (ndarray[Nline, 2])
+        self.line2point = None
+        # lines id (in line_list) connected to each point (list[Npoints, n])
+        self.point2line = None
 
         # Set DXF edit widget
         self.lf_center_x.setValue(0)
@@ -183,7 +192,8 @@ class DXF_Hole(Ui_DXF_Hole, QDialog):
             self.surf_list = list()
             self.w_surface_list.setRowCount(0)
             # Calculate connection matrix and matrix of points coordinates
-            self.comp_connection()
+            if AUTO_SELECT:
+                self.comp_connection()
             # Display
             self.update_graph()
         except Exception as e:
@@ -209,18 +219,23 @@ class DXF_Hole(Ui_DXF_Hole, QDialog):
         point_coord = list()
         point2line = list()
         for ii, line in enumerate(self.line_list):
+            # Add begin point
             point_begin = line.get_begin()
-            point_end = line.get_end()
-            if point_begin in point_coord:
-                point_id = point_coord.index(point_begin)
+            # Tolerance to avoid duplicate points
+            index = np.where(np.abs(np.array(point_coord) - point_begin) < Z_TOL)[0]
+            if len(index) == 1:
+                point_id = index[0]
                 line2point[ii, 0] = point_id
                 point2line[point_id].append(ii)
             else:
                 point_coord.append(point_begin)
                 line2point[ii, 0] = len(point_coord) - 1
                 point2line.append([ii])
-            if point_end in point_coord:
-                point_id = point_coord.index(point_end)
+            # Add end point
+            point_end = line.get_end()
+            index = np.where(np.abs(np.array(point_coord) - point_end) < Z_TOL)[0]
+            if len(index) == 1:
+                point_id = index[0]
                 line2point[ii, 1] = point_id
                 point2line[point_id].append(ii)
             else:
@@ -228,12 +243,15 @@ class DXF_Hole(Ui_DXF_Hole, QDialog):
                 line2point[ii, 1] = len(point_coord) - 1
                 point2line.append([ii])
 
+        # Store connection matrix for later use
         self.line2point = line2point
+        self.point2line = point2line
+
+        # Convert point list to matrix
         point_coord = np.array(point_coord, dtype=complex)
         self.point_coord = np.zeros((point_coord.size, 2))
         self.point_coord[:, 0] = np.real(point_coord)
         self.point_coord[:, 1] = np.imag(point_coord)
-        self.point2line = point2line
 
     def get_closest_line_id(self, X, Y):
         """Get closest line id to input X and Y coordinates
@@ -271,15 +289,16 @@ class DXF_Hole(Ui_DXF_Hole, QDialog):
         return closest_id
 
     def get_connected_lines(self, connected_lines, lin_curr, pt_curr):
-        """Get connected lines to the current line and current point and return if the connected lines
-        results in a closed surface
+        """Get connected lines to the current line starting at the current point
+        (need to call method on both end points of the lines)
+        return if the connected lines results in a closed surface and extend connected_lines
 
         Parameters
         ----------
         self : DXF_Hole
             a DXF_Hole object
         connected_lines: list
-            List of line if connected to current line and point
+            List of line index connected to current line and point
         lin_curr: int
             current line id
         pt_curr: int
@@ -295,17 +314,18 @@ class DXF_Hole(Ui_DXF_Hole, QDialog):
         point2line = self.point2line
 
         is_closed = False
-        is_next = True
+        is_next = True  # Is there another line to select
         while is_next:
-            l_i = point2line[pt_curr]
+            l_i = point2line[pt_curr]  # list of line connected to the point
             if len(l_i) == 2:
+                # We select the next line only if the point is connected to 2 lines
                 next_line = l_i[0] if l_i[1] == lin_curr else l_i[1]
                 if next_line not in connected_lines:
                     connected_lines.append(next_line)
                     lin_curr = next_line
                     p_i = line2point[lin_curr]
                     pt_curr = p_i[0] if p_i[1] == pt_curr else p_i[1]
-                else:
+                else:  # Next line is already in connected lines
                     is_next = False
                     is_closed = True
             else:
@@ -375,19 +395,26 @@ class DXF_Hole(Ui_DXF_Hole, QDialog):
 
                 connected_lines = [closest_id]
                 is_closed = False
-                if AUTO_SELECT:
+                # If the line is not already selected (else edit only the line)
+                if self.selected_line[closest_id] == 0 and AUTO_SELECT:
+                    # Select all points starting from begin point
                     lin_curr = closest_id
                     pt_curr = self.line2point[closest_id, 0]
                     is_closed = self.get_connected_lines(
                         connected_lines, lin_curr, pt_curr
                     )
-
+                    # Select all points starting from end point
                     if not is_closed:
                         lin_curr = closest_id
                         pt_curr = self.line2point[closest_id, 1]
-                        self.get_connected_lines(connected_lines, lin_curr, pt_curr)
+                        is_closed = self.get_connected_lines(
+                            connected_lines, lin_curr, pt_curr
+                        )
+                    # Make sure that all the lines will be set to "1"
+                    for index in connected_lines:
+                        self.selected_line[index] = 0
 
-                # Select/unselect line
+                # Select/unselect line (needed for add_surface)
                 for id_line in connected_lines:
                     if self.selected_line[id_line] == 0:
                         # Unselected to selected
@@ -396,7 +423,7 @@ class DXF_Hole(Ui_DXF_Hole, QDialog):
                         # Selected to selected bottom mag
                         Imag = np.where(self.selected_line == 2)[0]
                         if Imag.size > 0:
-                            current_bot_mag = self.selected_line[Imag[0]]
+                            current_bot_mag = Imag[0]
                             # Only one selected bottom mag line at the time
                             point_list = np.array(
                                 self.line_list[current_bot_mag].discretize(20)
@@ -413,23 +440,18 @@ class DXF_Hole(Ui_DXF_Hole, QDialog):
                         # selected bottom mag to Unselected
                         self.selected_line[id_line] = 0
 
-                    if not is_closed:
-                        # Change line color
+                # Check if the surface is complete
+                # (is_close=True: surface selected in one click)
+                if is_closed or self.check_selection():
+                    self.add_surface()
+                else:  # Update line color on plot
+                    for id_line in connected_lines:
                         point_list = np.array(self.line_list[id_line].discretize(20))
                         color = COLOR_LIST[self.selected_line[id_line]]
                         axes.plot(point_list.real, point_list.imag, color, zorder=2)
-
-                if is_closed:
-                    self.add_surface()
-
-                else:
                     self.axes.set_xlim(self.xlim)
                     self.axes.set_ylim(self.ylim)
                     self.canvas.draw()
-
-                    # Check if the surface is complete
-                    if self.check_selection():
-                        self.add_surface()
 
         def zoom(event):
             """Function to zoom/unzoom according the mouse wheel"""
@@ -493,6 +515,9 @@ class DXF_Hole(Ui_DXF_Hole, QDialog):
             point_list = np.array(line.discretize(20))
             color = COLOR_LIST[self.selected_line[ii]]
             axes.plot(point_list.real, point_list.imag, color, zorder=1)
+            if IS_ADD_LINE_ID:
+                Zmid = line.get_middle()
+                axes.text(Zmid.real, Zmid.imag, str(ii))
         # Add lamination center
         axes.plot(self.Zcenter.real, self.Zcenter.imag, "rx", zorder=0)
         axes.text(self.Zcenter.real, self.Zcenter.imag, "O")
@@ -514,12 +539,12 @@ class DXF_Hole(Ui_DXF_Hole, QDialog):
         """
 
         Iselect = np.where(self.selected_line)[0]
-
+        if len(Iselect) == 0:  # No line selected
+            return False
+        # line2point contains index (int), no need for Z_tol
         _, count0 = np.unique(self.line2point[Iselect, :].ravel(), return_counts=True)
 
-        is_surf = np.all(count0 == 2)
-
-        return is_surf
+        return np.all(count0 == 2)
 
     def sort_lines(self):
         """Sort selected lines so that current line's starting point is the same as previous line's ending point
@@ -594,9 +619,7 @@ class DXF_Hole(Ui_DXF_Hole, QDialog):
         combobox = QComboBox()
         combobox.addItems(["Hole", "Magnet"])
         self.w_surface_list.setCellWidget(
-            nrows,
-            TYPE_COL,
-            combobox,
+            nrows, TYPE_COL, combobox,
         )
         if np.any(self.selected_line == 2):
             combobox.setCurrentIndex(1)  # Magnet
@@ -607,9 +630,7 @@ class DXF_Hole(Ui_DXF_Hole, QDialog):
         del_button.setIcon(QIcon(self.delete_icon))
         del_button.pressed.connect(self.delete_surface)
         self.w_surface_list.setCellWidget(
-            nrows,
-            DEL_COL,
-            del_button,
+            nrows, DEL_COL, del_button,
         )
 
         # Adding Highlight button
@@ -617,18 +638,14 @@ class DXF_Hole(Ui_DXF_Hole, QDialog):
         HL_button.setIcon(QIcon(self.highlight_icon))
         HL_button.pressed.connect(self.highlight_surface)
         self.w_surface_list.setCellWidget(
-            nrows,
-            HL_COL,
-            HL_button,
+            nrows, HL_COL, HL_button,
         )
 
         # Add reference combobox
         combobox = QComboBox()
         combobox.addItems(str_list)
         self.w_surface_list.setCellWidget(
-            nrows,
-            REF_COL,
-            combobox,
+            nrows, REF_COL, combobox,
         )
         Imag = np.where(self.selected_line == 2)[0]
         if Imag.size > 0:
@@ -644,9 +661,7 @@ class DXF_Hole(Ui_DXF_Hole, QDialog):
         # lf_off.setText("0")
         lf_off.setEnabled(np.any(self.selected_line == 2))
         self.w_surface_list.setCellWidget(
-            nrows,
-            OFF_COL,
-            lf_off,
+            nrows, OFF_COL, lf_off,
         )
 
         # Remove selection to start new one
