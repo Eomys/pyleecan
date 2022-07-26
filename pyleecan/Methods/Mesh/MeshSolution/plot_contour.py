@@ -46,6 +46,7 @@ def plot_contour(
     is_animated=False,
     title="",
     p=None,
+    colormap=COLOR_MAP
 ):
     """Plot the contour of a field on a mesh using pyvista plotter.
 
@@ -100,6 +101,7 @@ def plot_contour(
             itimefreq=itimefreq,
             is_animated=is_animated,
             title=title,
+            colormap=colormap
         )
     else:
 
@@ -153,6 +155,7 @@ def plot_contour(
             clim=clim,
             mesh_pv=mesh_pv,
             field=field,
+            colormap = colormap
         )
 
         ###########
