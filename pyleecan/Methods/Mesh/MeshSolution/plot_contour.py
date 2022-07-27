@@ -144,7 +144,7 @@ def plot_contour(
         #     mesh_field = mesh_pv
         if clim is None:
             clim = [np_min(real(field)), np_max(real(field))]
-            if (clim[1] - clim[0]) / clim[1] < 0.01:
+            if abs((clim[1] - clim[0]) / clim[1]) < 0.01:
                 clim[0] = -abs(clim[1])
                 clim[1] = abs(clim[1])
 
