@@ -64,7 +64,7 @@ def test_efficiency_map(machine_name,Umax, Jmax):
     # Initialization of the simulation starting point
     simu.input = InputCurrent(
         OP=OPdq(),
-        Nt_tot=4 * 8 * 20,
+        Nt_tot=4 * 20,# *8,
         Na_tot=200 * 8,
         is_periodicity_a=True,
         is_periodicity_t=True,
@@ -83,6 +83,13 @@ def test_efficiency_map(machine_name,Umax, Jmax):
             unit = "", 
             symbol = "eff",
             keeper = lambda output: output.elec.OP.efficiency,
+            error_keeper = lambda simu: np.nan
+        ),
+        DataKeeper(
+            name = "current density",
+            unit = "A/mm^2", 
+            symbol = "J",
+            keeper = lambda output : output.elec.get_Jrms()*1e-6,
             error_keeper = lambda simu: np.nan
         ),
         DataKeeper(
@@ -148,11 +155,12 @@ def test_efficiency_map(machine_name,Umax, Jmax):
         Iq_min=0,
         LUT_enforced=None,
         is_grid_dq=True,
-        
+        Tsta=120,
+        type_skin_effect=1,
         LUT_simu=Simu1(
             input=InputCurrent(
                 OP=OPdq(),
-                Nt_tot=4 * 8 *10,
+                Nt_tot=4 *10,# *8,
                 Na_tot=200 * 8,
                 is_periodicity_a=True,
                 is_periodicity_t=True,
@@ -181,7 +189,7 @@ def test_efficiency_map(machine_name,Umax, Jmax):
     )
 
     load_vect = np.linspace(0, 1, Nload)
-    OP_matrix_MTPA = np.zeros((Nspeed, Nload, 5))
+    OP_matrix_MTPA = np.zeros((Nspeed, Nload, 6))
     U_MTPA = np.zeros((Nspeed, Nload, 3))
     I_MTPA = np.zeros((Nspeed, Nload, 3))
     Phidq_MTPA = np.zeros((Nspeed, Nload, 2))
@@ -207,6 +215,7 @@ def test_efficiency_map(machine_name,Umax, Jmax):
         OP_matrix_MTPA[:, ii, 2] = out["Iq"].result
         OP_matrix_MTPA[:, ii, 3] = out["T"].result
         OP_matrix_MTPA[:, ii, 4] = out["eff"].result
+        OP_matrix_MTPA[:, ii, 5] = out["J"].result
         U_MTPA[:, ii, 0] = out["Ud"].result
         U_MTPA[:, ii, 1] = out["Uq"].result
         U_MTPA[:, ii, 2] = out["U0"].result
@@ -250,6 +259,26 @@ def test_efficiency_map(machine_name,Umax, Jmax):
             legend_list=legend_list,
             is_show_fig=is_show_fig,
         )
+        # Plot max torque with respect to speed
+        y_list = [OP_matrix_MTPA[:, -1 , 3]] 
+        plot_2D(
+            [OP_matrix_MTPA[:, -1, 0]],
+            y_list,
+            xlabel="Speed [rpm]",
+            ylabel="Average torque [N.m]",
+            legend_list=legend_list,
+            is_show_fig=is_show_fig,
+        )
+        # Plot power with respect to speed
+        y_list =  [OP_matrix_MTPA[:,-1, 3]*OP_matrix_MTPA[:, -1, 0]*2*np.pi/60*1e-3]
+        plot_2D(
+            [OP_matrix_MTPA[:, -1, 0]],
+            y_list,
+            xlabel="Speed [rpm]",
+            ylabel="Power [kW]",
+            legend_list=legend_list,
+            is_show_fig=is_show_fig,
+        )
 
         # Plot Id for each load level
         y_list = [OP_matrix_MTPA[:, i_load, 1] for i_load in range(Nload)]
@@ -269,6 +298,16 @@ def test_efficiency_map(machine_name,Umax, Jmax):
             y_list,
             xlabel="Speed [rpm]",
             ylabel="Iq Current [Arms]",
+            legend_list=legend_list,
+            is_show_fig=is_show_fig,
+        )
+        # Plot J for each load level
+        y_list = [OP_matrix_MTPA[:, i_load, 5] for i_load in range(Nload)]
+        plot_2D(
+            [OP_matrix_MTPA[:, i_load, 0]],
+            y_list,
+            xlabel="Speed [rpm]",
+            ylabel="Current density [A/mm^2]",
             legend_list=legend_list,
             is_show_fig=is_show_fig,
         )
@@ -458,5 +497,5 @@ def test_efficiency_map(machine_name,Umax, Jmax):
 # To run it without pytest
 if __name__ == "__main__":
 
-    out = test_efficiency_map("Toyota_Prius",150,27e6)
-    #  out = test_efficiency_map("Jaguar_I_Pace",150,17e6)
+    out = test_efficiency_map("Toyota_Prius",240,27e6)
+    #  out = test_efficiency_map("Jaguar_I_Pace",143,27e6)
