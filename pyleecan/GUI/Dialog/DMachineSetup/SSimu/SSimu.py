@@ -1,19 +1,21 @@
-# -*- coding: utf-8 -*-
-
-from PySide2.QtCore import Qt, Signal
-from PySide2.QtWidgets import QFileDialog, QMessageBox, QWidget
+from datetime import datetime
 from logging import getLogger
 from multiprocessing import cpu_count
+from os.path import join
 
-from .....loggers import GUI_LOG_NAME
-from .....GUI import gui_option
-from .....GUI.Dialog.DMachineSetup.SSimu.Gen_SSimu import Gen_SSimu
-from .....Classes.MachineWRSM import MachineWRSM
-from .....Classes.Simu1 import Simu1
+from PySide2.QtCore import Qt, Signal
+from PySide2.QtWidgets import QMessageBox, QWidget
+
+from .....Classes._FEMMHandler import _FEMMHandler
 from .....Classes.InputCurrent import InputCurrent
+from .....Classes.MachineWRSM import MachineWRSM
+from .....Classes.MagFEMM import MagFEMM
 from .....Classes.OPdq import OPdq
 from .....Classes.OPdqf import OPdqf
-from .....Classes.MagFEMM import MagFEMM
+from .....Classes.Simu1 import Simu1
+from .....GUI import gui_option
+from .....GUI.Dialog.DMachineSetup.SSimu.Gen_SSimu import Gen_SSimu
+from .....loggers import GUI_LOG_NAME
 
 
 class SSimu(Gen_SSimu, QWidget):
@@ -92,6 +94,12 @@ class SSimu(Gen_SSimu, QWidget):
         self.si_nb_worker.setValue(self.simu.mag.nb_worker)
 
         # Setup path result selection
+        self.w_path_result.obj = None
+        self.w_path_result.param_name = None
+        self.w_path_result.verbose_name = "Result folder path"
+        self.w_path_result.extension = None
+        self.w_path_result.is_file = False
+        self.w_path_result.update()
 
         # Connecting the signal
         self.lf_N0.editingFinished.connect(self.set_N0)
@@ -105,6 +113,48 @@ class SSimu(Gen_SSimu, QWidget):
         self.is_per_t.toggled.connect(self.set_per_t)
         self.lf_Kmesh.editingFinished.connect(self.set_Kmesh)
         self.si_nb_worker.editingFinished.connect(self.set_nb_worker)
+
+        self.b_next.clicked.connect(self.run)
+
+    def run(self):
+        """Run the current simulation"""
+        if self.w_folder_path.get_path() is None:
+            QMessageBox().critical(
+                self, self.tr("Error"), "Please select a result folder"
+            )
+            return
+        # Setup result folder
+        now = datetime.now()
+        time_str = now.strftime("%Y_%m_%d %Hh%Mmin%Ss ")
+        self.simu.path_result = join(
+            self.w_folder_path.get_path(), time_str + "_" + self.simu.name
+        )
+        # Save simu for reference
+        self.simu.save(join(self.simu.path_result, self.simu.name + ".json"))
+        # Check FEMM installation
+        try:
+            femm = _FEMMHandler()
+            femm.openfemm(1)  # 1 == open in background, 0 == open normally
+            femm.closefemm()
+        except Exception as e:
+            msgBox = QMessageBox()
+            msgBox.setTextFormat(Qt.RichText)
+            msgBox.warning(
+                None,
+                "Warning",
+                "This pyleecan simulation requires FEMM Software (Finite Element Method Magnetics), its installer can be dowloaded from <a href='https://www.femm.info/wiki/Download'>https://www.femm.info/wiki/Download</a>.",
+                QMessageBox.Ok,
+            )
+            return
+        # Run simulation
+        try:
+            out = self.simu.run()
+        except Exception as e:
+            err_msg = "Error while running simulation:\n" + str(e)
+            QMessageBox().critical(self, self.tr("Error"), err_msg)
+            self.simu.get_logger().error(err_msg)
+        # Save results
+        out.save(join(self.simu.path_result, "Result.h5"))
 
     def set_N0(self):
         """Update N0 according to the widget"""
