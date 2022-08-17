@@ -1,0 +1,20 @@
+[
+    {
+        "cls": "MagFEMM",
+        "name": "Kmesh_fineness",
+        "widget": [
+            "in_Kmesh",
+            "lf_Kmesh"
+        ],
+        "xls": "Simulation"
+    },
+    {
+        "cls": "MagFEMM",
+        "name": "nb_worker",
+        "widget": [
+            "in_nb_worker",
+            "si_nb_worker"
+        ],
+        "xls": "Simulation"
+    }
+]
