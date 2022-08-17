@@ -18,7 +18,7 @@ def plot_mesh_field(
     mesh_pv=None,
     field=None,
     phase=1,
-    colormap=COLOR_MAP
+    colormap=COLOR_MAP,
 ):
 
     mesh_pv[field_name] = real(field * phase)

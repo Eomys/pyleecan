@@ -101,7 +101,7 @@ def plot_contour(
             itimefreq=itimefreq,
             is_animated=is_animated,
             title=title,
-            colormap=colormap
+            colormap=colormap,
         )
     else:
 
@@ -155,7 +155,7 @@ def plot_contour(
             clim=clim,
             mesh_pv=mesh_pv,
             field=field,
-            colormap = colormap
+            colormap=colormap,
         )
 
         ###########

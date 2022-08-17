@@ -33,9 +33,9 @@ def run(self):
         ),
         "proximity": LossModelProximity(group="stator winding"),
     }
-    
+
     if machine.is_synchronous() and machine.rotor.has_magnet():
-        self.model_dict["magnets"]=LossModelMagnet(group="rotor magnets")
+        self.model_dict["magnets"] = LossModelMagnet(group="rotor magnets")
 
     output.loss.store(
         self.model_dict,
