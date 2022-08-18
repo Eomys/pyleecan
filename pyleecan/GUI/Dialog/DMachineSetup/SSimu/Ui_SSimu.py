@@ -144,24 +144,24 @@ class Ui_SSimu(object):
 
         self.gridLayout.addWidget(self.unit_I3, 3, 2, 1, 1)
 
-        self.in_Tmag = QLabel(self.g_OP)
-        self.in_Tmag.setObjectName(u"in_Tmag")
-        self.in_Tmag.setMinimumSize(QSize(0, 0))
+        self.in_T_mag = QLabel(self.g_OP)
+        self.in_T_mag.setObjectName(u"in_T_mag")
+        self.in_T_mag.setMinimumSize(QSize(0, 0))
 
-        self.gridLayout.addWidget(self.in_Tmag, 4, 0, 1, 1)
+        self.gridLayout.addWidget(self.in_T_mag, 4, 0, 1, 1)
 
-        self.lf_Tmag = FloatEdit(self.g_OP)
-        self.lf_Tmag.setObjectName(u"lf_Tmag")
-        self.lf_Tmag.setMaximumSize(QSize(16777215, 16777215))
+        self.lf_T_mag = FloatEdit(self.g_OP)
+        self.lf_T_mag.setObjectName(u"lf_T_mag")
+        self.lf_T_mag.setMaximumSize(QSize(16777215, 16777215))
 
-        self.gridLayout.addWidget(self.lf_Tmag, 4, 1, 1, 1)
+        self.gridLayout.addWidget(self.lf_T_mag, 4, 1, 1, 1)
 
-        self.unit_Tmag = QLabel(self.g_OP)
-        self.unit_Tmag.setObjectName(u"unit_Tmag")
-        sizePolicy1.setHeightForWidth(self.unit_Tmag.sizePolicy().hasHeightForWidth())
-        self.unit_Tmag.setSizePolicy(sizePolicy1)
+        self.unit_T_mag = QLabel(self.g_OP)
+        self.unit_T_mag.setObjectName(u"unit_T_mag")
+        sizePolicy1.setHeightForWidth(self.unit_T_mag.sizePolicy().hasHeightForWidth())
+        self.unit_T_mag.setSizePolicy(sizePolicy1)
 
-        self.gridLayout.addWidget(self.unit_Tmag, 4, 2, 1, 1)
+        self.gridLayout.addWidget(self.unit_T_mag, 4, 2, 1, 1)
 
         self.verticalLayout_2.addWidget(self.g_OP)
 
@@ -359,18 +359,18 @@ class Ui_SSimu(object):
         # endif // QT_CONFIG(tooltip)
         self.unit_I3.setText(QCoreApplication.translate("SSimu", u"[Arms]", None))
         # if QT_CONFIG(tooltip)
-        self.in_Tmag.setToolTip(
+        self.in_T_mag.setToolTip(
             QCoreApplication.translate("SSimu", u"Stator external radius", None)
         )
         # endif // QT_CONFIG(tooltip)
-        self.in_Tmag.setText(QCoreApplication.translate("SSimu", u"Tmag:", None))
+        self.in_T_mag.setText(QCoreApplication.translate("SSimu", u"T_mag:", None))
         # if QT_CONFIG(tooltip)
-        self.lf_Tmag.setToolTip(
+        self.lf_T_mag.setToolTip(
             QCoreApplication.translate("SSimu", u"Stator external radius", None)
         )
         # endif // QT_CONFIG(tooltip)
-        self.lf_Tmag.setText(QCoreApplication.translate("SSimu", u"20", None))
-        self.unit_Tmag.setText(QCoreApplication.translate("SSimu", u"[\u00b0C]", None))
+        self.lf_T_mag.setText(QCoreApplication.translate("SSimu", u"20", None))
+        self.unit_T_mag.setText(QCoreApplication.translate("SSimu", u"[\u00b0C]", None))
         self.g_mag.setTitle(
             QCoreApplication.translate("SSimu", u"Magnetic Model", None)
         )

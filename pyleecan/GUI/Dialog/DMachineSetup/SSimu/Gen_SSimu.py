@@ -24,20 +24,20 @@ class Gen_SSimu(Ui_SSimu):
         self.unit_N0.setWhatsThis(txt)
         self.unit_N0.setToolTip(txt)
 
-        # Setup of in_If
+        # Setup of in_I3
         txt = self.tr(u"""DC rotor current""")
-        self.in_If.setWhatsThis(txt)
-        self.in_If.setToolTip(txt)
+        self.in_I3.setWhatsThis(txt)
+        self.in_I3.setToolTip(txt)
 
-        # Setup of lf_If
+        # Setup of lf_I3
         txt = self.tr(u"""DC rotor current""")
-        self.lf_If.setWhatsThis(txt)
-        self.lf_If.setToolTip(txt)
+        self.lf_I3.setWhatsThis(txt)
+        self.lf_I3.setToolTip(txt)
 
-        # Setup of unit_If
+        # Setup of unit_I3
         txt = self.tr(u"""DC rotor current""")
-        self.unit_If.setWhatsThis(txt)
-        self.unit_If.setToolTip(txt)
+        self.unit_I3.setWhatsThis(txt)
+        self.unit_I3.setToolTip(txt)
 
         # Setup of in_T_mag
         txt = self.tr(

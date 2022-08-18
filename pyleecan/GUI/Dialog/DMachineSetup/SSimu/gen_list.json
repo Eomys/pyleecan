@@ -13,9 +13,9 @@
         "cls": "OPdqf",
         "name": "If_ref",
         "widget": [
-            "in_If",
-            "lf_If",
-            "unit_If"
+            "in_I3",
+            "lf_I3",
+            "unit_I3"
         ],
         "xls": "Simulation"
     },
