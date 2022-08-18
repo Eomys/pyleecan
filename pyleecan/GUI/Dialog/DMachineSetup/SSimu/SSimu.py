@@ -9,6 +9,8 @@ from PySide2.QtWidgets import QMessageBox, QWidget
 from .....Classes._FEMMHandler import _FEMMHandler
 from .....Classes.InputCurrent import InputCurrent
 from .....Classes.MachineWRSM import MachineWRSM
+from .....Classes.MachineIPMSM import MachineIPMSM
+from .....Classes.MachineSIPMSM import MachineSIPMSM
 from .....Classes.MagFEMM import MagFEMM
 from .....Classes.OPdq import OPdq
 from .....Classes.OPdqf import OPdqf
@@ -49,21 +51,48 @@ class SSimu(Gen_SSimu, QWidget):
         self.machine = machine
         self.material_dict = material_dict
 
-        # Adapt current widget
+        # Plot the machine
+        try:
+            self.machine.plot(
+                fig=self.w_viewer.fig,
+                ax=self.w_viewer.axes,
+                sym=1,
+                alpha=0,
+                delta=0,
+                is_show_fig=False,
+                is_clean_plot=True,
+                is_max_sym=True,
+            )
+        except Exception as e:
+            err_msg = "Error while plotting machine in Simulation Step:\n" + str(e)
+            getLogger(GUI_LOG_NAME).error(err_msg)
+            QMessageBox().critical(
+                self,
+                self.tr("Error"),
+                err_msg,
+            )
+        self.w_viewer.draw()
+
+        # Adapt OP widgets to machine type
         self.in_I3.setHidden(not isinstance(self.machine, MachineWRSM))
+        self.lf_I3.setHidden(not isinstance(self.machine, MachineWRSM))
         self.unit_I3.setHidden(not isinstance(self.machine, MachineWRSM))
         if self.machine.is_synchronous():
-            self.in_I1.setText("Id")
-            self.in_I2.setText("Iq")
+            self.in_I1.setText("Id:")
+            self.in_I2.setText("Iq:")
             self.unit_I2.setText("[Arms]")
         else:
-            self.in_I1.setText("I0")
-            self.in_I2.setText("Phi0")
+            self.in_I1.setText("I0:")
+            self.in_I2.setText("Phi0:")
             self.unit_I2.setText("[rad]")
         self.unit_I1.setText("[Arms]")
+        hide_mag = not isinstance(self.machine, (MachineIPMSM, MachineSIPMSM))
+        self.in_T_mag.setHidden(hide_mag)
+        self.lf_T_mag.setHidden(hide_mag)
+        self.unit_T_mag.setHidden(hide_mag)
 
         # Init default simulation to edit
-        self.simu = Simu1(name="FEMM_" + self.machine.name)
+        self.simu = Simu1(name="FEMM_" + self.machine.name, machine=self.machine)
         p = self.machine.get_pole_pair_number()
         Zs = self.machine.stator.slot.Zs
         self.simu.input = InputCurrent(Na_tot=2 * 3 * 5 * 7 * p, Nt_tot=10 * Zs * p)
@@ -85,7 +114,7 @@ class SSimu(Gen_SSimu, QWidget):
         self.lf_I1.setValue(0)
         self.lf_I2.setValue(0)
         self.lf_I3.setValue(5)  # Hidden if not used
-        self.lf_Tmag.setValue(self.simu.mag.T_mag)
+        self.lf_T_mag.setValue(self.simu.mag.T_mag)
         self.si_Na_tot.setValue(self.simu.input.Na_tot)
         self.si_Nt_tot.setValue(self.simu.input.Nt_tot)
         self.is_per_a.setChecked(True)
@@ -106,7 +135,7 @@ class SSimu(Gen_SSimu, QWidget):
         self.lf_I1.editingFinished.connect(self.set_Id_Iq)
         self.lf_I2.editingFinished.connect(self.set_Id_Iq)
         self.lf_I3.editingFinished.connect(self.set_I3)
-        self.lf_Tmag.editingFinished.connect(self.set_Tmag)
+        self.lf_T_mag.editingFinished.connect(self.set_T_mag)
         self.si_Na_tot.editingFinished.connect(self.set_Na_tot)
         self.si_Nt_tot.editingFinished.connect(self.set_Nt_tot)
         self.is_per_a.toggled.connect(self.set_per_a)
@@ -118,16 +147,16 @@ class SSimu(Gen_SSimu, QWidget):
 
     def run(self):
         """Run the current simulation"""
-        if self.w_folder_path.get_path() is None:
+        if self.w_path_result.get_path() is None:
             QMessageBox().critical(
                 self, self.tr("Error"), "Please select a result folder"
             )
             return
         # Setup result folder
         now = datetime.now()
-        time_str = now.strftime("%Y_%m_%d %Hh%Mmin%Ss ")
+        time_str = now.strftime("%Y_%m_%d %Hh%Mmin%Ss")
         self.simu.path_result = join(
-            self.w_folder_path.get_path(), time_str + "_" + self.simu.name
+            self.w_path_result.get_path(), time_str + "_" + self.simu.name
         )
         # Save simu for reference
         self.simu.save(join(self.simu.path_result, self.simu.name + ".json"))
@@ -172,9 +201,9 @@ class SSimu(Gen_SSimu, QWidget):
         """Update If according to the widget"""
         self.simu.input.OP.If = self.lf_I3.value()
 
-    def set_Tmag(self):
-        """Update Tmag according to the widget"""
-        self.simu.mag.T_mag = self.lf_Tmag.value()
+    def set_T_mag(self):
+        """Update T_mag according to the widget"""
+        self.simu.mag.T_mag = self.lf_T_mag.value()
 
     def set_Na_tot(self):
         """Update Na_tot according to the widget"""

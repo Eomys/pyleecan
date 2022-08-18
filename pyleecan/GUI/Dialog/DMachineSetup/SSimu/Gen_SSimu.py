@@ -9,6 +9,81 @@ class Gen_SSimu(Ui_SSimu):
     def setupUi(self, SSimu):
         """Abstract class to update the widget according to the csv doc"""
         Ui_SSimu.setupUi(self, SSimu)
+        # Setup of in_N0
+        txt = self.tr(u"""Rotor speed""")
+        self.in_N0.setWhatsThis(txt)
+        self.in_N0.setToolTip(txt)
+
+        # Setup of lf_N0
+        txt = self.tr(u"""Rotor speed""")
+        self.lf_N0.setWhatsThis(txt)
+        self.lf_N0.setToolTip(txt)
+
+        # Setup of unit_N0
+        txt = self.tr(u"""Rotor speed""")
+        self.unit_N0.setWhatsThis(txt)
+        self.unit_N0.setToolTip(txt)
+
+        # Setup of in_If
+        txt = self.tr(u"""DC rotor current""")
+        self.in_If.setWhatsThis(txt)
+        self.in_If.setToolTip(txt)
+
+        # Setup of lf_If
+        txt = self.tr(u"""DC rotor current""")
+        self.lf_If.setWhatsThis(txt)
+        self.lf_If.setToolTip(txt)
+
+        # Setup of unit_If
+        txt = self.tr(u"""DC rotor current""")
+        self.unit_If.setWhatsThis(txt)
+        self.unit_If.setToolTip(txt)
+
+        # Setup of in_T_mag
+        txt = self.tr(
+            u"""Permanent magnet temperature to adapt magnet remanent flux density"""
+        )
+        self.in_T_mag.setWhatsThis(txt)
+        self.in_T_mag.setToolTip(txt)
+
+        # Setup of lf_T_mag
+        txt = self.tr(
+            u"""Permanent magnet temperature to adapt magnet remanent flux density"""
+        )
+        self.lf_T_mag.setWhatsThis(txt)
+        self.lf_T_mag.setToolTip(txt)
+
+        # Setup of unit_T_mag
+        txt = self.tr(
+            u"""Permanent magnet temperature to adapt magnet remanent flux density"""
+        )
+        self.unit_T_mag.setWhatsThis(txt)
+        self.unit_T_mag.setToolTip(txt)
+
+        # Setup of in_Na_tot
+        txt = self.tr(u"""Angular discretization""")
+        self.in_Na_tot.setWhatsThis(txt)
+        self.in_Na_tot.setToolTip(txt)
+
+        # Setup of si_Na_tot
+        self.si_Na_tot.setMinimum(1)
+        self.si_Na_tot.setMaximum(999999)
+        txt = self.tr(u"""Angular discretization""")
+        self.si_Na_tot.setWhatsThis(txt)
+        self.si_Na_tot.setToolTip(txt)
+
+        # Setup of in_Nt_tot
+        txt = self.tr(u"""Time discretization""")
+        self.in_Nt_tot.setWhatsThis(txt)
+        self.in_Nt_tot.setToolTip(txt)
+
+        # Setup of si_Nt_tot
+        self.si_Nt_tot.setMinimum(1)
+        self.si_Nt_tot.setMaximum(999999)
+        txt = self.tr(u"""Time discretization""")
+        self.si_Nt_tot.setWhatsThis(txt)
+        self.si_Nt_tot.setToolTip(txt)
+
         # Setup of in_Kmesh
         txt = self.tr(
             u"""global coefficient to adjust mesh fineness in FEMM (1 : default , > 1 : finner , < 1 : less fine)"""

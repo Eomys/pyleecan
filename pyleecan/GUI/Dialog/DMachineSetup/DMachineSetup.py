@@ -271,7 +271,7 @@ class DMachineSetup(Ui_DMachineSetup, QWidget):
                 return None  # Exit at the first fail
             nav.item(index).setFlags(ENABLE_ITEM)
             index += 1
-        self.last_index = index - 1
+        self.last_index = index
 
     def get_machine_index(self):
         """Get the index corresponding to the current machine in the mach_list"""

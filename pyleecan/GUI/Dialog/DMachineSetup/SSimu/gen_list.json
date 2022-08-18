@@ -1,5 +1,53 @@
 [
     {
+        "cls": "OP",
+        "name": "N0",
+        "widget": [
+            "in_N0",
+            "lf_N0",
+            "unit_N0"
+        ],
+        "xls": "Simulation"
+    },
+    {
+        "cls": "OPdqf",
+        "name": "If_ref",
+        "widget": [
+            "in_If",
+            "lf_If",
+            "unit_If"
+        ],
+        "xls": "Simulation"
+    },
+    {
+        "cls": "Magnetics",
+        "name": "T_mag",
+        "widget": [
+            "in_T_mag",
+            "lf_T_mag",
+            "unit_T_mag"
+        ],
+        "xls": "Simulation"
+    },
+    {
+        "cls": "Input",
+        "name": "Na_tot",
+        "widget": [
+            "in_Na_tot",
+            "si_Na_tot"
+        ],
+        "xls": "Simulation"
+    },
+    {
+        "cls": "Input",
+        "name": "Nt_tot",
+        "widget": [
+            "in_Nt_tot",
+            "si_Nt_tot"
+        ],
+        "xls": "Simulation"
+    },
+    {
         "cls": "MagFEMM",
         "name": "Kmesh_fineness",
         "widget": [

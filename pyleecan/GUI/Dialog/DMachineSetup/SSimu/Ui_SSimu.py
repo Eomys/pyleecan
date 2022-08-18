@@ -11,6 +11,7 @@ from PySide2.QtWidgets import *
 
 from .....GUI.Tools.FloatEdit import FloatEdit
 from .....GUI.Tools.WPathSelector.WPathSelector import WPathSelector
+from .....GUI.Tools.MPLCanvas import MPLCanvas
 
 from pyleecan.GUI.Resources import pyleecan_rc
 
@@ -19,24 +20,48 @@ class Ui_SSimu(object):
     def setupUi(self, SSimu):
         if not SSimu.objectName():
             SSimu.setObjectName(u"SSimu")
-        SSimu.resize(889, 550)
+        SSimu.resize(1209, 837)
         SSimu.setMinimumSize(QSize(650, 550))
         self.verticalLayout_4 = QVBoxLayout(SSimu)
         self.verticalLayout_4.setObjectName(u"verticalLayout_4")
-        self.horizontalLayout_4 = QHBoxLayout()
-        self.horizontalLayout_4.setObjectName(u"horizontalLayout_4")
-        self.label_2 = QLabel(SSimu)
-        self.label_2.setObjectName(u"label_2")
-        self.label_2.setPixmap(
-            QPixmap(u":/images/images/MachineSetup/MachineType/machine_SynRM.png")
-        )
-        self.label_2.setScaledContents(True)
-
-        self.horizontalLayout_4.addWidget(self.label_2)
-
+        self.horizontalLayout = QHBoxLayout()
+        self.horizontalLayout.setObjectName(u"horizontalLayout")
         self.verticalLayout_3 = QVBoxLayout()
         self.verticalLayout_3.setObjectName(u"verticalLayout_3")
-        self.g_OP = QGroupBox(SSimu)
+        self.w_viewer = MPLCanvas(SSimu)
+        self.w_viewer.setObjectName(u"w_viewer")
+        self.w_viewer.setMinimumSize(QSize(250, 0))
+
+        self.verticalLayout_3.addWidget(self.w_viewer)
+
+        self.txt_tuto = QTextEdit(SSimu)
+        self.txt_tuto.setObjectName(u"txt_tuto")
+        sizePolicy = QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.txt_tuto.sizePolicy().hasHeightForWidth())
+        self.txt_tuto.setSizePolicy(sizePolicy)
+        self.txt_tuto.setMaximumSize(QSize(16777215, 70))
+        self.txt_tuto.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+        self.txt_tuto.setTextInteractionFlags(
+            Qt.TextSelectableByKeyboard | Qt.TextSelectableByMouse
+        )
+
+        self.verticalLayout_3.addWidget(self.txt_tuto)
+
+        self.horizontalLayout.addLayout(self.verticalLayout_3)
+
+        self.scrollArea = QScrollArea(SSimu)
+        self.scrollArea.setObjectName(u"scrollArea")
+        self.scrollArea.setMinimumSize(QSize(330, 0))
+        self.scrollArea.setMaximumSize(QSize(330, 16777215))
+        self.scrollArea.setWidgetResizable(True)
+        self.scrollAreaWidgetContents = QWidget()
+        self.scrollAreaWidgetContents.setObjectName(u"scrollAreaWidgetContents")
+        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 328, 774))
+        self.verticalLayout_2 = QVBoxLayout(self.scrollAreaWidgetContents)
+        self.verticalLayout_2.setObjectName(u"verticalLayout_2")
+        self.g_OP = QGroupBox(self.scrollAreaWidgetContents)
         self.g_OP.setObjectName(u"g_OP")
         self.gridLayout = QGridLayout(self.g_OP)
         self.gridLayout.setObjectName(u"gridLayout")
@@ -54,11 +79,11 @@ class Ui_SSimu(object):
 
         self.unit_N0 = QLabel(self.g_OP)
         self.unit_N0.setObjectName(u"unit_N0")
-        sizePolicy = QSizePolicy(QSizePolicy.Fixed, QSizePolicy.Preferred)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.unit_N0.sizePolicy().hasHeightForWidth())
-        self.unit_N0.setSizePolicy(sizePolicy)
+        sizePolicy1 = QSizePolicy(QSizePolicy.Fixed, QSizePolicy.Preferred)
+        sizePolicy1.setHorizontalStretch(0)
+        sizePolicy1.setVerticalStretch(0)
+        sizePolicy1.setHeightForWidth(self.unit_N0.sizePolicy().hasHeightForWidth())
+        self.unit_N0.setSizePolicy(sizePolicy1)
 
         self.gridLayout.addWidget(self.unit_N0, 0, 2, 1, 1)
 
@@ -76,8 +101,8 @@ class Ui_SSimu(object):
 
         self.unit_I1 = QLabel(self.g_OP)
         self.unit_I1.setObjectName(u"unit_I1")
-        sizePolicy.setHeightForWidth(self.unit_I1.sizePolicy().hasHeightForWidth())
-        self.unit_I1.setSizePolicy(sizePolicy)
+        sizePolicy1.setHeightForWidth(self.unit_I1.sizePolicy().hasHeightForWidth())
+        self.unit_I1.setSizePolicy(sizePolicy1)
 
         self.gridLayout.addWidget(self.unit_I1, 1, 2, 1, 1)
 
@@ -95,8 +120,8 @@ class Ui_SSimu(object):
 
         self.unit_I2 = QLabel(self.g_OP)
         self.unit_I2.setObjectName(u"unit_I2")
-        sizePolicy.setHeightForWidth(self.unit_I2.sizePolicy().hasHeightForWidth())
-        self.unit_I2.setSizePolicy(sizePolicy)
+        sizePolicy1.setHeightForWidth(self.unit_I2.sizePolicy().hasHeightForWidth())
+        self.unit_I2.setSizePolicy(sizePolicy1)
 
         self.gridLayout.addWidget(self.unit_I2, 2, 2, 1, 1)
 
@@ -114,8 +139,8 @@ class Ui_SSimu(object):
 
         self.unit_I3 = QLabel(self.g_OP)
         self.unit_I3.setObjectName(u"unit_I3")
-        sizePolicy.setHeightForWidth(self.unit_I3.sizePolicy().hasHeightForWidth())
-        self.unit_I3.setSizePolicy(sizePolicy)
+        sizePolicy1.setHeightForWidth(self.unit_I3.sizePolicy().hasHeightForWidth())
+        self.unit_I3.setSizePolicy(sizePolicy1)
 
         self.gridLayout.addWidget(self.unit_I3, 3, 2, 1, 1)
 
@@ -133,102 +158,84 @@ class Ui_SSimu(object):
 
         self.unit_Tmag = QLabel(self.g_OP)
         self.unit_Tmag.setObjectName(u"unit_Tmag")
-        sizePolicy.setHeightForWidth(self.unit_Tmag.sizePolicy().hasHeightForWidth())
-        self.unit_Tmag.setSizePolicy(sizePolicy)
+        sizePolicy1.setHeightForWidth(self.unit_Tmag.sizePolicy().hasHeightForWidth())
+        self.unit_Tmag.setSizePolicy(sizePolicy1)
 
         self.gridLayout.addWidget(self.unit_Tmag, 4, 2, 1, 1)
 
-        self.verticalLayout_3.addWidget(self.g_OP)
+        self.verticalLayout_2.addWidget(self.g_OP)
 
-        self.g_mag = QGroupBox(SSimu)
+        self.g_mag = QGroupBox(self.scrollAreaWidgetContents)
         self.g_mag.setObjectName(u"g_mag")
-        self.verticalLayout_2 = QVBoxLayout(self.g_mag)
-        self.verticalLayout_2.setObjectName(u"verticalLayout_2")
-        self.gridLayout_2 = QGridLayout()
+        self.gridLayout_2 = QGridLayout(self.g_mag)
         self.gridLayout_2.setObjectName(u"gridLayout_2")
+        self.is_per_a = QCheckBox(self.g_mag)
+        self.is_per_a.setObjectName(u"is_per_a")
+
+        self.gridLayout_2.addWidget(self.is_per_a, 0, 0, 1, 1)
+
         self.in_Na_tot = QLabel(self.g_mag)
         self.in_Na_tot.setObjectName(u"in_Na_tot")
         self.in_Na_tot.setMinimumSize(QSize(0, 0))
 
-        self.gridLayout_2.addWidget(self.in_Na_tot, 0, 0, 1, 1)
+        self.gridLayout_2.addWidget(self.in_Na_tot, 1, 0, 1, 1)
 
         self.si_Na_tot = QSpinBox(self.g_mag)
         self.si_Na_tot.setObjectName(u"si_Na_tot")
 
-        self.gridLayout_2.addWidget(self.si_Na_tot, 0, 1, 1, 1)
+        self.gridLayout_2.addWidget(self.si_Na_tot, 1, 1, 1, 1)
 
-        self.is_per_a = QCheckBox(self.g_mag)
-        self.is_per_a.setObjectName(u"is_per_a")
+        self.is_per_t = QCheckBox(self.g_mag)
+        self.is_per_t.setObjectName(u"is_per_t")
 
-        self.gridLayout_2.addWidget(self.is_per_a, 0, 2, 1, 1)
+        self.gridLayout_2.addWidget(self.is_per_t, 2, 0, 1, 1)
 
         self.in_Nt_tot = QLabel(self.g_mag)
         self.in_Nt_tot.setObjectName(u"in_Nt_tot")
         self.in_Nt_tot.setMinimumSize(QSize(0, 0))
 
-        self.gridLayout_2.addWidget(self.in_Nt_tot, 1, 0, 1, 1)
+        self.gridLayout_2.addWidget(self.in_Nt_tot, 3, 0, 1, 1)
 
         self.si_Nt_tot = QSpinBox(self.g_mag)
         self.si_Nt_tot.setObjectName(u"si_Nt_tot")
 
-        self.gridLayout_2.addWidget(self.si_Nt_tot, 1, 1, 1, 1)
+        self.gridLayout_2.addWidget(self.si_Nt_tot, 3, 1, 1, 1)
 
-        self.is_per_t = QCheckBox(self.g_mag)
-        self.is_per_t.setObjectName(u"is_per_t")
-
-        self.gridLayout_2.addWidget(self.is_per_t, 1, 2, 1, 1)
-
-        self.verticalLayout_2.addLayout(self.gridLayout_2)
-
-        self.horizontalLayout = QHBoxLayout()
-        self.horizontalLayout.setObjectName(u"horizontalLayout")
-        self.gridLayout_3 = QGridLayout()
-        self.gridLayout_3.setObjectName(u"gridLayout_3")
         self.in_Kmesh = QLabel(self.g_mag)
         self.in_Kmesh.setObjectName(u"in_Kmesh")
         self.in_Kmesh.setMinimumSize(QSize(0, 0))
 
-        self.gridLayout_3.addWidget(self.in_Kmesh, 0, 0, 1, 1)
+        self.gridLayout_2.addWidget(self.in_Kmesh, 4, 0, 1, 1)
 
         self.lf_Kmesh = FloatEdit(self.g_mag)
         self.lf_Kmesh.setObjectName(u"lf_Kmesh")
         self.lf_Kmesh.setMaximumSize(QSize(16777215, 16777215))
 
-        self.gridLayout_3.addWidget(self.lf_Kmesh, 0, 1, 1, 1)
+        self.gridLayout_2.addWidget(self.lf_Kmesh, 4, 1, 1, 1)
 
         self.in_nb_worker = QLabel(self.g_mag)
         self.in_nb_worker.setObjectName(u"in_nb_worker")
         self.in_nb_worker.setMinimumSize(QSize(0, 0))
 
-        self.gridLayout_3.addWidget(self.in_nb_worker, 1, 0, 1, 1)
+        self.gridLayout_2.addWidget(self.in_nb_worker, 5, 0, 1, 1)
 
         self.si_nb_worker = QSpinBox(self.g_mag)
         self.si_nb_worker.setObjectName(u"si_nb_worker")
 
-        self.gridLayout_3.addWidget(self.si_nb_worker, 1, 1, 1, 1)
+        self.gridLayout_2.addWidget(self.si_nb_worker, 5, 1, 1, 1)
 
-        self.horizontalLayout.addLayout(self.gridLayout_3)
+        self.verticalLayout_2.addWidget(self.g_mag)
 
-        self.horizontalSpacer = QSpacerItem(
-            40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum
-        )
-
-        self.horizontalLayout.addItem(self.horizontalSpacer)
-
-        self.verticalLayout_2.addLayout(self.horizontalLayout)
-
-        self.verticalLayout_3.addWidget(self.g_mag)
-
-        self.g_out = QGroupBox(SSimu)
+        self.g_out = QGroupBox(self.scrollAreaWidgetContents)
         self.g_out.setObjectName(u"g_out")
         self.verticalLayout = QVBoxLayout(self.g_out)
         self.verticalLayout.setObjectName(u"verticalLayout")
         self.w_path_result = WPathSelector(self.g_out)
         self.w_path_result.setObjectName(u"w_path_result")
-        sizePolicy.setHeightForWidth(
+        sizePolicy1.setHeightForWidth(
             self.w_path_result.sizePolicy().hasHeightForWidth()
         )
-        self.w_path_result.setSizePolicy(sizePolicy)
+        self.w_path_result.setSizePolicy(sizePolicy1)
         self.w_path_result.setMinimumSize(QSize(100, 0))
 
         self.verticalLayout.addWidget(self.w_path_result)
@@ -243,17 +250,19 @@ class Ui_SSimu(object):
 
         self.verticalLayout.addWidget(self.is_mesh_sol)
 
+        self.verticalLayout_2.addWidget(self.g_out)
+
         self.verticalSpacer = QSpacerItem(
             20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding
         )
 
-        self.verticalLayout.addItem(self.verticalSpacer)
+        self.verticalLayout_2.addItem(self.verticalSpacer)
 
-        self.verticalLayout_3.addWidget(self.g_out)
+        self.scrollArea.setWidget(self.scrollAreaWidgetContents)
 
-        self.horizontalLayout_4.addLayout(self.verticalLayout_3)
+        self.horizontalLayout.addWidget(self.scrollArea)
 
-        self.verticalLayout_4.addLayout(self.horizontalLayout_4)
+        self.verticalLayout_4.addLayout(self.horizontalLayout)
 
         self.horizontalLayout_3 = QHBoxLayout()
         self.horizontalLayout_3.setObjectName(u"horizontalLayout_3")
@@ -283,7 +292,18 @@ class Ui_SSimu(object):
 
     def retranslateUi(self, SSimu):
         SSimu.setWindowTitle(QCoreApplication.translate("SSimu", u"Form", None))
-        self.label_2.setText("")
+        self.txt_tuto.setHtml(
+            QCoreApplication.translate(
+                "SSimu",
+                u'<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN" "http://www.w3.org/TR/REC-html40/strict.dtd">\n'
+                '<html><head><meta name="qrichtext" content="1" /><style type="text/css">\n'
+                "p, li { white-space: pre-wrap; }\n"
+                "</style></head><body style=\" font-family:'DejaVu Sans'; font-size:7.8pt; font-weight:400; font-style:normal;\">\n"
+                '<p align="center" style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-family:\'DejaVu Sans\'; font-size:10pt; font-weight:600;">Only Single Speed current driven FEMM simulation is available in this GUI</span></p>\n'
+                '<p align="center" style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-family:\'DejaVu Sans\'; font-size:10pt; font-weight:600;">Sensitivity, Variable speed, Optimization are available in scripting mode</span></p></body></html>',
+                None,
+            )
+        )
         self.g_OP.setTitle(
             QCoreApplication.translate("SSimu", u"Operating Point", None)
         )
@@ -343,16 +363,19 @@ class Ui_SSimu(object):
             QCoreApplication.translate("SSimu", u"Stator external radius", None)
         )
         # endif // QT_CONFIG(tooltip)
-        self.in_Tmag.setText(QCoreApplication.translate("SSimu", u"Tmag", None))
+        self.in_Tmag.setText(QCoreApplication.translate("SSimu", u"Tmag:", None))
         # if QT_CONFIG(tooltip)
         self.lf_Tmag.setToolTip(
             QCoreApplication.translate("SSimu", u"Stator external radius", None)
         )
         # endif // QT_CONFIG(tooltip)
         self.lf_Tmag.setText(QCoreApplication.translate("SSimu", u"20", None))
-        self.unit_Tmag.setText(QCoreApplication.translate("SSimu", u"[degC]", None))
+        self.unit_Tmag.setText(QCoreApplication.translate("SSimu", u"[\u00b0C]", None))
         self.g_mag.setTitle(
             QCoreApplication.translate("SSimu", u"Magnetic Model", None)
+        )
+        self.is_per_a.setText(
+            QCoreApplication.translate("SSimu", u"Angular periodicity", None)
         )
         # if QT_CONFIG(tooltip)
         self.in_Na_tot.setToolTip(
@@ -360,10 +383,12 @@ class Ui_SSimu(object):
         )
         # endif // QT_CONFIG(tooltip)
         self.in_Na_tot.setText(
-            QCoreApplication.translate("SSimu", u"Angular discretization:", None)
+            QCoreApplication.translate(
+                "SSimu", u"Angular points (over 360\u00b0)", None
+            )
         )
-        self.is_per_a.setText(
-            QCoreApplication.translate("SSimu", u"Angular periodicity", None)
+        self.is_per_t.setText(
+            QCoreApplication.translate("SSimu", u"Time periodicity", None)
         )
         # if QT_CONFIG(tooltip)
         self.in_Nt_tot.setToolTip(
@@ -371,10 +396,7 @@ class Ui_SSimu(object):
         )
         # endif // QT_CONFIG(tooltip)
         self.in_Nt_tot.setText(
-            QCoreApplication.translate("SSimu", u"Time discretization:", None)
-        )
-        self.is_per_t.setText(
-            QCoreApplication.translate("SSimu", u"Time periodicity", None)
+            QCoreApplication.translate("SSimu", u"Time steps (over one turn)", None)
         )
         # if QT_CONFIG(tooltip)
         self.in_Kmesh.setToolTip(
@@ -382,7 +404,7 @@ class Ui_SSimu(object):
         )
         # endif // QT_CONFIG(tooltip)
         self.in_Kmesh.setText(
-            QCoreApplication.translate("SSimu", u"Mesh Fineness", None)
+            QCoreApplication.translate("SSimu", u"Mesh fineness factor:", None)
         )
         # if QT_CONFIG(tooltip)
         self.lf_Kmesh.setToolTip(
@@ -396,11 +418,11 @@ class Ui_SSimu(object):
         )
         # endif // QT_CONFIG(tooltip)
         self.in_nb_worker.setText(
-            QCoreApplication.translate("SSimu", u"Nb worker", None)
+            QCoreApplication.translate("SSimu", u"Number of workers:", None)
         )
         self.g_out.setTitle(QCoreApplication.translate("SSimu", u"Results", None))
         self.is_losses.setText(
-            QCoreApplication.translate("SSimu", u"Compute Losses", None)
+            QCoreApplication.translate("SSimu", u"Compute core and Joule losses", None)
         )
         self.is_mesh_sol.setText(
             QCoreApplication.translate("SSimu", u"Save Mesh Solution", None)
