@@ -531,11 +531,12 @@ def test_Bore_sym():
     TP = load(join(DATA_DIR, "Machine", "Toyota_Prius.json"))
     # Add Bore shape with intersect method
     TP.rotor.bore = BoreFlower(
-        N=8, Rarc=TP.rotor.Rext * 0.75, alpha=pi / 8, type_merge_slot=1
+        N=8, Rarc=TP.rotor.Rext * 0.55, alpha=pi / 8, type_merge_slot=1
     )
     TP.stator.slot.H0 *= 4
     TP.stator.Rint *= 1.1
     TP.stator.Rext *= 1.05
+    TP.rotor.hole[0].H1 *= 3
     # Generate "hexagonal Bore Radius"
     line_list = list()
     Rbo = TP.stator.Rint
@@ -560,7 +561,7 @@ def test_Bore_sym():
     W0 = TP.stator.slot.W0
     H0 = TP.stator.slot.H0 / 4
     NC = SlotCirc(Zs=Zr, W0=W0 * 5, H0=H0 * 5)
-    NR = SlotM10(Zs=Zr, W0=W0 * 5, H0=H0 * 3)
+    NR = SlotM10(Zs=Zr, W0=W0 * 5, H0=H0 * 7.5)
     TP.rotor.notch = [
         NotchEvenDist(alpha=pi / 8, notch_shape=NC),
     ]
@@ -582,6 +583,9 @@ def test_Bore_sym():
     fig, ax = TP2.plot(is_show_fig=False, is_clean_plot=True)
     # fig.savefig(join(save_path, "2_notch_full.png"))
     # fig.savefig(join(save_path, "2_notch_full.svg"), format="svg")
+    fig, ax = TP2.rotor.plot(sym=4, is_show_fig=False, is_clean_plot=True, edgecolor="k")
+    # fig.savefig(join(save_path, "2_notch_full_rotor.png"))
+    # fig.savefig(join(save_path, "2_notch_full_rotor.svg"), format="svg")
     assert TP2.comp_periodicity_spatial() == (4, True)
 
     # Create all simulations
@@ -772,7 +776,7 @@ def test_Ring_Magnet():
 # To run it without pytest
 if __name__ == "__main__":
     test_Bore_sym()
-    # out, out2 = test_FEMM_periodicity_angle()
+    out, out2 = test_FEMM_periodicity_angle()
     # out3, out4 = test_FEMM_periodicity_time()
     # out5, out6 = test_FEMM_periodicity_time_no_periodicity_a()
     # test_Ring_Magnet()
