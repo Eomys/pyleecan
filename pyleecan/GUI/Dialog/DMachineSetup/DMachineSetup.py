@@ -271,6 +271,8 @@ class DMachineSetup(Ui_DMachineSetup, QWidget):
                 return None  # Exit at the first fail
             nav.item(index).setFlags(ENABLE_ITEM)
             index += 1
+        # Enable and select FEMM Simulation
+        nav.item(index).setFlags(ENABLE_ITEM)
         self.last_index = index
 
     def get_machine_index(self):

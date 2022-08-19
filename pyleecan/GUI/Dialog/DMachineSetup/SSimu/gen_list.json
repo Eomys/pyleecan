@@ -39,11 +39,27 @@
         "xls": "Simulation"
     },
     {
+        "cls": "Magnetics",
+        "name": "is_periodicity_a",
+        "widget": [
+            "is_per_a"
+        ],
+        "xls": "Simulation"
+    },
+    {
         "cls": "Input",
         "name": "Nt_tot",
         "widget": [
             "in_Nt_tot",
             "si_Nt_tot"
+        ],
+        "xls": "Simulation"
+    },
+    {
+        "cls": "Magnetics",
+        "name": "is_periodicity_t",
+        "widget": [
+            "is_per_t"
         ],
         "xls": "Simulation"
     },

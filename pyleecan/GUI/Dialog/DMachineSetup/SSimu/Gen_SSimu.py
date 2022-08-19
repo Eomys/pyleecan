@@ -72,6 +72,13 @@ class Gen_SSimu(Ui_SSimu):
         self.si_Na_tot.setWhatsThis(txt)
         self.si_Na_tot.setToolTip(txt)
 
+        # Setup of is_per_a
+        txt = self.tr(
+            u"""True to compute only on one angle periodicity (use periodicities defined in axes_dict[angle])"""
+        )
+        self.is_per_a.setWhatsThis(txt)
+        self.is_per_a.setToolTip(txt)
+
         # Setup of in_Nt_tot
         txt = self.tr(u"""Time discretization""")
         self.in_Nt_tot.setWhatsThis(txt)
@@ -83,6 +90,13 @@ class Gen_SSimu(Ui_SSimu):
         txt = self.tr(u"""Time discretization""")
         self.si_Nt_tot.setWhatsThis(txt)
         self.si_Nt_tot.setToolTip(txt)
+
+        # Setup of is_per_t
+        txt = self.tr(
+            u"""True to compute only on one time periodicity (use periodicities defined in axes_dict[time])"""
+        )
+        self.is_per_t.setWhatsThis(txt)
+        self.is_per_t.setToolTip(txt)
 
         # Setup of in_Kmesh
         txt = self.tr(

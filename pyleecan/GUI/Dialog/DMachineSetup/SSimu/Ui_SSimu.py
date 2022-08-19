@@ -53,12 +53,12 @@ class Ui_SSimu(object):
 
         self.scrollArea = QScrollArea(SSimu)
         self.scrollArea.setObjectName(u"scrollArea")
-        self.scrollArea.setMinimumSize(QSize(330, 0))
-        self.scrollArea.setMaximumSize(QSize(330, 16777215))
+        self.scrollArea.setMinimumSize(QSize(350, 0))
+        self.scrollArea.setMaximumSize(QSize(350, 16777215))
         self.scrollArea.setWidgetResizable(True)
         self.scrollAreaWidgetContents = QWidget()
         self.scrollAreaWidgetContents.setObjectName(u"scrollAreaWidgetContents")
-        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 328, 774))
+        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 348, 774))
         self.verticalLayout_2 = QVBoxLayout(self.scrollAreaWidgetContents)
         self.verticalLayout_2.setObjectName(u"verticalLayout_2")
         self.g_OP = QGroupBox(self.scrollAreaWidgetContents)
@@ -240,6 +240,20 @@ class Ui_SSimu(object):
 
         self.verticalLayout.addWidget(self.w_path_result)
 
+        self.horizontalLayout_2 = QHBoxLayout()
+        self.horizontalLayout_2.setObjectName(u"horizontalLayout_2")
+        self.in_name = QLabel(self.g_out)
+        self.in_name.setObjectName(u"in_name")
+
+        self.horizontalLayout_2.addWidget(self.in_name)
+
+        self.le_name = QLineEdit(self.g_out)
+        self.le_name.setObjectName(u"le_name")
+
+        self.horizontalLayout_2.addWidget(self.le_name)
+
+        self.verticalLayout.addLayout(self.horizontalLayout_2)
+
         self.is_losses = QCheckBox(self.g_out)
         self.is_losses.setObjectName(u"is_losses")
 
@@ -300,7 +314,7 @@ class Ui_SSimu(object):
                 "p, li { white-space: pre-wrap; }\n"
                 "</style></head><body style=\" font-family:'DejaVu Sans'; font-size:7.8pt; font-weight:400; font-style:normal;\">\n"
                 '<p align="center" style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-family:\'DejaVu Sans\'; font-size:10pt; font-weight:600;">Only Single Speed current driven FEMM simulation is available in this GUI</span></p>\n'
-                '<p align="center" style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-family:\'DejaVu Sans\'; font-size:10pt; font-weight:600;">Sensitivity, Variable speed, Optimization are available in scripting mode</span></p></body></html>',
+                '<p align="center" style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-family:\'DejaVu Sans\'; font-size:10pt; font-weight:600;">Other models, Sensitivity, Variable speed, Optimization are available in scripting mode</span></p></body></html>',
                 None,
             )
         )
@@ -421,6 +435,7 @@ class Ui_SSimu(object):
             QCoreApplication.translate("SSimu", u"Number of workers:", None)
         )
         self.g_out.setTitle(QCoreApplication.translate("SSimu", u"Results", None))
+        self.in_name.setText(QCoreApplication.translate("SSimu", u"Simu name:", None))
         self.is_losses.setText(
             QCoreApplication.translate("SSimu", u"Compute core and Joule losses", None)
         )

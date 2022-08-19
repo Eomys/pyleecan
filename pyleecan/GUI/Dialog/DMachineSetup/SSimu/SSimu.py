@@ -18,6 +18,8 @@ from .....Classes.Simu1 import Simu1
 from .....GUI import gui_option
 from .....GUI.Dialog.DMachineSetup.SSimu.Gen_SSimu import Gen_SSimu
 from .....loggers import GUI_LOG_NAME
+from .....definitions import config_dict
+from .....Functions.init_environment import save_config_dict
 
 
 class SSimu(Gen_SSimu, QWidget):
@@ -95,7 +97,7 @@ class SSimu(Gen_SSimu, QWidget):
         self.simu = Simu1(name="FEMM_" + self.machine.name, machine=self.machine)
         p = self.machine.get_pole_pair_number()
         Zs = self.machine.stator.slot.Zs
-        self.simu.input = InputCurrent(Na_tot=2 * 3 * 5 * 7 * p, Nt_tot=10 * Zs * p)
+        self.simu.input = InputCurrent(Na_tot=2 * 2 * 3 * 5 * 7 * p, Nt_tot=10 * Zs)
         if isinstance(self.machine, MachineWRSM):
             self.simu.input.OP = OPdqf(N0=1000, Id_ref=0, Iq_ref=0, If_ref=5)
         else:
@@ -121,14 +123,17 @@ class SSimu(Gen_SSimu, QWidget):
         self.is_per_t.setChecked(True)
         self.lf_Kmesh.setValue(1)
         self.si_nb_worker.setValue(self.simu.mag.nb_worker)
+        self.le_name.setText(self.simu.name)
 
         # Setup path result selection
         self.w_path_result.obj = None
         self.w_path_result.param_name = None
-        self.w_path_result.verbose_name = "Result folder"
+        self.w_path_result.verbose_name = "Path"
         self.w_path_result.extension = None
         self.w_path_result.is_file = False
         self.w_path_result.update()
+        if "MAIN" in config_dict and "RESULT_DIR" in config_dict["MAIN"]:
+            self.w_path_result.set_path_txt(config_dict["MAIN"]["RESULT_DIR"])
 
         # Connecting the signal
         self.lf_N0.editingFinished.connect(self.set_N0)
@@ -147,14 +152,22 @@ class SSimu(Gen_SSimu, QWidget):
 
     def run(self):
         """Run the current simulation"""
-        if self.w_path_result.get_path() is None:
+        if self.w_path_result.get_path() in [None, ""]:
             QMessageBox().critical(
                 self, self.tr("Error"), "Please select a result folder"
             )
             return
+        config_dict["MAIN"]["RESULT_DIR"] = self.w_path_result.get_path()
+        save_config_dict(config_dict)
+        if self.le_name.text() in [None, ""]:
+            QMessageBox().critical(
+                self, self.tr("Error"), "Please set a simulation name"
+            )
+            return
+        self.simu.name = self.le_name.text()
         # Setup result folder
         now = datetime.now()
-        time_str = now.strftime("%Y_%m_%d %Hh%Mmin%Ss")
+        time_str = now.strftime("%Y_%m_%d-%Hh%Mmin%Ss")
         self.simu.path_result = join(
             self.w_path_result.get_path(), time_str + "_" + self.simu.name
         )
@@ -183,7 +196,66 @@ class SSimu(Gen_SSimu, QWidget):
             QMessageBox().critical(self, self.tr("Error"), err_msg)
             self.simu.get_logger().error(err_msg)
         # Save results
+        # Full results
         out.save(join(self.simu.path_result, "Result.h5"))
+        # Machine
+        out.simu.machine.plot(
+            is_max_sym=self.simu.mag.is_periodicity_a,
+            is_clean_plot=True,
+            is_show_fig=False,
+            save_path=join(self.simu.path_result, out.simu.machine.name + ".png"),
+        )
+        p = self.machine.get_pole_pair_number()
+        # Torque
+        out.mag.Tem.plot_2D_Data(
+            "time",
+            is_show_fig=False,
+            save_path=join(self.simu.path_result, "torque as fct of time.png"),
+        )
+        # Flux
+        out.mag.B.plot_2D_Data(
+            "time",
+            is_show_fig=False,
+            save_path=join(self.simu.path_result, "flux as fct of time.png"),
+        )
+        out.mag.B.plot_2D_Data(
+            "angle{°}",
+            is_show_fig=False,
+            save_path=join(self.simu.path_result, "flux as fct of angle.png"),
+        )
+        out.mag.B.plot_2D_Data(
+            "freqs->elec_order=[0,15]",
+            is_show_fig=False,
+            save_path=join(self.simu.path_result, "flux FFT over freq.png"),
+        )
+        out.mag.B.plot_2D_Data(
+            "wavenumber=[0," + str(int(25 * p)) + "]",
+            is_show_fig=False,
+            save_path=join(self.simu.path_result, "flux FFT over wavenumber.png"),
+        )
+        out.mag.B.plot_3D_Data(
+            "time",
+            "angle{°}",
+            component_list=["radial"],
+            is_2D_view=True,
+            is_show_fig=False,
+            save_path=join(self.simu.path_result, "flux as fct of time and angle.png"),
+        )
+        out.mag.B.plot_3D_Data(
+            "freqs->elec_order=[0,10]",
+            "wavenumber->space_order=[-10,10]",
+            N_stem=50,
+            is_2D_view=True,
+            is_show_fig=False,
+            save_path=join(self.simu.path_result, "flux 3D FFT.png"),
+        )
+        # Phi_wind_stator
+        out.mag.Phi_wind_stator.plot_2D_Data(
+            "time",
+            "phase",
+            is_show_fig=False,
+            save_path=join(self.simu.path_result, "Stator winding flux.png"),
+        )
 
     def set_N0(self):
         """Update N0 according to the widget"""
