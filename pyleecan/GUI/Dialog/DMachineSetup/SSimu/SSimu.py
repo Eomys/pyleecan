@@ -124,6 +124,8 @@ class SSimu(Gen_SSimu, QWidget):
         self.lf_Kmesh.setValue(1)
         self.si_nb_worker.setValue(self.simu.mag.nb_worker)
         self.le_name.setText(self.simu.name)
+        self.is_losses.hide()  # Not available Yet
+        self.is_mesh_sol.hide()  # Not available Yet
 
         # Setup path result selection
         self.w_path_result.obj = None
@@ -198,6 +200,7 @@ class SSimu(Gen_SSimu, QWidget):
         # Save results
         # Full results
         out.save(join(self.simu.path_result, "Result.h5"))
+        out.export_to_mat(join(self.simu.path_result, "Result.mat"))
         # Machine
         out.simu.machine.plot(
             is_max_sym=self.simu.mag.is_periodicity_a,

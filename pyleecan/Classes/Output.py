@@ -67,6 +67,11 @@ except ImportError as error:
     get_data_from_str = error
 
 try:
+    from ..Methods.Output.Output.getter.export_to_mat import export_to_mat
+except ImportError as error:
+    export_to_mat = error
+
+try:
     from ..Methods.Output.Output.plot.Magnetic.plot_B_mesh import plot_B_mesh
 except ImportError as error:
     plot_B_mesh = error
@@ -189,6 +194,17 @@ class Output(FrozenClass):
         )
     else:
         get_data_from_str = get_data_from_str
+    # cf Methods.Output.Output.getter.export_to_mat
+    if isinstance(export_to_mat, ImportError):
+        export_to_mat = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Output method export_to_mat: " + str(export_to_mat)
+                )
+            )
+        )
+    else:
+        export_to_mat = export_to_mat
     # cf Methods.Output.Output.plot.Magnetic.plot_B_mesh
     if isinstance(plot_B_mesh, ImportError):
         plot_B_mesh = property(
