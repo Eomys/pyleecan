@@ -7,6 +7,7 @@ import pytest
 from PySide2 import QtWidgets
 
 from pyleecan.GUI.Dialog.DMachineSetup.DMachineSetup import DMachineSetup
+from pyleecan.GUI.Dialog.DMachineSetup.SSimu.SSimu import SSimu
 from pyleecan.GUI.Dialog.DMachineSetup.SPreview.SPreview import SPreview
 from pyleecan.definitions import DATA_DIR as data_test, MAIN_DIR
 from pyleecan.Functions.load import load_matlib
@@ -84,7 +85,10 @@ class TestSPreview(object):
             # To trigger the slot
             self.widget.b_load.clicked.emit()
 
-        # Check load MachineType
+        # Check loaded machine is fully defined
+        assert type(self.widget.w_step) is SSimu
+        # select preview step
+        self.widget.nav_step.setCurrentRow(self.widget.nav_step.count() - 2)
         assert type(self.widget.w_step) is SPreview
         # Check the table
         assert self.widget.w_step.tab_machine.tab_param.rowCount() == test_dict["Nrow"]
