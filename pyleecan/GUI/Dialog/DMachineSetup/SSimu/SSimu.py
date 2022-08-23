@@ -215,6 +215,11 @@ class SSimu(Gen_SSimu, QWidget):
             is_show_fig=False,
             save_path=join(self.simu.path_result, "torque as fct of time.png"),
         )
+        out.mag.Tem.plot_2D_Data(
+            "freqs->elec_order=[0,15]",
+            is_show_fig=False,
+            save_path=join(self.simu.path_result, "torque FFT over freq.png"),
+        )
         # Flux
         out.mag.B.plot_2D_Data(
             "time",
