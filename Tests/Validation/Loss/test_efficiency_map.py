@@ -41,13 +41,13 @@ is_show_fig = True
 @pytest.mark.IPMSM
 @pytest.mark.periodicity
 @pytest.mark.skip(reason="Work in progress")
-def test_efficiency_map(machine_name,Umax, Jmax):
+def test_efficiency_map():
     """Validation of the efficiency map of the Toyota Prius motor, based on the one presented in 
     "Electromagnetic Analysis and Design Methodology for Permanent Magnet Motors Using MotorAnalysis-PM Software",
     available at https://www.mdpi.com/2075-1702/7/4/75."""
 
-    Toyota_Prius = load(join(DATA_DIR, "Machine", f"{machine_name}.json"))
-    LUT_file_name = f"LUT_eff_{machine_name}.h5"
+    Toyota_Prius = load(join(DATA_DIR, "Machine", f"Toyota_Prius.json"))
+    LUT_file_name = f"LUT_eff_Toyota_Prius.h5"
     path_to_LUT = join(RESULT_DIR, LUT_file_name)
 
     if not exists(split(path_to_LUT)[0]):
@@ -138,7 +138,7 @@ def test_efficiency_map(machine_name,Umax, Jmax):
     ]
 
     OP_matrix = np.zeros((Nspeed, 3))
-    OP_matrix[:, 0] = np.linspace(500, 13000, Nspeed)
+    OP_matrix[:, 0] = np.linspace(500, 6000, Nspeed)
     simu.var_simu = VarLoadCurrent(
         OP_matrix=OP_matrix, type_OP_matrix=1,
         datakeeper_list = datakeeper_list
@@ -147,8 +147,8 @@ def test_efficiency_map(machine_name,Umax, Jmax):
     simu.input.set_OP_from_array(OP_matrix, type_OP_matrix=1)
 
     simu.elec = ElecLUTdq(
-        Urms_max=Umax,
-        Jrms_max=Jmax,
+        Urms_max=153,
+        Jrms_max=27e6,
         n_interp=100,
         n_Id=5,
         n_Iq=5,
@@ -498,6 +498,4 @@ def test_efficiency_map(machine_name,Umax, Jmax):
 # To run it without pytest
 if __name__ == "__main__":
 
-    out = test_efficiency_map("Toyota_Prius",153,27e6)
-    # out = test_efficiency_map("Jaguar_I_Pace",153,27e6)
-    
+    out = test_efficiency_map()
