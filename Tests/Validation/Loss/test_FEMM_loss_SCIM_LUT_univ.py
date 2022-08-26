@@ -15,12 +15,8 @@ from pyleecan.Classes.MagFEMM import MagFEMM
 from pyleecan.Classes.Electrical import Electrical
 from pyleecan.Classes.Loss import Loss
 from pyleecan.Classes.LossModelSteinmetz import LossModelSteinmetz
-from pyleecan.Classes.LossModelBertotti import LossModelBertotti
-from pyleecan.Classes.LossModelWinding import LossModelWinding
+from pyleecan.Classes.LossModelJoule import LossModelJoule
 from pyleecan.Classes.LossModelProximity import LossModelProximity
-from pyleecan.Classes.LossModelMagnet import LossModelMagnet
-from pyleecan.Classes.OutLoss import OutLoss
-from pyleecan.Functions.Electrical.comp_loss_joule import comp_loss_joule
 
 
 from pyleecan.Functions.load import load
@@ -42,17 +38,17 @@ is_show_fig = True
 @pytest.mark.SingleOP
 @pytest.mark.Loss
 @pytest.mark.skip(reason="Work in progress")
-def test_FEMM_loss_SCIM_L2EP():
+def test_FEMM_loss_SCIM():
     """Test to calculate losses in Toyota_Prius using LossFEMM model based on motoranalysis validation"""
 
-    machine = load(join(DATA_DIR, "Machine", "SCIM_5kw_Zaheer_wo_skew.json"))
+    machine = load(join(DATA_DIR, "Machine", "SCIM_5kw_Zaheer.json"))
 
-    simu = Simu1(name="test_FEMM_Loss_SCIM_5kw_Zaheer_wo_skew", machine=machine)
+    simu = Simu1(name="test_FEMM_Loss_SCIM_5kw_Zaheer", machine=machine)
 
     simu.input = InputCurrent(
         Nt_tot=4 * 40,
         Na_tot=200 * 8,
-        OP=OPslip(felec=50, slip_ref=0.0, I0_ref=10.4, IPhi0_ref=140 * np.pi / 180),
+        OP=OPslip(felec=50, slip_ref=0, I0_ref=6.6, IPhi0_ref=140 * np.pi / 180),
         is_periodicity_t=True,
         is_periodicity_a=True,
     )
@@ -70,9 +66,9 @@ def test_FEMM_loss_SCIM_L2EP():
         is_get_meshsolution=True,
         Tsta=100,
         model_dict={
-            "stator core Steinmetz": LossModelSteinmetz(group="stator core"),
+            "stator core Steinmetz": LossModelSteinmetz(group="stator core", is_show_fig=True),
             "rotor core Steinmetz": LossModelSteinmetz(group="rotor core"),
-            "joule": LossModelWinding(group="stator winding", type_skin_effect=0),
+            "joule": LossModelJoule(group="stator winding", type_skin_effect=1),
             "proximity": LossModelProximity(group="stator winding"),
         },
     )
@@ -80,7 +76,9 @@ def test_FEMM_loss_SCIM_L2EP():
     out = simu.run()
 
     power_dict = {
+        "Torque": out.mag.Tem_av,
         "total_power": out.mag.Pem_av,
+        "J":out.elec.get_Jrms(),
         **dict(
             [(o.name, o.get_loss_scalar(out.elec.OP.felec)) for o in out.loss.loss_list]
         ),
@@ -187,22 +185,23 @@ def test_FEMM_loss_SCIM_L2EP():
 @pytest.mark.SingleOP
 @pytest.mark.Loss
 @pytest.mark.skip(reason="Work in progress")
-def test_FEMM_loss_Audi_etron():
+def test_FEMM_loss_SCIM_with_param():
     """Test to calculate losses in Toyota_Prius using LossFEMM model based on motoranalysis validation"""
 
-    machine = load(join(DATA_DIR, "Machine", "Audi_eTron.json"))
+    machine = load(join(DATA_DIR, "Machine", "SCIM_5kw_Zaheer.json"))
+    machine.rotor.skew=None
 
-    simu = Simu1(name="test_FEMM_Loss_Audi_etron", machine=machine)
+    simu = Simu1(name="test_FEMM_Loss_SCIM_5kW", machine=machine)
 
     param_list = [
         {
-            "U0_ref": 144,
-            "N0": 4832,
-            "slip_ref": 0.047,
-            "Tem_av": 247,
-            "I1_abs": 333,
-            "Pjoule_s": 6304,
-            "Pjoule_r": 6160, 
+            "U0_ref": 202.5,
+            "N0": 728.7,
+            "slip_ref": 0.284,
+            "Tem_av": 24.6,
+            "I1_abs": 9,
+            "Pjoule_s": 50,
+            "Pjoule_r": 40
         },
         {
             "U0_ref": 200,
@@ -248,8 +247,8 @@ def test_FEMM_loss_Audi_etron():
         ]
     )
 
-    Lm_table = param_dict["Lm"]
-    Im_table = param_dict["Im"]
+    Lm_table = param_dict["Lm"]*10
+    Im_table = param_dict["Im"]*1e-1
 
     # simu.input = InputCurrent(
     #     Nt_tot=4 * 40 ,
@@ -266,7 +265,7 @@ def test_FEMM_loss_Audi_etron():
             slip_ref=param_dict["slip_ref"],
         ),
         Na_tot=100 * 2,
-        Nt_tot=400 * 2,
+        Nt_tot=100 * 2,
         is_periodicity_a=True,
         is_periodicity_t=False,
         # Nrev=1,
@@ -275,25 +274,38 @@ def test_FEMM_loss_Audi_etron():
 
     ELUT_Audi_eTron = LUTslip()
     ELUT_Audi_eTron.simu = Simu1(machine=machine)
-    R1_135 = 1 / (3 * 333 ** 2 / 6304)  # from Joule losses
+    R1_135 = 1 / (3 * 6.6 ** 2 / 50)  # from Joule losses
     ELUT_Audi_eTron.simu.elec = Electrical(
         eec=EEC_SCIM(
-            R1=R1_135,
-            L1=0.975 * 1.0899e-04,
-            Tsta=135,
-            R2=0.0108,
-            L2=8.4080e-07,
-            Trot=20,
+            R1=0.582,
+            L1=6e-3,
+            Tsta=60,
+            R2=1.4e-6,
+            L2=44e-9,
+            Trot=60,
             Lm_table=Lm_table,
             Im_table=Im_table,
             type_skin_effect=0,
+            Lm=0.627,
+            Im=1*np.exp(1j * 80 * np.pi/180)
         )
+        # eec=EEC_SCIM(
+        #     R1=R1_135,
+        #     L1=0.975 * 1.0899e-04,
+        #     Tsta=135,
+        #     R2=0.0108,
+        #     L2=8.4080e-04,
+        #     Trot=20,
+        #     Lm_table=Lm_table,
+        #     Im_table=Im_table,
+        #     type_skin_effect=0,
+        # )
     )
 
     # Configure simulation
     simu.elec = Electrical(
-        Tsta=135,
-        Trot=175,
+        Tsta=80,
+        Trot=80,
         LUT_enforced=ELUT_Audi_eTron,
     )
 
@@ -312,7 +324,8 @@ def test_FEMM_loss_Audi_etron():
         model_dict={
             "stator core Steinmetz": LossModelSteinmetz(group="stator core"),
             "rotor core Steinmetz": LossModelSteinmetz(group="rotor core"),
-            "joule": LossModelWinding(group="stator winding", type_skin_effect=1),
+            "joule stator": LossModelJoule(group="stator winding", type_skin_effect=1),
+            "joule rotor": LossModelJoule(group="rotor winding", type_skin_effect=1),
             "proximity": LossModelProximity(group="stator winding"),
         },
     )
@@ -320,7 +333,9 @@ def test_FEMM_loss_Audi_etron():
     out = simu.run()
 
     power_dict = {
+        "Torque": out.mag.Tem_av,
         "total_power": out.mag.Pem_av,
+        "J":out.elec.get_Jrms(),
         **dict(
             [(o.name, o.get_loss_scalar(out.elec.OP.felec)) for o in out.loss.loss_list]
         ),
@@ -422,5 +437,5 @@ def test_FEMM_loss_Audi_etron():
 # To run it without pytest
 if __name__ == "__main__":
 
-    # out = test_FEMM_loss_SCIM_L2EP()
-    out = test_FEMM_loss_Audi_etron()
+    # out = test_FEMM_loss_SCIM()
+    out = test_FEMM_loss_SCIM_with_param()

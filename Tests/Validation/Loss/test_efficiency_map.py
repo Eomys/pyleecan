@@ -20,7 +20,7 @@ from pyleecan.Classes.MagFEMM import MagFEMM
 from pyleecan.Classes.PostLUT import PostLUT
 from pyleecan.Classes.Loss import Loss
 from pyleecan.Classes.LossModelSteinmetz import LossModelSteinmetz
-from pyleecan.Classes.LossModelWinding import LossModelWinding
+from pyleecan.Classes.LossModelJoule import LossModelJoule
 from pyleecan.Classes.LossModelProximity import LossModelProximity
 from pyleecan.Classes.LossModelMagnet import LossModelMagnet
 from pyleecan.Classes.DataKeeper import DataKeeper
@@ -52,6 +52,7 @@ def test_efficiency_map(machine_name,Umax, Jmax):
 
     if not exists(split(path_to_LUT)[0]):
         raise Exception("The path to LUT is not valid.")
+    
 
     # Speed vector
     Nspeed = 50
@@ -181,12 +182,18 @@ def test_efficiency_map(machine_name,Umax, Jmax):
                 Tsta=100,
                 model_dict={"stator core": LossModelSteinmetz(group = "stator core"),
                             "rotor core": LossModelSteinmetz(group = "rotor core"),
-                            "joule": LossModelWinding(group = "stator winding"),
+                            "joule": LossModelJoule(group = "stator winding"),
                             "proximity": LossModelProximity(group = "stator winding"),
                             "magnets": LossModelMagnet(group = "rotor magnets")}
             )
         ),
     )
+    try:
+        LUT_enforced = load(path_to_LUT)
+        simu.elec.LUT_enforced = LUT_enforced
+    except (FileNotFoundError, LoadMissingFileError):
+        print("The LUT could not be loaded, so it will be computed.")
+        LUT_enforced = None
 
     load_vect = np.linspace(0, 1, Nload)
     OP_matrix_MTPA = np.zeros((Nspeed, Nload, 6))
@@ -196,14 +203,8 @@ def test_efficiency_map(machine_name,Umax, Jmax):
     out_load = list()
     for ii, load_rate in enumerate(load_vect):
     
-        try:
-            LUT_enforced = load(path_to_LUT)
-            is_LUT_exists = True
-            simu.elec.LUT_enforced = LUT_enforced
-        except (FileNotFoundError, LoadMissingFileError):
-            print("The LUT could not be loaded, so it will be computed.")
-            LUT_enforced = None
-            is_LUT_exists = False
+        if ii > 0 and LUT_enforced is None:
+             simu.elec.LUT_enforced = load(path_to_LUT)
 
         simu.elec.load_rate = load_rate
 
@@ -270,7 +271,7 @@ def test_efficiency_map(machine_name,Umax, Jmax):
             is_show_fig=is_show_fig,
         )
         # Plot power with respect to speed
-        y_list =  [OP_matrix_MTPA[:,-1, 3]*OP_matrix_MTPA[:, -1, 0]*2*np.pi/60*1e-3]
+        y_list =  [OP_matrix_MTPA[:,-1, 3]*OP_matrix_MTPA[:, -1, 0]*2*np.pi/60*1e-3*OP_matrix_MTPA[:,-1, 4]]
         plot_2D(
             [OP_matrix_MTPA[:, -1, 0]],
             y_list,
@@ -497,5 +498,6 @@ def test_efficiency_map(machine_name,Umax, Jmax):
 # To run it without pytest
 if __name__ == "__main__":
 
-    out = test_efficiency_map("Toyota_Prius",240,27e6)
-    #  out = test_efficiency_map("Jaguar_I_Pace",143,27e6)
+    out = test_efficiency_map("Toyota_Prius",153,27e6)
+    # out = test_efficiency_map("Jaguar_I_Pace",153,27e6)
+    
