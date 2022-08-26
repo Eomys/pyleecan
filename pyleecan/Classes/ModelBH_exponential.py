@@ -176,7 +176,7 @@ class ModelBH_exponential(FrozenClass):
     Bs = property(
         fget=_get_Bs,
         fset=_set_Bs,
-        doc=u"""BH curve parameter [T]
+        doc=u"""BH curve parameter
 
         :Type: float
         """,
@@ -194,7 +194,7 @@ class ModelBH_exponential(FrozenClass):
     mu_a = property(
         fget=_get_mu_a,
         fset=_set_mu_a,
-        doc=u"""Saturation permeability parameter [-]
+        doc=u"""Saturation permeability parameter
 
         :Type: float
         """,

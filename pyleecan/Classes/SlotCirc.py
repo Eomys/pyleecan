@@ -451,7 +451,7 @@ class SlotCirc(Slot):
     W0 = property(
         fget=_get_W0,
         fset=_set_W0,
-        doc=u"""Slot isthmus width. [m]
+        doc=u"""Slot isthmus width.
 
         :Type: float
         :min: 0
@@ -470,7 +470,7 @@ class SlotCirc(Slot):
     H0 = property(
         fget=_get_H0,
         fset=_set_H0,
-        doc=u"""Slot height [m]
+        doc=u"""Slot height
 
         :Type: float
         :min: 0

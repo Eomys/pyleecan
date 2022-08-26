@@ -696,7 +696,7 @@ class Magnetics(FrozenClass):
     is_remove_slotS = property(
         fget=_get_is_remove_slotS,
         fset=_set_is_remove_slotS,
-        doc=u"""1 to artificially remove stator slotting effects in permeance mmf calculations [-]
+        doc=u"""1 to artificially remove stator slotting effects in permeance mmf calculations
 
         :Type: bool
         """,
@@ -714,7 +714,7 @@ class Magnetics(FrozenClass):
     is_remove_slotR = property(
         fget=_get_is_remove_slotR,
         fset=_set_is_remove_slotR,
-        doc=u"""1 to artificially remove rotor slotting effects in permeance mmf calculations [-]
+        doc=u"""1 to artificially remove rotor slotting effects in permeance mmf calculations
 
         :Type: bool
         """,
@@ -732,7 +732,7 @@ class Magnetics(FrozenClass):
     is_remove_ventS = property(
         fget=_get_is_remove_ventS,
         fset=_set_is_remove_ventS,
-        doc=u"""1 to artificially remove the ventilations duct of the stator [-]
+        doc=u"""1 to artificially remove the ventilations duct of the stator
 
         :Type: bool
         """,
@@ -750,7 +750,7 @@ class Magnetics(FrozenClass):
     is_remove_ventR = property(
         fget=_get_is_remove_ventR,
         fset=_set_is_remove_ventR,
-        doc=u"""1 to artificially remove the ventilations duct of the rotor [-]
+        doc=u"""1 to artificially remove the ventilations duct of the rotor
 
         :Type: bool
         """,
@@ -768,7 +768,7 @@ class Magnetics(FrozenClass):
     is_mmfs = property(
         fget=_get_is_mmfs,
         fset=_set_is_mmfs,
-        doc=u"""1 to compute the stator magnetomotive force / stator armature magnetic field [-]
+        doc=u"""1 to compute the stator magnetomotive force / stator armature magnetic field
 
         :Type: bool
         """,
@@ -786,7 +786,7 @@ class Magnetics(FrozenClass):
     is_mmfr = property(
         fget=_get_is_mmfr,
         fset=_set_is_mmfr,
-        doc=u"""1 to compute the rotor magnetomotive force / rotor magnetic field [-]
+        doc=u"""1 to compute the rotor magnetomotive force / rotor magnetic field
 
         :Type: bool
         """,
@@ -804,7 +804,7 @@ class Magnetics(FrozenClass):
     type_BH_stator = property(
         fget=_get_type_BH_stator,
         fset=_set_type_BH_stator,
-        doc=u"""0 to use the B(H) curve, 1 to use linear B(H) curve according to mur_lin, 2 to enforce infinite permeability (mur_lin =100000) [-]
+        doc=u"""0 to use the B(H) curve, 1 to use linear B(H) curve according to mur_lin, 2 to enforce infinite permeability (mur_lin =100000)
 
         :Type: int
         :min: 0
@@ -824,7 +824,7 @@ class Magnetics(FrozenClass):
     type_BH_rotor = property(
         fget=_get_type_BH_rotor,
         fset=_set_type_BH_rotor,
-        doc=u"""0 to use the B(H) curve, 1 to use linear B(H) curve according to mur_lin, 2 to enforce infinite permeability (mur_lin =100000) [-]
+        doc=u"""0 to use the B(H) curve, 1 to use linear B(H) curve according to mur_lin, 2 to enforce infinite permeability (mur_lin =100000)
 
         :Type: int
         :min: 0
@@ -844,7 +844,7 @@ class Magnetics(FrozenClass):
     is_periodicity_t = property(
         fget=_get_is_periodicity_t,
         fset=_set_is_periodicity_t,
-        doc=u"""True to compute only on one time periodicity (use periodicities defined in axes_dict[time]) [-]
+        doc=u"""True to compute only on one time periodicity (use periodicities defined in axes_dict[time])
 
         :Type: bool
         """,
@@ -862,7 +862,7 @@ class Magnetics(FrozenClass):
     is_periodicity_a = property(
         fget=_get_is_periodicity_a,
         fset=_set_is_periodicity_a,
-        doc=u"""True to compute only on one angle periodicity (use periodicities defined in axes_dict[angle]) [-]
+        doc=u"""True to compute only on one angle periodicity (use periodicities defined in axes_dict[angle])
 
         :Type: bool
         """,
@@ -880,7 +880,7 @@ class Magnetics(FrozenClass):
     angle_stator_shift = property(
         fget=_get_angle_stator_shift,
         fset=_set_angle_stator_shift,
-        doc=u"""Shift angle to appy to the stator in magnetic model [rad]
+        doc=u"""Shift angle to appy to the stator in magnetic model
 
         :Type: float
         """,
@@ -898,7 +898,7 @@ class Magnetics(FrozenClass):
     angle_rotor_shift = property(
         fget=_get_angle_rotor_shift,
         fset=_set_angle_rotor_shift,
-        doc=u"""Shift angle to appy to the rotor in magnetic model [rad]
+        doc=u"""Shift angle to appy to the rotor in magnetic model
 
         :Type: float
         """,
@@ -916,7 +916,7 @@ class Magnetics(FrozenClass):
     logger_name = property(
         fget=_get_logger_name,
         fset=_set_logger_name,
-        doc=u"""Name of the logger to use [-]
+        doc=u"""Name of the logger to use
 
         :Type: str
         """,
@@ -955,7 +955,7 @@ class Magnetics(FrozenClass):
     Slice_enforced = property(
         fget=_get_Slice_enforced,
         fset=_set_Slice_enforced,
-        doc=u"""Enforce slice model to account for skew [-]
+        doc=u"""Enforce slice model to account for skew
 
         :Type: SliceModel
         """,
@@ -991,7 +991,7 @@ class Magnetics(FrozenClass):
     type_distribution_enforced = property(
         fget=_get_type_distribution_enforced,
         fset=_set_type_distribution_enforced,
-        doc=u"""To enforce type of slice distribution to use for rotor skew if linear and continuous ("uniform", "gauss", "user-defined") [-]
+        doc=u"""To enforce type of slice distribution to use for rotor skew if linear and continuous ("uniform", "gauss", "user-defined")
 
         :Type: str
         """,
@@ -1027,7 +1027,7 @@ class Magnetics(FrozenClass):
     T_mag = property(
         fget=_get_T_mag,
         fset=_set_T_mag,
-        doc=u"""Permanent magnet temperature to adapt magnet remanent flux density [deg Celsius]
+        doc=u"""Permanent magnet temperature to adapt magnet remanent flux density
 
         :Type: float
         """,

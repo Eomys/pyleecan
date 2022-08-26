@@ -492,7 +492,7 @@ class SlotW28(Slot):
     W0 = property(
         fget=_get_W0,
         fset=_set_W0,
-        doc=u"""Slot isthmus width. [m]
+        doc=u"""Slot isthmus width.
 
         :Type: float
         :min: 0
@@ -511,7 +511,7 @@ class SlotW28(Slot):
     H0 = property(
         fget=_get_H0,
         fset=_set_H0,
-        doc=u"""Slot isthmus height. [m]
+        doc=u"""Slot isthmus height.
 
         :Type: float
         :min: 0
@@ -530,7 +530,7 @@ class SlotW28(Slot):
     R1 = property(
         fget=_get_R1,
         fset=_set_R1,
-        doc=u"""Slot edge radius [m]
+        doc=u"""Slot edge radius
 
         :Type: float
         :min: 0
@@ -549,7 +549,7 @@ class SlotW28(Slot):
     W3 = property(
         fget=_get_W3,
         fset=_set_W3,
-        doc=u"""Tooth width [m]
+        doc=u"""Tooth width
 
         :Type: float
         :min: 0
@@ -568,7 +568,7 @@ class SlotW28(Slot):
     H3 = property(
         fget=_get_H3,
         fset=_set_H3,
-        doc=u"""Tooth height [m]
+        doc=u"""Tooth height
 
         :Type: float
         :min: 0

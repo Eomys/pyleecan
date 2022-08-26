@@ -420,9 +420,10 @@ def test_class_prop_doc(class_dict):
                 break
             else:
                 type_index += 1
-        assert [res.split(" [")[0] for res in result[: type_index - 1]] == [
-            p.split(" [")[0] for p in prop["desc"].split("\\n")
-        ]
+        assert result[: type_index - 1] == prop["desc"].split("\\n")
+        # assert [res.split(" [")[0] for res in result[: type_index - 1]] == [
+        #     p.split(" [")[0] for p in prop["desc"].split("\\n")
+        # ]
 
 
 @pytest.mark.parametrize("class_dict", class_list)

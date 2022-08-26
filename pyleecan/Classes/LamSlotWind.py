@@ -687,7 +687,7 @@ class LamSlotWind(LamSlot):
     Ksfill = property(
         fget=_get_Ksfill,
         fset=_set_Ksfill,
-        doc=u"""Imposed Slot Fill factor (if None, will be computed according to the winding and the slot) [-]
+        doc=u"""Imposed Slot Fill factor (if None, will be computed according to the winding and the slot)
 
         :Type: float
         :min: 0

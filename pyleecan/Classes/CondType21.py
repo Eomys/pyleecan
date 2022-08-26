@@ -417,7 +417,7 @@ class CondType21(Conductor):
     Hbar = property(
         fget=_get_Hbar,
         fset=_set_Hbar,
-        doc=u"""Bar height [m]
+        doc=u"""Bar height
 
         :Type: float
         :min: 0
@@ -436,7 +436,7 @@ class CondType21(Conductor):
     Wbar = property(
         fget=_get_Wbar,
         fset=_set_Wbar,
-        doc=u"""Bar width [m]
+        doc=u"""Bar width
 
         :Type: float
         :min: 0
@@ -455,7 +455,7 @@ class CondType21(Conductor):
     Wins = property(
         fget=_get_Wins,
         fset=_set_Wins,
-        doc=u"""Width of insulation [m]
+        doc=u"""Width of insulation
 
         :Type: float
         :min: 0

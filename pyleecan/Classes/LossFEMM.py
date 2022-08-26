@@ -306,23 +306,23 @@ class LossFEMM(Loss):
         check_var("k_ed", value, "float")
         self._k_ed = value
 
-    k_ed = property(
-        fget=_get_k_ed,
-        fset=_set_k_ed,
-        doc=u"""eddy current loss coefficients [W/(m3*T2*Hz2)]
+    is_get_meshsolution = property(
+        fget=_get_is_get_meshsolution,
+        fset=_set_is_get_meshsolution,
+        doc=u"""True to save loss density map as meshsolution
 
-        :Type: float
+        :Type: bool
         """,
     )
 
-    def _get_k_hy(self):
-        """getter of k_hy"""
-        return self._k_hy
+    def _get_Tsta(self):
+        """getter of Tsta"""
+        return self._Tsta
 
-    def _set_k_hy(self, value):
-        """setter of k_hy"""
-        check_var("k_hy", value, "float")
-        self._k_hy = value
+    def _set_Tsta(self, value):
+        """setter of Tsta"""
+        check_var("Tsta", value, "float")
+        self._Tsta = value
 
     k_hy = property(
         fget=_get_k_hy,
@@ -368,3 +368,5 @@ class LossFEMM(Loss):
         :Type: int
         """,
     )
+<<<<<<< HEAD
+=======

@@ -479,7 +479,7 @@ class HoleUD(HoleMag):
     name = property(
         fget=_get_name,
         fset=_set_name,
-        doc=u"""Name of the hole (for save) [-]
+        doc=u"""Name of the hole (for save)
 
         :Type: str
         """,

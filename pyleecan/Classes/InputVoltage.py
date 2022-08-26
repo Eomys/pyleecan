@@ -23,11 +23,6 @@ except ImportError as error:
     gen_input = error
 
 try:
-    from ..Methods.Simulation.InputVoltage.set_OP_from_array import set_OP_from_array
-except ImportError as error:
-    set_OP_from_array = error
-
-try:
     from ..Methods.Simulation.InputVoltage.set_Ud_Uq import set_Ud_Uq
 except ImportError as error:
     set_Ud_Uq = error
@@ -57,18 +52,6 @@ class InputVoltage(Input):
         )
     else:
         gen_input = gen_input
-    # cf Methods.Simulation.InputVoltage.set_OP_from_array
-    if isinstance(set_OP_from_array, ImportError):
-        set_OP_from_array = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use InputVoltage method set_OP_from_array: "
-                    + str(set_OP_from_array)
-                )
-            )
-        )
-    else:
-        set_OP_from_array = set_OP_from_array
     # cf Methods.Simulation.InputVoltage.set_Ud_Uq
     if isinstance(set_Ud_Uq, ImportError):
         set_Ud_Uq = property(
@@ -476,7 +459,7 @@ class InputVoltage(Input):
     rot_dir = property(
         fget=_get_rot_dir,
         fset=_set_rot_dir,
-        doc=u"""Rotation direction of the rotor (rot_dir*N0, default value given by ROT_DIR_REF) [-]
+        doc=u"""Rotation direction of the rotor (rot_dir*N0, default value given by ROT_DIR_REF)
 
         :Type: int
         :min: -1
@@ -569,7 +552,7 @@ class InputVoltage(Input):
     current_dir = property(
         fget=_get_current_dir,
         fset=_set_current_dir,
-        doc=u"""Rotation direction of the stator currents (current_dir*2*pi*felec*time, default value given by CURRENT_DIR_REF) [-]
+        doc=u"""Rotation direction of the stator currents (current_dir*2*pi*felec*time, default value given by CURRENT_DIR_REF)
 
         :Type: int
         :min: -1
@@ -589,7 +572,7 @@ class InputVoltage(Input):
     is_periodicity_t = property(
         fget=_get_is_periodicity_t,
         fset=_set_is_periodicity_t,
-        doc=u"""True to compute voltage/currents only on one time periodicity (use periodicities defined in axes_dict[time]) [-]
+        doc=u"""True to compute voltage/currents only on one time periodicity (use periodicities defined in axes_dict[time])
 
         :Type: bool
         """,
@@ -607,7 +590,7 @@ class InputVoltage(Input):
     is_periodicity_a = property(
         fget=_get_is_periodicity_a,
         fset=_set_is_periodicity_a,
-        doc=u"""True to compute voltage/currents only on one angle periodicity (use periodicities defined in axes_dict[angle]) [-]
+        doc=u"""True to compute voltage/currents only on one angle periodicity (use periodicities defined in axes_dict[angle])
 
         :Type: bool
         """,
