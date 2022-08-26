@@ -1,8 +1,8 @@
 {
   "__class__": "MachineIPMSM",
-  "__save_date__": "2022_08_04 15h54min52s ",
+  "__save_date__": "2022_08_26 17h11min13s ",
   "__version__": "pyleecan_1.4.0",
-  "desc": null,
+  "desc": "Machine of the Jaguar I-Pace vehicle,defined from\nA. J. P. Ortega et M. B. Kouhshahi, \u00ab High-Fidelity Analysis with Multiphysics Simulation for Performance Evaluation of Electric Motors Used in Traction Applications \u00bb, p. 8. \nand\nA. Krings et C. Monissen, \u00ab Review and Trends in Electric Traction Motors for Battery Electric and Hybrid Vehicles \u00bb, in 2020 International Conference on Electrical Machines (ICEM), ao\u00fbt 2020, vol. 1, p. 1807\u20111813. doi: 10.1109/ICEM49940.2020.9270946. \nThe geometry is defined, but there was no information about the materials unsed for the magnets and the winding configuration.",
   "frame": null,
   "logger_name": null,
   "name": "Jaguar_I_Pace",
