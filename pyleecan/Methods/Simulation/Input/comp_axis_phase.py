@@ -31,7 +31,7 @@ def comp_axis_phase(self, lamination, per_a=None, is_apera=None, Phase_in=None):
     else:
         name_phase = lamination.get_name_phase()
 
-        if len(name_phase) > 0:
+        if len(name_phase) > 1:
 
             if per_a is not None and is_apera is not None:
                 sym_dict = dict()
@@ -64,5 +64,18 @@ def comp_axis_phase(self, lamination, per_a=None, is_apera=None, Phase_in=None):
                     is_overlay=True,
                     filter={"Phase": []},
                 )
+        elif len(name_phase) == 1:
+            # Creating the data object
+            Phase = DataLinspace(
+                name="phase",
+                unit="rad",
+                initial=0,
+                final=2 * pi,
+                number=1,
+                include_endpoint=False,
+                normalizations={"bar_id": Norm_indices()},
+                is_overlay=True,
+                # filter={"Phase": []},
+            )
 
     return Phase
