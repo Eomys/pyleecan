@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
-# File generated according to Generator/ClassesRef/Simulation/LossModelJordan.csv
+# File generated according to Generator/ClassesRef/Simulation/LossModelJoule.csv
 # WARNING! All changes made in this file will be lost!
-"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Simulation/LossModelJordan
+"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Simulation/LossModelJoule
 """
 
 from os import linesep
@@ -18,48 +18,48 @@ from .LossModel import LossModel
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
 try:
-    from ..Methods.Simulation.LossModelJordan.comp_coeff import comp_coeff
-except ImportError as error:
-    comp_coeff = error
-
-try:
-    from ..Methods.Simulation.LossModelJordan.comp_loss import comp_loss
+    from ..Methods.Simulation.LossModelJoule.comp_loss import comp_loss
 except ImportError as error:
     comp_loss = error
+
+try:
+    from ..Methods.Simulation.LossModelJoule.comp_coeff import comp_coeff
+except ImportError as error:
+    comp_coeff = error
 
 
 from numpy import isnan
 from ._check import InitUnKnowClassError
 
 
-class LossModelJordan(LossModel):
-    """Jordan Loss Model Class"""
+class LossModelJoule(LossModel):
+    """Joule loss model"""
 
     VERSION = 1
 
     # Check ImportError to remove unnecessary dependencies in unused method
-    # cf Methods.Simulation.LossModelJordan.comp_coeff
-    if isinstance(comp_coeff, ImportError):
-        comp_coeff = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use LossModelJordan method comp_coeff: " + str(comp_coeff)
-                )
-            )
-        )
-    else:
-        comp_coeff = comp_coeff
-    # cf Methods.Simulation.LossModelJordan.comp_loss
+    # cf Methods.Simulation.LossModelJoule.comp_loss
     if isinstance(comp_loss, ImportError):
         comp_loss = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use LossModelJordan method comp_loss: " + str(comp_loss)
+                    "Can't use LossModelJoule method comp_loss: " + str(comp_loss)
                 )
             )
         )
     else:
         comp_loss = comp_loss
+    # cf Methods.Simulation.LossModelJoule.comp_coeff
+    if isinstance(comp_coeff, ImportError):
+        comp_coeff = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use LossModelJoule method comp_coeff: " + str(comp_coeff)
+                )
+            )
+        )
+    else:
+        comp_coeff = comp_coeff
     # generic save method is available in all object
     save = save
     # get_logger method is available in all object
@@ -67,8 +67,8 @@ class LossModelJordan(LossModel):
 
     def __init__(
         self,
-        k_hy=None,
-        k_ed=None,
+        temperature=20,
+        type_skin_effect=1,
         name="",
         group="",
         is_show_fig=False,
@@ -91,10 +91,10 @@ class LossModelJordan(LossModel):
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
-            if "k_hy" in list(init_dict.keys()):
-                k_hy = init_dict["k_hy"]
-            if "k_ed" in list(init_dict.keys()):
-                k_ed = init_dict["k_ed"]
+            if "temperature" in list(init_dict.keys()):
+                temperature = init_dict["temperature"]
+            if "type_skin_effect" in list(init_dict.keys()):
+                type_skin_effect = init_dict["type_skin_effect"]
             if "name" in list(init_dict.keys()):
                 name = init_dict["name"]
             if "group" in list(init_dict.keys()):
@@ -104,10 +104,10 @@ class LossModelJordan(LossModel):
             if "coeff_dict" in list(init_dict.keys()):
                 coeff_dict = init_dict["coeff_dict"]
         # Set the properties (value check and convertion are done in setter)
-        self.k_hy = k_hy
-        self.k_ed = k_ed
+        self.temperature = temperature
+        self.type_skin_effect = type_skin_effect
         # Call LossModel init
-        super(LossModelJordan, self).__init__(
+        super(LossModelJoule, self).__init__(
             name=name, group=group, is_show_fig=is_show_fig, coeff_dict=coeff_dict
         )
         # The class is frozen (in LossModel init), for now it's impossible to
@@ -116,12 +116,14 @@ class LossModelJordan(LossModel):
     def __str__(self):
         """Convert this object in a readeable string (for print)"""
 
-        LossModelJordan_str = ""
+        LossModelJoule_str = ""
         # Get the properties inherited from LossModel
-        LossModelJordan_str += super(LossModelJordan, self).__str__()
-        LossModelJordan_str += "k_hy = " + str(self.k_hy) + linesep
-        LossModelJordan_str += "k_ed = " + str(self.k_ed) + linesep
-        return LossModelJordan_str
+        LossModelJoule_str += super(LossModelJoule, self).__str__()
+        LossModelJoule_str += "temperature = " + str(self.temperature) + linesep
+        LossModelJoule_str += (
+            "type_skin_effect = " + str(self.type_skin_effect) + linesep
+        )
+        return LossModelJoule_str
 
     def __eq__(self, other):
         """Compare two objects (skip parent)"""
@@ -130,11 +132,11 @@ class LossModelJordan(LossModel):
             return False
 
         # Check the properties inherited from LossModel
-        if not super(LossModelJordan, self).__eq__(other):
+        if not super(LossModelJoule, self).__eq__(other):
             return False
-        if other.k_hy != self.k_hy:
+        if other.temperature != self.temperature:
             return False
-        if other.k_ed != self.k_ed:
+        if other.type_skin_effect != self.type_skin_effect:
             return False
         return True
 
@@ -149,40 +151,41 @@ class LossModelJordan(LossModel):
 
         # Check the properties inherited from LossModel
         diff_list.extend(
-            super(LossModelJordan, self).compare(
+            super(LossModelJoule, self).compare(
                 other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
             )
         )
         if (
-            other._k_hy is not None
-            and self._k_hy is not None
-            and isnan(other._k_hy)
-            and isnan(self._k_hy)
+            other._temperature is not None
+            and self._temperature is not None
+            and isnan(other._temperature)
+            and isnan(self._temperature)
         ):
             pass
-        elif other._k_hy != self._k_hy:
+        elif other._temperature != self._temperature:
             if is_add_value:
                 val_str = (
-                    " (self=" + str(self._k_hy) + ", other=" + str(other._k_hy) + ")"
+                    " (self="
+                    + str(self._temperature)
+                    + ", other="
+                    + str(other._temperature)
+                    + ")"
                 )
-                diff_list.append(name + ".k_hy" + val_str)
+                diff_list.append(name + ".temperature" + val_str)
             else:
-                diff_list.append(name + ".k_hy")
-        if (
-            other._k_ed is not None
-            and self._k_ed is not None
-            and isnan(other._k_ed)
-            and isnan(self._k_ed)
-        ):
-            pass
-        elif other._k_ed != self._k_ed:
+                diff_list.append(name + ".temperature")
+        if other._type_skin_effect != self._type_skin_effect:
             if is_add_value:
                 val_str = (
-                    " (self=" + str(self._k_ed) + ", other=" + str(other._k_ed) + ")"
+                    " (self="
+                    + str(self._type_skin_effect)
+                    + ", other="
+                    + str(other._type_skin_effect)
+                    + ")"
                 )
-                diff_list.append(name + ".k_ed" + val_str)
+                diff_list.append(name + ".type_skin_effect" + val_str)
             else:
-                diff_list.append(name + ".k_ed")
+                diff_list.append(name + ".type_skin_effect")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -193,9 +196,9 @@ class LossModelJordan(LossModel):
         S = 0  # Full size of the object
 
         # Get size of the properties inherited from LossModel
-        S += super(LossModelJordan, self).__sizeof__()
-        S += getsizeof(self.k_hy)
-        S += getsizeof(self.k_ed)
+        S += super(LossModelJoule, self).__sizeof__()
+        S += getsizeof(self.temperature)
+        S += getsizeof(self.type_skin_effect)
         return S
 
     def as_dict(self, type_handle_ndarray=0, keep_function=False, **kwargs):
@@ -210,24 +213,24 @@ class LossModelJordan(LossModel):
         """
 
         # Get the properties inherited from LossModel
-        LossModelJordan_dict = super(LossModelJordan, self).as_dict(
+        LossModelJoule_dict = super(LossModelJoule, self).as_dict(
             type_handle_ndarray=type_handle_ndarray,
             keep_function=keep_function,
             **kwargs
         )
-        LossModelJordan_dict["k_hy"] = self.k_hy
-        LossModelJordan_dict["k_ed"] = self.k_ed
+        LossModelJoule_dict["temperature"] = self.temperature
+        LossModelJoule_dict["type_skin_effect"] = self.type_skin_effect
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
-        LossModelJordan_dict["__class__"] = "LossModelJordan"
-        return LossModelJordan_dict
+        LossModelJoule_dict["__class__"] = "LossModelJoule"
+        return LossModelJoule_dict
 
     def copy(self):
         """Creates a deepcopy of the object"""
 
         # Handle deepcopy of all the properties
-        k_hy_val = self.k_hy
-        k_ed_val = self.k_ed
+        temperature_val = self.temperature
+        type_skin_effect_val = self.type_skin_effect
         name_val = self.name
         group_val = self.group
         is_show_fig_val = self.is_show_fig
@@ -237,8 +240,8 @@ class LossModelJordan(LossModel):
             coeff_dict_val = self.coeff_dict.copy()
         # Creates new object of the same type with the copied properties
         obj_copy = type(self)(
-            k_hy=k_hy_val,
-            k_ed=k_ed_val,
+            temperature=temperature_val,
+            type_skin_effect=type_skin_effect_val,
             name=name_val,
             group=group_val,
             is_show_fig=is_show_fig_val,
@@ -249,43 +252,43 @@ class LossModelJordan(LossModel):
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""
 
-        self.k_hy = None
-        self.k_ed = None
+        self.temperature = None
+        self.type_skin_effect = None
         # Set to None the properties inherited from LossModel
-        super(LossModelJordan, self)._set_None()
+        super(LossModelJoule, self)._set_None()
 
-    def _get_k_hy(self):
-        """getter of k_hy"""
-        return self._k_hy
+    def _get_temperature(self):
+        """getter of temperature"""
+        return self._temperature
 
-    def _set_k_hy(self, value):
-        """setter of k_hy"""
-        check_var("k_hy", value, "float")
-        self._k_hy = value
+    def _set_temperature(self, value):
+        """setter of temperature"""
+        check_var("temperature", value, "float")
+        self._temperature = value
 
-    k_hy = property(
-        fget=_get_k_hy,
-        fset=_set_k_hy,
-        doc=u"""Hysteresis loss coefficient [W/kg]
+    temperature = property(
+        fget=_get_temperature,
+        fset=_set_temperature,
+        doc=u"""Winding temperature [°C]
 
         :Type: float
         """,
     )
 
-    def _get_k_ed(self):
-        """getter of k_ed"""
-        return self._k_ed
+    def _get_type_skin_effect(self):
+        """getter of type_skin_effect"""
+        return self._type_skin_effect
 
-    def _set_k_ed(self, value):
-        """setter of k_ed"""
-        check_var("k_ed", value, "float")
-        self._k_ed = value
+    def _set_type_skin_effect(self, value):
+        """setter of type_skin_effect"""
+        check_var("type_skin_effect", value, "int")
+        self._type_skin_effect = value
 
-    k_ed = property(
-        fget=_get_k_ed,
-        fset=_set_k_ed,
-        doc=u"""Eddy current loss coefficient [W/kg]
+    type_skin_effect = property(
+        fget=_get_type_skin_effect,
+        fset=_set_type_skin_effect,
+        doc=u"""0 to ignore skin effect, 1 to consider it
 
-        :Type: float
+        :Type: int
         """,
     )

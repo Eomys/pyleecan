@@ -3,7 +3,7 @@ from numpy import sum as np_sum, zeros, array, pi
 
 def comp_loss(self):
     """Calculate Windage losses
-    Equation from "Design of Rotating Electrical Machines", Second Edition, Pyrhönen, Jokinen, Hrabovcovà
+    Equation from "Design of Rotating Electrical Machines", Second Edition, Pyrhönen, Jokinen, Hrabovcovà p528
 
     Parameters
     ----------
@@ -44,6 +44,11 @@ def comp_loss(self):
     mu = 18.5e-6  # Dynamic viscosity of air
     # Couette Reynolds number
     Re_delta = rho * omega * Dr * delta / (2 * mu)
+    # ------------------------------------------ Warning ---------------------------------------------
+    # As C_M depends on Re_delta, which depends on the frequency, the coefficient that will be stored
+    # in the coeff_dict below depends on frequency. So the coefficient may change with frequency and should be
+    # computed again. But to build the coeff_dict, the assumption that C_M will not change must be made.
+    # ------------------------------------------------------------------------------------------------
     if Re_delta < 64:
         C_M = 10 * (2 * delta / Dr) ** 0.3 / Re_delta
     elif Re_delta < 5e2:

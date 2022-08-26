@@ -22,11 +22,6 @@ try:
 except ImportError as error:
     comp_loss = error
 
-try:
-    from ..Methods.Simulation.LossModelWindage.comp_coeff import comp_coeff
-except ImportError as error:
-    comp_coeff = error
-
 
 from numpy import isnan
 from ._check import InitUnKnowClassError
@@ -37,7 +32,6 @@ class LossModelWindage(LossModel):
 
     VERSION = 1
 
-    # Check ImportError to remove unnecessary dependencies in unused method
     # cf Methods.Simulation.LossModelWindage.comp_loss
     if isinstance(comp_loss, ImportError):
         comp_loss = property(
@@ -49,17 +43,6 @@ class LossModelWindage(LossModel):
         )
     else:
         comp_loss = comp_loss
-    # cf Methods.Simulation.LossModelWindage.comp_coeff
-    if isinstance(comp_coeff, ImportError):
-        comp_coeff = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use LossModelWindage method comp_coeff: " + str(comp_coeff)
-                )
-            )
-        )
-    else:
-        comp_coeff = comp_coeff
     # generic save method is available in all object
     save = save
     # get_logger method is available in all object
@@ -67,7 +50,6 @@ class LossModelWindage(LossModel):
 
     def __init__(
         self,
-        temperature=20,
         name="",
         group="",
         is_show_fig=False,
@@ -90,8 +72,6 @@ class LossModelWindage(LossModel):
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
-            if "temperature" in list(init_dict.keys()):
-                temperature = init_dict["temperature"]
             if "name" in list(init_dict.keys()):
                 name = init_dict["name"]
             if "group" in list(init_dict.keys()):
@@ -101,7 +81,6 @@ class LossModelWindage(LossModel):
             if "coeff_dict" in list(init_dict.keys()):
                 coeff_dict = init_dict["coeff_dict"]
         # Set the properties (value check and convertion are done in setter)
-        self.temperature = temperature
         # Call LossModel init
         super(LossModelWindage, self).__init__(
             name=name, group=group, is_show_fig=is_show_fig, coeff_dict=coeff_dict
@@ -115,7 +94,6 @@ class LossModelWindage(LossModel):
         LossModelWindage_str = ""
         # Get the properties inherited from LossModel
         LossModelWindage_str += super(LossModelWindage, self).__str__()
-        LossModelWindage_str += "temperature = " + str(self.temperature) + linesep
         return LossModelWindage_str
 
     def __eq__(self, other):
@@ -126,8 +104,6 @@ class LossModelWindage(LossModel):
 
         # Check the properties inherited from LossModel
         if not super(LossModelWindage, self).__eq__(other):
-            return False
-        if other.temperature != self.temperature:
             return False
         return True
 
@@ -146,25 +122,6 @@ class LossModelWindage(LossModel):
                 other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
             )
         )
-        if (
-            other._temperature is not None
-            and self._temperature is not None
-            and isnan(other._temperature)
-            and isnan(self._temperature)
-        ):
-            pass
-        elif other._temperature != self._temperature:
-            if is_add_value:
-                val_str = (
-                    " (self="
-                    + str(self._temperature)
-                    + ", other="
-                    + str(other._temperature)
-                    + ")"
-                )
-                diff_list.append(name + ".temperature" + val_str)
-            else:
-                diff_list.append(name + ".temperature")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -176,7 +133,6 @@ class LossModelWindage(LossModel):
 
         # Get size of the properties inherited from LossModel
         S += super(LossModelWindage, self).__sizeof__()
-        S += getsizeof(self.temperature)
         return S
 
     def as_dict(self, type_handle_ndarray=0, keep_function=False, **kwargs):
@@ -196,7 +152,6 @@ class LossModelWindage(LossModel):
             keep_function=keep_function,
             **kwargs
         )
-        LossModelWindage_dict["temperature"] = self.temperature
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         LossModelWindage_dict["__class__"] = "LossModelWindage"
@@ -206,7 +161,6 @@ class LossModelWindage(LossModel):
         """Creates a deepcopy of the object"""
 
         # Handle deepcopy of all the properties
-        temperature_val = self.temperature
         name_val = self.name
         group_val = self.group
         is_show_fig_val = self.is_show_fig
@@ -216,7 +170,6 @@ class LossModelWindage(LossModel):
             coeff_dict_val = self.coeff_dict.copy()
         # Creates new object of the same type with the copied properties
         obj_copy = type(self)(
-            temperature=temperature_val,
             name=name_val,
             group=group_val,
             is_show_fig=is_show_fig_val,
@@ -227,24 +180,5 @@ class LossModelWindage(LossModel):
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""
 
-        self.temperature = None
         # Set to None the properties inherited from LossModel
         super(LossModelWindage, self)._set_None()
-
-    def _get_temperature(self):
-        """getter of temperature"""
-        return self._temperature
-
-    def _set_temperature(self, value):
-        """setter of temperature"""
-        check_var("temperature", value, "float")
-        self._temperature = value
-
-    temperature = property(
-        fget=_get_temperature,
-        fset=_set_temperature,
-        doc=u"""Winding temperature [°C]
-
-        :Type: float
-        """,
-    )
