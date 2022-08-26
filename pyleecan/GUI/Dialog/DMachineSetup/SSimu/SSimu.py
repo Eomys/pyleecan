@@ -279,7 +279,7 @@ class SSimu(Gen_SSimu, QWidget):
 
     def set_I3(self):
         """Update If according to the widget"""
-        self.simu.input.OP.If = self.lf_I3.value()
+        self.simu.input.OP.If_ref = self.lf_I3.value()
 
     def set_T_mag(self):
         """Update T_mag according to the widget"""
