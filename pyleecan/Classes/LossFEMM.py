@@ -50,7 +50,7 @@ class LossFEMM(Loss):
         self,
         k_ed=None,
         k_hy=None,
-        h_p=None,
+        k_p=None,
         type_skin_effect=1,
         logger_name="Pyleecan.Loss",
         model_dict=None,
@@ -79,8 +79,8 @@ class LossFEMM(Loss):
                 k_ed = init_dict["k_ed"]
             if "k_hy" in list(init_dict.keys()):
                 k_hy = init_dict["k_hy"]
-            if "h_p" in list(init_dict.keys()):
-                h_p = init_dict["h_p"]
+            if "k_p" in list(init_dict.keys()):
+                k_p = init_dict["k_p"]
             if "type_skin_effect" in list(init_dict.keys()):
                 type_skin_effect = init_dict["type_skin_effect"]
             if "logger_name" in list(init_dict.keys()):
@@ -96,7 +96,7 @@ class LossFEMM(Loss):
         # Set the properties (value check and convertion are done in setter)
         self.k_ed = k_ed
         self.k_hy = k_hy
-        self.h_p = h_p
+        self.k_p = k_p
         self.type_skin_effect = type_skin_effect
         # Call Loss init
         super(LossFEMM, self).__init__(
@@ -117,7 +117,7 @@ class LossFEMM(Loss):
         LossFEMM_str += super(LossFEMM, self).__str__()
         LossFEMM_str += "k_ed = " + str(self.k_ed) + linesep
         LossFEMM_str += "k_hy = " + str(self.k_hy) + linesep
-        LossFEMM_str += "h_p = " + str(self.h_p) + linesep
+        LossFEMM_str += "k_p = " + str(self.k_p) + linesep
         LossFEMM_str += "type_skin_effect = " + str(self.type_skin_effect) + linesep
         return LossFEMM_str
 
@@ -134,7 +134,7 @@ class LossFEMM(Loss):
             return False
         if other.k_hy != self.k_hy:
             return False
-        if other.h_p != self.h_p:
+        if other.k_p != self.k_p:
             return False
         if other.type_skin_effect != self.type_skin_effect:
             return False
@@ -186,20 +186,20 @@ class LossFEMM(Loss):
             else:
                 diff_list.append(name + ".k_hy")
         if (
-            other._h_p is not None
-            and self._h_p is not None
-            and isnan(other._h_p)
-            and isnan(self._h_p)
+            other._k_p is not None
+            and self._k_p is not None
+            and isnan(other._k_p)
+            and isnan(self._k_p)
         ):
             pass
-        elif other._h_p != self._h_p:
+        elif other._k_p != self._k_p:
             if is_add_value:
                 val_str = (
-                    " (self=" + str(self._h_p) + ", other=" + str(other._h_p) + ")"
+                    " (self=" + str(self._k_p) + ", other=" + str(other._k_p) + ")"
                 )
-                diff_list.append(name + ".h_p" + val_str)
+                diff_list.append(name + ".k_p" + val_str)
             else:
-                diff_list.append(name + ".h_p")
+                diff_list.append(name + ".k_p")
         if other._type_skin_effect != self._type_skin_effect:
             if is_add_value:
                 val_str = (
@@ -225,7 +225,7 @@ class LossFEMM(Loss):
         S += super(LossFEMM, self).__sizeof__()
         S += getsizeof(self.k_ed)
         S += getsizeof(self.k_hy)
-        S += getsizeof(self.h_p)
+        S += getsizeof(self.k_p)
         S += getsizeof(self.type_skin_effect)
         return S
 
@@ -248,7 +248,7 @@ class LossFEMM(Loss):
         )
         LossFEMM_dict["k_ed"] = self.k_ed
         LossFEMM_dict["k_hy"] = self.k_hy
-        LossFEMM_dict["h_p"] = self.h_p
+        LossFEMM_dict["k_p"] = self.k_p
         LossFEMM_dict["type_skin_effect"] = self.type_skin_effect
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
@@ -261,7 +261,7 @@ class LossFEMM(Loss):
         # Handle deepcopy of all the properties
         k_ed_val = self.k_ed
         k_hy_val = self.k_hy
-        h_p_val = self.h_p
+        k_p_val = self.k_p
         type_skin_effect_val = self.type_skin_effect
         logger_name_val = self.logger_name
         if self.model_dict is None:
@@ -277,7 +277,7 @@ class LossFEMM(Loss):
         obj_copy = type(self)(
             k_ed=k_ed_val,
             k_hy=k_hy_val,
-            h_p=h_p_val,
+            k_p=k_p_val,
             type_skin_effect=type_skin_effect_val,
             logger_name=logger_name_val,
             model_dict=model_dict_val,
@@ -292,7 +292,7 @@ class LossFEMM(Loss):
 
         self.k_ed = None
         self.k_hy = None
-        self.h_p = None
+        self.k_p = None
         self.type_skin_effect = None
         # Set to None the properties inherited from Loss
         super(LossFEMM, self)._set_None()
@@ -333,18 +333,18 @@ class LossFEMM(Loss):
         """,
     )
 
-    def _get_h_p(self):
-        """getter of h_p"""
-        return self._h_p
+    def _get_k_p(self):
+        """getter of k_p"""
+        return self._k_p
 
-    def _set_h_p(self, value):
-        """setter of h_p"""
-        check_var("h_p", value, "float")
-        self._h_p = value
+    def _set_k_p(self, value):
+        """setter of k_p"""
+        check_var("k_p", value, "float")
+        self._k_p = value
 
-    h_p = property(
-        fget=_get_h_p,
-        fset=_set_h_p,
+    k_p = property(
+        fget=_get_k_p,
+        fset=_set_k_p,
         doc=u"""proximity loss coefficients
 
         :Type: float

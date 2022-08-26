@@ -140,11 +140,9 @@ def test_efficiency_map():
     OP_matrix = np.zeros((Nspeed, 3))
     OP_matrix[:, 0] = np.linspace(500, 6000, Nspeed)
     simu.var_simu = VarLoadCurrent(
-        OP_matrix=OP_matrix, type_OP_matrix=1,
         datakeeper_list = datakeeper_list
-            # is_keep_all_output=True
     )
-    simu.input.set_OP_from_array(OP_matrix, type_OP_matrix=1)
+    simu.var_simu.set_OP_array(OP_matrix, "N0", "Id", "Iq")
 
     simu.elec = ElecLUTdq(
         Urms_max=153,
@@ -167,7 +165,6 @@ def test_efficiency_map():
                 is_periodicity_t=True,
             ),
             var_simu=VarLoadCurrent(
-                type_OP_matrix=1,
                 postproc_list=[PostLUT(is_save_LUT=True, file_name = LUT_file_name)],
                 is_keep_all_output=True,
             ),
@@ -376,7 +373,7 @@ def test_efficiency_map():
         LUT_grid = out.simu.elec.LUT_enforced
 
         # Get Id_min, Id_max, Iq_min, Iq_max from OP_matrix
-        OP_matrix = LUT_grid.get_OP_matrix()
+        OP_matrix = LUT_grid.get_OP_array("N0","Id","Iq")
         Id_min = OP_matrix[:, 1].min()
         Id_max = OP_matrix[:, 1].max()
         Iq_min = OP_matrix[:, 2].min()

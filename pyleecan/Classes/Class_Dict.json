@@ -5907,7 +5907,7 @@
                 "desc": "proximity loss coefficients",
                 "max": "",
                 "min": "",
-                "name": "h_p",
+                "name": "k_p",
                 "type": "float",
                 "unit": "W/(m3*T2*Hz2)",
                 "value": null

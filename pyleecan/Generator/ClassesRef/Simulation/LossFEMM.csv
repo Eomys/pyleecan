@@ -1,5 +1,5 @@
 Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
 k_ed,W/(m3*T2*Hz2),eddy current loss coefficients,,float,None,,,,Simulation,Loss,run,VERSION,1,"Simplified loss module, with predefined loss models for a quick setup"
 k_hy,W/(m3*T2*Hz),hysteresis loss coefficients,,float,None,,,,,,,,,
-h_p,W/(m3*T2*Hz2),proximity loss coefficients,,float,None,,,,,,,,,
+k_p,W/(m3*T2*Hz2),proximity loss coefficients,,float,None,,,,,,,,,
 type_skin_effect,-,Skin effect for resistance calculation,1,int,1,,,,,,,,,

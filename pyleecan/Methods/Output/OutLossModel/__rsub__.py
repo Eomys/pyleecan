@@ -1,7 +1,7 @@
 from ....Functions.Load.import_class import import_class
 
 
-def __add__(self, other):
+def __rsub__(self, other):
     if other == 0:
         return self
     try:

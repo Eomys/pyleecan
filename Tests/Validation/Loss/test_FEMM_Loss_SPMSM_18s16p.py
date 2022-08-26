@@ -60,7 +60,7 @@ def test_LossFEMM_SPMSM():
         # is_close_femm=False,
     )
 
-    simu.loss = LossFEMM(Ce = Ce, Ch = Ch, Cp=Cprox, is_get_meshsolution=True, Tsta=120, type_skin_effect = 0)
+    simu.loss = LossFEMM(k_hy=Ch, k_ed=Ce, k_h=Cprox, is_get_meshsolution=True, Tsta=120, type_skin_effect = 0)
 
     out = simu.run()
 
