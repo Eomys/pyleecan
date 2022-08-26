@@ -685,7 +685,7 @@ class Slot(FrozenClass):
     is_bore = property(
         fget=_get_is_bore,
         fset=_set_is_bore,
-        doc=u"""True if the Slot is on the bore radius, False for yoke [-]
+        doc=u"""True if the Slot is on the bore radius, False for yoke
 
         :Type: bool
         """,

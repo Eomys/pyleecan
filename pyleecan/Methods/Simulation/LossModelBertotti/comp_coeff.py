@@ -167,18 +167,30 @@ def comp_coeff(self, material):
                 label=f"fitting with f={key}Hz",
             )
         plt.xlabel("Peak magnetic flux density (T)")
-        plt.ylabel("Iron loss (W/kg")
-        plt.title(f"Curve fitting for the iron loss of the {material.name} material")
-        text = textwrap.dedent(
-            fr"""                    
-                                $P_{{loss}}=k_{{hy}} f B^2 + k_{{ed}} (f B)^2 + k_{{ex}} (f B)^{{1.5}}$
-                                where:
-                                $k_{{hy}}$ = {popt[0]:.5E}
-                                $k_{{ed}}$ = {popt[1]:.5E}
-                                $k_{{ex}}$ = {popt[2]:.5E}
-                                """
+        plt.ylabel("Iron loss (W/kg)")
+        plt.title(
+            "Curve fitting for the iron loss of the {} material".format(material.name)
         )
-        fig.text(0.02, 0.5, text, fontsize=12)
+        txt = (
+            " $P_{{loss}}=k_{{hy}} f B^2 + k_{{ed}} (f B)^2 + k_{{ex}} (f B)^{{1.5}}$\n"
+        )
+        txt += "where:\n"
+        txt += "$k_{{hy}}$ = " + format(popt[0], ".5E") + "\n"
+        txt += "$k_{{ed}}$ = " + format(popt[1], ".5E") + "\n"
+        txt += "$k_{{ex}}$ = " + format(popt[2], ".5E") + "\n"
+        # txt += "$\\alpha_f$ = " + format(popt[2], '.5E') +"\n"
+        # txt += "$\\alpha_B$ = " + format(popt[3], '.5E') +"\n"
+        # plt.title(f"Curve fitting for the iron loss of the {material.name} material")
+        # text = textwrap.dedent(
+        #     fr"""
+        #                         $P_{{loss}}=k_{{hy}} f B^2 + k_{{ed}} (f B)^2 + k_{{ex}} (f B)^{{1.5}}$
+        #                         where:
+        #                         $k_{{hy}}$ = {popt[0]:.5E}
+        #                         $k_{{ed}}$ = {popt[1]:.5E}
+        #                         $k_{{ex}}$ = {popt[2]:.5E}
+        #                         """
+        # )
+        fig.text(0.02, 0.5, txt, fontsize=12)
         plt.subplots_adjust(left=0.26)
         plt.legend()
         plt.show()

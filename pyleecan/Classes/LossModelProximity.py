@@ -239,7 +239,7 @@ class LossModelProximity(LossModel):
     k_p = property(
         fget=_get_k_p,
         fset=_set_k_p,
-        doc=u"""Proximity loss coefficient [W/kg]
+        doc=u"""Proximity loss coefficient
 
         :Type: float
         """,

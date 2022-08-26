@@ -430,4 +430,3 @@ class OutLoss(FrozenClass):
         :Type: str
         """,
     )
->>>>>>> fd1bcc4443af81296c328db734a1258660a37899

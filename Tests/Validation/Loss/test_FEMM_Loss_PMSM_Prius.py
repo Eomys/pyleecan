@@ -527,7 +527,7 @@ def test_FEMM_Id_Iq():
 # To run it without pytest
 if __name__ == "__main__":
 
-    # test_FEMM_Loss_diff()
+    test_FEMM_Loss_diff()
     # test_FEMM_Loss_Prius()
-    test_LossFEMM_Prius()
+    # test_LossFEMM_Prius()
     # test_FEMM_Id_Iq()

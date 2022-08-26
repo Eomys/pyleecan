@@ -377,7 +377,7 @@ class Loss(FrozenClass):
     Tsta = property(
         fget=_get_Tsta,
         fset=_set_Tsta,
-        doc=u"""Average stator temperature for Electrical calculation [deg Celsius]
+        doc=u"""Average stator temperature for Electrical calculation
 
         :Type: float
         """,
@@ -395,7 +395,7 @@ class Loss(FrozenClass):
     Trot = property(
         fget=_get_Trot,
         fset=_set_Trot,
-        doc=u"""Average rotor temperature for Electrical calculation [deg Celsius]
+        doc=u"""Average rotor temperature for Electrical calculation
 
         :Type: float
         """,
