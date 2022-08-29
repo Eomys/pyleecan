@@ -20,6 +20,7 @@ from .....GUI.Dialog.DMachineSetup.SSimu.Gen_SSimu import Gen_SSimu
 from .....loggers import GUI_LOG_NAME
 from .....definitions import config_dict
 from .....Functions.init_environment import save_config_dict
+from .....Functions.GUI.log_error import log_error
 
 
 class SSimu(Gen_SSimu, QWidget):
@@ -67,12 +68,7 @@ class SSimu(Gen_SSimu, QWidget):
             )
         except Exception as e:
             err_msg = "Error while plotting machine in Simulation Step:\n" + str(e)
-            getLogger(GUI_LOG_NAME).error(err_msg)
-            QMessageBox().critical(
-                self,
-                self.tr("Error"),
-                err_msg,
-            )
+            log_error(self, err_msg)
         self.w_viewer.draw()
 
         # Adapt OP widgets to machine type
@@ -195,7 +191,7 @@ class SSimu(Gen_SSimu, QWidget):
             out = self.simu.run()
         except Exception as e:
             err_msg = "Error while running simulation:\n" + str(e)
-            QMessageBox().critical(self, self.tr("Error"), err_msg)
+            log_error(self, err_msg)
             self.simu.get_logger().error(err_msg)
         # Save results
         # Full results
@@ -263,6 +259,15 @@ class SSimu(Gen_SSimu, QWidget):
             "phase",
             is_show_fig=False,
             save_path=join(self.simu.path_result, "Stator winding flux.png"),
+        )
+        # Done
+        QMessageBox().information(
+            self,
+            self.tr("Simlation finished"),
+            "Simulation "
+            + self.simu.name
+            + " is finished.\nResults available at "
+            + self.simu.path_result,
         )
 
     def set_N0(self):
