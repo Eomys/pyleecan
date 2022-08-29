@@ -109,8 +109,8 @@ def gen_input(self):
         Nt_per = Time.get_length(is_smallestperiod=True)
         Phase_R = outelec.axes_dict["phase_" + simu.machine.rotor.get_label()]
         qr_per = Phase_R.get_length(is_smallestperiod=True)
-        if self.OP.get_OP_array("If").size > 0:  # WRSM case
-            Ir_val = ones((Nt_per, qr_per)) * self.OP.get_OP_array("If")[0][0]
+        if hasattr(self.OP, "If_ref"):  # WRSM case
+            Ir_val = ones((Nt_per, qr_per)) * self.OP.If
         elif self.Ir is None:
             Ir_val = zeros((Nt_per, qr_per))
         else:
