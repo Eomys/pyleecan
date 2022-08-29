@@ -1,6 +1,6 @@
 {
   "__class__": "MachineWRSM",
-  "__save_date__": "2022_08_29 11h58min27s ",
+  "__save_date__": "2022_08_29 12h11min32s ",
   "__version__": "pyleecan_1.4.0",
   "desc": "ZOE machine of Renault (first generation), cf Pierre Pellerey thesis",
   "frame": null,
@@ -263,7 +263,7 @@
     "slot": {
       "H1": 0.003,
       "H2": 0.025,
-      "H3": 0.0,
+      "H3": 0.0005,
       "H4": 0.0,
       "R1": 0.07540000000000001,
       "W1": 0.0687,
