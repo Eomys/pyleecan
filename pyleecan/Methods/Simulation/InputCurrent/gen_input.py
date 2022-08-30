@@ -110,7 +110,7 @@ def gen_input(self):
         Phase_R = outelec.axes_dict["phase_" + simu.machine.rotor.get_label()]
         qr_per = Phase_R.get_length(is_smallestperiod=True)
         if hasattr(self.OP, "If_ref"):  # WRSM case
-            Ir_val = ones((Nt_per, qr_per)) * self.OP.If
+            Ir_val = ones((Nt_per, qr_per)) * self.OP.If_ref
         elif self.Ir is None:
             Ir_val = zeros((Nt_per, qr_per))
         else:
