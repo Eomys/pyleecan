@@ -14623,6 +14623,7 @@
             "comp_surface",
             "comp_surface_active",
             "get_surface_active",
+            "get_surface_opening",
             "plot_schematics"
         ],
         "mother": "Slot",
@@ -14738,6 +14739,7 @@
             "comp_surface",
             "comp_surface_active",
             "get_surface_active",
+            "get_surface_opening",
             "plot_schematics"
         ],
         "mother": "Slot",

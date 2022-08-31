@@ -34,33 +34,35 @@ def get_surface_opening(self, alpha=0, delta=0):
         curve_list.append(line_dict["3-w4"])
     curve_list.append(line_dict["w4-w3"])
     if self.H4 > 0:
-        curve_list.extend([line_dict["w3-w2"], line_dict["w2-5"], line_dict["5-6"]])
+        curve_list.extend([line_dict["w3-w2"], line_dict["w2-5"]])
     else:
-        curve_list.append(line_dict["w3-6"])
+        curve_list.append(line_dict["w3-5"])
+
+    curve_list.append(line_dict["5-6"])
     #  second winding
     if self.H4 > 0:
-        curve_list.extend([line_dict["6-7"], line_dict["7-w2s"], line_dict["w2s-w3s"]])
+        curve_list.extend([line_dict["6-w2s"], line_dict["w2s-w3s"]])
     else:
         curve_list.append(line_dict["6-w3s"])
     curve_list.append(line_dict["w3s-w4s"])
     if self.H3 > 0:
-        curve_list.extend([line_dict["w4s-w1s"], line_dict["w1s-8"], line_dict["8-9"]])
+        curve_list.extend([line_dict["w4s-w1s"], line_dict["w1s-7"], line_dict["7-8"]])
     elif self.W3 > 0:
-        curve_list.append(line_dict["w4s-9"])
-    curve_list.extend([line_dict["9-10"], line_dict["10-11"], line_dict["11-1"]])
+        curve_list.append(line_dict["w4s-8"])
+    curve_list.extend([line_dict["8-9"], line_dict["9-10"], line_dict["10-1"]])
 
     curve_list = [line for line in curve_list if line is not None]
 
-    # Only the closing arc (11-1) needs to be drawn (in FEMM)
+    # Only the closing arc (10-1) needs to be drawn (in FEMM)
     for curve in curve_list[:-1]:
         if curve.prop_dict is None:
             curve.prop_dict = dict()
         curve.prop_dict.update({DRAW_PROP_LAB: False})
 
     # Create surface
-    Z10 = line_dict["10-11"].get_begin()
+    Z9 = line_dict["9-10"].get_begin()
     Z2 = line_dict["1-2"].get_end()
-    Zmid = (Z10 + Z2) / 2
+    Zmid = (Z9 + Z2) / 2
     label = self.parent.get_label() + "_" + SOP_LAB + "_R0-T0-S0"
     surface = SurfLine(line_list=curve_list, label=label, point_ref=Zmid)
 
