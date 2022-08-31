@@ -3,7 +3,7 @@ from os.path import join
 import matplotlib.pyplot as plt
 from multiprocessing import cpu_count
 import pytest
-
+from numpy.testing import assert_array_almost_equal
 from Tests import save_validation_path as save_path
 from pyleecan.Classes.OPdqf import OPdqf
 from pyleecan.Classes.Simu1 import Simu1
@@ -25,18 +25,18 @@ from Tests import TEST_DATA_DIR
 def test_FEMM_compare_Zoe():
     """Test compute the Flux in FEMM of machine Zoe, with and without symmetry"""
     Zoe = load(join(DATA_DIR, "Machine", "Renault_Zoe.json"))
-    simu = Simu1(name="test_FEMM_compare_Zoe", machine=Zoe)
+    simu = Simu1(name="test_FEMM_compare_Zoe", machine=Zoe, path_result=save_path)
 
     # Initialization of the simulation starting point
     simu.input = InputCurrent()
     # Set time and space discretization
     simu.input.Na_tot = 2048
-    simu.input.Nt_tot = 128
+    simu.input.Nt_tot = 1
     simu.input.OP = OPdqf(N0=3000, Id_ref=0, Iq_ref=70, If_ref=10)  # Rotor speed [rpm]
 
     # Definition of the magnetic simulation (no symmetry)
     simu.mag = MagFEMM(
-        is_periodicity_a=False, is_periodicity_t=True, nb_worker=cpu_count()
+        is_periodicity_a=False, is_periodicity_t=False, nb_worker=cpu_count()
     )
     simu.force = None
     simu.struct = None
@@ -69,6 +69,13 @@ def test_FEMM_compare_Zoe():
         "B_{circ}"
     ]
 
+    assert_array_almost_equal(B_rad, B_rad_sym, decimal=1)
+    assert_array_almost_equal(B_tan, B_tan_sym, decimal=1)
+    assert max(B_rad) == pytest.approx(1.268, rel=0.1)
+    assert max(B_tan) == pytest.approx(0.445, rel=0.1)
+    assert out.mag.Tem_av == pytest.approx(51.987, rel=0.1)
+
 
 if __name__ == "__main__":
     test_FEMM_compare_Zoe()
+    print("Done")
