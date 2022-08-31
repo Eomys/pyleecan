@@ -1,16 +1,27 @@
 import os
 from math import exp
+import re
+from os.path import expanduser
+import time
 
-import pythoncom
-import win32com.client
+global windowsOS
+
+try:
+    import pythoncom
+    import win32com.client
+
+    windowsOS = True
+except:
+    print("No activex, using file I/O")
+    windowsOS = False
+
 from six import string_types
+
+sleeptime = 0.01
 
 
 class _FEMMHandler(object):
-    """
-    Object to handle FEMM
-    enable to start FEMM and run commands in it
-    """
+    # Object to handle FEMM enable to start FEMM and run commands in it
 
     def __init__(self, HandleToFEMM=None, init_dict=None):
         object.__init__(self)
@@ -20,7 +31,9 @@ class _FEMMHandler(object):
             if "HandleToFEMM" in list(init_dict.keys()):
                 HandleToFEMM = init_dict["HandleToFEMM"]
         self.HandleToFEMM = HandleToFEMM
-        pythoncom.CoInitialize()
+
+        if windowsOS:
+            pythoncom.CoInitialize()
 
     def as_dict(self, **kwargs):
         _FEMMHandler_dict = dict()
@@ -38,13 +51,108 @@ class _FEMMHandler(object):
     def fixpath(self, myPath):
         return myPath.replace("\\", "/").replace("//", "/")
 
-    def openfemm(self, *arg):
+    def openfemm(self, *arg, winepath="", femmpath=""):
+        # Opens FEMM, path to wine and FEMM directories can be given as openfemm(winepath='path/to/wine/',femmpath='path/to/femm/')."""
+        global ifile, ofile, HandleToFEMM, windowsOS
+
         if self.HandleToFEMM != None:
             raise Exception("An instance FEMM is already open")
 
-        self.HandleToFEMM = win32com.client.Dispatch("femm.ActiveFEMM")
+        if windowsOS:
+            self.HandleToFEMM = win32com.client.Dispatch("femm.ActiveFEMM")
+        else:
+            # find wine path
+            if winepath != "":
+                if os.path.isdir(winepath):
+                    winedir = winepath
+                elif os.path.isfile(winepath):
+                    winedir = re.sub("wine$", "", winepath)
+                else:
+                    raise Exception(
+                        "Given path for wine does not exist. Please check 'winepath'."
+                    )
+            else:
+                # check all environment paths for wine
+                envpath = os.getenv("PATH").split(":")
+                # add good guesses
+                envpath.extend(
+                    [
+                        "/usr/bin",
+                        "/usr/local/bin",
+                        "/opt/bin",
+                        "/opt/local/bin",
+                        "/Applications/CrossOver.app/Contents/SharedSupport/CrossOver/bin",
+                    ]
+                )
+                for k in envpath:
+                    if os.path.exists(k + "/wine"):
+                        winedir = k
+                        break
+                if "winedir" not in locals():
+                    raise Exception(
+                        "Wine binary not found in default path. Please define a path as openfemm(winepath='path/to/wine/',femmpath='path/to/femm/')."
+                    )
 
-        # Call femm
+            # find femm path
+            if femmpath != "":
+                if os.path.isdir(femmpath):
+                    femmdir = femmpath
+                elif os.path.isfile(femmpath):
+                    femmdir = re.sub("femm.exe$", "", femmpath)
+                else:
+                    raise Exception(
+                        "Given path for FEMM does not exist. Please check 'femmpath'."
+                    )
+            else:
+                # check if femm.exe exists in user's wine directory
+                rootpath = [
+                    expanduser("~") + "/.wine/drive_c/femm42/bin",
+                    expanduser("~") + "/.wine/drive_c/Program Files/femm42/bin",
+                    expanduser("~") + "/.wine/drive_c/Progra~1/femm42/bin",
+                ]
+                for k in rootpath:
+                    if os.path.exists(k + "/femm.exe"):
+                        femmdir = k
+                        break
+                if "femmdir" not in locals():
+                    raise Exception(
+                        "FEMM binary not found in default path. Please define a path as openfemm(femmpath='path/to/wine/',femmpath='path/to/femm/')."
+                    )
+
+            ifile = self.fixpath(femmdir + "/ifile.txt")
+            ofile = self.fixpath(femmdir + "/ofile.txt")
+
+            if os.path.exists(ifile):
+                os.unlink(ifile)
+            if os.path.exists(ofile):
+                os.unlink(ofile)
+
+            # test to see if there is already a femm process open
+            try:
+                f = open(ifile, mode="wt")
+            except:
+                f = open(ifile, mode="w")
+
+            f.write("flput(0)")
+            f.close()
+            time.sleep(sleeptime)
+            try:
+                f = open(ofile, mode="rt")
+                f.close()
+                os.unlink(ofile)
+                print("FEMM is already open")
+            except FileNotFoundError as e:
+                os.unlink(ifile)
+                os.system(
+                    self.fixpath(winedir + "/wine ")
+                    + self.fixpath(femmdir + "/femm.exe")
+                    + " -filelink &"
+                )
+            except OSError as e:
+                print("Error opening with mode rt failed:", e)
+                return
+            self.HandleToFEMM = "FEMM_Open"
+
         self.callfemm(
             "setcurrentdirectory(" + self.quote(self.fixpath(os.getcwd())) + ")"
         )
@@ -56,17 +164,63 @@ class _FEMMHandler(object):
             return
 
     def closefemm(self):
-        self.HandleToFEMM = None  # no reference to the handler, femm is closed
+        global ifile, ofile, HandleToFEMM, windowsOS
+        if windowsOS:
+            self.HandleToFEMM = None
+        else:
+            self.callfemm("quit()")
+            del ifile, ofile
 
     def callfemm(self, myString):
-        HandleToFEMM = self.HandleToFEMM
-        x = (
-            HandleToFEMM.mlab2femm(myString)
-            .replace("[ ", "[")
-            .replace(" ]", "]")
-            .replace(" ", ",")
-            .replace("I", "1j")
-        )
+        global ifile, ofile, HandleToFEMM, windowsOS
+
+        if windowsOS:
+            x = (
+                self.HandleToFEMM.mlab2femm(myString)
+                .replace("[ ", "[")
+                .replace(" ]", "]")
+                .replace(" ", ",")
+                .replace("I", "1j")
+            )
+        else:
+            try:
+                f = open(ifile, mode="wt")
+            except:
+                f = open(ifile, mode="w")
+
+            f.write("flput(" + myString + ")")
+            f.close()
+            x = False
+            while x == False:
+                try:
+                    f = open(ofile, mode="rt")
+                    x = (
+                        f.readline()
+                        .replace("[ ", "[")
+                        .replace(" ]", "]")
+                        .replace(" ", ",")
+                        .replace("I", "1j")
+                    )
+                    f.close()
+                except FileNotFoundError as e:
+                    time.sleep(sleeptime)
+                    notfound = 1
+                    while notfound:
+                        try:
+                            f = open(ofile, mode="rt")
+                            notfound = 0
+                        except FileNotFoundError as e:
+                            notfound = 1
+                            time.sleep(sleeptime)
+                        except OSError as e:
+                            print("Error opening with mode rt failed:", e)
+                            return
+                except OSError as e:
+                    print("Error opening with mode rt failed:", e)
+                    return
+            time.sleep(sleeptime)
+            os.unlink(ofile)
+
         if len(x) == 0:
             x = []
         elif x[0] == "e":
@@ -102,7 +256,7 @@ class _FEMMHandler(object):
             if isinstance(y, string_types):
                 x = x + '"' + y + '"'
             else:
-                x = x + str(y)
+                x = x + self.num(y)
             if k == (len(arg) - 1):
                 x = x + ")"
             else:
@@ -116,8 +270,42 @@ class _FEMMHandler(object):
         return 8.2514694 * exp(-0.115943 * awg)
 
     def callfemm_noeval(self, myString):
-        HandleToFEMM = self.HandleToFEMM
-        HandleToFEMM.mlab2femm(myString)
+        global ifile, ofile, HandleToFEMM, windowsOS
+
+        if windowsOS:
+            self.HandleToFEMM.mlab2femm(myString)
+        else:
+            try:
+                f = open(ifile, mode="wt")
+            except:
+                f = open(ifile, mode="w")
+
+            f.write("flput(" + myString + ")")
+            f.close()
+            u = -1
+            while u == -1:
+                try:
+                    f = open(ofile, mode="rt")
+                    u = f.readline()
+                    f.close()
+                except FileNotFoundError as e:
+                    print("File not found Error2:", e)
+                    time.sleep(sleeptime)
+                    notfound = 1
+                    while notfound:
+                        try:
+                            f = open(ofile, mode="rt")
+                            notfound = 0
+                        except FileNotFoundError as e:
+                            print("File not found Error3:", e)
+                            notfound = 1
+                            time.sleep(sleeptime)
+                        except OSError as e:
+                            print("Error opening with mode rt failed:", e)
+                            return
+                    return
+
+            os.unlink(ofile)
 
     def ci_addarc(self, *arg):
         self.callfemm("ci_addarc" + self.doargs(*arg))
@@ -2524,3 +2712,19 @@ class _FEMMHandler(object):
 
     def smartmesh(self, n):
         self.callfemm("smartmesh(" + self.num(n) + ")")
+
+
+    def mi_setcomment(self, fn):
+        self.callfemm("mi_setcomment(" + self.quote(fn) + ")")
+
+
+    def ei_setcomment(self, fn):
+        self.callfemm("ei_setcomment(" + self.quote(fn) + ")")
+
+
+    def hi_setcomment(self, fn):
+        self.callfemm("hi_setcomment(" + self.quote(fn) + ")")
+
+
+    def ci_setcomment(self, fn):
+        self.callfemm("ci_setcomment(" + self.quote(fn) + ")")
