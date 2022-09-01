@@ -101,7 +101,7 @@ class WMachineTable(Ui_WMachineTable, QWidget):
         """Plot the unit mmf of the stator"""
         try:
             if self.machine is not None:
-                self.machine.stator.plot_mmf_unit(is_create_appli=False)
+                self.machine.stator.plot_mmf_unit()
                 set_plot_gui_icon()
         except Exception as e:
             err_msg = "Error while plotting Stator mmf unit:\n" + str(e)
