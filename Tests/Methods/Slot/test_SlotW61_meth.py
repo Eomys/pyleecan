@@ -158,21 +158,10 @@ class Test_SlotW61_meth(object):
     def test_check_Inner_error(self, test_dict):
         """Check that the ERROR is raised"""
 
-        test_obj = test_dict["test_obj"]
+        test_obj = test_dict["test_obj"].copy()
 
         test_obj.is_internal = False
         with pytest.raises(S61_InnerCheckError) as context:
-            test_obj.slot.check()
-
-    @pytest.mark.parametrize("test_dict", slotW61_test)
-    def test_check_Wind_error(self, test_dict):
-        """Check that the ERROR is raised"""
-
-        test_obj = test_dict["test_obj"]
-
-        test_obj.slot.W3 = 50
-        test_obj.is_internal = True
-        with pytest.raises(S61_WindWError) as context:
             test_obj.slot.check()
 
     @pytest.mark.parametrize("test_dict", slotW61_test)
@@ -191,6 +180,17 @@ class Test_SlotW61_meth(object):
 
         msg = "Act+Op=" + str(S1) + ", Full=" + str(S2)
         assert abs((S1 - S2) / S1) < DELTA, msg
+
+    @pytest.mark.parametrize("test_dict", slotW61_test)
+    def test_check_Wind_error(self, test_dict):
+        """Check that the ERROR is raised"""
+
+        test_obj = test_dict["test_obj"].copy()
+
+        test_obj.slot.W3 = 50
+        test_obj.is_internal = True
+        with pytest.raises(S61_WindWError) as context:
+            test_obj.slot.check()
 
 
 if __name__ == "__main__":
