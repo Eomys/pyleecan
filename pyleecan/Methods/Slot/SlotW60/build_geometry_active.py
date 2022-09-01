@@ -45,45 +45,37 @@ def build_geometry_active(self, Nrad, Ntan, is_simplified=False, alpha=0, delta=
     # get the name of the lamination
     lam_label = self.parent.get_label()
 
-    point_dict = self._comp_point_coordinate()
-    Z4 = point_dict["Z4"]
-    Z5 = point_dict["Z5"]
-    Zw1 = point_dict["Zw1"]
-    Zw2 = point_dict["Zw2"]
-    Zw3 = point_dict["Zw3"]
-    Zw4 = point_dict["Zw4"]
-    Zw1s = point_dict["Zw1s"]
-    Zw2s = point_dict["Zw2s"]
-    Zw3s = point_dict["Zw3s"]
-    Zw4s = point_dict["Zw4s"]
+    line_dict = self._comp_line_dict()
 
-    Ref1 = (Zw1 + Zw2 + Zw3 + Zw4) / 4
-    Ref2 = (Zw1s + Zw2s + Zw3s + Zw4s) / 4
+    Ref1 = (line_dict["w3-w4"].get_begin() + line_dict["w1-w2"].get_begin()) / 2
+    Ref2 = (line_dict["w3s-w4s"].get_begin() + line_dict["w1s-w2s"].get_begin()) / 2
 
     # Create the surfaces
-    surf_list = list()
-    wind1 = [Segment(Zw3, Zw4)]
-    wind2 = [Segment(Zw3s, Zw4s)]
-    if (is_simplified and self.W3 > 0) or not is_simplified:
-        wind1.append(Segment(Zw4, Zw1))
-        wind2.append(Segment(Zw4s, Zw1s))
-    if not is_simplified:
-        wind1.append(Segment(Zw1, Zw2))
-        wind2.append(Segment(Zw1s, Zw2s))
-    if (is_simplified and self.W4 > 0) or not is_simplified:
-        wind1.append(Segment(Zw2, Zw3))
-        wind2.append(Segment(Zw2s, Zw3s))
+    wind1_lines = [
+        line_dict["w3-w4"],
+        line_dict["w4-w1"],
+        line_dict["w1-w2"],
+        line_dict["w2-w3"],
+    ]
 
+    wind2_lines = [
+        line_dict["w3s-w4s"],
+        line_dict["w4s-w1s"],
+        line_dict["w1s-w2s"],
+        line_dict["w2s-w3s"],
+    ]
+
+    surf_list = list()
     surf_list.append(
         SurfLine(
-            line_list=wind1,
+            line_list=wind1_lines,
             label=lam_label + "_" + WIND_LAB + "_R0-T0-S0",
             point_ref=Ref1,
         )
     )
     surf_list.append(
         SurfLine(
-            line_list=wind2,
+            line_list=wind2_lines,
             label=lam_label + "_" + WIND_LAB + "_R0-T1-S0",
             point_ref=Ref2,
         )

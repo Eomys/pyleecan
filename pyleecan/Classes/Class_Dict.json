@@ -10625,6 +10625,7 @@
             "getter.get_machine_periodicity",
             "getter.get_fund_harm",
             "getter.get_data_from_str",
+            "getter.export_to_mat",
             "plot.Magnetic.plot_B_mesh",
             "print_memory"
         ],
@@ -14622,6 +14623,7 @@
             "comp_surface",
             "comp_surface_active",
             "get_surface_active",
+            "get_surface_opening",
             "plot_schematics"
         ],
         "mother": "Slot",
@@ -14737,6 +14739,7 @@
             "comp_surface",
             "comp_surface_active",
             "get_surface_active",
+            "get_surface_opening",
             "plot_schematics"
         ],
         "mother": "Slot",

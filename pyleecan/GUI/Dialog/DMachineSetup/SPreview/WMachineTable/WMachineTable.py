@@ -12,6 +12,7 @@ from ......Classes.OPslip import OPslip
 from ......Classes.InputCurrent import InputCurrent
 from ......definitions import config_dict
 from ......loggers import GUI_LOG_NAME
+from ......Functions.GUI.log_error import log_error
 from ......Functions.FEMM.update_FEMM_simulation import update_FEMM_simulation
 from ......Functions.FEMM.draw_FEMM import draw_FEMM
 from ......Functions.Plot.set_plot_gui_icon import set_plot_gui_icon
@@ -104,8 +105,7 @@ class WMachineTable(Ui_WMachineTable, QWidget):
                 set_plot_gui_icon()
         except Exception as e:
             err_msg = "Error while plotting Stator mmf unit:\n" + str(e)
-            getLogger(GUI_LOG_NAME).error(err_msg)
-            QMessageBox().critical(self, self.tr("Error"), err_msg)
+            log_error(self, err_msg)
 
     def plot_machine(self):
         """Plot the machine"""
@@ -198,12 +198,7 @@ class WMachineTable(Ui_WMachineTable, QWidget):
                 + " in FEMM:\n"
                 + str(e)
             )
-            getLogger(GUI_LOG_NAME).error(err_msg)
-            QMessageBox().critical(
-                self,
-                self.tr("Error"),
-                self.tr(err_msg),
-            )
+            log_error(self, err_msg)
         femm.closefemm()
 
     def draw_GMSH(self):
@@ -236,12 +231,7 @@ class WMachineTable(Ui_WMachineTable, QWidget):
                 + " in GMSH:\n"
                 + str(e)
             )
-            getLogger(GUI_LOG_NAME).error(err_msg)
-            QMessageBox().critical(
-                self,
-                self.tr("Error"),
-                self.tr(err_msg),
-            )
+            log_error(self, err_msg)
 
     def draw_GMSH_3D(self):
         save_file_path = self.get_save_path(ext="_stator.msh", file_type="GMSH (*.msh)")
@@ -263,12 +253,7 @@ class WMachineTable(Ui_WMachineTable, QWidget):
                 + " in GMSH:\n"
                 + str(e)
             )
-            getLogger(GUI_LOG_NAME).error(err_msg)
-            QMessageBox().critical(
-                self,
-                self.tr("Error"),
-                self.tr(err_msg),
-            )
+            log_error(self, err_msg)
 
     def get_save_path(self, ext=".fem", file_type="FEMM (*.fem)"):
         machine_path = config_dict["MAIN"]["MACHINE_DIR"]

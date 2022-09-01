@@ -21,7 +21,7 @@ import platform
 # Release 1.1.0 : 1.1.0
 # First post release of the release 1.1.0 : 1.1.0.post1
 
-PYLEECAN_VERSION = "1.3.9"
+PYLEECAN_VERSION = "1.4.0"
 
 
 with open("README.md", "r") as fh:
@@ -35,18 +35,18 @@ install_requires = [
     "ezdxf==0.14.2",
     "h5py>=3.2.1",
     "matplotlib>=3.3.2",
-    "meshio>=4.0.15",
+    "meshio>=4.0.15,<=4.4.6",
     "numpy>1.19.5",
     "pandas>=1.0.3",
     'pyfemm>=0.1.1;platform_system=="Windows"',
     "PySide2>=5.15.2",
     "pyuff>=1.25",
-    "pyvista>=0.25.3",
+    "pyvista>=0.25.3,<=0.31.3",
     "quadpy",
-    "SciDataTool>=2.3.11",
+    "SciDataTool>=2.5.0",
     "scipy>=1.4.1",
     "setuptools",
-    "swat_em>=0.6.3",
+    "git+https://gitlab.com/CedMrnl/swat-em.git",
     "xlrd>=1.2.0",
     "xlwt>=1.3.0",
 ]
