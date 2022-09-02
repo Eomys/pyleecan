@@ -51,7 +51,7 @@ class WNotch(Ui_WNotch, QWidget):
         self.parent = parent
 
         # Adding tooltip + setting the min and max value for si_Zn
-        txt = self.tr(u"""notch number""")
+        txt = self.tr("""notch number""")
         self.in_Zn.setWhatsThis(txt)
         self.in_Zn.setToolTip(txt)
         self.si_Zn.setWhatsThis(txt)
@@ -61,10 +61,10 @@ class WNotch(Ui_WNotch, QWidget):
 
         if self.obj.is_stator:
             txt = self.tr(
-                u"""angular position of the first notch (0 is middle of first tooth)"""
+                """angular position of the first notch (0 is middle of first tooth)"""
             )
         else:
-            txt = self.tr(u"""angular position of the first notch""")
+            txt = self.tr("""angular position of the first notch""")
         self.in_alpha.setWhatsThis(txt)
         self.in_alpha.setToolTip(txt)
         self.lf_alpha.setWhatsThis(txt)
@@ -130,6 +130,8 @@ class WNotch(Ui_WNotch, QWidget):
 
     def set_alpha(self):
         """Set alpha value according to widgets"""
+        if self.lf_alpha.value() == None:
+            self.lf_alpha.setValue(0)
         if self.c_alpha_unit.currentIndex() == 0:  # rad
             self.obj.notch[self.index].alpha = self.lf_alpha.value()
         else:  # deg
@@ -213,5 +215,12 @@ class WNotch(Ui_WNotch, QWidget):
         error : str
             Error message (return None if no error)
         """
+
+        if not isinstance(self.w_notch, PWSlotUD):
+            # Check that the user did not define a notch a dimension equal to 0
+            if self.w_notch.lf_W0.value() <= 0:
+                return "W0 must be higher than 0"
+            if self.w_notch.lf_H0.value() <= 0:
+                return "H0 must be higher than 0"
 
         return self.w_notch.check(self.lam_notch)
