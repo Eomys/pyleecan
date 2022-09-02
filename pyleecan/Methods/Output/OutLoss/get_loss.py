@@ -4,8 +4,8 @@
 def get_loss(self, part_label="Stator", index=None):
     """Convenience method to get some specific loss component time data.
 
-    Parameter
-    ---------
+    Parameters
+    ----------
     self : OutLoss
         an OutLoss object
 
@@ -15,8 +15,8 @@ def get_loss(self, part_label="Stator", index=None):
     index : int
         Index of the Loss Model
 
-    Return
-    ------
+    Returns
+    -------
     DataTime : DataTime
         Time data of the requested loss component
 
