@@ -4,12 +4,10 @@
 def load_columns(self):
     """Method to load the names of the columns data of the Elmer simulation results
 
-    Parameter
-    ---------
-
-
-    Return
-    ------
+    Parameters
+    ----------
+    self : ElmerResults
+        An ElmerResults object
 
     """
     pass

@@ -6,8 +6,8 @@ from ....Methods.Simulation.Loss import LossError
 def remove_model(self, part_label, index):
     """Remove a loss model from the list of loss models.
 
-    Parameter
-    ---------
+    Parameters
+    ----------
     self : Loss
         Loss object
 
@@ -17,8 +17,8 @@ def remove_model(self, part_label, index):
     index : int
         Index of the model, e.g. if there are multiple 'stator core' loss models
 
-    Return
-    ------
+    Returns
+    -------
 
     is_success : bool
         Could the model be removed?

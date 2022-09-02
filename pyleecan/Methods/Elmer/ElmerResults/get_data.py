@@ -4,12 +4,13 @@
 def get_data(self):
     """Method to return the Elmer simulation results
 
-    Parameter
-    ---------
+    Parameters
+    ----------
+    self : ElmerResults
+        An ElmerResults object
 
-
-    Return
-    ------
+    Returns
+    -------
     data : list
         list of data
 
