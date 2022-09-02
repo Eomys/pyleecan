@@ -439,25 +439,9 @@ p, li { white-space: pre-wrap; }
          <item>
           <widget class="QGroupBox" name="g_out">
            <property name="title">
-            <string>Results</string>
+            <string>Output</string>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout">
-            <item>
-             <widget class="WPathSelector" name="w_path_result" native="true">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="minimumSize">
-               <size>
-                <width>100</width>
-                <height>0</height>
-               </size>
-              </property>
-             </widget>
-            </item>
             <item>
              <layout class="QHBoxLayout" name="horizontalLayout_2">
               <item>
@@ -471,6 +455,22 @@ p, li { white-space: pre-wrap; }
                <widget class="QLineEdit" name="le_name"/>
               </item>
              </layout>
+            </item>
+            <item>
+             <widget class="WPathSelectorV" name="w_path_result" native="true">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="minimumSize">
+               <size>
+                <width>100</width>
+                <height>0</height>
+               </size>
+              </property>
+             </widget>
             </item>
             <item>
              <widget class="QCheckBox" name="is_losses">
@@ -548,9 +548,9 @@ p, li { white-space: pre-wrap; }
    <header>.....GUI/Tools/FloatEdit.h</header>
   </customwidget>
   <customwidget>
-   <class>WPathSelector</class>
+   <class>WPathSelectorV</class>
    <extends>QWidget</extends>
-   <header>.....GUI.Tools.WPathSelector.WPathSelector</header>
+   <header>.....GUI.Tools.WPathSelector.WPathSelectorV</header>
    <container>1</container>
   </customwidget>
   <customwidget>
