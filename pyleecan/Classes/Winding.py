@@ -925,7 +925,7 @@ class Winding(FrozenClass):
     Lewout = property(
         fget=_get_Lewout,
         fset=_set_Lewout,
-        doc=u"""straight length of the conductors outside the lamination before the curved part of winding overhang [m] - can be negative to tune the average turn length 
+        doc=u"""straight length of the conductors outside the lamination before the curved part of winding overhang [m] - can be negative to tune the average turn length (only used in voltage driven simulations)
 
         :Type: float
         :min: 0
