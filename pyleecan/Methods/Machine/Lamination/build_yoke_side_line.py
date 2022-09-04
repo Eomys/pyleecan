@@ -15,7 +15,8 @@ def build_yoke_side_line(
 ):
     """Define the Yoke Side lines of a Lamination by taking into account sym and vent
 
-    Parameters:
+    Parameters
+    ----------
     self: Lamination
         a Lamination object
     sym : int
@@ -31,7 +32,8 @@ def build_yoke_side_line(
     ZTL : Complex
         Yoke Side Limit point Top Left
 
-    Returns:
+    Returns
+    -------
     right_list, left_list: ([Line], [Line])
         List of the lines to draw the left and right side of the yoke
     """

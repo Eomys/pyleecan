@@ -1,15 +1,15 @@
 def get_loss_group(self, group, felec):
     """Get loss power for given group from coefficients stored in coeff dict
 
-    Parameter
-    ---------
+    Parameters
+    ----------
     self : OutLoss
         an OutLoss object
     group: str
         Name of part for which to calculate loss function
 
-    Return
-    ------
+    Returns
+    -------
     Ploss : float
         loss power for given group [W]
 

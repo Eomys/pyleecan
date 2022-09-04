@@ -126,7 +126,7 @@ class SSimu(Gen_SSimu, QWidget):
         # Setup path result selection
         self.w_path_result.obj = None
         self.w_path_result.param_name = None
-        self.w_path_result.verbose_name = "Path"
+        self.w_path_result.verbose_name = "Results folder"
         self.w_path_result.extension = None
         self.w_path_result.is_file = False
         self.w_path_result.update()
