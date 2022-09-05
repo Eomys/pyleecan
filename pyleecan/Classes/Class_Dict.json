@@ -282,7 +282,8 @@
         "is_internal": false,
         "methods": [
             "get_bore_line",
-            "comp_periodicity_spatial"
+            "comp_periodicity_spatial",
+            "plot_schematics"
         ],
         "mother": "Bore",
         "name": "BoreFlower",
