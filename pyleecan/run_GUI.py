@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from PySide2 import QtWidgets, QtGui, QtCore
-from matplotlib.backends.backend_qt5agg import FigureCanvas
+from matplotlib.backends.backend_qt5agg import FigureCanvas # needed for proper exe gen.
 
 import sys
 from os.path import dirname, join, isfile

@@ -4,8 +4,8 @@ from numpy import pi
 def comp_power(self):
     """Compute the Ouput power
 
-    Parameter
-    --------
+    Parameters
+    ----------
     self : OutMag
         An OutMag object
     """

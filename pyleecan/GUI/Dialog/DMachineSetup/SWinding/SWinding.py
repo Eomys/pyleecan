@@ -80,6 +80,8 @@ class SWinding(Gen_SWinding, QWidget):
             # Enforce star of slot
             self.c_wind_type.setEnabled(False)
             self.c_wind_type.setCurrentIndex(0)
+            # No plot_mmf
+            self.b_plot_mmf.hide()
 
         # Pattern Group setup
         if self.obj.winding is None:
@@ -572,7 +574,7 @@ class SWinding(Gen_SWinding, QWidget):
         """Plot the unit mmf of the stator"""
         if self.machine is not None:
             try:
-                self.plot_widget = self.obj.plot_mmf_unit(is_create_appli=False)
+                self.obj.plot_mmf_unit()
             except Exception as e:
                 if self.obj.is_stator:  # Adapt the text to the current lamination
                     err_msg = "Error while plotting Stator mmf unit:\n" + str(e)

@@ -10,7 +10,7 @@ from PySide2.QtGui import *
 from PySide2.QtWidgets import *
 
 from .....GUI.Tools.FloatEdit import FloatEdit
-from .....GUI.Tools.WPathSelector.WPathSelector import WPathSelector
+from .....GUI.Tools.WPathSelector.WPathSelectorV import WPathSelectorV
 from .....GUI.Tools.MPLCanvas import MPLCanvas
 
 from pyleecan.GUI.Resources import pyleecan_rc
@@ -230,16 +230,6 @@ class Ui_SSimu(object):
         self.g_out.setObjectName(u"g_out")
         self.verticalLayout = QVBoxLayout(self.g_out)
         self.verticalLayout.setObjectName(u"verticalLayout")
-        self.w_path_result = WPathSelector(self.g_out)
-        self.w_path_result.setObjectName(u"w_path_result")
-        sizePolicy1.setHeightForWidth(
-            self.w_path_result.sizePolicy().hasHeightForWidth()
-        )
-        self.w_path_result.setSizePolicy(sizePolicy1)
-        self.w_path_result.setMinimumSize(QSize(100, 0))
-
-        self.verticalLayout.addWidget(self.w_path_result)
-
         self.horizontalLayout_2 = QHBoxLayout()
         self.horizontalLayout_2.setObjectName(u"horizontalLayout_2")
         self.in_name = QLabel(self.g_out)
@@ -253,6 +243,19 @@ class Ui_SSimu(object):
         self.horizontalLayout_2.addWidget(self.le_name)
 
         self.verticalLayout.addLayout(self.horizontalLayout_2)
+
+        self.w_path_result = WPathSelectorV(self.g_out)
+        self.w_path_result.setObjectName(u"w_path_result")
+        sizePolicy2 = QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Preferred)
+        sizePolicy2.setHorizontalStretch(0)
+        sizePolicy2.setVerticalStretch(0)
+        sizePolicy2.setHeightForWidth(
+            self.w_path_result.sizePolicy().hasHeightForWidth()
+        )
+        self.w_path_result.setSizePolicy(sizePolicy2)
+        self.w_path_result.setMinimumSize(QSize(100, 0))
+
+        self.verticalLayout.addWidget(self.w_path_result)
 
         self.is_losses = QCheckBox(self.g_out)
         self.is_losses.setObjectName(u"is_losses")
@@ -434,7 +437,7 @@ class Ui_SSimu(object):
         self.in_nb_worker.setText(
             QCoreApplication.translate("SSimu", u"Number of workers:", None)
         )
-        self.g_out.setTitle(QCoreApplication.translate("SSimu", u"Results", None))
+        self.g_out.setTitle(QCoreApplication.translate("SSimu", u"Output", None))
         self.in_name.setText(QCoreApplication.translate("SSimu", u"Simu name:", None))
         self.is_losses.setText(
             QCoreApplication.translate("SSimu", u"Compute core and Joule losses", None)
