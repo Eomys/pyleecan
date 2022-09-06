@@ -4,7 +4,7 @@ from ....Functions.Plot import dict_2D
 from ....definitions import config_dict
 
 
-def plot_mmf_unit(self, r_max=100, fig=None, is_show_fig=True):
+def plot_mmf_unit(self, r_max=100, fig=None, save_path=None, is_show_fig=True):
     """Plot the winding unit mmf as a function of space
     Parameters
     ----------
@@ -58,5 +58,6 @@ def plot_mmf_unit(self, r_max=100, fig=None, is_show_fig=True):
         ax=axs[1],
         is_show_fig=is_show_fig,
         win_title=name + "phase MMF FFT",
+        save_path=save_path,
         **dict_2D_0,
     )
