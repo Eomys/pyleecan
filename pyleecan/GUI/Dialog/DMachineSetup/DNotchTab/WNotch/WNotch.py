@@ -218,8 +218,12 @@ class WNotch(Ui_WNotch, QWidget):
 
         if not isinstance(self.w_notch, PWSlotUD):
             # Check that the user did not define a notch a dimension equal to 0
-            if self.w_notch.lf_W0.value() <= 0:
+            if self.w_notch.lf_W0.value() is None:
+                return "You must set W0 !"
+            elif self.w_notch.lf_W0.value() <= 0:
                 return "W0 must be higher than 0"
+            if self.w_notch.lf_H0.value() is None:
+                return "You must set H0 !"
             if self.w_notch.lf_H0.value() <= 0:
                 return "H0 must be higher than 0"
 
