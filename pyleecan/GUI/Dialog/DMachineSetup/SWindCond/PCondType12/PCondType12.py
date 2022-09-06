@@ -110,7 +110,8 @@ class PCondType12(Gen_PCondType12, QWidget):
             self.lf_Wins_wire.hide()
             self.unit_Wins_wire.hide()
             self.set_Wins_wire(Wins_wire=0)
-            self.set_Wins_cond(Wins_cond=3 * self.lf_Wwire.value())
+            if self.lf_Wwire.value() is not None:
+                self.set_Wins_cond(Wins_cond=3 * self.lf_Wwire.value())
 
     def set_Nwppc(self):
         """Signal to update the value of Nwppc according to the line edit
