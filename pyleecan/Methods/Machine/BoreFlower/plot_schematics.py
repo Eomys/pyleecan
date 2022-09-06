@@ -93,8 +93,8 @@ def plot_schematics(
         Zm0 = lines[1].get_middle()
         Zm1 = lines[2].get_middle()
         Rbo = self.parent.get_Rbo()
-        H = self.Rarc /8  # Small distance for label placement
-    
+        H = self.Rarc / 8  # Small distance for label placement
+
         # Adding schematics
         if is_add_schematics:
             # Rarc
@@ -105,7 +105,7 @@ def plot_schematics(
                 color=ARROW_COLOR,
                 linewidth=ARROW_WIDTH,
                 label="Rarc",
-                offset_label=1j*H*1.5,
+                offset_label=1j * H * 1.5,
                 is_arrow=True,
                 fontsize=SC_FONT_SIZE,
             )
@@ -154,7 +154,7 @@ def plot_schematics(
                 linewidth=MAIN_LINE_WIDTH,
             )
             # Machine center
-            line = Segment(0, Rbo*exp(1j*angle(Z2)))
+            line = Segment(0, Rbo * exp(1j * angle(Z2)))
             line.plot(
                 fig=fig,
                 ax=ax,
@@ -194,7 +194,7 @@ def plot_schematics(
 
         ax.axis("equal")
         ax.set_xlim(0, Rbo)
-        ax.set_ylim(-Rbo/10, Rbo*1.1)
+        ax.set_ylim(-Rbo / 10, Rbo * 1.1)
         manager = plt.get_current_fig_manager()
         if manager is not None:
             manager.set_window_title(type(self).__name__ + " Schematics")
