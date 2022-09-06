@@ -195,8 +195,13 @@ class SSimu(Gen_SSimu, QWidget):
             self.simu.get_logger().error(err_msg)
         # Save results
         # Full results
-        out.save(join(self.simu.path_result, "Result.h5"))
-        out.export_to_mat(join(self.simu.path_result, "Result.mat"))
+        try:
+            out.save(join(self.simu.path_result, "Result.h5"))
+            out.export_to_mat(join(self.simu.path_result, "Result.mat"))
+        except Exception as e:
+            err_msg = "Error while saving results:\n" + str(e)
+            log_error(self, err_msg)
+            self.simu.get_logger().error(err_msg)
         # Machine
         out.simu.machine.plot(
             is_max_sym=self.simu.mag.is_periodicity_a,
@@ -217,42 +222,47 @@ class SSimu(Gen_SSimu, QWidget):
             save_path=join(self.simu.path_result, "torque FFT over freq.png"),
         )
         # Flux
-        out.mag.B.plot_2D_Data(
-            "time",
-            is_show_fig=False,
-            save_path=join(self.simu.path_result, "flux as fct of time.png"),
-        )
-        out.mag.B.plot_2D_Data(
-            "angle{°}",
-            is_show_fig=False,
-            save_path=join(self.simu.path_result, "flux as fct of angle.png"),
-        )
-        out.mag.B.plot_2D_Data(
-            "freqs->elec_order=[0,15]",
-            is_show_fig=False,
-            save_path=join(self.simu.path_result, "flux FFT over freq.png"),
-        )
-        out.mag.B.plot_2D_Data(
-            "wavenumber=[0," + str(int(25 * p)) + "]",
-            is_show_fig=False,
-            save_path=join(self.simu.path_result, "flux FFT over wavenumber.png"),
-        )
-        out.mag.B.plot_3D_Data(
-            "time",
-            "angle{°}",
-            component_list=["radial"],
-            is_2D_view=True,
-            is_show_fig=False,
-            save_path=join(self.simu.path_result, "flux as fct of time and angle.png"),
-        )
-        out.mag.B.plot_3D_Data(
-            "freqs->elec_order=[0,10]",
-            "wavenumber->space_order=[-10,10]",
-            N_stem=50,
-            is_2D_view=True,
-            is_show_fig=False,
-            save_path=join(self.simu.path_result, "flux 3D FFT.png"),
-        )
+        try:
+            out.mag.B.plot_2D_Data(
+                "time",
+                is_show_fig=False,
+                save_path=join(self.simu.path_result, "flux as fct of time.png"),
+            )
+            out.mag.B.plot_2D_Data(
+                "angle{°}",
+                is_show_fig=False,
+                save_path=join(self.simu.path_result, "flux as fct of angle.png"),
+            )
+            out.mag.B.plot_2D_Data(
+                "freqs->elec_order=[0,15]",
+                is_show_fig=False,
+                save_path=join(self.simu.path_result, "flux FFT over freq.png"),
+            )
+            out.mag.B.plot_2D_Data(
+                "wavenumber=[0," + str(int(25 * p)) + "]",
+                is_show_fig=False,
+                save_path=join(self.simu.path_result, "flux FFT over wavenumber.png"),
+            )
+            out.mag.B.plot_3D_Data(
+                "time",
+                "angle{°}",
+                component_list=["radial"],
+                is_2D_view=True,
+                is_show_fig=False,
+                save_path=join(self.simu.path_result, "flux as fct of time and angle.png"),
+            )
+            out.mag.B.plot_3D_Data(
+                "freqs->elec_order=[0,10]",
+                "wavenumber->space_order=[-10,10]",
+                N_stem=50,
+                is_2D_view=True,
+                is_show_fig=False,
+                save_path=join(self.simu.path_result, "flux 3D FFT.png"),
+            )
+        except Exception as e:
+            err_msg = "Error while plotting flux:\n" + str(e)
+            log_error(self, err_msg)
+            self.simu.get_logger().error(err_msg)
         # Phi_wind_stator
         out.mag.Phi_wind_stator.plot_2D_Data(
             "time",
