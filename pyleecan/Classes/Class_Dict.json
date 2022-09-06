@@ -282,7 +282,8 @@
         "is_internal": false,
         "methods": [
             "get_bore_line",
-            "comp_periodicity_spatial"
+            "comp_periodicity_spatial",
+            "plot_schematics"
         ],
         "mother": "Bore",
         "name": "BoreFlower",
@@ -7502,7 +7503,7 @@
             },
             {
                 "as_dict": "",
-                "desc": "magnet remanence induction at 20degC (calculated from mur_lin and Hc if not provided)",
+                "desc": "magnet remanence induction at 20degC",
                 "max": "",
                 "min": "",
                 "name": "Brm20",
@@ -7512,7 +7513,7 @@
             },
             {
                 "as_dict": "",
-                "desc": "temperature coefficient for remanent flux density /degC compared to 20degC",
+                "desc": "temperature coefficient for remanent flux density",
                 "max": "",
                 "min": "",
                 "name": "alpha_Br",
@@ -16071,7 +16072,7 @@
             },
             {
                 "as_dict": "",
-                "desc": "straight length of the conductors outside the lamination before the curved part of winding overhang [m] - can be negative to tune the average turn length ",
+                "desc": "straight length of the conductors outside the lamination before the curved part of winding overhang [m] - can be negative to tune the average turn length (only used in voltage driven simulations)",
                 "max": "",
                 "min": "0",
                 "name": "Lewout",

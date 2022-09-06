@@ -1,7 +1,7 @@
 from ....Functions.Load.import_class import import_class
 
 
-def plot_mmf_unit(self, r_max=100, fig=None, is_show_fig=True):
+def plot_mmf_unit(self, r_max=100, fig=None, save_path=None, is_show_fig=True):
     """Plot the winding unit mmf as a function of space
     Parameters
     ----------
@@ -19,4 +19,6 @@ def plot_mmf_unit(self, r_max=100, fig=None, is_show_fig=True):
     # Call method of LamSlotWind
     LamSlotWind = import_class("pyleecan.Classes", "LamSlotWind")
 
-    LamSlotWind.plot_mmf_unit(self, r_max=r_max, fig=fig, is_show_fig=is_show_fig)
+    LamSlotWind.plot_mmf_unit(
+        self, r_max=r_max, fig=fig, save_path=save_path, is_show_fig=is_show_fig
+    )

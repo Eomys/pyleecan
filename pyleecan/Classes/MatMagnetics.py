@@ -477,7 +477,7 @@ class MatMagnetics(FrozenClass):
     Brm20 = property(
         fget=_get_Brm20,
         fset=_set_Brm20,
-        doc=u"""magnet remanence induction at 20degC (calculated from mur_lin and Hc if not provided)
+        doc=u"""magnet remanence induction at 20degC
 
         :Type: float
         """,
@@ -495,7 +495,7 @@ class MatMagnetics(FrozenClass):
     alpha_Br = property(
         fget=_get_alpha_Br,
         fset=_set_alpha_Br,
-        doc=u"""temperature coefficient for remanent flux density /degC compared to 20degC
+        doc=u"""temperature coefficient for remanent flux density
 
         :Type: float
         """,

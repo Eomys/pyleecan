@@ -158,6 +158,11 @@ class SWinding(Gen_SWinding, QWidget):
         self.is_reverse_layer.stateChanged.connect(self.set_is_reverse_layer)
         self.is_change_layer.stateChanged.connect(self.set_is_change_layer)
         self.is_permute_B_C.stateChanged.connect(self.set_is_permute_B_C)
+        self.si_qs.valueChanged.connect(self.refresh_needed)
+        self.si_Nlayer.valueChanged.connect(self.refresh_needed)
+        self.si_coil_pitch.valueChanged.connect(self.refresh_needed)
+        self.si_Ntcoil.valueChanged.connect(self.refresh_needed)
+        self.si_Npcp.valueChanged.connect(self.refresh_needed)
 
         # self.b_edit_wind_mat.clicked.connect(self.s_edit_wind_mat)
         self.b_import.clicked.connect(self.s_import_csv)
@@ -233,6 +238,9 @@ class SWinding(Gen_SWinding, QWidget):
             else:
                 self.is_change_layer.setCheckState(Qt.Unchecked)
 
+    def refresh_needed(self):
+        self.b_generate.setEnabled(True)
+
     def s_generate(self):
         # Update winding object
         self.obj.winding.qs = self.si_qs.value()
@@ -253,12 +261,14 @@ class SWinding(Gen_SWinding, QWidget):
         # Check winding
         try:
             self.obj.winding.get_connection_mat()
+            self.b_generate.setEnabled(False)
         except Exception as e:
             QMessageBox().critical(
                 self, self.tr("Error"), "Error while creating the winding:\n" + str(e)
             )
             self.comp_output()
             self.update_graph(is_lam_only=True)
+            self.b_generate.setEnabled(True)
             return
 
         # Update GUI
@@ -485,10 +495,11 @@ class SWinding(Gen_SWinding, QWidget):
             ms = str(self.obj.slot.Zs / (wind.p * wind.qs * 2.0))
         except TypeError:  # One of the value is None
             ms = "?"
+        self.out_ms.setText(self.tr("Number of slots/pole/phase: ") + ms)
         if self.obj.is_stator:
-            self.out_ms.setText(self.tr("ms = Zs / (2*p*qs) = ") + ms)
+            self.out_ms.setToolTip(self.tr("Zs / (2*p*qs)"))
         else:
-            self.out_ms.setText(self.tr("ms = Zr / (2*p*qr) = ") + ms)
+            self.out_ms.setToolTip(self.tr("Zr / (2*p*qr)"))
 
         try:
             Nperw, _ = wind.get_periodicity()
@@ -496,7 +507,7 @@ class SWinding(Gen_SWinding, QWidget):
         except Exception:  # Unable to compution the connection matrix
             Nperw = "?"
 
-        self.out_Nperw.setText(self.tr("Nperw: ") + str(Nperw))
+        self.out_Nperw.setText(self.tr("Winding periodicity: ") + str(Nperw))
 
         try:
             Ntspc = str(self.obj.winding.comp_Ntsp(self.obj.slot.Zs))
@@ -508,8 +519,8 @@ class SWinding(Gen_SWinding, QWidget):
             Ncspc = Ncspc[:-2] if Ncspc[-2:] == ".0" else Ncspc
         except:
             Ncspc = "?"
-        self.out_Ncspc.setText(self.tr("Ncspc: ") + Ncspc)
-        self.out_Ntspc.setText(self.tr("Ntspc: ") + Ntspc)
+        self.out_Ncspc.setText(self.tr("Number of coils Ncspc: ") + Ncspc)
+        self.out_Ntspc.setText(self.tr("Number of turns Ntspc: ") + Ntspc)
 
     def update_graph(self, is_lam_only=False):
         """Plot the lamination with/without the winding"""
