@@ -7,6 +7,7 @@ import logging
 from numpy import pi
 from numpy.testing import assert_almost_equal
 import pytest
+from Tests.GUI import gui_option  # Set unit as [m]
 from pyleecan.Classes.BoreFlower import BoreFlower
 from pyleecan.definitions import DATA_DIR
 from pyleecan.Functions.load import load_matlib
@@ -86,8 +87,8 @@ class TestBoreAddition(object):
         BW = self.widget.w_step.bore_win
         assert BW.c_bore_type.currentText() == "Bore Flower"
         assert isinstance(BW.w_bore, PBoreFlower)
-        assert BW.w_bore.lf_Rarc.value() == 68.17 *1e-3
-        assert BW.w_bore.lf_alpha.value() == 0.39269908
+        assert BW.w_bore.lf_Rarc.value() == pytest.approx(68.17 *1e-3, rel=0.1)
+        assert BW.w_bore.lf_alpha.value() == pytest.approx(0.39269908, rel=0.1)
 
         # Check set values
         BW.w_bore.lf_Rarc.setValue(60e-3)
@@ -123,8 +124,8 @@ class TestBoreAddition(object):
         assert isinstance(self.widget.w_step.bore_win, DBore)
         assert self.widget.w_step.bore_win.w_bore.lf_Rarc.value() == 60e-3
         assert self.widget.w_step.bore_win.w_bore.lf_alpha.value() == 0.39269908*2
-        assert self.widget.w_step.bore_win.w_bore.w_out.out_Rmin.text() == "Min Radius: 78.16 [mm]"
-        assert self.widget.w_step.bore_win.w_bore.w_out.out_surface.text() == "Rotor surface: 7876 [mm²]"
+        assert self.widget.w_step.bore_win.w_bore.w_out.out_Rmin.text() == "Min Radius: 0.07816 [m]"
+        assert self.widget.w_step.bore_win.w_bore.w_out.out_surface.text() == "Rotor surface: 0.007876 [m²]"
         self.widget.w_step.bore_win.b_cancel.clicked.emit()
 
         # Remove the bore shape
