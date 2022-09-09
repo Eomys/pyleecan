@@ -251,7 +251,11 @@
             "is_yoke",
             "merge_slot_connect",
             "merge_slot_intersect",
-            "merge_slot_translate"
+            "merge_slot_translate",
+            "comp_Rmin",
+            "comp_surface",
+            "get_surface",
+            "plot"
         ],
         "mother": "",
         "name": "Bore",

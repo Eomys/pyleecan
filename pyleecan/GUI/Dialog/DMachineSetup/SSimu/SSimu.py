@@ -249,7 +249,9 @@ class SSimu(Gen_SSimu, QWidget):
                 component_list=["radial"],
                 is_2D_view=True,
                 is_show_fig=False,
-                save_path=join(self.simu.path_result, "flux as fct of time and angle.png"),
+                save_path=join(
+                    self.simu.path_result, "flux as fct of time and angle.png"
+                ),
             )
             out.mag.B.plot_3D_Data(
                 "freqs->elec_order=[0,10]",

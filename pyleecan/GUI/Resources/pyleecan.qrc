@@ -52,7 +52,7 @@
     <file>images/MachineSetup/WSlot/SlotW29_empty.png</file>
     <file>images/MachineSetup/WSlot/SlotW29_wind.png</file>
     <file>images/MachineSetup/WSlot/SlotW29_wedge_full.png</file>
-	  <file>images/MachineSetup/WMSlot/SlotCirc_empty_int_rot.png</file>
+    <file>images/MachineSetup/WMSlot/SlotCirc_empty_int_rot.png</file>
     <file>images/MachineSetup/WMSlot/SlotCirc_empty_ext_sta.png</file>
     <file>images/MachineSetup/WMSlot/SlotM10.png</file>
     <file>images/MachineSetup/WMSlot/SlotM10_empty_int_rot.png</file>
@@ -73,6 +73,7 @@
     <file>images/MachineSetup/LamParam/VentilationCirc.png</file>
     <file>images/MachineSetup/LamParam/VentilationPolar.png</file>
     <file>images/MachineSetup/LamParam/VentilationTrap.png</file>
+    <file>images/MachineSetup/LamParam/BoreFlower.png</file>
     <file>images/MachineSetup/Bar/ShortCircuitRing_schematics.png</file>
     <file>images/MachineSetup/WindParam/Winding param.PNG</file>
     <file>images/MachineSetup/WindParam/CondType11.png</file>

@@ -158,7 +158,9 @@ def variable_to_hdf5(file, prefix, variable, name):
             try:
                 grp[name] = np.string_(variable.encode("ISO-8859-2"))
             except Exception as e:
-                raise Exception("Error while h5 saving variable "+name+":\n"+str(e))
+                raise Exception(
+                    "Error while h5 saving variable " + name + ":\n" + str(e)
+                )
     # None
     elif variable is None:
         # Create dataset

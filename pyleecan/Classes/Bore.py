@@ -42,6 +42,26 @@ try:
 except ImportError as error:
     merge_slot_translate = error
 
+try:
+    from ..Methods.Machine.Bore.comp_Rmin import comp_Rmin
+except ImportError as error:
+    comp_Rmin = error
+
+try:
+    from ..Methods.Machine.Bore.comp_surface import comp_surface
+except ImportError as error:
+    comp_surface = error
+
+try:
+    from ..Methods.Machine.Bore.get_surface import get_surface
+except ImportError as error:
+    get_surface = error
+
+try:
+    from ..Methods.Machine.Bore.plot import plot
+except ImportError as error:
+    plot = error
+
 
 from numpy import isnan
 from ._check import InitUnKnowClassError
@@ -107,6 +127,42 @@ class Bore(FrozenClass):
         )
     else:
         merge_slot_translate = merge_slot_translate
+    # cf Methods.Machine.Bore.comp_Rmin
+    if isinstance(comp_Rmin, ImportError):
+        comp_Rmin = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use Bore method comp_Rmin: " + str(comp_Rmin))
+            )
+        )
+    else:
+        comp_Rmin = comp_Rmin
+    # cf Methods.Machine.Bore.comp_surface
+    if isinstance(comp_surface, ImportError):
+        comp_surface = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use Bore method comp_surface: " + str(comp_surface))
+            )
+        )
+    else:
+        comp_surface = comp_surface
+    # cf Methods.Machine.Bore.get_surface
+    if isinstance(get_surface, ImportError):
+        get_surface = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use Bore method get_surface: " + str(get_surface))
+            )
+        )
+    else:
+        get_surface = get_surface
+    # cf Methods.Machine.Bore.plot
+    if isinstance(plot, ImportError):
+        plot = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use Bore method plot: " + str(plot))
+            )
+        )
+    else:
+        plot = plot
     # generic save method is available in all object
     save = save
     # get_logger method is available in all object
