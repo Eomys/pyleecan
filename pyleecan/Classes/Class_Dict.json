@@ -2633,6 +2633,7 @@
             "HoleM50",
             "HoleM51",
             "HoleM52",
+            "HoleM52R",
             "HoleM53",
             "HoleM54",
             "HoleM57",
@@ -3129,6 +3130,111 @@
                 "type": "Magnet",
                 "unit": "-",
                 "value": ""
+            }
+        ]
+    },
+    "HoleM52R": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            },
+            {
+                "name": "IS_SYMMETRICAL",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Rectangular slot for buried magnet",
+        "is_internal": false,
+        "methods": [
+            "_comp_point_coordinate",
+            "build_geometry",
+            "check",
+            "comp_alpha",
+            "comp_magnetization_dict",
+            "comp_radius",
+            "comp_surface",
+            "comp_surface_magnet_id",
+            "has_magnet",
+            "plot_schematics",
+            "remove_magnet",
+            "get_height_magnet_id"
+        ],
+        "mother": "HoleMag",
+        "name": "HoleM52R",
+        "package": "Slot",
+        "path": "pyleecan/Generator/ClassesRef/Slot/HoleM52R.csv",
+        "properties": [
+            {
+                "as_dict": "",
+                "desc": "Slot depth",
+                "max": "",
+                "min": "0",
+                "name": "H0",
+                "type": "float",
+                "unit": "m",
+                "value": 0.003
+            },
+            {
+                "as_dict": "",
+                "desc": "Magnet width",
+                "max": "",
+                "min": "0",
+                "name": "W0",
+                "type": "float",
+                "unit": "m",
+                "value": 0.003
+            },
+            {
+                "as_dict": "",
+                "desc": "Magnet height",
+                "max": "",
+                "min": "0",
+                "name": "H1",
+                "type": "float",
+                "unit": "m",
+                "value": 0
+            },
+            {
+                "as_dict": "",
+                "desc": "Void width",
+                "max": "",
+                "min": "0",
+                "name": "W1",
+                "type": "float",
+                "unit": "m",
+                "value": 0.001
+            },
+            {
+                "as_dict": "",
+                "desc": "Additional depth for the magnet",
+                "max": "",
+                "min": "0",
+                "name": "H2",
+                "type": "float",
+                "unit": "m",
+                "value": 0.02
+            },
+            {
+                "as_dict": "",
+                "desc": "Magnet of the hole",
+                "max": "",
+                "min": "",
+                "name": "magnet_0",
+                "type": "Magnet",
+                "unit": "-",
+                "value": ""
+            },
+            {
+                "as_dict": "",
+                "desc": "Void corner radius",
+                "max": "",
+                "min": "0",
+                "name": "R0",
+                "type": "float",
+                "unit": "m",
+                "value": 0
             }
         ]
     },
@@ -3704,6 +3810,7 @@
             "HoleM50",
             "HoleM51",
             "HoleM52",
+            "HoleM52R",
             "HoleM53",
             "HoleM57",
             "HoleM58",

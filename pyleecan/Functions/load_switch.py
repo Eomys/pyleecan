@@ -52,6 +52,7 @@ load_switch = {
     "HoleM50": HoleM50,
     "HoleM51": HoleM51,
     "HoleM52": HoleM52,
+    "HoleM52R": HoleM52R,
     "HoleM53": HoleM53,
     "HoleM54": HoleM54,
     "HoleM57": HoleM57,

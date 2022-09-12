@@ -50,6 +50,7 @@ from ..Classes.Hole import Hole
 from ..Classes.HoleM50 import HoleM50
 from ..Classes.HoleM51 import HoleM51
 from ..Classes.HoleM52 import HoleM52
+from ..Classes.HoleM52R import HoleM52R
 from ..Classes.HoleM53 import HoleM53
 from ..Classes.HoleM54 import HoleM54
 from ..Classes.HoleM57 import HoleM57
