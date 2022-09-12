@@ -40,28 +40,36 @@ def get_bore_line(self, prop_dict=None):
     phi_max = _get_phi(self, w_max)
     phi = linspace(-phi_max, phi_max, 2 * NN + 1)
 
-    Zpole = self.get_pole_shape(phi_max)
-    rq = (Zpole * exp(-1j * alpha1)).real
+    Zedge = self.get_pole_shape(-phi_max)
+    xedge = (Zedge * exp(1j * alpha1)).real
+    Rq = Rbo + self.delta_d - self.delta_q
 
     # Create the first pole bore line
     Z = [self.get_pole_shape(p) for p in phi]
-    if self.delta_q is not None and Rbo + self.delta_d - self.delta_q < rq:
-        dZ = (rq - (Rbo + self.delta_d - self.delta_q)) / cos(alpha1)
-        Znotch = Zpole - dZ
-        xmin = Zpole.imag / tan(pi / self.N)
-        if Znotch.real < xmin:
+
+    if self.delta_q is not None and Rq < xedge:
+        line = Segment(Zedge * exp(1j * alpha1), 1j * Zedge.imag * exp(1j * alpha1))
+        inter = line.intersect_line(Rq, Rq + 1j * Rq)
+        if len(inter) != 1:
+            raise ()  # TODO
+
+        if inter[0].imag <= 0:
+            inter = line.intersect_line(0, Rq)
+            if len(inter) != 1:
+                raise ()  # TODO
+
             logger.warning("Enforcing permissible q axis air gap (delta_q).")
-            Znotch = Zpole.imag / tan(pi / self.N) + 1j * Znotch.imag
+            Z.insert(0, inter[0] * exp(-1j * alpha1))
+            Z.append(Z[0].conjugate())
 
-        Z.append(Znotch)
-        Z.insert(0, Znotch.conjugate())
+        else:
+            Z.insert(0, inter[0] * exp(-1j * alpha1))
+            Z.append(Z[0].conjugate())
+            Z.insert(0, Rq * exp(-1j * alpha1))
+            Z.append(Z[0].conjugate())
 
-        Zq = abs(Znotch) * exp(1j * alpha1)
-        if Zq != Znotch:
-            Z.append(Zq)
-            Z.insert(0, Zq.conjugate())
     else:
-        Z.append(rq * exp(1j * alpha1))
+        Z.append(xedge * exp(1j * alpha1))
         Z.insert(0, Z[-1].conjugate())
 
     # Create the lines

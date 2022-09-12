@@ -1,7 +1,7 @@
 Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
 N,-,Number of Poles,,int,8,0,,,Machine,Bore,get_bore_line,VERSION,1,Class for Sine Field Pole Bore 
 k,-,pole width modifier,,float,1,0,,,,,get_pole_shape,,,
-delta_d,m,d-axis air gap width,,float,"0,001",0,,,,,,,,
-delta_q,m,q-axis air gap width,,float,None,0,,,,,,,,
+delta_d,m,d-axis air gap width,,float,"0,001",0,,,,,comp_periodicity_spatial,,,
+delta_q,m,q-axis air gap width,,float,None,0,,,,,plot_schematics,,,
 W0,m,Width of the pole,,float,None,0,,,,,,,,
 alpha,rad,Angular offset,,float,0,,,,,,,,,
