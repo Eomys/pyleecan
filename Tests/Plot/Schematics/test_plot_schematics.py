@@ -42,6 +42,7 @@ from pyleecan.Classes.VentilationPolar import VentilationPolar
 from pyleecan.Classes.VentilationTrap import VentilationTrap
 from pyleecan.Classes.HoleMLSRPM import HoleMLSRPM
 from pyleecan.Classes.BoreFlower import BoreFlower
+from pyleecan.Classes.BoreSinePole import BoreSinePole
 from Tests import SCHEMATICS_PATH
 from os.path import join, isdir, isfile
 from os import makedirs, remove
@@ -209,6 +210,24 @@ class Test_plot_schematics(object):
         )
         pass
 
+    def test_BoreSinePole(self):
+        """Bore Flower schematics"""
+        file_name = "BoreSinePole.png"
+        file_path = join(SCHEMATICS_PATH, file_name)
+        # Delete previous plot
+        if isfile(file_path):
+            remove(file_path)
+        # Plot / Save schematics
+        test_obj = BoreSinePole()
+        test_obj.plot_schematics(
+            is_default=True,
+            is_add_schematics=True,
+            is_add_main_line=True,
+            save_path=file_path,
+            is_show_fig=True,
+        )
+        pass
+
     @pytest.mark.parametrize("test_dict", hole_test)
     def test_hole_no_mag(self, test_dict):
         """Slot Schematics"""
@@ -359,6 +378,7 @@ class Test_plot_schematics(object):
 if __name__ == "__main__":
     a = Test_plot_schematics()
     a.test_BoreFlower()
+    a.test_BoreSinePole()
     # a.test_slot(slot_test[26])
     # a.test_slot_point(slot_test[-1])
     # for slot in slot_test:
