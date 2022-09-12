@@ -11,6 +11,7 @@ from ..Classes.Arc3 import Arc3
 from ..Classes.Bore import Bore
 from ..Classes.BoreFlower import BoreFlower
 from ..Classes.BoreLSRPM import BoreLSRPM
+from ..Classes.BoreSinePole import BoreSinePole
 from ..Classes.BoreUD import BoreUD
 from ..Classes.CellMat import CellMat
 from ..Classes.Circle import Circle

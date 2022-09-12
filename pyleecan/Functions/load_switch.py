@@ -13,6 +13,7 @@ load_switch = {
     "Bore": Bore,
     "BoreFlower": BoreFlower,
     "BoreLSRPM": BoreLSRPM,
+    "BoreSinePole": BoreSinePole,
     "BoreUD": BoreUD,
     "CellMat": CellMat,
     "Circle": Circle,

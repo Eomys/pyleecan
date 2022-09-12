@@ -242,6 +242,7 @@
         "daughters": [
             "BoreFlower",
             "BoreLSRPM",
+            "BoreSinePole",
             "BoreUD"
         ],
         "desc": "Abstract class for Bore shape",
@@ -374,6 +375,87 @@
                 "type": "float",
                 "unit": "m",
                 "value": 0.0035
+            },
+            {
+                "as_dict": "",
+                "desc": "Angular offset",
+                "max": "",
+                "min": "",
+                "name": "alpha",
+                "type": "float",
+                "unit": "rad",
+                "value": 0
+            }
+        ]
+    },
+    "BoreSinePole": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Class for Sine Field Pole Bore ",
+        "is_internal": false,
+        "methods": [
+            "get_bore_line",
+            "get_pole_shape"
+        ],
+        "mother": "Bore",
+        "name": "BoreSinePole",
+        "package": "Machine",
+        "path": "pyleecan/Generator/ClassesRef/Machine/BoreSinePole.csv",
+        "properties": [
+            {
+                "as_dict": "",
+                "desc": "Number of Poles",
+                "max": "",
+                "min": "0",
+                "name": "N",
+                "type": "int",
+                "unit": "-",
+                "value": 8
+            },
+            {
+                "as_dict": "",
+                "desc": "pole width modifier",
+                "max": "",
+                "min": "0",
+                "name": "k",
+                "type": "float",
+                "unit": "-",
+                "value": 1
+            },
+            {
+                "as_dict": "",
+                "desc": "d-axis air gap width",
+                "max": "",
+                "min": "0",
+                "name": "delta_d",
+                "type": "float",
+                "unit": "m",
+                "value": 0.001
+            },
+            {
+                "as_dict": "",
+                "desc": "q-axis air gap width",
+                "max": "",
+                "min": "0",
+                "name": "delta_q",
+                "type": "float",
+                "unit": "m",
+                "value": null
+            },
+            {
+                "as_dict": "",
+                "desc": "Width of the pole",
+                "max": "",
+                "min": "0",
+                "name": "W0",
+                "type": "float",
+                "unit": "m",
+                "value": null
             },
             {
                 "as_dict": "",
