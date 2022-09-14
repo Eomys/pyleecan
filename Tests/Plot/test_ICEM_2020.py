@@ -486,7 +486,7 @@ def test_WindingUD_layer():
     rotor = load(join(save_path, "Fig17_rotor_wind_layer.json"))
 
     # Plot, check and save
-    rotor.plot(is_show_fig=False, is_clean_plot=True,edgecolor="k")
+    rotor.plot(is_show_fig=False, is_clean_plot=True, edgecolor="k")
     fig = plt.gcf()
     fig.savefig(join(save_path, "fig_17_WindingUD_layer.png"))
     fig.savefig(join(save_path, "fig_17_WindingUD_layer.svg"), format="svg")

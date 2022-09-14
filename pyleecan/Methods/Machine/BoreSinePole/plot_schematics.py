@@ -98,7 +98,7 @@ def plot_schematics(
             # delta_q
             p1 = Rbo + self.delta_d - self.delta_q
             p2 = Rbo + self.delta_d
-            line = Segment(p1 * exp(2j*alpha), p2 * exp(2j*alpha))
+            line = Segment(p1 * exp(2j * alpha), p2 * exp(2j * alpha))
             line.plot(
                 fig=fig,
                 ax=ax,
@@ -133,7 +133,7 @@ def plot_schematics(
                 is_arrow=True,
                 fontsize=SC_FONT_SIZE,
             )
-            
+
         if is_add_main_line:
             plot_args = dict(
                 fig=fig,

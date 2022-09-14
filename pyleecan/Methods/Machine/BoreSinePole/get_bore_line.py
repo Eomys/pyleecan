@@ -78,8 +78,8 @@ def get_bore_line(self, prop_dict=None):
         for jj in range(len(Z) - 1):
             bore_list.append(
                 Segment(
-                    Z[jj] * exp(1j * (2 * alpha1 * (ii - 1 / 2))),
-                    Z[jj + 1] * exp(1j * (2 * alpha1 * (ii - 1 / 2))),
+                    Z[jj] * exp(1j * (2 * alpha1 * (ii - 1 / 2) + self.alpha)),
+                    Z[jj + 1] * exp(1j * (2 * alpha1 * (ii - 1 / 2) + self.alpha)),
                     prop_dict=prop_dict,
                 )
             )

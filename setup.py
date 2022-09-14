@@ -52,9 +52,9 @@ install_requires = [
 ]
 # Pyleecan optional dependancies
 full_require = [
-    'deap>=1.3.1',
-    'smoot>=0.1.0',
-    'gmsh-sdk>=4.6.0',
+    "deap>=1.3.1",
+    "smoot>=0.1.0",
+    "gmsh-sdk>=4.6.0",
 ]
 
 # Pyleecan Test dependancies
@@ -96,6 +96,6 @@ setuptools.setup(
     install_requires=install_requires,
     extras_require={
         "test": tests_require,
-        "full": full_require
+        "full": full_require,
     },  # Enables to install the test dependancies using pip install pyleecan[test]
 )
