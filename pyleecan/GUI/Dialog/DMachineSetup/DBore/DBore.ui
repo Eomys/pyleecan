@@ -39,7 +39,7 @@
      <item>
       <widget class="QComboBox" name="c_bore_type">
        <property name="enabled">
-        <bool>false</bool>
+        <bool>true</bool>
        </property>
        <item>
         <property name="text">

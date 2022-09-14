@@ -38,7 +38,7 @@ class Ui_DBore(object):
         self.c_bore_type = QComboBox(DBore)
         self.c_bore_type.addItem("")
         self.c_bore_type.setObjectName(u"c_bore_type")
-        self.c_bore_type.setEnabled(False)
+        self.c_bore_type.setEnabled(True)
 
         self.horizontalLayout_2.addWidget(self.c_bore_type)
 

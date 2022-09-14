@@ -10,6 +10,15 @@
     },
     {
         "cls": "BoreSinePole",
+        "name": "k",
+        "widget": [
+            "in_k",
+            "lf_k"
+        ],
+        "xls": "Machine"
+    },
+    {
+        "cls": "BoreSinePole",
         "name": "delta_d",
         "widget": [
             "in_delta_d",
