@@ -46,6 +46,11 @@
          <string>Bore Flower</string>
         </property>
        </item>
+       <item>
+        <property name="text">
+         <string>Bore Sine Pole</string>
+        </property>
+       </item>
       </widget>
      </item>
      <item>

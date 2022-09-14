@@ -1,6 +1,15 @@
 [
     {
         "cls": "BoreSinePole",
+        "name": "N",
+        "widget": [
+            "in_N",
+            "si_N"
+        ],
+        "xls": "Machine"
+    },
+    {
+        "cls": "BoreSinePole",
         "name": "W0",
         "widget": [
             "in_W0",

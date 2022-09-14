@@ -11,6 +11,18 @@ class Gen_PBoreSinePole(Ui_PBoreSinePole):
     def setupUi(self, PBoreSinePole):
         """Abstract class to update the widget according to the csv doc"""
         Ui_PBoreSinePole.setupUi(self, PBoreSinePole)
+        # Setup of in_N
+        txt = self.tr(u"""Number of Poles""")
+        self.in_N.setWhatsThis(txt)
+        self.in_N.setToolTip(txt)
+
+        # Setup of si_N
+        self.si_N.setMinimum(0)
+        self.si_N.setMaximum(999999)
+        txt = self.tr(u"""Number of Poles""")
+        self.si_N.setWhatsThis(txt)
+        self.si_N.setToolTip(txt)
+
         # Setup of in_W0
         txt = self.tr(u"""Width of the pole""")
         self.in_W0.setWhatsThis(txt)

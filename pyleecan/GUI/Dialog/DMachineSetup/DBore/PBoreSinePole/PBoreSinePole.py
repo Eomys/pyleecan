@@ -4,7 +4,7 @@ import PySide2.QtCore
 from PySide2.QtCore import Signal
 from PySide2.QtWidgets import QWidget
 from PySide2.QtGui import QPixmap
-from ......Classes.BoreFlower import BoreFlower
+from ......Classes.BoreSinePole import BoreSinePole
 from ......GUI import gui_option
 from ......GUI.Dialog.DMachineSetup.DBore.PBoreSinePole.Gen_PBoreSinePole import (
     Gen_PBoreSinePole,
@@ -15,21 +15,21 @@ translate = PySide2.QtCore.QCoreApplication.translate
 
 
 class PBoreSinePole(Gen_PBoreSinePole, QWidget):
-    """Page to set the BoreFlower"""
+    """Page to set the BoreSinePole"""
 
     # Signal to DMachineSetup to know that the save popup is needed
     saveNeeded = Signal()
     # Information for bore combobox
-    bore_name = "Bore Flower"
-    bore_type = BoreFlower
+    bore_name = "Bore Sine Pole"
+    bore_type = BoreSinePole
 
     def __init__(self, lamination=None):
         """Initialize the GUI according to current lamination
 
         Parameters
         ----------
-        self : PBoreFlower
-            A PBoreFlower widget
+        self : PBoreSinePole
+            A PBoreSinePole widget
         lamination : Lamination
             current lamination to edit
         """
@@ -40,6 +40,11 @@ class PBoreSinePole(Gen_PBoreSinePole, QWidget):
 
         self.lamination = lamination
         self.bore = lamination.bore
+        if self.bore.N is None or self.bore.N == 0:
+            self.bore.N = 2 * lamination.get_pole_pair_number()
+
+        if self.bore.k is None or self.bore.k == 0:
+            self.bore.k = 1
 
         # Set FloatEdit unit
         self.lf_W0.unit = "m"
@@ -55,8 +60,9 @@ class PBoreSinePole(Gen_PBoreSinePole, QWidget):
             wid.setText("[" + gui_option.unit.get_m_name() + "]")
 
         # Fill the fields with the machine values (if they're filled)
+        self.si_N.setValue(self.bore.N)
         self.lf_W0.setValue(self.bore.W0)
-        self.lf_k.setValue(self.bore.k)
+        self.lf_k.setValue(self.bore.k if self.bore.k else 1)
         self.lf_delta_d.setValue(self.bore.delta_d)
         self.lf_delta_q.setValue(self.bore.delta_q)
 
@@ -64,10 +70,24 @@ class PBoreSinePole(Gen_PBoreSinePole, QWidget):
         self.w_out.comp_output()
 
         # Connect the signal/bore
+        self.si_N.editingFinished.connect(self.set_N)
         self.lf_W0.editingFinished.connect(self.set_W0)
         self.lf_k.editingFinished.connect(self.set_k)
         self.lf_delta_d.editingFinished.connect(self.set_delta_d)
         self.lf_delta_q.editingFinished.connect(self.set_delta_q)
+
+    def set_N(self):
+        """Signal to update the value of N according to the line edit
+
+        Parameters
+        ----------
+        self : PBoreFlower
+            A PBoreFlower object
+        """
+        self.bore.N = self.si_N.value()
+        self.w_out.comp_output()
+        # Notify the machine GUI that the machine has changed
+        self.saveNeeded.emit()
 
     def set_W0(self):
         """Signal to update the value of W0 according to the line edit
@@ -137,10 +157,12 @@ class PBoreSinePole(Gen_PBoreSinePole, QWidget):
         """
 
         # Check that everything is set
-        if lam.bore.Rarc is None:
-            return "You must set Rarc !"
-        elif lam.bore.alpha is None:
-            return "You must set alpha !"
+        if lam.bore.W0 is None:
+            return "You must set W0 !"
+        elif lam.bore.k is None:
+            return "You must set k !"
+        elif lam.bore.delta_d is None:
+            return "You must set delta_d !"
 
         # Check that everything is set right
         # Constraints
