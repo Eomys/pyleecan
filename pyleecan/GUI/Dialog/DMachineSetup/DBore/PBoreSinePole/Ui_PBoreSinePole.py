@@ -134,6 +134,24 @@ class Ui_PBoreSinePole(object):
 
         self.gridLayout.addWidget(self.unit_delta_q, 4, 2, 1, 1)
 
+        self.in_alpha = QLabel(self.scrollAreaWidgetContents)
+        self.in_alpha.setObjectName(u"in_alpha")
+
+        self.gridLayout.addWidget(self.in_alpha, 5, 0, 1, 1)
+
+        self.lf_alpha = FloatEdit(self.scrollAreaWidgetContents)
+        self.lf_alpha.setObjectName(u"lf_alpha")
+
+        self.gridLayout.addWidget(self.lf_alpha, 5, 1, 1, 1)
+
+        self.c_alpha_unit = QComboBox(self.scrollAreaWidgetContents)
+        self.c_alpha_unit.addItem("")
+        self.c_alpha_unit.addItem("")
+        self.c_alpha_unit.setObjectName(u"c_alpha_unit")
+        self.c_alpha_unit.setMaximumSize(QSize(70, 16777215))
+
+        self.gridLayout.addWidget(self.c_alpha_unit, 5, 2, 1, 1)
+
         self.verticalLayout.addLayout(self.gridLayout)
 
         self.verticalSpacer = QSpacerItem(
@@ -179,6 +197,15 @@ class Ui_PBoreSinePole(object):
         )
         self.unit_delta_q.setText(
             QCoreApplication.translate("PBoreSinePole", u"m", None)
+        )
+        self.in_alpha.setText(
+            QCoreApplication.translate("PBoreSinePole", u"alpha", None)
+        )
+        self.c_alpha_unit.setItemText(
+            0, QCoreApplication.translate("PBoreSinePole", u"[rad]", None)
+        )
+        self.c_alpha_unit.setItemText(
+            1, QCoreApplication.translate("PBoreSinePole", u"[deg]", None)
         )
 
     # retranslateUi
