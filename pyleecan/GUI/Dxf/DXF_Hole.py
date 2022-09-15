@@ -6,9 +6,7 @@ from matplotlib.backends.backend_qt5agg import (
     NavigationToolbar2QT as NavigationToolbar,
 )
 from ezdxf import readfile
-from numpy import angle as np_angle
-from numpy import array, pi, argmax, argmin
-from numpy import max as np_max, min as np_min
+import numpy as np
 from PySide2.QtCore import QUrl, Qt
 from PySide2.QtGui import QIcon, QPixmap, QDesktopServices
 from PySide2.QtWidgets import (
@@ -44,6 +42,8 @@ ICON_SIZE = 24
 # Unselected, selected, selected-bottom-mag
 COLOR_LIST = ["k", "r", "c"]
 Z_TOL = 1e-4  # Point comparison tolerance
+AUTO_SELECT = True
+IS_ADD_LINE_ID = False  # For debug
 
 
 class DXF_Hole(Ui_DXF_Hole, QDialog):
@@ -102,10 +102,18 @@ class DXF_Hole(Ui_DXF_Hole, QDialog):
             self.lam = lam.copy()
 
         # Init properties
-        self.line_list = list()  # List of line from DXF
-        self.selected_list = list()  # List of currently selected lines
+        self.line_list = list()  # List of lines from DXF
+        self.selected_line = np.array([])  # Array of selected lines indices
         self.surf_list = list()  # List of defined surfaces
         self.Zcenter = 0  # For translate offset
+
+        # Connection related variables
+        # matrix of points coordinates (ndarray[Npoint, 2])
+        self.point_coord = None
+        # start point id (in point_coord) and end point id for each line (ndarray[Nline, 2])
+        self.line2point = None
+        # lines id (in line_list) connected to each point (list[Npoints, n])
+        self.point2line = None
 
         # Set DXF edit widget
         self.lf_center_x.setValue(0)
@@ -163,7 +171,7 @@ class DXF_Hole(Ui_DXF_Hole, QDialog):
         """
 
         # Check convertion
-        if self.is_convert.isChecked():
+        if self.is_convert.isChecked() and "_converted" not in basename(self.dxf_path):
             getLogger(GUI_LOG_NAME).info("Converting dxf file: " + self.dxf_path)
             self.dxf_path = self.convert_dxf_with_FEMM(
                 self.dxf_path, self.lf_tol.value()
@@ -179,11 +187,14 @@ class DXF_Hole(Ui_DXF_Hole, QDialog):
             modelspace = document.modelspace()
             # Convert DXF to pyleecan objects
             self.line_list = dxf_to_pyleecan_list(modelspace)
-            # Display
             # selected line: 0: unselected, 1:selected, 2: selected bottom magnet
-            self.selected_list = [0 for line in self.line_list]
+            self.selected_line = np.zeros(len(self.line_list), dtype=int)
             self.surf_list = list()
             self.w_surface_list.setRowCount(0)
+            # Calculate connection matrix and matrix of points coordinates
+            if AUTO_SELECT:
+                self.comp_connection()
+            # Display
             self.update_graph()
         except Exception as e:
             QMessageBox().critical(
@@ -191,6 +202,136 @@ class DXF_Hole(Ui_DXF_Hole, QDialog):
                 self.tr("Error"),
                 self.tr("Error while reading dxf file:\n" + str(e)),
             )
+
+    def comp_connection(self):
+        """Calculate connection matrices:
+            - line2point: start point id and end point id for each line (ndarray[Nline, 2])
+            - point2lines: lines id connected to each point (list[Npoints, n])
+            - point_coord: matrix of points coordinates (ndarray[Npoint, 2])
+
+        Parameters
+        ----------
+        self : DXF_Hole
+            a DXF_Hole object
+        """
+
+        line2point = np.zeros((len(self.line_list), 2), dtype=int)
+        point_coord = list()
+        point2line = list()
+        for ii, line in enumerate(self.line_list):
+            # Add begin point
+            point_begin = line.get_begin()
+            # Tolerance to avoid duplicate points
+            index = np.where(np.abs(np.array(point_coord) - point_begin) < Z_TOL)[0]
+            if len(index) == 1:
+                point_id = index[0]
+                line2point[ii, 0] = point_id
+                point2line[point_id].append(ii)
+            else:
+                point_coord.append(point_begin)
+                line2point[ii, 0] = len(point_coord) - 1
+                point2line.append([ii])
+            # Add end point
+            point_end = line.get_end()
+            index = np.where(np.abs(np.array(point_coord) - point_end) < Z_TOL)[0]
+            if len(index) == 1:
+                point_id = index[0]
+                line2point[ii, 1] = point_id
+                point2line[point_id].append(ii)
+            else:
+                point_coord.append(point_end)
+                line2point[ii, 1] = len(point_coord) - 1
+                point2line.append([ii])
+
+        # Store connection matrix for later use
+        self.line2point = line2point
+        self.point2line = point2line
+
+        # Convert point list to matrix
+        point_coord = np.array(point_coord, dtype=complex)
+        self.point_coord = np.zeros((point_coord.size, 2))
+        self.point_coord[:, 0] = np.real(point_coord)
+        self.point_coord[:, 1] = np.imag(point_coord)
+
+    def get_closest_line_id(self, X, Y):
+        """Get closest line id to input X and Y coordinates
+
+        Parameters
+        ----------
+        self : DXF_Hole
+            a DXF_Hole object
+        X: float
+            x coordinate
+        Y: float
+            y coordinate
+        """
+
+        point2line = self.point2line
+        line_list = self.line_list
+
+        # Get 10 closest points to click coordinates
+        x = self.point_coord[:, 0]
+        y = self.point_coord[:, 1]
+        Npts = min([10, x.size])
+        Ipts = np.argpartition((x - X) ** 2 + (y - Y) ** 2, Npts)[:Npts]
+
+        # Find all line indices containing 10 closest
+        Ilin = list()
+        for ii in Ipts:
+            Ilin.extend(point2line[ii])
+        Ilin = np.unique(Ilin)
+
+        # Find id of closest line
+        Z = X + 1j * Y  # XY position as complex number
+        point_dist = [line_list[ii].comp_distance(Z) for ii in Ilin]
+        closest_id = Ilin[np.argmin(point_dist)]
+
+        return closest_id
+
+    def get_connected_lines(self, connected_lines, lin_curr, pt_curr):
+        """Get connected lines to the current line starting at the current point
+        (need to call method on both end points of the lines)
+        return if the connected lines results in a closed surface and extend connected_lines
+
+        Parameters
+        ----------
+        self : DXF_Hole
+            a DXF_Hole object
+        connected_lines: list
+            List of line index connected to current line and point
+        lin_curr: int
+            current line id
+        pt_curr: int
+            current point id
+
+        Results
+        ----------
+        is_closed: bool
+            True if the connected lines results in a closed surface
+        """
+
+        line2point = self.line2point
+        point2line = self.point2line
+
+        is_closed = False
+        is_next = True  # Is there another line to select
+        while is_next:
+            l_i = point2line[pt_curr]  # list of line connected to the point
+            if len(l_i) == 2:
+                # We select the next line only if the point is connected to 2 lines
+                next_line = l_i[0] if l_i[1] == lin_curr else l_i[1]
+                if next_line not in connected_lines:
+                    connected_lines.append(next_line)
+                    lin_curr = next_line
+                    p_i = line2point[lin_curr]
+                    pt_curr = p_i[0] if p_i[1] == pt_curr else p_i[1]
+                else:  # Next line is already in connected lines
+                    is_next = False
+                    is_closed = True
+            else:
+                is_next = False
+
+        return is_closed
 
     def init_graph(self):
         """Initialize the viewer
@@ -248,46 +389,69 @@ class DXF_Hole(Ui_DXF_Hole, QDialog):
             if not is_ignore:
                 X = event.xdata  # X position of the click
                 Y = event.ydata  # Y position of the click
-                # Get closer pyleecan object
-                Z = X + 1j * Y
-                min_dist = float("inf")
-                closest_id = -1
-                for ii, line in enumerate(self.line_list):
-                    line_dist = line.comp_distance(Z)
-                    if line_dist < min_dist:
-                        closest_id = ii
-                        min_dist = line_dist
-                # Select/unselect line
-                if self.selected_list[closest_id] == 0:  # Unselected to selected
-                    self.selected_list[closest_id] = 1
-                elif (
-                    self.selected_list[closest_id] == 1
-                ):  # Selected to selected bottom mag
-                    if 2 in self.selected_list:
-                        current_bot_mag = self.selected_list.index(2)
-                        # Only one selected bottom mag line at the time
-                        point_list = array(
-                            self.line_list[current_bot_mag].discretize(20)
+
+                # Get id of closest line to click
+                closest_id = self.get_closest_line_id(X, Y)
+
+                connected_lines = [closest_id]
+                is_closed = False
+                # If the line is not already selected (else edit only the line)
+                if self.selected_line[closest_id] == 0 and AUTO_SELECT:
+                    # Select all points starting from begin point
+                    lin_curr = closest_id
+                    pt_curr = self.line2point[closest_id, 0]
+                    is_closed = self.get_connected_lines(
+                        connected_lines, lin_curr, pt_curr
+                    )
+                    # Select all points starting from end point
+                    if not is_closed:
+                        lin_curr = closest_id
+                        pt_curr = self.line2point[closest_id, 1]
+                        is_closed = self.get_connected_lines(
+                            connected_lines, lin_curr, pt_curr
                         )
-                        self.selected_list[current_bot_mag] = 1
-                        axes.plot(
-                            point_list.real, point_list.imag, COLOR_LIST[1], zorder=2
-                        )
-                    self.selected_list[closest_id] = 2
-                elif self.selected_list[closest_id] == 2:
-                    # selected bottom mag to Unselected
-                    self.selected_list[closest_id] = 0
-                # Change line color
-                point_list = array(self.line_list[closest_id].discretize(20))
-                color = COLOR_LIST[self.selected_list[closest_id]]
-                axes.plot(point_list.real, point_list.imag, color, zorder=2)
-                self.axes.set_xlim(self.xlim)
-                self.axes.set_ylim(self.ylim)
-                self.canvas.draw()
+                    # Make sure that all the lines will be set to "1"
+                    for index in connected_lines:
+                        self.selected_line[index] = 0
+
+                # Select/unselect line (needed for add_surface)
+                for id_line in connected_lines:
+                    if self.selected_line[id_line] == 0:
+                        # Unselected to selected
+                        self.selected_line[id_line] = 1
+                    elif self.selected_line[id_line] == 1:
+                        # Selected to selected bottom mag
+                        Imag = np.where(self.selected_line == 2)[0]
+                        if Imag.size > 0:
+                            current_bot_mag = Imag[0]
+                            # Only one selected bottom mag line at the time
+                            point_list = np.array(
+                                self.line_list[current_bot_mag].discretize(20)
+                            )
+                            self.selected_line[current_bot_mag] = 1
+                            axes.plot(
+                                point_list.real,
+                                point_list.imag,
+                                COLOR_LIST[1],
+                                zorder=2,
+                            )
+                        self.selected_line[id_line] = 2
+                    elif self.selected_line[id_line] == 2:
+                        # selected bottom mag to Unselected
+                        self.selected_line[id_line] = 0
 
                 # Check if the surface is complete
-                if self.check_selection():
+                # (is_close=True: surface selected in one click)
+                if is_closed or self.check_selection():
                     self.add_surface()
+                else:  # Update line color on plot
+                    for id_line in connected_lines:
+                        point_list = np.array(self.line_list[id_line].discretize(20))
+                        color = COLOR_LIST[self.selected_line[id_line]]
+                        axes.plot(point_list.real, point_list.imag, color, zorder=2)
+                    self.axes.set_xlim(self.xlim)
+                    self.axes.set_ylim(self.ylim)
+                    self.canvas.draw()
 
         def zoom(event):
             """Function to zoom/unzoom according the mouse wheel"""
@@ -341,15 +505,19 @@ class DXF_Hole(Ui_DXF_Hole, QDialog):
         self : DXF_Hole
             a DXF_Hole object
         """
-        fig, axes = self.fig, self.axes
+
+        _, axes = self.fig, self.axes
         axes.clear()
         axes.set_axis_off()
 
         # Draw the lines in the correct color
         for ii, line in enumerate(self.line_list):
-            point_list = array(line.discretize(20))
-            color = COLOR_LIST[self.selected_list[ii]]
+            point_list = np.array(line.discretize(20))
+            color = COLOR_LIST[self.selected_line[ii]]
             axes.plot(point_list.real, point_list.imag, color, zorder=1)
+            if IS_ADD_LINE_ID:
+                Zmid = line.get_middle()
+                axes.text(Zmid.real, Zmid.imag, str(ii))
         # Add lamination center
         axes.plot(self.Zcenter.real, self.Zcenter.imag, "rx", zorder=0)
         axes.text(self.Zcenter.real, self.Zcenter.imag, "O")
@@ -370,26 +538,62 @@ class DXF_Hole(Ui_DXF_Hole, QDialog):
             True if it forms a surface
         """
 
-        # Create list of begin and end point for all lines
-        point_list = list()
-        for ii, line in enumerate(self.line_list):
-            if self.selected_list[ii]:
-                point_list.append(line.get_begin())
-                point_list.append(line.get_end())
-
-        # Check with a tolerance if every point is twice in the list
-        if len(point_list) == 0:
+        Iselect = np.where(self.selected_line)[0]
+        if len(Iselect) == 0:  # No line selected
             return False
+        # line2point contains index (int), no need for Z_tol
+        _, count0 = np.unique(self.line2point[Iselect, :].ravel(), return_counts=True)
 
-        for p1 in point_list:
-            count = 0
-            for p2 in point_list:
-                if abs(p1 - p2) < Z_TOL:
-                    count += 1
-            if count != 2:
-                return False
+        return np.all(count0 == 2)
 
-        return True
+    def sort_lines(self):
+        """Sort selected lines so that current line's starting point is the same as previous line's ending point
+        and that current line's ending point is the same as next line's start point
+
+        Parameters
+        ----------
+        self : DXF_Hole
+            a DXF_Hole object
+
+        Returns
+        -------
+        curve_list : [Line]
+            List of sorted lines
+        str_list: [str]
+            List of line indices as str (to be printed in combobox)
+        """
+
+        Iselect = np.where(self.selected_line)[0]
+
+        l2p = self.line2point
+
+        p2l_select = list()
+        for lines in self.point2line:
+            if len(lines) == 2:
+                p2l_select.append(lines)
+            else:
+                p2l_select.append([ll for ll in lines if ll in Iselect])
+
+        ii = Iselect[0]
+        pt_start = l2p[ii, 0]
+        pt_curr = l2p[ii, 1]
+        index_list = [ii]
+        curve_list = [self.line_list[ii].copy()]
+        while pt_curr != pt_start:
+            l_i = p2l_select[pt_curr]
+            kk = l_i[1] if l_i[0] in index_list else l_i[0]
+            index_list.append(kk)
+            line_k = self.line_list[kk].copy()
+            if pt_curr == l2p[kk, 0]:
+                pt_curr = l2p[kk, 1]
+            elif pt_curr == l2p[kk, 1]:
+                pt_curr = l2p[kk, 0]
+                line_k.reverse()
+            curve_list.append(line_k)
+
+        str_list = [str(kk) for kk in index_list]
+
+        return curve_list, str_list
 
     def add_surface(self):
         """Validate the selection and create a surface object
@@ -400,25 +604,9 @@ class DXF_Hole(Ui_DXF_Hole, QDialog):
             a DXF_Hole object
         """
 
-        # Get all the selected lines
-        line_list = list()
-        index_list = list()
-        for ii, line in enumerate(self.line_list):
-            if self.selected_list[ii]:
-                index_list.append(str(ii))
-                line_list.append(line.copy())
-        # Sort the lines (begin = end)
-        curve_list = list()
-        curve_list.append(line_list.pop())
-        while len(line_list) > 0:
-            end = curve_list[-1].get_end()
-            for ii in range(len(line_list)):
-                if abs(line_list[ii].get_begin() - end) < Z_TOL:
-                    break
-                if abs(line_list[ii].get_end() - end) < Z_TOL:
-                    line_list[ii].reverse()
-                    break
-            curve_list.append(line_list.pop(ii))
+        # Sort the selected lines (begin = end)
+        curve_list, str_list = self.sort_lines()
+
         # Create the Surface object
         self.surf_list.append(SurfLine(line_list=curve_list))
         self.surf_list[-1].comp_point_ref(is_set=True)
@@ -427,6 +615,7 @@ class DXF_Hole(Ui_DXF_Hole, QDialog):
         nrows = self.w_surface_list.rowCount()
         self.w_surface_list.setRowCount(nrows + 1)
         # Adding Surface Type combobox
+
         combobox = QComboBox()
         combobox.addItems(["Hole", "Magnet"])
         self.w_surface_list.setCellWidget(
@@ -434,7 +623,7 @@ class DXF_Hole(Ui_DXF_Hole, QDialog):
             TYPE_COL,
             combobox,
         )
-        if 2 in self.selected_list:
+        if np.any(self.selected_line == 2):
             combobox.setCurrentIndex(1)  # Magnet
         combobox.currentIndexChanged.connect(self.enable_magnetization)
 
@@ -460,16 +649,15 @@ class DXF_Hole(Ui_DXF_Hole, QDialog):
 
         # Add reference combobox
         combobox = QComboBox()
-        combobox.addItems(index_list)
+        combobox.addItems(str_list)
         self.w_surface_list.setCellWidget(
             nrows,
             REF_COL,
             combobox,
         )
-        if 2 in self.selected_list:
-            combobox.setCurrentIndex(
-                index_list.index(str(self.selected_list.index(2)))
-            )  #
+        Imag = np.where(self.selected_line == 2)[0]
+        if Imag.size > 0:
+            combobox.setCurrentIndex(str_list.index(str(Imag[0])))
         else:
             combobox.setEnabled(False)
 
@@ -479,7 +667,7 @@ class DXF_Hole(Ui_DXF_Hole, QDialog):
         lf_off.validator().setTop(360)
         lf_off.setValue(0)
         # lf_off.setText("0")
-        lf_off.setEnabled(2 in self.selected_list)
+        lf_off.setEnabled(np.any(self.selected_line == 2))
         self.w_surface_list.setCellWidget(
             nrows,
             OFF_COL,
@@ -501,11 +689,11 @@ class DXF_Hole(Ui_DXF_Hole, QDialog):
 
     def remove_selection(self):
         # Remove selection
-        self.selected_list = [0 for line in self.line_list]
+        self.selected_line = np.zeros(len(self.line_list), dtype=int)
         # Redraw all the lines (in black)
         for ii, line in enumerate(self.line_list):
-            point_list = array(line.discretize(20))
-            color = COLOR_LIST[self.selected_list[ii]]
+            point_list = np.array(line.discretize(20))
+            color = COLOR_LIST[self.selected_line[ii]]
             self.axes.plot(point_list.real, point_list.imag, color, zorder=2)
         self.canvas.draw()
 
@@ -550,7 +738,7 @@ class DXF_Hole(Ui_DXF_Hole, QDialog):
             hole.magnet_dict["magnet_" + str(ii)] = Magnet(type_magnetization=1)
 
         # Sort the surfaces
-        angles = [np_angle(surf.point_ref) for surf in hole.surf_list]
+        angles = [np.angle(surf.point_ref) for surf in hole.surf_list]
         idx = sorted(range(len(angles)), key=lambda k: angles[k])
         surf_list_sorted = [hole.surf_list[ii] for ii in idx]
         bottom_list_sorted = [bottom_list[ii] for ii in idx]
@@ -565,7 +753,7 @@ class DXF_Hole(Ui_DXF_Hole, QDialog):
         # Rotation
         Zref = sum([surf.point_ref for surf in hole.surf_list])
         for surf in hole.surf_list:
-            surf.rotate(-1 * np_angle(Zref))
+            surf.rotate(-1 * np.angle(Zref))
 
         # Magnetization dict
         mag_dict = dict()
@@ -573,9 +761,9 @@ class DXF_Hole(Ui_DXF_Hole, QDialog):
         for ii in range(len(hole.surf_list)):
             if HOLEM_LAB in hole.surf_list[ii].label:
                 line = bottom_list_sorted[ii].copy()
-                line.rotate(-1 * np_angle(Zref))
+                line.rotate(-1 * np.angle(Zref))
                 mag_dict["magnet_" + str(Nmag)] = line.comp_normal()
-                mag_dict["magnet_" + str(Nmag)] += offset_list_sorted[ii] * pi / 180
+                mag_dict["magnet_" + str(Nmag)] += offset_list_sorted[ii] * np.pi / 180
                 Nmag += 1
         hole.magnetization_dict_offset = mag_dict
 
@@ -605,12 +793,12 @@ class DXF_Hole(Ui_DXF_Hole, QDialog):
             if HOLEV_LAB in surf.label:
                 line_list = surf.get_lines()
                 # Get middle list
-                middle_array = array([line.get_middle() for line in line_list])
+                middle_array = np.array([line.get_middle() for line in line_list])
                 # Get the extrema line on the top or bottom of the hole
-                if np_min(middle_array.imag) > 0 and np_max(middle_array.imag) > 0:
-                    start_idx = argmax(middle_array.imag)
+                if np.min(middle_array.imag) > 0 and np.max(middle_array.imag) > 0:
+                    start_idx = np.argmax(middle_array.imag)
                 else:
-                    start_idx = argmin(middle_array.imag)
+                    start_idx = np.argmin(middle_array.imag)
                 # Get the two lines middle besides the extrema line middle
                 if start_idx == 0:
                     ref_mid = [middle_array[-1], middle_array[0], middle_array[1]]
@@ -664,14 +852,14 @@ class DXF_Hole(Ui_DXF_Hole, QDialog):
         self : DXF_Hole
             a DXF_Hole object
         """
-        self.selected_list = [0 for line in self.line_list]
+        self.selected_line = np.zeros(len(self.line_list), dtype=int)
         surf = self.surf_list[self.w_surface_list.currentRow()]
         # Find the index of the surface line in self.line_list
         for surf_line in surf.line_list:
             mid = surf_line.get_middle()
             for ii, line in enumerate(self.line_list):
                 if abs(mid - line.get_middle()) < Z_TOL:
-                    self.selected_list[ii] = 1
+                    self.selected_line[ii] = 1
                     self.axes.text(
                         mid.real,
                         mid.imag,
@@ -680,8 +868,8 @@ class DXF_Hole(Ui_DXF_Hole, QDialog):
                     )
         self.update_graph()
         # Add Label
-        for ii in range(len(self.selected_list)):
-            if self.selected_list[ii] == 1:
+        for ii in range(len(self.selected_line)):
+            if self.selected_line[ii] == 1:
                 Zmid = self.line_list[ii].get_middle()
                 self.axes.text(
                     Zmid.real,

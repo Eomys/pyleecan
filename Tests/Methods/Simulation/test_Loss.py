@@ -4,6 +4,7 @@ from pyleecan.Classes.Loss import Loss
 from pyleecan.Classes.LossModel import LossModel
 
 
+@pytest.mark.skip(reason="add_model doesn't exist anymore")
 @pytest.mark.Loss
 def test_Loss_methods():
     """Test Loss methods add_model and remove_model"""

@@ -61,9 +61,7 @@ def test_LUTdq_grid_vect(is_load=True):
                     is_periodicity_t=True,
                 ),
                 var_simu=VarLoadCurrent(
-                    type_OP_matrix=1,
-                    postproc_list=[PostLUT(is_save_LUT=True)],
-                    is_keep_all_output=True,
+                    postproc_list=[PostLUT(is_save_LUT=True)], is_keep_all_output=True,
                 ),
                 mag=MagFEMM(
                     is_periodicity_a=True,
@@ -82,7 +80,7 @@ def test_LUTdq_grid_vect(is_load=True):
         LUT_vect = simu.elec.comp_LUTdq()
 
     # Get Id_min, Id_max, Iq_min, Iq_max from OP_matrix
-    OP_matrix = LUT_grid.get_OP_matrix()
+    OP_matrix = LUT_grid.get_OP_array("N0", "Id", "Iq")
     Id_min = OP_matrix[:, 1].min()
     Id_max = OP_matrix[:, 1].max()
     Iq_min = OP_matrix[:, 2].min()

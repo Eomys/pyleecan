@@ -411,7 +411,7 @@ class Skew(FrozenClass):
     type_skew = property(
         fget=_get_type_skew,
         fset=_set_type_skew,
-        doc="""Type of skew ("linear", "vshape", "function", "user-defined") [-]
+        doc="""Type of skew ("linear", "vshape", "function", "user-defined")
 
         :Type: str
         """,
@@ -429,7 +429,7 @@ class Skew(FrozenClass):
     rate = property(
         fget=_get_rate,
         fset=_set_rate,
-        doc="""Skew rate expressed in terms of slot pitch (stator slot pitch for SCIM, rotor slot pitch for PMSM) [-]
+        doc="""Skew rate expressed in terms of slot pitch (stator slot pitch for SCIM, rotor slot pitch for PMSM)
 
         :Type: float
         """,
@@ -447,7 +447,7 @@ class Skew(FrozenClass):
     is_step = property(
         fget=_get_is_step,
         fset=_set_is_step,
-        doc="""True to define skew as steps [-]
+        doc="""True to define skew as steps
 
         :Type: bool
         """,
@@ -482,7 +482,7 @@ class Skew(FrozenClass):
     function = property(
         fget=_get_function,
         fset=_set_function,
-        doc="""Function which describes skew pattern [-]
+        doc="""Function which describes skew pattern
 
         :Type: function
         """,
@@ -502,7 +502,7 @@ class Skew(FrozenClass):
     angle_list = property(
         fget=_get_angle_list,
         fset=_set_angle_list,
-        doc="""List of skew angles [rad]
+        doc="""List of skew angles
 
         :Type: list
         """,
@@ -522,7 +522,7 @@ class Skew(FrozenClass):
     z_list = property(
         fget=_get_z_list,
         fset=_set_z_list,
-        doc="""List of z axis positions for which skew angles are given [m]
+        doc="""List of z axis positions for which skew angles are given
 
         :Type: list
         """,
@@ -559,7 +559,7 @@ class Skew(FrozenClass):
     angle_overall = property(
         fget=_get_angle_overall,
         fset=_set_angle_overall,
-        doc="""Overall skewing angle [rad]
+        doc="""Overall skewing angle
 
         :Type: float
         :min: 0

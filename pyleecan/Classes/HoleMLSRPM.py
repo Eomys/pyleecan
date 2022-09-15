@@ -568,7 +568,7 @@ class HoleMLSRPM(HoleMag):
     H1 = property(
         fget=_get_H1,
         fset=_set_H1,
-        doc=u"""Magnet depth [m]
+        doc=u"""Magnet depth
 
         :Type: float
         :min: 0
@@ -587,7 +587,7 @@ class HoleMLSRPM(HoleMag):
     W0 = property(
         fget=_get_W0,
         fset=_set_W0,
-        doc=u"""Magnet top width [m]
+        doc=u"""Magnet top width
 
         :Type: float
         :min: 0
@@ -606,7 +606,7 @@ class HoleMLSRPM(HoleMag):
     W1 = property(
         fget=_get_W1,
         fset=_set_W1,
-        doc=u"""Magnet width angular 1  [rad]
+        doc=u"""Magnet width angular 1 
 
         :Type: float
         :min: 0
@@ -625,7 +625,7 @@ class HoleMLSRPM(HoleMag):
     W2 = property(
         fget=_get_W2,
         fset=_set_W2,
-        doc=u"""Small distance [m]
+        doc=u"""Small distance
 
         :Type: float
         :min: 0
@@ -644,7 +644,7 @@ class HoleMLSRPM(HoleMag):
     R1 = property(
         fget=_get_R1,
         fset=_set_R1,
-        doc=u"""Rounding radius [m]
+        doc=u"""Rounding radius
 
         :Type: float
         :min: 0
@@ -663,7 +663,7 @@ class HoleMLSRPM(HoleMag):
     R2 = property(
         fget=_get_R2,
         fset=_set_R2,
-        doc=u"""Radius 2 [m]
+        doc=u"""Radius 2
 
         :Type: float
         """,
@@ -681,7 +681,7 @@ class HoleMLSRPM(HoleMag):
     R3 = property(
         fget=_get_R3,
         fset=_set_R3,
-        doc=u"""Radius 3 [m]
+        doc=u"""Radius 3
 
         :Type: float
         """,
@@ -718,7 +718,7 @@ class HoleMLSRPM(HoleMag):
     magnet_0 = property(
         fget=_get_magnet_0,
         fset=_set_magnet_0,
-        doc=u"""Magnet of the hole [-]
+        doc=u"""Magnet of the hole
 
         :Type: Magnet
         """,

@@ -601,7 +601,7 @@ class LamSquirrelCage(LamSlotWind):
     Hscr = property(
         fget=_get_Hscr,
         fset=_set_Hscr,
-        doc=u"""short circuit ring section radial height [m] [m]
+        doc=u"""short circuit ring section radial height [m]
 
         :Type: float
         :min: 0
@@ -620,7 +620,7 @@ class LamSquirrelCage(LamSlotWind):
     Lscr = property(
         fget=_get_Lscr,
         fset=_set_Lscr,
-        doc=u"""short circuit ring section axial length [m]
+        doc=u"""short circuit ring section axial length
 
         :Type: float
         :min: 0

@@ -48,6 +48,7 @@ def comp_loss(self):
         self.comp_coeff(material)
 
     # Get loss coefficients
+    # The loss data are given in W/kg, but the loss density in pyleecan are computed in W/m^3
     k_hy = self.k_hy / Kf * rho
     k_ed = self.k_ed / Kf * rho
     alpha_f = self.alpha_f
@@ -137,21 +138,5 @@ def comp_loss(self):
     coeff = Lst * per_a * matmul(Bfft_magnitude ** alpha_B, Se)
     B = np_sum(k_hy * coeff * n ** alpha_f)
     self.coeff_dict = {"2": A, str(alpha_f): B}
-
-    with open("loss_models.txt", "w") as f:
-        f.write(
-            f"""
-k_hy: {self.k_hy}
-k_ed: {self.k_ed}
-alpha_f: {self.alpha_f}
-alpha_B: {self.alpha_B}
-coeff: {coeff}
-A: {A}
-B: {B}
-Lst: {Lst}
-Igrp: {Igrp}
-freqs: {freqs}
-"""
-        )
 
     return Pcore_density, freqs

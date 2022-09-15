@@ -50,7 +50,7 @@ def run(self):
         LUT = self.LUT_enforced
 
         # Get Id_min, Id_max, Iq_min, Iq_max from OP_matrix
-        OP_matrix = LUT.get_OP_matrix()
+        OP_matrix = LUT.get_OP_array("N0", "Id", "Iq")
         self.Id_min = OP_matrix[:, 1].min()
         self.Id_max = OP_matrix[:, 1].max()
         self.Iq_min = OP_matrix[:, 2].min()

@@ -157,40 +157,42 @@ def plot_schematics(
                 (point_dict["Z8"] + point_dict["Z7"]) / 2 * rot,
                 (point_dict["Z8s"] + point_dict["Z7s"]) / 2 * rot,
             )
-            line.plot(label="W1", offset_label=-1j * self.H3 * 0.4)
+            line.plot(label="W1", offset_label=-1j * self.H3 * 0.4, **kwargs)
             # W2
             line = Segment(point_dict["Z8"] * rot, point_dict["Z8b"] * rot)
-            line.plot(label="W2", offset_label=1j * self.H3 * 0.2)
+            line.plot(label="W2", offset_label=1j * self.H3 * 0.2, **kwargs)
             # W3
             line = Segment(
                 (point_dict["Z1s"] + point_dict["Z11s"]) * 0.5 * rot,
                 (point_dict["Z1"] + point_dict["Z11"]) * 0.5 * rot * exp(1j * sp),
             )
-            line.plot(label="W3", offset_label=-1j * self.H3 * 0.3)
+            line.plot(label="W3", offset_label=-1j * self.H3 * 0.3, **kwargs)
             # W4
             line = Segment(point_dict["Z5"] * rot, point_dict["Z4"] * rot)
-            line.plot(label="W4", offset_label=-1j * self.H3 * 0.3)
+            line.plot(label="W4", offset_label=-1j * self.H3 * 0.3, **kwargs)
             # H0
             line = Segment(Rbo * rot, point_dict["Z8"].real * rot)
-            line.plot(label="H0", offset_label=self.W0 * 0.05 + 1j * self.H3 * 0.2)
+            line.plot(
+                label="H0", offset_label=self.W0 * 0.05 + 1j * self.H3 * 0.2, **kwargs
+            )
             # H1
             line = Segment(
                 Rbo * exp(-1j * sp / 2) * rot,
                 (Rbo - self.H1) * exp(-1j * sp / 2) * rot,
             )
-            line.plot(label="H1", offset_label=self.H3 * 0.2)
+            line.plot(label="H1", offset_label=self.H3 * 0.2, **kwargs)
             # H2
             line = Segment(
                 (point_dict["Z3s"] + point_dict["Z6s"]) * 0.5 * rot,
                 (point_dict["Z4s"] + point_dict["Z5s"]) * 0.5 * rot,
             )
-            line.plot(label="H2", offset_label=self.H3 * 0.2)
+            line.plot(label="H2", offset_label=self.H3 * 0.2, **kwargs)
             # H3
             line = Segment(point_dict["Z4s"] * rot, point_dict["Z8cs"] * rot)
-            line.plot(label="H3", offset_label=self.H3 * 0.2)
+            line.plot(label="H3", offset_label=self.H3 * 0.2, **kwargs)
             # H4
             line = Segment(point_dict["Z9s"] * rot, point_dict["Z10s"] * rot)
-            line.plot(label="H4", offset_label=self.H3 * 0.2)
+            line.plot(label="H4", offset_label=self.H3 * 0.2, **kwargs)
 
         if is_add_main_line:
             lines = []

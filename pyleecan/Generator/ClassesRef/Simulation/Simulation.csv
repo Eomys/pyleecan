@@ -2,7 +2,7 @@ Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximu
 name,-,Name of the simulation,0,str,,,,,Simulation,,run,VERSION,1,Abstract class for the simulation
 desc,-,Simulation description,0,str,,,,,,,init_logger,,,
 machine,-,Machine to simulate,0,Machine,,,,,,,get_var_load,,,
-input,-,Input of the simulation,0,Input,,,,,,,,,,
+input,-,Input of the simulation,0,Input,,,,,,,get_OP_array,,,
 logger_name,-,Name of the logger to use,0,str,Pyleecan.Simulation,,,,,,,,,
 var_simu,-,Multi-simulation definition,,VarSimu,None,,,,,,,,,
 postproc_list,-,List of postprocessings to run on Output after the simulation,0,[Post],[],,,,,,,,,

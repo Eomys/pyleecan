@@ -1,7 +1,7 @@
 from pyleecan.Classes.LossModelMagnet import LossModelMagnet
 from pyleecan.Classes.LossModelProximity import LossModelProximity
 from pyleecan.Classes.LossModelSteinmetz import LossModelSteinmetz
-from pyleecan.Classes.LossModelWinding import LossModelWinding
+from pyleecan.Classes.LossModelJoule import LossModelJoule
 from ....Methods.Simulation.Input import InputError
 
 
@@ -23,19 +23,19 @@ def run(self):
 
     self.model_dict = {
         "stator core": LossModelSteinmetz(
-            group="stator core", k_hy=self.Ch, k_ed=self.Ce, alpha_f=1, alpha_B=2
+            group="stator core", k_hy=self.k_hy, k_ed=self.k_ed, alpha_f=1, alpha_B=2
         ),
         "rotor core": LossModelSteinmetz(
-            group="rotor core", k_hy=self.Ch, k_ed=self.Ce, alpha_f=1, alpha_B=2
+            group="rotor core", k_hy=self.k_hy, k_ed=self.k_ed, alpha_f=1, alpha_B=2
         ),
-        "joule": LossModelWinding(
+        "joule": LossModelJoule(
             group="stator winding", type_skin_effect=self.type_skin_effect
         ),
-        "proximity": LossModelProximity(group="stator winding"),
+        "proximity": LossModelProximity(group="stator winding", k_p=self.k_p),
     }
-    
+
     if machine.is_synchronous() and machine.rotor.has_magnet():
-        self.model_dict["magnets"]=LossModelMagnet(group="rotor magnets")
+        self.model_dict["magnets"] = LossModelMagnet(group="rotor magnets")
 
     output.loss.store(
         self.model_dict,
@@ -43,3 +43,6 @@ def run(self):
         self.is_get_meshsolution,
         Tsta=self.Tsta,
     )
+
+    output.loss.loss_list.append(sum(output.loss.loss_list))
+    output.loss.loss_list[-1].name = "overall"

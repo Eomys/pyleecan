@@ -43,16 +43,16 @@ def comp_loss(self):
 
     if self.type_skin_effect > 0:
         # Account for skin effect
-        k, power = self.comp_coeff(
+        k = self.comp_coeff(
             T_op=T_op,
         )
     else:
-        k, power = 0, 0
+        k = 0
 
     # Calculate overall joule losses
     Id_Iq = OP.get_Id_Iq()
     coeff = qs * Rs * (Id_Iq["Id"] ** 2 + Id_Iq["Iq"] ** 2)
-    Pjoule = coeff * (1 + k * felec ** power)
+    Pjoule = coeff * (1 + k * felec ** 2)
 
     per_a = output.geo.per_a
     if output.geo.is_antiper_a:
@@ -71,6 +71,6 @@ def comp_loss(self):
 
     A = coeff * k
     B = coeff
-    self.coeff_dict = {str(power): A, "0": B}
+    self.coeff_dict = {"2": A, "0": B}
 
     return Pjoule_density, freqs

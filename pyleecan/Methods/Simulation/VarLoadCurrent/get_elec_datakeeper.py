@@ -1,5 +1,5 @@
 from numpy import isnan
-
+from ....Classes.Simulation import Simulation
 from ....Functions.Simulation.VarSimu.get_elec_datakeeper_dict import (
     get_elec_datakeeper_dict,
 )
@@ -26,16 +26,23 @@ def get_elec_datakeeper(self, symbol_list, is_multi=False):
     dk_list = []
 
     if not is_multi:
-        if self.type_OP_matrix == 0:  # I0 and Phi0
-            quantity_list = ["I0", "Phi0", "Id", "Iq"]
-        elif self.type_OP_matrix == 1:  # Id and Iq
-            quantity_list = ["Id", "Iq"]
-
+        quantity_list = ["Id", "Iq"]
+        # Add "I0, Phi0" for Async machine
         if (
-            self.OP_matrix is not None
-            and self.OP_matrix.shape[1] > 3
-            and not isnan(self.OP_matrix[0, 3])
+            self.parent is not None
+            and isinstance(self.parent, Simulation)
+            and not self.parent.machine.is_synchronous()
         ):
+            quantity_list.extend(["I0", "Phi0"])
+        elif (
+            self.parent is not None
+            and self.parent.parent is not None
+            and isinstance(self.parent.parent, Simulation)
+            and not self.parent.parent.machine.is_synchronous()
+        ):
+            quantity_list.extend(["I0", "Phi0"])
+        # Add torque if provided in the OP_matrix
+        if self.OP_matrix is not None and self.OP_matrix.has_Tem():
             quantity_list.append("Tem_av_ref")
 
     # Save Id

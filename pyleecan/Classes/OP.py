@@ -22,6 +22,11 @@ try:
 except ImportError as error:
     get_machine_from_parent = error
 
+try:
+    from ..Methods.Simulation.OP.get_OP_array import get_OP_array
+except ImportError as error:
+    get_OP_array = error
+
 
 from numpy import isnan
 from ._check import InitUnKnowClassError
@@ -32,6 +37,7 @@ class OP(FrozenClass):
 
     VERSION = 1
 
+    # Check ImportError to remove unnecessary dependencies in unused method
     # cf Methods.Simulation.OP.get_machine_from_parent
     if isinstance(get_machine_from_parent, ImportError):
         get_machine_from_parent = property(
@@ -44,6 +50,15 @@ class OP(FrozenClass):
         )
     else:
         get_machine_from_parent = get_machine_from_parent
+    # cf Methods.Simulation.OP.get_OP_array
+    if isinstance(get_OP_array, ImportError):
+        get_OP_array = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use OP method get_OP_array: " + str(get_OP_array))
+            )
+        )
+    else:
+        get_OP_array = get_OP_array
     # generic save method is available in all object
     save = save
     # get_logger method is available in all object
@@ -327,7 +342,7 @@ class OP(FrozenClass):
     N0 = property(
         fget=_get_N0,
         fset=_set_N0,
-        doc=u"""Rotor speed [rpm]
+        doc=u"""Rotor speed
 
         :Type: float
         """,
@@ -345,7 +360,7 @@ class OP(FrozenClass):
     felec = property(
         fget=_get_felec,
         fset=_set_felec,
-        doc=u"""Electrical Frequency [Hz]
+        doc=u"""Electrical Frequency
 
         :Type: float
         """,
@@ -363,7 +378,7 @@ class OP(FrozenClass):
     Tem_av_ref = property(
         fget=_get_Tem_av_ref,
         fset=_set_Tem_av_ref,
-        doc=u"""Output average electromagnetic torque [N.m]
+        doc=u"""Output average electromagnetic torque
 
         :Type: float
         """,
@@ -381,7 +396,7 @@ class OP(FrozenClass):
     Pem_av_ref = property(
         fget=_get_Pem_av_ref,
         fset=_set_Pem_av_ref,
-        doc=u"""Output average Electromagnetic Power [W]
+        doc=u"""Output average Electromagnetic Power
 
         :Type: float
         """,
@@ -399,7 +414,7 @@ class OP(FrozenClass):
     Pem_av_in = property(
         fget=_get_Pem_av_in,
         fset=_set_Pem_av_in,
-        doc=u"""Input average power (e.g. for generator mode) [W]
+        doc=u"""Input average power (e.g. for generator mode)
 
         :Type: float
         """,

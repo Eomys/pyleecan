@@ -20,7 +20,7 @@ from pyleecan.Classes.MagFEMM import MagFEMM
 from pyleecan.Classes.PostLUT import PostLUT
 from pyleecan.Classes.Loss import Loss
 from pyleecan.Classes.LossModelSteinmetz import LossModelSteinmetz
-from pyleecan.Classes.LossModelWinding import LossModelWinding
+from pyleecan.Classes.LossModelJoule import LossModelJoule
 from pyleecan.Classes.LossModelProximity import LossModelProximity
 from pyleecan.Classes.LossModelMagnet import LossModelMagnet
 from pyleecan.Classes.DataKeeper import DataKeeper
@@ -41,17 +41,18 @@ is_show_fig = True
 @pytest.mark.IPMSM
 @pytest.mark.periodicity
 @pytest.mark.skip(reason="Work in progress")
-def test_efficiency_map(machine_name,Umax, Jmax):
+def test_efficiency_map():
     """Validation of the efficiency map of the Toyota Prius motor, based on the one presented in 
     "Electromagnetic Analysis and Design Methodology for Permanent Magnet Motors Using MotorAnalysis-PM Software",
     available at https://www.mdpi.com/2075-1702/7/4/75."""
 
-    Toyota_Prius = load(join(DATA_DIR, "Machine", f"{machine_name}.json"))
-    LUT_file_name = f"LUT_eff_{machine_name}.h5"
+    Toyota_Prius = load(join(DATA_DIR, "Machine", f"Toyota_Prius.json"))
+    LUT_file_name = f"LUT_eff_Toyota_Prius.h5"
     path_to_LUT = join(RESULT_DIR, LUT_file_name)
 
     if not exists(split(path_to_LUT)[0]):
         raise Exception("The path to LUT is not valid.")
+    
 
     # Speed vector
     Nspeed = 50
@@ -64,7 +65,7 @@ def test_efficiency_map(machine_name,Umax, Jmax):
     # Initialization of the simulation starting point
     simu.input = InputCurrent(
         OP=OPdq(),
-        Nt_tot=4 * 8 * 20,
+        Nt_tot=4 * 20,# *8,
         Na_tot=200 * 8,
         is_periodicity_a=True,
         is_periodicity_t=True,
@@ -83,6 +84,13 @@ def test_efficiency_map(machine_name,Umax, Jmax):
             unit = "", 
             symbol = "eff",
             keeper = lambda output: output.elec.OP.efficiency,
+            error_keeper = lambda simu: np.nan
+        ),
+        DataKeeper(
+            name = "current density",
+            unit = "A/mm^2", 
+            symbol = "J",
+            keeper = lambda output : output.elec.get_Jrms()*1e-6,
             error_keeper = lambda simu: np.nan
         ),
         DataKeeper(
@@ -130,17 +138,15 @@ def test_efficiency_map(machine_name,Umax, Jmax):
     ]
 
     OP_matrix = np.zeros((Nspeed, 3))
-    OP_matrix[:, 0] = np.linspace(500, 13000, Nspeed)
+    OP_matrix[:, 0] = np.linspace(500, 6000, Nspeed)
     simu.var_simu = VarLoadCurrent(
-        OP_matrix=OP_matrix, type_OP_matrix=1,
         datakeeper_list = datakeeper_list
-            # is_keep_all_output=True
     )
-    simu.input.set_OP_from_array(OP_matrix, type_OP_matrix=1)
+    simu.var_simu.set_OP_array(OP_matrix, "N0", "Id", "Iq")
 
     simu.elec = ElecLUTdq(
-        Urms_max=Umax,
-        Jrms_max=Jmax,
+        Urms_max=153,
+        Jrms_max=27e6,
         n_interp=100,
         n_Id=5,
         n_Iq=5,
@@ -148,17 +154,17 @@ def test_efficiency_map(machine_name,Umax, Jmax):
         Iq_min=0,
         LUT_enforced=None,
         is_grid_dq=True,
-        
+        Tsta=120,
+        type_skin_effect=1,
         LUT_simu=Simu1(
             input=InputCurrent(
                 OP=OPdq(),
-                Nt_tot=4 * 8 *10,
+                Nt_tot=4 *10,# *8,
                 Na_tot=200 * 8,
                 is_periodicity_a=True,
                 is_periodicity_t=True,
             ),
             var_simu=VarLoadCurrent(
-                type_OP_matrix=1,
                 postproc_list=[PostLUT(is_save_LUT=True, file_name = LUT_file_name)],
                 is_keep_all_output=True,
             ),
@@ -173,29 +179,29 @@ def test_efficiency_map(machine_name,Umax, Jmax):
                 Tsta=100,
                 model_dict={"stator core": LossModelSteinmetz(group = "stator core"),
                             "rotor core": LossModelSteinmetz(group = "rotor core"),
-                            "joule": LossModelWinding(group = "stator winding"),
+                            "joule": LossModelJoule(group = "stator winding"),
                             "proximity": LossModelProximity(group = "stator winding"),
                             "magnets": LossModelMagnet(group = "rotor magnets")}
             )
         ),
     )
+    try:
+        LUT_enforced = load(path_to_LUT)
+        simu.elec.LUT_enforced = LUT_enforced
+    except (FileNotFoundError, LoadMissingFileError):
+        print("The LUT could not be loaded, so it will be computed.")
+        LUT_enforced = None
 
     load_vect = np.linspace(0, 1, Nload)
-    OP_matrix_MTPA = np.zeros((Nspeed, Nload, 5))
+    OP_matrix_MTPA = np.zeros((Nspeed, Nload, 6))
     U_MTPA = np.zeros((Nspeed, Nload, 3))
     I_MTPA = np.zeros((Nspeed, Nload, 3))
     Phidq_MTPA = np.zeros((Nspeed, Nload, 2))
     out_load = list()
     for ii, load_rate in enumerate(load_vect):
     
-        try:
-            LUT_enforced = load(path_to_LUT)
-            is_LUT_exists = True
-            simu.elec.LUT_enforced = LUT_enforced
-        except (FileNotFoundError, LoadMissingFileError):
-            print("The LUT could not be loaded, so it will be computed.")
-            LUT_enforced = None
-            is_LUT_exists = False
+        if ii > 0 and LUT_enforced is None:
+             simu.elec.LUT_enforced = load(path_to_LUT)
 
         simu.elec.load_rate = load_rate
 
@@ -207,6 +213,7 @@ def test_efficiency_map(machine_name,Umax, Jmax):
         OP_matrix_MTPA[:, ii, 2] = out["Iq"].result
         OP_matrix_MTPA[:, ii, 3] = out["T"].result
         OP_matrix_MTPA[:, ii, 4] = out["eff"].result
+        OP_matrix_MTPA[:, ii, 5] = out["J"].result
         U_MTPA[:, ii, 0] = out["Ud"].result
         U_MTPA[:, ii, 1] = out["Uq"].result
         U_MTPA[:, ii, 2] = out["U0"].result
@@ -250,6 +257,26 @@ def test_efficiency_map(machine_name,Umax, Jmax):
             legend_list=legend_list,
             is_show_fig=is_show_fig,
         )
+        # Plot max torque with respect to speed
+        y_list = [OP_matrix_MTPA[:, -1 , 3]] 
+        plot_2D(
+            [OP_matrix_MTPA[:, -1, 0]],
+            y_list,
+            xlabel="Speed [rpm]",
+            ylabel="Average torque [N.m]",
+            legend_list=legend_list,
+            is_show_fig=is_show_fig,
+        )
+        # Plot power with respect to speed
+        y_list =  [OP_matrix_MTPA[:,-1, 3]*OP_matrix_MTPA[:, -1, 0]*2*np.pi/60*1e-3*OP_matrix_MTPA[:,-1, 4]]
+        plot_2D(
+            [OP_matrix_MTPA[:, -1, 0]],
+            y_list,
+            xlabel="Speed [rpm]",
+            ylabel="Power [kW]",
+            legend_list=legend_list,
+            is_show_fig=is_show_fig,
+        )
 
         # Plot Id for each load level
         y_list = [OP_matrix_MTPA[:, i_load, 1] for i_load in range(Nload)]
@@ -269,6 +296,16 @@ def test_efficiency_map(machine_name,Umax, Jmax):
             y_list,
             xlabel="Speed [rpm]",
             ylabel="Iq Current [Arms]",
+            legend_list=legend_list,
+            is_show_fig=is_show_fig,
+        )
+        # Plot J for each load level
+        y_list = [OP_matrix_MTPA[:, i_load, 5] for i_load in range(Nload)]
+        plot_2D(
+            [OP_matrix_MTPA[:, i_load, 0]],
+            y_list,
+            xlabel="Speed [rpm]",
+            ylabel="Current density [A/mm^2]",
             legend_list=legend_list,
             is_show_fig=is_show_fig,
         )
@@ -336,7 +373,7 @@ def test_efficiency_map(machine_name,Umax, Jmax):
         LUT_grid = out.simu.elec.LUT_enforced
 
         # Get Id_min, Id_max, Iq_min, Iq_max from OP_matrix
-        OP_matrix = LUT_grid.get_OP_matrix()
+        OP_matrix = LUT_grid.get_OP_array("N0","Id","Iq")
         Id_min = OP_matrix[:, 1].min()
         Id_max = OP_matrix[:, 1].max()
         Iq_min = OP_matrix[:, 2].min()
@@ -458,5 +495,4 @@ def test_efficiency_map(machine_name,Umax, Jmax):
 # To run it without pytest
 if __name__ == "__main__":
 
-    # out = test_efficiency_map("Toyota_Prius_loss",230,30e6)
-     out = test_efficiency_map("Jaguar_I_Pace_wo_skew",100,27e6)
+    out = test_efficiency_map()

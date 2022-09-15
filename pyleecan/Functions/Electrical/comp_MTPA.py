@@ -74,7 +74,7 @@ def comp_MTPA(
     # Stator winding number of phases
     qs = machine.stator.winding.qs
 
-    OP_matrix = LUT.get_OP_matrix()
+    OP_matrix = LUT.get_OP_array("N0", "Id", "Iq")
 
     # Get Id_min, Id_max, Iq_min, Iq_max from OP_matrix
     Id_min = OP_matrix[:, 1].min()

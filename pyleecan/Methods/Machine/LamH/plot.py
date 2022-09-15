@@ -1,6 +1,7 @@
 from numpy import exp, pi
 import matplotlib.pyplot as plt
 from matplotlib.patches import Patch
+from matplotlib.pyplot import legend
 
 from ....definitions import config_dict
 from ....Functions.init_fig import init_fig

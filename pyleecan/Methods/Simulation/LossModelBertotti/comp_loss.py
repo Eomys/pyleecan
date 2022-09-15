@@ -47,6 +47,7 @@ def comp_loss(self):
         self.comp_coeff(material)
 
     # Get loss coefficients
+    # The loss data are given in W/kg, but the loss density in pyleecan are computed in W/m^3
     k_hy = self.k_hy / Kf * rho
     k_ed = self.k_ed / Kf * rho
     k_ex = self.k_ex / Kf * rho

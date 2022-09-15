@@ -598,7 +598,7 @@ class LamSlotMulti(Lamination):
     alpha = property(
         fget=_get_alpha,
         fset=_set_alpha,
-        doc=u"""Angular position of the Slots [[rad]]
+        doc=u"""Angular position of the Slots
 
         :Type: ndarray
         """,

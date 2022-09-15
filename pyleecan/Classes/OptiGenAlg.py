@@ -413,7 +413,7 @@ class OptiGenAlg(OptiSolver):
     selector = property(
         fget=_get_selector,
         fset=_set_selector,
-        doc="""Selector of the genetic algorithm [-]
+        doc="""Selector of the genetic algorithm
 
         :Type: function
         """,
@@ -448,7 +448,7 @@ class OptiGenAlg(OptiSolver):
     crossover = property(
         fget=_get_crossover,
         fset=_set_crossover,
-        doc="""Crossover of the genetic algorithm [-]
+        doc="""Crossover of the genetic algorithm
 
         :Type: function
         """,
@@ -483,7 +483,7 @@ class OptiGenAlg(OptiSolver):
     mutator = property(
         fget=_get_mutator,
         fset=_set_mutator,
-        doc="""Mutator of the genetic algorithm [-]
+        doc="""Mutator of the genetic algorithm
 
         :Type: function
         """,
@@ -501,7 +501,7 @@ class OptiGenAlg(OptiSolver):
     p_cross = property(
         fget=_get_p_cross,
         fset=_set_p_cross,
-        doc="""Probability of crossover [-]
+        doc="""Probability of crossover
 
         :Type: float
         :min: 0
@@ -521,7 +521,7 @@ class OptiGenAlg(OptiSolver):
     p_mutate = property(
         fget=_get_p_mutate,
         fset=_set_p_mutate,
-        doc="""Probability of mutation  [-]
+        doc="""Probability of mutation 
 
         :Type: float
         :min: 0
@@ -541,7 +541,7 @@ class OptiGenAlg(OptiSolver):
     size_pop = property(
         fget=_get_size_pop,
         fset=_set_size_pop,
-        doc="""Size of the population [-]
+        doc="""Size of the population
 
         :Type: int
         :min: 1
@@ -560,7 +560,7 @@ class OptiGenAlg(OptiSolver):
     nb_gen = property(
         fget=_get_nb_gen,
         fset=_set_nb_gen,
-        doc="""Number of generations [-]
+        doc="""Number of generations
 
         :Type: int
         :min: 1

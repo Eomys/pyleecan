@@ -663,7 +663,7 @@ class ElecLUTdq(Electrical):
     Id_min = property(
         fget=_get_Id_min,
         fset=_set_Id_min,
-        doc=u"""Minimum Id for LUT calculation [Arms]
+        doc=u"""Minimum Id for LUT calculation
 
         :Type: float
         """,
@@ -681,7 +681,7 @@ class ElecLUTdq(Electrical):
     Id_max = property(
         fget=_get_Id_max,
         fset=_set_Id_max,
-        doc=u"""Maximum Id for LUT calculation [Arms]
+        doc=u"""Maximum Id for LUT calculation
 
         :Type: float
         """,
@@ -699,7 +699,7 @@ class ElecLUTdq(Electrical):
     Iq_min = property(
         fget=_get_Iq_min,
         fset=_set_Iq_min,
-        doc=u"""Minimum Iq for LUT calculation [Arms]
+        doc=u"""Minimum Iq for LUT calculation
 
         :Type: float
         """,
@@ -717,7 +717,7 @@ class ElecLUTdq(Electrical):
     Iq_max = property(
         fget=_get_Iq_max,
         fset=_set_Iq_max,
-        doc=u"""Maximum Iq for LUT calculation [Arms]
+        doc=u"""Maximum Iq for LUT calculation
 
         :Type: float
         """,
@@ -826,7 +826,7 @@ class ElecLUTdq(Electrical):
     Urms_max = property(
         fget=_get_Urms_max,
         fset=_set_Urms_max,
-        doc=u"""Maximum rms phase voltage [Vrms]
+        doc=u"""Maximum rms phase voltage
 
         :Type: float
         :min: 0
@@ -845,7 +845,7 @@ class ElecLUTdq(Electrical):
     Jrms_max = property(
         fget=_get_Jrms_max,
         fset=_set_Jrms_max,
-        doc=u"""Maximum rms current density in slot [A/m²]
+        doc=u"""Maximum rms current density in slot
 
         :Type: float
         :min: 0
@@ -864,7 +864,7 @@ class ElecLUTdq(Electrical):
     Irms_max = property(
         fget=_get_Irms_max,
         fset=_set_Irms_max,
-        doc=u"""Maximum rms phase current [A]
+        doc=u"""Maximum rms phase current
 
         :Type: float
         :min: 0

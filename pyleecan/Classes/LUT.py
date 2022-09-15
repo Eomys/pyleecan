@@ -23,9 +23,14 @@ except ImportError as error:
     get_eec = error
 
 try:
-    from ..Methods.Output.LUT.get_OP_matrix import get_OP_matrix
+    from ..Methods.Output.LUT.get_OP_matrix_obj import get_OP_matrix_obj
 except ImportError as error:
-    get_OP_matrix = error
+    get_OP_matrix_obj = error
+
+try:
+    from ..Methods.Output.LUT.get_OP_array import get_OP_array
+except ImportError as error:
+    get_OP_array = error
 
 try:
     from ..Methods.Output.LUT.set_default_simulation import set_default_simulation
@@ -57,15 +62,26 @@ class LUT(XOutput):
         )
     else:
         get_eec = get_eec
-    # cf Methods.Output.LUT.get_OP_matrix
-    if isinstance(get_OP_matrix, ImportError):
-        get_OP_matrix = property(
+    # cf Methods.Output.LUT.get_OP_matrix_obj
+    if isinstance(get_OP_matrix_obj, ImportError):
+        get_OP_matrix_obj = property(
             fget=lambda x: raise_(
-                ImportError("Can't use LUT method get_OP_matrix: " + str(get_OP_matrix))
+                ImportError(
+                    "Can't use LUT method get_OP_matrix_obj: " + str(get_OP_matrix_obj)
+                )
             )
         )
     else:
-        get_OP_matrix = get_OP_matrix
+        get_OP_matrix_obj = get_OP_matrix_obj
+    # cf Methods.Output.LUT.get_OP_array
+    if isinstance(get_OP_array, ImportError):
+        get_OP_array = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use LUT method get_OP_array: " + str(get_OP_array))
+            )
+        )
+    else:
+        get_OP_array = get_OP_array
     # cf Methods.Output.LUT.set_default_simulation
     if isinstance(set_default_simulation, ImportError):
         set_default_simulation = property(

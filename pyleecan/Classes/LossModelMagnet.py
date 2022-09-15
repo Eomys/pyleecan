@@ -18,11 +18,6 @@ from .LossModel import LossModel
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
 try:
-    from ..Methods.Simulation.LossModelMagnet.comp_coeff import comp_coeff
-except ImportError as error:
-    comp_coeff = error
-
-try:
     from ..Methods.Simulation.LossModelMagnet.comp_loss import comp_loss
 except ImportError as error:
     comp_loss = error
@@ -37,18 +32,6 @@ class LossModelMagnet(LossModel):
 
     VERSION = 1
 
-    # Check ImportError to remove unnecessary dependencies in unused method
-    # cf Methods.Simulation.LossModelMagnet.comp_coeff
-    if isinstance(comp_coeff, ImportError):
-        comp_coeff = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use LossModelMagnet method comp_coeff: " + str(comp_coeff)
-                )
-            )
-        )
-    else:
-        comp_coeff = comp_coeff
     # cf Methods.Simulation.LossModelMagnet.comp_loss
     if isinstance(comp_loss, ImportError):
         comp_loss = property(
@@ -67,7 +50,6 @@ class LossModelMagnet(LossModel):
 
     def __init__(
         self,
-        type_skin_effect=1,
         name="",
         group="",
         is_show_fig=False,
@@ -90,8 +72,6 @@ class LossModelMagnet(LossModel):
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
-            if "type_skin_effect" in list(init_dict.keys()):
-                type_skin_effect = init_dict["type_skin_effect"]
             if "name" in list(init_dict.keys()):
                 name = init_dict["name"]
             if "group" in list(init_dict.keys()):
@@ -101,7 +81,6 @@ class LossModelMagnet(LossModel):
             if "coeff_dict" in list(init_dict.keys()):
                 coeff_dict = init_dict["coeff_dict"]
         # Set the properties (value check and convertion are done in setter)
-        self.type_skin_effect = type_skin_effect
         # Call LossModel init
         super(LossModelMagnet, self).__init__(
             name=name, group=group, is_show_fig=is_show_fig, coeff_dict=coeff_dict
@@ -115,9 +94,6 @@ class LossModelMagnet(LossModel):
         LossModelMagnet_str = ""
         # Get the properties inherited from LossModel
         LossModelMagnet_str += super(LossModelMagnet, self).__str__()
-        LossModelMagnet_str += (
-            "type_skin_effect = " + str(self.type_skin_effect) + linesep
-        )
         return LossModelMagnet_str
 
     def __eq__(self, other):
@@ -128,8 +104,6 @@ class LossModelMagnet(LossModel):
 
         # Check the properties inherited from LossModel
         if not super(LossModelMagnet, self).__eq__(other):
-            return False
-        if other.type_skin_effect != self.type_skin_effect:
             return False
         return True
 
@@ -148,18 +122,6 @@ class LossModelMagnet(LossModel):
                 other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
             )
         )
-        if other._type_skin_effect != self._type_skin_effect:
-            if is_add_value:
-                val_str = (
-                    " (self="
-                    + str(self._type_skin_effect)
-                    + ", other="
-                    + str(other._type_skin_effect)
-                    + ")"
-                )
-                diff_list.append(name + ".type_skin_effect" + val_str)
-            else:
-                diff_list.append(name + ".type_skin_effect")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -171,7 +133,6 @@ class LossModelMagnet(LossModel):
 
         # Get size of the properties inherited from LossModel
         S += super(LossModelMagnet, self).__sizeof__()
-        S += getsizeof(self.type_skin_effect)
         return S
 
     def as_dict(self, type_handle_ndarray=0, keep_function=False, **kwargs):
@@ -191,7 +152,6 @@ class LossModelMagnet(LossModel):
             keep_function=keep_function,
             **kwargs
         )
-        LossModelMagnet_dict["type_skin_effect"] = self.type_skin_effect
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         LossModelMagnet_dict["__class__"] = "LossModelMagnet"
@@ -201,7 +161,6 @@ class LossModelMagnet(LossModel):
         """Creates a deepcopy of the object"""
 
         # Handle deepcopy of all the properties
-        type_skin_effect_val = self.type_skin_effect
         name_val = self.name
         group_val = self.group
         is_show_fig_val = self.is_show_fig
@@ -211,7 +170,6 @@ class LossModelMagnet(LossModel):
             coeff_dict_val = self.coeff_dict.copy()
         # Creates new object of the same type with the copied properties
         obj_copy = type(self)(
-            type_skin_effect=type_skin_effect_val,
             name=name_val,
             group=group_val,
             is_show_fig=is_show_fig_val,
@@ -222,24 +180,5 @@ class LossModelMagnet(LossModel):
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""
 
-        self.type_skin_effect = None
         # Set to None the properties inherited from LossModel
         super(LossModelMagnet, self)._set_None()
-
-    def _get_type_skin_effect(self):
-        """getter of type_skin_effect"""
-        return self._type_skin_effect
-
-    def _set_type_skin_effect(self, value):
-        """setter of type_skin_effect"""
-        check_var("type_skin_effect", value, "int")
-        self._type_skin_effect = value
-
-    type_skin_effect = property(
-        fget=_get_type_skin_effect,
-        fset=_set_type_skin_effect,
-        doc=u"""0 to ignore skin effect, 1 to consider it
-
-        :Type: int
-        """,
-    )

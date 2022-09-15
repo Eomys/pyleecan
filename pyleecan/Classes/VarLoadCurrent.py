@@ -7,7 +7,7 @@
 from os import linesep
 from sys import getsizeof
 from logging import getLogger
-from ._check import set_array, check_var, raise_
+from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
 from ..Functions.load import load_init_dict
@@ -37,7 +37,6 @@ except ImportError as error:
     get_input_list = error
 
 
-from numpy import array, array_equal
 from numpy import isnan
 from ._check import InitUnKnowClassError
 
@@ -92,8 +91,6 @@ class VarLoadCurrent(VarLoad):
     def __init__(
         self,
         OP_matrix=None,
-        type_OP_matrix=0,
-        is_output_power=True,
         name="",
         desc="",
         datakeeper_list=-1,
@@ -126,10 +123,6 @@ class VarLoadCurrent(VarLoad):
             # Overwrite default value with init_dict content
             if "OP_matrix" in list(init_dict.keys()):
                 OP_matrix = init_dict["OP_matrix"]
-            if "type_OP_matrix" in list(init_dict.keys()):
-                type_OP_matrix = init_dict["type_OP_matrix"]
-            if "is_output_power" in list(init_dict.keys()):
-                is_output_power = init_dict["is_output_power"]
             if "name" in list(init_dict.keys()):
                 name = init_dict["name"]
             if "desc" in list(init_dict.keys()):
@@ -158,8 +151,6 @@ class VarLoadCurrent(VarLoad):
         # Call VarLoad init
         super(VarLoadCurrent, self).__init__(
             OP_matrix=OP_matrix,
-            type_OP_matrix=type_OP_matrix,
-            is_output_power=is_output_power,
             name=name,
             desc=desc,
             datakeeper_list=datakeeper_list,
@@ -253,8 +244,6 @@ class VarLoadCurrent(VarLoad):
             OP_matrix_val = None
         else:
             OP_matrix_val = self.OP_matrix.copy()
-        type_OP_matrix_val = self.type_OP_matrix
-        is_output_power_val = self.is_output_power
         name_val = self.name
         desc_val = self.desc
         if self.datakeeper_list is None:
@@ -293,8 +282,6 @@ class VarLoadCurrent(VarLoad):
         # Creates new object of the same type with the copied properties
         obj_copy = type(self)(
             OP_matrix=OP_matrix_val,
-            type_OP_matrix=type_OP_matrix_val,
-            is_output_power=is_output_power_val,
             name=name_val,
             desc=desc_val,
             datakeeper_list=datakeeper_list_val,

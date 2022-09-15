@@ -13,8 +13,10 @@ def set_pole_pair_number(self, p):
     for lam in self.get_lam_list(is_int_to_ext=None):
         try:
             lam.set_pole_pair_number(p)
-        except:
+        except Exception as e:
             raise Exception(
-                "ERROR, cannot enforce pole pair number to lamination "
+                "Cannot enforce pole pair number to lamination "
                 + lam.get_label()
+                + ":\n"
+                + str(e)
             )

@@ -28,6 +28,8 @@ def _set_setter(self, value):
             # path like "<PARAM_DIR>/setter_rotor.py"
             self._setter_str = value
             value = abs_file_path(value)
+        else:  # Direct path
+            self._setter_str = value
         f = open(value, "r", encoding=PYTHON_DEFAULT_ENCODING)
         exec(f.read(), globals())
         f.close()

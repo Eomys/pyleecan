@@ -10,18 +10,11 @@ from pyleecan.Classes.InputCurrent import InputCurrent
 from pyleecan.Classes.Simu1 import Simu1
 from pyleecan.Classes.OPdq import OPdq
 from pyleecan.Classes.MagFEMM import MagFEMM
-from pyleecan.Classes.LossFEMM import LossFEMM
 from pyleecan.Classes.Loss import Loss
 from pyleecan.Classes.LossModelSteinmetz import LossModelSteinmetz
-from pyleecan.Classes.LossModelJordan import LossModelJordan
-from pyleecan.Classes.LossModelBertotti import LossModelBertotti
-from pyleecan.Classes.LossModelWinding import LossModelWinding
+from pyleecan.Classes.LossModelJoule import LossModelJoule
 from pyleecan.Classes.LossModelProximity import LossModelProximity
 from pyleecan.Classes.LossModelMagnet import LossModelMagnet
-from pyleecan.Classes.OutLossModel import OutLossModel
-from pyleecan.Classes.Skew import Skew
-from pyleecan.Functions.Electrical.comp_loss_joule import comp_loss_joule
-from pyleecan.Functions.Plot import dict_2D
 
 
 from pyleecan.Functions.load import load
@@ -107,13 +100,15 @@ def test_FEMM_Loss_Jaguar():
     """Test to calculate losses in Toyota_Prius using LossFEMM model based on motoranalysis validation"""
 
     machine = load(join(DATA_DIR, "Machine", "Jaguar_I_Pace.json"))
+    machine.plot()
     
+    machine.rotor.skew=None
 
     simu = Simu1(name="test_FEMM_Loss_Jaguar_I_Pace", machine=machine)
 
     # Current for MTPA
-    Ic = 900 * np.exp(1j * 120 * np.pi / 180)
-    SPEED = 6000
+    Ic = 450 * np.exp(1j * 120 * np.pi / 180)
+    SPEED = 4000
 
     simu.input = InputCurrent(
         Nt_tot = 4 * 40 * 8,
@@ -138,7 +133,7 @@ def test_FEMM_Loss_Jaguar():
         Tsta=100,
         model_dict={"stator core": LossModelSteinmetz(group = "stator core"),
                     "rotor core": LossModelSteinmetz(group = "rotor core"),
-                    "joule": LossModelWinding(group = "stator winding"),
+                    "joule": LossModelJoule(group = "stator winding"),
                     "proximity": LossModelProximity(group = "stator winding"),
                     "magnets": LossModelMagnet(group = "rotor magnets")}
     )
@@ -151,6 +146,7 @@ def test_FEMM_Loss_Jaguar():
     power_dict = {
         "Torque": out.mag.Tem_av,
         "total_power": out.mag.Pem_av,
+        "J":out.elec.get_Jrms(),
         **dict([(o.name,o.get_loss_scalar(out.elec.OP.felec)) for o in out.loss.loss_list])
     }
     print(power_dict)
@@ -236,11 +232,6 @@ def test_FEMM_Loss_Jaguar():
 
     return out
 
-
-
-
-
-
 @pytest.mark.long_5s
 @pytest.mark.FEMM
 @pytest.mark.MagFEMM
@@ -284,7 +275,7 @@ def test_FEMM_Loss_Jaguar_wo_skew():
         Tsta=100,
         model_dict={"stator core": LossModelSteinmetz(group = "stator core"),
                     "rotor core": LossModelSteinmetz(group = "rotor core"),
-                    "joule": LossModelWinding(group = "stator winding"),
+                    "joule": LossModelJoule(group = "stator winding"),
                     "proximity": LossModelProximity(group = "stator winding"),
                     "magnets": LossModelMagnet(group = "rotor magnets")}
     )

@@ -13,14 +13,11 @@ from pyleecan.Classes.MagFEMM import MagFEMM
 from pyleecan.Classes.LossFEMM import LossFEMM
 from pyleecan.Classes.Loss import Loss
 from pyleecan.Classes.LossModelSteinmetz import LossModelSteinmetz
-from pyleecan.Classes.LossModelJordan import LossModelJordan
 from pyleecan.Classes.LossModelBertotti import LossModelBertotti
-from pyleecan.Classes.LossModelWinding import LossModelWinding
+from pyleecan.Classes.LossModelJoule import LossModelJoule
 from pyleecan.Classes.LossModelProximity import LossModelProximity
 from pyleecan.Classes.LossModelMagnet import LossModelMagnet
 from pyleecan.Classes.LossModelWindage import LossModelWindage
-from pyleecan.Classes.OutLossModel import OutLossModel
-from pyleecan.Functions.Electrical.comp_loss_joule import comp_loss_joule
 
 
 from pyleecan.Functions.load import load
@@ -53,9 +50,10 @@ def test_FEMM_Loss_Prius():
     SPEED = 1200
 
     simu.input = InputCurrent(
-        Nt_tot=4 * 40 * 8,
+        Nt_tot=4 * 10 * 15,
         Na_tot=200 * 8,
         OP=OPdq(N0=SPEED, Id_ref=Ic.real, Iq_ref=Ic.imag),
+        
         is_periodicity_t=True,
         is_periodicity_a=True,
     )
@@ -72,9 +70,9 @@ def test_FEMM_Loss_Prius():
     simu.loss = Loss(
         is_get_meshsolution=True,
         Tsta=100,
-        model_dict={"stator core": LossModelSteinmetz(group = "stator core"),
+        model_dict={"stator core": LossModelSteinmetz(group = "stator core", is_show_fig=True),
                     "rotor core": LossModelSteinmetz(group = "rotor core"),
-                    "joule": LossModelWinding(group = "stator winding"),
+                    "joule": LossModelJoule(group = "stator winding"),
                     "proximity": LossModelProximity(group = "stator winding"),
                     "magnets": LossModelMagnet(group = "rotor magnets"),
                     "mechanical": LossModelWindage(group = "rotor core")}
@@ -119,6 +117,8 @@ def test_FEMM_Loss_Prius():
     # plt.plot(B_list, plot_loss_S, color='red')
     # plt.plot(B_list, plot_loss_B, color='blue')
     # plt.show()
+    
+    out.plot_B_mesh()
 
     if is_show_fig:
         group_names = [
@@ -131,7 +131,7 @@ def test_FEMM_Loss_Prius():
                 group_names.append("stator winding")
                 loss.get_mesh_solution().plot_contour(
                     "freqs=sum",
-                    label=f"{loss.name} Loss",
+                    label=f"{loss.name} Loss density (W/m^3)",
                     group_names = group_names
                 )
                 group_names.pop()
@@ -139,7 +139,7 @@ def test_FEMM_Loss_Prius():
                 
                 loss.get_mesh_solution().plot_contour(
                     "freqs=sum",
-                    label=f"{loss.name} Loss",
+                    label=f"{loss.name} Loss density (W/m^3)",
                     group_names = group_names
                 )
 
@@ -288,7 +288,7 @@ def test_FEMM_Loss_diff():
 def test_LossFEMM_Prius():
     """Test to calculate losses in Toyota_Prius using LossFEMM model"""
 
-    machine = load(join(DATA_DIR, "Machine", "Toyota_Prius_loss.json"))
+    machine = load(join(DATA_DIR, "Machine", "Toyota_Prius.json"))
 
     Ch = 143  # hysteresis loss coefficient [W/(m^3*T^2*Hz)]
     Ce = 0.530  # eddy current loss coefficients [W/(m^3*T^2*Hz^2)]
@@ -315,8 +315,7 @@ def test_LossFEMM_Prius():
         is_calc_torque_energy=False,
     )
 
-    simu.loss = LossFEMM(
-        Ce=Ce, Cp=Cprox, Ch=Ch, is_get_meshsolution=True, Tsta=100, type_skin_effect=0
+    simu.loss = LossFEMM( is_get_meshsolution=True, Tsta=100, type_skin_effect=1
     )
 
     out = simu.run()
@@ -421,7 +420,7 @@ def test_FEMM_Id_Iq():
         Tsta=100,
         model_dict={"stator core": LossModelSteinmetz(group = "stator core"),
                     "rotor core": LossModelSteinmetz(group = "rotor core"),
-                    "joule": LossModelWinding(group = "stator winding"),
+                    "joule": LossModelJoule(group = "stator winding"),
                     "proximity": LossModelProximity(group = "stator winding"),
                     "magnets": LossModelMagnet(group = "rotor magnets"),
                     "mechanical": LossModelWindage(group = "rotor core")}
@@ -528,7 +527,7 @@ def test_FEMM_Id_Iq():
 # To run it without pytest
 if __name__ == "__main__":
 
-    test_FEMM_Loss_Prius()
-    # test_FEMM_Loss_diff()
+    test_FEMM_Loss_diff()
+    # test_FEMM_Loss_Prius()
     # test_LossFEMM_Prius()
     # test_FEMM_Id_Iq()

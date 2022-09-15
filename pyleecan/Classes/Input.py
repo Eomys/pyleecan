@@ -442,7 +442,7 @@ class Input(FrozenClass):
     time = property(
         fget=_get_time,
         fset=_set_time,
-        doc=u"""Electrical time vector (no symmetry) to import [s]
+        doc=u"""Electrical time vector (no symmetry) to import
 
         :Type: ImportMatrix
         """,
@@ -478,7 +478,7 @@ class Input(FrozenClass):
     angle = property(
         fget=_get_angle,
         fset=_set_angle,
-        doc=u"""Electrical position vector (no symmetry) to import [rad]
+        doc=u"""Electrical position vector (no symmetry) to import
 
         :Type: ImportMatrix
         """,
@@ -496,7 +496,7 @@ class Input(FrozenClass):
     Nt_tot = property(
         fget=_get_Nt_tot,
         fset=_set_Nt_tot,
-        doc=u"""Time discretization [-]
+        doc=u"""Time discretization
 
         :Type: int
         :min: 1
@@ -515,7 +515,7 @@ class Input(FrozenClass):
     Nrev = property(
         fget=_get_Nrev,
         fset=_set_Nrev,
-        doc=u"""Number of rotor revolution (to compute the final time) [-]
+        doc=u"""Number of rotor revolution (to compute the final time)
 
         :Type: float
         :min: 0
@@ -534,7 +534,7 @@ class Input(FrozenClass):
     Na_tot = property(
         fget=_get_Na_tot,
         fset=_set_Na_tot,
-        doc=u"""Angular discretization [-]
+        doc=u"""Angular discretization
 
         :Type: int
         :min: 1
@@ -570,7 +570,7 @@ class Input(FrozenClass):
     OP = property(
         fget=_get_OP,
         fset=_set_OP,
-        doc=u"""Operating Point [-]
+        doc=u"""Operating Point
 
         :Type: OP
         """,

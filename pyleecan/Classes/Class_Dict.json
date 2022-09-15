@@ -1375,16 +1375,17 @@
         "desc": "Electrical Equivalent Circuit of Permanent Magnet Synchronous Machines",
         "is_internal": false,
         "methods": [
-            "comp_parameters",
-            "solve",
-            "solve_PWM",
-            "comp_joule_losses",
-            "comp_torque_sync_rel",
+            "clear_parameters",
             "comp_BEMF_harmonics",
+            "comp_joule_losses",
             "comp_Ld",
             "comp_Lq",
+            "comp_parameters",
             "comp_Phidq",
             "comp_Phidq_mag",
+            "comp_torque_sync_rel",
+            "solve",
+            "solve_PWM",
             "update_from_ref"
         ],
         "mother": "EEC",
@@ -1880,6 +1881,16 @@
                 "name": "type_skin_effect",
                 "type": "int",
                 "unit": "-",
+                "value": 1
+            },
+            {
+                "as_dict": "",
+                "desc": "True to include skin effect on inductance if type_skin_effect != 0",
+                "max": "",
+                "min": "",
+                "name": "is_skin_effect_inductance",
+                "type": "bool",
+                "unit": "",
                 "value": 1
             }
         ]
@@ -4662,8 +4673,7 @@
         "is_internal": false,
         "methods": [
             "gen_input",
-            "set_Id_Iq",
-            "set_OP_from_array"
+            "set_Id_Iq"
         ],
         "mother": "InputVoltage",
         "name": "InputCurrent",
@@ -4847,7 +4857,6 @@
         "is_internal": false,
         "methods": [
             "gen_input",
-            "set_OP_from_array",
             "set_Ud_Uq"
         ],
         "mother": "Input",
@@ -5000,7 +5009,8 @@
         "is_internal": false,
         "methods": [
             "get_eec",
-            "get_OP_matrix",
+            "get_OP_matrix_obj",
+            "get_OP_array",
             "set_default_simulation",
             "get_phase_dir"
         ],
@@ -5021,11 +5031,12 @@
         "desc": "Look Up Table class for dq OP matrix",
         "is_internal": false,
         "methods": [
+            "get_index_open_circuit",
             "get_L_dqh",
             "get_Lm_dqh",
-            "get_Phi_dqh_mean",
             "get_Phi_dqh_mag",
             "get_Phi_dqh_mag_mean",
+            "get_Phi_dqh_mean",
             "interp_Phi_dqh",
             "interp_Ploss_dqh",
             "interp_Tem_rip_dqh"
@@ -5790,38 +5801,17 @@
         "daughters": [
             "LossFEMM"
         ],
-        "desc": "Losses module object that containt the loss models. See method add_model for implementation details.",
+        "desc": "Loss module object that contain the loss models.",
         "is_internal": false,
         "methods": [
             "run",
-            "add_model",
-            "remove_model"
+            "comp_axes"
         ],
         "mother": "",
         "name": "Loss",
         "package": "Simulation",
         "path": "pyleecan/Generator/ClassesRef/Simulation/Loss.csv",
         "properties": [
-            {
-                "as_dict": "",
-                "desc": "Internal dict to store model index",
-                "max": "",
-                "min": "",
-                "name": "model_index",
-                "type": "dict",
-                "unit": "",
-                "value": {}
-            },
-            {
-                "as_dict": "",
-                "desc": "Internal list of loss models",
-                "max": "",
-                "min": "",
-                "name": "model_list",
-                "type": "[LossModel]",
-                "unit": "",
-                "value": ""
-            },
             {
                 "as_dict": "",
                 "desc": "Name of the logger to use",
@@ -5841,41 +5831,6 @@
                 "type": "{LossModel}",
                 "unit": "",
                 "value": null
-            }
-        ]
-    },
-    "LossFEMM": {
-        "constants": [
-            {
-                "name": "VERSION",
-                "value": "1"
-            }
-        ],
-        "daughters": [],
-        "desc": "Loss module dedicated to FEMM developed in https://www.femm.info/wiki/SPMLoss",
-        "is_internal": false,
-        "methods": [
-            "run",
-            "comp_axes",
-            "comp_loss",
-            "comp_loss_density_core",
-            "comp_loss_density_joule",
-            "comp_loss_density_magnet"
-        ],
-        "mother": "Loss",
-        "name": "LossFEMM",
-        "package": "Simulation",
-        "path": "pyleecan/Generator/ClassesRef/Simulation/LossFEMM.csv",
-        "properties": [
-            {
-                "as_dict": "",
-                "desc": "True to save loss density map as meshsolution",
-                "max": "",
-                "min": "",
-                "name": "is_get_meshsolution",
-                "type": "bool",
-                "unit": "",
-                "value": 0
             },
             {
                 "as_dict": "",
@@ -5899,6 +5854,66 @@
             },
             {
                 "as_dict": "",
+                "desc": "True to save loss density map as meshsolution",
+                "max": "",
+                "min": "",
+                "name": "is_get_meshsolution",
+                "type": "bool",
+                "unit": "",
+                "value": 0
+            }
+        ]
+    },
+    "LossFEMM": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Simplified loss module, with predefined loss models for a quick setup",
+        "is_internal": false,
+        "methods": [
+            "run"
+        ],
+        "mother": "Loss",
+        "name": "LossFEMM",
+        "package": "Simulation",
+        "path": "pyleecan/Generator/ClassesRef/Simulation/LossFEMM.csv",
+        "properties": [
+            {
+                "as_dict": "",
+                "desc": "eddy current loss coefficients",
+                "max": "",
+                "min": "",
+                "name": "k_ed",
+                "type": "float",
+                "unit": "W/(m3*T2*Hz2)",
+                "value": null
+            },
+            {
+                "as_dict": "",
+                "desc": "hysteresis loss coefficients",
+                "max": "",
+                "min": "",
+                "name": "k_hy",
+                "type": "float",
+                "unit": "W/(m3*T2*Hz)",
+                "value": null
+            },
+            {
+                "as_dict": "",
+                "desc": "proximity loss coefficients",
+                "max": "",
+                "min": "",
+                "name": "k_p",
+                "type": "float",
+                "unit": "W/(m3*T2*Hz2)",
+                "value": null
+            },
+            {
+                "as_dict": "",
                 "desc": "Skin effect for resistance calculation",
                 "max": "",
                 "min": "",
@@ -5906,16 +5921,6 @@
                 "type": "int",
                 "unit": "-",
                 "value": 1
-            },
-            {
-                "as_dict": "",
-                "desc": "proximity loss coefficients",
-                "max": "",
-                "min": "",
-                "name": "Cp",
-                "type": "float",
-                "unit": "W/(m3*T2*Hz2)",
-                "value": null
             }
         ]
     },
@@ -5928,7 +5933,11 @@
         ],
         "daughters": [
             "LossModelBertotti",
+            "LossModelJoule",
+            "LossModelMagnet",
+            "LossModelProximity",
             "LossModelSteinmetz",
+            "LossModelWindage",
             "LossModelWinding"
         ],
         "desc": "Abstract Loss Model Class",
@@ -5948,6 +5957,36 @@
                 "type": "str",
                 "unit": "",
                 "value": ""
+            },
+            {
+                "as_dict": "",
+                "desc": "Group in which the loss will be computed",
+                "max": "",
+                "min": "",
+                "name": "group",
+                "type": "str",
+                "unit": "",
+                "value": ""
+            },
+            {
+                "as_dict": "",
+                "desc": "True to show the plot of the curve fitting",
+                "max": "",
+                "min": "",
+                "name": "is_show_fig",
+                "type": "bool",
+                "unit": "",
+                "value": false
+            },
+            {
+                "as_dict": "",
+                "desc": "dict of coefficients to compute losses with respect to frequency",
+                "max": "",
+                "min": "",
+                "name": "coeff_dict",
+                "type": "dict",
+                "unit": "",
+                "value": null
             }
         ]
     },
@@ -5956,23 +5995,14 @@
             {
                 "name": "VERSION",
                 "value": "1"
-            },
-            {
-                "name": "F_REF",
-                "value": "50"
-            },
-            {
-                "name": "B_REF",
-                "value": "1.5"
             }
         ],
         "daughters": [],
         "desc": "Bertotti Loss Model Class",
         "is_internal": false,
         "methods": [
-            "comp_loss",
-            "comp_coeff_Bertotti",
-            "comp_loss_density"
+            "comp_coeff",
+            "comp_loss"
         ],
         "mother": "LossModel",
         "name": "LossModelBertotti",
@@ -6008,66 +6038,97 @@
                 "type": "float",
                 "unit": "W/kg",
                 "value": null
-            },
+            }
+        ]
+    },
+    "LossModelJoule": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Joule loss model",
+        "is_internal": false,
+        "methods": [
+            "comp_loss",
+            "comp_coeff"
+        ],
+        "mother": "LossModel",
+        "name": "LossModelJoule",
+        "package": "Simulation",
+        "path": "pyleecan/Generator/ClassesRef/Simulation/LossModelJoule.csv",
+        "properties": [
             {
                 "as_dict": "",
-                "desc": "Hysteresis loss power coefficient",
+                "desc": "Winding temperature",
                 "max": "",
                 "min": "",
-                "name": "alpha_hy",
+                "name": "temperature",
                 "type": "float",
-                "unit": "-",
-                "value": null
+                "unit": "\u00c2\u00b0C",
+                "value": 20
             },
             {
                 "as_dict": "",
-                "desc": "Eddy current loss power coefficient",
+                "desc": "0 to ignore skin effect, 1 to consider it",
                 "max": "",
                 "min": "",
-                "name": "alpha_ed",
+                "name": "type_skin_effect",
+                "type": "int",
+                "unit": "",
+                "value": 1
+            }
+        ]
+    },
+    "LossModelMagnet": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Magnet Loss Model Class",
+        "is_internal": false,
+        "methods": [
+            "comp_loss"
+        ],
+        "mother": "LossModel",
+        "name": "LossModelMagnet",
+        "package": "Simulation",
+        "path": "pyleecan/Generator/ClassesRef/Simulation/LossModelMagnet.csv",
+        "properties": []
+    },
+    "LossModelProximity": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Proximity Loss Model Class",
+        "is_internal": false,
+        "methods": [
+            "comp_coeff",
+            "comp_loss"
+        ],
+        "mother": "LossModel",
+        "name": "LossModelProximity",
+        "package": "Simulation",
+        "path": "pyleecan/Generator/ClassesRef/Simulation/LossModelProximity.csv",
+        "properties": [
+            {
+                "as_dict": "",
+                "desc": "Proximity loss coefficient",
+                "max": "",
+                "min": "",
+                "name": "k_p",
                 "type": "float",
-                "unit": "-",
+                "unit": "W/kg",
                 "value": null
-            },
-            {
-                "as_dict": "",
-                "desc": "Excess loss power coefficient",
-                "max": "",
-                "min": "",
-                "name": "alpha_ex",
-                "type": "float",
-                "unit": "-",
-                "value": null
-            },
-            {
-                "as_dict": "",
-                "desc": "String to override default FEA group to apply model",
-                "max": "",
-                "min": "",
-                "name": "group",
-                "type": "str",
-                "unit": "-",
-                "value": "core"
-            },
-            {
-                "as_dict": "",
-                "desc": "Store the loss density",
-                "max": "",
-                "min": "",
-                "name": "get_meshsolution",
-                "type": "bool",
-                "unit": "-",
-                "value": false
-            },
-            {
-                "as_dict": "",
-                "desc": "List of rotor speeds to override actual speed",
-                "max": "",
-                "min": "",
-                "name": "N0",
-                "type": "list",
-                "unit": "rpm",
-                "value": []
             }
         ]
     },
@@ -6082,7 +6143,8 @@
         "desc": "Steinmetz Loss Model Class",
         "is_internal": false,
         "methods": [
-            "comp_coeff"
+            "comp_coeff",
+            "comp_loss"
         ],
         "mother": "LossModel",
         "name": "LossModelSteinmetz",
@@ -6131,6 +6193,25 @@
             }
         ]
     },
+    "LossModelWindage": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Windage loss model",
+        "is_internal": false,
+        "methods": [
+            "comp_loss"
+        ],
+        "mother": "LossModel",
+        "name": "LossModelWindage",
+        "package": "Simulation",
+        "path": "pyleecan/Generator/ClassesRef/Simulation/LossModelWindage.csv",
+        "properties": []
+    },
     "LossModelWinding": {
         "constants": [
             {
@@ -6142,7 +6223,8 @@
         "desc": "Winding loss model",
         "is_internal": false,
         "methods": [
-            "comp_loss"
+            "comp_loss",
+            "comp_coeff"
         ],
         "mother": "LossModel",
         "name": "LossModelWinding",
@@ -6158,6 +6240,16 @@
                 "type": "float",
                 "unit": "\u00c2\u00b0C",
                 "value": 20
+            },
+            {
+                "as_dict": "",
+                "desc": "0 to ignore skin effect, 1 to consider it",
+                "max": "",
+                "min": "",
+                "name": "type_skin_effect",
+                "type": "int",
+                "unit": "",
+                "value": 1
             }
         ]
     },
@@ -8572,12 +8664,14 @@
         ],
         "daughters": [
             "OPdq",
+            "OPdqf",
             "OPslip"
         ],
         "desc": "Define the Operating Point of the simulation",
         "is_internal": false,
         "methods": [
-            "get_machine_from_parent"
+            "get_machine_from_parent",
+            "get_OP_array"
         ],
         "mother": "",
         "name": "OP",
@@ -8646,7 +8740,7 @@
             }
         ]
     },
-    "OPdq": {
+    "OPMatrix": {
         "constants": [
             {
                 "name": "VERSION",
@@ -8654,6 +8748,145 @@
             }
         ],
         "daughters": [],
+        "desc": "Define the Operating Point of a variable speed simulation",
+        "is_internal": false,
+        "methods": [
+            "get_N_OP",
+            "get_OP",
+            "get_OP_list",
+            "get_OP_array",
+            "set_OP_array",
+            "has_Pem",
+            "has_Tem",
+            "has_slip"
+        ],
+        "mother": "",
+        "name": "OPMatrix",
+        "package": "Simulation",
+        "path": "pyleecan/Generator/ClassesRef/Simulation/OPMatrix.csv",
+        "properties": [
+            {
+                "as_dict": "",
+                "desc": "Rotor speed",
+                "max": "",
+                "min": "",
+                "name": "N0",
+                "type": "ndarray",
+                "unit": "rpm",
+                "value": null
+            },
+            {
+                "as_dict": "",
+                "desc": "d-axis current rms value",
+                "max": "",
+                "min": "",
+                "name": "Id_ref",
+                "type": "ndarray",
+                "unit": "Arms",
+                "value": null
+            },
+            {
+                "as_dict": "",
+                "desc": "q-axis current rms value",
+                "max": "",
+                "min": "",
+                "name": "Iq_ref",
+                "type": "ndarray",
+                "unit": "Arms",
+                "value": null
+            },
+            {
+                "as_dict": "",
+                "desc": "d-axis voltage rms value",
+                "max": "",
+                "min": "",
+                "name": "Ud_ref",
+                "type": "ndarray",
+                "unit": "Vrms",
+                "value": null
+            },
+            {
+                "as_dict": "",
+                "desc": "q-axis voltage rms value",
+                "max": "",
+                "min": "",
+                "name": "Uq_ref",
+                "type": "ndarray",
+                "unit": "Vrms",
+                "value": null
+            },
+            {
+                "as_dict": "",
+                "desc": "Output average electromagnetic torque",
+                "max": "",
+                "min": "",
+                "name": "Tem_av_ref",
+                "type": "ndarray",
+                "unit": "N.m",
+                "value": null
+            },
+            {
+                "as_dict": "",
+                "desc": "Output/Input average Electromagnetic Power",
+                "max": "",
+                "min": "",
+                "name": "Pem_av_ref",
+                "type": "ndarray",
+                "unit": "W",
+                "value": null
+            },
+            {
+                "as_dict": "",
+                "desc": "Rotor mechanical slip",
+                "max": "",
+                "min": "",
+                "name": "slip_ref",
+                "type": "ndarray",
+                "unit": "",
+                "value": null
+            },
+            {
+                "as_dict": "",
+                "desc": "True if power given in OP_matrix is the output power, False if it is the input power",
+                "max": "",
+                "min": "",
+                "name": "is_output_power",
+                "type": "bool",
+                "unit": "",
+                "value": 1
+            },
+            {
+                "as_dict": "",
+                "desc": "DC rotor current",
+                "max": "",
+                "min": "",
+                "name": "If_ref",
+                "type": "ndarray",
+                "unit": "Arms",
+                "value": null
+            },
+            {
+                "as_dict": "",
+                "desc": "Name of the columns from set_OP_matrix",
+                "max": "",
+                "min": "",
+                "name": "col_names",
+                "type": "list",
+                "unit": "-",
+                "value": null
+            }
+        ]
+    },
+    "OPdq": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [
+            "OPdqf"
+        ],
         "desc": "Operating Point defined in DQH frame",
         "is_internal": false,
         "methods": [
@@ -8712,6 +8945,34 @@
                 "name": "Uq_ref",
                 "type": "float",
                 "unit": "Vrms",
+                "value": null
+            }
+        ]
+    },
+    "OPdqf": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Operating Point defined in DQH frame for WRSM",
+        "is_internal": false,
+        "methods": [],
+        "mother": "OPdq",
+        "name": "OPdqf",
+        "package": "Simulation",
+        "path": "pyleecan/Generator/ClassesRef/Simulation/OPdqf.csv",
+        "properties": [
+            {
+                "as_dict": "",
+                "desc": "DC rotor current",
+                "max": "",
+                "min": "",
+                "name": "If_ref",
+                "type": "float",
+                "unit": "Arms",
                 "value": null
             }
         ]
@@ -9918,7 +10179,6 @@
             "get_loss",
             "get_loss_density_ag",
             "get_loss_dist",
-            "get_loss_group",
             "get_loss_overall",
             "store"
         ],
@@ -9927,46 +10187,6 @@
         "package": "Output",
         "path": "pyleecan/Generator/ClassesRef/Output/OutLoss.csv",
         "properties": [
-            {
-                "as_dict": "",
-                "desc": "Internal list of loss data",
-                "max": "",
-                "min": "",
-                "name": "loss_list",
-                "type": "[SciDataTool.Classes.DataND.DataND]",
-                "unit": "",
-                "value": "None"
-            },
-            {
-                "as_dict": "",
-                "desc": "Internal list of loss meshsolutions",
-                "max": "",
-                "min": "",
-                "name": "meshsol_list",
-                "type": "[MeshSolution]",
-                "unit": "",
-                "value": null
-            },
-            {
-                "as_dict": "",
-                "desc": "Internal dict to index losses",
-                "max": "",
-                "min": "",
-                "name": "loss_index",
-                "type": "dict",
-                "unit": "",
-                "value": {}
-            },
-            {
-                "as_dict": "",
-                "desc": "Name of the logger to use",
-                "max": "",
-                "min": "",
-                "name": "logger_name",
-                "type": "str",
-                "unit": "-",
-                "value": "Pyleecan.Loss"
-            },
             {
                 "as_dict": "",
                 "desc": "Dict containing axes data used for Magnetics",
@@ -9979,63 +10199,98 @@
             },
             {
                 "as_dict": "",
-                "desc": "Stator core losses due to hysteresis and eddy currents",
+                "desc": "Lit containing OutLossModel obects for each type of loss",
                 "max": "",
                 "min": "",
-                "name": "Pstator",
-                "type": "float",
-                "unit": "W",
+                "name": "loss_list",
+                "type": "[OutLossModel]",
+                "unit": "",
+                "value": []
+            },
+            {
+                "as_dict": "",
+                "desc": "Name of the logger to use",
+                "max": "",
+                "min": "",
+                "name": "logger_name",
+                "type": "str",
+                "unit": "-",
+                "value": "Pyleecan.Loss"
+            }
+        ]
+    },
+    "OutLossModel": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Gather the loss module outputs",
+        "is_internal": false,
+        "methods": [
+            "get_mesh_solution",
+            "get_loss_scalar",
+            "__add__",
+            "__radd__",
+            "__sub__",
+            "__rsub__"
+        ],
+        "mother": "",
+        "name": "OutLossModel",
+        "package": "Output",
+        "path": "pyleecan/Generator/ClassesRef/Output/OutLossModel.csv",
+        "properties": [
+            {
+                "as_dict": "",
+                "desc": "Name of the loss",
+                "max": "",
+                "min": "",
+                "name": "name",
+                "type": "str",
+                "unit": "",
+                "value": ""
+            },
+            {
+                "as_dict": "",
+                "desc": "Loss density ",
+                "max": "",
+                "min": "",
+                "name": "loss_density",
+                "type": "ndarray",
+                "unit": "",
                 "value": null
             },
             {
                 "as_dict": "",
-                "desc": "Rotor core losses due to hysteresis and eddy currents",
-                "max": "",
-                "min": "",
-                "name": "Protor",
-                "type": "float",
-                "unit": "W",
-                "value": null
-            },
-            {
-                "as_dict": "",
-                "desc": "Magnet eddy current losses",
-                "max": "",
-                "min": "",
-                "name": "Pmagnet",
-                "type": "float",
-                "unit": "W",
-                "value": null
-            },
-            {
-                "as_dict": "",
-                "desc": "Stator core losses",
-                "max": "",
-                "min": "",
-                "name": "Pprox",
-                "type": "float",
-                "unit": "W",
-                "value": null
-            },
-            {
-                "as_dict": "",
-                "desc": "Stator core losses",
-                "max": "",
-                "min": "",
-                "name": "Pjoule",
-                "type": "float",
-                "unit": "W",
-                "value": null
-            },
-            {
-                "as_dict": "",
-                "desc": "Dict containing coefficients to rebuild loss polynom function of frequency",
+                "desc": "dict of coefficients to compute the scalar value with respcet to frequency",
                 "max": "",
                 "min": "",
                 "name": "coeff_dict",
                 "type": "dict",
                 "unit": "",
-                "value": {}
+                "value": null
+            },
+            {
+                "as_dict": "",
+                "desc": "group to which the loss applies",
+                "max": "",
+                "min": "",
+                "name": "group",
+                "type": "str",
+                "unit": "",
+                "value": "None"
+            },
+            {
+                "as_dict": "",
+                "desc": "The name of the loss model used to compute the loss stored in this output",
+                "max": "",
+                "min": "",
+                "name": "loss_model",
+                "type": "str",
+                "unit": "",
+                "value": "None"
             }
         ]
     },
@@ -10852,6 +11107,16 @@
                 "type": "bool",
                 "unit": "",
                 "value": 1
+            },
+            {
+                "as_dict": "",
+                "desc": "File name of the file created if is_save_LUT is True",
+                "max": "",
+                "min": "",
+                "name": "file_name",
+                "type": "str",
+                "unit": "",
+                "value": "LUT"
             }
         ]
     },
@@ -11454,7 +11719,8 @@
         "methods": [
             "run",
             "init_logger",
-            "get_var_load"
+            "get_var_load",
+            "get_OP_array"
         ],
         "mother": "",
         "name": "Simulation",
@@ -14420,6 +14686,7 @@
         "desc": "",
         "is_internal": false,
         "methods": [
+            "_comp_line_dict",
             "_comp_point_coordinate",
             "build_geometry",
             "build_geometry_active",
@@ -14429,7 +14696,8 @@
             "comp_height_active",
             "comp_surface",
             "comp_surface_active",
-            "get_surface_active"
+            "get_surface_active",
+            "plot_schematics"
         ],
         "mother": "Slot",
         "name": "SlotW60",
@@ -14533,6 +14801,7 @@
         "desc": "",
         "is_internal": false,
         "methods": [
+            "_comp_line_dict",
             "_comp_point_coordinate",
             "build_geometry",
             "build_geometry_active",
@@ -14542,7 +14811,8 @@
             "comp_height_active",
             "comp_surface",
             "comp_surface_active",
-            "get_surface_active"
+            "get_surface_active",
+            "plot_schematics"
         ],
         "mother": "Slot",
         "name": "SlotW61",
@@ -15345,7 +15615,9 @@
         "is_internal": false,
         "methods": [
             "get_ref_simu_index",
-            "get_OP_matrix"
+            "get_OP_array",
+            "set_OP_array",
+            "_set_OP_matrix"
         ],
         "mother": "VarSimu",
         "name": "VarLoad",
@@ -15354,33 +15626,13 @@
         "properties": [
             {
                 "as_dict": "",
-                "desc": "Operating point matrix (N0,I0,Phi0,T,P) or (N0,Id,Iq,T,P) or (N0,U0,s,T,P)",
+                "desc": "Operating point matrix object",
                 "max": "",
                 "min": "",
                 "name": "OP_matrix",
-                "type": "ndarray",
+                "type": "OPMatrix",
                 "unit": "-",
                 "value": null
-            },
-            {
-                "as_dict": "",
-                "desc": "Select which kind of OP_matrix is used 0: (N0,I0,Phi0,T,P), 1:(N0,Id,Iq,T,P), 2:(N0,U0,s,T,P)",
-                "max": "2",
-                "min": "0",
-                "name": "type_OP_matrix",
-                "type": "int",
-                "unit": "-",
-                "value": 0
-            },
-            {
-                "as_dict": "",
-                "desc": "True if power given in OP_matrix is the output power, False if it is the input power",
-                "max": "",
-                "min": "",
-                "name": "is_output_power",
-                "type": "bool",
-                "unit": "",
-                "value": 1
             }
         ]
     },
