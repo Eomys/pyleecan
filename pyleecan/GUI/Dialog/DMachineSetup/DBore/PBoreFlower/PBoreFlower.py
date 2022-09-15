@@ -40,6 +40,7 @@ class PBoreFlower(Gen_PBoreFlower, QWidget):
 
         self.lamination = lamination
         self.bore = lamination.bore
+        self.bore.N = self.lamination.get_pole_pair_number() *2
 
         # Set FloatEdit unit
         self.lf_Rarc.unit = "m"
