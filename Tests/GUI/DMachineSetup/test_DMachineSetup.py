@@ -25,22 +25,22 @@ from pyleecan.definitions import DATA_DIR
 from pyleecan.GUI.Dialog.DMachineSetup.SMachineType.SMachineType import SMachineType
 
 load_test = list()
-load_test.append({"type": "SCIM", "index": 0, "name": "SCIM_001", "p": 1, "count": 11})
-load_test.append({"type": "DFIM", "index": 1, "name": "DFIM_001", "p": 2, "count": 12})
+load_test.append({"type": "SCIM", "index": 0, "name": "SCIM_001", "p": 1, "count": 12})
+load_test.append({"type": "DFIM", "index": 1, "name": "DFIM_001", "p": 2, "count": 13})
 load_test.append(
-    {"type": "SynRM", "index": 2, "name": "SynRM_001", "p": 2, "count": 10}
+    {"type": "SynRM", "index": 2, "name": "SynRM_001", "p": 2, "count": 11}
 )
 load_test.append(
-    {"type": "SPMSM", "index": 3, "name": "SIPMSM_008", "p": 4, "count": 10}
+    {"type": "SPMSM", "index": 3, "name": "SIPMSM_008", "p": 4, "count": 11}
 )
 load_test.append(
-    {"type": "IPMSM", "index": 4, "name": "machine_IPMSM_A", "p": 5, "count": 10}
+    {"type": "IPMSM", "index": 4, "name": "machine_IPMSM_A", "p": 5, "count": 11}
 )
-load_test.append({"type": "WRSM", "index": 5, "name": "WRSM_001", "p": 6, "count": 12})
+load_test.append({"type": "WRSM", "index": 5, "name": "WRSM_001", "p": 6, "count": 13})
 load_test.append(
-    {"type": "SRM", "index": 6, "name": "SRM_test_load", "p": None, "count": 10}
+    {"type": "SRM", "index": 6, "name": "SRM_test_load", "p": None, "count": 11}
 )
-load_test.append({"type": "LSPM", "index": 7, "name": "LSPM_001", "p": 2, "count": 12})
+load_test.append({"type": "LSPM", "index": 7, "name": "LSPM_001", "p": 2, "count": 13})
 from PySide2.QtCore import Qt
 
 ENABLE_ITEM = Qt.ItemIsSelectable | Qt.ItemIsEnabled

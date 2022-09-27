@@ -84,7 +84,7 @@
       </size>
      </property>
      <property name="currentIndex">
-      <number>2</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="tab_elec">
       <attribute name="title">
@@ -251,7 +251,7 @@
                 </font>
                </property>
                <property name="text">
-                <string>alphaBr</string>
+                <string>Temperature coefficient for remanent flux density</string>
                </property>
               </widget>
              </item>
@@ -265,7 +265,7 @@
                 </font>
                </property>
                <property name="text">
-                <string>mur_lin</string>
+                <string>Relative magnetic permeability</string>
                </property>
               </widget>
              </item>
@@ -318,7 +318,7 @@
                 </font>
                </property>
                <property name="text">
-                <string>Brm20</string>
+                <string>Remanence flux density at 20°C</string>
                </property>
               </widget>
              </item>

@@ -48,11 +48,25 @@ def test_FEMM_LamHoleNS():
     TPNS.rotor.hole_south[0].magnet_0.mat_type.mag.mur_lin = 2
 
     # Check plot machine
-    TPNS.plot(sym=4, save_path=join(res_path, "machine_sym.png"), is_show_fig=False)
-    TPNS.plot(save_path=join(res_path, "machine_full.png"), is_show_fig=False)
-    TPNS.rotor.plot(
-        is_add_arrow=True, save_path=join(res_path, "rotor.png"), is_show_fig=False
+    fig, ax = TPNS.plot(
+        sym=4,
+        is_clean_plot=True,
+        is_show_fig=False,
     )
+    fig.savefig(join(res_path, "machine_sym.png"))
+    fig.savefig(join(res_path, "machine_sym.svg"), format="svg")
+
+    fig, ax = TPNS.plot(
+        save_path=join(res_path, "machine_full.png"),
+        is_clean_plot=True,
+        is_show_fig=False,
+    )
+    fig.savefig(join(res_path, "machine_full.png"))
+    fig.savefig(join(res_path, "machine_full.svg"), format="svg")
+
+    fig, ax = TPNS.rotor.plot(is_add_arrow=True, is_clean_plot=True, is_show_fig=False)
+    fig.savefig(join(res_path, "rotor.png"))
+    fig.savefig(join(res_path, "rotor.svg"), format="svg")
 
     # Check periodicity
     assert TPNS.comp_periodicity_spatial() == (4, False)
@@ -61,7 +75,9 @@ def test_FEMM_LamHoleNS():
     simu = Simu1(name="test_FEMM_LamHoleNS", machine=TPNS)
     simu.path_result = join(save_path, simu.name)
     simu.input = InputCurrent(
-        OP=OPdq(N0=1000, Id_ref=0, Iq_ref=0), Na_tot=2048, Nt_tot=1,
+        OP=OPdq(N0=1000, Id_ref=0, Iq_ref=0),
+        Na_tot=2048,
+        Nt_tot=1,
     )
 
     # Definition of the magnetic simulation: with periodicity

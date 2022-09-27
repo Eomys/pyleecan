@@ -6,8 +6,8 @@ from ...Functions.FEMM.create_FEMM_boundary_conditions import (
 def get_FEMM_BC_propname(femm, line_label, BC_dict):
     """Get/create the Boundary coundition corresponding the line
 
-    Parameters:
-    -----------
+    Parameters
+    ----------
     femm : FEMMHandler
         client to send command to a FEMM instance
     line_label : str
@@ -15,8 +15,8 @@ def get_FEMM_BC_propname(femm, line_label, BC_dict):
     BC_dict : dict
         Boundary condition dict ([line label] = BC name)
 
-    Returns:
-    --------
+    Returns
+    -------
     propname : str
         Name of the property to set
     """

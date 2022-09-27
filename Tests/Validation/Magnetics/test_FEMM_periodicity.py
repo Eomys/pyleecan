@@ -385,18 +385,20 @@ def test_FEMM_periodicity_angle():
     H0 = SPMSM_015.stator.slot.H0 * 0.8
     NBS = SlotCirc(Zs=Zs, W0=W0, H0=H0)
     SPMSM_015.stator.notch = [NotchEvenDist(alpha=0, notch_shape=NBS)]
-    NYS = SlotM10(Zs=Zs, W0=W0, H0=H0)
-    # SPMSM_015.stator.yoke_notch = [NotchEvenDist(alpha=0, notch_shape=NYS)]
+    NYS = SlotM10(Zs=Zs, W0=W0, H0=H0,is_bore=False)
+    # SPMSM_015.stator.notch.append(NotchEvenDist(alpha=0, notch_shape=NYS))
 
     Zr = SPMSM_015.rotor.slot.Zs
     W0 = SPMSM_015.stator.slot.W0 * 0.1
     H0 = SPMSM_015.rotor.comp_height_yoke() * 0.05
     NBR = SlotCirc(Zs=Zr, W0=W0, H0=H0)
     SPMSM_015.rotor.notch = [NotchEvenDist(alpha=0.001, notch_shape=NBR)]
-    NYR = SlotM10(Zs=Zr, W0=W0, H0=H0)
-    # SPMSM_015.rotor.yoke_notch = [NotchEvenDist(alpha=0, notch_shape=NYR)]
+    NYR = SlotM10(Zs=Zr, W0=W0, H0=H0,is_bore=False)
+    # SPMSM_015.rotor.notch.append(NotchEvenDist(alpha=0, notch_shape=NYR))
 
-    # SPMSM_015.plot(sym=3)
+    # fig, ax = SPMSM_015.plot(sym=3, is_clean_plot=True)
+    # fig.savefig(join(save_path, "SPMSM_015_2.png"))
+    # fig.savefig(join(save_path, "SPMSM_015_2.svg"), format="svg")
     # plt.show()
 
     assert SPMSM_015.comp_periodicity_spatial() == (9, False)
@@ -527,13 +529,14 @@ def test_Bore_sym():
     if not isdir(res_path):
         makedirs(res_path)
     TP = load(join(DATA_DIR, "Machine", "Toyota_Prius.json"))
-    # Add Bore shape with interset method
+    # Add Bore shape with intersect method
     TP.rotor.bore = BoreFlower(
-        N=8, Rarc=TP.rotor.Rext * 0.75, alpha=pi / 8, type_merge_slot=1
+        N=8, Rarc=TP.rotor.Rext * 0.55, alpha=pi / 8, type_merge_slot=1
     )
     TP.stator.slot.H0 *= 4
-    TP.stator.Rint*=1.1
-    TP.stator.Rext*=1.05
+    TP.stator.Rint *= 1.1
+    TP.stator.Rext *= 1.05
+    TP.rotor.hole[0].H1 *= 3
     # Generate "hexagonal Bore Radius"
     line_list = list()
     Rbo = TP.stator.Rint
@@ -547,28 +550,42 @@ def test_Bore_sym():
         line_list.append(Segment(begin=Z2, end=Z3))
     # Use connect method for merge
     TP.stator.bore = BoreUD(line_list=line_list, sym=8, type_merge_slot=0)
-    # TP.stator.plot()
-    # TP.stator.plot(sym=8)
-    # plt.show()
+    # fig, ax = TP.stator.plot(is_clean_plot=True, is_show_fig=False)
+    # fig.savefig(join(save_path, "Hexa_Bore.png"))
+    # fig.savefig(join(save_path, "Hexa_Bore.svg"), format="svg")
+    # fig, ax = TP.stator.plot(sym=8, is_clean_plot=True, is_show_fig=False)
+    # fig.savefig(join(save_path, "Hexa_Bore_sym.png"))
+    # fig.savefig(join(save_path, "Hexa_Bore_sym.svg"), format="svg")
     # Add Notch to merge with the Bore shape (middle of pole)
     Zr = TP.rotor.hole[0].Zh
     W0 = TP.stator.slot.W0
-    H0 = TP.stator.slot.H0 /4
+    H0 = TP.stator.slot.H0 / 4
     NC = SlotCirc(Zs=Zr, W0=W0 * 5, H0=H0 * 5)
-    NR = SlotM10(Zs=Zr, W0=W0 * 5, H0=H0 * 3)
+    NR = SlotM10(Zs=Zr, W0=W0 * 5, H0=H0 * 7.5)
     TP.rotor.notch = [
         NotchEvenDist(alpha=pi / 8, notch_shape=NC),
     ]
 
-    TP.plot(sym=8, is_show_fig=False, save_path=join(res_path, "1_notch_sym.png"))
-    TP.plot(is_show_fig=False, save_path=join(res_path, "1_notch_full.png"))
+    fig, ax = TP.plot(sym=8, is_clean_plot=True, is_show_fig=False, save_path=join(res_path, "1_notch_sym.png"))
+    # fig.savefig(join(save_path, "1_notch_sym.png"))
+    # fig.savefig(join(save_path, "1_notch_sym.svg"), format="svg")
+    fig, ax = TP.plot(is_show_fig=False, is_clean_plot=True)
+    # fig.savefig(join(save_path, "1_notch_full.png"))
+    # fig.savefig(join(save_path, "1_notch_full.svg"), format="svg")
     assert TP.comp_periodicity_spatial() == (4, True)
 
     # Add notch on sym line
     TP2 = TP.copy()
     TP2.rotor.notch.append(NotchEvenDist(alpha=0, notch_shape=NR))
-    TP2.plot(sym=8, is_show_fig=False, save_path=join(res_path, "2_notch_sym.png"))
-    TP2.plot(is_show_fig=False, save_path=join(res_path, "2_notch_full.png"))
+    fig, ax = TP2.plot(sym=8, is_show_fig=False, is_clean_plot=True)
+    # fig.savefig(join(save_path, "2_notch_sym.png"))
+    # fig.savefig(join(save_path, "2_notch_sym.svg"), format="svg")
+    fig, ax = TP2.plot(is_show_fig=False, is_clean_plot=True)
+    # fig.savefig(join(save_path, "2_notch_full.png"))
+    # fig.savefig(join(save_path, "2_notch_full.svg"), format="svg")
+    fig, ax = TP2.rotor.plot(sym=4, is_show_fig=False, is_clean_plot=True, edgecolor="k")
+    # fig.savefig(join(save_path, "2_notch_full_rotor.png"))
+    # fig.savefig(join(save_path, "2_notch_full_rotor.svg"), format="svg")
     assert TP2.comp_periodicity_spatial() == (4, True)
 
     # Create all simulations
@@ -759,7 +776,7 @@ def test_Ring_Magnet():
 # To run it without pytest
 if __name__ == "__main__":
     test_Bore_sym()
-    # out, out2 = test_FEMM_periodicity_angle()
+    out, out2 = test_FEMM_periodicity_angle()
     # out3, out4 = test_FEMM_periodicity_time()
     # out5, out6 = test_FEMM_periodicity_time_no_periodicity_a()
     # test_Ring_Magnet()

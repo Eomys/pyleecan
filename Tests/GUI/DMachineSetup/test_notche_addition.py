@@ -108,6 +108,11 @@ class TestNotcheAddition(object):
         notche_wid.b_plot.clicked.emit()
         self.widget.w_step.notches_win.b_plot.clicked.emit()
 
+        # Checking that we set alpha to None, then the value is set back to 0
+        notche_wid.lf_alpha.setValue(None)
+        notche_wid.lf_alpha.editingFinished.emit()
+        assert notche_wid.lf_alpha.value() == 0
+
         # Step 1-2 : Adding second notch (circular)
         self.widget.w_step.notches_win.b_add.clicked.emit()
         assert self.widget.w_step.notches_win.tab_notch.count() == 2
@@ -146,6 +151,53 @@ class TestNotcheAddition(object):
         assert notche_wid.err_msg == None
         self.widget.w_step.notches_win.b_plot.clicked.emit()
         assert self.widget.w_step.notches_win.err_msg == None
+
+        # Step 1-3 : Adding third notch with dimensions equal to 0
+        self.widget.w_step.notches_win.b_add.clicked.emit()
+        assert self.widget.w_step.notches_win.tab_notch.count() == 3
+
+        self.widget.w_step.notches_win.tab_notch.setCurrentIndex(2)
+        notche_wid = self.widget.w_step.notches_win.tab_notch.currentWidget()
+        assert isinstance(notche_wid, WNotch)
+
+        notche_wid.c_notch_type.setCurrentIndex(2)
+        assert notche_wid.c_notch_type.currentIndex() == 2
+
+        Zn = 48 // 4
+        notche_wid.si_Zn.setValue(Zn)
+        notche_wid.si_Zn.editingFinished.emit()
+        assert notche_wid.si_Zn.value() == Zn
+
+        alpha = 15
+        notche_wid.c_alpha_unit.setCurrentIndex(1)
+        notche_wid.lf_alpha.setValue(alpha)
+        notche_wid.lf_alpha.editingFinished.emit()
+        assert notche_wid.c_alpha_unit.currentIndex() == 1
+        assert notche_wid.lf_alpha.value() == alpha
+
+        H0 = 0
+        W0 = 0
+        assert isinstance(notche_wid.w_notch, WSlotCirc)
+        notche_wid.w_notch.lf_H0.setValue(H0)
+        notche_wid.w_notch.lf_W0.setValue(W0)
+        assert notche_wid.w_notch.lf_H0.value() == H0
+        notche_wid.w_notch.lf_H0.editingFinished.emit()
+        assert notche_wid.w_notch.lf_W0.value() == W0
+        notche_wid.w_notch.lf_W0.editingFinished.emit()
+
+        # Checking that we detect that the dimensions are null
+        assert notche_wid.check() == "W0 must be higher than 0"
+
+        W0 = 2e-3
+        notche_wid.w_notch.lf_W0.setValue(W0)
+        assert notche_wid.w_notch.lf_W0.value() == W0
+        notche_wid.w_notch.lf_W0.editingFinished.emit()
+
+        assert notche_wid.check() == "H0 must be higher than 0"
+
+        # Removing the notches with null dimensions
+        self.widget.w_step.notches_win.b_remove.clicked.emit()
+        assert self.widget.w_step.notches_win.tab_notch.count() == 2
 
         # Clicking on OK button
         self.widget.w_step.notches_win.b_ok.clicked.emit()
@@ -489,9 +541,9 @@ if __name__ == "__main__":
     a = TestNotcheAddition()
     a.setup_class()
     a.setup_method()
-    # a.test_notch_addition()
+    a.test_notch_addition()
     # a.test_cancel_button()
-    a.test_notch_addition_without_input()
+    # a.test_notch_addition_without_input()
     # a.test_notch_addition_wrong_input()
     # a.test_set_empty_floatedit()
     a.teardown_class()

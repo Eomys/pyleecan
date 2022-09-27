@@ -4,8 +4,8 @@ from math import gcd
 def comp_periodicity_duct_spatial(self, per_a, is_antiper_a):
     """Compute the periodity of the axial cooling ducts
 
-    Parameters:
-    -----------
+    Parameters
+    ----------
     self : Lamination
         A Lamination object
     per_a : int
@@ -13,8 +13,8 @@ def comp_periodicity_duct_spatial(self, per_a, is_antiper_a):
     is_antiper_a : bool
         True if an spatial anti-periodicity is possible after the periodicities
 
-    Returns:
-    --------
+    Returns
+    -------
     per_a : int
         Spatial periodicity of the lamination including ducts
     is_antiper_a : bool

@@ -128,10 +128,10 @@ class TestSWinding(object):
         self.widget.b_generate.clicked.emit()
         assert self.widget.obj.winding.wind_mat.shape == (2, 1, 36, 3)
         assert self.widget.out_rot_dir.text() == "Rotation direction: CCW"
-        assert self.widget.out_ms.text() == "ms = Zs / (2*p*qs) = 2.0"
-        assert self.widget.out_Nperw.text() == "Nperw: 6"
-        assert self.widget.out_Ncspc.text() == "Ncspc: 6"
-        assert self.widget.out_Ntspc.text() == "Ntspc: 54"
+        assert self.widget.out_ms.text() == "Number of slots/pole/phase: 2.0"
+        assert self.widget.out_Nperw.text() == "Winding periodicity: 6"
+        assert self.widget.out_Ncspc.text() == "Number of coils Ncspc: 6"
+        assert self.widget.out_Ntspc.text() == "Number of turns Ntspc: 54"
 
     def test_export_import(self):
         return_value = (
@@ -213,15 +213,15 @@ if __name__ == "__main__":
     a = TestSWinding()
     a.setup_class()
     a.setup_method()
-    a.test_init()
-    a.test_set_wind_type()
+    # a.test_init()
+    # a.test_set_wind_type()
     a.test_generate()
-    a.test_export_import()
-    a.test_set_is_reverse()
-    a.test_set_is_reverse_layer()
-    a.test_set_is_permute_B_C()
-    a.test_set_is_change_layer()
-    a.test_set_Nslot()
-    a.test_set_Npcp()
-    a.test_check()
+    # a.test_export_import()
+    # a.test_set_is_reverse()
+    # a.test_set_is_reverse_layer()
+    # a.test_set_is_permute_B_C()
+    # a.test_set_is_change_layer()
+    # a.test_set_Nslot()
+    # a.test_set_Npcp()
+    # a.test_check()
     print("Done")

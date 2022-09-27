@@ -65,42 +65,10 @@
         <height>478</height>
        </rect>
       </property>
-      <layout class="QVBoxLayout" name="verticalLayout_2">
-       <item>
-        <layout class="QGridLayout" name="gridLayout">
+      <layout class="QGridLayout" name="gridLayout_3">
+       <item row="0" column="0">
+        <layout class="QGridLayout" name="gridLayout_2">
          <item row="0" column="0">
-          <widget class="QLabel" name="in_Nwpc1_tan">
-           <property name="minimumSize">
-            <size>
-             <width>90</width>
-             <height>0</height>
-            </size>
-           </property>
-           <property name="text">
-            <string>Nwppc_tan</string>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="1">
-          <widget class="QSpinBox" name="si_Nwpc1_tan">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="minimumSize">
-            <size>
-             <width>0</width>
-             <height>0</height>
-            </size>
-           </property>
-           <property name="value">
-            <number>99</number>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="0">
           <widget class="QLabel" name="in_Nwpc1_rad">
            <property name="minimumSize">
             <size>
@@ -113,13 +81,45 @@
            </property>
           </widget>
          </item>
-         <item row="1" column="1">
+         <item row="0" column="1">
           <widget class="QSpinBox" name="si_Nwpc1_rad">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
+           </property>
+           <property name="value">
+            <number>99</number>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="0">
+          <widget class="QLabel" name="in_Nwpc1_tan">
+           <property name="minimumSize">
+            <size>
+             <width>90</width>
+             <height>0</height>
+            </size>
+           </property>
+           <property name="text">
+            <string>Nwppc_tan</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="1">
+          <widget class="QSpinBox" name="si_Nwpc1_tan">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>0</height>
+            </size>
            </property>
            <property name="value">
             <number>99</number>
@@ -222,55 +222,74 @@
            </property>
           </widget>
          </item>
-         <item row="4" column="0">
-          <widget class="QLabel" name="in_Wins_wire">
-           <property name="minimumSize">
-            <size>
-             <width>90</width>
-             <height>0</height>
-            </size>
-           </property>
-           <property name="text">
-            <string>Wins_wire</string>
-           </property>
-          </widget>
-         </item>
-         <item row="4" column="1">
-          <widget class="FloatEdit" name="lf_Wins_wire">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="minimumSize">
-            <size>
-             <width>0</width>
-             <height>0</height>
-            </size>
-           </property>
-           <property name="maximumSize">
-            <size>
-             <width>16777215</width>
-             <height>100</height>
-            </size>
-           </property>
-          </widget>
-         </item>
-         <item row="4" column="2">
-          <widget class="QLabel" name="unit_Wins_wire">
-           <property name="minimumSize">
-            <size>
-             <width>0</width>
-             <height>0</height>
-            </size>
-           </property>
-           <property name="text">
-            <string>m</string>
-           </property>
-          </widget>
-         </item>
-         <item row="5" column="0">
+        </layout>
+       </item>
+       <item row="1" column="0">
+        <widget class="QGroupBox" name="g_ins">
+         <property name="title">
+          <string>Insulation</string>
+         </property>
+         <property name="checkable">
+          <bool>true</bool>
+         </property>
+         <property name="checked">
+          <bool>false</bool>
+         </property>
+         <layout class="QGridLayout" name="gridLayout">
+          <item row="0" column="0">
+           <widget class="QLabel" name="in_Wins_wire">
+            <property name="minimumSize">
+             <size>
+              <width>90</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="text">
+             <string>Wins_wire</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="FloatEdit" name="lf_Wins_wire">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>100</height>
+             </size>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="2">
+           <widget class="QLabel" name="unit_Wins_wire">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="text">
+             <string>m</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item row="2" column="0">
+        <layout class="QHBoxLayout" name="horizontalLayout_2">
+         <item>
           <widget class="QLabel" name="in_Lewout">
            <property name="minimumSize">
             <size>
@@ -282,14 +301,14 @@
             <string>End-winding length on one side for a half-turn</string>
            </property>
            <property name="whatsThis">
-            <string>End-winding length on one side for a half-turn</string>
+            <string>End-winding length on one side for a half-turn (only used in voltage driven simulations)</string>
            </property>
            <property name="text">
             <string>Lewout</string>
            </property>
           </widget>
          </item>
-         <item row="5" column="1">
+         <item>
           <widget class="FloatEdit" name="lf_Lewout">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
@@ -317,7 +336,7 @@
            </property>
           </widget>
          </item>
-         <item row="5" column="2">
+         <item>
           <widget class="QLabel" name="unit_Lewout">
            <property name="minimumSize">
             <size>
@@ -338,7 +357,7 @@
          </item>
         </layout>
        </item>
-       <item>
+       <item row="3" column="0">
         <spacer name="verticalSpacer">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
@@ -351,7 +370,7 @@
          </property>
         </spacer>
        </item>
-       <item>
+       <item row="4" column="0">
         <widget class="WCondOut" name="w_out" native="true"/>
        </item>
       </layout>

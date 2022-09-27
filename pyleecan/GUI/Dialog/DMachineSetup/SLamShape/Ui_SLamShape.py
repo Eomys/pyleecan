@@ -39,7 +39,7 @@ class Ui_SLamShape(object):
         self.scrollArea.setWidgetResizable(True)
         self.scrollAreaWidgetContents = QWidget()
         self.scrollAreaWidgetContents.setObjectName(u"scrollAreaWidgetContents")
-        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 268, 793))
+        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 272, 762))
         self.verticalLayout_5 = QVBoxLayout(self.scrollAreaWidgetContents)
         self.verticalLayout_5.setObjectName(u"verticalLayout_5")
         self.gridLayout_2 = QGridLayout()
@@ -172,6 +172,12 @@ class Ui_SLamShape(object):
         self.g_bore.setObjectName(u"g_bore")
         self.g_bore.setCheckable(True)
         self.g_bore.setChecked(False)
+        self.verticalLayout_6 = QVBoxLayout(self.g_bore)
+        self.verticalLayout_6.setObjectName(u"verticalLayout_6")
+        self.b_bore = QPushButton(self.g_bore)
+        self.b_bore.setObjectName(u"b_bore")
+
+        self.verticalLayout_6.addWidget(self.b_bore)
 
         self.verticalLayout_5.addWidget(self.g_bore)
 
@@ -259,6 +265,9 @@ class Ui_SLamShape(object):
         )
         self.g_bore.setTitle(
             QCoreApplication.translate("SLamShape", u"Uneven bore shape", None)
+        )
+        self.b_bore.setText(
+            QCoreApplication.translate("SLamShape", u"set uneven bore shape", None)
         )
         self.b_previous.setText(
             QCoreApplication.translate("SLamShape", u"Previous", None)

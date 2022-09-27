@@ -29,6 +29,7 @@ def plot(
     is_show_fig=True,
     save_path=None,
     win_title=None,
+    is_clean_plot=False,
 ):
     """Plot a Lamination with Buried Magnets in a matplotlib fig
 
@@ -60,6 +61,8 @@ def plot(
         full path including folder, name and extension of the file to save if save_path is not None
     win_title : str
         Window title
+    is_clean_plot : bool
+        True to remove title, legend, axis (only machine on plot with white background)
 
     Returns
     -------
@@ -152,6 +155,15 @@ def plot(
             patch_leg.append(Patch(color=MAGNET_COLOR))
             label_leg.append("Magnet")
         ax.legend(patch_leg, label_leg)
+
+    # Clean figure
+    if is_clean_plot:
+        ax.set_axis_off()
+        ax.axis("equal")
+        if ax.get_legend() is not None:
+            ax.get_legend().remove()
+        ax.set_title("")
+
     if is_show_fig:
         fig.show()
     if save_path is not None:

@@ -33,10 +33,12 @@ class WCondOut(QGroupBox):
 
         self.out_Sact = QLabel(self)
         self.out_Sact.setObjectName("out_Sact")
+        self.out_Sact.setToolTip("Conductor active surface")
         self.layout.addWidget(self.out_Sact)
 
         self.out_K = QLabel(self)
         self.out_K.setObjectName("out_K")
+        self.out_K.setToolTip("Conductor active surface over total slot active surface")
         self.layout.addWidget(self.out_K)
 
         self.out_MLT = QLabel(self)
@@ -47,7 +49,7 @@ class WCondOut(QGroupBox):
         self.out_Rwind = QLabel(self)
         self.out_Rwind.setObjectName("out_Rwind")
         self.layout.addWidget(self.out_Rwind)
-        self.out_Rwind.setToolTip("Winding resistance at 20°C")
+        self.out_Rwind.setToolTip("Phase winding resistance at 20°C")
 
     def comp_output(self):
         """Update the Output with the computed values
@@ -72,8 +74,8 @@ class WCondOut(QGroupBox):
             K_txt = self.tr("Ksfill = ")
         else:
             K_txt = self.tr("Krfill = ")
-        MLT_txt = "MLT = "
-        Rwind_txt = "Rwind 20°C= "
+        MLT_txt = "Mean Length Turn = "
+        Rwind_txt = "Rwind 20°C = "
 
         # We compute the output only if the conductor is correctly set
         if parent.check(lam) is None:
@@ -116,3 +118,13 @@ class WCondOut(QGroupBox):
             self.out_K.setText(K_txt + "? %")
             self.out_MLT.setText(MLT_txt + "?")
             self.out_Rwind.setText(Rwind_txt + "?")
+
+        if parent is not None:
+            if parent.g_ins.isChecked():
+                self.out_H.show()
+                self.out_W.show()
+                self.out_S.show()
+            else:
+                self.out_H.hide()
+                self.out_W.hide()
+                self.out_S.hide()

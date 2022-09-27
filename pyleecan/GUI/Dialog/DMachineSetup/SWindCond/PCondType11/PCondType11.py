@@ -72,22 +72,39 @@ class PCondType11(Gen_PCondType11, QWidget):
         self.lf_Hwire.setValue(self.cond.Hwire)
         if self.cond.Wins_wire is None:
             self.cond.Wins_wire = 0  # Default value
+        else:
+            self.g_ins.setChecked(True)
         self.lf_Wins_wire.setValue(self.cond.Wins_wire)
         self.lf_Lewout.validator().setBottom(0)
         if self.lam.winding.Lewout is None:
             self.lam.winding.Lewout = 0
         self.lf_Lewout.setValue(self.lam.winding.Lewout)
 
+        self.update_ins_layout()
+
         # Display the conductor main output
         self.w_out.comp_output()
 
         # Connect the slot/signal
+        self.g_ins.toggled.connect(self.update_ins_layout)
         self.si_Nwpc1_tan.editingFinished.connect(self.set_Nwppc_tan)
         self.si_Nwpc1_rad.editingFinished.connect(self.set_Nwppc_rad)
         self.lf_Wwire.editingFinished.connect(self.set_Wwire)
         self.lf_Hwire.editingFinished.connect(self.set_Hwire)
         self.lf_Wins_wire.editingFinished.connect(self.set_Wins_wire)
         self.lf_Lewout.editingFinished.connect(self.set_Lewout)
+
+    def update_ins_layout(self):
+        if self.g_ins.isChecked():
+            self.in_Wins_wire.show()
+            self.lf_Wins_wire.show()
+            self.unit_Wins_wire.show()
+            self.set_Wins_wire()
+        else:
+            self.in_Wins_wire.hide()
+            self.lf_Wins_wire.hide()
+            self.unit_Wins_wire.hide()
+            self.set_Wins_wire(Wins_wire=0)
 
     def set_Nwppc_tan(self):
         """Signal to update the value of Nwppc_tan according to the line edit
@@ -154,7 +171,7 @@ class PCondType11(Gen_PCondType11, QWidget):
         # Notify the machine GUI that the machine has changed
         self.saveNeeded.emit()
 
-    def set_Wins_wire(self):
+    def set_Wins_wire(self, Wins_wire=None):
         """Signal to update the value of Wwire according to the line edit
 
         Parameters
@@ -162,7 +179,9 @@ class PCondType11(Gen_PCondType11, QWidget):
         self : PCondType11
             A PCondType11 object
         """
-        self.cond.Wins_wire = self.lf_Wins_wire.value()
+        if Wins_wire is None:
+            Wins_wire = self.lf_Wins_wire.value()
+        self.cond.Wins_wire = Wins_wire
         self.w_out.comp_output()
         # Notify the machine GUI that the machine has changed
         self.saveNeeded.emit()

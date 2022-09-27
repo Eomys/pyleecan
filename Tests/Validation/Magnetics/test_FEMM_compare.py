@@ -65,6 +65,7 @@ def test_FEMM_compare_IPMSM_xxx():
     simu_sym.mag.is_periodicity_a = True
 
     out = simu.run()
+    out.export_to_mat(join(save_path, "test_FEMM_compare_IPMSM_xxx.mat"))
 
     out2 = simu_sym.run()
 
@@ -575,7 +576,7 @@ def test_SPMSM_noload():
 
 
 if __name__ == "__main__":
-    # test_FEMM_compare_IPMSM_xxx()
+    test_FEMM_compare_IPMSM_xxx()
     test_FEMM_compare_IPMSM_xxx_lam_sym()
     # test_FEMM_compare_Prius()
     # test_FEMM_compare_SCIM()
