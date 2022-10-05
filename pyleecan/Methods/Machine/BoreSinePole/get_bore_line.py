@@ -87,6 +87,12 @@ def get_bore_line(self, prop_dict=None):
     return bore_list
 
 
+def _get_phi_max(obj):
+    """"Internal method to get max. pole angle."""
+    phi_max = fmin(lambda x: -obj.get_pole_shape(x).imag, 0, disp=False)[0]
+    return min(pi / 2, phi_max)
+
+
 def _get_pole_width_max(obj):
     """Return the max. pole width and the angle of the max. pole width
 
@@ -102,9 +108,7 @@ def _get_pole_width_max(obj):
         max. pole width
 
     """
-
-    phi_max = fmin(lambda x: -obj.get_pole_shape(x).imag, 0, disp=False)[0]
-    phi_max = min(pi / 2, phi_max)
+    phi_max = _get_phi_max(obj)
     w_max = 2 * obj.get_pole_shape(phi_max).imag
 
     return w_max
@@ -123,6 +127,10 @@ def _get_phi(obj, w):
     phi : float
         angle of the pole width
     """
-
-    phi = fmin(lambda x: abs(obj.get_pole_shape(x).imag - w / 2), 0, disp=False)[0]
+    phi_max = _get_phi_max(obj)
+    phi = fmin(
+        lambda x: abs(obj.get_pole_shape(x).imag - w / 2) + max(x - phi_max, 0),
+        0,
+        disp=False,
+    )[0]
     return phi
