@@ -18,19 +18,9 @@ from ._frozen import FrozenClass
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
 try:
-    from ..Methods.Output.OutLoss.get_loss import get_loss
-except ImportError as error:
-    get_loss = error
-
-try:
     from ..Methods.Output.OutLoss.get_loss_density_ag import get_loss_density_ag
 except ImportError as error:
     get_loss_density_ag = error
-
-try:
-    from ..Methods.Output.OutLoss.get_loss_dist import get_loss_dist
-except ImportError as error:
-    get_loss_dist = error
 
 try:
     from ..Methods.Output.OutLoss.get_loss_overall import get_loss_overall
@@ -53,15 +43,6 @@ class OutLoss(FrozenClass):
     VERSION = 1
 
     # Check ImportError to remove unnecessary dependencies in unused method
-    # cf Methods.Output.OutLoss.get_loss
-    if isinstance(get_loss, ImportError):
-        get_loss = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use OutLoss method get_loss: " + str(get_loss))
-            )
-        )
-    else:
-        get_loss = get_loss
     # cf Methods.Output.OutLoss.get_loss_density_ag
     if isinstance(get_loss_density_ag, ImportError):
         get_loss_density_ag = property(
@@ -74,17 +55,6 @@ class OutLoss(FrozenClass):
         )
     else:
         get_loss_density_ag = get_loss_density_ag
-    # cf Methods.Output.OutLoss.get_loss_dist
-    if isinstance(get_loss_dist, ImportError):
-        get_loss_dist = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use OutLoss method get_loss_dist: " + str(get_loss_dist)
-                )
-            )
-        )
-    else:
-        get_loss_dist = get_loss_dist
     # cf Methods.Output.OutLoss.get_loss_overall
     if isinstance(get_loss_overall, ImportError):
         get_loss_overall = property(

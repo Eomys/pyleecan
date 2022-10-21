@@ -10181,9 +10181,7 @@
         "desc": "Gather the loss module outputs",
         "is_internal": false,
         "methods": [
-            "get_loss",
             "get_loss_density_ag",
-            "get_loss_dist",
             "get_loss_overall",
             "store"
         ],
