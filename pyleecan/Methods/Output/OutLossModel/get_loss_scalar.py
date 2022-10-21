@@ -1,17 +1,17 @@
 def get_loss_scalar(self, felec):
     """Get loss power from coefficients stored in coeff_dict
 
-    Parameter
-    ---------
+    Parameters
+    ----------
     self : OutLossModel
         an OutLossModel object
     felec : float
         the electrical frequency
-    Return
-    ------
+
+    Returns
+    -------
     Ploss : float
         loss power for the specified frequency [W]
-
     """
 
     if self.coeff_dict is None:

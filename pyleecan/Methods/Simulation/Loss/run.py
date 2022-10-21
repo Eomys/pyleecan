@@ -2,7 +2,13 @@ from ....Methods.Simulation.Input import InputError
 
 
 def run(self):
-    """Run the LossFEMM module"""
+    """Run the Loss module
+
+    Parameters
+    ----------
+    self : Loss
+        A Loss model
+    """
     if self.parent is None:
         raise InputError("The Loss object must be in a Simulation object to run")
     if self.parent.parent is None:

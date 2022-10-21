@@ -4,12 +4,12 @@ from SciDataTool import Data1D
 
 
 def comp_axes(self, output):
-    """Compute the axes required in LossFEMM module
+    """Compute the axes required in Loss module
 
     Parameters
     ----------
-    self : LossFEMM
-        a LossFEMM object
+    self : Loss
+        a Loss object
     output : Output
         an Output object (to update)
 
