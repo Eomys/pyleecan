@@ -54,8 +54,8 @@
          <rect>
           <x>0</x>
           <y>0</y>
-          <width>268</width>
-          <height>793</height>
+          <width>272</width>
+          <height>762</height>
          </rect>
         </property>
         <layout class="QVBoxLayout" name="verticalLayout_5">
@@ -280,6 +280,15 @@
            <property name="checked">
             <bool>false</bool>
            </property>
+           <layout class="QVBoxLayout" name="verticalLayout_6">
+            <item>
+             <widget class="QPushButton" name="b_bore">
+              <property name="text">
+               <string>set uneven bore shape</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
           </widget>
          </item>
          <item>

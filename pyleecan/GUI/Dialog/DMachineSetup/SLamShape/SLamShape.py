@@ -7,6 +7,8 @@ from logging import getLogger
 
 from .....loggers import GUI_LOG_NAME
 from .....GUI import gui_option
+from .....Classes.MachineIPMSM import MachineIPMSM
+from .....GUI.Dialog.DMachineSetup.DBore.DBore import DBore
 from .....GUI.Dialog.DMachineSetup.DNotchTab.DNotchTab import DNotchTab
 from .....GUI.Dialog.DMachineSetup.DAVDuct.DAVDuct import DAVDuct
 from .....GUI.Dialog.DMachineSetup.SLamShape.Gen_SLamShape import Gen_SLamShape
@@ -101,8 +103,15 @@ class SLamShape(Gen_SLamShape, QWidget):
             self.g_notches.setChecked(True)
         self.update_notches_text()
 
-        # Not available Yet
-        self.g_bore.hide()
+        # Bore Setup
+        if self.obj.bore is not None:
+            self.g_bore.setChecked(True)
+
+        # Only for IPMSM rotor
+        if not is_stator and isinstance(self.machine, MachineIPMSM):
+            self.g_bore.show()
+        else:
+            self.g_bore.hide()
 
         # Setup Output
         self.update_graph()
@@ -116,6 +125,8 @@ class SLamShape(Gen_SLamShape, QWidget):
         self.b_axial_duct.clicked.connect(self.set_avd)
         self.g_notches.toggled.connect(self.enable_notches)
         self.b_notch.clicked.connect(self.set_notches)
+        self.g_bore.toggled.connect(self.enable_bore)
+        self.b_bore.clicked.connect(self.set_bore)
         self.si_Nrvd.editingFinished.connect(self.set_Nrvd)
         self.lf_Wrvd.editingFinished.connect(self.set_Wrvd)
         self.w_mat.saveNeeded.connect(self.emit_save)
@@ -307,6 +318,39 @@ class SLamShape(Gen_SLamShape, QWidget):
         for notch in self.obj.notch:
             Nnotch += notch.notch_shape.Zs
         self.out_notch.setText(str(Nset) + " set (" + str(Nnotch) + " notches)")
+
+    def enable_bore(self):
+        """Clear bore if g_bore is unselected"""
+        if not self.g_notches.isChecked():
+            self.obj.bore = None
+            self.update_graph()
+        # Notify the machine GUI that the machine has changed
+        self.saveNeeded.emit()
+
+    def set_bore(self):
+        """Opens widget to define bore to add to the lamination
+
+        Parameters
+        ----------
+        self : SLamShape
+            A SLamShape object
+        """
+        self.bore_win = DBore(self.obj)
+        self.bore_win.show()
+        self.bore_win.accepted.connect(self.validate_bore)
+
+    def validate_bore(self):
+        """validates the bore shape defined by the user
+        Parameters
+        ----------
+        self : SLamShape
+            A SLamShape object
+        """
+        self.obj.bore = self.bore_win.lam.bore
+        self.bore_win = None
+        self.update_graph()
+        # Notify the machine GUI that the machine has changed
+        self.saveNeeded.emit()
 
     def update_lenght(self):
         """Update the text of out_length

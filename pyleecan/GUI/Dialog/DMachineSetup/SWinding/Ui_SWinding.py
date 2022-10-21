@@ -47,29 +47,34 @@ class Ui_SWinding(object):
         self.scrollArea.setWidgetResizable(True)
         self.scrollAreaWidgetContents = QWidget()
         self.scrollAreaWidgetContents.setObjectName(u"scrollAreaWidgetContents")
-        self.scrollAreaWidgetContents.setGeometry(QRect(0, -31, 247, 805))
+        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 247, 793))
         self.verticalLayout_5 = QVBoxLayout(self.scrollAreaWidgetContents)
         self.verticalLayout_5.setObjectName(u"verticalLayout_5")
         self.g_pattern = QGroupBox(self.scrollAreaWidgetContents)
         self.g_pattern.setObjectName(u"g_pattern")
-        self.verticalLayout_2 = QVBoxLayout(self.g_pattern)
-        self.verticalLayout_2.setObjectName(u"verticalLayout_2")
+        self.gridLayout_2 = QGridLayout(self.g_pattern)
+        self.gridLayout_2.setObjectName(u"gridLayout_2")
+        self.in_Zs_2 = QLabel(self.g_pattern)
+        self.in_Zs_2.setObjectName(u"in_Zs_2")
+
+        self.gridLayout_2.addWidget(self.in_Zs_2, 0, 0, 1, 1)
+
         self.c_wind_type = QComboBox(self.g_pattern)
         self.c_wind_type.addItem("")
         self.c_wind_type.addItem("")
         self.c_wind_type.setObjectName(u"c_wind_type")
 
-        self.verticalLayout_2.addWidget(self.c_wind_type)
+        self.gridLayout_2.addWidget(self.c_wind_type, 0, 1, 1, 1)
 
         self.in_Zs = QLabel(self.g_pattern)
         self.in_Zs.setObjectName(u"in_Zs")
 
-        self.verticalLayout_2.addWidget(self.in_Zs)
+        self.gridLayout_2.addWidget(self.in_Zs, 1, 0, 1, 2)
 
         self.in_p = QLabel(self.g_pattern)
         self.in_p.setObjectName(u"in_p")
 
-        self.verticalLayout_2.addWidget(self.in_p)
+        self.gridLayout_2.addWidget(self.in_p, 2, 0, 1, 2)
 
         self.gridLayout = QGridLayout()
         self.gridLayout.setObjectName(u"gridLayout")
@@ -127,17 +132,17 @@ class Ui_SWinding(object):
 
         self.gridLayout.addWidget(self.si_Npcp, 4, 1, 1, 1)
 
-        self.verticalLayout_2.addLayout(self.gridLayout)
+        self.gridLayout_2.addLayout(self.gridLayout, 3, 0, 1, 2)
 
         self.b_generate = QPushButton(self.g_pattern)
         self.b_generate.setObjectName(u"b_generate")
 
-        self.verticalLayout_2.addWidget(self.b_generate)
+        self.gridLayout_2.addWidget(self.b_generate, 4, 0, 1, 2)
 
         self.b_import = QPushButton(self.g_pattern)
         self.b_import.setObjectName(u"b_import")
 
-        self.verticalLayout_2.addWidget(self.b_import)
+        self.gridLayout_2.addWidget(self.b_import, 5, 0, 1, 2)
 
         self.verticalLayout_5.addWidget(self.g_pattern)
 
@@ -279,7 +284,10 @@ class Ui_SWinding(object):
         SWinding.setWindowTitle(QCoreApplication.translate("SWinding", u"Form", None))
         self.in_wind_param.setText("")
         self.g_pattern.setTitle(
-            QCoreApplication.translate("SWinding", u"Pattern", None)
+            QCoreApplication.translate("SWinding", u"Winding pattern", None)
+        )
+        self.in_Zs_2.setText(
+            QCoreApplication.translate("SWinding", u"Generation method", None)
         )
         self.c_wind_type.setItemText(
             0, QCoreApplication.translate("SWinding", u"Star of Slot", None)
@@ -405,17 +413,21 @@ class Ui_SWinding(object):
         )
         # endif // QT_CONFIG(whatsthis)
         self.out_rot_dir.setText(
-            QCoreApplication.translate("SWinding", u"Rotation Direction: ", None)
+            QCoreApplication.translate("SWinding", u"Rotation Direction", None)
         )
         self.out_ms.setText(
-            QCoreApplication.translate("SWinding", u"ms = Zs / (2*p*qs) = ?", None)
+            QCoreApplication.translate(
+                "SWinding", u"Number of slot per pole per phase", None
+            )
         )
         # if QT_CONFIG(tooltip)
         self.out_Nperw.setToolTip(
             QCoreApplication.translate("SWinding", u"Winding periodicity", None)
         )
         # endif // QT_CONFIG(tooltip)
-        self.out_Nperw.setText(QCoreApplication.translate("SWinding", u"Nperw", None))
+        self.out_Nperw.setText(
+            QCoreApplication.translate("SWinding", u"Winding periodicity", None)
+        )
         # if QT_CONFIG(tooltip)
         self.out_Ntspc.setToolTip(
             QCoreApplication.translate(
@@ -437,7 +449,11 @@ class Ui_SWinding(object):
             )
         )
         # endif // QT_CONFIG(whatsthis)
-        self.out_Ntspc.setText(QCoreApplication.translate("SWinding", u"Ntspc: ", None))
+        self.out_Ntspc.setText(
+            QCoreApplication.translate(
+                "SWinding", u"Number of turns in series per phase", None
+            )
+        )
         # if QT_CONFIG(tooltip)
         self.out_Ncspc.setToolTip(
             QCoreApplication.translate(
@@ -459,7 +475,11 @@ class Ui_SWinding(object):
             )
         )
         # endif // QT_CONFIG(whatsthis)
-        self.out_Ncspc.setText(QCoreApplication.translate("SWinding", u"Ncspc:", None))
+        self.out_Ncspc.setText(
+            QCoreApplication.translate(
+                "SWinding", u"Number of coils in series per parallel circuit", None
+            )
+        )
         self.b_export.setText(
             QCoreApplication.translate("SWinding", u"Export to CSV", None)
         )

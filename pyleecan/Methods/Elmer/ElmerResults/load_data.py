@@ -7,12 +7,13 @@ from ....Methods.Elmer.ElmerResults import ElmerResultsError
 def load_data(self):
     """Method to load the Elmer simulation results (as an alternative for direct input)
 
-    Parameter
-    ---------
+    Parameters
+    ----------
+    self : ElmerResults
+        An ElmerResults object
 
-
-    Return
-    ------
+    Returns
+    -------
     data : list
         list of data
 

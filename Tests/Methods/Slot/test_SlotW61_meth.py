@@ -158,19 +158,43 @@ class Test_SlotW61_meth(object):
     def test_check_Inner_error(self, test_dict):
         """Check that the ERROR is raised"""
 
-        test_obj = test_dict["test_obj"]
+        test_obj = test_dict["test_obj"].copy()
 
         test_obj.is_internal = False
         with pytest.raises(S61_InnerCheckError) as context:
             test_obj.slot.check()
 
     @pytest.mark.parametrize("test_dict", slotW61_test)
+    def test_get_surfaces(self, test_dict):
+        """Checks that the surfaces are correct"""
+        test_obj = test_dict["test_obj"]
+        Sact = test_obj.slot.build_geometry_active(Nrad=1, Ntan=2)
+        Sfull = test_obj.slot.get_surface()
+        Sop = test_obj.slot.get_surface_opening()
+
+        # Sop[0].plot()
+        assert len(Sact) == 2
+        assert len(Sop) == 1
+        S1 = Sact[0].comp_surface() + Sact[1].comp_surface() + Sop[0].comp_surface()
+        S2 = Sfull.comp_surface()
+
+        msg = "Act+Op=" + str(S1) + ", Full=" + str(S2)
+        assert abs((S1 - S2) / S1) < DELTA, msg
+
+    @pytest.mark.parametrize("test_dict", slotW61_test)
     def test_check_Wind_error(self, test_dict):
         """Check that the ERROR is raised"""
 
-        test_obj = test_dict["test_obj"]
+        test_obj = test_dict["test_obj"].copy()
 
         test_obj.slot.W3 = 50
         test_obj.is_internal = True
         with pytest.raises(S61_WindWError) as context:
             test_obj.slot.check()
+
+
+if __name__ == "__main__":
+    a = Test_SlotW61_meth()
+    for test_dict in slotW61_test:
+        a.test_get_surfaces(test_dict)
+    print("Done")

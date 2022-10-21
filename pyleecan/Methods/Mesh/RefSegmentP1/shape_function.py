@@ -7,16 +7,16 @@ def shape_function(self, g_point, nb_gpt):
     """Return the values of linear shape functions in reference 2 node segment for a given point
 
     Parameters
-     ----------
+    ----------
     self : RefSegmentP1
          an RefCell object
     point : ndarray
         ref point
 
-     Returns
-     -------
-     value: array
-         interpolated field
+    Returns
+    -------
+    value: array
+        interpolated field
 
     """
 

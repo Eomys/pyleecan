@@ -1,13 +1,13 @@
 def get_loss_overall(self):
     """Get overall loss by summing all losses in OutLoss
 
-    Parameter
-    ---------
+    Parameters
+    ----------
     self : OutLoss
         an OutLoss object
 
-    Return
-    ------
+    Returns
+    -------
     loss : float
         overall loss [W]
 

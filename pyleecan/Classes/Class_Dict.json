@@ -251,7 +251,11 @@
             "is_yoke",
             "merge_slot_connect",
             "merge_slot_intersect",
-            "merge_slot_translate"
+            "merge_slot_translate",
+            "comp_Rmin",
+            "comp_surface",
+            "get_surface",
+            "plot"
         ],
         "mother": "",
         "name": "Bore",
@@ -282,7 +286,8 @@
         "is_internal": false,
         "methods": [
             "get_bore_line",
-            "comp_periodicity_spatial"
+            "comp_periodicity_spatial",
+            "plot_schematics"
         ],
         "mother": "Bore",
         "name": "BoreFlower",
@@ -5914,7 +5919,7 @@
             },
             {
                 "as_dict": "",
-                "desc": "Skin effect for resistance calculation",
+                "desc": "Skin effect for resistance calculation (0 to ignore skin effect, 1 to consider it)",
                 "max": "",
                 "min": "",
                 "name": "type_skin_effect",
@@ -7573,7 +7578,7 @@
             },
             {
                 "as_dict": "",
-                "desc": "magnet remanence induction at 20degC (calculated from mur_lin and Hc if not provided)",
+                "desc": "magnet remanence induction at 20degC",
                 "max": "",
                 "min": "",
                 "name": "Brm20",
@@ -7583,7 +7588,7 @@
             },
             {
                 "as_dict": "",
-                "desc": "temperature coefficient for remanent flux density /degC compared to 20degC",
+                "desc": "temperature coefficient for remanent flux density",
                 "max": "",
                 "min": "",
                 "name": "alpha_Br",
@@ -10690,6 +10695,7 @@
             "getter.get_machine_periodicity",
             "getter.get_fund_harm",
             "getter.get_data_from_str",
+            "getter.export_to_mat",
             "plot.Magnetic.plot_B_mesh",
             "print_memory"
         ],
@@ -14697,6 +14703,7 @@
             "comp_surface",
             "comp_surface_active",
             "get_surface_active",
+            "get_surface_opening",
             "plot_schematics"
         ],
         "mother": "Slot",
@@ -14812,6 +14819,7 @@
             "comp_surface",
             "comp_surface_active",
             "get_surface_active",
+            "get_surface_opening",
             "plot_schematics"
         ],
         "mother": "Slot",
@@ -16143,7 +16151,7 @@
             },
             {
                 "as_dict": "",
-                "desc": "straight length of the conductors outside the lamination before the curved part of winding overhang [m] - can be negative to tune the average turn length ",
+                "desc": "straight length of the conductors outside the lamination before the curved part of winding overhang [m] - can be negative to tune the average turn length (only used in voltage driven simulations)",
                 "max": "",
                 "min": "0",
                 "name": "Lewout",

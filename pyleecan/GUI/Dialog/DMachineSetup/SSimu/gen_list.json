@@ -1,0 +1,84 @@
+[
+    {
+        "cls": "OP",
+        "name": "N0",
+        "widget": [
+            "in_N0",
+            "lf_N0",
+            "unit_N0"
+        ],
+        "xls": "Simulation"
+    },
+    {
+        "cls": "OPdqf",
+        "name": "If_ref",
+        "widget": [
+            "in_I3",
+            "lf_I3",
+            "unit_I3"
+        ],
+        "xls": "Simulation"
+    },
+    {
+        "cls": "Magnetics",
+        "name": "T_mag",
+        "widget": [
+            "in_T_mag",
+            "lf_T_mag",
+            "unit_T_mag"
+        ],
+        "xls": "Simulation"
+    },
+    {
+        "cls": "Input",
+        "name": "Na_tot",
+        "widget": [
+            "in_Na_tot",
+            "si_Na_tot"
+        ],
+        "xls": "Simulation"
+    },
+    {
+        "cls": "Magnetics",
+        "name": "is_periodicity_a",
+        "widget": [
+            "is_per_a"
+        ],
+        "xls": "Simulation"
+    },
+    {
+        "cls": "Input",
+        "name": "Nt_tot",
+        "widget": [
+            "in_Nt_tot",
+            "si_Nt_tot"
+        ],
+        "xls": "Simulation"
+    },
+    {
+        "cls": "Magnetics",
+        "name": "is_periodicity_t",
+        "widget": [
+            "is_per_t"
+        ],
+        "xls": "Simulation"
+    },
+    {
+        "cls": "MagFEMM",
+        "name": "Kmesh_fineness",
+        "widget": [
+            "in_Kmesh",
+            "lf_Kmesh"
+        ],
+        "xls": "Simulation"
+    },
+    {
+        "cls": "MagFEMM",
+        "name": "nb_worker",
+        "widget": [
+            "in_nb_worker",
+            "si_nb_worker"
+        ],
+        "xls": "Simulation"
+    }
+]

@@ -1,4 +1,4 @@
-from numpy import zeros
+from numpy import zeros, ones
 
 from SciDataTool import DataTime
 
@@ -109,7 +109,9 @@ def gen_input(self):
         Nt_per = Time.get_length(is_smallestperiod=True)
         Phase_R = outelec.axes_dict["phase_" + simu.machine.rotor.get_label()]
         qr_per = Phase_R.get_length(is_smallestperiod=True)
-        if self.Ir is None:
+        if hasattr(self.OP, "If_ref"):  # WRSM case
+            Ir_val = ones((Nt_per, qr_per)) * self.OP.If_ref
+        elif self.Ir is None:
             Ir_val = zeros((Nt_per, qr_per))
         else:
             Ir_val = self.Ir.get_data()

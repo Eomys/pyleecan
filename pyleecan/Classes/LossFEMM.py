@@ -363,7 +363,7 @@ class LossFEMM(Loss):
     type_skin_effect = property(
         fget=_get_type_skin_effect,
         fset=_set_type_skin_effect,
-        doc=u"""Skin effect for resistance calculation
+        doc=u"""Skin effect for resistance calculation (0 to ignore skin effect, 1 to consider it)
 
         :Type: int
         """,

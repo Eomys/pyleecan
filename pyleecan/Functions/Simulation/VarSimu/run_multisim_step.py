@@ -16,11 +16,10 @@ def run_multisim_step(
     post_keeper_postproc_list=None,
     simu_type=None,
 ):
-    """
-    Execute a simulation step of a multi-simulation and run datakeepers
+    """Execute a simulation step of a multi-simulation and run datakeepers
 
-    Parameters:
-    -----------
+    Parameters
+    ----------
     simulation: Simulation
         Simulation to run
     datakeeper_list

@@ -4,8 +4,8 @@
 def get_loss_dist(self, part_label="Stator", index=None):
     """Convenience method to get some specific loss distribution component.
 
-    Parameter
-    ---------
+    Parameters
+    ----------
     self : OutLoss
         an OutLoss object
 
@@ -15,8 +15,8 @@ def get_loss_dist(self, part_label="Stator", index=None):
     index : int
         Index of the Loss Model
 
-    Return
-    ------
+    Returns
+    -------
     meshsolution : MeshSolution
         MeshSoltution of the requested loss component
 

@@ -83,7 +83,7 @@ class PHoleMUD(Ui_PHoleMUD, QWidget):
             # Add widget
             self.w_mat_dict[key] = WMatSelect(self.g_mat)
             self.w_mat_dict[key].setObjectName("w_mat_" + str(index))
-            self.g_mat_layout.addWidget(self.w_mat_dict[key])
+            self.g_mat_layout.insertWidget(int(index) + 1, self.w_mat_dict[key])
             # Setup Widget
             self.w_mat_dict[key].setText("Magnet " + str(index) + "")
             self.w_mat_dict[key].def_mat = "MagnetPrius"
