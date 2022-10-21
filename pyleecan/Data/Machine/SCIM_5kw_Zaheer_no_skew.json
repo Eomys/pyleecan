@@ -5,7 +5,7 @@
   "desc": "Machine studied in the Thesis of Minhaj Zaheer \"Evaluation of open-source FEM software performance in analysing converter-fed induction machine losses\", https://lutpub.lut.fi/handle/10024/163651",
   "frame": null,
   "logger_name": null,
-  "name": "SCIM_5kw_Zaheer_wo_skew",
+  "name": "SCIM_5kw_Zaheer_no_skew",
   "rotor": {
     "Hscr": 0.015,
     "Kf1": 0.95,

@@ -56,7 +56,7 @@ def find_best_phi0_jaguar():
     # No need to draw the machine for all OP
     varload.is_reuse_femm_file=True
     
-    machine = load(join(DATA_DIR, "Machine", "Jaguar_I_Pace_wo_skew.json"))
+    machine = load(join(DATA_DIR, "Machine", "Jaguar_I_Pace_no_skew.json"))
     
     simu = Simu1(name="test_FEMM_Loss_Jaguar_I_Pace", machine=machine)
     Ic = 450 * np.exp(1j * 150 * np.pi / 180)
@@ -240,10 +240,10 @@ def test_FEMM_Loss_Jaguar():
 @pytest.mark.SingleOP
 @pytest.mark.Loss
 @pytest.mark.skip(reason="Work in progress")
-def test_FEMM_Loss_Jaguar_wo_skew():
+def test_FEMM_Loss_Jaguar_no_skew():
     """Test to calculate losses in Toyota_Prius using LossFEMM model based on motoranalysis validation"""
 
-    machine = load(join(DATA_DIR, "Machine", "Jaguar_I_Pace_wo_skew.json"))
+    machine = load(join(DATA_DIR, "Machine", "Jaguar_I_Pace_no_skew.json"))
     
 
     simu = Simu1(name="test_FEMM_Loss_Jaguar_I_Pace", machine=machine)
@@ -378,6 +378,6 @@ def test_FEMM_Loss_Jaguar_wo_skew():
 if __name__ == "__main__":
     
     # find_best_phi0_jaguar()
-    # test_FEMM_Loss_Jaguar_wo_skew()
+    # test_FEMM_Loss_Jaguar_no_skew()
     test_FEMM_Loss_Jaguar()
     # test_FEMM_Jaguar_with_skew()

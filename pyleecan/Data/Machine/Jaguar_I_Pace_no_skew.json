@@ -5,7 +5,7 @@
   "desc": null,
   "frame": null,
   "logger_name": null,
-  "name": "Jaguar_I_Pace_wo_skew",
+  "name": "Jaguar_I_Pace_no_skew",
   "rotor": {
     "Kf1": 0.95,
     "L1": 0.1651,
