@@ -35,11 +35,10 @@ is_show_fig = True
 def test_ElecLUTdq_solve_MTPA():
     """Validation of the PMSM Electrical Equivalent Circuit with the Prius machine for MTPA calculation"""
 
-    machine = load("Research/Stellantis_IPMSM_test.json")
-
+    machine = load(
+        join(DATA_DIR, "Machine", "Stellantis_IPMSM_test.json")
+    )
     LUT_enforced = None
-
-    # LUT_enforced = load(r"C:\Users\LAP10\Documents\Loss\LUT_eff.h5")
 
     # Speed vector
     Nspeed = 10
@@ -61,9 +60,9 @@ def test_ElecLUTdq_solve_MTPA():
     OP_matrix = np.zeros((Nspeed, 3))
     OP_matrix[:, 0] = np.linspace(50, 18000, Nspeed)
     simu.var_simu = VarLoadCurrent(
-        OP_matrix=OP_matrix, type_OP_matrix=1, is_keep_all_output=True
+        is_keep_all_output=True
     )
-    simu.input.set_OP_from_array(OP_matrix, type_OP_matrix=1)
+    simu.var_simu.set_OP_array(OP_matrix, "N0", "Id", "Iq")
 
     simu.elec = ElecLUTdq(
         Urms_max=2 * 225 / (3 * np.sqrt(2)),
@@ -84,7 +83,6 @@ def test_ElecLUTdq_solve_MTPA():
                 is_periodicity_t=True,
             ),
             var_simu=VarLoadCurrent(
-                type_OP_matrix=1,
                 postproc_list=[PostLUT(is_save_LUT=True)],
                 is_keep_all_output=True,
             ),
