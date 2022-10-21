@@ -79,7 +79,7 @@ def comp_loss(self):
                 Wmag = hole0.W1
         elif isinstance(hole0, HoleM52):
             Hmag = hole0.H1
-        else:
+        else:  #HoleUD
             Hmag = np.sqrt(hole0.comp_surface_magnet_id(0))
             Wmag = Hmag
     else:
@@ -93,7 +93,7 @@ def comp_loss(self):
     # Calculate segmentation coefficient from:
     # "Effect of Eddy-Current Loss Reduction by Magnet Segmentation in Synchronous Motors With Concentrated Windings"
     # Katsumi Yamazaki, Member, IEEE, and Yu Fukushima, Equation (9)
-    if magnet.Lmag is None or magnet.Nseg is None or Wmag is None:
+    if magnet.Lmag is None or magnet.Nseg is None or Wmag is None or magnet.Nseg ==1:
         kseg = 1
     else:
         Lmag = magnet.Lmag
