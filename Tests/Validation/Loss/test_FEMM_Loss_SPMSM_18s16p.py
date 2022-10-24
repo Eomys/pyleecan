@@ -103,9 +103,9 @@ def test_LossFEMM_SPMSM():
         group_names = ["stator core", "rotor core", "rotor magnets"]
         for loss in out.loss.loss_list:
             if "joule" in loss.name or "proximity" in loss.name:
-                loss.plot_mesh(group_name=group_names + ["stator winding"])
+                loss.plot_mesh(group_names=group_names + ["stator winding"])
             else:
-                loss.plot_mesh(group_name=group_names)
+                loss.plot_mesh(group_names=group_names)
         out.loss.plot_losses()
 
         # plot_2D(

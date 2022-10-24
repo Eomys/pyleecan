@@ -112,9 +112,9 @@ def test_FEMM_Loss_Prius():
         group_names = ["stator core", "rotor core", "rotor magnets"]
         for loss in out.loss.loss_list:
             if "joule" in loss.name or "proximity" in loss.name:
-                loss.plot_mesh(group_name=group_names + ["stator winding"])
+                loss.plot_mesh(group_names=group_names + ["stator winding"])
             else:
-                loss.plot_mesh(group_name=group_names)
+                loss.plot_mesh(group_names=group_names)
         out.loss.plot_losses()
 
     # out.loss.meshsol_list[0].plot_contour(
@@ -202,9 +202,9 @@ def test_FEMM_Loss_diff():
         group_names = ["stator core", "rotor core", "rotor magnets"]
         for loss in out.loss.loss_list:
             if "joule" in loss.name or "proximity" in loss.name:
-                loss.plot_mesh(group_name=group_names + ["stator winding"])
+                loss.plot_mesh(group_names=group_names + ["stator winding"])
             else:
-                loss.plot_mesh(group_name=group_names)
+                loss.plot_mesh(group_names=group_names)
         out.loss.plot_losses()
 
     # out.loss.meshsol_list[0].plot_contour(
@@ -272,9 +272,9 @@ def test_LossFEMM_Prius():
         group_names = ["stator core", "rotor core", "rotor magnets"]
         for loss in out.loss.loss_list:
             if "joule" in loss.name or "proximity" in loss.name:
-                loss.plot_mesh(group_name=group_names + ["stator winding"])
+                loss.plot_mesh(group_names=group_names + ["stator winding"])
             else:
-                loss.plot_mesh(group_name=group_names)
+                loss.plot_mesh(group_names=group_names)
         out.loss.plot_losses()
 
         # out.loss.meshsol_list[0].plot_contour(
