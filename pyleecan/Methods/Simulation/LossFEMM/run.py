@@ -1,7 +1,7 @@
-from pyleecan.Classes.LossModelMagnet import LossModelMagnet
-from pyleecan.Classes.LossModelProximity import LossModelProximity
-from pyleecan.Classes.LossModelSteinmetz import LossModelSteinmetz
-from pyleecan.Classes.LossModelJoule import LossModelJoule
+from ....Classes.LossModelMagnet import LossModelMagnet
+from ....Classes.LossModelProximity import LossModelProximity
+from ....Classes.LossModelSteinmetz import LossModelSteinmetz
+from ....Classes.LossModelJoule import LossModelJoule
 from ....Methods.Simulation.Input import InputError
 
 
