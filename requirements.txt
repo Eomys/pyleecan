@@ -9,9 +9,9 @@ pyfemm>=0.1.1;platform_system=="Windows"
 PySide2>=5.15.2
 pyuff>=1.25
 pyvista>=0.25.3,<=0.31.3
-quadpy
+quadpy<=0.16.15
 SciDataTool>=2.5.0
-scipy>=1.4.1,<1.9.0
+scipy>=1.4.1
 setuptools
 git+https://gitlab.com/CedMrnl/swat-em.git
 xlrd>=1.2.0
