@@ -6067,16 +6067,6 @@
         "properties": [
             {
                 "as_dict": "",
-                "desc": "Winding temperature",
-                "max": "",
-                "min": "",
-                "name": "temperature",
-                "type": "float",
-                "unit": "\u00c2\u00b0C",
-                "value": 20
-            },
-            {
-                "as_dict": "",
                 "desc": "0 to ignore skin effect, 1 to consider it",
                 "max": "",
                 "min": "",
@@ -6236,16 +6226,6 @@
         "package": "Simulation",
         "path": "pyleecan/Generator/ClassesRef/Simulation/LossModelWinding.csv",
         "properties": [
-            {
-                "as_dict": "",
-                "desc": "Winding temperature",
-                "max": "",
-                "min": "",
-                "name": "temperature",
-                "type": "float",
-                "unit": "\u00c2\u00b0C",
-                "value": 20
-            },
             {
                 "as_dict": "",
                 "desc": "0 to ignore skin effect, 1 to consider it",

@@ -67,7 +67,6 @@ class LossModelJoule(LossModel):
 
     def __init__(
         self,
-        temperature=20,
         type_skin_effect=1,
         name="",
         group="",
@@ -91,8 +90,6 @@ class LossModelJoule(LossModel):
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
-            if "temperature" in list(init_dict.keys()):
-                temperature = init_dict["temperature"]
             if "type_skin_effect" in list(init_dict.keys()):
                 type_skin_effect = init_dict["type_skin_effect"]
             if "name" in list(init_dict.keys()):
@@ -104,7 +101,6 @@ class LossModelJoule(LossModel):
             if "coeff_dict" in list(init_dict.keys()):
                 coeff_dict = init_dict["coeff_dict"]
         # Set the properties (value check and convertion are done in setter)
-        self.temperature = temperature
         self.type_skin_effect = type_skin_effect
         # Call LossModel init
         super(LossModelJoule, self).__init__(
@@ -119,7 +115,6 @@ class LossModelJoule(LossModel):
         LossModelJoule_str = ""
         # Get the properties inherited from LossModel
         LossModelJoule_str += super(LossModelJoule, self).__str__()
-        LossModelJoule_str += "temperature = " + str(self.temperature) + linesep
         LossModelJoule_str += (
             "type_skin_effect = " + str(self.type_skin_effect) + linesep
         )
@@ -133,8 +128,6 @@ class LossModelJoule(LossModel):
 
         # Check the properties inherited from LossModel
         if not super(LossModelJoule, self).__eq__(other):
-            return False
-        if other.temperature != self.temperature:
             return False
         if other.type_skin_effect != self.type_skin_effect:
             return False
@@ -155,25 +148,6 @@ class LossModelJoule(LossModel):
                 other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
             )
         )
-        if (
-            other._temperature is not None
-            and self._temperature is not None
-            and isnan(other._temperature)
-            and isnan(self._temperature)
-        ):
-            pass
-        elif other._temperature != self._temperature:
-            if is_add_value:
-                val_str = (
-                    " (self="
-                    + str(self._temperature)
-                    + ", other="
-                    + str(other._temperature)
-                    + ")"
-                )
-                diff_list.append(name + ".temperature" + val_str)
-            else:
-                diff_list.append(name + ".temperature")
         if other._type_skin_effect != self._type_skin_effect:
             if is_add_value:
                 val_str = (
@@ -197,7 +171,6 @@ class LossModelJoule(LossModel):
 
         # Get size of the properties inherited from LossModel
         S += super(LossModelJoule, self).__sizeof__()
-        S += getsizeof(self.temperature)
         S += getsizeof(self.type_skin_effect)
         return S
 
@@ -218,7 +191,6 @@ class LossModelJoule(LossModel):
             keep_function=keep_function,
             **kwargs
         )
-        LossModelJoule_dict["temperature"] = self.temperature
         LossModelJoule_dict["type_skin_effect"] = self.type_skin_effect
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
@@ -229,7 +201,6 @@ class LossModelJoule(LossModel):
         """Creates a deepcopy of the object"""
 
         # Handle deepcopy of all the properties
-        temperature_val = self.temperature
         type_skin_effect_val = self.type_skin_effect
         name_val = self.name
         group_val = self.group
@@ -240,7 +211,6 @@ class LossModelJoule(LossModel):
             coeff_dict_val = self.coeff_dict.copy()
         # Creates new object of the same type with the copied properties
         obj_copy = type(self)(
-            temperature=temperature_val,
             type_skin_effect=type_skin_effect_val,
             name=name_val,
             group=group_val,
@@ -252,28 +222,9 @@ class LossModelJoule(LossModel):
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""
 
-        self.temperature = None
         self.type_skin_effect = None
         # Set to None the properties inherited from LossModel
         super(LossModelJoule, self)._set_None()
-
-    def _get_temperature(self):
-        """getter of temperature"""
-        return self._temperature
-
-    def _set_temperature(self, value):
-        """setter of temperature"""
-        check_var("temperature", value, "float")
-        self._temperature = value
-
-    temperature = property(
-        fget=_get_temperature,
-        fset=_set_temperature,
-        doc=u"""Winding temperature
-
-        :Type: float
-        """,
-    )
 
     def _get_type_skin_effect(self):
         """getter of type_skin_effect"""
