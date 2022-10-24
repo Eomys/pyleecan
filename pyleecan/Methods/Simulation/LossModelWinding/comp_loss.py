@@ -8,8 +8,8 @@ def comp_loss(self):
 
     Parameters
     ----------
-    self: LossFEMM
-        a LossFEMM object
+    self: LossModelWinding
+        a LossModelWinding object
 
     Returns
     -------

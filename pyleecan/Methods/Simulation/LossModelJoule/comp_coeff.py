@@ -9,14 +9,8 @@ def comp_coeff(self, T_op=20, T_ref=20):
 
     Parameters
     ----------
-    self : Conductor
-        an Conductor object
-    b: float
-        Slot width [m]
-    zt: int
-        Number of turns in series per coil
-    freq: float
-        electrical frequency [Hz]
+    self : LossModelJoule
+        a LossModelJoule object
     T_op: float
         Conductor operational temperature [degC]
     T_ref: float

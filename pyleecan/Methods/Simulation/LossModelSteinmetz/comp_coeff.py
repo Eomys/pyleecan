@@ -10,10 +10,12 @@ import textwrap
 
 def comp_coeff(self, material):
     """Enables to compute the coefficients of the loss model with a curve fitting
-    on loss data stored in the material
+    on loss data stored in the material (Store result in self.k_hy, self.k_ed, self.alpha_f, self.alpha_B)
 
     Parameters
     ----------
+    self : LossModelSteinmetz
+        A LossModelSteinmetz object
     material : Material
         A material object, corresponding to the material used in the electrical machine.
         This material object must contain loss data as an ImportMatrixVal object.
@@ -189,7 +191,7 @@ def comp_coeff(self, material):
         plt.legend()
         plt.show()
 
-    self.k_hy = popt[0]
-    self.k_ed = popt[1]
-    self.alpha_f = popt[2]
-    self.alpha_B = popt[3]
+    self.k_hy = popt[0]  # Hysteresis loss coefficient [W/kg]
+    self.k_ed = popt[1]  # Eddy current loss coefficient [W/kg]
+    self.alpha_f = popt[2]  # Hysteresis loss power coefficient for the frequency
+    self.alpha_B = popt[3]  # Hysteresis loss power coefficient for the flux density magnitude

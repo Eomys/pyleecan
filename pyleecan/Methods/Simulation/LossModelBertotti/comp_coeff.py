@@ -9,10 +9,12 @@ import textwrap
 
 def comp_coeff(self, material):
     """Enables to compute the coefficients of the loss model with a curve fitting
-    on loss data stored in the material
+    on loss data stored in the material (stored in self.k_hy, self.k_ed, self.k_ex)
 
     Parameters
     ----------
+    self : LossModelBertotti
+        A loss model to compute Bertotti losses
     material : Material
         A material object, corresponding to the material used in the electrical machine.
         This material object must contain loss data as an ImportMatrixVal object.
@@ -195,6 +197,6 @@ def comp_coeff(self, material):
         plt.legend()
         plt.show()
 
-    self.k_hy = popt[0]
-    self.k_ed = popt[1]
-    self.k_ex = popt[2]
+    self.k_hy = popt[0]  # Hysteresis loss coefficient [W/kg]
+    self.k_ed = popt[1]  # Eddy current loss coefficient [W/kg]
+    self.k_ex = popt[2]  # Excess loss coefficient [W/kg]

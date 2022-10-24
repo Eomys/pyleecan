@@ -8,8 +8,8 @@ def comp_loss(self):
 
     Parameters
     ----------
-    self: LossFEMM
-        a LossFEMM object
+    self: LossModelProximity
+        a LossModelProximity object
 
     Returns
     -------
@@ -33,9 +33,9 @@ def comp_loss(self):
     lamination = machine.stator if "stator" in self.group else machine.rotor
     Lst = lamination.L1
 
+    # Compute the Proximity loss coefficient (if not enforced)
     if self.k_p is None:
         self.comp_coeff()
-
     k_p = self.k_p
 
     # Get fundamental frequency

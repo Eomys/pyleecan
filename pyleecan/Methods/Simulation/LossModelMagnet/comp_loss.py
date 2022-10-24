@@ -21,10 +21,8 @@ def comp_loss(self):
 
     Parameters
     ----------
-    self: LossFEMM
-        a LossFEMM object
-    group: str
-        Name of part in which to calculate magnet losses
+    self: LossModelMagnet
+        a LossModelMagnet object
 
     Returns
     -------
@@ -32,8 +30,6 @@ def comp_loss(self):
         Magnet loss density function of frequency and elements [W/m3]
     freqs: ndarray
         frequency vector [Hz]
-    coeff_dict: dict
-        Dict containing coefficient A and B to calculate overall losses such as P = sum(A*f + B*f^2)
     """
 
     if self.parent.parent.parent is None:

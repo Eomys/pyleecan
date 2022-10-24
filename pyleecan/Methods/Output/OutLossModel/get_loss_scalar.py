@@ -6,7 +6,7 @@ def get_loss_scalar(self, felec):
     self : OutLossModel
         an OutLossModel object
     felec : float
-        the electrical frequency
+        the electrical frequency [Hz]
 
     Returns
     -------

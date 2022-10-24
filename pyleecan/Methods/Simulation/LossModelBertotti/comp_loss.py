@@ -9,8 +9,8 @@ def comp_loss(self):
 
     Parameters
     ----------
-    self: LossFEMM
-        a LossFEMM object
+    self: LossModelBertotti
+        a LossModelBertotti object
 
     Returns
     -------

@@ -21,8 +21,7 @@ def run(self):
 
     axes_dict = self.comp_axes(output)
 
-    # out_dict = self.comp_loss(output, axes_dict)
-
+    # Store calls "comp_loss" on each model from model_dict
     output.loss.store(
         self.model_dict,
         axes_dict,

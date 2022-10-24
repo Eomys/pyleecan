@@ -2,6 +2,20 @@ from ....Functions.Load.import_class import import_class
 
 
 def __sub__(self, other):
+    """Substract two loss models output (called for: self - other)
+
+    Parameters
+    ----------
+    self : OutLossModel
+        First loss model to sub
+    other : OutLossModel or dict
+        Second loss model to sub
+
+    Returns
+    -------
+    loss_tot : OutLossModel
+        Resulting Losses output
+    """
     if other == 0:
         return self
     try:

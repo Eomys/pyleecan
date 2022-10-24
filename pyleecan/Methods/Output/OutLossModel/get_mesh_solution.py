@@ -6,6 +6,18 @@ from ....Classes.MeshSolution import MeshSolution
 
 
 def get_mesh_solution(self):
+    """Returns the MeshSolution object corresponding to the losses
+    
+    Parameters
+    ----------
+    self : OutLossModel
+        Result of a Loss model computation
+
+    Returns
+    -------
+    MS : MeshSolution
+        Losses as fct(freq) on the machine mesh
+    """
     output = self.parent.parent
     # group = meshsol.group
     axes_dict = self.parent.axes_dict

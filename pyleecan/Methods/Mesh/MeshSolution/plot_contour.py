@@ -76,9 +76,22 @@ def plot_contour(
         a list of str corresponding to group name(s)
     save_path : str
         path to save the figure
+    itimefreq : int
+        if the field depends has a time/freqs axis, return the timefreq-th slice.
     is_show_fig : bool
         To call show at the end of the method
-    is_animated : True to animate magnetic flux density
+    win_title : str
+        Name of the window
+    factor : float
+        Normalization factor
+    is_animated : bool
+        True to animate magnetic flux density
+    title : str
+        Name of the figure
+    p : ?
+        Pyvista plotter
+    colormap : str
+        Name of the colormap to use (default is from config_dict)
 
     Returns
     -------

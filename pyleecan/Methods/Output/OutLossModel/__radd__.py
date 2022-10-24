@@ -2,6 +2,20 @@ from ....Functions.Load.import_class import import_class
 
 
 def __radd__(self, other):
+    """Add two loss models output (called for: other + self)
+    
+    Parameters
+    ----------
+    self : OutLossModel
+        First loss model to add
+    other : OutLossModel or dict
+        Second loss model to add
+
+    Returns
+    -------
+    loss_tot : OutLossModel
+        Resulting Losses output
+    """
     if other == 0:
         return self
     try:

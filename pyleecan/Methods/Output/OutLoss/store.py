@@ -14,10 +14,6 @@ def store(
     model_dict,
     axes_dict=None,
     is_get_meshsolution=True,
-    lam=None,
-    OP=None,
-    Tsta=20,
-    Pem=None,
 ):
     """Store the outputs of LossFEMM model that are temporarily in out_dict
 
@@ -25,36 +21,25 @@ def store(
     ----------
     self : OutLoss
         the OutLoss object to update
-    out_dict : dict
-        Dict containing all losses quantities that have been calculated in comp_losses
+    model_dict : {LossModel}
+        Dict containing all the losses models to compute
     axes_dict : dict
         Dict containing axes for loss calculation
     is_get_meshsolution: bool
-        True to store meshsolution of loss density
+        True to store meshsolution of each loss model
     """
 
     # Store dict of axes
     if axes_dict is not None:
         self.axes_dict = axes_dict
 
-    if lam is None:
-        lam = self.parent.simu.machine.stator
-
-    if OP is None:
-        OP = self.parent.elec.OP
-
-    if Pem is None:
-        Pem = self.parent.mag.Pem_av
-
-    felec = OP.get_felec(p=lam.get_pole_pair_number())
-
     meshsol = self.parent.mag.meshsolution
     group = meshsol.group
     freqs = axes_dict["freqs"].get_values()
     Nelem = meshsol.mesh[0].cell["triangle"].nb_cell
-    overall_loss_density = np.zeros((freqs.size, Nelem))
 
     for key, model in model_dict.items():
+        # Compute losses for each model
         P_density, f_array = model.comp_loss()
         if is_get_meshsolution:
             loss_density = np.zeros((freqs.size, Nelem))
@@ -63,7 +48,7 @@ def store(
             loss_density[If, Ie] += P_density
         else:
             loss_density = None
-        # overall_loss_density += loss_density
+        # Store results of each model in a different object
         out_loss_model = OutLossModel(
             name=key,
             loss_density=loss_density,
