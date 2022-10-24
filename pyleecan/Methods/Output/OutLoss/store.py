@@ -38,6 +38,7 @@ def store(
     freqs = axes_dict["freqs"].get_values()
     Nelem = meshsol.mesh[0].cell["triangle"].nb_cell
 
+    self.loss_list = list()
     for key, model in model_dict.items():
         # Compute losses for each model
         P_density, f_array = model.comp_loss()

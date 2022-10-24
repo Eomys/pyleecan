@@ -13,7 +13,8 @@ def plot_losses(self, N0_array=None):
         speed array to use as X axis [rpm]
     """
 
-    N0_array = linspace(10, 8000, 100)
+    if N0_array is None:
+        N0_array = linspace(10, 8000, 100)
     if self.parent is None:
         raise Exception("Error: OutLoss is not in Output object")
 
