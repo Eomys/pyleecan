@@ -17,7 +17,7 @@ from pyleecan.Functions.load import load
 
 from pyleecan.definitions import DATA_DIR
 
-from SciDataTool.Functions.Plot.plot_2D import plot_2D 
+from SciDataTool.Functions.Plot.plot_2D import plot_2D
 
 
 is_show_fig = False
@@ -60,68 +60,53 @@ def test_LossFEMM_SPMSM():
         # is_close_femm=False,
     )
 
-    simu.loss = LossFEMM(k_hy=Ch, k_ed=Ce, k_p=Cprox, is_get_meshsolution=True, Tsta=120, type_skin_effect = 0)
+    simu.loss = LossFEMM(
+        k_hy=Ch,
+        k_ed=Ce,
+        k_p=Cprox,
+        is_get_meshsolution=True,
+        Tsta=120,
+        type_skin_effect=0,
+    )
 
     out = simu.run()
 
     speed_array = np.linspace(10, 8000, 100)
     p = machine.get_pole_pair_number()
 
-    power_dict = {
-        "total_power": out.mag.Pem_av,
-        **dict([(o.name,o.get_loss_scalar(out.elec.OP.felec)) for o in out.loss.loss_list])
-    }
+    power_dict = out.loss.get_power_dict()
     print(power_dict)
-    
-    power_dict_ref = {"mechanical power": 62.30,
-                     "rotor core loss": 0.057,
-                     "stator core loss": 3.41,
-                     "prox loss": 0.06,
-                     "joule loss": 4.37,
-                     "magnet loss": 1.38,
-                     "total loss": 9.27
+
+    power_dict_ref = {
+        "mechanical power": 62.30,
+        "rotor core loss": 0.057,
+        "stator core loss": 3.41,
+        "prox loss": 0.06,
+        "joule loss": 4.37,
+        "magnet loss": 1.38,
+        "total loss": 9.27,
     }
 
     speed_array = np.linspace(10, 8000, 100)
     p = machine.get_pole_pair_number()
 
-    array_list = [np.array([o.get_loss_scalar(speed / 60 *p) for speed in speed_array])
-                  for o in out.loss.loss_list]
+    array_list = [
+        np.array([o.get_loss_scalar(speed / 60 * p) for speed in speed_array])
+        for o in out.loss.loss_list
+    ]
     power_val_ref = [62.30, 3.41, 0.06, 4.37, 0.06, 1.38, 9.27]
 
-    print(np.isclose(list(power_dict.values()), power_val_ref, rtol = 0.1, atol=0))
+    print(np.isclose(list(power_dict.values()), power_val_ref, rtol=0.1, atol=0))
     # assert_allclose(list(power_dict.values()), power_val_ref, rtol = 0.1)
 
     if is_show_fig:
-        group_names = [
-            "stator core",
-            "rotor core",
-            "rotor magnets"
-        ]
+        group_names = ["stator core", "rotor core", "rotor magnets"]
         for loss in out.loss.loss_list:
-            if "joule" in loss.name or "proximity" in loss.name :
-                group_names.append("stator winding")
-                loss.get_mesh_solution().plot_contour(
-                    "freqs=sum",
-                    label=f"{loss.name} loss density (W/m^3)",
-                    group_names = group_names
-                )
-                group_names.pop()
+            if "joule" in loss.name or "proximity" in loss.name:
+                loss.plot_mesh(group_name=group_names + ["stator winding"])
             else:
-                
-                loss.get_mesh_solution().plot_contour(
-                    "freqs=sum",
-                    label=f"{loss.name} loss density (W/m^3)",
-                    group_names = group_names
-                )
-
-        plot_2D(
-            [speed_array],
-            array_list,
-            xlabel="Speed [rpm]",
-            ylabel="Losses [W]",
-            legend_list=[o.name for o in out.loss.loss_list],
-        )
+                loss.plot_mesh(group_name=group_names)
+        out.loss.plot_losses()
 
         # plot_2D(
         #     [speed_array],
@@ -139,6 +124,7 @@ def test_LossFEMM_SPMSM():
         # )
 
     return out
+
 
 # To run it without pytest
 if __name__ == "__main__":

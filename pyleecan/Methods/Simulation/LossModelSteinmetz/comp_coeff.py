@@ -194,4 +194,5 @@ def comp_coeff(self, material):
     self.k_hy = popt[0]  # Hysteresis loss coefficient [W/kg]
     self.k_ed = popt[1]  # Eddy current loss coefficient [W/kg]
     self.alpha_f = popt[2]  # Hysteresis loss power coefficient for the frequency
-    self.alpha_B = popt[3]  # Hysteresis loss power coefficient for the flux density magnitude
+    # Hysteresis loss power coefficient for the flux density magnitude
+    self.alpha_B = popt[3]

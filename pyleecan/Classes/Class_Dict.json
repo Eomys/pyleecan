@@ -10183,7 +10183,9 @@
         "methods": [
             "get_loss_density_ag",
             "get_loss_overall",
-            "store"
+            "store",
+            "get_power_dict",
+            "plot_losses"
         ],
         "mother": "",
         "name": "OutLoss",
@@ -10238,7 +10240,8 @@
             "__add__",
             "__radd__",
             "__sub__",
-            "__rsub__"
+            "__rsub__",
+            "plot_mesh"
         ],
         "mother": "",
         "name": "OutLossModel",

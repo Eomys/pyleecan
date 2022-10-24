@@ -47,6 +47,11 @@ try:
 except ImportError as error:
     __rsub__ = error
 
+try:
+    from ..Methods.Output.OutLossModel.plot_mesh import plot_mesh
+except ImportError as error:
+    plot_mesh = error
+
 
 from numpy import array, array_equal
 from numpy import isnan
@@ -119,6 +124,17 @@ class OutLossModel(FrozenClass):
         )
     else:
         __rsub__ = __rsub__
+    # cf Methods.Output.OutLossModel.plot_mesh
+    if isinstance(plot_mesh, ImportError):
+        plot_mesh = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use OutLossModel method plot_mesh: " + str(plot_mesh)
+                )
+            )
+        )
+    else:
+        plot_mesh = plot_mesh
     # generic save method is available in all object
     save = save
     # get_logger method is available in all object

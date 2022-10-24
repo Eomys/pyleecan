@@ -26,5 +26,4 @@ def run(self):
         self.model_dict,
         axes_dict,
         self.is_get_meshsolution,
-        Tsta=self.Tsta,
     )

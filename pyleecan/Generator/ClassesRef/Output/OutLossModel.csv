@@ -5,3 +5,4 @@ coeff_dict,,dict of coefficients to compute the scalar value with respcet to fre
 group,,group to which the loss applies,,str,None,,,,,,__radd__,,,
 loss_model,,The name of the loss model used to compute the loss stored in this output,,str,None,,,,,,__sub__,,,
 ,,,,,,,,,,,__rsub__,,,
+,,,,,,,,,,,plot_mesh,,,

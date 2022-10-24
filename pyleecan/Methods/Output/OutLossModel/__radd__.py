@@ -3,7 +3,7 @@ from ....Functions.Load.import_class import import_class
 
 def __radd__(self, other):
     """Add two loss models output (called for: other + self)
-    
+
     Parameters
     ----------
     self : OutLossModel

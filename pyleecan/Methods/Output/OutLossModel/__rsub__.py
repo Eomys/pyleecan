@@ -3,7 +3,7 @@ from ....Functions.Load.import_class import import_class
 
 def __rsub__(self, other):
     """Substract two loss models output (called for: other - self)
-    
+
     Parameters
     ----------
     self : OutLossModel

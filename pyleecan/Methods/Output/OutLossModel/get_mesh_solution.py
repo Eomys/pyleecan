@@ -7,7 +7,7 @@ from ....Classes.MeshSolution import MeshSolution
 
 def get_mesh_solution(self):
     """Returns the MeshSolution object corresponding to the losses
-    
+
     Parameters
     ----------
     self : OutLossModel

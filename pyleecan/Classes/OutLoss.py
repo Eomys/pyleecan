@@ -32,6 +32,16 @@ try:
 except ImportError as error:
     store = error
 
+try:
+    from ..Methods.Output.OutLoss.get_power_dict import get_power_dict
+except ImportError as error:
+    get_power_dict = error
+
+try:
+    from ..Methods.Output.OutLoss.plot_losses import plot_losses
+except ImportError as error:
+    plot_losses = error
+
 
 from numpy import isnan
 from ._check import InitUnKnowClassError
@@ -76,6 +86,26 @@ class OutLoss(FrozenClass):
         )
     else:
         store = store
+    # cf Methods.Output.OutLoss.get_power_dict
+    if isinstance(get_power_dict, ImportError):
+        get_power_dict = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use OutLoss method get_power_dict: " + str(get_power_dict)
+                )
+            )
+        )
+    else:
+        get_power_dict = get_power_dict
+    # cf Methods.Output.OutLoss.plot_losses
+    if isinstance(plot_losses, ImportError):
+        plot_losses = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use OutLoss method plot_losses: " + str(plot_losses))
+            )
+        )
+    else:
+        plot_losses = plot_losses
     # generic save method is available in all object
     save = save
     # get_logger method is available in all object

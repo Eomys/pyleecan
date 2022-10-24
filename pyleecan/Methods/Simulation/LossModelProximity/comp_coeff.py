@@ -4,7 +4,7 @@ from numpy import pi
 
 def comp_coeff(self):
     """Compute the Proximity loss coefficient [W/kg]
-    
+
     Parameters
     ----------
     self : LossModelProximity

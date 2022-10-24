@@ -66,7 +66,9 @@ def test_FEMM_loss_SCIM():
         is_get_meshsolution=True,
         Tsta=100,
         model_dict={
-            "stator core Steinmetz": LossModelSteinmetz(group="stator core", is_show_fig=True),
+            "stator core Steinmetz": LossModelSteinmetz(
+                group="stator core", is_show_fig=True
+            ),
             "rotor core Steinmetz": LossModelSteinmetz(group="rotor core"),
             "joule": LossModelJoule(group="stator winding", type_skin_effect=1),
             "proximity": LossModelProximity(group="stator winding"),
@@ -75,25 +77,7 @@ def test_FEMM_loss_SCIM():
 
     out = simu.run()
 
-    power_dict = {
-        "Torque": out.mag.Tem_av,
-        "total_power": out.mag.Pem_av,
-        "J":out.elec.get_Jrms(),
-        **dict(
-            [(o.name, o.get_loss_scalar(out.elec.OP.felec)) for o in out.loss.loss_list]
-        ),
-    }
-    print(power_dict)
-
-    speed_array = np.linspace(10, 8000, 100)
-    p = machine.get_pole_pair_number()
-
-    array_list = [
-        np.array([o.get_loss_scalar(speed / 60 * p) for speed in speed_array])
-        for o in out.loss.loss_list
-        if o.name != "overall"
-    ]
-    array_list.append(sum(array_list))
+    print(out.loss.get_power_dict())
 
     # def calc_loss(coeff, B):
     #     f=80
@@ -137,13 +121,7 @@ def test_FEMM_loss_SCIM():
         #             group_names = group_names
         #         )
 
-        plot_2D(
-            [speed_array],
-            array_list,
-            xlabel="Speed [rpm]",
-            ylabel="Losses [W]",
-            legend_list=[o.name for o in out.loss.loss_list] + ["overall loss"],
-        )
+        out.loss.plot_losses()
 
         # Plot the flux
         out.mag.B.plot_2D_Data("angle", **dict_2D)
@@ -189,7 +167,7 @@ def test_FEMM_loss_SCIM_with_param():
     """Test to calculate losses in Toyota_Prius using LossFEMM model based on motoranalysis validation"""
 
     machine = load(join(DATA_DIR, "Machine", "SCIM_5kw_Zaheer.json"))
-    machine.rotor.skew=None
+    machine.rotor.skew = None
 
     simu = Simu1(name="test_FEMM_Loss_SCIM_5kW", machine=machine)
 
@@ -201,7 +179,7 @@ def test_FEMM_loss_SCIM_with_param():
             "Tem_av": 24.6,
             "I1_abs": 9,
             "Pjoule_s": 50,
-            "Pjoule_r": 40
+            "Pjoule_r": 40,
         },
         {
             "U0_ref": 200,
@@ -247,8 +225,8 @@ def test_FEMM_loss_SCIM_with_param():
         ]
     )
 
-    Lm_table = param_dict["Lm"]*10
-    Im_table = param_dict["Im"]*1e-1
+    Lm_table = param_dict["Lm"] * 10
+    Im_table = param_dict["Im"] * 1e-1
 
     # simu.input = InputCurrent(
     #     Nt_tot=4 * 40 ,
@@ -287,7 +265,7 @@ def test_FEMM_loss_SCIM_with_param():
             Im_table=Im_table,
             type_skin_effect=0,
             Lm=0.627,
-            Im=1*np.exp(1j * 80 * np.pi/180)
+            Im=1 * np.exp(1j * 80 * np.pi / 180),
         )
         # eec=EEC_SCIM(
         #     R1=R1_135,
@@ -332,25 +310,7 @@ def test_FEMM_loss_SCIM_with_param():
 
     out = simu.run()
 
-    power_dict = {
-        "Torque": out.mag.Tem_av,
-        "total_power": out.mag.Pem_av,
-        "J":out.elec.get_Jrms(),
-        **dict(
-            [(o.name, o.get_loss_scalar(out.elec.OP.felec)) for o in out.loss.loss_list]
-        ),
-    }
-    print(power_dict)
-
-    speed_array = np.linspace(10, 8000, 100)
-    p = machine.get_pole_pair_number()
-
-    array_list = [
-        np.array([o.get_loss_scalar(speed / 60 * p) for speed in speed_array])
-        for o in out.loss.loss_list
-        if o.name != "overall"
-    ]
-    array_list.append(sum(array_list))
+    print(out.loss.get_power_dict())
 
     # def calc_loss(coeff, B):
     #     f=80
@@ -394,13 +354,7 @@ def test_FEMM_loss_SCIM_with_param():
         #             group_names = group_names
         #         )
 
-        plot_2D(
-            [speed_array],
-            array_list,
-            xlabel="Speed [rpm]",
-            ylabel="Losses [W]",
-            legend_list=[o.name for o in out.loss.loss_list] + ["overall loss"],
-        )
+        out.loss.plot_losses()
 
         # Plot the flux
         out.mag.B.plot_2D_Data("angle", **dict_2D)
