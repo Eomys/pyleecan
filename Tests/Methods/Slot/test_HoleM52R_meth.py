@@ -14,7 +14,7 @@ from pyleecan.Methods.Slot.HoleM52R import (
     S52R_widthCheckError,
 )
 
-from numpy import exp, arcsin, ndarray, pi
+from numpy import exp, arcsin, ndarray, pi, angle
 
 # For AlmostEqual
 DELTA = 1e-6
@@ -107,6 +107,10 @@ class Test_Hole52_meth(object):
         # Check H0
         assert abs(Z9) == pytest.approx(test_obj.get_Rbo() - hole.H0)
         assert abs(Z1) == pytest.approx(test_obj.get_Rbo() - hole.H0)
+
+        # check alpha
+        alpha = hole.comp_alpha()
+        assert angle(Z1) - angle(Z9) == pytest.approx(alpha)
 
     @pytest.mark.parametrize("test_dict", HoleM52R_test)
     def test_comp_surface(self, test_dict):
