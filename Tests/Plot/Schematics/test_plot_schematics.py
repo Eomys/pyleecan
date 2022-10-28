@@ -33,6 +33,7 @@ from pyleecan.Classes.SlotWLSRPM import SlotWLSRPM
 from pyleecan.Classes.HoleM50 import HoleM50
 from pyleecan.Classes.HoleM51 import HoleM51
 from pyleecan.Classes.HoleM52 import HoleM52
+from pyleecan.Classes.HoleM52R import HoleM52R
 from pyleecan.Classes.HoleM53 import HoleM53
 from pyleecan.Classes.HoleM54 import HoleM54
 from pyleecan.Classes.HoleM57 import HoleM57
@@ -90,6 +91,7 @@ hole_test = list()
 hole_test.append({"test_obj": HoleM50(), "type_add_active": 2})
 hole_test.append({"test_obj": HoleM51(), "type_add_active": 2})
 hole_test.append({"test_obj": HoleM52(), "type_add_active": 2})
+hole_test.append({"test_obj": HoleM52R(), "type_add_active": 2})
 hole_test.append({"test_obj": HoleM53(), "type_add_active": 2})
 hole_test.append({"test_obj": HoleM54(), "type_add_active": 2})
 hole_test.append({"test_obj": HoleM57(), "type_add_active": 2})
@@ -101,6 +103,7 @@ hole_test.append({"test_obj": VentilationTrap(), "type_add_active": 2})
 slot_test.extend(hole_test)
 
 
+# python -m pytest ./Tests/Plot/Schematics/test_plot_schematics.py
 class Test_plot_schematics(object):
     def test_BoreFlower(self):
         """Bore Flower schematics"""

@@ -230,6 +230,20 @@ def plot_schematics(
                 linestyle=MAIN_LINE_STYLE,
                 linewidth=MAIN_LINE_WIDTH,
             )
+            # H0 radius
+            R = Rbo - self.H0
+            rot_N = 1
+            rot_P = exp(1j * pi * 0.98)
+            line = Arc1(
+                begin=R * rot_N, end=R * rot_P, radius=R, is_trigo_direction=True
+            )
+            line.plot(
+                fig=fig,
+                ax=ax,
+                color=MAIN_LINE_COLOR,
+                linestyle=MAIN_LINE_STYLE,
+                linewidth=MAIN_LINE_WIDTH,
+            )
             # H0 lines
             line = Segment(
                 0,
@@ -260,6 +274,28 @@ def plot_schematics(
             line = Segment(
                 point_dict["Z8"] * exp(1j * alpha),
                 point_dict["Z9"] * exp(1j * alpha),
+            )
+            line.plot(
+                fig=fig,
+                ax=ax,
+                color=MAIN_LINE_COLOR,
+                linestyle=MAIN_LINE_STYLE,
+                linewidth=MAIN_LINE_WIDTH,
+            )
+            line = Segment(
+                point_dict["Z1"] * exp(1j * alpha),
+                point_dict["Z2"] * exp(1j * alpha),
+            )
+            line.plot(
+                fig=fig,
+                ax=ax,
+                color=MAIN_LINE_COLOR,
+                linestyle=MAIN_LINE_STYLE,
+                linewidth=MAIN_LINE_WIDTH,
+            )
+            line = Segment(
+                point_dict["Z1"] * exp(1j * alpha),
+                point_dict["Z11"] * exp(1j * alpha),
             )
             line.plot(
                 fig=fig,

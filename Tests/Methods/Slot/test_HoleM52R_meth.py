@@ -74,6 +74,41 @@ class Test_Hole52_meth(object):
     """pytest for holeB52 methods"""
 
     @pytest.mark.parametrize("test_dict", HoleM52R_test)
+    def test_schematics(self, test_dict):
+        """Check that the schematics is correct"""
+        test_obj = test_dict["test_obj"]
+        hole = test_obj.hole[0]
+        point_dict = hole._comp_point_coordinate()
+        Z1 = point_dict["Z1"]
+        Z2 = point_dict["Z2"]
+        Z3 = point_dict["Z3"]
+        Z4 = point_dict["Z4"]
+        Z6 = point_dict["Z6"]
+        Z7 = point_dict["Z7"]
+        Z8 = point_dict["Z8"]
+        Z9 = point_dict["Z9"]
+        Z10 = point_dict["Z10"]
+        Z11 = point_dict["Z11"]
+        # Check H1
+        assert abs(Z4 - Z11) == pytest.approx(hole.H1)
+        assert abs(Z6 - Z10) == pytest.approx(hole.H1)
+        # Check H2
+        assert abs(Z3 - Z4) == pytest.approx(hole.H2)
+        assert abs(Z6 - Z7) == pytest.approx(hole.H2)
+        # Check W0
+        assert abs(Z4 - Z6) == pytest.approx(hole.W0)
+        assert abs(Z3 - Z7) == pytest.approx(hole.W0)
+        assert abs(Z11 - Z10) == pytest.approx(hole.W0)
+        # Check W1
+        assert abs(Z2 - Z3) == pytest.approx(hole.W1)
+        assert abs(Z7 - Z8) == pytest.approx(hole.W1)
+        assert abs(Z11 - Z1) == pytest.approx(hole.W1)
+        assert abs(Z10 - Z9) == pytest.approx(hole.W1)
+        # Check H0
+        assert abs(Z9) == pytest.approx(test_obj.get_Rbo() - hole.H0)
+        assert abs(Z1) == pytest.approx(test_obj.get_Rbo() - hole.H0)
+
+    @pytest.mark.parametrize("test_dict", HoleM52R_test)
     def test_comp_surface(self, test_dict):
         """Check that the computation of the surface is correct"""
         test_obj = test_dict["test_obj"]
@@ -206,3 +241,9 @@ class Test_Hole52_meth(object):
         test_obj.hole = [HoleM52R(Zh=8, W0=99e-3, W1=1e-3, H0=12e-3, H1=18e-3, H2=2e-3)]
         with pytest.raises(S52R_widthCheckError) as context:
             test_obj.hole[0].check()
+
+
+if __name__ == "__main__":
+    a = Test_Hole52_meth()
+    a.test_schematics(HoleM52R_test[0])
+    print("Done")
