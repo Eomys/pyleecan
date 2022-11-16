@@ -1,8 +1,9 @@
+from os import system
+from sys import executable
+
 try:
     import setuptools
 except ImportError:  # Install setuptools if needed
-    from os import system
-    from sys import executable
 
     # run 'pip install setuptools'
     system("{} -m pip install setuptools".format(executable))
@@ -11,6 +12,7 @@ except ImportError:  # Install setuptools if needed
 
 import platform
 
+system("{} -m pip install git+https://gitlab.com/CedMrnl/swat-em.git".format(executable))
 
 # /!\ Increase the number before a release
 # See https://www.python.org/dev/peps/pep-0440/
@@ -46,7 +48,6 @@ install_requires = [
     "SciDataTool>=2.5.0",
     "scipy>=1.4.1",
     "setuptools",
-    "git+https://gitlab.com/CedMrnl/swat-em.git",
     "xlrd>=1.2.0",
     "xlwt>=1.3.0",
 ]
