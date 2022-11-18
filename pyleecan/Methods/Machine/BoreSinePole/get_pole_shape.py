@@ -3,23 +3,17 @@ from numpy import arccos, cos, sin
 
 
 def get_pole_shape(self, phi):
-    """Return the bore radius
+    """Return the complex coordinates of the point at phi
 
     Parameters
     ----------
     phi : float
-        angle corresponding to the bore radius
-
-    Rbo : float
-        radius of the inital bore
-
-    delta_0 : float
-        initial airgap width
+        Angle where to compute the point [rad]
 
     Returns
     -------
-    r : float
-        Bore radius
+    Z : complex
+        Coordinates of the requested point
     """
 
     if self.parent is not None:
@@ -32,7 +26,7 @@ def get_pole_shape(self, phi):
     phi = max(-phi_max, phi)
     phi = min(phi_max, phi)
 
-    # compute the bore radius
+    # compute the point on the bore radius arc
     delta = self.delta_d / cos(phi * self.k)
     r = Rbo + self.delta_d - delta
     x = r * cos(2 * phi / self.N)

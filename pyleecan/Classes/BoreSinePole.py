@@ -45,7 +45,7 @@ from ._check import InitUnKnowClassError
 
 
 class BoreSinePole(Bore):
-    """Class for Sine Field Pole Bore """
+    """Class for Sine Field Pole Bore shape adapted from 'Muller, Germar, et al. Berechnung Elektrischer Maschinen. Hoboken, NJ, United States, Wiley, 2008.'"""
 
     VERSION = 1
 

@@ -45,6 +45,8 @@ class PBoreSinePole(Gen_PBoreSinePole, QWidget):
 
         if self.bore.k is None or self.bore.k == 0:
             self.bore.k = 1
+        if self.bore.alpha is None:
+            self.bore.alpha = 0
 
         # Set FloatEdit unit
         self.lf_W0.unit = "m"
@@ -181,6 +183,10 @@ class PBoreSinePole(Gen_PBoreSinePole, QWidget):
             return "You must set k !"
         elif lam.bore.delta_d is None:
             return "You must set delta_d !"
+        elif lam.bore.delta_q is None:
+            return "You must set delta_q !
+        elif lam.bore.alpha is None:
+            lam.bore.alpha = 0
 
         # Check that everything is set right
         # Constraints

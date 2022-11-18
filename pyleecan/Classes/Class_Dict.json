@@ -396,7 +396,7 @@
             }
         ],
         "daughters": [],
-        "desc": "Class for Sine Field Pole Bore ",
+        "desc": "Class for Sine Field Pole Bore shape adapted from 'Muller, Germar, et al. Berechnung Elektrischer Maschinen. Hoboken, NJ, United States, Wiley, 2008.'",
         "is_internal": false,
         "methods": [
             "get_bore_line",
