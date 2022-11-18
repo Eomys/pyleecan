@@ -184,7 +184,7 @@ class PBoreSinePole(Gen_PBoreSinePole, QWidget):
         elif lam.bore.delta_d is None:
             return "You must set delta_d !"
         elif lam.bore.delta_q is None:
-            return "You must set delta_q !
+            return "You must set delta_q !"
         elif lam.bore.alpha is None:
             lam.bore.alpha = 0
 

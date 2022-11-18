@@ -7,6 +7,8 @@ def get_pole_shape(self, phi):
 
     Parameters
     ----------
+    self : BoreSinePole
+        A BoreSinePole object
     phi : float
         Angle where to compute the point [rad]
 

@@ -3,8 +3,8 @@ def comp_periodicity_spatial(self):
 
     Parameters
     ----------
-    self : BoreFlower
-        A BoreFlower object
+    self : BoreSinePole
+        A BoreSinePole object
 
     Returns
     -------

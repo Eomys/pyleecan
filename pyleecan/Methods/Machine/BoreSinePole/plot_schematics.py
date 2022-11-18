@@ -38,8 +38,8 @@ def plot_schematics(
 
     Parameters
     ----------
-    self : BoreFlower
-        A BoreFlower object
+    self : BoreSinePole
+        A BoreSinePole object
     is_default : bool
         True: plot default schematics, else use current slot values
     is_add_schematics : bool
