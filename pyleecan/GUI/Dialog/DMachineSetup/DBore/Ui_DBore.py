@@ -37,8 +37,9 @@ class Ui_DBore(object):
 
         self.c_bore_type = QComboBox(DBore)
         self.c_bore_type.addItem("")
+        self.c_bore_type.addItem("")
         self.c_bore_type.setObjectName(u"c_bore_type")
-        self.c_bore_type.setEnabled(False)
+        self.c_bore_type.setEnabled(True)
 
         self.horizontalLayout_2.addWidget(self.c_bore_type)
 
@@ -98,6 +99,9 @@ class Ui_DBore(object):
         self.b_help.setText("")
         self.c_bore_type.setItemText(
             0, QCoreApplication.translate("DBore", u"Bore Flower", None)
+        )
+        self.c_bore_type.setItemText(
+            1, QCoreApplication.translate("DBore", u"Bore Sine Pole", None)
         )
 
         self.b_plot.setText(QCoreApplication.translate("DBore", u"Preview", None))

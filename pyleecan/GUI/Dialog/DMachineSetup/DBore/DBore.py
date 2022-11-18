@@ -8,12 +8,16 @@ from .....loggers import GUI_LOG_NAME
 from .....Classes.BoreFlower import BoreFlower
 from .....GUI.Dialog.DMachineSetup.DBore.Ui_DBore import Ui_DBore
 from .....GUI.Dialog.DMachineSetup.DBore.PBoreFlower.PBoreFlower import PBoreFlower
+from .....GUI.Dialog.DMachineSetup.DBore.PBoreSinePole.PBoreSinePole import (
+    PBoreSinePole,
+)
 from .....Functions.Plot.set_plot_gui_icon import set_plot_gui_icon
 from .....Functions.GUI.log_error import log_error
 
 # List to convert index of combobox to bore type
 WIDGET_LIST = [
     PBoreFlower,
+    PBoreSinePole,
 ]
 INIT_INDEX = [wid.bore_type for wid in WIDGET_LIST]
 BORE_NAME = [wid.bore_name for wid in WIDGET_LIST]

@@ -26,7 +26,7 @@ if __name__ == "__main__":
         soft_name = "SciDataTool"
         is_log = False
 
-    ui_folder_path = join(MAIN_DIR, "GUI", "Dxf")
+    ui_folder_path = join(MAIN_DIR, "GUI")
     gen_dict = read_all(DOC_DIR, soft_name=soft_name)
     print("#############################\nGenerating gui....")
     generate_gui(
