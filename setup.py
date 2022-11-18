@@ -23,7 +23,7 @@ system("{} -m pip install git+https://gitlab.com/CedMrnl/swat-em.git".format(exe
 # Release 1.1.0 : 1.1.0
 # First post release of the release 1.1.0 : 1.1.0.post1
 
-PYLEECAN_VERSION = "1.4.0"
+PYLEECAN_VERSION = "1.4.1"
 
 
 with open("README.md", "r") as fh:
@@ -40,7 +40,7 @@ install_requires = [
     "meshio>=4.0.15,<=4.4.6",
     "numpy>1.19.5",
     "pandas>=1.0.3",
-    'pyfemm>=0.1.1;platform_system=="Windows"',
+    "pyfemm>=0.1.3",
     "PySide2>=5.15.2",
     "pyuff>=1.25",
     "pyvista>=0.25.3,<=0.31.3",
