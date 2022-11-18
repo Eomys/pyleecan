@@ -7,7 +7,7 @@ def interpolation(self, point, vertice, field):
     """Return interpolated value of the field in a cell
 
     Parameters
-     ----------
+    ----------
     self : Interpolation
          an Interpolation object
     points : ndarray
@@ -19,10 +19,10 @@ def interpolation(self, point, vertice, field):
     field : ndarray
         field to interpolate
 
-     Returns
-     -------
-     value: array
-         interpolated field
+    Returns
+    -------
+    value: array
+        interpolated field
 
     """
 

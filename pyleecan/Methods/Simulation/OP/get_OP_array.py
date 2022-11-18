@@ -77,7 +77,7 @@ def get_OP_array(self, *arg_list):
             OP_matrix[0, ii] = U0_dict["UPhi0"]
         # If
         elif arg_list[ii].lower() in ["if", "fi"]:
-            OP_matrix[0, ii] = self.If_ref[:]
+            OP_matrix[0, ii] = self.If_ref
         else:
             raise OPMatrixException(
                 "Error in OP_matrix.get_OP_array, unknow column name for index "

@@ -24,8 +24,8 @@ def add_model(self, model, part_label, index=None):
     """Add a loss model to the list of loss models. For further details on
     Loss organization see Loss.add_model() comments.
 
-    Parameter
-    ---------
+    Parameters
+    ----------
     self : Loss
         Loss object
 
@@ -38,10 +38,6 @@ def add_model(self, model, part_label, index=None):
     index : int
         explicit index of the model, e.g. if there are multiple 'Stator core'
         loss models one may give an index to each of them
-
-    Return
-    ------
-
     """
     logger = self.get_logger()
 

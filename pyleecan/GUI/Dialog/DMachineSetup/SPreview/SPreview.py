@@ -28,7 +28,7 @@ class SPreview(Ui_SPreview, QWidget):
         material_dict: dict
             Materials dictionary (library + machine)
         is_stator : bool
-            To adapt the GUI to set either the stator or the rotor
+            To adapt the GUI to set either the stator or the rotor  (unused)
         """
 
         # Build the interface according to the .ui file
@@ -62,6 +62,23 @@ class SPreview(Ui_SPreview, QWidget):
         if self.w_plot.axes.get_legend() is not None:
             self.w_plot.axes.get_legend().remove()
         self.w_plot.draw()
+
+    @staticmethod
+    def check(machine):
+        """Check that the current machine have all the needed field set
+
+        Parameters
+        ----------
+        machine : Machine
+            Machine to check
+
+        Returns
+        -------
+        error : str
+            Error message (return None if no error)
+
+        """
+        return None  # Nothing to check here
 
     # def resizeEvent(self, event):
     #     W_main = self.width() - self.tab_machine.width()

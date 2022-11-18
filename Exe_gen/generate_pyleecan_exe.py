@@ -2,7 +2,6 @@ import os
 from os.path import abspath, dirname, join, isdir, isfile
 from shutil import rmtree, copy
 import re
-from pyleecan.Generator.run_generate_classes import generate_code
 from datetime import datetime
 import click
 
@@ -159,19 +158,19 @@ def generate_executable(
     # 4 Set environment
     ###################
     if start <= 4 and stop >= 4:
-        print("Step4: Setting Virtual env for release...")
+        print("Step 4: Setting Virtual env for release...")
 
         # Creating Python env in which to install needed package
         os.system("python -m venv " + ENV_PATH)
         # Updating packages
         os.system(join(ENV_PATH, "Scripts", "pip") + " install -U pip")
-        os.system(join(ENV_PATH, "Scripts", "pip") + " install -U pyinstaller")
+        os.system(join(ENV_PATH, "Scripts", "pip") + " install -U pyinstaller==5.1")
         os.system(join(ENV_PATH, "Scripts", "pip") + " install gmsh-sdk")
         # Installing required packages
         os.system(
             join(ENV_PATH, "Scripts", "pip")
             + " install -r "
-            + join(PRJ_PATH, "requirements.txt")
+            + join(PRJ_PATH, "requirements-full.txt")
         )
     else:
         print("Skipping step 4: environment setup")

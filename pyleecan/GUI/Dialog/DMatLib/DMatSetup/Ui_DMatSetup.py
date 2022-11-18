@@ -701,7 +701,7 @@ class Ui_DMatSetup(object):
 
         self.retranslateUi(DMatSetup)
 
-        self.nav_phy.setCurrentIndex(2)
+        self.nav_phy.setCurrentIndex(1)
         self.nav_mag.setCurrentIndex(0)
         self.nav_meca.setCurrentIndex(0)
         self.nav_ther.setCurrentIndex(0)
@@ -743,12 +743,20 @@ class Ui_DMatSetup(object):
         )
         self.unit_mur_lin.setText(QCoreApplication.translate("DMatSetup", u"[ ]", None))
         self.in_alpha_Br.setText(
-            QCoreApplication.translate("DMatSetup", u"alphaBr", None)
+            QCoreApplication.translate(
+                "DMatSetup", u"Temperature coefficient for remanent flux density", None
+            )
         )
         self.in_mur_lin.setText(
-            QCoreApplication.translate("DMatSetup", u"mur_lin", None)
+            QCoreApplication.translate(
+                "DMatSetup", u"Relative magnetic permeability", None
+            )
         )
-        self.in_Brm20.setText(QCoreApplication.translate("DMatSetup", u"Brm20", None))
+        self.in_Brm20.setText(
+            QCoreApplication.translate(
+                "DMatSetup", u"Remanence flux density at 20\u00b0C", None
+            )
+        )
         self.unit_Brm20.setText(QCoreApplication.translate("DMatSetup", u"[T]", None))
         self.g_BH_import.setTitle(
             QCoreApplication.translate("DMatSetup", u"B(H) curve definition", None)

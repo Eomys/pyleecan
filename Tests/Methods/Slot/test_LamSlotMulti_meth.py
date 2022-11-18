@@ -47,6 +47,7 @@ class TestLamSlotMulti(object):
         result = rotor.build_geometry(sym=2)
         assert len(result) == 1
 
+
 if __name__ == "__main__":
     a = TestLamSlotMulti()
     a.test_build_geometry()

@@ -7,7 +7,7 @@ def get_real_point(self, vertice, ref_pt, nb_ref_pt=1):
     """Return the coordinates in the cell of a point in the reference cell.
 
     Parameters
-     ----------
+    ----------
     self : RefCell
          an RefCell object
     vertice : ndarray
@@ -17,8 +17,8 @@ def get_real_point(self, vertice, ref_pt, nb_ref_pt=1):
     nb_ref_pt : int
         nb of ref points
 
-     Returns
-     -------
+    Returns
+    -------
     real_points : ndarray
         points coordinate
 

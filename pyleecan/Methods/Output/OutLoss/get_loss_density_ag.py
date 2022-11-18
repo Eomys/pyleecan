@@ -4,13 +4,13 @@ from numpy import pi
 def get_loss_density_ag(self):
     """Get loss density in the airgap
 
-    Parameter
-    ---------
+    Parameters
+    ----------
     self : OutLoss
         an OutLoss object
 
-    Return
-    ------
+    Returns
+    -------
     loss_density_ag : float
         airgap loss density [W/m^2]
 

@@ -72,19 +72,26 @@
         <property name="geometry">
          <rect>
           <x>0</x>
-          <y>-31</y>
+          <y>0</y>
           <width>247</width>
-          <height>805</height>
+          <height>793</height>
          </rect>
         </property>
         <layout class="QVBoxLayout" name="verticalLayout_5">
          <item>
           <widget class="QGroupBox" name="g_pattern">
            <property name="title">
-            <string>Pattern</string>
+            <string>Winding pattern</string>
            </property>
-           <layout class="QVBoxLayout" name="verticalLayout_2">
-            <item>
+           <layout class="QGridLayout" name="gridLayout_2">
+            <item row="0" column="0">
+             <widget class="QLabel" name="in_Zs_2">
+              <property name="text">
+               <string>Generation method</string>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="1">
              <widget class="QComboBox" name="c_wind_type">
               <item>
                <property name="text">
@@ -98,21 +105,21 @@
               </item>
              </widget>
             </item>
-            <item>
+            <item row="1" column="0" colspan="2">
              <widget class="QLabel" name="in_Zs">
               <property name="text">
                <string>Slot number=123</string>
               </property>
              </widget>
             </item>
-            <item>
+            <item row="2" column="0" colspan="2">
              <widget class="QLabel" name="in_p">
               <property name="text">
                <string>Pole pair number=32</string>
               </property>
              </widget>
             </item>
-            <item>
+            <item row="3" column="0" colspan="2">
              <layout class="QGridLayout" name="gridLayout">
               <item row="0" column="0">
                <widget class="QLabel" name="in_qs">
@@ -198,14 +205,14 @@
               </item>
              </layout>
             </item>
-            <item>
+            <item row="4" column="0" colspan="2">
              <widget class="QPushButton" name="b_generate">
               <property name="text">
                <string>Generate</string>
               </property>
              </widget>
             </item>
-            <item>
+            <item row="5" column="0" colspan="2">
              <widget class="QPushButton" name="b_import">
               <property name="text">
                <string>Import from CSV</string>
@@ -335,14 +342,14 @@
                <string>Fundamental field rotation direction when feeding the winding with direct AC current</string>
               </property>
               <property name="text">
-               <string>Rotation Direction: </string>
+               <string>Rotation Direction</string>
               </property>
              </widget>
             </item>
             <item>
              <widget class="QLabel" name="out_ms">
               <property name="text">
-               <string>ms = Zs / (2*p*qs) = ?</string>
+               <string>Number of slot per pole per phase</string>
               </property>
              </widget>
             </item>
@@ -352,7 +359,7 @@
                <string>Winding periodicity</string>
               </property>
               <property name="text">
-               <string>Nperw</string>
+               <string>Winding periodicity</string>
               </property>
              </widget>
             </item>
@@ -368,7 +375,7 @@
                <string>Winding number of turns in series per phase</string>
               </property>
               <property name="text">
-               <string>Ntspc: </string>
+               <string>Number of turns in series per phase</string>
               </property>
              </widget>
             </item>
@@ -384,7 +391,7 @@
                <string>Number of coils in series per parallel circuit</string>
               </property>
               <property name="text">
-               <string>Ncspc:</string>
+               <string>Number of coils in series per parallel circuit</string>
               </property>
              </widget>
             </item>

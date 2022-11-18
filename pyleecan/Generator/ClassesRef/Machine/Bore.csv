@@ -4,3 +4,7 @@ type_merge_slot,,"how to merge slot/notch into the bore radius (0: connect the d
 ,,,,,,,,,,,merge_slot_connect,,,
 ,,,,,,,,,,,merge_slot_intersect,,,
 ,,,,,,,,,,,merge_slot_translate,,,
+,,,,,,,,,,,comp_Rmin,,,
+,,,,,,,,,,,comp_surface,,,
+,,,,,,,,,,,get_surface,,,
+,,,,,,,,,,,plot,,,

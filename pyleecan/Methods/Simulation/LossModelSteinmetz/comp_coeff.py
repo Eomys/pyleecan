@@ -72,12 +72,14 @@ def comp_coeff(self, material):
         plt.xlabel("Peak magnetic flux density (T)")
         plt.ylabel("Iron loss (W/kg")
         plt.title(f"Curve fitting for the iron loss of the {material.name} material")
-        txt = "$P_{{loss}}=k_{{hy}} f^{{\\alpha_f}} B^{{\\alpha_B}} + k_{{ed}} (fB)^2$\n"
+        txt = (
+            "$P_{{loss}}=k_{{hy}} f^{{\\alpha_f}} B^{{\\alpha_B}} + k_{{ed}} (fB)^2$\n"
+        )
         txt += "where:\n"
-        txt += "$k_{{hy}}$ = " + format(popt[0], '.5E') +"\n"
-        txt += "$k_{{ed}}$ = " + format(popt[1], '.5E') +"\n"
-        txt += "$\\alpha_f$ = " + format(popt[2], '.5E') +"\n"
-        txt += "$\\alpha_B$ = " + format(popt[3], '.5E') +"\n"
+        txt += "$k_{{hy}}$ = " + format(popt[0], ".5E") + "\n"
+        txt += "$k_{{ed}}$ = " + format(popt[1], ".5E") + "\n"
+        txt += "$\\alpha_f$ = " + format(popt[2], ".5E") + "\n"
+        txt += "$\\alpha_B$ = " + format(popt[3], ".5E") + "\n"
         fig.text(0.02, 0.5, txt, fontsize=12)
         plt.subplots_adjust(left=0.23)
         plt.legend()

@@ -73,6 +73,11 @@ except ImportError as error:
     get_surface_active = error
 
 try:
+    from ..Methods.Slot.SlotW60.get_surface_opening import get_surface_opening
+except ImportError as error:
+    get_surface_opening = error
+
+try:
     from ..Methods.Slot.SlotW60.plot_schematics import plot_schematics
 except ImportError as error:
     plot_schematics = error
@@ -211,6 +216,18 @@ class SlotW60(Slot):
         )
     else:
         get_surface_active = get_surface_active
+    # cf Methods.Slot.SlotW60.get_surface_opening
+    if isinstance(get_surface_opening, ImportError):
+        get_surface_opening = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use SlotW60 method get_surface_opening: "
+                    + str(get_surface_opening)
+                )
+            )
+        )
+    else:
+        get_surface_opening = get_surface_opening
     # cf Methods.Slot.SlotW60.plot_schematics
     if isinstance(plot_schematics, ImportError):
         plot_schematics = property(

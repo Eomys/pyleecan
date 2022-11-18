@@ -70,6 +70,8 @@ class PCondType12(Gen_PCondType12, QWidget):
         self.lf_Wwire.setValue(self.cond.Wwire)
         if self.cond.Wins_wire is None:
             self.cond.Wins_wire = 0  # Default value
+        else:
+            self.g_ins.setChecked(True)
         self.lf_Wins_wire.setValue(self.cond.Wins_wire)
         self.lf_Wins_cond.setValue(self.cond.Wins_cond)
         self.lf_Lewout.validator().setBottom(0)
@@ -77,15 +79,39 @@ class PCondType12(Gen_PCondType12, QWidget):
             self.lam.winding.Lewout = 0
         self.lf_Lewout.setValue(self.lam.winding.Lewout)
 
+        self.update_ins_layout()
+
         # Display the conductor main output
         self.w_out.comp_output()
 
         # Connect the signal/slot
+        self.g_ins.toggled.connect(self.update_ins_layout)
         self.si_Nwpc1.editingFinished.connect(self.set_Nwppc)
         self.lf_Wwire.editingFinished.connect(self.set_Wwire)
         self.lf_Wins_wire.editingFinished.connect(self.set_Wins_wire)
         self.lf_Wins_cond.editingFinished.connect(self.set_Wins_cond)
         self.lf_Lewout.editingFinished.connect(self.set_Lewout)
+
+    def update_ins_layout(self):
+        if self.g_ins.isChecked():
+            self.in_Wins_cond.show()
+            self.lf_Wins_cond.show()
+            self.unit_Wins_cond.show()
+            self.in_Wins_wire.show()
+            self.lf_Wins_wire.show()
+            self.unit_Wins_wire.show()
+            self.set_Wins_wire()
+            self.set_Wins_cond()
+        else:
+            self.in_Wins_cond.hide()
+            self.lf_Wins_cond.hide()
+            self.unit_Wins_cond.hide()
+            self.in_Wins_wire.hide()
+            self.lf_Wins_wire.hide()
+            self.unit_Wins_wire.hide()
+            self.set_Wins_wire(Wins_wire=0)
+            if self.lf_Wwire.value() is not None:
+                self.set_Wins_cond(Wins_cond=3 * self.lf_Wwire.value())
 
     def set_Nwppc(self):
         """Signal to update the value of Nwppc according to the line edit
@@ -113,7 +139,7 @@ class PCondType12(Gen_PCondType12, QWidget):
         # Notify the machine GUI that the machine has changed
         self.saveNeeded.emit()
 
-    def set_Wins_wire(self):
+    def set_Wins_wire(self, Wins_wire=None):
         """Signal to update the value of Wins_wire according to the line edit
 
         Parameters
@@ -121,12 +147,14 @@ class PCondType12(Gen_PCondType12, QWidget):
         self : PCondType12
             A PCondType12 object
         """
-        self.cond.Wins_wire = self.lf_Wins_wire.value()
+        if Wins_wire is None:
+            Wins_wire = self.lf_Wins_wire.value()
+        self.cond.Wins_wire = Wins_wire
         self.w_out.comp_output()
         # Notify the machine GUI that the machine has changed
         self.saveNeeded.emit()
 
-    def set_Wins_cond(self):
+    def set_Wins_cond(self, Wins_cond=None):
         """Signal to update the value of Wins_cond according to the line edit
 
         Parameters
@@ -134,7 +162,9 @@ class PCondType12(Gen_PCondType12, QWidget):
         self : PCondType12
             A PCondType12 object
         """
-        self.cond.Wins_cond = self.lf_Wins_cond.value()
+        if Wins_cond is None:
+            Wins_cond = self.lf_Wins_cond.value()
+        self.cond.Wins_cond = Wins_cond
         self.w_out.comp_output()
         # Notify the machine GUI that the machine has changed
         self.saveNeeded.emit()
