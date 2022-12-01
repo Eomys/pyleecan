@@ -108,9 +108,9 @@ def check_optimization_input(self):
                 )
                 raise OptimizationAttributeError(mess)
             # Check getter
-            elif not callable(cstr.get_variable):
+            elif not callable(cstr.keeper):
                 mess = (
-                    "The constraint '{}' function get_variable is not callable.".format(
+                    "The constraint '{}' function keeper is not callable.".format(
                         cstr.name
                     )
                 )

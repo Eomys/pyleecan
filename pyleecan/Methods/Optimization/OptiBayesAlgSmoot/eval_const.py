@@ -13,7 +13,7 @@ def eval_const(self, constraint, input_x):
             var.setter(self.xoutput.simu, x[i])
             i += 1
 
-        const_value = constraint.get_variable(self.xoutput)
+        const_value = constraint.keeper(self.xoutput)
         if constraint.type_const == "<=":
             constraint_values.append(const_value - constraint.value)
         elif constraint.type_const == ">=":

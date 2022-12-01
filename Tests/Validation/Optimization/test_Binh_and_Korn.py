@@ -101,13 +101,13 @@ def test_Binh_and_Korn():
     cstrs = [
         OptiConstraint(
             name="first",
-            get_variable="lambda output: (output.simu.machine.rotor.slot.H0 - 5) ** 2 + output.simu.machine.stator.slot.H0 ** 2",
+            keeper="lambda output: (output.simu.machine.rotor.slot.H0 - 5) ** 2 + output.simu.machine.stator.slot.H0 ** 2",
             type_const="<=",
             value=25,
         ),
         OptiConstraint(
             name="second",
-            get_variable="lambda output: (output.simu.machine.rotor.slot.H0 - 5) ** 2 + (output.simu.machine.stator.slot.H0 + 3) ** 2",
+            keeper="lambda output: (output.simu.machine.rotor.slot.H0 - 5) ** 2 + (output.simu.machine.stator.slot.H0 + 3) ** 2",
             type_const=">=",
             value=7.7,
         ),

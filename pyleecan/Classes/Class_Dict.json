@@ -1037,6 +1037,7 @@
             }
         ],
         "daughters": [
+            "OptiConstraint",
             "OptiObjective"
         ],
         "desc": "Class for defining data to keep on a multi-simulation",
@@ -8910,21 +8911,11 @@
         "desc": "Constraint of the optimization problem",
         "is_internal": false,
         "methods": [],
-        "mother": "",
+        "mother": "DataKeeper",
         "name": "OptiConstraint",
         "package": "Optimization",
         "path": "pyleecan/Generator/ClassesRef/Optimization/OptiConstraint.csv",
         "properties": [
-            {
-                "as_dict": "",
-                "desc": "name of the design variable",
-                "max": "",
-                "min": "",
-                "name": "name",
-                "type": "str",
-                "unit": "",
-                "value": ""
-            },
             {
                 "as_dict": "",
                 "desc": "Type of comparison ( \"==\", \"<=\", \">=\", \"<\",\">\")",
@@ -8944,16 +8935,6 @@
                 "type": "float",
                 "unit": "",
                 "value": 0
-            },
-            {
-                "as_dict": "",
-                "desc": "Function to get the variable to compare",
-                "max": "",
-                "min": "",
-                "name": "get_variable",
-                "type": "function",
-                "unit": "",
-                "value": null
             }
         ]
     },
