@@ -139,6 +139,8 @@ from ..Classes.OptiBayesAlg import OptiBayesAlg
 from ..Classes.OptiBayesAlgSmoot import OptiBayesAlgSmoot
 from ..Classes.OptiConstraint import OptiConstraint
 from ..Classes.OptiDesignVar import OptiDesignVar
+from ..Classes.OptiDesignVarInterval import OptiDesignVarInterval
+from ..Classes.OptiDesignVarSet import OptiDesignVarSet
 from ..Classes.OptiGenAlg import OptiGenAlg
 from ..Classes.OptiGenAlgNsga2Deap import OptiGenAlgNsga2Deap
 from ..Classes.OptiObjective import OptiObjective

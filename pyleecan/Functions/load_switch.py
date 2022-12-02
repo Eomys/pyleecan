@@ -141,6 +141,8 @@ load_switch = {
     "OptiBayesAlgSmoot": OptiBayesAlgSmoot,
     "OptiConstraint": OptiConstraint,
     "OptiDesignVar": OptiDesignVar,
+    "OptiDesignVarInterval": OptiDesignVarInterval,
+    "OptiDesignVarSet": OptiDesignVarSet,
     "OptiGenAlg": OptiGenAlg,
     "OptiGenAlgNsga2Deap": OptiGenAlgNsga2Deap,
     "OptiObjective": OptiObjective,

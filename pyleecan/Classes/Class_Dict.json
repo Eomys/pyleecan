@@ -8945,8 +8945,11 @@
                 "value": "1"
             }
         ],
-        "daughters": [],
-        "desc": "Optimization",
+        "daughters": [
+            "OptiDesignVarInterval",
+            "OptiDesignVarSet"
+        ],
+        "desc": "Abstract class for OptiDesignVar (Optimization)",
         "is_internal": false,
         "methods": [],
         "mother": "ParamExplorer",
@@ -8954,16 +8957,6 @@
         "package": "Optimization",
         "path": "pyleecan/Generator/ClassesRef/Optimization/OptiDesignVar.csv",
         "properties": [
-            {
-                "as_dict": "",
-                "desc": "Type of the variable interval or set.",
-                "max": "",
-                "min": "",
-                "name": "type_var",
-                "type": "str",
-                "unit": "",
-                "value": "interval"
-            },
             {
                 "as_dict": "",
                 "desc": "Space of the variable",
@@ -8988,6 +8981,40 @@
                 "value": null
             }
         ]
+    },
+    "OptiDesignVarInterval": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Optimization",
+        "is_internal": false,
+        "methods": [],
+        "mother": "OptiDesignVar",
+        "name": "OptiDesignVarInterval",
+        "package": "Optimization",
+        "path": "pyleecan/Generator/ClassesRef/Optimization/OptiDesignVarInterval.csv",
+        "properties": []
+    },
+    "OptiDesignVarSet": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Optimization",
+        "is_internal": false,
+        "methods": [],
+        "mother": "OptiDesignVar",
+        "name": "OptiDesignVarSet",
+        "package": "Optimization",
+        "path": "pyleecan/Generator/ClassesRef/Optimization/OptiDesignVarSet.csv",
+        "properties": []
     },
     "OptiGenAlg": {
         "constants": [
@@ -10534,6 +10561,8 @@
         ],
         "daughters": [
             "OptiDesignVar",
+            "OptiDesignVarInterval",
+            "OptiDesignVarSet",
             "ParamExplorerInterval",
             "ParamExplorerSet"
         ],

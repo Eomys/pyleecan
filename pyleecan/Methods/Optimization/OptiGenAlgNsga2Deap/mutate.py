@@ -1,6 +1,8 @@
 import random
 from collections.abc import Iterable
 from deap.tools import mutPolynomialBounded
+from ....Classes.OptiDesignVarInterval import OptiDesignVarInterval
+from ....Classes.OptiDesignVarSet import OptiDesignVarSet
 
 
 def mutate(self, indiv):
@@ -28,7 +30,7 @@ def mutate(self, indiv):
             is_mutation = True
 
             if self.mutator == None:
-                if design_var.type_var == "interval":  # Interval variable
+                if isinstance(design_var, OptiDesignVarInterval):  # Interval variable
                     # Using polynomial bounded mutation as in Deb and al., "A Fast and Elitist Multiobjective Genetic Algorithm: NSGA-II"
                     if isinstance(indiv[k], Iterable):
                         indiv[k] = mutPolynomialBounded(
@@ -42,7 +44,7 @@ def mutate(self, indiv):
                 else:  # Uniform mutation
                     indiv[k] = random.choice(design_var.space)
             else:  # User defined mutator
-                if design_var.type_var == "interval":  # Interval variable
+                if isinstance(design_var, OptiDesignVarInterval):  # Interval variable
                     indiv[k] = self.mutator(indiv[k])
                 else:
                     # TODO Allow to redefine mutators for set

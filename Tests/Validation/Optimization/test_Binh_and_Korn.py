@@ -15,7 +15,7 @@ from pyleecan.Classes.MagFEMM import MagFEMM
 from pyleecan.Classes.Simu1 import Simu1
 from pyleecan.Classes.OPslip import OPslip
 from pyleecan.Classes.Output import Output
-from pyleecan.Classes.OptiDesignVar import OptiDesignVar
+from pyleecan.Classes.OptiDesignVarInterval import OptiDesignVarInterval
 from pyleecan.Classes.OptiObjective import OptiObjective
 from pyleecan.Classes.OptiConstraint import OptiConstraint
 from pyleecan.Classes.OptiProblem import OptiProblem
@@ -79,18 +79,16 @@ def test_Binh_and_Korn():
 
     # ### Design variable
     my_vars = [
-        OptiDesignVar(
+        OptiDesignVarInterval(
             name="Rotor slot height",
             symbol="RH0",
-            type_var="interval",
             space=[0, 5],  # May generate error in FEMM
             get_value="lambda space: random.uniform(*space)",
             setter="simu.machine.rotor.slot.H0",
         ),
-        OptiDesignVar(
+        OptiDesignVarInterval(
             name="Stator slot height",
             symbol="SH0",
-            type_var="interval",
             space=[0, 3],  # May generate error in FEMM
             get_value="lambda space: random.uniform(*space)",
             setter="simu.machine.stator.slot.H0",
