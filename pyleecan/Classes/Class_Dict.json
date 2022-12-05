@@ -15435,7 +15435,98 @@
         "path": "pyleecan/Generator/ClassesRef/Simulation/VarLoadVoltage.csv",
         "properties": []
     },
+    "VarOpti": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            },
+            {
+                "name": "NAME",
+                "value": "\"Optimization\""
+            }
+        ],
+        "daughters": [],
+        "desc": "Handle Optimization multisimulation by varying parameters",
+        "is_internal": false,
+        "methods": [
+            "check",
+            "run",
+            "get_full_solver"
+        ],
+        "mother": "VarParam",
+        "name": "VarOpti",
+        "package": "Simulation",
+        "path": "pyleecan/Generator/ClassesRef/Simulation/VarOpti.csv",
+        "properties": [
+            {
+                "as_dict": "",
+                "desc": "List containing OptiObjective objects",
+                "max": "",
+                "min": "",
+                "name": "objective_list",
+                "type": "[OptiObjective]",
+                "unit": "-",
+                "value": -1
+            },
+            {
+                "as_dict": "",
+                "desc": "List containing OptiConstraint objects",
+                "max": "",
+                "min": "",
+                "name": "constraint_list",
+                "type": "[OptiConstraint]",
+                "unit": "-",
+                "value": -1
+            },
+            {
+                "as_dict": "",
+                "desc": "Object that solve an OptiProblem",
+                "max": "",
+                "min": "",
+                "name": "solver",
+                "type": "OptiSolver",
+                "unit": "-",
+                "value": null
+            }
+        ]
+    },
     "VarParam": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            },
+            {
+                "name": "NAME",
+                "value": "\"Parameter Sweep\""
+            }
+        ],
+        "daughters": [
+            "VarOpti",
+            "VarParamSweep"
+        ],
+        "desc": "Handle multisimulation by varying parameters",
+        "is_internal": false,
+        "methods": [],
+        "mother": "VarSimu",
+        "name": "VarParam",
+        "package": "Simulation",
+        "path": "pyleecan/Generator/ClassesRef/Simulation/VarParam.csv",
+        "properties": [
+            {
+                "as_dict": "",
+                "desc": "List containing ParamSetter to define every simulation",
+                "max": "",
+                "min": "",
+                "name": "paramexplorer_list",
+                "type": "[ParamExplorer]",
+                "unit": "-",
+                "value": ""
+            }
+        ]
+    },
+    "VarParamSweep": {
         "constants": [
             {
                 "name": "VERSION",
@@ -15454,22 +15545,11 @@
             "generate_simulation_list",
             "get_simu_number"
         ],
-        "mother": "VarSimu",
-        "name": "VarParam",
+        "mother": "VarParam",
+        "name": "VarParamSweep",
         "package": "Simulation",
-        "path": "pyleecan/Generator/ClassesRef/Simulation/VarParam.csv",
-        "properties": [
-            {
-                "as_dict": "",
-                "desc": "List containing ParamSetter to define every simulation",
-                "max": "",
-                "min": "",
-                "name": "paramexplorer_list",
-                "type": "[ParamExplorer]",
-                "unit": "-",
-                "value": ""
-            }
-        ]
+        "path": "pyleecan/Generator/ClassesRef/Simulation/VarParamSweep.csv",
+        "properties": []
     },
     "VarSimu": {
         "constants": [
@@ -15482,7 +15562,9 @@
             "VarLoad",
             "VarLoadCurrent",
             "VarLoadVoltage",
-            "VarParam"
+            "VarOpti",
+            "VarParam",
+            "VarParamSweep"
         ],
         "desc": "Abstract class for the multi-simulation",
         "is_internal": false,

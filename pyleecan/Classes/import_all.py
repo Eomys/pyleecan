@@ -232,7 +232,9 @@ from ..Classes.Unit import Unit
 from ..Classes.VarLoad import VarLoad
 from ..Classes.VarLoadCurrent import VarLoadCurrent
 from ..Classes.VarLoadVoltage import VarLoadVoltage
+from ..Classes.VarOpti import VarOpti
 from ..Classes.VarParam import VarParam
+from ..Classes.VarParamSweep import VarParamSweep
 from ..Classes.VarSimu import VarSimu
 from ..Classes.VentilationCirc import VentilationCirc
 from ..Classes.VentilationPolar import VentilationPolar

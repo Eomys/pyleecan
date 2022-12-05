@@ -6,7 +6,7 @@ import numpy as np
 from pyleecan.Classes.OPdq import OPdq
 from pyleecan.Classes.Simu1 import Simu1
 from pyleecan.Classes.InputCurrent import InputCurrent
-from pyleecan.Classes.VarParam import VarParam
+from pyleecan.Classes.VarParamSweep import VarParamSweep
 from pyleecan.Classes.Simu1 import Simu1
 from pyleecan.Classes.DataKeeper import DataKeeper
 from pyleecan.Classes.ParamExplorerSet import ParamExplorerSet
@@ -18,14 +18,14 @@ from pyleecan.Functions.load import load
 from pyleecan.definitions import DATA_DIR, RESULT_DIR
 
 
-def test_VarParam_fct_save_load():
+def test_VarParamSweep_fct_save_load():
     """Test to check keeper, setter and getter functions defined as path containing
     global variable <PARAM_DIR>"""
 
     machine = load(join(DATA_DIR, "Machine", "Toyota_Prius.json"))
 
     # First simulation creating femm file
-    simu = Simu1(name="test_VarParam_fct_save_load", machine=machine)
+    simu = Simu1(name="test_VarParamSweep_fct_save_load", machine=machine)
 
     result_folder = join(RESULT_DIR, simu.name)
     if not isdir(result_folder):
@@ -54,7 +54,7 @@ def test_VarParam_fct_save_load():
     )
 
     # Generate parameter sweep
-    simu.var_simu = VarParam(
+    simu.var_simu = VarParamSweep(
         stop_if_error=True,
         is_keep_all_output=True,
         datakeeper_list=[
@@ -101,5 +101,5 @@ def test_VarParam_fct_save_load():
 
 if __name__ == "__main__":
 
-    test_VarParam_fct_save_load()
+    test_VarParamSweep_fct_save_load()
     print("Done")

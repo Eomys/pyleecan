@@ -6,7 +6,7 @@ class VarSimuError(Exception):
 
 
 def check_param(self):
-    """Check VarParam parameters validity"""
+    """Check VarParamSweep parameters validity"""
     if type(self).__name__ == "VarSimu":
         raise VarSimuError(
             "VarSimu is an abstract class, please create one of its daughters."

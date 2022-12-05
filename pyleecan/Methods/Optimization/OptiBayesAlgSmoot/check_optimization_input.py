@@ -72,8 +72,10 @@ def check_optimization_input(self):
         )
     else:
         for design_var in self.problem.design_var:
-            if not isinstance(design_var, OptiDesignVarInterval) and not isinstance(design_var, OptiDesignVarSet):
-                mess = 'The design variable \'{}\' is expected to be an OptiDesignVarSet or an OptiDesignVarInterval.'.format(
+            if not isinstance(design_var, OptiDesignVarInterval) and not isinstance(
+                design_var, OptiDesignVarSet
+            ):
+                mess = "The design variable '{}' is expected to be an OptiDesignVarSet or an OptiDesignVarInterval.".format(
                     design_var.name
                 )
                 raise OptimizationAttributeError(mess)
