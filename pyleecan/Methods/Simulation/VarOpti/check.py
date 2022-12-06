@@ -67,7 +67,7 @@ def check(self):
                 raise VarOptiError(
                     "VarOpti object must have only OptiConstraint objects in constraint_list"
                 )
-            elif constraint.symbol in ["", None]:
+            elif constraint.value in ["", None]:
                 raise VarOptiConstraintError("OptiConstraint.symbol cannot be empty")
             elif constraint.keeper is None:
                 raise VarOptiConstraintError("OptiConstraint.keeper must be defined")

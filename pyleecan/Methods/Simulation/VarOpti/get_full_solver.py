@@ -1,9 +1,5 @@
 from ....Classes.OptiProblem import OptiProblem
 
-def evaluate(output):
-        """Skip calculations"""
-        pass
-
 def get_full_solver(self):
     """Method to return a fully setted solver"""
 
@@ -20,11 +16,8 @@ def get_full_solver(self):
         obj_func=self.objective_list,
         datakeeper_list=self.datakeeper_list,
         constraint=self.constraint_list,
-        eval_func=evaluate
     )
 
-    # Reset the parent because when put into problem, parent of simu becomes OptiProblem instead of OutPut
-    problem.simu.parent = self.parent.parent
     # Copy the solver to don't rewrite it and give the problem
     solver = self.solver.copy()
     solver.problem = problem
