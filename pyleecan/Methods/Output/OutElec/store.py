@@ -107,10 +107,16 @@ def store(self, out_dict):
             Is.axes[0].values = freqs[Isort]
             Is.values = Is_val[Isort, :]
         else:
-            # felec already in frequency axis, simply add fundamenal values
+            # felec already in frequency axis, simply replace by fundamental value
             Is.axes[0].values = freqs
-            Is_PWM.values[Ifund, :] += Is_fund
+            Is_PWM.values[Ifund, :] = Is_fund
             Is.values = Is_PWM.values
 
         # Store current in OutElec
         self.Is = Is
+
+        # Is_PWM.plot_2D_Data(
+        #     "time=axis_data",
+        #     "phase[]",
+        #     axis_data={"time": self.axes_dict["time"].get_values()},
+        # )

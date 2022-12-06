@@ -8,6 +8,7 @@ from .....loggers import GUI_LOG_NAME
 from .....Classes.Winding import Winding
 from .....Classes.WindingUD import WindingUD
 from .....Classes.MachineSRM import MachineSRM
+from .....Classes.MachineWRSM import MachineWRSM
 from .....GUI.Dialog.DMachineSetup.SWinding.Gen_SWinding import Gen_SWinding
 from .....Methods.Machine.Winding import WindingError
 from .....Functions.Plot.set_plot_gui_icon import set_plot_gui_icon
@@ -63,14 +64,24 @@ class SWinding(Gen_SWinding, QWidget):
                 "Pole pair number=" + str(self.obj.get_pole_pair_number())
             )
 
-        # if machine.type_machine == 9 and not self.is_stator:
-        #     # Enforce tooth winding for WRSM rotor
-        #     self.obj.winding = WindingCW2LT(init_dict=self.obj.winding.as_dict())
-        #     self.obj.winding.qs = 1
-        #     self.b_preview.setEnabled(False)
-        #     self.si_qs.setEnabled(False)
-        #     self.c_wind_type.setEnabled(False)
-        #     self.c_wind_type.setCurrentIndex(0)
+        if isinstance(machine, MachineWRSM) and not self.is_stator:
+            # Enforce tooth winding for WRSM rotor
+            self.si_qs.setEnabled(False)
+            self.obj.winding.qs = 1
+            # Two tangential layer enforce
+            self.si_Nlayer.setEnabled(False)
+            self.obj.winding.Nlayer = 2
+            self.obj.winding.is_change_layer = False
+            self.is_change_layer.setEnabled(False)
+            self.obj.winding.coil_pitch = 1
+            self.si_coil_pitch.setEnabled(False)
+            self.in_Zs.hide()  # =2*p
+            self.b_preview.setEnabled(False)
+            # Enforce star of slot
+            self.c_wind_type.setEnabled(False)
+            self.c_wind_type.setCurrentIndex(0)
+            # No plot_mmf
+            self.b_plot_mmf.hide()
 
         # Pattern Group setup
         if self.obj.winding is None:
@@ -142,10 +153,16 @@ class SWinding(Gen_SWinding, QWidget):
         self.si_Nlayer.valueChanged.connect(self.show_layer_widget)
         self.si_Npcp.editingFinished.connect(self.set_Npcp)
         self.si_Nslot.valueChanged.connect(self.set_Nslot)
+        self.si_Ntcoil.valueChanged.connect(self.set_Ntcoil)
         self.is_reverse.stateChanged.connect(self.set_is_reverse_wind)
         self.is_reverse_layer.stateChanged.connect(self.set_is_reverse_layer)
         self.is_change_layer.stateChanged.connect(self.set_is_change_layer)
         self.is_permute_B_C.stateChanged.connect(self.set_is_permute_B_C)
+        self.si_qs.valueChanged.connect(self.refresh_needed)
+        self.si_Nlayer.valueChanged.connect(self.refresh_needed)
+        self.si_coil_pitch.valueChanged.connect(self.refresh_needed)
+        self.si_Ntcoil.valueChanged.connect(self.refresh_needed)
+        self.si_Npcp.valueChanged.connect(self.refresh_needed)
 
         # self.b_edit_wind_mat.clicked.connect(self.s_edit_wind_mat)
         self.b_import.clicked.connect(self.s_import_csv)
@@ -221,6 +238,9 @@ class SWinding(Gen_SWinding, QWidget):
             else:
                 self.is_change_layer.setCheckState(Qt.Unchecked)
 
+    def refresh_needed(self):
+        self.b_generate.setEnabled(True)
+
     def s_generate(self):
         # Update winding object
         self.obj.winding.qs = self.si_qs.value()
@@ -241,12 +261,14 @@ class SWinding(Gen_SWinding, QWidget):
         # Check winding
         try:
             self.obj.winding.get_connection_mat()
+            self.b_generate.setEnabled(False)
         except Exception as e:
             QMessageBox().critical(
                 self, self.tr("Error"), "Error while creating the winding:\n" + str(e)
             )
             self.comp_output()
             self.update_graph(is_lam_only=True)
+            self.b_generate.setEnabled(True)
             return
 
         # Update GUI
@@ -289,6 +311,19 @@ class SWinding(Gen_SWinding, QWidget):
             self.obj.winding = WindingUD(init_dict=init_dict)
             self.hide_star_widget(True)
         self.obj.winding.Npcp = self.si_Npcp.value()
+
+    def set_Ntcoil(self):
+        """Signal to update the value of Ntcoil according to the
+        spinbox
+
+        Parameters
+        ----------
+        self : SWinding
+            A SWinding object
+        """
+        self.obj.winding.Ntcoil = self.si_Ntcoil.value()
+        # Notify the machine GUI that the machine has changed
+        self.saveNeeded.emit()
 
     def set_Nslot(self):
         """Signal to update the value of Nslot_shift_wind according to the
@@ -460,10 +495,11 @@ class SWinding(Gen_SWinding, QWidget):
             ms = str(self.obj.slot.Zs / (wind.p * wind.qs * 2.0))
         except TypeError:  # One of the value is None
             ms = "?"
+        self.out_ms.setText(self.tr("Number of slots/pole/phase: ") + ms)
         if self.obj.is_stator:
-            self.out_ms.setText(self.tr("ms = Zs / (2*p*qs) = ") + ms)
+            self.out_ms.setToolTip(self.tr("Zs / (2*p*qs)"))
         else:
-            self.out_ms.setText(self.tr("ms = Zr / (2*p*qr) = ") + ms)
+            self.out_ms.setToolTip(self.tr("Zr / (2*p*qr)"))
 
         try:
             Nperw, _ = wind.get_periodicity()
@@ -471,7 +507,7 @@ class SWinding(Gen_SWinding, QWidget):
         except Exception:  # Unable to compution the connection matrix
             Nperw = "?"
 
-        self.out_Nperw.setText(self.tr("Nperw: ") + str(Nperw))
+        self.out_Nperw.setText(self.tr("Winding periodicity: ") + str(Nperw))
 
         try:
             Ntspc = str(self.obj.winding.comp_Ntsp(self.obj.slot.Zs))
@@ -483,8 +519,8 @@ class SWinding(Gen_SWinding, QWidget):
             Ncspc = Ncspc[:-2] if Ncspc[-2:] == ".0" else Ncspc
         except:
             Ncspc = "?"
-        self.out_Ncspc.setText(self.tr("Ncspc: ") + Ncspc)
-        self.out_Ntspc.setText(self.tr("Ntspc: ") + Ntspc)
+        self.out_Ncspc.setText(self.tr("Number of coils Ncspc: ") + Ncspc)
+        self.out_Ntspc.setText(self.tr("Number of turns Ntspc: ") + Ntspc)
 
     def update_graph(self, is_lam_only=False):
         """Plot the lamination with/without the winding"""
@@ -538,7 +574,7 @@ class SWinding(Gen_SWinding, QWidget):
         """Plot the unit mmf of the stator"""
         if self.machine is not None:
             try:
-                self.plot_widget = self.obj.plot_mmf_unit(is_create_appli=False)
+                self.obj.plot_mmf_unit()
             except Exception as e:
                 if self.obj.is_stator:  # Adapt the text to the current lamination
                     err_msg = "Error while plotting Stator mmf unit:\n" + str(e)

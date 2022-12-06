@@ -18,34 +18,19 @@ from .EEC import EEC
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
 try:
-    from ..Methods.Simulation.EEC_PMSM.comp_parameters import comp_parameters
+    from ..Methods.Simulation.EEC_PMSM.clear_parameters import clear_parameters
 except ImportError as error:
-    comp_parameters = error
-
-try:
-    from ..Methods.Simulation.EEC_PMSM.solve import solve
-except ImportError as error:
-    solve = error
-
-try:
-    from ..Methods.Simulation.EEC_PMSM.solve_PWM import solve_PWM
-except ImportError as error:
-    solve_PWM = error
-
-try:
-    from ..Methods.Simulation.EEC_PMSM.comp_joule_losses import comp_joule_losses
-except ImportError as error:
-    comp_joule_losses = error
-
-try:
-    from ..Methods.Simulation.EEC_PMSM.comp_torque_sync_rel import comp_torque_sync_rel
-except ImportError as error:
-    comp_torque_sync_rel = error
+    clear_parameters = error
 
 try:
     from ..Methods.Simulation.EEC_PMSM.comp_BEMF_harmonics import comp_BEMF_harmonics
 except ImportError as error:
     comp_BEMF_harmonics = error
+
+try:
+    from ..Methods.Simulation.EEC_PMSM.comp_joule_losses import comp_joule_losses
+except ImportError as error:
+    comp_joule_losses = error
 
 try:
     from ..Methods.Simulation.EEC_PMSM.comp_Ld import comp_Ld
@@ -58,6 +43,11 @@ except ImportError as error:
     comp_Lq = error
 
 try:
+    from ..Methods.Simulation.EEC_PMSM.comp_parameters import comp_parameters
+except ImportError as error:
+    comp_parameters = error
+
+try:
     from ..Methods.Simulation.EEC_PMSM.comp_Phidq import comp_Phidq
 except ImportError as error:
     comp_Phidq = error
@@ -66,6 +56,21 @@ try:
     from ..Methods.Simulation.EEC_PMSM.comp_Phidq_mag import comp_Phidq_mag
 except ImportError as error:
     comp_Phidq_mag = error
+
+try:
+    from ..Methods.Simulation.EEC_PMSM.comp_torque_sync_rel import comp_torque_sync_rel
+except ImportError as error:
+    comp_torque_sync_rel = error
+
+try:
+    from ..Methods.Simulation.EEC_PMSM.solve import solve
+except ImportError as error:
+    solve = error
+
+try:
+    from ..Methods.Simulation.EEC_PMSM.solve_PWM import solve_PWM
+except ImportError as error:
+    solve_PWM = error
 
 try:
     from ..Methods.Simulation.EEC_PMSM.update_from_ref import update_from_ref
@@ -83,59 +88,18 @@ class EEC_PMSM(EEC):
     VERSION = 1
 
     # Check ImportError to remove unnecessary dependencies in unused method
-    # cf Methods.Simulation.EEC_PMSM.comp_parameters
-    if isinstance(comp_parameters, ImportError):
-        comp_parameters = property(
+    # cf Methods.Simulation.EEC_PMSM.clear_parameters
+    if isinstance(clear_parameters, ImportError):
+        clear_parameters = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use EEC_PMSM method comp_parameters: " + str(comp_parameters)
+                    "Can't use EEC_PMSM method clear_parameters: "
+                    + str(clear_parameters)
                 )
             )
         )
     else:
-        comp_parameters = comp_parameters
-    # cf Methods.Simulation.EEC_PMSM.solve
-    if isinstance(solve, ImportError):
-        solve = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use EEC_PMSM method solve: " + str(solve))
-            )
-        )
-    else:
-        solve = solve
-    # cf Methods.Simulation.EEC_PMSM.solve_PWM
-    if isinstance(solve_PWM, ImportError):
-        solve_PWM = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use EEC_PMSM method solve_PWM: " + str(solve_PWM))
-            )
-        )
-    else:
-        solve_PWM = solve_PWM
-    # cf Methods.Simulation.EEC_PMSM.comp_joule_losses
-    if isinstance(comp_joule_losses, ImportError):
-        comp_joule_losses = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use EEC_PMSM method comp_joule_losses: "
-                    + str(comp_joule_losses)
-                )
-            )
-        )
-    else:
-        comp_joule_losses = comp_joule_losses
-    # cf Methods.Simulation.EEC_PMSM.comp_torque_sync_rel
-    if isinstance(comp_torque_sync_rel, ImportError):
-        comp_torque_sync_rel = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use EEC_PMSM method comp_torque_sync_rel: "
-                    + str(comp_torque_sync_rel)
-                )
-            )
-        )
-    else:
-        comp_torque_sync_rel = comp_torque_sync_rel
+        clear_parameters = clear_parameters
     # cf Methods.Simulation.EEC_PMSM.comp_BEMF_harmonics
     if isinstance(comp_BEMF_harmonics, ImportError):
         comp_BEMF_harmonics = property(
@@ -148,6 +112,18 @@ class EEC_PMSM(EEC):
         )
     else:
         comp_BEMF_harmonics = comp_BEMF_harmonics
+    # cf Methods.Simulation.EEC_PMSM.comp_joule_losses
+    if isinstance(comp_joule_losses, ImportError):
+        comp_joule_losses = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use EEC_PMSM method comp_joule_losses: "
+                    + str(comp_joule_losses)
+                )
+            )
+        )
+    else:
+        comp_joule_losses = comp_joule_losses
     # cf Methods.Simulation.EEC_PMSM.comp_Ld
     if isinstance(comp_Ld, ImportError):
         comp_Ld = property(
@@ -166,6 +142,17 @@ class EEC_PMSM(EEC):
         )
     else:
         comp_Lq = comp_Lq
+    # cf Methods.Simulation.EEC_PMSM.comp_parameters
+    if isinstance(comp_parameters, ImportError):
+        comp_parameters = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use EEC_PMSM method comp_parameters: " + str(comp_parameters)
+                )
+            )
+        )
+    else:
+        comp_parameters = comp_parameters
     # cf Methods.Simulation.EEC_PMSM.comp_Phidq
     if isinstance(comp_Phidq, ImportError):
         comp_Phidq = property(
@@ -186,6 +173,36 @@ class EEC_PMSM(EEC):
         )
     else:
         comp_Phidq_mag = comp_Phidq_mag
+    # cf Methods.Simulation.EEC_PMSM.comp_torque_sync_rel
+    if isinstance(comp_torque_sync_rel, ImportError):
+        comp_torque_sync_rel = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use EEC_PMSM method comp_torque_sync_rel: "
+                    + str(comp_torque_sync_rel)
+                )
+            )
+        )
+    else:
+        comp_torque_sync_rel = comp_torque_sync_rel
+    # cf Methods.Simulation.EEC_PMSM.solve
+    if isinstance(solve, ImportError):
+        solve = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use EEC_PMSM method solve: " + str(solve))
+            )
+        )
+    else:
+        solve = solve
+    # cf Methods.Simulation.EEC_PMSM.solve_PWM
+    if isinstance(solve_PWM, ImportError):
+        solve_PWM = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use EEC_PMSM method solve_PWM: " + str(solve_PWM))
+            )
+        )
+    else:
+        solve_PWM = solve_PWM
     # cf Methods.Simulation.EEC_PMSM.update_from_ref
     if isinstance(update_from_ref, ImportError):
         update_from_ref = property(

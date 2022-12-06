@@ -13,4 +13,8 @@ def get_pole_pair_number(self):
 
     """
 
-    return self.get_hole_list()[0].Zh // 2
+    hole_list = self.get_hole_list()
+    if len(hole_list) > 0:
+        return hole_list[0].Zh // 2
+    else:
+        return None

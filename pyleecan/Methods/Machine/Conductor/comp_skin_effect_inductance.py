@@ -11,7 +11,7 @@ def comp_skin_effect_inductance(
     ----------
     self : Conductor
         an Conductor object
-    freq: float
+    freq: float or ndarray
         electrical frequency [Hz]
     T_op: float
         Conductor operational temperature [degC]
@@ -62,6 +62,10 @@ def comp_skin_effect_inductance(
 
     # reduced conductor height Eq(4.90) p.257 + addind relative permeatibility
     ksi = h4 * sqrt(w * mu0 * mur * sigma * bc / (2 * b4))
+
+    if not isinstance(ksi, float):
+        # Avoid numerical error with 0
+        ksi[ksi == 0] = 1e-4
 
     # resistance factor function phi prime Eq(4.92) p.257
     phip = (

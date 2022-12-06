@@ -85,7 +85,11 @@ def run(self):
             out_dict = eec_out.solve()
 
         # Solve for each voltage harmonics in case of PWM
-        out_dict["Is_PWM"] = eec_out.solve_PWM(output)
+        out_dict["Is_PWM"] = eec_out.solve_PWM(
+            output,
+            is_skin_effect_inductance=self.is_skin_effect_inductance
+            and self.type_skin_effect != 0,
+        )
 
     # Compute losses due to Joule effects
     out_dict = eec_out.comp_joule_losses(out_dict, machine)

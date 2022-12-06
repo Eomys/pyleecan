@@ -17,11 +17,24 @@ def comp_surfaces(self):
         Lamination surface dictionary (Slam, Svent, Syoke, Steeth, Sslot) [m**2]
 
     """
+    if self.is_internal:
+        ext_shape = self.bore
+        int_shape = self.yoke
+    else:
+        ext_shape = self.yoke
+        int_shape = self.bore
 
     # Surface of the external disk
-    S_ext = (self.Rext ** 2) * pi
+    if ext_shape is not None:
+        S_ext = ext_shape.comp_surface()
+    else:
+        S_ext = (self.Rext ** 2) * pi
     # Surface of the internal disk
-    S_int = (self.Rint ** 2) * pi
+    if int_shape is not None:
+        S_int = int_shape.comp_surface()
+    else:
+        S_int = (self.Rint ** 2) * pi
+
     # Surface of lamination without hole
     Slam = S_ext - S_int
 

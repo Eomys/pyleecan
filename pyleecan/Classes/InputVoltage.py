@@ -23,11 +23,6 @@ except ImportError as error:
     gen_input = error
 
 try:
-    from ..Methods.Simulation.InputVoltage.set_OP_from_array import set_OP_from_array
-except ImportError as error:
-    set_OP_from_array = error
-
-try:
     from ..Methods.Simulation.InputVoltage.set_Ud_Uq import set_Ud_Uq
 except ImportError as error:
     set_Ud_Uq = error
@@ -57,18 +52,6 @@ class InputVoltage(Input):
         )
     else:
         gen_input = gen_input
-    # cf Methods.Simulation.InputVoltage.set_OP_from_array
-    if isinstance(set_OP_from_array, ImportError):
-        set_OP_from_array = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use InputVoltage method set_OP_from_array: "
-                    + str(set_OP_from_array)
-                )
-            )
-        )
-    else:
-        set_OP_from_array = set_OP_from_array
     # cf Methods.Simulation.InputVoltage.set_Ud_Uq
     if isinstance(set_Ud_Uq, ImportError):
         set_Ud_Uq = property(

@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from logging import getLogger
 from os.path import join
 
@@ -7,12 +5,14 @@ from PySide2.QtWidgets import QFileDialog, QTableWidgetItem, QWidget, QMessageBo
 
 from ......Classes._FEMMHandler import _FEMMHandler
 from ......Classes.Output import Output
+from ......Classes.InputCurrent import InputCurrent
 from ......Classes.Simu1 import Simu1
 from ......Classes.OPdq import OPdq
 from ......Classes.OPslip import OPslip
 from ......Classes.InputCurrent import InputCurrent
 from ......definitions import config_dict
 from ......loggers import GUI_LOG_NAME
+from ......Functions.GUI.log_error import log_error
 from ......Functions.FEMM.update_FEMM_simulation import update_FEMM_simulation
 from ......Functions.FEMM.draw_FEMM import draw_FEMM
 from ......Functions.Plot.set_plot_gui_icon import set_plot_gui_icon
@@ -101,12 +101,11 @@ class WMachineTable(Ui_WMachineTable, QWidget):
         """Plot the unit mmf of the stator"""
         try:
             if self.machine is not None:
-                self.machine.stator.plot_mmf_unit(is_create_appli=False)
+                self.machine.stator.plot_mmf_unit()
                 set_plot_gui_icon()
         except Exception as e:
             err_msg = "Error while plotting Stator mmf unit:\n" + str(e)
-            getLogger(GUI_LOG_NAME).error(err_msg)
-            QMessageBox().critical(self, self.tr("Error"), err_msg)
+            log_error(self, err_msg)
 
     def plot_machine(self):
         """Plot the machine"""
@@ -124,7 +123,7 @@ class WMachineTable(Ui_WMachineTable, QWidget):
 
         try:
             femm = _FEMMHandler()
-            output = Output(simu=Simu1(machine=self.machine))
+
             # Periodicity
             sym, is_antiper = self.machine.comp_periodicity_spatial()
             if is_antiper:
@@ -136,14 +135,37 @@ class WMachineTable(Ui_WMachineTable, QWidget):
             Sphase = S_slot / (Nrad * Ntan)
             J = 5e6
             if self.machine.is_synchronous():
-                op = OPdq(felec=60)
+                OP = OPdq(felec=60)
+                OP.set_Id_Iq(Id=0, Iq=J * Sphase / Ntcoil)
             else:
-                op = OPslip(felec=60)
-            op.set_Id_Iq(Id=J * Sphase / Ntcoil, Iq=0)
-            output.simu.input = InputCurrent(OP=op, Nt_tot=20)
+                OP = OPslip(felec=60)
+                OP.set_Id_Iq(Id=J * Sphase / Ntcoil, Iq=0)
+
+            output = Output(
+                simu=Simu1(
+                    machine=self.machine,
+                    input=InputCurrent(OP=OP, Nt_tot=20, Na_tot=200),
+                )
+            )
+
+            # Generate time and phase vectors in OutElec
             output.simu.input.gen_input()
-            Is = output.elec.get_Is().get_along("phase", "time")["I_s"].transpose()
-            alpha = output.get_angle_rotor_initial()
+
+            # Get current values for given OP
+            Is = output.elec.get_Is().values
+
+            # Divide phase current by the number of parallel circuit per phase of winding
+            stator = self.machine.stator
+            if hasattr(stator.winding, "Npcp") and stator.winding.Npcp is not None:
+                Npcp = stator.winding.Npcp
+            else:
+                Npcp = 1
+            Is /= Npcp
+
+            # Get rotor angular position in degress
+            angle_rotor = output.elec.axes_dict["time"].get_values(
+                normalization="angle_rotor"
+            )
             # Draw the machine
             FEMM_dict = draw_FEMM(
                 femm,
@@ -163,7 +185,7 @@ class WMachineTable(Ui_WMachineTable, QWidget):
                 FEMM_dict=FEMM_dict,
                 is_sliding_band=True,
                 is_internal_rotor=self.machine.rotor.is_internal,
-                angle_rotor=[alpha],
+                angle_rotor=angle_rotor,
                 Is=Is,
                 Ir=None,
                 ii=0,
@@ -176,12 +198,7 @@ class WMachineTable(Ui_WMachineTable, QWidget):
                 + " in FEMM:\n"
                 + str(e)
             )
-            getLogger(GUI_LOG_NAME).error(err_msg)
-            QMessageBox().critical(
-                self,
-                self.tr("Error"),
-                self.tr(err_msg),
-            )
+            log_error(self, err_msg)
         femm.closefemm()
 
     def draw_GMSH(self):
@@ -214,12 +231,7 @@ class WMachineTable(Ui_WMachineTable, QWidget):
                 + " in GMSH:\n"
                 + str(e)
             )
-            getLogger(GUI_LOG_NAME).error(err_msg)
-            QMessageBox().critical(
-                self,
-                self.tr("Error"),
-                self.tr(err_msg),
-            )
+            log_error(self, err_msg)
 
     def draw_GMSH_3D(self):
         save_file_path = self.get_save_path(ext="_stator.msh", file_type="GMSH (*.msh)")
@@ -241,12 +253,7 @@ class WMachineTable(Ui_WMachineTable, QWidget):
                 + " in GMSH:\n"
                 + str(e)
             )
-            getLogger(GUI_LOG_NAME).error(err_msg)
-            QMessageBox().critical(
-                self,
-                self.tr("Error"),
-                self.tr(err_msg),
-            )
+            log_error(self, err_msg)
 
     def get_save_path(self, ext=".fem", file_type="FEMM (*.fem)"):
         machine_path = config_dict["MAIN"]["MACHINE_DIR"]

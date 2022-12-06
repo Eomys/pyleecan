@@ -62,7 +62,10 @@ def generate_properties(gen_dict, class_dict, soft_name="pyleecan"):
             )
 
         ## For sphinx doc
-        desc_str = '"""' + prop["desc"] + "\n\n"
+        desc_str = '"""' + prop["desc"]
+        # if prop["unit"] != "":
+        #     desc_str += " [" + prop["unit"] + "]"
+        desc_str += "\n\n"
         desc_str += TAB2 + ":Type: " + prop["type"] + "\n"
         if str(prop["min"]):
             desc_str += TAB2 + ":min: " + str(prop["min"]) + "\n"

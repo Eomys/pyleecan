@@ -113,6 +113,7 @@ class ElecLUTdq(Electrical):
         Tsta=20,
         Trot=20,
         type_skin_effect=1,
+        is_skin_effect_inductance=True,
         init_dict=None,
         init_str=None,
     ):
@@ -171,6 +172,8 @@ class ElecLUTdq(Electrical):
                 Trot = init_dict["Trot"]
             if "type_skin_effect" in list(init_dict.keys()):
                 type_skin_effect = init_dict["type_skin_effect"]
+            if "is_skin_effect_inductance" in list(init_dict.keys()):
+                is_skin_effect_inductance = init_dict["is_skin_effect_inductance"]
         # Set the properties (value check and convertion are done in setter)
         self.n_interp = n_interp
         self.Id_min = Id_min
@@ -194,6 +197,7 @@ class ElecLUTdq(Electrical):
             Tsta=Tsta,
             Trot=Trot,
             type_skin_effect=type_skin_effect,
+            is_skin_effect_inductance=is_skin_effect_inductance,
         )
         # The class is frozen (in Electrical init), for now it's impossible to
         # add new properties
@@ -581,6 +585,7 @@ class ElecLUTdq(Electrical):
         Tsta_val = self.Tsta
         Trot_val = self.Trot
         type_skin_effect_val = self.type_skin_effect
+        is_skin_effect_inductance_val = self.is_skin_effect_inductance
         # Creates new object of the same type with the copied properties
         obj_copy = type(self)(
             n_interp=n_interp_val,
@@ -603,6 +608,7 @@ class ElecLUTdq(Electrical):
             Tsta=Tsta_val,
             Trot=Trot_val,
             type_skin_effect=type_skin_effect_val,
+            is_skin_effect_inductance=is_skin_effect_inductance_val,
         )
         return obj_copy
 

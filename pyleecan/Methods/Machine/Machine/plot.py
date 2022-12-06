@@ -25,6 +25,7 @@ def plot(
     win_title=None,
     fig_title=None,
     is_max_sym=False,
+    is_clean_plot=False,
 ):
     """Plot the Machine in a matplotlib fig
 
@@ -60,6 +61,8 @@ def plot(
         Name of the figure (default machine name)
     is_max_sym : bool
         True: overwrite sym parameter with max periodicity of the machine
+    is_clean_plot : bool
+        True to remove title, legend, axis (only machine on plot with white background)
 
     Returns
     -------
@@ -74,10 +77,9 @@ def plot(
         pera, is_apera = self.comp_periodicity_spatial()
         sym = 2 * pera if is_apera else pera
 
-    (fig, ax, _, _) = init_fig(fig=fig, ax=ax, shape="square")
-
     if edgecolor is None:
-        edgecolor = "k"
+        edgecolor = "k"  # Default is black
+    (fig, ax, _, _) = init_fig(fig=fig, ax=ax, shape="square")
 
     # Call each plot method to properly set the legend
     if self.frame is not None:
@@ -181,6 +183,14 @@ def plot(
     # Set Windows title
     if self.name not in ["", None] and win_title is None:
         win_title = self.name + " plot machine"
+
+    # Clean figure
+    if is_clean_plot:
+        ax.set_axis_off()
+        ax.axis("equal")
+        if ax.get_legend() is not None:
+            ax.get_legend().remove()
+        ax.set_title("")
 
     if save_path is not None:
         fig.savefig(save_path)

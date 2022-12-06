@@ -156,7 +156,7 @@ def get_electrical(
         felec = (1 - int(is_dqh)) * self.OP.get_felec()
         # Get data object with quantity harmonics higher than fundamental component
         obj = obj.get_data_along("freqs", "phase")
-        # Get index of fundamental frequencys
+        # Get index of fundamental frequency
         Freqs = obj.axes[0]
         freqs = Freqs.get_values()
         ifund = argmin(np_abs(freqs - felec))
@@ -174,8 +174,19 @@ def get_electrical(
             obj.axes[0] = Freqs_fund
             obj.values = obj.values[ifund, ...]
 
-        else:
-            # Put zero value at fundamental frequency
-            obj.values[ifund, ...] = 0
+        elif is_harm_only:
+            # Find all indices
+            iharm = [ii for ii in range(freqs.size) if ii != ifund]
+            # Remove fundamental frequency component
+            Freqs_harm = Data1D(
+                name=Freqs.name,
+                symbol=Freqs.symbol,
+                unit=Freqs.unit,
+                normalizations=Freqs.normalizations,
+                is_components=Freqs.is_components,
+                values=freqs[iharm],
+            )
+            obj.axes[0] = Freqs_harm
+            obj.values = obj.values[iharm, ...]
 
     return obj

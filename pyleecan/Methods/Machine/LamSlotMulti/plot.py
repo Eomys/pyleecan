@@ -21,6 +21,7 @@ def plot(
     is_add_arrow=False,
     is_display=True,
     is_show_fig=True,
+    is_clean_plot=False,
 ):
     """Plot the Lamination with empty Slots in a matplotlib fig
 
@@ -48,6 +49,8 @@ def plot(
         False to return the patches
     is_show_fig : bool
         To call show at the end of the method
+    is_clean_plot : bool
+        True to remove title, legend, axis (only machine on plot with white background)
 
     Returns
     -------
@@ -106,6 +109,13 @@ def plot(
                 ax.set_title("Rotor with empty slot")
 
             ax.legend(patch_leg, label_leg)
+        # Clean figure
+        if is_clean_plot:
+            ax.set_axis_off()
+            ax.axis("equal")
+            if ax.get_legend() is not None:
+                ax.get_legend().remove()
+            ax.set_title("")
         if is_show_fig:
             fig.show()
         return fig, ax

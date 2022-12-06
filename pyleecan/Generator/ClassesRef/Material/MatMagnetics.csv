@@ -1,7 +1,7 @@
 Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
 mur_lin,-,Relative magnetic permeability,0,float,1,0,,,Material,,get_BH,VERSION,1,magnetic material properties
-Brm20,T,magnet remanence induction at 20degC (calculated from mur_lin and Hc if not provided),0,float,0,,,,,,plot_BH,,,
-alpha_Br,-,temperature coefficient for remanent flux density /degC compared to 20degC,0,float,0,,,,,,get_Hc,,,
+Brm20,T,magnet remanence induction at 20degC,0,float,0,,,,,,plot_BH,,,
+alpha_Br,-,temperature coefficient for remanent flux density,0,float,0,,,,,,get_Hc,,,
 Wlam,m,lamination sheet width without insulation [m] (0 == not laminated),0,float,0,0,,,,,get_Brm,,,
 BH_curve,-,"nonlinear B(H) curve (two columns matrix, H and B(H))",0,ImportMatrix,,,,,,,,,,
 LossData,W/kg,"specific loss data value triplets, i.e. B, f, P",0,ImportMatrix,,,,,,,,,,

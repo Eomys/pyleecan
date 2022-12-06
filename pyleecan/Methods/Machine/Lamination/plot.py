@@ -1,5 +1,6 @@
 import matplotlib.pyplot as plt
 from matplotlib.patches import Patch
+from matplotlib.pyplot import legend
 
 from ....Functions.init_fig import init_fig
 from ....definitions import config_dict

@@ -48,7 +48,9 @@ class LossModelWinding(LossModel):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, temperature=20, name="", init_dict=None, init_str=None):
+    def __init__(
+        self, temperature=20, name="", is_show_fig=False, init_dict=None, init_str=None
+    ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -68,10 +70,12 @@ class LossModelWinding(LossModel):
                 temperature = init_dict["temperature"]
             if "name" in list(init_dict.keys()):
                 name = init_dict["name"]
+            if "is_show_fig" in list(init_dict.keys()):
+                is_show_fig = init_dict["is_show_fig"]
         # Set the properties (value check and convertion are done in setter)
         self.temperature = temperature
         # Call LossModel init
-        super(LossModelWinding, self).__init__(name=name)
+        super(LossModelWinding, self).__init__(name=name, is_show_fig=is_show_fig)
         # The class is frozen (in LossModel init), for now it's impossible to
         # add new properties
 
@@ -174,8 +178,11 @@ class LossModelWinding(LossModel):
         # Handle deepcopy of all the properties
         temperature_val = self.temperature
         name_val = self.name
+        is_show_fig_val = self.is_show_fig
         # Creates new object of the same type with the copied properties
-        obj_copy = type(self)(temperature=temperature_val, name=name_val)
+        obj_copy = type(self)(
+            temperature=temperature_val, name=name_val, is_show_fig=is_show_fig_val
+        )
         return obj_copy
 
     def _set_None(self):

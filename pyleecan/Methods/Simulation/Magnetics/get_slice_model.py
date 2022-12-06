@@ -43,15 +43,18 @@ def get_slice_model(self):
             # Slice model is given by skew slices
             if rotor_skew.type_skew == "linear" and not rotor_skew.is_step:
                 if self.Nslices_enforced is None:
-                    self.get_logger().debug("Enforce Nslices_enforced = 3")
-                    Nslices = 3
+                    Nslices = 5
+                    self.get_logger().debug(
+                        "Enforce Nslices_enforced = " + str(Nslices)
+                    )
                 else:
                     Nslices = self.Nslices_enforced
                 if self.type_distribution_enforced is None:
-                    self.get_logger().debug(
-                        'Enforce type_distribution_enforced = "uniform"'
-                    )
                     type_distribution = "uniform"
+                    self.get_logger().debug(
+                        "Enforce type_distribution_enforced = " + type_distribution
+                    )
+
                 else:
                     type_distribution = self.type_distribution_enforced
 
@@ -60,7 +63,8 @@ def get_slice_model(self):
                 # Calculating requested slice distribution
                 slice_model.Nslices = Nslices
                 slice_model.type_distribution = type_distribution
-                z_list = slice_model.get_distribution()
+                z_norm = slice_model.get_distribution()
+                z_list = [z * L for z in z_norm]
                 # Interpolating rotor skew angle given new slice distribution
                 angle_rotor = interp(z_list, z_skew, angle_skew)
 

@@ -11,6 +11,7 @@ from ..Classes.Arc3 import Arc3
 from ..Classes.Bore import Bore
 from ..Classes.BoreFlower import BoreFlower
 from ..Classes.BoreLSRPM import BoreLSRPM
+from ..Classes.BoreSinePole import BoreSinePole
 from ..Classes.BoreUD import BoreUD
 from ..Classes.CellMat import CellMat
 from ..Classes.Circle import Circle
@@ -49,6 +50,7 @@ from ..Classes.Hole import Hole
 from ..Classes.HoleM50 import HoleM50
 from ..Classes.HoleM51 import HoleM51
 from ..Classes.HoleM52 import HoleM52
+from ..Classes.HoleM52R import HoleM52R
 from ..Classes.HoleM53 import HoleM53
 from ..Classes.HoleM54 import HoleM54
 from ..Classes.HoleM57 import HoleM57
@@ -133,7 +135,9 @@ from ..Classes.NodeMat import NodeMat
 from ..Classes.Notch import Notch
 from ..Classes.NotchEvenDist import NotchEvenDist
 from ..Classes.OP import OP
+from ..Classes.OPMatrix import OPMatrix
 from ..Classes.OPdq import OPdq
+from ..Classes.OPdqf import OPdqf
 from ..Classes.OPslip import OPslip
 from ..Classes.OptiBayesAlg import OptiBayesAlg
 from ..Classes.OptiBayesAlgSmoot import OptiBayesAlgSmoot

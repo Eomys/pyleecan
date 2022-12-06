@@ -1,0 +1,56 @@
+[
+    {
+        "cls": "HoleM52R",
+        "name": "W0",
+        "widget": [
+            "in_W0",
+            "lf_W0"
+        ],
+        "xls": "Slot"
+    },
+    {
+        "cls": "HoleM52R",
+        "name": "W1",
+        "widget": [
+            "in_W1",
+            "lf_W1"
+        ],
+        "xls": "Slot"
+    },
+    {
+        "cls": "HoleM52R",
+        "name": "H0",
+        "widget": [
+            "in_H0",
+            "lf_H0"
+        ],
+        "xls": "Slot"
+    },
+    {
+        "cls": "HoleM52R",
+        "name": "H1",
+        "widget": [
+            "in_H1",
+            "lf_H1"
+        ],
+        "xls": "Slot"
+    },
+    {
+        "cls": "HoleM52R",
+        "name": "H2",
+        "widget": [
+            "in_H2",
+            "lf_H2"
+        ],
+        "xls": "Slot"
+    },
+    {
+        "cls": "HoleM52R",
+        "name": "R0",
+        "widget": [
+            "in_R0",
+            "lf_R0"
+        ],
+        "xls": "Slot"
+    }
+]

@@ -181,11 +181,8 @@ def comp_flux_airgap(self, output, axes_dict, Is_val=None, Ir_val=None):
             filename=self.import_file,
         )
 
-    # Store FEMM_dict in out_dict if FEMM file is not imported
-    if self.import_file is None:
-        # Especially useful to avoid redrawing machine in case of skew
-        self.import_file = path_femm
-        output.mag.internal.FEMM_dict = FEMM_dict
+    # Store FEMM_dict in to avoid drawing the machine several times
+    output.mag.internal.FEMM_dict = FEMM_dict
 
     # Store stator winding flux
     if STATOR_LAB + "-0" in out_dict["Phi_wind"].keys():
@@ -202,8 +199,8 @@ def comp_flux_airgap(self, output, axes_dict, Is_val=None, Ir_val=None):
         Indices_Cell = Data1D(
             name="indice", values=indices_cell, is_components=True, is_overlay=False
         )
-        Slice = axes_dict["z"]
-        axis_list = [Time, Indices_Cell, Slice]
+        # Slice = axes_dict["z"]
+        axis_list = [Time, Indices_Cell]
 
         B_sol = build_solution_vector(
             field=B_elem[:, :, None, :],  # quick fix for slice issue
@@ -229,8 +226,8 @@ def comp_flux_airgap(self, output, axes_dict, Is_val=None, Ir_val=None):
         Ae_sol = build_solution_data(
             field=A_elem[:, :, None],
             axis_list=axis_list,
-            name="Magnetic Potential Vector",
-            symbol="A_z",
+            name="Magnetic Potential Vector (per element)",
+            symbol="A_z^{element}",
             unit="Wb/m",
         )
 
@@ -241,7 +238,7 @@ def comp_flux_airgap(self, output, axes_dict, Is_val=None, Ir_val=None):
         An_sol = build_solution_data(
             field=A_node,
             axis_list=axis_list_node,
-            name="Magnetic Potential Vector",
+            name="Magnetic Potential Vector (nodal)",
             symbol="A_z",
             unit="Wb/m",
         )

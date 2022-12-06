@@ -34,66 +34,48 @@ def build_geometry_active(self, Nrad, Ntan, is_simplified=False, alpha=0, delta=
     Raises
     -------
     S60_WindError
-        Slot 60 can use only for winding with Nrad=1 and Ntan 2
+        Slot 60 can use only for winding with Nrad=1 and Ntan=2
 
     """
 
     if Nrad != 1 or Ntan != 2:
-        raise S60_WindError(
-            "Slot 60 can use only for winding with Nrad=1 " + "and Ntan 2"
-        )
+        raise S60_WindError("Slot 60 can use only for winding with Nrad=1 and Ntan=2")
     self.check()
 
     # get the name of the lamination
     lam_label = self.parent.get_label()
 
-    [Z1, Z2, Z3, Z4, Z5, Z6, Z7, Z8, Z9, Z10, Z11] = self._comp_point_coordinate()
+    line_dict = self._comp_line_dict()
 
-    # Compute the point in the tooth ref
-    hsp = pi / self.Zs
-    Z4t = Z4 * exp(1j * hsp)
-    Z5t = Z5 * exp(1j * hsp)
-    Zw1t = Z4t - self.H3
-    Zw2t = Z5t + self.H4
-    Zw3t = Zw2t + 1j * ((self.W1 - self.W2) / 2 - self.W3)
-    Zw4t = Zw1t + 1j * ((self.W1 - self.W2) / 2 - self.W3)
-
-    # Go back to slot ref
-    Zw1 = Zw1t * exp(1j * -hsp)
-    Zw2 = Zw2t * exp(1j * -hsp)
-    Zw3 = Zw3t * exp(1j * -hsp)
-    Zw4 = Zw4t * exp(1j * -hsp)
-    Zw1s = Zw1.conjugate()
-    Zw2s = Zw2.conjugate()
-    Zw3s = Zw3.conjugate()
-    Zw4s = Zw4.conjugate()
-    Ref1 = (Zw1 + Zw2 + Zw3 + Zw4) / 4
-    Ref2 = (Zw1s + Zw2s + Zw3s + Zw4s) / 4
+    Ref1 = (line_dict["w3-w4"].get_begin() + line_dict["w1-w2"].get_begin()) / 2
+    Ref2 = (line_dict["w3s-w4s"].get_begin() + line_dict["w1s-w2s"].get_begin()) / 2
 
     # Create the surfaces
-    surf_list = list()
-    wind1 = [Segment(Zw3, Zw4)]
-    wind2 = [Segment(Zw3s, Zw4s)]
-    if (is_simplified and self.W3 > 0) or not is_simplified:
-        wind1.append(Segment(Zw4, Zw1))
-        wind2.append(Segment(Zw4s, Zw1s))
-    if not is_simplified:
-        wind1.append(Segment(Zw1, Zw2))
-        wind2.append(Segment(Zw1s, Zw2s))
-    if (is_simplified and self.W4 > 0) or not is_simplified:
-        wind1.append(Segment(Zw2, Zw3))
-        wind2.append(Segment(Zw2s, Zw3s))
+    wind1_lines = [
+        line_dict["w3-w4"],
+        line_dict["w4-w1"],
+        line_dict["w1-w2"],
+        line_dict["w2-w3"],
+    ]
 
+    wind2_lines = [
+        line_dict["w3s-w4s"],
+        line_dict["w4s-w1s"],
+        line_dict["w1s-w2s"],
+        line_dict["w2s-w3s"],
+    ]
+
+    surf_list = list()
     surf_list.append(
         SurfLine(
-            line_list=wind1,
+            line_list=wind1_lines,
             label=lam_label + "_" + WIND_LAB + "_R0-T0-S0",
             point_ref=Ref1,
         )
     )
     surf_list.append(
         SurfLine(
-            line_list=wind2,
+            line_list=wind2_lines,
             label=lam_label + "_" + WIND_LAB + "_R0-T1-S0",
             point_ref=Ref2,
         )

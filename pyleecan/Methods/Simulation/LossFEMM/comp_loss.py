@@ -1,18 +1,16 @@
 from numpy import zeros, argmin, abs as np_abs, array
+from pyleecan.Functions.load import load
 
 
 def comp_loss(self, output, axes_dict):
-    """Calculate losses in electrical machine assuming power density is calculated as described given
-    by (cf. https://www.femm.info/wiki/SPMLoss)
+    """Computing the losses in electrical machines
 
     Parameters
     ----------
-    self: LossFEMM
-        a LossFEMM object
-    output: Output
-        an Output object
-    freqs: ndarray
-        frequency vector [Hz]
+    output : Output
+        an Output object with magnetic quantities previously computed
+    axes_dict : {axes}
+        A dict of axes
 
     Returns
     -------
@@ -24,6 +22,27 @@ def comp_loss(self, output, axes_dict):
 
     coeff_dict = dict()
 
+    loss_model = self.model_dict["stator core"]
+    if None in [
+        loss_model.k_hy,
+        loss_model.k_ed,
+        loss_model.alpha_f,
+        loss_model.alpha_B,
+    ]:
+        material = machine.stator.mat_type
+        loss_model.comp_coeff(material)
+
+    loss_model = self.model_dict["rotor core"]
+    if None in [
+        loss_model.k_hy,
+        loss_model.k_ed,
+        loss_model.alpha_f,
+        loss_model.alpha_B,
+    ]:
+        material = machine.rotor.mat_type
+        loss_model.comp_coeff(material)
+
+    # Comp stator core losses
     if "stator core" in self.model_dict:
         # Comp stator core losses
         Pstator_density, fstator = self.comp_loss_density_core(

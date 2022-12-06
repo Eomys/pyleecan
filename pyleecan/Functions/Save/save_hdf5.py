@@ -155,7 +155,12 @@ def variable_to_hdf5(file, prefix, variable, name):
             grp = file[prefix]
             # Create a fixed-width ASCII string according
             # to http://docs.h5py.org/en/stable/strings.html#exceptions-for-python-3
-            grp[name] = np.string_(variable.encode("ISO-8859-2"))
+            try:
+                grp[name] = np.string_(variable.encode("ISO-8859-2"))
+            except Exception as e:
+                raise Exception(
+                    "Error while h5 saving variable " + name + ":\n" + str(e)
+                )
     # None
     elif variable is None:
         # Create dataset

@@ -35,6 +35,7 @@ def plot(
     save_path=None,
     win_title=None,
     is_legend=True,
+    is_clean_plot=False,
 ):
     """Plot the Lamination in a matplotlib fig
 
@@ -70,6 +71,8 @@ def plot(
         Title for the window
     is_legend : bool
         True to add the legend
+    is_clean_plot : bool
+        True to remove title, legend, axis (only machine on plot with white background)
 
     Returns
     -------
@@ -226,6 +229,14 @@ def plot(
         if save_path is not None:
             fig.savefig(save_path)
             plt.close(fig=fig)
+        # Clean figure
+        if is_clean_plot:
+            ax.set_axis_off()
+            ax.axis("equal")
+            if ax.get_legend() is not None:
+                ax.get_legend().remove()
+            ax.set_title("")
+
         if is_show_fig:
             fig.show()
         return fig, ax
