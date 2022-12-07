@@ -43,8 +43,6 @@ def harm1(output):
 @pytest.mark.SCIM
 @pytest.mark.MagFEMM
 def test_opti_varopti():
-    # Defining reference Output
-    # Definition of the enforced output of the electrical module
     # Import the machine from a script
     Toyota_Prius = load(join(DATA_DIR, "Machine", "Toyota_Prius.json"))
     Toyota_Prius.plot()

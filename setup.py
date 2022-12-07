@@ -23,7 +23,7 @@ system("{} -m pip install git+https://gitlab.com/CedMrnl/swat-em.git".format(exe
 # Release 1.1.0 : 1.1.0
 # First post release of the release 1.1.0 : 1.1.0.post1
 
-PYLEECAN_VERSION = "1.4.1"
+PYLEECAN_VERSION = "1.4.2"
 
 
 with open("README.md", "r") as fh:
