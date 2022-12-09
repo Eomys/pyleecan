@@ -346,13 +346,10 @@ VARPARAM_VERSION = "1.4.2"
 
 def is_VarParam_dict(obj_dict):
     """Check if the object need to be updated for Winding"""
-    return (
-        "__class__" in obj_dict.keys()
-        and obj_dict["__class__"]
-        in [
-            "VarParam",
-        ]
-    )
+    return "__class__" in obj_dict.keys() and obj_dict["__class__"] in [
+        "VarParam",
+    ]
+
 
 def rename_varparam(varparam_dict):
     """Update the old VarParam class to VarParamSweep"""
@@ -384,6 +381,7 @@ def is_OptiConstraint_dict(obj_dict):
         and "get_variable" in obj_dict.keys()
     )
 
+
 def convert_opticonstraint(opticonstraint_dict):
     """Update the old OptiConstraint to the new one inherited from DataKeeper without get_variable"""
     getLogger(GUI_LOG_NAME).info(
@@ -407,13 +405,10 @@ OptiDesignVar_VERSION = "1.4.2"
 
 def is_OptiDesignVar_dict(obj_dict):
     """Check if the object need to be updated for OptiDesignVar"""
-    return (
-        "__class__" in obj_dict.keys()
-        and obj_dict["__class__"]
-        in [
-            "OptiDesignVar",
-        ]
-    )
+    return "__class__" in obj_dict.keys() and obj_dict["__class__"] in [
+        "OptiDesignVar",
+    ]
+
 
 def convert_optidesignvar(optidesignvar_dict):
     """Update the old OptiDesignVar to the new ones OptiDesignVarSet & OptiDesignVarInterval"""
@@ -422,15 +417,18 @@ def convert_optidesignvar(optidesignvar_dict):
     )
     # Copy dict to keep original version
     optidesignvar_dict_new = optidesignvar_dict.copy()
-    
+
     if optidesignvar_dict_new["type_var"] == "set":
         del optidesignvar_dict_new["type_var"]
         OptiDesignVarSet = import_class("pyleecan.Classes", "OptiDesignVarSet")
         return OptiDesignVarSet(init_dict=optidesignvar_dict_new)
     else:
         del optidesignvar_dict_new["type_var"]
-        OptiDesignVarInterval = import_class("pyleecan.Classes", "OptiDesignVarInterval")
+        OptiDesignVarInterval = import_class(
+            "pyleecan.Classes", "OptiDesignVarInterval"
+        )
         return OptiDesignVarInterval(init_dict=optidesignvar_dict_new)
+
 
 def is_before_version(ref_version, check_version):
     """Check if a version str is before another version str
@@ -496,6 +494,10 @@ def create_update_dict(file_version):
         update_dict["OP_matrix"] = is_before_version(OP_MAT_VERSION, file_version)
         update_dict["Yoke_Notch"] = is_before_version(Yoke_Notch_VERSION, file_version)
         update_dict["VarParam"] = is_before_version(VARPARAM_VERSION, file_version)
-        update_dict["OptiConstraint"] = is_before_version(OptiConstraint_VERSION, file_version)
-        update_dict["OptiDesignVar"] = is_before_version(OptiDesignVar_VERSION, file_version)
+        update_dict["OptiConstraint"] = is_before_version(
+            OptiConstraint_VERSION, file_version
+        )
+        update_dict["OptiDesignVar"] = is_before_version(
+            OptiDesignVar_VERSION, file_version
+        )
     return update_dict

@@ -1,5 +1,6 @@
 from ....Classes.OptiProblem import OptiProblem
 
+
 def get_full_solver(self):
     """Method to return a fully setted solver"""
 
@@ -11,7 +12,7 @@ def get_full_solver(self):
 
     # Creation of the problem
     problem = OptiProblem(
-        simu=ref_simu,         
+        simu=ref_simu,
         design_var=self.paramexplorer_list,
         obj_func=self.objective_list,
         datakeeper_list=self.datakeeper_list,

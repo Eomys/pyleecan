@@ -15844,7 +15844,7 @@
                 "name": "objective_list",
                 "type": "[OptiObjective]",
                 "unit": "-",
-                "value": -1
+                "value": ""
             },
             {
                 "as_dict": "",
@@ -15854,7 +15854,7 @@
                 "name": "constraint_list",
                 "type": "[OptiConstraint]",
                 "unit": "-",
-                "value": -1
+                "value": ""
             },
             {
                 "as_dict": "",
