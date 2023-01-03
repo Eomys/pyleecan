@@ -1196,7 +1196,7 @@
   "postproc_list": [],
   "struct": null,
   "var_simu": {
-    "__class__": "VarParam",
+    "__class__": "VarParamSweep",
     "datakeeper_list": [
       {
         "__class__": "DataKeeper",
