@@ -10,7 +10,7 @@ In Proceedings of the third international Conference on Genetic Algorithms (Mend
 from os.path import join
 import pytest
 from pyleecan.Classes.Simu1 import Simu1
-from pyleecan.Classes.OptiDesignVar import OptiDesignVar
+from pyleecan.Classes.OptiDesignVarInterval import OptiDesignVarInterval
 from pyleecan.Classes.OptiObjective import OptiObjective
 from pyleecan.Classes.OptiProblem import OptiProblem
 from pyleecan.Classes.OptiGenAlgNsga2Deap import OptiGenAlgNsga2Deap
@@ -35,18 +35,16 @@ def test_opti_preprocessing():
 
     # Design variable
     my_vars = [
-        OptiDesignVar(
+        OptiDesignVarInterval(
             name="Rotor slot height",
             symbol="RH0",
-            type_var="interval",
             space=[0, 5],  # May generate error in FEMM
             get_value=lambda space: random.uniform(*space),
             setter="simu.machine.rotor.slot.H0",
         ),
-        OptiDesignVar(
+        OptiDesignVarInterval(
             name="Stator slot height",
             symbol="SH0",
-            type_var="interval",
             space=[0, 3],  # May generate error in FEMM
             get_value=lambda space: random.uniform(*space),
             setter="simu.machine.stator.slot.H0",

@@ -25,7 +25,7 @@ from ._check import InitUnKnowClassError
 
 
 class OptiDesignVar(ParamExplorer):
-    """Optimization"""
+    """Abstract class for OptiDesignVar (Optimization)"""
 
     VERSION = 1
 
@@ -36,7 +36,6 @@ class OptiDesignVar(ParamExplorer):
 
     def __init__(
         self,
-        type_var="interval",
         space=[0, 1],
         get_value=None,
         name="",
@@ -62,8 +61,6 @@ class OptiDesignVar(ParamExplorer):
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
-            if "type_var" in list(init_dict.keys()):
-                type_var = init_dict["type_var"]
             if "space" in list(init_dict.keys()):
                 space = init_dict["space"]
             if "get_value" in list(init_dict.keys()):
@@ -79,7 +76,6 @@ class OptiDesignVar(ParamExplorer):
             if "getter" in list(init_dict.keys()):
                 getter = init_dict["getter"]
         # Set the properties (value check and convertion are done in setter)
-        self.type_var = type_var
         self.space = space
         self.get_value = get_value
         # Call ParamExplorer init
@@ -95,7 +91,6 @@ class OptiDesignVar(ParamExplorer):
         OptiDesignVar_str = ""
         # Get the properties inherited from ParamExplorer
         OptiDesignVar_str += super(OptiDesignVar, self).__str__()
-        OptiDesignVar_str += 'type_var = "' + str(self.type_var) + '"' + linesep
         OptiDesignVar_str += (
             "space = "
             + linesep
@@ -119,8 +114,6 @@ class OptiDesignVar(ParamExplorer):
         # Check the properties inherited from ParamExplorer
         if not super(OptiDesignVar, self).__eq__(other):
             return False
-        if other.type_var != self.type_var:
-            return False
         if other.space != self.space:
             return False
         if other._get_value_str != self._get_value_str:
@@ -142,18 +135,6 @@ class OptiDesignVar(ParamExplorer):
                 other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
             )
         )
-        if other._type_var != self._type_var:
-            if is_add_value:
-                val_str = (
-                    " (self="
-                    + str(self._type_var)
-                    + ", other="
-                    + str(other._type_var)
-                    + ")"
-                )
-                diff_list.append(name + ".type_var" + val_str)
-            else:
-                diff_list.append(name + ".type_var")
         if other._space != self._space:
             if is_add_value:
                 val_str = (
@@ -175,7 +156,6 @@ class OptiDesignVar(ParamExplorer):
 
         # Get size of the properties inherited from ParamExplorer
         S += super(OptiDesignVar, self).__sizeof__()
-        S += getsizeof(self.type_var)
         if self.space is not None:
             for value in self.space:
                 S += getsizeof(value)
@@ -199,7 +179,6 @@ class OptiDesignVar(ParamExplorer):
             keep_function=keep_function,
             **kwargs,
         )
-        OptiDesignVar_dict["type_var"] = self.type_var
         OptiDesignVar_dict["space"] = (
             self.space.copy() if self.space is not None else None
         )
@@ -224,7 +203,6 @@ class OptiDesignVar(ParamExplorer):
         """Creates a deepcopy of the object"""
 
         # Handle deepcopy of all the properties
-        type_var_val = self.type_var
         if self.space is None:
             space_val = None
         else:
@@ -246,7 +224,6 @@ class OptiDesignVar(ParamExplorer):
             getter_val = self._getter_func
         # Creates new object of the same type with the copied properties
         obj_copy = type(self)(
-            type_var=type_var_val,
             space=space_val,
             get_value=get_value_val,
             name=name_val,
@@ -260,29 +237,10 @@ class OptiDesignVar(ParamExplorer):
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""
 
-        self.type_var = None
         self.space = None
         self.get_value = None
         # Set to None the properties inherited from ParamExplorer
         super(OptiDesignVar, self)._set_None()
-
-    def _get_type_var(self):
-        """getter of type_var"""
-        return self._type_var
-
-    def _set_type_var(self, value):
-        """setter of type_var"""
-        check_var("type_var", value, "str")
-        self._type_var = value
-
-    type_var = property(
-        fget=_get_type_var,
-        fset=_set_type_var,
-        doc="""Type of the variable interval or set.
-
-        :Type: str
-        """,
-    )
 
     def _get_space(self):
         """getter of space"""

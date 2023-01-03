@@ -23,7 +23,7 @@ system("{} -m pip install git+https://gitlab.com/CedMrnl/swat-em.git".format(exe
 # Release 1.1.0 : 1.1.0
 # First post release of the release 1.1.0 : 1.1.0.post1
 
-PYLEECAN_VERSION = "1.4.1"
+PYLEECAN_VERSION = "1.4.2"
 
 
 with open("README.md", "r") as fh:
@@ -44,7 +44,6 @@ install_requires = [
     "PySide2>=5.15.2",
     "pyuff>=1.25",
     "pyvista>=0.25.3,<=0.31.3",
-    "quadpy",
     "SciDataTool>=2.5.0",
     "scipy>=1.4.1",
     "setuptools",

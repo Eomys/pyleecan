@@ -22,7 +22,7 @@ from pyleecan.Classes.PostFunction import PostFunction
 from pyleecan.Classes.PostPlot import PostPlot
 from pyleecan.Classes.Simu1 import Simu1
 from pyleecan.Classes.VarLoadCurrent import VarLoadCurrent
-from pyleecan.Classes.VarParam import VarParam
+from pyleecan.Classes.VarParamSweep import VarParamSweep
 from pyleecan.definitions import DATA_DIR
 from pyleecan.Functions.load import load
 from Tests import save_validation_path as save_path
@@ -179,7 +179,10 @@ def test_multi_multi():
     varload.is_keep_all_output = False
 
     # Multi-simulation to change machine parameters
-    multisim = VarParam(stop_if_error=True, is_reuse_femm_file=False)
+    multisim = VarParamSweep(
+        stop_if_error=True,
+        is_reuse_femm_file=False,
+    )
 
     simu.var_simu = multisim
 

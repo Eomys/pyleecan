@@ -1126,6 +1126,7 @@
             }
         ],
         "daughters": [
+            "OptiConstraint",
             "OptiObjective"
         ],
         "desc": "Class for defining data to keep on a multi-simulation",
@@ -9297,21 +9298,11 @@
         "desc": "Constraint of the optimization problem",
         "is_internal": false,
         "methods": [],
-        "mother": "",
+        "mother": "DataKeeper",
         "name": "OptiConstraint",
         "package": "Optimization",
         "path": "pyleecan/Generator/ClassesRef/Optimization/OptiConstraint.csv",
         "properties": [
-            {
-                "as_dict": "",
-                "desc": "name of the design variable",
-                "max": "",
-                "min": "",
-                "name": "name",
-                "type": "str",
-                "unit": "",
-                "value": ""
-            },
             {
                 "as_dict": "",
                 "desc": "Type of comparison ( \"==\", \"<=\", \">=\", \"<\",\">\")",
@@ -9331,16 +9322,6 @@
                 "type": "float",
                 "unit": "",
                 "value": 0
-            },
-            {
-                "as_dict": "",
-                "desc": "Function to get the variable to compare",
-                "max": "",
-                "min": "",
-                "name": "get_variable",
-                "type": "function",
-                "unit": "",
-                "value": null
             }
         ]
     },
@@ -9351,8 +9332,11 @@
                 "value": "1"
             }
         ],
-        "daughters": [],
-        "desc": "Optimization",
+        "daughters": [
+            "OptiDesignVarInterval",
+            "OptiDesignVarSet"
+        ],
+        "desc": "Abstract class for OptiDesignVar (Optimization)",
         "is_internal": false,
         "methods": [],
         "mother": "ParamExplorer",
@@ -9360,16 +9344,6 @@
         "package": "Optimization",
         "path": "pyleecan/Generator/ClassesRef/Optimization/OptiDesignVar.csv",
         "properties": [
-            {
-                "as_dict": "",
-                "desc": "Type of the variable interval or set.",
-                "max": "",
-                "min": "",
-                "name": "type_var",
-                "type": "str",
-                "unit": "",
-                "value": "interval"
-            },
             {
                 "as_dict": "",
                 "desc": "Space of the variable",
@@ -9394,6 +9368,40 @@
                 "value": null
             }
         ]
+    },
+    "OptiDesignVarInterval": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Optimization",
+        "is_internal": false,
+        "methods": [],
+        "mother": "OptiDesignVar",
+        "name": "OptiDesignVarInterval",
+        "package": "Optimization",
+        "path": "pyleecan/Generator/ClassesRef/Optimization/OptiDesignVarInterval.csv",
+        "properties": []
+    },
+    "OptiDesignVarSet": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Optimization",
+        "is_internal": false,
+        "methods": [],
+        "mother": "OptiDesignVar",
+        "name": "OptiDesignVarSet",
+        "package": "Optimization",
+        "path": "pyleecan/Generator/ClassesRef/Optimization/OptiDesignVarSet.csv",
+        "properties": []
     },
     "OptiGenAlg": {
         "constants": [
@@ -10941,6 +10949,8 @@
         ],
         "daughters": [
             "OptiDesignVar",
+            "OptiDesignVarInterval",
+            "OptiDesignVarSet",
             "ParamExplorerInterval",
             "ParamExplorerSet"
         ],
@@ -15802,7 +15812,98 @@
         "path": "pyleecan/Generator/ClassesRef/Simulation/VarLoadVoltage.csv",
         "properties": []
     },
+    "VarOpti": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            },
+            {
+                "name": "NAME",
+                "value": "\"Optimization\""
+            }
+        ],
+        "daughters": [],
+        "desc": "Handle Optimization multisimulation by varying parameters",
+        "is_internal": false,
+        "methods": [
+            "check",
+            "run",
+            "get_full_solver"
+        ],
+        "mother": "VarParam",
+        "name": "VarOpti",
+        "package": "Simulation",
+        "path": "pyleecan/Generator/ClassesRef/Simulation/VarOpti.csv",
+        "properties": [
+            {
+                "as_dict": "",
+                "desc": "List containing OptiObjective objects",
+                "max": "",
+                "min": "",
+                "name": "objective_list",
+                "type": "[OptiObjective]",
+                "unit": "-",
+                "value": ""
+            },
+            {
+                "as_dict": "",
+                "desc": "List containing OptiConstraint objects",
+                "max": "",
+                "min": "",
+                "name": "constraint_list",
+                "type": "[OptiConstraint]",
+                "unit": "-",
+                "value": ""
+            },
+            {
+                "as_dict": "",
+                "desc": "Object that solve an OptiProblem",
+                "max": "",
+                "min": "",
+                "name": "solver",
+                "type": "OptiSolver",
+                "unit": "-",
+                "value": null
+            }
+        ]
+    },
     "VarParam": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            },
+            {
+                "name": "NAME",
+                "value": "\"Parameter Sweep\""
+            }
+        ],
+        "daughters": [
+            "VarOpti",
+            "VarParamSweep"
+        ],
+        "desc": "Handle multisimulation by varying parameters",
+        "is_internal": false,
+        "methods": [],
+        "mother": "VarSimu",
+        "name": "VarParam",
+        "package": "Simulation",
+        "path": "pyleecan/Generator/ClassesRef/Simulation/VarParam.csv",
+        "properties": [
+            {
+                "as_dict": "",
+                "desc": "List containing ParamSetter to define every simulation",
+                "max": "",
+                "min": "",
+                "name": "paramexplorer_list",
+                "type": "[ParamExplorer]",
+                "unit": "-",
+                "value": ""
+            }
+        ]
+    },
+    "VarParamSweep": {
         "constants": [
             {
                 "name": "VERSION",
@@ -15821,22 +15922,11 @@
             "generate_simulation_list",
             "get_simu_number"
         ],
-        "mother": "VarSimu",
-        "name": "VarParam",
+        "mother": "VarParam",
+        "name": "VarParamSweep",
         "package": "Simulation",
-        "path": "pyleecan/Generator/ClassesRef/Simulation/VarParam.csv",
-        "properties": [
-            {
-                "as_dict": "",
-                "desc": "List containing ParamSetter to define every simulation",
-                "max": "",
-                "min": "",
-                "name": "paramexplorer_list",
-                "type": "[ParamExplorer]",
-                "unit": "-",
-                "value": ""
-            }
-        ]
+        "path": "pyleecan/Generator/ClassesRef/Simulation/VarParamSweep.csv",
+        "properties": []
     },
     "VarSimu": {
         "constants": [
@@ -15849,7 +15939,9 @@
             "VarLoad",
             "VarLoadCurrent",
             "VarLoadVoltage",
-            "VarParam"
+            "VarOpti",
+            "VarParam",
+            "VarParamSweep"
         ],
         "desc": "Abstract class for the multi-simulation",
         "is_internal": false,
