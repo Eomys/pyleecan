@@ -44,7 +44,6 @@ install_requires = [
     "PySide2>=5.15.2",
     "pyuff>=1.25",
     "pyvista>=0.25.3,<=0.31.3",
-    "quadpy",
     "SciDataTool>=2.5.0",
     "scipy>=1.4.1",
     "setuptools",
