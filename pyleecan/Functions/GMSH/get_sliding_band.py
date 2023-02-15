@@ -134,10 +134,6 @@ def get_sliding_band(sym, machine):
 
     else:  # Symmetry
         # Internal AirGap
-        #Z1 = Rgap_mec_int
-        #if isinstance(machine, MachineSIPMSM):
-        #    Z1 = Rgap_mag_int
-        #Z0 = Z1 * exp(1j * 2 * pi / sym)
         Z0 = 0 * exp(1j * 2 * pi / sym)
         Z2 = Rgap_mec_int + W_sb
         Z3 = Z2 * exp(1j * 2 * pi / sym)
@@ -156,7 +152,7 @@ def get_sliding_band(sym, machine):
         airgap_lines.append(
             Segment(begin=Z3, end=Z0, prop_dict={BOUNDARY_PROP_LAB: AS_BL_LAB})
         )
-        #airgap_lines.extend(rotor_airgap_int_lines)
+
         surf_list.append(
             SurfLine(
                 line_list=airgap_lines,
@@ -238,7 +234,6 @@ def get_sliding_band(sym, machine):
         )
 
         # External AirGap
-        #Z10 = Rgap_mec_ext
         Z10 = Sor
         Z11 = Z10 * exp(1j * 2 * pi / sym)
         airgap_lines = list()
@@ -266,7 +261,6 @@ def get_sliding_band(sym, machine):
         )
         ext_airgap_arc_copy.reverse()
         airgap_lines.append(ext_airgap_arc_copy)
-        #airgap_lines.extend(stator_airgap_ext_lines)
         surf_list.append(
             SurfLine(
                 line_list=airgap_lines,

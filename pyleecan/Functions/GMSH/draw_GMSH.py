@@ -49,7 +49,7 @@ def draw_GMSH(
     is_lam_only_R=False,
     user_mesh_dict={},
     path_save="GMSH_model.msh",
-    is_sliding_band=True,
+    is_sliding_band=False,
     is_airbox=False,
     is_set_labels=False,
     is_run=False,
@@ -540,30 +540,19 @@ def draw_GMSH(
                     if tid == 0:    
                         continue
                     stator_surf_gmsh_list.append((2, tid))
-
-                #stat_lam = stator_surf_gmsh_list.pop(0)
-                #print(rotor_ag_before, rotor_surf_gmsh_list)
-                #print(stator_ag_before, stat_lam, stator_surf_gmsh_list)
                 
                 cut1 = model.occ.cut([rotor_ag_before], rotor_surf_gmsh_list, removeObject=True, removeTool=False)
-                #cut2 = model.occ.cut([stator_ag_before], stator_surf_gmsh_list, removeObject=False, removeTool=False)
                 
                 # All These because CUT alone is not working for the stator
                 stat_copy = model.occ.copy(stator_surf_gmsh_list)
                 ints1 = model.occ.intersect([stator_ag_before],[stat_copy[0]],removeObject=True,removeTool=True,tag=-1)
                 stat_copy.pop(0)
                 cut2 = model.occ.cut(ints1[0],stat_copy,removeObject=True,removeTool=True,tag=-1)
-                
-                #print(cut1)
-                #print(cut2)
-                #print(stat_copy)
-                #print(fus1)
-                #print(fus2)
+
                 if len(cut1[0]) > 1:
                     # Remove extra surfaces
                     model.occ.remove([cut1[0][1]])
-                    factory.synchronize()
-                    
+                    factory.synchronize() 
                     pg = model.addPhysicalGroup(2, [cut1[0][0][1]])
                     model.setPhysicalName(2, pg, lab_int + "_" + AIRGAP_LAB + BOT_LAB)   
                 else:
@@ -639,8 +628,7 @@ def draw_GMSH(
                 if len(cut1[0]) > 1:
                     # Remove extra surfaces
                     model.occ.remove([cut1[0][0]])
-                    factory.synchronize()
-                    
+                    factory.synchronize()                 
                     pg = model.addPhysicalGroup(2, [cut1[0][1][1]])
                     model.setPhysicalName(2, pg, lab_int + "_" + AIRGAP_LAB + BOT_LAB)   
                 else:
@@ -658,8 +646,7 @@ def draw_GMSH(
                     factory.synchronize()
                     pg = model.addPhysicalGroup(2, [cut2[0][0][1]])
                     model.setPhysicalName(2, pg, lab_ext + "_" + AIRGAP_LAB + TOP_LAB)  
-                
-                
+                              
 
     ###################
     # Adding Airbox
@@ -752,9 +739,6 @@ def draw_GMSH(
             model.setPhysicalName(1, pg, label)
 
     
-
-
-
     # save mesh or geo file depending on file extension
     filename, file_extension = splitext(path_save)
 
