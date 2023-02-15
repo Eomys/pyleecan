@@ -41,10 +41,8 @@ def get_sliding_band(sym, machine):
     ----------
     sym: int
         Symmetry factor (1= full machine, 2= half of the machine...)
-    Rgap_mec_int: float
-        Internal lamination mechanic radius
-    Rgap_mec_ext: float
-        External lamination mechanic radius
+    machine: Machine
+        Machine to draw
 
     Returns
     -------

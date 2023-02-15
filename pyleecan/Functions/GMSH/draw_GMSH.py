@@ -73,7 +73,7 @@ def draw_GMSH(
     path_save : str
         Path to save the result msh file
     is_sliding_band : bool
-        True uses sliding band, else airgap (Not implemented yet)
+        True uses sliding band, else airgap 
     is_airbox : bool
         True to add the airbox
     is_set_label : bool

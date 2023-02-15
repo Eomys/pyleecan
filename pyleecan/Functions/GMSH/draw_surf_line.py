@@ -28,14 +28,18 @@ def draw_surf_line(
         Dictionary to enforce the mesh (key: line id, value:nb element)
     boundary_prop : dict
         Dictionary to set the Boundary conditions
-    factory :
-        gmsh.model.geo
+    model : Object
+        Gmsh model
     gmsh_dict: dict
         dictionary containing the main parameters of GMSH File
     nsurf : int
         Index of the surface to draw
     mesh_size: float
         Default mesh element size
+
+    Returns
+    -------
+    None
     """
     for ii, line in enumerate(surf.get_lines()):
         n_elem = mesh_dict[str(ii)]
@@ -89,8 +93,8 @@ def _add_agline_to_dict(gmodel, line, d={}, idx=0, mesh_size=1e-2, n_elements=0,
 
     Parameters
     ----------
-    geo : Model
-        GMSH Model objet
+    gmodel : Object
+        GMSH Model object
     line : Object
         Line Object
     d : Dictionary
@@ -101,6 +105,8 @@ def _add_agline_to_dict(gmodel, line, d={}, idx=0, mesh_size=1e-2, n_elements=0,
         Points mesh size
     n_elements : int
         Number of elements on the line for meshing control
+    bc : String
+        Boundary condition name
 
     Returns
     -------
