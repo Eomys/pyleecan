@@ -134,7 +134,7 @@ def variable_to_hdf5(file, prefix, variable, name):
         variable = variable.tolist()
     # Pyleecan object dict
     if isinstance(variable, dict):
-        # Create group
+        # Create group (Convert key in case of "/")
         group_name = prefix + "/" + name.replace("/", "\\x2F")
         file.create_group(group_name)
 
