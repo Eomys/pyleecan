@@ -74,6 +74,9 @@ def construct_dict_from_group(group):
             # Check if key is an int
             if is_int(key):
                 key = int(key)
+            # Convert key in case
+            if isinstance(key, str):
+                key = key.replace("\\x2F", "/")
             # Check if val is a group or a dataset
             if isinstance(val, Group):  # Group
                 # Call the function recursively to load group
