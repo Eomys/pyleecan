@@ -30,6 +30,7 @@ class Ui_WHoleMag(object):
         self.c_hole_type.addItem("")
         self.c_hole_type.addItem("")
         self.c_hole_type.addItem("")
+        self.c_hole_type.addItem("")
         self.c_hole_type.setObjectName(u"c_hole_type")
 
         self.horizontalLayout.addWidget(self.c_hole_type)
@@ -71,16 +72,19 @@ class Ui_WHoleMag(object):
             2, QCoreApplication.translate("WHoleMag", u"Slot Type 52", None)
         )
         self.c_hole_type.setItemText(
-            3, QCoreApplication.translate("WHoleMag", u"Slot Type 53", None)
+            3, QCoreApplication.translate("WHoleMag", u"Slot Type 52 R", None)
         )
         self.c_hole_type.setItemText(
-            4, QCoreApplication.translate("WHoleMag", u"Slot Type 54", None)
+            4, QCoreApplication.translate("WHoleMag", u"Slot Type 53", None)
         )
         self.c_hole_type.setItemText(
-            5, QCoreApplication.translate("WHoleMag", u"Slot Type 55", None)
+            5, QCoreApplication.translate("WHoleMag", u"Slot Type 54", None)
         )
         self.c_hole_type.setItemText(
-            6, QCoreApplication.translate("WHoleMag", u"Slot Type 56", None)
+            6, QCoreApplication.translate("WHoleMag", u"Slot Type 55", None)
+        )
+        self.c_hole_type.setItemText(
+            7, QCoreApplication.translate("WHoleMag", u"Slot Type 56", None)
         )
 
     # retranslateUi

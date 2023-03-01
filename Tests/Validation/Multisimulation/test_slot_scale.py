@@ -1,6 +1,6 @@
 # Multisimulation objects
 from pyleecan.Classes.OPdq import OPdq
-from pyleecan.Classes.VarParam import VarParam
+from pyleecan.Classes.VarParamSweep import VarParamSweep
 from pyleecan.Classes.ParamExplorerSet import ParamExplorerSet
 from pyleecan.Classes.DataKeeper import DataKeeper
 import numpy as np
@@ -68,7 +68,7 @@ def test_slot_scale():
     )
 
     # Multi-simulation to variate the slot size
-    multisim = VarParam(
+    multisim = VarParamSweep(
         stop_if_error=True,
         is_reuse_femm_file=False,
     )

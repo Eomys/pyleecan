@@ -56,6 +56,11 @@
        </item>
        <item>
         <property name="text">
+         <string>Slot Type 52 R</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
          <string>Slot Type 53</string>
         </property>
        </item>

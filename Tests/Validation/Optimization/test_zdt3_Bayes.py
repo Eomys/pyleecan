@@ -11,7 +11,7 @@ from pyleecan.Classes.InputCurrent import InputCurrent
 from pyleecan.Classes.MagFEMM import MagFEMM
 from pyleecan.Classes.Simu1 import Simu1
 from pyleecan.Classes.Output import Output
-from pyleecan.Classes.OptiDesignVar import OptiDesignVar
+from pyleecan.Classes.OptiDesignVarInterval import OptiDesignVarInterval
 from pyleecan.Classes.OptiObjective import OptiObjective
 from pyleecan.Classes.OptiConstraint import OptiConstraint
 from pyleecan.Classes.OptiProblem import OptiProblem
@@ -87,10 +87,9 @@ def test_zdt3_Bayes():
 
     for i in range(30):
         my_vars.append(
-            OptiDesignVar(
+            OptiDesignVarInterval(
                 name="Ir({})".format(i),
                 symbol="var_" + str(i),
-                type_var="interval",
                 space=[0, 1],
                 get_value=lambda space: np.random.uniform(*space),
                 setter=gen_setter(i),

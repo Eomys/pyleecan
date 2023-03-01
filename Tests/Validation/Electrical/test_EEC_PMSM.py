@@ -53,7 +53,7 @@ def test_EEC_PMSM(nb_worker=int(0.5 * cpu_count())):
     simu.elec = Electrical()
     simu.elec.eec = EEC_PMSM(
         fluxlink=MagFEMM(
-            is_periodicity_t=True, is_periodicity_a=True, nb_worker=nb_worker, T_mag=60,
+            is_periodicity_t=True, is_periodicity_a=True, nb_worker=nb_worker, T_mag=60
         ),
     )
 
@@ -101,7 +101,7 @@ def test_EEC_PMSM_sync_rel(nb_worker=int(0.5 * cpu_count())):
     simu.elec = Electrical()
     simu.elec.eec = EEC_PMSM(
         fluxlink=MagFEMM(
-            is_periodicity_t=True, is_periodicity_a=True, nb_worker=nb_worker, T_mag=60,
+            is_periodicity_t=True, is_periodicity_a=True, nb_worker=nb_worker, T_mag=60
         ),
         type_skin_effect=0,
     )

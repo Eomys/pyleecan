@@ -385,7 +385,7 @@ def test_FEMM_periodicity_angle():
     H0 = SPMSM_015.stator.slot.H0 * 0.8
     NBS = SlotCirc(Zs=Zs, W0=W0, H0=H0)
     SPMSM_015.stator.notch = [NotchEvenDist(alpha=0, notch_shape=NBS)]
-    NYS = SlotM10(Zs=Zs, W0=W0, H0=H0,is_bore=False)
+    NYS = SlotM10(Zs=Zs, W0=W0, H0=H0, is_bore=False)
     # SPMSM_015.stator.notch.append(NotchEvenDist(alpha=0, notch_shape=NYS))
 
     Zr = SPMSM_015.rotor.slot.Zs
@@ -393,7 +393,7 @@ def test_FEMM_periodicity_angle():
     H0 = SPMSM_015.rotor.comp_height_yoke() * 0.05
     NBR = SlotCirc(Zs=Zr, W0=W0, H0=H0)
     SPMSM_015.rotor.notch = [NotchEvenDist(alpha=0.001, notch_shape=NBR)]
-    NYR = SlotM10(Zs=Zr, W0=W0, H0=H0,is_bore=False)
+    NYR = SlotM10(Zs=Zr, W0=W0, H0=H0, is_bore=False)
     # SPMSM_015.rotor.notch.append(NotchEvenDist(alpha=0, notch_shape=NYR))
 
     # fig, ax = SPMSM_015.plot(sym=3, is_clean_plot=True)
@@ -566,7 +566,12 @@ def test_Bore_sym():
         NotchEvenDist(alpha=pi / 8, notch_shape=NC),
     ]
 
-    fig, ax = TP.plot(sym=8, is_clean_plot=True, is_show_fig=False, save_path=join(res_path, "1_notch_sym.png"))
+    fig, ax = TP.plot(
+        sym=8,
+        is_clean_plot=True,
+        is_show_fig=False,
+        save_path=join(res_path, "1_notch_sym.png"),
+    )
     # fig.savefig(join(save_path, "1_notch_sym.png"))
     # fig.savefig(join(save_path, "1_notch_sym.svg"), format="svg")
     fig, ax = TP.plot(is_show_fig=False, is_clean_plot=True)
@@ -583,7 +588,9 @@ def test_Bore_sym():
     fig, ax = TP2.plot(is_show_fig=False, is_clean_plot=True)
     # fig.savefig(join(save_path, "2_notch_full.png"))
     # fig.savefig(join(save_path, "2_notch_full.svg"), format="svg")
-    fig, ax = TP2.rotor.plot(sym=4, is_show_fig=False, is_clean_plot=True, edgecolor="k")
+    fig, ax = TP2.rotor.plot(
+        sym=4, is_show_fig=False, is_clean_plot=True, edgecolor="k"
+    )
     # fig.savefig(join(save_path, "2_notch_full_rotor.png"))
     # fig.savefig(join(save_path, "2_notch_full_rotor.svg"), format="svg")
     assert TP2.comp_periodicity_spatial() == (4, True)

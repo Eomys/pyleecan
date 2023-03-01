@@ -28,8 +28,11 @@ def comp_force_nodal(self, output, axes_dict):
 
     meshsolution_mag = output.mag.meshsolution  # Comes from FEMM simulation
 
-    # Select the target group (stator, rotor ...)
-    meshsolution_group = meshsolution_mag.get_group(self.group)
+    # Select the target group (stator, rotor ...) or all the domain
+    if self.group is None:
+        meshsolution_group = meshsolution_mag
+    else:
+        meshsolution_group = meshsolution_mag.get_group(self.group)
 
     # TODO before: Check if is_same_mesh is True
     mesh = meshsolution_group.get_mesh()

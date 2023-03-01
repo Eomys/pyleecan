@@ -40,7 +40,8 @@ class PBoreFlower(Gen_PBoreFlower, QWidget):
 
         self.lamination = lamination
         self.bore = lamination.bore
-        self.bore.N = self.lamination.get_pole_pair_number() *2
+        if self.bore.N is None or self.bore.N == 0:
+            self.bore.N = 2 * lamination.get_pole_pair_number()
 
         # Set FloatEdit unit
         self.lf_Rarc.unit = "m"
@@ -53,15 +54,30 @@ class PBoreFlower(Gen_PBoreFlower, QWidget):
 
         # Fill the fields with the machine values (if they're filled)
         self.lf_Rarc.setValue(self.bore.Rarc)
+        self.si_N.setValue(self.bore.N)
         self.lf_alpha.setValue(self.bore.alpha)
 
         # Display the main output of the bore (surface, height...)
         self.w_out.comp_output()
 
         # Connect the signal/bore
+        self.si_N.editingFinished.connect(self.set_N)
         self.lf_Rarc.editingFinished.connect(self.set_Rarc)
         self.lf_alpha.editingFinished.connect(self.set_alpha)
         self.c_alpha_unit.currentIndexChanged.connect(self.set_alpha)
+
+    def set_N(self):
+        """Signal to update the value of N according to the line edit
+
+        Parameters
+        ----------
+        self : PBoreFlower
+            A PBoreFlower object
+        """
+        self.bore.N = self.si_N.value()
+        self.w_out.comp_output()
+        # Notify the machine GUI that the machine has changed
+        self.saveNeeded.emit()
 
     def set_Rarc(self):
         """Signal to update the value of Rarc according to the line edit
