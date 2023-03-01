@@ -2,8 +2,7 @@ from os.path import dirname, abspath, normpath, join, basename
 from os import walk
 import subprocess
 from MermaidClass import MermaidClass
-
-ROOT_DIR = normpath(abspath(join(dirname(__file__), "..", "..", "..")))
+from ...definitions import GEN_DIR
 
 
 class Diagram:
@@ -11,8 +10,8 @@ class Diagram:
     code associated to it, given a list of classes.
     """
 
-    folder_path_to_write_code = join(ROOT_DIR, "UMLs", "code")
-    folder_path_to_write_svg = join(ROOT_DIR, "UMLs", "svg")
+    folder_path_to_write_code = join(GEN_DIR, "UMLs", "code")
+    folder_path_to_write_svg = join(GEN_DIR, "UMLs", "svg")
 
     def __init__(
         self,

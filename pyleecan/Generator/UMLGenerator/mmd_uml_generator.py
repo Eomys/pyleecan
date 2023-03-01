@@ -47,13 +47,20 @@ DOC_DIR = normpath(abspath(join(dirname(__file__), "..", "ClassesRef")))
 
 
 def main():
+    # Generate the UML of each main folder (Machine, Geometry, Slot...)
     list_dir = [join(DOC_DIR, folder_name) for folder_name in listdir(DOC_DIR)]
     for path in list_dir:
         Diagram([path]).draw_diagram()
+
+    # Full UML
     Diagram([DOC_DIR], name="Pyleecan").draw_diagram()
+
+    # Only machine classes (without component like Laminations)
     Diagram(
         [DOC_DIR], name="only_machines", parent_class_name="Machine", composition=False
     ).draw_diagram()
+
+    # Only lamination classes (without component like Slots)
     Diagram(
         [DOC_DIR],
         name="only_laminations",
