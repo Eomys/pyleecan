@@ -16,15 +16,16 @@ class OptiBayesAlgSmoot{
 	eval_const()
 }
 class OptiConstraint{
-	name : str
 	type_const : str
 	value : float
-	get_variable : function
 }
 class OptiDesignVar{
-	type_var : str
 	space : list
 	get_value : function
+}
+class OptiDesignVarInterval{
+}
+class OptiDesignVarSet{
 }
 class OptiGenAlg{
 	selector : function
@@ -63,6 +64,8 @@ class OptiSolver{
 	is_keep_all_output : bool
 }
 OptiBayesAlg  <|--> OptiBayesAlgSmoot
+OptiDesignVar  <|--> OptiDesignVarInterval
+OptiDesignVar  <|--> OptiDesignVarSet
 OptiGenAlg  <|--> OptiGenAlgNsga2Deap
 OptiProblem *--> OptiConstraint
 OptiProblem *--> OptiDesignVar

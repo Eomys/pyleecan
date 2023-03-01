@@ -2,18 +2,20 @@ classDiagram
 direction TB
 class LUT{
 	get_eec()
-	get_OP_matrix()
+	get_OP_matrix_obj()
+	get_OP_array()
 	set_default_simulation()
 	get_phase_dir()
 }
 class LUTdq{
 	Phi_dqh_mean : ndarray
 	Phi_dqh_mag : SciDataTool.Classes.DataND.DataND
+	get_index_open_circuit()
 	get_L_dqh()
 	get_Lm_dqh()
-	get_Phi_dqh_mean()
 	get_Phi_dqh_mag()
 	get_Phi_dqh_mag_mean()
+	get_Phi_dqh_mean()
 	interp_Phi_dqh()
 	interp_Ploss_dqh()
 	interp_Tem_rip_dqh()
@@ -171,6 +173,7 @@ class Output{
 	getter.get_machine_periodicity()
 	getter.get_fund_harm()
 	getter.get_data_from_str()
+	getter.export_to_mat()
 	plot.Magnetic.plot_B_mesh()
 	print_memory()
 }

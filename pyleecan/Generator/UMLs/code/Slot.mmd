@@ -92,6 +92,27 @@ class HoleM52{
 	plot_schematics()
 	remove_magnet()
 }
+class HoleM52R{
+	H0 : float
+	W0 : float
+	H1 : float
+	W1 : float
+	H2 : float
+	magnet_0 : Magnet
+	R0 : float
+	_comp_point_coordinate()
+	build_geometry()
+	check()
+	comp_alpha()
+	comp_magnetization_dict()
+	comp_radius()
+	comp_surface()
+	comp_surface_magnet_id()
+	has_magnet()
+	plot_schematics()
+	remove_magnet()
+	get_height_magnet_id()
+}
 class HoleM53{
 	H0 : float
 	H1 : float
@@ -209,6 +230,7 @@ class HoleUD{
 class Slot{
 	Zs : int
 	wedge_mat : Material
+	is_bore : bool
 	build_geometry_active()
 	build_geometry_half_tooth()
 	check()
@@ -266,6 +288,7 @@ class SlotCirc{
 	comp_surface_opening()
 	get_surface_active()
 	get_surface_opening()
+	plot_schematics()
 }
 class SlotDC{
 	W1 : float
@@ -801,6 +824,7 @@ class SlotW60{
 	H3 : float
 	H4 : float
 	W3 : float
+	_comp_line_dict()
 	_comp_point_coordinate()
 	build_geometry()
 	build_geometry_active()
@@ -811,6 +835,8 @@ class SlotW60{
 	comp_surface()
 	comp_surface_active()
 	get_surface_active()
+	get_surface_opening()
+	plot_schematics()
 }
 class SlotW61{
 	W0 : float
@@ -822,6 +848,7 @@ class SlotW61{
 	H3 : float
 	H4 : float
 	W3 : float
+	_comp_line_dict()
 	_comp_point_coordinate()
 	build_geometry()
 	build_geometry_active()
@@ -832,6 +859,8 @@ class SlotW61{
 	comp_surface()
 	comp_surface_active()
 	get_surface_active()
+	get_surface_opening()
+	plot_schematics()
 }
 class SlotWLSRPM{
 	W1 : float
@@ -894,6 +923,7 @@ Hole  <|--> VentilationTrap
 HoleMag  <|--> HoleM50
 HoleMag  <|--> HoleM51
 HoleMag  <|--> HoleM52
+HoleMag  <|--> HoleM52R
 HoleMag  <|--> HoleM53
 HoleMag  <|--> HoleM57
 HoleMag  <|--> HoleM58

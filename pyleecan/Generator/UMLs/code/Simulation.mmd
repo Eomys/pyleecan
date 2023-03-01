@@ -12,10 +12,8 @@ class DataKeeper{
 	unit : str
 	keeper : function
 	error_keeper : function
-	result : list
+	result : list~~
 	result_ref : str
-	as_dict()
-	_set_result()
 	_set_keeper()
 }
 class Drive{
@@ -60,16 +58,17 @@ class EEC_PMSM{
 	Phiq : float
 	Phid_mag : float
 	Phiq_mag : float
-	comp_parameters()
-	solve()
-	solve_PWM()
-	comp_joule_losses()
-	comp_torque_sync_rel()
+	clear_parameters()
 	comp_BEMF_harmonics()
+	comp_joule_losses()
 	comp_Ld()
 	comp_Lq()
+	comp_parameters()
 	comp_Phidq()
 	comp_Phidq_mag()
+	comp_torque_sync_rel()
+	solve()
+	solve_PWM()
 	update_from_ref()
 }
 class EEC_SCIM{
@@ -129,6 +128,7 @@ class Electrical{
 	Tsta : float
 	Trot : float
 	type_skin_effect : int
+	is_skin_effect_inductance : bool
 	run()
 	comp_power()
 	comp_torque()
@@ -176,7 +176,6 @@ class InputCurrent{
 	Is_harm : ImportData
 	gen_input()
 	set_Id_Iq()
-	set_OP_from_array()
 }
 class InputFlux{
 	per_a : int
@@ -203,7 +202,6 @@ class InputVoltage{
 	is_periodicity_a : bool
 	is_generator : bool
 	gen_input()
-	set_OP_from_array()
 	set_Ud_Uq()
 }
 class Loss{
@@ -230,6 +228,7 @@ class LossFEMM{
 }
 class LossModel{
 	name : str
+	is_show_fig : bool
 }
 class LossModelBertotti{
 	k_hy : float
@@ -300,6 +299,7 @@ class MagFEMM{
 	get_meshsolution()
 	get_path_save_fem()
 	solve_FEMM_parallel()
+	build_MS_sliced()
 }
 class Magnetics{
 	is_remove_slotS : bool
@@ -343,6 +343,28 @@ class OP{
 	Pem_av_in : float
 	efficiency : float
 	get_machine_from_parent()
+	get_OP_array()
+}
+class OPMatrix{
+	N0 : ndarray
+	Id_ref : ndarray
+	Iq_ref : ndarray
+	Ud_ref : ndarray
+	Uq_ref : ndarray
+	Tem_av_ref : ndarray
+	Pem_av_ref : ndarray
+	slip_ref : ndarray
+	is_output_power : bool
+	If_ref : ndarray
+	col_names : list
+	get_N_OP()
+	get_OP()
+	get_OP_list()
+	get_OP_array()
+	set_OP_array()
+	has_Pem()
+	has_Tem()
+	has_slip()
 }
 class OPdq{
 	Id_ref : float
@@ -360,6 +382,9 @@ class OPdq{
 	set_I0_Phi0()
 	get_U0_UPhi0()
 	set_U0_UPhi0()
+}
+class OPdqf{
+	If_ref : float
 }
 class OPslip{
 	I0_ref : float
@@ -401,13 +426,11 @@ class ParamExplorerInterval{
 	get_N()
 }
 class ParamExplorerSet{
-	value : list
+	value : list~~
 	get_value()
-	as_dict()
 	get_min()
 	get_max()
 	get_N()
-	_set_value()
 }
 class Simu1{
 	elec : Electrical
@@ -432,6 +455,7 @@ class Simulation{
 	run()
 	init_logger()
 	get_var_load()
+	get_OP_array()
 }
 class SliceModel{
 	type_distribution : str
@@ -468,11 +492,11 @@ class Structural{
 	comp_axes()
 }
 class VarLoad{
-	OP_matrix : ndarray
-	type_OP_matrix : int
-	is_output_power : bool
+	OP_matrix : OPMatrix
 	get_ref_simu_index()
-	get_OP_matrix()
+	get_OP_array()
+	set_OP_array()
+	_set_OP_matrix()
 }
 class VarLoadCurrent{
 	generate_simulation_list()
@@ -484,8 +508,18 @@ class VarLoadVoltage{
 	get_elec_datakeeper()
 	get_input_list()
 }
+class VarOpti{
+	objective_list : list~OptiObjective~
+	constraint_list : list~OptiConstraint~
+	solver : OptiSolver
+	check()
+	run()
+	get_full_solver()
+}
 class VarParam{
 	paramexplorer_list : list~ParamExplorer~
+}
+class VarParamSweep{
 	check_param()
 	generate_simulation_list()
 	get_simu_number()
@@ -541,6 +575,7 @@ Magnetics  <|--> MagFEMM
 Magnetics *--> SliceModel
 OP  <|--> OPdq
 OP  <|--> OPslip
+OPdq  <|--> OPdqf
 ParamExplorer  <|--> ParamExplorerInterval
 ParamExplorer  <|--> ParamExplorerSet
 Simu1 *--> Electrical
@@ -554,6 +589,9 @@ Simulation *--> VarSimu
 Structural  <|--> StructElmer
 VarLoad  <|--> VarLoadCurrent
 VarLoad  <|--> VarLoadVoltage
+VarLoad *--> OPMatrix
+VarParam  <|--> VarOpti
+VarParam  <|--> VarParamSweep
 VarParam *--> ParamExplorer
 VarSimu  <|--> VarLoad
 VarSimu  <|--> VarParam

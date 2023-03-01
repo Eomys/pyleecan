@@ -1,12 +1,24 @@
 classDiagram
 direction TB
 class Bore{
+	type_merge_slot : int
+	merge_slot()
+	is_yoke()
+	merge_slot_connect()
+	merge_slot_intersect()
+	merge_slot_translate()
+	comp_Rmin()
+	comp_surface()
+	get_surface()
+	plot()
 }
 class BoreFlower{
 	N : int
 	Rarc : float
 	alpha : float
 	get_bore_line()
+	comp_periodicity_spatial()
+	plot_schematics()
 }
 class BoreLSRPM{
 	N : int
@@ -14,10 +26,25 @@ class BoreLSRPM{
 	W1 : float
 	alpha : float
 	get_bore_line()
+	comp_periodicity_spatial()
+}
+class BoreSinePole{
+	N : int
+	k : float
+	delta_d : float
+	delta_q : float
+	W0 : float
+	alpha : float
+	get_bore_line()
+	get_pole_shape()
+	comp_periodicity_spatial()
+	plot_schematics()
 }
 class BoreUD{
 	line_list : list~Line~
+	sym : int
 	get_bore_line()
+	comp_periodicity_spatial()
 }
 class CondType11{
 	Hwire : float
@@ -151,20 +178,38 @@ class FrameBar{
 	comp_surface_bar()
 	comp_surface_gap()
 }
-class LamHole{
-	hole : list~Hole~
-	build_geometry()
+class LamH{
+	comp_angle_d_axis()
 	comp_height_yoke()
 	comp_masses()
+	comp_radius_mid_yoke()
 	comp_surfaces()
 	comp_volumes()
 	get_pole_pair_number()
-	plot()
-	comp_radius_mid_yoke()
-	has_magnet()
-	comp_angle_d_axis()
-	set_pole_pair_number()
 	get_Zs()
+	has_magnet()
+	plot()
+	set_pole_pair_number()
+}
+class LamHole{
+	hole : list~Hole~
+	_plot_arrow_mag()
+	build_geometry()
+	get_hole_list()
+	get_magnet_number()
+}
+class LamHoleNS{
+	hole_north : list~Hole~
+	hole_south : list~Hole~
+	_plot_arrow_mag()
+	build_geometry()
+	comp_masses()
+	comp_periodicity_geo()
+	comp_periodicity_spatial()
+	comp_surfaces()
+	comp_volumes()
+	get_hole_list()
+	get_magnet_number()
 }
 class LamSlot{
 	slot : Slot
@@ -175,11 +220,12 @@ class LamSlot{
 	plot()
 	comp_height_yoke()
 	get_Zs()
-	get_bore_desc()
 	set_pole_pair_number()
 	comp_angle_d_axis()
 	get_surfaces_closing()
 	has_magnet()
+	get_slot_desc_list()
+	has_slot()
 }
 class LamSlotMag{
 	magnet : Magnet
@@ -191,6 +237,7 @@ class LamSlotMag{
 	comp_volumes()
 	plot()
 	comp_angle_d_axis()
+	get_magnet_number()
 }
 class LamSlotMulti{
 	slot_list : list~Slot~
@@ -203,8 +250,9 @@ class LamSlotMulti{
 	plot()
 	comp_height_yoke()
 	get_Zs()
-	get_bore_desc()
 	comp_periodicity_spatial()
+	get_slot_desc_list()
+	has_slot()
 }
 class LamSlotMultiWind{
 	Ksfill : float
@@ -269,6 +317,7 @@ class LamSquirrelCageMag{
 	plot()
 	get_pole_pair_number()
 	set_pole_pair_number()
+	get_hole_list()
 }
 class Lamination{
 	L1 : float
@@ -283,8 +332,8 @@ class Lamination{
 	axial_vent : list~Hole~
 	notch : list~Notch~
 	skew : Skew
-	yoke_notch : list~Notch~
 	bore : Bore
+	yoke : Bore
 	build_geometry()
 	check()
 	comp_length()
@@ -293,7 +342,6 @@ class Lamination{
 	comp_surface_axial_vent()
 	comp_surfaces()
 	comp_volumes()
-	get_bore_line()
 	get_Rbo()
 	get_Ryoke()
 	get_name_phase()
@@ -302,19 +350,21 @@ class Lamination{
 	get_polar_eq()
 	is_outwards()
 	comp_height_yoke()
-	get_notch_list()
 	comp_angle_q_axis()
 	comp_radius_mid_yoke()
-	get_yoke_desc()
-	get_bore_desc()
 	comp_point_ref()
 	comp_periodicity_spatial()
 	get_label()
-	get_yoke_side_line()
+	build_yoke_side_line()
 	get_notches_surf()
 	comp_periodicity_duct_spatial()
 	get_surfaces_closing()
 	comp_periodicity_geo()
+	has_notch()
+	build_radius_lines()
+	build_radius_desc()
+	has_slot()
+	plot_preview_notch()
 }
 class Machine{
 	frame : Frame
@@ -357,7 +407,7 @@ class MachineDFIM{
 	get_machine_type()
 }
 class MachineIPMSM{
-	rotor : LamHole
+	rotor : LamH
 	stator : Lamination
 	check()
 	get_machine_type()
@@ -416,13 +466,15 @@ class Magnet{
 }
 class Notch{
 	get_Rbo()
+	get_Ryoke()
 	is_outwards()
 }
 class NotchEvenDist{
 	alpha : float
 	notch_shape : Slot
-	get_notch_list()
 	comp_surface()
+	comp_periodicity_spatial()
+	get_notch_desc_list()
 }
 class Shaft{
 	Lshaft : float
@@ -491,6 +543,7 @@ class WindingUD{
 }
 Bore  <|--> BoreFlower
 Bore  <|--> BoreLSRPM
+Bore  <|--> BoreSinePole
 Bore  <|--> BoreUD
 Conductor  <|--> CondType11
 Conductor  <|--> CondType12
@@ -500,6 +553,8 @@ Conductor  <|--> CondType22
 EndWinding  <|--> EndWindingCirc
 EndWinding  <|--> EndWindingRect
 Frame  <|--> FrameBar
+LamH  <|--> LamHole
+LamH  <|--> LamHoleNS
 LamSlot  <|--> LamSlotMag
 LamSlot  <|--> LamSlotWind
 LamSlotMag *--> Magnet
@@ -508,7 +563,7 @@ LamSlotMultiWind *--> Winding
 LamSlotWind  <|--> LamSquirrelCage
 LamSlotWind *--> Winding
 LamSquirrelCage  <|--> LamSquirrelCageMag
-Lamination  <|--> LamHole
+Lamination  <|--> LamH
 Lamination  <|--> LamSlot
 Lamination  <|--> LamSlotMulti
 Lamination *--> Bore
@@ -522,7 +577,7 @@ Machine *--> Shaft
 MachineAsync  <|--> MachineDFIM
 MachineDFIM  <|--> MachineSCIM
 MachineDFIM *--> LamSlotWind
-MachineIPMSM *--> LamHole
+MachineIPMSM *--> LamH
 MachineIPMSM *--> Lamination
 MachineLSPM *--> LamSlotWind
 MachineLSPM *--> LamSquirrelCageMag
