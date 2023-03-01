@@ -1,14 +1,16 @@
-from os.path import dirname, abspath, normpath, join, basename
+from os.path import dirname, realpath, abspath, join, basename
 from os import walk
 import subprocess
 from MermaidClass import MermaidClass
-from ...definitions import GEN_DIR
+
+GEN_DIR = abspath(join(dirname(realpath(__file__)), ".."))
 
 
 class Diagram:
     """A class representing an UML. It provides a method to write the mermaid
     code associated to it, given a list of classes.
     """
+
 
     folder_path_to_write_code = join(GEN_DIR, "UMLs", "code")
     folder_path_to_write_svg = join(GEN_DIR, "UMLs", "svg")
