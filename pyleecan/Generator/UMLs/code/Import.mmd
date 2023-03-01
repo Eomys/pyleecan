@@ -1,0 +1,119 @@
+classDiagram
+direction TB
+class Import{
+}
+class ImportData{
+	axes : list~ImportData~
+	field : Import
+	unit : str
+	name : str
+	symbol : str
+	normalizations : dict
+	symmetries : dict
+	get_data()
+}
+class ImportGenMatrixSin{
+	sin_list : list~ImportGenVectSin~
+	get_data()
+	init_vector()
+}
+class ImportGenPWM{
+	fs : float
+	duration : float
+	f : float
+	fmax : float
+	fmode : int
+	fswimode : int
+	fswi : float
+	fswi_max : float
+	typePWM : int
+	Vdc1 : float
+	U0 : float
+	type_carrier : int
+	var_amp : int
+	qs : int
+	is_star : bool
+	phase_dir : int
+	current_dir : int
+	Phi0 : float
+	get_data()
+	comp_voltage()
+	get_modulation_index()
+	comp_carrier()
+}
+class ImportGenToothSaw{
+	type_signal : int
+	f : float
+	A : float
+	N : int
+	Tf : float
+	Dt : float
+	get_data()
+}
+class ImportGenVectLin{
+	start : float
+	stop : float
+	num : float
+	endpoint : bool
+	check()
+	comp_step()
+	get_data()
+}
+class ImportGenVectSin{
+	f : float
+	A : float
+	Phi : float
+	N : int
+	Tf : float
+	get_data()
+}
+class ImportMatlab{
+	file_path : str
+	var_name : str
+	get_data()
+}
+class ImportMatrix{
+	is_transpose : bool
+	edit_matrix()
+}
+class ImportMatrixVal{
+	value : ndarray
+	get_data()
+}
+class ImportMatrixXls{
+	file_path : str
+	sheet : str
+	skiprows : int
+	usecols : str
+	axes_colrows : dict
+	is_allsheets : bool
+	get_data()
+}
+class ImportMeshMat{
+	file_path : str
+	get_data()
+}
+class ImportMeshUnv{
+	file_path : str
+	get_data()
+}
+class ImportVectorField{
+	components : dict~ImportData~
+	name : str
+	symbol : str
+	get_data()
+}
+Import  <|--> ImportMatrix
+Import  <|--> ImportMeshMat
+Import  <|--> ImportMeshUnv
+ImportData *--> Import
+ImportGenMatrixSin *--> ImportGenVectSin
+ImportMatrix  <|--> ImportGenMatrixSin
+ImportMatrix  <|--> ImportGenPWM
+ImportMatrix  <|--> ImportGenToothSaw
+ImportMatrix  <|--> ImportGenVectLin
+ImportMatrix  <|--> ImportGenVectSin
+ImportMatrix  <|--> ImportMatlab
+ImportMatrix  <|--> ImportMatrixVal
+ImportMatrix  <|--> ImportMatrixXls
+ImportVectorField *--> ImportData

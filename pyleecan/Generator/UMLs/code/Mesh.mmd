@@ -1,0 +1,213 @@
+classDiagram
+direction TB
+class CellMat{
+	connectivity : ndarray
+	nb_cell : int
+	nb_node_per_cell : int
+	indice : ndarray
+	interpolation : Interpolation
+	add_cell()
+	get_connectivity()
+	get_node2cell()
+	is_exist()
+}
+class FPGNSeg{
+	nb_gauss_point : int
+	get_gauss_points()
+}
+class FPGNTri{
+	nb_gauss_point : int
+	get_gauss_points()
+}
+class GaussPoint{
+}
+class Interpolation{
+	ref_cell : RefCell
+	gauss_point : GaussPoint
+	scalar_product : ScalarProduct
+}
+class Mesh{
+	label : str
+	dimension : int
+}
+class MeshMat{
+	cell : dict~CellMat~
+	node : NodeMat
+	_is_renum : bool
+	sym : int
+	is_antiper_a : bool
+	get_node()
+	get_node_indice()
+	get_cell()
+	get_mesh_pv()
+	get_cell_area()
+	get_vertice()
+	get_node2cell()
+	add_cell()
+	renum()
+	find_cell()
+	interface()
+	clear_node()
+	clear_cell()
+}
+class MeshSolution{
+	label : str
+	mesh : list~Mesh~
+	is_same_mesh : bool
+	solution : list~Solution~
+	group : dict
+	dimension : int
+	path : str
+	get_mesh()
+	get_solution()
+	get_field()
+	get_group()
+	get_mesh_field_pv()
+	plot_mesh()
+	plot_contour()
+	plot_deflection()
+	plot_glyph()
+	perm_coord()
+	get_deflection()
+	get_glyph()
+}
+class MeshVTK{
+	mesh : vtk.vtkPointSet
+	is_pyvista_mesh : bool
+	format : str
+	path : str
+	name : str
+	surf : pyvista.core.pointset.PolyData
+	is_vtk_surf : bool
+	surf_path : str
+	surf_name : str
+	node_normals : ndarray
+	get_mesh_pv()
+	get_node()
+	get_cell()
+	get_normals()
+	get_surf()
+	get_cell_area()
+	convert()
+	perm_coord()
+	get_path()
+}
+class NodeMat{
+	coordinate : ndarray
+	nb_node : int
+	delta : float
+	indice : ndarray
+	add_node()
+	get_coord()
+	is_exist()
+	get_indice()
+}
+class RefCell{
+	epsilon : float
+	interpolation()
+}
+class RefLine3{
+	shape_function()
+	jacobian()
+	grad_shape_function()
+	get_real_point()
+	get_ref_point()
+	is_inside()
+}
+class RefQuad4{
+	shape_function()
+	jacobian()
+	grad_shape_function()
+	get_real_point()
+	get_ref_point()
+	is_inside()
+}
+class RefQuad9{
+	shape_function()
+	jacobian()
+	grad_shape_function()
+	get_real_point()
+	get_ref_point()
+	is_inside()
+}
+class RefSegmentP1{
+	shape_function()
+	jacobian()
+	grad_shape_function()
+	get_real_point()
+	is_inside()
+	get_ref_point()
+	get_normal()
+}
+class RefTriangle3{
+	shape_function()
+	jacobian()
+	grad_shape_function()
+	get_real_point()
+	get_ref_point()
+	is_inside()
+	get_cell_area()
+	get_normal()
+}
+class RefTriangle6{
+	shape_function()
+	jacobian()
+	grad_shape_function()
+	get_real_point()
+	get_ref_point()
+	is_inside()
+}
+class ScalarProduct{
+}
+class ScalarProductL2{
+	scalar_product()
+}
+class Solution{
+	type_cell : str
+	label : str
+	dimension : int
+	unit : str
+}
+class SolutionData{
+	field : SciDataTool.Classes.DataND.DataND
+	get_field()
+	get_axes_list()
+	get_solution()
+}
+class SolutionMat{
+	field : ndarray
+	indice : ndarray
+	axis_name : list
+	axis_size : list
+	get_field()
+	get_axes_list()
+	get_solution()
+}
+class SolutionVector{
+	field : SciDataTool.Classes.VectorField.VectorField
+	get_field()
+	get_axes_list()
+	get_solution()
+}
+CellMat *--> Interpolation
+GaussPoint  <|--> FPGNSeg
+GaussPoint  <|--> FPGNTri
+Interpolation *--> GaussPoint
+Interpolation *--> RefCell
+Interpolation *--> ScalarProduct
+Mesh  <|--> MeshMat
+Mesh  <|--> MeshVTK
+MeshMat *--> CellMat
+MeshMat *--> NodeMat
+MeshSolution *--> Mesh
+MeshSolution *--> Solution
+RefCell  <|--> RefLine3
+RefCell  <|--> RefQuad4
+RefCell  <|--> RefQuad9
+RefCell  <|--> RefSegmentP1
+RefCell  <|--> RefTriangle3
+RefCell  <|--> RefTriangle6
+ScalarProduct  <|--> ScalarProductL2
+Solution  <|--> SolutionData
+Solution  <|--> SolutionMat
+Solution  <|--> SolutionVector

@@ -1,0 +1,229 @@
+classDiagram
+direction TB
+class LUT{
+	get_eec()
+	get_OP_matrix_obj()
+	get_OP_array()
+	set_default_simulation()
+	get_phase_dir()
+}
+class LUTdq{
+	Phi_dqh_mean : ndarray
+	Phi_dqh_mag : SciDataTool.Classes.DataND.DataND
+	get_index_open_circuit()
+	get_L_dqh()
+	get_Lm_dqh()
+	get_Phi_dqh_mag()
+	get_Phi_dqh_mag_mean()
+	get_Phi_dqh_mean()
+	interp_Phi_dqh()
+	interp_Ploss_dqh()
+	interp_Tem_rip_dqh()
+}
+class LUTslip{
+}
+class OutElec{
+	axes_dict : dict~SciDataTool.Classes.DataND.Data~
+	Is : SciDataTool.Classes.DataND.DataND
+	Ir : SciDataTool.Classes.DataND.DataND
+	logger_name : str
+	Pj_losses : float
+	Us : SciDataTool.Classes.DataND.DataND
+	internal : OutInternal
+	OP : OP
+	Pem_av : float
+	Tem_av : float
+	phase_dir : int
+	current_dir : int
+	PWM : ImportGenPWM
+	eec : EEC
+	P_out : float
+	Jrms : float
+	P_in : float
+	Arms : float
+	Erms : float
+	get_Nr()
+	get_Is()
+	get_Us()
+	store()
+	get_electrical()
+	get_Jrms()
+}
+class OutForce{
+	axes_dict : dict~SciDataTool.Classes.DataND.Data~
+	AGSF : SciDataTool.Classes.VectorField.VectorField
+	logger_name : str
+	Rag : float
+	meshsolution : MeshSolution
+	store()
+}
+class OutGeo{
+	stator : OutGeoLam
+	rotor : OutGeoLam
+	Wgap_mec : float
+	Wgap_mag : float
+	Rgap_mec : float
+	Lgap : float
+	logger_name : str
+	angle_rotor_initial : float
+	rot_dir : int
+	per_a : int
+	is_antiper_a : bool
+	per_t_S : int
+	is_antiper_t_S : bool
+	axes_dict : dict~SciDataTool.Classes.DataND.Data~
+	per_t_R : int
+	is_antiper_t_R : bool
+}
+class OutGeoLam{
+	name_phase : list
+	BH_curve : ndarray
+	Ksfill : float
+	S_slot : float
+	S_slot_wind : float
+	S_wind_act : float
+	per_a : int
+	is_antiper_a : bool
+	per_t : int
+	is_antiper_t : bool
+}
+class OutInternal{
+}
+class OutLoss{
+	loss_list : list~SciDataTool.Classes.DataND.DataND~
+	meshsol_list : list~MeshSolution~
+	loss_index : dict
+	logger_name : str
+	axes_dict : dict~SciDataTool.Classes.DataND.Data~
+	Pstator : float
+	Protor : float
+	Pmagnet : float
+	Pprox : float
+	Pjoule : float
+	coeff_dict : dict
+	get_loss()
+	get_loss_density_ag()
+	get_loss_dist()
+	get_loss_group()
+	get_loss_overall()
+	store()
+}
+class OutMag{
+	axes_dict : dict~SciDataTool.Classes.DataND.Data~
+	B : SciDataTool.Classes.VectorField.VectorField
+	Tem : SciDataTool.Classes.DataND.DataND
+	Tem_av : float
+	Tem_rip_norm : float
+	Tem_rip_pp : float
+	Phi_wind_stator : SciDataTool.Classes.DataND.DataND
+	Phi_wind : dict~SciDataTool.Classes.DataND.DataND~
+	emf : SciDataTool.Classes.DataND.DataND
+	meshsolution : MeshSolution
+	logger_name : str
+	internal : OutInternal
+	Rag : float
+	Pem_av : float
+	Slice : SliceModel
+	Tem_slice : SciDataTool.Classes.DataND.DataND
+	Phi_wind_slice : dict~SciDataTool.Classes.DataND.DataND~
+	Tem_norm : float
+	clean()
+	comp_emf()
+	comp_power()
+	get_demag()
+	store()
+	comp_torque_MT()
+}
+class OutMagElmer{
+	FEA_dict : dict
+	clean()
+}
+class OutMagFEMM{
+	FEMM_dict : dict
+	handler_list : list~_FEMMHandler~
+	clean()
+}
+class OutPost{
+	legend_name : str
+	line_color : str
+}
+class OutStruct{
+	axes_dict : dict~SciDataTool.Classes.DataND.Data~
+	logger_name : str
+	meshsolution : MeshSolution
+	FEA_dict : dict
+}
+class Output{
+	simu : Simulation
+	path_result : str
+	geo : OutGeo
+	elec : OutElec
+	mag : OutMag
+	struct : OutStruct
+	post : OutPost
+	logger_name : str
+	force : OutForce
+	loss : OutLoss
+	getter.comp_angle_rotor()
+	getter.get_angle_rotor_initial()
+	getter.get_angle_rotor()
+	getter.get_BH_rotor()
+	getter.get_BH_stator()
+	getter.get_path_result()
+	getter.get_machine_periodicity()
+	getter.get_fund_harm()
+	getter.get_data_from_str()
+	getter.export_to_mat()
+	plot.Magnetic.plot_B_mesh()
+	print_memory()
+}
+class XOutput{
+	paramexplorer_list : list~ParamExplorer~
+	output_list : list~Output~
+	xoutput_dict : dict~DataKeeper~
+	nb_simu : int
+	xoutput_ref : Output
+	xoutput_ref_index : int
+	__delitem__()
+	__getitem__()
+	__iter__()
+	__len__()
+	__missing__()
+	__next__()
+	__reversed__()
+	__setitem__()
+	append()
+	count()
+	get_param_simu()
+	get_paramexplorer()
+	get_pareto_index()
+	get_simu()
+	get_symbol_list()
+	get_xoutput_ref()
+	insert()
+	items()
+	keys()
+	plot_generation()
+	plot_multi()
+	plot_pareto()
+	pop()
+	print_memory()
+	remove()
+}
+LUT  <|--> LUTdq
+LUT  <|--> LUTslip
+OutElec *--> OutInternal
+OutGeo *--> OutGeoLam
+OutInternal  <|--> OutMagElmer
+OutInternal  <|--> OutMagFEMM
+OutMag *--> OutInternal
+Output  <|--> XOutput
+Output *--> OutElec
+Output *--> OutForce
+Output *--> OutGeo
+Output *--> OutLoss
+Output *--> OutMag
+Output *--> OutPost
+Output *--> OutStruct
+XOutput  <|--> LUT
+XOutput *--> Output

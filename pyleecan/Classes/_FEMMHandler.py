@@ -9,13 +9,16 @@ global is_windows_os
 try:
     import pythoncom
     import win32com.client
+
     is_windows_os = True
 except:
     print("No activex, using file I/O")
     is_windows_os = False
 
 from six import string_types
+
 sleeptime = 0.01
+
 
 class _FEMMHandler(object):
     """
@@ -67,7 +70,7 @@ class _FEMMHandler(object):
             self.main_restore()
             return
 
-    def openfemm_Linux(self, *arg,winepath="", femmpath=""):
+    def openfemm_Linux(self, *arg, winepath="", femmpath=""):
         # Opens FEMM, path to wine and FEMM directories can be given as openfemm(winepath='path/to/wine/',femmpath='path/to/femm/')."""
         global ifile, ofile
 
@@ -176,13 +179,12 @@ class _FEMMHandler(object):
             self.main_restore()
             return
 
-    def openfemm(self,*arg, winepath="", femmpath=""):
+    def openfemm(self, *arg, winepath="", femmpath=""):
         global is_windows_os
         if is_windows_os:
             self.openfemm_Windows(*arg)
         else:
             self.openfemm_Linux(*arg, winepath="", femmpath="")
-
 
     def closefemm_Windows(self):
         self.HandleToFEMM = None  # no reference to the handler, femm is closed
@@ -220,9 +222,8 @@ class _FEMMHandler(object):
             x = x[0]
         return x
 
-
     def callfemm_Linux(self, myString):
-        global ifile,ofile
+        global ifile, ofile
         try:
             f = open(ifile, mode="wt")
         except:
@@ -272,15 +273,14 @@ class _FEMMHandler(object):
             x = x[0]
         return x
 
-    def callfemm(self,myString):
+    def callfemm(self, myString):
         global is_windows_os
-        #print(myString) # uncomment to see all the calls made to femm while working
+        # print(myString) # uncomment to see all the calls made to femm while working
         if is_windows_os:
             x = self.callfemm_Windows(myString)
         else:
             x = self.callfemm_Linux(myString)
         return x
-
 
     def main_restore(self):
         self.callfemm("main_restore()")
@@ -323,8 +323,8 @@ class _FEMMHandler(object):
         HandleToFEMM = self.HandleToFEMM
         HandleToFEMM.mlab2femm(myString)
 
-    def callfemm_noeval_Linux(self,myString):
-        global ifile,ofile
+    def callfemm_noeval_Linux(self, myString):
+        global ifile, ofile
         try:
             f = open(ifile, mode="wt")
         except:
@@ -357,14 +357,13 @@ class _FEMMHandler(object):
 
         os.unlink(ofile)
 
-    def callfemm_noeval(self,myString):
+    def callfemm_noeval(self, myString):
         global is_windows_os
-        
+
         if is_windows_os:
-            self.callfemm_Windows(self,myString)
+            self.callfemm_Windows(self, myString)
         else:
-            self.callfemm_Linux(self,myString)
-            
+            self.callfemm_Linux(self, myString)
 
     def ci_addarc(self, *arg):
         self.callfemm("ci_addarc" + self.doargs(*arg))
