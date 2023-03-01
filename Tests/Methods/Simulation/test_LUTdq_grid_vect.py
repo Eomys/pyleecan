@@ -61,7 +61,8 @@ def test_LUTdq_grid_vect(is_load=True):
                     is_periodicity_t=True,
                 ),
                 var_simu=VarLoadCurrent(
-                    postproc_list=[PostLUT(is_save_LUT=True)], is_keep_all_output=True,
+                    postproc_list=[PostLUT(is_save_LUT=True)],
+                    is_keep_all_output=True,
                 ),
                 mag=MagFEMM(
                     is_periodicity_a=True,

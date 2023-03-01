@@ -25,7 +25,7 @@ def check_cstr(solver, indiv):
     # Browse constraints
     for constraint in solver.problem.constraint:
         # Compute value to compare
-        var_val = constraint.get_variable(indiv.output)
+        var_val = constraint.keeper(indiv.output)
 
         # Compare the value with the constraint
         type_const = constraint.type_const

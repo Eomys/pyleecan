@@ -15,26 +15,6 @@ from ..Functions.Load.import_class import import_class
 from copy import deepcopy
 from .VarSimu import VarSimu
 
-# Import all class method
-# Try/catch to remove unnecessary dependencies in unused method
-try:
-    from ..Methods.Simulation.VarParam.check_param import check_param
-except ImportError as error:
-    check_param = error
-
-try:
-    from ..Methods.Simulation.VarParam.generate_simulation_list import (
-        generate_simulation_list,
-    )
-except ImportError as error:
-    generate_simulation_list = error
-
-try:
-    from ..Methods.Simulation.VarParam.get_simu_number import get_simu_number
-except ImportError as error:
-    get_simu_number = error
-
-
 from numpy import isnan
 from ._check import InitUnKnowClassError
 
@@ -45,41 +25,6 @@ class VarParam(VarSimu):
     VERSION = 1
     NAME = "Parameter Sweep"
 
-    # Check ImportError to remove unnecessary dependencies in unused method
-    # cf Methods.Simulation.VarParam.check_param
-    if isinstance(check_param, ImportError):
-        check_param = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use VarParam method check_param: " + str(check_param)
-                )
-            )
-        )
-    else:
-        check_param = check_param
-    # cf Methods.Simulation.VarParam.generate_simulation_list
-    if isinstance(generate_simulation_list, ImportError):
-        generate_simulation_list = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use VarParam method generate_simulation_list: "
-                    + str(generate_simulation_list)
-                )
-            )
-        )
-    else:
-        generate_simulation_list = generate_simulation_list
-    # cf Methods.Simulation.VarParam.get_simu_number
-    if isinstance(get_simu_number, ImportError):
-        get_simu_number = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use VarParam method get_simu_number: " + str(get_simu_number)
-                )
-            )
-        )
-    else:
-        get_simu_number = get_simu_number
     # generic save method is available in all object
     save = save
     # get_logger method is available in all object

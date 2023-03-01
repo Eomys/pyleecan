@@ -5,7 +5,7 @@ class ParamExplorerError(Exception):
     pass
 
 
-class VarParamError(Exception):
+class VarParamSweepError(Exception):
     pass
 
 
@@ -14,12 +14,12 @@ class DataKeeperError(Exception):
 
 
 def check_param(self):
-    """Check VarParam parameters validity
+    """Check VarParamSweep parameters validity
 
     Raises
     ------
     ParamExplorerError: Error in ParamExplorer setting
-    VarParamError: Error in VarParam general setting
+    VarParamSweepError: Error in VarParamSweep general setting
     DataKeeperError: Error in DataKeeper setting
     """
     # run the base class check first
@@ -44,7 +44,7 @@ def check_param(self):
     if len(self.datakeeper_list) == 0 and self.is_keep_all_output is False:
         logger = self.get_logger()
         logger.warning(
-            "No datakeeper has been define in VarParam, setting is_keep_all_output as True."
+            "No datakeeper has been define in VarParamSweep, setting is_keep_all_output as True."
         )
         self.is_keep_all_output = True
 

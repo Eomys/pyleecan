@@ -13,7 +13,7 @@ from pyleecan.Classes.PostFunction import PostFunction
 from pyleecan.Classes.PostMethod import PostMethod
 from pyleecan.Classes.Simu1 import Simu1
 from pyleecan.Classes.InputCurrent import InputCurrent
-from pyleecan.Classes.VarParam import VarParam
+from pyleecan.Classes.VarParamSweep import VarParamSweep
 from pyleecan.Classes.ParamExplorerSet import ParamExplorerSet
 from pyleecan.Classes.DataKeeper import DataKeeper
 
@@ -68,7 +68,7 @@ def test_post_var_simu():
         keeper="lambda output: np.sqrt(output.simu.machine.stator.slot.W0)",
     )
 
-    simu1.var_simu = VarParam(
+    simu1.var_simu = VarParamSweep(
         paramexplorer_list=[pe1],
         datakeeper_list=[dk1],
         stop_if_error=True,

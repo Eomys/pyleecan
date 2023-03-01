@@ -3,8 +3,8 @@ def get_simu_number(self):
 
     Parameters
     ----------
-    self : VarParam
-        A VarParam object
+    self : VarParamSweep
+        A VarParamSweep object
 
     Returns
     -------
