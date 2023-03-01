@@ -220,5 +220,4 @@ def comp_desc_dict(self):
             )
         )
 
-
     return desc_dict

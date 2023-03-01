@@ -12,6 +12,8 @@ The mermaid-cli package should be installed before running this scipt.
 
 Installation process:
 
+    - pip install mermaid
+
     - Install Node.js and npm from https://nodejs.org (npm comes with Node.js
     in the Windows installer). Add Node.js to the system path.
     
@@ -27,10 +29,11 @@ Installation process:
             "console": "integratedTerminal"
         },
         
-    - It may be necessary to allow the execution of powershell scripts. To do this, go to
+    - It may be necessary to allow the execution of powershell scripts. To do this on windows 11, go to
     Settings > Update and safety > Developpers space and check the box :
     "Modify execution policy to allow the execution of local unsigned Powershell scipts
     and require a signature for remote scripts"
+    (after generating the UML you can uncheck this)
 
 If the generation of .svg file fails, it is still possible to use the .mmd files to see the diagrams.
 Here are two solutions:
@@ -40,22 +43,24 @@ Here are two solutions:
     Markdown Preview Mermaid Support https://marketplace.visualstudio.com/items?itemName=bierner.markdown-mermaid)
 """
 
-DOC_DIR = normpath(abspath(join(dirname(__file__),"..","ClassesRef")))
+DOC_DIR = normpath(abspath(join(dirname(__file__), "..", "ClassesRef")))
+
 
 def main():
-    list_dir=[join(DOC_DIR, folder_name) for folder_name in listdir(DOC_DIR)]
+    list_dir = [join(DOC_DIR, folder_name) for folder_name in listdir(DOC_DIR)]
     for path in list_dir:
         Diagram([path]).draw_diagram()
-    Diagram([DOC_DIR], name = "Pyleecan").draw_diagram()
-    Diagram([DOC_DIR],
-            name = "only_machines",
-            parent_class_name = "Machine",
-            composition = False).draw_diagram()
-    Diagram([DOC_DIR],
-            name = "only_laminations",
-            parent_class_name = "Lamination",
-            composition = False).draw_diagram()
-    
-    
+    Diagram([DOC_DIR], name="Pyleecan").draw_diagram()
+    Diagram(
+        [DOC_DIR], name="only_machines", parent_class_name="Machine", composition=False
+    ).draw_diagram()
+    Diagram(
+        [DOC_DIR],
+        name="only_laminations",
+        parent_class_name="Lamination",
+        composition=False,
+    ).draw_diagram()
+
+
 if __name__ == "__main__":
     main()

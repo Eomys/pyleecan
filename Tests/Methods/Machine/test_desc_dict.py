@@ -51,6 +51,7 @@ def test_desc_SCIM():
     assert desc_dict[11]["name"] == "Mrwind"
     assert desc_dict[11]["value"] == pytest.approx(21.118, rel=0.1)
 
+
 @pytest.mark.IPMSM
 def test_desc_IPMSM():
     """Check that the description of an IPMSM is correct"""

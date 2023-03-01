@@ -432,11 +432,12 @@ def test_save_load_simu(type_file):
     test_obj2 = load(file_path)
     assert test_obj == test_obj2
 
+
 def test_save_load_slash_h5():
     """Check that str with "/" can be save/load"""
     test_obj = XOutput()
     test_obj._set_None()
-    test_obj.xoutput_dict={"x/y":DataKeeper(name="x/y")}
+    test_obj.xoutput_dict = {"x/y": DataKeeper(name="x/y")}
 
     file_path = join(save_path, "test_save_slash.h5")
     logger.debug(file_path)
@@ -449,6 +450,7 @@ def test_save_load_slash_h5():
     assert isfile(file_path)
     test_obj2 = load(file_path)
     assert test_obj2 == test_obj
+
 
 if __name__ == "__main__":
     test_save_load_slash_h5()

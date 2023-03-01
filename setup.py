@@ -12,7 +12,9 @@ except ImportError:  # Install setuptools if needed
 
 import platform
 
-system("{} -m pip install git+https://gitlab.com/CedMrnl/swat-em.git".format(executable))
+system(
+    "{} -m pip install git+https://gitlab.com/CedMrnl/swat-em.git".format(executable)
+)
 
 # /!\ Increase the number before a release
 # See https://www.python.org/dev/peps/pep-0440/

@@ -54,8 +54,12 @@ hole_list.append(  # WindingCW1L
 varparam_list = list()
 varparam_list.append(
     {
-        "ref": join(TEST_DATA_DIR, "Retrocompatibility", "VarParam", "VarParam_ref.json"),
-        "old": join(TEST_DATA_DIR, "Retrocompatibility", "VarParam", "VarParam_old.json"),
+        "ref": join(
+            TEST_DATA_DIR, "Retrocompatibility", "VarParam", "VarParam_ref.json"
+        ),
+        "old": join(
+            TEST_DATA_DIR, "Retrocompatibility", "VarParam", "VarParam_old.json"
+        ),
     }
 )
 
@@ -63,8 +67,18 @@ varparam_list.append(
 opti_list = list()
 opti_list.append(
     {
-        "ref": join(TEST_DATA_DIR, "Retrocompatibility", "Optimisation", "OptiConstraint_and_OptiDesignVar_ref.json"),
-        "old": join(TEST_DATA_DIR, "Retrocompatibility", "Optimisation", "OptiConstraint_and_OptiDesignVar_old.json"),
+        "ref": join(
+            TEST_DATA_DIR,
+            "Retrocompatibility",
+            "Optimisation",
+            "OptiConstraint_and_OptiDesignVar_ref.json",
+        ),
+        "old": join(
+            TEST_DATA_DIR,
+            "Retrocompatibility",
+            "Optimisation",
+            "OptiConstraint_and_OptiDesignVar_old.json",
+        ),
     }
 )
 
@@ -113,7 +127,12 @@ wind_list.append(  # WindingDW1L
 def test_save_OPM_None_retro():
     """Check that the OP_matrix convertion works with None"""
     simu = load(
-        join(TEST_DATA_DIR, "Retrocompatibility", "OP_matrix", "test_OPM_None.json",),
+        join(
+            TEST_DATA_DIR,
+            "Retrocompatibility",
+            "OP_matrix",
+            "test_OPM_None.json",
+        ),
     )
     assert simu.var_simu.OP_matrix is None
 
@@ -203,7 +222,10 @@ def test_load_opti(file_dict):
     msg = "Error for OptiConstraint, get_variable is not converted into keeper"
     for ii in range(len(old.problem.constraint)):
         if hasattr(old.problem.constraint[ii], "keeper"):
-            assert old.problem.constraint[ii]._keeper_str == ref.problem.constraint[ii]._keeper_str 
+            assert (
+                old.problem.constraint[ii]._keeper_str
+                == ref.problem.constraint[ii]._keeper_str
+            )
         else:
             assert False, msg
 
