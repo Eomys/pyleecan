@@ -9,9 +9,9 @@ from numpy import array, linspace, ones, pi, zeros
 from pyleecan.Classes.import_all import *
 
 try:
-    from pyleecan.Functions.GMSH.gen_3D_mesh import gen_3D_mesh
+    from pyleecan.Functions.GMSH.gen_lam_3D_mesh_GMSH import gen_lam_3D_mesh_GMSH
 except ImportError as error:
-    gen_3D_mesh = error
+    gen_lam_3D_mesh_GMSH = error
 from Tests import save_plot_path
 from Tests.Plot.LamWind import wind_mat
 from pyleecan.Functions.load import load
@@ -101,8 +101,8 @@ def test_gmsh_mesh_dict():
     """Figure 10: Generate a 3D mesh with Gmsh by setting the
     number of element on each lines
     """
-    if isinstance(gen_3D_mesh, ImportError):
-        raise ImportError("Fail to import gen_3D_mesh (gmsh package missing)")
+    if isinstance(gen_lam_3D_mesh_GMSH, ImportError):
+        raise ImportError("Fail to import gen_lam_3D_mesh_GMSH (gmsh package missing)")
 
     # Stator definition
     stator = LamSlotWind(
@@ -143,7 +143,7 @@ def test_gmsh_mesh_dict():
         "13": 8,
         "14": 2,
     }
-    gen_3D_mesh(
+    gen_lam_3D_mesh_GMSH(
         lamination=stator,
         save_path=join(save_path, "fig_10_gmsh_mesh_dict.msh"),
         mesh_size=7e-3,
@@ -164,8 +164,8 @@ def test_SlotMulti_sym():
     with several slot types and notches
     """
 
-    if isinstance(gen_3D_mesh, ImportError):
-        raise ImportError("Fail to import gen_3D_mesh (gmsh package missing)")
+    if isinstance(gen_lam_3D_mesh_GMSH, ImportError):
+        raise ImportError("Fail to import gen_lam_3D_mesh_GMSH (gmsh package missing)")
 
     plt.close("all")
     # Rotor definition
@@ -202,7 +202,7 @@ def test_SlotMulti_sym():
     assert len(fig.axes[0].patches) == 1
 
     # Generate the gmsh equivalent
-    gen_3D_mesh(
+    gen_lam_3D_mesh_GMSH(
         lamination=rotor,
         save_path=join(save_path, "fig_11_gmsh_SlotMulti.msh"),
         sym=4,

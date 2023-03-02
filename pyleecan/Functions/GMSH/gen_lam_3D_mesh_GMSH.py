@@ -6,7 +6,7 @@ import gmsh
 from os.path import splitext
 
 
-def gen_3D_mesh(
+def gen_lam_3D_mesh_GMSH(
     lamination,
     save_path="Lamination.msh",
     sym=-1,

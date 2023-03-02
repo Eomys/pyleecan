@@ -26,9 +26,9 @@ try:
 except Exception as e:
     draw_GMSH = e
 try:
-    from pyleecan.Functions.GMSH.gen_3D_mesh import gen_3D_mesh
+    from pyleecan.Functions.GMSH.gen_lam_3D_mesh_GMSH import gen_lam_3D_mesh_GMSH
 except Exception as e:
-    gen_3D_mesh = e
+    gen_lam_3D_mesh_GMSH = e
 
 
 class WMachineTable(Ui_WMachineTable, QWidget):
@@ -58,8 +58,8 @@ class WMachineTable(Ui_WMachineTable, QWidget):
             self.b_GMSH.setToolTip(str(draw_GMSH))
 
             self.b_GMSH_3D.setEnabled(False)
-            self.b_GMSH_3D.setWhatsThis(str(gen_3D_mesh))
-            self.b_GMSH_3D.setToolTip(str(gen_3D_mesh))
+            self.b_GMSH_3D.setWhatsThis(str(gen_lam_3D_mesh_GMSH))
+            self.b_GMSH_3D.setToolTip(str(gen_lam_3D_mesh_GMSH))
         else:
             self.b_GMSH.clicked.connect(self.draw_GMSH)
             self.b_GMSH_3D.clicked.connect(self.draw_GMSH_3D)
@@ -239,7 +239,7 @@ class WMachineTable(Ui_WMachineTable, QWidget):
         if save_file_path is [None, ""]:
             return
         try:
-            gen_3D_mesh(
+            gen_lam_3D_mesh_GMSH(
                 lamination=self.machine.stator,
                 save_path=save_file_path,
                 mesh_size=(self.machine.stator.Rext - self.machine.stator.Rint) / 20,

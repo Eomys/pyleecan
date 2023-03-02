@@ -3,9 +3,9 @@ from os.path import isfile, join
 import pytest
 
 try:
-    from pyleecan.Functions.GMSH.gen_3D_mesh import gen_3D_mesh
+    from pyleecan.Functions.GMSH.gen_lam_3D_mesh_GMSH import gen_lam_3D_mesh_GMSH
 except:
-    gen_3D_mesh = ImportError
+    gen_lam_3D_mesh_GMSH = ImportError
 
 from pyleecan.Classes.LamSlotWind import LamSlotWind
 from pyleecan.Classes.SlotW10 import SlotW10
@@ -16,8 +16,8 @@ from Tests import save_validation_path as save_path
 @pytest.mark.long_5s
 def test_slot_10():
     """Check generation of the 3D mesh of Slot 10 with gmsh"""
-    if isinstance(gen_3D_mesh, ImportError):
-        raise ImportError("Fail to import gen_3D_mesh (gmsh package missing)")
+    if isinstance(gen_lam_3D_mesh_GMSH, ImportError):
+        raise ImportError("Fail to import gen_lam_3D_mesh_GMSH (gmsh package missing)")
 
     # SetUp
     stator = LamSlotWind(
@@ -33,7 +33,7 @@ def test_slot_10():
     stator.slot = SlotW10(
         Zs=36, H0=1e-3, H1=1.5e-3, H2=30e-3, W0=12e-3, W1=14e-3, W2=12e-3
     )
-    gen_3D_mesh(
+    gen_lam_3D_mesh_GMSH(
         lamination=stator,
         save_path=join(save_path, "Lamination.msh"),
         mesh_size=5e-3,
