@@ -38,6 +38,7 @@ from ....Functions.labels import (
 )
 from ....Functions.Winding.find_wind_phase_color import get_phase_id
 from .... import __version__
+
 from ....Functions.get_path_binary import get_path_binary
 
 from ....Classes.HoleM50 import HoleM50
