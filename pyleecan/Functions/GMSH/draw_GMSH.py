@@ -1,30 +1,19 @@
 from ...Classes.Arc import Arc
 from ...Classes.Arc2 import Arc2
 from ...Classes.MachineSIPMSM import MachineSIPMSM
-from ...Classes.MachineSCIM import MachineSCIM
-from ...Classes.MachineWRSM import MachineWRSM
 
 from ...Functions.labels import (
     HOLEM_LAB_S,
     MAG_LAB,
-    BAR_LAB,
     short_label,
     LAM_LAB,
-    YOKE_LAB,
-    WIND_LAB_S,
     LAM_LAB_S,
     SHAFT_LAB,
     decode_label,
     SLID_LAB,
     AIRGAP_LAB,
     BOT_LAB,
-    TOP_LAB,
     AIRBOX_LAB,
-    AIRBOX_R_LAB,
-    AR_B_LAB,
-    AR_T_LAB,
-    SBR_B_LAB,
-    SBR_T_LAB,
 )
 from ...Functions.GMSH import InputError
 from ...Functions.GMSH.get_sliding_band import get_sliding_band
@@ -40,7 +29,7 @@ from os.path import splitext
 
 from numpy import pi
 
-from ...Functions.get_logger import get_logger
+
 def draw_GMSH(
     output,
     sym,
@@ -49,7 +38,7 @@ def draw_GMSH(
     is_lam_only_R=False,
     user_mesh_dict={},
     path_save="GMSH_model.msh",
-    is_sliding_band=False,
+    is_sliding_band=True,
     is_airbox=False,
     is_set_labels=False,
     is_run=False,
@@ -73,7 +62,7 @@ def draw_GMSH(
     path_save : str
         Path to save the result msh file
     is_sliding_band : bool
-        True uses sliding band, else airgap 
+        True uses sliding band, else airgap (Not implemented yet)
     is_airbox : bool
         True to add the airbox
     is_set_label : bool
@@ -102,15 +91,10 @@ def draw_GMSH(
     mesh_size_R = machine.rotor.Rext / 25.0  # Rotor
     mesh_size_SB = 2.0 * pi * machine.rotor.Rext / 360.0  # Sliding Band
     mesh_size_AB = machine.stator.Rext / 50.0  # AirBox
-    lam_list = machine.get_lam_list()
-    lam_int = lam_list[0]
-    lam_ext = lam_list[1]
-    lab_int = lam_int.get_label()
-    lab_ext = lam_ext.get_label()
 
     # For readibility
     model = gmsh.model
-    factory = model.occ
+    factory = model.geo
 
     # Start a new model
     gmsh.initialize()
@@ -148,7 +132,6 @@ def draw_GMSH(
             "with_holes": False,
             1: {
                 "tag": 0,
-                "label": None,
                 "n_elements": 1,
                 "bc_name": None,
                 "begin": {"tag": oo, "coord": complex(0.0, 0.0)},
@@ -165,6 +148,7 @@ def draw_GMSH(
     if not is_lam_only_S:
         for surf in rotor_list:
             nsurf += 1
+            # print(surf.label)
             gmsh_dict.update(
                 {
                     nsurf: {
@@ -188,7 +172,7 @@ def draw_GMSH(
                 surf,
                 mesh_dict,
                 boundary_prop,
-                model,
+                factory,
                 gmsh_dict,
                 nsurf,
                 mesh_size_R,
@@ -215,7 +199,6 @@ def draw_GMSH(
             if (
                 MAG_LAB in label_dict["surf_type"]
                 or HOLEM_LAB_S in label_dict["surf_type"]
-                or BAR_LAB in label_dict["surf_type"]
             ):
                 # Surface of Hole Magnet
                 rotor_cloops.extend([cloop])
@@ -226,11 +209,7 @@ def draw_GMSH(
             else:
                 # MachineSIPSM does not have holes in rotor lam
                 # only shaft is taken out if symmetry is one
-                if ( 
-                    isinstance(machine, MachineSIPMSM) 
-                    or isinstance(machine, MachineSCIM)
-                    or isinstance(machine, MachineWRSM)
-                ):
+                if isinstance(machine, MachineSIPMSM):
                     if sym == 1 and SHAFT_LAB in label_dict["surf_type"]:
                         lam_and_holes.extend([cloop])
                 else:
@@ -244,7 +223,6 @@ def draw_GMSH(
                 # Shaft, magnets and magnet pocket surfaces are created
                 if not is_lam_only_R:
                     s_data["tag"] = factory.addPlaneSurface([cloop], tag=-1)
-                    factory.synchronize()
                     pg = model.addPhysicalGroup(2, [s_data["tag"]])
                     model.setPhysicalName(2, pg, s_data["label"])
 
@@ -255,14 +233,12 @@ def draw_GMSH(
             gmsh_dict[lam_rotor_surf_id]["tag"] = factory.addPlaneSurface(
                 lam_and_holes, tag=-1
             )
-        factory.synchronize()
         pg = model.addPhysicalGroup(2, [gmsh_dict[lam_rotor_surf_id]["tag"]])
         model.setPhysicalName(2, pg, gmsh_dict[lam_rotor_surf_id]["label"])
         # rotor_cloops = lam_and_holes
 
     # store rotor dict
     rotor_dict = gmsh_dict.copy()
-    
 
     #####################
     # Adding Stator
@@ -275,7 +251,6 @@ def draw_GMSH(
             "with_holes": False,
             1: {
                 "tag": 0,
-                "label": None,
                 "n_elements": 1,
                 "bc_name": None,
                 "begin": {"tag": oo, "coord": complex(0.0, 0.0)},
@@ -313,7 +288,7 @@ def draw_GMSH(
                 surf,
                 mesh_dict,
                 boundary_prop,
-                model,
+                factory,
                 gmsh_dict,
                 nsurf,
                 mesh_size_S,
@@ -325,66 +300,24 @@ def draw_GMSH(
             if s_data["label"] == "origin":
                 continue
 
-            if sym == 1:
-                inner_loop = []
-                # build a lineloop of the surfaces lines independently for yoke
-                # and bore is considered a hole
-                for lvalues in s_data.values():
-                    if type(lvalues) is not dict:
-                        continue
-                    
-                    if WIND_LAB_S in s_data["label"]:
-                        lloop.extend([lvalues["tag"]])
-                        inner_loop.extend([lvalues["tag"]])
-                    elif(
-                        lvalues["label"] is not None
-                        and LAM_LAB in lvalues["label"]
-                        and YOKE_LAB in lvalues["label"]
-                    ):
-                        lloop.extend([lvalues["tag"]])
-                    else:
-                        inner_loop.extend([lvalues["tag"]])    
-                #print(s_data["label"],lloop,inner_loop)
-                cloop = factory.addCurveLoop(lloop)
-                #stator_cloops.append(cloop)
+            # build a lineloop of the surfaces lines
+            for lvalues in s_data.values():
+                if type(lvalues) is not dict:
+                    continue
+                lloop.extend([lvalues["tag"]])
+            cloop = factory.addCurveLoop(lloop)
+            stator_cloops.append(cloop)
 
-                
-                if LAM_LAB_S in decode_label(s_data["label"])["surf_type"] or (
-                    not is_lam_only_S
-                ):
-                    # Winding surfaces are created
-                    if WIND_LAB_S in s_data["label"]:
-                        s_data["tag"] = factory.addPlaneSurface([cloop], tag=-1)
-                        factory.synchronize()
-                        pg = model.addPhysicalGroup(2, [s_data["tag"]])
-                        model.setPhysicalName(2, pg, s_data["label"])
-                    # Lamination surfaces are created
-                    else:
-                        inner_cloop = factory.addCurveLoop(inner_loop)
-                        s_data["tag"] = factory.addPlaneSurface([cloop, inner_cloop], tag=-1)
-                        factory.synchronize()
-                        pg = model.addPhysicalGroup(2, [s_data["tag"]])
-                        model.setPhysicalName(2, pg, s_data["label"])
-            else:
-                for lvalues in s_data.values():
-                    if type(lvalues) is not dict:
-                        continue
-                    lloop.extend([lvalues["tag"]])
-                cloop = factory.addCurveLoop(lloop)
-                #stator_cloops.append(cloop)
+            # Winding surfaces are created
+            if LAM_LAB_S in decode_label(s_data["label"])["surf_type"] or (
+                not is_lam_only_S
+            ):
+                s_data["tag"] = factory.addPlaneSurface([cloop], tag=-1)
+                pg = model.addPhysicalGroup(2, [s_data["tag"]])
+                model.setPhysicalName(2, pg, s_data["label"])
 
-                # All surfaces are created
-                if LAM_LAB_S in decode_label(s_data["label"])["surf_type"] or (
-                    not is_lam_only_S
-                ):
-                    s_data["tag"] = factory.addPlaneSurface([cloop], tag=-1)
-                    factory.synchronize()
-                    pg = model.addPhysicalGroup(2, [s_data["tag"]])
-                    model.setPhysicalName(2, pg, s_data["label"])
+        # stator_dict = gmsh_dict.copy()
 
-            
-
-    stator_dict = gmsh_dict.copy()
     gmsh_dict.update(rotor_dict)
 
     #####################
@@ -416,237 +349,40 @@ def draw_GMSH(
             surf,
             mesh_dict,
             boundary_prop,
-            model,
+            factory,
             gmsh_dict,
             nsurf,
             mesh_size_SB,
         )
 
-    if is_sliding_band and (not is_lam_only_R) and (not is_lam_only_S):
-        if sym == 1:
-            lloop1 = []
-            lloop2 = []
-            lloop3 = []
-            lloop4 = []
-            lloop5 = []
-            for s_data in gmsh_dict.values():            
-                label_dict = decode_label(s_data["label"])
+    for s_data in gmsh_dict.values():
+        lloop = []
+        label_dict = decode_label(s_data["label"])
 
-                # skip this surface dataset if it is the origin
-                if s_data["label"] == "origin" or not (
-                    AIRGAP_LAB in label_dict["surf_type"] or SLID_LAB in label_dict["surf_type"]
-                ):
-                    continue
+        # skip this surface dataset if it is the origin
+        if s_data["label"] == "origin" or not (
+            AIRGAP_LAB in label_dict["surf_type"] or SLID_LAB in label_dict["surf_type"]
+        ):
+            continue
 
-                # build a lineloop of the surfaces lines
-                for lvalues in s_data.values():
-                    if type(lvalues) is not dict:
-                        continue
-                    
-                    if (
-                        AIRGAP_LAB in label_dict["surf_type"]
-                        and BOT_LAB in label_dict["surf_type"]
-                        and AR_B_LAB in lvalues["label"]
-                    ):
-                        lloop1.extend([lvalues["tag"]])                 
-                    elif (
-                        SLID_LAB in label_dict["surf_type"]
-                        and BOT_LAB in label_dict["surf_type"]
-                        and SBR_B_LAB in lvalues["label"]
-                    ):
-                        lloop2.extend([lvalues["tag"]])  
-                    elif (
-                        SLID_LAB in label_dict["surf_type"]
-                        and TOP_LAB in label_dict["surf_type"]
-                        and SBR_T_LAB in lvalues["label"]
-                    ):
-                        lloop3.extend([lvalues["tag"]])  
-                    elif (
-                        AIRGAP_LAB in label_dict["surf_type"]
-                        and TOP_LAB in label_dict["surf_type"]
-                        and AR_T_LAB in lvalues["label"]
-                    ):
-                        lloop4.extend([lvalues["tag"]])  
-                    elif (
-                        AIRGAP_LAB in label_dict["surf_type"]
-                        and TOP_LAB in label_dict["surf_type"]
-                        and AIRBOX_R_LAB in lvalues["label"]
-                    ):
-                        lloop5.extend([lvalues["tag"]])
-                    else:    
-                        pass
-                
-            cloop1 = factory.addCurveLoop(lloop1)
-            cloop2 = factory.addCurveLoop(lloop2)
-            cloop3 = factory.addCurveLoop(lloop3)
-            cloop4 = factory.addCurveLoop(lloop4)
-            cloop5 = factory.addCurveLoop(lloop5)
-            
-            for s_data in gmsh_dict.values():
-                label_dict = decode_label(s_data["label"])
+        # build a lineloop of the surfaces lines
+        for lvalues in s_data.values():
+            if type(lvalues) is not dict:
+                continue
+            lloop.extend([lvalues["tag"]])
 
-                # skip this surface dataset if it is the origin
-                if s_data["label"] == "origin" or not (
-                    AIRGAP_LAB in label_dict["surf_type"] or SLID_LAB in label_dict["surf_type"]
-                ):
-                    continue
-
-                if (
-                    AIRGAP_LAB in label_dict["surf_type"]
-                    and BOT_LAB in label_dict["surf_type"]
-                ):
-                    s_data["tag"] = factory.addPlaneSurface([cloop1], tag=-1)
-                    factory.synchronize()
-                    rotor_ag_before = (2,s_data["tag"])
-                elif (
-                    SLID_LAB in label_dict["surf_type"]
-                    and BOT_LAB in label_dict["surf_type"]
-                ):
-                    s_data["tag"] = factory.addPlaneSurface([cloop2, cloop1], tag=-1)
-                    factory.synchronize()
-                    pg = model.addPhysicalGroup(2, [s_data["tag"]])
-                    model.setPhysicalName(2, pg, s_data["label"])                
-                elif (
-                    SLID_LAB in label_dict["surf_type"]
-                    and TOP_LAB in label_dict["surf_type"]
-                ):
-                    s_data["tag"] = factory.addPlaneSurface([cloop4, cloop3], tag=-1)
-                    factory.synchronize()
-                    pg = model.addPhysicalGroup(2, [s_data["tag"]])
-                    model.setPhysicalName(2, pg, s_data["label"])
-                elif (
-                    AIRGAP_LAB in label_dict["surf_type"]
-                    and TOP_LAB in label_dict["surf_type"]
-                ):
-                    s_data["tag"] = factory.addPlaneSurface([cloop5, cloop4], tag=-1)
-                    #s_data["tag"] = factory.addPlaneSurface([cloop5], tag=-1)
-                    factory.synchronize()
-                    stator_ag_before = (2,s_data["tag"])
-                else:
-                    continue
-                
-
-            if is_sliding_band and (not is_lam_only_R) and (not is_lam_only_S):    
-                rotor_surf_gmsh_list = []
-                for tid in rotor_dict:
-                    # Discard Origin
-                    if tid == 0:    
-                        continue
-                    rotor_surf_gmsh_list.append((2, tid))
-
-                stator_surf_gmsh_list = []
-                for tid in stator_dict:
-                    # Discard Origin
-                    if tid == 0:    
-                        continue
-                    stator_surf_gmsh_list.append((2, tid))
-                
-                cut1 = model.occ.cut([rotor_ag_before], rotor_surf_gmsh_list, removeObject=True, removeTool=False)
-                
-                # All These because CUT alone is not working for the stator
-                stat_copy = model.occ.copy(stator_surf_gmsh_list)
-                ints1 = model.occ.intersect([stator_ag_before],[stat_copy[0]],removeObject=True,removeTool=True,tag=-1)
-                stat_copy.pop(0)
-                cut2 = model.occ.cut(ints1[0],stat_copy,removeObject=True,removeTool=True,tag=-1)
-
-                if len(cut1[0]) > 1:
-                    # Remove extra surfaces
-                    model.occ.remove([cut1[0][1]])
-                    factory.synchronize() 
-                    pg = model.addPhysicalGroup(2, [cut1[0][0][1]])
-                    model.setPhysicalName(2, pg, lab_int + "_" + AIRGAP_LAB + BOT_LAB)   
-                else:
-                    factory.synchronize()
-                    pg = model.addPhysicalGroup(2, [cut1[0][0][1]])
-                    model.setPhysicalName(2, pg, lab_int + "_" + AIRGAP_LAB + BOT_LAB)  
-
-                if len(cut2[0]) > 1:
-                    # Remove extra surfaces
-                    model.occ.remove([cut2[0][0]])
-                    factory.synchronize()
-                    pg = model.addPhysicalGroup(2, [cut2[0][1][1]])
-                    model.setPhysicalName(2, pg, lab_ext + "_" + AIRGAP_LAB + TOP_LAB)   
-                else:
-                    factory.synchronize()
-                    pg = model.addPhysicalGroup(2, [cut2[0][0][1]])
-                    model.setPhysicalName(2, pg, lab_ext + "_" + AIRGAP_LAB + TOP_LAB)  
-                
-        else:
-            for s_data in gmsh_dict.values():
-                lloop = []
-                label_dict = decode_label(s_data["label"])
-
-                # skip this surface dataset if it is the origin
-                if s_data["label"] == "origin" or not (
-                    AIRGAP_LAB in label_dict["surf_type"] or SLID_LAB in label_dict["surf_type"]
-                ):
-                    continue
-
-                # build a lineloop of the surfaces lines
-                for lvalues in s_data.values():
-                    if type(lvalues) is not dict:
-                        continue
-                    lloop.extend([lvalues["tag"]])
-
-                if lloop:
-                    cloop = factory.addCurveLoop(lloop)
-                    if (
-                        AIRGAP_LAB in label_dict["surf_type"]
-                        and BOT_LAB in label_dict["surf_type"]
-                        and isinstance(machine, MachineSIPMSM)
-                    ):
-                        s_data["tag"] = factory.addPlaneSurface([cloop] + rotor_cloops, tag=-1)
-                    else:
-                        s_data["tag"] = factory.addPlaneSurface([cloop], tag=-1)
-                    factory.synchronize()
-                    pg = model.addPhysicalGroup(2, [s_data["tag"]])
-                    model.setPhysicalName(2, pg, s_data["label"])          
-                    if (AIRGAP_LAB in s_data["label"] and BOT_LAB in s_data["label"]):
-                        rotor_ag_before = (2,s_data["tag"])
-                    if (AIRGAP_LAB in s_data["label"] and TOP_LAB in s_data["label"]):
-                        stator_ag_before = (2,s_data["tag"])
-                
-
-            if is_sliding_band and (not is_lam_only_R) and (not is_lam_only_S):    
-                rotor_surf_gmsh_list = []
-                for tid in rotor_dict:
-                    # Discard Origin
-                    if tid == 0:    
-                        continue
-                    rotor_surf_gmsh_list.append((2, tid))
-
-                stator_surf_gmsh_list = []
-                for tid in stator_dict:
-                    # Discard Origin
-                    if tid == 0:    
-                        continue
-                    stator_surf_gmsh_list.append((2, tid))
-
-                cut1 = model.occ.cut([rotor_ag_before], rotor_surf_gmsh_list, removeObject=True, removeTool=False)
-                cut2 = model.occ.cut([stator_ag_before], stator_surf_gmsh_list, removeObject=True, removeTool=False)
-
-                if len(cut1[0]) > 1:
-                    # Remove extra surfaces
-                    model.occ.remove([cut1[0][0]])
-                    factory.synchronize()                 
-                    pg = model.addPhysicalGroup(2, [cut1[0][1][1]])
-                    model.setPhysicalName(2, pg, lab_int + "_" + AIRGAP_LAB + BOT_LAB)   
-                else:
-                    factory.synchronize()
-                    pg = model.addPhysicalGroup(2, [cut1[0][0][1]])
-                    model.setPhysicalName(2, pg, lab_int + "_" + AIRGAP_LAB + BOT_LAB)  
-
-                if len(cut2[0]) > 1:
-                    # Remove extra surfaces
-                    model.occ.remove([cut2[0][0]])
-                    factory.synchronize()
-                    pg = model.addPhysicalGroup(2, [cut2[0][1][1]])
-                    model.setPhysicalName(2, pg, lab_ext + "_" + AIRGAP_LAB + TOP_LAB)   
-                else:
-                    factory.synchronize()
-                    pg = model.addPhysicalGroup(2, [cut2[0][0][1]])
-                    model.setPhysicalName(2, pg, lab_ext + "_" + AIRGAP_LAB + TOP_LAB)  
-                              
+        if lloop:
+            cloop = factory.addCurveLoop(lloop)
+            if (
+                AIRGAP_LAB in label_dict["surf_type"]
+                and BOT_LAB in label_dict["surf_type"]
+                and isinstance(machine, MachineSIPMSM)
+            ):
+                s_data["tag"] = factory.addPlaneSurface([cloop] + rotor_cloops, tag=-1)
+            else:
+                s_data["tag"] = factory.addPlaneSurface([cloop], tag=-1)
+            pg = model.addPhysicalGroup(2, [s_data["tag"]])
+            model.setPhysicalName(2, pg, s_data["label"])
 
     ###################
     # Adding Airbox
@@ -698,7 +434,6 @@ def draw_GMSH(
         if lloop:
             cloop = factory.addCurveLoop(lloop)
             s_data["tag"] = factory.addPlaneSurface([cloop], tag=-1)
-            factory.synchronize()
             pg = model.addPhysicalGroup(2, [s_data["tag"]])
             model.setPhysicalName(2, pg, s_data["label"])
 
@@ -713,7 +448,6 @@ def draw_GMSH(
                 if lvalues["bc_name"] == propname:
                     bc_id.extend([abs(lvalues["tag"])])
         if bc_id:
-            factory.synchronize()
             pg = model.addPhysicalGroup(1, bc_id)
             model.setPhysicalName(1, pg, propname)
 
@@ -734,11 +468,11 @@ def draw_GMSH(
                 groups[lvalues["label"]].append(abs(lvalues["tag"]))
 
         for label, tags in groups.items():
-            factory.synchronize()
             pg = model.addPhysicalGroup(1, tags)
             model.setPhysicalName(1, pg, label)
 
-    
+    factory.synchronize()
+
     # save mesh or geo file depending on file extension
     filename, file_extension = splitext(path_save)
 
