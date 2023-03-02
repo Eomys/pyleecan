@@ -105,8 +105,8 @@ def draw_GMSH(
     lam_list = machine.get_lam_list()
     lam_int = lam_list[0]
     lam_ext = lam_list[1]
-    lab_int = lam_int.get_label()
-    lab_ext = lam_ext.get_label()
+    lab_int = lam_int.get_label(is_short=True)
+    lab_ext = lam_ext.get_label(is_short=True)
 
     # For readibility
     model = gmsh.model
@@ -678,7 +678,7 @@ def draw_GMSH(
             surf,
             mesh_dict,
             boundary_prop,
-            factory,
+            model,
             gmsh_dict,
             nsurf,
             mesh_size_AB,

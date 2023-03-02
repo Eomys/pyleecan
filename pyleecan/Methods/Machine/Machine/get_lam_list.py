@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from ....Functions.labels import STATOR_LAB, ROTOR_LAB
+from ....Functions.labels import STATOR_LAB, ROTOR_LAB, STATOR_LAB_S, ROTOR_LAB_S
 
 
 def get_lam_list(self, is_int_to_ext=True, key=None):
@@ -36,9 +36,9 @@ def get_lam_list(self, is_int_to_ext=True, key=None):
 
     # Filter the lamination according to key
     if key is not None:
-        if key == STATOR_LAB:
+        if key in [STATOR_LAB, STATOR_LAB_S]:
             is_stator = True
-        elif key == ROTOR_LAB:
+        elif key in [ROTOR_LAB, ROTOR_LAB_S]:
             is_stator = False
         else:
             raise KeyInputError(
