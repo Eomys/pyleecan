@@ -40,3 +40,8 @@ def test_slot_10():
         Nlayer=20,
         display=False,
     )
+
+
+if __name__ == "__main__":
+    test_slot_10()
+    print("Done")
