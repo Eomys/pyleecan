@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
-# File generated according to Generator/ClassesRef/Simulation/LossFEMM.csv
+# File generated according to Generator/ClassesRef/Simulation/LossFEA.csv
 # WARNING! All changes made in this file will be lost!
-"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Simulation/LossFEMM
+"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Simulation/LossFEA
 """
 
 from os import linesep
@@ -18,7 +18,7 @@ from .Loss import Loss
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
 try:
-    from ..Methods.Simulation.LossFEMM.run import run
+    from ..Methods.Simulation.LossFEA.run import run
 except ImportError as error:
     run = error
 
@@ -27,16 +27,16 @@ from numpy import isnan
 from ._check import InitUnKnowClassError
 
 
-class LossFEMM(Loss):
+class LossFEA(Loss):
     """Simplified loss module, with predefined loss models for a quick setup"""
 
     VERSION = 1
 
-    # cf Methods.Simulation.LossFEMM.run
+    # cf Methods.Simulation.LossFEA.run
     if isinstance(run, ImportError):
         run = property(
             fget=lambda x: raise_(
-                ImportError("Can't use LossFEMM method run: " + str(run))
+                ImportError("Can't use LossFEA method run: " + str(run))
             )
         )
     else:
@@ -99,7 +99,7 @@ class LossFEMM(Loss):
         self.k_p = k_p
         self.type_skin_effect = type_skin_effect
         # Call Loss init
-        super(LossFEMM, self).__init__(
+        super(LossFEA, self).__init__(
             logger_name=logger_name,
             model_dict=model_dict,
             Tsta=Tsta,
@@ -112,14 +112,14 @@ class LossFEMM(Loss):
     def __str__(self):
         """Convert this object in a readeable string (for print)"""
 
-        LossFEMM_str = ""
+        LossFEA_str = ""
         # Get the properties inherited from Loss
-        LossFEMM_str += super(LossFEMM, self).__str__()
-        LossFEMM_str += "k_ed = " + str(self.k_ed) + linesep
-        LossFEMM_str += "k_hy = " + str(self.k_hy) + linesep
-        LossFEMM_str += "k_p = " + str(self.k_p) + linesep
-        LossFEMM_str += "type_skin_effect = " + str(self.type_skin_effect) + linesep
-        return LossFEMM_str
+        LossFEA_str += super(LossFEA, self).__str__()
+        LossFEA_str += "k_ed = " + str(self.k_ed) + linesep
+        LossFEA_str += "k_hy = " + str(self.k_hy) + linesep
+        LossFEA_str += "k_p = " + str(self.k_p) + linesep
+        LossFEA_str += "type_skin_effect = " + str(self.type_skin_effect) + linesep
+        return LossFEA_str
 
     def __eq__(self, other):
         """Compare two objects (skip parent)"""
@@ -128,7 +128,7 @@ class LossFEMM(Loss):
             return False
 
         # Check the properties inherited from Loss
-        if not super(LossFEMM, self).__eq__(other):
+        if not super(LossFEA, self).__eq__(other):
             return False
         if other.k_ed != self.k_ed:
             return False
@@ -151,7 +151,7 @@ class LossFEMM(Loss):
 
         # Check the properties inherited from Loss
         diff_list.extend(
-            super(LossFEMM, self).compare(
+            super(LossFEA, self).compare(
                 other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
             )
         )
@@ -222,7 +222,7 @@ class LossFEMM(Loss):
         S = 0  # Full size of the object
 
         # Get size of the properties inherited from Loss
-        S += super(LossFEMM, self).__sizeof__()
+        S += super(LossFEA, self).__sizeof__()
         S += getsizeof(self.k_ed)
         S += getsizeof(self.k_hy)
         S += getsizeof(self.k_p)
@@ -241,19 +241,19 @@ class LossFEMM(Loss):
         """
 
         # Get the properties inherited from Loss
-        LossFEMM_dict = super(LossFEMM, self).as_dict(
+        LossFEA_dict = super(LossFEA, self).as_dict(
             type_handle_ndarray=type_handle_ndarray,
             keep_function=keep_function,
             **kwargs
         )
-        LossFEMM_dict["k_ed"] = self.k_ed
-        LossFEMM_dict["k_hy"] = self.k_hy
-        LossFEMM_dict["k_p"] = self.k_p
-        LossFEMM_dict["type_skin_effect"] = self.type_skin_effect
+        LossFEA_dict["k_ed"] = self.k_ed
+        LossFEA_dict["k_hy"] = self.k_hy
+        LossFEA_dict["k_p"] = self.k_p
+        LossFEA_dict["type_skin_effect"] = self.type_skin_effect
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
-        LossFEMM_dict["__class__"] = "LossFEMM"
-        return LossFEMM_dict
+        LossFEA_dict["__class__"] = "LossFEA"
+        return LossFEA_dict
 
     def copy(self):
         """Creates a deepcopy of the object"""
@@ -295,7 +295,7 @@ class LossFEMM(Loss):
         self.k_p = None
         self.type_skin_effect = None
         # Set to None the properties inherited from Loss
-        super(LossFEMM, self)._set_None()
+        super(LossFEA, self)._set_None()
 
     def _get_k_ed(self):
         """getter of k_ed"""

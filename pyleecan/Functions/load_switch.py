@@ -96,7 +96,7 @@ load_switch = {
     "Lamination": Lamination,
     "Line": Line,
     "Loss": Loss,
-    "LossFEMM": LossFEMM,
+    "LossFEA": LossFEA,
     "LossModel": LossModel,
     "LossModelBertotti": LossModelBertotti,
     "LossModelJoule": LossModelJoule,

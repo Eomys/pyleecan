@@ -15,7 +15,7 @@ from pyleecan.Classes.VarLoadCurrent import VarLoadCurrent
 from pyleecan.Classes.PostLUT import PostLUT
 from pyleecan.Classes.ElecLUTdq import ElecLUTdq
 from pyleecan.Classes.MagFEMM import MagFEMM
-from pyleecan.Classes.LossFEMM import LossFEMM
+from pyleecan.Classes.LossFEA import LossFEA
 
 from pyleecan.Functions.load import load
 
@@ -83,7 +83,7 @@ def test_ElecLUTdq_solve_power():
                 nb_worker=4,
                 is_get_meshsolution=True,
             ),
-            loss=LossFEMM(
+            loss=LossFEA(
                 Cp=Cprox,
                 is_get_meshsolution=True,
                 Tsta=100,

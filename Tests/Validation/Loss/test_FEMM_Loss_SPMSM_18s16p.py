@@ -10,7 +10,7 @@ from pyleecan.Classes.InputCurrent import InputCurrent
 from pyleecan.Classes.Simu1 import Simu1
 from pyleecan.Classes.OPdq import OPdq
 from pyleecan.Classes.MagFEMM import MagFEMM
-from pyleecan.Classes.LossFEMM import LossFEMM
+from pyleecan.Classes.LossFEA import LossFEA
 
 
 from pyleecan.Functions.load import load
@@ -23,8 +23,8 @@ from SciDataTool.Functions.Plot.plot_2D import plot_2D
 is_show_fig = False
 
 
-def test_LossFEMM_SPMSM():
-    """Test to calculate losses in SPMSM using LossFEMM model from https://www.femm.info/wiki/SPMLoss """
+def test_LossFEA_SPMSM():
+    """Test to calculate losses in SPMSM using LossFEA model from https://www.femm.info/wiki/SPMLoss """
 
     machine = load(join(DATA_DIR, "Machine", "SPMSM_18s16p_loss.json"))
 
@@ -60,7 +60,7 @@ def test_LossFEMM_SPMSM():
         # is_close_femm=False,
     )
 
-    simu.loss = LossFEMM(
+    simu.loss = LossFEA(
         k_hy=Ch,
         k_ed=Ce,
         k_p=Cprox,
@@ -130,4 +130,4 @@ def test_LossFEMM_SPMSM():
 if __name__ == "__main__":
 
     # test_FEMM_Loss_SPMSM()
-    test_LossFEMM_SPMSM()
+    test_LossFEA_SPMSM()

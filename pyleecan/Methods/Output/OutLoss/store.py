@@ -15,7 +15,7 @@ def store(
     axes_dict=None,
     is_get_meshsolution=True,
 ):
-    """Store the outputs of LossFEMM model that are temporarily in out_dict
+    """Store the outputs of LossFEA model that are temporarily in out_dict
 
     Parameters
     ----------

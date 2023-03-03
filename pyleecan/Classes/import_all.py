@@ -94,7 +94,7 @@ from ..Classes.LamSquirrelCageMag import LamSquirrelCageMag
 from ..Classes.Lamination import Lamination
 from ..Classes.Line import Line
 from ..Classes.Loss import Loss
-from ..Classes.LossFEMM import LossFEMM
+from ..Classes.LossFEA import LossFEA
 from ..Classes.LossModel import LossModel
 from ..Classes.LossModelBertotti import LossModelBertotti
 from ..Classes.LossModelJoule import LossModelJoule

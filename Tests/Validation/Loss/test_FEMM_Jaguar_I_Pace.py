@@ -102,7 +102,7 @@ def find_best_phi0_jaguar():
 @pytest.mark.Loss
 @pytest.mark.skip(reason="Work in progress")
 def test_FEMM_Loss_Jaguar():
-    """Test to calculate losses in Toyota_Prius using LossFEMM model based on motoranalysis validation"""
+    """Test to calculate losses in Toyota_Prius using LossFEA model based on motoranalysis validation"""
 
     machine = load(join(DATA_DIR, "Machine", "Jaguar_I_Pace.json"))
     machine.plot()
@@ -218,7 +218,7 @@ def test_FEMM_Loss_Jaguar():
 @pytest.mark.Loss
 @pytest.mark.skip(reason="Work in progress")
 def test_FEMM_Loss_Jaguar_no_skew():
-    """Test to calculate losses in Toyota_Prius using LossFEMM model based on motoranalysis validation"""
+    """Test to calculate losses in Toyota_Prius using LossFEA model based on motoranalysis validation"""
 
     machine = load(join(DATA_DIR, "Machine", "Jaguar_I_Pace_no_skew.json"))
 

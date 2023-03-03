@@ -39,7 +39,7 @@ is_show_fig = True
 @pytest.mark.Loss
 @pytest.mark.skip(reason="Work in progress")
 def test_FEMM_loss_SCIM():
-    """Test to calculate losses in Toyota_Prius using LossFEMM model based on motoranalysis validation"""
+    """Test to calculate losses in Toyota_Prius using Loss model based on motoranalysis validation"""
 
     machine = load(join(DATA_DIR, "Machine", "SCIM_5kw_Zaheer.json"))
 
@@ -164,7 +164,7 @@ def test_FEMM_loss_SCIM():
 @pytest.mark.Loss
 @pytest.mark.skip(reason="Work in progress")
 def test_FEMM_loss_SCIM_with_param():
-    """Test to calculate losses in Toyota_Prius using LossFEMM model based on motoranalysis validation"""
+    """Test to calculate losses in Toyota_Prius using Loss model based on motoranalysis validation"""
 
     machine = load(join(DATA_DIR, "Machine", "SCIM_5kw_Zaheer.json"))
     machine.rotor.skew = None

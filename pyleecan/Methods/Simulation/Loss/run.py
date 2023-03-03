@@ -14,7 +14,7 @@ def run(self):
     if self.parent.parent is None:
         raise InputError("The Loss object must be in an Output object to run")
 
-    self.get_logger().info("Running LossFEMM module")
+    self.get_logger().info("Running Loss module")
 
     # get output
     output = self.parent.parent

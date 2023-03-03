@@ -10,7 +10,7 @@ from pyleecan.Classes.InputCurrent import InputCurrent
 from pyleecan.Classes.Simu1 import Simu1
 from pyleecan.Classes.OPdq import OPdq
 from pyleecan.Classes.MagFEMM import MagFEMM
-from pyleecan.Classes.LossFEMM import LossFEMM
+from pyleecan.Classes.LossFEA import LossFEA
 from pyleecan.Classes.Loss import Loss
 from pyleecan.Classes.LossModelSteinmetz import LossModelSteinmetz
 from pyleecan.Classes.LossModelBertotti import LossModelBertotti
@@ -39,7 +39,7 @@ is_show_fig = True
 @pytest.mark.Loss
 @pytest.mark.skip(reason="Work in progress")
 def test_FEMM_Loss_Prius():
-    """Test to calculate losses in Toyota_Prius using LossFEMM model based on motoranalysis validation"""
+    """Test to calculate losses in Toyota_Prius using LossFEA model based on motoranalysis validation"""
 
     machine = load(join(DATA_DIR, "Machine", "Toyota_Prius.json"))
 
@@ -151,7 +151,7 @@ def test_FEMM_Loss_Prius():
 @pytest.mark.Loss
 @pytest.mark.skip(reason="Work in progress")
 def test_FEMM_Loss_diff():
-    """Test to calculate losses in Toyota_Prius using LossFEMM model based on motoranalysis validation"""
+    """Test to calculate losses in Toyota_Prius using LossFEA model based on motoranalysis validation"""
 
     machine = load(join(DATA_DIR, "Machine", "Toyota_Prius_loss.json"))
 
@@ -232,8 +232,8 @@ def test_FEMM_Loss_diff():
     return out
 
 
-def test_LossFEMM_Prius():
-    """Test to calculate losses in Toyota_Prius using LossFEMM model"""
+def test_LossFEA_Prius():
+    """Test to calculate losses in Toyota_Prius using LossFEA model"""
 
     machine = load(join(DATA_DIR, "Machine", "Toyota_Prius.json"))
 
@@ -262,7 +262,7 @@ def test_LossFEMM_Prius():
         is_calc_torque_energy=False,
     )
 
-    simu.loss = LossFEMM(is_get_meshsolution=True, Tsta=100, type_skin_effect=1)
+    simu.loss = LossFEA(is_get_meshsolution=True, Tsta=100, type_skin_effect=1)
 
     out = simu.run()
 
@@ -303,7 +303,7 @@ def test_LossFEMM_Prius():
 @pytest.mark.Loss
 @pytest.mark.skip(reason="Work in progress")
 def test_FEMM_Id_Iq():
-    """Test to calculate losses in Toyota_Prius using LossFEMM model based on motoranalysis validation"""
+    """Test to calculate losses in Toyota_Prius using LossFEA model based on motoranalysis validation"""
 
     machine = load(join(DATA_DIR, "Machine", "Toyota_Prius.json"))
 
@@ -430,5 +430,5 @@ if __name__ == "__main__":
 
     # test_FEMM_Loss_diff()
     # test_FEMM_Loss_Prius()
-    test_LossFEMM_Prius()
+    test_LossFEA_Prius()
     # test_FEMM_Id_Iq()
