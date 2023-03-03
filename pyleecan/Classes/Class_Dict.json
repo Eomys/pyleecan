@@ -6002,7 +6002,8 @@
         "is_internal": false,
         "methods": [
             "run",
-            "comp_axes"
+            "comp_axes",
+            "comp_all_losses"
         ],
         "mother": "",
         "name": "Loss",
@@ -10362,7 +10363,6 @@
         "methods": [
             "get_loss_density_ag",
             "get_loss_overall",
-            "store",
             "get_power_dict",
             "plot_losses"
         ],
@@ -10383,11 +10383,11 @@
             },
             {
                 "as_dict": "",
-                "desc": "Lit containing OutLossModel obects for each type of loss",
+                "desc": "Dict containing OutLossModel obects for each type of loss",
                 "max": "",
                 "min": "",
-                "name": "loss_list",
-                "type": "[OutLossModel]",
+                "name": "loss_dict",
+                "type": "{OutLossModel}",
                 "unit": "",
                 "value": []
             },

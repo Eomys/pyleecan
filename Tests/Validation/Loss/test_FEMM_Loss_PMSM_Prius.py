@@ -81,8 +81,7 @@ def test_FEMM_Loss_Prius():
 
     out = simu.run()
 
-    out.loss.loss_list.append(sum(out.loss.loss_list))
-    out.loss.loss_list[-1].name = "overall"
+    out.loss.loss_dict["overall"] = sum(out.loss.loss_dict.values())
 
     print(out.loss.get_power_dict())
 
@@ -110,7 +109,7 @@ def test_FEMM_Loss_Prius():
 
     if is_show_fig:
         group_names = ["stator core", "rotor core", "rotor magnets"]
-        for loss in out.loss.loss_list:
+        for loss in out.loss.loss_dict.values():
             if "joule" in loss.name or "proximity" in loss.name:
                 loss.plot_mesh(group_names=group_names + ["stator winding"])
             else:
@@ -132,9 +131,9 @@ def test_FEMM_Loss_Prius():
     # )
     # txt = f"total_power: {out.mag.Pem_av}\n"
     # txt += F"speed = {SPEED} rpm\n"
-    # txt += "\n".join([f"{o.name}: {o.get_loss_scalar(out.elec.OP.felec)}" for o in out.loss.loss_list])
+    # txt += "\n".join([f"{o.name}: {o.get_loss_scalar(out.elec.OP.felec)}" for o in out.loss.loss_dict.values()])
     # txt += F"speed = {SPEED/3} rpm\n"
-    # txt += "\n".join([f"{o.name}: {o.get_loss_scalar(SPEED /3/60 * p)}" for o in out.loss.loss_list])
+    # txt += "\n".join([f"{o.name}: {o.get_loss_scalar(SPEED /3/60 * p)}" for o in out.loss.loss_dict.values()])
 
     # with open(F"{SPEED} rpm.txt", "w") as f:
     #     f.write(txt)
@@ -193,14 +192,13 @@ def test_FEMM_Loss_diff():
 
     out = simu.run()
 
-    out.loss.loss_list.append((out.loss.loss_list[0] - out.loss.loss_list[1]))
-    out.loss.loss_list[-1].name = "Difference"
+    out.loss.loss_dict["overall"] = (out.loss.loss_dict.values()[0] - out.loss.loss_dict.values()[1])
 
     print(out.loss.get_power_dict())
 
     if is_show_fig:
         group_names = ["stator core", "rotor core", "rotor magnets"]
-        for loss in out.loss.loss_list:
+        for loss in out.loss.loss_dict.values():
             if "joule" in loss.name or "proximity" in loss.name:
                 loss.plot_mesh(group_names=group_names + ["stator winding"])
             else:
@@ -222,9 +220,9 @@ def test_FEMM_Loss_diff():
     # )
     # txt = f"total_power: {out.mag.Pem_av}\n"
     # txt += F"speed = {SPEED} rpm\n"
-    # txt += "\n".join([f"{o.name}: {o.get_loss_scalar(out.elec.OP.felec)}" for o in out.loss.loss_list])
+    # txt += "\n".join([f"{o.name}: {o.get_loss_scalar(out.elec.OP.felec)}" for o in out.loss.loss_dict.values()])
     # txt += F"speed = {SPEED/3} rpm\n"
-    # txt += "\n".join([f"{o.name}: {o.get_loss_scalar(SPEED /3/60 * p)}" for o in out.loss.loss_list])
+    # txt += "\n".join([f"{o.name}: {o.get_loss_scalar(SPEED /3/60 * p)}" for o in out.loss.loss_dict.values()])
 
     # with open(F"{SPEED} rpm.txt", "w") as f:
     #     f.write(txt)
@@ -270,7 +268,7 @@ def test_LossFEA_Prius():
 
     if is_show_fig:
         group_names = ["stator core", "rotor core", "rotor magnets"]
-        for loss in out.loss.loss_list:
+        for loss in out.loss.loss_dict.values():
             if "joule" in loss.name or "proximity" in loss.name:
                 loss.plot_mesh(group_names=group_names + ["stator winding"])
             else:
@@ -344,8 +342,7 @@ def test_FEMM_Id_Iq():
 
     out = simu.run()
 
-    out.loss.loss_list.append(sum(out.loss.loss_list))
-    out.loss.loss_list[-1].name = "overall"
+    out.loss.loss_dict["overall"] = sum(out.loss.loss_dict.values())
 
     print(out.loss.get_power_dict())
     # def calc_loss(coeff, B):
@@ -375,7 +372,7 @@ def test_FEMM_Id_Iq():
     #     "rotor core",
     #     "rotor magnets"
     # ]
-    # for loss in out.loss.loss_list:
+    # for loss in out.loss.loss_dict.values():
     #     if "joule" in loss.name or "proximity" in loss.name :
     #         group_names.append("stator winding")
     #         loss.get_mesh_solution().plot_contour(
@@ -397,7 +394,7 @@ def test_FEMM_Id_Iq():
     #     array_list,
     #     xlabel="Speed [rpm]",
     #     ylabel="Losses [W]",
-    #     legend_list=[o.name for o in out.loss.loss_list],
+    #     legend_list=[o.name for o in out.loss.loss_dict.values()],
     # )
 
     # out.loss.meshsol_list[0].plot_contour(
@@ -415,9 +412,9 @@ def test_FEMM_Id_Iq():
     # )
     # txt = f"total_power: {out.mag.Pem_av}\n"
     # txt += F"speed = {SPEED} rpm\n"
-    # txt += "\n".join([f"{o.name}: {o.get_loss_scalar(out.elec.OP.felec)}" for o in out.loss.loss_list])
+    # txt += "\n".join([f"{o.name}: {o.get_loss_scalar(out.elec.OP.felec)}" for o in out.loss.loss_dict.values()])
     # txt += F"speed = {SPEED/3} rpm\n"
-    # txt += "\n".join([f"{o.name}: {o.get_loss_scalar(SPEED /3/60 * p)}" for o in out.loss.loss_list])
+    # txt += "\n".join([f"{o.name}: {o.get_loss_scalar(SPEED /3/60 * p)}" for o in out.loss.loss_dict.values()])
 
     # with open(F"{SPEED} rpm.txt", "w") as f:
     #     f.write(txt)

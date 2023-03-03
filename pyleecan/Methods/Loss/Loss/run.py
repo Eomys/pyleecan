@@ -20,10 +20,5 @@ def run(self):
     output = self.parent.parent
 
     axes_dict = self.comp_axes(output)
-
-    # Store calls "comp_loss" on each model from model_dict
-    output.loss.store(
-        self.model_dict,
-        axes_dict,
-        self.is_get_meshsolution,
-    )
+    # Comp and store in output
+    self.comp_all_losses(axes_dict)

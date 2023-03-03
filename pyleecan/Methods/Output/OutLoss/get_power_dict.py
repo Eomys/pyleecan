@@ -19,7 +19,10 @@ def get_power_dict(self):
         raise Exception("Error: OP is not set")
 
     power_dict = dict(
-        [(o.name, o.get_loss_scalar(out.elec.OP.felec)) for o in self.loss_list]
+        [
+            (o.name, o.get_loss_scalar(out.elec.OP.felec))
+            for o in self.loss_dict.values()
+        ]
     )
 
     if out.mag is not None and out.mag.Pem_av is not None:

@@ -27,6 +27,11 @@ try:
 except ImportError as error:
     comp_axes = error
 
+try:
+    from ..Methods.Loss.Loss.comp_all_losses import comp_all_losses
+except ImportError as error:
+    comp_all_losses = error
+
 
 from numpy import isnan
 from ._check import InitUnKnowClassError
@@ -54,6 +59,17 @@ class Loss(FrozenClass):
         )
     else:
         comp_axes = comp_axes
+    # cf Methods.Loss.Loss.comp_all_losses
+    if isinstance(comp_all_losses, ImportError):
+        comp_all_losses = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Loss method comp_all_losses: " + str(comp_all_losses)
+                )
+            )
+        )
+    else:
+        comp_all_losses = comp_all_losses
     # generic save method is available in all object
     save = save
     # get_logger method is available in all object

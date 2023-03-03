@@ -41,13 +41,7 @@ def run(self):
     if machine.is_synchronous() and machine.rotor.has_magnet():
         self.model_dict["magnets"] = LossModelMagnet(group="rotor magnets")
 
-    # Store calls "comp_loss" on each model from model_dict
-    output.loss.store(
-        self.model_dict,
-        axes_dict,
-        self.is_get_meshsolution,
-    )
+    self.comp_all_losses(axes_dict)
 
     # Add overall by adding all losses sources
-    output.loss.loss_list.append(sum(output.loss.loss_list))
-    output.loss.loss_list[-1].name = "overall"
+    output.loss.loss_dict["overall"] = sum(output.loss.loss_dict.values())

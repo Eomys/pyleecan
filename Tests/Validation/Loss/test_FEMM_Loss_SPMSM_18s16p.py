@@ -92,7 +92,7 @@ def test_LossFEA_SPMSM():
 
     array_list = [
         np.array([o.get_loss_scalar(speed / 60 * p) for speed in speed_array])
-        for o in out.loss.loss_list
+        for o in out.loss.loss_dict.values()
     ]
     power_val_ref = [62.30, 3.41, 0.06, 4.37, 0.06, 1.38, 9.27]
 
@@ -101,7 +101,7 @@ def test_LossFEA_SPMSM():
 
     if is_show_fig:
         group_names = ["stator core", "rotor core", "rotor magnets"]
-        for loss in out.loss.loss_list:
+        for loss in out.loss.loss_dict.values():
             if "joule" in loss.name or "proximity" in loss.name:
                 loss.plot_mesh(group_names=group_names + ["stator winding"])
             else:

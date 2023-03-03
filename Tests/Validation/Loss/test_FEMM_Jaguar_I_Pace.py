@@ -149,8 +149,7 @@ def test_FEMM_Loss_Jaguar():
 
     out = simu.run()
 
-    out.loss.loss_list.append(sum(out.loss.loss_list))
-    out.loss.loss_list[-1].name = "overall"
+    out.loss.loss_dict["overall"] =sum(out.loss.loss_dict.values())
 
     print(out.loss.get_power_dict())
 
@@ -176,7 +175,7 @@ def test_FEMM_Loss_Jaguar():
 
     if is_show_fig:
         group_names = ["stator core", "rotor core", "rotor magnets"]
-        for loss in out.loss.loss_list:
+        for loss in out.loss.loss_dict.values():
             if "joule" in loss.name or "proximity" in loss.name:
                 loss.plot_mesh(group_names=group_names + ["stator winding"])
             else:
@@ -199,9 +198,9 @@ def test_FEMM_Loss_Jaguar():
     # )
     # txt = f"total_power: {out.mag.Pem_av}\n"
     # txt += F"speed = {SPEED} rpm\n"
-    # txt += "\n".join([f"{o.name}: {o.get_loss_scalar(out.elec.OP.felec)}" for o in out.loss.loss_list])
+    # txt += "\n".join([f"{o.name}: {o.get_loss_scalar(out.elec.OP.felec)}" for o in out.loss.loss_dict.values()])
     # txt += F"speed = {SPEED/3} rpm\n"
-    # txt += "\n".join([f"{o.name}: {o.get_loss_scalar(SPEED /3/60 * p)}" for o in out.loss.loss_list])
+    # txt += "\n".join([f"{o.name}: {o.get_loss_scalar(SPEED /3/60 * p)}" for o in out.loss.loss_dict.values()])
 
     # with open(F"{SPEED} rpm.txt", "w") as f:
     #     f.write(txt)
@@ -262,8 +261,7 @@ def test_FEMM_Loss_Jaguar_no_skew():
 
     out = simu.run()
 
-    out.loss.loss_list.append(sum(out.loss.loss_list))
-    out.loss.loss_list[-1].name = "overall"
+    out.loss.loss_dict["overall"] = sum(out.loss.loss_dict.values())
 
     print(out.loss.get_power_dict())
 
@@ -289,7 +287,7 @@ def test_FEMM_Loss_Jaguar_no_skew():
 
     if is_show_fig:
         group_names = ["stator core", "rotor core", "rotor magnets"]
-        for loss in out.loss.loss_list:
+        for loss in out.loss.loss_dict.values():
             if "joule" in loss.name or "proximity" in loss.name:
                 loss.plot_mesh(group_names=group_names + ["stator winding"])
             else:
@@ -311,9 +309,9 @@ def test_FEMM_Loss_Jaguar_no_skew():
     # )
     # txt = f"total_power: {out.mag.Pem_av}\n"
     # txt += F"speed = {SPEED} rpm\n"
-    # txt += "\n".join([f"{o.name}: {o.get_loss_scalar(out.elec.OP.felec)}" for o in out.loss.loss_list])
+    # txt += "\n".join([f"{o.name}: {o.get_loss_scalar(out.elec.OP.felec)}" for o in out.loss.loss_dict.values()])
     # txt += F"speed = {SPEED/3} rpm\n"
-    # txt += "\n".join([f"{o.name}: {o.get_loss_scalar(SPEED /3/60 * p)}" for o in out.loss.loss_list])
+    # txt += "\n".join([f"{o.name}: {o.get_loss_scalar(SPEED /3/60 * p)}" for o in out.loss.loss_dict.values()])
 
     # with open(F"{SPEED} rpm.txt", "w") as f:
     #     f.write(txt)

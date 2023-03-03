@@ -28,11 +28,6 @@ except ImportError as error:
     get_loss_overall = error
 
 try:
-    from ..Methods.Output.OutLoss.store import store
-except ImportError as error:
-    store = error
-
-try:
     from ..Methods.Output.OutLoss.get_power_dict import get_power_dict
 except ImportError as error:
     get_power_dict = error
@@ -77,15 +72,6 @@ class OutLoss(FrozenClass):
         )
     else:
         get_loss_overall = get_loss_overall
-    # cf Methods.Output.OutLoss.store
-    if isinstance(store, ImportError):
-        store = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use OutLoss method store: " + str(store))
-            )
-        )
-    else:
-        store = store
     # cf Methods.Output.OutLoss.get_power_dict
     if isinstance(get_power_dict, ImportError):
         get_power_dict = property(
@@ -114,7 +100,7 @@ class OutLoss(FrozenClass):
     def __init__(
         self,
         axes_dict=None,
-        loss_list=-1,
+        loss_dict=-1,
         logger_name="Pyleecan.Loss",
         init_dict=None,
         init_str=None,
@@ -136,14 +122,14 @@ class OutLoss(FrozenClass):
             # Overwrite default value with init_dict content
             if "axes_dict" in list(init_dict.keys()):
                 axes_dict = init_dict["axes_dict"]
-            if "loss_list" in list(init_dict.keys()):
-                loss_list = init_dict["loss_list"]
+            if "loss_dict" in list(init_dict.keys()):
+                loss_dict = init_dict["loss_dict"]
             if "logger_name" in list(init_dict.keys()):
                 logger_name = init_dict["logger_name"]
         # Set the properties (value check and convertion are done in setter)
         self.parent = None
         self.axes_dict = axes_dict
-        self.loss_list = loss_list
+        self.loss_dict = loss_dict
         self.logger_name = logger_name
 
         # The class is frozen, for now it's impossible to add new properties
@@ -158,13 +144,13 @@ class OutLoss(FrozenClass):
         else:
             OutLoss_str += "parent = " + str(type(self.parent)) + " object" + linesep
         OutLoss_str += "axes_dict = " + str(self.axes_dict) + linesep + linesep
-        if len(self.loss_list) == 0:
-            OutLoss_str += "loss_list = []" + linesep
-        for ii in range(len(self.loss_list)):
+        if len(self.loss_dict) == 0:
+            OutLoss_str += "loss_dict = dict()" + linesep
+        for key, obj in self.loss_dict.items():
             tmp = (
-                self.loss_list[ii].__str__().replace(linesep, linesep + "\t") + linesep
+                self.loss_dict[key].__str__().replace(linesep, linesep + "\t") + linesep
             )
-            OutLoss_str += "loss_list[" + str(ii) + "] =" + tmp + linesep + linesep
+            OutLoss_str += "loss_dict[" + key + "] =" + tmp + linesep + linesep
         OutLoss_str += 'logger_name = "' + str(self.logger_name) + '"' + linesep
         return OutLoss_str
 
@@ -175,7 +161,7 @@ class OutLoss(FrozenClass):
             return False
         if other.axes_dict != self.axes_dict:
             return False
-        if other.loss_list != self.loss_list:
+        if other.loss_dict != self.loss_dict:
             return False
         if other.logger_name != self.logger_name:
             return False
@@ -207,20 +193,20 @@ class OutLoss(FrozenClass):
                         is_add_value=is_add_value,
                     )
                 )
-        if (other.loss_list is None and self.loss_list is not None) or (
-            other.loss_list is not None and self.loss_list is None
+        if (other.loss_dict is None and self.loss_dict is not None) or (
+            other.loss_dict is not None and self.loss_dict is None
         ):
-            diff_list.append(name + ".loss_list None mismatch")
-        elif self.loss_list is None:
+            diff_list.append(name + ".loss_dict None mismatch")
+        elif self.loss_dict is None:
             pass
-        elif len(other.loss_list) != len(self.loss_list):
-            diff_list.append("len(" + name + ".loss_list)")
+        elif len(other.loss_dict) != len(self.loss_dict):
+            diff_list.append("len(" + name + "loss_dict)")
         else:
-            for ii in range(len(other.loss_list)):
+            for key in self.loss_dict:
                 diff_list.extend(
-                    self.loss_list[ii].compare(
-                        other.loss_list[ii],
-                        name=name + ".loss_list[" + str(ii) + "]",
+                    self.loss_dict[key].compare(
+                        other.loss_dict[key],
+                        name=name + ".loss_dict[" + str(key) + "]",
                         ignore_list=ignore_list,
                         is_add_value=is_add_value,
                     )
@@ -248,9 +234,9 @@ class OutLoss(FrozenClass):
         if self.axes_dict is not None:
             for key, value in self.axes_dict.items():
                 S += getsizeof(value) + getsizeof(key)
-        if self.loss_list is not None:
-            for value in self.loss_list:
-                S += getsizeof(value)
+        if self.loss_dict is not None:
+            for key, value in self.loss_dict.items():
+                S += getsizeof(value) + getsizeof(key)
         S += getsizeof(self.logger_name)
         return S
 
@@ -279,21 +265,19 @@ class OutLoss(FrozenClass):
                     )
                 else:
                     OutLoss_dict["axes_dict"][key] = None
-        if self.loss_list is None:
-            OutLoss_dict["loss_list"] = None
+        if self.loss_dict is None:
+            OutLoss_dict["loss_dict"] = None
         else:
-            OutLoss_dict["loss_list"] = list()
-            for obj in self.loss_list:
+            OutLoss_dict["loss_dict"] = dict()
+            for key, obj in self.loss_dict.items():
                 if obj is not None:
-                    OutLoss_dict["loss_list"].append(
-                        obj.as_dict(
-                            type_handle_ndarray=type_handle_ndarray,
-                            keep_function=keep_function,
-                            **kwargs
-                        )
+                    OutLoss_dict["loss_dict"][key] = obj.as_dict(
+                        type_handle_ndarray=type_handle_ndarray,
+                        keep_function=keep_function,
+                        **kwargs
                     )
                 else:
-                    OutLoss_dict["loss_list"].append(None)
+                    OutLoss_dict["loss_dict"][key] = None
         OutLoss_dict["logger_name"] = self.logger_name
         # The class name is added to the dict for deserialisation purpose
         OutLoss_dict["__class__"] = "OutLoss"
@@ -309,17 +293,17 @@ class OutLoss(FrozenClass):
             axes_dict_val = dict()
             for key, obj in self.axes_dict.items():
                 axes_dict_val[key] = obj.copy()
-        if self.loss_list is None:
-            loss_list_val = None
+        if self.loss_dict is None:
+            loss_dict_val = None
         else:
-            loss_list_val = list()
-            for obj in self.loss_list:
-                loss_list_val.append(obj.copy())
+            loss_dict_val = dict()
+            for key, obj in self.loss_dict.items():
+                loss_dict_val[key] = obj.copy()
         logger_name_val = self.logger_name
         # Creates new object of the same type with the copied properties
         obj_copy = type(self)(
             axes_dict=axes_dict_val,
-            loss_list=loss_list_val,
+            loss_dict=loss_dict_val,
             logger_name=logger_name_val,
         )
         return obj_copy
@@ -328,7 +312,7 @@ class OutLoss(FrozenClass):
         """Set all the properties to None (except pyleecan object)"""
 
         self.axes_dict = None
-        self.loss_list = None
+        self.loss_dict = None
         self.logger_name = None
 
     def _get_axes_dict(self):
@@ -371,18 +355,18 @@ class OutLoss(FrozenClass):
         """,
     )
 
-    def _get_loss_list(self):
-        """getter of loss_list"""
-        if self._loss_list is not None:
-            for obj in self._loss_list:
+    def _get_loss_dict(self):
+        """getter of loss_dict"""
+        if self._loss_dict is not None:
+            for key, obj in self._loss_dict.items():
                 if obj is not None:
                     obj.parent = self
-        return self._loss_list
+        return self._loss_dict
 
-    def _set_loss_list(self, value):
-        """setter of loss_list"""
-        if type(value) is list:
-            for ii, obj in enumerate(value):
+    def _set_loss_dict(self, value):
+        """setter of loss_dict"""
+        if type(value) is dict:
+            for key, obj in value.items():
                 if isinstance(obj, str):  # Load from file
                     try:
                         obj = load_init_dict(obj)[1]
@@ -391,25 +375,23 @@ class OutLoss(FrozenClass):
                             "Error while loading " + obj + ", setting None instead"
                         )
                         obj = None
-                        value[ii] = None
+                        value[key] = None
                 if type(obj) is dict:
                     class_obj = import_class(
-                        "pyleecan.Classes", obj.get("__class__"), "loss_list"
+                        "pyleecan.Classes", obj.get("__class__"), "loss_dict"
                     )
-                    value[ii] = class_obj(init_dict=obj)
-                if value[ii] is not None:
-                    value[ii].parent = self
-        if value == -1:
-            value = list()
-        check_var("loss_list", value, "[OutLossModel]")
-        self._loss_list = value
+                    value[key] = class_obj(init_dict=obj)
+        if type(value) is int and value == -1:
+            value = dict()
+        check_var("loss_dict", value, "{OutLossModel}")
+        self._loss_dict = value
 
-    loss_list = property(
-        fget=_get_loss_list,
-        fset=_set_loss_list,
-        doc=u"""Lit containing OutLossModel obects for each type of loss
+    loss_dict = property(
+        fget=_get_loss_dict,
+        fset=_set_loss_dict,
+        doc=u"""Dict containing OutLossModel obects for each type of loss
 
-        :Type: [OutLossModel]
+        :Type: {OutLossModel}
         """,
     )
 

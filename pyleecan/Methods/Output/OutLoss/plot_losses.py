@@ -22,7 +22,7 @@ def plot_losses(self, N0_array=None):
 
     array_list = [
         array([out_loss.get_loss_scalar(speed / 60 * p) for speed in N0_array])
-        for out_loss in self.loss_list
+        for out_loss in self.loss_dict.values()
     ]
 
     plot_2D(
@@ -30,5 +30,5 @@ def plot_losses(self, N0_array=None):
         array_list,
         xlabel="Speed [rpm]",
         ylabel="Losses [W]",
-        legend_list=[out_loss.name for out_loss in self.loss_list],
+        legend_list=[out_loss.name for out_loss in self.loss_dict.values()],
     )

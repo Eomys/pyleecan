@@ -104,7 +104,7 @@ def test_FEMM_loss_SCIM():
         #     "stator core",
         #     "rotor core",
         # ]
-        # for loss in out.loss.loss_list:
+        # for loss in out.loss.loss_dict.values():
         #     if "joule" in loss.name or "proximity" in loss.name :
         #         group_names.append("stator winding")
         #         loss.get_mesh_solution().plot_contour(
@@ -145,9 +145,9 @@ def test_FEMM_loss_SCIM():
     # )
     # txt = f"total_power: {out.mag.Pem_av}\n"
     # txt += F"speed = {SPEED} rpm\n"
-    # txt += "\n".join([f"{o.name}: {o.get_loss_scalar(out.elec.OP.felec)}" for o in out.loss.loss_list])
+    # txt += "\n".join([f"{o.name}: {o.get_loss_scalar(out.elec.OP.felec)}" for o in out.loss.loss_dict.values()])
     # txt += F"speed = {SPEED/3} rpm\n"
-    # txt += "\n".join([f"{o.name}: {o.get_loss_scalar(SPEED /3/60 * p)}" for o in out.loss.loss_list])
+    # txt += "\n".join([f"{o.name}: {o.get_loss_scalar(SPEED /3/60 * p)}" for o in out.loss.loss_dict.values()])
 
     # with open(F"{SPEED} rpm.txt", "w") as f:
     #     f.write(txt)
@@ -337,7 +337,7 @@ def test_FEMM_loss_SCIM_with_param():
         #     "stator core",
         #     "rotor core",
         # ]
-        # for loss in out.loss.loss_list:
+        # for loss in out.loss.loss_dict.values():
         #     if "joule" in loss.name or "proximity" in loss.name :
         #         group_names.append("stator winding")
         #         loss.get_mesh_solution().plot_contour(
@@ -378,9 +378,9 @@ def test_FEMM_loss_SCIM_with_param():
     # )
     # txt = f"total_power: {out.mag.Pem_av}\n"
     # txt += F"speed = {SPEED} rpm\n"
-    # txt += "\n".join([f"{o.name}: {o.get_loss_scalar(out.elec.OP.felec)}" for o in out.loss.loss_list])
+    # txt += "\n".join([f"{o.name}: {o.get_loss_scalar(out.elec.OP.felec)}" for o in out.loss.loss_dict.values()])
     # txt += F"speed = {SPEED/3} rpm\n"
-    # txt += "\n".join([f"{o.name}: {o.get_loss_scalar(SPEED /3/60 * p)}" for o in out.loss.loss_list])
+    # txt += "\n".join([f"{o.name}: {o.get_loss_scalar(SPEED /3/60 * p)}" for o in out.loss.loss_dict.values()])
 
     # with open(F"{SPEED} rpm.txt", "w") as f:
     #     f.write(txt)

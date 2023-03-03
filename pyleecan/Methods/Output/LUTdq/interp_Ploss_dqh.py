@@ -36,7 +36,7 @@ def interp_Ploss_dqh(self, Id, Iq, N0, exclude_models=[]):
     felec = N0 / 60 * p
 
     Ploss_dqh = np.zeros(
-        (len(self.output_list), len(self.output_list[0].loss.loss_list))
+        (len(self.output_list), len(self.output_list[0].loss.loss_dict))
     )
     for ii, out in enumerate(self.output_list):
         OP = out.elec.OP.copy()
