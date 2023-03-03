@@ -49,6 +49,7 @@ def comp_all_losses(
         out_loss_model = OutLossModel(
             name=key,
             loss_density=loss_density,
+            scalar_value=None,
             coeff_dict=model.coeff_dict,
             group=model.group,
             loss_model=type(model).__name__,

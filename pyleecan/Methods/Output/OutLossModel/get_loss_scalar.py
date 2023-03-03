@@ -1,4 +1,4 @@
-def get_loss_scalar(self, felec):
+def get_loss_scalar(self, felec=None):
     """Get loss power from coefficients stored in coeff_dict
 
     Parameters
@@ -15,12 +15,13 @@ def get_loss_scalar(self, felec):
     """
 
     if self.coeff_dict is None:
-        if self.scalar_value is None:
-            return None
-        else:
-            return self.scalar_value
+        return self.scalar_value  # Can be None
     else:
+        if felec is None:
+            output = self.parent.parent
+            felec = output.elec.OP.felec
         Ploss = 0
         for key, value in self.coeff_dict.items():
             Ploss += value * felec ** float(key)
-    return Ploss
+        self.scalar_value = Ploss
+    return self.scalar_value

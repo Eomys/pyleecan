@@ -10478,6 +10478,16 @@
                 "type": "str",
                 "unit": "",
                 "value": "None"
+            },
+            {
+                "as_dict": "",
+                "desc": "To store the value of get_loss_scalar (for scalar losses or with coeff_dict cleaned)",
+                "max": "",
+                "min": "",
+                "name": "scalar_value",
+                "type": "float",
+                "unit": "",
+                "value": null
             }
         ]
     },

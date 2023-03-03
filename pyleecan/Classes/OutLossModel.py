@@ -147,6 +147,7 @@ class OutLossModel(FrozenClass):
         coeff_dict=None,
         group=None,
         loss_model=None,
+        scalar_value=None,
         init_dict=None,
         init_str=None,
     ):
@@ -175,6 +176,8 @@ class OutLossModel(FrozenClass):
                 group = init_dict["group"]
             if "loss_model" in list(init_dict.keys()):
                 loss_model = init_dict["loss_model"]
+            if "scalar_value" in list(init_dict.keys()):
+                scalar_value = init_dict["scalar_value"]
         # Set the properties (value check and convertion are done in setter)
         self.parent = None
         self.name = name
@@ -182,6 +185,7 @@ class OutLossModel(FrozenClass):
         self.coeff_dict = coeff_dict
         self.group = group
         self.loss_model = loss_model
+        self.scalar_value = scalar_value
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -207,6 +211,7 @@ class OutLossModel(FrozenClass):
         OutLossModel_str += "coeff_dict = " + str(self.coeff_dict) + linesep
         OutLossModel_str += 'group = "' + str(self.group) + '"' + linesep
         OutLossModel_str += 'loss_model = "' + str(self.loss_model) + '"' + linesep
+        OutLossModel_str += "scalar_value = " + str(self.scalar_value) + linesep
         return OutLossModel_str
 
     def __eq__(self, other):
@@ -223,6 +228,8 @@ class OutLossModel(FrozenClass):
         if other.group != self.group:
             return False
         if other.loss_model != self.loss_model:
+            return False
+        if other.scalar_value != self.scalar_value:
             return False
         return True
 
@@ -276,6 +283,25 @@ class OutLossModel(FrozenClass):
                 diff_list.append(name + ".loss_model" + val_str)
             else:
                 diff_list.append(name + ".loss_model")
+        if (
+            other._scalar_value is not None
+            and self._scalar_value is not None
+            and isnan(other._scalar_value)
+            and isnan(self._scalar_value)
+        ):
+            pass
+        elif other._scalar_value != self._scalar_value:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._scalar_value)
+                    + ", other="
+                    + str(other._scalar_value)
+                    + ")"
+                )
+                diff_list.append(name + ".scalar_value" + val_str)
+            else:
+                diff_list.append(name + ".scalar_value")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -291,6 +317,7 @@ class OutLossModel(FrozenClass):
                 S += getsizeof(value) + getsizeof(key)
         S += getsizeof(self.group)
         S += getsizeof(self.loss_model)
+        S += getsizeof(self.scalar_value)
         return S
 
     def as_dict(self, type_handle_ndarray=0, keep_function=False, **kwargs):
@@ -324,6 +351,7 @@ class OutLossModel(FrozenClass):
         )
         OutLossModel_dict["group"] = self.group
         OutLossModel_dict["loss_model"] = self.loss_model
+        OutLossModel_dict["scalar_value"] = self.scalar_value
         # The class name is added to the dict for deserialisation purpose
         OutLossModel_dict["__class__"] = "OutLossModel"
         return OutLossModel_dict
@@ -343,6 +371,7 @@ class OutLossModel(FrozenClass):
             coeff_dict_val = self.coeff_dict.copy()
         group_val = self.group
         loss_model_val = self.loss_model
+        scalar_value_val = self.scalar_value
         # Creates new object of the same type with the copied properties
         obj_copy = type(self)(
             name=name_val,
@@ -350,6 +379,7 @@ class OutLossModel(FrozenClass):
             coeff_dict=coeff_dict_val,
             group=group_val,
             loss_model=loss_model_val,
+            scalar_value=scalar_value_val,
         )
         return obj_copy
 
@@ -361,6 +391,7 @@ class OutLossModel(FrozenClass):
         self.coeff_dict = None
         self.group = None
         self.loss_model = None
+        self.scalar_value = None
 
     def _get_name(self):
         """getter of name"""
@@ -458,5 +489,23 @@ class OutLossModel(FrozenClass):
         doc=u"""The name of the loss model used to compute the loss stored in this output
 
         :Type: str
+        """,
+    )
+
+    def _get_scalar_value(self):
+        """getter of scalar_value"""
+        return self._scalar_value
+
+    def _set_scalar_value(self, value):
+        """setter of scalar_value"""
+        check_var("scalar_value", value, "float")
+        self._scalar_value = value
+
+    scalar_value = property(
+        fget=_get_scalar_value,
+        fset=_set_scalar_value,
+        doc=u"""To store the value of get_loss_scalar (for scalar losses or with coeff_dict cleaned)
+
+        :Type: float
         """,
     )
