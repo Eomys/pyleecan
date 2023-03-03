@@ -1,3 +1,3 @@
 Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
-type_skin_effect,,"0 to ignore skin effect, 1 to consider it",,int,1,,,,Simulation,LossModel,comp_loss,VERSION,1,Winding loss model
-,,,,,,,,,,,comp_coeff,,,
+k_p,W/kg,Proximity loss coefficient,,float,None,,,,Loss,LossModel,comp_coeff,VERSION,1,Proximity Loss Model Class
+,,,,,,,,,,,comp_loss,,,

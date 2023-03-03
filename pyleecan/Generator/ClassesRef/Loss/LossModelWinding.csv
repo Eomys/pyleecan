@@ -1,2 +1,3 @@
 Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
-,,,,,,,,,Simulation,LossModel,comp_loss,VERSION,1,Windage loss model
+type_skin_effect,,"0 to ignore skin effect, 1 to consider it",,int,1,,,,Loss,LossModel,comp_loss,VERSION,1,Winding loss model
+,,,,,,,,,,,comp_coeff,,,

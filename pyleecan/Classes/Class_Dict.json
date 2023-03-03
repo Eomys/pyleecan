@@ -6006,8 +6006,8 @@
         ],
         "mother": "",
         "name": "Loss",
-        "package": "Simulation",
-        "path": "pyleecan/Generator/ClassesRef/Simulation/Loss.csv",
+        "package": "Loss",
+        "path": "pyleecan/Generator/ClassesRef/Loss/Loss.csv",
         "properties": [
             {
                 "as_dict": "",
@@ -6076,8 +6076,8 @@
         ],
         "mother": "Loss",
         "name": "LossFEA",
-        "package": "Simulation",
-        "path": "pyleecan/Generator/ClassesRef/Simulation/LossFEA.csv",
+        "package": "Loss",
+        "path": "pyleecan/Generator/ClassesRef/Loss/LossFEA.csv",
         "properties": [
             {
                 "as_dict": "",
@@ -6142,8 +6142,8 @@
         "methods": [],
         "mother": "",
         "name": "LossModel",
-        "package": "Simulation",
-        "path": "pyleecan/Generator/ClassesRef/Simulation/LossModel.csv",
+        "package": "Loss",
+        "path": "pyleecan/Generator/ClassesRef/Loss/LossModel.csv",
         "properties": [
             {
                 "as_dict": "",
@@ -6203,8 +6203,8 @@
         ],
         "mother": "LossModel",
         "name": "LossModelBertotti",
-        "package": "Simulation",
-        "path": "pyleecan/Generator/ClassesRef/Simulation/LossModelBertotti.csv",
+        "package": "Loss",
+        "path": "pyleecan/Generator/ClassesRef/Loss/LossModelBertotti.csv",
         "properties": [
             {
                 "as_dict": "",
@@ -6254,8 +6254,8 @@
         ],
         "mother": "LossModel",
         "name": "LossModelJoule",
-        "package": "Simulation",
-        "path": "pyleecan/Generator/ClassesRef/Simulation/LossModelJoule.csv",
+        "package": "Loss",
+        "path": "pyleecan/Generator/ClassesRef/Loss/LossModelJoule.csv",
         "properties": [
             {
                 "as_dict": "",
@@ -6284,8 +6284,8 @@
         ],
         "mother": "LossModel",
         "name": "LossModelMagnet",
-        "package": "Simulation",
-        "path": "pyleecan/Generator/ClassesRef/Simulation/LossModelMagnet.csv",
+        "package": "Loss",
+        "path": "pyleecan/Generator/ClassesRef/Loss/LossModelMagnet.csv",
         "properties": []
     },
     "LossModelProximity": {
@@ -6304,8 +6304,8 @@
         ],
         "mother": "LossModel",
         "name": "LossModelProximity",
-        "package": "Simulation",
-        "path": "pyleecan/Generator/ClassesRef/Simulation/LossModelProximity.csv",
+        "package": "Loss",
+        "path": "pyleecan/Generator/ClassesRef/Loss/LossModelProximity.csv",
         "properties": [
             {
                 "as_dict": "",
@@ -6335,8 +6335,8 @@
         ],
         "mother": "LossModel",
         "name": "LossModelSteinmetz",
-        "package": "Simulation",
-        "path": "pyleecan/Generator/ClassesRef/Simulation/LossModelSteinmetz.csv",
+        "package": "Loss",
+        "path": "pyleecan/Generator/ClassesRef/Loss/LossModelSteinmetz.csv",
         "properties": [
             {
                 "as_dict": "",
@@ -6395,8 +6395,8 @@
         ],
         "mother": "LossModel",
         "name": "LossModelWindage",
-        "package": "Simulation",
-        "path": "pyleecan/Generator/ClassesRef/Simulation/LossModelWindage.csv",
+        "package": "Loss",
+        "path": "pyleecan/Generator/ClassesRef/Loss/LossModelWindage.csv",
         "properties": []
     },
     "LossModelWinding": {
@@ -6415,8 +6415,8 @@
         ],
         "mother": "LossModel",
         "name": "LossModelWinding",
-        "package": "Simulation",
-        "path": "pyleecan/Generator/ClassesRef/Simulation/LossModelWinding.csv",
+        "package": "Loss",
+        "path": "pyleecan/Generator/ClassesRef/Loss/LossModelWinding.csv",
         "properties": [
             {
                 "as_dict": "",

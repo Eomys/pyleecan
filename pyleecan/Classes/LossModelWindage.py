@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
-# File generated according to Generator/ClassesRef/Simulation/LossModelWindage.csv
+# File generated according to Generator/ClassesRef/Loss/LossModelWindage.csv
 # WARNING! All changes made in this file will be lost!
-"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Simulation/LossModelWindage
+"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Loss/LossModelWindage
 """
 
 from os import linesep
@@ -18,7 +18,7 @@ from .LossModel import LossModel
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
 try:
-    from ..Methods.Simulation.LossModelWindage.comp_loss import comp_loss
+    from ..Methods.Loss.LossModelWindage.comp_loss import comp_loss
 except ImportError as error:
     comp_loss = error
 
@@ -32,7 +32,7 @@ class LossModelWindage(LossModel):
 
     VERSION = 1
 
-    # cf Methods.Simulation.LossModelWindage.comp_loss
+    # cf Methods.Loss.LossModelWindage.comp_loss
     if isinstance(comp_loss, ImportError):
         comp_loss = property(
             fget=lambda x: raise_(

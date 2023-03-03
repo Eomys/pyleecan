@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
-# File generated according to Generator/ClassesRef/Simulation/Loss.csv
+# File generated according to Generator/ClassesRef/Loss/Loss.csv
 # WARNING! All changes made in this file will be lost!
-"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Simulation/Loss
+"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Loss/Loss
 """
 
 from os import linesep
@@ -18,12 +18,12 @@ from ._frozen import FrozenClass
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
 try:
-    from ..Methods.Simulation.Loss.run import run
+    from ..Methods.Loss.Loss.run import run
 except ImportError as error:
     run = error
 
 try:
-    from ..Methods.Simulation.Loss.comp_axes import comp_axes
+    from ..Methods.Loss.Loss.comp_axes import comp_axes
 except ImportError as error:
     comp_axes = error
 
@@ -38,14 +38,14 @@ class Loss(FrozenClass):
     VERSION = 1
 
     # Check ImportError to remove unnecessary dependencies in unused method
-    # cf Methods.Simulation.Loss.run
+    # cf Methods.Loss.Loss.run
     if isinstance(run, ImportError):
         run = property(
             fget=lambda x: raise_(ImportError("Can't use Loss method run: " + str(run)))
         )
     else:
         run = run
-    # cf Methods.Simulation.Loss.comp_axes
+    # cf Methods.Loss.Loss.comp_axes
     if isinstance(comp_axes, ImportError):
         comp_axes = property(
             fget=lambda x: raise_(

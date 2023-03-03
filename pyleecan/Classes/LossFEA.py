@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
-# File generated according to Generator/ClassesRef/Simulation/LossFEA.csv
+# File generated according to Generator/ClassesRef/Loss/LossFEA.csv
 # WARNING! All changes made in this file will be lost!
-"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Simulation/LossFEA
+"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Loss/LossFEA
 """
 
 from os import linesep
@@ -18,7 +18,7 @@ from .Loss import Loss
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
 try:
-    from ..Methods.Simulation.LossFEA.run import run
+    from ..Methods.Loss.LossFEA.run import run
 except ImportError as error:
     run = error
 
@@ -32,7 +32,7 @@ class LossFEA(Loss):
 
     VERSION = 1
 
-    # cf Methods.Simulation.LossFEA.run
+    # cf Methods.Loss.LossFEA.run
     if isinstance(run, ImportError):
         run = property(
             fget=lambda x: raise_(

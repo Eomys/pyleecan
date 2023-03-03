@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
-# File generated according to Generator/ClassesRef/Simulation/LossModelBertotti.csv
+# File generated according to Generator/ClassesRef/Loss/LossModelBertotti.csv
 # WARNING! All changes made in this file will be lost!
-"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Simulation/LossModelBertotti
+"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Loss/LossModelBertotti
 """
 
 from os import linesep
@@ -18,12 +18,12 @@ from .LossModel import LossModel
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
 try:
-    from ..Methods.Simulation.LossModelBertotti.comp_coeff import comp_coeff
+    from ..Methods.Loss.LossModelBertotti.comp_coeff import comp_coeff
 except ImportError as error:
     comp_coeff = error
 
 try:
-    from ..Methods.Simulation.LossModelBertotti.comp_loss import comp_loss
+    from ..Methods.Loss.LossModelBertotti.comp_loss import comp_loss
 except ImportError as error:
     comp_loss = error
 
@@ -38,7 +38,7 @@ class LossModelBertotti(LossModel):
     VERSION = 1
 
     # Check ImportError to remove unnecessary dependencies in unused method
-    # cf Methods.Simulation.LossModelBertotti.comp_coeff
+    # cf Methods.Loss.LossModelBertotti.comp_coeff
     if isinstance(comp_coeff, ImportError):
         comp_coeff = property(
             fget=lambda x: raise_(
@@ -49,7 +49,7 @@ class LossModelBertotti(LossModel):
         )
     else:
         comp_coeff = comp_coeff
-    # cf Methods.Simulation.LossModelBertotti.comp_loss
+    # cf Methods.Loss.LossModelBertotti.comp_loss
     if isinstance(comp_loss, ImportError):
         comp_loss = property(
             fget=lambda x: raise_(
