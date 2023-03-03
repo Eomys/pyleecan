@@ -1,13 +1,14 @@
 from os.path import join
 
 import pytest
-
+from multiprocessing import cpu_count
 import numpy as np
 from numpy.testing import assert_almost_equal
 from numpy.testing import assert_allclose
-
+import matplotlib.pyplot as plt
 from pyleecan.Classes.InputCurrent import InputCurrent
 from pyleecan.Classes.Simu1 import Simu1
+from pyleecan.Classes.Skew import Skew
 from pyleecan.Classes.OPdq import OPdq
 from pyleecan.Classes.MagFEMM import MagFEMM
 from pyleecan.Classes.LossFEA import LossFEA
@@ -192,7 +193,7 @@ def test_FEMM_Loss_diff():
 
     out = simu.run()
 
-    out.loss.loss_dict["overall"] = (out.loss.loss_dict.values()[0] - out.loss.loss_dict.values()[1])
+    out.loss.loss_dict["Difference"] = (out.loss.loss_dict.values()[0] - out.loss.loss_dict.values()[1])
 
     print(out.loss.get_power_dict())
 
@@ -230,7 +231,13 @@ def test_FEMM_Loss_diff():
     return out
 
 
-def test_LossFEA_Prius():
+@pytest.mark.Loss
+@pytest.mark.FEMM
+@pytest.mark.MagFEMM
+@pytest.mark.IPMSM
+@pytest.mark.long_5s
+@pytest.mark.long_1m
+def test_LossFEMM_Prius():
     """Test to calculate losses in Toyota_Prius using LossFEA model"""
 
     machine = load(join(DATA_DIR, "Machine", "Toyota_Prius.json"))
@@ -254,7 +261,7 @@ def test_LossFEA_Prius():
     simu.mag = MagFEMM(
         is_periodicity_a=True,
         is_periodicity_t=True,
-        nb_worker=4,
+        nb_worker=cpu_count(),
         is_get_meshsolution=True,
         is_fast_draw=True,
         is_calc_torque_energy=False,
@@ -262,32 +269,61 @@ def test_LossFEA_Prius():
 
     simu.loss = LossFEA(is_get_meshsolution=True, Tsta=100, type_skin_effect=1)
 
+    # Same with linear skew
+    simu_skew = simu.copy()
+    simu_skew.name = simu_skew.name + "_Skew"
+    simu_skew.machine.rotor.skew = Skew(rate=1, type_skew="linear", Nstep=3)
+    # simu_skew.machine.rotor.skew.plot()
+    # plt.show()
+
     out = simu.run()
 
-    print(out.loss.get_power_dict())
+    # Check Power Dict
+    power_dict = out.loss.get_power_dict()
+    exp_power_dict = {
+        "stator core": 292.64240263817754,
+        "rotor core": 14.808165782336602,
+        "joule": 7579.031160511537,
+        "proximity": 16.826278397540907,
+        "magnets": 12.178782086036916,
+        "overall": 7915.486789415628,
+        "total_power": 54596.16442311069,
+    }
+    assert len(power_dict.keys()) == len(exp_power_dict.keys())
+    for key in power_dict:
+        assert power_dict[key] == pytest.approx(exp_power_dict[key], rel=1e-2)
 
+    out_skew = simu_skew.run()
+    # Check Power Dict
+    power_dict_skew = out_skew.loss.get_power_dict()
+    exp_power_dict_skew = {
+        "stator core": 262.1429040501597,
+        "rotor core": 2.0164214385787242,
+        "joule": 7579.031160511537,
+        "proximity": 10.177251941106874,
+        "magnets": 6.810952030240605,
+        "overall": 7860.178689971623,
+        "total_power": 51908.33963148792,
+    }
+    assert len(power_dict_skew.keys()) == len(exp_power_dict.keys())
+    for key in power_dict_skew:
+        assert power_dict_skew[key] == pytest.approx(exp_power_dict_skew[key], rel=1e-2)
+
+    # Check Plot
     if is_show_fig:
+        out.loss.plot_losses()
+        out_skew.loss.plot_losses()
         group_names = ["stator core", "rotor core", "rotor magnets"]
         for loss in out.loss.loss_dict.values():
             if "joule" in loss.name or "proximity" in loss.name:
                 loss.plot_mesh(group_names=group_names + ["stator winding"])
             else:
                 loss.plot_mesh(group_names=group_names)
-        out.loss.plot_losses()
-
-        # out.loss.meshsol_list[0].plot_contour(
-        #     "freqs=sum",
-        #     label="Loss",
-        #     group_names=["stator core", "stator winding"],
-        #     # clim=[2e4, 2e7],
-        # )
-
-        # out.loss.meshsol_list[0].plot_contour(
-        #     "freqs=sum",
-        #     label="Loss",
-        #     group_names=["rotor core", "rotor magnets"],
-        #     # clim=[2e4, 2e7],
-        # )
+        for loss in out_skew.loss.loss_dict.values():
+            if "joule" in loss.name or "proximity" in loss.name:
+                loss.plot_mesh(group_names=group_names + ["stator winding"])
+            else:
+                loss.plot_mesh(group_names=group_names)
 
     return out
 
@@ -427,5 +463,6 @@ if __name__ == "__main__":
 
     # test_FEMM_Loss_diff()
     # test_FEMM_Loss_Prius()
-    test_LossFEA_Prius()
+    test_LossFEMM_Prius()
     # test_FEMM_Id_Iq()
+    print("Done")

@@ -23,6 +23,13 @@ from SciDataTool.Functions.Plot.plot_2D import plot_2D
 is_show_fig = False
 
 
+@pytest.mark.Loss
+@pytest.mark.FEMM
+@pytest.mark.MagFEMM
+@pytest.mark.IPMSM
+@pytest.mark.long_5s
+@pytest.mark.long_1m
+@pytest.mark.long_10m
 def test_LossFEA_SPMSM():
     """Test to calculate losses in SPMSM using LossFEA model from https://www.femm.info/wiki/SPMLoss """
 

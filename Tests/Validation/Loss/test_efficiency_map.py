@@ -4,6 +4,7 @@ import numpy as np
 import pytest
 
 import SciDataTool
+
 print(SciDataTool.__version__)
 
 from SciDataTool.Functions.Plot.plot_2D import plot_2D
@@ -42,7 +43,7 @@ is_show_fig = True
 @pytest.mark.periodicity
 @pytest.mark.skip(reason="Work in progress")
 def test_efficiency_map():
-    """Validation of the efficiency map of the Toyota Prius motor, based on the one presented in 
+    """Validation of the efficiency map of the Toyota Prius motor, based on the one presented in
     "Electromagnetic Analysis and Design Methodology for Permanent Magnet Motors Using MotorAnalysis-PM Software",
     available at https://www.mdpi.com/2075-1702/7/4/75."""
 
@@ -52,7 +53,6 @@ def test_efficiency_map():
 
     if not exists(split(path_to_LUT)[0]):
         raise Exception("The path to LUT is not valid.")
-    
 
     # Speed vector
     Nspeed = 50
@@ -65,83 +65,81 @@ def test_efficiency_map():
     # Initialization of the simulation starting point
     simu.input = InputCurrent(
         OP=OPdq(),
-        Nt_tot=4 * 20,# *8,
+        Nt_tot=4 * 20,  # *8,
         Na_tot=200 * 8,
         is_periodicity_a=True,
         is_periodicity_t=True,
     )
-    
-    datakeeper_list=[
+
+    datakeeper_list = [
         DataKeeper(
-            name = "Torque",
-            unit = "N.m", 
-            symbol = "T",
-            keeper = lambda output: output.elec.Tem_av,
-            error_keeper = lambda simu: np.nan
+            name="Torque",
+            unit="N.m",
+            symbol="T",
+            keeper=lambda output: output.elec.Tem_av,
+            error_keeper=lambda simu: np.nan,
         ),
         DataKeeper(
-            name = "Efficiency",
-            unit = "", 
-            symbol = "eff",
-            keeper = lambda output: output.elec.OP.efficiency,
-            error_keeper = lambda simu: np.nan
+            name="Efficiency",
+            unit="",
+            symbol="eff",
+            keeper=lambda output: output.elec.OP.efficiency,
+            error_keeper=lambda simu: np.nan,
         ),
         DataKeeper(
-            name = "current density",
-            unit = "A/mm^2", 
-            symbol = "J",
-            keeper = lambda output : output.elec.get_Jrms()*1e-6,
-            error_keeper = lambda simu: np.nan
+            name="current density",
+            unit="A/mm^2",
+            symbol="J",
+            keeper=lambda output: output.elec.get_Jrms() * 1e-6,
+            error_keeper=lambda simu: np.nan,
         ),
         DataKeeper(
-            name = "Ud",
-            unit = "V", 
-            symbol = "Ud",
-            keeper = lambda output: output.elec.OP.Ud_ref,
-            error_keeper = lambda simu: np.nan
+            name="Ud",
+            unit="V",
+            symbol="Ud",
+            keeper=lambda output: output.elec.OP.Ud_ref,
+            error_keeper=lambda simu: np.nan,
         ),
         DataKeeper(
-            name = "Uq",
-            unit = "V", 
-            symbol = "Uq",
-            keeper = lambda output: output.elec.OP.Uq_ref,
-            error_keeper = lambda simu: np.nan
+            name="Uq",
+            unit="V",
+            symbol="Uq",
+            keeper=lambda output: output.elec.OP.Uq_ref,
+            error_keeper=lambda simu: np.nan,
         ),
         DataKeeper(
-            name = "U0",
-            unit = "V", 
-            symbol = "U0",
-            keeper = lambda output: output.elec.OP.get_U0_UPhi0()["U0"] ,
-            error_keeper = lambda simu: np.nan
+            name="U0",
+            unit="V",
+            symbol="U0",
+            keeper=lambda output: output.elec.OP.get_U0_UPhi0()["U0"],
+            error_keeper=lambda simu: np.nan,
         ),
         DataKeeper(
-            name = "I0",
-            unit = "A", 
-            symbol = "I0",
-            keeper = lambda output: output.elec.OP.get_I0_Phi0()["I0"] ,
-            error_keeper = lambda simu: np.nan
+            name="I0",
+            unit="A",
+            symbol="I0",
+            keeper=lambda output: output.elec.OP.get_I0_Phi0()["I0"],
+            error_keeper=lambda simu: np.nan,
         ),
         DataKeeper(
-            name = "Phid",
-            unit = "Wb", 
-            symbol = "Phid",
-            keeper = lambda output: output.elec.eec.Phid,
-            error_keeper = lambda simu: np.nan
+            name="Phid",
+            unit="Wb",
+            symbol="Phid",
+            keeper=lambda output: output.elec.eec.Phid,
+            error_keeper=lambda simu: np.nan,
         ),
         DataKeeper(
-            name = "Phiq",
-            unit = "Wb", 
-            symbol = "Phiq",
-            keeper = lambda output: output.elec.eec.Phiq,
-            error_keeper = lambda simu: np.nan
+            name="Phiq",
+            unit="Wb",
+            symbol="Phiq",
+            keeper=lambda output: output.elec.eec.Phiq,
+            error_keeper=lambda simu: np.nan,
         ),
     ]
 
     OP_matrix = np.zeros((Nspeed, 3))
     OP_matrix[:, 0] = np.linspace(500, 6000, Nspeed)
-    simu.var_simu = VarLoadCurrent(
-        datakeeper_list = datakeeper_list
-    )
+    simu.var_simu = VarLoadCurrent(datakeeper_list=datakeeper_list)
     simu.var_simu.set_OP_array(OP_matrix, "N0", "Id", "Iq")
 
     simu.elec = ElecLUTdq(
@@ -159,13 +157,13 @@ def test_efficiency_map():
         LUT_simu=Simu1(
             input=InputCurrent(
                 OP=OPdq(),
-                Nt_tot=4 *10,# *8,
+                Nt_tot=4 * 10,  # *8,
                 Na_tot=200 * 8,
                 is_periodicity_a=True,
                 is_periodicity_t=True,
             ),
             var_simu=VarLoadCurrent(
-                postproc_list=[PostLUT(is_save_LUT=True, file_name = LUT_file_name)],
+                postproc_list=[PostLUT(is_save_LUT=True, file_name=LUT_file_name)],
                 is_keep_all_output=True,
             ),
             mag=MagFEMM(
@@ -174,15 +172,17 @@ def test_efficiency_map():
                 nb_worker=4,
                 is_get_meshsolution=True,
             ),
-            loss = Loss(
+            loss=Loss(
                 is_get_meshsolution=False,
                 Tsta=100,
-                model_dict={"stator core": LossModelSteinmetz(group = "stator core"),
-                            "rotor core": LossModelSteinmetz(group = "rotor core"),
-                            "joule": LossModelJoule(group = "stator winding"),
-                            "proximity": LossModelProximity(group = "stator winding"),
-                            "magnets": LossModelMagnet(group = "rotor magnets")}
-            )
+                model_dict={
+                    "stator core": LossModelSteinmetz(group="stator core"),
+                    "rotor core": LossModelSteinmetz(group="rotor core"),
+                    "joule": LossModelJoule(group="stator winding"),
+                    "proximity": LossModelProximity(group="stator winding"),
+                    "magnets": LossModelMagnet(group="rotor magnets"),
+                },
+            ),
         ),
     )
     try:
@@ -199,9 +199,9 @@ def test_efficiency_map():
     Phidq_MTPA = np.zeros((Nspeed, Nload, 2))
     out_load = list()
     for ii, load_rate in enumerate(load_vect):
-    
+
         if ii > 0 and LUT_enforced is None:
-             simu.elec.LUT_enforced = load(path_to_LUT)
+            simu.elec.LUT_enforced = load(path_to_LUT)
 
         simu.elec.load_rate = load_rate
 
@@ -230,7 +230,7 @@ def test_efficiency_map():
     # assert_almost_equal(OP_matrix_MTPA[:, -1, 3].min(), 164, decimal=0)
     # assert_almost_equal(OP_matrix_MTPA[:, 0, 3].max(), 0, decimal=0)
     # assert_almost_equal(OP_matrix_MTPA[:, 0, 3].min(), 0, decimal=0)
-    
+
     # if not is_LUT_exists:
     #     simu.elec.LUT_enforced.save(save_path=path_to_LUT)
 
@@ -258,7 +258,7 @@ def test_efficiency_map():
             is_show_fig=is_show_fig,
         )
         # Plot max torque with respect to speed
-        y_list = [OP_matrix_MTPA[:, -1 , 3]] 
+        y_list = [OP_matrix_MTPA[:, -1, 3]]
         plot_2D(
             [OP_matrix_MTPA[:, -1, 0]],
             y_list,
@@ -268,7 +268,15 @@ def test_efficiency_map():
             is_show_fig=is_show_fig,
         )
         # Plot power with respect to speed
-        y_list =  [OP_matrix_MTPA[:,-1, 3]*OP_matrix_MTPA[:, -1, 0]*2*np.pi/60*1e-3*OP_matrix_MTPA[:,-1, 4]]
+        y_list = [
+            OP_matrix_MTPA[:, -1, 3]
+            * OP_matrix_MTPA[:, -1, 0]
+            * 2
+            * np.pi
+            / 60
+            * 1e-3
+            * OP_matrix_MTPA[:, -1, 4]
+        ]
         plot_2D(
             [OP_matrix_MTPA[:, -1, 0]],
             y_list,
@@ -352,28 +360,28 @@ def test_efficiency_map():
             legend_list=["Ud", "Uq", "Umax"],
             is_show_fig=is_show_fig,
         )
-        #=============================================#
+        # =============================================#
         # Plot efficiency map
         plot_3D(
             Xdata=OP_matrix_MTPA[:, :, 0],  # Rotational speed
             Ydata=OP_matrix_MTPA[:, :, 3],  # Torque
-            Zdata=OP_matrix_MTPA[:, :, 4], # Efficiency
+            Zdata=OP_matrix_MTPA[:, :, 4],  # Efficiency
             xlabel="Rotational speed",
             ylabel="Torque",
             zlabel="Efficiency",
             title="Efficiency map in torque, speed plane",
             type_plot="pcolormesh",
             is_contour=True,
-            levels=[0.7,0.85,0.9,0.92,0.93,0.94,0.95],
-            gamma=5
+            levels=[0.7, 0.85, 0.9, 0.92, 0.93, 0.94, 0.95],
+            gamma=5,
         )
-        #=============================================#
-        
-        #==============Plot losses in the d-q plane=======#
+        # =============================================#
+
+        # ==============Plot losses in the d-q plane=======#
         LUT_grid = out.simu.elec.LUT_enforced
 
         # Get Id_min, Id_max, Iq_min, Iq_max from OP_matrix
-        OP_matrix = LUT_grid.get_OP_array("N0","Id","Iq")
+        OP_matrix = LUT_grid.get_OP_array("N0", "Id", "Iq")
         Id_min = OP_matrix[:, 1].min()
         Id_max = OP_matrix[:, 1].max()
         Iq_min = OP_matrix[:, 2].min()
@@ -389,27 +397,23 @@ def test_efficiency_map():
 
         Ploss_dqh = LUT_grid.interp_Ploss_dqh(Id, Iq, N0=1200)
         dict_map = {
-                "Xdata": Id.reshape((nd, nq))[0, :],
-                "Ydata": Iq.reshape((nd, nq))[:, 0],
-                "xlabel": "d-axis current [Arms]",
-                "ylabel": "q-axis current [Arms]",
-                "type_plot": "pcolormesh",
-                "is_contour": True,
-            }
-        loss_list = ["stator core",
-                     "rotor core",
-                     "joule",
-                     "proximity",
-                     "magnets"]
+            "Xdata": Id.reshape((nd, nq))[0, :],
+            "Ydata": Iq.reshape((nd, nq))[:, 0],
+            "xlabel": "d-axis current [Arms]",
+            "ylabel": "q-axis current [Arms]",
+            "type_plot": "pcolormesh",
+            "is_contour": True,
+        }
+        loss_list = ["stator core", "rotor core", "joule", "proximity", "magnets"]
         for i, loss in enumerate(loss_list):
             plot_3D(
-                    Zdata=Ploss_dqh[:, i].reshape((nd, nq)),
-                    zlabel=f"{loss} [W]",
-                    **dict_map,
-                )
-        #==================================================#
+                Zdata=Ploss_dqh[:, i].reshape((nd, nq)),
+                zlabel=f"{loss} [W]",
+                **dict_map,
+            )
+        # ==================================================#
         Tem_rip = LUT_grid.interp_Tem_rip_dqh(Id, Iq)
-        
+
         # Plot T_em_rip map
         plot_3D(
             Zdata=Tem_rip.reshape((nd, nq)),
@@ -417,9 +421,9 @@ def test_efficiency_map():
             title="Torque ripple map in dq plane",
             **dict_map,
         )
-        
+
         Phi_dqh_grid = LUT_grid.interp_Phi_dqh(Id, Iq)
-        
+
         # Plot Phi_d map
         plot_3D(
             Zdata=Phi_dqh_grid[0, :].reshape((nd, nq)).T,
@@ -435,59 +439,58 @@ def test_efficiency_map():
             title="Flux linkage map in dq plane (q-axis)",
             **dict_map,
         )
-    #======================================================#
-        # # Init plot map
-        # dict_map = {
-        #     "Xdata": I_MTPA[:, :, 0],  # Id
-        #     "Ydata": I_MTPA[:, :, 1],  # Iq
-        #     "xlabel": "d-axis current [Arms]",
-        #     "ylabel": "q-axis current [Arms]",
-        #     "type_plot": "pcolormesh",
-        #     "is_contour": True,
-        # }
+    # ======================================================#
+    # # Init plot map
+    # dict_map = {
+    #     "Xdata": I_MTPA[:, :, 0],  # Id
+    #     "Ydata": I_MTPA[:, :, 1],  # Iq
+    #     "xlabel": "d-axis current [Arms]",
+    #     "ylabel": "q-axis current [Arms]",
+    #     "type_plot": "pcolormesh",
+    #     "is_contour": True,
+    # }
 
-        # # Plot torque maps
-        # plot_3D(
-        #     Zdata=OP_matrix_MTPA[:, :, 3],
-        #     zlabel="Average Torque [N.m]",
-        #     title="Torque map in dq plane",
-        #     **dict_map,
-        # )
+    # # Plot torque maps
+    # plot_3D(
+    #     Zdata=OP_matrix_MTPA[:, :, 3],
+    #     zlabel="Average Torque [N.m]",
+    #     title="Torque map in dq plane",
+    #     **dict_map,
+    # )
 
-        # plot_3D(
-        #     Zdata=Id.reshape((nd, nq)).T,
-        #     zlabel="Average Torque [N.m]",
-        #     title="Torque map in dq plane",
-        #     # save_path=join(save_path, name + "_torque_map.png"),
-        #     **dict_map,
-        # )
-        # plot_3D(
-        #     Zdata=Iq.reshape((n_Iq, n_Id)).T,
-        #     zlabel="Average Torque [N.m]",
-        #     title="Torque map in dq plane",
-        #     # save_path=join(save_path, name + "_torque_map.png"),
-        #     **dict_map,
-        # )
-        # plt.contour(
-        #     dict_map["Xdata"],
-        #     dict_map["Ydata"],
-        #     U_max_interp.reshape((n_Iq, n_Id)),
-        #     colors="blue",
-        #     linewidths=0.8,
-        # )
-        # plot_3D(
-        #     Zdata=Tem_sync.reshape((n_Iq, n_Id)).T,
-        #     zlabel="Synchrnous Torque [N.m]",
-        #     title="Torque map in dq plane",
-        #     **dict_map,
-        # )
-        # plot_3D(
-        #     Zdata=Tem_rel.reshape((n_Iq, n_Id)).T,
-        #     zlabel="Reluctant Torque [N.m]",
-        #     title="Torque map in dq plane",
-        #     **dict_map,
-        # )
-
+    # plot_3D(
+    #     Zdata=Id.reshape((nd, nq)).T,
+    #     zlabel="Average Torque [N.m]",
+    #     title="Torque map in dq plane",
+    #     # save_path=join(save_path, name + "_torque_map.png"),
+    #     **dict_map,
+    # )
+    # plot_3D(
+    #     Zdata=Iq.reshape((n_Iq, n_Id)).T,
+    #     zlabel="Average Torque [N.m]",
+    #     title="Torque map in dq plane",
+    #     # save_path=join(save_path, name + "_torque_map.png"),
+    #     **dict_map,
+    # )
+    # plt.contour(
+    #     dict_map["Xdata"],
+    #     dict_map["Ydata"],
+    #     U_max_interp.reshape((n_Iq, n_Id)),
+    #     colors="blue",
+    #     linewidths=0.8,
+    # )
+    # plot_3D(
+    #     Zdata=Tem_sync.reshape((n_Iq, n_Id)).T,
+    #     zlabel="Synchrnous Torque [N.m]",
+    #     title="Torque map in dq plane",
+    #     **dict_map,
+    # )
+    # plot_3D(
+    #     Zdata=Tem_rel.reshape((n_Iq, n_Id)).T,
+    #     zlabel="Reluctant Torque [N.m]",
+    #     title="Torque map in dq plane",
+    #     **dict_map,
+    # )
 
     return out
 
