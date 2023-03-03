@@ -1,6 +1,6 @@
 Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
 axes_dict,,Dict containing axes data used for Magnetics,,{SciDataTool.Classes.DataND.Data},None,,,,Output,,get_loss_density_ag,VERSION,1,Gather the loss module outputs
-loss_dict,,Dict containing OutLossModel obects for each type of loss,,{OutLossModel},[],,,,,,get_loss_overall,,,
+loss_dict,,Dict containing OutLossModel obects for each type of loss,,{OutLossModel},{},,,,,,get_loss_overall,,,
 logger_name,-,Name of the logger to use,0,str,Pyleecan.Loss,,,,,,get_power_dict,,,
 ,,,,,,,,,,,plot_losses,,,
 ,,,,,,,,,,,__getitem__,,,

@@ -10391,7 +10391,7 @@
                 "name": "loss_dict",
                 "type": "{OutLossModel}",
                 "unit": "",
-                "value": []
+                "value": {}
             },
             {
                 "as_dict": "",
