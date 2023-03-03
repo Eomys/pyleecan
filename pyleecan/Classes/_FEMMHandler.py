@@ -1,9 +1,23 @@
 import os
 from math import exp
+import re
+from os.path import expanduser
+import time
 
-import pythoncom
-import win32com.client
+global is_windows_os
+
+try:
+    import pythoncom
+    import win32com.client
+
+    is_windows_os = True
+except:
+    print("No activex, using file I/O")
+    is_windows_os = False
+
 from six import string_types
+
+sleeptime = 0.01
 
 
 class _FEMMHandler(object):
@@ -20,7 +34,8 @@ class _FEMMHandler(object):
             if "HandleToFEMM" in list(init_dict.keys()):
                 HandleToFEMM = init_dict["HandleToFEMM"]
         self.HandleToFEMM = HandleToFEMM
-        pythoncom.CoInitialize()
+        if is_windows_os:
+            pythoncom.CoInitialize()
 
     def as_dict(self, **kwargs):
         _FEMMHandler_dict = dict()
@@ -38,7 +53,7 @@ class _FEMMHandler(object):
     def fixpath(self, myPath):
         return myPath.replace("\\", "/").replace("//", "/")
 
-    def openfemm(self, *arg):
+    def openfemm_Windows(self, *arg):
         if self.HandleToFEMM != None:
             raise Exception("An instance FEMM is already open")
 
@@ -55,10 +70,139 @@ class _FEMMHandler(object):
             self.main_restore()
             return
 
-    def closefemm(self):
+    def openfemm_Linux(self, *arg, winepath="", femmpath=""):
+        # Opens FEMM, path to wine and FEMM directories can be given as openfemm(winepath='path/to/wine/',femmpath='path/to/femm/')."""
+        global ifile, ofile
+
+        if self.HandleToFEMM != None:
+            raise Exception("An instance FEMM is already open")
+
+        # find wine path
+        if winepath != "":
+            if os.path.isdir(winepath):
+                winedir = winepath
+            elif os.path.isfile(winepath):
+                winedir = re.sub("wine$", "", winepath)
+            else:
+                raise Exception(
+                    "Given path for wine does not exist. Please check 'winepath'."
+                )
+        else:
+            # check all environment paths for wine
+            envpath = os.getenv("PATH").split(":")
+            # add good guesses
+            envpath.extend(
+                [
+                    "/usr/bin",
+                    "/usr/local/bin",
+                    "/opt/bin",
+                    "/opt/local/bin",
+                    "/Applications/CrossOver.app/Contents/SharedSupport/CrossOver/bin",
+                ]
+            )
+            for k in envpath:
+                if os.path.exists(k + "/wine"):
+                    winedir = k
+                    break
+            if "winedir" not in locals():
+                raise Exception(
+                    "Wine binary not found in default path. Please define a path as openfemm(winepath='path/to/wine/',femmpath='path/to/femm/')."
+                )
+
+        # find femm path
+        if femmpath != "":
+            if os.path.isdir(femmpath):
+                femmdir = femmpath
+            elif os.path.isfile(femmpath):
+                femmdir = re.sub("femm.exe$", "", femmpath)
+            else:
+                raise Exception(
+                    "Given path for FEMM does not exist. Please check 'femmpath'."
+                )
+        else:
+            # check if femm.exe exists in user's wine directory
+            rootpath = [
+                expanduser("~") + "/.wine/drive_c/femm42/bin",
+                expanduser("~") + "/.wine/drive_c/Program Files/femm42/bin",
+                expanduser("~") + "/.wine/drive_c/Progra~1/femm42/bin",
+            ]
+            for k in rootpath:
+                if os.path.exists(k + "/femm.exe"):
+                    femmdir = k
+                    break
+            if "femmdir" not in locals():
+                raise Exception(
+                    "FEMM binary not found in default path. Please define a path as openfemm(femmpath='path/to/wine/',femmpath='path/to/femm/')."
+                )
+
+        ifile = self.fixpath(femmdir + "/ifile.txt")
+        ofile = self.fixpath(femmdir + "/ofile.txt")
+
+        if os.path.exists(ifile):
+            os.unlink(ifile)
+        if os.path.exists(ofile):
+            os.unlink(ofile)
+
+        # test to see if there is already a femm process open
+        try:
+            f = open(ifile, mode="wt")
+        except:
+            f = open(ifile, mode="w")
+
+        f.write("flput(0)")
+        f.close()
+        time.sleep(sleeptime)
+        try:
+            f = open(ofile, mode="rt")
+            f.close()
+            os.unlink(ofile)
+            print("FEMM is already open")
+        except FileNotFoundError as e:
+            os.unlink(ifile)
+            os.system(
+                self.fixpath(winedir + "/wine ")
+                + self.fixpath(femmdir + "/femm.exe")
+                + " -filelink &"
+            )
+        except OSError as e:
+            print("Error opening with mode rt failed:", e)
+            return
+        self.HandleToFEMM = "FEMM_Open"
+
+        self.callfemm(
+            "setcurrentdirectory(" + self.quote(self.fixpath(os.getcwd())) + ")"
+        )
+        if len(arg) == 0:
+            self.main_restore()
+            return
+        if arg[0] == 0:
+            self.main_restore()
+            return
+
+    def openfemm(self, *arg, winepath="", femmpath=""):
+        global is_windows_os
+        if is_windows_os:
+            self.openfemm_Windows(*arg)
+        else:
+            self.openfemm_Linux(*arg, winepath="", femmpath="")
+
+    def closefemm_Windows(self):
         self.HandleToFEMM = None  # no reference to the handler, femm is closed
 
-    def callfemm(self, myString):
+    def closefemm_Linux(self):
+        global ifile, ofile
+        self.callfemm("quit()")
+        del ifile, ofile
+
+    def closefemm(self):
+        global is_windows_os
+
+        if is_windows_os:
+            self.closefemm_Windows()
+        else:
+            self.closefemm_Linux()
+
+    def callfemm_Windows(self, myString):
         HandleToFEMM = self.HandleToFEMM
         x = (
             HandleToFEMM.mlab2femm(myString)
@@ -76,6 +220,66 @@ class _FEMMHandler(object):
             x = eval(x)
         if len(x) == 1:
             x = x[0]
+        return x
+
+    def callfemm_Linux(self, myString):
+        global ifile, ofile
+        try:
+            f = open(ifile, mode="wt")
+        except:
+            f = open(ifile, mode="w")
+
+        f.write("flput(" + myString + ")")
+        f.close()
+        x = False
+        while x == False:
+            try:
+                f = open(ofile, mode="rt")
+                x = (
+                    f.readline()
+                    .replace("[ ", "[")
+                    .replace(" ]", "]")
+                    .replace(" ", ",")
+                    .replace("I", "1j")
+                )
+                f.close()
+            except FileNotFoundError as e:
+                time.sleep(sleeptime)
+                notfound = 1
+                while notfound:
+                    try:
+                        f = open(ofile, mode="rt")
+                        notfound = 0
+                    except FileNotFoundError as e:
+                        notfound = 1
+                        time.sleep(sleeptime)
+                    except OSError as e:
+                        print("Error opening with mode rt failed:", e)
+                        return
+            except OSError as e:
+                print("Error opening with mode rt failed:", e)
+                return
+        time.sleep(sleeptime)
+        os.unlink(ofile)
+
+        if len(x) == 0:
+            x = []
+        elif x[0] == "e":
+            ErrorMsg = x.replace(",", " ").replace("1j", "I")
+            raise Exception(ErrorMsg)
+        else:
+            x = eval(x)
+        if len(x) == 1:
+            x = x[0]
+        return x
+
+    def callfemm(self, myString):
+        global is_windows_os
+        # print(myString) # uncomment to see all the calls made to femm while working
+        if is_windows_os:
+            x = self.callfemm_Windows(myString)
+        else:
+            x = self.callfemm_Linux(myString)
         return x
 
     def main_restore(self):
@@ -115,9 +319,51 @@ class _FEMMHandler(object):
     def AWG(self, awg):
         return 8.2514694 * exp(-0.115943 * awg)
 
-    def callfemm_noeval(self, myString):
+    def callfemm_noeval_Windows(self, myString):
         HandleToFEMM = self.HandleToFEMM
         HandleToFEMM.mlab2femm(myString)
+
+    def callfemm_noeval_Linux(self, myString):
+        global ifile, ofile
+        try:
+            f = open(ifile, mode="wt")
+        except:
+            f = open(ifile, mode="w")
+
+        f.write("flput(" + myString + ")")
+        f.close()
+        u = -1
+        while u == -1:
+            try:
+                f = open(ofile, mode="rt")
+                u = f.readline()
+                f.close()
+            except FileNotFoundError as e:
+                print("File not found Error2:", e)
+                time.sleep(sleeptime)
+                notfound = 1
+                while notfound:
+                    try:
+                        f = open(ofile, mode="rt")
+                        notfound = 0
+                    except FileNotFoundError as e:
+                        print("File not found Error3:", e)
+                        notfound = 1
+                        time.sleep(sleeptime)
+                    except OSError as e:
+                        print("Error opening with mode rt failed:", e)
+                        return
+                return
+
+        os.unlink(ofile)
+
+    def callfemm_noeval(self, myString):
+        global is_windows_os
+
+        if is_windows_os:
+            self.callfemm_Windows(self, myString)
+        else:
+            self.callfemm_Linux(self, myString)
 
     def ci_addarc(self, *arg):
         self.callfemm("ci_addarc" + self.doargs(*arg))

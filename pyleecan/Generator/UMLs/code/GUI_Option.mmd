@@ -1,0 +1,17 @@
+classDiagram
+direction TB
+class GUIOption{
+	unit : Unit
+}
+class Unit{
+	unit_m : int
+	unit_rad : int
+	unit_m2 : int
+	get_m()
+	get_m2()
+	get_m_name()
+	get_m2_name()
+	set_m()
+	set_m2()
+}
+GUIOption *--> Unit

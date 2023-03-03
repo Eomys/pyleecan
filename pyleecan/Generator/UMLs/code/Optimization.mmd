@@ -1,0 +1,75 @@
+classDiagram
+direction TB
+class OptiBayesAlg{
+	nb_iter : int
+	nb_start : int
+	criterion : str
+	kernel : int
+}
+class OptiBayesAlgSmoot{
+	size_pop : int
+	nb_gen : int
+	solve()
+	check_optimization_input()
+	evaluate()
+	plot_pareto()
+	eval_const()
+}
+class OptiConstraint{
+	type_const : str
+	value : float
+}
+class OptiDesignVar{
+	space : list
+	get_value : function
+}
+class OptiDesignVarInterval{
+}
+class OptiDesignVarSet{
+}
+class OptiGenAlg{
+	selector : function
+	crossover : function
+	mutator : function
+	p_cross : float
+	p_mutate : float
+	size_pop : int
+	nb_gen : int
+}
+class OptiGenAlgNsga2Deap{
+	toolbox : deap.base.Toolbox
+	solve()
+	mutate()
+	cross()
+	create_toolbox()
+	check_optimization_input()
+	delete_toolbox()
+	plot_pareto()
+}
+class OptiObjective{
+}
+class OptiProblem{
+	simu : Simulation
+	design_var : list~OptiDesignVar~
+	obj_func : list~OptiObjective~
+	eval_func : function
+	constraint : list~OptiConstraint~
+	preprocessing : function
+	datakeeper_list : list~DataKeeper~
+}
+class OptiSolver{
+	problem : OptiProblem
+	xoutput : XOutput
+	logger_name : str
+	is_keep_all_output : bool
+}
+OptiBayesAlg  <|--> OptiBayesAlgSmoot
+OptiDesignVar  <|--> OptiDesignVarInterval
+OptiDesignVar  <|--> OptiDesignVarSet
+OptiGenAlg  <|--> OptiGenAlgNsga2Deap
+OptiProblem *--> OptiConstraint
+OptiProblem *--> OptiDesignVar
+OptiProblem *--> OptiObjective
+OptiSolver  <|--> OptiBayesAlg
+OptiSolver  <|--> OptiGenAlg
+OptiSolver *--> OptiProblem

@@ -1,0 +1,4 @@
+Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
+objective_list,-,List containing OptiObjective objects,0,[OptiObjective],,,,,Simulation,VarParam,check,VERSION,1,Handle Optimization multisimulation by varying parameters
+constraint_list,-,List containing OptiConstraint objects,0,[OptiConstraint],,,,,,,run,NAME,"""Optimization""",
+solver,-,Object that solve an OptiProblem,0,OptiSolver,None,,,,,,get_full_solver,,,

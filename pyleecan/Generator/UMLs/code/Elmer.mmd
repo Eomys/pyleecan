@@ -1,0 +1,46 @@
+classDiagram
+direction TB
+class Elmer{
+	logger_name : str
+}
+class ElmerResults{
+	data : dict
+	file : str
+	usecols : list
+	columns : list
+	is_scalars : bool
+	load_data()
+	load_columns()
+	get_data()
+}
+class ElmerResultsVTU{
+	label : str
+	file_path : str
+	store_dict : dict
+	build_meshsolution()
+}
+class Section{
+	section : str
+	id : int
+	comment : str
+	_statements : dict
+	_comments : dict
+	__delitem__()
+	__getitem__()
+	__iter__()
+	__len__()
+	__missing__()
+	__reversed__()
+	__setitem__()
+	pop()
+	keys()
+	write()
+}
+class SolverInputFile{
+	sections : list
+	write()
+}
+Elmer  <|--> ElmerResults
+Elmer  <|--> ElmerResultsVTU
+Elmer  <|--> Section
+Elmer  <|--> SolverInputFile

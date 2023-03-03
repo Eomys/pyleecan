@@ -20,7 +20,7 @@ from pyleecan.Classes.MagFEMM import MagFEMM
 from pyleecan.Classes.Simu1 import Simu1
 from pyleecan.Classes.Output import Output
 from pyleecan.Classes.SlotUD2 import SlotUD2
-from pyleecan.Classes.OptiDesignVar import OptiDesignVar
+from pyleecan.Classes.OptiDesignVarInterval import OptiDesignVarInterval
 from pyleecan.Classes.OptiObjective import OptiObjective
 from pyleecan.Classes.OptiProblem import OptiProblem
 from pyleecan.Classes.ImportMatrixVal import ImportMatrixVal
@@ -486,7 +486,7 @@ def test_WindingUD_layer():
     rotor = load(join(save_path, "Fig17_rotor_wind_layer.json"))
 
     # Plot, check and save
-    rotor.plot(is_show_fig=False, is_clean_plot=True,edgecolor="k")
+    rotor.plot(is_show_fig=False, is_clean_plot=True, edgecolor="k")
     fig = plt.gcf()
     fig.savefig(join(save_path, "fig_17_WindingUD_layer.png"))
     fig.savefig(join(save_path, "fig_17_WindingUD_layer.svg"), format="svg")
@@ -747,11 +747,10 @@ def test_Optimization_problem():
 
     # Design variables
     my_vars = [
-        OptiDesignVar(
+        OptiDesignVarInterval(
             name="Stator slot opening",
             symbol="W0",
             unit="m",
-            type_var="interval",
             space=[
                 0.2 * output.simu.machine.stator.slot.W2,
                 output.simu.machine.stator.slot.W2,
@@ -759,11 +758,10 @@ def test_Optimization_problem():
             get_value="lambda space: random.uniform(*space)",
             setter="simu.machine.stator.slot.W0",
         ),
-        OptiDesignVar(
+        OptiDesignVarInterval(
             name="Rotor magnet width",
             symbol="Wmag",
             unit="m",
-            type_var="interval",
             space=[
                 0.5 * output.simu.machine.rotor.slot.W0,
                 0.99 * output.simu.machine.rotor.slot.W0,

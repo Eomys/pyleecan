@@ -11,6 +11,7 @@ from ..Classes.Arc3 import Arc3
 from ..Classes.Bore import Bore
 from ..Classes.BoreFlower import BoreFlower
 from ..Classes.BoreLSRPM import BoreLSRPM
+from ..Classes.BoreSinePole import BoreSinePole
 from ..Classes.BoreUD import BoreUD
 from ..Classes.CellMat import CellMat
 from ..Classes.Circle import Circle
@@ -49,6 +50,7 @@ from ..Classes.Hole import Hole
 from ..Classes.HoleM50 import HoleM50
 from ..Classes.HoleM51 import HoleM51
 from ..Classes.HoleM52 import HoleM52
+from ..Classes.HoleM52R import HoleM52R
 from ..Classes.HoleM53 import HoleM53
 from ..Classes.HoleM54 import HoleM54
 from ..Classes.HoleM57 import HoleM57
@@ -145,6 +147,8 @@ from ..Classes.OptiBayesAlg import OptiBayesAlg
 from ..Classes.OptiBayesAlgSmoot import OptiBayesAlgSmoot
 from ..Classes.OptiConstraint import OptiConstraint
 from ..Classes.OptiDesignVar import OptiDesignVar
+from ..Classes.OptiDesignVarInterval import OptiDesignVarInterval
+from ..Classes.OptiDesignVarSet import OptiDesignVarSet
 from ..Classes.OptiGenAlg import OptiGenAlg
 from ..Classes.OptiGenAlgNsga2Deap import OptiGenAlgNsga2Deap
 from ..Classes.OptiObjective import OptiObjective
@@ -237,7 +241,9 @@ from ..Classes.Unit import Unit
 from ..Classes.VarLoad import VarLoad
 from ..Classes.VarLoadCurrent import VarLoadCurrent
 from ..Classes.VarLoadVoltage import VarLoadVoltage
+from ..Classes.VarOpti import VarOpti
 from ..Classes.VarParam import VarParam
+from ..Classes.VarParamSweep import VarParamSweep
 from ..Classes.VarSimu import VarSimu
 from ..Classes.VentilationCirc import VentilationCirc
 from ..Classes.VentilationPolar import VentilationPolar

@@ -1,0 +1,97 @@
+classDiagram
+direction TB
+class MatEconomical{
+	cost_unit : float
+	unit_name : str
+}
+class MatElectrical{
+	rho : float
+	epsr : float
+	alpha : float
+	get_conductivity()
+	get_resistivity()
+}
+class MatHT{
+	lambda_x : float
+	lambda_y : float
+	lambda_z : float
+	Cp : float
+	alpha : float
+}
+class MatMagnetics{
+	mur_lin : float
+	Brm20 : float
+	alpha_Br : float
+	Wlam : float
+	BH_curve : ImportMatrix
+	LossData : ImportMatrix
+	ModelBH : ModelBH
+	is_BH_extrapolate : bool
+	get_BH()
+	plot_BH()
+	get_Hc()
+	get_Brm()
+}
+class MatStructural{
+	rho : float
+	Ex : float
+	Ey : float
+	Ez : float
+	nu_xy : float
+	nu_xz : float
+	nu_yz : float
+	Gxz : float
+	Gxy : float
+	Gyz : float
+}
+class Material{
+	name : str
+	is_isotropic : bool
+	elec : MatElectrical
+	mag : MatMagnetics
+	struct : MatStructural
+	HT : MatHT
+	eco : MatEconomical
+	desc : str
+	path : str
+}
+class ModelBH{
+	Bmax : float
+	Hmax : float
+	delta : float
+	get_BH()
+	fit_model()
+}
+class ModelBH_Langevin{
+	Bs : float
+	a : float
+	param1 : float
+	param2 : float
+	get_BH()
+	BH_func()
+}
+class ModelBH_arctangent{
+	k : float
+	mu_a : float
+}
+class ModelBH_exponential{
+	Bs : float
+	mu_a : float
+}
+class ModelBH_linear_sat{
+	Bs : float
+	mu_a : float
+	param1 : float
+	param2 : float
+	get_BH()
+	BH_func()
+}
+MatMagnetics *--> ModelBH
+Material *--> MatEconomical
+Material *--> MatElectrical
+Material *--> MatHT
+Material *--> MatMagnetics
+Material *--> MatStructural
+ModelBH  <|--> ModelBH_Langevin
+ModelBH  <|--> ModelBH_arctangent
+ModelBH  <|--> ModelBH_linear_sat

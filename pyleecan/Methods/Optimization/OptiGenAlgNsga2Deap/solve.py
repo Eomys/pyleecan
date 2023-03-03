@@ -22,7 +22,7 @@ def create_setter(accessor, attribute):
     return lambda simu, val: setattr(eval(accessor), attribute, val)
 
 
-def solve(self):
+def solve(self, xoutput=None):
     """Method to perform NSGA-II using DEAP tools
 
     Parameters
@@ -34,6 +34,8 @@ def solve(self):
     -------
     multi_output : OutputMultiOpti
         class containing the results
+    xoutput : XOutput
+        class containing the results of the simulations
     """
 
     logger = self.get_logger()
@@ -67,10 +69,8 @@ def solve(self):
         self.create_toolbox()
 
         # Add the reference output to multi_output
-        if isinstance(self.problem.simu.parent, Output):
-            xoutput = XOutput(
-                init_dict=self.problem.simu.parent.as_dict(keep_function=True)
-            )
+        if xoutput is not None:
+            xoutput = xoutput
         else:
             xoutput = XOutput(simu=self.problem.simu.copy())
 

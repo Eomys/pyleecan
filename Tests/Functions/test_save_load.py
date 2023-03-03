@@ -14,6 +14,8 @@ from pyleecan.Classes.LamSlotMag import LamSlotMag
 from pyleecan.Classes.LamSlotWind import LamSlotWind
 from pyleecan.Classes.MachineSIPMSM import MachineSIPMSM
 from pyleecan.Classes.MagFEMM import MagFEMM
+from pyleecan.Classes.XOutput import XOutput
+from pyleecan.Classes.DataKeeper import DataKeeper
 from pyleecan.Classes.Output import Output
 from pyleecan.Classes.PostFunction import PostFunction
 from pyleecan.Classes.Shaft import Shaft
@@ -431,8 +433,27 @@ def test_save_load_simu(type_file):
     assert test_obj == test_obj2
 
 
+def test_save_load_slash_h5():
+    """Check that str with "/" can be save/load"""
+    test_obj = XOutput()
+    test_obj._set_None()
+    test_obj.xoutput_dict = {"x/y": DataKeeper(name="x/y")}
+
+    file_path = join(save_path, "test_save_slash.h5")
+    logger.debug(file_path)
+
+    if isfile(file_path):
+        remove(file_path)
+
+    assert not isfile(file_path)
+    test_obj.save(file_path)
+    assert isfile(file_path)
+    test_obj2 = load(file_path)
+    assert test_obj2 == test_obj
+
+
 if __name__ == "__main__":
-    test_save_load_folder_path()
+    test_save_load_slash_h5()
     # test_save_load_DXF_flat()
     # test_save_load_simu("json")
     # test_save_load_simu("h5")

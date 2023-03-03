@@ -13,8 +13,9 @@ from ..Functions.save import save
 from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
 from copy import deepcopy
-from ._frozen import FrozenClass
+from .DataKeeper import DataKeeper
 
+from numpy import array, ndarray
 from ntpath import basename
 from os.path import isfile
 from ._check import CheckTypeError
@@ -24,7 +25,7 @@ from numpy import isnan
 from ._check import InitUnKnowClassError
 
 
-class OptiConstraint(FrozenClass):
+class OptiConstraint(DataKeeper):
     """Constraint of the optimization problem"""
 
     VERSION = 1
@@ -36,10 +37,16 @@ class OptiConstraint(FrozenClass):
 
     def __init__(
         self,
-        name="",
         type_const="<=",
         value=0,
-        get_variable=None,
+        name="",
+        symbol="",
+        unit="",
+        keeper=None,
+        error_keeper=None,
+        result=-1,
+        result_ref=None,
+        physic=None,
         init_dict=None,
         init_str=None,
     ):
@@ -58,45 +65,51 @@ class OptiConstraint(FrozenClass):
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
-            if "name" in list(init_dict.keys()):
-                name = init_dict["name"]
             if "type_const" in list(init_dict.keys()):
                 type_const = init_dict["type_const"]
             if "value" in list(init_dict.keys()):
                 value = init_dict["value"]
-            if "get_variable" in list(init_dict.keys()):
-                get_variable = init_dict["get_variable"]
+            if "name" in list(init_dict.keys()):
+                name = init_dict["name"]
+            if "symbol" in list(init_dict.keys()):
+                symbol = init_dict["symbol"]
+            if "unit" in list(init_dict.keys()):
+                unit = init_dict["unit"]
+            if "keeper" in list(init_dict.keys()):
+                keeper = init_dict["keeper"]
+            if "error_keeper" in list(init_dict.keys()):
+                error_keeper = init_dict["error_keeper"]
+            if "result" in list(init_dict.keys()):
+                result = init_dict["result"]
+            if "result_ref" in list(init_dict.keys()):
+                result_ref = init_dict["result_ref"]
+            if "physic" in list(init_dict.keys()):
+                physic = init_dict["physic"]
         # Set the properties (value check and convertion are done in setter)
-        self.parent = None
-        self.name = name
         self.type_const = type_const
         self.value = value
-        self.get_variable = get_variable
-
-        # The class is frozen, for now it's impossible to add new properties
-        self._freeze()
+        # Call DataKeeper init
+        super(OptiConstraint, self).__init__(
+            name=name,
+            symbol=symbol,
+            unit=unit,
+            keeper=keeper,
+            error_keeper=error_keeper,
+            result=result,
+            result_ref=result_ref,
+            physic=physic,
+        )
+        # The class is frozen (in DataKeeper init), for now it's impossible to
+        # add new properties
 
     def __str__(self):
         """Convert this object in a readeable string (for print)"""
 
         OptiConstraint_str = ""
-        if self.parent is None:
-            OptiConstraint_str += "parent = None " + linesep
-        else:
-            OptiConstraint_str += (
-                "parent = " + str(type(self.parent)) + " object" + linesep
-            )
-        OptiConstraint_str += 'name = "' + str(self.name) + '"' + linesep
+        # Get the properties inherited from DataKeeper
+        OptiConstraint_str += super(OptiConstraint, self).__str__()
         OptiConstraint_str += 'type_const = "' + str(self.type_const) + '"' + linesep
         OptiConstraint_str += "value = " + str(self.value) + linesep
-        if self._get_variable_str is not None:
-            OptiConstraint_str += "get_variable = " + self._get_variable_str + linesep
-        elif self._get_variable_func is not None:
-            OptiConstraint_str += (
-                "get_variable = " + str(self._get_variable_func) + linesep
-            )
-        else:
-            OptiConstraint_str += "get_variable = None" + linesep + linesep
         return OptiConstraint_str
 
     def __eq__(self, other):
@@ -104,13 +117,13 @@ class OptiConstraint(FrozenClass):
 
         if type(other) != type(self):
             return False
-        if other.name != self.name:
+
+        # Check the properties inherited from DataKeeper
+        if not super(OptiConstraint, self).__eq__(other):
             return False
         if other.type_const != self.type_const:
             return False
         if other.value != self.value:
-            return False
-        if other._get_variable_str != self._get_variable_str:
             return False
         return True
 
@@ -122,14 +135,13 @@ class OptiConstraint(FrozenClass):
         if type(other) != type(self):
             return ["type(" + name + ")"]
         diff_list = list()
-        if other._name != self._name:
-            if is_add_value:
-                val_str = (
-                    " (self=" + str(self._name) + ", other=" + str(other._name) + ")"
-                )
-                diff_list.append(name + ".name" + val_str)
-            else:
-                diff_list.append(name + ".name")
+
+        # Check the properties inherited from DataKeeper
+        diff_list.extend(
+            super(OptiConstraint, self).compare(
+                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
+            )
+        )
         if other._type_const != self._type_const:
             if is_add_value:
                 val_str = (
@@ -157,8 +169,6 @@ class OptiConstraint(FrozenClass):
                 diff_list.append(name + ".value" + val_str)
             else:
                 diff_list.append(name + ".value")
-        if other._get_variable_str != self._get_variable_str:
-            diff_list.append(name + ".get_variable")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -167,10 +177,11 @@ class OptiConstraint(FrozenClass):
         """Return the size in memory of the object (including all subobject)"""
 
         S = 0  # Full size of the object
-        S += getsizeof(self.name)
+
+        # Get size of the properties inherited from DataKeeper
+        S += super(OptiConstraint, self).__sizeof__()
         S += getsizeof(self.type_const)
         S += getsizeof(self.value)
-        S += getsizeof(self._get_variable_str)
         return S
 
     def as_dict(self, type_handle_ndarray=0, keep_function=False, **kwargs):
@@ -184,23 +195,16 @@ class OptiConstraint(FrozenClass):
         and may prevent json serializability.
         """
 
-        OptiConstraint_dict = dict()
-        OptiConstraint_dict["name"] = self.name
+        # Get the properties inherited from DataKeeper
+        OptiConstraint_dict = super(OptiConstraint, self).as_dict(
+            type_handle_ndarray=type_handle_ndarray,
+            keep_function=keep_function,
+            **kwargs
+        )
         OptiConstraint_dict["type_const"] = self.type_const
         OptiConstraint_dict["value"] = self.value
-        if self._get_variable_str is not None:
-            OptiConstraint_dict["get_variable"] = self._get_variable_str
-        elif keep_function:
-            OptiConstraint_dict["get_variable"] = self.get_variable
-        else:
-            OptiConstraint_dict["get_variable"] = None
-            if self.get_variable is not None:
-                self.get_logger().warning(
-                    "OptiConstraint.as_dict(): "
-                    + f"Function {self.get_variable.__name__} is not serializable "
-                    + "and will be converted to None."
-                )
         # The class name is added to the dict for deserialisation purpose
+        # Overwrite the mother class name
         OptiConstraint_dict["__class__"] = "OptiConstraint"
         return OptiConstraint_dict
 
@@ -208,47 +212,50 @@ class OptiConstraint(FrozenClass):
         """Creates a deepcopy of the object"""
 
         # Handle deepcopy of all the properties
-        name_val = self.name
         type_const_val = self.type_const
         value_val = self.value
-        if self._get_variable_str is not None:
-            get_variable_val = self._get_variable_str
+        name_val = self.name
+        symbol_val = self.symbol
+        unit_val = self.unit
+        if self._keeper_str is not None:
+            keeper_val = self._keeper_str
         else:
-            get_variable_val = self._get_variable_func
+            keeper_val = self._keeper_func
+        if self._error_keeper_str is not None:
+            error_keeper_val = self._error_keeper_str
+        else:
+            error_keeper_val = self._error_keeper_func
+        if self.result is None:
+            result_val = None
+        else:
+            result_val = self.result.copy()
+        if hasattr(self.result_ref, "copy"):
+            result_ref_val = self.result_ref.copy()
+        else:
+            result_ref_val = self.result_ref
+        physic_val = self.physic
         # Creates new object of the same type with the copied properties
         obj_copy = type(self)(
-            name=name_val,
             type_const=type_const_val,
             value=value_val,
-            get_variable=get_variable_val,
+            name=name_val,
+            symbol=symbol_val,
+            unit=unit_val,
+            keeper=keeper_val,
+            error_keeper=error_keeper_val,
+            result=result_val,
+            result_ref=result_ref_val,
+            physic=physic_val,
         )
         return obj_copy
 
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""
 
-        self.name = None
         self.type_const = None
         self.value = None
-        self.get_variable = None
-
-    def _get_name(self):
-        """getter of name"""
-        return self._name
-
-    def _set_name(self, value):
-        """setter of name"""
-        check_var("name", value, "str")
-        self._name = value
-
-    name = property(
-        fget=_get_name,
-        fset=_set_name,
-        doc="""name of the design variable
-
-        :Type: str
-        """,
-    )
+        # Set to None the properties inherited from DataKeeper
+        super(OptiConstraint, self)._set_None()
 
     def _get_type_const(self):
         """getter of type_const"""
@@ -262,7 +269,7 @@ class OptiConstraint(FrozenClass):
     type_const = property(
         fget=_get_type_const,
         fset=_set_type_const,
-        doc="""Type of comparison ( "==", "<=", ">=", "<",">")
+        doc=u"""Type of comparison ( "==", "<=", ">=", "<",">")
 
         :Type: str
         """,
@@ -280,43 +287,8 @@ class OptiConstraint(FrozenClass):
     value = property(
         fget=_get_value,
         fset=_set_value,
-        doc="""Value to compare
+        doc=u"""Value to compare
 
         :Type: float
-        """,
-    )
-
-    def _get_get_variable(self):
-        """getter of get_variable"""
-        return self._get_variable_func
-
-    def _set_get_variable(self, value):
-        """setter of get_variable"""
-        if value is None:
-            self._get_variable_str = None
-            self._get_variable_func = None
-        elif isinstance(value, str) and "lambda" in value:
-            self._get_variable_str = value
-            self._get_variable_func = eval(value)
-        elif isinstance(value, str) and isfile(value) and value[-3:] == ".py":
-            self._get_variable_str = value
-            f = open(value, "r")
-            exec(f.read(), globals())
-            self._get_variable_func = eval(basename(value[:-3]))
-        elif callable(value):
-            self._get_variable_str = None
-            self._get_variable_func = value
-        else:
-            raise CheckTypeError(
-                "For property get_variable Expected function or str (path to python file or lambda), got: "
-                + str(type(value))
-            )
-
-    get_variable = property(
-        fget=_get_get_variable,
-        fset=_set_get_variable,
-        doc="""Function to get the variable to compare
-
-        :Type: function
         """,
     )

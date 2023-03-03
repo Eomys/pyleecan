@@ -59,6 +59,12 @@ def _search_and_update(obj_dict, parent=None, parent_index=None, update_dict=Non
         parent[parent_index] = convert_Winding(obj_dict)
     elif update_dict["Yoke_Notch"] and is_yoke_notch(obj_dict):
         move_yoke_notch(obj_dict)
+    elif update_dict["VarParam"] and is_VarParam_dict(obj_dict):
+        rename_varparam(obj_dict)
+    elif update_dict["OptiConstraint"] and is_OptiConstraint_dict(obj_dict):
+        parent[parent_index] = convert_opticonstraint(obj_dict)
+    elif update_dict["OptiDesignVar"] and is_OptiDesignVar_dict(obj_dict):
+        parent[parent_index] = convert_optidesignvar(obj_dict)
     else:
         # walk through the dict
         for key, value in obj_dict.items():
@@ -331,6 +337,99 @@ def convert_Winding(wind_dict):
         return Winding_class(init_dict=wind_dict_new)
 
 
+######################
+# v 1.4.1 => 1.4.2
+# VarParam is now VarParamSweep
+######################
+VARPARAM_VERSION = "1.4.2"
+
+
+def is_VarParam_dict(obj_dict):
+    """Check if the object need to be updated for Winding"""
+    return "__class__" in obj_dict.keys() and obj_dict["__class__"] in [
+        "VarParam",
+    ]
+
+
+def rename_varparam(varparam_dict):
+    """Update the old VarParam class to VarParamSweep"""
+    getLogger(GUI_LOG_NAME).info(
+        "Old machine version detected, Updating the VarParam object"
+    )
+    # Copy dict to keep original version
+    varparam_dict_new = varparam_dict.copy()
+    # Instantiate object
+    VarParamSweep = import_class("pyleecan.Classes", "VarParamSweep")
+    return VarParamSweep(init_dict=varparam_dict_new)
+
+
+######################
+# v 1.4.1 => 1.4.2
+# VarParam is now VarParamSweep
+######################
+OptiConstraint_VERSION = "1.4.2"
+
+
+def is_OptiConstraint_dict(obj_dict):
+    """Check if the object need to be updated for OptiConstraint"""
+    return (
+        "__class__" in obj_dict.keys()
+        and obj_dict["__class__"]
+        in [
+            "OptiConstraint",
+        ]
+        and "get_variable" in obj_dict.keys()
+    )
+
+
+def convert_opticonstraint(opticonstraint_dict):
+    """Update the old OptiConstraint to the new one inherited from DataKeeper without get_variable"""
+    getLogger(GUI_LOG_NAME).info(
+        "Old machine version detected, Updating the OptiConstraint object"
+    )
+    # Copy dict to keep original version
+    opticonstraint_dict_new = opticonstraint_dict.copy()
+    opticonstraint_dict_new["keeper"] = opticonstraint_dict_new["get_variable"]
+    del opticonstraint_dict_new["get_variable"]
+    # Instantiate object
+    OptiConstraint = import_class("pyleecan.Classes", "OptiConstraint")
+    return OptiConstraint(init_dict=opticonstraint_dict_new)
+
+
+######################
+# v 1.4.1 => 1.4.2
+# VarParam is now VarParamSweep
+######################
+OptiDesignVar_VERSION = "1.4.2"
+
+
+def is_OptiDesignVar_dict(obj_dict):
+    """Check if the object need to be updated for OptiDesignVar"""
+    return "__class__" in obj_dict.keys() and obj_dict["__class__"] in [
+        "OptiDesignVar",
+    ]
+
+
+def convert_optidesignvar(optidesignvar_dict):
+    """Update the old OptiDesignVar to the new ones OptiDesignVarSet & OptiDesignVarInterval"""
+    getLogger(GUI_LOG_NAME).info(
+        "Old machine version detected, Updating the OptiDesignVar object"
+    )
+    # Copy dict to keep original version
+    optidesignvar_dict_new = optidesignvar_dict.copy()
+
+    if optidesignvar_dict_new["type_var"] == "set":
+        del optidesignvar_dict_new["type_var"]
+        OptiDesignVarSet = import_class("pyleecan.Classes", "OptiDesignVarSet")
+        return OptiDesignVarSet(init_dict=optidesignvar_dict_new)
+    else:
+        del optidesignvar_dict_new["type_var"]
+        OptiDesignVarInterval = import_class(
+            "pyleecan.Classes", "OptiDesignVarInterval"
+        )
+        return OptiDesignVarInterval(init_dict=optidesignvar_dict_new)
+
+
 def is_before_version(ref_version, check_version):
     """Check if a version str is before another version str
 
@@ -385,10 +484,20 @@ def create_update_dict(file_version):
         update_dict["OP"] = True
         update_dict["OP_matrix"] = True
         update_dict["Yoke_Notch"] = True
+        update_dict["VarParam"] = True
+        update_dict["OptiConstraint"] = True
+        update_dict["OptiDesignVar"] = True
     else:
         update_dict["Winding"] = is_before_version(WIND_VERSION, file_version)
         update_dict["HoleUD"] = is_before_version(HoleUD_VERSION, file_version)
         update_dict["OP"] = is_before_version(OP_VERSION, file_version)
         update_dict["OP_matrix"] = is_before_version(OP_MAT_VERSION, file_version)
         update_dict["Yoke_Notch"] = is_before_version(Yoke_Notch_VERSION, file_version)
+        update_dict["VarParam"] = is_before_version(VARPARAM_VERSION, file_version)
+        update_dict["OptiConstraint"] = is_before_version(
+            OptiConstraint_VERSION, file_version
+        )
+        update_dict["OptiDesignVar"] = is_before_version(
+            OptiDesignVar_VERSION, file_version
+        )
     return update_dict

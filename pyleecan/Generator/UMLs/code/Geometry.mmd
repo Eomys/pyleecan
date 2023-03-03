@@ -1,0 +1,192 @@
+classDiagram
+direction TB
+class Arc{
+	draw_FEMM()
+	intersect_line()
+	is_on_line()
+	split_line()
+	comp_distance()
+	plot()
+	comp_maxseg()
+	intersect_obj()
+	is_arc()
+}
+class Arc1{
+	begin : complex
+	end : complex
+	radius : float
+	is_trigo_direction : bool
+	check()
+	comp_length()
+	comp_radius()
+	discretize()
+	get_angle()
+	get_begin()
+	get_center()
+	get_end()
+	get_middle()
+	reverse()
+	rotate()
+	scale()
+	split_half()
+	translate()
+	split_point()
+}
+class Arc2{
+	begin : complex
+	center : complex
+	angle : float
+	check()
+	comp_length()
+	comp_radius()
+	discretize()
+	get_angle()
+	get_begin()
+	get_center()
+	get_end()
+	get_middle()
+	reverse()
+	rotate()
+	scale()
+	split_half()
+	translate()
+	split_point()
+}
+class Arc3{
+	begin : complex
+	end : complex
+	is_trigo_direction : bool
+	check()
+	comp_length()
+	comp_radius()
+	discretize()
+	get_angle()
+	get_begin()
+	get_center()
+	get_end()
+	get_middle()
+	reverse()
+	rotate()
+	scale()
+	split_half()
+	translate()
+	split_point()
+}
+class Circle{
+	radius : float
+	center : complex
+	prop_dict : dict
+	check()
+	comp_length()
+	comp_surface()
+	discretize()
+	get_lines()
+	get_patches()
+	rotate()
+	translate()
+	comp_point_ref()
+}
+class Line{
+	prop_dict : dict
+	comp_normal()
+}
+class PolarArc{
+	angle : float
+	height : float
+	get_lines()
+	rotate()
+	translate()
+	check()
+	comp_length()
+	discretize()
+	get_patches()
+	comp_surface()
+	comp_point_ref()
+}
+class Segment{
+	begin : complex
+	end : complex
+	check()
+	comp_distance()
+	comp_length()
+	discretize()
+	draw_FEMM()
+	get_begin()
+	get_end()
+	get_middle()
+	intersect_line()
+	is_on_line()
+	plot()
+	reverse()
+	rotate()
+	scale()
+	split_half()
+	split_line()
+	translate()
+	split_point()
+	intersect_obj()
+	is_arc()
+}
+class SurfLine{
+	line_list : list~Line~
+	check()
+	comp_length()
+	comp_point_ref()
+	comp_surface()
+	discretize()
+	get_lines()
+	get_patches()
+	plot_lines()
+	rotate()
+	scale()
+	translate()
+}
+class SurfRing{
+	out_surf : Surface
+	in_surf : Surface
+	get_lines()
+	rotate()
+	translate()
+	check()
+	comp_length()
+	get_patches()
+	discretize()
+	comp_surface()
+	plot_lines()
+	comp_point_ref()
+}
+class Surface{
+	point_ref : complex
+	label : str
+	comp_mesh_dict()
+	draw_FEMM()
+	plot()
+	split_line()
+	is_inside()
+}
+class Trapeze{
+	height : float
+	W2 : float
+	W1 : float
+	check()
+	comp_length()
+	comp_surface()
+	discretize()
+	get_lines()
+	get_patches()
+	rotate()
+	translate()
+	comp_point_ref()
+}
+Arc  <|--> Arc1
+Arc  <|--> Arc2
+Arc  <|--> Arc3
+Line  <|--> Arc
+Line  <|--> Segment
+SurfLine *--> Line
+SurfRing *--> Surface
+Surface  <|--> Circle
+Surface  <|--> PolarArc
+Surface  <|--> SurfLine
+Surface  <|--> SurfRing
+Surface  <|--> Trapeze

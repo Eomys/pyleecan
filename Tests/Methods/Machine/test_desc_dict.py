@@ -14,7 +14,7 @@ def test_desc_SCIM():
     """Check that the description of a SCIM is correct"""
     Railway_Traction = load(join(DATA_DIR, "Machine", "Railway_Traction.json"))
     desc_dict = Railway_Traction.comp_desc_dict()
-    assert len(desc_dict) == 9
+    assert len(desc_dict) == 12
     assert desc_dict[0]["name"] == "Type"
     assert desc_dict[0]["value"] == "SCIM"
 
@@ -39,8 +39,17 @@ def test_desc_SCIM():
     assert desc_dict[7]["name"] == "Mmachine"
     assert desc_dict[7]["value"] == pytest.approx(342.819, rel=0.1)
 
-    assert desc_dict[8]["name"] == "Mwind"
-    assert desc_dict[8]["value"] == pytest.approx(59.055, rel=0.1)
+    assert desc_dict[8]["name"] == "Mslam"
+    assert desc_dict[8]["value"] == pytest.approx(143.598, rel=0.1)
+
+    assert desc_dict[9]["name"] == "Mswind"
+    assert desc_dict[9]["value"] == pytest.approx(59.055, rel=0.1)
+
+    assert desc_dict[10]["name"] == "Mrlam"
+    assert desc_dict[10]["value"] == pytest.approx(97.5362, rel=0.1)
+
+    assert desc_dict[11]["name"] == "Mrwind"
+    assert desc_dict[11]["value"] == pytest.approx(21.118, rel=0.1)
 
 
 @pytest.mark.IPMSM
@@ -48,7 +57,7 @@ def test_desc_IPMSM():
     """Check that the description of an IPMSM is correct"""
     Toyota_Prius = load(join(DATA_DIR, "Machine", "Toyota_Prius.json"))
     desc_dict = Toyota_Prius.comp_desc_dict()
-    assert len(desc_dict) == 9
+    assert len(desc_dict) == 11
     assert desc_dict[0]["name"] == "Type"
     assert desc_dict[0]["value"] == "IPMSM"
 
@@ -70,11 +79,17 @@ def test_desc_IPMSM():
     assert desc_dict[6]["name"] == "Mmachine"
     assert desc_dict[6]["value"] == pytest.approx(33.37, rel=0.1)
 
-    assert desc_dict[7]["name"] == "Mwind"
-    assert desc_dict[7]["value"] == pytest.approx(4.0014, rel=0.1)
+    assert desc_dict[7]["name"] == "Mslam"
+    assert desc_dict[7]["value"] == pytest.approx(15.78146, rel=0.1)
 
-    assert desc_dict[8]["name"] == "Mmag"
-    assert desc_dict[8]["value"] == pytest.approx(1.235, rel=0.1)
+    assert desc_dict[8]["name"] == "Mswind"
+    assert desc_dict[8]["value"] == pytest.approx(4.0014, rel=0.1)
+
+    assert desc_dict[9]["name"] == "Mrlam"
+    assert desc_dict[9]["value"] == pytest.approx(5.0063, rel=0.1)
+
+    assert desc_dict[10]["name"] == "Mmag"
+    assert desc_dict[10]["value"] == pytest.approx(1.235, rel=0.1)
 
 
 @pytest.mark.outer_rotor

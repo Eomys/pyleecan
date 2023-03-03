@@ -1,0 +1,43 @@
+{
+  "__class__": "VarParamSweep",
+  "__save_date__": "2022_12_07 14h03min33s ",
+  "__version__": "pyleecan_1.4.1",
+  "datakeeper_list": [
+    {
+      "__class__": "DataKeeper",
+      "error_keeper": "lambda simu: np.nan",
+      "keeper": null,
+      "name": "Dummy result",
+      "physic": null,
+      "result": [],
+      "result_ref": null,
+      "symbol": "res",
+      "unit": "-"
+    }
+  ],
+  "desc": "",
+  "is_keep_all_output": true,
+  "is_reuse_LUT": false,
+  "is_reuse_femm_file": false,
+  "name": "",
+  "nb_simu": 0,
+  "paramexplorer_list": [
+    {
+      "__class__": "ParamExplorerSet",
+      "getter": null,
+      "name": "Dummy variable",
+      "setter": null,
+      "symbol": "X",
+      "unit": "-",
+      "value": [
+        0,
+        1
+      ]
+    }
+  ],
+  "post_keeper_postproc_list": null,
+  "postproc_list": [],
+  "pre_keeper_postproc_list": null,
+  "stop_if_error": true,
+  "var_simu": null
+}
