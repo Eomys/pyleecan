@@ -10364,7 +10364,9 @@
             "get_loss_density_ag",
             "get_loss_overall",
             "get_power_dict",
-            "plot_losses"
+            "plot_losses",
+            "__getitem__",
+            "__len__"
         ],
         "mother": "",
         "name": "OutLoss",

@@ -3,3 +3,5 @@ axes_dict,,Dict containing axes data used for Magnetics,,{SciDataTool.Classes.Da
 loss_dict,,Dict containing OutLossModel obects for each type of loss,,{OutLossModel},[],,,,,,get_loss_overall,,,
 logger_name,-,Name of the logger to use,0,str,Pyleecan.Loss,,,,,,get_power_dict,,,
 ,,,,,,,,,,,plot_losses,,,
+,,,,,,,,,,,__getitem__,,,
+,,,,,,,,,,,__len__,,,

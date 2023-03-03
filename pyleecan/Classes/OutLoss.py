@@ -37,6 +37,16 @@ try:
 except ImportError as error:
     plot_losses = error
 
+try:
+    from ..Methods.Output.OutLoss.__getitem__ import __getitem__
+except ImportError as error:
+    __getitem__ = error
+
+try:
+    from ..Methods.Output.OutLoss.__len__ import __len__
+except ImportError as error:
+    __len__ = error
+
 
 from numpy import isnan
 from ._check import InitUnKnowClassError
@@ -92,6 +102,24 @@ class OutLoss(FrozenClass):
         )
     else:
         plot_losses = plot_losses
+    # cf Methods.Output.OutLoss.__getitem__
+    if isinstance(__getitem__, ImportError):
+        __getitem__ = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use OutLoss method __getitem__: " + str(__getitem__))
+            )
+        )
+    else:
+        __getitem__ = __getitem__
+    # cf Methods.Output.OutLoss.__len__
+    if isinstance(__len__, ImportError):
+        __len__ = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use OutLoss method __len__: " + str(__len__))
+            )
+        )
+    else:
+        __len__ = __len__
     # generic save method is available in all object
     save = save
     # get_logger method is available in all object
