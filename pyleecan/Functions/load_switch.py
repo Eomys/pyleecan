@@ -103,7 +103,7 @@ load_switch = {
     "LossModelMagnet": LossModelMagnet,
     "LossModelProximity": LossModelProximity,
     "LossModelSteinmetz": LossModelSteinmetz,
-    "LossModelWindage": LossModelWindage,
+    "LossModelWindagePyrhonen": LossModelWindagePyrhonen,
     "LossModelWinding": LossModelWinding,
     "Machine": Machine,
     "MachineAsync": MachineAsync,

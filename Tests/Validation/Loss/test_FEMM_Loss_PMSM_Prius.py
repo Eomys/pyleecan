@@ -17,7 +17,7 @@ from pyleecan.Classes.LossModelBertotti import LossModelBertotti
 from pyleecan.Classes.LossModelJoule import LossModelJoule
 from pyleecan.Classes.LossModelProximity import LossModelProximity
 from pyleecan.Classes.LossModelMagnet import LossModelMagnet
-from pyleecan.Classes.LossModelWindage import LossModelWindage
+from pyleecan.Classes.LossModelWindagePyrhonen import LossModelWindagePyrhonen
 
 
 from pyleecan.Functions.load import load
@@ -75,7 +75,7 @@ def test_FEMM_Loss_Prius():
             "joule": LossModelJoule(group="stator winding"),
             "proximity": LossModelProximity(group="stator winding"),
             "magnets": LossModelMagnet(group="rotor magnets"),
-            "mechanical": LossModelWindage(group="rotor core"),
+            "mechanical": LossModelWindagePyrhonen(group="rotor core"),
         },
     )
 
@@ -336,7 +336,7 @@ def test_FEMM_Id_Iq():
             "joule": LossModelJoule(group="stator winding"),
             "proximity": LossModelProximity(group="stator winding"),
             "magnets": LossModelMagnet(group="rotor magnets"),
-            "mechanical": LossModelWindage(group="rotor core"),
+            "mechanical": LossModelWindagePyrhonen(group="rotor core"),
         },
     )
 

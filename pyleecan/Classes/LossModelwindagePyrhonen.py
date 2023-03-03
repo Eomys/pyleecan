@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
-# File generated according to Generator/ClassesRef/Loss/LossModelWindage.csv
+# File generated according to Generator/ClassesRef/Loss/LossModelWindagePyrhonen.csv
 # WARNING! All changes made in this file will be lost!
-"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Loss/LossModelWindage
+"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Loss/LossModelWindagePyrhonen
 """
 
 from os import linesep
@@ -18,7 +18,7 @@ from .LossModel import LossModel
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
 try:
-    from ..Methods.Loss.LossModelWindage.comp_loss import comp_loss
+    from ..Methods.Loss.LossModelWindagePyrhonen.comp_loss import comp_loss
 except ImportError as error:
     comp_loss = error
 
@@ -27,17 +27,18 @@ from numpy import isnan
 from ._check import InitUnKnowClassError
 
 
-class LossModelWindage(LossModel):
+class LossModelWindagePyrhonen(LossModel):
     """Windage loss model"""
 
     VERSION = 1
 
-    # cf Methods.Loss.LossModelWindage.comp_loss
+    # cf Methods.Loss.LossModelWindagePyrhonen.comp_loss
     if isinstance(comp_loss, ImportError):
         comp_loss = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use LossModelWindage method comp_loss: " + str(comp_loss)
+                    "Can't use LossModelWindagePyrhonen method comp_loss: "
+                    + str(comp_loss)
                 )
             )
         )
@@ -82,7 +83,7 @@ class LossModelWindage(LossModel):
                 coeff_dict = init_dict["coeff_dict"]
         # Set the properties (value check and convertion are done in setter)
         # Call LossModel init
-        super(LossModelWindage, self).__init__(
+        super(LossModelWindagePyrhonen, self).__init__(
             name=name, group=group, is_show_fig=is_show_fig, coeff_dict=coeff_dict
         )
         # The class is frozen (in LossModel init), for now it's impossible to
@@ -91,10 +92,10 @@ class LossModelWindage(LossModel):
     def __str__(self):
         """Convert this object in a readeable string (for print)"""
 
-        LossModelWindage_str = ""
+        LossModelWindagePyrhonen_str = ""
         # Get the properties inherited from LossModel
-        LossModelWindage_str += super(LossModelWindage, self).__str__()
-        return LossModelWindage_str
+        LossModelWindagePyrhonen_str += super(LossModelWindagePyrhonen, self).__str__()
+        return LossModelWindagePyrhonen_str
 
     def __eq__(self, other):
         """Compare two objects (skip parent)"""
@@ -103,7 +104,7 @@ class LossModelWindage(LossModel):
             return False
 
         # Check the properties inherited from LossModel
-        if not super(LossModelWindage, self).__eq__(other):
+        if not super(LossModelWindagePyrhonen, self).__eq__(other):
             return False
         return True
 
@@ -118,7 +119,7 @@ class LossModelWindage(LossModel):
 
         # Check the properties inherited from LossModel
         diff_list.extend(
-            super(LossModelWindage, self).compare(
+            super(LossModelWindagePyrhonen, self).compare(
                 other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
             )
         )
@@ -132,7 +133,7 @@ class LossModelWindage(LossModel):
         S = 0  # Full size of the object
 
         # Get size of the properties inherited from LossModel
-        S += super(LossModelWindage, self).__sizeof__()
+        S += super(LossModelWindagePyrhonen, self).__sizeof__()
         return S
 
     def as_dict(self, type_handle_ndarray=0, keep_function=False, **kwargs):
@@ -147,15 +148,15 @@ class LossModelWindage(LossModel):
         """
 
         # Get the properties inherited from LossModel
-        LossModelWindage_dict = super(LossModelWindage, self).as_dict(
+        LossModelWindagePyrhonen_dict = super(LossModelWindagePyrhonen, self).as_dict(
             type_handle_ndarray=type_handle_ndarray,
             keep_function=keep_function,
             **kwargs
         )
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
-        LossModelWindage_dict["__class__"] = "LossModelWindage"
-        return LossModelWindage_dict
+        LossModelWindagePyrhonen_dict["__class__"] = "LossModelWindagePyrhonen"
+        return LossModelWindagePyrhonen_dict
 
     def copy(self):
         """Creates a deepcopy of the object"""
@@ -181,4 +182,4 @@ class LossModelWindage(LossModel):
         """Set all the properties to None (except pyleecan object)"""
 
         # Set to None the properties inherited from LossModel
-        super(LossModelWindage, self)._set_None()
+        super(LossModelWindagePyrhonen, self)._set_None()

@@ -101,7 +101,7 @@ from ..Classes.LossModelJoule import LossModelJoule
 from ..Classes.LossModelMagnet import LossModelMagnet
 from ..Classes.LossModelProximity import LossModelProximity
 from ..Classes.LossModelSteinmetz import LossModelSteinmetz
-from ..Classes.LossModelWindage import LossModelWindage
+from ..Classes.LossModelWindagePyrhonen import LossModelWindagePyrhonen
 from ..Classes.LossModelWinding import LossModelWinding
 from ..Classes.Machine import Machine
 from ..Classes.MachineAsync import MachineAsync

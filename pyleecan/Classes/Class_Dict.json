@@ -6135,7 +6135,7 @@
             "LossModelMagnet",
             "LossModelProximity",
             "LossModelSteinmetz",
-            "LossModelWindage",
+            "LossModelWindagePyrhonen",
             "LossModelWinding"
         ],
         "desc": "Abstract Loss Model Class",
@@ -6381,7 +6381,7 @@
             }
         ]
     },
-    "LossModelWindage": {
+    "LossModelWindagePyrhonen": {
         "constants": [
             {
                 "name": "VERSION",
@@ -6395,9 +6395,9 @@
             "comp_loss"
         ],
         "mother": "LossModel",
-        "name": "LossModelWindage",
+        "name": "LossModelWindagePyrhonen",
         "package": "Loss",
-        "path": "pyleecan/Generator/ClassesRef/Loss/LossModelWindage.csv",
+        "path": "pyleecan/Generator/ClassesRef/Loss/LossModelWindagePyrhonen.csv",
         "properties": []
     },
     "LossModelWinding": {

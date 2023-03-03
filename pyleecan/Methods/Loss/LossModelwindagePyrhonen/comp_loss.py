@@ -7,8 +7,8 @@ def comp_loss(self):
 
     Parameters
     ----------
-    self: LossModelWindage
-        a LossModelWindage object
+    self: LossModelWindagePyrhonen
+        a LossModelWindagePyrhonen object
 
     Returns
     -------
