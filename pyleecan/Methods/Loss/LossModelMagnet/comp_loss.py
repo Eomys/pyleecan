@@ -156,7 +156,7 @@ def comp_loss(self):
         Se_mag = Se[kmag]
 
         # derivation in frequency domain
-        Az_df = Az_dt.get_along("freqs", "indice" + str(kmag), "z[0]")
+        Az_df = Az_dt.get_along("freqs", "indice" + str(kmag), "z=mean")
         if ii == 0:
             freqs = Az_df["freqs"]
             w = 2 * pi * freqs[:, None]

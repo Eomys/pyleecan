@@ -116,7 +116,7 @@ def comp_loss(self):
     # )
 
     # Compute magnetic flux density FFT
-    Bfft = Bvect.get_xyz_along("freqs", "indice=" + str(Igrp), "z[0]")
+    Bfft = Bvect.get_xyz_along("freqs", "indice=" + str(Igrp), "z=mean")
     freqs = Bfft["freqs"]
     Bfft_magnitude = np_sqrt(np_abs(Bfft["comp_x"]) ** 2 + np_abs(Bfft["comp_y"]) ** 2)
 

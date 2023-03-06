@@ -44,4 +44,6 @@ def run(self):
     self.comp_all_losses(axes_dict)
 
     # Add overall by adding all losses sources
-    output.loss.loss_dict["overall"] = sum(output.loss.loss_dict.values())
+    overall = sum(output.loss.loss_dict.values())
+    overall.name = "overall"
+    output.loss.loss_dict["overall"] = overall
