@@ -36,11 +36,15 @@ def interp_Ploss_dqh(self, Id, Iq, N0, exclude_models=[]):
     name_list = ["joule", "stator core", "magnets", "rotor core", "proximity"]
     # Check that all the losses are available
     if self.output_list is None or len(self.output_list) == 0:
-        raise Exception("Error, interpolation requires output_list, check is_keep_all_output")
+        raise Exception(
+            "Error, interpolation requires output_list, check is_keep_all_output"
+        )
     out1 = self.output_list[0]
     for name in name_list:
         if name not in out1.loss.loss_dict.keys():
-            raise Exception("Error "+name+" is missing in "+str(out1.loss.loss_dict.keys()))
+            raise Exception(
+                "Error " + name + " is missing in " + str(out1.loss.loss_dict.keys())
+            )
 
     p = self.simu.machine.get_pole_pair_number()
 
