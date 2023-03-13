@@ -239,7 +239,7 @@ def test_skew_pattern():
 
     assert_array_almost_equal(
         z_cont_lin,
-        [-0.0769, 0.0769],
+        [-0.06, 0.06],
     )
 
     assert max(angle_cont_lin) - min(angle_cont_lin) == ssp2
@@ -253,6 +253,6 @@ def test_skew_pattern():
 
 if __name__ == "__main__":
     Toyota_Prius, Audi_eTron = test_skew_pattern()
-
+    print("Done")
     # Toyota_Prius.rotor.skew.plot(is_show_fig=True)
     # Audi_eTron.rotor.skew.plot(is_show_fig=True)

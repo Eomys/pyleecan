@@ -94,10 +94,14 @@ from ..Classes.LamSquirrelCageMag import LamSquirrelCageMag
 from ..Classes.Lamination import Lamination
 from ..Classes.Line import Line
 from ..Classes.Loss import Loss
-from ..Classes.LossFEMM import LossFEMM
+from ..Classes.LossFEA import LossFEA
 from ..Classes.LossModel import LossModel
 from ..Classes.LossModelBertotti import LossModelBertotti
+from ..Classes.LossModelJoule import LossModelJoule
+from ..Classes.LossModelMagnet import LossModelMagnet
+from ..Classes.LossModelProximity import LossModelProximity
 from ..Classes.LossModelSteinmetz import LossModelSteinmetz
+from ..Classes.LossModelWindagePyrhonen import LossModelWindagePyrhonen
 from ..Classes.LossModelWinding import LossModelWinding
 from ..Classes.Machine import Machine
 from ..Classes.MachineAsync import MachineAsync
@@ -156,6 +160,7 @@ from ..Classes.OutGeo import OutGeo
 from ..Classes.OutGeoLam import OutGeoLam
 from ..Classes.OutInternal import OutInternal
 from ..Classes.OutLoss import OutLoss
+from ..Classes.OutLossModel import OutLossModel
 from ..Classes.OutMag import OutMag
 from ..Classes.OutMagElmer import OutMagElmer
 from ..Classes.OutMagFEMM import OutMagFEMM

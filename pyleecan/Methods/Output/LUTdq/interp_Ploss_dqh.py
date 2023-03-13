@@ -4,8 +4,9 @@ import scipy.interpolate as scp_int
 from ....Functions.Electrical.comp_loss_joule import comp_loss_joule
 
 
-def interp_Ploss_dqh(self, Id, Iq, N0):
+def interp_Ploss_dqh(self, Id, Iq, N0, exclude_models=[]):
     """Interpolate losses in function of Id and Iq and for given speed
+    Meant to be used with SIPMSM/IPMSM machine with LossFEA (to have the correct loss models name)
 
     Parameters
     ----------
@@ -17,6 +18,8 @@ def interp_Ploss_dqh(self, Id, Iq, N0):
         current Iq
     N0: float
         rotation speed [rpm]
+    exclude_models: list of strings
+        list of LossModel names to exclude from the interpolation
 
     Returns
     ----------
@@ -29,27 +32,32 @@ def interp_Ploss_dqh(self, Id, Iq, N0):
         - 5th column : proximity losses
     """
 
+    # Name of the losses model to interpolate (in order)
+    name_list = ["joule", "stator core", "magnets", "rotor core", "proximity"]
+    # Check that all the losses are available
+    if self.output_list is None or len(self.output_list) == 0:
+        raise Exception(
+            "Error, interpolation requires output_list, check is_keep_all_output"
+        )
+    out1 = self.output_list[0]
+    for name in name_list:
+        if name not in out1.loss.loss_dict.keys():
+            raise Exception(
+                "Error " + name + " is missing in " + str(out1.loss.loss_dict.keys())
+            )
+
     p = self.simu.machine.get_pole_pair_number()
 
     felec = N0 / 60 * p
 
-    type_skin_effect = self.simu.loss.type_skin_effect
-    Tsta = self.simu.loss.Tsta
-
-    Ploss_dqh = np.zeros((len(self.output_list), 5))
+    Ploss_dqh = np.zeros(
+        (len(self.output_list), len(self.output_list[0].loss.loss_dict))
+    )
     for ii, out in enumerate(self.output_list):
-        OP = out.elec.OP.copy()
-        OP.felec = felec
-        Ploss_dqh[ii, 0] = comp_loss_joule(
-            lam=self.simu.machine.stator,
-            OP=OP,
-            T_op=Tsta,
-            type_skin_effect=type_skin_effect,
-        )
-        Ploss_dqh[ii, 1] = out.loss.get_loss_group("stator core", felec)
-        Ploss_dqh[ii, 2] = out.loss.get_loss_group("rotor magnets", felec)
-        Ploss_dqh[ii, 3] = out.loss.get_loss_group("rotor core", felec)
-        Ploss_dqh[ii, 4] = out.loss.get_loss_group("stator winding", felec)
+        for kk, loss_name in enumerate(name_list):
+            loss = out.loss.loss_dict[loss_name]
+            if loss.loss_model not in exclude_models:
+                Ploss_dqh[ii, kk] = loss.get_loss_scalar(felec)
 
     # Get unique Id, Iq sorted in ascending order
     OP_matrix = self.get_OP_array("N0", "Id", "Iq")

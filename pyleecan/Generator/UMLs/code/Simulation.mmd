@@ -213,7 +213,7 @@ class Loss{
 	add_model()
 	remove_model()
 }
-class LossFEMM{
+class LossFEA{
 	is_get_meshsolution : bool
 	Tsta : float
 	Trot : float
@@ -563,7 +563,7 @@ Input  <|--> InputVoltage
 Input *--> OP
 InputCurrent  <|--> InputFlux
 InputVoltage  <|--> InputCurrent
-Loss  <|--> LossFEMM
+Loss  <|--> LossFEA
 Loss *--> LossModel
 LossModel  <|--> LossModelBertotti
 LossModel  <|--> LossModelSteinmetz

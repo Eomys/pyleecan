@@ -1,2 +1,0 @@
-Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
-temperature,°C,Winding temperature,0,float,20,,,,Simulation,LossModel,comp_loss,VERSION,1,Winding loss model

@@ -11,7 +11,6 @@ class Diagram:
     code associated to it, given a list of classes.
     """
 
-
     folder_path_to_write_code = join(GEN_DIR, "UMLs", "code")
     folder_path_to_write_svg = join(GEN_DIR, "UMLs", "svg")
 

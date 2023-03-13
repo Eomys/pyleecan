@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
-# File generated according to Generator/ClassesRef/Simulation/LossModelSteinmetz.csv
+# File generated according to Generator/ClassesRef/Loss/LossModelSteinmetz.csv
 # WARNING! All changes made in this file will be lost!
-"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Simulation/LossModelSteinmetz
+"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Loss/LossModelSteinmetz
 """
 
 from os import linesep
@@ -18,9 +18,14 @@ from .LossModel import LossModel
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
 try:
-    from ..Methods.Simulation.LossModelSteinmetz.comp_coeff import comp_coeff
+    from ..Methods.Loss.LossModelSteinmetz.comp_coeff import comp_coeff
 except ImportError as error:
     comp_coeff = error
+
+try:
+    from ..Methods.Loss.LossModelSteinmetz.comp_loss import comp_loss
+except ImportError as error:
+    comp_loss = error
 
 
 from numpy import isnan
@@ -32,7 +37,8 @@ class LossModelSteinmetz(LossModel):
 
     VERSION = 1
 
-    # cf Methods.Simulation.LossModelSteinmetz.comp_coeff
+    # Check ImportError to remove unnecessary dependencies in unused method
+    # cf Methods.Loss.LossModelSteinmetz.comp_coeff
     if isinstance(comp_coeff, ImportError):
         comp_coeff = property(
             fget=lambda x: raise_(
@@ -43,6 +49,17 @@ class LossModelSteinmetz(LossModel):
         )
     else:
         comp_coeff = comp_coeff
+    # cf Methods.Loss.LossModelSteinmetz.comp_loss
+    if isinstance(comp_loss, ImportError):
+        comp_loss = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use LossModelSteinmetz method comp_loss: " + str(comp_loss)
+                )
+            )
+        )
+    else:
+        comp_loss = comp_loss
     # generic save method is available in all object
     save = save
     # get_logger method is available in all object
@@ -55,7 +72,9 @@ class LossModelSteinmetz(LossModel):
         alpha_f=None,
         alpha_B=None,
         name="",
+        group="",
         is_show_fig=False,
+        coeff_dict=None,
         init_dict=None,
         init_str=None,
     ):
@@ -84,15 +103,21 @@ class LossModelSteinmetz(LossModel):
                 alpha_B = init_dict["alpha_B"]
             if "name" in list(init_dict.keys()):
                 name = init_dict["name"]
+            if "group" in list(init_dict.keys()):
+                group = init_dict["group"]
             if "is_show_fig" in list(init_dict.keys()):
                 is_show_fig = init_dict["is_show_fig"]
+            if "coeff_dict" in list(init_dict.keys()):
+                coeff_dict = init_dict["coeff_dict"]
         # Set the properties (value check and convertion are done in setter)
         self.k_hy = k_hy
         self.k_ed = k_ed
         self.alpha_f = alpha_f
         self.alpha_B = alpha_B
         # Call LossModel init
-        super(LossModelSteinmetz, self).__init__(name=name, is_show_fig=is_show_fig)
+        super(LossModelSteinmetz, self).__init__(
+            name=name, group=group, is_show_fig=is_show_fig, coeff_dict=coeff_dict
+        )
         # The class is frozen (in LossModel init), for now it's impossible to
         # add new properties
 
@@ -262,7 +287,12 @@ class LossModelSteinmetz(LossModel):
         alpha_f_val = self.alpha_f
         alpha_B_val = self.alpha_B
         name_val = self.name
+        group_val = self.group
         is_show_fig_val = self.is_show_fig
+        if self.coeff_dict is None:
+            coeff_dict_val = None
+        else:
+            coeff_dict_val = self.coeff_dict.copy()
         # Creates new object of the same type with the copied properties
         obj_copy = type(self)(
             k_hy=k_hy_val,
@@ -270,7 +300,9 @@ class LossModelSteinmetz(LossModel):
             alpha_f=alpha_f_val,
             alpha_B=alpha_B_val,
             name=name_val,
+            group=group_val,
             is_show_fig=is_show_fig_val,
+            coeff_dict=coeff_dict_val,
         )
         return obj_copy
 
