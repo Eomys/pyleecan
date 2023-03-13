@@ -3,6 +3,7 @@ from json import load as jload
 from os.path import isdir, isfile, splitext
 from ...Generator import PYTHON_DEFAULT_ENCODING
 
+
 def load_json(file_path):
     """Load a json file
 
