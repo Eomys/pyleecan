@@ -46,7 +46,9 @@ class PostLUT(PostMethod):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, is_save_LUT=True, init_dict=None, init_str=None):
+    def __init__(
+        self, is_save_LUT=True, file_name="LUT", init_dict=None, init_str=None
+    ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -64,8 +66,11 @@ class PostLUT(PostMethod):
             # Overwrite default value with init_dict content
             if "is_save_LUT" in list(init_dict.keys()):
                 is_save_LUT = init_dict["is_save_LUT"]
+            if "file_name" in list(init_dict.keys()):
+                file_name = init_dict["file_name"]
         # Set the properties (value check and convertion are done in setter)
         self.is_save_LUT = is_save_LUT
+        self.file_name = file_name
         # Call PostMethod init
         super(PostLUT, self).__init__()
         # The class is frozen (in PostMethod init), for now it's impossible to
@@ -78,6 +83,7 @@ class PostLUT(PostMethod):
         # Get the properties inherited from PostMethod
         PostLUT_str += super(PostLUT, self).__str__()
         PostLUT_str += "is_save_LUT = " + str(self.is_save_LUT) + linesep
+        PostLUT_str += 'file_name = "' + str(self.file_name) + '"' + linesep
         return PostLUT_str
 
     def __eq__(self, other):
@@ -90,6 +96,8 @@ class PostLUT(PostMethod):
         if not super(PostLUT, self).__eq__(other):
             return False
         if other.is_save_LUT != self.is_save_LUT:
+            return False
+        if other.file_name != self.file_name:
             return False
         return True
 
@@ -120,6 +128,18 @@ class PostLUT(PostMethod):
                 diff_list.append(name + ".is_save_LUT" + val_str)
             else:
                 diff_list.append(name + ".is_save_LUT")
+        if other._file_name != self._file_name:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._file_name)
+                    + ", other="
+                    + str(other._file_name)
+                    + ")"
+                )
+                diff_list.append(name + ".file_name" + val_str)
+            else:
+                diff_list.append(name + ".file_name")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -132,6 +152,7 @@ class PostLUT(PostMethod):
         # Get size of the properties inherited from PostMethod
         S += super(PostLUT, self).__sizeof__()
         S += getsizeof(self.is_save_LUT)
+        S += getsizeof(self.file_name)
         return S
 
     def as_dict(self, type_handle_ndarray=0, keep_function=False, **kwargs):
@@ -152,6 +173,7 @@ class PostLUT(PostMethod):
             **kwargs
         )
         PostLUT_dict["is_save_LUT"] = self.is_save_LUT
+        PostLUT_dict["file_name"] = self.file_name
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         PostLUT_dict["__class__"] = "PostLUT"
@@ -162,14 +184,16 @@ class PostLUT(PostMethod):
 
         # Handle deepcopy of all the properties
         is_save_LUT_val = self.is_save_LUT
+        file_name_val = self.file_name
         # Creates new object of the same type with the copied properties
-        obj_copy = type(self)(is_save_LUT=is_save_LUT_val)
+        obj_copy = type(self)(is_save_LUT=is_save_LUT_val, file_name=file_name_val)
         return obj_copy
 
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""
 
         self.is_save_LUT = None
+        self.file_name = None
         # Set to None the properties inherited from PostMethod
         super(PostLUT, self)._set_None()
 
@@ -188,5 +212,23 @@ class PostLUT(PostMethod):
         doc=u"""True to save LUT in PostLUT
 
         :Type: bool
+        """,
+    )
+
+    def _get_file_name(self):
+        """getter of file_name"""
+        return self._file_name
+
+    def _set_file_name(self, value):
+        """setter of file_name"""
+        check_var("file_name", value, "str")
+        self._file_name = value
+
+    file_name = property(
+        fget=_get_file_name,
+        fset=_set_file_name,
+        doc=u"""File name of the file created if is_save_LUT is True
+
+        :Type: str
         """,
     )

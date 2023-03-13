@@ -7,6 +7,7 @@ from PySide2.QtWidgets import QMessageBox, QWidget
 from ......GUI.Dialog.DMachineSetup.SMHoleMag.PHoleM50.PHoleM50 import PHoleM50
 from ......GUI.Dialog.DMachineSetup.SMHoleMag.PHoleM51.PHoleM51 import PHoleM51
 from ......GUI.Dialog.DMachineSetup.SMHoleMag.PHoleM52.PHoleM52 import PHoleM52
+from ......GUI.Dialog.DMachineSetup.SMHoleMag.PHoleM52R.PHoleM52R import PHoleM52R
 from ......GUI.Dialog.DMachineSetup.SMHoleMag.PHoleM53.PHoleM53 import PHoleM53
 from ......GUI.Dialog.DMachineSetup.SMHoleMag.PHoleM54.PHoleM54 import PHoleM54
 from ......GUI.Dialog.DMachineSetup.SMHoleMag.PHoleM57.PHoleM57 import PHoleM57
@@ -55,6 +56,7 @@ class WHoleMag(Ui_WHoleMag, QWidget):
                 PHoleM50,
                 PHoleM51,
                 PHoleM52,
+                PHoleM52R,
                 PHoleM53,
                 PHoleM57,
                 PHoleM58,
@@ -65,6 +67,7 @@ class WHoleMag(Ui_WHoleMag, QWidget):
                 PHoleM50,
                 PHoleM51,
                 PHoleM52,
+                PHoleM52R,
                 PHoleM53,
                 PHoleM54,
                 PHoleM57,

@@ -1,0 +1,3 @@
+Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
+k_p,W/kg,Proximity loss coefficient,,float,None,,,,Loss,LossModel,comp_coeff,VERSION,1,Proximity Loss Model Class
+,,,,,,,,,,,comp_loss,,,

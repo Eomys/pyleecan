@@ -26,7 +26,7 @@ def test_EEC_SCIM():
     """Calculate magnetizing flux"""
 
     # Prepare simulation
-    machine = load(join(DATA_DIR, "Machine", "Audi_eTron_loss.json"))
+    machine = load(join(DATA_DIR, "Machine", "Audi_eTron.json"))
 
     Rs = machine.stator.comp_resistance_wind()
     Rr = machine.rotor.comp_resistance_wind()

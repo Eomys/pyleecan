@@ -11,6 +11,18 @@ class Gen_PBoreFlower(Ui_PBoreFlower):
     def setupUi(self, PBoreFlower):
         """Abstract class to update the widget according to the csv doc"""
         Ui_PBoreFlower.setupUi(self, PBoreFlower)
+        # Setup of in_N
+        txt = self.tr(u"""Number of flower arc""")
+        self.in_N.setWhatsThis(txt)
+        self.in_N.setToolTip(txt)
+
+        # Setup of si_N
+        self.si_N.setMinimum(0)
+        self.si_N.setMaximum(999999)
+        txt = self.tr(u"""Number of flower arc""")
+        self.si_N.setWhatsThis(txt)
+        self.si_N.setToolTip(txt)
+
         # Setup of in_Rarc
         txt = self.tr(u"""Radius of the flower arc""")
         self.in_Rarc.setWhatsThis(txt)

@@ -1,8 +1,9 @@
+from os import system
+from sys import executable
+
 try:
     import setuptools
 except ImportError:  # Install setuptools if needed
-    from os import system
-    from sys import executable
 
     # run 'pip install setuptools'
     system("{} -m pip install setuptools".format(executable))
@@ -11,6 +12,9 @@ except ImportError:  # Install setuptools if needed
 
 import platform
 
+system(
+    "{} -m pip install git+https://gitlab.com/CedMrnl/swat-em.git".format(executable)
+)
 
 # /!\ Increase the number before a release
 # See https://www.python.org/dev/peps/pep-0440/
@@ -21,7 +25,7 @@ import platform
 # Release 1.1.0 : 1.1.0
 # First post release of the release 1.1.0 : 1.1.0.post1
 
-PYLEECAN_VERSION = "1.4.0"
+PYLEECAN_VERSION = "1.4.2"
 
 
 with open("README.md", "r") as fh:
@@ -38,23 +42,21 @@ install_requires = [
     "meshio>=4.0.15,<=4.4.6",
     "numpy>1.19.5",
     "pandas>=1.0.3",
-    'pyfemm>=0.1.1;platform_system=="Windows"',
+    "pyfemm>=0.1.3",
     "PySide2>=5.15.2",
     "pyuff>=1.25",
     "pyvista>=0.25.3,<=0.31.3",
-    "quadpy",
     "SciDataTool>=2.5.0",
     "scipy>=1.4.1",
     "setuptools",
-    "git+https://gitlab.com/CedMrnl/swat-em.git",
     "xlrd>=1.2.0",
     "xlwt>=1.3.0",
 ]
 # Pyleecan optional dependancies
 full_require = [
-    'deap>=1.3.1',
-    'smoot>=0.1.0',
-    'gmsh-sdk>=4.6.0',
+    "deap>=1.3.1",
+    "smoot>=0.1.0",
+    "gmsh-sdk>=4.6.0",
 ]
 
 # Pyleecan Test dependancies
@@ -96,6 +98,6 @@ setuptools.setup(
     install_requires=install_requires,
     extras_require={
         "test": tests_require,
-        "full": full_require
+        "full": full_require,
     },  # Enables to install the test dependancies using pip install pyleecan[test]
 )

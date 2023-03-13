@@ -60,6 +60,10 @@ def solve_MTPA(self, LUT, Rs):
         if self.n_Iq == 1
         else int(self.n_Iq * self.n_interp / (self.n_Id + self.n_Iq))
     )
+
+    # Check if there is a loss model
+    is_loss_model = LUT.simu.loss is not None
+
     while abs(delta_Tem) > delta_Tem_max and niter_Tem < Nmax:
 
         # Refine Id/Iq mesh
@@ -84,6 +88,24 @@ def solve_MTPA(self, LUT, Rs):
 
         # Set maximum voltage condition
         U_cond = Umax_interp <= Urms_max
+
+        if is_loss_model:
+            # Interpolate losses from LUT
+            Ploss_dqh = LUT.interp_Ploss_dqh(Id, Iq, N0=OP.N0)
+            Ploss_ovl = np.sum(Ploss_dqh, axis=1)
+            Ploss_dqh_wo_Joule = LUT.interp_Ploss_dqh(
+                Id, Iq, N0=OP.N0, exclude_models=["LossModelWinding"]
+            )
+            # The input power must cover electrical power + additional losses
+            P_in = qs * (Ud * Id + Uq * Iq) + np.sum(Ploss_dqh_wo_Joule, axis=1)
+        else:
+            # Only consider stator Joule losses
+            Ploss_ovl = qs * Rs * (Id ** 2 + Iq ** 2)
+            # The input power must cover electrical power + Joule losses
+            P_in = qs * (Ud * Id + Uq * Iq)
+
+        # The output power is the input power minus all losses
+        P_out = P_in - Ploss_ovl
 
         if self.load_rate == 0:
             # Finding indices of operating points satisfying voltage constraint for no torque production
@@ -148,6 +170,13 @@ def solve_MTPA(self, LUT, Rs):
         self.get_logger().warning("Current constraint cannot be reached")
 
     out_dict = dict()
+
+    # Calculate efficiency
+    out_dict["P_in"] = P_in[i0][imin]
+    out_dict["P_out"] = P_out[i0][imin]
+    eff = out_dict["P_out"] / out_dict["P_in"]
+    out_dict["efficiency"] = eff if eff > 0 else 0
+    # out_dict["efficiency"] = out_dict["P_out"] / out_dict["P_in"]
 
     # Calculate torque from output power
     out_dict["Tem_av"] = Tem_interp[i0][imin]

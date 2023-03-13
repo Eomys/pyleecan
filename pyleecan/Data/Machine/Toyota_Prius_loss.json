@@ -1,7 +1,7 @@
 {
   "__class__": "MachineIPMSM",
-  "__save_date__": "2022_04_13 10h28min19s ",
-  "__version__": "pyleecan_1.3.8",
+  "__save_date__": "2022_06_30 12h15min56s ",
+  "__version__": "pyleecan_1.4.0",
   "desc": "TOYOTA Prius 2004 interior magnet (V shape) with distributed winding",
   "frame": null,
   "logger_name": "Pyleecan.Machine",
@@ -1766,7 +1766,7 @@
     },
     "notch": [],
     "skew": null,
-    "yoke_notch": []
+    "yoke": null
   },
   "shaft": {
     "Drsh": 0.11064,
@@ -3177,6 +3177,7 @@
       "W3": 0.0076,
       "Zs": 48,
       "__class__": "SlotW28",
+      "is_bore": true,
       "wedge_mat": null
     },
     "winding": {
@@ -3535,7 +3536,7 @@
         ]
       ]
     },
-    "yoke_notch": []
+    "yoke": null
   },
   "type_machine": 1
 }

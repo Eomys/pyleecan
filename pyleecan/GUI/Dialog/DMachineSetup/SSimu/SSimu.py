@@ -292,7 +292,9 @@ class SSimu(Gen_SSimu, QWidget):
             self.simu.input.OP.Id_ref = self.lf_I1.value()
             self.simu.input.OP.Iq_ref = self.lf_I2.value()
         else:
-            self.simu.input.OP.set_Id_Iq(I0=self.lf_I1.value(), Phi0=self.lf_I2.value())
+            self.simu.input.OP.set_I0_Phi0(
+                I0=self.lf_I1.value(), Phi0=self.lf_I2.value()
+            )
 
     def set_I3(self):
         """Update If according to the widget"""

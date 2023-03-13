@@ -1,0 +1,3 @@
+Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
+type_skin_effect,,"0 to ignore skin effect, 1 to consider it",,int,1,,,,Loss,LossModel,comp_loss,VERSION,1,Joule loss model
+,,,,,,,,,,,comp_coeff,,,

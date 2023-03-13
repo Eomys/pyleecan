@@ -1,3 +1,4 @@
+from multiprocessing import cpu_count
 from os.path import join
 
 import numpy as np
@@ -36,9 +37,7 @@ def test_ElecLUTdq_solve_MTPA():
 
     Toyota_Prius = load(join(DATA_DIR, "Machine", "Toyota_Prius.json"))
 
-    # LUT_enforced = None
-
-    LUT_enforced = load("C:/pyleecan/pyleecan_B/pyleecan/pyleecan/Results/LUT.h5")
+    LUT_enforced = None
 
     # Speed vector
     Nspeed = 50
@@ -83,12 +82,12 @@ def test_ElecLUTdq_solve_MTPA():
                 is_periodicity_t=True,
             ),
             var_simu=VarLoadCurrent(
-                postproc_list=[PostLUT(is_save_LUT=False)], is_keep_all_output=True,
+                postproc_list=[PostLUT(is_save_LUT=False)], is_keep_all_output=True
             ),
             mag=MagFEMM(
                 is_periodicity_a=True,
                 is_periodicity_t=True,
-                nb_worker=4,
+                nb_worker=int(0.5 * cpu_count()),
                 is_get_meshsolution=True,
             ),
         ),

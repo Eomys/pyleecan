@@ -37,7 +37,9 @@ def test_copy_out():
 
     # Definition of the magnetic simulation (no symmetry)
     simu.mag = MagFEMM(
-        is_periodicity_a=True, is_periodicity_t=True, nb_worker=cpu_count(),
+        is_periodicity_a=True,
+        is_periodicity_t=True,
+        nb_worker=cpu_count(),
     )
     simu.force = None
     simu.struct = None

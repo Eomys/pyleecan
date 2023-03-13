@@ -1,0 +1,21 @@
+{
+  "name": "pyleecan",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Eomys/pyleecan.git"
+  },
+  "author": "",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/Eomys/pyleecan/issues"
+  },
+  "homepage": "https://github.com/Eomys/pyleecan#readme",
+  "dependencies": {
+    "@mermaid-js/mermaid-cli": "^9.0.0"
+  }
+}

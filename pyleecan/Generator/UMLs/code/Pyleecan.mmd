@@ -1,0 +1,3218 @@
+classDiagram
+direction TB
+class Arc{
+	draw_FEMM()
+	intersect_line()
+	is_on_line()
+	split_line()
+	comp_distance()
+	plot()
+	comp_maxseg()
+	intersect_obj()
+	is_arc()
+}
+class Arc1{
+	begin : complex
+	end : complex
+	radius : float
+	is_trigo_direction : bool
+	check()
+	comp_length()
+	comp_radius()
+	discretize()
+	get_angle()
+	get_begin()
+	get_center()
+	get_end()
+	get_middle()
+	reverse()
+	rotate()
+	scale()
+	split_half()
+	translate()
+	split_point()
+}
+class Arc2{
+	begin : complex
+	center : complex
+	angle : float
+	check()
+	comp_length()
+	comp_radius()
+	discretize()
+	get_angle()
+	get_begin()
+	get_center()
+	get_end()
+	get_middle()
+	reverse()
+	rotate()
+	scale()
+	split_half()
+	translate()
+	split_point()
+}
+class Arc3{
+	begin : complex
+	end : complex
+	is_trigo_direction : bool
+	check()
+	comp_length()
+	comp_radius()
+	discretize()
+	get_angle()
+	get_begin()
+	get_center()
+	get_end()
+	get_middle()
+	reverse()
+	rotate()
+	scale()
+	split_half()
+	translate()
+	split_point()
+}
+class Bore{
+	type_merge_slot : int
+	merge_slot()
+	is_yoke()
+	merge_slot_connect()
+	merge_slot_intersect()
+	merge_slot_translate()
+	comp_Rmin()
+	comp_surface()
+	get_surface()
+	plot()
+}
+class BoreFlower{
+	N : int
+	Rarc : float
+	alpha : float
+	get_bore_line()
+	comp_periodicity_spatial()
+	plot_schematics()
+}
+class BoreLSRPM{
+	N : int
+	Rarc : float
+	W1 : float
+	alpha : float
+	get_bore_line()
+	comp_periodicity_spatial()
+}
+class BoreSinePole{
+	N : int
+	k : float
+	delta_d : float
+	delta_q : float
+	W0 : float
+	alpha : float
+	get_bore_line()
+	get_pole_shape()
+	comp_periodicity_spatial()
+	plot_schematics()
+}
+class BoreUD{
+	line_list : list~Line~
+	sym : int
+	get_bore_line()
+	comp_periodicity_spatial()
+}
+class CellMat{
+	connectivity : ndarray
+	nb_cell : int
+	nb_node_per_cell : int
+	indice : ndarray
+	interpolation : Interpolation
+	add_cell()
+	get_connectivity()
+	get_node2cell()
+	is_exist()
+}
+class Circle{
+	radius : float
+	center : complex
+	prop_dict : dict
+	check()
+	comp_length()
+	comp_surface()
+	discretize()
+	get_lines()
+	get_patches()
+	rotate()
+	translate()
+	comp_point_ref()
+}
+class CondType11{
+	Hwire : float
+	Wwire : float
+	Nwppc_rad : int
+	Nwppc_tan : int
+	Wins_wire : float
+	Wins_coil : float
+	type_winding_shape : int
+	alpha_ew : float
+	comp_surface_active()
+	comp_height()
+	comp_surface()
+	comp_width()
+	plot()
+	plot_schematics()
+	comp_width_wire()
+	comp_height_wire()
+	comp_nb_circumferential_wire()
+	comp_nb_radial_wire()
+	is_round_wire()
+}
+class CondType12{
+	Wwire : float
+	Wins_cond : float
+	Nwppc : int
+	Wins_wire : float
+	Kwoh : float
+	check()
+	comp_surface_active()
+	comp_height()
+	comp_surface()
+	comp_width()
+	plot()
+	plot_schematics()
+	comp_width_wire()
+	comp_height_wire()
+	comp_nb_circumferential_wire()
+	comp_nb_radial_wire()
+	is_round_wire()
+}
+class CondType13{
+	Wwire : float
+	Wins_cond : float
+	Nwppc_rad : int
+	Nwppc_tan : int
+	Wins_wire : float
+	Kwoh : float
+	comp_surface_active()
+	comp_height()
+	comp_surface()
+	comp_width()
+	plot()
+	plot_schematics()
+	comp_width_wire()
+	comp_height_wire()
+	comp_nb_circumferential_wire()
+	comp_nb_radial_wire()
+	is_round_wire()
+}
+class CondType21{
+	Hbar : float
+	Wbar : float
+	Wins : float
+	comp_surface_active()
+	comp_height()
+	comp_surface()
+	comp_width()
+	plot()
+	comp_width_wire()
+	comp_height_wire()
+	comp_nb_circumferential_wire()
+	comp_nb_radial_wire()
+	is_round_wire()
+}
+class CondType22{
+	Sbar : float
+	comp_surface_active()
+	comp_surface()
+	comp_width_wire()
+	comp_height_wire()
+	comp_nb_circumferential_wire()
+	comp_nb_radial_wire()
+	is_round_wire()
+}
+class Conductor{
+	cond_mat : Material
+	ins_mat : Material
+	check()
+	comp_skin_effect_resistance()
+	comp_skin_effect_inductance()
+	comp_temperature_effect()
+}
+class DXFImport{
+	file_path : str
+	surf_dict : dict
+	BC_list : list
+	get_surfaces()
+}
+class DataKeeper{
+	name : str
+	symbol : str
+	unit : str
+	keeper : function
+	error_keeper : function
+	result : list~~
+	result_ref : str
+	_set_keeper()
+}
+class Drive{
+	Umax : float
+	Imax : float
+	is_current : bool
+}
+class DriveWave{
+	wave : Import
+	get_wave()
+}
+class EEC{
+	type_skin_effect : int
+	OP : OP
+	Tsta : float
+	Trot : float
+	Xkr_skinS : float
+	Xke_skinS : float
+	Xkr_skinR : float
+	Xke_skinR : float
+	R1 : float
+	fluxlink : Magnetics
+	get_machine_from_parent()
+	comp_R1()
+	comp_skin_effect()
+	comp_parameters()
+	update_from_ref()
+	solve()
+	solve_PWM()
+	comp_joule_losses()
+	comp_fluxlinkage()
+}
+class EEC_LSRPM{
+	comp_parameters()
+	solve()
+	comp_joule_losses()
+}
+class EEC_PMSM{
+	Ld : float
+	Lq : float
+	Phid : float
+	Phiq : float
+	Phid_mag : float
+	Phiq_mag : float
+	clear_parameters()
+	comp_BEMF_harmonics()
+	comp_joule_losses()
+	comp_Ld()
+	comp_Lq()
+	comp_parameters()
+	comp_Phidq()
+	comp_Phidq_mag()
+	comp_torque_sync_rel()
+	solve()
+	solve_PWM()
+	update_from_ref()
+}
+class EEC_SCIM{
+	Rfe : float
+	L1 : float
+	R2 : float
+	L2 : float
+	K21Z : float
+	K21I : float
+	Im_table : ndarray
+	Lm_table : ndarray
+	I1 : complex
+	I2 : complex
+	U1 : complex
+	U2 : complex
+	If : complex
+	Lm : float
+	Im : complex
+	_comp_flux_mean()
+	_comp_Lm_FEA()
+	clear_parameters()
+	comp_joule_losses()
+	comp_K21()
+	comp_L1()
+	comp_L2()
+	comp_parameters()
+	comp_R2()
+	comp_skin_effect()
+	solve()
+	solve_elementary()
+	update_from_ref()
+}
+class ElecLUTdq{
+	n_interp : int
+	Id_min : float
+	Id_max : float
+	Iq_min : float
+	Iq_max : float
+	n_Id : int
+	n_Iq : int
+	LUT_simu : Simulation
+	is_grid_dq : bool
+	Urms_max : float
+	Jrms_max : float
+	Irms_max : float
+	load_rate : float
+	run()
+	comp_LUTdq()
+	solve_power()
+	solve_MTPA()
+}
+class Electrical{
+	eec : EEC
+	logger_name : str
+	freq_max : float
+	LUT_enforced : LUT
+	Tsta : float
+	Trot : float
+	type_skin_effect : int
+	is_skin_effect_inductance : bool
+	run()
+	comp_power()
+	comp_torque()
+	gen_drive()
+}
+class Elmer{
+	logger_name : str
+}
+class ElmerResults{
+	data : dict
+	file : str
+	usecols : list
+	columns : list
+	is_scalars : bool
+	load_data()
+	load_columns()
+	get_data()
+}
+class ElmerResultsVTU{
+	label : str
+	file_path : str
+	store_dict : dict
+	build_meshsolution()
+}
+class EndWinding{
+	Lew_enforced : float
+	comp_length()
+	comp_inductance()
+}
+class EndWindingCirc{
+	coil_pitch : float
+	comp_length()
+	comp_inductance()
+}
+class EndWindingRect{
+	coil_pitch : float
+	lambda_length : float
+	lambda_width : float
+	comp_length()
+	comp_inductance()
+}
+class FPGNSeg{
+	nb_gauss_point : int
+	get_gauss_points()
+}
+class FPGNTri{
+	nb_gauss_point : int
+	get_gauss_points()
+}
+class Force{
+	is_periodicity_t : bool
+	is_periodicity_a : bool
+	is_agsf_transfer : bool
+	max_wavenumber_transfer : int
+	Rsbo_enforced_transfer : float
+	logger_name : str
+	run()
+	comp_axes()
+	comp_AGSF_transfer()
+}
+class ForceMT{
+	comp_force()
+	comp_force_nodal()
+}
+class ForceTensor{
+	group : str
+	tensor : dict
+	comp_force()
+	comp_force_nodal()
+	comp_magnetostrictive_tensor()
+	element_loop()
+}
+class Frame{
+	Lfra : float
+	Rint : float
+	Rext : float
+	mat_type : Material
+	build_geometry()
+	comp_height_eq()
+	comp_mass()
+	comp_surface()
+	comp_volume()
+	get_length()
+	plot()
+}
+class FrameBar{
+	Nbar : int
+	wbar : float
+	build_geometry()
+	comp_surface()
+	comp_height_gap()
+	build_geometry_bar()
+	comp_surface_bar()
+	comp_surface_gap()
+}
+class GUIOption{
+	unit : Unit
+}
+class GaussPoint{
+}
+class Hole{
+	Zh : int
+	mat_void : Material
+	magnetization_dict_offset : dict
+	Alpha0 : float
+	comp_height()
+	comp_magnetization_dict()
+	comp_radius()
+	comp_surface()
+	convert_to_UD()
+	get_is_stator()
+	get_magnet_by_id()
+	get_magnet_dict()
+	get_Rbo()
+	get_Rext()
+	has_magnet()
+	plot()
+	set_magnet_by_id()
+	get_R_id()
+}
+class HoleM50{
+	H0 : float
+	W0 : float
+	H1 : float
+	W1 : float
+	H2 : float
+	W2 : float
+	H3 : float
+	W3 : float
+	H4 : float
+	W4 : float
+	magnet_0 : Magnet
+	magnet_1 : Magnet
+	_comp_point_coordinate()
+	build_geometry()
+	check()
+	comp_alpha()
+	comp_magnetization_dict()
+	comp_radius()
+	comp_surface_magnet_id()
+	comp_W5()
+	has_magnet()
+	plot_schematics()
+	remove_magnet()
+}
+class HoleM51{
+	H0 : float
+	H1 : float
+	H2 : float
+	W0 : float
+	W1 : float
+	W2 : float
+	W3 : float
+	W4 : float
+	W5 : float
+	W6 : float
+	W7 : float
+	magnet_0 : Magnet
+	magnet_1 : Magnet
+	magnet_2 : Magnet
+	_comp_point_coordinate()
+	build_geometry()
+	check()
+	comp_alpha()
+	comp_magnetization_dict()
+	comp_radius()
+	comp_surface_magnet_id()
+	comp_width()
+	has_magnet()
+	plot_schematics()
+	remove_magnet()
+}
+class HoleM52{
+	H0 : float
+	W0 : float
+	H1 : float
+	W3 : float
+	H2 : float
+	magnet_0 : Magnet
+	_comp_point_coordinate()
+	build_geometry()
+	check()
+	comp_alpha()
+	comp_magnetization_dict()
+	comp_radius()
+	comp_surface()
+	comp_surface_magnet_id()
+	comp_W1()
+	has_magnet()
+	plot_schematics()
+	remove_magnet()
+}
+class HoleM52R{
+	H0 : float
+	W0 : float
+	H1 : float
+	W1 : float
+	H2 : float
+	magnet_0 : Magnet
+	R0 : float
+	_comp_point_coordinate()
+	build_geometry()
+	check()
+	comp_alpha()
+	comp_magnetization_dict()
+	comp_radius()
+	comp_surface()
+	comp_surface_magnet_id()
+	has_magnet()
+	plot_schematics()
+	remove_magnet()
+	get_height_magnet_id()
+}
+class HoleM53{
+	H0 : float
+	H1 : float
+	W1 : float
+	H2 : float
+	W2 : float
+	H3 : float
+	W3 : float
+	W4 : float
+	magnet_0 : Magnet
+	magnet_1 : Magnet
+	_comp_point_coordinate()
+	build_geometry()
+	check()
+	comp_alpha()
+	comp_magnetization_dict()
+	comp_radius()
+	comp_surface_magnet_id()
+	comp_W5()
+	has_magnet()
+	plot_schematics()
+	remove_magnet()
+}
+class HoleM54{
+	H0 : float
+	H1 : float
+	W0 : float
+	R1 : float
+	_comp_point_coordinate()
+	build_geometry()
+	check()
+	comp_magnetization_dict()
+	comp_radius()
+	comp_surface()
+	plot_schematics()
+}
+class HoleM57{
+	W0 : float
+	H1 : float
+	W1 : float
+	H2 : float
+	W2 : float
+	W3 : float
+	W4 : float
+	magnet_0 : Magnet
+	magnet_1 : Magnet
+	_comp_point_coordinate()
+	build_geometry()
+	check()
+	comp_magnetization_dict()
+	comp_radius()
+	comp_surface_magnet_id()
+	has_magnet()
+	plot_schematics()
+	remove_magnet()
+}
+class HoleM58{
+	H0 : float
+	W0 : float
+	H1 : float
+	W1 : float
+	H2 : float
+	W2 : float
+	W3 : float
+	R0 : float
+	magnet_0 : Magnet
+	_comp_point_coordinate()
+	build_geometry()
+	check()
+	comp_magnetization_dict()
+	comp_radius()
+	comp_surface_magnet_id()
+	has_magnet()
+	plot_schematics()
+	remove_magnet()
+}
+class HoleMLSRPM{
+	H1 : float
+	W0 : float
+	W1 : float
+	W2 : float
+	R1 : float
+	R2 : float
+	R3 : float
+	magnet_0 : Magnet
+	_comp_point_coordinate()
+	build_geometry()
+	check()
+	comp_magnetization_dict()
+	comp_mass_magnet()
+	comp_surface_magnet()
+	comp_volume_magnet()
+	plot_schematics()
+	remove_magnet()
+	has_magnet()
+}
+class HoleMag{
+	comp_mass_magnet_id()
+	comp_mass_magnets()
+	comp_surface_magnets()
+	comp_volume_magnets()
+	get_magnet_list()
+	has_magnet()
+}
+class HoleUD{
+	surf_list : list~Surface~
+	magnet_dict : dict~Magnet~
+	name : str
+	build_geometry()
+	check()
+	comp_surface_magnet_id()
+	has_magnet()
+	remove_magnet()
+}
+class Import{
+}
+class ImportData{
+	axes : list~ImportData~
+	field : Import
+	unit : str
+	name : str
+	symbol : str
+	normalizations : dict
+	symmetries : dict
+	get_data()
+}
+class ImportGenMatrixSin{
+	sin_list : list~ImportGenVectSin~
+	get_data()
+	init_vector()
+}
+class ImportGenPWM{
+	fs : float
+	duration : float
+	f : float
+	fmax : float
+	fmode : int
+	fswimode : int
+	fswi : float
+	fswi_max : float
+	typePWM : int
+	Vdc1 : float
+	U0 : float
+	type_carrier : int
+	var_amp : int
+	qs : int
+	is_star : bool
+	phase_dir : int
+	current_dir : int
+	Phi0 : float
+	get_data()
+	comp_voltage()
+	get_modulation_index()
+	comp_carrier()
+}
+class ImportGenToothSaw{
+	type_signal : int
+	f : float
+	A : float
+	N : int
+	Tf : float
+	Dt : float
+	get_data()
+}
+class ImportGenVectLin{
+	start : float
+	stop : float
+	num : float
+	endpoint : bool
+	check()
+	comp_step()
+	get_data()
+}
+class ImportGenVectSin{
+	f : float
+	A : float
+	Phi : float
+	N : int
+	Tf : float
+	get_data()
+}
+class ImportMatlab{
+	file_path : str
+	var_name : str
+	get_data()
+}
+class ImportMatrix{
+	is_transpose : bool
+	edit_matrix()
+}
+class ImportMatrixVal{
+	value : ndarray
+	get_data()
+}
+class ImportMatrixXls{
+	file_path : str
+	sheet : str
+	skiprows : int
+	usecols : str
+	axes_colrows : dict
+	is_allsheets : bool
+	get_data()
+}
+class ImportMeshMat{
+	file_path : str
+	get_data()
+}
+class ImportMeshUnv{
+	file_path : str
+	get_data()
+}
+class ImportVectorField{
+	components : dict~ImportData~
+	name : str
+	symbol : str
+	get_data()
+}
+class Input{
+	time : ImportMatrix
+	angle : ImportMatrix
+	Nt_tot : int
+	Nrev : float
+	Na_tot : int
+	OP : OP
+	t_final : float
+	comp_axes()
+	comp_axis_time()
+	comp_axis_angle()
+	comp_axis_phase()
+}
+class InputCurrent{
+	Is : ImportMatrix
+	Ir : ImportMatrix
+	Is_harm : ImportData
+	gen_input()
+	set_Id_Iq()
+}
+class InputFlux{
+	per_a : int
+	per_t : int
+	is_antiper_a : bool
+	is_antiper_t : bool
+	B_dict : dict
+	unit : str
+	slice : ndarray
+	B_enforced : SciDataTool.Classes.VectorField.VectorField
+	gen_input()
+}
+class InputForce{
+	P : ImportVectorField
+	gen_input()
+}
+class InputVoltage{
+	rot_dir : int
+	angle_rotor_initial : float
+	PWM : ImportGenPWM
+	phase_dir : int
+	current_dir : int
+	is_periodicity_t : bool
+	is_periodicity_a : bool
+	is_generator : bool
+	gen_input()
+	set_Ud_Uq()
+}
+class Interpolation{
+	ref_cell : RefCell
+	gauss_point : GaussPoint
+	scalar_product : ScalarProduct
+}
+class LUT{
+	get_eec()
+	get_OP_matrix_obj()
+	get_OP_array()
+	set_default_simulation()
+	get_phase_dir()
+}
+class LUTdq{
+	Phi_dqh_mean : ndarray
+	Phi_dqh_mag : SciDataTool.Classes.DataND.DataND
+	get_index_open_circuit()
+	get_L_dqh()
+	get_Lm_dqh()
+	get_Phi_dqh_mag()
+	get_Phi_dqh_mag_mean()
+	get_Phi_dqh_mean()
+	interp_Phi_dqh()
+	interp_Ploss_dqh()
+	interp_Tem_rip_dqh()
+}
+class LUTslip{
+}
+class LamH{
+	comp_angle_d_axis()
+	comp_height_yoke()
+	comp_masses()
+	comp_radius_mid_yoke()
+	comp_surfaces()
+	comp_volumes()
+	get_pole_pair_number()
+	get_Zs()
+	has_magnet()
+	plot()
+	set_pole_pair_number()
+}
+class LamHole{
+	hole : list~Hole~
+	_plot_arrow_mag()
+	build_geometry()
+	get_hole_list()
+	get_magnet_number()
+}
+class LamHoleNS{
+	hole_north : list~Hole~
+	hole_south : list~Hole~
+	_plot_arrow_mag()
+	build_geometry()
+	comp_masses()
+	comp_periodicity_geo()
+	comp_periodicity_spatial()
+	comp_surfaces()
+	comp_volumes()
+	get_hole_list()
+	get_magnet_number()
+}
+class LamSlot{
+	slot : Slot
+	check()
+	comp_radius_mec()
+	comp_surfaces()
+	get_pole_pair_number()
+	plot()
+	comp_height_yoke()
+	get_Zs()
+	set_pole_pair_number()
+	comp_angle_d_axis()
+	get_surfaces_closing()
+	has_magnet()
+	get_slot_desc_list()
+	has_slot()
+}
+class LamSlotMag{
+	magnet : Magnet
+	build_geometry()
+	check()
+	comp_masses()
+	comp_radius_mec()
+	comp_surfaces()
+	comp_volumes()
+	plot()
+	comp_angle_d_axis()
+	get_magnet_number()
+}
+class LamSlotMulti{
+	slot_list : list~Slot~
+	alpha : ndarray
+	sym_dict_enforced : dict
+	check()
+	comp_radius_mec()
+	comp_surfaces()
+	get_pole_pair_number()
+	plot()
+	comp_height_yoke()
+	get_Zs()
+	comp_periodicity_spatial()
+	get_slot_desc_list()
+	has_slot()
+}
+class LamSlotMultiWind{
+	Ksfill : float
+	winding : Winding
+	plot()
+	build_geometry()
+	get_pole_pair_number()
+	comp_mmf_dir()
+	plot_mmf_unit()
+	comp_mmf_unit()
+	comp_wind_function()
+	comp_angle_d_axis()
+}
+class LamSlotWind{
+	Ksfill : float
+	winding : Winding
+	build_geometry()
+	check()
+	comp_masses()
+	comp_surfaces()
+	comp_volumes()
+	get_pole_pair_number()
+	plot()
+	plot_winding()
+	comp_fill_factor()
+	comp_output_geo()
+	get_polar_eq()
+	comp_wind_function()
+	plot_mmf_unit()
+	comp_resistance_wind()
+	comp_angle_d_axis()
+	comp_mmf_unit()
+	comp_mmf_dir()
+	comp_lengths_winding()
+	comp_number_phase_eq()
+	comp_periodicity_spatial()
+	set_pole_pair_number()
+}
+class LamSquirrelCage{
+	Hscr : float
+	Lscr : float
+	ring_mat : Material
+	build_geometry()
+	check()
+	comp_length_ring()
+	plot()
+	comp_number_phase_eq()
+	comp_surface_ring()
+	comp_resistance_wind()
+	get_name_phase()
+	comp_angle_d_axis()
+	comp_periodicity_spatial()
+	comp_masses()
+	plot_schematics_scr()
+	plot_side()
+}
+class LamSquirrelCageMag{
+	hole : list~Hole~
+	build_geometry()
+	check()
+	comp_surfaces()
+	plot()
+	get_pole_pair_number()
+	set_pole_pair_number()
+	get_hole_list()
+}
+class Lamination{
+	L1 : float
+	mat_type : Material
+	Nrvd : int
+	Wrvd : float
+	Kf1 : float
+	is_internal : bool
+	Rint : float
+	Rext : float
+	is_stator : bool
+	axial_vent : list~Hole~
+	notch : list~Notch~
+	skew : Skew
+	bore : Bore
+	yoke : Bore
+	build_geometry()
+	check()
+	comp_length()
+	comp_masses()
+	comp_radius_mec()
+	comp_surface_axial_vent()
+	comp_surfaces()
+	comp_volumes()
+	get_Rbo()
+	get_Ryoke()
+	get_name_phase()
+	plot()
+	comp_output_geo()
+	get_polar_eq()
+	is_outwards()
+	comp_height_yoke()
+	comp_angle_q_axis()
+	comp_radius_mid_yoke()
+	comp_point_ref()
+	comp_periodicity_spatial()
+	get_label()
+	build_yoke_side_line()
+	get_notches_surf()
+	comp_periodicity_duct_spatial()
+	get_surfaces_closing()
+	comp_periodicity_geo()
+	has_notch()
+	build_radius_lines()
+	build_radius_desc()
+	has_slot()
+	plot_preview_notch()
+}
+class Line{
+	prop_dict : dict
+	comp_normal()
+}
+class Loss{
+	model_index : dict
+	model_list : list~LossModel~
+	logger_name : str
+	model_dict : dict~LossModel~
+	run()
+	add_model()
+	remove_model()
+}
+class LossFEA{
+	is_get_meshsolution : bool
+	Tsta : float
+	Trot : float
+	type_skin_effect : int
+	Cp : float
+	run()
+	comp_axes()
+	comp_loss()
+	comp_loss_density_core()
+	comp_loss_density_joule()
+	comp_loss_density_magnet()
+}
+class LossModel{
+	name : str
+	is_show_fig : bool
+}
+class LossModelBertotti{
+	k_hy : float
+	k_ed : float
+	k_ex : float
+	alpha_hy : float
+	alpha_ed : float
+	alpha_ex : float
+	group : str
+	get_meshsolution : bool
+	N0 : list
+	comp_loss()
+	comp_coeff_Bertotti()
+	comp_loss_density()
+}
+class LossModelSteinmetz{
+	k_hy : float
+	k_ed : float
+	alpha_f : float
+	alpha_B : float
+	comp_coeff()
+}
+class LossModelWinding{
+	temperature : float
+	comp_loss()
+}
+class Machine{
+	frame : Frame
+	shaft : Shaft
+	name : str
+	desc : str
+	type_machine : int
+	logger_name : str
+	build_geometry()
+	check()
+	comp_angle_rotor_initial()
+	comp_desc_dict()
+	comp_length_airgap_active()
+	comp_masses()
+	comp_output_geo()
+	comp_Rgap_mec()
+	comp_periodicity_spatial()
+	comp_width_airgap_mag()
+	comp_width_airgap_mec()
+	get_material_dict()
+	get_polar_eq()
+	plot()
+	plot_anim_rotor()
+	get_lam_list()
+	get_lam_list_label()
+	get_lam_by_label()
+	get_lam_index()
+	get_pole_pair_number()
+	set_pole_pair_number()
+	comp_periodicity_time()
+}
+class MachineAsync{
+	is_synchronous()
+	comp_desc_dict()
+}
+class MachineDFIM{
+	rotor : LamSlotWind
+	stator : LamSlotWind
+	check()
+	get_machine_type()
+}
+class MachineIPMSM{
+	rotor : LamH
+	stator : Lamination
+	check()
+	get_machine_type()
+}
+class MachineLSPM{
+	rotor : LamSquirrelCageMag
+	stator : LamSlotWind
+	check()
+	get_machine_type()
+}
+class MachineSCIM{
+	check()
+	get_machine_type()
+}
+class MachineSIPMSM{
+	rotor : LamSlotMag
+	stator : Lamination
+	check()
+	get_machine_type()
+}
+class MachineSRM{
+	rotor : LamSlot
+	stator : LamSlotWind
+	check()
+	get_machine_type()
+	get_pole_pair_number()
+	set_pole_pair_number()
+}
+class MachineSyRM{
+	rotor : LamHole
+	stator : LamSlotWind
+	check()
+	get_machine_type()
+}
+class MachineSync{
+	is_synchronous()
+	comp_angle_rotor_initial()
+}
+class MachineUD{
+	lam_list : list~Lamination~
+	is_sync : bool
+	build_geometry()
+	is_synchronous()
+}
+class MachineWRSM{
+	rotor : LamSlotWind
+	stator : LamSlotWind
+	check()
+	get_machine_type()
+}
+class MagElmer{
+	Kmesh_fineness : float
+	Kgeo_fineness : float
+	file_name : str
+	FEA_dict : dict
+	is_get_mesh : bool
+	is_save_FEA : bool
+	transform_list : list
+	rotor_dxf : DXFImport
+	stator_dxf : DXFImport
+	import_file : str
+	nb_worker : int
+	comp_flux_airgap()
+	solve_FEA()
+	get_meshsolution()
+	get_path_save_fea()
+	get_path_save()
+	gen_elmer_mesh()
+}
+class MagFEMM{
+	Kmesh_fineness : float
+	Kgeo_fineness : float
+	type_calc_leakage : int
+	file_name : str
+	FEMM_dict_enforced : dict
+	is_get_meshsolution : bool
+	is_save_meshsolution_as_file : bool
+	is_sliding_band : bool
+	transform_list : list
+	rotor_dxf : DXFImport
+	stator_dxf : DXFImport
+	import_file : str
+	is_close_femm : bool
+	nb_worker : int
+	Rag_enforced : float
+	is_set_previous : bool
+	is_fast_draw : bool
+	is_calc_torque_energy : bool
+	comp_flux_airgap()
+	get_path_save()
+	solve_FEMM()
+	get_meshsolution()
+	get_path_save_fem()
+	solve_FEMM_parallel()
+	build_MS_sliced()
+}
+class Magnet{
+	mat_type : Material
+	type_magnetization : int
+	Lmag : float
+	Nseg : int
+}
+class Magnetics{
+	is_remove_slotS : bool
+	is_remove_slotR : bool
+	is_remove_ventS : bool
+	is_remove_ventR : bool
+	is_mmfs : bool
+	is_mmfr : bool
+	type_BH_stator : int
+	type_BH_rotor : int
+	is_periodicity_t : bool
+	is_periodicity_a : bool
+	angle_stator_shift : float
+	angle_rotor_shift : float
+	logger_name : str
+	Slice_enforced : SliceModel
+	Nslices_enforced : int
+	type_distribution_enforced : str
+	is_current_harm : bool
+	T_mag : float
+	is_periodicity_rotor : bool
+	run()
+	comp_axes()
+	get_slice_model()
+	comp_I_mag()
+}
+class MatEconomical{
+	cost_unit : float
+	unit_name : str
+}
+class MatElectrical{
+	rho : float
+	epsr : float
+	alpha : float
+	get_conductivity()
+	get_resistivity()
+}
+class MatHT{
+	lambda_x : float
+	lambda_y : float
+	lambda_z : float
+	Cp : float
+	alpha : float
+}
+class MatMagnetics{
+	mur_lin : float
+	Brm20 : float
+	alpha_Br : float
+	Wlam : float
+	BH_curve : ImportMatrix
+	LossData : ImportMatrix
+	ModelBH : ModelBH
+	is_BH_extrapolate : bool
+	get_BH()
+	plot_BH()
+	get_Hc()
+	get_Brm()
+}
+class MatStructural{
+	rho : float
+	Ex : float
+	Ey : float
+	Ez : float
+	nu_xy : float
+	nu_xz : float
+	nu_yz : float
+	Gxz : float
+	Gxy : float
+	Gyz : float
+}
+class Material{
+	name : str
+	is_isotropic : bool
+	elec : MatElectrical
+	mag : MatMagnetics
+	struct : MatStructural
+	HT : MatHT
+	eco : MatEconomical
+	desc : str
+	path : str
+}
+class Mesh{
+	label : str
+	dimension : int
+}
+class MeshMat{
+	cell : dict~CellMat~
+	node : NodeMat
+	_is_renum : bool
+	sym : int
+	is_antiper_a : bool
+	get_node()
+	get_node_indice()
+	get_cell()
+	get_mesh_pv()
+	get_cell_area()
+	get_vertice()
+	get_node2cell()
+	add_cell()
+	renum()
+	find_cell()
+	interface()
+	clear_node()
+	clear_cell()
+}
+class MeshSolution{
+	label : str
+	mesh : list~Mesh~
+	is_same_mesh : bool
+	solution : list~Solution~
+	group : dict
+	dimension : int
+	path : str
+	get_mesh()
+	get_solution()
+	get_field()
+	get_group()
+	get_mesh_field_pv()
+	plot_mesh()
+	plot_contour()
+	plot_deflection()
+	plot_glyph()
+	perm_coord()
+	get_deflection()
+	get_glyph()
+}
+class MeshVTK{
+	mesh : vtk.vtkPointSet
+	is_pyvista_mesh : bool
+	format : str
+	path : str
+	name : str
+	surf : pyvista.core.pointset.PolyData
+	is_vtk_surf : bool
+	surf_path : str
+	surf_name : str
+	node_normals : ndarray
+	get_mesh_pv()
+	get_node()
+	get_cell()
+	get_normals()
+	get_surf()
+	get_cell_area()
+	convert()
+	perm_coord()
+	get_path()
+}
+class Mode{
+	nat_freq : float
+	order_circ : int
+	order_long : int
+	plot()
+	plot_animated()
+	get_shape_xyz()
+	get_shape_pol()
+}
+class ModelBH{
+	Bmax : float
+	Hmax : float
+	delta : float
+	get_BH()
+	fit_model()
+}
+class ModelBH_Langevin{
+	Bs : float
+	a : float
+	param1 : float
+	param2 : float
+	get_BH()
+	BH_func()
+}
+class ModelBH_arctangent{
+	k : float
+	mu_a : float
+}
+class ModelBH_exponential{
+	Bs : float
+	mu_a : float
+}
+class ModelBH_linear_sat{
+	Bs : float
+	mu_a : float
+	param1 : float
+	param2 : float
+	get_BH()
+	BH_func()
+}
+class NodeMat{
+	coordinate : ndarray
+	nb_node : int
+	delta : float
+	indice : ndarray
+	add_node()
+	get_coord()
+	is_exist()
+	get_indice()
+}
+class Notch{
+	get_Rbo()
+	get_Ryoke()
+	is_outwards()
+}
+class NotchEvenDist{
+	alpha : float
+	notch_shape : Slot
+	comp_surface()
+	comp_periodicity_spatial()
+	get_notch_desc_list()
+}
+class OP{
+	N0 : float
+	felec : float
+	Tem_av_ref : float
+	Pem_av_ref : float
+	Pem_av_in : float
+	efficiency : float
+	get_machine_from_parent()
+	get_OP_array()
+}
+class OPMatrix{
+	N0 : ndarray
+	Id_ref : ndarray
+	Iq_ref : ndarray
+	Ud_ref : ndarray
+	Uq_ref : ndarray
+	Tem_av_ref : ndarray
+	Pem_av_ref : ndarray
+	slip_ref : ndarray
+	is_output_power : bool
+	If_ref : ndarray
+	col_names : list
+	get_N_OP()
+	get_OP()
+	get_OP_list()
+	get_OP_array()
+	set_OP_array()
+	has_Pem()
+	has_Tem()
+	has_slip()
+}
+class OPdq{
+	Id_ref : float
+	Iq_ref : float
+	Ud_ref : float
+	Uq_ref : float
+	get_Id_Iq()
+	get_felec()
+	get_N0()
+	get_slip()
+	get_Ud_Uq()
+	set_Id_Iq()
+	get_I0_Phi0()
+	set_Ud_Uq()
+	set_I0_Phi0()
+	get_U0_UPhi0()
+	set_U0_UPhi0()
+}
+class OPdqf{
+	If_ref : float
+}
+class OPslip{
+	I0_ref : float
+	IPhi0_ref : float
+	slip_ref : float
+	U0_ref : float
+	UPhi0_ref : float
+	get_Id_Iq()
+	get_felec()
+	get_N0()
+	get_Ud_Uq()
+	set_Id_Iq()
+	get_I0_Phi0()
+	get_slip()
+	set_I0_Phi0()
+	set_Ud_Uq()
+	get_U0_UPhi0()
+	set_U0_UPhi0()
+}
+class OptiBayesAlg{
+	nb_iter : int
+	nb_start : int
+	criterion : str
+	kernel : int
+}
+class OptiBayesAlgSmoot{
+	size_pop : int
+	nb_gen : int
+	solve()
+	check_optimization_input()
+	evaluate()
+	plot_pareto()
+	eval_const()
+}
+class OptiConstraint{
+	type_const : str
+	value : float
+}
+class OptiDesignVar{
+	space : list
+	get_value : function
+}
+class OptiDesignVarInterval{
+}
+class OptiDesignVarSet{
+}
+class OptiGenAlg{
+	selector : function
+	crossover : function
+	mutator : function
+	p_cross : float
+	p_mutate : float
+	size_pop : int
+	nb_gen : int
+}
+class OptiGenAlgNsga2Deap{
+	toolbox : deap.base.Toolbox
+	solve()
+	mutate()
+	cross()
+	create_toolbox()
+	check_optimization_input()
+	delete_toolbox()
+	plot_pareto()
+}
+class OptiObjective{
+}
+class OptiProblem{
+	simu : Simulation
+	design_var : list~OptiDesignVar~
+	obj_func : list~OptiObjective~
+	eval_func : function
+	constraint : list~OptiConstraint~
+	preprocessing : function
+	datakeeper_list : list~DataKeeper~
+}
+class OptiSolver{
+	problem : OptiProblem
+	xoutput : XOutput
+	logger_name : str
+	is_keep_all_output : bool
+}
+class OutElec{
+	axes_dict : dict~SciDataTool.Classes.DataND.Data~
+	Is : SciDataTool.Classes.DataND.DataND
+	Ir : SciDataTool.Classes.DataND.DataND
+	logger_name : str
+	Pj_losses : float
+	Us : SciDataTool.Classes.DataND.DataND
+	internal : OutInternal
+	OP : OP
+	Pem_av : float
+	Tem_av : float
+	phase_dir : int
+	current_dir : int
+	PWM : ImportGenPWM
+	eec : EEC
+	P_out : float
+	Jrms : float
+	P_in : float
+	Arms : float
+	Erms : float
+	get_Nr()
+	get_Is()
+	get_Us()
+	store()
+	get_electrical()
+	get_Jrms()
+}
+class OutForce{
+	axes_dict : dict~SciDataTool.Classes.DataND.Data~
+	AGSF : SciDataTool.Classes.VectorField.VectorField
+	logger_name : str
+	Rag : float
+	meshsolution : MeshSolution
+	store()
+}
+class OutGeo{
+	stator : OutGeoLam
+	rotor : OutGeoLam
+	Wgap_mec : float
+	Wgap_mag : float
+	Rgap_mec : float
+	Lgap : float
+	logger_name : str
+	angle_rotor_initial : float
+	rot_dir : int
+	per_a : int
+	is_antiper_a : bool
+	per_t_S : int
+	is_antiper_t_S : bool
+	axes_dict : dict~SciDataTool.Classes.DataND.Data~
+	per_t_R : int
+	is_antiper_t_R : bool
+}
+class OutGeoLam{
+	name_phase : list
+	BH_curve : ndarray
+	Ksfill : float
+	S_slot : float
+	S_slot_wind : float
+	S_wind_act : float
+	per_a : int
+	is_antiper_a : bool
+	per_t : int
+	is_antiper_t : bool
+}
+class OutInternal{
+}
+class OutLoss{
+	loss_list : list~SciDataTool.Classes.DataND.DataND~
+	meshsol_list : list~MeshSolution~
+	loss_index : dict
+	logger_name : str
+	axes_dict : dict~SciDataTool.Classes.DataND.Data~
+	Pstator : float
+	Protor : float
+	Pmagnet : float
+	Pprox : float
+	Pjoule : float
+	coeff_dict : dict
+	get_loss()
+	get_loss_density_ag()
+	get_loss_dist()
+	get_loss_group()
+	get_loss_overall()
+	store()
+}
+class OutMag{
+	axes_dict : dict~SciDataTool.Classes.DataND.Data~
+	B : SciDataTool.Classes.VectorField.VectorField
+	Tem : SciDataTool.Classes.DataND.DataND
+	Tem_av : float
+	Tem_rip_norm : float
+	Tem_rip_pp : float
+	Phi_wind_stator : SciDataTool.Classes.DataND.DataND
+	Phi_wind : dict~SciDataTool.Classes.DataND.DataND~
+	emf : SciDataTool.Classes.DataND.DataND
+	meshsolution : MeshSolution
+	logger_name : str
+	internal : OutInternal
+	Rag : float
+	Pem_av : float
+	Slice : SliceModel
+	Tem_slice : SciDataTool.Classes.DataND.DataND
+	Phi_wind_slice : dict~SciDataTool.Classes.DataND.DataND~
+	Tem_norm : float
+	clean()
+	comp_emf()
+	comp_power()
+	get_demag()
+	store()
+	comp_torque_MT()
+}
+class OutMagElmer{
+	FEA_dict : dict
+	clean()
+}
+class OutMagFEMM{
+	FEMM_dict : dict
+	handler_list : list~_FEMMHandler~
+	clean()
+}
+class OutPost{
+	legend_name : str
+	line_color : str
+}
+class OutStruct{
+	axes_dict : dict~SciDataTool.Classes.DataND.Data~
+	logger_name : str
+	meshsolution : MeshSolution
+	FEA_dict : dict
+}
+class Output{
+	simu : Simulation
+	path_result : str
+	geo : OutGeo
+	elec : OutElec
+	mag : OutMag
+	struct : OutStruct
+	post : OutPost
+	logger_name : str
+	force : OutForce
+	loss : OutLoss
+	getter.comp_angle_rotor()
+	getter.get_angle_rotor_initial()
+	getter.get_angle_rotor()
+	getter.get_BH_rotor()
+	getter.get_BH_stator()
+	getter.get_path_result()
+	getter.get_machine_periodicity()
+	getter.get_fund_harm()
+	getter.get_data_from_str()
+	getter.export_to_mat()
+	plot.Magnetic.plot_B_mesh()
+	print_memory()
+}
+class ParamExplorer{
+	name : str
+	symbol : str
+	unit : str
+	setter : function
+	getter : function
+	_set_setter()
+	_set_getter()
+	get_desc()
+}
+class ParamExplorerInterval{
+	min_value : float
+	max_value : float
+	N : int
+	type_value_gen : int
+	type_value : int
+	get_value()
+	get_min()
+	get_max()
+	get_N()
+}
+class ParamExplorerSet{
+	value : list~~
+	get_value()
+	get_min()
+	get_max()
+	get_N()
+}
+class PolarArc{
+	angle : float
+	height : float
+	get_lines()
+	rotate()
+	translate()
+	check()
+	comp_length()
+	discretize()
+	get_patches()
+	comp_surface()
+	comp_point_ref()
+}
+class Post{
+}
+class PostFunction{
+	run : function
+}
+class PostLUT{
+	is_save_LUT : bool
+	run()
+}
+class PostMethod{
+	run()
+}
+class PostPlot{
+	method : str
+	name : str
+	param_list : list
+	param_dict : dict
+	save_format : str
+	quantity : str
+	run()
+}
+class RefCell{
+	epsilon : float
+	interpolation()
+}
+class RefLine3{
+	shape_function()
+	jacobian()
+	grad_shape_function()
+	get_real_point()
+	get_ref_point()
+	is_inside()
+}
+class RefQuad4{
+	shape_function()
+	jacobian()
+	grad_shape_function()
+	get_real_point()
+	get_ref_point()
+	is_inside()
+}
+class RefQuad9{
+	shape_function()
+	jacobian()
+	grad_shape_function()
+	get_real_point()
+	get_ref_point()
+	is_inside()
+}
+class RefSegmentP1{
+	shape_function()
+	jacobian()
+	grad_shape_function()
+	get_real_point()
+	is_inside()
+	get_ref_point()
+	get_normal()
+}
+class RefTriangle3{
+	shape_function()
+	jacobian()
+	grad_shape_function()
+	get_real_point()
+	get_ref_point()
+	is_inside()
+	get_cell_area()
+	get_normal()
+}
+class RefTriangle6{
+	shape_function()
+	jacobian()
+	grad_shape_function()
+	get_real_point()
+	get_ref_point()
+	is_inside()
+}
+class ScalarProduct{
+}
+class ScalarProductL2{
+	scalar_product()
+}
+class Section{
+	section : str
+	id : int
+	comment : str
+	_statements : dict
+	_comments : dict
+	__delitem__()
+	__getitem__()
+	__iter__()
+	__len__()
+	__missing__()
+	__reversed__()
+	__setitem__()
+	pop()
+	keys()
+	write()
+}
+class Segment{
+	begin : complex
+	end : complex
+	check()
+	comp_distance()
+	comp_length()
+	discretize()
+	draw_FEMM()
+	get_begin()
+	get_end()
+	get_middle()
+	intersect_line()
+	is_on_line()
+	plot()
+	reverse()
+	rotate()
+	scale()
+	split_half()
+	split_line()
+	translate()
+	split_point()
+	intersect_obj()
+	is_arc()
+}
+class Shaft{
+	Lshaft : float
+	mat_type : Material
+	Drsh : float
+	build_geometry()
+	comp_mass()
+	plot()
+}
+class Simu1{
+	elec : Electrical
+	mag : Magnetics
+	struct : Structural
+	force : Force
+	loss : Loss
+	run_single()
+}
+class Simulation{
+	name : str
+	desc : str
+	machine : Machine
+	input : Input
+	logger_name : str
+	var_simu : VarSimu
+	postproc_list : list~Post~
+	index : int
+	path_result : str
+	layer : int
+	layer_log_warn : int
+	run()
+	init_logger()
+	get_var_load()
+	get_OP_array()
+}
+class Skew{
+	type_skew : str
+	rate : float
+	is_step : bool
+	function : function
+	angle_list : list
+	z_list : list
+	Nstep : int
+	angle_overall : float
+	comp_angle()
+	comp_pattern()
+	plot()
+}
+class SliceModel{
+	type_distribution : str
+	Nslices : int
+	z_list : list
+	angle_rotor : ndarray
+	angle_stator : ndarray
+	L : float
+	is_step : bool
+	is_skew : bool
+	get_distribution()
+	get_data()
+	plot()
+}
+class Slot{
+	Zs : int
+	wedge_mat : Material
+	is_bore : bool
+	build_geometry_active()
+	build_geometry_half_tooth()
+	check()
+	comp_angle_active_eq()
+	comp_angle_opening()
+	comp_height()
+	comp_height_active()
+	comp_height_opening()
+	comp_radius()
+	comp_radius_mid_active()
+	comp_surface()
+	comp_surface_active()
+	comp_surface_opening()
+	comp_surface_wedges()
+	comp_width()
+	comp_width_opening()
+	convert_to_SlotUD2()
+	get_is_stator()
+	get_name_lam()
+	get_Rbo()
+	get_surface()
+	get_surface_tooth()
+	get_surface_wedges()
+	is_outwards()
+	plot()
+	plot_active()
+	set_label()
+}
+class Slot19{
+	W0 : float
+	H0 : float
+	W1 : float
+	Wx_is_rad : bool
+	_comp_point_coordinate()
+	build_geometry()
+	check()
+	comp_angle_opening()
+	comp_angle_bottom()
+	comp_height()
+	comp_surface()
+}
+class SlotCirc{
+	W0 : float
+	H0 : float
+	_comp_line_dict()
+	_comp_point_coordinate()
+	_comp_R0()
+	build_geometry()
+	check()
+	comp_angle_opening()
+	comp_height()
+	comp_height_active()
+	comp_surface()
+	comp_surface_active()
+	comp_surface_opening()
+	get_surface_active()
+	get_surface_opening()
+	plot_schematics()
+}
+class SlotDC{
+	W1 : float
+	H1 : float
+	D1 : float
+	W2 : float
+	H2 : float
+	D2 : float
+	H3 : float
+	R3 : float
+	_comp_point_coordinate()
+	build_geometry()
+	get_surface_active()
+	check()
+	comp_angle_opening()
+	comp_height()
+	comp_height_active()
+	comp_surface()
+	comp_surface_active()
+}
+class SlotM10{
+	W0 : float
+	H0 : float
+	Wmag : float
+	Hmag : float
+	_comp_point_coordinate()
+	build_geometry()
+	check()
+	comp_angle_opening()
+	comp_height()
+	comp_height_active()
+	comp_surface()
+	comp_surface_active()
+	get_surface_active()
+	plot_schematics()
+}
+class SlotM11{
+	W0 : float
+	H0 : float
+	Wmag : float
+	Hmag : float
+	_comp_point_coordinate()
+	build_geometry()
+	check()
+	comp_angle_opening()
+	comp_height()
+	comp_height_active()
+	comp_surface()
+	comp_surface_active()
+	get_surface_active()
+	plot_schematics()
+}
+class SlotM12{
+	W0 : float
+	H0 : float
+	Wmag : float
+	Hmag : float
+	_comp_point_coordinate()
+	build_geometry()
+	check()
+	comp_angle_opening()
+	comp_height()
+	comp_height_active()
+	comp_surface()
+	comp_surface_active()
+	get_surface_active()
+	plot_schematics()
+}
+class SlotM13{
+	W0 : float
+	H0 : float
+	Wmag : float
+	Hmag : float
+	Rtopm : float
+	_comp_point_coordinate()
+	build_geometry()
+	check()
+	comp_angle_opening()
+	comp_height()
+	comp_height_active()
+	comp_surface()
+	comp_surface_active()
+	get_surface_active()
+	plot_schematics()
+}
+class SlotM14{
+	W0 : float
+	H0 : float
+	Wmag : float
+	Hmag : float
+	Rtopm : float
+	_comp_point_coordinate()
+	build_geometry()
+	check()
+	comp_angle_opening()
+	comp_height()
+	comp_height_active()
+	comp_surface()
+	comp_surface_active()
+	get_surface_active()
+	plot_schematics()
+}
+class SlotM15{
+	W0 : float
+	H0 : float
+	Wmag : float
+	Hmag : float
+	Rtopm : float
+	_comp_point_coordinate()
+	build_geometry()
+	check()
+	comp_angle_opening()
+	comp_height()
+	comp_height_active()
+	comp_surface()
+	comp_surface_active()
+	get_surface_active()
+	plot_schematics()
+}
+class SlotM16{
+	W0 : float
+	H0 : float
+	W1 : float
+	H1 : float
+	_comp_point_coordinate()
+	build_geometry()
+	check()
+	comp_angle_opening()
+	comp_height()
+	comp_height_active()
+	comp_surface()
+	comp_surface_active()
+	get_surface_active()
+	plot_schematics()
+}
+class SlotM17{
+	build_geometry()
+	check()
+	comp_angle_opening()
+	comp_height()
+	comp_height_active()
+	comp_surface()
+	comp_surface_active()
+	get_surface_active()
+	plot_schematics()
+}
+class SlotM18{
+	Hmag : float
+	_comp_point_coordinate()
+	build_geometry()
+	check()
+	comp_angle_opening()
+	comp_height()
+	comp_height_active()
+	comp_surface()
+	comp_surface_active()
+	get_surface_active()
+	plot_schematics()
+}
+class SlotUD{
+	line_list : list~Line~
+	wind_begin_index : int
+	wind_end_index : int
+	type_line_wind : int
+	name : str
+	build_geometry()
+	check()
+	get_surface_active()
+	get_surface_opening()
+	set_from_point_list()
+}
+class SlotUD2{
+	line_list : list~Line~
+	active_surf : Surface
+	split_active_surf_dict : dict
+	name : str
+	build_geometry()
+	build_geometry_active()
+	get_surface_active()
+	check()
+	_set_split_active_surf_dict()
+}
+class SlotW10{
+	W0 : float
+	H0 : float
+	H1 : float
+	W1 : float
+	H2 : float
+	W2 : float
+	H1_is_rad : bool
+	_comp_line_dict()
+	_comp_point_coordinate()
+	build_geometry()
+	build_geometry_active()
+	check()
+	comp_angle_opening()
+	comp_height()
+	comp_height_active()
+	comp_surface()
+	comp_surface_active()
+	comp_surface_opening()
+	get_surface_active()
+	get_surface_opening()
+	get_H1()
+	plot_schematics()
+}
+class SlotW11{
+	W0 : float
+	H0 : float
+	H1 : float
+	H1_is_rad : bool
+	W1 : float
+	H2 : float
+	W2 : float
+	R1 : float
+	_comp_line_dict()
+	_comp_point_coordinate()
+	build_geometry()
+	check()
+	comp_angle_opening()
+	comp_height()
+	comp_height_active()
+	comp_surface()
+	comp_surface_active()
+	comp_surface_opening()
+	get_H1()
+	get_surface_active()
+	get_surface_opening()
+	plot_schematics()
+}
+class SlotW12{
+	H0 : float
+	H1 : float
+	R1 : float
+	R2 : float
+	_comp_line_dict()
+	_comp_point_coordinate()
+	build_geometry()
+	check()
+	comp_angle_opening()
+	comp_height()
+	comp_height_active()
+	comp_surface()
+	comp_surface_active()
+	comp_surface_opening()
+	get_surface_active()
+	get_surface_opening()
+	plot_schematics()
+}
+class SlotW13{
+	W0 : float
+	H0 : float
+	H1 : float
+	W1 : float
+	H2 : float
+	W2 : float
+	W3 : float
+	H1_is_rad : bool
+	_comp_line_dict()
+	_comp_point_coordinate()
+	build_geometry()
+	build_geometry_active()
+	check()
+	comp_angle_opening()
+	comp_height()
+	comp_height_active()
+	comp_surface()
+	comp_surface_active()
+	comp_surface_opening()
+	get_surface_active()
+	get_surface_opening()
+	get_H1()
+	plot_schematics()
+}
+class SlotW14{
+	W0 : float
+	H0 : float
+	H1 : float
+	H3 : float
+	W3 : float
+	_comp_line_dict()
+	_comp_point_coordinate()
+	build_geometry()
+	check()
+	comp_angle_opening()
+	comp_height()
+	comp_height_active()
+	comp_surface()
+	comp_surface_active()
+	comp_surface_opening()
+	get_surface_active()
+	get_surface_opening()
+	plot_schematics()
+}
+class SlotW15{
+	W0 : float
+	W3 : float
+	H0 : float
+	H1 : float
+	H2 : float
+	R1 : float
+	R2 : float
+	_comp_line_dict()
+	_comp_point_coordinate()
+	build_geometry()
+	check()
+	comp_angle_opening()
+	comp_height()
+	comp_height_active()
+	comp_surface()
+	comp_surface_opening()
+	get_surface_active()
+	get_surface_opening()
+	plot_schematics()
+}
+class SlotW16{
+	W0 : float
+	W3 : float
+	H0 : float
+	H2 : float
+	R1 : float
+	_comp_line_dict()
+	_comp_point_coordinate()
+	build_geometry()
+	check()
+	comp_angle_opening()
+	comp_height()
+	comp_height_active()
+	comp_surface()
+	comp_surface_opening()
+	get_surface_active()
+	get_surface_opening()
+	plot_schematics()
+}
+class SlotW21{
+	W0 : float
+	H0 : float
+	H1 : float
+	H1_is_rad : bool
+	W1 : float
+	H2 : float
+	W2 : float
+	_comp_line_dict()
+	_comp_point_coordinate()
+	build_geometry()
+	build_geometry_active()
+	check()
+	comp_angle_opening()
+	comp_height()
+	comp_height_active()
+	comp_surface()
+	comp_surface_active()
+	comp_surface_opening()
+	get_H1()
+	get_surface_active()
+	get_surface_opening()
+	plot_schematics()
+}
+class SlotW22{
+	W0 : float
+	H0 : float
+	H2 : float
+	W2 : float
+	_comp_line_dict()
+	_comp_point_coordinate()
+	build_geometry()
+	build_geometry_active()
+	check()
+	comp_angle_opening()
+	comp_height()
+	comp_height_active()
+	comp_surface()
+	comp_surface_active()
+	comp_surface_opening()
+	get_surface_active()
+	get_surface_opening()
+	plot_schematics()
+}
+class SlotW23{
+	W0 : float
+	H0 : float
+	H1 : float
+	W1 : float
+	H2 : float
+	W2 : float
+	W3 : float
+	H1_is_rad : bool
+	is_cstt_tooth : bool
+	_comp_line_dict()
+	_comp_point_coordinate()
+	_comp_W()
+	build_geometry()
+	build_geometry_active()
+	check()
+	comp_angle_opening()
+	comp_height()
+	comp_height_active()
+	comp_surface()
+	comp_surface_active()
+	comp_surface_opening()
+	get_surface_active()
+	get_surface_opening()
+	plot_schematics()
+}
+class SlotW24{
+	W3 : float
+	H2 : float
+	_comp_line_dict()
+	_comp_point_coordinate()
+	build_geometry()
+	build_geometry_active()
+	check()
+	comp_angle_opening()
+	comp_height()
+	comp_height_active()
+	comp_surface()
+	comp_surface_active()
+	comp_surface_opening()
+	get_surface_active()
+	get_surface_opening()
+	plot_schematics()
+}
+class SlotW25{
+	W3 : float
+	H2 : float
+	W4 : float
+	H1 : float
+	_comp_line_dict()
+	_comp_point_coordinate()
+	build_geometry()
+	build_geometry_active()
+	check()
+	comp_angle_opening()
+	comp_height()
+	comp_height_active()
+	comp_surface()
+	comp_surface_active()
+	comp_surface_opening()
+	get_surface_active()
+	get_surface_opening()
+	plot_schematics()
+}
+class SlotW26{
+	W0 : float
+	H0 : float
+	H1 : float
+	R1 : float
+	R2 : float
+	_comp_line_dict()
+	_comp_point_coordinate()
+	build_geometry()
+	check()
+	comp_angle_opening()
+	comp_height()
+	comp_height_active()
+	comp_surface()
+	comp_surface_active()
+	comp_surface_opening()
+	get_surface_active()
+	get_surface_opening()
+	plot_schematics()
+}
+class SlotW27{
+	H0 : float
+	H1 : float
+	H2 : float
+	W0 : float
+	W1 : float
+	W2 : float
+	W3 : float
+	is_trap_wind : bool
+	_comp_line_dict()
+	_comp_point_coordinate()
+	build_geometry()
+	check()
+	comp_angle_opening()
+	comp_height()
+	comp_height_active()
+	comp_surface()
+	comp_surface_active()
+	comp_surface_opening()
+	get_surface_active()
+	get_surface_opening()
+	plot_schematics()
+}
+class SlotW28{
+	W0 : float
+	H0 : float
+	R1 : float
+	W3 : float
+	H3 : float
+	_comp_line_dict()
+	_comp_point_coordinate()
+	build_geometry()
+	check()
+	comp_angle_opening()
+	comp_height()
+	comp_height_active()
+	comp_surface()
+	comp_surface_opening()
+	get_surface_active()
+	get_surface_opening()
+	plot_schematics()
+}
+class SlotW29{
+	W0 : float
+	H0 : float
+	H1 : float
+	W1 : float
+	H2 : float
+	W2 : float
+	_comp_line_dict()
+	_comp_point_coordinate()
+	build_geometry()
+	build_geometry_active()
+	check()
+	comp_angle_opening()
+	comp_height()
+	comp_height_active()
+	comp_surface()
+	comp_surface_active()
+	comp_surface_opening()
+	get_surface_active()
+	get_surface_opening()
+	plot_schematics()
+}
+class SlotW60{
+	W1 : float
+	W2 : float
+	H1 : float
+	H2 : float
+	R1 : float
+	H3 : float
+	H4 : float
+	W3 : float
+	_comp_line_dict()
+	_comp_point_coordinate()
+	build_geometry()
+	build_geometry_active()
+	check()
+	comp_angle_opening()
+	comp_height()
+	comp_height_active()
+	comp_surface()
+	comp_surface_active()
+	get_surface_active()
+	get_surface_opening()
+	plot_schematics()
+}
+class SlotW61{
+	W0 : float
+	W1 : float
+	W2 : float
+	H0 : float
+	H1 : float
+	H2 : float
+	H3 : float
+	H4 : float
+	W3 : float
+	_comp_line_dict()
+	_comp_point_coordinate()
+	build_geometry()
+	build_geometry_active()
+	check()
+	comp_angle_opening()
+	comp_height()
+	comp_height_active()
+	comp_surface()
+	comp_surface_active()
+	get_surface_active()
+	get_surface_opening()
+	plot_schematics()
+}
+class SlotWLSRPM{
+	W1 : float
+	W3 : float
+	H2 : float
+	R1 : float
+	H3 : float
+	_comp_point_coordinate()
+	build_geometry()
+	build_geometry_active()
+	check()
+	comp_angle_opening()
+	comp_height_damper()
+	comp_height_wind()
+	comp_height()
+	get_surface_active()
+	plot_schematics()
+}
+class Solution{
+	type_cell : str
+	label : str
+	dimension : int
+	unit : str
+}
+class SolutionData{
+	field : SciDataTool.Classes.DataND.DataND
+	get_field()
+	get_axes_list()
+	get_solution()
+}
+class SolutionMat{
+	field : ndarray
+	indice : ndarray
+	axis_name : list
+	axis_size : list
+	get_field()
+	get_axes_list()
+	get_solution()
+}
+class SolutionVector{
+	field : SciDataTool.Classes.VectorField.VectorField
+	get_field()
+	get_axes_list()
+	get_solution()
+}
+class SolverInputFile{
+	sections : list
+	write()
+}
+class StructElmer{
+	Kmesh_fineness : float
+	path_name : str
+	FEA_dict_enforced : dict
+	is_get_mesh : bool
+	is_save_FEA : bool
+	transform_list : list
+	include_magnets : bool
+	run()
+	get_meshsolution()
+	get_path_save_fea()
+	solve_FEA()
+	gen_mesh()
+	gen_case()
+	process_mesh()
+}
+class Structural{
+	logger_name : str
+	run()
+	comp_axes()
+}
+class SurfLine{
+	line_list : list~Line~
+	check()
+	comp_length()
+	comp_point_ref()
+	comp_surface()
+	discretize()
+	get_lines()
+	get_patches()
+	plot_lines()
+	rotate()
+	scale()
+	translate()
+}
+class SurfRing{
+	out_surf : Surface
+	in_surf : Surface
+	get_lines()
+	rotate()
+	translate()
+	check()
+	comp_length()
+	get_patches()
+	discretize()
+	comp_surface()
+	plot_lines()
+	comp_point_ref()
+}
+class Surface{
+	point_ref : complex
+	label : str
+	comp_mesh_dict()
+	draw_FEMM()
+	plot()
+	split_line()
+	is_inside()
+}
+class Trapeze{
+	height : float
+	W2 : float
+	W1 : float
+	check()
+	comp_length()
+	comp_surface()
+	discretize()
+	get_lines()
+	get_patches()
+	rotate()
+	translate()
+	comp_point_ref()
+}
+class Unit{
+	unit_m : int
+	unit_rad : int
+	unit_m2 : int
+	get_m()
+	get_m2()
+	get_m_name()
+	get_m2_name()
+	set_m()
+	set_m2()
+}
+class VarLoad{
+	OP_matrix : OPMatrix
+	get_ref_simu_index()
+	get_OP_array()
+	set_OP_array()
+	_set_OP_matrix()
+}
+class VarLoadCurrent{
+	generate_simulation_list()
+	get_elec_datakeeper()
+	get_input_list()
+}
+class VarLoadVoltage{
+	generate_simulation_list()
+	get_elec_datakeeper()
+	get_input_list()
+}
+class VarOpti{
+	objective_list : list~OptiObjective~
+	constraint_list : list~OptiConstraint~
+	solver : OptiSolver
+	check()
+	run()
+	get_full_solver()
+}
+class VarParam{
+	paramexplorer_list : list~ParamExplorer~
+}
+class VarParamSweep{
+	check_param()
+	generate_simulation_list()
+	get_simu_number()
+}
+class VarSimu{
+	name : str
+	desc : str
+	datakeeper_list : list~DataKeeper~
+	is_keep_all_output : bool
+	stop_if_error : bool
+	var_simu : VarSimu
+	nb_simu : int
+	is_reuse_femm_file : bool
+	postproc_list : list~Post~
+	pre_keeper_postproc_list : list~Post~
+	post_keeper_postproc_list : list~Post~
+	is_reuse_LUT : bool
+	run()
+	set_reused_data()
+	check_param()
+	generate_simulation_list()
+	gen_datakeeper_list()
+	get_elec_datakeeper()
+	get_mag_datakeeper()
+	get_force_datakeeper()
+	get_ref_simu_index()
+}
+class VentilationCirc{
+	D0 : float
+	H0 : float
+	build_geometry()
+	check()
+	comp_radius()
+	comp_surface()
+	get_center()
+	_comp_point_coordinate()
+	plot_schematics()
+}
+class VentilationPolar{
+	D0 : float
+	H0 : float
+	W1 : float
+	build_geometry()
+	check()
+	comp_radius()
+	comp_surface()
+	get_center()
+	_comp_point_coordinate()
+	plot_schematics()
+}
+class VentilationTrap{
+	D0 : float
+	H0 : float
+	W1 : float
+	W2 : float
+	build_geometry()
+	check()
+	comp_radius()
+	comp_surface()
+	get_center()
+	_comp_point_coordinate()
+	plot_schematics()
+}
+class Winding{
+	is_reverse_wind : bool
+	Nslot_shift_wind : int
+	qs : int
+	Ntcoil : int
+	Npcp : int
+	type_connection : int
+	p : int
+	Lewout : float
+	conductor : Conductor
+	coil_pitch : int
+	wind_mat : ndarray
+	Nlayer : int
+	per_a : int
+	is_aper_a : bool
+	end_winding : EndWinding
+	is_reverse_layer : bool
+	is_change_layer : bool
+	is_permute_B_C : bool
+	comp_connection_mat()
+	comp_length_endwinding()
+	comp_Ncspc()
+	comp_Ntsp()
+	comp_periodicity()
+	comp_phasor_angle()
+	comp_winding_factor()
+	get_connection_mat()
+	get_dim_wind()
+	get_periodicity()
+	export_to_csv()
+	clean()
+}
+class WindingSC{
+	comp_connection_mat()
+	get_dim_wind()
+	comp_periodicity()
+}
+class WindingUD{
+	init_as_CW1L()
+	init_as_CW2LR()
+	init_as_CW2LT()
+	init_as_DWL()
+	import_from_csv()
+}
+class XOutput{
+	paramexplorer_list : list~ParamExplorer~
+	output_list : list~Output~
+	xoutput_dict : dict~DataKeeper~
+	nb_simu : int
+	xoutput_ref : Output
+	xoutput_ref_index : int
+	__delitem__()
+	__getitem__()
+	__iter__()
+	__len__()
+	__missing__()
+	__next__()
+	__reversed__()
+	__setitem__()
+	append()
+	count()
+	get_param_simu()
+	get_paramexplorer()
+	get_pareto_index()
+	get_simu()
+	get_symbol_list()
+	get_xoutput_ref()
+	insert()
+	items()
+	keys()
+	plot_generation()
+	plot_multi()
+	plot_pareto()
+	pop()
+	print_memory()
+	remove()
+}
+Arc  <|--> Arc1
+Arc  <|--> Arc2
+Arc  <|--> Arc3
+Bore  <|--> BoreFlower
+Bore  <|--> BoreLSRPM
+Bore  <|--> BoreSinePole
+Bore  <|--> BoreUD
+BoreUD *--> Line
+CellMat *--> Interpolation
+Conductor  <|--> CondType11
+Conductor  <|--> CondType12
+Conductor  <|--> CondType13
+Conductor  <|--> CondType21
+Conductor  <|--> CondType22
+Conductor *--> Material
+DataKeeper  <|--> OptiConstraint
+DataKeeper  <|--> OptiObjective
+Drive  <|--> DriveWave
+DriveWave *--> Import
+EEC  <|--> EEC_LSRPM
+EEC  <|--> EEC_PMSM
+EEC  <|--> EEC_SCIM
+EEC *--> Magnetics
+EEC *--> OP
+ElecLUTdq *--> Simulation
+Electrical  <|--> ElecLUTdq
+Electrical *--> EEC
+Electrical *--> LUT
+Elmer  <|--> ElmerResults
+Elmer  <|--> ElmerResultsVTU
+Elmer  <|--> Section
+Elmer  <|--> SolverInputFile
+EndWinding  <|--> EndWindingCirc
+EndWinding  <|--> EndWindingRect
+Force  <|--> ForceMT
+Force  <|--> ForceTensor
+Frame  <|--> FrameBar
+Frame *--> Material
+GUIOption *--> Unit
+GaussPoint  <|--> FPGNSeg
+GaussPoint  <|--> FPGNTri
+Hole  <|--> HoleM54
+Hole  <|--> HoleMag
+Hole  <|--> VentilationCirc
+Hole  <|--> VentilationPolar
+Hole  <|--> VentilationTrap
+Hole *--> Material
+HoleM50 *--> Magnet
+HoleM51 *--> Magnet
+HoleM52 *--> Magnet
+HoleM52R *--> Magnet
+HoleM53 *--> Magnet
+HoleM57 *--> Magnet
+HoleM58 *--> Magnet
+HoleMLSRPM *--> Magnet
+HoleMag  <|--> HoleM50
+HoleMag  <|--> HoleM51
+HoleMag  <|--> HoleM52
+HoleMag  <|--> HoleM52R
+HoleMag  <|--> HoleM53
+HoleMag  <|--> HoleM57
+HoleMag  <|--> HoleM58
+HoleMag  <|--> HoleMLSRPM
+HoleMag  <|--> HoleUD
+HoleUD *--> Magnet
+HoleUD *--> Surface
+Import  <|--> ImportMatrix
+Import  <|--> ImportMeshMat
+Import  <|--> ImportMeshUnv
+ImportData *--> Import
+ImportGenMatrixSin *--> ImportGenVectSin
+ImportMatrix  <|--> ImportGenMatrixSin
+ImportMatrix  <|--> ImportGenPWM
+ImportMatrix  <|--> ImportGenToothSaw
+ImportMatrix  <|--> ImportGenVectLin
+ImportMatrix  <|--> ImportGenVectSin
+ImportMatrix  <|--> ImportMatlab
+ImportMatrix  <|--> ImportMatrixVal
+ImportMatrix  <|--> ImportMatrixXls
+ImportVectorField *--> ImportData
+Input  <|--> InputForce
+Input  <|--> InputVoltage
+Input *--> ImportMatrix
+Input *--> OP
+InputCurrent  <|--> InputFlux
+InputCurrent *--> ImportData
+InputCurrent *--> ImportMatrix
+InputForce *--> ImportVectorField
+InputVoltage  <|--> InputCurrent
+InputVoltage *--> ImportGenPWM
+Interpolation *--> GaussPoint
+Interpolation *--> RefCell
+Interpolation *--> ScalarProduct
+LUT  <|--> LUTdq
+LUT  <|--> LUTslip
+LamH  <|--> LamHole
+LamH  <|--> LamHoleNS
+LamHole *--> Hole
+LamHoleNS *--> Hole
+LamSlot  <|--> LamSlotMag
+LamSlot  <|--> LamSlotWind
+LamSlot *--> Slot
+LamSlotMag *--> Magnet
+LamSlotMulti  <|--> LamSlotMultiWind
+LamSlotMulti *--> Slot
+LamSlotMultiWind *--> Winding
+LamSlotWind  <|--> LamSquirrelCage
+LamSlotWind *--> Winding
+LamSquirrelCage  <|--> LamSquirrelCageMag
+LamSquirrelCage *--> Material
+LamSquirrelCageMag *--> Hole
+Lamination  <|--> LamH
+Lamination  <|--> LamSlot
+Lamination  <|--> LamSlotMulti
+Lamination *--> Bore
+Lamination *--> Hole
+Lamination *--> Material
+Lamination *--> Notch
+Lamination *--> Skew
+Line  <|--> Arc
+Line  <|--> Segment
+Loss  <|--> LossFEA
+Loss *--> LossModel
+LossModel  <|--> LossModelBertotti
+LossModel  <|--> LossModelSteinmetz
+LossModel  <|--> LossModelWinding
+Machine  <|--> MachineAsync
+Machine  <|--> MachineSync
+Machine  <|--> MachineUD
+Machine *--> Frame
+Machine *--> Shaft
+MachineAsync  <|--> MachineDFIM
+MachineDFIM  <|--> MachineSCIM
+MachineDFIM *--> LamSlotWind
+MachineIPMSM *--> LamH
+MachineIPMSM *--> Lamination
+MachineLSPM *--> LamSlotWind
+MachineLSPM *--> LamSquirrelCageMag
+MachineSIPMSM *--> LamSlotMag
+MachineSIPMSM *--> Lamination
+MachineSRM *--> LamSlot
+MachineSRM *--> LamSlotWind
+MachineSyRM *--> LamHole
+MachineSyRM *--> LamSlotWind
+MachineSync  <|--> MachineIPMSM
+MachineSync  <|--> MachineLSPM
+MachineSync  <|--> MachineSIPMSM
+MachineSync  <|--> MachineSRM
+MachineSync  <|--> MachineSyRM
+MachineSync  <|--> MachineWRSM
+MachineUD *--> Lamination
+MachineWRSM *--> LamSlotWind
+MagElmer *--> DXFImport
+MagFEMM *--> DXFImport
+Magnet *--> Material
+Magnetics  <|--> MagElmer
+Magnetics  <|--> MagFEMM
+Magnetics *--> SliceModel
+MatMagnetics *--> ImportMatrix
+MatMagnetics *--> ModelBH
+Material *--> MatEconomical
+Material *--> MatElectrical
+Material *--> MatHT
+Material *--> MatMagnetics
+Material *--> MatStructural
+Mesh  <|--> MeshMat
+Mesh  <|--> MeshVTK
+MeshMat *--> CellMat
+MeshMat *--> NodeMat
+MeshSolution *--> Mesh
+MeshSolution *--> Solution
+ModelBH  <|--> ModelBH_Langevin
+ModelBH  <|--> ModelBH_arctangent
+ModelBH  <|--> ModelBH_linear_sat
+Notch  <|--> NotchEvenDist
+NotchEvenDist *--> Slot
+OP  <|--> OPdq
+OP  <|--> OPslip
+OPdq  <|--> OPdqf
+OptiBayesAlg  <|--> OptiBayesAlgSmoot
+OptiDesignVar  <|--> OptiDesignVarInterval
+OptiDesignVar  <|--> OptiDesignVarSet
+OptiGenAlg  <|--> OptiGenAlgNsga2Deap
+OptiProblem *--> DataKeeper
+OptiProblem *--> OptiConstraint
+OptiProblem *--> OptiDesignVar
+OptiProblem *--> OptiObjective
+OptiProblem *--> Simulation
+OptiSolver  <|--> OptiBayesAlg
+OptiSolver  <|--> OptiGenAlg
+OptiSolver *--> OptiProblem
+OptiSolver *--> XOutput
+OutElec *--> EEC
+OutElec *--> ImportGenPWM
+OutElec *--> OP
+OutElec *--> OutInternal
+OutForce *--> MeshSolution
+OutGeo *--> OutGeoLam
+OutInternal  <|--> OutMagElmer
+OutInternal  <|--> OutMagFEMM
+OutLoss *--> MeshSolution
+OutMag *--> MeshSolution
+OutMag *--> OutInternal
+OutMag *--> SliceModel
+OutStruct *--> MeshSolution
+Output  <|--> XOutput
+Output *--> OutElec
+Output *--> OutForce
+Output *--> OutGeo
+Output *--> OutLoss
+Output *--> OutMag
+Output *--> OutPost
+Output *--> OutStruct
+Output *--> Simulation
+ParamExplorer  <|--> OptiDesignVar
+ParamExplorer  <|--> ParamExplorerInterval
+ParamExplorer  <|--> ParamExplorerSet
+Post  <|--> PostFunction
+Post  <|--> PostMethod
+PostMethod  <|--> PostLUT
+PostMethod  <|--> PostPlot
+RefCell  <|--> RefLine3
+RefCell  <|--> RefQuad4
+RefCell  <|--> RefQuad9
+RefCell  <|--> RefSegmentP1
+RefCell  <|--> RefTriangle3
+RefCell  <|--> RefTriangle6
+ScalarProduct  <|--> ScalarProductL2
+Shaft *--> Material
+Simu1 *--> Electrical
+Simu1 *--> Force
+Simu1 *--> Loss
+Simu1 *--> Magnetics
+Simu1 *--> Structural
+Simulation  <|--> Simu1
+Simulation *--> Input
+Simulation *--> Machine
+Simulation *--> Post
+Simulation *--> VarSimu
+Slot  <|--> Slot19
+Slot  <|--> SlotCirc
+Slot  <|--> SlotDC
+Slot  <|--> SlotM10
+Slot  <|--> SlotM11
+Slot  <|--> SlotM12
+Slot  <|--> SlotM13
+Slot  <|--> SlotM14
+Slot  <|--> SlotM15
+Slot  <|--> SlotM16
+Slot  <|--> SlotM17
+Slot  <|--> SlotM18
+Slot  <|--> SlotUD
+Slot  <|--> SlotUD2
+Slot  <|--> SlotW10
+Slot  <|--> SlotW11
+Slot  <|--> SlotW12
+Slot  <|--> SlotW13
+Slot  <|--> SlotW14
+Slot  <|--> SlotW15
+Slot  <|--> SlotW16
+Slot  <|--> SlotW21
+Slot  <|--> SlotW22
+Slot  <|--> SlotW23
+Slot  <|--> SlotW24
+Slot  <|--> SlotW25
+Slot  <|--> SlotW26
+Slot  <|--> SlotW27
+Slot  <|--> SlotW28
+Slot  <|--> SlotW29
+Slot  <|--> SlotW60
+Slot  <|--> SlotW61
+Slot  <|--> SlotWLSRPM
+Slot *--> Material
+SlotUD *--> Line
+SlotUD2 *--> Line
+SlotUD2 *--> Surface
+Solution  <|--> SolutionData
+Solution  <|--> SolutionMat
+Solution  <|--> SolutionVector
+SolutionMat  <|--> Mode
+Structural  <|--> StructElmer
+SurfLine *--> Line
+SurfRing *--> Surface
+Surface  <|--> Circle
+Surface  <|--> PolarArc
+Surface  <|--> SurfLine
+Surface  <|--> SurfRing
+Surface  <|--> Trapeze
+VarLoad  <|--> VarLoadCurrent
+VarLoad  <|--> VarLoadVoltage
+VarLoad *--> OPMatrix
+VarOpti *--> OptiConstraint
+VarOpti *--> OptiObjective
+VarOpti *--> OptiSolver
+VarParam  <|--> VarOpti
+VarParam  <|--> VarParamSweep
+VarParam *--> ParamExplorer
+VarSimu  <|--> VarLoad
+VarSimu  <|--> VarParam
+VarSimu *--> DataKeeper
+VarSimu *--> Post
+Winding  <|--> WindingSC
+Winding  <|--> WindingUD
+Winding *--> Conductor
+Winding *--> EndWinding
+XOutput  <|--> LUT
+XOutput *--> DataKeeper
+XOutput *--> Output
+XOutput *--> ParamExplorer

@@ -28,9 +28,12 @@ SCIM_dict = {
         ("Stator phase number", "3"),
         ("Stator winding resistance", "0.02392 Ohm"),
         ("Machine total mass", "342.8 kg"),
+        ("Stator lamination mass", "143.6 kg"),
         ("Stator winding mass", "59.06 kg"),
+        ("Rotor lamination mass", "97.54 kg"),
+        ("Rotor winding mass", "21.12 kg"),
     ],
-    "Nrow": 9,
+    "Nrow": 12,
 }
 IPMSM_dict = {
     "file_path": join(machine_path, "Toyota_Prius.json").replace("\\", "/"),
@@ -42,14 +45,16 @@ IPMSM_dict = {
         ("Stator phase number", "3"),
         ("Stator winding resistance", "0.03595 Ohm"),
         ("Machine total mass", "33.38 kg"),
+        ("Stator lamination mass", "15.78 kg"),
         ("Stator winding mass", "4.001 kg"),
+        ("Rotor lamination mass", "5.006 kg"),
         ("Rotor magnet mass", "1.236 kg"),
     ],
-    "Nrow": 9,
+    "Nrow": 11,
 }
 load_preview_test = [SCIM_dict, IPMSM_dict]
 
-
+# python -m pytest ./Tests/GUI/DMachineSetup/test_SPreview.py
 class TestSPreview(object):
     def setup_method(self):
         """Setup the workspace and the GUI"""

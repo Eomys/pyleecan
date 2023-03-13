@@ -1,0 +1,964 @@
+classDiagram
+direction TB
+class Hole{
+	Zh : int
+	mat_void : Material
+	magnetization_dict_offset : dict
+	Alpha0 : float
+	comp_height()
+	comp_magnetization_dict()
+	comp_radius()
+	comp_surface()
+	convert_to_UD()
+	get_is_stator()
+	get_magnet_by_id()
+	get_magnet_dict()
+	get_Rbo()
+	get_Rext()
+	has_magnet()
+	plot()
+	set_magnet_by_id()
+	get_R_id()
+}
+class HoleM50{
+	H0 : float
+	W0 : float
+	H1 : float
+	W1 : float
+	H2 : float
+	W2 : float
+	H3 : float
+	W3 : float
+	H4 : float
+	W4 : float
+	magnet_0 : Magnet
+	magnet_1 : Magnet
+	_comp_point_coordinate()
+	build_geometry()
+	check()
+	comp_alpha()
+	comp_magnetization_dict()
+	comp_radius()
+	comp_surface_magnet_id()
+	comp_W5()
+	has_magnet()
+	plot_schematics()
+	remove_magnet()
+}
+class HoleM51{
+	H0 : float
+	H1 : float
+	H2 : float
+	W0 : float
+	W1 : float
+	W2 : float
+	W3 : float
+	W4 : float
+	W5 : float
+	W6 : float
+	W7 : float
+	magnet_0 : Magnet
+	magnet_1 : Magnet
+	magnet_2 : Magnet
+	_comp_point_coordinate()
+	build_geometry()
+	check()
+	comp_alpha()
+	comp_magnetization_dict()
+	comp_radius()
+	comp_surface_magnet_id()
+	comp_width()
+	has_magnet()
+	plot_schematics()
+	remove_magnet()
+}
+class HoleM52{
+	H0 : float
+	W0 : float
+	H1 : float
+	W3 : float
+	H2 : float
+	magnet_0 : Magnet
+	_comp_point_coordinate()
+	build_geometry()
+	check()
+	comp_alpha()
+	comp_magnetization_dict()
+	comp_radius()
+	comp_surface()
+	comp_surface_magnet_id()
+	comp_W1()
+	has_magnet()
+	plot_schematics()
+	remove_magnet()
+}
+class HoleM52R{
+	H0 : float
+	W0 : float
+	H1 : float
+	W1 : float
+	H2 : float
+	magnet_0 : Magnet
+	R0 : float
+	_comp_point_coordinate()
+	build_geometry()
+	check()
+	comp_alpha()
+	comp_magnetization_dict()
+	comp_radius()
+	comp_surface()
+	comp_surface_magnet_id()
+	has_magnet()
+	plot_schematics()
+	remove_magnet()
+	get_height_magnet_id()
+}
+class HoleM53{
+	H0 : float
+	H1 : float
+	W1 : float
+	H2 : float
+	W2 : float
+	H3 : float
+	W3 : float
+	W4 : float
+	magnet_0 : Magnet
+	magnet_1 : Magnet
+	_comp_point_coordinate()
+	build_geometry()
+	check()
+	comp_alpha()
+	comp_magnetization_dict()
+	comp_radius()
+	comp_surface_magnet_id()
+	comp_W5()
+	has_magnet()
+	plot_schematics()
+	remove_magnet()
+}
+class HoleM54{
+	H0 : float
+	H1 : float
+	W0 : float
+	R1 : float
+	_comp_point_coordinate()
+	build_geometry()
+	check()
+	comp_magnetization_dict()
+	comp_radius()
+	comp_surface()
+	plot_schematics()
+}
+class HoleM57{
+	W0 : float
+	H1 : float
+	W1 : float
+	H2 : float
+	W2 : float
+	W3 : float
+	W4 : float
+	magnet_0 : Magnet
+	magnet_1 : Magnet
+	_comp_point_coordinate()
+	build_geometry()
+	check()
+	comp_magnetization_dict()
+	comp_radius()
+	comp_surface_magnet_id()
+	has_magnet()
+	plot_schematics()
+	remove_magnet()
+}
+class HoleM58{
+	H0 : float
+	W0 : float
+	H1 : float
+	W1 : float
+	H2 : float
+	W2 : float
+	W3 : float
+	R0 : float
+	magnet_0 : Magnet
+	_comp_point_coordinate()
+	build_geometry()
+	check()
+	comp_magnetization_dict()
+	comp_radius()
+	comp_surface_magnet_id()
+	has_magnet()
+	plot_schematics()
+	remove_magnet()
+}
+class HoleMLSRPM{
+	H1 : float
+	W0 : float
+	W1 : float
+	W2 : float
+	R1 : float
+	R2 : float
+	R3 : float
+	magnet_0 : Magnet
+	_comp_point_coordinate()
+	build_geometry()
+	check()
+	comp_magnetization_dict()
+	comp_mass_magnet()
+	comp_surface_magnet()
+	comp_volume_magnet()
+	plot_schematics()
+	remove_magnet()
+	has_magnet()
+}
+class HoleMag{
+	comp_mass_magnet_id()
+	comp_mass_magnets()
+	comp_surface_magnets()
+	comp_volume_magnets()
+	get_magnet_list()
+	has_magnet()
+}
+class HoleUD{
+	surf_list : list~Surface~
+	magnet_dict : dict~Magnet~
+	name : str
+	build_geometry()
+	check()
+	comp_surface_magnet_id()
+	has_magnet()
+	remove_magnet()
+}
+class Slot{
+	Zs : int
+	wedge_mat : Material
+	is_bore : bool
+	build_geometry_active()
+	build_geometry_half_tooth()
+	check()
+	comp_angle_active_eq()
+	comp_angle_opening()
+	comp_height()
+	comp_height_active()
+	comp_height_opening()
+	comp_radius()
+	comp_radius_mid_active()
+	comp_surface()
+	comp_surface_active()
+	comp_surface_opening()
+	comp_surface_wedges()
+	comp_width()
+	comp_width_opening()
+	convert_to_SlotUD2()
+	get_is_stator()
+	get_name_lam()
+	get_Rbo()
+	get_surface()
+	get_surface_tooth()
+	get_surface_wedges()
+	is_outwards()
+	plot()
+	plot_active()
+	set_label()
+}
+class Slot19{
+	W0 : float
+	H0 : float
+	W1 : float
+	Wx_is_rad : bool
+	_comp_point_coordinate()
+	build_geometry()
+	check()
+	comp_angle_opening()
+	comp_angle_bottom()
+	comp_height()
+	comp_surface()
+}
+class SlotCirc{
+	W0 : float
+	H0 : float
+	_comp_line_dict()
+	_comp_point_coordinate()
+	_comp_R0()
+	build_geometry()
+	check()
+	comp_angle_opening()
+	comp_height()
+	comp_height_active()
+	comp_surface()
+	comp_surface_active()
+	comp_surface_opening()
+	get_surface_active()
+	get_surface_opening()
+	plot_schematics()
+}
+class SlotDC{
+	W1 : float
+	H1 : float
+	D1 : float
+	W2 : float
+	H2 : float
+	D2 : float
+	H3 : float
+	R3 : float
+	_comp_point_coordinate()
+	build_geometry()
+	get_surface_active()
+	check()
+	comp_angle_opening()
+	comp_height()
+	comp_height_active()
+	comp_surface()
+	comp_surface_active()
+}
+class SlotM10{
+	W0 : float
+	H0 : float
+	Wmag : float
+	Hmag : float
+	_comp_point_coordinate()
+	build_geometry()
+	check()
+	comp_angle_opening()
+	comp_height()
+	comp_height_active()
+	comp_surface()
+	comp_surface_active()
+	get_surface_active()
+	plot_schematics()
+}
+class SlotM11{
+	W0 : float
+	H0 : float
+	Wmag : float
+	Hmag : float
+	_comp_point_coordinate()
+	build_geometry()
+	check()
+	comp_angle_opening()
+	comp_height()
+	comp_height_active()
+	comp_surface()
+	comp_surface_active()
+	get_surface_active()
+	plot_schematics()
+}
+class SlotM12{
+	W0 : float
+	H0 : float
+	Wmag : float
+	Hmag : float
+	_comp_point_coordinate()
+	build_geometry()
+	check()
+	comp_angle_opening()
+	comp_height()
+	comp_height_active()
+	comp_surface()
+	comp_surface_active()
+	get_surface_active()
+	plot_schematics()
+}
+class SlotM13{
+	W0 : float
+	H0 : float
+	Wmag : float
+	Hmag : float
+	Rtopm : float
+	_comp_point_coordinate()
+	build_geometry()
+	check()
+	comp_angle_opening()
+	comp_height()
+	comp_height_active()
+	comp_surface()
+	comp_surface_active()
+	get_surface_active()
+	plot_schematics()
+}
+class SlotM14{
+	W0 : float
+	H0 : float
+	Wmag : float
+	Hmag : float
+	Rtopm : float
+	_comp_point_coordinate()
+	build_geometry()
+	check()
+	comp_angle_opening()
+	comp_height()
+	comp_height_active()
+	comp_surface()
+	comp_surface_active()
+	get_surface_active()
+	plot_schematics()
+}
+class SlotM15{
+	W0 : float
+	H0 : float
+	Wmag : float
+	Hmag : float
+	Rtopm : float
+	_comp_point_coordinate()
+	build_geometry()
+	check()
+	comp_angle_opening()
+	comp_height()
+	comp_height_active()
+	comp_surface()
+	comp_surface_active()
+	get_surface_active()
+	plot_schematics()
+}
+class SlotM16{
+	W0 : float
+	H0 : float
+	W1 : float
+	H1 : float
+	_comp_point_coordinate()
+	build_geometry()
+	check()
+	comp_angle_opening()
+	comp_height()
+	comp_height_active()
+	comp_surface()
+	comp_surface_active()
+	get_surface_active()
+	plot_schematics()
+}
+class SlotM17{
+	build_geometry()
+	check()
+	comp_angle_opening()
+	comp_height()
+	comp_height_active()
+	comp_surface()
+	comp_surface_active()
+	get_surface_active()
+	plot_schematics()
+}
+class SlotM18{
+	Hmag : float
+	_comp_point_coordinate()
+	build_geometry()
+	check()
+	comp_angle_opening()
+	comp_height()
+	comp_height_active()
+	comp_surface()
+	comp_surface_active()
+	get_surface_active()
+	plot_schematics()
+}
+class SlotUD{
+	line_list : list~Line~
+	wind_begin_index : int
+	wind_end_index : int
+	type_line_wind : int
+	name : str
+	build_geometry()
+	check()
+	get_surface_active()
+	get_surface_opening()
+	set_from_point_list()
+}
+class SlotUD2{
+	line_list : list~Line~
+	active_surf : Surface
+	split_active_surf_dict : dict
+	name : str
+	build_geometry()
+	build_geometry_active()
+	get_surface_active()
+	check()
+	_set_split_active_surf_dict()
+}
+class SlotW10{
+	W0 : float
+	H0 : float
+	H1 : float
+	W1 : float
+	H2 : float
+	W2 : float
+	H1_is_rad : bool
+	_comp_line_dict()
+	_comp_point_coordinate()
+	build_geometry()
+	build_geometry_active()
+	check()
+	comp_angle_opening()
+	comp_height()
+	comp_height_active()
+	comp_surface()
+	comp_surface_active()
+	comp_surface_opening()
+	get_surface_active()
+	get_surface_opening()
+	get_H1()
+	plot_schematics()
+}
+class SlotW11{
+	W0 : float
+	H0 : float
+	H1 : float
+	H1_is_rad : bool
+	W1 : float
+	H2 : float
+	W2 : float
+	R1 : float
+	_comp_line_dict()
+	_comp_point_coordinate()
+	build_geometry()
+	check()
+	comp_angle_opening()
+	comp_height()
+	comp_height_active()
+	comp_surface()
+	comp_surface_active()
+	comp_surface_opening()
+	get_H1()
+	get_surface_active()
+	get_surface_opening()
+	plot_schematics()
+}
+class SlotW12{
+	H0 : float
+	H1 : float
+	R1 : float
+	R2 : float
+	_comp_line_dict()
+	_comp_point_coordinate()
+	build_geometry()
+	check()
+	comp_angle_opening()
+	comp_height()
+	comp_height_active()
+	comp_surface()
+	comp_surface_active()
+	comp_surface_opening()
+	get_surface_active()
+	get_surface_opening()
+	plot_schematics()
+}
+class SlotW13{
+	W0 : float
+	H0 : float
+	H1 : float
+	W1 : float
+	H2 : float
+	W2 : float
+	W3 : float
+	H1_is_rad : bool
+	_comp_line_dict()
+	_comp_point_coordinate()
+	build_geometry()
+	build_geometry_active()
+	check()
+	comp_angle_opening()
+	comp_height()
+	comp_height_active()
+	comp_surface()
+	comp_surface_active()
+	comp_surface_opening()
+	get_surface_active()
+	get_surface_opening()
+	get_H1()
+	plot_schematics()
+}
+class SlotW14{
+	W0 : float
+	H0 : float
+	H1 : float
+	H3 : float
+	W3 : float
+	_comp_line_dict()
+	_comp_point_coordinate()
+	build_geometry()
+	check()
+	comp_angle_opening()
+	comp_height()
+	comp_height_active()
+	comp_surface()
+	comp_surface_active()
+	comp_surface_opening()
+	get_surface_active()
+	get_surface_opening()
+	plot_schematics()
+}
+class SlotW15{
+	W0 : float
+	W3 : float
+	H0 : float
+	H1 : float
+	H2 : float
+	R1 : float
+	R2 : float
+	_comp_line_dict()
+	_comp_point_coordinate()
+	build_geometry()
+	check()
+	comp_angle_opening()
+	comp_height()
+	comp_height_active()
+	comp_surface()
+	comp_surface_opening()
+	get_surface_active()
+	get_surface_opening()
+	plot_schematics()
+}
+class SlotW16{
+	W0 : float
+	W3 : float
+	H0 : float
+	H2 : float
+	R1 : float
+	_comp_line_dict()
+	_comp_point_coordinate()
+	build_geometry()
+	check()
+	comp_angle_opening()
+	comp_height()
+	comp_height_active()
+	comp_surface()
+	comp_surface_opening()
+	get_surface_active()
+	get_surface_opening()
+	plot_schematics()
+}
+class SlotW21{
+	W0 : float
+	H0 : float
+	H1 : float
+	H1_is_rad : bool
+	W1 : float
+	H2 : float
+	W2 : float
+	_comp_line_dict()
+	_comp_point_coordinate()
+	build_geometry()
+	build_geometry_active()
+	check()
+	comp_angle_opening()
+	comp_height()
+	comp_height_active()
+	comp_surface()
+	comp_surface_active()
+	comp_surface_opening()
+	get_H1()
+	get_surface_active()
+	get_surface_opening()
+	plot_schematics()
+}
+class SlotW22{
+	W0 : float
+	H0 : float
+	H2 : float
+	W2 : float
+	_comp_line_dict()
+	_comp_point_coordinate()
+	build_geometry()
+	build_geometry_active()
+	check()
+	comp_angle_opening()
+	comp_height()
+	comp_height_active()
+	comp_surface()
+	comp_surface_active()
+	comp_surface_opening()
+	get_surface_active()
+	get_surface_opening()
+	plot_schematics()
+}
+class SlotW23{
+	W0 : float
+	H0 : float
+	H1 : float
+	W1 : float
+	H2 : float
+	W2 : float
+	W3 : float
+	H1_is_rad : bool
+	is_cstt_tooth : bool
+	_comp_line_dict()
+	_comp_point_coordinate()
+	_comp_W()
+	build_geometry()
+	build_geometry_active()
+	check()
+	comp_angle_opening()
+	comp_height()
+	comp_height_active()
+	comp_surface()
+	comp_surface_active()
+	comp_surface_opening()
+	get_surface_active()
+	get_surface_opening()
+	plot_schematics()
+}
+class SlotW24{
+	W3 : float
+	H2 : float
+	_comp_line_dict()
+	_comp_point_coordinate()
+	build_geometry()
+	build_geometry_active()
+	check()
+	comp_angle_opening()
+	comp_height()
+	comp_height_active()
+	comp_surface()
+	comp_surface_active()
+	comp_surface_opening()
+	get_surface_active()
+	get_surface_opening()
+	plot_schematics()
+}
+class SlotW25{
+	W3 : float
+	H2 : float
+	W4 : float
+	H1 : float
+	_comp_line_dict()
+	_comp_point_coordinate()
+	build_geometry()
+	build_geometry_active()
+	check()
+	comp_angle_opening()
+	comp_height()
+	comp_height_active()
+	comp_surface()
+	comp_surface_active()
+	comp_surface_opening()
+	get_surface_active()
+	get_surface_opening()
+	plot_schematics()
+}
+class SlotW26{
+	W0 : float
+	H0 : float
+	H1 : float
+	R1 : float
+	R2 : float
+	_comp_line_dict()
+	_comp_point_coordinate()
+	build_geometry()
+	check()
+	comp_angle_opening()
+	comp_height()
+	comp_height_active()
+	comp_surface()
+	comp_surface_active()
+	comp_surface_opening()
+	get_surface_active()
+	get_surface_opening()
+	plot_schematics()
+}
+class SlotW27{
+	H0 : float
+	H1 : float
+	H2 : float
+	W0 : float
+	W1 : float
+	W2 : float
+	W3 : float
+	is_trap_wind : bool
+	_comp_line_dict()
+	_comp_point_coordinate()
+	build_geometry()
+	check()
+	comp_angle_opening()
+	comp_height()
+	comp_height_active()
+	comp_surface()
+	comp_surface_active()
+	comp_surface_opening()
+	get_surface_active()
+	get_surface_opening()
+	plot_schematics()
+}
+class SlotW28{
+	W0 : float
+	H0 : float
+	R1 : float
+	W3 : float
+	H3 : float
+	_comp_line_dict()
+	_comp_point_coordinate()
+	build_geometry()
+	check()
+	comp_angle_opening()
+	comp_height()
+	comp_height_active()
+	comp_surface()
+	comp_surface_opening()
+	get_surface_active()
+	get_surface_opening()
+	plot_schematics()
+}
+class SlotW29{
+	W0 : float
+	H0 : float
+	H1 : float
+	W1 : float
+	H2 : float
+	W2 : float
+	_comp_line_dict()
+	_comp_point_coordinate()
+	build_geometry()
+	build_geometry_active()
+	check()
+	comp_angle_opening()
+	comp_height()
+	comp_height_active()
+	comp_surface()
+	comp_surface_active()
+	comp_surface_opening()
+	get_surface_active()
+	get_surface_opening()
+	plot_schematics()
+}
+class SlotW60{
+	W1 : float
+	W2 : float
+	H1 : float
+	H2 : float
+	R1 : float
+	H3 : float
+	H4 : float
+	W3 : float
+	_comp_line_dict()
+	_comp_point_coordinate()
+	build_geometry()
+	build_geometry_active()
+	check()
+	comp_angle_opening()
+	comp_height()
+	comp_height_active()
+	comp_surface()
+	comp_surface_active()
+	get_surface_active()
+	get_surface_opening()
+	plot_schematics()
+}
+class SlotW61{
+	W0 : float
+	W1 : float
+	W2 : float
+	H0 : float
+	H1 : float
+	H2 : float
+	H3 : float
+	H4 : float
+	W3 : float
+	_comp_line_dict()
+	_comp_point_coordinate()
+	build_geometry()
+	build_geometry_active()
+	check()
+	comp_angle_opening()
+	comp_height()
+	comp_height_active()
+	comp_surface()
+	comp_surface_active()
+	get_surface_active()
+	get_surface_opening()
+	plot_schematics()
+}
+class SlotWLSRPM{
+	W1 : float
+	W3 : float
+	H2 : float
+	R1 : float
+	H3 : float
+	_comp_point_coordinate()
+	build_geometry()
+	build_geometry_active()
+	check()
+	comp_angle_opening()
+	comp_height_damper()
+	comp_height_wind()
+	comp_height()
+	get_surface_active()
+	plot_schematics()
+}
+class VentilationCirc{
+	D0 : float
+	H0 : float
+	build_geometry()
+	check()
+	comp_radius()
+	comp_surface()
+	get_center()
+	_comp_point_coordinate()
+	plot_schematics()
+}
+class VentilationPolar{
+	D0 : float
+	H0 : float
+	W1 : float
+	build_geometry()
+	check()
+	comp_radius()
+	comp_surface()
+	get_center()
+	_comp_point_coordinate()
+	plot_schematics()
+}
+class VentilationTrap{
+	D0 : float
+	H0 : float
+	W1 : float
+	W2 : float
+	build_geometry()
+	check()
+	comp_radius()
+	comp_surface()
+	get_center()
+	_comp_point_coordinate()
+	plot_schematics()
+}
+Hole  <|--> HoleM54
+Hole  <|--> HoleMag
+Hole  <|--> VentilationCirc
+Hole  <|--> VentilationPolar
+Hole  <|--> VentilationTrap
+HoleMag  <|--> HoleM50
+HoleMag  <|--> HoleM51
+HoleMag  <|--> HoleM52
+HoleMag  <|--> HoleM52R
+HoleMag  <|--> HoleM53
+HoleMag  <|--> HoleM57
+HoleMag  <|--> HoleM58
+HoleMag  <|--> HoleMLSRPM
+HoleMag  <|--> HoleUD
+Slot  <|--> Slot19
+Slot  <|--> SlotCirc
+Slot  <|--> SlotDC
+Slot  <|--> SlotM10
+Slot  <|--> SlotM11
+Slot  <|--> SlotM12
+Slot  <|--> SlotM13
+Slot  <|--> SlotM14
+Slot  <|--> SlotM15
+Slot  <|--> SlotM16
+Slot  <|--> SlotM17
+Slot  <|--> SlotM18
+Slot  <|--> SlotUD
+Slot  <|--> SlotUD2
+Slot  <|--> SlotW10
+Slot  <|--> SlotW11
+Slot  <|--> SlotW12
+Slot  <|--> SlotW13
+Slot  <|--> SlotW14
+Slot  <|--> SlotW15
+Slot  <|--> SlotW16
+Slot  <|--> SlotW21
+Slot  <|--> SlotW22
+Slot  <|--> SlotW23
+Slot  <|--> SlotW24
+Slot  <|--> SlotW25
+Slot  <|--> SlotW26
+Slot  <|--> SlotW27
+Slot  <|--> SlotW28
+Slot  <|--> SlotW29
+Slot  <|--> SlotW60
+Slot  <|--> SlotW61
+Slot  <|--> SlotWLSRPM
