@@ -1,3 +1,6 @@
-Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
-file_path,-,Path of the file to load,0,str,,,,,Import,ImportMatrix,get_data,VERSION,1,Import the data from a mat file
-var_name,-,Name of the variable to load,0,str,,,,,,,,,,
+Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,as_dict Type
+file_path,-,Path of the file to load,0,str,,,
+var_name,-,Name of the variable to load,0,str,,,
+,
+Package,Inherit,Methods,Constant Name,Constant Value,Class description
+Import,ImportMatrix,get_data,VERSION,1,Import the data from a mat file

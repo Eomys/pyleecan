@@ -1,5 +1,8 @@
-Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
-OP_matrix,-,Operating point matrix object,"(Nsimu, Nvalue)",OPMatrix,None,,,,Simulation,VarSimu,get_ref_simu_index,VERSION,1,Abstract class to generate multi-simulation by changing the operating point
-,,,,,,,,,,,get_OP_array,NAME,"""Variable Load""",
-,,,,,,,,,,,set_OP_array,,,
-,,,,,,,,,,,_set_OP_matrix,,,
+Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,as_dict Type
+OP_matrix,-,Operating point matrix object,"(Nsimu, Nvalue)",OPMatrix,None,,
+,
+Package,Inherit,Methods,Constant Name,Constant Value,Class description
+Simulation,VarSimu,get_ref_simu_index,VERSION,1,Abstract class to generate multi-simulation by changing the operating point
+,,get_OP_array,NAME,"""Variable Load""",
+,,set_OP_array,,,
+,,_set_OP_matrix,,,

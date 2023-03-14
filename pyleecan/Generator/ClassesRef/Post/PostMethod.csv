@@ -1,2 +1,4 @@
-Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
-,,,,,,,,,Post,Post,run,VERSION,1,Abstract class for post-processing defined in the method run
+Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,as_dict Type
+,
+Package,Inherit,Methods,Constant Name,Constant Value,Class description
+Post,Post,run,VERSION,1,Abstract class for post-processing defined in the method run

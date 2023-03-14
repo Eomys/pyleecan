@@ -1,3 +1,6 @@
-Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
-Bs,T,BH curve parameter,,float,None,,,,Material,,,VERSION,1,Abstract class for BH curve model 
-mu_a,-,Saturation permeability parameter,,float,None,,,,,,,,,
+Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,as_dict Type
+Bs,T,BH curve parameter,,float,None,,
+mu_a,-,Saturation permeability parameter,,float,None,,
+,
+Package,Inherit,Methods,Constant Name,Constant Value,Class description
+Material,,,VERSION,1,Abstract class for BH curve model 

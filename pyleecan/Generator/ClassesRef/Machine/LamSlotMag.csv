@@ -1,10 +1,13 @@
-Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
-magnet,-,Magnet of the lamination,,Magnet,,,,,Machine,LamSlot,build_geometry,VERSION,1,Lamination with Slot for Magnets
-,,,,,,,,,,,check,,,
-,,,,,,,,,,,comp_masses,,,
-,,,,,,,,,,,comp_radius_mec,,,
-,,,,,,,,,,,comp_surfaces,,,
-,,,,,,,,,,,comp_volumes,,,
-,,,,,,,,,,,plot,,,
-,,,,,,,,,,,comp_angle_d_axis,,,
-,,,,,,,,,,,get_magnet_number,,,
+Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,as_dict Type
+magnet,-,Magnet of the lamination,,Magnet,,,
+,
+Package,Inherit,Methods,Constant Name,Constant Value,Class description
+Machine,LamSlot,build_geometry,VERSION,1,Lamination with Slot for Magnets
+,,check,,,
+,,comp_masses,,,
+,,comp_radius_mec,,,
+,,comp_surfaces,,,
+,,comp_volumes,,,
+,,plot,,,
+,,comp_angle_d_axis,,,
+,,get_magnet_number,,,

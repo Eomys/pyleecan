@@ -1,6 +1,10 @@
-Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constante Name,Constante Value,Description classe,Classe fille
-size_pop,-,Number of individuals for each generation,1,int,40,1,,,Optimization,OptiBayesAlg,solve,VERSION,1,Multi-objectives optimization problem with some constraints,
-nb_gen,-,Number of generations for the genetic part,1,int,100,1,,,,,check_optimization_input,,,,
-,,,,,,,,,,,evaluate,,,,
-,,,,,,,,,,,plot_pareto,,,,
-,,,,,,,,,,,eval_const,,,,
+Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,as_dict Type
+size_pop,-,Number of individuals for each generation,1,int,40,1,
+nb_gen,-,Number of generations for the genetic part,1,int,100,1,
+,
+Package,Inherit,Methods,Constante Name,Constante Value,Description classe,Classe fille
+Optimization,OptiBayesAlg,solve,VERSION,1,Multi-objectives optimization problem with some constraints,
+,,check_optimization_input,,,,
+,,evaluate,,,,
+,,plot_pareto,,,,
+,,eval_const,,,,

@@ -1,8 +1,11 @@
-Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constante Name,Constante Value,Description classe,Classe fille
-simu,,Default simulation,1,Simulation,,,,,Optimization,,,VERSION,1,Multi-objectives optimization problem with some constraints,
-design_var,,List of design variables,1,[OptiDesignVar],,,,,,,,,,,
-obj_func,,List of objective functions,1,[OptiObjective],,,,,,,,,,,
-eval_func,,Function to evaluate before computing obj function and constraints,1,function,None,,,,,,,,,,
-constraint,,List containing the constraints ,1,[OptiConstraint],,,,,,,,,,,
-preprocessing,,Function to execute a preprocessing on the simulation right before it is run.,,function,None,,,,,,,,,,
-datakeeper_list,,List of DataKeepers to run on every output,1,[DataKeeper],,,,,,,,,,,
+Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,as_dict Type
+simu,,Default simulation,1,Simulation,,,
+design_var,,List of design variables,1,[OptiDesignVar],,,
+obj_func,,List of objective functions,1,[OptiObjective],,,
+eval_func,,Function to evaluate before computing obj function and constraints,1,function,None,,
+constraint,,List containing the constraints ,1,[OptiConstraint],,,
+preprocessing,,Function to execute a preprocessing on the simulation right before it is run.,,function,None,,
+datakeeper_list,,List of DataKeepers to run on every output,1,[DataKeeper],,,
+,
+Package,Inherit,Methods,Constante Name,Constante Value,Description classe,Classe fille
+Optimization,,,VERSION,1,Multi-objectives optimization problem with some constraints,

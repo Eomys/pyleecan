@@ -1,3 +1,6 @@
-Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
-Lew_enforced,H,Enforced end-winding lekage inductance,,float,0,0,,,Machine,,comp_length,VERSION,1,Abstract Class of the machine's end winding
-,,,,,,,,,,,comp_inductance,,,
+Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,as_dict Type
+Lew_enforced,H,Enforced end-winding lekage inductance,,float,0,0,
+,
+Package,Inherit,Methods,Constant Name,Constant Value,Class description
+Machine,,comp_length,VERSION,1,Abstract Class of the machine's end winding
+,,comp_inductance,,,

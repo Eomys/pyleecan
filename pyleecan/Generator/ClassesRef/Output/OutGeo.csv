@@ -1,17 +1,20 @@
-Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
-stator,-,Geometry output of the stator,0,OutGeoLam,None,,,,Output,,,VERSION,1,Gather the geometrical and the global outputs
-rotor,-,Geometry output of the rotor,0,OutGeoLam,None,,,,,,,,,
-Wgap_mec,m,mechanical airgap width (minimal distance between the lamination including magnet),0,float,None,,,,,,,,,
-Wgap_mag,m,the magnetic airgap width (distance beetween the two Laminations bore radius),0,float,None,,,,,,,,,
-Rgap_mec,m,radius of the center of the mecanical airgap,0,float,None,,,,,,,,,
-Lgap,m,Airgap active length,0,float,None,,,,,,,,,
-logger_name,-,Name of the logger to use,0,str,Pyleecan.OutGeo,,,,,,,,,
-angle_rotor_initial,rad,Difference between the d axis angle of the stator and the rotor,0,float,None,,,,,,,,,
-rot_dir,-,"Rotation direction of the rotor (rot_dir*N0, default value given by ROT_DIR_REF)",,int,None,-1,1,,,,,,,
-per_a,-,Number of spatial periodicities of the machine,0,int,None,,,,,,,,,
-is_antiper_a,-,True if an spatial anti-periodicity is possible after the periodicities,0,bool,None,,,,,,,,,
-per_t_S,-,Number of time periodicities of the machine in static referential,0,int,None,,,,,,,,,
-is_antiper_t_S,-,True if an time anti-periodicity is possible after the periodicities in static referential,0,bool,None,,,,,,,,,
-axes_dict,,Dict containing axes data without periodicities used for plots and to have simulation full time/angle vectors,,{SciDataTool.Classes.DataND.Data},None,,,,,,,,,
-per_t_R,-,Number of time periodicities of the machine in rotating referential,0,int,None,,,,,,,,,
-is_antiper_t_R,-,True if an time anti-periodicity is possible after the periodicities in rotating referential,0,bool,None,,,,,,,,,
+Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,as_dict Type
+stator,-,Geometry output of the stator,0,OutGeoLam,None,,
+rotor,-,Geometry output of the rotor,0,OutGeoLam,None,,
+Wgap_mec,m,mechanical airgap width (minimal distance between the lamination including magnet),0,float,None,,
+Wgap_mag,m,the magnetic airgap width (distance beetween the two Laminations bore radius),0,float,None,,
+Rgap_mec,m,radius of the center of the mecanical airgap,0,float,None,,
+Lgap,m,Airgap active length,0,float,None,,
+logger_name,-,Name of the logger to use,0,str,Pyleecan.OutGeo,,
+angle_rotor_initial,rad,Difference between the d axis angle of the stator and the rotor,0,float,None,,
+rot_dir,-,"Rotation direction of the rotor (rot_dir*N0, default value given by ROT_DIR_REF)",,int,None,-1,1
+per_a,-,Number of spatial periodicities of the machine,0,int,None,,
+is_antiper_a,-,True if an spatial anti-periodicity is possible after the periodicities,0,bool,None,,
+per_t_S,-,Number of time periodicities of the machine in static referential,0,int,None,,
+is_antiper_t_S,-,True if an time anti-periodicity is possible after the periodicities in static referential,0,bool,None,,
+axes_dict,,Dict containing axes data without periodicities used for plots and to have simulation full time/angle vectors,,{SciDataTool.Classes.DataND.Data},None,,
+per_t_R,-,Number of time periodicities of the machine in rotating referential,0,int,None,,
+is_antiper_t_R,-,True if an time anti-periodicity is possible after the periodicities in rotating referential,0,bool,None,,
+,
+Package,Inherit,Methods,Constant Name,Constant Value,Class description
+Output,,,VERSION,1,Gather the geometrical and the global outputs

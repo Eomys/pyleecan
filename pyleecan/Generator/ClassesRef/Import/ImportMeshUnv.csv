@@ -1,2 +1,5 @@
-Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
-file_path,-,Path of the file to load,0,str,,,,,Import,Import,get_data,VERSION,1,Import mesh data from an unv file
+Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,as_dict Type
+file_path,-,Path of the file to load,0,str,,,
+,
+Package,Inherit,Methods,Constant Name,Constant Value,Class description
+Import,Import,get_data,VERSION,1,Import mesh data from an unv file

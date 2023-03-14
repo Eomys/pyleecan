@@ -1,3 +1,6 @@
-Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constante Name,Constante Value,Description classe,Classe fille
-logger_name,-,Name of the logger to use,0,str,Pyleecan.Structural,,,,Simulation,,run,VERSION,1,Structural module abstract object,
-,,,,,,,,,,,comp_axes,,,,
+Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,as_dict Type
+logger_name,-,Name of the logger to use,0,str,Pyleecan.Structural,,
+,
+Package,Inherit,Methods,Constante Name,Constante Value,Description classe,Classe fille
+Simulation,,run,VERSION,1,Structural module abstract object,
+,,comp_axes,,,,

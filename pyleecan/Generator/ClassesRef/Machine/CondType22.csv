@@ -1,8 +1,11 @@
-Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
-Sbar,m,Surface of the Slot,0,float,1.00E-02,0,,,Machine,Conductor,comp_surface_active,VERSION,1,conductor with only surface definition without specifc shape nor isolation
-,,,,,,,,,,,comp_surface,,,
-,,,,,,,,,,,comp_width_wire,,,
-,,,,,,,,,,,comp_height_wire,,,
-,,,,,,,,,,,comp_nb_circumferential_wire,,,
-,,,,,,,,,,,comp_nb_radial_wire,,,
-,,,,,,,,,,,is_round_wire,,,
+Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,as_dict Type
+Sbar,m,Surface of the Slot,0,float,1.00E-02,0,
+,
+Package,Inherit,Methods,Constant Name,Constant Value,Class description
+Machine,Conductor,comp_surface_active,VERSION,1,conductor with only surface definition without specifc shape nor isolation
+,,comp_surface,,,
+,,comp_width_wire,,,
+,,comp_height_wire,,,
+,,comp_nb_circumferential_wire,,,
+,,comp_nb_radial_wire,,,
+,,is_round_wire,,,

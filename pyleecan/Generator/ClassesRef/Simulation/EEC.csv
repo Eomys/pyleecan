@@ -1,11 +1,22 @@
-Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constante Name,Constante Value,Description classe
-type_skin_effect,-,Skin effect for resistance and inductance,1,int,1,,,,Simulation,,get_machine_from_parent,VERSION,1,Equivalent Electrical Circuit abstract class
-OP,-,Operating Point,,OP,None,,,,,,comp_R1,,,
-Tsta,deg Celsius,Average stator temperature for operational EEC calculation,0,float,20,,,,,,comp_skin_effect,,,
-Trot,deg Celsius,Average rotor temperature for operational EEC calculation,0,float,20,,,,,,comp_parameters,,,
-Xkr_skinS,,Skin effect coefficient for resistances at stator side,,float,1,,,,,,update_from_ref,,,
-Xke_skinS,,Skin effect coefficient for inductances at stator side,,float,1,,,,,,solve,,,
-Xkr_skinR,,Skin effect coefficient for resistances at rotor side,,float,1,,,,,,solve_PWM,,,
-Xke_skinR,,Skin effect coefficient for inductances at rotor side,,float,1,,,,,,comp_joule_losses,,,
-R1,Ohm,Stator phase resistance,,float,None,,,,,,comp_fluxlinkage,,,
-fluxlink,-,Magnetic model for flux linkage calculation,,Magnetics,None,,,,,,,,,
+Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,as_dict Type
+type_skin_effect,-,Skin effect for resistance and inductance,1,int,1,,
+OP,-,Operating Point,,OP,None,,
+Tsta,deg Celsius,Average stator temperature for operational EEC calculation,0,float,20,,
+Trot,deg Celsius,Average rotor temperature for operational EEC calculation,0,float,20,,
+Xkr_skinS,,Skin effect coefficient for resistances at stator side,,float,1,,
+Xke_skinS,,Skin effect coefficient for inductances at stator side,,float,1,,
+Xkr_skinR,,Skin effect coefficient for resistances at rotor side,,float,1,,
+Xke_skinR,,Skin effect coefficient for inductances at rotor side,,float,1,,
+R1,Ohm,Stator phase resistance,,float,None,,
+fluxlink,-,Magnetic model for flux linkage calculation,,Magnetics,None,,
+,
+Package,Inherit,Methods,Constante Name,Constante Value,Description classe
+Simulation,,get_machine_from_parent,VERSION,1,Equivalent Electrical Circuit abstract class
+,,comp_R1,,,
+,,comp_skin_effect,,,
+,,comp_parameters,,,
+,,update_from_ref,,,
+,,solve,,,
+,,solve_PWM,,,
+,,comp_joule_losses,,,
+,,comp_fluxlinkage,,,

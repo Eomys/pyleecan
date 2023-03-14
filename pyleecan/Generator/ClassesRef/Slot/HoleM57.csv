@@ -1,10 +1,21 @@
-Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constante Name,Constante Value,Description classe
-W0,rad,V angle,0,float,0.2,0,3.15,,Slot,HoleMag,_comp_point_coordinate,VERSION,1,V shape slot for buried magnet
-H1,m,Distance from the lamination Bore,0,float,0,0,,,,,build_geometry,IS_SYMMETRICAL,1,
-W1,m,Tooth width (at V bottom),0,float,"1,30E-02",0,,,,,check,,,
-H2,m,Magnet height,0,float,"2,00E-02",0,,,,,comp_magnetization_dict,,,
-W2,m,Distance Magnet to top of the V,0,float,"1,00E-02",0,,,,,comp_radius,,,
-W3,m,Tooth width (at V top),0,float,"1,00E-02",0,,,,,comp_surface_magnet_id,,,
-W4,m,Magnet Width,0,float,"1,00E-02",0,,,,,has_magnet,,,
-magnet_0,-,First Magnet,0,Magnet,,,,,,,plot_schematics,,,
-magnet_1,-,Second Magnet,0,Magnet,,,,,,,remove_magnet,,,
+Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,as_dict Type
+W0,rad,V angle,0,float,0.2,0,3.15
+H1,m,Distance from the lamination Bore,0,float,0,0,
+W1,m,Tooth width (at V bottom),0,float,"1,30E-02",0,
+H2,m,Magnet height,0,float,"2,00E-02",0,
+W2,m,Distance Magnet to top of the V,0,float,"1,00E-02",0,
+W3,m,Tooth width (at V top),0,float,"1,00E-02",0,
+W4,m,Magnet Width,0,float,"1,00E-02",0,
+magnet_0,-,First Magnet,0,Magnet,,,
+magnet_1,-,Second Magnet,0,Magnet,,,
+,
+Package,Inherit,Methods,Constante Name,Constante Value,Description classe
+Slot,HoleMag,_comp_point_coordinate,VERSION,1,V shape slot for buried magnet
+,,build_geometry,IS_SYMMETRICAL,1,
+,,check,,,
+,,comp_magnetization_dict,,,
+,,comp_radius,,,
+,,comp_surface_magnet_id,,,
+,,has_magnet,,,
+,,plot_schematics,,,
+,,remove_magnet,,,

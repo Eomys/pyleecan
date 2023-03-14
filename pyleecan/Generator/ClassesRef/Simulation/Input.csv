@@ -1,8 +1,14 @@
-Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
-time,s,Electrical time vector (no symmetry) to import,Nt_tot,ImportMatrix,None,,,,Simulation,,comp_axes,VERSION,1,Starting data of the simulation
-angle,rad,Electrical position vector (no symmetry) to import,Na_tot,ImportMatrix,None,,,,,,comp_axis_time,,,
-Nt_tot,-,Time discretization,0,int,2048,1,,,,,comp_axis_angle,,,
-Nrev,-,Number of rotor revolution (to compute the final time),,float,None,0,,,,,comp_axis_phase,,,
-Na_tot,-,Angular discretization,,int,2048,1,,,,,,,,
-OP,-,Operating Point,,OP,None,,,,,,,,,
-t_final,,To enforce final time,,float,None,,,,,,,,,
+Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,as_dict Type
+time,s,Electrical time vector (no symmetry) to import,Nt_tot,ImportMatrix,None,,
+angle,rad,Electrical position vector (no symmetry) to import,Na_tot,ImportMatrix,None,,
+Nt_tot,-,Time discretization,0,int,2048,1,
+Nrev,-,Number of rotor revolution (to compute the final time),,float,None,0,
+Na_tot,-,Angular discretization,,int,2048,1,
+OP,-,Operating Point,,OP,None,,
+t_final,,To enforce final time,,float,None,,
+,
+Package,Inherit,Methods,Constant Name,Constant Value,Class description
+Simulation,,comp_axes,VERSION,1,Starting data of the simulation
+,,comp_axis_time,,,
+,,comp_axis_angle,,,
+,,comp_axis_phase,,,

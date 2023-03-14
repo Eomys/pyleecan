@@ -1,10 +1,14 @@
-Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
-angle,-,Polar angle,,float,1,0,,,Geometry,Surface,get_lines,VERSION,1,"PolarArc defined by  the center of object(point_ref), the label, the angle and the height"
-height,m,The Heigth of the PolarAngle,,float,1,0,,,,,rotate,,,
-,,,,,,,,,,,translate,,,
-,,,,,,,,,,,check,,,
-,,,,,,,,,,,comp_length,,,
-,,,,,,,,,,,discretize,,,
-,,,,,,,,,,,get_patches,,,
-,,,,,,,,,,,comp_surface,,,
-,,,,,,,,,,,comp_point_ref,,,
+Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,as_dict Type
+angle,-,Polar angle,,float,1,0,
+height,m,The Heigth of the PolarAngle,,float,1,0,
+,
+Package,Inherit,Methods,Constant Name,Constant Value,Class description
+Geometry,Surface,get_lines,VERSION,1,"PolarArc defined by  the center of object(point_ref), the label, the angle and the height"
+,,rotate,,,
+,,translate,,,
+,,check,,,
+,,comp_length,,,
+,,discretize,,,
+,,get_patches,,,
+,,comp_surface,,,
+,,comp_point_ref,,,

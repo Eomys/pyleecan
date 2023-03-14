@@ -1,4 +1,7 @@
-Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constante Name,Constante Value,Description classe,Classe fille
-label,,Label of the resulting meshsolution,,str,ElmerResults,,,,Elmer,Elmer,build_meshsolution,VERSION,1,Class to get Elmer simulation results from a VTU file,
-file_path,,Filename of the results VTU data file,,str,,,,,,,,,,,
-store_dict,,Dict containing the data names to store,,dict,,,,,,,,,,,
+Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,as_dict Type
+label,,Label of the resulting meshsolution,,str,ElmerResults,,
+file_path,,Filename of the results VTU data file,,str,,,
+store_dict,,Dict containing the data names to store,,dict,,,
+,
+Package,Inherit,Methods,Constante Name,Constante Value,Description classe,Classe fille
+Elmer,Elmer,build_meshsolution,VERSION,1,Class to get Elmer simulation results from a VTU file,

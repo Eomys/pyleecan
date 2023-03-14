@@ -1,12 +1,22 @@
-Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
-Hwire,m,"cf schematics, single wire height without insulation [m]",0,float,1.00E-02,0,,,Machine,Conductor,comp_surface_active,VERSION,1,parallel stranded conductor consisting of at least a single rectangular wire
-Wwire,m,"cf schematics, single wire width without insulation [m]",0,float,1.00E-02,0,,,,,comp_height,,,
-Nwppc_rad,-,"cf schematics, stator winding number of preformed wires (strands) in parallel per coil along radial (vertical) direction",0,int,1,1,,,,,comp_surface,,,
-Nwppc_tan,-,"cf schematics, stator winding number of preformed wires (strands) in parallel per coil along tangential (horizontal) direction",0,int,1,1,,,,,comp_width,,,
-Wins_wire,m,"(advanced) cf schematics, winding strand insulation thickness [m]",0,float,0,0,,,,,plot,,,
-Wins_coil,m,"(advanced) cf schematics, winding coil insulation  thickness [m]",0,float,0,0,,,,,plot_schematics,,,
-type_winding_shape,-,type of winding shape for end winding length calculation\n0 for hairpin windings\n1 for normal windings,0,int,0,0,1,,,,comp_width_wire,,,
-alpha_ew,deg,angle of winding overhang hairpin coils [deg],0,float,58,0,180,,,,comp_height_wire,,,
-,,,,,,,,,,,comp_nb_circumferential_wire,,,
-,,,,,,,,,,,comp_nb_radial_wire,,,
-,,,,,,,,,,,is_round_wire,,,
+Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,as_dict Type
+Hwire,m,"cf schematics, single wire height without insulation [m]",0,float,1.00E-02,0,
+Wwire,m,"cf schematics, single wire width without insulation [m]",0,float,1.00E-02,0,
+Nwppc_rad,-,"cf schematics, stator winding number of preformed wires (strands) in parallel per coil along radial (vertical) direction",0,int,1,1,
+Nwppc_tan,-,"cf schematics, stator winding number of preformed wires (strands) in parallel per coil along tangential (horizontal) direction",0,int,1,1,
+Wins_wire,m,"(advanced) cf schematics, winding strand insulation thickness [m]",0,float,0,0,
+Wins_coil,m,"(advanced) cf schematics, winding coil insulation  thickness [m]",0,float,0,0,
+type_winding_shape,-,type of winding shape for end winding length calculation\n0 for hairpin windings\n1 for normal windings,0,int,0,0,1
+alpha_ew,deg,angle of winding overhang hairpin coils [deg],0,float,58,0,180
+,
+Package,Inherit,Methods,Constant Name,Constant Value,Class description
+Machine,Conductor,comp_surface_active,VERSION,1,parallel stranded conductor consisting of at least a single rectangular wire
+,,comp_height,,,
+,,comp_surface,,,
+,,comp_width,,,
+,,plot,,,
+,,plot_schematics,,,
+,,comp_width_wire,,,
+,,comp_height_wire,,,
+,,comp_nb_circumferential_wire,,,
+,,comp_nb_radial_wire,,,
+,,is_round_wire,,,

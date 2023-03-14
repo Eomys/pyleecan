@@ -1,12 +1,19 @@
-Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
-I0_ref,Arms,Current rms value,1,float,None,,,,Simulation,OP,get_Id_Iq,VERSION,1,"Operating Point defined with slip, I0"
-IPhi0_ref,rad,Current phase,1,float,None,,,,,,get_felec,,,
-slip_ref,,Rotor mechanical slip,,float,0,,,,,,get_N0,,,
-U0_ref,Vrms,stator voltage (phase to neutral),,float,None,,,,,,get_Ud_Uq,,,
-UPhi0_ref,rad,Voltage phase,,float,None,,,,,,set_Id_Iq,,,
-,,,,,,,,,,,get_I0_Phi0,,,
-,,,,,,,,,,,get_slip,,,
-,,,,,,,,,,,set_I0_Phi0,,,
-,,,,,,,,,,,set_Ud_Uq,,,
-,,,,,,,,,,,get_U0_UPhi0,,,
-,,,,,,,,,,,set_U0_UPhi0,,,
+Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,as_dict Type
+I0_ref,Arms,Current rms value,1,float,None,,
+IPhi0_ref,rad,Current phase,1,float,None,,
+slip_ref,,Rotor mechanical slip,,float,0,,
+U0_ref,Vrms,stator voltage (phase to neutral),,float,None,,
+UPhi0_ref,rad,Voltage phase,,float,None,,
+,
+Package,Inherit,Methods,Constant Name,Constant Value,Class description
+Simulation,OP,get_Id_Iq,VERSION,1,"Operating Point defined with slip, I0"
+,,get_felec,,,
+,,get_N0,,,
+,,get_Ud_Uq,,,
+,,set_Id_Iq,,,
+,,get_I0_Phi0,,,
+,,get_slip,,,
+,,set_I0_Phi0,,,
+,,set_Ud_Uq,,,
+,,get_U0_UPhi0,,,
+,,set_U0_UPhi0,,,

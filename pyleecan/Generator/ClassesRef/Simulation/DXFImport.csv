@@ -1,4 +1,7 @@
-Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
-file_path,-,Path to the DXF file to import,,str,,,,,Simulation,,get_surfaces,VERSION,1,Use a DXF to define a lamination
-surf_dict,-,"dictionary to assign the surfaces: key=complex reference point coordinate, value=label of the surface",,dict,,,,,,,,,,
-BC_list,-,"List of tuple to apply boundary conditions (complex reference point coordinate, is_arc, label of the BC to apply)",,list,[],,,,,,,,,
+Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,as_dict Type
+file_path,-,Path to the DXF file to import,,str,,,
+surf_dict,-,"dictionary to assign the surfaces: key=complex reference point coordinate, value=label of the surface",,dict,,,
+BC_list,-,"List of tuple to apply boundary conditions (complex reference point coordinate, is_arc, label of the BC to apply)",,list,[],,
+,
+Package,Inherit,Methods,Constant Name,Constant Value,Class description
+Simulation,,get_surfaces,VERSION,1,Use a DXF to define a lamination

@@ -1,3 +1,7 @@
-Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
-lam_list,,List of Lamination,,[Lamination],,,,,Machine,Machine,build_geometry,VERSION,1,User defined Machine with multiple Laminations
-is_sync,,True if the machine should be handled as a Synchronous machine,,bool,True,,,,,,is_synchronous,,,
+Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,as_dict Type
+lam_list,,List of Lamination,,[Lamination],,,
+is_sync,,True if the machine should be handled as a Synchronous machine,,bool,True,,
+,
+Package,Inherit,Methods,Constant Name,Constant Value,Class description
+Machine,Machine,build_geometry,VERSION,1,User defined Machine with multiple Laminations
+,,is_synchronous,,,

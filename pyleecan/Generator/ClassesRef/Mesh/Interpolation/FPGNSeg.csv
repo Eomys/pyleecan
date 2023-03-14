@@ -1,2 +1,5 @@
-Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
-nb_gauss_point,,Nb of gauss point to be used,0,int,4,,,,Mesh,GaussPoint,get_gauss_points,VERSION,1,Compute N gauss point for segment elements
+Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,as_dict Type
+nb_gauss_point,,Nb of gauss point to be used,0,int,4,,
+,
+Package,Inherit,Methods,Constant Name,Constant Value,Class description
+Mesh,GaussPoint,get_gauss_points,VERSION,1,Compute N gauss point for segment elements

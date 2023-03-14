@@ -1,4 +1,6 @@
-Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constante Name,Constante Value,Description classe,Classe fille
-,,,,,,,,,Simulation,EEC,comp_parameters,VERSION,1,Electrical Equivalent Circuit for LSRPM,
-,,,,,,,,,,,solve,,,,
-,,,,,,,,,,,comp_joule_losses,,,,
+Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,as_dict Type
+,
+Package,Inherit,Methods,Constante Name,Constante Value,Description classe,Classe fille
+Simulation,EEC,comp_parameters,VERSION,1,Electrical Equivalent Circuit for LSRPM,
+,,solve,,,,
+,,comp_joule_losses,,,,
