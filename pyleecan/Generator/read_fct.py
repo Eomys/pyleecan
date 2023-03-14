@@ -24,9 +24,9 @@ METH_COL = 11  # methods list
 CST_NAME_COL = 12  # constants name list
 CST_VAL_COL = 13  # constants value list
 CLASS_DEF_COL = 14  # class description
-# DAUG_COL = 18  # daughter class list (unused)
 
-COLUMN_OFFSET = PACK_COL  # Offset for column csv ()
+# Offset for column csv (to convert side by side index to column)
+COLUMN_OFFSET = PACK_COL
 
 
 def read_all(path, is_internal=False, in_path="", soft_name=PACKAGE_NAME):
@@ -123,7 +123,6 @@ def read_file(file_path, soft_name=PACKAGE_NAME):
         if is_side_by_side:
             get_dict_from_side_by_side(class_csv, class_dict)
         else:
-            print("Using columns for " + class_dict["name"])
             get_dict_from_columns(class_csv, class_dict, header_index)
     return class_dict
 
