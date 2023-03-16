@@ -188,8 +188,19 @@ class Test_Winding_plot(object):
             save_path=join(save_path, "test_unit_mmf.png")
         )
 
+    def test_plot_radial(self):
+        Toyota_Prius = load(join(DATA_DIR, "Machine", "Toyota_Prius.json"))
+        Toyota_Prius.stator.winding.plot_radial()
+
+    def test_plot_linear(self):
+        Toyota_Prius = load(join(DATA_DIR, "Machine", "Toyota_Prius.json"))
+        Toyota_Prius.plot()
+        Toyota_Prius.stator.winding.plot_linear()
+
 
 if __name__ == "__main__":
     a = Test_Winding_plot()
-    a.test_plot_mmf_unit()
+    # a.test_plot_mmf_unit()
+    # a.test_plot_radial()
+    a.test_plot_linear()
     print("Done")

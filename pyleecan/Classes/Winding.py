@@ -77,6 +77,16 @@ try:
 except ImportError as error:
     clean = error
 
+try:
+    from ..Methods.Machine.Winding.plot_radial import plot_radial
+except ImportError as error:
+    plot_radial = error
+
+try:
+    from ..Methods.Machine.Winding.plot_linear import plot_linear
+except ImportError as error:
+    plot_linear = error
+
 
 from numpy import array, array_equal
 from numpy import isnan
@@ -222,6 +232,24 @@ class Winding(FrozenClass):
         )
     else:
         clean = clean
+    # cf Methods.Machine.Winding.plot_radial
+    if isinstance(plot_radial, ImportError):
+        plot_radial = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use Winding method plot_radial: " + str(plot_radial))
+            )
+        )
+    else:
+        plot_radial = plot_radial
+    # cf Methods.Machine.Winding.plot_linear
+    if isinstance(plot_linear, ImportError):
+        plot_linear = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use Winding method plot_linear: " + str(plot_linear))
+            )
+        )
+    else:
+        plot_linear = plot_linear
     # generic save method is available in all object
     save = save
     # get_logger method is available in all object

@@ -16348,7 +16348,9 @@
             "get_dim_wind",
             "get_periodicity",
             "export_to_csv",
-            "clean"
+            "clean",
+            "plot_radial",
+            "plot_linear"
         ],
         "mother": "",
         "name": "Winding",
