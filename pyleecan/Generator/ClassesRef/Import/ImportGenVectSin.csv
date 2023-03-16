@@ -1,6 +1,9 @@
-Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
-f,Hz,Frequency of the sinus to generate,0,float,100,0,,,Import,ImportMatrix,get_data,VERSION,1,To generate a Sinus vector
-A,-,Amplitude of the sinus to generate,0,float,1,,,,,,,,,
-Phi,-,Phase of the sinus to generate,0,float,0,-6.29,6.29,,,,,,,
-N,-,Length of the vector to generate,0,int,1024,0,,,,,,,,
-Tf,s,End time of the sinus generation,0,float,1,0,,,,,,,,
+Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,as_dict Type
+f,Hz,Frequency of the sinus to generate,0,float,100,0,
+A,-,Amplitude of the sinus to generate,0,float,1,,
+Phi,-,Phase of the sinus to generate,0,float,0,-6.29,6.29
+N,-,Length of the vector to generate,0,int,1024,0,
+Tf,s,End time of the sinus generation,0,float,1,0,
+,
+Package,Inherit,Methods,Constant Name,Constant Value,Class description
+Import,ImportMatrix,get_data,VERSION,1,To generate a Sinus vector

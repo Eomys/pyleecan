@@ -1,9 +1,12 @@
-Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
-name,-,Data name,0,str,,,,,Simulation,,_set_keeper,VERSION,1,Class for defining data to keep on a multi-simulation
-symbol,-,Data symbol,,str,,,,,,,,,,
-unit,-,Data unit,,str,,,,,,,,,,
-keeper,-,Function that takes an Output in argument and return a value,,function,None,,,,,,,,,
-error_keeper,-,"Function that takes a Simulation in argument and returns a value, this attribute enables to handle errors and to put NaN values in the result matrices",,function,None,,,,,,,,,
-result,-,List containing datakeeper results for each simulation,,[],,,,,,,,,,
-result_ref,-,Result for the reference simulation,,,None,,,,,,,,,
-physic,-,Physic of the tracked quantity,,str,None,,,,,,,,,
+Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,as_dict Type
+name,-,Data name,0,str,,,
+symbol,-,Data symbol,,str,,,
+unit,-,Data unit,,str,,,
+keeper,-,Function that takes an Output in argument and return a value,,function,None,,
+error_keeper,-,"Function that takes a Simulation in argument and returns a value, this attribute enables to handle errors and to put NaN values in the result matrices",,function,None,,
+result,-,List containing datakeeper results for each simulation,,[],,,
+result_ref,-,Result for the reference simulation,,,None,,
+physic,-,Physic of the tracked quantity,,str,None,,
+,
+Package,Inherit,Methods,Constant Name,Constant Value,Class description
+Simulation,,_set_keeper,VERSION,1,Class for defining data to keep on a multi-simulation

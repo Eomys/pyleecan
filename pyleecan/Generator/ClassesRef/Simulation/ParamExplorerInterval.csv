@@ -1,6 +1,12 @@
-Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
-min_value,-,Minumum value of the interval,,float,0,,,,Simulation,ParamExplorer,get_value,VERSION,1,Define a set of value (for parameter sweep) on interval
-max_value,-,Maximum value of the interval,,float,1,,,,,,get_min,,,
-N,-,Number of value to take in the interval,,int,4,2,,,,,get_max,,,
-type_value_gen,-,"How to generate the value list. 0: linspace, 1: random (Not available yet)",,int,0,0,1,,,,get_N,,,
-type_value,-,"Type of the value: 0:float, 1:int",,int,0,0,1,,,,,,,
+Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,as_dict Type
+min_value,-,Minumum value of the interval,,float,0,,
+max_value,-,Maximum value of the interval,,float,1,,
+N,-,Number of value to take in the interval,,int,4,2,
+type_value_gen,-,"How to generate the value list. 0: linspace, 1: random (Not available yet)",,int,0,0,1
+type_value,-,"Type of the value: 0:float, 1:int",,int,0,0,1
+,
+Package,Inherit,Methods,Constant Name,Constant Value,Class description
+Simulation,ParamExplorer,get_value,VERSION,1,Define a set of value (for parameter sweep) on interval
+,,get_min,,,
+,,get_max,,,
+,,get_N,,,

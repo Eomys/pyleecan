@@ -1,6 +1,9 @@
-Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
-lambda_x,W/K,"thermal conductivity (XY is lamination plane, Z is rotation axis)",0,float,1,0,,,Material,,,VERSION,1,Material Heat Transfer properties
-lambda_y,W/K,"thermal conductivity (XY is lamination plane, Z is rotation axis)",0,float,1,0,,,,,,,,
-lambda_z,W/K,"thermal conductivity (XY is lamination plane, Z is rotation axis)",0,float,1,0,,,,,,,,
-Cp,W/kg/K,specific heat capacity,0,float,1,0,,,,,,,,
-alpha,-,thermal expansion coefficient,0,float,0,0,,,,,,,,
+Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,as_dict Type
+lambda_x,W/K,"thermal conductivity (XY is lamination plane, Z is rotation axis)",0,float,1,0,
+lambda_y,W/K,"thermal conductivity (XY is lamination plane, Z is rotation axis)",0,float,1,0,
+lambda_z,W/K,"thermal conductivity (XY is lamination plane, Z is rotation axis)",0,float,1,0,
+Cp,W/kg/K,specific heat capacity,0,float,1,0,
+alpha,-,thermal expansion coefficient,0,float,0,0,
+,
+Package,Inherit,Methods,Constant Name,Constant Value,Class description
+Material,,,VERSION,1,Material Heat Transfer properties

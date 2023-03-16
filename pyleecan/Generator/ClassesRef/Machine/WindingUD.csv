@@ -1,6 +1,8 @@
-Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
-,,,,,,,,,Machine,Winding,init_as_CW1L,VERSION,1,User defined winding
-,,,,,,,,,,,init_as_CW2LR,NAME,"""User defined""",
-,,,,,,,,,,,init_as_CW2LT,,,
-,,,,,,,,,,,init_as_DWL,,,
-,,,,,,,,,,,import_from_csv,,,
+Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,as_dict Type
+,
+Package,Inherit,Methods,Constant Name,Constant Value,Class description
+Machine,Winding,init_as_CW1L,VERSION,1,User defined winding
+,,init_as_CW2LR,NAME,"""User defined""",
+,,init_as_CW2LT,,,
+,,init_as_DWL,,,
+,,import_from_csv,,,

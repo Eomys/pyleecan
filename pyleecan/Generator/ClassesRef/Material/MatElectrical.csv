@@ -1,4 +1,8 @@
-Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
-rho,ohm.m,Resistivity at 20 deg C,0,float,0,0,,,Material,,get_conductivity,VERSION,1,material electrical properties
-epsr,-,Relative dielectric constant,0,float,1,0,,,,,get_resistivity,,,
-alpha,1/K,Thermal resistivity coefficient,0,float,0,0,,,,,,,,
+Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,as_dict Type
+rho,ohm.m,Resistivity at 20 deg C,0,float,0,0,
+epsr,-,Relative dielectric constant,0,float,1,0,
+alpha,1/K,Thermal resistivity coefficient,0,float,0,0,
+,
+Package,Inherit,Methods,Constant Name,Constant Value,Class description
+Material,,get_conductivity,VERSION,1,material electrical properties
+,,get_resistivity,,,

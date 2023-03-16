@@ -1,5 +1,10 @@
-Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
-field,-,Matrix/Vector of the numerical values of the solutions.,,ndarray,None,,,,Mesh,Solution,get_field,VERSION,1,Define a Solution with ndarray object.
-indice,-,Indices of loaded cells. Set to None if all cells are loaded,,ndarray,None,,,,,,get_axes_list,,,
-axis_name,-,"List of axis names (e.g. ""time"", ""direction"")",,list,None,,,,,,get_solution,,,
-axis_size,-,List of axis sizes,,list,None,,,,,,,,,
+Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,as_dict Type
+field,-,Matrix/Vector of the numerical values of the solutions.,,ndarray,None,,
+indice,-,Indices of loaded cells. Set to None if all cells are loaded,,ndarray,None,,
+axis_name,-,"List of axis names (e.g. ""time"", ""direction"")",,list,None,,
+axis_size,-,List of axis sizes,,list,None,,
+,
+Package,Inherit,Methods,Constant Name,Constant Value,Class description
+Mesh,Solution,get_field,VERSION,1,Define a Solution with ndarray object.
+,,get_axes_list,,,
+,,get_solution,,,

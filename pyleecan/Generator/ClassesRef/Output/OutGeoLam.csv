@@ -1,11 +1,14 @@
-Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
-name_phase,-,Name of the phases of the winding (if any),0,list,None,,,,Output,,,VERSION,1,Gather the geometrical and the global outputs of a lamination
-BH_curve,-,"B(H) curve (two columns matrix, H and B(H))",2,ndarray,None,,,,,,,,,
-Ksfill,-,Slot fill factor,0,float,None,,,,,,,,,
-S_slot,m^2,Slot surface,0,float,None,,,,,,,,,
-S_slot_wind,m^2,Slot winding surface,0,float,None,,,,,,,,,
-S_wind_act,m^2,Conductor active surface,0,float,None,,,,,,,,,
-per_a,-,Number of spatial periodicities of the lamination,0,int,None,,,,,,,,,
-is_antiper_a,-,True if an spatial anti-periodicity is possible after the periodicities,0,bool,None,,,,,,,,,
-per_t,-,Number of time periodicities of the lamination,0,int,None,,,,,,,,,
-is_antiper_t,-,True if an time anti-periodicity is possible after the periodicities,0,bool,None,,,,,,,,,
+Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,as_dict Type
+name_phase,-,Name of the phases of the winding (if any),0,list,None,,
+BH_curve,-,"B(H) curve (two columns matrix, H and B(H))",2,ndarray,None,,
+Ksfill,-,Slot fill factor,0,float,None,,
+S_slot,m^2,Slot surface,0,float,None,,
+S_slot_wind,m^2,Slot winding surface,0,float,None,,
+S_wind_act,m^2,Conductor active surface,0,float,None,,
+per_a,-,Number of spatial periodicities of the lamination,0,int,None,,
+is_antiper_a,-,True if an spatial anti-periodicity is possible after the periodicities,0,bool,None,,
+per_t,-,Number of time periodicities of the lamination,0,int,None,,
+is_antiper_t,-,True if an time anti-periodicity is possible after the periodicities,0,bool,None,,
+,
+Package,Inherit,Methods,Constant Name,Constant Value,Class description
+Output,,,VERSION,1,Gather the geometrical and the global outputs of a lamination

@@ -1,10 +1,13 @@
-Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
-name,,name of the material,0,str,Material,,,,Material,,,VERSION,1,
-is_isotropic,-,"If Isotropic, uniformity in all orientations",0,bool,0,,,,,,,,,
-elec,,Electrical properties of the material,0,MatElectrical,,,,,,,,,,
-mag,,Magnetic properties of the material,0,MatMagnetics,,,,,,,,,,
-struct,,Structural properties of the material,0,MatStructural,,,,,,,,,,
-HT,,Heat Transfer properties of the material,0,MatHT,,,,,,,,,,
-eco,,Economical properties of the material,0,MatEconomical,,,,,,,,,,
-desc,,material description,0,str,Material description,,,,,,,,,
-path,,Path to the material file,0,str,,,,,,,,,,
+Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,as_dict Type
+name,,name of the material,0,str,Material,,
+is_isotropic,-,"If Isotropic, uniformity in all orientations",0,bool,0,,
+elec,,Electrical properties of the material,0,MatElectrical,,,
+mag,,Magnetic properties of the material,0,MatMagnetics,,,
+struct,,Structural properties of the material,0,MatStructural,,,
+HT,,Heat Transfer properties of the material,0,MatHT,,,
+eco,,Economical properties of the material,0,MatEconomical,,,
+desc,,material description,0,str,Material description,,
+path,,Path to the material file,0,str,,,
+,
+Package,Inherit,Methods,Constant Name,Constant Value,Class description
+Material,,,VERSION,1,

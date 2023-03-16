@@ -1,3 +1,5 @@
-Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constante Name,Constante Value,Description classe,Classe file
-,,,,,,,,,Simulation,Force,comp_force,VERSION,1,Force Maxwell tensor model for radial flux machines,
-,,,,,,,,,,,comp_force_nodal,,,,
+Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,as_dict Type
+,
+Package,Inherit,Methods,Constante Name,Constante Value,Description classe,Classe file
+Simulation,Force,comp_force,VERSION,1,Force Maxwell tensor model for radial flux machines,
+,,comp_force_nodal,,,,

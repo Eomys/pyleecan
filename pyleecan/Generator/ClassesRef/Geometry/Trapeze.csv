@@ -1,10 +1,15 @@
-Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
-height,m,the height of the Trapeze,,float,1,0,,,Geometry,Surface,check,VERSION,1,"Trapeze defined by  the center of symmetry(point_ref), the label, the polar angle, the height and the big and small weight"
-W2,m,the big base of Trapeze,,float,1,0,,,,,comp_length,,,
-W1,m,the small base of the Trapeze,,float,1,0,,,,,comp_surface,,,
-,,,,,,,,,,,discretize,,,
-,,,,,,,,,,,get_lines,,,
-,,,,,,,,,,,get_patches,,,
-,,,,,,,,,,,rotate,,,
-,,,,,,,,,,,translate,,,
-,,,,,,,,,,,comp_point_ref,,,
+Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,as_dict Type
+height,m,the height of the Trapeze,,float,1,0,
+W2,m,the big base of Trapeze,,float,1,0,
+W1,m,the small base of the Trapeze,,float,1,0,
+,
+Package,Inherit,Methods,Constant Name,Constant Value,Class description
+Geometry,Surface,check,VERSION,1,"Trapeze defined by  the center of symmetry(point_ref), the label, the polar angle, the height and the big and small weight"
+,,comp_length,,,
+,,comp_surface,,,
+,,discretize,,,
+,,get_lines,,,
+,,get_patches,,,
+,,rotate,,,
+,,translate,,,
+,,comp_point_ref,,,

@@ -1,2 +1,5 @@
-Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
-P,N.m^2,Magnetic air-gap surface force,,ImportVectorField,None,,,,Simulation,Input,gen_input,VERSION,1,Input to start with the structural one 
+Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,as_dict Type
+P,N.m^2,Magnetic air-gap surface force,,ImportVectorField,None,,
+,
+Package,Inherit,Methods,Constant Name,Constant Value,Class description
+Simulation,Input,gen_input,VERSION,1,Input to start with the structural one 

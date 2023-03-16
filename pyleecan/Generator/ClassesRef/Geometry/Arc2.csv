@@ -1,16 +1,21 @@
-Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
-begin,-,begin point of the arc,0,complex,0,,,,Geometry,Arc,check,VERSION,1,An arc between two points (defined by the begin  point and a center and angle)
-center,-,center of the arc,0,complex,0,,,,,,comp_length,,,
-angle,rad,opening angle of the arc,0,float,1.57079633,-6.283185308,6.283185308,,,,comp_radius,,,
-,,,,,,,,,,,discretize,,,
-,,,,,,,,,,,get_angle,,,
-,,,,,,,,,,,get_begin,,,
-,,,,,,,,,,,get_center,,,
-,,,,,,,,,,,get_end,,,
-,,,,,,,,,,,get_middle,,,
-,,,,,,,,,,,reverse,,,
-,,,,,,,,,,,rotate,,,
-,,,,,,,,,,,scale,,,
-,,,,,,,,,,,split_half,,,
-,,,,,,,,,,,translate,,,
-,,,,,,,,,,,split_point,,,
+Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,as_dict Type
+begin,-,begin point of the arc,0,complex,0,,
+center,-,center of the arc,0,complex,0,,
+angle,rad,opening angle of the arc,0,float,1.57079633,-6.283185308,6.283185308
+,
+Package,Inherit,Methods,Constant Name,Constant Value,Class description
+Geometry,Arc,check,VERSION,1,An arc between two points (defined by the begin  point and a center and angle)
+,,comp_length,,,
+,,comp_radius,,,
+,,discretize,,,
+,,get_angle,,,
+,,get_begin,,,
+,,get_center,,,
+,,get_end,,,
+,,get_middle,,,
+,,reverse,,,
+,,rotate,,,
+,,scale,,,
+,,split_half,,,
+,,translate,,,
+,,split_point,,,

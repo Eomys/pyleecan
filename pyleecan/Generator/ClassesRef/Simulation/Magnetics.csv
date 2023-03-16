@@ -1,20 +1,26 @@
-Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constante Name,Constante Value,Description classe,Classe fille
-is_remove_slotS,-,1 to artificially remove stator slotting effects in permeance mmf calculations,0,bool,0,,,,Simulation,,run,VERSION,1,Magnetic module abstract object,MagFEMM
-is_remove_slotR,-,1 to artificially remove rotor slotting effects in permeance mmf calculations,0,bool,0,,,,,,comp_axes,,,,MagElmer
-is_remove_ventS,-,1 to artificially remove the ventilations duct of the stator,0,bool,0,,,,,,get_slice_model,,,,
-is_remove_ventR,-,1 to artificially remove the ventilations duct of the rotor,0,bool,0,,,,,,comp_I_mag,,,,
-is_mmfs,-,1 to compute the stator magnetomotive force / stator armature magnetic field,0,bool,1,,,,,,,,,,
-is_mmfr,-,1 to compute the rotor magnetomotive force / rotor magnetic field,0,bool,1,,,,,,,,,,
-type_BH_stator,-,"0 to use the B(H) curve, 1 to use linear B(H) curve according to mur_lin, 2 to enforce infinite permeability (mur_lin =100000)",0,int,0,0,2,,,,,,,,
-type_BH_rotor,-,"0 to use the B(H) curve, 1 to use linear B(H) curve according to mur_lin, 2 to enforce infinite permeability (mur_lin =100000)",0,int,0,0,2,,,,,,,,
-is_periodicity_t,-,True to compute only on one time periodicity (use periodicities defined in axes_dict[time]),0,bool,0,,,,,,,,,,
-is_periodicity_a,-,True to compute only on one angle periodicity (use periodicities defined in axes_dict[angle]),0,bool,0,,,,,,,,,,
-angle_stator_shift,rad,Shift angle to appy to the stator in magnetic model,0,float,0,,,,,,,,,,
-angle_rotor_shift,rad,Shift angle to appy to the rotor in magnetic model,0,float,0,,,,,,,,,,
-logger_name,-,Name of the logger to use,0,str,Pyleecan.Magnetics,,,,,,,,,,
-Slice_enforced,-,Enforce slice model to account for skew,0,SliceModel,None,,,,,,,,,,
-Nslices_enforced,,To enforce number of slices in slice model,,int,None,,,,,,,,,,
-type_distribution_enforced,-,"To enforce type of slice distribution to use for rotor skew if linear and continuous (""uniform"", ""gauss"", ""user-defined"")",,str,None,,,,,,,,,,
-is_current_harm,,0 To compute only the airgap flux from fundamental current harmonics,0,bool,1,,,,,,,,,,
-T_mag,deg Celsius,Permanent magnet temperature to adapt magnet remanent flux density,,float,20,,,,,,,,,,
-is_periodicity_rotor,,True to consider rotor periodicity over time instead of stator,,bool,0,,,,,,,,,,
+Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,as_dict Type
+is_remove_slotS,-,1 to artificially remove stator slotting effects in permeance mmf calculations,0,bool,0,,
+is_remove_slotR,-,1 to artificially remove rotor slotting effects in permeance mmf calculations,0,bool,0,,
+is_remove_ventS,-,1 to artificially remove the ventilations duct of the stator,0,bool,0,,
+is_remove_ventR,-,1 to artificially remove the ventilations duct of the rotor,0,bool,0,,
+is_mmfs,-,1 to compute the stator magnetomotive force / stator armature magnetic field,0,bool,1,,
+is_mmfr,-,1 to compute the rotor magnetomotive force / rotor magnetic field,0,bool,1,,
+type_BH_stator,-,"0 to use the B(H) curve, 1 to use linear B(H) curve according to mur_lin, 2 to enforce infinite permeability (mur_lin =100000)",0,int,0,0,2
+type_BH_rotor,-,"0 to use the B(H) curve, 1 to use linear B(H) curve according to mur_lin, 2 to enforce infinite permeability (mur_lin =100000)",0,int,0,0,2
+is_periodicity_t,-,True to compute only on one time periodicity (use periodicities defined in axes_dict[time]),0,bool,0,,
+is_periodicity_a,-,True to compute only on one angle periodicity (use periodicities defined in axes_dict[angle]),0,bool,0,,
+angle_stator_shift,rad,Shift angle to appy to the stator in magnetic model,0,float,0,,
+angle_rotor_shift,rad,Shift angle to appy to the rotor in magnetic model,0,float,0,,
+logger_name,-,Name of the logger to use,0,str,Pyleecan.Magnetics,,
+Slice_enforced,-,Enforce slice model to account for skew,0,SliceModel,None,,
+Nslices_enforced,,To enforce number of slices in slice model,,int,None,,
+type_distribution_enforced,-,"To enforce type of slice distribution to use for rotor skew if linear and continuous (""uniform"", ""gauss"", ""user-defined"")",,str,None,,
+is_current_harm,,0 To compute only the airgap flux from fundamental current harmonics,0,bool,1,,
+T_mag,deg Celsius,Permanent magnet temperature to adapt magnet remanent flux density,,float,20,,
+is_periodicity_rotor,,True to consider rotor periodicity over time instead of stator,,bool,0,,
+,
+Package,Inherit,Methods,Constante Name,Constante Value,Description classe,Classe fille
+Simulation,,run,VERSION,1,Magnetic module abstract object,MagFEMM
+,,comp_axes,,,,MagElmer
+,,get_slice_model,,,,
+,,comp_I_mag,,,,

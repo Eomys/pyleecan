@@ -1,11 +1,18 @@
- Variable name ,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
-W1,m,Slot bottom side width.,0,float,0.008,0,,,Slot,Slot,_comp_point_coordinate,VERSION,1,Open Rectangular or trapezoidal slot with wedge
-W3,m,Tooth width,0,float,1.16E-02,0,,,,,build_geometry,IS_SYMMETRICAL,1,
-H2,m,Slot height ,0,float,1.48E-02,0,,,,,build_geometry_active,,,
-R1,m,Top radius,0,float,0.00075,0,,,,,check,,,
-H3,m,damper winding height,0,float,0.001,0,,,,,comp_angle_opening,,,
-,,,,,,,,,,,comp_height_damper,,,
-,,,,,,,,,,,comp_height_wind,,,
-,,,,,,,,,,,comp_height,,,
-,,,,,,,,,,,get_surface_active,,,
-,,,,,,,,,,,plot_schematics,,,
+ Variable name ,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,as_dict Type
+W1,m,Slot bottom side width.,0,float,0.008,0,
+W3,m,Tooth width,0,float,1.16E-02,0,
+H2,m,Slot height ,0,float,1.48E-02,0,
+R1,m,Top radius,0,float,0.00075,0,
+H3,m,damper winding height,0,float,0.001,0,
+,
+Package,Inherit,Methods,Constant Name,Constant Value,Class description
+Slot,Slot,_comp_point_coordinate,VERSION,1,Open Rectangular or trapezoidal slot with wedge
+,,build_geometry,IS_SYMMETRICAL,1,
+,,build_geometry_active,,,
+,,check,,,
+,,comp_angle_opening,,,
+,,comp_height_damper,,,
+,,comp_height_wind,,,
+,,comp_height,,,
+,,get_surface_active,,,
+,,plot_schematics,,,

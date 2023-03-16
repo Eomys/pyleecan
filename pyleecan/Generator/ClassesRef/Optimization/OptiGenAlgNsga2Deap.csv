@@ -1,8 +1,11 @@
-Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constante Name,Constante Value,Description classe,Classe fille
-toolbox,,DEAP toolbox,,deap.base.Toolbox,None,,,,Optimization,OptiGenAlg,solve,VERSION,1,Multi-objectives optimization problem with some constraints,
-,,,,,,,,,,,mutate,,,,
-,,,,,,,,,,,cross,,,,
-,,,,,,,,,,,create_toolbox,,,,
-,,,,,,,,,,,check_optimization_input,,,,
-,,,,,,,,,,,delete_toolbox,,,,
-,,,,,,,,,,,plot_pareto,,,,
+Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,as_dict Type
+toolbox,,DEAP toolbox,,deap.base.Toolbox,None,,
+,
+Package,Inherit,Methods,Constante Name,Constante Value,Description classe,Classe fille
+Optimization,OptiGenAlg,solve,VERSION,1,Multi-objectives optimization problem with some constraints,
+,,mutate,,,,
+,,cross,,,,
+,,create_toolbox,,,,
+,,check_optimization_input,,,,
+,,delete_toolbox,,,,
+,,plot_pareto,,,,

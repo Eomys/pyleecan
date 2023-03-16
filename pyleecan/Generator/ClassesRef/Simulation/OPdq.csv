@@ -1,12 +1,18 @@
-Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
-Id_ref,Arms,d-axis current rms value,1,float,None,,,,Simulation,OP,get_Id_Iq,VERSION,1,Operating Point defined in DQH frame
-Iq_ref,Arms,q-axis current rms value,1,float,None,,,,,,get_felec,,,
-Ud_ref,Vrms,d-axis voltage rms value,1,float,None,,,,,,get_N0,,,
-Uq_ref,Vrms,q-axis voltage rms value,1,float,None,,,,,,get_slip,,,
-,,,,,,,,,,,get_Ud_Uq,,,
-,,,,,,,,,,,set_Id_Iq,,,
-,,,,,,,,,,,get_I0_Phi0,,,
-,,,,,,,,,,,set_Ud_Uq,,,
-,,,,,,,,,,,set_I0_Phi0,,,
-,,,,,,,,,,,get_U0_UPhi0,,,
-,,,,,,,,,,,set_U0_UPhi0,,,
+Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,as_dict Type
+Id_ref,Arms,d-axis current rms value,1,float,None,,
+Iq_ref,Arms,q-axis current rms value,1,float,None,,
+Ud_ref,Vrms,d-axis voltage rms value,1,float,None,,
+Uq_ref,Vrms,q-axis voltage rms value,1,float,None,,
+,
+Package,Inherit,Methods,Constant Name,Constant Value,Class description
+Simulation,OP,get_Id_Iq,VERSION,1,Operating Point defined in DQH frame
+,,get_felec,,,
+,,get_N0,,,
+,,get_slip,,,
+,,get_Ud_Uq,,,
+,,set_Id_Iq,,,
+,,get_I0_Phi0,,,
+,,set_Ud_Uq,,,
+,,set_I0_Phi0,,,
+,,get_U0_UPhi0,,,
+,,set_U0_UPhi0,,,

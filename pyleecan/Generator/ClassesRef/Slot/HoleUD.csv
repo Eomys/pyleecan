@@ -1,6 +1,11 @@
-Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
-surf_list,,"List of surface to draw the Hole. Surfaces must be ordered in trigo order, label must contain HoleMagnet for Magnet and Hole for holes",,[Surface],,,,,Slot,HoleMag,build_geometry,VERSION,1,User defined hole from list of surface
-magnet_dict,,"dictionary with the magnet for the Hole (None to remove magnet, key should be magnet_X)",,{Magnet},,,,,,,check,IS_SYMMETRICAL,1,
-name,-,Name of the hole (for save),,str,,,,,,,comp_surface_magnet_id,,,
-,,,,,,,,,,,has_magnet,,,
-,,,,,,,,,,,remove_magnet,,,
+Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,as_dict Type
+surf_list,,"List of surface to draw the Hole. Surfaces must be ordered in trigo order, label must contain HoleMagnet for Magnet and Hole for holes",,[Surface],,,
+magnet_dict,,"dictionary with the magnet for the Hole (None to remove magnet, key should be magnet_X)",,{Magnet},,,
+name,-,Name of the hole (for save),,str,,,
+,
+Package,Inherit,Methods,Constant Name,Constant Value,Class description
+Slot,HoleMag,build_geometry,VERSION,1,User defined hole from list of surface
+,,check,IS_SYMMETRICAL,1,
+,,comp_surface_magnet_id,,,
+,,has_magnet,,,
+,,remove_magnet,,,

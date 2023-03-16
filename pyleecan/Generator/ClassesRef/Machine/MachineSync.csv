@@ -1,3 +1,5 @@
-Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
-,,,,,,,,,Machine,Machine,is_synchronous,VERSION,1,Abstract class for synchronous machine
-,,,,,,,,,,,comp_angle_rotor_initial,,,
+Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,as_dict Type
+,
+Package,Inherit,Methods,Constant Name,Constant Value,Class description
+Machine,Machine,is_synchronous,VERSION,1,Abstract class for synchronous machine
+,,comp_angle_rotor_initial,,,

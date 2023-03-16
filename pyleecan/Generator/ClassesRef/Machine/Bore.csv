@@ -1,10 +1,13 @@
-﻿Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
-type_merge_slot,,"how to merge slot/notch into the bore radius (0: connect the dot, 1: intersection, 2: translate)",,int,1,0,2,,Machine,,merge_slot,VERSION,1,Abstract class for Bore shape
-,,,,,,,,,,,is_yoke,,,
-,,,,,,,,,,,merge_slot_connect,,,
-,,,,,,,,,,,merge_slot_intersect,,,
-,,,,,,,,,,,merge_slot_translate,,,
-,,,,,,,,,,,comp_Rmin,,,
-,,,,,,,,,,,comp_surface,,,
-,,,,,,,,,,,get_surface,,,
-,,,,,,,,,,,plot,,,
+﻿Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,as_dict Type
+type_merge_slot,,"how to merge slot/notch into the bore radius (0: connect the dot, 1: intersection, 2: translate)",,int,1,0,2
+,
+Package,Inherit,Methods,Constant Name,Constant Value,Class description
+Machine,,merge_slot,VERSION,1,Abstract class for Bore shape
+,,is_yoke,,,
+,,merge_slot_connect,,,
+,,merge_slot_intersect,,,
+,,merge_slot_translate,,,
+,,comp_Rmin,,,
+,,comp_surface,,,
+,,get_surface,,,
+,,plot,,,

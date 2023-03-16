@@ -1,11 +1,22 @@
-Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,Type as_dict,Package,Inherit,Methods,Constant Name,Constant Value,Class description
-mesh,,Pyvista object of the mesh (optional),,vtk.vtkPointSet,None,,,1,Mesh,Mesh,get_mesh_pv,VERSION,1,Gather the mesh storage format
-is_pyvista_mesh,,Store the pyvista object,,bool,False,,,,,,get_node,,,
-format,,Format in which the mesh is stored,,str,vtk,,,,,,get_cell,,,
-path,,Path where the mesh is stored,,str,None,,,,,,get_normals,,,
-name,,Name of the mesh file,,str,mesh,,,,,,get_surf,,,
-surf,,Pyvista object of the outer surface,,pyvista.core.pointset.PolyData,None,,,1,,,get_cell_area,,,
-is_vtk_surf,,Save the surface mesh in a vtk file,,bool,False,,,,,,convert,,,
-surf_path,,Path where the outer surface is stored,,str,,,,,,,perm_coord,,,
-surf_name,,Name of the outer surface file,,str,,,,,,,get_path,,,
-node_normals,,Array of normals to nodes (cell vertices),,ndarray,None,,,,,,,,,
+Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,as_dict Type
+mesh,,Pyvista object of the mesh (optional),,vtk.vtkPointSet,None,,,1
+is_pyvista_mesh,,Store the pyvista object,,bool,False,,,
+format,,Format in which the mesh is stored,,str,vtk,,,
+path,,Path where the mesh is stored,,str,None,,,
+name,,Name of the mesh file,,str,mesh,,,
+surf,,Pyvista object of the outer surface,,pyvista.core.pointset.PolyData,None,,,1
+is_vtk_surf,,Save the surface mesh in a vtk file,,bool,False,,,
+surf_path,,Path where the outer surface is stored,,str,,,,
+surf_name,,Name of the outer surface file,,str,,,,
+node_normals,,Array of normals to nodes (cell vertices),,ndarray,None,,,
+,,,,,,,,
+Package,Inherit,Methods,Constant Name,Constant Value,Class description,,,
+Mesh,Mesh,get_mesh_pv,VERSION,1,Gather the mesh storage format,,,
+,,get_node,,,,,,
+,,get_cell,,,,,,
+,,get_normals,,,,,,
+,,get_surf,,,,,,
+,,get_cell_area,,,,,,
+,,convert,,,,,,
+,,perm_coord,,,,,,
+,,get_path,,,,,,

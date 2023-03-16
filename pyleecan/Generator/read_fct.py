@@ -17,13 +17,16 @@ MIN_VAL_COL = 6  # minimum value
 MAX_VAL_COL = 7  # maximum value
 AS_DICT_COL = 8  # To change as_dict/copy behavior
 
+# Index in side by side
 PACK_COL = 9  # package
 HER_COL = 10  # mother class name
 METH_COL = 11  # methods list
 CST_NAME_COL = 12  # constants name list
 CST_VAL_COL = 13  # constants value list
 CLASS_DEF_COL = 14  # class description
-# DAUG_COL = 18  # daughter class list (unused)
+
+# Offset for column csv (to convert side by side index to column)
+COLUMN_OFFSET = PACK_COL
 
 
 def read_all(path, is_internal=False, in_path="", soft_name=PACKAGE_NAME):
@@ -93,7 +96,6 @@ def read_file(file_path, soft_name=PACKAGE_NAME):
         Dict containing all the class informations (properties, package, methods...)
     """
     class_dict = dict()
-
     # Open the module doc
     if not isfile(file_path):
         raise NotAFile("File not found")
@@ -109,54 +111,71 @@ def read_file(file_path, soft_name=PACKAGE_NAME):
     with open(file_path, mode="r") as csv_file:
         class_csv = reader(csv_file, delimiter=",")
         class_csv = list(class_csv)
-        # Get all the properties of the class
-        properties = list()
+        # Check format of the csv (two tables side by side or in column)
+        is_side_by_side = True
+        header_index = None
         Nline = len(class_csv)
         for rx in range(1, Nline):  # Skip the first line (title of column)
-            name = class_csv[rx][NAME_COL]
-            if name != "":
-                prop_dict = dict()
-                prop_dict["name"] = name
-                prop_dict["unit"] = class_csv[rx][UNIT_COL]
-                prop_dict["type"] = class_csv[rx][TYPE_COL]
-                prop_dict["min"] = class_csv[rx][MIN_VAL_COL].replace(",", ".")
-                prop_dict["max"] = class_csv[rx][MAX_VAL_COL].replace(",", ".")
-                prop_dict["value"] = class_csv[rx][DEF_VAL_COL]
-                prop_dict["as_dict"] = class_csv[rx][AS_DICT_COL]
-                if prop_dict["type"] == "float":
-                    prop_dict["value"] = prop_dict["value"].replace(",", ".")
-                if (
-                    prop_dict["value"] != ""
-                    and prop_dict["type"] != "str"
-                    and "." not in prop_dict["type"]
-                    and "()" not in prop_dict["value"]
-                ):
-                    prop_dict["value"] = eval(prop_dict["value"])
-                desc = class_csv[rx][EN_DESC_COL]
-                prop_dict["desc"] = desc.replace("\\\\", "\\")
-                properties.append(prop_dict)
-        class_dict["properties"] = properties
+            if class_csv[rx][0] == "Package" and class_csv[rx][1] == "Inherit":
+                is_side_by_side = False
+                header_index = rx
+                break
+        if is_side_by_side:
+            get_dict_from_side_by_side(class_csv, class_dict)
+        else:
+            get_dict_from_columns(class_csv, class_dict, header_index)
+    return class_dict
 
-        # Get all the constants
-        cste = list()
-        for rx in range(1, Nline):  # Skip the first line (title of column)
-            name = class_csv[rx][CST_NAME_COL]
-            if name != "":
-                cste_dict = dict()
-                cste_dict["name"] = name
-                cste_dict["value"] = class_csv[rx][CST_VAL_COL]
-                cste.append(cste_dict)
-        class_dict["constants"] = cste
 
-        # Get all the methods
-        class_dict["methods"] = list()
-        for rx in range(1, Nline):  # Skip the first line (title of column)
-            meth = class_csv[rx][METH_COL]
-            if meth != "":
-                class_dict["methods"].append(meth)
+def get_dict_from_side_by_side(class_csv, class_dict):
+    # Get all the properties of the class
+    properties = list()
+    Nline = len(class_csv)
+    for rx in range(1, Nline):  # Skip the first line (title of column)
+        name = class_csv[rx][NAME_COL]
+        if name != "":
+            prop_dict = dict()
+            prop_dict["name"] = name
+            prop_dict["unit"] = class_csv[rx][UNIT_COL]
+            prop_dict["type"] = class_csv[rx][TYPE_COL]
+            prop_dict["min"] = class_csv[rx][MIN_VAL_COL].replace(",", ".")
+            prop_dict["max"] = class_csv[rx][MAX_VAL_COL].replace(",", ".")
+            prop_dict["value"] = class_csv[rx][DEF_VAL_COL]
+            prop_dict["as_dict"] = class_csv[rx][AS_DICT_COL]
+            if prop_dict["type"] == "float":
+                prop_dict["value"] = prop_dict["value"].replace(",", ".")
+            if (
+                prop_dict["value"] != ""
+                and prop_dict["type"] != "str"
+                and "." not in prop_dict["type"]
+                and "()" not in prop_dict["value"]
+            ):
+                prop_dict["value"] = eval(prop_dict["value"])
+            desc = class_csv[rx][EN_DESC_COL]
+            prop_dict["desc"] = desc.replace("\\\\", "\\")
+            properties.append(prop_dict)
+    class_dict["properties"] = properties
 
-        # The daughters are automatically detected in read_all
-        class_dict["daughters"] = list()
+    # Get all the constants
+    cste = list()
+    for rx in range(1, Nline):
+        name = class_csv[rx][CST_NAME_COL]
+        if name != "":
+            cste_dict = dict()
+            cste_dict["name"] = name
+            cste_dict["value"] = class_csv[rx][CST_VAL_COL]
+            cste.append(cste_dict)
+    class_dict["constants"] = cste
+
+    # Get all the methods
+    class_dict["methods"] = list()
+    for rx in range(1, Nline):  # Skip the first line (title of column)
+        meth = class_csv[rx][METH_COL]
+        if meth != "":
+            class_dict["methods"].append(meth)
+
+    # The daughters are automatically detected in read_all
+    class_dict["daughters"] = list()
 
     class_dict["package"] = class_csv[1][PACK_COL]
     class_dict["desc"] = class_csv[1][CLASS_DEF_COL]
@@ -166,7 +185,69 @@ def read_file(file_path, soft_name=PACKAGE_NAME):
             "ERROR: the class " + class_dict["name"] + " inherit from itself"
         )
 
-    return class_dict
+
+def get_dict_from_columns(class_csv, class_dict, header_index):
+    # Get all the properties of the class
+    properties = list()
+    Nline = len(class_csv)
+    # Skip the first line (title of column), stop before second tables
+    for rx in range(1, header_index - 1):
+        name = class_csv[rx][NAME_COL]
+        if name != "":
+            prop_dict = dict()
+            prop_dict["name"] = name
+            prop_dict["unit"] = class_csv[rx][UNIT_COL]
+            prop_dict["type"] = class_csv[rx][TYPE_COL]
+            prop_dict["min"] = class_csv[rx][MIN_VAL_COL].replace(",", ".")
+            prop_dict["max"] = class_csv[rx][MAX_VAL_COL].replace(",", ".")
+            prop_dict["value"] = class_csv[rx][DEF_VAL_COL]
+            if len(class_csv[rx]) == AS_DICT_COL + 1:  # Not mandatory columns
+                prop_dict["as_dict"] = class_csv[rx][AS_DICT_COL]
+            else:
+                prop_dict["as_dict"] = ""
+
+            if prop_dict["type"] == "float":
+                prop_dict["value"] = prop_dict["value"].replace(",", ".")
+            if (
+                prop_dict["value"] != ""
+                and prop_dict["type"] != "str"
+                and "." not in prop_dict["type"]
+                and "()" not in prop_dict["value"]
+            ):
+                prop_dict["value"] = eval(prop_dict["value"])
+            desc = class_csv[rx][EN_DESC_COL]
+            prop_dict["desc"] = desc.replace("\\\\", "\\")
+            properties.append(prop_dict)
+    class_dict["properties"] = properties
+
+    # Get all the constants
+    cste = list()
+    for rx in range(header_index + 1, Nline):  # Read only second table
+        name = class_csv[rx][CST_NAME_COL - COLUMN_OFFSET]
+        if name != "":
+            cste_dict = dict()
+            cste_dict["name"] = name
+            cste_dict["value"] = class_csv[rx][CST_VAL_COL - COLUMN_OFFSET]
+            cste.append(cste_dict)
+    class_dict["constants"] = cste
+
+    # Get all the methods
+    class_dict["methods"] = list()
+    for rx in range(header_index + 1, Nline):  # Read only second table
+        meth = class_csv[rx][METH_COL - COLUMN_OFFSET]
+        if meth != "":
+            class_dict["methods"].append(meth)
+
+    # The daughters are automatically detected in read_all
+    class_dict["daughters"] = list()
+
+    class_dict["package"] = class_csv[header_index + 1][PACK_COL - COLUMN_OFFSET]
+    class_dict["desc"] = class_csv[header_index + 1][CLASS_DEF_COL - COLUMN_OFFSET]
+    class_dict["mother"] = class_csv[header_index + 1][HER_COL - COLUMN_OFFSET]
+    if class_dict["mother"] == class_dict["name"]:
+        raise InheritError(
+            "ERROR: the class " + class_dict["name"] + " inherit from itself"
+        )
 
 
 def update_all_daughters(gen_dict):

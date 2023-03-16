@@ -1,4 +1,6 @@
-Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
-,,,,,,,,,Machine,Winding,comp_connection_mat,VERSION,1,short-circuit winding (e.g. squirrel cage type)
-,,,,,,,,,,,get_dim_wind,NAME,"""short-circuit""",
-,,,,,,,,,,,comp_periodicity,,,
+Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,as_dict Type
+,
+Package,Inherit,Methods,Constant Name,Constant Value,Class description
+Machine,Winding,comp_connection_mat,VERSION,1,short-circuit winding (e.g. squirrel cage type)
+,,get_dim_wind,NAME,"""short-circuit""",
+,,comp_periodicity,,,

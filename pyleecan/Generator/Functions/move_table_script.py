@@ -7,10 +7,10 @@ from os.path import isfile, join
 from pyleecan.definitions import DOC_DIR
 import csv
 
-IS_OVERWRITE = False  # True to replace the files in place
+IS_OVERWRITE = True  # True to replace the files in place
 if __name__ == "__main__":
     # Read all the csv files
-    for (dirpath, dirnames, filenames) in walk(join(DOC_DIR, "Geometry")):
+    for (dirpath, dirnames, filenames) in walk(DOC_DIR):
         for file_name in filenames:
             input_file = join(dirpath, file_name)
             output_file = join(dirpath, file_name[0:-4] + "_tmp.csv")

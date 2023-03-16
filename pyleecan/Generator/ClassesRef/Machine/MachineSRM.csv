@@ -1,5 +1,9 @@
-Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constante Name,Constante Value,Description classe,Classe fille
-rotor,,Machine's Rotor,,LamSlot,,,,,Machine,MachineSync,check,VERSION,1,Switched Reluctance Machine,
-stator,,Machine's Stator,,LamSlotWind,,,,,,,get_machine_type,,,,
-,,,,,,,,,,,get_pole_pair_number,,,,
-,,,,,,,,,,,set_pole_pair_number,,,,
+Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,as_dict Type
+rotor,,Machine's Rotor,,LamSlot,,,
+stator,,Machine's Stator,,LamSlotWind,,,
+,
+Package,Inherit,Methods,Constante Name,Constante Value,Description classe,Classe fille
+Machine,MachineSync,check,VERSION,1,Switched Reluctance Machine,
+,,get_machine_type,,,,
+,,get_pole_pair_number,,,,
+,,set_pole_pair_number,,,,

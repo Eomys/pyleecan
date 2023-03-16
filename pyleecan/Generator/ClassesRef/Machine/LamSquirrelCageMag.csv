@@ -1,8 +1,11 @@
-Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
-hole,,lamination Hole,1,[Hole],,,,,Machine,LamSquirrelCage,build_geometry,VERSION,1,Rotor lamination for LSPM
-,,,,,,,,,,,check,,,
-,,,,,,,,,,,comp_surfaces,,,
-,,,,,,,,,,,plot,,,
-,,,,,,,,,,,get_pole_pair_number,,,
-,,,,,,,,,,,set_pole_pair_number,,,
-,,,,,,,,,,,get_hole_list,,,
+Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,as_dict Type
+hole,,lamination Hole,1,[Hole],,,
+,
+Package,Inherit,Methods,Constant Name,Constant Value,Class description
+Machine,LamSquirrelCage,build_geometry,VERSION,1,Rotor lamination for LSPM
+,,check,,,
+,,comp_surfaces,,,
+,,plot,,,
+,,get_pole_pair_number,,,
+,,set_pole_pair_number,,,
+,,get_hole_list,,,

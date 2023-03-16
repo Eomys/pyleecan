@@ -1,6 +1,13 @@
-Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
-line_list,-,list of line to draw the edges of the slot,,[Line],,,,,Slot,Slot,build_geometry,VERSION,1,"""User defined"" Slot from a line list. "
-wind_begin_index,-,Index of the first line to include in the winding,,int,None,,,,,,check,,,
-wind_end_index,-,Index of the last line to include in the winding,,int,None,,,,,,get_surface_active,,,
-type_line_wind,-,"0 to close winding with Segment, 1 for Arc1",,int,0,0,1,,,,get_surface_opening,,,
-name,-,Name of the slot (for save),,str,,,,,,,set_from_point_list,,,
+Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,as_dict Type
+line_list,-,list of line to draw the edges of the slot,,[Line],,,
+wind_begin_index,-,Index of the first line to include in the winding,,int,None,,
+wind_end_index,-,Index of the last line to include in the winding,,int,None,,
+type_line_wind,-,"0 to close winding with Segment, 1 for Arc1",,int,0,0,1
+name,-,Name of the slot (for save),,str,,,
+,
+Package,Inherit,Methods,Constant Name,Constant Value,Class description
+Slot,Slot,build_geometry,VERSION,1,"""User defined"" Slot from a line list. "
+,,check,,,
+,,get_surface_active,,,
+,,get_surface_opening,,,
+,,set_from_point_list,,,

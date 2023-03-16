@@ -1,5 +1,9 @@
-Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constante Name,Constante Value,Description classe,Classe file
-group,-,"Name of the group selected for magnetic force computation. If None, all the domain is selected.",,str,stator core,,,,Simulation,Force,comp_force,VERSION,1,"Force various tensors (Maxwell, magnetostrictive) model for radial flux machines",
-tensor,-,Force model(s) to be used,,dict,None,,,,,,comp_force_nodal,,,,
-,,,,,,,,,,,comp_magnetostrictive_tensor,,,,
-,,,,,,,,,,,element_loop,,,,
+Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,as_dict Type
+group,-,"Name of the group selected for magnetic force computation. If None, all the domain is selected.",,str,stator core,,
+tensor,-,Force model(s) to be used,,dict,None,,
+,
+Package,Inherit,Methods,Constante Name,Constante Value,Description classe,Classe file
+Simulation,Force,comp_force,VERSION,1,"Force various tensors (Maxwell, magnetostrictive) model for radial flux machines",
+,,comp_force_nodal,,,,
+,,comp_magnetostrictive_tensor,,,,
+,,element_loop,,,,

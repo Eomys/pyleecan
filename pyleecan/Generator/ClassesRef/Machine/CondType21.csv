@@ -1,11 +1,16 @@
-Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
-Hbar,m,Bar height,0,float,1.00E-02,0,,,Machine,Conductor,comp_surface_active,VERSION,1,single rectangular conductor \nhas to be used for LamSquirrelCages's conductor
-Wbar,m,Bar width,0,float,1.00E-02,0,,,,,comp_height,,,
-Wins,m,Width of insulation,0,float,0,0,,,,,comp_surface,,,
-,,,,,,,,,,,comp_width,,,
-,,,,,,,,,,,plot,,,
-,,,,,,,,,,,comp_width_wire,,,
-,,,,,,,,,,,comp_height_wire,,,
-,,,,,,,,,,,comp_nb_circumferential_wire,,,
-,,,,,,,,,,,comp_nb_radial_wire,,,
-,,,,,,,,,,,is_round_wire,,,
+Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,as_dict Type
+Hbar,m,Bar height,0,float,1.00E-02,0,
+Wbar,m,Bar width,0,float,1.00E-02,0,
+Wins,m,Width of insulation,0,float,0,0,
+,
+Package,Inherit,Methods,Constant Name,Constant Value,Class description
+Machine,Conductor,comp_surface_active,VERSION,1,single rectangular conductor \nhas to be used for LamSquirrelCages's conductor
+,,comp_height,,,
+,,comp_surface,,,
+,,comp_width,,,
+,,plot,,,
+,,comp_width_wire,,,
+,,comp_height_wire,,,
+,,comp_nb_circumferential_wire,,,
+,,comp_nb_radial_wire,,,
+,,is_round_wire,,,
