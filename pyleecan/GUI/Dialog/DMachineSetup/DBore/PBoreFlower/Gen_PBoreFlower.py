@@ -33,13 +33,3 @@ class Gen_PBoreFlower(Ui_PBoreFlower):
         txt = self.tr(u"""Radius of the flower arc""")
         self.lf_Rarc.setWhatsThis(txt)
         self.lf_Rarc.setToolTip(txt)
-
-        # Setup of in_alpha
-        txt = self.tr(u"""Angular offset for the arc""")
-        self.in_alpha.setWhatsThis(txt)
-        self.in_alpha.setToolTip(txt)
-
-        # Setup of lf_alpha
-        txt = self.tr(u"""Angular offset for the arc""")
-        self.lf_alpha.setWhatsThis(txt)
-        self.lf_alpha.setToolTip(txt)

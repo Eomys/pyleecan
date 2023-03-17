@@ -1,5 +1,6 @@
 ﻿Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,as_dict Type
-type_merge_slot,,"how to merge slot/notch into the bore radius (0: connect the dot, 1: intersection, 2: translate)",,int,1,0,2
+type_merge_slot,,"how to merge slot/notch into the bore radius (0: connect the dot, 1: intersection, 2: translate)",,int,1,0,2,
+alpha,rad,Angular offset for the bore shape,,float,0,,,
 ,
 Package,Inherit,Methods,Constant Name,Constant Value,Class description
 Machine,,merge_slot,VERSION,1,Abstract class for Bore shape
@@ -11,3 +12,4 @@ Machine,,merge_slot,VERSION,1,Abstract class for Bore shape
 ,,comp_surface,,,
 ,,get_surface,,,
 ,,plot,,,
+,,comp_Rmax,,,

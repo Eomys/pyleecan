@@ -123,7 +123,6 @@ class WVent(Gen_WVent, QWidget):
                 "Error while opening corresponding cooling duct widget:\n" + str(e),
             )
 
-
     def set_Alpha0(self):
         """Signal to update the value of Alpha0 according to the line edit
 

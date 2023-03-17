@@ -256,7 +256,8 @@
             "comp_Rmin",
             "comp_surface",
             "get_surface",
-            "plot"
+            "plot",
+            "comp_Rmax"
         ],
         "mother": "",
         "name": "Bore",
@@ -272,6 +273,16 @@
                 "type": "int",
                 "unit": "",
                 "value": 1
+            },
+            {
+                "as_dict": "",
+                "desc": "Angular offset for the bore shape",
+                "max": "",
+                "min": "",
+                "name": "alpha",
+                "type": "float",
+                "unit": "rad",
+                "value": 0
             }
         ]
     },
@@ -314,16 +325,6 @@
                 "type": "float",
                 "unit": "m",
                 "value": 0.01
-            },
-            {
-                "as_dict": "",
-                "desc": "Angular offset for the arc",
-                "max": "",
-                "min": "",
-                "name": "alpha",
-                "type": "float",
-                "unit": "rad",
-                "value": 0
             }
         ]
     },
@@ -375,16 +376,6 @@
                 "type": "float",
                 "unit": "m",
                 "value": 0.0035
-            },
-            {
-                "as_dict": "",
-                "desc": "Angular offset",
-                "max": "",
-                "min": "",
-                "name": "alpha",
-                "type": "float",
-                "unit": "rad",
-                "value": 0
             }
         ]
     },
@@ -458,16 +449,6 @@
                 "type": "float",
                 "unit": "m",
                 "value": null
-            },
-            {
-                "as_dict": "",
-                "desc": "Angular offset",
-                "max": "",
-                "min": "",
-                "name": "alpha",
-                "type": "float",
-                "unit": "rad",
-                "value": 0
             }
         ]
     },
@@ -509,6 +490,16 @@
                 "type": "int",
                 "unit": "-",
                 "value": 1
+            },
+            {
+                "as_dict": "",
+                "desc": "Name of the bore (for save)",
+                "max": "",
+                "min": "",
+                "name": "name",
+                "type": "str",
+                "unit": "-",
+                "value": ""
             }
         ]
     },

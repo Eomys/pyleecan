@@ -9,7 +9,8 @@ from PySide2.QtCore import *
 from PySide2.QtGui import *
 from PySide2.QtWidgets import *
 
-from pyleecan.GUI.Tools.HelpButton import HelpButton
+from .....GUI.Tools.FloatEdit import FloatEdit
+from .....GUI.Tools.HelpButton import HelpButton
 
 from pyleecan.GUI.Resources import pyleecan_rc
 
@@ -18,8 +19,8 @@ class Ui_DBore(object):
     def setupUi(self, DBore):
         if not DBore.objectName():
             DBore.setObjectName(u"DBore")
-        DBore.resize(650, 550)
-        DBore.setMinimumSize(QSize(650, 550))
+        DBore.resize(820, 600)
+        DBore.setMinimumSize(QSize(820, 600))
         icon = QIcon()
         icon.addFile(
             u":/images/images/icon/pyleecan_64.png", QSize(), QIcon.Normal, QIcon.Off
@@ -29,19 +30,35 @@ class Ui_DBore(object):
         self.main_layout.setObjectName(u"main_layout")
         self.horizontalLayout_2 = QHBoxLayout()
         self.horizontalLayout_2.setObjectName(u"horizontalLayout_2")
+        self.c_bore_type = QComboBox(DBore)
+        self.c_bore_type.addItem("")
+        self.c_bore_type.setObjectName(u"c_bore_type")
+
+        self.horizontalLayout_2.addWidget(self.c_bore_type)
+
         self.b_help = HelpButton(DBore)
         self.b_help.setObjectName(u"b_help")
         self.b_help.setPixmap(QPixmap(u":/images/images/icon/help_16.png"))
 
         self.horizontalLayout_2.addWidget(self.b_help)
 
-        self.c_bore_type = QComboBox(DBore)
-        self.c_bore_type.addItem("")
-        self.c_bore_type.addItem("")
-        self.c_bore_type.setObjectName(u"c_bore_type")
-        self.c_bore_type.setEnabled(True)
+        self.in_alpha = QLabel(DBore)
+        self.in_alpha.setObjectName(u"in_alpha")
 
-        self.horizontalLayout_2.addWidget(self.c_bore_type)
+        self.horizontalLayout_2.addWidget(self.in_alpha)
+
+        self.lf_alpha = FloatEdit(DBore)
+        self.lf_alpha.setObjectName(u"lf_alpha")
+        self.lf_alpha.setMinimumSize(QSize(100, 0))
+
+        self.horizontalLayout_2.addWidget(self.lf_alpha)
+
+        self.c_alpha_unit = QComboBox(DBore)
+        self.c_alpha_unit.addItem("")
+        self.c_alpha_unit.addItem("")
+        self.c_alpha_unit.setObjectName(u"c_alpha_unit")
+
+        self.horizontalLayout_2.addWidget(self.c_alpha_unit)
 
         self.horizontalSpacer_3 = QSpacerItem(
             40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum
@@ -96,12 +113,17 @@ class Ui_DBore(object):
         DBore.setWindowTitle(
             QCoreApplication.translate("DBore", u"Uneven bore shape setup", None)
         )
-        self.b_help.setText("")
         self.c_bore_type.setItemText(
             0, QCoreApplication.translate("DBore", u"Bore Flower", None)
         )
-        self.c_bore_type.setItemText(
-            1, QCoreApplication.translate("DBore", u"Bore Sine Pole", None)
+
+        self.b_help.setText("")
+        self.in_alpha.setText(QCoreApplication.translate("DBore", u"alpha :", None))
+        self.c_alpha_unit.setItemText(
+            0, QCoreApplication.translate("DBore", u"[rad]", None)
+        )
+        self.c_alpha_unit.setItemText(
+            1, QCoreApplication.translate("DBore", u"[\u00b0]", None)
         )
 
         self.b_plot.setText(QCoreApplication.translate("DBore", u"Preview", None))

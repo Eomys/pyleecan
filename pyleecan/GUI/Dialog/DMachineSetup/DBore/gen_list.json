@@ -1,0 +1,11 @@
+[
+    {
+        "cls": "Bore",
+        "name": "alpha",
+        "widget": [
+            "in_alpha",
+            "lf_alpha"
+        ],
+        "xls": "Machine"
+    }
+]

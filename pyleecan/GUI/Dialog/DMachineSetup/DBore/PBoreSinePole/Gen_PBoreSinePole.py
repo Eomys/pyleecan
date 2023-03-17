@@ -66,13 +66,3 @@ class Gen_PBoreSinePole(Ui_PBoreSinePole):
         txt = self.tr(u"""q-axis air gap width""")
         self.lf_delta_q.setWhatsThis(txt)
         self.lf_delta_q.setToolTip(txt)
-
-        # Setup of in_alpha
-        txt = self.tr(u"""Angular offset""")
-        self.in_alpha.setWhatsThis(txt)
-        self.in_alpha.setToolTip(txt)
-
-        # Setup of lf_alpha
-        txt = self.tr(u"""Angular offset""")
-        self.lf_alpha.setWhatsThis(txt)
-        self.lf_alpha.setToolTip(txt)
