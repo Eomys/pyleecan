@@ -5,7 +5,9 @@ from PySide2.QtCore import Signal
 from PySide2.QtGui import QPixmap
 from PySide2.QtWidgets import QWidget
 
+from ......Classes.MachineIPMSM import MachineIPMSM
 from ......Classes.HoleM51 import HoleM51
+from ......Classes.Magnet import Magnet
 from ......GUI import gui_option
 from ......GUI.Dialog.DMachineSetup.SMHoleMag.PHoleM51.Gen_PHoleM51 import Gen_PHoleM51
 from ......Methods.Slot.Slot import SlotCheckError
@@ -72,7 +74,6 @@ class PHoleM51(Gen_PHoleM51, QWidget):
         self.u = gui_option.unit
         wid_list = [
             self.unit_W0,
-            self.unit_W1,
             self.unit_W2,
             self.unit_W3,
             self.unit_W4,
@@ -89,7 +90,7 @@ class PHoleM51(Gen_PHoleM51, QWidget):
         self.hole = hole
 
         # Adapt GUI with/without magnet
-        if hole.magnet_0 is None:  # SyRM
+        if not isinstance(hole.parent.parent, MachineIPMSM):  # SyRM
             self.img_slot.setPixmap(
                 QPixmap(":/images/images/MachineSetup/SMHoleMag/HoleM51_no_mag.png")
             )
@@ -115,6 +116,12 @@ class PHoleM51(Gen_PHoleM51, QWidget):
             self.w_mat_1.update(self.hole.magnet_0, "mat_type", self.material_dict)
             self.w_mat_2.update(self.hole.magnet_1, "mat_type", self.material_dict)
             self.w_mat_3.update(self.hole.magnet_2, "mat_type", self.material_dict)
+            if self.hole.magnet_0 is None:
+                self.w_mat_1.setEnabled(False)
+            if self.hole.magnet_1 is None:
+                self.w_mat_2.setEnabled(False)
+            if self.hole.magnet_2 is None:
+                self.w_mat_3.setEnabled(False)
 
         # Fill the fields with the machine values (if they're filled)
         self.lf_W0.setValue(self.hole.W0)
@@ -129,6 +136,9 @@ class PHoleM51(Gen_PHoleM51, QWidget):
         self.lf_H1.setValue(self.hole.H1)
         self.lf_H2.setValue(self.hole.H2)
 
+        self.is_magnet_0.setChecked(self.hole.magnet_0 is not None)
+        self.is_magnet_1.setChecked(self.hole.magnet_1 is not None)
+        self.is_magnet_2.setChecked(self.hole.magnet_2 is not None)
         # Display the main output of the hole (surface, height...)
         self.comp_output()
 
@@ -148,6 +158,45 @@ class PHoleM51(Gen_PHoleM51, QWidget):
         self.w_mat_1.saveNeeded.connect(self.emit_save)
         self.w_mat_2.saveNeeded.connect(self.emit_save)
         self.w_mat_3.saveNeeded.connect(self.emit_save)
+        self.is_magnet_0.stateChanged.connect(self.change_magnet_0)
+        self.is_magnet_1.stateChanged.connect(self.change_magnet_1)
+        self.is_magnet_2.stateChanged.connect(self.change_magnet_2)
+
+    def change_magnet_0(self):
+        """Set/Remove magnet_0 according to checkbox"""
+        if self.is_magnet_0.isChecked():
+            self.hole.magnet_0 = Magnet()
+            self.hole.magnet_0._set_None()
+            self.w_mat_1.setEnabled(True)
+            self.w_mat_1.update(self.hole.magnet_0, "mat_type", self.material_dict)
+            self.w_mat_1.set_mat_type()
+        else:
+            self.hole.magnet_0 = None
+            self.w_mat_1.setEnabled(False)
+
+    def change_magnet_1(self):
+        """Set/Remove magnet_1 according to checkbox"""
+        if self.is_magnet_1.isChecked():
+            self.hole.magnet_1 = Magnet()
+            self.hole.magnet_1._set_None()
+            self.w_mat_2.setEnabled(True)
+            self.w_mat_2.update(self.hole.magnet_1, "mat_type", self.material_dict)
+            self.w_mat_2.set_mat_type()
+        else:
+            self.hole.magnet_1 = None
+            self.w_mat_2.setEnabled(False)
+
+    def change_magnet_2(self):
+        """Set/Remove magnet_2 according to checkbox"""
+        if self.is_magnet_2.isChecked():
+            self.hole.magnet_2 = Magnet()
+            self.hole.magnet_2._set_None()
+            self.w_mat_3.setEnabled(True)
+            self.w_mat_3.update(self.hole.magnet_2, "mat_type", self.material_dict)
+            self.w_mat_3.set_mat_type()
+        else:
+            self.hole.magnet_2 = None
+            self.w_mat_3.setEnabled(False)
 
     def emit_save(self):
         """Send a saveNeeded signal to the DMachineSetup"""
