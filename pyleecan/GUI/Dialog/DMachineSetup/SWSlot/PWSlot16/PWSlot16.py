@@ -98,6 +98,8 @@ class PWSlot16(Gen_PWSlot16, QWidget):
             self.img_slot.setPixmap(
                 QPixmap(u":/images/images/MachineSetup/WSlot/SlotW16_wind.png")
             )
+        # Notify the machine GUI that the machine has changed
+        self.saveNeeded.emit()
 
     def set_W0(self):
         """Signal to update the value of W0 according to the line edit
