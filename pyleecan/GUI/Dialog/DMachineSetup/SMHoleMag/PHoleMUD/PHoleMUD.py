@@ -7,6 +7,7 @@ from PySide2.QtWidgets import QWidget, QDialog
 from PySide2.QtWidgets import QMessageBox
 from PySide2.QtCore import Qt
 from ......Functions.load import load
+from ......Functions.GUI.log_error import log_error
 from ......Classes.HoleUD import HoleUD
 from ......GUI import gui_option
 from ......GUI.Dialog.DMachineSetup.SMHoleMag.PHoleMUD.Ui_PHoleMUD import Ui_PHoleMUD
@@ -120,10 +121,12 @@ class PHoleMUD(Ui_PHoleMUD, QWidget):
         try:
             hole = load(self.w_path_json.get_path())
         except Exception as e:
-            QMessageBox().critical(
+            log_error(
                 self,
-                self.tr("Error"),
-                self.tr("Error when loading file:\n" + str(e)),
+                "Error when loading hole json file "
+                + self.w_path_json.get_path()
+                + ":\n"
+                + str(e),
             )
             return
         # Check that the json file contain a HoleUD
@@ -148,17 +151,21 @@ class PHoleMUD(Ui_PHoleMUD, QWidget):
         self.update_graph()
         self.update_mag_list()
         self.comp_output()
+        self.emit_save()
 
     def open_dxf_hole(self):
         """Open the GUI to define the HoleUD"""
         # Init GUI with lamination parameters
-        self.dxf_gui = DXF_Hole(
-            Zh=self.hole.Zh, Lmag=self.hole.parent.L1, lam=self.hole.parent
-        )
-        self.dxf_gui.setWindowFlags(Qt.Window)  # To maximize the GUI
-        self.dxf_gui.show()
-        # Update the hole when saving
-        self.dxf_gui.accepted.connect(self.set_dxf_path)
+        try:
+            self.dxf_gui = DXF_Hole(
+                Zh=self.hole.Zh, Lmag=self.hole.parent.L1, lam=self.hole.parent
+            )
+            self.dxf_gui.setWindowFlags(Qt.Window)  # To maximize the GUI
+            self.dxf_gui.show()
+            # Update the hole when saving
+            self.dxf_gui.accepted.connect(self.set_dxf_path)
+        except Exception as e:
+            log_error(self, "Error opening DXF import GUI for Hole:\n" + str(e))
 
     def set_dxf_path(self):
         """Update the hole according to the file defined by DXF_Hole"""
@@ -189,13 +196,21 @@ class PHoleMUD(Ui_PHoleMUD, QWidget):
 
                 # Update the GUI to display the Output
                 self.out_slot_surface.setText(
-                    "Hole full surface : " + s_surf + " " + self.u.get_m2_name()
+                    "Hole full surface : " + s_surf + " [" + self.u.get_m2_name() + "]"
                 )
                 self.out_magnet_surface.setText(
-                    "Hole magnet surface : " + m_surf + " " + self.u.get_m2_name()
+                    "Hole magnet surface : "
+                    + m_surf
+                    + " ["
+                    + self.u.get_m2_name()
+                    + "]"
                 )
-                self.out_Rmin.setText("Rmin : " + Rmin_txt + " " + self.u.get_m_name())
-                self.out_Rmax.setText("Rmax : " + Rmax_txt + " " + self.u.get_m_name())
+                self.out_Rmin.setText(
+                    "Rmin : " + Rmin_txt + " [" + self.u.get_m_name() + "]"
+                )
+                self.out_Rmax.setText(
+                    "Rmax : " + Rmax_txt + " [" + self.u.get_m_name() + "]"
+                )
                 is_set = True
             except:
                 pass
