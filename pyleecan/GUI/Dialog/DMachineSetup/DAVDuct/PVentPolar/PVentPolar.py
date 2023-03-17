@@ -8,6 +8,7 @@ from ......GUI.Dialog.DMachineSetup.DAVDuct.PVentPolar.Gen_PVentPolar import (
     Gen_PVentPolar,
 )
 from ......Classes.VentilationPolar import VentilationPolar
+from numpy import pi
 
 
 class PVentPolar(Gen_PVentPolar, QWidget):
@@ -49,8 +50,7 @@ class PVentPolar(Gen_PVentPolar, QWidget):
         self.si_Zh.setValue(self.vent.Zh)
         self.lf_H0.setValue(self.vent.H0)
         self.lf_D0.setValue(self.vent.D0)
-        self.lf_W1.setValue(self.vent.W1)
-        self.lf_Alpha0.setValue(self.vent.Alpha0)
+        self.lf_W1.setValue(self.vent.W1)  # default unit is rad
 
         # Display the main output of the vent
         self.w_out.comp_output()
@@ -61,11 +61,11 @@ class PVentPolar(Gen_PVentPolar, QWidget):
             wid.setText("[" + gui_option.unit.get_m_name() + "]")
 
         # Connect the signal
-        self.si_Zh.editingFinished.connect(self.set_Zh)
+        self.si_Zh.valueChanged.connect(self.set_Zh)
         self.lf_H0.editingFinished.connect(self.set_H0)
         self.lf_D0.editingFinished.connect(self.set_D0)
         self.lf_W1.editingFinished.connect(self.set_W1)
-        self.lf_Alpha0.editingFinished.connect(self.set_Alpha0)
+        self.c_W1_unit.currentIndexChanged.connect(self.set_W1_unit)
 
     def set_Zh(self):
         """Signal to update the value of Zh according to the line edit
@@ -108,19 +108,21 @@ class PVentPolar(Gen_PVentPolar, QWidget):
         self : PVentPolar
             A PVentPolar object
         """
-        self.vent.W1 = self.lf_W1.value()
+        if self.lf_W1.value() is None:
+            self.vent.W1 = 0
+        elif self.c_W1_unit.currentText() == "[rad]":
+            self.vent.W1 = self.lf_W1.value()
+        else:
+            self.vent.W1 = self.lf_W1.value() * pi / 180
         self.w_out.comp_output()
 
-    def set_Alpha0(self):
-        """Signal to update the value of Alpha0 according to the line edit
-
-        Parameters
-        ----------
-        self : PVentPolar
-            A PVentPolar object
-        """
-        self.vent.Alpha0 = self.lf_Alpha0.value()
-        self.w_out.comp_output()
+    def set_W1_unit(self):
+        """Change current unit of W1"""
+        if self.c_W1_unit.currentText() == "[rad]":
+            self.lf_W1.validator().setTop(6.29)
+        else:
+            self.lf_W1.validator().setTop(360)
+        self.set_W1()
 
     def check(self):
         """Check that the current machine have all the needed field set
@@ -146,5 +148,5 @@ class PVentPolar(Gen_PVentPolar, QWidget):
         elif self.vent.W1 is None:
             return self.tr("You must set W1 !")
         elif self.vent.Alpha0 is None:
-            return self.tr("You must set Alpha0 !")
+            self.vent.Alpha0 = 0
         return None
