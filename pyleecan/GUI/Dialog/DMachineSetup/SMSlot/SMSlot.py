@@ -1,14 +1,12 @@
 # -*- coding: utf-8 -*-
 
 from numpy import pi
-from PySide2.QtCore import Signal
-from PySide2.QtWidgets import QMessageBox, QWidget
+from PySide2.QtCore import Signal, Qt
+from PySide2.QtWidgets import QMessageBox, QWidget, QListView
 from logging import getLogger
 from .....loggers import GUI_LOG_NAME
-from .....Classes.LamSlotWind import LamSlotWind
 from .....Classes.Slot import Slot
 from .....Classes.SlotM10 import SlotM10
-from .....Classes.Slot import Slot
 from .....GUI.Dialog.DMachineSetup.SMSlot.Ui_SMSlot import Ui_SMSlot
 from .....GUI.Dialog.DMachineSetup.SMSlot.PMSlot10.PMSlot10 import PMSlot10
 from .....GUI.Dialog.DMachineSetup.SMSlot.PMSlot11.PMSlot11 import PMSlot11
@@ -20,6 +18,7 @@ from .....GUI.Dialog.DMachineSetup.SMSlot.PMSlot16.PMSlot16 import PMSlot16
 from .....GUI.Dialog.DMachineSetup.SMSlot.PMSlot17.PMSlot17 import PMSlot17
 from .....GUI.Dialog.DMachineSetup.SMSlot.PMSlot18.PMSlot18 import PMSlot18
 from .....Functions.Plot.set_plot_gui_icon import set_plot_gui_icon
+from .....Functions.GUI.log_error import log_error
 
 # List to convert index of combobox to slot type
 WIDGET_LIST = [
@@ -68,11 +67,14 @@ class SMSlot(Ui_SMSlot, QWidget):
         self.machine = machine
         self.material_dict = material_dict
         self.is_stator = is_stator
+        self.is_test = False  # To skip show fig for tests
 
         self.b_help.hide()
 
         # Fill the combobox with the available slot
+        listView = QListView(self.c_slot_type)
         self.c_slot_type.clear()
+        self.c_slot_type.setView(listView)
         for slot in SLOT_NAME:
             self.c_slot_type.addItem(slot)
         # Avoid erase all the parameters when navigating though the slots
@@ -84,6 +86,8 @@ class SMSlot(Ui_SMSlot, QWidget):
             self.obj = machine.stator
         else:
             self.obj = machine.rotor
+        if self.obj.magnet.Nseg is None:  # Set default value
+            self.obj.magnet.Nseg = 1
 
         # If the Slot is not set, initialize it with a SlotM10
         if self.obj.slot is None or type(self.obj.slot) is Slot:
@@ -95,6 +99,8 @@ class SMSlot(Ui_SMSlot, QWidget):
         # Set magnetization
         if self.obj.magnet.type_magnetization not in [0, 1, 2]:
             self.obj.magnet.type_magnetization = 0  # Set default value
+        listView = QListView(self.c_type_magnetization)
+        self.c_type_magnetization.setView(listView)
         self.c_type_magnetization.setCurrentIndex(self.obj.magnet.type_magnetization)
 
         # Set material
@@ -242,11 +248,17 @@ class SMSlot(Ui_SMSlot, QWidget):
                 self.obj.plot()
                 set_plot_gui_icon()
             except Exception as e:
-                err_msg = (
-                    "Error while plotting " + name + " in Slot definition:\n" + str(e)
-                )
-                getLogger(GUI_LOG_NAME).error(err_msg)
-                QMessageBox().critical(self, self.tr("Error"), err_msg)
+                if self.is_stator:
+                    err_msg = (
+                        "Error while plotting Lamination in Stator Magnet step:\n"
+                        + str(e)
+                    )
+                else:
+                    err_msg = (
+                        "Error while plotting Lamination in Rotor Magnet step:\n"
+                        + str(e)
+                    )
+                log_error(self, err_msg)
 
     @staticmethod
     def check(lam):

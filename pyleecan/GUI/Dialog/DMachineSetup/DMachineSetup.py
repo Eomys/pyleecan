@@ -144,8 +144,8 @@ class DMachineSetup(Ui_DMachineSetup, QWidget):
             try:
                 self.machine.save(save_file_path)
             except Exception as e:
-                err_msg = Error while saving machine " + self.machine.name + ":\n" + str(e)
-                log_error(self, err_msg)<
+                err_msg = "Error while saving machine " + self.machine.name + ":\n" + str(e)
+                log_error(self, err_msg)
                 return False
             # To update the machine name field (if first page)
             self.set_nav(self.nav_step.currentRow())
