@@ -1,15 +1,20 @@
 # -*- coding: utf-8 -*-
 
-from numpy import pi
-from PySide2.QtCore import Signal
-from PySide2.QtWidgets import QMessageBox, QWidget
+from PySide2.QtCore import Signal, Qt
+from PySide2.QtWidgets import QMessageBox, QWidget, QApplication
+from numpy import pi, floor
+import matplotlib.pyplot as plt
 from logging import getLogger
+
+from .....Functions.Load.import_class import import_class
 from .....loggers import GUI_LOG_NAME
 from .....Classes.LamSlotWind import LamSlotWind
 from .....Classes.LamSquirrelCage import LamSquirrelCage
 from .....Classes.Slot import Slot
-from .....Classes.SlotW10 import SlotW10
+from .....Classes.SlotUD import SlotUD
+from .....Classes.SlotUD2 import SlotUD2
 from .....Classes.Slot import Slot
+from .....Classes.LamSquirrelCage import LamSquirrelCage
 from .....GUI.Dialog.DMachineSetup.SWSlot.Gen_SWSlot import Gen_SWSlot
 from .....GUI.Dialog.DMachineSetup.SWSlot.PWSlotUD.PWSlotUD import PWSlotUD
 from .....GUI.Dialog.DMachineSetup.SWSlot.PWSlot10.PWSlot10 import PWSlot10
@@ -85,6 +90,7 @@ class SWSlot(Gen_SWSlot, QWidget):
         self.machine = machine
         self.material_dict = material_dict
         self.is_stator = is_stator
+        self.is_test = False  # To avoid call to show in plot
 
         self.b_help.hide()
 
@@ -101,8 +107,10 @@ class SWSlot(Gen_SWSlot, QWidget):
             self.obj = machine.stator
         else:
             self.obj = machine.rotor
+            self.out_Slot_pitch.setText(self.out_Slot_pitch.text().replace("Zs", "Zr"))
+            self.in_Zs.setText(self.in_Zs.text().replace("Zs", "Zr"))
 
-        # If the Slot is not set, initialize it with a 1_0
+        # If the Slot is not set, initialize it with a 10
         if self.obj.slot is None or type(self.obj.slot) is Slot:
             self.obj.slot = SlotW10()
             self.obj.slot._set_None()
@@ -115,7 +123,10 @@ class SWSlot(Gen_SWSlot, QWidget):
         self.set_slot_pitch(self.obj.slot.Zs)
 
         # Set the correct index for the type checkbox and display the object
-        index = INIT_INDEX.index(type(self.obj.slot))
+        if isinstance(self.obj.slot, SlotUD2):
+            index = len(INIT_INDEX)-1
+        else:
+            index = INIT_INDEX.index(type(self.obj.slot))
         self.c_slot_type.setCurrentIndex(index)
 
         # Update the slot widget
@@ -123,7 +134,7 @@ class SWSlot(Gen_SWSlot, QWidget):
 
         # Connect the slot
         self.c_slot_type.currentIndexChanged.connect(self.s_change_slot)
-        self.si_Zs.editingFinished.connect(self.set_Zs)
+        self.si_Zs.valueChanged.connect(self.set_Zs)
         self.b_plot.clicked.connect(self.s_plot)
 
     def emit_save(self):
@@ -179,8 +190,10 @@ class SWSlot(Gen_SWSlot, QWidget):
         # Clear previous winding matrix (if needed)
         if hasattr(self.obj, "winding"):
             self.obj.winding.clean()
+        # If we are working on a SCIM then we also need to update the value of qs
         if isinstance(self.obj, LamSquirrelCage):
             self.obj.winding.qs = value
+
         self.set_slot_pitch(value)
         self.w_slot.w_out.comp_output()
         if isinstance(self.w_slot, PWSlotUD):
@@ -239,6 +252,7 @@ class SWSlot(Gen_SWSlot, QWidget):
 
     def set_Zs_UD(self):
         self.si_Zs.blockSignals(True)
+        self.obj.slot = self.w_slot.slot  # Update pointer
         self.si_Zs.setValue(self.obj.slot.Zs)
         self.si_Zs.blockSignals(False)
 
@@ -277,14 +291,27 @@ class SWSlot(Gen_SWSlot, QWidget):
             QMessageBox().critical(self, self.tr("Error"), err_msg)
         else:  # No error => Plot the lamination
             try:
-                self.obj.plot(is_lam_only=not (type(self.obj) is LamSlotWind))
+                self.obj.plot(
+                    is_lam_only=not (type(self.obj) is LamSlotWind),
+                    is_show_fig=not self.is_test,
+                )
                 set_plot_gui_icon()
             except Exception as e:
-                err_msg = (
-                    "Error while plotting " + name + " in Slot definition:\n" + str(e)
-                )
+                if self.is_stator:
+                    err_msg = (
+                        "Error while plotting Lamination in Stator Slot step:\n"
+                        + str(e)
+                    )
+                else:
+                    err_msg = (
+                        "Error while plotting Lamination in Rotor Slot step:\n" + str(e)
+                    )
                 getLogger(GUI_LOG_NAME).error(err_msg)
-                QMessageBox().critical(self, self.tr("Error"), err_msg)
+                QMessageBox().warning(
+                    self,
+                    self.tr("Error while plotting"),
+                    self.tr(err_msg),
+                )
 
     @staticmethod
     def check(lam):
@@ -307,7 +334,10 @@ class SWSlot(Gen_SWSlot, QWidget):
 
             # Call the check method of the slot (every slot type have a
             # different check method)
-            index = INIT_INDEX.index(type(lam.slot))
+            if isinstance(lam.slot, SlotUD2):
+                index = len(INIT_INDEX)-1
+            else:
+                index = INIT_INDEX.index(type(lam.slot))
             return WIDGET_LIST[index].check(lam)
         except Exception as e:
             return str(e)
