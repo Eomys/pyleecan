@@ -26,6 +26,7 @@ def plot(
     fig_title=None,
     is_max_sym=False,
     is_clean_plot=False,
+    is_winding_connection=False,
 ):
     """Plot the Machine in a matplotlib fig
 
@@ -63,6 +64,8 @@ def plot(
         True: overwrite sym parameter with max periodicity of the machine
     is_clean_plot : bool
         True to remove title, legend, axis (only machine on plot with white background)
+    is_winding_connection : bool
+        True to display winding connections
 
     Returns
     -------
@@ -112,6 +115,7 @@ def plot(
             edgecolor=edgecolor,
             is_add_arrow=is_add_arrow,
             is_show_fig=False,
+            is_winding_connection=is_winding_connection,
         )
 
     if lam_list[0].Rint > 0 and self.shaft is not None and self.shaft.Drsh is not None:

@@ -1,5 +1,16 @@
-from matplotlib.patches import Patch
+from matplotlib.patches import Patch, FancyArrowPatch
 import matplotlib.pyplot as plt
+from swat_em import datamodel
+from numpy import (
+    sqrt,
+    pi,
+    sign as np_sign,
+    abs as np_abs,
+    arccos,
+    arctan,
+    arcsin,
+    angle as np_angle,
+)
 
 from ....Functions.labels import decode_label, WIND_LAB, BAR_LAB, LAM_LAB, WEDGE_LAB
 from ....Functions.Winding.find_wind_phase_color import find_wind_phase_color
@@ -36,6 +47,7 @@ def plot(
     win_title=None,
     is_legend=True,
     is_clean_plot=False,
+    is_winding_connection=False,
 ):
     """Plot the Lamination in a matplotlib fig
 
@@ -73,6 +85,8 @@ def plot(
         True to add the legend
     is_clean_plot : bool
         True to remove title, legend, axis (only machine on plot with white background)
+    is_winding_connection : bool
+        True to display winding connections
 
     Returns
     -------
@@ -83,6 +97,11 @@ def plot(
     ax : Matplotlib.axes.Axes object
         Axis containing the plot
     """
+    # Arrow style
+    head = None
+    style = "Simple, tail_width=2, head_width=8, head_length=12"
+    kw = dict(arrowstyle=style, linewidth=0.8, edgecolor="k")
+
     if self.is_stator:
         color_lam = STATOR_COLOR
     else:
@@ -101,6 +120,19 @@ def plot(
             try:
                 wind_mat = self.winding.get_connection_mat(self.get_Zs())
                 qs = self.winding.qs
+                if is_winding_connection and self.is_stator:
+                    # generate a datamodel for the winding
+                    wdg = datamodel()
+                    # generate winding from inputs
+                    wdg.genwdg(
+                        Q=self.get_Zs(),
+                        P=2 * self.get_pole_pair_number(),
+                        m=qs,
+                        layers=self.winding.Nlayer,
+                        turns=self.winding.Ntcoil,
+                        w=self.winding.coil_pitch,
+                    )
+                    head = wdg.get_wdg_overhang(optimize_overhang=False)
             except:
                 wind_mat = None
                 qs = 1
@@ -111,11 +143,13 @@ def plot(
     for surf in surf_list:
         label_dict = decode_label(surf.label)
         if LAM_LAB in label_dict["surf_type"]:
-            patches.extend(
-                surf.get_patches(
-                    color_lam, is_edge_only=is_edge_only, edgecolor=edgecolor
-                )
+            patches = surf.get_patches(
+                color_lam, is_edge_only=is_edge_only, edgecolor=edgecolor
             )
+            if head is not None:  # Add transparency to lamination when arrows are added
+                for patch in patches:
+                    patch._alpha = 0.2
+            patches.extend(patches)
         elif WIND_LAB in label_dict["surf_type"] or BAR_LAB in label_dict["surf_type"]:
             if not is_lam_only:
                 color, sign = find_wind_phase_color(wind_mat=wind_mat, label=surf.label)
@@ -133,6 +167,57 @@ def plot(
                         edgecolor=edgecolor,
                     )
                 )
+                if head is not None:
+                    for phase in head:
+                        if label_dict["S_id"] + 1 in [line[0][0] for line in phase]:
+                            start_ind = [line[0][0] for line in phase].index(
+                                label_dict["S_id"] + 1
+                            )
+                            start_point = [
+                                surf.comp_point_ref().real,
+                                surf.comp_point_ref().imag,
+                            ]
+                            end_point = None
+                            for surf2 in surf_list:
+                                label_dict2 = decode_label(surf2.label)
+                                if (
+                                    "S_id" in label_dict2
+                                    and phase[start_ind][0][1]
+                                    == label_dict2["S_id"] + 1
+                                ):
+                                    end_point = [
+                                        surf2.comp_point_ref().real,
+                                        surf2.comp_point_ref().imag,
+                                    ]
+                                    delta_indices = (
+                                        phase[start_ind][0][1] - phase[start_ind][0][0]
+                                    )
+                                    if (
+                                        abs(delta_indices) > self.get_Zs() / 2
+                                    ):  # Handle connections like 43 with 2
+                                        delta_indices = np_sign(delta_indices) * (
+                                            abs(delta_indices) - self.get_Zs()
+                                        )
+                                    signe = np_sign(delta_indices)  # Arrow direction
+                                    break
+                            if end_point is not None:
+                                dist_AB = sqrt(
+                                    (end_point[0] - start_point[0]) ** 2
+                                    + (end_point[1] - start_point[1]) ** 2
+                                )
+                                angle = signe * (1.5 * self.Rext) / dist_AB
+                                line = FancyArrowPatch(
+                                    start_point,
+                                    end_point,
+                                    connectionstyle="arc3,rad=" + str(angle),
+                                    facecolor=color,
+                                    zorder=2,
+                                    **kw
+                                )
+                                patches.append(line)
+
+                            break
+
         elif WEDGE_LAB in label_dict["surf_type"] and not is_lam_only:
             patches.extend(surf.get_patches(WEDGE_COLOR, is_edge_only=is_edge_only))
         else:
@@ -147,7 +232,7 @@ def plot(
 
         ax.set_xlabel("(m)")
         ax.set_ylabel("(m)")
-        for patch in patches:
+        for ii, patch in enumerate(patches):
             ax.add_patch(patch)
         # Axis Setup
         ax.axis("equal")

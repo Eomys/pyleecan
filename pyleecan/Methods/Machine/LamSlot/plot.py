@@ -20,6 +20,7 @@ def plot(
     is_add_arrow=False,
     is_display=True,
     is_show_fig=True,
+    is_winding_connection=False,
 ):
     """Plot the Lamination with empty Slots in a matplotlib fig
 

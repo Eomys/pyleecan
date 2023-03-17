@@ -32,7 +32,7 @@ def plot_linear(self):
     if (
         not isinstance(config_dict["PLOT"]["COLOR_DICT"]["PHASE_COLORS"][0], str)
         and len(config_dict["PLOT"]["COLOR_DICT"]["PHASE_COLORS"][0]) == 4
-    ):  # rgba to hex
+    ):  # convert rgba to hex
         config["plt"]["phase_colors"] = [
             "#{:02x}{:02x}{:02x}".format(
                 int(color[0] * 255 * (1 - color[3]) + 255 * color[3]),
@@ -45,7 +45,7 @@ def plot_linear(self):
         config["plt"]["phase_colors"] = config_dict["PLOT"]["COLOR_DICT"][
             "PHASE_COLORS"
         ]
-    plt = plots._overhang_plot(None, None, wdg)
+    plt = plots._overhang_plot(None, None, wdg)  # Possibility to add layout
     plt.plot(show=True, optimize_overhang=False)
-    item = plt.fig.getPlotItem()
-    item.titleLabel.item.setFont(config_dict["PLOT"]["FONT_NAME"])
+    # item = plt.fig.getPlotItem() # did not manage to set font
+    # item.titleLabel.item.setFont(config_dict["PLOT"]["FONT_NAME"])

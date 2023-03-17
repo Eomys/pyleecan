@@ -30,6 +30,7 @@ def plot(
     save_path=None,
     win_title=None,
     is_clean_plot=False,
+    is_winding_connection=False,
 ):
     """Plot a Lamination with Buried Magnets in a matplotlib fig
 

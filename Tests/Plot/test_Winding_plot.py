@@ -189,8 +189,20 @@ class Test_Winding_plot(object):
         )
 
     def test_plot_radial(self):
-        Toyota_Prius = load(join(DATA_DIR, "Machine", "Toyota_Prius.json"))
-        Toyota_Prius.stator.winding.plot_radial()
+        machine_list = [
+            "Toyota_Prius",
+            "Audi_eTron",
+            "Benchmark",
+            "BMW_i3",
+            "Jaguar_I_Pace",
+            "Railway_Traction",
+            "Renault_Zoe",
+            "Tesla_model_3",
+        ]
+        for machine_name in machine_list:
+            machine = load(join(DATA_DIR, "Machine", machine_name + ".json"))
+            machine.plot(is_winding_connection=True)
+            # machine.stator.winding.plot_radial()
 
     def test_plot_linear(self):
         Toyota_Prius = load(join(DATA_DIR, "Machine", "Toyota_Prius.json"))
@@ -201,6 +213,6 @@ class Test_Winding_plot(object):
 if __name__ == "__main__":
     a = Test_Winding_plot()
     # a.test_plot_mmf_unit()
-    # a.test_plot_radial()
-    a.test_plot_linear()
+    a.test_plot_radial()
+    # a.test_plot_linear()
     print("Done")
