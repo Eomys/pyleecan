@@ -71,7 +71,8 @@ class TestNotcheAddition(object):
         assert self.widget.machine.name == "Toyota_Prius"
 
         # Step 1 : Checking notch groupBox and recovering dialog
-        self.widget.nav_step.setCurrentRow(5)
+        self.widget.nav_step.setCurrentRow(3)
+        assert self.widget.nav_step.currentItem().text() == " 4: Stator Lamination"
         assert isinstance(self.widget.w_step, SLamShape)
         assert not self.widget.w_step.g_notches.isChecked()
 
@@ -204,7 +205,9 @@ class TestNotcheAddition(object):
 
         # Step 1-3 : Making sure that the groupBox and the widget are updated according to the new stator (with notches)
         self.widget.nav_step.setCurrentRow(7)
-        self.widget.nav_step.setCurrentRow(5)
+        assert self.widget.nav_step.currentItem().text() == " 8: Rotor Lamination"
+        self.widget.nav_step.setCurrentRow(3)
+        assert self.widget.nav_step.currentItem().text() == " 4: Stator Lamination"
 
         assert isinstance(self.widget.w_step, SLamShape)
         assert self.widget.w_step.g_notches.isChecked()
@@ -219,6 +222,7 @@ class TestNotcheAddition(object):
 
         # Step 2 : Adding notches on the rotor (polar)
         self.widget.nav_step.setCurrentRow(7)
+        assert self.widget.nav_step.currentItem().text() == " 8: Rotor Lamination"
 
         # Enabling notch on rotor
         assert isinstance(self.widget.w_step, SLamShape)
@@ -264,8 +268,10 @@ class TestNotcheAddition(object):
         self.widget.w_step.notches_win.b_ok.clicked.emit()
 
         # Step 2-2 : Making sure that the groupBox and the widget are updated according to the new stator (with notches)
-        self.widget.nav_step.setCurrentRow(5)
+        self.widget.nav_step.setCurrentRow(3)
+        assert self.widget.nav_step.currentItem().text() == " 4: Stator Lamination"
         self.widget.nav_step.setCurrentRow(7)
+        assert self.widget.nav_step.currentItem().text() == " 8: Rotor Lamination"
 
         assert isinstance(self.widget.w_step, SLamShape)
         assert self.widget.w_step.g_notches.isChecked()
@@ -316,7 +322,8 @@ class TestNotcheAddition(object):
         assert self.widget.machine.stator.notch in [list(), None]
 
         # Step 1 : Checking notch groupBox and recovering dialog
-        self.widget.nav_step.setCurrentRow(5)
+        self.widget.nav_step.setCurrentRow(3)
+        assert self.widget.nav_step.currentItem().text() == " 4: Stator Lamination"
         assert isinstance(self.widget.w_step, SLamShape)
         assert not self.widget.w_step.g_notches.isChecked()
 
@@ -366,7 +373,8 @@ class TestNotcheAddition(object):
         assert self.widget.machine.name == "Toyota_Prius"
 
         # Step 1 : Checking notch groupBox and recovering dialog
-        self.widget.nav_step.setCurrentRow(5)
+        self.widget.nav_step.setCurrentRow(3)
+        assert self.widget.nav_step.currentItem().text() == " 4: Stator Lamination"
         assert isinstance(self.widget.w_step, SLamShape)
         assert not self.widget.w_step.g_notches.isChecked()
 
@@ -435,7 +443,8 @@ class TestNotcheAddition(object):
         assert self.widget.machine.name == "Toyota_Prius"
 
         # Step 1 : Checking notch groupBox and recovering dialog
-        self.widget.nav_step.setCurrentRow(5)
+        self.widget.nav_step.setCurrentRow(3)
+        assert self.widget.nav_step.currentItem().text() == " 4: Stator Lamination"
         assert isinstance(self.widget.w_step, SLamShape)
         assert not self.widget.w_step.g_notches.isChecked()
 
@@ -502,7 +511,8 @@ class TestNotcheAddition(object):
         assert self.widget.machine.name == "Toyota_Prius"
 
         # Step 1 : Checking notch groupBox and recovering dialog
-        self.widget.nav_step.setCurrentRow(5)
+        self.widget.nav_step.setCurrentRow(3)
+        assert self.widget.nav_step.currentItem().text() == " 4: Stator Lamination"
         assert isinstance(self.widget.w_step, SLamShape)
         assert not self.widget.w_step.g_notches.isChecked()
 
