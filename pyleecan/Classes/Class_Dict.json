@@ -12442,7 +12442,8 @@
             "comp_surface_opening",
             "get_surface_active",
             "get_surface_opening",
-            "plot_schematics"
+            "plot_schematics",
+            "convert_to_H0_bore"
         ],
         "mother": "Slot",
         "name": "SlotCirc",
@@ -12468,6 +12469,16 @@
                 "type": "float",
                 "unit": "m",
                 "value": 0.03
+            },
+            {
+                "as_dict": "",
+                "desc": "True to define H0 from top of arc to bore radius, False top arc to middle of W0 segment",
+                "max": "",
+                "min": "",
+                "name": "is_H0_bore",
+                "type": "bool",
+                "unit": "-",
+                "value": 1
             }
         ]
     },
