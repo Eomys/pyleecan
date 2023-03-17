@@ -19,7 +19,7 @@ class Ui_PCondType11(object):
     def setupUi(self, PCondType11):
         if not PCondType11.objectName():
             PCondType11.setObjectName(u"PCondType11")
-        PCondType11.resize(939, 502)
+        PCondType11.resize(996, 583)
         self.horizontalLayout = QHBoxLayout(PCondType11)
         self.horizontalLayout.setObjectName(u"horizontalLayout")
         self.img_cond = QLabel(PCondType11)
@@ -29,7 +29,8 @@ class Ui_PCondType11(object):
         self.img_cond.setPixmap(
             QPixmap(u":/images/images/MachineSetup/WindParam/CondType11.png")
         )
-        self.img_cond.setScaledContents(True)
+        self.img_cond.setScaledContents(False)
+        self.img_cond.setAlignment(Qt.AlignCenter)
 
         self.horizontalLayout.addWidget(self.img_cond)
 
@@ -40,7 +41,7 @@ class Ui_PCondType11(object):
         self.scrollArea.setWidgetResizable(True)
         self.scrollAreaWidgetContents = QWidget()
         self.scrollAreaWidgetContents.setObjectName(u"scrollAreaWidgetContents")
-        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 268, 478))
+        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 268, 559))
         self.gridLayout_3 = QGridLayout(self.scrollAreaWidgetContents)
         self.gridLayout_3.setObjectName(u"gridLayout_3")
         self.gridLayout_2 = QGridLayout()
@@ -228,7 +229,9 @@ class Ui_PCondType11(object):
         # if QT_CONFIG(tooltip)
         self.in_Lewout.setToolTip(
             QCoreApplication.translate(
-                "PCondType11", u"End-winding length on one side for a half-turn", None
+                "PCondType11",
+                u"<qt><nobr>End-winding length on one side for a half-turn</nobr></qt>",
+                None,
             )
         )
         # endif // QT_CONFIG(tooltip)
@@ -247,7 +250,9 @@ class Ui_PCondType11(object):
         # if QT_CONFIG(tooltip)
         self.lf_Lewout.setToolTip(
             QCoreApplication.translate(
-                "PCondType11", u"End-winding length on one side for a half-turn", None
+                "PCondType11",
+                u"<qt><nobr>End-winding length on one side for a half-turn</nobr></qt>",
+                None,
             )
         )
         # endif // QT_CONFIG(tooltip)
@@ -261,7 +266,9 @@ class Ui_PCondType11(object):
         # if QT_CONFIG(tooltip)
         self.unit_Lewout.setToolTip(
             QCoreApplication.translate(
-                "PCondType11", u"End-winding length on one side for a half-turn", None
+                "PCondType11",
+                u"<qt><nobr>End-winding length on one side for a half-turn</nobr></qt>",
+                None,
             )
         )
         # endif // QT_CONFIG(tooltip)

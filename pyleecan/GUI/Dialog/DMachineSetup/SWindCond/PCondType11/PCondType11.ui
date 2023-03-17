@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>939</width>
-    <height>502</height>
+    <width>996</width>
+    <height>583</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -35,7 +35,10 @@
       <pixmap resource="../../../../Resources/pyleecan.qrc">:/images/images/MachineSetup/WindParam/CondType11.png</pixmap>
      </property>
      <property name="scaledContents">
-      <bool>true</bool>
+      <bool>false</bool>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
      </property>
     </widget>
    </item>
@@ -62,7 +65,7 @@
         <x>0</x>
         <y>0</y>
         <width>268</width>
-        <height>478</height>
+        <height>559</height>
        </rect>
       </property>
       <layout class="QGridLayout" name="gridLayout_3">
