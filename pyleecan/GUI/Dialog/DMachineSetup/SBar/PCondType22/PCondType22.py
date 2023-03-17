@@ -56,6 +56,7 @@ class PCondType22(Gen_PCondType22, QWidget):
             conductor = machine.rotor.winding.conductor
 
         self.w_mat.update(conductor, "cond_mat", self.material_dict)
+        conductor.ins_mat = None  # No insulation for Bar
 
         # Update active surface for output display
         self.machine.rotor.winding.conductor.Sbar = (
