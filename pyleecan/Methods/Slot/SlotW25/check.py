@@ -29,11 +29,11 @@ def check(self):
     Rbo = self.get_Rbo()
 
     if self.H1 == 0:
-        raise S25_W4CheckError("You must have H1>0 (use Slot 25 for H1=0)")
+        raise S25_W4CheckError("You must have H1>0 (use Slot 24 for H1=0)")
     if self.H2 == 0:
-        raise S25_W4CheckError("You must have H2>0 (use Slot 25 for H2=0)")
+        raise S25_W4CheckError("You must have H2>0 (use Slot 24 for H2=0)")
     if self.W4 == self.W3:
-        raise S25_W4CheckError("You must have W4 != W3 (use Slot 25 for W4=W3)")
+        raise S25_W4CheckError("You must have W4 != W3 (use Slot 24 for W4=W3)")
 
     if 2 * arcsin(self.W4 / (2 * Rbo)) > 2 * pi / self.Zs:
         raise S25_W4CheckError("The teeth are too wide, reduce Zs or W4")
