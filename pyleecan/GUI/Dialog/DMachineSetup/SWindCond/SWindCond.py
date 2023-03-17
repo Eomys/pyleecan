@@ -2,7 +2,7 @@
 
 
 from PySide2.QtCore import Signal
-from PySide2.QtWidgets import QMessageBox, QWidget
+from PySide2.QtWidgets import QMessageBox, QWidget, QListView
 
 from .....Classes.CondType11 import CondType11
 from .....Classes.CondType12 import CondType12
@@ -67,9 +67,10 @@ class SWindCond(Ui_SWindCond, QWidget):
 
         # Fill the combobox with the available conductor
         self.c_cond_type.clear()
+        listView = QListView(self.c_cond_type)
         for cond in name_list:
             self.c_cond_type.addItem(cond)
-
+        self.c_cond_type.setView(listView)
         # Set default conductor if conductor not set
         if (
             self.obj.winding.conductor is None
@@ -108,9 +109,15 @@ class SWindCond(Ui_SWindCond, QWidget):
             Index of the selected conductor type
         """
 
-        # Initialize the new one
+        # Initialize the new one and keep materials
+        cond_mat = self.obj.winding.conductor.cond_mat
+        ins_mat = self.obj.winding.conductor.ins_mat
+
         self.obj.winding.conductor = type_list[index]()
         self.obj.winding.conductor._set_None()
+
+        self.obj.winding.conductor.cond_mat = cond_mat
+        self.obj.winding.conductor.ins_mat = ins_mat
         # Update the GUI
         self.s_update(index)
 

@@ -46,6 +46,11 @@ class WCondOut(QGroupBox):
         self.layout.addWidget(self.out_MLT)
         self.out_MLT.setToolTip("Mean Length Turn")
 
+        self.out_Mwind = QLabel(self)
+        self.out_Mwind.setObjectName("out_Mwind")
+        self.layout.addWidget(self.out_Mwind)
+        self.out_Mwind.setToolTip("Total winding mass [kg]")
+
         self.out_Rwind = QLabel(self)
         self.out_Rwind.setObjectName("out_Rwind")
         self.layout.addWidget(self.out_Rwind)
@@ -75,6 +80,7 @@ class WCondOut(QGroupBox):
         else:
             K_txt = self.tr("Krfill = ")
         MLT_txt = "Mean Length Turn = "
+        Mwind_txt = "Winding mass = "
         Rwind_txt = "Rwind 20°C = "
 
         # We compute the output only if the conductor is correctly set
@@ -96,6 +102,10 @@ class WCondOut(QGroupBox):
             except Exception:  # Unable to compute MLT
                 MLT = "?"
             try:
+                Mwind = format(lam.comp_masses()["Mwind"], ".4g")
+            except Exception:  # Unable to compute MLT
+                Mwind = "?"
+            try:
                 Rwind = format(lam.comp_resistance_wind(T=20), ".4g")
             except Exception:  # Unable to compute MLT
                 Rwind = "?"
@@ -107,6 +117,7 @@ class WCondOut(QGroupBox):
             self.out_Sact.setText(Sa_txt + Sact + " [" + self.u.get_m2_name() + "]")
             self.out_K.setText(K_txt + K + " %")
             self.out_MLT.setText(MLT_txt + MLT + " [" + self.u.get_m_name() + "]")
+            self.out_Mwind.setText(Mwind_txt + Mwind + " [kg]")
             self.out_Rwind.setText(Rwind_txt + Rwind + " [Ohm]")
         else:
             # We can't compute the output => We erase the previous version
@@ -117,6 +128,7 @@ class WCondOut(QGroupBox):
             self.out_Sact.setText(Sa_txt + "?")
             self.out_K.setText(K_txt + "? %")
             self.out_MLT.setText(MLT_txt + "?")
+            self.out_Mwind.setText(Mwind_txt + " ?")
             self.out_Rwind.setText(Rwind_txt + "?")
 
         if parent is not None:
