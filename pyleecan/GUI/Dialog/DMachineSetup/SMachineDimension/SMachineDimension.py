@@ -231,14 +231,14 @@ class SMachineDimension(Ui_SMachineDimension, QWidget):
             if rotor.Rext is not None and stator.Rint is not None:
                 gap = stator.Rint - rotor.Rext
                 airgap = format(gap * 1000, ".6g")
-                self.out_airgap.setText(gap_txt + airgap + " mm")
+                self.out_airgap.setText(gap_txt + airgap + " [mm]")
             else:
                 self.out_airgap.setText(gap_txt + "?")
         else:
             # Update only if the needed parameters are set
             if rotor.Rint is not None and stator.Rext is not None:
                 airgap = format((rotor.Rint - stator.Rext) * 1000, ".6g")
-                self.out_airgap.setText(gap_txt + airgap + " mm")
+                self.out_airgap.setText(gap_txt + airgap + " [mm]")
             else:
                 self.out_airgap.setText(gap_txt + "?")
 
