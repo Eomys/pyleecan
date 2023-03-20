@@ -37,6 +37,7 @@ from .....Functions.Plot.set_plot_gui_icon import set_plot_gui_icon
 
 # List to convert index of combobox to slot type
 WIDGET_LIST = [
+    PWSlotUD,
     PWSlot10,
     PWSlot11,
     PWSlot12,
@@ -53,7 +54,6 @@ WIDGET_LIST = [
     PWSlot27,
     PWSlot28,
     PWSlot29,
-    PWSlotUD,
 ]
 INIT_INDEX = [wid.slot_type for wid in WIDGET_LIST]
 SLOT_NAME = [wid.slot_name for wid in WIDGET_LIST]
@@ -110,9 +110,9 @@ class SWSlot(Gen_SWSlot, QWidget):
             self.out_Slot_pitch.setText(self.out_Slot_pitch.text().replace("Zs", "Zr"))
             self.in_Zs.setText(self.in_Zs.text().replace("Zs", "Zr"))
 
-        # If the Slot is not set, initialize it with a 10
+        # If the Slot is not set, initialize it with a UD
         if self.obj.slot is None or type(self.obj.slot) is Slot:
-            self.obj.slot = SlotW10()
+            self.obj.slot = SlotUD()
             self.obj.slot._set_None()
 
         if self.obj.slot.Zs is None:
