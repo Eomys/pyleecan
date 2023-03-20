@@ -5,6 +5,7 @@ from ....Functions.labels import decode_label, WIND_LAB, BAR_LAB, LAM_LAB, WEDGE
 from ....Functions.Winding.find_wind_phase_color import find_wind_phase_color
 from ....Functions.Winding.gen_phase_list import gen_name
 from ....Functions.init_fig import init_fig
+from ....Functions.Plot import dict_2D
 from ....definitions import config_dict
 from ....Classes.WindingSC import WindingSC
 

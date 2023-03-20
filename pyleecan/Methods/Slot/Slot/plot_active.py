@@ -4,6 +4,7 @@ from numpy import array, exp, pi
 from ....definitions import config_dict
 from ....Classes.Material import Material
 from ....Functions.init_fig import init_fig
+from ....Functions.Plot import dict_2D
 from ....Functions.Winding.gen_phase_list import gen_name
 
 PHASE_COLORS = config_dict["PLOT"]["COLOR_DICT"]["PHASE_COLORS"]
