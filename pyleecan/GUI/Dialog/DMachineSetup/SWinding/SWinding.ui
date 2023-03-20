@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>993</width>
+    <width>1154</width>
     <height>837</height>
    </rect>
   </property>
@@ -33,25 +33,6 @@
       </widget>
      </item>
      <item>
-      <widget class="QLabel" name="in_wind_param">
-       <property name="maximumSize">
-        <size>
-         <width>400</width>
-         <height>16777215</height>
-        </size>
-       </property>
-       <property name="text">
-        <string/>
-       </property>
-       <property name="pixmap">
-        <pixmap resource="../../../Resources/pyleecan.qrc">:/images/images/MachineSetup/WindParam/Winding param.PNG</pixmap>
-       </property>
-       <property name="scaledContents">
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
-     <item>
       <widget class="QScrollArea" name="scrollArea">
        <property name="minimumSize">
         <size>
@@ -73,8 +54,8 @@
          <rect>
           <x>0</x>
           <y>0</y>
-          <width>247</width>
-          <height>793</height>
+          <width>268</width>
+          <height>779</height>
          </rect>
         </property>
         <layout class="QVBoxLayout" name="verticalLayout_5">
@@ -169,7 +150,7 @@
               <item row="2" column="0">
                <widget class="QLabel" name="in_coil_pitch">
                 <property name="text">
-                 <string>Coil pitch</string>
+                 <string>Throw</string>
                 </property>
                </widget>
               </item>
@@ -409,6 +390,20 @@
               </property>
              </widget>
             </item>
+            <item>
+             <widget class="QPushButton" name="b_plot_linear">
+              <property name="text">
+               <string>Plot Linear Pattern</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="b_plot_radial">
+              <property name="text">
+               <string>Plot Radial Pattern</string>
+              </property>
+             </widget>
+            </item>
            </layout>
           </widget>
          </item>
@@ -432,13 +427,6 @@
         </size>
        </property>
       </spacer>
-     </item>
-     <item>
-      <widget class="QPushButton" name="b_preview">
-       <property name="text">
-        <string>Preview</string>
-       </property>
-      </widget>
      </item>
      <item>
       <widget class="QPushButton" name="b_previous">
