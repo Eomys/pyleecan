@@ -2,6 +2,7 @@
 
 import sys
 
+import pytest
 from PySide2 import QtWidgets
 from PySide2.QtTest import QTest
 from PySide2.QtCore import Qt, QPoint
@@ -11,9 +12,6 @@ from Tests.GUI import gui_option  # Set unit as [m]
 from pyleecan.Classes.LamSlotWind import LamSlotWind
 from pyleecan.Classes.SlotW23 import SlotW23
 from pyleecan.GUI.Dialog.DMachineSetup.SWSlot.PWSlot23.PWSlot23 import PWSlot23
-
-
-import pytest
 
 
 class TestPWSlot23(object):
@@ -146,7 +144,6 @@ class TestPWSlot23(object):
         assert self.widget.slot.H1 == 0.35
         assert self.test_obj.slot.H1 == 0.35
 
-        #    @pytest.mark.GUI
         #    def test_set_H1_is_rad(setUp):
         #        """Check that the Widget allow to update H1_is_rad
         #        """

@@ -2,6 +2,7 @@
 
 import sys
 
+import pytest
 from PySide2 import QtWidgets
 from PySide2.QtTest import QTest
 from numpy import pi
@@ -11,9 +12,6 @@ from Tests.GUI import gui_option  # Set unit as [m]
 from pyleecan.Classes.LamSlotWind import LamSlotWind
 from pyleecan.Classes.SlotW11 import SlotW11
 from pyleecan.GUI.Dialog.DMachineSetup.SWSlot.PWSlot11.PWSlot11 import PWSlot11
-
-
-import pytest
 
 
 class TestPWSlot11(object):
