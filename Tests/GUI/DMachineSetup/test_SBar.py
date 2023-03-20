@@ -3,6 +3,7 @@
 import sys
 from random import uniform
 
+import pytest
 from PySide2 import QtWidgets
 from PySide2.QtTest import QTest
 
@@ -17,9 +18,6 @@ from pyleecan.GUI.Dialog.DMatLib.DMatLib import LIB_KEY, MACH_KEY
 from pyleecan.GUI.Dialog.DMachineSetup.SBar.PCondType21.PCondType21 import PCondType21
 from pyleecan.GUI.Dialog.DMachineSetup.SBar.PCondType22.PCondType22 import PCondType22
 from pyleecan.GUI.Dialog.DMachineSetup.SBar.SBar import SBar
-
-
-import pytest
 
 
 class TestSBar(object):
@@ -66,6 +64,7 @@ class TestSBar(object):
         self.test_obj = test_obj
         self.material_dict = material_dict
 
+    @pytest.mark.SCIM
     def test_init(self):
         """Check that the Widget spinbox initialise to the lamination value"""
 
@@ -100,6 +99,7 @@ class TestSBar(object):
 
         assert self.widget.c_bar_type.currentIndex() == 0
 
+    @pytest.mark.SCIM
     def test_init_Cond22(self):
         self.test_obj.rotor = LamSquirrelCage(Hscr=0.21, Lscr=0.22)
         self.test_obj.rotor.slot = SlotW22(H0=0.001, H2=0.01, W0=0.1, W2=0.2)
@@ -128,6 +128,7 @@ class TestSBar(object):
         assert self.widget.w_bar.w_out.out_Sslot.text() == "Sslot: 0.002088 [m²]"
         assert self.widget.w_bar.w_out.out_ratio.text() == "Sbar / Sslot: 100 [%]"
 
+    @pytest.mark.SCIM
     def test_set_Hscr(self):
         """Check that the Widget allow to update Hscr"""
         # Clear the field before writing the new value
@@ -138,6 +139,7 @@ class TestSBar(object):
 
         assert self.test_obj.rotor.Hscr == value
 
+    @pytest.mark.SCIM
     def test_set_Lscr(self):
         """Check that the Widget allow to update Lscr"""
         # Clear the field before writing the new value
@@ -148,6 +150,7 @@ class TestSBar(object):
 
         assert self.test_obj.rotor.Lscr == value
 
+    @pytest.mark.SCIM
     def test_set_Hbar(self):
         """Check that the Widget allow to update Hbar"""
         # Clear the field before writing the new value
@@ -158,6 +161,7 @@ class TestSBar(object):
 
         assert self.test_obj.rotor.winding.conductor.Hbar == value
 
+    @pytest.mark.SCIM
     def test_set_Wbar(self):
         """Check that the Widget allow to update Wbar"""
         # Clear the field before writing the new value
@@ -168,6 +172,7 @@ class TestSBar(object):
 
         assert self.test_obj.rotor.winding.conductor.Wbar == value
 
+    @pytest.mark.SCIM
     def test_set_Lewout(self):
         """Check that the Widget allow to update Lewout"""
         # Clear the field before writing the new value
@@ -178,6 +183,7 @@ class TestSBar(object):
 
         assert self.test_obj.rotor.winding.Lewout == value
 
+    @pytest.mark.SCIM
     def test_set_material(self):
         """Check that the combobox update the material"""
         self.widget.w_mat_scr.c_mat_type.setCurrentIndex(0)
@@ -192,6 +198,7 @@ class TestSBar(object):
         assert self.test_obj.rotor.ring_mat.name == "test3"
         assert self.test_obj.rotor.ring_mat.elec.rho == 0.33
 
+    @pytest.mark.SCIM
     def test_set_cond_type(self):
         """Check that you can change the conductor type"""
         # To remember to update the test
@@ -206,6 +213,7 @@ class TestSBar(object):
         assert type(self.widget.w_bar) is PCondType21
         assert type(self.test_obj.rotor.winding.conductor) is CondType21
 
+    @pytest.mark.SCIM
     def test_init_PCondType21(self):
         """Check that the init is setting a conductor if None"""
         self.test_obj.rotor = LamSquirrelCage(Hscr=0.21, Lscr=0.22)
@@ -218,6 +226,7 @@ class TestSBar(object):
         )
         assert type(self.widget.machine.rotor.winding.conductor) is CondType21
 
+    @pytest.mark.SCIM
     def test_init_PCondType22(self):
         """Check that the init is setting a conductor if None"""
         self.test_obj.rotor = LamSquirrelCage(Hscr=0.21, Lscr=0.22)
@@ -230,6 +239,7 @@ class TestSBar(object):
         )
         assert type(self.widget.machine.rotor.winding.conductor) is CondType22
 
+    @pytest.mark.SCIM
     def test_check(self):
         """Check that the check method return errors"""
         lam = LamSquirrelCage(Hscr=0.21, Lscr=0.22)

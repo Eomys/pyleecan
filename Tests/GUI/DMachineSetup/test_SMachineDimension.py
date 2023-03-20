@@ -3,21 +3,19 @@
 import sys
 from random import uniform
 
+import pytest
 from PySide2 import QtWidgets
 from PySide2.QtTest import QTest
 
 from pyleecan.Classes.Frame import Frame
-from pyleecan.Classes.Shaft import Shaft
 from pyleecan.Classes.LamSlotWind import LamSlotWind
+from pyleecan.Classes.MachineSCIM import MachineSCIM
 from pyleecan.Classes.Material import Material
 from pyleecan.GUI.Dialog.DMatLib.DMatLib import MACH_KEY, LIB_KEY
-from pyleecan.Classes.MachineSCIM import MachineSCIM
+from pyleecan.Classes.Shaft import Shaft
 from pyleecan.GUI.Dialog.DMachineSetup.SMachineDimension.SMachineDimension import (
     SMachineDimension,
 )
-
-
-import pytest
 
 
 class TestSMachineDimension(object):
