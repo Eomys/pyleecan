@@ -20,6 +20,21 @@ def comp_masses(self):
     M_dict = LamSlot.comp_masses(self)
 
     if self.winding is not None:
+        # Check
+        if self.winding.conductor.cond_mat.struct.rho is None:
+            if self.is_stator:
+                lam_name = "Stator"
+            else:
+                lam_name = "Rotor"
+            mat_name = str(self.winding.conductor.cond_mat.name)
+            raise Exception(
+                "Error: The "
+                + lam_name
+                + " winding conductor material ("
+                + mat_name
+                + ") is not fully defined. Please set struct.rho"
+            )
+        # Compute
         L_dict = self.comp_lengths_winding()
         Mwind = (
             self.winding.conductor.comp_surface_active()
