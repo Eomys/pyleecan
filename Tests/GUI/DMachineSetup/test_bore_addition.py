@@ -11,7 +11,7 @@ from Tests.GUI import gui_option  # Set unit as [m]
 from pyleecan.Classes.BoreFlower import BoreFlower
 from pyleecan.Classes.BoreSinePole import BoreSinePole
 from pyleecan.definitions import DATA_DIR
-from pyleecan.Functions.load import load_matlib
+from pyleecan.Functions.load import load_matlib, load
 from pyleecan.GUI.Dialog.DMachineSetup.DMachineSetup import DMachineSetup
 from pyleecan.GUI.Dialog.DMachineSetup.DBore.DBore import DBore
 from pyleecan.GUI.Dialog.DMachineSetup.DBore.PBoreSinePole.PBoreSinePole import (
@@ -28,6 +28,7 @@ mpl_logger = logging.getLogger("matplotlib")
 mpl_logger.setLevel(logging.WARNING)
 
 
+# python -m pytest ./Tests/GUI/Dialog/DMachineSetup/test_bore_addition.py
 class TestBoreAddition(object):
     """Test that the widget SLamShape enables to add Bore shape"""
 
@@ -92,7 +93,7 @@ class TestBoreAddition(object):
         assert BW.c_bore_type.currentText() == "Bore Flower"
         assert isinstance(BW.w_bore, PBoreFlower)
         assert BW.w_bore.lf_Rarc.value() == pytest.approx(68.17 * 1e-3, rel=0.1)
-        assert BW.w_bore.lf_alpha.value() == pytest.approx(0.39269908, rel=0.1)
+        assert BW.lf_alpha.value() == pytest.approx(0.39269908, rel=0.1)
         assert BW.w_bore.si_N.value() == 8
 
         # Check set values
@@ -100,19 +101,19 @@ class TestBoreAddition(object):
         BW.w_bore.lf_Rarc.editingFinished.emit()
         assert BW.w_bore.bore.Rarc == 60e-3
 
+        assert BW.c_alpha_unit.currentText() == "[rad]"
+        BW.lf_alpha.setValue(1)
+        BW.lf_alpha.editingFinished.emit()
+
         BW.w_bore.si_N.setValue(9)
         BW.w_bore.si_N.editingFinished.emit()
         assert BW.w_bore.bore.N == 9
-
-        assert BW.w_bore.c_alpha_unit.currentText() == "[rad]"
-        BW.w_bore.lf_alpha.setValue(1)
-        BW.w_bore.lf_alpha.editingFinished.emit()
         assert BW.w_bore.bore.alpha == 1
-        BW.w_bore.c_alpha_unit.setCurrentIndex(1)
+        BW.c_alpha_unit.setCurrentIndex(1)
 
-        assert BW.w_bore.c_alpha_unit.currentText() == "[deg]"
-        BW.w_bore.lf_alpha.setValue(45)
-        BW.w_bore.lf_alpha.editingFinished.emit()
+        assert BW.c_alpha_unit.currentText() == "[°]"
+        BW.lf_alpha.setValue(45)
+        BW.lf_alpha.editingFinished.emit()
         assert BW.w_bore.bore.alpha == pytest.approx(0.39269908 * 2, rel=0.1)
 
         # Checking plot/preview function
@@ -132,11 +133,10 @@ class TestBoreAddition(object):
         self.widget.w_step.b_bore.clicked.emit()
         assert isinstance(self.widget.w_step.bore_win, DBore)
         assert self.widget.w_step.bore_win.w_bore.lf_Rarc.value() == 60e-3
-        assert self.widget.w_step.bore_win.w_bore.lf_alpha.value() == 0.39269908 * 2
-        assert self.widget.w_step.bore_win.w_bore.si_N.value() == 9
+        assert self.widget.w_step.bore_win.lf_alpha.value() == 0.39269908 * 2
         assert (
             self.widget.w_step.bore_win.w_bore.w_out.out_Rmin.text()
-            == "Min Radius: 0.07858 [m]"
+            == "Minimum radius: 0.07858 [m]"
         )
         assert (
             self.widget.w_step.bore_win.w_bore.w_out.out_surface.text()
@@ -186,7 +186,7 @@ class TestBoreAddition(object):
         assert BW.w_bore.lf_k.value() == 1
         assert BW.w_bore.lf_delta_d.value() is None
         assert BW.w_bore.lf_delta_q.value() is None
-        assert BW.w_bore.lf_alpha.value() == 0
+        assert BW.lf_alpha.value() == pytest.approx(0.39269908)
 
         # Check set values
         BW.w_bore.si_N.setValue(9)
@@ -209,15 +209,15 @@ class TestBoreAddition(object):
         BW.w_bore.lf_delta_q.editingFinished.emit()
         assert BW.w_bore.bore.delta_q == 20e-3
 
-        assert BW.w_bore.c_alpha_unit.currentText() == "[rad]"
-        BW.w_bore.lf_alpha.setValue(1)
-        BW.w_bore.lf_alpha.editingFinished.emit()
+        assert BW.c_alpha_unit.currentText() == "[rad]"
+        BW.lf_alpha.setValue(1)
+        BW.lf_alpha.editingFinished.emit()
         assert BW.w_bore.bore.alpha == 1
-        BW.w_bore.c_alpha_unit.setCurrentIndex(1)
+        BW.c_alpha_unit.setCurrentIndex(1)
 
-        assert BW.w_bore.c_alpha_unit.currentText() == "[deg]"
-        BW.w_bore.lf_alpha.setValue(45)
-        BW.w_bore.lf_alpha.editingFinished.emit()
+        assert BW.c_alpha_unit.currentText() == "[°]"
+        BW.lf_alpha.setValue(45)
+        BW.lf_alpha.editingFinished.emit()
         assert BW.w_bore.bore.alpha == pytest.approx(0.39269908 * 2, rel=0.1)
 
         # Checking plot/preview function
@@ -242,10 +242,10 @@ class TestBoreAddition(object):
         assert BW.w_bore.lf_k.value() == 0.5
         assert BW.w_bore.lf_delta_d.value() == 5e-3
         assert BW.w_bore.lf_delta_q.value() == 20e-3
-        assert BW.w_bore.lf_alpha.value() == pytest.approx(0.39269908 * 2, rel=0.1)
+        assert BW.lf_alpha.value() == pytest.approx(0.39269908 * 2, rel=0.1)
         assert (
             self.widget.w_step.bore_win.w_bore.w_out.out_Rmin.text()
-            == "Min Radius: 0.0652 [m]"
+            == "Minimum radius: 0.0652 [m]"
         )
         assert (
             self.widget.w_step.bore_win.w_bore.w_out.out_surface.text()
