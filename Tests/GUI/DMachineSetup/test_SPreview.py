@@ -1,9 +1,11 @@
 import sys
-from os.path import join, isfile
+from os.path import join, isfile, isdir
+from os import makedirs
 import mock
 import pytest
 from PySide2 import QtWidgets
 
+from Tests import save_gui_path
 from pyleecan.GUI.Dialog.DMachineSetup.DMachineSetup import DMachineSetup
 from pyleecan.GUI.Dialog.DMachineSetup.SSimu.SSimu import SSimu
 from pyleecan.GUI.Dialog.DMachineSetup.SPreview.SPreview import SPreview

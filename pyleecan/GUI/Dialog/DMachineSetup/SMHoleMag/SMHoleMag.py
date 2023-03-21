@@ -162,7 +162,6 @@ class SMHoleMag(Ui_SMHoleMag, QWidget):
             )
             return
 
-
     def s_plot(self, is_show_fig=True):
         """Try to plot the lamination
 

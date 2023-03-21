@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from numpy import abs as np_abs, angle as np_angle, arcsin, exp, pi, sqrt
+from numpy import abs as np_abs, angle as np_angle, exp, sqrt
 
 
 def get_center(self):
