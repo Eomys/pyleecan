@@ -308,8 +308,7 @@ class TestNewMachineZoe(object):
         assert self.widget.w_step.w_cond.w_out.out_Sact.text() == "Scond_active = 3.142e-06 [m²]"
         assert self.widget.w_step.w_cond.w_out.out_K.text() == "Ksfill = 38.56 %"
         assert self.widget.w_step.w_cond.w_out.out_MLT.text() == "Mean Length Turn = 0.34 [m]"
-        # TODO BUG Rwind must be 0.03595 Ohm but actually not working
-        assert self.widget.w_step.w_cond.w_out.out_Rwind.text() == "Rwind 20°C = ? [Ohm]"
+        assert self.widget.w_step.w_cond.w_out.out_Rwind.text() == "Rwind 20°C = 0.01872 [Ohm]"
 
         # Is the stator winding conductors well defined ?
         assert isinstance(self.widget.w_step.machine.stator.winding.conductor, CondType12)
@@ -423,7 +422,6 @@ class TestNewMachineZoe(object):
         self.widget.w_step.b_generate.clicked.emit()
 
         assert self.widget.w_step.si_Ntcoil.value() == 45
-        # TODO BUG find why the Rotation direction does not setup as a CCW rotation but CW instead (In an imported Zoé, it does.)
         assert self.widget.w_step.out_rot_dir.text() == "Rotation direction: CW"
         assert self.widget.w_step.out_ms.text() == "Number of slots/pole/phase: 1.0"
         assert self.widget.w_step.out_Nperw.text() == "Winding periodicity: 4"
@@ -520,21 +518,18 @@ class TestNewMachineZoe(object):
         assert self.widget.w_step.tab_machine.tab_param.item(3,1).text() == "Internal Rotor"
         assert self.widget.w_step.tab_machine.tab_param.item(4,0).text() == "Stator phase number"
         assert self.widget.w_step.tab_machine.tab_param.item(4,1).text() == "3"
-
-        # TODO BUG THERE MUST BE MORE ITEMS TO CHECK BUT BUGGED FOR NOW
-        
-        # assert self.widget.w_step.tab_machine.tab_param.item(5,0).text() == "Stator winding resistance"
-        # assert self.widget.w_step.tab_machine.tab_param.item(5,1).text() == "0.01872 Ohm"
-        # assert self.widget.w_step.tab_machine.tab_param.item(6,0).text() == "Machine total mass"
-        # assert self.widget.w_step.tab_machine.tab_param.item(6,1).text() == "53.68 kg"
-        # assert self.widget.w_step.tab_machine.tab_param.item(7,0).text() == "Stator lamination mass"
-        # assert self.widget.w_step.tab_machine.tab_param.item(7,1).text() == "27.96 kg"
-        # assert self.widget.w_step.tab_machine.tab_param.item(8,0).text() == "Stator winding mass"
-        # assert self.widget.w_step.tab_machine.tab_param.item(8,1).text() == "4.563 kg"
-        # assert self.widget.w_step.tab_machine.tab_param.item(9,0).text() == "Rotor lamination mass"
-        # assert self.widget.w_step.tab_machine.tab_param.item(9,1).text() == "18.98 kg"
-        # assert self.widget.w_step.tab_machine.tab_param.item(10,0).text() == "Rotor winding mass"
-        # assert self.widget.w_step.tab_machine.tab_param.item(10,1).text() == "2.179 kg"
+        assert self.widget.w_step.tab_machine.tab_param.item(5,0).text() == "Stator winding resistance"
+        assert self.widget.w_step.tab_machine.tab_param.item(5,1).text() == "0.01872 Ohm"
+        assert self.widget.w_step.tab_machine.tab_param.item(6,0).text() == "Machine total mass"
+        assert self.widget.w_step.tab_machine.tab_param.item(6,1).text() == "53.68 kg"
+        assert self.widget.w_step.tab_machine.tab_param.item(7,0).text() == "Stator lamination mass"
+        assert self.widget.w_step.tab_machine.tab_param.item(7,1).text() == "27.96 kg"
+        assert self.widget.w_step.tab_machine.tab_param.item(8,0).text() == "Stator winding mass"
+        assert self.widget.w_step.tab_machine.tab_param.item(8,1).text() == "4.563 kg"
+        assert self.widget.w_step.tab_machine.tab_param.item(9,0).text() == "Rotor lamination mass"
+        assert self.widget.w_step.tab_machine.tab_param.item(9,1).text() == "18.98 kg"
+        assert self.widget.w_step.tab_machine.tab_param.item(10,0).text() == "Rotor winding mass"
+        assert self.widget.w_step.tab_machine.tab_param.item(10,1).text() == "2.179 kg"
 
         self.widget.w_step.tab_machine.b_plot_machine.clicked.emit()
         self.widget.w_step.tab_machine.b_mmf.clicked.emit()

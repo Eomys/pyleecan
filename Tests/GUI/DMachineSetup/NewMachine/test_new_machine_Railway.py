@@ -132,7 +132,8 @@ class TestNewMachineRailway(object):
 
         self.widget.w_step.si_Zs.setValue(36)
         self.widget.w_step.si_Zs.editingFinished.emit()
-        assert self.widget.w_step.c_slot_type.currentText() == "Slot Type 10"
+        index_slot10 = self.widget.w_step.c_slot_type.findText("Slot Type 10")
+        self.widget.w_step.c_slot_type.setCurrentIndex(index_slot10)
         self.widget.w_step.w_slot.lf_W0.setValue(0.012)
         self.widget.w_step.w_slot.lf_W0.editingFinished.emit()
         self.widget.w_step.w_slot.lf_W1.setValue(0.014)
@@ -437,19 +438,16 @@ class TestNewMachineRailway(object):
         assert self.widget.w_step.tab_machine.tab_param.item(5,1).text() == "3"
         assert self.widget.w_step.tab_machine.tab_param.item(6,0).text() == "Stator winding resistance"
         assert self.widget.w_step.tab_machine.tab_param.item(6,1).text() == "0.02392 Ohm"
-
-        # BUG don't have the following infos
-
-        # assert self.widget.w_step.tab_machine.tab_param.item(7,0).text() == "Machine total mass"
-        # assert self.widget.w_step.tab_machine.tab_param.item(7,1).text() == "342.8 kg"
-        # assert self.widget.w_step.tab_machine.tab_param.item(8,0).text() == "Stator lamination mass"
-        # assert self.widget.w_step.tab_machine.tab_param.item(8,1).text() == "143.6 kg"
-        # assert self.widget.w_step.tab_machine.tab_param.item(9,0).text() == "Stator winding mass"
-        # assert self.widget.w_step.tab_machine.tab_param.item(9,1).text() == "59.06 kg"
-        # assert self.widget.w_step.tab_machine.tab_param.item(10,0).text() == "Rotor lamination mass"
-        # assert self.widget.w_step.tab_machine.tab_param.item(10,1).text() == "97.54 kg"
-        # assert self.widget.w_step.tab_machine.tab_param.item(11,0).text() == "Rotor winding mass"
-        # assert self.widget.w_step.tab_machine.tab_param.item(11,1).text() == "21.12 kg"
+        assert self.widget.w_step.tab_machine.tab_param.item(7,0).text() == "Machine total mass"
+        assert self.widget.w_step.tab_machine.tab_param.item(7,1).text() == "327.7 kg"
+        assert self.widget.w_step.tab_machine.tab_param.item(8,0).text() == "Stator lamination mass"
+        assert self.widget.w_step.tab_machine.tab_param.item(8,1).text() == "143.6 kg"
+        assert self.widget.w_step.tab_machine.tab_param.item(9,0).text() == "Stator winding mass"
+        assert self.widget.w_step.tab_machine.tab_param.item(9,1).text() == "59.06 kg"
+        assert self.widget.w_step.tab_machine.tab_param.item(10,0).text() == "Rotor lamination mass"
+        assert self.widget.w_step.tab_machine.tab_param.item(10,1).text() == "103.9 kg"
+        assert self.widget.w_step.tab_machine.tab_param.item(11,0).text() == "Rotor winding mass"
+        assert self.widget.w_step.tab_machine.tab_param.item(11,1).text() == "21.12 kg"
 
         self.widget.w_step.tab_machine.b_plot_machine.clicked.emit()
         self.widget.w_step.tab_machine.b_mmf.clicked.emit()

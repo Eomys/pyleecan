@@ -229,7 +229,6 @@ class TestNewMachinePrius(object):
         self.widget.w_step.b_generate.clicked.emit()
 
         assert self.widget.w_step.si_Ntcoil.value() == 9
-        # TODO BUG find why the Rotation direction does not setup as a CCW rotation (In an imported toyota prius, it does.)
         assert self.widget.w_step.out_rot_dir.text() == "Rotation direction: CCW"
         assert self.widget.w_step.out_ms.text() == "Number of slots/pole/phase: 2.0"
         assert self.widget.w_step.out_Nperw.text() == "Winding periodicity: 8"
@@ -299,7 +298,6 @@ class TestNewMachinePrius(object):
         assert self.widget.w_step.w_cond.w_out.out_Sact.text() == "Scond_active = 8.492e-06 [m²]"
         assert self.widget.w_step.w_cond.w_out.out_K.text() == "Ksfill = 35.45 %"
         assert self.widget.w_step.w_cond.w_out.out_MLT.text() == "Mean Length Turn = 0.2451 [m]"
-        # TODO BUG Rwind must be 0.03595 Ohm but actually not working
         assert self.widget.w_step.w_cond.w_out.out_Rwind.text() == "Rwind 20°C = 0.03595 [Ohm]"
 
         # Is the stator winding conductors well defined ?
@@ -420,9 +418,6 @@ class TestNewMachinePrius(object):
         assert self.widget.w_step.tab_machine.tab_param.item(3,1).text() == "Internal Rotor"
         assert self.widget.w_step.tab_machine.tab_param.item(4,0).text() == "Stator phase number"
         assert self.widget.w_step.tab_machine.tab_param.item(4,1).text() == "3"
-
-        # TODO BUG THERE MUST BE MORE ITEMS TO CHECK BUT BUGGED FOR NOW
-
         assert self.widget.w_step.tab_machine.tab_param.item(5,0).text() == "Stator winding resistance"
         assert self.widget.w_step.tab_machine.tab_param.item(5,1).text() == "0.03595 Ohm"
         assert self.widget.w_step.tab_machine.tab_param.item(6,0).text() == "Machine total mass"
@@ -433,7 +428,7 @@ class TestNewMachinePrius(object):
         assert self.widget.w_step.tab_machine.tab_param.item(8,1).text() == "4.001 kg"
         assert self.widget.w_step.tab_machine.tab_param.item(9,0).text() == "Rotor lamination mass"
         assert self.widget.w_step.tab_machine.tab_param.item(9,1).text() == "5.006 kg"
-        assert self.widget.w_step.tab_machine.tab_param.item(10,0).text() == "Rotor winding mass"
+        assert self.widget.w_step.tab_machine.tab_param.item(10,0).text() == "Rotor magnet mass"
         assert self.widget.w_step.tab_machine.tab_param.item(10,1).text() == "1.236 kg"
 
         self.widget.w_step.tab_machine.b_plot_machine.clicked.emit()
