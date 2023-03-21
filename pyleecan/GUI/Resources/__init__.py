@@ -3,6 +3,9 @@
 pixmap_dict = {
     "End_Random": ":/images/images/MachineSetup/WindParam/End_Random.PNG",
     "End_Preform": ":/images/images/MachineSetup/WindParam/End_Preform.PNG",
+    "Dim_Ext_Rotor_mag": ":/images/images/MachineSetup/MachineDimension/Dimension_Stator_Rotor_mag.png",
+    "Dim_In_Rotor_No_Shaft_mag": ":/images/images/MachineSetup/MachineDimension/Dimension_Rotor_Stator_mag.png",
+    "Dim_In_Rotor_Shaft_mag": ":/images/images/MachineSetup/MachineDimension/Dimension_Shaft_Rotor_Stator_mag.png",
     "Dim_Ext_Rotor": ":/images/images/MachineSetup/MachineDimension/Dimension_Stator_Rotor.png",
     "Dim_In_Rotor_No_Shaft": ":/images/images/MachineSetup/MachineDimension/Dimension_Rotor_Stator.png",
     "Dim_In_Rotor_Shaft": ":/images/images/MachineSetup/MachineDimension/Dimension_Shaft_Rotor_Stator.png",
