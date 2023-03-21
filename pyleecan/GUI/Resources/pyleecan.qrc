@@ -106,6 +106,9 @@
     <file>images/MachineSetup/MachineDimension/Dimension_Rotor_Stator.png</file>
     <file>images/MachineSetup/MachineDimension/Dimension_Shaft_Rotor_Stator.png</file>
     <file>images/MachineSetup/MachineDimension/Dimension_Stator_Rotor.png</file>
+    <file>images/MachineSetup/MachineDimension/Dimension_Rotor_Stator_mag.png</file>
+    <file>images/MachineSetup/MachineDimension/Dimension_Shaft_Rotor_Stator_mag.png</file>
+    <file>images/MachineSetup/MachineDimension/Dimension_Stator_Rotor_mag.png</file>
     <file>images/icon/pyleecan_64.png</file>
   </qresource>
 </RCC>
