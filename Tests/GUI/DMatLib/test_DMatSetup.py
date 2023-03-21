@@ -4,20 +4,19 @@ import sys
 from os import mkdir
 from os.path import join, isdir, isfile
 import mock
-from shutil import rmtree, copyfile
 from random import uniform
+from shutil import rmtree, copyfile
 from numpy import array
+import pytest
 from PySide2 import QtWidgets
-from PySide2.QtCore import Qt
 from PySide2.QtTest import QTest
 from PySide2.QtWidgets import QMessageBox
 from pyleecan.Classes.MatMagnetics import MatMagnetics
 from pyleecan.Classes.Material import Material
 from pyleecan.Classes.ImportMatrixVal import ImportMatrixVal
 from pyleecan.GUI.Dialog.DMatLib.DMatLib import DMatLib, LIB_KEY, MACH_KEY
+from Tests.GUI import gui_option  # Set unit as [m]
 from Tests import save_load_path as save_path, TEST_DATA_DIR
-
-import pytest
 
 work_path = join(save_path, "Material")
 csv_path = join(TEST_DATA_DIR, "test_BH_Import_csv.csv")
@@ -59,6 +58,7 @@ class TestDMatSetup(object):
         test_obj.path = join(work_path, "Magnet1.json")
         test_obj.is_isotropic = True
         test_obj.elec.rho = 0.11
+        test_obj.elec.alpha = 0.1155
         test_obj.mag = MatMagnetics(mur_lin=0.12, Wlam=0.13)
         test_obj.mag.BH_curve = ImportMatrixVal(
             value=array([[0, 1], [2, 100], [3, 300], [4, 450]])
@@ -95,6 +95,7 @@ class TestDMatSetup(object):
         assert self.widget.w_setup.le_name.text() == "Magnet1"
         assert self.widget.w_setup.cb_material_type.currentText() == "Isotropic"
         assert self.widget.w_setup.lf_rho_elec.value() == 0.11
+        assert self.widget.w_setup.lf_alpha_elec.value() == 0.1155
         assert self.widget.w_setup.lf_mur_lin.value() == 0.12
         assert self.widget.w_setup.lf_Wlam.value() == 0.13
         assert self.widget.w_setup.lf_rho_meca.value() == 0.14
@@ -107,6 +108,7 @@ class TestDMatSetup(object):
         assert self.widget.w_setup.lf_cost_unit.value() == 0.21
 
         # Test Raw Material
+        backup_mat = self.material_dict[LIB_KEY][0].copy()
         self.material_dict[LIB_KEY][0].mag = None
         self.widget = DMatLib(material_dict=self.material_dict)
 
@@ -115,6 +117,7 @@ class TestDMatSetup(object):
         assert self.widget.w_setup.le_name.text() == "Magnet1"
         assert self.widget.w_setup.cb_material_type.currentText() == "Isotropic"
         assert self.widget.w_setup.lf_rho_elec.value() == 0.11
+        assert self.widget.w_setup.lf_alpha_elec.value() == 0.1155
         assert self.widget.w_setup.lf_rho_meca.value() == 0.14
         assert self.widget.w_setup.lf_E.value() == 0.15 / 1e9
         assert self.widget.w_setup.lf_nu.value() == 0.16
@@ -127,7 +130,7 @@ class TestDMatSetup(object):
         # Test Magnet material Non isotropic
         self.material_dict[LIB_KEY][0].is_isotropic = False
         self.material_dict[LIB_KEY][0].mag = MatMagnetics(
-            mur_lin=0.22, Brm20=0.23, alpha_Br=0.24
+            mur_lin=0.22, Brm20=0.23, alpha_Br=-0.24
         )
         self.widget = DMatLib(material_dict=self.material_dict)
 
@@ -136,9 +139,10 @@ class TestDMatSetup(object):
         assert self.widget.w_setup.le_name.text() == "Magnet1"
         assert self.widget.w_setup.cb_material_type.currentText() == "Orthotropic"
         assert self.widget.w_setup.lf_rho_elec.value() == 0.11
+        assert self.widget.w_setup.lf_alpha_elec.value() == 0.1155
         assert self.widget.w_setup.lf_mur_lin.value() == 0.22
         assert self.widget.w_setup.lf_Brm20.value() == 0.23
-        assert self.widget.w_setup.lf_alpha_Br.value() == 0.24
+        assert self.widget.w_setup.lf_alpha_Br.value() == -24
         assert self.widget.w_setup.lf_rho_meca.value() == 0.14
 
         assert self.widget.w_setup.lf_Ex.value() == 0.15 / 1e9
@@ -184,6 +188,11 @@ class TestDMatSetup(object):
 
         assert self.widget.w_setup.mat.struct is not None
 
+        # Test material with all at None (in particular name and alpha_Br)
+        self.material_dict[LIB_KEY][0] = backup_mat
+        self.material_dict[LIB_KEY][0]._set_None()
+        self.widget = DMatLib(material_dict=self.material_dict)
+
     def test_set_name(self):
         """Check that you can change the name and the path"""
         self.widget.w_setup.le_name.setText("Magnet2")
@@ -203,6 +212,15 @@ class TestDMatSetup(object):
         self.widget.w_setup.lf_rho_elec.editingFinished.emit()  # To trigger the slot
 
         assert self.widget.w_setup.mat.elec.rho == value
+
+    def test_set_alpha_elec(self):
+        """Check that the Widget allow to update alpha_elec"""
+        self.widget.w_setup.lf_alpha_elec.clear()  # Clear the field before writing
+        value = round(uniform(0, 1), 4)
+        QTest.keyClicks(self.widget.w_setup.lf_alpha_elec, str(value))
+        self.widget.w_setup.lf_alpha_elec.editingFinished.emit()  # To trigger the slot
+
+        assert self.widget.w_setup.mat.elec.alpha == value
 
     def test_set_mur_lin(self):
         """Check that the Widget allow to update mur_lin"""
@@ -247,11 +265,11 @@ class TestDMatSetup(object):
         self.material_dict[LIB_KEY][0].mag = MatMagnetics()
         self.widget = DMatLib(material_dict=self.material_dict)
         self.widget.w_setup.lf_alpha_Br.clear()  # Clear the field before writing
-        value = round(uniform(0, 1), 4)
+        value = -round(uniform(0, 1), 4)
         QTest.keyClicks(self.widget.w_setup.lf_alpha_Br, str(value))
         self.widget.w_setup.lf_alpha_Br.editingFinished.emit()  # To trigger the slot
 
-        assert self.widget.w_setup.mat.mag.alpha_Br == value
+        assert self.widget.w_setup.mat.mag.alpha_Br == value / 100
 
     def test_set_rho_meca(self):
         """Check that the Widget allow to update rho_meca"""
@@ -596,5 +614,6 @@ if __name__ == "__main__":
     a = TestDMatSetup()
     a.setup_class()
     a.setup_method()
-    a.test_BH_setup()
+    a.test_init()
+    # a.test_set_alpha_Br()
     print("Done")

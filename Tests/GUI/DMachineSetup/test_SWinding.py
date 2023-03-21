@@ -5,12 +5,10 @@ from os.path import join, isfile
 from random import uniform
 from PySide2 import QtWidgets
 from PySide2.QtCore import Qt
-from PySide2.QtTest import QTest
 import mock
 import pytest
 from pyleecan.Classes.LamSlotWind import LamSlotWind
 from pyleecan.Classes.MachineSCIM import MachineSCIM
-from pyleecan.Classes.MachineWRSM import MachineWRSM
 from pyleecan.Classes.SlotW22 import SlotW22
 from pyleecan.Classes.Winding import Winding
 from pyleecan.Classes.WindingUD import WindingUD
@@ -51,11 +49,18 @@ class TestSWinding(object):
         self.widget = SWinding(machine=test_obj, material_dict=dict(), is_stator=True)
         self.test_obj = test_obj
 
+        self.test_obj_2 = test_obj
+        self.test_obj.stator.winding = WindingUD()
+        self.widget_2 = SWinding(
+            machine=self.test_obj_2, material_dict=dict(), is_stator=True
+        )
+
     @classmethod
     def teardown_class(cls):
         """Exit the app after the test"""
         cls.app.quit()
 
+    @pytest.mark.SCIM
     def test_init(self):
         """Check that the Widget spinbox initialise to the lamination value"""
         assert self.widget.in_Zs.text() == "Slot number=36"
@@ -108,6 +113,7 @@ class TestSWinding(object):
         assert self.widget.machine.stator.winding.Ntcoil == 1
         assert not self.widget.machine.stator.winding.is_reverse_wind
 
+    @pytest.mark.SCIM
     def test_set_wind_type(self):
         """Check that the Widget allow to update type_winding"""
 
@@ -117,6 +123,7 @@ class TestSWinding(object):
         self.widget.c_wind_type.setCurrentIndex(0)
         assert type(self.test_obj.stator.winding) == Winding
 
+    @pytest.mark.SCIM
     def test_generate(self):
         """Check that the Widget allow to update qs"""
         self.widget.si_qs.setValue(3)
@@ -133,6 +140,7 @@ class TestSWinding(object):
         assert self.widget.out_Ncspc.text() == "Number of coils Ncspc: 6"
         assert self.widget.out_Ntspc.text() == "Number of turns Ntspc: 54"
 
+    @pytest.mark.SCIM
     def test_export_import(self):
         return_value = (
             join(save_gui_path, "test_SWinding_export.csv"),
@@ -152,8 +160,9 @@ class TestSWinding(object):
             "PySide2.QtWidgets.QFileDialog.getOpenFileName", return_value=return_value
         ):
             # To trigger the slot
-            self.widget.b_import.clicked.emit()
+            self.widget_2.b_import.clicked.emit()
 
+    @pytest.mark.SCIM
     def test_set_is_reverse(self):
         """Check that the Widget allow to update is_reverse_wind"""
         self.widget.is_reverse.setCheckState(Qt.Unchecked)
@@ -161,6 +170,7 @@ class TestSWinding(object):
         self.widget.is_reverse.setCheckState(Qt.Checked)
         assert self.test_obj.stator.winding.is_reverse_wind
 
+    @pytest.mark.SCIM
     def test_set_is_reverse_layer(self):
         """Check that the Widget allow to update is_reverse_layer"""
         self.widget.is_reverse_layer.setCheckState(Qt.Unchecked)
@@ -168,6 +178,7 @@ class TestSWinding(object):
         self.widget.is_reverse_layer.setCheckState(Qt.Checked)
         assert self.test_obj.stator.winding.is_reverse_layer
 
+    @pytest.mark.SCIM
     def test_set_is_permute_B_C(self):
         """Check that the Widget allow to update is_permute_B_C"""
         self.widget.is_permute_B_C.setCheckState(Qt.Unchecked)
@@ -175,6 +186,7 @@ class TestSWinding(object):
         self.widget.is_permute_B_C.setCheckState(Qt.Checked)
         assert self.test_obj.stator.winding.is_permute_B_C
 
+    @pytest.mark.SCIM
     def test_set_is_change_layer(self):
         """Check that the Widget allow to update is_change_layer"""
         self.widget.is_change_layer.setCheckState(Qt.Unchecked)
@@ -182,24 +194,25 @@ class TestSWinding(object):
         self.widget.is_change_layer.setCheckState(Qt.Checked)
         assert self.test_obj.stator.winding.is_change_layer
 
+    @pytest.mark.SCIM
     def test_set_Nslot(self):
         """Check that the Widget allow to update Nslot"""
         self.widget.si_Nslot.clear()  # Clear the field before writing
         value = int(uniform(0, 100))
-        QTest.keyClicks(self.widget.si_Nslot, str(value))
-        self.widget.si_Nslot.editingFinished.emit()  # To trigger the slot
+        self.widget.si_Nslot.setValue(value)
 
         assert self.test_obj.stator.winding.Nslot_shift_wind == value
 
+    @pytest.mark.SCIM
     def test_set_Npcp(self):
         """Check that the Widget allow to update Npcp"""
         self.widget.si_Npcp.clear()  # Clear the field before writing
         value = int(uniform(1, 3))
-        QTest.keyClicks(self.widget.si_Npcp, str(value))
-        self.widget.si_Npcp.editingFinished.emit()  # To trigger the slot
+        self.widget.si_Npcp.setValue(value)
 
         assert self.test_obj.stator.winding.Npcp == value
 
+    @pytest.mark.SCIM
     def test_check(self):
         """Check that the check works correctly"""
         rotor = LamSlotWind()
@@ -224,4 +237,5 @@ if __name__ == "__main__":
     # a.test_set_Nslot()
     # a.test_set_Npcp()
     # a.test_check()
+    a.teardown_class()
     print("Done")
