@@ -149,7 +149,7 @@ def test_FEMM_Loss_Jaguar():
 
     out = simu.run()
 
-    out.loss.loss_dict["overall"] =sum(out.loss.loss_dict.values())
+    out.loss.loss_dict["overall"] = sum(out.loss.loss_dict.values())
 
     print(out.loss.get_power_dict())
 

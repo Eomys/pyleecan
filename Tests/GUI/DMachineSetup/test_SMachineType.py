@@ -44,13 +44,14 @@ class TestSMachineType(object):
             is_stator=False, is_internal=True, Rint=0.11, Rext=0.12
         )
 
-        self.widget = SMachineType(machine=self.test_obj, material_dict=dict(), is_stator=False)
+        self.widget = SMachineType(
+            machine=self.test_obj, material_dict=dict(), is_stator=False
+        )
 
     @classmethod
     def teardown_class(cls):
         """Exit the app after the test"""
         cls.app.quit()
-
 
     @pytest.mark.SCIM
     @pytest.mark.IPMSM
@@ -393,6 +394,7 @@ class TestSMachineType(object):
         self.test_obj.stator.winding = None
 
         assert self.widget.check(self.test_obj) == "Missing stator winding"
+
 
 if __name__ == "__main__":
     a = TestSMachineType()

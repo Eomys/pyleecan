@@ -19,7 +19,12 @@ from pyleecan.GUI.Dialog.DMachineSetup.DAVDuct.PVentPolar.PVentPolar import (
 from pyleecan.GUI.Dialog.DMachineSetup.DAVDuct.PVentTrap.PVentTrap import (
     PVentTrap,
 )
-from Tests.GUI.DMachineSetup.DAVDuct import VENT_CIRC_INDEX, VENT_POLAR_INDEX, VENT_TRAP_INDEX
+from Tests.GUI.DMachineSetup.DAVDuct import (
+    VENT_CIRC_INDEX,
+    VENT_POLAR_INDEX,
+    VENT_TRAP_INDEX,
+)
+
 
 class TestDAVDuct(object):
     """Test that the widget DAVDuct behave like it should"""
@@ -27,7 +32,7 @@ class TestDAVDuct(object):
     @classmethod
     def setup_class(cls):
         """Start the app for the test"""
-        print("\nStart Test TestSMSlot")
+        print("\nStart Test TestDAVDuct")
         if not QtWidgets.QApplication.instance():
             cls.app = QtWidgets.QApplication(sys.argv)
         else:
@@ -75,17 +80,24 @@ class TestDAVDuct(object):
 
         # First set
         assert type(self.widget.tab_vent.widget(0).w_vent) == PVentCirc
-        assert self.widget.tab_vent.widget(0).c_vent_type.currentIndex() == VENT_CIRC_INDEX
+        assert (
+            self.widget.tab_vent.widget(0).c_vent_type.currentIndex() == VENT_CIRC_INDEX
+        )
         assert self.widget.tab_vent.widget(0).w_vent.si_Zh.value() == 8
 
         # 2nd set
         assert type(self.widget.tab_vent.widget(1).w_vent) == PVentTrap
-        assert self.widget.tab_vent.widget(1).c_vent_type.currentIndex() == VENT_TRAP_INDEX
+        assert (
+            self.widget.tab_vent.widget(1).c_vent_type.currentIndex() == VENT_TRAP_INDEX
+        )
         assert self.widget.tab_vent.widget(1).w_vent.si_Zh.value() == 4
 
         # 3rd set
         assert type(self.widget.tab_vent.widget(2).w_vent) == PVentPolar
-        assert self.widget.tab_vent.widget(2).c_vent_type.currentIndex() == VENT_POLAR_INDEX
+        assert (
+            self.widget.tab_vent.widget(2).c_vent_type.currentIndex()
+            == VENT_POLAR_INDEX
+        )
         assert self.widget.tab_vent.widget(2).w_vent.si_Zh.value() == 3
 
 
