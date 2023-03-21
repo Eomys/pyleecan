@@ -11,6 +11,7 @@ from .....GUI.Dialog.DMachineSetup.SMHoleMag.Ui_SMHoleMag import Ui_SMHoleMag
 from .....GUI.Dialog.DMachineSetup.SMHoleMag.WHoleMag.WHoleMag import WHoleMag
 from .....Methods.Slot.Slot import SlotCheckError
 from .....Functions.Plot.set_plot_gui_icon import set_plot_gui_icon
+from numpy import pi
 
 
 class SMHoleMag(Ui_SMHoleMag, QWidget):
@@ -73,8 +74,8 @@ class SMHoleMag(Ui_SMHoleMag, QWidget):
         self.b_help.hide()
 
         # Connect the slot
+        self.tab_hole.tabCloseRequested.connect(self.s_remove)
         self.b_add.clicked.connect(self.s_add)
-        self.b_remove.clicked.connect(self.s_remove)
 
         self.b_plot.clicked.connect(self.s_plot)
 
@@ -97,7 +98,13 @@ class SMHoleMag(Ui_SMHoleMag, QWidget):
             self.out_hole_pitch.setText(Zh_txt + "?")
         else:
             hole_pitch = 360.0 / Zh
-            self.out_hole_pitch.setText(Zh_txt + "%.4g" % (hole_pitch) + " °")
+            self.out_hole_pitch.setText(
+                Zh_txt
+                + "%.4g" % (hole_pitch)
+                + " [°] = "
+                + "%.4g" % (hole_pitch * pi / 180)
+                + " [rad]"
+            )
 
     def s_add(self, hole=False):
         """Signal to add a new hole
@@ -134,7 +141,7 @@ class SMHoleMag(Ui_SMHoleMag, QWidget):
         tab.saveNeeded.connect(self.emit_save)
         self.tab_hole.addTab(tab, "Hole Set " + str(hole_index + 1))
 
-    def s_remove(self):
+    def s_remove(self, index):
         """Signal to remove the last hole
 
         Parameters
@@ -143,10 +150,20 @@ class SMHoleMag(Ui_SMHoleMag, QWidget):
             a SMHoleMag object
         """
         if len(self.obj.hole) > 1:
-            self.tab_hole.removeTab(len(self.obj.hole) - 1)
-            self.obj.hole.pop(-1)
+            self.tab_hole.removeTab(index)
+            self.obj.hole.pop(index)
 
-    def s_plot(self):
+            self.emit_save()
+        else:
+            QMessageBox().warning(
+                self,
+                self.tr("Warning"),
+                "Impossible to remove the hole as it is the last one defined",
+            )
+            return
+
+
+    def s_plot(self, is_show_fig=True):
         """Try to plot the lamination
 
         Parameters
@@ -167,7 +184,7 @@ class SMHoleMag(Ui_SMHoleMag, QWidget):
             QMessageBox().critical(self, self.tr("Error"), err_msg)
         else:  # No error => Plot the lamination
             try:
-                self.obj.plot(is_show_fig=True)
+                self.obj.plot(is_show_fig=is_show_fig)
                 set_plot_gui_icon()
             except Exception as e:
                 err_msg = "Error while plotting Lamination in Hole definition:\n" + str(

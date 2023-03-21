@@ -2,13 +2,14 @@
 
 
 from PySide2.QtCore import Signal
-from PySide2.QtWidgets import QWidget
+from PySide2.QtWidgets import QWidget, QListView
 
 from .....GUI import gui_option
 from .....GUI.Dialog.DMachineSetup.SBar.Gen_SBar import Gen_SBar
 from .....GUI.Dialog.DMachineSetup.SBar.PCondType21.PCondType21 import PCondType21
 from .....GUI.Dialog.DMachineSetup.SBar.PCondType22.PCondType22 import PCondType22
 from .....Functions.Plot.set_plot_gui_icon import set_plot_gui_icon
+from .....Functions.GUI.log_error import log_error
 
 # Information to fill the conductor type combobox
 WIDGET_LIST = [PCondType21, PCondType22]
@@ -64,6 +65,17 @@ class SBar(Gen_SBar, QWidget):
         ):
             self.machine.rotor.winding.qs = self.machine.rotor.slot.Zs
 
+        # Update winding
+        if (
+            self.machine.rotor.slot.Zs is not None
+            and self.machine.rotor.winding.qs is None
+        ):
+            self.machine.rotor.winding.qs = self.machine.rotor.slot.Zs
+        if self.machine.rotor.winding.Npcp is None:
+            self.machine.rotor.winding.Npcp = 1
+        if self.machine.rotor.winding.Ntcoil is None:
+            self.machine.rotor.winding.Ntcoil = 1
+
         # Set materials
         self.w_mat_scr.def_mat = "Copper1"
         self.w_mat_scr.setText("Ring material")
@@ -76,7 +88,9 @@ class SBar(Gen_SBar, QWidget):
         self.lf_Lewout.setValue(machine.rotor.winding.Lewout)
 
         # Fill the combobox
+        listView = QListView(self.c_bar_type)
         self.c_bar_type.clear()
+        self.c_bar_type.setView(listView)
         for cond in COND_NAME:
             self.c_bar_type.addItem(cond)
         # Initialize the needed conductor page
@@ -151,21 +165,23 @@ class SBar(Gen_SBar, QWidget):
         index : int
             Index of the selected conductor type
         """
+        try:
+            # Remove the old widget
+            self.g_bar.layout().removeWidget(self.w_bar)
+            self.w_bar.setParent(None)
 
-        # Remove the old widget
-        self.g_bar.layout().removeWidget(self.w_bar)
-        self.w_bar.setParent(None)
+            # Initialize the new widget and conductor
+            self.machine.rotor.winding.conductor = INIT_INDEX[index]()
+            self.machine.rotor.winding.conductor._set_None()
 
-        # Initialize the new widget and conductor
-        self.machine.rotor.winding.conductor = INIT_INDEX[index]()
-        self.machine.rotor.winding.conductor._set_None()
-
-        self.w_bar = WIDGET_LIST[index](self.machine, self.material_dict)
-        self.w_bar.saveNeeded.connect(self.emit_save)
-        # Refresh the GUi
-        self.g_bar.layout().addWidget(self.w_bar)
-        # Notify the machine GUI that the machine has changed
-        self.saveNeeded.emit()
+            self.w_bar = WIDGET_LIST[index](self.machine, self.material_dict)
+            self.w_bar.saveNeeded.connect(self.emit_save)
+            # Refresh the GUi
+            self.g_bar.layout().addWidget(self.w_bar)
+            # Notify the machine GUI that the machine has changed
+            self.saveNeeded.emit()
+        except Exception as e:
+            log_error(self, "Error while selecting bar type:\n" + str(e))
 
     def s_plot(self):
         """Try to plot the machine
@@ -201,6 +217,10 @@ class SBar(Gen_SBar, QWidget):
                 return "You must set Lscr !"
             elif lamination.winding.Lewout is None:
                 return "You must set Lewout !"
+            elif lamination.ring_mat.name is None:
+                return "You must set the ring material !"
+            elif lamination.winding.conductor.cond_mat is None:
+                return "You must set the bar material !"
 
             if type(lamination.winding.conductor) is INIT_INDEX[0]:
                 if lamination.winding.conductor.Hbar is None:

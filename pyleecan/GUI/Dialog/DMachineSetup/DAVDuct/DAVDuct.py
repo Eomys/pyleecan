@@ -1,8 +1,6 @@
-﻿# -*- coding: utf-8 -*-
-
-
 from PySide2.QtCore import Qt
-from PySide2.QtWidgets import QDialog, QMessageBox
+from PySide2.QtWidgets import QDialog, QMessageBox, QShortcut
+from PySide2.QtGui import QKeySequence
 
 from .....Classes.Lamination import Lamination
 from .....Classes.VentilationCirc import VentilationCirc
@@ -26,13 +24,12 @@ class DAVDuct(Ui_DAVDuct, QDialog):
         """
         # Build the interface according to the .ui file
         QDialog.__init__(self)
-        self.setupUi(self)
+        self.setWindowFlag(Qt.WindowMinimizeButtonHint, True)
         self.setWindowFlag(Qt.WindowMaximizeButtonHint, True)
+        self.setupUi(self)
 
         self.obj = lamination  # Current object
-        self.lam = Lamination(
-            init_dict=Lamination.as_dict(lamination)
-        )  # Copy to modify
+        self.lam = lamination.copy()  # Copy to modify
 
         # Init the GUI
         if len(self.lam.axial_vent) == 0:  # No vent => init circle
@@ -40,20 +37,25 @@ class DAVDuct(Ui_DAVDuct, QDialog):
             self.lam.axial_vent[0]._set_None()
 
         self.tab_vent.clear()
-        for vent in self.lam.axial_vent:
-            self.s_add(vent)
+        for idx_vent, vent in enumerate(self.lam.axial_vent):
+            self.s_add(vent, idx_vent)
         self.tab_vent.setCurrentIndex(0)
 
         # Set Help URL
         self.b_help.hide()
 
         self.b_new.clicked.connect(self.s_add)
-        self.b_remove.clicked.connect(self.s_remove)
+        self.tab_vent.tabCloseRequested.connect(self.s_remove)
         self.b_plot.clicked.connect(self.plot)
         self.b_cancel.clicked.connect(self.reject)
         self.b_ok.clicked.connect(self.valid_vent)
 
-    def s_add(self, vent=False):
+    def keyPressEvent(self, event):
+        if event.text() == "\r":
+            self.valid_vent()
+        event.accept()
+
+    def s_add(self, vent=False, idx_vent=None):
         """Signal to add a new hole
 
         Parameters
@@ -71,11 +73,11 @@ class DAVDuct(Ui_DAVDuct, QDialog):
             self.lam.axial_vent.append(vent_obj)
             index = len(self.lam.axial_vent) - 1
         else:
-            index = self.lam.axial_vent.index(vent)
+            index = idx_vent
         tab = WVent(self.lam, index=index)
         self.tab_vent.addTab(tab, "Set " + str(index + 1))
 
-    def s_remove(self):
+    def s_remove(self, index):
         """Signal to remove the last hole
 
         Parameters
@@ -84,8 +86,13 @@ class DAVDuct(Ui_DAVDuct, QDialog):
             a DAVDuct object
         """
         if len(self.lam.axial_vent) > 1:
-            self.tab_vent.removeTab(len(self.lam.axial_vent) - 1)
-            self.lam.axial_vent.pop(-1)
+            self.tab_vent.removeTab(index)
+            self.lam.axial_vent.pop(index)
+
+        self.tab_vent.clear()
+        for idx_vent, vent in enumerate(self.lam.axial_vent):
+            self.s_add(vent, idx_vent)
+        self.tab_vent.setCurrentIndex(0)
 
     def plot(self):
         """Plot the ventilation ducts according to the table

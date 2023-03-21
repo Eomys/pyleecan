@@ -6,33 +6,20 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>767</width>
-    <height>630</height>
+    <width>771</width>
+    <height>639</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Set axial cooling duct</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="../../../../Resources/pyleecan.qrc">
+   <iconset>
     <normaloff>:/images/images/icon/pyleecan_64.png</normaloff>:/images/images/icon/pyleecan_64.png</iconset>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout_2">
-     <item>
-      <spacer name="horizontalSpacer">
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>40</width>
-         <height>20</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
      <item>
       <widget class="QPushButton" name="b_new">
        <property name="text">
@@ -41,19 +28,9 @@
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="b_remove">
-       <property name="text">
-        <string>Remove Last Set</string>
-       </property>
-      </widget>
-     </item>
-     <item>
       <widget class="HelpButton" name="b_help">
        <property name="text">
         <string/>
-       </property>
-       <property name="pixmap">
-        <pixmap resource="../../../../Resources/pyleecan.qrc">:/images/images/icon/help_16.png</pixmap>
        </property>
       </widget>
      </item>
@@ -74,6 +51,12 @@
    </item>
    <item>
     <widget class="QTabWidget" name="tab_vent">
+     <property name="currentIndex">
+      <number>0</number>
+     </property>
+     <property name="tabsClosable">
+      <bool>true</bool>
+     </property>
      <widget class="QWidget" name="tab">
       <attribute name="title">
        <string>Tab 1</string>

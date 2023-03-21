@@ -14,18 +14,18 @@ from pyleecan.GUI.Dialog.DMachineSetup.SMSlot.WSlotCirc.WSlotCirc import WSlotCi
 import pytest
 
 
-class TestPMSlot10(object):
-    """Test that the widget PMSlot10 behave like it should"""
+class TestSlotCirc(object):
+    """Test that the widget SlotCirc behave like it should"""
 
     def setup_method(self):
         self.test_obj = LamSlotMag(Rint=0.1, Rext=0.2)
-        self.test_obj.slot = SlotCirc(H0=10e-3, W0=45e-3)
+        self.test_obj.slot = SlotCirc(H0=10e-3, W0=45e-3, is_H0_bore=False)
         self.widget = WSlotCirc(self.test_obj)
 
     @classmethod
     def setup_class(cls):
         """Start the app for the test"""
-        print("\nStart Test TestPMSlot10")
+        print("\nStart Test TestSlotCirc")
         if not QtWidgets.QApplication.instance():
             cls.app = QtWidgets.QApplication(sys.argv)
         else:
@@ -41,6 +41,8 @@ class TestPMSlot10(object):
 
         assert self.widget.lf_H0.value() == 0.01
         assert self.widget.lf_W0.value() == 0.045
+        assert self.widget.c_H0_bore.currentIndex() == 1
+        assert self.widget.c_H0_bore.currentText() == "Opening Segment"
 
     def test_set_W0(self):
         """Check that the Widget allow to update W0"""
@@ -66,11 +68,26 @@ class TestPMSlot10(object):
         assert self.widget.slot.H0 == 0.34
         assert self.test_obj.slot.H0 == 0.34
 
+    def test_set_H0_bore(self):
+        """Check that the Widget allow to update is_H0_bore"""
+        assert not self.test_obj.slot.is_H0_bore
+        self.widget.c_H0_bore.setCurrentIndex(0)
+        assert self.widget.c_H0_bore.currentText() == "Opening Arc"
+
+        assert self.test_obj.slot.is_H0_bore
+        self.widget.c_H0_bore.setCurrentIndex(1)
+        assert self.widget.c_H0_bore.currentText() == "Opening Segment"
+        assert not self.test_obj.slot.is_H0_bore
+
     def test_output_txt(self):
         """Check that the Output text is computed and correct"""
-        self.test_obj.slot = SlotCirc(H0=10e-3, W0=45e-3)
+        self.test_obj.slot = SlotCirc(H0=10e-3, W0=45e-3, is_H0_bore=False)
         self.widget = WSlotCirc(self.test_obj)
         assert self.widget.w_out.out_slot_height.text() == "Slot height: 0.01127 [m]"
+
+        self.test_obj.slot = SlotCirc(H0=10e-3, W0=45e-3, is_H0_bore=True)
+        self.widget = WSlotCirc(self.test_obj)
+        assert self.widget.w_out.out_slot_height.text() == "Slot height: 0.01 [m]"
 
     def test_check(self):
         """Check that the check is working correctly"""
@@ -85,7 +102,7 @@ class TestPMSlot10(object):
 
 
 if __name__ == "__main__":
-    a = TestPMSlot10()
+    a = TestSlotCirc()
     a.setup_class()
     a.setup_method()
     a.test_init()

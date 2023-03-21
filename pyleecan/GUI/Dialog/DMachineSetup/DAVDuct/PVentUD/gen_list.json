@@ -7,14 +7,5 @@
             "si_Zh"
         ],
         "xls": "Slot"
-    },
-    {
-        "cls": "Hole",
-        "name": "Alpha0",
-        "widget": [
-            "in_Alpha0",
-            "lf_Alpha0"
-        ],
-        "xls": "Slot"
     }
 ]

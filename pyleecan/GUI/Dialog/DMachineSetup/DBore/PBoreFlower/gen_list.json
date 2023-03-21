@@ -16,14 +16,5 @@
             "lf_Rarc"
         ],
         "xls": "Machine"
-    },
-    {
-        "cls": "BoreFlower",
-        "name": "alpha",
-        "widget": [
-            "in_alpha",
-            "lf_alpha"
-        ],
-        "xls": "Machine"
     }
 ]

@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from numpy import pi
+from PySide2.QtCore import Qt
 from PySide2.QtCore import Signal
 from PySide2.QtWidgets import QMessageBox, QDialog
 from logging import getLogger
@@ -42,6 +43,8 @@ class DBore(Ui_DBore, QDialog):
 
         # Build the interface according to the .ui file
         QDialog.__init__(self)
+        self.setWindowFlag(Qt.WindowMinimizeButtonHint, True)
+        self.setWindowFlag(Qt.WindowMaximizeButtonHint, True)
         self.setupUi(self)
 
         # Saving arguments
@@ -65,6 +68,9 @@ class DBore(Ui_DBore, QDialog):
                 Rarc=self.obj.get_Rbo() * 0.85,
                 alpha=pi / (2 * self.obj.get_pole_pair_number()),
             )
+        if self.lam.bore.alpha is None:
+            self.lam.bore.alpha = 0
+        self.lf_alpha.setValue(self.lam.bore.alpha)
 
         # Set the correct index for the type checkbox and display the object
         index = INIT_INDEX.index(type(self.lam.bore))
@@ -75,6 +81,8 @@ class DBore(Ui_DBore, QDialog):
 
         # Connect the bore
         self.c_bore_type.currentIndexChanged.connect(self.s_change_bore)
+        self.lf_alpha.editingFinished.connect(self.set_alpha)
+        self.c_alpha_unit.currentIndexChanged.connect(self.set_alpha)
         self.b_plot.clicked.connect(self.s_plot)
         self.b_cancel.clicked.connect(self.reject)
         self.b_ok.clicked.connect(self.valid_bore)
@@ -96,6 +104,21 @@ class DBore(Ui_DBore, QDialog):
 
     def emit_save(self):
         """Send a saveNeeded signal to the DMachineSetup"""
+        self.saveNeeded.emit()
+
+    def set_alpha(self):
+        """Signal to update the value of alpha according to the line edit
+
+        Parameters
+        ----------
+        self : DBore
+            A DBore object
+        """
+        if self.c_alpha_unit.currentIndex() == 0:  # rad
+            self.lam.bore.alpha = self.lf_alpha.value()
+        else:  # deg
+            self.lam.bore.alpha = self.lf_alpha.value() * pi / 180
+        # Notify the machine GUI that the machine has changed
         self.saveNeeded.emit()
 
     def set_bore_type(self, index):

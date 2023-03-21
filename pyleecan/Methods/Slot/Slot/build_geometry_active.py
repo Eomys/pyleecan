@@ -48,7 +48,9 @@ def build_geometry_active(self, Nrad, Ntan, alpha=0, delta=0):
         inter_list.pop(0)
         inter_list.pop(1)
 
-    assert len(inter_list) == 2
+    assert (
+        len(inter_list) == 2
+    ), "Can't find the two points of the intersection with 0x axis"
 
     if abs(inter_list[0]) < abs(inter_list[1]) and self.is_outwards():
         Ztan1 = inter_list[0]

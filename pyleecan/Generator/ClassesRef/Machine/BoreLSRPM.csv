@@ -1,8 +1,7 @@
 Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,as_dict Type
-N,-,Number of flower arc,,int,8,0,
-Rarc,m,Radius of the flower arc,,float,"0,0375",0,
-W1,m,Width of segement,,float,"0,0035",,
-alpha,rad,Angular offset,,float,0,,
+N,-,Number of flower arc,,int,8,0,,
+Rarc,m,Radius of the flower arc,,float,"0,0375",0,,
+W1,m,Width of segement,,float,"0,0035",,,
 ,
 Package,Inherit,Methods,Constant Name,Constant Value,Class description
 Machine,Bore,get_bore_line,VERSION,1,Class for Bore LSRPM

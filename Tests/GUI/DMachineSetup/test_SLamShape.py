@@ -3,23 +3,17 @@
 import sys
 from random import uniform
 
+import pytest
 from PySide2 import QtWidgets
 from PySide2.QtTest import QTest
 
-from pyleecan.Classes.LamHole import LamHole
-from pyleecan.Classes.LamSlotMag import LamSlotMag
 from pyleecan.Classes.LamSlotWind import LamSlotWind
-from pyleecan.Classes.MachineIPMSM import MachineIPMSM
 from pyleecan.Classes.MachineSCIM import MachineSCIM
-from pyleecan.Classes.MachineSIPMSM import MachineSIPMSM
+from pyleecan.Classes.Material import Material
 from pyleecan.Classes.VentilationCirc import VentilationCirc
 from pyleecan.Classes.VentilationTrap import VentilationTrap
-from pyleecan.Classes.Material import Material
 from pyleecan.GUI.Dialog.DMatLib.DMatLib import LIB_KEY, MACH_KEY
 from pyleecan.GUI.Dialog.DMachineSetup.SLamShape.SLamShape import SLamShape
-
-
-import pytest
 
 
 class TestSLamShape(object):
@@ -70,6 +64,7 @@ class TestSLamShape(object):
 
         self.app.quit()
 
+    @pytest.mark.SCIM
     def test_init(self, setup):
         """Check that the Widget spinbox initialise to the lamination value"""
 
@@ -85,6 +80,7 @@ class TestSLamShape(object):
         assert setup["widget2"].si_Nrvd.value() == 22
         assert setup["widget2"].w_mat.c_mat_type.currentIndex() == 1
 
+    @pytest.mark.SCIM
     def test_set_L1(self, setup):
         """Check that the Widget allow to update L1"""
         # Clear the field before writing the new value
@@ -102,6 +98,7 @@ class TestSLamShape(object):
         assert setup["test_obj"].stator.L1 == value_1
         assert setup["test_obj"].rotor.L1 == value_2
 
+    @pytest.mark.SCIM
     def test_set_Kf1(self, setup):
         """Check that the Widget allow to update Kf1"""
         # Clear the field before writing the new value
@@ -119,6 +116,7 @@ class TestSLamShape(object):
         assert setup["test_obj"].stator.Kf1 == value_1
         assert setup["test_obj"].rotor.Kf1 == value_2
 
+    @pytest.mark.SCIM
     def test_set_Wrvd(self, setup):
         """Check that the Widget allow to update Wrvd"""
         # Clear the field before writing the new value
@@ -136,23 +134,23 @@ class TestSLamShape(object):
         assert setup["test_obj"].stator.Wrvd == value_1
         assert setup["test_obj"].rotor.Wrvd == value_2
 
+    @pytest.mark.SCIM
     def test_set_Nrvd(self, setup):
         """Check that the Widget allow to update Nrvd"""
         # Clear the field before writing the new value
         setup["widget"].si_Nrvd.clear()
         value_1 = int(uniform(1, 10))
-        QTest.keyClicks(setup["widget"].si_Nrvd, str(value_1))
-        setup["widget"].si_Nrvd.editingFinished.emit()  # To trigger the slot
+        setup["widget"].si_Nrvd.setValue(value_1)
 
         # Clear the field before writing the new value
         setup["widget2"].si_Nrvd.clear()
         value_2 = int(uniform(1, 10))
-        QTest.keyClicks(setup["widget2"].si_Nrvd, str(value_2))
-        setup["widget2"].si_Nrvd.editingFinished.emit()  # To trigger the slot
+        setup["widget2"].si_Nrvd.setValue(value_2)
 
         assert setup["test_obj"].stator.Nrvd == value_1
         assert setup["test_obj"].rotor.Nrvd == value_2
 
+    @pytest.mark.SCIM
     def test_set_material(self, setup):
         """Check that the combobox update the material"""
         setup["widget"].w_mat.c_mat_type.setCurrentIndex(0)
@@ -163,6 +161,7 @@ class TestSLamShape(object):
         assert setup["test_obj"].rotor.mat_type.name == "test3"
         assert setup["test_obj"].rotor.mat_type.elec.rho == 0.33
 
+    @pytest.mark.SCIM
     def test_clean_vent(self, setup):
         """Test that you can clean the ventilation"""
 
@@ -181,6 +180,7 @@ class TestSLamShape(object):
         setup["widget"].g_axial.setChecked(False)
         assert setup["test_obj"].stator.axial_vent == list()
 
+    @pytest.mark.SCIM
     def test_text_vent(self, setup):
         """Test the text avd"""
         assert setup["widget"].out_axial_duct.text() == "Axial: 0 set (0 ducts)"

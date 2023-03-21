@@ -1,5 +1,10 @@
+from PySide2.QtCore import Signal
+from PySide2.QtWidgets import QWidget
+
+from .....GUI.Dialog.DMatLib.DMatLib import DMatLib
 from .....GUI.Dialog.DMatLib.WMatSelect.Ui_WMatSelect import Ui_WMatSelect
 from .....GUI.Dialog.DMatLib.DMatLib import DMatLib, LIB_KEY, MACH_KEY
+from .....Functions.GUI.log_error import log_error
 from PySide2.QtWidgets import QWidget
 from PySide2.QtCore import Signal
 from .....Classes.Machine import Machine
@@ -78,12 +83,6 @@ class WMatSelect(Ui_WMatSelect, QWidget):
         self.mat_attr_name = mat_attr_name
         self.material_dict = material_dict
 
-        # Get machine object to update the materials
-        parent = obj.parent
-        while parent is not None and not isinstance(parent, Machine):
-            parent = parent.parent
-        self.machine = parent
-
         if self.is_hide_button:
             self.b_matlib.hide()
         else:
@@ -97,6 +96,17 @@ class WMatSelect(Ui_WMatSelect, QWidget):
         # Add machine-specific materials
         items_to_add.extend([mat.name for mat in material_dict[MACH_KEY]])
         self.c_mat_type.addItems(items_to_add)
+
+        if self.obj is None:  # Removed magnet case PHoleM51
+            self.c_mat_type.setCurrentIndex(-1)
+            self.c_mat_type.blockSignals(False)
+            return
+
+        # Get machine object to update the materials
+        parent = obj.parent
+        while parent is not None and not isinstance(parent, Machine):
+            parent = parent.parent
+        self.machine = parent
 
         mat = getattr(self.obj, mat_attr_name, None)
         if mat is None or mat.name is None:
@@ -130,7 +140,7 @@ class WMatSelect(Ui_WMatSelect, QWidget):
         """
         self.in_mat_type.setText(txt)
 
-    def set_mat_type(self, index):
+    def set_mat_type(self, index=None):
         """
         Signal to set the referenced material from the material libary
         by the selected Combobox index
@@ -146,6 +156,8 @@ class WMatSelect(Ui_WMatSelect, QWidget):
         -------
 
         """
+        if index is None:
+            index = self.c_mat_type.currentIndex()
         if index >= len(self.material_dict[LIB_KEY]):
             index -= len(self.material_dict[LIB_KEY])
             dict_key = MACH_KEY
@@ -175,15 +187,18 @@ class WMatSelect(Ui_WMatSelect, QWidget):
         else:
             index = self.c_mat_type.currentIndex()
             is_lib_mat = True
-        self.current_dialog = DMatLib(
-            material_dict=self.material_dict,
-            machine=self.machine,
-            is_lib_mat=is_lib_mat,
-            selected_id=index,
-        )
-        self.current_dialog.materialListChanged.connect(self.update_mat_list)
-        self.current_dialog.saveNeeded.connect(self.emit_save)
-        self.current_dialog.show()
+        try:
+            self.current_dialog = DMatLib(
+                material_dict=self.material_dict,
+                machine=self.machine,
+                is_lib_mat=is_lib_mat,
+                selected_id=index,
+            )
+            self.current_dialog.materialListChanged.connect(self.update_mat_list)
+            self.current_dialog.saveNeeded.connect(self.emit_save)
+            self.current_dialog.show()
+        except Exception as e:
+            log_error(self, "Error while opening the Material Library : \n" + str(e))
 
     def emit_save(self):
         """

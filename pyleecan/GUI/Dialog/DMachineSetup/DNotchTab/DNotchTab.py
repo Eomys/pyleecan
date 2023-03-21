@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 
-from PySide2.QtCore import Signal
+from PySide2.QtCore import Signal, Qt
 from PySide2.QtWidgets import QMessageBox, QDialog
 from logging import getLogger
 
@@ -38,6 +38,8 @@ class DNotchTab(Ui_DNotchTab, QDialog):
         """
         # Build the interface according to the .ui file
         QDialog.__init__(self)
+        self.setWindowFlag(Qt.WindowMinimizeButtonHint, True)
+        self.setWindowFlag(Qt.WindowMaximizeButtonHint, True)
         self.setupUi(self)
 
         # Saving arguments
@@ -66,16 +68,16 @@ class DNotchTab(Ui_DNotchTab, QDialog):
         # Update all the notch tab
         # (the current notches types will be initialized)
         self.tab_notch.clear()
-        for notch in self.obj.notch:
-            self.s_add(notch)
+        for idx_notch, notch in enumerate(self.obj.notch):
+            self.s_add(notch, idx_notch)
         self.tab_notch.setCurrentIndex(0)
 
         # Set Help URL
         # self.b_help.hide()
 
         # Connect the slot
-        self.b_add.clicked.connect(lambda: self.s_add())
-        self.b_remove.clicked.connect(self.s_remove)
+        self.b_add.clicked.connect(self.s_add)
+        self.tab_notch.tabCloseRequested.connect(self.s_remove)
         self.b_ok.clicked.connect(self.update_and_close)
         self.b_cancel.clicked.connect(self.reject)
         self.b_plot.clicked.connect(self.s_plot)
@@ -84,7 +86,7 @@ class DNotchTab(Ui_DNotchTab, QDialog):
         """Send a saveNeeded signal to the DMachineSetup"""
         self.saveNeeded.emit()
 
-    def s_add(self, notch=None):
+    def s_add(self, notch=None, idx_notch=None):
         """Signal to add a new notch
 
         Parameters
@@ -105,12 +107,12 @@ class DNotchTab(Ui_DNotchTab, QDialog):
             notch = self.obj.notch[-1]
             notch_index = len(self.obj.notch) - 1
         else:
-            notch_index = self.obj.notch.index(notch)
+            notch_index = idx_notch
         tab = WNotch(self, index=notch_index)
         tab.saveNeeded.connect(self.emit_save)
         self.tab_notch.addTab(tab, "Notch Set " + str(notch_index + 1))
 
-    def s_remove(self):
+    def s_remove(self, index):
         """Signal to remove the last notch
 
         Parameters
@@ -119,8 +121,14 @@ class DNotchTab(Ui_DNotchTab, QDialog):
             A DNotchTab widget
         """
         if len(self.obj.notch) > 1:
-            self.tab_notch.removeTab(len(self.obj.notch) - 1)
-            self.obj.notch.pop(-1)
+            self.tab_notch.removeTab(index)
+            self.obj.notch.pop(index)
+
+        # Make sure that the tab have the correct number in their name
+        self.tab_notch.clear()
+        for idx_notch, notch in enumerate(self.obj.notch):
+            self.s_add(notch, idx_notch)
+        self.tab_notch.setCurrentIndex(0)
 
     def s_plot(self):
         """Try to plot the lamination

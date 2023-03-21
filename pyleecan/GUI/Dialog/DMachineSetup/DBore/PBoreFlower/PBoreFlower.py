@@ -55,7 +55,6 @@ class PBoreFlower(Gen_PBoreFlower, QWidget):
         # Fill the fields with the machine values (if they're filled)
         self.lf_Rarc.setValue(self.bore.Rarc)
         self.si_N.setValue(self.bore.N)
-        self.lf_alpha.setValue(self.bore.alpha)
 
         # Display the main output of the bore (surface, height...)
         self.w_out.comp_output()
@@ -63,8 +62,6 @@ class PBoreFlower(Gen_PBoreFlower, QWidget):
         # Connect the signal/bore
         self.si_N.editingFinished.connect(self.set_N)
         self.lf_Rarc.editingFinished.connect(self.set_Rarc)
-        self.lf_alpha.editingFinished.connect(self.set_alpha)
-        self.c_alpha_unit.currentIndexChanged.connect(self.set_alpha)
 
     def set_N(self):
         """Signal to update the value of N according to the line edit
@@ -89,21 +86,6 @@ class PBoreFlower(Gen_PBoreFlower, QWidget):
         """
         self.bore.Rarc = self.lf_Rarc.value()
         self.w_out.comp_output()
-        # Notify the machine GUI that the machine has changed
-        self.saveNeeded.emit()
-
-    def set_alpha(self):
-        """Signal to update the value of alpha according to the line edit
-
-        Parameters
-        ----------
-        self : PBoreFlower
-            A PBoreFlower object
-        """
-        if self.c_alpha_unit.currentIndex() == 0:  # rad
-            self.bore.alpha = self.lf_alpha.value()
-        else:  # deg
-            self.bore.alpha = self.lf_alpha.value() * pi / 180
         # Notify the machine GUI that the machine has changed
         self.saveNeeded.emit()
 

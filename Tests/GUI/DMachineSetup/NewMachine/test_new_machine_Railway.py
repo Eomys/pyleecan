@@ -120,7 +120,7 @@ class TestNewMachineRailway(object):
         assert self.widget.machine.rotor.Rext == pytest.approx(0.131)
         assert self.widget.machine.rotor.Rint == pytest.approx(0.045)
         assert self.widget.w_step.out_Drsh.text() == "Drsh = 0.09 [m]"
-        assert self.widget.w_step.out_airgap.text() == "gap = 1.5 [mm]"
+        assert self.widget.w_step.out_airgap.text() == "Airgap magnetic width = 1.5 [mm]"
         assert isinstance(self.widget.machine.shaft, Shaft)
         assert self.widget.machine.frame is None
 

@@ -89,7 +89,7 @@ class PWSlot11(Gen_PWSlot11, QWidget):
         # Update the unit combobox with the current m unit name
         self.c_H1_unit.clear()
         self.c_H1_unit.addItems(
-            ["[" + gui_option.unit.get_m_name() + "]", "[rad]", "[deg]"]
+            ["[" + gui_option.unit.get_m_name() + "]", "[rad]", "[°]"]
         )
         if self.slot.H1_is_rad:
             self.c_H1_unit.setCurrentIndex(1)  # Rad
@@ -124,6 +124,8 @@ class PWSlot11(Gen_PWSlot11, QWidget):
             self.img_slot.setPixmap(
                 QPixmap(u":/images/images/MachineSetup/WSlot/SlotW11_wind.png")
             )
+        # Notify the machine GUI that the machine has changed
+        self.saveNeeded.emit()
 
     def set_W0(self):
         """Signal to update the value of W0 according to the line edit
@@ -185,12 +187,15 @@ class PWSlot11(Gen_PWSlot11, QWidget):
         self : PWSlot11
             A PWSlot11 object
         """
-        if self.c_H1_unit.currentIndex() == 0:  # m or mm
-            self.slot.H1 = gui_option.unit.set_m(self.lf_H1.value())
-        elif self.c_H1_unit.currentIndex() == 1:  # rad
-            self.slot.H1 = self.lf_H1.value()
-        else:  # deg
-            self.slot.H1 = self.lf_H1.value() / 180 * pi
+        if self.lf_H1.value() is not None:
+            if self.c_H1_unit.currentIndex() == 0:  # m or mm
+                self.slot.H1 = gui_option.unit.set_m(self.lf_H1.value())
+            elif self.c_H1_unit.currentIndex() == 1:  # rad
+                self.slot.H1 = self.lf_H1.value()
+            else:  # °
+                self.slot.H1 = self.lf_H1.value() / 180 * pi
+        else:
+            self.slot.H1 = None
         self.w_out.comp_output()
         # Notify the machine GUI that the machine has changed
         self.saveNeeded.emit()
@@ -207,7 +212,7 @@ class PWSlot11(Gen_PWSlot11, QWidget):
         """
         self.slot.H1_is_rad = bool(value)
         if self.lf_H1.text() != "":
-            self.set_H1()  # Update for deg if needed and call comp_output
+            self.set_H1()  # Update for ° if needed and call comp_output
         # Notify the machine GUI that the machine has changed
         self.saveNeeded.emit()
 

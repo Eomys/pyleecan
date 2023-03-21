@@ -2,6 +2,7 @@
 
 import sys
 
+import pytest
 from PySide2 import QtWidgets
 from PySide2.QtTest import QTest
 from pyleecan.Classes.Material import Material
@@ -10,9 +11,6 @@ from Tests.GUI import gui_option  # Set unit as [m]
 from pyleecan.Classes.LamSlotWind import LamSlotWind
 from pyleecan.Classes.SlotW25 import SlotW25
 from pyleecan.GUI.Dialog.DMachineSetup.SWSlot.PWSlot25.PWSlot25 import PWSlot25
-
-
-import pytest
 
 
 class TestPWSlot25(object):
@@ -140,17 +138,17 @@ class TestPWSlot25(object):
         self.test_obj.slot = SlotW25(Zs=4, H2=0.11, H1=0, W4=0.1, W3=0.16)
         assert (
             self.widget.check(self.test_obj)
-            == "You must have H1>0 (use Slot 25 for H1=0)"
+            == "You must have H1>0 (use Slot 24 for H1=0)"
         )
         self.test_obj.slot = SlotW25(Zs=4, H2=0, H1=0.11, W4=0.1, W3=0.16)
         assert (
             self.widget.check(self.test_obj)
-            == "You must have H2>0 (use Slot 25 for H2=0)"
+            == "You must have H2>0 (use Slot 24 for H2=0)"
         )
         self.test_obj.slot = SlotW25(Zs=4, H2=0.12, H1=0.11, W4=0.1, W3=0.1)
         assert (
             self.widget.check(self.test_obj)
-            == "You must have W4 != W3 (use Slot 25 for W4=W3)"
+            == "You must have W4 != W3 (use Slot 24 for W4=W3)"
         )
 
     def test_set_wedge(self):

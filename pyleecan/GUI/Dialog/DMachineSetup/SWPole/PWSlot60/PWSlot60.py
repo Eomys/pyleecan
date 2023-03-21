@@ -4,7 +4,6 @@ import PySide2.QtCore
 from PySide2.QtCore import Signal
 from PySide2.QtWidgets import QWidget
 
-from ......Classes.SlotW60 import SlotW60
 from ......GUI import gui_option
 from ......GUI.Dialog.DMachineSetup.SWPole.PWSlot60.Gen_PWSlot60 import Gen_PWSlot60
 from ......Methods.Slot.Slot import SlotCheckError

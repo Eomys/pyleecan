@@ -28,6 +28,16 @@
         "xls": "Material"
     },
     {
+        "cls": "MatElectrical",
+        "name": "alpha",
+        "widget": [
+            "in_alpha_elec",
+            "lf_alpha_elec",
+            "unit_alpha_elec"
+        ],
+        "xls": "Material"
+    },
+    {
         "cls": "MatEconomical",
         "name": "cost_unit",
         "widget": [

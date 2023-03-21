@@ -1,0 +1,4 @@
+# Index of vent type
+VENT_CIRC_INDEX = 0
+VENT_TRAP_INDEX = 1
+VENT_POLAR_INDEX = 2

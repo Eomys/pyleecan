@@ -5,7 +5,7 @@ ROTOR_COLOR = config_dict["PLOT"]["COLOR_DICT"]["ROTOR_COLOR"]
 STATOR_COLOR = config_dict["PLOT"]["COLOR_DICT"]["STATOR_COLOR"]
 
 
-def plot(self, fig=None, ax=None):
+def plot(self, fig=None, ax=None, is_show_fig=True):
     """Plot the Slot in a matplotlib fig
 
     Parameters
@@ -27,8 +27,8 @@ def plot(self, fig=None, ax=None):
 
     # Display the result
     (fig, ax, patch_leg, label_leg) = init_fig(fig, ax)
-    ax.set_xlabel("(m)")
-    ax.set_ylabel("(m)")
+    ax.set_xlabel("[m]")
+    ax.set_ylabel("[m]")
     ax.set_title("Slot")
 
     # Add the slot to the fig
@@ -41,5 +41,6 @@ def plot(self, fig=None, ax=None):
 
     # Axis Setup
     ax.axis("equal")
-    fig.show()
+    if is_show_fig:
+        fig.show()
     return fig, ax

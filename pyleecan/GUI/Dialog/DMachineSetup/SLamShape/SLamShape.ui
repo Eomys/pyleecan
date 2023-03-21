@@ -154,7 +154,7 @@
             <item>
              <widget class="QPushButton" name="b_axial_duct">
               <property name="text">
-               <string>set axial ducts</string>
+               <string>Set Axial Ducts</string>
               </property>
              </widget>
             </item>
@@ -262,7 +262,7 @@
             <item>
              <widget class="QPushButton" name="b_notch">
               <property name="text">
-               <string>set notches</string>
+               <string>Set Notches</string>
               </property>
              </widget>
             </item>
@@ -284,7 +284,7 @@
             <item>
              <widget class="QPushButton" name="b_bore">
               <property name="text">
-               <string>set uneven bore shape</string>
+               <string>Set Uneven Bore Shape</string>
               </property>
              </widget>
             </item>

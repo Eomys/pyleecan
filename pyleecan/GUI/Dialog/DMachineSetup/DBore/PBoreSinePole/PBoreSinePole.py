@@ -67,7 +67,6 @@ class PBoreSinePole(Gen_PBoreSinePole, QWidget):
         self.lf_k.setValue(self.bore.k if self.bore.k else 1)
         self.lf_delta_d.setValue(self.bore.delta_d)
         self.lf_delta_q.setValue(self.bore.delta_q)
-        self.lf_alpha.setValue(self.bore.alpha)
 
         # Display the main output of the bore (surface, height...)
         self.w_out.comp_output()
@@ -78,8 +77,6 @@ class PBoreSinePole(Gen_PBoreSinePole, QWidget):
         self.lf_k.editingFinished.connect(self.set_k)
         self.lf_delta_d.editingFinished.connect(self.set_delta_d)
         self.lf_delta_q.editingFinished.connect(self.set_delta_q)
-        self.lf_alpha.editingFinished.connect(self.set_alpha)
-        self.c_alpha_unit.currentIndexChanged.connect(self.set_alpha)
 
     def set_N(self):
         """Signal to update the value of N according to the line edit
@@ -143,21 +140,6 @@ class PBoreSinePole(Gen_PBoreSinePole, QWidget):
         """
         self.bore.delta_q = self.lf_delta_q.value()
         self.w_out.comp_output()
-        # Notify the machine GUI that the machine has changed
-        self.saveNeeded.emit()
-
-    def set_alpha(self):
-        """Signal to update the value of alpha according to the line edit
-
-        Parameters
-        ----------
-        self : PBoreFlower
-            A PBoreFlower object
-        """
-        if self.c_alpha_unit.currentIndex() == 0:  # rad
-            self.bore.alpha = self.lf_alpha.value()
-        else:  # deg
-            self.bore.alpha = self.lf_alpha.value() * pi / 180
         # Notify the machine GUI that the machine has changed
         self.saveNeeded.emit()
 

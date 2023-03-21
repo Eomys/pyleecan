@@ -7,6 +7,7 @@ from PySide2.QtWidgets import QWidget, QDialog
 from PySide2.QtWidgets import QMessageBox
 from PySide2.QtCore import Qt
 from ......Functions.load import load
+from ......Functions.GUI.log_error import log_error
 from ......Classes.HoleUD import HoleUD
 from ......GUI import gui_option
 from ......GUI.Dialog.DMachineSetup.DAVDuct.PVentUD.Gen_PVentUD import (
@@ -50,9 +51,6 @@ class PVentUD(Gen_PVentUD, QWidget):
         if self.vent.Zh is None:
             self.vent.Zh = 8
         self.si_Zh.setValue(self.vent.Zh)
-        if self.vent.Alpha0 is None:
-            self.vent.Alpha0 = 0
-        self.lf_Alpha0.setValue(self.vent.Alpha0)
 
         # Setup Path selector for Json files
         self.w_path_json.obj = None
@@ -68,30 +66,17 @@ class PVentUD(Gen_PVentUD, QWidget):
         # Connect the signals
         self.b_dxf.clicked.connect(self.open_DXF_Surf)
         self.w_path_json.pathChanged.connect(self.load_hole)
-        self.si_Zh.editingFinished.connect(self.set_Zh)
-        self.lf_Alpha0.editingFinished.connect(self.set_Alpha0)
+        self.si_Zh.valueChanged.connect(self.set_Zh)
 
     def set_Zh(self):
         """Signal to update the value of Zh according to the line edit
 
         Parameters
         ----------
-        self : PVentTrap
-            A PVentTrap object
+        self : PVentUD
+            A PVentUD object
         """
         self.vent.Zh = self.si_Zh.value()
-        self.update_graph()
-        self.w_out.comp_output()
-
-    def set_Alpha0(self):
-        """Signal to update the value of Alpha0 according to the line edit
-
-        Parameters
-        ----------
-        self : PVentTrap
-            A PVentTrap object
-        """
-        self.vent.Alpha0 = self.lf_Alpha0.value()
         self.update_graph()
         self.w_out.comp_output()
 
@@ -100,8 +85,8 @@ class PVentUD(Gen_PVentUD, QWidget):
 
         Parameters
         ----------
-        self : PVentTrap
-            A PVentTrap object
+        self : PVentUD
+            A PVentUD object
 
         Returns
         -------
@@ -113,7 +98,7 @@ class PVentUD(Gen_PVentUD, QWidget):
         if self.vent.Zh is None:
             return self.tr("You must set Zh !")
         elif self.vent.Alpha0 is None:
-            return self.tr("You must set Alpha0 !")
+            self.vent.Alpha0 = 0
         return None
 
     def update_graph(self):
@@ -142,20 +127,19 @@ class PVentUD(Gen_PVentUD, QWidget):
         try:
             vent = load(self.w_path_json.get_path())
         except Exception as e:
-            QMessageBox().critical(
+            log_error(
                 self,
-                self.tr("Error"),
-                self.tr("Error when loading file:\n" + str(e)),
+                "Error when loading json file for user-defined cooling duct:\n"
+                + str(e),
             )
             return
         # Check that the json file contain a HoleUD
         if not isinstance(vent, HoleUD):
-            QMessageBox().critical(
+            log_error(
                 self,
-                self.tr("Error"),
-                self.tr(
-                    "The choosen file is not a HoleUD file (" + str(type(vent)) + ")"
-                ),
+                "Error when loading json file for user-defined cooling duct:\nThe file doesn't contain a HoleUD ("
+                + str(type(vent))
+                + ")",
             )
             return
 
@@ -163,11 +147,9 @@ class PVentUD(Gen_PVentUD, QWidget):
         self.vent.__init__(init_dict=vent.as_dict())  # keep pointer
         # Update GUI widget according to hole
         self.si_Zh.blockSignals(True)
-        self.lf_Alpha0.blockSignals(True)
         self.si_Zh.setValue(self.vent.Zh)
-        self.lf_Alpha0.setValue(self.vent.Alpha0)
         self.si_Zh.blockSignals(False)
-        self.lf_Alpha0.blockSignals(False)
+        self.vent.Alpha0 = self.parent().lf_Alpha0.value()
 
         # Update the new GUI according to the new vent
         self.update_graph()
@@ -175,15 +157,20 @@ class PVentUD(Gen_PVentUD, QWidget):
 
     def open_DXF_Surf(self):
         """Open the GUI to define the HoleUD"""
-        # Init GUI with lamination parameters
-        self.dxf_gui = DXF_Surf(Zh=self.vent.Zh, lam=self.lam)
-        self.dxf_gui.setWindowFlags(Qt.Window)  # To maximize the GUI
-        self.dxf_gui.show()
-        # Update the slot when saving
-        self.dxf_gui.accepted.connect(self.set_dxf_path)
+        try:
+            # Init GUI with lamination parameters
+            self.dxf_gui = DXF_Surf(Zh=self.vent.Zh, lam=self.lam)
+            self.dxf_gui.setWindowFlags(Qt.Window)  # To maximize the GUI
+            self.dxf_gui.show()
+            # Update the vent when saving
+            self.dxf_gui.accepted.connect(self.set_dxf_path)
+        except Exception as e:
+            log_error(
+                self, "Error when opening DXF import GUI for cooling duct:\n" + str(e)
+            )
 
     def set_dxf_path(self):
-        """Update the slot according to the file defined by DXF_Slot"""
+        """Update the vent according to the file defined by DXF_Slot"""
         # Get the saving path from DXF_Slot
         self.w_path_json.set_path_txt(self.dxf_gui.save_path)
         # Update vent and GUI

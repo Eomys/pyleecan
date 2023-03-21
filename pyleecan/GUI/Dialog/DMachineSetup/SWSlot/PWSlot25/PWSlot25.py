@@ -94,6 +94,8 @@ class PWSlot25(Gen_PWSlot25, QWidget):
             self.img_slot.setPixmap(
                 QPixmap(u":/images/images/MachineSetup/WSlot/SlotW25_wind.png")
             )
+        # Notify the machine GUI that the machine has changed
+        self.saveNeeded.emit()
 
     def set_W3(self):
         """Signal to update the value of W3 according to the line edit

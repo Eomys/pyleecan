@@ -125,7 +125,7 @@ class TestNewMachinePrius(object):
         assert self.widget.machine.rotor.Rext == pytest.approx(80.2e-3)
         assert self.widget.machine.rotor.Rint == pytest.approx(55.32e-3)
         assert self.widget.w_step.out_Drsh.text() == "Drsh = 0.1106 [m]"
-        assert self.widget.w_step.out_airgap.text() == "gap = 0.75 [mm]"
+        assert self.widget.w_step.out_airgap.text() == "Airgap magnetic width = 0.75 [mm]"
         assert isinstance(self.widget.machine.shaft, Shaft)
         assert self.widget.machine.frame is None
 
@@ -230,7 +230,7 @@ class TestNewMachinePrius(object):
 
         assert self.widget.w_step.si_Ntcoil.value() == 9
         # TODO BUG find why the Rotation direction does not setup as a CCW rotation (In an imported toyota prius, it does.)
-        assert self.widget.w_step.out_rot_dir.text() == "Rotation direction: ?"
+        assert self.widget.w_step.out_rot_dir.text() == "Rotation direction: CCW"
         assert self.widget.w_step.out_ms.text() == "Number of slots/pole/phase: 2.0"
         assert self.widget.w_step.out_Nperw.text() == "Winding periodicity: 8"
         assert self.widget.w_step.out_Ntspc.text() == "Number of turns Ntspc: 72"
@@ -300,7 +300,7 @@ class TestNewMachinePrius(object):
         assert self.widget.w_step.w_cond.w_out.out_K.text() == "Ksfill = 35.45 %"
         assert self.widget.w_step.w_cond.w_out.out_MLT.text() == "Mean Length Turn = 0.2451 [m]"
         # TODO BUG Rwind must be 0.03595 Ohm but actually not working
-        assert self.widget.w_step.w_cond.w_out.out_Rwind.text() == "Rwind 20°C = ? [Ohm]"
+        assert self.widget.w_step.w_cond.w_out.out_Rwind.text() == "Rwind 20°C = 0.03595 [Ohm]"
 
         # Is the stator winding conductors well defined ?
         assert isinstance(self.widget.w_step.machine.stator.winding.conductor, CondType12)
@@ -316,7 +316,7 @@ class TestNewMachinePrius(object):
         assert self.widget.nav_step.currentItem().text() == " 7: Rotor Hole"
         assert isinstance(self.widget.w_step, SMHoleMag)
 
-        assert self.widget.w_step.out_hole_pitch.text() == "Slot pitch = 360 / 2p = 45 °"
+        assert self.widget.w_step.out_hole_pitch.text() == "Slot pitch = 360 / 2p = 45 [°] = 0.7854 [rad]"
 
         wid_hole = self.widget.w_step.tab_hole.currentWidget()
         assert isinstance(wid_hole, WHoleMag)
@@ -363,10 +363,10 @@ class TestNewMachinePrius(object):
         wid_hole.w_hole.w_mat_1.c_mat_type.setCurrentIndex(index_magnetPrius)
         wid_hole.w_hole.w_mat_2.c_mat_type.setCurrentIndex(index_magnetPrius)
 
-        assert wid_hole.w_hole.out_slot_surface.text() == "Slot surface: 0.0002968 [m²]"
+        assert wid_hole.w_hole.out_slot_surface.text() == "Hole surface: 0.0002968 [m²]"
         assert wid_hole.w_hole.out_magnet_surface.text() == "Magnet surf.: 0.0002457 [m²]"
         assert wid_hole.w_hole.out_alpha.text() == "alpha: 0.3048 [rad] (17.46°)"
-        assert wid_hole.w_hole.out_W5.text() == "W5: 0.003115 [m]"
+        assert wid_hole.w_hole.out_W5.text() == "Max magnet width: 0.02201 [m]"
 
         assert self.widget.w_step.machine.rotor.hole[0].H0 == 0.01096
         assert self.widget.w_step.machine.rotor.hole[0].H1 == 0.0015
@@ -423,18 +423,18 @@ class TestNewMachinePrius(object):
 
         # TODO BUG THERE MUST BE MORE ITEMS TO CHECK BUT BUGGED FOR NOW
 
-        # assert self.widget.w_step.tab_machine.tab_param.item(5,0).text() == "Stator winding resistance"
-        # assert self.widget.w_step.tab_machine.tab_param.item(5,1).text() == "0.03595 Ohm"
-        # assert self.widget.w_step.tab_machine.tab_param.item(6,0).text() == "Machine total mass"
-        # assert self.widget.w_step.tab_machine.tab_param.item(6,1).text() == "26.02 kg"
-        # assert self.widget.w_step.tab_machine.tab_param.item(7,0).text() == "Stator lamination mass"
-        # assert self.widget.w_step.tab_machine.tab_param.item(7,1).text() == "15.78 kg"
-        # assert self.widget.w_step.tab_machine.tab_param.item(8,0).text() == "Stator winding mass"
-        # assert self.widget.w_step.tab_machine.tab_param.item(8,1).text() == "4.001 kg"
-        # assert self.widget.w_step.tab_machine.tab_param.item(9,0).text() == "Rotor lamination mass"
-        # assert self.widget.w_step.tab_machine.tab_param.item(9,1).text() == "5.006 kg"
-        # assert self.widget.w_step.tab_machine.tab_param.item(10,0).text() == "Rotor winding mass"
-        # assert self.widget.w_step.tab_machine.tab_param.item(10,1).text() == "1.236 kg"
+        assert self.widget.w_step.tab_machine.tab_param.item(5,0).text() == "Stator winding resistance"
+        assert self.widget.w_step.tab_machine.tab_param.item(5,1).text() == "0.03595 Ohm"
+        assert self.widget.w_step.tab_machine.tab_param.item(6,0).text() == "Machine total mass"
+        assert self.widget.w_step.tab_machine.tab_param.item(6,1).text() == "26.02 kg"
+        assert self.widget.w_step.tab_machine.tab_param.item(7,0).text() == "Stator lamination mass"
+        assert self.widget.w_step.tab_machine.tab_param.item(7,1).text() == "15.78 kg"
+        assert self.widget.w_step.tab_machine.tab_param.item(8,0).text() == "Stator winding mass"
+        assert self.widget.w_step.tab_machine.tab_param.item(8,1).text() == "4.001 kg"
+        assert self.widget.w_step.tab_machine.tab_param.item(9,0).text() == "Rotor lamination mass"
+        assert self.widget.w_step.tab_machine.tab_param.item(9,1).text() == "5.006 kg"
+        assert self.widget.w_step.tab_machine.tab_param.item(10,0).text() == "Rotor winding mass"
+        assert self.widget.w_step.tab_machine.tab_param.item(10,1).text() == "1.236 kg"
 
         self.widget.w_step.tab_machine.b_plot_machine.clicked.emit()
         self.widget.w_step.tab_machine.b_mmf.clicked.emit()

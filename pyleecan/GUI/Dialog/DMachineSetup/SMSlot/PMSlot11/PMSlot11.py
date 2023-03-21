@@ -111,10 +111,13 @@ class PMSlot11(Gen_PMSlot11, QWidget):
         self : PMSlot11
             A PMSlot11 object
         """
-        if self.c_W0_unit.currentIndex() == RAD_ID:
-            self.slot.W0 = self.lf_W0.value()
+        if self.lf_W0.value() is not None:
+            if self.c_W0_unit.currentIndex() == RAD_ID:
+                self.slot.W0 = self.lf_W0.value()
+            else:
+                self.slot.W0 = self.lf_W0.value() * pi / 180
         else:
-            self.slot.W0 = self.lf_W0.value() * pi / 180
+            self.slot.W0 = None
         self.w_out.comp_output()
         # Notify the machine GUI that the machine has changed
         self.saveNeeded.emit()

@@ -43,14 +43,5 @@
             "lf_delta_q"
         ],
         "xls": "Machine"
-    },
-    {
-        "cls": "BoreSinePole",
-        "name": "alpha",
-        "widget": [
-            "in_alpha",
-            "lf_alpha"
-        ],
-        "xls": "Machine"
     }
 ]

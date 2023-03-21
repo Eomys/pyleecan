@@ -9,8 +9,8 @@ from PySide2.QtCore import *
 from PySide2.QtGui import *
 from PySide2.QtWidgets import *
 
-from ......GUI.Tools.FloatEdit import FloatEdit
 from ......GUI.Dialog.DMachineSetup.DAVDuct.WVentOut.WVentOut import WVentOut
+from ......GUI.Tools.SpinBox import SpinBox
 from ......GUI.Tools.WPathSelector.WPathSelectorV import WPathSelectorV
 from ......GUI.Tools.MPLCanvas import MPLCanvas
 
@@ -63,26 +63,11 @@ class Ui_PVentUD(object):
 
         self.gridLayout.addWidget(self.in_Zh, 0, 0, 1, 1)
 
-        self.si_Zh = QSpinBox(self.scrollAreaWidgetContents)
+        self.si_Zh = SpinBox(self.scrollAreaWidgetContents)
         self.si_Zh.setObjectName(u"si_Zh")
         self.si_Zh.setMaximum(999999999)
 
         self.gridLayout.addWidget(self.si_Zh, 0, 1, 1, 1)
-
-        self.in_Alpha0 = QLabel(self.scrollAreaWidgetContents)
-        self.in_Alpha0.setObjectName(u"in_Alpha0")
-
-        self.gridLayout.addWidget(self.in_Alpha0, 1, 0, 1, 1)
-
-        self.lf_Alpha0 = FloatEdit(self.scrollAreaWidgetContents)
-        self.lf_Alpha0.setObjectName(u"lf_Alpha0")
-
-        self.gridLayout.addWidget(self.lf_Alpha0, 1, 1, 1, 1)
-
-        self.unit_Alpha0 = QLabel(self.scrollAreaWidgetContents)
-        self.unit_Alpha0.setObjectName(u"unit_Alpha0")
-
-        self.gridLayout.addWidget(self.unit_Alpha0, 1, 2, 1, 1)
 
         self.verticalLayout.addLayout(self.gridLayout)
 
@@ -113,7 +98,5 @@ class Ui_PVentUD(object):
             QCoreApplication.translate("PVentUD", u"Define Duct from DXF", None)
         )
         self.in_Zh.setText(QCoreApplication.translate("PVentUD", u"Zh :", None))
-        self.in_Alpha0.setText(QCoreApplication.translate("PVentUD", u"Alpha0 :", None))
-        self.unit_Alpha0.setText(QCoreApplication.translate("PVentUD", u"[rad]", None))
 
     # retranslateUi

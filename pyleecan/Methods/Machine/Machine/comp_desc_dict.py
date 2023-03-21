@@ -220,4 +220,21 @@ def comp_desc_dict(self):
             )
         )
 
+    # Shaft mass only if necessary
+    if M_dict is not None and "Shaft" in M_dict:
+        Mshaft = M_dict["Shaft"]
+        desc_dict.append(
+            dict(
+                {
+                    "name": "Mshaft",
+                    "path": "machine.comp_masses()['Shaft']",
+                    "verbose": "Shaft mass",
+                    "type": float,
+                    "unit": "kg",
+                    "is_input": False,
+                    "value": Mshaft,
+                }
+            )
+        )
+
     return desc_dict
