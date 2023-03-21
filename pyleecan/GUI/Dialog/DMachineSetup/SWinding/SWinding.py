@@ -76,7 +76,7 @@ class SWinding(Gen_SWinding, QWidget):
             self.obj.winding.coil_pitch = 1
             self.si_coil_pitch.setEnabled(False)
             self.in_Zs.hide()  # =2*p
-            self.b_preview.setEnabled(False)
+            #self.b_preview.setEnabled(False)
             # Enforce star of slot
             self.c_wind_type.setEnabled(False)
             self.c_wind_type.setCurrentIndex(0)
@@ -169,7 +169,7 @@ class SWinding(Gen_SWinding, QWidget):
         self.b_export.clicked.connect(self.s_export_csv)
         self.b_edit_wind_mat.hide()
         self.b_generate.clicked.connect(self.s_generate)
-        self.b_preview.clicked.connect(self.s_plot)
+        # self.b_preview.clicked.connect(self.s_plot)
         self.b_plot_mmf.clicked.connect(self.s_plot_mmf)
 
     def hide_star_widget(self, is_hide=True):

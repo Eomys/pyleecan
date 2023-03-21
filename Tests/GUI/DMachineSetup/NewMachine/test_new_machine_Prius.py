@@ -120,10 +120,10 @@ class TestNewMachinePrius(object):
         self.widget.w_step.lf_RRint.setText("55.32e-3")
         self.widget.w_step.lf_RRint.editingFinished.emit()
         ## Check modif
-        assert self.widget.machine.stator.Rint == pytest.approx(80.95e-3)
         assert self.widget.machine.stator.Rext == pytest.approx(134.62e-3)
-        assert self.widget.machine.rotor.Rint == pytest.approx(55.32e-3)
+        assert self.widget.machine.stator.Rint == pytest.approx(80.95e-3)
         assert self.widget.machine.rotor.Rext == pytest.approx(80.2e-3)
+        assert self.widget.machine.rotor.Rint == pytest.approx(55.32e-3)
         assert self.widget.w_step.out_Drsh.text() == "Drsh = 0.1106 [m]"
         assert self.widget.w_step.out_airgap.text() == "gap = 0.75 [mm]"
         assert isinstance(self.widget.machine.shaft, Shaft)
@@ -162,6 +162,7 @@ class TestNewMachinePrius(object):
         assert self.widget.w_step.machine.stator.slot.H1 == pytest.approx(0)
         assert self.widget.w_step.machine.stator.slot.H2 == pytest.approx(33.3e-3)
         assert self.widget.w_step.machine.stator.slot.R1 == pytest.approx(4e-3)
+        assert self.widget.w_step.out_Slot_pitch.text() == "Slot pitch = 360 / Zs = 7.5 [°] (0.1309 [rad])"
         assert (
             self.widget.w_step.w_slot.w_out.out_slot_height.text() == "Slot height: 0.03429 [m]"
         )
@@ -213,14 +214,14 @@ class TestNewMachinePrius(object):
         assert self.widget.w_step.c_wind_type.currentText() == "Star of Slot"
         assert self.widget.w_step.in_Zs.text() == "Slot number=48"
         assert self.widget.w_step.in_p.text() == "Pole pair number=4"
+        assert self.widget.w_step.si_qs.value() == 3
         assert self.widget.w_step.si_Nlayer.value() == 1 
+        assert self.widget.w_step.si_coil_pitch.value() == 6
+        assert self.widget.w_step.si_Ntcoil.value() == 1
         assert self.widget.w_step.si_Npcp.value() == 1
         assert self.widget.w_step.si_Nslot.value() == 0
-        assert self.widget.w_step.si_Ntcoil.value() == 1
         assert not self.widget.w_step.is_reverse.isChecked()
         assert not self.widget.w_step.is_permute_B_C.isChecked()
-        assert self.widget.w_step.si_qs.value() == 3
-        assert self.widget.w_step.si_coil_pitch.value() == 6
 
         self.widget.w_step.si_Ntcoil.setValue(9)
         self.widget.w_step.si_Ntcoil.editingFinished.emit()
@@ -278,19 +279,19 @@ class TestNewMachinePrius(object):
 
         self.widget.w_step.w_cond.g_ins.setChecked(True)
 
-        assert self.widget.w_step.w_cond.lf_Wins_wire.value() == 0
         assert self.widget.w_step.w_cond.lf_Wins_cond.value() is None
+        assert self.widget.w_step.w_cond.lf_Wins_wire.value() == 0
 
         self.widget.w_step.w_cond.si_Nwpc1.setValue(13)
         self.widget.w_step.w_cond.si_Nwpc1.editingFinished.emit()
         self.widget.w_step.w_cond.lf_Wwire.setValue(0.000912)
         self.widget.w_step.w_cond.lf_Wwire.editingFinished.emit()
-        self.widget.w_step.w_cond.lf_Lewout.setValue(0.019366)
-        self.widget.w_step.w_cond.lf_Lewout.editingFinished.emit()
-        self.widget.w_step.w_cond.lf_Wins_wire.setValue(1e-06)
-        self.widget.w_step.w_cond.lf_Wins_wire.editingFinished.emit()
         self.widget.w_step.w_cond.lf_Wins_cond.setValue(0.015)
         self.widget.w_step.w_cond.lf_Wins_cond.editingFinished.emit()
+        self.widget.w_step.w_cond.lf_Wins_wire.setValue(1e-06)
+        self.widget.w_step.w_cond.lf_Wins_wire.editingFinished.emit()
+        self.widget.w_step.w_cond.lf_Lewout.setValue(0.019366)
+        self.widget.w_step.w_cond.lf_Lewout.editingFinished.emit()
 
         assert self.widget.w_step.w_cond.w_out.out_H.text() == "Hcond = 0.015 [m]"
         assert self.widget.w_step.w_cond.w_out.out_W.text() == "Wcond = 0.015 [m]"
@@ -421,6 +422,19 @@ class TestNewMachinePrius(object):
         assert self.widget.w_step.tab_machine.tab_param.item(4,1).text() == "3"
 
         # TODO BUG THERE MUST BE MORE ITEMS TO CHECK BUT BUGGED FOR NOW
+
+        # assert self.widget.w_step.tab_machine.tab_param.item(5,0).text() == "Stator winding resistance"
+        # assert self.widget.w_step.tab_machine.tab_param.item(5,1).text() == "0.03595 Ohm"
+        # assert self.widget.w_step.tab_machine.tab_param.item(6,0).text() == "Machine total mass"
+        # assert self.widget.w_step.tab_machine.tab_param.item(6,1).text() == "26.02 kg"
+        # assert self.widget.w_step.tab_machine.tab_param.item(7,0).text() == "Stator lamination mass"
+        # assert self.widget.w_step.tab_machine.tab_param.item(7,1).text() == "15.78 kg"
+        # assert self.widget.w_step.tab_machine.tab_param.item(8,0).text() == "Stator winding mass"
+        # assert self.widget.w_step.tab_machine.tab_param.item(8,1).text() == "4.001 kg"
+        # assert self.widget.w_step.tab_machine.tab_param.item(9,0).text() == "Rotor lamination mass"
+        # assert self.widget.w_step.tab_machine.tab_param.item(9,1).text() == "5.006 kg"
+        # assert self.widget.w_step.tab_machine.tab_param.item(10,0).text() == "Rotor winding mass"
+        # assert self.widget.w_step.tab_machine.tab_param.item(10,1).text() == "1.236 kg"
 
         self.widget.w_step.tab_machine.b_plot_machine.clicked.emit()
         self.widget.w_step.tab_machine.b_mmf.clicked.emit()

@@ -1,9 +1,7 @@
 import sys
-from os.path import isdir, isfile, join
-from shutil import rmtree
+from os.path import join
 
 from PySide2 import QtWidgets
-import mock
 import pytest
 from pyleecan.Classes.MachineSIPMSM import MachineSIPMSM
 from pyleecan.Classes.Shaft import Shaft
@@ -27,7 +25,6 @@ from pyleecan.GUI.Dialog.DMachineSetup.SSkew.SSkew import SSkew
 from Tests.GUI import gui_option  # Set unit as [m]
 
 from pyleecan.Functions.load import load_matlib
-from Tests import save_gui_path as save_path
 
 from pyleecan.definitions import DATA_DIR
 
@@ -40,7 +37,7 @@ matlib_path = join(DATA_DIR, "Material")
 
 
 class TestNewMachineBenchmark(object):
-    """Test that you can create the Toyota prius"""
+    """Test that you can create the Benchmark"""
 
     @classmethod
     def setup_class(cls):
@@ -60,7 +57,7 @@ class TestNewMachineBenchmark(object):
         )
 
     @pytest.mark.IPMSM
-    def test_Toyota_Prius(self):
+    def test_Benchmark(self):
         """Create a new machine"""
         # Load data for readibility
         self.widget.nav_step.count() == 12
@@ -76,8 +73,8 @@ class TestNewMachineBenchmark(object):
         assert isinstance(self.widget.w_step, SMachineType)
         assert self.widget.w_step.c_type.currentText() == "SCIM"
         ## Definition
-        index_IPMSM = self.widget.w_step.c_type.findText("SPMSM")
-        self.widget.w_step.c_type.setCurrentIndex(index_IPMSM)
+        index_SPMSM = self.widget.w_step.c_type.findText("SPMSM")
+        self.widget.w_step.c_type.setCurrentIndex(index_SPMSM)
         assert self.widget.w_step.c_type.currentText() == "SPMSM"
         self.widget.w_step.le_name.setText("Benchmark_Test")
         self.widget.w_step.le_name.editingFinished.emit()
@@ -117,10 +114,10 @@ class TestNewMachineBenchmark(object):
         self.widget.w_step.lf_RRint.setText("0.0095")
         self.widget.w_step.lf_RRint.editingFinished.emit()
         ## Check modif
-        assert self.widget.machine.stator.Rint == pytest.approx(0.048)
         assert self.widget.machine.stator.Rext == pytest.approx(0.073)
-        assert self.widget.machine.rotor.Rint == pytest.approx(0.0095)
+        assert self.widget.machine.stator.Rint == pytest.approx(0.048)
         assert self.widget.machine.rotor.Rext == pytest.approx(0.04)
+        assert self.widget.machine.rotor.Rint == pytest.approx(0.0095)
         assert self.widget.w_step.out_Drsh.text() == "Drsh = 0.019 [m]"
         assert self.widget.w_step.out_airgap.text() == "gap = 8 [mm]"
         assert isinstance(self.widget.machine.shaft, Shaft)
@@ -134,8 +131,8 @@ class TestNewMachineBenchmark(object):
 
         self.widget.w_step.si_Zs.setValue(12)
         self.widget.w_step.si_Zs.editingFinished.emit()
-        index_slot11 = self.widget.w_step.c_slot_type.findText("Slot Type 22")
-        self.widget.w_step.c_slot_type.setCurrentIndex(index_slot11)
+        index_slot22 = self.widget.w_step.c_slot_type.findText("Slot Type 22")
+        self.widget.w_step.c_slot_type.setCurrentIndex(index_slot22)
         self.widget.w_step.w_slot.lf_W0.setValue(0.3142)
         self.widget.w_step.w_slot.lf_W0.editingFinished.emit()
         self.widget.w_step.w_slot.lf_W2.setValue(0.3142)
@@ -150,6 +147,7 @@ class TestNewMachineBenchmark(object):
         assert self.widget.w_step.machine.stator.slot.W2 == pytest.approx(0.3142)
         assert self.widget.w_step.machine.stator.slot.H0 == pytest.approx(0)
         assert self.widget.w_step.machine.stator.slot.H2 == pytest.approx(0.02)
+        assert self.widget.w_step.out_Slot_pitch.text() == "Slot pitch = 360 / Zs = 30 [°] (0.5236 [rad])"
         assert (
             self.widget.w_step.w_slot.w_out.out_Wlam.text() == "Stator width: 0.025 [m]"
         )
@@ -204,16 +202,16 @@ class TestNewMachineBenchmark(object):
         assert self.widget.w_step.c_wind_type.currentText() == "Star of Slot"
         assert self.widget.w_step.in_Zs.text() == "Slot number=12"
         assert self.widget.w_step.in_p.text() == "Pole pair number=5"
+        assert self.widget.w_step.si_qs.value() == 3
         assert self.widget.w_step.si_Nlayer.value() == 1
+        assert self.widget.w_step.si_coil_pitch.value() == 1
+        assert self.widget.w_step.si_Ntcoil.value() == 1
         assert self.widget.w_step.si_Npcp.value() == 1
         assert self.widget.w_step.si_Nslot.value() == 0
-        assert self.widget.w_step.si_Ntcoil.value() == 1
         assert not self.widget.w_step.is_reverse.isChecked()
         assert not self.widget.w_step.is_permute_B_C.isChecked()
         assert not self.widget.w_step.is_reverse_layer.isChecked()
         assert not self.widget.w_step.is_change_layer.isChecked()
-        assert self.widget.w_step.si_qs.value() == 3
-        assert self.widget.w_step.si_coil_pitch.value() == 1
 
         self.widget.w_step.si_Nlayer.setValue(2)
         self.widget.w_step.si_Nlayer.editingFinished.emit()
@@ -221,7 +219,7 @@ class TestNewMachineBenchmark(object):
         self.widget.w_step.b_generate.clicked.emit()
 
         assert self.widget.w_step.si_Nlayer.value() == 2
-        # TODO BUG find why the Rotation direction does not setup as a CCW rotation (In an imported toyota prius, it does.)
+        # TODO BUG find why the Rotation direction does not setup as a CCW rotation (In an imported Benchmark, it does.)
         assert self.widget.w_step.out_rot_dir.text() == "Rotation direction: ?"
         assert self.widget.w_step.out_ms.text() == "Number of slots/pole/phase: 0.4"
         assert self.widget.w_step.out_Nperw.text() == "Winding periodicity: 2"
@@ -400,22 +398,9 @@ class TestNewMachineBenchmark(object):
         assert self.widget.w_step.si_nb_worker.value() == 12
         assert self.widget.w_step.le_name.text() == "FEMM_Benchmark_Test"
 
-        # ######
-        # # Save
-        # file_path = join(mach_path, "Prius_Test.json")
-        # with mock.patch(
-        #     "PySide2.QtWidgets.QFileDialog.getSaveFileName",
-        #     return_value=(file_path, "Json file (*.json)"),
-        # ):
-        #     wid.b_save_as.clicked.emit()
-        # assert self.widget.machine_selector.gridLayout.count() == NB_Mach + 1
-        # assert isfile(file_path)
-        # # assert isfile(join(WS_path, "Machine", "Prius_Test.png"))
-
-
 if __name__ == "__main__":
     a = TestNewMachineBenchmark()
     a.setup_class()
     a.setup_method()
-    a.test_Toyota_Prius()
+    a.test_Benchmark()
     print("Done")
