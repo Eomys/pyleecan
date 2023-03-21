@@ -62,6 +62,11 @@ try:
 except ImportError as error:
     get_magnet_number = error
 
+try:
+    from ..Methods.Machine.LamSlotMag.set_Lmag import set_Lmag
+except ImportError as error:
+    set_Lmag = error
+
 
 from numpy import isnan
 from ._check import InitUnKnowClassError
@@ -171,6 +176,15 @@ class LamSlotMag(LamSlot):
         )
     else:
         get_magnet_number = get_magnet_number
+    # cf Methods.Machine.LamSlotMag.set_Lmag
+    if isinstance(set_Lmag, ImportError):
+        set_Lmag = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use LamSlotMag method set_Lmag: " + str(set_Lmag))
+            )
+        )
+    else:
+        set_Lmag = set_Lmag
     # generic save method is available in all object
     save = save
     # get_logger method is available in all object
