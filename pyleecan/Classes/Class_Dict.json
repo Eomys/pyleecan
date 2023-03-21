@@ -5297,7 +5297,8 @@
             "get_Zs",
             "has_magnet",
             "plot",
-            "set_pole_pair_number"
+            "set_pole_pair_number",
+            "set_Lmag"
         ],
         "mother": "Lamination",
         "name": "LamH",
