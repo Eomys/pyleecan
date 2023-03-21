@@ -457,18 +457,6 @@ class TestNewMachinePrius(object):
         assert self.widget.w_step.si_nb_worker.value() == 12
         assert self.widget.w_step.le_name.text() == "FEMM_Prius_Test"
 
-        # ######
-        # # Save
-        # file_path = join(mach_path, "Prius_Test.json")
-        # with mock.patch(
-        #     "PySide2.QtWidgets.QFileDialog.getSaveFileName",
-        #     return_value=(file_path, "Json file (*.json)"),
-        # ):
-        #     wid.b_save_as.clicked.emit()
-        # assert self.widget.machine_selector.gridLayout.count() == NB_Mach + 1
-        # assert isfile(file_path)
-        # # assert isfile(join(WS_path, "Machine", "Prius_Test.png"))
-
 
 if __name__ == "__main__":
     a = TestNewMachinePrius()
