@@ -50,8 +50,8 @@ def plot(
     """
 
     (fig, ax, patch_leg, label_leg) = init_fig(fig, ax)
-    ax.set_xlabel("(m)")
-    ax.set_ylabel("(m)")
+    ax.set_xlabel("[m]")
+    ax.set_ylabel("[m]")
 
     patches = self.get_patches(
         color=color, edgecolor=edgecolor, is_edge_only=is_edge_only, linestyle=linestyle
