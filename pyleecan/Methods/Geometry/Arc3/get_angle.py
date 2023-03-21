@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from numpy import exp, angle, pi
+from numpy import pi
 
 
 def get_angle(self, is_deg=False):

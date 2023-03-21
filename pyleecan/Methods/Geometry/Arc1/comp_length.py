@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from numpy import pi, arcsin
+from numpy import pi
 
 
 def comp_length(self):

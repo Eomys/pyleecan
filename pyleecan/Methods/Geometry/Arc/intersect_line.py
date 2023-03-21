@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 
-from ....Functions.Geometry.inter_line_circle import inter_line_circle
 from numpy import exp, pi, angle, abs as np_abs
+
+from ....Functions.Geometry.inter_line_circle import inter_line_circle
 
 
 def intersect_line(self, Z1, Z2):
