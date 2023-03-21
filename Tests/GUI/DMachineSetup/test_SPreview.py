@@ -30,7 +30,7 @@ SCIM_dict = {
         ("Stator winding mass", "59.06 kg"),
         ("Rotor lamination mass", "97.54 kg"),
         ("Rotor winding mass", "21.12 kg"),
-        ("Shaft mass", "21.51 kg")
+        ("Shaft mass", "21.51 kg"),
     ],
     "Nrow": 13,
 }
@@ -48,7 +48,7 @@ IPMSM_dict = {
         ("Stator winding mass", "4.001 kg"),
         ("Rotor lamination mass", "5.006 kg"),
         ("Rotor magnet mass", "1.236 kg"),
-        ("Shaft mass", "7.355 kg")
+        ("Shaft mass", "7.355 kg"),
     ],
     "Nrow": 12,
 }

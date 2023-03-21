@@ -53,53 +53,251 @@ if not isdir(SCHEMATICS_PATH):
 
 slot_test = list()
 
-slot_test.append({"test_obj": SlotCirc(), "type_add_active": 0, "is_default": 2})
+slot_test.append(
+    {
+        "test_obj": SlotCirc(),
+        "type_add_active": 0,
+        "is_default": 2,
+    }
+)
 
-slot_test.append({"test_obj": SlotM10(), "type_add_active": 2, "is_default": 2})
-slot_test.append({"test_obj": SlotM11(), "type_add_active": 2, "is_default": 2})
-slot_test.append({"test_obj": SlotM12(), "type_add_active": 2})
-slot_test.append({"test_obj": SlotM13(), "type_add_active": 2})
-slot_test.append({"test_obj": SlotM14(), "type_add_active": 2})
-slot_test.append({"test_obj": SlotM15(), "type_add_active": 2})
-slot_test.append({"test_obj": SlotM16(), "type_add_active": 2})
-slot_test.append({"test_obj": SlotM17(), "type_add_active": 2})
-slot_test.append({"test_obj": SlotM18(), "type_add_active": 2})
+slot_test.append(
+    {
+        "test_obj": SlotM10(),
+        "type_add_active": 2,
+        "is_default": 2,
+    }
+)
+slot_test.append(
+    {
+        "test_obj": SlotM11(),
+        "type_add_active": 2,
+        "is_default": 2,
+    }
+)
+slot_test.append(
+    {
+        "test_obj": SlotM12(),
+        "type_add_active": 2,
+    }
+)
+slot_test.append(
+    {
+        "test_obj": SlotM13(),
+        "type_add_active": 2,
+    }
+)
+slot_test.append(
+    {
+        "test_obj": SlotM14(),
+        "type_add_active": 2,
+    }
+)
+slot_test.append(
+    {
+        "test_obj": SlotM15(),
+        "type_add_active": 2,
+    }
+)
+slot_test.append(
+    {
+        "test_obj": SlotM16(),
+        "type_add_active": 2,
+    }
+)
+slot_test.append(
+    {
+        "test_obj": SlotM17(),
+        "type_add_active": 2,
+    }
+)
+slot_test.append(
+    {
+        "test_obj": SlotM18(),
+        "type_add_active": 2,
+    }
+)
 
-slot_test.append({"test_obj": SlotW10(), "type_add_active": 1})
-slot_test.append({"test_obj": SlotW11(), "type_add_active": 1})
-slot_test.append({"test_obj": SlotW12(), "type_add_active": 1})
-slot_test.append({"test_obj": SlotW13(), "type_add_active": 1})
-slot_test.append({"test_obj": SlotW14(), "type_add_active": 1})
-slot_test.append({"test_obj": SlotW15(), "type_add_active": 1})
-slot_test.append({"test_obj": SlotW16(), "type_add_active": 1})
-slot_test.append({"test_obj": SlotW21(), "type_add_active": 1})
-slot_test.append({"test_obj": SlotW22(), "type_add_active": 1})
-slot_test.append({"test_obj": SlotW23(), "type_add_active": 1})
-slot_test.append({"test_obj": SlotW24(), "type_add_active": 1})
-slot_test.append({"test_obj": SlotW25(), "type_add_active": 1})
-slot_test.append({"test_obj": SlotW26(), "type_add_active": 1})
-slot_test.append({"test_obj": SlotW27(), "type_add_active": 1})
-slot_test.append({"test_obj": SlotW28(), "type_add_active": 1})
-slot_test.append({"test_obj": SlotW29(), "type_add_active": 1})
-slot_test.append({"test_obj": SlotW60(), "type_add_active": 1})
+slot_test.append(
+    {
+        "test_obj": SlotW10(),
+        "type_add_active": 1,
+    }
+)
+slot_test.append(
+    {
+        "test_obj": SlotW11(),
+        "type_add_active": 1,
+    }
+)
+slot_test.append(
+    {
+        "test_obj": SlotW12(),
+        "type_add_active": 1,
+    }
+)
+slot_test.append(
+    {
+        "test_obj": SlotW13(),
+        "type_add_active": 1,
+    }
+)
+slot_test.append(
+    {
+        "test_obj": SlotW14(),
+        "type_add_active": 1,
+    }
+)
+slot_test.append(
+    {
+        "test_obj": SlotW15(),
+        "type_add_active": 1,
+    }
+)
+slot_test.append(
+    {
+        "test_obj": SlotW16(),
+        "type_add_active": 1,
+    }
+)
+slot_test.append(
+    {
+        "test_obj": SlotW21(),
+        "type_add_active": 1,
+    }
+)
+slot_test.append(
+    {
+        "test_obj": SlotW22(),
+        "type_add_active": 1,
+    }
+)
+slot_test.append(
+    {
+        "test_obj": SlotW23(),
+        "type_add_active": 1,
+    }
+)
+slot_test.append(
+    {
+        "test_obj": SlotW24(),
+        "type_add_active": 1,
+    }
+)
+slot_test.append(
+    {
+        "test_obj": SlotW25(),
+        "type_add_active": 1,
+    }
+)
+slot_test.append(
+    {
+        "test_obj": SlotW26(),
+        "type_add_active": 1,
+    }
+)
+slot_test.append(
+    {
+        "test_obj": SlotW27(),
+        "type_add_active": 1,
+    }
+)
+slot_test.append(
+    {
+        "test_obj": SlotW28(),
+        "type_add_active": 1,
+    }
+)
+slot_test.append(
+    {
+        "test_obj": SlotW29(),
+        "type_add_active": 1,
+    }
+)
+slot_test.append(
+    {
+        "test_obj": SlotW60(),
+        "type_add_active": 1,
+    }
+)
 
 slot_test.append({"test_obj": SlotW61(), "type_add_active": 1})
 
 slot_test.append({"test_obj": SlotWLSRPM(), "type_add_active": 1})
 
 hole_test = list()
-hole_test.append({"test_obj": HoleM50(), "type_add_active": 2})
-hole_test.append({"test_obj": HoleM51(), "type_add_active": 2})
-hole_test.append({"test_obj": HoleM52(), "type_add_active": 2})
-hole_test.append({"test_obj": HoleM52R(), "type_add_active": 2})
-hole_test.append({"test_obj": HoleM53(), "type_add_active": 2})
-hole_test.append({"test_obj": HoleM54(), "type_add_active": 2})
-hole_test.append({"test_obj": HoleM57(), "type_add_active": 2})
-hole_test.append({"test_obj": HoleM58(), "type_add_active": 2})
-hole_test.append({"test_obj": HoleMLSRPM(), "type_add_active": 2})
-hole_test.append({"test_obj": VentilationCirc(), "type_add_active": 2})
-hole_test.append({"test_obj": VentilationPolar(), "type_add_active": 2})
-hole_test.append({"test_obj": VentilationTrap(), "type_add_active": 2})
+hole_test.append(
+    {
+        "test_obj": HoleM50(),
+        "type_add_active": 2,
+    }
+)
+hole_test.append(
+    {
+        "test_obj": HoleM51(),
+        "type_add_active": 2,
+    }
+)
+hole_test.append(
+    {
+        "test_obj": HoleM52(),
+        "type_add_active": 2,
+    }
+)
+hole_test.append(
+    {
+        "test_obj": HoleM52R(),
+        "type_add_active": 2,
+    }
+)
+hole_test.append(
+    {
+        "test_obj": HoleM53(),
+        "type_add_active": 2,
+    }
+)
+hole_test.append(
+    {
+        "test_obj": HoleM54(),
+        "type_add_active": 2,
+    }
+)
+hole_test.append(
+    {
+        "test_obj": HoleM57(),
+        "type_add_active": 2,
+    }
+)
+hole_test.append(
+    {
+        "test_obj": HoleM58(),
+        "type_add_active": 2,
+    }
+)
+hole_test.append(
+    {
+        "test_obj": HoleMLSRPM(),
+        "type_add_active": 2,
+    }
+)
+hole_test.append(
+    {
+        "test_obj": VentilationCirc(),
+        "type_add_active": 2,
+    }
+)
+hole_test.append(
+    {
+        "test_obj": VentilationPolar(),
+        "type_add_active": 2,
+    }
+)
+hole_test.append(
+    {
+        "test_obj": VentilationTrap(),
+        "type_add_active": 2,
+    }
+)
 slot_test.extend(hole_test)
 
 
@@ -283,6 +481,46 @@ class Test_plot_schematics(object):
             is_add_schematics=False,
             is_add_main_line=True,
             type_add_active=test_dict["type_add_active"],
+            save_path=file_path,
+            is_show_fig=False,
+        )
+
+    def test_slotCirc_old(self):
+        """Slot Schematics for SlotCirc, old H0 definition"""
+        ## Empty
+        test_obj = SlotCirc()
+        file_name = "SlotCirc_empty_int_rot_old.png"
+        file_path = join(SCHEMATICS_PATH, file_name)
+        # Delete previous plot
+        if isfile(file_path):
+            remove(file_path)
+        # Plot / Save schematics
+        print("Generating " + file_name)
+        test_obj.plot_schematics(
+            is_default=True,
+            is_add_point_label=False,
+            is_add_schematics=True,
+            is_add_main_line=True,
+            is_enforce_default_H0_bore=False,
+            type_add_active=0,
+            save_path=file_path,
+            is_show_fig=False,
+        )
+        # Ext stator
+        file_name = "SlotCirc_empty_ext_sta_old.png"
+        file_path = join(SCHEMATICS_PATH, file_name)
+        # Delete previous plot
+        if isfile(file_path):
+            remove(file_path)
+        # Plot / Save schematics
+        print("Generating " + file_name)
+        test_obj.plot_schematics(
+            is_default=2,
+            is_add_point_label=False,
+            is_add_schematics=True,
+            is_add_main_line=True,
+            is_enforce_default_H0_bore=False,
+            type_add_active=0,
             save_path=file_path,
             is_show_fig=False,
         )

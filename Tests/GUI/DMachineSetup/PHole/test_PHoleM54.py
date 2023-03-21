@@ -33,7 +33,6 @@ class TestPHoleM54(object):
     def setup_method(self):
         """Run at the begining of every test to setup the gui"""
 
-
         test_obj = LamHole(Rint=0.1, Rext=0.2)
         test_obj.hole = list()
         test_obj.hole.append(HoleM54(H0=0.10, H1=0.11, W0=0.12, R1=0.13))
@@ -91,6 +90,7 @@ class TestPHoleM54(object):
 
         assert self.widget.hole.R1 == 0.36
         assert self.test_obj.hole[0].R1 == 0.36
+
 
 if __name__ == "__main__":
     a = TestPHoleM54()

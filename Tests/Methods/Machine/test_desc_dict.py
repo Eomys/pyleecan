@@ -53,6 +53,7 @@ def test_desc_SCIM():
     assert desc_dict[12]["name"] == "Mshaft"
     assert desc_dict[12]["value"] == pytest.approx(21.51, rel=0.1)
 
+
 def test_desc_IPMSM():
     """Check that the description of an IPMSM is correct"""
     Toyota_Prius = load(join(DATA_DIR, "Machine", "Toyota_Prius.json"))

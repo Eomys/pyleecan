@@ -189,6 +189,7 @@ class TestPHoleM58(object):
         assert self.widget.W2 == 0
         assert self.widget.w_mat_1.isHidden()
 
+
 if __name__ == "__main__":
     a = TestPHoleM58()
     a.setup_class()

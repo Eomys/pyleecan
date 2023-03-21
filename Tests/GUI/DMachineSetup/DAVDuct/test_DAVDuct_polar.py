@@ -71,7 +71,10 @@ class TestDAVDuctPolar(object):
 
         # 2nd set
         assert type(setup["widget"].tab_vent.widget(1).w_vent) == PVentPolar
-        assert setup["widget"].tab_vent.widget(1).c_vent_type.currentIndex() == VENT_POLAR_INDEX
+        assert (
+            setup["widget"].tab_vent.widget(1).c_vent_type.currentIndex()
+            == VENT_POLAR_INDEX
+        )
         assert setup["widget"].tab_vent.widget(1).w_vent.si_Zh.value() == 2
         assert setup["widget"].tab_vent.widget(1).w_vent.lf_H0.value() == 22e-3
         assert setup["widget"].tab_vent.widget(1).w_vent.lf_D0.value() == 32e-3
@@ -80,7 +83,10 @@ class TestDAVDuctPolar(object):
 
         # 3rd set
         assert type(setup["widget"].tab_vent.widget(2).w_vent) == PVentPolar
-        assert setup["widget"].tab_vent.widget(2).c_vent_type.currentIndex() == VENT_POLAR_INDEX
+        assert (
+            setup["widget"].tab_vent.widget(2).c_vent_type.currentIndex()
+            == VENT_POLAR_INDEX
+        )
         assert setup["widget"].tab_vent.widget(2).w_vent.si_Zh.value() == 3
         assert setup["widget"].tab_vent.widget(2).w_vent.lf_H0.value() == 23e-3
         assert setup["widget"].tab_vent.widget(2).w_vent.lf_D0.value() == 33e-3

@@ -63,9 +63,7 @@ class TestPHoleM52(object):
 
         self.test_obj = LamHole(Rint=0.1, Rext=0.2)
         self.test_obj.hole = list()
-        self.test_obj.hole.append(
-            HoleM52(H0=0.10, H1=0.11, H2=0.12, W0=0.13, W3=0.17)
-        )
+        self.test_obj.hole.append(HoleM52(H0=0.10, H1=0.11, H2=0.12, W0=0.13, W3=0.17))
         self.test_obj.hole[0].magnet_0 == None
 
         self.widget = PHoleM52(self.test_obj.hole[0], self.material_dict)
@@ -148,9 +146,7 @@ class TestPHoleM52(object):
         # Nan are there because the value are not correct for the sin, cos and tan methods. But with true values, it works.
 
         assert self.widget.out_slot_surface.text() == "Slot suface: 0.002569 m²"
-        assert (
-            self.widget.out_magnet_surface.text() == "Magnet surface: 0.000143 m²"
-        )
+        assert self.widget.out_magnet_surface.text() == "Magnet surface: 0.000143 m²"
         assert self.widget.out_alpha.text() == "alpha: 0.166 rad (9.511°)"
         assert self.widget.out_W1.text() == "W1: 0.006234 m"
 

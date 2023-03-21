@@ -150,6 +150,7 @@ class TestPHoleM57(object):
         assert self.widget.hole.H2 == 0.36
         assert self.test_obj.hole[0].H2 == 0.36
 
+
 if __name__ == "__main__":
     a = TestPHoleM57()
     a.setup_class()

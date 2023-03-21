@@ -50,9 +50,9 @@ class TestSSkew(object):
         assert self.widget.machine.rotor.skew.Nstep == 3
         assert self.widget.machine.rotor.skew.type_skew == "linear"
         assert self.widget.machine.rotor.skew.angle_list == [
-            -7.5 * pi / 180 /2,
+            -7.5 * pi / 180 / 2,
             0,
-            7.5 * pi / 180 /2,
+            7.5 * pi / 180 / 2,
         ]
 
         assert self.widget.cb_type.currentText() == "Linear"
@@ -172,7 +172,6 @@ class TestSSkew(object):
             3 * pi / 180,
             4 * pi / 180,
         ]
-
 
     @pytest.mark.SkewR
     @pytest.mark.IPMSM
