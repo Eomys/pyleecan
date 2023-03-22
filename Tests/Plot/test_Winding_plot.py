@@ -202,11 +202,9 @@ class Test_Winding_plot(object):
         for machine_name in machine_list:
             machine = load(join(DATA_DIR, "Machine", machine_name + ".json"))
             machine.plot(is_winding_connection=True)
-            # machine.stator.winding.plot_radial()
 
     def test_plot_linear(self):
         Toyota_Prius = load(join(DATA_DIR, "Machine", "Toyota_Prius.json"))
-        # Toyota_Prius.plot()
         Toyota_Prius.stator.winding.plot_linear()
 
 

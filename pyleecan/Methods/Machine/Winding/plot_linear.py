@@ -1,17 +1,15 @@
+from numpy import ones, real, imag, conjugate, array, delete, insert
 from swat_em import datamodel
 from swat_em.config import config
-import numpy as np
+from matplotlib.patches import Rectangle, Patch, FancyArrowPatch
+import matplotlib.pyplot as plt
+from matplotlib.font_manager import FontProperties
+
 from ....Functions.init_fig import init_fig
 from ....Functions.Geometry.inter_line_line import inter_line_line
 from ....Functions.Winding.gen_phase_list import gen_name
-
-from matplotlib.patches import Rectangle, Patch, FancyArrowPatch
-import matplotlib.pyplot as plt
-
-
 from ....definitions import config_dict
 
-is_old = False
 PHASE_COLORS = config_dict["PLOT"]["COLOR_DICT"]["PHASE_COLORS"]
 ROTOR_COLOR = config_dict["PLOT"]["COLOR_DICT"]["ROTOR_COLOR"]
 STATOR_COLOR = config_dict["PLOT"]["COLOR_DICT"]["STATOR_COLOR"]
@@ -32,7 +30,20 @@ def plot_linear(
     ----------
     self : Winding
         A Winding object
-
+    fig : Matplotlib.figure.Figure
+        existing figure to use if None create a new one
+    ax : Matplotlib.axes.Axes object
+        Axis on which to plot the data
+    sym : int
+        Symmetry factor (1= full machine, 2= half of the machine...)
+    is_show_fig : bool
+        To call show at the end of the method
+    save_path : str
+        full path including folder, name and extension of the file to save if save_path is not None
+    win_title : str
+        Title for the window
+    is_legend : bool
+        True to add the legend
     """
 
     # Recovering the colors of the phases
@@ -57,9 +68,8 @@ def plot_linear(
     Zs = self.parent.get_Zs()
     p = self.parent.get_pole_pair_number()
 
-    wdg = datamodel()
-
     # Generating the winding from inputs and recovering its attributes
+    wdg = datamodel()
     wdg.genwdg(
         Q=Zs,
         P=2 * p,
@@ -75,15 +85,14 @@ def plot_linear(
     h1 = 0.6  # height of the coil side
     h2 = 0.5 + self.coil_pitch / 6  # height of the winding overhang
     db1 = 0  # distance between coil side and slot center
-    Np1 = 101  # number of plotting points in the winding overhang per coil
 
     # Step 2: Creating a list of patches and lines that will be plotted
     patches = list()
     lines_dict = dict()
 
-    # Step2 -1: Adding slot surface as rectangural patches
+    # Step 2-1: Adding slot surface as rectangural patches
     xy = [(k - 0.5 - bz / 2, -hz / 2) for k in range(Zs + 1)]
-    width = np.ones([Zs + 1]) * bz
+    width = ones([Zs + 1]) * bz
     height = hz
 
     # First tooth is cut in half so we have two surfaces instead of 1
@@ -131,7 +140,7 @@ def plot_linear(
             P5 = db1 - 1j * h1
 
             point_list = [P0, P1, P2, P3, P4, P5]
-            x_, y_ = np.real(point_list), np.imag(point_list)
+            x_, y_ = real(point_list), imag(point_list)
 
             # Step 2-2-2: Shifting the coil pattern to the right slot according to the direction of the winding
             direct = coil[2]
@@ -174,11 +183,11 @@ def plot_linear(
                 # Listing the point corrected and its conjugate
                 point_corrected = list()
                 point_corrected.append(point_correct[0])
-                point_corrected.append(np.conjugate(point_correct[0]))
+                point_corrected.append(conjugate(point_correct[0]))
 
                 # Putting the corrected point on the left border to complete the coil
-                point_to_add = np.array(point_corrected) - Zs
-                point_to_add = np.insert(point_to_add, 1, wrong_points - Zs)
+                point_to_add = array(point_corrected) - Zs
+                point_to_add = insert(point_to_add, 1, wrong_points - Zs)
 
                 # Replacing the incorrect point by the new P2 and P3
                 for idx_point, _ in enumerate(idx_point_too_far):
@@ -188,9 +197,7 @@ def plot_linear(
 
                 # Removing point that are not necessary (when more that 2 point are out of bounds)
                 if idx_point_to_remove != list():
-                    point_list_updated = np.delete(
-                        point_list_updated, idx_point_to_remove
-                    )
+                    point_list_updated = delete(point_list_updated, idx_point_to_remove)
 
                 coils.append(point_list_updated)
                 coils.append(point_to_add)
@@ -242,10 +249,10 @@ def plot_linear(
         lines_dict["Phase " + str(idx_phase + 1)] = coils
 
     # Step 3: plotting the line and patches that we computed before
-    # Initializing the figure
+    # Step 3-1: Initializing the figure
     (fig, ax, patch_leg, label_leg) = init_fig(fig=fig, ax=ax, shape="rectangle")
 
-    # Drawing coils
+    # Step 3-2: Drawing the coils
     for idx_phase, phase in enumerate(lines_dict):
         for coil in lines_dict[phase]:
             for idx_coil in range(len(coil)):
@@ -259,37 +266,36 @@ def plot_linear(
                     end = coil[idx_coil + 1]
 
                 # Adding condition to make sure that we do not draw lines between two point on the left or  the right border
-                if (np.real(begin) != -0.5 or np.real(end) != -0.5) and (
-                    np.real(begin) != Zs - 0.5 or np.real(end) != Zs - 0.5
+                if (real(begin) != -0.5 or real(end) != -0.5) and (
+                    real(begin) != Zs - 0.5 or real(end) != Zs - 0.5
                 ):
-                    points = np.array([begin, end])
+                    points = array([begin, end])
                     ax.plot(
                         points.real,
                         points.imag,
                         color=PHASE_COLORS[idx_phase],
                     )
 
-    # Adding stator tooth patches to the figure
+    # Step 3-3: Adding stator tooth patches to the figure
     for patch in patches:
         ax.add_patch(patch)
 
-    # Adding plot slot number between each tooth
+    # Step 3-4: Adding plot slot number between each tooth
     for slot_nb in range(Zs):
-        ax.text(
-            x=slot_nb,
-            y=-h1 / 2,
-            s=str(slot_nb + 1),
-            fontdict=config_dict["PLOT"]["FONT_NAME"],
+        ax.annotate(
+            xy=(slot_nb, -hz / 2),
+            text=str(slot_nb + 1),
+            family=config_dict["PLOT"]["FONT_NAME"],
             horizontalalignment="center",
             color="k",
         )
 
-    # Setting limits of the figure and removing axes
+    # Step 3-5: Setting limits of the figure and removing axes
     ax.set_xlim(-0.5, Zs - 0.5)
     ax.set_ylim(-h2 * 1.2, h2 * 1.2)
     ax.set_axis_off()
 
-    # Setting the title of the window and of the figure
+    # Step 3-6: Setting the title of the window and of the figure
     if self.parent.is_stator:
         title = "Stator winding linear pattern"
         prefix = "Stator "
@@ -302,7 +308,7 @@ def plot_linear(
         manager.set_window_title(win_title)
     ax.set_title(win_title)
 
-    # Setting the legend of the figure
+    # Step 3-7: Setting the legend of the figure
     # Adding lamination name in the lamination
     if self.parent.is_stator and "Stator" not in label_leg:
         patch_leg.append(Patch(color=STATOR_COLOR))
@@ -329,7 +335,8 @@ def plot_linear(
         fig.savefig(save_path)
         plt.close(fig=fig)
 
-    # Displaying the figure if asked
+    # Displaying the figure if necessary
     if is_show_fig:
         fig.show()
+
     return fig, ax
