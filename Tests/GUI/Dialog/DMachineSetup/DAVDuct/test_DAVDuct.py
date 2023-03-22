@@ -19,7 +19,7 @@ from pyleecan.GUI.Dialog.DMachineSetup.DAVDuct.PVentPolar.PVentPolar import (
 from pyleecan.GUI.Dialog.DMachineSetup.DAVDuct.PVentTrap.PVentTrap import (
     PVentTrap,
 )
-from Tests.GUI.DMachineSetup.DAVDuct import (
+from Tests.GUI.Dialog.DMachineSetup.DAVDuct import (
     VENT_CIRC_INDEX,
     VENT_POLAR_INDEX,
     VENT_TRAP_INDEX,
