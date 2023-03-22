@@ -10,6 +10,7 @@ from .....Classes.WindingUD import WindingUD
 from .....Classes.MachineSRM import MachineSRM
 from .....Classes.MachineWRSM import MachineWRSM
 from .....GUI.Dialog.DMachineSetup.SWinding.Gen_SWinding import Gen_SWinding
+from .....Functions.Plot.set_plot_gui_icon import set_plot_gui_icon
 
 
 class SWinding(Gen_SWinding, QWidget):
@@ -74,7 +75,6 @@ class SWinding(Gen_SWinding, QWidget):
             self.obj.winding.coil_pitch = 1
             self.si_coil_pitch.setEnabled(False)
             self.in_Zs.hide()  # =2*p
-            #self.b_preview.setEnabled(False)
             # Enforce star of slot
             self.c_wind_type.setEnabled(False)
             self.c_wind_type.setCurrentIndex(0)
@@ -558,25 +558,6 @@ class SWinding(Gen_SWinding, QWidget):
         self.w_viewer.axes.axis("equal")
         self.w_viewer.draw()
 
-    def s_plot(self):
-        """Plot a preview of the winding in a popup
-
-        Parameters
-        ----------
-        self : SWinding
-            A SWinding object
-        """
-        try:
-            self.obj.plot_winding()
-            set_plot_gui_icon()
-        except (AssertionError, WindingError) as e:
-            if self.obj.is_stator:  # Adapt the text to the current lamination
-                err_msg = "Error while plotting winding in Stator Winding:\n" + str(e)
-            else:
-                err_msg = "Error while plotting winding in Rotor Winding:\n" + str(e)
-            getLogger(GUI_LOG_NAME).error(err_msg)
-            QMessageBox().critical(self, self.tr("Error"), err_msg)
-
     def s_plot_linear(self):
         """Plot linear pattern of the winding defined
 
@@ -588,7 +569,7 @@ class SWinding(Gen_SWinding, QWidget):
         try:
             self.obj.winding.plot_linear()
             set_plot_gui_icon()
-        except (AssertionError, WindingError) as e:
+        except Exception as e:
             if self.obj.is_stator:  # Adapt the text to the current lamination
                 err_msg = (
                     "Error while plotting linear pattern in Stator Winding:\n" + str(e)
@@ -597,8 +578,7 @@ class SWinding(Gen_SWinding, QWidget):
                 err_msg = (
                     "Error while plotting linear pattern in Rotor Winding:\n" + str(e)
                 )
-            getLogger(GUI_LOG_NAME).error(err_msg)
-            QMessageBox().critical(self, self.tr("Error"), err_msg)
+            log_error(self, err_msg)
 
     def s_plot_radial(self):
         """Plot radial pattern of the winding defined
@@ -611,7 +591,7 @@ class SWinding(Gen_SWinding, QWidget):
         try:
             self.obj.plot(is_winding_connection=True)
             set_plot_gui_icon()
-        except (AssertionError, WindingError) as e:
+        except Exception as e:
             if self.obj.is_stator:  # Adapt the text to the current lamination
                 err_msg = (
                     "Error while plotting radial pattern in Stator Winding:\n" + str(e)
@@ -620,8 +600,7 @@ class SWinding(Gen_SWinding, QWidget):
                 err_msg = (
                     "Error while plotting radial pattern in Rotor Winding:\n" + str(e)
                 )
-            getLogger(GUI_LOG_NAME).error(err_msg)
-            QMessageBox().critical(self, self.tr("Error"), err_msg)
+            log_error(self, err_msg)
 
     def s_plot_mmf(self):
         """Plot the unit mmf of the stator"""

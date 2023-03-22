@@ -3,7 +3,6 @@ from swat_em import datamodel
 from swat_em.config import config
 from matplotlib.patches import Rectangle, Patch, FancyArrowPatch
 import matplotlib.pyplot as plt
-from matplotlib.font_manager import FontProperties
 
 from ....Functions.init_fig import init_fig
 from ....Functions.Geometry.inter_line_line import inter_line_line
@@ -84,7 +83,7 @@ def plot_linear(
     hz = 0.5  # slot height
     h1 = 0.6  # height of the coil side
     h2 = 0.5 + self.coil_pitch / 6  # height of the winding overhang
-    db1 = 0  # distance between coil side and slot center
+    db1 = 0 if self.Nlayer == 1 else 0.1  # distance between coil side and slot center
 
     # Step 2: Creating a list of patches and lines that will be plotted
     patches = list()
