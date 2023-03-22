@@ -10,14 +10,14 @@ PATCH_EDGE_ALPHA = config_dict["PLOT"]["COLOR_DICT"]["PATCH_EDGE_ALPHA"]
 
 
 def get_patches(
-    self, color=PATCH_COLOR, edgecolor=PATCH_EDGE, is_edge_only=False, linestyle=None
+    self, color=PATCH_COLOR, edgecolor=None, is_edge_only=False, linestyle=None
 ):
     """Returns the Circle Patch to be display in matplotlib
 
     Parameters
     ----------
     self : Circle
-          a Circle object
+        a Circle object
     color :
         the color of the Patch (Default value = PATCH_COLOR)
     edgecolor :
@@ -33,15 +33,22 @@ def get_patches(
         List of patches corresponding to the surface
     """
 
+    # Set default color
+    if edgecolor is None and not is_edge_only:
+        edgecolor = PATCH_EDGE
+    elif edgecolor is None and is_edge_only:
+        edgecolor = PATCH_EDGE_ALPHA
+    if is_edge_only:
+        color = PATCH_COLOR_ALPHA
+    if "--" in edgecolor:
+        edgecolor = edgecolor.replace("-", "")
+        linestyle = "--"
+
     # check if the Circle is correct
     self.check()
     # the coordinates of the center of the circle
     Zr = self.center.real
     Zi = self.center.imag
-
-    if is_edge_only:
-        color = PATCH_COLOR_ALPHA
-        edgecolor = PATCH_EDGE_ALPHA
 
     return [
         Circle(

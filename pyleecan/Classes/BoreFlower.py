@@ -86,7 +86,7 @@ class BoreFlower(Bore):
     get_logger = get_logger
 
     def __init__(
-        self, N=8, Rarc=0.01, alpha=0, type_merge_slot=1, init_dict=None, init_str=None
+        self, N=8, Rarc=0.01, type_merge_slot=1, alpha=0, init_dict=None, init_str=None
     ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
@@ -107,16 +107,15 @@ class BoreFlower(Bore):
                 N = init_dict["N"]
             if "Rarc" in list(init_dict.keys()):
                 Rarc = init_dict["Rarc"]
-            if "alpha" in list(init_dict.keys()):
-                alpha = init_dict["alpha"]
             if "type_merge_slot" in list(init_dict.keys()):
                 type_merge_slot = init_dict["type_merge_slot"]
+            if "alpha" in list(init_dict.keys()):
+                alpha = init_dict["alpha"]
         # Set the properties (value check and convertion are done in setter)
         self.N = N
         self.Rarc = Rarc
-        self.alpha = alpha
         # Call Bore init
-        super(BoreFlower, self).__init__(type_merge_slot=type_merge_slot)
+        super(BoreFlower, self).__init__(type_merge_slot=type_merge_slot, alpha=alpha)
         # The class is frozen (in Bore init), for now it's impossible to
         # add new properties
 
@@ -128,7 +127,6 @@ class BoreFlower(Bore):
         BoreFlower_str += super(BoreFlower, self).__str__()
         BoreFlower_str += "N = " + str(self.N) + linesep
         BoreFlower_str += "Rarc = " + str(self.Rarc) + linesep
-        BoreFlower_str += "alpha = " + str(self.alpha) + linesep
         return BoreFlower_str
 
     def __eq__(self, other):
@@ -143,8 +141,6 @@ class BoreFlower(Bore):
         if other.N != self.N:
             return False
         if other.Rarc != self.Rarc:
-            return False
-        if other.alpha != self.alpha:
             return False
         return True
 
@@ -184,21 +180,6 @@ class BoreFlower(Bore):
                 diff_list.append(name + ".Rarc" + val_str)
             else:
                 diff_list.append(name + ".Rarc")
-        if (
-            other._alpha is not None
-            and self._alpha is not None
-            and isnan(other._alpha)
-            and isnan(self._alpha)
-        ):
-            pass
-        elif other._alpha != self._alpha:
-            if is_add_value:
-                val_str = (
-                    " (self=" + str(self._alpha) + ", other=" + str(other._alpha) + ")"
-                )
-                diff_list.append(name + ".alpha" + val_str)
-            else:
-                diff_list.append(name + ".alpha")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -212,7 +193,6 @@ class BoreFlower(Bore):
         S += super(BoreFlower, self).__sizeof__()
         S += getsizeof(self.N)
         S += getsizeof(self.Rarc)
-        S += getsizeof(self.alpha)
         return S
 
     def as_dict(self, type_handle_ndarray=0, keep_function=False, **kwargs):
@@ -234,7 +214,6 @@ class BoreFlower(Bore):
         )
         BoreFlower_dict["N"] = self.N
         BoreFlower_dict["Rarc"] = self.Rarc
-        BoreFlower_dict["alpha"] = self.alpha
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         BoreFlower_dict["__class__"] = "BoreFlower"
@@ -246,11 +225,11 @@ class BoreFlower(Bore):
         # Handle deepcopy of all the properties
         N_val = self.N
         Rarc_val = self.Rarc
-        alpha_val = self.alpha
         type_merge_slot_val = self.type_merge_slot
+        alpha_val = self.alpha
         # Creates new object of the same type with the copied properties
         obj_copy = type(self)(
-            N=N_val, Rarc=Rarc_val, alpha=alpha_val, type_merge_slot=type_merge_slot_val
+            N=N_val, Rarc=Rarc_val, type_merge_slot=type_merge_slot_val, alpha=alpha_val
         )
         return obj_copy
 
@@ -259,7 +238,6 @@ class BoreFlower(Bore):
 
         self.N = None
         self.Rarc = None
-        self.alpha = None
         # Set to None the properties inherited from Bore
         super(BoreFlower, self)._set_None()
 
@@ -298,23 +276,5 @@ class BoreFlower(Bore):
 
         :Type: float
         :min: 0
-        """,
-    )
-
-    def _get_alpha(self):
-        """getter of alpha"""
-        return self._alpha
-
-    def _set_alpha(self, value):
-        """setter of alpha"""
-        check_var("alpha", value, "float")
-        self._alpha = value
-
-    alpha = property(
-        fget=_get_alpha,
-        fset=_set_alpha,
-        doc=u"""Angular offset for the arc
-
-        :Type: float
         """,
     )

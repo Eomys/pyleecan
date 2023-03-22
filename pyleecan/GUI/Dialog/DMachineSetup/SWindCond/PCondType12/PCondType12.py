@@ -73,6 +73,8 @@ class PCondType12(Gen_PCondType12, QWidget):
         else:
             self.g_ins.setChecked(True)
         self.lf_Wins_wire.setValue(self.cond.Wins_wire)
+        if self.cond.Wins_cond is None:
+            self.cond.Wins_cond = self.cond.Wwire  # Default value
         self.lf_Wins_cond.setValue(self.cond.Wins_cond)
         self.lf_Lewout.validator().setBottom(0)
         if self.lam.winding.Lewout is None:
@@ -135,6 +137,9 @@ class PCondType12(Gen_PCondType12, QWidget):
             A PCondType12 object
         """
         self.cond.Wwire = self.lf_Wwire.value()
+        if not self.g_ins.isChecked():
+            self.lf_Wins_cond.setValue(self.cond.Wwire)
+            self.cond.Wins_cond = self.cond.Wwire
         self.w_out.comp_output()
         # Notify the machine GUI that the machine has changed
         self.saveNeeded.emit()

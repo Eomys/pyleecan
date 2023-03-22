@@ -4,6 +4,7 @@ from numpy import array, exp, pi
 from ....definitions import config_dict
 from ....Classes.Material import Material
 from ....Functions.init_fig import init_fig
+from ....Functions.Plot import dict_2D
 from ....Functions.Winding.gen_phase_list import gen_name
 
 PHASE_COLORS = config_dict["PLOT"]["COLOR_DICT"]["PHASE_COLORS"]
@@ -16,6 +17,7 @@ def plot_active(
     self,
     wind_mat=None,
     fig=None,
+    ax=None,
     is_bar=False,
     is_show_fig=True,
     enforced_default_color=None,
@@ -84,9 +86,9 @@ def plot_active(
             point_list = point_list * exp(1j * (2 * pi) / self.Zs)
 
     # Display the result
-    (fig, ax, patch_leg, label_leg) = init_fig(fig)
-    ax.set_xlabel("(m)")
-    ax.set_ylabel("(m)")
+    (fig, ax, patch_leg, label_leg) = init_fig(fig, ax=ax)
+    ax.set_xlabel("[m]")
+    ax.set_ylabel("[m]")
     ax.set_title("Winding Pattern")
 
     # Add wedges
@@ -137,7 +139,20 @@ def plot_active(
                 patch_leg.append(Patch(color=PHASE_COLORS[index]))
                 label_leg.append("Phase " + qs_name[ii])
 
-    ax.legend(patch_leg, label_leg)
+    ax.legend(
+        patch_leg,
+        label_leg,
+        prop={"family": dict_2D["font_name"], "size": dict_2D["font_size_legend"]},
+    )
+
+    for item in (
+        [ax.xaxis.label, ax.yaxis.label] + ax.get_xticklabels() + ax.get_yticklabels()
+    ):
+        item.set_fontname(dict_2D["font_name"])
+        item.set_fontsize(dict_2D["font_size_label"])
+    ax.title.set_fontname(dict_2D["font_name"])
+    ax.title.set_fontsize(dict_2D["font_size_title"])
+
     if is_show_fig:
         fig.show()
     return fig, ax

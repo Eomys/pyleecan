@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 
-from numpy import pi
 from ....Classes.LamSlot import LamSlot
 
 

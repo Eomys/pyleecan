@@ -10,6 +10,7 @@ from PySide2.QtGui import *
 from PySide2.QtWidgets import *
 
 from .....GUI.Tools.MPLCanvas import MPLCanvas
+from .....GUI.Tools.SpinBox import SpinBox
 
 from pyleecan.GUI.Resources import pyleecan_rc
 
@@ -20,25 +21,41 @@ class Ui_SWinding(object):
             SWinding.setObjectName(u"SWinding")
         SWinding.resize(993, 837)
         SWinding.setMinimumSize(QSize(650, 550))
-        self.verticalLayout_4 = QVBoxLayout(SWinding)
-        self.verticalLayout_4.setObjectName(u"verticalLayout_4")
-        self.horizontalLayout_8 = QHBoxLayout()
-        self.horizontalLayout_8.setObjectName(u"horizontalLayout_8")
+        self.gridLayout_3 = QGridLayout(SWinding)
+        self.gridLayout_3.setObjectName(u"gridLayout_3")
         self.w_viewer = MPLCanvas(SWinding)
         self.w_viewer.setObjectName(u"w_viewer")
+        sizePolicy = QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.w_viewer.sizePolicy().hasHeightForWidth())
+        self.w_viewer.setSizePolicy(sizePolicy)
         self.w_viewer.setMinimumSize(QSize(250, 0))
 
-        self.horizontalLayout_8.addWidget(self.w_viewer)
+        self.gridLayout_3.addWidget(self.w_viewer, 0, 0, 1, 1)
 
+        self.verticalLayout_4 = QVBoxLayout()
+        self.verticalLayout_4.setObjectName(u"verticalLayout_4")
         self.in_wind_param = QLabel(SWinding)
         self.in_wind_param.setObjectName(u"in_wind_param")
-        self.in_wind_param.setMaximumSize(QSize(400, 16777215))
+        self.in_wind_param.setMaximumSize(QSize(250, 400))
         self.in_wind_param.setPixmap(
             QPixmap(u":/images/images/MachineSetup/WindParam/Winding param.PNG")
         )
         self.in_wind_param.setScaledContents(True)
+        self.in_wind_param.setAlignment(
+            Qt.AlignLeading | Qt.AlignLeft | Qt.AlignVCenter
+        )
 
-        self.horizontalLayout_8.addWidget(self.in_wind_param)
+        self.verticalLayout_4.addWidget(self.in_wind_param)
+
+        self.verticalSpacer_2 = QSpacerItem(
+            20, 338, QSizePolicy.Minimum, QSizePolicy.Expanding
+        )
+
+        self.verticalLayout_4.addItem(self.verticalSpacer_2)
+
+        self.gridLayout_3.addLayout(self.verticalLayout_4, 0, 1, 1, 1)
 
         self.scrollArea = QScrollArea(SWinding)
         self.scrollArea.setObjectName(u"scrollArea")
@@ -47,7 +64,7 @@ class Ui_SWinding(object):
         self.scrollArea.setWidgetResizable(True)
         self.scrollAreaWidgetContents = QWidget()
         self.scrollAreaWidgetContents.setObjectName(u"scrollAreaWidgetContents")
-        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 247, 793))
+        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 265, 793))
         self.verticalLayout_5 = QVBoxLayout(self.scrollAreaWidgetContents)
         self.verticalLayout_5.setObjectName(u"verticalLayout_5")
         self.g_pattern = QGroupBox(self.scrollAreaWidgetContents)
@@ -83,7 +100,7 @@ class Ui_SWinding(object):
 
         self.gridLayout.addWidget(self.in_qs, 0, 0, 1, 1)
 
-        self.si_qs = QSpinBox(self.g_pattern)
+        self.si_qs = SpinBox(self.g_pattern)
         self.si_qs.setObjectName(u"si_qs")
 
         self.gridLayout.addWidget(self.si_qs, 0, 1, 1, 1)
@@ -93,7 +110,7 @@ class Ui_SWinding(object):
 
         self.gridLayout.addWidget(self.in_Nlayer, 1, 0, 1, 1)
 
-        self.si_Nlayer = QSpinBox(self.g_pattern)
+        self.si_Nlayer = SpinBox(self.g_pattern)
         self.si_Nlayer.setObjectName(u"si_Nlayer")
         self.si_Nlayer.setMinimum(1)
         self.si_Nlayer.setMaximum(2)
@@ -105,7 +122,7 @@ class Ui_SWinding(object):
 
         self.gridLayout.addWidget(self.in_coil_pitch, 2, 0, 1, 1)
 
-        self.si_coil_pitch = QSpinBox(self.g_pattern)
+        self.si_coil_pitch = SpinBox(self.g_pattern)
         self.si_coil_pitch.setObjectName(u"si_coil_pitch")
 
         self.gridLayout.addWidget(self.si_coil_pitch, 2, 1, 1, 1)
@@ -115,7 +132,7 @@ class Ui_SWinding(object):
 
         self.gridLayout.addWidget(self.in_Ntcoil, 3, 0, 1, 1)
 
-        self.si_Ntcoil = QSpinBox(self.g_pattern)
+        self.si_Ntcoil = SpinBox(self.g_pattern)
         self.si_Ntcoil.setObjectName(u"si_Ntcoil")
 
         self.gridLayout.addWidget(self.si_Ntcoil, 3, 1, 1, 1)
@@ -125,7 +142,7 @@ class Ui_SWinding(object):
 
         self.gridLayout.addWidget(self.in_Npcp, 4, 0, 1, 1)
 
-        self.si_Npcp = QSpinBox(self.g_pattern)
+        self.si_Npcp = SpinBox(self.g_pattern)
         self.si_Npcp.setObjectName(u"si_Npcp")
         self.si_Npcp.setMaximum(999999999)
         self.si_Npcp.setValue(12345)
@@ -165,7 +182,7 @@ class Ui_SWinding(object):
 
         self.horizontalLayout_4.addWidget(self.in_Nslot)
 
-        self.si_Nslot = QSpinBox(self.g_edit)
+        self.si_Nslot = SpinBox(self.g_edit)
         self.si_Nslot.setObjectName(u"si_Nslot")
         self.si_Nslot.setMinimumSize(QSize(60, 0))
 
@@ -245,9 +262,7 @@ class Ui_SWinding(object):
 
         self.scrollArea.setWidget(self.scrollAreaWidgetContents)
 
-        self.horizontalLayout_8.addWidget(self.scrollArea)
-
-        self.verticalLayout_4.addLayout(self.horizontalLayout_8)
+        self.gridLayout_3.addWidget(self.scrollArea, 0, 2, 1, 1)
 
         self.horizontalLayout_3 = QHBoxLayout()
         self.horizontalLayout_3.setObjectName(u"horizontalLayout_3")
@@ -272,7 +287,7 @@ class Ui_SWinding(object):
 
         self.horizontalLayout_3.addWidget(self.b_next)
 
-        self.verticalLayout_4.addLayout(self.horizontalLayout_3)
+        self.gridLayout_3.addLayout(self.horizontalLayout_3, 1, 0, 1, 3)
 
         self.retranslateUi(SWinding)
 
@@ -308,7 +323,9 @@ class Ui_SWinding(object):
         # if QT_CONFIG(tooltip)
         self.in_Nlayer.setToolTip(
             QCoreApplication.translate(
-                "SWinding", u"Number of different phases in a same slot", None
+                "SWinding",
+                u"<qt><nobr>Number of different phases in a same slot</nobr></qt>",
+                None,
             )
         )
         # endif // QT_CONFIG(tooltip)
@@ -332,7 +349,9 @@ class Ui_SWinding(object):
         # if QT_CONFIG(tooltip)
         self.si_Nlayer.setToolTip(
             QCoreApplication.translate(
-                "SWinding", u"Number of different phases in a same slot", None
+                "SWinding",
+                u"<qt><nobr>Number of different phases in a same slot</nobr></qt>",
+                None,
             )
         )
         # endif // QT_CONFIG(tooltip)
@@ -389,7 +408,7 @@ class Ui_SWinding(object):
         self.out_rot_dir.setToolTip(
             QCoreApplication.translate(
                 "SWinding",
-                u"Fundamental field rotation direction when feeding the winding with direct AC current",
+                u"<qt><nobr>Fundamental field rotation direction when feeding the</nobr> winding with direct AC current</qt>",
                 None,
             )
         )
@@ -422,7 +441,9 @@ class Ui_SWinding(object):
         )
         # if QT_CONFIG(tooltip)
         self.out_Nperw.setToolTip(
-            QCoreApplication.translate("SWinding", u"Winding periodicity", None)
+            QCoreApplication.translate(
+                "SWinding", u"<qt><nobr>Winding periodicity</nobr></qt>", None
+            )
         )
         # endif // QT_CONFIG(tooltip)
         self.out_Nperw.setText(
@@ -431,7 +452,9 @@ class Ui_SWinding(object):
         # if QT_CONFIG(tooltip)
         self.out_Ntspc.setToolTip(
             QCoreApplication.translate(
-                "SWinding", u"Winding number of turns in series per phase", None
+                "SWinding",
+                u"<qt><nobr>Winding number of turns in series per phase</nobr></qt>",
+                None,
             )
         )
         # endif // QT_CONFIG(tooltip)
@@ -457,7 +480,9 @@ class Ui_SWinding(object):
         # if QT_CONFIG(tooltip)
         self.out_Ncspc.setToolTip(
             QCoreApplication.translate(
-                "SWinding", u"Number of coils in series per parallel circuit", None
+                "SWinding",
+                u"<qt><nobr>Number of coils in series per parallel circuit</nobr></qt>",
+                None,
             )
         )
         # endif // QT_CONFIG(tooltip)

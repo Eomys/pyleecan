@@ -6,14 +6,14 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>650</width>
-    <height>550</height>
+    <width>820</width>
+    <height>600</height>
    </rect>
   </property>
   <property name="minimumSize">
    <size>
-    <width>650</width>
-    <height>550</height>
+    <width>820</width>
+    <height>600</height>
    </size>
   </property>
   <property name="windowTitle">
@@ -27,28 +27,51 @@
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout_2">
      <item>
-      <widget class="HelpButton" name="b_help">
-       <property name="text">
-        <string/>
-       </property>
-       <property name="pixmap">
-        <pixmap resource="../../../Resources/pyleecan.qrc">:/images/images/icon/help_16.png</pixmap>
-       </property>
-      </widget>
-     </item>
-     <item>
       <widget class="QComboBox" name="c_bore_type">
-       <property name="enabled">
-        <bool>true</bool>
-       </property>
        <item>
         <property name="text">
          <string>Bore Flower</string>
         </property>
        </item>
+      </widget>
+     </item>
+     <item>
+      <widget class="HelpButton" name="b_help">
+       <property name="text">
+        <string/>
+       </property>
+       <property name="pixmap">
+        <pixmap>:/images/images/icon/help_16.png</pixmap>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="in_alpha">
+       <property name="text">
+        <string>alpha :</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="FloatEdit" name="lf_alpha">
+       <property name="minimumSize">
+        <size>
+         <width>100</width>
+         <height>0</height>
+        </size>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QComboBox" name="c_alpha_unit">
        <item>
         <property name="text">
-         <string>Bore Sine Pole</string>
+         <string>[rad]</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>[°]</string>
         </property>
        </item>
       </widget>
@@ -120,9 +143,14 @@
  </widget>
  <customwidgets>
   <customwidget>
+   <class>FloatEdit</class>
+   <extends>QLineEdit</extends>
+   <header>.....GUI/Tools/FloatEdit.h</header>
+  </customwidget>
+  <customwidget>
    <class>HelpButton</class>
    <extends>QLabel</extends>
-   <header>pyleecan/GUI/Tools/HelpButton.h</header>
+   <header>.....GUI/Tools/HelpButton.h</header>
   </customwidget>
  </customwidgets>
  <resources>

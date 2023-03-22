@@ -3,7 +3,7 @@
 import PySide2.QtCore
 from numpy import pi
 from PySide2.QtCore import Signal
-from PySide2.QtWidgets import QWidget
+from PySide2.QtWidgets import QWidget, QListView
 from PySide2.QtGui import QPixmap
 from ......Classes.SlotW22 import SlotW22
 from ......GUI import gui_option
@@ -56,6 +56,12 @@ class PWSlot22(Gen_PWSlot22, QWidget):
         self.lf_H0.setValue(self.slot.H0)
         self.lf_H2.setValue(self.slot.H2)
 
+        listView = QListView(self.c_W0_unit)
+        self.c_W0_unit.setView(listView)
+
+        listView = QListView(self.c_W2_unit)
+        self.c_W2_unit.setView(listView)
+
         self.c_W0_unit.setCurrentIndex(0)  # rad
         self.c_W2_unit.setCurrentIndex(0)  # rad
 
@@ -97,6 +103,8 @@ class PWSlot22(Gen_PWSlot22, QWidget):
             self.img_slot.setPixmap(
                 QPixmap(u":/images/images/MachineSetup/WSlot/SlotW22_wind.png")
             )
+        # Notify the machine GUI that the machine has changed
+        self.saveNeeded.emit()
 
     def set_W0(self):
         """Signal to update the value of W0 according to the line edit
@@ -106,10 +114,13 @@ class PWSlot22(Gen_PWSlot22, QWidget):
         self : PWSlot22
             A PWSlot22 object
         """
-        if self.c_W0_unit.currentIndex() == 0:  # Rad
-            self.slot.W0 = self.lf_W0.value()
+        if self.lf_W0 is not None:
+            if self.c_W0_unit.currentIndex() == 0:  # Rad
+                self.slot.W0 = self.lf_W0.value()
+            else:
+                self.slot.W0 = self.lf_W0.value() / 180 * pi
         else:
-            self.slot.W0 = self.lf_W0.value() / 180 * pi
+            self.slot.W0 = None
         self.w_out.comp_output()
         # Notify the machine GUI that the machine has changed
         self.saveNeeded.emit()
@@ -122,10 +133,13 @@ class PWSlot22(Gen_PWSlot22, QWidget):
         self : PWSlot22
             A PWSlot22 object
         """
-        if self.c_W2_unit.currentIndex() == 0:  # Rad
-            self.slot.W2 = self.lf_W2.value()
+        if self.lf_W2.value() is not None:
+            if self.c_W2_unit.currentIndex() == 0:  # Rad
+                self.slot.W2 = self.lf_W2.value()
+            else:
+                self.slot.W2 = self.lf_W2.value() / 180 * pi
         else:
-            self.slot.W2 = self.lf_W2.value() / 180 * pi
+            self.slot.W2 = None
         self.w_out.comp_output()
         # Notify the machine GUI that the machine has changed
         self.saveNeeded.emit()
@@ -167,7 +181,7 @@ class PWSlot22(Gen_PWSlot22, QWidget):
             Current index of combobox
         """
         if self.lf_W0.text() != "":
-            self.set_W0()  # Update for deg if needed and call comp_output
+            self.set_W0()  # Update for ° if needed and call comp_output
         # Notify the machine GUI that the machine has changed
         self.saveNeeded.emit()
 
@@ -182,7 +196,7 @@ class PWSlot22(Gen_PWSlot22, QWidget):
             Current index of combobox
         """
         if self.lf_W2.text() != "":
-            self.set_W2()  # Update for deg if needed and call comp_output
+            self.set_W2()  # Update for ° if needed and call comp_output
         # Notify the machine GUI that the machine has changed
         self.saveNeeded.emit()
 

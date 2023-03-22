@@ -81,16 +81,23 @@
         <x>0</x>
         <y>0</y>
         <width>268</width>
-        <height>450</height>
+        <height>446</height>
        </rect>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout">
        <item>
         <layout class="QGridLayout" name="gridLayout">
-         <item row="0" column="0">
-          <widget class="QLabel" name="in_N">
+         <item row="0" column="2">
+          <widget class="QLabel" name="unit_N">
            <property name="text">
-            <string>N</string>
+            <string/>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="2">
+          <widget class="QLabel" name="unit_k">
+           <property name="text">
+            <string/>
            </property>
           </widget>
          </item>
@@ -107,13 +114,6 @@
            </property>
           </widget>
          </item>
-         <item row="0" column="2">
-          <widget class="QLabel" name="unit_N">
-           <property name="text">
-            <string/>
-           </property>
-          </widget>
-         </item>
          <item row="1" column="0">
           <widget class="QLabel" name="in_W0">
            <property name="text">
@@ -121,30 +121,20 @@
            </property>
           </widget>
          </item>
-         <item row="1" column="1">
-          <widget class="FloatEdit" name="lf_W0"/>
-         </item>
          <item row="1" column="2">
           <widget class="QLabel" name="unit_W0">
            <property name="text">
-            <string>m</string>
+            <string>[m]</string>
            </property>
           </widget>
          </item>
-         <item row="2" column="0">
-          <widget class="QLabel" name="in_k">
-           <property name="text">
-            <string>k</string>
-           </property>
-          </widget>
+         <item row="1" column="1">
+          <widget class="FloatEdit" name="lf_W0"/>
          </item>
-         <item row="2" column="1">
-          <widget class="FloatEdit" name="lf_k"/>
-         </item>
-         <item row="2" column="2">
-          <widget class="QLabel" name="unit_k">
+         <item row="4" column="0">
+          <widget class="QLabel" name="in_delta_q">
            <property name="text">
-            <string/>
+            <string>delta_q</string>
            </property>
           </widget>
          </item>
@@ -155,63 +145,43 @@
            </property>
           </widget>
          </item>
-         <item row="3" column="1">
-          <widget class="FloatEdit" name="lf_delta_d"/>
-         </item>
-         <item row="3" column="2">
-          <widget class="QLabel" name="unit_delta_d">
+         <item row="2" column="0">
+          <widget class="QLabel" name="in_k">
            <property name="text">
-            <string>m</string>
-           </property>
-          </widget>
-         </item>
-         <item row="4" column="0">
-          <widget class="QLabel" name="in_delta_q">
-           <property name="text">
-            <string>delta_q</string>
+            <string>k</string>
            </property>
           </widget>
          </item>
          <item row="4" column="1">
           <widget class="FloatEdit" name="lf_delta_q"/>
          </item>
+         <item row="0" column="0">
+          <widget class="QLabel" name="in_N">
+           <property name="text">
+            <string>N</string>
+           </property>
+          </widget>
+         </item>
+         <item row="3" column="1">
+          <widget class="FloatEdit" name="lf_delta_d"/>
+         </item>
+         <item row="2" column="1">
+          <widget class="FloatEdit" name="lf_k"/>
+         </item>
+         <item row="3" column="2">
+          <widget class="QLabel" name="unit_delta_d">
+           <property name="text">
+            <string>[m]</string>
+           </property>
+          </widget>
+         </item>
          <item row="4" column="2">
           <widget class="QLabel" name="unit_delta_q">
            <property name="text">
-            <string>m</string>
+            <string>[m]</string>
            </property>
           </widget>
          </item>
-         <item row="5" column="0">
-          <widget class="QLabel" name="in_alpha">
-           <property name="text">
-            <string>alpha</string>
-           </property>
-          </widget>
-         </item>
-         <item row="5" column="1">
-          <widget class="FloatEdit" name="lf_alpha"/>
-         </item>
-         <item row="5" column="2">
-          <widget class="QComboBox" name="c_alpha_unit">
-           <property name="maximumSize">
-            <size>
-             <width>70</width>
-             <height>16777215</height>
-            </size>
-           </property>
-           <item>
-            <property name="text">
-             <string>[rad]</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>[deg]</string>
-            </property>
-           </item>
-          </widget>
-         </item>   
         </layout>
        </item>
        <item>

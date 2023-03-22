@@ -3,9 +3,8 @@
 
 from PySide2.QtCore import Signal
 from PySide2.QtWidgets import QMessageBox, QWidget
-from logging import getLogger
-from .....loggers import GUI_LOG_NAME
 from .....GUI.Dialog.DMachineSetup.SPreview.Ui_SPreview import Ui_SPreview
+from .....Functions.GUI.log_error import log_error
 
 
 class SPreview(Ui_SPreview, QWidget):
@@ -51,12 +50,7 @@ class SPreview(Ui_SPreview, QWidget):
             )
         except Exception as e:
             err_msg = "Error while plotting machine in Machine Summary:\n" + str(e)
-            getLogger(GUI_LOG_NAME).error(err_msg)
-            QMessageBox().critical(
-                self,
-                self.tr("Error"),
-                err_msg,
-            )
+            log_error(self, err_msg)
         self.w_plot.axes.set_axis_off()
         self.w_plot.axes.axis("equal")
         if self.w_plot.axes.get_legend() is not None:

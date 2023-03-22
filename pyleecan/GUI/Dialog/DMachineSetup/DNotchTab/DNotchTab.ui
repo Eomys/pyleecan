@@ -40,13 +40,6 @@
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="b_remove">
-       <property name="text">
-        <string>Remove last notch</string>
-       </property>
-      </widget>
-     </item>
-     <item>
       <spacer name="horizontalSpacer_2">
        <property name="orientation">
         <enum>Qt::Horizontal</enum>
@@ -87,6 +80,9 @@
      </property>
      <property name="currentIndex">
       <number>-1</number>
+     </property>
+     <property name="tabsClosable">
+      <bool>true</bool>
      </property>
     </widget>
    </item>

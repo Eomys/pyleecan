@@ -6,9 +6,15 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>958</width>
+    <width>600</width>
     <height>657</height>
    </rect>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>600</width>
+    <height>0</height>
+   </size>
   </property>
   <property name="windowTitle">
    <string>Edit Material</string>
@@ -84,7 +90,7 @@
       </size>
      </property>
      <property name="currentIndex">
-      <number>1</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="tab_elec">
       <attribute name="title">
@@ -108,7 +114,7 @@
           </widget>
          </item>
          <item row="0" column="1">
-          <widget class="FloatEdit" name="lf_rho_elec"/>
+          <widget class="FloatEdit" name="lf_rho_elec" native="true"/>
          </item>
          <item row="0" column="2">
           <widget class="QLabel" name="unit_rho_elec">
@@ -139,12 +145,36 @@
           </widget>
          </item>
          <item row="1" column="1">
-          <widget class="FloatEdit" name="lf_epsr"/>
+          <widget class="FloatEdit" name="lf_epsr" native="true"/>
          </item>
          <item row="1" column="2">
           <widget class="QLabel" name="unit_epsr">
            <property name="text">
-            <string>[ ]</string>
+            <string>[-]</string>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="0">
+          <widget class="QLabel" name="in_alpha_elec">
+           <property name="font">
+            <font>
+             <pointsize>8</pointsize>
+             <weight>50</weight>
+             <bold>false</bold>
+            </font>
+           </property>
+           <property name="text">
+            <string>alpha</string>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="1">
+          <widget class="FloatEdit" name="lf_alpha_elec" native="true"/>
+         </item>
+         <item row="2" column="2">
+          <widget class="QLabel" name="unit_alpha_elec">
+           <property name="text">
+            <string>[1/K]</string>
            </property>
           </widget>
          </item>
@@ -225,12 +255,12 @@
               <enum>QLayout::SetDefaultConstraint</enum>
              </property>
              <item row="2" column="1">
-              <widget class="FloatEdit" name="lf_alpha_Br"/>
+              <widget class="FloatEdit" name="lf_alpha_Br" native="true"/>
              </item>
              <item row="2" column="2">
               <widget class="QLabel" name="unit_alpha_Br">
                <property name="text">
-                <string>[ ]</string>
+                <string>[%/°C]</string>
                </property>
               </widget>
              </item>
@@ -323,10 +353,10 @@
               </widget>
              </item>
              <item row="0" column="1">
-              <widget class="FloatEdit" name="lf_mur_lin"/>
+              <widget class="FloatEdit" name="lf_mur_lin" native="true"/>
              </item>
              <item row="1" column="1">
-              <widget class="FloatEdit" name="lf_Brm20"/>
+              <widget class="FloatEdit" name="lf_Brm20" native="true"/>
              </item>
              <item row="1" column="2">
               <widget class="QLabel" name="unit_Brm20">
@@ -339,6 +369,30 @@
                </property>
                <property name="text">
                 <string>[T]</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+           <item>
+            <layout class="QHBoxLayout" name="horizontalLayout_11">
+             <item>
+              <spacer name="horizontalSpacer_11">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>40</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+             <item>
+              <widget class="QPushButton" name="b_plot_BrmHc">
+               <property name="text">
+                <string>Plot Brm/Hc</string>
                </property>
               </widget>
              </item>
@@ -363,6 +417,12 @@
           <layout class="QVBoxLayout" name="verticalLayout_3">
            <item>
             <widget class="QGroupBox" name="g_BH_import">
+             <property name="minimumSize">
+              <size>
+               <width>250</width>
+               <height>0</height>
+              </size>
+             </property>
              <property name="title">
               <string>B(H) curve definition</string>
              </property>
@@ -379,7 +439,7 @@
            <item>
             <layout class="QGridLayout" name="gridLayout_5">
              <item row="0" column="1">
-              <widget class="FloatEdit" name="lf_Wlam"/>
+              <widget class="FloatEdit" name="lf_Wlam" native="true"/>
              </item>
              <item row="0" column="0">
               <widget class="QLabel" name="in_Wlam">
@@ -495,7 +555,7 @@
           </widget>
          </item>
          <item>
-          <widget class="FloatEdit" name="lf_rho_meca"/>
+          <widget class="FloatEdit" name="lf_rho_meca" native="true"/>
          </item>
          <item>
           <widget class="QLabel" name="unit_rho_meca">
@@ -541,7 +601,7 @@
                </widget>
               </item>
               <item>
-               <widget class="FloatEdit" name="lf_Ex"/>
+               <widget class="FloatEdit" name="lf_Ex" native="true"/>
               </item>
               <item>
                <widget class="QLabel" name="in_Ey">
@@ -558,7 +618,7 @@
                </widget>
               </item>
               <item>
-               <widget class="FloatEdit" name="lf_Ey"/>
+               <widget class="FloatEdit" name="lf_Ey" native="true"/>
               </item>
               <item>
                <widget class="QLabel" name="in_Ez">
@@ -575,7 +635,7 @@
                </widget>
               </item>
               <item>
-               <widget class="FloatEdit" name="lf_Ez"/>
+               <widget class="FloatEdit" name="lf_Ez" native="true"/>
               </item>
              </layout>
             </widget>
@@ -601,7 +661,7 @@
                </widget>
               </item>
               <item>
-               <widget class="FloatEdit" name="lf_nu_xy"/>
+               <widget class="FloatEdit" name="lf_nu_xy" native="true"/>
               </item>
               <item>
                <widget class="QLabel" name="in_nu_xz">
@@ -618,7 +678,7 @@
                </widget>
               </item>
               <item>
-               <widget class="FloatEdit" name="lf_nu_xz"/>
+               <widget class="FloatEdit" name="lf_nu_xz" native="true"/>
               </item>
               <item>
                <widget class="QLabel" name="in_nu_yz">
@@ -635,7 +695,7 @@
                </widget>
               </item>
               <item>
-               <widget class="FloatEdit" name="lf_nu_yz"/>
+               <widget class="FloatEdit" name="lf_nu_yz" native="true"/>
               </item>
              </layout>
             </widget>
@@ -661,7 +721,7 @@
                </widget>
               </item>
               <item>
-               <widget class="FloatEdit" name="lf_Gxy"/>
+               <widget class="FloatEdit" name="lf_Gxy" native="true"/>
               </item>
               <item>
                <widget class="QLabel" name="in_Gxz">
@@ -678,7 +738,7 @@
                </widget>
               </item>
               <item>
-               <widget class="FloatEdit" name="lf_Gxz"/>
+               <widget class="FloatEdit" name="lf_Gxz" native="true"/>
               </item>
               <item>
                <widget class="QLabel" name="in_Gyz">
@@ -695,7 +755,7 @@
                </widget>
               </item>
               <item>
-               <widget class="FloatEdit" name="lf_Gyz"/>
+               <widget class="FloatEdit" name="lf_Gyz" native="true"/>
               </item>
              </layout>
             </widget>
@@ -734,7 +794,7 @@
               </widget>
              </item>
              <item row="0" column="1">
-              <widget class="FloatEdit" name="lf_E"/>
+              <widget class="FloatEdit" name="lf_E" native="true"/>
              </item>
              <item row="0" column="2">
               <widget class="QLabel" name="unit_E">
@@ -758,7 +818,7 @@
               </widget>
              </item>
              <item row="1" column="1">
-              <widget class="FloatEdit" name="lf_nu"/>
+              <widget class="FloatEdit" name="lf_nu" native="true"/>
              </item>
              <item row="2" column="0">
               <widget class="QLabel" name="in_G">
@@ -775,7 +835,7 @@
               </widget>
              </item>
              <item row="2" column="1">
-              <widget class="FloatEdit" name="lf_G"/>
+              <widget class="FloatEdit" name="lf_G" native="true"/>
              </item>
              <item row="2" column="2">
               <widget class="QLabel" name="unit_G">
@@ -863,7 +923,7 @@
                </widget>
               </item>
               <item>
-               <widget class="FloatEdit" name="lf_Lx"/>
+               <widget class="FloatEdit" name="lf_Lx" native="true"/>
               </item>
               <item>
                <widget class="QLabel" name="in_Ly">
@@ -880,7 +940,7 @@
                </widget>
               </item>
               <item>
-               <widget class="FloatEdit" name="lf_Ly"/>
+               <widget class="FloatEdit" name="lf_Ly" native="true"/>
               </item>
               <item>
                <widget class="QLabel" name="in_Lz">
@@ -897,7 +957,7 @@
                </widget>
               </item>
               <item>
-               <widget class="FloatEdit" name="lf_Lz"/>
+               <widget class="FloatEdit" name="lf_Lz" native="true"/>
               </item>
              </layout>
             </widget>
@@ -918,7 +978,7 @@
                </widget>
               </item>
               <item>
-               <widget class="FloatEdit" name="lf_L"/>
+               <widget class="FloatEdit" name="lf_L" native="true"/>
               </item>
               <item>
                <widget class="QLabel" name="unit_L">
@@ -965,7 +1025,7 @@
           </widget>
          </item>
          <item row="1" column="1">
-          <widget class="FloatEdit" name="lf_alpha"/>
+          <widget class="FloatEdit" name="lf_alpha" native="true"/>
          </item>
          <item row="0" column="2">
           <widget class="QLabel" name="unit_Cp">
@@ -982,7 +1042,7 @@
           </widget>
          </item>
          <item row="0" column="1">
-          <widget class="FloatEdit" name="lf_Cp"/>
+          <widget class="FloatEdit" name="lf_Cp" native="true"/>
          </item>
          <item row="1" column="2">
           <widget class="QLabel" name="unit_alpha">
@@ -1030,12 +1090,12 @@
           </widget>
          </item>
          <item>
-          <widget class="FloatEdit" name="lf_cost_unit"/>
+          <widget class="FloatEdit" name="lf_cost_unit" native="true"/>
          </item>
          <item>
           <widget class="QLabel" name="unit_cost_unit">
            <property name="text">
-            <string>[€ / kg]</string>
+            <string>1 / kg</string>
            </property>
           </widget>
          </item>
@@ -1101,8 +1161,9 @@
  <customwidgets>
   <customwidget>
    <class>FloatEdit</class>
-   <extends>QLineEdit</extends>
+   <extends>QWidget</extends>
    <header>.....GUI/Tools/FloatEdit.h</header>
+   <container>1</container>
   </customwidget>
   <customwidget>
    <class>DTableData</class>

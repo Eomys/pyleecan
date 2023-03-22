@@ -11,6 +11,7 @@ from PySide2.QtWidgets import *
 
 from ......GUI.Tools.FloatEdit import FloatEdit
 from ......GUI.Dialog.DMachineSetup.DAVDuct.WVentOut.WVentOut import WVentOut
+from ......GUI.Tools.SpinBox import SpinBox
 
 from pyleecan.GUI.Resources import pyleecan_rc
 
@@ -53,75 +54,62 @@ class Ui_PVentPolar(object):
         self.verticalLayout.setObjectName(u"verticalLayout")
         self.gridLayout = QGridLayout()
         self.gridLayout.setObjectName(u"gridLayout")
-        self.in_Zh = QLabel(self.scrollAreaWidgetContents)
-        self.in_Zh.setObjectName(u"in_Zh")
-
-        self.gridLayout.addWidget(self.in_Zh, 0, 0, 1, 1)
-
-        self.si_Zh = QSpinBox(self.scrollAreaWidgetContents)
+        self.si_Zh = SpinBox(self.scrollAreaWidgetContents)
         self.si_Zh.setObjectName(u"si_Zh")
 
         self.gridLayout.addWidget(self.si_Zh, 0, 1, 1, 1)
-
-        self.in_H0 = QLabel(self.scrollAreaWidgetContents)
-        self.in_H0.setObjectName(u"in_H0")
-
-        self.gridLayout.addWidget(self.in_H0, 1, 0, 1, 1)
 
         self.lf_H0 = FloatEdit(self.scrollAreaWidgetContents)
         self.lf_H0.setObjectName(u"lf_H0")
 
         self.gridLayout.addWidget(self.lf_H0, 1, 1, 1, 1)
 
-        self.unit_H0 = QLabel(self.scrollAreaWidgetContents)
-        self.unit_H0.setObjectName(u"unit_H0")
-
-        self.gridLayout.addWidget(self.unit_H0, 1, 2, 1, 1)
-
         self.in_D0 = QLabel(self.scrollAreaWidgetContents)
         self.in_D0.setObjectName(u"in_D0")
 
         self.gridLayout.addWidget(self.in_D0, 2, 0, 1, 1)
-
-        self.lf_D0 = FloatEdit(self.scrollAreaWidgetContents)
-        self.lf_D0.setObjectName(u"lf_D0")
-
-        self.gridLayout.addWidget(self.lf_D0, 2, 1, 1, 1)
-
-        self.unit_D0 = QLabel(self.scrollAreaWidgetContents)
-        self.unit_D0.setObjectName(u"unit_D0")
-
-        self.gridLayout.addWidget(self.unit_D0, 2, 2, 1, 1)
-
-        self.in_W1 = QLabel(self.scrollAreaWidgetContents)
-        self.in_W1.setObjectName(u"in_W1")
-
-        self.gridLayout.addWidget(self.in_W1, 3, 0, 1, 1)
 
         self.lf_W1 = FloatEdit(self.scrollAreaWidgetContents)
         self.lf_W1.setObjectName(u"lf_W1")
 
         self.gridLayout.addWidget(self.lf_W1, 3, 1, 1, 1)
 
-        self.unit_W1 = QLabel(self.scrollAreaWidgetContents)
-        self.unit_W1.setObjectName(u"unit_W1")
+        self.unit_H0 = QLabel(self.scrollAreaWidgetContents)
+        self.unit_H0.setObjectName(u"unit_H0")
 
-        self.gridLayout.addWidget(self.unit_W1, 3, 2, 1, 1)
+        self.gridLayout.addWidget(self.unit_H0, 1, 2, 1, 1)
 
-        self.in_Alpha0 = QLabel(self.scrollAreaWidgetContents)
-        self.in_Alpha0.setObjectName(u"in_Alpha0")
+        self.unit_D0 = QLabel(self.scrollAreaWidgetContents)
+        self.unit_D0.setObjectName(u"unit_D0")
 
-        self.gridLayout.addWidget(self.in_Alpha0, 4, 0, 1, 1)
+        self.gridLayout.addWidget(self.unit_D0, 2, 2, 1, 1)
 
-        self.lf_Alpha0 = FloatEdit(self.scrollAreaWidgetContents)
-        self.lf_Alpha0.setObjectName(u"lf_Alpha0")
+        self.in_H0 = QLabel(self.scrollAreaWidgetContents)
+        self.in_H0.setObjectName(u"in_H0")
 
-        self.gridLayout.addWidget(self.lf_Alpha0, 4, 1, 1, 1)
+        self.gridLayout.addWidget(self.in_H0, 1, 0, 1, 1)
 
-        self.unit_Alpha0 = QLabel(self.scrollAreaWidgetContents)
-        self.unit_Alpha0.setObjectName(u"unit_Alpha0")
+        self.in_W1 = QLabel(self.scrollAreaWidgetContents)
+        self.in_W1.setObjectName(u"in_W1")
 
-        self.gridLayout.addWidget(self.unit_Alpha0, 4, 2, 1, 1)
+        self.gridLayout.addWidget(self.in_W1, 3, 0, 1, 1)
+
+        self.lf_D0 = FloatEdit(self.scrollAreaWidgetContents)
+        self.lf_D0.setObjectName(u"lf_D0")
+
+        self.gridLayout.addWidget(self.lf_D0, 2, 1, 1, 1)
+
+        self.in_Zh = QLabel(self.scrollAreaWidgetContents)
+        self.in_Zh.setObjectName(u"in_Zh")
+
+        self.gridLayout.addWidget(self.in_Zh, 0, 0, 1, 1)
+
+        self.c_W1_unit = QComboBox(self.scrollAreaWidgetContents)
+        self.c_W1_unit.addItem("")
+        self.c_W1_unit.addItem("")
+        self.c_W1_unit.setObjectName(u"c_W1_unit")
+
+        self.gridLayout.addWidget(self.c_W1_unit, 3, 2, 1, 1)
 
         self.verticalLayout.addLayout(self.gridLayout)
 
@@ -141,7 +129,6 @@ class Ui_PVentPolar(object):
         self.horizontalLayout.addWidget(self.scrollArea)
 
         QWidget.setTabOrder(self.lf_H0, self.lf_D0)
-        QWidget.setTabOrder(self.lf_D0, self.lf_Alpha0)
 
         self.retranslateUi(PVentPolar)
 
@@ -154,18 +141,17 @@ class Ui_PVentPolar(object):
             QCoreApplication.translate("PVentPolar", u"Form", None)
         )
         self.img_vent.setText("")
-        self.in_Zh.setText(QCoreApplication.translate("PVentPolar", u"Zh :", None))
-        self.in_H0.setText(QCoreApplication.translate("PVentPolar", u"H0 :", None))
-        self.unit_H0.setText(QCoreApplication.translate("PVentPolar", u"m", None))
         self.in_D0.setText(QCoreApplication.translate("PVentPolar", u"D0 :", None))
+        self.unit_H0.setText(QCoreApplication.translate("PVentPolar", u"m", None))
         self.unit_D0.setText(QCoreApplication.translate("PVentPolar", u"m", None))
+        self.in_H0.setText(QCoreApplication.translate("PVentPolar", u"H0 :", None))
         self.in_W1.setText(QCoreApplication.translate("PVentPolar", u"W1 :", None))
-        self.unit_W1.setText(QCoreApplication.translate("PVentPolar", u"[rad]", None))
-        self.in_Alpha0.setText(
-            QCoreApplication.translate("PVentPolar", u"Alpha0 :", None)
+        self.in_Zh.setText(QCoreApplication.translate("PVentPolar", u"Zh :", None))
+        self.c_W1_unit.setItemText(
+            0, QCoreApplication.translate("PVentPolar", u"[rad]", None)
         )
-        self.unit_Alpha0.setText(
-            QCoreApplication.translate("PVentPolar", u"[rad]", None)
+        self.c_W1_unit.setItemText(
+            1, QCoreApplication.translate("PVentPolar", u"[\u00b0]", None)
         )
 
     # retranslateUi

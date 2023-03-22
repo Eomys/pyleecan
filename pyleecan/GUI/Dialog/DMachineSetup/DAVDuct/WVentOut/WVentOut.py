@@ -64,16 +64,24 @@ class WVentOut(QGroupBox):
             vent = self.parent().parent().parent().parent().vent
 
         # Lamination output
-        # Rint = format(self.u.get_m(lam.Rint), ".4g")
-        # self.out_Rint.setText(lam_name + ".Rint: " + Rint + " " + self.u.get_m_name())
-        self.out_Rint.hide()
+        lam_name = lam.get_label(is_add_id=False)
+        Rint = format(self.u.get_m(lam.Rint), ".4g")
+        self.out_Rint.setText(
+            lam_name + ".Rint: " + Rint + " [" + self.u.get_m_name() + "]"
+        )
 
-        # Rext = format(self.u.get_m(lam.Rext), ".4g")
-        # self.out_Rext.setText(lam_name + ".Rext: " + Rext + " " + self.u.get_m_name())
-        self.out_Rext.hide()
+        Rext = format(self.u.get_m(lam.Rext), ".4g")
+        self.out_Rext.setText(
+            lam_name + ".Rext: " + Rext + " [" + self.u.get_m_name() + "]"
+        )
 
         if vent.Zh not in [None, 0]:
-            sp_txt = format(pi / vent.Zh, ".4g") + " [rad]"
+            sp_txt = (
+                format(pi / vent.Zh, ".4g")
+                + " [rad], "
+                + format(180 / vent.Zh, ".4g")
+                + " [°]"
+            )
         else:
             sp_txt = "?"
         self.out_sp.setText("pi / Zh : " + sp_txt)

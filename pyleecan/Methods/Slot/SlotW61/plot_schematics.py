@@ -86,7 +86,9 @@ def plot_schematics(
             H3=16e-3,
             H4=16e-3,
         )
-        lam = LamSlot(Rint=0.135, Rext=0.3, is_internal=True, is_stator=True, slot=slot)
+        lam = LamSlot(
+            Rint=0.135, Rext=0.3, is_internal=True, is_stator=False, slot=slot
+        )
 
         return slot.plot_schematics(
             is_default=False,
@@ -316,6 +318,7 @@ def plot_schematics(
             is_add_wedge = False  # No wedge for this false
             self.plot_active(
                 fig=fig,
+                ax=ax,
                 is_show_fig=False,
                 is_add_wedge=is_add_wedge,
                 wind_mat=np.ones((1, 2, self.Zs, 1)),
@@ -323,6 +326,7 @@ def plot_schematics(
             )
             self.plot_active(
                 fig=fig,
+                ax=ax,
                 is_show_fig=False,
                 is_add_wedge=is_add_wedge,
                 wind_mat=np.ones((1, 2, self.Zs, 1)),
@@ -330,6 +334,7 @@ def plot_schematics(
             )
             self.plot_active(
                 fig=fig,
+                ax=ax,
                 is_show_fig=False,
                 is_add_wedge=is_add_wedge,
                 wind_mat=np.ones((1, 2, self.Zs, 1)),
@@ -337,6 +342,7 @@ def plot_schematics(
             )
             self.plot_active(
                 fig=fig,
+                ax=ax,
                 is_show_fig=False,
                 is_add_wedge=is_add_wedge,
                 wind_mat=np.ones((1, 2, self.Zs, 1)),
@@ -345,6 +351,7 @@ def plot_schematics(
         elif type_add_active == 2:  # Magnet
             self.plot_active(
                 fig=fig,
+                ax=ax,
                 is_show_fig=False,
                 enforced_default_color=MAGNET_COLOR,
             )

@@ -256,7 +256,8 @@
             "comp_Rmin",
             "comp_surface",
             "get_surface",
-            "plot"
+            "plot",
+            "comp_Rmax"
         ],
         "mother": "",
         "name": "Bore",
@@ -272,6 +273,16 @@
                 "type": "int",
                 "unit": "",
                 "value": 1
+            },
+            {
+                "as_dict": "",
+                "desc": "Angular offset for the bore shape",
+                "max": "",
+                "min": "",
+                "name": "alpha",
+                "type": "float",
+                "unit": "rad",
+                "value": 0
             }
         ]
     },
@@ -314,16 +325,6 @@
                 "type": "float",
                 "unit": "m",
                 "value": 0.01
-            },
-            {
-                "as_dict": "",
-                "desc": "Angular offset for the arc",
-                "max": "",
-                "min": "",
-                "name": "alpha",
-                "type": "float",
-                "unit": "rad",
-                "value": 0
             }
         ]
     },
@@ -375,16 +376,6 @@
                 "type": "float",
                 "unit": "m",
                 "value": 0.0035
-            },
-            {
-                "as_dict": "",
-                "desc": "Angular offset",
-                "max": "",
-                "min": "",
-                "name": "alpha",
-                "type": "float",
-                "unit": "rad",
-                "value": 0
             }
         ]
     },
@@ -458,16 +449,6 @@
                 "type": "float",
                 "unit": "m",
                 "value": null
-            },
-            {
-                "as_dict": "",
-                "desc": "Angular offset",
-                "max": "",
-                "min": "",
-                "name": "alpha",
-                "type": "float",
-                "unit": "rad",
-                "value": 0
             }
         ]
     },
@@ -509,6 +490,16 @@
                 "type": "int",
                 "unit": "-",
                 "value": 1
+            },
+            {
+                "as_dict": "",
+                "desc": "Name of the bore (for save)",
+                "max": "",
+                "min": "",
+                "name": "name",
+                "type": "str",
+                "unit": "-",
+                "value": ""
             }
         ]
     },
@@ -5306,7 +5297,8 @@
             "get_Zs",
             "has_magnet",
             "plot",
-            "set_pole_pair_number"
+            "set_pole_pair_number",
+            "set_Lmag"
         ],
         "mother": "Lamination",
         "name": "LamH",
@@ -5461,7 +5453,8 @@
             "comp_volumes",
             "plot",
             "comp_angle_d_axis",
-            "get_magnet_number"
+            "get_magnet_number",
+            "set_Lmag"
         ],
         "mother": "LamSlot",
         "name": "LamSlotMag",
@@ -12451,7 +12444,8 @@
             "comp_surface_opening",
             "get_surface_active",
             "get_surface_opening",
-            "plot_schematics"
+            "plot_schematics",
+            "convert_to_H0_bore"
         ],
         "mother": "Slot",
         "name": "SlotCirc",
@@ -12477,6 +12471,16 @@
                 "type": "float",
                 "unit": "m",
                 "value": 0.03
+            },
+            {
+                "as_dict": "",
+                "desc": "True to define H0 from top of arc to bore radius, False top arc to middle of W0 segment",
+                "max": "",
+                "min": "",
+                "name": "is_H0_bore",
+                "type": "bool",
+                "unit": "-",
+                "value": 1
             }
         ]
     },

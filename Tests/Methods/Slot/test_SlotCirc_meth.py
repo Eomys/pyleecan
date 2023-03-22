@@ -1,12 +1,15 @@
 # -*- coding: utf-8 -*-
 import pytest
-
+from os.path import join, isfile
+from os import remove
 from pyleecan.Classes.SlotCirc import SlotCirc
 from numpy import ndarray, pi, exp
 from pyleecan.Classes.LamSlot import LamSlot
 from pyleecan.Classes.Slot import Slot
 from pyleecan.Methods.Slot.SlotCirc import SlotCheckError
 import matplotlib.pyplot as plt
+from pyleecan.Functions.load import load
+from Tests import save_load_path
 
 # For AlmostEqual
 DELTA = 1e-4
@@ -15,7 +18,7 @@ slotCirc_test = list()
 
 # Internal Slot
 lam = LamSlot(is_internal=True, Rint=0.1325, Rext=0.2)
-lam.slot = SlotCirc(Zs=6, H0=30e-3, W0=12e-3)
+lam.slot = SlotCirc(Zs=6, H0=30e-3, W0=12e-3, is_H0_bore=False)
 slotCirc_test.append(
     {
         "test_obj": lam,
@@ -29,7 +32,7 @@ slotCirc_test.append(
 
 # External Slot
 lam = LamSlot(is_internal=False, Rint=0.1325)
-lam.slot = SlotCirc(Zs=6, H0=30e-3, W0=12e-3)
+lam.slot = SlotCirc(Zs=6, H0=30e-3, W0=12e-3, is_H0_bore=False)
 slotCirc_test.append(
     {
         "test_obj": lam,
@@ -43,7 +46,7 @@ slotCirc_test.append(
 
 # H0 < W0/2 internal
 lam = LamSlot(is_internal=True, Rext=0.0592, Rint=0.0215)
-lam.slot = SlotCirc(Zs=8, H0=0.00021, W0=0.008)
+lam.slot = SlotCirc(Zs=8, H0=0.00021, W0=0.008, is_H0_bore=False)
 slotCirc_test.append(
     {
         "test_obj": lam,
@@ -57,7 +60,7 @@ slotCirc_test.append(
 
 # H0 < W0/2 external
 lam = LamSlot(is_internal=False, Rint=0.0592, Rext=0.075)
-lam.slot = SlotCirc(Zs=8, H0=0.00035, W0=0.008)
+lam.slot = SlotCirc(Zs=8, H0=0.00035, W0=0.008, is_H0_bore=False)
 slotCirc_test.append(
     {
         "test_obj": lam,
@@ -69,7 +72,80 @@ slotCirc_test.append(
     }
 )
 
+#############
+# Same 4 cases with is_H0_bore=True
+#############
+# Internal Slot
+lam = LamSlot(is_internal=True, Rint=0.1325, Rext=0.2)
+lam.slot = SlotCirc(Zs=6, H0=30e-3, W0=12e-3, is_H0_bore=True)
+slotCirc_test.append(
+    {
+        "test_obj": lam,
+        "S_exp": 0.00075132,
+        "Ao": 0.0600090036,
+        "Aw": 0.135373,
+        "SW_exp": 0.00075132,
+        "H_exp": 0.03,
+    }
+)
 
+# External Slot
+lam = LamSlot(is_internal=False, Rint=0.1325)
+lam.slot = SlotCirc(Zs=6, H0=30e-3, W0=12e-3, is_H0_bore=True)
+slotCirc_test.append(
+    {
+        "test_obj": lam,
+        "S_exp": 0.0007602278,
+        "Ao": 0.090597,
+        "Aw": 0.1718029,
+        "SW_exp": 0.0007602278,
+        "H_exp": 0.03,
+    }
+)
+
+# H0 < W0/2 internal
+lam = LamSlot(is_internal=True, Rext=0.0592, Rint=0.0215)
+lam.slot = SlotCirc(Zs=8, H0=0.00021, W0=0.008, is_H0_bore=True)
+slotCirc_test.append(
+    {
+        "test_obj": lam,
+        "S_exp": 1.1201928e-06,
+        "Ao": 0.135238,
+        "Aw": 0.0902657,
+        "SW_exp": 1.1201928e-06,
+        "H_exp": 0.00021,
+    }
+)
+
+# H0 < W0/2 external
+lam = LamSlot(is_internal=False, Rint=0.0592, Rext=0.075)
+lam.slot = SlotCirc(Zs=8, H0=0.00035, W0=0.008, is_H0_bore=True)
+slotCirc_test.append(
+    {
+        "test_obj": lam,
+        "S_exp": 1.874104913e-06,
+        "Ao": 0.13523817,
+        "Aw": 0.090182,
+        "SW_exp": 1.874104913e-06,
+        "H_exp": 0.00035,
+    }
+)
+
+###################
+# Check Convertion should not change geometry
+###################
+Conv_test = slotCirc_test[0].copy()
+Conv_test["test_obj"] = Conv_test["test_obj"].copy()
+Conv_test["test_obj"].slot.convert_to_H0_bore()
+slotCirc_test.append(Conv_test)
+
+Conv_test = slotCirc_test[1].copy()
+Conv_test["test_obj"] = Conv_test["test_obj"].copy()
+Conv_test["test_obj"].slot.convert_to_H0_bore()
+slotCirc_test.append(Conv_test)
+
+
+# python -m pytest ./Tests/Methods/Slot/test_SlotCirc_meth.py
 class Test_SlotCirc_meth(object):
     """pytest for SlotCirc methods"""
 
@@ -88,12 +164,17 @@ class Test_SlotCirc_meth(object):
         assert abs(point_dict["Z1"] - point_dict["Z2"]) == pytest.approx(
             test_obj.slot.W0
         )
-        assert abs(point_dict["Z2"].real - point_dict["ZM"]) == pytest.approx(
-            test_obj.slot.H0
-        )
-        assert abs(point_dict["Z1"].real - point_dict["ZM"]) == pytest.approx(
-            test_obj.slot.H0
-        )
+        if test_obj.slot.is_H0_bore:
+            assert abs(point_dict["ZM"] - test_obj.get_Rbo()) == pytest.approx(
+                test_obj.slot.H0
+            )
+        else:
+            assert abs(point_dict["Z2"].real - point_dict["ZM"]) == pytest.approx(
+                test_obj.slot.H0
+            )
+            assert abs(point_dict["Z1"].real - point_dict["ZM"]) == pytest.approx(
+                test_obj.slot.H0
+            )
         # Two different computation methods
         assert abs(line_dict["M-2"].get_begin() - point_dict["ZM"]) == pytest.approx(0)
 
@@ -241,15 +322,17 @@ class Test_SlotCirc_meth(object):
 if __name__ == "__main__":
     a = Test_SlotCirc_meth()
     # a.test_comp_surface(slotCirc_test[2])
+    a.test_build_geometry_active(slotCirc_test[6])
     for ii, test_dict in enumerate(slotCirc_test):
         print("Running test for Slot[" + str(ii) + "]")
-        a.test_schematics(test_dict)
-        a.test_comp_surface(test_dict)
-        a.test_comp_surface_active(test_dict)
-        a.test_comp_surface_opening(test_dict)
-        a.test_comp_height(test_dict)
+        # a.test_check_retro(test_dict)
+        # a.test_schematics(test_dict)
+        # a.test_comp_surface(test_dict)
+        # a.test_comp_surface_active(test_dict)
+        # a.test_comp_surface_opening(test_dict)
+        # a.test_comp_height(test_dict)
         a.test_build_geometry_active(test_dict)
-        a.test_comp_angle_opening(test_dict)
-        a.test_comp_angle_active_eq(test_dict)
+        # a.test_comp_angle_opening(test_dict)
+        # a.test_comp_angle_active_eq(test_dict)
     a.test_get_surface_X()
     print("Done")

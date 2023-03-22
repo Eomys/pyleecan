@@ -25,8 +25,8 @@ def plot_lines(self, fig=None, ax=None):
     """
 
     (fig, ax, patch_leg, label_leg) = init_fig(fig, ax)
-    ax.set_xlabel("(m)")
-    ax.set_ylabel("(m)")
+    ax.set_xlabel("[m]")
+    ax.set_ylabel("[m]")
 
     points = self.out_surf.discretize(10)
     for idx in range(len(points) - 1):

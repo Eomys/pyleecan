@@ -62,6 +62,11 @@ try:
 except ImportError as error:
     plot = error
 
+try:
+    from ..Methods.Machine.Bore.comp_Rmax import comp_Rmax
+except ImportError as error:
+    comp_Rmax = error
+
 
 from numpy import isnan
 from ._check import InitUnKnowClassError
@@ -163,12 +168,21 @@ class Bore(FrozenClass):
         )
     else:
         plot = plot
+    # cf Methods.Machine.Bore.comp_Rmax
+    if isinstance(comp_Rmax, ImportError):
+        comp_Rmax = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use Bore method comp_Rmax: " + str(comp_Rmax))
+            )
+        )
+    else:
+        comp_Rmax = comp_Rmax
     # generic save method is available in all object
     save = save
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, type_merge_slot=1, init_dict=None, init_str=None):
+    def __init__(self, type_merge_slot=1, alpha=0, init_dict=None, init_str=None):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -186,9 +200,12 @@ class Bore(FrozenClass):
             # Overwrite default value with init_dict content
             if "type_merge_slot" in list(init_dict.keys()):
                 type_merge_slot = init_dict["type_merge_slot"]
+            if "alpha" in list(init_dict.keys()):
+                alpha = init_dict["alpha"]
         # Set the properties (value check and convertion are done in setter)
         self.parent = None
         self.type_merge_slot = type_merge_slot
+        self.alpha = alpha
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -202,6 +219,7 @@ class Bore(FrozenClass):
         else:
             Bore_str += "parent = " + str(type(self.parent)) + " object" + linesep
         Bore_str += "type_merge_slot = " + str(self.type_merge_slot) + linesep
+        Bore_str += "alpha = " + str(self.alpha) + linesep
         return Bore_str
 
     def __eq__(self, other):
@@ -210,6 +228,8 @@ class Bore(FrozenClass):
         if type(other) != type(self):
             return False
         if other.type_merge_slot != self.type_merge_slot:
+            return False
+        if other.alpha != self.alpha:
             return False
         return True
 
@@ -233,6 +253,21 @@ class Bore(FrozenClass):
                 diff_list.append(name + ".type_merge_slot" + val_str)
             else:
                 diff_list.append(name + ".type_merge_slot")
+        if (
+            other._alpha is not None
+            and self._alpha is not None
+            and isnan(other._alpha)
+            and isnan(self._alpha)
+        ):
+            pass
+        elif other._alpha != self._alpha:
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._alpha) + ", other=" + str(other._alpha) + ")"
+                )
+                diff_list.append(name + ".alpha" + val_str)
+            else:
+                diff_list.append(name + ".alpha")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -242,6 +277,7 @@ class Bore(FrozenClass):
 
         S = 0  # Full size of the object
         S += getsizeof(self.type_merge_slot)
+        S += getsizeof(self.alpha)
         return S
 
     def as_dict(self, type_handle_ndarray=0, keep_function=False, **kwargs):
@@ -257,6 +293,7 @@ class Bore(FrozenClass):
 
         Bore_dict = dict()
         Bore_dict["type_merge_slot"] = self.type_merge_slot
+        Bore_dict["alpha"] = self.alpha
         # The class name is added to the dict for deserialisation purpose
         Bore_dict["__class__"] = "Bore"
         return Bore_dict
@@ -266,14 +303,16 @@ class Bore(FrozenClass):
 
         # Handle deepcopy of all the properties
         type_merge_slot_val = self.type_merge_slot
+        alpha_val = self.alpha
         # Creates new object of the same type with the copied properties
-        obj_copy = type(self)(type_merge_slot=type_merge_slot_val)
+        obj_copy = type(self)(type_merge_slot=type_merge_slot_val, alpha=alpha_val)
         return obj_copy
 
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""
 
         self.type_merge_slot = None
+        self.alpha = None
 
     def _get_type_merge_slot(self):
         """getter of type_merge_slot"""
@@ -292,5 +331,23 @@ class Bore(FrozenClass):
         :Type: int
         :min: 0
         :max: 2
+        """,
+    )
+
+    def _get_alpha(self):
+        """getter of alpha"""
+        return self._alpha
+
+    def _set_alpha(self, value):
+        """setter of alpha"""
+        check_var("alpha", value, "float")
+        self._alpha = value
+
+    alpha = property(
+        fget=_get_alpha,
+        fset=_set_alpha,
+        doc=u"""Angular offset for the bore shape
+
+        :Type: float
         """,
     )
