@@ -87,6 +87,11 @@ try:
 except ImportError as error:
     plot_schematics = error
 
+try:
+    from ..Methods.Slot.SlotCirc.convert_to_H0_bore import convert_to_H0_bore
+except ImportError as error:
+    convert_to_H0_bore = error
+
 
 from numpy import isnan
 from ._check import InitUnKnowClassError
@@ -256,6 +261,18 @@ class SlotCirc(Slot):
         )
     else:
         plot_schematics = plot_schematics
+    # cf Methods.Slot.SlotCirc.convert_to_H0_bore
+    if isinstance(convert_to_H0_bore, ImportError):
+        convert_to_H0_bore = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use SlotCirc method convert_to_H0_bore: "
+                    + str(convert_to_H0_bore)
+                )
+            )
+        )
+    else:
+        convert_to_H0_bore = convert_to_H0_bore
     # generic save method is available in all object
     save = save
     # get_logger method is available in all object
@@ -265,6 +282,7 @@ class SlotCirc(Slot):
         self,
         W0=0.01,
         H0=0.03,
+        is_H0_bore=True,
         Zs=36,
         wedge_mat=None,
         is_bore=True,
@@ -290,6 +308,8 @@ class SlotCirc(Slot):
                 W0 = init_dict["W0"]
             if "H0" in list(init_dict.keys()):
                 H0 = init_dict["H0"]
+            if "is_H0_bore" in list(init_dict.keys()):
+                is_H0_bore = init_dict["is_H0_bore"]
             if "Zs" in list(init_dict.keys()):
                 Zs = init_dict["Zs"]
             if "wedge_mat" in list(init_dict.keys()):
@@ -299,6 +319,7 @@ class SlotCirc(Slot):
         # Set the properties (value check and convertion are done in setter)
         self.W0 = W0
         self.H0 = H0
+        self.is_H0_bore = is_H0_bore
         # Call Slot init
         super(SlotCirc, self).__init__(Zs=Zs, wedge_mat=wedge_mat, is_bore=is_bore)
         # The class is frozen (in Slot init), for now it's impossible to
@@ -312,6 +333,7 @@ class SlotCirc(Slot):
         SlotCirc_str += super(SlotCirc, self).__str__()
         SlotCirc_str += "W0 = " + str(self.W0) + linesep
         SlotCirc_str += "H0 = " + str(self.H0) + linesep
+        SlotCirc_str += "is_H0_bore = " + str(self.is_H0_bore) + linesep
         return SlotCirc_str
 
     def __eq__(self, other):
@@ -326,6 +348,8 @@ class SlotCirc(Slot):
         if other.W0 != self.W0:
             return False
         if other.H0 != self.H0:
+            return False
+        if other.is_H0_bore != self.is_H0_bore:
             return False
         return True
 
@@ -370,6 +394,18 @@ class SlotCirc(Slot):
                 diff_list.append(name + ".H0" + val_str)
             else:
                 diff_list.append(name + ".H0")
+        if other._is_H0_bore != self._is_H0_bore:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._is_H0_bore)
+                    + ", other="
+                    + str(other._is_H0_bore)
+                    + ")"
+                )
+                diff_list.append(name + ".is_H0_bore" + val_str)
+            else:
+                diff_list.append(name + ".is_H0_bore")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -383,6 +419,7 @@ class SlotCirc(Slot):
         S += super(SlotCirc, self).__sizeof__()
         S += getsizeof(self.W0)
         S += getsizeof(self.H0)
+        S += getsizeof(self.is_H0_bore)
         return S
 
     def as_dict(self, type_handle_ndarray=0, keep_function=False, **kwargs):
@@ -404,6 +441,7 @@ class SlotCirc(Slot):
         )
         SlotCirc_dict["W0"] = self.W0
         SlotCirc_dict["H0"] = self.H0
+        SlotCirc_dict["is_H0_bore"] = self.is_H0_bore
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         SlotCirc_dict["__class__"] = "SlotCirc"
@@ -415,6 +453,7 @@ class SlotCirc(Slot):
         # Handle deepcopy of all the properties
         W0_val = self.W0
         H0_val = self.H0
+        is_H0_bore_val = self.is_H0_bore
         Zs_val = self.Zs
         if self.wedge_mat is None:
             wedge_mat_val = None
@@ -425,6 +464,7 @@ class SlotCirc(Slot):
         obj_copy = type(self)(
             W0=W0_val,
             H0=H0_val,
+            is_H0_bore=is_H0_bore_val,
             Zs=Zs_val,
             wedge_mat=wedge_mat_val,
             is_bore=is_bore_val,
@@ -436,6 +476,7 @@ class SlotCirc(Slot):
 
         self.W0 = None
         self.H0 = None
+        self.is_H0_bore = None
         # Set to None the properties inherited from Slot
         super(SlotCirc, self)._set_None()
 
@@ -474,5 +515,23 @@ class SlotCirc(Slot):
 
         :Type: float
         :min: 0
+        """,
+    )
+
+    def _get_is_H0_bore(self):
+        """getter of is_H0_bore"""
+        return self._is_H0_bore
+
+    def _set_is_H0_bore(self, value):
+        """setter of is_H0_bore"""
+        check_var("is_H0_bore", value, "bool")
+        self._is_H0_bore = value
+
+    is_H0_bore = property(
+        fget=_get_is_H0_bore,
+        fset=_set_is_H0_bore,
+        doc=u"""True to define H0 from top of arc to bore radius, False top arc to middle of W0 segment
+
+        :Type: bool
         """,
     )

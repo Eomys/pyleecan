@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import sys
-
+import matplotlib.pyplot as plt
 from PySide2 import QtWidgets
 from PySide2.QtTest import QTest
 from numpy import pi
@@ -31,6 +31,7 @@ from pyleecan.GUI.Dialog.DMachineSetup.SMSlot.PMSlot16.PMSlot16 import PMSlot16
 from pyleecan.GUI.Dialog.DMachineSetup.SMSlot.PMSlot17.PMSlot17 import PMSlot17
 from pyleecan.GUI.Dialog.DMachineSetup.SMSlot.PMSlot18.PMSlot18 import PMSlot18
 import pytest
+from Tests.GUI import gui_option  # Set unit as [m]
 
 
 class TestSMSlot(object):
@@ -59,6 +60,7 @@ class TestSMSlot(object):
         self.widget = SMSlot(
             machine=test_obj, material_dict=material_dict, is_stator=False
         )
+        self.widget.is_test = True
         self.test_obj = test_obj
 
     @classmethod
@@ -184,6 +186,6 @@ if __name__ == "__main__":
     a = TestSMSlot()
     a.setup_class()
     a.setup_method()
-    a.test_init()
+    a.test_plot_schematics()
     a.teardown_class()
     print("Done")

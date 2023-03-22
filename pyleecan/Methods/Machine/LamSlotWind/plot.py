@@ -16,6 +16,7 @@ from ....Functions.labels import decode_label, WIND_LAB, BAR_LAB, LAM_LAB, WEDGE
 from ....Functions.Winding.find_wind_phase_color import find_wind_phase_color
 from ....Functions.Winding.gen_phase_list import gen_name
 from ....Functions.init_fig import init_fig
+from ....Functions.Plot import dict_2D
 from ....definitions import config_dict
 from ....Classes.WindingSC import WindingSC
 
@@ -230,9 +231,9 @@ def plot(
         # Display the result
         (fig, ax, patch_leg, label_leg) = init_fig(fig=fig, ax=ax, shape="rectangle")
 
-        ax.set_xlabel("(m)")
-        ax.set_ylabel("(m)")
-        for ii, patch in enumerate(patches):
+        ax.set_xlabel("[m]")
+        ax.set_ylabel("[m]")
+        for patch in patches:
             ax.add_patch(patch)
         # Axis Setup
         ax.axis("equal")
@@ -299,6 +300,7 @@ def plot(
                             patch_leg.append(
                                 Patch(color=PHASE_COLORS[index], hatch=PLUS_HATCH)
                             )
+                            patch_leg[-1].set_edgecolor("k")
                             label_leg.append(phase_name[ii] + " +")
                         if not phase_name[ii] + " -" in label_leg and is_add_sign:
                             # Avoid adding twice the same label
@@ -306,10 +308,28 @@ def plot(
                             patch_leg.append(
                                 Patch(color=PHASE_COLORS[index], hatch=MINUS_HATCH)
                             )
+                            patch_leg[-1].set_edgecolor("k")
                             label_leg.append(phase_name[ii] + " -")
 
             if is_legend:
-                ax.legend(patch_leg, label_leg)
+                ax.legend(
+                    patch_leg,
+                    label_leg,
+                    prop={
+                        "family": dict_2D["font_name"],
+                        "size": dict_2D["font_size_legend"],
+                    },
+                )
+
+            for item in (
+                [ax.xaxis.label, ax.yaxis.label]
+                + ax.get_xticklabels()
+                + ax.get_yticklabels()
+            ):
+                item.set_fontname(dict_2D["font_name"])
+                item.set_fontsize(dict_2D["font_size_label"])
+            ax.title.set_fontname(dict_2D["font_name"])
+            ax.title.set_fontsize(dict_2D["font_size_title"])
 
         if save_path is not None:
             fig.savefig(save_path)

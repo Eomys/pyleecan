@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>936</width>
-    <height>532</height>
+    <width>1084</width>
+    <height>543</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -46,10 +46,13 @@
         <string/>
        </property>
        <property name="pixmap">
-        <pixmap resource="../../../../Resources/pyleecan.qrc">:/images/images/MachineSetup/WSlot/Slot_61.PNG</pixmap>
+        <pixmap resource="../../../../Resources/pyleecan.qrc">:/images/images/MachineSetup/WSlot/Slot_61.png</pixmap>
        </property>
        <property name="scaledContents">
-        <bool>true</bool>
+        <bool>false</bool>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
        </property>
       </widget>
      </item>
@@ -64,7 +67,7 @@
        <property name="maximumSize">
         <size>
          <width>16777215</width>
-         <height>50</height>
+         <height>60</height>
         </size>
        </property>
        <property name="verticalScrollBarPolicy">
@@ -108,7 +111,7 @@ p, li { white-space: pre-wrap; }
         <x>0</x>
         <y>0</y>
         <width>268</width>
-        <height>508</height>
+        <height>519</height>
        </rect>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout">

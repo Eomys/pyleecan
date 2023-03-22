@@ -72,6 +72,7 @@ class TestSWindCond(object):
         """Exit the app after the test"""
         cls.app.quit()
 
+    @pytest.mark.SCIM
     def test_init(self):
         assert self.widget.c_cond_type.currentIndex() == 0
         assert self.widget.w_cond.si_Nwpc1_rad.value() == 2
@@ -97,38 +98,40 @@ class TestSWindCond(object):
         assert self.widget.w_mat_0.in_mat_type.text() == "mat_wind1: "
         assert type(self.test_obj.stator.winding.conductor) is CondType11
 
+    @pytest.mark.SCIM
     def test_set_si_Nwpc1_rad(self):
         """Check that the Widget allow to update si_Nwpc1_rad"""
         # Clear the field before writing the new value
         self.widget.w_cond.si_Nwpc1_rad.clear()
         value = int(uniform(5, 100))
-        QTest.keyClicks(self.widget.w_cond.si_Nwpc1_rad, str(value))
-        # To trigger the slot
+        self.widget.w_cond.si_Nwpc1_rad.setValue(value)
         self.widget.w_cond.si_Nwpc1_rad.editingFinished.emit()
 
         assert self.test_obj.stator.winding.conductor.Nwppc_rad == value
 
+    @pytest.mark.SCIM
     def test_set_si_Nwpc1_tan(self):
         """Check that the Widget allow to update si_Nwpc1_tan"""
         # Clear the field before writing the new value
         self.widget.w_cond.si_Nwpc1_tan.clear()
         value = int(uniform(5, 100))
-        QTest.keyClicks(self.widget.w_cond.si_Nwpc1_tan, str(value))
-        # To trigger the slot
+        self.widget.w_cond.si_Nwpc1_tan.setValue(value)
         self.widget.w_cond.si_Nwpc1_tan.editingFinished.emit()
 
         assert self.test_obj.stator.winding.conductor.Nwppc_tan == value
 
+    @pytest.mark.SCIM
     def test_set_si_Nwpc1(self):
         """Check that the Widget allow to update si_Nwpc1"""
         # Clear the field before writing the new value
         self.widget2.w_cond.si_Nwpc1.clear()
         value = int(uniform(5, 100))
-        QTest.keyClicks(self.widget2.w_cond.si_Nwpc1, str(value))
-        self.widget2.w_cond.si_Nwpc1.editingFinished.emit()  # To trigger the slot
+        self.widget2.w_cond.si_Nwpc1.setValue(value)
+        self.widget2.w_cond.si_Nwpc1.editingFinished.emit()
 
         assert self.test_obj.rotor.winding.conductor.Nwppc == value
 
+    @pytest.mark.SCIM
     def test_set_Wins_wire(self):
         """Check that the Widget allow to update Wins_wire"""
         # Clear the field before writing the new value
@@ -147,6 +150,7 @@ class TestSWindCond(object):
 
         assert self.test_obj.rotor.winding.conductor.Wins_wire == value
 
+    @pytest.mark.SCIM
     def test_set_Wwire(self):
         """Check that the Widget allow to update Wins_wire"""
         # Clear the field before writing the new value
@@ -165,6 +169,7 @@ class TestSWindCond(object):
 
         assert self.test_obj.rotor.winding.conductor.Wwire == value
 
+    @pytest.mark.SCIM
     def test_set_Lewout(self):
         """Check that the Widget allow to update Lewout"""
         # Clear the field before writing the new value
@@ -183,6 +188,7 @@ class TestSWindCond(object):
 
         assert self.test_obj.rotor.winding.Lewout == value
 
+    @pytest.mark.SCIM
     def test_set_Wins_cond(self):
         """Check that the Widget allow to update Wins_cond"""
         # Clear the field before writing the new value
@@ -194,6 +200,7 @@ class TestSWindCond(object):
 
         assert self.test_obj.rotor.winding.conductor.Wins_cond == value
 
+    @pytest.mark.SCIM
     def test_set_cond_type(self):
         """Check that the Widget allow to update conductor type"""
         assert type(self.test_obj.stator.winding.conductor) is CondType11
@@ -204,6 +211,7 @@ class TestSWindCond(object):
         self.widget.c_cond_type.setCurrentIndex(0)
         assert type(self.test_obj.stator.winding.conductor) is CondType11
 
+    @pytest.mark.SCIM
     def test_check(self):
         """Check that the check method return errors"""
         rotor = LamSlotWind(is_stator=False)
@@ -215,6 +223,7 @@ class TestSWindCond(object):
 
         assert self.widget2.check(rotor) == "You must set Wwire !"
 
+    @pytest.mark.SCIM
     def test_init_PCondType12(self):
         """Check that the init is setting a conductor if None"""
         lam = LamSlotWind(is_stator=False)
@@ -228,6 +237,7 @@ class TestSWindCond(object):
         assert widget.cond.Wins_cond is None
         assert widget.lam.winding.Lewout == 0
 
+    @pytest.mark.SCIM
     def test_check_PCondType12(self):
         """Check that the check methods is correctly working"""
         lam = LamSlotWind(is_stator=False)
@@ -255,6 +265,6 @@ if __name__ == "__main__":
     a = TestSWindCond()
     a.setup_class()
     a.setup_method()
-    a.test_check_PCondType12()
+    a.test_set_si_Nwpc1_rad()
     a.teardown_class()
     print("Done")

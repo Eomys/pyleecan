@@ -1,17 +1,15 @@
 # -*- coding: utf-8 -*-
 
 from PySide2.QtCore import Qt, Signal
-from PySide2.QtGui import QPixmap
 from PySide2.QtWidgets import QMessageBox, QWidget, QFileDialog
-from logging import getLogger
-from .....loggers import GUI_LOG_NAME
+from os.path import join
+
+from .....Functions.GUI.log_error import log_error
 from .....Classes.Winding import Winding
 from .....Classes.WindingUD import WindingUD
 from .....Classes.MachineSRM import MachineSRM
 from .....Classes.MachineWRSM import MachineWRSM
 from .....GUI.Dialog.DMachineSetup.SWinding.Gen_SWinding import Gen_SWinding
-from .....Methods.Machine.Winding import WindingError
-from .....Functions.Plot.set_plot_gui_icon import set_plot_gui_icon
 
 
 class SWinding(Gen_SWinding, QWidget):
@@ -76,7 +74,7 @@ class SWinding(Gen_SWinding, QWidget):
             self.obj.winding.coil_pitch = 1
             self.si_coil_pitch.setEnabled(False)
             self.in_Zs.hide()  # =2*p
-            self.b_preview.setEnabled(False)
+            #self.b_preview.setEnabled(False)
             # Enforce star of slot
             self.c_wind_type.setEnabled(False)
             self.c_wind_type.setCurrentIndex(0)
@@ -151,7 +149,7 @@ class SWinding(Gen_SWinding, QWidget):
         # Connect the signal/slot
         self.c_wind_type.currentIndexChanged.connect(self.set_type)
         self.si_Nlayer.valueChanged.connect(self.show_layer_widget)
-        self.si_Npcp.editingFinished.connect(self.set_Npcp)
+        self.si_Npcp.valueChanged.connect(self.set_Npcp)
         self.si_Nslot.valueChanged.connect(self.set_Nslot)
         self.si_Ntcoil.valueChanged.connect(self.set_Ntcoil)
         self.is_reverse.stateChanged.connect(self.set_is_reverse_wind)
@@ -256,6 +254,7 @@ class SWinding(Gen_SWinding, QWidget):
                     self.tr("Error"),
                     "Error while creating the winding:\nZs must be a multiple of qs for SRM machine",
                 )
+                self.b_plot_mmf.setEnabled(False)
                 return
             # p is not defined for SRM => enforced to p=Zs/qs
             self.obj.winding.p = self.obj.slot.Zs // self.obj.winding.qs
@@ -265,17 +264,28 @@ class SWinding(Gen_SWinding, QWidget):
             self.obj.winding.get_connection_mat()
             self.b_generate.setEnabled(False)
         except Exception as e:
-            QMessageBox().critical(
-                self, self.tr("Error"), "Error while creating the winding:\n" + str(e)
+            log_error(
+                self,
+                "Error while creating the winding:\nStar of slot algorithm didn't managed to find a solution for the combination Zs="
+                + str(self.obj.slot.Zs)
+                + ", qs="
+                + str(self.obj.winding.qs)
+                + ", p="
+                + str(self.obj.winding.p)
+                + "and layer number="
+                + str(self.obj.winding.Nlayer)
+                + ".",
             )
             self.comp_output()
             self.update_graph(is_lam_only=True)
+            self.b_plot_mmf.setEnabled(False)
             self.b_generate.setEnabled(True)
             return
 
         # Update GUI
         self.comp_output()
         self.update_graph()
+        self.b_plot_mmf.setEnabled(True)
         # Notify the machine GUI that the machine has changed
         self.saveNeeded.emit()
 
@@ -434,18 +444,21 @@ class SWinding(Gen_SWinding, QWidget):
             name = self.machine.name + "_Winding.csv"
         else:
             name = "Winding.csv"
-        save_file_path = QFileDialog.getSaveFileName(
-            self, self.tr("Save file"), name, "CSV (*.csv);;All files (*.*)"
+        save_file_path = QFileDialog().getSaveFileName(
+            self,
+            self.tr("Save file"),
+            name,
+            "CSV (*.csv);;All files (*.*)",
         )[0]
-        try:
-            self.obj.winding.export_to_csv(
-                file_path=save_file_path, is_add_header=True, is_skip_empty=False
-            )
-        except Exception as e:
-            QMessageBox().critical(
-                self, self.tr("Error"), "Error while exporting the winding:\n" + str(e)
-            )
-            return
+
+        if save_file_path not in ["", None]:
+            try:
+                self.obj.winding.export_to_csv(
+                    file_path=save_file_path, is_add_header=True, is_skip_empty=False
+                )
+            except Exception as e:
+                log_error(self, "Error while exporting the winding:\n" + str(e))
+                return
 
     def s_import_csv(self):
         """Import the winding matrix to csv"""
@@ -463,11 +476,7 @@ class SWinding(Gen_SWinding, QWidget):
                 # Notify the machine GUI that the machine has changed
                 self.saveNeeded.emit()
             except Exception as e:
-                QMessageBox().critical(
-                    self,
-                    self.tr("Error"),
-                    "Error while importing the winding:\n" + str(e),
-                )
+                log_error(self, "Error while importing the winding:\n" + str(e))
                 return
 
     def comp_output(self):
@@ -535,18 +544,14 @@ class SWinding(Gen_SWinding, QWidget):
                 is_show_fig=False,
                 is_lam_only=is_lam_only,
                 is_add_sign=True,
+                is_legend=False,
             )
         except Exception as e:
             if self.obj.is_stator:  # Adapt the text to the current lamination
                 err_msg = "Error while plotting machine in Stator Winding:\n" + str(e)
             else:
                 err_msg = "Error while plotting machine in Rotor Winding:\n" + str(e)
-            getLogger(GUI_LOG_NAME).error(err_msg)
-            QMessageBox().critical(
-                self,
-                self.tr("Error"),
-                err_msg,
-            )
+            log_error(self, err_msg)
 
         # Update the Graph
         self.w_viewer.axes.set_axis_off()
@@ -628,8 +633,7 @@ class SWinding(Gen_SWinding, QWidget):
                     err_msg = "Error while plotting Stator mmf unit:\n" + str(e)
                 else:
                     err_msg = "Error while plotting Rotor mmf unit:\n" + str(e)
-                getLogger(GUI_LOG_NAME).error(err_msg)
-                QMessageBox().critical(self, self.tr("Error"), err_msg)
+                log_error(self, err_msg)
 
     @staticmethod
     def check(lamination):

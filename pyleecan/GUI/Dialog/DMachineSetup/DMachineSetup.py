@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
 
-from os.path import basename, join, dirname
-
+from os.path import basename, join, dirname, isfile
+from logging import getLogger
+from ....Functions.GUI.log_error import log_error
+from ....loggers import GUI_LOG_NAME
 from PySide2.QtCore import Qt, Signal
 from PySide2.QtWidgets import QFileDialog, QMessageBox, QWidget
 
@@ -42,6 +44,8 @@ class DMachineSetup(Ui_DMachineSetup, QWidget):
 
         # Build the interface according to the .ui file
         QWidget.__init__(self)
+        self.setWindowFlag(Qt.WindowMinimizeButtonHint, True)
+        self.setWindowFlag(Qt.WindowMaximizeButtonHint, True)
         self.setupUi(self)
 
         self.is_save_needed = False
@@ -51,9 +55,9 @@ class DMachineSetup(Ui_DMachineSetup, QWidget):
         # Saving arguments
         self.machine = machine
         if machine_path == "":
-            self.machine_path = config_dict["MAIN"]["MACHINE_DIR"]
+            self.machine_path = config_dict["MAIN"]["MACHINE_DIR"].replace("\\", "/")
         else:
-            self.machine_path = machine_path
+            self.machine_path = machine_path.replace("\\", "/")
 
         # Initialize the machine if needed
         if machine is None:
@@ -124,13 +128,24 @@ class DMachineSetup(Ui_DMachineSetup, QWidget):
             save_file_path = QFileDialog.getSaveFileName(
                 self, self.tr("Save file"), def_path, "Json (*.json)"
             )[0]
+        save_file_path = save_file_path.replace("\\", "/")
 
         # Avoid bug due to user closing the popup witout selecting a file
         if save_file_path != "":
             # Set the machine name to match the file name
             self.machine.name = str(basename(str(save_file_path)))[:-5]
             # Save the machine file
-            self.machine.save(save_file_path)
+            getLogger(GUI_LOG_NAME).info(
+                "Saving " + self.machine.name + " in folder " + dirname(save_file_path)
+            )
+            try:
+                self.machine.save(save_file_path)
+            except Exception as e:
+                err_msg = (
+                    "Error while saving machine " + self.machine.name + ":\n" + str(e)
+                )
+                log_error(self, err_msg)
+                return False
             # To update the machine name field (if first page)
             self.set_nav(self.nav_step.currentRow())
             # Update the machine path to remember the last used folder

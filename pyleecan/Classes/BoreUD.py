@@ -69,7 +69,14 @@ class BoreUD(Bore):
     get_logger = get_logger
 
     def __init__(
-        self, line_list=-1, sym=1, type_merge_slot=1, init_dict=None, init_str=None
+        self,
+        line_list=-1,
+        sym=1,
+        name="",
+        type_merge_slot=1,
+        alpha=0,
+        init_dict=None,
+        init_str=None,
     ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
@@ -90,13 +97,18 @@ class BoreUD(Bore):
                 line_list = init_dict["line_list"]
             if "sym" in list(init_dict.keys()):
                 sym = init_dict["sym"]
+            if "name" in list(init_dict.keys()):
+                name = init_dict["name"]
             if "type_merge_slot" in list(init_dict.keys()):
                 type_merge_slot = init_dict["type_merge_slot"]
+            if "alpha" in list(init_dict.keys()):
+                alpha = init_dict["alpha"]
         # Set the properties (value check and convertion are done in setter)
         self.line_list = line_list
         self.sym = sym
+        self.name = name
         # Call Bore init
-        super(BoreUD, self).__init__(type_merge_slot=type_merge_slot)
+        super(BoreUD, self).__init__(type_merge_slot=type_merge_slot, alpha=alpha)
         # The class is frozen (in Bore init), for now it's impossible to
         # add new properties
 
@@ -114,6 +126,7 @@ class BoreUD(Bore):
             )
             BoreUD_str += "line_list[" + str(ii) + "] =" + tmp + linesep + linesep
         BoreUD_str += "sym = " + str(self.sym) + linesep
+        BoreUD_str += 'name = "' + str(self.name) + '"' + linesep
         return BoreUD_str
 
     def __eq__(self, other):
@@ -128,6 +141,8 @@ class BoreUD(Bore):
         if other.line_list != self.line_list:
             return False
         if other.sym != self.sym:
+            return False
+        if other.name != self.name:
             return False
         return True
 
@@ -172,6 +187,14 @@ class BoreUD(Bore):
                 diff_list.append(name + ".sym" + val_str)
             else:
                 diff_list.append(name + ".sym")
+        if other._name != self._name:
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._name) + ", other=" + str(other._name) + ")"
+                )
+                diff_list.append(name + ".name" + val_str)
+            else:
+                diff_list.append(name + ".name")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -187,6 +210,7 @@ class BoreUD(Bore):
             for value in self.line_list:
                 S += getsizeof(value)
         S += getsizeof(self.sym)
+        S += getsizeof(self.name)
         return S
 
     def as_dict(self, type_handle_ndarray=0, keep_function=False, **kwargs):
@@ -222,6 +246,7 @@ class BoreUD(Bore):
                 else:
                     BoreUD_dict["line_list"].append(None)
         BoreUD_dict["sym"] = self.sym
+        BoreUD_dict["name"] = self.name
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         BoreUD_dict["__class__"] = "BoreUD"
@@ -238,10 +263,16 @@ class BoreUD(Bore):
             for obj in self.line_list:
                 line_list_val.append(obj.copy())
         sym_val = self.sym
+        name_val = self.name
         type_merge_slot_val = self.type_merge_slot
+        alpha_val = self.alpha
         # Creates new object of the same type with the copied properties
         obj_copy = type(self)(
-            line_list=line_list_val, sym=sym_val, type_merge_slot=type_merge_slot_val
+            line_list=line_list_val,
+            sym=sym_val,
+            name=name_val,
+            type_merge_slot=type_merge_slot_val,
+            alpha=alpha_val,
         )
         return obj_copy
 
@@ -250,6 +281,7 @@ class BoreUD(Bore):
 
         self.line_list = None
         self.sym = None
+        self.name = None
         # Set to None the properties inherited from Bore
         super(BoreUD, self)._set_None()
 
@@ -311,5 +343,23 @@ class BoreUD(Bore):
 
         :Type: int
         :min: 1
+        """,
+    )
+
+    def _get_name(self):
+        """getter of name"""
+        return self._name
+
+    def _set_name(self, value):
+        """setter of name"""
+        check_var("name", value, "str")
+        self._name = value
+
+    name = property(
+        fget=_get_name,
+        fset=_set_name,
+        doc=u"""Name of the bore (for save)
+
+        :Type: str
         """,
     )

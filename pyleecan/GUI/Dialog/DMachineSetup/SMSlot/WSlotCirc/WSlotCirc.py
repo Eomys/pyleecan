@@ -42,22 +42,6 @@ class WSlotCirc(Gen_WSlotCirc, QWidget):
         self.lamination = lamination
         self.slot = lamination.slot
 
-        # Selecting the right image
-        if not self.lamination.is_internal:
-            # Use schematics on the external without magnet
-            self.img_slot.setPixmap(
-                QPixmap(
-                    u":/images/images/MachineSetup/WMSlot/SlotCirc_empty_ext_sta.png"
-                )
-            )
-        else:
-            # Use schematics on the inner without magnet
-            self.img_slot.setPixmap(
-                QPixmap(
-                    u":/images/images/MachineSetup/WMSlot/SlotCirc_empty_int_rot.png"
-                )
-            )
-
         # Set FloatEdit unit
         self.lf_W0.unit = "m"
         self.lf_H0.unit = "m"
@@ -72,13 +56,35 @@ class WSlotCirc(Gen_WSlotCirc, QWidget):
         # Fill the fields with the machine values (if they're filled)
         self.lf_W0.setValue(self.slot.W0)
         self.lf_H0.setValue(self.slot.H0)
-
+        if self.slot.is_H0_bore is None:
+            self.slot.is_H0_bore = True  # Default to new schematics
+        if self.slot.is_H0_bore:
+            self.c_H0_bore.setCurrentIndex(0)
+        else:
+            self.c_H0_bore.setCurrentIndex(1)
+        self.set_correct_schematics()
         # Display the main output of the slot (surface, height...)
         self.w_out.comp_output()
 
         # Connect the signal
         self.lf_W0.editingFinished.connect(self.set_W0)
         self.lf_H0.editingFinished.connect(self.set_H0)
+        self.c_H0_bore.currentIndexChanged.connect(self.set_H0_bore)
+
+    def set_correct_schematics(self):
+        """Update the schematics according to the current lamination/slot"""
+        # Selecting the right image
+        if not self.lamination.is_internal:
+            # Use schematics on the external without magnet
+            path = u":/images/images/MachineSetup/WMSlot/SlotCirc_empty_ext_sta"
+        else:
+            # Use schematics on the inner without magnet
+            path = u":/images/images/MachineSetup/WMSlot/SlotCirc_empty_int_rot"
+        # Old/New schematics
+        if not self.slot.is_H0_bore:
+            path += "_old"
+
+        self.img_slot.setPixmap(QPixmap(path + ".png"))
 
     def set_W0(self):
         """Signal to update the value of W0 according to the line edit
@@ -102,6 +108,15 @@ class WSlotCirc(Gen_WSlotCirc, QWidget):
             A SlotCirc object
         """
         self.slot.H0 = self.lf_H0.value()
+        if self.check(self.lamination) is None:
+            self.w_out.comp_output()
+        # Notify the machine GUI that the machine has changed
+        self.saveNeeded.emit()
+
+    def set_H0_bore(self):
+        """Change the definition of H0"""
+        self.slot.is_H0_bore = self.c_H0_bore.currentIndex() == 0
+        self.set_correct_schematics()
         if self.check(self.lamination) is None:
             self.w_out.comp_output()
         # Notify the machine GUI that the machine has changed

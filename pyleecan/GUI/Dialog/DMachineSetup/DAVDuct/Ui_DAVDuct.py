@@ -9,7 +9,7 @@ from PySide2.QtCore import *
 from PySide2.QtGui import *
 from PySide2.QtWidgets import *
 
-from .....GUI.Tools.HelpButton import HelpButton
+from pyleecan.GUI.Tools.HelpButton import HelpButton
 
 from pyleecan.GUI.Resources import pyleecan_rc
 
@@ -18,7 +18,7 @@ class Ui_DAVDuct(object):
     def setupUi(self, DAVDuct):
         if not DAVDuct.objectName():
             DAVDuct.setObjectName(u"DAVDuct")
-        DAVDuct.resize(767, 630)
+        DAVDuct.resize(771, 639)
         icon = QIcon()
         icon.addFile(
             u":/images/images/icon/pyleecan_64.png", QSize(), QIcon.Normal, QIcon.Off
@@ -28,25 +28,13 @@ class Ui_DAVDuct(object):
         self.verticalLayout.setObjectName(u"verticalLayout")
         self.horizontalLayout_2 = QHBoxLayout()
         self.horizontalLayout_2.setObjectName(u"horizontalLayout_2")
-        self.horizontalSpacer = QSpacerItem(
-            40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum
-        )
-
-        self.horizontalLayout_2.addItem(self.horizontalSpacer)
-
         self.b_new = QPushButton(DAVDuct)
         self.b_new.setObjectName(u"b_new")
 
         self.horizontalLayout_2.addWidget(self.b_new)
 
-        self.b_remove = QPushButton(DAVDuct)
-        self.b_remove.setObjectName(u"b_remove")
-
-        self.horizontalLayout_2.addWidget(self.b_remove)
-
         self.b_help = HelpButton(DAVDuct)
         self.b_help.setObjectName(u"b_help")
-        self.b_help.setPixmap(QPixmap(u":/images/images/icon/help_16.png"))
 
         self.horizontalLayout_2.addWidget(self.b_help)
 
@@ -60,6 +48,7 @@ class Ui_DAVDuct(object):
 
         self.tab_vent = QTabWidget(DAVDuct)
         self.tab_vent.setObjectName(u"tab_vent")
+        self.tab_vent.setTabsClosable(True)
         self.tab = QWidget()
         self.tab.setObjectName(u"tab")
         self.tab_vent.addTab(self.tab, "")
@@ -96,6 +85,8 @@ class Ui_DAVDuct(object):
 
         self.retranslateUi(DAVDuct)
 
+        self.tab_vent.setCurrentIndex(0)
+
         QMetaObject.connectSlotsByName(DAVDuct)
 
     # setupUi
@@ -105,9 +96,6 @@ class Ui_DAVDuct(object):
             QCoreApplication.translate("DAVDuct", u"Set axial cooling duct", None)
         )
         self.b_new.setText(QCoreApplication.translate("DAVDuct", u"Add New Set", None))
-        self.b_remove.setText(
-            QCoreApplication.translate("DAVDuct", u"Remove Last Set", None)
-        )
         self.b_help.setText("")
         self.tab_vent.setTabText(
             self.tab_vent.indexOf(self.tab),

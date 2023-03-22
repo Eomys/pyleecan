@@ -36,7 +36,7 @@ load_test.append(
 load_test.append(
     {"type": "IPMSM", "index": 4, "name": "machine_IPMSM_A", "p": 5, "count": 11}
 )
-load_test.append({"type": "WRSM", "index": 5, "name": "WRSM_001", "p": 6, "count": 13})
+load_test.append({"type": "WRSM", "index": 5, "name": "WRSM_001", "p": 6, "count": 12})
 load_test.append(
     {"type": "SRM", "index": 6, "name": "SRM_test_load", "p": None, "count": 11}
 )
@@ -178,8 +178,8 @@ if __name__ == "__main__":
     a = TestDMachineSetup()
     a.setup_class()
     a.setup_method()
-    # for ii, test_dict in enumerate(load_test):
-    #     print(ii)
-    #     a.test_load(test_dict)
+    for ii, test_dict in enumerate(load_test):
+        print(ii)
+        a.test_load(test_dict)
     a.test_load(load_test[0])
     print("Done")

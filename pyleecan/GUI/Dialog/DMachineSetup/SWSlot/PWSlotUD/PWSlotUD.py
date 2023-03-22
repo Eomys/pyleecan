@@ -1,13 +1,14 @@
-# -*- coding: utf-8 -*-
-
 from numpy import pi
 from PySide2.QtCore import Signal
 from PySide2.QtGui import QPixmap
 from PySide2.QtWidgets import QWidget, QDialog
 from PySide2.QtWidgets import QMessageBox
 from PySide2.QtCore import Qt
+
+from ......Functions.GUI.log_error import log_error
 from ......Functions.load import load
 from ......Classes.SlotUD import SlotUD
+from ......Classes.SlotUD2 import SlotUD2
 from ......GUI import gui_option
 from ......GUI.Dialog.DMachineSetup.SWSlot.PWSlotUD.Ui_PWSlotUD import Ui_PWSlotUD
 from ......Methods.Slot.Slot import SlotCheckError
@@ -52,6 +53,7 @@ class PWSlotUD(Ui_PWSlotUD, QWidget):
         self.material_dict = material_dict
         self.dxf_gui = None  # Link to the popup
         self.is_notch = is_notch
+        self.test_err_msg = None  # To store error message for tests
 
         # Setup Path selector for Json files
         self.w_path_json.obj = None
@@ -88,12 +90,22 @@ class PWSlotUD(Ui_PWSlotUD, QWidget):
     def set_wedge(self):
         """Setup the slot wedge according to the GUI"""
         if self.g_wedge.isChecked():
+            if isinstance(self.slot, SlotUD2) and self.slot.wedge_surf_list in [
+                None,
+                list(),
+            ]:
+                self.test_err_msg = "To add wedges on imported slot, please select wedges surface during the import"
+                log_error(self, self.test_err_msg)
+                self.g_wedge.setChecked(False)
+                return
             self.w_wedge_mat.show()
             self.w_wedge_mat.update(self.slot, "wedge_mat", self.material_dict)
         else:
             self.w_wedge_mat.hide()
             self.slot.wedge_mat = None
         self.update_graph()
+        # Notify the machine GUI that the machine has changed
+        self.saveNeeded.emit()
 
     def update_graph(self):
         """Plot the lamination with/without the slot"""
@@ -102,7 +114,7 @@ class PWSlotUD(Ui_PWSlotUD, QWidget):
         try:
             self.slot.check()
             lam.slot = self.slot
-        except SlotCheckError:
+        except Exception:
             # Plot only the lamination
             lam.slot = None
         # Plot the lamination in the viewer fig
@@ -129,7 +141,7 @@ class PWSlotUD(Ui_PWSlotUD, QWidget):
             )
             return
         # Check that the json file contain a SlotUD
-        if not isinstance(slot, SlotUD):
+        if not isinstance(slot, (SlotUD, SlotUD2)):
             QMessageBox().critical(
                 self,
                 self.tr("Error"),
@@ -140,18 +152,21 @@ class PWSlotUD(Ui_PWSlotUD, QWidget):
             return
 
         # Update the slot object
-        parent = self.slot.parent
-        self.slot.__init__(init_dict=slot.as_dict())  # keep pointer
-        self.slot.parent = parent
+        self.lamination.slot = slot
+        self.slot = self.lamination.slot
         self.ZsChanged.emit()
+        self.set_wedge()
 
-        # Update the new GUI according to the slot
-        self.update_graph()
-        self.w_out.comp_output()
-
-        # Update the new GUI according to the slot
-        self.update_graph()
-        self.w_out.comp_output()
+        try:
+            # Update the new GUI according to the slot
+            self.update_graph()
+            self.w_out.comp_output()
+        except:
+            QMessageBox().critical(
+                self,
+                self.tr("Error"),
+                self.tr("An error occured while updating the plot."),
+            )
 
     def open_DXF_Slot(self):
         """Open the GUI to define the SlotUD"""
@@ -197,12 +212,10 @@ class PWSlotUD(Ui_PWSlotUD, QWidget):
         try:
             yoke_height = lam.comp_height_yoke()
         except Exception as error:
-            return translate("Unable to compute yoke height:", "PWSlotUD") + str(error)
+            return "Unable to compute yoke height:" + str(error)
 
         if yoke_height <= 0:
-            return translate(
-                "The slot height is greater than the lamination !", "PWSlotUD"
-            )
+            return "The slot height is greater than the lamination !"
 
     def emit_save(self):
         """Send a saveNeeded signal to the DMachineSetup"""

@@ -19,8 +19,8 @@ class Ui_PBoreFlower(object):
     def setupUi(self, PBoreFlower):
         if not PBoreFlower.objectName():
             PBoreFlower.setObjectName(u"PBoreFlower")
-        PBoreFlower.resize(899, 470)
-        PBoreFlower.setMinimumSize(QSize(630, 470))
+        PBoreFlower.resize(800, 470)
+        PBoreFlower.setMinimumSize(QSize(800, 470))
         PBoreFlower.setMaximumSize(QSize(16777215, 16777215))
         self.horizontalLayout = QHBoxLayout(PBoreFlower)
         self.horizontalLayout.setObjectName(u"horizontalLayout")
@@ -33,6 +33,7 @@ class Ui_PBoreFlower(object):
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.img_bore.sizePolicy().hasHeightForWidth())
         self.img_bore.setSizePolicy(sizePolicy)
+        self.img_bore.setMinimumSize(QSize(400, 0))
         self.img_bore.setMaximumSize(QSize(16777215, 16777215))
         self.img_bore.setPixmap(
             QPixmap(u":/images/images/MachineSetup/LamParam/BoreFlower.png")
@@ -46,7 +47,7 @@ class Ui_PBoreFlower(object):
 
         self.scrollArea = QScrollArea(PBoreFlower)
         self.scrollArea.setObjectName(u"scrollArea")
-        self.scrollArea.setMinimumSize(QSize(270, 0))
+        self.scrollArea.setMinimumSize(QSize(270, 200))
         self.scrollArea.setMaximumSize(QSize(270, 16777215))
         self.scrollArea.setWidgetResizable(True)
         self.scrollAreaWidgetContents = QWidget()
@@ -63,16 +64,8 @@ class Ui_PBoreFlower(object):
 
         self.si_N = QSpinBox(self.scrollAreaWidgetContents)
         self.si_N.setObjectName(u"si_N")
-        self.si_N.setMinimum(1)
-        self.si_N.setMaximum(999999)
-        self.si_N.setValue(1)
 
         self.gridLayout.addWidget(self.si_N, 0, 1, 1, 1)
-
-        self.unit_N = QLabel(self.scrollAreaWidgetContents)
-        self.unit_N.setObjectName(u"unit_N")
-
-        self.gridLayout.addWidget(self.unit_N, 0, 2, 1, 1)
 
         self.in_Rarc = QLabel(self.scrollAreaWidgetContents)
         self.in_Rarc.setObjectName(u"in_Rarc")
@@ -88,24 +81,6 @@ class Ui_PBoreFlower(object):
         self.unit_Rarc.setObjectName(u"unit_Rarc")
 
         self.gridLayout.addWidget(self.unit_Rarc, 1, 2, 1, 1)
-
-        self.in_alpha = QLabel(self.scrollAreaWidgetContents)
-        self.in_alpha.setObjectName(u"in_alpha")
-
-        self.gridLayout.addWidget(self.in_alpha, 2, 0, 1, 1)
-
-        self.lf_alpha = FloatEdit(self.scrollAreaWidgetContents)
-        self.lf_alpha.setObjectName(u"lf_alpha")
-
-        self.gridLayout.addWidget(self.lf_alpha, 2, 1, 1, 1)
-
-        self.c_alpha_unit = QComboBox(self.scrollAreaWidgetContents)
-        self.c_alpha_unit.addItem("")
-        self.c_alpha_unit.addItem("")
-        self.c_alpha_unit.setObjectName(u"c_alpha_unit")
-        self.c_alpha_unit.setMaximumSize(QSize(70, 16777215))
-
-        self.gridLayout.addWidget(self.c_alpha_unit, 2, 2, 1, 1)
 
         self.verticalLayout.addLayout(self.gridLayout)
 
@@ -136,15 +111,7 @@ class Ui_PBoreFlower(object):
         )
         self.img_bore.setText("")
         self.in_N.setText(QCoreApplication.translate("PBoreFlower", u"N", None))
-        self.unit_N.setText("")
         self.in_Rarc.setText(QCoreApplication.translate("PBoreFlower", u"Rarc", None))
         self.unit_Rarc.setText(QCoreApplication.translate("PBoreFlower", u"m", None))
-        self.in_alpha.setText(QCoreApplication.translate("PBoreFlower", u"alpha", None))
-        self.c_alpha_unit.setItemText(
-            0, QCoreApplication.translate("PBoreFlower", u"[rad]", None)
-        )
-        self.c_alpha_unit.setItemText(
-            1, QCoreApplication.translate("PBoreFlower", u"[deg]", None)
-        )
 
     # retranslateUi

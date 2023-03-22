@@ -9,12 +9,11 @@ from pyleecan.Classes.LamHole import LamHole
 from pyleecan.Classes.LamSlotWind import LamSlotWind
 
 
-@pytest.mark.SCIM
 def test_desc_SCIM():
     """Check that the description of a SCIM is correct"""
     Railway_Traction = load(join(DATA_DIR, "Machine", "Railway_Traction.json"))
     desc_dict = Railway_Traction.comp_desc_dict()
-    assert len(desc_dict) == 12
+    assert len(desc_dict) == 13
     assert desc_dict[0]["name"] == "Type"
     assert desc_dict[0]["value"] == "SCIM"
 
@@ -51,13 +50,15 @@ def test_desc_SCIM():
     assert desc_dict[11]["name"] == "Mrwind"
     assert desc_dict[11]["value"] == pytest.approx(21.118, rel=0.1)
 
+    assert desc_dict[12]["name"] == "Mshaft"
+    assert desc_dict[12]["value"] == pytest.approx(21.51, rel=0.1)
 
-@pytest.mark.IPMSM
+
 def test_desc_IPMSM():
     """Check that the description of an IPMSM is correct"""
     Toyota_Prius = load(join(DATA_DIR, "Machine", "Toyota_Prius.json"))
     desc_dict = Toyota_Prius.comp_desc_dict()
-    assert len(desc_dict) == 11
+    assert len(desc_dict) == 12
     assert desc_dict[0]["name"] == "Type"
     assert desc_dict[0]["value"] == "IPMSM"
 
@@ -91,8 +92,10 @@ def test_desc_IPMSM():
     assert desc_dict[10]["name"] == "Mmag"
     assert desc_dict[10]["value"] == pytest.approx(1.235, rel=0.1)
 
+    assert desc_dict[11]["name"] == "Mshaft"
+    assert desc_dict[11]["value"] == pytest.approx(7.355, rel=0.1)
 
-@pytest.mark.outer_rotor
+
 def test_desc_Outer_Rotor():
     """Check that the description with External Rotor is correct"""
 

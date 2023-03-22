@@ -37,11 +37,6 @@ class Ui_DNotchTab(object):
 
         self.horizontalLayout_3.addWidget(self.b_add)
 
-        self.b_remove = QPushButton(DNotchTab)
-        self.b_remove.setObjectName(u"b_remove")
-
-        self.horizontalLayout_3.addWidget(self.b_remove)
-
         self.horizontalSpacer_2 = QSpacerItem(
             40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum
         )
@@ -59,6 +54,7 @@ class Ui_DNotchTab(object):
         self.tab_notch = QTabWidget(DNotchTab)
         self.tab_notch.setObjectName(u"tab_notch")
         self.tab_notch.setMinimumSize(QSize(770, 500))
+        self.tab_notch.setTabsClosable(True)
 
         self.verticalLayout.addWidget(self.tab_notch)
 
@@ -102,9 +98,6 @@ class Ui_DNotchTab(object):
         )
         self.b_add.setText(
             QCoreApplication.translate("DNotchTab", u"Add new notch", None)
-        )
-        self.b_remove.setText(
-            QCoreApplication.translate("DNotchTab", u"Remove last notch", None)
         )
         self.b_plot.setText(QCoreApplication.translate("DNotchTab", u"Preview", None))
         self.b_cancel.setText(QCoreApplication.translate("DNotchTab", u"Cancel", None))

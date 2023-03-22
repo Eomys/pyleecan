@@ -134,10 +134,10 @@ def plot_schematics(
             )
 
         if type_add_active == 1:
-            self.plot_active(fig=fig, is_show_fig=False)
+            self.plot_active(fig=fig, ax=ax, is_show_fig=False)
         elif type_add_active == 2:
             self.plot_active(
-                fig=fig, is_show_fig=False, enforced_default_color=MAGNET_COLOR
+                fig=fig, ax=ax, is_show_fig=False, enforced_default_color=MAGNET_COLOR
             )
 
         # Zooming and cleaning

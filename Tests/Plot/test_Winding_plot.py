@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-import pytest
+from PySide2 import QtWidgets, QtGui, QtCore
 
 from os.path import join
 
@@ -206,13 +206,13 @@ class Test_Winding_plot(object):
 
     def test_plot_linear(self):
         Toyota_Prius = load(join(DATA_DIR, "Machine", "Toyota_Prius.json"))
-        Toyota_Prius.plot()
+        # Toyota_Prius.plot()
         Toyota_Prius.stator.winding.plot_linear()
 
 
 if __name__ == "__main__":
     a = Test_Winding_plot()
     # a.test_plot_mmf_unit()
-    a.test_plot_radial()
-    # a.test_plot_linear()
+    # a.test_plot_radial()
+    a.test_plot_linear()
     print("Done")

@@ -54,6 +54,7 @@ class TestPWSlotUD(object):
         self.test_obj.slot = SlotUD(Zs=42)
         self.widget = PWSlotUD(self.test_obj, self.material_dict)
 
+    @pytest.mark.SlotUD
     def test_init(self):
         """Check that the Widget spinbox initialise to the lamination value"""
 
@@ -66,6 +67,7 @@ class TestPWSlotUD(object):
         assert self.widget.w_wedge_mat.c_mat_type.count() == 4
         assert self.widget.w_wedge_mat.c_mat_type.currentText() == "Mat4"
 
+    @pytest.mark.SlotUD
     def test_set_wedge(self):
         """Check that the GUI enables to edit the wedges"""
         assert self.test_obj.slot.wedge_mat is None
@@ -90,6 +92,7 @@ class TestPWSlotUD(object):
         assert self.test_obj.slot.wedge_mat is not None
         assert self.test_obj.slot.wedge_mat.name == "M400-50A"
 
+    @pytest.mark.SlotUD
     def test_open_dxf_gui(self):
         """Check that the DXF gui can be open"""
         assert self.widget.dxf_gui is None
@@ -104,6 +107,7 @@ if __name__ == "__main__":
     a.setup_class()
     a.setup_method()
     # a.test_init()
-    a.test_set_wedge()
+    # a.test_set_wedge()
+    a.test_open_dxf_gui()
     a.teardown_class()
     print("Done")

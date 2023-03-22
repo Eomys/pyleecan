@@ -33,6 +33,37 @@
       <widget class="QComboBox" name="c_vent_type"/>
      </item>
      <item>
+      <widget class="QLabel" name="in_Alpha0">
+       <property name="text">
+        <string>Alpha0 :</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="FloatEdit" name="lf_Alpha0">
+       <property name="minimumSize">
+        <size>
+         <width>100</width>
+         <height>0</height>
+        </size>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QComboBox" name="c_Alpha0_unit">
+       <item>
+        <property name="text">
+         <string>[rad]</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>[°]</string>
+        </property>
+       </item>
+      </widget>
+     </item>
+     <item>
       <spacer name="horizontalSpacer">
        <property name="orientation">
         <enum>Qt::Horizontal</enum>
@@ -59,6 +90,18 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>HelpButton</class>
+   <extends>QLabel</extends>
+   <header>......GUI/Tools/HelpButton.h</header>
+  </customwidget>
+  <customwidget>
+   <class>FloatEdit</class>
+   <extends>QLineEdit</extends>
+   <header>......GUI/Tools/FloatEdit.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

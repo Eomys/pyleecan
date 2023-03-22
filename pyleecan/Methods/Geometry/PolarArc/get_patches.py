@@ -10,7 +10,7 @@ PATCH_EDGE_ALPHA = config_dict["PLOT"]["COLOR_DICT"]["PATCH_EDGE_ALPHA"]
 
 
 def get_patches(
-    self, color=PATCH_COLOR, edgecolor=PATCH_EDGE, is_edge_only=False, linestyle=None
+    self, color=PATCH_COLOR, edgecolor=None, is_edge_only=False, linestyle=None
 ):
     """Returns the PolarArc Patch to be display in matplotlib
     Parameters
@@ -32,12 +32,19 @@ def get_patches(
         List of patches corresponding to the surface
     """
 
-    # check if the PolarArc is correct
-    self.check()
-
+    # Set default color
+    if edgecolor is None and not is_edge_only:
+        edgecolor = PATCH_EDGE
+    elif edgecolor is None and is_edge_only:
+        edgecolor = PATCH_EDGE_ALPHA
     if is_edge_only:
         color = PATCH_COLOR_ALPHA
-        edgecolor = PATCH_EDGE_ALPHA
+    if "--" in edgecolor:
+        edgecolor = edgecolor.replace("-", "")
+        linestyle = "--"
+
+    # check if the PolarArc is correct
+    self.check()
 
     line_list = self.get_lines()
     Z_list = list()

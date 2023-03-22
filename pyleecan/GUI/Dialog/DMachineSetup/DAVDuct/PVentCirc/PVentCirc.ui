@@ -50,7 +50,7 @@
       <string/>
      </property>
      <property name="pixmap">
-      <pixmap resource="../../../../../Resources/pyleecan.qrc">:/images/images/MachineSetup/LamParam/VentilationCirc.png</pixmap>
+      <pixmap>:/images/images/MachineSetup/LamParam/VentilationCirc.png</pixmap>
      </property>
      <property name="scaledContents">
       <bool>false</bool>
@@ -89,20 +89,10 @@
       <layout class="QVBoxLayout" name="verticalLayout">
        <item>
         <layout class="QGridLayout" name="gridLayout">
-         <item row="0" column="0">
-          <widget class="QLabel" name="in_Zh">
+         <item row="2" column="0">
+          <widget class="QLabel" name="in_D0">
            <property name="text">
-            <string>Zh :</string>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="1">
-          <widget class="QSpinBox" name="si_Zh">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
+            <string>D0 :</string>
            </property>
           </widget>
          </item>
@@ -113,8 +103,28 @@
            </property>
           </widget>
          </item>
+         <item row="2" column="2">
+          <widget class="QLabel" name="unit_D0">
+           <property name="text">
+            <string>m</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="1">
+          <widget class="SpinBox" name="si_Zh">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+          </widget>
+         </item>
          <item row="1" column="1">
           <widget class="FloatEdit" name="lf_H0"/>
+         </item>
+         <item row="2" column="1">
+          <widget class="FloatEdit" name="lf_D0"/>
          </item>
          <item row="1" column="2">
           <widget class="QLabel" name="unit_H0">
@@ -123,37 +133,10 @@
            </property>
           </widget>
          </item>
-         <item row="2" column="0">
-          <widget class="QLabel" name="in_D0">
+         <item row="0" column="0">
+          <widget class="QLabel" name="in_Zh">
            <property name="text">
-            <string>D0 :</string>
-           </property>
-          </widget>
-         </item>
-         <item row="2" column="1">
-          <widget class="FloatEdit" name="lf_D0"/>
-         </item>
-         <item row="2" column="2">
-          <widget class="QLabel" name="unit_D0">
-           <property name="text">
-            <string>m</string>
-           </property>
-          </widget>
-         </item>
-         <item row="3" column="0">
-          <widget class="QLabel" name="in_Alpha0">
-           <property name="text">
-            <string>Alpha0 :</string>
-           </property>
-          </widget>
-         </item>
-         <item row="3" column="1">
-          <widget class="FloatEdit" name="lf_Alpha0"/>
-         </item>
-         <item row="3" column="2">
-          <widget class="QLabel" name="unit_Alpha0">
-           <property name="text">
-            <string>[rad]</string>
+            <string>Zh :</string>
            </property>
           </widget>
          </item>
@@ -193,11 +176,15 @@
    <header>......GUI.Dialog.DMachineSetup.DAVDuct.WVentOut.WVentOut.h</header>
    <container>1</container>
   </customwidget>
+  <customwidget>
+   <class>SpinBox</class>
+   <extends>QSpinBox</extends>
+   <header>......GUI/Tools/SpinBox.h</header>
+  </customwidget>
  </customwidgets>
  <tabstops>
   <tabstop>lf_H0</tabstop>
   <tabstop>lf_D0</tabstop>
-  <tabstop>lf_Alpha0</tabstop>
  </tabstops>
  <resources>
   <include location="../../../../../Resources/pyleecan.qrc"/>

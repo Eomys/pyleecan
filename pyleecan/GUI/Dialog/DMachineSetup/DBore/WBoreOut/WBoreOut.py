@@ -46,7 +46,7 @@ class WBoreOut(QGroupBox):
         else:
             lam_name = "Rotor"
 
-        R_txt = self.tr("Min Radius: ")
+        R_txt = self.tr("Minimum radius: ")
         S_txt = self.tr(lam_name + " surface: ")
 
         if parent.check(lam) is None:

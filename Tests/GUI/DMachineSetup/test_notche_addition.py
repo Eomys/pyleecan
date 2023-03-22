@@ -1,24 +1,25 @@
 from PySide2 import QtWidgets
+from PySide2.QtWidgets import QTabBar
 from os.path import join, isfile
 from os import remove
 import mock
+import pytest
 import sys
 import logging
 from numpy import pi
 from numpy.testing import assert_almost_equal
-
+import matplotlib.pyplot as plt
 from pyleecan.Classes.SlotM10 import SlotM10
 from pyleecan.Classes.SlotM11 import SlotM11
 from pyleecan.Classes.SlotCirc import SlotCirc
 from pyleecan.definitions import DATA_DIR
-from pyleecan.Functions.load import load_matlib
+from pyleecan.Functions.load import load_matlib, load
 from pyleecan.GUI.Dialog.DMachineSetup.DMachineSetup import DMachineSetup
 from pyleecan.GUI.Dialog.DMachineSetup.DNotchTab.DNotchTab import DNotchTab
 from pyleecan.GUI.Dialog.DMachineSetup.DNotchTab.WNotch.WNotch import WNotch
 from pyleecan.GUI.Dialog.DMachineSetup.SMSlot.PMSlot10.PMSlot10 import PMSlot10
 from pyleecan.GUI.Dialog.DMachineSetup.SMSlot.PMSlot11.PMSlot11 import PMSlot11
 from pyleecan.GUI.Dialog.DMachineSetup.SMSlot.WSlotCirc.WSlotCirc import WSlotCirc
-from pyleecan.GUI.Dialog.DMachineSetup.SMachineType.SMachineType import SMachineType
 from pyleecan.GUI.Dialog.DMachineSetup.SLamShape.SLamShape import SLamShape
 from Tests import save_gui_path as save_path
 
@@ -35,7 +36,7 @@ class TestNotcheAddition(object):
     @classmethod
     def setup_class(cls):
         """Start the app for the test"""
-        print("\nStart Test TestDMachineSetup")
+        print("\nStart Test DMachineSetup Notch addition")
         if not QtWidgets.QApplication.instance():
             cls.app = QtWidgets.QApplication(sys.argv)
         else:
@@ -65,6 +66,9 @@ class TestNotcheAddition(object):
         """Exit the app after the test"""
         cls.app.quit()
 
+    @pytest.mark.long_5s
+    @pytest.mark.Notches
+    @pytest.mark.IPMSM
     def test_notch_addition(self):
         """Checking that the UI allow the definition and the addition to a machine"""
 
@@ -76,7 +80,9 @@ class TestNotcheAddition(object):
         assert isinstance(self.widget.w_step, SLamShape)
         assert not self.widget.w_step.g_notches.isChecked()
 
+        assert not self.widget.is_save_needed
         self.widget.w_step.g_notches.setChecked(True)
+        assert not self.widget.is_save_needed
 
         assert self.widget.w_step.b_notch.isEnabled()
         self.widget.w_step.b_notch.clicked.emit()
@@ -197,11 +203,16 @@ class TestNotcheAddition(object):
         assert notche_wid.check() == "H0 must be higher than 0"
 
         # Removing the notches with null dimensions
-        self.widget.w_step.notches_win.b_remove.clicked.emit()
+        b_remove = self.widget.w_step.notches_win.tab_notch.tabBar().tabButton(
+            self.widget.w_step.notches_win.tab_notch.count() - 1, QTabBar.RightSide
+        )
+        b_remove.clicked.emit()
         assert self.widget.w_step.notches_win.tab_notch.count() == 2
 
         # Clicking on OK button
         self.widget.w_step.notches_win.b_ok.clicked.emit()
+        assert self.widget.is_save_needed
+        self.widget.is_save_needed = False
 
         # Step 1-3 : Making sure that the groupBox and the widget are updated according to the new stator (with notches)
         self.widget.nav_step.setCurrentRow(7)
@@ -223,6 +234,7 @@ class TestNotcheAddition(object):
         # Step 2 : Adding notches on the rotor (polar)
         self.widget.nav_step.setCurrentRow(7)
         assert self.widget.nav_step.currentItem().text() == " 8: Rotor Lamination"
+        assert not self.widget.is_save_needed
 
         # Enabling notch on rotor
         assert isinstance(self.widget.w_step, SLamShape)
@@ -266,6 +278,7 @@ class TestNotcheAddition(object):
 
         # Clicking on OK button
         self.widget.w_step.notches_win.b_ok.clicked.emit()
+        assert self.widget.is_save_needed
 
         # Step 2-2 : Making sure that the groupBox and the widget are updated according to the new stator (with notches)
         self.widget.nav_step.setCurrentRow(3)
@@ -294,7 +307,7 @@ class TestNotcheAddition(object):
 
         # Step 4 : Saving the machine with notches
         # Making sure that the updated machine was saved
-        file_path = join(save_path, machine_name + ".json")
+        file_path = join(save_path, "Machine", machine_name + "_with_notch.json")
 
         # Check that the file didn't already exist
         if isfile(file_path):
@@ -315,6 +328,8 @@ class TestNotcheAddition(object):
         remove(file_path)
         assert not isfile(file_path)
 
+    @pytest.mark.Notches
+    @pytest.mark.IPMSM
     def test_cancel_button(self):
         """Checking that when clicking on cancel button, the machine is not update (no new notches added)"""
 
@@ -368,6 +383,8 @@ class TestNotcheAddition(object):
         ):
             self.widget.close()
 
+    @pytest.mark.Notches
+    @pytest.mark.IPMSM
     def test_notch_addition_without_input(self):
         """Checking that if the UI is not completely defined, then we can not add a notch and a error message is shown"""
         assert self.widget.machine.name == "Toyota_Prius"
@@ -438,6 +455,8 @@ class TestNotcheAddition(object):
         ):
             self.widget.close()
 
+    @pytest.mark.Notches
+    @pytest.mark.IPMSM
     def test_notch_addition_wrong_input(self):
         """Checking that if the UI is wrongly defined, then we can not add a notch and a error message is shown"""
         assert self.widget.machine.name == "Toyota_Prius"

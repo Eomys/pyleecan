@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-from ....Functions.Geometry.inter_line_line import find_line_eq
 from numpy import sqrt, angle, exp, sign
 
 

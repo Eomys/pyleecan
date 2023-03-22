@@ -55,11 +55,6 @@ class Ui_SMHoleMag(object):
 
         self.horizontalLayout_3.addWidget(self.b_add)
 
-        self.b_remove = QPushButton(SMHoleMag)
-        self.b_remove.setObjectName(u"b_remove")
-
-        self.horizontalLayout_3.addWidget(self.b_remove)
-
         self.horizontalSpacer_2 = QSpacerItem(
             40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum
         )
@@ -77,6 +72,7 @@ class Ui_SMHoleMag(object):
         self.tab_hole = QTabWidget(SMHoleMag)
         self.tab_hole.setObjectName(u"tab_hole")
         self.tab_hole.setMinimumSize(QSize(770, 500))
+        self.tab_hole.setTabsClosable(True)
 
         self.verticalLayout.addWidget(self.tab_hole)
 
@@ -122,9 +118,6 @@ class Ui_SMHoleMag(object):
         )
         self.b_add.setText(
             QCoreApplication.translate("SMHoleMag", u"Add new holes", None)
-        )
-        self.b_remove.setText(
-            QCoreApplication.translate("SMHoleMag", u"Remove last hole", None)
         )
         self.b_plot.setText(QCoreApplication.translate("SMHoleMag", u"Preview", None))
         self.b_previous.setText(

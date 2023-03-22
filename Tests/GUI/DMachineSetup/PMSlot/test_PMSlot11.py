@@ -175,8 +175,20 @@ class TestPMSlot11(object):
             self.widget.check(self.test_obj)
             == "You must have Wmag < pi/p (use ring magnet instead)"
         )
+        self.test_obj.slot = SlotM11(Zs=12, H0=0.10, Hmag=0.10, W0=0.623, Wmag=0.623)
+        assert (
+            self.widget.check(self.test_obj)
+            == "You must have Wmag < pi/p (use ring magnet instead)"
+        )
         self.test_obj.slot = SlotM11(
             Zs=8, H0=0.10, Hmag=0.10, W0=(pi / 4) * 0.99, Wmag=(pi / 4) * 0.99
+        )
+        assert (
+            self.widget.check(self.test_obj)
+            == "You must have Wmag < pi/p (use ring magnet instead)"
+        )
+        self.test_obj.slot = SlotM11(
+            Zs=8, H0=0.10, Hmag=0.10, W0=(pi / 4) * 0.98, Wmag=(pi / 4) * 0.98
         )
         assert self.widget.check(self.test_obj) is None
 
@@ -186,5 +198,7 @@ if __name__ == "__main__":
     a.setup_class()
     a.setup_method()
     a.test_check()
+    a.test_change_unit_W0()
+    a.test_change_unit_Wmag()
     a.teardown_class()
     print("Done")

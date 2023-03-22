@@ -109,8 +109,8 @@ class BoreSinePole(Bore):
         delta_d=0.001,
         delta_q=None,
         W0=None,
-        alpha=0,
         type_merge_slot=1,
+        alpha=0,
         init_dict=None,
         init_str=None,
     ):
@@ -139,19 +139,18 @@ class BoreSinePole(Bore):
                 delta_q = init_dict["delta_q"]
             if "W0" in list(init_dict.keys()):
                 W0 = init_dict["W0"]
-            if "alpha" in list(init_dict.keys()):
-                alpha = init_dict["alpha"]
             if "type_merge_slot" in list(init_dict.keys()):
                 type_merge_slot = init_dict["type_merge_slot"]
+            if "alpha" in list(init_dict.keys()):
+                alpha = init_dict["alpha"]
         # Set the properties (value check and convertion are done in setter)
         self.N = N
         self.k = k
         self.delta_d = delta_d
         self.delta_q = delta_q
         self.W0 = W0
-        self.alpha = alpha
         # Call Bore init
-        super(BoreSinePole, self).__init__(type_merge_slot=type_merge_slot)
+        super(BoreSinePole, self).__init__(type_merge_slot=type_merge_slot, alpha=alpha)
         # The class is frozen (in Bore init), for now it's impossible to
         # add new properties
 
@@ -166,7 +165,6 @@ class BoreSinePole(Bore):
         BoreSinePole_str += "delta_d = " + str(self.delta_d) + linesep
         BoreSinePole_str += "delta_q = " + str(self.delta_q) + linesep
         BoreSinePole_str += "W0 = " + str(self.W0) + linesep
-        BoreSinePole_str += "alpha = " + str(self.alpha) + linesep
         return BoreSinePole_str
 
     def __eq__(self, other):
@@ -187,8 +185,6 @@ class BoreSinePole(Bore):
         if other.delta_q != self.delta_q:
             return False
         if other.W0 != self.W0:
-            return False
-        if other.alpha != self.alpha:
             return False
         return True
 
@@ -277,21 +273,6 @@ class BoreSinePole(Bore):
                 diff_list.append(name + ".W0" + val_str)
             else:
                 diff_list.append(name + ".W0")
-        if (
-            other._alpha is not None
-            and self._alpha is not None
-            and isnan(other._alpha)
-            and isnan(self._alpha)
-        ):
-            pass
-        elif other._alpha != self._alpha:
-            if is_add_value:
-                val_str = (
-                    " (self=" + str(self._alpha) + ", other=" + str(other._alpha) + ")"
-                )
-                diff_list.append(name + ".alpha" + val_str)
-            else:
-                diff_list.append(name + ".alpha")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -308,7 +289,6 @@ class BoreSinePole(Bore):
         S += getsizeof(self.delta_d)
         S += getsizeof(self.delta_q)
         S += getsizeof(self.W0)
-        S += getsizeof(self.alpha)
         return S
 
     def as_dict(self, type_handle_ndarray=0, keep_function=False, **kwargs):
@@ -333,7 +313,6 @@ class BoreSinePole(Bore):
         BoreSinePole_dict["delta_d"] = self.delta_d
         BoreSinePole_dict["delta_q"] = self.delta_q
         BoreSinePole_dict["W0"] = self.W0
-        BoreSinePole_dict["alpha"] = self.alpha
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         BoreSinePole_dict["__class__"] = "BoreSinePole"
@@ -348,8 +327,8 @@ class BoreSinePole(Bore):
         delta_d_val = self.delta_d
         delta_q_val = self.delta_q
         W0_val = self.W0
-        alpha_val = self.alpha
         type_merge_slot_val = self.type_merge_slot
+        alpha_val = self.alpha
         # Creates new object of the same type with the copied properties
         obj_copy = type(self)(
             N=N_val,
@@ -357,8 +336,8 @@ class BoreSinePole(Bore):
             delta_d=delta_d_val,
             delta_q=delta_q_val,
             W0=W0_val,
-            alpha=alpha_val,
             type_merge_slot=type_merge_slot_val,
+            alpha=alpha_val,
         )
         return obj_copy
 
@@ -370,7 +349,6 @@ class BoreSinePole(Bore):
         self.delta_d = None
         self.delta_q = None
         self.W0 = None
-        self.alpha = None
         # Set to None the properties inherited from Bore
         super(BoreSinePole, self)._set_None()
 
@@ -466,23 +444,5 @@ class BoreSinePole(Bore):
 
         :Type: float
         :min: 0
-        """,
-    )
-
-    def _get_alpha(self):
-        """getter of alpha"""
-        return self._alpha
-
-    def _set_alpha(self, value):
-        """setter of alpha"""
-        check_var("alpha", value, "float")
-        self._alpha = value
-
-    alpha = property(
-        fget=_get_alpha,
-        fset=_set_alpha,
-        doc=u"""Angular offset
-
-        :Type: float
         """,
     )

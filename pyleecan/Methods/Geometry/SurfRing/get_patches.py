@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-from matplotlib.patches import Polygon
 from ....definitions import config_dict
 
 PATCH_EDGE = config_dict["PLOT"]["COLOR_DICT"]["PATCH_EDGE"]
@@ -9,7 +8,7 @@ PATCH_EDGE_ALPHA = config_dict["PLOT"]["COLOR_DICT"]["PATCH_EDGE_ALPHA"]
 
 
 def get_patches(
-    self, color=PATCH_COLOR, edgecolor=PATCH_EDGE, is_edge_only=False, linestyle=None
+    self, color=PATCH_COLOR, edgecolor=None, is_edge_only=False, linestyle=None
 ):
     """Returns the PolarArc Patch to be display in matplotlib
 
@@ -37,6 +36,8 @@ def get_patches(
     )
     # No color for inner surface
     patch_list.extend(
-        self.in_surf.get_patches(is_edge_only=is_edge_only, linestyle=linestyle)
+        self.in_surf.get_patches(
+            is_edge_only=is_edge_only, edgecolor=edgecolor, linestyle=linestyle
+        )
     )
     return patch_list

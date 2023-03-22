@@ -84,7 +84,32 @@
         <height>446</height>
        </rect>
       </property>
-      <layout class="QVBoxLayout" name="verticalLayout_3">
+      <layout class="QVBoxLayout" name="verticalLayout">
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_2">
+         <item>
+          <widget class="QLabel" name="in_H0_bore">
+           <property name="text">
+            <string>H0 definition:</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QComboBox" name="c_H0_bore">
+           <item>
+            <property name="text">
+             <string>Opening Arc</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Opening Segment</string>
+            </property>
+           </item>
+          </widget>
+         </item>
+        </layout>
+       </item>
        <item>
         <layout class="QGridLayout" name="gridLayout">
          <item row="1" column="2">

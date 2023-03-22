@@ -1,18 +1,16 @@
 import sys
-from os import makedirs
 from os.path import join, isfile, isdir
-
+from os import makedirs
 import mock
 import pytest
 from PySide2 import QtWidgets
 
+from Tests import save_gui_path
 from pyleecan.GUI.Dialog.DMachineSetup.DMachineSetup import DMachineSetup
 from pyleecan.GUI.Dialog.DMachineSetup.SSimu.SSimu import SSimu
 from pyleecan.GUI.Dialog.DMachineSetup.SPreview.SPreview import SPreview
 from pyleecan.definitions import DATA_DIR as data_test, MAIN_DIR
 from pyleecan.Functions.load import load_matlib
-from Tests import save_gui_path
-
 
 matlib_path = join(data_test, "Material")
 machine_path = join(MAIN_DIR, "Data", "Machine")
@@ -32,8 +30,9 @@ SCIM_dict = {
         ("Stator winding mass", "59.06 kg"),
         ("Rotor lamination mass", "97.54 kg"),
         ("Rotor winding mass", "21.12 kg"),
+        ("Shaft mass", "21.51 kg"),
     ],
-    "Nrow": 12,
+    "Nrow": 13,
 }
 IPMSM_dict = {
     "file_path": join(machine_path, "Toyota_Prius.json").replace("\\", "/"),
@@ -49,12 +48,13 @@ IPMSM_dict = {
         ("Stator winding mass", "4.001 kg"),
         ("Rotor lamination mass", "5.006 kg"),
         ("Rotor magnet mass", "1.236 kg"),
+        ("Shaft mass", "7.355 kg"),
     ],
-    "Nrow": 11,
+    "Nrow": 12,
 }
 load_preview_test = [SCIM_dict, IPMSM_dict]
 
-# python -m pytest ./Tests/GUI/DMachineSetup/test_SPreview.py
+# python -m pytest ./Tests/GUI/Dialog/DMachineSetup/test_SPreview.py
 class TestSPreview(object):
     def setup_method(self):
         """Setup the workspace and the GUI"""
