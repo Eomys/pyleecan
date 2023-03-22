@@ -124,7 +124,7 @@ class SWSlot(Gen_SWSlot, QWidget):
 
         # Set the correct index for the type checkbox and display the object
         if isinstance(self.obj.slot, SlotUD2):
-            index = len(INIT_INDEX) - 1
+            index = 0
         else:
             index = INIT_INDEX.index(type(self.obj.slot))
         self.c_slot_type.setCurrentIndex(index)
@@ -335,7 +335,7 @@ class SWSlot(Gen_SWSlot, QWidget):
             # Call the check method of the slot (every slot type have a
             # different check method)
             if isinstance(lam.slot, SlotUD2):
-                index = len(INIT_INDEX) - 1
+                index = 0
             else:
                 index = INIT_INDEX.index(type(lam.slot))
             return WIDGET_LIST[index].check(lam)

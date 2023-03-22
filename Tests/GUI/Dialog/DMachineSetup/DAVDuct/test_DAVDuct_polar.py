@@ -12,7 +12,7 @@ from pyleecan.GUI.Dialog.DMachineSetup.DAVDuct.DAVDuct import DAVDuct
 from pyleecan.GUI.Dialog.DMachineSetup.DAVDuct.PVentPolar.PVentPolar import (
     PVentPolar,
 )
-from Tests.GUI.DMachineSetup.DAVDuct import VENT_POLAR_INDEX
+from Tests.GUI.Dialog.DMachineSetup.DAVDuct import VENT_POLAR_INDEX
 from numpy import pi
 
 
