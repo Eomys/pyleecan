@@ -18,12 +18,13 @@ def plot_linear(
     self,
     fig=None,
     ax=None,
+    is_max_sym=True,
     is_show_fig=True,
     save_path=None,
     win_title=None,
     is_legend=True,
 ):
-    """Plots the winding linear pattern
+    """Plots the winding linear pattern. Method based on plot_overhang method of swat-em module
 
     Parameters
     ----------
@@ -35,6 +36,8 @@ def plot_linear(
         Axis on which to plot the data
     sym : int
         Symmetry factor (1= full machine, 2= half of the machine...)
+    is_max_sym : bool
+        To only plot the linear pattern on the maximum symetry of the machine
     is_show_fig : bool
         To call show at the end of the method
     save_path : str
@@ -85,13 +88,21 @@ def plot_linear(
     h2 = 0.5 + self.coil_pitch / 6  # height of the winding overhang
     db1 = 0 if self.Nlayer == 1 else 0.1  # distance between coil side and slot center
 
+    # Only plotting the machine for a period (if antiperiod given using the full period)
+    # This done by only taking into account Zs for a period
+    if is_max_sym:
+        per, is_antiper = self.comp_periodicity()
+        Zs_per = Zs // (per // 2) if is_antiper else Zs // per
+    else:
+        Zs_per = Zs
+
     # Step 2: Creating a list of patches and lines that will be plotted
     patches = list()
     lines_dict = dict()
 
     # Step 2-1: Adding slot surface as rectangural patches
-    xy = [(k - 0.5 - bz / 2, -hz / 2) for k in range(Zs + 1)]
-    width = ones([Zs + 1]) * bz
+    xy = [(k - 0.5 - bz / 2, -hz / 2) for k in range(Zs_per + 1)]
+    width = ones([Zs_per + 1]) * bz
     height = hz
 
     # First tooth is cut in half so we have two surfaces instead of 1
@@ -99,7 +110,7 @@ def plot_linear(
     width[0] = bz / 2
     width[-1] = bz / 2
 
-    for idx_slot in range(Zs + 1):
+    for idx_slot in range(Zs_per + 1):
         point = xy[idx_slot]
         width_patch = width[idx_slot]
         patch = Rectangle(
@@ -150,9 +161,10 @@ def plot_linear(
 
             point_list_updated = x_ + 1j * y_
 
-            # Step 2-2-3: If a coil cross the right border then it must be splitted in 2
-            idx_point_too_far = [i for i in range(len(x_)) if x_[i] > Zs - 0.5]
-            if idx_point_too_far != list():
+            # Step 2-2-3: If a coil cross the right border then it must be splitted in 2,
+            # if the coil is completely out of bounds then we do not plot it at all
+            idx_point_too_far = [i for i in range(len(x_)) if x_[i] > Zs_per - 0.5]
+            if idx_point_too_far != list() and len(idx_point_too_far) != len(x_):
                 wrong_points = x_[idx_point_too_far] + 1j * y_[idx_point_too_far]
 
                 # Correcting first point so that it is on the right border (new P2 point) and getting P3 as the conjugate of P2
@@ -163,14 +175,14 @@ def plot_linear(
                 idx_point_too_far = [idx_point_too_far[0], idx_point_too_far[-1]]
 
                 # For the point that we have to correct, we have to find the intersection
-                # between the segments that are too far and a vertical line on Y= Zs-0.5
+                # between the segments that are too far and a vertical line on Y= Zs_per-0.5
                 wrong_point = x_[idx_point_too_far[0]] + 1j * y_[idx_point_too_far[0]]
                 previous_point = (
                     x_[idx_point_too_far[0] - 1] + 1j * y_[idx_point_too_far[0] - 1]
                 )
 
-                lim_axis_y_point_A = Zs - 0.5 + 1j * h2
-                lim_axis_y_point_B = Zs - 0.5 - 1j * h2
+                lim_axis_y_point_A = Zs_per - 0.5 + 1j * h2
+                lim_axis_y_point_B = Zs_per - 0.5 - 1j * h2
 
                 point_correct = inter_line_line(
                     previous_point,
@@ -185,8 +197,8 @@ def plot_linear(
                 point_corrected.append(conjugate(point_correct[0]))
 
                 # Putting the corrected point on the left border to complete the coil
-                point_to_add = array(point_corrected) - Zs
-                point_to_add = insert(point_to_add, 1, wrong_points - Zs)
+                point_to_add = array(point_corrected) - Zs_per
+                point_to_add = insert(point_to_add, 1, wrong_points - Zs_per)
 
                 # Replacing the incorrect point by the new P2 and P3
                 for idx_point, _ in enumerate(idx_point_too_far):
@@ -200,11 +212,11 @@ def plot_linear(
 
                 coils.append(point_list_updated)
                 coils.append(point_to_add)
-            else:
+            elif len(idx_point_too_far) != len(x_):
                 coils.append(point_list_updated)
 
             # Step 2-2-4: Adding arrow patch for each coil between P2<->P3 and P5<->P0 (direction depending on winding direction)
-            if idx_point_too_far != list():
+            if idx_point_too_far != list() and len(idx_point_too_far) != len(x_):
                 # If the coil is splitted, then the point of the arrow are different compared with other case
                 if direct > 0:
                     # Winding direction from left to right
@@ -215,7 +227,7 @@ def plot_linear(
                     # Winding direction from right to left
                     start_point_1 = point_list_updated[0]
                     start_point_2 = point_to_add[len(point_to_add) // 2]
-            else:
+            elif len(idx_point_too_far) != len(x_):
                 if direct > 0:
                     # Winding direction from left to right
                     start_point_1 = point_list_updated[5]
@@ -266,7 +278,7 @@ def plot_linear(
 
                 # Adding condition to make sure that we do not draw lines between two point on the left or  the right border
                 if (real(begin) != -0.5 or real(end) != -0.5) and (
-                    real(begin) != Zs - 0.5 or real(end) != Zs - 0.5
+                    real(begin) != Zs_per - 0.5 or real(end) != Zs_per - 0.5
                 ):
                     points = array([begin, end])
                     ax.plot(
@@ -280,7 +292,7 @@ def plot_linear(
         ax.add_patch(patch)
 
     # Step 3-4: Adding plot slot number between each tooth
-    for slot_nb in range(Zs):
+    for slot_nb in range(Zs_per):
         ax.annotate(
             xy=(slot_nb, -hz / 2),
             text=str(slot_nb + 1),
@@ -290,7 +302,7 @@ def plot_linear(
         )
 
     # Step 3-5: Setting limits of the figure and removing axes
-    ax.set_xlim(-0.5, Zs - 0.5)
+    ax.set_xlim(-0.5, Zs_per - 0.5)
     ax.set_ylim(-h2 * 1.2, h2 * 1.2)
     ax.set_axis_off()
 
