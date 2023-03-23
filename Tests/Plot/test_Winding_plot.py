@@ -204,8 +204,26 @@ class Test_Winding_plot(object):
             machine.plot(is_winding_connection=True)
 
     def test_plot_linear(self):
-        Toyota_Prius = load(join(DATA_DIR, "Machine", "Toyota_Prius.json"))
-        Toyota_Prius.stator.winding.plot_linear()
+        machine_list = [
+            "Toyota_Prius",
+            "Renault_Zoe",
+            "Audi_eTron",
+            "Benchmark",
+            "Railway_Traction",
+            "Protean_InWheel",
+        ]
+        for machine_name in machine_list:
+            machine = load(join(DATA_DIR, "Machine", machine_name + ".json"))
+            machine.stator.winding.plot_linear(
+                is_max_sym=True,
+                save_path=join(
+                    save_path, "test_plot_linear_" + machine_name + "_max_sym_.png"
+                ),
+            )
+            machine.stator.winding.plot_linear(
+                is_max_sym=False,
+                save_path=join(save_path, "test_plot_linear_" + machine_name + ".png"),
+            )
 
 
 if __name__ == "__main__":
