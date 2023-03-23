@@ -12,7 +12,7 @@ from pyleecan.GUI.Dialog.DMachineSetup.DAVDuct.DAVDuct import DAVDuct
 from pyleecan.GUI.Dialog.DMachineSetup.DAVDuct.PVentTrap.PVentTrap import (
     PVentTrap,
 )
-from Tests.GUI.DMachineSetup.DAVDuct import VENT_TRAP_INDEX
+from Tests.GUI.Dialog.DMachineSetup.DAVDuct import VENT_TRAP_INDEX
 from numpy import pi
 
 
