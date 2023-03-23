@@ -216,45 +216,46 @@ def plot_linear(
                 coils.append(point_list_updated)
 
             # Step 2-2-4: Adding arrow patch for each coil between P2<->P3 and P5<->P0 (direction depending on winding direction)
-            if idx_point_too_far != list() and len(idx_point_too_far) != len(x_):
-                # If the coil is splitted, then the point of the arrow are different compared with other case
-                if direct > 0:
-                    # Winding direction from left to right
-                    start_point_1 = point_list_updated[-1]
-                    start_point_2 = point_to_add[len(point_to_add) // 2 - 1]
+            if len(idx_point_too_far) != len(x_):
+                if idx_point_too_far != list():
+                    # If the coil is splitted, then the point of the arrow are different compared with other case
+                    if direct > 0:
+                        # Winding direction from left to right
+                        start_point_1 = point_list_updated[-1]
+                        start_point_2 = point_to_add[len(point_to_add) // 2 - 1]
 
+                    else:
+                        # Winding direction from right to left
+                        start_point_1 = point_list_updated[0]
+                        start_point_2 = point_to_add[len(point_to_add) // 2]
                 else:
-                    # Winding direction from right to left
-                    start_point_1 = point_list_updated[0]
-                    start_point_2 = point_to_add[len(point_to_add) // 2]
-            elif len(idx_point_too_far) != len(x_):
-                if direct > 0:
-                    # Winding direction from left to right
-                    start_point_1 = point_list_updated[5]
-                    start_point_2 = point_list_updated[2]
+                    if direct > 0:
+                        # Winding direction from left to right
+                        start_point_1 = point_list_updated[5]
+                        start_point_2 = point_list_updated[2]
 
-                else:
-                    # Winding direction from right to left
-                    start_point_1 = point_list_updated[3]
-                    start_point_2 = point_list_updated[2]
+                    else:
+                        # Winding direction from right to left
+                        start_point_1 = point_list_updated[3]
+                        start_point_2 = point_list_updated[0]
 
-            arrow_1 = FancyArrowPatch(
-                (start_point_1.real, start_point_1.imag),
-                (start_point_1.real, 0),
-                facecolor=PHASE_COLORS[idx_phase],
-                linewidth=0,
-                arrowstyle="Simple, tail_width=0, head_width=8, head_length=12",
-            )
-            arrow_2 = FancyArrowPatch(
-                (start_point_2.real, start_point_2.imag),
-                (start_point_2.real, 0),
-                facecolor=PHASE_COLORS[idx_phase],
-                linewidth=0,
-                arrowstyle="Simple, tail_width=0, head_width=8, head_length=12",
-            )
+                arrow_1 = FancyArrowPatch(
+                    (start_point_1.real, start_point_1.imag),
+                    (start_point_1.real, 0),
+                    facecolor=PHASE_COLORS[idx_phase],
+                    linewidth=0,
+                    arrowstyle="Simple, tail_width=0, head_width=8, head_length=12",
+                )
+                arrow_2 = FancyArrowPatch(
+                    (start_point_2.real, start_point_2.imag),
+                    (start_point_2.real, 0),
+                    facecolor=PHASE_COLORS[idx_phase],
+                    linewidth=0,
+                    arrowstyle="Simple, tail_width=0, head_width=8, head_length=12",
+                )
 
-            patches.append(arrow_1)
-            patches.append(arrow_2)
+                patches.append(arrow_1)
+                patches.append(arrow_2)
 
         # Step 2-2-4: Keeping the coils of each phase inside a dict
         lines_dict["Phase " + str(idx_phase + 1)] = coils
