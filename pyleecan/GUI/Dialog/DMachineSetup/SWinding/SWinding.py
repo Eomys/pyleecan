@@ -80,6 +80,7 @@ class SWinding(Gen_SWinding, QWidget):
             self.c_wind_type.setCurrentIndex(0)
             # No plot_mmf
             self.b_plot_mmf.hide()
+            # self.b_plot_radial.hide()
 
         # Pattern Group setup
         if self.obj.winding is None:
@@ -167,7 +168,6 @@ class SWinding(Gen_SWinding, QWidget):
         self.b_export.clicked.connect(self.s_export_csv)
         self.b_edit_wind_mat.hide()
         self.b_generate.clicked.connect(self.s_generate)
-        # self.b_preview.clicked.connect(self.s_plot)
         self.b_plot_linear.clicked.connect(self.s_plot_linear)
         self.b_plot_radial.clicked.connect(self.s_plot_radial)
         self.b_plot_mmf.clicked.connect(self.s_plot_mmf)

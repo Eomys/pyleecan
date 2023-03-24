@@ -87,7 +87,7 @@ def plot(
     is_clean_plot : bool
         True to remove title, legend, axis (only machine on plot with white background)
     is_winding_connection : bool
-        True to display winding connections
+        True to display winding connections (plot based on plot_polar_layout method of swat-em)
 
     Returns
     -------
@@ -121,7 +121,8 @@ def plot(
             try:
                 wind_mat = self.winding.get_connection_mat(self.get_Zs())
                 qs = self.winding.qs
-                if is_winding_connection and self.is_stator:
+                # Calling swat-em method for the winding if we want to plot the radial pattern
+                if is_winding_connection:
                     # generate a datamodel for the winding
                     wdg = datamodel()
                     # generate winding from inputs
@@ -147,9 +148,10 @@ def plot(
             patches = surf.get_patches(
                 color_lam, is_edge_only=is_edge_only, edgecolor=edgecolor
             )
-            if head is not None:  # Add transparency to lamination when arrows are added
-                for patch in patches:
-                    patch._alpha = 0.2
+            # Add transparency to stator lamination when arrows are added
+            if head is not None and self.is_stator:
+                # Only adding transparency to the first surface as the second is a white circle
+                patches[0]._alpha = 0.2
             patches.extend(patches)
         elif WIND_LAB in label_dict["surf_type"] or BAR_LAB in label_dict["surf_type"]:
             if not is_lam_only:
@@ -168,63 +170,89 @@ def plot(
                         edgecolor=edgecolor,
                     )
                 )
-                if head is not None:
-                    for phase in head:
-                        if label_dict["S_id"] + 1 in [line[0][0] for line in phase]:
-                            start_ind = [line[0][0] for line in phase].index(
-                                label_dict["S_id"] + 1
-                            )
-                            start_point = [
-                                surf.comp_point_ref().real,
-                                surf.comp_point_ref().imag,
-                            ]
-                            end_point = None
-                            for surf2 in surf_list:
-                                label_dict2 = decode_label(surf2.label)
-                                if (
-                                    "S_id" in label_dict2
-                                    and phase[start_ind][0][1]
-                                    == label_dict2["S_id"] + 1
-                                ):
-                                    end_point = [
-                                        surf2.comp_point_ref().real,
-                                        surf2.comp_point_ref().imag,
-                                    ]
-                                    delta_indices = (
-                                        phase[start_ind][0][1] - phase[start_ind][0][0]
-                                    )
-                                    if (
-                                        abs(delta_indices) > self.get_Zs() / 2
-                                    ):  # Handle connections like 43 with 2
-                                        delta_indices = np_sign(delta_indices) * (
-                                            abs(delta_indices) - self.get_Zs()
-                                        )
-                                    signe = np_sign(delta_indices)  # Arrow direction
-                                    break
-                            if end_point is not None:
-                                dist_AB = sqrt(
-                                    (end_point[0] - start_point[0]) ** 2
-                                    + (end_point[1] - start_point[1]) ** 2
-                                )
-                                angle = signe * (1.5 * self.Rext) / dist_AB
-                                line = FancyArrowPatch(
-                                    start_point,
-                                    end_point,
-                                    connectionstyle="arc3,rad=" + str(angle),
-                                    facecolor=color,
-                                    zorder=2,
-                                    **kw
-                                )
-                                patches.append(line)
-
-                            break
-
         elif WEDGE_LAB in label_dict["surf_type"] and not is_lam_only:
             patches.extend(surf.get_patches(WEDGE_COLOR, is_edge_only=is_edge_only))
         else:
             patches.extend(
                 surf.get_patches(is_edge_only=is_edge_only, edgecolor=edgecolor)
             )
+
+    # Adding arrows between slots for winding radial pattern
+    if head is not None:
+        for idx_phase, phase in enumerate(head):
+            for coil in phase:
+                # Recovering the starting and ending slot of the coil
+                start_slot_idx = (coil[0][0], self.winding.Nlayer - 1 - coil[3][0])
+                end_slot_idx = (coil[0][1], self.winding.Nlayer - 1 - coil[3][1])
+
+                # Recovering the winding direction:  1-> from left to right, -1-> from right to left
+                winding_direction = coil[2]
+
+                # Recovering the surface corresponding to the starting slot and ending slot
+                wind_surf_list = [
+                    surf
+                    for surf in surf_list
+                    if WIND_LAB in decode_label(surf.label)["surf_type"]
+                ]
+
+                # If Nlayer > 1 then we have to precise if the direction is tangential or radial
+                # If Nlayer ==1 then checking radial but value always equal to 0
+                Nrad, Ntan = self.winding.get_dim_wind()
+                if Nrad < Ntan:
+                    layer_id_name = "T_id"
+                else:
+                    layer_id_name = "R_id"
+
+                start_slot_surf = [
+                    surf
+                    for surf in wind_surf_list
+                    if decode_label(surf.label)["S_id"] + 1 == start_slot_idx[0]
+                    and decode_label(surf.label)[layer_id_name] == start_slot_idx[1]
+                ]
+
+                end_slot_surf = [
+                    surf
+                    for surf in wind_surf_list
+                    if decode_label(surf.label)["S_id"] + 1 == end_slot_idx[0]
+                    and decode_label(surf.label)[layer_id_name] == end_slot_idx[1]
+                ]
+
+                # Making sure that only one surface was selected for each slot
+                if len(start_slot_surf) != 1 or len(end_slot_surf) != 1:
+                    raise Exception(
+                        "Could not find the surface of the starting or ending slot of the winding"
+                    )
+                else:
+                    start_slot_surf = start_slot_surf[0]
+                    end_slot_surf = end_slot_surf[0]
+
+                # Recovering the start point and ending point of the arrow as the center of each slot
+                start_point = [
+                    start_slot_surf.comp_point_ref().real,
+                    start_slot_surf.comp_point_ref().imag,
+                ]
+
+                end_point = [
+                    end_slot_surf.comp_point_ref().real,
+                    end_slot_surf.comp_point_ref().imag,
+                ]
+
+                # Computing the angle of the arc and its sign
+                dist_AB = sqrt(
+                    (end_point[0] - start_point[0]) ** 2
+                    + (end_point[1] - start_point[1]) ** 2
+                )
+                angle = winding_direction * (1.5 * self.Rext) / dist_AB
+
+                # Adding the arrow as a Patch
+                line = FancyArrowPatch(
+                    start_point,
+                    end_point,
+                    connectionstyle="arc3,rad=" + str(angle),
+                    facecolor=PHASE_COLORS[idx_phase],
+                    **kw
+                )
+                patches.append(line)
 
     if is_display:
 

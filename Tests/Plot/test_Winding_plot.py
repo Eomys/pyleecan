@@ -201,7 +201,10 @@ class Test_Winding_plot(object):
         ]
         for machine_name in machine_list:
             machine = load(join(DATA_DIR, "Machine", machine_name + ".json"))
-            machine.plot(is_winding_connection=True)
+            machine.stator.plot(
+                is_winding_connection=True,
+                save_path=join(save_path, "test_plot_radial_" + machine_name + ".png"),
+            )
 
     def test_plot_linear(self):
         machine_list = [
@@ -229,6 +232,6 @@ class Test_Winding_plot(object):
 if __name__ == "__main__":
     a = Test_Winding_plot()
     # a.test_plot_mmf_unit()
-    # a.test_plot_radial()
-    a.test_plot_linear()
+    a.test_plot_radial()
+    # a.test_plot_linear()
     print("Done")
