@@ -1,16 +1,7 @@
 from matplotlib.patches import Patch, FancyArrowPatch
 import matplotlib.pyplot as plt
 from swat_em import datamodel
-from numpy import (
-    sqrt,
-    pi,
-    sign as np_sign,
-    abs as np_abs,
-    arccos,
-    arctan,
-    arcsin,
-    angle as np_angle,
-)
+from numpy import sqrt
 
 from ....Functions.labels import decode_label, WIND_LAB, BAR_LAB, LAM_LAB, WEDGE_LAB
 from ....Functions.Winding.find_wind_phase_color import find_wind_phase_color
@@ -179,11 +170,41 @@ def plot(
 
     # Adding arrows between slots for winding radial pattern
     if head is not None:
+        is_outer_rotor = not self.parent.rotor.is_internal
+
+        # Taking into account slot shifting transformation
+        Nslot_shift_wind = (
+            self.winding.Nslot_shift_wind
+            if self.winding.Nslot_shift_wind not in [0, None]
+            else 0
+        )
+
+        # Permuting B and C if asked
+        if self.winding.is_permute_B_C:
+            head_2 = head.copy()
+            head_2[1] = head[2]
+            head_2[2] = head[1]
+            head = head_2
+
+        # Applying reverse winding transformation
+        if self.winding.is_reverse_wind:
+            head[1:] = head[1:][::-1]
+
         for idx_phase, phase in enumerate(head):
             for coil in phase:
-                # Recovering the starting and ending slot of the coil
-                start_slot_idx = (coil[0][0], self.winding.Nlayer - 1 - coil[3][0])
-                end_slot_idx = (coil[0][1], self.winding.Nlayer - 1 - coil[3][1])
+                # Recovering the starting and ending slot of the coil (applying reverse layer transformation if needed)
+                start_slot_idx = (
+                    coil[0][0] + Nslot_shift_wind,
+                    coil[3][0]
+                    if self.winding.is_reverse_layer
+                    else self.winding.Nlayer - 1 - coil[3][0],
+                )
+                end_slot_idx = (
+                    coil[0][1] + Nslot_shift_wind,
+                    coil[3][1]
+                    if self.winding.is_reverse_layer
+                    else self.winding.Nlayer - 1 - coil[3][1],
+                )
 
                 # Recovering the winding direction:  1-> from left to right, -1-> from right to left
                 winding_direction = coil[2]
@@ -242,7 +263,16 @@ def plot(
                     (end_point[0] - start_point[0]) ** 2
                     + (end_point[1] - start_point[1]) ** 2
                 )
-                angle = winding_direction * (1.5 * self.Rext) / dist_AB
+
+                # Changing arrow xize depending on type of rotor (inner or outer)
+                arrow_size = 0.5 if is_outer_rotor else 1.5
+                angle = winding_direction * (arrow_size * self.Rext) / dist_AB
+
+                # Applying reverse winding transformation by swapping start and ending point
+                if self.winding.is_reverse_wind:
+                    temp = start_point
+                    start_point = end_point
+                    end_point = temp
 
                 # Adding the arrow as a Patch
                 line = FancyArrowPatch(

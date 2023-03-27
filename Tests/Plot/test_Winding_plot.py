@@ -197,7 +197,7 @@ class Test_Winding_plot(object):
             "Jaguar_I_Pace",
             "Railway_Traction",
             "Renault_Zoe",
-            "Tesla_model_3",
+            "Protean_InWheel",
         ]
         for machine_name in machine_list:
             machine = load(join(DATA_DIR, "Machine", machine_name + ".json"))
