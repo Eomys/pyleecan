@@ -186,28 +186,43 @@ def plot(
             head_2[2] = head[1]
             head = head_2
 
-        # Applying reverse winding transformation
-        if self.winding.is_reverse_wind:
-            head[1:] = head[1:][::-1]
+        # Detecting the direction of the layer (tangential or radial)
+        # If Nlayer > 1 then we have to precise if the direction is tangential or radial
+        # If Nlayer ==1 then checking radial but value always equal to 0
+        Nrad, Ntan = self.winding.get_dim_wind()
+        if Nrad < Ntan:
+            layer_id_name = "T_id"
+        else:
+            layer_id_name = "R_id"
 
+        Zs = self.get_Zs()
         for idx_phase, phase in enumerate(head):
             for coil in phase:
                 # Recovering the starting and ending slot of the coil (applying reverse layer transformation if needed)
                 start_slot_idx = (
-                    coil[0][0] + Nslot_shift_wind,
+                    Zs - (coil[0][0] + Nslot_shift_wind) + 1
+                    if self.winding.is_reverse_wind
+                    else coil[0][0] + Nslot_shift_wind,
                     coil[3][0]
                     if self.winding.is_reverse_layer
+                    ^ (self.winding.is_reverse_wind and layer_id_name == "T_id")
                     else self.winding.Nlayer - 1 - coil[3][0],
                 )
                 end_slot_idx = (
-                    coil[0][1] + Nslot_shift_wind,
+                    Zs - (coil[0][1] + Nslot_shift_wind) + 1
+                    if self.winding.is_reverse_wind
+                    else coil[0][1] + Nslot_shift_wind,
                     coil[3][1]
                     if self.winding.is_reverse_layer
+                    ^ (self.winding.is_reverse_wind and layer_id_name == "T_id")
                     else self.winding.Nlayer - 1 - coil[3][1],
                 )
 
                 # Recovering the winding direction:  1-> from left to right, -1-> from right to left
-                winding_direction = coil[2]
+                # Applying reverse winding transformation by changing the winding direction as well
+                winding_direction = (
+                    -1 * coil[2] if self.winding.is_reverse_wind else coil[2]
+                )
 
                 # Recovering the surface corresponding to the starting slot and ending slot
                 wind_surf_list = [
@@ -215,14 +230,6 @@ def plot(
                     for surf in surf_list
                     if WIND_LAB in decode_label(surf.label)["surf_type"]
                 ]
-
-                # If Nlayer > 1 then we have to precise if the direction is tangential or radial
-                # If Nlayer ==1 then checking radial but value always equal to 0
-                Nrad, Ntan = self.winding.get_dim_wind()
-                if Nrad < Ntan:
-                    layer_id_name = "T_id"
-                else:
-                    layer_id_name = "R_id"
 
                 start_slot_surf = [
                     surf
@@ -264,15 +271,9 @@ def plot(
                     + (end_point[1] - start_point[1]) ** 2
                 )
 
-                # Changing arrow xize depending on type of rotor (inner or outer)
-                arrow_size = 0.5 if is_outer_rotor else 1.5
+                # Changing arrow size depending on type of rotor (inner or outer)
+                arrow_size = -0.5 if is_outer_rotor else 1.5
                 angle = winding_direction * (arrow_size * self.Rext) / dist_AB
-
-                # Applying reverse winding transformation by swapping start and ending point
-                if self.winding.is_reverse_wind:
-                    temp = start_point
-                    start_point = end_point
-                    end_point = temp
 
                 # Adding the arrow as a Patch
                 line = FancyArrowPatch(
