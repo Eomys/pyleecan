@@ -29,7 +29,7 @@ def plot_mmf_unit(self, r_max=100, fig=None, save_path=None, is_show_fig=True):
     # Compute the winding function and mmf
     qs = self.winding.qs
     p = self.get_pole_pair_number()
-    MMF_U, WF = self.comp_mmf_unit(Nt=1, Na=400 * p)
+    MMF_U, WF = self.comp_mmf_unit(Nt=100, Na=400 * p)
 
     color_list = config_dict["PLOT"]["COLOR_DICT"]["COLOR_LIST"][:qs]
 

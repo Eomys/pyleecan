@@ -275,6 +275,8 @@ class Winding(FrozenClass):
         is_reverse_layer=False,
         is_change_layer=False,
         is_permute_B_C=False,
+        dual_tri_phase_shift=None,
+        is_wye=True,
         init_dict=None,
         init_str=None,
     ):
@@ -329,6 +331,10 @@ class Winding(FrozenClass):
                 is_change_layer = init_dict["is_change_layer"]
             if "is_permute_B_C" in list(init_dict.keys()):
                 is_permute_B_C = init_dict["is_permute_B_C"]
+            if "dual_tri_phase_shift" in list(init_dict.keys()):
+                dual_tri_phase_shift = init_dict["dual_tri_phase_shift"]
+            if "is_wye" in list(init_dict.keys()):
+                is_wye = init_dict["is_wye"]
         # Set the properties (value check and convertion are done in setter)
         self.parent = None
         self.is_reverse_wind = is_reverse_wind
@@ -349,6 +355,8 @@ class Winding(FrozenClass):
         self.is_reverse_layer = is_reverse_layer
         self.is_change_layer = is_change_layer
         self.is_permute_B_C = is_permute_B_C
+        self.dual_tri_phase_shift = dual_tri_phase_shift
+        self.is_wye = is_wye
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -395,6 +403,10 @@ class Winding(FrozenClass):
         Winding_str += "is_reverse_layer = " + str(self.is_reverse_layer) + linesep
         Winding_str += "is_change_layer = " + str(self.is_change_layer) + linesep
         Winding_str += "is_permute_B_C = " + str(self.is_permute_B_C) + linesep
+        Winding_str += (
+            "dual_tri_phase_shift = " + str(self.dual_tri_phase_shift) + linesep
+        )
+        Winding_str += "is_wye = " + str(self.is_wye) + linesep
         return Winding_str
 
     def __eq__(self, other):
@@ -437,6 +449,10 @@ class Winding(FrozenClass):
         if other.is_change_layer != self.is_change_layer:
             return False
         if other.is_permute_B_C != self.is_permute_B_C:
+            return False
+        if other.dual_tri_phase_shift != self.dual_tri_phase_shift:
+            return False
+        if other.is_wye != self.is_wye:
             return False
         return True
 
@@ -643,6 +659,37 @@ class Winding(FrozenClass):
                 diff_list.append(name + ".is_permute_B_C" + val_str)
             else:
                 diff_list.append(name + ".is_permute_B_C")
+        if (
+            other._dual_tri_phase_shift is not None
+            and self._dual_tri_phase_shift is not None
+            and isnan(other._dual_tri_phase_shift)
+            and isnan(self._dual_tri_phase_shift)
+        ):
+            pass
+        elif other._dual_tri_phase_shift != self._dual_tri_phase_shift:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._dual_tri_phase_shift)
+                    + ", other="
+                    + str(other._dual_tri_phase_shift)
+                    + ")"
+                )
+                diff_list.append(name + ".dual_tri_phase_shift" + val_str)
+            else:
+                diff_list.append(name + ".dual_tri_phase_shift")
+        if other._is_wye != self._is_wye:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._is_wye)
+                    + ", other="
+                    + str(other._is_wye)
+                    + ")"
+                )
+                diff_list.append(name + ".is_wye" + val_str)
+            else:
+                diff_list.append(name + ".is_wye")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -669,6 +716,8 @@ class Winding(FrozenClass):
         S += getsizeof(self.is_reverse_layer)
         S += getsizeof(self.is_change_layer)
         S += getsizeof(self.is_permute_B_C)
+        S += getsizeof(self.dual_tri_phase_shift)
+        S += getsizeof(self.is_wye)
         return S
 
     def as_dict(self, type_handle_ndarray=0, keep_function=False, **kwargs):
@@ -727,6 +776,8 @@ class Winding(FrozenClass):
         Winding_dict["is_reverse_layer"] = self.is_reverse_layer
         Winding_dict["is_change_layer"] = self.is_change_layer
         Winding_dict["is_permute_B_C"] = self.is_permute_B_C
+        Winding_dict["dual_tri_phase_shift"] = self.dual_tri_phase_shift
+        Winding_dict["is_wye"] = self.is_wye
         # The class name is added to the dict for deserialisation purpose
         Winding_dict["__class__"] = "Winding"
         return Winding_dict
@@ -762,6 +813,8 @@ class Winding(FrozenClass):
         is_reverse_layer_val = self.is_reverse_layer
         is_change_layer_val = self.is_change_layer
         is_permute_B_C_val = self.is_permute_B_C
+        dual_tri_phase_shift_val = self.dual_tri_phase_shift
+        is_wye_val = self.is_wye
         # Creates new object of the same type with the copied properties
         obj_copy = type(self)(
             is_reverse_wind=is_reverse_wind_val,
@@ -782,6 +835,8 @@ class Winding(FrozenClass):
             is_reverse_layer=is_reverse_layer_val,
             is_change_layer=is_change_layer_val,
             is_permute_B_C=is_permute_B_C_val,
+            dual_tri_phase_shift=dual_tri_phase_shift_val,
+            is_wye=is_wye_val,
         )
         return obj_copy
 
@@ -808,6 +863,8 @@ class Winding(FrozenClass):
         self.is_reverse_layer = None
         self.is_change_layer = None
         self.is_permute_B_C = None
+        self.dual_tri_phase_shift = None
+        self.is_wye = None
 
     def _get_is_reverse_wind(self):
         """getter of is_reverse_wind"""
@@ -1182,6 +1239,42 @@ class Winding(FrozenClass):
         fget=_get_is_permute_B_C,
         fset=_set_is_permute_B_C,
         doc=u"""True to permute phase B and phase C
+
+        :Type: bool
+        """,
+    )
+
+    def _get_dual_tri_phase_shift(self):
+        """getter of dual_tri_phase_shift"""
+        return self._dual_tri_phase_shift
+
+    def _set_dual_tri_phase_shift(self, value):
+        """setter of dual_tri_phase_shift"""
+        check_var("dual_tri_phase_shift", value, "float")
+        self._dual_tri_phase_shift = value
+
+    dual_tri_phase_shift = property(
+        fget=_get_dual_tri_phase_shift,
+        fset=_set_dual_tri_phase_shift,
+        doc=u"""Phase shift between both tri-phase systems in dual-tri-phase case
+
+        :Type: float
+        """,
+    )
+
+    def _get_is_wye(self):
+        """getter of is_wye"""
+        return self._is_wye
+
+    def _set_is_wye(self, value):
+        """setter of is_wye"""
+        check_var("is_wye", value, "bool")
+        self._is_wye = value
+
+    is_wye = property(
+        fget=_get_is_wye,
+        fset=_set_is_wye,
+        doc=u"""True if the alimentation is wye (else delta)
 
         :Type: bool
         """,

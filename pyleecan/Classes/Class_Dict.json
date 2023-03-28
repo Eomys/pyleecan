@@ -16540,6 +16540,26 @@
                 "type": "bool",
                 "unit": "",
                 "value": 0
+            },
+            {
+                "as_dict": "",
+                "desc": "Phase shift between both tri-phase systems in dual-tri-phase case",
+                "max": "",
+                "min": "",
+                "name": "dual_tri_phase_shift",
+                "type": "float",
+                "unit": "rad",
+                "value": null
+            },
+            {
+                "as_dict": "",
+                "desc": "True if the alimentation is wye (else delta)",
+                "max": "",
+                "min": "",
+                "name": "is_wye",
+                "type": "bool",
+                "unit": "-",
+                "value": 1
             }
         ]
     },
