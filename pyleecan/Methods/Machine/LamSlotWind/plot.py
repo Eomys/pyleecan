@@ -321,10 +321,16 @@ def plot(
         ax.axis("equal")
 
         # Window title
-        if self.is_stator:
-            prefix = "Stator "
+        if is_winding_connection:
+            if self.is_stator:
+                prefix = "Stator winding radial pattern "
+            else:
+                prefix = "Rotor winding radial pattern "
         else:
-            prefix = "Rotor "
+            if self.is_stator:
+                prefix = "Stator "
+            else:
+                prefix = "Rotor "
         if (
             win_title is None
             and self.parent is not None
@@ -346,14 +352,25 @@ def plot(
 
         # Add the legend
         if not is_edge_only:
-            if self.is_stator and "Stator" not in label_leg:
-                patch_leg.append(Patch(color=STATOR_COLOR))
-                label_leg.append("Stator")
-                title = "Stator with winding"
-            elif not self.is_stator and "Rotor" not in label_leg:
-                patch_leg.append(Patch(color=ROTOR_COLOR))
-                label_leg.append("Rotor")
-                title = "Rotor with winding"
+            if is_winding_connection:
+                if self.is_stator and "Stator" not in label_leg:
+                    patch_leg.append(Patch(color=STATOR_COLOR))
+                    label_leg.append("Stator")
+                    title = "Stator winding radial pattern"
+                elif not self.is_stator and "Rotor" not in label_leg:
+                    patch_leg.append(Patch(color=ROTOR_COLOR))
+                    label_leg.append("Rotor")
+                    title = "Rotor winding radial pattern"
+            else:
+                if self.is_stator and "Stator" not in label_leg:
+                    patch_leg.append(Patch(color=STATOR_COLOR))
+                    label_leg.append("Stator")
+                    title = "Stator with winding"
+                elif not self.is_stator and "Rotor" not in label_leg:
+                    patch_leg.append(Patch(color=ROTOR_COLOR))
+                    label_leg.append("Rotor")
+                    title = "Rotor with winding"
+
             ax.set_title(title)
             # Add the wedges legend only if needed
             if (
