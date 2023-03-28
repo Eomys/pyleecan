@@ -10,6 +10,7 @@ from ....Functions.init_fig import init_fig
 from ....Functions.Plot import dict_2D
 from ....definitions import config_dict
 from ....Classes.WindingSC import WindingSC
+from ....Classes.WindingUD import WindingUD
 
 PHASE_COLORS = config_dict["PLOT"]["COLOR_DICT"]["PHASE_COLORS"]
 ROTOR_COLOR = config_dict["PLOT"]["COLOR_DICT"]["ROTOR_COLOR"]
@@ -99,6 +100,10 @@ def plot(
     else:
         color_lam = ROTOR_COLOR
 
+    # If the winding is user defined, we can not plot the radial pattern
+    if isinstance(self.winding, WindingUD):
+        is_winding_connection = False
+
     # Get the LamSlot surface(s)
     surf_list = self.build_geometry(sym=sym, alpha=alpha, delta=delta)
 
@@ -173,11 +178,10 @@ def plot(
         is_outer_rotor = not self.parent.rotor.is_internal
 
         # Taking into account slot shifting transformation
-        Nslot_shift_wind = (
-            self.winding.Nslot_shift_wind
-            if self.winding.Nslot_shift_wind not in [0, None]
-            else 0
-        )
+        if self.winding.Nslot_shift_wind not in [0, None]:
+            Nslot_shift_wind = self.winding.Nslot_shift_wind
+        else:
+            Nslot_shift_wind = 0
 
         # Permuting B and C if asked
         if self.winding.is_permute_B_C:
@@ -198,31 +202,45 @@ def plot(
         Zs = self.get_Zs()
         for idx_phase, phase in enumerate(head):
             for coil in phase:
-                # Recovering the starting and ending slot of the coil (applying reverse layer transformation if needed)
-                start_slot_idx = (
-                    Zs - (coil[0][0] + Nslot_shift_wind) + 1
-                    if self.winding.is_reverse_wind
-                    else coil[0][0] + Nslot_shift_wind,
-                    coil[3][0]
-                    if self.winding.is_reverse_layer
+                # Recovering the starting and ending slot index of the coil (applying reverse layer transformation if needed)
+                if self.winding.is_reverse_wind:
+                    start_slot_idx = Zs + Nslot_shift_wind + 1 - coil[0][0]
+                    end_slot_idx = Zs + Nslot_shift_wind + 1 - coil[0][1]
+                else:
+                    start_slot_idx = coil[0][0] + Nslot_shift_wind
+                    end_slot_idx = coil[0][1] + Nslot_shift_wind
+
+                # Recovering the starting and ending slot layer index of the coil (applying reverse layer transformation if needed)
+                if (
+                    self.winding.is_reverse_layer
                     ^ (self.winding.is_reverse_wind and layer_id_name == "T_id")
-                    else self.winding.Nlayer - 1 - coil[3][0],
-                )
-                end_slot_idx = (
-                    Zs - (coil[0][1] + Nslot_shift_wind) + 1
-                    if self.winding.is_reverse_wind
-                    else coil[0][1] + Nslot_shift_wind,
-                    coil[3][1]
-                    if self.winding.is_reverse_layer
-                    ^ (self.winding.is_reverse_wind and layer_id_name == "T_id")
-                    else self.winding.Nlayer - 1 - coil[3][1],
-                )
+                    ^ (
+                        self.winding.is_reverse_wind
+                        and layer_id_name == "R_id"
+                        and is_outer_rotor
+                    )
+                ):
+                    start_slot_layer_idx = coil[3][0]
+                    end_slot_layer_idx = coil[3][1]
+                else:
+                    start_slot_layer_idx = self.winding.Nlayer - 1 - coil[3][0]
+                    end_slot_layer_idx = self.winding.Nlayer - 1 - coil[3][1]
+
+                start_slot = (start_slot_idx, start_slot_layer_idx)
+                end_slot = (end_slot_idx, end_slot_layer_idx)
+
+                # If the value is geater than Zs putting it back between 1 and Zs
+                if start_slot[0] > Zs:
+                    start_slot = (start_slot[0] % Zs, start_slot[1])
+                if end_slot[0] > Zs:
+                    end_slot = (end_slot[0] % Zs, end_slot[1])
 
                 # Recovering the winding direction:  1-> from left to right, -1-> from right to left
                 # Applying reverse winding transformation by changing the winding direction as well
-                winding_direction = (
-                    -1 * coil[2] if self.winding.is_reverse_wind else coil[2]
-                )
+                if self.winding.is_reverse_wind:
+                    winding_direction = -1 * coil[2]
+                else:
+                    winding_direction = coil[2]
 
                 # Recovering the surface corresponding to the starting slot and ending slot
                 wind_surf_list = [
@@ -234,15 +252,15 @@ def plot(
                 start_slot_surf = [
                     surf
                     for surf in wind_surf_list
-                    if decode_label(surf.label)["S_id"] + 1 == start_slot_idx[0]
-                    and decode_label(surf.label)[layer_id_name] == start_slot_idx[1]
+                    if decode_label(surf.label)["S_id"] + 1 == start_slot[0]
+                    and decode_label(surf.label)[layer_id_name] == start_slot[1]
                 ]
 
                 end_slot_surf = [
                     surf
                     for surf in wind_surf_list
-                    if decode_label(surf.label)["S_id"] + 1 == end_slot_idx[0]
-                    and decode_label(surf.label)[layer_id_name] == end_slot_idx[1]
+                    if decode_label(surf.label)["S_id"] + 1 == end_slot[0]
+                    and decode_label(surf.label)[layer_id_name] == end_slot[1]
                 ]
 
                 # Making sure that only one surface was selected for each slot
