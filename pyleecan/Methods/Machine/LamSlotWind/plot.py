@@ -41,6 +41,7 @@ def plot(
     is_legend=True,
     is_clean_plot=False,
     is_winding_connection=False,
+    is_winding_connection_phase_A=False,
 ):
     """Plot the Lamination in a matplotlib fig
 
@@ -80,7 +81,8 @@ def plot(
         True to remove title, legend, axis (only machine on plot with white background)
     is_winding_connection : bool
         True to display winding connections (plot based on plot_polar_layout method of swat-em)
-
+    is_winding_connection : bool
+        True to display winding connections on phase A only
     Returns
     -------
     patches : list
@@ -201,6 +203,9 @@ def plot(
 
         Zs = self.get_Zs()
         for idx_phase, phase in enumerate(head):
+            # Take into account case where only want to plot one phase for readability
+            if is_winding_connection_phase_A and idx_phase != 0:
+                break
             for coil in phase:
                 # Recovering the starting and ending slot index of the coil (applying reverse layer transformation if needed)
                 if self.winding.is_reverse_wind:
