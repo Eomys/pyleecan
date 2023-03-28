@@ -125,6 +125,19 @@ def plot_linear(
     # Step 2-2: Adding coil pattern as line between six points
     head = wdg.get_wdg_overhang(optimize_overhang=False)
 
+    # Taking into account slot shifting transformation
+    if self.Nslot_shift_wind not in [0, None]:
+        Nslot_shift_wind = self.Nslot_shift_wind
+    else:
+        Nslot_shift_wind = 0
+
+    # Permuting B and C if asked
+    if self.is_permute_B_C:
+        head_2 = head.copy()
+        head_2[1] = head[2]
+        head_2[2] = head[1]
+        head = head_2
+
     for idx_phase, phase in enumerate(head):
         coils = list()  # list of points that constitutes the coils of a phase
         for coil in phase:
@@ -152,12 +165,19 @@ def plot_linear(
             point_list = [P0, P1, P2, P3, P4, P5]
             x_, y_ = real(point_list), imag(point_list)
 
-            # Step 2-2-2: Shifting the coil pattern to the right slot according to the direction of the winding
+            # Step 2-2-2: Shifting the coil pattern to the right slot according to the direction of the winding and the potential winding transformation
             direct = coil[2]
-            if direct > 0:
-                x_ += coil[0][0] - 1
+            if self.is_reverse_wind:
+                if direct > 0:
+                    x_ += Zs - coil[0][0] - 1 + Nslot_shift_wind
+                else:
+                    x_ += Zs - coil[0][1] - 1 + Nslot_shift_wind
+
             else:
-                x_ += coil[0][1] - 1
+                if direct > 0:
+                    x_ += coil[0][0] - 1 + Nslot_shift_wind
+                else:
+                    x_ += coil[0][1] - 1 + Nslot_shift_wind
 
             point_list_updated = x_ + 1j * y_
 
@@ -214,6 +234,10 @@ def plot_linear(
                 coils.append(point_to_add)
             elif len(idx_point_too_far) != len(x_):
                 coils.append(point_list_updated)
+
+            # If we apply the reverse winding transformation then we must invert the the signe of the coil
+            if self.is_reverse_wind:
+                direct *= -1
 
             # Step 2-2-4: Adding arrow patch for each coil between P2<->P3 and P5<->P0 (direction depending on winding direction)
             if len(idx_point_too_far) != len(x_):

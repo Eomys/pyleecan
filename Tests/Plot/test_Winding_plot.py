@@ -278,14 +278,15 @@ class Test_Winding_plot(object):
     def test_plot_linear(self):
         machine_list = [
             "Toyota_Prius",
-            "Renault_Zoe",
-            "Audi_eTron",
+            "Toyota_Prius_6phases",
             "Benchmark",
             "Railway_Traction",
+            "Renault_Zoe",
             "Protean_InWheel",
         ]
         for machine_name in machine_list:
             machine = load(join(DATA_DIR, "Machine", machine_name + ".json"))
+
             machine.stator.winding.plot_linear(
                 is_max_sym=True,
                 save_path=join(
@@ -296,12 +297,71 @@ class Test_Winding_plot(object):
                 is_max_sym=False,
                 save_path=join(save_path, "test_plot_linear_" + machine_name + ".png"),
             )
+            print(machine_name + " done")
+
+    def test_plot_linear_transformation(self):
+        machine_list = [
+            "Toyota_Prius_6phases",
+            "Protean_InWheel",
+        ]
+        for machine_name in machine_list:
+            machine = load(join(DATA_DIR, "Machine", machine_name + ".json"))
+
+            # Plotting the machine with its winding after applying the reverse winding transformation
+            machine_reverse_wind = machine.copy()
+            machine_reverse_wind.name += " with winding reversed"
+            machine_reverse_wind.stator.winding.is_reverse_wind = True
+            machine_reverse_wind.stator.winding.plot_linear(
+                is_max_sym=True,
+                save_path=join(
+                    save_path, "test_plot_linear_" + machine_reverse_wind.name + ".png"
+                ),
+            )
+
+            # Plotting the machine with its winding after applying the slot shift transformation
+            machine_Nslot_shift_wind = machine.copy()
+            machine_Nslot_shift_wind.name += " with slot shifted"
+            machine_Nslot_shift_wind.stator.winding.Nslot_shift_wind = 2
+            machine_Nslot_shift_wind.stator.winding.plot_linear(
+                is_max_sym=True,
+                save_path=join(
+                    save_path,
+                    "test_plot_linear_" + machine_Nslot_shift_wind.name + ".png",
+                ),
+            )
+
+            # Plotting the machine with its winding after applying the reverse layer transformation
+            machine_is_reverse_layer = machine.copy()
+            machine_is_reverse_layer.name += " with layer reversed"
+            machine_is_reverse_layer.stator.winding.is_reverse_layer = True
+            machine_is_reverse_layer.stator.winding.plot_linear(
+                is_max_sym=True,
+                save_path=join(
+                    save_path,
+                    "test_plot_linear_" + machine_is_reverse_layer.name + ".png",
+                ),
+            )
+
+            # Plotting the machine with its winding after applying the permute B-C transformation
+            machine_is_permute_B_C = machine.copy()
+            machine_is_permute_B_C.name += " with B-C permuted"
+            machine_is_permute_B_C.stator.winding.is_permute_B_C = True
+            machine_is_permute_B_C.stator.winding.plot_linear(
+                is_max_sym=True,
+                save_path=join(
+                    save_path,
+                    "test_plot_linear_" + machine_is_permute_B_C.name + ".png",
+                ),
+            )
+
+            print(machine_name + " done")
 
 
 if __name__ == "__main__":
     a = Test_Winding_plot()
     # a.test_plot_mmf_unit()
     # a.test_plot_radial()
-    a.test_plot_radial_transformation()
-    # a.test_plot_linear()
+    # a.test_plot_radial_transformation()
+    a.test_plot_linear()
+    # a.test_plot_linear_transformation()
     print("Done")
