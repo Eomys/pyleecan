@@ -71,17 +71,17 @@ class WCondOut(QGroupBox):
         parent = obj.parent()
         lam = parent.lam
 
-        H_txt = self.tr("Hcond = ")
-        W_txt = self.tr("Wcond = ")
-        S_txt = self.tr("Scond = ")
-        Sa_txt = self.tr("Scond_active = ")
+        H_txt = self.tr("Conductor height = ")
+        W_txt = self.tr("Conductor width = ")
+        S_txt = self.tr("Conductor surface = ")
+        Sa_txt = self.tr("Conductor active surface = ")
         if lam.is_stator:
             K_txt = self.tr("Ksfill = ")
         else:
             K_txt = self.tr("Krfill = ")
         MLT_txt = "Mean Length Turn = "
         Mwind_txt = "Winding mass = "
-        Rwind_txt = "Rwind 20°C = "
+        Rwind_txt = "Winding resistance at 20°C = "
 
         # We compute the output only if the conductor is correctly set
         if parent.check(lam) is None:
