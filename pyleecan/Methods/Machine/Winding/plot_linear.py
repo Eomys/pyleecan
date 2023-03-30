@@ -81,12 +81,22 @@ def plot_linear(
         w=self.coil_pitch,
     )
 
+    # Detecting the direction of the layer (tangential or radial)
+    # If Nlayer > 1 then we have to precise if the direction is tangential or radial to draw the coil at the right location in the slot
+    Nrad, Ntan = self.get_dim_wind()
+    if Nrad < Ntan:
+        is_tangential_layer = True
+    else:
+        is_tangential_layer = False
+
     # Input used to build the coils that we will display
     bz = 0.5  # tooth width
     hz = 0.5  # slot height
     h1 = 0.6  # height of the coil side
     h2 = 0.5 + self.coil_pitch / 6  # height of the winding overhang
-    db1 = 0 if self.Nlayer == 1 else 0.1  # distance between coil side and slot center
+    db1 = (
+        0 if self.Nlayer == 1 or not is_tangential_layer else 0.1
+    )  # distance between coil side and slot center
 
     # Only plotting the machine for a period (if antiperiod given using the full period)
     # This done by only taking into account Zs for a period
@@ -267,8 +277,8 @@ def plot_linear(
 
                     else:
                         # Winding direction from right to left
-                        start_point_1 = point_list_updated[3]
-                        start_point_2 = point_list_updated[0]
+                        start_point_1 = point_list_updated[0]
+                        start_point_2 = point_list_updated[3]
 
                 arrow_1 = FancyArrowPatch(
                     (start_point_1.real, start_point_1.imag),
