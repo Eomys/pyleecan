@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>996</width>
+    <width>1019</width>
     <height>583</height>
    </rect>
   </property>
@@ -258,7 +258,7 @@
              </size>
             </property>
             <property name="text">
-             <string>Thickness</string>
+             <string>Insulator thickness</string>
             </property>
            </widget>
           </item>

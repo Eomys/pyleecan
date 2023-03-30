@@ -37,6 +37,7 @@ class PCondType11(Gen_PCondType11, QWidget):
 
         self.material_dict = material_dict
 
+        self.w_mat_0.setText("Conductor material")
         self.w_mat_0.def_mat = "Copper1"
         self.w_mat_0.setWhatsThis("Conductor material")
         self.w_mat_0.setToolTip("Conductor material")
@@ -84,9 +85,9 @@ class PCondType11(Gen_PCondType11, QWidget):
         self.lf_Hwire.setValue(self.cond.Hwire)
         if self.cond.Wins_wire is None:
             self.cond.Wins_wire = 0  # Default value
-        else:
+        if self.cond.Wins_wire != 0:
             self.g_ins.setChecked(True)
-        self.lf_Wins_wire.setValue(self.cond.Wins_wire)
+            self.lf_Wins_wire.setValue(self.cond.Wins_wire)
         self.lf_Lewout.validator().setBottom(0)
         if self.lam.winding.Lewout is None:
             self.lam.winding.Lewout = 0
@@ -123,11 +124,13 @@ class PCondType11(Gen_PCondType11, QWidget):
             self.in_Wins_wire.show()
             self.lf_Wins_wire.show()
             self.unit_Wins_wire.show()
+            self.w_mat_1.show()
             self.set_Wins_wire()
         else:
             self.in_Wins_wire.hide()
             self.lf_Wins_wire.hide()
             self.unit_Wins_wire.hide()
+            self.w_mat_1.hide()
             self.set_Wins_wire(Wins_wire=0)
 
     def set_Nwppc(self):
@@ -254,14 +257,20 @@ class PCondType11(Gen_PCondType11, QWidget):
         cond = lam.winding.conductor
         # Check that everything is set
         if cond.Nwppc_tan is None:
-            return "You must set Nwppc_tan !"
+            return "Nr of strands in tan. dir. must be set"
         elif cond.Nwppc_rad is None:
-            return "You must set Nwppc_rad !"
-        elif cond.Hwire is None:
-            return "You must set Hwire !"
+            return "Nr of strands in rad. dir. must be set"
         elif cond.Wwire is None:
-            return "You must set Wwire !"
+            if cond.Nwppc_tan * cond.Nwppc_rad > 1:
+                return "Strand width must be set"
+            else:
+                return "Conductor width must be set"
+        elif cond.Hwire is None:
+            if cond.Nwppc_tan * cond.Nwppc_rad > 1:
+                return "Strand height must be set"
+            else:
+                return "Conductor height must be set"
         elif cond.Wins_wire is None:
-            return "You must set Wins_wire !"
+            return "Insulator thickness must be set"
         elif lam.winding.Lewout is None:
-            return "You must set Lewout !"
+            return "End winding length must be set"

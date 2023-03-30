@@ -35,3 +35,4 @@ Machine,,comp_connection_mat,VERSION,1,Winding class generating connection matri
 ,,clean,,,,,,
 ,,plot_radial,,,,,,
 ,,plot_linear,,,,,,
+,,comp_Ncps,,,,,,

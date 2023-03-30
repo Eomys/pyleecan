@@ -94,42 +94,42 @@ class Ui_PCondType12(object):
         self.g_ins.setChecked(False)
         self.gridLayout = QGridLayout(self.g_ins)
         self.gridLayout.setObjectName(u"gridLayout")
-        self.in_Wins_cond = QLabel(self.g_ins)
-        self.in_Wins_cond.setObjectName(u"in_Wins_cond")
-        self.in_Wins_cond.setMinimumSize(QSize(90, 0))
-
-        self.gridLayout.addWidget(self.in_Wins_cond, 0, 0, 1, 1)
-
-        self.lf_Wins_cond = FloatEdit(self.g_ins)
-        self.lf_Wins_cond.setObjectName(u"lf_Wins_cond")
-        self.lf_Wins_cond.setMinimumSize(QSize(50, 0))
-        self.lf_Wins_cond.setMaximumSize(QSize(16777215, 16777215))
-
-        self.gridLayout.addWidget(self.lf_Wins_cond, 0, 1, 1, 1)
-
-        self.unit_Wins_cond = QLabel(self.g_ins)
-        self.unit_Wins_cond.setObjectName(u"unit_Wins_cond")
-
-        self.gridLayout.addWidget(self.unit_Wins_cond, 0, 2, 1, 1)
-
         self.in_Wins_wire = QLabel(self.g_ins)
         self.in_Wins_wire.setObjectName(u"in_Wins_wire")
         self.in_Wins_wire.setMinimumSize(QSize(90, 0))
 
-        self.gridLayout.addWidget(self.in_Wins_wire, 1, 0, 1, 1)
+        self.gridLayout.addWidget(self.in_Wins_wire, 0, 0, 1, 1)
 
         self.lf_Wins_wire = FloatEdit(self.g_ins)
         self.lf_Wins_wire.setObjectName(u"lf_Wins_wire")
         self.lf_Wins_wire.setMinimumSize(QSize(50, 0))
         self.lf_Wins_wire.setMaximumSize(QSize(16777215, 16777215))
 
-        self.gridLayout.addWidget(self.lf_Wins_wire, 1, 1, 1, 1)
+        self.gridLayout.addWidget(self.lf_Wins_wire, 0, 1, 1, 1)
 
         self.unit_Wins_wire = QLabel(self.g_ins)
         self.unit_Wins_wire.setObjectName(u"unit_Wins_wire")
-        self.unit_Wins_wire.setMinimumSize(QSize(0, 0))
 
-        self.gridLayout.addWidget(self.unit_Wins_wire, 1, 2, 1, 1)
+        self.gridLayout.addWidget(self.unit_Wins_wire, 0, 2, 1, 1)
+
+        self.in_Wins_cond = QLabel(self.g_ins)
+        self.in_Wins_cond.setObjectName(u"in_Wins_cond")
+        self.in_Wins_cond.setMinimumSize(QSize(90, 0))
+
+        self.gridLayout.addWidget(self.in_Wins_cond, 1, 0, 1, 1)
+
+        self.lf_Wins_cond = FloatEdit(self.g_ins)
+        self.lf_Wins_cond.setObjectName(u"lf_Wins_cond")
+        self.lf_Wins_cond.setMinimumSize(QSize(50, 0))
+        self.lf_Wins_cond.setMaximumSize(QSize(16777215, 16777215))
+
+        self.gridLayout.addWidget(self.lf_Wins_cond, 1, 1, 1, 1)
+
+        self.unit_Wins_cond = QLabel(self.g_ins)
+        self.unit_Wins_cond.setObjectName(u"unit_Wins_cond")
+        self.unit_Wins_cond.setMinimumSize(QSize(0, 0))
+
+        self.gridLayout.addWidget(self.unit_Wins_cond, 1, 2, 1, 1)
 
         self.w_mat_1 = WMatSelect(self.g_ins)
         self.w_mat_1.setObjectName(u"w_mat_1")
@@ -178,7 +178,7 @@ class Ui_PCondType12(object):
         self.horizontalLayout.addWidget(self.scrollArea)
 
         QWidget.setTabOrder(self.si_Nwpc1, self.lf_Wwire)
-        QWidget.setTabOrder(self.lf_Wwire, self.lf_Wins_wire)
+        QWidget.setTabOrder(self.lf_Wwire, self.lf_Wins_cond)
 
         self.retranslateUi(PCondType12)
 
@@ -201,16 +201,16 @@ class Ui_PCondType12(object):
         self.g_ins.setTitle(
             QCoreApplication.translate("PCondType12", u"Insulation", None)
         )
-        self.in_Wins_cond.setText(
-            QCoreApplication.translate("PCondType12", u"Thickness", None)
-        )
-        self.unit_Wins_cond.setText(
-            QCoreApplication.translate("PCondType12", u"m", None)
-        )
         self.in_Wins_wire.setText(
-            QCoreApplication.translate("PCondType12", u"Conductor diameter", None)
+            QCoreApplication.translate("PCondType12", u"Insulator thickness", None)
         )
         self.unit_Wins_wire.setText(
+            QCoreApplication.translate("PCondType12", u"m", None)
+        )
+        self.in_Wins_cond.setText(
+            QCoreApplication.translate("PCondType12", u"Conductor diameter", None)
+        )
+        self.unit_Wins_cond.setText(
             QCoreApplication.translate("PCondType12", u"m", None)
         )
         # if QT_CONFIG(tooltip)

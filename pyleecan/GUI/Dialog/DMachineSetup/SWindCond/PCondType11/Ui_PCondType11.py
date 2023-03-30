@@ -21,7 +21,7 @@ class Ui_PCondType11(object):
     def setupUi(self, PCondType11):
         if not PCondType11.objectName():
             PCondType11.setObjectName(u"PCondType11")
-        PCondType11.resize(996, 583)
+        PCondType11.resize(1019, 583)
         self.horizontalLayout = QHBoxLayout(PCondType11)
         self.horizontalLayout.setObjectName(u"horizontalLayout")
         self.img_cond = QLabel(PCondType11)
@@ -243,7 +243,7 @@ class Ui_PCondType11(object):
             QCoreApplication.translate("PCondType11", u"Insulation", None)
         )
         self.in_Wins_wire.setText(
-            QCoreApplication.translate("PCondType11", u"Thickness", None)
+            QCoreApplication.translate("PCondType11", u"Insulator thickness", None)
         )
         self.unit_Wins_wire.setText(
             QCoreApplication.translate("PCondType11", u"m", None)

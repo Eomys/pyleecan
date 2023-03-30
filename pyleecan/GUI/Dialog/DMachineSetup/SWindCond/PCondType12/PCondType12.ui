@@ -164,42 +164,6 @@
          </property>
          <layout class="QGridLayout" name="gridLayout">
           <item row="0" column="0">
-           <widget class="QLabel" name="in_Wins_cond">
-            <property name="minimumSize">
-             <size>
-              <width>90</width>
-              <height>0</height>
-             </size>
-            </property>
-            <property name="text">
-             <string>Thickness</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="1">
-           <widget class="FloatEdit" name="lf_Wins_cond">
-            <property name="minimumSize">
-             <size>
-              <width>50</width>
-              <height>0</height>
-             </size>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>16777215</width>
-              <height>16777215</height>
-             </size>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="2">
-           <widget class="QLabel" name="unit_Wins_cond">
-            <property name="text">
-             <string>m</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="0">
            <widget class="QLabel" name="in_Wins_wire">
             <property name="minimumSize">
              <size>
@@ -208,11 +172,11 @@
              </size>
             </property>
             <property name="text">
-             <string>Conductor diameter</string>
+             <string>Insulator thickness</string>
             </property>
            </widget>
           </item>
-          <item row="1" column="1">
+          <item row="0" column="1">
            <widget class="FloatEdit" name="lf_Wins_wire">
             <property name="minimumSize">
              <size>
@@ -228,8 +192,44 @@
             </property>
            </widget>
           </item>
-          <item row="1" column="2">
+          <item row="0" column="2">
            <widget class="QLabel" name="unit_Wins_wire">
+            <property name="text">
+             <string>m</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QLabel" name="in_Wins_cond">
+            <property name="minimumSize">
+             <size>
+              <width>90</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="text">
+             <string>Conductor diameter</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="FloatEdit" name="lf_Wins_cond">
+            <property name="minimumSize">
+             <size>
+              <width>50</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>16777215</height>
+             </size>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="2">
+           <widget class="QLabel" name="unit_Wins_cond">
             <property name="minimumSize">
              <size>
               <width>0</width>
@@ -368,7 +368,7 @@
  <tabstops>
   <tabstop>si_Nwpc1</tabstop>
   <tabstop>lf_Wwire</tabstop>
-  <tabstop>lf_Wins_wire</tabstop>
+  <tabstop>lf_Wins_cond</tabstop>
  </tabstops>
  <resources>
   <include location="../../../../Resources/pyleecan.qrc"/>

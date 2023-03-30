@@ -16354,7 +16354,8 @@
             "export_to_csv",
             "clean",
             "plot_radial",
-            "plot_linear"
+            "plot_linear",
+            "comp_Ncps"
         ],
         "mother": "",
         "name": "Winding",
