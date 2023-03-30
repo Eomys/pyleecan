@@ -168,23 +168,30 @@ def plot_linear(
             # Step 2-2-2: Shifting the coil pattern to the right slot according to the direction of the winding and the potential winding transformation
             direct = coil[2]
             if self.is_reverse_wind:
-                if direct > 0:
-                    x_ += Zs - coil[0][0] - 1 + Nslot_shift_wind
+                if direct < 0:
+                    slot_shift = Zs - coil[0][0]
                 else:
-                    x_ += Zs - coil[0][1] - 1 + Nslot_shift_wind
-
+                    slot_shift = Zs - coil[0][1]
             else:
                 if direct > 0:
-                    x_ += coil[0][0] - 1 + Nslot_shift_wind
+                    slot_shift = coil[0][0] - 1
                 else:
-                    x_ += coil[0][1] - 1 + Nslot_shift_wind
+                    slot_shift = coil[0][1] - 1
+
+            x_ += slot_shift + Nslot_shift_wind
 
             point_list_updated = x_ + 1j * y_
 
             # Step 2-2-3: If a coil cross the right border then it must be splitted in 2,
             # if the coil is completely out of bounds then we do not plot it at all
             idx_point_too_far = [i for i in range(len(x_)) if x_[i] > Zs_per - 0.5]
-            if idx_point_too_far != list() and len(idx_point_too_far) != len(x_):
+            # if the coil is on the left border, not plotting it (overlap with coil splitted on right border)
+            idx_point_too_low = [i for i in range(len(x_)) if x_[i] < -0.5]
+            if (
+                idx_point_too_far != list()
+                and len(idx_point_too_far) != len(x_)
+                and idx_point_too_low == list()
+            ):
                 wrong_points = x_[idx_point_too_far] + 1j * y_[idx_point_too_far]
 
                 # Correcting first point so that it is on the right border (new P2 point) and getting P3 as the conjugate of P2
@@ -232,7 +239,7 @@ def plot_linear(
 
                 coils.append(point_list_updated)
                 coils.append(point_to_add)
-            elif len(idx_point_too_far) != len(x_):
+            elif len(idx_point_too_far) != len(x_) and idx_point_too_low == list():
                 coils.append(point_list_updated)
 
             # If we apply the reverse winding transformation then we must invert the the signe of the coil
@@ -240,7 +247,7 @@ def plot_linear(
                 direct *= -1
 
             # Step 2-2-4: Adding arrow patch for each coil between P2<->P3 and P5<->P0 (direction depending on winding direction)
-            if len(idx_point_too_far) != len(x_):
+            if len(idx_point_too_far) != len(x_) and idx_point_too_low == list():
                 if idx_point_too_far != list():
                     # If the coil is splitted, then the point of the arrow are different compared with other case
                     if direct > 0:
