@@ -1,4 +1,4 @@
-from numpy import ones, real, imag, conjugate, array, delete, insert
+from numpy import ones, real, imag, conjugate, array, delete, insert, round
 from swat_em import datamodel
 from swat_em.config import config
 from matplotlib.patches import Rectangle, Patch, FancyArrowPatch
@@ -309,8 +309,12 @@ def plot_linear(
                     end = coil[idx_coil + 1]
 
                 # Adding condition to make sure that we do not draw lines between two point on the left or  the right border
-                if (real(begin) != -0.5 or real(end) != -0.5) and (
-                    real(begin) != Zs_per - 0.5 or real(end) != Zs_per - 0.5
+                if (
+                    round(real(begin), decimals=1) != -0.5
+                    or round(real(end), decimals=1) != -0.5
+                ) and (
+                    round(real(begin), decimals=1) != Zs_per - 0.5
+                    or round(real(end), decimals=1) != Zs_per - 0.5
                 ):
                     points = array([begin, end])
                     ax.plot(
