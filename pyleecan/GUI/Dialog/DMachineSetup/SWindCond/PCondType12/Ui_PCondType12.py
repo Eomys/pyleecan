@@ -9,7 +9,6 @@ from PySide2.QtCore import *
 from PySide2.QtGui import *
 from PySide2.QtWidgets import *
 
-from ......GUI.Dialog.DMatLib.WMatSelect.WMatSelect import WMatSelect
 from ......GUI.Tools.FloatEdit import FloatEdit
 from ......GUI.Dialog.DMachineSetup.SWindCond.WCondOut.WCondOut import WCondOut
 from ......GUI.Dialog.DMatLib.WMatSelect.WMatSelectV import WMatSelectV
@@ -46,41 +45,60 @@ class Ui_PCondType12(object):
         self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 348, 648))
         self.verticalLayout = QVBoxLayout(self.scrollAreaWidgetContents)
         self.verticalLayout.setObjectName(u"verticalLayout")
-        self.gridLayout_2 = QGridLayout()
-        self.gridLayout_2.setObjectName(u"gridLayout_2")
+        self.gridLayout = QGridLayout()
+        self.gridLayout.setObjectName(u"gridLayout")
         self.in_Nwpc1 = QLabel(self.scrollAreaWidgetContents)
         self.in_Nwpc1.setObjectName(u"in_Nwpc1")
         self.in_Nwpc1.setMinimumSize(QSize(90, 0))
 
-        self.gridLayout_2.addWidget(self.in_Nwpc1, 0, 0, 1, 1)
+        self.gridLayout.addWidget(self.in_Nwpc1, 0, 0, 1, 1)
 
         self.si_Nwpc1 = QSpinBox(self.scrollAreaWidgetContents)
         self.si_Nwpc1.setObjectName(u"si_Nwpc1")
         self.si_Nwpc1.setMinimumSize(QSize(0, 0))
         self.si_Nwpc1.setValue(99)
 
-        self.gridLayout_2.addWidget(self.si_Nwpc1, 0, 1, 1, 1)
+        self.gridLayout.addWidget(self.si_Nwpc1, 0, 1, 1, 1)
 
         self.in_Wwire = QLabel(self.scrollAreaWidgetContents)
         self.in_Wwire.setObjectName(u"in_Wwire")
         self.in_Wwire.setMinimumSize(QSize(90, 0))
 
-        self.gridLayout_2.addWidget(self.in_Wwire, 1, 0, 1, 1)
+        self.gridLayout.addWidget(self.in_Wwire, 1, 0, 1, 1)
 
         self.lf_Wwire = FloatEdit(self.scrollAreaWidgetContents)
         self.lf_Wwire.setObjectName(u"lf_Wwire")
         self.lf_Wwire.setMinimumSize(QSize(0, 0))
         self.lf_Wwire.setMaximumSize(QSize(16777215, 16777215))
 
-        self.gridLayout_2.addWidget(self.lf_Wwire, 1, 1, 1, 1)
+        self.gridLayout.addWidget(self.lf_Wwire, 1, 1, 1, 1)
 
         self.unit_Wwire = QLabel(self.scrollAreaWidgetContents)
         self.unit_Wwire.setObjectName(u"unit_Wwire")
         self.unit_Wwire.setMinimumSize(QSize(0, 0))
 
-        self.gridLayout_2.addWidget(self.unit_Wwire, 1, 2, 1, 1)
+        self.gridLayout.addWidget(self.unit_Wwire, 1, 2, 1, 1)
 
-        self.verticalLayout.addLayout(self.gridLayout_2)
+        self.in_Wins_cond = QLabel(self.scrollAreaWidgetContents)
+        self.in_Wins_cond.setObjectName(u"in_Wins_cond")
+        self.in_Wins_cond.setMinimumSize(QSize(90, 0))
+
+        self.gridLayout.addWidget(self.in_Wins_cond, 2, 0, 1, 1)
+
+        self.lf_Wins_cond = FloatEdit(self.scrollAreaWidgetContents)
+        self.lf_Wins_cond.setObjectName(u"lf_Wins_cond")
+        self.lf_Wins_cond.setMinimumSize(QSize(50, 0))
+        self.lf_Wins_cond.setMaximumSize(QSize(16777215, 16777215))
+
+        self.gridLayout.addWidget(self.lf_Wins_cond, 2, 1, 1, 1)
+
+        self.unit_Wins_cond = QLabel(self.scrollAreaWidgetContents)
+        self.unit_Wins_cond.setObjectName(u"unit_Wins_cond")
+        self.unit_Wins_cond.setMinimumSize(QSize(0, 0))
+
+        self.gridLayout.addWidget(self.unit_Wins_cond, 2, 2, 1, 1)
+
+        self.verticalLayout.addLayout(self.gridLayout)
 
         self.w_mat_0 = WMatSelectV(self.scrollAreaWidgetContents)
         self.w_mat_0.setObjectName(u"w_mat_0")
@@ -92,50 +110,31 @@ class Ui_PCondType12(object):
         self.g_ins.setObjectName(u"g_ins")
         self.g_ins.setCheckable(True)
         self.g_ins.setChecked(False)
-        self.gridLayout = QGridLayout(self.g_ins)
-        self.gridLayout.setObjectName(u"gridLayout")
+        self.gridLayout_2 = QGridLayout(self.g_ins)
+        self.gridLayout_2.setObjectName(u"gridLayout_2")
         self.in_Wins_wire = QLabel(self.g_ins)
         self.in_Wins_wire.setObjectName(u"in_Wins_wire")
         self.in_Wins_wire.setMinimumSize(QSize(90, 0))
 
-        self.gridLayout.addWidget(self.in_Wins_wire, 0, 0, 1, 1)
+        self.gridLayout_2.addWidget(self.in_Wins_wire, 0, 0, 1, 1)
 
         self.lf_Wins_wire = FloatEdit(self.g_ins)
         self.lf_Wins_wire.setObjectName(u"lf_Wins_wire")
         self.lf_Wins_wire.setMinimumSize(QSize(50, 0))
         self.lf_Wins_wire.setMaximumSize(QSize(16777215, 16777215))
 
-        self.gridLayout.addWidget(self.lf_Wins_wire, 0, 1, 1, 1)
+        self.gridLayout_2.addWidget(self.lf_Wins_wire, 0, 1, 1, 1)
 
         self.unit_Wins_wire = QLabel(self.g_ins)
         self.unit_Wins_wire.setObjectName(u"unit_Wins_wire")
 
-        self.gridLayout.addWidget(self.unit_Wins_wire, 0, 2, 1, 1)
+        self.gridLayout_2.addWidget(self.unit_Wins_wire, 0, 2, 1, 1)
 
-        self.in_Wins_cond = QLabel(self.g_ins)
-        self.in_Wins_cond.setObjectName(u"in_Wins_cond")
-        self.in_Wins_cond.setMinimumSize(QSize(90, 0))
-
-        self.gridLayout.addWidget(self.in_Wins_cond, 1, 0, 1, 1)
-
-        self.lf_Wins_cond = FloatEdit(self.g_ins)
-        self.lf_Wins_cond.setObjectName(u"lf_Wins_cond")
-        self.lf_Wins_cond.setMinimumSize(QSize(50, 0))
-        self.lf_Wins_cond.setMaximumSize(QSize(16777215, 16777215))
-
-        self.gridLayout.addWidget(self.lf_Wins_cond, 1, 1, 1, 1)
-
-        self.unit_Wins_cond = QLabel(self.g_ins)
-        self.unit_Wins_cond.setObjectName(u"unit_Wins_cond")
-        self.unit_Wins_cond.setMinimumSize(QSize(0, 0))
-
-        self.gridLayout.addWidget(self.unit_Wins_cond, 1, 2, 1, 1)
-
-        self.w_mat_1 = WMatSelect(self.g_ins)
+        self.w_mat_1 = WMatSelectV(self.g_ins)
         self.w_mat_1.setObjectName(u"w_mat_1")
         self.w_mat_1.setMinimumSize(QSize(100, 0))
 
-        self.gridLayout.addWidget(self.w_mat_1, 2, 0, 1, 3)
+        self.gridLayout_2.addWidget(self.w_mat_1, 1, 0, 1, 3)
 
         self.verticalLayout.addWidget(self.g_ins)
 
@@ -198,6 +197,12 @@ class Ui_PCondType12(object):
             QCoreApplication.translate("PCondType12", u"Conductor diameter", None)
         )
         self.unit_Wwire.setText(QCoreApplication.translate("PCondType12", u"m", None))
+        self.in_Wins_cond.setText(
+            QCoreApplication.translate("PCondType12", u"Conductor diameter", None)
+        )
+        self.unit_Wins_cond.setText(
+            QCoreApplication.translate("PCondType12", u"m", None)
+        )
         self.g_ins.setTitle(
             QCoreApplication.translate("PCondType12", u"Insulation", None)
         )
@@ -205,12 +210,6 @@ class Ui_PCondType12(object):
             QCoreApplication.translate("PCondType12", u"Insulator thickness", None)
         )
         self.unit_Wins_wire.setText(
-            QCoreApplication.translate("PCondType12", u"m", None)
-        )
-        self.in_Wins_cond.setText(
-            QCoreApplication.translate("PCondType12", u"Conductor diameter", None)
-        )
-        self.unit_Wins_cond.setText(
             QCoreApplication.translate("PCondType12", u"m", None)
         )
         # if QT_CONFIG(tooltip)

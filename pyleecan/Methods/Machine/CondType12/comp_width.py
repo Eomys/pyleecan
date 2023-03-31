@@ -16,4 +16,13 @@ def comp_width(self):
 
     """
 
-    return self.Wins_cond
+    if self.Wins_cond is None:
+        if self.Nwppc == 1:
+            Wins_wire = self.Wins_wire if self.Wins_wire is not None else 0
+            width = self.Wwire + 2 * Wins_wire
+        else:
+            raise Exception("Conductor diameter not set")
+    else:
+        width = self.Wins_cond
+
+    return width

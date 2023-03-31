@@ -42,6 +42,7 @@ class PCondType12(Gen_PCondType12, QWidget):
         self.w_mat_0.setWhatsThis("Conductor material")
         self.w_mat_0.setToolTip("Conductor material")
 
+        self.w_mat_1.setText("Insulator material")
         self.w_mat_1.def_mat = "Insulator1"
         self.w_mat_1.setText("Insulator material")
         self.w_mat_1.setWhatsThis("Insulator material")
@@ -86,7 +87,7 @@ class PCondType12(Gen_PCondType12, QWidget):
         if self.cond.Wins_wire != 0:
             self.g_ins.setChecked(True)
             self.lf_Wins_wire.setValue(self.cond.Wins_wire)
-            self.lf_Wins_cond.setValue(self.cond.Wins_cond)
+        self.lf_Wins_cond.setValue(self.cond.Wins_cond)
         self.lf_Lewout.validator().setBottom(0)
         if self.lam.winding.Lewout is None:
             self.lam.winding.Lewout = 0
@@ -121,21 +122,9 @@ class PCondType12(Gen_PCondType12, QWidget):
             self.in_Wins_wire.show()
             self.lf_Wins_wire.show()
             self.unit_Wins_wire.show()
-            if self.si_Nwpc1.value() > 1:
-                self.in_Wins_cond.show()
-                self.lf_Wins_cond.show()
-                self.unit_Wins_cond.show()
-            else:
-                self.in_Wins_cond.hide()
-                self.lf_Wins_cond.hide()
-                self.unit_Wins_cond.hide()
             self.w_mat_1.show()
             self.set_Wins_wire()
-            self.set_Wins_cond()
         else:
-            self.in_Wins_cond.hide()
-            self.lf_Wins_cond.hide()
-            self.unit_Wins_cond.hide()
             self.in_Wins_wire.hide()
             self.lf_Wins_wire.hide()
             self.unit_Wins_wire.hide()
@@ -156,19 +145,17 @@ class PCondType12(Gen_PCondType12, QWidget):
             self.img_cond.setPixmap(
                 QPixmap(u":/images/images/MachineSetup/WindParam/CondType12.png")
             )
-            if self.g_ins.isChecked():
-                self.in_Wins_cond.show()
-                self.lf_Wins_cond.show()
-                self.unit_Wins_cond.show()
+            self.in_Wins_cond.show()
+            self.lf_Wins_cond.show()
+            self.unit_Wins_cond.show()
         else:
             self.in_Wwire.setText("Conductor diameter")
             self.img_cond.setPixmap(
                 QPixmap(u":/images/images/MachineSetup/WindParam/CondType12_single.png")
             )
-            if self.g_ins.isChecked():
-                self.in_Wins_cond.hide()
-                self.lf_Wins_cond.hide()
-                self.unit_Wins_cond.hide()
+            self.in_Wins_cond.hide()
+            self.lf_Wins_cond.hide()
+            self.unit_Wins_cond.hide()
         self.w_out.comp_output()
         # Notify the machine GUI that the machine has changed
         self.saveNeeded.emit()
@@ -255,7 +242,7 @@ class PCondType12(Gen_PCondType12, QWidget):
                 return "Conductor diameter must be set"
         elif cond.Wins_wire is None:
             return "Insulator thickness must be set"
-        elif cond.Wins_wire > 0 and cond.Nwppc > 1 and cond.Wins_cond is None:
+        elif cond.Nwppc > 1 and cond.Wins_cond is None:
             return "Conductor diameter must be set"
         elif cond.Wins_cond is not None and cond.Wins_cond < cond.Wwire:
             return "Conductor diameter must be larger than strand diameter"

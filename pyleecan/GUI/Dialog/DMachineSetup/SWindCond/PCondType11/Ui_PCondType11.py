@@ -9,7 +9,6 @@ from PySide2.QtCore import *
 from PySide2.QtGui import *
 from PySide2.QtWidgets import *
 
-from ......GUI.Dialog.DMatLib.WMatSelect.WMatSelect import WMatSelect
 from ......GUI.Tools.FloatEdit import FloatEdit
 from ......GUI.Dialog.DMachineSetup.SWindCond.WCondOut.WCondOut import WCondOut
 from ......GUI.Dialog.DMatLib.WMatSelect.WMatSelectV import WMatSelectV
@@ -138,7 +137,7 @@ class Ui_PCondType11(object):
         self.gridLayout.setObjectName(u"gridLayout")
         self.in_Wins_wire = QLabel(self.g_ins)
         self.in_Wins_wire.setObjectName(u"in_Wins_wire")
-        self.in_Wins_wire.setMinimumSize(QSize(90, 0))
+        self.in_Wins_wire.setMinimumSize(QSize(100, 0))
 
         self.gridLayout.addWidget(self.in_Wins_wire, 0, 0, 1, 1)
 
@@ -157,7 +156,7 @@ class Ui_PCondType11(object):
 
         self.gridLayout.addWidget(self.unit_Wins_wire, 0, 2, 1, 1)
 
-        self.w_mat_1 = WMatSelect(self.g_ins)
+        self.w_mat_1 = WMatSelectV(self.g_ins)
         self.w_mat_1.setObjectName(u"w_mat_1")
         self.w_mat_1.setMinimumSize(QSize(100, 0))
 

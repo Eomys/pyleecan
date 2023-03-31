@@ -253,7 +253,7 @@
            <widget class="QLabel" name="in_Wins_wire">
             <property name="minimumSize">
              <size>
-              <width>90</width>
+              <width>100</width>
               <height>0</height>
              </size>
             </property>
@@ -298,7 +298,7 @@
            </widget>
           </item>
           <item row="1" column="0" colspan="3">
-           <widget class="WMatSelect" name="w_mat_1" native="true">
+           <widget class="WMatSelectV" name="w_mat_1" native="true">
             <property name="minimumSize">
              <size>
               <width>100</width>
@@ -403,12 +403,6 @@
   </layout>
  </widget>
  <customwidgets>
-  <customwidget>
-   <class>WMatSelect</class>
-   <extends>QWidget</extends>
-   <header>......GUI.Dialog.DMatLib.WMatSelect.WMatSelect.h</header>
-   <container>1</container>
-  </customwidget>
   <customwidget>
    <class>FloatEdit</class>
    <extends>QLineEdit</extends>

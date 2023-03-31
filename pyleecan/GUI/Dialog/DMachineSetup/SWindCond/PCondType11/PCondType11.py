@@ -42,6 +42,7 @@ class PCondType11(Gen_PCondType11, QWidget):
         self.w_mat_0.setWhatsThis("Conductor material")
         self.w_mat_0.setToolTip("Conductor material")
 
+        self.w_mat_1.setText("Insulator material")
         self.w_mat_1.def_mat = "Insulator1"
         self.w_mat_1.setText("Insulator material")
         self.w_mat_1.setWhatsThis("Insulator material")
