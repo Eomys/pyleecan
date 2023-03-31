@@ -503,7 +503,7 @@ class CondType12(Conductor):
     Wwire = property(
         fget=_get_Wwire,
         fset=_set_Wwire,
-        doc=u"""cf schematics, single wire diameter without insulation [m]
+        doc=u"""cf schematics, single strand diameter without insulation
 
         :Type: float
         :min: 0
@@ -522,7 +522,7 @@ class CondType12(Conductor):
     Wins_cond = property(
         fget=_get_Wins_cond,
         fset=_set_Wins_cond,
-        doc=u"""(advanced) cf schematics, winding coil insulation diameter [m]
+        doc=u"""(advanced) cf schematics, conductor diameter
 
         :Type: float
         :min: 0
@@ -541,7 +541,7 @@ class CondType12(Conductor):
     Nwppc = property(
         fget=_get_Nwppc,
         fset=_set_Nwppc,
-        doc=u"""cf schematics, winding number of random wires (strands) in parallel per coil
+        doc=u"""number of strands in parallel per conductor
 
         :Type: int
         :min: 1
@@ -560,7 +560,7 @@ class CondType12(Conductor):
     Wins_wire = property(
         fget=_get_Wins_wire,
         fset=_set_Wins_wire,
-        doc=u"""(advanced) cf schematics, winding strand insulation thickness [m]
+        doc=u"""(advanced) cf schematics, winding strand insulation thickness
 
         :Type: float
         :min: 0

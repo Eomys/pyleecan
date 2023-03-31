@@ -664,7 +664,7 @@
         "properties": [
             {
                 "as_dict": "",
-                "desc": "cf schematics, single wire height without insulation [m]",
+                "desc": "cf schematics, single strand height without insulation",
                 "max": "",
                 "min": "0",
                 "name": "Hwire",
@@ -674,7 +674,7 @@
             },
             {
                 "as_dict": "",
-                "desc": "cf schematics, single wire width without insulation [m]",
+                "desc": "cf schematics, single strand width without insulation",
                 "max": "",
                 "min": "0",
                 "name": "Wwire",
@@ -684,7 +684,7 @@
             },
             {
                 "as_dict": "",
-                "desc": "cf schematics, stator winding number of preformed wires (strands) in parallel per coil along radial (vertical) direction",
+                "desc": "number of form wound strands in parallel per conductor along radial (vertical) direction",
                 "max": "",
                 "min": "1",
                 "name": "Nwppc_rad",
@@ -694,7 +694,7 @@
             },
             {
                 "as_dict": "",
-                "desc": "cf schematics, stator winding number of preformed wires (strands) in parallel per coil along tangential (horizontal) direction",
+                "desc": "number of form wound strands in parallel per conductor along tangential (horizontal) direction",
                 "max": "",
                 "min": "1",
                 "name": "Nwppc_tan",
@@ -704,7 +704,7 @@
             },
             {
                 "as_dict": "",
-                "desc": "(advanced) cf schematics, winding strand insulation thickness [m]",
+                "desc": "(advanced) cf schematics, winding strand insulation thickness",
                 "max": "",
                 "min": "0",
                 "name": "Wins_wire",
@@ -714,7 +714,7 @@
             },
             {
                 "as_dict": "",
-                "desc": "(advanced) cf schematics, winding coil insulation  thickness [m]",
+                "desc": "(advanced) cf schematics, winding coil insulation  thickness",
                 "max": "",
                 "min": "0",
                 "name": "Wins_coil",
@@ -775,7 +775,7 @@
         "properties": [
             {
                 "as_dict": "",
-                "desc": "cf schematics, single wire diameter without insulation [m]",
+                "desc": "cf schematics, single strand diameter without insulation",
                 "max": "",
                 "min": "0",
                 "name": "Wwire",
@@ -785,7 +785,7 @@
             },
             {
                 "as_dict": "",
-                "desc": "(advanced) cf schematics, winding coil insulation diameter [m]",
+                "desc": "(advanced) cf schematics, conductor diameter",
                 "max": "",
                 "min": "0",
                 "name": "Wins_cond",
@@ -795,7 +795,7 @@
             },
             {
                 "as_dict": "",
-                "desc": "cf schematics, winding number of random wires (strands) in parallel per coil",
+                "desc": "number of strands in parallel per conductor",
                 "max": "",
                 "min": "1",
                 "name": "Nwppc",
@@ -805,7 +805,7 @@
             },
             {
                 "as_dict": "",
-                "desc": "(advanced) cf schematics, winding strand insulation thickness [m]",
+                "desc": "(advanced) cf schematics, winding strand insulation thickness",
                 "max": "",
                 "min": "0",
                 "name": "Wins_wire",
