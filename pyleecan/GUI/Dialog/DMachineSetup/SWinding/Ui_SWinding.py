@@ -10,6 +10,7 @@ from PySide2.QtGui import *
 from PySide2.QtWidgets import *
 
 from .....GUI.Tools.MPLCanvas import MPLCanvas
+from .....GUI.Tools.SpinBox import SpinBox
 
 from pyleecan.GUI.Resources import pyleecan_rc
 
@@ -18,17 +19,43 @@ class Ui_SWinding(object):
     def setupUi(self, SWinding):
         if not SWinding.objectName():
             SWinding.setObjectName(u"SWinding")
-        SWinding.resize(1154, 837)
+        SWinding.resize(993, 837)
         SWinding.setMinimumSize(QSize(650, 550))
-        self.verticalLayout_4 = QVBoxLayout(SWinding)
-        self.verticalLayout_4.setObjectName(u"verticalLayout_4")
-        self.horizontalLayout_8 = QHBoxLayout()
-        self.horizontalLayout_8.setObjectName(u"horizontalLayout_8")
+        self.gridLayout_3 = QGridLayout(SWinding)
+        self.gridLayout_3.setObjectName(u"gridLayout_3")
         self.w_viewer = MPLCanvas(SWinding)
         self.w_viewer.setObjectName(u"w_viewer")
+        sizePolicy = QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.w_viewer.sizePolicy().hasHeightForWidth())
+        self.w_viewer.setSizePolicy(sizePolicy)
         self.w_viewer.setMinimumSize(QSize(250, 0))
 
-        self.horizontalLayout_8.addWidget(self.w_viewer)
+        self.gridLayout_3.addWidget(self.w_viewer, 0, 0, 1, 1)
+
+        self.verticalLayout_4 = QVBoxLayout()
+        self.verticalLayout_4.setObjectName(u"verticalLayout_4")
+        self.in_wind_param = QLabel(SWinding)
+        self.in_wind_param.setObjectName(u"in_wind_param")
+        self.in_wind_param.setMaximumSize(QSize(250, 400))
+        self.in_wind_param.setPixmap(
+            QPixmap(u":/images/images/MachineSetup/WindParam/Winding param.PNG")
+        )
+        self.in_wind_param.setScaledContents(True)
+        self.in_wind_param.setAlignment(
+            Qt.AlignLeading | Qt.AlignLeft | Qt.AlignVCenter
+        )
+
+        self.verticalLayout_4.addWidget(self.in_wind_param)
+
+        self.verticalSpacer_2 = QSpacerItem(
+            20, 338, QSizePolicy.Minimum, QSizePolicy.Expanding
+        )
+
+        self.verticalLayout_4.addItem(self.verticalSpacer_2)
+
+        self.gridLayout_3.addLayout(self.verticalLayout_4, 0, 1, 1, 1)
 
         self.scrollArea = QScrollArea(SWinding)
         self.scrollArea.setObjectName(u"scrollArea")
@@ -37,7 +64,7 @@ class Ui_SWinding(object):
         self.scrollArea.setWidgetResizable(True)
         self.scrollAreaWidgetContents = QWidget()
         self.scrollAreaWidgetContents.setObjectName(u"scrollAreaWidgetContents")
-        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 268, 779))
+        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 265, 793))
         self.verticalLayout_5 = QVBoxLayout(self.scrollAreaWidgetContents)
         self.verticalLayout_5.setObjectName(u"verticalLayout_5")
         self.g_pattern = QGroupBox(self.scrollAreaWidgetContents)
@@ -73,7 +100,7 @@ class Ui_SWinding(object):
 
         self.gridLayout.addWidget(self.in_qs, 0, 0, 1, 1)
 
-        self.si_qs = QSpinBox(self.g_pattern)
+        self.si_qs = SpinBox(self.g_pattern)
         self.si_qs.setObjectName(u"si_qs")
 
         self.gridLayout.addWidget(self.si_qs, 0, 1, 1, 1)
@@ -83,7 +110,7 @@ class Ui_SWinding(object):
 
         self.gridLayout.addWidget(self.in_Nlayer, 1, 0, 1, 1)
 
-        self.si_Nlayer = QSpinBox(self.g_pattern)
+        self.si_Nlayer = SpinBox(self.g_pattern)
         self.si_Nlayer.setObjectName(u"si_Nlayer")
         self.si_Nlayer.setMinimum(1)
         self.si_Nlayer.setMaximum(2)
@@ -95,7 +122,7 @@ class Ui_SWinding(object):
 
         self.gridLayout.addWidget(self.in_coil_pitch, 2, 0, 1, 1)
 
-        self.si_coil_pitch = QSpinBox(self.g_pattern)
+        self.si_coil_pitch = SpinBox(self.g_pattern)
         self.si_coil_pitch.setObjectName(u"si_coil_pitch")
 
         self.gridLayout.addWidget(self.si_coil_pitch, 2, 1, 1, 1)
@@ -105,7 +132,7 @@ class Ui_SWinding(object):
 
         self.gridLayout.addWidget(self.in_Ntcoil, 3, 0, 1, 1)
 
-        self.si_Ntcoil = QSpinBox(self.g_pattern)
+        self.si_Ntcoil = SpinBox(self.g_pattern)
         self.si_Ntcoil.setObjectName(u"si_Ntcoil")
 
         self.gridLayout.addWidget(self.si_Ntcoil, 3, 1, 1, 1)
@@ -115,7 +142,7 @@ class Ui_SWinding(object):
 
         self.gridLayout.addWidget(self.in_Npcp, 4, 0, 1, 1)
 
-        self.si_Npcp = QSpinBox(self.g_pattern)
+        self.si_Npcp = SpinBox(self.g_pattern)
         self.si_Npcp.setObjectName(u"si_Npcp")
         self.si_Npcp.setMaximum(999999999)
         self.si_Npcp.setValue(12345)
@@ -155,7 +182,7 @@ class Ui_SWinding(object):
 
         self.horizontalLayout_4.addWidget(self.in_Nslot)
 
-        self.si_Nslot = QSpinBox(self.g_edit)
+        self.si_Nslot = SpinBox(self.g_edit)
         self.si_Nslot.setObjectName(u"si_Nslot")
         self.si_Nslot.setMinimumSize(QSize(60, 0))
 
@@ -231,23 +258,11 @@ class Ui_SWinding(object):
 
         self.verticalLayout_3.addWidget(self.b_plot_mmf)
 
-        self.b_plot_linear = QPushButton(self.g_output)
-        self.b_plot_linear.setObjectName(u"b_plot_linear")
-
-        self.verticalLayout_3.addWidget(self.b_plot_linear)
-
-        self.b_plot_radial = QPushButton(self.g_output)
-        self.b_plot_radial.setObjectName(u"b_plot_radial")
-
-        self.verticalLayout_3.addWidget(self.b_plot_radial)
-
         self.verticalLayout_5.addWidget(self.g_output)
 
         self.scrollArea.setWidget(self.scrollAreaWidgetContents)
 
-        self.horizontalLayout_8.addWidget(self.scrollArea)
-
-        self.verticalLayout_4.addLayout(self.horizontalLayout_8)
+        self.gridLayout_3.addWidget(self.scrollArea, 0, 2, 1, 1)
 
         self.horizontalLayout_3 = QHBoxLayout()
         self.horizontalLayout_3.setObjectName(u"horizontalLayout_3")
@@ -256,6 +271,11 @@ class Ui_SWinding(object):
         )
 
         self.horizontalLayout_3.addItem(self.horizontalSpacer_3)
+
+        self.b_preview = QPushButton(SWinding)
+        self.b_preview.setObjectName(u"b_preview")
+
+        self.horizontalLayout_3.addWidget(self.b_preview)
 
         self.b_previous = QPushButton(SWinding)
         self.b_previous.setObjectName(u"b_previous")
@@ -267,7 +287,7 @@ class Ui_SWinding(object):
 
         self.horizontalLayout_3.addWidget(self.b_next)
 
-        self.verticalLayout_4.addLayout(self.horizontalLayout_3)
+        self.gridLayout_3.addLayout(self.horizontalLayout_3, 1, 0, 1, 3)
 
         self.retranslateUi(SWinding)
 
@@ -277,6 +297,7 @@ class Ui_SWinding(object):
 
     def retranslateUi(self, SWinding):
         SWinding.setWindowTitle(QCoreApplication.translate("SWinding", u"Form", None))
+        self.in_wind_param.setText("")
         self.g_pattern.setTitle(
             QCoreApplication.translate("SWinding", u"Winding pattern", None)
         )
@@ -345,7 +366,7 @@ class Ui_SWinding(object):
         )
         # endif // QT_CONFIG(whatsthis)
         self.in_coil_pitch.setText(
-            QCoreApplication.translate("SWinding", u"Throw", None)
+            QCoreApplication.translate("SWinding", u"Coil pitch", None)
         )
         self.in_Ntcoil.setText(
             QCoreApplication.translate("SWinding", u"Turns per coil", None)
@@ -480,12 +501,7 @@ class Ui_SWinding(object):
         self.b_plot_mmf.setText(
             QCoreApplication.translate("SWinding", u"Plot Stator Unit MMF", None)
         )
-        self.b_plot_linear.setText(
-            QCoreApplication.translate("SWinding", u"Plot Linear Pattern", None)
-        )
-        self.b_plot_radial.setText(
-            QCoreApplication.translate("SWinding", u"Plot Radial Pattern", None)
-        )
+        self.b_preview.setText(QCoreApplication.translate("SWinding", u"Preview", None))
         self.b_previous.setText(
             QCoreApplication.translate("SWinding", u"Previous", None)
         )
