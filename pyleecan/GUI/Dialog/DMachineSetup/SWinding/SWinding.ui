@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1107</width>
-    <height>875</height>
+    <width>1103</width>
+    <height>866</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -72,9 +72,9 @@
       <property name="geometry">
        <rect>
         <x>0</x>
-        <y>0</y>
-        <width>268</width>
-        <height>819</height>
+        <y>-91</y>
+        <width>265</width>
+        <height>882</height>
        </rect>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_5">
@@ -238,7 +238,7 @@
        <item>
         <widget class="QGroupBox" name="g_edit">
          <property name="title">
-          <string>Edit</string>
+          <string>Winding transformation</string>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout">
           <item>
@@ -425,6 +425,19 @@
           </item>
          </layout>
         </widget>
+       </item>
+       <item>
+        <spacer name="verticalSpacer_2">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
        </item>
       </layout>
      </widget>

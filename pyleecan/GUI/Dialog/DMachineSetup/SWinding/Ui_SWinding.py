@@ -19,7 +19,7 @@ class Ui_SWinding(object):
     def setupUi(self, SWinding):
         if not SWinding.objectName():
             SWinding.setObjectName(u"SWinding")
-        SWinding.resize(1107, 875)
+        SWinding.resize(1103, 866)
         SWinding.setMinimumSize(QSize(650, 550))
         self.gridLayout_3 = QGridLayout(SWinding)
         self.gridLayout_3.setObjectName(u"gridLayout_3")
@@ -50,7 +50,7 @@ class Ui_SWinding(object):
         self.scrollArea.setWidgetResizable(True)
         self.scrollAreaWidgetContents = QWidget()
         self.scrollAreaWidgetContents.setObjectName(u"scrollAreaWidgetContents")
-        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 268, 819))
+        self.scrollAreaWidgetContents.setGeometry(QRect(0, -91, 265, 882))
         self.verticalLayout_5 = QVBoxLayout(self.scrollAreaWidgetContents)
         self.verticalLayout_5.setObjectName(u"verticalLayout_5")
         self.g_pattern = QGroupBox(self.scrollAreaWidgetContents)
@@ -256,6 +256,12 @@ class Ui_SWinding(object):
 
         self.verticalLayout_5.addWidget(self.g_output)
 
+        self.verticalSpacer_2 = QSpacerItem(
+            20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding
+        )
+
+        self.verticalLayout_5.addItem(self.verticalSpacer_2)
+
         self.scrollArea.setWidget(self.scrollAreaWidgetContents)
 
         self.gridLayout_3.addWidget(self.scrollArea, 0, 1, 1, 1)
@@ -365,7 +371,9 @@ class Ui_SWinding(object):
         self.b_import.setText(
             QCoreApplication.translate("SWinding", u"Import from CSV", None)
         )
-        self.g_edit.setTitle(QCoreApplication.translate("SWinding", u"Edit", None))
+        self.g_edit.setTitle(
+            QCoreApplication.translate("SWinding", u"Winding transformation", None)
+        )
         self.in_Nslot.setText(
             QCoreApplication.translate("SWinding", u"Slot shift", None)
         )

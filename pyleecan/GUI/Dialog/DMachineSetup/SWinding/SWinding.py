@@ -498,7 +498,7 @@ class SWinding(Gen_SWinding, QWidget):
                 mmf_dir = "CW"
             else:
                 mmf_dir = "?"
-        except Exception:  # Unable to compution the connection matrix
+        except Exception:  # Unable to compute the connection matrix
             mmf_dir = "?"
         self.out_rot_dir.setText(self.tr("Rotation direction: ") + mmf_dir)
 
@@ -530,8 +530,10 @@ class SWinding(Gen_SWinding, QWidget):
             Ncspc = Ncspc[:-2] if Ncspc[-2:] == ".0" else Ncspc
         except:
             Ncspc = "?"
-        self.out_Ncspc.setText(self.tr("Number of coils Ncspc: ") + Ncspc)
-        self.out_Ntspc.setText(self.tr("Number of turns Ntspc: ") + Ntspc)
+        self.out_Ncspc.setText(
+            self.tr("Coils in series per parallel circuit: ") + Ncspc
+        )
+        self.out_Ntspc.setText(self.tr("Turns in series per phase: ") + Ntspc)
 
     def update_graph(self, is_lam_only=False):
         """Plot the lamination with/without the winding"""
