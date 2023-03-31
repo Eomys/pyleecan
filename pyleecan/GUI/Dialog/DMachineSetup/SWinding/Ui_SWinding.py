@@ -19,43 +19,29 @@ class Ui_SWinding(object):
     def setupUi(self, SWinding):
         if not SWinding.objectName():
             SWinding.setObjectName(u"SWinding")
-        SWinding.resize(993, 837)
+        SWinding.resize(1107, 875)
         SWinding.setMinimumSize(QSize(650, 550))
         self.gridLayout_3 = QGridLayout(SWinding)
         self.gridLayout_3.setObjectName(u"gridLayout_3")
-        self.w_viewer = MPLCanvas(SWinding)
-        self.w_viewer.setObjectName(u"w_viewer")
-        sizePolicy = QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.w_viewer.sizePolicy().hasHeightForWidth())
-        self.w_viewer.setSizePolicy(sizePolicy)
-        self.w_viewer.setMinimumSize(QSize(250, 0))
-
-        self.gridLayout_3.addWidget(self.w_viewer, 0, 0, 1, 1)
-
-        self.verticalLayout_4 = QVBoxLayout()
-        self.verticalLayout_4.setObjectName(u"verticalLayout_4")
-        self.in_wind_param = QLabel(SWinding)
-        self.in_wind_param.setObjectName(u"in_wind_param")
-        self.in_wind_param.setMaximumSize(QSize(250, 400))
-        self.in_wind_param.setPixmap(
-            QPixmap(u":/images/images/MachineSetup/WindParam/Winding param.PNG")
-        )
-        self.in_wind_param.setScaledContents(True)
-        self.in_wind_param.setAlignment(
-            Qt.AlignLeading | Qt.AlignLeft | Qt.AlignVCenter
+        self.horizontalLayout_3 = QHBoxLayout()
+        self.horizontalLayout_3.setObjectName(u"horizontalLayout_3")
+        self.horizontalSpacer_3 = QSpacerItem(
+            40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum
         )
 
-        self.verticalLayout_4.addWidget(self.in_wind_param)
+        self.horizontalLayout_3.addItem(self.horizontalSpacer_3)
 
-        self.verticalSpacer_2 = QSpacerItem(
-            20, 338, QSizePolicy.Minimum, QSizePolicy.Expanding
-        )
+        self.b_previous = QPushButton(SWinding)
+        self.b_previous.setObjectName(u"b_previous")
 
-        self.verticalLayout_4.addItem(self.verticalSpacer_2)
+        self.horizontalLayout_3.addWidget(self.b_previous)
 
-        self.gridLayout_3.addLayout(self.verticalLayout_4, 0, 1, 1, 1)
+        self.b_next = QPushButton(SWinding)
+        self.b_next.setObjectName(u"b_next")
+
+        self.horizontalLayout_3.addWidget(self.b_next)
+
+        self.gridLayout_3.addLayout(self.horizontalLayout_3, 1, 0, 1, 2)
 
         self.scrollArea = QScrollArea(SWinding)
         self.scrollArea.setObjectName(u"scrollArea")
@@ -64,7 +50,7 @@ class Ui_SWinding(object):
         self.scrollArea.setWidgetResizable(True)
         self.scrollAreaWidgetContents = QWidget()
         self.scrollAreaWidgetContents.setObjectName(u"scrollAreaWidgetContents")
-        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 265, 793))
+        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 268, 819))
         self.verticalLayout_5 = QVBoxLayout(self.scrollAreaWidgetContents)
         self.verticalLayout_5.setObjectName(u"verticalLayout_5")
         self.g_pattern = QGroupBox(self.scrollAreaWidgetContents)
@@ -248,46 +234,42 @@ class Ui_SWinding(object):
 
         self.verticalLayout_3.addWidget(self.out_Ncspc)
 
-        self.b_export = QPushButton(self.g_output)
-        self.b_export.setObjectName(u"b_export")
-
-        self.verticalLayout_3.addWidget(self.b_export)
-
         self.b_plot_mmf = QPushButton(self.g_output)
         self.b_plot_mmf.setObjectName(u"b_plot_mmf")
 
         self.verticalLayout_3.addWidget(self.b_plot_mmf)
 
+        self.b_plot_linear = QPushButton(self.g_output)
+        self.b_plot_linear.setObjectName(u"b_plot_linear")
+
+        self.verticalLayout_3.addWidget(self.b_plot_linear)
+
+        self.b_plot_radial = QPushButton(self.g_output)
+        self.b_plot_radial.setObjectName(u"b_plot_radial")
+
+        self.verticalLayout_3.addWidget(self.b_plot_radial)
+
+        self.b_export = QPushButton(self.g_output)
+        self.b_export.setObjectName(u"b_export")
+
+        self.verticalLayout_3.addWidget(self.b_export)
+
         self.verticalLayout_5.addWidget(self.g_output)
 
         self.scrollArea.setWidget(self.scrollAreaWidgetContents)
 
-        self.gridLayout_3.addWidget(self.scrollArea, 0, 2, 1, 1)
+        self.gridLayout_3.addWidget(self.scrollArea, 0, 1, 1, 1)
 
-        self.horizontalLayout_3 = QHBoxLayout()
-        self.horizontalLayout_3.setObjectName(u"horizontalLayout_3")
-        self.horizontalSpacer_3 = QSpacerItem(
-            40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum
-        )
+        self.w_viewer = MPLCanvas(SWinding)
+        self.w_viewer.setObjectName(u"w_viewer")
+        sizePolicy = QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.w_viewer.sizePolicy().hasHeightForWidth())
+        self.w_viewer.setSizePolicy(sizePolicy)
+        self.w_viewer.setMinimumSize(QSize(250, 0))
 
-        self.horizontalLayout_3.addItem(self.horizontalSpacer_3)
-
-        self.b_preview = QPushButton(SWinding)
-        self.b_preview.setObjectName(u"b_preview")
-
-        self.horizontalLayout_3.addWidget(self.b_preview)
-
-        self.b_previous = QPushButton(SWinding)
-        self.b_previous.setObjectName(u"b_previous")
-
-        self.horizontalLayout_3.addWidget(self.b_previous)
-
-        self.b_next = QPushButton(SWinding)
-        self.b_next.setObjectName(u"b_next")
-
-        self.horizontalLayout_3.addWidget(self.b_next)
-
-        self.gridLayout_3.addLayout(self.horizontalLayout_3, 1, 0, 1, 3)
+        self.gridLayout_3.addWidget(self.w_viewer, 0, 0, 1, 1)
 
         self.retranslateUi(SWinding)
 
@@ -297,7 +279,10 @@ class Ui_SWinding(object):
 
     def retranslateUi(self, SWinding):
         SWinding.setWindowTitle(QCoreApplication.translate("SWinding", u"Form", None))
-        self.in_wind_param.setText("")
+        self.b_previous.setText(
+            QCoreApplication.translate("SWinding", u"Previous", None)
+        )
+        self.b_next.setText(QCoreApplication.translate("SWinding", u"Next", None))
         self.g_pattern.setTitle(
             QCoreApplication.translate("SWinding", u"Winding pattern", None)
         )
@@ -366,7 +351,7 @@ class Ui_SWinding(object):
         )
         # endif // QT_CONFIG(whatsthis)
         self.in_coil_pitch.setText(
-            QCoreApplication.translate("SWinding", u"Coil pitch", None)
+            QCoreApplication.translate("SWinding", u"Throw", None)
         )
         self.in_Ntcoil.setText(
             QCoreApplication.translate("SWinding", u"Turns per coil", None)
@@ -495,16 +480,17 @@ class Ui_SWinding(object):
                 "SWinding", u"Number of coils in series per parallel circuit", None
             )
         )
-        self.b_export.setText(
-            QCoreApplication.translate("SWinding", u"Export to CSV", None)
-        )
         self.b_plot_mmf.setText(
             QCoreApplication.translate("SWinding", u"Plot Stator Unit MMF", None)
         )
-        self.b_preview.setText(QCoreApplication.translate("SWinding", u"Preview", None))
-        self.b_previous.setText(
-            QCoreApplication.translate("SWinding", u"Previous", None)
+        self.b_plot_linear.setText(
+            QCoreApplication.translate("SWinding", u"Plot Winding Linear Pattern", None)
         )
-        self.b_next.setText(QCoreApplication.translate("SWinding", u"Next", None))
+        self.b_plot_radial.setText(
+            QCoreApplication.translate("SWinding", u"Plot Winding Radial Pattern", None)
+        )
+        self.b_export.setText(
+            QCoreApplication.translate("SWinding", u"Export to CSV", None)
+        )
 
     # retranslateUi

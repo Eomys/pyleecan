@@ -27,6 +27,15 @@
     },
     {
         "cls": "Winding",
+        "name": "coil_pitch",
+        "widget": [
+            "si_coil_pitch",
+            "si_Nslot"
+        ],
+        "xls": "Machine"
+    },
+    {
+        "cls": "Winding",
         "name": "Ntcoil",
         "widget": [
             "in_Ntcoil",

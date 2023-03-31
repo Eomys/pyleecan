@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>993</width>
-    <height>837</height>
+    <width>1107</width>
+    <height>875</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -20,62 +20,38 @@
    <string>Form</string>
   </property>
   <layout class="QGridLayout" name="gridLayout_3">
-   <item row="0" column="0">
-    <widget class="MPLCanvas" name="w_viewer" native="true">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="minimumSize">
-      <size>
-       <width>250</width>
-       <height>0</height>
-      </size>
-     </property>
-    </widget>
-   </item>
-   <item row="0" column="1">
-    <layout class="QVBoxLayout" name="verticalLayout_4">
+   <item row="1" column="0" colspan="2">
+    <layout class="QHBoxLayout" name="horizontalLayout_3">
      <item>
-      <widget class="QLabel" name="in_wind_param">
-       <property name="maximumSize">
-        <size>
-         <width>250</width>
-         <height>400</height>
-        </size>
-       </property>
-       <property name="text">
-        <string/>
-       </property>
-       <property name="pixmap">
-        <pixmap resource="../../../Resources/pyleecan.qrc">:/images/images/MachineSetup/WindParam/Winding param.PNG</pixmap>
-       </property>
-       <property name="scaledContents">
-        <bool>true</bool>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <spacer name="verticalSpacer_2">
+      <spacer name="horizontalSpacer_3">
        <property name="orientation">
-        <enum>Qt::Vertical</enum>
+        <enum>Qt::Horizontal</enum>
        </property>
        <property name="sizeHint" stdset="0">
         <size>
-         <width>20</width>
-         <height>338</height>
+         <width>40</width>
+         <height>20</height>
         </size>
        </property>
       </spacer>
      </item>
+     <item>
+      <widget class="QPushButton" name="b_previous">
+       <property name="text">
+        <string>Previous</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="b_next">
+       <property name="text">
+        <string>Next</string>
+       </property>
+      </widget>
+     </item>
     </layout>
    </item>
-   <item row="0" column="2">
+   <item row="0" column="1">
     <widget class="QScrollArea" name="scrollArea">
      <property name="minimumSize">
       <size>
@@ -97,8 +73,8 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>265</width>
-        <height>793</height>
+        <width>268</width>
+        <height>819</height>
        </rect>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_5">
@@ -193,7 +169,7 @@
             <item row="2" column="0">
              <widget class="QLabel" name="in_coil_pitch">
               <property name="text">
-               <string>Coil pitch</string>
+               <string>Throw</string>
               </property>
              </widget>
             </item>
@@ -420,16 +396,30 @@
            </widget>
           </item>
           <item>
-           <widget class="QPushButton" name="b_export">
+           <widget class="QPushButton" name="b_plot_mmf">
             <property name="text">
-             <string>Export to CSV</string>
+             <string>Plot Stator Unit MMF</string>
             </property>
            </widget>
           </item>
           <item>
-           <widget class="QPushButton" name="b_plot_mmf">
+           <widget class="QPushButton" name="b_plot_linear">
             <property name="text">
-             <string>Plot Stator Unit MMF</string>
+             <string>Plot Winding Linear Pattern</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="b_plot_radial">
+            <property name="text">
+             <string>Plot Winding Radial Pattern</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="b_export">
+            <property name="text">
+             <string>Export to CSV</string>
             </property>
            </widget>
           </item>
@@ -440,43 +430,21 @@
      </widget>
     </widget>
    </item>
-   <item row="1" column="0" colspan="3">
-    <layout class="QHBoxLayout" name="horizontalLayout_3">
-     <item>
-      <spacer name="horizontalSpacer_3">
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>40</width>
-         <height>20</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-     <item>
-      <widget class="QPushButton" name="b_preview">
-       <property name="text">
-        <string>Preview</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="b_previous">
-       <property name="text">
-        <string>Previous</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="b_next">
-       <property name="text">
-        <string>Next</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
+   <item row="0" column="0">
+    <widget class="MPLCanvas" name="w_viewer" native="true">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="minimumSize">
+      <size>
+       <width>250</width>
+       <height>0</height>
+      </size>
+     </property>
+    </widget>
    </item>
   </layout>
  </widget>

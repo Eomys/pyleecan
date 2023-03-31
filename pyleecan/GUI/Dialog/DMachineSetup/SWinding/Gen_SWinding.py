@@ -44,6 +44,24 @@ class Gen_SWinding(Ui_SWinding):
         self.si_Nslot.setWhatsThis(txt)
         self.si_Nslot.setToolTip(txt)
 
+        # Setup of si_coil_pitch
+        self.si_coil_pitch.setMinimum(-999999)
+        self.si_coil_pitch.setMaximum(999999)
+        txt = self.tr(
+            u"""Distance (in slot) between a conductor of a certain phase and the corresponding return conductor"""
+        )
+        self.si_coil_pitch.setWhatsThis(txt)
+        self.si_coil_pitch.setToolTip(txt)
+
+        # Setup of si_Nslot
+        self.si_Nslot.setMinimum(-999999)
+        self.si_Nslot.setMaximum(999999)
+        txt = self.tr(
+            u"""Distance (in slot) between a conductor of a certain phase and the corresponding return conductor"""
+        )
+        self.si_Nslot.setWhatsThis(txt)
+        self.si_Nslot.setToolTip(txt)
+
         # Setup of in_Ntcoil
         txt = self.tr(u"""number of turns per coil""")
         self.in_Ntcoil.setWhatsThis(txt)
