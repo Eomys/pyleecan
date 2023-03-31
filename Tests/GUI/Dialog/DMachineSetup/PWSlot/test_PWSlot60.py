@@ -67,7 +67,7 @@ class TestPWSlot60(object):
             W3=2e-3,
         )
         self.widget = PWSlot60(self.test_obj)
-        assert self.widget.out_slot_height.text() == "Slot height: 0.04038 m"
+        assert self.widget.out_slot_height.text() == "Slot height: 0.04038 [m]"
         assert self.widget.out_tooth_width.isHidden()
 
     def test_set_R1(self):
@@ -255,6 +255,7 @@ if __name__ == "__main__":
     a = TestPWSlot60()
     a.setup_class()
     a.setup_method()
-    a.test_init()
+    # a.test_init()
+    a.test_output()
     a.teardown_class()
     print("Done")

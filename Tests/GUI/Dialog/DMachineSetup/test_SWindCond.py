@@ -81,12 +81,14 @@ class TestSWindCond(object):
         assert self.widget.w_cond.lf_Wwire.value() == 20e-3
         assert self.widget.w_cond.lf_Wins_wire.value() == 30e-3
         assert self.widget.w_cond.lf_Lewout.value() == 40e-3
+        assert self.widget.w_cond.w_mat_0.title() == "Conductor material"
 
         assert self.widget2.c_cond_type.currentIndex() == 1
         assert self.widget2.w_cond.si_Nwpc1.value() == 4
         assert self.widget2.w_cond.lf_Wwire.value() == 11e-3
         assert self.widget2.w_cond.lf_Wins_wire.value() == 21e-3
         assert self.widget2.w_cond.lf_Wins_cond.value() == 31e-3
+        assert self.widget2.w_cond.w_mat_0.title() == "Conductor material"
 
         self.test_obj.stator.winding.conductor = None
         self.widget = SWindCond(
@@ -95,7 +97,6 @@ class TestSWindCond(object):
             is_stator=True,
         )
 
-        assert self.widget.w_mat_0.in_mat_type.text() == "mat_wind1: "
         assert type(self.test_obj.stator.winding.conductor) is CondType11
 
     @pytest.mark.SCIM
@@ -221,7 +222,7 @@ class TestSWindCond(object):
             Nwppc=4, Wwire=None, Wins_wire=21e-3, Wins_cond=31e-3
         )
 
-        assert self.widget2.check(rotor) == "You must set Wwire !"
+        assert self.widget2.check(rotor) == "Strand diameter must be set"
 
     @pytest.mark.SCIM
     def test_init_PCondType12(self):
@@ -230,7 +231,7 @@ class TestSWindCond(object):
         lam.slot = SlotW22(H0=0.001, H2=0.01, W0=0.1, W2=0.2)
         lam.winding = Winding(Npcp=20, Ntcoil=21, Lewout=None)
         lam.winding.conductor = None
-        widget = PCondType12(lamination=lam)
+        widget = PCondType12(lamination=lam, material_dict=self.material_dict)
         assert type(widget.cond) is CondType12
         assert widget.cond.Nwppc == 1
         assert widget.cond.Wins_wire == 0
@@ -244,27 +245,35 @@ class TestSWindCond(object):
         lam.slot = SlotW22(H0=0.001, H2=0.01, W0=0.1, W2=0.2)
         lam.winding = Winding(Npcp=20, Ntcoil=21, Lewout=0.15)
         lam.winding.conductor = None
-        widget = PCondType12(lamination=lam)
+        widget = PCondType12(lamination=lam, material_dict=self.material_dict)
         widget.cond.Wwire = 0.5
         widget.cond.Wins_cond = 0.1
-        assert widget.check(lam) == "You must have Wins_cond >= Wwire !"
+        assert (
+            widget.check(lam)
+            == "Conductor diameter must be larger than strand diameter"
+        )
         widget.cond.Wins_cond = 0.6
         widget.lam.winding.Lewout = None
-        assert widget.check(lam) == "You must set Lewout !"
+        assert widget.check(lam) == "End winding length must be set"
+        widget.cond.Nwppc = 2
         widget.cond.Wins_cond = None
-        assert widget.check(lam) == "You must set Wins_cond !"
+        assert widget.check(lam) == "Conductor diameter must be set"
         widget.cond._Wins_wire = None
-        assert widget.check(lam) == "You must set Wins_wire !"
+        assert widget.check(lam) == "Insulator thickness must be set"
         widget.cond.Wwire = None
-        assert widget.check(lam) == "You must set Wwire !"
+        assert widget.check(lam) == "Strand diameter must be set"
         widget.cond.Nwppc = None
-        assert widget.check(lam) == "You must set Nwppc !"
+        assert widget.check(lam) == "Nr of strands per hand must be set"
 
 
 if __name__ == "__main__":
     a = TestSWindCond()
     a.setup_class()
     a.setup_method()
-    a.test_set_si_Nwpc1_rad()
+    # a.test_init()
+    # a.test_check()
+    # a.test_init_PCondType12()
+    a.test_check_PCondType12()
+    # a.test_set_si_Nwpc1_rad()
     a.teardown_class()
     print("Done")
