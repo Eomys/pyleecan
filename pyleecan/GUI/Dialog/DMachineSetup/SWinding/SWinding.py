@@ -587,7 +587,7 @@ class SWinding(Gen_SWinding, QWidget):
                 is_show_fig=False,
                 is_lam_only=is_lam_only,
                 is_add_sign=True,
-                is_legend=False,
+                is_legend=True,
             )
         except Exception as e:
             if self.obj.is_stator:  # Adapt the text to the current lamination
