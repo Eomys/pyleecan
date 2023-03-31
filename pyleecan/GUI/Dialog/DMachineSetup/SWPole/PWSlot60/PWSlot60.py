@@ -207,7 +207,11 @@ class PWSlot60(Gen_PWSlot60, QWidget):
             gui_option.unit.get_m(self.lamination.Rext - self.lamination.Rint), ".4g"
         )
         self.out_Wlam.setText(
-            self.tr("Lamination width: ") + Wlam + " [" + gui_option.unit.get_m_name() + "]"
+            self.tr("Lamination width: ")
+            + Wlam
+            + " ["
+            + gui_option.unit.get_m_name()
+            + "]"
         )
         self.out_tooth_width.hide()
         if self.check(self.lamination) is None:

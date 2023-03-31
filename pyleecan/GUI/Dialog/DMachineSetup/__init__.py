@@ -37,7 +37,7 @@ from ....GUI.Resources import pixmap_dict
 LSW_step = [SWSlot, SLamShape, SWinding, SWindCond]
 # Steps needed to setup a LamSlotWind for the rotor of a WRSM
 LP_step = [SWPole, SLamShape, SWinding, SWindCond, SSkew]
-# Steps needed to setup a LamSquirrelCage 
+# Steps needed to setup a LamSquirrelCage
 LSC_step = [SWSlot, SBar, SLamShape, SSkew]
 # Steps needed to setup a LamSquirrelCageMag
 LSCM_step = [SWSlot, SBar, SMHoleMag, SLamShape, SSkew]

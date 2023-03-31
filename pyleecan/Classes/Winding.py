@@ -1009,7 +1009,7 @@ class Winding(FrozenClass):
     coil_pitch = property(
         fget=_get_coil_pitch,
         fset=_set_coil_pitch,
-        doc=u"""Coil pitch (or coil span)
+        doc=u"""Distance (in slot) between a conductor of a certain phase and the corresponding return conductor
 
         :Type: int
         """,
@@ -1052,7 +1052,7 @@ class Winding(FrozenClass):
     Nlayer = property(
         fget=_get_Nlayer,
         fset=_set_Nlayer,
-        doc=u"""Number of layers per slots
+        doc=u"""Number of different coils in a slot
 
         :Type: int
         :min: 1

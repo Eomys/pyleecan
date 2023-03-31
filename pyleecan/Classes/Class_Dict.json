@@ -16453,7 +16453,7 @@
             },
             {
                 "as_dict": "",
-                "desc": "Coil pitch (or coil span)",
+                "desc": "Distance (in slot) between a conductor of a certain phase and the corresponding return conductor",
                 "max": "",
                 "min": "",
                 "name": "coil_pitch",
@@ -16473,7 +16473,7 @@
             },
             {
                 "as_dict": "",
-                "desc": "Number of layers per slots",
+                "desc": "Number of different coils in a slot",
                 "max": "",
                 "min": "1",
                 "name": "Nlayer",
