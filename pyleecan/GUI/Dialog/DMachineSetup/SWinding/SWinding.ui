@@ -72,9 +72,9 @@
       <property name="geometry">
        <rect>
         <x>0</x>
-        <y>-91</y>
+        <y>0</y>
         <width>265</width>
-        <height>882</height>
+        <height>853</height>
        </rect>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_5">
@@ -121,6 +121,9 @@
           </item>
           <item row="3" column="0" colspan="2">
            <layout class="QGridLayout" name="gridLayout">
+            <item row="0" column="1">
+             <widget class="SpinBox" name="si_qs"/>
+            </item>
             <item row="0" column="0">
              <widget class="QLabel" name="in_qs">
               <property name="text">
@@ -128,68 +131,23 @@
               </property>
              </widget>
             </item>
-            <item row="0" column="1">
-             <widget class="SpinBox" name="si_qs"/>
-            </item>
-            <item row="1" column="0">
-             <widget class="QLabel" name="in_Nlayer">
-              <property name="toolTip">
-               <string>Number of different phases in a same slot</string>
-              </property>
-              <property name="statusTip">
-               <string>Number of different phases in a same slot</string>
-              </property>
-              <property name="whatsThis">
-               <string>Number of different phases in a same slot</string>
-              </property>
-              <property name="text">
-               <string>Layers number</string>
-              </property>
-             </widget>
-            </item>
-            <item row="1" column="1">
-             <widget class="SpinBox" name="si_Nlayer">
-              <property name="toolTip">
-               <string>Number of different phases in a same slot</string>
-              </property>
-              <property name="statusTip">
-               <string>Number of different phases in a same slot</string>
-              </property>
-              <property name="whatsThis">
-               <string>Number of different phases in a same slot</string>
-              </property>
-              <property name="minimum">
-               <number>1</number>
-              </property>
-              <property name="maximum">
-               <number>2</number>
-              </property>
-             </widget>
-            </item>
-            <item row="2" column="0">
-             <widget class="QLabel" name="in_coil_pitch">
-              <property name="text">
-               <string>Throw</string>
-              </property>
-             </widget>
-            </item>
             <item row="2" column="1">
              <widget class="SpinBox" name="si_coil_pitch"/>
             </item>
-            <item row="3" column="0">
-             <widget class="QLabel" name="in_Ntcoil">
+            <item row="4" column="0">
+             <widget class="QLabel" name="in_Npcp">
               <property name="text">
-               <string>Turns per coil</string>
+               <string>Parallel circuits</string>
               </property>
              </widget>
             </item>
             <item row="3" column="1">
              <widget class="SpinBox" name="si_Ntcoil"/>
             </item>
-            <item row="4" column="0">
-             <widget class="QLabel" name="in_Npcp">
+            <item row="2" column="0">
+             <widget class="QLabel" name="in_coil_pitch">
               <property name="text">
-               <string>Parallel circuits</string>
+               <string>Throw</string>
               </property>
              </widget>
             </item>
@@ -201,6 +159,44 @@
               <property name="value">
                <number>12345</number>
               </property>
+             </widget>
+            </item>
+            <item row="3" column="0">
+             <widget class="QLabel" name="in_Ntcoil">
+              <property name="text">
+               <string>Turns per coil</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="0" colspan="2">
+             <widget class="QComboBox" name="c_layer_def">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>16777215</width>
+                <height>16777215</height>
+               </size>
+              </property>
+              <item>
+               <property name="text">
+                <string>Single Layer</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Double Layer overlapping</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Double Layer non-overlapping</string>
+               </property>
+              </item>
              </widget>
             </item>
            </layout>
@@ -292,13 +288,6 @@
            <widget class="QCheckBox" name="is_reverse_layer">
             <property name="text">
              <string>Reverse layer</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QCheckBox" name="is_change_layer">
-            <property name="text">
-             <string>Change layer direction</string>
             </property>
            </widget>
           </item>
