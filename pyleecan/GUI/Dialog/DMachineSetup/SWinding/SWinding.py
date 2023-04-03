@@ -59,12 +59,12 @@ class SWinding(Gen_SWinding, QWidget):
         else:
             self.obj = machine.rotor
             self.b_plot_mmf.setText("Plot Rotor Unit MMF")
-        self.in_Zs.setText("Slot number=" + str(self.obj.get_Zs()))
+        self.in_Zs.setText("Slot number: " + str(self.obj.get_Zs()))
         if isinstance(machine, MachineSRM):
             self.in_p.hide()  # p is not meaningful for SRM
         else:
             self.in_p.setText(
-                "Pole pair number=" + str(self.obj.get_pole_pair_number())
+                "Pole pair number: " + str(self.obj.get_pole_pair_number())
             )
 
         if isinstance(machine, MachineWRSM) and not self.is_stator:
