@@ -63,10 +63,10 @@ class TestSWinding(object):
     @pytest.mark.SCIM
     def test_init(self):
         """Check that the Widget spinbox initialise to the lamination value"""
-        assert self.widget.in_Zs.text() == "Slot number=36"
-        assert self.widget.in_p.text() == "Pole pair number=3"
+        assert self.widget.in_Zs.text() == "Slot number: 36"
+        assert self.widget.in_p.text() == "Pole pair number: 3"
         assert self.widget.si_qs.value() == 6
-        assert self.widget.si_Nlayer.value() == 2
+        assert self.widget.c_layer_def.currentIndex() == 2
         assert self.widget.si_coil_pitch.value() == 8
         assert self.widget.si_Nslot.value() == 10
         assert self.widget.si_Npcp.value() == 2
@@ -74,7 +74,6 @@ class TestSWinding(object):
         assert self.widget.c_wind_type.currentText() == "Star of Slot"
         assert self.widget.is_reverse.checkState() == Qt.Checked
         assert self.widget.is_reverse_layer.checkState() == Qt.Checked
-        assert self.widget.is_change_layer.checkState() == Qt.Checked
         assert self.widget.is_permute_B_C.checkState() == Qt.Checked
         assert self.widget.out_rot_dir.text() == "Rotation direction: CW"
 
@@ -109,7 +108,7 @@ class TestSWinding(object):
         assert self.test_obj.stator.winding.coil_pitch == 6
         assert self.widget.si_coil_pitch.value() == 6
         assert self.widget.si_Nslot.value() == 0
-        assert self.widget.si_Nlayer.value() == 1
+        assert self.widget.c_layer_def.currentIndex() == 0
         assert self.widget.machine.stator.winding.Ntcoil == 1
         assert not self.widget.machine.stator.winding.is_reverse_wind
 
@@ -127,7 +126,7 @@ class TestSWinding(object):
     def test_generate(self):
         """Check that the Widget allow to update qs"""
         self.widget.si_qs.setValue(3)
-        self.widget.si_Nlayer.setValue(2)
+        self.widget.c_layer_def.setCurrentIndex(2)
         self.widget.si_coil_pitch.setValue(5)
         self.widget.si_Ntcoil.setValue(9)
         self.widget.si_Npcp.setValue(2)
@@ -137,8 +136,8 @@ class TestSWinding(object):
         assert self.widget.out_rot_dir.text() == "Rotation direction: CCW"
         assert self.widget.out_ms.text() == "Number of slots/pole/phase: 2.0"
         assert self.widget.out_Nperw.text() == "Winding periodicity: 6"
-        assert self.widget.out_Ncspc.text() == "Number of coils Ncspc: 6"
-        assert self.widget.out_Ntspc.text() == "Number of turns Ntspc: 54"
+        assert self.widget.out_Ncspc.text() == "Coils in series per parallel circuit: 6"
+        assert self.widget.out_Ntspc.text() == "Turns in series per phase: 54"
 
     @pytest.mark.SCIM
     def test_export_import(self):
