@@ -80,7 +80,9 @@
     <file>images/MachineSetup/Bar/ShortCircuitRing_schematics.png</file>
     <file>images/MachineSetup/WindParam/Winding param.PNG</file>
     <file>images/MachineSetup/WindParam/CondType11.png</file>
+    <file>images/MachineSetup/WindParam/CondType11_single.png</file>
     <file>images/MachineSetup/WindParam/CondType12.png</file>
+    <file>images/MachineSetup/WindParam/CondType12_single.png</file>
     <file>images/MachineSetup/LamParam/RadVentDuct.png</file>
     <file>images/MachineSetup/MachineType/DFIM.png</file>
     <file>images/MachineSetup/MachineType/machine_IPMSM.png</file>

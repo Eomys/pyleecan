@@ -87,6 +87,11 @@ try:
 except ImportError as error:
     plot_linear = error
 
+try:
+    from ..Methods.Machine.Winding.comp_Ncps import comp_Ncps
+except ImportError as error:
+    comp_Ncps = error
+
 
 from numpy import array, array_equal
 from numpy import isnan
@@ -250,6 +255,15 @@ class Winding(FrozenClass):
         )
     else:
         plot_linear = plot_linear
+    # cf Methods.Machine.Winding.comp_Ncps
+    if isinstance(comp_Ncps, ImportError):
+        comp_Ncps = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use Winding method comp_Ncps: " + str(comp_Ncps))
+            )
+        )
+    else:
+        comp_Ncps = comp_Ncps
     # generic save method is available in all object
     save = save
     # get_logger method is available in all object

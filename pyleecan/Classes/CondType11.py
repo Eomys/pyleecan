@@ -574,7 +574,7 @@ class CondType11(Conductor):
     Hwire = property(
         fget=_get_Hwire,
         fset=_set_Hwire,
-        doc=u"""cf schematics, single wire height without insulation [m]
+        doc=u"""cf schematics, single strand height without insulation
 
         :Type: float
         :min: 0
@@ -593,7 +593,7 @@ class CondType11(Conductor):
     Wwire = property(
         fget=_get_Wwire,
         fset=_set_Wwire,
-        doc=u"""cf schematics, single wire width without insulation [m]
+        doc=u"""cf schematics, single strand width without insulation
 
         :Type: float
         :min: 0
@@ -612,7 +612,7 @@ class CondType11(Conductor):
     Nwppc_rad = property(
         fget=_get_Nwppc_rad,
         fset=_set_Nwppc_rad,
-        doc=u"""cf schematics, stator winding number of preformed wires (strands) in parallel per coil along radial (vertical) direction
+        doc=u"""number of form wound strands in parallel per conductor along radial (vertical) direction
 
         :Type: int
         :min: 1
@@ -631,7 +631,7 @@ class CondType11(Conductor):
     Nwppc_tan = property(
         fget=_get_Nwppc_tan,
         fset=_set_Nwppc_tan,
-        doc=u"""cf schematics, stator winding number of preformed wires (strands) in parallel per coil along tangential (horizontal) direction
+        doc=u"""number of form wound strands in parallel per conductor along tangential (horizontal) direction
 
         :Type: int
         :min: 1
@@ -650,7 +650,7 @@ class CondType11(Conductor):
     Wins_wire = property(
         fget=_get_Wins_wire,
         fset=_set_Wins_wire,
-        doc=u"""(advanced) cf schematics, winding strand insulation thickness [m]
+        doc=u"""(advanced) cf schematics, winding strand insulation thickness
 
         :Type: float
         :min: 0
@@ -669,7 +669,7 @@ class CondType11(Conductor):
     Wins_coil = property(
         fget=_get_Wins_coil,
         fset=_set_Wins_coil,
-        doc=u"""(advanced) cf schematics, winding coil insulation  thickness [m]
+        doc=u"""(advanced) cf schematics, winding coil insulation  thickness
 
         :Type: float
         :min: 0

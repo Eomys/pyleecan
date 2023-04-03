@@ -95,18 +95,18 @@ class TestDMatlibWF(object):
         assert combo.currentText() == "M400-50A"
         assert [combo.itemText(i) for i in range(combo.count())] == exp_items
         # LamParam Stator
-        self.widget.nav_step.setCurrentRow(5)
+        self.widget.nav_step.setCurrentRow(3)
         assert isinstance(self.widget.w_step, SLamShape)
         combo = self.widget.w_step.w_mat.c_mat_type
         assert combo.currentText() == "M400-50A"
         assert [combo.itemText(i) for i in range(combo.count())] == exp_items
         # Winding conductor
-        self.widget.nav_step.setCurrentRow(4)
+        self.widget.nav_step.setCurrentRow(5)
         assert isinstance(self.widget.w_step, SWindCond)
-        combo = self.widget.w_step.w_mat_0.c_mat_type
+        combo = self.widget.w_step.w_cond.w_mat_0.c_mat_type
         assert combo.currentText() == "Copper1"
         assert [combo.itemText(i) for i in range(combo.count())] == exp_items
-        combo = self.widget.w_step.w_mat_1.c_mat_type
+        combo = self.widget.w_step.w_cond.w_mat_1.c_mat_type
         assert combo.currentText() == "Insulator1"
         assert [combo.itemText(i) for i in range(combo.count())] == exp_items
         # LamParam Rotor
@@ -145,7 +145,7 @@ class TestDMatlibWF(object):
         M400 = load(join(WS_path, "M400-50A.json"))
         assert M400.elec.rho == 1
         # Open DMatlib
-        self.widget.nav_step.setCurrentRow(5)  # LamParam Stator
+        self.widget.nav_step.setCurrentRow(3)  # LamParam Stator
         assert isinstance(self.widget.w_step, SLamShape)
         assert self.widget.w_step.w_mat.current_dialog is None
         self.widget.w_step.w_mat.b_matlib.clicked.emit()
@@ -214,7 +214,7 @@ class TestDMatlibWF(object):
         assert self.widget.machine.rotor.mat_type.elec.rho == 12
         assert self.widget.machine.shaft.mat_type.elec.rho == 12
         # Open DMatlib
-        self.widget.nav_step.setCurrentRow(5)  # LamParam Stator
+        self.widget.nav_step.setCurrentRow(3)  # LamParam Stator
         assert isinstance(self.widget.w_step, SLamShape)
         assert self.widget.w_step.w_mat.current_dialog is None
         self.widget.w_step.w_mat.b_matlib.clicked.emit()
@@ -249,7 +249,7 @@ class TestDMatlibWF(object):
         assert M400.elec.rho == 1
         assert not isfile(join(WS_path, "M400-50A_copy.json"))
         # Open DMatlib
-        self.widget.nav_step.setCurrentRow(5)  # LamParam Stator
+        self.widget.nav_step.setCurrentRow(3)  # LamParam Stator
         assert isinstance(self.widget.w_step, SLamShape)
         assert self.widget.w_step.w_mat.current_dialog is None
         self.widget.w_step.w_mat.b_matlib.clicked.emit()
@@ -382,7 +382,7 @@ class TestDMatlibWF(object):
         M400 = load(join(WS_path, "M400-50A.json"))
         assert M400.elec.rho == 1
         # Open DMatlib
-        self.widget.nav_step.setCurrentRow(5)  # LamParam Stator
+        self.widget.nav_step.setCurrentRow(3)  # LamParam Stator
         assert isinstance(self.widget.w_step, SLamShape)
         assert self.widget.w_step.w_mat.current_dialog is None
         self.widget.w_step.w_mat.b_matlib.clicked.emit()
@@ -486,7 +486,7 @@ class TestDMatlibWF(object):
         # Check initial state
         assert isfile(join(WS_path, "M400-50A.json"))
         # Open DMatlib
-        self.widget.nav_step.setCurrentRow(5)  # LamParam Stator
+        self.widget.nav_step.setCurrentRow(3)  # LamParam Stator
         assert isinstance(self.widget.w_step, SLamShape)
         assert self.widget.w_step.w_mat.current_dialog is None
         self.widget.w_step.w_mat.b_matlib.clicked.emit()
@@ -532,7 +532,7 @@ class TestDMatlibWF(object):
         M400 = load(join(WS_path, "M400-50A.json"))
         assert M400.elec.rho == 1
         # Open DMatlib
-        self.widget.nav_step.setCurrentRow(5)  # LamParam Stator
+        self.widget.nav_step.setCurrentRow(3)  # LamParam Stator
         assert isinstance(self.widget.w_step, SLamShape)
         assert self.widget.w_step.w_mat.current_dialog is None
         self.widget.w_step.w_mat.b_matlib.clicked.emit()
@@ -654,10 +654,10 @@ if __name__ == "__main__":
     # a.test_rename_machine_material()
     # a.test_rename_matlib()
     # a.test_new_machine_material()
-    a.test_copy_machine_material()
+    # a.test_copy_machine_material()
     # a.test_new_matlib()
     # a.test_edit_machine_to_library()
-    # a.test_edit_matlib_to_machine()
+    a.test_edit_matlib_to_machine()
     # a.test_edit_machine_material_several()
     # a.test_edit_machine_material()
     # a.test_edit_matlib()

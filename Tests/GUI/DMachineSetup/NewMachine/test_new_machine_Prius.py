@@ -1,6 +1,7 @@
 import sys
 from os.path import isdir, isfile, join
 from shutil import rmtree
+from multiprocessing import cpu_count
 
 from PySide2 import QtWidgets
 import mock
@@ -18,8 +19,12 @@ from pyleecan.GUI.Dialog.DMachineSetup.SMHoleMag.WHoleMag.WHoleMag import WHoleM
 from pyleecan.GUI.Dialog.DMachineSetup.SMHoleMag.PHoleM50.PHoleM50 import PHoleM50
 from pyleecan.GUI.Dialog.DMachineSetup.SSimu.SSimu import SSimu
 from pyleecan.GUI.Dialog.DMachineSetup.SWindCond.SWindCond import SWindCond
-from pyleecan.GUI.Dialog.DMachineSetup.SWindCond.PCondType11.PCondType11 import PCondType11
-from pyleecan.GUI.Dialog.DMachineSetup.SWindCond.PCondType12.PCondType12 import PCondType12
+from pyleecan.GUI.Dialog.DMachineSetup.SWindCond.PCondType11.PCondType11 import (
+    PCondType11,
+)
+from pyleecan.GUI.Dialog.DMachineSetup.SWindCond.PCondType12.PCondType12 import (
+    PCondType12,
+)
 from pyleecan.Classes.CondType11 import CondType11
 from pyleecan.Classes.CondType12 import CondType12
 from pyleecan.GUI.Dialog.DMachineSetup.SWinding.SWinding import SWinding
@@ -125,7 +130,9 @@ class TestNewMachinePrius(object):
         assert self.widget.machine.rotor.Rext == pytest.approx(80.2e-3)
         assert self.widget.machine.rotor.Rint == pytest.approx(55.32e-3)
         assert self.widget.w_step.out_Drsh.text() == "Drsh = 0.1106 [m]"
-        assert self.widget.w_step.out_airgap.text() == "Airgap magnetic width = 0.75 [mm]"
+        assert (
+            self.widget.w_step.out_airgap.text() == "Airgap magnetic width = 0.75 [mm]"
+        )
         assert isinstance(self.widget.machine.shaft, Shaft)
         assert self.widget.machine.frame is None
 
@@ -162,12 +169,17 @@ class TestNewMachinePrius(object):
         assert self.widget.w_step.machine.stator.slot.H1 == pytest.approx(0)
         assert self.widget.w_step.machine.stator.slot.H2 == pytest.approx(33.3e-3)
         assert self.widget.w_step.machine.stator.slot.R1 == pytest.approx(4e-3)
-        assert self.widget.w_step.out_Slot_pitch.text() == "Slot pitch = 360 / Zs = 7.5 [°] (0.1309 [rad])"
         assert (
-            self.widget.w_step.w_slot.w_out.out_slot_height.text() == "Slot height: 0.03429 [m]"
+            self.widget.w_step.out_Slot_pitch.text()
+            == "Slot pitch = 360 / Zs = 7.5 [°] (0.1309 [rad])"
         )
         assert (
-            self.widget.w_step.w_slot.w_out.out_yoke_height.text() == "Yoke height: 0.01938 [m]"
+            self.widget.w_step.w_slot.w_out.out_slot_height.text()
+            == "Slot height: 0.03429 [m]"
+        )
+        assert (
+            self.widget.w_step.w_slot.w_out.out_yoke_height.text()
+            == "Yoke height: 0.01938 [m]"
         )
         assert (
             self.widget.w_step.w_slot.w_out.out_wind_surface.text()
@@ -215,7 +227,7 @@ class TestNewMachinePrius(object):
         assert self.widget.w_step.in_Zs.text() == "Slot number=48"
         assert self.widget.w_step.in_p.text() == "Pole pair number=4"
         assert self.widget.w_step.si_qs.value() == 3
-        assert self.widget.w_step.si_Nlayer.value() == 1 
+        assert self.widget.w_step.si_Nlayer.value() == 1
         assert self.widget.w_step.si_coil_pitch.value() == 6
         assert self.widget.w_step.si_Ntcoil.value() == 1
         assert self.widget.w_step.si_Npcp.value() == 1
@@ -252,10 +264,9 @@ class TestNewMachinePrius(object):
         assert isinstance(self.widget.w_step, SWindCond)
 
         # Initial state
-        assert self.widget.w_step.c_cond_type.currentText() == "Preformed Rectangular"
-        assert self.widget.w_step.w_mat_0.c_mat_type.currentText() == "Copper1"
-        assert self.widget.w_step.w_mat_1.c_mat_type.currentText() == "Insulator1"
+        assert self.widget.w_step.c_cond_type.currentText() == "Form wound"
         assert isinstance(self.widget.w_step.w_cond, PCondType11)
+        assert self.widget.w_step.w_cond.w_mat_0.c_mat_type.currentText() == "Copper1"
         assert not self.widget.w_step.w_cond.g_ins.isChecked()
         assert self.widget.w_step.w_cond.si_Nwpc1_rad.value() == 1
         assert self.widget.w_step.w_cond.si_Nwpc1_tan.value() == 1
@@ -263,23 +274,27 @@ class TestNewMachinePrius(object):
         assert self.widget.w_step.w_cond.lf_Hwire.value() is None
         assert self.widget.w_step.w_cond.lf_Lewout.value() == 0
 
-        assert isinstance(self.widget.w_step.machine.stator.winding.conductor, CondType11)
+        assert isinstance(
+            self.widget.w_step.machine.stator.winding.conductor, CondType11
+        )
 
         self.widget.w_step.c_cond_type.setCurrentIndex(1)
 
-        assert self.widget.w_step.c_cond_type.currentText() == "Random Round Wire"
-        assert self.widget.w_step.w_mat_0.c_mat_type.currentText() == "Copper1"
-        assert self.widget.w_step.w_mat_1.c_mat_type.currentText() == "Insulator1"
+        assert self.widget.w_step.c_cond_type.currentText() == "Stranded"
         assert isinstance(self.widget.w_step.w_cond, PCondType12)
+        assert self.widget.w_step.w_cond.w_mat_0.c_mat_type.currentText() == "Copper1"
         assert not self.widget.w_step.w_cond.g_ins.isChecked()
         assert self.widget.w_step.w_cond.si_Nwpc1.value() == 1
         assert self.widget.w_step.w_cond.lf_Wwire.value() is None
         assert self.widget.w_step.w_cond.lf_Lewout.value() == 0
 
         self.widget.w_step.w_cond.g_ins.setChecked(True)
+        assert (
+            self.widget.w_step.w_cond.w_mat_1.c_mat_type.currentText() == "Insulator1"
+        )
 
         assert self.widget.w_step.w_cond.lf_Wins_cond.value() is None
-        assert self.widget.w_step.w_cond.lf_Wins_wire.value() == 0
+        assert self.widget.w_step.w_cond.lf_Wins_wire.value() is None
 
         self.widget.w_step.w_cond.si_Nwpc1.setValue(13)
         self.widget.w_step.w_cond.si_Nwpc1.editingFinished.emit()
@@ -292,16 +307,36 @@ class TestNewMachinePrius(object):
         self.widget.w_step.w_cond.lf_Lewout.setValue(0.019366)
         self.widget.w_step.w_cond.lf_Lewout.editingFinished.emit()
 
-        assert self.widget.w_step.w_cond.w_out.out_H.text() == "Hcond = 0.015 [m]"
-        assert self.widget.w_step.w_cond.w_out.out_W.text() == "Wcond = 0.015 [m]"
-        assert self.widget.w_step.w_cond.w_out.out_S.text() == "Scond = 0.0001767 [m²]"
-        assert self.widget.w_step.w_cond.w_out.out_Sact.text() == "Scond_active = 8.492e-06 [m²]"
-        assert self.widget.w_step.w_cond.w_out.out_K.text() == "Ksfill = 35.45 %"
-        assert self.widget.w_step.w_cond.w_out.out_MLT.text() == "Mean Length Turn = 0.2451 [m]"
-        assert self.widget.w_step.w_cond.w_out.out_Rwind.text() == "Rwind 20°C = 0.03595 [Ohm]"
+        assert (
+            self.widget.w_step.w_cond.w_out.out_Sslot.text()
+            == "Slot surface = 0.0002175 [m²]"
+        )
+        assert (
+            self.widget.w_step.w_cond.w_out.out_Saslot.text()
+            == "Slot active surface = 0.0002156 [m²]"
+        )
+        assert (
+            self.widget.w_step.w_cond.w_out.out_Sact.text()
+            == "Conductor active surface = 8.492e-06 [m²]"
+        )
+        assert (
+            self.widget.w_step.w_cond.w_out.out_Ncps.text()
+            == "Nr of conductors per slot = 9"
+        )
+        assert self.widget.w_step.w_cond.w_out.out_K.text() == "Fill factor = 35.45 %"
+        assert (
+            self.widget.w_step.w_cond.w_out.out_MLT.text()
+            == "Mean Length Turn = 0.2451 [m]"
+        )
+        assert (
+            self.widget.w_step.w_cond.w_out.out_Rwind.text()
+            == "Winding resistance at 20°C = 0.03595 [Ohm]"
+        )
 
         # Is the stator winding conductors well defined ?
-        assert isinstance(self.widget.w_step.machine.stator.winding.conductor, CondType12)
+        assert isinstance(
+            self.widget.w_step.machine.stator.winding.conductor, CondType12
+        )
         assert self.widget.w_step.machine.stator.winding.conductor.Nwppc == 13
         assert self.widget.w_step.machine.stator.winding.conductor.Wwire == 0.000912
         assert self.widget.w_step.machine.stator.winding.conductor.Wins_wire == 1e-06
@@ -314,7 +349,10 @@ class TestNewMachinePrius(object):
         assert self.widget.nav_step.currentItem().text() == " 7: Rotor Hole"
         assert isinstance(self.widget.w_step, SMHoleMag)
 
-        assert self.widget.w_step.out_hole_pitch.text() == "Slot pitch = 360 / 2p = 45 [°] = 0.7854 [rad]"
+        assert (
+            self.widget.w_step.out_hole_pitch.text()
+            == "Slot pitch = 360 / 2p = 45 [°] = 0.7854 [rad]"
+        )
 
         wid_hole = self.widget.w_step.tab_hole.currentWidget()
         assert isinstance(wid_hole, WHoleMag)
@@ -362,7 +400,9 @@ class TestNewMachinePrius(object):
         wid_hole.w_hole.w_mat_2.c_mat_type.setCurrentIndex(index_magnetPrius)
 
         assert wid_hole.w_hole.out_slot_surface.text() == "Hole surface: 0.0002968 [m²]"
-        assert wid_hole.w_hole.out_magnet_surface.text() == "Magnet surf.: 0.0002457 [m²]"
+        assert (
+            wid_hole.w_hole.out_magnet_surface.text() == "Magnet surf.: 0.0002457 [m²]"
+        )
         assert wid_hole.w_hole.out_alpha.text() == "alpha: 0.3048 [rad] (17.46°)"
         assert wid_hole.w_hole.out_W5.text() == "Max magnet width: 0.02201 [m]"
 
@@ -376,7 +416,6 @@ class TestNewMachinePrius(object):
         assert self.widget.w_step.machine.rotor.hole[0].W2 == 0
         assert self.widget.w_step.machine.rotor.hole[0].W3 == 0.014
         assert self.widget.w_step.machine.rotor.hole[0].W4 == 0.0189
-
 
         #####################
         # 8 Rotor Lamination
@@ -408,28 +447,62 @@ class TestNewMachinePrius(object):
         assert self.widget.nav_step.currentItem().text() == "10: Machine Summary"
         assert isinstance(self.widget.w_step, SPreview)
 
-        assert self.widget.w_step.tab_machine.tab_param.item(0,0).text() == "Machine Type"
-        assert self.widget.w_step.tab_machine.tab_param.item(0,1).text() == "IPMSM"
-        assert self.widget.w_step.tab_machine.tab_param.item(1,0).text() == "Stator slot number"
-        assert self.widget.w_step.tab_machine.tab_param.item(1,1).text() == "48"
-        assert self.widget.w_step.tab_machine.tab_param.item(2,0).text() == "Pole pair number"
-        assert self.widget.w_step.tab_machine.tab_param.item(2,1).text() == "4"
-        assert self.widget.w_step.tab_machine.tab_param.item(3,0).text() == "Topology"
-        assert self.widget.w_step.tab_machine.tab_param.item(3,1).text() == "Internal Rotor"
-        assert self.widget.w_step.tab_machine.tab_param.item(4,0).text() == "Stator phase number"
-        assert self.widget.w_step.tab_machine.tab_param.item(4,1).text() == "3"
-        assert self.widget.w_step.tab_machine.tab_param.item(5,0).text() == "Stator winding resistance"
-        assert self.widget.w_step.tab_machine.tab_param.item(5,1).text() == "0.03595 Ohm"
-        assert self.widget.w_step.tab_machine.tab_param.item(6,0).text() == "Machine total mass"
-        assert self.widget.w_step.tab_machine.tab_param.item(6,1).text() == "26.02 kg"
-        assert self.widget.w_step.tab_machine.tab_param.item(7,0).text() == "Stator lamination mass"
-        assert self.widget.w_step.tab_machine.tab_param.item(7,1).text() == "15.78 kg"
-        assert self.widget.w_step.tab_machine.tab_param.item(8,0).text() == "Stator winding mass"
-        assert self.widget.w_step.tab_machine.tab_param.item(8,1).text() == "4.001 kg"
-        assert self.widget.w_step.tab_machine.tab_param.item(9,0).text() == "Rotor lamination mass"
-        assert self.widget.w_step.tab_machine.tab_param.item(9,1).text() == "5.006 kg"
-        assert self.widget.w_step.tab_machine.tab_param.item(10,0).text() == "Rotor magnet mass"
-        assert self.widget.w_step.tab_machine.tab_param.item(10,1).text() == "1.236 kg"
+        assert (
+            self.widget.w_step.tab_machine.tab_param.item(0, 0).text() == "Machine Type"
+        )
+        assert self.widget.w_step.tab_machine.tab_param.item(0, 1).text() == "IPMSM"
+        assert (
+            self.widget.w_step.tab_machine.tab_param.item(1, 0).text()
+            == "Stator slot number"
+        )
+        assert self.widget.w_step.tab_machine.tab_param.item(1, 1).text() == "48"
+        assert (
+            self.widget.w_step.tab_machine.tab_param.item(2, 0).text()
+            == "Pole pair number"
+        )
+        assert self.widget.w_step.tab_machine.tab_param.item(2, 1).text() == "4"
+        assert self.widget.w_step.tab_machine.tab_param.item(3, 0).text() == "Topology"
+        assert (
+            self.widget.w_step.tab_machine.tab_param.item(3, 1).text()
+            == "Internal Rotor"
+        )
+        assert (
+            self.widget.w_step.tab_machine.tab_param.item(4, 0).text()
+            == "Stator phase number"
+        )
+        assert self.widget.w_step.tab_machine.tab_param.item(4, 1).text() == "3"
+        assert (
+            self.widget.w_step.tab_machine.tab_param.item(5, 0).text()
+            == "Stator winding resistance"
+        )
+        assert (
+            self.widget.w_step.tab_machine.tab_param.item(5, 1).text() == "0.03595 Ohm"
+        )
+        assert (
+            self.widget.w_step.tab_machine.tab_param.item(6, 0).text()
+            == "Machine total mass"
+        )
+        assert self.widget.w_step.tab_machine.tab_param.item(6, 1).text() == "26.02 kg"
+        assert (
+            self.widget.w_step.tab_machine.tab_param.item(7, 0).text()
+            == "Stator lamination mass"
+        )
+        assert self.widget.w_step.tab_machine.tab_param.item(7, 1).text() == "15.78 kg"
+        assert (
+            self.widget.w_step.tab_machine.tab_param.item(8, 0).text()
+            == "Stator winding mass"
+        )
+        assert self.widget.w_step.tab_machine.tab_param.item(8, 1).text() == "4.001 kg"
+        assert (
+            self.widget.w_step.tab_machine.tab_param.item(9, 0).text()
+            == "Rotor lamination mass"
+        )
+        assert self.widget.w_step.tab_machine.tab_param.item(9, 1).text() == "5.006 kg"
+        assert (
+            self.widget.w_step.tab_machine.tab_param.item(10, 0).text()
+            == "Rotor magnet mass"
+        )
+        assert self.widget.w_step.tab_machine.tab_param.item(10, 1).text() == "1.236 kg"
 
         self.widget.w_step.tab_machine.b_plot_machine.clicked.emit()
         self.widget.w_step.tab_machine.b_mmf.clicked.emit()
@@ -444,12 +517,12 @@ class TestNewMachinePrius(object):
         assert self.widget.w_step.lf_I1.value() == 0
         assert self.widget.w_step.lf_I2.value() == 0
         assert self.widget.w_step.lf_T_mag.value() == 20
-        assert self.widget.w_step.si_Na_tot.value() == 1680 
+        assert self.widget.w_step.si_Na_tot.value() == 1680
         assert self.widget.w_step.si_Nt_tot.value() == 480
         assert self.widget.w_step.is_per_a.isChecked()
         assert self.widget.w_step.is_per_t.isChecked()
         assert self.widget.w_step.lf_Kmesh.value() == 1
-        assert self.widget.w_step.si_nb_worker.value() == 12
+        assert self.widget.w_step.si_nb_worker.value() == cpu_count()
         assert self.widget.w_step.le_name.text() == "FEMM_Prius_Test"
 
 
