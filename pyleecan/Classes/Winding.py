@@ -910,7 +910,7 @@ class Winding(FrozenClass):
     Nslot_shift_wind = property(
         fget=_get_Nslot_shift_wind,
         fset=_set_Nslot_shift_wind,
-        doc=u"""0 not to change the stator winding connection matrix built by pyleecan number of slots to shift the coils obtained with pyleecan winding algorithm (a, b, c becomes b, c, a with Nslot_shift_wind1=1)
+        doc=u"""Number of slots to shift the coils obtained with pyleecan winding algorithm (a, b, c becomes b, c, a with Nslot_shift_wind=1)
 
         :Type: int
         """,

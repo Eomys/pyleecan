@@ -16374,7 +16374,7 @@
             },
             {
                 "as_dict": "",
-                "desc": "0 not to change the stator winding connection matrix built by pyleecan number of slots to shift the coils obtained with pyleecan winding algorithm (a, b, c becomes b, c, a with Nslot_shift_wind1=1)",
+                "desc": "Number of slots to shift the coils obtained with pyleecan winding algorithm (a, b, c becomes b, c, a with Nslot_shift_wind=1)",
                 "max": "",
                 "min": "",
                 "name": "Nslot_shift_wind",

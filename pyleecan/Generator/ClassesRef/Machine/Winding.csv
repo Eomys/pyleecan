@@ -1,6 +1,6 @@
 Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,as_dict Type
 is_reverse_wind,-,"1 to reverse the default winding algorithm along the airgap (c, b, a instead of a, b, c along the trigonometric direction)",0,bool,0,,,
-Nslot_shift_wind,-,"0 not to change the stator winding connection matrix built by pyleecan number of slots to shift the coils obtained with pyleecan winding algorithm (a, b, c becomes b, c, a with Nslot_shift_wind1=1)",0,int,0,,,
+Nslot_shift_wind,-,"Number of slots to shift the coils obtained with pyleecan winding algorithm (a, b, c becomes b, c, a with Nslot_shift_wind=1)",0,int,0,,,
 qs,-,number of phases ,0,int,3,0,,
 Ntcoil,-,number of turns per coil,0,int,7,1,,
 Npcp,-,number of parallel circuits per phase,0,int,2,1,,
