@@ -361,6 +361,15 @@ def plot(
                     patch_leg.append(Patch(color=ROTOR_COLOR))
                     label_leg.append("Rotor")
                     title = "Rotor winding radial pattern"
+            elif is_lam_only:
+                if self.is_stator and "Stator" not in label_leg:
+                    patch_leg.append(Patch(color=STATOR_COLOR))
+                    label_leg.append("Stator")
+                    title = "Stator Lamination"
+                elif not self.is_stator and "Rotor" not in label_leg:
+                    patch_leg.append(Patch(color=ROTOR_COLOR))
+                    label_leg.append("Rotor")
+                    title = "Rotor Lamination"
             else:
                 if self.is_stator and "Stator" not in label_leg:
                     patch_leg.append(Patch(color=STATOR_COLOR))
