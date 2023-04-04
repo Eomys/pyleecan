@@ -222,12 +222,12 @@ class Ui_PCondType11(object):
         self.img_cond.setText("")
         self.in_Nwpc1_rad.setText(
             QCoreApplication.translate(
-                "PCondType11", u"Nr of strands in rad. dir.", None
+                "PCondType11", u"Strands in radial direction", None
             )
         )
         self.in_Nwpc1_tan.setText(
             QCoreApplication.translate(
-                "PCondType11", u"Nr of strands in tan. dir.", None
+                "PCondType11", u"Strands in tangential direction", None
             )
         )
         self.in_Wwire.setText(

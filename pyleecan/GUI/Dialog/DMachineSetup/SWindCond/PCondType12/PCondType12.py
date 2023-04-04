@@ -234,7 +234,7 @@ class PCondType12(Gen_PCondType12, QWidget):
         cond = lam.winding.conductor
         # Check that everything is set
         if cond.Nwppc is None:
-            return "Nr of strands per hand must be set"
+            return "Strands per hand must be set"
         elif cond.Wwire is None:
             if cond.Nwppc > 1:
                 return "Strand diameter must be set"

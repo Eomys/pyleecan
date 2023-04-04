@@ -258,9 +258,9 @@ class PCondType11(Gen_PCondType11, QWidget):
         cond = lam.winding.conductor
         # Check that everything is set
         if cond.Nwppc_tan is None:
-            return "Nr of strands in tan. dir. must be set"
+            return "Strands in tangential direction must be set"
         elif cond.Nwppc_rad is None:
-            return "Nr of strands in rad. dir. must be set"
+            return "Strands in radial direction must be set"
         elif cond.Wwire is None:
             if cond.Nwppc_tan * cond.Nwppc_rad > 1:
                 return "Strand width must be set"

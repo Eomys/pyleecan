@@ -80,7 +80,7 @@
             </size>
            </property>
            <property name="text">
-            <string>Nr of strands in hand</string>
+            <string>Strands in hand</string>
            </property>
           </widget>
          </item>

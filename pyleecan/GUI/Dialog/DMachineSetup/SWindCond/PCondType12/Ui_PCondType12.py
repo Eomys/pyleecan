@@ -191,7 +191,7 @@ class Ui_PCondType12(object):
         )
         self.img_cond.setText("")
         self.in_Nwpc1.setText(
-            QCoreApplication.translate("PCondType12", u"Nr of strands in hand", None)
+            QCoreApplication.translate("PCondType12", u"Strands in hand", None)
         )
         self.in_Wwire.setText(
             QCoreApplication.translate("PCondType12", u"Conductor diameter", None)

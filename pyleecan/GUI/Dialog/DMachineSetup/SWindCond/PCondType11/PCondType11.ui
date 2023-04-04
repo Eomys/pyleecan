@@ -80,7 +80,7 @@
             </size>
            </property>
            <property name="text">
-            <string>Nr of strands in rad. dir.</string>
+            <string>Strands in radial direction</string>
            </property>
           </widget>
          </item>
@@ -106,7 +106,7 @@
             </size>
            </property>
            <property name="text">
-            <string>Nr of strands in tan. dir.</string>
+            <string>Strands in tangential direction</string>
            </property>
           </widget>
          </item>
