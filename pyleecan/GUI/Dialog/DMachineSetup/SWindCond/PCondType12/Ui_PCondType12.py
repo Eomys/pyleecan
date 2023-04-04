@@ -42,14 +42,14 @@ class Ui_PCondType12(object):
         self.scrollArea.setWidgetResizable(True)
         self.scrollAreaWidgetContents = QWidget()
         self.scrollAreaWidgetContents.setObjectName(u"scrollAreaWidgetContents")
-        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 348, 648))
+        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 372, 631))
         self.verticalLayout = QVBoxLayout(self.scrollAreaWidgetContents)
         self.verticalLayout.setObjectName(u"verticalLayout")
         self.gridLayout = QGridLayout()
         self.gridLayout.setObjectName(u"gridLayout")
         self.in_Nwpc1 = QLabel(self.scrollAreaWidgetContents)
         self.in_Nwpc1.setObjectName(u"in_Nwpc1")
-        self.in_Nwpc1.setMinimumSize(QSize(90, 0))
+        self.in_Nwpc1.setMinimumSize(QSize(150, 0))
 
         self.gridLayout.addWidget(self.in_Nwpc1, 0, 0, 1, 1)
 
@@ -62,7 +62,7 @@ class Ui_PCondType12(object):
 
         self.in_Wwire = QLabel(self.scrollAreaWidgetContents)
         self.in_Wwire.setObjectName(u"in_Wwire")
-        self.in_Wwire.setMinimumSize(QSize(90, 0))
+        self.in_Wwire.setMinimumSize(QSize(150, 0))
 
         self.gridLayout.addWidget(self.in_Wwire, 1, 0, 1, 1)
 
@@ -81,7 +81,7 @@ class Ui_PCondType12(object):
 
         self.in_Wins_cond = QLabel(self.scrollAreaWidgetContents)
         self.in_Wins_cond.setObjectName(u"in_Wins_cond")
-        self.in_Wins_cond.setMinimumSize(QSize(90, 0))
+        self.in_Wins_cond.setMinimumSize(QSize(150, 0))
 
         self.gridLayout.addWidget(self.in_Wins_cond, 2, 0, 1, 1)
 
@@ -142,7 +142,7 @@ class Ui_PCondType12(object):
         self.horizontalLayout_2.setObjectName(u"horizontalLayout_2")
         self.in_Lewout = QLabel(self.scrollAreaWidgetContents)
         self.in_Lewout.setObjectName(u"in_Lewout")
-        self.in_Lewout.setMinimumSize(QSize(90, 0))
+        self.in_Lewout.setMinimumSize(QSize(150, 0))
 
         self.horizontalLayout_2.addWidget(self.in_Lewout)
 
@@ -169,6 +169,7 @@ class Ui_PCondType12(object):
 
         self.w_out = WCondOut(self.scrollAreaWidgetContents)
         self.w_out.setObjectName(u"w_out")
+        self.w_out.setMinimumSize(QSize(350, 0))
 
         self.verticalLayout.addWidget(self.w_out)
 
