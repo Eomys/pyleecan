@@ -319,6 +319,7 @@ class SWinding(Gen_SWinding, QWidget):
         self.comp_output()
         self.update_graph()
         self.b_plot_mmf.setEnabled(True)
+        self.show_layer_widget()
         # Notify the machine GUI that the machine has changed
         self.saveNeeded.emit()
 
@@ -547,7 +548,7 @@ class SWinding(Gen_SWinding, QWidget):
             ms = str(self.obj.slot.Zs / (wind.p * wind.qs * 2.0))
         except TypeError:  # One of the value is None
             ms = "?"
-        self.out_ms.setText(self.tr("Number of slots/pole/phase: ") + ms)
+        self.out_ms.setText(self.tr("Slots per pole per phase: ") + ms)
         if self.obj.is_stator:
             self.out_ms.setToolTip(self.tr("Zs / (2*p*qs)"))
         else:
