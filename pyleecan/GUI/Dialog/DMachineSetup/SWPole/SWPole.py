@@ -127,8 +127,8 @@ class SWPole(Ui_SWPole, QWidget):
         Zs : int
             The current value of Zs
         """
-        sp_txt = self.tr("Slot pitch = 360 / Zs = ")
-        self.in_Zs.setText("Zs = 2*p = " + str(Zs))
+        sp_txt = self.tr("Slot pitch: 360 / Zs = ")
+        self.in_Zs.setText("Zs: 2*p = " + str(Zs))
 
         if Zs in [None, 0]:
             self.out_Slot_pitch.setText(sp_txt + "?")

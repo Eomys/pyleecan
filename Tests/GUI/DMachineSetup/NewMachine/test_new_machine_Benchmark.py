@@ -152,7 +152,7 @@ class TestNewMachineBenchmark(object):
         assert self.widget.w_step.machine.stator.slot.H2 == pytest.approx(0.02)
         assert (
             self.widget.w_step.out_Slot_pitch.text()
-            == "Slot pitch = 360 / Zs = 30 [°] (0.5236 [rad])"
+            == "Slot pitch: 360 / Zs = 30 [°] (0.5236 [rad])"
         )
         assert (
             self.widget.w_step.w_slot.w_out.out_Wlam.text() == "Stator width: 0.025 [m]"

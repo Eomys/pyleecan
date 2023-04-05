@@ -171,7 +171,7 @@ class TestNewMachinePrius(object):
         assert self.widget.w_step.machine.stator.slot.R1 == pytest.approx(4e-3)
         assert (
             self.widget.w_step.out_Slot_pitch.text()
-            == "Slot pitch = 360 / Zs = 7.5 [°] (0.1309 [rad])"
+            == "Slot pitch: 360 / Zs = 7.5 [°] (0.1309 [rad])"
         )
         assert (
             self.widget.w_step.w_slot.w_out.out_slot_height.text()
@@ -353,7 +353,7 @@ class TestNewMachinePrius(object):
 
         assert (
             self.widget.w_step.out_hole_pitch.text()
-            == "Slot pitch = 360 / 2p = 45 [°] = 0.7854 [rad]"
+            == "Slot pitch: 360 / 2p = 45 [°] = 0.7854 [rad]"
         )
 
         wid_hole = self.widget.w_step.tab_hole.currentWidget()

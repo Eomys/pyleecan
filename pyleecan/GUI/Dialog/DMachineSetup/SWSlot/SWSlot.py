@@ -212,7 +212,7 @@ class SWSlot(Gen_SWSlot, QWidget):
         Zs : int
             The current value of Zs
         """
-        sp_txt = self.tr("Slot pitch = 360 / Zs = ")
+        sp_txt = self.tr("Slot pitch: 360 / Zs = ")
 
         if Zs in [None, 0]:
             self.out_Slot_pitch.setText(sp_txt + "?")

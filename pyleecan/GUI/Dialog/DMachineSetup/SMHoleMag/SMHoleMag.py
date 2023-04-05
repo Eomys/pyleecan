@@ -93,7 +93,7 @@ class SMHoleMag(Ui_SMHoleMag, QWidget):
         Zh : int
             The current value of Zh
         """
-        Zh_txt = self.tr("Slot pitch = 360 / 2p = ")
+        Zh_txt = self.tr("Slot pitch: 360 / 2p = ")
         if Zh in [None, 0]:
             self.out_hole_pitch.setText(Zh_txt + "?")
         else:

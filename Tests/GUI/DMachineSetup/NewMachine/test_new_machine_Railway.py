@@ -162,7 +162,7 @@ class TestNewMachineRailway(object):
         assert self.widget.w_step.machine.stator.slot.H2 == pytest.approx(0.03)
         assert (
             self.widget.w_step.out_Slot_pitch.text()
-            == "Slot pitch = 360 / Zs = 10 [°] (0.1745 [rad])"
+            == "Slot pitch: 360 / Zs = 10 [°] (0.1745 [rad])"
         )
         assert (
             self.widget.w_step.w_slot.w_out.out_Wlam.text()
@@ -219,10 +219,10 @@ class TestNewMachineRailway(object):
         assert isinstance(self.widget.w_step, SWinding)
 
         assert self.widget.w_step.c_wind_type.currentText() == "Star of Slot"
-        assert self.widget.w_step.in_Zs.text() == "Slot number=36"
-        assert self.widget.w_step.in_p.text() == "Pole pair number=3"
+        assert self.widget.w_step.in_Zs.text() == "Slot number: 36"
+        assert self.widget.w_step.in_p.text() == "Pole pair number: 3"
         assert self.widget.w_step.si_qs.value() == 3
-        assert self.widget.w_step.si_Nlayer.value() == 1
+        assert self.widget.w_step.c_layer_def.currentText() == "Single Layer"
         assert self.widget.w_step.si_coil_pitch.value() == 6
         assert self.widget.w_step.si_Ntcoil.value() == 1
         assert self.widget.w_step.si_Npcp.value() == 1
@@ -230,10 +230,8 @@ class TestNewMachineRailway(object):
         assert not self.widget.w_step.is_reverse.isChecked()
         assert not self.widget.w_step.is_permute_B_C.isChecked()
         assert not self.widget.w_step.is_reverse_layer.isChecked()
-        assert not self.widget.w_step.is_change_layer.isChecked()
 
-        self.widget.w_step.si_Nlayer.setValue(2)
-        self.widget.w_step.si_Nlayer.editingFinished.emit()
+        self.widget.w_step.c_layer_def.setCurrentIndex(1)
         self.widget.w_step.si_coil_pitch.setValue(5)
         self.widget.w_step.si_coil_pitch.editingFinished.emit()
         self.widget.w_step.si_Ntcoil.setValue(7)
@@ -243,16 +241,21 @@ class TestNewMachineRailway(object):
 
         self.widget.w_step.b_generate.clicked.emit()
 
-        assert self.widget.w_step.si_Nlayer.value() == 2
+        assert (
+            self.widget.w_step.c_layer_def.currentText() == "Double Layer overlapping"
+        )
         assert self.widget.w_step.si_coil_pitch.value() == 5
         assert self.widget.w_step.si_Ntcoil.value() == 7
         assert self.widget.w_step.si_Npcp.value() == 2
         # TODO BUG find why the Rotation direction does not setup as a CCW rotation (In an imported toyota prius, it does.)
         assert self.widget.w_step.out_rot_dir.text() == "Rotation direction: ?"
-        assert self.widget.w_step.out_ms.text() == "Number of slots/pole/phase: 2.0"
+        assert self.widget.w_step.out_ms.text() == "Slots per pole per phase: 2.0"
         assert self.widget.w_step.out_Nperw.text() == "Winding periodicity: 6"
-        assert self.widget.w_step.out_Ntspc.text() == "Number of turns Ntspc: 42"
-        assert self.widget.w_step.out_Ncspc.text() == "Number of coils Ncspc: 6"
+        assert self.widget.w_step.out_Ntspc.text() == "Turns in series per phase: 42"
+        assert (
+            self.widget.w_step.out_Ncspc.text()
+            == "Coils in series per parallel circuit: 6"
+        )
 
         # Is the stator winding well defined ?
         assert self.widget.w_step.machine.stator.winding.qs == 3
@@ -303,28 +306,27 @@ class TestNewMachineRailway(object):
 
         assert (
             self.widget.w_step.w_cond.w_out.out_Sslot.text()
-            == "Slot surface = 0.0003904 [m²]"
+            == "Slot surface: 0.0003904 [m²]"
         )
         assert (
             self.widget.w_step.w_cond.w_out.out_Saslot.text()
-            == "Slot active surface = 0.00036 [m²]"
+            == "Slot active surface: 0.00036 [m²]"
         )
         assert (
             self.widget.w_step.w_cond.w_out.out_Sact.text()
-            == "Conductor active surface = 2e-05 [m²]"
+            == "Conductor active surface: 2e-05 [m²]"
         )
         assert (
-            self.widget.w_step.w_cond.w_out.out_Ncps.text()
-            == "Nr of conductors per slot = 14"
+            self.widget.w_step.w_cond.w_out.out_Ncps.text() == "Conductors per slot: 14"
         )
-        assert self.widget.w_step.w_cond.w_out.out_K.text() == "Fill factor = 77.78 %"
+        assert self.widget.w_step.w_cond.w_out.out_K.text() == "Fill factor: 77.78 %"
         assert (
             self.widget.w_step.w_cond.w_out.out_MLT.text()
-            == "Mean Length Turn = 1.317 [m]"
+            == "Mean Length Turn: 1.317 [m]"
         )
         assert (
             self.widget.w_step.w_cond.w_out.out_Rwind.text()
-            == "Winding resistance at 20°C = 0.02392 [Ohm]"
+            == "Winding resistance at 20°C: 0.024 [Ohm]"
         )
 
         # Is the stator winding conductors well defined ?
@@ -371,7 +373,7 @@ class TestNewMachineRailway(object):
         assert self.widget.w_step.machine.rotor.slot.H2 == pytest.approx(0.02)
         assert (
             self.widget.w_step.out_Slot_pitch.text()
-            == "Slot pitch = 360 / Zs = 12.86 [°] (0.2244 [rad])"
+            == "Slot pitch: 360 / Zs = 12.86 [°] (0.2244 [rad])"
         )
         assert (
             self.widget.w_step.w_slot.w_out.out_Wlam.text() == "Rotor width: 0.086 [m]"

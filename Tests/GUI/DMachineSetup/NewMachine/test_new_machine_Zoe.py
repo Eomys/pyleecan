@@ -164,7 +164,7 @@ class TestNewMachineZoe(object):
         assert self.widget.w_step.machine.stator.slot.R1 == pytest.approx(0.002)
         assert (
             self.widget.w_step.out_Slot_pitch.text()
-            == "Slot pitch = 360 / Zs = 7.5 [°] (0.1309 [rad])"
+            == "Slot pitch: 360 / Zs = 7.5 [°] (0.1309 [rad])"
         )
         assert (
             self.widget.w_step.w_slot.w_out.out_Wlam.text()
@@ -363,7 +363,7 @@ class TestNewMachineZoe(object):
 
         assert (
             self.widget.w_step.out_Slot_pitch.text()
-            == "Slot pitch = 360 / Zs = 90 [°] (1.571 [rad])"
+            == "Slot pitch: 360 / Zs = 90 [°] (1.571 [rad])"
         )
 
         assert self.widget.w_step.c_slot_type.count() == 2
