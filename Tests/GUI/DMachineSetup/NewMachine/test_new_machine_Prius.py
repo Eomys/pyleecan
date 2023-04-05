@@ -224,10 +224,10 @@ class TestNewMachinePrius(object):
         assert isinstance(self.widget.w_step, SWinding)
 
         assert self.widget.w_step.c_wind_type.currentText() == "Star of Slot"
-        assert self.widget.w_step.in_Zs.text() == "Slot number=48"
-        assert self.widget.w_step.in_p.text() == "Pole pair number=4"
+        assert self.widget.w_step.in_Zs.text() == "Slot number: 48"
+        assert self.widget.w_step.in_p.text() == "Pole pair number: 4"
         assert self.widget.w_step.si_qs.value() == 3
-        assert self.widget.w_step.si_Nlayer.value() == 1
+        assert self.widget.w_step.c_layer_def.currentText() == "Single Layer"
         assert self.widget.w_step.si_coil_pitch.value() == 6
         assert self.widget.w_step.si_Ntcoil.value() == 1
         assert self.widget.w_step.si_Npcp.value() == 1
@@ -242,10 +242,13 @@ class TestNewMachinePrius(object):
 
         assert self.widget.w_step.si_Ntcoil.value() == 9
         assert self.widget.w_step.out_rot_dir.text() == "Rotation direction: CCW"
-        assert self.widget.w_step.out_ms.text() == "Number of slots/pole/phase: 2.0"
+        assert self.widget.w_step.out_ms.text() == "Slots per pole per phase: 2.0"
         assert self.widget.w_step.out_Nperw.text() == "Winding periodicity: 8"
-        assert self.widget.w_step.out_Ntspc.text() == "Number of turns Ntspc: 72"
-        assert self.widget.w_step.out_Ncspc.text() == "Number of coils Ncspc: 8"
+        assert self.widget.w_step.out_Ntspc.text() == "Turns in series per phase: 72"
+        assert (
+            self.widget.w_step.out_Ncspc.text()
+            == "Coils in series per parallel circuit: 8"
+        )
 
         # Is the stator winding well defined ?
         assert self.widget.w_step.machine.stator.winding.qs == 3
@@ -309,28 +312,27 @@ class TestNewMachinePrius(object):
 
         assert (
             self.widget.w_step.w_cond.w_out.out_Sslot.text()
-            == "Slot surface = 0.0002175 [m²]"
+            == "Slot surface: 0.0002175 [m²]"
         )
         assert (
             self.widget.w_step.w_cond.w_out.out_Saslot.text()
-            == "Slot active surface = 0.0002156 [m²]"
+            == "Slot active surface: 0.0002156 [m²]"
         )
         assert (
             self.widget.w_step.w_cond.w_out.out_Sact.text()
-            == "Conductor active surface = 8.492e-06 [m²]"
+            == "Conductor active surface: 8.492e-06 [m²]"
         )
         assert (
-            self.widget.w_step.w_cond.w_out.out_Ncps.text()
-            == "Nr of conductors per slot = 9"
+            self.widget.w_step.w_cond.w_out.out_Ncps.text() == "Conductors per slot: 9"
         )
-        assert self.widget.w_step.w_cond.w_out.out_K.text() == "Fill factor = 35.45 %"
+        assert self.widget.w_step.w_cond.w_out.out_K.text() == "Fill factor: 35.45 %"
         assert (
             self.widget.w_step.w_cond.w_out.out_MLT.text()
-            == "Mean Length Turn = 0.2451 [m]"
+            == "Mean Length Turn: 0.2451 [m]"
         )
         assert (
             self.widget.w_step.w_cond.w_out.out_Rwind.text()
-            == "Winding resistance at 20°C = 0.03595 [Ohm]"
+            == "Winding resistance at 20°C: 0.036 [Ohm]"
         )
 
         # Is the stator winding conductors well defined ?
