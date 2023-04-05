@@ -134,7 +134,7 @@ class TestSWinding(object):
         self.widget.b_generate.clicked.emit()
         assert self.widget.obj.winding.wind_mat.shape == (2, 1, 36, 3)
         assert self.widget.out_rot_dir.text() == "Rotation direction: CCW"
-        assert self.widget.out_ms.text() == "Number of slots/pole/phase: 2.0"
+        assert self.widget.out_ms.text() == "Slots per pole per phase: 2.0"
         assert self.widget.out_Nperw.text() == "Winding periodicity: 6"
         assert self.widget.out_Ncspc.text() == "Coils in series per parallel circuit: 6"
         assert self.widget.out_Ntspc.text() == "Turns in series per phase: 54"
@@ -186,11 +186,11 @@ class TestSWinding(object):
         assert self.test_obj.stator.winding.is_permute_B_C
 
     @pytest.mark.SCIM
-    def test_set_is_change_layer(self):
-        """Check that the Widget allow to update is_change_layer"""
-        self.widget.is_change_layer.setCheckState(Qt.Unchecked)
+    def test_set_c_layer_def(self):
+        """Check that the Widget allow to update layer definition"""
+        self.widget.c_layer_def.setCurrentIndex(1)
         assert not self.test_obj.stator.winding.is_change_layer
-        self.widget.is_change_layer.setCheckState(Qt.Checked)
+        self.widget.c_layer_def.setCurrentIndex(2)
         assert self.test_obj.stator.winding.is_change_layer
 
     @pytest.mark.SCIM
@@ -227,12 +227,12 @@ if __name__ == "__main__":
     a.setup_method()
     # a.test_init()
     # a.test_set_wind_type()
-    a.test_generate()
+    # a.test_generate()
     # a.test_export_import()
     # a.test_set_is_reverse()
     # a.test_set_is_reverse_layer()
     # a.test_set_is_permute_B_C()
-    # a.test_set_is_change_layer()
+    a.test_set_is_change_layer()
     # a.test_set_Nslot()
     # a.test_set_Npcp()
     # a.test_check()
