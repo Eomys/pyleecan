@@ -208,10 +208,10 @@ class TestNewMachineBenchmark(object):
         assert isinstance(self.widget.w_step, SWinding)
 
         assert self.widget.w_step.c_wind_type.currentText() == "Star of Slot"
-        assert self.widget.w_step.in_Zs.text() == "Slot number=12"
-        assert self.widget.w_step.in_p.text() == "Pole pair number=5"
+        assert self.widget.w_step.in_Zs.text() == "Slot number: 12"
+        assert self.widget.w_step.in_p.text() == "Pole pair number: 5"
         assert self.widget.w_step.si_qs.value() == 3
-        assert self.widget.w_step.si_Nlayer.value() == 1
+        assert self.widget.w_step.c_layer_def.currentText() == "Single Layer"
         assert self.widget.w_step.si_coil_pitch.value() == 1
         assert self.widget.w_step.si_Ntcoil.value() == 1
         assert self.widget.w_step.si_Npcp.value() == 1
@@ -219,20 +219,24 @@ class TestNewMachineBenchmark(object):
         assert not self.widget.w_step.is_reverse.isChecked()
         assert not self.widget.w_step.is_permute_B_C.isChecked()
         assert not self.widget.w_step.is_reverse_layer.isChecked()
-        assert not self.widget.w_step.is_change_layer.isChecked()
 
-        self.widget.w_step.si_Nlayer.setValue(2)
-        self.widget.w_step.si_Nlayer.editingFinished.emit()
+        self.widget.w_step.c_layer_def.setCurrentIndex(2)
 
         self.widget.w_step.b_generate.clicked.emit()
 
-        assert self.widget.w_step.si_Nlayer.value() == 2
+        assert (
+            self.widget.w_step.c_layer_def.currentText()
+            == "Double Layer non-overlapping"
+        )
         # TODO BUG find why the Rotation direction does not setup as a CCW rotation (In an imported Benchmark, it does.)
         assert self.widget.w_step.out_rot_dir.text() == "Rotation direction: ?"
-        assert self.widget.w_step.out_ms.text() == "Number of slots/pole/phase: 0.4"
+        assert self.widget.w_step.out_ms.text() == "Slots per pole per phase: 0.4"
         assert self.widget.w_step.out_Nperw.text() == "Winding periodicity: 2"
-        assert self.widget.w_step.out_Ntspc.text() == "Number of turns Ntspc: 4"
-        assert self.widget.w_step.out_Ncspc.text() == "Number of coils Ncspc: 4"
+        assert self.widget.w_step.out_Ntspc.text() == "Turns in series per phase: 4"
+        assert (
+            self.widget.w_step.out_Ncspc.text()
+            == "Coils in series per parallel circuit: 4"
+        )
 
         # Is the stator winding well defined ?
         assert self.widget.w_step.machine.stator.winding.qs == 3
@@ -283,28 +287,27 @@ class TestNewMachineBenchmark(object):
 
         assert (
             self.widget.w_step.w_cond.w_out.out_Sslot.text()
-            == "Slot surface = 0.0003645 [m²]"
+            == "Slot surface: 0.0003645 [m²]"
         )
         assert (
             self.widget.w_step.w_cond.w_out.out_Saslot.text()
-            == "Slot active surface = 0.0003645 [m²]"
+            == "Slot active surface: 0.0003645 [m²]"
         )
         assert (
             self.widget.w_step.w_cond.w_out.out_Sact.text()
-            == "Conductor active surface = 5e-05 [m²]"
+            == "Conductor active surface: 5e-05 [m²]"
         )
         assert (
-            self.widget.w_step.w_cond.w_out.out_Ncps.text()
-            == "Nr of conductors per slot = 2"
+            self.widget.w_step.w_cond.w_out.out_Ncps.text() == "Conductors per slot: 2"
         )
-        assert self.widget.w_step.w_cond.w_out.out_K.text() == "Fill factor = 27.44 %"
+        assert self.widget.w_step.w_cond.w_out.out_K.text() == "Fill factor: 27.44 %"
         assert (
             self.widget.w_step.w_cond.w_out.out_MLT.text()
-            == "Mean Length Turn = 0.28 [m]"
+            == "Mean Length Turn: 0.28 [m]"
         )
         assert (
             self.widget.w_step.w_cond.w_out.out_Rwind.text()
-            == "Winding resistance at 20°C = 0.0003875 [Ohm]"
+            == "Winding resistance at 20°C: 0.00039 [Ohm]"
         )
 
         # Is the stator winding conductors well defined ?
