@@ -221,10 +221,10 @@ class TestNewMachineZoe(object):
         assert isinstance(self.widget.w_step, SWinding)
 
         assert self.widget.w_step.c_wind_type.currentText() == "Star of Slot"
-        assert self.widget.w_step.in_Zs.text() == "Slot number=48"
-        assert self.widget.w_step.in_p.text() == "Pole pair number=2"
+        assert self.widget.w_step.in_Zs.text() == "Slot number: 48"
+        assert self.widget.w_step.in_p.text() == "Pole pair number: 2"
         assert self.widget.w_step.si_qs.value() == 3
-        assert self.widget.w_step.si_Nlayer.value() == 1
+        assert self.widget.w_step.c_layer_def.currentText() == "Single Layer"
         assert self.widget.w_step.si_coil_pitch.value() == 12
         assert self.widget.w_step.si_Ntcoil.value() == 1
         assert self.widget.w_step.si_Npcp.value() == 1
@@ -232,10 +232,8 @@ class TestNewMachineZoe(object):
         assert not self.widget.w_step.is_reverse.isChecked()
         assert not self.widget.w_step.is_permute_B_C.isChecked()
         assert not self.widget.w_step.is_reverse_layer.isChecked()
-        assert not self.widget.w_step.is_change_layer.isChecked()
 
-        self.widget.w_step.si_Nlayer.setValue(2)
-        self.widget.w_step.si_Nlayer.editingFinished.emit()
+        self.widget.w_step.c_layer_def.setCurrentIndex(1)
         self.widget.w_step.si_coil_pitch.setValue(10)
         self.widget.w_step.si_coil_pitch.editingFinished.emit()
         self.widget.w_step.si_Ntcoil.setValue(10)
@@ -245,16 +243,21 @@ class TestNewMachineZoe(object):
 
         self.widget.w_step.b_generate.clicked.emit()
 
-        assert self.widget.w_step.si_Nlayer.value() == 2
+        assert (
+            self.widget.w_step.c_layer_def.currentText() == "Double Layer overlapping"
+        )
         assert self.widget.w_step.si_coil_pitch.value() == 10
         assert self.widget.w_step.si_Ntcoil.value() == 10
         assert self.widget.w_step.si_Npcp.value() == 4
         # TODO BUG find why the Rotation direction does not setup as a CCW rotation (In an imported Zoé, it does.)
         assert self.widget.w_step.out_rot_dir.text() == "Rotation direction: ?"
-        assert self.widget.w_step.out_ms.text() == "Number of slots/pole/phase: 4.0"
+        assert self.widget.w_step.out_ms.text() == "Slots per pole per phase: 4.0"
         assert self.widget.w_step.out_Nperw.text() == "Winding periodicity: 4"
-        assert self.widget.w_step.out_Ntspc.text() == "Number of turns Ntspc: 40"
-        assert self.widget.w_step.out_Ncspc.text() == "Number of coils Ncspc: 4"
+        assert self.widget.w_step.out_Ntspc.text() == "Turns in series per phase: 40"
+        assert (
+            self.widget.w_step.out_Ncspc.text()
+            == "Coils in series per parallel circuit: 4"
+        )
 
         # Is the stator winding well defined ?
         assert self.widget.w_step.machine.stator.winding.qs == 3
@@ -320,28 +323,27 @@ class TestNewMachineZoe(object):
 
         assert (
             self.widget.w_step.w_cond.w_out.out_Sslot.text()
-            == "Slot surface = 0.0001673 [m²]"
+            == "Slot surface: 0.0001673 [m²]"
         )
         assert (
             self.widget.w_step.w_cond.w_out.out_Saslot.text()
-            == "Slot active surface = 0.0001629 [m²]"
+            == "Slot active surface: 0.0001629 [m²]"
         )
         assert (
             self.widget.w_step.w_cond.w_out.out_Sact.text()
-            == "Conductor active surface = 3.142e-06 [m²]"
+            == "Conductor active surface: 3.142e-06 [m²]"
         )
         assert (
-            self.widget.w_step.w_cond.w_out.out_Ncps.text()
-            == "Nr of conductors per slot = 20"
+            self.widget.w_step.w_cond.w_out.out_Ncps.text() == "Conductors per slot: 20"
         )
-        assert self.widget.w_step.w_cond.w_out.out_K.text() == "Fill factor = 38.56 %"
+        assert self.widget.w_step.w_cond.w_out.out_K.text() == "Fill factor: 38.56 %"
         assert (
             self.widget.w_step.w_cond.w_out.out_MLT.text()
-            == "Mean Length Turn = 0.34 [m]"
+            == "Mean Length Turn: 0.34 [m]"
         )
         assert (
             self.widget.w_step.w_cond.w_out.out_Rwind.text()
-            == "Winding resistance at 20°C = 0.01872 [Ohm]"
+            == "Winding resistance at 20°C: 0.019 [Ohm]"
         )
 
         # Is the stator winding conductors well defined ?
@@ -437,11 +439,14 @@ class TestNewMachineZoe(object):
         assert isinstance(self.widget.w_step, SWinding)
 
         assert self.widget.w_step.c_wind_type.currentText() == "Star of Slot"
-        assert self.widget.w_step.in_p.text() == "Pole pair number=2"
+        assert self.widget.w_step.in_p.text() == "Pole pair number: 2"
         assert self.widget.w_step.si_qs.value() == 1
         assert not self.widget.w_step.si_qs.isEnabled()
-        assert self.widget.w_step.si_Nlayer.value() == 2
-        assert not self.widget.w_step.si_Nlayer.isEnabled()
+        assert (
+            self.widget.w_step.c_layer_def.currentText()
+            == "Double Layer non-overlapping"
+        )
+        assert not self.widget.w_step.c_layer_def.isEnabled()
         assert self.widget.w_step.si_coil_pitch.value() == 1
         assert not self.widget.w_step.si_coil_pitch.isEnabled()
         assert self.widget.w_step.si_Ntcoil.value() == 1
@@ -450,7 +455,6 @@ class TestNewMachineZoe(object):
         assert not self.widget.w_step.is_reverse.isChecked()
         assert not self.widget.w_step.is_permute_B_C.isChecked()
         assert not self.widget.w_step.is_reverse_layer.isChecked()
-        assert not self.widget.w_step.is_change_layer.isChecked()
 
         self.widget.w_step.si_Ntcoil.setValue(45)
         self.widget.w_step.si_Ntcoil.editingFinished.emit()
@@ -459,10 +463,13 @@ class TestNewMachineZoe(object):
 
         assert self.widget.w_step.si_Ntcoil.value() == 45
         assert self.widget.w_step.out_rot_dir.text() == "Rotation direction: CW"
-        assert self.widget.w_step.out_ms.text() == "Number of slots/pole/phase: 1.0"
+        assert self.widget.w_step.out_ms.text() == "Slots per pole per phase: 1.0"
         assert self.widget.w_step.out_Nperw.text() == "Winding periodicity: 4"
-        assert self.widget.w_step.out_Ntspc.text() == "Number of turns Ntspc: 180"
-        assert self.widget.w_step.out_Ncspc.text() == "Number of coils Ncspc: 4"
+        assert self.widget.w_step.out_Ntspc.text() == "Turns in series per phase: 180"
+        assert (
+            self.widget.w_step.out_Ncspc.text()
+            == "Coils in series per parallel circuit: 4"
+        )
 
         # Is the rotor winding well defined ?
         assert self.widget.w_step.machine.rotor.winding.qs == 1
@@ -517,28 +524,27 @@ class TestNewMachineZoe(object):
 
         assert (
             self.widget.w_step.w_cond.w_out.out_Sslot.text()
-            == "Slot surface = 0.001539 [m²]"
+            == "Slot surface: 0.001539 [m²]"
         )
         assert (
             self.widget.w_step.w_cond.w_out.out_Saslot.text()
-            == "Slot active surface = 0.0005807 [m²]"
+            == "Slot active surface: 0.0005807 [m²]"
         )
         assert (
             self.widget.w_step.w_cond.w_out.out_Sact.text()
-            == "Conductor active surface = 4e-06 [m²]"
+            == "Conductor active surface: 4e-06 [m²]"
         )
         assert (
-            self.widget.w_step.w_cond.w_out.out_Ncps.text()
-            == "Nr of conductors per slot = 90"
+            self.widget.w_step.w_cond.w_out.out_Ncps.text() == "Conductors per slot: 90"
         )
-        assert self.widget.w_step.w_cond.w_out.out_K.text() == "Fill factor = 62.00 %"
+        assert self.widget.w_step.w_cond.w_out.out_K.text() == "Fill factor: 62.00 %"
         assert (
             self.widget.w_step.w_cond.w_out.out_MLT.text()
-            == "Mean Length Turn = 0.34 [m]"
+            == "Mean Length Turn: 0.34 [m]"
         )
         assert (
             self.widget.w_step.w_cond.w_out.out_Rwind.text()
-            == "Winding resistance at 20°C = 0.3366 [Ohm]"
+            == "Winding resistance at 20°C: 0.34 [Ohm]"
         )
 
         # Is the stator winding conductors well defined ?
