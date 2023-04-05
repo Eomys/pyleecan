@@ -109,6 +109,8 @@ class TestSWindCond(object):
         self.widget.w_cond.si_Nwpc1_rad.editingFinished.emit()
 
         assert self.test_obj.stator.winding.conductor.Nwppc_rad == value
+        assert self.widget.w_cond.in_Wwire.text() == "Strand width"
+        assert self.widget.w_cond.w_mat_0.title() == "Strand material"
 
     @pytest.mark.SCIM
     def test_set_si_Nwpc1_tan(self):
@@ -120,6 +122,8 @@ class TestSWindCond(object):
         self.widget.w_cond.si_Nwpc1_tan.editingFinished.emit()
 
         assert self.test_obj.stator.winding.conductor.Nwppc_tan == value
+        assert self.widget.w_cond.in_Wwire.text() == "Strand width"
+        assert self.widget.w_cond.w_mat_0.title() == "Strand material"
 
     @pytest.mark.SCIM
     def test_set_si_Nwpc1(self):
@@ -131,6 +135,9 @@ class TestSWindCond(object):
         self.widget2.w_cond.si_Nwpc1.editingFinished.emit()
 
         assert self.test_obj.rotor.winding.conductor.Nwppc == value
+        assert self.widget2.w_cond.in_Wwire.text() == "Strand diameter"
+        assert self.widget2.w_cond.w_mat_0.title() == "Strand material"
+        assert not self.widget2.w_cond.lf_Wins_cond.isHidden()
 
     @pytest.mark.SCIM
     def test_set_Wins_wire(self):
@@ -141,7 +148,7 @@ class TestSWindCond(object):
         QTest.keyClicks(self.widget.w_cond.lf_Wins_wire, str(value))
         self.widget.w_cond.lf_Wins_wire.editingFinished.emit()  # To trigger the slot
 
-        assert self.test_obj.stator.winding.conductor.Wins_wire == value * 1e-3
+        assert self.test_obj.stator.winding.conductor.Wins_wire == value
 
         # Clear the field before writing the new value
         self.widget2.w_cond.lf_Wins_wire.clear()
@@ -149,7 +156,7 @@ class TestSWindCond(object):
         QTest.keyClicks(self.widget2.w_cond.lf_Wins_wire, str(value))
         self.widget2.w_cond.lf_Wins_wire.editingFinished.emit()  # To trigger the slot
 
-        assert self.test_obj.rotor.winding.conductor.Wins_wire == value * 1e-3
+        assert self.test_obj.rotor.winding.conductor.Wins_wire == value
 
     @pytest.mark.SCIM
     def test_set_Wwire(self):
@@ -160,7 +167,7 @@ class TestSWindCond(object):
         QTest.keyClicks(self.widget.w_cond.lf_Wwire, str(value))
         self.widget.w_cond.lf_Wwire.editingFinished.emit()  # To trigger the slot
 
-        assert self.test_obj.stator.winding.conductor.Wwire == value * 1e-3
+        assert self.test_obj.stator.winding.conductor.Wwire == value
 
         # Clear the field before writing the new value
         self.widget2.w_cond.lf_Wwire.clear()
@@ -168,7 +175,7 @@ class TestSWindCond(object):
         QTest.keyClicks(self.widget2.w_cond.lf_Wwire, str(value))
         self.widget2.w_cond.lf_Wwire.editingFinished.emit()  # To trigger the slot
 
-        assert self.test_obj.rotor.winding.conductor.Wwire == value * 1e-3
+        assert self.test_obj.rotor.winding.conductor.Wwire == value
 
     @pytest.mark.SCIM
     def test_set_Lewout(self):
@@ -179,7 +186,7 @@ class TestSWindCond(object):
         QTest.keyClicks(self.widget.w_cond.lf_Lewout, str(value))
         self.widget.w_cond.lf_Lewout.editingFinished.emit()  # To trigger the slot
 
-        assert self.test_obj.stator.winding.Lewout == value * 1e-3
+        assert self.test_obj.stator.winding.Lewout == value
 
         # Clear the field before writing the new value
         self.widget2.w_cond.lf_Lewout.clear()
@@ -187,7 +194,7 @@ class TestSWindCond(object):
         QTest.keyClicks(self.widget2.w_cond.lf_Lewout, str(value))
         self.widget2.w_cond.lf_Lewout.editingFinished.emit()  # To trigger the slot
 
-        assert self.test_obj.rotor.winding.Lewout == value * 1e-3
+        assert self.test_obj.rotor.winding.Lewout == value
 
     @pytest.mark.SCIM
     def test_set_Wins_cond(self):
@@ -199,7 +206,7 @@ class TestSWindCond(object):
         # To trigger the slot
         self.widget2.w_cond.lf_Wins_cond.editingFinished.emit()
 
-        assert self.test_obj.rotor.winding.conductor.Wins_cond == value * 1e-3
+        assert self.test_obj.rotor.winding.conductor.Wins_cond == value
 
     @pytest.mark.SCIM
     def test_set_cond_type(self):
@@ -277,7 +284,9 @@ if __name__ == "__main__":
     # a.test_set_Wins_cond()
     # a.test_check()
     # a.test_init_PCondType12()
-    a.test_check_PCondType12()
+    # a.test_check_PCondType12()
     # a.test_set_si_Nwpc1_rad()
+    # a.test_set_si_Nwpc1_tan()
+    a.test_set_si_Nwpc1()
     a.teardown_class()
     print("Done")
