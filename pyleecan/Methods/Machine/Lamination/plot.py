@@ -24,6 +24,7 @@ def plot(
     is_add_arrow=False,
     is_show_fig=True,
     save_path=None,
+    is_winding_connection=False,
 ):
     """Plot the Lamination in a matplotlib fig
 
