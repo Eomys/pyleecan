@@ -150,12 +150,14 @@ class PCondType11(Gen_PCondType11, QWidget):
             self.img_cond.setPixmap(
                 QPixmap(u":/images/images/MachineSetup/WindParam/CondType11.png")
             )
+            self.w_mat_0.setText("Strand material")
         else:
             self.in_Wwire.setText("Conductor width")
             self.in_Hwire.setText("Conductor height")
             self.img_cond.setPixmap(
                 QPixmap(u":/images/images/MachineSetup/WindParam/CondType11_single.png")
             )
+            self.w_mat_0.setText("Conductor material")
         self.w_out.comp_output()
         # Notify the machine GUI that the machine has changed
         self.saveNeeded.emit()

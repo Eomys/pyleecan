@@ -124,12 +124,23 @@ class PCondType12(Gen_PCondType12, QWidget):
             self.unit_Wins_wire.show()
             self.w_mat_1.show()
             self.set_Wins_wire()
+            if self.si_Nwpc1.value() > 1:
+                self.in_Wins_cond.show()
+                self.lf_Wins_cond.show()
+                self.unit_Wins_cond.show()
+            else:
+                self.in_Wins_cond.hide()
+                self.lf_Wins_cond.hide()
+                self.unit_Wins_cond.hide()
         else:
             self.in_Wins_wire.hide()
             self.lf_Wins_wire.hide()
             self.unit_Wins_wire.hide()
             self.w_mat_1.hide()
-            self.set_Wins_wire(Wins_wire=0)
+            self.set_Wins_wire(Wins_wire=None)
+            self.in_Wins_cond.hide()
+            self.lf_Wins_cond.hide()
+            self.unit_Wins_cond.hide()
 
     def set_Nwppc(self):
         """Signal to update the value of Nwppc according to the line edit
@@ -145,17 +156,21 @@ class PCondType12(Gen_PCondType12, QWidget):
             self.img_cond.setPixmap(
                 QPixmap(u":/images/images/MachineSetup/WindParam/CondType12.png")
             )
-            self.in_Wins_cond.show()
-            self.lf_Wins_cond.show()
-            self.unit_Wins_cond.show()
+            self.w_mat_0.setText("Strand material")
+            if self.g_ins.isChecked():
+                self.in_Wins_cond.show()
+                self.lf_Wins_cond.show()
+                self.unit_Wins_cond.show()
         else:
             self.in_Wwire.setText("Conductor diameter")
             self.img_cond.setPixmap(
                 QPixmap(u":/images/images/MachineSetup/WindParam/CondType12_single.png")
             )
-            self.in_Wins_cond.hide()
-            self.lf_Wins_cond.hide()
-            self.unit_Wins_cond.hide()
+            self.w_mat_0.setText("Conductor material")
+            if self.g_ins.isChecked():
+                self.in_Wins_cond.hide()
+                self.lf_Wins_cond.hide()
+                self.unit_Wins_cond.hide()
         self.w_out.comp_output()
         # Notify the machine GUI that the machine has changed
         self.saveNeeded.emit()
@@ -242,9 +257,9 @@ class PCondType12(Gen_PCondType12, QWidget):
                 return "Conductor diameter must be set"
         elif cond.Wins_wire is None:
             return "Insulator thickness must be set"
-        elif cond.Nwppc > 1 and cond.Wins_cond is None:
-            return "Conductor diameter must be set"
+        elif cond.Wins_wire is not None and cond.Nwppc > 1 and cond.Wins_cond is None:
+            return "Overall diameter must be set"
         elif cond.Wins_cond is not None and cond.Wins_cond < cond.Wwire:
-            return "Conductor diameter must be larger than strand diameter"
+            return "Overall diameter must be larger than strand diameter"
         elif lam.winding.Lewout is None:
             return "End winding length must be set"
