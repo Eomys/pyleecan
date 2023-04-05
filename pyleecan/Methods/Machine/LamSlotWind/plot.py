@@ -396,15 +396,17 @@ def plot(
                     label_leg.append(prefix + "Bar")
                 elif self.winding is not None:
                     if is_add_sign:
-                        # Adding + and - in the legend as separate patch
-                        patch_leg.append(Patch(color="w", hatch=PLUS_HATCH))
-                        patch_leg[-1].set_edgecolor("k")
-                        label_leg.append("Phase +")
+                        if "Phase +" not in label_leg:
+                            # Adding + and - in the legend as separate patch
+                            patch_leg.append(Patch(color="w", hatch=PLUS_HATCH))
+                            patch_leg[-1].set_edgecolor("k")
+                            label_leg.append("Phase +")
 
-                        # Adding + and - legend
-                        patch_leg.append(Patch(color="w", hatch=MINUS_HATCH))
-                        patch_leg[-1].set_edgecolor("k")
-                        label_leg.append("Phase -")
+                        if "Phase -" not in label_leg:
+                            # Adding + and - legend
+                            patch_leg.append(Patch(color="w", hatch=MINUS_HATCH))
+                            patch_leg[-1].set_edgecolor("k")
+                            label_leg.append("Phase -")
 
                     phase_name = [prefix + n for n in gen_name(qs, is_add_phase=True)]
                     for ii in range(qs):
