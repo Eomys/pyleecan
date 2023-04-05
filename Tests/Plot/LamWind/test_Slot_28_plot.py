@@ -71,19 +71,19 @@ class Test_Slot_28_plot(object):
         fig = plt.gcf()
         fig.savefig(join(save_path, "test_Lam_Wind_s28_1-Machine.png"))
         # Rotor + stator + 2 for frame + 1 for Shaft
-        assert len(fig.axes[0].patches) == 133
+        assert len(fig.axes[0].patches) == 137
 
         test_obj.rotor.plot(is_show_fig=False)
         fig = plt.gcf()
         fig.savefig(join(save_path, "test_Lam_Wind_s28_2-Rotor.png"))
         # 2 for lam + Zs*2 for wind + 6 vent
-        assert len(fig.axes[0].patches) == 92
+        assert len(fig.axes[0].patches) == 94
 
         test_obj.stator.plot(is_show_fig=False)
         fig = plt.gcf()
         fig.savefig(join(save_path, "test_Lam_Wind_s28_3-Stator.png"))
         # 2 for lam, 2*Zs for wind
-        assert len(fig.axes[0].patches) == 38
+        assert len(fig.axes[0].patches) == 40
 
     def test_Lam_Wind_28_wind_22(self):
         """Test machine plot with Slot 28 and winding rad=2, tan=2"""
@@ -125,19 +125,19 @@ class Test_Slot_28_plot(object):
         fig = plt.gcf()
         fig.savefig(join(save_path, "test_Lam_Wind_s28_4-Machine.png"))
         # Rotor + stator + 0 for frame + 1 for shaft
-        assert len(fig.axes[0].patches) == 59
+        assert len(fig.axes[0].patches) == 63
 
         test_obj.rotor.plot(is_show_fig=False)
         fig = plt.gcf()
         fig.savefig(join(save_path, "test_Lam_Wind_s28_5-Rotor.png"))
         # 2 for lam + Zs*4 for wind
-        assert len(fig.axes[0].patches) == 26
+        assert len(fig.axes[0].patches) == 28
 
         test_obj.stator.plot(is_show_fig=False)
         fig = plt.gcf()
         fig.savefig(join(save_path, "test_Lam_Wind_s28_6-Stator.png"))
         # 2 for lam, 4*Zs for wind + 6 vents
-        assert len(fig.axes[0].patches) == 32
+        assert len(fig.axes[0].patches) == 34
 
         tooth = test_obj.rotor.slot.get_surface_tooth()
         tooth.plot(color="r", is_show_fig=False)

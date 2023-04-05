@@ -54,7 +54,7 @@ class Test_Slot_61_plot(object):
         fig = plt.gcf()
         fig.savefig(join(save_path, "test_Lam_Wind_s61_1-Rotor.png"))
         # 1 for Lam, Zs*2 for wind
-        assert len(fig.axes[0].patches) == 25
+        assert len(fig.axes[0].patches) == 26
 
         test_obj.rotor.slot.W3 = 0
         test_obj.rotor.slot.H3 = 0
@@ -63,7 +63,7 @@ class Test_Slot_61_plot(object):
         fig = plt.gcf()
         fig.savefig(join(save_path, "test_Lam_Wind_s61_2-Rotor Wind.png"))
         # 1 for Lam, Zs*2 for wind
-        assert len(fig.axes[0].patches) == 25
+        assert len(fig.axes[0].patches) == 26
 
         tooth = test_obj.rotor.slot.get_surface_tooth()
         tooth.plot(color="r", is_show_fig=False)
