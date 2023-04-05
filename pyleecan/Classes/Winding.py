@@ -910,7 +910,7 @@ class Winding(FrozenClass):
     Nslot_shift_wind = property(
         fget=_get_Nslot_shift_wind,
         fset=_set_Nslot_shift_wind,
-        doc=u"""0 not to change the stator winding connection matrix built by pyleecan number of slots to shift the coils obtained with pyleecan winding algorithm (a, b, c becomes b, c, a with Nslot_shift_wind1=1)
+        doc=u"""Number of slots to shift the coils obtained with pyleecan winding algorithm (a, b, c becomes b, c, a with Nslot_shift_wind=1)
 
         :Type: int
         """,
@@ -1080,7 +1080,7 @@ class Winding(FrozenClass):
     coil_pitch = property(
         fget=_get_coil_pitch,
         fset=_set_coil_pitch,
-        doc=u"""Coil pitch (or coil span)
+        doc=u"""Distance (in slot) between a conductor of a certain phase and the corresponding return conductor
 
         :Type: int
         """,
@@ -1123,7 +1123,7 @@ class Winding(FrozenClass):
     Nlayer = property(
         fget=_get_Nlayer,
         fset=_set_Nlayer,
-        doc=u"""Number of layers per slots
+        doc=u"""Number of different coils in a slot
 
         :Type: int
         :min: 1

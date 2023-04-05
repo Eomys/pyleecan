@@ -42,14 +42,14 @@ class Ui_PCondType11(object):
         self.scrollArea.setWidgetResizable(True)
         self.scrollAreaWidgetContents = QWidget()
         self.scrollAreaWidgetContents.setObjectName(u"scrollAreaWidgetContents")
-        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 348, 559))
+        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 372, 542))
         self.verticalLayout = QVBoxLayout(self.scrollAreaWidgetContents)
         self.verticalLayout.setObjectName(u"verticalLayout")
         self.gridLayout_2 = QGridLayout()
         self.gridLayout_2.setObjectName(u"gridLayout_2")
         self.in_Nwpc1_rad = QLabel(self.scrollAreaWidgetContents)
         self.in_Nwpc1_rad.setObjectName(u"in_Nwpc1_rad")
-        self.in_Nwpc1_rad.setMinimumSize(QSize(90, 0))
+        self.in_Nwpc1_rad.setMinimumSize(QSize(200, 0))
 
         self.gridLayout_2.addWidget(self.in_Nwpc1_rad, 0, 0, 1, 1)
 
@@ -66,7 +66,7 @@ class Ui_PCondType11(object):
 
         self.in_Nwpc1_tan = QLabel(self.scrollAreaWidgetContents)
         self.in_Nwpc1_tan.setObjectName(u"in_Nwpc1_tan")
-        self.in_Nwpc1_tan.setMinimumSize(QSize(90, 0))
+        self.in_Nwpc1_tan.setMinimumSize(QSize(230, 0))
 
         self.gridLayout_2.addWidget(self.in_Nwpc1_tan, 1, 0, 1, 1)
 
@@ -81,7 +81,7 @@ class Ui_PCondType11(object):
 
         self.in_Wwire = QLabel(self.scrollAreaWidgetContents)
         self.in_Wwire.setObjectName(u"in_Wwire")
-        self.in_Wwire.setMinimumSize(QSize(90, 0))
+        self.in_Wwire.setMinimumSize(QSize(200, 0))
 
         self.gridLayout_2.addWidget(self.in_Wwire, 2, 0, 1, 1)
 
@@ -102,7 +102,7 @@ class Ui_PCondType11(object):
 
         self.in_Hwire = QLabel(self.scrollAreaWidgetContents)
         self.in_Hwire.setObjectName(u"in_Hwire")
-        self.in_Hwire.setMinimumSize(QSize(90, 0))
+        self.in_Hwire.setMinimumSize(QSize(200, 0))
 
         self.gridLayout_2.addWidget(self.in_Hwire, 3, 0, 1, 1)
 
@@ -168,7 +168,7 @@ class Ui_PCondType11(object):
         self.horizontalLayout_2.setObjectName(u"horizontalLayout_2")
         self.in_Lewout = QLabel(self.scrollAreaWidgetContents)
         self.in_Lewout.setObjectName(u"in_Lewout")
-        self.in_Lewout.setMinimumSize(QSize(90, 0))
+        self.in_Lewout.setMinimumSize(QSize(150, 0))
 
         self.horizontalLayout_2.addWidget(self.in_Lewout)
 
@@ -197,6 +197,7 @@ class Ui_PCondType11(object):
 
         self.w_out = WCondOut(self.scrollAreaWidgetContents)
         self.w_out.setObjectName(u"w_out")
+        self.w_out.setMinimumSize(QSize(350, 0))
 
         self.verticalLayout.addWidget(self.w_out)
 
@@ -222,12 +223,12 @@ class Ui_PCondType11(object):
         self.img_cond.setText("")
         self.in_Nwpc1_rad.setText(
             QCoreApplication.translate(
-                "PCondType11", u"Nr of strands in rad. dir.", None
+                "PCondType11", u"Strands in radial direction", None
             )
         )
         self.in_Nwpc1_tan.setText(
             QCoreApplication.translate(
-                "PCondType11", u"Nr of strands in tan. dir.", None
+                "PCondType11", u"Strands in tangential direction", None
             )
         )
         self.in_Wwire.setText(

@@ -30,7 +30,7 @@ class Gen_SWinding(Ui_SWinding):
 
         # Setup of in_Nslot
         txt = self.tr(
-            u"""0 not to change the stator winding connection matrix built by pyleecan number of slots to shift the coils obtained with pyleecan winding algorithm (a, b, c becomes b, c, a with Nslot_shift_wind1=1)"""
+            u"""Number of slots to shift the coils obtained with pyleecan winding algorithm (a, b, c becomes b, c, a with Nslot_shift_wind=1)"""
         )
         self.in_Nslot.setWhatsThis(txt)
         self.in_Nslot.setToolTip(txt)
@@ -39,10 +39,26 @@ class Gen_SWinding(Ui_SWinding):
         self.si_Nslot.setMinimum(-999999)
         self.si_Nslot.setMaximum(999999)
         txt = self.tr(
-            u"""0 not to change the stator winding connection matrix built by pyleecan number of slots to shift the coils obtained with pyleecan winding algorithm (a, b, c becomes b, c, a with Nslot_shift_wind1=1)"""
+            u"""Number of slots to shift the coils obtained with pyleecan winding algorithm (a, b, c becomes b, c, a with Nslot_shift_wind=1)"""
         )
         self.si_Nslot.setWhatsThis(txt)
         self.si_Nslot.setToolTip(txt)
+
+        # Setup of in_coil_pitch
+        txt = self.tr(
+            u"""Distance (in slot) between a conductor of a certain phase and the corresponding return conductor"""
+        )
+        self.in_coil_pitch.setWhatsThis(txt)
+        self.in_coil_pitch.setToolTip(txt)
+
+        # Setup of si_coil_pitch
+        self.si_coil_pitch.setMinimum(-999999)
+        self.si_coil_pitch.setMaximum(999999)
+        txt = self.tr(
+            u"""Distance (in slot) between a conductor of a certain phase and the corresponding return conductor"""
+        )
+        self.si_coil_pitch.setWhatsThis(txt)
+        self.si_coil_pitch.setToolTip(txt)
 
         # Setup of in_Ntcoil
         txt = self.tr(u"""number of turns per coil""")

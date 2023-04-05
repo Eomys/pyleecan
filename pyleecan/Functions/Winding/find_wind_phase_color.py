@@ -32,7 +32,8 @@ def find_wind_phase_color(label, wind_mat):
             color = "w"
             sign = None
         else:
-            color = PHASE_COLORS[q_id]
+            # Looping colors when there are more than 8 phases
+            color = PHASE_COLORS[q_id % len(PHASE_COLORS)]
             if wind_mat[Nrad, Ntan, Zs_id, q_id] > 0:
                 sign = "+"
             elif wind_mat[Nrad, Ntan, Zs_id, q_id] < 0:

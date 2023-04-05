@@ -16374,7 +16374,7 @@
             },
             {
                 "as_dict": "",
-                "desc": "0 not to change the stator winding connection matrix built by pyleecan number of slots to shift the coils obtained with pyleecan winding algorithm (a, b, c becomes b, c, a with Nslot_shift_wind1=1)",
+                "desc": "Number of slots to shift the coils obtained with pyleecan winding algorithm (a, b, c becomes b, c, a with Nslot_shift_wind=1)",
                 "max": "",
                 "min": "",
                 "name": "Nslot_shift_wind",
@@ -16454,7 +16454,7 @@
             },
             {
                 "as_dict": "",
-                "desc": "Coil pitch (or coil span)",
+                "desc": "Distance (in slot) between a conductor of a certain phase and the corresponding return conductor",
                 "max": "",
                 "min": "",
                 "name": "coil_pitch",
@@ -16474,7 +16474,7 @@
             },
             {
                 "as_dict": "",
-                "desc": "Number of layers per slots",
+                "desc": "Number of different coils in a slot",
                 "max": "",
                 "min": "1",
                 "name": "Nlayer",

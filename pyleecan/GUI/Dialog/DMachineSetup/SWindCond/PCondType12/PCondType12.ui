@@ -64,8 +64,8 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>348</width>
-        <height>648</height>
+        <width>372</width>
+        <height>631</height>
        </rect>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout">
@@ -75,12 +75,12 @@
           <widget class="QLabel" name="in_Nwpc1">
            <property name="minimumSize">
             <size>
-             <width>90</width>
+             <width>150</width>
              <height>0</height>
             </size>
            </property>
            <property name="text">
-            <string>Nr of strands in hand</string>
+            <string>Strands in hand</string>
            </property>
           </widget>
          </item>
@@ -101,7 +101,7 @@
           <widget class="QLabel" name="in_Wwire">
            <property name="minimumSize">
             <size>
-             <width>90</width>
+             <width>150</width>
              <height>0</height>
             </size>
            </property>
@@ -143,7 +143,7 @@
           <widget class="QLabel" name="in_Wins_cond">
            <property name="minimumSize">
             <size>
-             <width>90</width>
+             <width>150</width>
              <height>0</height>
             </size>
            </property>
@@ -260,7 +260,7 @@
           <widget class="QLabel" name="in_Lewout">
            <property name="minimumSize">
             <size>
-             <width>90</width>
+             <width>150</width>
              <height>0</height>
             </size>
            </property>
@@ -332,7 +332,14 @@
         </spacer>
        </item>
        <item>
-        <widget class="WCondOut" name="w_out" native="true"/>
+        <widget class="WCondOut" name="w_out" native="true">
+         <property name="minimumSize">
+          <size>
+           <width>350</width>
+           <height>0</height>
+          </size>
+         </property>
+        </widget>
        </item>
       </layout>
      </widget>

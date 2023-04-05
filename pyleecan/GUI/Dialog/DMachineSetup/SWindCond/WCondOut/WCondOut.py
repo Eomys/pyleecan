@@ -74,14 +74,14 @@ class WCondOut(QGroupBox):
         parent = obj.parent()
         lam = parent.lam
 
-        Sslot_txt = self.tr("Slot surface = ")
-        Saslot_txt = self.tr("Slot active surface = ")
-        Sa_txt = self.tr("Conductor active surface = ")
-        Ncps_txt = self.tr("Nr of conductors per slot = ")
-        K_txt = self.tr("Fill factor = ")
-        MLT_txt = "Mean Length Turn = "
-        Mwind_txt = "Winding mass = "
-        Rwind_txt = "Winding resistance at 20°C = "
+        Sslot_txt = self.tr("Slot surface: ")
+        Saslot_txt = self.tr("Slot active surface: ")
+        Sa_txt = self.tr("Conductor active surface: ")
+        Ncps_txt = self.tr("Conductors per slot: ")
+        K_txt = self.tr("Fill factor: ")
+        MLT_txt = "Mean Length Turn: "
+        Mwind_txt = "Winding mass: "
+        Rwind_txt = "Winding resistance at 20°C: "
 
         # Compute all the needed output as string
         try:
@@ -115,7 +115,7 @@ class WCondOut(QGroupBox):
         except Exception:  # Unable to compute MLT
             Mwind = "?"
         try:
-            Rwind = format(lam.comp_resistance_wind(T=20), ".4g")
+            Rwind = format(lam.comp_resistance_wind(T=20), ".2g")
         except Exception:  # Unable to compute MLT
             Rwind = "?"
 

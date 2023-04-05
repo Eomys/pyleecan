@@ -436,8 +436,8 @@ class SLamShape(Gen_SLamShape, QWidget):
         if not self.g_axial.isChecked():
             self.obj.axial_vent = list()  # Default empty
 
-    def update_graph(self, is_lam_only=False):
-        """Plot the lamination with/without the winding"""
+    def update_graph(self, is_lam_only=True):
+        """Plot the lamination without the winding"""
         self.w_viewer.axes.clear()
         # Plot the lamination in the viewer fig
         try:

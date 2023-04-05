@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from PySide2.QtCore import Qt, Signal
-from PySide2.QtWidgets import QMessageBox, QWidget, QFileDialog
+from PySide2.QtWidgets import QMessageBox, QWidget, QFileDialog, QListView
 from os.path import join
 
 from .....Functions.GUI.log_error import log_error
@@ -11,6 +11,10 @@ from .....Classes.MachineSRM import MachineSRM
 from .....Classes.MachineWRSM import MachineWRSM
 from .....GUI.Dialog.DMachineSetup.SWinding.Gen_SWinding import Gen_SWinding
 from .....Functions.Plot.set_plot_gui_icon import set_plot_gui_icon
+
+IDX_SINGLE_LAYER = 0
+IDX_DOUBLE_LAYER_RAD = 1
+IDX_DOUBLE_LAYER_TAN = 2
 
 
 class SWinding(Gen_SWinding, QWidget):
@@ -55,23 +59,23 @@ class SWinding(Gen_SWinding, QWidget):
         else:
             self.obj = machine.rotor
             self.b_plot_mmf.setText("Plot Rotor Unit MMF")
-        self.in_Zs.setText("Slot number=" + str(self.obj.get_Zs()))
+        self.in_Zs.setText("Slot number: " + str(self.obj.get_Zs()))
         if isinstance(machine, MachineSRM):
             self.in_p.hide()  # p is not meaningful for SRM
         else:
             self.in_p.setText(
-                "Pole pair number=" + str(self.obj.get_pole_pair_number())
+                "Pole pair number: " + str(self.obj.get_pole_pair_number())
             )
 
         if isinstance(machine, MachineWRSM) and not self.is_stator:
             # Enforce tooth winding for WRSM rotor
             self.si_qs.setEnabled(False)
             self.obj.winding.qs = 1
-            # Two tangential layer enforce
-            self.si_Nlayer.setEnabled(False)
+            # Two tangential layer enforced
+            self.c_layer_def.setEnabled(False)
+            self.c_layer_def.setCurrentIndex(IDX_DOUBLE_LAYER_TAN)
             self.obj.winding.Nlayer = 2
             self.obj.winding.is_change_layer = False
-            self.is_change_layer.setEnabled(False)
             self.obj.winding.coil_pitch = 1
             self.si_coil_pitch.setEnabled(False)
             self.in_Zs.hide()  # =2*p
@@ -80,7 +84,6 @@ class SWinding(Gen_SWinding, QWidget):
             self.c_wind_type.setCurrentIndex(0)
             # No plot_mmf
             self.b_plot_mmf.hide()
-            # self.b_plot_radial.hide()
 
         # Pattern Group setup
         if self.obj.winding is None:
@@ -95,7 +98,15 @@ class SWinding(Gen_SWinding, QWidget):
             # Nlayer
             if self.obj.winding.Nlayer is None:
                 self.obj.winding.Nlayer = 1
-            self.si_Nlayer.setValue(self.obj.winding.Nlayer)
+            # Layer definition (number + direction if necessary)
+            if self.obj.winding.Nlayer == 1:
+                self.c_layer_def.setCurrentIndex(IDX_SINGLE_LAYER)
+            else:
+                Nrad, Ntan = self.obj.winding.get_dim_wind()
+                if Nrad < Ntan:
+                    self.c_layer_def.setCurrentIndex(IDX_DOUBLE_LAYER_TAN)
+                else:
+                    self.c_layer_def.setCurrentIndex(IDX_DOUBLE_LAYER_RAD)
             # Coil_pitch
             self.show_layer_widget()
             # Ntcoil
@@ -110,7 +121,7 @@ class SWinding(Gen_SWinding, QWidget):
             self.obj.winding.Npcp = 1  # Default value
         self.si_Npcp.setValue(self.obj.winding.Npcp)
 
-        # Edit Group setup
+        # Winding Transformation setup
         if self.obj.winding.is_reverse_wind is None:
             self.obj.winding.is_reverse_wind = False
         if self.obj.winding.is_reverse_wind:
@@ -131,10 +142,6 @@ class SWinding(Gen_SWinding, QWidget):
         # is_change_layer
         if self.obj.winding.is_change_layer is None:
             self.obj.winding.is_change_layer = False
-        if self.obj.winding.is_change_layer:
-            self.is_change_layer.setCheckState(Qt.Checked)
-        else:
-            self.is_change_layer.setCheckState(Qt.Unchecked)
         # is_permute_B_C
         if self.obj.winding.is_permute_B_C is None:
             self.obj.winding.is_permute_B_C = False
@@ -149,16 +156,15 @@ class SWinding(Gen_SWinding, QWidget):
 
         # Connect the signal/slot
         self.c_wind_type.currentIndexChanged.connect(self.set_type)
-        self.si_Nlayer.valueChanged.connect(self.show_layer_widget)
+        self.c_layer_def.currentIndexChanged.connect(self.update_winding_layer)
         self.si_Npcp.valueChanged.connect(self.set_Npcp)
         self.si_Nslot.valueChanged.connect(self.set_Nslot)
         self.si_Ntcoil.valueChanged.connect(self.set_Ntcoil)
         self.is_reverse.stateChanged.connect(self.set_is_reverse_wind)
         self.is_reverse_layer.stateChanged.connect(self.set_is_reverse_layer)
-        self.is_change_layer.stateChanged.connect(self.set_is_change_layer)
         self.is_permute_B_C.stateChanged.connect(self.set_is_permute_B_C)
         self.si_qs.valueChanged.connect(self.refresh_needed)
-        self.si_Nlayer.valueChanged.connect(self.refresh_needed)
+        self.c_layer_def.currentIndexChanged.connect(self.refresh_needed)
         self.si_coil_pitch.valueChanged.connect(self.refresh_needed)
         self.si_Ntcoil.valueChanged.connect(self.refresh_needed)
         self.si_Npcp.valueChanged.connect(self.refresh_needed)
@@ -175,30 +181,44 @@ class SWinding(Gen_SWinding, QWidget):
     def hide_star_widget(self, is_hide=True):
         """To display/hide the star of slot widgets"""
         if is_hide:
-            self.in_Nlayer.hide()
             self.in_Ntcoil.hide()
             self.in_coil_pitch.hide()
             self.in_qs.hide()
-            self.si_Nlayer.hide()
+            self.c_layer_def.hide()
             self.si_Ntcoil.hide()
             self.si_coil_pitch.hide()
             self.si_qs.hide()
             self.b_generate.hide()
             self.b_import.show()
         else:
-            self.in_Nlayer.show()
             self.in_Ntcoil.show()
             self.in_coil_pitch.show()
             self.in_qs.show()
-            self.si_Nlayer.show()
+            self.c_layer_def.show()
             self.si_Ntcoil.show()
             self.si_coil_pitch.show()
             self.si_qs.show()
             self.b_generate.show()
             self.b_import.hide()
 
-    def show_layer_widget(self):
+    def update_winding_layer(self):
+        "Updating winding of the lamination according to c_layer_def: Number of layer and the direction"
+        if self.c_layer_def.currentIndex() == IDX_SINGLE_LAYER:
+            self.obj.winding.Nlayer = 1
+        else:
+            Nrad, Ntan = self.obj.winding.get_dim_wind()
+            if self.c_layer_def.currentIndex() == IDX_DOUBLE_LAYER_RAD and Nrad < Ntan:
+                self.obj.winding.Nlayer = 2
+                self.obj.winding.is_change_layer = True
+            elif (
+                self.c_layer_def.currentIndex() == IDX_DOUBLE_LAYER_TAN and Nrad > Ntan
+            ):
+                self.obj.winding.Nlayer = 2
+                self.obj.winding.is_change_layer = True
+            elif Nrad == Ntan:
+                self.obj.winding.Nlayer = 2
 
+    def show_layer_widget(self):
         # Coil pitch (or coil span)
         if self.obj.winding.coil_pitch in [0, None]:
             if self.obj.winding.p is None:  # SRM
@@ -216,13 +236,11 @@ class SWinding(Gen_SWinding, QWidget):
                     # tooth concentrated winding
                     self.obj.winding.coil_pitch = 1
         self.si_coil_pitch.setValue(self.obj.winding.coil_pitch)
-
-        if self.si_Nlayer.value() == 1:
+        # Showing the right transformation depending on the number of layer
+        if self.c_layer_def.currentIndex() == IDX_SINGLE_LAYER:
             self.is_reverse_layer.hide()
-            self.is_change_layer.hide()
         else:
             self.is_reverse_layer.show()
-            self.is_change_layer.show()
             # is_reverse_layer
             if self.obj.winding.is_reverse_layer is None:
                 self.obj.winding.is_reverse_layer = False
@@ -233,10 +251,6 @@ class SWinding(Gen_SWinding, QWidget):
             # is_change_layer
             if self.obj.winding.is_change_layer is None:
                 self.obj.winding.is_change_layer = False
-            if self.obj.winding.is_change_layer:
-                self.is_change_layer.setCheckState(Qt.Checked)
-            else:
-                self.is_change_layer.setCheckState(Qt.Unchecked)
 
     def refresh_needed(self):
         self.b_generate.setEnabled(True)
@@ -244,7 +258,9 @@ class SWinding(Gen_SWinding, QWidget):
     def s_generate(self):
         # Update winding object
         self.obj.winding.qs = self.si_qs.value()
-        self.obj.winding.Nlayer = self.si_Nlayer.value()
+        self.obj.winding.Nlayer = (
+            1 if self.c_layer_def.currentIndex() == IDX_SINGLE_LAYER else 2
+        )
         self.obj.winding.coil_pitch = self.si_coil_pitch.value()
         self.obj.winding.Ntcoil = self.si_Ntcoil.value()
         if isinstance(self.machine, MachineSRM):
@@ -263,6 +279,23 @@ class SWinding(Gen_SWinding, QWidget):
         try:
             self.obj.winding.get_connection_mat()
             self.b_generate.setEnabled(False)
+
+            # Correcting the winding matrix if the one generated does not have the direction specified by the user
+            if self.obj.winding.Nlayer > 1:
+                Nrad, Ntan = self.obj.winding.get_dim_wind()
+                if (
+                    self.c_layer_def.currentIndex() == IDX_DOUBLE_LAYER_TAN
+                    and Nrad > Ntan
+                ):
+                    self.obj.winding.is_change_layer = True
+                    self.obj.winding.get_connection_mat()
+                elif (
+                    self.c_layer_def.currentIndex() == IDX_DOUBLE_LAYER_RAD
+                    and Nrad < Ntan
+                ):
+                    self.obj.winding.is_change_layer = True
+                    self.obj.winding.get_connection_mat()
+
         except Exception as e:
             log_error(
                 self,
@@ -286,6 +319,7 @@ class SWinding(Gen_SWinding, QWidget):
         self.comp_output()
         self.update_graph()
         self.b_plot_mmf.setEnabled(True)
+        self.show_layer_widget()
         # Notify the machine GUI that the machine has changed
         self.saveNeeded.emit()
 
@@ -315,8 +349,16 @@ class SWinding(Gen_SWinding, QWidget):
             if self.obj.winding.Ntcoil is None:
                 self.obj.winding.Ntcoil = 1
             self.si_Ntcoil.setValue(self.obj.winding.Ntcoil)
+            # c_layer_def
+            if self.obj.winding.Nlayer == 1:
+                self.c_layer_def.setCurrentIndex(IDX_SINGLE_LAYER)
+            else:
+                Nrad, Ntan = self.winding.get_dim_wind()
+                if Nrad < Ntan:
+                    self.c_layer_def.setCurrentIndex(IDX_DOUBLE_LAYER_TAN)
+                else:
+                    self.c_layer_def.setCurrentIndex(IDX_DOUBLE_LAYER_RAD)
 
-            self.si_Nlayer.setValue(self.obj.winding.Nlayer)
             self.obj.winding.clean()  # ­ Enforce new computation
             self.hide_star_widget(False)
         else:  # User Defined
@@ -498,7 +540,7 @@ class SWinding(Gen_SWinding, QWidget):
                 mmf_dir = "CW"
             else:
                 mmf_dir = "?"
-        except Exception:  # Unable to compution the connection matrix
+        except Exception:  # Unable to compute the connection matrix
             mmf_dir = "?"
         self.out_rot_dir.setText(self.tr("Rotation direction: ") + mmf_dir)
 
@@ -506,7 +548,7 @@ class SWinding(Gen_SWinding, QWidget):
             ms = str(self.obj.slot.Zs / (wind.p * wind.qs * 2.0))
         except TypeError:  # One of the value is None
             ms = "?"
-        self.out_ms.setText(self.tr("Number of slots/pole/phase: ") + ms)
+        self.out_ms.setText(self.tr("Slots per pole per phase: ") + ms)
         if self.obj.is_stator:
             self.out_ms.setToolTip(self.tr("Zs / (2*p*qs)"))
         else:
@@ -530,8 +572,10 @@ class SWinding(Gen_SWinding, QWidget):
             Ncspc = Ncspc[:-2] if Ncspc[-2:] == ".0" else Ncspc
         except:
             Ncspc = "?"
-        self.out_Ncspc.setText(self.tr("Number of coils Ncspc: ") + Ncspc)
-        self.out_Ntspc.setText(self.tr("Number of turns Ntspc: ") + Ntspc)
+        self.out_Ncspc.setText(
+            self.tr("Coils in series per parallel circuit: ") + Ncspc
+        )
+        self.out_Ntspc.setText(self.tr("Turns in series per phase: ") + Ntspc)
 
     def update_graph(self, is_lam_only=False):
         """Plot the lamination with/without the winding"""
@@ -544,7 +588,7 @@ class SWinding(Gen_SWinding, QWidget):
                 is_show_fig=False,
                 is_lam_only=is_lam_only,
                 is_add_sign=True,
-                is_legend=False,
+                is_legend=True,
             )
         except Exception as e:
             if self.obj.is_stator:  # Adapt the text to the current lamination
