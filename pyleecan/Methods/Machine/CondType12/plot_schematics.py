@@ -149,7 +149,7 @@ def plot_schematics(
                     ax=ax,
                     color=ARROW_COLOR,
                     linewidth=ARROW_WIDTH,
-                    label="Conductor diameter",
+                    label="Overall diameter",
                     offset_label=-1j * self.Wins_cond * 0.25 + self.Wins_wire / 2,
                     is_arrow=True,
                     fontsize=SC_FONT_SIZE,
