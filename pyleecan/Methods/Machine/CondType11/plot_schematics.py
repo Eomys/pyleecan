@@ -199,7 +199,7 @@ def plot_schematics(
                 ax.text(
                     -self.Wins_wire,
                     5 * self.Wins_wire + 2.5 * self.Hwire,
-                    "Nr of strands in rad. dir. = 3\nNr of strands in tan. dir. = 2",
+                    "Strands in radial direction: 3\nStrands in tangential direction: 2",
                     fontsize=SC_FONT_SIZE,
                     bbox=TEXT_BOX,
                 )

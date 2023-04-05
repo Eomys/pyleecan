@@ -158,7 +158,7 @@ def plot_schematics(
                 ax.text(
                     -a - 2 * self.Wwire,
                     2.5 * a,
-                    "Nr of strands in hand = 4",
+                    "Strands in hand: 4",
                     fontsize=SC_FONT_SIZE,
                     bbox=TEXT_BOX,
                 )
