@@ -611,8 +611,9 @@ class SWinding(Gen_SWinding, QWidget):
             A SWinding object
         """
         try:
-            self.obj.winding.plot_linear()
+            fig, _ = self.obj.winding.plot_linear()
             set_plot_gui_icon()
+            self.fig_linear = fig
         except Exception as e:
             if self.obj.is_stator:  # Adapt the text to the current lamination
                 err_msg = (
@@ -633,8 +634,9 @@ class SWinding(Gen_SWinding, QWidget):
             A SWinding object
         """
         try:
-            self.obj.plot(is_winding_connection=True)
+            fig, _ = self.obj.plot(is_winding_connection=True)
             set_plot_gui_icon()
+            self.fig_radial = fig
         except Exception as e:
             if self.obj.is_stator:  # Adapt the text to the current lamination
                 err_msg = (
@@ -650,7 +652,9 @@ class SWinding(Gen_SWinding, QWidget):
         """Plot the unit mmf of the stator"""
         if self.machine is not None:
             try:
-                self.obj.plot_mmf_unit()
+                self.plot_mmf_widget = self.machine.stator.plot_mmf_unit(
+                    is_create_appli=False
+                )
             except Exception as e:
                 if self.obj.is_stator:  # Adapt the text to the current lamination
                     err_msg = "Error while plotting Stator mmf unit:\n" + str(e)

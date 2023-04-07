@@ -2,6 +2,9 @@ import sys
 from os.path import isdir, isfile, join
 from shutil import rmtree
 from multiprocessing import cpu_count
+import matplotlib.pyplot as plt
+
+from SciDataTool.GUI.DDataPlotter.DDataPlotter import DDataPlotter
 
 from PySide2 import QtWidgets
 import mock
@@ -247,8 +250,7 @@ class TestNewMachineRailway(object):
         assert self.widget.w_step.si_coil_pitch.value() == 5
         assert self.widget.w_step.si_Ntcoil.value() == 7
         assert self.widget.w_step.si_Npcp.value() == 2
-        # TODO BUG find why the Rotation direction does not setup as a CCW rotation (In an imported toyota prius, it does.)
-        assert self.widget.w_step.out_rot_dir.text() == "Rotation direction: ?"
+        assert self.widget.w_step.out_rot_dir.text() == "Rotation direction: CCW"
         assert self.widget.w_step.out_ms.text() == "Slots per pole per phase: 2.0"
         assert self.widget.w_step.out_Nperw.text() == "Winding periodicity: 6"
         assert self.widget.w_step.out_Ntspc.text() == "Turns in series per phase: 42"
@@ -256,6 +258,15 @@ class TestNewMachineRailway(object):
             self.widget.w_step.out_Ncspc.text()
             == "Coils in series per parallel circuit: 6"
         )
+
+        # Check plots
+        self.widget.w_step.b_plot_mmf.clicked.emit()
+        assert isinstance(self.widget.w_step.plot_mmf_widget, DDataPlotter)
+        self.widget.w_step.plot_mmf_widget.close()
+        self.widget.w_step.b_plot_radial.clicked.emit()
+        assert isinstance(self.widget.w_step.fig_radial, plt.Figure)
+        self.widget.w_step.b_plot_linear.clicked.emit()
+        assert isinstance(self.widget.w_step.fig_linear, plt.Figure)
 
         # Is the stator winding well defined ?
         assert self.widget.w_step.machine.stator.winding.qs == 3
