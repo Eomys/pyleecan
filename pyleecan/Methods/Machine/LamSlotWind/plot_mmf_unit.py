@@ -1,21 +1,25 @@
 import matplotlib.pyplot as plt
+from numpy import min as np_min, max as np_max
 
-from ....Functions.Plot import dict_2D
-from ....definitions import config_dict
+from SciDataTool.GUI.DDataPlotter.DDataPlotter import DDataPlotter
+from SciDataTool.Functions import parser
+
+from ....Functions.Plot import dict_2D, TEXT_BOX
+from ....definitions import config_dict, RES_PATH
+from ....Functions.Plot.set_plot_gui_icon import set_plot_gui_icon
+
+PHASE_COLORS = config_dict["PLOT"]["COLOR_DICT"]["PHASE_COLORS"]
 
 
-def plot_mmf_unit(self, r_max=100, fig=None, save_path=None, is_show_fig=True):
+def plot_mmf_unit(self, is_create_appli=True, save_path=None, is_show_fig=False):
     """Plot the winding unit mmf as a function of space
     Parameters
     ----------
+
     self : LamSlotWind
         an LamSlotWind object
-    Na : int
-        Space discretization
-    fig : Matplotlib.figure.Figure
-        existing figure to use if None create a new one
-    is_show_fig : bool
-        To call show at the end of the method
+    is_create_appli : bool
+        True to create an QApplication (required if not already created by another GUI)
     """
 
     name = ""
@@ -31,33 +35,61 @@ def plot_mmf_unit(self, r_max=100, fig=None, save_path=None, is_show_fig=True):
     p = self.get_pole_pair_number()
     MMF_U, WF = self.comp_mmf_unit(Nt=100, Na=400 * p)
 
-    color_list = config_dict["PLOT"]["COLOR_DICT"]["COLOR_LIST"][:qs]
+    color_list = PHASE_COLORS[:qs]
 
-    fig, axs = plt.subplots(2, 1, tight_layout=True, figsize=(8, 8))
+    plot_arg_dict = dict_2D.copy()
+    plot_arg_dict["color_list"] = color_list + ["k"]
+    plot_arg_dict["data_list"] = [MMF_U]
 
-    dict_2D_0 = dict_2D.copy()
-    dict_2D_0["color_list"] = color_list + ["k"]
+    if save_path is not None:
+        WF.plot_2D_Data(
+            "angle{°}",
+            "phase[]",
+            unit="A",
+            y_min=np_min(MMF_U.values) * 1.1,
+            y_max=np_max(MMF_U.values) * 1.1,
+            is_show_fig=is_show_fig,
+            save_path=save_path,
+            **plot_arg_dict,
+        )
 
-    WF.plot_2D_Data(
-        "angle{°}",
-        "phase[]",
-        data_list=[MMF_U],
-        fig=fig,
-        ax=axs[0],
-        is_show_fig=is_show_fig,
-        win_title=name + "phase MMF",
-        **dict_2D_0,
-    )
-
-    dict_2D_0["color_list"] = [color_list[0], "k"]
-
-    WF.plot_2D_Data(
-        "wavenumber=[0," + str(r_max) + "]",
-        data_list=[MMF_U],
-        fig=fig,
-        ax=axs[1],
-        is_show_fig=is_show_fig,
-        win_title=name + "phase MMF FFT",
-        save_path=save_path,
-        **dict_2D_0,
-    )
+    elif is_create_appli:
+        WF.plot(
+            "angle{°}",
+            "phase[]",
+            unit="A",
+            z_min=np_min(MMF_U.values) * 1.1,
+            z_max=np_max(MMF_U.values) * 1.1,
+            plot_arg_dict=plot_arg_dict,
+            is_create_appli=is_create_appli,
+            frozen_type=2,
+        )
+    else:
+        axes_request_list = parser.read_input_strings(
+            ["angle{°}", "phase[]"], axis_data={}
+        )
+        plt.rcParams.update(
+            {
+                "font.family": config_dict["PLOT"]["FONT_NAME"],
+                "font.size": config_dict["PLOT"]["FONT_SIZE_LEGEND"],
+            }
+        )
+        wid = DDataPlotter(
+            data=WF,
+            axes_request_list=axes_request_list,
+            unit="A",
+            z_min=np_min(MMF_U.values) * 1.1,
+            z_max=np_max(MMF_U.values) * 1.1,
+            plot_arg_dict=plot_arg_dict,
+            path_to_image=RES_PATH,
+            text_box=TEXT_BOX,
+            frozen_type=2,
+        )
+        wid.setWindowTitle(name + "Phase MMF plot")
+        set_plot_gui_icon()
+        # Change default file name
+        wid.canvas.get_default_filename = (
+            lambda: wid.windowTitle().replace(" ", "_").replace(":", "") + ".png"
+        )
+        wid.show()
+        return wid
