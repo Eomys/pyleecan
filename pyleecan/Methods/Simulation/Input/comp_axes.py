@@ -76,15 +76,8 @@ def comp_axes(
     p = machine.get_pole_pair_number()
 
     # Fill periodicity parameters that are None
-    if (
-        is_periodicity_a is not False
-        and is_periodicity_t is not False
-        and (
-            per_a is None
-            or is_antiper_a is None
-            or per_t is None
-            or is_antiper_t is None
-        )
+    if (is_periodicity_a is not False or is_periodicity_t is not False) and (
+        per_a is None or is_antiper_a is None or per_t is None or is_antiper_t is None
     ):
         if output is not None:
             # Get time and space (anti-)periodicities from the output
