@@ -132,7 +132,7 @@ class PCondType11(Gen_PCondType11, QWidget):
             self.lf_Wins_wire.hide()
             self.unit_Wins_wire.hide()
             self.w_mat_1.hide()
-            self.set_Wins_wire(Wins_wire=0)
+            self.set_Wins_wire(Wins_wire=None)
 
     def set_Nwppc(self):
         """Signal to update the value of Nwppc_tan and rad according to the line edit
@@ -214,7 +214,7 @@ class PCondType11(Gen_PCondType11, QWidget):
         # Notify the machine GUI that the machine has changed
         self.saveNeeded.emit()
 
-    def set_Wins_wire(self, Wins_wire=None):
+    def set_Wins_wire(self, Wins_wire=-1):
         """Signal to update the value of Wwire according to the line edit
 
         Parameters
@@ -222,7 +222,7 @@ class PCondType11(Gen_PCondType11, QWidget):
         self : PCondType11
             A PCondType11 object
         """
-        if Wins_wire is None:
+        if Wins_wire == -1:
             Wins_wire = self.lf_Wins_wire.value()
         self.cond.Wins_wire = Wins_wire
         self.w_out.comp_output()

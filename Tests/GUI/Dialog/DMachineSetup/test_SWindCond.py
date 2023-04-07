@@ -272,6 +272,50 @@ class TestSWindCond(object):
         widget.cond.Nwppc = None
         assert widget.check(lam) == "Strands per hand must be set"
 
+    def test_insulation_group(self):
+        # CondType11
+        # Hide insulation
+        self.widget.w_cond.g_ins.setChecked(False)
+        assert self.widget.w_cond.in_Wins_wire.isHidden()
+        assert self.widget.w_cond.lf_Wins_wire.isHidden()
+        assert self.widget.w_cond.unit_Wins_wire.isHidden()
+        assert self.widget.w_cond.w_mat_1.isHidden()
+        assert self.test_obj.stator.winding.conductor.Wins_wire is None
+        # Show insulation
+        self.widget.w_cond.g_ins.setChecked(True)
+        assert not self.widget.w_cond.in_Wins_wire.isHidden()
+        assert not self.widget.w_cond.lf_Wins_wire.isHidden()
+        assert not self.widget.w_cond.unit_Wins_wire.isHidden()
+        assert not self.widget.w_cond.w_mat_1.isHidden()
+        assert self.widget.w_cond.lf_Wins_wire.value() == 0.03
+        assert self.test_obj.stator.winding.conductor.Wins_wire == 0.03
+
+        # CondType12
+        # Hide insulation
+        self.widget2.w_cond.g_ins.setChecked(False)
+        assert self.widget2.w_cond.in_Wins_wire.isHidden()
+        assert self.widget2.w_cond.lf_Wins_wire.isHidden()
+        assert self.widget2.w_cond.unit_Wins_wire.isHidden()
+        assert self.widget2.w_cond.in_Wins_cond.isHidden()
+        assert self.widget2.w_cond.lf_Wins_cond.isHidden()
+        assert self.widget2.w_cond.unit_Wins_cond.isHidden()
+        assert self.widget2.w_cond.w_mat_1.isHidden()
+        assert self.test_obj.rotor.winding.conductor.Wins_wire is None
+        assert self.test_obj.rotor.winding.conductor.Wins_cond is None
+        # Show insulation
+        self.widget2.w_cond.g_ins.setChecked(True)
+        assert not self.widget2.w_cond.in_Wins_wire.isHidden()
+        assert not self.widget2.w_cond.lf_Wins_wire.isHidden()
+        assert not self.widget2.w_cond.unit_Wins_wire.isHidden()
+        assert not self.widget2.w_cond.in_Wins_cond.isHidden()
+        assert not self.widget2.w_cond.lf_Wins_cond.isHidden()
+        assert not self.widget2.w_cond.unit_Wins_cond.isHidden()
+        assert not self.widget2.w_cond.w_mat_1.isHidden()
+        assert self.widget2.w_cond.lf_Wins_wire.value() == 0.021
+        assert self.widget2.w_cond.lf_Wins_cond.value() == 0.031
+        assert self.test_obj.rotor.winding.conductor.Wins_wire == 0.021
+        assert self.test_obj.rotor.winding.conductor.Wins_cond == 0.031
+
 
 if __name__ == "__main__":
     a = TestSWindCond()
@@ -287,6 +331,7 @@ if __name__ == "__main__":
     # a.test_check_PCondType12()
     # a.test_set_si_Nwpc1_rad()
     # a.test_set_si_Nwpc1_tan()
-    a.test_set_si_Nwpc1()
+    # a.test_set_si_Nwpc1()
+    a.test_insulation_group()
     a.teardown_class()
     print("Done")

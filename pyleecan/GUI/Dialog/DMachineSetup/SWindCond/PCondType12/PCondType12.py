@@ -128,16 +128,19 @@ class PCondType12(Gen_PCondType12, QWidget):
                 self.in_Wins_cond.show()
                 self.lf_Wins_cond.show()
                 self.unit_Wins_cond.show()
+                self.set_Wins_cond()
             else:
                 self.in_Wins_cond.hide()
                 self.lf_Wins_cond.hide()
                 self.unit_Wins_cond.hide()
+                self.set_Wins_cond(Wins_cond=None)
         else:
             self.in_Wins_wire.hide()
             self.lf_Wins_wire.hide()
             self.unit_Wins_wire.hide()
             self.w_mat_1.hide()
             self.set_Wins_wire(Wins_wire=None)
+            self.set_Wins_cond(Wins_cond=None)
             self.in_Wins_cond.hide()
             self.lf_Wins_cond.hide()
             self.unit_Wins_cond.hide()
@@ -188,7 +191,7 @@ class PCondType12(Gen_PCondType12, QWidget):
         # Notify the machine GUI that the machine has changed
         self.saveNeeded.emit()
 
-    def set_Wins_wire(self, Wins_wire=None):
+    def set_Wins_wire(self, Wins_wire=-1):
         """Signal to update the value of Wins_wire according to the line edit
 
         Parameters
@@ -196,14 +199,14 @@ class PCondType12(Gen_PCondType12, QWidget):
         self : PCondType12
             A PCondType12 object
         """
-        if Wins_wire is None:
+        if Wins_wire == -1:
             Wins_wire = self.lf_Wins_wire.value()
         self.cond.Wins_wire = Wins_wire
         self.w_out.comp_output()
         # Notify the machine GUI that the machine has changed
         self.saveNeeded.emit()
 
-    def set_Wins_cond(self, Wins_cond=None):
+    def set_Wins_cond(self, Wins_cond=-1):
         """Signal to update the value of Wins_cond according to the line edit
 
         Parameters
@@ -211,7 +214,7 @@ class PCondType12(Gen_PCondType12, QWidget):
         self : PCondType12
             A PCondType12 object
         """
-        if Wins_cond is None:
+        if Wins_cond == -1:
             Wins_cond = self.lf_Wins_cond.value()
         self.cond.Wins_cond = Wins_cond
         self.w_out.comp_output()
