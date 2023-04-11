@@ -2,6 +2,9 @@ import sys
 from os.path import isdir, isfile, join
 from shutil import rmtree
 from multiprocessing import cpu_count
+import matplotlib.pyplot as plt
+
+from SciDataTool.GUI.DDataPlotter.DDataPlotter import DDataPlotter
 
 from PySide2 import QtWidgets
 import mock
@@ -249,6 +252,15 @@ class TestNewMachinePrius(object):
             self.widget.w_step.out_Ncspc.text()
             == "Coils in series per parallel circuit: 8"
         )
+
+        # Check plots
+        self.widget.w_step.b_plot_mmf.clicked.emit()
+        assert isinstance(self.widget.w_step.plot_mmf_widget, DDataPlotter)
+        self.widget.w_step.plot_mmf_widget.close()
+        self.widget.w_step.b_plot_radial.clicked.emit()
+        assert isinstance(self.widget.w_step.fig_radial, plt.Figure)
+        self.widget.w_step.b_plot_linear.clicked.emit()
+        assert isinstance(self.widget.w_step.fig_linear, plt.Figure)
 
         # Is the stator winding well defined ?
         assert self.widget.w_step.machine.stator.winding.qs == 3

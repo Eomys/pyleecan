@@ -72,8 +72,8 @@ def comp_mmf_unit(self, Na=None, Nt=None, felec=1, current_dir=None, phase_dir=N
     axes_dict = input.comp_axes(
         axes_list=["time", "angle", "phase_S", "phase_R"],
         machine=machine,
-        is_periodicity_t=bool(Nt > 1),
-        is_periodicity_a=bool(Na > 1),
+        is_periodicity_t=False,
+        is_periodicity_a=False,
         is_antiper_t=False,
         is_antiper_a=False,
     )
