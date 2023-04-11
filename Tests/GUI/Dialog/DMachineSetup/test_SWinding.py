@@ -47,9 +47,9 @@ class TestSWinding(object):
         test_obj.stator.winding.is_permute_B_C = True
 
         self.widget = SWinding(machine=test_obj, material_dict=dict(), is_stator=True)
-        self.test_obj = test_obj
+        self.test_obj = test_obj.copy()
 
-        self.test_obj_2 = test_obj
+        self.test_obj_2 = test_obj.copy()
         self.test_obj.stator.winding = WindingUD()
         self.widget_2 = SWinding(
             machine=self.test_obj_2, material_dict=dict(), is_stator=True
@@ -188,10 +188,23 @@ class TestSWinding(object):
     @pytest.mark.SCIM
     def test_set_c_layer_def(self):
         """Check that the Widget allow to update layer definition"""
+
+        # First state: machine has two layers
+        assert self.widget.obj.winding.Nlayer == 2
+
+        # Second state: Machine has one layer
+        self.widget.c_layer_def.setCurrentIndex(0)
+        assert self.widget.obj.winding.Nlayer == 1
+
+        # Third state: Machine has double layer radial
         self.widget.c_layer_def.setCurrentIndex(1)
-        assert not self.test_obj.stator.winding.is_change_layer
+        Nrad, Ntan = self.obj.winding.get_dim_wind()
+        assert Nrad > Ntan
+
+        # Fourth state: machine has double layer tangential
         self.widget.c_layer_def.setCurrentIndex(2)
-        assert self.test_obj.stator.winding.is_change_layer
+        Nrad, Ntan = self.obj.winding.get_dim_wind()
+        assert Nrad < Ntan
 
     @pytest.mark.SCIM
     def test_set_Nslot(self):
