@@ -117,10 +117,10 @@ class TestSWinding(object):
         """Check that the Widget allow to update type_winding"""
 
         self.widget.c_wind_type.setCurrentIndex(1)
-        assert type(self.test_obj.stator.winding) == WindingUD
+        assert type(self.widget.obj.winding) == WindingUD
 
         self.widget.c_wind_type.setCurrentIndex(0)
-        assert type(self.test_obj.stator.winding) == Winding
+        assert type(self.widget.obj.winding) == Winding
 
     @pytest.mark.SCIM
     def test_generate(self):
@@ -155,35 +155,37 @@ class TestSWinding(object):
 
         assert isfile(return_value[0])
 
+        self.widget.c_wind_type.setCurrentIndex(1)
+        assert not self.widget.b_import.isHidden()
         with mock.patch(
             "PySide2.QtWidgets.QFileDialog.getOpenFileName", return_value=return_value
         ):
             # To trigger the slot
-            self.widget_2.b_import.clicked.emit()
+            self.widget.b_import.clicked.emit()
 
     @pytest.mark.SCIM
     def test_set_is_reverse(self):
         """Check that the Widget allow to update is_reverse_wind"""
         self.widget.is_reverse.setCheckState(Qt.Unchecked)
-        assert not self.test_obj.stator.winding.is_reverse_wind
+        assert not self.widget.obj.winding.is_reverse_wind
         self.widget.is_reverse.setCheckState(Qt.Checked)
-        assert self.test_obj.stator.winding.is_reverse_wind
+        assert self.widget.obj.winding.is_reverse_wind
 
     @pytest.mark.SCIM
     def test_set_is_reverse_layer(self):
         """Check that the Widget allow to update is_reverse_layer"""
         self.widget.is_reverse_layer.setCheckState(Qt.Unchecked)
-        assert not self.test_obj.stator.winding.is_reverse_layer
+        assert not self.widget.obj.winding.is_reverse_layer
         self.widget.is_reverse_layer.setCheckState(Qt.Checked)
-        assert self.test_obj.stator.winding.is_reverse_layer
+        assert self.widget.obj.winding.is_reverse_layer
 
     @pytest.mark.SCIM
     def test_set_is_permute_B_C(self):
         """Check that the Widget allow to update is_permute_B_C"""
         self.widget.is_permute_B_C.setCheckState(Qt.Unchecked)
-        assert not self.test_obj.stator.winding.is_permute_B_C
+        assert not self.widget.obj.winding.is_permute_B_C
         self.widget.is_permute_B_C.setCheckState(Qt.Checked)
-        assert self.test_obj.stator.winding.is_permute_B_C
+        assert self.widget.obj.winding.is_permute_B_C
 
     @pytest.mark.SCIM
     def test_set_c_layer_def(self):
@@ -194,17 +196,20 @@ class TestSWinding(object):
 
         # Second state: Machine has one layer
         self.widget.c_layer_def.setCurrentIndex(0)
+        self.widget.b_generate.clicked.emit()
         assert self.widget.obj.winding.Nlayer == 1
 
         # Third state: Machine has double layer radial
         self.widget.c_layer_def.setCurrentIndex(1)
-        Nrad, Ntan = self.obj.winding.get_dim_wind()
-        assert Nrad > Ntan
+        self.widget.b_generate.clicked.emit()
+        assert self.widget.obj.winding.Nlayer == 2
+        assert not self.widget.obj.winding.is_change_layer
 
         # Fourth state: machine has double layer tangential
         self.widget.c_layer_def.setCurrentIndex(2)
-        Nrad, Ntan = self.obj.winding.get_dim_wind()
-        assert Nrad < Ntan
+        self.widget.b_generate.clicked.emit()
+        assert self.widget.obj.winding.Nlayer == 2
+        assert self.widget.obj.winding.is_change_layer
 
     @pytest.mark.SCIM
     def test_set_Nslot(self):
@@ -213,7 +218,7 @@ class TestSWinding(object):
         value = int(uniform(0, 100))
         self.widget.si_Nslot.setValue(value)
 
-        assert self.test_obj.stator.winding.Nslot_shift_wind == value
+        assert self.widget.obj.winding.Nslot_shift_wind == value
 
     @pytest.mark.SCIM
     def test_set_Npcp(self):
@@ -222,7 +227,7 @@ class TestSWinding(object):
         value = int(uniform(1, 3))
         self.widget.si_Npcp.setValue(value)
 
-        assert self.test_obj.stator.winding.Npcp == value
+        assert self.widget.obj.winding.Npcp == value
 
     @pytest.mark.SCIM
     def test_check(self):
@@ -245,9 +250,9 @@ if __name__ == "__main__":
     # a.test_set_is_reverse()
     # a.test_set_is_reverse_layer()
     # a.test_set_is_permute_B_C()
-    a.test_set_is_change_layer()
     # a.test_set_Nslot()
-    # a.test_set_Npcp()
+    a.test_set_Npcp()
     # a.test_check()
+    # a.test_set_c_layer_def()
     a.teardown_class()
     print("Done")

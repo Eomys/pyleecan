@@ -156,7 +156,6 @@ class SWinding(Gen_SWinding, QWidget):
 
         # Connect the signal/slot
         self.c_wind_type.currentIndexChanged.connect(self.set_type)
-        self.c_layer_def.currentIndexChanged.connect(self.update_winding_layer)
         self.si_Npcp.valueChanged.connect(self.set_Npcp)
         self.si_Nslot.valueChanged.connect(self.set_Nslot)
         self.si_Ntcoil.valueChanged.connect(self.set_Ntcoil)
@@ -200,23 +199,6 @@ class SWinding(Gen_SWinding, QWidget):
             self.si_qs.show()
             self.b_generate.show()
             self.b_import.hide()
-
-    def update_winding_layer(self):
-        "Updating winding of the lamination according to c_layer_def: Number of layer and the direction"
-        if self.c_layer_def.currentIndex() == IDX_SINGLE_LAYER:
-            self.obj.winding.Nlayer = 1
-        else:
-            Nrad, Ntan = self.obj.winding.get_dim_wind()
-            if self.c_layer_def.currentIndex() == IDX_DOUBLE_LAYER_RAD and Nrad < Ntan:
-                self.obj.winding.Nlayer = 2
-                self.obj.winding.is_change_layer = True
-            elif (
-                self.c_layer_def.currentIndex() == IDX_DOUBLE_LAYER_TAN and Nrad > Ntan
-            ):
-                self.obj.winding.Nlayer = 2
-                self.obj.winding.is_change_layer = True
-            elif Nrad == Ntan:
-                self.obj.winding.Nlayer = 2
 
     def show_layer_widget(self):
         # Coil pitch (or coil span)
@@ -284,17 +266,22 @@ class SWinding(Gen_SWinding, QWidget):
             if self.obj.winding.Nlayer > 1:
                 Nrad, Ntan = self.obj.winding.get_dim_wind()
                 if (
-                    self.c_layer_def.currentIndex() == IDX_DOUBLE_LAYER_TAN
-                    and Nrad > Ntan
-                ):
-                    self.obj.winding.is_change_layer = True
-                    self.obj.winding.get_connection_mat()
-                elif (
                     self.c_layer_def.currentIndex() == IDX_DOUBLE_LAYER_RAD
                     and Nrad < Ntan
                 ):
-                    self.obj.winding.is_change_layer = True
-                    self.obj.winding.get_connection_mat()
+                    self.obj.winding.is_change_layer = (
+                        not self.obj.winding.is_change_layer
+                    )
+                elif (
+                    self.c_layer_def.currentIndex() == IDX_DOUBLE_LAYER_TAN
+                    and Nrad > Ntan
+                ):
+                    self.obj.winding.is_change_layer = (
+                        not self.obj.winding.is_change_layer
+                    )
+                elif Nrad == Ntan:
+                    self.obj.winding.is_change_layer = False
+                self.obj.winding.get_connection_mat()
 
         except Exception as e:
             log_error(
@@ -353,7 +340,7 @@ class SWinding(Gen_SWinding, QWidget):
             if self.obj.winding.Nlayer == 1:
                 self.c_layer_def.setCurrentIndex(IDX_SINGLE_LAYER)
             else:
-                Nrad, Ntan = self.winding.get_dim_wind()
+                Nrad, Ntan = self.obj.winding.get_dim_wind()
                 if Nrad < Ntan:
                     self.c_layer_def.setCurrentIndex(IDX_DOUBLE_LAYER_TAN)
                 else:
@@ -446,24 +433,6 @@ class SWinding(Gen_SWinding, QWidget):
         self.obj.winding.is_permute_B_C = value
         self.update_graph()
         self.comp_output()
-        # Notify the machine GUI that the machine has changed
-        self.saveNeeded.emit()
-
-    def set_is_change_layer(self, value):
-        """Signal to update the value of is_change_layer according to the
-        widget
-
-        Parameters
-        ----------
-        self : SWinding
-            A SWinding object
-        value :
-            New value of is_change_layer
-        """
-
-        value = self.is_change_layer.isChecked()
-        self.obj.winding.is_change_layer = value
-        self.update_graph()
         # Notify the machine GUI that the machine has changed
         self.saveNeeded.emit()
 
