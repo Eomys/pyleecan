@@ -51,6 +51,10 @@ class SWinding(Gen_SWinding, QWidget):
         self.machine = machine
         self.material_dict = material_dict
         self.is_stator = is_stator
+        self.is_test = False  # True to hide the plot
+        self.plot_mmf_widget = None  # To test plot
+        self.fig_linear = None  # To test plot
+        self.fig_radial = None  # To test plot
 
         # Fill the fields with the machine values (if they're filled)
         if self.is_stator:
@@ -580,7 +584,7 @@ class SWinding(Gen_SWinding, QWidget):
             A SWinding object
         """
         try:
-            fig, _ = self.obj.winding.plot_linear()
+            fig, _ = self.obj.winding.plot_linear(is_show_fig=not self.is_test)
             set_plot_gui_icon()
             self.fig_linear = fig
         except Exception as e:
@@ -603,7 +607,7 @@ class SWinding(Gen_SWinding, QWidget):
             A SWinding object
         """
         try:
-            fig, _ = self.obj.plot(is_winding_connection=True)
+            fig, _ = self.obj.plot(is_winding_connection=True, is_show_fig=not self.is_test)
             set_plot_gui_icon()
             self.fig_radial = fig
         except Exception as e:
@@ -622,7 +626,7 @@ class SWinding(Gen_SWinding, QWidget):
         if self.machine is not None:
             try:
                 self.plot_mmf_widget = self.machine.stator.plot_mmf_unit(
-                    is_create_appli=False
+                    is_create_appli=False, is_show_fig=not self.is_test
                 )
             except Exception as e:
                 if self.obj.is_stator:  # Adapt the text to the current lamination
