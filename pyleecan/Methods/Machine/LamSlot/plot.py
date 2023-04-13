@@ -49,7 +49,7 @@ def plot(
     is_show_fig : bool
         To call show at the end of the method
     is_winding_connection : bool
-        True to add winding connection arrow (not used)
+        True to display winding connections (not used)
 
     Returns
     -------

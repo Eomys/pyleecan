@@ -54,7 +54,7 @@ def plot(
     is_legend : bool
         True to add the legend
     is_winding_connection : bool
-        True to add winding connection arrow (not used)
+        True to display winding connections (not used)
 
     Returns
     -------
