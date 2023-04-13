@@ -91,7 +91,10 @@ class TestNewMachineRailway(object):
         ## Check modif
         assert isinstance(self.widget.machine, MachineSCIM)
         assert self.widget.machine.name == "Railway_Test"
+        assert not self.widget.machine.stator.is_internal
+        assert self.widget.machine.rotor.is_internal
         assert self.widget.machine.stator.winding.p == 3
+        assert self.widget.machine.rotor.winding.p == 3
 
         #####################
         # 2 Machine Dimension
@@ -120,6 +123,7 @@ class TestNewMachineRailway(object):
         assert self.widget.w_step.lf_RRint.isEnabled()
         self.widget.w_step.lf_RRint.setText("0.045")
         self.widget.w_step.lf_RRint.editingFinished.emit()
+        assert self.widget.w_step.w_mat_0.c_mat_type.currentText() == "M400-50A"
         ## Check modif
         assert self.widget.machine.stator.Rext == pytest.approx(0.2)
         assert self.widget.machine.stator.Rint == pytest.approx(0.1325)
@@ -130,6 +134,7 @@ class TestNewMachineRailway(object):
             self.widget.w_step.out_airgap.text() == "Airgap magnetic width = 1.5 [mm]"
         )
         assert isinstance(self.widget.machine.shaft, Shaft)
+        assert self.widget.machine.shaft.mat_type.name == "M400-50A"
         assert self.widget.machine.frame is None
 
         #####################
@@ -137,7 +142,41 @@ class TestNewMachineRailway(object):
         self.widget.w_step.b_next.clicked.emit()
         assert self.widget.nav_step.currentItem().text() == " 3: Stator Slot"
         assert isinstance(self.widget.w_step, SWSlot)
+        self.widget.w_step.is_test = True  # To hide the plots
 
+        ## Initial state
+        assert self.widget.w_step.test_err_msg is None
+        with mock.patch(
+            "PySide2.QtWidgets.QMessageBox.critical",
+            return_value=QtWidgets.QMessageBox.Ok,
+        ):
+            self.widget.w_step.b_plot.clicked.emit()
+        assert (
+            self.widget.w_step.test_err_msg
+            == "Error in Stator Slot definition:\nYou must set Zs !"
+        )
+
+        assert self.widget.w_step.out_Slot_pitch.text() == "Slot pitch: 360 / Zs = ?"
+        assert (
+            self.widget.w_step.w_slot.w_out.out_Wlam.text()
+            == "Stator width: 0.0675 [m]"
+        )
+        assert (
+            self.widget.w_step.w_slot.w_out.out_slot_height.text() == "Slot height: ?"
+        )
+        assert (
+            self.widget.w_step.w_slot.w_out.out_yoke_height.text() == "Yoke height: ?"
+        )
+        assert (
+            self.widget.w_step.w_slot.w_out.out_wind_surface.text()
+            == "Active surface: ?"
+        )
+        assert (
+            self.widget.w_step.w_slot.w_out.out_tot_surface.text() == "Slot surface: ?"
+        )
+        assert self.widget.w_step.w_slot.w_out.out_op_angle.text() == "Opening angle: ?"
+
+        ## Definition
         self.widget.w_step.si_Zs.setValue(36)
         self.widget.w_step.si_Zs.editingFinished.emit()
         index_slot10 = self.widget.w_step.c_slot_type.findText("Slot Type 10")
@@ -200,6 +239,7 @@ class TestNewMachineRailway(object):
 
         assert self.widget.w_step.lf_L1.value() is None
         assert self.widget.w_step.lf_Kf1.value() == 0.95
+        assert self.widget.w_step.w_mat.c_mat_type.currentText() == "M400-50A"
 
         assert not self.widget.w_step.g_axial.isChecked()
         assert not self.widget.w_step.g_radial.isChecked()
@@ -214,12 +254,14 @@ class TestNewMachineRailway(object):
 
         assert self.widget.w_step.machine.stator.L1 == 0.35
         assert self.widget.w_step.machine.stator.Kf1 == 0.95
+        assert self.widget.machine.stator.mat_type.name == "M400-50A"
 
         #####################
         # 5 Stator Winding
         self.widget.w_step.b_next.clicked.emit()
         assert self.widget.nav_step.currentItem().text() == " 5: Stator Winding"
         assert isinstance(self.widget.w_step, SWinding)
+        self.widget.w_step.is_test = True  # To hide the plots
 
         assert self.widget.w_step.c_wind_type.currentText() == "Star of Slot"
         assert self.widget.w_step.in_Zs.text() == "Slot number: 36"
@@ -259,14 +301,32 @@ class TestNewMachineRailway(object):
             == "Coils in series per parallel circuit: 6"
         )
 
-        # Check plots
+        # Check plots/export
+        assert self.widget.w_step.plot_mmf_widget is None
         self.widget.w_step.b_plot_mmf.clicked.emit()
         assert isinstance(self.widget.w_step.plot_mmf_widget, DDataPlotter)
         self.widget.w_step.plot_mmf_widget.close()
+
+        assert self.widget.w_step.fig_radial is None
         self.widget.w_step.b_plot_radial.clicked.emit()
         assert isinstance(self.widget.w_step.fig_radial, plt.Figure)
+
+        assert self.widget.w_step.fig_linear is None
         self.widget.w_step.b_plot_linear.clicked.emit()
         assert isinstance(self.widget.w_step.fig_linear, plt.Figure)
+
+        file_path = join(save_path, "winding_export.csv")
+        return_value = (
+            file_path,
+            "CSV (*.csv)",
+        )
+        assert not isfile(file_path)
+        with mock.patch(
+            "PySide2.QtWidgets.QFileDialog.getSaveFileName", return_value=return_value
+        ):
+            # To trigger the slot
+            self.widget.w_step.b_export.clicked.emit()
+        assert isfile(file_path)
 
         # Is the stator winding well defined ?
         assert self.widget.w_step.machine.stator.winding.qs == 3
@@ -344,6 +404,14 @@ class TestNewMachineRailway(object):
         assert isinstance(
             self.widget.w_step.machine.stator.winding.conductor, CondType11
         )
+        assert (
+            self.widget.w_step.machine.stator.winding.conductor.cond_mat.name
+            == "Copper1"
+        )
+        assert (
+            self.widget.w_step.machine.stator.winding.conductor.ins_mat.name
+            == "Insulator1"
+        )
         assert self.widget.w_step.machine.stator.winding.conductor.Nwppc_tan == 1
         assert self.widget.w_step.machine.stator.winding.conductor.Nwppc_rad == 1
         assert self.widget.w_step.machine.stator.winding.conductor.Wwire == 0.01
@@ -356,6 +424,18 @@ class TestNewMachineRailway(object):
         self.widget.w_step.b_next.clicked.emit()
         assert self.widget.nav_step.currentItem().text() == " 7: Rotor Slot"
         assert isinstance(self.widget.w_step, SWSlot)
+        self.widget.w_step.is_test = True  # To hide the plot
+
+        assert self.widget.w_step.test_err_msg is None
+        with mock.patch(
+            "PySide2.QtWidgets.QMessageBox.critical",
+            return_value=QtWidgets.QMessageBox.Ok,
+        ):
+            self.widget.w_step.b_plot.clicked.emit()
+        assert (
+            self.widget.w_step.test_err_msg
+            == "Error in Rotor Slot definition:\nYou must set Zs !"
+        )
 
         self.widget.w_step.si_Zs.setValue(28)
         self.widget.w_step.si_Zs.editingFinished.emit()
@@ -419,10 +499,16 @@ class TestNewMachineRailway(object):
         assert self.widget.w_step.lf_Hscr.value() is None
         assert self.widget.w_step.lf_Lscr.value() is None
         assert self.widget.w_step.lf_Lewout.value() is None
+        assert self.widget.w_step.w_mat_scr.c_mat_type.currentText() == "Copper1"
         assert self.widget.w_step.c_bar_type.currentText() == "Rectangular bar"
         assert isinstance(self.widget.w_step.w_bar, PCondType21)
         assert self.widget.w_step.w_bar.lf_Hbar.value() is None
         assert self.widget.w_step.w_bar.lf_Wbar.value() is None
+        assert self.widget.w_step.w_bar.w_mat.c_mat_type.currentText() == "Copper1"
+
+        assert self.widget.w_step.w_bar.w_out.out_Sbar.text() == "Sbar: ?"
+        assert self.widget.w_step.w_bar.w_out.out_Sslot.text() == "Sslot: 0.000239 [m²]"
+        assert self.widget.w_step.w_bar.w_out.out_ratio.text() == "Sbar / Sslot: ?"
 
         self.widget.w_step.lf_Hscr.setValue(0.02)
         self.widget.w_step.lf_Hscr.editingFinished.emit()
@@ -449,6 +535,11 @@ class TestNewMachineRailway(object):
         )
         assert self.widget.w_step.machine.rotor.winding.conductor.Wbar == pytest.approx(
             0.01
+        )
+        assert self.widget.w_step.machine.rotor.ring_mat.name == "Copper1"
+        assert (
+            self.widget.w_step.machine.rotor.winding.conductor.cond_mat.name
+            == "Copper1"
         )
 
         #####################
@@ -480,6 +571,7 @@ class TestNewMachineRailway(object):
         self.widget.w_step.b_next.clicked.emit()
         assert self.widget.nav_step.currentItem().text() == "11: Machine Summary"
         assert isinstance(self.widget.w_step, SPreview)
+        self.widget.w_step.tab_machine.is_test = True  # To hide the plots
 
         assert (
             self.widget.w_step.tab_machine.tab_param.item(0, 0).text() == "Machine Type"
@@ -542,6 +634,11 @@ class TestNewMachineRailway(object):
             == "Rotor winding mass"
         )
         assert self.widget.w_step.tab_machine.tab_param.item(11, 1).text() == "21.12 kg"
+        assert (
+            self.widget.w_step.tab_machine.tab_param.item(12, 0).text() == "Shaft mass"
+        )
+        assert self.widget.w_step.tab_machine.tab_param.item(12, 1).text() == "0 kg"
+        assert self.widget.w_step.tab_machine.tab_param.rowCount() == 13
 
         self.widget.w_step.tab_machine.b_plot_machine.clicked.emit()
         self.widget.w_step.tab_machine.b_mmf.clicked.emit()

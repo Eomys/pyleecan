@@ -62,6 +62,7 @@ def plot_mmf_unit(self, is_create_appli=True, save_path=None, is_show_fig=False)
             z_max=np_max(MMF_U.values) * 1.1,
             plot_arg_dict=plot_arg_dict,
             is_create_appli=is_create_appli,
+            is_show_fig=is_show_fig,
             frozen_type=2,
         )
     else:
@@ -91,5 +92,6 @@ def plot_mmf_unit(self, is_create_appli=True, save_path=None, is_show_fig=False)
         wid.canvas.get_default_filename = (
             lambda: wid.windowTitle().replace(" ", "_").replace(":", "") + ".png"
         )
-        wid.show()
+        if is_show_fig:
+            wid.show()
         return wid

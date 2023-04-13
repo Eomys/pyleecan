@@ -1,4 +1,5 @@
 import sys
+from os import makedirs
 from os.path import isdir, isfile, join
 from shutil import rmtree
 from multiprocessing import cpu_count
@@ -48,6 +49,9 @@ mpl_logger = logging.getLogger("matplotlib")
 mpl_logger.setLevel(logging.WARNING)
 
 matlib_path = join(DATA_DIR, "Material")
+save_path = join(save_path, "Test_New_Prius")
+if not isdir(save_path):
+    makedirs(save_path)
 
 
 class TestNewMachinePrius(object):
@@ -98,7 +102,10 @@ class TestNewMachinePrius(object):
         ## Check modif
         assert isinstance(self.widget.machine, MachineIPMSM)
         assert self.widget.machine.name == "Prius_Test"
+        assert not self.widget.machine.stator.is_internal
+        assert self.widget.machine.rotor.is_internal
         assert self.widget.machine.stator.winding.p == 4
+        assert self.widget.machine.rotor.hole[0].Zh == 8
 
         #####################
         # 2 Machine Dimension
@@ -127,6 +134,7 @@ class TestNewMachinePrius(object):
         assert self.widget.w_step.lf_RRint.isEnabled()
         self.widget.w_step.lf_RRint.setText("55.32e-3")
         self.widget.w_step.lf_RRint.editingFinished.emit()
+        assert self.widget.w_step.w_mat_0.c_mat_type.currentText() == "M400-50A"
         ## Check modif
         assert self.widget.machine.stator.Rext == pytest.approx(134.62e-3)
         assert self.widget.machine.stator.Rint == pytest.approx(80.95e-3)
@@ -137,6 +145,7 @@ class TestNewMachinePrius(object):
             self.widget.w_step.out_airgap.text() == "Airgap magnetic width = 0.75 [mm]"
         )
         assert isinstance(self.widget.machine.shaft, Shaft)
+        assert self.widget.machine.shaft.mat_type.name == "M400-50A"
         assert self.widget.machine.frame is None
 
         #####################
@@ -144,7 +153,41 @@ class TestNewMachinePrius(object):
         self.widget.w_step.b_next.clicked.emit()
         assert self.widget.nav_step.currentItem().text() == " 3: Stator Slot"
         assert isinstance(self.widget.w_step, SWSlot)
+        self.widget.w_step.is_test = True  # To hide the plots
 
+        ## Initial state
+        assert self.widget.w_step.test_err_msg is None
+        with mock.patch(
+            "PySide2.QtWidgets.QMessageBox.critical",
+            return_value=QtWidgets.QMessageBox.Ok,
+        ):
+            self.widget.w_step.b_plot.clicked.emit()
+        assert (
+            self.widget.w_step.test_err_msg
+            == "Error in Stator Slot definition:\nYou must set Zs !"
+        )
+
+        assert self.widget.w_step.out_Slot_pitch.text() == "Slot pitch: 360 / Zs = ?"
+        assert (
+            self.widget.w_step.w_slot.w_out.out_Wlam.text()
+            == "Stator width: 0.05367 [m]"
+        )
+        assert (
+            self.widget.w_step.w_slot.w_out.out_slot_height.text() == "Slot height: ?"
+        )
+        assert (
+            self.widget.w_step.w_slot.w_out.out_yoke_height.text() == "Yoke height: ?"
+        )
+        assert (
+            self.widget.w_step.w_slot.w_out.out_wind_surface.text()
+            == "Active surface: ?"
+        )
+        assert (
+            self.widget.w_step.w_slot.w_out.out_tot_surface.text() == "Slot surface: ?"
+        )
+        assert self.widget.w_step.w_slot.w_out.out_op_angle.text() == "Opening angle: ?"
+
+        ## Definition
         self.widget.w_step.si_Zs.setValue(48)
         self.widget.w_step.si_Zs.editingFinished.emit()
         index_slot11 = self.widget.w_step.c_slot_type.findText("Slot Type 11")
@@ -205,6 +248,7 @@ class TestNewMachinePrius(object):
 
         assert self.widget.w_step.lf_L1.value() is None
         assert self.widget.w_step.lf_Kf1.value() == 0.95
+        assert self.widget.w_step.w_mat.c_mat_type.currentText() == "M400-50A"
 
         assert not self.widget.w_step.g_axial.isChecked()
         assert not self.widget.w_step.g_radial.isChecked()
@@ -219,12 +263,14 @@ class TestNewMachinePrius(object):
 
         assert self.widget.w_step.machine.stator.L1 == 0.08382
         assert self.widget.w_step.machine.stator.Kf1 == 0.95
+        assert self.widget.machine.stator.mat_type.name == "M400-50A"
 
         #####################
         # 5 Stator Winding
         self.widget.w_step.b_next.clicked.emit()
         assert self.widget.nav_step.currentItem().text() == " 5: Stator Winding"
         assert isinstance(self.widget.w_step, SWinding)
+        self.widget.w_step.is_test = True  # To hide the plots
 
         assert self.widget.w_step.c_wind_type.currentText() == "Star of Slot"
         assert self.widget.w_step.in_Zs.text() == "Slot number: 48"
@@ -253,14 +299,32 @@ class TestNewMachinePrius(object):
             == "Coils in series per parallel circuit: 8"
         )
 
-        # Check plots
+        # Check plots/export
+        assert self.widget.w_step.plot_mmf_widget is None
         self.widget.w_step.b_plot_mmf.clicked.emit()
         assert isinstance(self.widget.w_step.plot_mmf_widget, DDataPlotter)
         self.widget.w_step.plot_mmf_widget.close()
+
+        assert self.widget.w_step.fig_radial is None
         self.widget.w_step.b_plot_radial.clicked.emit()
         assert isinstance(self.widget.w_step.fig_radial, plt.Figure)
+
+        assert self.widget.w_step.fig_linear is None
         self.widget.w_step.b_plot_linear.clicked.emit()
         assert isinstance(self.widget.w_step.fig_linear, plt.Figure)
+
+        file_path = join(save_path, "winding_export.csv")
+        return_value = (
+            file_path,
+            "CSV (*.csv)",
+        )
+        assert not isfile(file_path)
+        with mock.patch(
+            "PySide2.QtWidgets.QFileDialog.getSaveFileName", return_value=return_value
+        ):
+            # To trigger the slot
+            self.widget.w_step.b_export.clicked.emit()
+        assert isfile(file_path)
 
         # Is the stator winding well defined ?
         assert self.widget.w_step.machine.stator.winding.qs == 3
@@ -351,6 +415,14 @@ class TestNewMachinePrius(object):
         assert isinstance(
             self.widget.w_step.machine.stator.winding.conductor, CondType12
         )
+        assert (
+            self.widget.w_step.machine.stator.winding.conductor.cond_mat.name
+            == "Copper1"
+        )
+        assert (
+            self.widget.w_step.machine.stator.winding.conductor.ins_mat.name
+            == "Insulator1"
+        )
         assert self.widget.w_step.machine.stator.winding.conductor.Nwppc == 13
         assert self.widget.w_step.machine.stator.winding.conductor.Wwire == 0.000912
         assert self.widget.w_step.machine.stator.winding.conductor.Wins_wire == 1e-06
@@ -362,6 +434,7 @@ class TestNewMachinePrius(object):
         self.widget.w_step.b_next.clicked.emit()
         assert self.widget.nav_step.currentItem().text() == " 7: Rotor Hole"
         assert isinstance(self.widget.w_step, SMHoleMag)
+        self.widget.w_step.is_test = True  # To hide the plot
 
         assert (
             self.widget.w_step.out_hole_pitch.text()
@@ -374,6 +447,17 @@ class TestNewMachinePrius(object):
         assert wid_hole.c_hole_type.count() == 8
         assert wid_hole.c_hole_type.currentText() == "Hole Type 50"
         assert isinstance(wid_hole.w_hole, PHoleM50)
+
+        assert self.widget.w_step.test_err_msg is None
+        with mock.patch(
+            "PySide2.QtWidgets.QMessageBox.critical",
+            return_value=QtWidgets.QMessageBox.Ok,
+        ):
+            self.widget.w_step.b_plot.clicked.emit()
+        assert (
+            self.widget.w_step.test_err_msg
+            == "Error in Hole definition:\nYou must set W0 !"
+        )
 
         assert wid_hole.w_hole.lf_W0.value() is None
         assert wid_hole.w_hole.lf_W1.value() is None
@@ -388,6 +472,10 @@ class TestNewMachinePrius(object):
         assert wid_hole.w_hole.w_mat_0.c_mat_type.currentText() == "Air"
         assert wid_hole.w_hole.w_mat_1.c_mat_type.currentText() == "Magnet1"
         assert wid_hole.w_hole.w_mat_2.c_mat_type.currentText() == "Magnet1"
+        assert wid_hole.w_hole.out_slot_surface.text() == "Hole surface: ?"
+        assert wid_hole.w_hole.out_magnet_surface.text() == "Magnet surf.: ?"
+        assert wid_hole.w_hole.out_alpha.text() == "alpha: ?"
+        assert wid_hole.w_hole.out_W5.text() == "Max magnet width: ?"
 
         wid_hole.w_hole.lf_H0.setValue(0.01096)
         wid_hole.w_hole.lf_H0.editingFinished.emit()
@@ -430,6 +518,7 @@ class TestNewMachinePrius(object):
         assert self.widget.w_step.machine.rotor.hole[0].W2 == 0
         assert self.widget.w_step.machine.rotor.hole[0].W3 == 0.014
         assert self.widget.w_step.machine.rotor.hole[0].W4 == 0.0189
+        self.widget.w_step.b_plot.clicked.emit()
 
         #####################
         # 8 Rotor Lamination
@@ -439,6 +528,7 @@ class TestNewMachinePrius(object):
 
         assert self.widget.w_step.lf_L1.value() == 0.08382
         assert self.widget.w_step.lf_Kf1.value() == 0.95
+        assert self.widget.w_step.w_mat.c_mat_type.currentText() == "M400-50A"
 
         assert not self.widget.w_step.g_axial.isChecked()
         assert not self.widget.w_step.g_radial.isChecked()
@@ -446,6 +536,7 @@ class TestNewMachinePrius(object):
 
         assert self.widget.w_step.machine.rotor.L1 == 0.08382
         assert self.widget.w_step.machine.rotor.Kf1 == 0.95
+        assert self.widget.w_step.machine.rotor.mat_type.name == "M400-50A"
 
         #####################
         # 9 Rotor Skew
@@ -460,6 +551,7 @@ class TestNewMachinePrius(object):
         self.widget.w_step.b_next.clicked.emit()
         assert self.widget.nav_step.currentItem().text() == "10: Machine Summary"
         assert isinstance(self.widget.w_step, SPreview)
+        self.widget.w_step.tab_machine.is_test = True  # To hide the plots
 
         assert (
             self.widget.w_step.tab_machine.tab_param.item(0, 0).text() == "Machine Type"
@@ -517,6 +609,11 @@ class TestNewMachinePrius(object):
             == "Rotor magnet mass"
         )
         assert self.widget.w_step.tab_machine.tab_param.item(10, 1).text() == "1.236 kg"
+        assert (
+            self.widget.w_step.tab_machine.tab_param.item(11, 0).text() == "Shaft mass"
+        )
+        assert self.widget.w_step.tab_machine.tab_param.item(11, 1).text() == "0 kg"
+        assert self.widget.w_step.tab_machine.tab_param.rowCount() == 12
 
         self.widget.w_step.tab_machine.b_plot_machine.clicked.emit()
         self.widget.w_step.tab_machine.b_mmf.clicked.emit()

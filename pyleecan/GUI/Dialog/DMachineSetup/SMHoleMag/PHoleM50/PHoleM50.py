@@ -268,7 +268,7 @@ class PHoleM50(Gen_PHoleM50, QWidget):
                 "Hole surface: " + s_surf + " [" + self.u.get_m2_name() + "]"
             )
         except:
-            self.out_slot_surface.setText("Hole suface: ?")
+            self.out_slot_surface.setText("Hole surface: ?")
 
         # Magnet surface
         try:

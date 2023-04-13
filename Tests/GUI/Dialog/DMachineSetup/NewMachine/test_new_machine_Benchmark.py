@@ -43,7 +43,7 @@ mpl_logger = logging.getLogger("matplotlib")
 mpl_logger.setLevel(logging.WARNING)
 
 matlib_path = join(DATA_DIR, "Material")
-save_path = join(save_path, "Test_Bechmark")
+save_path = join(save_path, "Test_New_Bechmark")
 if not isdir(save_path):
     makedirs(save_path)
 
@@ -98,6 +98,8 @@ class TestNewMachineBenchmark(object):
         assert self.widget.machine.name == "Benchmark_Test"
         assert self.widget.machine.stator.winding.p == 5
         assert self.widget.machine.rotor.slot.Zs == 10
+        assert not self.widget.machine.stator.is_internal
+        assert self.widget.machine.rotor.is_internal
 
         #####################
         # 2 Machine Dimension
