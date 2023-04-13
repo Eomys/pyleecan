@@ -47,6 +47,7 @@ save_path = join(save_path, "Test_Bechmark")
 if not isdir(save_path):
     makedirs(save_path)
 
+
 class TestNewMachineBenchmark(object):
     """Test that you can create the Benchmark"""
 
@@ -151,35 +152,29 @@ class TestNewMachineBenchmark(object):
             return_value=QtWidgets.QMessageBox.Ok,
         ):
             self.widget.w_step.b_plot.clicked.emit()
-        assert self.widget.w_step.test_err_msg  == "Error in Stator Slot definition:\nYou must set Zs !"
-        
         assert (
-            self.widget.w_step.out_Slot_pitch.text()
-            == "Slot pitch: 360 / Zs = ?"
+            self.widget.w_step.test_err_msg
+            == "Error in Stator Slot definition:\nYou must set Zs !"
         )
+
+        assert self.widget.w_step.out_Slot_pitch.text() == "Slot pitch: 360 / Zs = ?"
         assert (
             self.widget.w_step.w_slot.w_out.out_Wlam.text() == "Stator width: 0.025 [m]"
         )
         assert (
-            self.widget.w_step.w_slot.w_out.out_slot_height.text()
-            == "Slot height: ?"
+            self.widget.w_step.w_slot.w_out.out_slot_height.text() == "Slot height: ?"
         )
         assert (
-            self.widget.w_step.w_slot.w_out.out_yoke_height.text()
-            == "Yoke height: ?"
+            self.widget.w_step.w_slot.w_out.out_yoke_height.text() == "Yoke height: ?"
         )
         assert (
             self.widget.w_step.w_slot.w_out.out_wind_surface.text()
             == "Active surface: ?"
         )
         assert (
-            self.widget.w_step.w_slot.w_out.out_tot_surface.text()
-            == "Slot surface: ?"
+            self.widget.w_step.w_slot.w_out.out_tot_surface.text() == "Slot surface: ?"
         )
-        assert (
-            self.widget.w_step.w_slot.w_out.out_op_angle.text()
-            == "Opening angle: ?"
-        )
+        assert self.widget.w_step.w_slot.w_out.out_op_angle.text() == "Opening angle: ?"
         ## Definition
         self.widget.w_step.si_Zs.setValue(12)
         self.widget.w_step.si_Zs.editingFinished.emit()
@@ -418,8 +413,14 @@ class TestNewMachineBenchmark(object):
         assert isinstance(
             self.widget.w_step.machine.stator.winding.conductor, CondType11
         )
-        assert self.widget.w_step.machine.stator.winding.conductor.cond_mat.name == "Copper1"
-        assert self.widget.w_step.machine.stator.winding.conductor.ins_mat.name == "Insulator1"
+        assert (
+            self.widget.w_step.machine.stator.winding.conductor.cond_mat.name
+            == "Copper1"
+        )
+        assert (
+            self.widget.w_step.machine.stator.winding.conductor.ins_mat.name
+            == "Insulator1"
+        )
         assert self.widget.w_step.machine.stator.winding.conductor.Nwppc_tan == 5
         assert self.widget.w_step.machine.stator.winding.conductor.Nwppc_rad == 10
         assert self.widget.w_step.machine.stator.winding.conductor.Wwire == 0.001
@@ -448,15 +449,16 @@ class TestNewMachineBenchmark(object):
             return_value=QtWidgets.QMessageBox.Ok,
         ):
             self.widget.w_step.b_plot.clicked.emit()
-        assert self.widget.w_step.test_err_msg  == "Error in Rotor Slot definition:\nYou must set W0 !"
-        
+        assert (
+            self.widget.w_step.test_err_msg
+            == "Error in Rotor Slot definition:\nYou must set W0 !"
+        )
+
         wid_slot = self.widget.w_step.w_slot
         assert wid_slot.w_out.out_Wlam.text() == "Rotor width: 0.0305 [m]"
         assert wid_slot.w_out.out_slot_height.text() == "Slot height: ?"
         assert wid_slot.w_out.out_yoke_height.text() == "Yoke height: ?"
-        assert (
-            wid_slot.w_out.out_wind_surface.text() == "Active surface: ?"
-        )
+        assert wid_slot.w_out.out_wind_surface.text() == "Active surface: ?"
         assert wid_slot.w_out.out_tot_surface.text() == "Slot surface: ?"
         assert wid_slot.w_out.out_op_angle.text() == "Opening angle: ?"
 

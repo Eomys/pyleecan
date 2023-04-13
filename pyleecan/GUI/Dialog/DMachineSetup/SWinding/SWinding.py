@@ -607,7 +607,9 @@ class SWinding(Gen_SWinding, QWidget):
             A SWinding object
         """
         try:
-            fig, _ = self.obj.plot(is_winding_connection=True, is_show_fig=not self.is_test)
+            fig, _ = self.obj.plot(
+                is_winding_connection=True, is_show_fig=not self.is_test
+            )
             set_plot_gui_icon()
             self.fig_radial = fig
         except Exception as e:

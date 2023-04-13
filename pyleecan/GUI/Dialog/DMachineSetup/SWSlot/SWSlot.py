@@ -287,7 +287,7 @@ class SWSlot(Gen_SWSlot, QWidget):
             name = "Rotor"
 
         if error:  # Error => Display it
-            self.test_err_msg =  "Error in " + name + " Slot definition:\n" + error
+            self.test_err_msg = "Error in " + name + " Slot definition:\n" + error
             getLogger(GUI_LOG_NAME).debug(self.test_err_msg)
             QMessageBox().critical(self, self.tr("Error"), self.test_err_msg)
         else:  # No error => Plot the lamination
@@ -299,7 +299,7 @@ class SWSlot(Gen_SWSlot, QWidget):
                 set_plot_gui_icon()
             except Exception as e:
                 if self.is_stator:
-                    self.test_err_msg =  (
+                    self.test_err_msg = (
                         "Error while plotting Lamination in Stator Slot step:\n"
                         + str(e)
                     )
