@@ -64,6 +64,8 @@ def plot(
         Window title
     is_clean_plot : bool
         True to remove title, legend, axis (only machine on plot with white background)
+    is_winding_connection : bool
+        True to display winding connections (not used)
 
     Returns
     -------

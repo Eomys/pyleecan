@@ -53,6 +53,8 @@ def plot(
         Window title
     is_legend : bool
         True to add the legend
+    is_winding_connection : bool
+        True to add winding connection arrow (not used)
 
     Returns
     -------

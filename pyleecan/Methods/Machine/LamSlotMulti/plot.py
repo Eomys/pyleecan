@@ -52,6 +52,8 @@ def plot(
         To call show at the end of the method
     is_clean_plot : bool
         True to remove title, legend, axis (only machine on plot with white background)
+    is_winding_connection : bool
+        True to add winding connection arrow (not used)
 
     Returns
     -------

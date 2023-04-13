@@ -59,6 +59,8 @@ def plot(
         False to return the patches
     is_show_fig : bool
         To call show at the end of the method
+    is_winding_connection : bool
+        True to add winding connection arrow (not used)
 
     Returns
     -------
