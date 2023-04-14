@@ -522,7 +522,8 @@ class TestSMHoleMag(object):
             material_dict=self.material_dict,
             is_stator=False,
         )
-        self.widget.s_plot(is_show_fig=False)
+        self.widget.is_test = True
+        self.widget.b_plot.clicked.emit()
 
         assert self.widget.machine.rotor.hole[0].Zh == 8
 
@@ -531,7 +532,7 @@ class TestSMHoleMag(object):
             "PySide2.QtWidgets.QMessageBox.critical",
             return_value=QtWidgets.QMessageBox.Ok,
         ):
-            self.widget.s_plot(is_show_fig=False)
+            self.widget.b_plot.clicked.emit()
 
         assert (
             self.widget.out_hole_pitch.text()

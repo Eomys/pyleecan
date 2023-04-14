@@ -53,6 +53,7 @@ class SSimu(Gen_SSimu, QWidget):
         # Saving arguments
         self.machine = machine
         self.material_dict = material_dict
+        self.last_out = None  # To store the last output for tests
 
         # Plot the machine
         try:
@@ -193,8 +194,9 @@ class SSimu(Gen_SSimu, QWidget):
             err_msg = "Error while running simulation:\n" + str(e)
             log_error(self, err_msg)
             self.simu.get_logger().error(err_msg)
+        # Store output for test
+        self.last_out = out
         # Save results
-        # Full results
         try:
             out.save(join(self.simu.path_result, "Result.h5"))
             out.export_to_mat(join(self.simu.path_result, "Result.mat"))

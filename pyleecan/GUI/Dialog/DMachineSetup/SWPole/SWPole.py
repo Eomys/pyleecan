@@ -51,6 +51,7 @@ class SWPole(Ui_SWPole, QWidget):
         self.machine = machine
         self.material_dict = material_dict
         self.is_stator = is_stator
+        self.test_err_msg = None  # To check the error messages in test
 
         self.b_help.hide()
 
@@ -187,7 +188,8 @@ class SWPole(Ui_SWPole, QWidget):
         error = self.check(self.obj)
 
         if error:  # Error => Display it
-            QMessageBox().critical(self, self.tr("Error"), error)
+            self.test_err_msg = error
+            QMessageBox().critical(self, self.tr("Error"), self.test_err_msg)
         else:  # No error => Plot the lamination
             self.obj.plot()
             set_plot_gui_icon()

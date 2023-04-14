@@ -3,7 +3,8 @@ from os.path import isdir, isfile, join
 from shutil import rmtree
 from multiprocessing import cpu_count
 import matplotlib.pyplot as plt
-
+from os import makedirs, listdir
+from numpy import max as np_max
 from SciDataTool.GUI.DDataPlotter.DDataPlotter import DDataPlotter
 
 from PySide2 import QtWidgets
@@ -47,6 +48,9 @@ mpl_logger = logging.getLogger("matplotlib")
 mpl_logger.setLevel(logging.WARNING)
 
 matlib_path = join(DATA_DIR, "Material")
+save_path = join(save_path, "Test_New_Zoe")
+if not isdir(save_path):
+    makedirs(save_path)
 
 
 class TestNewMachineZoe(object):
@@ -97,7 +101,10 @@ class TestNewMachineZoe(object):
         ## Check modif
         assert isinstance(self.widget.machine, MachineWRSM)
         assert self.widget.machine.name == "Zoe_Test"
+        assert not self.widget.machine.stator.is_internal
+        assert self.widget.machine.rotor.is_internal
         assert self.widget.machine.stator.winding.p == 2
+        assert self.widget.machine.rotor.winding.p == 2
 
         #####################
         # 2 Machine Dimension
@@ -126,6 +133,7 @@ class TestNewMachineZoe(object):
         assert self.widget.w_step.lf_RRint.isEnabled()
         self.widget.w_step.lf_RRint.setText("0.0125")
         self.widget.w_step.lf_RRint.editingFinished.emit()
+        assert self.widget.w_step.w_mat_0.c_mat_type.currentText() == "M400-50A"
         ## Check modif
         assert self.widget.machine.stator.Rext == pytest.approx(0.13)
         assert self.widget.machine.stator.Rint == pytest.approx(0.0845)
@@ -136,6 +144,7 @@ class TestNewMachineZoe(object):
             self.widget.w_step.out_airgap.text() == "Airgap magnetic width = 0.8 [mm]"
         )
         assert isinstance(self.widget.machine.shaft, Shaft)
+        assert self.widget.machine.shaft.mat_type.name == "M400-50A"
         assert self.widget.machine.frame is None
 
         #####################
@@ -143,7 +152,41 @@ class TestNewMachineZoe(object):
         self.widget.w_step.b_next.clicked.emit()
         assert self.widget.nav_step.currentItem().text() == " 3: Stator Slot"
         assert isinstance(self.widget.w_step, SWSlot)
+        self.widget.w_step.is_test = True  # To hide the plots
 
+        ## Initial state
+        assert self.widget.w_step.test_err_msg is None
+        with mock.patch(
+            "PySide2.QtWidgets.QMessageBox.critical",
+            return_value=QtWidgets.QMessageBox.Ok,
+        ):
+            self.widget.w_step.b_plot.clicked.emit()
+        assert (
+            self.widget.w_step.test_err_msg
+            == "Error in Stator Slot definition:\nYou must set Zs !"
+        )
+
+        assert self.widget.w_step.out_Slot_pitch.text() == "Slot pitch: 360 / Zs = ?"
+        assert (
+            self.widget.w_step.w_slot.w_out.out_Wlam.text()
+            == "Stator width: 0.0455 [m]"
+        )
+        assert (
+            self.widget.w_step.w_slot.w_out.out_slot_height.text() == "Slot height: ?"
+        )
+        assert (
+            self.widget.w_step.w_slot.w_out.out_yoke_height.text() == "Yoke height: ?"
+        )
+        assert (
+            self.widget.w_step.w_slot.w_out.out_wind_surface.text()
+            == "Active surface: ?"
+        )
+        assert (
+            self.widget.w_step.w_slot.w_out.out_tot_surface.text() == "Slot surface: ?"
+        )
+        assert self.widget.w_step.w_slot.w_out.out_op_angle.text() == "Opening angle: ?"
+
+        ## Definition
         self.widget.w_step.si_Zs.setValue(48)
         self.widget.w_step.si_Zs.editingFinished.emit()
         index_slot28 = self.widget.w_step.c_slot_type.findText("Slot Type 28")
@@ -199,9 +242,11 @@ class TestNewMachineZoe(object):
         self.widget.w_step.b_next.clicked.emit()
         assert self.widget.nav_step.currentItem().text() == " 4: Stator Lamination"
         assert isinstance(self.widget.w_step, SLamShape)
+        self.widget.w_step.is_test = True
 
         assert self.widget.w_step.lf_L1.value() is None
         assert self.widget.w_step.lf_Kf1.value() == 0.95
+        assert self.widget.w_step.w_mat.c_mat_type.currentText() == "M400-50A"
 
         assert not self.widget.w_step.g_axial.isChecked()
         assert not self.widget.w_step.g_radial.isChecked()
@@ -216,12 +261,14 @@ class TestNewMachineZoe(object):
 
         assert self.widget.w_step.machine.stator.L1 == 0.17
         assert self.widget.w_step.machine.stator.Kf1 == 0.95
+        assert self.widget.machine.stator.mat_type.name == "M400-50A"
 
         #####################
         # 5 Stator Winding
         self.widget.w_step.b_next.clicked.emit()
         assert self.widget.nav_step.currentItem().text() == " 5: Stator Winding"
         assert isinstance(self.widget.w_step, SWinding)
+        self.widget.w_step.is_test = True
 
         assert self.widget.w_step.c_wind_type.currentText() == "Star of Slot"
         assert self.widget.w_step.in_Zs.text() == "Slot number: 48"
@@ -261,14 +308,32 @@ class TestNewMachineZoe(object):
             == "Coils in series per parallel circuit: 4"
         )
 
-        # Check plots
+        # Check plots/export
+        assert self.widget.w_step.plot_mmf_widget is None
         self.widget.w_step.b_plot_mmf.clicked.emit()
         assert isinstance(self.widget.w_step.plot_mmf_widget, DDataPlotter)
         self.widget.w_step.plot_mmf_widget.close()
+
+        assert self.widget.w_step.fig_radial is None
         self.widget.w_step.b_plot_radial.clicked.emit()
         assert isinstance(self.widget.w_step.fig_radial, plt.Figure)
+
+        assert self.widget.w_step.fig_linear is None
         self.widget.w_step.b_plot_linear.clicked.emit()
         assert isinstance(self.widget.w_step.fig_linear, plt.Figure)
+
+        file_path = join(save_path, "winding_export.csv")
+        return_value = (
+            file_path,
+            "CSV (*.csv)",
+        )
+        assert not isfile(file_path)
+        with mock.patch(
+            "PySide2.QtWidgets.QFileDialog.getSaveFileName", return_value=return_value
+        ):
+            # To trigger the slot
+            self.widget.w_step.b_export.clicked.emit()
+        assert isfile(file_path)
 
         # Is the stator winding well defined ?
         assert self.widget.w_step.machine.stator.winding.qs == 3
@@ -361,6 +426,14 @@ class TestNewMachineZoe(object):
         assert isinstance(
             self.widget.w_step.machine.stator.winding.conductor, CondType12
         )
+        assert (
+            self.widget.w_step.machine.stator.winding.conductor.cond_mat.name
+            == "Copper1"
+        )
+        assert (
+            self.widget.w_step.machine.stator.winding.conductor.ins_mat.name
+            == "Insulator1"
+        )
         assert self.widget.w_step.machine.stator.winding.conductor.Nwppc == 1
         assert self.widget.w_step.machine.stator.winding.conductor.Wwire == 0.002
         assert self.widget.w_step.machine.stator.winding.conductor.Wins_cond == 0.002
@@ -381,6 +454,14 @@ class TestNewMachineZoe(object):
 
         assert self.widget.w_step.c_slot_type.count() == 2
         assert self.widget.w_step.c_slot_type.currentText() == "Pole Type 60"
+
+        assert self.widget.w_step.test_err_msg is None
+        with mock.patch(
+            "PySide2.QtWidgets.QMessageBox.critical",
+            return_value=QtWidgets.QMessageBox.Ok,
+        ):
+            self.widget.w_step.b_plot.clicked.emit()
+        assert self.widget.w_step.test_err_msg == "You must set R1 !"
 
         wid_pole = self.widget.w_step.w_slot
         assert isinstance(self.widget.w_step.w_slot, PWSlot60)
@@ -562,6 +643,14 @@ class TestNewMachineZoe(object):
         assert isinstance(
             self.widget.w_step.machine.rotor.winding.conductor, CondType11
         )
+        assert (
+            self.widget.w_step.machine.rotor.winding.conductor.cond_mat.name
+            == "Copper2"
+        )
+        assert (
+            self.widget.w_step.machine.rotor.winding.conductor.ins_mat.name
+            == "Insulator1"
+        )
         assert self.widget.w_step.machine.rotor.winding.conductor.Nwppc_tan == 1
         assert self.widget.w_step.machine.rotor.winding.conductor.Nwppc_rad == 1
         assert self.widget.w_step.machine.rotor.winding.conductor.Wwire == 0.002
@@ -582,6 +671,7 @@ class TestNewMachineZoe(object):
         self.widget.w_step.b_next.clicked.emit()
         assert self.widget.nav_step.currentItem().text() == "12: Machine Summary"
         assert isinstance(self.widget.w_step, SPreview)
+        self.widget.w_step.tab_machine.is_test = True  # To hide the plots
 
         assert (
             self.widget.w_step.tab_machine.tab_param.item(0, 0).text() == "Machine Type"
@@ -639,6 +729,11 @@ class TestNewMachineZoe(object):
             == "Rotor winding mass"
         )
         assert self.widget.w_step.tab_machine.tab_param.item(10, 1).text() == "2.179 kg"
+        assert (
+            self.widget.w_step.tab_machine.tab_param.item(11, 0).text() == "Shaft mass"
+        )
+        assert self.widget.w_step.tab_machine.tab_param.item(11, 1).text() == "0 kg"
+        assert self.widget.w_step.tab_machine.tab_param.rowCount() == 12
 
         self.widget.w_step.tab_machine.b_plot_machine.clicked.emit()
         self.widget.w_step.tab_machine.b_mmf.clicked.emit()
@@ -660,6 +755,31 @@ class TestNewMachineZoe(object):
         assert self.widget.w_step.lf_Kmesh.value() == 1
         assert self.widget.w_step.si_nb_worker.value() == cpu_count()
         assert self.widget.w_step.le_name.text() == "FEMM_Zoe_Test"
+
+        ## Define
+        res_path = join(save_path, "Simu_Results")
+        makedirs(res_path)
+        with mock.patch(
+            "PySide2.QtWidgets.QFileDialog.getExistingDirectory", return_value=res_path
+        ):
+            # To trigger the slot
+            self.widget.w_step.w_path_result.b_path.clicked.emit()
+        self.widget.w_step.si_Nt_tot.setValue(1)
+        self.widget.w_step.si_Nt_tot.editingFinished.emit()
+        self.widget.w_step.lf_Kmesh.setValue(0.6)
+        self.widget.w_step.lf_Kmesh.editingFinished.emit()
+        self.widget.w_step.lf_I1.setValue(80)
+        self.widget.w_step.lf_I1.editingFinished.emit()
+
+        ## Run
+        assert len(listdir(res_path)) == 0
+        self.widget.w_step.b_next.clicked.emit()
+        # Run creates a new results folder with execution time in the name
+        assert len(listdir(res_path)) == 1
+        assert len(listdir(join(res_path, listdir(res_path)[0]))) == 19
+        assert np_max(
+            self.widget.w_step.last_out.mag.B.components["radial"].values
+        ) == pytest.approx(1.1, rel=0.1)
 
 
 if __name__ == "__main__":

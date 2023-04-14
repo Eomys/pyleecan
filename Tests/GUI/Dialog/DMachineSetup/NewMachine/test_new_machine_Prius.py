@@ -1,10 +1,10 @@
 import sys
-from os import makedirs
 from os.path import isdir, isfile, join
 from shutil import rmtree
 from multiprocessing import cpu_count
 import matplotlib.pyplot as plt
-
+from os import makedirs, listdir
+from numpy import max as np_max
 from SciDataTool.GUI.DDataPlotter.DDataPlotter import DDataPlotter
 
 from PySide2 import QtWidgets
@@ -635,6 +635,29 @@ class TestNewMachinePrius(object):
         assert self.widget.w_step.lf_Kmesh.value() == 1
         assert self.widget.w_step.si_nb_worker.value() == cpu_count()
         assert self.widget.w_step.le_name.text() == "FEMM_Prius_Test"
+
+        ## Define
+        res_path = join(save_path, "Simu_Results")
+        makedirs(res_path)
+        with mock.patch(
+            "PySide2.QtWidgets.QFileDialog.getExistingDirectory", return_value=res_path
+        ):
+            # To trigger the slot
+            self.widget.w_step.w_path_result.b_path.clicked.emit()
+        self.widget.w_step.si_Nt_tot.setValue(1)
+        self.widget.w_step.si_Nt_tot.editingFinished.emit()
+        self.widget.w_step.lf_Kmesh.setValue(0.6)
+        self.widget.w_step.lf_Kmesh.editingFinished.emit()
+
+        ## Run
+        assert len(listdir(res_path)) == 0
+        self.widget.w_step.b_next.clicked.emit()
+        # Run creates a new results folder with execution time in the name
+        assert len(listdir(res_path)) == 1
+        assert len(listdir(join(res_path, listdir(res_path)[0]))) == 19
+        assert np_max(
+            self.widget.w_step.last_out.mag.B.components["radial"].values
+        ) == pytest.approx(0.548, rel=0.1)
 
 
 if __name__ == "__main__":
