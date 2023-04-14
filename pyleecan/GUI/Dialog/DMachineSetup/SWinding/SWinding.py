@@ -52,7 +52,7 @@ class SWinding(Gen_SWinding, QWidget):
         self.material_dict = material_dict
         self.is_stator = is_stator
         self.is_test = False  # True to hide the plot
-        self.plot_mmf_widget = None  # To test plot
+        self.fig_mmf = None  # To test plot
         self.fig_linear = None  # To test plot
         self.fig_radial = None  # To test plot
 
@@ -627,8 +627,8 @@ class SWinding(Gen_SWinding, QWidget):
         """Plot the unit mmf of the stator"""
         if self.machine is not None:
             try:
-                self.plot_mmf_widget = self.machine.stator.plot_mmf_unit(
-                    is_create_appli=False, is_show_fig=not self.is_test
+                self.fig_mmf = self.machine.stator.plot_mmf_unit(
+                    is_show_fig=not self.is_test
                 )
             except Exception as e:
                 if self.obj.is_stator:  # Adapt the text to the current lamination

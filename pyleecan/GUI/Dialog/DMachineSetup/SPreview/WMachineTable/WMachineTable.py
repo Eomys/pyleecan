@@ -48,6 +48,7 @@ class WMachineTable(Ui_WMachineTable, QWidget):
         self.setupUi(self)
 
         self.machine = None
+        self.fig_mmf = None  # To store the fig for tests
         self.is_test = False  # True to hide the plots in tests
 
         # Connect the widget
@@ -102,8 +103,8 @@ class WMachineTable(Ui_WMachineTable, QWidget):
         """Plot the unit mmf of the stator"""
         try:
             if self.machine is not None:
-                self.plot_mmf_widget = self.machine.stator.plot_mmf_unit(
-                    is_create_appli=False, is_show_fig=not self.is_test
+                self.fig_mmf = self.machine.stator.plot_mmf_unit(
+                    is_show_fig=not self.is_test
                 )
         except Exception as e:
             err_msg = "Error while plotting Stator mmf unit:\n" + str(e)

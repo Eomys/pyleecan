@@ -5,7 +5,6 @@ from multiprocessing import cpu_count
 import matplotlib.pyplot as plt
 from os import makedirs, listdir
 from numpy import max as np_max
-from SciDataTool.GUI.DDataPlotter.DDataPlotter import DDataPlotter
 
 from PySide2 import QtWidgets
 import mock
@@ -309,10 +308,9 @@ class TestNewMachineZoe(object):
         )
 
         # Check plots/export
-        assert self.widget.w_step.plot_mmf_widget is None
+        assert self.widget.w_step.fig_mmf is None
         self.widget.w_step.b_plot_mmf.clicked.emit()
-        assert isinstance(self.widget.w_step.plot_mmf_widget, DDataPlotter)
-        self.widget.w_step.plot_mmf_widget.close()
+        assert isinstance(self.widget.w_step.fig_mmf, plt.Figure)
 
         assert self.widget.w_step.fig_radial is None
         self.widget.w_step.b_plot_radial.clicked.emit()
@@ -768,18 +766,23 @@ class TestNewMachineZoe(object):
         self.widget.w_step.si_Nt_tot.editingFinished.emit()
         self.widget.w_step.lf_Kmesh.setValue(0.6)
         self.widget.w_step.lf_Kmesh.editingFinished.emit()
-        self.widget.w_step.lf_I1.setValue(80)
+        self.widget.w_step.lf_I1.setValue(-80)
         self.widget.w_step.lf_I1.editingFinished.emit()
+        self.widget.w_step.lf_I2.setValue(80)
+        self.widget.w_step.lf_I2.editingFinished.emit()
 
         ## Run
         assert len(listdir(res_path)) == 0
-        self.widget.w_step.b_next.clicked.emit()
+        with mock.patch(
+            "PySide2.QtWidgets.QMessageBox.information", return_value=None
+        ):
+            self.widget.w_step.b_next.clicked.emit()
         # Run creates a new results folder with execution time in the name
         assert len(listdir(res_path)) == 1
-        assert len(listdir(join(res_path, listdir(res_path)[0]))) == 19
+        assert len(listdir(join(res_path, listdir(res_path)[0]))) == 18
         assert np_max(
             self.widget.w_step.last_out.mag.B.components["radial"].values
-        ) == pytest.approx(1.1, rel=0.1)
+        ) == pytest.approx(1.535, rel=0.1)
 
 
 if __name__ == "__main__":
