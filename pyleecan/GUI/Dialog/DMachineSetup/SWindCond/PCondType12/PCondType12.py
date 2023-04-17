@@ -9,6 +9,7 @@ from ......GUI import gui_option
 from ......GUI.Dialog.DMachineSetup.SWindCond.PCondType12.Gen_PCondType12 import (
     Gen_PCondType12,
 )
+from ......GUI.Resources import pixmap_dict
 
 
 class PCondType12(Gen_PCondType12, QWidget):
@@ -157,7 +158,7 @@ class PCondType12(Gen_PCondType12, QWidget):
         if self.si_Nwpc1.value() > 1:
             self.in_Wwire.setText("Strand diameter")
             self.img_cond.setPixmap(
-                QPixmap(u":/images/images/MachineSetup/WindParam/CondType12.png")
+                QPixmap(pixmap_dict["Cond12"])
             )
             self.w_mat_0.setText("Strand material")
             if self.g_ins.isChecked():
@@ -167,7 +168,7 @@ class PCondType12(Gen_PCondType12, QWidget):
         else:
             self.in_Wwire.setText("Conductor diameter")
             self.img_cond.setPixmap(
-                QPixmap(u":/images/images/MachineSetup/WindParam/CondType12_single.png")
+                QPixmap(pixmap_dict["Cond12_single"])
             )
             self.w_mat_0.setText("Conductor material")
             if self.g_ins.isChecked():

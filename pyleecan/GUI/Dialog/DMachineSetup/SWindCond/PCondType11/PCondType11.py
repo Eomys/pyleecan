@@ -9,6 +9,7 @@ from ......GUI import gui_option
 from ......GUI.Dialog.DMachineSetup.SWindCond.PCondType11.Gen_PCondType11 import (
     Gen_PCondType11,
 )
+from ......GUI.Resources import pixmap_dict
 
 
 class PCondType11(Gen_PCondType11, QWidget):
@@ -148,14 +149,14 @@ class PCondType11(Gen_PCondType11, QWidget):
             self.in_Wwire.setText("Strand width")
             self.in_Hwire.setText("Strand height")
             self.img_cond.setPixmap(
-                QPixmap(u":/images/images/MachineSetup/WindParam/CondType11.png")
+                QPixmap(pixmap_dict["Cond11"])
             )
             self.w_mat_0.setText("Strand material")
         else:
             self.in_Wwire.setText("Conductor width")
             self.in_Hwire.setText("Conductor height")
             self.img_cond.setPixmap(
-                QPixmap(u":/images/images/MachineSetup/WindParam/CondType11_single.png")
+                QPixmap(pixmap_dict["Cond11_single"])
             )
             self.w_mat_0.setText("Conductor material")
         self.w_out.comp_output()
