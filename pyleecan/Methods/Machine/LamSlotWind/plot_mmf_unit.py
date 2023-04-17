@@ -60,7 +60,7 @@ def plot_mmf_unit(self, save_path=None, is_show_fig=False):
 
     dict_2D_0["color_list"] = [color_list[0], "k"]
 
-    r_max=100
+    r_max = 100
     WF.plot_2D_Data(
         "wavenumber=[0," + str(r_max) + "]",
         data_list=[MMF_U],

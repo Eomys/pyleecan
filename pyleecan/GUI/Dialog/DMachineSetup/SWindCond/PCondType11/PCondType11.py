@@ -148,16 +148,12 @@ class PCondType11(Gen_PCondType11, QWidget):
         if self.si_Nwpc1_tan.value() * self.si_Nwpc1_rad.value() > 1:
             self.in_Wwire.setText("Strand width")
             self.in_Hwire.setText("Strand height")
-            self.img_cond.setPixmap(
-                QPixmap(pixmap_dict["Cond11"])
-            )
+            self.img_cond.setPixmap(QPixmap(pixmap_dict["Cond11"]))
             self.w_mat_0.setText("Strand material")
         else:
             self.in_Wwire.setText("Conductor width")
             self.in_Hwire.setText("Conductor height")
-            self.img_cond.setPixmap(
-                QPixmap(pixmap_dict["Cond11_single"])
-            )
+            self.img_cond.setPixmap(QPixmap(pixmap_dict["Cond11_single"]))
             self.w_mat_0.setText("Conductor material")
         self.w_out.comp_output()
         # Notify the machine GUI that the machine has changed

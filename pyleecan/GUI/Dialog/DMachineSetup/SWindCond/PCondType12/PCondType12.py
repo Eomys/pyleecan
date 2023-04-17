@@ -157,9 +157,7 @@ class PCondType12(Gen_PCondType12, QWidget):
         self.cond.Nwppc = self.si_Nwpc1.value()
         if self.si_Nwpc1.value() > 1:
             self.in_Wwire.setText("Strand diameter")
-            self.img_cond.setPixmap(
-                QPixmap(pixmap_dict["Cond12"])
-            )
+            self.img_cond.setPixmap(QPixmap(pixmap_dict["Cond12"]))
             self.w_mat_0.setText("Strand material")
             if self.g_ins.isChecked():
                 self.in_Wins_cond.show()
@@ -167,9 +165,7 @@ class PCondType12(Gen_PCondType12, QWidget):
                 self.unit_Wins_cond.show()
         else:
             self.in_Wwire.setText("Conductor diameter")
-            self.img_cond.setPixmap(
-                QPixmap(pixmap_dict["Cond12_single"])
-            )
+            self.img_cond.setPixmap(QPixmap(pixmap_dict["Cond12_single"]))
             self.w_mat_0.setText("Conductor material")
             if self.g_ins.isChecked():
                 self.in_Wins_cond.hide()

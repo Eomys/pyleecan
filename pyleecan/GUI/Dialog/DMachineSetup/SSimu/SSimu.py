@@ -213,14 +213,14 @@ class SSimu(Gen_SSimu, QWidget):
         )
         p = self.machine.get_pole_pair_number()
         # Torque Time
-        try: 
+        try:
             out.mag.Tem.plot_2D_Data(
                 "time",
                 is_show_fig=False,
                 save_path=join(self.simu.path_result, "torque as fct of time.png"),
             )
         except Exception as e:
-            err_msg = "Error while plotting torque as fct of time: "+str(e)
+            err_msg = "Error while plotting torque as fct of time: " + str(e)
             self.simu.get_logger().error(err_msg)
         # Torque FFT
         try:
@@ -230,7 +230,7 @@ class SSimu(Gen_SSimu, QWidget):
                 save_path=join(self.simu.path_result, "torque FFT over freq.png"),
             )
         except Exception as e:
-            err_msg = "Error while plotting torque FFT over freq: "+str(e)
+            err_msg = "Error while plotting torque FFT over freq: " + str(e)
             self.simu.get_logger().error(err_msg)
         # Flux
         try:

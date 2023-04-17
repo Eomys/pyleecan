@@ -773,9 +773,7 @@ class TestNewMachineZoe(object):
 
         ## Run
         assert len(listdir(res_path)) == 0
-        with mock.patch(
-            "PySide2.QtWidgets.QMessageBox.information", return_value=None
-        ):
+        with mock.patch("PySide2.QtWidgets.QMessageBox.information", return_value=None):
             self.widget.w_step.b_next.clicked.emit()
         # Run creates a new results folder with execution time in the name
         assert len(listdir(res_path)) == 1
