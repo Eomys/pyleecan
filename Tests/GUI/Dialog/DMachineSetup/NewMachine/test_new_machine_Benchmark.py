@@ -565,6 +565,37 @@ class TestNewMachineBenchmark(object):
             self.widget.w_step.tab_machine.tab_param.item(5, 1).text()
             == "0.0003875 Ohm"
         )
+
+        assert (
+            self.widget.w_step.tab_machine.tab_param.item(6, 0).text()
+            == "Machine total mass"
+        )
+        assert self.widget.w_step.tab_machine.tab_param.item(6, 1).text() == "12.89 kg"
+        assert (
+            self.widget.w_step.tab_machine.tab_param.item(7, 0).text()
+            == "Stator lamination mass"
+        )
+        assert self.widget.w_step.tab_machine.tab_param.item(7, 1).text() == "5.219 kg"
+        assert (
+            self.widget.w_step.tab_machine.tab_param.item(8, 0).text()
+            == "Stator winding mass"
+        )
+        assert self.widget.w_step.tab_machine.tab_param.item(8, 1).text() == "1.495 kg"
+        assert (
+            self.widget.w_step.tab_machine.tab_param.item(9, 0).text()
+            == "Rotor lamination mass"
+        )
+        assert self.widget.w_step.tab_machine.tab_param.item(9, 1).text() == "4.826 kg"
+        assert (
+            self.widget.w_step.tab_machine.tab_param.item(10, 0).text()
+            == "Rotor magnet mass"
+        )
+        assert self.widget.w_step.tab_machine.tab_param.item(10, 1).text() == "1.349 kg"
+        assert (
+            self.widget.w_step.tab_machine.tab_param.item(11, 0).text() == "Shaft mass"
+        )
+        assert self.widget.w_step.tab_machine.tab_param.item(11, 1).text() == "0 kg"
+
         assert self.widget.w_step.tab_machine.tab_param.rowCount() == 12
 
         self.widget.w_step.tab_machine.b_plot_machine.clicked.emit()
