@@ -52,7 +52,8 @@ def plot(
         To call show at the end of the method
     save_path : str
         full path including folder, name and extension of the file to save if save_path is not None
-
+    is_winding_connection : bool
+        True to display winding connections (not used)
 
     Returns
     -------
