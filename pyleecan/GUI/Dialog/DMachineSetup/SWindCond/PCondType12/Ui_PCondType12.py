@@ -39,10 +39,11 @@ class Ui_PCondType12(object):
         self.scrollArea.setObjectName(u"scrollArea")
         self.scrollArea.setMinimumSize(QSize(350, 0))
         self.scrollArea.setMaximumSize(QSize(350, 16777215))
+        self.scrollArea.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self.scrollArea.setWidgetResizable(True)
         self.scrollAreaWidgetContents = QWidget()
         self.scrollAreaWidgetContents.setObjectName(u"scrollAreaWidgetContents")
-        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 372, 627))
+        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 348, 648))
         self.verticalLayout = QVBoxLayout(self.scrollAreaWidgetContents)
         self.verticalLayout.setObjectName(u"verticalLayout")
         self.gridLayout_3 = QGridLayout()
@@ -55,7 +56,13 @@ class Ui_PCondType12(object):
 
         self.si_Nwpc1 = QSpinBox(self.scrollAreaWidgetContents)
         self.si_Nwpc1.setObjectName(u"si_Nwpc1")
+        sizePolicy = QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.si_Nwpc1.sizePolicy().hasHeightForWidth())
+        self.si_Nwpc1.setSizePolicy(sizePolicy)
         self.si_Nwpc1.setMinimumSize(QSize(0, 0))
+        self.si_Nwpc1.setMaximumSize(QSize(100, 16777215))
         self.si_Nwpc1.setValue(99)
 
         self.gridLayout_3.addWidget(self.si_Nwpc1, 0, 1, 1, 1)
@@ -69,7 +76,7 @@ class Ui_PCondType12(object):
         self.lf_Wwire = FloatEdit(self.scrollAreaWidgetContents)
         self.lf_Wwire.setObjectName(u"lf_Wwire")
         self.lf_Wwire.setMinimumSize(QSize(0, 0))
-        self.lf_Wwire.setMaximumSize(QSize(16777215, 16777215))
+        self.lf_Wwire.setMaximumSize(QSize(100, 16777215))
 
         self.gridLayout_3.addWidget(self.lf_Wwire, 1, 1, 1, 1)
 
@@ -84,11 +91,13 @@ class Ui_PCondType12(object):
         self.w_mat_0 = WMatSelectV(self.scrollAreaWidgetContents)
         self.w_mat_0.setObjectName(u"w_mat_0")
         self.w_mat_0.setMinimumSize(QSize(100, 0))
+        self.w_mat_0.setMaximumSize(QSize(328, 16777215))
 
         self.verticalLayout.addWidget(self.w_mat_0)
 
         self.g_ins = QGroupBox(self.scrollAreaWidgetContents)
         self.g_ins.setObjectName(u"g_ins")
+        self.g_ins.setMaximumSize(QSize(328, 16777215))
         self.g_ins.setCheckable(True)
         self.g_ins.setChecked(False)
         self.gridLayout_2 = QGridLayout(self.g_ins)
@@ -104,7 +113,7 @@ class Ui_PCondType12(object):
         self.lf_Wins_wire = FloatEdit(self.g_ins)
         self.lf_Wins_wire.setObjectName(u"lf_Wins_wire")
         self.lf_Wins_wire.setMinimumSize(QSize(0, 0))
-        self.lf_Wins_wire.setMaximumSize(QSize(16777215, 16777215))
+        self.lf_Wins_wire.setMaximumSize(QSize(100, 16777215))
 
         self.gridLayout.addWidget(self.lf_Wins_wire, 0, 1, 1, 1)
 
@@ -122,7 +131,7 @@ class Ui_PCondType12(object):
         self.lf_Wins_cond = FloatEdit(self.g_ins)
         self.lf_Wins_cond.setObjectName(u"lf_Wins_cond")
         self.lf_Wins_cond.setMinimumSize(QSize(0, 0))
-        self.lf_Wins_cond.setMaximumSize(QSize(16777215, 16777215))
+        self.lf_Wins_cond.setMaximumSize(QSize(100, 16777215))
 
         self.gridLayout.addWidget(self.lf_Wins_cond, 1, 1, 1, 1)
 
@@ -137,6 +146,7 @@ class Ui_PCondType12(object):
         self.w_mat_1 = WMatSelectV(self.g_ins)
         self.w_mat_1.setObjectName(u"w_mat_1")
         self.w_mat_1.setMinimumSize(QSize(100, 0))
+        self.w_mat_1.setMaximumSize(QSize(306, 16777215))
 
         self.gridLayout_2.addWidget(self.w_mat_1, 1, 0, 1, 1)
 
@@ -153,7 +163,7 @@ class Ui_PCondType12(object):
         self.lf_Lewout = FloatEdit(self.scrollAreaWidgetContents)
         self.lf_Lewout.setObjectName(u"lf_Lewout")
         self.lf_Lewout.setMinimumSize(QSize(0, 0))
-        self.lf_Lewout.setMaximumSize(QSize(16777215, 16777215))
+        self.lf_Lewout.setMaximumSize(QSize(100, 16777215))
 
         self.horizontalLayout_2.addWidget(self.lf_Lewout)
 
@@ -173,7 +183,8 @@ class Ui_PCondType12(object):
 
         self.w_out = WCondOut(self.scrollAreaWidgetContents)
         self.w_out.setObjectName(u"w_out")
-        self.w_out.setMinimumSize(QSize(350, 0))
+        self.w_out.setMinimumSize(QSize(0, 0))
+        self.w_out.setMaximumSize(QSize(328, 16777215))
 
         self.verticalLayout.addWidget(self.w_out)
 

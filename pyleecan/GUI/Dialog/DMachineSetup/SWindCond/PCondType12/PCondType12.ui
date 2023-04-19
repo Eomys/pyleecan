@@ -56,6 +56,9 @@
        <height>16777215</height>
       </size>
      </property>
+     <property name="horizontalScrollBarPolicy">
+      <enum>Qt::ScrollBarAlwaysOff</enum>
+     </property>
      <property name="widgetResizable">
       <bool>true</bool>
      </property>
@@ -64,8 +67,8 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>372</width>
-        <height>627</height>
+        <width>348</width>
+        <height>648</height>
        </rect>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout">
@@ -86,10 +89,22 @@
          </item>
          <item row="0" column="1">
           <widget class="QSpinBox" name="si_Nwpc1">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
            <property name="minimumSize">
             <size>
              <width>0</width>
              <height>0</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>100</width>
+             <height>16777215</height>
             </size>
            </property>
            <property name="value">
@@ -120,7 +135,7 @@
            </property>
            <property name="maximumSize">
             <size>
-             <width>16777215</width>
+             <width>100</width>
              <height>16777215</height>
             </size>
            </property>
@@ -149,10 +164,22 @@
            <height>0</height>
           </size>
          </property>
+         <property name="maximumSize">
+          <size>
+           <width>328</width>
+           <height>16777215</height>
+          </size>
+         </property>
         </widget>
        </item>
        <item>
         <widget class="QGroupBox" name="g_ins">
+         <property name="maximumSize">
+          <size>
+           <width>328</width>
+           <height>16777215</height>
+          </size>
+         </property>
          <property name="title">
           <string>Insulation</string>
          </property>
@@ -188,7 +215,7 @@
               </property>
               <property name="maximumSize">
                <size>
-                <width>16777215</width>
+                <width>100</width>
                 <height>16777215</height>
                </size>
               </property>
@@ -224,7 +251,7 @@
               </property>
               <property name="maximumSize">
                <size>
-                <width>16777215</width>
+                <width>100</width>
                 <height>16777215</height>
                </size>
               </property>
@@ -251,6 +278,12 @@
              <size>
               <width>100</width>
               <height>0</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>306</width>
+              <height>16777215</height>
              </size>
             </property>
            </widget>
@@ -289,7 +322,7 @@
            </property>
            <property name="maximumSize">
             <size>
-             <width>16777215</width>
+             <width>100</width>
              <height>16777215</height>
             </size>
            </property>
@@ -339,8 +372,14 @@
         <widget class="WCondOut" name="w_out" native="true">
          <property name="minimumSize">
           <size>
-           <width>350</width>
+           <width>0</width>
            <height>0</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>328</width>
+           <height>16777215</height>
           </size>
          </property>
         </widget>
