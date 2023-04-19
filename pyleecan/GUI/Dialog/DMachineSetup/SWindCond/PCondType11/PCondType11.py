@@ -270,7 +270,5 @@ class PCondType11(Gen_PCondType11, QWidget):
                 return "Strand height must be set"
             else:
                 return "Conductor height must be set"
-        elif cond.Wins_wire is None:
-            return "Insulator thickness must be set"
         elif lam.winding.Lewout is None:
             return "End winding length must be set"

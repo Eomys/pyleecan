@@ -255,8 +255,6 @@ class PCondType12(Gen_PCondType12, QWidget):
                 return "Strand diameter must be set"
             else:
                 return "Conductor diameter must be set"
-        elif cond.Wins_wire is None:
-            return "Insulator thickness must be set"
         elif cond.Wins_wire is not None and cond.Nwppc > 1 and cond.Wins_cond is None:
             return "Overall diameter must be set"
         elif cond.Wins_cond is not None and cond.Wins_cond < cond.Wwire:
