@@ -385,7 +385,7 @@ def plot_linear(
 
     # Adding the legend if necessary
     if is_legend:
-        ax.legend(patch_leg, label_leg)
+        ax.legend(patch_leg, label_leg, bbox_to_anchor=(1, 1))
 
     # Saving the figure if necessary
     if save_path is not None:
