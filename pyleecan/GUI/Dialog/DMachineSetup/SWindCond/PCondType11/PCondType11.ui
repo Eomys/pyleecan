@@ -57,7 +57,7 @@
       </size>
      </property>
      <property name="horizontalScrollBarPolicy">
-      <enum>Qt::ScrollBarAlwaysOff</enum>
+      <enum>Qt::ScrollBarAsNeeded</enum>
      </property>
      <property name="widgetResizable">
       <bool>true</bool>
@@ -68,7 +68,7 @@
         <x>0</x>
         <y>0</y>
         <width>350</width>
-        <height>559</height>
+        <height>538</height>
        </rect>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout">
