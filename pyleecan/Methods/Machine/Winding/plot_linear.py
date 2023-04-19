@@ -387,6 +387,8 @@ def plot_linear(
     if is_legend:
         ax.legend(patch_leg, label_leg, bbox_to_anchor=(1, 1))
 
+    fig.tight_layout()
+
     # Saving the figure if necessary
     if save_path is not None:
         fig.savefig(save_path)
