@@ -137,6 +137,10 @@ class SMachineType(Gen_SMachineType, QWidget):
         if self.machine.stator.winding is None:
             self.machine.stator.winding = Winding()
             self.machine.stator.winding._set_None()
+        else:
+            # If a winding is defined, clearing it as it will have to be re-generated
+            self.machine.stator.winding.clean()
+
         self.machine.set_pole_pair_number(value)
         if isinstance(self.machine, MachineWRSM):
             self.machine.rotor.slot.Zs = value
