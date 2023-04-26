@@ -43,28 +43,28 @@ class Ui_PCondType11(object):
         self.scrollArea.setWidgetResizable(True)
         self.scrollAreaWidgetContents = QWidget()
         self.scrollAreaWidgetContents.setObjectName(u"scrollAreaWidgetContents")
-        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 350, 538))
+        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 348, 559))
         self.verticalLayout = QVBoxLayout(self.scrollAreaWidgetContents)
         self.verticalLayout.setObjectName(u"verticalLayout")
         self.gridLayout_2 = QGridLayout()
         self.gridLayout_2.setObjectName(u"gridLayout_2")
-        self.in_Nwpc1_rad = QLabel(self.scrollAreaWidgetContents)
-        self.in_Nwpc1_rad.setObjectName(u"in_Nwpc1_rad")
-        self.in_Nwpc1_rad.setMinimumSize(QSize(200, 0))
-
-        self.gridLayout_2.addWidget(self.in_Nwpc1_rad, 0, 0, 1, 1)
-
-        self.si_Nwpc1_rad = QSpinBox(self.scrollAreaWidgetContents)
-        self.si_Nwpc1_rad.setObjectName(u"si_Nwpc1_rad")
+        self.lf_Wwire = FloatEdit(self.scrollAreaWidgetContents)
+        self.lf_Wwire.setObjectName(u"lf_Wwire")
         sizePolicy = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.si_Nwpc1_rad.sizePolicy().hasHeightForWidth())
-        self.si_Nwpc1_rad.setSizePolicy(sizePolicy)
-        self.si_Nwpc1_rad.setMaximumSize(QSize(100, 16777215))
-        self.si_Nwpc1_rad.setValue(99)
+        sizePolicy.setHeightForWidth(self.lf_Wwire.sizePolicy().hasHeightForWidth())
+        self.lf_Wwire.setSizePolicy(sizePolicy)
+        self.lf_Wwire.setMinimumSize(QSize(0, 0))
+        self.lf_Wwire.setMaximumSize(QSize(50, 100))
 
-        self.gridLayout_2.addWidget(self.si_Nwpc1_rad, 0, 1, 1, 1)
+        self.gridLayout_2.addWidget(self.lf_Wwire, 2, 1, 1, 1)
+
+        self.in_Wwire = QLabel(self.scrollAreaWidgetContents)
+        self.in_Wwire.setObjectName(u"in_Wwire")
+        self.in_Wwire.setMinimumSize(QSize(200, 0))
+
+        self.gridLayout_2.addWidget(self.in_Wwire, 2, 0, 1, 1)
 
         self.in_Nwpc1_tan = QLabel(self.scrollAreaWidgetContents)
         self.in_Nwpc1_tan.setObjectName(u"in_Nwpc1_tan")
@@ -77,25 +77,19 @@ class Ui_PCondType11(object):
         sizePolicy.setHeightForWidth(self.si_Nwpc1_tan.sizePolicy().hasHeightForWidth())
         self.si_Nwpc1_tan.setSizePolicy(sizePolicy)
         self.si_Nwpc1_tan.setMinimumSize(QSize(0, 0))
-        self.si_Nwpc1_tan.setMaximumSize(QSize(100, 16777215))
+        self.si_Nwpc1_tan.setMaximumSize(QSize(50, 16777215))
         self.si_Nwpc1_tan.setValue(99)
 
         self.gridLayout_2.addWidget(self.si_Nwpc1_tan, 1, 1, 1, 1)
 
-        self.in_Wwire = QLabel(self.scrollAreaWidgetContents)
-        self.in_Wwire.setObjectName(u"in_Wwire")
-        self.in_Wwire.setMinimumSize(QSize(200, 0))
+        self.si_Nwpc1_rad = QSpinBox(self.scrollAreaWidgetContents)
+        self.si_Nwpc1_rad.setObjectName(u"si_Nwpc1_rad")
+        sizePolicy.setHeightForWidth(self.si_Nwpc1_rad.sizePolicy().hasHeightForWidth())
+        self.si_Nwpc1_rad.setSizePolicy(sizePolicy)
+        self.si_Nwpc1_rad.setMaximumSize(QSize(50, 16777215))
+        self.si_Nwpc1_rad.setValue(99)
 
-        self.gridLayout_2.addWidget(self.in_Wwire, 2, 0, 1, 1)
-
-        self.lf_Wwire = FloatEdit(self.scrollAreaWidgetContents)
-        self.lf_Wwire.setObjectName(u"lf_Wwire")
-        sizePolicy.setHeightForWidth(self.lf_Wwire.sizePolicy().hasHeightForWidth())
-        self.lf_Wwire.setSizePolicy(sizePolicy)
-        self.lf_Wwire.setMinimumSize(QSize(0, 0))
-        self.lf_Wwire.setMaximumSize(QSize(100, 100))
-
-        self.gridLayout_2.addWidget(self.lf_Wwire, 2, 1, 1, 1)
+        self.gridLayout_2.addWidget(self.si_Nwpc1_rad, 0, 1, 1, 1)
 
         self.unit_Wwire = QLabel(self.scrollAreaWidgetContents)
         self.unit_Wwire.setObjectName(u"unit_Wwire")
@@ -109,20 +103,26 @@ class Ui_PCondType11(object):
 
         self.gridLayout_2.addWidget(self.in_Hwire, 3, 0, 1, 1)
 
-        self.lf_Hwire = FloatEdit(self.scrollAreaWidgetContents)
-        self.lf_Hwire.setObjectName(u"lf_Hwire")
-        sizePolicy.setHeightForWidth(self.lf_Hwire.sizePolicy().hasHeightForWidth())
-        self.lf_Hwire.setSizePolicy(sizePolicy)
-        self.lf_Hwire.setMinimumSize(QSize(0, 0))
-        self.lf_Hwire.setMaximumSize(QSize(100, 100))
+        self.in_Nwpc1_rad = QLabel(self.scrollAreaWidgetContents)
+        self.in_Nwpc1_rad.setObjectName(u"in_Nwpc1_rad")
+        self.in_Nwpc1_rad.setMinimumSize(QSize(200, 0))
 
-        self.gridLayout_2.addWidget(self.lf_Hwire, 3, 1, 1, 1)
+        self.gridLayout_2.addWidget(self.in_Nwpc1_rad, 0, 0, 1, 1)
 
         self.unit_Hwire = QLabel(self.scrollAreaWidgetContents)
         self.unit_Hwire.setObjectName(u"unit_Hwire")
         self.unit_Hwire.setMinimumSize(QSize(0, 0))
 
         self.gridLayout_2.addWidget(self.unit_Hwire, 3, 2, 1, 1)
+
+        self.lf_Hwire = FloatEdit(self.scrollAreaWidgetContents)
+        self.lf_Hwire.setObjectName(u"lf_Hwire")
+        sizePolicy.setHeightForWidth(self.lf_Hwire.sizePolicy().hasHeightForWidth())
+        self.lf_Hwire.setSizePolicy(sizePolicy)
+        self.lf_Hwire.setMinimumSize(QSize(0, 0))
+        self.lf_Hwire.setMaximumSize(QSize(50, 100))
+
+        self.gridLayout_2.addWidget(self.lf_Hwire, 3, 1, 1, 1)
 
         self.verticalLayout.addLayout(self.gridLayout_2)
 
@@ -135,6 +135,7 @@ class Ui_PCondType11(object):
 
         self.g_ins = QGroupBox(self.scrollAreaWidgetContents)
         self.g_ins.setObjectName(u"g_ins")
+        self.g_ins.setMaximumSize(QSize(328, 16777215))
         self.g_ins.setCheckable(True)
         self.g_ins.setChecked(False)
         self.gridLayout = QGridLayout(self.g_ins)
@@ -150,7 +151,7 @@ class Ui_PCondType11(object):
         sizePolicy.setHeightForWidth(self.lf_Wins_wire.sizePolicy().hasHeightForWidth())
         self.lf_Wins_wire.setSizePolicy(sizePolicy)
         self.lf_Wins_wire.setMinimumSize(QSize(0, 0))
-        self.lf_Wins_wire.setMaximumSize(QSize(100, 100))
+        self.lf_Wins_wire.setMaximumSize(QSize(50, 100))
 
         self.gridLayout.addWidget(self.lf_Wins_wire, 0, 1, 1, 1)
 
@@ -182,7 +183,7 @@ class Ui_PCondType11(object):
         sizePolicy.setHeightForWidth(self.lf_Lewout.sizePolicy().hasHeightForWidth())
         self.lf_Lewout.setSizePolicy(sizePolicy)
         self.lf_Lewout.setMinimumSize(QSize(0, 0))
-        self.lf_Lewout.setMaximumSize(QSize(100, 100))
+        self.lf_Lewout.setMaximumSize(QSize(50, 100))
 
         self.horizontalLayout_2.addWidget(self.lf_Lewout)
 
@@ -202,7 +203,8 @@ class Ui_PCondType11(object):
 
         self.w_out = WCondOut(self.scrollAreaWidgetContents)
         self.w_out.setObjectName(u"w_out")
-        self.w_out.setMinimumSize(QSize(328, 0))
+        self.w_out.setMinimumSize(QSize(0, 0))
+        self.w_out.setMaximumSize(QSize(328, 16777215))
 
         self.verticalLayout.addWidget(self.w_out)
 
@@ -226,22 +228,22 @@ class Ui_PCondType11(object):
             QCoreApplication.translate("PCondType11", u"Form", None)
         )
         self.img_cond.setText("")
-        self.in_Nwpc1_rad.setText(
-            QCoreApplication.translate(
-                "PCondType11", u"Strands in radial direction", None
-            )
+        self.in_Wwire.setText(
+            QCoreApplication.translate("PCondType11", u"Conductor width", None)
         )
         self.in_Nwpc1_tan.setText(
             QCoreApplication.translate(
                 "PCondType11", u"Strands in tangential direction", None
             )
         )
-        self.in_Wwire.setText(
-            QCoreApplication.translate("PCondType11", u"Conductor width", None)
-        )
         self.unit_Wwire.setText(QCoreApplication.translate("PCondType11", u"m", None))
         self.in_Hwire.setText(
             QCoreApplication.translate("PCondType11", u"Conductor height", None)
+        )
+        self.in_Nwpc1_rad.setText(
+            QCoreApplication.translate(
+                "PCondType11", u"Strands in radial direction", None
+            )
         )
         self.unit_Hwire.setText(QCoreApplication.translate("PCondType11", u"m", None))
         self.g_ins.setTitle(
@@ -256,7 +258,9 @@ class Ui_PCondType11(object):
         # if QT_CONFIG(tooltip)
         self.in_Lewout.setToolTip(
             QCoreApplication.translate(
-                "PCondType11", u"End-winding length on one side for a half-turn", None
+                "PCondType11",
+                u"<qt><nobr>End-winding length on one side for a half-turn</nobr></qt>",
+                None,
             )
         )
         # endif // QT_CONFIG(tooltip)
@@ -275,7 +279,9 @@ class Ui_PCondType11(object):
         # if QT_CONFIG(tooltip)
         self.lf_Lewout.setToolTip(
             QCoreApplication.translate(
-                "PCondType11", u"End-winding length on one side for a half-turn", None
+                "PCondType11",
+                u"<qt><nobr>End-winding length on one side for a half-turn</nobr></qt>",
+                None,
             )
         )
         # endif // QT_CONFIG(tooltip)
@@ -289,7 +295,9 @@ class Ui_PCondType11(object):
         # if QT_CONFIG(tooltip)
         self.unit_Lewout.setToolTip(
             QCoreApplication.translate(
-                "PCondType11", u"End-winding length on one side for a half-turn", None
+                "PCondType11",
+                u"<qt><nobr>End-winding length on one side for a half-turn</nobr></qt>",
+                None,
             )
         )
         # endif // QT_CONFIG(tooltip)

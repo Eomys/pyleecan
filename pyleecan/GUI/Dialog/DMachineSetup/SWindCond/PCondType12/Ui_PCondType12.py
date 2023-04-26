@@ -56,11 +56,6 @@ class Ui_PCondType12(object):
 
         self.si_Nwpc1 = QSpinBox(self.scrollAreaWidgetContents)
         self.si_Nwpc1.setObjectName(u"si_Nwpc1")
-        sizePolicy = QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.si_Nwpc1.sizePolicy().hasHeightForWidth())
-        self.si_Nwpc1.setSizePolicy(sizePolicy)
         self.si_Nwpc1.setMinimumSize(QSize(0, 0))
         self.si_Nwpc1.setMaximumSize(QSize(100, 16777215))
         self.si_Nwpc1.setValue(99)
@@ -97,7 +92,6 @@ class Ui_PCondType12(object):
 
         self.g_ins = QGroupBox(self.scrollAreaWidgetContents)
         self.g_ins.setObjectName(u"g_ins")
-        self.g_ins.setMaximumSize(QSize(328, 16777215))
         self.g_ins.setCheckable(True)
         self.g_ins.setChecked(False)
         self.gridLayout_2 = QGridLayout(self.g_ins)
@@ -231,7 +225,9 @@ class Ui_PCondType12(object):
         # if QT_CONFIG(tooltip)
         self.in_Lewout.setToolTip(
             QCoreApplication.translate(
-                "PCondType12", u"End-winding length on one side for a half-turn", None
+                "PCondType12",
+                u"<qt><nobr>End-winding length on one side for a half-turn</nobr></qt>",
+                None,
             )
         )
         # endif // QT_CONFIG(tooltip)
@@ -250,7 +246,9 @@ class Ui_PCondType12(object):
         # if QT_CONFIG(tooltip)
         self.lf_Lewout.setToolTip(
             QCoreApplication.translate(
-                "PCondType12", u"End-winding length on one side for a half-turn", None
+                "PCondType12",
+                u"<qt><nobr>End-winding length on one side for a half-turn</nobr></qt>",
+                None,
             )
         )
         # endif // QT_CONFIG(tooltip)
@@ -264,7 +262,9 @@ class Ui_PCondType12(object):
         # if QT_CONFIG(tooltip)
         self.unit_Lewout.setToolTip(
             QCoreApplication.translate(
-                "PCondType12", u"End-winding length on one side for a half-turn", None
+                "PCondType12",
+                u"<qt><nobr>End-winding length on one side for a half-turn</nobr></qt>",
+                None,
             )
         )
         # endif // QT_CONFIG(tooltip)

@@ -2,8 +2,9 @@
 
 from PySide2.QtCore import Qt, Signal
 from PySide2.QtWidgets import QMessageBox, QWidget, QFileDialog, QListView
-from os.path import join
+from os.path import join, isdir
 
+from .....Functions.init_fig import init_fig
 from .....Functions.GUI.log_error import log_error
 from .....Classes.Winding import Winding
 from .....Classes.WindingUD import WindingUD
@@ -92,6 +93,7 @@ class SWinding(Gen_SWinding, QWidget):
         # Pattern Group setup
         if self.obj.winding is None:
             self.obj.winding = Winding()  # Default is Star of Slot
+
         if type(self.obj.winding) is Winding:  # Star of Slot
             self.c_wind_type.setCurrentIndex(0)
             self.hide_star_widget(False)
@@ -106,11 +108,22 @@ class SWinding(Gen_SWinding, QWidget):
             if self.obj.winding.Nlayer == 1:
                 self.c_layer_def.setCurrentIndex(IDX_SINGLE_LAYER)
             else:
-                Nrad, Ntan = self.obj.winding.get_dim_wind()
-                if Nrad < Ntan:
-                    self.c_layer_def.setCurrentIndex(IDX_DOUBLE_LAYER_TAN)
+                err_msg = None
+                try:
+                    # To recover Nrad and Ntan we have to compute the connection matrix. If Star of slot method is unable to do so,
+                    # Setting the number of layer to 1
+                    Nrad, Ntan = self.obj.winding.get_dim_wind()
+                except Exception as e:
+                    err_msg = str(e)
+                if err_msg is None:
+                    if Nrad < Ntan:
+                        self.c_layer_def.setCurrentIndex(IDX_DOUBLE_LAYER_TAN)
+                    else:
+                        self.c_layer_def.setCurrentIndex(IDX_DOUBLE_LAYER_RAD)
                 else:
-                    self.c_layer_def.setCurrentIndex(IDX_DOUBLE_LAYER_RAD)
+                    self.obj.winding.Nlayer = 1
+                    self.c_layer_def.setCurrentIndex(IDX_SINGLE_LAYER)
+
             # Coil_pitch
             self.show_layer_widget()
             # Ntcoil
@@ -352,6 +365,7 @@ class SWinding(Gen_SWinding, QWidget):
 
             self.obj.winding.clean()  # ­ Enforce new computation
             self.hide_star_widget(False)
+
         else:  # User Defined
             self.obj.winding = WindingUD(init_dict=init_dict)
             self.hide_star_widget(True)
@@ -608,7 +622,9 @@ class SWinding(Gen_SWinding, QWidget):
         """
         try:
             fig, _ = self.obj.plot(
-                is_winding_connection=True, is_show_fig=not self.is_test
+                is_winding_connection=True,
+                is_show_fig=not self.is_test,
+                is_add_sign=True,
             )
             set_plot_gui_icon()
             self.fig_radial = fig

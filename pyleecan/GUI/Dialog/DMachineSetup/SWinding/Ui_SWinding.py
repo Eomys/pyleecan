@@ -45,8 +45,8 @@ class Ui_SWinding(object):
 
         self.scrollArea = QScrollArea(SWinding)
         self.scrollArea.setObjectName(u"scrollArea")
-        self.scrollArea.setMinimumSize(QSize(270, 0))
-        self.scrollArea.setMaximumSize(QSize(300, 16777215))
+        self.scrollArea.setMinimumSize(QSize(300, 0))
+        self.scrollArea.setMaximumSize(QSize(270, 16777215))
         self.scrollArea.setHorizontalScrollBarPolicy(Qt.ScrollBarAsNeeded)
         self.scrollArea.setWidgetResizable(True)
         self.scrollAreaWidgetContents = QWidget()
@@ -360,7 +360,7 @@ class Ui_SWinding(object):
         self.out_rot_dir.setToolTip(
             QCoreApplication.translate(
                 "SWinding",
-                u"Fundamental field rotation direction when feeding the winding with direct AC current",
+                u"<qt><nobr>Fundamental field rotation direction when feeding the</nobr> winding with direct AC current</qt>",
                 None,
             )
         )
@@ -393,7 +393,9 @@ class Ui_SWinding(object):
         )
         # if QT_CONFIG(tooltip)
         self.out_Nperw.setToolTip(
-            QCoreApplication.translate("SWinding", u"Winding periodicity", None)
+            QCoreApplication.translate(
+                "SWinding", u"<qt><nobr>Winding periodicity</nobr></qt>", None
+            )
         )
         # endif // QT_CONFIG(tooltip)
         self.out_Nperw.setText(
@@ -402,7 +404,9 @@ class Ui_SWinding(object):
         # if QT_CONFIG(tooltip)
         self.out_Ntspc.setToolTip(
             QCoreApplication.translate(
-                "SWinding", u"Winding number of turns in series per phase", None
+                "SWinding",
+                u"<qt><nobr>Winding number of turns in series per phase</nobr></qt>",
+                None,
             )
         )
         # endif // QT_CONFIG(tooltip)
@@ -428,7 +432,9 @@ class Ui_SWinding(object):
         # if QT_CONFIG(tooltip)
         self.out_Ncspc.setToolTip(
             QCoreApplication.translate(
-                "SWinding", u"Number of coils in series per parallel circuit", None
+                "SWinding",
+                u"<qt><nobr>Number of coils in series per parallel circuit</nobr></qt>",
+                None,
             )
         )
         # endif // QT_CONFIG(tooltip)
