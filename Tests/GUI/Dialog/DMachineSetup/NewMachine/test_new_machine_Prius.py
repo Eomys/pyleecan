@@ -468,8 +468,8 @@ class TestNewMachinePrius(object):
         assert wid_hole.w_hole.lf_H3.value() is None
         assert wid_hole.w_hole.lf_H4.value() is None
         assert wid_hole.w_hole.w_mat_0.c_mat_type.currentText() == "Air"
-        assert wid_hole.w_hole.w_mat_1.c_mat_type.currentText() == "Magnet1"
-        assert wid_hole.w_hole.w_mat_2.c_mat_type.currentText() == "Magnet1"
+        assert wid_hole.w_hole.w_mat_1.c_mat_type.currentText() == "MagnetPrius"
+        assert wid_hole.w_hole.w_mat_2.c_mat_type.currentText() == "MagnetPrius"
         assert wid_hole.w_hole.out_slot_surface.text() == "Hole surface: ?"
         assert wid_hole.w_hole.out_magnet_surface.text() == "Magnet surf.: ?"
         assert wid_hole.w_hole.out_alpha.text() == "alpha: ?"
@@ -495,9 +495,6 @@ class TestNewMachinePrius(object):
         wid_hole.w_hole.lf_W3.editingFinished.emit()
         wid_hole.w_hole.lf_W4.setValue(0.0189)
         wid_hole.w_hole.lf_W4.editingFinished.emit()
-        index_magnetPrius = wid_hole.w_hole.w_mat_1.c_mat_type.findText("MagnetPrius")
-        wid_hole.w_hole.w_mat_1.c_mat_type.setCurrentIndex(index_magnetPrius)
-        wid_hole.w_hole.w_mat_2.c_mat_type.setCurrentIndex(index_magnetPrius)
 
         assert wid_hole.w_hole.out_slot_surface.text() == "Hole surface: 0.0002968 [m²]"
         assert (
