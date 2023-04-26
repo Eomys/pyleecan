@@ -8,6 +8,7 @@ from ......Classes.HoleM57 import HoleM57
 from ......GUI import gui_option
 from ......GUI.Dialog.DMachineSetup.SMHoleMag.PHoleM57.Gen_PHoleM57 import Gen_PHoleM57
 from ......Methods.Slot.Slot import SlotCheckError
+from ......GUI.Dialog.DMachineSetup.SMHoleMag import DEFAULT_MAG_MAT
 
 
 class PHoleM57(Gen_PHoleM57, QWidget):
@@ -53,11 +54,11 @@ class PHoleM57(Gen_PHoleM57, QWidget):
         self.w_mat_0.is_hide_button = True
 
         self.w_mat_1.setText("magnet_0")
-        self.w_mat_1.def_mat = "Magnet1"
+        self.w_mat_1.def_mat = DEFAULT_MAG_MAT
         self.w_mat_1.is_hide_button = True
 
         self.w_mat_2.setText("magnet_1")
-        self.w_mat_2.def_mat = "Magnet1"
+        self.w_mat_2.def_mat = DEFAULT_MAG_MAT
         self.w_mat_2.is_hide_button = True
 
         if hole.magnet_0 is None:  # SyRM

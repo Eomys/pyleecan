@@ -1,1 +1,1 @@
-# -*- coding: utf-8 -*-
+DEFAULT_MAG_MAT = "MagnetPrius"
