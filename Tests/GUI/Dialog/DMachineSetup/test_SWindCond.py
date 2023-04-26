@@ -259,14 +259,17 @@ class TestSWindCond(object):
         assert (
             widget.check(lam) == "Overall diameter must be larger than strand diameter"
         )
+
         widget.cond.Wins_cond = 0.6
         widget.lam.winding.Lewout = None
         assert widget.check(lam) == "End winding length must be set"
         widget.cond.Nwppc = 2
         widget.cond.Wins_cond = None
         assert widget.check(lam) == "Overall diameter must be set"
-        widget.cond._Wins_wire = None
-        assert widget.check(lam) == "Insulator thickness must be set"
+        widget.cond.Wins_wire = (
+            None  # Not mandatory parameter + change how check is handled
+        )
+        assert widget.check(lam) == "End winding length must be set"
         widget.cond.Wwire = None
         assert widget.check(lam) == "Strand diameter must be set"
         widget.cond.Nwppc = None
