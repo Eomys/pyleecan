@@ -359,7 +359,11 @@ def plot_linear(
     else:
         title = "Rotor winding linear pattern"
         prefix = "Rotor "
-    win_title = self.parent.parent.name + " " + title
+    # Add machine name if available
+    if self.parent.parent is not None and self.parent.parent.name not in ["", None]:  
+        win_title = self.parent.parent.name + " " + title
+    else:
+        win_title = title
     manager = plt.get_current_fig_manager()
     if manager is not None:
         manager.set_window_title(win_title)

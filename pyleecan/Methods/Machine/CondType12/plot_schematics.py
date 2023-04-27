@@ -59,7 +59,7 @@ def plot_schematics(
     # Use some default parameter
     if is_default and is_single:
         cond = type(self)(Wins_cond=40e-3, Wwire=35e-3, Wins_wire=5e-3, Nwppc=1)
-        cond.plot_schematics(
+        return cond.plot_schematics(
             is_default=False,
             is_add_schematics=is_add_schematics,
             is_add_main_line=is_add_main_line,
@@ -71,7 +71,7 @@ def plot_schematics(
         )
     elif is_default:
         cond = type(self)(Wins_cond=40e-3, Wwire=10e-3, Wins_wire=2e-3, Nwppc=4)
-        cond.plot_schematics(
+        return cond.plot_schematics(
             is_default=False,
             is_add_schematics=is_add_schematics,
             is_add_main_line=is_add_main_line,

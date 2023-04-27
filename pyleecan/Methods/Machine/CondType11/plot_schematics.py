@@ -61,7 +61,7 @@ def plot_schematics(
         cond = type(self)(
             Hwire=10e-3, Wwire=22e-3, Wins_wire=2e-3, Nwppc_rad=1, Nwppc_tan=1
         )
-        cond.plot_schematics(
+        return cond.plot_schematics(
             is_default=False,
             is_add_schematics=is_add_schematics,
             is_add_main_line=is_add_main_line,
@@ -75,7 +75,7 @@ def plot_schematics(
         cond = type(self)(
             Hwire=10e-3, Wwire=22e-3, Wins_wire=2e-3, Nwppc_rad=3, Nwppc_tan=2
         )
-        cond.plot_schematics(
+        return cond.plot_schematics(
             is_default=False,
             is_add_schematics=is_add_schematics,
             is_add_main_line=is_add_main_line,

@@ -177,8 +177,6 @@ def plot(
 
     # Adding arrows between slots for winding radial pattern
     if head is not None:
-        is_outer_rotor = not self.parent.rotor.is_internal
-
         # Taking into account slot shifting transformation
         if self.winding.Nslot_shift_wind not in [0, None]:
             Nslot_shift_wind = self.winding.Nslot_shift_wind
@@ -222,7 +220,7 @@ def plot(
                     ^ (
                         self.winding.is_reverse_wind
                         and layer_id_name == "R_id"
-                        and is_outer_rotor
+                        and self.is_internal
                     )
                 ):
                     start_slot_layer_idx = coil[3][0]
@@ -295,7 +293,7 @@ def plot(
                 )
 
                 # Changing arrow size depending on type of rotor (inner or outer)
-                arrow_size = -0.5 if is_outer_rotor else 1.5
+                arrow_size = -0.5 if self.is_internal else 1.5
                 angle = winding_direction * (arrow_size * self.Rext) / dist_AB
 
                 # Adding the arrow as a Patch

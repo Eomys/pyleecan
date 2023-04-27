@@ -4,13 +4,15 @@ from swat_em.config import config
 from ....definitions import config_dict
 
 
-def plot_radial(self):
+def plot_radial(self, is_show_fig=True):
     """Plots the winding radial pattern
 
     Parameters
     ----------
     self : Winding
         A Winding object
+    is_show_fig : bool
+        True to call fig.show
 
     """
     Zs = self.parent.get_Zs()
@@ -46,4 +48,4 @@ def plot_radial(self):
             "PHASE_COLORS"
         ]
     plt = plots._polar_layout_plot(None, None, wdg)
-    plt.plot(show=True, optimize_overhang=False)
+    plt.plot(show=is_show_fig, optimize_overhang=False)
