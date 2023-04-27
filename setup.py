@@ -25,13 +25,13 @@ system(
 # Release 1.1.0 : 1.1.0
 # First post release of the release 1.1.0 : 1.1.0.post1
 
-PYLEECAN_VERSION = "1.4.2"
+PYLEECAN_VERSION = "1.5.0"
 
 
 with open("README.md", "r") as fh:
     long_description = fh.read()
 
-python_requires = ">= 3.6"
+python_requires = ">= 3.6, <3.11"
 
 # Pyleecan main dependancies
 install_requires = [
