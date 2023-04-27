@@ -23,6 +23,7 @@ def plot(
     is_show_fig=True,
     win_title=None,
     is_legend=True,
+    is_winding_connection=False,
 ):
     """Plot a Lamination with Magnets in a matplotlib fig
 
@@ -52,6 +53,8 @@ def plot(
         Window title
     is_legend : bool
         True to add the legend
+    is_winding_connection : bool
+        True to display winding connections (not used)
 
     Returns
     -------

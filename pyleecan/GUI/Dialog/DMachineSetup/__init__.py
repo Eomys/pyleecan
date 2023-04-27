@@ -34,9 +34,9 @@ from ....GUI.Dialog.DMachineSetup.SSkew.SSkew import SSkew
 from ....GUI.Resources import pixmap_dict
 
 # Steps needed to setup a LamSlotWind
-LSW_step = [SWSlot, SWinding, SWindCond, SLamShape]
+LSW_step = [SWSlot, SLamShape, SWinding, SWindCond]
 # Steps needed to setup a LamSlotWind for the rotor of a WRSM
-LP_step = [SWPole, SWinding, SWindCond, SLamShape]
+LP_step = [SWPole, SLamShape, SWinding, SWindCond, SSkew]
 # Steps needed to setup a LamSquirrelCage
 LSC_step = [SWSlot, SBar, SLamShape, SSkew]
 # Steps needed to setup a LamSquirrelCageMag

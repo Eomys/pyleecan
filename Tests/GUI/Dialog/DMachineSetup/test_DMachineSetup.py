@@ -36,7 +36,7 @@ load_test.append(
 load_test.append(
     {"type": "IPMSM", "index": 4, "name": "machine_IPMSM_A", "p": 5, "count": 11}
 )
-load_test.append({"type": "WRSM", "index": 5, "name": "WRSM_001", "p": 6, "count": 12})
+load_test.append({"type": "WRSM", "index": 5, "name": "WRSM_001", "p": 6, "count": 13})
 load_test.append(
     {"type": "SRM", "index": 6, "name": "SRM_test_load", "p": None, "count": 11}
 )

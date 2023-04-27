@@ -47,7 +47,7 @@ def create_FEMM_circuit_material(
     # Load parameter for readibility
     rho = lam.winding.conductor.cond_mat.elec.get_resistivity()  # Resistivity at 20°C
     wind_mat = lam.winding.get_connection_mat(lam.get_Zs())
-    Swire = lam.winding.conductor.comp_surface()
+    Swire = lam.winding.conductor.comp_surface_active()
 
     # Decode the label
     Nrad_id = label_dict["R_id"]  # zone radial coordinate

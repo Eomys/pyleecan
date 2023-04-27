@@ -31,6 +31,7 @@ def plot(
     is_show_fig=True,
     save_path=None,
     win_title=None,
+    is_winding_connection=False,
 ):
     """Plot the Lamination with empty Slots in a matplotlib fig
 
@@ -58,6 +59,8 @@ def plot(
         False to return the patches
     is_show_fig : bool
         To call show at the end of the method
+    is_winding_connection : bool
+        True to display winding connections (not used)
 
     Returns
     -------
@@ -181,14 +184,14 @@ def plot(
                             index = ii % len(PHASE_COLORS)
                             patch_leg.append(Patch(color=PHASE_COLORS[index]))
                             label_leg.append(phase_name[ii])
-                        if not phase_name[ii] + " +" in label_leg and is_add_sign:
+                        if not "Phase +" in label_leg and is_add_sign:
                             # Avoid adding twice the same label
                             index = ii % len(PHASE_COLORS)
                             patch_leg.append(
                                 Patch(color=PHASE_COLORS[index], hatch=PLUS_HATCH)
                             )
                             label_leg.append(phase_name[ii] + " +")
-                        if not phase_name[ii] + " -" in label_leg and is_add_sign:
+                        if not "Phase -" in label_leg and is_add_sign:
                             # Avoid adding twice the same label
                             index = ii % len(PHASE_COLORS)
                             patch_leg.append(

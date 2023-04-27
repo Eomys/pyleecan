@@ -71,7 +71,7 @@ class TestBoreAddition(object):
         assert self.widget.machine.name == "Toyota_Prius"
 
         # Step 1 : Checking bore groupBox and recovering dialog
-        self.widget.nav_step.setCurrentRow(5)  # Stator Shape step
+        self.widget.nav_step.setCurrentRow(3)  # Stator Shape step
         assert isinstance(self.widget.w_step, SLamShape)
         assert self.widget.w_step.g_bore.isHidden()
 
@@ -122,7 +122,8 @@ class TestBoreAddition(object):
         # Clicking on OK button
         BW.b_ok.clicked.emit()
         assert isinstance(self.widget.w_step.obj.bore, BoreFlower)
-        self.widget.nav_step.setCurrentRow(5)
+        self.widget.nav_step.setCurrentRow(3)
+        assert isinstance(self.widget.w_step, SLamShape)
         self.widget.nav_step.setCurrentRow(7)
 
         assert isinstance(self.widget.w_step, SLamShape)
@@ -155,11 +156,13 @@ class TestBoreAddition(object):
         Rbo = self.widget.machine.rotor.Rext
 
         # Step 1 : Checking bore groupBox and recovering dialog
-        self.widget.nav_step.setCurrentRow(5)  # Stator Shape step
+        self.widget.nav_step.setCurrentRow(3)  # Stator Shape step
+        assert self.widget.nav_step.currentItem().text() == " 4: Stator Lamination"
         assert isinstance(self.widget.w_step, SLamShape)
         assert self.widget.w_step.g_bore.isHidden()
 
         self.widget.nav_step.setCurrentRow(7)  # Rotor Shape step
+        assert self.widget.nav_step.currentItem().text() == " 8: Rotor Lamination"
         assert isinstance(self.widget.w_step, SLamShape)
         assert not self.widget.w_step.g_bore.isHidden()
         assert not self.widget.w_step.g_bore.isChecked()
@@ -262,6 +265,7 @@ if __name__ == "__main__":
     a = TestBoreAddition()
     a.setup_class()
     a.setup_method()
+    # a.test_boreflower_addition()
     a.test_boresin_addition()
     a.teardown_class()
     print("Done")

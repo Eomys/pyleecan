@@ -105,6 +105,8 @@ class WindingSC(Winding):
         is_reverse_layer=False,
         is_change_layer=False,
         is_permute_B_C=False,
+        dual_tri_phase_shift=None,
+        is_wye=True,
         init_dict=None,
         init_str=None,
     ):
@@ -159,6 +161,10 @@ class WindingSC(Winding):
                 is_change_layer = init_dict["is_change_layer"]
             if "is_permute_B_C" in list(init_dict.keys()):
                 is_permute_B_C = init_dict["is_permute_B_C"]
+            if "dual_tri_phase_shift" in list(init_dict.keys()):
+                dual_tri_phase_shift = init_dict["dual_tri_phase_shift"]
+            if "is_wye" in list(init_dict.keys()):
+                is_wye = init_dict["is_wye"]
         # Set the properties (value check and convertion are done in setter)
         # Call Winding init
         super(WindingSC, self).__init__(
@@ -180,6 +186,8 @@ class WindingSC(Winding):
             is_reverse_layer=is_reverse_layer,
             is_change_layer=is_change_layer,
             is_permute_B_C=is_permute_B_C,
+            dual_tri_phase_shift=dual_tri_phase_shift,
+            is_wye=is_wye,
         )
         # The class is frozen (in Winding init), for now it's impossible to
         # add new properties
@@ -284,6 +292,8 @@ class WindingSC(Winding):
         is_reverse_layer_val = self.is_reverse_layer
         is_change_layer_val = self.is_change_layer
         is_permute_B_C_val = self.is_permute_B_C
+        dual_tri_phase_shift_val = self.dual_tri_phase_shift
+        is_wye_val = self.is_wye
         # Creates new object of the same type with the copied properties
         obj_copy = type(self)(
             is_reverse_wind=is_reverse_wind_val,
@@ -304,6 +314,8 @@ class WindingSC(Winding):
             is_reverse_layer=is_reverse_layer_val,
             is_change_layer=is_change_layer_val,
             is_permute_B_C=is_permute_B_C_val,
+            dual_tri_phase_shift=dual_tri_phase_shift_val,
+            is_wye=is_wye_val,
         )
         return obj_copy
 

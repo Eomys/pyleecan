@@ -664,7 +664,7 @@
         "properties": [
             {
                 "as_dict": "",
-                "desc": "cf schematics, single wire height without insulation [m]",
+                "desc": "cf schematics, single strand height without insulation",
                 "max": "",
                 "min": "0",
                 "name": "Hwire",
@@ -674,7 +674,7 @@
             },
             {
                 "as_dict": "",
-                "desc": "cf schematics, single wire width without insulation [m]",
+                "desc": "cf schematics, single strand width without insulation",
                 "max": "",
                 "min": "0",
                 "name": "Wwire",
@@ -684,7 +684,7 @@
             },
             {
                 "as_dict": "",
-                "desc": "cf schematics, stator winding number of preformed wires (strands) in parallel per coil along radial (vertical) direction",
+                "desc": "number of form wound strands in parallel per conductor along radial (vertical) direction",
                 "max": "",
                 "min": "1",
                 "name": "Nwppc_rad",
@@ -694,7 +694,7 @@
             },
             {
                 "as_dict": "",
-                "desc": "cf schematics, stator winding number of preformed wires (strands) in parallel per coil along tangential (horizontal) direction",
+                "desc": "number of form wound strands in parallel per conductor along tangential (horizontal) direction",
                 "max": "",
                 "min": "1",
                 "name": "Nwppc_tan",
@@ -704,7 +704,7 @@
             },
             {
                 "as_dict": "",
-                "desc": "(advanced) cf schematics, winding strand insulation thickness [m]",
+                "desc": "(advanced) cf schematics, winding strand insulation thickness",
                 "max": "",
                 "min": "0",
                 "name": "Wins_wire",
@@ -714,7 +714,7 @@
             },
             {
                 "as_dict": "",
-                "desc": "(advanced) cf schematics, winding coil insulation  thickness [m]",
+                "desc": "(advanced) cf schematics, winding coil insulation  thickness",
                 "max": "",
                 "min": "0",
                 "name": "Wins_coil",
@@ -775,7 +775,7 @@
         "properties": [
             {
                 "as_dict": "",
-                "desc": "cf schematics, single wire diameter without insulation [m]",
+                "desc": "cf schematics, single strand diameter without insulation",
                 "max": "",
                 "min": "0",
                 "name": "Wwire",
@@ -785,7 +785,7 @@
             },
             {
                 "as_dict": "",
-                "desc": "(advanced) cf schematics, winding coil insulation diameter [m]",
+                "desc": "(advanced) cf schematics, conductor diameter",
                 "max": "",
                 "min": "0",
                 "name": "Wins_cond",
@@ -795,7 +795,7 @@
             },
             {
                 "as_dict": "",
-                "desc": "cf schematics, winding number of random wires (strands) in parallel per coil",
+                "desc": "number of strands in parallel per conductor",
                 "max": "",
                 "min": "1",
                 "name": "Nwppc",
@@ -805,7 +805,7 @@
             },
             {
                 "as_dict": "",
-                "desc": "(advanced) cf schematics, winding strand insulation thickness [m]",
+                "desc": "(advanced) cf schematics, winding strand insulation thickness",
                 "max": "",
                 "min": "0",
                 "name": "Wins_wire",
@@ -16352,7 +16352,10 @@
             "get_dim_wind",
             "get_periodicity",
             "export_to_csv",
-            "clean"
+            "clean",
+            "plot_radial",
+            "plot_linear",
+            "comp_Ncps"
         ],
         "mother": "",
         "name": "Winding",
@@ -16371,7 +16374,7 @@
             },
             {
                 "as_dict": "",
-                "desc": "0 not to change the stator winding connection matrix built by pyleecan number of slots to shift the coils obtained with pyleecan winding algorithm (a, b, c becomes b, c, a with Nslot_shift_wind1=1)",
+                "desc": "Number of slots to shift the coils obtained with pyleecan winding algorithm (a, b, c becomes b, c, a with Nslot_shift_wind=1)",
                 "max": "",
                 "min": "",
                 "name": "Nslot_shift_wind",
@@ -16451,7 +16454,7 @@
             },
             {
                 "as_dict": "",
-                "desc": "Coil pitch (or coil span)",
+                "desc": "Distance (in slot) between a conductor of a certain phase and the corresponding return conductor",
                 "max": "",
                 "min": "",
                 "name": "coil_pitch",
@@ -16471,7 +16474,7 @@
             },
             {
                 "as_dict": "",
-                "desc": "Number of layers per slots",
+                "desc": "Number of different coils in a slot",
                 "max": "",
                 "min": "1",
                 "name": "Nlayer",
@@ -16538,6 +16541,26 @@
                 "type": "bool",
                 "unit": "",
                 "value": 0
+            },
+            {
+                "as_dict": "",
+                "desc": "Phase shift between both tri-phase systems in dual-tri-phase case",
+                "max": "",
+                "min": "",
+                "name": "dual_tri_phase_shift",
+                "type": "float",
+                "unit": "rad",
+                "value": null
+            },
+            {
+                "as_dict": "",
+                "desc": "True if the alimentation is wye (else delta)",
+                "max": "",
+                "min": "",
+                "name": "is_wye",
+                "type": "bool",
+                "unit": "-",
+                "value": 1
             }
         ]
     },

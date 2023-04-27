@@ -76,7 +76,9 @@ def comp_axes(
     p = machine.get_pole_pair_number()
 
     # Fill periodicity parameters that are None
-    if per_a is None or is_antiper_a is None or per_t is None or is_antiper_t is None:
+    if (is_periodicity_a is not False or is_periodicity_t is not False) and (
+        per_a is None or is_antiper_a is None or per_t is None or is_antiper_t is None
+    ):
         if output is not None:
             # Get time and space (anti-)periodicities from the output
             (
@@ -139,7 +141,10 @@ def comp_axes(
     if "angle" in axes_list:
 
         # Airgap radius
-        Rag = machine.comp_Rgap_mec()
+        try:
+            Rag = machine.comp_Rgap_mec()
+        except Exception:  # Case where rotor is not defined yet (Rag is only used for angle axis normalization)
+            Rag = 1
 
         # Check if Angle is already in input dict of axes
         if axes_dict_in is not None and "angle" in axes_dict_in:

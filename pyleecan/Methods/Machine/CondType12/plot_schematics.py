@@ -25,6 +25,7 @@ def plot_schematics(
     is_show_fig=True,
     fig=None,
     ax=None,
+    is_single=False,
 ):
     """Plot the schematics of the slot
 
@@ -56,9 +57,21 @@ def plot_schematics(
     """
 
     # Use some default parameter
-    if is_default:
+    if is_default and is_single:
+        cond = type(self)(Wins_cond=40e-3, Wwire=35e-3, Wins_wire=5e-3, Nwppc=1)
+        return cond.plot_schematics(
+            is_default=False,
+            is_add_schematics=is_add_schematics,
+            is_add_main_line=is_add_main_line,
+            save_path=save_path,
+            is_show_fig=is_show_fig,
+            fig=fig,
+            ax=ax,
+            is_single=is_single,
+        )
+    elif is_default:
         cond = type(self)(Wins_cond=40e-3, Wwire=10e-3, Wins_wire=2e-3, Nwppc=4)
-        cond.plot_schematics(
+        return cond.plot_schematics(
             is_default=False,
             is_add_schematics=is_add_schematics,
             is_add_main_line=is_add_main_line,
@@ -74,56 +87,87 @@ def plot_schematics(
 
         # Adding schematics
         if is_add_schematics:
-            # Wwire
-            line = Segment(a - self.Wwire / 2 + 1j * a, a + self.Wwire / 2 + 1j * a)
-            line.plot(
-                fig=fig,
-                ax=ax,
-                color=ARROW_COLOR,
-                linewidth=ARROW_WIDTH,
-                label="Wwire",
-                offset_label=1j * self.Wins_wire,
-                is_arrow=True,
-                fontsize=SC_FONT_SIZE,
-            )
-            # Wins_wire
-            line = Segment(
-                -self.Wwire / 2 - self.Wins_wire + 1j * self.Wins_wire,
-                -self.Wwire / 2 - self.Wins_wire - 1j * self.Wins_wire,
-            )
-            line.plot(
-                fig=fig,
-                ax=ax,
-                color=ARROW_COLOR,
-                linewidth=ARROW_WIDTH,
-                label="2*Wins_wire",
-                offset_label=-8 * self.Wins_wire,
-                is_arrow=True,
-                fontsize=SC_FONT_SIZE,
-            )
-            # Wins_cond
-            line = Segment(-1j * self.Wins_cond / 2, 1j * self.Wins_cond / 2)
-            line.plot(
-                fig=fig,
-                ax=ax,
-                color=ARROW_COLOR,
-                linewidth=ARROW_WIDTH,
-                label="Wins_cond",
-                offset_label=-1j * self.Wins_cond * 0.25 + self.Wins_wire,
-                is_arrow=True,
-                fontsize=SC_FONT_SIZE,
-            )
-            # Nwppc_rad
-            ax.text(
-                -a - self.Wwire,
-                a,
-                "Nwppc=4",
-                fontsize=SC_FONT_SIZE,
-                bbox=TEXT_BOX,
-            )
+            if is_single:
+                # Wwire
+                line = Segment(-self.Wwire / 2, self.Wwire / 2)
+                line.plot(
+                    fig=fig,
+                    ax=ax,
+                    color=ARROW_COLOR,
+                    linewidth=ARROW_WIDTH,
+                    label="Conductor diameter",
+                    offset_label=1j * self.Wins_wire / 2,
+                    is_arrow=True,
+                    fontsize=SC_FONT_SIZE,
+                )
+                # Wins_wire
+                line = Segment(
+                    1j * (self.Wwire / 2 + self.Wins_wire), 1j * self.Wwire / 2
+                )
+                line.plot(
+                    fig=fig,
+                    ax=ax,
+                    color=ARROW_COLOR,
+                    linewidth=ARROW_WIDTH,
+                    label="Insulator thickness",
+                    offset_label=self.Wins_wire / 2,
+                    is_arrow=True,
+                    fontsize=SC_FONT_SIZE,
+                )
+            else:
+                # Wwire
+                line = Segment(a - self.Wwire / 2 + 1j * a, a + self.Wwire / 2 + 1j * a)
+                line.plot(
+                    fig=fig,
+                    ax=ax,
+                    color=ARROW_COLOR,
+                    linewidth=ARROW_WIDTH,
+                    label="Strand diameter",
+                    offset_label=1j * self.Wins_wire,
+                    is_arrow=True,
+                    fontsize=SC_FONT_SIZE,
+                )
+                # Wins_wire
+                line = Segment(
+                    -self.Wwire / 2 - self.Wins_wire + 1j * self.Wins_wire,
+                    -self.Wwire / 2 - self.Wins_wire,
+                )
+                line.plot(
+                    fig=fig,
+                    ax=ax,
+                    color=ARROW_COLOR,
+                    linewidth=ARROW_WIDTH,
+                    label="Insulator thickness",
+                    offset_label=-8 * self.Wins_wire,
+                    is_arrow=True,
+                    fontsize=SC_FONT_SIZE,
+                )
+                # Wins_cond
+                line = Segment(-1j * self.Wins_cond / 2, 1j * self.Wins_cond / 2)
+                line.plot(
+                    fig=fig,
+                    ax=ax,
+                    color=ARROW_COLOR,
+                    linewidth=ARROW_WIDTH,
+                    label="Overall diameter",
+                    offset_label=-1j * self.Wins_cond * 0.25 + self.Wins_wire / 2,
+                    is_arrow=True,
+                    fontsize=SC_FONT_SIZE,
+                )
+                # Nwppc_rad
+                ax.text(
+                    -a - 2 * self.Wwire,
+                    2.5 * a,
+                    "Strands in hand: 4",
+                    fontsize=SC_FONT_SIZE,
+                    bbox=TEXT_BOX,
+                )
 
         # Zooming and cleaning
-        W = self.comp_width() * 1.05
+        if is_single:
+            W = self.comp_width() * 1.2
+        else:
+            W = self.comp_width() * 1.05
 
         ax.axis("equal")
         ax.set_xlim(-W / 2, W / 2)

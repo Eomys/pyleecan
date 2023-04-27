@@ -9,6 +9,7 @@ from ......Classes.HoleM50 import HoleM50
 from ......GUI import gui_option
 from ......GUI.Dialog.DMachineSetup.SMHoleMag.PHoleM50.Gen_PHoleM50 import Gen_PHoleM50
 from ......Methods.Slot.Slot import SlotCheckError
+from ......GUI.Dialog.DMachineSetup.SMHoleMag import DEFAULT_MAG_MAT
 
 
 class PHoleM50(Gen_PHoleM50, QWidget):
@@ -56,10 +57,10 @@ class PHoleM50(Gen_PHoleM50, QWidget):
         self.w_mat_0.def_mat = "Air"
         self.w_mat_0.is_hide_button = True
         self.w_mat_1.setText("magnet_0")
-        self.w_mat_1.def_mat = "Magnet1"
+        self.w_mat_1.def_mat = DEFAULT_MAG_MAT
         self.w_mat_1.is_hide_button = True
         self.w_mat_2.setText("magnet_1")
-        self.w_mat_2.def_mat = "Magnet1"
+        self.w_mat_2.def_mat = DEFAULT_MAG_MAT
         self.w_mat_2.is_hide_button = True
 
         # Adapt GUI with/without magnet
@@ -268,7 +269,7 @@ class PHoleM50(Gen_PHoleM50, QWidget):
                 "Hole surface: " + s_surf + " [" + self.u.get_m2_name() + "]"
             )
         except:
-            self.out_slot_surface.setText("Hole suface: ?")
+            self.out_slot_surface.setText("Hole surface: ?")
 
         # Magnet surface
         try:

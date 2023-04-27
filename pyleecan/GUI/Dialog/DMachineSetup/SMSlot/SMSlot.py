@@ -68,6 +68,7 @@ class SMSlot(Ui_SMSlot, QWidget):
         self.material_dict = material_dict
         self.is_stator = is_stator
         self.is_test = False  # To skip show fig for tests
+        self.test_err_msg = None  # To test the error messages
 
         self.b_help.hide()
 
@@ -240,25 +241,25 @@ class SMSlot(Ui_SMSlot, QWidget):
             name = "Rotor"
 
         if error:  # Error => Display it
-            err_msg = "Error in " + name + " Slot definition:\n" + error
-            getLogger(GUI_LOG_NAME).debug(err_msg)
-            QMessageBox().critical(self, self.tr("Error"), err_msg)
+            self.test_err_msg = "Error in " + name + " Slot definition:\n" + error
+            getLogger(GUI_LOG_NAME).debug(self.test_err_msg)
+            QMessageBox().critical(self, self.tr("Error"), self.test_err_msg)
         else:  # No error => Plot the lamination
             try:
-                self.obj.plot()
+                self.obj.plot(is_show_fig=not self.is_test)
                 set_plot_gui_icon()
             except Exception as e:
                 if self.is_stator:
-                    err_msg = (
+                    self.test_err_msg = (
                         "Error while plotting Lamination in Stator Magnet step:\n"
                         + str(e)
                     )
                 else:
-                    err_msg = (
+                    self.test_err_msg = (
                         "Error while plotting Lamination in Rotor Magnet step:\n"
                         + str(e)
                     )
-                log_error(self, err_msg)
+                log_error(self, self.test_err_msg)
 
     @staticmethod
     def check(lam):

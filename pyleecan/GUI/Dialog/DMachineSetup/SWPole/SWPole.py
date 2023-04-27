@@ -51,6 +51,7 @@ class SWPole(Ui_SWPole, QWidget):
         self.machine = machine
         self.material_dict = material_dict
         self.is_stator = is_stator
+        self.test_err_msg = None  # To check the error messages in test
 
         self.b_help.hide()
 
@@ -127,8 +128,8 @@ class SWPole(Ui_SWPole, QWidget):
         Zs : int
             The current value of Zs
         """
-        sp_txt = self.tr("Slot pitch = 360 / Zs = ")
-        self.in_Zs.setText("Zs = 2*p = " + str(Zs))
+        sp_txt = self.tr("Slot pitch: 360 / Zs = ")
+        self.in_Zs.setText("Zs: 2*p = " + str(Zs))
 
         if Zs in [None, 0]:
             self.out_Slot_pitch.setText(sp_txt + "?")
@@ -139,9 +140,9 @@ class SWPole(Ui_SWPole, QWidget):
             self.out_Slot_pitch.setText(
                 sp_txt
                 + "%.4g" % (Slot_pitch)
-                + " ° ("
+                + " [°] ("
                 + "%.4g" % (Slot_pitch_rad)
-                + " rad)"
+                + " [rad])"
             )
 
     def s_update_slot(self):
@@ -187,7 +188,8 @@ class SWPole(Ui_SWPole, QWidget):
         error = self.check(self.obj)
 
         if error:  # Error => Display it
-            QMessageBox().critical(self, self.tr("Error"), error)
+            self.test_err_msg = error
+            QMessageBox().critical(self, self.tr("Error"), self.test_err_msg)
         else:  # No error => Plot the lamination
             self.obj.plot()
             set_plot_gui_icon()

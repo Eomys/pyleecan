@@ -114,7 +114,7 @@ class PWSlot22(Gen_PWSlot22, QWidget):
         self : PWSlot22
             A PWSlot22 object
         """
-        if self.lf_W0 is not None:
+        if self.lf_W0.value() is not None:
             if self.c_W0_unit.currentIndex() == 0:  # Rad
                 self.slot.W0 = self.lf_W0.value()
             else:

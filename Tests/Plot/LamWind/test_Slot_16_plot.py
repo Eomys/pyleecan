@@ -52,7 +52,7 @@ class Test_Slot_16_plot(object):
         fig = plt.gcf()
         fig.savefig(join(save_path, "test_Lam_Wind_s16_1-4-wind.png"))
         # 2 for lam + Zs*4 for wind
-        assert len(fig.axes[0].patches) == 26
+        assert len(fig.axes[0].patches) == 28
 
     def test_Lam_Wind_16_wind_tan(self, lamination):
         """Test lamination plot with Slot 16 and winding rad=1, tan=2"""
@@ -62,7 +62,7 @@ class Test_Slot_16_plot(object):
         fig = plt.gcf()
         fig.savefig(join(save_path, "test_Lam_Wind_s16_2-tan-wind.png"))
         # 2 for lam + Zs*2 for wind
-        assert len(fig.axes[0].patches) == 14
+        assert len(fig.axes[0].patches) == 16
 
     def test_Lam_Wind_16_wind_rad(self, lamination):
         """Test lamination plot with Slot 16 and winding rad=2, tan=1"""
@@ -71,7 +71,7 @@ class Test_Slot_16_plot(object):
         fig = plt.gcf()
         fig.savefig(join(save_path, "test_Lam_Wind_s16_3-rad-wind.png"))
         # 2 for lam + Zs*2 for wind
-        assert len(fig.axes[0].patches) == 14
+        assert len(fig.axes[0].patches) == 16
 
     def test_Lam_Wind_16_tooth(self, lamination):
         """Test the Slot 16 tooth plot"""

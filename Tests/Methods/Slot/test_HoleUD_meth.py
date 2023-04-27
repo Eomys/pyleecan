@@ -185,8 +185,8 @@ class Test_HoleUD_meth(object):
 if __name__ == "__main__":
     a = Test_HoleUD_meth()
     a.test_convert_UD()
-    a.test_comp_magnet_surface()
-    a.test_comp_surface()
-    a.test_build_geometry_mag()
-    a.test_build_geometry_no_mag()
-    a.test_comp_surface_magnet_id()
+    # a.test_comp_magnet_surface()
+    # a.test_comp_surface()
+    # a.test_build_geometry_mag()
+    # a.test_build_geometry_no_mag()
+    # a.test_comp_surface_magnet_id()

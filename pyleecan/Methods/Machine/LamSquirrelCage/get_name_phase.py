@@ -18,4 +18,6 @@ def get_name_phase(self):
         # or self.winding.conductor is None
     ):
         return list()
-    return ["Bar " + str(ii + 1) for ii in range(self.winding.qs)]
+    qs = 3 if self.winding.qs is None else self.winding.qs
+
+    return ["Bar " + str(ii + 1) for ii in range(qs)]

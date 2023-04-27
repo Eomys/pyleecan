@@ -20,4 +20,8 @@ pixmap_dict = {
     "check": ":/images/images/icon/check.png",
     "search": ":/images/images/icon/search.png",
     "soft_icon": ":/images/images/icon/pyleecan_64.png",
+    "Cond11": ":/images/images/MachineSetup/WindParam/CondType11.png",
+    "Cond11_single": ":/images/images/MachineSetup/WindParam/CondType11_single.png",
+    "Cond12": ":/images/images/MachineSetup/WindParam/CondType12.png",
+    "Cond12_single": ":/images/images/MachineSetup/WindParam/CondType12_single.png",
 }

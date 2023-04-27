@@ -46,7 +46,7 @@ class TestSWPole(object):
 
     def test_init(self):
         """Check that the Widget initialize to the correct slot"""
-        assert self.widget.in_Zs.text() == "Zs = 2*p = 8"
+        assert self.widget.in_Zs.text() == "Zs: 2*p = 8"
         assert self.widget.c_slot_type.currentIndex() == 0
         assert type(self.widget.w_slot) == PWSlot60
 
@@ -68,7 +68,7 @@ class TestSWPole(object):
 
         self.widget = SWPole(self.test_obj, material_dict=dict(), is_stator=False)
 
-        assert self.widget.in_Zs.text() == "Zs = 2*p = 16"
+        assert self.widget.in_Zs.text() == "Zs: 2*p = 16"
         assert self.widget.c_slot_type.currentIndex() == 1
         assert type(self.widget.w_slot) == PWSlot61
 
@@ -90,6 +90,7 @@ if __name__ == "__main__":
     a = TestSWPole()
     a.setup_class()
     a.setup_method()
-    a.test_c_slot_type()
+    a.test_init()
+    # a.test_c_slot_type()
     a.teardown_class()
     print("Done")

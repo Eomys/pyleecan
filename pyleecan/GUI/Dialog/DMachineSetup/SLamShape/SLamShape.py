@@ -7,7 +7,7 @@ from logging import getLogger
 
 from .....loggers import GUI_LOG_NAME
 from .....GUI import gui_option
-from .....Classes.Lamination import Lamination
+from .....Classes.LamSlotWind import LamSlotWind
 from .....Classes.MachineIPMSM import MachineIPMSM
 from .....Classes.MachineWRSM import MachineWRSM
 from .....GUI.Dialog.DMachineSetup.DBore.DBore import DBore
@@ -436,9 +436,11 @@ class SLamShape(Gen_SLamShape, QWidget):
         if not self.g_axial.isChecked():
             self.obj.axial_vent = list()  # Default empty
 
-    def update_graph(self, is_lam_only=False):
-        """Plot the lamination with/without the winding"""
+    def update_graph(self):
+        """Plot the lamination without the winding"""
         self.w_viewer.axes.clear()
+        # Winding is not yet defined, but magnets are
+        is_lam_only = isinstance(self.obj, LamSlotWind)
         # Plot the lamination in the viewer fig
         try:
             self.obj.plot(

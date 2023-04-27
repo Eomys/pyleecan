@@ -24,6 +24,7 @@ def plot(
     is_add_arrow=False,
     is_show_fig=True,
     save_path=None,
+    is_winding_connection=False,
 ):
     """Plot the Lamination in a matplotlib fig
 
@@ -51,7 +52,8 @@ def plot(
         To call show at the end of the method
     save_path : str
         full path including folder, name and extension of the file to save if save_path is not None
-
+    is_winding_connection : bool
+        True to display winding connections (not used)
 
     Returns
     -------

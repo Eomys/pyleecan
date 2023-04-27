@@ -61,7 +61,7 @@ class TestSSkew(object):
         assert self.widget.lf_angle.value() == 7.5
         assert (
             self.widget.in_slot_pitch.text()
-            == "Stator slot pitch =7.5 [°] / Skew rate = 100%"
+            == "Stator slot pitch: 7.5 [°] / Skew rate: 100%"
         )
         assert self.widget.tab_angle.rowCount() == 3
         assert (
@@ -113,7 +113,7 @@ class TestSSkew(object):
         assert self.widget.lf_angle.value() == 7.5
         assert (
             self.widget.in_slot_pitch.text()
-            == "Stator slot pitch =7.5 [°] / Skew rate = 100%"
+            == "Stator slot pitch: 7.5 [°] / Skew rate: 100%"
         )
         assert self.widget.tab_angle.rowCount() == 2
         assert (
@@ -191,7 +191,7 @@ class TestSSkew(object):
         assert self.widget.lf_angle.value() == 3.75
         assert (
             self.widget.in_slot_pitch.text()
-            == "Stator slot pitch =7.5 [°] / Skew rate = 50%"
+            == "Stator slot pitch: 7.5 [°] / Skew rate: 50%"
         )
         assert self.widget.tab_angle.rowCount() == 4
         assert (

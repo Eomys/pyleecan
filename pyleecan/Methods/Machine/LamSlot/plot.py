@@ -20,6 +20,7 @@ def plot(
     is_add_arrow=False,
     is_display=True,
     is_show_fig=True,
+    is_winding_connection=False,
 ):
     """Plot the Lamination with empty Slots in a matplotlib fig
 
@@ -47,6 +48,8 @@ def plot(
         False to return the patches
     is_show_fig : bool
         To call show at the end of the method
+    is_winding_connection : bool
+        True to display winding connections (not used)
 
     Returns
     -------

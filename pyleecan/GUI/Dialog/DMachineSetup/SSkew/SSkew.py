@@ -314,9 +314,9 @@ class SSkew(Ui_SSkew, QWidget):
             lam_name = "Rotor "
         self.in_slot_pitch.setText(
             lam_name
-            + "slot pitch ="
+            + "slot pitch: "
             + format(self.slot_pitch, ".2g")
-            + " [°] / Skew rate = "
+            + " [°] / Skew rate: "
             + format(self.rate * 100, ".3g")
             + "%"
         )

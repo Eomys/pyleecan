@@ -91,6 +91,7 @@ class SWSlot(Gen_SWSlot, QWidget):
         self.material_dict = material_dict
         self.is_stator = is_stator
         self.is_test = False  # To avoid call to show in plot
+        self.test_err_msg = None  # To store error message for testing
 
         self.b_help.hide()
 
@@ -212,7 +213,7 @@ class SWSlot(Gen_SWSlot, QWidget):
         Zs : int
             The current value of Zs
         """
-        sp_txt = self.tr("Slot pitch = 360 / Zs = ")
+        sp_txt = self.tr("Slot pitch: 360 / Zs = ")
 
         if Zs in [None, 0]:
             self.out_Slot_pitch.setText(sp_txt + "?")
@@ -286,9 +287,9 @@ class SWSlot(Gen_SWSlot, QWidget):
             name = "Rotor"
 
         if error:  # Error => Display it
-            err_msg = "Error in " + name + " Slot definition:\n" + error
-            getLogger(GUI_LOG_NAME).debug(err_msg)
-            QMessageBox().critical(self, self.tr("Error"), err_msg)
+            self.test_err_msg = "Error in " + name + " Slot definition:\n" + error
+            getLogger(GUI_LOG_NAME).debug(self.test_err_msg)
+            QMessageBox().critical(self, self.tr("Error"), self.test_err_msg)
         else:  # No error => Plot the lamination
             try:
                 self.obj.plot(
@@ -298,19 +299,19 @@ class SWSlot(Gen_SWSlot, QWidget):
                 set_plot_gui_icon()
             except Exception as e:
                 if self.is_stator:
-                    err_msg = (
+                    self.test_err_msg = (
                         "Error while plotting Lamination in Stator Slot step:\n"
                         + str(e)
                     )
                 else:
-                    err_msg = (
+                    self.test_err_msg = (
                         "Error while plotting Lamination in Rotor Slot step:\n" + str(e)
                     )
-                getLogger(GUI_LOG_NAME).error(err_msg)
+                getLogger(GUI_LOG_NAME).error(self.test_err_msg)
                 QMessageBox().warning(
                     self,
                     self.tr("Error while plotting"),
-                    self.tr(err_msg),
+                    self.tr(self.test_err_msg),
                 )
 
     @staticmethod

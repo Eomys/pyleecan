@@ -66,20 +66,20 @@ class Test_Slot_24_plot(object):
 
         fig.savefig(join(save_path, "test_Lam_Wind_s24_1-Machine.png"))
         # Rotor + Stator + 0 for frame + 1 for shaft
-        assert len(fig.axes[0].patches) == 65
+        assert len(fig.axes[0].patches) == 69
 
         test_obj.rotor.plot(is_show_fig=False)
         fig = plt.gcf()
 
         fig.savefig(join(save_path, "test_Lam_Wind_s24_2-Rotor.png"))
         # 2 for lam + 4*Zs for wind
-        assert len(fig.axes[0].patches) == 26
+        assert len(fig.axes[0].patches) == 28
         test_obj.stator.plot(is_show_fig=False)
         fig = plt.gcf()
 
         fig.savefig(join(save_path, "test_Lam_Wind_s24_3-Stator.png"))
         # 2 for lam + 2*Zs for wind
-        assert len(fig.axes[0].patches) == 38
+        assert len(fig.axes[0].patches) == 40
 
         tooth = test_obj.rotor.slot.get_surface_tooth()
         tooth.plot(color="r", is_show_fig=False)
