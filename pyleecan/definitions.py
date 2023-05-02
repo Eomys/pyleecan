@@ -10,6 +10,8 @@ from matplotlib.cm import get_cmap, register_cmap
 from numpy import load as np_load
 from matplotlib import font_manager
 
+PYTHON_DEFAULT_ENCODING = "utf-8-sig"
+
 ROOT_DIR = normpath(abspath(join(dirname(__file__), ".."))).replace("\\", "/")
 # Further import
 try:

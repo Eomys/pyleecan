@@ -1,7 +1,7 @@
 from ....Classes._check import CheckTypeError
 from ntpath import basename
 from ....Functions.path_tools import abs_file_path
-from ....Generator import PYTHON_DEFAULT_ENCODING
+from ....definitions import PYTHON_DEFAULT_ENCODING
 
 # Import numpy to be usable in the fct/lambda
 import numpy as np
