@@ -16,7 +16,10 @@ def comp_radius_mec(self):
 
     """
 
-    if self.is_internal:
-        return self.Rext
+    (Rmin, Rmax) = self.slot.comp_radius()
+
+    if self.is_internal:  # inward Slot
+        # Top radius of the magnet
+        return max(self.Rext, Rmax)
     else:
-        return self.Rint
+        return min(self.Rint, Rmin)
