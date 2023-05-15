@@ -4,30 +4,25 @@ import numpy as np
 
 
 def add_node(self, coord):
-    """Define a new NodeMat object based on a set of elements.
+    """Add a new node defined by its coordinates to the NodeMat
+    (if a node of this coordinate already exist, do nothing)
 
     Parameters
     ----------
     self : NodeMat
         an NodeMat object
-    element : Element
-        an Element object
-
-    Returns
-    -------
-    node: Node
-        a Node object corresponding to Element
-
+    coord : list
+        The list of coordinates (length must match mesh dimension)
     """
     if self.is_exist(coord):
         return None
-    else:
+    else:  # Add node only if it doesn't already exist
         if self.coordinate is not None and self.coordinate.size > 0:
             self.coordinate = np.vstack((self.coordinate, coord))
             new_ind = max(self.indice) + 1
             self.indice = np.concatenate((self.indice, np.array([new_ind], dtype=int)))
             self.nb_node = self.nb_node + 1
-        else:
+        else:  # Add first node
             if self.coordinate is not None:
                 self.coordinate = np.concatenate((self.coordinate, coord))
             else:

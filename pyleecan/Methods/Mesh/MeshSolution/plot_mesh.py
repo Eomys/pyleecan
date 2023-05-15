@@ -11,7 +11,6 @@ def plot_mesh(
     indices=None,
     save_path=None,
     group_names=None,
-    node_label=None,
     is_show_axes=False,
     is_show_fig=True,
     is_show_grid=False,
@@ -26,17 +25,23 @@ def plot_mesh(
     p : a pyvista(qt) object, optional
         a pyvista object which will be used for the plot
     label : str
-        a label
+        Label of the mesh to plot
     index : int
-        an index
+        Index of the mesh to plot
     indices : list
-        list of the points to extract (optional)
+        list of the nodes to extract (optional)
+    save_path : str
+        Path to a file where to save the figure
+    group_names : [str] or str
+        List of the mesh group to plot
     is_show_axes : bool
         True to show axes
     is_show_fig : bool
         To call show at the end of the method
     is_show_grid : bool
         True to show grid
+    win_title : str
+        To set the name of the plot window
 
     Returns
     -------
@@ -52,7 +57,6 @@ def plot_mesh(
             group_names=None,
         )
     else:
-
         if p is None:
             if save_path is None:
                 try:

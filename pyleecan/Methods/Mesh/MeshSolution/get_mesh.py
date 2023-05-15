@@ -9,9 +9,9 @@ def get_mesh(self, label=None, index=None):
     self : MeshSolution
         an MeshSolution object
     label : str
-        a label
+        Label of the mesh to return
     index : int
-        an index
+        Index of the mesh to return
 
     Returns
     -------

@@ -82,6 +82,11 @@ try:
 except ImportError as error:
     clear_cell = error
 
+try:
+    from ..Methods.Mesh.MeshMat.get_cell_nb import get_cell_nb
+except ImportError as error:
+    get_cell_nb = error
+
 
 from numpy import isnan
 from ._check import InitUnKnowClassError
@@ -216,6 +221,15 @@ class MeshMat(Mesh):
         )
     else:
         clear_cell = clear_cell
+    # cf Methods.Mesh.MeshMat.get_cell_nb
+    if isinstance(get_cell_nb, ImportError):
+        get_cell_nb = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use MeshMat method get_cell_nb: " + str(get_cell_nb))
+            )
+        )
+    else:
+        get_cell_nb = get_cell_nb
     # generic save method is available in all object
     save = save
     # get_logger method is available in all object

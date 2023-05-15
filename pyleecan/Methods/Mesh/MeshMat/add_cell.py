@@ -7,29 +7,24 @@ def add_cell(self, node_indices, cell_type):
     Parameters
     ----------
     self : MeshMat
-        an Mesh object
-    node_indices : ndarray
-        a ndarray of points indices
+        a MeshMat object
+    node_indices : ndarray or list of int
+        a ndarray of nodes indices (length must match cell.nb_node_per_cell)
     cell_type : str
-        Define the type of cell.
+        Define the type of cell to add (key of self.cell dict)
 
     Returns
     -------
-    new_ind : int
+    new_index : int
         indice of the newly created cell. None if the cell already exists.
     """
 
-    # Create the new element
-    new_ind = 0
-    for key in self.cell:  # There should only one solution
-        if self.cell[key].indice is not None and self.cell[key].indice.size > 0:
-            tmp_ind = max(self.cell[key].indice)
-            new_ind = max(new_ind, tmp_ind)
-            new_ind += 1
+    # The cell index must be unique for all cell type
+    new_index = self.get_cell_nb()  # index start at 0 (last index = nb-1)
 
-    test_exist = self.cell[cell_type].add_cell(node_indices, new_ind)
+    is_created = self.cell[cell_type].add_cell(node_indices, new_index)
 
-    if test_exist:
-        return new_ind
+    if is_created:
+        return new_index
     else:
         return None

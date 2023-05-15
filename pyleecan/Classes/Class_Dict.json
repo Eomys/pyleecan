@@ -8104,7 +8104,8 @@
             "find_cell",
             "interface",
             "clear_node",
-            "clear_cell"
+            "clear_cell",
+            "get_cell_nb"
         ],
         "mother": "Mesh",
         "name": "MeshMat",
