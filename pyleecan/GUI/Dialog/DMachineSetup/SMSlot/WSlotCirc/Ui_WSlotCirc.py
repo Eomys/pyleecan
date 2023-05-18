@@ -52,8 +52,24 @@ class Ui_WSlotCirc(object):
         self.scrollAreaWidgetContents = QWidget()
         self.scrollAreaWidgetContents.setObjectName(u"scrollAreaWidgetContents")
         self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 268, 446))
-        self.verticalLayout_3 = QVBoxLayout(self.scrollAreaWidgetContents)
-        self.verticalLayout_3.setObjectName(u"verticalLayout_3")
+        self.verticalLayout = QVBoxLayout(self.scrollAreaWidgetContents)
+        self.verticalLayout.setObjectName(u"verticalLayout")
+        self.horizontalLayout_2 = QHBoxLayout()
+        self.horizontalLayout_2.setObjectName(u"horizontalLayout_2")
+        self.in_H0_bore = QLabel(self.scrollAreaWidgetContents)
+        self.in_H0_bore.setObjectName(u"in_H0_bore")
+
+        self.horizontalLayout_2.addWidget(self.in_H0_bore)
+
+        self.c_H0_bore = QComboBox(self.scrollAreaWidgetContents)
+        self.c_H0_bore.addItem("")
+        self.c_H0_bore.addItem("")
+        self.c_H0_bore.setObjectName(u"c_H0_bore")
+
+        self.horizontalLayout_2.addWidget(self.c_H0_bore)
+
+        self.verticalLayout.addLayout(self.horizontalLayout_2)
+
         self.gridLayout = QGridLayout()
         self.gridLayout.setObjectName(u"gridLayout")
         self.unit_H0 = QLabel(self.scrollAreaWidgetContents)
@@ -86,18 +102,18 @@ class Ui_WSlotCirc(object):
 
         self.gridLayout.addWidget(self.lf_W0, 0, 1, 1, 1)
 
-        self.verticalLayout_3.addLayout(self.gridLayout)
+        self.verticalLayout.addLayout(self.gridLayout)
 
         self.verticalSpacer = QSpacerItem(
             20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding
         )
 
-        self.verticalLayout_3.addItem(self.verticalSpacer)
+        self.verticalLayout.addItem(self.verticalSpacer)
 
         self.w_out = WWSlotOut(self.scrollAreaWidgetContents)
         self.w_out.setObjectName(u"w_out")
 
-        self.verticalLayout_3.addWidget(self.w_out)
+        self.verticalLayout.addWidget(self.w_out)
 
         self.scrollArea.setWidget(self.scrollAreaWidgetContents)
 
@@ -114,6 +130,16 @@ class Ui_WSlotCirc(object):
     def retranslateUi(self, WSlotCirc):
         WSlotCirc.setWindowTitle(QCoreApplication.translate("WSlotCirc", u"Form", None))
         self.img_slot.setText("")
+        self.in_H0_bore.setText(
+            QCoreApplication.translate("WSlotCirc", u"H0 definition:", None)
+        )
+        self.c_H0_bore.setItemText(
+            0, QCoreApplication.translate("WSlotCirc", u"Opening Arc", None)
+        )
+        self.c_H0_bore.setItemText(
+            1, QCoreApplication.translate("WSlotCirc", u"Opening Segment", None)
+        )
+
         self.unit_H0.setText(QCoreApplication.translate("WSlotCirc", u"[m]", None))
         self.in_H0.setText(QCoreApplication.translate("WSlotCirc", u"H0", None))
         self.unit_W0.setText(QCoreApplication.translate("WSlotCirc", u"[m]", None))

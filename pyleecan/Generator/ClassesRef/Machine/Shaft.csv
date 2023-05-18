@@ -1,4 +1,9 @@
-Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
-Lshaft,m,length of the rotor shaft [m] (used for weight & cost estimation only),0,float,4.42E-01,0,,,Machine,,build_geometry,VERSION,1,machine shaft
-mat_type,,Shaft's Material,0,Material,,,,,,,comp_mass,,,
-Drsh,m,"diameter of the rotor shaft [m], used to estimate bearing diameter for friction losses",0,float,4.50E-02,0,,,,,plot,,,
+Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,as_dict Type
+Lshaft,m,length of the rotor shaft [m] (used for weight & cost estimation only),0,float,4.42E-01,0,
+mat_type,,Shaft's Material,0,Material,,,
+Drsh,m,"diameter of the rotor shaft [m], used to estimate bearing diameter for friction losses",0,float,4.50E-02,0,
+,
+Package,Inherit,Methods,Constant Name,Constant Value,Class description
+Machine,,build_geometry,VERSION,1,machine shaft
+,,comp_mass,,,
+,,plot,,,

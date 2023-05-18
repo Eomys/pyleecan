@@ -2,12 +2,14 @@
 
 from PySide2.QtCore import Signal
 from PySide2.QtWidgets import QWidget
+from PySide2.QtGui import QPixmap
 
 from ......Classes.CondType11 import CondType11
 from ......GUI import gui_option
 from ......GUI.Dialog.DMachineSetup.SWindCond.PCondType11.Gen_PCondType11 import (
     Gen_PCondType11,
 )
+from ......GUI.Resources import pixmap_dict
 
 
 class PCondType11(Gen_PCondType11, QWidget):
@@ -17,9 +19,9 @@ class PCondType11(Gen_PCondType11, QWidget):
     saveNeeded = Signal()
     # Information for SWindCond combobox
     cond_type = CondType11
-    cond_name = "Preformed Rectangular"
+    cond_name = "Form wound"
 
-    def __init__(self, lamination=None):
+    def __init__(self, lamination=None, material_dict=None):
         """Initialize the widget according to lamination
 
         Parameters
@@ -33,6 +35,19 @@ class PCondType11(Gen_PCondType11, QWidget):
         # Build the interface according to the .ui file
         QWidget.__init__(self)
         self.setupUi(self)
+
+        self.material_dict = material_dict
+
+        self.w_mat_0.setText("Conductor material")
+        self.w_mat_0.def_mat = "Copper1"
+        self.w_mat_0.setWhatsThis("Conductor material")
+        self.w_mat_0.setToolTip("Conductor material")
+
+        self.w_mat_1.setText("Insulator material")
+        self.w_mat_1.def_mat = "Insulator1"
+        self.w_mat_1.setText("Insulator material")
+        self.w_mat_1.setWhatsThis("Insulator material")
+        self.w_mat_1.setToolTip("Insulator material")
 
         # Set FloatEdit unit
         self.lf_Wwire.unit = "m"
@@ -72,42 +87,56 @@ class PCondType11(Gen_PCondType11, QWidget):
         self.lf_Hwire.setValue(self.cond.Hwire)
         if self.cond.Wins_wire is None:
             self.cond.Wins_wire = 0  # Default value
-        else:
+        if self.cond.Wins_wire != 0:
             self.g_ins.setChecked(True)
-        self.lf_Wins_wire.setValue(self.cond.Wins_wire)
+            self.lf_Wins_wire.setValue(self.cond.Wins_wire)
         self.lf_Lewout.validator().setBottom(0)
         if self.lam.winding.Lewout is None:
             self.lam.winding.Lewout = 0
         self.lf_Lewout.setValue(self.lam.winding.Lewout)
 
+        self.set_Nwppc()
+        self.set_Nwppc()
         self.update_ins_layout()
+
+        # Set conductor and insulator material
+        self.w_mat_0.update(self.lam.winding.conductor, "cond_mat", self.material_dict)
+        self.w_mat_1.update(self.lam.winding.conductor, "ins_mat", self.material_dict)
 
         # Display the conductor main output
         self.w_out.comp_output()
 
         # Connect the slot/signal
         self.g_ins.toggled.connect(self.update_ins_layout)
-        self.si_Nwpc1_tan.editingFinished.connect(self.set_Nwppc_tan)
-        self.si_Nwpc1_rad.editingFinished.connect(self.set_Nwppc_rad)
+        self.si_Nwpc1_tan.valueChanged.connect(self.set_Nwppc)
+        self.si_Nwpc1_rad.valueChanged.connect(self.set_Nwppc)
         self.lf_Wwire.editingFinished.connect(self.set_Wwire)
         self.lf_Hwire.editingFinished.connect(self.set_Hwire)
         self.lf_Wins_wire.editingFinished.connect(self.set_Wins_wire)
         self.lf_Lewout.editingFinished.connect(self.set_Lewout)
+        self.w_mat_0.saveNeeded.connect(self.emit_save)
+        self.w_mat_1.saveNeeded.connect(self.emit_save)
+
+    def emit_save(self):
+        """Send a saveNeeded signal to the DMachineSetup"""
+        self.saveNeeded.emit()
 
     def update_ins_layout(self):
         if self.g_ins.isChecked():
             self.in_Wins_wire.show()
             self.lf_Wins_wire.show()
             self.unit_Wins_wire.show()
+            self.w_mat_1.show()
             self.set_Wins_wire()
         else:
             self.in_Wins_wire.hide()
             self.lf_Wins_wire.hide()
             self.unit_Wins_wire.hide()
-            self.set_Wins_wire(Wins_wire=0)
+            self.w_mat_1.hide()
+            self.set_Wins_wire(Wins_wire=None)
 
-    def set_Nwppc_tan(self):
-        """Signal to update the value of Nwppc_tan according to the line edit
+    def set_Nwppc(self):
+        """Signal to update the value of Nwppc_tan and rad according to the line edit
 
         Parameters
         ----------
@@ -115,6 +144,17 @@ class PCondType11(Gen_PCondType11, QWidget):
             A PCondType11 object
         """
         self.cond.Nwppc_tan = self.si_Nwpc1_tan.value()
+        self.cond.Nwppc_rad = self.si_Nwpc1_rad.value()
+        if self.si_Nwpc1_tan.value() * self.si_Nwpc1_rad.value() > 1:
+            self.in_Wwire.setText("Strand width")
+            self.in_Hwire.setText("Strand height")
+            self.img_cond.setPixmap(QPixmap(pixmap_dict["Cond11"]))
+            self.w_mat_0.setText("Strand material")
+        else:
+            self.in_Wwire.setText("Conductor width")
+            self.in_Hwire.setText("Conductor height")
+            self.img_cond.setPixmap(QPixmap(pixmap_dict["Cond11_single"]))
+            self.w_mat_0.setText("Conductor material")
         self.w_out.comp_output()
         # Notify the machine GUI that the machine has changed
         self.saveNeeded.emit()
@@ -171,7 +211,7 @@ class PCondType11(Gen_PCondType11, QWidget):
         # Notify the machine GUI that the machine has changed
         self.saveNeeded.emit()
 
-    def set_Wins_wire(self, Wins_wire=None):
+    def set_Wins_wire(self, Wins_wire=-1):
         """Signal to update the value of Wwire according to the line edit
 
         Parameters
@@ -179,7 +219,7 @@ class PCondType11(Gen_PCondType11, QWidget):
         self : PCondType11
             A PCondType11 object
         """
-        if Wins_wire is None:
+        if Wins_wire == -1:
             Wins_wire = self.lf_Wins_wire.value()
         self.cond.Wins_wire = Wins_wire
         self.w_out.comp_output()
@@ -217,14 +257,18 @@ class PCondType11(Gen_PCondType11, QWidget):
         cond = lam.winding.conductor
         # Check that everything is set
         if cond.Nwppc_tan is None:
-            return "You must set Nwppc_tan !"
+            return "Strands in tangential direction must be set"
         elif cond.Nwppc_rad is None:
-            return "You must set Nwppc_rad !"
-        elif cond.Hwire is None:
-            return "You must set Hwire !"
+            return "Strands in radial direction must be set"
         elif cond.Wwire is None:
-            return "You must set Wwire !"
-        elif cond.Wins_wire is None:
-            return "You must set Wins_wire !"
+            if cond.Nwppc_tan * cond.Nwppc_rad > 1:
+                return "Strand width must be set"
+            else:
+                return "Conductor width must be set"
+        elif cond.Hwire is None:
+            if cond.Nwppc_tan * cond.Nwppc_rad > 1:
+                return "Strand height must be set"
+            else:
+                return "Conductor height must be set"
         elif lam.winding.Lewout is None:
-            return "You must set Lewout !"
+            return "End winding length must be set"

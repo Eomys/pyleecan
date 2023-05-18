@@ -1,5 +1,10 @@
-Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
-start,-,Begin point of the linspace,0,float,0,,,,Import,ImportMatrix,check,VERSION,1,To generate a Linspace vector
-stop,-,End point of the linspace,0,float,1,,,,,,comp_step,,,
-num,-,Number of value in the linspace,0,float,100,,,,,,get_data,,,
-endpoint,-,"If True, stop is the last sample. Otherwise, it is not included",0,bool,1,,,,,,,,,
+Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,as_dict Type
+start,-,Begin point of the linspace,0,float,0,,
+stop,-,End point of the linspace,0,float,1,,
+num,-,Number of value in the linspace,0,float,100,,
+endpoint,-,"If True, stop is the last sample. Otherwise, it is not included",0,bool,1,,
+,
+Package,Inherit,Methods,Constant Name,Constant Value,Class description
+Import,ImportMatrix,check,VERSION,1,To generate a Linspace vector
+,,comp_step,,,
+,,get_data,,,

@@ -1,12 +1,12 @@
-Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
-loss_list,,Internal list of loss data,,[SciDataTool.Classes.DataND.DataND],None,,,,Output,,get_loss,VERSION,1,Gather the loss module outputs
-meshsol_list,,Internal list of loss meshsolutions,,[MeshSolution],None,,,,,,get_loss_density_ag,,,
-loss_index,,Internal dict to index losses,,dict,{},,,,,,get_loss_dist,,,
-logger_name,-,Name of the logger to use,0,str,Pyleecan.Loss,,,,,,get_loss_group,,,
-axes_dict,,Dict containing axes data used for Magnetics,,{SciDataTool.Classes.DataND.Data},None,,,,,,get_loss_overall,,,
-Pstator,W,Stator core losses due to hysteresis and eddy currents,,float,None,,,,,,store,,,
-Protor,W,Rotor core losses due to hysteresis and eddy currents,,float,None,,,,,,,,,
-Pmagnet,W,Magnet eddy current losses,,float,None,,,,,,,,,
-Pprox,W,Stator core losses,,float,None,,,,,,,,,
-Pjoule,W,Stator core losses,,float,None,,,,,,,,,
-coeff_dict,,Dict containing coefficients to rebuild loss polynom function of frequency,,dict,{},,,,,,,,,
+Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,as_dict Type
+axes_dict,,Dict containing axes data used for Magnetics,,{SciDataTool.Classes.DataND.Data},None,,
+loss_dict,,Dict containing OutLossModel obects for each type of loss,,{OutLossModel},{},,
+logger_name,-,Name of the logger to use,0,str,Pyleecan.Loss,,
+,
+Package,Inherit,Methods,Constant Name,Constant Value,Class description
+Output,,get_loss_density_ag,VERSION,1,Gather the loss module outputs
+,,get_loss_overall,,,
+,,get_power_dict,,,
+,,plot_losses,,,
+,,__getitem__,,,
+,,__len__,,,

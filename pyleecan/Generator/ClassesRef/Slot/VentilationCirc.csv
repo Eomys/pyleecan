@@ -1,8 +1,12 @@
-Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
-D0,m,Hole diameters,0,float,1,0,,,Slot,Hole,build_geometry,VERSION,1,Circular axial ventilation duct
-H0,m,Radius of the hole centers,0,float,1,0,,,,,check,,,
-,,,,,,,,,,,comp_radius,,,
-,,,,,,,,,,,comp_surface,,,
-,,,,,,,,,,,get_center,,,
-,,,,,,,,,,,_comp_point_coordinate,,,
-,,,,,,,,,,,plot_schematics,,,
+Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,as_dict Type
+D0,m,Hole diameters,0,float,1,0,
+H0,m,Radius of the hole centers,0,float,1,0,
+,
+Package,Inherit,Methods,Constant Name,Constant Value,Class description
+Slot,Hole,build_geometry,VERSION,1,Circular axial ventilation duct
+,,check,,,
+,,comp_radius,,,
+,,comp_surface,,,
+,,get_center,,,
+,,_comp_point_coordinate,,,
+,,plot_schematics,,,

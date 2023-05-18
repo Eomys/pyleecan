@@ -1,5 +1,8 @@
-Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
-mat_type,,The Magnet material,0,Material,,,,,Machine,,,VERSION,1,Magnet class
-type_magnetization,-,"Permanent magnet magnetization type: 0 for radial, 1 for parallel, 2 for Hallbach, 3 Tangential",0,int,0,0,3,,,,,,,
-Lmag,-,Magnet axial length,0,float,0.95,0,,,,,,,,
-Nseg,,Number of segments,,int,1,1,,,,,,,,
+Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,as_dict Type
+mat_type,,The Magnet material,0,Material,,,
+type_magnetization,-,"Permanent magnet magnetization type: 0 for radial, 1 for parallel, 2 for Hallbach, 3 Tangential",0,int,0,0,3
+Lmag,-,Magnet axial length,0,float,0.95,0,
+Nseg,,Number of segments,,int,1,1,
+,
+Package,Inherit,Methods,Constant Name,Constant Value,Class description
+Machine,,,VERSION,1,Magnet class

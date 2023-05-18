@@ -1,6 +1,11 @@
-Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constante Name,Constante Value,Description classe,Classe fille
-data,,Dict with simulation results,,dict,,,,,Elmer,Elmer,load_data,VERSION,1,Class to get 'SaveScalars' and 'SaveLine' data,
-file,,Filename of the results data file,,str,,,,,,,load_columns,,,,
-usecols,,"List integers (starting with 1) of columns to load. If usecols is not set all columns are loaded.",,list,[],,,,,,get_data,,,,
-columns,,List of columns data names,,list,[],,,,,,,,,,
-is_scalars,,"Determin if data are 'SaveScalars' data, else 'SaveLine' data are assumed",,bool,0,,,,,,,,,,
+Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,as_dict Type
+data,,Dict with simulation results,,dict,,,
+file,,Filename of the results data file,,str,,,
+usecols,,List integers (starting with 1) of columns to load. If usecols is not set all columns are loaded.,,list,[],,
+columns,,List of columns data names,,list,[],,
+is_scalars,,"Determin if data are 'SaveScalars' data, else 'SaveLine' data are assumed",,bool,0,,
+,
+Package,Inherit,Methods,Constante Name,Constante Value,Description classe,Classe fille
+Elmer,Elmer,load_data,VERSION,1,Class to get 'SaveScalars' and 'SaveLine' data,
+,,load_columns,,,,
+,,get_data,,,,

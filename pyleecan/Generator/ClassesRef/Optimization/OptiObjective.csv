@@ -1,2 +1,4 @@
-Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
-,,,,,,,,,Optimization,DataKeeper,,VERSION,1,Class to distinguish normal DataKeeper from optimization objectives 
+Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,as_dict Type
+,
+Package,Inherit,Methods,Constant Name,Constant Value,Class description
+Optimization,DataKeeper,,VERSION,1,Class to distinguish normal DataKeeper from optimization objectives 

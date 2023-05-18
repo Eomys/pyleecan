@@ -1,3 +1,4 @@
+from .....Functions.GUI.log_error import log_error
 from .....GUI.Dialog.DMatLib.WMatSelect.Ui_WMatSelect import Ui_WMatSelect
 from .....GUI.Dialog.DMatLib.DMatLib import DMatLib, LIB_KEY, MACH_KEY
 from PySide2.QtWidgets import (
@@ -7,6 +8,7 @@ from PySide2.QtWidgets import (
     QComboBox,
     QVBoxLayout,
     QPushButton,
+    QListView,
 )
 from .....Classes.Machine import Machine
 from PySide2.QtCore import Signal
@@ -45,7 +47,10 @@ class WMatSelectV(QGroupBox):
         QGroupBox.__init__(self, parent)
 
         self.verticalLayout = QVBoxLayout(self)
+
         self.c_mat_type = QComboBox(self)
+        listView = QListView(self.c_mat_type)
+        self.c_mat_type.setView(listView)
         self.c_mat_type.setObjectName("c_mat_type")
         self.verticalLayout.addWidget(self.c_mat_type)
 
@@ -61,6 +66,9 @@ class WMatSelectV(QGroupBox):
         self.material_dict = dict()  #  Material library + machine
         self.def_mat = "M400-50A"  # Default material
         self.is_hide_button = False  # To hide the "Edit material" button
+        self.test_err_msg = (
+            None  # Used to stored the last error message displayed (used in test)
+        )
 
         # Connect the signals
         self.c_mat_type.currentIndexChanged.connect(self.set_mat_type)
@@ -88,7 +96,6 @@ class WMatSelectV(QGroupBox):
 
         """
         self.c_mat_type.blockSignals(True)
-
         # Set material combobox according to matlib names
         self.obj = obj
         self.mat_attr_name = mat_attr_name
@@ -119,11 +126,14 @@ class WMatSelectV(QGroupBox):
             # Select default material
             index = self.c_mat_type.findText(self.def_mat)
             if index != -1:
-                setattr(
-                    self.obj,
-                    self.mat_attr_name,
-                    self.material_dict[LIB_KEY][index],
-                )
+                # Detecting if the material that we want to set for the wedge is stored in the Material Library or is machine_specific
+                if index < len(self.material_dict[LIB_KEY]):
+                    material_to_set = self.material_dict[LIB_KEY][index]
+                else:
+                    index_mat = index - len(self.material_dict[LIB_KEY])
+                    material_to_set = self.material_dict[MACH_KEY][index_mat]
+
+                setattr(self.obj, self.mat_attr_name, material_to_set)
         else:
             index = self.c_mat_type.findText(mat.name)
         self.c_mat_type.setCurrentIndex(index)
@@ -185,21 +195,30 @@ class WMatSelectV(QGroupBox):
         -------
 
         """
+        # Making sure that we do not try to edit a material when is index is -1 => not a actual material
+        if self.c_mat_type.currentIndex() == -1:
+            self.test_err_msg = "Attempting to edit a material that is not set. Please select a material in the list to edit it."
+            QMessageBox().warning(None, "Warning", self.test_err_msg)
+            return None
+
         if self.c_mat_type.currentIndex() >= len(self.material_dict[LIB_KEY]):
             index = self.c_mat_type.currentIndex() - len(self.material_dict[LIB_KEY])
             is_lib_mat = False
         else:
             index = self.c_mat_type.currentIndex()
             is_lib_mat = True
-        self.current_dialog = DMatLib(
-            material_dict=self.material_dict,
-            machine=self.machine,
-            is_lib_mat=is_lib_mat,
-            selected_id=index,
-        )
-        self.current_dialog.materialListChanged.connect(self.update_mat_list)
-        self.current_dialog.saveNeeded.connect(self.emit_save)
-        self.current_dialog.show()
+        try:
+            self.current_dialog = DMatLib(
+                material_dict=self.material_dict,
+                machine=self.machine,
+                is_lib_mat=is_lib_mat,
+                selected_id=index,
+            )
+            self.current_dialog.materialListChanged.connect(self.update_mat_list)
+            self.current_dialog.saveNeeded.connect(self.emit_save)
+            self.current_dialog.show()
+        except Exception as e:
+            log_error(self, "Error while opening the Material Library : \n" + str(e))
 
     def emit_save(self):
         """

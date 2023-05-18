@@ -1,7 +1,12 @@
-Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constante Name,Constante Value,Description classe,Classe file
-is_periodicity_t,-,"True to compute only on one time periodicity (use periodicities defined in axes_dict[time]). If None, automatically calculated based on Magnetics periodicities.",0,bool,None,,,,Simulation,,run,VERSION,1,Forces module abstract object,ForceMT
-is_periodicity_a,-,"True to compute only on one angle periodicity (use periodicities defined in axes_dict[angle]). If None, automatically calculated based on Magnetics periodicities.",0,bool,None,,,,,,comp_axes,,,,
-is_agsf_transfer,-,True to compute the AGSF transfer from air-gap to stator bore radius.,0,bool,0,,,,,,comp_AGSF_transfer,,,,
-max_wavenumber_transfer,-,Maximum value to apply agsf transfer (to be used with FEA to avoid numerical noise amplification),0,int,None,,,,,,,,,,
-Rsbo_enforced_transfer,-,To enforce the value of the radius for AGSF transfer,0,float,None,,,,,,,,,,
-logger_name,-,Name of the logger to use,0,str,Pyleecan.Force,,,,,,,,,,
+Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,as_dict Type
+is_periodicity_t,-,"True to compute only on one time periodicity (use periodicities defined in axes_dict[time]). If None, automatically calculated based on Magnetics periodicities.",0,bool,None,,
+is_periodicity_a,-,"True to compute only on one angle periodicity (use periodicities defined in axes_dict[angle]). If None, automatically calculated based on Magnetics periodicities.",0,bool,None,,
+is_agsf_transfer,-,True to compute the AGSF transfer from air-gap to stator bore radius.,0,bool,0,,
+max_wavenumber_transfer,-,Maximum value to apply agsf transfer (to be used with FEA to avoid numerical noise amplification),0,int,None,,
+Rsbo_enforced_transfer,-,To enforce the value of the radius for AGSF transfer,0,float,None,,
+logger_name,-,Name of the logger to use,0,str,Pyleecan.Force,,
+,
+Package,Inherit,Methods,Constante Name,Constante Value,Description classe,Classe file
+Simulation,,run,VERSION,1,Forces module abstract object,ForceMT
+,,comp_axes,,,,
+,,comp_AGSF_transfer,,,,

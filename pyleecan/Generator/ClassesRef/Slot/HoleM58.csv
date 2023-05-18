@@ -1,10 +1,21 @@
-Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
-H0,m,Slot depth,0,float,3.00E-03,0,,,Slot,HoleMag,_comp_point_coordinate,VERSION,1,One magnet with circular notches
-W0,m,Slot width,0,float,3.00E-03,0,,,,,build_geometry,IS_SYMMETRICAL,1,
-H1,m,Distance from the lamination Bore,0,float,0,0,,,,,check,,,
-W1,m,Magnet width,0,float,1.30E-02,0,,,,,comp_magnetization_dict,,,
-H2,m,Magnet Height,0,float,2.00E-02,0,,,,,comp_radius,,,
-W2,m,Distance Magnet to side of the notch,0,float,1.00E-02,0,,,,,comp_surface_magnet_id,,,
-W3,rad,Tooth angular opening width,0,float,1.00E-02,0,,,,,has_magnet,,,
-R0,m,Notch radius,0,float,1.00E-02,0,,,,,plot_schematics,,,
-magnet_0,-,Magnet,0,Magnet,,,,,,,remove_magnet,,,
+Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,as_dict Type
+H0,m,Slot depth,0,float,3.00E-03,0,
+W0,m,Slot width,0,float,3.00E-03,0,
+H1,m,Distance from the lamination Bore,0,float,0,0,
+W1,m,Magnet width,0,float,1.30E-02,0,
+H2,m,Magnet Height,0,float,2.00E-02,0,
+W2,m,Distance Magnet to side of the notch,0,float,1.00E-02,0,
+W3,rad,Tooth angular opening width,0,float,1.00E-02,0,
+R0,m,Notch radius,0,float,1.00E-02,0,
+magnet_0,-,Magnet,0,Magnet,,,
+,
+Package,Inherit,Methods,Constant Name,Constant Value,Class description
+Slot,HoleMag,_comp_point_coordinate,VERSION,1,One magnet with circular notches
+,,build_geometry,IS_SYMMETRICAL,1,
+,,check,,,
+,,comp_magnetization_dict,,,
+,,comp_radius,,,
+,,comp_surface_magnet_id,,,
+,,has_magnet,,,
+,,plot_schematics,,,
+,,remove_magnet,,,

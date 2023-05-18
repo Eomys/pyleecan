@@ -18,4 +18,4 @@ def comp_surface(self):
 
     """
 
-    return pi * ((self.Wins_cond / 2.0) ** 2)
+    return pi * ((self.comp_width() / 2.0) ** 2)

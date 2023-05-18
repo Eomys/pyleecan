@@ -25,6 +25,7 @@ def plot_schematics(
     is_show_fig=True,
     fig=None,
     ax=None,
+    is_single=False,
 ):
     """Plot the schematics of the slot
 
@@ -56,11 +57,25 @@ def plot_schematics(
     """
 
     # Use some default parameter
-    if is_default:
+    if is_default and is_single:
+        cond = type(self)(
+            Hwire=10e-3, Wwire=22e-3, Wins_wire=2e-3, Nwppc_rad=1, Nwppc_tan=1
+        )
+        return cond.plot_schematics(
+            is_default=False,
+            is_add_schematics=is_add_schematics,
+            is_add_main_line=is_add_main_line,
+            save_path=save_path,
+            is_show_fig=is_show_fig,
+            fig=fig,
+            ax=ax,
+            is_single=is_single,
+        )
+    elif is_default:
         cond = type(self)(
             Hwire=10e-3, Wwire=22e-3, Wins_wire=2e-3, Nwppc_rad=3, Nwppc_tan=2
         )
-        cond.plot_schematics(
+        return cond.plot_schematics(
             is_default=False,
             is_add_schematics=is_add_schematics,
             is_add_main_line=is_add_main_line,
@@ -75,77 +90,119 @@ def plot_schematics(
 
         # Adding schematics
         if is_add_schematics:
-            # Wwire
-            line = Segment(
-                3 * self.Wins_wire
-                + self.Wwire
-                + 1j * (self.Wins_wire + self.Hwire / 2),
-                3 * self.Wins_wire
-                + 2 * self.Wwire
-                + 1j * (self.Wins_wire + self.Hwire / 2),
-            )
-            line.plot(
-                fig=fig,
-                ax=ax,
-                color=ARROW_COLOR,
-                linewidth=ARROW_WIDTH,
-                label="Wwire",
-                offset_label=1j * self.Wins_wire,
-                is_arrow=True,
-                fontsize=SC_FONT_SIZE,
-            )
-            # Hwire
-            line = Segment(
-                1j * (3 * self.Wins_wire + self.Hwire)
-                + (self.Wins_wire + self.Wwire / 2),
-                1j * (3 * self.Wins_wire + 2 * self.Hwire)
-                + (self.Wins_wire + self.Wwire / 2),
-            )
-            line.plot(
-                fig=fig,
-                ax=ax,
-                color=ARROW_COLOR,
-                linewidth=ARROW_WIDTH,
-                label="Hwire",
-                offset_label=self.Wins_wire,
-                is_arrow=True,
-                fontsize=SC_FONT_SIZE,
-            )
-            # Wins_wire
-            line = Segment(
-                1 * self.Wins_wire
-                + self.Wwire
-                + 1j * (2 * self.Wins_wire + self.Hwire * 3 / 2),
-                3 * self.Wins_wire
-                + 1 * self.Wwire
-                + 1j * (2 * self.Wins_wire + self.Hwire * 3 / 2),
-            )
-            line.plot(
-                fig=fig,
-                ax=ax,
-                color=ARROW_COLOR,
-                linewidth=ARROW_WIDTH,
-                label="Wins_wire",
-                offset_label=1j * self.Wins_wire,
-                is_arrow=True,
-                fontsize=SC_FONT_SIZE,
-            )
-            # Nwppc_rad
-            ax.text(
-                self.Wins_wire + self.Wwire * 0.2,
-                self.Wins_wire + self.Hwire * 0.5,
-                "Nwppc_rad=3",
-                fontsize=SC_FONT_SIZE,
-                bbox=TEXT_BOX,
-            )
-            # Nwppc_tan
-            ax.text(
-                self.Wins_wire + self.Wwire * 0.2,
-                5 * self.Wins_wire + 2.5 * self.Hwire,
-                "Nwppc_tan=2",
-                fontsize=SC_FONT_SIZE,
-                bbox=TEXT_BOX,
-            )
+            if is_single:
+                # Wwire
+                line = Segment(
+                    self.Wins_wire + 1j * (self.Wins_wire + self.Hwire / 2),
+                    self.Wins_wire
+                    + self.Wwire
+                    + 1j * (self.Wins_wire + self.Hwire / 2),
+                )
+                line.plot(
+                    fig=fig,
+                    ax=ax,
+                    color=ARROW_COLOR,
+                    linewidth=ARROW_WIDTH,
+                    label="Conductor width",
+                    offset_label=-4 * self.Wins_wire - 1j * 2 * self.Wins_wire / 3,
+                    is_arrow=True,
+                    fontsize=SC_FONT_SIZE,
+                )
+                # Hwire
+                line = Segment(
+                    1j * (self.Wins_wire) + (self.Wins_wire + self.Wwire / 2),
+                    1j * (self.Wins_wire + self.Hwire)
+                    + (self.Wins_wire + self.Wwire / 2),
+                )
+                line.plot(
+                    fig=fig,
+                    ax=ax,
+                    color=ARROW_COLOR,
+                    linewidth=ARROW_WIDTH,
+                    label="Conductor height",
+                    offset_label=self.Wins_wire / 3 + 1j * self.Wins_wire,
+                    is_arrow=True,
+                    fontsize=SC_FONT_SIZE,
+                )
+                # Wins_wire
+                line = Segment(
+                    2 * self.Wins_wire + 1j * (2 * self.Wins_wire + self.Hwire),
+                    2 * self.Wins_wire + 1j * (self.Wins_wire + self.Hwire),
+                )
+                line.plot(
+                    fig=fig,
+                    ax=ax,
+                    color=ARROW_COLOR,
+                    linewidth=ARROW_WIDTH,
+                    label="Insulator thickness",
+                    offset_label=self.Wins_wire / 2,
+                    is_arrow=True,
+                    fontsize=SC_FONT_SIZE,
+                )
+            else:
+                # Wwire
+                line = Segment(
+                    3 * self.Wins_wire
+                    + self.Wwire
+                    + 1j * (3 * self.Wins_wire + self.Hwire * 3 / 2),
+                    3 * self.Wins_wire
+                    + 2 * self.Wwire
+                    + 1j * (3 * self.Wins_wire + self.Hwire * 3 / 2),
+                )
+                line.plot(
+                    fig=fig,
+                    ax=ax,
+                    color=ARROW_COLOR,
+                    linewidth=ARROW_WIDTH,
+                    label="Strand width",
+                    offset_label=1j * self.Wins_wire,
+                    is_arrow=True,
+                    fontsize=SC_FONT_SIZE,
+                )
+                # Hwire
+                line = Segment(
+                    1j * (3 * self.Wins_wire + self.Hwire)
+                    + (self.Wins_wire + self.Wwire / 2),
+                    1j * (3 * self.Wins_wire + 2 * self.Hwire)
+                    + (self.Wins_wire + self.Wwire / 2),
+                )
+                line.plot(
+                    fig=fig,
+                    ax=ax,
+                    color=ARROW_COLOR,
+                    linewidth=ARROW_WIDTH,
+                    label="Strand height",
+                    offset_label=self.Wins_wire / 2,
+                    is_arrow=True,
+                    fontsize=SC_FONT_SIZE,
+                )
+                # Wins_wire
+                line = Segment(
+                    2 * self.Wins_wire
+                    + self.Wwire
+                    + 1j * (self.Wins_wire + self.Hwire / 2),
+                    3 * self.Wins_wire
+                    + 1 * self.Wwire
+                    + 1j * (self.Wins_wire + self.Hwire / 2),
+                )
+                line.plot(
+                    fig=fig,
+                    ax=ax,
+                    color=ARROW_COLOR,
+                    linewidth=ARROW_WIDTH,
+                    label="Insulator thickness",
+                    offset_label=self.Wins_wire,
+                    is_arrow=True,
+                    fontsize=SC_FONT_SIZE,
+                )
+                # Nwppc_rad/tan
+                ax.text(
+                    -self.Wins_wire,
+                    5 * self.Wins_wire + 2.5 * self.Hwire,
+                    "Strands in radial direction: 3\nStrands in tangential direction: 2",
+                    fontsize=SC_FONT_SIZE,
+                    bbox=TEXT_BOX,
+                )
 
         if is_add_main_line:
             for ii in range(1, self.Nwppc_tan):

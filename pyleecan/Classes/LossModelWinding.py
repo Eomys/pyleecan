@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
-# File generated according to Generator/ClassesRef/Simulation/LossModelWinding.csv
+# File generated according to Generator/ClassesRef/Loss/LossModelWinding.csv
 # WARNING! All changes made in this file will be lost!
-"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Simulation/LossModelWinding
+"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Loss/LossModelWinding
 """
 
 from os import linesep
@@ -18,9 +18,14 @@ from .LossModel import LossModel
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
 try:
-    from ..Methods.Simulation.LossModelWinding.comp_loss import comp_loss
+    from ..Methods.Loss.LossModelWinding.comp_loss import comp_loss
 except ImportError as error:
     comp_loss = error
+
+try:
+    from ..Methods.Loss.LossModelWinding.comp_coeff import comp_coeff
+except ImportError as error:
+    comp_coeff = error
 
 
 from numpy import isnan
@@ -32,7 +37,8 @@ class LossModelWinding(LossModel):
 
     VERSION = 1
 
-    # cf Methods.Simulation.LossModelWinding.comp_loss
+    # Check ImportError to remove unnecessary dependencies in unused method
+    # cf Methods.Loss.LossModelWinding.comp_loss
     if isinstance(comp_loss, ImportError):
         comp_loss = property(
             fget=lambda x: raise_(
@@ -43,13 +49,31 @@ class LossModelWinding(LossModel):
         )
     else:
         comp_loss = comp_loss
+    # cf Methods.Loss.LossModelWinding.comp_coeff
+    if isinstance(comp_coeff, ImportError):
+        comp_coeff = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use LossModelWinding method comp_coeff: " + str(comp_coeff)
+                )
+            )
+        )
+    else:
+        comp_coeff = comp_coeff
     # generic save method is available in all object
     save = save
     # get_logger method is available in all object
     get_logger = get_logger
 
     def __init__(
-        self, temperature=20, name="", is_show_fig=False, init_dict=None, init_str=None
+        self,
+        type_skin_effect=1,
+        name="",
+        group="",
+        is_show_fig=False,
+        coeff_dict=None,
+        init_dict=None,
+        init_str=None,
     ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
@@ -66,16 +90,22 @@ class LossModelWinding(LossModel):
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
-            if "temperature" in list(init_dict.keys()):
-                temperature = init_dict["temperature"]
+            if "type_skin_effect" in list(init_dict.keys()):
+                type_skin_effect = init_dict["type_skin_effect"]
             if "name" in list(init_dict.keys()):
                 name = init_dict["name"]
+            if "group" in list(init_dict.keys()):
+                group = init_dict["group"]
             if "is_show_fig" in list(init_dict.keys()):
                 is_show_fig = init_dict["is_show_fig"]
+            if "coeff_dict" in list(init_dict.keys()):
+                coeff_dict = init_dict["coeff_dict"]
         # Set the properties (value check and convertion are done in setter)
-        self.temperature = temperature
+        self.type_skin_effect = type_skin_effect
         # Call LossModel init
-        super(LossModelWinding, self).__init__(name=name, is_show_fig=is_show_fig)
+        super(LossModelWinding, self).__init__(
+            name=name, group=group, is_show_fig=is_show_fig, coeff_dict=coeff_dict
+        )
         # The class is frozen (in LossModel init), for now it's impossible to
         # add new properties
 
@@ -85,7 +115,9 @@ class LossModelWinding(LossModel):
         LossModelWinding_str = ""
         # Get the properties inherited from LossModel
         LossModelWinding_str += super(LossModelWinding, self).__str__()
-        LossModelWinding_str += "temperature = " + str(self.temperature) + linesep
+        LossModelWinding_str += (
+            "type_skin_effect = " + str(self.type_skin_effect) + linesep
+        )
         return LossModelWinding_str
 
     def __eq__(self, other):
@@ -97,7 +129,7 @@ class LossModelWinding(LossModel):
         # Check the properties inherited from LossModel
         if not super(LossModelWinding, self).__eq__(other):
             return False
-        if other.temperature != self.temperature:
+        if other.type_skin_effect != self.type_skin_effect:
             return False
         return True
 
@@ -116,25 +148,18 @@ class LossModelWinding(LossModel):
                 other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
             )
         )
-        if (
-            other._temperature is not None
-            and self._temperature is not None
-            and isnan(other._temperature)
-            and isnan(self._temperature)
-        ):
-            pass
-        elif other._temperature != self._temperature:
+        if other._type_skin_effect != self._type_skin_effect:
             if is_add_value:
                 val_str = (
                     " (self="
-                    + str(self._temperature)
+                    + str(self._type_skin_effect)
                     + ", other="
-                    + str(other._temperature)
+                    + str(other._type_skin_effect)
                     + ")"
                 )
-                diff_list.append(name + ".temperature" + val_str)
+                diff_list.append(name + ".type_skin_effect" + val_str)
             else:
-                diff_list.append(name + ".temperature")
+                diff_list.append(name + ".type_skin_effect")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -146,7 +171,7 @@ class LossModelWinding(LossModel):
 
         # Get size of the properties inherited from LossModel
         S += super(LossModelWinding, self).__sizeof__()
-        S += getsizeof(self.temperature)
+        S += getsizeof(self.type_skin_effect)
         return S
 
     def as_dict(self, type_handle_ndarray=0, keep_function=False, **kwargs):
@@ -166,7 +191,7 @@ class LossModelWinding(LossModel):
             keep_function=keep_function,
             **kwargs
         )
-        LossModelWinding_dict["temperature"] = self.temperature
+        LossModelWinding_dict["type_skin_effect"] = self.type_skin_effect
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         LossModelWinding_dict["__class__"] = "LossModelWinding"
@@ -176,36 +201,45 @@ class LossModelWinding(LossModel):
         """Creates a deepcopy of the object"""
 
         # Handle deepcopy of all the properties
-        temperature_val = self.temperature
+        type_skin_effect_val = self.type_skin_effect
         name_val = self.name
+        group_val = self.group
         is_show_fig_val = self.is_show_fig
+        if self.coeff_dict is None:
+            coeff_dict_val = None
+        else:
+            coeff_dict_val = self.coeff_dict.copy()
         # Creates new object of the same type with the copied properties
         obj_copy = type(self)(
-            temperature=temperature_val, name=name_val, is_show_fig=is_show_fig_val
+            type_skin_effect=type_skin_effect_val,
+            name=name_val,
+            group=group_val,
+            is_show_fig=is_show_fig_val,
+            coeff_dict=coeff_dict_val,
         )
         return obj_copy
 
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""
 
-        self.temperature = None
+        self.type_skin_effect = None
         # Set to None the properties inherited from LossModel
         super(LossModelWinding, self)._set_None()
 
-    def _get_temperature(self):
-        """getter of temperature"""
-        return self._temperature
+    def _get_type_skin_effect(self):
+        """getter of type_skin_effect"""
+        return self._type_skin_effect
 
-    def _set_temperature(self, value):
-        """setter of temperature"""
-        check_var("temperature", value, "float")
-        self._temperature = value
+    def _set_type_skin_effect(self, value):
+        """setter of type_skin_effect"""
+        check_var("type_skin_effect", value, "int")
+        self._type_skin_effect = value
 
-    temperature = property(
-        fget=_get_temperature,
-        fset=_set_temperature,
-        doc=u"""Winding temperature
+    type_skin_effect = property(
+        fget=_get_type_skin_effect,
+        fset=_set_type_skin_effect,
+        doc=u"""0 to ignore skin effect, 1 to consider it
 
-        :Type: float
+        :Type: int
         """,
     )

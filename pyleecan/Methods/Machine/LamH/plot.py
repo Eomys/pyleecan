@@ -30,6 +30,7 @@ def plot(
     save_path=None,
     win_title=None,
     is_clean_plot=False,
+    is_winding_connection=False,
 ):
     """Plot a Lamination with Buried Magnets in a matplotlib fig
 
@@ -63,6 +64,8 @@ def plot(
         Window title
     is_clean_plot : bool
         True to remove title, legend, axis (only machine on plot with white background)
+    is_winding_connection : bool
+        True to display winding connections (not used)
 
     Returns
     -------

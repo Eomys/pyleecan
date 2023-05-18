@@ -1,6 +1,5 @@
-Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
-is_transpose,-,1 to transpose the Imported/Generated matrix,1,bool,0,,,,Import,Import,edit_matrix,VERSION,1,Abstract class to Import/Generate 1D or D matrix
-,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,
+Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,as_dict Type
+is_transpose,-,1 to transpose the Imported/Generated matrix,1,bool,0,,
+,
+Package,Inherit,Methods,Constant Name,Constant Value,Class description
+Import,Import,edit_matrix,VERSION,1,Abstract class to Import/Generate 1D or D matrix

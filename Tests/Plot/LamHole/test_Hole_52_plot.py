@@ -48,7 +48,7 @@ class Test_Hole_52_plot(object):
         machine.plot(is_show_fig=False)
         fig = plt.gcf()
         # Rotor + 2 for stator + 0 for frame + 1 for shaft
-        assert len(fig.axes[0].patches) == 29
+        assert len(fig.axes[0].patches) == 31
         fig.savefig(join(save_path, "test_Lam_Hole_s52_1-Machine.png"))
 
         machine.rotor.plot(is_show_fig=False)

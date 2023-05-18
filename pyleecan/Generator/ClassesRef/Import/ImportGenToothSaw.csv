@@ -1,7 +1,10 @@
-Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
-type_signal,-,"0: Forward toothsaw, 1: Backwards toothsaw, 2: symmetrical toothsaw",,int,0,0,2,,Import,ImportMatrix,get_data,VERSION,1,To generate a toothsaw vector
-f,Hz,Frequency of the signal to generate,0,float,100,0,,,,,,,,
-A,-,Amplitude of the signal to generate,0,float,1,,,,,,,,,
-N,-,Length of the signal to generate,0,int,1024,0,,,,,,,,
-Tf,s,End time of the signal generation,0,float,1,0,,,,,,,,
-Dt,s,Time offset,0,float,0,,,,,,,,,
+Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,as_dict Type
+type_signal,-,"0: Forward toothsaw, 1: Backwards toothsaw, 2: symmetrical toothsaw",,int,0,0,2
+f,Hz,Frequency of the signal to generate,0,float,100,0,
+A,-,Amplitude of the signal to generate,0,float,1,,
+N,-,Length of the signal to generate,0,int,1024,0,
+Tf,s,End time of the signal generation,0,float,1,0,
+Dt,s,Time offset,0,float,0,,
+,
+Package,Inherit,Methods,Constant Name,Constant Value,Class description
+Import,ImportMatrix,get_data,VERSION,1,To generate a toothsaw vector

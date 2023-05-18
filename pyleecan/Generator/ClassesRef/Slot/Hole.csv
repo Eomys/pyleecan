@@ -1,15 +1,21 @@
-Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
-Zh,-,Number of Hole around the circumference,0,int,36,0,,,Slot,,comp_height,VERSION,1,Holes for lamination (abstract)
-mat_void,-,Material of the void part of the hole (Air in general),0,Material,,,,,,,comp_magnetization_dict,,,
-magnetization_dict_offset,-,"Dictionary add an offset to the magnetization direction of the magnets (key=magnet_X, value=angle[rad])",0,dict,None,,,,,,comp_radius,,,
-Alpha0,rad,Shift angle of the holes around circumference,0,float,0,0,6.29,,,,comp_surface,,,
-,,,,,,,,,,,convert_to_UD,,,
-,,,,,,,,,,,get_is_stator,,,
-,,,,,,,,,,,get_magnet_by_id,,,
-,,,,,,,,,,,get_magnet_dict,,,
-,,,,,,,,,,,get_Rbo,,,
-,,,,,,,,,,,get_Rext,,,
-,,,,,,,,,,,has_magnet,,,
-,,,,,,,,,,,plot,,,
-,,,,,,,,,,,set_magnet_by_id,,,
-,,,,,,,,,,,get_R_id,,,
+Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,as_dict Type
+Zh,-,Number of Hole around the circumference,0,int,36,0,
+mat_void,-,Material of the void part of the hole (Air in general),0,Material,,,
+magnetization_dict_offset,-,"Dictionary add an offset to the magnetization direction of the magnets (key=magnet_X, value=angle[rad])",0,dict,None,,
+Alpha0,rad,Shift angle of the holes around circumference,0,float,0,0,6.29
+,
+Package,Inherit,Methods,Constant Name,Constant Value,Class description
+Slot,,comp_height,VERSION,1,Holes for lamination (abstract)
+,,comp_magnetization_dict,,,
+,,comp_radius,,,
+,,comp_surface,,,
+,,convert_to_UD,,,
+,,get_is_stator,,,
+,,get_magnet_by_id,,,
+,,get_magnet_dict,,,
+,,get_Rbo,,,
+,,get_Rext,,,
+,,has_magnet,,,
+,,plot,,,
+,,set_magnet_by_id,,,
+,,get_R_id,,,

@@ -1,7 +1,10 @@
-Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
-file_path,-,Path of the file to load,0,str,,,,,Import,ImportMatrix,get_data,VERSION,1,Import the data from an xls file
-sheet,-,Name of the sheet to load,0,str,,,,,,,,,,
-skiprows,-,To skip some rows in the file (header),0,int,0,0,,,,,,,,
-usecols,-,"list of Excel column letters and column ranges (e.g. ""A:E"" or ""A,C,E:F"")",0,str,None,,,,,,,,,
-axes_colrows,-,To read axes in first line/column,0,dict,None,,,,,,,,,
-is_allsheets,-,To read all sheets in a 3D matrix,0,bool,False,,,,,,,,,
+Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,as_dict Type
+file_path,-,Path of the file to load,0,str,,,
+sheet,-,Name of the sheet to load,0,str,,,
+skiprows,-,To skip some rows in the file (header),0,int,0,0,
+usecols,-,"list of Excel column letters and column ranges (e.g. ""A:E"" or ""A,C,E:F"")",0,str,None,,
+axes_colrows,-,To read axes in first line/column,0,dict,None,,
+is_allsheets,-,To read all sheets in a 3D matrix,0,bool,False,,
+,
+Package,Inherit,Methods,Constant Name,Constant Value,Class description
+Import,ImportMatrix,get_data,VERSION,1,Import the data from an xls file

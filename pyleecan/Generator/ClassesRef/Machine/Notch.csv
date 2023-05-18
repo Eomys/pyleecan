@@ -1,4 +1,6 @@
-﻿Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
-,,,,,,,,,Machine,,get_Rbo,VERSION,1,Abstract class for notches
-,,,,,,,,,,,get_Ryoke,,,
-,,,,,,,,,,,is_outwards,,,
+﻿Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,as_dict Type
+,
+Package,Inherit,Methods,Constant Name,Constant Value,Class description
+Machine,,get_Rbo,VERSION,1,Abstract class for notches
+,,get_Ryoke,,,
+,,is_outwards,,,

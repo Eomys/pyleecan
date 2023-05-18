@@ -7,11 +7,14 @@ from logging import getLogger
 
 from .....loggers import GUI_LOG_NAME
 from .....GUI import gui_option
+from .....Classes.LamSlotWind import LamSlotWind
 from .....Classes.MachineIPMSM import MachineIPMSM
+from .....Classes.MachineWRSM import MachineWRSM
 from .....GUI.Dialog.DMachineSetup.DBore.DBore import DBore
 from .....GUI.Dialog.DMachineSetup.DNotchTab.DNotchTab import DNotchTab
 from .....GUI.Dialog.DMachineSetup.DAVDuct.DAVDuct import DAVDuct
 from .....GUI.Dialog.DMachineSetup.SLamShape.Gen_SLamShape import Gen_SLamShape
+from .....Functions.GUI.log_error import log_error
 
 
 class SLamShape(Gen_SLamShape, QWidget):
@@ -66,6 +69,8 @@ class SLamShape(Gen_SLamShape, QWidget):
             if self.obj.L1 is None:
                 # Default value for rotor is the stator one
                 self.obj.L1 = self.machine.stator.L1
+                if self.obj.has_magnet():
+                    self.obj.set_Lmag(self.machine.stator.L1)
             if self.obj.Kf1 is None:
                 # Default value for rotor is the stator one
                 self.obj.Kf1 = self.machine.stator.Kf1
@@ -97,11 +102,14 @@ class SLamShape(Gen_SLamShape, QWidget):
             self.g_radial.setChecked(True)
 
         # Notches setup
-        if self.obj.notch is None:
-            self.obj.notch = list()
-        if len(self.obj.notch) > 0:
-            self.g_notches.setChecked(True)
-        self.update_notches_text()
+        if isinstance(self.machine, MachineWRSM) and not self.is_stator:
+            self.g_notches.hide()
+        else:
+            if self.obj.notch is None:
+                self.obj.notch = list()
+            if len(self.obj.notch) > 0:
+                self.g_notches.setChecked(True)
+            self.update_notches_text()
 
         # Bore Setup
         if self.obj.bore is not None:
@@ -127,7 +135,7 @@ class SLamShape(Gen_SLamShape, QWidget):
         self.b_notch.clicked.connect(self.set_notches)
         self.g_bore.toggled.connect(self.enable_bore)
         self.b_bore.clicked.connect(self.set_bore)
-        self.si_Nrvd.editingFinished.connect(self.set_Nrvd)
+        self.si_Nrvd.valueChanged.connect(self.set_Nrvd)
         self.lf_Wrvd.editingFinished.connect(self.set_Wrvd)
         self.w_mat.saveNeeded.connect(self.emit_save)
 
@@ -144,6 +152,8 @@ class SLamShape(Gen_SLamShape, QWidget):
         """
         if self.lf_L1.value() != self.obj.L1:
             self.obj.L1 = self.lf_L1.value()
+            if self.obj.has_magnet():
+                self.obj.set_Lmag(self.lf_L1.value())
             self.update_lenght()
             # Notify the machine GUI that the machine has changed
             self.saveNeeded.emit()
@@ -204,9 +214,12 @@ class SLamShape(Gen_SLamShape, QWidget):
         self : SLamShape
             A SLamShape object
         """
-        self.avd_win = DAVDuct(self.obj)
-        self.avd_win.show()
-        self.avd_win.accepted.connect(self.validate_avd)
+        try:
+            self.avd_win = DAVDuct(self.obj)
+            self.avd_win.show()
+            self.avd_win.accepted.connect(self.validate_avd)
+        except Exception as e:
+            log_error(self, "Error while opening cooling duct widget:\n" + str(e))
 
     def validate_avd(self):
         """Validate the ventilation
@@ -216,7 +229,7 @@ class SLamShape(Gen_SLamShape, QWidget):
         self : SLamShape
             A SLamShape object
         """
-        # self.obj.axial_vent = self.avd_win.vent
+        self.obj.axial_vent = self.avd_win.obj.axial_vent
         self.update_avd_text()
         self.update_graph()
         # Notify the machine GUI that the machine has changed
@@ -276,8 +289,8 @@ class SLamShape(Gen_SLamShape, QWidget):
             self.obj.notch = list()
             self.update_notches_text()
             self.update_graph()
-        # Notify the machine GUI that the machine has changed
-        self.saveNeeded.emit()
+            # Notify the machine GUI that the machine has changed
+            self.saveNeeded.emit()
 
     def set_notches(self):
         """Opens widget to define notches to add to the lamination
@@ -394,6 +407,8 @@ class SLamShape(Gen_SLamShape, QWidget):
                 return "You must set L1 !"
             elif lamination.Kf1 is None:
                 return "You must set Kf1 !"
+            elif lamination.mat_type is None:
+                return "You must set the lamination material !"
         except Exception as e:
             return str(e)
 
@@ -421,9 +436,11 @@ class SLamShape(Gen_SLamShape, QWidget):
         if not self.g_axial.isChecked():
             self.obj.axial_vent = list()  # Default empty
 
-    def update_graph(self, is_lam_only=False):
-        """Plot the lamination with/without the winding"""
+    def update_graph(self):
+        """Plot the lamination without the winding"""
         self.w_viewer.axes.clear()
+        # Winding is not yet defined, but magnets are
+        is_lam_only = isinstance(self.obj, LamSlotWind)
         # Plot the lamination in the viewer fig
         try:
             self.obj.plot(
@@ -432,6 +449,9 @@ class SLamShape(Gen_SLamShape, QWidget):
                 is_show_fig=False,
                 is_lam_only=is_lam_only,
             )
+            self.w_viewer.axes.set_axis_off()
+            self.w_viewer.axes.axis("equal")
+            self.w_viewer.draw()
         except Exception as e:
             if self.obj.is_stator:  # Adapt the text to the current lamination
                 err_msg = "Error while plotting machine in Stator Lamination:\n" + str(
@@ -439,14 +459,4 @@ class SLamShape(Gen_SLamShape, QWidget):
                 )
             else:
                 err_msg = "Error while plotting machine in Rotor Lamination:\n" + str(e)
-            getLogger(GUI_LOG_NAME).error(err_msg)
-            QMessageBox().critical(
-                self,
-                self.tr("Error"),
-                err_msg,
-            )
-
-        # Update the Graph
-        self.w_viewer.axes.set_axis_off()
-        self.w_viewer.axes.axis("equal")
-        self.w_viewer.draw()
+            log_error(self, err_msg)

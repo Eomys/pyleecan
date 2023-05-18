@@ -1,5 +1,9 @@
-Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
-Bs,T,Saturation flux density,,float,None,,,,Material,ModelBH,get_BH,VERSION,1,Abstract class for BH curve model 
-mu_a,-,Linear permeability,,float,None,,,,,,BH_func,,,
-param1,-,Init value for Bs for fitting algorithm,,float,1.89,,,,,,,,,
-param2,-,Init value for mu_a for fitting algorithm,,float,240,,,,,,,,,
+Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,as_dict Type
+Bs,T,Saturation flux density,,float,None,,
+mu_a,-,Linear permeability,,float,None,,
+param1,-,Init value for Bs for fitting algorithm,,float,1.89,,
+param2,-,Init value for mu_a for fitting algorithm,,float,240,,
+,
+Package,Inherit,Methods,Constant Name,Constant Value,Class description
+Material,ModelBH,get_BH,VERSION,1,Abstract class for BH curve model 
+,,BH_func,,,

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>993</width>
-    <height>837</height>
+    <width>1103</width>
+    <height>866</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -19,406 +19,8 @@
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout_4">
-   <item>
-    <layout class="QHBoxLayout" name="horizontalLayout_8">
-     <item>
-      <widget class="MPLCanvas" name="w_viewer" native="true">
-       <property name="minimumSize">
-        <size>
-         <width>250</width>
-         <height>0</height>
-        </size>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLabel" name="in_wind_param">
-       <property name="maximumSize">
-        <size>
-         <width>400</width>
-         <height>16777215</height>
-        </size>
-       </property>
-       <property name="text">
-        <string/>
-       </property>
-       <property name="pixmap">
-        <pixmap resource="../../../Resources/pyleecan.qrc">:/images/images/MachineSetup/WindParam/Winding param.PNG</pixmap>
-       </property>
-       <property name="scaledContents">
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QScrollArea" name="scrollArea">
-       <property name="minimumSize">
-        <size>
-         <width>270</width>
-         <height>0</height>
-        </size>
-       </property>
-       <property name="maximumSize">
-        <size>
-         <width>270</width>
-         <height>16777215</height>
-        </size>
-       </property>
-       <property name="widgetResizable">
-        <bool>true</bool>
-       </property>
-       <widget class="QWidget" name="scrollAreaWidgetContents">
-        <property name="geometry">
-         <rect>
-          <x>0</x>
-          <y>0</y>
-          <width>247</width>
-          <height>793</height>
-         </rect>
-        </property>
-        <layout class="QVBoxLayout" name="verticalLayout_5">
-         <item>
-          <widget class="QGroupBox" name="g_pattern">
-           <property name="title">
-            <string>Winding pattern</string>
-           </property>
-           <layout class="QGridLayout" name="gridLayout_2">
-            <item row="0" column="0">
-             <widget class="QLabel" name="in_Zs_2">
-              <property name="text">
-               <string>Generation method</string>
-              </property>
-             </widget>
-            </item>
-            <item row="0" column="1">
-             <widget class="QComboBox" name="c_wind_type">
-              <item>
-               <property name="text">
-                <string>Star of Slot</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>User Defined</string>
-               </property>
-              </item>
-             </widget>
-            </item>
-            <item row="1" column="0" colspan="2">
-             <widget class="QLabel" name="in_Zs">
-              <property name="text">
-               <string>Slot number=123</string>
-              </property>
-             </widget>
-            </item>
-            <item row="2" column="0" colspan="2">
-             <widget class="QLabel" name="in_p">
-              <property name="text">
-               <string>Pole pair number=32</string>
-              </property>
-             </widget>
-            </item>
-            <item row="3" column="0" colspan="2">
-             <layout class="QGridLayout" name="gridLayout">
-              <item row="0" column="0">
-               <widget class="QLabel" name="in_qs">
-                <property name="text">
-                 <string>Phases number</string>
-                </property>
-               </widget>
-              </item>
-              <item row="0" column="1">
-               <widget class="QSpinBox" name="si_qs"/>
-              </item>
-              <item row="1" column="0">
-               <widget class="QLabel" name="in_Nlayer">
-                <property name="toolTip">
-                 <string>Number of different phases in a same slot</string>
-                </property>
-                <property name="statusTip">
-                 <string>Number of different phases in a same slot</string>
-                </property>
-                <property name="whatsThis">
-                 <string>Number of different phases in a same slot</string>
-                </property>
-                <property name="text">
-                 <string>Layers number</string>
-                </property>
-               </widget>
-              </item>
-              <item row="1" column="1">
-               <widget class="QSpinBox" name="si_Nlayer">
-                <property name="toolTip">
-                 <string>Number of different phases in a same slot</string>
-                </property>
-                <property name="statusTip">
-                 <string>Number of different phases in a same slot</string>
-                </property>
-                <property name="whatsThis">
-                 <string>Number of different phases in a same slot</string>
-                </property>
-                <property name="minimum">
-                 <number>1</number>
-                </property>
-                <property name="maximum">
-                 <number>2</number>
-                </property>
-               </widget>
-              </item>
-              <item row="2" column="0">
-               <widget class="QLabel" name="in_coil_pitch">
-                <property name="text">
-                 <string>Coil pitch</string>
-                </property>
-               </widget>
-              </item>
-              <item row="2" column="1">
-               <widget class="QSpinBox" name="si_coil_pitch"/>
-              </item>
-              <item row="3" column="0">
-               <widget class="QLabel" name="in_Ntcoil">
-                <property name="text">
-                 <string>Turns per coil</string>
-                </property>
-               </widget>
-              </item>
-              <item row="3" column="1">
-               <widget class="QSpinBox" name="si_Ntcoil"/>
-              </item>
-              <item row="4" column="0">
-               <widget class="QLabel" name="in_Npcp">
-                <property name="text">
-                 <string>Parallel circuits</string>
-                </property>
-               </widget>
-              </item>
-              <item row="4" column="1">
-               <widget class="QSpinBox" name="si_Npcp">
-                <property name="maximum">
-                 <number>999999999</number>
-                </property>
-                <property name="value">
-                 <number>12345</number>
-                </property>
-               </widget>
-              </item>
-             </layout>
-            </item>
-            <item row="4" column="0" colspan="2">
-             <widget class="QPushButton" name="b_generate">
-              <property name="text">
-               <string>Generate</string>
-              </property>
-             </widget>
-            </item>
-            <item row="5" column="0" colspan="2">
-             <widget class="QPushButton" name="b_import">
-              <property name="text">
-               <string>Import from CSV</string>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </widget>
-         </item>
-         <item>
-          <spacer name="verticalSpacer">
-           <property name="orientation">
-            <enum>Qt::Vertical</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>20</width>
-             <height>40</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-         <item>
-          <widget class="QGroupBox" name="g_edit">
-           <property name="title">
-            <string>Edit</string>
-           </property>
-           <layout class="QVBoxLayout" name="verticalLayout">
-            <item>
-             <layout class="QHBoxLayout" name="horizontalLayout_4">
-              <item>
-               <widget class="QLabel" name="in_Nslot">
-                <property name="minimumSize">
-                 <size>
-                  <width>0</width>
-                  <height>0</height>
-                 </size>
-                </property>
-                <property name="maximumSize">
-                 <size>
-                  <width>16777215</width>
-                  <height>16777215</height>
-                 </size>
-                </property>
-                <property name="text">
-                 <string>Slot shift</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QSpinBox" name="si_Nslot">
-                <property name="minimumSize">
-                 <size>
-                  <width>60</width>
-                  <height>0</height>
-                 </size>
-                </property>
-               </widget>
-              </item>
-             </layout>
-            </item>
-            <item>
-             <widget class="QCheckBox" name="is_permute_B_C">
-              <property name="text">
-               <string>Permute B-C phases</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QCheckBox" name="is_reverse">
-              <property name="text">
-               <string>Reverse winding</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QCheckBox" name="is_reverse_layer">
-              <property name="text">
-               <string>Reverse layer</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QCheckBox" name="is_change_layer">
-              <property name="text">
-               <string>Change layer direction</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QPushButton" name="b_edit_wind_mat">
-              <property name="text">
-               <string>Edit Winding Matrix</string>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </widget>
-         </item>
-         <item>
-          <widget class="QGroupBox" name="g_output">
-           <property name="minimumSize">
-            <size>
-             <width>200</width>
-             <height>0</height>
-            </size>
-           </property>
-           <property name="title">
-            <string>Output</string>
-           </property>
-           <layout class="QVBoxLayout" name="verticalLayout_3">
-            <item>
-             <widget class="QLabel" name="out_rot_dir">
-              <property name="minimumSize">
-               <size>
-                <width>175</width>
-                <height>0</height>
-               </size>
-              </property>
-              <property name="toolTip">
-               <string>Fundamental field rotation direction when feeding the winding with direct AC current</string>
-              </property>
-              <property name="statusTip">
-               <string>Fundamental field rotation direction when feeding the winding with direct AC current</string>
-              </property>
-              <property name="whatsThis">
-               <string>Fundamental field rotation direction when feeding the winding with direct AC current</string>
-              </property>
-              <property name="text">
-               <string>Rotation Direction</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QLabel" name="out_ms">
-              <property name="text">
-               <string>Number of slot per pole per phase</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QLabel" name="out_Nperw">
-              <property name="toolTip">
-               <string>Winding periodicity</string>
-              </property>
-              <property name="text">
-               <string>Winding periodicity</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QLabel" name="out_Ntspc">
-              <property name="toolTip">
-               <string>Winding number of turns in series per phase</string>
-              </property>
-              <property name="statusTip">
-               <string>Winding number of turns in series per phase</string>
-              </property>
-              <property name="whatsThis">
-               <string>Winding number of turns in series per phase</string>
-              </property>
-              <property name="text">
-               <string>Number of turns in series per phase</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QLabel" name="out_Ncspc">
-              <property name="toolTip">
-               <string>Number of coils in series per parallel circuit</string>
-              </property>
-              <property name="statusTip">
-               <string>Number of coils in series per parallel circuit</string>
-              </property>
-              <property name="whatsThis">
-               <string>Number of coils in series per parallel circuit</string>
-              </property>
-              <property name="text">
-               <string>Number of coils in series per parallel circuit</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QPushButton" name="b_export">
-              <property name="text">
-               <string>Export to CSV</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QPushButton" name="b_plot_mmf">
-              <property name="text">
-               <string>Plot Stator Unit MMF</string>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </widget>
-         </item>
-        </layout>
-       </widget>
-      </widget>
-     </item>
-    </layout>
-   </item>
-   <item>
+  <layout class="QGridLayout" name="gridLayout_3">
+   <item row="1" column="0" colspan="2">
     <layout class="QHBoxLayout" name="horizontalLayout_3">
      <item>
       <spacer name="horizontalSpacer_3">
@@ -432,13 +34,6 @@
         </size>
        </property>
       </spacer>
-     </item>
-     <item>
-      <widget class="QPushButton" name="b_preview">
-       <property name="text">
-        <string>Preview</string>
-       </property>
-      </widget>
      </item>
      <item>
       <widget class="QPushButton" name="b_previous">
@@ -456,6 +51,406 @@
      </item>
     </layout>
    </item>
+   <item row="0" column="1">
+    <widget class="QScrollArea" name="scrollArea">
+     <property name="minimumSize">
+      <size>
+       <width>300</width>
+       <height>0</height>
+      </size>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>270</width>
+       <height>16777215</height>
+      </size>
+     </property>
+     <property name="horizontalScrollBarPolicy">
+      <enum>Qt::ScrollBarAsNeeded</enum>
+     </property>
+     <property name="widgetResizable">
+      <bool>true</bool>
+     </property>
+     <widget class="QWidget" name="scrollAreaWidgetContents">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>277</width>
+        <height>843</height>
+       </rect>
+      </property>
+      <layout class="QVBoxLayout" name="verticalLayout_5">
+       <item>
+        <widget class="QGroupBox" name="g_pattern">
+         <property name="title">
+          <string>Winding pattern</string>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_2">
+          <item row="0" column="0">
+           <widget class="QLabel" name="in_Zs_2">
+            <property name="text">
+             <string>Generation method</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QComboBox" name="c_wind_type">
+            <item>
+             <property name="text">
+              <string>Star of Slot</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>User Defined</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+          <item row="1" column="0" colspan="2">
+           <widget class="QLabel" name="in_Zs">
+            <property name="text">
+             <string>Slot number=123</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0" colspan="2">
+           <widget class="QLabel" name="in_p">
+            <property name="text">
+             <string>Pole pair number=32</string>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="0" colspan="2">
+           <layout class="QGridLayout" name="gridLayout">
+            <item row="0" column="1">
+             <widget class="SpinBox" name="si_qs"/>
+            </item>
+            <item row="0" column="0">
+             <widget class="QLabel" name="in_qs">
+              <property name="text">
+               <string>Phases number</string>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="1">
+             <widget class="SpinBox" name="si_coil_pitch"/>
+            </item>
+            <item row="4" column="0">
+             <widget class="QLabel" name="in_Npcp">
+              <property name="text">
+               <string>Parallel circuits</string>
+              </property>
+             </widget>
+            </item>
+            <item row="3" column="1">
+             <widget class="SpinBox" name="si_Ntcoil"/>
+            </item>
+            <item row="2" column="0">
+             <widget class="QLabel" name="in_coil_pitch">
+              <property name="text">
+               <string>Throw</string>
+              </property>
+             </widget>
+            </item>
+            <item row="4" column="1">
+             <widget class="SpinBox" name="si_Npcp">
+              <property name="maximum">
+               <number>999999999</number>
+              </property>
+              <property name="value">
+               <number>12345</number>
+              </property>
+             </widget>
+            </item>
+            <item row="3" column="0">
+             <widget class="QLabel" name="in_Ntcoil">
+              <property name="text">
+               <string>Turns per coil</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="0" colspan="2">
+             <widget class="QComboBox" name="c_layer_def">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>16777215</width>
+                <height>16777215</height>
+               </size>
+              </property>
+              <item>
+               <property name="text">
+                <string>Single Layer</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Double Layer overlapping</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Double Layer non-overlapping</string>
+               </property>
+              </item>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item row="4" column="0" colspan="2">
+           <widget class="QPushButton" name="b_generate">
+            <property name="text">
+             <string>Generate</string>
+            </property>
+           </widget>
+          </item>
+          <item row="5" column="0" colspan="2">
+           <widget class="QPushButton" name="b_import">
+            <property name="text">
+             <string>Import from CSV</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <spacer name="verticalSpacer">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="g_edit">
+         <property name="title">
+          <string>Winding transformation</string>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout">
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_4">
+            <item>
+             <widget class="QLabel" name="in_Nslot">
+              <property name="minimumSize">
+               <size>
+                <width>0</width>
+                <height>0</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>16777215</width>
+                <height>16777215</height>
+               </size>
+              </property>
+              <property name="text">
+               <string>Slot shift</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="SpinBox" name="si_Nslot">
+              <property name="minimumSize">
+               <size>
+                <width>60</width>
+                <height>0</height>
+               </size>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="is_permute_B_C">
+            <property name="text">
+             <string>Permute B-C phases</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="is_reverse">
+            <property name="text">
+             <string>Reverse winding</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="is_reverse_layer">
+            <property name="text">
+             <string>Reverse layer</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="b_edit_wind_mat">
+            <property name="text">
+             <string>Edit Winding Matrix</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="g_output">
+         <property name="minimumSize">
+          <size>
+           <width>200</width>
+           <height>0</height>
+          </size>
+         </property>
+         <property name="title">
+          <string>Output</string>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_3">
+          <item>
+           <widget class="QLabel" name="out_rot_dir">
+            <property name="minimumSize">
+             <size>
+              <width>175</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="toolTip">
+             <string>Fundamental field rotation direction when feeding the winding with direct AC current</string>
+            </property>
+            <property name="statusTip">
+             <string>Fundamental field rotation direction when feeding the winding with direct AC current</string>
+            </property>
+            <property name="whatsThis">
+             <string>Fundamental field rotation direction when feeding the winding with direct AC current</string>
+            </property>
+            <property name="text">
+             <string>Rotation Direction</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="out_ms">
+            <property name="text">
+             <string>Number of slot per pole per phase</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="out_Nperw">
+            <property name="toolTip">
+             <string>Winding periodicity</string>
+            </property>
+            <property name="text">
+             <string>Winding periodicity</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="out_Ntspc">
+            <property name="toolTip">
+             <string>Winding number of turns in series per phase</string>
+            </property>
+            <property name="statusTip">
+             <string>Winding number of turns in series per phase</string>
+            </property>
+            <property name="whatsThis">
+             <string>Winding number of turns in series per phase</string>
+            </property>
+            <property name="text">
+             <string>Number of turns in series per phase</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="out_Ncspc">
+            <property name="toolTip">
+             <string>Number of coils in series per parallel circuit</string>
+            </property>
+            <property name="statusTip">
+             <string>Number of coils in series per parallel circuit</string>
+            </property>
+            <property name="whatsThis">
+             <string>Number of coils in series per parallel circuit</string>
+            </property>
+            <property name="text">
+             <string>Number of coils in series per parallel circuit</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="b_plot_mmf">
+            <property name="text">
+             <string>Plot Stator Unit MMF</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="b_plot_linear">
+            <property name="text">
+             <string>Plot Winding Linear Pattern</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="b_plot_radial">
+            <property name="text">
+             <string>Plot Winding Radial Pattern</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="b_export">
+            <property name="text">
+             <string>Export to CSV</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <spacer name="verticalSpacer_2">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </widget>
+    </widget>
+   </item>
+   <item row="0" column="0">
+    <widget class="MPLCanvas" name="w_viewer" native="true">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="minimumSize">
+      <size>
+       <width>250</width>
+       <height>0</height>
+      </size>
+     </property>
+    </widget>
+   </item>
   </layout>
  </widget>
  <customwidgets>
@@ -464,6 +459,11 @@
    <extends>QWidget</extends>
    <header>.....GUI.Tools.MPLCanvas</header>
    <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>SpinBox</class>
+   <extends>QSpinBox</extends>
+   <header>.....GUI/Tools/SpinBox.h</header>
   </customwidget>
  </customwidgets>
  <resources>

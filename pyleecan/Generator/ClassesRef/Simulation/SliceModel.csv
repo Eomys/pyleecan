@@ -1,9 +1,14 @@
-Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
-type_distribution,-,"Type of slice distribution to use for rotor skew if linear and continuous (""uniform"", ""gauss"", ""user-defined"")",,str,None,,,,Simulation,,get_distribution,VERSION,1,Class to hande slices in magnetics model
-Nslices,-,Number of slices,,int,5,,,,,,get_data,,,
-z_list,m,List of slice positions,,list,None,,,,,,plot,,,
-angle_rotor,rad,Array of rotor skew angles in case of skew,,ndarray,None,,,,,,,,,
-angle_stator,rad,Array of stator skew angles in case of skew,,ndarray,None,,,,,,,,,
-L,m,Machine length (mean of rotor/stator lengths),,float,None,,,,,,,,,
-is_step,-,True to define slices as steps,0,bool,None,,,,,,,,,
-is_skew,,True if slices account for skew,,bool,None,,,,,,,,,
+Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,as_dict Type
+type_distribution,-,"Type of slice distribution to use for rotor skew if linear and continuous (""uniform"", ""gauss"", ""user-defined"")",,str,None,,
+Nslices,-,Number of slices,,int,5,,
+z_list,m,List of slice positions,,list,None,,
+angle_rotor,rad,Array of rotor skew angles in case of skew,,ndarray,None,,
+angle_stator,rad,Array of stator skew angles in case of skew,,ndarray,None,,
+L,m,Machine length (mean of rotor/stator lengths),,float,None,,
+is_step,-,True to define slices as steps,0,bool,None,,
+is_skew,,True if slices account for skew,,bool,None,,
+,
+Package,Inherit,Methods,Constant Name,Constant Value,Class description
+Simulation,,get_distribution,VERSION,1,Class to hande slices in magnetics model
+,,get_data,,,
+,,plot,,,

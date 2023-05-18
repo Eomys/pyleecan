@@ -1,5 +1,8 @@
-Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
-value,-,List containing the different parameter values to explore,,[],,,,,Simulation,ParamExplorer,get_value,VERSION,1,Define a parameter set (for parameter sweep) from a list
-,,,,,,,,,,,get_min,,,
-,,,,,,,,,,,get_max,,,
-,,,,,,,,,,,get_N,,,
+Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,as_dict Type
+value,-,List containing the different parameter values to explore,,[],,,
+,
+Package,Inherit,Methods,Constant Name,Constant Value,Class description
+Simulation,ParamExplorer,get_value,VERSION,1,Define a parameter set (for parameter sweep) from a list
+,,get_min,,,
+,,get_max,,,
+,,get_N,,,

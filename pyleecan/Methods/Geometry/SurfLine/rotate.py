@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from numpy import exp
 
 
@@ -18,6 +16,8 @@ def rotate(self, angle):
     -------
     None
     """
+    if angle == 0:
+        return  # Nothing to do
     # Check if the Surface is correct
     self.check()
     # rotation of every line in the Surface

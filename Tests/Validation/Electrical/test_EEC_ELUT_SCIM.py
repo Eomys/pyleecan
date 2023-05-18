@@ -20,7 +20,7 @@ from pyleecan.Functions.Plot import dict_2D
 
 from pyleecan.definitions import DATA_DIR, TEST_DIR
 
-is_show_fig = False
+is_show_fig = True
 
 
 param_list_Audi_eTron = [
@@ -163,7 +163,7 @@ def test_EEC_ELUT_Railway_Traction(is_run=True, is_linear=False):
 def test_EEC_ELUT_SCIM_Audi_eTron(param_dict, is_run=True, is_linear=False):
     """Validation of the Audi eTron SCIM electrical equivalent circuits"""
 
-    Audi_eTron = load(join(DATA_DIR, "Machine", "Audi_eTron_loss.json"))
+    Audi_eTron = load(join(DATA_DIR, "Machine", "Audi_eTron.json"))
     Audi_eTron.stator.winding.Lewout = 0.05
     Audi_eTron.rotor.slot.wedge_mat = Audi_eTron.rotor.mat_type
 

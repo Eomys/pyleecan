@@ -9,6 +9,7 @@ from ......Classes.HoleM50 import HoleM50
 from ......GUI import gui_option
 from ......GUI.Dialog.DMachineSetup.SMHoleMag.PHoleM50.Gen_PHoleM50 import Gen_PHoleM50
 from ......Methods.Slot.Slot import SlotCheckError
+from ......GUI.Dialog.DMachineSetup.SMHoleMag import DEFAULT_MAG_MAT
 
 
 class PHoleM50(Gen_PHoleM50, QWidget):
@@ -56,10 +57,10 @@ class PHoleM50(Gen_PHoleM50, QWidget):
         self.w_mat_0.def_mat = "Air"
         self.w_mat_0.is_hide_button = True
         self.w_mat_1.setText("magnet_0")
-        self.w_mat_1.def_mat = "Magnet1"
+        self.w_mat_1.def_mat = DEFAULT_MAG_MAT
         self.w_mat_1.is_hide_button = True
         self.w_mat_2.setText("magnet_1")
-        self.w_mat_2.def_mat = "Magnet1"
+        self.w_mat_2.def_mat = DEFAULT_MAG_MAT
         self.w_mat_2.is_hide_button = True
 
         # Adapt GUI with/without magnet
@@ -261,40 +262,47 @@ class PHoleM50(Gen_PHoleM50, QWidget):
         self : PHoleM50
             A PHoleM50 widget
         """
-        is_set = False
-        if self.check() is None:
-            try:
-                # We compute the output only if the hole is correctly set
-                # Compute all the needed output as string
-                s_surf = format(self.u.get_m2(self.hole.comp_surface()), ".4g")
-                m_surf = format(self.u.get_m2(self.hole.comp_surface_magnets()), ".4g")
-                alpha = self.hole.comp_alpha()
-                alpha_rad = "%.4g" % alpha
-                alpha_deg = "%.4g" % (alpha * 180 / pi)
-                W5 = format(self.u.get_m(self.hole.comp_W5()), ".4g")
+        # Hole surface
+        try:
+            s_surf = format(self.u.get_m2(self.hole.comp_surface()), ".4g")
+            self.out_slot_surface.setText(
+                "Hole surface: " + s_surf + " [" + self.u.get_m2_name() + "]"
+            )
+        except:
+            self.out_slot_surface.setText("Hole surface: ?")
 
-                # Update the GUI to display the Output
-                self.out_slot_surface.setText(
-                    "Slot surface: " + s_surf + " [" + self.u.get_m2_name() + "]"
-                )
-                self.out_magnet_surface.setText(
-                    "Magnet surf.: " + m_surf + " [" + self.u.get_m2_name() + "]"
-                )
-                self.out_alpha.setText(
-                    "alpha: " + alpha_rad + " [rad] (" + alpha_deg + "°)"
-                )
-                self.out_W5.setText("W5: " + W5 + " [" + self.u.get_m_name() + "]")
-                is_set = True
-            except:
-                pass
-
-        if not is_set:
-            # We can't compute the output => We erase the previous version
-            # (that way the user know that something is wrong)
-            self.out_slot_surface.setText("Slot suface: ?")
+        # Magnet surface
+        try:
+            m_surf = format(self.u.get_m2(self.hole.comp_surface_magnets()), ".4g")
+            self.out_magnet_surface.setText(
+                "Magnet surf.: " + m_surf + " [" + self.u.get_m2_name() + "]"
+            )
+        except:
             self.out_magnet_surface.setText("Magnet surf.: ?")
+
+        # Alpha
+        try:
+            alpha = self.hole.comp_alpha()
+            alpha_rad = "%.4g" % alpha
+            alpha_deg = "%.4g" % (alpha * 180 / pi)
+            self.out_alpha.setText(
+                "alpha: " + alpha_rad + " [rad] (" + alpha_deg + "°)"
+            )
+        except:
             self.out_alpha.setText("alpha: ?")
-            self.out_W5.setText("W5: ?")
+
+        # Magnet width
+        try:
+            Mag_width = format(
+                self.u.get_m(self.hole.W2 + self.hole.W4 + self.hole.comp_W5()),
+                ".4g",
+            )
+            # Update the GUI to display the Output
+            self.out_W5.setText(
+                "Max magnet width: " + Mag_width + " [" + self.u.get_m_name() + "]"
+            )
+        except:
+            self.out_W5.setText("Max magnet width: ?")
 
     def check(self):
         """Check that the current machine have all the needed field set

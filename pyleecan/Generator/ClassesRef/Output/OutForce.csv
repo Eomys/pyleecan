@@ -1,6 +1,9 @@
-Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
-axes_dict,,Dict containing axes data used for Force,,{SciDataTool.Classes.DataND.Data},None,,,,Output,,store,VERSION,1,Gather the structural module outputs
-AGSF,N.m^2,Air Gap Surface Force (mainly computed with Maxwell stress tensor),"(Nt_tot ,Na_tot)",SciDataTool.Classes.VectorField.VectorField,None,,,,,,,,,
-logger_name,-,Name of the logger to use,0,str,Pyleecan.Force,,,,,,,,,
-Rag,-,Radius value for air-gap computation,0,float,None,,,,,,,,,
-meshsolution,-,Force computed on a mesh,,MeshSolution,None,,,,,,,,,
+Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,as_dict Type
+axes_dict,,Dict containing axes data used for Force,,{SciDataTool.Classes.DataND.Data},None,,
+AGSF,N.m^2,Air Gap Surface Force (mainly computed with Maxwell stress tensor),"(Nt_tot ,Na_tot)",SciDataTool.Classes.VectorField.VectorField,None,,
+logger_name,-,Name of the logger to use,0,str,Pyleecan.Force,,
+Rag,-,Radius value for air-gap computation,0,float,None,,
+meshsolution,-,Force computed on a mesh,,MeshSolution,None,,
+,
+Package,Inherit,Methods,Constant Name,Constant Value,Class description
+Output,,store,VERSION,1,Gather the structural module outputs

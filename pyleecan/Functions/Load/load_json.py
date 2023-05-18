@@ -1,6 +1,7 @@
 import gzip
 from json import load as jload
 from os.path import isdir, isfile, splitext
+from ...definitions import PYTHON_DEFAULT_ENCODING
 
 
 def load_json(file_path):
@@ -43,12 +44,15 @@ def load_json(file_path):
         raise LoadMissingFileError(str(file_path) + " doesn't exist")
 
     # Get the data dictionary
-    if file_path.endswith(".json.gz"):
-        with gzip.open(file_path, mode="rt", encoding="utf-8") as fp:
-            json_data = jload(fp)
-    else:
-        with open(file_path, "r") as fp:
-            json_data = jload(fp)
+    try:
+        if file_path.endswith(".json.gz"):
+            with gzip.open(file_path, mode="rt", encoding="utf-8") as fp:
+                json_data = jload(fp)
+        else:
+            with open(file_path, "r", encoding=PYTHON_DEFAULT_ENCODING) as fp:
+                json_data = jload(fp)
+    except Exception as e:
+        raise Exception("Error while loading " + file_path + "\n" + str(e))
 
     return file_path, json_data
 

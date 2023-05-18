@@ -1,9 +1,13 @@
-Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
-Ksfill,-,"Imposed Slot Fill factor (if None, will be computed according to the winding and the slot)",,float,None,0,1,,Machine,LamSlotMulti,plot,VERSION,1,Lamination with list of Slot filled with winding
-winding,,Lamination's Winding,,Winding,,,,,,,build_geometry,,,
-,,,,,,,,,,,get_pole_pair_number,,,
-,,,,,,,,,,,comp_mmf_dir,,,
-,,,,,,,,,,,plot_mmf_unit,,,
-,,,,,,,,,,,comp_mmf_unit,,,
-,,,,,,,,,,,comp_wind_function,,,
-,,,,,,,,,,,comp_angle_d_axis,,,
+Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,as_dict Type
+Ksfill,-,"Imposed Slot Fill factor (if None, will be computed according to the winding and the slot)",,float,None,0,1
+winding,,Lamination's Winding,,Winding,,,
+,
+Package,Inherit,Methods,Constant Name,Constant Value,Class description
+Machine,LamSlotMulti,plot,VERSION,1,Lamination with list of Slot filled with winding
+,,build_geometry,,,
+,,get_pole_pair_number,,,
+,,comp_mmf_dir,,,
+,,plot_mmf_unit,,,
+,,comp_mmf_unit,,,
+,,comp_wind_function,,,
+,,comp_angle_d_axis,,,

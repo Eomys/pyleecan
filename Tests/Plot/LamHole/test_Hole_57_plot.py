@@ -60,7 +60,7 @@ class Test_Hole_57_plot(object):
         self.test_obj.plot(is_show_fig=False)
         fig = plt.gcf()
         fig.savefig(join(save_path, "test_Lam_Hole_57_s57_Machine.png"))
-        assert len(fig.axes[0].patches) == 55
+        assert len(fig.axes[0].patches) == 57
 
         self.test_obj.rotor.plot(is_show_fig=False)
         fig = plt.gcf()

@@ -7,6 +7,7 @@ from PySide2.QtWidgets import QMessageBox, QWidget
 from .....GUI.Dialog.DMachineSetup.SMachineType.Gen_SMachineType import Gen_SMachineType
 from .....Classes.Winding import Winding
 from .....Classes.MachineSRM import MachineSRM
+from .....Classes.MachineWRSM import MachineWRSM
 from .....definitions import PACKAGE_NAME
 
 
@@ -95,7 +96,7 @@ class SMachineType(Gen_SMachineType, QWidget):
             self.le_name.setText(machine.name)
 
         # Connect the slot/signal
-        self.si_p.editingFinished.connect(self.set_p)
+        self.si_p.valueChanged.connect(self.set_p)
         self.c_topology.currentIndexChanged.connect(self.set_inner_rotor)
         self.le_name.editingFinished.connect(self.s_set_name)
         self.in_machine_desc.textChanged.connect(self.set_desc)
@@ -136,7 +137,13 @@ class SMachineType(Gen_SMachineType, QWidget):
         if self.machine.stator.winding is None:
             self.machine.stator.winding = Winding()
             self.machine.stator.winding._set_None()
+        else:
+            # If a winding is defined, clearing it as it will have to be re-generated
+            self.machine.stator.winding.clean()
+
         self.machine.set_pole_pair_number(value)
+        if isinstance(self.machine, MachineWRSM):
+            self.machine.rotor.slot.Zs = value
 
         # Notify the machine GUI that the machine has changed
         self.saveNeeded.emit()
@@ -205,5 +212,7 @@ class SMachineType(Gen_SMachineType, QWidget):
                 machine, MachineSRM
             ) and machine.stator.get_pole_pair_number() in [None, 0]:
                 return "p must be >0 !"
+            if machine.name in [None, ""]:
+                return "name of the machine is missing"
         except Exception as e:
             return str(e)

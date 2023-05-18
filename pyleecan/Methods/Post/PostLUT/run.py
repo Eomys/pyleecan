@@ -32,6 +32,6 @@ def run(self, LUT):
 
     # Save/Store LUT object
     if self.is_save_LUT:
-        save_path = join(LUT.get_path_result(), "LUT.h5")
+        save_path = join(LUT.get_path_result(), self.file_name)
         self.get_logger().info("Saving LUT at: " + save_path)
         LUT.save(save_path=save_path)

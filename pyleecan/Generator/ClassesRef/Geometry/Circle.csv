@@ -1,10 +1,15 @@
-Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
-radius,,Radius of the circle,,float,1,0,,,Geometry,Surface,check,VERSION,1,"Circle define by  the center of circle(point_ref), the label and the radius"
-center,,center of the Circle,,complex,0,,,,,,comp_length,,,
-prop_dict,,Property dict to apply on the lines,,dict,,,,,,,comp_surface,,,
-,,,,,,,,,,,discretize,,,
-,,,,,,,,,,,get_lines,,,
-,,,,,,,,,,,get_patches,,,
-,,,,,,,,,,,rotate,,,
-,,,,,,,,,,,translate,,,
-,,,,,,,,,,,comp_point_ref,,,
+Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,as_dict Type
+radius,,Radius of the circle,,float,1,0,
+center,,center of the Circle,,complex,0,,
+prop_dict,,Property dict to apply on the lines,,dict,,,
+,
+Package,Inherit,Methods,Constant Name,Constant Value,Class description
+Geometry,Surface,check,VERSION,1,"Circle define by  the center of circle(point_ref), the label and the radius"
+,,comp_length,,,
+,,comp_surface,,,
+,,discretize,,,
+,,get_lines,,,
+,,get_patches,,,
+,,rotate,,,
+,,translate,,,
+,,comp_point_ref,,,

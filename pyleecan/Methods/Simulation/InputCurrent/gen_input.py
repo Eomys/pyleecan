@@ -1,6 +1,6 @@
-from numpy import zeros, ones
+from numpy import zeros, ones, sqrt, exp, pi, arctan
 
-from SciDataTool import DataTime
+from SciDataTool import DataTime, Data1D, DataFreq
 
 from ....Classes.InputVoltage import InputVoltage
 from ....Classes.ElecLUTdq import ElecLUTdq
@@ -41,7 +41,61 @@ def gen_input(self):
 
     # Load and check Is
     if qs > 0:
-        if self.Is is None:
+        if qs == 6 and simu.machine.stator.winding.dual_tri_phase_shift is not None:
+            Is_val = zeros((1, 6), dtype=complex)
+            Id = self.OP.get_Id_Iq()["Id"]
+            Iq = self.OP.get_Id_Iq()["Iq"]
+            I0 = sqrt(Id ** 2 + Iq ** 2) * sqrt(2)
+            if Iq == 0:
+                phi0 = 0 if Id >= 0 else -pi
+            else:
+                phi0 = arctan(Id / Iq) - pi / 2
+            if not simu.machine.stator.winding.is_wye:
+                I0 = I0 / sqrt(3)
+                phi0 = phi0 + pi / 6
+            Is_val[0, 0] = I0 * exp(1j * phi0)
+            Is_val[0, 1] = I0 * exp(
+                1j * (phi0 + simu.machine.stator.winding.dual_tri_phase_shift)
+            )
+            Is_val[0, 2] = I0 * exp(1j * (phi0 + 2 * pi / 3))
+            Is_val[0, 3] = I0 * exp(
+                1j
+                * (phi0 + 2 * pi / 3 + simu.machine.stator.winding.dual_tri_phase_shift)
+            )
+            Is_val[0, 4] = I0 * exp(1j * (phi0 + 4 * pi / 3))
+            Is_val[0, 5] = I0 * exp(
+                1j
+                * (phi0 + 4 * pi / 3 + simu.machine.stator.winding.dual_tri_phase_shift)
+            )
+            felec = self.OP.N0 * simu.machine.get_pole_pair_number() / 60
+            # Create Data object
+            Phases = Data1D(
+                name="phase",
+                unit="",
+                values=["A", "A2", "B", "B2", "C", "C2"],
+                is_components=True,
+            )
+            Freqs = Data1D(
+                values=[felec],
+                unit="Hz",
+                name="freqs",
+                normalizations=Time.normalizations.copy(),
+            )
+            Is = DataFreq(
+                name="Stator current",
+                unit="A",
+                symbol="I_s",
+                axes=[Freqs, Phases],
+                values=Is_val,
+            )
+            outelec.OP = self.OP
+            outelec.Is = Is.get_data_along(
+                "time=axis_data",
+                "phase",
+                axis_data={"time": Time.get_values(is_smallestperiod=True)},
+            )
+            outelec.Is.axes[0].symmetries = Time.symmetries.copy()
+        elif self.Is is None:
             if self.OP.get_Id_Iq()["Id"] is None and self.OP.get_Id_Iq()["Iq"] is None:
                 if not isinstance(simu.elec, ElecLUTdq):
                     raise InputError(

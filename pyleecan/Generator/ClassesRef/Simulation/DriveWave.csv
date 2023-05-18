@@ -1,2 +1,5 @@
-Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constante Name,Constante Value,Description classe
-wave,,Wave generator,,Import,,,,,Simulation,Drive,get_wave,VERSION,1,Drive to generate a wave according to an Import object
+Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,as_dict Type
+wave,,Wave generator,,Import,,,
+,
+Package,Inherit,Methods,Constante Name,Constante Value,Description classe
+Simulation,Drive,get_wave,VERSION,1,Drive to generate a wave according to an Import object

@@ -1,3 +1,6 @@
-Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
-cost_unit,unit/kg,Cost of one kilo of material,0,float,1.27E-01,0,,,Material,,,VERSION,1,material ecomomical properties
-unit_name,-,Name of the unit,0,str,$,,,,,,,,,
+Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,as_dict Type
+cost_unit,unit/kg,Cost of one kilo of material,0,float,1.27E-01,0,
+unit_name,-,Name of the unit,0,str,$,,
+,
+Package,Inherit,Methods,Constant Name,Constant Value,Class description
+Material,,,VERSION,1,material ecomomical properties

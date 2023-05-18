@@ -51,7 +51,6 @@ class PVentCirc(Gen_PVentCirc, QWidget):
         self.si_Zh.setValue(self.vent.Zh)
         self.lf_H0.setValue(self.vent.H0)
         self.lf_D0.setValue(self.vent.D0)
-        self.lf_Alpha0.setValue(self.vent.Alpha0)
 
         # Display the main output of the vent
         self.w_out.comp_output()
@@ -62,10 +61,9 @@ class PVentCirc(Gen_PVentCirc, QWidget):
             wid.setText("[" + gui_option.unit.get_m_name() + "]")
 
         # Connect the signal
-        self.si_Zh.editingFinished.connect(self.set_Zh)
+        self.si_Zh.valueChanged.connect(self.set_Zh)
         self.lf_H0.editingFinished.connect(self.set_H0)
         self.lf_D0.editingFinished.connect(self.set_D0)
-        self.lf_Alpha0.editingFinished.connect(self.set_Alpha0)
 
     def set_Zh(self):
         """Signal to update the value of Zh according to the line edit
@@ -100,17 +98,6 @@ class PVentCirc(Gen_PVentCirc, QWidget):
         self.vent.D0 = self.lf_D0.value()
         self.w_out.comp_output()
 
-    def set_Alpha0(self):
-        """Signal to update the value of Alpha0 according to the line edit
-
-        Parameters
-        ----------
-        self : PVentCirc
-            A PVentCirc object
-        """
-        self.vent.Alpha0 = self.lf_Alpha0.value()
-        self.w_out.comp_output()
-
     def check(self):
         """Check that the current machine have all the needed field set
 
@@ -133,5 +120,5 @@ class PVentCirc(Gen_PVentCirc, QWidget):
         elif self.vent.D0 is None:
             return self.tr("You must set D0 !")
         elif self.vent.Alpha0 is None:
-            return self.tr("You must set Alpha0 !")
+            self.vent.Alpha0 = 0
         return None

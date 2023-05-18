@@ -1,9 +1,12 @@
-Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
-per_a,-,Angle periodicity,,int,1,,,,Simulation,InputCurrent,gen_input,VERSION,1,Input to skip the magnetic module and start with the structural one
-per_t,-,Time periodicity,,int,1,,,,,,,,,
-is_antiper_a,-,If angle is antiperiodic,,bool,0,,,,,,,,,
-is_antiper_t,-,If time is antiperiodic,,bool,0,,,,,,,,,
-B_dict,-,Dict of Import objects or lists for each component of the flux,,dict,None,,,,,,,,,
-unit,-,Unit of the flux if not T,,str,None,,,,,,,,,
-slice,m,Slice axis values,,ndarray,None,,,,,,,,,
-B_enforced,,Airgap flux density as VectorField object,,SciDataTool.Classes.VectorField.VectorField,None,,,,,,,,,
+Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,as_dict Type
+per_a,-,Angle periodicity,,int,1,,
+per_t,-,Time periodicity,,int,1,,
+is_antiper_a,-,If angle is antiperiodic,,bool,0,,
+is_antiper_t,-,If time is antiperiodic,,bool,0,,
+B_dict,-,Dict of Import objects or lists for each component of the flux,,dict,None,,
+unit,-,Unit of the flux if not T,,str,None,,
+slice,m,Slice axis values,,ndarray,None,,
+B_enforced,,Airgap flux density as VectorField object,,SciDataTool.Classes.VectorField.VectorField,None,,
+,
+Package,Inherit,Methods,Constant Name,Constant Value,Class description
+Simulation,InputCurrent,gen_input,VERSION,1,Input to skip the magnetic module and start with the structural one

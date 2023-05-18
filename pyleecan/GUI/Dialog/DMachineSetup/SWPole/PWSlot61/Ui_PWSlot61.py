@@ -18,7 +18,7 @@ class Ui_PWSlot61(object):
     def setupUi(self, PWSlot61):
         if not PWSlot61.objectName():
             PWSlot61.setObjectName(u"PWSlot61")
-        PWSlot61.resize(936, 532)
+        PWSlot61.resize(1084, 543)
         PWSlot61.setMinimumSize(QSize(630, 470))
         PWSlot61.setMaximumSize(QSize(16777215, 16777215))
         self.horizontalLayout = QHBoxLayout(PWSlot61)
@@ -34,9 +34,10 @@ class Ui_PWSlot61(object):
         self.img_slot.setSizePolicy(sizePolicy)
         self.img_slot.setMaximumSize(QSize(16777215, 16777215))
         self.img_slot.setPixmap(
-            QPixmap(u":/images/images/MachineSetup/WSlot/Slot_61.PNG")
+            QPixmap(u":/images/images/MachineSetup/WSlot/Slot_61.png")
         )
-        self.img_slot.setScaledContents(True)
+        self.img_slot.setScaledContents(False)
+        self.img_slot.setAlignment(Qt.AlignCenter)
 
         self.verticalLayout_2.addWidget(self.img_slot)
 
@@ -49,7 +50,7 @@ class Ui_PWSlot61(object):
             self.txt_constraint.sizePolicy().hasHeightForWidth()
         )
         self.txt_constraint.setSizePolicy(sizePolicy1)
-        self.txt_constraint.setMaximumSize(QSize(16777215, 50))
+        self.txt_constraint.setMaximumSize(QSize(16777215, 60))
         self.txt_constraint.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self.txt_constraint.setTextInteractionFlags(
             Qt.TextSelectableByKeyboard | Qt.TextSelectableByMouse
@@ -66,7 +67,7 @@ class Ui_PWSlot61(object):
         self.scrollArea.setWidgetResizable(True)
         self.scrollAreaWidgetContents = QWidget()
         self.scrollAreaWidgetContents.setObjectName(u"scrollAreaWidgetContents")
-        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 268, 508))
+        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 268, 519))
         self.verticalLayout = QVBoxLayout(self.scrollAreaWidgetContents)
         self.verticalLayout.setObjectName(u"verticalLayout")
         self.gridLayout = QGridLayout()

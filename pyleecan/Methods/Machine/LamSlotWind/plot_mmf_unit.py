@@ -1,21 +1,30 @@
 import matplotlib.pyplot as plt
+from numpy import min as np_min, max as np_max
+
 
 from ....Functions.Plot import dict_2D
 from ....definitions import config_dict
+from ....Functions.Plot.set_plot_gui_icon import set_plot_gui_icon
+
+PHASE_COLORS = config_dict["PLOT"]["COLOR_DICT"]["PHASE_COLORS"]
 
 
-def plot_mmf_unit(self, r_max=100, fig=None, save_path=None, is_show_fig=True):
+def plot_mmf_unit(self, save_path=None, is_show_fig=False):
     """Plot the winding unit mmf as a function of space
+
     Parameters
     ----------
     self : LamSlotWind
         an LamSlotWind object
-    Na : int
-        Space discretization
-    fig : Matplotlib.figure.Figure
-        existing figure to use if None create a new one
+    save_path : str
+        File path to save the figure
     is_show_fig : bool
         To call show at the end of the method
+
+    Returns
+    -------
+    fig : Matplotlib.figure.Figure
+        Figure containing the plot
     """
 
     name = ""
@@ -51,6 +60,7 @@ def plot_mmf_unit(self, r_max=100, fig=None, save_path=None, is_show_fig=True):
 
     dict_2D_0["color_list"] = [color_list[0], "k"]
 
+    r_max = 100
     WF.plot_2D_Data(
         "wavenumber=[0," + str(r_max) + "]",
         data_list=[MMF_U],
@@ -61,3 +71,6 @@ def plot_mmf_unit(self, r_max=100, fig=None, save_path=None, is_show_fig=True):
         save_path=save_path,
         **dict_2D_0,
     )
+    set_plot_gui_icon()
+
+    return fig

@@ -36,7 +36,7 @@ def _comp_line_dict(self):
     else:
         line_dict["1-2"] = None
 
-    if self.H1 > 0 and self.W1 > self.W0:
+    if self.H1 > 0 and self.W1 >= self.W0:
         line_dict["2-3"] = Segment(Z2, Z3)
     else:
         line_dict["2-3"] = None
@@ -60,7 +60,7 @@ def _comp_line_dict(self):
     else:
         line_dict["7-8"] = None
 
-    if self.H1 > 0 and self.W1 > self.W0:
+    if self.H1 > 0 and self.W1 >= self.W0:
         line_dict["8-9"] = Segment(Z8, Z9)
     else:
         line_dict["8-9"] = None

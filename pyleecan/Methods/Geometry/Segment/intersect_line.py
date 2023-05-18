@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 
-from ....Functions.Geometry.inter_line_line import inter_line_line
 from numpy import abs as np_abs
+
+from ....Functions.Geometry.inter_line_line import inter_line_line
 
 
 def intersect_line(self, Z1, Z2):

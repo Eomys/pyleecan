@@ -1,4 +1,7 @@
-Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
-ref_cell,,,,RefCell,None,,,,Mesh,,,VERSION,1,Store shape functions
-gauss_point,,,,GaussPoint,None,,,,,,,,,
-scalar_product,,,,ScalarProduct,None,,,,,,,,,
+Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,as_dict Type
+ref_cell,,,,RefCell,None,,
+gauss_point,,,,GaussPoint,None,,
+scalar_product,,,,ScalarProduct,None,,
+,
+Package,Inherit,Methods,Constant Name,Constant Value,Class description
+Mesh,,,VERSION,1,Store shape functions

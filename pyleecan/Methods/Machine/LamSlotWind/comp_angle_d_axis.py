@@ -21,7 +21,7 @@ def comp_angle_d_axis(self, is_plot=False):
 
     p = self.get_pole_pair_number()
 
-    MMF, _ = self.comp_mmf_unit(Nt=1, Na=400 * p)
+    MMF, _ = self.comp_mmf_unit(Nt=100, Na=400 * p)
 
     # Get angle values
     results1 = MMF.get_along("angle[oneperiod]")

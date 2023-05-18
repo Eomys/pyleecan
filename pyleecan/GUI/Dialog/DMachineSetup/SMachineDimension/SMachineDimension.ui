@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1065</width>
+    <width>1062</width>
     <height>679</height>
    </rect>
   </property>
@@ -43,7 +43,10 @@
         <pixmap resource="../../../Resources/pyleecan.qrc">:/images/images/MachineSetup/MachineDimension/Dimension_Shaft_Rotor_Stator.png</pixmap>
        </property>
        <property name="scaledContents">
-        <bool>true</bool>
+        <bool>false</bool>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
        </property>
       </widget>
      </item>
@@ -275,7 +278,7 @@
          <item>
           <widget class="QLabel" name="out_airgap">
            <property name="toolTip">
-            <string>mechanical airgap width (distance between stator bore and rotor bore radii)</string>
+            <string>Magnetic airgap width (distance between stator bore and rotor bore radii)</string>
            </property>
            <property name="text">
             <string>airgap = </string>

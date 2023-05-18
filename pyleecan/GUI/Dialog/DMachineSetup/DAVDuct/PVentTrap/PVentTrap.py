@@ -53,7 +53,6 @@ class PVentTrap(Gen_PVentTrap, QWidget):
         self.lf_D0.setValue(self.vent.D0)
         self.lf_W1.setValue(self.vent.W1)
         self.lf_W2.setValue(self.vent.W2)
-        self.lf_Alpha0.setValue(self.vent.Alpha0)
 
         # Display the main output of the vent
         self.w_out.comp_output()
@@ -63,19 +62,17 @@ class PVentTrap(Gen_PVentTrap, QWidget):
             self.unit_H0,
             self.unit_D0,
             self.unit_W1,
-            self.unit_W1,
             self.unit_W2,
         ]
         for wid in wid_list:
             wid.setText("[" + gui_option.unit.get_m_name() + "]")
 
         # Connect the signal
-        self.si_Zh.editingFinished.connect(self.set_Zh)
+        self.si_Zh.valueChanged.connect(self.set_Zh)
         self.lf_H0.editingFinished.connect(self.set_H0)
         self.lf_D0.editingFinished.connect(self.set_D0)
         self.lf_W1.editingFinished.connect(self.set_W1)
         self.lf_W2.editingFinished.connect(self.set_W2)
-        self.lf_Alpha0.editingFinished.connect(self.set_Alpha0)
 
     def set_Zh(self):
         """Signal to update the value of Zh according to the line edit
@@ -132,17 +129,6 @@ class PVentTrap(Gen_PVentTrap, QWidget):
         self.vent.W2 = self.lf_W2.value()
         self.w_out.comp_output()
 
-    def set_Alpha0(self):
-        """Signal to update the value of Alpha0 according to the line edit
-
-        Parameters
-        ----------
-        self : PVentTrap
-            A PVentTrap object
-        """
-        self.vent.Alpha0 = self.lf_Alpha0.value()
-        self.w_out.comp_output()
-
     def check(self):
         """Check that the current machine have all the needed field set
 
@@ -169,5 +155,5 @@ class PVentTrap(Gen_PVentTrap, QWidget):
         elif self.vent.W2 is None:
             return self.tr("You must set W2 !")
         elif self.vent.Alpha0 is None:
-            return self.tr("You must set Alpha0 !")
+            self.vent.Alpha0 = 0
         return None

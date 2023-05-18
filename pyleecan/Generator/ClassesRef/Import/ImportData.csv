@@ -1,8 +1,11 @@
-Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
-axes,-,List of axes of the data,,[ImportData],[],,,,Import,,get_data,VERSION,1,Abstract class for Data Import/Generation
-field,-,Field (Import object),,Import,None,,,,,,,,,
-unit,-,Unit of the field,,str,SI,,,,,,,,,
-name,-,Name of the field,,str,,,,,,,,,,
-symbol,-,Symbol of the field,,str,,,,,,,,,,
-normalizations,-,Dict of normalizations,,dict,{},,,,,,,,,
-symmetries,-,Dict of symmetries,,dict,{},,,,,,,,,
+Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,as_dict Type
+axes,-,List of axes of the data,,[ImportData],[],,
+field,-,Field (Import object),,Import,None,,
+unit,-,Unit of the field,,str,SI,,
+name,-,Name of the field,,str,,,
+symbol,-,Symbol of the field,,str,,,
+normalizations,-,Dict of normalizations,,dict,{},,
+symmetries,-,Dict of symmetries,,dict,{},,
+,
+Package,Inherit,Methods,Constant Name,Constant Value,Class description
+Import,,get_data,VERSION,1,Abstract class for Data Import/Generation

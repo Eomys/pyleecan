@@ -1,4 +1,8 @@
-﻿Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
-alpha,rad,angular positon of the first notch (0 is middle of first tooth),0,float,0,,,,Machine,Notch,comp_surface,VERSION,1,Class for evenly distributed notches (according to Zs)
-notch_shape,-,Shape of the Notch,0,Slot,,,,,,,comp_periodicity_spatial,,,
-,,,,,,,,,,,get_notch_desc_list,,,
+﻿Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,as_dict Type
+alpha,rad,angular positon of the first notch (0 is middle of first tooth),0,float,0,,
+notch_shape,-,Shape of the Notch,0,Slot,,,
+,
+Package,Inherit,Methods,Constant Name,Constant Value,Class description
+Machine,Notch,comp_surface,VERSION,1,Class for evenly distributed notches (according to Zs)
+,,comp_periodicity_spatial,,,
+,,get_notch_desc_list,,,

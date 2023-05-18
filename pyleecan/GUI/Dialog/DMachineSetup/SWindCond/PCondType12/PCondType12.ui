@@ -35,7 +35,10 @@
       <pixmap resource="../../../../Resources/pyleecan.qrc">:/images/images/MachineSetup/WindParam/CondType12.png</pixmap>
      </property>
      <property name="scaledContents">
-      <bool>true</bool>
+      <bool>false</bool>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
      </property>
     </widget>
    </item>
@@ -43,15 +46,18 @@
     <widget class="QScrollArea" name="scrollArea">
      <property name="minimumSize">
       <size>
-       <width>270</width>
+       <width>350</width>
        <height>0</height>
       </size>
      </property>
      <property name="maximumSize">
       <size>
-       <width>270</width>
+       <width>350</width>
        <height>16777215</height>
       </size>
+     </property>
+     <property name="horizontalScrollBarPolicy">
+      <enum>Qt::ScrollBarAsNeeded</enum>
      </property>
      <property name="widgetResizable">
       <bool>true</bool>
@@ -61,23 +67,23 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>268</width>
+        <width>348</width>
         <height>648</height>
        </rect>
       </property>
-      <layout class="QGridLayout" name="gridLayout_3">
-       <item row="0" column="0">
-        <layout class="QGridLayout" name="gridLayout_2">
+      <layout class="QVBoxLayout" name="verticalLayout">
+       <item>
+        <layout class="QGridLayout" name="gridLayout_3">
          <item row="0" column="0">
           <widget class="QLabel" name="in_Nwpc1">
            <property name="minimumSize">
             <size>
-             <width>90</width>
+             <width>150</width>
              <height>0</height>
             </size>
            </property>
            <property name="text">
-            <string>Nwppc</string>
+            <string>Strands in hand</string>
            </property>
           </widget>
          </item>
@@ -89,6 +95,12 @@
              <height>0</height>
             </size>
            </property>
+           <property name="maximumSize">
+            <size>
+             <width>100</width>
+             <height>16777215</height>
+            </size>
+           </property>
            <property name="value">
             <number>99</number>
            </property>
@@ -98,12 +110,12 @@
           <widget class="QLabel" name="in_Wwire">
            <property name="minimumSize">
             <size>
-             <width>90</width>
+             <width>150</width>
              <height>0</height>
             </size>
            </property>
            <property name="text">
-            <string>Wwire</string>
+            <string>Conductor diameter</string>
            </property>
           </widget>
          </item>
@@ -117,7 +129,7 @@
            </property>
            <property name="maximumSize">
             <size>
-             <width>16777215</width>
+             <width>100</width>
              <height>16777215</height>
             </size>
            </property>
@@ -138,7 +150,23 @@
          </item>
         </layout>
        </item>
-       <item row="1" column="0">
+       <item>
+        <widget class="WMatSelectV" name="w_mat_0" native="true">
+         <property name="minimumSize">
+          <size>
+           <width>100</width>
+           <height>0</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>328</width>
+           <height>16777215</height>
+          </size>
+         </property>
+        </widget>
+       </item>
+       <item>
         <widget class="QGroupBox" name="g_ins">
          <property name="title">
           <string>Insulation</string>
@@ -149,95 +177,115 @@
          <property name="checked">
           <bool>false</bool>
          </property>
-         <layout class="QGridLayout" name="gridLayout">
+         <layout class="QGridLayout" name="gridLayout_2">
           <item row="0" column="0">
-           <widget class="QLabel" name="in_Wins_cond">
-            <property name="minimumSize">
-             <size>
-              <width>90</width>
-              <height>0</height>
-             </size>
-            </property>
-            <property name="text">
-             <string>Wins_cond</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="1">
-           <widget class="FloatEdit" name="lf_Wins_cond">
-            <property name="minimumSize">
-             <size>
-              <width>50</width>
-              <height>0</height>
-             </size>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>16777215</width>
-              <height>16777215</height>
-             </size>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="2">
-           <widget class="QLabel" name="unit_Wins_cond">
-            <property name="text">
-             <string>m</string>
-            </property>
-           </widget>
+           <layout class="QGridLayout" name="gridLayout">
+            <item row="0" column="0">
+             <widget class="QLabel" name="in_Wins_wire">
+              <property name="minimumSize">
+               <size>
+                <width>90</width>
+                <height>0</height>
+               </size>
+              </property>
+              <property name="text">
+               <string>Insulator thickness</string>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="1">
+             <widget class="FloatEdit" name="lf_Wins_wire">
+              <property name="minimumSize">
+               <size>
+                <width>0</width>
+                <height>0</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>100</width>
+                <height>16777215</height>
+               </size>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="2">
+             <widget class="QLabel" name="unit_Wins_wire">
+              <property name="text">
+               <string>m</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="0">
+             <widget class="QLabel" name="in_Wins_cond">
+              <property name="minimumSize">
+               <size>
+                <width>150</width>
+                <height>0</height>
+               </size>
+              </property>
+              <property name="text">
+               <string>Overall diameter</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="1">
+             <widget class="FloatEdit" name="lf_Wins_cond">
+              <property name="minimumSize">
+               <size>
+                <width>0</width>
+                <height>0</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>100</width>
+                <height>16777215</height>
+               </size>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="2">
+             <widget class="QLabel" name="unit_Wins_cond">
+              <property name="minimumSize">
+               <size>
+                <width>0</width>
+                <height>0</height>
+               </size>
+              </property>
+              <property name="text">
+               <string>m</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
           </item>
           <item row="1" column="0">
-           <widget class="QLabel" name="in_Wins_wire">
+           <widget class="WMatSelectV" name="w_mat_1" native="true">
             <property name="minimumSize">
              <size>
-              <width>90</width>
-              <height>0</height>
-             </size>
-            </property>
-            <property name="text">
-             <string>Wins_wire</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="1">
-           <widget class="FloatEdit" name="lf_Wins_wire">
-            <property name="minimumSize">
-             <size>
-              <width>50</width>
+              <width>100</width>
               <height>0</height>
              </size>
             </property>
             <property name="maximumSize">
              <size>
-              <width>16777215</width>
+              <width>306</width>
               <height>16777215</height>
              </size>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="2">
-           <widget class="QLabel" name="unit_Wins_wire">
-            <property name="minimumSize">
-             <size>
-              <width>0</width>
-              <height>0</height>
-             </size>
-            </property>
-            <property name="text">
-             <string>m</string>
             </property>
            </widget>
           </item>
          </layout>
         </widget>
        </item>
-       <item row="2" column="0">
+       <item>
         <layout class="QHBoxLayout" name="horizontalLayout_2">
          <item>
           <widget class="QLabel" name="in_Lewout">
            <property name="minimumSize">
             <size>
-             <width>90</width>
+             <width>150</width>
              <height>0</height>
             </size>
            </property>
@@ -248,7 +296,7 @@
             <string>End-winding length on one side for a half-turn (only used in voltage driven simulations)</string>
            </property>
            <property name="text">
-            <string>Lewout</string>
+            <string>End winding length</string>
            </property>
           </widget>
          </item>
@@ -256,13 +304,13 @@
           <widget class="FloatEdit" name="lf_Lewout">
            <property name="minimumSize">
             <size>
-             <width>50</width>
+             <width>0</width>
              <height>0</height>
             </size>
            </property>
            <property name="maximumSize">
             <size>
-             <width>16777215</width>
+             <width>100</width>
              <height>16777215</height>
             </size>
            </property>
@@ -295,7 +343,7 @@
          </item>
         </layout>
        </item>
-       <item row="3" column="0">
+       <item>
         <spacer name="verticalSpacer">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
@@ -308,8 +356,21 @@
          </property>
         </spacer>
        </item>
-       <item row="4" column="0">
-        <widget class="WCondOut" name="w_out" native="true"/>
+       <item>
+        <widget class="WCondOut" name="w_out" native="true">
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>0</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>328</width>
+           <height>16777215</height>
+          </size>
+         </property>
+        </widget>
        </item>
       </layout>
      </widget>
@@ -329,11 +390,17 @@
    <header>......GUI.Dialog.DMachineSetup.SWindCond.WCondOut.WCondOut.h</header>
    <container>1</container>
   </customwidget>
+  <customwidget>
+   <class>WMatSelectV</class>
+   <extends>QWidget</extends>
+   <header>......GUI.Dialog.DMatLib.WMatSelect.WMatSelectV.h</header>
+   <container>1</container>
+  </customwidget>
  </customwidgets>
  <tabstops>
   <tabstop>si_Nwpc1</tabstop>
   <tabstop>lf_Wwire</tabstop>
-  <tabstop>lf_Wins_wire</tabstop>
+  <tabstop>lf_Wins_cond</tabstop>
  </tabstops>
  <resources>
   <include location="../../../../Resources/pyleecan.qrc"/>

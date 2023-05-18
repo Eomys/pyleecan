@@ -42,3 +42,16 @@ class Test_cond_schematics(object):
             save_path=file_path,
             is_show_fig=False,
         )
+        file_name_single = type(test_dict["test_obj"]).__name__ + "_single.png"
+        file_path_single = join(SCHEMATICS_PATH, file_name_single)
+        # Delete previous plot
+        if isfile(file_path_single):
+            remove(file_path_single)
+        test_obj.plot_schematics(
+            is_default=True,
+            is_add_schematics=True,
+            is_add_main_line=True,
+            save_path=file_path_single,
+            is_show_fig=False,
+            is_single=True,
+        )

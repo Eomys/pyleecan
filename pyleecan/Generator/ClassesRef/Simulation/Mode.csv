@@ -1,5 +1,10 @@
-Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constante Name,Constante Value,Description classe,Classe fille
-nat_freq,Hz,Natural frequency of the mode,,float,None,,,,Simulation,SolutionMat,plot,VERSION,1,Structural module: Mode object,
-order_circ,-,Circumferential order,,int,None,0,,,,,plot_animated,,,,
-order_long,-,Longitudinal order,,int,None,0,,,,,get_shape_xyz,,,,
-,,,,,,,,,,,get_shape_pol,,,,
+Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,as_dict Type
+nat_freq,Hz,Natural frequency of the mode,,float,None,,
+order_circ,-,Circumferential order,,int,None,0,
+order_long,-,Longitudinal order,,int,None,0,
+,
+Package,Inherit,Methods,Constante Name,Constante Value,Description classe,Classe fille
+Simulation,SolutionMat,plot,VERSION,1,Structural module: Mode object,
+,,plot_animated,,,,
+,,get_shape_xyz,,,,
+,,get_shape_pol,,,,

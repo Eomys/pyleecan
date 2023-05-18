@@ -8,6 +8,7 @@ from ......Classes.HoleM53 import HoleM53
 from ......GUI import gui_option
 from ......GUI.Dialog.DMachineSetup.SMHoleMag.PHoleM53.Gen_PHoleM53 import Gen_PHoleM53
 from ......Methods.Slot.Slot import SlotCheckError
+from ......GUI.Dialog.DMachineSetup.SMHoleMag import DEFAULT_MAG_MAT
 
 
 class PHoleM53(Gen_PHoleM53, QWidget):
@@ -53,11 +54,11 @@ class PHoleM53(Gen_PHoleM53, QWidget):
         self.w_mat_0.is_hide_button = True
 
         self.w_mat_1.setText("magnet_0")
-        self.w_mat_1.def_mat = "Magnet1"
+        self.w_mat_1.def_mat = DEFAULT_MAG_MAT
         self.w_mat_1.is_hide_button = True
 
         self.w_mat_2.setText("magnet_1")
-        self.w_mat_2.def_mat = "Magnet1"
+        self.w_mat_2.def_mat = DEFAULT_MAG_MAT
         self.w_mat_2.is_hide_button = True
 
         # Set unit name (m ou mm)

@@ -83,26 +83,9 @@
           </widget>
          </item>
          <item row="0" column="1">
-          <widget class="QSpinBox" name="si_Zh">
+          <widget class="SpinBox" name="si_Zh">
            <property name="maximum">
             <number>999999999</number>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="0">
-          <widget class="QLabel" name="in_Alpha0">
-           <property name="text">
-            <string>Alpha0 :</string>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="1">
-          <widget class="FloatEdit" name="lf_Alpha0"/>
-         </item>
-         <item row="1" column="2">
-          <widget class="QLabel" name="unit_Alpha0">
-           <property name="text">
-            <string>[rad]</string>
            </property>
           </widget>
          </item>
@@ -132,15 +115,15 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>FloatEdit</class>
-   <extends>QLineEdit</extends>
-   <header>......GUI/Tools/FloatEdit.h</header>
-  </customwidget>
-  <customwidget>
    <class>WVentOut</class>
    <extends>QWidget</extends>
    <header>......GUI.Dialog.DMachineSetup.DAVDuct.WVentOut.WVentOut.h</header>
    <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>SpinBox</class>
+   <extends>QSpinBox</extends>
+   <header>......GUI/Tools/SpinBox.h</header>
   </customwidget>
   <customwidget>
    <class>WPathSelectorV</class>

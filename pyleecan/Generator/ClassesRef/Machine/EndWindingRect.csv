@@ -1,4 +1,8 @@
-Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
-coil_pitch,,effective coil pitch (override) for length calculation,0,float,None,,,,Machine,EndWinding,comp_length,VERSION,1,Class of the machine's end winding assuming a rectangular shape
-lambda_length,,permeance factor related to end winding length,0,float,0,0,,,,,comp_inductance,,,
-lambda_width,,permeance factor related to end winding width,0,float,0,0,,,,,,,,
+Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,as_dict Type
+coil_pitch,,effective coil pitch (override) for length calculation,0,float,None,,
+lambda_length,,permeance factor related to end winding length,0,float,0,0,
+lambda_width,,permeance factor related to end winding width,0,float,0,0,
+,
+Package,Inherit,Methods,Constant Name,Constant Value,Class description
+Machine,EndWinding,comp_length,VERSION,1,Class of the machine's end winding assuming a rectangular shape
+,,comp_inductance,,,

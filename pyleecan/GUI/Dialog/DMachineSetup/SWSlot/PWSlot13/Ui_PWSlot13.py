@@ -262,7 +262,7 @@ class Ui_PWSlot13(object):
             1, QCoreApplication.translate("PWSlot13", u"[rad]", None)
         )
         self.c_H1_unit.setItemText(
-            2, QCoreApplication.translate("PWSlot13", u"[deg]", None)
+            2, QCoreApplication.translate("PWSlot13", u"[\u00b0]", None)
         )
 
         self.in_H2.setText(QCoreApplication.translate("PWSlot13", u"H2", None))

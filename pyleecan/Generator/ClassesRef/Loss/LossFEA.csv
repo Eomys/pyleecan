@@ -1,0 +1,8 @@
+Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,as_dict Type
+k_ed,W/(m3*T2*Hz2),eddy current loss coefficients,,float,None,,
+k_hy,W/(m3*T2*Hz),hysteresis loss coefficients,,float,None,,
+k_p,W/(m3*T2*Hz2),proximity loss coefficients,,float,None,,
+type_skin_effect,-,"Skin effect for resistance calculation (0 to ignore skin effect, 1 to consider it)",1,int,1,,
+,
+Package,Inherit,Methods,Constant Name,Constant Value,Class description
+Loss,Loss,run,VERSION,1,"Simplified loss module, with predefined loss models for a quick setup"

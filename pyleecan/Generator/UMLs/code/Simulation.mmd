@@ -1,0 +1,598 @@
+classDiagram
+direction TB
+class DXFImport{
+	file_path : str
+	surf_dict : dict
+	BC_list : list
+	get_surfaces()
+}
+class DataKeeper{
+	name : str
+	symbol : str
+	unit : str
+	keeper : function
+	error_keeper : function
+	result : list~~
+	result_ref : str
+	_set_keeper()
+}
+class Drive{
+	Umax : float
+	Imax : float
+	is_current : bool
+}
+class DriveWave{
+	wave : Import
+	get_wave()
+}
+class EEC{
+	type_skin_effect : int
+	OP : OP
+	Tsta : float
+	Trot : float
+	Xkr_skinS : float
+	Xke_skinS : float
+	Xkr_skinR : float
+	Xke_skinR : float
+	R1 : float
+	fluxlink : Magnetics
+	get_machine_from_parent()
+	comp_R1()
+	comp_skin_effect()
+	comp_parameters()
+	update_from_ref()
+	solve()
+	solve_PWM()
+	comp_joule_losses()
+	comp_fluxlinkage()
+}
+class EEC_LSRPM{
+	comp_parameters()
+	solve()
+	comp_joule_losses()
+}
+class EEC_PMSM{
+	Ld : float
+	Lq : float
+	Phid : float
+	Phiq : float
+	Phid_mag : float
+	Phiq_mag : float
+	clear_parameters()
+	comp_BEMF_harmonics()
+	comp_joule_losses()
+	comp_Ld()
+	comp_Lq()
+	comp_parameters()
+	comp_Phidq()
+	comp_Phidq_mag()
+	comp_torque_sync_rel()
+	solve()
+	solve_PWM()
+	update_from_ref()
+}
+class EEC_SCIM{
+	Rfe : float
+	L1 : float
+	R2 : float
+	L2 : float
+	K21Z : float
+	K21I : float
+	Im_table : ndarray
+	Lm_table : ndarray
+	I1 : complex
+	I2 : complex
+	U1 : complex
+	U2 : complex
+	If : complex
+	Lm : float
+	Im : complex
+	_comp_flux_mean()
+	_comp_Lm_FEA()
+	clear_parameters()
+	comp_joule_losses()
+	comp_K21()
+	comp_L1()
+	comp_L2()
+	comp_parameters()
+	comp_R2()
+	comp_skin_effect()
+	solve()
+	solve_elementary()
+	update_from_ref()
+}
+class ElecLUTdq{
+	n_interp : int
+	Id_min : float
+	Id_max : float
+	Iq_min : float
+	Iq_max : float
+	n_Id : int
+	n_Iq : int
+	LUT_simu : Simulation
+	is_grid_dq : bool
+	Urms_max : float
+	Jrms_max : float
+	Irms_max : float
+	load_rate : float
+	run()
+	comp_LUTdq()
+	solve_power()
+	solve_MTPA()
+}
+class Electrical{
+	eec : EEC
+	logger_name : str
+	freq_max : float
+	LUT_enforced : LUT
+	Tsta : float
+	Trot : float
+	type_skin_effect : int
+	is_skin_effect_inductance : bool
+	run()
+	comp_power()
+	comp_torque()
+	gen_drive()
+}
+class Force{
+	is_periodicity_t : bool
+	is_periodicity_a : bool
+	is_agsf_transfer : bool
+	max_wavenumber_transfer : int
+	Rsbo_enforced_transfer : float
+	logger_name : str
+	run()
+	comp_axes()
+	comp_AGSF_transfer()
+}
+class ForceMT{
+	comp_force()
+	comp_force_nodal()
+}
+class ForceTensor{
+	group : str
+	tensor : dict
+	comp_force()
+	comp_force_nodal()
+	comp_magnetostrictive_tensor()
+	element_loop()
+}
+class Input{
+	time : ImportMatrix
+	angle : ImportMatrix
+	Nt_tot : int
+	Nrev : float
+	Na_tot : int
+	OP : OP
+	t_final : float
+	comp_axes()
+	comp_axis_time()
+	comp_axis_angle()
+	comp_axis_phase()
+}
+class InputCurrent{
+	Is : ImportMatrix
+	Ir : ImportMatrix
+	Is_harm : ImportData
+	gen_input()
+	set_Id_Iq()
+}
+class InputFlux{
+	per_a : int
+	per_t : int
+	is_antiper_a : bool
+	is_antiper_t : bool
+	B_dict : dict
+	unit : str
+	slice : ndarray
+	B_enforced : SciDataTool.Classes.VectorField.VectorField
+	gen_input()
+}
+class InputForce{
+	P : ImportVectorField
+	gen_input()
+}
+class InputVoltage{
+	rot_dir : int
+	angle_rotor_initial : float
+	PWM : ImportGenPWM
+	phase_dir : int
+	current_dir : int
+	is_periodicity_t : bool
+	is_periodicity_a : bool
+	is_generator : bool
+	gen_input()
+	set_Ud_Uq()
+}
+class Loss{
+	model_index : dict
+	model_list : list~LossModel~
+	logger_name : str
+	model_dict : dict~LossModel~
+	run()
+	add_model()
+	remove_model()
+}
+class LossFEA{
+	is_get_meshsolution : bool
+	Tsta : float
+	Trot : float
+	type_skin_effect : int
+	Cp : float
+	run()
+	comp_axes()
+	comp_loss()
+	comp_loss_density_core()
+	comp_loss_density_joule()
+	comp_loss_density_magnet()
+}
+class LossModel{
+	name : str
+	is_show_fig : bool
+}
+class LossModelBertotti{
+	k_hy : float
+	k_ed : float
+	k_ex : float
+	alpha_hy : float
+	alpha_ed : float
+	alpha_ex : float
+	group : str
+	get_meshsolution : bool
+	N0 : list
+	comp_loss()
+	comp_coeff_Bertotti()
+	comp_loss_density()
+}
+class LossModelSteinmetz{
+	k_hy : float
+	k_ed : float
+	alpha_f : float
+	alpha_B : float
+	comp_coeff()
+}
+class LossModelWinding{
+	temperature : float
+	comp_loss()
+}
+class MagElmer{
+	Kmesh_fineness : float
+	Kgeo_fineness : float
+	file_name : str
+	FEA_dict : dict
+	is_get_mesh : bool
+	is_save_FEA : bool
+	transform_list : list
+	rotor_dxf : DXFImport
+	stator_dxf : DXFImport
+	import_file : str
+	nb_worker : int
+	comp_flux_airgap()
+	solve_FEA()
+	get_meshsolution()
+	get_path_save_fea()
+	get_path_save()
+	gen_elmer_mesh()
+}
+class MagFEMM{
+	Kmesh_fineness : float
+	Kgeo_fineness : float
+	type_calc_leakage : int
+	file_name : str
+	FEMM_dict_enforced : dict
+	is_get_meshsolution : bool
+	is_save_meshsolution_as_file : bool
+	is_sliding_band : bool
+	transform_list : list
+	rotor_dxf : DXFImport
+	stator_dxf : DXFImport
+	import_file : str
+	is_close_femm : bool
+	nb_worker : int
+	Rag_enforced : float
+	is_set_previous : bool
+	is_fast_draw : bool
+	is_calc_torque_energy : bool
+	comp_flux_airgap()
+	get_path_save()
+	solve_FEMM()
+	get_meshsolution()
+	get_path_save_fem()
+	solve_FEMM_parallel()
+	build_MS_sliced()
+}
+class Magnetics{
+	is_remove_slotS : bool
+	is_remove_slotR : bool
+	is_remove_ventS : bool
+	is_remove_ventR : bool
+	is_mmfs : bool
+	is_mmfr : bool
+	type_BH_stator : int
+	type_BH_rotor : int
+	is_periodicity_t : bool
+	is_periodicity_a : bool
+	angle_stator_shift : float
+	angle_rotor_shift : float
+	logger_name : str
+	Slice_enforced : SliceModel
+	Nslices_enforced : int
+	type_distribution_enforced : str
+	is_current_harm : bool
+	T_mag : float
+	is_periodicity_rotor : bool
+	run()
+	comp_axes()
+	get_slice_model()
+	comp_I_mag()
+}
+class Mode{
+	nat_freq : float
+	order_circ : int
+	order_long : int
+	plot()
+	plot_animated()
+	get_shape_xyz()
+	get_shape_pol()
+}
+class OP{
+	N0 : float
+	felec : float
+	Tem_av_ref : float
+	Pem_av_ref : float
+	Pem_av_in : float
+	efficiency : float
+	get_machine_from_parent()
+	get_OP_array()
+}
+class OPMatrix{
+	N0 : ndarray
+	Id_ref : ndarray
+	Iq_ref : ndarray
+	Ud_ref : ndarray
+	Uq_ref : ndarray
+	Tem_av_ref : ndarray
+	Pem_av_ref : ndarray
+	slip_ref : ndarray
+	is_output_power : bool
+	If_ref : ndarray
+	col_names : list
+	get_N_OP()
+	get_OP()
+	get_OP_list()
+	get_OP_array()
+	set_OP_array()
+	has_Pem()
+	has_Tem()
+	has_slip()
+}
+class OPdq{
+	Id_ref : float
+	Iq_ref : float
+	Ud_ref : float
+	Uq_ref : float
+	get_Id_Iq()
+	get_felec()
+	get_N0()
+	get_slip()
+	get_Ud_Uq()
+	set_Id_Iq()
+	get_I0_Phi0()
+	set_Ud_Uq()
+	set_I0_Phi0()
+	get_U0_UPhi0()
+	set_U0_UPhi0()
+}
+class OPdqf{
+	If_ref : float
+}
+class OPslip{
+	I0_ref : float
+	IPhi0_ref : float
+	slip_ref : float
+	U0_ref : float
+	UPhi0_ref : float
+	get_Id_Iq()
+	get_felec()
+	get_N0()
+	get_Ud_Uq()
+	set_Id_Iq()
+	get_I0_Phi0()
+	get_slip()
+	set_I0_Phi0()
+	set_Ud_Uq()
+	get_U0_UPhi0()
+	set_U0_UPhi0()
+}
+class ParamExplorer{
+	name : str
+	symbol : str
+	unit : str
+	setter : function
+	getter : function
+	_set_setter()
+	_set_getter()
+	get_desc()
+}
+class ParamExplorerInterval{
+	min_value : float
+	max_value : float
+	N : int
+	type_value_gen : int
+	type_value : int
+	get_value()
+	get_min()
+	get_max()
+	get_N()
+}
+class ParamExplorerSet{
+	value : list~~
+	get_value()
+	get_min()
+	get_max()
+	get_N()
+}
+class Simu1{
+	elec : Electrical
+	mag : Magnetics
+	struct : Structural
+	force : Force
+	loss : Loss
+	run_single()
+}
+class Simulation{
+	name : str
+	desc : str
+	machine : Machine
+	input : Input
+	logger_name : str
+	var_simu : VarSimu
+	postproc_list : list~Post~
+	index : int
+	path_result : str
+	layer : int
+	layer_log_warn : int
+	run()
+	init_logger()
+	get_var_load()
+	get_OP_array()
+}
+class SliceModel{
+	type_distribution : str
+	Nslices : int
+	z_list : list
+	angle_rotor : ndarray
+	angle_stator : ndarray
+	L : float
+	is_step : bool
+	is_skew : bool
+	get_distribution()
+	get_data()
+	plot()
+}
+class StructElmer{
+	Kmesh_fineness : float
+	path_name : str
+	FEA_dict_enforced : dict
+	is_get_mesh : bool
+	is_save_FEA : bool
+	transform_list : list
+	include_magnets : bool
+	run()
+	get_meshsolution()
+	get_path_save_fea()
+	solve_FEA()
+	gen_mesh()
+	gen_case()
+	process_mesh()
+}
+class Structural{
+	logger_name : str
+	run()
+	comp_axes()
+}
+class VarLoad{
+	OP_matrix : OPMatrix
+	get_ref_simu_index()
+	get_OP_array()
+	set_OP_array()
+	_set_OP_matrix()
+}
+class VarLoadCurrent{
+	generate_simulation_list()
+	get_elec_datakeeper()
+	get_input_list()
+}
+class VarLoadVoltage{
+	generate_simulation_list()
+	get_elec_datakeeper()
+	get_input_list()
+}
+class VarOpti{
+	objective_list : list~OptiObjective~
+	constraint_list : list~OptiConstraint~
+	solver : OptiSolver
+	check()
+	run()
+	get_full_solver()
+}
+class VarParam{
+	paramexplorer_list : list~ParamExplorer~
+}
+class VarParamSweep{
+	check_param()
+	generate_simulation_list()
+	get_simu_number()
+}
+class VarSimu{
+	name : str
+	desc : str
+	datakeeper_list : list~DataKeeper~
+	is_keep_all_output : bool
+	stop_if_error : bool
+	var_simu : VarSimu
+	nb_simu : int
+	is_reuse_femm_file : bool
+	postproc_list : list~Post~
+	pre_keeper_postproc_list : list~Post~
+	post_keeper_postproc_list : list~Post~
+	is_reuse_LUT : bool
+	run()
+	set_reused_data()
+	check_param()
+	generate_simulation_list()
+	gen_datakeeper_list()
+	get_elec_datakeeper()
+	get_mag_datakeeper()
+	get_force_datakeeper()
+	get_ref_simu_index()
+}
+Drive  <|--> DriveWave
+EEC  <|--> EEC_LSRPM
+EEC  <|--> EEC_PMSM
+EEC  <|--> EEC_SCIM
+EEC *--> Magnetics
+EEC *--> OP
+ElecLUTdq *--> Simulation
+Electrical  <|--> ElecLUTdq
+Electrical *--> EEC
+Force  <|--> ForceMT
+Force  <|--> ForceTensor
+Input  <|--> InputForce
+Input  <|--> InputVoltage
+Input *--> OP
+InputCurrent  <|--> InputFlux
+InputVoltage  <|--> InputCurrent
+Loss  <|--> LossFEA
+Loss *--> LossModel
+LossModel  <|--> LossModelBertotti
+LossModel  <|--> LossModelSteinmetz
+LossModel  <|--> LossModelWinding
+MagElmer *--> DXFImport
+MagFEMM *--> DXFImport
+Magnetics  <|--> MagElmer
+Magnetics  <|--> MagFEMM
+Magnetics *--> SliceModel
+OP  <|--> OPdq
+OP  <|--> OPslip
+OPdq  <|--> OPdqf
+ParamExplorer  <|--> ParamExplorerInterval
+ParamExplorer  <|--> ParamExplorerSet
+Simu1 *--> Electrical
+Simu1 *--> Force
+Simu1 *--> Loss
+Simu1 *--> Magnetics
+Simu1 *--> Structural
+Simulation  <|--> Simu1
+Simulation *--> Input
+Simulation *--> VarSimu
+Structural  <|--> StructElmer
+VarLoad  <|--> VarLoadCurrent
+VarLoad  <|--> VarLoadVoltage
+VarLoad *--> OPMatrix
+VarParam  <|--> VarOpti
+VarParam  <|--> VarParamSweep
+VarParam *--> ParamExplorer
+VarSimu  <|--> VarLoad
+VarSimu  <|--> VarParam
+VarSimu *--> DataKeeper

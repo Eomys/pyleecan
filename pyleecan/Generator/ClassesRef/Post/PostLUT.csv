@@ -1,2 +1,6 @@
-Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
-is_save_LUT,,True to save LUT in PostLUT,,bool,1,,,,Post,PostMethod,run,VERSION,1,Class to generate a LUT after the corresponding simulation
+Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,as_dict Type
+is_save_LUT,,True to save LUT in PostLUT,,bool,1,,
+file_name,,File name of the file created if is_save_LUT is True,,str,LUT,,
+,
+Package,Inherit,Methods,Constant Name,Constant Value,Class description
+Post,PostMethod,run,VERSION,1,Class to generate a LUT after the corresponding simulation

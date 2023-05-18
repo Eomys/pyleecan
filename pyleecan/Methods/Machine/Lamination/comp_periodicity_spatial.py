@@ -38,7 +38,7 @@ def comp_periodicity_spatial(self):
             per_a = gcd(per_a, nb_list[ii])
 
         nb_list.pop(0)
-        is_antiper_a = all(nb_list / per_a % 2 == 0)
+        is_antiper_a = all([nb / per_a % 2 == 0 for nb in nb_list])
 
         # Account for duct periodicity
         per_a, is_antiper_a = self.comp_periodicity_duct_spatial(per_a, is_antiper_a)

@@ -13,7 +13,7 @@ class Gen_PCondType12(Ui_PCondType12):
         Ui_PCondType12.setupUi(self, PCondType12)
         # Setup of in_Nwpc1
         txt = self.tr(
-            u"""cf schematics, winding number of random wires (strands) in parallel per coil"""
+            u"""<qt><nobr>number of strands in parallel per conductor</nobr></qt>"""
         )
         self.in_Nwpc1.setWhatsThis(txt)
         self.in_Nwpc1.setToolTip(txt)
@@ -22,25 +22,29 @@ class Gen_PCondType12(Ui_PCondType12):
         self.si_Nwpc1.setMinimum(1)
         self.si_Nwpc1.setMaximum(999999)
         txt = self.tr(
-            u"""cf schematics, winding number of random wires (strands) in parallel per coil"""
+            u"""<qt><nobr>number of strands in parallel per conductor</nobr></qt>"""
         )
         self.si_Nwpc1.setWhatsThis(txt)
         self.si_Nwpc1.setToolTip(txt)
 
         # Setup of in_Wwire
-        txt = self.tr(u"""cf schematics, single wire diameter without insulation [m]""")
+        txt = self.tr(
+            u"""<qt><nobr>cf schematics, single strand diameter without</nobr> insulation</qt>"""
+        )
         self.in_Wwire.setWhatsThis(txt)
         self.in_Wwire.setToolTip(txt)
 
         # Setup of lf_Wwire
         self.lf_Wwire.validator().setBottom(0)
-        txt = self.tr(u"""cf schematics, single wire diameter without insulation [m]""")
+        txt = self.tr(
+            u"""<qt><nobr>cf schematics, single strand diameter without</nobr> insulation</qt>"""
+        )
         self.lf_Wwire.setWhatsThis(txt)
         self.lf_Wwire.setToolTip(txt)
 
         # Setup of in_Wins_wire
         txt = self.tr(
-            u"""(advanced) cf schematics, winding strand insulation thickness [m]"""
+            u"""<qt><nobr>(advanced) cf schematics, winding strand insulation</nobr> thickness</qt>"""
         )
         self.in_Wins_wire.setWhatsThis(txt)
         self.in_Wins_wire.setToolTip(txt)
@@ -48,14 +52,14 @@ class Gen_PCondType12(Ui_PCondType12):
         # Setup of lf_Wins_wire
         self.lf_Wins_wire.validator().setBottom(0)
         txt = self.tr(
-            u"""(advanced) cf schematics, winding strand insulation thickness [m]"""
+            u"""<qt><nobr>(advanced) cf schematics, winding strand insulation</nobr> thickness</qt>"""
         )
         self.lf_Wins_wire.setWhatsThis(txt)
         self.lf_Wins_wire.setToolTip(txt)
 
         # Setup of in_Wins_cond
         txt = self.tr(
-            u"""(advanced) cf schematics, winding coil insulation diameter [m]"""
+            u"""<qt><nobr>(advanced) cf schematics, conductor diameter</nobr></qt>"""
         )
         self.in_Wins_cond.setWhatsThis(txt)
         self.in_Wins_cond.setToolTip(txt)
@@ -63,7 +67,7 @@ class Gen_PCondType12(Ui_PCondType12):
         # Setup of lf_Wins_cond
         self.lf_Wins_cond.validator().setBottom(0)
         txt = self.tr(
-            u"""(advanced) cf schematics, winding coil insulation diameter [m]"""
+            u"""<qt><nobr>(advanced) cf schematics, conductor diameter</nobr></qt>"""
         )
         self.lf_Wins_cond.setWhatsThis(txt)
         self.lf_Wins_cond.setToolTip(txt)

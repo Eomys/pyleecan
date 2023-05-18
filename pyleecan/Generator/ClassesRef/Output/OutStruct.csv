@@ -1,5 +1,8 @@
-Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
-axes_dict,,Dict containing axes data used for Structural,,{SciDataTool.Classes.DataND.Data},None,,,,Output,,,VERSION,1,Gather the structural module outputs
-logger_name,-,Name of the logger to use,0,str,Pyleecan.Structural,,,,,,,,,
-meshsolution,,FEA software mesh and solution,,MeshSolution,,,,,,,,,,
-FEA_dict,,dictionary containing the main FEA parameter,,dict,None,,,,,,,,,
+Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,as_dict Type
+axes_dict,,Dict containing axes data used for Structural,,{SciDataTool.Classes.DataND.Data},None,,
+logger_name,-,Name of the logger to use,0,str,Pyleecan.Structural,,
+meshsolution,,FEA software mesh and solution,,MeshSolution,,,
+FEA_dict,,dictionary containing the main FEA parameter,,dict,None,,
+,
+Package,Inherit,Methods,Constant Name,Constant Value,Class description
+Output,,,VERSION,1,Gather the structural module outputs

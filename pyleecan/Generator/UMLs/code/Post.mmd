@@ -1,0 +1,27 @@
+classDiagram
+direction TB
+class Post{
+}
+class PostFunction{
+	run : function
+}
+class PostLUT{
+	is_save_LUT : bool
+	run()
+}
+class PostMethod{
+	run()
+}
+class PostPlot{
+	method : str
+	name : str
+	param_list : list
+	param_dict : dict
+	save_format : str
+	quantity : str
+	run()
+}
+Post  <|--> PostFunction
+Post  <|--> PostMethod
+PostMethod  <|--> PostLUT
+PostMethod  <|--> PostPlot

@@ -1,0 +1,16 @@
+Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,as_dict Type
+name,,Name of the loss,,str,,,
+loss_density,,Loss density ,,ndarray,None,,
+coeff_dict,,dict of coefficients to compute the scalar value with respcet to frequency,,dict,None,,
+group,,group to which the loss applies,,str,None,,
+loss_model,,The name of the loss model used to compute the loss stored in this output,,str,None,,
+scalar_value,,To store the value of get_loss_scalar (for scalar losses or with coeff_dict cleaned),,float,None,,
+,
+Package,Inherit,Methods,Constant Name,Constant Value,Class description
+Output,,get_mesh_solution,VERSION,1,Gather the loss module outputs
+,,get_loss_scalar,,,
+,,__add__,,,
+,,__radd__,,,
+,,__sub__,,,
+,,__rsub__,,,
+,,plot_mesh,,,

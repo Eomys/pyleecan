@@ -1,8 +1,14 @@
-Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
-D0,m,Hole height,0,float,1,0,,,Slot,Hole,build_geometry,VERSION,1,Trapezoidal axial ventilation ducts
-H0,m,Radius of the hole bottom,0,float,1,0,,,,,check,,,
-W1,m,Hole small basis,0,float,1,0,,,,,comp_radius,,,
-W2,m,Hole large basis,0,float,1,0,,,,,comp_surface,,,
-,,,,,,,,,,,get_center,,,
-,,,,,,,,,,,_comp_point_coordinate,,,
-,,,,,,,,,,,plot_schematics,,,
+Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,as_dict Type
+D0,m,Hole height,0,float,1,0,
+H0,m,Radius of the hole bottom,0,float,1,0,
+W1,m,Hole small basis,0,float,1,0,
+W2,m,Hole large basis,0,float,1,0,
+,
+Package,Inherit,Methods,Constant Name,Constant Value,Class description
+Slot,Hole,build_geometry,VERSION,1,Trapezoidal axial ventilation ducts
+,,check,,,
+,,comp_radius,,,
+,,comp_surface,,,
+,,get_center,,,
+,,_comp_point_coordinate,,,
+,,plot_schematics,,,

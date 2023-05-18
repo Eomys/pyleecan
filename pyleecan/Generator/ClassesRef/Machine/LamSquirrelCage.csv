@@ -1,14 +1,19 @@
-Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
-Hscr,m,short circuit ring section radial height [m],0,float,3.00E-02,0,,,Machine,LamSlotWind,build_geometry,VERSION,1,squirrel cages lamination
-Lscr,m,short circuit ring section axial length,0,float,1.50E-02,0,,,,,check,,,
-ring_mat,,Material of the Rotor short circuit ring,,Material,,,,,,,comp_length_ring,,,
-,,,,,,,,,,,plot,,,
-,,,,,,,,,,,comp_number_phase_eq,,,
-,,,,,,,,,,,comp_surface_ring,,,
-,,,,,,,,,,,comp_resistance_wind,,,
-,,,,,,,,,,,get_name_phase,,,
-,,,,,,,,,,,comp_angle_d_axis,,,
-,,,,,,,,,,,comp_periodicity_spatial,,,
-,,,,,,,,,,,comp_masses,,,
-,,,,,,,,,,,plot_schematics_scr,,,
-,,,,,,,,,,,plot_side,,,
+Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,as_dict Type
+Hscr,m,short circuit ring section radial height [m],0,float,3.00E-02,0,
+Lscr,m,short circuit ring section axial length,0,float,1.50E-02,0,
+ring_mat,,Material of the Rotor short circuit ring,,Material,,,
+,
+Package,Inherit,Methods,Constant Name,Constant Value,Class description
+Machine,LamSlotWind,build_geometry,VERSION,1,squirrel cages lamination
+,,check,,,
+,,comp_length_ring,,,
+,,plot,,,
+,,comp_number_phase_eq,,,
+,,comp_surface_ring,,,
+,,comp_resistance_wind,,,
+,,get_name_phase,,,
+,,comp_angle_d_axis,,,
+,,comp_periodicity_spatial,,,
+,,comp_masses,,,
+,,plot_schematics_scr,,,
+,,plot_side,,,

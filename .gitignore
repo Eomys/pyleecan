@@ -25,4 +25,4 @@ run_GUI_internal.py
 /.spyproject/config/workspace.ini
 /build
 /dist
-
+node_modules

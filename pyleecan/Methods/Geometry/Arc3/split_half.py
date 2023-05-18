@@ -1,5 +1,6 @@
-from ....Classes.Arc2 import Arc2
 from numpy import pi
+
+from ....Classes.Arc2 import Arc2
 
 
 def split_half(self, is_begin=True):

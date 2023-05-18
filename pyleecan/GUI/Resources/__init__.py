@@ -3,6 +3,9 @@
 pixmap_dict = {
     "End_Random": ":/images/images/MachineSetup/WindParam/End_Random.PNG",
     "End_Preform": ":/images/images/MachineSetup/WindParam/End_Preform.PNG",
+    "Dim_Ext_Rotor_mag": ":/images/images/MachineSetup/MachineDimension/Dimension_Stator_Rotor_mag.png",
+    "Dim_In_Rotor_No_Shaft_mag": ":/images/images/MachineSetup/MachineDimension/Dimension_Rotor_Stator_mag.png",
+    "Dim_In_Rotor_Shaft_mag": ":/images/images/MachineSetup/MachineDimension/Dimension_Shaft_Rotor_Stator_mag.png",
     "Dim_Ext_Rotor": ":/images/images/MachineSetup/MachineDimension/Dimension_Stator_Rotor.png",
     "Dim_In_Rotor_No_Shaft": ":/images/images/MachineSetup/MachineDimension/Dimension_Rotor_Stator.png",
     "Dim_In_Rotor_Shaft": ":/images/images/MachineSetup/MachineDimension/Dimension_Shaft_Rotor_Stator.png",
@@ -17,4 +20,8 @@ pixmap_dict = {
     "check": ":/images/images/icon/check.png",
     "search": ":/images/images/icon/search.png",
     "soft_icon": ":/images/images/icon/pyleecan_64.png",
+    "Cond11": ":/images/images/MachineSetup/WindParam/CondType11.png",
+    "Cond11_single": ":/images/images/MachineSetup/WindParam/CondType11_single.png",
+    "Cond12": ":/images/images/MachineSetup/WindParam/CondType12.png",
+    "Cond12_single": ":/images/images/MachineSetup/WindParam/CondType12_single.png",
 }

@@ -1,6 +1,12 @@
-Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
-connectivity,,Matrix of connectivity for one element type,,ndarray,,,,,Mesh,,add_cell,VERSION,1,Define the connectivity under matricial format containing one type of element (example: only triangles with 3 nodes). 
-nb_cell,,Total number of elements,,int,0,,,,,,get_connectivity,,,
-nb_node_per_cell,,Define the number of node per cell,,int,0,,,,,,get_node2cell,,,
-indice,,Element indices,,ndarray,,,,,,,is_exist,,,
-interpolation,,Define FEA interpolation,,Interpolation,,,,,,,,,,
+Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,as_dict Type
+connectivity,,Matrix of connectivity for one element type,,ndarray,,,
+nb_cell,,Total number of elements,,int,0,,
+nb_node_per_cell,,Define the number of node per cell,,int,0,,
+indice,,Element indices,,ndarray,,,
+interpolation,,Define FEA interpolation,,Interpolation,,,
+,
+Package,Inherit,Methods,Constant Name,Constant Value,Class description
+Mesh,,add_cell,VERSION,1,Define the connectivity under matricial format containing one type of element (example: only triangles with 3 nodes). 
+,,get_connectivity,,,
+,,get_node2cell,,,
+,,is_exist,,,

@@ -12,7 +12,9 @@ except ImportError:  # Install setuptools if needed
 
 import platform
 
-system("{} -m pip install git+https://gitlab.com/CedMrnl/swat-em.git".format(executable))
+system(
+    "{} -m pip install git+https://gitlab.com/CedMrnl/swat-em.git".format(executable)
+)
 
 # /!\ Increase the number before a release
 # See https://www.python.org/dev/peps/pep-0440/
@@ -23,22 +25,22 @@ system("{} -m pip install git+https://gitlab.com/CedMrnl/swat-em.git".format(exe
 # Release 1.1.0 : 1.1.0
 # First post release of the release 1.1.0 : 1.1.0.post1
 
-PYLEECAN_VERSION = "1.4.2"
+PYLEECAN_VERSION = "1.5.1"
 
 
 with open("README.md", "r") as fh:
     long_description = fh.read()
 
-python_requires = ">= 3.6"
+python_requires = ">= 3.6, <3.11"
 
 # Pyleecan main dependancies
 install_requires = [
     "cloudpickle>=1.3.0",
     "ezdxf==0.14.2",
     "h5py>=3.2.1",
-    "matplotlib>=3.3.2",
+    "matplotlib>=3.3.2,<=3.3.4",
     "meshio>=4.0.15,<=4.4.6",
-    "numpy>1.19.5",
+    "numpy>1.19.5,<=1.23.1",
     "pandas>=1.0.3",
     "pyfemm>=0.1.3",
     "PySide2>=5.15.2",

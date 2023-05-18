@@ -19,6 +19,7 @@ To achieve all of that, Pyleecan is **open source** with a very permissive licen
 
 ## Getting Started
 The procedure to install and use Pyleecan is detailed on [pyleecan website](https://www.pyleecan.org/get.pyleecan.html)
+Warning: Pyleecan is not yet compatible with Python 3.11 due to PySide2. We plan to update pyleecan to 3.11 when we will have the time to do so. 
 
 ## Origin and Current Status of the Project
 [EOMYS ENGINEERING](https://eomys.com/?lang=en) initiated this open-source project in 2018 for the study of electric motors. The project is now backed by [Green Forge Coop](https://www.linkedin.com/company/greenforgecoop/) non profit organization, who also supports the development of [Mosqito](https://github.com/Eomys/MoSQITo) for sound quality and [SciDataTool](https://github.com/Eomys/SciDataTool) for efficient scientific data exploitation. 

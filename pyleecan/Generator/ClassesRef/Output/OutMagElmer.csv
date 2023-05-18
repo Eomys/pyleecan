@@ -1,2 +1,5 @@
-Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
-FEA_dict,,dictionary containing the main FEA parameters,,dict,None,,,,Output,OutInternal,clean,VERSION,1,Class to store outputs related to MagElmer magnetic model
+Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,as_dict Type
+FEA_dict,,dictionary containing the main FEA parameters,,dict,None,,
+,
+Package,Inherit,Methods,Constant Name,Constant Value,Class description
+Output,OutInternal,clean,VERSION,1,Class to store outputs related to MagElmer magnetic model

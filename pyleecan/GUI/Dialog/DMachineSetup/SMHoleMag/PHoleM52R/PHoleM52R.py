@@ -11,6 +11,7 @@ from ......GUI.Dialog.DMachineSetup.SMHoleMag.PHoleM52R.Gen_PHoleM52R import (
     Gen_PHoleM52R,
 )
 from ......Methods.Slot.Slot import SlotCheckError
+from ......GUI.Dialog.DMachineSetup.SMHoleMag import DEFAULT_MAG_MAT
 
 
 class PHoleM52R(Gen_PHoleM52R, QWidget):
@@ -55,7 +56,7 @@ class PHoleM52R(Gen_PHoleM52R, QWidget):
         self.w_mat_0.is_hide_button = True
 
         self.w_mat_1.setText("magnet_0")
-        self.w_mat_1.def_mat = "Magnet1"
+        self.w_mat_1.def_mat = DEFAULT_MAG_MAT
         self.w_mat_1.is_hide_button = True
 
         # Set unit name (m ou mm)

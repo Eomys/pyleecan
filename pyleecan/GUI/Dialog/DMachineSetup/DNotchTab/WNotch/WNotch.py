@@ -1,5 +1,5 @@
-from PySide2.QtCore import Signal
-from PySide2.QtWidgets import QWidget, QMessageBox
+from PySide2.QtCore import Signal, Qt
+from PySide2.QtWidgets import QWidget, QMessageBox, QApplication
 from numpy import pi
 from logging import getLogger
 
@@ -12,6 +12,7 @@ from ......GUI.Dialog.DMachineSetup.SMSlot.PMSlot10.PMSlot10 import PMSlot10
 from ......GUI.Dialog.DMachineSetup.SMSlot.PMSlot11.PMSlot11 import PMSlot11
 from ......GUI.Dialog.DMachineSetup.SMSlot.WSlotCirc.WSlotCirc import WSlotCirc
 from ......GUI.Dialog.DMachineSetup.DNotchTab.WNotch.Ui_WNotch import Ui_WNotch
+from ......Functions.Plot.set_plot_gui_icon import set_plot_gui_icon
 
 
 class WNotch(Ui_WNotch, QWidget):
@@ -49,6 +50,7 @@ class WNotch(Ui_WNotch, QWidget):
         self.lam_notch.slot = self.obj.notch[index].notch_shape
         self.index = index
         self.parent = parent
+        self.is_test = False  # To skip show fig in tests
 
         # Adding tooltip + setting the min and max value for si_Zn
         txt = self.tr("""notch number""")
@@ -127,6 +129,7 @@ class WNotch(Ui_WNotch, QWidget):
         else:
             # No error in the definition of the notche => the preview should be generated
             self.obj.plot_preview_notch(index=self.index)
+            set_plot_gui_icon()
 
     def set_alpha(self):
         """Set alpha value according to widgets"""
@@ -200,6 +203,7 @@ class WNotch(Ui_WNotch, QWidget):
     def set_Zs_UD(self):
         self.si_Zn.blockSignals(True)
         self.si_Zn.setValue(self.w_notch.slot.Zs)
+        self.obj.notch[self.index].notch_shape = self.w_notch.slot  # Update pointer
         self.si_Zn.blockSignals(False)
 
     def check(self):

@@ -1,0 +1,9 @@
+Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,as_dict Type
+k_hy,W/kg,Hysteresis loss coefficient,0,float,None,,
+k_ed,W/kg,Eddy current loss coefficient,0,float,None,,
+alpha_f,-,Hysteresis loss power coefficient for the frequency,0,float,None,,
+alpha_B,-,Hysteresis loss power coefficient for the flux density magnitude,0,float,None,,
+,
+Package,Inherit,Methods,Constant Name,Constant Value,Class description
+Loss,LossModel,comp_coeff,VERSION,1,Steinmetz Loss Model Class
+,,comp_loss,,,

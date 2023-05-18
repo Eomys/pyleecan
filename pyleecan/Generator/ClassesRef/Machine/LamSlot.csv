@@ -1,14 +1,17 @@
-Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
-slot,,lamination Slot,,Slot,,,,,Machine,Lamination,check,VERSION,1,Lamination with empty Slot
-,,,,,,,,,,,comp_radius_mec,,,
-,,,,,,,,,,,comp_surfaces,,,
-,,,,,,,,,,,get_pole_pair_number,,,
-,,,,,,,,,,,plot,,,
-,,,,,,,,,,,comp_height_yoke,,,
-,,,,,,,,,,,get_Zs,,,
-,,,,,,,,,,,set_pole_pair_number,,,
-,,,,,,,,,,,comp_angle_d_axis,,,
-,,,,,,,,,,,get_surfaces_closing,,,
-,,,,,,,,,,,has_magnet,,,
-,,,,,,,,,,,get_slot_desc_list,,,
-,,,,,,,,,,,has_slot,,,
+Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,as_dict Type
+slot,,lamination Slot,,Slot,,,
+,
+Package,Inherit,Methods,Constant Name,Constant Value,Class description
+Machine,Lamination,check,VERSION,1,Lamination with empty Slot
+,,comp_radius_mec,,,
+,,comp_surfaces,,,
+,,get_pole_pair_number,,,
+,,plot,,,
+,,comp_height_yoke,,,
+,,get_Zs,,,
+,,set_pole_pair_number,,,
+,,comp_angle_d_axis,,,
+,,get_surfaces_closing,,,
+,,has_magnet,,,
+,,get_slot_desc_list,,,
+,,has_slot,,,

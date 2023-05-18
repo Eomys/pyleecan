@@ -1,6 +1,6 @@
-from numpy import zeros, ones, dot, squeeze
+from numpy import zeros, ones, dot, squeeze, sqrt, arctan, pi, exp
 
-from SciDataTool import DataTime
+from SciDataTool import DataTime, Data1D, DataFreq
 
 from ....Classes.OPdq import OPdq
 
@@ -72,8 +72,8 @@ def comp_mmf_unit(self, Na=None, Nt=None, felec=1, current_dir=None, phase_dir=N
     axes_dict = input.comp_axes(
         axes_list=["time", "angle", "phase_S", "phase_R"],
         machine=machine,
-        is_periodicity_t=bool(Nt > 1),
-        is_periodicity_a=bool(Na > 1),
+        is_periodicity_t=False,
+        is_periodicity_a=False,
         is_antiper_t=False,
         is_antiper_a=False,
     )
@@ -87,9 +87,55 @@ def comp_mmf_unit(self, Na=None, Nt=None, felec=1, current_dir=None, phase_dir=N
     angle_elec = axes_dict["time"].get_values(
         is_oneperiod=True, normalization="angle_elec"
     )
-    Idq = zeros((angle_elec.size, 3))
-    Idq[:, 0] = ones(angle_elec.size)
-    I = dqh2n(Idq, angle_elec, n=qs, is_n_rms=False, phase_dir=phase_dir)
+
+    if qs == 6 and self.winding.dual_tri_phase_shift is not None:
+        Is_val = zeros((1, 6), dtype=complex)
+        Id = 1
+        Iq = 0
+        I0 = sqrt(Id ** 2 + Iq ** 2) * sqrt(2)
+        phi0 = 0
+        if not self.winding.is_wye:
+            I0 = I0 / sqrt(3)
+            phi0 = phi0 + pi / 6
+        Is_val[0, 0] = I0 * exp(1j * phi0)
+        Is_val[0, 1] = I0 * exp(1j * (phi0 + self.winding.dual_tri_phase_shift))
+        Is_val[0, 2] = I0 * exp(1j * (phi0 + 2 * pi / 3))
+        Is_val[0, 3] = I0 * exp(
+            1j * (phi0 + 2 * pi / 3 + self.winding.dual_tri_phase_shift)
+        )
+        Is_val[0, 4] = I0 * exp(1j * (phi0 + 4 * pi / 3))
+        Is_val[0, 5] = I0 * exp(
+            1j * (phi0 + 4 * pi / 3 + self.winding.dual_tri_phase_shift)
+        )
+        # Create Data object
+        Phases = Data1D(
+            name="phase",
+            unit="",
+            values=["A1", "A2", "B1", "B2", "C1", "C2"],
+            is_components=True,
+        )
+        Freqs = Data1D(
+            values=[felec],
+            unit="Hz",
+            name="freqs",
+            normalizations=axes_dict["time"].normalizations.copy(),
+        )
+        Is = DataFreq(
+            name="Stator current",
+            unit="A",
+            symbol="I_s",
+            axes=[Freqs, Phases],
+            values=Is_val,
+        )
+        I = Is.get_along(
+            "time=axis_data",
+            "phase",
+            axis_data={"time": axes_dict["time"].get_values(is_oneperiod=True)},
+        )["I_s"]
+    else:
+        Idq = zeros((angle_elec.size, 3))
+        Idq[:, 0] = ones(angle_elec.size)
+        I = dqh2n(Idq, angle_elec, n=qs, is_n_rms=False, phase_dir=phase_dir)
 
     # Compute unit mmf
     mmf_u = squeeze(dot(I, wf))

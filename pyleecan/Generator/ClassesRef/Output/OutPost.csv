@@ -1,3 +1,6 @@
-Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
-legend_name,-,Name to use in the legend in case of comparison,,str,,,,,Output,,,VERSION,1,Gather the parameters for the post-processings
-line_color,-,Color to use in case of comparison,,str,,,,,,,,,,
+Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,as_dict Type
+legend_name,-,Name to use in the legend in case of comparison,,str,,,
+line_color,-,Color to use in case of comparison,,str,,,
+,
+Package,Inherit,Methods,Constant Name,Constant Value,Class description
+Output,,,VERSION,1,Gather the parameters for the post-processings

@@ -123,7 +123,7 @@ def test_gmsh_mesh_dict():
     fig = plt.gcf()
     fig.savefig(join(save_path, "fig_10_ref_lamination.png"))
     fig.savefig(join(save_path, "fig_10_ref_lamination.svg"), format="svg")
-    assert len(fig.axes[0].patches) == 2
+    assert len(fig.axes[0].patches) == 4
 
     # Definition of the number of each element on each line
     mesh_dict = {
@@ -268,7 +268,7 @@ def test_MachineUD():
     fig = plt.gcf()
     fig.savefig(join(save_path, "fig_12_MachineUD.png"))
     fig.savefig(join(save_path, "fig_12_MachineUD.svg"), format="svg")
-    assert len(fig.axes[0].patches) == 57
+    assert len(fig.axes[0].patches) == 61
 
     machine.frame = None
     machine.name = None
@@ -277,7 +277,7 @@ def test_MachineUD():
     fig = plt.gcf()
     fig.savefig(join(save_path, "fig_12_MachineUD_no_frame_no_name.png"))
     fig.savefig(join(save_path, "fig_12_MachineUD_no_frame_no_name.svg"), format="svg")
-    assert len(fig.axes[0].patches) == 57
+    assert len(fig.axes[0].patches) == 61
 
 
 def test_SlotMulti_rotor():
@@ -406,7 +406,7 @@ def test_SlotUD():
     # Plot, check and save
     machine.plot(is_show_fig=False, is_clean_plot=True)
     fig = plt.gcf()
-    assert len(fig.axes[0].patches) == 83
+    assert len(fig.axes[0].patches) == 85
     fig.savefig(join(save_path, "fig_14_SlotUD.png"))
     fig.savefig(join(save_path, "fig_14_SlotUD.svg"), format="svg")
 
@@ -453,7 +453,7 @@ def test_WindingUD():
     fig = plt.gcf()
     fig.savefig(join(save_path, "fig_16_WindingUD.png"))
     fig.savefig(join(save_path, "fig_16_WindingUD.svg"), format="svg")
-    assert len(fig.axes[0].patches) == 73
+    assert len(fig.axes[0].patches) == 77
 
 
 def test_WindingUD_layer():
@@ -490,7 +490,7 @@ def test_WindingUD_layer():
     fig = plt.gcf()
     fig.savefig(join(save_path, "fig_17_WindingUD_layer.png"))
     fig.savefig(join(save_path, "fig_17_WindingUD_layer.svg"), format="svg")
-    assert len(fig.axes[0].patches) == 32
+    assert len(fig.axes[0].patches) == 34
 
 
 def test_BoreFlower(is_show_fig=False):
@@ -848,8 +848,11 @@ def test_Optimization_problem():
 
 
 if __name__ == "__main__":
-    test_WindingUD_layer()
+    # test_WindingUD_layer()
     # test_FEMM_sym()
+    # test_gmsh_mesh_dict()
+    # test_SlotMulti_sym()
+    test_MachineUD()
     # test_WindingUD()
     # test_ecc_FEMM()
     # test_WindingUD_layer()

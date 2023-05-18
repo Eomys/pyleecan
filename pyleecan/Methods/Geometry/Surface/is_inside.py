@@ -1,4 +1,5 @@
-# -*- coding: utf-8 -*
+import matplotlib.pyplot as plt
+from numpy import array
 
 
 def is_inside(self, Z, if_online=False):
@@ -55,15 +56,19 @@ def is_inside(self, Z, if_online=False):
             else:
                 # The point is below Z
                 is_bot = True
+        # If the point selected is inside the branch on the y-axis
+        if (point.imag > Z.imag - eps) and (point.imag < Z.imag + eps):
+            if point.real - Z.real > 0:
+                # The point is on the left of Z
+                is_left = True
+            else:
+                # The point is on the right of Z
+                is_right = True
 
-        else:
-            # If the point selected is inside the branch on the y-axis
-            if (point.imag > Z.imag - eps) and (point.imag < Z.imag + eps):
-                if point.real - Z.real > 0:
-                    # The point is on the left of Z
-                    is_left = True
-                else:
-                    # The point is on the right of Z
-                    is_right = True
+    # Plot for debug
+    # fig, ax = self.plot()
+    # ax.plot(Z.real, Z.imag, "xr")
+    # for point in pointcloud:
+    #     ax.plot(point.real, point.imag, "xg")
 
     return is_top and is_left and is_right and is_bot

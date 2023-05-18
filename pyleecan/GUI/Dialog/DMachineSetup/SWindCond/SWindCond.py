@@ -2,7 +2,7 @@
 
 
 from PySide2.QtCore import Signal
-from PySide2.QtWidgets import QMessageBox, QWidget
+from PySide2.QtWidgets import QMessageBox, QWidget, QListView
 
 from .....Classes.CondType11 import CondType11
 from .....Classes.CondType12 import CondType12
@@ -51,25 +51,15 @@ class SWindCond(Ui_SWindCond, QWidget):
         # Fill the fields with the machine values (if they're filled)
         if self.is_stator:
             self.obj = machine.stator
-            self.w_mat_0.in_mat_type.setText(self.tr("mat_wind1: "))
         else:
             self.obj = machine.rotor
-            self.w_mat_0.in_mat_type.setText(self.tr("mat_wind2: "))
-
-        self.w_mat_0.def_mat = "Copper1"
-        self.w_mat_0.setWhatsThis("Conductor material")
-        self.w_mat_0.setToolTip("Conductor material")
-
-        self.w_mat_1.def_mat = "Insulator1"
-        self.w_mat_1.setText("ins_mat:")
-        self.w_mat_1.setWhatsThis("Insulator material")
-        self.w_mat_1.setToolTip("Insulator material")
 
         # Fill the combobox with the available conductor
         self.c_cond_type.clear()
+        listView = QListView(self.c_cond_type)
         for cond in name_list:
             self.c_cond_type.addItem(cond)
-
+        self.c_cond_type.setView(listView)
         # Set default conductor if conductor not set
         if (
             self.obj.winding.conductor is None
@@ -79,10 +69,6 @@ class SWindCond(Ui_SWindCond, QWidget):
             self.obj.winding.conductor = CondType11()
             self.obj.winding.conductor._set_None()
 
-        # Set conductor and insulator material
-        self.w_mat_0.update(self.obj.winding.conductor, "cond_mat", self.material_dict)
-        self.w_mat_1.update(self.obj.winding.conductor, "ins_mat", self.material_dict)
-
         # Initialize the needed conductor widget
         index = type_list.index(type(self.obj.winding.conductor))
         self.s_update(index)
@@ -90,8 +76,6 @@ class SWindCond(Ui_SWindCond, QWidget):
 
         # Connect the widget
         self.c_cond_type.currentIndexChanged.connect(self.s_set_cond_type)
-        self.w_mat_0.saveNeeded.connect(self.emit_save)
-        self.w_mat_1.saveNeeded.connect(self.emit_save)
 
     def emit_save(self):
         """Send a saveNeeded signal to the DMachineSetup"""
@@ -108,9 +92,15 @@ class SWindCond(Ui_SWindCond, QWidget):
             Index of the selected conductor type
         """
 
-        # Initialize the new one
+        # Initialize the new one and keep materials
+        cond_mat = self.obj.winding.conductor.cond_mat
+        ins_mat = self.obj.winding.conductor.ins_mat
+
         self.obj.winding.conductor = type_list[index]()
         self.obj.winding.conductor._set_None()
+
+        self.obj.winding.conductor.cond_mat = cond_mat
+        self.obj.winding.conductor.ins_mat = ins_mat
         # Update the GUI
         self.s_update(index)
 
@@ -129,7 +119,7 @@ class SWindCond(Ui_SWindCond, QWidget):
         """
         # Regenerate the pages with the new values
         self.w_cond.setParent(None)
-        self.w_cond = wid_list[index](self.obj)
+        self.w_cond = wid_list[index](self.obj, self.material_dict)
         self.w_cond.saveNeeded.connect(self.emit_save)
 
         # Refresh the GUI

@@ -1,5 +1,11 @@
-Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
-coordinate,,Nodes coordinates,,ndarray,,,,,Mesh,,add_node,VERSION,1,Class to define nodes coordinates and getter.
-nb_node,,Total number of nodes,,int,0,,,,,,get_coord,,,
-delta,,Sensibility for node searching,,float,1.00E-10,,,,,,is_exist,,,
-indice,,Nodes unique indices,,ndarray,,,,,,,get_indice,,,
+Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,as_dict Type
+coordinate,,Nodes coordinates,,ndarray,,,
+nb_node,,Total number of nodes,,int,0,,
+delta,,Sensibility for node searching,,float,1.00E-10,,
+indice,,Nodes unique indices,,ndarray,,,
+,
+Package,Inherit,Methods,Constant Name,Constant Value,Class description
+Mesh,,add_node,VERSION,1,Class to define nodes coordinates and getter.
+,,get_coord,,,
+,,is_exist,,,
+,,get_indice,,,

@@ -53,6 +53,7 @@ class SSimu(Gen_SSimu, QWidget):
         # Saving arguments
         self.machine = machine
         self.material_dict = material_dict
+        self.last_out = None  # To store the last output for tests
 
         # Plot the machine
         try:
@@ -193,8 +194,9 @@ class SSimu(Gen_SSimu, QWidget):
             err_msg = "Error while running simulation:\n" + str(e)
             log_error(self, err_msg)
             self.simu.get_logger().error(err_msg)
+        # Store output for test
+        self.last_out = out
         # Save results
-        # Full results
         try:
             out.save(join(self.simu.path_result, "Result.h5"))
             out.export_to_mat(join(self.simu.path_result, "Result.mat"))
@@ -210,17 +212,26 @@ class SSimu(Gen_SSimu, QWidget):
             save_path=join(self.simu.path_result, out.simu.machine.name + ".png"),
         )
         p = self.machine.get_pole_pair_number()
-        # Torque
-        out.mag.Tem.plot_2D_Data(
-            "time",
-            is_show_fig=False,
-            save_path=join(self.simu.path_result, "torque as fct of time.png"),
-        )
-        out.mag.Tem.plot_2D_Data(
-            "freqs->elec_order=[0,15]",
-            is_show_fig=False,
-            save_path=join(self.simu.path_result, "torque FFT over freq.png"),
-        )
+        # Torque Time
+        try:
+            out.mag.Tem.plot_2D_Data(
+                "time",
+                is_show_fig=False,
+                save_path=join(self.simu.path_result, "torque as fct of time.png"),
+            )
+        except Exception as e:
+            err_msg = "Error while plotting torque as fct of time: " + str(e)
+            self.simu.get_logger().error(err_msg)
+        # Torque FFT
+        try:
+            out.mag.Tem.plot_2D_Data(
+                "freqs->elec_order=[0,15]",
+                is_show_fig=False,
+                save_path=join(self.simu.path_result, "torque FFT over freq.png"),
+            )
+        except Exception as e:
+            err_msg = "Error while plotting torque FFT over freq: " + str(e)
+            self.simu.get_logger().error(err_msg)
         # Flux
         try:
             out.mag.B.plot_2D_Data(
@@ -243,16 +254,16 @@ class SSimu(Gen_SSimu, QWidget):
                 is_show_fig=False,
                 save_path=join(self.simu.path_result, "flux FFT over wavenumber.png"),
             )
-            out.mag.B.plot_3D_Data(
-                "time",
-                "angle{°}",
-                component_list=["radial"],
-                is_2D_view=True,
-                is_show_fig=False,
-                save_path=join(
-                    self.simu.path_result, "flux as fct of time and angle.png"
-                ),
-            )
+            # out.mag.B.plot_3D_Data(
+            #     "time",
+            #     "angle{°}",
+            #     component_list=["radial"],
+            #     is_2D_view=True,
+            #     is_show_fig=False,
+            #     save_path=join(
+            #         self.simu.path_result, "flux as fct of time and angle.png"
+            #     ),
+            # )
             out.mag.B.plot_3D_Data(
                 "freqs->elec_order=[0,10]",
                 "wavenumber->space_order=[-10,10]",
@@ -266,12 +277,16 @@ class SSimu(Gen_SSimu, QWidget):
             log_error(self, err_msg)
             self.simu.get_logger().error(err_msg)
         # Phi_wind_stator
-        out.mag.Phi_wind_stator.plot_2D_Data(
-            "time",
-            "phase",
-            is_show_fig=False,
-            save_path=join(self.simu.path_result, "Stator winding flux.png"),
-        )
+        try:
+            out.mag.Phi_wind_stator.plot_2D_Data(
+                "time",
+                "phase[0]",
+                is_show_fig=False,
+                save_path=join(self.simu.path_result, "Stator winding flux.png"),
+            )
+        except Exception as e:
+            err_msg = "Error while plotting Stator winding flux:\n" + str(e)
+            self.simu.get_logger().error(err_msg)
         # Done
         QMessageBox().information(
             self,

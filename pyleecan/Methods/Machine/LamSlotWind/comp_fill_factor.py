@@ -16,16 +16,7 @@ def comp_fill_factor(self):
         return 0
     else:
         # compute the number of conductors per slot
-        Ncps_ = abs(self.winding.get_connection_mat().sum(axis=(0, 1))).sum(axis=1)
-        Ncps = Ncps_.mean()
-
-        if Ncps_.std() != 0:
-            self.get_logger().warning(
-                "LamSlotWind.comp_fill_factor: "
-                "Uneven number of conductors per slot. "
-                + "Max. number of conductors will be used to compute slot fill factor."
-            )
-            Ncps = Ncps_.max()
+        Ncps = self.winding.comp_Ncps()
 
         # compute the winding surfaces
         S_slot_wind = self.slot.comp_surface_active()
