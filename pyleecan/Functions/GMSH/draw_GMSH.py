@@ -175,10 +175,7 @@ def draw_GMSH(
 
             # comp. number of elements on the lines & override by user values in case
             mesh_dict = comp_gmsh_mesh_dict(surface=surf, element_size=mesh_size_R, user_mesh_dict=user_mesh_dict)
-            #print(mesh_dict)
-            # if user_mesh_dict and surf.label in user_mesh_dict:
-            #     mesh_dict.update(user_mesh_dict[surf.label])
-            # print(mesh_dict)
+
             # Draw the surface
             draw_surf_line(
                 surf,
@@ -292,11 +289,6 @@ def draw_GMSH(
 
             # comp. number of elements on the lines & override by user values in case
             mesh_dict = comp_gmsh_mesh_dict(surface=surf, element_size=mesh_size_S, user_mesh_dict=user_mesh_dict)
-            #print(mesh_dict)
-            
-            # mesh_dict = surf.comp_mesh_dict(element_size=mesh_size_S)
-            # if user_mesh_dict and surf.label in user_mesh_dict:
-            #     mesh_dict.update(user_mesh_dict[surf.label])
 
             # Draw the surface
             draw_surf_line(
@@ -356,11 +348,6 @@ def draw_GMSH(
         )
         # comp. number of elements on the lines & override by user values in case
         mesh_dict = comp_gmsh_mesh_dict(surface=surf, element_size=mesh_size_SB, user_mesh_dict=user_mesh_dict)
-        #print(surf.label)
-        #print(mesh_dict)
-        # mesh_dict = surf.comp_mesh_dict(element_size=mesh_size_SB)
-        # if user_mesh_dict and surf.label in user_mesh_dict:
-        #     mesh_dict.update(user_mesh_dict[surf.label])
 
         # Draw the surface
         draw_surf_line(
@@ -705,10 +692,6 @@ def draw_GMSH(
 
         # comp. number of elements on the lines & override by user values in case
         mesh_dict = comp_gmsh_mesh_dict(surface=surf, element_size=mesh_size_AB, user_mesh_dict=user_mesh_dict)
-        #print(mesh_dict)
-        # mesh_dict = surf.comp_mesh_dict(element_size=mesh_size_AB)
-        # if user_mesh_dict and surf.label in user_mesh_dict:
-        #     mesh_dict.update(user_mesh_dict[surf.label])
 
         # Draw the surface
         draw_surf_line(
