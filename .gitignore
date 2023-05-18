@@ -26,3 +26,9 @@ run_GUI_internal.py
 /build
 /dist
 node_modules
+MyProjects/12s8p_HWA_Audi/GSMH_12s8p_HWA_Audi.geo
+MyProjects/12s8p_HWA_Audi/gmsh_dict_12s8p_HWA_Audi.json
+MyProjects/example_optimization_gmsh_elmer.py
+MyProjects/12s8p_HWA_Audi.json
+MyProjects/test_gmsh_drawing.py
+MyProjects
