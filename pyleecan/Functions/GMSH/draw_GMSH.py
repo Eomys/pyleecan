@@ -25,12 +25,17 @@ from ...Functions.labels import (
     AR_T_LAB,
     SBR_B_LAB,
     SBR_T_LAB,
+    AS_BL_LAB,
+    AS_BR_LAB,
+    AS_TL_LAB,
+    AS_TR_LAB
 )
 from ...Functions.GMSH import InputError
 from ...Functions.GMSH.get_sliding_band import get_sliding_band
 from ...Functions.GMSH.get_air_box import get_air_box
 from ...Functions.GMSH.get_boundary_condition import get_boundary_condition
 from ...Functions.GMSH.draw_surf_line import draw_surf_line
+from ...Functions.GMSH.comp_gmsh_mesh_dict import comp_gmsh_mesh_dict
 import sys
 import gmsh
 import cmath
@@ -180,9 +185,11 @@ def draw_GMSH(
                 gmsh_dict[nsurf]["with_holes"] = False
 
             # comp. number of elements on the lines & override by user values in case
-            mesh_dict = surf.comp_mesh_dict(element_size=mesh_size_R)
-            if user_mesh_dict and surf.label in user_mesh_dict:
-                mesh_dict.update(user_mesh_dict[surf.label])
+            mesh_dict = comp_gmsh_mesh_dict(surface=surf, element_size=mesh_size_R, user_mesh_dict=user_mesh_dict)
+            #print(mesh_dict)
+            # if user_mesh_dict and surf.label in user_mesh_dict:
+            #     mesh_dict.update(user_mesh_dict[surf.label])
+            # print(mesh_dict)
             # Draw the surface
             draw_surf_line(
                 surf,
@@ -304,9 +311,12 @@ def draw_GMSH(
                 gmsh_dict[nsurf]["with_holes"] = False
 
             # comp. number of elements on the lines & override by user values in case
-            mesh_dict = surf.comp_mesh_dict(element_size=mesh_size_S)
-            if user_mesh_dict and surf.label in user_mesh_dict:
-                mesh_dict.update(user_mesh_dict[surf.label])
+            mesh_dict = comp_gmsh_mesh_dict(surface=surf, element_size=mesh_size_S, user_mesh_dict=user_mesh_dict)
+            #print(mesh_dict)
+            
+            # mesh_dict = surf.comp_mesh_dict(element_size=mesh_size_S)
+            # if user_mesh_dict and surf.label in user_mesh_dict:
+            #     mesh_dict.update(user_mesh_dict[surf.label])
 
             # Draw the surface
             draw_surf_line(
@@ -407,9 +417,12 @@ def draw_GMSH(
             }
         )
         # comp. number of elements on the lines & override by user values in case
-        mesh_dict = surf.comp_mesh_dict(element_size=mesh_size_SB)
-        if user_mesh_dict and surf.label in user_mesh_dict:
-            mesh_dict.update(user_mesh_dict[surf.label])
+        mesh_dict = comp_gmsh_mesh_dict(surface=surf, element_size=mesh_size_SB, user_mesh_dict=user_mesh_dict)
+        #print(surf.label)
+        #print(mesh_dict)
+        # mesh_dict = surf.comp_mesh_dict(element_size=mesh_size_SB)
+        # if user_mesh_dict and surf.label in user_mesh_dict:
+        #     mesh_dict.update(user_mesh_dict[surf.label])
 
         # Draw the surface
         draw_surf_line(
@@ -572,7 +585,7 @@ def draw_GMSH(
                     model.setPhysicalName(2, pg, lab_ext + "_" + AIRGAP_LAB + TOP_LAB)  
                 
         else:
-            for s_data in gmsh_dict.values():
+            for s_key, s_data in gmsh_dict.items():
                 lloop = []
                 label_dict = decode_label(s_data["label"])
 
@@ -603,8 +616,10 @@ def draw_GMSH(
                     model.setPhysicalName(2, pg, s_data["label"])          
                     if (AIRGAP_LAB in s_data["label"] and BOT_LAB in s_data["label"]):
                         rotor_ag_before = (2,s_data["tag"])
+                        rotor_ag_key_before = s_key
                     if (AIRGAP_LAB in s_data["label"] and TOP_LAB in s_data["label"]):
                         stator_ag_before = (2,s_data["tag"])
+                        stator_ag_key_before = s_key
                 
 
             if is_sliding_band and (not is_lam_only_R) and (not is_lam_only_S):    
@@ -636,6 +651,48 @@ def draw_GMSH(
                     pg = model.addPhysicalGroup(2, [cut1[0][0][1]])
                     model.setPhysicalName(2, pg, lab_int + "_" + AIRGAP_LAB + BOT_LAB)  
 
+                # Look at the lines in the resulting surface, then update the dictionary
+                # with MASTER/SLAVE BC when line angles match symmetry angles
+                # MASTER is x-axis and SLAVE is 2Pi/sym
+                rotor_ag_after = model.getEntitiesForPhysicalGroup(2, pg)
+                rotor_ag_new_lines = model.getBoundary([(2,rotor_ag_after)])
+                nline = 0
+                for type_entity_l, rotor_ag_line in rotor_ag_new_lines:
+                    rotor_ag_new_points = model.getBoundary([(type_entity_l, abs(rotor_ag_line))])
+                    btag = rotor_ag_new_points[0][1]
+                    etag = rotor_ag_new_points[1][1]
+                    bxy = model.getValue(0, btag, [])
+                    exy = model.getValue(0, etag, [])
+                    exy_angle = cmath.phase(complex(exy[0], exy[1])) 
+                    bxy_angle = cmath.phase(complex(bxy[0], bxy[1]))
+                    if exy_angle == bxy_angle and abs(exy_angle) < 1e-6:
+                        b_name = boundary_prop[AS_BR_LAB]
+                        l_name = AS_BR_LAB
+                    elif (exy_angle == bxy_angle) and (abs(abs(exy_angle) - 2.0*pi/sym) < 1e-6):
+                        b_name = boundary_prop[AS_BL_LAB]
+                        l_name = AS_BL_LAB
+                    else:
+                        b_name = None
+                        l_name = None
+                    gmsh_dict[rotor_ag_before[1]].update(
+                        {
+                            "tag" : rotor_ag_after[0],
+                            "label" : lab_int + "_" + AIRGAP_LAB + BOT_LAB,
+                            nline : {
+                                "tag": abs(rotor_ag_line),
+                                "label": l_name,
+                                "n_elements": None,
+                                "bc_name": b_name,
+                                "begin": {"tag": btag, "coord": complex(bxy[0], bxy[1])},
+                                "end": {"tag": etag, "coord": complex(exy[0], exy[1])},
+                                "arc_angle": None,
+                                "line_angle": None,
+                            }
+                        }                            
+                    )
+                    nline = nline + 1
+                        
+
                 if len(cut2[0]) > 1:
                     # Remove extra surfaces
                     model.occ.remove([cut2[0][0]])
@@ -646,7 +703,47 @@ def draw_GMSH(
                     factory.synchronize()
                     pg = model.addPhysicalGroup(2, [cut2[0][0][1]])
                     model.setPhysicalName(2, pg, lab_ext + "_" + AIRGAP_LAB + TOP_LAB)  
-                              
+                
+                # Look at the lines in the resulting surface, then update the dictionary
+                # with MASTER/SLAVE BC when line angles match symmetry angles
+                # MASTER is x-axis and SLAVE is 2Pi/sym
+                stator_ag_after = model.getEntitiesForPhysicalGroup(2, pg)
+                stator_ag_new_lines = model.getBoundary([(2,stator_ag_after)])
+                nline = 0
+                for type_entity_l, stator_ag_line in stator_ag_new_lines:
+                    stator_ag_new_points = model.getBoundary([(type_entity_l, abs(stator_ag_line))])
+                    btag = stator_ag_new_points[0][1]
+                    etag = stator_ag_new_points[1][1]
+                    bxy = model.getValue(0, btag, [])
+                    exy = model.getValue(0, etag, [])
+                    exy_angle = cmath.phase(complex(exy[0], exy[1])) 
+                    bxy_angle = cmath.phase(complex(bxy[0], bxy[1]))
+                    if exy_angle == bxy_angle and abs(exy_angle) < 1e-6:
+                        b_name = boundary_prop[AS_TR_LAB]
+                        l_name = AS_TR_LAB
+                    elif (exy_angle == bxy_angle) and (abs(abs(exy_angle) - 2.0*pi/sym) < 1e-6):
+                        b_name = boundary_prop[AS_TL_LAB]
+                        l_name = AS_TL_LAB
+                    else:
+                        b_name = None
+                        l_name = None
+                    gmsh_dict[stator_ag_before[1]].update(
+                        {
+                            "tag" : stator_ag_after[0],
+                            "label" : lab_ext + "_" + AIRGAP_LAB + TOP_LAB,
+                            nline : {
+                                "tag": abs(stator_ag_line),
+                                "label": l_name,
+                                "n_elements": None,
+                                "bc_name": b_name,
+                                "begin": {"tag": btag, "coord": complex(bxy[0], bxy[1])},
+                                "end": {"tag": etag, "coord": complex(exy[0], exy[1])},
+                                "arc_angle": None,
+                                "line_angle": None,
+                            }
+                        }                            
+                    )
+                    nline = nline + 1             
 
     ###################
     # Adding Airbox
@@ -669,16 +766,18 @@ def draw_GMSH(
         )
 
         # comp. number of elements on the lines & override by user values in case
-        mesh_dict = surf.comp_mesh_dict(element_size=mesh_size_AB)
-        if user_mesh_dict and surf.label in user_mesh_dict:
-            mesh_dict.update(user_mesh_dict[surf.label])
+        mesh_dict = comp_gmsh_mesh_dict(surface=surf, element_size=mesh_size_AB, user_mesh_dict=user_mesh_dict)
+        #print(mesh_dict)
+        # mesh_dict = surf.comp_mesh_dict(element_size=mesh_size_AB)
+        # if user_mesh_dict and surf.label in user_mesh_dict:
+        #     mesh_dict.update(user_mesh_dict[surf.label])
 
         # Draw the surface
         draw_surf_line(
             surf,
             mesh_dict,
             boundary_prop,
-            factory,
+            model,
             gmsh_dict,
             nsurf,
             mesh_size_AB,

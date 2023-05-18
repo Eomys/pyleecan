@@ -42,7 +42,7 @@ def draw_surf_line(
     None
     """
     for ii, line in enumerate(surf.get_lines()):
-        n_elem = mesh_dict[str(ii)]
+        n_elem = None if not mesh_dict else mesh_dict[str(ii)]
         n_elem = n_elem if n_elem is not None else 0
         bc_name = get_boundary_condition(line, boundary_prop)
         # Gmsh built-in engine does not allow arcs larger than 180deg

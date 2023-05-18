@@ -182,6 +182,7 @@ def get_sliding_band(sym, machine):
             end=Z3,
             radius=Rgap_mec_int + W_sb,
             # label="int_airgap_arc_copy",
+            prop_dict={BOUNDARY_PROP_LAB: AR_B_LAB},
             is_trigo_direction=True,
         )
         int_airgap_arc_copy.reverse()
@@ -207,7 +208,7 @@ def get_sliding_band(sym, machine):
             begin=Z8,
             end=Z9,
             radius=Rgap_mec_int + 3 * W_sb,
-            prop_dict={BOUNDARY_PROP_LAB: SBR_T_LAB},  # Top Radius SB
+            prop_dict={BOUNDARY_PROP_LAB: AR_T_LAB},  # Top Radius SB
             is_trigo_direction=True,
         )
         airgap_lines.append(ext_airgap_arc)
@@ -219,6 +220,7 @@ def get_sliding_band(sym, machine):
             end=Z7,
             radius=Rgap_mec_int + 2 * W_sb + tol / 10,
             # label="ext_sb_arc",
+            prop_dict={BOUNDARY_PROP_LAB: SBR_T_LAB},
             is_trigo_direction=True,
         )
         ext_sb_arc.reverse()

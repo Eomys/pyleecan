@@ -74,7 +74,15 @@ def get_air_box(sym, machine):
         airbox_lines.append(
             Segment(begin=Z3, end=Z0, prop_dict={BOUNDARY_PROP_LAB: AIRBOX_SL_LAB})
         )
-        airbox_lines.append(Arc2(begin=Z0, center=0.0, angle=-2 * pi / sym))
+        #airbox_lines.append(Arc2(begin=Z0, center=0.0, angle=-2 * pi / sym))
+        airbox_lines.append(
+             Arc1(
+                 begin=Z0, 
+                 end=Z1, 
+                 radius=-R_ext,
+                 is_trigo_direction=False,
+                 )
+        )
         surf_list.append(
             SurfLine(
                 line_list=airbox_lines,
