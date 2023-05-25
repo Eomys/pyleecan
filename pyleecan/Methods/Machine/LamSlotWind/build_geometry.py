@@ -1,12 +1,8 @@
-# -*- coding: utf-8 -*-
 from numpy import pi
 
-from ....Classes.Winding import Winding
-from ....Methods import NotImplementedYetError
 from ....Classes.LamSlot import LamSlot
 from ....Functions.labels import update_RTS_index
-from ....Classes.SlotM18 import SlotM18
-from ....Functions.labels import BOUNDARY_PROP_LAB, MAG_LAB, YSMR_LAB, YSML_LAB
+from ....Functions.labels import BOUNDARY_PROP_LAB, YSMR_LAB, YSML_LAB, decode_label
 
 
 def build_geometry(self, sym=1, alpha=0, delta=0, is_circular_radius=False):
@@ -75,14 +71,19 @@ def build_geometry(self, sym=1, alpha=0, delta=0, is_circular_radius=False):
                 new_surf.label = update_RTS_index(label=surf.label, S_id=ii)
                 new_surf.rotate(ii * angle)
                 surf_list.append(new_surf)
-        # Update the winding BC (if winding side matches sym lines SlotM18 only)
-        if isinstance(self.slot, SlotM18) and sym > 1:
-            surf_list[0].line_list[0].prop_dict.update(
-                {BOUNDARY_PROP_LAB: st + "_" + YSMR_LAB}
-            )
-            surf_list[-1].line_list[2].prop_dict.update(
-                {BOUNDARY_PROP_LAB: st + "_" + YSML_LAB}
-            )
+        # Update the winding BC (if winding side matches sym lines ex: SlotM18)
+        if self.slot.is_full_pitch_active() and sym > 1:
+            for surf in surf_list:
+                # Set BC on Right side / Ox
+                if decode_label(surf.label)["S_id"]  == 0:
+                    surf.line_list[0].prop_dict.update(
+                        {BOUNDARY_PROP_LAB: st + "_" + YSMR_LAB}
+                    )
+                # Set BC on Left side / last active surface
+                if decode_label(surf.label)["S_id"]  == Zs//sym-1:
+                    surf.line_list[2].prop_dict.update(
+                        {BOUNDARY_PROP_LAB: st + "_" + YSML_LAB}
+                    )
         # Add wedges if any
         if self.slot.wedge_mat is not None:
             wedge_list = self.slot.get_surface_wedges()

@@ -782,9 +782,9 @@ def test_Ring_Magnet():
 
 # To run it without pytest
 if __name__ == "__main__":
-    test_Bore_sym()
-    out, out2 = test_FEMM_periodicity_angle()
+    # test_Bore_sym()
+    # out, out2 = test_FEMM_periodicity_angle()
     # out3, out4 = test_FEMM_periodicity_time()
     # out5, out6 = test_FEMM_periodicity_time_no_periodicity_a()
-    # test_Ring_Magnet()
+    test_Ring_Magnet()
     print("Done")

@@ -1,9 +1,7 @@
-# -*- coding: utf-8 -*-
 from numpy import pi
 
 from ....Classes.LamSlot import LamSlot
-from ....Classes.SlotM18 import SlotM18
-from ....Functions.labels import BOUNDARY_PROP_LAB, MAG_LAB, YSMR_LAB, YSML_LAB
+from ....Functions.labels import BOUNDARY_PROP_LAB, MAG_LAB, YSMR_LAB, YSML_LAB, decode_label
 
 
 def build_geometry(
@@ -62,14 +60,19 @@ def build_geometry(
             mag_surf_list.append(mag_surf)
             # Adapt the label
             mag_surf_list[-1].label = st + "_" + MAG_LAB + "_R0-T0-S" + str(ii)
-        # Update the magnets BC (if magnet side matches sym lines SlotM18 only)
-        if isinstance(self.slot, SlotM18) and sym > 1:
-            mag_surf_list[0].line_list[0].prop_dict.update(
-                {BOUNDARY_PROP_LAB: st + "_" + YSMR_LAB}
-            )
-            mag_surf_list[-1].line_list[2].prop_dict.update(
-                {BOUNDARY_PROP_LAB: st + "_" + YSML_LAB}
-            )
+        # Update the magnets BC (if magnet side matches sym lines ex: SlotM18)
+        if self.slot.is_full_pitch_active() and sym > 1:
+            for surf in mag_surf_list:
+                # Set BC on Right side / Ox
+                if decode_label(surf.label)["S_id"]  == 0:
+                    surf.line_list[0].prop_dict.update(
+                        {BOUNDARY_PROP_LAB: st + "_" + YSMR_LAB}
+                    )
+                # Set BC on Left side / last active surface
+                if decode_label(surf.label)["S_id"]  == Zs//sym-1:
+                    surf.line_list[2].prop_dict.update(
+                        {BOUNDARY_PROP_LAB: st + "_" + YSML_LAB}
+                    )
         surf_list.extend(mag_surf_list)
 
     # Apply the transformations
