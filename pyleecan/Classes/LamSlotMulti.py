@@ -23,11 +23,6 @@ except ImportError as error:
     check = error
 
 try:
-    from ..Methods.Machine.LamSlotMulti.comp_radius_mec import comp_radius_mec
-except ImportError as error:
-    comp_radius_mec = error
-
-try:
     from ..Methods.Machine.LamSlotMulti.comp_surfaces import comp_surfaces
 except ImportError as error:
     comp_surfaces = error
@@ -90,18 +85,6 @@ class LamSlotMulti(Lamination):
         )
     else:
         check = check
-    # cf Methods.Machine.LamSlotMulti.comp_radius_mec
-    if isinstance(comp_radius_mec, ImportError):
-        comp_radius_mec = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use LamSlotMulti method comp_radius_mec: "
-                    + str(comp_radius_mec)
-                )
-            )
-        )
-    else:
-        comp_radius_mec = comp_radius_mec
     # cf Methods.Machine.LamSlotMulti.comp_surfaces
     if isinstance(comp_surfaces, ImportError):
         comp_surfaces = property(

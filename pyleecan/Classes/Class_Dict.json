@@ -5448,7 +5448,6 @@
             "build_geometry",
             "check",
             "comp_masses",
-            "comp_radius_mec",
             "comp_surfaces",
             "comp_volumes",
             "plot",
@@ -5487,7 +5486,6 @@
         "is_internal": false,
         "methods": [
             "check",
-            "comp_radius_mec",
             "comp_surfaces",
             "get_pole_pair_number",
             "plot",
@@ -12307,7 +12305,9 @@
             "is_outwards",
             "plot",
             "plot_active",
-            "set_label"
+            "set_label",
+            "is_airgap_active",
+            "is_full_pitch_active"
         ],
         "mother": "",
         "name": "Slot",
@@ -12620,7 +12620,8 @@
             "comp_surface",
             "comp_surface_active",
             "get_surface_active",
-            "plot_schematics"
+            "plot_schematics",
+            "is_airgap_active"
         ],
         "mother": "Slot",
         "name": "SlotM10",
@@ -12693,7 +12694,9 @@
             "comp_surface",
             "comp_surface_active",
             "get_surface_active",
-            "plot_schematics"
+            "plot_schematics",
+            "is_airgap_active",
+            "is_full_pitch_active"
         ],
         "mother": "Slot",
         "name": "SlotM11",
@@ -12766,7 +12769,8 @@
             "comp_surface",
             "comp_surface_active",
             "get_surface_active",
-            "plot_schematics"
+            "plot_schematics",
+            "is_airgap_active"
         ],
         "mother": "Slot",
         "name": "SlotM12",
@@ -12839,7 +12843,8 @@
             "comp_surface",
             "comp_surface_active",
             "get_surface_active",
-            "plot_schematics"
+            "plot_schematics",
+            "is_airgap_active"
         ],
         "mother": "Slot",
         "name": "SlotM13",
@@ -12922,7 +12927,9 @@
             "comp_surface",
             "comp_surface_active",
             "get_surface_active",
-            "plot_schematics"
+            "plot_schematics",
+            "is_airgap_active",
+            "is_full_pitch_active"
         ],
         "mother": "Slot",
         "name": "SlotM14",
@@ -13005,7 +13012,8 @@
             "comp_surface",
             "comp_surface_active",
             "get_surface_active",
-            "plot_schematics"
+            "plot_schematics",
+            "is_airgap_active"
         ],
         "mother": "Slot",
         "name": "SlotM15",
@@ -13160,7 +13168,9 @@
             "comp_surface",
             "comp_surface_active",
             "get_surface_active",
-            "plot_schematics"
+            "plot_schematics",
+            "is_airgap_active",
+            "is_full_pitch_active"
         ],
         "mother": "Slot",
         "name": "SlotM17",
@@ -13192,7 +13202,9 @@
             "comp_surface",
             "comp_surface_active",
             "get_surface_active",
-            "plot_schematics"
+            "plot_schematics",
+            "is_airgap_active",
+            "is_full_pitch_active"
         ],
         "mother": "Slot",
         "name": "SlotM18",

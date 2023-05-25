@@ -33,11 +33,6 @@ except ImportError as error:
     comp_masses = error
 
 try:
-    from ..Methods.Machine.LamSlotMag.comp_radius_mec import comp_radius_mec
-except ImportError as error:
-    comp_radius_mec = error
-
-try:
     from ..Methods.Machine.LamSlotMag.comp_surfaces import comp_surfaces
 except ImportError as error:
     comp_surfaces = error
@@ -109,18 +104,6 @@ class LamSlotMag(LamSlot):
         )
     else:
         comp_masses = comp_masses
-    # cf Methods.Machine.LamSlotMag.comp_radius_mec
-    if isinstance(comp_radius_mec, ImportError):
-        comp_radius_mec = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use LamSlotMag method comp_radius_mec: "
-                    + str(comp_radius_mec)
-                )
-            )
-        )
-    else:
-        comp_radius_mec = comp_radius_mec
     # cf Methods.Machine.LamSlotMag.comp_surfaces
     if isinstance(comp_surfaces, ImportError):
         comp_surfaces = property(
