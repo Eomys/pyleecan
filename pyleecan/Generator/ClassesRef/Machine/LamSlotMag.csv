@@ -1,5 +1,7 @@
 Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,as_dict Type
 magnet,-,Magnet of the lamination,,Magnet,,,,
+mur_lin_matrix,-,"Matrix to enforce a different relative magnetic permeability for each magnet layer (shape: [Nrad, Ntan, Zs])",,ndarray,None,,,
+Brm20_matrix,-,"Matrix to enforce a different magnet remanence induction at 20degC for each magnet layer (shape: [Nrad, Ntan, Zs])",,ndarray,None,,,
 ,,,,,,,,
 Package,Inherit,Methods,Constant Name,Constant Value,Class description,,,
 Machine,LamSlot,build_geometry,VERSION,1,Lamination with Slot for Magnets,,,
@@ -11,3 +13,4 @@ Machine,LamSlot,build_geometry,VERSION,1,Lamination with Slot for Magnets,,,
 ,,comp_angle_d_axis,,,,,,
 ,,get_magnet_number,,,,,,
 ,,set_Lmag,,,,,,
+,,get_dim_active,,,,,,
