@@ -67,6 +67,16 @@ try:
 except ImportError as error:
     get_dim_active = error
 
+try:
+    from ..Methods.Machine.LamSlotMag.get_all_mag_obj import get_all_mag_obj
+except ImportError as error:
+    get_all_mag_obj = error
+
+try:
+    from ..Methods.Machine.LamSlotMag.get_magnet_by_label import get_magnet_by_label
+except ImportError as error:
+    get_magnet_by_label = error
+
 
 from numpy import array, array_equal
 from numpy import isnan
@@ -185,6 +195,30 @@ class LamSlotMag(LamSlot):
         )
     else:
         get_dim_active = get_dim_active
+    # cf Methods.Machine.LamSlotMag.get_all_mag_obj
+    if isinstance(get_all_mag_obj, ImportError):
+        get_all_mag_obj = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use LamSlotMag method get_all_mag_obj: "
+                    + str(get_all_mag_obj)
+                )
+            )
+        )
+    else:
+        get_all_mag_obj = get_all_mag_obj
+    # cf Methods.Machine.LamSlotMag.get_magnet_by_label
+    if isinstance(get_magnet_by_label, ImportError):
+        get_magnet_by_label = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use LamSlotMag method get_magnet_by_label: "
+                    + str(get_magnet_by_label)
+                )
+            )
+        )
+    else:
+        get_magnet_by_label = get_magnet_by_label
     # generic save method is available in all object
     save = save
     # get_logger method is available in all object

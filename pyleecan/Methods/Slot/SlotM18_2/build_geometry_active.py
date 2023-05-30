@@ -64,7 +64,7 @@ def build_geometry_active(self, Nrad, Ntan, alpha=0, delta=0):
         else:
             curve_list.append(Arc1(ZM6, ZM1, -Rbo, is_trigo_direction=False))
 
-        Zmid = (abs(ZM1) + abs(ZM3)) / 2
+        Zmid = (abs(ZM1) + abs(ZM2)) / 2
 
         surf_list.append(
             SurfLine(
@@ -74,7 +74,7 @@ def build_geometry_active(self, Nrad, Ntan, alpha=0, delta=0):
             )
         )
 
-        # Yoke magnet
+        # Airgap magnet
         curve_list = list()
         curve_list.append(Segment(ZM2, ZM3))
 
@@ -108,12 +108,12 @@ def build_geometry_active(self, Nrad, Ntan, alpha=0, delta=0):
                 Arc1(ZM5, ZM2, -Rbo - self.Hmag_bore, is_trigo_direction=False)
             )
 
-        Zmid = (abs(ZM1) + abs(ZM3)) / 2
+        Zmid = (abs(ZM2) + abs(ZM3)) / 2
 
         surf_list.append(
             SurfLine(
                 line_list=curve_list,
-                label=lam_label + "_" + WIND_LAB + "_R0-T0-S0",
+                label=lam_label + "_" + WIND_LAB + "_R1-T0-S0",
                 point_ref=Zmid,
             )
         )

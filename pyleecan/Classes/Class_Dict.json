@@ -5454,7 +5454,9 @@
             "comp_angle_d_axis",
             "get_magnet_number",
             "set_Lmag",
-            "get_dim_active"
+            "get_dim_active",
+            "get_all_mag_obj",
+            "get_magnet_by_label"
         ],
         "mother": "LamSlot",
         "name": "LamSlotMag",
@@ -13291,7 +13293,7 @@
             },
             {
                 "as_dict": "",
-                "desc": "Height of the magnet near the yoke",
+                "desc": "Height of the magnet near the airgap",
                 "max": "",
                 "min": "0",
                 "name": "Hmag_gap",

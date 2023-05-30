@@ -470,7 +470,7 @@ class SlotM18_2(Slot):
     Hmag_gap = property(
         fget=_get_Hmag_gap,
         fset=_set_Hmag_gap,
-        doc=u"""Height of the magnet near the yoke
+        doc=u"""Height of the magnet near the airgap
 
         :Type: float
         :min: 0

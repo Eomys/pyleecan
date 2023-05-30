@@ -786,13 +786,39 @@ def test_Ring_Magnet_2():
     machine = load(join(DATA_DIR, "Machine", "SPMSM_001.json"))
     Hmag = machine.rotor.slot.Hmag
     machine.rotor.slot = SlotM18_2(init_dict=machine.rotor.slot.as_dict())
-    machine.rotor.slot.Hmag_bore = Hmag
-    machine.rotor.slot.Hmag_gap = Hmag*2
-    machine.rotor.Rext -= 2*Hmag
+    machine.rotor.slot.Hmag_bore = machine.rotor.Rext - machine.rotor.Rint - Hmag
+    machine.rotor.slot.Hmag_gap = Hmag
+    machine.rotor.Rext = machine.rotor.Rint
+
     mur_lin = machine.rotor.magnet.mat_type.mag.mur_lin
+    Brm20 = machine.rotor.magnet.mat_type.mag.Brm20
     machine.rotor.mur_lin_matrix= ones((2,1,8)) * mur_lin
-    machine.plot(is_max_sym=True)
-    plt.show()
+    machine.rotor.mur_lin_matrix[0,0,:] = mur_lin/2
+
+    # machine.plot(is_max_sym=True)
+    # plt.show()
+
+    mag_list = machine.rotor.get_all_mag_obj()
+    assert len(mag_list) == 2
+    assert mag_list[0].mat_type.name == "Magnet_1"
+    assert mag_list[0].mat_type.mag.mur_lin == mur_lin/2
+    assert mag_list[0].mat_type.mag.Brm20 == Brm20
+    assert mag_list[1].mat_type.name == "Magnet_2"
+    assert mag_list[1].mat_type.mag.mur_lin == mur_lin
+    assert mag_list[1].mat_type.mag.Brm20 == Brm20
+
+    machine.rotor.Brm20_matrix= ones((2,1,8)) * Brm20
+    machine.rotor.Brm20_matrix[0,0,:] = Brm20/4
+
+    mag_list = machine.rotor.get_all_mag_obj()
+    assert len(mag_list) == 2
+    assert mag_list[0].mat_type.name == "Magnet_1"
+    assert mag_list[0].mat_type.mag.mur_lin == mur_lin/2
+    assert mag_list[0].mat_type.mag.Brm20 == Brm20/4
+    assert mag_list[1].mat_type.name == "Magnet_2"
+    assert mag_list[1].mat_type.mag.mur_lin == mur_lin
+    assert mag_list[1].mat_type.mag.Brm20 == Brm20
+
     simu = Simu1(name="test_FEMM_periodicity_RingMag", machine=machine)
 
     # Definition of the enforced output of the electrical module
@@ -814,7 +840,8 @@ def test_Ring_Magnet_2():
         type_BH_rotor=1,
         is_periodicity_a=False,
         is_periodicity_t=True,
-        nb_worker=1,  # cpu_count(),
+        nb_worker=1,  # cpu_count()
+        is_fast_draw=True,
         # Kmesh_fineness=2,
     )
     simu.force = ForceMT()
