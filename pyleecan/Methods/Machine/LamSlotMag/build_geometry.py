@@ -81,19 +81,20 @@ def build_geometry(
         # Update the magnets BC (if magnet side matches sym lines ex: SlotM18)
         if self.slot.is_full_pitch_active() and sym > 1:
             for surf in mag_surf_list:
+                label_dict = decode_label(surf.label)
                 # Set BC on Right side / Ox
-                if decode_label(surf.label)["S_id"] == 0:
+                if label_dict["S_id"] == 0:
                     if surf.line_list[0].prop_dict is None:
                         surf.line_list[0].prop_dict = dict()
                     surf.line_list[0].prop_dict.update(
-                        {BOUNDARY_PROP_LAB: st + "_" + YSMR_LAB}
+                        {BOUNDARY_PROP_LAB: st + "_" + YSMR_LAB+"-"+str(label_dict["R_id"])}
                     )
                 # Set BC on Left side / last active surface
-                if decode_label(surf.label)["S_id"] == Zs // sym - 1:
+                if label_dict["S_id"] == Zs // sym - 1:
                     if surf.line_list[2].prop_dict is None:
                         surf.line_list[2].prop_dict = dict()
                     surf.line_list[2].prop_dict.update(
-                        {BOUNDARY_PROP_LAB: st + "_" + YSML_LAB}
+                        {BOUNDARY_PROP_LAB: st + "_" + YSML_LAB+"-"+str(label_dict["R_id"])}
                     )
 
         # Shift to have a tooth center on Ox
