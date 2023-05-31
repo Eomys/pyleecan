@@ -12,4 +12,4 @@ def is_airgap_active(self):
         True if a part or the full active surface is in the airgap
     """
 
-    return self.Hmag > self.H0
+    return self.comp_height_active() > self.comp_height()

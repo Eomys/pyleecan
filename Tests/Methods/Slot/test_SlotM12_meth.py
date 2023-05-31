@@ -6,7 +6,7 @@ from pyleecan.Classes.LamSlotMag import LamSlotMag
 from pyleecan.Classes.SlotM12 import SlotM12
 from pyleecan.Classes.Slot import Slot
 from pyleecan.Methods import ParentMissingError
-
+import matplotlib.pyplot as plt
 from numpy import exp
 
 Mag12_test = list()
@@ -171,3 +171,9 @@ class Test_Magnet_Type_12_meth(object):
 
         assert abs(ZM2) == pytest.approx(abs(ZM0), rel=DELTA)
         assert abs(ZM3) == pytest.approx(abs(ZM0), rel=DELTA)
+
+if __name__ == "__main__":
+    a = Test_Magnet_Type_12_meth()
+    for test_dict in Mag12_test:
+        a.test_comp_mec_radius(test_dict)
+    print("Done")
