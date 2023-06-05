@@ -4,6 +4,7 @@ from ....Classes.LamSlot import LamSlot
 from ....Functions.labels import update_RTS_index
 from ....Functions.labels import (
     BOUNDARY_PROP_LAB,
+    COND_BOUNDARY_PROP_LAB,
     WIND_LAB,
     YSMR_LAB,
     YSML_LAB,
@@ -85,18 +86,20 @@ def build_geometry(self, sym=1, alpha=0, delta=0, is_circular_radius=False):
                 label_dict = decode_label(surf.label)
                 # Set BC on Right side / Ox
                 if label_dict["S_id"] == 0:
-                    if surf.line_list[0].prop_dict is None:
-                        surf.line_list[0].prop_dict = dict()
-                    surf.line_list[0].prop_dict.update(
-                        {BOUNDARY_PROP_LAB: st + "_" + YSMR_LAB+"-"+str(label_dict["R_id"])}
-                    )
+                    # Find the lines to add the BC
+                    for line in surf.get_lines():
+                        if line.prop_dict is not None and COND_BOUNDARY_PROP_LAB in line.prop_dict and line.prop_dict[COND_BOUNDARY_PROP_LAB] == YSMR_LAB:
+                            line.prop_dict.update(
+                                {BOUNDARY_PROP_LAB: st + "_" + YSMR_LAB+"-"+str(label_dict["R_id"])}
+                            )
                 # Set BC on Left side / last active surface
                 if label_dict["S_id"] == Zs // sym - 1:
-                    if surf.line_list[2].prop_dict is None:
-                        surf.line_list[2].prop_dict = dict()
-                    surf.line_list[2].prop_dict.update(
-                        {BOUNDARY_PROP_LAB: st + "_" + YSML_LAB+"-"+str(label_dict["R_id"])}
-                    )
+                    # Find the lines to add the BC
+                    for line in surf.get_lines():
+                        if line.prop_dict is not None and COND_BOUNDARY_PROP_LAB in line.prop_dict and line.prop_dict[COND_BOUNDARY_PROP_LAB] == YSML_LAB:
+                            line.prop_dict.update(
+                                {BOUNDARY_PROP_LAB: st + "_" + YSML_LAB+"-"+str(label_dict["R_id"])}
+                            )
         # Add wedges if any
         if self.slot.wedge_mat is not None:
             wedge_list = self.slot.get_surface_wedges()

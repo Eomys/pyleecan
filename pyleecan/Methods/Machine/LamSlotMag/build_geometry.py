@@ -4,9 +4,12 @@ from ....Classes.LamSlot import LamSlot
 from ....Functions.labels import update_RTS_index
 from ....Functions.labels import (
     BOUNDARY_PROP_LAB,
+    COND_BOUNDARY_PROP_LAB,
     MAG_LAB,
     YSMR_LAB,
     YSML_LAB,
+    LAM_LAB,
+    YOKE_LAB,
     decode_label,
 )
 
@@ -84,18 +87,31 @@ def build_geometry(
                 label_dict = decode_label(surf.label)
                 # Set BC on Right side / Ox
                 if label_dict["S_id"] == 0:
-                    if surf.line_list[0].prop_dict is None:
-                        surf.line_list[0].prop_dict = dict()
-                    surf.line_list[0].prop_dict.update(
-                        {BOUNDARY_PROP_LAB: st + "_" + YSMR_LAB+"-"+str(label_dict["R_id"])}
-                    )
+                    # Find the lines to add the BC
+                    for line in surf.get_lines():
+                        if line.prop_dict is not None and COND_BOUNDARY_PROP_LAB in line.prop_dict and line.prop_dict[COND_BOUNDARY_PROP_LAB] == YSMR_LAB:
+                            line.prop_dict.update(
+                                {BOUNDARY_PROP_LAB: st + "_" + YSMR_LAB+"-"+str(label_dict["R_id"])}
+                            )
                 # Set BC on Left side / last active surface
                 if label_dict["S_id"] == Zs // sym - 1:
-                    if surf.line_list[2].prop_dict is None:
-                        surf.line_list[2].prop_dict = dict()
-                    surf.line_list[2].prop_dict.update(
-                        {BOUNDARY_PROP_LAB: st + "_" + YSML_LAB+"-"+str(label_dict["R_id"])}
-                    )
+                    # Find the lines to add the BC
+                    for line in surf.get_lines():
+                        if line.prop_dict is not None and COND_BOUNDARY_PROP_LAB in line.prop_dict and line.prop_dict[COND_BOUNDARY_PROP_LAB] == YSML_LAB:
+                            line.prop_dict.update(
+                                {BOUNDARY_PROP_LAB: st + "_" + YSML_LAB+"-"+str(label_dict["R_id"])}
+                            )
+        # Update Magnets BC when no lamination
+        if self.Rint == self.Rext and self.Rint!=0:
+            label_yoke = self.get_label() + "_" + LAM_LAB + YOKE_LAB
+            for surf in mag_surf_list:
+                label_dict = decode_label(surf.label)
+                if label_dict["R_id"] == 0:
+                    for line in surf.get_lines():
+                        if line.prop_dict is not None and COND_BOUNDARY_PROP_LAB in line.prop_dict and line.prop_dict[COND_BOUNDARY_PROP_LAB] == YOKE_LAB:
+                            line.prop_dict.update(
+                                {BOUNDARY_PROP_LAB: label_yoke}
+                            )
 
         # Shift to have a tooth center on Ox
         for surf in mag_surf_list:

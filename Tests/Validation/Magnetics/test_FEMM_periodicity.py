@@ -29,7 +29,7 @@ from pyleecan.Functions.Plot import dict_2D
 
 from pyleecan.definitions import DATA_DIR
 
-
+# python -m pytest ./Tests/Validation/Magnetics/test_FEMM_periodicity.py
 @pytest.mark.long_5s
 @pytest.mark.long_1m
 @pytest.mark.MagFEMM
@@ -911,5 +911,6 @@ if __name__ == "__main__":
     # out, out2 = test_FEMM_periodicity_angle()
     # out3, out4 = test_FEMM_periodicity_time()
     # out5, out6 = test_FEMM_periodicity_time_no_periodicity_a()
+    test_Ring_Magnet()
     test_Ring_Magnet_2()
     print("Done")

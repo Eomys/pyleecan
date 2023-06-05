@@ -35,6 +35,8 @@ VENT_LAB_S = "Vent"
 ## Line Property dict
 DRAW_PROP_LAB = "IS_DRAW"
 BOUNDARY_PROP_LAB = "Boundary"
+# Line where BC can be applied but not always
+COND_BOUNDARY_PROP_LAB = "ConditionalBoundary"
 RIGHT_LAB = "Right"  # Right is 0x line
 LEFT_LAB = "Left"
 BOT_LAB = "Bot"
