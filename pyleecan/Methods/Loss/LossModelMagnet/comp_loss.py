@@ -65,8 +65,6 @@ def comp_loss(self):
             Hmag = hole0.H2
             if isinstance(hole0, HoleM51):
                 Wmag = (hole0.W3 + hole0.W5 + hole0.W7) / 3
-            elif isinstance(hole0, HoleM52):
-                Wmag = hole0.W0
             elif isinstance(hole0, HoleM53):
                 Wmag = hole0.W3
             elif isinstance(hole0, HoleM57):
@@ -75,6 +73,7 @@ def comp_loss(self):
                 Wmag = hole0.W1
         elif isinstance(hole0, HoleM52):
             Hmag = hole0.H1
+            Wmag = hole0.W0
         else:  # HoleUD
             Hmag = np.sqrt(hole0.comp_surface_magnet_id(0))
             Wmag = Hmag
