@@ -9,6 +9,7 @@ from pyleecan.Classes.SlotM15 import SlotM15
 from pyleecan.Classes.SlotM16 import SlotM16
 from pyleecan.Classes.SlotM17 import SlotM17
 from pyleecan.Classes.SlotM18 import SlotM18
+from pyleecan.Classes.SlotM19 import SlotM19
 
 from pyleecan.Classes.SlotW10 import SlotW10
 from pyleecan.Classes.SlotW11 import SlotW11
@@ -52,6 +53,14 @@ if not isdir(SCHEMATICS_PATH):
     makedirs(SCHEMATICS_PATH)
 
 slot_test = list()
+
+slot_test.append(
+    {
+        "test_obj": SlotM19(),
+        "type_add_active": 2,
+        "is_default": 2,
+    }
+)
 
 slot_test.append(
     {
@@ -528,10 +537,10 @@ class Test_plot_schematics(object):
 
 if __name__ == "__main__":
     a = Test_plot_schematics()
-    a.test_BoreFlower()
-    a.test_BoreSinePole()
-    # a.test_slot(slot_test[26])
-    # a.test_slot_point(slot_test[-1])
+    #a.test_BoreFlower()
+    #a.test_BoreSinePole()
+    a.test_slot(slot_test[0])
+    a.test_slot_point(slot_test[0])
     # for slot in slot_test:
     #     a.test_slot(slot)
     #     a.test_slot_point(slot)
