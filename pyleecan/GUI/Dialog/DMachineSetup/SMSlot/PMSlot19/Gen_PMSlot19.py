@@ -2,7 +2,7 @@
 """File generated according to PMSlot19/gen_list.json
 WARNING! All changes made in this file will be lost!
 """
-from pyleecan.GUI.Dialog.DMachineSetup.SMslot.PMSlot19.Ui_PMSlot19 import Ui_PMSlot19
+from pyleecan.GUI.Dialog.DMachineSetup.SMSlot.PMSlot19.Ui_PMSlot19 import Ui_PMSlot19
 
 
 class Gen_PMSlot19(Ui_PMSlot19):
