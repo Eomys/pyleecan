@@ -52,7 +52,7 @@ def get_surface_active(self, alpha=0, delta=0):
         curve_list.append(Arc1(Z4, Z1, -Rbo, is_trigo_direction=False))
 
     surface = SurfLine(
-        line_list=curve_list, label="Wind_" + st + "_R0_T0_S0", point_ref= Zmid
+        line_list=curve_list, label="Wind_" + st + "_R0_T0_S0", point_ref= (Z1+Z3)/2
     )
 
     # Apply transformation

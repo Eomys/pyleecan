@@ -19,7 +19,7 @@ class PMSlot19(Gen_PMSlot19, QWidget):
     # Signal to DMachineSetup to know that the save popup is needed
     saveNeeded = Signal()
     # Information for Slot combobox
-    slot_name = "Rectangular Magnet with polar top"
+    slot_name = "Trapezoidal Magnet with polar top"
     slot_type = SlotM19
 
     def __init__(self, lamination=None):
