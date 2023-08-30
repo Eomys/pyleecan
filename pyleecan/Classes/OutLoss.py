@@ -75,8 +75,7 @@ class OutLoss(FrozenClass):
         get_loss_overall = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use OutLoss method get_loss_overall: "
-                    + str(get_loss_overall)
+                    "Can't use OutLoss method get_loss_overall: " + str(get_loss_overall)
                 )
             )
         )
@@ -125,14 +124,7 @@ class OutLoss(FrozenClass):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(
-        self,
-        axes_dict=None,
-        loss_dict=-1,
-        logger_name="Pyleecan.Loss",
-        init_dict=None,
-        init_str=None,
-    ):
+    def __init__(self, axes_dict=None, loss_dict=-1, logger_name="Pyleecan.Loss", init_dict = None, init_str = None):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -171,14 +163,12 @@ class OutLoss(FrozenClass):
             OutLoss_str += "parent = None " + linesep
         else:
             OutLoss_str += "parent = " + str(type(self.parent)) + " object" + linesep
-        OutLoss_str += "axes_dict = " + str(self.axes_dict) + linesep + linesep
+        OutLoss_str += "axes_dict = "+ str(self.axes_dict) + linesep + linesep
         if len(self.loss_dict) == 0:
-            OutLoss_str += "loss_dict = dict()" + linesep
+            OutLoss_str += "loss_dict = dict()"+linesep
         for key, obj in self.loss_dict.items():
-            tmp = (
-                self.loss_dict[key].__str__().replace(linesep, linesep + "\t") + linesep
-            )
-            OutLoss_str += "loss_dict[" + key + "] =" + tmp + linesep + linesep
+            tmp = self.loss_dict[key].__str__().replace(linesep, linesep + "\t") + linesep 
+            OutLoss_str += "loss_dict["+key+"] ="+ tmp + linesep + linesep
         OutLoss_str += 'logger_name = "' + str(self.logger_name) + '"' + linesep
         return OutLoss_str
 
@@ -195,64 +185,40 @@ class OutLoss(FrozenClass):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
+    def compare(self, other, name='self', ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
             ignore_list = list()
         if type(other) != type(self):
-            return ["type(" + name + ")"]
+            return ['type('+name+')']
         diff_list = list()
-        if (other.axes_dict is None and self.axes_dict is not None) or (
-            other.axes_dict is not None and self.axes_dict is None
-        ):
-            diff_list.append(name + ".axes_dict None mismatch")
+        if (other.axes_dict is None and self.axes_dict is not None) or (other.axes_dict is not None and self.axes_dict is None):
+            diff_list.append(name+'.axes_dict None mismatch')
         elif self.axes_dict is None:
             pass
         elif len(other.axes_dict) != len(self.axes_dict):
-            diff_list.append("len(" + name + "axes_dict)")
+            diff_list.append('len('+name+'axes_dict)')
         else:
             for key in self.axes_dict:
-                diff_list.extend(
-                    self.axes_dict[key].compare(
-                        other.axes_dict[key],
-                        name=name + ".axes_dict[" + str(key) + "]",
-                        ignore_list=ignore_list,
-                        is_add_value=is_add_value,
-                    )
-                )
-        if (other.loss_dict is None and self.loss_dict is not None) or (
-            other.loss_dict is not None and self.loss_dict is None
-        ):
-            diff_list.append(name + ".loss_dict None mismatch")
+                diff_list.extend(self.axes_dict[key].compare(other.axes_dict[key],name=name+'.axes_dict['+str(key)+']',ignore_list=ignore_list,is_add_value=is_add_value))
+        if (other.loss_dict is None and self.loss_dict is not None) or (other.loss_dict is not None and self.loss_dict is None):
+            diff_list.append(name+'.loss_dict None mismatch')
         elif self.loss_dict is None:
             pass
         elif len(other.loss_dict) != len(self.loss_dict):
-            diff_list.append("len(" + name + "loss_dict)")
+            diff_list.append('len('+name+'loss_dict)')
         else:
             for key in self.loss_dict:
-                diff_list.extend(
-                    self.loss_dict[key].compare(
-                        other.loss_dict[key],
-                        name=name + ".loss_dict[" + str(key) + "]",
-                        ignore_list=ignore_list,
-                        is_add_value=is_add_value,
-                    )
-                )
+                diff_list.extend(self.loss_dict[key].compare(other.loss_dict[key],name=name+'.loss_dict['+str(key)+']',ignore_list=ignore_list,is_add_value=is_add_value))
         if other._logger_name != self._logger_name:
             if is_add_value:
-                val_str = (
-                    " (self="
-                    + str(self._logger_name)
-                    + ", other="
-                    + str(other._logger_name)
-                    + ")"
-                )
-                diff_list.append(name + ".logger_name" + val_str)
+                val_str = ' (self='+str(self._logger_name)+', other='+str(other._logger_name)+')'
+                diff_list.append(name+'.logger_name'+val_str)
             else:
-                diff_list.append(name + ".logger_name")
+                diff_list.append(name+'.logger_name')
         # Filter ignore differences
-        diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
+        diff_list = list(filter(lambda x : x not in ignore_list, diff_list))
         return diff_list
 
     def __sizeof__(self):
@@ -275,7 +241,7 @@ class OutLoss(FrozenClass):
             How to handle ndarray (0: tolist, 1: copy, 2: nothing)
         keep_function : bool
             True to keep the function object, else return str
-        Optional keyword input parameter is for internal use only
+        Optional keyword input parameter is for internal use only 
         and may prevent json serializability.
         """
 
@@ -286,11 +252,7 @@ class OutLoss(FrozenClass):
             OutLoss_dict["axes_dict"] = dict()
             for key, obj in self.axes_dict.items():
                 if obj is not None:
-                    OutLoss_dict["axes_dict"][key] = obj.as_dict(
-                        type_handle_ndarray=type_handle_ndarray,
-                        keep_function=keep_function,
-                        **kwargs
-                    )
+                    OutLoss_dict["axes_dict"][key] = obj.as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs)
                 else:
                     OutLoss_dict["axes_dict"][key] = None
         if self.loss_dict is None:
@@ -299,17 +261,14 @@ class OutLoss(FrozenClass):
             OutLoss_dict["loss_dict"] = dict()
             for key, obj in self.loss_dict.items():
                 if obj is not None:
-                    OutLoss_dict["loss_dict"][key] = obj.as_dict(
-                        type_handle_ndarray=type_handle_ndarray,
-                        keep_function=keep_function,
-                        **kwargs
-                    )
+                    OutLoss_dict["loss_dict"][key] = obj.as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs)
                 else:
                     OutLoss_dict["loss_dict"][key] = None
         OutLoss_dict["logger_name"] = self.logger_name
         # The class name is added to the dict for deserialisation purpose
         OutLoss_dict["__class__"] = "OutLoss"
         return OutLoss_dict
+
 
     def copy(self):
         """Creates a deepcopy of the object"""
@@ -329,11 +288,7 @@ class OutLoss(FrozenClass):
                 loss_dict_val[key] = obj.copy()
         logger_name_val = self.logger_name
         # Creates new object of the same type with the copied properties
-        obj_copy = type(self)(
-            axes_dict=axes_dict_val,
-            loss_dict=loss_dict_val,
-            logger_name=logger_name_val,
-        )
+        obj_copy = type(self)(axes_dict=axes_dict_val,loss_dict=loss_dict_val,logger_name=logger_name_val)
         return obj_copy
 
     def _set_None(self):
@@ -359,15 +314,11 @@ class OutLoss(FrozenClass):
                     try:
                         obj = load_init_dict(obj)[1]
                     except Exception as e:
-                        self.get_logger().error(
-                            "Error while loading " + obj + ", setting None instead"
-                        )
+                        self.get_logger().error('Error while loading '+obj+', setting None instead')
                         obj = None
                         value[key] = None
                 if type(obj) is dict:
-                    class_obj = import_class(
-                        "SciDataTool.Classes", obj.get("__class__"), "axes_dict"
-                    )
+                    class_obj = import_class('SciDataTool.Classes', obj.get('__class__'), 'axes_dict')
                     value[key] = class_obj(init_dict=obj)
         if type(value) is int and value == -1:
             value = dict()
@@ -399,15 +350,11 @@ class OutLoss(FrozenClass):
                     try:
                         obj = load_init_dict(obj)[1]
                     except Exception as e:
-                        self.get_logger().error(
-                            "Error while loading " + obj + ", setting None instead"
-                        )
+                        self.get_logger().error('Error while loading '+obj+', setting None instead')
                         obj = None
                         value[key] = None
                 if type(obj) is dict:
-                    class_obj = import_class(
-                        "pyleecan.Classes", obj.get("__class__"), "loss_dict"
-                    )
+                    class_obj = import_class('pyleecan.Classes', obj.get('__class__'), 'loss_dict')
                     value[key] = class_obj(init_dict=obj)
         if type(value) is int and value == -1:
             value = dict()

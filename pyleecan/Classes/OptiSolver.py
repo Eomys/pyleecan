@@ -29,15 +29,7 @@ class OptiSolver(FrozenClass):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(
-        self,
-        problem=-1,
-        xoutput=-1,
-        logger_name="Pyleecan.OptiSolver",
-        is_keep_all_output=False,
-        init_dict=None,
-        init_str=None,
-    ):
+    def __init__(self, problem=-1, xoutput=-1, logger_name="Pyleecan.OptiSolver", is_keep_all_output=False, init_dict = None, init_str = None):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -81,18 +73,16 @@ class OptiSolver(FrozenClass):
             OptiSolver_str += "parent = " + str(type(self.parent)) + " object" + linesep
         if self.problem is not None:
             tmp = self.problem.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            OptiSolver_str += "problem = " + tmp
+            OptiSolver_str += "problem = "+ tmp
         else:
             OptiSolver_str += "problem = None" + linesep + linesep
         if self.xoutput is not None:
             tmp = self.xoutput.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            OptiSolver_str += "xoutput = " + tmp
+            OptiSolver_str += "xoutput = "+ tmp
         else:
             OptiSolver_str += "xoutput = None" + linesep + linesep
         OptiSolver_str += 'logger_name = "' + str(self.logger_name) + '"' + linesep
-        OptiSolver_str += (
-            "is_keep_all_output = " + str(self.is_keep_all_output) + linesep
-        )
+        OptiSolver_str += "is_keep_all_output = " + str(self.is_keep_all_output) + linesep
         return OptiSolver_str
 
     def __eq__(self, other):
@@ -110,66 +100,36 @@ class OptiSolver(FrozenClass):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
+    def compare(self, other, name='self', ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
             ignore_list = list()
         if type(other) != type(self):
-            return ["type(" + name + ")"]
+            return ['type('+name+')']
         diff_list = list()
-        if (other.problem is None and self.problem is not None) or (
-            other.problem is not None and self.problem is None
-        ):
-            diff_list.append(name + ".problem None mismatch")
+        if (other.problem is None and self.problem is not None) or (other.problem is not None and self.problem is None):
+            diff_list.append(name+'.problem None mismatch')
         elif self.problem is not None:
-            diff_list.extend(
-                self.problem.compare(
-                    other.problem,
-                    name=name + ".problem",
-                    ignore_list=ignore_list,
-                    is_add_value=is_add_value,
-                )
-            )
-        if (other.xoutput is None and self.xoutput is not None) or (
-            other.xoutput is not None and self.xoutput is None
-        ):
-            diff_list.append(name + ".xoutput None mismatch")
+            diff_list.extend(self.problem.compare(other.problem,name=name+'.problem',ignore_list=ignore_list,is_add_value=is_add_value))
+        if (other.xoutput is None and self.xoutput is not None) or (other.xoutput is not None and self.xoutput is None):
+            diff_list.append(name+'.xoutput None mismatch')
         elif self.xoutput is not None:
-            diff_list.extend(
-                self.xoutput.compare(
-                    other.xoutput,
-                    name=name + ".xoutput",
-                    ignore_list=ignore_list,
-                    is_add_value=is_add_value,
-                )
-            )
+            diff_list.extend(self.xoutput.compare(other.xoutput,name=name+'.xoutput',ignore_list=ignore_list,is_add_value=is_add_value))
         if other._logger_name != self._logger_name:
             if is_add_value:
-                val_str = (
-                    " (self="
-                    + str(self._logger_name)
-                    + ", other="
-                    + str(other._logger_name)
-                    + ")"
-                )
-                diff_list.append(name + ".logger_name" + val_str)
+                val_str = ' (self='+str(self._logger_name)+', other='+str(other._logger_name)+')'
+                diff_list.append(name+'.logger_name'+val_str)
             else:
-                diff_list.append(name + ".logger_name")
+                diff_list.append(name+'.logger_name')
         if other._is_keep_all_output != self._is_keep_all_output:
             if is_add_value:
-                val_str = (
-                    " (self="
-                    + str(self._is_keep_all_output)
-                    + ", other="
-                    + str(other._is_keep_all_output)
-                    + ")"
-                )
-                diff_list.append(name + ".is_keep_all_output" + val_str)
+                val_str = ' (self='+str(self._is_keep_all_output)+', other='+str(other._is_keep_all_output)+')'
+                diff_list.append(name+'.is_keep_all_output'+val_str)
             else:
-                diff_list.append(name + ".is_keep_all_output")
+                diff_list.append(name+'.is_keep_all_output')
         # Filter ignore differences
-        diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
+        diff_list = list(filter(lambda x : x not in ignore_list, diff_list))
         return diff_list
 
     def __sizeof__(self):
@@ -189,7 +149,7 @@ class OptiSolver(FrozenClass):
             How to handle ndarray (0: tolist, 1: copy, 2: nothing)
         keep_function : bool
             True to keep the function object, else return str
-        Optional keyword input parameter is for internal use only
+        Optional keyword input parameter is for internal use only 
         and may prevent json serializability.
         """
 
@@ -197,24 +157,17 @@ class OptiSolver(FrozenClass):
         if self.problem is None:
             OptiSolver_dict["problem"] = None
         else:
-            OptiSolver_dict["problem"] = self.problem.as_dict(
-                type_handle_ndarray=type_handle_ndarray,
-                keep_function=keep_function,
-                **kwargs
-            )
+            OptiSolver_dict["problem"] = self.problem.as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs)
         if self.xoutput is None:
             OptiSolver_dict["xoutput"] = None
         else:
-            OptiSolver_dict["xoutput"] = self.xoutput.as_dict(
-                type_handle_ndarray=type_handle_ndarray,
-                keep_function=keep_function,
-                **kwargs
-            )
+            OptiSolver_dict["xoutput"] = self.xoutput.as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs)
         OptiSolver_dict["logger_name"] = self.logger_name
         OptiSolver_dict["is_keep_all_output"] = self.is_keep_all_output
         # The class name is added to the dict for deserialisation purpose
         OptiSolver_dict["__class__"] = "OptiSolver"
         return OptiSolver_dict
+
 
     def copy(self):
         """Creates a deepcopy of the object"""
@@ -231,12 +184,7 @@ class OptiSolver(FrozenClass):
         logger_name_val = self.logger_name
         is_keep_all_output_val = self.is_keep_all_output
         # Creates new object of the same type with the copied properties
-        obj_copy = type(self)(
-            problem=problem_val,
-            xoutput=xoutput_val,
-            logger_name=logger_name_val,
-            is_keep_all_output=is_keep_all_output_val,
-        )
+        obj_copy = type(self)(problem=problem_val,xoutput=xoutput_val,logger_name=logger_name_val,is_keep_all_output=is_keep_all_output_val)
         return obj_copy
 
     def _set_None(self):
@@ -259,24 +207,19 @@ class OptiSolver(FrozenClass):
             try:
                 value = load_init_dict(value)[1]
             except Exception as e:
-                self.get_logger().error(
-                    "Error while loading " + value + ", setting None instead"
-                )
+                self.get_logger().error('Error while loading '+value+', setting None instead')
                 value = None
-        if isinstance(value, dict) and "__class__" in value:
-            class_obj = import_class(
-                "pyleecan.Classes", value.get("__class__"), "problem"
-            )
+        if isinstance(value, dict) and '__class__' in value:
+            class_obj = import_class('pyleecan.Classes', value.get('__class__'), 'problem')
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
-            OptiProblem = import_class("pyleecan.Classes", "OptiProblem", "problem")
+            OptiProblem = import_class('pyleecan.Classes', 'OptiProblem', 'problem')
             value = OptiProblem()
         check_var("problem", value, "OptiProblem")
         self._problem = value
 
         if self._problem is not None:
             self._problem.parent = self
-
     problem = property(
         fget=_get_problem,
         fset=_set_problem,
@@ -296,24 +239,19 @@ class OptiSolver(FrozenClass):
             try:
                 value = load_init_dict(value)[1]
             except Exception as e:
-                self.get_logger().error(
-                    "Error while loading " + value + ", setting None instead"
-                )
+                self.get_logger().error('Error while loading '+value+', setting None instead')
                 value = None
-        if isinstance(value, dict) and "__class__" in value:
-            class_obj = import_class(
-                "pyleecan.Classes", value.get("__class__"), "xoutput"
-            )
+        if isinstance(value, dict) and '__class__' in value:
+            class_obj = import_class('pyleecan.Classes', value.get('__class__'), 'xoutput')
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
-            XOutput = import_class("pyleecan.Classes", "XOutput", "xoutput")
+            XOutput = import_class('pyleecan.Classes', 'XOutput', 'xoutput')
             value = XOutput()
         check_var("xoutput", value, "XOutput")
         self._xoutput = value
 
         if self._xoutput is not None:
             self._xoutput.parent = self
-
     xoutput = property(
         fget=_get_xoutput,
         fset=_set_xoutput,

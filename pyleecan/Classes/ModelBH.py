@@ -61,7 +61,7 @@ class ModelBH(FrozenClass):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, Bmax=2.31, Hmax=None, delta=100, init_dict=None, init_str=None):
+    def __init__(self, Bmax=2.31, Hmax=None, delta=100, init_dict = None, init_str = None):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -118,61 +118,40 @@ class ModelBH(FrozenClass):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
+    def compare(self, other, name='self', ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
             ignore_list = list()
         if type(other) != type(self):
-            return ["type(" + name + ")"]
+            return ['type('+name+')']
         diff_list = list()
-        if (
-            other._Bmax is not None
-            and self._Bmax is not None
-            and isnan(other._Bmax)
-            and isnan(self._Bmax)
-        ):
+        if other._Bmax is not None and self._Bmax is not None and isnan(other._Bmax) and isnan(self._Bmax):
             pass
         elif other._Bmax != self._Bmax:
             if is_add_value:
-                val_str = (
-                    " (self=" + str(self._Bmax) + ", other=" + str(other._Bmax) + ")"
-                )
-                diff_list.append(name + ".Bmax" + val_str)
+                val_str = ' (self='+str(self._Bmax)+', other='+str(other._Bmax)+')'
+                diff_list.append(name+'.Bmax'+val_str)
             else:
-                diff_list.append(name + ".Bmax")
-        if (
-            other._Hmax is not None
-            and self._Hmax is not None
-            and isnan(other._Hmax)
-            and isnan(self._Hmax)
-        ):
+                diff_list.append(name+'.Bmax')
+        if other._Hmax is not None and self._Hmax is not None and isnan(other._Hmax) and isnan(self._Hmax):
             pass
         elif other._Hmax != self._Hmax:
             if is_add_value:
-                val_str = (
-                    " (self=" + str(self._Hmax) + ", other=" + str(other._Hmax) + ")"
-                )
-                diff_list.append(name + ".Hmax" + val_str)
+                val_str = ' (self='+str(self._Hmax)+', other='+str(other._Hmax)+')'
+                diff_list.append(name+'.Hmax'+val_str)
             else:
-                diff_list.append(name + ".Hmax")
-        if (
-            other._delta is not None
-            and self._delta is not None
-            and isnan(other._delta)
-            and isnan(self._delta)
-        ):
+                diff_list.append(name+'.Hmax')
+        if other._delta is not None and self._delta is not None and isnan(other._delta) and isnan(self._delta):
             pass
         elif other._delta != self._delta:
             if is_add_value:
-                val_str = (
-                    " (self=" + str(self._delta) + ", other=" + str(other._delta) + ")"
-                )
-                diff_list.append(name + ".delta" + val_str)
+                val_str = ' (self='+str(self._delta)+', other='+str(other._delta)+')'
+                diff_list.append(name+'.delta'+val_str)
             else:
-                diff_list.append(name + ".delta")
+                diff_list.append(name+'.delta')
         # Filter ignore differences
-        diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
+        diff_list = list(filter(lambda x : x not in ignore_list, diff_list))
         return diff_list
 
     def __sizeof__(self):
@@ -191,7 +170,7 @@ class ModelBH(FrozenClass):
             How to handle ndarray (0: tolist, 1: copy, 2: nothing)
         keep_function : bool
             True to keep the function object, else return str
-        Optional keyword input parameter is for internal use only
+        Optional keyword input parameter is for internal use only 
         and may prevent json serializability.
         """
 
@@ -203,6 +182,7 @@ class ModelBH(FrozenClass):
         ModelBH_dict["__class__"] = "ModelBH"
         return ModelBH_dict
 
+
     def copy(self):
         """Creates a deepcopy of the object"""
 
@@ -211,7 +191,7 @@ class ModelBH(FrozenClass):
         Hmax_val = self.Hmax
         delta_val = self.delta
         # Creates new object of the same type with the copied properties
-        obj_copy = type(self)(Bmax=Bmax_val, Hmax=Hmax_val, delta=delta_val)
+        obj_copy = type(self)(Bmax=Bmax_val,Hmax=Hmax_val,delta=delta_val)
         return obj_copy
 
     def _set_None(self):

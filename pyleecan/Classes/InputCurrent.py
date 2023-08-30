@@ -68,29 +68,7 @@ class InputCurrent(InputVoltage):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(
-        self,
-        Is=None,
-        Ir=None,
-        Is_harm=None,
-        rot_dir=None,
-        angle_rotor_initial=0,
-        PWM=None,
-        phase_dir=None,
-        current_dir=None,
-        is_periodicity_t=False,
-        is_periodicity_a=False,
-        is_generator=False,
-        time=None,
-        angle=None,
-        Nt_tot=2048,
-        Nrev=None,
-        Na_tot=2048,
-        OP=None,
-        t_final=None,
-        init_dict=None,
-        init_str=None,
-    ):
+    def __init__(self, Is=None, Ir=None, Is_harm=None, rot_dir=None, angle_rotor_initial=0, PWM=None, phase_dir=None, current_dir=None, is_periodicity_t=False, is_periodicity_a=False, is_generator=False, time=None, angle=None, Nt_tot=2048, Nrev=None, Na_tot=2048, OP=None, t_final=None, init_dict = None, init_str = None):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -147,23 +125,7 @@ class InputCurrent(InputVoltage):
         self.Ir = Ir
         self.Is_harm = Is_harm
         # Call InputVoltage init
-        super(InputCurrent, self).__init__(
-            rot_dir=rot_dir,
-            angle_rotor_initial=angle_rotor_initial,
-            PWM=PWM,
-            phase_dir=phase_dir,
-            current_dir=current_dir,
-            is_periodicity_t=is_periodicity_t,
-            is_periodicity_a=is_periodicity_a,
-            is_generator=is_generator,
-            time=time,
-            angle=angle,
-            Nt_tot=Nt_tot,
-            Nrev=Nrev,
-            Na_tot=Na_tot,
-            OP=OP,
-            t_final=t_final,
-        )
+        super(InputCurrent, self).__init__(rot_dir=rot_dir, angle_rotor_initial=angle_rotor_initial, PWM=PWM, phase_dir=phase_dir, current_dir=current_dir, is_periodicity_t=is_periodicity_t, is_periodicity_a=is_periodicity_a, is_generator=is_generator, time=time, angle=angle, Nt_tot=Nt_tot, Nrev=Nrev, Na_tot=Na_tot, OP=OP, t_final=t_final)
         # The class is frozen (in InputVoltage init), for now it's impossible to
         # add new properties
 
@@ -175,17 +137,17 @@ class InputCurrent(InputVoltage):
         InputCurrent_str += super(InputCurrent, self).__str__()
         if self.Is is not None:
             tmp = self.Is.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            InputCurrent_str += "Is = " + tmp
+            InputCurrent_str += "Is = "+ tmp
         else:
             InputCurrent_str += "Is = None" + linesep + linesep
         if self.Ir is not None:
             tmp = self.Ir.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            InputCurrent_str += "Ir = " + tmp
+            InputCurrent_str += "Ir = "+ tmp
         else:
             InputCurrent_str += "Ir = None" + linesep + linesep
         if self.Is_harm is not None:
             tmp = self.Is_harm.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            InputCurrent_str += "Is_harm = " + tmp
+            InputCurrent_str += "Is_harm = "+ tmp
         else:
             InputCurrent_str += "Is_harm = None" + linesep + linesep
         return InputCurrent_str
@@ -207,62 +169,31 @@ class InputCurrent(InputVoltage):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
+    def compare(self, other, name='self', ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
             ignore_list = list()
         if type(other) != type(self):
-            return ["type(" + name + ")"]
+            return ['type('+name+')']
         diff_list = list()
 
         # Check the properties inherited from InputVoltage
-        diff_list.extend(
-            super(InputCurrent, self).compare(
-                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
-            )
-        )
-        if (other.Is is None and self.Is is not None) or (
-            other.Is is not None and self.Is is None
-        ):
-            diff_list.append(name + ".Is None mismatch")
+        diff_list.extend(super(InputCurrent, self).compare(other,name=name, ignore_list=ignore_list, is_add_value=is_add_value))
+        if (other.Is is None and self.Is is not None) or (other.Is is not None and self.Is is None):
+            diff_list.append(name+'.Is None mismatch')
         elif self.Is is not None:
-            diff_list.extend(
-                self.Is.compare(
-                    other.Is,
-                    name=name + ".Is",
-                    ignore_list=ignore_list,
-                    is_add_value=is_add_value,
-                )
-            )
-        if (other.Ir is None and self.Ir is not None) or (
-            other.Ir is not None and self.Ir is None
-        ):
-            diff_list.append(name + ".Ir None mismatch")
+            diff_list.extend(self.Is.compare(other.Is,name=name+'.Is',ignore_list=ignore_list,is_add_value=is_add_value))
+        if (other.Ir is None and self.Ir is not None) or (other.Ir is not None and self.Ir is None):
+            diff_list.append(name+'.Ir None mismatch')
         elif self.Ir is not None:
-            diff_list.extend(
-                self.Ir.compare(
-                    other.Ir,
-                    name=name + ".Ir",
-                    ignore_list=ignore_list,
-                    is_add_value=is_add_value,
-                )
-            )
-        if (other.Is_harm is None and self.Is_harm is not None) or (
-            other.Is_harm is not None and self.Is_harm is None
-        ):
-            diff_list.append(name + ".Is_harm None mismatch")
+            diff_list.extend(self.Ir.compare(other.Ir,name=name+'.Ir',ignore_list=ignore_list,is_add_value=is_add_value))
+        if (other.Is_harm is None and self.Is_harm is not None) or (other.Is_harm is not None and self.Is_harm is None):
+            diff_list.append(name+'.Is_harm None mismatch')
         elif self.Is_harm is not None:
-            diff_list.extend(
-                self.Is_harm.compare(
-                    other.Is_harm,
-                    name=name + ".Is_harm",
-                    ignore_list=ignore_list,
-                    is_add_value=is_add_value,
-                )
-            )
+            diff_list.extend(self.Is_harm.compare(other.Is_harm,name=name+'.Is_harm',ignore_list=ignore_list,is_add_value=is_add_value))
         # Filter ignore differences
-        diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
+        diff_list = list(filter(lambda x : x not in ignore_list, diff_list))
         return diff_list
 
     def __sizeof__(self):
@@ -284,44 +215,29 @@ class InputCurrent(InputVoltage):
             How to handle ndarray (0: tolist, 1: copy, 2: nothing)
         keep_function : bool
             True to keep the function object, else return str
-        Optional keyword input parameter is for internal use only
+        Optional keyword input parameter is for internal use only 
         and may prevent json serializability.
         """
 
         # Get the properties inherited from InputVoltage
-        InputCurrent_dict = super(InputCurrent, self).as_dict(
-            type_handle_ndarray=type_handle_ndarray,
-            keep_function=keep_function,
-            **kwargs
-        )
+        InputCurrent_dict = super(InputCurrent, self).as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs)
         if self.Is is None:
             InputCurrent_dict["Is"] = None
         else:
-            InputCurrent_dict["Is"] = self.Is.as_dict(
-                type_handle_ndarray=type_handle_ndarray,
-                keep_function=keep_function,
-                **kwargs
-            )
+            InputCurrent_dict["Is"] = self.Is.as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs)
         if self.Ir is None:
             InputCurrent_dict["Ir"] = None
         else:
-            InputCurrent_dict["Ir"] = self.Ir.as_dict(
-                type_handle_ndarray=type_handle_ndarray,
-                keep_function=keep_function,
-                **kwargs
-            )
+            InputCurrent_dict["Ir"] = self.Ir.as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs)
         if self.Is_harm is None:
             InputCurrent_dict["Is_harm"] = None
         else:
-            InputCurrent_dict["Is_harm"] = self.Is_harm.as_dict(
-                type_handle_ndarray=type_handle_ndarray,
-                keep_function=keep_function,
-                **kwargs
-            )
+            InputCurrent_dict["Is_harm"] = self.Is_harm.as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs)
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         InputCurrent_dict["__class__"] = "InputCurrent"
         return InputCurrent_dict
+
 
     def copy(self):
         """Creates a deepcopy of the object"""
@@ -367,26 +283,7 @@ class InputCurrent(InputVoltage):
             OP_val = self.OP.copy()
         t_final_val = self.t_final
         # Creates new object of the same type with the copied properties
-        obj_copy = type(self)(
-            Is=Is_val,
-            Ir=Ir_val,
-            Is_harm=Is_harm_val,
-            rot_dir=rot_dir_val,
-            angle_rotor_initial=angle_rotor_initial_val,
-            PWM=PWM_val,
-            phase_dir=phase_dir_val,
-            current_dir=current_dir_val,
-            is_periodicity_t=is_periodicity_t_val,
-            is_periodicity_a=is_periodicity_a_val,
-            is_generator=is_generator_val,
-            time=time_val,
-            angle=angle_val,
-            Nt_tot=Nt_tot_val,
-            Nrev=Nrev_val,
-            Na_tot=Na_tot_val,
-            OP=OP_val,
-            t_final=t_final_val,
-        )
+        obj_copy = type(self)(Is=Is_val,Ir=Ir_val,Is_harm=Is_harm_val,rot_dir=rot_dir_val,angle_rotor_initial=angle_rotor_initial_val,PWM=PWM_val,phase_dir=phase_dir_val,current_dir=current_dir_val,is_periodicity_t=is_periodicity_t_val,is_periodicity_a=is_periodicity_a_val,is_generator=is_generator_val,time=time_val,angle=angle_val,Nt_tot=Nt_tot_val,Nrev=Nrev_val,Na_tot=Na_tot_val,OP=OP_val,t_final=t_final_val)
         return obj_copy
 
     def _set_None(self):
@@ -407,25 +304,24 @@ class InputCurrent(InputVoltage):
 
     def _set_Is(self, value):
         """setter of Is"""
-        ImportMatrix = import_class("pyleecan.Classes", "ImportMatrix", "Is")
-        ImportMatrixVal = import_class("pyleecan.Classes", "ImportMatrixVal", "Is")
+        ImportMatrix = import_class('pyleecan.Classes', 'ImportMatrix', 'Is')
+        ImportMatrixVal = import_class('pyleecan.Classes', 'ImportMatrixVal', 'Is')
         if isinstance(value, str):  # Load from file
             value = load_init_dict(value)[1]
-        if isinstance(value, ndarray):
+        if isinstance(value,ndarray):
             value = ImportMatrixVal(value=value)
-        elif isinstance(value, list):
+        elif isinstance(value,list):
             value = ImportMatrixVal(value=array(value))
         elif value == -1:
             value = ImportMatrix()
-        elif isinstance(value, dict):
-            class_obj = import_class("pyleecan.Classes", value.get("__class__"), "Is")
+        elif isinstance(value,dict):
+            class_obj = import_class('pyleecan.Classes', value.get('__class__'), 'Is')
             value = class_obj(init_dict=value)
         check_var("Is", value, "ImportMatrix")
         self._Is = value
 
         if self._Is is not None:
             self._Is.parent = self
-
     Is = property(
         fget=_get_Is,
         fset=_set_Is,
@@ -441,25 +337,24 @@ class InputCurrent(InputVoltage):
 
     def _set_Ir(self, value):
         """setter of Ir"""
-        ImportMatrix = import_class("pyleecan.Classes", "ImportMatrix", "Ir")
-        ImportMatrixVal = import_class("pyleecan.Classes", "ImportMatrixVal", "Ir")
+        ImportMatrix = import_class('pyleecan.Classes', 'ImportMatrix', 'Ir')
+        ImportMatrixVal = import_class('pyleecan.Classes', 'ImportMatrixVal', 'Ir')
         if isinstance(value, str):  # Load from file
             value = load_init_dict(value)[1]
-        if isinstance(value, ndarray):
+        if isinstance(value,ndarray):
             value = ImportMatrixVal(value=value)
-        elif isinstance(value, list):
+        elif isinstance(value,list):
             value = ImportMatrixVal(value=array(value))
         elif value == -1:
             value = ImportMatrix()
-        elif isinstance(value, dict):
-            class_obj = import_class("pyleecan.Classes", value.get("__class__"), "Ir")
+        elif isinstance(value,dict):
+            class_obj = import_class('pyleecan.Classes', value.get('__class__'), 'Ir')
             value = class_obj(init_dict=value)
         check_var("Ir", value, "ImportMatrix")
         self._Ir = value
 
         if self._Ir is not None:
             self._Ir.parent = self
-
     Ir = property(
         fget=_get_Ir,
         fset=_set_Ir,
@@ -479,24 +374,19 @@ class InputCurrent(InputVoltage):
             try:
                 value = load_init_dict(value)[1]
             except Exception as e:
-                self.get_logger().error(
-                    "Error while loading " + value + ", setting None instead"
-                )
+                self.get_logger().error('Error while loading '+value+', setting None instead')
                 value = None
-        if isinstance(value, dict) and "__class__" in value:
-            class_obj = import_class(
-                "pyleecan.Classes", value.get("__class__"), "Is_harm"
-            )
+        if isinstance(value, dict) and '__class__' in value:
+            class_obj = import_class('pyleecan.Classes', value.get('__class__'), 'Is_harm')
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
-            ImportData = import_class("pyleecan.Classes", "ImportData", "Is_harm")
+            ImportData = import_class('pyleecan.Classes', 'ImportData', 'Is_harm')
             value = ImportData()
         check_var("Is_harm", value, "ImportData")
         self._Is_harm = value
 
         if self._Is_harm is not None:
             self._Is_harm.parent = self
-
     Is_harm = property(
         fget=_get_Is_harm,
         fset=_set_Is_harm,

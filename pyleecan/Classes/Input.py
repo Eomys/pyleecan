@@ -98,18 +98,7 @@ class Input(FrozenClass):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(
-        self,
-        time=None,
-        angle=None,
-        Nt_tot=2048,
-        Nrev=None,
-        Na_tot=2048,
-        OP=None,
-        t_final=None,
-        init_dict=None,
-        init_str=None,
-    ):
+    def __init__(self, time=None, angle=None, Nt_tot=2048, Nrev=None, Na_tot=2048, OP=None, t_final=None, init_dict = None, init_str = None):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -162,12 +151,12 @@ class Input(FrozenClass):
             Input_str += "parent = " + str(type(self.parent)) + " object" + linesep
         if self.time is not None:
             tmp = self.time.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            Input_str += "time = " + tmp
+            Input_str += "time = "+ tmp
         else:
             Input_str += "time = None" + linesep + linesep
         if self.angle is not None:
             tmp = self.angle.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            Input_str += "angle = " + tmp
+            Input_str += "angle = "+ tmp
         else:
             Input_str += "angle = None" + linesep + linesep
         Input_str += "Nt_tot = " + str(self.Nt_tot) + linesep
@@ -175,7 +164,7 @@ class Input(FrozenClass):
         Input_str += "Na_tot = " + str(self.Na_tot) + linesep
         if self.OP is not None:
             tmp = self.OP.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            Input_str += "OP = " + tmp
+            Input_str += "OP = "+ tmp
         else:
             Input_str += "OP = None" + linesep + linesep
         Input_str += "t_final = " + str(self.t_final) + linesep
@@ -202,113 +191,56 @@ class Input(FrozenClass):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
+    def compare(self, other, name='self', ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
             ignore_list = list()
         if type(other) != type(self):
-            return ["type(" + name + ")"]
+            return ['type('+name+')']
         diff_list = list()
-        if (other.time is None and self.time is not None) or (
-            other.time is not None and self.time is None
-        ):
-            diff_list.append(name + ".time None mismatch")
+        if (other.time is None and self.time is not None) or (other.time is not None and self.time is None):
+            diff_list.append(name+'.time None mismatch')
         elif self.time is not None:
-            diff_list.extend(
-                self.time.compare(
-                    other.time,
-                    name=name + ".time",
-                    ignore_list=ignore_list,
-                    is_add_value=is_add_value,
-                )
-            )
-        if (other.angle is None and self.angle is not None) or (
-            other.angle is not None and self.angle is None
-        ):
-            diff_list.append(name + ".angle None mismatch")
+            diff_list.extend(self.time.compare(other.time,name=name+'.time',ignore_list=ignore_list,is_add_value=is_add_value))
+        if (other.angle is None and self.angle is not None) or (other.angle is not None and self.angle is None):
+            diff_list.append(name+'.angle None mismatch')
         elif self.angle is not None:
-            diff_list.extend(
-                self.angle.compare(
-                    other.angle,
-                    name=name + ".angle",
-                    ignore_list=ignore_list,
-                    is_add_value=is_add_value,
-                )
-            )
+            diff_list.extend(self.angle.compare(other.angle,name=name+'.angle',ignore_list=ignore_list,is_add_value=is_add_value))
         if other._Nt_tot != self._Nt_tot:
             if is_add_value:
-                val_str = (
-                    " (self="
-                    + str(self._Nt_tot)
-                    + ", other="
-                    + str(other._Nt_tot)
-                    + ")"
-                )
-                diff_list.append(name + ".Nt_tot" + val_str)
+                val_str = ' (self='+str(self._Nt_tot)+', other='+str(other._Nt_tot)+')'
+                diff_list.append(name+'.Nt_tot'+val_str)
             else:
-                diff_list.append(name + ".Nt_tot")
-        if (
-            other._Nrev is not None
-            and self._Nrev is not None
-            and isnan(other._Nrev)
-            and isnan(self._Nrev)
-        ):
+                diff_list.append(name+'.Nt_tot')
+        if other._Nrev is not None and self._Nrev is not None and isnan(other._Nrev) and isnan(self._Nrev):
             pass
         elif other._Nrev != self._Nrev:
             if is_add_value:
-                val_str = (
-                    " (self=" + str(self._Nrev) + ", other=" + str(other._Nrev) + ")"
-                )
-                diff_list.append(name + ".Nrev" + val_str)
+                val_str = ' (self='+str(self._Nrev)+', other='+str(other._Nrev)+')'
+                diff_list.append(name+'.Nrev'+val_str)
             else:
-                diff_list.append(name + ".Nrev")
+                diff_list.append(name+'.Nrev')
         if other._Na_tot != self._Na_tot:
             if is_add_value:
-                val_str = (
-                    " (self="
-                    + str(self._Na_tot)
-                    + ", other="
-                    + str(other._Na_tot)
-                    + ")"
-                )
-                diff_list.append(name + ".Na_tot" + val_str)
+                val_str = ' (self='+str(self._Na_tot)+', other='+str(other._Na_tot)+')'
+                diff_list.append(name+'.Na_tot'+val_str)
             else:
-                diff_list.append(name + ".Na_tot")
-        if (other.OP is None and self.OP is not None) or (
-            other.OP is not None and self.OP is None
-        ):
-            diff_list.append(name + ".OP None mismatch")
+                diff_list.append(name+'.Na_tot')
+        if (other.OP is None and self.OP is not None) or (other.OP is not None and self.OP is None):
+            diff_list.append(name+'.OP None mismatch')
         elif self.OP is not None:
-            diff_list.extend(
-                self.OP.compare(
-                    other.OP,
-                    name=name + ".OP",
-                    ignore_list=ignore_list,
-                    is_add_value=is_add_value,
-                )
-            )
-        if (
-            other._t_final is not None
-            and self._t_final is not None
-            and isnan(other._t_final)
-            and isnan(self._t_final)
-        ):
+            diff_list.extend(self.OP.compare(other.OP,name=name+'.OP',ignore_list=ignore_list,is_add_value=is_add_value))
+        if other._t_final is not None and self._t_final is not None and isnan(other._t_final) and isnan(self._t_final):
             pass
         elif other._t_final != self._t_final:
             if is_add_value:
-                val_str = (
-                    " (self="
-                    + str(self._t_final)
-                    + ", other="
-                    + str(other._t_final)
-                    + ")"
-                )
-                diff_list.append(name + ".t_final" + val_str)
+                val_str = ' (self='+str(self._t_final)+', other='+str(other._t_final)+')'
+                diff_list.append(name+'.t_final'+val_str)
             else:
-                diff_list.append(name + ".t_final")
+                diff_list.append(name+'.t_final')
         # Filter ignore differences
-        diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
+        diff_list = list(filter(lambda x : x not in ignore_list, diff_list))
         return diff_list
 
     def __sizeof__(self):
@@ -331,7 +263,7 @@ class Input(FrozenClass):
             How to handle ndarray (0: tolist, 1: copy, 2: nothing)
         keep_function : bool
             True to keep the function object, else return str
-        Optional keyword input parameter is for internal use only
+        Optional keyword input parameter is for internal use only 
         and may prevent json serializability.
         """
 
@@ -339,34 +271,23 @@ class Input(FrozenClass):
         if self.time is None:
             Input_dict["time"] = None
         else:
-            Input_dict["time"] = self.time.as_dict(
-                type_handle_ndarray=type_handle_ndarray,
-                keep_function=keep_function,
-                **kwargs
-            )
+            Input_dict["time"] = self.time.as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs)
         if self.angle is None:
             Input_dict["angle"] = None
         else:
-            Input_dict["angle"] = self.angle.as_dict(
-                type_handle_ndarray=type_handle_ndarray,
-                keep_function=keep_function,
-                **kwargs
-            )
+            Input_dict["angle"] = self.angle.as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs)
         Input_dict["Nt_tot"] = self.Nt_tot
         Input_dict["Nrev"] = self.Nrev
         Input_dict["Na_tot"] = self.Na_tot
         if self.OP is None:
             Input_dict["OP"] = None
         else:
-            Input_dict["OP"] = self.OP.as_dict(
-                type_handle_ndarray=type_handle_ndarray,
-                keep_function=keep_function,
-                **kwargs
-            )
+            Input_dict["OP"] = self.OP.as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs)
         Input_dict["t_final"] = self.t_final
         # The class name is added to the dict for deserialisation purpose
         Input_dict["__class__"] = "Input"
         return Input_dict
+
 
     def copy(self):
         """Creates a deepcopy of the object"""
@@ -389,15 +310,7 @@ class Input(FrozenClass):
             OP_val = self.OP.copy()
         t_final_val = self.t_final
         # Creates new object of the same type with the copied properties
-        obj_copy = type(self)(
-            time=time_val,
-            angle=angle_val,
-            Nt_tot=Nt_tot_val,
-            Nrev=Nrev_val,
-            Na_tot=Na_tot_val,
-            OP=OP_val,
-            t_final=t_final_val,
-        )
+        obj_copy = type(self)(time=time_val,angle=angle_val,Nt_tot=Nt_tot_val,Nrev=Nrev_val,Na_tot=Na_tot_val,OP=OP_val,t_final=t_final_val)
         return obj_copy
 
     def _set_None(self):
@@ -420,25 +333,24 @@ class Input(FrozenClass):
 
     def _set_time(self, value):
         """setter of time"""
-        ImportMatrix = import_class("pyleecan.Classes", "ImportMatrix", "time")
-        ImportMatrixVal = import_class("pyleecan.Classes", "ImportMatrixVal", "time")
+        ImportMatrix = import_class('pyleecan.Classes', 'ImportMatrix', 'time')
+        ImportMatrixVal = import_class('pyleecan.Classes', 'ImportMatrixVal', 'time')
         if isinstance(value, str):  # Load from file
             value = load_init_dict(value)[1]
-        if isinstance(value, ndarray):
+        if isinstance(value,ndarray):
             value = ImportMatrixVal(value=value)
-        elif isinstance(value, list):
+        elif isinstance(value,list):
             value = ImportMatrixVal(value=array(value))
         elif value == -1:
             value = ImportMatrix()
-        elif isinstance(value, dict):
-            class_obj = import_class("pyleecan.Classes", value.get("__class__"), "time")
+        elif isinstance(value,dict):
+            class_obj = import_class('pyleecan.Classes', value.get('__class__'), 'time')
             value = class_obj(init_dict=value)
         check_var("time", value, "ImportMatrix")
         self._time = value
 
         if self._time is not None:
             self._time.parent = self
-
     time = property(
         fget=_get_time,
         fset=_set_time,
@@ -454,27 +366,24 @@ class Input(FrozenClass):
 
     def _set_angle(self, value):
         """setter of angle"""
-        ImportMatrix = import_class("pyleecan.Classes", "ImportMatrix", "angle")
-        ImportMatrixVal = import_class("pyleecan.Classes", "ImportMatrixVal", "angle")
+        ImportMatrix = import_class('pyleecan.Classes', 'ImportMatrix', 'angle')
+        ImportMatrixVal = import_class('pyleecan.Classes', 'ImportMatrixVal', 'angle')
         if isinstance(value, str):  # Load from file
             value = load_init_dict(value)[1]
-        if isinstance(value, ndarray):
+        if isinstance(value,ndarray):
             value = ImportMatrixVal(value=value)
-        elif isinstance(value, list):
+        elif isinstance(value,list):
             value = ImportMatrixVal(value=array(value))
         elif value == -1:
             value = ImportMatrix()
-        elif isinstance(value, dict):
-            class_obj = import_class(
-                "pyleecan.Classes", value.get("__class__"), "angle"
-            )
+        elif isinstance(value,dict):
+            class_obj = import_class('pyleecan.Classes', value.get('__class__'), 'angle')
             value = class_obj(init_dict=value)
         check_var("angle", value, "ImportMatrix")
         self._angle = value
 
         if self._angle is not None:
             self._angle.parent = self
-
     angle = property(
         fget=_get_angle,
         fset=_set_angle,
@@ -551,22 +460,19 @@ class Input(FrozenClass):
             try:
                 value = load_init_dict(value)[1]
             except Exception as e:
-                self.get_logger().error(
-                    "Error while loading " + value + ", setting None instead"
-                )
+                self.get_logger().error('Error while loading '+value+', setting None instead')
                 value = None
-        if isinstance(value, dict) and "__class__" in value:
-            class_obj = import_class("pyleecan.Classes", value.get("__class__"), "OP")
+        if isinstance(value, dict) and '__class__' in value:
+            class_obj = import_class('pyleecan.Classes', value.get('__class__'), 'OP')
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
-            OP = import_class("pyleecan.Classes", "OP", "OP")
+            OP = import_class('pyleecan.Classes', 'OP', 'OP')
             value = OP()
         check_var("OP", value, "OP")
         self._OP = value
 
         if self._OP is not None:
             self._OP.parent = self
-
     OP = property(
         fget=_get_OP,
         fset=_set_OP,

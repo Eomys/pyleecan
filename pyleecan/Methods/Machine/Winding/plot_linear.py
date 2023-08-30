@@ -360,7 +360,7 @@ def plot_linear(
         title = "Rotor winding linear pattern"
         prefix = "Rotor "
     # Add machine name if available
-    if self.parent.parent is not None and self.parent.parent.name not in ["", None]:  
+    if self.parent.parent is not None and self.parent.parent.name not in ["", None]:
         win_title = self.parent.parent.name + " " + title
     else:
         win_title = title

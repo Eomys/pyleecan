@@ -28,11 +28,6 @@ except ImportError as error:
     build_geometry = error
 
 try:
-    from ..Methods.Slot.SlotM19.check import check
-except ImportError as error:
-    check = error
-
-try:
     from ..Methods.Slot.SlotM19.comp_angle_opening import comp_angle_opening
 except ImportError as error:
     comp_angle_opening = error
@@ -67,13 +62,18 @@ try:
 except ImportError as error:
     plot_schematics = error
 
+try:
+    from ..Methods.Slot.SlotM19.check import check
+except ImportError as error:
+    check = error
+
 
 from numpy import isnan
 from ._check import InitUnKnowClassError
 
 
 class SlotM19(Slot):
-    """Rectangular Slot with Rectangular magnet with polar top"""
+    """trapezoidal  Slot with Rectangular trapezoidal  with polar top"""
 
     VERSION = 1
     IS_SYMMETRICAL = 1
@@ -102,15 +102,6 @@ class SlotM19(Slot):
         )
     else:
         build_geometry = build_geometry
-    # cf Methods.Slot.SlotM19.check
-    if isinstance(check, ImportError):
-        check = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use SlotM19 method check: " + str(check))
-            )
-        )
-    else:
-        check = check
     # cf Methods.Slot.SlotM19.comp_angle_opening
     if isinstance(comp_angle_opening, ImportError):
         comp_angle_opening = property(
@@ -190,22 +181,21 @@ class SlotM19(Slot):
         )
     else:
         plot_schematics = plot_schematics
+    # cf Methods.Slot.SlotM19.check
+    if isinstance(check, ImportError):
+        check = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use SlotM19 method check: " + str(check))
+            )
+        )
+    else:
+        check = check
     # generic save method is available in all object
     save = save
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(
-        self,
-        W0=0.0122,
-        W1=0.0152,
-        Hmag=0.001,
-        Zs=36,
-        wedge_mat=None,
-        is_bore=True,
-        init_dict=None,
-        init_str=None,
-    ):
+    def __init__(self, W0=0.03, W1=0.02, Hmag=0.00175, Zs=36, wedge_mat=None, is_bore=True, init_dict = None, init_str = None):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -249,7 +239,7 @@ class SlotM19(Slot):
         # Get the properties inherited from Slot
         SlotM19_str += super(SlotM19, self).__str__()
         SlotM19_str += "W0 = " + str(self.W0) + linesep
-        SlotM19_str += "W1" + str(self.W1) + linesep
+        SlotM19_str += "W1 = " + str(self.W1) + linesep
         SlotM19_str += "Hmag = " + str(self.Hmag) + linesep
         return SlotM19_str
 
@@ -270,67 +260,43 @@ class SlotM19(Slot):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
+    def compare(self, other, name='self', ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
             ignore_list = list()
         if type(other) != type(self):
-            return ["type(" + name + ")"]
+            return ['type('+name+')']
         diff_list = list()
 
         # Check the properties inherited from Slot
-        diff_list.extend(
-            super(SlotM19, self).compare(
-                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
-            )
-        )
-        if (
-            other._W0 is not None
-            and self._W0 is not None
-            and isnan(other._W0)
-            and isnan(self._W0)
-        ):
+        diff_list.extend(super(SlotM19, self).compare(other,name=name, ignore_list=ignore_list, is_add_value=is_add_value))
+        if other._W0 is not None and self._W0 is not None and isnan(other._W0) and isnan(self._W0):
             pass
         elif other._W0 != self._W0:
             if is_add_value:
-                val_str = " (self=" + str(self._W0) + ", other=" + str(other._W0) + ")"
-                diff_list.append(name + ".W0" + val_str)
+                val_str = ' (self='+str(self._W0)+', other='+str(other._W0)+')'
+                diff_list.append(name+'.W0'+val_str)
             else:
-                diff_list.append(name + ".W0")
-        
-        if (
-            other._W1 is not None
-            and self._W1 is not None
-            and isnan(other._W1)
-            and isnan(self._W1)
-        ):
+                diff_list.append(name+'.W0')
+        if other._W1 is not None and self._W1 is not None and isnan(other._W1) and isnan(self._W1):
             pass
         elif other._W1 != self._W1:
             if is_add_value:
-                val_str = (
-                    " (self=" + str(self._W1) + ", other=" + str(other._W1) + ")"
-                )
-                diff_list.append(name + ".W1" + val_str)
+                val_str = ' (self='+str(self._W1)+', other='+str(other._W1)+')'
+                diff_list.append(name+'.W1'+val_str)
             else:
-                diff_list.append(name + ".W1")
-        if (
-            other._Hmag is not None
-            and self._Hmag is not None
-            and isnan(other._Hmag)
-            and isnan(self._Hmag)
-        ):
+                diff_list.append(name+'.W1')
+        if other._Hmag is not None and self._Hmag is not None and isnan(other._Hmag) and isnan(self._Hmag):
             pass
         elif other._Hmag != self._Hmag:
             if is_add_value:
-                val_str = (
-                    " (self=" + str(self._Hmag) + ", other=" + str(other._Hmag) + ")"
-                )
-                diff_list.append(name + ".Hmag" + val_str)
+                val_str = ' (self='+str(self._Hmag)+', other='+str(other._Hmag)+')'
+                diff_list.append(name+'.Hmag'+val_str)
             else:
-                diff_list.append(name + ".Hmag")
+                diff_list.append(name+'.Hmag')
         # Filter ignore differences
-        diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
+        diff_list = list(filter(lambda x : x not in ignore_list, diff_list))
         return diff_list
 
     def __sizeof__(self):
@@ -352,16 +318,12 @@ class SlotM19(Slot):
             How to handle ndarray (0: tolist, 1: copy, 2: nothing)
         keep_function : bool
             True to keep the function object, else return str
-        Optional keyword input parameter is for internal use only
+        Optional keyword input parameter is for internal use only 
         and may prevent json serializability.
         """
 
         # Get the properties inherited from Slot
-        SlotM19_dict = super(SlotM19, self).as_dict(
-            type_handle_ndarray=type_handle_ndarray,
-            keep_function=keep_function,
-            **kwargs
-        )
+        SlotM19_dict = super(SlotM19, self).as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs)
         SlotM19_dict["W0"] = self.W0
         SlotM19_dict["W1"] = self.W1
         SlotM19_dict["Hmag"] = self.Hmag
@@ -369,6 +331,7 @@ class SlotM19(Slot):
         # Overwrite the mother class name
         SlotM19_dict["__class__"] = "SlotM19"
         return SlotM19_dict
+
 
     def copy(self):
         """Creates a deepcopy of the object"""
@@ -384,14 +347,7 @@ class SlotM19(Slot):
             wedge_mat_val = self.wedge_mat.copy()
         is_bore_val = self.is_bore
         # Creates new object of the same type with the copied properties
-        obj_copy = type(self)(
-            W0=W0_val,
-            W1=W1_val,
-            Hmag=Hmag_val,
-            Zs=Zs_val,
-            wedge_mat=wedge_mat_val,
-            is_bore=is_bore_val,
-        )
+        obj_copy = type(self)(W0=W0_val,W1=W1_val,Hmag=Hmag_val,Zs=Zs_val,wedge_mat=wedge_mat_val,is_bore=is_bore_val)
         return obj_copy
 
     def _set_None(self):
@@ -415,7 +371,7 @@ class SlotM19(Slot):
     W0 = property(
         fget=_get_W0,
         fset=_set_W0,
-        doc=u"""Slot isthmus width.
+        doc=u"""Slot/magnet width.
 
         :Type: float
         :min: 0
@@ -434,7 +390,7 @@ class SlotM19(Slot):
     W1 = property(
         fget=_get_W1,
         fset=_set_W1,
-        doc=u"""Magnet width
+        doc=u"""Slot/magnet width.
 
         :Type: float
         :min: 0

@@ -46,17 +46,7 @@ class PostPlot(PostMethod):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(
-        self,
-        method=None,
-        name="[]",
-        param_list=-1,
-        param_dict=-1,
-        save_format="png",
-        quantity=None,
-        init_dict=None,
-        init_str=None,
-    ):
+    def __init__(self, method=None, name="[]", param_list=-1, param_dict=-1, save_format="png", quantity=None, init_dict = None, init_str = None):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -104,12 +94,7 @@ class PostPlot(PostMethod):
         PostPlot_str += super(PostPlot, self).__str__()
         PostPlot_str += 'method = "' + str(self.method) + '"' + linesep
         PostPlot_str += 'name = "' + str(self.name) + '"' + linesep
-        PostPlot_str += (
-            "param_list = "
-            + linesep
-            + str(self.param_list).replace(linesep, linesep + "\t")
-            + linesep
-        )
+        PostPlot_str += "param_list = " + linesep + str(self.param_list).replace(linesep, linesep + "\t") + linesep
         PostPlot_str += "param_dict = " + str(self.param_dict) + linesep
         PostPlot_str += 'save_format = "' + str(self.save_format) + '"' + linesep
         PostPlot_str += 'quantity = "' + str(self.quantity) + '"' + linesep
@@ -138,91 +123,55 @@ class PostPlot(PostMethod):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
+    def compare(self, other, name='self', ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
             ignore_list = list()
         if type(other) != type(self):
-            return ["type(" + name + ")"]
+            return ['type('+name+')']
         diff_list = list()
 
         # Check the properties inherited from PostMethod
-        diff_list.extend(
-            super(PostPlot, self).compare(
-                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
-            )
-        )
+        diff_list.extend(super(PostPlot, self).compare(other,name=name, ignore_list=ignore_list, is_add_value=is_add_value))
         if other._method != self._method:
             if is_add_value:
-                val_str = (
-                    " (self="
-                    + str(self._method)
-                    + ", other="
-                    + str(other._method)
-                    + ")"
-                )
-                diff_list.append(name + ".method" + val_str)
+                val_str = ' (self='+str(self._method)+', other='+str(other._method)+')'
+                diff_list.append(name+'.method'+val_str)
             else:
-                diff_list.append(name + ".method")
+                diff_list.append(name+'.method')
         if other._name != self._name:
             if is_add_value:
-                val_str = (
-                    " (self=" + str(self._name) + ", other=" + str(other._name) + ")"
-                )
-                diff_list.append(name + ".name" + val_str)
+                val_str = ' (self='+str(self._name)+', other='+str(other._name)+')'
+                diff_list.append(name+'.name'+val_str)
             else:
-                diff_list.append(name + ".name")
+                diff_list.append(name+'.name')
         if other._param_list != self._param_list:
             if is_add_value:
-                val_str = (
-                    " (self="
-                    + str(self._param_list)
-                    + ", other="
-                    + str(other._param_list)
-                    + ")"
-                )
-                diff_list.append(name + ".param_list" + val_str)
+                val_str = ' (self='+str(self._param_list)+', other='+str(other._param_list)+')'
+                diff_list.append(name+'.param_list'+val_str)
             else:
-                diff_list.append(name + ".param_list")
+                diff_list.append(name+'.param_list')
         if other._param_dict != self._param_dict:
             if is_add_value:
-                val_str = (
-                    " (self="
-                    + str(self._param_dict)
-                    + ", other="
-                    + str(other._param_dict)
-                    + ")"
-                )
-                diff_list.append(name + ".param_dict" + val_str)
+                val_str = ' (self='+str(self._param_dict)+', other='+str(other._param_dict)+')'
+                diff_list.append(name+'.param_dict'+val_str)
             else:
-                diff_list.append(name + ".param_dict")
+                diff_list.append(name+'.param_dict')
         if other._save_format != self._save_format:
             if is_add_value:
-                val_str = (
-                    " (self="
-                    + str(self._save_format)
-                    + ", other="
-                    + str(other._save_format)
-                    + ")"
-                )
-                diff_list.append(name + ".save_format" + val_str)
+                val_str = ' (self='+str(self._save_format)+', other='+str(other._save_format)+')'
+                diff_list.append(name+'.save_format'+val_str)
             else:
-                diff_list.append(name + ".save_format")
+                diff_list.append(name+'.save_format')
         if other._quantity != self._quantity:
             if is_add_value:
-                val_str = (
-                    " (self="
-                    + str(self._quantity)
-                    + ", other="
-                    + str(other._quantity)
-                    + ")"
-                )
-                diff_list.append(name + ".quantity" + val_str)
+                val_str = ' (self='+str(self._quantity)+', other='+str(other._quantity)+')'
+                diff_list.append(name+'.quantity'+val_str)
             else:
-                diff_list.append(name + ".quantity")
+                diff_list.append(name+'.quantity')
         # Filter ignore differences
-        diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
+        diff_list = list(filter(lambda x : x not in ignore_list, diff_list))
         return diff_list
 
     def __sizeof__(self):
@@ -251,16 +200,12 @@ class PostPlot(PostMethod):
             How to handle ndarray (0: tolist, 1: copy, 2: nothing)
         keep_function : bool
             True to keep the function object, else return str
-        Optional keyword input parameter is for internal use only
+        Optional keyword input parameter is for internal use only 
         and may prevent json serializability.
         """
 
         # Get the properties inherited from PostMethod
-        PostPlot_dict = super(PostPlot, self).as_dict(
-            type_handle_ndarray=type_handle_ndarray,
-            keep_function=keep_function,
-            **kwargs
-        )
+        PostPlot_dict = super(PostPlot, self).as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs)
         PostPlot_dict["method"] = self.method
         PostPlot_dict["name"] = self.name
         PostPlot_dict["param_list"] = (
@@ -275,6 +220,7 @@ class PostPlot(PostMethod):
         # Overwrite the mother class name
         PostPlot_dict["__class__"] = "PostPlot"
         return PostPlot_dict
+
 
     def copy(self):
         """Creates a deepcopy of the object"""
@@ -293,14 +239,7 @@ class PostPlot(PostMethod):
         save_format_val = self.save_format
         quantity_val = self.quantity
         # Creates new object of the same type with the copied properties
-        obj_copy = type(self)(
-            method=method_val,
-            name=name_val,
-            param_list=param_list_val,
-            param_dict=param_dict_val,
-            save_format=save_format_val,
-            quantity=quantity_val,
-        )
+        obj_copy = type(self)(method=method_val,name=name_val,param_list=param_list_val,param_dict=param_dict_val,save_format=save_format_val,quantity=quantity_val)
         return obj_copy
 
     def _set_None(self):

@@ -18,6 +18,7 @@ from pyleecan.Classes.SlotM15 import SlotM15
 from pyleecan.Classes.SlotM16 import SlotM16
 from pyleecan.Classes.SlotM17 import SlotM17
 from pyleecan.Classes.SlotM18 import SlotM18
+from pyleecan.Classes.SlotM19 import SlotM19
 from pyleecan.Classes.Material import Material
 from pyleecan.GUI.Dialog.DMatLib.DMatLib import LIB_KEY, MACH_KEY
 from pyleecan.GUI.Dialog.DMachineSetup.SMSlot.SMSlot import SMSlot
@@ -30,6 +31,7 @@ from pyleecan.GUI.Dialog.DMachineSetup.SMSlot.PMSlot15.PMSlot15 import PMSlot15
 from pyleecan.GUI.Dialog.DMachineSetup.SMSlot.PMSlot16.PMSlot16 import PMSlot16
 from pyleecan.GUI.Dialog.DMachineSetup.SMSlot.PMSlot17.PMSlot17 import PMSlot17
 from pyleecan.GUI.Dialog.DMachineSetup.SMSlot.PMSlot18.PMSlot18 import PMSlot18
+from pyleecan.GUI.Dialog.DMachineSetup.SMSlot.PMSlot19.PMSlot19 import PMSlot19
 import pytest
 from Tests.GUI import gui_option  # Set unit as [m]
 
@@ -80,7 +82,7 @@ class TestSMSlot(object):
     def test_init(self):
         """Check that the GUI initialize correctly"""
         # To remember to update after adding a new type
-        assert self.widget.c_slot_type.count() == 9
+        assert self.widget.c_slot_type.count() == 10
 
         assert self.widget.c_slot_type.currentIndex() == 1
         assert self.widget.c_slot_type.currentText() == "Polar Magnet"
@@ -180,6 +182,13 @@ class TestSMSlot(object):
         assert type(self.widget.w_slot) == PMSlot18
         assert self.widget.c_slot_type.currentText() == "Ring Magnet"
         assert type(self.test_obj.rotor.slot) == SlotM18
+
+    def test_set_type_19(self):
+        """Check that the Widget is able to set Magnet type 19"""
+        self.widget.c_slot_type.setCurrentIndex(9)
+        assert type(self.widget.w_slot) == PMSlot19
+        assert self.widget.c_slot_type.currentText() == "Trapezoidal Magnet"
+        assert type(self.test_obj.rotor.slot) == SlotM19
 
 
 if __name__ == "__main__":

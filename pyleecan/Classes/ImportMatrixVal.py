@@ -49,7 +49,7 @@ class ImportMatrixVal(ImportMatrix):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, value=None, is_transpose=False, init_dict=None, init_str=None):
+    def __init__(self, value=None, is_transpose=False, init_dict = None, init_str = None):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -82,13 +82,7 @@ class ImportMatrixVal(ImportMatrix):
         ImportMatrixVal_str = ""
         # Get the properties inherited from ImportMatrix
         ImportMatrixVal_str += super(ImportMatrixVal, self).__str__()
-        ImportMatrixVal_str += (
-            "value = "
-            + linesep
-            + str(self.value).replace(linesep, linesep + "\t")
-            + linesep
-            + linesep
-        )
+        ImportMatrixVal_str += "value = " + linesep + str(self.value).replace(linesep, linesep + "\t") + linesep + linesep
         return ImportMatrixVal_str
 
     def __eq__(self, other):
@@ -104,25 +98,21 @@ class ImportMatrixVal(ImportMatrix):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
+    def compare(self, other, name='self', ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
             ignore_list = list()
         if type(other) != type(self):
-            return ["type(" + name + ")"]
+            return ['type('+name+')']
         diff_list = list()
 
         # Check the properties inherited from ImportMatrix
-        diff_list.extend(
-            super(ImportMatrixVal, self).compare(
-                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
-            )
-        )
+        diff_list.extend(super(ImportMatrixVal, self).compare(other,name=name, ignore_list=ignore_list, is_add_value=is_add_value))
         if not array_equal(other.value, self.value):
-            diff_list.append(name + ".value")
+            diff_list.append(name+'.value')
         # Filter ignore differences
-        diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
+        diff_list = list(filter(lambda x : x not in ignore_list, diff_list))
         return diff_list
 
     def __sizeof__(self):
@@ -142,33 +132,28 @@ class ImportMatrixVal(ImportMatrix):
             How to handle ndarray (0: tolist, 1: copy, 2: nothing)
         keep_function : bool
             True to keep the function object, else return str
-        Optional keyword input parameter is for internal use only
+        Optional keyword input parameter is for internal use only 
         and may prevent json serializability.
         """
 
         # Get the properties inherited from ImportMatrix
-        ImportMatrixVal_dict = super(ImportMatrixVal, self).as_dict(
-            type_handle_ndarray=type_handle_ndarray,
-            keep_function=keep_function,
-            **kwargs
-        )
+        ImportMatrixVal_dict = super(ImportMatrixVal, self).as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs)
         if self.value is None:
             ImportMatrixVal_dict["value"] = None
         else:
-            if type_handle_ndarray == 0:
+            if type_handle_ndarray==0:
                 ImportMatrixVal_dict["value"] = self.value.tolist()
-            elif type_handle_ndarray == 1:
+            elif type_handle_ndarray==1:
                 ImportMatrixVal_dict["value"] = self.value.copy()
-            elif type_handle_ndarray == 2:
+            elif type_handle_ndarray==2:
                 ImportMatrixVal_dict["value"] = self.value
             else:
-                raise Exception(
-                    "Unknown type_handle_ndarray: " + str(type_handle_ndarray)
-                )
+                raise Exception ('Unknown type_handle_ndarray: '+str(type_handle_ndarray))
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         ImportMatrixVal_dict["__class__"] = "ImportMatrixVal"
         return ImportMatrixVal_dict
+
 
     def copy(self):
         """Creates a deepcopy of the object"""
@@ -180,7 +165,7 @@ class ImportMatrixVal(ImportMatrix):
             value_val = self.value.copy()
         is_transpose_val = self.is_transpose
         # Creates new object of the same type with the copied properties
-        obj_copy = type(self)(value=value_val, is_transpose=is_transpose_val)
+        obj_copy = type(self)(value=value_val,is_transpose=is_transpose_val)
         return obj_copy
 
     def _set_None(self):

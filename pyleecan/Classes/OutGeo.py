@@ -29,27 +29,7 @@ class OutGeo(FrozenClass):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(
-        self,
-        stator=None,
-        rotor=None,
-        Wgap_mec=None,
-        Wgap_mag=None,
-        Rgap_mec=None,
-        Lgap=None,
-        logger_name="Pyleecan.OutGeo",
-        angle_rotor_initial=None,
-        rot_dir=None,
-        per_a=None,
-        is_antiper_a=None,
-        per_t_S=None,
-        is_antiper_t_S=None,
-        axes_dict=None,
-        per_t_R=None,
-        is_antiper_t_R=None,
-        init_dict=None,
-        init_str=None,
-    ):
+    def __init__(self, stator=None, rotor=None, Wgap_mec=None, Wgap_mag=None, Rgap_mec=None, Lgap=None, logger_name="Pyleecan.OutGeo", angle_rotor_initial=None, rot_dir=None, per_a=None, is_antiper_a=None, per_t_S=None, is_antiper_t_S=None, axes_dict=None, per_t_R=None, is_antiper_t_R=None, init_dict = None, init_str = None):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -129,12 +109,12 @@ class OutGeo(FrozenClass):
             OutGeo_str += "parent = " + str(type(self.parent)) + " object" + linesep
         if self.stator is not None:
             tmp = self.stator.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            OutGeo_str += "stator = " + tmp
+            OutGeo_str += "stator = "+ tmp
         else:
             OutGeo_str += "stator = None" + linesep + linesep
         if self.rotor is not None:
             tmp = self.rotor.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            OutGeo_str += "rotor = " + tmp
+            OutGeo_str += "rotor = "+ tmp
         else:
             OutGeo_str += "rotor = None" + linesep + linesep
         OutGeo_str += "Wgap_mec = " + str(self.Wgap_mec) + linesep
@@ -148,7 +128,7 @@ class OutGeo(FrozenClass):
         OutGeo_str += "is_antiper_a = " + str(self.is_antiper_a) + linesep
         OutGeo_str += "per_t_S = " + str(self.per_t_S) + linesep
         OutGeo_str += "is_antiper_t_S = " + str(self.is_antiper_t_S) + linesep
-        OutGeo_str += "axes_dict = " + str(self.axes_dict) + linesep + linesep
+        OutGeo_str += "axes_dict = "+ str(self.axes_dict) + linesep + linesep
         OutGeo_str += "per_t_R = " + str(self.per_t_R) + linesep
         OutGeo_str += "is_antiper_t_R = " + str(self.is_antiper_t_R) + linesep
         return OutGeo_str
@@ -192,243 +172,121 @@ class OutGeo(FrozenClass):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
+    def compare(self, other, name='self', ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
             ignore_list = list()
         if type(other) != type(self):
-            return ["type(" + name + ")"]
+            return ['type('+name+')']
         diff_list = list()
-        if (other.stator is None and self.stator is not None) or (
-            other.stator is not None and self.stator is None
-        ):
-            diff_list.append(name + ".stator None mismatch")
+        if (other.stator is None and self.stator is not None) or (other.stator is not None and self.stator is None):
+            diff_list.append(name+'.stator None mismatch')
         elif self.stator is not None:
-            diff_list.extend(
-                self.stator.compare(
-                    other.stator,
-                    name=name + ".stator",
-                    ignore_list=ignore_list,
-                    is_add_value=is_add_value,
-                )
-            )
-        if (other.rotor is None and self.rotor is not None) or (
-            other.rotor is not None and self.rotor is None
-        ):
-            diff_list.append(name + ".rotor None mismatch")
+            diff_list.extend(self.stator.compare(other.stator,name=name+'.stator',ignore_list=ignore_list,is_add_value=is_add_value))
+        if (other.rotor is None and self.rotor is not None) or (other.rotor is not None and self.rotor is None):
+            diff_list.append(name+'.rotor None mismatch')
         elif self.rotor is not None:
-            diff_list.extend(
-                self.rotor.compare(
-                    other.rotor,
-                    name=name + ".rotor",
-                    ignore_list=ignore_list,
-                    is_add_value=is_add_value,
-                )
-            )
-        if (
-            other._Wgap_mec is not None
-            and self._Wgap_mec is not None
-            and isnan(other._Wgap_mec)
-            and isnan(self._Wgap_mec)
-        ):
+            diff_list.extend(self.rotor.compare(other.rotor,name=name+'.rotor',ignore_list=ignore_list,is_add_value=is_add_value))
+        if other._Wgap_mec is not None and self._Wgap_mec is not None and isnan(other._Wgap_mec) and isnan(self._Wgap_mec):
             pass
         elif other._Wgap_mec != self._Wgap_mec:
             if is_add_value:
-                val_str = (
-                    " (self="
-                    + str(self._Wgap_mec)
-                    + ", other="
-                    + str(other._Wgap_mec)
-                    + ")"
-                )
-                diff_list.append(name + ".Wgap_mec" + val_str)
+                val_str = ' (self='+str(self._Wgap_mec)+', other='+str(other._Wgap_mec)+')'
+                diff_list.append(name+'.Wgap_mec'+val_str)
             else:
-                diff_list.append(name + ".Wgap_mec")
-        if (
-            other._Wgap_mag is not None
-            and self._Wgap_mag is not None
-            and isnan(other._Wgap_mag)
-            and isnan(self._Wgap_mag)
-        ):
+                diff_list.append(name+'.Wgap_mec')
+        if other._Wgap_mag is not None and self._Wgap_mag is not None and isnan(other._Wgap_mag) and isnan(self._Wgap_mag):
             pass
         elif other._Wgap_mag != self._Wgap_mag:
             if is_add_value:
-                val_str = (
-                    " (self="
-                    + str(self._Wgap_mag)
-                    + ", other="
-                    + str(other._Wgap_mag)
-                    + ")"
-                )
-                diff_list.append(name + ".Wgap_mag" + val_str)
+                val_str = ' (self='+str(self._Wgap_mag)+', other='+str(other._Wgap_mag)+')'
+                diff_list.append(name+'.Wgap_mag'+val_str)
             else:
-                diff_list.append(name + ".Wgap_mag")
-        if (
-            other._Rgap_mec is not None
-            and self._Rgap_mec is not None
-            and isnan(other._Rgap_mec)
-            and isnan(self._Rgap_mec)
-        ):
+                diff_list.append(name+'.Wgap_mag')
+        if other._Rgap_mec is not None and self._Rgap_mec is not None and isnan(other._Rgap_mec) and isnan(self._Rgap_mec):
             pass
         elif other._Rgap_mec != self._Rgap_mec:
             if is_add_value:
-                val_str = (
-                    " (self="
-                    + str(self._Rgap_mec)
-                    + ", other="
-                    + str(other._Rgap_mec)
-                    + ")"
-                )
-                diff_list.append(name + ".Rgap_mec" + val_str)
+                val_str = ' (self='+str(self._Rgap_mec)+', other='+str(other._Rgap_mec)+')'
+                diff_list.append(name+'.Rgap_mec'+val_str)
             else:
-                diff_list.append(name + ".Rgap_mec")
-        if (
-            other._Lgap is not None
-            and self._Lgap is not None
-            and isnan(other._Lgap)
-            and isnan(self._Lgap)
-        ):
+                diff_list.append(name+'.Rgap_mec')
+        if other._Lgap is not None and self._Lgap is not None and isnan(other._Lgap) and isnan(self._Lgap):
             pass
         elif other._Lgap != self._Lgap:
             if is_add_value:
-                val_str = (
-                    " (self=" + str(self._Lgap) + ", other=" + str(other._Lgap) + ")"
-                )
-                diff_list.append(name + ".Lgap" + val_str)
+                val_str = ' (self='+str(self._Lgap)+', other='+str(other._Lgap)+')'
+                diff_list.append(name+'.Lgap'+val_str)
             else:
-                diff_list.append(name + ".Lgap")
+                diff_list.append(name+'.Lgap')
         if other._logger_name != self._logger_name:
             if is_add_value:
-                val_str = (
-                    " (self="
-                    + str(self._logger_name)
-                    + ", other="
-                    + str(other._logger_name)
-                    + ")"
-                )
-                diff_list.append(name + ".logger_name" + val_str)
+                val_str = ' (self='+str(self._logger_name)+', other='+str(other._logger_name)+')'
+                diff_list.append(name+'.logger_name'+val_str)
             else:
-                diff_list.append(name + ".logger_name")
-        if (
-            other._angle_rotor_initial is not None
-            and self._angle_rotor_initial is not None
-            and isnan(other._angle_rotor_initial)
-            and isnan(self._angle_rotor_initial)
-        ):
+                diff_list.append(name+'.logger_name')
+        if other._angle_rotor_initial is not None and self._angle_rotor_initial is not None and isnan(other._angle_rotor_initial) and isnan(self._angle_rotor_initial):
             pass
         elif other._angle_rotor_initial != self._angle_rotor_initial:
             if is_add_value:
-                val_str = (
-                    " (self="
-                    + str(self._angle_rotor_initial)
-                    + ", other="
-                    + str(other._angle_rotor_initial)
-                    + ")"
-                )
-                diff_list.append(name + ".angle_rotor_initial" + val_str)
+                val_str = ' (self='+str(self._angle_rotor_initial)+', other='+str(other._angle_rotor_initial)+')'
+                diff_list.append(name+'.angle_rotor_initial'+val_str)
             else:
-                diff_list.append(name + ".angle_rotor_initial")
+                diff_list.append(name+'.angle_rotor_initial')
         if other._rot_dir != self._rot_dir:
             if is_add_value:
-                val_str = (
-                    " (self="
-                    + str(self._rot_dir)
-                    + ", other="
-                    + str(other._rot_dir)
-                    + ")"
-                )
-                diff_list.append(name + ".rot_dir" + val_str)
+                val_str = ' (self='+str(self._rot_dir)+', other='+str(other._rot_dir)+')'
+                diff_list.append(name+'.rot_dir'+val_str)
             else:
-                diff_list.append(name + ".rot_dir")
+                diff_list.append(name+'.rot_dir')
         if other._per_a != self._per_a:
             if is_add_value:
-                val_str = (
-                    " (self=" + str(self._per_a) + ", other=" + str(other._per_a) + ")"
-                )
-                diff_list.append(name + ".per_a" + val_str)
+                val_str = ' (self='+str(self._per_a)+', other='+str(other._per_a)+')'
+                diff_list.append(name+'.per_a'+val_str)
             else:
-                diff_list.append(name + ".per_a")
+                diff_list.append(name+'.per_a')
         if other._is_antiper_a != self._is_antiper_a:
             if is_add_value:
-                val_str = (
-                    " (self="
-                    + str(self._is_antiper_a)
-                    + ", other="
-                    + str(other._is_antiper_a)
-                    + ")"
-                )
-                diff_list.append(name + ".is_antiper_a" + val_str)
+                val_str = ' (self='+str(self._is_antiper_a)+', other='+str(other._is_antiper_a)+')'
+                diff_list.append(name+'.is_antiper_a'+val_str)
             else:
-                diff_list.append(name + ".is_antiper_a")
+                diff_list.append(name+'.is_antiper_a')
         if other._per_t_S != self._per_t_S:
             if is_add_value:
-                val_str = (
-                    " (self="
-                    + str(self._per_t_S)
-                    + ", other="
-                    + str(other._per_t_S)
-                    + ")"
-                )
-                diff_list.append(name + ".per_t_S" + val_str)
+                val_str = ' (self='+str(self._per_t_S)+', other='+str(other._per_t_S)+')'
+                diff_list.append(name+'.per_t_S'+val_str)
             else:
-                diff_list.append(name + ".per_t_S")
+                diff_list.append(name+'.per_t_S')
         if other._is_antiper_t_S != self._is_antiper_t_S:
             if is_add_value:
-                val_str = (
-                    " (self="
-                    + str(self._is_antiper_t_S)
-                    + ", other="
-                    + str(other._is_antiper_t_S)
-                    + ")"
-                )
-                diff_list.append(name + ".is_antiper_t_S" + val_str)
+                val_str = ' (self='+str(self._is_antiper_t_S)+', other='+str(other._is_antiper_t_S)+')'
+                diff_list.append(name+'.is_antiper_t_S'+val_str)
             else:
-                diff_list.append(name + ".is_antiper_t_S")
-        if (other.axes_dict is None and self.axes_dict is not None) or (
-            other.axes_dict is not None and self.axes_dict is None
-        ):
-            diff_list.append(name + ".axes_dict None mismatch")
+                diff_list.append(name+'.is_antiper_t_S')
+        if (other.axes_dict is None and self.axes_dict is not None) or (other.axes_dict is not None and self.axes_dict is None):
+            diff_list.append(name+'.axes_dict None mismatch')
         elif self.axes_dict is None:
             pass
         elif len(other.axes_dict) != len(self.axes_dict):
-            diff_list.append("len(" + name + "axes_dict)")
+            diff_list.append('len('+name+'axes_dict)')
         else:
             for key in self.axes_dict:
-                diff_list.extend(
-                    self.axes_dict[key].compare(
-                        other.axes_dict[key],
-                        name=name + ".axes_dict[" + str(key) + "]",
-                        ignore_list=ignore_list,
-                        is_add_value=is_add_value,
-                    )
-                )
+                diff_list.extend(self.axes_dict[key].compare(other.axes_dict[key],name=name+'.axes_dict['+str(key)+']',ignore_list=ignore_list,is_add_value=is_add_value))
         if other._per_t_R != self._per_t_R:
             if is_add_value:
-                val_str = (
-                    " (self="
-                    + str(self._per_t_R)
-                    + ", other="
-                    + str(other._per_t_R)
-                    + ")"
-                )
-                diff_list.append(name + ".per_t_R" + val_str)
+                val_str = ' (self='+str(self._per_t_R)+', other='+str(other._per_t_R)+')'
+                diff_list.append(name+'.per_t_R'+val_str)
             else:
-                diff_list.append(name + ".per_t_R")
+                diff_list.append(name+'.per_t_R')
         if other._is_antiper_t_R != self._is_antiper_t_R:
             if is_add_value:
-                val_str = (
-                    " (self="
-                    + str(self._is_antiper_t_R)
-                    + ", other="
-                    + str(other._is_antiper_t_R)
-                    + ")"
-                )
-                diff_list.append(name + ".is_antiper_t_R" + val_str)
+                val_str = ' (self='+str(self._is_antiper_t_R)+', other='+str(other._is_antiper_t_R)+')'
+                diff_list.append(name+'.is_antiper_t_R'+val_str)
             else:
-                diff_list.append(name + ".is_antiper_t_R")
+                diff_list.append(name+'.is_antiper_t_R')
         # Filter ignore differences
-        diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
+        diff_list = list(filter(lambda x : x not in ignore_list, diff_list))
         return diff_list
 
     def __sizeof__(self):
@@ -462,7 +320,7 @@ class OutGeo(FrozenClass):
             How to handle ndarray (0: tolist, 1: copy, 2: nothing)
         keep_function : bool
             True to keep the function object, else return str
-        Optional keyword input parameter is for internal use only
+        Optional keyword input parameter is for internal use only 
         and may prevent json serializability.
         """
 
@@ -470,19 +328,11 @@ class OutGeo(FrozenClass):
         if self.stator is None:
             OutGeo_dict["stator"] = None
         else:
-            OutGeo_dict["stator"] = self.stator.as_dict(
-                type_handle_ndarray=type_handle_ndarray,
-                keep_function=keep_function,
-                **kwargs
-            )
+            OutGeo_dict["stator"] = self.stator.as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs)
         if self.rotor is None:
             OutGeo_dict["rotor"] = None
         else:
-            OutGeo_dict["rotor"] = self.rotor.as_dict(
-                type_handle_ndarray=type_handle_ndarray,
-                keep_function=keep_function,
-                **kwargs
-            )
+            OutGeo_dict["rotor"] = self.rotor.as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs)
         OutGeo_dict["Wgap_mec"] = self.Wgap_mec
         OutGeo_dict["Wgap_mag"] = self.Wgap_mag
         OutGeo_dict["Rgap_mec"] = self.Rgap_mec
@@ -500,11 +350,7 @@ class OutGeo(FrozenClass):
             OutGeo_dict["axes_dict"] = dict()
             for key, obj in self.axes_dict.items():
                 if obj is not None:
-                    OutGeo_dict["axes_dict"][key] = obj.as_dict(
-                        type_handle_ndarray=type_handle_ndarray,
-                        keep_function=keep_function,
-                        **kwargs
-                    )
+                    OutGeo_dict["axes_dict"][key] = obj.as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs)
                 else:
                     OutGeo_dict["axes_dict"][key] = None
         OutGeo_dict["per_t_R"] = self.per_t_R
@@ -512,6 +358,7 @@ class OutGeo(FrozenClass):
         # The class name is added to the dict for deserialisation purpose
         OutGeo_dict["__class__"] = "OutGeo"
         return OutGeo_dict
+
 
     def copy(self):
         """Creates a deepcopy of the object"""
@@ -545,24 +392,7 @@ class OutGeo(FrozenClass):
         per_t_R_val = self.per_t_R
         is_antiper_t_R_val = self.is_antiper_t_R
         # Creates new object of the same type with the copied properties
-        obj_copy = type(self)(
-            stator=stator_val,
-            rotor=rotor_val,
-            Wgap_mec=Wgap_mec_val,
-            Wgap_mag=Wgap_mag_val,
-            Rgap_mec=Rgap_mec_val,
-            Lgap=Lgap_val,
-            logger_name=logger_name_val,
-            angle_rotor_initial=angle_rotor_initial_val,
-            rot_dir=rot_dir_val,
-            per_a=per_a_val,
-            is_antiper_a=is_antiper_a_val,
-            per_t_S=per_t_S_val,
-            is_antiper_t_S=is_antiper_t_S_val,
-            axes_dict=axes_dict_val,
-            per_t_R=per_t_R_val,
-            is_antiper_t_R=is_antiper_t_R_val,
-        )
+        obj_copy = type(self)(stator=stator_val,rotor=rotor_val,Wgap_mec=Wgap_mec_val,Wgap_mag=Wgap_mag_val,Rgap_mec=Rgap_mec_val,Lgap=Lgap_val,logger_name=logger_name_val,angle_rotor_initial=angle_rotor_initial_val,rot_dir=rot_dir_val,per_a=per_a_val,is_antiper_a=is_antiper_a_val,per_t_S=per_t_S_val,is_antiper_t_S=is_antiper_t_S_val,axes_dict=axes_dict_val,per_t_R=per_t_R_val,is_antiper_t_R=is_antiper_t_R_val)
         return obj_copy
 
     def _set_None(self):
@@ -597,24 +427,19 @@ class OutGeo(FrozenClass):
             try:
                 value = load_init_dict(value)[1]
             except Exception as e:
-                self.get_logger().error(
-                    "Error while loading " + value + ", setting None instead"
-                )
+                self.get_logger().error('Error while loading '+value+', setting None instead')
                 value = None
-        if isinstance(value, dict) and "__class__" in value:
-            class_obj = import_class(
-                "pyleecan.Classes", value.get("__class__"), "stator"
-            )
+        if isinstance(value, dict) and '__class__' in value:
+            class_obj = import_class('pyleecan.Classes', value.get('__class__'), 'stator')
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
-            OutGeoLam = import_class("pyleecan.Classes", "OutGeoLam", "stator")
+            OutGeoLam = import_class('pyleecan.Classes', 'OutGeoLam', 'stator')
             value = OutGeoLam()
         check_var("stator", value, "OutGeoLam")
         self._stator = value
 
         if self._stator is not None:
             self._stator.parent = self
-
     stator = property(
         fget=_get_stator,
         fset=_set_stator,
@@ -634,24 +459,19 @@ class OutGeo(FrozenClass):
             try:
                 value = load_init_dict(value)[1]
             except Exception as e:
-                self.get_logger().error(
-                    "Error while loading " + value + ", setting None instead"
-                )
+                self.get_logger().error('Error while loading '+value+', setting None instead')
                 value = None
-        if isinstance(value, dict) and "__class__" in value:
-            class_obj = import_class(
-                "pyleecan.Classes", value.get("__class__"), "rotor"
-            )
+        if isinstance(value, dict) and '__class__' in value:
+            class_obj = import_class('pyleecan.Classes', value.get('__class__'), 'rotor')
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
-            OutGeoLam = import_class("pyleecan.Classes", "OutGeoLam", "rotor")
+            OutGeoLam = import_class('pyleecan.Classes', 'OutGeoLam', 'rotor')
             value = OutGeoLam()
         check_var("rotor", value, "OutGeoLam")
         self._rotor = value
 
         if self._rotor is not None:
             self._rotor.parent = self
-
     rotor = property(
         fget=_get_rotor,
         fset=_set_rotor,
@@ -877,15 +697,11 @@ class OutGeo(FrozenClass):
                     try:
                         obj = load_init_dict(obj)[1]
                     except Exception as e:
-                        self.get_logger().error(
-                            "Error while loading " + obj + ", setting None instead"
-                        )
+                        self.get_logger().error('Error while loading '+obj+', setting None instead')
                         obj = None
                         value[key] = None
                 if type(obj) is dict:
-                    class_obj = import_class(
-                        "SciDataTool.Classes", obj.get("__class__"), "axes_dict"
-                    )
+                    class_obj = import_class('SciDataTool.Classes', obj.get('__class__'), 'axes_dict')
                     value[key] = class_obj(init_dict=obj)
         if type(value) is int and value == -1:
             value = dict()

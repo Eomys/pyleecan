@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from numpy import abs as np_abs
-from numpy import sqrt 
+from numpy import sqrt
 
 
 def comp_height_active(self):
@@ -21,17 +21,17 @@ def comp_height_active(self):
     Rbo = self.get_Rbo()
     point_dict = self._comp_point_coordinate()
 
-    Zmid =point_dict["Zmid"]
+    Zmid = point_dict["Zmid"]
     Z1 = point_dict["Z1"]
     Z2 = point_dict["Z2"]
     Z3 = point_dict["Z3"]
     Z4 = point_dict["Z4"]
 
     if self.is_outwards():
-    
-        R1 = np_abs(Rbo)
-        R2 = np_abs(sqrt(Z1.real**2 + Z1.imag**2))
 
+        R1 = np_abs(Rbo)
+        R2 = np_abs(sqrt(Z2.real *  Z2.real + Z2.imag * Z2.imag))
+        
     else:
         R1 = np_abs(Zmid)
         R2 = np_abs(Rbo)

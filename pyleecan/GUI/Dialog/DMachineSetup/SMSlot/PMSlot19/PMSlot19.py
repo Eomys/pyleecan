@@ -91,7 +91,6 @@ class PMSlot19(Gen_PMSlot19, QWidget):
         # Notify the machine GUI that the machine has changed
         self.saveNeeded.emit()
 
-
     def set_Hmag(self):
         """Signal to update the value of Hmag according to the line edit
 

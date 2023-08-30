@@ -49,37 +49,7 @@ class InputFlux(InputCurrent):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(
-        self,
-        per_a=1,
-        per_t=1,
-        is_antiper_a=False,
-        is_antiper_t=False,
-        B_dict=None,
-        unit=None,
-        slice=None,
-        B_enforced=None,
-        Is=None,
-        Ir=None,
-        Is_harm=None,
-        rot_dir=None,
-        angle_rotor_initial=0,
-        PWM=None,
-        phase_dir=None,
-        current_dir=None,
-        is_periodicity_t=False,
-        is_periodicity_a=False,
-        is_generator=False,
-        time=None,
-        angle=None,
-        Nt_tot=2048,
-        Nrev=None,
-        Na_tot=2048,
-        OP=None,
-        t_final=None,
-        init_dict=None,
-        init_str=None,
-    ):
+    def __init__(self, per_a=1, per_t=1, is_antiper_a=False, is_antiper_t=False, B_dict=None, unit=None, slice=None, B_enforced=None, Is=None, Ir=None, Is_harm=None, rot_dir=None, angle_rotor_initial=0, PWM=None, phase_dir=None, current_dir=None, is_periodicity_t=False, is_periodicity_a=False, is_generator=False, time=None, angle=None, Nt_tot=2048, Nrev=None, Na_tot=2048, OP=None, t_final=None, init_dict = None, init_str = None):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -157,26 +127,7 @@ class InputFlux(InputCurrent):
         self.slice = slice
         self.B_enforced = B_enforced
         # Call InputCurrent init
-        super(InputFlux, self).__init__(
-            Is=Is,
-            Ir=Ir,
-            Is_harm=Is_harm,
-            rot_dir=rot_dir,
-            angle_rotor_initial=angle_rotor_initial,
-            PWM=PWM,
-            phase_dir=phase_dir,
-            current_dir=current_dir,
-            is_periodicity_t=is_periodicity_t,
-            is_periodicity_a=is_periodicity_a,
-            is_generator=is_generator,
-            time=time,
-            angle=angle,
-            Nt_tot=Nt_tot,
-            Nrev=Nrev,
-            Na_tot=Na_tot,
-            OP=OP,
-            t_final=t_final,
-        )
+        super(InputFlux, self).__init__(Is=Is, Ir=Ir, Is_harm=Is_harm, rot_dir=rot_dir, angle_rotor_initial=angle_rotor_initial, PWM=PWM, phase_dir=phase_dir, current_dir=current_dir, is_periodicity_t=is_periodicity_t, is_periodicity_a=is_periodicity_a, is_generator=is_generator, time=time, angle=angle, Nt_tot=Nt_tot, Nrev=Nrev, Na_tot=Na_tot, OP=OP, t_final=t_final)
         # The class is frozen (in InputCurrent init), for now it's impossible to
         # add new properties
 
@@ -192,14 +143,8 @@ class InputFlux(InputCurrent):
         InputFlux_str += "is_antiper_t = " + str(self.is_antiper_t) + linesep
         InputFlux_str += "B_dict = " + str(self.B_dict) + linesep
         InputFlux_str += 'unit = "' + str(self.unit) + '"' + linesep
-        InputFlux_str += (
-            "slice = "
-            + linesep
-            + str(self.slice).replace(linesep, linesep + "\t")
-            + linesep
-            + linesep
-        )
-        InputFlux_str += "B_enforced = " + str(self.B_enforced) + linesep + linesep
+        InputFlux_str += "slice = " + linesep + str(self.slice).replace(linesep, linesep + "\t") + linesep + linesep
+        InputFlux_str += "B_enforced = "+ str(self.B_enforced) + linesep + linesep
         return InputFlux_str
 
     def __eq__(self, other):
@@ -229,98 +174,61 @@ class InputFlux(InputCurrent):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
+    def compare(self, other, name='self', ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
             ignore_list = list()
         if type(other) != type(self):
-            return ["type(" + name + ")"]
+            return ['type('+name+')']
         diff_list = list()
 
         # Check the properties inherited from InputCurrent
-        diff_list.extend(
-            super(InputFlux, self).compare(
-                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
-            )
-        )
+        diff_list.extend(super(InputFlux, self).compare(other,name=name, ignore_list=ignore_list, is_add_value=is_add_value))
         if other._per_a != self._per_a:
             if is_add_value:
-                val_str = (
-                    " (self=" + str(self._per_a) + ", other=" + str(other._per_a) + ")"
-                )
-                diff_list.append(name + ".per_a" + val_str)
+                val_str = ' (self='+str(self._per_a)+', other='+str(other._per_a)+')'
+                diff_list.append(name+'.per_a'+val_str)
             else:
-                diff_list.append(name + ".per_a")
+                diff_list.append(name+'.per_a')
         if other._per_t != self._per_t:
             if is_add_value:
-                val_str = (
-                    " (self=" + str(self._per_t) + ", other=" + str(other._per_t) + ")"
-                )
-                diff_list.append(name + ".per_t" + val_str)
+                val_str = ' (self='+str(self._per_t)+', other='+str(other._per_t)+')'
+                diff_list.append(name+'.per_t'+val_str)
             else:
-                diff_list.append(name + ".per_t")
+                diff_list.append(name+'.per_t')
         if other._is_antiper_a != self._is_antiper_a:
             if is_add_value:
-                val_str = (
-                    " (self="
-                    + str(self._is_antiper_a)
-                    + ", other="
-                    + str(other._is_antiper_a)
-                    + ")"
-                )
-                diff_list.append(name + ".is_antiper_a" + val_str)
+                val_str = ' (self='+str(self._is_antiper_a)+', other='+str(other._is_antiper_a)+')'
+                diff_list.append(name+'.is_antiper_a'+val_str)
             else:
-                diff_list.append(name + ".is_antiper_a")
+                diff_list.append(name+'.is_antiper_a')
         if other._is_antiper_t != self._is_antiper_t:
             if is_add_value:
-                val_str = (
-                    " (self="
-                    + str(self._is_antiper_t)
-                    + ", other="
-                    + str(other._is_antiper_t)
-                    + ")"
-                )
-                diff_list.append(name + ".is_antiper_t" + val_str)
+                val_str = ' (self='+str(self._is_antiper_t)+', other='+str(other._is_antiper_t)+')'
+                diff_list.append(name+'.is_antiper_t'+val_str)
             else:
-                diff_list.append(name + ".is_antiper_t")
+                diff_list.append(name+'.is_antiper_t')
         if other._B_dict != self._B_dict:
             if is_add_value:
-                val_str = (
-                    " (self="
-                    + str(self._B_dict)
-                    + ", other="
-                    + str(other._B_dict)
-                    + ")"
-                )
-                diff_list.append(name + ".B_dict" + val_str)
+                val_str = ' (self='+str(self._B_dict)+', other='+str(other._B_dict)+')'
+                diff_list.append(name+'.B_dict'+val_str)
             else:
-                diff_list.append(name + ".B_dict")
+                diff_list.append(name+'.B_dict')
         if other._unit != self._unit:
             if is_add_value:
-                val_str = (
-                    " (self=" + str(self._unit) + ", other=" + str(other._unit) + ")"
-                )
-                diff_list.append(name + ".unit" + val_str)
+                val_str = ' (self='+str(self._unit)+', other='+str(other._unit)+')'
+                diff_list.append(name+'.unit'+val_str)
             else:
-                diff_list.append(name + ".unit")
+                diff_list.append(name+'.unit')
         if not array_equal(other.slice, self.slice):
-            diff_list.append(name + ".slice")
-        if (other.B_enforced is None and self.B_enforced is not None) or (
-            other.B_enforced is not None and self.B_enforced is None
-        ):
-            diff_list.append(name + ".B_enforced None mismatch")
+            diff_list.append(name+'.slice')
+        if (other.B_enforced is None and self.B_enforced is not None) or (other.B_enforced is not None and self.B_enforced is None):
+            diff_list.append(name+'.B_enforced None mismatch')
         elif self.B_enforced is not None:
-            diff_list.extend(
-                self.B_enforced.compare(
-                    other.B_enforced,
-                    name=name + ".B_enforced",
-                    ignore_list=ignore_list,
-                    is_add_value=is_add_value,
-                )
-            )
+            diff_list.extend(self.B_enforced.compare(other.B_enforced,name=name+'.B_enforced',ignore_list=ignore_list,is_add_value=is_add_value))
         # Filter ignore differences
-        diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
+        diff_list = list(filter(lambda x : x not in ignore_list, diff_list))
         return diff_list
 
     def __sizeof__(self):
@@ -349,16 +257,12 @@ class InputFlux(InputCurrent):
             How to handle ndarray (0: tolist, 1: copy, 2: nothing)
         keep_function : bool
             True to keep the function object, else return str
-        Optional keyword input parameter is for internal use only
+        Optional keyword input parameter is for internal use only 
         and may prevent json serializability.
         """
 
         # Get the properties inherited from InputCurrent
-        InputFlux_dict = super(InputFlux, self).as_dict(
-            type_handle_ndarray=type_handle_ndarray,
-            keep_function=keep_function,
-            **kwargs
-        )
+        InputFlux_dict = super(InputFlux, self).as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs)
         InputFlux_dict["per_a"] = self.per_a
         InputFlux_dict["per_t"] = self.per_t
         InputFlux_dict["is_antiper_a"] = self.is_antiper_a
@@ -370,28 +274,23 @@ class InputFlux(InputCurrent):
         if self.slice is None:
             InputFlux_dict["slice"] = None
         else:
-            if type_handle_ndarray == 0:
+            if type_handle_ndarray==0:
                 InputFlux_dict["slice"] = self.slice.tolist()
-            elif type_handle_ndarray == 1:
+            elif type_handle_ndarray==1:
                 InputFlux_dict["slice"] = self.slice.copy()
-            elif type_handle_ndarray == 2:
+            elif type_handle_ndarray==2:
                 InputFlux_dict["slice"] = self.slice
             else:
-                raise Exception(
-                    "Unknown type_handle_ndarray: " + str(type_handle_ndarray)
-                )
+                raise Exception ('Unknown type_handle_ndarray: '+str(type_handle_ndarray))
         if self.B_enforced is None:
             InputFlux_dict["B_enforced"] = None
         else:
-            InputFlux_dict["B_enforced"] = self.B_enforced.as_dict(
-                type_handle_ndarray=type_handle_ndarray,
-                keep_function=keep_function,
-                **kwargs
-            )
+            InputFlux_dict["B_enforced"] = self.B_enforced.as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs)
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         InputFlux_dict["__class__"] = "InputFlux"
         return InputFlux_dict
+
 
     def copy(self):
         """Creates a deepcopy of the object"""
@@ -454,34 +353,7 @@ class InputFlux(InputCurrent):
             OP_val = self.OP.copy()
         t_final_val = self.t_final
         # Creates new object of the same type with the copied properties
-        obj_copy = type(self)(
-            per_a=per_a_val,
-            per_t=per_t_val,
-            is_antiper_a=is_antiper_a_val,
-            is_antiper_t=is_antiper_t_val,
-            B_dict=B_dict_val,
-            unit=unit_val,
-            slice=slice_val,
-            B_enforced=B_enforced_val,
-            Is=Is_val,
-            Ir=Ir_val,
-            Is_harm=Is_harm_val,
-            rot_dir=rot_dir_val,
-            angle_rotor_initial=angle_rotor_initial_val,
-            PWM=PWM_val,
-            phase_dir=phase_dir_val,
-            current_dir=current_dir_val,
-            is_periodicity_t=is_periodicity_t_val,
-            is_periodicity_a=is_periodicity_a_val,
-            is_generator=is_generator_val,
-            time=time_val,
-            angle=angle_val,
-            Nt_tot=Nt_tot_val,
-            Nrev=Nrev_val,
-            Na_tot=Na_tot_val,
-            OP=OP_val,
-            t_final=t_final_val,
-        )
+        obj_copy = type(self)(per_a=per_a_val,per_t=per_t_val,is_antiper_a=is_antiper_a_val,is_antiper_t=is_antiper_t_val,B_dict=B_dict_val,unit=unit_val,slice=slice_val,B_enforced=B_enforced_val,Is=Is_val,Ir=Ir_val,Is_harm=Is_harm_val,rot_dir=rot_dir_val,angle_rotor_initial=angle_rotor_initial_val,PWM=PWM_val,phase_dir=phase_dir_val,current_dir=current_dir_val,is_periodicity_t=is_periodicity_t_val,is_periodicity_a=is_periodicity_a_val,is_generator=is_generator_val,time=time_val,angle=angle_val,Nt_tot=Nt_tot_val,Nrev=Nrev_val,Na_tot=Na_tot_val,OP=OP_val,t_final=t_final_val)
         return obj_copy
 
     def _set_None(self):
@@ -643,14 +515,10 @@ class InputFlux(InputCurrent):
             try:
                 value = load_init_dict(value)[1]
             except Exception as e:
-                self.get_logger().error(
-                    "Error while loading " + value + ", setting None instead"
-                )
+                self.get_logger().error('Error while loading '+value+', setting None instead')
                 value = None
-        if isinstance(value, dict) and "__class__" in value:
-            class_obj = import_class(
-                "SciDataTool.Classes", value.get("__class__"), "B_enforced"
-            )
+        if isinstance(value, dict) and '__class__' in value:
+            class_obj = import_class('SciDataTool.Classes', value.get('__class__'), 'B_enforced')
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
             value = VectorField()

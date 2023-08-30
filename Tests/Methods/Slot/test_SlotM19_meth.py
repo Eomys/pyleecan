@@ -20,7 +20,7 @@ Mag19_test.append(
         "S_exp": 3.740172221187858e-5,
         "H_exp": 5.0e-3, 
         "SA_exp": 3.740172221187858e-5,
-        "HA_exp": 5.0e-3,  
+        "HA_exp": 5.0000000000000044e-3,  
         "Ao": 0.0377385, 
     }
 )
@@ -187,6 +187,7 @@ if __name__ == "__main__":
         a.test_comp_surface(test_dict)
         a.test_comp_surface_active(test_dict)
         a.test_comp_height(test_dict)
+        a.test_comp_height_active(test_dict)
         a.test_comp_angle_opening(test_dict)
         a.test_schematics(test_dict)
 

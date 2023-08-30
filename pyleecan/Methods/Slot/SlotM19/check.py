@@ -19,5 +19,3 @@ def check(self):
 
     """
     pass
-
-

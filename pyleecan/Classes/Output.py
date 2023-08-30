@@ -23,9 +23,7 @@ except ImportError as error:
     comp_angle_rotor = error
 
 try:
-    from ..Methods.Output.Output.getter.get_angle_rotor_initial import (
-        get_angle_rotor_initial,
-    )
+    from ..Methods.Output.Output.getter.get_angle_rotor_initial import get_angle_rotor_initial
 except ImportError as error:
     get_angle_rotor_initial = error
 
@@ -50,9 +48,7 @@ except ImportError as error:
     get_path_result = error
 
 try:
-    from ..Methods.Output.Output.getter.get_machine_periodicity import (
-        get_machine_periodicity,
-    )
+    from ..Methods.Output.Output.getter.get_machine_periodicity import get_machine_periodicity
 except ImportError as error:
     get_machine_periodicity = error
 
@@ -230,21 +226,7 @@ class Output(FrozenClass):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(
-        self,
-        simu=-1,
-        path_result="",
-        geo=-1,
-        elec=-1,
-        mag=-1,
-        struct=-1,
-        post=-1,
-        logger_name="Pyleecan.Output",
-        force=-1,
-        loss=-1,
-        init_dict=None,
-        init_str=None,
-    ):
+    def __init__(self, simu=-1, path_result="", geo=-1, elec=-1, mag=-1, struct=-1, post=-1, logger_name="Pyleecan.Output", force=-1, loss=-1, init_dict = None, init_str = None):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -306,44 +288,44 @@ class Output(FrozenClass):
             Output_str += "parent = " + str(type(self.parent)) + " object" + linesep
         if self.simu is not None:
             tmp = self.simu.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            Output_str += "simu = " + tmp
+            Output_str += "simu = "+ tmp
         else:
             Output_str += "simu = None" + linesep + linesep
         Output_str += 'path_result = "' + str(self.path_result) + '"' + linesep
         if self.geo is not None:
             tmp = self.geo.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            Output_str += "geo = " + tmp
+            Output_str += "geo = "+ tmp
         else:
             Output_str += "geo = None" + linesep + linesep
         if self.elec is not None:
             tmp = self.elec.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            Output_str += "elec = " + tmp
+            Output_str += "elec = "+ tmp
         else:
             Output_str += "elec = None" + linesep + linesep
         if self.mag is not None:
             tmp = self.mag.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            Output_str += "mag = " + tmp
+            Output_str += "mag = "+ tmp
         else:
             Output_str += "mag = None" + linesep + linesep
         if self.struct is not None:
             tmp = self.struct.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            Output_str += "struct = " + tmp
+            Output_str += "struct = "+ tmp
         else:
             Output_str += "struct = None" + linesep + linesep
         if self.post is not None:
             tmp = self.post.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            Output_str += "post = " + tmp
+            Output_str += "post = "+ tmp
         else:
             Output_str += "post = None" + linesep + linesep
         Output_str += 'logger_name = "' + str(self.logger_name) + '"' + linesep
         if self.force is not None:
             tmp = self.force.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            Output_str += "force = " + tmp
+            Output_str += "force = "+ tmp
         else:
             Output_str += "force = None" + linesep + linesep
         if self.loss is not None:
             tmp = self.loss.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            Output_str += "loss = " + tmp
+            Output_str += "loss = "+ tmp
         else:
             Output_str += "loss = None" + linesep + linesep
         return Output_str
@@ -375,144 +357,60 @@ class Output(FrozenClass):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
+    def compare(self, other, name='self', ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
             ignore_list = list()
         if type(other) != type(self):
-            return ["type(" + name + ")"]
+            return ['type('+name+')']
         diff_list = list()
-        if (other.simu is None and self.simu is not None) or (
-            other.simu is not None and self.simu is None
-        ):
-            diff_list.append(name + ".simu None mismatch")
+        if (other.simu is None and self.simu is not None) or (other.simu is not None and self.simu is None):
+            diff_list.append(name+'.simu None mismatch')
         elif self.simu is not None:
-            diff_list.extend(
-                self.simu.compare(
-                    other.simu,
-                    name=name + ".simu",
-                    ignore_list=ignore_list,
-                    is_add_value=is_add_value,
-                )
-            )
+            diff_list.extend(self.simu.compare(other.simu,name=name+'.simu',ignore_list=ignore_list,is_add_value=is_add_value))
         if other._path_result != self._path_result:
             if is_add_value:
-                val_str = (
-                    " (self="
-                    + str(self._path_result)
-                    + ", other="
-                    + str(other._path_result)
-                    + ")"
-                )
-                diff_list.append(name + ".path_result" + val_str)
+                val_str = ' (self='+str(self._path_result)+', other='+str(other._path_result)+')'
+                diff_list.append(name+'.path_result'+val_str)
             else:
-                diff_list.append(name + ".path_result")
-        if (other.geo is None and self.geo is not None) or (
-            other.geo is not None and self.geo is None
-        ):
-            diff_list.append(name + ".geo None mismatch")
+                diff_list.append(name+'.path_result')
+        if (other.geo is None and self.geo is not None) or (other.geo is not None and self.geo is None):
+            diff_list.append(name+'.geo None mismatch')
         elif self.geo is not None:
-            diff_list.extend(
-                self.geo.compare(
-                    other.geo,
-                    name=name + ".geo",
-                    ignore_list=ignore_list,
-                    is_add_value=is_add_value,
-                )
-            )
-        if (other.elec is None and self.elec is not None) or (
-            other.elec is not None and self.elec is None
-        ):
-            diff_list.append(name + ".elec None mismatch")
+            diff_list.extend(self.geo.compare(other.geo,name=name+'.geo',ignore_list=ignore_list,is_add_value=is_add_value))
+        if (other.elec is None and self.elec is not None) or (other.elec is not None and self.elec is None):
+            diff_list.append(name+'.elec None mismatch')
         elif self.elec is not None:
-            diff_list.extend(
-                self.elec.compare(
-                    other.elec,
-                    name=name + ".elec",
-                    ignore_list=ignore_list,
-                    is_add_value=is_add_value,
-                )
-            )
-        if (other.mag is None and self.mag is not None) or (
-            other.mag is not None and self.mag is None
-        ):
-            diff_list.append(name + ".mag None mismatch")
+            diff_list.extend(self.elec.compare(other.elec,name=name+'.elec',ignore_list=ignore_list,is_add_value=is_add_value))
+        if (other.mag is None and self.mag is not None) or (other.mag is not None and self.mag is None):
+            diff_list.append(name+'.mag None mismatch')
         elif self.mag is not None:
-            diff_list.extend(
-                self.mag.compare(
-                    other.mag,
-                    name=name + ".mag",
-                    ignore_list=ignore_list,
-                    is_add_value=is_add_value,
-                )
-            )
-        if (other.struct is None and self.struct is not None) or (
-            other.struct is not None and self.struct is None
-        ):
-            diff_list.append(name + ".struct None mismatch")
+            diff_list.extend(self.mag.compare(other.mag,name=name+'.mag',ignore_list=ignore_list,is_add_value=is_add_value))
+        if (other.struct is None and self.struct is not None) or (other.struct is not None and self.struct is None):
+            diff_list.append(name+'.struct None mismatch')
         elif self.struct is not None:
-            diff_list.extend(
-                self.struct.compare(
-                    other.struct,
-                    name=name + ".struct",
-                    ignore_list=ignore_list,
-                    is_add_value=is_add_value,
-                )
-            )
-        if (other.post is None and self.post is not None) or (
-            other.post is not None and self.post is None
-        ):
-            diff_list.append(name + ".post None mismatch")
+            diff_list.extend(self.struct.compare(other.struct,name=name+'.struct',ignore_list=ignore_list,is_add_value=is_add_value))
+        if (other.post is None and self.post is not None) or (other.post is not None and self.post is None):
+            diff_list.append(name+'.post None mismatch')
         elif self.post is not None:
-            diff_list.extend(
-                self.post.compare(
-                    other.post,
-                    name=name + ".post",
-                    ignore_list=ignore_list,
-                    is_add_value=is_add_value,
-                )
-            )
+            diff_list.extend(self.post.compare(other.post,name=name+'.post',ignore_list=ignore_list,is_add_value=is_add_value))
         if other._logger_name != self._logger_name:
             if is_add_value:
-                val_str = (
-                    " (self="
-                    + str(self._logger_name)
-                    + ", other="
-                    + str(other._logger_name)
-                    + ")"
-                )
-                diff_list.append(name + ".logger_name" + val_str)
+                val_str = ' (self='+str(self._logger_name)+', other='+str(other._logger_name)+')'
+                diff_list.append(name+'.logger_name'+val_str)
             else:
-                diff_list.append(name + ".logger_name")
-        if (other.force is None and self.force is not None) or (
-            other.force is not None and self.force is None
-        ):
-            diff_list.append(name + ".force None mismatch")
+                diff_list.append(name+'.logger_name')
+        if (other.force is None and self.force is not None) or (other.force is not None and self.force is None):
+            diff_list.append(name+'.force None mismatch')
         elif self.force is not None:
-            diff_list.extend(
-                self.force.compare(
-                    other.force,
-                    name=name + ".force",
-                    ignore_list=ignore_list,
-                    is_add_value=is_add_value,
-                )
-            )
-        if (other.loss is None and self.loss is not None) or (
-            other.loss is not None and self.loss is None
-        ):
-            diff_list.append(name + ".loss None mismatch")
+            diff_list.extend(self.force.compare(other.force,name=name+'.force',ignore_list=ignore_list,is_add_value=is_add_value))
+        if (other.loss is None and self.loss is not None) or (other.loss is not None and self.loss is None):
+            diff_list.append(name+'.loss None mismatch')
         elif self.loss is not None:
-            diff_list.extend(
-                self.loss.compare(
-                    other.loss,
-                    name=name + ".loss",
-                    ignore_list=ignore_list,
-                    is_add_value=is_add_value,
-                )
-            )
+            diff_list.extend(self.loss.compare(other.loss,name=name+'.loss',ignore_list=ignore_list,is_add_value=is_add_value))
         # Filter ignore differences
-        diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
+        diff_list = list(filter(lambda x : x not in ignore_list, diff_list))
         return diff_list
 
     def __sizeof__(self):
@@ -538,7 +436,7 @@ class Output(FrozenClass):
             How to handle ndarray (0: tolist, 1: copy, 2: nothing)
         keep_function : bool
             True to keep the function object, else return str
-        Optional keyword input parameter is for internal use only
+        Optional keyword input parameter is for internal use only 
         and may prevent json serializability.
         """
 
@@ -546,72 +444,41 @@ class Output(FrozenClass):
         if self.simu is None:
             Output_dict["simu"] = None
         else:
-            Output_dict["simu"] = self.simu.as_dict(
-                type_handle_ndarray=type_handle_ndarray,
-                keep_function=keep_function,
-                **kwargs
-            )
+            Output_dict["simu"] = self.simu.as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs)
         Output_dict["path_result"] = self.path_result
         if self.geo is None:
             Output_dict["geo"] = None
         else:
-            Output_dict["geo"] = self.geo.as_dict(
-                type_handle_ndarray=type_handle_ndarray,
-                keep_function=keep_function,
-                **kwargs
-            )
+            Output_dict["geo"] = self.geo.as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs)
         if self.elec is None:
             Output_dict["elec"] = None
         else:
-            Output_dict["elec"] = self.elec.as_dict(
-                type_handle_ndarray=type_handle_ndarray,
-                keep_function=keep_function,
-                **kwargs
-            )
+            Output_dict["elec"] = self.elec.as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs)
         if self.mag is None:
             Output_dict["mag"] = None
         else:
-            Output_dict["mag"] = self.mag.as_dict(
-                type_handle_ndarray=type_handle_ndarray,
-                keep_function=keep_function,
-                **kwargs
-            )
+            Output_dict["mag"] = self.mag.as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs)
         if self.struct is None:
             Output_dict["struct"] = None
         else:
-            Output_dict["struct"] = self.struct.as_dict(
-                type_handle_ndarray=type_handle_ndarray,
-                keep_function=keep_function,
-                **kwargs
-            )
+            Output_dict["struct"] = self.struct.as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs)
         if self.post is None:
             Output_dict["post"] = None
         else:
-            Output_dict["post"] = self.post.as_dict(
-                type_handle_ndarray=type_handle_ndarray,
-                keep_function=keep_function,
-                **kwargs
-            )
+            Output_dict["post"] = self.post.as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs)
         Output_dict["logger_name"] = self.logger_name
         if self.force is None:
             Output_dict["force"] = None
         else:
-            Output_dict["force"] = self.force.as_dict(
-                type_handle_ndarray=type_handle_ndarray,
-                keep_function=keep_function,
-                **kwargs
-            )
+            Output_dict["force"] = self.force.as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs)
         if self.loss is None:
             Output_dict["loss"] = None
         else:
-            Output_dict["loss"] = self.loss.as_dict(
-                type_handle_ndarray=type_handle_ndarray,
-                keep_function=keep_function,
-                **kwargs
-            )
+            Output_dict["loss"] = self.loss.as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs)
         # The class name is added to the dict for deserialisation purpose
         Output_dict["__class__"] = "Output"
         return Output_dict
+
 
     def copy(self):
         """Creates a deepcopy of the object"""
@@ -652,18 +519,7 @@ class Output(FrozenClass):
         else:
             loss_val = self.loss.copy()
         # Creates new object of the same type with the copied properties
-        obj_copy = type(self)(
-            simu=simu_val,
-            path_result=path_result_val,
-            geo=geo_val,
-            elec=elec_val,
-            mag=mag_val,
-            struct=struct_val,
-            post=post_val,
-            logger_name=logger_name_val,
-            force=force_val,
-            loss=loss_val,
-        )
+        obj_copy = type(self)(simu=simu_val,path_result=path_result_val,geo=geo_val,elec=elec_val,mag=mag_val,struct=struct_val,post=post_val,logger_name=logger_name_val,force=force_val,loss=loss_val)
         return obj_copy
 
     def _set_None(self):
@@ -698,22 +554,19 @@ class Output(FrozenClass):
             try:
                 value = load_init_dict(value)[1]
             except Exception as e:
-                self.get_logger().error(
-                    "Error while loading " + value + ", setting None instead"
-                )
+                self.get_logger().error('Error while loading '+value+', setting None instead')
                 value = None
-        if isinstance(value, dict) and "__class__" in value:
-            class_obj = import_class("pyleecan.Classes", value.get("__class__"), "simu")
+        if isinstance(value, dict) and '__class__' in value:
+            class_obj = import_class('pyleecan.Classes', value.get('__class__'), 'simu')
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
-            Simulation = import_class("pyleecan.Classes", "Simulation", "simu")
+            Simulation = import_class('pyleecan.Classes', 'Simulation', 'simu')
             value = Simulation()
         check_var("simu", value, "Simulation")
         self._simu = value
 
         if self._simu is not None:
             self._simu.parent = self
-
     simu = property(
         fget=_get_simu,
         fset=_set_simu,
@@ -751,22 +604,19 @@ class Output(FrozenClass):
             try:
                 value = load_init_dict(value)[1]
             except Exception as e:
-                self.get_logger().error(
-                    "Error while loading " + value + ", setting None instead"
-                )
+                self.get_logger().error('Error while loading '+value+', setting None instead')
                 value = None
-        if isinstance(value, dict) and "__class__" in value:
-            class_obj = import_class("pyleecan.Classes", value.get("__class__"), "geo")
+        if isinstance(value, dict) and '__class__' in value:
+            class_obj = import_class('pyleecan.Classes', value.get('__class__'), 'geo')
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
-            OutGeo = import_class("pyleecan.Classes", "OutGeo", "geo")
+            OutGeo = import_class('pyleecan.Classes', 'OutGeo', 'geo')
             value = OutGeo()
         check_var("geo", value, "OutGeo")
         self._geo = value
 
         if self._geo is not None:
             self._geo.parent = self
-
     geo = property(
         fget=_get_geo,
         fset=_set_geo,
@@ -786,22 +636,19 @@ class Output(FrozenClass):
             try:
                 value = load_init_dict(value)[1]
             except Exception as e:
-                self.get_logger().error(
-                    "Error while loading " + value + ", setting None instead"
-                )
+                self.get_logger().error('Error while loading '+value+', setting None instead')
                 value = None
-        if isinstance(value, dict) and "__class__" in value:
-            class_obj = import_class("pyleecan.Classes", value.get("__class__"), "elec")
+        if isinstance(value, dict) and '__class__' in value:
+            class_obj = import_class('pyleecan.Classes', value.get('__class__'), 'elec')
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
-            OutElec = import_class("pyleecan.Classes", "OutElec", "elec")
+            OutElec = import_class('pyleecan.Classes', 'OutElec', 'elec')
             value = OutElec()
         check_var("elec", value, "OutElec")
         self._elec = value
 
         if self._elec is not None:
             self._elec.parent = self
-
     elec = property(
         fget=_get_elec,
         fset=_set_elec,
@@ -821,22 +668,19 @@ class Output(FrozenClass):
             try:
                 value = load_init_dict(value)[1]
             except Exception as e:
-                self.get_logger().error(
-                    "Error while loading " + value + ", setting None instead"
-                )
+                self.get_logger().error('Error while loading '+value+', setting None instead')
                 value = None
-        if isinstance(value, dict) and "__class__" in value:
-            class_obj = import_class("pyleecan.Classes", value.get("__class__"), "mag")
+        if isinstance(value, dict) and '__class__' in value:
+            class_obj = import_class('pyleecan.Classes', value.get('__class__'), 'mag')
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
-            OutMag = import_class("pyleecan.Classes", "OutMag", "mag")
+            OutMag = import_class('pyleecan.Classes', 'OutMag', 'mag')
             value = OutMag()
         check_var("mag", value, "OutMag")
         self._mag = value
 
         if self._mag is not None:
             self._mag.parent = self
-
     mag = property(
         fget=_get_mag,
         fset=_set_mag,
@@ -856,24 +700,19 @@ class Output(FrozenClass):
             try:
                 value = load_init_dict(value)[1]
             except Exception as e:
-                self.get_logger().error(
-                    "Error while loading " + value + ", setting None instead"
-                )
+                self.get_logger().error('Error while loading '+value+', setting None instead')
                 value = None
-        if isinstance(value, dict) and "__class__" in value:
-            class_obj = import_class(
-                "pyleecan.Classes", value.get("__class__"), "struct"
-            )
+        if isinstance(value, dict) and '__class__' in value:
+            class_obj = import_class('pyleecan.Classes', value.get('__class__'), 'struct')
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
-            OutStruct = import_class("pyleecan.Classes", "OutStruct", "struct")
+            OutStruct = import_class('pyleecan.Classes', 'OutStruct', 'struct')
             value = OutStruct()
         check_var("struct", value, "OutStruct")
         self._struct = value
 
         if self._struct is not None:
             self._struct.parent = self
-
     struct = property(
         fget=_get_struct,
         fset=_set_struct,
@@ -893,22 +732,19 @@ class Output(FrozenClass):
             try:
                 value = load_init_dict(value)[1]
             except Exception as e:
-                self.get_logger().error(
-                    "Error while loading " + value + ", setting None instead"
-                )
+                self.get_logger().error('Error while loading '+value+', setting None instead')
                 value = None
-        if isinstance(value, dict) and "__class__" in value:
-            class_obj = import_class("pyleecan.Classes", value.get("__class__"), "post")
+        if isinstance(value, dict) and '__class__' in value:
+            class_obj = import_class('pyleecan.Classes', value.get('__class__'), 'post')
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
-            OutPost = import_class("pyleecan.Classes", "OutPost", "post")
+            OutPost = import_class('pyleecan.Classes', 'OutPost', 'post')
             value = OutPost()
         check_var("post", value, "OutPost")
         self._post = value
 
         if self._post is not None:
             self._post.parent = self
-
     post = property(
         fget=_get_post,
         fset=_set_post,
@@ -946,24 +782,19 @@ class Output(FrozenClass):
             try:
                 value = load_init_dict(value)[1]
             except Exception as e:
-                self.get_logger().error(
-                    "Error while loading " + value + ", setting None instead"
-                )
+                self.get_logger().error('Error while loading '+value+', setting None instead')
                 value = None
-        if isinstance(value, dict) and "__class__" in value:
-            class_obj = import_class(
-                "pyleecan.Classes", value.get("__class__"), "force"
-            )
+        if isinstance(value, dict) and '__class__' in value:
+            class_obj = import_class('pyleecan.Classes', value.get('__class__'), 'force')
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
-            OutForce = import_class("pyleecan.Classes", "OutForce", "force")
+            OutForce = import_class('pyleecan.Classes', 'OutForce', 'force')
             value = OutForce()
         check_var("force", value, "OutForce")
         self._force = value
 
         if self._force is not None:
             self._force.parent = self
-
     force = property(
         fget=_get_force,
         fset=_set_force,
@@ -983,22 +814,19 @@ class Output(FrozenClass):
             try:
                 value = load_init_dict(value)[1]
             except Exception as e:
-                self.get_logger().error(
-                    "Error while loading " + value + ", setting None instead"
-                )
+                self.get_logger().error('Error while loading '+value+', setting None instead')
                 value = None
-        if isinstance(value, dict) and "__class__" in value:
-            class_obj = import_class("pyleecan.Classes", value.get("__class__"), "loss")
+        if isinstance(value, dict) and '__class__' in value:
+            class_obj = import_class('pyleecan.Classes', value.get('__class__'), 'loss')
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
-            OutLoss = import_class("pyleecan.Classes", "OutLoss", "loss")
+            OutLoss = import_class('pyleecan.Classes', 'OutLoss', 'loss')
             value = OutLoss()
         check_var("loss", value, "OutLoss")
         self._loss = value
 
         if self._loss is not None:
             self._loss.parent = self
-
     loss = property(
         fget=_get_loss,
         fset=_set_loss,

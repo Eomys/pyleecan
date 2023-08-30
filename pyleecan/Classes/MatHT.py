@@ -29,16 +29,7 @@ class MatHT(FrozenClass):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(
-        self,
-        lambda_x=1,
-        lambda_y=1,
-        lambda_z=1,
-        Cp=1,
-        alpha=0,
-        init_dict=None,
-        init_str=None,
-    ):
+    def __init__(self, lambda_x=1, lambda_y=1, lambda_z=1, Cp=1, alpha=0, init_dict = None, init_str = None):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -107,101 +98,56 @@ class MatHT(FrozenClass):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
+    def compare(self, other, name='self', ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
             ignore_list = list()
         if type(other) != type(self):
-            return ["type(" + name + ")"]
+            return ['type('+name+')']
         diff_list = list()
-        if (
-            other._lambda_x is not None
-            and self._lambda_x is not None
-            and isnan(other._lambda_x)
-            and isnan(self._lambda_x)
-        ):
+        if other._lambda_x is not None and self._lambda_x is not None and isnan(other._lambda_x) and isnan(self._lambda_x):
             pass
         elif other._lambda_x != self._lambda_x:
             if is_add_value:
-                val_str = (
-                    " (self="
-                    + str(self._lambda_x)
-                    + ", other="
-                    + str(other._lambda_x)
-                    + ")"
-                )
-                diff_list.append(name + ".lambda_x" + val_str)
+                val_str = ' (self='+str(self._lambda_x)+', other='+str(other._lambda_x)+')'
+                diff_list.append(name+'.lambda_x'+val_str)
             else:
-                diff_list.append(name + ".lambda_x")
-        if (
-            other._lambda_y is not None
-            and self._lambda_y is not None
-            and isnan(other._lambda_y)
-            and isnan(self._lambda_y)
-        ):
+                diff_list.append(name+'.lambda_x')
+        if other._lambda_y is not None and self._lambda_y is not None and isnan(other._lambda_y) and isnan(self._lambda_y):
             pass
         elif other._lambda_y != self._lambda_y:
             if is_add_value:
-                val_str = (
-                    " (self="
-                    + str(self._lambda_y)
-                    + ", other="
-                    + str(other._lambda_y)
-                    + ")"
-                )
-                diff_list.append(name + ".lambda_y" + val_str)
+                val_str = ' (self='+str(self._lambda_y)+', other='+str(other._lambda_y)+')'
+                diff_list.append(name+'.lambda_y'+val_str)
             else:
-                diff_list.append(name + ".lambda_y")
-        if (
-            other._lambda_z is not None
-            and self._lambda_z is not None
-            and isnan(other._lambda_z)
-            and isnan(self._lambda_z)
-        ):
+                diff_list.append(name+'.lambda_y')
+        if other._lambda_z is not None and self._lambda_z is not None and isnan(other._lambda_z) and isnan(self._lambda_z):
             pass
         elif other._lambda_z != self._lambda_z:
             if is_add_value:
-                val_str = (
-                    " (self="
-                    + str(self._lambda_z)
-                    + ", other="
-                    + str(other._lambda_z)
-                    + ")"
-                )
-                diff_list.append(name + ".lambda_z" + val_str)
+                val_str = ' (self='+str(self._lambda_z)+', other='+str(other._lambda_z)+')'
+                diff_list.append(name+'.lambda_z'+val_str)
             else:
-                diff_list.append(name + ".lambda_z")
-        if (
-            other._Cp is not None
-            and self._Cp is not None
-            and isnan(other._Cp)
-            and isnan(self._Cp)
-        ):
+                diff_list.append(name+'.lambda_z')
+        if other._Cp is not None and self._Cp is not None and isnan(other._Cp) and isnan(self._Cp):
             pass
         elif other._Cp != self._Cp:
             if is_add_value:
-                val_str = " (self=" + str(self._Cp) + ", other=" + str(other._Cp) + ")"
-                diff_list.append(name + ".Cp" + val_str)
+                val_str = ' (self='+str(self._Cp)+', other='+str(other._Cp)+')'
+                diff_list.append(name+'.Cp'+val_str)
             else:
-                diff_list.append(name + ".Cp")
-        if (
-            other._alpha is not None
-            and self._alpha is not None
-            and isnan(other._alpha)
-            and isnan(self._alpha)
-        ):
+                diff_list.append(name+'.Cp')
+        if other._alpha is not None and self._alpha is not None and isnan(other._alpha) and isnan(self._alpha):
             pass
         elif other._alpha != self._alpha:
             if is_add_value:
-                val_str = (
-                    " (self=" + str(self._alpha) + ", other=" + str(other._alpha) + ")"
-                )
-                diff_list.append(name + ".alpha" + val_str)
+                val_str = ' (self='+str(self._alpha)+', other='+str(other._alpha)+')'
+                diff_list.append(name+'.alpha'+val_str)
             else:
-                diff_list.append(name + ".alpha")
+                diff_list.append(name+'.alpha')
         # Filter ignore differences
-        diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
+        diff_list = list(filter(lambda x : x not in ignore_list, diff_list))
         return diff_list
 
     def __sizeof__(self):
@@ -222,7 +168,7 @@ class MatHT(FrozenClass):
             How to handle ndarray (0: tolist, 1: copy, 2: nothing)
         keep_function : bool
             True to keep the function object, else return str
-        Optional keyword input parameter is for internal use only
+        Optional keyword input parameter is for internal use only 
         and may prevent json serializability.
         """
 
@@ -236,6 +182,7 @@ class MatHT(FrozenClass):
         MatHT_dict["__class__"] = "MatHT"
         return MatHT_dict
 
+
     def copy(self):
         """Creates a deepcopy of the object"""
 
@@ -246,13 +193,7 @@ class MatHT(FrozenClass):
         Cp_val = self.Cp
         alpha_val = self.alpha
         # Creates new object of the same type with the copied properties
-        obj_copy = type(self)(
-            lambda_x=lambda_x_val,
-            lambda_y=lambda_y_val,
-            lambda_z=lambda_z_val,
-            Cp=Cp_val,
-            alpha=alpha_val,
-        )
+        obj_copy = type(self)(lambda_x=lambda_x_val,lambda_y=lambda_y_val,lambda_z=lambda_z_val,Cp=Cp_val,alpha=alpha_val)
         return obj_copy
 
     def _set_None(self):

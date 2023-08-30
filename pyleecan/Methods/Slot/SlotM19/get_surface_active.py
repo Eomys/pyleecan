@@ -2,7 +2,7 @@
 
 from numpy import linspace, zeros
 from numpy import abs as np_abs
-from numpy import sqrt 
+from numpy import sqrt
 
 from ....Classes.Segment import Segment
 from ....Classes.Arc1 import Arc1
@@ -37,14 +37,12 @@ def get_surface_active(self, alpha=0, delta=0):
     Z3 = point_dict["Z3"]
     Z4 = point_dict["Z4"]
 
-
-
     curve_list = list()
     curve_list.append(Segment(Z1, Z2))
     curve_list.append(Segment(Z2, Z3))
     curve_list.append(Segment(Z3, Z4))
 
-    #R1 = np_abs(sqrt(Z1.real**2 + Z1.imag**2))
+    # R1 = np_abs(sqrt(Z1.real**2 + Z1.imag**2))
 
     if self.is_outwards():
         curve_list.append(Arc1(Z4, Z1, -Rbo, is_trigo_direction=False))
@@ -52,7 +50,7 @@ def get_surface_active(self, alpha=0, delta=0):
         curve_list.append(Arc1(Z4, Z1, -Rbo, is_trigo_direction=False))
 
     surface = SurfLine(
-        line_list=curve_list, label="Wind_" + st + "_R0_T0_S0", point_ref= (Z1+Z3)/2
+        line_list=curve_list, label="Wind_" + st + "_R0_T0_S0", point_ref=(Z1 + Z3) / 2
     )
 
     # Apply transformation

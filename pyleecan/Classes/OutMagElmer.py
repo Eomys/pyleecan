@@ -46,7 +46,7 @@ class OutMagElmer(OutInternal):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, FEA_dict=None, init_dict=None, init_str=None):
+    def __init__(self, FEA_dict=None, init_dict = None, init_str = None):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -93,35 +93,25 @@ class OutMagElmer(OutInternal):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
+    def compare(self, other, name='self', ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
             ignore_list = list()
         if type(other) != type(self):
-            return ["type(" + name + ")"]
+            return ['type('+name+')']
         diff_list = list()
 
         # Check the properties inherited from OutInternal
-        diff_list.extend(
-            super(OutMagElmer, self).compare(
-                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
-            )
-        )
+        diff_list.extend(super(OutMagElmer, self).compare(other,name=name, ignore_list=ignore_list, is_add_value=is_add_value))
         if other._FEA_dict != self._FEA_dict:
             if is_add_value:
-                val_str = (
-                    " (self="
-                    + str(self._FEA_dict)
-                    + ", other="
-                    + str(other._FEA_dict)
-                    + ")"
-                )
-                diff_list.append(name + ".FEA_dict" + val_str)
+                val_str = ' (self='+str(self._FEA_dict)+', other='+str(other._FEA_dict)+')'
+                diff_list.append(name+'.FEA_dict'+val_str)
             else:
-                diff_list.append(name + ".FEA_dict")
+                diff_list.append(name+'.FEA_dict')
         # Filter ignore differences
-        diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
+        diff_list = list(filter(lambda x : x not in ignore_list, diff_list))
         return diff_list
 
     def __sizeof__(self):
@@ -143,16 +133,12 @@ class OutMagElmer(OutInternal):
             How to handle ndarray (0: tolist, 1: copy, 2: nothing)
         keep_function : bool
             True to keep the function object, else return str
-        Optional keyword input parameter is for internal use only
+        Optional keyword input parameter is for internal use only 
         and may prevent json serializability.
         """
 
         # Get the properties inherited from OutInternal
-        OutMagElmer_dict = super(OutMagElmer, self).as_dict(
-            type_handle_ndarray=type_handle_ndarray,
-            keep_function=keep_function,
-            **kwargs
-        )
+        OutMagElmer_dict = super(OutMagElmer, self).as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs)
         OutMagElmer_dict["FEA_dict"] = (
             self.FEA_dict.copy() if self.FEA_dict is not None else None
         )
@@ -160,6 +146,7 @@ class OutMagElmer(OutInternal):
         # Overwrite the mother class name
         OutMagElmer_dict["__class__"] = "OutMagElmer"
         return OutMagElmer_dict
+
 
     def copy(self):
         """Creates a deepcopy of the object"""

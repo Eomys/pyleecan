@@ -140,17 +140,7 @@ class OutLossModel(FrozenClass):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(
-        self,
-        name="",
-        loss_density=None,
-        coeff_dict=None,
-        group=None,
-        loss_model=None,
-        scalar_value=None,
-        init_dict=None,
-        init_str=None,
-    ):
+    def __init__(self, name="", loss_density=None, coeff_dict=None, group=None, loss_model=None, scalar_value=None, init_dict = None, init_str = None):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -197,17 +187,9 @@ class OutLossModel(FrozenClass):
         if self.parent is None:
             OutLossModel_str += "parent = None " + linesep
         else:
-            OutLossModel_str += (
-                "parent = " + str(type(self.parent)) + " object" + linesep
-            )
+            OutLossModel_str += "parent = " + str(type(self.parent)) + " object" + linesep
         OutLossModel_str += 'name = "' + str(self.name) + '"' + linesep
-        OutLossModel_str += (
-            "loss_density = "
-            + linesep
-            + str(self.loss_density).replace(linesep, linesep + "\t")
-            + linesep
-            + linesep
-        )
+        OutLossModel_str += "loss_density = " + linesep + str(self.loss_density).replace(linesep, linesep + "\t") + linesep + linesep
         OutLossModel_str += "coeff_dict = " + str(self.coeff_dict) + linesep
         OutLossModel_str += 'group = "' + str(self.group) + '"' + linesep
         OutLossModel_str += 'loss_model = "' + str(self.loss_model) + '"' + linesep
@@ -233,77 +215,50 @@ class OutLossModel(FrozenClass):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
+    def compare(self, other, name='self', ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
             ignore_list = list()
         if type(other) != type(self):
-            return ["type(" + name + ")"]
+            return ['type('+name+')']
         diff_list = list()
         if other._name != self._name:
             if is_add_value:
-                val_str = (
-                    " (self=" + str(self._name) + ", other=" + str(other._name) + ")"
-                )
-                diff_list.append(name + ".name" + val_str)
+                val_str = ' (self='+str(self._name)+', other='+str(other._name)+')'
+                diff_list.append(name+'.name'+val_str)
             else:
-                diff_list.append(name + ".name")
+                diff_list.append(name+'.name')
         if not array_equal(other.loss_density, self.loss_density):
-            diff_list.append(name + ".loss_density")
+            diff_list.append(name+'.loss_density')
         if other._coeff_dict != self._coeff_dict:
             if is_add_value:
-                val_str = (
-                    " (self="
-                    + str(self._coeff_dict)
-                    + ", other="
-                    + str(other._coeff_dict)
-                    + ")"
-                )
-                diff_list.append(name + ".coeff_dict" + val_str)
+                val_str = ' (self='+str(self._coeff_dict)+', other='+str(other._coeff_dict)+')'
+                diff_list.append(name+'.coeff_dict'+val_str)
             else:
-                diff_list.append(name + ".coeff_dict")
+                diff_list.append(name+'.coeff_dict')
         if other._group != self._group:
             if is_add_value:
-                val_str = (
-                    " (self=" + str(self._group) + ", other=" + str(other._group) + ")"
-                )
-                diff_list.append(name + ".group" + val_str)
+                val_str = ' (self='+str(self._group)+', other='+str(other._group)+')'
+                diff_list.append(name+'.group'+val_str)
             else:
-                diff_list.append(name + ".group")
+                diff_list.append(name+'.group')
         if other._loss_model != self._loss_model:
             if is_add_value:
-                val_str = (
-                    " (self="
-                    + str(self._loss_model)
-                    + ", other="
-                    + str(other._loss_model)
-                    + ")"
-                )
-                diff_list.append(name + ".loss_model" + val_str)
+                val_str = ' (self='+str(self._loss_model)+', other='+str(other._loss_model)+')'
+                diff_list.append(name+'.loss_model'+val_str)
             else:
-                diff_list.append(name + ".loss_model")
-        if (
-            other._scalar_value is not None
-            and self._scalar_value is not None
-            and isnan(other._scalar_value)
-            and isnan(self._scalar_value)
-        ):
+                diff_list.append(name+'.loss_model')
+        if other._scalar_value is not None and self._scalar_value is not None and isnan(other._scalar_value) and isnan(self._scalar_value):
             pass
         elif other._scalar_value != self._scalar_value:
             if is_add_value:
-                val_str = (
-                    " (self="
-                    + str(self._scalar_value)
-                    + ", other="
-                    + str(other._scalar_value)
-                    + ")"
-                )
-                diff_list.append(name + ".scalar_value" + val_str)
+                val_str = ' (self='+str(self._scalar_value)+', other='+str(other._scalar_value)+')'
+                diff_list.append(name+'.scalar_value'+val_str)
             else:
-                diff_list.append(name + ".scalar_value")
+                diff_list.append(name+'.scalar_value')
         # Filter ignore differences
-        diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
+        diff_list = list(filter(lambda x : x not in ignore_list, diff_list))
         return diff_list
 
     def __sizeof__(self):
@@ -327,7 +282,7 @@ class OutLossModel(FrozenClass):
             How to handle ndarray (0: tolist, 1: copy, 2: nothing)
         keep_function : bool
             True to keep the function object, else return str
-        Optional keyword input parameter is for internal use only
+        Optional keyword input parameter is for internal use only 
         and may prevent json serializability.
         """
 
@@ -336,16 +291,14 @@ class OutLossModel(FrozenClass):
         if self.loss_density is None:
             OutLossModel_dict["loss_density"] = None
         else:
-            if type_handle_ndarray == 0:
+            if type_handle_ndarray==0:
                 OutLossModel_dict["loss_density"] = self.loss_density.tolist()
-            elif type_handle_ndarray == 1:
+            elif type_handle_ndarray==1:
                 OutLossModel_dict["loss_density"] = self.loss_density.copy()
-            elif type_handle_ndarray == 2:
+            elif type_handle_ndarray==2:
                 OutLossModel_dict["loss_density"] = self.loss_density
             else:
-                raise Exception(
-                    "Unknown type_handle_ndarray: " + str(type_handle_ndarray)
-                )
+                raise Exception ('Unknown type_handle_ndarray: '+str(type_handle_ndarray))
         OutLossModel_dict["coeff_dict"] = (
             self.coeff_dict.copy() if self.coeff_dict is not None else None
         )
@@ -355,6 +308,7 @@ class OutLossModel(FrozenClass):
         # The class name is added to the dict for deserialisation purpose
         OutLossModel_dict["__class__"] = "OutLossModel"
         return OutLossModel_dict
+
 
     def copy(self):
         """Creates a deepcopy of the object"""
@@ -373,14 +327,7 @@ class OutLossModel(FrozenClass):
         loss_model_val = self.loss_model
         scalar_value_val = self.scalar_value
         # Creates new object of the same type with the copied properties
-        obj_copy = type(self)(
-            name=name_val,
-            loss_density=loss_density_val,
-            coeff_dict=coeff_dict_val,
-            group=group_val,
-            loss_model=loss_model_val,
-            scalar_value=scalar_value_val,
-        )
+        obj_copy = type(self)(name=name_val,loss_density=loss_density_val,coeff_dict=coeff_dict_val,group=group_val,loss_model=loss_model_val,scalar_value=scalar_value_val)
         return obj_copy
 
     def _set_None(self):

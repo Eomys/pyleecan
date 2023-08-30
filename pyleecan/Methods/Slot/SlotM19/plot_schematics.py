@@ -68,11 +68,11 @@ def plot_schematics(
     ax : Matplotlib.axes.Axes object
         Axis containing the schematics
     """
-    
+
     # Use some default parameter
     if is_default:
 
-        #definir paramètre par défault
+        # definir paramètre par défault
         slot = type(self)(Zs=4, W0=30e-3, Hmag=17.5e-3, W1=20e-3)
         lam = LamSlot(
             Rint=0.1, Rext=0.135, is_internal=True, is_stator=False, slot=slot
@@ -141,7 +141,7 @@ def plot_schematics(
                 fontsize=SC_FONT_SIZE,
             )
             """
-            
+
             # W1
             plot_quote(
                 Z1=point_dict["Z1"],
@@ -167,7 +167,7 @@ def plot_schematics(
                 fontsize=SC_FONT_SIZE,
             )"""
             # Hmag
-            mid = (point_dict["Zmid"])
+            mid = point_dict["Zmid"]
             line = Segment(mid, mid - sign * self.Hmag)
             line.plot(
                 fig=fig,
@@ -175,7 +175,7 @@ def plot_schematics(
                 color=ARROW_COLOR,
                 linewidth=ARROW_WIDTH,
                 label="Hmag",
-                offset_label=1j * 0.1 * self.Hmag -0.0025,
+                offset_label=1j * 0.1 * self.Hmag - 0.0025,
                 is_arrow=True,
                 fontsize=SC_FONT_SIZE,
             )
@@ -209,8 +209,8 @@ def plot_schematics(
             line = Arc1(
                 begin=point_dict["Z1"],
                 end=point_dict["Z4"],
-                radius= abs(point_dict["Z1"]),
-                is_trigo_direction=True, 
+                radius=abs(point_dict["Z1"]),
+                is_trigo_direction=True,
             )
             line.plot(
                 fig=fig,
@@ -249,7 +249,6 @@ def plot_schematics(
         if is_show_fig:
             fig.show()
         return fig, ax
-        
 
 
 """

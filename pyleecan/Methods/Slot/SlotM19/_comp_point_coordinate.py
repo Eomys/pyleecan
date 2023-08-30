@@ -23,13 +23,12 @@ def _comp_point_coordinate(self):
     Z1 = Rbo * exp(-1j * alpha)
 
     if self.is_outwards():
-        Zmid  = Rbo + self.Hmag
+        Zmid = Rbo + self.Hmag
 
     else:  # inward slot
-        Zmid  = Rbo - self.Hmag
-    
-    Z2 = Zmid - 1j*(self.W0/2)
+        Zmid = Rbo - self.Hmag
 
+    Z2 = Zmid - 1j * (self.W0 / 2)
 
     point_dict = dict()
     point_dict["Z1"] = Z1

@@ -21,4 +21,3 @@ def comp_angle_opening(self):
     Rbo = self.get_Rbo()
 
     return float(2 * arcsin(self.W1 / (2 * Rbo)))
-

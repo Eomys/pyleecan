@@ -67,7 +67,7 @@ class MatElectrical(FrozenClass):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, rho=0, epsr=1, alpha=0, init_dict=None, init_str=None):
+    def __init__(self, rho=0, epsr=1, alpha=0, init_dict = None, init_str = None):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -105,9 +105,7 @@ class MatElectrical(FrozenClass):
         if self.parent is None:
             MatElectrical_str += "parent = None " + linesep
         else:
-            MatElectrical_str += (
-                "parent = " + str(type(self.parent)) + " object" + linesep
-            )
+            MatElectrical_str += "parent = " + str(type(self.parent)) + " object" + linesep
         MatElectrical_str += "rho = " + str(self.rho) + linesep
         MatElectrical_str += "epsr = " + str(self.epsr) + linesep
         MatElectrical_str += "alpha = " + str(self.alpha) + linesep
@@ -126,61 +124,40 @@ class MatElectrical(FrozenClass):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
+    def compare(self, other, name='self', ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
             ignore_list = list()
         if type(other) != type(self):
-            return ["type(" + name + ")"]
+            return ['type('+name+')']
         diff_list = list()
-        if (
-            other._rho is not None
-            and self._rho is not None
-            and isnan(other._rho)
-            and isnan(self._rho)
-        ):
+        if other._rho is not None and self._rho is not None and isnan(other._rho) and isnan(self._rho):
             pass
         elif other._rho != self._rho:
             if is_add_value:
-                val_str = (
-                    " (self=" + str(self._rho) + ", other=" + str(other._rho) + ")"
-                )
-                diff_list.append(name + ".rho" + val_str)
+                val_str = ' (self='+str(self._rho)+', other='+str(other._rho)+')'
+                diff_list.append(name+'.rho'+val_str)
             else:
-                diff_list.append(name + ".rho")
-        if (
-            other._epsr is not None
-            and self._epsr is not None
-            and isnan(other._epsr)
-            and isnan(self._epsr)
-        ):
+                diff_list.append(name+'.rho')
+        if other._epsr is not None and self._epsr is not None and isnan(other._epsr) and isnan(self._epsr):
             pass
         elif other._epsr != self._epsr:
             if is_add_value:
-                val_str = (
-                    " (self=" + str(self._epsr) + ", other=" + str(other._epsr) + ")"
-                )
-                diff_list.append(name + ".epsr" + val_str)
+                val_str = ' (self='+str(self._epsr)+', other='+str(other._epsr)+')'
+                diff_list.append(name+'.epsr'+val_str)
             else:
-                diff_list.append(name + ".epsr")
-        if (
-            other._alpha is not None
-            and self._alpha is not None
-            and isnan(other._alpha)
-            and isnan(self._alpha)
-        ):
+                diff_list.append(name+'.epsr')
+        if other._alpha is not None and self._alpha is not None and isnan(other._alpha) and isnan(self._alpha):
             pass
         elif other._alpha != self._alpha:
             if is_add_value:
-                val_str = (
-                    " (self=" + str(self._alpha) + ", other=" + str(other._alpha) + ")"
-                )
-                diff_list.append(name + ".alpha" + val_str)
+                val_str = ' (self='+str(self._alpha)+', other='+str(other._alpha)+')'
+                diff_list.append(name+'.alpha'+val_str)
             else:
-                diff_list.append(name + ".alpha")
+                diff_list.append(name+'.alpha')
         # Filter ignore differences
-        diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
+        diff_list = list(filter(lambda x : x not in ignore_list, diff_list))
         return diff_list
 
     def __sizeof__(self):
@@ -199,7 +176,7 @@ class MatElectrical(FrozenClass):
             How to handle ndarray (0: tolist, 1: copy, 2: nothing)
         keep_function : bool
             True to keep the function object, else return str
-        Optional keyword input parameter is for internal use only
+        Optional keyword input parameter is for internal use only 
         and may prevent json serializability.
         """
 
@@ -211,6 +188,7 @@ class MatElectrical(FrozenClass):
         MatElectrical_dict["__class__"] = "MatElectrical"
         return MatElectrical_dict
 
+
     def copy(self):
         """Creates a deepcopy of the object"""
 
@@ -219,7 +197,7 @@ class MatElectrical(FrozenClass):
         epsr_val = self.epsr
         alpha_val = self.alpha
         # Creates new object of the same type with the copied properties
-        obj_copy = type(self)(rho=rho_val, epsr=epsr_val, alpha=alpha_val)
+        obj_copy = type(self)(rho=rho_val,epsr=epsr_val,alpha=alpha_val)
         return obj_copy
 
     def _set_None(self):

@@ -53,9 +53,7 @@ except ImportError as error:
     get_Zs = error
 
 try:
-    from ..Methods.Machine.LamSlotMulti.comp_periodicity_spatial import (
-        comp_periodicity_spatial,
-    )
+    from ..Methods.Machine.LamSlotMulti.comp_periodicity_spatial import comp_periodicity_spatial
 except ImportError as error:
     comp_periodicity_spatial = error
 
@@ -193,28 +191,7 @@ class LamSlotMulti(Lamination):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(
-        self,
-        slot_list=-1,
-        alpha=None,
-        sym_dict_enforced=None,
-        L1=0.35,
-        mat_type=-1,
-        Nrvd=0,
-        Wrvd=0,
-        Kf1=0.95,
-        is_internal=True,
-        Rint=0,
-        Rext=1,
-        is_stator=True,
-        axial_vent=-1,
-        notch=-1,
-        skew=None,
-        bore=None,
-        yoke=None,
-        init_dict=None,
-        init_str=None,
-    ):
+    def __init__(self, slot_list=-1, alpha=None, sym_dict_enforced=None, L1=0.35, mat_type=-1, Nrvd=0, Wrvd=0, Kf1=0.95, is_internal=True, Rint=0, Rext=1, is_stator=True, axial_vent=-1, notch=-1, skew=None, bore=None, yoke=None, init_dict = None, init_str = None):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -269,22 +246,7 @@ class LamSlotMulti(Lamination):
         self.alpha = alpha
         self.sym_dict_enforced = sym_dict_enforced
         # Call Lamination init
-        super(LamSlotMulti, self).__init__(
-            L1=L1,
-            mat_type=mat_type,
-            Nrvd=Nrvd,
-            Wrvd=Wrvd,
-            Kf1=Kf1,
-            is_internal=is_internal,
-            Rint=Rint,
-            Rext=Rext,
-            is_stator=is_stator,
-            axial_vent=axial_vent,
-            notch=notch,
-            skew=skew,
-            bore=bore,
-            yoke=yoke,
-        )
+        super(LamSlotMulti, self).__init__(L1=L1, mat_type=mat_type, Nrvd=Nrvd, Wrvd=Wrvd, Kf1=Kf1, is_internal=is_internal, Rint=Rint, Rext=Rext, is_stator=is_stator, axial_vent=axial_vent, notch=notch, skew=skew, bore=bore, yoke=yoke)
         # The class is frozen (in Lamination init), for now it's impossible to
         # add new properties
 
@@ -297,20 +259,10 @@ class LamSlotMulti(Lamination):
         if len(self.slot_list) == 0:
             LamSlotMulti_str += "slot_list = []" + linesep
         for ii in range(len(self.slot_list)):
-            tmp = (
-                self.slot_list[ii].__str__().replace(linesep, linesep + "\t") + linesep
-            )
-            LamSlotMulti_str += "slot_list[" + str(ii) + "] =" + tmp + linesep + linesep
-        LamSlotMulti_str += (
-            "alpha = "
-            + linesep
-            + str(self.alpha).replace(linesep, linesep + "\t")
-            + linesep
-            + linesep
-        )
-        LamSlotMulti_str += (
-            "sym_dict_enforced = " + str(self.sym_dict_enforced) + linesep
-        )
+            tmp = self.slot_list[ii].__str__().replace(linesep, linesep + "\t") + linesep
+            LamSlotMulti_str += "slot_list["+str(ii)+"] ="+ tmp + linesep + linesep
+        LamSlotMulti_str += "alpha = " + linesep + str(self.alpha).replace(linesep, linesep + "\t") + linesep + linesep
+        LamSlotMulti_str += "sym_dict_enforced = " + str(self.sym_dict_enforced) + linesep
         return LamSlotMulti_str
 
     def __eq__(self, other):
@@ -330,55 +282,36 @@ class LamSlotMulti(Lamination):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
+    def compare(self, other, name='self', ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
             ignore_list = list()
         if type(other) != type(self):
-            return ["type(" + name + ")"]
+            return ['type('+name+')']
         diff_list = list()
 
         # Check the properties inherited from Lamination
-        diff_list.extend(
-            super(LamSlotMulti, self).compare(
-                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
-            )
-        )
-        if (other.slot_list is None and self.slot_list is not None) or (
-            other.slot_list is not None and self.slot_list is None
-        ):
-            diff_list.append(name + ".slot_list None mismatch")
+        diff_list.extend(super(LamSlotMulti, self).compare(other,name=name, ignore_list=ignore_list, is_add_value=is_add_value))
+        if (other.slot_list is None and self.slot_list is not None) or (other.slot_list is not None and self.slot_list is None):
+            diff_list.append(name+'.slot_list None mismatch')
         elif self.slot_list is None:
             pass
         elif len(other.slot_list) != len(self.slot_list):
-            diff_list.append("len(" + name + ".slot_list)")
+            diff_list.append('len('+name+'.slot_list)')
         else:
             for ii in range(len(other.slot_list)):
-                diff_list.extend(
-                    self.slot_list[ii].compare(
-                        other.slot_list[ii],
-                        name=name + ".slot_list[" + str(ii) + "]",
-                        ignore_list=ignore_list,
-                        is_add_value=is_add_value,
-                    )
-                )
+                diff_list.extend(self.slot_list[ii].compare(other.slot_list[ii],name=name+'.slot_list['+str(ii)+']',ignore_list=ignore_list,is_add_value=is_add_value))
         if not array_equal(other.alpha, self.alpha):
-            diff_list.append(name + ".alpha")
+            diff_list.append(name+'.alpha')
         if other._sym_dict_enforced != self._sym_dict_enforced:
             if is_add_value:
-                val_str = (
-                    " (self="
-                    + str(self._sym_dict_enforced)
-                    + ", other="
-                    + str(other._sym_dict_enforced)
-                    + ")"
-                )
-                diff_list.append(name + ".sym_dict_enforced" + val_str)
+                val_str = ' (self='+str(self._sym_dict_enforced)+', other='+str(other._sym_dict_enforced)+')'
+                diff_list.append(name+'.sym_dict_enforced'+val_str)
             else:
-                diff_list.append(name + ".sym_dict_enforced")
+                diff_list.append(name+'.sym_dict_enforced')
         # Filter ignore differences
-        diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
+        diff_list = list(filter(lambda x : x not in ignore_list, diff_list))
         return diff_list
 
     def __sizeof__(self):
@@ -404,53 +337,40 @@ class LamSlotMulti(Lamination):
             How to handle ndarray (0: tolist, 1: copy, 2: nothing)
         keep_function : bool
             True to keep the function object, else return str
-        Optional keyword input parameter is for internal use only
+        Optional keyword input parameter is for internal use only 
         and may prevent json serializability.
         """
 
         # Get the properties inherited from Lamination
-        LamSlotMulti_dict = super(LamSlotMulti, self).as_dict(
-            type_handle_ndarray=type_handle_ndarray,
-            keep_function=keep_function,
-            **kwargs
-        )
+        LamSlotMulti_dict = super(LamSlotMulti, self).as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs)
         if self.slot_list is None:
-            LamSlotMulti_dict["slot_list"] = None
+            LamSlotMulti_dict['slot_list'] = None
         else:
-            LamSlotMulti_dict["slot_list"] = list()
+            LamSlotMulti_dict['slot_list'] = list()
             for obj in self.slot_list:
                 if obj is not None:
-                    LamSlotMulti_dict["slot_list"].append(
-                        obj.as_dict(
-                            type_handle_ndarray=type_handle_ndarray,
-                            keep_function=keep_function,
-                            **kwargs
-                        )
-                    )
+                    LamSlotMulti_dict['slot_list'].append(obj.as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs))
                 else:
-                    LamSlotMulti_dict["slot_list"].append(None)
+                    LamSlotMulti_dict['slot_list'].append(None)
         if self.alpha is None:
             LamSlotMulti_dict["alpha"] = None
         else:
-            if type_handle_ndarray == 0:
+            if type_handle_ndarray==0:
                 LamSlotMulti_dict["alpha"] = self.alpha.tolist()
-            elif type_handle_ndarray == 1:
+            elif type_handle_ndarray==1:
                 LamSlotMulti_dict["alpha"] = self.alpha.copy()
-            elif type_handle_ndarray == 2:
+            elif type_handle_ndarray==2:
                 LamSlotMulti_dict["alpha"] = self.alpha
             else:
-                raise Exception(
-                    "Unknown type_handle_ndarray: " + str(type_handle_ndarray)
-                )
+                raise Exception ('Unknown type_handle_ndarray: '+str(type_handle_ndarray))
         LamSlotMulti_dict["sym_dict_enforced"] = (
-            self.sym_dict_enforced.copy()
-            if self.sym_dict_enforced is not None
-            else None
+            self.sym_dict_enforced.copy() if self.sym_dict_enforced is not None else None
         )
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         LamSlotMulti_dict["__class__"] = "LamSlotMulti"
         return LamSlotMulti_dict
+
 
     def copy(self):
         """Creates a deepcopy of the object"""
@@ -507,25 +427,7 @@ class LamSlotMulti(Lamination):
         else:
             yoke_val = self.yoke.copy()
         # Creates new object of the same type with the copied properties
-        obj_copy = type(self)(
-            slot_list=slot_list_val,
-            alpha=alpha_val,
-            sym_dict_enforced=sym_dict_enforced_val,
-            L1=L1_val,
-            mat_type=mat_type_val,
-            Nrvd=Nrvd_val,
-            Wrvd=Wrvd_val,
-            Kf1=Kf1_val,
-            is_internal=is_internal_val,
-            Rint=Rint_val,
-            Rext=Rext_val,
-            is_stator=is_stator_val,
-            axial_vent=axial_vent_val,
-            notch=notch_val,
-            skew=skew_val,
-            bore=bore_val,
-            yoke=yoke_val,
-        )
+        obj_copy = type(self)(slot_list=slot_list_val,alpha=alpha_val,sym_dict_enforced=sym_dict_enforced_val,L1=L1_val,mat_type=mat_type_val,Nrvd=Nrvd_val,Wrvd=Wrvd_val,Kf1=Kf1_val,is_internal=is_internal_val,Rint=Rint_val,Rext=Rext_val,is_stator=is_stator_val,axial_vent=axial_vent_val,notch=notch_val,skew=skew_val,bore=bore_val,yoke=yoke_val)
         return obj_copy
 
     def _set_None(self):
@@ -553,15 +455,11 @@ class LamSlotMulti(Lamination):
                     try:
                         obj = load_init_dict(obj)[1]
                     except Exception as e:
-                        self.get_logger().error(
-                            "Error while loading " + obj + ", setting None instead"
-                        )
+                        self.get_logger().error('Error while loading '+obj+', setting None instead')
                         obj = None
                         value[ii] = None
                 if type(obj) is dict:
-                    class_obj = import_class(
-                        "pyleecan.Classes", obj.get("__class__"), "slot_list"
-                    )
+                    class_obj = import_class('pyleecan.Classes', obj.get('__class__'), 'slot_list')
                     value[ii] = class_obj(init_dict=obj)
                 if value[ii] is not None:
                     value[ii].parent = self

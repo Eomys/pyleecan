@@ -80,19 +80,7 @@ class Skew(FrozenClass):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(
-        self,
-        type_skew=None,
-        rate=1,
-        is_step=True,
-        function=None,
-        angle_list=None,
-        z_list=None,
-        Nstep=None,
-        angle_overall=None,
-        init_dict=None,
-        init_str=None,
-    ):
+    def __init__(self, type_skew=None, rate=1, is_step=True, function=None, angle_list=None, z_list=None, Nstep=None, angle_overall=None, init_dict = None, init_str = None):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -155,18 +143,8 @@ class Skew(FrozenClass):
             Skew_str += "function = " + str(self._function_func) + linesep
         else:
             Skew_str += "function = None" + linesep + linesep
-        Skew_str += (
-            "angle_list = "
-            + linesep
-            + str(self.angle_list).replace(linesep, linesep + "\t")
-            + linesep
-        )
-        Skew_str += (
-            "z_list = "
-            + linesep
-            + str(self.z_list).replace(linesep, linesep + "\t")
-            + linesep
-        )
+        Skew_str += "angle_list = " + linesep + str(self.angle_list).replace(linesep, linesep + "\t") + linesep
+        Skew_str += "z_list = " + linesep + str(self.z_list).replace(linesep, linesep + "\t") + linesep
         Skew_str += "Nstep = " + str(self.Nstep) + linesep
         Skew_str += "angle_overall = " + str(self.angle_overall) + linesep
         return Skew_str
@@ -194,108 +172,64 @@ class Skew(FrozenClass):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
+    def compare(self, other, name='self', ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
             ignore_list = list()
         if type(other) != type(self):
-            return ["type(" + name + ")"]
+            return ['type('+name+')']
         diff_list = list()
         if other._type_skew != self._type_skew:
             if is_add_value:
-                val_str = (
-                    " (self="
-                    + str(self._type_skew)
-                    + ", other="
-                    + str(other._type_skew)
-                    + ")"
-                )
-                diff_list.append(name + ".type_skew" + val_str)
+                val_str = ' (self='+str(self._type_skew)+', other='+str(other._type_skew)+')'
+                diff_list.append(name+'.type_skew'+val_str)
             else:
-                diff_list.append(name + ".type_skew")
-        if (
-            other._rate is not None
-            and self._rate is not None
-            and isnan(other._rate)
-            and isnan(self._rate)
-        ):
+                diff_list.append(name+'.type_skew')
+        if other._rate is not None and self._rate is not None and isnan(other._rate) and isnan(self._rate):
             pass
         elif other._rate != self._rate:
             if is_add_value:
-                val_str = (
-                    " (self=" + str(self._rate) + ", other=" + str(other._rate) + ")"
-                )
-                diff_list.append(name + ".rate" + val_str)
+                val_str = ' (self='+str(self._rate)+', other='+str(other._rate)+')'
+                diff_list.append(name+'.rate'+val_str)
             else:
-                diff_list.append(name + ".rate")
+                diff_list.append(name+'.rate')
         if other._is_step != self._is_step:
             if is_add_value:
-                val_str = (
-                    " (self="
-                    + str(self._is_step)
-                    + ", other="
-                    + str(other._is_step)
-                    + ")"
-                )
-                diff_list.append(name + ".is_step" + val_str)
+                val_str = ' (self='+str(self._is_step)+', other='+str(other._is_step)+')'
+                diff_list.append(name+'.is_step'+val_str)
             else:
-                diff_list.append(name + ".is_step")
+                diff_list.append(name+'.is_step')
         if other._function_str != self._function_str:
-            diff_list.append(name + ".function")
+            diff_list.append(name+'.function')
         if other._angle_list != self._angle_list:
             if is_add_value:
-                val_str = (
-                    " (self="
-                    + str(self._angle_list)
-                    + ", other="
-                    + str(other._angle_list)
-                    + ")"
-                )
-                diff_list.append(name + ".angle_list" + val_str)
+                val_str = ' (self='+str(self._angle_list)+', other='+str(other._angle_list)+')'
+                diff_list.append(name+'.angle_list'+val_str)
             else:
-                diff_list.append(name + ".angle_list")
+                diff_list.append(name+'.angle_list')
         if other._z_list != self._z_list:
             if is_add_value:
-                val_str = (
-                    " (self="
-                    + str(self._z_list)
-                    + ", other="
-                    + str(other._z_list)
-                    + ")"
-                )
-                diff_list.append(name + ".z_list" + val_str)
+                val_str = ' (self='+str(self._z_list)+', other='+str(other._z_list)+')'
+                diff_list.append(name+'.z_list'+val_str)
             else:
-                diff_list.append(name + ".z_list")
+                diff_list.append(name+'.z_list')
         if other._Nstep != self._Nstep:
             if is_add_value:
-                val_str = (
-                    " (self=" + str(self._Nstep) + ", other=" + str(other._Nstep) + ")"
-                )
-                diff_list.append(name + ".Nstep" + val_str)
+                val_str = ' (self='+str(self._Nstep)+', other='+str(other._Nstep)+')'
+                diff_list.append(name+'.Nstep'+val_str)
             else:
-                diff_list.append(name + ".Nstep")
-        if (
-            other._angle_overall is not None
-            and self._angle_overall is not None
-            and isnan(other._angle_overall)
-            and isnan(self._angle_overall)
-        ):
+                diff_list.append(name+'.Nstep')
+        if other._angle_overall is not None and self._angle_overall is not None and isnan(other._angle_overall) and isnan(self._angle_overall):
             pass
         elif other._angle_overall != self._angle_overall:
             if is_add_value:
-                val_str = (
-                    " (self="
-                    + str(self._angle_overall)
-                    + ", other="
-                    + str(other._angle_overall)
-                    + ")"
-                )
-                diff_list.append(name + ".angle_overall" + val_str)
+                val_str = ' (self='+str(self._angle_overall)+', other='+str(other._angle_overall)+')'
+                diff_list.append(name+'.angle_overall'+val_str)
             else:
-                diff_list.append(name + ".angle_overall")
+                diff_list.append(name+'.angle_overall')
         # Filter ignore differences
-        diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
+        diff_list = list(filter(lambda x : x not in ignore_list, diff_list))
         return diff_list
 
     def __sizeof__(self):
@@ -323,7 +257,7 @@ class Skew(FrozenClass):
             How to handle ndarray (0: tolist, 1: copy, 2: nothing)
         keep_function : bool
             True to keep the function object, else return str
-        Optional keyword input parameter is for internal use only
+        Optional keyword input parameter is for internal use only 
         and may prevent json serializability.
         """
 
@@ -339,19 +273,20 @@ class Skew(FrozenClass):
             Skew_dict["function"] = None
             if self.function is not None:
                 self.get_logger().warning(
-                    "Skew.as_dict(): "
-                    + f"Function {self.function.__name__} is not serializable "
-                    + "and will be converted to None."
+                    "Skew.as_dict(): " +f"Function {self.function.__name__} is not serializable " + "and will be converted to None."
                 )
         Skew_dict["angle_list"] = (
             self.angle_list.copy() if self.angle_list is not None else None
         )
-        Skew_dict["z_list"] = self.z_list.copy() if self.z_list is not None else None
+        Skew_dict["z_list"] = (
+            self.z_list.copy() if self.z_list is not None else None
+        )
         Skew_dict["Nstep"] = self.Nstep
         Skew_dict["angle_overall"] = self.angle_overall
         # The class name is added to the dict for deserialisation purpose
         Skew_dict["__class__"] = "Skew"
         return Skew_dict
+
 
     def copy(self):
         """Creates a deepcopy of the object"""
@@ -375,16 +310,7 @@ class Skew(FrozenClass):
         Nstep_val = self.Nstep
         angle_overall_val = self.angle_overall
         # Creates new object of the same type with the copied properties
-        obj_copy = type(self)(
-            type_skew=type_skew_val,
-            rate=rate_val,
-            is_step=is_step_val,
-            function=function_val,
-            angle_list=angle_list_val,
-            z_list=z_list_val,
-            Nstep=Nstep_val,
-            angle_overall=angle_overall_val,
-        )
+        obj_copy = type(self)(type_skew=type_skew_val,rate=rate_val,is_step=is_step_val,function=function_val,angle_list=angle_list_val,z_list=z_list_val,Nstep=Nstep_val,angle_overall=angle_overall_val)
         return obj_copy
 
     def _set_None(self):
@@ -411,7 +337,7 @@ class Skew(FrozenClass):
     type_skew = property(
         fget=_get_type_skew,
         fset=_set_type_skew,
-        doc="""Type of skew ("linear", "vshape", "function", "user-defined")
+        doc=u"""Type of skew ("linear", "vshape", "function", "user-defined")
 
         :Type: str
         """,
@@ -429,7 +355,7 @@ class Skew(FrozenClass):
     rate = property(
         fget=_get_rate,
         fset=_set_rate,
-        doc="""Skew rate expressed in terms of slot pitch (stator slot pitch for SCIM, rotor slot pitch for PMSM)
+        doc=u"""Skew rate expressed in terms of slot pitch (stator slot pitch for SCIM, rotor slot pitch for PMSM)
 
         :Type: float
         """,
@@ -447,7 +373,7 @@ class Skew(FrozenClass):
     is_step = property(
         fget=_get_is_step,
         fset=_set_is_step,
-        doc="""True to define skew as steps
+        doc=u"""True to define skew as steps
 
         :Type: bool
         """,
@@ -482,7 +408,7 @@ class Skew(FrozenClass):
     function = property(
         fget=_get_function,
         fset=_set_function,
-        doc="""Function which describes skew pattern
+        doc=u"""Function which describes skew pattern
 
         :Type: function
         """,
@@ -502,7 +428,7 @@ class Skew(FrozenClass):
     angle_list = property(
         fget=_get_angle_list,
         fset=_set_angle_list,
-        doc="""List of skew angles
+        doc=u"""List of skew angles
 
         :Type: list
         """,
@@ -522,7 +448,7 @@ class Skew(FrozenClass):
     z_list = property(
         fget=_get_z_list,
         fset=_set_z_list,
-        doc="""List of z axis positions for which skew angles are given
+        doc=u"""List of z axis positions for which skew angles are given
 
         :Type: list
         """,
@@ -540,7 +466,7 @@ class Skew(FrozenClass):
     Nstep = property(
         fget=_get_Nstep,
         fset=_set_Nstep,
-        doc="""Number of steps if step skew
+        doc=u"""Number of steps if step skew
 
         :Type: int
         :min: 2
@@ -559,7 +485,7 @@ class Skew(FrozenClass):
     angle_overall = property(
         fget=_get_angle_overall,
         fset=_set_angle_overall,
-        doc="""Overall skewing angle
+        doc=u"""Overall skewing angle
 
         :Type: float
         :min: 0

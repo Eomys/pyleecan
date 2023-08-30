@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 
 from numpy import abs as np_abs
-from numpy import sqrt 
+from numpy import sqrt
+
 
 def comp_height(self):
     """Compute the height of the Slot.
@@ -20,7 +21,7 @@ def comp_height(self):
     """
 
     point_dict = self._comp_point_coordinate()
-    Zmid =point_dict["Zmid"]
+    Zmid = point_dict["Zmid"]
     Z1 = point_dict["Z1"]
     Z2 = point_dict["Z2"]
     Z3 = point_dict["Z3"]
@@ -29,9 +30,9 @@ def comp_height(self):
     Rbo = self.get_Rbo()
 
     if self.is_outwards():
-    
+
         R1 = np_abs(Rbo)
-        R2 = np_abs(sqrt(Z2.real*Z2.real + Z2.imag*Z2.imag))
+        R2 = np_abs(sqrt(Z2.real * Z2.real + Z2.imag * Z2.imag))
 
     else:
         R1 = np_abs(Zmid)
