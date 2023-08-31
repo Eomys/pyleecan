@@ -187,7 +187,7 @@ class TestSMSlot(object):
         """Check that the Widget is able to set Magnet type 19"""
         self.widget.c_slot_type.setCurrentIndex(9)
         assert type(self.widget.w_slot) == PMSlot19
-        assert self.widget.c_slot_type.currentText() == "Trapezoidal Magnet"
+        assert self.widget.c_slot_type.currentText() == "Trapezoidal Magnet with polar top"
         assert type(self.test_obj.rotor.slot) == SlotM19
 
 

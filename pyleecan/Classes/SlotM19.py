@@ -73,7 +73,7 @@ from ._check import InitUnKnowClassError
 
 
 class SlotM19(Slot):
-    """trapezoidal  Slot with Rectangular trapezoidal  with polar top"""
+    """trapezoidal Slot with Rectangular trapezoidal with polar top"""
 
     VERSION = 1
     IS_SYMMETRICAL = 1
