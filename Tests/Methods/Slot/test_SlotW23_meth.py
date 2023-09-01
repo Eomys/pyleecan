@@ -99,6 +99,42 @@ class Test_SlotW23_meth(object):
         assert abs(point_dict["Z5"] - point_dict["Z6"]) == pytest.approx(
             test_obj.slot.H2
         )
+    
+    @pytest.mark.parametrize("test_dict", slotW23_test)
+    def test_schematics_constant_tooth(self, test_dict):
+        """Check that the schematics is correct"""
+        test_obj = test_dict["test_obj"]
+        point_dict = test_obj.slot._comp_point_coordinate()
+
+        # Check width
+        assert abs(point_dict["Z1"] - point_dict["Z8"]) == pytest.approx(
+            test_obj.slot.W0
+        )
+        assert abs(point_dict["Z3"] - point_dict["Z6"]) == pytest.approx(
+            test_obj.slot.W1
+        )
+        assert abs(point_dict["Z4"] - point_dict["Z5"]) == pytest.approx(
+            test_obj.slot.W2
+        )
+        # Check height
+        assert abs(point_dict["Z1"] - point_dict["Z2"]) == pytest.approx(
+            test_obj.slot.H0
+        )
+        assert abs(point_dict["Z2"].real - point_dict["Z3"].real) == pytest.approx(
+            test_obj.slot.H1
+        )
+        assert abs(point_dict["Z3"] - point_dict["Z4"]) == pytest.approx(
+            test_obj.slot.H2
+        )
+        assert abs(point_dict["Z8"] - point_dict["Z7"]) == pytest.approx(
+            test_obj.slot.H0
+        )
+        assert abs(point_dict["Z6"].real - point_dict["Z7"].real) == pytest.approx(
+            test_obj.slot.H1
+        )
+        assert abs(point_dict["Z5"] - point_dict["Z6"]) == pytest.approx(
+            test_obj.slot.H2
+        )
 
     @pytest.mark.parametrize("test_dict", slotW23_test)
     def test_build_geometry_active(self, test_dict):
@@ -275,6 +311,7 @@ if __name__ == "__main__":
     for ii, test_dict in enumerate(slotW23_test):
         print("Running test for Slot[" + str(ii) + "]")
         a.test_schematics(test_dict)
+        a.test_schematics_constant_tooth(test_dict)
         a.test_comp_surface(test_dict)
         a.test_comp_surface_active(test_dict)
         a.test_comp_surface_opening(test_dict)
