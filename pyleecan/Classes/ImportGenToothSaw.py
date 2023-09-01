@@ -48,7 +48,18 @@ class ImportGenToothSaw(ImportMatrix):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, type_signal=0, f=100, A=1, N=1024, Tf=1, Dt=0, is_transpose=False, init_dict = None, init_str = None):
+    def __init__(
+        self,
+        type_signal=0,
+        f=100,
+        A=1,
+        N=1024,
+        Tf=1,
+        Dt=0,
+        is_transpose=False,
+        init_dict=None,
+        init_str=None,
+    ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -127,63 +138,93 @@ class ImportGenToothSaw(ImportMatrix):
             return False
         return True
 
-    def compare(self, other, name='self', ignore_list=None, is_add_value=False):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
             ignore_list = list()
         if type(other) != type(self):
-            return ['type('+name+')']
+            return ["type(" + name + ")"]
         diff_list = list()
 
         # Check the properties inherited from ImportMatrix
-        diff_list.extend(super(ImportGenToothSaw, self).compare(other,name=name, ignore_list=ignore_list, is_add_value=is_add_value))
+        diff_list.extend(
+            super(ImportGenToothSaw, self).compare(
+                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
+            )
+        )
         if other._type_signal != self._type_signal:
             if is_add_value:
-                val_str = ' (self='+str(self._type_signal)+', other='+str(other._type_signal)+')'
-                diff_list.append(name+'.type_signal'+val_str)
+                val_str = (
+                    " (self="
+                    + str(self._type_signal)
+                    + ", other="
+                    + str(other._type_signal)
+                    + ")"
+                )
+                diff_list.append(name + ".type_signal" + val_str)
             else:
-                diff_list.append(name+'.type_signal')
-        if other._f is not None and self._f is not None and isnan(other._f) and isnan(self._f):
+                diff_list.append(name + ".type_signal")
+        if (
+            other._f is not None
+            and self._f is not None
+            and isnan(other._f)
+            and isnan(self._f)
+        ):
             pass
         elif other._f != self._f:
             if is_add_value:
-                val_str = ' (self='+str(self._f)+', other='+str(other._f)+')'
-                diff_list.append(name+'.f'+val_str)
+                val_str = " (self=" + str(self._f) + ", other=" + str(other._f) + ")"
+                diff_list.append(name + ".f" + val_str)
             else:
-                diff_list.append(name+'.f')
-        if other._A is not None and self._A is not None and isnan(other._A) and isnan(self._A):
+                diff_list.append(name + ".f")
+        if (
+            other._A is not None
+            and self._A is not None
+            and isnan(other._A)
+            and isnan(self._A)
+        ):
             pass
         elif other._A != self._A:
             if is_add_value:
-                val_str = ' (self='+str(self._A)+', other='+str(other._A)+')'
-                diff_list.append(name+'.A'+val_str)
+                val_str = " (self=" + str(self._A) + ", other=" + str(other._A) + ")"
+                diff_list.append(name + ".A" + val_str)
             else:
-                diff_list.append(name+'.A')
+                diff_list.append(name + ".A")
         if other._N != self._N:
             if is_add_value:
-                val_str = ' (self='+str(self._N)+', other='+str(other._N)+')'
-                diff_list.append(name+'.N'+val_str)
+                val_str = " (self=" + str(self._N) + ", other=" + str(other._N) + ")"
+                diff_list.append(name + ".N" + val_str)
             else:
-                diff_list.append(name+'.N')
-        if other._Tf is not None and self._Tf is not None and isnan(other._Tf) and isnan(self._Tf):
+                diff_list.append(name + ".N")
+        if (
+            other._Tf is not None
+            and self._Tf is not None
+            and isnan(other._Tf)
+            and isnan(self._Tf)
+        ):
             pass
         elif other._Tf != self._Tf:
             if is_add_value:
-                val_str = ' (self='+str(self._Tf)+', other='+str(other._Tf)+')'
-                diff_list.append(name+'.Tf'+val_str)
+                val_str = " (self=" + str(self._Tf) + ", other=" + str(other._Tf) + ")"
+                diff_list.append(name + ".Tf" + val_str)
             else:
-                diff_list.append(name+'.Tf')
-        if other._Dt is not None and self._Dt is not None and isnan(other._Dt) and isnan(self._Dt):
+                diff_list.append(name + ".Tf")
+        if (
+            other._Dt is not None
+            and self._Dt is not None
+            and isnan(other._Dt)
+            and isnan(self._Dt)
+        ):
             pass
         elif other._Dt != self._Dt:
             if is_add_value:
-                val_str = ' (self='+str(self._Dt)+', other='+str(other._Dt)+')'
-                diff_list.append(name+'.Dt'+val_str)
+                val_str = " (self=" + str(self._Dt) + ", other=" + str(other._Dt) + ")"
+                diff_list.append(name + ".Dt" + val_str)
             else:
-                diff_list.append(name+'.Dt')
+                diff_list.append(name + ".Dt")
         # Filter ignore differences
-        diff_list = list(filter(lambda x : x not in ignore_list, diff_list))
+        diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
 
     def __sizeof__(self):
@@ -208,12 +249,16 @@ class ImportGenToothSaw(ImportMatrix):
             How to handle ndarray (0: tolist, 1: copy, 2: nothing)
         keep_function : bool
             True to keep the function object, else return str
-        Optional keyword input parameter is for internal use only 
+        Optional keyword input parameter is for internal use only
         and may prevent json serializability.
         """
 
         # Get the properties inherited from ImportMatrix
-        ImportGenToothSaw_dict = super(ImportGenToothSaw, self).as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs)
+        ImportGenToothSaw_dict = super(ImportGenToothSaw, self).as_dict(
+            type_handle_ndarray=type_handle_ndarray,
+            keep_function=keep_function,
+            **kwargs
+        )
         ImportGenToothSaw_dict["type_signal"] = self.type_signal
         ImportGenToothSaw_dict["f"] = self.f
         ImportGenToothSaw_dict["A"] = self.A
@@ -224,7 +269,6 @@ class ImportGenToothSaw(ImportMatrix):
         # Overwrite the mother class name
         ImportGenToothSaw_dict["__class__"] = "ImportGenToothSaw"
         return ImportGenToothSaw_dict
-
 
     def copy(self):
         """Creates a deepcopy of the object"""
@@ -238,7 +282,15 @@ class ImportGenToothSaw(ImportMatrix):
         Dt_val = self.Dt
         is_transpose_val = self.is_transpose
         # Creates new object of the same type with the copied properties
-        obj_copy = type(self)(type_signal=type_signal_val,f=f_val,A=A_val,N=N_val,Tf=Tf_val,Dt=Dt_val,is_transpose=is_transpose_val)
+        obj_copy = type(self)(
+            type_signal=type_signal_val,
+            f=f_val,
+            A=A_val,
+            N=N_val,
+            Tf=Tf_val,
+            Dt=Dt_val,
+            is_transpose=is_transpose_val,
+        )
         return obj_copy
 
     def _set_None(self):

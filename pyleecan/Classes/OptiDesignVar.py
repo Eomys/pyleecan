@@ -34,7 +34,18 @@ class OptiDesignVar(ParamExplorer):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, space=[0, 1], get_value=None, name="", symbol="", unit="", setter=None, getter=None, init_dict = None, init_str = None):
+    def __init__(
+        self,
+        space=[0, 1],
+        get_value=None,
+        name="",
+        symbol="",
+        unit="",
+        setter=None,
+        getter=None,
+        init_dict=None,
+        init_str=None,
+    ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -68,7 +79,9 @@ class OptiDesignVar(ParamExplorer):
         self.space = space
         self.get_value = get_value
         # Call ParamExplorer init
-        super(OptiDesignVar, self).__init__(name=name, symbol=symbol, unit=unit, setter=setter, getter=getter)
+        super(OptiDesignVar, self).__init__(
+            name=name, symbol=symbol, unit=unit, setter=setter, getter=getter
+        )
         # The class is frozen (in ParamExplorer init), for now it's impossible to
         # add new properties
 
@@ -78,7 +91,12 @@ class OptiDesignVar(ParamExplorer):
         OptiDesignVar_str = ""
         # Get the properties inherited from ParamExplorer
         OptiDesignVar_str += super(OptiDesignVar, self).__str__()
-        OptiDesignVar_str += "space = " + linesep + str(self.space).replace(linesep, linesep + "\t") + linesep
+        OptiDesignVar_str += (
+            "space = "
+            + linesep
+            + str(self.space).replace(linesep, linesep + "\t")
+            + linesep
+        )
         if self._get_value_str is not None:
             OptiDesignVar_str += "get_value = " + self._get_value_str + linesep
         elif self._get_value_func is not None:
@@ -102,27 +120,33 @@ class OptiDesignVar(ParamExplorer):
             return False
         return True
 
-    def compare(self, other, name='self', ignore_list=None, is_add_value=False):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
             ignore_list = list()
         if type(other) != type(self):
-            return ['type('+name+')']
+            return ["type(" + name + ")"]
         diff_list = list()
 
         # Check the properties inherited from ParamExplorer
-        diff_list.extend(super(OptiDesignVar, self).compare(other,name=name, ignore_list=ignore_list, is_add_value=is_add_value))
+        diff_list.extend(
+            super(OptiDesignVar, self).compare(
+                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
+            )
+        )
         if other._space != self._space:
             if is_add_value:
-                val_str = ' (self='+str(self._space)+', other='+str(other._space)+')'
-                diff_list.append(name+'.space'+val_str)
+                val_str = (
+                    " (self=" + str(self._space) + ", other=" + str(other._space) + ")"
+                )
+                diff_list.append(name + ".space" + val_str)
             else:
-                diff_list.append(name+'.space')
+                diff_list.append(name + ".space")
         if other._get_value_str != self._get_value_str:
-            diff_list.append(name+'.get_value')
+            diff_list.append(name + ".get_value")
         # Filter ignore differences
-        diff_list = list(filter(lambda x : x not in ignore_list, diff_list))
+        diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
 
     def __sizeof__(self):
@@ -145,12 +169,16 @@ class OptiDesignVar(ParamExplorer):
             How to handle ndarray (0: tolist, 1: copy, 2: nothing)
         keep_function : bool
             True to keep the function object, else return str
-        Optional keyword input parameter is for internal use only 
+        Optional keyword input parameter is for internal use only
         and may prevent json serializability.
         """
 
         # Get the properties inherited from ParamExplorer
-        OptiDesignVar_dict = super(OptiDesignVar, self).as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs)
+        OptiDesignVar_dict = super(OptiDesignVar, self).as_dict(
+            type_handle_ndarray=type_handle_ndarray,
+            keep_function=keep_function,
+            **kwargs,
+        )
         OptiDesignVar_dict["space"] = (
             self.space.copy() if self.space is not None else None
         )
@@ -162,13 +190,14 @@ class OptiDesignVar(ParamExplorer):
             OptiDesignVar_dict["get_value"] = None
             if self.get_value is not None:
                 self.get_logger().warning(
-                    "OptiDesignVar.as_dict(): " +f"Function {self.get_value.__name__} is not serializable " + "and will be converted to None."
+                    "OptiDesignVar.as_dict(): "
+                    + f"Function {self.get_value.__name__} is not serializable "
+                    + "and will be converted to None."
                 )
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         OptiDesignVar_dict["__class__"] = "OptiDesignVar"
         return OptiDesignVar_dict
-
 
     def copy(self):
         """Creates a deepcopy of the object"""
@@ -194,7 +223,15 @@ class OptiDesignVar(ParamExplorer):
         else:
             getter_val = self._getter_func
         # Creates new object of the same type with the copied properties
-        obj_copy = type(self)(space=space_val,get_value=get_value_val,name=name_val,symbol=symbol_val,unit=unit_val,setter=setter_val,getter=getter_val)
+        obj_copy = type(self)(
+            space=space_val,
+            get_value=get_value_val,
+            name=name_val,
+            symbol=symbol_val,
+            unit=unit_val,
+            setter=setter_val,
+            getter=getter_val,
+        )
         return obj_copy
 
     def _set_None(self):
@@ -219,7 +256,7 @@ class OptiDesignVar(ParamExplorer):
     space = property(
         fget=_get_space,
         fset=_set_space,
-        doc=u"""Space of the variable
+        doc="""Space of the variable
 
         :Type: list
         """,
@@ -254,7 +291,7 @@ class OptiDesignVar(ParamExplorer):
     get_value = property(
         fget=_get_get_value,
         fset=_set_get_value,
-        doc=u"""Function of the space to initiate the variable
+        doc="""Function of the space to initiate the variable
 
         :Type: function
         """,

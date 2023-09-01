@@ -187,7 +187,21 @@ class OPdq(OP):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, Id_ref=None, Iq_ref=None, Ud_ref=None, Uq_ref=None, N0=None, felec=None, Tem_av_ref=None, Pem_av_ref=None, Pem_av_in=None, efficiency=None, init_dict = None, init_str = None):
+    def __init__(
+        self,
+        Id_ref=None,
+        Iq_ref=None,
+        Ud_ref=None,
+        Uq_ref=None,
+        N0=None,
+        felec=None,
+        Tem_av_ref=None,
+        Pem_av_ref=None,
+        Pem_av_in=None,
+        efficiency=None,
+        init_dict=None,
+        init_str=None,
+    ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -229,7 +243,14 @@ class OPdq(OP):
         self.Ud_ref = Ud_ref
         self.Uq_ref = Uq_ref
         # Call OP init
-        super(OPdq, self).__init__(N0=N0, felec=felec, Tem_av_ref=Tem_av_ref, Pem_av_ref=Pem_av_ref, Pem_av_in=Pem_av_in, efficiency=efficiency)
+        super(OPdq, self).__init__(
+            N0=N0,
+            felec=felec,
+            Tem_av_ref=Tem_av_ref,
+            Pem_av_ref=Pem_av_ref,
+            Pem_av_in=Pem_av_in,
+            efficiency=efficiency,
+        )
         # The class is frozen (in OP init), for now it's impossible to
         # add new properties
 
@@ -264,51 +285,99 @@ class OPdq(OP):
             return False
         return True
 
-    def compare(self, other, name='self', ignore_list=None, is_add_value=False):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
             ignore_list = list()
         if type(other) != type(self):
-            return ['type('+name+')']
+            return ["type(" + name + ")"]
         diff_list = list()
 
         # Check the properties inherited from OP
-        diff_list.extend(super(OPdq, self).compare(other,name=name, ignore_list=ignore_list, is_add_value=is_add_value))
-        if other._Id_ref is not None and self._Id_ref is not None and isnan(other._Id_ref) and isnan(self._Id_ref):
+        diff_list.extend(
+            super(OPdq, self).compare(
+                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
+            )
+        )
+        if (
+            other._Id_ref is not None
+            and self._Id_ref is not None
+            and isnan(other._Id_ref)
+            and isnan(self._Id_ref)
+        ):
             pass
         elif other._Id_ref != self._Id_ref:
             if is_add_value:
-                val_str = ' (self='+str(self._Id_ref)+', other='+str(other._Id_ref)+')'
-                diff_list.append(name+'.Id_ref'+val_str)
+                val_str = (
+                    " (self="
+                    + str(self._Id_ref)
+                    + ", other="
+                    + str(other._Id_ref)
+                    + ")"
+                )
+                diff_list.append(name + ".Id_ref" + val_str)
             else:
-                diff_list.append(name+'.Id_ref')
-        if other._Iq_ref is not None and self._Iq_ref is not None and isnan(other._Iq_ref) and isnan(self._Iq_ref):
+                diff_list.append(name + ".Id_ref")
+        if (
+            other._Iq_ref is not None
+            and self._Iq_ref is not None
+            and isnan(other._Iq_ref)
+            and isnan(self._Iq_ref)
+        ):
             pass
         elif other._Iq_ref != self._Iq_ref:
             if is_add_value:
-                val_str = ' (self='+str(self._Iq_ref)+', other='+str(other._Iq_ref)+')'
-                diff_list.append(name+'.Iq_ref'+val_str)
+                val_str = (
+                    " (self="
+                    + str(self._Iq_ref)
+                    + ", other="
+                    + str(other._Iq_ref)
+                    + ")"
+                )
+                diff_list.append(name + ".Iq_ref" + val_str)
             else:
-                diff_list.append(name+'.Iq_ref')
-        if other._Ud_ref is not None and self._Ud_ref is not None and isnan(other._Ud_ref) and isnan(self._Ud_ref):
+                diff_list.append(name + ".Iq_ref")
+        if (
+            other._Ud_ref is not None
+            and self._Ud_ref is not None
+            and isnan(other._Ud_ref)
+            and isnan(self._Ud_ref)
+        ):
             pass
         elif other._Ud_ref != self._Ud_ref:
             if is_add_value:
-                val_str = ' (self='+str(self._Ud_ref)+', other='+str(other._Ud_ref)+')'
-                diff_list.append(name+'.Ud_ref'+val_str)
+                val_str = (
+                    " (self="
+                    + str(self._Ud_ref)
+                    + ", other="
+                    + str(other._Ud_ref)
+                    + ")"
+                )
+                diff_list.append(name + ".Ud_ref" + val_str)
             else:
-                diff_list.append(name+'.Ud_ref')
-        if other._Uq_ref is not None and self._Uq_ref is not None and isnan(other._Uq_ref) and isnan(self._Uq_ref):
+                diff_list.append(name + ".Ud_ref")
+        if (
+            other._Uq_ref is not None
+            and self._Uq_ref is not None
+            and isnan(other._Uq_ref)
+            and isnan(self._Uq_ref)
+        ):
             pass
         elif other._Uq_ref != self._Uq_ref:
             if is_add_value:
-                val_str = ' (self='+str(self._Uq_ref)+', other='+str(other._Uq_ref)+')'
-                diff_list.append(name+'.Uq_ref'+val_str)
+                val_str = (
+                    " (self="
+                    + str(self._Uq_ref)
+                    + ", other="
+                    + str(other._Uq_ref)
+                    + ")"
+                )
+                diff_list.append(name + ".Uq_ref" + val_str)
             else:
-                diff_list.append(name+'.Uq_ref')
+                diff_list.append(name + ".Uq_ref")
         # Filter ignore differences
-        diff_list = list(filter(lambda x : x not in ignore_list, diff_list))
+        diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
 
     def __sizeof__(self):
@@ -331,12 +400,16 @@ class OPdq(OP):
             How to handle ndarray (0: tolist, 1: copy, 2: nothing)
         keep_function : bool
             True to keep the function object, else return str
-        Optional keyword input parameter is for internal use only 
+        Optional keyword input parameter is for internal use only
         and may prevent json serializability.
         """
 
         # Get the properties inherited from OP
-        OPdq_dict = super(OPdq, self).as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs)
+        OPdq_dict = super(OPdq, self).as_dict(
+            type_handle_ndarray=type_handle_ndarray,
+            keep_function=keep_function,
+            **kwargs
+        )
         OPdq_dict["Id_ref"] = self.Id_ref
         OPdq_dict["Iq_ref"] = self.Iq_ref
         OPdq_dict["Ud_ref"] = self.Ud_ref
@@ -345,7 +418,6 @@ class OPdq(OP):
         # Overwrite the mother class name
         OPdq_dict["__class__"] = "OPdq"
         return OPdq_dict
-
 
     def copy(self):
         """Creates a deepcopy of the object"""
@@ -362,7 +434,18 @@ class OPdq(OP):
         Pem_av_in_val = self.Pem_av_in
         efficiency_val = self.efficiency
         # Creates new object of the same type with the copied properties
-        obj_copy = type(self)(Id_ref=Id_ref_val,Iq_ref=Iq_ref_val,Ud_ref=Ud_ref_val,Uq_ref=Uq_ref_val,N0=N0_val,felec=felec_val,Tem_av_ref=Tem_av_ref_val,Pem_av_ref=Pem_av_ref_val,Pem_av_in=Pem_av_in_val,efficiency=efficiency_val)
+        obj_copy = type(self)(
+            Id_ref=Id_ref_val,
+            Iq_ref=Iq_ref_val,
+            Ud_ref=Ud_ref_val,
+            Uq_ref=Uq_ref_val,
+            N0=N0_val,
+            felec=felec_val,
+            Tem_av_ref=Tem_av_ref_val,
+            Pem_av_ref=Pem_av_ref_val,
+            Pem_av_in=Pem_av_in_val,
+            efficiency=efficiency_val,
+        )
         return obj_copy
 
     def _set_None(self):

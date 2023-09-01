@@ -33,7 +33,9 @@ except ImportError as error:
     check_param = error
 
 try:
-    from ..Methods.Simulation.VarSimu.generate_simulation_list import generate_simulation_list
+    from ..Methods.Simulation.VarSimu.generate_simulation_list import (
+        generate_simulation_list,
+    )
 except ImportError as error:
     generate_simulation_list = error
 
@@ -179,7 +181,23 @@ class VarSimu(FrozenClass):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, name="", desc="", datakeeper_list=-1, is_keep_all_output=False, stop_if_error=False, var_simu=None, nb_simu=0, is_reuse_femm_file=True, postproc_list=-1, pre_keeper_postproc_list=None, post_keeper_postproc_list=None, is_reuse_LUT=True, init_dict = None, init_str = None):
+    def __init__(
+        self,
+        name="",
+        desc="",
+        datakeeper_list=-1,
+        is_keep_all_output=False,
+        stop_if_error=False,
+        var_simu=None,
+        nb_simu=0,
+        is_reuse_femm_file=True,
+        postproc_list=-1,
+        pre_keeper_postproc_list=None,
+        post_keeper_postproc_list=None,
+        is_reuse_LUT=True,
+        init_dict=None,
+        init_str=None,
+    ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -250,13 +268,18 @@ class VarSimu(FrozenClass):
         if len(self.datakeeper_list) == 0:
             VarSimu_str += "datakeeper_list = []" + linesep
         for ii in range(len(self.datakeeper_list)):
-            tmp = self.datakeeper_list[ii].__str__().replace(linesep, linesep + "\t") + linesep
-            VarSimu_str += "datakeeper_list["+str(ii)+"] ="+ tmp + linesep + linesep
+            tmp = (
+                self.datakeeper_list[ii].__str__().replace(linesep, linesep + "\t")
+                + linesep
+            )
+            VarSimu_str += (
+                "datakeeper_list[" + str(ii) + "] =" + tmp + linesep + linesep
+            )
         VarSimu_str += "is_keep_all_output = " + str(self.is_keep_all_output) + linesep
         VarSimu_str += "stop_if_error = " + str(self.stop_if_error) + linesep
         if self.var_simu is not None:
             tmp = self.var_simu.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            VarSimu_str += "var_simu = "+ tmp
+            VarSimu_str += "var_simu = " + tmp
         else:
             VarSimu_str += "var_simu = None" + linesep + linesep
         VarSimu_str += "nb_simu = " + str(self.nb_simu) + linesep
@@ -264,18 +287,35 @@ class VarSimu(FrozenClass):
         if len(self.postproc_list) == 0:
             VarSimu_str += "postproc_list = []" + linesep
         for ii in range(len(self.postproc_list)):
-            tmp = self.postproc_list[ii].__str__().replace(linesep, linesep + "\t") + linesep
-            VarSimu_str += "postproc_list["+str(ii)+"] ="+ tmp + linesep + linesep
+            tmp = (
+                self.postproc_list[ii].__str__().replace(linesep, linesep + "\t")
+                + linesep
+            )
+            VarSimu_str += "postproc_list[" + str(ii) + "] =" + tmp + linesep + linesep
         if len(self.pre_keeper_postproc_list) == 0:
             VarSimu_str += "pre_keeper_postproc_list = []" + linesep
         for ii in range(len(self.pre_keeper_postproc_list)):
-            tmp = self.pre_keeper_postproc_list[ii].__str__().replace(linesep, linesep + "\t") + linesep
-            VarSimu_str += "pre_keeper_postproc_list["+str(ii)+"] ="+ tmp + linesep + linesep
+            tmp = (
+                self.pre_keeper_postproc_list[ii]
+                .__str__()
+                .replace(linesep, linesep + "\t")
+                + linesep
+            )
+            VarSimu_str += (
+                "pre_keeper_postproc_list[" + str(ii) + "] =" + tmp + linesep + linesep
+            )
         if len(self.post_keeper_postproc_list) == 0:
             VarSimu_str += "post_keeper_postproc_list = []" + linesep
         for ii in range(len(self.post_keeper_postproc_list)):
-            tmp = self.post_keeper_postproc_list[ii].__str__().replace(linesep, linesep + "\t") + linesep
-            VarSimu_str += "post_keeper_postproc_list["+str(ii)+"] ="+ tmp + linesep + linesep
+            tmp = (
+                self.post_keeper_postproc_list[ii]
+                .__str__()
+                .replace(linesep, linesep + "\t")
+                + linesep
+            )
+            VarSimu_str += (
+                "post_keeper_postproc_list[" + str(ii) + "] =" + tmp + linesep + linesep
+            )
         VarSimu_str += "is_reuse_LUT = " + str(self.is_reuse_LUT) + linesep
         return VarSimu_str
 
@@ -310,98 +350,187 @@ class VarSimu(FrozenClass):
             return False
         return True
 
-    def compare(self, other, name='self', ignore_list=None, is_add_value=False):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
             ignore_list = list()
         if type(other) != type(self):
-            return ['type('+name+')']
+            return ["type(" + name + ")"]
         diff_list = list()
         if other._name != self._name:
             if is_add_value:
-                val_str = ' (self='+str(self._name)+', other='+str(other._name)+')'
-                diff_list.append(name+'.name'+val_str)
+                val_str = (
+                    " (self=" + str(self._name) + ", other=" + str(other._name) + ")"
+                )
+                diff_list.append(name + ".name" + val_str)
             else:
-                diff_list.append(name+'.name')
+                diff_list.append(name + ".name")
         if other._desc != self._desc:
             if is_add_value:
-                val_str = ' (self='+str(self._desc)+', other='+str(other._desc)+')'
-                diff_list.append(name+'.desc'+val_str)
+                val_str = (
+                    " (self=" + str(self._desc) + ", other=" + str(other._desc) + ")"
+                )
+                diff_list.append(name + ".desc" + val_str)
             else:
-                diff_list.append(name+'.desc')
-        if (other.datakeeper_list is None and self.datakeeper_list is not None) or (other.datakeeper_list is not None and self.datakeeper_list is None):
-            diff_list.append(name+'.datakeeper_list None mismatch')
+                diff_list.append(name + ".desc")
+        if (other.datakeeper_list is None and self.datakeeper_list is not None) or (
+            other.datakeeper_list is not None and self.datakeeper_list is None
+        ):
+            diff_list.append(name + ".datakeeper_list None mismatch")
         elif self.datakeeper_list is None:
             pass
         elif len(other.datakeeper_list) != len(self.datakeeper_list):
-            diff_list.append('len('+name+'.datakeeper_list)')
+            diff_list.append("len(" + name + ".datakeeper_list)")
         else:
             for ii in range(len(other.datakeeper_list)):
-                diff_list.extend(self.datakeeper_list[ii].compare(other.datakeeper_list[ii],name=name+'.datakeeper_list['+str(ii)+']',ignore_list=ignore_list,is_add_value=is_add_value))
+                diff_list.extend(
+                    self.datakeeper_list[ii].compare(
+                        other.datakeeper_list[ii],
+                        name=name + ".datakeeper_list[" + str(ii) + "]",
+                        ignore_list=ignore_list,
+                        is_add_value=is_add_value,
+                    )
+                )
         if other._is_keep_all_output != self._is_keep_all_output:
             if is_add_value:
-                val_str = ' (self='+str(self._is_keep_all_output)+', other='+str(other._is_keep_all_output)+')'
-                diff_list.append(name+'.is_keep_all_output'+val_str)
+                val_str = (
+                    " (self="
+                    + str(self._is_keep_all_output)
+                    + ", other="
+                    + str(other._is_keep_all_output)
+                    + ")"
+                )
+                diff_list.append(name + ".is_keep_all_output" + val_str)
             else:
-                diff_list.append(name+'.is_keep_all_output')
+                diff_list.append(name + ".is_keep_all_output")
         if other._stop_if_error != self._stop_if_error:
             if is_add_value:
-                val_str = ' (self='+str(self._stop_if_error)+', other='+str(other._stop_if_error)+')'
-                diff_list.append(name+'.stop_if_error'+val_str)
+                val_str = (
+                    " (self="
+                    + str(self._stop_if_error)
+                    + ", other="
+                    + str(other._stop_if_error)
+                    + ")"
+                )
+                diff_list.append(name + ".stop_if_error" + val_str)
             else:
-                diff_list.append(name+'.stop_if_error')
-        if (other.var_simu is None and self.var_simu is not None) or (other.var_simu is not None and self.var_simu is None):
-            diff_list.append(name+'.var_simu None mismatch')
+                diff_list.append(name + ".stop_if_error")
+        if (other.var_simu is None and self.var_simu is not None) or (
+            other.var_simu is not None and self.var_simu is None
+        ):
+            diff_list.append(name + ".var_simu None mismatch")
         elif self.var_simu is not None:
-            diff_list.extend(self.var_simu.compare(other.var_simu,name=name+'.var_simu',ignore_list=ignore_list,is_add_value=is_add_value))
+            diff_list.extend(
+                self.var_simu.compare(
+                    other.var_simu,
+                    name=name + ".var_simu",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
+            )
         if other._nb_simu != self._nb_simu:
             if is_add_value:
-                val_str = ' (self='+str(self._nb_simu)+', other='+str(other._nb_simu)+')'
-                diff_list.append(name+'.nb_simu'+val_str)
+                val_str = (
+                    " (self="
+                    + str(self._nb_simu)
+                    + ", other="
+                    + str(other._nb_simu)
+                    + ")"
+                )
+                diff_list.append(name + ".nb_simu" + val_str)
             else:
-                diff_list.append(name+'.nb_simu')
+                diff_list.append(name + ".nb_simu")
         if other._is_reuse_femm_file != self._is_reuse_femm_file:
             if is_add_value:
-                val_str = ' (self='+str(self._is_reuse_femm_file)+', other='+str(other._is_reuse_femm_file)+')'
-                diff_list.append(name+'.is_reuse_femm_file'+val_str)
+                val_str = (
+                    " (self="
+                    + str(self._is_reuse_femm_file)
+                    + ", other="
+                    + str(other._is_reuse_femm_file)
+                    + ")"
+                )
+                diff_list.append(name + ".is_reuse_femm_file" + val_str)
             else:
-                diff_list.append(name+'.is_reuse_femm_file')
-        if (other.postproc_list is None and self.postproc_list is not None) or (other.postproc_list is not None and self.postproc_list is None):
-            diff_list.append(name+'.postproc_list None mismatch')
+                diff_list.append(name + ".is_reuse_femm_file")
+        if (other.postproc_list is None and self.postproc_list is not None) or (
+            other.postproc_list is not None and self.postproc_list is None
+        ):
+            diff_list.append(name + ".postproc_list None mismatch")
         elif self.postproc_list is None:
             pass
         elif len(other.postproc_list) != len(self.postproc_list):
-            diff_list.append('len('+name+'.postproc_list)')
+            diff_list.append("len(" + name + ".postproc_list)")
         else:
             for ii in range(len(other.postproc_list)):
-                diff_list.extend(self.postproc_list[ii].compare(other.postproc_list[ii],name=name+'.postproc_list['+str(ii)+']',ignore_list=ignore_list,is_add_value=is_add_value))
-        if (other.pre_keeper_postproc_list is None and self.pre_keeper_postproc_list is not None) or (other.pre_keeper_postproc_list is not None and self.pre_keeper_postproc_list is None):
-            diff_list.append(name+'.pre_keeper_postproc_list None mismatch')
+                diff_list.extend(
+                    self.postproc_list[ii].compare(
+                        other.postproc_list[ii],
+                        name=name + ".postproc_list[" + str(ii) + "]",
+                        ignore_list=ignore_list,
+                        is_add_value=is_add_value,
+                    )
+                )
+        if (
+            other.pre_keeper_postproc_list is None
+            and self.pre_keeper_postproc_list is not None
+        ) or (
+            other.pre_keeper_postproc_list is not None
+            and self.pre_keeper_postproc_list is None
+        ):
+            diff_list.append(name + ".pre_keeper_postproc_list None mismatch")
         elif self.pre_keeper_postproc_list is None:
             pass
         elif len(other.pre_keeper_postproc_list) != len(self.pre_keeper_postproc_list):
-            diff_list.append('len('+name+'.pre_keeper_postproc_list)')
+            diff_list.append("len(" + name + ".pre_keeper_postproc_list)")
         else:
             for ii in range(len(other.pre_keeper_postproc_list)):
-                diff_list.extend(self.pre_keeper_postproc_list[ii].compare(other.pre_keeper_postproc_list[ii],name=name+'.pre_keeper_postproc_list['+str(ii)+']',ignore_list=ignore_list,is_add_value=is_add_value))
-        if (other.post_keeper_postproc_list is None and self.post_keeper_postproc_list is not None) or (other.post_keeper_postproc_list is not None and self.post_keeper_postproc_list is None):
-            diff_list.append(name+'.post_keeper_postproc_list None mismatch')
+                diff_list.extend(
+                    self.pre_keeper_postproc_list[ii].compare(
+                        other.pre_keeper_postproc_list[ii],
+                        name=name + ".pre_keeper_postproc_list[" + str(ii) + "]",
+                        ignore_list=ignore_list,
+                        is_add_value=is_add_value,
+                    )
+                )
+        if (
+            other.post_keeper_postproc_list is None
+            and self.post_keeper_postproc_list is not None
+        ) or (
+            other.post_keeper_postproc_list is not None
+            and self.post_keeper_postproc_list is None
+        ):
+            diff_list.append(name + ".post_keeper_postproc_list None mismatch")
         elif self.post_keeper_postproc_list is None:
             pass
-        elif len(other.post_keeper_postproc_list) != len(self.post_keeper_postproc_list):
-            diff_list.append('len('+name+'.post_keeper_postproc_list)')
+        elif len(other.post_keeper_postproc_list) != len(
+            self.post_keeper_postproc_list
+        ):
+            diff_list.append("len(" + name + ".post_keeper_postproc_list)")
         else:
             for ii in range(len(other.post_keeper_postproc_list)):
-                diff_list.extend(self.post_keeper_postproc_list[ii].compare(other.post_keeper_postproc_list[ii],name=name+'.post_keeper_postproc_list['+str(ii)+']',ignore_list=ignore_list,is_add_value=is_add_value))
+                diff_list.extend(
+                    self.post_keeper_postproc_list[ii].compare(
+                        other.post_keeper_postproc_list[ii],
+                        name=name + ".post_keeper_postproc_list[" + str(ii) + "]",
+                        ignore_list=ignore_list,
+                        is_add_value=is_add_value,
+                    )
+                )
         if other._is_reuse_LUT != self._is_reuse_LUT:
             if is_add_value:
-                val_str = ' (self='+str(self._is_reuse_LUT)+', other='+str(other._is_reuse_LUT)+')'
-                diff_list.append(name+'.is_reuse_LUT'+val_str)
+                val_str = (
+                    " (self="
+                    + str(self._is_reuse_LUT)
+                    + ", other="
+                    + str(other._is_reuse_LUT)
+                    + ")"
+                )
+                diff_list.append(name + ".is_reuse_LUT" + val_str)
             else:
-                diff_list.append(name+'.is_reuse_LUT')
+                diff_list.append(name + ".is_reuse_LUT")
         # Filter ignore differences
-        diff_list = list(filter(lambda x : x not in ignore_list, diff_list))
+        diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
 
     def __sizeof__(self):
@@ -437,7 +566,7 @@ class VarSimu(FrozenClass):
             How to handle ndarray (0: tolist, 1: copy, 2: nothing)
         keep_function : bool
             True to keep the function object, else return str
-        Optional keyword input parameter is for internal use only 
+        Optional keyword input parameter is for internal use only
         and may prevent json serializability.
         """
 
@@ -445,54 +574,81 @@ class VarSimu(FrozenClass):
         VarSimu_dict["name"] = self.name
         VarSimu_dict["desc"] = self.desc
         if self.datakeeper_list is None:
-            VarSimu_dict['datakeeper_list'] = None
+            VarSimu_dict["datakeeper_list"] = None
         else:
-            VarSimu_dict['datakeeper_list'] = list()
+            VarSimu_dict["datakeeper_list"] = list()
             for obj in self.datakeeper_list:
                 if obj is not None:
-                    VarSimu_dict['datakeeper_list'].append(obj.as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs))
+                    VarSimu_dict["datakeeper_list"].append(
+                        obj.as_dict(
+                            type_handle_ndarray=type_handle_ndarray,
+                            keep_function=keep_function,
+                            **kwargs
+                        )
+                    )
                 else:
-                    VarSimu_dict['datakeeper_list'].append(None)
+                    VarSimu_dict["datakeeper_list"].append(None)
         VarSimu_dict["is_keep_all_output"] = self.is_keep_all_output
         VarSimu_dict["stop_if_error"] = self.stop_if_error
         if self.var_simu is None:
             VarSimu_dict["var_simu"] = None
         else:
-            VarSimu_dict["var_simu"] = self.var_simu.as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs)
+            VarSimu_dict["var_simu"] = self.var_simu.as_dict(
+                type_handle_ndarray=type_handle_ndarray,
+                keep_function=keep_function,
+                **kwargs
+            )
         VarSimu_dict["nb_simu"] = self.nb_simu
         VarSimu_dict["is_reuse_femm_file"] = self.is_reuse_femm_file
         if self.postproc_list is None:
-            VarSimu_dict['postproc_list'] = None
+            VarSimu_dict["postproc_list"] = None
         else:
-            VarSimu_dict['postproc_list'] = list()
+            VarSimu_dict["postproc_list"] = list()
             for obj in self.postproc_list:
                 if obj is not None:
-                    VarSimu_dict['postproc_list'].append(obj.as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs))
+                    VarSimu_dict["postproc_list"].append(
+                        obj.as_dict(
+                            type_handle_ndarray=type_handle_ndarray,
+                            keep_function=keep_function,
+                            **kwargs
+                        )
+                    )
                 else:
-                    VarSimu_dict['postproc_list'].append(None)
+                    VarSimu_dict["postproc_list"].append(None)
         if self.pre_keeper_postproc_list is None:
-            VarSimu_dict['pre_keeper_postproc_list'] = None
+            VarSimu_dict["pre_keeper_postproc_list"] = None
         else:
-            VarSimu_dict['pre_keeper_postproc_list'] = list()
+            VarSimu_dict["pre_keeper_postproc_list"] = list()
             for obj in self.pre_keeper_postproc_list:
                 if obj is not None:
-                    VarSimu_dict['pre_keeper_postproc_list'].append(obj.as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs))
+                    VarSimu_dict["pre_keeper_postproc_list"].append(
+                        obj.as_dict(
+                            type_handle_ndarray=type_handle_ndarray,
+                            keep_function=keep_function,
+                            **kwargs
+                        )
+                    )
                 else:
-                    VarSimu_dict['pre_keeper_postproc_list'].append(None)
+                    VarSimu_dict["pre_keeper_postproc_list"].append(None)
         if self.post_keeper_postproc_list is None:
-            VarSimu_dict['post_keeper_postproc_list'] = None
+            VarSimu_dict["post_keeper_postproc_list"] = None
         else:
-            VarSimu_dict['post_keeper_postproc_list'] = list()
+            VarSimu_dict["post_keeper_postproc_list"] = list()
             for obj in self.post_keeper_postproc_list:
                 if obj is not None:
-                    VarSimu_dict['post_keeper_postproc_list'].append(obj.as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs))
+                    VarSimu_dict["post_keeper_postproc_list"].append(
+                        obj.as_dict(
+                            type_handle_ndarray=type_handle_ndarray,
+                            keep_function=keep_function,
+                            **kwargs
+                        )
+                    )
                 else:
-                    VarSimu_dict['post_keeper_postproc_list'].append(None)
+                    VarSimu_dict["post_keeper_postproc_list"].append(None)
         VarSimu_dict["is_reuse_LUT"] = self.is_reuse_LUT
         # The class name is added to the dict for deserialisation purpose
         VarSimu_dict["__class__"] = "VarSimu"
         return VarSimu_dict
-
 
     def copy(self):
         """Creates a deepcopy of the object"""
@@ -534,7 +690,20 @@ class VarSimu(FrozenClass):
                 post_keeper_postproc_list_val.append(obj.copy())
         is_reuse_LUT_val = self.is_reuse_LUT
         # Creates new object of the same type with the copied properties
-        obj_copy = type(self)(name=name_val,desc=desc_val,datakeeper_list=datakeeper_list_val,is_keep_all_output=is_keep_all_output_val,stop_if_error=stop_if_error_val,var_simu=var_simu_val,nb_simu=nb_simu_val,is_reuse_femm_file=is_reuse_femm_file_val,postproc_list=postproc_list_val,pre_keeper_postproc_list=pre_keeper_postproc_list_val,post_keeper_postproc_list=post_keeper_postproc_list_val,is_reuse_LUT=is_reuse_LUT_val)
+        obj_copy = type(self)(
+            name=name_val,
+            desc=desc_val,
+            datakeeper_list=datakeeper_list_val,
+            is_keep_all_output=is_keep_all_output_val,
+            stop_if_error=stop_if_error_val,
+            var_simu=var_simu_val,
+            nb_simu=nb_simu_val,
+            is_reuse_femm_file=is_reuse_femm_file_val,
+            postproc_list=postproc_list_val,
+            pre_keeper_postproc_list=pre_keeper_postproc_list_val,
+            post_keeper_postproc_list=post_keeper_postproc_list_val,
+            is_reuse_LUT=is_reuse_LUT_val,
+        )
         return obj_copy
 
     def _set_None(self):
@@ -606,11 +775,15 @@ class VarSimu(FrozenClass):
                     try:
                         obj = load_init_dict(obj)[1]
                     except Exception as e:
-                        self.get_logger().error('Error while loading '+obj+', setting None instead')
+                        self.get_logger().error(
+                            "Error while loading " + obj + ", setting None instead"
+                        )
                         obj = None
                         value[ii] = None
                 if type(obj) is dict:
-                    class_obj = import_class('pyleecan.Classes', obj.get('__class__'), 'datakeeper_list')
+                    class_obj = import_class(
+                        "pyleecan.Classes", obj.get("__class__"), "datakeeper_list"
+                    )
                     value[ii] = class_obj(init_dict=obj)
                 if value[ii] is not None:
                     value[ii].parent = self
@@ -674,19 +847,24 @@ class VarSimu(FrozenClass):
             try:
                 value = load_init_dict(value)[1]
             except Exception as e:
-                self.get_logger().error('Error while loading '+value+', setting None instead')
+                self.get_logger().error(
+                    "Error while loading " + value + ", setting None instead"
+                )
                 value = None
-        if isinstance(value, dict) and '__class__' in value:
-            class_obj = import_class('pyleecan.Classes', value.get('__class__'), 'var_simu')
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class(
+                "pyleecan.Classes", value.get("__class__"), "var_simu"
+            )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
-            VarSimu = import_class('pyleecan.Classes', 'VarSimu', 'var_simu')
+            VarSimu = import_class("pyleecan.Classes", "VarSimu", "var_simu")
             value = VarSimu()
         check_var("var_simu", value, "VarSimu")
         self._var_simu = value
 
         if self._var_simu is not None:
             self._var_simu.parent = self
+
     var_simu = property(
         fget=_get_var_simu,
         fset=_set_var_simu,
@@ -748,11 +926,15 @@ class VarSimu(FrozenClass):
                     try:
                         obj = load_init_dict(obj)[1]
                     except Exception as e:
-                        self.get_logger().error('Error while loading '+obj+', setting None instead')
+                        self.get_logger().error(
+                            "Error while loading " + obj + ", setting None instead"
+                        )
                         obj = None
                         value[ii] = None
                 if type(obj) is dict:
-                    class_obj = import_class('pyleecan.Classes', obj.get('__class__'), 'postproc_list')
+                    class_obj = import_class(
+                        "pyleecan.Classes", obj.get("__class__"), "postproc_list"
+                    )
                     value[ii] = class_obj(init_dict=obj)
                 if value[ii] is not None:
                     value[ii].parent = self
@@ -786,11 +968,17 @@ class VarSimu(FrozenClass):
                     try:
                         obj = load_init_dict(obj)[1]
                     except Exception as e:
-                        self.get_logger().error('Error while loading '+obj+', setting None instead')
+                        self.get_logger().error(
+                            "Error while loading " + obj + ", setting None instead"
+                        )
                         obj = None
                         value[ii] = None
                 if type(obj) is dict:
-                    class_obj = import_class('pyleecan.Classes', obj.get('__class__'), 'pre_keeper_postproc_list')
+                    class_obj = import_class(
+                        "pyleecan.Classes",
+                        obj.get("__class__"),
+                        "pre_keeper_postproc_list",
+                    )
                     value[ii] = class_obj(init_dict=obj)
                 if value[ii] is not None:
                     value[ii].parent = self
@@ -824,11 +1012,17 @@ class VarSimu(FrozenClass):
                     try:
                         obj = load_init_dict(obj)[1]
                     except Exception as e:
-                        self.get_logger().error('Error while loading '+obj+', setting None instead')
+                        self.get_logger().error(
+                            "Error while loading " + obj + ", setting None instead"
+                        )
                         obj = None
                         value[ii] = None
                 if type(obj) is dict:
-                    class_obj = import_class('pyleecan.Classes', obj.get('__class__'), 'post_keeper_postproc_list')
+                    class_obj = import_class(
+                        "pyleecan.Classes",
+                        obj.get("__class__"),
+                        "post_keeper_postproc_list",
+                    )
                     value[ii] = class_obj(init_dict=obj)
                 if value[ii] is not None:
                     value[ii].parent = self

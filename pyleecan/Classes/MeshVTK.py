@@ -67,15 +67,17 @@ from numpy import array, array_equal
 from numpy import isnan
 from cloudpickle import dumps, loads
 from ._check import CheckTypeError
-try :
+
+try:
     from vtk import vtkPointSet
-except ImportError :
+except ImportError:
     vtkPointSet = ImportError
 from cloudpickle import dumps, loads
 from ._check import CheckTypeError
-try :
+
+try:
     from pyvista.core.pointset import PolyData
-except ImportError :
+except ImportError:
     PolyData = ImportError
 from ._check import InitUnKnowClassError
 
@@ -174,7 +176,23 @@ class MeshVTK(Mesh):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, mesh=None, is_pyvista_mesh=False, format="vtk", path=None, name="mesh", surf=None, is_vtk_surf=False, surf_path="", surf_name="", node_normals=None, label=None, dimension=2, init_dict = None, init_str = None):
+    def __init__(
+        self,
+        mesh=None,
+        is_pyvista_mesh=False,
+        format="vtk",
+        path=None,
+        name="mesh",
+        surf=None,
+        is_vtk_surf=False,
+        surf_path="",
+        surf_name="",
+        node_normals=None,
+        label=None,
+        dimension=2,
+        init_dict=None,
+        init_str=None,
+    ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -236,16 +254,22 @@ class MeshVTK(Mesh):
         MeshVTK_str = ""
         # Get the properties inherited from Mesh
         MeshVTK_str += super(MeshVTK, self).__str__()
-        MeshVTK_str += "mesh = "+ str(self.mesh) + linesep + linesep
+        MeshVTK_str += "mesh = " + str(self.mesh) + linesep + linesep
         MeshVTK_str += "is_pyvista_mesh = " + str(self.is_pyvista_mesh) + linesep
         MeshVTK_str += 'format = "' + str(self.format) + '"' + linesep
         MeshVTK_str += 'path = "' + str(self.path) + '"' + linesep
         MeshVTK_str += 'name = "' + str(self.name) + '"' + linesep
-        MeshVTK_str += "surf = "+ str(self.surf) + linesep + linesep
+        MeshVTK_str += "surf = " + str(self.surf) + linesep + linesep
         MeshVTK_str += "is_vtk_surf = " + str(self.is_vtk_surf) + linesep
         MeshVTK_str += 'surf_path = "' + str(self.surf_path) + '"' + linesep
         MeshVTK_str += 'surf_name = "' + str(self.surf_name) + '"' + linesep
-        MeshVTK_str += "node_normals = " + linesep + str(self.node_normals).replace(linesep, linesep + "\t") + linesep + linesep
+        MeshVTK_str += (
+            "node_normals = "
+            + linesep
+            + str(self.node_normals).replace(linesep, linesep + "\t")
+            + linesep
+            + linesep
+        )
         return MeshVTK_str
 
     def __eq__(self, other):
@@ -279,71 +303,113 @@ class MeshVTK(Mesh):
             return False
         return True
 
-    def compare(self, other, name='self', ignore_list=None, is_add_value=False):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
             ignore_list = list()
         if type(other) != type(self):
-            return ['type('+name+')']
+            return ["type(" + name + ")"]
         diff_list = list()
 
         # Check the properties inherited from Mesh
-        diff_list.extend(super(MeshVTK, self).compare(other,name=name, ignore_list=ignore_list, is_add_value=is_add_value))
-        if (other.mesh is None and self.mesh is not None) or (other.mesh is not None and self.mesh is None):
-            diff_list.append(name+'.mesh None mismatch')
+        diff_list.extend(
+            super(MeshVTK, self).compare(
+                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
+            )
+        )
+        if (other.mesh is None and self.mesh is not None) or (
+            other.mesh is not None and self.mesh is None
+        ):
+            diff_list.append(name + ".mesh None mismatch")
         elif self.mesh is not None and self.mesh != other.mesh:
-            diff_list.append(name+'.mesh')
+            diff_list.append(name + ".mesh")
         if other._is_pyvista_mesh != self._is_pyvista_mesh:
             if is_add_value:
-                val_str = ' (self='+str(self._is_pyvista_mesh)+', other='+str(other._is_pyvista_mesh)+')'
-                diff_list.append(name+'.is_pyvista_mesh'+val_str)
+                val_str = (
+                    " (self="
+                    + str(self._is_pyvista_mesh)
+                    + ", other="
+                    + str(other._is_pyvista_mesh)
+                    + ")"
+                )
+                diff_list.append(name + ".is_pyvista_mesh" + val_str)
             else:
-                diff_list.append(name+'.is_pyvista_mesh')
+                diff_list.append(name + ".is_pyvista_mesh")
         if other._format != self._format:
             if is_add_value:
-                val_str = ' (self='+str(self._format)+', other='+str(other._format)+')'
-                diff_list.append(name+'.format'+val_str)
+                val_str = (
+                    " (self="
+                    + str(self._format)
+                    + ", other="
+                    + str(other._format)
+                    + ")"
+                )
+                diff_list.append(name + ".format" + val_str)
             else:
-                diff_list.append(name+'.format')
+                diff_list.append(name + ".format")
         if other._path != self._path:
             if is_add_value:
-                val_str = ' (self='+str(self._path)+', other='+str(other._path)+')'
-                diff_list.append(name+'.path'+val_str)
+                val_str = (
+                    " (self=" + str(self._path) + ", other=" + str(other._path) + ")"
+                )
+                diff_list.append(name + ".path" + val_str)
             else:
-                diff_list.append(name+'.path')
+                diff_list.append(name + ".path")
         if other._name != self._name:
             if is_add_value:
-                val_str = ' (self='+str(self._name)+', other='+str(other._name)+')'
-                diff_list.append(name+'.name'+val_str)
+                val_str = (
+                    " (self=" + str(self._name) + ", other=" + str(other._name) + ")"
+                )
+                diff_list.append(name + ".name" + val_str)
             else:
-                diff_list.append(name+'.name')
-        if (other.surf is None and self.surf is not None) or (other.surf is not None and self.surf is None):
-            diff_list.append(name+'.surf None mismatch')
+                diff_list.append(name + ".name")
+        if (other.surf is None and self.surf is not None) or (
+            other.surf is not None and self.surf is None
+        ):
+            diff_list.append(name + ".surf None mismatch")
         elif self.surf is not None and self.surf != other.surf:
-            diff_list.append(name+'.surf')
+            diff_list.append(name + ".surf")
         if other._is_vtk_surf != self._is_vtk_surf:
             if is_add_value:
-                val_str = ' (self='+str(self._is_vtk_surf)+', other='+str(other._is_vtk_surf)+')'
-                diff_list.append(name+'.is_vtk_surf'+val_str)
+                val_str = (
+                    " (self="
+                    + str(self._is_vtk_surf)
+                    + ", other="
+                    + str(other._is_vtk_surf)
+                    + ")"
+                )
+                diff_list.append(name + ".is_vtk_surf" + val_str)
             else:
-                diff_list.append(name+'.is_vtk_surf')
+                diff_list.append(name + ".is_vtk_surf")
         if other._surf_path != self._surf_path:
             if is_add_value:
-                val_str = ' (self='+str(self._surf_path)+', other='+str(other._surf_path)+')'
-                diff_list.append(name+'.surf_path'+val_str)
+                val_str = (
+                    " (self="
+                    + str(self._surf_path)
+                    + ", other="
+                    + str(other._surf_path)
+                    + ")"
+                )
+                diff_list.append(name + ".surf_path" + val_str)
             else:
-                diff_list.append(name+'.surf_path')
+                diff_list.append(name + ".surf_path")
         if other._surf_name != self._surf_name:
             if is_add_value:
-                val_str = ' (self='+str(self._surf_name)+', other='+str(other._surf_name)+')'
-                diff_list.append(name+'.surf_name'+val_str)
+                val_str = (
+                    " (self="
+                    + str(self._surf_name)
+                    + ", other="
+                    + str(other._surf_name)
+                    + ")"
+                )
+                diff_list.append(name + ".surf_name" + val_str)
             else:
-                diff_list.append(name+'.surf_name')
+                diff_list.append(name + ".surf_name")
         if not array_equal(other.node_normals, self.node_normals):
-            diff_list.append(name+'.node_normals')
+            diff_list.append(name + ".node_normals")
         # Filter ignore differences
-        diff_list = list(filter(lambda x : x not in ignore_list, diff_list))
+        diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
 
     def __sizeof__(self):
@@ -372,37 +438,42 @@ class MeshVTK(Mesh):
             How to handle ndarray (0: tolist, 1: copy, 2: nothing)
         keep_function : bool
             True to keep the function object, else return str
-        Optional keyword input parameter is for internal use only 
+        Optional keyword input parameter is for internal use only
         and may prevent json serializability.
         """
 
         # Get the properties inherited from Mesh
-        MeshVTK_dict = super(MeshVTK, self).as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs)
-        MeshVTK_dict['mesh'] = None
+        MeshVTK_dict = super(MeshVTK, self).as_dict(
+            type_handle_ndarray=type_handle_ndarray,
+            keep_function=keep_function,
+            **kwargs
+        )
+        MeshVTK_dict["mesh"] = None
         MeshVTK_dict["is_pyvista_mesh"] = self.is_pyvista_mesh
         MeshVTK_dict["format"] = self.format
         MeshVTK_dict["path"] = self.path
         MeshVTK_dict["name"] = self.name
-        MeshVTK_dict['surf'] = None
+        MeshVTK_dict["surf"] = None
         MeshVTK_dict["is_vtk_surf"] = self.is_vtk_surf
         MeshVTK_dict["surf_path"] = self.surf_path
         MeshVTK_dict["surf_name"] = self.surf_name
         if self.node_normals is None:
             MeshVTK_dict["node_normals"] = None
         else:
-            if type_handle_ndarray==0:
+            if type_handle_ndarray == 0:
                 MeshVTK_dict["node_normals"] = self.node_normals.tolist()
-            elif type_handle_ndarray==1:
+            elif type_handle_ndarray == 1:
                 MeshVTK_dict["node_normals"] = self.node_normals.copy()
-            elif type_handle_ndarray==2:
+            elif type_handle_ndarray == 2:
                 MeshVTK_dict["node_normals"] = self.node_normals
             else:
-                raise Exception ('Unknown type_handle_ndarray: '+str(type_handle_ndarray))
+                raise Exception(
+                    "Unknown type_handle_ndarray: " + str(type_handle_ndarray)
+                )
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         MeshVTK_dict["__class__"] = "MeshVTK"
         return MeshVTK_dict
-
 
     def copy(self):
         """Creates a deepcopy of the object"""
@@ -424,7 +495,20 @@ class MeshVTK(Mesh):
         label_val = self.label
         dimension_val = self.dimension
         # Creates new object of the same type with the copied properties
-        obj_copy = type(self)(mesh=mesh_val,is_pyvista_mesh=is_pyvista_mesh_val,format=format_val,path=path_val,name=name_val,surf=surf_val,is_vtk_surf=is_vtk_surf_val,surf_path=surf_path_val,surf_name=surf_name_val,node_normals=node_normals_val,label=label_val,dimension=dimension_val)
+        obj_copy = type(self)(
+            mesh=mesh_val,
+            is_pyvista_mesh=is_pyvista_mesh_val,
+            format=format_val,
+            path=path_val,
+            name=name_val,
+            surf=surf_val,
+            is_vtk_surf=is_vtk_surf_val,
+            surf_path=surf_path_val,
+            surf_name=surf_name_val,
+            node_normals=node_normals_val,
+            label=label_val,
+            dimension=dimension_val,
+        )
         return obj_copy
 
     def _set_None(self):

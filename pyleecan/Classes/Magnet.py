@@ -29,7 +29,15 @@ class Magnet(FrozenClass):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, mat_type=-1, type_magnetization=0, Lmag=0.95, Nseg=1, init_dict = None, init_str = None):
+    def __init__(
+        self,
+        mat_type=-1,
+        type_magnetization=0,
+        Lmag=0.95,
+        Nseg=1,
+        init_dict=None,
+        init_str=None,
+    ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -73,7 +81,7 @@ class Magnet(FrozenClass):
             Magnet_str += "parent = " + str(type(self.parent)) + " object" + linesep
         if self.mat_type is not None:
             tmp = self.mat_type.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            Magnet_str += "mat_type = "+ tmp
+            Magnet_str += "mat_type = " + tmp
         else:
             Magnet_str += "mat_type = None" + linesep + linesep
         Magnet_str += "type_magnetization = " + str(self.type_magnetization) + linesep
@@ -96,40 +104,64 @@ class Magnet(FrozenClass):
             return False
         return True
 
-    def compare(self, other, name='self', ignore_list=None, is_add_value=False):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
             ignore_list = list()
         if type(other) != type(self):
-            return ['type('+name+')']
+            return ["type(" + name + ")"]
         diff_list = list()
-        if (other.mat_type is None and self.mat_type is not None) or (other.mat_type is not None and self.mat_type is None):
-            diff_list.append(name+'.mat_type None mismatch')
+        if (other.mat_type is None and self.mat_type is not None) or (
+            other.mat_type is not None and self.mat_type is None
+        ):
+            diff_list.append(name + ".mat_type None mismatch")
         elif self.mat_type is not None:
-            diff_list.extend(self.mat_type.compare(other.mat_type,name=name+'.mat_type',ignore_list=ignore_list,is_add_value=is_add_value))
+            diff_list.extend(
+                self.mat_type.compare(
+                    other.mat_type,
+                    name=name + ".mat_type",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
+            )
         if other._type_magnetization != self._type_magnetization:
             if is_add_value:
-                val_str = ' (self='+str(self._type_magnetization)+', other='+str(other._type_magnetization)+')'
-                diff_list.append(name+'.type_magnetization'+val_str)
+                val_str = (
+                    " (self="
+                    + str(self._type_magnetization)
+                    + ", other="
+                    + str(other._type_magnetization)
+                    + ")"
+                )
+                diff_list.append(name + ".type_magnetization" + val_str)
             else:
-                diff_list.append(name+'.type_magnetization')
-        if other._Lmag is not None and self._Lmag is not None and isnan(other._Lmag) and isnan(self._Lmag):
+                diff_list.append(name + ".type_magnetization")
+        if (
+            other._Lmag is not None
+            and self._Lmag is not None
+            and isnan(other._Lmag)
+            and isnan(self._Lmag)
+        ):
             pass
         elif other._Lmag != self._Lmag:
             if is_add_value:
-                val_str = ' (self='+str(self._Lmag)+', other='+str(other._Lmag)+')'
-                diff_list.append(name+'.Lmag'+val_str)
+                val_str = (
+                    " (self=" + str(self._Lmag) + ", other=" + str(other._Lmag) + ")"
+                )
+                diff_list.append(name + ".Lmag" + val_str)
             else:
-                diff_list.append(name+'.Lmag')
+                diff_list.append(name + ".Lmag")
         if other._Nseg != self._Nseg:
             if is_add_value:
-                val_str = ' (self='+str(self._Nseg)+', other='+str(other._Nseg)+')'
-                diff_list.append(name+'.Nseg'+val_str)
+                val_str = (
+                    " (self=" + str(self._Nseg) + ", other=" + str(other._Nseg) + ")"
+                )
+                diff_list.append(name + ".Nseg" + val_str)
             else:
-                diff_list.append(name+'.Nseg')
+                diff_list.append(name + ".Nseg")
         # Filter ignore differences
-        diff_list = list(filter(lambda x : x not in ignore_list, diff_list))
+        diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
 
     def __sizeof__(self):
@@ -149,7 +181,7 @@ class Magnet(FrozenClass):
             How to handle ndarray (0: tolist, 1: copy, 2: nothing)
         keep_function : bool
             True to keep the function object, else return str
-        Optional keyword input parameter is for internal use only 
+        Optional keyword input parameter is for internal use only
         and may prevent json serializability.
         """
 
@@ -157,14 +189,17 @@ class Magnet(FrozenClass):
         if self.mat_type is None:
             Magnet_dict["mat_type"] = None
         else:
-            Magnet_dict["mat_type"] = self.mat_type.as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs)
+            Magnet_dict["mat_type"] = self.mat_type.as_dict(
+                type_handle_ndarray=type_handle_ndarray,
+                keep_function=keep_function,
+                **kwargs
+            )
         Magnet_dict["type_magnetization"] = self.type_magnetization
         Magnet_dict["Lmag"] = self.Lmag
         Magnet_dict["Nseg"] = self.Nseg
         # The class name is added to the dict for deserialisation purpose
         Magnet_dict["__class__"] = "Magnet"
         return Magnet_dict
-
 
     def copy(self):
         """Creates a deepcopy of the object"""
@@ -178,7 +213,12 @@ class Magnet(FrozenClass):
         Lmag_val = self.Lmag
         Nseg_val = self.Nseg
         # Creates new object of the same type with the copied properties
-        obj_copy = type(self)(mat_type=mat_type_val,type_magnetization=type_magnetization_val,Lmag=Lmag_val,Nseg=Nseg_val)
+        obj_copy = type(self)(
+            mat_type=mat_type_val,
+            type_magnetization=type_magnetization_val,
+            Lmag=Lmag_val,
+            Nseg=Nseg_val,
+        )
         return obj_copy
 
     def _set_None(self):
@@ -200,19 +240,24 @@ class Magnet(FrozenClass):
             try:
                 value = load_init_dict(value)[1]
             except Exception as e:
-                self.get_logger().error('Error while loading '+value+', setting None instead')
+                self.get_logger().error(
+                    "Error while loading " + value + ", setting None instead"
+                )
                 value = None
-        if isinstance(value, dict) and '__class__' in value:
-            class_obj = import_class('pyleecan.Classes', value.get('__class__'), 'mat_type')
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class(
+                "pyleecan.Classes", value.get("__class__"), "mat_type"
+            )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
-            Material = import_class('pyleecan.Classes', 'Material', 'mat_type')
+            Material = import_class("pyleecan.Classes", "Material", "mat_type")
             value = Material()
         check_var("mat_type", value, "Material")
         self._mat_type = value
 
         if self._mat_type is not None:
             self._mat_type.parent = self
+
     mat_type = property(
         fget=_get_mat_type,
         fset=_set_mat_type,

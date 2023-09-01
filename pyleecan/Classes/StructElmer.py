@@ -139,7 +139,19 @@ class StructElmer(Structural):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, Kmesh_fineness=1, path_name="", FEA_dict_enforced=-1, is_get_mesh=False, is_save_FEA=True, transform_list=-1, include_magnets=True, logger_name="Pyleecan.Structural", init_dict = None, init_str = None):
+    def __init__(
+        self,
+        Kmesh_fineness=1,
+        path_name="",
+        FEA_dict_enforced=-1,
+        is_get_mesh=False,
+        is_save_FEA=True,
+        transform_list=-1,
+        include_magnets=True,
+        logger_name="Pyleecan.Structural",
+        init_dict=None,
+        init_str=None,
+    ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -192,10 +204,17 @@ class StructElmer(Structural):
         StructElmer_str += super(StructElmer, self).__str__()
         StructElmer_str += "Kmesh_fineness = " + str(self.Kmesh_fineness) + linesep
         StructElmer_str += 'path_name = "' + str(self.path_name) + '"' + linesep
-        StructElmer_str += "FEA_dict_enforced = " + str(self.FEA_dict_enforced) + linesep
+        StructElmer_str += (
+            "FEA_dict_enforced = " + str(self.FEA_dict_enforced) + linesep
+        )
         StructElmer_str += "is_get_mesh = " + str(self.is_get_mesh) + linesep
         StructElmer_str += "is_save_FEA = " + str(self.is_save_FEA) + linesep
-        StructElmer_str += "transform_list = " + linesep + str(self.transform_list).replace(linesep, linesep + "\t") + linesep
+        StructElmer_str += (
+            "transform_list = "
+            + linesep
+            + str(self.transform_list).replace(linesep, linesep + "\t")
+            + linesep
+        )
         StructElmer_str += "include_magnets = " + str(self.include_magnets) + linesep
         return StructElmer_str
 
@@ -224,63 +243,114 @@ class StructElmer(Structural):
             return False
         return True
 
-    def compare(self, other, name='self', ignore_list=None, is_add_value=False):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
             ignore_list = list()
         if type(other) != type(self):
-            return ['type('+name+')']
+            return ["type(" + name + ")"]
         diff_list = list()
 
         # Check the properties inherited from Structural
-        diff_list.extend(super(StructElmer, self).compare(other,name=name, ignore_list=ignore_list, is_add_value=is_add_value))
-        if other._Kmesh_fineness is not None and self._Kmesh_fineness is not None and isnan(other._Kmesh_fineness) and isnan(self._Kmesh_fineness):
+        diff_list.extend(
+            super(StructElmer, self).compare(
+                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
+            )
+        )
+        if (
+            other._Kmesh_fineness is not None
+            and self._Kmesh_fineness is not None
+            and isnan(other._Kmesh_fineness)
+            and isnan(self._Kmesh_fineness)
+        ):
             pass
         elif other._Kmesh_fineness != self._Kmesh_fineness:
             if is_add_value:
-                val_str = ' (self='+str(self._Kmesh_fineness)+', other='+str(other._Kmesh_fineness)+')'
-                diff_list.append(name+'.Kmesh_fineness'+val_str)
+                val_str = (
+                    " (self="
+                    + str(self._Kmesh_fineness)
+                    + ", other="
+                    + str(other._Kmesh_fineness)
+                    + ")"
+                )
+                diff_list.append(name + ".Kmesh_fineness" + val_str)
             else:
-                diff_list.append(name+'.Kmesh_fineness')
+                diff_list.append(name + ".Kmesh_fineness")
         if other._path_name != self._path_name:
             if is_add_value:
-                val_str = ' (self='+str(self._path_name)+', other='+str(other._path_name)+')'
-                diff_list.append(name+'.path_name'+val_str)
+                val_str = (
+                    " (self="
+                    + str(self._path_name)
+                    + ", other="
+                    + str(other._path_name)
+                    + ")"
+                )
+                diff_list.append(name + ".path_name" + val_str)
             else:
-                diff_list.append(name+'.path_name')
+                diff_list.append(name + ".path_name")
         if other._FEA_dict_enforced != self._FEA_dict_enforced:
             if is_add_value:
-                val_str = ' (self='+str(self._FEA_dict_enforced)+', other='+str(other._FEA_dict_enforced)+')'
-                diff_list.append(name+'.FEA_dict_enforced'+val_str)
+                val_str = (
+                    " (self="
+                    + str(self._FEA_dict_enforced)
+                    + ", other="
+                    + str(other._FEA_dict_enforced)
+                    + ")"
+                )
+                diff_list.append(name + ".FEA_dict_enforced" + val_str)
             else:
-                diff_list.append(name+'.FEA_dict_enforced')
+                diff_list.append(name + ".FEA_dict_enforced")
         if other._is_get_mesh != self._is_get_mesh:
             if is_add_value:
-                val_str = ' (self='+str(self._is_get_mesh)+', other='+str(other._is_get_mesh)+')'
-                diff_list.append(name+'.is_get_mesh'+val_str)
+                val_str = (
+                    " (self="
+                    + str(self._is_get_mesh)
+                    + ", other="
+                    + str(other._is_get_mesh)
+                    + ")"
+                )
+                diff_list.append(name + ".is_get_mesh" + val_str)
             else:
-                diff_list.append(name+'.is_get_mesh')
+                diff_list.append(name + ".is_get_mesh")
         if other._is_save_FEA != self._is_save_FEA:
             if is_add_value:
-                val_str = ' (self='+str(self._is_save_FEA)+', other='+str(other._is_save_FEA)+')'
-                diff_list.append(name+'.is_save_FEA'+val_str)
+                val_str = (
+                    " (self="
+                    + str(self._is_save_FEA)
+                    + ", other="
+                    + str(other._is_save_FEA)
+                    + ")"
+                )
+                diff_list.append(name + ".is_save_FEA" + val_str)
             else:
-                diff_list.append(name+'.is_save_FEA')
+                diff_list.append(name + ".is_save_FEA")
         if other._transform_list != self._transform_list:
             if is_add_value:
-                val_str = ' (self='+str(self._transform_list)+', other='+str(other._transform_list)+')'
-                diff_list.append(name+'.transform_list'+val_str)
+                val_str = (
+                    " (self="
+                    + str(self._transform_list)
+                    + ", other="
+                    + str(other._transform_list)
+                    + ")"
+                )
+                diff_list.append(name + ".transform_list" + val_str)
             else:
-                diff_list.append(name+'.transform_list')
+                diff_list.append(name + ".transform_list")
         if other._include_magnets != self._include_magnets:
             if is_add_value:
-                val_str = ' (self='+str(self._include_magnets)+', other='+str(other._include_magnets)+')'
-                diff_list.append(name+'.include_magnets'+val_str)
+                val_str = (
+                    " (self="
+                    + str(self._include_magnets)
+                    + ", other="
+                    + str(other._include_magnets)
+                    + ")"
+                )
+                diff_list.append(name + ".include_magnets" + val_str)
             else:
-                diff_list.append(name+'.include_magnets')
+                diff_list.append(name + ".include_magnets")
         # Filter ignore differences
-        diff_list = list(filter(lambda x : x not in ignore_list, diff_list))
+        diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
 
     def __sizeof__(self):
@@ -310,16 +380,22 @@ class StructElmer(Structural):
             How to handle ndarray (0: tolist, 1: copy, 2: nothing)
         keep_function : bool
             True to keep the function object, else return str
-        Optional keyword input parameter is for internal use only 
+        Optional keyword input parameter is for internal use only
         and may prevent json serializability.
         """
 
         # Get the properties inherited from Structural
-        StructElmer_dict = super(StructElmer, self).as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs)
+        StructElmer_dict = super(StructElmer, self).as_dict(
+            type_handle_ndarray=type_handle_ndarray,
+            keep_function=keep_function,
+            **kwargs
+        )
         StructElmer_dict["Kmesh_fineness"] = self.Kmesh_fineness
         StructElmer_dict["path_name"] = self.path_name
         StructElmer_dict["FEA_dict_enforced"] = (
-            self.FEA_dict_enforced.copy() if self.FEA_dict_enforced is not None else None
+            self.FEA_dict_enforced.copy()
+            if self.FEA_dict_enforced is not None
+            else None
         )
         StructElmer_dict["is_get_mesh"] = self.is_get_mesh
         StructElmer_dict["is_save_FEA"] = self.is_save_FEA
@@ -331,7 +407,6 @@ class StructElmer(Structural):
         # Overwrite the mother class name
         StructElmer_dict["__class__"] = "StructElmer"
         return StructElmer_dict
-
 
     def copy(self):
         """Creates a deepcopy of the object"""
@@ -352,7 +427,16 @@ class StructElmer(Structural):
         include_magnets_val = self.include_magnets
         logger_name_val = self.logger_name
         # Creates new object of the same type with the copied properties
-        obj_copy = type(self)(Kmesh_fineness=Kmesh_fineness_val,path_name=path_name_val,FEA_dict_enforced=FEA_dict_enforced_val,is_get_mesh=is_get_mesh_val,is_save_FEA=is_save_FEA_val,transform_list=transform_list_val,include_magnets=include_magnets_val,logger_name=logger_name_val)
+        obj_copy = type(self)(
+            Kmesh_fineness=Kmesh_fineness_val,
+            path_name=path_name_val,
+            FEA_dict_enforced=FEA_dict_enforced_val,
+            is_get_mesh=is_get_mesh_val,
+            is_save_FEA=is_save_FEA_val,
+            transform_list=transform_list_val,
+            include_magnets=include_magnets_val,
+            logger_name=logger_name_val,
+        )
         return obj_copy
 
     def _set_None(self):

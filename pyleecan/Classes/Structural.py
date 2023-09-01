@@ -61,7 +61,9 @@ class Structural(FrozenClass):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, logger_name="Pyleecan.Structural", init_dict = None, init_str = None):
+    def __init__(
+        self, logger_name="Pyleecan.Structural", init_dict=None, init_str=None
+    ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -106,22 +108,28 @@ class Structural(FrozenClass):
             return False
         return True
 
-    def compare(self, other, name='self', ignore_list=None, is_add_value=False):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
             ignore_list = list()
         if type(other) != type(self):
-            return ['type('+name+')']
+            return ["type(" + name + ")"]
         diff_list = list()
         if other._logger_name != self._logger_name:
             if is_add_value:
-                val_str = ' (self='+str(self._logger_name)+', other='+str(other._logger_name)+')'
-                diff_list.append(name+'.logger_name'+val_str)
+                val_str = (
+                    " (self="
+                    + str(self._logger_name)
+                    + ", other="
+                    + str(other._logger_name)
+                    + ")"
+                )
+                diff_list.append(name + ".logger_name" + val_str)
             else:
-                diff_list.append(name+'.logger_name')
+                diff_list.append(name + ".logger_name")
         # Filter ignore differences
-        diff_list = list(filter(lambda x : x not in ignore_list, diff_list))
+        diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
 
     def __sizeof__(self):
@@ -138,7 +146,7 @@ class Structural(FrozenClass):
             How to handle ndarray (0: tolist, 1: copy, 2: nothing)
         keep_function : bool
             True to keep the function object, else return str
-        Optional keyword input parameter is for internal use only 
+        Optional keyword input parameter is for internal use only
         and may prevent json serializability.
         """
 
@@ -147,7 +155,6 @@ class Structural(FrozenClass):
         # The class name is added to the dict for deserialisation purpose
         Structural_dict["__class__"] = "Structural"
         return Structural_dict
-
 
     def copy(self):
         """Creates a deepcopy of the object"""

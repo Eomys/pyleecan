@@ -242,7 +242,15 @@ class Hole(FrozenClass):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, Zh=36, mat_void=-1, magnetization_dict_offset=None, Alpha0=0, init_dict = None, init_str = None):
+    def __init__(
+        self,
+        Zh=36,
+        mat_void=-1,
+        magnetization_dict_offset=None,
+        Alpha0=0,
+        init_dict=None,
+        init_str=None,
+    ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -287,10 +295,14 @@ class Hole(FrozenClass):
         Hole_str += "Zh = " + str(self.Zh) + linesep
         if self.mat_void is not None:
             tmp = self.mat_void.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            Hole_str += "mat_void = "+ tmp
+            Hole_str += "mat_void = " + tmp
         else:
             Hole_str += "mat_void = None" + linesep + linesep
-        Hole_str += "magnetization_dict_offset = " + str(self.magnetization_dict_offset) + linesep
+        Hole_str += (
+            "magnetization_dict_offset = "
+            + str(self.magnetization_dict_offset)
+            + linesep
+        )
         Hole_str += "Alpha0 = " + str(self.Alpha0) + linesep
         return Hole_str
 
@@ -309,40 +321,66 @@ class Hole(FrozenClass):
             return False
         return True
 
-    def compare(self, other, name='self', ignore_list=None, is_add_value=False):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
             ignore_list = list()
         if type(other) != type(self):
-            return ['type('+name+')']
+            return ["type(" + name + ")"]
         diff_list = list()
         if other._Zh != self._Zh:
             if is_add_value:
-                val_str = ' (self='+str(self._Zh)+', other='+str(other._Zh)+')'
-                diff_list.append(name+'.Zh'+val_str)
+                val_str = " (self=" + str(self._Zh) + ", other=" + str(other._Zh) + ")"
+                diff_list.append(name + ".Zh" + val_str)
             else:
-                diff_list.append(name+'.Zh')
-        if (other.mat_void is None and self.mat_void is not None) or (other.mat_void is not None and self.mat_void is None):
-            diff_list.append(name+'.mat_void None mismatch')
+                diff_list.append(name + ".Zh")
+        if (other.mat_void is None and self.mat_void is not None) or (
+            other.mat_void is not None and self.mat_void is None
+        ):
+            diff_list.append(name + ".mat_void None mismatch")
         elif self.mat_void is not None:
-            diff_list.extend(self.mat_void.compare(other.mat_void,name=name+'.mat_void',ignore_list=ignore_list,is_add_value=is_add_value))
+            diff_list.extend(
+                self.mat_void.compare(
+                    other.mat_void,
+                    name=name + ".mat_void",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
+            )
         if other._magnetization_dict_offset != self._magnetization_dict_offset:
             if is_add_value:
-                val_str = ' (self='+str(self._magnetization_dict_offset)+', other='+str(other._magnetization_dict_offset)+')'
-                diff_list.append(name+'.magnetization_dict_offset'+val_str)
+                val_str = (
+                    " (self="
+                    + str(self._magnetization_dict_offset)
+                    + ", other="
+                    + str(other._magnetization_dict_offset)
+                    + ")"
+                )
+                diff_list.append(name + ".magnetization_dict_offset" + val_str)
             else:
-                diff_list.append(name+'.magnetization_dict_offset')
-        if other._Alpha0 is not None and self._Alpha0 is not None and isnan(other._Alpha0) and isnan(self._Alpha0):
+                diff_list.append(name + ".magnetization_dict_offset")
+        if (
+            other._Alpha0 is not None
+            and self._Alpha0 is not None
+            and isnan(other._Alpha0)
+            and isnan(self._Alpha0)
+        ):
             pass
         elif other._Alpha0 != self._Alpha0:
             if is_add_value:
-                val_str = ' (self='+str(self._Alpha0)+', other='+str(other._Alpha0)+')'
-                diff_list.append(name+'.Alpha0'+val_str)
+                val_str = (
+                    " (self="
+                    + str(self._Alpha0)
+                    + ", other="
+                    + str(other._Alpha0)
+                    + ")"
+                )
+                diff_list.append(name + ".Alpha0" + val_str)
             else:
-                diff_list.append(name+'.Alpha0')
+                diff_list.append(name + ".Alpha0")
         # Filter ignore differences
-        diff_list = list(filter(lambda x : x not in ignore_list, diff_list))
+        diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
 
     def __sizeof__(self):
@@ -364,7 +402,7 @@ class Hole(FrozenClass):
             How to handle ndarray (0: tolist, 1: copy, 2: nothing)
         keep_function : bool
             True to keep the function object, else return str
-        Optional keyword input parameter is for internal use only 
+        Optional keyword input parameter is for internal use only
         and may prevent json serializability.
         """
 
@@ -373,15 +411,20 @@ class Hole(FrozenClass):
         if self.mat_void is None:
             Hole_dict["mat_void"] = None
         else:
-            Hole_dict["mat_void"] = self.mat_void.as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs)
+            Hole_dict["mat_void"] = self.mat_void.as_dict(
+                type_handle_ndarray=type_handle_ndarray,
+                keep_function=keep_function,
+                **kwargs
+            )
         Hole_dict["magnetization_dict_offset"] = (
-            self.magnetization_dict_offset.copy() if self.magnetization_dict_offset is not None else None
+            self.magnetization_dict_offset.copy()
+            if self.magnetization_dict_offset is not None
+            else None
         )
         Hole_dict["Alpha0"] = self.Alpha0
         # The class name is added to the dict for deserialisation purpose
         Hole_dict["__class__"] = "Hole"
         return Hole_dict
-
 
     def copy(self):
         """Creates a deepcopy of the object"""
@@ -398,7 +441,12 @@ class Hole(FrozenClass):
             magnetization_dict_offset_val = self.magnetization_dict_offset.copy()
         Alpha0_val = self.Alpha0
         # Creates new object of the same type with the copied properties
-        obj_copy = type(self)(Zh=Zh_val,mat_void=mat_void_val,magnetization_dict_offset=magnetization_dict_offset_val,Alpha0=Alpha0_val)
+        obj_copy = type(self)(
+            Zh=Zh_val,
+            mat_void=mat_void_val,
+            magnetization_dict_offset=magnetization_dict_offset_val,
+            Alpha0=Alpha0_val,
+        )
         return obj_copy
 
     def _set_None(self):
@@ -439,19 +487,24 @@ class Hole(FrozenClass):
             try:
                 value = load_init_dict(value)[1]
             except Exception as e:
-                self.get_logger().error('Error while loading '+value+', setting None instead')
+                self.get_logger().error(
+                    "Error while loading " + value + ", setting None instead"
+                )
                 value = None
-        if isinstance(value, dict) and '__class__' in value:
-            class_obj = import_class('pyleecan.Classes', value.get('__class__'), 'mat_void')
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class(
+                "pyleecan.Classes", value.get("__class__"), "mat_void"
+            )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
-            Material = import_class('pyleecan.Classes', 'Material', 'mat_void')
+            Material = import_class("pyleecan.Classes", "Material", "mat_void")
             value = Material()
         check_var("mat_void", value, "Material")
         self._mat_void = value
 
         if self._mat_void is not None:
             self._mat_void.parent = self
+
     mat_void = property(
         fget=_get_mat_void,
         fset=_set_mat_void,

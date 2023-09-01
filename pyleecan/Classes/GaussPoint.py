@@ -29,7 +29,7 @@ class GaussPoint(FrozenClass):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, init_dict = None, init_str = None):
+    def __init__(self, init_dict=None, init_str=None):
         """Constructor of the class. Can be use in two ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -40,8 +40,8 @@ class GaussPoint(FrozenClass):
         object or dict can be given for pyleecan Object"""
 
         if init_dict is not None:  # Initialisation by dict
-            assert '__class__' in init_dict
-            assert init_dict['__class__']== 'GaussPoint'
+            assert "__class__" in init_dict
+            assert init_dict["__class__"] == "GaussPoint"
         if init_str is not None:  # Initialisation by str
             assert type(init_str) is str
         # The class is frozen, for now it's impossible to add new properties
@@ -65,16 +65,16 @@ class GaussPoint(FrozenClass):
             return False
         return True
 
-    def compare(self, other, name='self', ignore_list=None, is_add_value=False):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
             ignore_list = list()
         if type(other) != type(self):
-            return ['type('+name+')']
+            return ["type(" + name + ")"]
         diff_list = list()
         # Filter ignore differences
-        diff_list = list(filter(lambda x : x not in ignore_list, diff_list))
+        diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
 
     def __sizeof__(self):
@@ -90,7 +90,7 @@ class GaussPoint(FrozenClass):
             How to handle ndarray (0: tolist, 1: copy, 2: nothing)
         keep_function : bool
             True to keep the function object, else return str
-        Optional keyword input parameter is for internal use only 
+        Optional keyword input parameter is for internal use only
         and may prevent json serializability.
         """
 
@@ -98,7 +98,6 @@ class GaussPoint(FrozenClass):
         # The class name is added to the dict for deserialisation purpose
         GaussPoint_dict["__class__"] = "GaussPoint"
         return GaussPoint_dict
-
 
     def copy(self):
         """Creates a deepcopy of the object"""

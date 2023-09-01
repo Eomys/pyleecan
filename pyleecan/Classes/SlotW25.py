@@ -261,7 +261,18 @@ class SlotW25(Slot):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, W3=0.003, H2=0.003, W4=0.003, H1=0.003, Zs=36, wedge_mat=None, is_bore=True, init_dict = None, init_str = None):
+    def __init__(
+        self,
+        W3=0.003,
+        H2=0.003,
+        W4=0.003,
+        H1=0.003,
+        Zs=36,
+        wedge_mat=None,
+        is_bore=True,
+        init_dict=None,
+        init_str=None,
+    ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -332,51 +343,75 @@ class SlotW25(Slot):
             return False
         return True
 
-    def compare(self, other, name='self', ignore_list=None, is_add_value=False):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
             ignore_list = list()
         if type(other) != type(self):
-            return ['type('+name+')']
+            return ["type(" + name + ")"]
         diff_list = list()
 
         # Check the properties inherited from Slot
-        diff_list.extend(super(SlotW25, self).compare(other,name=name, ignore_list=ignore_list, is_add_value=is_add_value))
-        if other._W3 is not None and self._W3 is not None and isnan(other._W3) and isnan(self._W3):
+        diff_list.extend(
+            super(SlotW25, self).compare(
+                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
+            )
+        )
+        if (
+            other._W3 is not None
+            and self._W3 is not None
+            and isnan(other._W3)
+            and isnan(self._W3)
+        ):
             pass
         elif other._W3 != self._W3:
             if is_add_value:
-                val_str = ' (self='+str(self._W3)+', other='+str(other._W3)+')'
-                diff_list.append(name+'.W3'+val_str)
+                val_str = " (self=" + str(self._W3) + ", other=" + str(other._W3) + ")"
+                diff_list.append(name + ".W3" + val_str)
             else:
-                diff_list.append(name+'.W3')
-        if other._H2 is not None and self._H2 is not None and isnan(other._H2) and isnan(self._H2):
+                diff_list.append(name + ".W3")
+        if (
+            other._H2 is not None
+            and self._H2 is not None
+            and isnan(other._H2)
+            and isnan(self._H2)
+        ):
             pass
         elif other._H2 != self._H2:
             if is_add_value:
-                val_str = ' (self='+str(self._H2)+', other='+str(other._H2)+')'
-                diff_list.append(name+'.H2'+val_str)
+                val_str = " (self=" + str(self._H2) + ", other=" + str(other._H2) + ")"
+                diff_list.append(name + ".H2" + val_str)
             else:
-                diff_list.append(name+'.H2')
-        if other._W4 is not None and self._W4 is not None and isnan(other._W4) and isnan(self._W4):
+                diff_list.append(name + ".H2")
+        if (
+            other._W4 is not None
+            and self._W4 is not None
+            and isnan(other._W4)
+            and isnan(self._W4)
+        ):
             pass
         elif other._W4 != self._W4:
             if is_add_value:
-                val_str = ' (self='+str(self._W4)+', other='+str(other._W4)+')'
-                diff_list.append(name+'.W4'+val_str)
+                val_str = " (self=" + str(self._W4) + ", other=" + str(other._W4) + ")"
+                diff_list.append(name + ".W4" + val_str)
             else:
-                diff_list.append(name+'.W4')
-        if other._H1 is not None and self._H1 is not None and isnan(other._H1) and isnan(self._H1):
+                diff_list.append(name + ".W4")
+        if (
+            other._H1 is not None
+            and self._H1 is not None
+            and isnan(other._H1)
+            and isnan(self._H1)
+        ):
             pass
         elif other._H1 != self._H1:
             if is_add_value:
-                val_str = ' (self='+str(self._H1)+', other='+str(other._H1)+')'
-                diff_list.append(name+'.H1'+val_str)
+                val_str = " (self=" + str(self._H1) + ", other=" + str(other._H1) + ")"
+                diff_list.append(name + ".H1" + val_str)
             else:
-                diff_list.append(name+'.H1')
+                diff_list.append(name + ".H1")
         # Filter ignore differences
-        diff_list = list(filter(lambda x : x not in ignore_list, diff_list))
+        diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
 
     def __sizeof__(self):
@@ -399,12 +434,16 @@ class SlotW25(Slot):
             How to handle ndarray (0: tolist, 1: copy, 2: nothing)
         keep_function : bool
             True to keep the function object, else return str
-        Optional keyword input parameter is for internal use only 
+        Optional keyword input parameter is for internal use only
         and may prevent json serializability.
         """
 
         # Get the properties inherited from Slot
-        SlotW25_dict = super(SlotW25, self).as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs)
+        SlotW25_dict = super(SlotW25, self).as_dict(
+            type_handle_ndarray=type_handle_ndarray,
+            keep_function=keep_function,
+            **kwargs
+        )
         SlotW25_dict["W3"] = self.W3
         SlotW25_dict["H2"] = self.H2
         SlotW25_dict["W4"] = self.W4
@@ -413,7 +452,6 @@ class SlotW25(Slot):
         # Overwrite the mother class name
         SlotW25_dict["__class__"] = "SlotW25"
         return SlotW25_dict
-
 
     def copy(self):
         """Creates a deepcopy of the object"""
@@ -430,7 +468,15 @@ class SlotW25(Slot):
             wedge_mat_val = self.wedge_mat.copy()
         is_bore_val = self.is_bore
         # Creates new object of the same type with the copied properties
-        obj_copy = type(self)(W3=W3_val,H2=H2_val,W4=W4_val,H1=H1_val,Zs=Zs_val,wedge_mat=wedge_mat_val,is_bore=is_bore_val)
+        obj_copy = type(self)(
+            W3=W3_val,
+            H2=H2_val,
+            W4=W4_val,
+            H1=H1_val,
+            Zs=Zs_val,
+            wedge_mat=wedge_mat_val,
+            is_bore=is_bore_val,
+        )
         return obj_copy
 
     def _set_None(self):

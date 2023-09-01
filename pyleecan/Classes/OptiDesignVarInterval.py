@@ -34,7 +34,18 @@ class OptiDesignVarInterval(OptiDesignVar):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, space=[0, 1], get_value=None, name="", symbol="", unit="", setter=None, getter=None, init_dict = None, init_str = None):
+    def __init__(
+        self,
+        space=[0, 1],
+        get_value=None,
+        name="",
+        symbol="",
+        unit="",
+        setter=None,
+        getter=None,
+        init_dict=None,
+        init_str=None,
+    ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -66,7 +77,15 @@ class OptiDesignVarInterval(OptiDesignVar):
                 getter = init_dict["getter"]
         # Set the properties (value check and convertion are done in setter)
         # Call OptiDesignVar init
-        super(OptiDesignVarInterval, self).__init__(space=space, get_value=get_value, name=name, symbol=symbol, unit=unit, setter=setter, getter=getter)
+        super(OptiDesignVarInterval, self).__init__(
+            space=space,
+            get_value=get_value,
+            name=name,
+            symbol=symbol,
+            unit=unit,
+            setter=setter,
+            getter=getter,
+        )
         # The class is frozen (in OptiDesignVar init), for now it's impossible to
         # add new properties
 
@@ -89,19 +108,23 @@ class OptiDesignVarInterval(OptiDesignVar):
             return False
         return True
 
-    def compare(self, other, name='self', ignore_list=None, is_add_value=False):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
             ignore_list = list()
         if type(other) != type(self):
-            return ['type('+name+')']
+            return ["type(" + name + ")"]
         diff_list = list()
 
         # Check the properties inherited from OptiDesignVar
-        diff_list.extend(super(OptiDesignVarInterval, self).compare(other,name=name, ignore_list=ignore_list, is_add_value=is_add_value))
+        diff_list.extend(
+            super(OptiDesignVarInterval, self).compare(
+                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
+            )
+        )
         # Filter ignore differences
-        diff_list = list(filter(lambda x : x not in ignore_list, diff_list))
+        diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
 
     def __sizeof__(self):
@@ -120,17 +143,20 @@ class OptiDesignVarInterval(OptiDesignVar):
             How to handle ndarray (0: tolist, 1: copy, 2: nothing)
         keep_function : bool
             True to keep the function object, else return str
-        Optional keyword input parameter is for internal use only 
+        Optional keyword input parameter is for internal use only
         and may prevent json serializability.
         """
 
         # Get the properties inherited from OptiDesignVar
-        OptiDesignVarInterval_dict = super(OptiDesignVarInterval, self).as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs)
+        OptiDesignVarInterval_dict = super(OptiDesignVarInterval, self).as_dict(
+            type_handle_ndarray=type_handle_ndarray,
+            keep_function=keep_function,
+            **kwargs
+        )
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         OptiDesignVarInterval_dict["__class__"] = "OptiDesignVarInterval"
         return OptiDesignVarInterval_dict
-
 
     def copy(self):
         """Creates a deepcopy of the object"""
@@ -156,7 +182,15 @@ class OptiDesignVarInterval(OptiDesignVar):
         else:
             getter_val = self._getter_func
         # Creates new object of the same type with the copied properties
-        obj_copy = type(self)(space=space_val,get_value=get_value_val,name=name_val,symbol=symbol_val,unit=unit_val,setter=setter_val,getter=getter_val)
+        obj_copy = type(self)(
+            space=space_val,
+            get_value=get_value_val,
+            name=name_val,
+            symbol=symbol_val,
+            unit=unit_val,
+            setter=setter_val,
+            getter=getter_val,
+        )
         return obj_copy
 
     def _set_None(self):

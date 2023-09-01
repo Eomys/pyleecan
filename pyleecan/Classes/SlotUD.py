@@ -114,7 +114,19 @@ class SlotUD(Slot):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, line_list=-1, wind_begin_index=None, wind_end_index=None, type_line_wind=0, name="", Zs=36, wedge_mat=None, is_bore=True, init_dict = None, init_str = None):
+    def __init__(
+        self,
+        line_list=-1,
+        wind_begin_index=None,
+        wind_end_index=None,
+        type_line_wind=0,
+        name="",
+        Zs=36,
+        wedge_mat=None,
+        is_bore=True,
+        init_dict=None,
+        init_str=None,
+    ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -166,8 +178,10 @@ class SlotUD(Slot):
         if len(self.line_list) == 0:
             SlotUD_str += "line_list = []" + linesep
         for ii in range(len(self.line_list)):
-            tmp = self.line_list[ii].__str__().replace(linesep, linesep + "\t") + linesep
-            SlotUD_str += "line_list["+str(ii)+"] ="+ tmp + linesep + linesep
+            tmp = (
+                self.line_list[ii].__str__().replace(linesep, linesep + "\t") + linesep
+            )
+            SlotUD_str += "line_list[" + str(ii) + "] =" + tmp + linesep + linesep
         SlotUD_str += "wind_begin_index = " + str(self.wind_begin_index) + linesep
         SlotUD_str += "wind_end_index = " + str(self.wind_end_index) + linesep
         SlotUD_str += "type_line_wind = " + str(self.type_line_wind) + linesep
@@ -195,52 +209,85 @@ class SlotUD(Slot):
             return False
         return True
 
-    def compare(self, other, name='self', ignore_list=None, is_add_value=False):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
             ignore_list = list()
         if type(other) != type(self):
-            return ['type('+name+')']
+            return ["type(" + name + ")"]
         diff_list = list()
 
         # Check the properties inherited from Slot
-        diff_list.extend(super(SlotUD, self).compare(other,name=name, ignore_list=ignore_list, is_add_value=is_add_value))
-        if (other.line_list is None and self.line_list is not None) or (other.line_list is not None and self.line_list is None):
-            diff_list.append(name+'.line_list None mismatch')
+        diff_list.extend(
+            super(SlotUD, self).compare(
+                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
+            )
+        )
+        if (other.line_list is None and self.line_list is not None) or (
+            other.line_list is not None and self.line_list is None
+        ):
+            diff_list.append(name + ".line_list None mismatch")
         elif self.line_list is None:
             pass
         elif len(other.line_list) != len(self.line_list):
-            diff_list.append('len('+name+'.line_list)')
+            diff_list.append("len(" + name + ".line_list)")
         else:
             for ii in range(len(other.line_list)):
-                diff_list.extend(self.line_list[ii].compare(other.line_list[ii],name=name+'.line_list['+str(ii)+']',ignore_list=ignore_list,is_add_value=is_add_value))
+                diff_list.extend(
+                    self.line_list[ii].compare(
+                        other.line_list[ii],
+                        name=name + ".line_list[" + str(ii) + "]",
+                        ignore_list=ignore_list,
+                        is_add_value=is_add_value,
+                    )
+                )
         if other._wind_begin_index != self._wind_begin_index:
             if is_add_value:
-                val_str = ' (self='+str(self._wind_begin_index)+', other='+str(other._wind_begin_index)+')'
-                diff_list.append(name+'.wind_begin_index'+val_str)
+                val_str = (
+                    " (self="
+                    + str(self._wind_begin_index)
+                    + ", other="
+                    + str(other._wind_begin_index)
+                    + ")"
+                )
+                diff_list.append(name + ".wind_begin_index" + val_str)
             else:
-                diff_list.append(name+'.wind_begin_index')
+                diff_list.append(name + ".wind_begin_index")
         if other._wind_end_index != self._wind_end_index:
             if is_add_value:
-                val_str = ' (self='+str(self._wind_end_index)+', other='+str(other._wind_end_index)+')'
-                diff_list.append(name+'.wind_end_index'+val_str)
+                val_str = (
+                    " (self="
+                    + str(self._wind_end_index)
+                    + ", other="
+                    + str(other._wind_end_index)
+                    + ")"
+                )
+                diff_list.append(name + ".wind_end_index" + val_str)
             else:
-                diff_list.append(name+'.wind_end_index')
+                diff_list.append(name + ".wind_end_index")
         if other._type_line_wind != self._type_line_wind:
             if is_add_value:
-                val_str = ' (self='+str(self._type_line_wind)+', other='+str(other._type_line_wind)+')'
-                diff_list.append(name+'.type_line_wind'+val_str)
+                val_str = (
+                    " (self="
+                    + str(self._type_line_wind)
+                    + ", other="
+                    + str(other._type_line_wind)
+                    + ")"
+                )
+                diff_list.append(name + ".type_line_wind" + val_str)
             else:
-                diff_list.append(name+'.type_line_wind')
+                diff_list.append(name + ".type_line_wind")
         if other._name != self._name:
             if is_add_value:
-                val_str = ' (self='+str(self._name)+', other='+str(other._name)+')'
-                diff_list.append(name+'.name'+val_str)
+                val_str = (
+                    " (self=" + str(self._name) + ", other=" + str(other._name) + ")"
+                )
+                diff_list.append(name + ".name" + val_str)
             else:
-                diff_list.append(name+'.name')
+                diff_list.append(name + ".name")
         # Filter ignore differences
-        diff_list = list(filter(lambda x : x not in ignore_list, diff_list))
+        diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
 
     def __sizeof__(self):
@@ -266,21 +313,31 @@ class SlotUD(Slot):
             How to handle ndarray (0: tolist, 1: copy, 2: nothing)
         keep_function : bool
             True to keep the function object, else return str
-        Optional keyword input parameter is for internal use only 
+        Optional keyword input parameter is for internal use only
         and may prevent json serializability.
         """
 
         # Get the properties inherited from Slot
-        SlotUD_dict = super(SlotUD, self).as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs)
+        SlotUD_dict = super(SlotUD, self).as_dict(
+            type_handle_ndarray=type_handle_ndarray,
+            keep_function=keep_function,
+            **kwargs
+        )
         if self.line_list is None:
-            SlotUD_dict['line_list'] = None
+            SlotUD_dict["line_list"] = None
         else:
-            SlotUD_dict['line_list'] = list()
+            SlotUD_dict["line_list"] = list()
             for obj in self.line_list:
                 if obj is not None:
-                    SlotUD_dict['line_list'].append(obj.as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs))
+                    SlotUD_dict["line_list"].append(
+                        obj.as_dict(
+                            type_handle_ndarray=type_handle_ndarray,
+                            keep_function=keep_function,
+                            **kwargs
+                        )
+                    )
                 else:
-                    SlotUD_dict['line_list'].append(None)
+                    SlotUD_dict["line_list"].append(None)
         SlotUD_dict["wind_begin_index"] = self.wind_begin_index
         SlotUD_dict["wind_end_index"] = self.wind_end_index
         SlotUD_dict["type_line_wind"] = self.type_line_wind
@@ -289,7 +346,6 @@ class SlotUD(Slot):
         # Overwrite the mother class name
         SlotUD_dict["__class__"] = "SlotUD"
         return SlotUD_dict
-
 
     def copy(self):
         """Creates a deepcopy of the object"""
@@ -312,7 +368,16 @@ class SlotUD(Slot):
             wedge_mat_val = self.wedge_mat.copy()
         is_bore_val = self.is_bore
         # Creates new object of the same type with the copied properties
-        obj_copy = type(self)(line_list=line_list_val,wind_begin_index=wind_begin_index_val,wind_end_index=wind_end_index_val,type_line_wind=type_line_wind_val,name=name_val,Zs=Zs_val,wedge_mat=wedge_mat_val,is_bore=is_bore_val)
+        obj_copy = type(self)(
+            line_list=line_list_val,
+            wind_begin_index=wind_begin_index_val,
+            wind_end_index=wind_end_index_val,
+            type_line_wind=type_line_wind_val,
+            name=name_val,
+            Zs=Zs_val,
+            wedge_mat=wedge_mat_val,
+            is_bore=is_bore_val,
+        )
         return obj_copy
 
     def _set_None(self):
@@ -342,11 +407,15 @@ class SlotUD(Slot):
                     try:
                         obj = load_init_dict(obj)[1]
                     except Exception as e:
-                        self.get_logger().error('Error while loading '+obj+', setting None instead')
+                        self.get_logger().error(
+                            "Error while loading " + obj + ", setting None instead"
+                        )
                         obj = None
                         value[ii] = None
                 if type(obj) is dict:
-                    class_obj = import_class('pyleecan.Classes', obj.get('__class__'), 'line_list')
+                    class_obj = import_class(
+                        "pyleecan.Classes", obj.get("__class__"), "line_list"
+                    )
                     value[ii] = class_obj(init_dict=obj)
                 if value[ii] is not None:
                     value[ii].parent = self

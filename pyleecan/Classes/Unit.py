@@ -116,7 +116,7 @@ class Unit(FrozenClass):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, unit_m=0, unit_rad=0, unit_m2=0, init_dict = None, init_str = None):
+    def __init__(self, unit_m=0, unit_rad=0, unit_m2=0, init_dict=None, init_str=None):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -173,34 +173,52 @@ class Unit(FrozenClass):
             return False
         return True
 
-    def compare(self, other, name='self', ignore_list=None, is_add_value=False):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
             ignore_list = list()
         if type(other) != type(self):
-            return ['type('+name+')']
+            return ["type(" + name + ")"]
         diff_list = list()
         if other._unit_m != self._unit_m:
             if is_add_value:
-                val_str = ' (self='+str(self._unit_m)+', other='+str(other._unit_m)+')'
-                diff_list.append(name+'.unit_m'+val_str)
+                val_str = (
+                    " (self="
+                    + str(self._unit_m)
+                    + ", other="
+                    + str(other._unit_m)
+                    + ")"
+                )
+                diff_list.append(name + ".unit_m" + val_str)
             else:
-                diff_list.append(name+'.unit_m')
+                diff_list.append(name + ".unit_m")
         if other._unit_rad != self._unit_rad:
             if is_add_value:
-                val_str = ' (self='+str(self._unit_rad)+', other='+str(other._unit_rad)+')'
-                diff_list.append(name+'.unit_rad'+val_str)
+                val_str = (
+                    " (self="
+                    + str(self._unit_rad)
+                    + ", other="
+                    + str(other._unit_rad)
+                    + ")"
+                )
+                diff_list.append(name + ".unit_rad" + val_str)
             else:
-                diff_list.append(name+'.unit_rad')
+                diff_list.append(name + ".unit_rad")
         if other._unit_m2 != self._unit_m2:
             if is_add_value:
-                val_str = ' (self='+str(self._unit_m2)+', other='+str(other._unit_m2)+')'
-                diff_list.append(name+'.unit_m2'+val_str)
+                val_str = (
+                    " (self="
+                    + str(self._unit_m2)
+                    + ", other="
+                    + str(other._unit_m2)
+                    + ")"
+                )
+                diff_list.append(name + ".unit_m2" + val_str)
             else:
-                diff_list.append(name+'.unit_m2')
+                diff_list.append(name + ".unit_m2")
         # Filter ignore differences
-        diff_list = list(filter(lambda x : x not in ignore_list, diff_list))
+        diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
 
     def __sizeof__(self):
@@ -219,7 +237,7 @@ class Unit(FrozenClass):
             How to handle ndarray (0: tolist, 1: copy, 2: nothing)
         keep_function : bool
             True to keep the function object, else return str
-        Optional keyword input parameter is for internal use only 
+        Optional keyword input parameter is for internal use only
         and may prevent json serializability.
         """
 
@@ -231,7 +249,6 @@ class Unit(FrozenClass):
         Unit_dict["__class__"] = "Unit"
         return Unit_dict
 
-
     def copy(self):
         """Creates a deepcopy of the object"""
 
@@ -240,7 +257,9 @@ class Unit(FrozenClass):
         unit_rad_val = self.unit_rad
         unit_m2_val = self.unit_m2
         # Creates new object of the same type with the copied properties
-        obj_copy = type(self)(unit_m=unit_m_val,unit_rad=unit_rad_val,unit_m2=unit_m2_val)
+        obj_copy = type(self)(
+            unit_m=unit_m_val, unit_rad=unit_rad_val, unit_m2=unit_m2_val
+        )
         return obj_copy
 
     def _set_None(self):

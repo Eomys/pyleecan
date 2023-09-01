@@ -65,7 +65,18 @@ class LossModelBertotti(LossModel):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, k_hy=None, k_ed=None, k_ex=None, name="", group="", is_show_fig=False, coeff_dict=None, init_dict = None, init_str = None):
+    def __init__(
+        self,
+        k_hy=None,
+        k_ed=None,
+        k_ex=None,
+        name="",
+        group="",
+        is_show_fig=False,
+        coeff_dict=None,
+        init_dict=None,
+        init_str=None,
+    ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -100,7 +111,9 @@ class LossModelBertotti(LossModel):
         self.k_ed = k_ed
         self.k_ex = k_ex
         # Call LossModel init
-        super(LossModelBertotti, self).__init__(name=name, group=group, is_show_fig=is_show_fig, coeff_dict=coeff_dict)
+        super(LossModelBertotti, self).__init__(
+            name=name, group=group, is_show_fig=is_show_fig, coeff_dict=coeff_dict
+        )
         # The class is frozen (in LossModel init), for now it's impossible to
         # add new properties
 
@@ -132,43 +145,68 @@ class LossModelBertotti(LossModel):
             return False
         return True
 
-    def compare(self, other, name='self', ignore_list=None, is_add_value=False):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
             ignore_list = list()
         if type(other) != type(self):
-            return ['type('+name+')']
+            return ["type(" + name + ")"]
         diff_list = list()
 
         # Check the properties inherited from LossModel
-        diff_list.extend(super(LossModelBertotti, self).compare(other,name=name, ignore_list=ignore_list, is_add_value=is_add_value))
-        if other._k_hy is not None and self._k_hy is not None and isnan(other._k_hy) and isnan(self._k_hy):
+        diff_list.extend(
+            super(LossModelBertotti, self).compare(
+                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
+            )
+        )
+        if (
+            other._k_hy is not None
+            and self._k_hy is not None
+            and isnan(other._k_hy)
+            and isnan(self._k_hy)
+        ):
             pass
         elif other._k_hy != self._k_hy:
             if is_add_value:
-                val_str = ' (self='+str(self._k_hy)+', other='+str(other._k_hy)+')'
-                diff_list.append(name+'.k_hy'+val_str)
+                val_str = (
+                    " (self=" + str(self._k_hy) + ", other=" + str(other._k_hy) + ")"
+                )
+                diff_list.append(name + ".k_hy" + val_str)
             else:
-                diff_list.append(name+'.k_hy')
-        if other._k_ed is not None and self._k_ed is not None and isnan(other._k_ed) and isnan(self._k_ed):
+                diff_list.append(name + ".k_hy")
+        if (
+            other._k_ed is not None
+            and self._k_ed is not None
+            and isnan(other._k_ed)
+            and isnan(self._k_ed)
+        ):
             pass
         elif other._k_ed != self._k_ed:
             if is_add_value:
-                val_str = ' (self='+str(self._k_ed)+', other='+str(other._k_ed)+')'
-                diff_list.append(name+'.k_ed'+val_str)
+                val_str = (
+                    " (self=" + str(self._k_ed) + ", other=" + str(other._k_ed) + ")"
+                )
+                diff_list.append(name + ".k_ed" + val_str)
             else:
-                diff_list.append(name+'.k_ed')
-        if other._k_ex is not None and self._k_ex is not None and isnan(other._k_ex) and isnan(self._k_ex):
+                diff_list.append(name + ".k_ed")
+        if (
+            other._k_ex is not None
+            and self._k_ex is not None
+            and isnan(other._k_ex)
+            and isnan(self._k_ex)
+        ):
             pass
         elif other._k_ex != self._k_ex:
             if is_add_value:
-                val_str = ' (self='+str(self._k_ex)+', other='+str(other._k_ex)+')'
-                diff_list.append(name+'.k_ex'+val_str)
+                val_str = (
+                    " (self=" + str(self._k_ex) + ", other=" + str(other._k_ex) + ")"
+                )
+                diff_list.append(name + ".k_ex" + val_str)
             else:
-                diff_list.append(name+'.k_ex')
+                diff_list.append(name + ".k_ex")
         # Filter ignore differences
-        diff_list = list(filter(lambda x : x not in ignore_list, diff_list))
+        diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
 
     def __sizeof__(self):
@@ -190,12 +228,16 @@ class LossModelBertotti(LossModel):
             How to handle ndarray (0: tolist, 1: copy, 2: nothing)
         keep_function : bool
             True to keep the function object, else return str
-        Optional keyword input parameter is for internal use only 
+        Optional keyword input parameter is for internal use only
         and may prevent json serializability.
         """
 
         # Get the properties inherited from LossModel
-        LossModelBertotti_dict = super(LossModelBertotti, self).as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs)
+        LossModelBertotti_dict = super(LossModelBertotti, self).as_dict(
+            type_handle_ndarray=type_handle_ndarray,
+            keep_function=keep_function,
+            **kwargs
+        )
         LossModelBertotti_dict["k_hy"] = self.k_hy
         LossModelBertotti_dict["k_ed"] = self.k_ed
         LossModelBertotti_dict["k_ex"] = self.k_ex
@@ -203,7 +245,6 @@ class LossModelBertotti(LossModel):
         # Overwrite the mother class name
         LossModelBertotti_dict["__class__"] = "LossModelBertotti"
         return LossModelBertotti_dict
-
 
     def copy(self):
         """Creates a deepcopy of the object"""
@@ -220,7 +261,15 @@ class LossModelBertotti(LossModel):
         else:
             coeff_dict_val = self.coeff_dict.copy()
         # Creates new object of the same type with the copied properties
-        obj_copy = type(self)(k_hy=k_hy_val,k_ed=k_ed_val,k_ex=k_ex_val,name=name_val,group=group_val,is_show_fig=is_show_fig_val,coeff_dict=coeff_dict_val)
+        obj_copy = type(self)(
+            k_hy=k_hy_val,
+            k_ed=k_ed_val,
+            k_ex=k_ex_val,
+            name=name_val,
+            group=group_val,
+            is_show_fig=is_show_fig_val,
+            coeff_dict=coeff_dict_val,
+        )
         return obj_copy
 
     def _set_None(self):

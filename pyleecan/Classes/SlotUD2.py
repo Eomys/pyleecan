@@ -38,7 +38,9 @@ except ImportError as error:
     check = error
 
 try:
-    from ..Methods.Slot.SlotUD2._set_split_active_surf_dict import _set_split_active_surf_dict
+    from ..Methods.Slot.SlotUD2._set_split_active_surf_dict import (
+        _set_split_active_surf_dict,
+    )
 except ImportError as error:
     _set_split_active_surf_dict = error
 
@@ -114,7 +116,18 @@ class SlotUD2(Slot):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, line_list=-1, active_surf=-1, split_active_surf_dict=None, name="", Zs=36, wedge_mat=None, is_bore=True, init_dict = None, init_str = None):
+    def __init__(
+        self,
+        line_list=-1,
+        active_surf=-1,
+        split_active_surf_dict=None,
+        name="",
+        Zs=36,
+        wedge_mat=None,
+        is_bore=True,
+        init_dict=None,
+        init_str=None,
+    ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -163,14 +176,20 @@ class SlotUD2(Slot):
         if len(self.line_list) == 0:
             SlotUD2_str += "line_list = []" + linesep
         for ii in range(len(self.line_list)):
-            tmp = self.line_list[ii].__str__().replace(linesep, linesep + "\t") + linesep
-            SlotUD2_str += "line_list["+str(ii)+"] ="+ tmp + linesep + linesep
+            tmp = (
+                self.line_list[ii].__str__().replace(linesep, linesep + "\t") + linesep
+            )
+            SlotUD2_str += "line_list[" + str(ii) + "] =" + tmp + linesep + linesep
         if self.active_surf is not None:
-            tmp = self.active_surf.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            SlotUD2_str += "active_surf = "+ tmp
+            tmp = (
+                self.active_surf.__str__().replace(linesep, linesep + "\t").rstrip("\t")
+            )
+            SlotUD2_str += "active_surf = " + tmp
         else:
             SlotUD2_str += "active_surf = None" + linesep + linesep
-        SlotUD2_str += "split_active_surf_dict = " + str(self.split_active_surf_dict) + linesep
+        SlotUD2_str += (
+            "split_active_surf_dict = " + str(self.split_active_surf_dict) + linesep
+        )
         SlotUD2_str += 'name = "' + str(self.name) + '"' + linesep
         return SlotUD2_str
 
@@ -193,44 +212,74 @@ class SlotUD2(Slot):
             return False
         return True
 
-    def compare(self, other, name='self', ignore_list=None, is_add_value=False):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
             ignore_list = list()
         if type(other) != type(self):
-            return ['type('+name+')']
+            return ["type(" + name + ")"]
         diff_list = list()
 
         # Check the properties inherited from Slot
-        diff_list.extend(super(SlotUD2, self).compare(other,name=name, ignore_list=ignore_list, is_add_value=is_add_value))
-        if (other.line_list is None and self.line_list is not None) or (other.line_list is not None and self.line_list is None):
-            diff_list.append(name+'.line_list None mismatch')
+        diff_list.extend(
+            super(SlotUD2, self).compare(
+                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
+            )
+        )
+        if (other.line_list is None and self.line_list is not None) or (
+            other.line_list is not None and self.line_list is None
+        ):
+            diff_list.append(name + ".line_list None mismatch")
         elif self.line_list is None:
             pass
         elif len(other.line_list) != len(self.line_list):
-            diff_list.append('len('+name+'.line_list)')
+            diff_list.append("len(" + name + ".line_list)")
         else:
             for ii in range(len(other.line_list)):
-                diff_list.extend(self.line_list[ii].compare(other.line_list[ii],name=name+'.line_list['+str(ii)+']',ignore_list=ignore_list,is_add_value=is_add_value))
-        if (other.active_surf is None and self.active_surf is not None) or (other.active_surf is not None and self.active_surf is None):
-            diff_list.append(name+'.active_surf None mismatch')
+                diff_list.extend(
+                    self.line_list[ii].compare(
+                        other.line_list[ii],
+                        name=name + ".line_list[" + str(ii) + "]",
+                        ignore_list=ignore_list,
+                        is_add_value=is_add_value,
+                    )
+                )
+        if (other.active_surf is None and self.active_surf is not None) or (
+            other.active_surf is not None and self.active_surf is None
+        ):
+            diff_list.append(name + ".active_surf None mismatch")
         elif self.active_surf is not None:
-            diff_list.extend(self.active_surf.compare(other.active_surf,name=name+'.active_surf',ignore_list=ignore_list,is_add_value=is_add_value))
+            diff_list.extend(
+                self.active_surf.compare(
+                    other.active_surf,
+                    name=name + ".active_surf",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
+            )
         if other._split_active_surf_dict != self._split_active_surf_dict:
             if is_add_value:
-                val_str = ' (self='+str(self._split_active_surf_dict)+', other='+str(other._split_active_surf_dict)+')'
-                diff_list.append(name+'.split_active_surf_dict'+val_str)
+                val_str = (
+                    " (self="
+                    + str(self._split_active_surf_dict)
+                    + ", other="
+                    + str(other._split_active_surf_dict)
+                    + ")"
+                )
+                diff_list.append(name + ".split_active_surf_dict" + val_str)
             else:
-                diff_list.append(name+'.split_active_surf_dict')
+                diff_list.append(name + ".split_active_surf_dict")
         if other._name != self._name:
             if is_add_value:
-                val_str = ' (self='+str(self._name)+', other='+str(other._name)+')'
-                diff_list.append(name+'.name'+val_str)
+                val_str = (
+                    " (self=" + str(self._name) + ", other=" + str(other._name) + ")"
+                )
+                diff_list.append(name + ".name" + val_str)
             else:
-                diff_list.append(name+'.name')
+                diff_list.append(name + ".name")
         # Filter ignore differences
-        diff_list = list(filter(lambda x : x not in ignore_list, diff_list))
+        diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
 
     def __sizeof__(self):
@@ -257,34 +306,49 @@ class SlotUD2(Slot):
             How to handle ndarray (0: tolist, 1: copy, 2: nothing)
         keep_function : bool
             True to keep the function object, else return str
-        Optional keyword input parameter is for internal use only 
+        Optional keyword input parameter is for internal use only
         and may prevent json serializability.
         """
 
         # Get the properties inherited from Slot
-        SlotUD2_dict = super(SlotUD2, self).as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs)
+        SlotUD2_dict = super(SlotUD2, self).as_dict(
+            type_handle_ndarray=type_handle_ndarray,
+            keep_function=keep_function,
+            **kwargs
+        )
         if self.line_list is None:
-            SlotUD2_dict['line_list'] = None
+            SlotUD2_dict["line_list"] = None
         else:
-            SlotUD2_dict['line_list'] = list()
+            SlotUD2_dict["line_list"] = list()
             for obj in self.line_list:
                 if obj is not None:
-                    SlotUD2_dict['line_list'].append(obj.as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs))
+                    SlotUD2_dict["line_list"].append(
+                        obj.as_dict(
+                            type_handle_ndarray=type_handle_ndarray,
+                            keep_function=keep_function,
+                            **kwargs
+                        )
+                    )
                 else:
-                    SlotUD2_dict['line_list'].append(None)
+                    SlotUD2_dict["line_list"].append(None)
         if self.active_surf is None:
             SlotUD2_dict["active_surf"] = None
         else:
-            SlotUD2_dict["active_surf"] = self.active_surf.as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs)
+            SlotUD2_dict["active_surf"] = self.active_surf.as_dict(
+                type_handle_ndarray=type_handle_ndarray,
+                keep_function=keep_function,
+                **kwargs
+            )
         SlotUD2_dict["split_active_surf_dict"] = (
-            self.split_active_surf_dict.copy() if self.split_active_surf_dict is not None else None
+            self.split_active_surf_dict.copy()
+            if self.split_active_surf_dict is not None
+            else None
         )
         SlotUD2_dict["name"] = self.name
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         SlotUD2_dict["__class__"] = "SlotUD2"
         return SlotUD2_dict
-
 
     def copy(self):
         """Creates a deepcopy of the object"""
@@ -312,7 +376,15 @@ class SlotUD2(Slot):
             wedge_mat_val = self.wedge_mat.copy()
         is_bore_val = self.is_bore
         # Creates new object of the same type with the copied properties
-        obj_copy = type(self)(line_list=line_list_val,active_surf=active_surf_val,split_active_surf_dict=split_active_surf_dict_val,name=name_val,Zs=Zs_val,wedge_mat=wedge_mat_val,is_bore=is_bore_val)
+        obj_copy = type(self)(
+            line_list=line_list_val,
+            active_surf=active_surf_val,
+            split_active_surf_dict=split_active_surf_dict_val,
+            name=name_val,
+            Zs=Zs_val,
+            wedge_mat=wedge_mat_val,
+            is_bore=is_bore_val,
+        )
         return obj_copy
 
     def _set_None(self):
@@ -342,11 +414,15 @@ class SlotUD2(Slot):
                     try:
                         obj = load_init_dict(obj)[1]
                     except Exception as e:
-                        self.get_logger().error('Error while loading '+obj+', setting None instead')
+                        self.get_logger().error(
+                            "Error while loading " + obj + ", setting None instead"
+                        )
                         obj = None
                         value[ii] = None
                 if type(obj) is dict:
-                    class_obj = import_class('pyleecan.Classes', obj.get('__class__'), 'line_list')
+                    class_obj = import_class(
+                        "pyleecan.Classes", obj.get("__class__"), "line_list"
+                    )
                     value[ii] = class_obj(init_dict=obj)
                 if value[ii] is not None:
                     value[ii].parent = self
@@ -374,19 +450,24 @@ class SlotUD2(Slot):
             try:
                 value = load_init_dict(value)[1]
             except Exception as e:
-                self.get_logger().error('Error while loading '+value+', setting None instead')
+                self.get_logger().error(
+                    "Error while loading " + value + ", setting None instead"
+                )
                 value = None
-        if isinstance(value, dict) and '__class__' in value:
-            class_obj = import_class('pyleecan.Classes', value.get('__class__'), 'active_surf')
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class(
+                "pyleecan.Classes", value.get("__class__"), "active_surf"
+            )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
-            Surface = import_class('pyleecan.Classes', 'Surface', 'active_surf')
+            Surface = import_class("pyleecan.Classes", "Surface", "active_surf")
             value = Surface()
         check_var("active_surf", value, "Surface")
         self._active_surf = value
 
         if self._active_surf is not None:
             self._active_surf.parent = self
+
     active_surf = property(
         fget=_get_active_surf,
         fset=_set_active_surf,

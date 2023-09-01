@@ -46,9 +46,7 @@ class Loss(FrozenClass):
     # cf Methods.Loss.Loss.run
     if isinstance(run, ImportError):
         run = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use Loss method run: " + str(run))
-            )
+            fget=lambda x: raise_(ImportError("Can't use Loss method run: " + str(run)))
         )
     else:
         run = run
@@ -77,7 +75,16 @@ class Loss(FrozenClass):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, logger_name="Pyleecan.Loss", model_dict=None, Tsta=20, Trot=20, is_get_meshsolution=False, init_dict = None, init_str = None):
+    def __init__(
+        self,
+        logger_name="Pyleecan.Loss",
+        model_dict=None,
+        Tsta=20,
+        Trot=20,
+        is_get_meshsolution=False,
+        init_dict=None,
+        init_str=None,
+    ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -124,10 +131,13 @@ class Loss(FrozenClass):
             Loss_str += "parent = " + str(type(self.parent)) + " object" + linesep
         Loss_str += 'logger_name = "' + str(self.logger_name) + '"' + linesep
         if len(self.model_dict) == 0:
-            Loss_str += "model_dict = dict()"+linesep
+            Loss_str += "model_dict = dict()" + linesep
         for key, obj in self.model_dict.items():
-            tmp = self.model_dict[key].__str__().replace(linesep, linesep + "\t") + linesep 
-            Loss_str += "model_dict["+key+"] ="+ tmp + linesep + linesep
+            tmp = (
+                self.model_dict[key].__str__().replace(linesep, linesep + "\t")
+                + linesep
+            )
+            Loss_str += "model_dict[" + key + "] =" + tmp + linesep + linesep
         Loss_str += "Tsta = " + str(self.Tsta) + linesep
         Loss_str += "Trot = " + str(self.Trot) + linesep
         Loss_str += "is_get_meshsolution = " + str(self.is_get_meshsolution) + linesep
@@ -150,53 +160,88 @@ class Loss(FrozenClass):
             return False
         return True
 
-    def compare(self, other, name='self', ignore_list=None, is_add_value=False):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
             ignore_list = list()
         if type(other) != type(self):
-            return ['type('+name+')']
+            return ["type(" + name + ")"]
         diff_list = list()
         if other._logger_name != self._logger_name:
             if is_add_value:
-                val_str = ' (self='+str(self._logger_name)+', other='+str(other._logger_name)+')'
-                diff_list.append(name+'.logger_name'+val_str)
+                val_str = (
+                    " (self="
+                    + str(self._logger_name)
+                    + ", other="
+                    + str(other._logger_name)
+                    + ")"
+                )
+                diff_list.append(name + ".logger_name" + val_str)
             else:
-                diff_list.append(name+'.logger_name')
-        if (other.model_dict is None and self.model_dict is not None) or (other.model_dict is not None and self.model_dict is None):
-            diff_list.append(name+'.model_dict None mismatch')
+                diff_list.append(name + ".logger_name")
+        if (other.model_dict is None and self.model_dict is not None) or (
+            other.model_dict is not None and self.model_dict is None
+        ):
+            diff_list.append(name + ".model_dict None mismatch")
         elif self.model_dict is None:
             pass
         elif len(other.model_dict) != len(self.model_dict):
-            diff_list.append('len('+name+'model_dict)')
+            diff_list.append("len(" + name + "model_dict)")
         else:
             for key in self.model_dict:
-                diff_list.extend(self.model_dict[key].compare(other.model_dict[key],name=name+'.model_dict['+str(key)+']',ignore_list=ignore_list,is_add_value=is_add_value))
-        if other._Tsta is not None and self._Tsta is not None and isnan(other._Tsta) and isnan(self._Tsta):
+                diff_list.extend(
+                    self.model_dict[key].compare(
+                        other.model_dict[key],
+                        name=name + ".model_dict[" + str(key) + "]",
+                        ignore_list=ignore_list,
+                        is_add_value=is_add_value,
+                    )
+                )
+        if (
+            other._Tsta is not None
+            and self._Tsta is not None
+            and isnan(other._Tsta)
+            and isnan(self._Tsta)
+        ):
             pass
         elif other._Tsta != self._Tsta:
             if is_add_value:
-                val_str = ' (self='+str(self._Tsta)+', other='+str(other._Tsta)+')'
-                diff_list.append(name+'.Tsta'+val_str)
+                val_str = (
+                    " (self=" + str(self._Tsta) + ", other=" + str(other._Tsta) + ")"
+                )
+                diff_list.append(name + ".Tsta" + val_str)
             else:
-                diff_list.append(name+'.Tsta')
-        if other._Trot is not None and self._Trot is not None and isnan(other._Trot) and isnan(self._Trot):
+                diff_list.append(name + ".Tsta")
+        if (
+            other._Trot is not None
+            and self._Trot is not None
+            and isnan(other._Trot)
+            and isnan(self._Trot)
+        ):
             pass
         elif other._Trot != self._Trot:
             if is_add_value:
-                val_str = ' (self='+str(self._Trot)+', other='+str(other._Trot)+')'
-                diff_list.append(name+'.Trot'+val_str)
+                val_str = (
+                    " (self=" + str(self._Trot) + ", other=" + str(other._Trot) + ")"
+                )
+                diff_list.append(name + ".Trot" + val_str)
             else:
-                diff_list.append(name+'.Trot')
+                diff_list.append(name + ".Trot")
         if other._is_get_meshsolution != self._is_get_meshsolution:
             if is_add_value:
-                val_str = ' (self='+str(self._is_get_meshsolution)+', other='+str(other._is_get_meshsolution)+')'
-                diff_list.append(name+'.is_get_meshsolution'+val_str)
+                val_str = (
+                    " (self="
+                    + str(self._is_get_meshsolution)
+                    + ", other="
+                    + str(other._is_get_meshsolution)
+                    + ")"
+                )
+                diff_list.append(name + ".is_get_meshsolution" + val_str)
             else:
-                diff_list.append(name+'.is_get_meshsolution')
+                diff_list.append(name + ".is_get_meshsolution")
         # Filter ignore differences
-        diff_list = list(filter(lambda x : x not in ignore_list, diff_list))
+        diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
 
     def __sizeof__(self):
@@ -219,7 +264,7 @@ class Loss(FrozenClass):
             How to handle ndarray (0: tolist, 1: copy, 2: nothing)
         keep_function : bool
             True to keep the function object, else return str
-        Optional keyword input parameter is for internal use only 
+        Optional keyword input parameter is for internal use only
         and may prevent json serializability.
         """
 
@@ -231,7 +276,11 @@ class Loss(FrozenClass):
             Loss_dict["model_dict"] = dict()
             for key, obj in self.model_dict.items():
                 if obj is not None:
-                    Loss_dict["model_dict"][key] = obj.as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs)
+                    Loss_dict["model_dict"][key] = obj.as_dict(
+                        type_handle_ndarray=type_handle_ndarray,
+                        keep_function=keep_function,
+                        **kwargs
+                    )
                 else:
                     Loss_dict["model_dict"][key] = None
         Loss_dict["Tsta"] = self.Tsta
@@ -240,7 +289,6 @@ class Loss(FrozenClass):
         # The class name is added to the dict for deserialisation purpose
         Loss_dict["__class__"] = "Loss"
         return Loss_dict
-
 
     def copy(self):
         """Creates a deepcopy of the object"""
@@ -257,7 +305,13 @@ class Loss(FrozenClass):
         Trot_val = self.Trot
         is_get_meshsolution_val = self.is_get_meshsolution
         # Creates new object of the same type with the copied properties
-        obj_copy = type(self)(logger_name=logger_name_val,model_dict=model_dict_val,Tsta=Tsta_val,Trot=Trot_val,is_get_meshsolution=is_get_meshsolution_val)
+        obj_copy = type(self)(
+            logger_name=logger_name_val,
+            model_dict=model_dict_val,
+            Tsta=Tsta_val,
+            Trot=Trot_val,
+            is_get_meshsolution=is_get_meshsolution_val,
+        )
         return obj_copy
 
     def _set_None(self):
@@ -303,11 +357,15 @@ class Loss(FrozenClass):
                     try:
                         obj = load_init_dict(obj)[1]
                     except Exception as e:
-                        self.get_logger().error('Error while loading '+obj+', setting None instead')
+                        self.get_logger().error(
+                            "Error while loading " + obj + ", setting None instead"
+                        )
                         obj = None
                         value[key] = None
                 if type(obj) is dict:
-                    class_obj = import_class('pyleecan.Classes', obj.get('__class__'), 'model_dict')
+                    class_obj = import_class(
+                        "pyleecan.Classes", obj.get("__class__"), "model_dict"
+                    )
                     value[key] = class_obj(init_dict=obj)
         if type(value) is int and value == -1:
             value = dict()

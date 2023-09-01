@@ -46,7 +46,18 @@ class ImportData(FrozenClass):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, axes=-1, field=None, unit="SI", name="", symbol="", normalizations=-1, symmetries=-1, init_dict = None, init_str = None):
+    def __init__(
+        self,
+        axes=-1,
+        field=None,
+        unit="SI",
+        name="",
+        symbol="",
+        normalizations=-1,
+        symmetries=-1,
+        init_dict=None,
+        init_str=None,
+    ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -101,10 +112,10 @@ class ImportData(FrozenClass):
             ImportData_str += "axes = []" + linesep
         for ii in range(len(self.axes)):
             tmp = self.axes[ii].__str__().replace(linesep, linesep + "\t") + linesep
-            ImportData_str += "axes["+str(ii)+"] ="+ tmp + linesep + linesep
+            ImportData_str += "axes[" + str(ii) + "] =" + tmp + linesep + linesep
         if self.field is not None:
             tmp = self.field.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            ImportData_str += "field = "+ tmp
+            ImportData_str += "field = " + tmp
         else:
             ImportData_str += "field = None" + linesep + linesep
         ImportData_str += 'unit = "' + str(self.unit) + '"' + linesep
@@ -135,59 +146,99 @@ class ImportData(FrozenClass):
             return False
         return True
 
-    def compare(self, other, name='self', ignore_list=None, is_add_value=False):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
             ignore_list = list()
         if type(other) != type(self):
-            return ['type('+name+')']
+            return ["type(" + name + ")"]
         diff_list = list()
-        if (other.axes is None and self.axes is not None) or (other.axes is not None and self.axes is None):
-            diff_list.append(name+'.axes None mismatch')
+        if (other.axes is None and self.axes is not None) or (
+            other.axes is not None and self.axes is None
+        ):
+            diff_list.append(name + ".axes None mismatch")
         elif self.axes is None:
             pass
         elif len(other.axes) != len(self.axes):
-            diff_list.append('len('+name+'.axes)')
+            diff_list.append("len(" + name + ".axes)")
         else:
             for ii in range(len(other.axes)):
-                diff_list.extend(self.axes[ii].compare(other.axes[ii],name=name+'.axes['+str(ii)+']',ignore_list=ignore_list,is_add_value=is_add_value))
-        if (other.field is None and self.field is not None) or (other.field is not None and self.field is None):
-            diff_list.append(name+'.field None mismatch')
+                diff_list.extend(
+                    self.axes[ii].compare(
+                        other.axes[ii],
+                        name=name + ".axes[" + str(ii) + "]",
+                        ignore_list=ignore_list,
+                        is_add_value=is_add_value,
+                    )
+                )
+        if (other.field is None and self.field is not None) or (
+            other.field is not None and self.field is None
+        ):
+            diff_list.append(name + ".field None mismatch")
         elif self.field is not None:
-            diff_list.extend(self.field.compare(other.field,name=name+'.field',ignore_list=ignore_list,is_add_value=is_add_value))
+            diff_list.extend(
+                self.field.compare(
+                    other.field,
+                    name=name + ".field",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
+            )
         if other._unit != self._unit:
             if is_add_value:
-                val_str = ' (self='+str(self._unit)+', other='+str(other._unit)+')'
-                diff_list.append(name+'.unit'+val_str)
+                val_str = (
+                    " (self=" + str(self._unit) + ", other=" + str(other._unit) + ")"
+                )
+                diff_list.append(name + ".unit" + val_str)
             else:
-                diff_list.append(name+'.unit')
+                diff_list.append(name + ".unit")
         if other._name != self._name:
             if is_add_value:
-                val_str = ' (self='+str(self._name)+', other='+str(other._name)+')'
-                diff_list.append(name+'.name'+val_str)
+                val_str = (
+                    " (self=" + str(self._name) + ", other=" + str(other._name) + ")"
+                )
+                diff_list.append(name + ".name" + val_str)
             else:
-                diff_list.append(name+'.name')
+                diff_list.append(name + ".name")
         if other._symbol != self._symbol:
             if is_add_value:
-                val_str = ' (self='+str(self._symbol)+', other='+str(other._symbol)+')'
-                diff_list.append(name+'.symbol'+val_str)
+                val_str = (
+                    " (self="
+                    + str(self._symbol)
+                    + ", other="
+                    + str(other._symbol)
+                    + ")"
+                )
+                diff_list.append(name + ".symbol" + val_str)
             else:
-                diff_list.append(name+'.symbol')
+                diff_list.append(name + ".symbol")
         if other._normalizations != self._normalizations:
             if is_add_value:
-                val_str = ' (self='+str(self._normalizations)+', other='+str(other._normalizations)+')'
-                diff_list.append(name+'.normalizations'+val_str)
+                val_str = (
+                    " (self="
+                    + str(self._normalizations)
+                    + ", other="
+                    + str(other._normalizations)
+                    + ")"
+                )
+                diff_list.append(name + ".normalizations" + val_str)
             else:
-                diff_list.append(name+'.normalizations')
+                diff_list.append(name + ".normalizations")
         if other._symmetries != self._symmetries:
             if is_add_value:
-                val_str = ' (self='+str(self._symmetries)+', other='+str(other._symmetries)+')'
-                diff_list.append(name+'.symmetries'+val_str)
+                val_str = (
+                    " (self="
+                    + str(self._symmetries)
+                    + ", other="
+                    + str(other._symmetries)
+                    + ")"
+                )
+                diff_list.append(name + ".symmetries" + val_str)
             else:
-                diff_list.append(name+'.symmetries')
+                diff_list.append(name + ".symmetries")
         # Filter ignore differences
-        diff_list = list(filter(lambda x : x not in ignore_list, diff_list))
+        diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
 
     def __sizeof__(self):
@@ -216,24 +267,34 @@ class ImportData(FrozenClass):
             How to handle ndarray (0: tolist, 1: copy, 2: nothing)
         keep_function : bool
             True to keep the function object, else return str
-        Optional keyword input parameter is for internal use only 
+        Optional keyword input parameter is for internal use only
         and may prevent json serializability.
         """
 
         ImportData_dict = dict()
         if self.axes is None:
-            ImportData_dict['axes'] = None
+            ImportData_dict["axes"] = None
         else:
-            ImportData_dict['axes'] = list()
+            ImportData_dict["axes"] = list()
             for obj in self.axes:
                 if obj is not None:
-                    ImportData_dict['axes'].append(obj.as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs))
+                    ImportData_dict["axes"].append(
+                        obj.as_dict(
+                            type_handle_ndarray=type_handle_ndarray,
+                            keep_function=keep_function,
+                            **kwargs
+                        )
+                    )
                 else:
-                    ImportData_dict['axes'].append(None)
+                    ImportData_dict["axes"].append(None)
         if self.field is None:
             ImportData_dict["field"] = None
         else:
-            ImportData_dict["field"] = self.field.as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs)
+            ImportData_dict["field"] = self.field.as_dict(
+                type_handle_ndarray=type_handle_ndarray,
+                keep_function=keep_function,
+                **kwargs
+            )
         ImportData_dict["unit"] = self.unit
         ImportData_dict["name"] = self.name
         ImportData_dict["symbol"] = self.symbol
@@ -246,7 +307,6 @@ class ImportData(FrozenClass):
         # The class name is added to the dict for deserialisation purpose
         ImportData_dict["__class__"] = "ImportData"
         return ImportData_dict
-
 
     def copy(self):
         """Creates a deepcopy of the object"""
@@ -274,7 +334,15 @@ class ImportData(FrozenClass):
         else:
             symmetries_val = self.symmetries.copy()
         # Creates new object of the same type with the copied properties
-        obj_copy = type(self)(axes=axes_val,field=field_val,unit=unit_val,name=name_val,symbol=symbol_val,normalizations=normalizations_val,symmetries=symmetries_val)
+        obj_copy = type(self)(
+            axes=axes_val,
+            field=field_val,
+            unit=unit_val,
+            name=name_val,
+            symbol=symbol_val,
+            normalizations=normalizations_val,
+            symmetries=symmetries_val,
+        )
         return obj_copy
 
     def _set_None(self):
@@ -305,11 +373,15 @@ class ImportData(FrozenClass):
                     try:
                         obj = load_init_dict(obj)[1]
                     except Exception as e:
-                        self.get_logger().error('Error while loading '+obj+', setting None instead')
+                        self.get_logger().error(
+                            "Error while loading " + obj + ", setting None instead"
+                        )
                         obj = None
                         value[ii] = None
                 if type(obj) is dict:
-                    class_obj = import_class('pyleecan.Classes', obj.get('__class__'), 'axes')
+                    class_obj = import_class(
+                        "pyleecan.Classes", obj.get("__class__"), "axes"
+                    )
                     value[ii] = class_obj(init_dict=obj)
                 if value[ii] is not None:
                     value[ii].parent = self
@@ -337,19 +409,24 @@ class ImportData(FrozenClass):
             try:
                 value = load_init_dict(value)[1]
             except Exception as e:
-                self.get_logger().error('Error while loading '+value+', setting None instead')
+                self.get_logger().error(
+                    "Error while loading " + value + ", setting None instead"
+                )
                 value = None
-        if isinstance(value, dict) and '__class__' in value:
-            class_obj = import_class('pyleecan.Classes', value.get('__class__'), 'field')
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class(
+                "pyleecan.Classes", value.get("__class__"), "field"
+            )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
-            Import = import_class('pyleecan.Classes', 'Import', 'field')
+            Import = import_class("pyleecan.Classes", "Import", "field")
             value = Import()
         check_var("field", value, "Import")
         self._field = value
 
         if self._field is not None:
             self._field.parent = self
+
     field = property(
         fget=_get_field,
         fset=_set_field,

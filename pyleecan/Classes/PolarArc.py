@@ -167,7 +167,9 @@ class PolarArc(Surface):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, angle=1, height=1, point_ref=0, label="", init_dict = None, init_str = None):
+    def __init__(
+        self, angle=1, height=1, point_ref=0, label="", init_dict=None, init_str=None
+    ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -224,35 +226,57 @@ class PolarArc(Surface):
             return False
         return True
 
-    def compare(self, other, name='self', ignore_list=None, is_add_value=False):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
             ignore_list = list()
         if type(other) != type(self):
-            return ['type('+name+')']
+            return ["type(" + name + ")"]
         diff_list = list()
 
         # Check the properties inherited from Surface
-        diff_list.extend(super(PolarArc, self).compare(other,name=name, ignore_list=ignore_list, is_add_value=is_add_value))
-        if other._angle is not None and self._angle is not None and isnan(other._angle) and isnan(self._angle):
+        diff_list.extend(
+            super(PolarArc, self).compare(
+                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
+            )
+        )
+        if (
+            other._angle is not None
+            and self._angle is not None
+            and isnan(other._angle)
+            and isnan(self._angle)
+        ):
             pass
         elif other._angle != self._angle:
             if is_add_value:
-                val_str = ' (self='+str(self._angle)+', other='+str(other._angle)+')'
-                diff_list.append(name+'.angle'+val_str)
+                val_str = (
+                    " (self=" + str(self._angle) + ", other=" + str(other._angle) + ")"
+                )
+                diff_list.append(name + ".angle" + val_str)
             else:
-                diff_list.append(name+'.angle')
-        if other._height is not None and self._height is not None and isnan(other._height) and isnan(self._height):
+                diff_list.append(name + ".angle")
+        if (
+            other._height is not None
+            and self._height is not None
+            and isnan(other._height)
+            and isnan(self._height)
+        ):
             pass
         elif other._height != self._height:
             if is_add_value:
-                val_str = ' (self='+str(self._height)+', other='+str(other._height)+')'
-                diff_list.append(name+'.height'+val_str)
+                val_str = (
+                    " (self="
+                    + str(self._height)
+                    + ", other="
+                    + str(other._height)
+                    + ")"
+                )
+                diff_list.append(name + ".height" + val_str)
             else:
-                diff_list.append(name+'.height')
+                diff_list.append(name + ".height")
         # Filter ignore differences
-        diff_list = list(filter(lambda x : x not in ignore_list, diff_list))
+        diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
 
     def __sizeof__(self):
@@ -273,19 +297,22 @@ class PolarArc(Surface):
             How to handle ndarray (0: tolist, 1: copy, 2: nothing)
         keep_function : bool
             True to keep the function object, else return str
-        Optional keyword input parameter is for internal use only 
+        Optional keyword input parameter is for internal use only
         and may prevent json serializability.
         """
 
         # Get the properties inherited from Surface
-        PolarArc_dict = super(PolarArc, self).as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs)
+        PolarArc_dict = super(PolarArc, self).as_dict(
+            type_handle_ndarray=type_handle_ndarray,
+            keep_function=keep_function,
+            **kwargs
+        )
         PolarArc_dict["angle"] = self.angle
         PolarArc_dict["height"] = self.height
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         PolarArc_dict["__class__"] = "PolarArc"
         return PolarArc_dict
-
 
     def copy(self):
         """Creates a deepcopy of the object"""
@@ -296,7 +323,9 @@ class PolarArc(Surface):
         point_ref_val = self.point_ref
         label_val = self.label
         # Creates new object of the same type with the copied properties
-        obj_copy = type(self)(angle=angle_val,height=height_val,point_ref=point_ref_val,label=label_val)
+        obj_copy = type(self)(
+            angle=angle_val, height=height_val, point_ref=point_ref_val, label=label_val
+        )
         return obj_copy
 
     def _set_None(self):

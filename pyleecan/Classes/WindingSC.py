@@ -85,7 +85,31 @@ class WindingSC(Winding):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, is_reverse_wind=False, Nslot_shift_wind=0, qs=3, Ntcoil=7, Npcp=2, type_connection=0, p=3, Lewout=0.015, conductor=-1, coil_pitch=1, wind_mat=None, Nlayer=1, per_a=None, is_aper_a=None, end_winding=-1, is_reverse_layer=False, is_change_layer=False, is_permute_B_C=False, dual_tri_phase_shift=None, is_wye=True, init_dict = None, init_str = None):
+    def __init__(
+        self,
+        is_reverse_wind=False,
+        Nslot_shift_wind=0,
+        qs=3,
+        Ntcoil=7,
+        Npcp=2,
+        type_connection=0,
+        p=3,
+        Lewout=0.015,
+        conductor=-1,
+        coil_pitch=1,
+        wind_mat=None,
+        Nlayer=1,
+        per_a=None,
+        is_aper_a=None,
+        end_winding=-1,
+        is_reverse_layer=False,
+        is_change_layer=False,
+        is_permute_B_C=False,
+        dual_tri_phase_shift=None,
+        is_wye=True,
+        init_dict=None,
+        init_str=None,
+    ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -143,7 +167,28 @@ class WindingSC(Winding):
                 is_wye = init_dict["is_wye"]
         # Set the properties (value check and convertion are done in setter)
         # Call Winding init
-        super(WindingSC, self).__init__(is_reverse_wind=is_reverse_wind, Nslot_shift_wind=Nslot_shift_wind, qs=qs, Ntcoil=Ntcoil, Npcp=Npcp, type_connection=type_connection, p=p, Lewout=Lewout, conductor=conductor, coil_pitch=coil_pitch, wind_mat=wind_mat, Nlayer=Nlayer, per_a=per_a, is_aper_a=is_aper_a, end_winding=end_winding, is_reverse_layer=is_reverse_layer, is_change_layer=is_change_layer, is_permute_B_C=is_permute_B_C, dual_tri_phase_shift=dual_tri_phase_shift, is_wye=is_wye)
+        super(WindingSC, self).__init__(
+            is_reverse_wind=is_reverse_wind,
+            Nslot_shift_wind=Nslot_shift_wind,
+            qs=qs,
+            Ntcoil=Ntcoil,
+            Npcp=Npcp,
+            type_connection=type_connection,
+            p=p,
+            Lewout=Lewout,
+            conductor=conductor,
+            coil_pitch=coil_pitch,
+            wind_mat=wind_mat,
+            Nlayer=Nlayer,
+            per_a=per_a,
+            is_aper_a=is_aper_a,
+            end_winding=end_winding,
+            is_reverse_layer=is_reverse_layer,
+            is_change_layer=is_change_layer,
+            is_permute_B_C=is_permute_B_C,
+            dual_tri_phase_shift=dual_tri_phase_shift,
+            is_wye=is_wye,
+        )
         # The class is frozen (in Winding init), for now it's impossible to
         # add new properties
 
@@ -166,19 +211,23 @@ class WindingSC(Winding):
             return False
         return True
 
-    def compare(self, other, name='self', ignore_list=None, is_add_value=False):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
             ignore_list = list()
         if type(other) != type(self):
-            return ['type('+name+')']
+            return ["type(" + name + ")"]
         diff_list = list()
 
         # Check the properties inherited from Winding
-        diff_list.extend(super(WindingSC, self).compare(other,name=name, ignore_list=ignore_list, is_add_value=is_add_value))
+        diff_list.extend(
+            super(WindingSC, self).compare(
+                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
+            )
+        )
         # Filter ignore differences
-        diff_list = list(filter(lambda x : x not in ignore_list, diff_list))
+        diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
 
     def __sizeof__(self):
@@ -197,17 +246,20 @@ class WindingSC(Winding):
             How to handle ndarray (0: tolist, 1: copy, 2: nothing)
         keep_function : bool
             True to keep the function object, else return str
-        Optional keyword input parameter is for internal use only 
+        Optional keyword input parameter is for internal use only
         and may prevent json serializability.
         """
 
         # Get the properties inherited from Winding
-        WindingSC_dict = super(WindingSC, self).as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs)
+        WindingSC_dict = super(WindingSC, self).as_dict(
+            type_handle_ndarray=type_handle_ndarray,
+            keep_function=keep_function,
+            **kwargs
+        )
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         WindingSC_dict["__class__"] = "WindingSC"
         return WindingSC_dict
-
 
     def copy(self):
         """Creates a deepcopy of the object"""
@@ -243,7 +295,28 @@ class WindingSC(Winding):
         dual_tri_phase_shift_val = self.dual_tri_phase_shift
         is_wye_val = self.is_wye
         # Creates new object of the same type with the copied properties
-        obj_copy = type(self)(is_reverse_wind=is_reverse_wind_val,Nslot_shift_wind=Nslot_shift_wind_val,qs=qs_val,Ntcoil=Ntcoil_val,Npcp=Npcp_val,type_connection=type_connection_val,p=p_val,Lewout=Lewout_val,conductor=conductor_val,coil_pitch=coil_pitch_val,wind_mat=wind_mat_val,Nlayer=Nlayer_val,per_a=per_a_val,is_aper_a=is_aper_a_val,end_winding=end_winding_val,is_reverse_layer=is_reverse_layer_val,is_change_layer=is_change_layer_val,is_permute_B_C=is_permute_B_C_val,dual_tri_phase_shift=dual_tri_phase_shift_val,is_wye=is_wye_val)
+        obj_copy = type(self)(
+            is_reverse_wind=is_reverse_wind_val,
+            Nslot_shift_wind=Nslot_shift_wind_val,
+            qs=qs_val,
+            Ntcoil=Ntcoil_val,
+            Npcp=Npcp_val,
+            type_connection=type_connection_val,
+            p=p_val,
+            Lewout=Lewout_val,
+            conductor=conductor_val,
+            coil_pitch=coil_pitch_val,
+            wind_mat=wind_mat_val,
+            Nlayer=Nlayer_val,
+            per_a=per_a_val,
+            is_aper_a=is_aper_a_val,
+            end_winding=end_winding_val,
+            is_reverse_layer=is_reverse_layer_val,
+            is_change_layer=is_change_layer_val,
+            is_permute_B_C=is_permute_B_C_val,
+            dual_tri_phase_shift=dual_tri_phase_shift_val,
+            is_wye=is_wye_val,
+        )
         return obj_copy
 
     def _set_None(self):

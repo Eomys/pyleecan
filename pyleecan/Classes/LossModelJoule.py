@@ -65,7 +65,16 @@ class LossModelJoule(LossModel):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, type_skin_effect=1, name="", group="", is_show_fig=False, coeff_dict=None, init_dict = None, init_str = None):
+    def __init__(
+        self,
+        type_skin_effect=1,
+        name="",
+        group="",
+        is_show_fig=False,
+        coeff_dict=None,
+        init_dict=None,
+        init_str=None,
+    ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -94,7 +103,9 @@ class LossModelJoule(LossModel):
         # Set the properties (value check and convertion are done in setter)
         self.type_skin_effect = type_skin_effect
         # Call LossModel init
-        super(LossModelJoule, self).__init__(name=name, group=group, is_show_fig=is_show_fig, coeff_dict=coeff_dict)
+        super(LossModelJoule, self).__init__(
+            name=name, group=group, is_show_fig=is_show_fig, coeff_dict=coeff_dict
+        )
         # The class is frozen (in LossModel init), for now it's impossible to
         # add new properties
 
@@ -104,7 +115,9 @@ class LossModelJoule(LossModel):
         LossModelJoule_str = ""
         # Get the properties inherited from LossModel
         LossModelJoule_str += super(LossModelJoule, self).__str__()
-        LossModelJoule_str += "type_skin_effect = " + str(self.type_skin_effect) + linesep
+        LossModelJoule_str += (
+            "type_skin_effect = " + str(self.type_skin_effect) + linesep
+        )
         return LossModelJoule_str
 
     def __eq__(self, other):
@@ -120,25 +133,35 @@ class LossModelJoule(LossModel):
             return False
         return True
 
-    def compare(self, other, name='self', ignore_list=None, is_add_value=False):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
             ignore_list = list()
         if type(other) != type(self):
-            return ['type('+name+')']
+            return ["type(" + name + ")"]
         diff_list = list()
 
         # Check the properties inherited from LossModel
-        diff_list.extend(super(LossModelJoule, self).compare(other,name=name, ignore_list=ignore_list, is_add_value=is_add_value))
+        diff_list.extend(
+            super(LossModelJoule, self).compare(
+                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
+            )
+        )
         if other._type_skin_effect != self._type_skin_effect:
             if is_add_value:
-                val_str = ' (self='+str(self._type_skin_effect)+', other='+str(other._type_skin_effect)+')'
-                diff_list.append(name+'.type_skin_effect'+val_str)
+                val_str = (
+                    " (self="
+                    + str(self._type_skin_effect)
+                    + ", other="
+                    + str(other._type_skin_effect)
+                    + ")"
+                )
+                diff_list.append(name + ".type_skin_effect" + val_str)
             else:
-                diff_list.append(name+'.type_skin_effect')
+                diff_list.append(name + ".type_skin_effect")
         # Filter ignore differences
-        diff_list = list(filter(lambda x : x not in ignore_list, diff_list))
+        diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
 
     def __sizeof__(self):
@@ -158,18 +181,21 @@ class LossModelJoule(LossModel):
             How to handle ndarray (0: tolist, 1: copy, 2: nothing)
         keep_function : bool
             True to keep the function object, else return str
-        Optional keyword input parameter is for internal use only 
+        Optional keyword input parameter is for internal use only
         and may prevent json serializability.
         """
 
         # Get the properties inherited from LossModel
-        LossModelJoule_dict = super(LossModelJoule, self).as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs)
+        LossModelJoule_dict = super(LossModelJoule, self).as_dict(
+            type_handle_ndarray=type_handle_ndarray,
+            keep_function=keep_function,
+            **kwargs
+        )
         LossModelJoule_dict["type_skin_effect"] = self.type_skin_effect
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         LossModelJoule_dict["__class__"] = "LossModelJoule"
         return LossModelJoule_dict
-
 
     def copy(self):
         """Creates a deepcopy of the object"""
@@ -184,7 +210,13 @@ class LossModelJoule(LossModel):
         else:
             coeff_dict_val = self.coeff_dict.copy()
         # Creates new object of the same type with the copied properties
-        obj_copy = type(self)(type_skin_effect=type_skin_effect_val,name=name_val,group=group_val,is_show_fig=is_show_fig_val,coeff_dict=coeff_dict_val)
+        obj_copy = type(self)(
+            type_skin_effect=type_skin_effect_val,
+            name=name_val,
+            group=group_val,
+            is_show_fig=is_show_fig_val,
+            coeff_dict=coeff_dict_val,
+        )
         return obj_copy
 
     def _set_None(self):

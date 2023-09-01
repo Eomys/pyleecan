@@ -28,7 +28,9 @@ except ImportError as error:
     check = error
 
 try:
-    from ..Methods.Machine.Machine.comp_angle_rotor_initial import comp_angle_rotor_initial
+    from ..Methods.Machine.Machine.comp_angle_rotor_initial import (
+        comp_angle_rotor_initial,
+    )
 except ImportError as error:
     comp_angle_rotor_initial = error
 
@@ -38,7 +40,9 @@ except ImportError as error:
     comp_desc_dict = error
 
 try:
-    from ..Methods.Machine.Machine.comp_length_airgap_active import comp_length_airgap_active
+    from ..Methods.Machine.Machine.comp_length_airgap_active import (
+        comp_length_airgap_active,
+    )
 except ImportError as error:
     comp_length_airgap_active = error
 
@@ -58,7 +62,9 @@ except ImportError as error:
     comp_Rgap_mec = error
 
 try:
-    from ..Methods.Machine.Machine.comp_periodicity_spatial import comp_periodicity_spatial
+    from ..Methods.Machine.Machine.comp_periodicity_spatial import (
+        comp_periodicity_spatial,
+    )
 except ImportError as error:
     comp_periodicity_spatial = error
 
@@ -331,7 +337,8 @@ class Machine(FrozenClass):
         get_lam_by_label = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use Machine method get_lam_by_label: " + str(get_lam_by_label)
+                    "Can't use Machine method get_lam_by_label: "
+                    + str(get_lam_by_label)
                 )
             )
         )
@@ -389,7 +396,17 @@ class Machine(FrozenClass):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, frame=-1, shaft=-1, name="default_machine", desc="", type_machine=1, logger_name="Pyleecan.Machine", init_dict = None, init_str = None):
+    def __init__(
+        self,
+        frame=-1,
+        shaft=-1,
+        name="default_machine",
+        desc="",
+        type_machine=1,
+        logger_name="Pyleecan.Machine",
+        init_dict=None,
+        init_str=None,
+    ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -439,12 +456,12 @@ class Machine(FrozenClass):
             Machine_str += "parent = " + str(type(self.parent)) + " object" + linesep
         if self.frame is not None:
             tmp = self.frame.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            Machine_str += "frame = "+ tmp
+            Machine_str += "frame = " + tmp
         else:
             Machine_str += "frame = None" + linesep + linesep
         if self.shaft is not None:
             tmp = self.shaft.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            Machine_str += "shaft = "+ tmp
+            Machine_str += "shaft = " + tmp
         else:
             Machine_str += "shaft = None" + linesep + linesep
         Machine_str += 'name = "' + str(self.name) + '"' + linesep
@@ -472,48 +489,82 @@ class Machine(FrozenClass):
             return False
         return True
 
-    def compare(self, other, name='self', ignore_list=None, is_add_value=False):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
             ignore_list = list()
         if type(other) != type(self):
-            return ['type('+name+')']
+            return ["type(" + name + ")"]
         diff_list = list()
-        if (other.frame is None and self.frame is not None) or (other.frame is not None and self.frame is None):
-            diff_list.append(name+'.frame None mismatch')
+        if (other.frame is None and self.frame is not None) or (
+            other.frame is not None and self.frame is None
+        ):
+            diff_list.append(name + ".frame None mismatch")
         elif self.frame is not None:
-            diff_list.extend(self.frame.compare(other.frame,name=name+'.frame',ignore_list=ignore_list,is_add_value=is_add_value))
-        if (other.shaft is None and self.shaft is not None) or (other.shaft is not None and self.shaft is None):
-            diff_list.append(name+'.shaft None mismatch')
+            diff_list.extend(
+                self.frame.compare(
+                    other.frame,
+                    name=name + ".frame",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
+            )
+        if (other.shaft is None and self.shaft is not None) or (
+            other.shaft is not None and self.shaft is None
+        ):
+            diff_list.append(name + ".shaft None mismatch")
         elif self.shaft is not None:
-            diff_list.extend(self.shaft.compare(other.shaft,name=name+'.shaft',ignore_list=ignore_list,is_add_value=is_add_value))
+            diff_list.extend(
+                self.shaft.compare(
+                    other.shaft,
+                    name=name + ".shaft",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
+            )
         if other._name != self._name:
             if is_add_value:
-                val_str = ' (self='+str(self._name)+', other='+str(other._name)+')'
-                diff_list.append(name+'.name'+val_str)
+                val_str = (
+                    " (self=" + str(self._name) + ", other=" + str(other._name) + ")"
+                )
+                diff_list.append(name + ".name" + val_str)
             else:
-                diff_list.append(name+'.name')
+                diff_list.append(name + ".name")
         if other._desc != self._desc:
             if is_add_value:
-                val_str = ' (self='+str(self._desc)+', other='+str(other._desc)+')'
-                diff_list.append(name+'.desc'+val_str)
+                val_str = (
+                    " (self=" + str(self._desc) + ", other=" + str(other._desc) + ")"
+                )
+                diff_list.append(name + ".desc" + val_str)
             else:
-                diff_list.append(name+'.desc')
+                diff_list.append(name + ".desc")
         if other._type_machine != self._type_machine:
             if is_add_value:
-                val_str = ' (self='+str(self._type_machine)+', other='+str(other._type_machine)+')'
-                diff_list.append(name+'.type_machine'+val_str)
+                val_str = (
+                    " (self="
+                    + str(self._type_machine)
+                    + ", other="
+                    + str(other._type_machine)
+                    + ")"
+                )
+                diff_list.append(name + ".type_machine" + val_str)
             else:
-                diff_list.append(name+'.type_machine')
+                diff_list.append(name + ".type_machine")
         if other._logger_name != self._logger_name:
             if is_add_value:
-                val_str = ' (self='+str(self._logger_name)+', other='+str(other._logger_name)+')'
-                diff_list.append(name+'.logger_name'+val_str)
+                val_str = (
+                    " (self="
+                    + str(self._logger_name)
+                    + ", other="
+                    + str(other._logger_name)
+                    + ")"
+                )
+                diff_list.append(name + ".logger_name" + val_str)
             else:
-                diff_list.append(name+'.logger_name')
+                diff_list.append(name + ".logger_name")
         # Filter ignore differences
-        diff_list = list(filter(lambda x : x not in ignore_list, diff_list))
+        diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
 
     def __sizeof__(self):
@@ -535,7 +586,7 @@ class Machine(FrozenClass):
             How to handle ndarray (0: tolist, 1: copy, 2: nothing)
         keep_function : bool
             True to keep the function object, else return str
-        Optional keyword input parameter is for internal use only 
+        Optional keyword input parameter is for internal use only
         and may prevent json serializability.
         """
 
@@ -543,11 +594,19 @@ class Machine(FrozenClass):
         if self.frame is None:
             Machine_dict["frame"] = None
         else:
-            Machine_dict["frame"] = self.frame.as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs)
+            Machine_dict["frame"] = self.frame.as_dict(
+                type_handle_ndarray=type_handle_ndarray,
+                keep_function=keep_function,
+                **kwargs
+            )
         if self.shaft is None:
             Machine_dict["shaft"] = None
         else:
-            Machine_dict["shaft"] = self.shaft.as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs)
+            Machine_dict["shaft"] = self.shaft.as_dict(
+                type_handle_ndarray=type_handle_ndarray,
+                keep_function=keep_function,
+                **kwargs
+            )
         Machine_dict["name"] = self.name
         Machine_dict["desc"] = self.desc
         Machine_dict["type_machine"] = self.type_machine
@@ -555,7 +614,6 @@ class Machine(FrozenClass):
         # The class name is added to the dict for deserialisation purpose
         Machine_dict["__class__"] = "Machine"
         return Machine_dict
-
 
     def copy(self):
         """Creates a deepcopy of the object"""
@@ -574,7 +632,14 @@ class Machine(FrozenClass):
         type_machine_val = self.type_machine
         logger_name_val = self.logger_name
         # Creates new object of the same type with the copied properties
-        obj_copy = type(self)(frame=frame_val,shaft=shaft_val,name=name_val,desc=desc_val,type_machine=type_machine_val,logger_name=logger_name_val)
+        obj_copy = type(self)(
+            frame=frame_val,
+            shaft=shaft_val,
+            name=name_val,
+            desc=desc_val,
+            type_machine=type_machine_val,
+            logger_name=logger_name_val,
+        )
         return obj_copy
 
     def _set_None(self):
@@ -599,19 +664,24 @@ class Machine(FrozenClass):
             try:
                 value = load_init_dict(value)[1]
             except Exception as e:
-                self.get_logger().error('Error while loading '+value+', setting None instead')
+                self.get_logger().error(
+                    "Error while loading " + value + ", setting None instead"
+                )
                 value = None
-        if isinstance(value, dict) and '__class__' in value:
-            class_obj = import_class('pyleecan.Classes', value.get('__class__'), 'frame')
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class(
+                "pyleecan.Classes", value.get("__class__"), "frame"
+            )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
-            Frame = import_class('pyleecan.Classes', 'Frame', 'frame')
+            Frame = import_class("pyleecan.Classes", "Frame", "frame")
             value = Frame()
         check_var("frame", value, "Frame")
         self._frame = value
 
         if self._frame is not None:
             self._frame.parent = self
+
     frame = property(
         fget=_get_frame,
         fset=_set_frame,
@@ -631,19 +701,24 @@ class Machine(FrozenClass):
             try:
                 value = load_init_dict(value)[1]
             except Exception as e:
-                self.get_logger().error('Error while loading '+value+', setting None instead')
+                self.get_logger().error(
+                    "Error while loading " + value + ", setting None instead"
+                )
                 value = None
-        if isinstance(value, dict) and '__class__' in value:
-            class_obj = import_class('pyleecan.Classes', value.get('__class__'), 'shaft')
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class(
+                "pyleecan.Classes", value.get("__class__"), "shaft"
+            )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
-            Shaft = import_class('pyleecan.Classes', 'Shaft', 'shaft')
+            Shaft = import_class("pyleecan.Classes", "Shaft", "shaft")
             value = Shaft()
         check_var("shaft", value, "Shaft")
         self._shaft = value
 
         if self._shaft is not None:
             self._shaft.parent = self
+
     shaft = property(
         fget=_get_shaft,
         fset=_set_shaft,

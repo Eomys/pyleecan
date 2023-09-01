@@ -35,7 +35,19 @@ class OptiObjective(DataKeeper):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, name="", symbol="", unit="", keeper=None, error_keeper=None, result=-1, result_ref=None, physic=None, init_dict = None, init_str = None):
+    def __init__(
+        self,
+        name="",
+        symbol="",
+        unit="",
+        keeper=None,
+        error_keeper=None,
+        result=-1,
+        result_ref=None,
+        physic=None,
+        init_dict=None,
+        init_str=None,
+    ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -69,7 +81,16 @@ class OptiObjective(DataKeeper):
                 physic = init_dict["physic"]
         # Set the properties (value check and convertion are done in setter)
         # Call DataKeeper init
-        super(OptiObjective, self).__init__(name=name, symbol=symbol, unit=unit, keeper=keeper, error_keeper=error_keeper, result=result, result_ref=result_ref, physic=physic)
+        super(OptiObjective, self).__init__(
+            name=name,
+            symbol=symbol,
+            unit=unit,
+            keeper=keeper,
+            error_keeper=error_keeper,
+            result=result,
+            result_ref=result_ref,
+            physic=physic,
+        )
         # The class is frozen (in DataKeeper init), for now it's impossible to
         # add new properties
 
@@ -92,19 +113,23 @@ class OptiObjective(DataKeeper):
             return False
         return True
 
-    def compare(self, other, name='self', ignore_list=None, is_add_value=False):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
             ignore_list = list()
         if type(other) != type(self):
-            return ['type('+name+')']
+            return ["type(" + name + ")"]
         diff_list = list()
 
         # Check the properties inherited from DataKeeper
-        diff_list.extend(super(OptiObjective, self).compare(other,name=name, ignore_list=ignore_list, is_add_value=is_add_value))
+        diff_list.extend(
+            super(OptiObjective, self).compare(
+                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
+            )
+        )
         # Filter ignore differences
-        diff_list = list(filter(lambda x : x not in ignore_list, diff_list))
+        diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
 
     def __sizeof__(self):
@@ -123,17 +148,20 @@ class OptiObjective(DataKeeper):
             How to handle ndarray (0: tolist, 1: copy, 2: nothing)
         keep_function : bool
             True to keep the function object, else return str
-        Optional keyword input parameter is for internal use only 
+        Optional keyword input parameter is for internal use only
         and may prevent json serializability.
         """
 
         # Get the properties inherited from DataKeeper
-        OptiObjective_dict = super(OptiObjective, self).as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs)
+        OptiObjective_dict = super(OptiObjective, self).as_dict(
+            type_handle_ndarray=type_handle_ndarray,
+            keep_function=keep_function,
+            **kwargs
+        )
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         OptiObjective_dict["__class__"] = "OptiObjective"
         return OptiObjective_dict
-
 
     def copy(self):
         """Creates a deepcopy of the object"""
@@ -154,13 +182,22 @@ class OptiObjective(DataKeeper):
             result_val = None
         else:
             result_val = self.result.copy()
-        if hasattr(self.result_ref, 'copy'):
+        if hasattr(self.result_ref, "copy"):
             result_ref_val = self.result_ref.copy()
         else:
             result_ref_val = self.result_ref
         physic_val = self.physic
         # Creates new object of the same type with the copied properties
-        obj_copy = type(self)(name=name_val,symbol=symbol_val,unit=unit_val,keeper=keeper_val,error_keeper=error_keeper_val,result=result_val,result_ref=result_ref_val,physic=physic_val)
+        obj_copy = type(self)(
+            name=name_val,
+            symbol=symbol_val,
+            unit=unit_val,
+            keeper=keeper_val,
+            error_keeper=error_keeper_val,
+            result=result_val,
+            result_ref=result_ref_val,
+            physic=physic_val,
+        )
         return obj_copy
 
     def _set_None(self):

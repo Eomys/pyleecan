@@ -64,7 +64,19 @@ class MachineIPMSM(MachineSync):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, rotor=-1, stator=-1, frame=-1, shaft=-1, name="default_machine", desc="", type_machine=1, logger_name="Pyleecan.Machine", init_dict = None, init_str = None):
+    def __init__(
+        self,
+        rotor=-1,
+        stator=-1,
+        frame=-1,
+        shaft=-1,
+        name="default_machine",
+        desc="",
+        type_machine=1,
+        logger_name="Pyleecan.Machine",
+        init_dict=None,
+        init_str=None,
+    ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -100,7 +112,14 @@ class MachineIPMSM(MachineSync):
         self.rotor = rotor
         self.stator = stator
         # Call MachineSync init
-        super(MachineIPMSM, self).__init__(frame=frame, shaft=shaft, name=name, desc=desc, type_machine=type_machine, logger_name=logger_name)
+        super(MachineIPMSM, self).__init__(
+            frame=frame,
+            shaft=shaft,
+            name=name,
+            desc=desc,
+            type_machine=type_machine,
+            logger_name=logger_name,
+        )
         # The class is frozen (in MachineSync init), for now it's impossible to
         # add new properties
 
@@ -112,12 +131,12 @@ class MachineIPMSM(MachineSync):
         MachineIPMSM_str += super(MachineIPMSM, self).__str__()
         if self.rotor is not None:
             tmp = self.rotor.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            MachineIPMSM_str += "rotor = "+ tmp
+            MachineIPMSM_str += "rotor = " + tmp
         else:
             MachineIPMSM_str += "rotor = None" + linesep + linesep
         if self.stator is not None:
             tmp = self.stator.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            MachineIPMSM_str += "stator = "+ tmp
+            MachineIPMSM_str += "stator = " + tmp
         else:
             MachineIPMSM_str += "stator = None" + linesep + linesep
         return MachineIPMSM_str
@@ -137,27 +156,49 @@ class MachineIPMSM(MachineSync):
             return False
         return True
 
-    def compare(self, other, name='self', ignore_list=None, is_add_value=False):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
             ignore_list = list()
         if type(other) != type(self):
-            return ['type('+name+')']
+            return ["type(" + name + ")"]
         diff_list = list()
 
         # Check the properties inherited from MachineSync
-        diff_list.extend(super(MachineIPMSM, self).compare(other,name=name, ignore_list=ignore_list, is_add_value=is_add_value))
-        if (other.rotor is None and self.rotor is not None) or (other.rotor is not None and self.rotor is None):
-            diff_list.append(name+'.rotor None mismatch')
+        diff_list.extend(
+            super(MachineIPMSM, self).compare(
+                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
+            )
+        )
+        if (other.rotor is None and self.rotor is not None) or (
+            other.rotor is not None and self.rotor is None
+        ):
+            diff_list.append(name + ".rotor None mismatch")
         elif self.rotor is not None:
-            diff_list.extend(self.rotor.compare(other.rotor,name=name+'.rotor',ignore_list=ignore_list,is_add_value=is_add_value))
-        if (other.stator is None and self.stator is not None) or (other.stator is not None and self.stator is None):
-            diff_list.append(name+'.stator None mismatch')
+            diff_list.extend(
+                self.rotor.compare(
+                    other.rotor,
+                    name=name + ".rotor",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
+            )
+        if (other.stator is None and self.stator is not None) or (
+            other.stator is not None and self.stator is None
+        ):
+            diff_list.append(name + ".stator None mismatch")
         elif self.stator is not None:
-            diff_list.extend(self.stator.compare(other.stator,name=name+'.stator',ignore_list=ignore_list,is_add_value=is_add_value))
+            diff_list.extend(
+                self.stator.compare(
+                    other.stator,
+                    name=name + ".stator",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
+            )
         # Filter ignore differences
-        diff_list = list(filter(lambda x : x not in ignore_list, diff_list))
+        diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
 
     def __sizeof__(self):
@@ -178,25 +219,36 @@ class MachineIPMSM(MachineSync):
             How to handle ndarray (0: tolist, 1: copy, 2: nothing)
         keep_function : bool
             True to keep the function object, else return str
-        Optional keyword input parameter is for internal use only 
+        Optional keyword input parameter is for internal use only
         and may prevent json serializability.
         """
 
         # Get the properties inherited from MachineSync
-        MachineIPMSM_dict = super(MachineIPMSM, self).as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs)
+        MachineIPMSM_dict = super(MachineIPMSM, self).as_dict(
+            type_handle_ndarray=type_handle_ndarray,
+            keep_function=keep_function,
+            **kwargs
+        )
         if self.rotor is None:
             MachineIPMSM_dict["rotor"] = None
         else:
-            MachineIPMSM_dict["rotor"] = self.rotor.as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs)
+            MachineIPMSM_dict["rotor"] = self.rotor.as_dict(
+                type_handle_ndarray=type_handle_ndarray,
+                keep_function=keep_function,
+                **kwargs
+            )
         if self.stator is None:
             MachineIPMSM_dict["stator"] = None
         else:
-            MachineIPMSM_dict["stator"] = self.stator.as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs)
+            MachineIPMSM_dict["stator"] = self.stator.as_dict(
+                type_handle_ndarray=type_handle_ndarray,
+                keep_function=keep_function,
+                **kwargs
+            )
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         MachineIPMSM_dict["__class__"] = "MachineIPMSM"
         return MachineIPMSM_dict
-
 
     def copy(self):
         """Creates a deepcopy of the object"""
@@ -223,7 +275,16 @@ class MachineIPMSM(MachineSync):
         type_machine_val = self.type_machine
         logger_name_val = self.logger_name
         # Creates new object of the same type with the copied properties
-        obj_copy = type(self)(rotor=rotor_val,stator=stator_val,frame=frame_val,shaft=shaft_val,name=name_val,desc=desc_val,type_machine=type_machine_val,logger_name=logger_name_val)
+        obj_copy = type(self)(
+            rotor=rotor_val,
+            stator=stator_val,
+            frame=frame_val,
+            shaft=shaft_val,
+            name=name_val,
+            desc=desc_val,
+            type_machine=type_machine_val,
+            logger_name=logger_name_val,
+        )
         return obj_copy
 
     def _set_None(self):
@@ -246,19 +307,24 @@ class MachineIPMSM(MachineSync):
             try:
                 value = load_init_dict(value)[1]
             except Exception as e:
-                self.get_logger().error('Error while loading '+value+', setting None instead')
+                self.get_logger().error(
+                    "Error while loading " + value + ", setting None instead"
+                )
                 value = None
-        if isinstance(value, dict) and '__class__' in value:
-            class_obj = import_class('pyleecan.Classes', value.get('__class__'), 'rotor')
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class(
+                "pyleecan.Classes", value.get("__class__"), "rotor"
+            )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
-            LamH = import_class('pyleecan.Classes', 'LamH', 'rotor')
+            LamH = import_class("pyleecan.Classes", "LamH", "rotor")
             value = LamH()
         check_var("rotor", value, "LamH")
         self._rotor = value
 
         if self._rotor is not None:
             self._rotor.parent = self
+
     rotor = property(
         fget=_get_rotor,
         fset=_set_rotor,
@@ -278,19 +344,24 @@ class MachineIPMSM(MachineSync):
             try:
                 value = load_init_dict(value)[1]
             except Exception as e:
-                self.get_logger().error('Error while loading '+value+', setting None instead')
+                self.get_logger().error(
+                    "Error while loading " + value + ", setting None instead"
+                )
                 value = None
-        if isinstance(value, dict) and '__class__' in value:
-            class_obj = import_class('pyleecan.Classes', value.get('__class__'), 'stator')
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class(
+                "pyleecan.Classes", value.get("__class__"), "stator"
+            )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
-            Lamination = import_class('pyleecan.Classes', 'Lamination', 'stator')
+            Lamination = import_class("pyleecan.Classes", "Lamination", "stator")
             value = Lamination()
         check_var("stator", value, "Lamination")
         self._stator = value
 
         if self._stator is not None:
             self._stator.parent = self
+
     stator = property(
         fget=_get_stator,
         fset=_set_stator,

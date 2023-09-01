@@ -132,7 +132,17 @@ class FrameBar(Frame):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, Nbar=8, wbar=0.01, Lfra=0.35, Rint=0.2, Rext=0.2, mat_type=-1, init_dict = None, init_str = None):
+    def __init__(
+        self,
+        Nbar=8,
+        wbar=0.01,
+        Lfra=0.35,
+        Rint=0.2,
+        Rext=0.2,
+        mat_type=-1,
+        init_dict=None,
+        init_str=None,
+    ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -164,7 +174,9 @@ class FrameBar(Frame):
         self.Nbar = Nbar
         self.wbar = wbar
         # Call Frame init
-        super(FrameBar, self).__init__(Lfra=Lfra, Rint=Rint, Rext=Rext, mat_type=mat_type)
+        super(FrameBar, self).__init__(
+            Lfra=Lfra, Rint=Rint, Rext=Rext, mat_type=mat_type
+        )
         # The class is frozen (in Frame init), for now it's impossible to
         # add new properties
 
@@ -193,33 +205,46 @@ class FrameBar(Frame):
             return False
         return True
 
-    def compare(self, other, name='self', ignore_list=None, is_add_value=False):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
             ignore_list = list()
         if type(other) != type(self):
-            return ['type('+name+')']
+            return ["type(" + name + ")"]
         diff_list = list()
 
         # Check the properties inherited from Frame
-        diff_list.extend(super(FrameBar, self).compare(other,name=name, ignore_list=ignore_list, is_add_value=is_add_value))
+        diff_list.extend(
+            super(FrameBar, self).compare(
+                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
+            )
+        )
         if other._Nbar != self._Nbar:
             if is_add_value:
-                val_str = ' (self='+str(self._Nbar)+', other='+str(other._Nbar)+')'
-                diff_list.append(name+'.Nbar'+val_str)
+                val_str = (
+                    " (self=" + str(self._Nbar) + ", other=" + str(other._Nbar) + ")"
+                )
+                diff_list.append(name + ".Nbar" + val_str)
             else:
-                diff_list.append(name+'.Nbar')
-        if other._wbar is not None and self._wbar is not None and isnan(other._wbar) and isnan(self._wbar):
+                diff_list.append(name + ".Nbar")
+        if (
+            other._wbar is not None
+            and self._wbar is not None
+            and isnan(other._wbar)
+            and isnan(self._wbar)
+        ):
             pass
         elif other._wbar != self._wbar:
             if is_add_value:
-                val_str = ' (self='+str(self._wbar)+', other='+str(other._wbar)+')'
-                diff_list.append(name+'.wbar'+val_str)
+                val_str = (
+                    " (self=" + str(self._wbar) + ", other=" + str(other._wbar) + ")"
+                )
+                diff_list.append(name + ".wbar" + val_str)
             else:
-                diff_list.append(name+'.wbar')
+                diff_list.append(name + ".wbar")
         # Filter ignore differences
-        diff_list = list(filter(lambda x : x not in ignore_list, diff_list))
+        diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
 
     def __sizeof__(self):
@@ -240,19 +265,22 @@ class FrameBar(Frame):
             How to handle ndarray (0: tolist, 1: copy, 2: nothing)
         keep_function : bool
             True to keep the function object, else return str
-        Optional keyword input parameter is for internal use only 
+        Optional keyword input parameter is for internal use only
         and may prevent json serializability.
         """
 
         # Get the properties inherited from Frame
-        FrameBar_dict = super(FrameBar, self).as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs)
+        FrameBar_dict = super(FrameBar, self).as_dict(
+            type_handle_ndarray=type_handle_ndarray,
+            keep_function=keep_function,
+            **kwargs
+        )
         FrameBar_dict["Nbar"] = self.Nbar
         FrameBar_dict["wbar"] = self.wbar
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         FrameBar_dict["__class__"] = "FrameBar"
         return FrameBar_dict
-
 
     def copy(self):
         """Creates a deepcopy of the object"""
@@ -268,7 +296,14 @@ class FrameBar(Frame):
         else:
             mat_type_val = self.mat_type.copy()
         # Creates new object of the same type with the copied properties
-        obj_copy = type(self)(Nbar=Nbar_val,wbar=wbar_val,Lfra=Lfra_val,Rint=Rint_val,Rext=Rext_val,mat_type=mat_type_val)
+        obj_copy = type(self)(
+            Nbar=Nbar_val,
+            wbar=wbar_val,
+            Lfra=Lfra_val,
+            Rint=Rint_val,
+            Rext=Rext_val,
+            mat_type=mat_type_val,
+        )
         return obj_copy
 
     def _set_None(self):

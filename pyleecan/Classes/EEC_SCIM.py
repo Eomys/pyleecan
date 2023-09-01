@@ -236,7 +236,36 @@ class EEC_SCIM(EEC):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, Rfe=None, L1=None, R2=None, L2=None, K21Z=None, K21I=None, Im_table=None, Lm_table=None, I1=None, I2=None, U1=None, U2=None, If=None, Lm=None, Im=None, type_skin_effect=1, OP=None, Tsta=20, Trot=20, Xkr_skinS=1, Xke_skinS=1, Xkr_skinR=1, Xke_skinR=1, R1=None, fluxlink=None, init_dict = None, init_str = None):
+    def __init__(
+        self,
+        Rfe=None,
+        L1=None,
+        R2=None,
+        L2=None,
+        K21Z=None,
+        K21I=None,
+        Im_table=None,
+        Lm_table=None,
+        I1=None,
+        I2=None,
+        U1=None,
+        U2=None,
+        If=None,
+        Lm=None,
+        Im=None,
+        type_skin_effect=1,
+        OP=None,
+        Tsta=20,
+        Trot=20,
+        Xkr_skinS=1,
+        Xke_skinS=1,
+        Xkr_skinR=1,
+        Xke_skinR=1,
+        R1=None,
+        fluxlink=None,
+        init_dict=None,
+        init_str=None,
+    ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -319,7 +348,18 @@ class EEC_SCIM(EEC):
         self.Lm = Lm
         self.Im = Im
         # Call EEC init
-        super(EEC_SCIM, self).__init__(type_skin_effect=type_skin_effect, OP=OP, Tsta=Tsta, Trot=Trot, Xkr_skinS=Xkr_skinS, Xke_skinS=Xke_skinS, Xkr_skinR=Xkr_skinR, Xke_skinR=Xke_skinR, R1=R1, fluxlink=fluxlink)
+        super(EEC_SCIM, self).__init__(
+            type_skin_effect=type_skin_effect,
+            OP=OP,
+            Tsta=Tsta,
+            Trot=Trot,
+            Xkr_skinS=Xkr_skinS,
+            Xke_skinS=Xke_skinS,
+            Xkr_skinR=Xkr_skinR,
+            Xke_skinR=Xke_skinR,
+            R1=R1,
+            fluxlink=fluxlink,
+        )
         # The class is frozen (in EEC init), for now it's impossible to
         # add new properties
 
@@ -335,8 +375,20 @@ class EEC_SCIM(EEC):
         EEC_SCIM_str += "L2 = " + str(self.L2) + linesep
         EEC_SCIM_str += "K21Z = " + str(self.K21Z) + linesep
         EEC_SCIM_str += "K21I = " + str(self.K21I) + linesep
-        EEC_SCIM_str += "Im_table = " + linesep + str(self.Im_table).replace(linesep, linesep + "\t") + linesep + linesep
-        EEC_SCIM_str += "Lm_table = " + linesep + str(self.Lm_table).replace(linesep, linesep + "\t") + linesep + linesep
+        EEC_SCIM_str += (
+            "Im_table = "
+            + linesep
+            + str(self.Im_table).replace(linesep, linesep + "\t")
+            + linesep
+            + linesep
+        )
+        EEC_SCIM_str += (
+            "Lm_table = "
+            + linesep
+            + str(self.Lm_table).replace(linesep, linesep + "\t")
+            + linesep
+            + linesep
+        )
         EEC_SCIM_str += "I1 = " + str(self.I1) + linesep
         EEC_SCIM_str += "I2 = " + str(self.I2) + linesep
         EEC_SCIM_str += "U1 = " + str(self.U1) + linesep
@@ -387,115 +439,160 @@ class EEC_SCIM(EEC):
             return False
         return True
 
-    def compare(self, other, name='self', ignore_list=None, is_add_value=False):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
             ignore_list = list()
         if type(other) != type(self):
-            return ['type('+name+')']
+            return ["type(" + name + ")"]
         diff_list = list()
 
         # Check the properties inherited from EEC
-        diff_list.extend(super(EEC_SCIM, self).compare(other,name=name, ignore_list=ignore_list, is_add_value=is_add_value))
-        if other._Rfe is not None and self._Rfe is not None and isnan(other._Rfe) and isnan(self._Rfe):
+        diff_list.extend(
+            super(EEC_SCIM, self).compare(
+                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
+            )
+        )
+        if (
+            other._Rfe is not None
+            and self._Rfe is not None
+            and isnan(other._Rfe)
+            and isnan(self._Rfe)
+        ):
             pass
         elif other._Rfe != self._Rfe:
             if is_add_value:
-                val_str = ' (self='+str(self._Rfe)+', other='+str(other._Rfe)+')'
-                diff_list.append(name+'.Rfe'+val_str)
+                val_str = (
+                    " (self=" + str(self._Rfe) + ", other=" + str(other._Rfe) + ")"
+                )
+                diff_list.append(name + ".Rfe" + val_str)
             else:
-                diff_list.append(name+'.Rfe')
-        if other._L1 is not None and self._L1 is not None and isnan(other._L1) and isnan(self._L1):
+                diff_list.append(name + ".Rfe")
+        if (
+            other._L1 is not None
+            and self._L1 is not None
+            and isnan(other._L1)
+            and isnan(self._L1)
+        ):
             pass
         elif other._L1 != self._L1:
             if is_add_value:
-                val_str = ' (self='+str(self._L1)+', other='+str(other._L1)+')'
-                diff_list.append(name+'.L1'+val_str)
+                val_str = " (self=" + str(self._L1) + ", other=" + str(other._L1) + ")"
+                diff_list.append(name + ".L1" + val_str)
             else:
-                diff_list.append(name+'.L1')
-        if other._R2 is not None and self._R2 is not None and isnan(other._R2) and isnan(self._R2):
+                diff_list.append(name + ".L1")
+        if (
+            other._R2 is not None
+            and self._R2 is not None
+            and isnan(other._R2)
+            and isnan(self._R2)
+        ):
             pass
         elif other._R2 != self._R2:
             if is_add_value:
-                val_str = ' (self='+str(self._R2)+', other='+str(other._R2)+')'
-                diff_list.append(name+'.R2'+val_str)
+                val_str = " (self=" + str(self._R2) + ", other=" + str(other._R2) + ")"
+                diff_list.append(name + ".R2" + val_str)
             else:
-                diff_list.append(name+'.R2')
-        if other._L2 is not None and self._L2 is not None and isnan(other._L2) and isnan(self._L2):
+                diff_list.append(name + ".R2")
+        if (
+            other._L2 is not None
+            and self._L2 is not None
+            and isnan(other._L2)
+            and isnan(self._L2)
+        ):
             pass
         elif other._L2 != self._L2:
             if is_add_value:
-                val_str = ' (self='+str(self._L2)+', other='+str(other._L2)+')'
-                diff_list.append(name+'.L2'+val_str)
+                val_str = " (self=" + str(self._L2) + ", other=" + str(other._L2) + ")"
+                diff_list.append(name + ".L2" + val_str)
             else:
-                diff_list.append(name+'.L2')
-        if other._K21Z is not None and self._K21Z is not None and isnan(other._K21Z) and isnan(self._K21Z):
+                diff_list.append(name + ".L2")
+        if (
+            other._K21Z is not None
+            and self._K21Z is not None
+            and isnan(other._K21Z)
+            and isnan(self._K21Z)
+        ):
             pass
         elif other._K21Z != self._K21Z:
             if is_add_value:
-                val_str = ' (self='+str(self._K21Z)+', other='+str(other._K21Z)+')'
-                diff_list.append(name+'.K21Z'+val_str)
+                val_str = (
+                    " (self=" + str(self._K21Z) + ", other=" + str(other._K21Z) + ")"
+                )
+                diff_list.append(name + ".K21Z" + val_str)
             else:
-                diff_list.append(name+'.K21Z')
-        if other._K21I is not None and self._K21I is not None and isnan(other._K21I) and isnan(self._K21I):
+                diff_list.append(name + ".K21Z")
+        if (
+            other._K21I is not None
+            and self._K21I is not None
+            and isnan(other._K21I)
+            and isnan(self._K21I)
+        ):
             pass
         elif other._K21I != self._K21I:
             if is_add_value:
-                val_str = ' (self='+str(self._K21I)+', other='+str(other._K21I)+')'
-                diff_list.append(name+'.K21I'+val_str)
+                val_str = (
+                    " (self=" + str(self._K21I) + ", other=" + str(other._K21I) + ")"
+                )
+                diff_list.append(name + ".K21I" + val_str)
             else:
-                diff_list.append(name+'.K21I')
+                diff_list.append(name + ".K21I")
         if not array_equal(other.Im_table, self.Im_table):
-            diff_list.append(name+'.Im_table')
+            diff_list.append(name + ".Im_table")
         if not array_equal(other.Lm_table, self.Lm_table):
-            diff_list.append(name+'.Lm_table')
+            diff_list.append(name + ".Lm_table")
         if other._I1 != self._I1:
             if is_add_value:
-                val_str = ' (self='+str(self._I1)+', other='+str(other._I1)+')'
-                diff_list.append(name+'.I1'+val_str)
+                val_str = " (self=" + str(self._I1) + ", other=" + str(other._I1) + ")"
+                diff_list.append(name + ".I1" + val_str)
             else:
-                diff_list.append(name+'.I1')
+                diff_list.append(name + ".I1")
         if other._I2 != self._I2:
             if is_add_value:
-                val_str = ' (self='+str(self._I2)+', other='+str(other._I2)+')'
-                diff_list.append(name+'.I2'+val_str)
+                val_str = " (self=" + str(self._I2) + ", other=" + str(other._I2) + ")"
+                diff_list.append(name + ".I2" + val_str)
             else:
-                diff_list.append(name+'.I2')
+                diff_list.append(name + ".I2")
         if other._U1 != self._U1:
             if is_add_value:
-                val_str = ' (self='+str(self._U1)+', other='+str(other._U1)+')'
-                diff_list.append(name+'.U1'+val_str)
+                val_str = " (self=" + str(self._U1) + ", other=" + str(other._U1) + ")"
+                diff_list.append(name + ".U1" + val_str)
             else:
-                diff_list.append(name+'.U1')
+                diff_list.append(name + ".U1")
         if other._U2 != self._U2:
             if is_add_value:
-                val_str = ' (self='+str(self._U2)+', other='+str(other._U2)+')'
-                diff_list.append(name+'.U2'+val_str)
+                val_str = " (self=" + str(self._U2) + ", other=" + str(other._U2) + ")"
+                diff_list.append(name + ".U2" + val_str)
             else:
-                diff_list.append(name+'.U2')
+                diff_list.append(name + ".U2")
         if other._If != self._If:
             if is_add_value:
-                val_str = ' (self='+str(self._If)+', other='+str(other._If)+')'
-                diff_list.append(name+'.If'+val_str)
+                val_str = " (self=" + str(self._If) + ", other=" + str(other._If) + ")"
+                diff_list.append(name + ".If" + val_str)
             else:
-                diff_list.append(name+'.If')
-        if other._Lm is not None and self._Lm is not None and isnan(other._Lm) and isnan(self._Lm):
+                diff_list.append(name + ".If")
+        if (
+            other._Lm is not None
+            and self._Lm is not None
+            and isnan(other._Lm)
+            and isnan(self._Lm)
+        ):
             pass
         elif other._Lm != self._Lm:
             if is_add_value:
-                val_str = ' (self='+str(self._Lm)+', other='+str(other._Lm)+')'
-                diff_list.append(name+'.Lm'+val_str)
+                val_str = " (self=" + str(self._Lm) + ", other=" + str(other._Lm) + ")"
+                diff_list.append(name + ".Lm" + val_str)
             else:
-                diff_list.append(name+'.Lm')
+                diff_list.append(name + ".Lm")
         if other._Im != self._Im:
             if is_add_value:
-                val_str = ' (self='+str(self._Im)+', other='+str(other._Im)+')'
-                diff_list.append(name+'.Im'+val_str)
+                val_str = " (self=" + str(self._Im) + ", other=" + str(other._Im) + ")"
+                diff_list.append(name + ".Im" + val_str)
             else:
-                diff_list.append(name+'.Im')
+                diff_list.append(name + ".Im")
         # Filter ignore differences
-        diff_list = list(filter(lambda x : x not in ignore_list, diff_list))
+        diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
 
     def __sizeof__(self):
@@ -529,12 +626,16 @@ class EEC_SCIM(EEC):
             How to handle ndarray (0: tolist, 1: copy, 2: nothing)
         keep_function : bool
             True to keep the function object, else return str
-        Optional keyword input parameter is for internal use only 
+        Optional keyword input parameter is for internal use only
         and may prevent json serializability.
         """
 
         # Get the properties inherited from EEC
-        EEC_SCIM_dict = super(EEC_SCIM, self).as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs)
+        EEC_SCIM_dict = super(EEC_SCIM, self).as_dict(
+            type_handle_ndarray=type_handle_ndarray,
+            keep_function=keep_function,
+            **kwargs
+        )
         EEC_SCIM_dict["Rfe"] = self.Rfe
         EEC_SCIM_dict["L1"] = self.L1
         EEC_SCIM_dict["R2"] = self.R2
@@ -544,25 +645,29 @@ class EEC_SCIM(EEC):
         if self.Im_table is None:
             EEC_SCIM_dict["Im_table"] = None
         else:
-            if type_handle_ndarray==0:
+            if type_handle_ndarray == 0:
                 EEC_SCIM_dict["Im_table"] = self.Im_table.tolist()
-            elif type_handle_ndarray==1:
+            elif type_handle_ndarray == 1:
                 EEC_SCIM_dict["Im_table"] = self.Im_table.copy()
-            elif type_handle_ndarray==2:
+            elif type_handle_ndarray == 2:
                 EEC_SCIM_dict["Im_table"] = self.Im_table
             else:
-                raise Exception ('Unknown type_handle_ndarray: '+str(type_handle_ndarray))
+                raise Exception(
+                    "Unknown type_handle_ndarray: " + str(type_handle_ndarray)
+                )
         if self.Lm_table is None:
             EEC_SCIM_dict["Lm_table"] = None
         else:
-            if type_handle_ndarray==0:
+            if type_handle_ndarray == 0:
                 EEC_SCIM_dict["Lm_table"] = self.Lm_table.tolist()
-            elif type_handle_ndarray==1:
+            elif type_handle_ndarray == 1:
                 EEC_SCIM_dict["Lm_table"] = self.Lm_table.copy()
-            elif type_handle_ndarray==2:
+            elif type_handle_ndarray == 2:
                 EEC_SCIM_dict["Lm_table"] = self.Lm_table
             else:
-                raise Exception ('Unknown type_handle_ndarray: '+str(type_handle_ndarray))
+                raise Exception(
+                    "Unknown type_handle_ndarray: " + str(type_handle_ndarray)
+                )
         if self.I1 is None:
             EEC_SCIM_dict["I1"] = None
         elif isinstance(self.I1, float):
@@ -604,7 +709,6 @@ class EEC_SCIM(EEC):
         # Overwrite the mother class name
         EEC_SCIM_dict["__class__"] = "EEC_SCIM"
         return EEC_SCIM_dict
-
 
     def copy(self):
         """Creates a deepcopy of the object"""
@@ -648,7 +752,33 @@ class EEC_SCIM(EEC):
         else:
             fluxlink_val = self.fluxlink.copy()
         # Creates new object of the same type with the copied properties
-        obj_copy = type(self)(Rfe=Rfe_val,L1=L1_val,R2=R2_val,L2=L2_val,K21Z=K21Z_val,K21I=K21I_val,Im_table=Im_table_val,Lm_table=Lm_table_val,I1=I1_val,I2=I2_val,U1=U1_val,U2=U2_val,If=If_val,Lm=Lm_val,Im=Im_val,type_skin_effect=type_skin_effect_val,OP=OP_val,Tsta=Tsta_val,Trot=Trot_val,Xkr_skinS=Xkr_skinS_val,Xke_skinS=Xke_skinS_val,Xkr_skinR=Xkr_skinR_val,Xke_skinR=Xke_skinR_val,R1=R1_val,fluxlink=fluxlink_val)
+        obj_copy = type(self)(
+            Rfe=Rfe_val,
+            L1=L1_val,
+            R2=R2_val,
+            L2=L2_val,
+            K21Z=K21Z_val,
+            K21I=K21I_val,
+            Im_table=Im_table_val,
+            Lm_table=Lm_table_val,
+            I1=I1_val,
+            I2=I2_val,
+            U1=U1_val,
+            U2=U2_val,
+            If=If_val,
+            Lm=Lm_val,
+            Im=Im_val,
+            type_skin_effect=type_skin_effect_val,
+            OP=OP_val,
+            Tsta=Tsta_val,
+            Trot=Trot_val,
+            Xkr_skinS=Xkr_skinS_val,
+            Xke_skinS=Xke_skinS_val,
+            Xkr_skinR=Xkr_skinR_val,
+            Xke_skinR=Xke_skinR_val,
+            R1=R1_val,
+            fluxlink=fluxlink_val,
+        )
         return obj_copy
 
     def _set_None(self):
@@ -836,7 +966,7 @@ class EEC_SCIM(EEC):
 
     def _set_I1(self, value):
         """setter of I1"""
-        if isinstance(value,str):
+        if isinstance(value, str):
             value = complex(value)
         check_var("I1", value, "complex")
         self._I1 = value
@@ -856,7 +986,7 @@ class EEC_SCIM(EEC):
 
     def _set_I2(self, value):
         """setter of I2"""
-        if isinstance(value,str):
+        if isinstance(value, str):
             value = complex(value)
         check_var("I2", value, "complex")
         self._I2 = value
@@ -876,7 +1006,7 @@ class EEC_SCIM(EEC):
 
     def _set_U1(self, value):
         """setter of U1"""
-        if isinstance(value,str):
+        if isinstance(value, str):
             value = complex(value)
         check_var("U1", value, "complex")
         self._U1 = value
@@ -896,7 +1026,7 @@ class EEC_SCIM(EEC):
 
     def _set_U2(self, value):
         """setter of U2"""
-        if isinstance(value,str):
+        if isinstance(value, str):
             value = complex(value)
         check_var("U2", value, "complex")
         self._U2 = value
@@ -916,7 +1046,7 @@ class EEC_SCIM(EEC):
 
     def _set_If(self, value):
         """setter of If"""
-        if isinstance(value,str):
+        if isinstance(value, str):
             value = complex(value)
         check_var("If", value, "complex")
         self._If = value
@@ -954,7 +1084,7 @@ class EEC_SCIM(EEC):
 
     def _set_Im(self, value):
         """setter of Im"""
-        if isinstance(value,str):
+        if isinstance(value, str):
             value = complex(value)
         check_var("Im", value, "complex")
         self._Im = value

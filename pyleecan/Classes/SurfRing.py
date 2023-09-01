@@ -181,7 +181,15 @@ class SurfRing(Surface):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, out_surf=-1, in_surf=-1, point_ref=0, label="", init_dict = None, init_str = None):
+    def __init__(
+        self,
+        out_surf=-1,
+        in_surf=-1,
+        point_ref=0,
+        label="",
+        init_dict=None,
+        init_str=None,
+    ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -221,12 +229,12 @@ class SurfRing(Surface):
         SurfRing_str += super(SurfRing, self).__str__()
         if self.out_surf is not None:
             tmp = self.out_surf.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            SurfRing_str += "out_surf = "+ tmp
+            SurfRing_str += "out_surf = " + tmp
         else:
             SurfRing_str += "out_surf = None" + linesep + linesep
         if self.in_surf is not None:
             tmp = self.in_surf.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            SurfRing_str += "in_surf = "+ tmp
+            SurfRing_str += "in_surf = " + tmp
         else:
             SurfRing_str += "in_surf = None" + linesep + linesep
         return SurfRing_str
@@ -246,27 +254,49 @@ class SurfRing(Surface):
             return False
         return True
 
-    def compare(self, other, name='self', ignore_list=None, is_add_value=False):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
             ignore_list = list()
         if type(other) != type(self):
-            return ['type('+name+')']
+            return ["type(" + name + ")"]
         diff_list = list()
 
         # Check the properties inherited from Surface
-        diff_list.extend(super(SurfRing, self).compare(other,name=name, ignore_list=ignore_list, is_add_value=is_add_value))
-        if (other.out_surf is None and self.out_surf is not None) or (other.out_surf is not None and self.out_surf is None):
-            diff_list.append(name+'.out_surf None mismatch')
+        diff_list.extend(
+            super(SurfRing, self).compare(
+                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
+            )
+        )
+        if (other.out_surf is None and self.out_surf is not None) or (
+            other.out_surf is not None and self.out_surf is None
+        ):
+            diff_list.append(name + ".out_surf None mismatch")
         elif self.out_surf is not None:
-            diff_list.extend(self.out_surf.compare(other.out_surf,name=name+'.out_surf',ignore_list=ignore_list,is_add_value=is_add_value))
-        if (other.in_surf is None and self.in_surf is not None) or (other.in_surf is not None and self.in_surf is None):
-            diff_list.append(name+'.in_surf None mismatch')
+            diff_list.extend(
+                self.out_surf.compare(
+                    other.out_surf,
+                    name=name + ".out_surf",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
+            )
+        if (other.in_surf is None and self.in_surf is not None) or (
+            other.in_surf is not None and self.in_surf is None
+        ):
+            diff_list.append(name + ".in_surf None mismatch")
         elif self.in_surf is not None:
-            diff_list.extend(self.in_surf.compare(other.in_surf,name=name+'.in_surf',ignore_list=ignore_list,is_add_value=is_add_value))
+            diff_list.extend(
+                self.in_surf.compare(
+                    other.in_surf,
+                    name=name + ".in_surf",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
+            )
         # Filter ignore differences
-        diff_list = list(filter(lambda x : x not in ignore_list, diff_list))
+        diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
 
     def __sizeof__(self):
@@ -287,25 +317,36 @@ class SurfRing(Surface):
             How to handle ndarray (0: tolist, 1: copy, 2: nothing)
         keep_function : bool
             True to keep the function object, else return str
-        Optional keyword input parameter is for internal use only 
+        Optional keyword input parameter is for internal use only
         and may prevent json serializability.
         """
 
         # Get the properties inherited from Surface
-        SurfRing_dict = super(SurfRing, self).as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs)
+        SurfRing_dict = super(SurfRing, self).as_dict(
+            type_handle_ndarray=type_handle_ndarray,
+            keep_function=keep_function,
+            **kwargs
+        )
         if self.out_surf is None:
             SurfRing_dict["out_surf"] = None
         else:
-            SurfRing_dict["out_surf"] = self.out_surf.as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs)
+            SurfRing_dict["out_surf"] = self.out_surf.as_dict(
+                type_handle_ndarray=type_handle_ndarray,
+                keep_function=keep_function,
+                **kwargs
+            )
         if self.in_surf is None:
             SurfRing_dict["in_surf"] = None
         else:
-            SurfRing_dict["in_surf"] = self.in_surf.as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs)
+            SurfRing_dict["in_surf"] = self.in_surf.as_dict(
+                type_handle_ndarray=type_handle_ndarray,
+                keep_function=keep_function,
+                **kwargs
+            )
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         SurfRing_dict["__class__"] = "SurfRing"
         return SurfRing_dict
-
 
     def copy(self):
         """Creates a deepcopy of the object"""
@@ -322,7 +363,12 @@ class SurfRing(Surface):
         point_ref_val = self.point_ref
         label_val = self.label
         # Creates new object of the same type with the copied properties
-        obj_copy = type(self)(out_surf=out_surf_val,in_surf=in_surf_val,point_ref=point_ref_val,label=label_val)
+        obj_copy = type(self)(
+            out_surf=out_surf_val,
+            in_surf=in_surf_val,
+            point_ref=point_ref_val,
+            label=label_val,
+        )
         return obj_copy
 
     def _set_None(self):
@@ -345,19 +391,24 @@ class SurfRing(Surface):
             try:
                 value = load_init_dict(value)[1]
             except Exception as e:
-                self.get_logger().error('Error while loading '+value+', setting None instead')
+                self.get_logger().error(
+                    "Error while loading " + value + ", setting None instead"
+                )
                 value = None
-        if isinstance(value, dict) and '__class__' in value:
-            class_obj = import_class('pyleecan.Classes', value.get('__class__'), 'out_surf')
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class(
+                "pyleecan.Classes", value.get("__class__"), "out_surf"
+            )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
-            Surface = import_class('pyleecan.Classes', 'Surface', 'out_surf')
+            Surface = import_class("pyleecan.Classes", "Surface", "out_surf")
             value = Surface()
         check_var("out_surf", value, "Surface")
         self._out_surf = value
 
         if self._out_surf is not None:
             self._out_surf.parent = self
+
     out_surf = property(
         fget=_get_out_surf,
         fset=_set_out_surf,
@@ -377,19 +428,24 @@ class SurfRing(Surface):
             try:
                 value = load_init_dict(value)[1]
             except Exception as e:
-                self.get_logger().error('Error while loading '+value+', setting None instead')
+                self.get_logger().error(
+                    "Error while loading " + value + ", setting None instead"
+                )
                 value = None
-        if isinstance(value, dict) and '__class__' in value:
-            class_obj = import_class('pyleecan.Classes', value.get('__class__'), 'in_surf')
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class(
+                "pyleecan.Classes", value.get("__class__"), "in_surf"
+            )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
-            Surface = import_class('pyleecan.Classes', 'Surface', 'in_surf')
+            Surface = import_class("pyleecan.Classes", "Surface", "in_surf")
             value = Surface()
         check_var("in_surf", value, "Surface")
         self._in_surf = value
 
         if self._in_surf is not None:
             self._in_surf.parent = self
+
     in_surf = property(
         fget=_get_in_surf,
         fset=_set_in_surf,

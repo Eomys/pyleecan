@@ -144,7 +144,19 @@ class HoleM54(Hole):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, H0=0.003, H1=0, W0=0.013, R1=0.02, Zh=36, mat_void=-1, magnetization_dict_offset=None, Alpha0=0, init_dict = None, init_str = None):
+    def __init__(
+        self,
+        H0=0.003,
+        H1=0,
+        W0=0.013,
+        R1=0.02,
+        Zh=36,
+        mat_void=-1,
+        magnetization_dict_offset=None,
+        Alpha0=0,
+        init_dict=None,
+        init_str=None,
+    ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -182,7 +194,12 @@ class HoleM54(Hole):
         self.W0 = W0
         self.R1 = R1
         # Call Hole init
-        super(HoleM54, self).__init__(Zh=Zh, mat_void=mat_void, magnetization_dict_offset=magnetization_dict_offset, Alpha0=Alpha0)
+        super(HoleM54, self).__init__(
+            Zh=Zh,
+            mat_void=mat_void,
+            magnetization_dict_offset=magnetization_dict_offset,
+            Alpha0=Alpha0,
+        )
         # The class is frozen (in Hole init), for now it's impossible to
         # add new properties
 
@@ -217,51 +234,75 @@ class HoleM54(Hole):
             return False
         return True
 
-    def compare(self, other, name='self', ignore_list=None, is_add_value=False):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
             ignore_list = list()
         if type(other) != type(self):
-            return ['type('+name+')']
+            return ["type(" + name + ")"]
         diff_list = list()
 
         # Check the properties inherited from Hole
-        diff_list.extend(super(HoleM54, self).compare(other,name=name, ignore_list=ignore_list, is_add_value=is_add_value))
-        if other._H0 is not None and self._H0 is not None and isnan(other._H0) and isnan(self._H0):
+        diff_list.extend(
+            super(HoleM54, self).compare(
+                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
+            )
+        )
+        if (
+            other._H0 is not None
+            and self._H0 is not None
+            and isnan(other._H0)
+            and isnan(self._H0)
+        ):
             pass
         elif other._H0 != self._H0:
             if is_add_value:
-                val_str = ' (self='+str(self._H0)+', other='+str(other._H0)+')'
-                diff_list.append(name+'.H0'+val_str)
+                val_str = " (self=" + str(self._H0) + ", other=" + str(other._H0) + ")"
+                diff_list.append(name + ".H0" + val_str)
             else:
-                diff_list.append(name+'.H0')
-        if other._H1 is not None and self._H1 is not None and isnan(other._H1) and isnan(self._H1):
+                diff_list.append(name + ".H0")
+        if (
+            other._H1 is not None
+            and self._H1 is not None
+            and isnan(other._H1)
+            and isnan(self._H1)
+        ):
             pass
         elif other._H1 != self._H1:
             if is_add_value:
-                val_str = ' (self='+str(self._H1)+', other='+str(other._H1)+')'
-                diff_list.append(name+'.H1'+val_str)
+                val_str = " (self=" + str(self._H1) + ", other=" + str(other._H1) + ")"
+                diff_list.append(name + ".H1" + val_str)
             else:
-                diff_list.append(name+'.H1')
-        if other._W0 is not None and self._W0 is not None and isnan(other._W0) and isnan(self._W0):
+                diff_list.append(name + ".H1")
+        if (
+            other._W0 is not None
+            and self._W0 is not None
+            and isnan(other._W0)
+            and isnan(self._W0)
+        ):
             pass
         elif other._W0 != self._W0:
             if is_add_value:
-                val_str = ' (self='+str(self._W0)+', other='+str(other._W0)+')'
-                diff_list.append(name+'.W0'+val_str)
+                val_str = " (self=" + str(self._W0) + ", other=" + str(other._W0) + ")"
+                diff_list.append(name + ".W0" + val_str)
             else:
-                diff_list.append(name+'.W0')
-        if other._R1 is not None and self._R1 is not None and isnan(other._R1) and isnan(self._R1):
+                diff_list.append(name + ".W0")
+        if (
+            other._R1 is not None
+            and self._R1 is not None
+            and isnan(other._R1)
+            and isnan(self._R1)
+        ):
             pass
         elif other._R1 != self._R1:
             if is_add_value:
-                val_str = ' (self='+str(self._R1)+', other='+str(other._R1)+')'
-                diff_list.append(name+'.R1'+val_str)
+                val_str = " (self=" + str(self._R1) + ", other=" + str(other._R1) + ")"
+                diff_list.append(name + ".R1" + val_str)
             else:
-                diff_list.append(name+'.R1')
+                diff_list.append(name + ".R1")
         # Filter ignore differences
-        diff_list = list(filter(lambda x : x not in ignore_list, diff_list))
+        diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
 
     def __sizeof__(self):
@@ -284,12 +325,16 @@ class HoleM54(Hole):
             How to handle ndarray (0: tolist, 1: copy, 2: nothing)
         keep_function : bool
             True to keep the function object, else return str
-        Optional keyword input parameter is for internal use only 
+        Optional keyword input parameter is for internal use only
         and may prevent json serializability.
         """
 
         # Get the properties inherited from Hole
-        HoleM54_dict = super(HoleM54, self).as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs)
+        HoleM54_dict = super(HoleM54, self).as_dict(
+            type_handle_ndarray=type_handle_ndarray,
+            keep_function=keep_function,
+            **kwargs
+        )
         HoleM54_dict["H0"] = self.H0
         HoleM54_dict["H1"] = self.H1
         HoleM54_dict["W0"] = self.W0
@@ -298,7 +343,6 @@ class HoleM54(Hole):
         # Overwrite the mother class name
         HoleM54_dict["__class__"] = "HoleM54"
         return HoleM54_dict
-
 
     def copy(self):
         """Creates a deepcopy of the object"""
@@ -319,7 +363,16 @@ class HoleM54(Hole):
             magnetization_dict_offset_val = self.magnetization_dict_offset.copy()
         Alpha0_val = self.Alpha0
         # Creates new object of the same type with the copied properties
-        obj_copy = type(self)(H0=H0_val,H1=H1_val,W0=W0_val,R1=R1_val,Zh=Zh_val,mat_void=mat_void_val,magnetization_dict_offset=magnetization_dict_offset_val,Alpha0=Alpha0_val)
+        obj_copy = type(self)(
+            H0=H0_val,
+            H1=H1_val,
+            W0=W0_val,
+            R1=R1_val,
+            Zh=Zh_val,
+            mat_void=mat_void_val,
+            magnetization_dict_offset=magnetization_dict_offset_val,
+            Alpha0=Alpha0_val,
+        )
         return obj_copy
 
     def _set_None(self):

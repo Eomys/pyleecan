@@ -119,7 +119,29 @@ class OutMag(FrozenClass):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, axes_dict=None, B=None, Tem=None, Tem_av=None, Tem_rip_norm=None, Tem_rip_pp=None, Phi_wind_stator=None, Phi_wind=None, emf=None, meshsolution=-1, logger_name="Pyleecan.Magnetics", internal=None, Rag=None, Pem_av=None, Slice=None, Tem_slice=None, Phi_wind_slice=None, Tem_norm=0.001, init_dict = None, init_str = None):
+    def __init__(
+        self,
+        axes_dict=None,
+        B=None,
+        Tem=None,
+        Tem_av=None,
+        Tem_rip_norm=None,
+        Tem_rip_pp=None,
+        Phi_wind_stator=None,
+        Phi_wind=None,
+        emf=None,
+        meshsolution=-1,
+        logger_name="Pyleecan.Magnetics",
+        internal=None,
+        Rag=None,
+        Pem_av=None,
+        Slice=None,
+        Tem_slice=None,
+        Phi_wind_slice=None,
+        Tem_norm=0.001,
+        init_dict=None,
+        init_str=None,
+    ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -203,35 +225,41 @@ class OutMag(FrozenClass):
             OutMag_str += "parent = None " + linesep
         else:
             OutMag_str += "parent = " + str(type(self.parent)) + " object" + linesep
-        OutMag_str += "axes_dict = "+ str(self.axes_dict) + linesep + linesep
-        OutMag_str += "B = "+ str(self.B) + linesep + linesep
-        OutMag_str += "Tem = "+ str(self.Tem) + linesep + linesep
+        OutMag_str += "axes_dict = " + str(self.axes_dict) + linesep + linesep
+        OutMag_str += "B = " + str(self.B) + linesep + linesep
+        OutMag_str += "Tem = " + str(self.Tem) + linesep + linesep
         OutMag_str += "Tem_av = " + str(self.Tem_av) + linesep
         OutMag_str += "Tem_rip_norm = " + str(self.Tem_rip_norm) + linesep
         OutMag_str += "Tem_rip_pp = " + str(self.Tem_rip_pp) + linesep
-        OutMag_str += "Phi_wind_stator = "+ str(self.Phi_wind_stator) + linesep + linesep
-        OutMag_str += "Phi_wind = "+ str(self.Phi_wind) + linesep + linesep
-        OutMag_str += "emf = "+ str(self.emf) + linesep + linesep
+        OutMag_str += (
+            "Phi_wind_stator = " + str(self.Phi_wind_stator) + linesep + linesep
+        )
+        OutMag_str += "Phi_wind = " + str(self.Phi_wind) + linesep + linesep
+        OutMag_str += "emf = " + str(self.emf) + linesep + linesep
         if self.meshsolution is not None:
-            tmp = self.meshsolution.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            OutMag_str += "meshsolution = "+ tmp
+            tmp = (
+                self.meshsolution.__str__()
+                .replace(linesep, linesep + "\t")
+                .rstrip("\t")
+            )
+            OutMag_str += "meshsolution = " + tmp
         else:
             OutMag_str += "meshsolution = None" + linesep + linesep
         OutMag_str += 'logger_name = "' + str(self.logger_name) + '"' + linesep
         if self.internal is not None:
             tmp = self.internal.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            OutMag_str += "internal = "+ tmp
+            OutMag_str += "internal = " + tmp
         else:
             OutMag_str += "internal = None" + linesep + linesep
         OutMag_str += "Rag = " + str(self.Rag) + linesep
         OutMag_str += "Pem_av = " + str(self.Pem_av) + linesep
         if self.Slice is not None:
             tmp = self.Slice.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            OutMag_str += "Slice = "+ tmp
+            OutMag_str += "Slice = " + tmp
         else:
             OutMag_str += "Slice = None" + linesep + linesep
-        OutMag_str += "Tem_slice = "+ str(self.Tem_slice) + linesep + linesep
-        OutMag_str += "Phi_wind_slice = "+ str(self.Phi_wind_slice) + linesep + linesep
+        OutMag_str += "Tem_slice = " + str(self.Tem_slice) + linesep + linesep
+        OutMag_str += "Phi_wind_slice = " + str(self.Phi_wind_slice) + linesep + linesep
         OutMag_str += "Tem_norm = " + str(self.Tem_norm) + linesep
         return OutMag_str
 
@@ -278,129 +306,296 @@ class OutMag(FrozenClass):
             return False
         return True
 
-    def compare(self, other, name='self', ignore_list=None, is_add_value=False):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
             ignore_list = list()
         if type(other) != type(self):
-            return ['type('+name+')']
+            return ["type(" + name + ")"]
         diff_list = list()
-        if (other.axes_dict is None and self.axes_dict is not None) or (other.axes_dict is not None and self.axes_dict is None):
-            diff_list.append(name+'.axes_dict None mismatch')
+        if (other.axes_dict is None and self.axes_dict is not None) or (
+            other.axes_dict is not None and self.axes_dict is None
+        ):
+            diff_list.append(name + ".axes_dict None mismatch")
         elif self.axes_dict is None:
             pass
         elif len(other.axes_dict) != len(self.axes_dict):
-            diff_list.append('len('+name+'axes_dict)')
+            diff_list.append("len(" + name + "axes_dict)")
         else:
             for key in self.axes_dict:
-                diff_list.extend(self.axes_dict[key].compare(other.axes_dict[key],name=name+'.axes_dict['+str(key)+']',ignore_list=ignore_list,is_add_value=is_add_value))
-        if (other.B is None and self.B is not None) or (other.B is not None and self.B is None):
-            diff_list.append(name+'.B None mismatch')
+                diff_list.extend(
+                    self.axes_dict[key].compare(
+                        other.axes_dict[key],
+                        name=name + ".axes_dict[" + str(key) + "]",
+                        ignore_list=ignore_list,
+                        is_add_value=is_add_value,
+                    )
+                )
+        if (other.B is None and self.B is not None) or (
+            other.B is not None and self.B is None
+        ):
+            diff_list.append(name + ".B None mismatch")
         elif self.B is not None:
-            diff_list.extend(self.B.compare(other.B,name=name+'.B',ignore_list=ignore_list,is_add_value=is_add_value))
-        if (other.Tem is None and self.Tem is not None) or (other.Tem is not None and self.Tem is None):
-            diff_list.append(name+'.Tem None mismatch')
+            diff_list.extend(
+                self.B.compare(
+                    other.B,
+                    name=name + ".B",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
+            )
+        if (other.Tem is None and self.Tem is not None) or (
+            other.Tem is not None and self.Tem is None
+        ):
+            diff_list.append(name + ".Tem None mismatch")
         elif self.Tem is not None:
-            diff_list.extend(self.Tem.compare(other.Tem,name=name+'.Tem',ignore_list=ignore_list,is_add_value=is_add_value))
-        if other._Tem_av is not None and self._Tem_av is not None and isnan(other._Tem_av) and isnan(self._Tem_av):
+            diff_list.extend(
+                self.Tem.compare(
+                    other.Tem,
+                    name=name + ".Tem",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
+            )
+        if (
+            other._Tem_av is not None
+            and self._Tem_av is not None
+            and isnan(other._Tem_av)
+            and isnan(self._Tem_av)
+        ):
             pass
         elif other._Tem_av != self._Tem_av:
             if is_add_value:
-                val_str = ' (self='+str(self._Tem_av)+', other='+str(other._Tem_av)+')'
-                diff_list.append(name+'.Tem_av'+val_str)
+                val_str = (
+                    " (self="
+                    + str(self._Tem_av)
+                    + ", other="
+                    + str(other._Tem_av)
+                    + ")"
+                )
+                diff_list.append(name + ".Tem_av" + val_str)
             else:
-                diff_list.append(name+'.Tem_av')
-        if other._Tem_rip_norm is not None and self._Tem_rip_norm is not None and isnan(other._Tem_rip_norm) and isnan(self._Tem_rip_norm):
+                diff_list.append(name + ".Tem_av")
+        if (
+            other._Tem_rip_norm is not None
+            and self._Tem_rip_norm is not None
+            and isnan(other._Tem_rip_norm)
+            and isnan(self._Tem_rip_norm)
+        ):
             pass
         elif other._Tem_rip_norm != self._Tem_rip_norm:
             if is_add_value:
-                val_str = ' (self='+str(self._Tem_rip_norm)+', other='+str(other._Tem_rip_norm)+')'
-                diff_list.append(name+'.Tem_rip_norm'+val_str)
+                val_str = (
+                    " (self="
+                    + str(self._Tem_rip_norm)
+                    + ", other="
+                    + str(other._Tem_rip_norm)
+                    + ")"
+                )
+                diff_list.append(name + ".Tem_rip_norm" + val_str)
             else:
-                diff_list.append(name+'.Tem_rip_norm')
-        if other._Tem_rip_pp is not None and self._Tem_rip_pp is not None and isnan(other._Tem_rip_pp) and isnan(self._Tem_rip_pp):
+                diff_list.append(name + ".Tem_rip_norm")
+        if (
+            other._Tem_rip_pp is not None
+            and self._Tem_rip_pp is not None
+            and isnan(other._Tem_rip_pp)
+            and isnan(self._Tem_rip_pp)
+        ):
             pass
         elif other._Tem_rip_pp != self._Tem_rip_pp:
             if is_add_value:
-                val_str = ' (self='+str(self._Tem_rip_pp)+', other='+str(other._Tem_rip_pp)+')'
-                diff_list.append(name+'.Tem_rip_pp'+val_str)
+                val_str = (
+                    " (self="
+                    + str(self._Tem_rip_pp)
+                    + ", other="
+                    + str(other._Tem_rip_pp)
+                    + ")"
+                )
+                diff_list.append(name + ".Tem_rip_pp" + val_str)
             else:
-                diff_list.append(name+'.Tem_rip_pp')
-        if (other.Phi_wind_stator is None and self.Phi_wind_stator is not None) or (other.Phi_wind_stator is not None and self.Phi_wind_stator is None):
-            diff_list.append(name+'.Phi_wind_stator None mismatch')
+                diff_list.append(name + ".Tem_rip_pp")
+        if (other.Phi_wind_stator is None and self.Phi_wind_stator is not None) or (
+            other.Phi_wind_stator is not None and self.Phi_wind_stator is None
+        ):
+            diff_list.append(name + ".Phi_wind_stator None mismatch")
         elif self.Phi_wind_stator is not None:
-            diff_list.extend(self.Phi_wind_stator.compare(other.Phi_wind_stator,name=name+'.Phi_wind_stator',ignore_list=ignore_list,is_add_value=is_add_value))
-        if (other.Phi_wind is None and self.Phi_wind is not None) or (other.Phi_wind is not None and self.Phi_wind is None):
-            diff_list.append(name+'.Phi_wind None mismatch')
+            diff_list.extend(
+                self.Phi_wind_stator.compare(
+                    other.Phi_wind_stator,
+                    name=name + ".Phi_wind_stator",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
+            )
+        if (other.Phi_wind is None and self.Phi_wind is not None) or (
+            other.Phi_wind is not None and self.Phi_wind is None
+        ):
+            diff_list.append(name + ".Phi_wind None mismatch")
         elif self.Phi_wind is None:
             pass
         elif len(other.Phi_wind) != len(self.Phi_wind):
-            diff_list.append('len('+name+'Phi_wind)')
+            diff_list.append("len(" + name + "Phi_wind)")
         else:
             for key in self.Phi_wind:
-                diff_list.extend(self.Phi_wind[key].compare(other.Phi_wind[key],name=name+'.Phi_wind['+str(key)+']',ignore_list=ignore_list,is_add_value=is_add_value))
-        if (other.emf is None and self.emf is not None) or (other.emf is not None and self.emf is None):
-            diff_list.append(name+'.emf None mismatch')
+                diff_list.extend(
+                    self.Phi_wind[key].compare(
+                        other.Phi_wind[key],
+                        name=name + ".Phi_wind[" + str(key) + "]",
+                        ignore_list=ignore_list,
+                        is_add_value=is_add_value,
+                    )
+                )
+        if (other.emf is None and self.emf is not None) or (
+            other.emf is not None and self.emf is None
+        ):
+            diff_list.append(name + ".emf None mismatch")
         elif self.emf is not None:
-            diff_list.extend(self.emf.compare(other.emf,name=name+'.emf',ignore_list=ignore_list,is_add_value=is_add_value))
-        if (other.meshsolution is None and self.meshsolution is not None) or (other.meshsolution is not None and self.meshsolution is None):
-            diff_list.append(name+'.meshsolution None mismatch')
+            diff_list.extend(
+                self.emf.compare(
+                    other.emf,
+                    name=name + ".emf",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
+            )
+        if (other.meshsolution is None and self.meshsolution is not None) or (
+            other.meshsolution is not None and self.meshsolution is None
+        ):
+            diff_list.append(name + ".meshsolution None mismatch")
         elif self.meshsolution is not None:
-            diff_list.extend(self.meshsolution.compare(other.meshsolution,name=name+'.meshsolution',ignore_list=ignore_list,is_add_value=is_add_value))
+            diff_list.extend(
+                self.meshsolution.compare(
+                    other.meshsolution,
+                    name=name + ".meshsolution",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
+            )
         if other._logger_name != self._logger_name:
             if is_add_value:
-                val_str = ' (self='+str(self._logger_name)+', other='+str(other._logger_name)+')'
-                diff_list.append(name+'.logger_name'+val_str)
+                val_str = (
+                    " (self="
+                    + str(self._logger_name)
+                    + ", other="
+                    + str(other._logger_name)
+                    + ")"
+                )
+                diff_list.append(name + ".logger_name" + val_str)
             else:
-                diff_list.append(name+'.logger_name')
-        if (other.internal is None and self.internal is not None) or (other.internal is not None and self.internal is None):
-            diff_list.append(name+'.internal None mismatch')
+                diff_list.append(name + ".logger_name")
+        if (other.internal is None and self.internal is not None) or (
+            other.internal is not None and self.internal is None
+        ):
+            diff_list.append(name + ".internal None mismatch")
         elif self.internal is not None:
-            diff_list.extend(self.internal.compare(other.internal,name=name+'.internal',ignore_list=ignore_list,is_add_value=is_add_value))
-        if other._Rag is not None and self._Rag is not None and isnan(other._Rag) and isnan(self._Rag):
+            diff_list.extend(
+                self.internal.compare(
+                    other.internal,
+                    name=name + ".internal",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
+            )
+        if (
+            other._Rag is not None
+            and self._Rag is not None
+            and isnan(other._Rag)
+            and isnan(self._Rag)
+        ):
             pass
         elif other._Rag != self._Rag:
             if is_add_value:
-                val_str = ' (self='+str(self._Rag)+', other='+str(other._Rag)+')'
-                diff_list.append(name+'.Rag'+val_str)
+                val_str = (
+                    " (self=" + str(self._Rag) + ", other=" + str(other._Rag) + ")"
+                )
+                diff_list.append(name + ".Rag" + val_str)
             else:
-                diff_list.append(name+'.Rag')
-        if other._Pem_av is not None and self._Pem_av is not None and isnan(other._Pem_av) and isnan(self._Pem_av):
+                diff_list.append(name + ".Rag")
+        if (
+            other._Pem_av is not None
+            and self._Pem_av is not None
+            and isnan(other._Pem_av)
+            and isnan(self._Pem_av)
+        ):
             pass
         elif other._Pem_av != self._Pem_av:
             if is_add_value:
-                val_str = ' (self='+str(self._Pem_av)+', other='+str(other._Pem_av)+')'
-                diff_list.append(name+'.Pem_av'+val_str)
+                val_str = (
+                    " (self="
+                    + str(self._Pem_av)
+                    + ", other="
+                    + str(other._Pem_av)
+                    + ")"
+                )
+                diff_list.append(name + ".Pem_av" + val_str)
             else:
-                diff_list.append(name+'.Pem_av')
-        if (other.Slice is None and self.Slice is not None) or (other.Slice is not None and self.Slice is None):
-            diff_list.append(name+'.Slice None mismatch')
+                diff_list.append(name + ".Pem_av")
+        if (other.Slice is None and self.Slice is not None) or (
+            other.Slice is not None and self.Slice is None
+        ):
+            diff_list.append(name + ".Slice None mismatch")
         elif self.Slice is not None:
-            diff_list.extend(self.Slice.compare(other.Slice,name=name+'.Slice',ignore_list=ignore_list,is_add_value=is_add_value))
-        if (other.Tem_slice is None and self.Tem_slice is not None) or (other.Tem_slice is not None and self.Tem_slice is None):
-            diff_list.append(name+'.Tem_slice None mismatch')
+            diff_list.extend(
+                self.Slice.compare(
+                    other.Slice,
+                    name=name + ".Slice",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
+            )
+        if (other.Tem_slice is None and self.Tem_slice is not None) or (
+            other.Tem_slice is not None and self.Tem_slice is None
+        ):
+            diff_list.append(name + ".Tem_slice None mismatch")
         elif self.Tem_slice is not None:
-            diff_list.extend(self.Tem_slice.compare(other.Tem_slice,name=name+'.Tem_slice',ignore_list=ignore_list,is_add_value=is_add_value))
-        if (other.Phi_wind_slice is None and self.Phi_wind_slice is not None) or (other.Phi_wind_slice is not None and self.Phi_wind_slice is None):
-            diff_list.append(name+'.Phi_wind_slice None mismatch')
+            diff_list.extend(
+                self.Tem_slice.compare(
+                    other.Tem_slice,
+                    name=name + ".Tem_slice",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
+            )
+        if (other.Phi_wind_slice is None and self.Phi_wind_slice is not None) or (
+            other.Phi_wind_slice is not None and self.Phi_wind_slice is None
+        ):
+            diff_list.append(name + ".Phi_wind_slice None mismatch")
         elif self.Phi_wind_slice is None:
             pass
         elif len(other.Phi_wind_slice) != len(self.Phi_wind_slice):
-            diff_list.append('len('+name+'Phi_wind_slice)')
+            diff_list.append("len(" + name + "Phi_wind_slice)")
         else:
             for key in self.Phi_wind_slice:
-                diff_list.extend(self.Phi_wind_slice[key].compare(other.Phi_wind_slice[key],name=name+'.Phi_wind_slice['+str(key)+']',ignore_list=ignore_list,is_add_value=is_add_value))
-        if other._Tem_norm is not None and self._Tem_norm is not None and isnan(other._Tem_norm) and isnan(self._Tem_norm):
+                diff_list.extend(
+                    self.Phi_wind_slice[key].compare(
+                        other.Phi_wind_slice[key],
+                        name=name + ".Phi_wind_slice[" + str(key) + "]",
+                        ignore_list=ignore_list,
+                        is_add_value=is_add_value,
+                    )
+                )
+        if (
+            other._Tem_norm is not None
+            and self._Tem_norm is not None
+            and isnan(other._Tem_norm)
+            and isnan(self._Tem_norm)
+        ):
             pass
         elif other._Tem_norm != self._Tem_norm:
             if is_add_value:
-                val_str = ' (self='+str(self._Tem_norm)+', other='+str(other._Tem_norm)+')'
-                diff_list.append(name+'.Tem_norm'+val_str)
+                val_str = (
+                    " (self="
+                    + str(self._Tem_norm)
+                    + ", other="
+                    + str(other._Tem_norm)
+                    + ")"
+                )
+                diff_list.append(name + ".Tem_norm" + val_str)
             else:
-                diff_list.append(name+'.Tem_norm')
+                diff_list.append(name + ".Tem_norm")
         # Filter ignore differences
-        diff_list = list(filter(lambda x : x not in ignore_list, diff_list))
+        diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
 
     def __sizeof__(self):
@@ -440,7 +635,7 @@ class OutMag(FrozenClass):
             How to handle ndarray (0: tolist, 1: copy, 2: nothing)
         keep_function : bool
             True to keep the function object, else return str
-        Optional keyword input parameter is for internal use only 
+        Optional keyword input parameter is for internal use only
         and may prevent json serializability.
         """
 
@@ -451,70 +646,113 @@ class OutMag(FrozenClass):
             OutMag_dict["axes_dict"] = dict()
             for key, obj in self.axes_dict.items():
                 if obj is not None:
-                    OutMag_dict["axes_dict"][key] = obj.as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs)
+                    OutMag_dict["axes_dict"][key] = obj.as_dict(
+                        type_handle_ndarray=type_handle_ndarray,
+                        keep_function=keep_function,
+                        **kwargs
+                    )
                 else:
                     OutMag_dict["axes_dict"][key] = None
         if self.B is None:
             OutMag_dict["B"] = None
         else:
-            OutMag_dict["B"] = self.B.as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs)
+            OutMag_dict["B"] = self.B.as_dict(
+                type_handle_ndarray=type_handle_ndarray,
+                keep_function=keep_function,
+                **kwargs
+            )
         if self.Tem is None:
             OutMag_dict["Tem"] = None
         else:
-            OutMag_dict["Tem"] = self.Tem.as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs)
+            OutMag_dict["Tem"] = self.Tem.as_dict(
+                type_handle_ndarray=type_handle_ndarray,
+                keep_function=keep_function,
+                **kwargs
+            )
         OutMag_dict["Tem_av"] = self.Tem_av
         OutMag_dict["Tem_rip_norm"] = self.Tem_rip_norm
         OutMag_dict["Tem_rip_pp"] = self.Tem_rip_pp
         if self.Phi_wind_stator is None:
             OutMag_dict["Phi_wind_stator"] = None
         else:
-            OutMag_dict["Phi_wind_stator"] = self.Phi_wind_stator.as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs)
+            OutMag_dict["Phi_wind_stator"] = self.Phi_wind_stator.as_dict(
+                type_handle_ndarray=type_handle_ndarray,
+                keep_function=keep_function,
+                **kwargs
+            )
         if self.Phi_wind is None:
             OutMag_dict["Phi_wind"] = None
         else:
             OutMag_dict["Phi_wind"] = dict()
             for key, obj in self.Phi_wind.items():
                 if obj is not None:
-                    OutMag_dict["Phi_wind"][key] = obj.as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs)
+                    OutMag_dict["Phi_wind"][key] = obj.as_dict(
+                        type_handle_ndarray=type_handle_ndarray,
+                        keep_function=keep_function,
+                        **kwargs
+                    )
                 else:
                     OutMag_dict["Phi_wind"][key] = None
         if self.emf is None:
             OutMag_dict["emf"] = None
         else:
-            OutMag_dict["emf"] = self.emf.as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs)
+            OutMag_dict["emf"] = self.emf.as_dict(
+                type_handle_ndarray=type_handle_ndarray,
+                keep_function=keep_function,
+                **kwargs
+            )
         if self.meshsolution is None:
             OutMag_dict["meshsolution"] = None
         else:
-            OutMag_dict["meshsolution"] = self.meshsolution.as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs)
+            OutMag_dict["meshsolution"] = self.meshsolution.as_dict(
+                type_handle_ndarray=type_handle_ndarray,
+                keep_function=keep_function,
+                **kwargs
+            )
         OutMag_dict["logger_name"] = self.logger_name
         if self.internal is None:
             OutMag_dict["internal"] = None
         else:
-            OutMag_dict["internal"] = self.internal.as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs)
+            OutMag_dict["internal"] = self.internal.as_dict(
+                type_handle_ndarray=type_handle_ndarray,
+                keep_function=keep_function,
+                **kwargs
+            )
         OutMag_dict["Rag"] = self.Rag
         OutMag_dict["Pem_av"] = self.Pem_av
         if self.Slice is None:
             OutMag_dict["Slice"] = None
         else:
-            OutMag_dict["Slice"] = self.Slice.as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs)
+            OutMag_dict["Slice"] = self.Slice.as_dict(
+                type_handle_ndarray=type_handle_ndarray,
+                keep_function=keep_function,
+                **kwargs
+            )
         if self.Tem_slice is None:
             OutMag_dict["Tem_slice"] = None
         else:
-            OutMag_dict["Tem_slice"] = self.Tem_slice.as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs)
+            OutMag_dict["Tem_slice"] = self.Tem_slice.as_dict(
+                type_handle_ndarray=type_handle_ndarray,
+                keep_function=keep_function,
+                **kwargs
+            )
         if self.Phi_wind_slice is None:
             OutMag_dict["Phi_wind_slice"] = None
         else:
             OutMag_dict["Phi_wind_slice"] = dict()
             for key, obj in self.Phi_wind_slice.items():
                 if obj is not None:
-                    OutMag_dict["Phi_wind_slice"][key] = obj.as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs)
+                    OutMag_dict["Phi_wind_slice"][key] = obj.as_dict(
+                        type_handle_ndarray=type_handle_ndarray,
+                        keep_function=keep_function,
+                        **kwargs
+                    )
                 else:
                     OutMag_dict["Phi_wind_slice"][key] = None
         OutMag_dict["Tem_norm"] = self.Tem_norm
         # The class name is added to the dict for deserialisation purpose
         OutMag_dict["__class__"] = "OutMag"
         return OutMag_dict
-
 
     def copy(self):
         """Creates a deepcopy of the object"""
@@ -578,7 +816,26 @@ class OutMag(FrozenClass):
                 Phi_wind_slice_val[key] = obj.copy()
         Tem_norm_val = self.Tem_norm
         # Creates new object of the same type with the copied properties
-        obj_copy = type(self)(axes_dict=axes_dict_val,B=B_val,Tem=Tem_val,Tem_av=Tem_av_val,Tem_rip_norm=Tem_rip_norm_val,Tem_rip_pp=Tem_rip_pp_val,Phi_wind_stator=Phi_wind_stator_val,Phi_wind=Phi_wind_val,emf=emf_val,meshsolution=meshsolution_val,logger_name=logger_name_val,internal=internal_val,Rag=Rag_val,Pem_av=Pem_av_val,Slice=Slice_val,Tem_slice=Tem_slice_val,Phi_wind_slice=Phi_wind_slice_val,Tem_norm=Tem_norm_val)
+        obj_copy = type(self)(
+            axes_dict=axes_dict_val,
+            B=B_val,
+            Tem=Tem_val,
+            Tem_av=Tem_av_val,
+            Tem_rip_norm=Tem_rip_norm_val,
+            Tem_rip_pp=Tem_rip_pp_val,
+            Phi_wind_stator=Phi_wind_stator_val,
+            Phi_wind=Phi_wind_val,
+            emf=emf_val,
+            meshsolution=meshsolution_val,
+            logger_name=logger_name_val,
+            internal=internal_val,
+            Rag=Rag_val,
+            Pem_av=Pem_av_val,
+            Slice=Slice_val,
+            Tem_slice=Tem_slice_val,
+            Phi_wind_slice=Phi_wind_slice_val,
+            Tem_norm=Tem_norm_val,
+        )
         return obj_copy
 
     def _set_None(self):
@@ -622,11 +879,15 @@ class OutMag(FrozenClass):
                     try:
                         obj = load_init_dict(obj)[1]
                     except Exception as e:
-                        self.get_logger().error('Error while loading '+obj+', setting None instead')
+                        self.get_logger().error(
+                            "Error while loading " + obj + ", setting None instead"
+                        )
                         obj = None
                         value[key] = None
                 if type(obj) is dict:
-                    class_obj = import_class('SciDataTool.Classes', obj.get('__class__'), 'axes_dict')
+                    class_obj = import_class(
+                        "SciDataTool.Classes", obj.get("__class__"), "axes_dict"
+                    )
                     value[key] = class_obj(init_dict=obj)
         if type(value) is int and value == -1:
             value = dict()
@@ -652,10 +913,12 @@ class OutMag(FrozenClass):
             try:
                 value = load_init_dict(value)[1]
             except Exception as e:
-                self.get_logger().error('Error while loading '+value+', setting None instead')
+                self.get_logger().error(
+                    "Error while loading " + value + ", setting None instead"
+                )
                 value = None
-        if isinstance(value, dict) and '__class__' in value:
-            class_obj = import_class('SciDataTool.Classes', value.get('__class__'), 'B')
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class("SciDataTool.Classes", value.get("__class__"), "B")
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
             value = VectorField()
@@ -681,10 +944,14 @@ class OutMag(FrozenClass):
             try:
                 value = load_init_dict(value)[1]
             except Exception as e:
-                self.get_logger().error('Error while loading '+value+', setting None instead')
+                self.get_logger().error(
+                    "Error while loading " + value + ", setting None instead"
+                )
                 value = None
-        if isinstance(value, dict) and '__class__' in value:
-            class_obj = import_class('SciDataTool.Classes', value.get('__class__'), 'Tem')
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class(
+                "SciDataTool.Classes", value.get("__class__"), "Tem"
+            )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
             value = DataND()
@@ -764,10 +1031,14 @@ class OutMag(FrozenClass):
             try:
                 value = load_init_dict(value)[1]
             except Exception as e:
-                self.get_logger().error('Error while loading '+value+', setting None instead')
+                self.get_logger().error(
+                    "Error while loading " + value + ", setting None instead"
+                )
                 value = None
-        if isinstance(value, dict) and '__class__' in value:
-            class_obj = import_class('SciDataTool.Classes', value.get('__class__'), 'Phi_wind_stator')
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class(
+                "SciDataTool.Classes", value.get("__class__"), "Phi_wind_stator"
+            )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
             value = DataND()
@@ -799,11 +1070,15 @@ class OutMag(FrozenClass):
                     try:
                         obj = load_init_dict(obj)[1]
                     except Exception as e:
-                        self.get_logger().error('Error while loading '+obj+', setting None instead')
+                        self.get_logger().error(
+                            "Error while loading " + obj + ", setting None instead"
+                        )
                         obj = None
                         value[key] = None
                 if type(obj) is dict:
-                    class_obj = import_class('SciDataTool.Classes', obj.get('__class__'), 'Phi_wind')
+                    class_obj = import_class(
+                        "SciDataTool.Classes", obj.get("__class__"), "Phi_wind"
+                    )
                     value[key] = class_obj(init_dict=obj)
         if type(value) is int and value == -1:
             value = dict()
@@ -829,10 +1104,14 @@ class OutMag(FrozenClass):
             try:
                 value = load_init_dict(value)[1]
             except Exception as e:
-                self.get_logger().error('Error while loading '+value+', setting None instead')
+                self.get_logger().error(
+                    "Error while loading " + value + ", setting None instead"
+                )
                 value = None
-        if isinstance(value, dict) and '__class__' in value:
-            class_obj = import_class('SciDataTool.Classes', value.get('__class__'), 'emf')
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class(
+                "SciDataTool.Classes", value.get("__class__"), "emf"
+            )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
             value = DataND()
@@ -858,19 +1137,26 @@ class OutMag(FrozenClass):
             try:
                 value = load_init_dict(value)[1]
             except Exception as e:
-                self.get_logger().error('Error while loading '+value+', setting None instead')
+                self.get_logger().error(
+                    "Error while loading " + value + ", setting None instead"
+                )
                 value = None
-        if isinstance(value, dict) and '__class__' in value:
-            class_obj = import_class('pyleecan.Classes', value.get('__class__'), 'meshsolution')
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class(
+                "pyleecan.Classes", value.get("__class__"), "meshsolution"
+            )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
-            MeshSolution = import_class('pyleecan.Classes', 'MeshSolution', 'meshsolution')
+            MeshSolution = import_class(
+                "pyleecan.Classes", "MeshSolution", "meshsolution"
+            )
             value = MeshSolution()
         check_var("meshsolution", value, "MeshSolution")
         self._meshsolution = value
 
         if self._meshsolution is not None:
             self._meshsolution.parent = self
+
     meshsolution = property(
         fget=_get_meshsolution,
         fset=_set_meshsolution,
@@ -908,19 +1194,24 @@ class OutMag(FrozenClass):
             try:
                 value = load_init_dict(value)[1]
             except Exception as e:
-                self.get_logger().error('Error while loading '+value+', setting None instead')
+                self.get_logger().error(
+                    "Error while loading " + value + ", setting None instead"
+                )
                 value = None
-        if isinstance(value, dict) and '__class__' in value:
-            class_obj = import_class('pyleecan.Classes', value.get('__class__'), 'internal')
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class(
+                "pyleecan.Classes", value.get("__class__"), "internal"
+            )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
-            OutInternal = import_class('pyleecan.Classes', 'OutInternal', 'internal')
+            OutInternal = import_class("pyleecan.Classes", "OutInternal", "internal")
             value = OutInternal()
         check_var("internal", value, "OutInternal")
         self._internal = value
 
         if self._internal is not None:
             self._internal.parent = self
+
     internal = property(
         fget=_get_internal,
         fset=_set_internal,
@@ -976,19 +1267,24 @@ class OutMag(FrozenClass):
             try:
                 value = load_init_dict(value)[1]
             except Exception as e:
-                self.get_logger().error('Error while loading '+value+', setting None instead')
+                self.get_logger().error(
+                    "Error while loading " + value + ", setting None instead"
+                )
                 value = None
-        if isinstance(value, dict) and '__class__' in value:
-            class_obj = import_class('pyleecan.Classes', value.get('__class__'), 'Slice')
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class(
+                "pyleecan.Classes", value.get("__class__"), "Slice"
+            )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
-            SliceModel = import_class('pyleecan.Classes', 'SliceModel', 'Slice')
+            SliceModel = import_class("pyleecan.Classes", "SliceModel", "Slice")
             value = SliceModel()
         check_var("Slice", value, "SliceModel")
         self._Slice = value
 
         if self._Slice is not None:
             self._Slice.parent = self
+
     Slice = property(
         fget=_get_Slice,
         fset=_set_Slice,
@@ -1008,10 +1304,14 @@ class OutMag(FrozenClass):
             try:
                 value = load_init_dict(value)[1]
             except Exception as e:
-                self.get_logger().error('Error while loading '+value+', setting None instead')
+                self.get_logger().error(
+                    "Error while loading " + value + ", setting None instead"
+                )
                 value = None
-        if isinstance(value, dict) and '__class__' in value:
-            class_obj = import_class('SciDataTool.Classes', value.get('__class__'), 'Tem_slice')
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class(
+                "SciDataTool.Classes", value.get("__class__"), "Tem_slice"
+            )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
             value = DataND()
@@ -1043,11 +1343,15 @@ class OutMag(FrozenClass):
                     try:
                         obj = load_init_dict(obj)[1]
                     except Exception as e:
-                        self.get_logger().error('Error while loading '+obj+', setting None instead')
+                        self.get_logger().error(
+                            "Error while loading " + obj + ", setting None instead"
+                        )
                         obj = None
                         value[key] = None
                 if type(obj) is dict:
-                    class_obj = import_class('SciDataTool.Classes', obj.get('__class__'), 'Phi_wind_slice')
+                    class_obj = import_class(
+                        "SciDataTool.Classes", obj.get("__class__"), "Phi_wind_slice"
+                    )
                     value[key] = class_obj(init_dict=obj)
         if type(value) is int and value == -1:
             value = dict()

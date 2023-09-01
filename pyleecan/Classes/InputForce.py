@@ -49,7 +49,19 @@ class InputForce(Input):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, P=None, time=None, angle=None, Nt_tot=2048, Nrev=None, Na_tot=2048, OP=None, t_final=None, init_dict = None, init_str = None):
+    def __init__(
+        self,
+        P=None,
+        time=None,
+        angle=None,
+        Nt_tot=2048,
+        Nrev=None,
+        Na_tot=2048,
+        OP=None,
+        t_final=None,
+        init_dict=None,
+        init_str=None,
+    ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -84,7 +96,15 @@ class InputForce(Input):
         # Set the properties (value check and convertion are done in setter)
         self.P = P
         # Call Input init
-        super(InputForce, self).__init__(time=time, angle=angle, Nt_tot=Nt_tot, Nrev=Nrev, Na_tot=Na_tot, OP=OP, t_final=t_final)
+        super(InputForce, self).__init__(
+            time=time,
+            angle=angle,
+            Nt_tot=Nt_tot,
+            Nrev=Nrev,
+            Na_tot=Na_tot,
+            OP=OP,
+            t_final=t_final,
+        )
         # The class is frozen (in Input init), for now it's impossible to
         # add new properties
 
@@ -96,7 +116,7 @@ class InputForce(Input):
         InputForce_str += super(InputForce, self).__str__()
         if self.P is not None:
             tmp = self.P.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            InputForce_str += "P = "+ tmp
+            InputForce_str += "P = " + tmp
         else:
             InputForce_str += "P = None" + linesep + linesep
         return InputForce_str
@@ -114,23 +134,36 @@ class InputForce(Input):
             return False
         return True
 
-    def compare(self, other, name='self', ignore_list=None, is_add_value=False):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
             ignore_list = list()
         if type(other) != type(self):
-            return ['type('+name+')']
+            return ["type(" + name + ")"]
         diff_list = list()
 
         # Check the properties inherited from Input
-        diff_list.extend(super(InputForce, self).compare(other,name=name, ignore_list=ignore_list, is_add_value=is_add_value))
-        if (other.P is None and self.P is not None) or (other.P is not None and self.P is None):
-            diff_list.append(name+'.P None mismatch')
+        diff_list.extend(
+            super(InputForce, self).compare(
+                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
+            )
+        )
+        if (other.P is None and self.P is not None) or (
+            other.P is not None and self.P is None
+        ):
+            diff_list.append(name + ".P None mismatch")
         elif self.P is not None:
-            diff_list.extend(self.P.compare(other.P,name=name+'.P',ignore_list=ignore_list,is_add_value=is_add_value))
+            diff_list.extend(
+                self.P.compare(
+                    other.P,
+                    name=name + ".P",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
+            )
         # Filter ignore differences
-        diff_list = list(filter(lambda x : x not in ignore_list, diff_list))
+        diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
 
     def __sizeof__(self):
@@ -150,21 +183,28 @@ class InputForce(Input):
             How to handle ndarray (0: tolist, 1: copy, 2: nothing)
         keep_function : bool
             True to keep the function object, else return str
-        Optional keyword input parameter is for internal use only 
+        Optional keyword input parameter is for internal use only
         and may prevent json serializability.
         """
 
         # Get the properties inherited from Input
-        InputForce_dict = super(InputForce, self).as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs)
+        InputForce_dict = super(InputForce, self).as_dict(
+            type_handle_ndarray=type_handle_ndarray,
+            keep_function=keep_function,
+            **kwargs
+        )
         if self.P is None:
             InputForce_dict["P"] = None
         else:
-            InputForce_dict["P"] = self.P.as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs)
+            InputForce_dict["P"] = self.P.as_dict(
+                type_handle_ndarray=type_handle_ndarray,
+                keep_function=keep_function,
+                **kwargs
+            )
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         InputForce_dict["__class__"] = "InputForce"
         return InputForce_dict
-
 
     def copy(self):
         """Creates a deepcopy of the object"""
@@ -191,7 +231,16 @@ class InputForce(Input):
             OP_val = self.OP.copy()
         t_final_val = self.t_final
         # Creates new object of the same type with the copied properties
-        obj_copy = type(self)(P=P_val,time=time_val,angle=angle_val,Nt_tot=Nt_tot_val,Nrev=Nrev_val,Na_tot=Na_tot_val,OP=OP_val,t_final=t_final_val)
+        obj_copy = type(self)(
+            P=P_val,
+            time=time_val,
+            angle=angle_val,
+            Nt_tot=Nt_tot_val,
+            Nrev=Nrev_val,
+            Na_tot=Na_tot_val,
+            OP=OP_val,
+            t_final=t_final_val,
+        )
         return obj_copy
 
     def _set_None(self):
@@ -212,19 +261,24 @@ class InputForce(Input):
             try:
                 value = load_init_dict(value)[1]
             except Exception as e:
-                self.get_logger().error('Error while loading '+value+', setting None instead')
+                self.get_logger().error(
+                    "Error while loading " + value + ", setting None instead"
+                )
                 value = None
-        if isinstance(value, dict) and '__class__' in value:
-            class_obj = import_class('pyleecan.Classes', value.get('__class__'), 'P')
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class("pyleecan.Classes", value.get("__class__"), "P")
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
-            ImportVectorField = import_class('pyleecan.Classes', 'ImportVectorField', 'P')
+            ImportVectorField = import_class(
+                "pyleecan.Classes", "ImportVectorField", "P"
+            )
             value = ImportVectorField()
         check_var("P", value, "ImportVectorField")
         self._P = value
 
         if self._P is not None:
             self._P.parent = self
+
     P = property(
         fget=_get_P,
         fset=_set_P,

@@ -79,7 +79,19 @@ class SliceModel(FrozenClass):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, type_distribution=None, Nslices=5, z_list=None, angle_rotor=None, angle_stator=None, L=None, is_step=None, is_skew=None, init_dict = None, init_str = None):
+    def __init__(
+        self,
+        type_distribution=None,
+        Nslices=5,
+        z_list=None,
+        angle_rotor=None,
+        angle_stator=None,
+        L=None,
+        is_step=None,
+        is_skew=None,
+        init_dict=None,
+        init_str=None,
+    ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -133,11 +145,30 @@ class SliceModel(FrozenClass):
             SliceModel_str += "parent = None " + linesep
         else:
             SliceModel_str += "parent = " + str(type(self.parent)) + " object" + linesep
-        SliceModel_str += 'type_distribution = "' + str(self.type_distribution) + '"' + linesep
+        SliceModel_str += (
+            'type_distribution = "' + str(self.type_distribution) + '"' + linesep
+        )
         SliceModel_str += "Nslices = " + str(self.Nslices) + linesep
-        SliceModel_str += "z_list = " + linesep + str(self.z_list).replace(linesep, linesep + "\t") + linesep
-        SliceModel_str += "angle_rotor = " + linesep + str(self.angle_rotor).replace(linesep, linesep + "\t") + linesep + linesep
-        SliceModel_str += "angle_stator = " + linesep + str(self.angle_stator).replace(linesep, linesep + "\t") + linesep + linesep
+        SliceModel_str += (
+            "z_list = "
+            + linesep
+            + str(self.z_list).replace(linesep, linesep + "\t")
+            + linesep
+        )
+        SliceModel_str += (
+            "angle_rotor = "
+            + linesep
+            + str(self.angle_rotor).replace(linesep, linesep + "\t")
+            + linesep
+            + linesep
+        )
+        SliceModel_str += (
+            "angle_stator = "
+            + linesep
+            + str(self.angle_stator).replace(linesep, linesep + "\t")
+            + linesep
+            + linesep
+        )
         SliceModel_str += "L = " + str(self.L) + linesep
         SliceModel_str += "is_step = " + str(self.is_step) + linesep
         SliceModel_str += "is_skew = " + str(self.is_skew) + linesep
@@ -166,58 +197,93 @@ class SliceModel(FrozenClass):
             return False
         return True
 
-    def compare(self, other, name='self', ignore_list=None, is_add_value=False):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
             ignore_list = list()
         if type(other) != type(self):
-            return ['type('+name+')']
+            return ["type(" + name + ")"]
         diff_list = list()
         if other._type_distribution != self._type_distribution:
             if is_add_value:
-                val_str = ' (self='+str(self._type_distribution)+', other='+str(other._type_distribution)+')'
-                diff_list.append(name+'.type_distribution'+val_str)
+                val_str = (
+                    " (self="
+                    + str(self._type_distribution)
+                    + ", other="
+                    + str(other._type_distribution)
+                    + ")"
+                )
+                diff_list.append(name + ".type_distribution" + val_str)
             else:
-                diff_list.append(name+'.type_distribution')
+                diff_list.append(name + ".type_distribution")
         if other._Nslices != self._Nslices:
             if is_add_value:
-                val_str = ' (self='+str(self._Nslices)+', other='+str(other._Nslices)+')'
-                diff_list.append(name+'.Nslices'+val_str)
+                val_str = (
+                    " (self="
+                    + str(self._Nslices)
+                    + ", other="
+                    + str(other._Nslices)
+                    + ")"
+                )
+                diff_list.append(name + ".Nslices" + val_str)
             else:
-                diff_list.append(name+'.Nslices')
+                diff_list.append(name + ".Nslices")
         if other._z_list != self._z_list:
             if is_add_value:
-                val_str = ' (self='+str(self._z_list)+', other='+str(other._z_list)+')'
-                diff_list.append(name+'.z_list'+val_str)
+                val_str = (
+                    " (self="
+                    + str(self._z_list)
+                    + ", other="
+                    + str(other._z_list)
+                    + ")"
+                )
+                diff_list.append(name + ".z_list" + val_str)
             else:
-                diff_list.append(name+'.z_list')
+                diff_list.append(name + ".z_list")
         if not array_equal(other.angle_rotor, self.angle_rotor):
-            diff_list.append(name+'.angle_rotor')
+            diff_list.append(name + ".angle_rotor")
         if not array_equal(other.angle_stator, self.angle_stator):
-            diff_list.append(name+'.angle_stator')
-        if other._L is not None and self._L is not None and isnan(other._L) and isnan(self._L):
+            diff_list.append(name + ".angle_stator")
+        if (
+            other._L is not None
+            and self._L is not None
+            and isnan(other._L)
+            and isnan(self._L)
+        ):
             pass
         elif other._L != self._L:
             if is_add_value:
-                val_str = ' (self='+str(self._L)+', other='+str(other._L)+')'
-                diff_list.append(name+'.L'+val_str)
+                val_str = " (self=" + str(self._L) + ", other=" + str(other._L) + ")"
+                diff_list.append(name + ".L" + val_str)
             else:
-                diff_list.append(name+'.L')
+                diff_list.append(name + ".L")
         if other._is_step != self._is_step:
             if is_add_value:
-                val_str = ' (self='+str(self._is_step)+', other='+str(other._is_step)+')'
-                diff_list.append(name+'.is_step'+val_str)
+                val_str = (
+                    " (self="
+                    + str(self._is_step)
+                    + ", other="
+                    + str(other._is_step)
+                    + ")"
+                )
+                diff_list.append(name + ".is_step" + val_str)
             else:
-                diff_list.append(name+'.is_step')
+                diff_list.append(name + ".is_step")
         if other._is_skew != self._is_skew:
             if is_add_value:
-                val_str = ' (self='+str(self._is_skew)+', other='+str(other._is_skew)+')'
-                diff_list.append(name+'.is_skew'+val_str)
+                val_str = (
+                    " (self="
+                    + str(self._is_skew)
+                    + ", other="
+                    + str(other._is_skew)
+                    + ")"
+                )
+                diff_list.append(name + ".is_skew" + val_str)
             else:
-                diff_list.append(name+'.is_skew')
+                diff_list.append(name + ".is_skew")
         # Filter ignore differences
-        diff_list = list(filter(lambda x : x not in ignore_list, diff_list))
+        diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
 
     def __sizeof__(self):
@@ -243,7 +309,7 @@ class SliceModel(FrozenClass):
             How to handle ndarray (0: tolist, 1: copy, 2: nothing)
         keep_function : bool
             True to keep the function object, else return str
-        Optional keyword input parameter is for internal use only 
+        Optional keyword input parameter is for internal use only
         and may prevent json serializability.
         """
 
@@ -256,32 +322,35 @@ class SliceModel(FrozenClass):
         if self.angle_rotor is None:
             SliceModel_dict["angle_rotor"] = None
         else:
-            if type_handle_ndarray==0:
+            if type_handle_ndarray == 0:
                 SliceModel_dict["angle_rotor"] = self.angle_rotor.tolist()
-            elif type_handle_ndarray==1:
+            elif type_handle_ndarray == 1:
                 SliceModel_dict["angle_rotor"] = self.angle_rotor.copy()
-            elif type_handle_ndarray==2:
+            elif type_handle_ndarray == 2:
                 SliceModel_dict["angle_rotor"] = self.angle_rotor
             else:
-                raise Exception ('Unknown type_handle_ndarray: '+str(type_handle_ndarray))
+                raise Exception(
+                    "Unknown type_handle_ndarray: " + str(type_handle_ndarray)
+                )
         if self.angle_stator is None:
             SliceModel_dict["angle_stator"] = None
         else:
-            if type_handle_ndarray==0:
+            if type_handle_ndarray == 0:
                 SliceModel_dict["angle_stator"] = self.angle_stator.tolist()
-            elif type_handle_ndarray==1:
+            elif type_handle_ndarray == 1:
                 SliceModel_dict["angle_stator"] = self.angle_stator.copy()
-            elif type_handle_ndarray==2:
+            elif type_handle_ndarray == 2:
                 SliceModel_dict["angle_stator"] = self.angle_stator
             else:
-                raise Exception ('Unknown type_handle_ndarray: '+str(type_handle_ndarray))
+                raise Exception(
+                    "Unknown type_handle_ndarray: " + str(type_handle_ndarray)
+                )
         SliceModel_dict["L"] = self.L
         SliceModel_dict["is_step"] = self.is_step
         SliceModel_dict["is_skew"] = self.is_skew
         # The class name is added to the dict for deserialisation purpose
         SliceModel_dict["__class__"] = "SliceModel"
         return SliceModel_dict
-
 
     def copy(self):
         """Creates a deepcopy of the object"""
@@ -305,7 +374,16 @@ class SliceModel(FrozenClass):
         is_step_val = self.is_step
         is_skew_val = self.is_skew
         # Creates new object of the same type with the copied properties
-        obj_copy = type(self)(type_distribution=type_distribution_val,Nslices=Nslices_val,z_list=z_list_val,angle_rotor=angle_rotor_val,angle_stator=angle_stator_val,L=L_val,is_step=is_step_val,is_skew=is_skew_val)
+        obj_copy = type(self)(
+            type_distribution=type_distribution_val,
+            Nslices=Nslices_val,
+            z_list=z_list_val,
+            angle_rotor=angle_rotor_val,
+            angle_stator=angle_stator_val,
+            L=L_val,
+            is_step=is_step_val,
+            is_skew=is_skew_val,
+        )
         return obj_copy
 
     def _set_None(self):

@@ -80,7 +80,19 @@ class SolutionMat(Solution):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, field=None, indice=None, axis_name=None, axis_size=None, type_cell="triangle", label=None, dimension=2, unit="", init_dict = None, init_str = None):
+    def __init__(
+        self,
+        field=None,
+        indice=None,
+        axis_name=None,
+        axis_size=None,
+        type_cell="triangle",
+        label=None,
+        dimension=2,
+        unit="",
+        init_dict=None,
+        init_str=None,
+    ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -118,7 +130,9 @@ class SolutionMat(Solution):
         self.axis_name = axis_name
         self.axis_size = axis_size
         # Call Solution init
-        super(SolutionMat, self).__init__(type_cell=type_cell, label=label, dimension=dimension, unit=unit)
+        super(SolutionMat, self).__init__(
+            type_cell=type_cell, label=label, dimension=dimension, unit=unit
+        )
         # The class is frozen (in Solution init), for now it's impossible to
         # add new properties
 
@@ -128,10 +142,32 @@ class SolutionMat(Solution):
         SolutionMat_str = ""
         # Get the properties inherited from Solution
         SolutionMat_str += super(SolutionMat, self).__str__()
-        SolutionMat_str += "field = " + linesep + str(self.field).replace(linesep, linesep + "\t") + linesep + linesep
-        SolutionMat_str += "indice = " + linesep + str(self.indice).replace(linesep, linesep + "\t") + linesep + linesep
-        SolutionMat_str += "axis_name = " + linesep + str(self.axis_name).replace(linesep, linesep + "\t") + linesep
-        SolutionMat_str += "axis_size = " + linesep + str(self.axis_size).replace(linesep, linesep + "\t") + linesep
+        SolutionMat_str += (
+            "field = "
+            + linesep
+            + str(self.field).replace(linesep, linesep + "\t")
+            + linesep
+            + linesep
+        )
+        SolutionMat_str += (
+            "indice = "
+            + linesep
+            + str(self.indice).replace(linesep, linesep + "\t")
+            + linesep
+            + linesep
+        )
+        SolutionMat_str += (
+            "axis_name = "
+            + linesep
+            + str(self.axis_name).replace(linesep, linesep + "\t")
+            + linesep
+        )
+        SolutionMat_str += (
+            "axis_size = "
+            + linesep
+            + str(self.axis_size).replace(linesep, linesep + "\t")
+            + linesep
+        )
         return SolutionMat_str
 
     def __eq__(self, other):
@@ -153,35 +189,51 @@ class SolutionMat(Solution):
             return False
         return True
 
-    def compare(self, other, name='self', ignore_list=None, is_add_value=False):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
             ignore_list = list()
         if type(other) != type(self):
-            return ['type('+name+')']
+            return ["type(" + name + ")"]
         diff_list = list()
 
         # Check the properties inherited from Solution
-        diff_list.extend(super(SolutionMat, self).compare(other,name=name, ignore_list=ignore_list, is_add_value=is_add_value))
+        diff_list.extend(
+            super(SolutionMat, self).compare(
+                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
+            )
+        )
         if not array_equal(other.field, self.field):
-            diff_list.append(name+'.field')
+            diff_list.append(name + ".field")
         if not array_equal(other.indice, self.indice):
-            diff_list.append(name+'.indice')
+            diff_list.append(name + ".indice")
         if other._axis_name != self._axis_name:
             if is_add_value:
-                val_str = ' (self='+str(self._axis_name)+', other='+str(other._axis_name)+')'
-                diff_list.append(name+'.axis_name'+val_str)
+                val_str = (
+                    " (self="
+                    + str(self._axis_name)
+                    + ", other="
+                    + str(other._axis_name)
+                    + ")"
+                )
+                diff_list.append(name + ".axis_name" + val_str)
             else:
-                diff_list.append(name+'.axis_name')
+                diff_list.append(name + ".axis_name")
         if other._axis_size != self._axis_size:
             if is_add_value:
-                val_str = ' (self='+str(self._axis_size)+', other='+str(other._axis_size)+')'
-                diff_list.append(name+'.axis_size'+val_str)
+                val_str = (
+                    " (self="
+                    + str(self._axis_size)
+                    + ", other="
+                    + str(other._axis_size)
+                    + ")"
+                )
+                diff_list.append(name + ".axis_size" + val_str)
             else:
-                diff_list.append(name+'.axis_size')
+                diff_list.append(name + ".axis_size")
         # Filter ignore differences
-        diff_list = list(filter(lambda x : x not in ignore_list, diff_list))
+        diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
 
     def __sizeof__(self):
@@ -208,34 +260,42 @@ class SolutionMat(Solution):
             How to handle ndarray (0: tolist, 1: copy, 2: nothing)
         keep_function : bool
             True to keep the function object, else return str
-        Optional keyword input parameter is for internal use only 
+        Optional keyword input parameter is for internal use only
         and may prevent json serializability.
         """
 
         # Get the properties inherited from Solution
-        SolutionMat_dict = super(SolutionMat, self).as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs)
+        SolutionMat_dict = super(SolutionMat, self).as_dict(
+            type_handle_ndarray=type_handle_ndarray,
+            keep_function=keep_function,
+            **kwargs
+        )
         if self.field is None:
             SolutionMat_dict["field"] = None
         else:
-            if type_handle_ndarray==0:
+            if type_handle_ndarray == 0:
                 SolutionMat_dict["field"] = self.field.tolist()
-            elif type_handle_ndarray==1:
+            elif type_handle_ndarray == 1:
                 SolutionMat_dict["field"] = self.field.copy()
-            elif type_handle_ndarray==2:
+            elif type_handle_ndarray == 2:
                 SolutionMat_dict["field"] = self.field
             else:
-                raise Exception ('Unknown type_handle_ndarray: '+str(type_handle_ndarray))
+                raise Exception(
+                    "Unknown type_handle_ndarray: " + str(type_handle_ndarray)
+                )
         if self.indice is None:
             SolutionMat_dict["indice"] = None
         else:
-            if type_handle_ndarray==0:
+            if type_handle_ndarray == 0:
                 SolutionMat_dict["indice"] = self.indice.tolist()
-            elif type_handle_ndarray==1:
+            elif type_handle_ndarray == 1:
                 SolutionMat_dict["indice"] = self.indice.copy()
-            elif type_handle_ndarray==2:
+            elif type_handle_ndarray == 2:
                 SolutionMat_dict["indice"] = self.indice
             else:
-                raise Exception ('Unknown type_handle_ndarray: '+str(type_handle_ndarray))
+                raise Exception(
+                    "Unknown type_handle_ndarray: " + str(type_handle_ndarray)
+                )
         SolutionMat_dict["axis_name"] = (
             self.axis_name.copy() if self.axis_name is not None else None
         )
@@ -246,7 +306,6 @@ class SolutionMat(Solution):
         # Overwrite the mother class name
         SolutionMat_dict["__class__"] = "SolutionMat"
         return SolutionMat_dict
-
 
     def copy(self):
         """Creates a deepcopy of the object"""
@@ -273,7 +332,16 @@ class SolutionMat(Solution):
         dimension_val = self.dimension
         unit_val = self.unit
         # Creates new object of the same type with the copied properties
-        obj_copy = type(self)(field=field_val,indice=indice_val,axis_name=axis_name_val,axis_size=axis_size_val,type_cell=type_cell_val,label=label_val,dimension=dimension_val,unit=unit_val)
+        obj_copy = type(self)(
+            field=field_val,
+            indice=indice_val,
+            axis_name=axis_name_val,
+            axis_size=axis_size_val,
+            type_cell=type_cell_val,
+            label=label_val,
+            dimension=dimension_val,
+            unit=unit_val,
+        )
         return obj_copy
 
     def _set_None(self):

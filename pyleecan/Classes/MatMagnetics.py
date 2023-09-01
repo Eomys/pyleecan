@@ -92,7 +92,19 @@ class MatMagnetics(FrozenClass):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, mur_lin=1, Brm20=0, alpha_Br=0, Wlam=0, BH_curve=-1, LossData=-1, ModelBH=-1, is_BH_extrapolate=False, init_dict = None, init_str = None):
+    def __init__(
+        self,
+        mur_lin=1,
+        Brm20=0,
+        alpha_Br=0,
+        Wlam=0,
+        BH_curve=-1,
+        LossData=-1,
+        ModelBH=-1,
+        is_BH_extrapolate=False,
+        init_dict=None,
+        init_str=None,
+    ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -145,27 +157,31 @@ class MatMagnetics(FrozenClass):
         if self.parent is None:
             MatMagnetics_str += "parent = None " + linesep
         else:
-            MatMagnetics_str += "parent = " + str(type(self.parent)) + " object" + linesep
+            MatMagnetics_str += (
+                "parent = " + str(type(self.parent)) + " object" + linesep
+            )
         MatMagnetics_str += "mur_lin = " + str(self.mur_lin) + linesep
         MatMagnetics_str += "Brm20 = " + str(self.Brm20) + linesep
         MatMagnetics_str += "alpha_Br = " + str(self.alpha_Br) + linesep
         MatMagnetics_str += "Wlam = " + str(self.Wlam) + linesep
         if self.BH_curve is not None:
             tmp = self.BH_curve.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            MatMagnetics_str += "BH_curve = "+ tmp
+            MatMagnetics_str += "BH_curve = " + tmp
         else:
             MatMagnetics_str += "BH_curve = None" + linesep + linesep
         if self.LossData is not None:
             tmp = self.LossData.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            MatMagnetics_str += "LossData = "+ tmp
+            MatMagnetics_str += "LossData = " + tmp
         else:
             MatMagnetics_str += "LossData = None" + linesep + linesep
         if self.ModelBH is not None:
             tmp = self.ModelBH.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            MatMagnetics_str += "ModelBH = "+ tmp
+            MatMagnetics_str += "ModelBH = " + tmp
         else:
             MatMagnetics_str += "ModelBH = None" + linesep + linesep
-        MatMagnetics_str += "is_BH_extrapolate = " + str(self.is_BH_extrapolate) + linesep
+        MatMagnetics_str += (
+            "is_BH_extrapolate = " + str(self.is_BH_extrapolate) + linesep
+        )
         return MatMagnetics_str
 
     def __eq__(self, other):
@@ -191,66 +207,135 @@ class MatMagnetics(FrozenClass):
             return False
         return True
 
-    def compare(self, other, name='self', ignore_list=None, is_add_value=False):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
             ignore_list = list()
         if type(other) != type(self):
-            return ['type('+name+')']
+            return ["type(" + name + ")"]
         diff_list = list()
-        if other._mur_lin is not None and self._mur_lin is not None and isnan(other._mur_lin) and isnan(self._mur_lin):
+        if (
+            other._mur_lin is not None
+            and self._mur_lin is not None
+            and isnan(other._mur_lin)
+            and isnan(self._mur_lin)
+        ):
             pass
         elif other._mur_lin != self._mur_lin:
             if is_add_value:
-                val_str = ' (self='+str(self._mur_lin)+', other='+str(other._mur_lin)+')'
-                diff_list.append(name+'.mur_lin'+val_str)
+                val_str = (
+                    " (self="
+                    + str(self._mur_lin)
+                    + ", other="
+                    + str(other._mur_lin)
+                    + ")"
+                )
+                diff_list.append(name + ".mur_lin" + val_str)
             else:
-                diff_list.append(name+'.mur_lin')
-        if other._Brm20 is not None and self._Brm20 is not None and isnan(other._Brm20) and isnan(self._Brm20):
+                diff_list.append(name + ".mur_lin")
+        if (
+            other._Brm20 is not None
+            and self._Brm20 is not None
+            and isnan(other._Brm20)
+            and isnan(self._Brm20)
+        ):
             pass
         elif other._Brm20 != self._Brm20:
             if is_add_value:
-                val_str = ' (self='+str(self._Brm20)+', other='+str(other._Brm20)+')'
-                diff_list.append(name+'.Brm20'+val_str)
+                val_str = (
+                    " (self=" + str(self._Brm20) + ", other=" + str(other._Brm20) + ")"
+                )
+                diff_list.append(name + ".Brm20" + val_str)
             else:
-                diff_list.append(name+'.Brm20')
-        if other._alpha_Br is not None and self._alpha_Br is not None and isnan(other._alpha_Br) and isnan(self._alpha_Br):
+                diff_list.append(name + ".Brm20")
+        if (
+            other._alpha_Br is not None
+            and self._alpha_Br is not None
+            and isnan(other._alpha_Br)
+            and isnan(self._alpha_Br)
+        ):
             pass
         elif other._alpha_Br != self._alpha_Br:
             if is_add_value:
-                val_str = ' (self='+str(self._alpha_Br)+', other='+str(other._alpha_Br)+')'
-                diff_list.append(name+'.alpha_Br'+val_str)
+                val_str = (
+                    " (self="
+                    + str(self._alpha_Br)
+                    + ", other="
+                    + str(other._alpha_Br)
+                    + ")"
+                )
+                diff_list.append(name + ".alpha_Br" + val_str)
             else:
-                diff_list.append(name+'.alpha_Br')
-        if other._Wlam is not None and self._Wlam is not None and isnan(other._Wlam) and isnan(self._Wlam):
+                diff_list.append(name + ".alpha_Br")
+        if (
+            other._Wlam is not None
+            and self._Wlam is not None
+            and isnan(other._Wlam)
+            and isnan(self._Wlam)
+        ):
             pass
         elif other._Wlam != self._Wlam:
             if is_add_value:
-                val_str = ' (self='+str(self._Wlam)+', other='+str(other._Wlam)+')'
-                diff_list.append(name+'.Wlam'+val_str)
+                val_str = (
+                    " (self=" + str(self._Wlam) + ", other=" + str(other._Wlam) + ")"
+                )
+                diff_list.append(name + ".Wlam" + val_str)
             else:
-                diff_list.append(name+'.Wlam')
-        if (other.BH_curve is None and self.BH_curve is not None) or (other.BH_curve is not None and self.BH_curve is None):
-            diff_list.append(name+'.BH_curve None mismatch')
+                diff_list.append(name + ".Wlam")
+        if (other.BH_curve is None and self.BH_curve is not None) or (
+            other.BH_curve is not None and self.BH_curve is None
+        ):
+            diff_list.append(name + ".BH_curve None mismatch")
         elif self.BH_curve is not None:
-            diff_list.extend(self.BH_curve.compare(other.BH_curve,name=name+'.BH_curve',ignore_list=ignore_list,is_add_value=is_add_value))
-        if (other.LossData is None and self.LossData is not None) or (other.LossData is not None and self.LossData is None):
-            diff_list.append(name+'.LossData None mismatch')
+            diff_list.extend(
+                self.BH_curve.compare(
+                    other.BH_curve,
+                    name=name + ".BH_curve",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
+            )
+        if (other.LossData is None and self.LossData is not None) or (
+            other.LossData is not None and self.LossData is None
+        ):
+            diff_list.append(name + ".LossData None mismatch")
         elif self.LossData is not None:
-            diff_list.extend(self.LossData.compare(other.LossData,name=name+'.LossData',ignore_list=ignore_list,is_add_value=is_add_value))
-        if (other.ModelBH is None and self.ModelBH is not None) or (other.ModelBH is not None and self.ModelBH is None):
-            diff_list.append(name+'.ModelBH None mismatch')
+            diff_list.extend(
+                self.LossData.compare(
+                    other.LossData,
+                    name=name + ".LossData",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
+            )
+        if (other.ModelBH is None and self.ModelBH is not None) or (
+            other.ModelBH is not None and self.ModelBH is None
+        ):
+            diff_list.append(name + ".ModelBH None mismatch")
         elif self.ModelBH is not None:
-            diff_list.extend(self.ModelBH.compare(other.ModelBH,name=name+'.ModelBH',ignore_list=ignore_list,is_add_value=is_add_value))
+            diff_list.extend(
+                self.ModelBH.compare(
+                    other.ModelBH,
+                    name=name + ".ModelBH",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
+            )
         if other._is_BH_extrapolate != self._is_BH_extrapolate:
             if is_add_value:
-                val_str = ' (self='+str(self._is_BH_extrapolate)+', other='+str(other._is_BH_extrapolate)+')'
-                diff_list.append(name+'.is_BH_extrapolate'+val_str)
+                val_str = (
+                    " (self="
+                    + str(self._is_BH_extrapolate)
+                    + ", other="
+                    + str(other._is_BH_extrapolate)
+                    + ")"
+                )
+                diff_list.append(name + ".is_BH_extrapolate" + val_str)
             else:
-                diff_list.append(name+'.is_BH_extrapolate')
+                diff_list.append(name + ".is_BH_extrapolate")
         # Filter ignore differences
-        diff_list = list(filter(lambda x : x not in ignore_list, diff_list))
+        diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
 
     def __sizeof__(self):
@@ -274,7 +359,7 @@ class MatMagnetics(FrozenClass):
             How to handle ndarray (0: tolist, 1: copy, 2: nothing)
         keep_function : bool
             True to keep the function object, else return str
-        Optional keyword input parameter is for internal use only 
+        Optional keyword input parameter is for internal use only
         and may prevent json serializability.
         """
 
@@ -286,20 +371,31 @@ class MatMagnetics(FrozenClass):
         if self.BH_curve is None:
             MatMagnetics_dict["BH_curve"] = None
         else:
-            MatMagnetics_dict["BH_curve"] = self.BH_curve.as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs)
+            MatMagnetics_dict["BH_curve"] = self.BH_curve.as_dict(
+                type_handle_ndarray=type_handle_ndarray,
+                keep_function=keep_function,
+                **kwargs
+            )
         if self.LossData is None:
             MatMagnetics_dict["LossData"] = None
         else:
-            MatMagnetics_dict["LossData"] = self.LossData.as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs)
+            MatMagnetics_dict["LossData"] = self.LossData.as_dict(
+                type_handle_ndarray=type_handle_ndarray,
+                keep_function=keep_function,
+                **kwargs
+            )
         if self.ModelBH is None:
             MatMagnetics_dict["ModelBH"] = None
         else:
-            MatMagnetics_dict["ModelBH"] = self.ModelBH.as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs)
+            MatMagnetics_dict["ModelBH"] = self.ModelBH.as_dict(
+                type_handle_ndarray=type_handle_ndarray,
+                keep_function=keep_function,
+                **kwargs
+            )
         MatMagnetics_dict["is_BH_extrapolate"] = self.is_BH_extrapolate
         # The class name is added to the dict for deserialisation purpose
         MatMagnetics_dict["__class__"] = "MatMagnetics"
         return MatMagnetics_dict
-
 
     def copy(self):
         """Creates a deepcopy of the object"""
@@ -323,7 +419,16 @@ class MatMagnetics(FrozenClass):
             ModelBH_val = self.ModelBH.copy()
         is_BH_extrapolate_val = self.is_BH_extrapolate
         # Creates new object of the same type with the copied properties
-        obj_copy = type(self)(mur_lin=mur_lin_val,Brm20=Brm20_val,alpha_Br=alpha_Br_val,Wlam=Wlam_val,BH_curve=BH_curve_val,LossData=LossData_val,ModelBH=ModelBH_val,is_BH_extrapolate=is_BH_extrapolate_val)
+        obj_copy = type(self)(
+            mur_lin=mur_lin_val,
+            Brm20=Brm20_val,
+            alpha_Br=alpha_Br_val,
+            Wlam=Wlam_val,
+            BH_curve=BH_curve_val,
+            LossData=LossData_val,
+            ModelBH=ModelBH_val,
+            is_BH_extrapolate=is_BH_extrapolate_val,
+        )
         return obj_copy
 
     def _set_None(self):
@@ -421,24 +526,29 @@ class MatMagnetics(FrozenClass):
 
     def _set_BH_curve(self, value):
         """setter of BH_curve"""
-        ImportMatrix = import_class('pyleecan.Classes', 'ImportMatrix', 'BH_curve')
-        ImportMatrixVal = import_class('pyleecan.Classes', 'ImportMatrixVal', 'BH_curve')
+        ImportMatrix = import_class("pyleecan.Classes", "ImportMatrix", "BH_curve")
+        ImportMatrixVal = import_class(
+            "pyleecan.Classes", "ImportMatrixVal", "BH_curve"
+        )
         if isinstance(value, str):  # Load from file
             value = load_init_dict(value)[1]
-        if isinstance(value,ndarray):
+        if isinstance(value, ndarray):
             value = ImportMatrixVal(value=value)
-        elif isinstance(value,list):
+        elif isinstance(value, list):
             value = ImportMatrixVal(value=array(value))
         elif value == -1:
             value = ImportMatrix()
-        elif isinstance(value,dict):
-            class_obj = import_class('pyleecan.Classes', value.get('__class__'), 'BH_curve')
+        elif isinstance(value, dict):
+            class_obj = import_class(
+                "pyleecan.Classes", value.get("__class__"), "BH_curve"
+            )
             value = class_obj(init_dict=value)
         check_var("BH_curve", value, "ImportMatrix")
         self._BH_curve = value
 
         if self._BH_curve is not None:
             self._BH_curve.parent = self
+
     BH_curve = property(
         fget=_get_BH_curve,
         fset=_set_BH_curve,
@@ -454,24 +564,29 @@ class MatMagnetics(FrozenClass):
 
     def _set_LossData(self, value):
         """setter of LossData"""
-        ImportMatrix = import_class('pyleecan.Classes', 'ImportMatrix', 'LossData')
-        ImportMatrixVal = import_class('pyleecan.Classes', 'ImportMatrixVal', 'LossData')
+        ImportMatrix = import_class("pyleecan.Classes", "ImportMatrix", "LossData")
+        ImportMatrixVal = import_class(
+            "pyleecan.Classes", "ImportMatrixVal", "LossData"
+        )
         if isinstance(value, str):  # Load from file
             value = load_init_dict(value)[1]
-        if isinstance(value,ndarray):
+        if isinstance(value, ndarray):
             value = ImportMatrixVal(value=value)
-        elif isinstance(value,list):
+        elif isinstance(value, list):
             value = ImportMatrixVal(value=array(value))
         elif value == -1:
             value = ImportMatrix()
-        elif isinstance(value,dict):
-            class_obj = import_class('pyleecan.Classes', value.get('__class__'), 'LossData')
+        elif isinstance(value, dict):
+            class_obj = import_class(
+                "pyleecan.Classes", value.get("__class__"), "LossData"
+            )
             value = class_obj(init_dict=value)
         check_var("LossData", value, "ImportMatrix")
         self._LossData = value
 
         if self._LossData is not None:
             self._LossData.parent = self
+
     LossData = property(
         fget=_get_LossData,
         fset=_set_LossData,
@@ -491,19 +606,24 @@ class MatMagnetics(FrozenClass):
             try:
                 value = load_init_dict(value)[1]
             except Exception as e:
-                self.get_logger().error('Error while loading '+value+', setting None instead')
+                self.get_logger().error(
+                    "Error while loading " + value + ", setting None instead"
+                )
                 value = None
-        if isinstance(value, dict) and '__class__' in value:
-            class_obj = import_class('pyleecan.Classes', value.get('__class__'), 'ModelBH')
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class(
+                "pyleecan.Classes", value.get("__class__"), "ModelBH"
+            )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
-            ModelBH = import_class('pyleecan.Classes', 'ModelBH', 'ModelBH')
+            ModelBH = import_class("pyleecan.Classes", "ModelBH", "ModelBH")
             value = ModelBH()
         check_var("ModelBH", value, "ModelBH")
         self._ModelBH = value
 
         if self._ModelBH is not None:
             self._ModelBH.parent = self
+
     ModelBH = property(
         fget=_get_ModelBH,
         fset=_set_ModelBH,

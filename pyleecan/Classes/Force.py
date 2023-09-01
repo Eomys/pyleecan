@@ -78,7 +78,17 @@ class Force(FrozenClass):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, is_periodicity_t=None, is_periodicity_a=None, is_agsf_transfer=False, max_wavenumber_transfer=None, Rsbo_enforced_transfer=None, logger_name="Pyleecan.Force", init_dict = None, init_str = None):
+    def __init__(
+        self,
+        is_periodicity_t=None,
+        is_periodicity_a=None,
+        is_agsf_transfer=False,
+        max_wavenumber_transfer=None,
+        Rsbo_enforced_transfer=None,
+        logger_name="Pyleecan.Force",
+        init_dict=None,
+        init_str=None,
+    ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -129,8 +139,12 @@ class Force(FrozenClass):
         Force_str += "is_periodicity_t = " + str(self.is_periodicity_t) + linesep
         Force_str += "is_periodicity_a = " + str(self.is_periodicity_a) + linesep
         Force_str += "is_agsf_transfer = " + str(self.is_agsf_transfer) + linesep
-        Force_str += "max_wavenumber_transfer = " + str(self.max_wavenumber_transfer) + linesep
-        Force_str += "Rsbo_enforced_transfer = " + str(self.Rsbo_enforced_transfer) + linesep
+        Force_str += (
+            "max_wavenumber_transfer = " + str(self.max_wavenumber_transfer) + linesep
+        )
+        Force_str += (
+            "Rsbo_enforced_transfer = " + str(self.Rsbo_enforced_transfer) + linesep
+        )
         Force_str += 'logger_name = "' + str(self.logger_name) + '"' + linesep
         return Force_str
 
@@ -153,54 +167,95 @@ class Force(FrozenClass):
             return False
         return True
 
-    def compare(self, other, name='self', ignore_list=None, is_add_value=False):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
             ignore_list = list()
         if type(other) != type(self):
-            return ['type('+name+')']
+            return ["type(" + name + ")"]
         diff_list = list()
         if other._is_periodicity_t != self._is_periodicity_t:
             if is_add_value:
-                val_str = ' (self='+str(self._is_periodicity_t)+', other='+str(other._is_periodicity_t)+')'
-                diff_list.append(name+'.is_periodicity_t'+val_str)
+                val_str = (
+                    " (self="
+                    + str(self._is_periodicity_t)
+                    + ", other="
+                    + str(other._is_periodicity_t)
+                    + ")"
+                )
+                diff_list.append(name + ".is_periodicity_t" + val_str)
             else:
-                diff_list.append(name+'.is_periodicity_t')
+                diff_list.append(name + ".is_periodicity_t")
         if other._is_periodicity_a != self._is_periodicity_a:
             if is_add_value:
-                val_str = ' (self='+str(self._is_periodicity_a)+', other='+str(other._is_periodicity_a)+')'
-                diff_list.append(name+'.is_periodicity_a'+val_str)
+                val_str = (
+                    " (self="
+                    + str(self._is_periodicity_a)
+                    + ", other="
+                    + str(other._is_periodicity_a)
+                    + ")"
+                )
+                diff_list.append(name + ".is_periodicity_a" + val_str)
             else:
-                diff_list.append(name+'.is_periodicity_a')
+                diff_list.append(name + ".is_periodicity_a")
         if other._is_agsf_transfer != self._is_agsf_transfer:
             if is_add_value:
-                val_str = ' (self='+str(self._is_agsf_transfer)+', other='+str(other._is_agsf_transfer)+')'
-                diff_list.append(name+'.is_agsf_transfer'+val_str)
+                val_str = (
+                    " (self="
+                    + str(self._is_agsf_transfer)
+                    + ", other="
+                    + str(other._is_agsf_transfer)
+                    + ")"
+                )
+                diff_list.append(name + ".is_agsf_transfer" + val_str)
             else:
-                diff_list.append(name+'.is_agsf_transfer')
+                diff_list.append(name + ".is_agsf_transfer")
         if other._max_wavenumber_transfer != self._max_wavenumber_transfer:
             if is_add_value:
-                val_str = ' (self='+str(self._max_wavenumber_transfer)+', other='+str(other._max_wavenumber_transfer)+')'
-                diff_list.append(name+'.max_wavenumber_transfer'+val_str)
+                val_str = (
+                    " (self="
+                    + str(self._max_wavenumber_transfer)
+                    + ", other="
+                    + str(other._max_wavenumber_transfer)
+                    + ")"
+                )
+                diff_list.append(name + ".max_wavenumber_transfer" + val_str)
             else:
-                diff_list.append(name+'.max_wavenumber_transfer')
-        if other._Rsbo_enforced_transfer is not None and self._Rsbo_enforced_transfer is not None and isnan(other._Rsbo_enforced_transfer) and isnan(self._Rsbo_enforced_transfer):
+                diff_list.append(name + ".max_wavenumber_transfer")
+        if (
+            other._Rsbo_enforced_transfer is not None
+            and self._Rsbo_enforced_transfer is not None
+            and isnan(other._Rsbo_enforced_transfer)
+            and isnan(self._Rsbo_enforced_transfer)
+        ):
             pass
         elif other._Rsbo_enforced_transfer != self._Rsbo_enforced_transfer:
             if is_add_value:
-                val_str = ' (self='+str(self._Rsbo_enforced_transfer)+', other='+str(other._Rsbo_enforced_transfer)+')'
-                diff_list.append(name+'.Rsbo_enforced_transfer'+val_str)
+                val_str = (
+                    " (self="
+                    + str(self._Rsbo_enforced_transfer)
+                    + ", other="
+                    + str(other._Rsbo_enforced_transfer)
+                    + ")"
+                )
+                diff_list.append(name + ".Rsbo_enforced_transfer" + val_str)
             else:
-                diff_list.append(name+'.Rsbo_enforced_transfer')
+                diff_list.append(name + ".Rsbo_enforced_transfer")
         if other._logger_name != self._logger_name:
             if is_add_value:
-                val_str = ' (self='+str(self._logger_name)+', other='+str(other._logger_name)+')'
-                diff_list.append(name+'.logger_name'+val_str)
+                val_str = (
+                    " (self="
+                    + str(self._logger_name)
+                    + ", other="
+                    + str(other._logger_name)
+                    + ")"
+                )
+                diff_list.append(name + ".logger_name" + val_str)
             else:
-                diff_list.append(name+'.logger_name')
+                diff_list.append(name + ".logger_name")
         # Filter ignore differences
-        diff_list = list(filter(lambda x : x not in ignore_list, diff_list))
+        diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
 
     def __sizeof__(self):
@@ -222,7 +277,7 @@ class Force(FrozenClass):
             How to handle ndarray (0: tolist, 1: copy, 2: nothing)
         keep_function : bool
             True to keep the function object, else return str
-        Optional keyword input parameter is for internal use only 
+        Optional keyword input parameter is for internal use only
         and may prevent json serializability.
         """
 
@@ -237,7 +292,6 @@ class Force(FrozenClass):
         Force_dict["__class__"] = "Force"
         return Force_dict
 
-
     def copy(self):
         """Creates a deepcopy of the object"""
 
@@ -249,7 +303,14 @@ class Force(FrozenClass):
         Rsbo_enforced_transfer_val = self.Rsbo_enforced_transfer
         logger_name_val = self.logger_name
         # Creates new object of the same type with the copied properties
-        obj_copy = type(self)(is_periodicity_t=is_periodicity_t_val,is_periodicity_a=is_periodicity_a_val,is_agsf_transfer=is_agsf_transfer_val,max_wavenumber_transfer=max_wavenumber_transfer_val,Rsbo_enforced_transfer=Rsbo_enforced_transfer_val,logger_name=logger_name_val)
+        obj_copy = type(self)(
+            is_periodicity_t=is_periodicity_t_val,
+            is_periodicity_a=is_periodicity_a_val,
+            is_agsf_transfer=is_agsf_transfer_val,
+            max_wavenumber_transfer=max_wavenumber_transfer_val,
+            Rsbo_enforced_transfer=Rsbo_enforced_transfer_val,
+            logger_name=logger_name_val,
+        )
         return obj_copy
 
     def _set_None(self):
