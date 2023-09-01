@@ -112,23 +112,6 @@ class PWSlot23(Gen_PWSlot23, QWidget):
         self.is_cst_tooth.toggled.connect(self.set_is_cst_tooth)
         self.g_wedge.toggled.connect(self.set_wedge)
 
-    def set_wedge(self):
-        """Setup the slot wedge according to the GUI"""
-        if self.g_wedge.isChecked():
-            self.w_wedge_mat.show()
-            self.img_slot.setPixmap(
-                QPixmap(u":/images/images/MachineSetup/WSlot/SlotW23_wedge_full.png")
-            )
-            self.w_wedge_mat.update(self.slot, "wedge_mat", self.material_dict)
-        else:
-            self.w_wedge_mat.hide()
-            self.slot.wedge_mat = None
-            self.img_slot.setPixmap(
-                QPixmap(u":/images/images/MachineSetup/WSlot/SlotW23_wind.png")
-            )
-        # Notify the machine GUI that the machine has changed
-        self.saveNeeded.emit()
-
     def set_W0(self):
         """Signal to update the value of W0 according to the line edit
 
@@ -220,6 +203,42 @@ class PWSlot23(Gen_PWSlot23, QWidget):
         # Notify the machine GUI that the machine has changed
         self.saveNeeded.emit()
 
+    def pictures(self, is_checked):
+        """setup the picture"""
+        if self.g_wedge.isChecked():
+            if self.is_checked :
+                self.img_slot.setPixmap(
+                QPixmap(u":/images/images/MachineSetup/WSlot/SlotW23_constant_tooth_wedge_full.png")
+            )
+            
+            else :
+                self.img_slot.setPixmap(
+                QPixmap(u":/images/images/MachineSetup/WSlot/SlotW23_wedge_full.png")
+            )
+    
+        else : 
+            if is_checked :
+                self.img_slot.setPixmap(
+                QPixmap(u":/images/images/MachineSetup/WSlot/SlotW23_constant_tooth_wind.png")
+            )
+            else :
+                self.img_slot.setPixmap(
+                QPixmap(u":/images/images/MachineSetup/WSlot/SlotW23_wind.png")
+            )
+
+
+    def set_wedge(self):
+        """Setup the slot wedge according to the GUI"""
+        if self.g_wedge.isChecked():
+            self.w_wedge_mat.show()
+            self.w_wedge_mat.update(self.slot, "wedge_mat", self.material_dict)
+
+        else:
+            self.w_wedge_mat.hide()
+            self.slot.wedge_mat = None
+        # Notify the machine GUI that the machine has changed
+        self.saveNeeded.emit()
+
     def set_is_cst_tooth(self, is_checked):
         """Signal to set the correct mode (constant tooth or slot) according to
         the checkbox
@@ -231,7 +250,9 @@ class PWSlot23(Gen_PWSlot23, QWidget):
         is_checked : bool
             State of the checkbox
         """
+
         if is_checked:
+            self.w_wedge_mat.update(self.slot, "wedge_mat", self.material_dict)
             self.slot.W1 = None
             self.slot.W2 = None
             self.lf_W1.clear()
@@ -239,12 +260,15 @@ class PWSlot23(Gen_PWSlot23, QWidget):
             self.lf_W1.setEnabled(False)
             self.lf_W2.setEnabled(False)
             self.lf_W3.setEnabled(True)
+            self.w_wedge_mat.show()
+
         else:
             self.slot.W3 = None
             self.lf_W3.clear()
             self.lf_W3.setEnabled(False)
             self.lf_W1.setEnabled(True)
             self.lf_W2.setEnabled(True)
+            self.w_wedge_mat.show()
         # Notify the machine GUI that the machine has changed
         self.saveNeeded.emit()
 

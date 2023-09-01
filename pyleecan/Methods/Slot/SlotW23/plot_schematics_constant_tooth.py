@@ -71,8 +71,12 @@ def plot_schematics_constant_tooth(
 
     # Use some default parameter
     if is_default:
-        slot = type(self)(Zs=12, H0=20e-3, W0=20e-3, H1=20e-3, H2=80e-3, W3=20e-3)
-        lam = LamSlot(Rint=0.135, Rext=0.3, is_internal=False, is_stator=True, slot=slot)
+        slot = type(self)(
+            Zs=12, H0=20e-3, W0=20e-3, H1=20e-3, H2=80e-3, W3=20e-3, is_cstt_tooth=True
+        )
+        lam = LamSlot(
+            Rint=0.135, Rext=0.3, is_internal=False, is_stator=True, slot=slot
+        )
         return slot.plot_schematics_constant_tooth(
             is_default=False,
             is_add_point_label=is_add_point_label,
@@ -85,7 +89,6 @@ def plot_schematics_constant_tooth(
             ax=ax,
         )
     else:
-        sp = 2 * pi / self.Zs
         # Getting the main plot
         if self.parent is None:
             raise ParentMissingError("Error: The slot is not inside a Lamination")
@@ -108,7 +111,7 @@ def plot_schematics_constant_tooth(
                     fontsize=P_FONT_SIZE,
                     bbox=TEXT_BOX,
                 )
-
+        sp = 2 * pi / self.Zs
         # Adding schematics
         if is_add_schematics:
 
@@ -319,7 +322,8 @@ def plot_schematics_constant_tooth(
             fig.show()
         return fig, ax
 
-#"""
+
+"""
 import pytest
 
 from pyleecan.Classes.LamSlotMag import LamSlotMag
@@ -334,7 +338,7 @@ Mag19_test = list()
 # Internal Slot
 lam = LamSlot(Rint=0.135, Rext=0.3, is_internal=False)
 lam.slot = SlotW23(
-    Zs=12, H0=20e-3, W0=20e-3, H1=20e-3, H2=80e-3, W3=20e-3, is_cstt_tooth=True
+    #Zs=12, H0=20e-3, W0=20e-3, H1=20e-3, H2=80e-3, W3=20e-3, is_cstt_tooth=True
 )
 
 
@@ -342,4 +346,4 @@ if __name__ == "__main__":
     plot_schematics_constant_tooth(lam.slot)
     plt.show()
     sleep(60)
-#"""
+"""
