@@ -99,7 +99,7 @@ class Test_SlotW23_meth(object):
         assert abs(point_dict["Z5"] - point_dict["Z6"]) == pytest.approx(
             test_obj.slot.H2
         )
-    
+
     @pytest.mark.parametrize("test_dict", slotW23_test)
     def test_schematics_constant_tooth(self, test_dict):
         """Check that the schematics is correct"""

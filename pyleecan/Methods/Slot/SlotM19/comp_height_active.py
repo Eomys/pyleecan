@@ -18,21 +18,4 @@ def comp_height_active(self):
         Height of the active area [m]
 
     """
-    Rbo = self.get_Rbo()
-    point_dict = self._comp_point_coordinate()
-
-    Zmid = point_dict["Zmid"]
-    Z1 = point_dict["Z1"]
-    Z2 = point_dict["Z2"]
-    Z3 = point_dict["Z3"]
-    Z4 = point_dict["Z4"]
-
-    if self.is_outwards():
-
-        R1 = np_abs(Rbo)
-        R2 = np_abs(sqrt(Z2.real *  Z2.real + Z2.imag * Z2.imag))
-        
-    else:
-        R1 = np_abs(Zmid)
-        R2 = np_abs(Rbo)
-    return R2 - R1
+    return self.comp_height()

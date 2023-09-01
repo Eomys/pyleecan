@@ -18,10 +18,10 @@ Mag19_test.append(
         "test_obj": lam,
         "Rmec": 0.1325,
         "S_exp": 3.740172221187858e-5,
-        "H_exp": 5.0e-3, 
+        "H_exp": 5.0e-3,
         "SA_exp": 3.740172221187858e-5,
-        "HA_exp": 5.0000000000000044e-3,  
-        "Ao": 0.0377385, 
+        "HA_exp": 5.0000000000000044e-3,
+        "Ao": 0.0377385,
     }
 )
 
@@ -47,22 +47,6 @@ DELTA = 1e-4
 class Test_Magnet_Type_19_meth(object):
     """unittest for MagnetType19 methods"""
 
-   
-    @pytest.mark.parametrize("test_dict", Mag19_test)
-    def test_schematics(self, test_dict):
-        """Check that the schematics is correct"""
-        test_obj = test_dict["test_obj"]
-        point_dict = test_obj.slot._comp_point_coordinate()
-
-        # Check width
-        assert abs(point_dict["Z2"] - point_dict["Z3"]) == pytest.approx(
-            test_obj.slot.W0
-        )
-        assert abs(point_dict["Z4"] - point_dict["Z1"]) == pytest.approx(
-            test_obj.slot.W1
-        )
-
-        
     @pytest.mark.parametrize("test_dict", Mag19_test)
     def test_comp_surface(self, test_dict):
         """Check that the computation of the surface is correct"""
@@ -79,7 +63,6 @@ class Test_Magnet_Type_19_meth(object):
         msg = "Return " + str(a) + " expected " + str(b)
         assert a == pytest.approx(b, rel=DELTA), msg
 
-
     @pytest.mark.parametrize("test_dict", Mag19_test)
     def test_comp_surface_active(self, test_dict):
         """Check that the computation of the active surface is correct"""
@@ -95,7 +78,6 @@ class Test_Magnet_Type_19_meth(object):
         b = Slot.comp_surface_active(test_obj.slot, Ndisc=2000)
         msg = "Return " + str(a) + " expected " + str(b)
         assert a == pytest.approx(b, rel=DELTA), msg
-
 
     @pytest.mark.parametrize("test_dict", Mag19_test)
     def test_comp_height(self, test_dict):
@@ -140,8 +122,6 @@ class Test_Magnet_Type_19_meth(object):
         msg = "Return " + str(a) + " expected " + str(b)
         assert a == pytest.approx(b, rel=DELTA)
 
-
-
     @pytest.mark.parametrize("test_dict", Mag19_test)
     def test_comp_point_coordinate(self, test_dict):
         """Check that the point coordinates are correct"""
@@ -152,31 +132,12 @@ class Test_Magnet_Type_19_meth(object):
         Z3 = point_dict["Z3"]
         Z4 = point_dict["Z4"]
         W0 = test_obj.slot.W0
-        W1= test_obj.slot.W1
+        W1 = test_obj.slot.W1
         Hmag = test_obj.slot.Hmag
 
+        assert abs(self.Rbo - (Z2 + Z3) / 2) == self.Hmag
         assert abs(Z1 - Z4) == pytest.approx(W1, rel=DELTA)
         assert abs(Z2 - Z3) == pytest.approx(W0, rel=DELTA)
-
-    
-    @pytest.mark.parametrize("test_dict", Mag19_test)
-    def test_schematics(self, test_dict):
-        """Check that the schematics is correct"""
-        test_obj = test_dict["test_obj"]
-        point_dict = test_obj.slot._comp_point_coordinate()
-
-        # Check width
-        assert abs(point_dict["Z1"] - point_dict["Z4"]) == pytest.approx(
-            test_obj.slot.W1
-        )
-        assert abs(point_dict["Z2"] - point_dict["Z3"]) == pytest.approx(
-            test_obj.slot.W0
-        )
-        
-
-
-
-
 
 
 if __name__ == "__main__":

@@ -127,21 +127,6 @@ def plot_schematics(
                 is_arrow=True,
                 fontsize=SC_FONT_SIZE,
             )
-            """
-            #W1
-            line = Segment(point_dict["Z1"], point_dict["Z4"])
-            line.plot(
-                fig=fig,
-                ax=ax,
-                color=ARROW_COLOR,
-                linewidth=ARROW_WIDTH,
-                label="W1",
-                offset_label=sign * self.Hmag * 0.4,
-                is_arrow=True,
-                fontsize=SC_FONT_SIZE,
-            )
-            """
-
             # W1
             plot_quote(
                 Z1=point_dict["Z1"],
@@ -153,19 +138,6 @@ def plot_schematics(
                 ax=ax,
                 label="W1",
             )
-            """
-            # H0
-            line = Segment(point_dict["Z1"], point_dict["Z2"])
-            line.plot(
-                fig=fig,
-                ax=ax,
-                color=ARROW_COLOR,
-                linewidth=ARROW_WIDTH,
-                label="H0",
-                offset_label=1j * -0.1 * self.W0,
-                is_arrow=True,
-                fontsize=SC_FONT_SIZE,
-            )"""
             # Hmag
             mid = point_dict["Zmid"]
             line = Segment(mid, mid - sign * self.Hmag)
@@ -190,21 +162,6 @@ def plot_schematics(
                 linestyle=MAIN_LINE_STYLE,
                 linewidth=MAIN_LINE_WIDTH,
             )
-            # Top arc
-            """
-            line = Arc1(
-                begin=point_dict["Z1"],
-                end=point_dict["Z4"],
-                radius=self.get_Rbo(),
-                is_trigo_direction=True,
-            )
-            line.plot(
-                fig=fig,
-                ax=ax,
-                color=MAIN_LINE_COLOR,
-                linestyle=MAIN_LINE_STYLE,
-                linewidth=MAIN_LINE_WIDTH,
-            )"""
             # Magnet Arc
             line = Arc1(
                 begin=point_dict["Z1"],
@@ -249,63 +206,3 @@ def plot_schematics(
         if is_show_fig:
             fig.show()
         return fig, ax
-
-
-"""
-    point_dict = self._comp_point_coordinate()
-
-    fig, ax = plt.subplots()
-
-    Z3=point_dict["Z3"]
-    Z2 = point_dict["Z2"]
-    Z1=point_dict["Z1"]
-    Z4=point_dict["Z4"]
-
-    ax.plot([Z2.real,Z3.real],[Z2.imag, Z3.imag])
-    ax.plot([Z1.real,Z4.real],[Z1.imag, Z4.imag])
-    ax.plot([Z2.real,Z1.real],[Z2.imag, Z1.imag])
-    ax.plot([Z3.real,Z4.real],[Z3.imag, Z4.imag])
-
-    
-    line = Segment(point_dict["Z3"], point_dict["Z2"])
-    line.plot(
-        fig=fig,
-        ax=ax,
-        color=ARROW_COLOR,
-        linewidth=ARROW_WIDTH,
-        label="W0",
-        offset_label=  self.Hmag * 0.4,
-        is_arrow=True,
-        fontsize=SC_FONT_SIZE,
-    )
-        
-    plt.show()
-    #return fig, ax
-
-
-
-
-# -*- coding: utf-8 -*-
-
-import pytest
-
-from pyleecan.Classes.LamSlotMag import LamSlotMag
-from pyleecan.Classes.SlotM19 import SlotM19
-from pyleecan.Classes.Slot import Slot
-from pyleecan.Methods import ParentMissingError
-
-from numpy import exp
-from time import sleep
-
-Mag19_test = list()
-# Internal Slot
-lam = LamSlotMag(is_internal=True, Rext=0.1325)
-lam.slot = SlotM19(W0=10e-3, Zs=4, Hmag=5e-3, W1=5e-3)
-
-
-
-if __name__ == "__main__":
-    plot_schematics(lam.slot)
-    sleep(100)
-
-"""

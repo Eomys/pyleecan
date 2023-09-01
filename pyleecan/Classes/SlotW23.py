@@ -93,7 +93,9 @@ except ImportError as error:
     plot_schematics = error
 
 try:
-    from ..Methods.Slot.SlotW23.plot_schematics_constant_tooth import plot_schematics_constant_tooth
+    from ..Methods.Slot.SlotW23.plot_schematics_constant_tooth import (
+        plot_schematics_constant_tooth,
+    )
 except ImportError as error:
     plot_schematics_constant_tooth = error
 
@@ -281,13 +283,13 @@ class SlotW23(Slot):
     # get_logger method is available in all object
     get_logger = get_logger
 
-
     # cf Methods.Slot.SlotW23.plot_schematics_constant_tooth
     if isinstance(plot_schematics_constant_tooth, ImportError):
         plot_schematics_constant_tooth = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use SlotW23 method plot_schematics_constant_tooth: " + str(plot_schematics_constant_tooth)
+                    "Can't use SlotW23 method plot_schematics_constant_tooth: "
+                    + str(plot_schematics_constant_tooth)
                 )
             )
         )

@@ -42,8 +42,6 @@ def get_surface_active(self, alpha=0, delta=0):
     curve_list.append(Segment(Z2, Z3))
     curve_list.append(Segment(Z3, Z4))
 
-    # R1 = np_abs(sqrt(Z1.real**2 + Z1.imag**2))
-
     if self.is_outwards():
         curve_list.append(Arc1(Z4, Z1, -Rbo, is_trigo_direction=False))
     else:
@@ -54,7 +52,9 @@ def get_surface_active(self, alpha=0, delta=0):
     )
 
     # Apply transformation
-    surface.rotate(alpha)
-    surface.translate(delta)
+    if alpha != 0:
+        surface.rotate(alpha)
+    if delta != 0:
+        surface.translate(delta)
 
     return surface

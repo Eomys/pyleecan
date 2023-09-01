@@ -30,11 +30,7 @@ def comp_height(self):
     Rbo = self.get_Rbo()
 
     if self.is_outwards():
-
-        R1 = np_abs(Rbo)
-        R2 = np_abs(sqrt(Z2.real * Z2.real + Z2.imag * Z2.imag))
+        return np_abs(sqrt(Z2.real ** 2 + Z2.imag ** 2)) - np_abs(Rbo)
 
     else:
-        R1 = np_abs(Zmid)
-        R2 = np_abs(Rbo)
-    return R2 - R1
+        return self.Hmag
