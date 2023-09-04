@@ -60,6 +60,21 @@ slotW23_test.append(
     }
 )
 
+# Constant tooth
+lam = LamSlot(is_internal=True, Rext=0.1325)
+lam.slot = SlotW23(
+    H0=1e-3, H1=1.5e-3, H1_is_rad=False, H2=30e-3, W0=12e-3, W1=None, W2=None, W3=10e-3, is_cstt_tooth = True
+)
+slotW23_test.append(
+    {
+        "test_obj": lam,
+        "S_exp": 3.3199239014400616e-4,
+        "Aw": 0.08716490125463687,
+        "SO_exp": 3.1473325433303185e-05,
+        "SW_exp": 3.0051906471070296e-04,
+        "H_exp": 0.03245132013168321,
+    }
+)
 
 class Test_SlotW23_meth(object):
     """pytest for SlotW23 methods"""
@@ -261,7 +276,7 @@ class Test_SlotW23_meth(object):
     def test_check_error(self):
         """Check that the check method is correctly raising an error"""
         lam = LamSlot(is_internal=True, Rext=0.1325)
-        lam.slot = SlotW23(Zs=69, H2=0.0015, W3=12e-3, H1_is_rad=True, H1=3.14)
+        lam.slot = SlotW23(Zs=69, H2=0.0015, W3=12e-3, H1_is_rad=True, H1=3.14, is_cstt_tooth=True)
 
         with pytest.raises(S23_H1rCheckError) as context:
             lam.slot.check()
@@ -306,6 +321,29 @@ class Test_SlotW23_meth(object):
         assert lam.slot.W2 == 0.022533218866714805
 
 
+    # Check surface, change, W3, check surface again ................................................................................
+    @pytest.mark.parametrize("test_dict", slotW23_test)
+    def test_comp_surface_change_W3(self, test_dict):
+        lam = LamSlot(is_internal=True, Rext=0.1325, is_stator=False)
+        lam.slot = SlotW23(
+            H0=1e-3, H1=1.5e-3, H1_is_rad=False, H2=30e-3, W0=12e-3, W3=10e-3, is_cstt_tooth = True
+        )
+
+        """Check that the computation of the surface is correct"""
+        test_obj = test_dict["test_obj"]
+        result = test_obj.slot.comp_surface()
+
+        a = result
+        b = test_dict["S_exp"]
+        msg = "Return " + str(a) + " expected " + str(b)
+        assert abs((a - b) / a - 0) < DELTA, msg
+
+        # Check that the analytical method returns the same result as the numerical one
+        b = Slot.comp_surface(test_obj.slot)
+        msg = "Return " + str(a) + " expected " + str(b)
+        assert abs((a - b) / a - 0) < DELTA, msg
+
+
 if __name__ == "__main__":
     a = Test_SlotW23_meth()
     for ii, test_dict in enumerate(slotW23_test):
@@ -319,4 +357,6 @@ if __name__ == "__main__":
         a.test_build_geometry_active(test_dict)
         a.test_comp_angle_opening(test_dict)
         a.test_comp_angle_active_eq(test_dict)
+
+        a.test_comp_surface_change_W3(test_dict)
         print("Done")

@@ -15,7 +15,7 @@ def _comp_point_coordinate(self):
         A dict of the slot point coordinates
     """
     Rbo = self.get_Rbo()
-    if self.is_cstt_tooth:
+    if self.is_cstt_tooth and (self.W1 is None or self.W2 is None):
         # Compute W1 and W2 to match W3 tooth constraint
         self._comp_W()
 

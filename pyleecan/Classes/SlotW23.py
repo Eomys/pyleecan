@@ -773,6 +773,7 @@ class SlotW23(Slot):
         """setter of W3"""
         check_var("W3", value, "float", Vmin=0)
         self._W3 = value
+        # self._comp_W()
 
     W3 = property(
         fget=_get_W3,
