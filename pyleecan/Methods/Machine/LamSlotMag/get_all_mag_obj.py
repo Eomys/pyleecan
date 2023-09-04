@@ -22,7 +22,7 @@ def get_all_mag_obj(self):
         _, index_unique = unique(self.mur_lin_matrix, return_index=True)
         for ii, flat_index in enumerate(index_unique):
             mag_list.append(self.magnet.copy())
-            mag_list[-1].mat_type.name = "Magnet_" + str(ii+1)
+            mag_list[-1].mat_type.name = "Magnet_" + str(ii + 1)
             mag_list[-1].mat_type.mag.mur_lin = self.mur_lin_matrix.flat[flat_index]
             # Assume that if a magnet has a different mur_lin, it has a different Brm20
             # So unique is applied only on mur (no cross unique check)
@@ -33,7 +33,7 @@ def get_all_mag_obj(self):
         for ii, Brm20 in enumerate(Brm20_val):
             mag_list.append(self.magnet.copy())
             mag_list[-1].mat_type.mag.Brm20 = Brm20
-            mag_list[-1].mat_type.name = "Magnet_" + str(ii+1)
+            mag_list[-1].mat_type.name = "Magnet_" + str(ii + 1)
             name_index += 1
 
     return mag_list

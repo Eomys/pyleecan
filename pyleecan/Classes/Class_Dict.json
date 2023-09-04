@@ -12278,6 +12278,7 @@
             "SlotM17",
             "SlotM18",
             "SlotM18_2",
+            "SlotM19",
             "SlotUD",
             "SlotUD2",
             "SlotW10",
@@ -13300,6 +13301,69 @@
                 "type": "float",
                 "unit": "m",
                 "value": 0.001
+            }
+        ]
+    },
+    "SlotM19": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            },
+            {
+                "name": "IS_SYMMETRICAL",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "trapezoidal  Slot with trapezoidal magnet with polar top",
+        "is_internal": false,
+        "methods": [
+            "_comp_point_coordinate",
+            "build_geometry",
+            "comp_angle_opening",
+            "comp_height",
+            "comp_height_active",
+            "comp_surface",
+            "comp_surface_active",
+            "get_surface_active",
+            "plot_schematics",
+            "check"
+        ],
+        "mother": "Slot",
+        "name": "SlotM19",
+        "package": "Slot",
+        "path": "pyleecan/Generator/ClassesRef/Slot/SlotM19.csv",
+        "properties": [
+            {
+                "as_dict": "",
+                "desc": "Slot/magnet width. (top)",
+                "max": "",
+                "min": "0",
+                "name": "W0",
+                "type": "float",
+                "unit": "m",
+                "value": 0.03
+            },
+            {
+                "as_dict": "",
+                "desc": "Slot/magnet width. (bottom)",
+                "max": "",
+                "min": "0",
+                "name": "W1",
+                "type": "float",
+                "unit": "m",
+                "value": 0.02
+            },
+            {
+                "as_dict": "",
+                "desc": "Magnet Height",
+                "max": "",
+                "min": "0",
+                "name": "Hmag",
+                "type": "float",
+                "unit": "m",
+                "value": 0.00175
             }
         ]
     },

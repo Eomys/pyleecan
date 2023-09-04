@@ -1,7 +1,13 @@
 from ....Classes.Arc1 import Arc1
 from ....Classes.Segment import Segment
 from ....Classes.SurfLine import SurfLine
-from ....Functions.labels import WIND_LAB, COND_BOUNDARY_PROP_LAB, YSMR_LAB, YSML_LAB, YOKE_LAB
+from ....Functions.labels import (
+    WIND_LAB,
+    COND_BOUNDARY_PROP_LAB,
+    YSMR_LAB,
+    YSML_LAB,
+    YOKE_LAB,
+)
 
 
 def build_geometry_active(self, Nrad, Ntan, alpha=0, delta=0):
@@ -46,7 +52,9 @@ def build_geometry_active(self, Nrad, Ntan, alpha=0, delta=0):
         # Bore Magnet
         surf_list = list()
         curve_list = list()
-        curve_list.append(Segment(ZM1, ZM2, prop_dict={COND_BOUNDARY_PROP_LAB:YSMR_LAB}))
+        curve_list.append(
+            Segment(ZM1, ZM2, prop_dict={COND_BOUNDARY_PROP_LAB: YSMR_LAB})
+        )
 
         if self.is_outwards():
             curve_list.append(
@@ -57,14 +65,16 @@ def build_geometry_active(self, Nrad, Ntan, alpha=0, delta=0):
                 Arc1(ZM2, ZM5, (Rbo + self.Hmag_bore), is_trigo_direction=True)
             )
 
-        curve_list.append(Segment(ZM5, ZM6, prop_dict={COND_BOUNDARY_PROP_LAB:YSML_LAB}))
+        curve_list.append(
+            Segment(ZM5, ZM6, prop_dict={COND_BOUNDARY_PROP_LAB: YSML_LAB})
+        )
 
         if self.is_outwards():
             curve_list.append(Arc1(ZM6, ZM1, -Rbo, is_trigo_direction=False))
         else:
             curve_list.append(Arc1(ZM6, ZM1, -Rbo, is_trigo_direction=False))
         # If no lamination, BC is required on bore
-        curve_list[-1]. prop_dict={COND_BOUNDARY_PROP_LAB:YOKE_LAB}
+        curve_list[-1].prop_dict = {COND_BOUNDARY_PROP_LAB: YOKE_LAB}
 
         Zmid = (abs(ZM1) + abs(ZM2)) / 2
 
@@ -78,7 +88,9 @@ def build_geometry_active(self, Nrad, Ntan, alpha=0, delta=0):
 
         # Airgap magnet
         curve_list = list()
-        curve_list.append(Segment(ZM2, ZM3, prop_dict={COND_BOUNDARY_PROP_LAB:YSMR_LAB}))
+        curve_list.append(
+            Segment(ZM2, ZM3, prop_dict={COND_BOUNDARY_PROP_LAB: YSMR_LAB})
+        )
 
         if self.is_outwards():
             curve_list.append(
@@ -99,7 +111,9 @@ def build_geometry_active(self, Nrad, Ntan, alpha=0, delta=0):
                 )
             )
 
-        curve_list.append(Segment(ZM4, ZM5, prop_dict={COND_BOUNDARY_PROP_LAB:YSML_LAB}))
+        curve_list.append(
+            Segment(ZM4, ZM5, prop_dict={COND_BOUNDARY_PROP_LAB: YSML_LAB})
+        )
 
         if self.is_outwards():
             curve_list.append(

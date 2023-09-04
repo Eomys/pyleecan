@@ -88,17 +88,37 @@ def build_geometry(self, sym=1, alpha=0, delta=0, is_circular_radius=False):
                 if label_dict["S_id"] == 0:
                     # Find the lines to add the BC
                     for line in surf.get_lines():
-                        if line.prop_dict is not None and COND_BOUNDARY_PROP_LAB in line.prop_dict and line.prop_dict[COND_BOUNDARY_PROP_LAB] == YSMR_LAB:
+                        if (
+                            line.prop_dict is not None
+                            and COND_BOUNDARY_PROP_LAB in line.prop_dict
+                            and line.prop_dict[COND_BOUNDARY_PROP_LAB] == YSMR_LAB
+                        ):
                             line.prop_dict.update(
-                                {BOUNDARY_PROP_LAB: st + "_" + YSMR_LAB+"-"+str(label_dict["R_id"])}
+                                {
+                                    BOUNDARY_PROP_LAB: st
+                                    + "_"
+                                    + YSMR_LAB
+                                    + "-"
+                                    + str(label_dict["R_id"])
+                                }
                             )
                 # Set BC on Left side / last active surface
                 if label_dict["S_id"] == Zs // sym - 1:
                     # Find the lines to add the BC
                     for line in surf.get_lines():
-                        if line.prop_dict is not None and COND_BOUNDARY_PROP_LAB in line.prop_dict and line.prop_dict[COND_BOUNDARY_PROP_LAB] == YSML_LAB:
+                        if (
+                            line.prop_dict is not None
+                            and COND_BOUNDARY_PROP_LAB in line.prop_dict
+                            and line.prop_dict[COND_BOUNDARY_PROP_LAB] == YSML_LAB
+                        ):
                             line.prop_dict.update(
-                                {BOUNDARY_PROP_LAB: st + "_" + YSML_LAB+"-"+str(label_dict["R_id"])}
+                                {
+                                    BOUNDARY_PROP_LAB: st
+                                    + "_"
+                                    + YSML_LAB
+                                    + "-"
+                                    + str(label_dict["R_id"])
+                                }
                             )
         # Add wedges if any
         if self.slot.wedge_mat is not None:

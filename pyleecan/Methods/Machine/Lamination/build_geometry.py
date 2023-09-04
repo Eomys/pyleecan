@@ -104,7 +104,7 @@ def build_geometry(self, sym=1, alpha=0, delta=0, is_circular_radius=False):
         elif len(ext_line) == 0:  # (SlotM17)
             pass  # No surface to draw / No lamination
     # Part of the lamination by symmetry
-    elif sym != 1 and len(ext_line) > 0 and self.Rint != self.Rext:  
+    elif sym != 1 and len(ext_line) > 0 and self.Rint != self.Rext:
         # Get limit point of the yoke side
         if self.is_internal:
             ZTR = ext_line[0].get_begin()  # Top Right
