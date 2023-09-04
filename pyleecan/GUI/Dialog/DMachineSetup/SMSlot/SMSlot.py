@@ -17,6 +17,7 @@ from .....GUI.Dialog.DMachineSetup.SMSlot.PMSlot15.PMSlot15 import PMSlot15
 from .....GUI.Dialog.DMachineSetup.SMSlot.PMSlot16.PMSlot16 import PMSlot16
 from .....GUI.Dialog.DMachineSetup.SMSlot.PMSlot17.PMSlot17 import PMSlot17
 from .....GUI.Dialog.DMachineSetup.SMSlot.PMSlot18.PMSlot18 import PMSlot18
+from .....GUI.Dialog.DMachineSetup.SMSlot.PMSlot19.PMSlot19 import PMSlot19
 from .....Functions.Plot.set_plot_gui_icon import set_plot_gui_icon
 from .....Functions.GUI.log_error import log_error
 
@@ -31,6 +32,7 @@ WIDGET_LIST = [
     PMSlot16,
     PMSlot17,
     PMSlot18,
+    PMSlot19,
 ]
 INIT_INDEX = [wid.slot_type for wid in WIDGET_LIST]
 SLOT_NAME = [wid.slot_name for wid in WIDGET_LIST]
