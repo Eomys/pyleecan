@@ -203,7 +203,6 @@ class PWSlot23(Gen_PWSlot23, QWidget):
         # Notify the machine GUI that the machine has changed
         self.saveNeeded.emit()
 
-
     def set_wedge(self):
         """Setup the slot wedge according to the GUI"""
         if self.g_wedge.isChecked():
@@ -217,31 +216,36 @@ class PWSlot23(Gen_PWSlot23, QWidget):
         self.saveNeeded.emit()
 
         """setup the picture"""
-        #self.set_is_cst_tooth
+        # self.set_is_cst_tooth
 
         if self.g_wedge.isChecked():
-            if self.is_cst_tooth.isChecked() :
+            if self.is_cst_tooth.isChecked():
                 self.img_slot.setPixmap(
-                QPixmap(u":/images/images/MachineSetup/WSlot/SlotW23_constant_tooth_wedge_full.png")
-            )
-            
-            else :
+                    QPixmap(
+                        u":/images/images/MachineSetup/WSlot/SlotW23_constant_tooth_wedge_full.png"
+                    )
+                )
+
+            else:
                 self.img_slot.setPixmap(
-                QPixmap(u":/images/images/MachineSetup/WSlot/SlotW23_wedge_full.png")
-            )
-                
-        else : 
-            if self.is_cst_tooth.isChecked() :
+                    QPixmap(
+                        u":/images/images/MachineSetup/WSlot/SlotW23_wedge_full.png"
+                    )
+                )
+
+        else:
+            if self.is_cst_tooth.isChecked():
                 self.img_slot.setPixmap(
-                QPixmap(u":/images/images/MachineSetup/WSlot/SlotW23_constant_tooth_wind.png")
-            )
-            else :
+                    QPixmap(
+                        u":/images/images/MachineSetup/WSlot/SlotW23_constant_tooth_wind.png"
+                    )
+                )
+            else:
                 self.img_slot.setPixmap(
-                QPixmap(u":/images/images/MachineSetup/WSlot/SlotW23_wind.png")
-            )
+                    QPixmap(u":/images/images/MachineSetup/WSlot/SlotW23_wind.png")
+                )
         # Notify the machine GUI that the machine has changed
         self.saveNeeded.emit()
-
 
     def set_is_cst_tooth(self, is_checked):
         """Signal to set the correct mode (constant tooth or slot) according to
@@ -278,34 +282,37 @@ class PWSlot23(Gen_PWSlot23, QWidget):
         # Notify the machine GUI that the machine has changed
         self.saveNeeded.emit()
 
-    
-    
         """setup the picture"""
-        #self.set_is_cst_tooth
+        # self.set_is_cst_tooth
 
         if self.g_wedge.isChecked():
-            if self.is_cst_tooth.isChecked() :
+            if self.is_cst_tooth.isChecked():
                 self.img_slot.setPixmap(
-                QPixmap(u":/images/images/MachineSetup/WSlot/SlotW23_constant_tooth_wedge_full.png")
-            )
-            
-            else :
+                    QPixmap(
+                        u":/images/images/MachineSetup/WSlot/SlotW23_constant_tooth_wedge_full.png"
+                    )
+                )
+
+            else:
                 self.img_slot.setPixmap(
-                QPixmap(u":/images/images/MachineSetup/WSlot/SlotW23_wedge_full.png")
-            )
-                
-        else : 
-            if self.is_cst_tooth.isChecked() :
+                    QPixmap(
+                        u":/images/images/MachineSetup/WSlot/SlotW23_wedge_full.png"
+                    )
+                )
+
+        else:
+            if self.is_cst_tooth.isChecked():
                 self.img_slot.setPixmap(
-                QPixmap(u":/images/images/MachineSetup/WSlot/SlotW23_constant_tooth_wind.png")
-            )
-            else :
+                    QPixmap(
+                        u":/images/images/MachineSetup/WSlot/SlotW23_constant_tooth_wind.png"
+                    )
+                )
+            else:
                 self.img_slot.setPixmap(
-                QPixmap(u":/images/images/MachineSetup/WSlot/SlotW23_wind.png")
-            )
+                    QPixmap(u":/images/images/MachineSetup/WSlot/SlotW23_wind.png")
+                )
         # Notify the machine GUI that the machine has changed
         self.saveNeeded.emit()
-
 
     @staticmethod
     def check(lam):

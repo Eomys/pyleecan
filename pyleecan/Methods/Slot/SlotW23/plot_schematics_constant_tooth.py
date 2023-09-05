@@ -276,7 +276,6 @@ def plot_schematics_constant_tooth(
                 linestyle=MAIN_LINE_STYLE,
                 linewidth=MAIN_LINE_WIDTH,
             )
-            
 
         if type_add_active in [1, 3]:  # Wind and Wedge
             is_add_wedge = type_add_active == 3

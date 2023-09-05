@@ -13224,7 +13224,7 @@
             }
         ],
         "daughters": [],
-        "desc": "trapezoidal  Slot with Rectangular trapezoidal  with polar top",
+        "desc": "trapezoidal  Slot with trapezoidal magnet with polar top",
         "is_internal": false,
         "methods": [
             "_comp_point_coordinate",
@@ -13245,7 +13245,7 @@
         "properties": [
             {
                 "as_dict": "",
-                "desc": "Slot/magnet width.",
+                "desc": "Slot/magnet width. (top)",
                 "max": "",
                 "min": "0",
                 "name": "W0",
@@ -13255,7 +13255,7 @@
             },
             {
                 "as_dict": "",
-                "desc": "Slot/magnet width.",
+                "desc": "Slot/magnet width. (bottom)",
                 "max": "",
                 "min": "0",
                 "name": "W1",
@@ -14310,6 +14310,7 @@
         "methods": [
             "_comp_line_dict",
             "_comp_point_coordinate",
+            "_set_W3",
             "_comp_W",
             "build_geometry",
             "build_geometry_active",
@@ -14322,7 +14323,8 @@
             "comp_surface_opening",
             "get_surface_active",
             "get_surface_opening",
-            "plot_schematics"
+            "plot_schematics",
+            "get_H1"
         ],
         "mother": "Slot",
         "name": "SlotW23",
@@ -14337,7 +14339,7 @@
                 "name": "W0",
                 "type": "float",
                 "unit": "m",
-                "value": 0.003
+                "value": null
             },
             {
                 "as_dict": "",
@@ -14347,7 +14349,7 @@
                 "name": "H0",
                 "type": "float",
                 "unit": "m",
-                "value": 0.003
+                "value": null
             },
             {
                 "as_dict": "",
@@ -14357,7 +14359,7 @@
                 "name": "H1",
                 "type": "float",
                 "unit": "m/rad",
-                "value": 0
+                "value": null
             },
             {
                 "as_dict": "",
@@ -14367,7 +14369,7 @@
                 "name": "W1",
                 "type": "float",
                 "unit": "m",
-                "value": 0.013
+                "value": null
             },
             {
                 "as_dict": "",
@@ -14377,7 +14379,7 @@
                 "name": "H2",
                 "type": "float",
                 "unit": "m",
-                "value": 0.02
+                "value": null
             },
             {
                 "as_dict": "",
@@ -14387,17 +14389,7 @@
                 "name": "W2",
                 "type": "float",
                 "unit": "m",
-                "value": 0.01
-            },
-            {
-                "as_dict": "",
-                "desc": "Tooth width",
-                "max": "",
-                "min": "0",
-                "name": "W3",
-                "type": "float",
-                "unit": "m",
-                "value": 0.01
+                "value": null
             },
             {
                 "as_dict": "",
@@ -14418,6 +14410,16 @@
                 "type": "bool",
                 "unit": "-",
                 "value": 0
+            },
+            {
+                "as_dict": "",
+                "desc": "Tooth width",
+                "max": "",
+                "min": "0",
+                "name": "W3",
+                "type": "float",
+                "unit": "m",
+                "value": null
             }
         ]
     },

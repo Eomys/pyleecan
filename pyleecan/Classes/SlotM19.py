@@ -73,7 +73,7 @@ from ._check import InitUnKnowClassError
 
 
 class SlotM19(Slot):
-    """trapezoidal  Slot with Rectangular trapezoidal  with polar top"""
+    """trapezoidal  Slot with trapezoidal magnet with polar top"""
 
     VERSION = 1
     IS_SYMMETRICAL = 1
@@ -412,7 +412,7 @@ class SlotM19(Slot):
     W0 = property(
         fget=_get_W0,
         fset=_set_W0,
-        doc=u"""Slot/magnet width.
+        doc=u"""Slot/magnet width. (top)
 
         :Type: float
         :min: 0
@@ -431,7 +431,7 @@ class SlotM19(Slot):
     W1 = property(
         fget=_get_W1,
         fset=_set_W1,
-        doc=u"""Slot/magnet width.
+        doc=u"""Slot/magnet width. (bottom)
 
         :Type: float
         :min: 0
