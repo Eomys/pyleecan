@@ -40,6 +40,7 @@ def _comp_point_coordinate(self):
 
         H2 = sqrt(self.H2 ** 2 - ((self.W2 - self.W1) / 2.0) ** 2)
         Z4 = Z3.real - H2 - 1j * self.W2 / 2
+    
 
     point_dict = dict()
     # symetry

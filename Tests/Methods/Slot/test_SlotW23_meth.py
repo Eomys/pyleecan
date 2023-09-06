@@ -52,11 +52,11 @@ lam.slot = SlotW23(
 slotW23_test.append(
     {
         "test_obj": lam,
-        "S_exp": 0.010646,
-        "Aw": 0.013918,
-        "SO_exp": 0.0102566867,
-        "SW_exp": 3.89935e-4,
-        "H_exp": 0.81626,
+        "S_exp": 0.0004146499860595897,
+        "Aw": 0.086887469043536,
+        "SO_exp": 2.3990748216427426e-05,
+        "SW_exp": 3.906592378431622e-4,
+        "H_exp": 0.03195587242929246,
     }
 )
 
@@ -78,19 +78,19 @@ slotW23_test.append(
 )
 
 # External Slot / H1 rad  / Cst tooth
-lam_CT = LamSlot(is_internal=False, Rext=0.1325)
+lam_CT = LamSlot(is_internal=False, Rint=0.1325)
 lam_CT.slot = SlotW23(
     H0=1e-3, H1=pi / 12, H1_is_rad=True, H2=10e-3, W0=12e-3, W1=None, W2=None, W3=10e-3, is_cstt_tooth = True
 )
-Lam_CT_surf = 3.3199239014400616e-4
+Lam_CT_surf = 1.566368729413543e-4
 slotW23_test.append(
     {
         "test_obj": lam_CT,
         "S_exp": Lam_CT_surf,
-        "Aw": 0.08716490125463687,
-        "SO_exp": 3.1473325433303185e-05,
-        "SW_exp": 3.0051906471070296e-04,
-        "H_exp": 0.03245132013168321,
+        "Aw": 0.10182012053189782,
+        "SO_exp": 1.3238508285680388e-05,
+        "SW_exp": 1.4339836465567391e-04,
+        "H_exp": 0.011203056674731204,
     }
 )
 
@@ -154,7 +154,7 @@ class Test_SlotW23_meth(object):
             test_obj.slot.H0
         )
         assert abs(point_dict["Z2"].real - point_dict["Z3"].real) == pytest.approx(
-            test_obj.slot.H1
+            test_obj.slot.get_H1()
         )
         assert abs(point_dict["Z3"] - point_dict["Z4"]) == pytest.approx(
             test_obj.slot.H2
@@ -163,7 +163,7 @@ class Test_SlotW23_meth(object):
             test_obj.slot.H0
         )
         assert abs(point_dict["Z6"].real - point_dict["Z7"].real) == pytest.approx(
-            test_obj.slot.H1
+            test_obj.slot.get_H1()
         )
         assert abs(point_dict["Z5"] - point_dict["Z6"]) == pytest.approx(
             test_obj.slot.H2
@@ -213,7 +213,7 @@ class Test_SlotW23_meth(object):
 
         a = result
         b = test_dict["S_exp"]
-        msg = "Return " + str(a) + " expected " + str(b)
+        msg = "Return " + str(a) + " expected " + str(b) + "  not analytic"
         assert abs((a - b) / a - 0) < DELTA, msg
 
         # Check that the analytical method returns the same result as the numerical one
@@ -229,7 +229,7 @@ class Test_SlotW23_meth(object):
 
         a = result
         b = test_dict["SW_exp"]
-        msg = "Return " + str(a) + " expected " + str(b)
+        msg = "Return " + str(a) + " expected " + str(b) 
         assert abs((a - b) / a - 0) < DELTA, msg
 
         # Check that the analytical method returns the same result as the numerical one
@@ -261,7 +261,7 @@ class Test_SlotW23_meth(object):
 
         a = result
         b = test_dict["H_exp"]
-        msg = "Return " + str(a) + " expected " + str(b)
+        msg = "Return " + str(a) + " expected " + str(b) 
         assert abs((a - b) / a - 0) < DELTA, msg
 
         # Check that the analytical method returns the same result as the numerical one
@@ -324,7 +324,7 @@ class Test_SlotW23_meth(object):
         """Check that the computations of the Ws are right"""
         lam = LamSlot(is_internal=True, Rext=0.1325, is_stator=False)
         lam.slot = SlotW23(
-            H0=1e-3, H1=1.5e-3, H1_is_rad=False, H2=30e-3, W0=12e-3, W1=14e-3, W2=12e-3
+            H0=1e-3, H1=1.5e-3, H1_is_rad=False, H2=30e-3, W0=12e-3, W3=10e-3, is_cstt_tooth=True
         )
         lam.slot._comp_W()
         assert lam.slot.W1 == 0.012681779210634543
@@ -332,18 +332,16 @@ class Test_SlotW23_meth(object):
 
         lam = LamSlot(is_internal=False, Rext=0.1325, is_stator=False, Rint=0.154)
         lam.slot = SlotW23(
-            H0=1e-3, H1=1.5e-3, H1_is_rad=False, H2=30e-3, W0=12e-3, W1=14e-3, W2=12e-3
+            H0=1e-3, H1=1.5e-3, H1_is_rad=False, H2=30e-3, W0=12e-3, W3=10e-3, is_cstt_tooth=True
         )
         lam.slot._comp_W()
         assert lam.slot.W1 == 0.017303874301855315
         assert lam.slot.W2 == 0.022533218866714805
 
 
-#"""Check that the computation of the surface is correct"""
-    """
-    # Check surface, change, W3, check surface again
-    def test_comp_surface_change_W3(self, test_dict):
-        
+    
+    def test_comp_surface_change_W3(self):
+        # Check surface, change, W3, check surface again
         test_obj = lam_CT.copy()
 
         assert test_obj.slot.W1 is None
@@ -375,7 +373,7 @@ class Test_SlotW23_meth(object):
         # Check that the analytical method returns the same result as the numerical one
         msg = "Return " + str(c) + " expected " + str(b)
         assert abs((c - b) / c - 0) < DELTA, msg
-"""
+ 
 
 if __name__ == "__main__":
     a = Test_SlotW23_meth()
@@ -390,7 +388,7 @@ if __name__ == "__main__":
         a.test_build_geometry_active(test_dict)
         a.test_comp_angle_opening(test_dict)
         a.test_comp_angle_active_eq(test_dict)
-        a.test_comp_W(test_dict)
-
-        #a.test_comp_surface_change_W3(test_dict)
+        a.test_comp_W()
+        a.test_comp_surface_change_W3()
+        a.test_check_error()
         print("Done")

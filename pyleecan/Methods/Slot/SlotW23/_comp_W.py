@@ -19,7 +19,7 @@ def _comp_W(self):
 
     """
     Rbo = self.get_Rbo()
-
+    
     # To compute the slot width we use the fact that
     # alpha_tooth + alpha_slot = slot_pitch
     slot_pitch = 2 * pi / self.Zs

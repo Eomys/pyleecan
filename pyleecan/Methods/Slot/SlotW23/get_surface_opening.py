@@ -1,6 +1,5 @@
 from ....Classes.SurfLine import SurfLine
 from ....Functions.labels import SOP_LAB, DRAW_PROP_LAB
-from .get_H1 import get_H1
 
 def get_surface_opening(self, alpha=0, delta=0):
     """Return the list of surfaces defining the opening area of the Slot
@@ -19,9 +18,9 @@ def get_surface_opening(self, alpha=0, delta=0):
     surf_list : list
         list of surfaces objects
     """
-    self.H1=get_H1(self)
+    
     # H0=H1=0 no opening
-    if self.H0 == 0 and self.H1 == 0:
+    if self.H0 == 0 and self.get_H1() == 0:
         return []
 
     # Create curve list
