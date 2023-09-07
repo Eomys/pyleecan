@@ -15,13 +15,10 @@ def _comp_point_coordinate(self):
         A dict of the slot coordinates
     """
     Rbo = self.get_Rbo()
-    if self.is_cstt_tooth:
-        # Compute W1 and W2 to match W3 tooth constraint
-        self._comp_W()
 
     H1 = self.get_H1()
 
-    # alpha is the angle to rotate Z0 so ||Z1,Z10|| = W0
+    # alpha is the angle to rotate Z0 so ||Z1,Z8|| = W0
     alpha = float(arcsin(self.W0 / (2 * Rbo)))
 
     # comp point coordinate (in complex)
@@ -31,18 +28,12 @@ def _comp_point_coordinate(self):
     if self.is_outwards():
         Z2 = Z1 + self.H0
         Z3 = Z2.real + H1 + -1j * self.W1 / 2.0
-
-        # ........ Changer la méthode pour être adaptable avec constant tooth .......
-
         Z4 = Z3.real + (self.H2 - self.R1) - 1j * self.W2 / 2.0
         Z5 = Z4 + self.R1 + self.R1 * 1j
         # rot_sign = 1  # Rotation direction for Arc1
     else:  # inward slot
         Z2 = Z1 - self.H0
         Z3 = Z2.real - H1 + -1j * self.W1 / 2.0
-
-        # ........ Changer la méthode pour être adaptable avec constant tooth .......
-
         Z4 = Z3.real - (self.H2 - self.R1) - 1j * self.W2 / 2.0
         Z5 = Z4 - self.R1 + self.R1 * 1j
         # rot_sign = -1  # Rotation direction for Arc1

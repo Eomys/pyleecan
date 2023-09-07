@@ -375,6 +375,35 @@ class Test_SlotW23_meth(object):
         assert abs((c - b) / c - 0) < DELTA, msg
  
 
+ 
+    def test_get_H1(self) :
+        """check conversion of H1"""
+        
+        lam = LamSlot(is_internal=True, Rext=0.1325, is_stator=False)
+        lam.slot = SlotW23(
+            H0=1e-3, H1=pi / 4, H1_is_rad=True, H2=30e-3, W0=12e-3, W3=10e-3, is_cstt_tooth=True
+        )
+
+        a = lam.slot.get_H1()
+        b = 0.0005362698781809228
+        msg = "Return " + str(a) + " expected " + str(b)
+        assert abs((a - b) / a - 0) < DELTA, msg
+
+
+        lam = LamSlot(is_internal=False, Rext=0.1325, is_stator=False, Rint=0.154)
+        lam.slot = SlotW23(
+            H0=1e-3, H1=pi/4, H1_is_rad=True, H2=30e-3, W0=12e-3, W1=20e-3, W2=10e-3, is_cstt_tooth=False
+        )
+
+        a = lam.slot.get_H1()
+        b = 0.004
+        msg = "Return " + str(a) + " expected " + str(b)
+        assert abs((a - b) / a - 0) < DELTA, msg
+
+
+
+
+
 if __name__ == "__main__":
     a = Test_SlotW23_meth()
     for ii, test_dict in enumerate(slotW23_test):
@@ -391,4 +420,5 @@ if __name__ == "__main__":
         a.test_comp_W()
         a.test_comp_surface_change_W3()
         a.test_check_error()
+        a.test_get_H1()
         print("Done")

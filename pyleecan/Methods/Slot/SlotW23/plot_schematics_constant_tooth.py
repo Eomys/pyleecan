@@ -156,7 +156,7 @@ def plot_schematics_constant_tooth(
                 is_arrow=True,
                 fontsize=SC_FONT_SIZE,
             )
-            # H1
+            # H1 [m]
             line = Segment(
                 point_dict["Z2"].real,
                 point_dict["Z3"].real,
@@ -164,13 +164,32 @@ def plot_schematics_constant_tooth(
             line.plot(
                 fig=fig,
                 ax=ax,
-                label="H1",
+                label="H1 [m]",
                 color=ARROW_COLOR,
                 linewidth=ARROW_WIDTH,
                 offset_label=1j * self.W0 * 0.1 + 0.005j - 0.005,
                 is_arrow=True,
                 fontsize=SC_FONT_SIZE,
             )
+            # H1 [rad]
+            line = Arc1(
+                begin=(point_dict["Z2"] + point_dict["Z3"]) / 2
+                - self.get_H1() / 2
+                - 0.007j,
+                end=(point_dict["Z2"] + point_dict["Z3"]) / 2,
+                radius=(self.get_H1() / 2),
+                is_trigo_direction=True,
+            )
+            line.plot(
+                fig=fig,
+                ax=ax,
+                color=ARROW_COLOR,
+                linewidth=ARROW_WIDTH,
+                label="H1 [rad]",
+                offset_label=-1j * sign * self.get_H1() * 1.1,
+                fontsize=SC_FONT_SIZE,
+            )
+
             # H2
             line = Segment(point_dict["Z5"], point_dict["Z6"])
             line.plot(
@@ -276,6 +295,15 @@ def plot_schematics_constant_tooth(
                 linestyle=MAIN_LINE_STYLE,
                 linewidth=MAIN_LINE_WIDTH,
             )
+            # H1
+            line = Segment(point_dict["Z2"] - 1j, point_dict["Z7"])
+            line.plot(
+                fig=fig,
+                ax=ax,
+                color=MAIN_LINE_COLOR,
+                linestyle=MAIN_LINE_STYLE,
+                linewidth=MAIN_LINE_WIDTH,
+            )
 
         if type_add_active in [1, 3]:  # Wind and Wedge
             is_add_wedge = type_add_active == 3
@@ -330,7 +358,7 @@ Mag19_test = list()
 # Internal Slot
 lam = LamSlot(Rint=0.135, Rext=0.3, is_internal=False)
 lam.slot = SlotW23(
-    #Zs=12, H0=20e-3, W0=20e-3, H1=20e-3, H2=80e-3, W3=20e-3, is_cstt_tooth=True
+    Zs=12, H0=20e-3, W0=20e-3, H1=20e-3, H2=80e-3, W3=20e-3, is_cstt_tooth=True
 )
 
 

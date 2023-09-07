@@ -39,6 +39,6 @@ def comp_surface_opening(self):
         # The opening part is radial
         S1 = (pi * (Rbo ** 2) - pi * ((Rbo - self.H0) ** 2)) * alpha / (2 * pi) + Sarc
 
-    S2 = 0.5 * self.get_H1() * (Wint + self.W1)  
+    S2 = 0.5 * self.get_H1() * (Wint + self.W1)
 
     return S1 + S2

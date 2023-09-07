@@ -27,3 +27,4 @@ Slot,Slot,_comp_line_dict,VERSION,1,semi-closed trapezoidal without fillet witho
 ,,get_surface_opening,,,,,,
 ,,plot_schematics,,,,,,
 ,,get_H1,,,,,,
+,,plot_schematics_constant_tooth,,,,,,

@@ -1,6 +1,7 @@
 from ....Functions.labels import WIND_LAB, DRAW_PROP_LAB
 from ....Classes.SurfLine import SurfLine
 
+
 def get_surface_active(self, alpha=0, delta=0):
     """Return the full winding surface
 

@@ -14324,7 +14324,8 @@
             "get_surface_active",
             "get_surface_opening",
             "plot_schematics",
-            "get_H1"
+            "get_H1",
+            "plot_schematics_constant_tooth"
         ],
         "mother": "Slot",
         "name": "SlotW23",
