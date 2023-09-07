@@ -48,7 +48,6 @@ class PWSlot23(Gen_PWSlot23, QWidget):
         self.lf_W2.unit = "m"
         self.lf_W3.unit = "m"
         self.lf_H0.unit = "m"
-        # self.lf_H1.unit = "m"
         self.lf_H2.unit = "m"
 
         # Set unit name (m ou mm)
@@ -122,6 +121,7 @@ class PWSlot23(Gen_PWSlot23, QWidget):
         self.lf_W2.editingFinished.connect(self.set_W2)
         self.lf_W3.editingFinished.connect(self.set_W3)
         self.lf_H0.editingFinished.connect(self.set_H0)
+        self.lf_H1.editingFinished.connect(self.set_H1)
         self.c_H1_unit.currentIndexChanged.connect(self.set_H1_unit)
         self.lf_H2.editingFinished.connect(self.set_H2)
         self.is_cst_tooth.toggled.connect(self.set_is_cst_tooth)
