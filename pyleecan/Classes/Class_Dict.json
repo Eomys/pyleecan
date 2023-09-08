@@ -3686,13 +3686,18 @@
             {
                 "name": "VERSION",
                 "value": "1"
+            },
+            {
+                "name": "IS_SYMMETRICAL",
+                "value": "1"
             }
         ],
         "daughters": [],
         "desc": "V shape slot for buried magnet",
         "is_internal": false,
         "methods": [
-            "_comp_point_coordinate"
+            "_comp_point_coordinate",
+            "build_geometry"
         ],
         "mother": "HoleMag",
         "name": "HoleM60",
