@@ -114,7 +114,6 @@ def plot_schematics_constant_tooth(
         sp = 2 * pi / self.Zs
         # Adding schematics
         if is_add_schematics:
-
             # W0
             line = Segment(point_dict["Z1"], point_dict["Z8"])
             line.plot(
@@ -176,7 +175,8 @@ def plot_schematics_constant_tooth(
                 begin=(point_dict["Z2"] + point_dict["Z3"]) / 2
                 - self.get_H1() / 2
                 - 0.007j,
-                end=(point_dict["Z2"] + point_dict["Z3"]) / 2,
+                end=(((point_dict["Z2"] + point_dict["Z3"]) / 2) + point_dict["Z3"])
+                / 2,
                 radius=(self.get_H1() / 2),
                 is_trigo_direction=True,
             )
@@ -186,7 +186,7 @@ def plot_schematics_constant_tooth(
                 color=ARROW_COLOR,
                 linewidth=ARROW_WIDTH,
                 label="H1 [rad]",
-                offset_label=-1j * sign * self.get_H1() * 1.1,
+                offset_label=-1j * sign * self.get_H1() * 0.8,
                 fontsize=SC_FONT_SIZE,
             )
 
@@ -341,29 +341,3 @@ def plot_schematics_constant_tooth(
         if is_show_fig:
             fig.show()
         return fig, ax
-
-
-"""
-import pytest
-
-from pyleecan.Classes.LamSlotMag import LamSlotMag
-from pyleecan.Classes.SlotW23 import SlotW23
-from pyleecan.Classes.Slot import Slot
-from pyleecan.Methods import ParentMissingError
-
-from numpy import exp
-from time import sleep
-
-Mag19_test = list()
-# Internal Slot
-lam = LamSlot(Rint=0.135, Rext=0.3, is_internal=False)
-lam.slot = SlotW23(
-    Zs=12, H0=20e-3, W0=20e-3, H1=20e-3, H2=80e-3, W3=20e-3, is_cstt_tooth=True
-)
-
-
-if __name__ == "__main__":
-    plot_schematics_constant_tooth(lam.slot)
-    plt.show()
-    sleep(60)
-"""

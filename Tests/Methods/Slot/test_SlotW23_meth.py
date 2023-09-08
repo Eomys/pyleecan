@@ -15,7 +15,14 @@ slotW23_test = list()
 # Internal Slot / H1m / Cst slot
 lam = LamSlot(is_internal=True, Rext=0.1325)
 lam.slot = SlotW23(
-    H0=1e-3, H1=1.5e-3, H1_is_rad=False, H2=30e-3, W0=12e-3, W1=14e-3, W2=12e-3, is_cstt_tooth = False
+    H0=1e-3,
+    H1=1.5e-3,
+    H1_is_rad=False,
+    H2=30e-3,
+    W0=12e-3,
+    W1=14e-3,
+    W2=12e-3,
+    is_cstt_tooth=False,
 )
 slotW23_test.append(
     {
@@ -31,7 +38,14 @@ slotW23_test.append(
 # External Slot  / H1m / Cst slot
 lam = LamSlot(is_internal=False, Rint=0.1325)
 lam.slot = SlotW23(
-    H0=1e-3, H1=1.5e-3, H1_is_rad=False, H2=30e-3, W0=12e-3, W1=14e-3, W2=12e-3, is_cstt_tooth = False
+    H0=1e-3,
+    H1=1.5e-3,
+    H1_is_rad=False,
+    H2=30e-3,
+    W0=12e-3,
+    W1=14e-3,
+    W2=12e-3,
+    is_cstt_tooth=False,
 )
 slotW23_test.append(
     {
@@ -47,7 +61,14 @@ slotW23_test.append(
 # External Slot /Rad H1  / Cst slot
 lam = LamSlot(is_internal=False, Rint=0.1325)
 lam.slot = SlotW23(
-    H0=1e-3, H1=pi / 4, H1_is_rad=True, H2=30e-3, W0=12e-3, W1=14e-3, W2=12e-3, is_cstt_tooth = False
+    H0=1e-3,
+    H1=pi / 4,
+    H1_is_rad=True,
+    H2=30e-3,
+    W0=12e-3,
+    W1=14e-3,
+    W2=12e-3,
+    is_cstt_tooth=False,
 )
 slotW23_test.append(
     {
@@ -63,7 +84,15 @@ slotW23_test.append(
 # Internal Slot / H1m  / Cst tooth
 lam_CT = LamSlot(is_internal=True, Rext=0.1325)
 lam_CT.slot = SlotW23(
-    H0=1e-3, H1=1.5e-3, H1_is_rad=False, H2=30e-3, W0=12e-3, W1=None, W2=None, W3=10e-3, is_cstt_tooth = True
+    H0=1e-3,
+    H1=1.5e-3,
+    H1_is_rad=False,
+    H2=30e-3,
+    W0=12e-3,
+    W1=None,
+    W2=None,
+    W3=10e-3,
+    is_cstt_tooth=True,
 )
 Lam_CT_surf = 3.3199239014400616e-4
 slotW23_test.append(
@@ -80,7 +109,15 @@ slotW23_test.append(
 # External Slot / H1 rad  / Cst tooth
 lam_CT = LamSlot(is_internal=False, Rint=0.1325)
 lam_CT.slot = SlotW23(
-    H0=1e-3, H1=pi / 12, H1_is_rad=True, H2=10e-3, W0=12e-3, W1=None, W2=None, W3=10e-3, is_cstt_tooth = True
+    H0=1e-3,
+    H1=pi / 12,
+    H1_is_rad=True,
+    H2=10e-3,
+    W0=12e-3,
+    W1=None,
+    W2=None,
+    W3=10e-3,
+    is_cstt_tooth=True,
 )
 Lam_CT_surf = 1.566368729413543e-4
 slotW23_test.append(
@@ -93,6 +130,7 @@ slotW23_test.append(
         "H_exp": 0.011203056674731204,
     }
 )
+
 
 class Test_SlotW23_meth(object):
     """pytest for SlotW23 methods"""
@@ -229,7 +267,7 @@ class Test_SlotW23_meth(object):
 
         a = result
         b = test_dict["SW_exp"]
-        msg = "Return " + str(a) + " expected " + str(b) 
+        msg = "Return " + str(a) + " expected " + str(b)
         assert abs((a - b) / a - 0) < DELTA, msg
 
         # Check that the analytical method returns the same result as the numerical one
@@ -261,7 +299,7 @@ class Test_SlotW23_meth(object):
 
         a = result
         b = test_dict["H_exp"]
-        msg = "Return " + str(a) + " expected " + str(b) 
+        msg = "Return " + str(a) + " expected " + str(b)
         assert abs((a - b) / a - 0) < DELTA, msg
 
         # Check that the analytical method returns the same result as the numerical one
@@ -294,7 +332,9 @@ class Test_SlotW23_meth(object):
     def test_check_error(self):
         """Check that the check method is correctly raising an error"""
         lam = LamSlot(is_internal=True, Rext=0.1325)
-        lam.slot = SlotW23(Zs=69, H2=0.0015, W3=12e-3, H1_is_rad=True, H1=3.14, is_cstt_tooth=True)
+        lam.slot = SlotW23(
+            Zs=69, H2=0.0015, W3=12e-3, H1_is_rad=True, H1=3.14, is_cstt_tooth=True
+        )
 
         with pytest.raises(S23_H1rCheckError) as context:
             lam.slot.check()
@@ -324,7 +364,13 @@ class Test_SlotW23_meth(object):
         """Check that the computations of the Ws are right"""
         lam = LamSlot(is_internal=True, Rext=0.1325, is_stator=False)
         lam.slot = SlotW23(
-            H0=1e-3, H1=1.5e-3, H1_is_rad=False, H2=30e-3, W0=12e-3, W3=10e-3, is_cstt_tooth=True
+            H0=1e-3,
+            H1=1.5e-3,
+            H1_is_rad=False,
+            H2=30e-3,
+            W0=12e-3,
+            W3=10e-3,
+            is_cstt_tooth=True,
         )
         lam.slot._comp_W()
         assert lam.slot.W1 == 0.012681779210634543
@@ -332,14 +378,18 @@ class Test_SlotW23_meth(object):
 
         lam = LamSlot(is_internal=False, Rext=0.1325, is_stator=False, Rint=0.154)
         lam.slot = SlotW23(
-            H0=1e-3, H1=1.5e-3, H1_is_rad=False, H2=30e-3, W0=12e-3, W3=10e-3, is_cstt_tooth=True
+            H0=1e-3,
+            H1=1.5e-3,
+            H1_is_rad=False,
+            H2=30e-3,
+            W0=12e-3,
+            W3=10e-3,
+            is_cstt_tooth=True,
         )
         lam.slot._comp_W()
         assert lam.slot.W1 == 0.017303874301855315
         assert lam.slot.W2 == 0.022533218866714805
 
-
-    
     def test_comp_surface_change_W3(self):
         # Check surface, change, W3, check surface again
         test_obj = lam_CT.copy()
@@ -355,17 +405,17 @@ class Test_SlotW23_meth(object):
         msg = "Return " + str(a) + " expected " + str(b)
         assert abs((a - b) / a - 0) < DELTA, msg
 
-        #change W3
+        # change W3
         W2 = test_obj.slot.W2
         W1 = test_obj.slot.W1
-        test_obj.slot.W3 = test_obj.slot.W3 /2
+        test_obj.slot.W3 = test_obj.slot.W3 / 2
         assert test_obj.slot.W2 != W2
         assert test_obj.slot.W1 != W1
-        
+
         result = test_obj.slot.comp_surface()
 
         # Check if methods constant thooth change surface
-        c = result        
+        c = result
         b = Slot.comp_surface(test_obj.slot)
         msg = "Error if " + str(c) + " and " + str(b) + "are equal"
         assert Lam_CT_surf != b, msg
@@ -373,15 +423,19 @@ class Test_SlotW23_meth(object):
         # Check that the analytical method returns the same result as the numerical one
         msg = "Return " + str(c) + " expected " + str(b)
         assert abs((c - b) / c - 0) < DELTA, msg
- 
 
- 
-    def test_get_H1(self) :
+    def test_get_H1(self):
         """check conversion of H1"""
-        
+
         lam = LamSlot(is_internal=True, Rext=0.1325, is_stator=False)
         lam.slot = SlotW23(
-            H0=1e-3, H1=pi / 4, H1_is_rad=True, H2=30e-3, W0=12e-3, W3=10e-3, is_cstt_tooth=True
+            H0=1e-3,
+            H1=pi / 4,
+            H1_is_rad=True,
+            H2=30e-3,
+            W0=12e-3,
+            W3=10e-3,
+            is_cstt_tooth=True,
         )
 
         a = lam.slot.get_H1()
@@ -389,19 +443,22 @@ class Test_SlotW23_meth(object):
         msg = "Return " + str(a) + " expected " + str(b)
         assert abs((a - b) / a - 0) < DELTA, msg
 
-
         lam = LamSlot(is_internal=False, Rext=0.1325, is_stator=False, Rint=0.154)
         lam.slot = SlotW23(
-            H0=1e-3, H1=pi/4, H1_is_rad=True, H2=30e-3, W0=12e-3, W1=20e-3, W2=10e-3, is_cstt_tooth=False
+            H0=1e-3,
+            H1=pi / 4,
+            H1_is_rad=True,
+            H2=30e-3,
+            W0=12e-3,
+            W1=20e-3,
+            W2=10e-3,
+            is_cstt_tooth=False,
         )
 
         a = lam.slot.get_H1()
         b = 0.004
         msg = "Return " + str(a) + " expected " + str(b)
         assert abs((a - b) / a - 0) < DELTA, msg
-
-
-
 
 
 if __name__ == "__main__":

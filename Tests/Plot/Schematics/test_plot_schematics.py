@@ -536,56 +536,31 @@ class Test_plot_schematics(object):
             is_show_fig=False,
         )
 
+    @pytest.mark.parametrize("test_dict", SlotW23)
     def test_slot_constant_tooth(self, test_dict):
         """Slot Schematics constant tooth"""
-        ## Empty
-        if "is_default" in test_dict:
-            file_name = (
-                type(test_dict["test_obj"]).__name__
-                + "_constant_tooth_empty_int_rot.png"
-            )
-        else:
-            file_name = (
-                type(test_dict["test_obj"]).__name__ + "_constant_tooth_empty.png"
-            )
-        file_path = join(SCHEMATICS_PATH, file_name)
-        # Delete previous plot
-        if isfile(file_path):
-            remove(file_path)
-        # Plot / Save schematics
-        print("Generating " + file_name)
-        test_obj = test_dict["test_obj"]
-        test_obj.plot_schematics_constant_tooth(
-            is_default=True,
-            is_add_point_label=False,
-            is_add_schematics=True,
-            is_add_main_line=True,
-            type_add_active=0,
-            save_path=file_path,
-            is_show_fig=False,
-        )
-
-        if "is_default" in test_dict:
-            if test_dict["is_default"] == 2:  # External schematics
+        test_obj = test_dict["test_obj"].copy()
+        # Test if method constant_tooth
+        if "is_cstt_tooth" in dir(test_obj):
+            ## Empty
+            if "is_default" in test_dict:
                 file_name = (
                     type(test_dict["test_obj"]).__name__
-                    + "_constant_tooth_empty_ext_sta.png"
+                    + "_constant_tooth_empty_int_rot.png"
                 )
             else:
                 file_name = (
-                    type(test_dict["test_obj"]).__name__
-                    + "_constant_tooth_empty_"
-                    + str(test_dict["is_default"])
-                    + "_constant_tooth.png"
+                    type(test_dict["test_obj"]).__name__ + "_constant_tooth_empty.png"
                 )
             file_path = join(SCHEMATICS_PATH, file_name)
             # Delete previous plot
             if isfile(file_path):
                 remove(file_path)
+            # Plot / Save schematics
             print("Generating " + file_name)
             test_obj = test_dict["test_obj"]
             test_obj.plot_schematics_constant_tooth(
-                is_default=True,  # test_dict["is_default"],
+                is_default=True,
                 is_add_point_label=False,
                 is_add_schematics=True,
                 is_add_main_line=True,
@@ -594,76 +569,111 @@ class Test_plot_schematics(object):
                 is_show_fig=False,
             )
 
-        if test_dict["type_add_active"] == 1:
-            ## Wind only
-            file_name = (
-                type(test_dict["test_obj"]).__name__ + "_constant_tooth_wind.png"
-            )
-            file_path = join(SCHEMATICS_PATH, file_name)
-            # Delete previous plot
-            if isfile(file_path):
-                remove(file_path)
-            # Plot / Save schematics
-            print("Generating " + file_name)
-            test_obj = test_dict["test_obj"]
-            test_obj.plot_schematics_constant_tooth(
-                is_default=True,
-                is_add_point_label=False,
-                is_add_schematics=True,
-                is_add_main_line=True,
-                type_add_active=1,
-                save_path=file_path,
-                is_show_fig=False,
-            )
-            ## Wind and Wedge
-            file_name = (
-                type(test_dict["test_obj"]).__name__ + "_constant_tooth_wedge_full.png"
-            )
-            file_path = join(SCHEMATICS_PATH, file_name)
-            # Delete previous plot
-            if isfile(file_path):
-                remove(file_path)
-            # Plot / Save schematics
-            print("Generating " + file_name)
-            test_obj = test_dict["test_obj"]
-            test_obj.plot_schematics_constant_tooth(
-                is_default=True,
-                is_add_point_label=False,
-                is_add_schematics=True,
-                is_add_main_line=True,
-                type_add_active=3,
-                save_path=file_path,
-                is_show_fig=False,
-            )
-        elif test_dict["type_add_active"] == 2:
-            ## Magnet only
-            file_name = type(test_dict["test_obj"]).__name__ + "_constant_tooth_mag.png"
-            file_path = join(SCHEMATICS_PATH, file_name)
-            # Delete previous plot
-            if isfile(file_path):
-                remove(file_path)
-            # Plot / Save
-            print("Generating " + file_name)
-            test_obj = test_dict["test_obj"]
-            test_obj.plot_schematics_constant_tooth(
-                is_default=True,
-                is_add_point_label=False,
-                is_add_schematics=True,
-                is_add_main_line=True,
-                type_add_active=2,
-                save_path=file_path,
-                is_show_fig=False,
-            )
+            if "is_default" in test_dict:
+                if test_dict["is_default"] == 2:  # External schematics
+                    file_name = (
+                        type(test_dict["test_obj"]).__name__
+                        + "_constant_tooth_empty_ext_sta.png"
+                    )
+                else:
+                    file_name = (
+                        type(test_dict["test_obj"]).__name__
+                        + "_constant_tooth_empty_"
+                        + str(test_dict["is_default"])
+                        + "_constant_tooth.png"
+                    )
+                file_path = join(SCHEMATICS_PATH, file_name)
+                # Delete previous plot
+                if isfile(file_path):
+                    remove(file_path)
+                print("Generating " + file_name)
+                test_obj = test_dict["test_obj"]
+                test_obj.plot_schematics_constant_tooth(
+                    is_default=True,  # test_dict["is_default"],
+                    is_add_point_label=False,
+                    is_add_schematics=True,
+                    is_add_main_line=True,
+                    type_add_active=0,
+                    save_path=file_path,
+                    is_show_fig=False,
+                )
+
+            if test_dict["type_add_active"] == 1:
+                ## Wind only
+                file_name = (
+                    type(test_dict["test_obj"]).__name__ + "_constant_tooth_wind.png"
+                )
+                file_path = join(SCHEMATICS_PATH, file_name)
+                # Delete previous plot
+                if isfile(file_path):
+                    remove(file_path)
+                # Plot / Save schematics
+                print("Generating " + file_name)
+                test_obj = test_dict["test_obj"]
+                test_obj.plot_schematics_constant_tooth(
+                    is_default=True,
+                    is_add_point_label=False,
+                    is_add_schematics=True,
+                    is_add_main_line=True,
+                    type_add_active=1,
+                    save_path=file_path,
+                    is_show_fig=False,
+                )
+                ## Wind and Wedge
+                file_name = (
+                    type(test_dict["test_obj"]).__name__
+                    + "_constant_tooth_wedge_full.png"
+                )
+                file_path = join(SCHEMATICS_PATH, file_name)
+                # Delete previous plot
+                if isfile(file_path):
+                    remove(file_path)
+                # Plot / Save schematics
+                print("Generating " + file_name)
+                test_obj = test_dict["test_obj"]
+                test_obj.plot_schematics_constant_tooth(
+                    is_default=True,
+                    is_add_point_label=False,
+                    is_add_schematics=True,
+                    is_add_main_line=True,
+                    type_add_active=3,
+                    save_path=file_path,
+                    is_show_fig=False,
+                )
+            elif test_dict["type_add_active"] == 2:
+                ## Magnet only
+                file_name = (
+                    type(test_dict["test_obj"]).__name__ + "_constant_tooth_mag.png"
+                )
+                file_path = join(SCHEMATICS_PATH, file_name)
+                # Delete previous plot
+                if isfile(file_path):
+                    remove(file_path)
+                # Plot / Save
+                print("Generating " + file_name)
+                test_obj = test_dict["test_obj"]
+                test_obj.plot_schematics_constant_tooth(
+                    is_default=True,
+                    is_add_point_label=False,
+                    is_add_schematics=True,
+                    is_add_main_line=True,
+                    type_add_active=2,
+                    save_path=file_path,
+                    is_show_fig=False,
+                )
+        else:
+            pass
 
 
 if __name__ == "__main__":
     a = Test_plot_schematics()
     # a.test_BoreFlower()
     # a.test_BoreSinePole()
-    a.test_slot(slot_test[20])
-    a.test_slot_point(slot_test[20])
-    a.test_slot_constant_tooth(slot_test[20])
-    # for slot in slot_test:
-    #     a.test_slot(slot)
-    #     a.test_slot_point(slot)
+    # a.test_slot(slot_test[20])
+    # a.test_slot_point(slot_test[20])
+    # a.test_slot_constant_tooth(slot_test[20])
+    for slot in slot_test:
+        a.test_slot(slot)
+        a.test_slot_point(slot)
+        a.test_slot_constant_tooth(slot)
     print("Done")

@@ -261,27 +261,25 @@ class PWSlot23(Gen_PWSlot23, QWidget):
             if self.is_cst_tooth.isChecked():
                 self.img_slot.setPixmap(
                     QPixmap(
-                        u":/images/images/MachineSetup/WSlot/SlotW23_constant_tooth_wedge_full.png"
+                        ":/images/images/MachineSetup/WSlot/SlotW23_constant_tooth_wedge_full.png"
                     )
                 )
 
             else:
                 self.img_slot.setPixmap(
-                    QPixmap(
-                        u":/images/images/MachineSetup/WSlot/SlotW23_wedge_full.png"
-                    )
+                    QPixmap(":/images/images/MachineSetup/WSlot/SlotW23_wedge_full.png")
                 )
 
         else:
             if self.is_cst_tooth.isChecked():
                 self.img_slot.setPixmap(
                     QPixmap(
-                        u":/images/images/MachineSetup/WSlot/SlotW23_constant_tooth_wind.png"
+                        ":/images/images/MachineSetup/WSlot/SlotW23_constant_tooth_wind.png"
                     )
                 )
             else:
                 self.img_slot.setPixmap(
-                    QPixmap(u":/images/images/MachineSetup/WSlot/SlotW23_wind.png")
+                    QPixmap(":/images/images/MachineSetup/WSlot/SlotW23_wind.png")
                 )
         # Notify the machine GUI that the machine has changed
         self.saveNeeded.emit()
@@ -328,27 +326,25 @@ class PWSlot23(Gen_PWSlot23, QWidget):
             if self.is_cst_tooth.isChecked():
                 self.img_slot.setPixmap(
                     QPixmap(
-                        u":/images/images/MachineSetup/WSlot/SlotW23_constant_tooth_wedge_full.png"
+                        ":/images/images/MachineSetup/WSlot/SlotW23_constant_tooth_wedge_full.png"
                     )
                 )
 
             else:
                 self.img_slot.setPixmap(
-                    QPixmap(
-                        u":/images/images/MachineSetup/WSlot/SlotW23_wedge_full.png"
-                    )
+                    QPixmap(":/images/images/MachineSetup/WSlot/SlotW23_wedge_full.png")
                 )
 
         else:
             if self.is_cst_tooth.isChecked():
                 self.img_slot.setPixmap(
                     QPixmap(
-                        u":/images/images/MachineSetup/WSlot/SlotW23_constant_tooth_wind.png"
+                        ":/images/images/MachineSetup/WSlot/SlotW23_constant_tooth_wind.png"
                     )
                 )
             else:
                 self.img_slot.setPixmap(
-                    QPixmap(u":/images/images/MachineSetup/WSlot/SlotW23_wind.png")
+                    QPixmap(":/images/images/MachineSetup/WSlot/SlotW23_wind.png")
                 )
         # Notify the machine GUI that the machine has changed
         self.saveNeeded.emit()

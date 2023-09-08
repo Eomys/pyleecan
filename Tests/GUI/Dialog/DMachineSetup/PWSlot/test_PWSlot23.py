@@ -201,7 +201,14 @@ class TestPWSlot23(object):
             Wrvd=0.02,
         )
         self.test_obj.slot = SlotW23(
-            Zs=6, W0=50e-3, W1=90e-3, W2=100e-3, H0=20e-3, H1=35e-3, H2=130e-3, H1_is_rad=False
+            Zs=6,
+            W0=50e-3,
+            W1=90e-3,
+            W2=100e-3,
+            H0=20e-3,
+            H1=35e-3,
+            H2=130e-3,
+            H1_is_rad=False,
         )
         self.widget = PWSlot23(self.test_obj)
         assert self.widget.w_out.out_slot_height.text() == "Slot height: 0.1816 [m]"
