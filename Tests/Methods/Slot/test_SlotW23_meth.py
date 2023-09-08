@@ -32,6 +32,7 @@ slotW23_test.append(
         "SO_exp": 3.24619910e-05,
         "SW_exp": 3.8834260e-04,
         "H_exp": 0.032438,
+        "name": "is_cstt_tooth",
     }
 )
 
@@ -55,6 +56,7 @@ slotW23_test.append(
         "SO_exp": 3.051338972e-05,
         "SW_exp": 3.906568e-04,
         "H_exp": 0.032455,
+        "name": "is_cstt_tooth",
     }
 )
 
@@ -78,6 +80,7 @@ slotW23_test.append(
         "SO_exp": 2.3990748216427426e-05,
         "SW_exp": 3.906592378431622e-4,
         "H_exp": 0.03195587242929246,
+        "name": "is_cstt_tooth",
     }
 )
 
@@ -103,6 +106,7 @@ slotW23_test.append(
         "SO_exp": 3.1473325433303185e-05,
         "SW_exp": 3.0051906471070296e-04,
         "H_exp": 0.03245132013168321,
+        "name": "is_cstt_tooth",
     }
 )
 
@@ -128,6 +132,7 @@ slotW23_test.append(
         "SO_exp": 1.3238508285680388e-05,
         "SW_exp": 1.4339836465567391e-04,
         "H_exp": 0.011203056674731204,
+        "name": "is_cstt_tooth",
     }
 )
 
@@ -137,42 +142,6 @@ class Test_SlotW23_meth(object):
 
     @pytest.mark.parametrize("test_dict", slotW23_test)
     def test_schematics(self, test_dict):
-        """Check that the schematics is correct"""
-        test_obj = test_dict["test_obj"].copy()
-        point_dict = test_obj.slot._comp_point_coordinate()
-
-        # Check width
-        assert abs(point_dict["Z1"] - point_dict["Z8"]) == pytest.approx(
-            test_obj.slot.W0
-        )
-        assert abs(point_dict["Z3"] - point_dict["Z6"]) == pytest.approx(
-            test_obj.slot.W1
-        )
-        assert abs(point_dict["Z4"] - point_dict["Z5"]) == pytest.approx(
-            test_obj.slot.W2
-        )
-        # Check height
-        assert abs(point_dict["Z1"] - point_dict["Z2"]) == pytest.approx(
-            test_obj.slot.H0
-        )
-        assert abs(point_dict["Z2"].real - point_dict["Z3"].real) == pytest.approx(
-            test_obj.slot.get_H1()
-        )
-        assert abs(point_dict["Z3"] - point_dict["Z4"]) == pytest.approx(
-            test_obj.slot.H2
-        )
-        assert abs(point_dict["Z8"] - point_dict["Z7"]) == pytest.approx(
-            test_obj.slot.H0
-        )
-        assert abs(point_dict["Z6"].real - point_dict["Z7"].real) == pytest.approx(
-            test_obj.slot.get_H1()
-        )
-        assert abs(point_dict["Z5"] - point_dict["Z6"]) == pytest.approx(
-            test_obj.slot.H2
-        )
-
-    @pytest.mark.parametrize("test_dict", slotW23_test)
-    def test_schematics_constant_tooth(self, test_dict):
         """Check that the schematics is correct"""
         test_obj = test_dict["test_obj"].copy()
         point_dict = test_obj.slot._comp_point_coordinate()
