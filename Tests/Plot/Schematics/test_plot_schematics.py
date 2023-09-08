@@ -235,6 +235,16 @@ slot_test.append({"test_obj": SlotW61(), "type_add_active": 1})
 
 slot_test.append({"test_obj": SlotWLSRPM(), "type_add_active": 1})
 
+
+slot_test_constant_tooth = list()
+
+slot_test.append(
+    {
+        "test_obj": SlotW23(),
+        "type_add_active": 1,
+    }
+)
+
 hole_test = list()
 hole_test.append(
     {
@@ -536,7 +546,7 @@ class Test_plot_schematics(object):
             is_show_fig=False,
         )
 
-    @pytest.mark.parametrize("test_dict", SlotW23)
+    @pytest.mark.parametrize("test_dict", slot_test_constant_tooth)
     def test_slot_constant_tooth(self, test_dict):
         """Slot Schematics constant tooth"""
         test_obj = test_dict["test_obj"].copy()
