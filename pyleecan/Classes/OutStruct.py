@@ -29,15 +29,7 @@ class OutStruct(FrozenClass):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(
-        self,
-        axes_dict=None,
-        logger_name="Pyleecan.Structural",
-        meshsolution=-1,
-        FEA_dict=None,
-        init_dict=None,
-        init_str=None,
-    ):
+    def __init__(self, axes_dict=None, logger_name="Pyleecan.Structural", meshsolution=-1, FEA_dict=None, init_dict = None, init_str = None):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -79,15 +71,11 @@ class OutStruct(FrozenClass):
             OutStruct_str += "parent = None " + linesep
         else:
             OutStruct_str += "parent = " + str(type(self.parent)) + " object" + linesep
-        OutStruct_str += "axes_dict = " + str(self.axes_dict) + linesep + linesep
+        OutStruct_str += "axes_dict = "+ str(self.axes_dict) + linesep + linesep
         OutStruct_str += 'logger_name = "' + str(self.logger_name) + '"' + linesep
         if self.meshsolution is not None:
-            tmp = (
-                self.meshsolution.__str__()
-                .replace(linesep, linesep + "\t")
-                .rstrip("\t")
-            )
-            OutStruct_str += "meshsolution = " + tmp
+            tmp = self.meshsolution.__str__().replace(linesep, linesep + "\t").rstrip("\t")
+            OutStruct_str += "meshsolution = "+ tmp
         else:
             OutStruct_str += "meshsolution = None" + linesep + linesep
         OutStruct_str += "FEA_dict = " + str(self.FEA_dict) + linesep
@@ -108,71 +96,41 @@ class OutStruct(FrozenClass):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
+    def compare(self, other, name='self', ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
             ignore_list = list()
         if type(other) != type(self):
-            return ["type(" + name + ")"]
+            return ['type('+name+')']
         diff_list = list()
-        if (other.axes_dict is None and self.axes_dict is not None) or (
-            other.axes_dict is not None and self.axes_dict is None
-        ):
-            diff_list.append(name + ".axes_dict None mismatch")
+        if (other.axes_dict is None and self.axes_dict is not None) or (other.axes_dict is not None and self.axes_dict is None):
+            diff_list.append(name+'.axes_dict None mismatch')
         elif self.axes_dict is None:
             pass
         elif len(other.axes_dict) != len(self.axes_dict):
-            diff_list.append("len(" + name + "axes_dict)")
+            diff_list.append('len('+name+'axes_dict)')
         else:
             for key in self.axes_dict:
-                diff_list.extend(
-                    self.axes_dict[key].compare(
-                        other.axes_dict[key],
-                        name=name + ".axes_dict[" + str(key) + "]",
-                        ignore_list=ignore_list,
-                        is_add_value=is_add_value,
-                    )
-                )
+                diff_list.extend(self.axes_dict[key].compare(other.axes_dict[key],name=name+'.axes_dict['+str(key)+']',ignore_list=ignore_list,is_add_value=is_add_value))
         if other._logger_name != self._logger_name:
             if is_add_value:
-                val_str = (
-                    " (self="
-                    + str(self._logger_name)
-                    + ", other="
-                    + str(other._logger_name)
-                    + ")"
-                )
-                diff_list.append(name + ".logger_name" + val_str)
+                val_str = ' (self='+str(self._logger_name)+', other='+str(other._logger_name)+')'
+                diff_list.append(name+'.logger_name'+val_str)
             else:
-                diff_list.append(name + ".logger_name")
-        if (other.meshsolution is None and self.meshsolution is not None) or (
-            other.meshsolution is not None and self.meshsolution is None
-        ):
-            diff_list.append(name + ".meshsolution None mismatch")
+                diff_list.append(name+'.logger_name')
+        if (other.meshsolution is None and self.meshsolution is not None) or (other.meshsolution is not None and self.meshsolution is None):
+            diff_list.append(name+'.meshsolution None mismatch')
         elif self.meshsolution is not None:
-            diff_list.extend(
-                self.meshsolution.compare(
-                    other.meshsolution,
-                    name=name + ".meshsolution",
-                    ignore_list=ignore_list,
-                    is_add_value=is_add_value,
-                )
-            )
+            diff_list.extend(self.meshsolution.compare(other.meshsolution,name=name+'.meshsolution',ignore_list=ignore_list,is_add_value=is_add_value))
         if other._FEA_dict != self._FEA_dict:
             if is_add_value:
-                val_str = (
-                    " (self="
-                    + str(self._FEA_dict)
-                    + ", other="
-                    + str(other._FEA_dict)
-                    + ")"
-                )
-                diff_list.append(name + ".FEA_dict" + val_str)
+                val_str = ' (self='+str(self._FEA_dict)+', other='+str(other._FEA_dict)+')'
+                diff_list.append(name+'.FEA_dict'+val_str)
             else:
-                diff_list.append(name + ".FEA_dict")
+                diff_list.append(name+'.FEA_dict')
         # Filter ignore differences
-        diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
+        diff_list = list(filter(lambda x : x not in ignore_list, diff_list))
         return diff_list
 
     def __sizeof__(self):
@@ -196,7 +154,7 @@ class OutStruct(FrozenClass):
             How to handle ndarray (0: tolist, 1: copy, 2: nothing)
         keep_function : bool
             True to keep the function object, else return str
-        Optional keyword input parameter is for internal use only
+        Optional keyword input parameter is for internal use only 
         and may prevent json serializability.
         """
 
@@ -207,28 +165,21 @@ class OutStruct(FrozenClass):
             OutStruct_dict["axes_dict"] = dict()
             for key, obj in self.axes_dict.items():
                 if obj is not None:
-                    OutStruct_dict["axes_dict"][key] = obj.as_dict(
-                        type_handle_ndarray=type_handle_ndarray,
-                        keep_function=keep_function,
-                        **kwargs
-                    )
+                    OutStruct_dict["axes_dict"][key] = obj.as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs)
                 else:
                     OutStruct_dict["axes_dict"][key] = None
         OutStruct_dict["logger_name"] = self.logger_name
         if self.meshsolution is None:
             OutStruct_dict["meshsolution"] = None
         else:
-            OutStruct_dict["meshsolution"] = self.meshsolution.as_dict(
-                type_handle_ndarray=type_handle_ndarray,
-                keep_function=keep_function,
-                **kwargs
-            )
+            OutStruct_dict["meshsolution"] = self.meshsolution.as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs)
         OutStruct_dict["FEA_dict"] = (
             self.FEA_dict.copy() if self.FEA_dict is not None else None
         )
         # The class name is added to the dict for deserialisation purpose
         OutStruct_dict["__class__"] = "OutStruct"
         return OutStruct_dict
+
 
     def copy(self):
         """Creates a deepcopy of the object"""
@@ -250,12 +201,7 @@ class OutStruct(FrozenClass):
         else:
             FEA_dict_val = self.FEA_dict.copy()
         # Creates new object of the same type with the copied properties
-        obj_copy = type(self)(
-            axes_dict=axes_dict_val,
-            logger_name=logger_name_val,
-            meshsolution=meshsolution_val,
-            FEA_dict=FEA_dict_val,
-        )
+        obj_copy = type(self)(axes_dict=axes_dict_val,logger_name=logger_name_val,meshsolution=meshsolution_val,FEA_dict=FEA_dict_val)
         return obj_copy
 
     def _set_None(self):
@@ -283,15 +229,11 @@ class OutStruct(FrozenClass):
                     try:
                         obj = load_init_dict(obj)[1]
                     except Exception as e:
-                        self.get_logger().error(
-                            "Error while loading " + obj + ", setting None instead"
-                        )
+                        self.get_logger().error('Error while loading '+obj+', setting None instead')
                         obj = None
                         value[key] = None
                 if type(obj) is dict:
-                    class_obj = import_class(
-                        "SciDataTool.Classes", obj.get("__class__"), "axes_dict"
-                    )
+                    class_obj = import_class('SciDataTool.Classes', obj.get('__class__'), 'axes_dict')
                     value[key] = class_obj(init_dict=obj)
         if type(value) is int and value == -1:
             value = dict()
@@ -335,26 +277,19 @@ class OutStruct(FrozenClass):
             try:
                 value = load_init_dict(value)[1]
             except Exception as e:
-                self.get_logger().error(
-                    "Error while loading " + value + ", setting None instead"
-                )
+                self.get_logger().error('Error while loading '+value+', setting None instead')
                 value = None
-        if isinstance(value, dict) and "__class__" in value:
-            class_obj = import_class(
-                "pyleecan.Classes", value.get("__class__"), "meshsolution"
-            )
+        if isinstance(value, dict) and '__class__' in value:
+            class_obj = import_class('pyleecan.Classes', value.get('__class__'), 'meshsolution')
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
-            MeshSolution = import_class(
-                "pyleecan.Classes", "MeshSolution", "meshsolution"
-            )
+            MeshSolution = import_class('pyleecan.Classes', 'MeshSolution', 'meshsolution')
             value = MeshSolution()
         check_var("meshsolution", value, "MeshSolution")
         self._meshsolution = value
 
         if self._meshsolution is not None:
             self._meshsolution.parent = self
-
     meshsolution = property(
         fget=_get_meshsolution,
         fset=_set_meshsolution,

@@ -67,17 +67,7 @@ class MachineAsync(Machine):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(
-        self,
-        frame=-1,
-        shaft=-1,
-        name="default_machine",
-        desc="",
-        type_machine=1,
-        logger_name="Pyleecan.Machine",
-        init_dict=None,
-        init_str=None,
-    ):
+    def __init__(self, frame=-1, shaft=-1, name="default_machine", desc="", type_machine=1, logger_name="Pyleecan.Machine", init_dict = None, init_str = None):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -107,14 +97,7 @@ class MachineAsync(Machine):
                 logger_name = init_dict["logger_name"]
         # Set the properties (value check and convertion are done in setter)
         # Call Machine init
-        super(MachineAsync, self).__init__(
-            frame=frame,
-            shaft=shaft,
-            name=name,
-            desc=desc,
-            type_machine=type_machine,
-            logger_name=logger_name,
-        )
+        super(MachineAsync, self).__init__(frame=frame, shaft=shaft, name=name, desc=desc, type_machine=type_machine, logger_name=logger_name)
         # The class is frozen (in Machine init), for now it's impossible to
         # add new properties
 
@@ -137,23 +120,19 @@ class MachineAsync(Machine):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
+    def compare(self, other, name='self', ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
             ignore_list = list()
         if type(other) != type(self):
-            return ["type(" + name + ")"]
+            return ['type('+name+')']
         diff_list = list()
 
         # Check the properties inherited from Machine
-        diff_list.extend(
-            super(MachineAsync, self).compare(
-                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
-            )
-        )
+        diff_list.extend(super(MachineAsync, self).compare(other,name=name, ignore_list=ignore_list, is_add_value=is_add_value))
         # Filter ignore differences
-        diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
+        diff_list = list(filter(lambda x : x not in ignore_list, diff_list))
         return diff_list
 
     def __sizeof__(self):
@@ -172,20 +151,17 @@ class MachineAsync(Machine):
             How to handle ndarray (0: tolist, 1: copy, 2: nothing)
         keep_function : bool
             True to keep the function object, else return str
-        Optional keyword input parameter is for internal use only
+        Optional keyword input parameter is for internal use only 
         and may prevent json serializability.
         """
 
         # Get the properties inherited from Machine
-        MachineAsync_dict = super(MachineAsync, self).as_dict(
-            type_handle_ndarray=type_handle_ndarray,
-            keep_function=keep_function,
-            **kwargs
-        )
+        MachineAsync_dict = super(MachineAsync, self).as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs)
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         MachineAsync_dict["__class__"] = "MachineAsync"
         return MachineAsync_dict
+
 
     def copy(self):
         """Creates a deepcopy of the object"""
@@ -204,14 +180,7 @@ class MachineAsync(Machine):
         type_machine_val = self.type_machine
         logger_name_val = self.logger_name
         # Creates new object of the same type with the copied properties
-        obj_copy = type(self)(
-            frame=frame_val,
-            shaft=shaft_val,
-            name=name_val,
-            desc=desc_val,
-            type_machine=type_machine_val,
-            logger_name=logger_name_val,
-        )
+        obj_copy = type(self)(frame=frame_val,shaft=shaft_val,name=name_val,desc=desc_val,type_machine=type_machine_val,logger_name=logger_name_val)
         return obj_copy
 
     def _set_None(self):

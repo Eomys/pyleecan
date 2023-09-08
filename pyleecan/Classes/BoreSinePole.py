@@ -28,9 +28,7 @@ except ImportError as error:
     get_pole_shape = error
 
 try:
-    from ..Methods.Machine.BoreSinePole.comp_periodicity_spatial import (
-        comp_periodicity_spatial,
-    )
+    from ..Methods.Machine.BoreSinePole.comp_periodicity_spatial import comp_periodicity_spatial
 except ImportError as error:
     comp_periodicity_spatial = error
 
@@ -102,18 +100,7 @@ class BoreSinePole(Bore):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(
-        self,
-        N=8,
-        k=1,
-        delta_d=0.001,
-        delta_q=None,
-        W0=None,
-        type_merge_slot=1,
-        alpha=0,
-        init_dict=None,
-        init_str=None,
-    ):
+    def __init__(self, N=8, k=1, delta_d=0.001, delta_q=None, W0=None, type_merge_slot=1, alpha=0, init_dict = None, init_str = None):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -188,93 +175,57 @@ class BoreSinePole(Bore):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
+    def compare(self, other, name='self', ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
             ignore_list = list()
         if type(other) != type(self):
-            return ["type(" + name + ")"]
+            return ['type('+name+')']
         diff_list = list()
 
         # Check the properties inherited from Bore
-        diff_list.extend(
-            super(BoreSinePole, self).compare(
-                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
-            )
-        )
+        diff_list.extend(super(BoreSinePole, self).compare(other,name=name, ignore_list=ignore_list, is_add_value=is_add_value))
         if other._N != self._N:
             if is_add_value:
-                val_str = " (self=" + str(self._N) + ", other=" + str(other._N) + ")"
-                diff_list.append(name + ".N" + val_str)
+                val_str = ' (self='+str(self._N)+', other='+str(other._N)+')'
+                diff_list.append(name+'.N'+val_str)
             else:
-                diff_list.append(name + ".N")
-        if (
-            other._k is not None
-            and self._k is not None
-            and isnan(other._k)
-            and isnan(self._k)
-        ):
+                diff_list.append(name+'.N')
+        if other._k is not None and self._k is not None and isnan(other._k) and isnan(self._k):
             pass
         elif other._k != self._k:
             if is_add_value:
-                val_str = " (self=" + str(self._k) + ", other=" + str(other._k) + ")"
-                diff_list.append(name + ".k" + val_str)
+                val_str = ' (self='+str(self._k)+', other='+str(other._k)+')'
+                diff_list.append(name+'.k'+val_str)
             else:
-                diff_list.append(name + ".k")
-        if (
-            other._delta_d is not None
-            and self._delta_d is not None
-            and isnan(other._delta_d)
-            and isnan(self._delta_d)
-        ):
+                diff_list.append(name+'.k')
+        if other._delta_d is not None and self._delta_d is not None and isnan(other._delta_d) and isnan(self._delta_d):
             pass
         elif other._delta_d != self._delta_d:
             if is_add_value:
-                val_str = (
-                    " (self="
-                    + str(self._delta_d)
-                    + ", other="
-                    + str(other._delta_d)
-                    + ")"
-                )
-                diff_list.append(name + ".delta_d" + val_str)
+                val_str = ' (self='+str(self._delta_d)+', other='+str(other._delta_d)+')'
+                diff_list.append(name+'.delta_d'+val_str)
             else:
-                diff_list.append(name + ".delta_d")
-        if (
-            other._delta_q is not None
-            and self._delta_q is not None
-            and isnan(other._delta_q)
-            and isnan(self._delta_q)
-        ):
+                diff_list.append(name+'.delta_d')
+        if other._delta_q is not None and self._delta_q is not None and isnan(other._delta_q) and isnan(self._delta_q):
             pass
         elif other._delta_q != self._delta_q:
             if is_add_value:
-                val_str = (
-                    " (self="
-                    + str(self._delta_q)
-                    + ", other="
-                    + str(other._delta_q)
-                    + ")"
-                )
-                diff_list.append(name + ".delta_q" + val_str)
+                val_str = ' (self='+str(self._delta_q)+', other='+str(other._delta_q)+')'
+                diff_list.append(name+'.delta_q'+val_str)
             else:
-                diff_list.append(name + ".delta_q")
-        if (
-            other._W0 is not None
-            and self._W0 is not None
-            and isnan(other._W0)
-            and isnan(self._W0)
-        ):
+                diff_list.append(name+'.delta_q')
+        if other._W0 is not None and self._W0 is not None and isnan(other._W0) and isnan(self._W0):
             pass
         elif other._W0 != self._W0:
             if is_add_value:
-                val_str = " (self=" + str(self._W0) + ", other=" + str(other._W0) + ")"
-                diff_list.append(name + ".W0" + val_str)
+                val_str = ' (self='+str(self._W0)+', other='+str(other._W0)+')'
+                diff_list.append(name+'.W0'+val_str)
             else:
-                diff_list.append(name + ".W0")
+                diff_list.append(name+'.W0')
         # Filter ignore differences
-        diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
+        diff_list = list(filter(lambda x : x not in ignore_list, diff_list))
         return diff_list
 
     def __sizeof__(self):
@@ -298,16 +249,12 @@ class BoreSinePole(Bore):
             How to handle ndarray (0: tolist, 1: copy, 2: nothing)
         keep_function : bool
             True to keep the function object, else return str
-        Optional keyword input parameter is for internal use only
+        Optional keyword input parameter is for internal use only 
         and may prevent json serializability.
         """
 
         # Get the properties inherited from Bore
-        BoreSinePole_dict = super(BoreSinePole, self).as_dict(
-            type_handle_ndarray=type_handle_ndarray,
-            keep_function=keep_function,
-            **kwargs
-        )
+        BoreSinePole_dict = super(BoreSinePole, self).as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs)
         BoreSinePole_dict["N"] = self.N
         BoreSinePole_dict["k"] = self.k
         BoreSinePole_dict["delta_d"] = self.delta_d
@@ -317,6 +264,7 @@ class BoreSinePole(Bore):
         # Overwrite the mother class name
         BoreSinePole_dict["__class__"] = "BoreSinePole"
         return BoreSinePole_dict
+
 
     def copy(self):
         """Creates a deepcopy of the object"""
@@ -330,15 +278,7 @@ class BoreSinePole(Bore):
         type_merge_slot_val = self.type_merge_slot
         alpha_val = self.alpha
         # Creates new object of the same type with the copied properties
-        obj_copy = type(self)(
-            N=N_val,
-            k=k_val,
-            delta_d=delta_d_val,
-            delta_q=delta_q_val,
-            W0=W0_val,
-            type_merge_slot=type_merge_slot_val,
-            alpha=alpha_val,
-        )
+        obj_copy = type(self)(N=N_val,k=k_val,delta_d=delta_d_val,delta_q=delta_q_val,W0=W0_val,type_merge_slot=type_merge_slot_val,alpha=alpha_val)
         return obj_copy
 
     def _set_None(self):

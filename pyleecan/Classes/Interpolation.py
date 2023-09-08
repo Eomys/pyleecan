@@ -29,14 +29,7 @@ class Interpolation(FrozenClass):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(
-        self,
-        ref_cell=None,
-        gauss_point=None,
-        scalar_product=None,
-        init_dict=None,
-        init_str=None,
-    ):
+    def __init__(self, ref_cell=None, gauss_point=None, scalar_product=None, init_dict = None, init_str = None):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -74,28 +67,20 @@ class Interpolation(FrozenClass):
         if self.parent is None:
             Interpolation_str += "parent = None " + linesep
         else:
-            Interpolation_str += (
-                "parent = " + str(type(self.parent)) + " object" + linesep
-            )
+            Interpolation_str += "parent = " + str(type(self.parent)) + " object" + linesep
         if self.ref_cell is not None:
             tmp = self.ref_cell.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            Interpolation_str += "ref_cell = " + tmp
+            Interpolation_str += "ref_cell = "+ tmp
         else:
             Interpolation_str += "ref_cell = None" + linesep + linesep
         if self.gauss_point is not None:
-            tmp = (
-                self.gauss_point.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            )
-            Interpolation_str += "gauss_point = " + tmp
+            tmp = self.gauss_point.__str__().replace(linesep, linesep + "\t").rstrip("\t")
+            Interpolation_str += "gauss_point = "+ tmp
         else:
             Interpolation_str += "gauss_point = None" + linesep + linesep
         if self.scalar_product is not None:
-            tmp = (
-                self.scalar_product.__str__()
-                .replace(linesep, linesep + "\t")
-                .rstrip("\t")
-            )
-            Interpolation_str += "scalar_product = " + tmp
+            tmp = self.scalar_product.__str__().replace(linesep, linesep + "\t").rstrip("\t")
+            Interpolation_str += "scalar_product = "+ tmp
         else:
             Interpolation_str += "scalar_product = None" + linesep + linesep
         return Interpolation_str
@@ -113,55 +98,28 @@ class Interpolation(FrozenClass):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
+    def compare(self, other, name='self', ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
             ignore_list = list()
         if type(other) != type(self):
-            return ["type(" + name + ")"]
+            return ['type('+name+')']
         diff_list = list()
-        if (other.ref_cell is None and self.ref_cell is not None) or (
-            other.ref_cell is not None and self.ref_cell is None
-        ):
-            diff_list.append(name + ".ref_cell None mismatch")
+        if (other.ref_cell is None and self.ref_cell is not None) or (other.ref_cell is not None and self.ref_cell is None):
+            diff_list.append(name+'.ref_cell None mismatch')
         elif self.ref_cell is not None:
-            diff_list.extend(
-                self.ref_cell.compare(
-                    other.ref_cell,
-                    name=name + ".ref_cell",
-                    ignore_list=ignore_list,
-                    is_add_value=is_add_value,
-                )
-            )
-        if (other.gauss_point is None and self.gauss_point is not None) or (
-            other.gauss_point is not None and self.gauss_point is None
-        ):
-            diff_list.append(name + ".gauss_point None mismatch")
+            diff_list.extend(self.ref_cell.compare(other.ref_cell,name=name+'.ref_cell',ignore_list=ignore_list,is_add_value=is_add_value))
+        if (other.gauss_point is None and self.gauss_point is not None) or (other.gauss_point is not None and self.gauss_point is None):
+            diff_list.append(name+'.gauss_point None mismatch')
         elif self.gauss_point is not None:
-            diff_list.extend(
-                self.gauss_point.compare(
-                    other.gauss_point,
-                    name=name + ".gauss_point",
-                    ignore_list=ignore_list,
-                    is_add_value=is_add_value,
-                )
-            )
-        if (other.scalar_product is None and self.scalar_product is not None) or (
-            other.scalar_product is not None and self.scalar_product is None
-        ):
-            diff_list.append(name + ".scalar_product None mismatch")
+            diff_list.extend(self.gauss_point.compare(other.gauss_point,name=name+'.gauss_point',ignore_list=ignore_list,is_add_value=is_add_value))
+        if (other.scalar_product is None and self.scalar_product is not None) or (other.scalar_product is not None and self.scalar_product is None):
+            diff_list.append(name+'.scalar_product None mismatch')
         elif self.scalar_product is not None:
-            diff_list.extend(
-                self.scalar_product.compare(
-                    other.scalar_product,
-                    name=name + ".scalar_product",
-                    ignore_list=ignore_list,
-                    is_add_value=is_add_value,
-                )
-            )
+            diff_list.extend(self.scalar_product.compare(other.scalar_product,name=name+'.scalar_product',ignore_list=ignore_list,is_add_value=is_add_value))
         # Filter ignore differences
-        diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
+        diff_list = list(filter(lambda x : x not in ignore_list, diff_list))
         return diff_list
 
     def __sizeof__(self):
@@ -180,7 +138,7 @@ class Interpolation(FrozenClass):
             How to handle ndarray (0: tolist, 1: copy, 2: nothing)
         keep_function : bool
             True to keep the function object, else return str
-        Optional keyword input parameter is for internal use only
+        Optional keyword input parameter is for internal use only 
         and may prevent json serializability.
         """
 
@@ -188,30 +146,19 @@ class Interpolation(FrozenClass):
         if self.ref_cell is None:
             Interpolation_dict["ref_cell"] = None
         else:
-            Interpolation_dict["ref_cell"] = self.ref_cell.as_dict(
-                type_handle_ndarray=type_handle_ndarray,
-                keep_function=keep_function,
-                **kwargs
-            )
+            Interpolation_dict["ref_cell"] = self.ref_cell.as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs)
         if self.gauss_point is None:
             Interpolation_dict["gauss_point"] = None
         else:
-            Interpolation_dict["gauss_point"] = self.gauss_point.as_dict(
-                type_handle_ndarray=type_handle_ndarray,
-                keep_function=keep_function,
-                **kwargs
-            )
+            Interpolation_dict["gauss_point"] = self.gauss_point.as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs)
         if self.scalar_product is None:
             Interpolation_dict["scalar_product"] = None
         else:
-            Interpolation_dict["scalar_product"] = self.scalar_product.as_dict(
-                type_handle_ndarray=type_handle_ndarray,
-                keep_function=keep_function,
-                **kwargs
-            )
+            Interpolation_dict["scalar_product"] = self.scalar_product.as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs)
         # The class name is added to the dict for deserialisation purpose
         Interpolation_dict["__class__"] = "Interpolation"
         return Interpolation_dict
+
 
     def copy(self):
         """Creates a deepcopy of the object"""
@@ -230,11 +177,7 @@ class Interpolation(FrozenClass):
         else:
             scalar_product_val = self.scalar_product.copy()
         # Creates new object of the same type with the copied properties
-        obj_copy = type(self)(
-            ref_cell=ref_cell_val,
-            gauss_point=gauss_point_val,
-            scalar_product=scalar_product_val,
-        )
+        obj_copy = type(self)(ref_cell=ref_cell_val,gauss_point=gauss_point_val,scalar_product=scalar_product_val)
         return obj_copy
 
     def _set_None(self):
@@ -257,24 +200,19 @@ class Interpolation(FrozenClass):
             try:
                 value = load_init_dict(value)[1]
             except Exception as e:
-                self.get_logger().error(
-                    "Error while loading " + value + ", setting None instead"
-                )
+                self.get_logger().error('Error while loading '+value+', setting None instead')
                 value = None
-        if isinstance(value, dict) and "__class__" in value:
-            class_obj = import_class(
-                "pyleecan.Classes", value.get("__class__"), "ref_cell"
-            )
+        if isinstance(value, dict) and '__class__' in value:
+            class_obj = import_class('pyleecan.Classes', value.get('__class__'), 'ref_cell')
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
-            RefCell = import_class("pyleecan.Classes", "RefCell", "ref_cell")
+            RefCell = import_class('pyleecan.Classes', 'RefCell', 'ref_cell')
             value = RefCell()
         check_var("ref_cell", value, "RefCell")
         self._ref_cell = value
 
         if self._ref_cell is not None:
             self._ref_cell.parent = self
-
     ref_cell = property(
         fget=_get_ref_cell,
         fset=_set_ref_cell,
@@ -294,24 +232,19 @@ class Interpolation(FrozenClass):
             try:
                 value = load_init_dict(value)[1]
             except Exception as e:
-                self.get_logger().error(
-                    "Error while loading " + value + ", setting None instead"
-                )
+                self.get_logger().error('Error while loading '+value+', setting None instead')
                 value = None
-        if isinstance(value, dict) and "__class__" in value:
-            class_obj = import_class(
-                "pyleecan.Classes", value.get("__class__"), "gauss_point"
-            )
+        if isinstance(value, dict) and '__class__' in value:
+            class_obj = import_class('pyleecan.Classes', value.get('__class__'), 'gauss_point')
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
-            GaussPoint = import_class("pyleecan.Classes", "GaussPoint", "gauss_point")
+            GaussPoint = import_class('pyleecan.Classes', 'GaussPoint', 'gauss_point')
             value = GaussPoint()
         check_var("gauss_point", value, "GaussPoint")
         self._gauss_point = value
 
         if self._gauss_point is not None:
             self._gauss_point.parent = self
-
     gauss_point = property(
         fget=_get_gauss_point,
         fset=_set_gauss_point,
@@ -331,26 +264,19 @@ class Interpolation(FrozenClass):
             try:
                 value = load_init_dict(value)[1]
             except Exception as e:
-                self.get_logger().error(
-                    "Error while loading " + value + ", setting None instead"
-                )
+                self.get_logger().error('Error while loading '+value+', setting None instead')
                 value = None
-        if isinstance(value, dict) and "__class__" in value:
-            class_obj = import_class(
-                "pyleecan.Classes", value.get("__class__"), "scalar_product"
-            )
+        if isinstance(value, dict) and '__class__' in value:
+            class_obj = import_class('pyleecan.Classes', value.get('__class__'), 'scalar_product')
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
-            ScalarProduct = import_class(
-                "pyleecan.Classes", "ScalarProduct", "scalar_product"
-            )
+            ScalarProduct = import_class('pyleecan.Classes', 'ScalarProduct', 'scalar_product')
             value = ScalarProduct()
         check_var("scalar_product", value, "ScalarProduct")
         self._scalar_product = value
 
         if self._scalar_product is not None:
             self._scalar_product.parent = self
-
     scalar_product = property(
         fget=_get_scalar_product,
         fset=_set_scalar_product,

@@ -30,21 +30,7 @@ class OutGeoLam(FrozenClass):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(
-        self,
-        name_phase=None,
-        BH_curve=None,
-        Ksfill=None,
-        S_slot=None,
-        S_slot_wind=None,
-        S_wind_act=None,
-        per_a=None,
-        is_antiper_a=None,
-        per_t=None,
-        is_antiper_t=None,
-        init_dict=None,
-        init_str=None,
-    ):
+    def __init__(self, name_phase=None, BH_curve=None, Ksfill=None, S_slot=None, S_slot_wind=None, S_wind_act=None, per_a=None, is_antiper_a=None, per_t=None, is_antiper_t=None, init_dict = None, init_str = None):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -104,19 +90,8 @@ class OutGeoLam(FrozenClass):
             OutGeoLam_str += "parent = None " + linesep
         else:
             OutGeoLam_str += "parent = " + str(type(self.parent)) + " object" + linesep
-        OutGeoLam_str += (
-            "name_phase = "
-            + linesep
-            + str(self.name_phase).replace(linesep, linesep + "\t")
-            + linesep
-        )
-        OutGeoLam_str += (
-            "BH_curve = "
-            + linesep
-            + str(self.BH_curve).replace(linesep, linesep + "\t")
-            + linesep
-            + linesep
-        )
+        OutGeoLam_str += "name_phase = " + linesep + str(self.name_phase).replace(linesep, linesep + "\t") + linesep
+        OutGeoLam_str += "BH_curve = " + linesep + str(self.BH_curve).replace(linesep, linesep + "\t") + linesep + linesep
         OutGeoLam_str += "Ksfill = " + str(self.Ksfill) + linesep
         OutGeoLam_str += "S_slot = " + str(self.S_slot) + linesep
         OutGeoLam_str += "S_slot_wind = " + str(self.S_slot_wind) + linesep
@@ -154,146 +129,80 @@ class OutGeoLam(FrozenClass):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
+    def compare(self, other, name='self', ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
             ignore_list = list()
         if type(other) != type(self):
-            return ["type(" + name + ")"]
+            return ['type('+name+')']
         diff_list = list()
         if other._name_phase != self._name_phase:
             if is_add_value:
-                val_str = (
-                    " (self="
-                    + str(self._name_phase)
-                    + ", other="
-                    + str(other._name_phase)
-                    + ")"
-                )
-                diff_list.append(name + ".name_phase" + val_str)
+                val_str = ' (self='+str(self._name_phase)+', other='+str(other._name_phase)+')'
+                diff_list.append(name+'.name_phase'+val_str)
             else:
-                diff_list.append(name + ".name_phase")
+                diff_list.append(name+'.name_phase')
         if not array_equal(other.BH_curve, self.BH_curve):
-            diff_list.append(name + ".BH_curve")
-        if (
-            other._Ksfill is not None
-            and self._Ksfill is not None
-            and isnan(other._Ksfill)
-            and isnan(self._Ksfill)
-        ):
+            diff_list.append(name+'.BH_curve')
+        if other._Ksfill is not None and self._Ksfill is not None and isnan(other._Ksfill) and isnan(self._Ksfill):
             pass
         elif other._Ksfill != self._Ksfill:
             if is_add_value:
-                val_str = (
-                    " (self="
-                    + str(self._Ksfill)
-                    + ", other="
-                    + str(other._Ksfill)
-                    + ")"
-                )
-                diff_list.append(name + ".Ksfill" + val_str)
+                val_str = ' (self='+str(self._Ksfill)+', other='+str(other._Ksfill)+')'
+                diff_list.append(name+'.Ksfill'+val_str)
             else:
-                diff_list.append(name + ".Ksfill")
-        if (
-            other._S_slot is not None
-            and self._S_slot is not None
-            and isnan(other._S_slot)
-            and isnan(self._S_slot)
-        ):
+                diff_list.append(name+'.Ksfill')
+        if other._S_slot is not None and self._S_slot is not None and isnan(other._S_slot) and isnan(self._S_slot):
             pass
         elif other._S_slot != self._S_slot:
             if is_add_value:
-                val_str = (
-                    " (self="
-                    + str(self._S_slot)
-                    + ", other="
-                    + str(other._S_slot)
-                    + ")"
-                )
-                diff_list.append(name + ".S_slot" + val_str)
+                val_str = ' (self='+str(self._S_slot)+', other='+str(other._S_slot)+')'
+                diff_list.append(name+'.S_slot'+val_str)
             else:
-                diff_list.append(name + ".S_slot")
-        if (
-            other._S_slot_wind is not None
-            and self._S_slot_wind is not None
-            and isnan(other._S_slot_wind)
-            and isnan(self._S_slot_wind)
-        ):
+                diff_list.append(name+'.S_slot')
+        if other._S_slot_wind is not None and self._S_slot_wind is not None and isnan(other._S_slot_wind) and isnan(self._S_slot_wind):
             pass
         elif other._S_slot_wind != self._S_slot_wind:
             if is_add_value:
-                val_str = (
-                    " (self="
-                    + str(self._S_slot_wind)
-                    + ", other="
-                    + str(other._S_slot_wind)
-                    + ")"
-                )
-                diff_list.append(name + ".S_slot_wind" + val_str)
+                val_str = ' (self='+str(self._S_slot_wind)+', other='+str(other._S_slot_wind)+')'
+                diff_list.append(name+'.S_slot_wind'+val_str)
             else:
-                diff_list.append(name + ".S_slot_wind")
-        if (
-            other._S_wind_act is not None
-            and self._S_wind_act is not None
-            and isnan(other._S_wind_act)
-            and isnan(self._S_wind_act)
-        ):
+                diff_list.append(name+'.S_slot_wind')
+        if other._S_wind_act is not None and self._S_wind_act is not None and isnan(other._S_wind_act) and isnan(self._S_wind_act):
             pass
         elif other._S_wind_act != self._S_wind_act:
             if is_add_value:
-                val_str = (
-                    " (self="
-                    + str(self._S_wind_act)
-                    + ", other="
-                    + str(other._S_wind_act)
-                    + ")"
-                )
-                diff_list.append(name + ".S_wind_act" + val_str)
+                val_str = ' (self='+str(self._S_wind_act)+', other='+str(other._S_wind_act)+')'
+                diff_list.append(name+'.S_wind_act'+val_str)
             else:
-                diff_list.append(name + ".S_wind_act")
+                diff_list.append(name+'.S_wind_act')
         if other._per_a != self._per_a:
             if is_add_value:
-                val_str = (
-                    " (self=" + str(self._per_a) + ", other=" + str(other._per_a) + ")"
-                )
-                diff_list.append(name + ".per_a" + val_str)
+                val_str = ' (self='+str(self._per_a)+', other='+str(other._per_a)+')'
+                diff_list.append(name+'.per_a'+val_str)
             else:
-                diff_list.append(name + ".per_a")
+                diff_list.append(name+'.per_a')
         if other._is_antiper_a != self._is_antiper_a:
             if is_add_value:
-                val_str = (
-                    " (self="
-                    + str(self._is_antiper_a)
-                    + ", other="
-                    + str(other._is_antiper_a)
-                    + ")"
-                )
-                diff_list.append(name + ".is_antiper_a" + val_str)
+                val_str = ' (self='+str(self._is_antiper_a)+', other='+str(other._is_antiper_a)+')'
+                diff_list.append(name+'.is_antiper_a'+val_str)
             else:
-                diff_list.append(name + ".is_antiper_a")
+                diff_list.append(name+'.is_antiper_a')
         if other._per_t != self._per_t:
             if is_add_value:
-                val_str = (
-                    " (self=" + str(self._per_t) + ", other=" + str(other._per_t) + ")"
-                )
-                diff_list.append(name + ".per_t" + val_str)
+                val_str = ' (self='+str(self._per_t)+', other='+str(other._per_t)+')'
+                diff_list.append(name+'.per_t'+val_str)
             else:
-                diff_list.append(name + ".per_t")
+                diff_list.append(name+'.per_t')
         if other._is_antiper_t != self._is_antiper_t:
             if is_add_value:
-                val_str = (
-                    " (self="
-                    + str(self._is_antiper_t)
-                    + ", other="
-                    + str(other._is_antiper_t)
-                    + ")"
-                )
-                diff_list.append(name + ".is_antiper_t" + val_str)
+                val_str = ' (self='+str(self._is_antiper_t)+', other='+str(other._is_antiper_t)+')'
+                diff_list.append(name+'.is_antiper_t'+val_str)
             else:
-                diff_list.append(name + ".is_antiper_t")
+                diff_list.append(name+'.is_antiper_t')
         # Filter ignore differences
-        diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
+        diff_list = list(filter(lambda x : x not in ignore_list, diff_list))
         return diff_list
 
     def __sizeof__(self):
@@ -321,7 +230,7 @@ class OutGeoLam(FrozenClass):
             How to handle ndarray (0: tolist, 1: copy, 2: nothing)
         keep_function : bool
             True to keep the function object, else return str
-        Optional keyword input parameter is for internal use only
+        Optional keyword input parameter is for internal use only 
         and may prevent json serializability.
         """
 
@@ -332,16 +241,14 @@ class OutGeoLam(FrozenClass):
         if self.BH_curve is None:
             OutGeoLam_dict["BH_curve"] = None
         else:
-            if type_handle_ndarray == 0:
+            if type_handle_ndarray==0:
                 OutGeoLam_dict["BH_curve"] = self.BH_curve.tolist()
-            elif type_handle_ndarray == 1:
+            elif type_handle_ndarray==1:
                 OutGeoLam_dict["BH_curve"] = self.BH_curve.copy()
-            elif type_handle_ndarray == 2:
+            elif type_handle_ndarray==2:
                 OutGeoLam_dict["BH_curve"] = self.BH_curve
             else:
-                raise Exception(
-                    "Unknown type_handle_ndarray: " + str(type_handle_ndarray)
-                )
+                raise Exception ('Unknown type_handle_ndarray: '+str(type_handle_ndarray))
         OutGeoLam_dict["Ksfill"] = self.Ksfill
         OutGeoLam_dict["S_slot"] = self.S_slot
         OutGeoLam_dict["S_slot_wind"] = self.S_slot_wind
@@ -353,6 +260,7 @@ class OutGeoLam(FrozenClass):
         # The class name is added to the dict for deserialisation purpose
         OutGeoLam_dict["__class__"] = "OutGeoLam"
         return OutGeoLam_dict
+
 
     def copy(self):
         """Creates a deepcopy of the object"""
@@ -375,18 +283,7 @@ class OutGeoLam(FrozenClass):
         per_t_val = self.per_t
         is_antiper_t_val = self.is_antiper_t
         # Creates new object of the same type with the copied properties
-        obj_copy = type(self)(
-            name_phase=name_phase_val,
-            BH_curve=BH_curve_val,
-            Ksfill=Ksfill_val,
-            S_slot=S_slot_val,
-            S_slot_wind=S_slot_wind_val,
-            S_wind_act=S_wind_act_val,
-            per_a=per_a_val,
-            is_antiper_a=is_antiper_a_val,
-            per_t=per_t_val,
-            is_antiper_t=is_antiper_t_val,
-        )
+        obj_copy = type(self)(name_phase=name_phase_val,BH_curve=BH_curve_val,Ksfill=Ksfill_val,S_slot=S_slot_val,S_slot_wind=S_slot_wind_val,S_wind_act=S_wind_act_val,per_a=per_a_val,is_antiper_a=is_antiper_a_val,per_t=per_t_val,is_antiper_t=is_antiper_t_val)
         return obj_copy
 
     def _set_None(self):

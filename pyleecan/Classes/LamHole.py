@@ -98,26 +98,7 @@ class LamHole(LamH):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(
-        self,
-        hole=-1,
-        L1=0.35,
-        mat_type=-1,
-        Nrvd=0,
-        Wrvd=0,
-        Kf1=0.95,
-        is_internal=True,
-        Rint=0,
-        Rext=1,
-        is_stator=True,
-        axial_vent=-1,
-        notch=-1,
-        skew=None,
-        bore=None,
-        yoke=None,
-        init_dict=None,
-        init_str=None,
-    ):
+    def __init__(self, hole=-1, L1=0.35, mat_type=-1, Nrvd=0, Wrvd=0, Kf1=0.95, is_internal=True, Rint=0, Rext=1, is_stator=True, axial_vent=-1, notch=-1, skew=None, bore=None, yoke=None, init_dict = None, init_str = None):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -166,22 +147,7 @@ class LamHole(LamH):
         # Set the properties (value check and convertion are done in setter)
         self.hole = hole
         # Call LamH init
-        super(LamHole, self).__init__(
-            L1=L1,
-            mat_type=mat_type,
-            Nrvd=Nrvd,
-            Wrvd=Wrvd,
-            Kf1=Kf1,
-            is_internal=is_internal,
-            Rint=Rint,
-            Rext=Rext,
-            is_stator=is_stator,
-            axial_vent=axial_vent,
-            notch=notch,
-            skew=skew,
-            bore=bore,
-            yoke=yoke,
-        )
+        super(LamHole, self).__init__(L1=L1, mat_type=mat_type, Nrvd=Nrvd, Wrvd=Wrvd, Kf1=Kf1, is_internal=is_internal, Rint=Rint, Rext=Rext, is_stator=is_stator, axial_vent=axial_vent, notch=notch, skew=skew, bore=bore, yoke=yoke)
         # The class is frozen (in LamH init), for now it's impossible to
         # add new properties
 
@@ -195,7 +161,7 @@ class LamHole(LamH):
             LamHole_str += "hole = []" + linesep
         for ii in range(len(self.hole)):
             tmp = self.hole[ii].__str__().replace(linesep, linesep + "\t") + linesep
-            LamHole_str += "hole[" + str(ii) + "] =" + tmp + linesep + linesep
+            LamHole_str += "hole["+str(ii)+"] ="+ tmp + linesep + linesep
         return LamHole_str
 
     def __eq__(self, other):
@@ -211,41 +177,28 @@ class LamHole(LamH):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
+    def compare(self, other, name='self', ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
             ignore_list = list()
         if type(other) != type(self):
-            return ["type(" + name + ")"]
+            return ['type('+name+')']
         diff_list = list()
 
         # Check the properties inherited from LamH
-        diff_list.extend(
-            super(LamHole, self).compare(
-                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
-            )
-        )
-        if (other.hole is None and self.hole is not None) or (
-            other.hole is not None and self.hole is None
-        ):
-            diff_list.append(name + ".hole None mismatch")
+        diff_list.extend(super(LamHole, self).compare(other,name=name, ignore_list=ignore_list, is_add_value=is_add_value))
+        if (other.hole is None and self.hole is not None) or (other.hole is not None and self.hole is None):
+            diff_list.append(name+'.hole None mismatch')
         elif self.hole is None:
             pass
         elif len(other.hole) != len(self.hole):
-            diff_list.append("len(" + name + ".hole)")
+            diff_list.append('len('+name+'.hole)')
         else:
             for ii in range(len(other.hole)):
-                diff_list.extend(
-                    self.hole[ii].compare(
-                        other.hole[ii],
-                        name=name + ".hole[" + str(ii) + "]",
-                        ignore_list=ignore_list,
-                        is_add_value=is_add_value,
-                    )
-                )
+                diff_list.extend(self.hole[ii].compare(other.hole[ii],name=name+'.hole['+str(ii)+']',ignore_list=ignore_list,is_add_value=is_add_value))
         # Filter ignore differences
-        diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
+        diff_list = list(filter(lambda x : x not in ignore_list, diff_list))
         return diff_list
 
     def __sizeof__(self):
@@ -267,35 +220,26 @@ class LamHole(LamH):
             How to handle ndarray (0: tolist, 1: copy, 2: nothing)
         keep_function : bool
             True to keep the function object, else return str
-        Optional keyword input parameter is for internal use only
+        Optional keyword input parameter is for internal use only 
         and may prevent json serializability.
         """
 
         # Get the properties inherited from LamH
-        LamHole_dict = super(LamHole, self).as_dict(
-            type_handle_ndarray=type_handle_ndarray,
-            keep_function=keep_function,
-            **kwargs
-        )
+        LamHole_dict = super(LamHole, self).as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs)
         if self.hole is None:
-            LamHole_dict["hole"] = None
+            LamHole_dict['hole'] = None
         else:
-            LamHole_dict["hole"] = list()
+            LamHole_dict['hole'] = list()
             for obj in self.hole:
                 if obj is not None:
-                    LamHole_dict["hole"].append(
-                        obj.as_dict(
-                            type_handle_ndarray=type_handle_ndarray,
-                            keep_function=keep_function,
-                            **kwargs
-                        )
-                    )
+                    LamHole_dict['hole'].append(obj.as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs))
                 else:
-                    LamHole_dict["hole"].append(None)
+                    LamHole_dict['hole'].append(None)
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         LamHole_dict["__class__"] = "LamHole"
         return LamHole_dict
+
 
     def copy(self):
         """Creates a deepcopy of the object"""
@@ -344,23 +288,7 @@ class LamHole(LamH):
         else:
             yoke_val = self.yoke.copy()
         # Creates new object of the same type with the copied properties
-        obj_copy = type(self)(
-            hole=hole_val,
-            L1=L1_val,
-            mat_type=mat_type_val,
-            Nrvd=Nrvd_val,
-            Wrvd=Wrvd_val,
-            Kf1=Kf1_val,
-            is_internal=is_internal_val,
-            Rint=Rint_val,
-            Rext=Rext_val,
-            is_stator=is_stator_val,
-            axial_vent=axial_vent_val,
-            notch=notch_val,
-            skew=skew_val,
-            bore=bore_val,
-            yoke=yoke_val,
-        )
+        obj_copy = type(self)(hole=hole_val,L1=L1_val,mat_type=mat_type_val,Nrvd=Nrvd_val,Wrvd=Wrvd_val,Kf1=Kf1_val,is_internal=is_internal_val,Rint=Rint_val,Rext=Rext_val,is_stator=is_stator_val,axial_vent=axial_vent_val,notch=notch_val,skew=skew_val,bore=bore_val,yoke=yoke_val)
         return obj_copy
 
     def _set_None(self):
@@ -386,15 +314,11 @@ class LamHole(LamH):
                     try:
                         obj = load_init_dict(obj)[1]
                     except Exception as e:
-                        self.get_logger().error(
-                            "Error while loading " + obj + ", setting None instead"
-                        )
+                        self.get_logger().error('Error while loading '+obj+', setting None instead')
                         obj = None
                         value[ii] = None
                 if type(obj) is dict:
-                    class_obj = import_class(
-                        "pyleecan.Classes", obj.get("__class__"), "hole"
-                    )
+                    class_obj = import_class('pyleecan.Classes', obj.get('__class__'), 'hole')
                     value[ii] = class_obj(init_dict=obj)
                 if value[ii] is not None:
                     value[ii].parent = self

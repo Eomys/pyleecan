@@ -48,9 +48,7 @@ class ImportVectorField(FrozenClass):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(
-        self, components=-1, name="", symbol="", init_dict=None, init_str=None
-    ):
+    def __init__(self, components=-1, name="", symbol="", init_dict = None, init_str = None):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -88,19 +86,12 @@ class ImportVectorField(FrozenClass):
         if self.parent is None:
             ImportVectorField_str += "parent = None " + linesep
         else:
-            ImportVectorField_str += (
-                "parent = " + str(type(self.parent)) + " object" + linesep
-            )
+            ImportVectorField_str += "parent = " + str(type(self.parent)) + " object" + linesep
         if len(self.components) == 0:
-            ImportVectorField_str += "components = dict()" + linesep
+            ImportVectorField_str += "components = dict()"+linesep
         for key, obj in self.components.items():
-            tmp = (
-                self.components[key].__str__().replace(linesep, linesep + "\t")
-                + linesep
-            )
-            ImportVectorField_str += (
-                "components[" + key + "] =" + tmp + linesep + linesep
-            )
+            tmp = self.components[key].__str__().replace(linesep, linesep + "\t") + linesep 
+            ImportVectorField_str += "components["+key+"] ="+ tmp + linesep + linesep
         ImportVectorField_str += 'name = "' + str(self.name) + '"' + linesep
         ImportVectorField_str += 'symbol = "' + str(self.symbol) + '"' + linesep
         return ImportVectorField_str
@@ -118,54 +109,37 @@ class ImportVectorField(FrozenClass):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
+    def compare(self, other, name='self', ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
             ignore_list = list()
         if type(other) != type(self):
-            return ["type(" + name + ")"]
+            return ['type('+name+')']
         diff_list = list()
-        if (other.components is None and self.components is not None) or (
-            other.components is not None and self.components is None
-        ):
-            diff_list.append(name + ".components None mismatch")
+        if (other.components is None and self.components is not None) or (other.components is not None and self.components is None):
+            diff_list.append(name+'.components None mismatch')
         elif self.components is None:
             pass
         elif len(other.components) != len(self.components):
-            diff_list.append("len(" + name + "components)")
+            diff_list.append('len('+name+'components)')
         else:
             for key in self.components:
-                diff_list.extend(
-                    self.components[key].compare(
-                        other.components[key],
-                        name=name + ".components[" + str(key) + "]",
-                        ignore_list=ignore_list,
-                        is_add_value=is_add_value,
-                    )
-                )
+                diff_list.extend(self.components[key].compare(other.components[key],name=name+'.components['+str(key)+']',ignore_list=ignore_list,is_add_value=is_add_value))
         if other._name != self._name:
             if is_add_value:
-                val_str = (
-                    " (self=" + str(self._name) + ", other=" + str(other._name) + ")"
-                )
-                diff_list.append(name + ".name" + val_str)
+                val_str = ' (self='+str(self._name)+', other='+str(other._name)+')'
+                diff_list.append(name+'.name'+val_str)
             else:
-                diff_list.append(name + ".name")
+                diff_list.append(name+'.name')
         if other._symbol != self._symbol:
             if is_add_value:
-                val_str = (
-                    " (self="
-                    + str(self._symbol)
-                    + ", other="
-                    + str(other._symbol)
-                    + ")"
-                )
-                diff_list.append(name + ".symbol" + val_str)
+                val_str = ' (self='+str(self._symbol)+', other='+str(other._symbol)+')'
+                diff_list.append(name+'.symbol'+val_str)
             else:
-                diff_list.append(name + ".symbol")
+                diff_list.append(name+'.symbol')
         # Filter ignore differences
-        diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
+        diff_list = list(filter(lambda x : x not in ignore_list, diff_list))
         return diff_list
 
     def __sizeof__(self):
@@ -186,7 +160,7 @@ class ImportVectorField(FrozenClass):
             How to handle ndarray (0: tolist, 1: copy, 2: nothing)
         keep_function : bool
             True to keep the function object, else return str
-        Optional keyword input parameter is for internal use only
+        Optional keyword input parameter is for internal use only 
         and may prevent json serializability.
         """
 
@@ -197,11 +171,7 @@ class ImportVectorField(FrozenClass):
             ImportVectorField_dict["components"] = dict()
             for key, obj in self.components.items():
                 if obj is not None:
-                    ImportVectorField_dict["components"][key] = obj.as_dict(
-                        type_handle_ndarray=type_handle_ndarray,
-                        keep_function=keep_function,
-                        **kwargs
-                    )
+                    ImportVectorField_dict["components"][key] = obj.as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs)
                 else:
                     ImportVectorField_dict["components"][key] = None
         ImportVectorField_dict["name"] = self.name
@@ -209,6 +179,7 @@ class ImportVectorField(FrozenClass):
         # The class name is added to the dict for deserialisation purpose
         ImportVectorField_dict["__class__"] = "ImportVectorField"
         return ImportVectorField_dict
+
 
     def copy(self):
         """Creates a deepcopy of the object"""
@@ -223,9 +194,7 @@ class ImportVectorField(FrozenClass):
         name_val = self.name
         symbol_val = self.symbol
         # Creates new object of the same type with the copied properties
-        obj_copy = type(self)(
-            components=components_val, name=name_val, symbol=symbol_val
-        )
+        obj_copy = type(self)(components=components_val,name=name_val,symbol=symbol_val)
         return obj_copy
 
     def _set_None(self):
@@ -251,15 +220,11 @@ class ImportVectorField(FrozenClass):
                     try:
                         obj = load_init_dict(obj)[1]
                     except Exception as e:
-                        self.get_logger().error(
-                            "Error while loading " + obj + ", setting None instead"
-                        )
+                        self.get_logger().error('Error while loading '+obj+', setting None instead')
                         obj = None
                         value[key] = None
                 if type(obj) is dict:
-                    class_obj = import_class(
-                        "pyleecan.Classes", obj.get("__class__"), "components"
-                    )
+                    class_obj = import_class('pyleecan.Classes', obj.get('__class__'), 'components')
                     value[key] = class_obj(init_dict=obj)
         if type(value) is int and value == -1:
             value = dict()

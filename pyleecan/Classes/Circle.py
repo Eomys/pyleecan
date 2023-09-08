@@ -163,16 +163,7 @@ class Circle(Surface):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(
-        self,
-        radius=1,
-        center=0,
-        prop_dict=-1,
-        point_ref=0,
-        label="",
-        init_dict=None,
-        init_str=None,
-    ):
+    def __init__(self, radius=1, center=0, prop_dict=-1, point_ref=0, label="", init_dict = None, init_str = None):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -235,66 +226,39 @@ class Circle(Surface):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
+    def compare(self, other, name='self', ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
             ignore_list = list()
         if type(other) != type(self):
-            return ["type(" + name + ")"]
+            return ['type('+name+')']
         diff_list = list()
 
         # Check the properties inherited from Surface
-        diff_list.extend(
-            super(Circle, self).compare(
-                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
-            )
-        )
-        if (
-            other._radius is not None
-            and self._radius is not None
-            and isnan(other._radius)
-            and isnan(self._radius)
-        ):
+        diff_list.extend(super(Circle, self).compare(other,name=name, ignore_list=ignore_list, is_add_value=is_add_value))
+        if other._radius is not None and self._radius is not None and isnan(other._radius) and isnan(self._radius):
             pass
         elif other._radius != self._radius:
             if is_add_value:
-                val_str = (
-                    " (self="
-                    + str(self._radius)
-                    + ", other="
-                    + str(other._radius)
-                    + ")"
-                )
-                diff_list.append(name + ".radius" + val_str)
+                val_str = ' (self='+str(self._radius)+', other='+str(other._radius)+')'
+                diff_list.append(name+'.radius'+val_str)
             else:
-                diff_list.append(name + ".radius")
+                diff_list.append(name+'.radius')
         if other._center != self._center:
             if is_add_value:
-                val_str = (
-                    " (self="
-                    + str(self._center)
-                    + ", other="
-                    + str(other._center)
-                    + ")"
-                )
-                diff_list.append(name + ".center" + val_str)
+                val_str = ' (self='+str(self._center)+', other='+str(other._center)+')'
+                diff_list.append(name+'.center'+val_str)
             else:
-                diff_list.append(name + ".center")
+                diff_list.append(name+'.center')
         if other._prop_dict != self._prop_dict:
             if is_add_value:
-                val_str = (
-                    " (self="
-                    + str(self._prop_dict)
-                    + ", other="
-                    + str(other._prop_dict)
-                    + ")"
-                )
-                diff_list.append(name + ".prop_dict" + val_str)
+                val_str = ' (self='+str(self._prop_dict)+', other='+str(other._prop_dict)+')'
+                diff_list.append(name+'.prop_dict'+val_str)
             else:
-                diff_list.append(name + ".prop_dict")
+                diff_list.append(name+'.prop_dict')
         # Filter ignore differences
-        diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
+        diff_list = list(filter(lambda x : x not in ignore_list, diff_list))
         return diff_list
 
     def __sizeof__(self):
@@ -318,16 +282,12 @@ class Circle(Surface):
             How to handle ndarray (0: tolist, 1: copy, 2: nothing)
         keep_function : bool
             True to keep the function object, else return str
-        Optional keyword input parameter is for internal use only
+        Optional keyword input parameter is for internal use only 
         and may prevent json serializability.
         """
 
         # Get the properties inherited from Surface
-        Circle_dict = super(Circle, self).as_dict(
-            type_handle_ndarray=type_handle_ndarray,
-            keep_function=keep_function,
-            **kwargs
-        )
+        Circle_dict = super(Circle, self).as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs)
         Circle_dict["radius"] = self.radius
         if self.center is None:
             Circle_dict["center"] = None
@@ -343,6 +303,7 @@ class Circle(Surface):
         Circle_dict["__class__"] = "Circle"
         return Circle_dict
 
+
     def copy(self):
         """Creates a deepcopy of the object"""
 
@@ -356,13 +317,7 @@ class Circle(Surface):
         point_ref_val = self.point_ref
         label_val = self.label
         # Creates new object of the same type with the copied properties
-        obj_copy = type(self)(
-            radius=radius_val,
-            center=center_val,
-            prop_dict=prop_dict_val,
-            point_ref=point_ref_val,
-            label=label_val,
-        )
+        obj_copy = type(self)(radius=radius_val,center=center_val,prop_dict=prop_dict_val,point_ref=point_ref_val,label=label_val)
         return obj_copy
 
     def _set_None(self):
@@ -399,7 +354,7 @@ class Circle(Surface):
 
     def _set_center(self, value):
         """setter of center"""
-        if isinstance(value, str):
+        if isinstance(value,str):
             value = complex(value)
         check_var("center", value, "complex")
         self._center = value

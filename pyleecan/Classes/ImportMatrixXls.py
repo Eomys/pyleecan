@@ -48,18 +48,7 @@ class ImportMatrixXls(ImportMatrix):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(
-        self,
-        file_path="",
-        sheet="",
-        skiprows=0,
-        usecols=None,
-        axes_colrows=None,
-        is_allsheets=False,
-        is_transpose=False,
-        init_dict=None,
-        init_str=None,
-    ):
+    def __init__(self, file_path="", sheet="", skiprows=0, usecols=None, axes_colrows=None, is_allsheets=False, is_transpose=False, init_dict = None, init_str = None):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -138,91 +127,55 @@ class ImportMatrixXls(ImportMatrix):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
+    def compare(self, other, name='self', ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
             ignore_list = list()
         if type(other) != type(self):
-            return ["type(" + name + ")"]
+            return ['type('+name+')']
         diff_list = list()
 
         # Check the properties inherited from ImportMatrix
-        diff_list.extend(
-            super(ImportMatrixXls, self).compare(
-                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
-            )
-        )
+        diff_list.extend(super(ImportMatrixXls, self).compare(other,name=name, ignore_list=ignore_list, is_add_value=is_add_value))
         if other._file_path != self._file_path:
             if is_add_value:
-                val_str = (
-                    " (self="
-                    + str(self._file_path)
-                    + ", other="
-                    + str(other._file_path)
-                    + ")"
-                )
-                diff_list.append(name + ".file_path" + val_str)
+                val_str = ' (self='+str(self._file_path)+', other='+str(other._file_path)+')'
+                diff_list.append(name+'.file_path'+val_str)
             else:
-                diff_list.append(name + ".file_path")
+                diff_list.append(name+'.file_path')
         if other._sheet != self._sheet:
             if is_add_value:
-                val_str = (
-                    " (self=" + str(self._sheet) + ", other=" + str(other._sheet) + ")"
-                )
-                diff_list.append(name + ".sheet" + val_str)
+                val_str = ' (self='+str(self._sheet)+', other='+str(other._sheet)+')'
+                diff_list.append(name+'.sheet'+val_str)
             else:
-                diff_list.append(name + ".sheet")
+                diff_list.append(name+'.sheet')
         if other._skiprows != self._skiprows:
             if is_add_value:
-                val_str = (
-                    " (self="
-                    + str(self._skiprows)
-                    + ", other="
-                    + str(other._skiprows)
-                    + ")"
-                )
-                diff_list.append(name + ".skiprows" + val_str)
+                val_str = ' (self='+str(self._skiprows)+', other='+str(other._skiprows)+')'
+                diff_list.append(name+'.skiprows'+val_str)
             else:
-                diff_list.append(name + ".skiprows")
+                diff_list.append(name+'.skiprows')
         if other._usecols != self._usecols:
             if is_add_value:
-                val_str = (
-                    " (self="
-                    + str(self._usecols)
-                    + ", other="
-                    + str(other._usecols)
-                    + ")"
-                )
-                diff_list.append(name + ".usecols" + val_str)
+                val_str = ' (self='+str(self._usecols)+', other='+str(other._usecols)+')'
+                diff_list.append(name+'.usecols'+val_str)
             else:
-                diff_list.append(name + ".usecols")
+                diff_list.append(name+'.usecols')
         if other._axes_colrows != self._axes_colrows:
             if is_add_value:
-                val_str = (
-                    " (self="
-                    + str(self._axes_colrows)
-                    + ", other="
-                    + str(other._axes_colrows)
-                    + ")"
-                )
-                diff_list.append(name + ".axes_colrows" + val_str)
+                val_str = ' (self='+str(self._axes_colrows)+', other='+str(other._axes_colrows)+')'
+                diff_list.append(name+'.axes_colrows'+val_str)
             else:
-                diff_list.append(name + ".axes_colrows")
+                diff_list.append(name+'.axes_colrows')
         if other._is_allsheets != self._is_allsheets:
             if is_add_value:
-                val_str = (
-                    " (self="
-                    + str(self._is_allsheets)
-                    + ", other="
-                    + str(other._is_allsheets)
-                    + ")"
-                )
-                diff_list.append(name + ".is_allsheets" + val_str)
+                val_str = ' (self='+str(self._is_allsheets)+', other='+str(other._is_allsheets)+')'
+                diff_list.append(name+'.is_allsheets'+val_str)
             else:
-                diff_list.append(name + ".is_allsheets")
+                diff_list.append(name+'.is_allsheets')
         # Filter ignore differences
-        diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
+        diff_list = list(filter(lambda x : x not in ignore_list, diff_list))
         return diff_list
 
     def __sizeof__(self):
@@ -249,16 +202,12 @@ class ImportMatrixXls(ImportMatrix):
             How to handle ndarray (0: tolist, 1: copy, 2: nothing)
         keep_function : bool
             True to keep the function object, else return str
-        Optional keyword input parameter is for internal use only
+        Optional keyword input parameter is for internal use only 
         and may prevent json serializability.
         """
 
         # Get the properties inherited from ImportMatrix
-        ImportMatrixXls_dict = super(ImportMatrixXls, self).as_dict(
-            type_handle_ndarray=type_handle_ndarray,
-            keep_function=keep_function,
-            **kwargs
-        )
+        ImportMatrixXls_dict = super(ImportMatrixXls, self).as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs)
         ImportMatrixXls_dict["file_path"] = self.file_path
         ImportMatrixXls_dict["sheet"] = self.sheet
         ImportMatrixXls_dict["skiprows"] = self.skiprows
@@ -271,6 +220,7 @@ class ImportMatrixXls(ImportMatrix):
         # Overwrite the mother class name
         ImportMatrixXls_dict["__class__"] = "ImportMatrixXls"
         return ImportMatrixXls_dict
+
 
     def copy(self):
         """Creates a deepcopy of the object"""
@@ -287,15 +237,7 @@ class ImportMatrixXls(ImportMatrix):
         is_allsheets_val = self.is_allsheets
         is_transpose_val = self.is_transpose
         # Creates new object of the same type with the copied properties
-        obj_copy = type(self)(
-            file_path=file_path_val,
-            sheet=sheet_val,
-            skiprows=skiprows_val,
-            usecols=usecols_val,
-            axes_colrows=axes_colrows_val,
-            is_allsheets=is_allsheets_val,
-            is_transpose=is_transpose_val,
-        )
+        obj_copy = type(self)(file_path=file_path_val,sheet=sheet_val,skiprows=skiprows_val,usecols=usecols_val,axes_colrows=axes_colrows_val,is_allsheets=is_allsheets_val,is_transpose=is_transpose_val)
         return obj_copy
 
     def _set_None(self):

@@ -48,8 +48,7 @@ class EEC_LSRPM(EEC):
         comp_parameters = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use EEC_LSRPM method comp_parameters: "
-                    + str(comp_parameters)
+                    "Can't use EEC_LSRPM method comp_parameters: " + str(comp_parameters)
                 )
             )
         )
@@ -81,21 +80,7 @@ class EEC_LSRPM(EEC):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(
-        self,
-        type_skin_effect=1,
-        OP=None,
-        Tsta=20,
-        Trot=20,
-        Xkr_skinS=1,
-        Xke_skinS=1,
-        Xkr_skinR=1,
-        Xke_skinR=1,
-        R1=None,
-        fluxlink=None,
-        init_dict=None,
-        init_str=None,
-    ):
+    def __init__(self, type_skin_effect=1, OP=None, Tsta=20, Trot=20, Xkr_skinS=1, Xke_skinS=1, Xkr_skinR=1, Xke_skinR=1, R1=None, fluxlink=None, init_dict = None, init_str = None):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -133,18 +118,7 @@ class EEC_LSRPM(EEC):
                 fluxlink = init_dict["fluxlink"]
         # Set the properties (value check and convertion are done in setter)
         # Call EEC init
-        super(EEC_LSRPM, self).__init__(
-            type_skin_effect=type_skin_effect,
-            OP=OP,
-            Tsta=Tsta,
-            Trot=Trot,
-            Xkr_skinS=Xkr_skinS,
-            Xke_skinS=Xke_skinS,
-            Xkr_skinR=Xkr_skinR,
-            Xke_skinR=Xke_skinR,
-            R1=R1,
-            fluxlink=fluxlink,
-        )
+        super(EEC_LSRPM, self).__init__(type_skin_effect=type_skin_effect, OP=OP, Tsta=Tsta, Trot=Trot, Xkr_skinS=Xkr_skinS, Xke_skinS=Xke_skinS, Xkr_skinR=Xkr_skinR, Xke_skinR=Xke_skinR, R1=R1, fluxlink=fluxlink)
         # The class is frozen (in EEC init), for now it's impossible to
         # add new properties
 
@@ -167,23 +141,19 @@ class EEC_LSRPM(EEC):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
+    def compare(self, other, name='self', ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
             ignore_list = list()
         if type(other) != type(self):
-            return ["type(" + name + ")"]
+            return ['type('+name+')']
         diff_list = list()
 
         # Check the properties inherited from EEC
-        diff_list.extend(
-            super(EEC_LSRPM, self).compare(
-                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
-            )
-        )
+        diff_list.extend(super(EEC_LSRPM, self).compare(other,name=name, ignore_list=ignore_list, is_add_value=is_add_value))
         # Filter ignore differences
-        diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
+        diff_list = list(filter(lambda x : x not in ignore_list, diff_list))
         return diff_list
 
     def __sizeof__(self):
@@ -202,20 +172,17 @@ class EEC_LSRPM(EEC):
             How to handle ndarray (0: tolist, 1: copy, 2: nothing)
         keep_function : bool
             True to keep the function object, else return str
-        Optional keyword input parameter is for internal use only
+        Optional keyword input parameter is for internal use only 
         and may prevent json serializability.
         """
 
         # Get the properties inherited from EEC
-        EEC_LSRPM_dict = super(EEC_LSRPM, self).as_dict(
-            type_handle_ndarray=type_handle_ndarray,
-            keep_function=keep_function,
-            **kwargs
-        )
+        EEC_LSRPM_dict = super(EEC_LSRPM, self).as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs)
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         EEC_LSRPM_dict["__class__"] = "EEC_LSRPM"
         return EEC_LSRPM_dict
+
 
     def copy(self):
         """Creates a deepcopy of the object"""
@@ -238,18 +205,7 @@ class EEC_LSRPM(EEC):
         else:
             fluxlink_val = self.fluxlink.copy()
         # Creates new object of the same type with the copied properties
-        obj_copy = type(self)(
-            type_skin_effect=type_skin_effect_val,
-            OP=OP_val,
-            Tsta=Tsta_val,
-            Trot=Trot_val,
-            Xkr_skinS=Xkr_skinS_val,
-            Xke_skinS=Xke_skinS_val,
-            Xkr_skinR=Xkr_skinR_val,
-            Xke_skinR=Xke_skinR_val,
-            R1=R1_val,
-            fluxlink=fluxlink_val,
-        )
+        obj_copy = type(self)(type_skin_effect=type_skin_effect_val,OP=OP_val,Tsta=Tsta_val,Trot=Trot_val,Xkr_skinS=Xkr_skinS_val,Xke_skinS=Xke_skinS_val,Xkr_skinR=Xkr_skinR_val,Xke_skinR=Xke_skinR_val,R1=R1_val,fluxlink=fluxlink_val)
         return obj_copy
 
     def _set_None(self):

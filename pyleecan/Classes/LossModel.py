@@ -29,15 +29,7 @@ class LossModel(FrozenClass):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(
-        self,
-        name="",
-        group="",
-        is_show_fig=False,
-        coeff_dict=None,
-        init_dict=None,
-        init_str=None,
-    ):
+    def __init__(self, name="", group="", is_show_fig=False, coeff_dict=None, init_dict = None, init_str = None):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -100,56 +92,40 @@ class LossModel(FrozenClass):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
+    def compare(self, other, name='self', ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
             ignore_list = list()
         if type(other) != type(self):
-            return ["type(" + name + ")"]
+            return ['type('+name+')']
         diff_list = list()
         if other._name != self._name:
             if is_add_value:
-                val_str = (
-                    " (self=" + str(self._name) + ", other=" + str(other._name) + ")"
-                )
-                diff_list.append(name + ".name" + val_str)
+                val_str = ' (self='+str(self._name)+', other='+str(other._name)+')'
+                diff_list.append(name+'.name'+val_str)
             else:
-                diff_list.append(name + ".name")
+                diff_list.append(name+'.name')
         if other._group != self._group:
             if is_add_value:
-                val_str = (
-                    " (self=" + str(self._group) + ", other=" + str(other._group) + ")"
-                )
-                diff_list.append(name + ".group" + val_str)
+                val_str = ' (self='+str(self._group)+', other='+str(other._group)+')'
+                diff_list.append(name+'.group'+val_str)
             else:
-                diff_list.append(name + ".group")
+                diff_list.append(name+'.group')
         if other._is_show_fig != self._is_show_fig:
             if is_add_value:
-                val_str = (
-                    " (self="
-                    + str(self._is_show_fig)
-                    + ", other="
-                    + str(other._is_show_fig)
-                    + ")"
-                )
-                diff_list.append(name + ".is_show_fig" + val_str)
+                val_str = ' (self='+str(self._is_show_fig)+', other='+str(other._is_show_fig)+')'
+                diff_list.append(name+'.is_show_fig'+val_str)
             else:
-                diff_list.append(name + ".is_show_fig")
+                diff_list.append(name+'.is_show_fig')
         if other._coeff_dict != self._coeff_dict:
             if is_add_value:
-                val_str = (
-                    " (self="
-                    + str(self._coeff_dict)
-                    + ", other="
-                    + str(other._coeff_dict)
-                    + ")"
-                )
-                diff_list.append(name + ".coeff_dict" + val_str)
+                val_str = ' (self='+str(self._coeff_dict)+', other='+str(other._coeff_dict)+')'
+                diff_list.append(name+'.coeff_dict'+val_str)
             else:
-                diff_list.append(name + ".coeff_dict")
+                diff_list.append(name+'.coeff_dict')
         # Filter ignore differences
-        diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
+        diff_list = list(filter(lambda x : x not in ignore_list, diff_list))
         return diff_list
 
     def __sizeof__(self):
@@ -171,7 +147,7 @@ class LossModel(FrozenClass):
             How to handle ndarray (0: tolist, 1: copy, 2: nothing)
         keep_function : bool
             True to keep the function object, else return str
-        Optional keyword input parameter is for internal use only
+        Optional keyword input parameter is for internal use only 
         and may prevent json serializability.
         """
 
@@ -186,6 +162,7 @@ class LossModel(FrozenClass):
         LossModel_dict["__class__"] = "LossModel"
         return LossModel_dict
 
+
     def copy(self):
         """Creates a deepcopy of the object"""
 
@@ -198,12 +175,7 @@ class LossModel(FrozenClass):
         else:
             coeff_dict_val = self.coeff_dict.copy()
         # Creates new object of the same type with the copied properties
-        obj_copy = type(self)(
-            name=name_val,
-            group=group_val,
-            is_show_fig=is_show_fig_val,
-            coeff_dict=coeff_dict_val,
-        )
+        obj_copy = type(self)(name=name_val,group=group_val,is_show_fig=is_show_fig_val,coeff_dict=coeff_dict_val)
         return obj_copy
 
     def _set_None(self):

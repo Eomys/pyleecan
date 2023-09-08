@@ -23,9 +23,7 @@ except ImportError as error:
     get_bore_line = error
 
 try:
-    from ..Methods.Machine.BoreLSRPM.comp_periodicity_spatial import (
-        comp_periodicity_spatial,
-    )
+    from ..Methods.Machine.BoreLSRPM.comp_periodicity_spatial import comp_periodicity_spatial
 except ImportError as error:
     comp_periodicity_spatial = error
 
@@ -68,16 +66,7 @@ class BoreLSRPM(Bore):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(
-        self,
-        N=8,
-        Rarc=0.0375,
-        W1=0.0035,
-        type_merge_slot=1,
-        alpha=0,
-        init_dict=None,
-        init_str=None,
-    ):
+    def __init__(self, N=8, Rarc=0.0375, W1=0.0035, type_merge_slot=1, alpha=0, init_dict = None, init_str = None):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -140,57 +129,41 @@ class BoreLSRPM(Bore):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
+    def compare(self, other, name='self', ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
             ignore_list = list()
         if type(other) != type(self):
-            return ["type(" + name + ")"]
+            return ['type('+name+')']
         diff_list = list()
 
         # Check the properties inherited from Bore
-        diff_list.extend(
-            super(BoreLSRPM, self).compare(
-                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
-            )
-        )
+        diff_list.extend(super(BoreLSRPM, self).compare(other,name=name, ignore_list=ignore_list, is_add_value=is_add_value))
         if other._N != self._N:
             if is_add_value:
-                val_str = " (self=" + str(self._N) + ", other=" + str(other._N) + ")"
-                diff_list.append(name + ".N" + val_str)
+                val_str = ' (self='+str(self._N)+', other='+str(other._N)+')'
+                diff_list.append(name+'.N'+val_str)
             else:
-                diff_list.append(name + ".N")
-        if (
-            other._Rarc is not None
-            and self._Rarc is not None
-            and isnan(other._Rarc)
-            and isnan(self._Rarc)
-        ):
+                diff_list.append(name+'.N')
+        if other._Rarc is not None and self._Rarc is not None and isnan(other._Rarc) and isnan(self._Rarc):
             pass
         elif other._Rarc != self._Rarc:
             if is_add_value:
-                val_str = (
-                    " (self=" + str(self._Rarc) + ", other=" + str(other._Rarc) + ")"
-                )
-                diff_list.append(name + ".Rarc" + val_str)
+                val_str = ' (self='+str(self._Rarc)+', other='+str(other._Rarc)+')'
+                diff_list.append(name+'.Rarc'+val_str)
             else:
-                diff_list.append(name + ".Rarc")
-        if (
-            other._W1 is not None
-            and self._W1 is not None
-            and isnan(other._W1)
-            and isnan(self._W1)
-        ):
+                diff_list.append(name+'.Rarc')
+        if other._W1 is not None and self._W1 is not None and isnan(other._W1) and isnan(self._W1):
             pass
         elif other._W1 != self._W1:
             if is_add_value:
-                val_str = " (self=" + str(self._W1) + ", other=" + str(other._W1) + ")"
-                diff_list.append(name + ".W1" + val_str)
+                val_str = ' (self='+str(self._W1)+', other='+str(other._W1)+')'
+                diff_list.append(name+'.W1'+val_str)
             else:
-                diff_list.append(name + ".W1")
+                diff_list.append(name+'.W1')
         # Filter ignore differences
-        diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
+        diff_list = list(filter(lambda x : x not in ignore_list, diff_list))
         return diff_list
 
     def __sizeof__(self):
@@ -212,16 +185,12 @@ class BoreLSRPM(Bore):
             How to handle ndarray (0: tolist, 1: copy, 2: nothing)
         keep_function : bool
             True to keep the function object, else return str
-        Optional keyword input parameter is for internal use only
+        Optional keyword input parameter is for internal use only 
         and may prevent json serializability.
         """
 
         # Get the properties inherited from Bore
-        BoreLSRPM_dict = super(BoreLSRPM, self).as_dict(
-            type_handle_ndarray=type_handle_ndarray,
-            keep_function=keep_function,
-            **kwargs
-        )
+        BoreLSRPM_dict = super(BoreLSRPM, self).as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs)
         BoreLSRPM_dict["N"] = self.N
         BoreLSRPM_dict["Rarc"] = self.Rarc
         BoreLSRPM_dict["W1"] = self.W1
@@ -229,6 +198,7 @@ class BoreLSRPM(Bore):
         # Overwrite the mother class name
         BoreLSRPM_dict["__class__"] = "BoreLSRPM"
         return BoreLSRPM_dict
+
 
     def copy(self):
         """Creates a deepcopy of the object"""
@@ -240,13 +210,7 @@ class BoreLSRPM(Bore):
         type_merge_slot_val = self.type_merge_slot
         alpha_val = self.alpha
         # Creates new object of the same type with the copied properties
-        obj_copy = type(self)(
-            N=N_val,
-            Rarc=Rarc_val,
-            W1=W1_val,
-            type_merge_slot=type_merge_slot_val,
-            alpha=alpha_val,
-        )
+        obj_copy = type(self)(N=N_val,Rarc=Rarc_val,W1=W1_val,type_merge_slot=type_merge_slot_val,alpha=alpha_val)
         return obj_copy
 
     def _set_None(self):

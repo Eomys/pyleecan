@@ -29,27 +29,7 @@ class LUTslip(LUT):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(
-        self,
-        paramexplorer_list=-1,
-        output_list=-1,
-        xoutput_dict=-1,
-        nb_simu=0,
-        xoutput_ref=None,
-        xoutput_ref_index=None,
-        simu=-1,
-        path_result="",
-        geo=-1,
-        elec=-1,
-        mag=-1,
-        struct=-1,
-        post=-1,
-        logger_name="Pyleecan.Output",
-        force=-1,
-        loss=-1,
-        init_dict=None,
-        init_str=None,
-    ):
+    def __init__(self, paramexplorer_list=-1, output_list=-1, xoutput_dict=-1, nb_simu=0, xoutput_ref=None, xoutput_ref_index=None, simu=-1, path_result="", geo=-1, elec=-1, mag=-1, struct=-1, post=-1, logger_name="Pyleecan.Output", force=-1, loss=-1, init_dict = None, init_str = None):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -99,24 +79,7 @@ class LUTslip(LUT):
                 loss = init_dict["loss"]
         # Set the properties (value check and convertion are done in setter)
         # Call LUT init
-        super(LUTslip, self).__init__(
-            paramexplorer_list=paramexplorer_list,
-            output_list=output_list,
-            xoutput_dict=xoutput_dict,
-            nb_simu=nb_simu,
-            xoutput_ref=xoutput_ref,
-            xoutput_ref_index=xoutput_ref_index,
-            simu=simu,
-            path_result=path_result,
-            geo=geo,
-            elec=elec,
-            mag=mag,
-            struct=struct,
-            post=post,
-            logger_name=logger_name,
-            force=force,
-            loss=loss,
-        )
+        super(LUTslip, self).__init__(paramexplorer_list=paramexplorer_list, output_list=output_list, xoutput_dict=xoutput_dict, nb_simu=nb_simu, xoutput_ref=xoutput_ref, xoutput_ref_index=xoutput_ref_index, simu=simu, path_result=path_result, geo=geo, elec=elec, mag=mag, struct=struct, post=post, logger_name=logger_name, force=force, loss=loss)
         # The class is frozen (in LUT init), for now it's impossible to
         # add new properties
 
@@ -139,23 +102,19 @@ class LUTslip(LUT):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
+    def compare(self, other, name='self', ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
             ignore_list = list()
         if type(other) != type(self):
-            return ["type(" + name + ")"]
+            return ['type('+name+')']
         diff_list = list()
 
         # Check the properties inherited from LUT
-        diff_list.extend(
-            super(LUTslip, self).compare(
-                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
-            )
-        )
+        diff_list.extend(super(LUTslip, self).compare(other,name=name, ignore_list=ignore_list, is_add_value=is_add_value))
         # Filter ignore differences
-        diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
+        diff_list = list(filter(lambda x : x not in ignore_list, diff_list))
         return diff_list
 
     def __sizeof__(self):
@@ -174,20 +133,17 @@ class LUTslip(LUT):
             How to handle ndarray (0: tolist, 1: copy, 2: nothing)
         keep_function : bool
             True to keep the function object, else return str
-        Optional keyword input parameter is for internal use only
+        Optional keyword input parameter is for internal use only 
         and may prevent json serializability.
         """
 
         # Get the properties inherited from LUT
-        LUTslip_dict = super(LUTslip, self).as_dict(
-            type_handle_ndarray=type_handle_ndarray,
-            keep_function=keep_function,
-            **kwargs
-        )
+        LUTslip_dict = super(LUTslip, self).as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs)
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         LUTslip_dict["__class__"] = "LUTslip"
         return LUTslip_dict
+
 
     def copy(self):
         """Creates a deepcopy of the object"""
@@ -252,24 +208,7 @@ class LUTslip(LUT):
         else:
             loss_val = self.loss.copy()
         # Creates new object of the same type with the copied properties
-        obj_copy = type(self)(
-            paramexplorer_list=paramexplorer_list_val,
-            output_list=output_list_val,
-            xoutput_dict=xoutput_dict_val,
-            nb_simu=nb_simu_val,
-            xoutput_ref=xoutput_ref_val,
-            xoutput_ref_index=xoutput_ref_index_val,
-            simu=simu_val,
-            path_result=path_result_val,
-            geo=geo_val,
-            elec=elec_val,
-            mag=mag_val,
-            struct=struct_val,
-            post=post_val,
-            logger_name=logger_name_val,
-            force=force_val,
-            loss=loss_val,
-        )
+        obj_copy = type(self)(paramexplorer_list=paramexplorer_list_val,output_list=output_list_val,xoutput_dict=xoutput_dict_val,nb_simu=nb_simu_val,xoutput_ref=xoutput_ref_val,xoutput_ref_index=xoutput_ref_index_val,simu=simu_val,path_result=path_result_val,geo=geo_val,elec=elec_val,mag=mag_val,struct=struct_val,post=post_val,logger_name=logger_name_val,force=force_val,loss=loss_val)
         return obj_copy
 
     def _set_None(self):

@@ -2632,6 +2632,7 @@
             "HoleM54",
             "HoleM57",
             "HoleM58",
+            "HoleM60",
             "HoleMLSRPM",
             "HoleMag",
             "HoleUD",
@@ -3680,6 +3681,86 @@
             }
         ]
     },
+    "HoleM60": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "V shape slot for buried magnet",
+        "is_internal": false,
+        "methods": [
+            "_comp_point_coordinate"
+        ],
+        "mother": "HoleMag",
+        "name": "HoleM60",
+        "package": "Slot",
+        "path": "pyleecan/Generator/ClassesRef/Slot/HoleM60.csv",
+        "properties": [
+            {
+                "as_dict": "",
+                "desc": "Hole angular width",
+                "max": "",
+                "min": "0",
+                "name": "W0",
+                "type": "float",
+                "unit": "rad",
+                "value": null
+            },
+            {
+                "as_dict": "",
+                "desc": "Magnet width",
+                "max": "",
+                "min": "0",
+                "name": "W1",
+                "type": "float",
+                "unit": "m",
+                "value": null
+            },
+            {
+                "as_dict": "",
+                "desc": "Hole width",
+                "max": "",
+                "min": "0",
+                "name": "W2",
+                "type": "float",
+                "unit": "m",
+                "value": null
+            },
+            {
+                "as_dict": "",
+                "desc": "Tooth width",
+                "max": "",
+                "min": "0",
+                "name": "W3",
+                "type": "float",
+                "unit": "m",
+                "value": null
+            },
+            {
+                "as_dict": "",
+                "desc": "Magnet height",
+                "max": "",
+                "min": "0",
+                "name": "H0",
+                "type": "float",
+                "unit": "m",
+                "value": null
+            },
+            {
+                "as_dict": "",
+                "desc": "Distance from the lamination bore",
+                "max": "",
+                "min": "0",
+                "name": "H1",
+                "type": "float",
+                "unit": "m",
+                "value": null
+            }
+        ]
+    },
     "HoleMLSRPM": {
         "constants": [
             {
@@ -3808,6 +3889,7 @@
             "HoleM53",
             "HoleM57",
             "HoleM58",
+            "HoleM60",
             "HoleMLSRPM",
             "HoleUD"
         ],
@@ -13224,7 +13306,7 @@
             }
         ],
         "daughters": [],
-        "desc": "trapezoidal  Slot with Rectangular trapezoidal  with polar top",
+        "desc": "trapezoidal  Slot with trapezoidal magnet with polar top",
         "is_internal": false,
         "methods": [
             "_comp_point_coordinate",
@@ -13245,7 +13327,7 @@
         "properties": [
             {
                 "as_dict": "",
-                "desc": "Slot/magnet width.",
+                "desc": "Slot/magnet width. (top)",
                 "max": "",
                 "min": "0",
                 "name": "W0",
@@ -13255,7 +13337,7 @@
             },
             {
                 "as_dict": "",
-                "desc": "Slot/magnet width.",
+                "desc": "Slot/magnet width. (bottom)",
                 "max": "",
                 "min": "0",
                 "name": "W1",

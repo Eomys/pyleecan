@@ -78,27 +78,7 @@ class VarOpti(VarParam):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(
-        self,
-        objective_list=-1,
-        constraint_list=-1,
-        solver=None,
-        paramexplorer_list=-1,
-        name="",
-        desc="",
-        datakeeper_list=-1,
-        is_keep_all_output=False,
-        stop_if_error=False,
-        var_simu=None,
-        nb_simu=0,
-        is_reuse_femm_file=True,
-        postproc_list=-1,
-        pre_keeper_postproc_list=None,
-        post_keeper_postproc_list=None,
-        is_reuse_LUT=True,
-        init_dict=None,
-        init_str=None,
-    ):
+    def __init__(self, objective_list=-1, constraint_list=-1, solver=None, paramexplorer_list=-1, name="", desc="", datakeeper_list=-1, is_keep_all_output=False, stop_if_error=False, var_simu=None, nb_simu=0, is_reuse_femm_file=True, postproc_list=-1, pre_keeper_postproc_list=None, post_keeper_postproc_list=None, is_reuse_LUT=True, init_dict = None, init_str = None):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -151,21 +131,7 @@ class VarOpti(VarParam):
         self.constraint_list = constraint_list
         self.solver = solver
         # Call VarParam init
-        super(VarOpti, self).__init__(
-            paramexplorer_list=paramexplorer_list,
-            name=name,
-            desc=desc,
-            datakeeper_list=datakeeper_list,
-            is_keep_all_output=is_keep_all_output,
-            stop_if_error=stop_if_error,
-            var_simu=var_simu,
-            nb_simu=nb_simu,
-            is_reuse_femm_file=is_reuse_femm_file,
-            postproc_list=postproc_list,
-            pre_keeper_postproc_list=pre_keeper_postproc_list,
-            post_keeper_postproc_list=post_keeper_postproc_list,
-            is_reuse_LUT=is_reuse_LUT,
-        )
+        super(VarOpti, self).__init__(paramexplorer_list=paramexplorer_list, name=name, desc=desc, datakeeper_list=datakeeper_list, is_keep_all_output=is_keep_all_output, stop_if_error=stop_if_error, var_simu=var_simu, nb_simu=nb_simu, is_reuse_femm_file=is_reuse_femm_file, postproc_list=postproc_list, pre_keeper_postproc_list=pre_keeper_postproc_list, post_keeper_postproc_list=post_keeper_postproc_list, is_reuse_LUT=is_reuse_LUT)
         # The class is frozen (in VarParam init), for now it's impossible to
         # add new properties
 
@@ -178,24 +144,16 @@ class VarOpti(VarParam):
         if len(self.objective_list) == 0:
             VarOpti_str += "objective_list = []" + linesep
         for ii in range(len(self.objective_list)):
-            tmp = (
-                self.objective_list[ii].__str__().replace(linesep, linesep + "\t")
-                + linesep
-            )
-            VarOpti_str += "objective_list[" + str(ii) + "] =" + tmp + linesep + linesep
+            tmp = self.objective_list[ii].__str__().replace(linesep, linesep + "\t") + linesep
+            VarOpti_str += "objective_list["+str(ii)+"] ="+ tmp + linesep + linesep
         if len(self.constraint_list) == 0:
             VarOpti_str += "constraint_list = []" + linesep
         for ii in range(len(self.constraint_list)):
-            tmp = (
-                self.constraint_list[ii].__str__().replace(linesep, linesep + "\t")
-                + linesep
-            )
-            VarOpti_str += (
-                "constraint_list[" + str(ii) + "] =" + tmp + linesep + linesep
-            )
+            tmp = self.constraint_list[ii].__str__().replace(linesep, linesep + "\t") + linesep
+            VarOpti_str += "constraint_list["+str(ii)+"] ="+ tmp + linesep + linesep
         if self.solver is not None:
             tmp = self.solver.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            VarOpti_str += "solver = " + tmp
+            VarOpti_str += "solver = "+ tmp
         else:
             VarOpti_str += "solver = None" + linesep + linesep
         return VarOpti_str
@@ -217,72 +175,41 @@ class VarOpti(VarParam):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
+    def compare(self, other, name='self', ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
             ignore_list = list()
         if type(other) != type(self):
-            return ["type(" + name + ")"]
+            return ['type('+name+')']
         diff_list = list()
 
         # Check the properties inherited from VarParam
-        diff_list.extend(
-            super(VarOpti, self).compare(
-                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
-            )
-        )
-        if (other.objective_list is None and self.objective_list is not None) or (
-            other.objective_list is not None and self.objective_list is None
-        ):
-            diff_list.append(name + ".objective_list None mismatch")
+        diff_list.extend(super(VarOpti, self).compare(other,name=name, ignore_list=ignore_list, is_add_value=is_add_value))
+        if (other.objective_list is None and self.objective_list is not None) or (other.objective_list is not None and self.objective_list is None):
+            diff_list.append(name+'.objective_list None mismatch')
         elif self.objective_list is None:
             pass
         elif len(other.objective_list) != len(self.objective_list):
-            diff_list.append("len(" + name + ".objective_list)")
+            diff_list.append('len('+name+'.objective_list)')
         else:
             for ii in range(len(other.objective_list)):
-                diff_list.extend(
-                    self.objective_list[ii].compare(
-                        other.objective_list[ii],
-                        name=name + ".objective_list[" + str(ii) + "]",
-                        ignore_list=ignore_list,
-                        is_add_value=is_add_value,
-                    )
-                )
-        if (other.constraint_list is None and self.constraint_list is not None) or (
-            other.constraint_list is not None and self.constraint_list is None
-        ):
-            diff_list.append(name + ".constraint_list None mismatch")
+                diff_list.extend(self.objective_list[ii].compare(other.objective_list[ii],name=name+'.objective_list['+str(ii)+']',ignore_list=ignore_list,is_add_value=is_add_value))
+        if (other.constraint_list is None and self.constraint_list is not None) or (other.constraint_list is not None and self.constraint_list is None):
+            diff_list.append(name+'.constraint_list None mismatch')
         elif self.constraint_list is None:
             pass
         elif len(other.constraint_list) != len(self.constraint_list):
-            diff_list.append("len(" + name + ".constraint_list)")
+            diff_list.append('len('+name+'.constraint_list)')
         else:
             for ii in range(len(other.constraint_list)):
-                diff_list.extend(
-                    self.constraint_list[ii].compare(
-                        other.constraint_list[ii],
-                        name=name + ".constraint_list[" + str(ii) + "]",
-                        ignore_list=ignore_list,
-                        is_add_value=is_add_value,
-                    )
-                )
-        if (other.solver is None and self.solver is not None) or (
-            other.solver is not None and self.solver is None
-        ):
-            diff_list.append(name + ".solver None mismatch")
+                diff_list.extend(self.constraint_list[ii].compare(other.constraint_list[ii],name=name+'.constraint_list['+str(ii)+']',ignore_list=ignore_list,is_add_value=is_add_value))
+        if (other.solver is None and self.solver is not None) or (other.solver is not None and self.solver is None):
+            diff_list.append(name+'.solver None mismatch')
         elif self.solver is not None:
-            diff_list.extend(
-                self.solver.compare(
-                    other.solver,
-                    name=name + ".solver",
-                    ignore_list=ignore_list,
-                    is_add_value=is_add_value,
-                )
-            )
+            diff_list.extend(self.solver.compare(other.solver,name=name+'.solver',ignore_list=ignore_list,is_add_value=is_add_value))
         # Filter ignore differences
-        diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
+        diff_list = list(filter(lambda x : x not in ignore_list, diff_list))
         return diff_list
 
     def __sizeof__(self):
@@ -308,58 +235,39 @@ class VarOpti(VarParam):
             How to handle ndarray (0: tolist, 1: copy, 2: nothing)
         keep_function : bool
             True to keep the function object, else return str
-        Optional keyword input parameter is for internal use only
+        Optional keyword input parameter is for internal use only 
         and may prevent json serializability.
         """
 
         # Get the properties inherited from VarParam
-        VarOpti_dict = super(VarOpti, self).as_dict(
-            type_handle_ndarray=type_handle_ndarray,
-            keep_function=keep_function,
-            **kwargs
-        )
+        VarOpti_dict = super(VarOpti, self).as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs)
         if self.objective_list is None:
-            VarOpti_dict["objective_list"] = None
+            VarOpti_dict['objective_list'] = None
         else:
-            VarOpti_dict["objective_list"] = list()
+            VarOpti_dict['objective_list'] = list()
             for obj in self.objective_list:
                 if obj is not None:
-                    VarOpti_dict["objective_list"].append(
-                        obj.as_dict(
-                            type_handle_ndarray=type_handle_ndarray,
-                            keep_function=keep_function,
-                            **kwargs
-                        )
-                    )
+                    VarOpti_dict['objective_list'].append(obj.as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs))
                 else:
-                    VarOpti_dict["objective_list"].append(None)
+                    VarOpti_dict['objective_list'].append(None)
         if self.constraint_list is None:
-            VarOpti_dict["constraint_list"] = None
+            VarOpti_dict['constraint_list'] = None
         else:
-            VarOpti_dict["constraint_list"] = list()
+            VarOpti_dict['constraint_list'] = list()
             for obj in self.constraint_list:
                 if obj is not None:
-                    VarOpti_dict["constraint_list"].append(
-                        obj.as_dict(
-                            type_handle_ndarray=type_handle_ndarray,
-                            keep_function=keep_function,
-                            **kwargs
-                        )
-                    )
+                    VarOpti_dict['constraint_list'].append(obj.as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs))
                 else:
-                    VarOpti_dict["constraint_list"].append(None)
+                    VarOpti_dict['constraint_list'].append(None)
         if self.solver is None:
             VarOpti_dict["solver"] = None
         else:
-            VarOpti_dict["solver"] = self.solver.as_dict(
-                type_handle_ndarray=type_handle_ndarray,
-                keep_function=keep_function,
-                **kwargs
-            )
+            VarOpti_dict["solver"] = self.solver.as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs)
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         VarOpti_dict["__class__"] = "VarOpti"
         return VarOpti_dict
+
 
     def copy(self):
         """Creates a deepcopy of the object"""
@@ -423,24 +331,7 @@ class VarOpti(VarParam):
                 post_keeper_postproc_list_val.append(obj.copy())
         is_reuse_LUT_val = self.is_reuse_LUT
         # Creates new object of the same type with the copied properties
-        obj_copy = type(self)(
-            objective_list=objective_list_val,
-            constraint_list=constraint_list_val,
-            solver=solver_val,
-            paramexplorer_list=paramexplorer_list_val,
-            name=name_val,
-            desc=desc_val,
-            datakeeper_list=datakeeper_list_val,
-            is_keep_all_output=is_keep_all_output_val,
-            stop_if_error=stop_if_error_val,
-            var_simu=var_simu_val,
-            nb_simu=nb_simu_val,
-            is_reuse_femm_file=is_reuse_femm_file_val,
-            postproc_list=postproc_list_val,
-            pre_keeper_postproc_list=pre_keeper_postproc_list_val,
-            post_keeper_postproc_list=post_keeper_postproc_list_val,
-            is_reuse_LUT=is_reuse_LUT_val,
-        )
+        obj_copy = type(self)(objective_list=objective_list_val,constraint_list=constraint_list_val,solver=solver_val,paramexplorer_list=paramexplorer_list_val,name=name_val,desc=desc_val,datakeeper_list=datakeeper_list_val,is_keep_all_output=is_keep_all_output_val,stop_if_error=stop_if_error_val,var_simu=var_simu_val,nb_simu=nb_simu_val,is_reuse_femm_file=is_reuse_femm_file_val,postproc_list=postproc_list_val,pre_keeper_postproc_list=pre_keeper_postproc_list_val,post_keeper_postproc_list=post_keeper_postproc_list_val,is_reuse_LUT=is_reuse_LUT_val)
         return obj_copy
 
     def _set_None(self):
@@ -469,15 +360,11 @@ class VarOpti(VarParam):
                     try:
                         obj = load_init_dict(obj)[1]
                     except Exception as e:
-                        self.get_logger().error(
-                            "Error while loading " + obj + ", setting None instead"
-                        )
+                        self.get_logger().error('Error while loading '+obj+', setting None instead')
                         obj = None
                         value[ii] = None
                 if type(obj) is dict:
-                    class_obj = import_class(
-                        "pyleecan.Classes", obj.get("__class__"), "objective_list"
-                    )
+                    class_obj = import_class('pyleecan.Classes', obj.get('__class__'), 'objective_list')
                     value[ii] = class_obj(init_dict=obj)
                 if value[ii] is not None:
                     value[ii].parent = self
@@ -511,15 +398,11 @@ class VarOpti(VarParam):
                     try:
                         obj = load_init_dict(obj)[1]
                     except Exception as e:
-                        self.get_logger().error(
-                            "Error while loading " + obj + ", setting None instead"
-                        )
+                        self.get_logger().error('Error while loading '+obj+', setting None instead')
                         obj = None
                         value[ii] = None
                 if type(obj) is dict:
-                    class_obj = import_class(
-                        "pyleecan.Classes", obj.get("__class__"), "constraint_list"
-                    )
+                    class_obj = import_class('pyleecan.Classes', obj.get('__class__'), 'constraint_list')
                     value[ii] = class_obj(init_dict=obj)
                 if value[ii] is not None:
                     value[ii].parent = self
@@ -547,24 +430,19 @@ class VarOpti(VarParam):
             try:
                 value = load_init_dict(value)[1]
             except Exception as e:
-                self.get_logger().error(
-                    "Error while loading " + value + ", setting None instead"
-                )
+                self.get_logger().error('Error while loading '+value+', setting None instead')
                 value = None
-        if isinstance(value, dict) and "__class__" in value:
-            class_obj = import_class(
-                "pyleecan.Classes", value.get("__class__"), "solver"
-            )
+        if isinstance(value, dict) and '__class__' in value:
+            class_obj = import_class('pyleecan.Classes', value.get('__class__'), 'solver')
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
-            OptiSolver = import_class("pyleecan.Classes", "OptiSolver", "solver")
+            OptiSolver = import_class('pyleecan.Classes', 'OptiSolver', 'solver')
             value = OptiSolver()
         check_var("solver", value, "OptiSolver")
         self._solver = value
 
         if self._solver is not None:
             self._solver.parent = self
-
     solver = property(
         fget=_get_solver,
         fset=_set_solver,

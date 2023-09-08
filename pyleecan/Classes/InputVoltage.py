@@ -68,26 +68,7 @@ class InputVoltage(Input):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(
-        self,
-        rot_dir=None,
-        angle_rotor_initial=0,
-        PWM=None,
-        phase_dir=None,
-        current_dir=None,
-        is_periodicity_t=False,
-        is_periodicity_a=False,
-        is_generator=False,
-        time=None,
-        angle=None,
-        Nt_tot=2048,
-        Nrev=None,
-        Na_tot=2048,
-        OP=None,
-        t_final=None,
-        init_dict=None,
-        init_str=None,
-    ):
+    def __init__(self, rot_dir=None, angle_rotor_initial=0, PWM=None, phase_dir=None, current_dir=None, is_periodicity_t=False, is_periodicity_a=False, is_generator=False, time=None, angle=None, Nt_tot=2048, Nrev=None, Na_tot=2048, OP=None, t_final=None, init_dict = None, init_str = None):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -143,15 +124,7 @@ class InputVoltage(Input):
         self.is_periodicity_a = is_periodicity_a
         self.is_generator = is_generator
         # Call Input init
-        super(InputVoltage, self).__init__(
-            time=time,
-            angle=angle,
-            Nt_tot=Nt_tot,
-            Nrev=Nrev,
-            Na_tot=Na_tot,
-            OP=OP,
-            t_final=t_final,
-        )
+        super(InputVoltage, self).__init__(time=time, angle=angle, Nt_tot=Nt_tot, Nrev=Nrev, Na_tot=Na_tot, OP=OP, t_final=t_final)
         # The class is frozen (in Input init), for now it's impossible to
         # add new properties
 
@@ -162,12 +135,10 @@ class InputVoltage(Input):
         # Get the properties inherited from Input
         InputVoltage_str += super(InputVoltage, self).__str__()
         InputVoltage_str += "rot_dir = " + str(self.rot_dir) + linesep
-        InputVoltage_str += (
-            "angle_rotor_initial = " + str(self.angle_rotor_initial) + linesep
-        )
+        InputVoltage_str += "angle_rotor_initial = " + str(self.angle_rotor_initial) + linesep
         if self.PWM is not None:
             tmp = self.PWM.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            InputVoltage_str += "PWM = " + tmp
+            InputVoltage_str += "PWM = "+ tmp
         else:
             InputVoltage_str += "PWM = None" + linesep + linesep
         InputVoltage_str += "phase_dir = " + str(self.phase_dir) + linesep
@@ -204,127 +175,67 @@ class InputVoltage(Input):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
+    def compare(self, other, name='self', ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
             ignore_list = list()
         if type(other) != type(self):
-            return ["type(" + name + ")"]
+            return ['type('+name+')']
         diff_list = list()
 
         # Check the properties inherited from Input
-        diff_list.extend(
-            super(InputVoltage, self).compare(
-                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
-            )
-        )
+        diff_list.extend(super(InputVoltage, self).compare(other,name=name, ignore_list=ignore_list, is_add_value=is_add_value))
         if other._rot_dir != self._rot_dir:
             if is_add_value:
-                val_str = (
-                    " (self="
-                    + str(self._rot_dir)
-                    + ", other="
-                    + str(other._rot_dir)
-                    + ")"
-                )
-                diff_list.append(name + ".rot_dir" + val_str)
+                val_str = ' (self='+str(self._rot_dir)+', other='+str(other._rot_dir)+')'
+                diff_list.append(name+'.rot_dir'+val_str)
             else:
-                diff_list.append(name + ".rot_dir")
-        if (
-            other._angle_rotor_initial is not None
-            and self._angle_rotor_initial is not None
-            and isnan(other._angle_rotor_initial)
-            and isnan(self._angle_rotor_initial)
-        ):
+                diff_list.append(name+'.rot_dir')
+        if other._angle_rotor_initial is not None and self._angle_rotor_initial is not None and isnan(other._angle_rotor_initial) and isnan(self._angle_rotor_initial):
             pass
         elif other._angle_rotor_initial != self._angle_rotor_initial:
             if is_add_value:
-                val_str = (
-                    " (self="
-                    + str(self._angle_rotor_initial)
-                    + ", other="
-                    + str(other._angle_rotor_initial)
-                    + ")"
-                )
-                diff_list.append(name + ".angle_rotor_initial" + val_str)
+                val_str = ' (self='+str(self._angle_rotor_initial)+', other='+str(other._angle_rotor_initial)+')'
+                diff_list.append(name+'.angle_rotor_initial'+val_str)
             else:
-                diff_list.append(name + ".angle_rotor_initial")
-        if (other.PWM is None and self.PWM is not None) or (
-            other.PWM is not None and self.PWM is None
-        ):
-            diff_list.append(name + ".PWM None mismatch")
+                diff_list.append(name+'.angle_rotor_initial')
+        if (other.PWM is None and self.PWM is not None) or (other.PWM is not None and self.PWM is None):
+            diff_list.append(name+'.PWM None mismatch')
         elif self.PWM is not None:
-            diff_list.extend(
-                self.PWM.compare(
-                    other.PWM,
-                    name=name + ".PWM",
-                    ignore_list=ignore_list,
-                    is_add_value=is_add_value,
-                )
-            )
+            diff_list.extend(self.PWM.compare(other.PWM,name=name+'.PWM',ignore_list=ignore_list,is_add_value=is_add_value))
         if other._phase_dir != self._phase_dir:
             if is_add_value:
-                val_str = (
-                    " (self="
-                    + str(self._phase_dir)
-                    + ", other="
-                    + str(other._phase_dir)
-                    + ")"
-                )
-                diff_list.append(name + ".phase_dir" + val_str)
+                val_str = ' (self='+str(self._phase_dir)+', other='+str(other._phase_dir)+')'
+                diff_list.append(name+'.phase_dir'+val_str)
             else:
-                diff_list.append(name + ".phase_dir")
+                diff_list.append(name+'.phase_dir')
         if other._current_dir != self._current_dir:
             if is_add_value:
-                val_str = (
-                    " (self="
-                    + str(self._current_dir)
-                    + ", other="
-                    + str(other._current_dir)
-                    + ")"
-                )
-                diff_list.append(name + ".current_dir" + val_str)
+                val_str = ' (self='+str(self._current_dir)+', other='+str(other._current_dir)+')'
+                diff_list.append(name+'.current_dir'+val_str)
             else:
-                diff_list.append(name + ".current_dir")
+                diff_list.append(name+'.current_dir')
         if other._is_periodicity_t != self._is_periodicity_t:
             if is_add_value:
-                val_str = (
-                    " (self="
-                    + str(self._is_periodicity_t)
-                    + ", other="
-                    + str(other._is_periodicity_t)
-                    + ")"
-                )
-                diff_list.append(name + ".is_periodicity_t" + val_str)
+                val_str = ' (self='+str(self._is_periodicity_t)+', other='+str(other._is_periodicity_t)+')'
+                diff_list.append(name+'.is_periodicity_t'+val_str)
             else:
-                diff_list.append(name + ".is_periodicity_t")
+                diff_list.append(name+'.is_periodicity_t')
         if other._is_periodicity_a != self._is_periodicity_a:
             if is_add_value:
-                val_str = (
-                    " (self="
-                    + str(self._is_periodicity_a)
-                    + ", other="
-                    + str(other._is_periodicity_a)
-                    + ")"
-                )
-                diff_list.append(name + ".is_periodicity_a" + val_str)
+                val_str = ' (self='+str(self._is_periodicity_a)+', other='+str(other._is_periodicity_a)+')'
+                diff_list.append(name+'.is_periodicity_a'+val_str)
             else:
-                diff_list.append(name + ".is_periodicity_a")
+                diff_list.append(name+'.is_periodicity_a')
         if other._is_generator != self._is_generator:
             if is_add_value:
-                val_str = (
-                    " (self="
-                    + str(self._is_generator)
-                    + ", other="
-                    + str(other._is_generator)
-                    + ")"
-                )
-                diff_list.append(name + ".is_generator" + val_str)
+                val_str = ' (self='+str(self._is_generator)+', other='+str(other._is_generator)+')'
+                diff_list.append(name+'.is_generator'+val_str)
             else:
-                diff_list.append(name + ".is_generator")
+                diff_list.append(name+'.is_generator')
         # Filter ignore differences
-        diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
+        diff_list = list(filter(lambda x : x not in ignore_list, diff_list))
         return diff_list
 
     def __sizeof__(self):
@@ -351,26 +262,18 @@ class InputVoltage(Input):
             How to handle ndarray (0: tolist, 1: copy, 2: nothing)
         keep_function : bool
             True to keep the function object, else return str
-        Optional keyword input parameter is for internal use only
+        Optional keyword input parameter is for internal use only 
         and may prevent json serializability.
         """
 
         # Get the properties inherited from Input
-        InputVoltage_dict = super(InputVoltage, self).as_dict(
-            type_handle_ndarray=type_handle_ndarray,
-            keep_function=keep_function,
-            **kwargs
-        )
+        InputVoltage_dict = super(InputVoltage, self).as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs)
         InputVoltage_dict["rot_dir"] = self.rot_dir
         InputVoltage_dict["angle_rotor_initial"] = self.angle_rotor_initial
         if self.PWM is None:
             InputVoltage_dict["PWM"] = None
         else:
-            InputVoltage_dict["PWM"] = self.PWM.as_dict(
-                type_handle_ndarray=type_handle_ndarray,
-                keep_function=keep_function,
-                **kwargs
-            )
+            InputVoltage_dict["PWM"] = self.PWM.as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs)
         InputVoltage_dict["phase_dir"] = self.phase_dir
         InputVoltage_dict["current_dir"] = self.current_dir
         InputVoltage_dict["is_periodicity_t"] = self.is_periodicity_t
@@ -380,6 +283,7 @@ class InputVoltage(Input):
         # Overwrite the mother class name
         InputVoltage_dict["__class__"] = "InputVoltage"
         return InputVoltage_dict
+
 
     def copy(self):
         """Creates a deepcopy of the object"""
@@ -413,23 +317,7 @@ class InputVoltage(Input):
             OP_val = self.OP.copy()
         t_final_val = self.t_final
         # Creates new object of the same type with the copied properties
-        obj_copy = type(self)(
-            rot_dir=rot_dir_val,
-            angle_rotor_initial=angle_rotor_initial_val,
-            PWM=PWM_val,
-            phase_dir=phase_dir_val,
-            current_dir=current_dir_val,
-            is_periodicity_t=is_periodicity_t_val,
-            is_periodicity_a=is_periodicity_a_val,
-            is_generator=is_generator_val,
-            time=time_val,
-            angle=angle_val,
-            Nt_tot=Nt_tot_val,
-            Nrev=Nrev_val,
-            Na_tot=Na_tot_val,
-            OP=OP_val,
-            t_final=t_final_val,
-        )
+        obj_copy = type(self)(rot_dir=rot_dir_val,angle_rotor_initial=angle_rotor_initial_val,PWM=PWM_val,phase_dir=phase_dir_val,current_dir=current_dir_val,is_periodicity_t=is_periodicity_t_val,is_periodicity_a=is_periodicity_a_val,is_generator=is_generator_val,time=time_val,angle=angle_val,Nt_tot=Nt_tot_val,Nrev=Nrev_val,Na_tot=Na_tot_val,OP=OP_val,t_final=t_final_val)
         return obj_copy
 
     def _set_None(self):
@@ -495,22 +383,19 @@ class InputVoltage(Input):
             try:
                 value = load_init_dict(value)[1]
             except Exception as e:
-                self.get_logger().error(
-                    "Error while loading " + value + ", setting None instead"
-                )
+                self.get_logger().error('Error while loading '+value+', setting None instead')
                 value = None
-        if isinstance(value, dict) and "__class__" in value:
-            class_obj = import_class("pyleecan.Classes", value.get("__class__"), "PWM")
+        if isinstance(value, dict) and '__class__' in value:
+            class_obj = import_class('pyleecan.Classes', value.get('__class__'), 'PWM')
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
-            ImportGenPWM = import_class("pyleecan.Classes", "ImportGenPWM", "PWM")
+            ImportGenPWM = import_class('pyleecan.Classes', 'ImportGenPWM', 'PWM')
             value = ImportGenPWM()
         check_var("PWM", value, "ImportGenPWM")
         self._PWM = value
 
         if self._PWM is not None:
             self._PWM.parent = self
-
     PWM = property(
         fget=_get_PWM,
         fset=_set_PWM,

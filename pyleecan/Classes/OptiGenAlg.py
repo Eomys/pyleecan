@@ -34,22 +34,7 @@ class OptiGenAlg(OptiSolver):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(
-        self,
-        selector=None,
-        crossover=None,
-        mutator=None,
-        p_cross=0.9,
-        p_mutate=0.1,
-        size_pop=40,
-        nb_gen=100,
-        problem=-1,
-        xoutput=-1,
-        logger_name="Pyleecan.OptiSolver",
-        is_keep_all_output=False,
-        init_dict=None,
-        init_str=None,
-    ):
+    def __init__(self, selector=None, crossover=None, mutator=None, p_cross=0.9, p_mutate=0.1, size_pop=40, nb_gen=100, problem=-1, xoutput=-1, logger_name="Pyleecan.OptiSolver", is_keep_all_output=False, init_dict = None, init_str = None):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -96,12 +81,7 @@ class OptiGenAlg(OptiSolver):
         self.size_pop = size_pop
         self.nb_gen = nb_gen
         # Call OptiSolver init
-        super(OptiGenAlg, self).__init__(
-            problem=problem,
-            xoutput=xoutput,
-            logger_name=logger_name,
-            is_keep_all_output=is_keep_all_output,
-        )
+        super(OptiGenAlg, self).__init__(problem=problem, xoutput=xoutput, logger_name=logger_name, is_keep_all_output=is_keep_all_output)
         # The class is frozen (in OptiSolver init), for now it's impossible to
         # add new properties
 
@@ -160,91 +140,53 @@ class OptiGenAlg(OptiSolver):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
+    def compare(self, other, name='self', ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
             ignore_list = list()
         if type(other) != type(self):
-            return ["type(" + name + ")"]
+            return ['type('+name+')']
         diff_list = list()
 
         # Check the properties inherited from OptiSolver
-        diff_list.extend(
-            super(OptiGenAlg, self).compare(
-                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
-            )
-        )
+        diff_list.extend(super(OptiGenAlg, self).compare(other,name=name, ignore_list=ignore_list, is_add_value=is_add_value))
         if other._selector_str != self._selector_str:
-            diff_list.append(name + ".selector")
+            diff_list.append(name+'.selector')
         if other._crossover_str != self._crossover_str:
-            diff_list.append(name + ".crossover")
+            diff_list.append(name+'.crossover')
         if other._mutator_str != self._mutator_str:
-            diff_list.append(name + ".mutator")
-        if (
-            other._p_cross is not None
-            and self._p_cross is not None
-            and isnan(other._p_cross)
-            and isnan(self._p_cross)
-        ):
+            diff_list.append(name+'.mutator')
+        if other._p_cross is not None and self._p_cross is not None and isnan(other._p_cross) and isnan(self._p_cross):
             pass
         elif other._p_cross != self._p_cross:
             if is_add_value:
-                val_str = (
-                    " (self="
-                    + str(self._p_cross)
-                    + ", other="
-                    + str(other._p_cross)
-                    + ")"
-                )
-                diff_list.append(name + ".p_cross" + val_str)
+                val_str = ' (self='+str(self._p_cross)+', other='+str(other._p_cross)+')'
+                diff_list.append(name+'.p_cross'+val_str)
             else:
-                diff_list.append(name + ".p_cross")
-        if (
-            other._p_mutate is not None
-            and self._p_mutate is not None
-            and isnan(other._p_mutate)
-            and isnan(self._p_mutate)
-        ):
+                diff_list.append(name+'.p_cross')
+        if other._p_mutate is not None and self._p_mutate is not None and isnan(other._p_mutate) and isnan(self._p_mutate):
             pass
         elif other._p_mutate != self._p_mutate:
             if is_add_value:
-                val_str = (
-                    " (self="
-                    + str(self._p_mutate)
-                    + ", other="
-                    + str(other._p_mutate)
-                    + ")"
-                )
-                diff_list.append(name + ".p_mutate" + val_str)
+                val_str = ' (self='+str(self._p_mutate)+', other='+str(other._p_mutate)+')'
+                diff_list.append(name+'.p_mutate'+val_str)
             else:
-                diff_list.append(name + ".p_mutate")
+                diff_list.append(name+'.p_mutate')
         if other._size_pop != self._size_pop:
             if is_add_value:
-                val_str = (
-                    " (self="
-                    + str(self._size_pop)
-                    + ", other="
-                    + str(other._size_pop)
-                    + ")"
-                )
-                diff_list.append(name + ".size_pop" + val_str)
+                val_str = ' (self='+str(self._size_pop)+', other='+str(other._size_pop)+')'
+                diff_list.append(name+'.size_pop'+val_str)
             else:
-                diff_list.append(name + ".size_pop")
+                diff_list.append(name+'.size_pop')
         if other._nb_gen != self._nb_gen:
             if is_add_value:
-                val_str = (
-                    " (self="
-                    + str(self._nb_gen)
-                    + ", other="
-                    + str(other._nb_gen)
-                    + ")"
-                )
-                diff_list.append(name + ".nb_gen" + val_str)
+                val_str = ' (self='+str(self._nb_gen)+', other='+str(other._nb_gen)+')'
+                diff_list.append(name+'.nb_gen'+val_str)
             else:
-                diff_list.append(name + ".nb_gen")
+                diff_list.append(name+'.nb_gen')
         # Filter ignore differences
-        diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
+        diff_list = list(filter(lambda x : x not in ignore_list, diff_list))
         return diff_list
 
     def __sizeof__(self):
@@ -270,16 +212,12 @@ class OptiGenAlg(OptiSolver):
             How to handle ndarray (0: tolist, 1: copy, 2: nothing)
         keep_function : bool
             True to keep the function object, else return str
-        Optional keyword input parameter is for internal use only
+        Optional keyword input parameter is for internal use only 
         and may prevent json serializability.
         """
 
         # Get the properties inherited from OptiSolver
-        OptiGenAlg_dict = super(OptiGenAlg, self).as_dict(
-            type_handle_ndarray=type_handle_ndarray,
-            keep_function=keep_function,
-            **kwargs,
-        )
+        OptiGenAlg_dict = super(OptiGenAlg, self).as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs)
         if self._selector_str is not None:
             OptiGenAlg_dict["selector"] = self._selector_str
         elif keep_function:
@@ -288,9 +226,7 @@ class OptiGenAlg(OptiSolver):
             OptiGenAlg_dict["selector"] = None
             if self.selector is not None:
                 self.get_logger().warning(
-                    "OptiGenAlg.as_dict(): "
-                    + f"Function {self.selector.__name__} is not serializable "
-                    + "and will be converted to None."
+                    "OptiGenAlg.as_dict(): " +f"Function {self.selector.__name__} is not serializable " + "and will be converted to None."
                 )
         if self._crossover_str is not None:
             OptiGenAlg_dict["crossover"] = self._crossover_str
@@ -300,9 +236,7 @@ class OptiGenAlg(OptiSolver):
             OptiGenAlg_dict["crossover"] = None
             if self.crossover is not None:
                 self.get_logger().warning(
-                    "OptiGenAlg.as_dict(): "
-                    + f"Function {self.crossover.__name__} is not serializable "
-                    + "and will be converted to None."
+                    "OptiGenAlg.as_dict(): " +f"Function {self.crossover.__name__} is not serializable " + "and will be converted to None."
                 )
         if self._mutator_str is not None:
             OptiGenAlg_dict["mutator"] = self._mutator_str
@@ -312,9 +246,7 @@ class OptiGenAlg(OptiSolver):
             OptiGenAlg_dict["mutator"] = None
             if self.mutator is not None:
                 self.get_logger().warning(
-                    "OptiGenAlg.as_dict(): "
-                    + f"Function {self.mutator.__name__} is not serializable "
-                    + "and will be converted to None."
+                    "OptiGenAlg.as_dict(): " +f"Function {self.mutator.__name__} is not serializable " + "and will be converted to None."
                 )
         OptiGenAlg_dict["p_cross"] = self.p_cross
         OptiGenAlg_dict["p_mutate"] = self.p_mutate
@@ -324,6 +256,7 @@ class OptiGenAlg(OptiSolver):
         # Overwrite the mother class name
         OptiGenAlg_dict["__class__"] = "OptiGenAlg"
         return OptiGenAlg_dict
+
 
     def copy(self):
         """Creates a deepcopy of the object"""
@@ -356,19 +289,7 @@ class OptiGenAlg(OptiSolver):
         logger_name_val = self.logger_name
         is_keep_all_output_val = self.is_keep_all_output
         # Creates new object of the same type with the copied properties
-        obj_copy = type(self)(
-            selector=selector_val,
-            crossover=crossover_val,
-            mutator=mutator_val,
-            p_cross=p_cross_val,
-            p_mutate=p_mutate_val,
-            size_pop=size_pop_val,
-            nb_gen=nb_gen_val,
-            problem=problem_val,
-            xoutput=xoutput_val,
-            logger_name=logger_name_val,
-            is_keep_all_output=is_keep_all_output_val,
-        )
+        obj_copy = type(self)(selector=selector_val,crossover=crossover_val,mutator=mutator_val,p_cross=p_cross_val,p_mutate=p_mutate_val,size_pop=size_pop_val,nb_gen=nb_gen_val,problem=problem_val,xoutput=xoutput_val,logger_name=logger_name_val,is_keep_all_output=is_keep_all_output_val)
         return obj_copy
 
     def _set_None(self):
@@ -413,7 +334,7 @@ class OptiGenAlg(OptiSolver):
     selector = property(
         fget=_get_selector,
         fset=_set_selector,
-        doc="""Selector of the genetic algorithm
+        doc=u"""Selector of the genetic algorithm
 
         :Type: function
         """,
@@ -448,7 +369,7 @@ class OptiGenAlg(OptiSolver):
     crossover = property(
         fget=_get_crossover,
         fset=_set_crossover,
-        doc="""Crossover of the genetic algorithm
+        doc=u"""Crossover of the genetic algorithm
 
         :Type: function
         """,
@@ -483,7 +404,7 @@ class OptiGenAlg(OptiSolver):
     mutator = property(
         fget=_get_mutator,
         fset=_set_mutator,
-        doc="""Mutator of the genetic algorithm
+        doc=u"""Mutator of the genetic algorithm
 
         :Type: function
         """,
@@ -501,7 +422,7 @@ class OptiGenAlg(OptiSolver):
     p_cross = property(
         fget=_get_p_cross,
         fset=_set_p_cross,
-        doc="""Probability of crossover
+        doc=u"""Probability of crossover
 
         :Type: float
         :min: 0
@@ -521,7 +442,7 @@ class OptiGenAlg(OptiSolver):
     p_mutate = property(
         fget=_get_p_mutate,
         fset=_set_p_mutate,
-        doc="""Probability of mutation 
+        doc=u"""Probability of mutation 
 
         :Type: float
         :min: 0
@@ -541,7 +462,7 @@ class OptiGenAlg(OptiSolver):
     size_pop = property(
         fget=_get_size_pop,
         fset=_set_size_pop,
-        doc="""Size of the population
+        doc=u"""Size of the population
 
         :Type: int
         :min: 1
@@ -560,7 +481,7 @@ class OptiGenAlg(OptiSolver):
     nb_gen = property(
         fget=_get_nb_gen,
         fset=_set_nb_gen,
-        doc="""Number of generations
+        doc=u"""Number of generations
 
         :Type: int
         :min: 1

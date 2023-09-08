@@ -163,9 +163,7 @@ class Trapeze(Surface):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(
-        self, height=1, W2=1, W1=1, point_ref=0, label="", init_dict=None, init_str=None
-    ):
+    def __init__(self, height=1, W2=1, W1=1, point_ref=0, label="", init_dict = None, init_str = None):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -228,68 +226,43 @@ class Trapeze(Surface):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
+    def compare(self, other, name='self', ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
             ignore_list = list()
         if type(other) != type(self):
-            return ["type(" + name + ")"]
+            return ['type('+name+')']
         diff_list = list()
 
         # Check the properties inherited from Surface
-        diff_list.extend(
-            super(Trapeze, self).compare(
-                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
-            )
-        )
-        if (
-            other._height is not None
-            and self._height is not None
-            and isnan(other._height)
-            and isnan(self._height)
-        ):
+        diff_list.extend(super(Trapeze, self).compare(other,name=name, ignore_list=ignore_list, is_add_value=is_add_value))
+        if other._height is not None and self._height is not None and isnan(other._height) and isnan(self._height):
             pass
         elif other._height != self._height:
             if is_add_value:
-                val_str = (
-                    " (self="
-                    + str(self._height)
-                    + ", other="
-                    + str(other._height)
-                    + ")"
-                )
-                diff_list.append(name + ".height" + val_str)
+                val_str = ' (self='+str(self._height)+', other='+str(other._height)+')'
+                diff_list.append(name+'.height'+val_str)
             else:
-                diff_list.append(name + ".height")
-        if (
-            other._W2 is not None
-            and self._W2 is not None
-            and isnan(other._W2)
-            and isnan(self._W2)
-        ):
+                diff_list.append(name+'.height')
+        if other._W2 is not None and self._W2 is not None and isnan(other._W2) and isnan(self._W2):
             pass
         elif other._W2 != self._W2:
             if is_add_value:
-                val_str = " (self=" + str(self._W2) + ", other=" + str(other._W2) + ")"
-                diff_list.append(name + ".W2" + val_str)
+                val_str = ' (self='+str(self._W2)+', other='+str(other._W2)+')'
+                diff_list.append(name+'.W2'+val_str)
             else:
-                diff_list.append(name + ".W2")
-        if (
-            other._W1 is not None
-            and self._W1 is not None
-            and isnan(other._W1)
-            and isnan(self._W1)
-        ):
+                diff_list.append(name+'.W2')
+        if other._W1 is not None and self._W1 is not None and isnan(other._W1) and isnan(self._W1):
             pass
         elif other._W1 != self._W1:
             if is_add_value:
-                val_str = " (self=" + str(self._W1) + ", other=" + str(other._W1) + ")"
-                diff_list.append(name + ".W1" + val_str)
+                val_str = ' (self='+str(self._W1)+', other='+str(other._W1)+')'
+                diff_list.append(name+'.W1'+val_str)
             else:
-                diff_list.append(name + ".W1")
+                diff_list.append(name+'.W1')
         # Filter ignore differences
-        diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
+        diff_list = list(filter(lambda x : x not in ignore_list, diff_list))
         return diff_list
 
     def __sizeof__(self):
@@ -311,16 +284,12 @@ class Trapeze(Surface):
             How to handle ndarray (0: tolist, 1: copy, 2: nothing)
         keep_function : bool
             True to keep the function object, else return str
-        Optional keyword input parameter is for internal use only
+        Optional keyword input parameter is for internal use only 
         and may prevent json serializability.
         """
 
         # Get the properties inherited from Surface
-        Trapeze_dict = super(Trapeze, self).as_dict(
-            type_handle_ndarray=type_handle_ndarray,
-            keep_function=keep_function,
-            **kwargs
-        )
+        Trapeze_dict = super(Trapeze, self).as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs)
         Trapeze_dict["height"] = self.height
         Trapeze_dict["W2"] = self.W2
         Trapeze_dict["W1"] = self.W1
@@ -328,6 +297,7 @@ class Trapeze(Surface):
         # Overwrite the mother class name
         Trapeze_dict["__class__"] = "Trapeze"
         return Trapeze_dict
+
 
     def copy(self):
         """Creates a deepcopy of the object"""
@@ -339,13 +309,7 @@ class Trapeze(Surface):
         point_ref_val = self.point_ref
         label_val = self.label
         # Creates new object of the same type with the copied properties
-        obj_copy = type(self)(
-            height=height_val,
-            W2=W2_val,
-            W1=W1_val,
-            point_ref=point_ref_val,
-            label=label_val,
-        )
+        obj_copy = type(self)(height=height_val,W2=W2_val,W1=W1_val,point_ref=point_ref_val,label=label_val)
         return obj_copy
 
     def _set_None(self):

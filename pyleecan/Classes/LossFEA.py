@@ -46,20 +46,7 @@ class LossFEA(Loss):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(
-        self,
-        k_ed=None,
-        k_hy=None,
-        k_p=None,
-        type_skin_effect=1,
-        logger_name="Pyleecan.Loss",
-        model_dict=None,
-        Tsta=20,
-        Trot=20,
-        is_get_meshsolution=False,
-        init_dict=None,
-        init_str=None,
-    ):
+    def __init__(self, k_ed=None, k_hy=None, k_p=None, type_skin_effect=1, logger_name="Pyleecan.Loss", model_dict=None, Tsta=20, Trot=20, is_get_meshsolution=False, init_dict = None, init_str = None):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -99,13 +86,7 @@ class LossFEA(Loss):
         self.k_p = k_p
         self.type_skin_effect = type_skin_effect
         # Call Loss init
-        super(LossFEA, self).__init__(
-            logger_name=logger_name,
-            model_dict=model_dict,
-            Tsta=Tsta,
-            Trot=Trot,
-            is_get_meshsolution=is_get_meshsolution,
-        )
+        super(LossFEA, self).__init__(logger_name=logger_name, model_dict=model_dict, Tsta=Tsta, Trot=Trot, is_get_meshsolution=is_get_meshsolution)
         # The class is frozen (in Loss init), for now it's impossible to
         # add new properties
 
@@ -140,80 +121,49 @@ class LossFEA(Loss):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
+    def compare(self, other, name='self', ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
             ignore_list = list()
         if type(other) != type(self):
-            return ["type(" + name + ")"]
+            return ['type('+name+')']
         diff_list = list()
 
         # Check the properties inherited from Loss
-        diff_list.extend(
-            super(LossFEA, self).compare(
-                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
-            )
-        )
-        if (
-            other._k_ed is not None
-            and self._k_ed is not None
-            and isnan(other._k_ed)
-            and isnan(self._k_ed)
-        ):
+        diff_list.extend(super(LossFEA, self).compare(other,name=name, ignore_list=ignore_list, is_add_value=is_add_value))
+        if other._k_ed is not None and self._k_ed is not None and isnan(other._k_ed) and isnan(self._k_ed):
             pass
         elif other._k_ed != self._k_ed:
             if is_add_value:
-                val_str = (
-                    " (self=" + str(self._k_ed) + ", other=" + str(other._k_ed) + ")"
-                )
-                diff_list.append(name + ".k_ed" + val_str)
+                val_str = ' (self='+str(self._k_ed)+', other='+str(other._k_ed)+')'
+                diff_list.append(name+'.k_ed'+val_str)
             else:
-                diff_list.append(name + ".k_ed")
-        if (
-            other._k_hy is not None
-            and self._k_hy is not None
-            and isnan(other._k_hy)
-            and isnan(self._k_hy)
-        ):
+                diff_list.append(name+'.k_ed')
+        if other._k_hy is not None and self._k_hy is not None and isnan(other._k_hy) and isnan(self._k_hy):
             pass
         elif other._k_hy != self._k_hy:
             if is_add_value:
-                val_str = (
-                    " (self=" + str(self._k_hy) + ", other=" + str(other._k_hy) + ")"
-                )
-                diff_list.append(name + ".k_hy" + val_str)
+                val_str = ' (self='+str(self._k_hy)+', other='+str(other._k_hy)+')'
+                diff_list.append(name+'.k_hy'+val_str)
             else:
-                diff_list.append(name + ".k_hy")
-        if (
-            other._k_p is not None
-            and self._k_p is not None
-            and isnan(other._k_p)
-            and isnan(self._k_p)
-        ):
+                diff_list.append(name+'.k_hy')
+        if other._k_p is not None and self._k_p is not None and isnan(other._k_p) and isnan(self._k_p):
             pass
         elif other._k_p != self._k_p:
             if is_add_value:
-                val_str = (
-                    " (self=" + str(self._k_p) + ", other=" + str(other._k_p) + ")"
-                )
-                diff_list.append(name + ".k_p" + val_str)
+                val_str = ' (self='+str(self._k_p)+', other='+str(other._k_p)+')'
+                diff_list.append(name+'.k_p'+val_str)
             else:
-                diff_list.append(name + ".k_p")
+                diff_list.append(name+'.k_p')
         if other._type_skin_effect != self._type_skin_effect:
             if is_add_value:
-                val_str = (
-                    " (self="
-                    + str(self._type_skin_effect)
-                    + ", other="
-                    + str(other._type_skin_effect)
-                    + ")"
-                )
-                diff_list.append(name + ".type_skin_effect" + val_str)
+                val_str = ' (self='+str(self._type_skin_effect)+', other='+str(other._type_skin_effect)+')'
+                diff_list.append(name+'.type_skin_effect'+val_str)
             else:
-                diff_list.append(name + ".type_skin_effect")
+                diff_list.append(name+'.type_skin_effect')
         # Filter ignore differences
-        diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
+        diff_list = list(filter(lambda x : x not in ignore_list, diff_list))
         return diff_list
 
     def __sizeof__(self):
@@ -236,16 +186,12 @@ class LossFEA(Loss):
             How to handle ndarray (0: tolist, 1: copy, 2: nothing)
         keep_function : bool
             True to keep the function object, else return str
-        Optional keyword input parameter is for internal use only
+        Optional keyword input parameter is for internal use only 
         and may prevent json serializability.
         """
 
         # Get the properties inherited from Loss
-        LossFEA_dict = super(LossFEA, self).as_dict(
-            type_handle_ndarray=type_handle_ndarray,
-            keep_function=keep_function,
-            **kwargs
-        )
+        LossFEA_dict = super(LossFEA, self).as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs)
         LossFEA_dict["k_ed"] = self.k_ed
         LossFEA_dict["k_hy"] = self.k_hy
         LossFEA_dict["k_p"] = self.k_p
@@ -254,6 +200,7 @@ class LossFEA(Loss):
         # Overwrite the mother class name
         LossFEA_dict["__class__"] = "LossFEA"
         return LossFEA_dict
+
 
     def copy(self):
         """Creates a deepcopy of the object"""
@@ -274,17 +221,7 @@ class LossFEA(Loss):
         Trot_val = self.Trot
         is_get_meshsolution_val = self.is_get_meshsolution
         # Creates new object of the same type with the copied properties
-        obj_copy = type(self)(
-            k_ed=k_ed_val,
-            k_hy=k_hy_val,
-            k_p=k_p_val,
-            type_skin_effect=type_skin_effect_val,
-            logger_name=logger_name_val,
-            model_dict=model_dict_val,
-            Tsta=Tsta_val,
-            Trot=Trot_val,
-            is_get_meshsolution=is_get_meshsolution_val,
-        )
+        obj_copy = type(self)(k_ed=k_ed_val,k_hy=k_hy_val,k_p=k_p_val,type_skin_effect=type_skin_effect_val,logger_name=logger_name_val,model_dict=model_dict_val,Tsta=Tsta_val,Trot=Trot_val,is_get_meshsolution=is_get_meshsolution_val)
         return obj_copy
 
     def _set_None(self):

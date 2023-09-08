@@ -243,16 +243,7 @@ class Arc1(Arc):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(
-        self,
-        begin=0,
-        end=0,
-        radius=0,
-        is_trigo_direction=True,
-        prop_dict=None,
-        init_dict=None,
-        init_str=None,
-    ):
+    def __init__(self, begin=0, end=0, radius=0, is_trigo_direction=True, prop_dict=None, init_dict = None, init_str = None):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -319,70 +310,45 @@ class Arc1(Arc):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
+    def compare(self, other, name='self', ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
             ignore_list = list()
         if type(other) != type(self):
-            return ["type(" + name + ")"]
+            return ['type('+name+')']
         diff_list = list()
 
         # Check the properties inherited from Arc
-        diff_list.extend(
-            super(Arc1, self).compare(
-                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
-            )
-        )
+        diff_list.extend(super(Arc1, self).compare(other,name=name, ignore_list=ignore_list, is_add_value=is_add_value))
         if other._begin != self._begin:
             if is_add_value:
-                val_str = (
-                    " (self=" + str(self._begin) + ", other=" + str(other._begin) + ")"
-                )
-                diff_list.append(name + ".begin" + val_str)
+                val_str = ' (self='+str(self._begin)+', other='+str(other._begin)+')'
+                diff_list.append(name+'.begin'+val_str)
             else:
-                diff_list.append(name + ".begin")
+                diff_list.append(name+'.begin')
         if other._end != self._end:
             if is_add_value:
-                val_str = (
-                    " (self=" + str(self._end) + ", other=" + str(other._end) + ")"
-                )
-                diff_list.append(name + ".end" + val_str)
+                val_str = ' (self='+str(self._end)+', other='+str(other._end)+')'
+                diff_list.append(name+'.end'+val_str)
             else:
-                diff_list.append(name + ".end")
-        if (
-            other._radius is not None
-            and self._radius is not None
-            and isnan(other._radius)
-            and isnan(self._radius)
-        ):
+                diff_list.append(name+'.end')
+        if other._radius is not None and self._radius is not None and isnan(other._radius) and isnan(self._radius):
             pass
         elif other._radius != self._radius:
             if is_add_value:
-                val_str = (
-                    " (self="
-                    + str(self._radius)
-                    + ", other="
-                    + str(other._radius)
-                    + ")"
-                )
-                diff_list.append(name + ".radius" + val_str)
+                val_str = ' (self='+str(self._radius)+', other='+str(other._radius)+')'
+                diff_list.append(name+'.radius'+val_str)
             else:
-                diff_list.append(name + ".radius")
+                diff_list.append(name+'.radius')
         if other._is_trigo_direction != self._is_trigo_direction:
             if is_add_value:
-                val_str = (
-                    " (self="
-                    + str(self._is_trigo_direction)
-                    + ", other="
-                    + str(other._is_trigo_direction)
-                    + ")"
-                )
-                diff_list.append(name + ".is_trigo_direction" + val_str)
+                val_str = ' (self='+str(self._is_trigo_direction)+', other='+str(other._is_trigo_direction)+')'
+                diff_list.append(name+'.is_trigo_direction'+val_str)
             else:
-                diff_list.append(name + ".is_trigo_direction")
+                diff_list.append(name+'.is_trigo_direction')
         # Filter ignore differences
-        diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
+        diff_list = list(filter(lambda x : x not in ignore_list, diff_list))
         return diff_list
 
     def __sizeof__(self):
@@ -405,16 +371,12 @@ class Arc1(Arc):
             How to handle ndarray (0: tolist, 1: copy, 2: nothing)
         keep_function : bool
             True to keep the function object, else return str
-        Optional keyword input parameter is for internal use only
+        Optional keyword input parameter is for internal use only 
         and may prevent json serializability.
         """
 
         # Get the properties inherited from Arc
-        Arc1_dict = super(Arc1, self).as_dict(
-            type_handle_ndarray=type_handle_ndarray,
-            keep_function=keep_function,
-            **kwargs
-        )
+        Arc1_dict = super(Arc1, self).as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs)
         if self.begin is None:
             Arc1_dict["begin"] = None
         elif isinstance(self.begin, float):
@@ -434,6 +396,7 @@ class Arc1(Arc):
         Arc1_dict["__class__"] = "Arc1"
         return Arc1_dict
 
+
     def copy(self):
         """Creates a deepcopy of the object"""
 
@@ -447,13 +410,7 @@ class Arc1(Arc):
         else:
             prop_dict_val = self.prop_dict.copy()
         # Creates new object of the same type with the copied properties
-        obj_copy = type(self)(
-            begin=begin_val,
-            end=end_val,
-            radius=radius_val,
-            is_trigo_direction=is_trigo_direction_val,
-            prop_dict=prop_dict_val,
-        )
+        obj_copy = type(self)(begin=begin_val,end=end_val,radius=radius_val,is_trigo_direction=is_trigo_direction_val,prop_dict=prop_dict_val)
         return obj_copy
 
     def _set_None(self):
@@ -472,7 +429,7 @@ class Arc1(Arc):
 
     def _set_begin(self, value):
         """setter of begin"""
-        if isinstance(value, str):
+        if isinstance(value,str):
             value = complex(value)
         check_var("begin", value, "complex")
         self._begin = value
@@ -492,7 +449,7 @@ class Arc1(Arc):
 
     def _set_end(self, value):
         """setter of end"""
-        if isinstance(value, str):
+        if isinstance(value,str):
             value = complex(value)
         check_var("end", value, "complex")
         self._end = value

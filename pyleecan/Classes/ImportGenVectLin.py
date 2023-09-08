@@ -79,16 +79,7 @@ class ImportGenVectLin(ImportMatrix):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(
-        self,
-        start=0,
-        stop=1,
-        num=100,
-        endpoint=True,
-        is_transpose=False,
-        init_dict=None,
-        init_str=None,
-    ):
+    def __init__(self, start=0, stop=1, num=100, endpoint=True, is_transpose=False, init_dict = None, init_str = None):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -155,80 +146,49 @@ class ImportGenVectLin(ImportMatrix):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
+    def compare(self, other, name='self', ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
             ignore_list = list()
         if type(other) != type(self):
-            return ["type(" + name + ")"]
+            return ['type('+name+')']
         diff_list = list()
 
         # Check the properties inherited from ImportMatrix
-        diff_list.extend(
-            super(ImportGenVectLin, self).compare(
-                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
-            )
-        )
-        if (
-            other._start is not None
-            and self._start is not None
-            and isnan(other._start)
-            and isnan(self._start)
-        ):
+        diff_list.extend(super(ImportGenVectLin, self).compare(other,name=name, ignore_list=ignore_list, is_add_value=is_add_value))
+        if other._start is not None and self._start is not None and isnan(other._start) and isnan(self._start):
             pass
         elif other._start != self._start:
             if is_add_value:
-                val_str = (
-                    " (self=" + str(self._start) + ", other=" + str(other._start) + ")"
-                )
-                diff_list.append(name + ".start" + val_str)
+                val_str = ' (self='+str(self._start)+', other='+str(other._start)+')'
+                diff_list.append(name+'.start'+val_str)
             else:
-                diff_list.append(name + ".start")
-        if (
-            other._stop is not None
-            and self._stop is not None
-            and isnan(other._stop)
-            and isnan(self._stop)
-        ):
+                diff_list.append(name+'.start')
+        if other._stop is not None and self._stop is not None and isnan(other._stop) and isnan(self._stop):
             pass
         elif other._stop != self._stop:
             if is_add_value:
-                val_str = (
-                    " (self=" + str(self._stop) + ", other=" + str(other._stop) + ")"
-                )
-                diff_list.append(name + ".stop" + val_str)
+                val_str = ' (self='+str(self._stop)+', other='+str(other._stop)+')'
+                diff_list.append(name+'.stop'+val_str)
             else:
-                diff_list.append(name + ".stop")
-        if (
-            other._num is not None
-            and self._num is not None
-            and isnan(other._num)
-            and isnan(self._num)
-        ):
+                diff_list.append(name+'.stop')
+        if other._num is not None and self._num is not None and isnan(other._num) and isnan(self._num):
             pass
         elif other._num != self._num:
             if is_add_value:
-                val_str = (
-                    " (self=" + str(self._num) + ", other=" + str(other._num) + ")"
-                )
-                diff_list.append(name + ".num" + val_str)
+                val_str = ' (self='+str(self._num)+', other='+str(other._num)+')'
+                diff_list.append(name+'.num'+val_str)
             else:
-                diff_list.append(name + ".num")
+                diff_list.append(name+'.num')
         if other._endpoint != self._endpoint:
             if is_add_value:
-                val_str = (
-                    " (self="
-                    + str(self._endpoint)
-                    + ", other="
-                    + str(other._endpoint)
-                    + ")"
-                )
-                diff_list.append(name + ".endpoint" + val_str)
+                val_str = ' (self='+str(self._endpoint)+', other='+str(other._endpoint)+')'
+                diff_list.append(name+'.endpoint'+val_str)
             else:
-                diff_list.append(name + ".endpoint")
+                diff_list.append(name+'.endpoint')
         # Filter ignore differences
-        diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
+        diff_list = list(filter(lambda x : x not in ignore_list, diff_list))
         return diff_list
 
     def __sizeof__(self):
@@ -251,16 +211,12 @@ class ImportGenVectLin(ImportMatrix):
             How to handle ndarray (0: tolist, 1: copy, 2: nothing)
         keep_function : bool
             True to keep the function object, else return str
-        Optional keyword input parameter is for internal use only
+        Optional keyword input parameter is for internal use only 
         and may prevent json serializability.
         """
 
         # Get the properties inherited from ImportMatrix
-        ImportGenVectLin_dict = super(ImportGenVectLin, self).as_dict(
-            type_handle_ndarray=type_handle_ndarray,
-            keep_function=keep_function,
-            **kwargs
-        )
+        ImportGenVectLin_dict = super(ImportGenVectLin, self).as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs)
         ImportGenVectLin_dict["start"] = self.start
         ImportGenVectLin_dict["stop"] = self.stop
         ImportGenVectLin_dict["num"] = self.num
@@ -269,6 +225,7 @@ class ImportGenVectLin(ImportMatrix):
         # Overwrite the mother class name
         ImportGenVectLin_dict["__class__"] = "ImportGenVectLin"
         return ImportGenVectLin_dict
+
 
     def copy(self):
         """Creates a deepcopy of the object"""
@@ -280,13 +237,7 @@ class ImportGenVectLin(ImportMatrix):
         endpoint_val = self.endpoint
         is_transpose_val = self.is_transpose
         # Creates new object of the same type with the copied properties
-        obj_copy = type(self)(
-            start=start_val,
-            stop=stop_val,
-            num=num_val,
-            endpoint=endpoint_val,
-            is_transpose=is_transpose_val,
-        )
+        obj_copy = type(self)(start=start_val,stop=stop_val,num=num_val,endpoint=endpoint_val,is_transpose=is_transpose_val)
         return obj_copy
 
     def _set_None(self):

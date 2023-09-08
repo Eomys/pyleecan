@@ -79,17 +79,7 @@ class ElmerResults(Elmer):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(
-        self,
-        data=-1,
-        file="",
-        usecols=-1,
-        columns=-1,
-        is_scalars=False,
-        logger_name="Pyleecan.Elmer",
-        init_dict=None,
-        init_str=None,
-    ):
+    def __init__(self, data=-1, file="", usecols=-1, columns=-1, is_scalars=False, logger_name="Pyleecan.Elmer", init_dict = None, init_str = None):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -136,18 +126,8 @@ class ElmerResults(Elmer):
         ElmerResults_str += super(ElmerResults, self).__str__()
         ElmerResults_str += "data = " + str(self.data) + linesep
         ElmerResults_str += 'file = "' + str(self.file) + '"' + linesep
-        ElmerResults_str += (
-            "usecols = "
-            + linesep
-            + str(self.usecols).replace(linesep, linesep + "\t")
-            + linesep
-        )
-        ElmerResults_str += (
-            "columns = "
-            + linesep
-            + str(self.columns).replace(linesep, linesep + "\t")
-            + linesep
-        )
+        ElmerResults_str += "usecols = " + linesep + str(self.usecols).replace(linesep, linesep + "\t") + linesep
+        ElmerResults_str += "columns = " + linesep + str(self.columns).replace(linesep, linesep + "\t") + linesep
         ElmerResults_str += "is_scalars = " + str(self.is_scalars) + linesep
         return ElmerResults_str
 
@@ -172,75 +152,49 @@ class ElmerResults(Elmer):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
+    def compare(self, other, name='self', ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
             ignore_list = list()
         if type(other) != type(self):
-            return ["type(" + name + ")"]
+            return ['type('+name+')']
         diff_list = list()
 
         # Check the properties inherited from Elmer
-        diff_list.extend(
-            super(ElmerResults, self).compare(
-                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
-            )
-        )
+        diff_list.extend(super(ElmerResults, self).compare(other,name=name, ignore_list=ignore_list, is_add_value=is_add_value))
         if other._data != self._data:
             if is_add_value:
-                val_str = (
-                    " (self=" + str(self._data) + ", other=" + str(other._data) + ")"
-                )
-                diff_list.append(name + ".data" + val_str)
+                val_str = ' (self='+str(self._data)+', other='+str(other._data)+')'
+                diff_list.append(name+'.data'+val_str)
             else:
-                diff_list.append(name + ".data")
+                diff_list.append(name+'.data')
         if other._file != self._file:
             if is_add_value:
-                val_str = (
-                    " (self=" + str(self._file) + ", other=" + str(other._file) + ")"
-                )
-                diff_list.append(name + ".file" + val_str)
+                val_str = ' (self='+str(self._file)+', other='+str(other._file)+')'
+                diff_list.append(name+'.file'+val_str)
             else:
-                diff_list.append(name + ".file")
+                diff_list.append(name+'.file')
         if other._usecols != self._usecols:
             if is_add_value:
-                val_str = (
-                    " (self="
-                    + str(self._usecols)
-                    + ", other="
-                    + str(other._usecols)
-                    + ")"
-                )
-                diff_list.append(name + ".usecols" + val_str)
+                val_str = ' (self='+str(self._usecols)+', other='+str(other._usecols)+')'
+                diff_list.append(name+'.usecols'+val_str)
             else:
-                diff_list.append(name + ".usecols")
+                diff_list.append(name+'.usecols')
         if other._columns != self._columns:
             if is_add_value:
-                val_str = (
-                    " (self="
-                    + str(self._columns)
-                    + ", other="
-                    + str(other._columns)
-                    + ")"
-                )
-                diff_list.append(name + ".columns" + val_str)
+                val_str = ' (self='+str(self._columns)+', other='+str(other._columns)+')'
+                diff_list.append(name+'.columns'+val_str)
             else:
-                diff_list.append(name + ".columns")
+                diff_list.append(name+'.columns')
         if other._is_scalars != self._is_scalars:
             if is_add_value:
-                val_str = (
-                    " (self="
-                    + str(self._is_scalars)
-                    + ", other="
-                    + str(other._is_scalars)
-                    + ")"
-                )
-                diff_list.append(name + ".is_scalars" + val_str)
+                val_str = ' (self='+str(self._is_scalars)+', other='+str(other._is_scalars)+')'
+                diff_list.append(name+'.is_scalars'+val_str)
             else:
-                diff_list.append(name + ".is_scalars")
+                diff_list.append(name+'.is_scalars')
         # Filter ignore differences
-        diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
+        diff_list = list(filter(lambda x : x not in ignore_list, diff_list))
         return diff_list
 
     def __sizeof__(self):
@@ -270,17 +224,15 @@ class ElmerResults(Elmer):
             How to handle ndarray (0: tolist, 1: copy, 2: nothing)
         keep_function : bool
             True to keep the function object, else return str
-        Optional keyword input parameter is for internal use only
+        Optional keyword input parameter is for internal use only 
         and may prevent json serializability.
         """
 
         # Get the properties inherited from Elmer
-        ElmerResults_dict = super(ElmerResults, self).as_dict(
-            type_handle_ndarray=type_handle_ndarray,
-            keep_function=keep_function,
-            **kwargs
+        ElmerResults_dict = super(ElmerResults, self).as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs)
+        ElmerResults_dict["data"] = (
+            self.data.copy() if self.data is not None else None
         )
-        ElmerResults_dict["data"] = self.data.copy() if self.data is not None else None
         ElmerResults_dict["file"] = self.file
         ElmerResults_dict["usecols"] = (
             self.usecols.copy() if self.usecols is not None else None
@@ -293,6 +245,7 @@ class ElmerResults(Elmer):
         # Overwrite the mother class name
         ElmerResults_dict["__class__"] = "ElmerResults"
         return ElmerResults_dict
+
 
     def copy(self):
         """Creates a deepcopy of the object"""
@@ -314,14 +267,7 @@ class ElmerResults(Elmer):
         is_scalars_val = self.is_scalars
         logger_name_val = self.logger_name
         # Creates new object of the same type with the copied properties
-        obj_copy = type(self)(
-            data=data_val,
-            file=file_val,
-            usecols=usecols_val,
-            columns=columns_val,
-            is_scalars=is_scalars_val,
-            logger_name=logger_name_val,
-        )
+        obj_copy = type(self)(data=data_val,file=file_val,usecols=usecols_val,columns=columns_val,is_scalars=is_scalars_val,logger_name=logger_name_val)
         return obj_copy
 
     def _set_None(self):

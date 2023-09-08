@@ -63,8 +63,7 @@ class CellMat(FrozenClass):
         get_connectivity = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use CellMat method get_connectivity: "
-                    + str(get_connectivity)
+                    "Can't use CellMat method get_connectivity: " + str(get_connectivity)
                 )
             )
         )
@@ -95,16 +94,7 @@ class CellMat(FrozenClass):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(
-        self,
-        connectivity=None,
-        nb_cell=0,
-        nb_node_per_cell=0,
-        indice=None,
-        interpolation=-1,
-        init_dict=None,
-        init_str=None,
-    ):
+    def __init__(self, connectivity=None, nb_cell=0, nb_node_per_cell=0, indice=None, interpolation=-1, init_dict = None, init_str = None):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -149,29 +139,13 @@ class CellMat(FrozenClass):
             CellMat_str += "parent = None " + linesep
         else:
             CellMat_str += "parent = " + str(type(self.parent)) + " object" + linesep
-        CellMat_str += (
-            "connectivity = "
-            + linesep
-            + str(self.connectivity).replace(linesep, linesep + "\t")
-            + linesep
-            + linesep
-        )
+        CellMat_str += "connectivity = " + linesep + str(self.connectivity).replace(linesep, linesep + "\t") + linesep + linesep
         CellMat_str += "nb_cell = " + str(self.nb_cell) + linesep
         CellMat_str += "nb_node_per_cell = " + str(self.nb_node_per_cell) + linesep
-        CellMat_str += (
-            "indice = "
-            + linesep
-            + str(self.indice).replace(linesep, linesep + "\t")
-            + linesep
-            + linesep
-        )
+        CellMat_str += "indice = " + linesep + str(self.indice).replace(linesep, linesep + "\t") + linesep + linesep
         if self.interpolation is not None:
-            tmp = (
-                self.interpolation.__str__()
-                .replace(linesep, linesep + "\t")
-                .rstrip("\t")
-            )
-            CellMat_str += "interpolation = " + tmp
+            tmp = self.interpolation.__str__().replace(linesep, linesep + "\t").rstrip("\t")
+            CellMat_str += "interpolation = "+ tmp
         else:
             CellMat_str += "interpolation = None" + linesep + linesep
         return CellMat_str
@@ -193,57 +167,36 @@ class CellMat(FrozenClass):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
+    def compare(self, other, name='self', ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
             ignore_list = list()
         if type(other) != type(self):
-            return ["type(" + name + ")"]
+            return ['type('+name+')']
         diff_list = list()
         if not array_equal(other.connectivity, self.connectivity):
-            diff_list.append(name + ".connectivity")
+            diff_list.append(name+'.connectivity')
         if other._nb_cell != self._nb_cell:
             if is_add_value:
-                val_str = (
-                    " (self="
-                    + str(self._nb_cell)
-                    + ", other="
-                    + str(other._nb_cell)
-                    + ")"
-                )
-                diff_list.append(name + ".nb_cell" + val_str)
+                val_str = ' (self='+str(self._nb_cell)+', other='+str(other._nb_cell)+')'
+                diff_list.append(name+'.nb_cell'+val_str)
             else:
-                diff_list.append(name + ".nb_cell")
+                diff_list.append(name+'.nb_cell')
         if other._nb_node_per_cell != self._nb_node_per_cell:
             if is_add_value:
-                val_str = (
-                    " (self="
-                    + str(self._nb_node_per_cell)
-                    + ", other="
-                    + str(other._nb_node_per_cell)
-                    + ")"
-                )
-                diff_list.append(name + ".nb_node_per_cell" + val_str)
+                val_str = ' (self='+str(self._nb_node_per_cell)+', other='+str(other._nb_node_per_cell)+')'
+                diff_list.append(name+'.nb_node_per_cell'+val_str)
             else:
-                diff_list.append(name + ".nb_node_per_cell")
+                diff_list.append(name+'.nb_node_per_cell')
         if not array_equal(other.indice, self.indice):
-            diff_list.append(name + ".indice")
-        if (other.interpolation is None and self.interpolation is not None) or (
-            other.interpolation is not None and self.interpolation is None
-        ):
-            diff_list.append(name + ".interpolation None mismatch")
+            diff_list.append(name+'.indice')
+        if (other.interpolation is None and self.interpolation is not None) or (other.interpolation is not None and self.interpolation is None):
+            diff_list.append(name+'.interpolation None mismatch')
         elif self.interpolation is not None:
-            diff_list.extend(
-                self.interpolation.compare(
-                    other.interpolation,
-                    name=name + ".interpolation",
-                    ignore_list=ignore_list,
-                    is_add_value=is_add_value,
-                )
-            )
+            diff_list.extend(self.interpolation.compare(other.interpolation,name=name+'.interpolation',ignore_list=ignore_list,is_add_value=is_add_value))
         # Filter ignore differences
-        diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
+        diff_list = list(filter(lambda x : x not in ignore_list, diff_list))
         return diff_list
 
     def __sizeof__(self):
@@ -264,7 +217,7 @@ class CellMat(FrozenClass):
             How to handle ndarray (0: tolist, 1: copy, 2: nothing)
         keep_function : bool
             True to keep the function object, else return str
-        Optional keyword input parameter is for internal use only
+        Optional keyword input parameter is for internal use only 
         and may prevent json serializability.
         """
 
@@ -272,42 +225,35 @@ class CellMat(FrozenClass):
         if self.connectivity is None:
             CellMat_dict["connectivity"] = None
         else:
-            if type_handle_ndarray == 0:
+            if type_handle_ndarray==0:
                 CellMat_dict["connectivity"] = self.connectivity.tolist()
-            elif type_handle_ndarray == 1:
+            elif type_handle_ndarray==1:
                 CellMat_dict["connectivity"] = self.connectivity.copy()
-            elif type_handle_ndarray == 2:
+            elif type_handle_ndarray==2:
                 CellMat_dict["connectivity"] = self.connectivity
             else:
-                raise Exception(
-                    "Unknown type_handle_ndarray: " + str(type_handle_ndarray)
-                )
+                raise Exception ('Unknown type_handle_ndarray: '+str(type_handle_ndarray))
         CellMat_dict["nb_cell"] = self.nb_cell
         CellMat_dict["nb_node_per_cell"] = self.nb_node_per_cell
         if self.indice is None:
             CellMat_dict["indice"] = None
         else:
-            if type_handle_ndarray == 0:
+            if type_handle_ndarray==0:
                 CellMat_dict["indice"] = self.indice.tolist()
-            elif type_handle_ndarray == 1:
+            elif type_handle_ndarray==1:
                 CellMat_dict["indice"] = self.indice.copy()
-            elif type_handle_ndarray == 2:
+            elif type_handle_ndarray==2:
                 CellMat_dict["indice"] = self.indice
             else:
-                raise Exception(
-                    "Unknown type_handle_ndarray: " + str(type_handle_ndarray)
-                )
+                raise Exception ('Unknown type_handle_ndarray: '+str(type_handle_ndarray))
         if self.interpolation is None:
             CellMat_dict["interpolation"] = None
         else:
-            CellMat_dict["interpolation"] = self.interpolation.as_dict(
-                type_handle_ndarray=type_handle_ndarray,
-                keep_function=keep_function,
-                **kwargs
-            )
+            CellMat_dict["interpolation"] = self.interpolation.as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs)
         # The class name is added to the dict for deserialisation purpose
         CellMat_dict["__class__"] = "CellMat"
         return CellMat_dict
+
 
     def copy(self):
         """Creates a deepcopy of the object"""
@@ -328,13 +274,7 @@ class CellMat(FrozenClass):
         else:
             interpolation_val = self.interpolation.copy()
         # Creates new object of the same type with the copied properties
-        obj_copy = type(self)(
-            connectivity=connectivity_val,
-            nb_cell=nb_cell_val,
-            nb_node_per_cell=nb_node_per_cell_val,
-            indice=indice_val,
-            interpolation=interpolation_val,
-        )
+        obj_copy = type(self)(connectivity=connectivity_val,nb_cell=nb_cell_val,nb_node_per_cell=nb_node_per_cell_val,indice=indice_val,interpolation=interpolation_val)
         return obj_copy
 
     def _set_None(self):
@@ -443,26 +383,19 @@ class CellMat(FrozenClass):
             try:
                 value = load_init_dict(value)[1]
             except Exception as e:
-                self.get_logger().error(
-                    "Error while loading " + value + ", setting None instead"
-                )
+                self.get_logger().error('Error while loading '+value+', setting None instead')
                 value = None
-        if isinstance(value, dict) and "__class__" in value:
-            class_obj = import_class(
-                "pyleecan.Classes", value.get("__class__"), "interpolation"
-            )
+        if isinstance(value, dict) and '__class__' in value:
+            class_obj = import_class('pyleecan.Classes', value.get('__class__'), 'interpolation')
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
-            Interpolation = import_class(
-                "pyleecan.Classes", "Interpolation", "interpolation"
-            )
+            Interpolation = import_class('pyleecan.Classes', 'Interpolation', 'interpolation')
             value = Interpolation()
         check_var("interpolation", value, "Interpolation")
         self._interpolation = value
 
         if self._interpolation is not None:
             self._interpolation.parent = self
-
     interpolation = property(
         fget=_get_interpolation,
         fset=_set_interpolation,

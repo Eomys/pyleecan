@@ -46,7 +46,7 @@ class OutMagFEMM(OutInternal):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, FEMM_dict=None, handler_list=-1, init_dict=None, init_str=None):
+    def __init__(self, FEMM_dict=None, handler_list=-1, init_dict = None, init_str = None):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -84,13 +84,8 @@ class OutMagFEMM(OutInternal):
         if len(self.handler_list) == 0:
             OutMagFEMM_str += "handler_list = []" + linesep
         for ii in range(len(self.handler_list)):
-            tmp = (
-                self.handler_list[ii].__str__().replace(linesep, linesep + "\t")
-                + linesep
-            )
-            OutMagFEMM_str += (
-                "handler_list[" + str(ii) + "] =" + tmp + linesep + linesep
-            )
+            tmp = self.handler_list[ii].__str__().replace(linesep, linesep + "\t") + linesep
+            OutMagFEMM_str += "handler_list["+str(ii)+"] ="+ tmp + linesep + linesep
         return OutMagFEMM_str
 
     def __eq__(self, other):
@@ -108,53 +103,34 @@ class OutMagFEMM(OutInternal):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
+    def compare(self, other, name='self', ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
             ignore_list = list()
         if type(other) != type(self):
-            return ["type(" + name + ")"]
+            return ['type('+name+')']
         diff_list = list()
 
         # Check the properties inherited from OutInternal
-        diff_list.extend(
-            super(OutMagFEMM, self).compare(
-                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
-            )
-        )
+        diff_list.extend(super(OutMagFEMM, self).compare(other,name=name, ignore_list=ignore_list, is_add_value=is_add_value))
         if other._FEMM_dict != self._FEMM_dict:
             if is_add_value:
-                val_str = (
-                    " (self="
-                    + str(self._FEMM_dict)
-                    + ", other="
-                    + str(other._FEMM_dict)
-                    + ")"
-                )
-                diff_list.append(name + ".FEMM_dict" + val_str)
+                val_str = ' (self='+str(self._FEMM_dict)+', other='+str(other._FEMM_dict)+')'
+                diff_list.append(name+'.FEMM_dict'+val_str)
             else:
-                diff_list.append(name + ".FEMM_dict")
-        if (other.handler_list is None and self.handler_list is not None) or (
-            other.handler_list is not None and self.handler_list is None
-        ):
-            diff_list.append(name + ".handler_list None mismatch")
+                diff_list.append(name+'.FEMM_dict')
+        if (other.handler_list is None and self.handler_list is not None) or (other.handler_list is not None and self.handler_list is None):
+            diff_list.append(name+'.handler_list None mismatch')
         elif self.handler_list is None:
             pass
         elif len(other.handler_list) != len(self.handler_list):
-            diff_list.append("len(" + name + ".handler_list)")
+            diff_list.append('len('+name+'.handler_list)')
         else:
             for ii in range(len(other.handler_list)):
-                diff_list.extend(
-                    self.handler_list[ii].compare(
-                        other.handler_list[ii],
-                        name=name + ".handler_list[" + str(ii) + "]",
-                        ignore_list=ignore_list,
-                        is_add_value=is_add_value,
-                    )
-                )
+                diff_list.extend(self.handler_list[ii].compare(other.handler_list[ii],name=name+'.handler_list['+str(ii)+']',ignore_list=ignore_list,is_add_value=is_add_value))
         # Filter ignore differences
-        diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
+        diff_list = list(filter(lambda x : x not in ignore_list, diff_list))
         return diff_list
 
     def __sizeof__(self):
@@ -179,38 +155,29 @@ class OutMagFEMM(OutInternal):
             How to handle ndarray (0: tolist, 1: copy, 2: nothing)
         keep_function : bool
             True to keep the function object, else return str
-        Optional keyword input parameter is for internal use only
+        Optional keyword input parameter is for internal use only 
         and may prevent json serializability.
         """
 
         # Get the properties inherited from OutInternal
-        OutMagFEMM_dict = super(OutMagFEMM, self).as_dict(
-            type_handle_ndarray=type_handle_ndarray,
-            keep_function=keep_function,
-            **kwargs
-        )
+        OutMagFEMM_dict = super(OutMagFEMM, self).as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs)
         OutMagFEMM_dict["FEMM_dict"] = (
             self.FEMM_dict.copy() if self.FEMM_dict is not None else None
         )
         if self.handler_list is None:
-            OutMagFEMM_dict["handler_list"] = None
+            OutMagFEMM_dict['handler_list'] = None
         else:
-            OutMagFEMM_dict["handler_list"] = list()
+            OutMagFEMM_dict['handler_list'] = list()
             for obj in self.handler_list:
                 if obj is not None:
-                    OutMagFEMM_dict["handler_list"].append(
-                        obj.as_dict(
-                            type_handle_ndarray=type_handle_ndarray,
-                            keep_function=keep_function,
-                            **kwargs
-                        )
-                    )
+                    OutMagFEMM_dict['handler_list'].append(obj.as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs))
                 else:
-                    OutMagFEMM_dict["handler_list"].append(None)
+                    OutMagFEMM_dict['handler_list'].append(None)
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         OutMagFEMM_dict["__class__"] = "OutMagFEMM"
         return OutMagFEMM_dict
+
 
     def copy(self):
         """Creates a deepcopy of the object"""
@@ -227,7 +194,7 @@ class OutMagFEMM(OutInternal):
             for obj in self.handler_list:
                 handler_list_val.append(obj.copy())
         # Creates new object of the same type with the copied properties
-        obj_copy = type(self)(FEMM_dict=FEMM_dict_val, handler_list=handler_list_val)
+        obj_copy = type(self)(FEMM_dict=FEMM_dict_val,handler_list=handler_list_val)
         return obj_copy
 
     def _set_None(self):
@@ -274,15 +241,11 @@ class OutMagFEMM(OutInternal):
                     try:
                         obj = load_init_dict(obj)[1]
                     except Exception as e:
-                        self.get_logger().error(
-                            "Error while loading " + obj + ", setting None instead"
-                        )
+                        self.get_logger().error('Error while loading '+obj+', setting None instead')
                         obj = None
                         value[ii] = None
                 if type(obj) is dict:
-                    class_obj = import_class(
-                        "pyleecan.Classes", obj.get("__class__"), "handler_list"
-                    )
+                    class_obj = import_class('pyleecan.Classes', obj.get('__class__'), 'handler_list')
                     value[ii] = class_obj(init_dict=obj)
                 if value[ii] is not None:
                     value[ii].parent = self

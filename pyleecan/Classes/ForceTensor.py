@@ -28,9 +28,7 @@ except ImportError as error:
     comp_force_nodal = error
 
 try:
-    from ..Methods.Simulation.ForceTensor.comp_magnetostrictive_tensor import (
-        comp_magnetostrictive_tensor,
-    )
+    from ..Methods.Simulation.ForceTensor.comp_magnetostrictive_tensor import comp_magnetostrictive_tensor
 except ImportError as error:
     comp_magnetostrictive_tensor = error
 
@@ -101,19 +99,7 @@ class ForceTensor(Force):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(
-        self,
-        group="stator core",
-        tensor=None,
-        is_periodicity_t=None,
-        is_periodicity_a=None,
-        is_agsf_transfer=False,
-        max_wavenumber_transfer=None,
-        Rsbo_enforced_transfer=None,
-        logger_name="Pyleecan.Force",
-        init_dict=None,
-        init_str=None,
-    ):
+    def __init__(self, group="stator core", tensor=None, is_periodicity_t=None, is_periodicity_a=None, is_agsf_transfer=False, max_wavenumber_transfer=None, Rsbo_enforced_transfer=None, logger_name="Pyleecan.Force", init_dict = None, init_str = None):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -149,14 +135,7 @@ class ForceTensor(Force):
         self.group = group
         self.tensor = tensor
         # Call Force init
-        super(ForceTensor, self).__init__(
-            is_periodicity_t=is_periodicity_t,
-            is_periodicity_a=is_periodicity_a,
-            is_agsf_transfer=is_agsf_transfer,
-            max_wavenumber_transfer=max_wavenumber_transfer,
-            Rsbo_enforced_transfer=Rsbo_enforced_transfer,
-            logger_name=logger_name,
-        )
+        super(ForceTensor, self).__init__(is_periodicity_t=is_periodicity_t, is_periodicity_a=is_periodicity_a, is_agsf_transfer=is_agsf_transfer, max_wavenumber_transfer=max_wavenumber_transfer, Rsbo_enforced_transfer=Rsbo_enforced_transfer, logger_name=logger_name)
         # The class is frozen (in Force init), for now it's impossible to
         # add new properties
 
@@ -185,43 +164,31 @@ class ForceTensor(Force):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
+    def compare(self, other, name='self', ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
             ignore_list = list()
         if type(other) != type(self):
-            return ["type(" + name + ")"]
+            return ['type('+name+')']
         diff_list = list()
 
         # Check the properties inherited from Force
-        diff_list.extend(
-            super(ForceTensor, self).compare(
-                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
-            )
-        )
+        diff_list.extend(super(ForceTensor, self).compare(other,name=name, ignore_list=ignore_list, is_add_value=is_add_value))
         if other._group != self._group:
             if is_add_value:
-                val_str = (
-                    " (self=" + str(self._group) + ", other=" + str(other._group) + ")"
-                )
-                diff_list.append(name + ".group" + val_str)
+                val_str = ' (self='+str(self._group)+', other='+str(other._group)+')'
+                diff_list.append(name+'.group'+val_str)
             else:
-                diff_list.append(name + ".group")
+                diff_list.append(name+'.group')
         if other._tensor != self._tensor:
             if is_add_value:
-                val_str = (
-                    " (self="
-                    + str(self._tensor)
-                    + ", other="
-                    + str(other._tensor)
-                    + ")"
-                )
-                diff_list.append(name + ".tensor" + val_str)
+                val_str = ' (self='+str(self._tensor)+', other='+str(other._tensor)+')'
+                diff_list.append(name+'.tensor'+val_str)
             else:
-                diff_list.append(name + ".tensor")
+                diff_list.append(name+'.tensor')
         # Filter ignore differences
-        diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
+        diff_list = list(filter(lambda x : x not in ignore_list, diff_list))
         return diff_list
 
     def __sizeof__(self):
@@ -244,16 +211,12 @@ class ForceTensor(Force):
             How to handle ndarray (0: tolist, 1: copy, 2: nothing)
         keep_function : bool
             True to keep the function object, else return str
-        Optional keyword input parameter is for internal use only
+        Optional keyword input parameter is for internal use only 
         and may prevent json serializability.
         """
 
         # Get the properties inherited from Force
-        ForceTensor_dict = super(ForceTensor, self).as_dict(
-            type_handle_ndarray=type_handle_ndarray,
-            keep_function=keep_function,
-            **kwargs
-        )
+        ForceTensor_dict = super(ForceTensor, self).as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs)
         ForceTensor_dict["group"] = self.group
         ForceTensor_dict["tensor"] = (
             self.tensor.copy() if self.tensor is not None else None
@@ -262,6 +225,7 @@ class ForceTensor(Force):
         # Overwrite the mother class name
         ForceTensor_dict["__class__"] = "ForceTensor"
         return ForceTensor_dict
+
 
     def copy(self):
         """Creates a deepcopy of the object"""
@@ -279,16 +243,7 @@ class ForceTensor(Force):
         Rsbo_enforced_transfer_val = self.Rsbo_enforced_transfer
         logger_name_val = self.logger_name
         # Creates new object of the same type with the copied properties
-        obj_copy = type(self)(
-            group=group_val,
-            tensor=tensor_val,
-            is_periodicity_t=is_periodicity_t_val,
-            is_periodicity_a=is_periodicity_a_val,
-            is_agsf_transfer=is_agsf_transfer_val,
-            max_wavenumber_transfer=max_wavenumber_transfer_val,
-            Rsbo_enforced_transfer=Rsbo_enforced_transfer_val,
-            logger_name=logger_name_val,
-        )
+        obj_copy = type(self)(group=group_val,tensor=tensor_val,is_periodicity_t=is_periodicity_t_val,is_periodicity_a=is_periodicity_a_val,is_agsf_transfer=is_agsf_transfer_val,max_wavenumber_transfer=max_wavenumber_transfer_val,Rsbo_enforced_transfer=Rsbo_enforced_transfer_val,logger_name=logger_name_val)
         return obj_copy
 
     def _set_None(self):

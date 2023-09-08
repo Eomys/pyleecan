@@ -53,9 +53,7 @@ except ImportError as error:
     comp_height_wire = error
 
 try:
-    from ..Methods.Machine.CondType21.comp_nb_circumferential_wire import (
-        comp_nb_circumferential_wire,
-    )
+    from ..Methods.Machine.CondType21.comp_nb_circumferential_wire import comp_nb_circumferential_wire
 except ImportError as error:
     comp_nb_circumferential_wire = error
 
@@ -198,16 +196,7 @@ class CondType21(Conductor):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(
-        self,
-        Hbar=0.01,
-        Wbar=0.01,
-        Wins=0,
-        cond_mat=-1,
-        ins_mat=-1,
-        init_dict=None,
-        init_str=None,
-    ):
+    def __init__(self, Hbar=0.01, Wbar=0.01, Wins=0, cond_mat=-1, ins_mat=-1, init_dict = None, init_str = None):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -270,68 +259,43 @@ class CondType21(Conductor):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
+    def compare(self, other, name='self', ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
             ignore_list = list()
         if type(other) != type(self):
-            return ["type(" + name + ")"]
+            return ['type('+name+')']
         diff_list = list()
 
         # Check the properties inherited from Conductor
-        diff_list.extend(
-            super(CondType21, self).compare(
-                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
-            )
-        )
-        if (
-            other._Hbar is not None
-            and self._Hbar is not None
-            and isnan(other._Hbar)
-            and isnan(self._Hbar)
-        ):
+        diff_list.extend(super(CondType21, self).compare(other,name=name, ignore_list=ignore_list, is_add_value=is_add_value))
+        if other._Hbar is not None and self._Hbar is not None and isnan(other._Hbar) and isnan(self._Hbar):
             pass
         elif other._Hbar != self._Hbar:
             if is_add_value:
-                val_str = (
-                    " (self=" + str(self._Hbar) + ", other=" + str(other._Hbar) + ")"
-                )
-                diff_list.append(name + ".Hbar" + val_str)
+                val_str = ' (self='+str(self._Hbar)+', other='+str(other._Hbar)+')'
+                diff_list.append(name+'.Hbar'+val_str)
             else:
-                diff_list.append(name + ".Hbar")
-        if (
-            other._Wbar is not None
-            and self._Wbar is not None
-            and isnan(other._Wbar)
-            and isnan(self._Wbar)
-        ):
+                diff_list.append(name+'.Hbar')
+        if other._Wbar is not None and self._Wbar is not None and isnan(other._Wbar) and isnan(self._Wbar):
             pass
         elif other._Wbar != self._Wbar:
             if is_add_value:
-                val_str = (
-                    " (self=" + str(self._Wbar) + ", other=" + str(other._Wbar) + ")"
-                )
-                diff_list.append(name + ".Wbar" + val_str)
+                val_str = ' (self='+str(self._Wbar)+', other='+str(other._Wbar)+')'
+                diff_list.append(name+'.Wbar'+val_str)
             else:
-                diff_list.append(name + ".Wbar")
-        if (
-            other._Wins is not None
-            and self._Wins is not None
-            and isnan(other._Wins)
-            and isnan(self._Wins)
-        ):
+                diff_list.append(name+'.Wbar')
+        if other._Wins is not None and self._Wins is not None and isnan(other._Wins) and isnan(self._Wins):
             pass
         elif other._Wins != self._Wins:
             if is_add_value:
-                val_str = (
-                    " (self=" + str(self._Wins) + ", other=" + str(other._Wins) + ")"
-                )
-                diff_list.append(name + ".Wins" + val_str)
+                val_str = ' (self='+str(self._Wins)+', other='+str(other._Wins)+')'
+                diff_list.append(name+'.Wins'+val_str)
             else:
-                diff_list.append(name + ".Wins")
+                diff_list.append(name+'.Wins')
         # Filter ignore differences
-        diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
+        diff_list = list(filter(lambda x : x not in ignore_list, diff_list))
         return diff_list
 
     def __sizeof__(self):
@@ -353,16 +317,12 @@ class CondType21(Conductor):
             How to handle ndarray (0: tolist, 1: copy, 2: nothing)
         keep_function : bool
             True to keep the function object, else return str
-        Optional keyword input parameter is for internal use only
+        Optional keyword input parameter is for internal use only 
         and may prevent json serializability.
         """
 
         # Get the properties inherited from Conductor
-        CondType21_dict = super(CondType21, self).as_dict(
-            type_handle_ndarray=type_handle_ndarray,
-            keep_function=keep_function,
-            **kwargs
-        )
+        CondType21_dict = super(CondType21, self).as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs)
         CondType21_dict["Hbar"] = self.Hbar
         CondType21_dict["Wbar"] = self.Wbar
         CondType21_dict["Wins"] = self.Wins
@@ -370,6 +330,7 @@ class CondType21(Conductor):
         # Overwrite the mother class name
         CondType21_dict["__class__"] = "CondType21"
         return CondType21_dict
+
 
     def copy(self):
         """Creates a deepcopy of the object"""
@@ -387,13 +348,7 @@ class CondType21(Conductor):
         else:
             ins_mat_val = self.ins_mat.copy()
         # Creates new object of the same type with the copied properties
-        obj_copy = type(self)(
-            Hbar=Hbar_val,
-            Wbar=Wbar_val,
-            Wins=Wins_val,
-            cond_mat=cond_mat_val,
-            ins_mat=ins_mat_val,
-        )
+        obj_copy = type(self)(Hbar=Hbar_val,Wbar=Wbar_val,Wins=Wins_val,cond_mat=cond_mat_val,ins_mat=ins_mat_val)
         return obj_copy
 
     def _set_None(self):

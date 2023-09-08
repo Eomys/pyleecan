@@ -38,9 +38,7 @@ except ImportError as error:
     create_toolbox = error
 
 try:
-    from ..Methods.Optimization.OptiGenAlgNsga2Deap.check_optimization_input import (
-        check_optimization_input,
-    )
+    from ..Methods.Optimization.OptiGenAlgNsga2Deap.check_optimization_input import check_optimization_input
 except ImportError as error:
     check_optimization_input = error
 
@@ -63,10 +61,9 @@ import random
 from numpy import isnan
 from cloudpickle import dumps, loads
 from ._check import CheckTypeError
-
-try:
+try :
     from deap.base import Toolbox
-except ImportError:
+except ImportError :
     Toolbox = ImportError
 from ._check import InitUnKnowClassError
 
@@ -159,23 +156,7 @@ class OptiGenAlgNsga2Deap(OptiGenAlg):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(
-        self,
-        toolbox=None,
-        selector=None,
-        crossover=None,
-        mutator=None,
-        p_cross=0.9,
-        p_mutate=0.1,
-        size_pop=40,
-        nb_gen=100,
-        problem=-1,
-        xoutput=-1,
-        logger_name="Pyleecan.OptiSolver",
-        is_keep_all_output=False,
-        init_dict=None,
-        init_str=None,
-    ):
+    def __init__(self, toolbox=None, selector=None, crossover=None, mutator=None, p_cross=0.9, p_mutate=0.1, size_pop=40, nb_gen=100, problem=-1, xoutput=-1, logger_name="Pyleecan.OptiSolver", is_keep_all_output=False, init_dict = None, init_str = None):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -218,19 +199,7 @@ class OptiGenAlgNsga2Deap(OptiGenAlg):
         # Set the properties (value check and convertion are done in setter)
         self.toolbox = toolbox
         # Call OptiGenAlg init
-        super(OptiGenAlgNsga2Deap, self).__init__(
-            selector=selector,
-            crossover=crossover,
-            mutator=mutator,
-            p_cross=p_cross,
-            p_mutate=p_mutate,
-            size_pop=size_pop,
-            nb_gen=nb_gen,
-            problem=problem,
-            xoutput=xoutput,
-            logger_name=logger_name,
-            is_keep_all_output=is_keep_all_output,
-        )
+        super(OptiGenAlgNsga2Deap, self).__init__(selector=selector, crossover=crossover, mutator=mutator, p_cross=p_cross, p_mutate=p_mutate, size_pop=size_pop, nb_gen=nb_gen, problem=problem, xoutput=xoutput, logger_name=logger_name, is_keep_all_output=is_keep_all_output)
         # The class is frozen (in OptiGenAlg init), for now it's impossible to
         # add new properties
 
@@ -240,7 +209,7 @@ class OptiGenAlgNsga2Deap(OptiGenAlg):
         OptiGenAlgNsga2Deap_str = ""
         # Get the properties inherited from OptiGenAlg
         OptiGenAlgNsga2Deap_str += super(OptiGenAlgNsga2Deap, self).__str__()
-        OptiGenAlgNsga2Deap_str += "toolbox = " + str(self.toolbox) + linesep + linesep
+        OptiGenAlgNsga2Deap_str += "toolbox = "+ str(self.toolbox) + linesep + linesep
         return OptiGenAlgNsga2Deap_str
 
     def __eq__(self, other):
@@ -256,29 +225,23 @@ class OptiGenAlgNsga2Deap(OptiGenAlg):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
+    def compare(self, other, name='self', ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
             ignore_list = list()
         if type(other) != type(self):
-            return ["type(" + name + ")"]
+            return ['type('+name+')']
         diff_list = list()
 
         # Check the properties inherited from OptiGenAlg
-        diff_list.extend(
-            super(OptiGenAlgNsga2Deap, self).compare(
-                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
-            )
-        )
-        if (other.toolbox is None and self.toolbox is not None) or (
-            other.toolbox is not None and self.toolbox is None
-        ):
-            diff_list.append(name + ".toolbox None mismatch")
+        diff_list.extend(super(OptiGenAlgNsga2Deap, self).compare(other,name=name, ignore_list=ignore_list, is_add_value=is_add_value))
+        if (other.toolbox is None and self.toolbox is not None) or (other.toolbox is not None and self.toolbox is None):
+            diff_list.append(name+'.toolbox None mismatch')
         elif self.toolbox is not None and self.toolbox != other.toolbox:
-            diff_list.append(name + ".toolbox")
+            diff_list.append(name+'.toolbox')
         # Filter ignore differences
-        diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
+        diff_list = list(filter(lambda x : x not in ignore_list, diff_list))
         return diff_list
 
     def __sizeof__(self):
@@ -298,30 +261,27 @@ class OptiGenAlgNsga2Deap(OptiGenAlg):
             How to handle ndarray (0: tolist, 1: copy, 2: nothing)
         keep_function : bool
             True to keep the function object, else return str
-        Optional keyword input parameter is for internal use only
+        Optional keyword input parameter is for internal use only 
         and may prevent json serializability.
         """
 
         # Get the properties inherited from OptiGenAlg
-        OptiGenAlgNsga2Deap_dict = super(OptiGenAlgNsga2Deap, self).as_dict(
-            type_handle_ndarray=type_handle_ndarray,
-            keep_function=keep_function,
-            **kwargs
-        )
+        OptiGenAlgNsga2Deap_dict = super(OptiGenAlgNsga2Deap, self).as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs)
         if self.toolbox is None:
             OptiGenAlgNsga2Deap_dict["toolbox"] = None
         else:
             # Store serialized data (using cloudpickle) and str
             # to read it in json save files
-            OptiGenAlgNsga2Deap_dict["toolbox"] = {
+            OptiGenAlgNsga2Deap_dict["toolbox"] ={
                 "__class__": str(type(self._toolbox)),
                 "__repr__": str(self._toolbox.__repr__()),
-                "serialized": dumps(self._toolbox).decode("ISO-8859-2"),
+                "serialized": dumps(self._toolbox).decode("ISO-8859-2")
             }
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         OptiGenAlgNsga2Deap_dict["__class__"] = "OptiGenAlgNsga2Deap"
         return OptiGenAlgNsga2Deap_dict
+
 
     def copy(self):
         """Creates a deepcopy of the object"""
@@ -358,20 +318,7 @@ class OptiGenAlgNsga2Deap(OptiGenAlg):
         logger_name_val = self.logger_name
         is_keep_all_output_val = self.is_keep_all_output
         # Creates new object of the same type with the copied properties
-        obj_copy = type(self)(
-            toolbox=toolbox_val,
-            selector=selector_val,
-            crossover=crossover_val,
-            mutator=mutator_val,
-            p_cross=p_cross_val,
-            p_mutate=p_mutate_val,
-            size_pop=size_pop_val,
-            nb_gen=nb_gen_val,
-            problem=problem_val,
-            xoutput=xoutput_val,
-            logger_name=logger_name_val,
-            is_keep_all_output=is_keep_all_output_val,
-        )
+        obj_copy = type(self)(toolbox=toolbox_val,selector=selector_val,crossover=crossover_val,mutator=mutator_val,p_cross=p_cross_val,p_mutate=p_mutate_val,size_pop=size_pop_val,nb_gen=nb_gen_val,problem=problem_val,xoutput=xoutput_val,logger_name=logger_name_val,is_keep_all_output=is_keep_all_output_val)
         return obj_copy
 
     def _set_None(self):
