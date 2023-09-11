@@ -3697,7 +3697,10 @@
         "is_internal": false,
         "methods": [
             "_comp_point_coordinate",
-            "build_geometry"
+            "build_geometry",
+            "plot_schematics",
+            "remove_magnet",
+            "set_magnet_by_id"
         ],
         "mother": "HoleMag",
         "name": "HoleM60",
@@ -3763,6 +3766,26 @@
                 "type": "float",
                 "unit": "m",
                 "value": null
+            },
+            {
+                "as_dict": "",
+                "desc": "First Magnet",
+                "max": "",
+                "min": "",
+                "name": "magnet_0",
+                "type": "Magnet",
+                "unit": "-",
+                "value": ""
+            },
+            {
+                "as_dict": "",
+                "desc": "Second Magnet",
+                "max": "",
+                "min": "",
+                "name": "magnet_1",
+                "type": "Magnet",
+                "unit": "-",
+                "value": ""
             }
         ]
     },

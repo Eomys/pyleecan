@@ -18,6 +18,7 @@ test_obj.hole.append(
         W3=5e-3,
         H0=3e-3,
         H1=5e-3,
+        magnet_0=None,
     )
 )
 HoleM60_test.append(
@@ -38,8 +39,6 @@ class Test_HoleM60_meth(object):
         """Check that the schematics is correct"""
         test_obj = test_dict["test_obj"]
         point_dict = test_obj.hole[0]._comp_point_coordinate()
-        print("Z sec=", point_dict["Z"])
-        print("Z0=", point_dict["Z0"])
         test_obj.plot()
         test_obj.hole[0].plot()
         plt.show()

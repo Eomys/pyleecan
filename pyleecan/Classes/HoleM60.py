@@ -27,6 +27,21 @@ try:
 except ImportError as error:
     build_geometry = error
 
+try:
+    from ..Methods.Slot.HoleM60.plot_schematics import plot_schematics
+except ImportError as error:
+    plot_schematics = error
+
+try:
+    from ..Methods.Slot.HoleM60.remove_magnet import remove_magnet
+except ImportError as error:
+    remove_magnet = error
+
+try:
+    from ..Methods.Slot.HoleM60.set_magnet_by_id import set_magnet_by_id
+except ImportError as error:
+    set_magnet_by_id = error
+
 
 from numpy import isnan
 from ._check import InitUnKnowClassError
@@ -62,12 +77,45 @@ class HoleM60(HoleMag):
         )
     else:
         build_geometry = build_geometry
+    # cf Methods.Slot.HoleM60.plot_schematics
+    if isinstance(plot_schematics, ImportError):
+        plot_schematics = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use HoleM60 method plot_schematics: " + str(plot_schematics)
+                )
+            )
+        )
+    else:
+        plot_schematics = plot_schematics
+    # cf Methods.Slot.HoleM60.remove_magnet
+    if isinstance(remove_magnet, ImportError):
+        remove_magnet = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use HoleM60 method remove_magnet: " + str(remove_magnet)
+                )
+            )
+        )
+    else:
+        remove_magnet = remove_magnet
+    # cf Methods.Slot.HoleM60.set_magnet_by_id
+    if isinstance(set_magnet_by_id, ImportError):
+        set_magnet_by_id = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use HoleM60 method set_magnet_by_id: " + str(set_magnet_by_id)
+                )
+            )
+        )
+    else:
+        set_magnet_by_id = set_magnet_by_id
     # generic save method is available in all object
     save = save
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, W0=None, W1=None, W2=None, W3=None, H0=None, H1=None, Zh=36, mat_void=-1, magnetization_dict_offset=None, Alpha0=0, init_dict = None, init_str = None):
+    def __init__(self, W0=None, W1=None, W2=None, W3=None, H0=None, H1=None, magnet_0=-1, magnet_1=-1, Zh=36, mat_void=-1, magnetization_dict_offset=None, Alpha0=0, init_dict = None, init_str = None):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -95,6 +143,10 @@ class HoleM60(HoleMag):
                 H0 = init_dict["H0"]
             if "H1" in list(init_dict.keys()):
                 H1 = init_dict["H1"]
+            if "magnet_0" in list(init_dict.keys()):
+                magnet_0 = init_dict["magnet_0"]
+            if "magnet_1" in list(init_dict.keys()):
+                magnet_1 = init_dict["magnet_1"]
             if "Zh" in list(init_dict.keys()):
                 Zh = init_dict["Zh"]
             if "mat_void" in list(init_dict.keys()):
@@ -110,6 +162,8 @@ class HoleM60(HoleMag):
         self.W3 = W3
         self.H0 = H0
         self.H1 = H1
+        self.magnet_0 = magnet_0
+        self.magnet_1 = magnet_1
         # Call HoleMag init
         super(HoleM60, self).__init__(Zh=Zh, mat_void=mat_void, magnetization_dict_offset=magnetization_dict_offset, Alpha0=Alpha0)
         # The class is frozen (in HoleMag init), for now it's impossible to
@@ -127,6 +181,16 @@ class HoleM60(HoleMag):
         HoleM60_str += "W3 = " + str(self.W3) + linesep
         HoleM60_str += "H0 = " + str(self.H0) + linesep
         HoleM60_str += "H1 = " + str(self.H1) + linesep
+        if self.magnet_0 is not None:
+            tmp = self.magnet_0.__str__().replace(linesep, linesep + "\t").rstrip("\t")
+            HoleM60_str += "magnet_0 = "+ tmp
+        else:
+            HoleM60_str += "magnet_0 = None" + linesep + linesep
+        if self.magnet_1 is not None:
+            tmp = self.magnet_1.__str__().replace(linesep, linesep + "\t").rstrip("\t")
+            HoleM60_str += "magnet_1 = "+ tmp
+        else:
+            HoleM60_str += "magnet_1 = None" + linesep + linesep
         return HoleM60_str
 
     def __eq__(self, other):
@@ -149,6 +213,10 @@ class HoleM60(HoleMag):
         if other.H0 != self.H0:
             return False
         if other.H1 != self.H1:
+            return False
+        if other.magnet_0 != self.magnet_0:
+            return False
+        if other.magnet_1 != self.magnet_1:
             return False
         return True
 
@@ -211,6 +279,14 @@ class HoleM60(HoleMag):
                 diff_list.append(name+'.H1'+val_str)
             else:
                 diff_list.append(name+'.H1')
+        if (other.magnet_0 is None and self.magnet_0 is not None) or (other.magnet_0 is not None and self.magnet_0 is None):
+            diff_list.append(name+'.magnet_0 None mismatch')
+        elif self.magnet_0 is not None:
+            diff_list.extend(self.magnet_0.compare(other.magnet_0,name=name+'.magnet_0',ignore_list=ignore_list,is_add_value=is_add_value))
+        if (other.magnet_1 is None and self.magnet_1 is not None) or (other.magnet_1 is not None and self.magnet_1 is None):
+            diff_list.append(name+'.magnet_1 None mismatch')
+        elif self.magnet_1 is not None:
+            diff_list.extend(self.magnet_1.compare(other.magnet_1,name=name+'.magnet_1',ignore_list=ignore_list,is_add_value=is_add_value))
         # Filter ignore differences
         diff_list = list(filter(lambda x : x not in ignore_list, diff_list))
         return diff_list
@@ -228,6 +304,8 @@ class HoleM60(HoleMag):
         S += getsizeof(self.W3)
         S += getsizeof(self.H0)
         S += getsizeof(self.H1)
+        S += getsizeof(self.magnet_0)
+        S += getsizeof(self.magnet_1)
         return S
 
     def as_dict(self, type_handle_ndarray=0, keep_function=False, **kwargs):
@@ -249,6 +327,14 @@ class HoleM60(HoleMag):
         HoleM60_dict["W3"] = self.W3
         HoleM60_dict["H0"] = self.H0
         HoleM60_dict["H1"] = self.H1
+        if self.magnet_0 is None:
+            HoleM60_dict["magnet_0"] = None
+        else:
+            HoleM60_dict["magnet_0"] = self.magnet_0.as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs)
+        if self.magnet_1 is None:
+            HoleM60_dict["magnet_1"] = None
+        else:
+            HoleM60_dict["magnet_1"] = self.magnet_1.as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs)
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         HoleM60_dict["__class__"] = "HoleM60"
@@ -265,6 +351,14 @@ class HoleM60(HoleMag):
         W3_val = self.W3
         H0_val = self.H0
         H1_val = self.H1
+        if self.magnet_0 is None:
+            magnet_0_val = None
+        else:
+            magnet_0_val = self.magnet_0.copy()
+        if self.magnet_1 is None:
+            magnet_1_val = None
+        else:
+            magnet_1_val = self.magnet_1.copy()
         Zh_val = self.Zh
         if self.mat_void is None:
             mat_void_val = None
@@ -276,7 +370,7 @@ class HoleM60(HoleMag):
             magnetization_dict_offset_val = self.magnetization_dict_offset.copy()
         Alpha0_val = self.Alpha0
         # Creates new object of the same type with the copied properties
-        obj_copy = type(self)(W0=W0_val,W1=W1_val,W2=W2_val,W3=W3_val,H0=H0_val,H1=H1_val,Zh=Zh_val,mat_void=mat_void_val,magnetization_dict_offset=magnetization_dict_offset_val,Alpha0=Alpha0_val)
+        obj_copy = type(self)(W0=W0_val,W1=W1_val,W2=W2_val,W3=W3_val,H0=H0_val,H1=H1_val,magnet_0=magnet_0_val,magnet_1=magnet_1_val,Zh=Zh_val,mat_void=mat_void_val,magnetization_dict_offset=magnetization_dict_offset_val,Alpha0=Alpha0_val)
         return obj_copy
 
     def _set_None(self):
@@ -288,6 +382,10 @@ class HoleM60(HoleMag):
         self.W3 = None
         self.H0 = None
         self.H1 = None
+        if self.magnet_0 is not None:
+            self.magnet_0._set_None()
+        if self.magnet_1 is not None:
+            self.magnet_1._set_None()
         # Set to None the properties inherited from HoleMag
         super(HoleM60, self)._set_None()
 
@@ -402,5 +500,69 @@ class HoleM60(HoleMag):
 
         :Type: float
         :min: 0
+        """,
+    )
+
+    def _get_magnet_0(self):
+        """getter of magnet_0"""
+        return self._magnet_0
+
+    def _set_magnet_0(self, value):
+        """setter of magnet_0"""
+        if isinstance(value, str):  # Load from file
+            try:
+                value = load_init_dict(value)[1]
+            except Exception as e:
+                self.get_logger().error('Error while loading '+value+', setting None instead')
+                value = None
+        if isinstance(value, dict) and '__class__' in value:
+            class_obj = import_class('pyleecan.Classes', value.get('__class__'), 'magnet_0')
+            value = class_obj(init_dict=value)
+        elif type(value) is int and value == -1:  # Default constructor
+            Magnet = import_class('pyleecan.Classes', 'Magnet', 'magnet_0')
+            value = Magnet()
+        check_var("magnet_0", value, "Magnet")
+        self._magnet_0 = value
+
+        if self._magnet_0 is not None:
+            self._magnet_0.parent = self
+    magnet_0 = property(
+        fget=_get_magnet_0,
+        fset=_set_magnet_0,
+        doc=u"""First Magnet
+
+        :Type: Magnet
+        """,
+    )
+
+    def _get_magnet_1(self):
+        """getter of magnet_1"""
+        return self._magnet_1
+
+    def _set_magnet_1(self, value):
+        """setter of magnet_1"""
+        if isinstance(value, str):  # Load from file
+            try:
+                value = load_init_dict(value)[1]
+            except Exception as e:
+                self.get_logger().error('Error while loading '+value+', setting None instead')
+                value = None
+        if isinstance(value, dict) and '__class__' in value:
+            class_obj = import_class('pyleecan.Classes', value.get('__class__'), 'magnet_1')
+            value = class_obj(init_dict=value)
+        elif type(value) is int and value == -1:  # Default constructor
+            Magnet = import_class('pyleecan.Classes', 'Magnet', 'magnet_1')
+            value = Magnet()
+        check_var("magnet_1", value, "Magnet")
+        self._magnet_1 = value
+
+        if self._magnet_1 is not None:
+            self._magnet_1.parent = self
+    magnet_1 = property(
+        fget=_get_magnet_1,
+        fset=_set_magnet_1,
+        doc=u"""Second Magnet
+
+        :Type: Magnet
         """,
     )
