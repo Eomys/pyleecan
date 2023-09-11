@@ -38,9 +38,29 @@ except ImportError as error:
     remove_magnet = error
 
 try:
-    from ..Methods.Slot.HoleM60.set_magnet_by_id import set_magnet_by_id
+    from ..Methods.Slot.HoleM60.comp_surface_magnet_id import comp_surface_magnet_id
 except ImportError as error:
-    set_magnet_by_id = error
+    comp_surface_magnet_id = error
+
+try:
+    from ..Methods.Slot.HoleM60.comp_radius import comp_radius
+except ImportError as error:
+    comp_radius = error
+
+try:
+    from ..Methods.Slot.HoleM60.has_magnet import has_magnet
+except ImportError as error:
+    has_magnet = error
+
+try:
+    from ..Methods.Slot.HoleM60.check import check
+except ImportError as error:
+    check = error
+
+try:
+    from ..Methods.Slot.HoleM60.comp_magnetization_dict import comp_magnetization_dict
+except ImportError as error:
+    comp_magnetization_dict = error
 
 
 from numpy import isnan
@@ -99,17 +119,57 @@ class HoleM60(HoleMag):
         )
     else:
         remove_magnet = remove_magnet
-    # cf Methods.Slot.HoleM60.set_magnet_by_id
-    if isinstance(set_magnet_by_id, ImportError):
-        set_magnet_by_id = property(
+    # cf Methods.Slot.HoleM60.comp_surface_magnet_id
+    if isinstance(comp_surface_magnet_id, ImportError):
+        comp_surface_magnet_id = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use HoleM60 method set_magnet_by_id: " + str(set_magnet_by_id)
+                    "Can't use HoleM60 method comp_surface_magnet_id: "
+                    + str(comp_surface_magnet_id)
                 )
             )
         )
     else:
-        set_magnet_by_id = set_magnet_by_id
+        comp_surface_magnet_id = comp_surface_magnet_id
+    # cf Methods.Slot.HoleM60.comp_radius
+    if isinstance(comp_radius, ImportError):
+        comp_radius = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use HoleM60 method comp_radius: " + str(comp_radius))
+            )
+        )
+    else:
+        comp_radius = comp_radius
+    # cf Methods.Slot.HoleM60.has_magnet
+    if isinstance(has_magnet, ImportError):
+        has_magnet = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use HoleM60 method has_magnet: " + str(has_magnet))
+            )
+        )
+    else:
+        has_magnet = has_magnet
+    # cf Methods.Slot.HoleM60.check
+    if isinstance(check, ImportError):
+        check = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use HoleM60 method check: " + str(check))
+            )
+        )
+    else:
+        check = check
+    # cf Methods.Slot.HoleM60.comp_magnetization_dict
+    if isinstance(comp_magnetization_dict, ImportError):
+        comp_magnetization_dict = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use HoleM60 method comp_magnetization_dict: "
+                    + str(comp_magnetization_dict)
+                )
+            )
+        )
+    else:
+        comp_magnetization_dict = comp_magnetization_dict
     # generic save method is available in all object
     save = save
     # get_logger method is available in all object

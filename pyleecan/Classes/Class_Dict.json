@@ -3700,7 +3700,11 @@
             "build_geometry",
             "plot_schematics",
             "remove_magnet",
-            "set_magnet_by_id"
+            "comp_surface_magnet_id",
+            "comp_radius",
+            "has_magnet",
+            "check",
+            "comp_magnetization_dict"
         ],
         "mother": "HoleMag",
         "name": "HoleM60",

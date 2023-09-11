@@ -3,6 +3,7 @@
 from numpy import pi, angle
 import matplotlib.pyplot as plt
 import pytest
+from pyleecan.Classes.Hole import Hole
 from pyleecan.Classes.LamHole import LamHole
 from pyleecan.Classes.HoleM60 import HoleM60
 from pyleecan.Functions.Geometry.inter_line_line import inter_line_line
@@ -21,9 +22,13 @@ test_obj.hole.append(
         magnet_0=None,
     )
 )
+
 HoleM60_test.append(
     {
         "test_obj": test_obj,
+        "Rmin_exp": 0.7067731287283922,
+        "Rmax_exp": 0.7458565593569103,
+        "S_exp": 0.0005961365913508596,
     }
 )
 
@@ -39,12 +44,9 @@ class Test_HoleM60_meth(object):
         """Check that the schematics is correct"""
         test_obj = test_dict["test_obj"]
         point_dict = test_obj.hole[0]._comp_point_coordinate()
-        test_obj.plot()
-        test_obj.hole[0].plot()
-        plt.show()
-        for i in range(1, 7):
-            print("Z%d=" % (i), point_dict["Z%d" % i])
-            print("Z%ds=" % (i), point_dict["Z%ds" % i])
+        # test_obj.plot()
+        # test_obj.hole[0].plot()
+        # plt.show()
                     
         # Check width
         assert abs(point_dict["Z2"] - point_dict["Z1"]) == pytest.approx(
@@ -136,8 +138,64 @@ class Test_HoleM60_meth(object):
             test_obj.hole[0].H0
         )
 
+    @pytest.mark.parametrize("test_dict", HoleM60_test)
+    def test_comp_radius(self, test_dict):
+        """Check that the computation of the surface is correct"""
+        test_obj = test_dict["test_obj"]
+        Rmin, Rmax = test_obj.hole[0].comp_radius()
+
+        # Check that the analytical method returns the same result as the numerical one
+        Rmin_a, Rmax_a = Hole.comp_radius(test_obj.hole[0])
+        
+        a, b = Rmin, Rmin_a
+        msg = "For Rmin: Return " + str(a) + " expected " + str(b)
+        assert abs((a - b) / a - 0) < DELTA, msg
+        a, b = Rmax, Rmax_a
+        msg = "For Rmax: Return " + str(a) + " expected " + str(b)
+        assert abs((a - b) / a - 0) < DELTA, msg
+        
+    @pytest.mark.parametrize("test_dict", HoleM60_test)
+    def test_comp_surface(self, test_dict):
+        """Check that the computation of the surface is correct"""
+        test_obj = test_dict["test_obj"]
+        result = test_obj.hole[0].comp_surface()
+
+        a = result
+        b = test_dict["S_exp"]
+        msg = "Return " + str(a) + " expected " + str(b)
+        assert a == pytest.approx(b, rel=DELTA), msg
+
+        # Check that the analytical method returns the same result as the numerical one
+        b = Hole.comp_surface(test_obj.hole[0])
+        msg = "Return " + str(a) + " expected " + str(b)
+        assert a == pytest.approx(b, rel=DELTA), msg
+        
+    @pytest.mark.parametrize("test_dict", HoleM60_test)
+    def test_comp_surface_magnet_id(self, test_dict):
+        """Check that the computation of the surface is correct"""
+        test_obj = test_dict["test_obj"]
+        result = test_obj.hole[0].comp_surface()
+
+        a = result
+        b = test_dict["S_exp"]
+        msg = "Return " + str(a) + " expected " + str(b)
+        assert a == pytest.approx(b, rel=DELTA), msg
+
+        # Check that the analytical method returns the same result as the numerical one
+        b = Hole.comp_surface(test_obj.hole[0])
+        msg = "Return " + str(a) + " expected " + str(b)
+        assert a == pytest.approx(b, rel=DELTA), msg
+
 if __name__ == "__main__":
     a = Test_HoleM60_meth()
     for test_dict in HoleM60_test:
+        print("Test - schematics")
         a.test_schematics(test_dict)
+        print("Done - schematics")
+        print("Test - comp_radius")
+        a.test_comp_radius(test_dict)
+        print("Done - comp_radius")
+        print("Test - comp_surface")
+        a.test_comp_surface(test_dict)
+        print("Done - comp_surface")
     print("Done")

@@ -656,8 +656,8 @@ if __name__ == "__main__":
     a = Test_plot_schematics()
     #a.test_BoreFlower()
     #a.test_BoreSinePole()
-    a.test_slot(slot_test[-1])
-    a.test_slot_point(slot_test[-1])
+    a.test_slot(slot_test[-7])
+    a.test_slot_point(slot_test[-7])
     # a.test_slot_constant_tooth(slot_test[-1])
     # for slot in slot_test:
     #     a.test_slot(slot)
