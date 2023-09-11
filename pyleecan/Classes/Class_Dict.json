@@ -13538,6 +13538,8 @@
         "methods": [
             "_comp_line_dict",
             "_comp_point_coordinate",
+            "_set_W3",
+            "_comp_W",
             "build_geometry",
             "check",
             "comp_angle_opening",
@@ -13549,7 +13551,8 @@
             "get_H1",
             "get_surface_active",
             "get_surface_opening",
-            "plot_schematics"
+            "plot_schematics",
+            "plot_schematics_constant_tooth"
         ],
         "mother": "Slot",
         "name": "SlotW11",
@@ -13564,7 +13567,7 @@
                 "name": "W0",
                 "type": "float",
                 "unit": "m",
-                "value": 0.003
+                "value": null
             },
             {
                 "as_dict": "",
@@ -13574,7 +13577,7 @@
                 "name": "H0",
                 "type": "float",
                 "unit": "m",
-                "value": 0.003
+                "value": null
             },
             {
                 "as_dict": "",
@@ -13584,7 +13587,7 @@
                 "name": "H1",
                 "type": "float",
                 "unit": "m/rad",
-                "value": 0
+                "value": null
             },
             {
                 "as_dict": "",
@@ -13604,7 +13607,7 @@
                 "name": "W1",
                 "type": "float",
                 "unit": "m",
-                "value": 0.013
+                "value": null
             },
             {
                 "as_dict": "",
@@ -13614,7 +13617,7 @@
                 "name": "H2",
                 "type": "float",
                 "unit": "m",
-                "value": 0.02
+                "value": null
             },
             {
                 "as_dict": "",
@@ -13624,7 +13627,27 @@
                 "name": "W2",
                 "type": "float",
                 "unit": "m",
-                "value": 0.01
+                "value": null
+            },
+            {
+                "as_dict": "",
+                "desc": "True: use W3 to define the slot, False: use W2 and W1",
+                "max": "",
+                "min": "",
+                "name": "is_cstt_tooth",
+                "type": "bool",
+                "unit": "-",
+                "value": 0
+            },
+            {
+                "as_dict": "",
+                "desc": "Tooth width",
+                "max": "",
+                "min": "0",
+                "name": "W3",
+                "type": "float",
+                "unit": "m",
+                "value": null
             },
             {
                 "as_dict": "",
@@ -13634,7 +13657,7 @@
                 "name": "R1",
                 "type": "float",
                 "unit": "m",
-                "value": 0.001
+                "value": null
             }
         ]
     },

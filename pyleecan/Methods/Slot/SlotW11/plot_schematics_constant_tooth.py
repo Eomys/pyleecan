@@ -24,7 +24,7 @@ from pyleecan.Methods import ParentMissingError
 MAGNET_COLOR = config_dict["PLOT"]["COLOR_DICT"]["MAGNET_COLOR"]
 
 
-def plot_schematics(
+def plot_schematics_constant_tooth(
     self,
     is_default=False,
     is_add_point_label=False,
@@ -71,12 +71,19 @@ def plot_schematics(
     # Use some default parameter
     if is_default:
         slot = type(self)(
-            Zs=8, H0=10e-3, W0=20e-3, H1=10e-3, H2=40e-3, W1=40e-3, W2=50e-3, R1=5e-3
+            Zs=12,
+            H0=20e-3,
+            W0=30e-3,
+            H1=30e-3,
+            H2=80e-3,
+            W3=20e-3,
+            is_cstt_tooth=True,
+            R1=20e-3,
         )
         lam = LamSlot(
             Rint=0.135, Rext=0.3, is_internal=False, is_stator=True, slot=slot
         )
-        return slot.plot_schematics(
+        return slot.plot_schematics_constant_tooth(
             is_default=False,
             is_add_point_label=is_add_point_label,
             is_add_schematics=is_add_schematics,
@@ -110,6 +117,7 @@ def plot_schematics(
                     fontsize=P_FONT_SIZE,
                     bbox=TEXT_BOX,
                 )
+        sp = 2 * pi / self.Zs
 
         # Adding schematics
         if is_add_schematics:
@@ -121,34 +129,24 @@ def plot_schematics(
                 color=ARROW_COLOR,
                 linewidth=ARROW_WIDTH,
                 label="W0",
-                offset_label=self.H0 * 0.15 + 1j * self.W0 * 0.1,
+                offset_label=self.H0 * 0.1 - 0.02,
                 is_arrow=True,
                 fontsize=SC_FONT_SIZE,
             )
-            # W1
-            line = Segment(point_dict["Z3"], point_dict["Z8"])
+            # W3
+            line = Segment(
+                (point_dict["Z3"] + point_dict["Z4"]) / 2,
+                (point_dict["Z7"] + point_dict["Z8"]) / 2 * exp(-1j * sp),
+            )
             line.plot(
                 fig=fig,
                 ax=ax,
                 color=ARROW_COLOR,
                 linewidth=ARROW_WIDTH,
-                label="W1",
-                offset_label=self.H0 * 0.15 + 1j * self.W1 * 0.3,
+                label="W3",
+                offset_label=self.H1 * 0.2 - 0.001j,
                 is_arrow=True,
                 fontsize=SC_FONT_SIZE,
-            )
-            # W2
-            Zlim1 = point_dict["Z5"].real + sign * self.R1 + 1j * point_dict["Z4"].imag
-            Zlim2 = point_dict["Z6"].real + sign * self.R1 + 1j * point_dict["Z7"].imag
-            plot_quote(
-                point_dict["Z4"],
-                Zlim1,
-                Zlim2,
-                point_dict["Z7"],
-                offset_label=sign * 0.05 * self.H2,
-                fig=fig,
-                ax=ax,
-                label="W2",
             )
             # H0
             line = Segment(point_dict["Z10"], point_dict["Z9"])
@@ -158,20 +156,39 @@ def plot_schematics(
                 label="H0",
                 color=ARROW_COLOR,
                 linewidth=ARROW_WIDTH,
-                offset_label=1j * self.W0 * 0.15,
+                offset_label=1j * self.W0 * 0.11 + 0.005j - 0.005,
                 is_arrow=True,
                 fontsize=SC_FONT_SIZE,
             )
-            # H1
+            # H1[m]
             line = Segment(point_dict["Z2"].real, point_dict["Z3"].real)
             line.plot(
                 fig=fig,
                 ax=ax,
-                label="H1",
+                label="H1[m]",
                 color=ARROW_COLOR,
                 linewidth=ARROW_WIDTH,
-                offset_label=1j * self.W0 * 0.15,
+                offset_label=1j * self.W0 * 0.25 - 0.01,
                 is_arrow=True,
+                fontsize=SC_FONT_SIZE,
+            )
+            # H1 [rad]
+            line = Arc1(
+                begin=(point_dict["Z2"] + point_dict["Z3"]) / 2
+                - self.get_H1() / 2
+                - 0.007j,
+                end=(((point_dict["Z2"] + point_dict["Z3"]) / 2) + point_dict["Z3"])
+                / 2,
+                radius=(self.get_H1() / 2),
+                is_trigo_direction=True,
+            )
+            line.plot(
+                fig=fig,
+                ax=ax,
+                color=ARROW_COLOR,
+                linewidth=ARROW_WIDTH,
+                label="H1 [rad]",
+                offset_label=-1j * sign * self.get_H1() * 0.5,
                 fontsize=SC_FONT_SIZE,
             )
             # H2
@@ -182,7 +199,7 @@ def plot_schematics(
                 label="H2",
                 color=ARROW_COLOR,
                 linewidth=ARROW_WIDTH,
-                offset_label=1j * self.W0 * 0.15,
+                offset_label=1j * self.W0 * 0.3,
                 is_arrow=True,
                 fontsize=SC_FONT_SIZE,
             )
@@ -194,7 +211,7 @@ def plot_schematics(
                 label="R1",
                 color=ARROW_COLOR,
                 linewidth=ARROW_WIDTH,
-                offset_label=1j * self.W0 * 0.15,
+                offset_label=1j * self.W0 * 0.3,
                 is_arrow=True,
                 fontsize=SC_FONT_SIZE,
             )
@@ -265,6 +282,69 @@ def plot_schematics(
                 linestyle=MAIN_LINE_STYLE,
                 linewidth=MAIN_LINE_WIDTH,
             )
+            # W3 parralel
+            line = Segment(point_dict["Z3"] * exp(1j * sp), point_dict["Z8"])
+            line.plot(
+                fig=fig,
+                ax=ax,
+                color=MAIN_LINE_COLOR,
+                linestyle=MAIN_LINE_STYLE,
+                linewidth=MAIN_LINE_WIDTH,
+            )
+
+            line = Segment(point_dict["Z3"], point_dict["Z8"] * exp(-1j * sp))
+            line.plot(
+                fig=fig,
+                ax=ax,
+                color=MAIN_LINE_COLOR,
+                linestyle=MAIN_LINE_STYLE,
+                linewidth=MAIN_LINE_WIDTH,
+            )
+
+            # H0 lines
+            line = Segment(0, point_dict["Z1"])
+            line.plot(
+                fig=fig,
+                ax=ax,
+                color=MAIN_LINE_COLOR,
+                linestyle=MAIN_LINE_STYLE,
+                linewidth=MAIN_LINE_WIDTH,
+            )
+            line = Segment(0, point_dict["Z10"])
+            line.plot(
+                fig=fig,
+                ax=ax,
+                color=MAIN_LINE_COLOR,
+                linestyle=MAIN_LINE_STYLE,
+                linewidth=MAIN_LINE_WIDTH,
+            )
+            # H1
+            line = Segment(point_dict["Z2"] - 1j, point_dict["Z9"])
+            line.plot(
+                fig=fig,
+                ax=ax,
+                color=MAIN_LINE_COLOR,
+                linestyle=MAIN_LINE_STYLE,
+                linewidth=MAIN_LINE_WIDTH,
+            )
+            # axis between Slot
+            line = Segment(0, lam.Rext * 1.5 * exp(-1j * sp / 2))
+            line.plot(
+                fig=fig,
+                ax=ax,
+                color=MAIN_LINE_COLOR,
+                linestyle=MAIN_LINE_STYLE,
+                linewidth=MAIN_LINE_WIDTH,
+            )
+
+            line = Segment(0, lam.Rext * 1.5 * exp(1j * sp / 2))
+            line.plot(
+                fig=fig,
+                ax=ax,
+                color=MAIN_LINE_COLOR,
+                linestyle=MAIN_LINE_STYLE,
+                linewidth=MAIN_LINE_WIDTH,
+            )
 
         if type_add_active in [1, 3]:  # Wind and Wedge
             is_add_wedge = type_add_active == 3
@@ -280,7 +360,8 @@ def plot_schematics(
             )
 
         # Zooming and cleaning
-        W = max([self.W1, self.W0, self.W2]) * 0.6
+        # W = max([self.W1, self.W0, self.W2]) * 0.6
+        W = (point_dict["Z4"] * exp(1j * sp)).imag * 1.1
         Rint = min(point_dict["Z6"].real, point_dict["Z1"].real)
         Rext = max(point_dict["Z6"].real, point_dict["Z1"].real)
 
@@ -320,19 +401,18 @@ Mag19_test = list()
 lam = LamSlot(Rint=0.135, Rext=0.3, is_internal=False)
 lam.slot = SlotW11(
     Zs=12,
-    H0=10e-3,
-    W0=20e-3,
-    H1=10e-3,
-    H2=40e-3,
-    W1=30e-3,
-    W2=20e-3,
-    is_cstt_tooth=False,
-    R1=1e-3,
+    H0=20e-3,
+    W0=30e-3,
+    H1=30e-3,
+    H2=80e-3,
+    W3=20e-3,
+    is_cstt_tooth=True,
+    R1=20e-3,
 )
 
 
 if __name__ == "__main__":
-    plot_schematics(lam.slot)
+    plot_schematics_constant_tooth(lam.slot)
     plt.show()
     sleep(60)
 """

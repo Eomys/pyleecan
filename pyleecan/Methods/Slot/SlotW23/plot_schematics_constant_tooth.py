@@ -241,7 +241,7 @@ def plot_schematics_constant_tooth(
                 linestyle=MAIN_LINE_STYLE,
                 linewidth=MAIN_LINE_WIDTH,
             )
-            # Tooth axis
+            # axis between Slot
             line = Segment(0, lam.Rext * 1.5 * exp(-1j * sp / 2))
             line.plot(
                 fig=fig,

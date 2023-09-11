@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from numpy import cos
+from numpy import cos, exp, arcsin
 
 
 def comp_height(self):
@@ -18,19 +18,19 @@ def comp_height(self):
         Height of the slot [m]
 
     """
-
+    if self.is_cstt_tooth:
+        # Compute W1 and W2 to match W3 tooth constraint
+        self._comp_W()
     Rbo = self.get_Rbo()
+    point_dict = self._comp_point_coordinate()
+    Z1 = point_dict["Z1"]
+    Z5 = point_dict["Z5"]
 
-    H1 = self.get_H1()
+    Harc = abs(Z1.real - Rbo)
 
-    # Computation of the arc height
-    alpha = self.comp_angle_opening() / 2
-    Harc = float(Rbo * (1 - cos(alpha)))
+    Harc2 = abs(Z5.real - Rbo)
 
     if self.is_outwards():
-        return (
-            abs(Rbo - Harc + self.H0 + H1 + self.H2 + 1j * (self.W2 / 2.0 - self.R1))
-            - Rbo
-        )
+        return abs(Z5) - Rbo
     else:
-        return self.H0 + H1 + self.H2 + Harc
+        return Rbo - Harc - abs(Z5)

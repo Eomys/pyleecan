@@ -16,6 +16,9 @@ def comp_surface_opening(self):
         Slot opening surface [m**2]
 
     """
+    if self.is_cstt_tooth:
+        # Compute W1 and W2 to match W3 tooth constraint
+        self._comp_W()
 
     Rbo = self.get_Rbo()
 
@@ -26,7 +29,7 @@ def comp_surface_opening(self):
 
     # The bottom is an arc
     alpha = self.comp_angle_opening()
-    Sarc = (Rbo ** 2.0) / 2.0 * (alpha - sin(alpha))
+    Sarc = (Rbo**2.0) / 2.0 * (alpha - sin(alpha))
 
     # Because Slamination = S - Zs * Sslot
     if self.is_outwards():
