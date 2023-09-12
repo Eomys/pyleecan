@@ -33,5 +33,5 @@ def check(self):
     elif self.H1 is None:
         raise S58_NoneError("You must set H1 !")
 
-    if self.W1 + self.H0 <= self.W2:
+    if (self.W1 + self.H0) <= self.W2:
         raise S58_WCheckError("You must have W1 + H0 <= W2")
