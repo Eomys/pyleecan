@@ -158,7 +158,8 @@ class TestPWSlot23(object):
     def test_set_H1_is_rad(self):
         """Check that the Widget allow to update H1_is_rad"""
         assert not self.test_obj.slot.H1_is_rad
-        self.widget.c_H1_unit.setCurrentIndex(1)  # Index 1 is rad
+        self.widget.c_H1_unit.setCurrentIndex(1)
+        assert str(self.widget.c_H1_unit.currentText()) == "[rad]"
         assert self.test_obj.slot.H1_is_rad
 
     def test_set_H2(self):
