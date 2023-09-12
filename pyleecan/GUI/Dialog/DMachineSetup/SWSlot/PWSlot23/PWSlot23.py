@@ -242,8 +242,8 @@ class PWSlot23(Gen_PWSlot23, QWidget):
         # Notify the machine GUI that the machine has changed
         self.saveNeeded.emit()
 
-    # setup slot schematics
     def update_schematics(self):
+        """Select the correct schematics according to wedge and constant tooth/slot"""
         if self.g_wedge.isChecked():
             if self.is_cst_tooth.isChecked():
                 self.img_slot.setPixmap(
@@ -281,7 +281,7 @@ class PWSlot23(Gen_PWSlot23, QWidget):
         # Notify the machine GUI that the machine has changed
         self.saveNeeded.emit()
 
-        """setup the picture"""
+        # Select the correct schematics
         self.update_schematics()
 
         # Notify the machine GUI that the machine has changed
@@ -322,7 +322,7 @@ class PWSlot23(Gen_PWSlot23, QWidget):
         # Notify the machine GUI that the machine has changed
         self.saveNeeded.emit()
 
-        """setup the picture"""
+        # Select the correct schematics
         self.update_schematics()
 
         # Notify the machine GUI that the machine has changed
