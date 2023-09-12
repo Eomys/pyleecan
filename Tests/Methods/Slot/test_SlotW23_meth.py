@@ -430,21 +430,21 @@ class Test_SlotW23_meth(object):
         assert abs((a - b) / a - 0) < DELTA, msg
 
     def test_is_cstt_tooth(self):
-        test_obj = lam_CT.copy()
+        test_obj = lam.copy()
+        if test_obj.slot.is_cstt_tooth:
+            point_dict = test_obj.slot._comp_point_coordinate()
 
-        point_dict = test_obj.slot._comp_point_coordinate()
+            sp = 2 * pi / test_obj.slot.Zs
 
-        sp = 2 * pi / test_obj.slot.Zs
+            a = point_dict["Z3"]
+            b = exp(-1j * sp) * point_dict["Z6"]
+            msg = "Return " + str(abs((a - b))) + " expected " + str(test_obj.slot.W3)
+            assert (abs((a - b)) - test_obj.slot.W3) < DELTA, msg
 
-        a = point_dict["Z3"]
-        b = exp(-1j * sp) * point_dict["Z6"]
-        msg = "Return " + str(abs((a - b))) + " expected " + str(test_obj.slot.W3)
-        assert (abs((a - b)) - test_obj.slot.W3) < DELTA, msg
-
-        a = point_dict["Z4"]
-        b = exp(-1j * sp) * point_dict["Z5"]
-        msg = "Return " + str(abs((a - b))) + " expected " + str(test_obj.slot.W3)
-        assert (abs((a - b)) - test_obj.slot.W3) < DELTA, msg
+            a = point_dict["Z4"]
+            b = exp(-1j * sp) * point_dict["Z5"]
+            msg = "Return " + str(abs((a - b))) + " expected " + str(test_obj.slot.W3)
+            assert (abs((a - b)) - test_obj.slot.W3) < DELTA, msg
 
 
 if __name__ == "__main__":

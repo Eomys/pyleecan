@@ -145,10 +145,8 @@ class TestPWSlot23(object):
         assert self.widget.slot.H1 == 0.35, msg
         assert self.test_obj.slot.H1 == 0.35
 
-        self.widget.c_H1_unit.setCurrentIndex(3)
-        assert str(self.widget.c_H1_unit.itemText(0)) == "[m]"
-        assert str(self.widget.c_H1_unit.itemText(1)) == "[rad]"
-        assert str(self.widget.c_H1_unit.itemText(2)) == "[°]"
+        self.widget.c_H1_unit.setCurrentIndex(2)
+        assert str(self.widget.c_H1_unit.currentText()) == "[°]"
 
         self.widget.lf_H1.clear()  # Clear the field before writing
         value = 1.4

@@ -193,7 +193,7 @@ class PWSlot23(Gen_PWSlot23, QWidget):
         self.saveNeeded.emit()
 
     def set_H1(self):
-        """Signal to update the value of H0 according to the line edit
+        """Signal to update the value of H1 according to the line edit
 
         Parameters
         ----------
@@ -243,7 +243,7 @@ class PWSlot23(Gen_PWSlot23, QWidget):
         self.saveNeeded.emit()
 
     # setup slot schematics
-    def pictures(self):
+    def update_schematics(self):
         if self.g_wedge.isChecked():
             if self.is_cst_tooth.isChecked():
                 self.img_slot.setPixmap(
@@ -282,7 +282,7 @@ class PWSlot23(Gen_PWSlot23, QWidget):
         self.saveNeeded.emit()
 
         """setup the picture"""
-        self.pictures()
+        self.update_schematics()
 
         # Notify the machine GUI that the machine has changed
         self.saveNeeded.emit()
@@ -323,7 +323,7 @@ class PWSlot23(Gen_PWSlot23, QWidget):
         self.saveNeeded.emit()
 
         """setup the picture"""
-        self.pictures()
+        self.update_schematics()
 
         # Notify the machine GUI that the machine has changed
         self.saveNeeded.emit()
