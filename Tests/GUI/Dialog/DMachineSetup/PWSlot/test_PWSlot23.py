@@ -146,6 +146,10 @@ class TestPWSlot23(object):
         assert self.test_obj.slot.H1 == 0.35
 
         self.widget.c_H1_unit.setCurrentIndex(3)
+        assert str(self.widget.c_H1_unit.itemText(0)) == "[m]"
+        assert str(self.widget.c_H1_unit.itemText(1)) == "[rad]"
+        assert str(self.widget.c_H1_unit.itemText(2)) == "[°]"
+
         self.widget.lf_H1.clear()  # Clear the field before writing
         value = 1.4
         QTest.keyClicks(self.widget.lf_H1, str(value))
@@ -153,14 +157,11 @@ class TestPWSlot23(object):
 
         assert self.widget.slot.H1 == value / 180 * pi
 
-        #    def test_set_H1_is_rad(setUp):
-        #        """Check that the Widget allow to update H1_is_rad
-        #        """
-        #        self.assertTrue(not self.test_obj.slot.H1_is_rad)
-        #
-        #        self.widget.c_H1_unit.setCurrentIndex(1)#Index 1 is rad
-        #
-        #        self.assertTrue(self.test_obj.slot.H1_is_rad)
+    def test_set_H1_is_rad(self):
+        """Check that the Widget allow to update H1_is_rad"""
+        assert not self.test_obj.slot.H1_is_rad
+        self.widget.c_H1_unit.setCurrentIndex(1)  # Index 1 is rad
+        assert self.test_obj.slot.H1_is_rad
 
     def test_set_H2(self):
         """Check that the Widget allow to update H2"""

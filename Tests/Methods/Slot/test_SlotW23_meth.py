@@ -2,7 +2,7 @@
 import pytest
 
 from pyleecan.Classes.SlotW23 import SlotW23
-from numpy import ndarray, arcsin, pi
+from numpy import ndarray, arcsin, pi, exp
 from pyleecan.Classes.LamSlot import LamSlot
 from pyleecan.Classes.Slot import Slot
 from pyleecan.Methods.Slot.SlotW23 import S23_H1rCheckError
@@ -429,13 +429,29 @@ class Test_SlotW23_meth(object):
         msg = "Return " + str(a) + " expected " + str(b)
         assert abs((a - b) / a - 0) < DELTA, msg
 
+    def test_is_cstt_tooth(self):
+        test_obj = lam_CT.copy()
+
+        point_dict = test_obj.slot._comp_point_coordinate()
+
+        sp = 2 * pi / test_obj.slot.Zs
+
+        a = point_dict["Z3"]
+        b = exp(-1j * sp) * point_dict["Z6"]
+        msg = "Return " + str(abs((a - b))) + " expected " + str(test_obj.slot.W3)
+        assert (abs((a - b)) - test_obj.slot.W3) < DELTA, msg
+
+        a = point_dict["Z4"]
+        b = exp(-1j * sp) * point_dict["Z5"]
+        msg = "Return " + str(abs((a - b))) + " expected " + str(test_obj.slot.W3)
+        assert (abs((a - b)) - test_obj.slot.W3) < DELTA, msg
+
 
 if __name__ == "__main__":
     a = Test_SlotW23_meth()
     for ii, test_dict in enumerate(slotW23_test):
         print("Running test for Slot[" + str(ii) + "]")
         a.test_schematics(test_dict)
-        a.test_schematics_constant_tooth(test_dict)
         a.test_comp_surface(test_dict)
         a.test_comp_surface_active(test_dict)
         a.test_comp_surface_opening(test_dict)
@@ -447,4 +463,5 @@ if __name__ == "__main__":
         a.test_comp_surface_change_W3()
         a.test_check_error()
         a.test_get_H1()
+        a.test_is_cstt_tooth()
         print("Done")
