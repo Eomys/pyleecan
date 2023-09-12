@@ -14,7 +14,6 @@ from ......GUI.Dialog.DMachineSetup.SWSlot.WWSlotOut.WWSlotOut import WWSlotOut
 
 from pyleecan.GUI.Resources import pyleecan_rc
 
-
 class Ui_PMSlot19(object):
     def setupUi(self, PMSlot19):
         if not PMSlot19.objectName():
@@ -34,13 +33,12 @@ class Ui_PMSlot19(object):
         sizePolicy.setHeightForWidth(self.img_slot.sizePolicy().hasHeightForWidth())
         self.img_slot.setSizePolicy(sizePolicy)
         self.img_slot.setMaximumSize(QSize(16777215, 16777215))
-        self.img_slot.setPixmap(
-            QPixmap(u":/images/images/MachineSetup/WMSlot/SlotM19.png")
-        )
+        self.img_slot.setPixmap(QPixmap(u":/images/images/MachineSetup/WMSlot/SlotM19.png"))
         self.img_slot.setScaledContents(False)
         self.img_slot.setAlignment(Qt.AlignCenter)
 
         self.verticalLayout_2.addWidget(self.img_slot)
+
 
         self.horizontalLayout.addLayout(self.verticalLayout_2)
 
@@ -101,11 +99,10 @@ class Ui_PMSlot19(object):
 
         self.gridLayout.addWidget(self.in_W1, 1, 0, 1, 1)
 
+
         self.verticalLayout_3.addLayout(self.gridLayout)
 
-        self.verticalSpacer = QSpacerItem(
-            20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding
-        )
+        self.verticalSpacer = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
 
         self.verticalLayout_3.addItem(self.verticalSpacer)
 
@@ -124,7 +121,6 @@ class Ui_PMSlot19(object):
         self.retranslateUi(PMSlot19)
 
         QMetaObject.connectSlotsByName(PMSlot19)
-
     # setupUi
 
     def retranslateUi(self, PMSlot19):
@@ -136,5 +132,5 @@ class Ui_PMSlot19(object):
         self.in_Hmag.setText(QCoreApplication.translate("PMSlot19", u"Hmag", None))
         self.unit_W0.setText(QCoreApplication.translate("PMSlot19", u"[m]", None))
         self.in_W1.setText(QCoreApplication.translate("PMSlot19", u"W1", None))
-
     # retranslateUi
+

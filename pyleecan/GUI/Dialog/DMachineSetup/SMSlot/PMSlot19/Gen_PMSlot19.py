@@ -7,7 +7,8 @@ from pyleecan.GUI.Dialog.DMachineSetup.SMSlot.PMSlot19.Ui_PMSlot19 import Ui_PMS
 
 class Gen_PMSlot19(Ui_PMSlot19):
     def setupUi(self, PMSlot19):
-        """Abstract class to update the widget according to the csv doc"""
+        """Abstract class to update the widget according to the csv doc
+        """
         Ui_PMSlot19.setupUi(self, PMSlot19)
         # Setup of in_W0
         txt = self.tr(u"""Slot/magnet width. (top)""")
