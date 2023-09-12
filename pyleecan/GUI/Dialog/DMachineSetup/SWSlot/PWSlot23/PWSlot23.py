@@ -278,8 +278,6 @@ class PWSlot23(Gen_PWSlot23, QWidget):
         else:
             self.w_wedge_mat.hide()
             self.slot.wedge_mat = None
-        # Notify the machine GUI that the machine has changed
-        self.saveNeeded.emit()
 
         # Select the correct schematics
         self.update_schematics()
@@ -319,8 +317,6 @@ class PWSlot23(Gen_PWSlot23, QWidget):
             self.lf_W2.setEnabled(True)
             self.txt_constraint.setEnabled(True)
             self.w_wedge_mat.show()
-        # Notify the machine GUI that the machine has changed
-        self.saveNeeded.emit()
 
         # Select the correct schematics
         self.update_schematics()
