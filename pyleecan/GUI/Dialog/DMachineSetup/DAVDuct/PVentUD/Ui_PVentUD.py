@@ -20,34 +20,34 @@ from pyleecan.GUI.Resources import pyleecan_rc
 class Ui_PVentUD(object):
     def setupUi(self, PVentUD):
         if not PVentUD.objectName():
-            PVentUD.setObjectName("PVentUD")
+            PVentUD.setObjectName(u"PVentUD")
         PVentUD.resize(641, 440)
         PVentUD.setMinimumSize(QSize(0, 440))
         PVentUD.setMaximumSize(QSize(16777215, 16777215))
         self.horizontalLayout = QHBoxLayout(PVentUD)
-        self.horizontalLayout.setObjectName("horizontalLayout")
+        self.horizontalLayout.setObjectName(u"horizontalLayout")
         self.w_viewer = MPLCanvas(PVentUD)
-        self.w_viewer.setObjectName("w_viewer")
+        self.w_viewer.setObjectName(u"w_viewer")
 
         self.horizontalLayout.addWidget(self.w_viewer)
 
         self.scrollArea = QScrollArea(PVentUD)
-        self.scrollArea.setObjectName("scrollArea")
+        self.scrollArea.setObjectName(u"scrollArea")
         self.scrollArea.setMinimumSize(QSize(300, 0))
         self.scrollArea.setMaximumSize(QSize(300, 16777215))
         self.scrollArea.setWidgetResizable(True)
         self.scrollAreaWidgetContents = QWidget()
-        self.scrollAreaWidgetContents.setObjectName("scrollAreaWidgetContents")
+        self.scrollAreaWidgetContents.setObjectName(u"scrollAreaWidgetContents")
         self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 298, 416))
         self.verticalLayout = QVBoxLayout(self.scrollAreaWidgetContents)
-        self.verticalLayout.setObjectName("verticalLayout")
+        self.verticalLayout.setObjectName(u"verticalLayout")
         self.b_dxf = QPushButton(self.scrollAreaWidgetContents)
-        self.b_dxf.setObjectName("b_dxf")
+        self.b_dxf.setObjectName(u"b_dxf")
 
         self.verticalLayout.addWidget(self.b_dxf)
 
         self.w_path_json = WPathSelectorV(self.scrollAreaWidgetContents)
-        self.w_path_json.setObjectName("w_path_json")
+        self.w_path_json.setObjectName(u"w_path_json")
         sizePolicy = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -57,14 +57,14 @@ class Ui_PVentUD(object):
         self.verticalLayout.addWidget(self.w_path_json)
 
         self.gridLayout = QGridLayout()
-        self.gridLayout.setObjectName("gridLayout")
+        self.gridLayout.setObjectName(u"gridLayout")
         self.in_Zh = QLabel(self.scrollAreaWidgetContents)
-        self.in_Zh.setObjectName("in_Zh")
+        self.in_Zh.setObjectName(u"in_Zh")
 
         self.gridLayout.addWidget(self.in_Zh, 0, 0, 1, 1)
 
         self.si_Zh = SpinBox(self.scrollAreaWidgetContents)
-        self.si_Zh.setObjectName("si_Zh")
+        self.si_Zh.setObjectName(u"si_Zh")
         self.si_Zh.setMaximum(999999999)
 
         self.gridLayout.addWidget(self.si_Zh, 0, 1, 1, 1)
@@ -78,7 +78,7 @@ class Ui_PVentUD(object):
         self.verticalLayout.addItem(self.verticalSpacer)
 
         self.w_out = WVentOut(self.scrollAreaWidgetContents)
-        self.w_out.setObjectName("w_out")
+        self.w_out.setObjectName(u"w_out")
 
         self.verticalLayout.addWidget(self.w_out)
 
@@ -93,10 +93,10 @@ class Ui_PVentUD(object):
     # setupUi
 
     def retranslateUi(self, PVentUD):
-        PVentUD.setWindowTitle(QCoreApplication.translate("PVentUD", "Form", None))
+        PVentUD.setWindowTitle(QCoreApplication.translate("PVentUD", u"Form", None))
         self.b_dxf.setText(
-            QCoreApplication.translate("PVentUD", "Define Duct from DXF", None)
+            QCoreApplication.translate("PVentUD", u"Define Duct from DXF", None)
         )
-        self.in_Zh.setText(QCoreApplication.translate("PVentUD", "Zh :", None))
+        self.in_Zh.setText(QCoreApplication.translate("PVentUD", u"Zh :", None))
 
     # retranslateUi

@@ -20,34 +20,34 @@ from pyleecan.GUI.Resources import pyleecan_rc
 class Ui_PWSlotUD(object):
     def setupUi(self, PWSlotUD):
         if not PWSlotUD.objectName():
-            PWSlotUD.setObjectName("PWSlotUD")
+            PWSlotUD.setObjectName(u"PWSlotUD")
         PWSlotUD.resize(641, 440)
         PWSlotUD.setMinimumSize(QSize(0, 440))
         PWSlotUD.setMaximumSize(QSize(16777215, 16777215))
         self.horizontalLayout = QHBoxLayout(PWSlotUD)
-        self.horizontalLayout.setObjectName("horizontalLayout")
+        self.horizontalLayout.setObjectName(u"horizontalLayout")
         self.w_viewer = MPLCanvas(PWSlotUD)
-        self.w_viewer.setObjectName("w_viewer")
+        self.w_viewer.setObjectName(u"w_viewer")
 
         self.horizontalLayout.addWidget(self.w_viewer)
 
         self.scrollArea = QScrollArea(PWSlotUD)
-        self.scrollArea.setObjectName("scrollArea")
+        self.scrollArea.setObjectName(u"scrollArea")
         self.scrollArea.setMinimumSize(QSize(270, 0))
         self.scrollArea.setMaximumSize(QSize(270, 16777215))
         self.scrollArea.setWidgetResizable(True)
         self.scrollAreaWidgetContents = QWidget()
-        self.scrollAreaWidgetContents.setObjectName("scrollAreaWidgetContents")
+        self.scrollAreaWidgetContents.setObjectName(u"scrollAreaWidgetContents")
         self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 268, 416))
         self.verticalLayout_2 = QVBoxLayout(self.scrollAreaWidgetContents)
-        self.verticalLayout_2.setObjectName("verticalLayout_2")
+        self.verticalLayout_2.setObjectName(u"verticalLayout_2")
         self.b_dxf = QPushButton(self.scrollAreaWidgetContents)
-        self.b_dxf.setObjectName("b_dxf")
+        self.b_dxf.setObjectName(u"b_dxf")
 
         self.verticalLayout_2.addWidget(self.b_dxf)
 
         self.w_path_json = WPathSelectorV(self.scrollAreaWidgetContents)
-        self.w_path_json.setObjectName("w_path_json")
+        self.w_path_json.setObjectName(u"w_path_json")
         sizePolicy = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -57,13 +57,13 @@ class Ui_PWSlotUD(object):
         self.verticalLayout_2.addWidget(self.w_path_json)
 
         self.g_wedge = QGroupBox(self.scrollAreaWidgetContents)
-        self.g_wedge.setObjectName("g_wedge")
+        self.g_wedge.setObjectName(u"g_wedge")
         self.g_wedge.setCheckable(True)
         self.g_wedge.setChecked(False)
         self.verticalLayout = QVBoxLayout(self.g_wedge)
-        self.verticalLayout.setObjectName("verticalLayout")
+        self.verticalLayout.setObjectName(u"verticalLayout")
         self.w_wedge_mat = WMatSelectV(self.g_wedge)
-        self.w_wedge_mat.setObjectName("w_wedge_mat")
+        self.w_wedge_mat.setObjectName(u"w_wedge_mat")
         self.w_wedge_mat.setMinimumSize(QSize(100, 0))
 
         self.verticalLayout.addWidget(self.w_wedge_mat)
@@ -77,7 +77,7 @@ class Ui_PWSlotUD(object):
         self.verticalLayout_2.addItem(self.verticalSpacer)
 
         self.w_out = WWSlotOut(self.scrollAreaWidgetContents)
-        self.w_out.setObjectName("w_out")
+        self.w_out.setObjectName(u"w_out")
 
         self.verticalLayout_2.addWidget(self.w_out)
 
@@ -92,10 +92,10 @@ class Ui_PWSlotUD(object):
     # setupUi
 
     def retranslateUi(self, PWSlotUD):
-        PWSlotUD.setWindowTitle(QCoreApplication.translate("PWSlotUD", "Form", None))
+        PWSlotUD.setWindowTitle(QCoreApplication.translate("PWSlotUD", u"Form", None))
         self.b_dxf.setText(
-            QCoreApplication.translate("PWSlotUD", "Define Slot from DXF", None)
+            QCoreApplication.translate("PWSlotUD", u"Define Slot from DXF", None)
         )
-        self.g_wedge.setTitle(QCoreApplication.translate("PWSlotUD", "Wedge", None))
+        self.g_wedge.setTitle(QCoreApplication.translate("PWSlotUD", u"Wedge", None))
 
     # retranslateUi

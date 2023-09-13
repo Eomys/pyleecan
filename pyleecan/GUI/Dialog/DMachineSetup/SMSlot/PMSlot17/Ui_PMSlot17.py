@@ -18,16 +18,16 @@ from pyleecan.GUI.Resources import pyleecan_rc
 class Ui_PMSlot17(object):
     def setupUi(self, PMSlot17):
         if not PMSlot17.objectName():
-            PMSlot17.setObjectName("PMSlot17")
+            PMSlot17.setObjectName(u"PMSlot17")
         PMSlot17.resize(887, 470)
         PMSlot17.setMinimumSize(QSize(630, 470))
         PMSlot17.setMaximumSize(QSize(16777215, 16777215))
         self.horizontalLayout = QHBoxLayout(PMSlot17)
-        self.horizontalLayout.setObjectName("horizontalLayout")
+        self.horizontalLayout.setObjectName(u"horizontalLayout")
         self.verticalLayout_2 = QVBoxLayout()
-        self.verticalLayout_2.setObjectName("verticalLayout_2")
+        self.verticalLayout_2.setObjectName(u"verticalLayout_2")
         self.img_slot = QLabel(PMSlot17)
-        self.img_slot.setObjectName("img_slot")
+        self.img_slot.setObjectName(u"img_slot")
         sizePolicy = QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -35,7 +35,7 @@ class Ui_PMSlot17(object):
         self.img_slot.setSizePolicy(sizePolicy)
         self.img_slot.setMaximumSize(QSize(16777215, 16777215))
         self.img_slot.setPixmap(
-            QPixmap(":/images/images/MachineSetup/WMSlot/SlotM17.png")
+            QPixmap(u":/images/images/MachineSetup/WMSlot/SlotM17.png")
         )
         self.img_slot.setScaledContents(False)
         self.img_slot.setAlignment(Qt.AlignCenter)
@@ -43,7 +43,7 @@ class Ui_PMSlot17(object):
         self.verticalLayout_2.addWidget(self.img_slot)
 
         self.txt_constraint = QTextEdit(PMSlot17)
-        self.txt_constraint.setObjectName("txt_constraint")
+        self.txt_constraint.setObjectName(u"txt_constraint")
         sizePolicy1 = QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
         sizePolicy1.setHorizontalStretch(0)
         sizePolicy1.setVerticalStretch(0)
@@ -62,29 +62,29 @@ class Ui_PMSlot17(object):
         self.horizontalLayout.addLayout(self.verticalLayout_2)
 
         self.scrollArea = QScrollArea(PMSlot17)
-        self.scrollArea.setObjectName("scrollArea")
+        self.scrollArea.setObjectName(u"scrollArea")
         self.scrollArea.setMinimumSize(QSize(270, 0))
         self.scrollArea.setMaximumSize(QSize(270, 16777215))
         self.scrollArea.setWidgetResizable(True)
         self.scrollAreaWidgetContents = QWidget()
-        self.scrollAreaWidgetContents.setObjectName("scrollAreaWidgetContents")
+        self.scrollAreaWidgetContents.setObjectName(u"scrollAreaWidgetContents")
         self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 268, 446))
         self.verticalLayout = QVBoxLayout(self.scrollAreaWidgetContents)
-        self.verticalLayout.setObjectName("verticalLayout")
+        self.verticalLayout.setObjectName(u"verticalLayout")
         self.gridLayout = QGridLayout()
-        self.gridLayout.setObjectName("gridLayout")
+        self.gridLayout.setObjectName(u"gridLayout")
         self.unit_Lmag = QLabel(self.scrollAreaWidgetContents)
-        self.unit_Lmag.setObjectName("unit_Lmag")
+        self.unit_Lmag.setObjectName(u"unit_Lmag")
 
         self.gridLayout.addWidget(self.unit_Lmag, 0, 2, 1, 1)
 
         self.lf_Lmag = FloatEdit(self.scrollAreaWidgetContents)
-        self.lf_Lmag.setObjectName("lf_Lmag")
+        self.lf_Lmag.setObjectName(u"lf_Lmag")
 
         self.gridLayout.addWidget(self.lf_Lmag, 0, 1, 1, 1)
 
         self.in_Lmag = QLabel(self.scrollAreaWidgetContents)
-        self.in_Lmag.setObjectName("in_Lmag")
+        self.in_Lmag.setObjectName(u"in_Lmag")
 
         self.gridLayout.addWidget(self.in_Lmag, 0, 0, 1, 1)
 
@@ -97,7 +97,7 @@ class Ui_PMSlot17(object):
         self.verticalLayout.addItem(self.verticalSpacer)
 
         self.w_out = WWSlotOut(self.scrollAreaWidgetContents)
-        self.w_out.setObjectName("w_out")
+        self.w_out.setObjectName(u"w_out")
 
         self.verticalLayout.addWidget(self.w_out)
 
@@ -114,12 +114,12 @@ class Ui_PMSlot17(object):
     # setupUi
 
     def retranslateUi(self, PMSlot17):
-        PMSlot17.setWindowTitle(QCoreApplication.translate("PMSlot17", "Form", None))
+        PMSlot17.setWindowTitle(QCoreApplication.translate("PMSlot17", u"Form", None))
         self.img_slot.setText("")
         self.txt_constraint.setHtml(
             QCoreApplication.translate(
                 "PMSlot17",
-                '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN" "http://www.w3.org/TR/REC-html40/strict.dtd">\n'
+                u'<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN" "http://www.w3.org/TR/REC-html40/strict.dtd">\n'
                 '<html><head><meta name="qrichtext" content="1" /><style type="text/css">\n'
                 "p, li { white-space: pre-wrap; }\n"
                 "</style></head><body style=\" font-family:'DejaVu Sans'; font-size:7.8pt; font-weight:400; font-style:normal;\">\n"
@@ -128,7 +128,7 @@ class Ui_PMSlot17(object):
                 None,
             )
         )
-        self.unit_Lmag.setText(QCoreApplication.translate("PMSlot17", "[m]", None))
-        self.in_Lmag.setText(QCoreApplication.translate("PMSlot17", "Lmag", None))
+        self.unit_Lmag.setText(QCoreApplication.translate("PMSlot17", u"[m]", None))
+        self.in_Lmag.setText(QCoreApplication.translate("PMSlot17", u"Lmag", None))
 
     # retranslateUi

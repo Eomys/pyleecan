@@ -18,31 +18,31 @@ from pyleecan.GUI.Resources import pyleecan_rc
 class Ui_DXF_Surf(object):
     def setupUi(self, DXF_Surf):
         if not DXF_Surf.objectName():
-            DXF_Surf.setObjectName("DXF_Surf")
+            DXF_Surf.setObjectName(u"DXF_Surf")
         DXF_Surf.resize(864, 653)
         icon = QIcon()
         icon.addFile(
-            ":/images/images/icon/pyleecan_64.png", QSize(), QIcon.Normal, QIcon.Off
+            u":/images/images/icon/pyleecan_64.png", QSize(), QIcon.Normal, QIcon.Off
         )
         DXF_Surf.setWindowIcon(icon)
         self.horizontalLayout_5 = QHBoxLayout(DXF_Surf)
-        self.horizontalLayout_5.setObjectName("horizontalLayout_5")
+        self.horizontalLayout_5.setObjectName(u"horizontalLayout_5")
         self.layout_plot = QVBoxLayout()
-        self.layout_plot.setObjectName("layout_plot")
+        self.layout_plot.setObjectName(u"layout_plot")
         self.horizontalLayout = QHBoxLayout()
-        self.horizontalLayout.setObjectName("horizontalLayout")
+        self.horizontalLayout.setObjectName(u"horizontalLayout")
         self.b_reset = QPushButton(DXF_Surf)
-        self.b_reset.setObjectName("b_reset")
+        self.b_reset.setObjectName(u"b_reset")
 
         self.horizontalLayout.addWidget(self.b_reset)
 
         self.b_cancel = QPushButton(DXF_Surf)
-        self.b_cancel.setObjectName("b_cancel")
+        self.b_cancel.setObjectName(u"b_cancel")
 
         self.horizontalLayout.addWidget(self.b_cancel)
 
         self.b_tuto = QPushButton(DXF_Surf)
-        self.b_tuto.setObjectName("b_tuto")
+        self.b_tuto.setObjectName(u"b_tuto")
         self.b_tuto.setEnabled(False)
 
         self.horizontalLayout.addWidget(self.b_tuto)
@@ -56,7 +56,7 @@ class Ui_DXF_Surf(object):
         self.layout_plot.addLayout(self.horizontalLayout)
 
         self.textBrowser = QTextBrowser(DXF_Surf)
-        self.textBrowser.setObjectName("textBrowser")
+        self.textBrowser.setObjectName(u"textBrowser")
         self.textBrowser.setMaximumSize(QSize(16777215, 140))
 
         self.layout_plot.addWidget(self.textBrowser)
@@ -64,17 +64,17 @@ class Ui_DXF_Surf(object):
         self.horizontalLayout_5.addLayout(self.layout_plot)
 
         self.w_side = QWidget(DXF_Surf)
-        self.w_side.setObjectName("w_side")
+        self.w_side.setObjectName(u"w_side")
         self.w_side.setMinimumSize(QSize(400, 0))
         self.w_side.setMaximumSize(QSize(400, 16777215))
         self.verticalLayout_2 = QVBoxLayout(self.w_side)
-        self.verticalLayout_2.setObjectName("verticalLayout_2")
+        self.verticalLayout_2.setObjectName(u"verticalLayout_2")
         self.g_import = QGroupBox(self.w_side)
-        self.g_import.setObjectName("g_import")
+        self.g_import.setObjectName(u"g_import")
         self.verticalLayout = QVBoxLayout(self.g_import)
-        self.verticalLayout.setObjectName("verticalLayout")
+        self.verticalLayout.setObjectName(u"verticalLayout")
         self.w_path_selector = WPathSelector(self.g_import)
-        self.w_path_selector.setObjectName("w_path_selector")
+        self.w_path_selector.setObjectName(u"w_path_selector")
         sizePolicy = QSizePolicy(QSizePolicy.Fixed, QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -86,20 +86,20 @@ class Ui_DXF_Surf(object):
         self.verticalLayout.addWidget(self.w_path_selector)
 
         self.is_convert = QCheckBox(self.g_import)
-        self.is_convert.setObjectName("is_convert")
+        self.is_convert.setObjectName(u"is_convert")
         self.is_convert.setChecked(True)
 
         self.verticalLayout.addWidget(self.is_convert)
 
         self.horizontalLayout_3 = QHBoxLayout()
-        self.horizontalLayout_3.setObjectName("horizontalLayout_3")
+        self.horizontalLayout_3.setObjectName(u"horizontalLayout_3")
         self.in_tol = QLabel(self.g_import)
-        self.in_tol.setObjectName("in_tol")
+        self.in_tol.setObjectName(u"in_tol")
 
         self.horizontalLayout_3.addWidget(self.in_tol)
 
         self.lf_tol = FloatEdit(self.g_import)
-        self.lf_tol.setObjectName("lf_tol")
+        self.lf_tol.setObjectName(u"lf_tol")
         sizePolicy1 = QSizePolicy(QSizePolicy.Minimum, QSizePolicy.Fixed)
         sizePolicy1.setHorizontalStretch(0)
         sizePolicy1.setVerticalStretch(0)
@@ -113,19 +113,19 @@ class Ui_DXF_Surf(object):
         self.verticalLayout_2.addWidget(self.g_import)
 
         self.gridLayout = QGridLayout()
-        self.gridLayout.setObjectName("gridLayout")
+        self.gridLayout.setObjectName(u"gridLayout")
         self.in_Zh = QLabel(self.w_side)
-        self.in_Zh.setObjectName("in_Zh")
+        self.in_Zh.setObjectName(u"in_Zh")
 
         self.gridLayout.addWidget(self.in_Zh, 0, 0, 1, 1)
 
         self.in_per_a = QLabel(self.w_side)
-        self.in_per_a.setObjectName("in_per_a")
+        self.in_per_a.setObjectName(u"in_per_a")
 
         self.gridLayout.addWidget(self.in_per_a, 1, 0, 1, 1)
 
         self.si_Zh = QSpinBox(self.w_side)
-        self.si_Zh.setObjectName("si_Zh")
+        self.si_Zh.setObjectName(u"si_Zh")
         sizePolicy2 = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Preferred)
         sizePolicy2.setHorizontalStretch(0)
         sizePolicy2.setVerticalStretch(0)
@@ -139,23 +139,23 @@ class Ui_DXF_Surf(object):
         self.gridLayout.addWidget(self.si_Zh, 0, 2, 1, 1)
 
         self.si_per_a = QSpinBox(self.w_side)
-        self.si_per_a.setObjectName("si_per_a")
+        self.si_per_a.setObjectName(u"si_per_a")
 
         self.gridLayout.addWidget(self.si_per_a, 1, 2, 1, 1)
 
         self.verticalLayout_2.addLayout(self.gridLayout)
 
         self.g_center = QGroupBox(self.w_side)
-        self.g_center.setObjectName("g_center")
+        self.g_center.setObjectName(u"g_center")
         self.gridLayout_3 = QGridLayout(self.g_center)
-        self.gridLayout_3.setObjectName("gridLayout_3")
+        self.gridLayout_3.setObjectName(u"gridLayout_3")
         self.in_coord_center_X = QLabel(self.g_center)
-        self.in_coord_center_X.setObjectName("in_coord_center_X")
+        self.in_coord_center_X.setObjectName(u"in_coord_center_X")
 
         self.gridLayout_3.addWidget(self.in_coord_center_X, 0, 0, 1, 1)
 
         self.lf_center_x = FloatEdit(self.g_center)
-        self.lf_center_x.setObjectName("lf_center_x")
+        self.lf_center_x.setObjectName(u"lf_center_x")
         sizePolicy3 = QSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
         sizePolicy3.setHorizontalStretch(0)
         sizePolicy3.setVerticalStretch(0)
@@ -165,12 +165,12 @@ class Ui_DXF_Surf(object):
         self.gridLayout_3.addWidget(self.lf_center_x, 0, 1, 1, 1)
 
         self.in_coord_center_Y = QLabel(self.g_center)
-        self.in_coord_center_Y.setObjectName("in_coord_center_Y")
+        self.in_coord_center_Y.setObjectName(u"in_coord_center_Y")
 
         self.gridLayout_3.addWidget(self.in_coord_center_Y, 1, 0, 1, 1)
 
         self.lf_center_y = FloatEdit(self.g_center)
-        self.lf_center_y.setObjectName("lf_center_y")
+        self.lf_center_y.setObjectName(u"lf_center_y")
         self.lf_center_y.setEnabled(True)
         sizePolicy3.setHeightForWidth(self.lf_center_y.sizePolicy().hasHeightForWidth())
         self.lf_center_y.setSizePolicy(sizePolicy3)
@@ -187,14 +187,14 @@ class Ui_DXF_Surf(object):
         self.verticalLayout_2.addItem(self.verticalSpacer)
 
         self.horizontalLayout_4 = QHBoxLayout()
-        self.horizontalLayout_4.setObjectName("horizontalLayout_4")
+        self.horizontalLayout_4.setObjectName(u"horizontalLayout_4")
         self.in_scaling = QLabel(self.w_side)
-        self.in_scaling.setObjectName("in_scaling")
+        self.in_scaling.setObjectName(u"in_scaling")
 
         self.horizontalLayout_4.addWidget(self.in_scaling)
 
         self.lf_scaling = FloatEdit(self.w_side)
-        self.lf_scaling.setObjectName("lf_scaling")
+        self.lf_scaling.setObjectName(u"lf_scaling")
         sizePolicy3.setHeightForWidth(self.lf_scaling.sizePolicy().hasHeightForWidth())
         self.lf_scaling.setSizePolicy(sizePolicy3)
 
@@ -203,7 +203,7 @@ class Ui_DXF_Surf(object):
         self.verticalLayout_2.addLayout(self.horizontalLayout_4)
 
         self.horizontalLayout_2 = QHBoxLayout()
-        self.horizontalLayout_2.setObjectName("horizontalLayout_2")
+        self.horizontalLayout_2.setObjectName(u"horizontalLayout_2")
         self.horizontalLayout_2.setSizeConstraint(QLayout.SetMinimumSize)
         self.horizontalSpacer = QSpacerItem(
             40, 20, QSizePolicy.Fixed, QSizePolicy.Minimum
@@ -212,12 +212,12 @@ class Ui_DXF_Surf(object):
         self.horizontalLayout_2.addItem(self.horizontalSpacer)
 
         self.b_plot = QPushButton(self.w_side)
-        self.b_plot.setObjectName("b_plot")
+        self.b_plot.setObjectName(u"b_plot")
 
         self.horizontalLayout_2.addWidget(self.b_plot)
 
         self.b_save = QPushButton(self.w_side)
-        self.b_save.setObjectName("b_save")
+        self.b_save.setObjectName(u"b_save")
 
         self.horizontalLayout_2.addWidget(self.b_save)
 
@@ -233,19 +233,21 @@ class Ui_DXF_Surf(object):
 
     def retranslateUi(self, DXF_Surf):
         DXF_Surf.setWindowTitle(
-            QCoreApplication.translate("DXF_Surf", "Define Hole from DXF", None)
+            QCoreApplication.translate("DXF_Surf", u"Define Hole from DXF", None)
         )
-        self.b_reset.setText(QCoreApplication.translate("DXF_Surf", "Reset View", None))
+        self.b_reset.setText(
+            QCoreApplication.translate("DXF_Surf", u"Reset View", None)
+        )
         self.b_cancel.setText(
-            QCoreApplication.translate("DXF_Surf", "Cancel Selection", None)
+            QCoreApplication.translate("DXF_Surf", u"Cancel Selection", None)
         )
         self.b_tuto.setText(
-            QCoreApplication.translate("DXF_Surf", "Open Tutorial", None)
+            QCoreApplication.translate("DXF_Surf", u"Open Tutorial", None)
         )
         self.textBrowser.setHtml(
             QCoreApplication.translate(
                 "DXF_Surf",
-                '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN" "http://www.w3.org/TR/REC-html40/strict.dtd">\n'
+                u'<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN" "http://www.w3.org/TR/REC-html40/strict.dtd">\n'
                 '<html><head><meta name="qrichtext" content="1" /><style type="text/css">\n'
                 "p, li { white-space: pre-wrap; }\n"
                 "</style></head><body style=\" font-family:'DejaVu Sans'; font-size:7.8pt; font-weight:400; font-style:normal;\">\n"
@@ -258,37 +260,39 @@ class Ui_DXF_Surf(object):
             )
         )
         self.g_import.setTitle(
-            QCoreApplication.translate("DXF_Surf", "DXF file import", None)
+            QCoreApplication.translate("DXF_Surf", u"DXF file import", None)
         )
         self.is_convert.setText(
-            QCoreApplication.translate("DXF_Surf", "Convert through FEMM", None)
+            QCoreApplication.translate("DXF_Surf", u"Convert through FEMM", None)
         )
         self.in_tol.setText(
-            QCoreApplication.translate("DXF_Surf", "Merge tolerance [l.u.]", None)
+            QCoreApplication.translate("DXF_Surf", u"Merge tolerance [l.u.]", None)
         )
-        self.lf_tol.setText(QCoreApplication.translate("DXF_Surf", "1e-5", None))
+        self.lf_tol.setText(QCoreApplication.translate("DXF_Surf", u"1e-5", None))
         self.in_Zh.setText(
-            QCoreApplication.translate("DXF_Surf", "Number of ducts", None)
+            QCoreApplication.translate("DXF_Surf", u"Number of ducts", None)
         )
         self.in_per_a.setText(
-            QCoreApplication.translate("DXF_Surf", "Periodicity", None)
+            QCoreApplication.translate("DXF_Surf", u"Periodicity", None)
         )
         self.g_center.setTitle(
-            QCoreApplication.translate("DXF_Surf", "Machine Center", None)
+            QCoreApplication.translate("DXF_Surf", u"Machine Center", None)
         )
         self.in_coord_center_X.setText(
-            QCoreApplication.translate("DXF_Surf", "X coordinate [l.u.]", None)
+            QCoreApplication.translate("DXF_Surf", u"X coordinate [l.u.]", None)
         )
-        self.lf_center_x.setText(QCoreApplication.translate("DXF_Surf", "0", None))
+        self.lf_center_x.setText(QCoreApplication.translate("DXF_Surf", u"0", None))
         self.in_coord_center_Y.setText(
-            QCoreApplication.translate("DXF_Surf", "Y coordinate [l.u.]", None)
+            QCoreApplication.translate("DXF_Surf", u"Y coordinate [l.u.]", None)
         )
-        self.lf_center_y.setText(QCoreApplication.translate("DXF_Surf", "0", None))
+        self.lf_center_y.setText(QCoreApplication.translate("DXF_Surf", u"0", None))
         self.in_scaling.setText(
-            QCoreApplication.translate("DXF_Surf", "Scaling factor [l.u.] to [m]", None)
+            QCoreApplication.translate(
+                "DXF_Surf", u"Scaling factor [l.u.] to [m]", None
+            )
         )
-        self.lf_scaling.setText(QCoreApplication.translate("DXF_Surf", "1", None))
-        self.b_plot.setText(QCoreApplication.translate("DXF_Surf", "Plot", None))
-        self.b_save.setText(QCoreApplication.translate("DXF_Surf", "Save", None))
+        self.lf_scaling.setText(QCoreApplication.translate("DXF_Surf", u"1", None))
+        self.b_plot.setText(QCoreApplication.translate("DXF_Surf", u"Plot", None))
+        self.b_save.setText(QCoreApplication.translate("DXF_Surf", u"Save", None))
 
     # retranslateUi
