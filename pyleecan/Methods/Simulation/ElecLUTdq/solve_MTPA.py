@@ -65,7 +65,6 @@ def solve_MTPA(self, LUT, Rs):
     is_loss_model = LUT.simu.loss is not None
 
     while abs(delta_Tem) > delta_Tem_max and niter_Tem < Nmax:
-
         # Refine Id/Iq mesh
         Id_vect = np.linspace(Id_min, Id_max, Nd)
         Iq_vect = np.linspace(Iq_min, Iq_max, Nq)

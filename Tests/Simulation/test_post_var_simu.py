@@ -112,5 +112,4 @@ def test_post_var_simu():
 
 
 if __name__ == "__main__":
-
     test_post_var_simu()

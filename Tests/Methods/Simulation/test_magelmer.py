@@ -46,7 +46,6 @@ mesh_dict = {
 @pytest.mark.SingleOP
 @pytest.mark.periodicity
 def test_ipm_Elmer():
-
     Toyota_Prius = load(join(DATA_DIR, "Machine", "Toyota_Prius.json"))
     Toyota_Prius.stator.slot.H1 = 1e-3
     simu = Simu1(name="test_ipm_Elmer", machine=Toyota_Prius)

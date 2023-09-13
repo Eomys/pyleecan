@@ -21,7 +21,6 @@ def comp_periodicity(self):
     lamination = self.parent
 
     if lamination is not None:
-
         # Call comp_periodicity of Lamination class since squirrel cage periodicity
         # depends on lamination properties: number of pole pairs and number of slots
         per_a, is_aper_a = Lamination.comp_periodicity_spatial(lamination)
@@ -33,5 +32,4 @@ def comp_periodicity(self):
         return per_a, is_aper_a
 
     else:
-
         return None, False

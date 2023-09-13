@@ -15,7 +15,6 @@ TAB = " " * 8
 
 
 def generate_uml(file_path, save_file=None, is_attributes=True, is_methods=True):
-
     # check if the file exist
     if not isfile(file_path):
         raise GenerateUMLMissingFileError(str(file_path) + " doesn't exist")

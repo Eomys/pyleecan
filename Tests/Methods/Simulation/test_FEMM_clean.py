@@ -46,5 +46,4 @@ def test_FEMM_clean():
 
 
 if __name__ == "__main__":
-
     out = test_FEMM_clean()

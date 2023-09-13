@@ -52,7 +52,6 @@ def plot_mesh(
             group_names=None,
         )
     else:
-
         if p is None:
             if save_path is None:
                 try:

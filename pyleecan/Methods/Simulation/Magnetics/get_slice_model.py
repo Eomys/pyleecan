@@ -19,7 +19,6 @@ def get_slice_model(self):
     """
 
     if self.Slice_enforced is None:
-
         machine = self.parent.machine
 
         # Rotor length

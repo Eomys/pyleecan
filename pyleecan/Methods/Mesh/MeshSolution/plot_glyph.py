@@ -89,7 +89,6 @@ def plot_glyph(
             enforced_mesh=enforced_mesh,
         )
     else:
-
         # Init figure
         if p is None:
             if title != "" and win_title == "":

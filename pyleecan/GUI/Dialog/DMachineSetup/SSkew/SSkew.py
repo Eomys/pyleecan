@@ -163,7 +163,6 @@ class SSkew(Ui_SSkew, QWidget):
         """Hide / show widget depending on parameters"""
 
         if self.g_activate.isChecked():
-
             # Show common widgets
             self.cb_type.show()
             self.cb_step.show()

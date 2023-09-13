@@ -270,7 +270,6 @@ class Test_InCurrent_meth(object):
 
 # To run it without pytest
 if __name__ == "__main__":
-
     obj = Test_InCurrent_meth()
 
     # test_dict = idq_test[0]

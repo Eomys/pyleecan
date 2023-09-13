@@ -360,7 +360,7 @@ class Ui_SWinding(object):
         self.out_rot_dir.setToolTip(
             QCoreApplication.translate(
                 "SWinding",
-                u"<qt><nobr>Fundamental field rotation direction when feeding the</nobr> winding with direct AC current</qt>",
+                u"Fundamental field rotation direction when feeding the winding with direct AC current",
                 None,
             )
         )
@@ -393,9 +393,7 @@ class Ui_SWinding(object):
         )
         # if QT_CONFIG(tooltip)
         self.out_Nperw.setToolTip(
-            QCoreApplication.translate(
-                "SWinding", u"<qt><nobr>Winding periodicity</nobr></qt>", None
-            )
+            QCoreApplication.translate("SWinding", u"Winding periodicity", None)
         )
         # endif // QT_CONFIG(tooltip)
         self.out_Nperw.setText(
@@ -404,9 +402,7 @@ class Ui_SWinding(object):
         # if QT_CONFIG(tooltip)
         self.out_Ntspc.setToolTip(
             QCoreApplication.translate(
-                "SWinding",
-                u"<qt><nobr>Winding number of turns in series per phase</nobr></qt>",
-                None,
+                "SWinding", u"Winding number of turns in series per phase", None
             )
         )
         # endif // QT_CONFIG(tooltip)
@@ -432,9 +428,7 @@ class Ui_SWinding(object):
         # if QT_CONFIG(tooltip)
         self.out_Ncspc.setToolTip(
             QCoreApplication.translate(
-                "SWinding",
-                u"<qt><nobr>Number of coils in series per parallel circuit</nobr></qt>",
-                None,
+                "SWinding", u"Number of coils in series per parallel circuit", None
             )
         )
         # endif // QT_CONFIG(tooltip)

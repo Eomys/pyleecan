@@ -6,6 +6,7 @@ from ....Methods.Machine.Winding import WindingError
 from ....Functions.Winding.reverse_wind_mat import reverse_wind_mat
 from ....Functions.Winding.shift_wind_mat import shift_wind_mat
 
+
 # TODO: update docstring -> there should not be elementary circuits since
 #       every bar could have its own unique current
 def comp_connection_mat(self, Zs=None, p=None):

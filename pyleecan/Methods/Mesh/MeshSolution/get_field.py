@@ -101,7 +101,6 @@ def get_field(
 
     ## Check the existing axes and put indice and component in first position to ease transformation.
     if axes_list[0] is not None:
-
         # Swap axis indice position
         if "indice" in axes_list[0]:
             ind_indices0 = axes_list[0].index("indice")
@@ -303,7 +302,6 @@ def apply_normal_center_surf_vectorfield(
     new_ind_otherdim = list(ind_otherdim)
 
     if len(ind_otherdim) == 0:
-
         # Reduce field to requested indices
         if indices is not None:
             field = field.take(indices, axis=ind_indices)
@@ -355,7 +353,6 @@ def apply_normal_center_surf_vectorfield(
         result = zeros(shape_result, dtype=dtype)
 
         for i in range(shape_otherdim[-1]):
-
             field_i = field.take((i), axis=new_ind_otherdim[-1])
 
             ind_other_dim_i = list(new_ind_otherdim)

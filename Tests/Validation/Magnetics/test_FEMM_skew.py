@@ -83,7 +83,6 @@ def test_FEMM_skew():
     linestyles = ["solid", "solid", "dashed", "dashdot", "dotted"]
 
     for out_skew in out_list:
-
         Nstep = out_skew.simu.machine.rotor.skew.Nstep
 
         # Plot skew pattern result

@@ -45,7 +45,6 @@ def element_loop(
 
     # For every type of element (now only Triangle3, TO BE extended)
     for key in mesh.cell:
-
         # mesh.cell[key].interpolation = Interpolation()
         # mesh.cell[key].interpolation.init_key(key=key, nb_gauss=1)
 
@@ -74,7 +73,6 @@ def element_loop(
 
         # Loop on element (elt)
         for elt_indice, elt_number in enumerate(indice):
-
             node_number = mesh_cell_key.get_connectivity(
                 elt_number
             )  # elt nodes numbers, can differ from indices
@@ -107,7 +105,6 @@ def element_loop(
 
             # Loop on edges
             for n in range(nb_node_per_cell):
-
                 # Get current node + next node indices (both needed since pression will be computed on edges because of Green Ostrogradski)
                 node_indice = np.where(mesh.node.indice == node_number[n])[0][0]
 

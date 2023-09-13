@@ -117,7 +117,6 @@ def plot_contour(
             colormap=colormap,
         )
     else:
-
         # Init figure
         if p is None:
             if title != "" and win_title == "":
@@ -174,7 +173,6 @@ def plot_contour(
         ###########
         # Internal animation (cannot be combined with other plots)
         if is_animated:
-
             p.add_text(
                 'Adjust 3D view and press "Q"',
                 position="lower_edge",

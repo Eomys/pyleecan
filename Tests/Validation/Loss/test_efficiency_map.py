@@ -199,7 +199,6 @@ def test_efficiency_map():
     Phidq_MTPA = np.zeros((Nspeed, Nload, 2))
     out_load = list()
     for ii, load_rate in enumerate(load_vect):
-
         if ii > 0 and LUT_enforced is None:
             simu.elec.LUT_enforced = load(path_to_LUT)
 
@@ -497,5 +496,4 @@ def test_efficiency_map():
 
 # To run it without pytest
 if __name__ == "__main__":
-
     out = test_efficiency_map()

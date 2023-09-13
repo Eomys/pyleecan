@@ -45,6 +45,7 @@ from pyleecan.Classes.VentilationTrap import VentilationTrap
 from pyleecan.Classes.HoleMLSRPM import HoleMLSRPM
 from pyleecan.Classes.BoreFlower import BoreFlower
 from pyleecan.Classes.BoreSinePole import BoreSinePole
+from pyleecan.Classes.HoleM60 import HoleM60
 from Tests import SCHEMATICS_PATH
 from os.path import join, isdir, isfile
 from os import makedirs, remove
@@ -327,6 +328,12 @@ hole_test.append(
 hole_test.append(
     {
         "test_obj": VentilationTrap(),
+        "type_add_active": 2,
+    }
+)
+hole_test.append(
+    {
+        "test_obj": HoleM60(),
         "type_add_active": 2,
     }
 )

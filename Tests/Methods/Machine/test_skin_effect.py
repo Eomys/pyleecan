@@ -11,7 +11,8 @@ from pyleecan.definitions import DATA_DIR
 
 def test_skin_effect():
     """Test skin effect on resistance and inductance of conductor
-    Validation case from "Design of Rotating Electrical Machines", J. Pyrhonen, second edition"""
+    Validation case from "Design of Rotating Electrical Machines", J. Pyrhonen, second edition
+    """
 
     ###### Example 5.1 (a) p273
     # Single layer winding, two turns per coil, 6 parallel wires per conductor, no transposition

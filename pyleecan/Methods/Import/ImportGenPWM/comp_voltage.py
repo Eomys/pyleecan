@@ -85,7 +85,6 @@ def comp_voltage(self, Tpwmu, PF_angle=0, is_sin=True, is_norm=True):
             delta_fswi[1::2] = delta_fswi[0::2] * -1
 
         else:
-
             num_slice = round((fswi_max + fswi) / 2 * Tpwmu[-1])
             delta_fswi = np.random.randint(
                 fswi, high=fswi_max + 1, size=num_slice * 2, dtype=int
@@ -118,7 +117,6 @@ def comp_voltage(self, Tpwmu, PF_angle=0, is_sin=True, is_norm=True):
         carrier = signal.resample(carrier, len(Tpwmu))
 
     elif fswimode == 4:  # Random amplitude carrier wave
-
         carrier = Vdc1 / 2 * (self.comp_carrier(Tpwmu))
         num_slice = int(fswi * Tpwmu[-1])
         delta_amp = np.random.randint(
@@ -173,7 +171,6 @@ def comp_voltage(self, Tpwmu, PF_angle=0, is_sin=True, is_norm=True):
         v_pwm[1] = np.where(Vbs < carrier, -amp_dc, amp_dc)
         v_pwm[2] = np.where(Vcs < carrier, -amp_dc, amp_dc)
     else:
-
         V_min = np.amin(
             np.concatenate((Vas[:, None], Vbs[:, None], Vcs[:, None]), axis=1), axis=1
         )

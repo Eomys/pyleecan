@@ -4,7 +4,6 @@ from sys import executable
 try:
     import setuptools
 except ImportError:  # Install setuptools if needed
-
     # run 'pip install setuptools'
     system("{} -m pip install setuptools".format(executable))
 

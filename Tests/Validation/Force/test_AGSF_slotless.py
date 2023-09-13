@@ -70,5 +70,4 @@ def test_AGSF_slotless():
 
 # To run it without pytest
 if __name__ == "__main__":
-
     out = test_AGSF_slotless()

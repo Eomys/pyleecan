@@ -161,7 +161,6 @@ def plot_B_mesh(
     ###########
     # Internal animation (cannot be combined with other plots)
     if is_animated:
-
         p.add_text(
             'Adjust 3D view and press "Q"',
             position="lower_edge",

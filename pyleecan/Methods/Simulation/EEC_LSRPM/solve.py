@@ -83,7 +83,6 @@ def solve_EEC(self, output):
         output.elec.Ida_ref = XI[2]
         output.elec.Iqa_ref = XI[3]
     else:
-
         output.elec.Uds_ref = (
             I_ds * (R_s + ws * L_dss)
             + (I_ds - I_da) * ws * (L_dmu + L_dsa)

@@ -140,5 +140,4 @@ def test_FEMM_Loss_Prius():
 
 # To run it without pytest
 if __name__ == "__main__":
-
     test_FEMM_Loss_Prius()

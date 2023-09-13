@@ -258,9 +258,7 @@ class Ui_PCondType11(object):
         # if QT_CONFIG(tooltip)
         self.in_Lewout.setToolTip(
             QCoreApplication.translate(
-                "PCondType11",
-                u"<qt><nobr>End-winding length on one side for a half-turn</nobr></qt>",
-                None,
+                "PCondType11", u"End-winding length on one side for a half-turn", None
             )
         )
         # endif // QT_CONFIG(tooltip)
@@ -279,9 +277,7 @@ class Ui_PCondType11(object):
         # if QT_CONFIG(tooltip)
         self.lf_Lewout.setToolTip(
             QCoreApplication.translate(
-                "PCondType11",
-                u"<qt><nobr>End-winding length on one side for a half-turn</nobr></qt>",
-                None,
+                "PCondType11", u"End-winding length on one side for a half-turn", None
             )
         )
         # endif // QT_CONFIG(tooltip)
@@ -295,9 +291,7 @@ class Ui_PCondType11(object):
         # if QT_CONFIG(tooltip)
         self.unit_Lewout.setToolTip(
             QCoreApplication.translate(
-                "PCondType11",
-                u"<qt><nobr>End-winding length on one side for a half-turn</nobr></qt>",
-                None,
+                "PCondType11", u"End-winding length on one side for a half-turn", None
             )
         )
         # endif // QT_CONFIG(tooltip)
