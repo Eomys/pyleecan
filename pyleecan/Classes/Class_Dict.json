@@ -3704,8 +3704,7 @@
             "comp_radius",
             "has_magnet",
             "check",
-            "comp_magnetization_dict",
-            "comp_surface"
+            "comp_magnetization_dict"
         ],
         "mother": "HoleMag",
         "name": "HoleM60",
