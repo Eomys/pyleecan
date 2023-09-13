@@ -171,8 +171,6 @@ class Test_SlotW23_meth(object):
             test_obj.slot.H2
         )
         if test_obj.slot.is_cstt_tooth:
-            point_dict = test_obj.slot._comp_point_coordinate()
-
             sp = 2 * pi / test_obj.slot.Zs
 
             a = point_dict["Z3"]
