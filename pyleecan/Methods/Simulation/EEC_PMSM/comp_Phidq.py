@@ -11,7 +11,6 @@ def comp_Phidq(self):
     Idq_dict = self.OP.get_Id_Iq()
 
     if Idq_dict["Id"] is not None and Idq_dict["Iq"] is not None:
-
         if self.Ld is not None and self.Phid_mag is not None:
             # Calculate Phid from available data
             Phid = self.Ld * Idq_dict["Id"] + self.Phid_mag

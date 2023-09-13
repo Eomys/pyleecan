@@ -29,7 +29,6 @@ def comp_maxseg(self, elementsize, maxseg_amp):
         maxseg = MAXSEG_default
 
     else:
-
         angle = self.get_angle(is_deg=True)
         begin = self.get_begin()
         end = self.get_end()

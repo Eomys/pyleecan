@@ -35,7 +35,7 @@ from pyleecan.definitions import DATA_DIR, TEST_DIR
 
 
 def harm1(output):
-    """Return the first torque harmonic """
+    """Return the first torque harmonic"""
     harm_list = output.mag.Tem.get_magnitude_along("freqs")["T_{em}"]
 
     # Return the first torque harmonic

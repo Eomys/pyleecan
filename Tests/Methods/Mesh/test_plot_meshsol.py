@@ -83,7 +83,6 @@ solution = SolutionVector(
 
 @pytest.mark.MeshSol
 def test_plot_glyph():
-
     MSol = MeshSolution(
         mesh=[mesh],
         solution=[solution],
@@ -99,7 +98,6 @@ def test_plot_glyph():
 @pytest.mark.MeshSol
 @pytest.mark.skip
 def test_plot_glyph_animated():
-
     MSol = MeshSolution(
         mesh=[mesh],
         solution=[solution],
@@ -114,7 +112,6 @@ def test_plot_glyph_animated():
 
 @pytest.mark.MeshSol
 def test_plot_deflection():
-
     MSol = MeshSolution(
         mesh=[mesh],
         solution=[solution],
@@ -128,7 +125,6 @@ def test_plot_deflection():
 @pytest.mark.MeshSol
 @pytest.mark.skip
 def test_plot_deflection_animated():
-
     MSol = MeshSolution(
         mesh=[mesh],
         solution=[solution],
@@ -141,7 +137,6 @@ def test_plot_deflection_animated():
 
 
 if __name__ == "__main__":
-
     test_plot_glyph()
     test_plot_glyph_animated()
     test_plot_deflection()

@@ -47,7 +47,6 @@ class WMeshSolution(QWidget):
         self.onSelectionChanged()  # trigger initial plot
 
     def setupUi(self):
-
         self.mainLayout = QVBoxLayout()
         self.subLayout = QHBoxLayout()
 

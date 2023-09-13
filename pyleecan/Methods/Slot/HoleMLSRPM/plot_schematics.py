@@ -148,7 +148,6 @@ def plot_schematics(
 
         # Adding schematics
         if is_add_schematics:
-
             # H1
             line = Segment(
                 (point_dict["Z5"] + point_dict["Z6"]) / 2 * exp(1j * alpha),

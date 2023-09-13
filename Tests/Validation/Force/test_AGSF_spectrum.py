@@ -212,7 +212,6 @@ def test_IPMSM_AGSF_spectrum_sym():
 
 
 if __name__ == "__main__":
-
     out = test_IPMSM_AGSF_spectrum_sym()
     # out2 = test_IPMSM_AGSF_spectrum_no_sym()
 

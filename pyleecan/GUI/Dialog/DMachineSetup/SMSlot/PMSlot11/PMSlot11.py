@@ -75,14 +75,14 @@ class PMSlot11(Gen_PMSlot11, QWidget):
                 # Use schematics on the external without magnet
                 self.img_slot.setPixmap(
                     QPixmap(
-                        u":/images/images/MachineSetup/WMSlot/SlotM11_empty_ext_sta.png"
+                        ":/images/images/MachineSetup/WMSlot/SlotM11_empty_ext_sta.png"
                     )
                 )
             else:
                 # Use schematics on the inner without magnet
                 self.img_slot.setPixmap(
                     QPixmap(
-                        u":/images/images/MachineSetup/WMSlot/SlotM11_empty_int_rot.png"
+                        ":/images/images/MachineSetup/WMSlot/SlotM11_empty_int_rot.png"
                     )
                 )
 

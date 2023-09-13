@@ -125,7 +125,6 @@ def test_dqh_transformation_freq(param_dict):
 
 
 if __name__ == "__main__":
-
     for param_dict in param_list:
         test_dqh_transformation_freq(param_dict)
 

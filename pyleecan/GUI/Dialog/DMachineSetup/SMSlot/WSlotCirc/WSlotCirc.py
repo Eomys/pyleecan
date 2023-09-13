@@ -76,10 +76,10 @@ class WSlotCirc(Gen_WSlotCirc, QWidget):
         # Selecting the right image
         if not self.lamination.is_internal:
             # Use schematics on the external without magnet
-            path = u":/images/images/MachineSetup/WMSlot/SlotCirc_empty_ext_sta"
+            path = ":/images/images/MachineSetup/WMSlot/SlotCirc_empty_ext_sta"
         else:
             # Use schematics on the inner without magnet
-            path = u":/images/images/MachineSetup/WMSlot/SlotCirc_empty_int_rot"
+            path = ":/images/images/MachineSetup/WMSlot/SlotCirc_empty_int_rot"
         # Old/New schematics
         if not self.slot.is_H0_bore:
             path += "_old"

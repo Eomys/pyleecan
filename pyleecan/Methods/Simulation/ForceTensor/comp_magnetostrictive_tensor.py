@@ -51,7 +51,6 @@ def comp_magnetostrictive_tensor(
 
     # Iteration over time step
     for ti in range(Nt_tot):
-
         M_times_M = np.dot(M[:, :, ti], np.transpose(M[:, :, ti]))
 
         M_norm_squared = np.linalg.norm(M[:, :, ti]) ** 2

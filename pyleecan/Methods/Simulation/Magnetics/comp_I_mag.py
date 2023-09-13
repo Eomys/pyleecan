@@ -71,7 +71,6 @@ def comp_I_mag(self, output, Time):
         and rotor.winding is not None
         and rotor.winding.conductor is not None
     ):
-
         # Get Data object
         Ir = output.elec.Ir
 

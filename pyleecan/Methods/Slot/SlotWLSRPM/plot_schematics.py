@@ -120,7 +120,6 @@ def plot_schematics(
 
         # Adding schematics
         if is_add_schematics:
-
             # W1
             line = Segment(
                 point_dict["Z4"] + 0.005 - 1j * 0.002,

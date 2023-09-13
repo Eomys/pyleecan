@@ -143,7 +143,6 @@ test_per_list.append({"machine": SP1, "exp": (1, False, 1, False)})
 @pytest.mark.periodicity
 @pytest.mark.parametrize("test_dict", test_per_list)
 def test_comp_periodicity(test_dict):
-
     if isinstance(test_dict["machine"], str):
         machine_obj = load(join(DATA_DIR, "Machine", test_dict["machine"] + ".json"))
     else:

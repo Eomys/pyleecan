@@ -45,7 +45,6 @@ def perm_coord(
     CellMatDict = dict()
 
     for key in mesh_mat_cell[0]:
-
         cellMat = CellMat(
             connectivity=mesh_mat_cell[0][key],
             nb_cell=len(mesh_mat_cell[0][key]),

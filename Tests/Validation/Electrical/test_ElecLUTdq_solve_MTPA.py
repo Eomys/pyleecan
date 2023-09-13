@@ -295,7 +295,6 @@ def test_ElecLUTdq_solve_MTPA():
 
 # To run it without pytest
 if __name__ == "__main__":
-
     out = test_ElecLUTdq_solve_MTPA()
 
     # ELUT = test_EEC_ELUT_PMSM_calc(n_Id=3, n_Iq=3)

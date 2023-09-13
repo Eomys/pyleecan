@@ -32,7 +32,7 @@ def test_skew_pattern():
     Z2 = Audi_eTron.rotor.get_Zs()
     ssp2 = 2 * pi / Z2
 
-    #%% 2-Stepped linear skew, half stator slot pitch
+    # %% 2-Stepped linear skew, half stator slot pitch
     Toyota_Prius.rotor.skew = Skew(type_skew="linear", is_step=True, Nstep=2, rate=0.5)
 
     angle_step_linear, z_step_linear = Toyota_Prius.rotor.skew.comp_pattern()
@@ -58,7 +58,7 @@ def test_skew_pattern():
         is_show_fig=is_show_fig,
     )
 
-    #%% 3-Stepped linear skew, one stator slot pitch
+    # %% 3-Stepped linear skew, one stator slot pitch
     Toyota_Prius.rotor.skew = Skew(type_skew="linear", is_step=True, Nstep=3, rate=1)
 
     angle_step_linear, z_step_linear = Toyota_Prius.rotor.skew.comp_pattern()
@@ -93,7 +93,7 @@ def test_skew_pattern():
         is_show_fig=is_show_fig,
     )
 
-    #%% 4-Stepped V-shape skew, one stator slot pitch
+    # %% 4-Stepped V-shape skew, one stator slot pitch
     Toyota_Prius.rotor.skew = Skew(type_skew="vshape", is_step=True, Nstep=4, rate=1)
 
     angle_step_vshape, z_step_vshape = Toyota_Prius.rotor.skew.comp_pattern()
@@ -123,7 +123,7 @@ def test_skew_pattern():
         is_show_fig=is_show_fig,
     )
 
-    #%% 3-Stepped V-shape skew, one stator slot pitch
+    # %% 3-Stepped V-shape skew, one stator slot pitch
     Toyota_Prius.rotor.skew = Skew(type_skew="vshape", is_step=True, Nstep=3, rate=1)
 
     angle_step_vshape, z_step_vshape = Toyota_Prius.rotor.skew.comp_pattern()
@@ -158,7 +158,7 @@ def test_skew_pattern():
         is_show_fig=is_show_fig,
     )
 
-    #%% 5-Stepped alternate skew, one stator slot pitch
+    # %% 5-Stepped alternate skew, one stator slot pitch
     Toyota_Prius.rotor.skew = Skew(type_skew="zig-zag", is_step=True, Nstep=5, rate=0.8)
 
     angle_step_alternate, z_step_alternate = Toyota_Prius.rotor.skew.comp_pattern()
@@ -203,7 +203,7 @@ def test_skew_pattern():
         is_show_fig=is_show_fig,
     )
 
-    #%% 2-Stepped UD skew
+    # %% 2-Stepped UD skew
     angle_list = [0.5, -0.2]
     Toyota_Prius.rotor.skew = Skew(
         type_skew="user-defined", is_step=True, angle_list=angle_list
@@ -227,7 +227,7 @@ def test_skew_pattern():
         is_show_fig=is_show_fig,
     )
 
-    #%% Continuous linear skew, one rotor slot pitch
+    # %% Continuous linear skew, one rotor slot pitch
     Audi_eTron.rotor.skew = Skew(type_skew="linear", is_step=False, rate=1)
 
     angle_cont_lin, z_cont_lin = Audi_eTron.rotor.skew.comp_pattern()

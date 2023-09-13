@@ -14,7 +14,6 @@ from Tests import save_plot_path as save_path
 
 @pytest.mark.MeshSol
 def test_perm_coord():
-
     # Generate mesh
     mesh = MeshMat(dimension=3)
     mesh.node = NodeMat()

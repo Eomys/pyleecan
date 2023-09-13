@@ -258,6 +258,5 @@ def test_FEMM_parallelization_meshsolution():
 
 
 if __name__ == "__main__":
-
     out, out2 = test_FEMM_parallelization_mag()
     # out3, out4 = test_FEMM_parallelization_meshsolution()

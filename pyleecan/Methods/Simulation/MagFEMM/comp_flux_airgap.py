@@ -190,7 +190,6 @@ def comp_flux_airgap(self, output, axes_dict, Is_val=None, Ir_val=None):
 
     # Store mesh data & solution
     if self.is_get_meshsolution and B_elem is not None:
-
         # Define axis
         Time = Time.copy()
         meshFEMM[0].sym = sym

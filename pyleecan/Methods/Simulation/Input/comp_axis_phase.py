@@ -32,7 +32,6 @@ def comp_axis_phase(self, lamination, per_a=None, is_apera=None, Phase_in=None):
         name_phase = lamination.get_name_phase()
 
         if len(name_phase) > 1:
-
             if per_a is not None and is_apera is not None:
                 sym_dict = dict()
                 if is_apera:

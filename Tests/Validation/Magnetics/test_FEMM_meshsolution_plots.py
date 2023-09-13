@@ -400,7 +400,6 @@ def test_FEMM_meshsolution_plots_Prius():
 
 # To run it without pytest
 if __name__ == "__main__":
-
     out = test_FEMM_meshsolution_plots_SPMSM()
     # out = test_FEMM_meshsolution_plots_slotless()
     # out = test_FEMM_meshsolution_plots_Prius()

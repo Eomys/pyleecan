@@ -586,7 +586,7 @@ def find_ui_files(ui_folder_path):
     """
 
     file_list = list()
-    for (dirpath, dirnames, filenames) in walk(ui_folder_path):
+    for dirpath, dirnames, filenames in walk(ui_folder_path):
         for file_name in filenames:
             # If the file name end by .ui, add it to the list
             if match(".*\.ui$", file_name):
@@ -601,7 +601,7 @@ def find_py_files():
     """
 
     file_list = list()
-    for (dirpath, dirnames, filenames) in walk(GUI_DIR):
+    for dirpath, dirnames, filenames in walk(GUI_DIR):
         for file_name in filenames:
             # If the file name end by .ui, add it to the list
             if match(".*\.py$", file_name) and file_name != "__init__.py":
