@@ -248,6 +248,11 @@ def plot_schematics(
                 enforced_default_color=MAGNET_COLOR,
             )
 
+        elif type_add_active == 4:  # type_wedge = 1
+            self.plot_active(
+                fig=fig, ax=ax, is_show_fig=False, is_add_wedge=is_add_wedge
+            )
+
         # Zooming and cleaning
         W = (point_dict["Z6"] * exp(1j * hsp)).imag
         Rint = min(point_dict["Z5"].real, point_dict["Z1"].real)

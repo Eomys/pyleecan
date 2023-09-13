@@ -13995,6 +13995,7 @@
             "comp_surface_active",
             "comp_surface_opening",
             "get_surface_active",
+            "set_surface_wedge",
             "get_surface_opening",
             "plot_schematics"
         ],
@@ -14042,6 +14043,16 @@
                 "type": "float",
                 "unit": "m",
                 "value": 0.0122
+            },
+            {
+                "as_dict": "",
+                "desc": "selection type wedge",
+                "max": "",
+                "min": "0",
+                "name": "wedge_type",
+                "type": "int",
+                "unit": "-",
+                "value": 0.0
             },
             {
                 "as_dict": "",

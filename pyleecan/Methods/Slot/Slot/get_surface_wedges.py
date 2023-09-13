@@ -19,11 +19,22 @@ def get_surface_wedges(self, alpha=0, delta=0):
         list of surfaces objects
     """
 
+    if hasattr(self, "wedge_type"):
+        wedge_type = self.wedge_type
+    else:
+        wedge_type = 0
+
     if self.wedge_mat is None:
         return []  # No wedges
     else:
         # By default Wedge is the full opening surface
-        surf_list = self.get_surface_opening()
+        if wedge_type == 0:
+            surf_list = self.get_surface_opening()
+        elif wedge_type == 1:
+            surf_list = self.get_surface_wedge()
+        else:
+            raise NotImplementedError
+
         if self.parent is not None:
             # Adapt label
             lam_lab = self.parent.get_label()

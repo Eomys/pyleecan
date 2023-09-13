@@ -53,4 +53,8 @@ def _comp_line_dict(self):
     line_dict["3-7"] = Segment(Z3, Z7)
     line_dict["7-3"] = Segment(Z7, Z3)
 
+    # closing wedge
+    line_dict["2-8"] = Segment(Z2, Z8)
+    line_dict["9-1"] = Segment(Z9, Z1)
+
     return line_dict
