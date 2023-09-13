@@ -197,8 +197,8 @@ class PWSlot23(Gen_PWSlot23, QWidget):
 
         Parameters
         ----------
-        self : PWSlot11
-            A PWSlot11 object
+        self : PWSlot23
+            A PWSlot23 object
         """
         if self.lf_H1.value() is not None:
             if self.c_H1_unit.currentIndex() == 0:  # m or mm
@@ -242,21 +242,8 @@ class PWSlot23(Gen_PWSlot23, QWidget):
         # Notify the machine GUI that the machine has changed
         self.saveNeeded.emit()
 
-    def set_wedge(self):
-        """Setup the slot wedge according to the GUI"""
-        if self.g_wedge.isChecked():
-            self.w_wedge_mat.show()
-            self.w_wedge_mat.update(self.slot, "wedge_mat", self.material_dict)
-
-        else:
-            self.w_wedge_mat.hide()
-            self.slot.wedge_mat = None
-        # Notify the machine GUI that the machine has changed
-        self.saveNeeded.emit()
-
-        """setup the picture"""
-        # self.set_is_cst_tooth
-
+    # setup slot schematics
+    def pictures(self):
         if self.g_wedge.isChecked():
             if self.is_cst_tooth.isChecked():
                 self.img_slot.setPixmap(
@@ -281,6 +268,22 @@ class PWSlot23(Gen_PWSlot23, QWidget):
                 self.img_slot.setPixmap(
                     QPixmap(":/images/images/MachineSetup/WSlot/SlotW23_wind.png")
                 )
+
+    def set_wedge(self):
+        """Setup the slot wedge according to the GUI"""
+        if self.g_wedge.isChecked():
+            self.w_wedge_mat.show()
+            self.w_wedge_mat.update(self.slot, "wedge_mat", self.material_dict)
+
+        else:
+            self.w_wedge_mat.hide()
+            self.slot.wedge_mat = None
+        # Notify the machine GUI that the machine has changed
+        self.saveNeeded.emit()
+
+        """setup the picture"""
+        self.pictures()
+
         # Notify the machine GUI that the machine has changed
         self.saveNeeded.emit()
 
@@ -320,32 +323,8 @@ class PWSlot23(Gen_PWSlot23, QWidget):
         self.saveNeeded.emit()
 
         """setup the picture"""
-        # self.set_is_cst_tooth
+        self.pictures()
 
-        if self.g_wedge.isChecked():
-            if self.is_cst_tooth.isChecked():
-                self.img_slot.setPixmap(
-                    QPixmap(
-                        ":/images/images/MachineSetup/WSlot/SlotW23_constant_tooth_wedge_full.png"
-                    )
-                )
-
-            else:
-                self.img_slot.setPixmap(
-                    QPixmap(":/images/images/MachineSetup/WSlot/SlotW23_wedge_full.png")
-                )
-
-        else:
-            if self.is_cst_tooth.isChecked():
-                self.img_slot.setPixmap(
-                    QPixmap(
-                        ":/images/images/MachineSetup/WSlot/SlotW23_constant_tooth_wind.png"
-                    )
-                )
-            else:
-                self.img_slot.setPixmap(
-                    QPixmap(":/images/images/MachineSetup/WSlot/SlotW23_wind.png")
-                )
         # Notify the machine GUI that the machine has changed
         self.saveNeeded.emit()
 

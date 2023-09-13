@@ -259,7 +259,7 @@ def plot_schematics_constant_tooth(
                 linestyle=MAIN_LINE_STYLE,
                 linewidth=MAIN_LINE_WIDTH,
             )
-            # Z3 parralel
+            # W3 parralel
             line = Segment(point_dict["Z3"] * exp(1j * sp), point_dict["Z6"])
             line.plot(
                 fig=fig,

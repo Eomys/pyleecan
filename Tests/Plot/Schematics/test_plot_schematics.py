@@ -204,6 +204,13 @@ slot_test.append(
 )
 slot_test.append(
     {
+        "test_obj": SlotW23(),
+        "type_add_active": 1,
+        "method_name": "plot_schematics_constant_tooth",
+    }
+)
+slot_test.append(
+    {
         "test_obj": SlotW24(),
         "type_add_active": 1,
     }
@@ -433,11 +440,6 @@ class Test_plot_schematics(object):
                 remove(file_path)
             print("Generating " + file_name)
             test_obj = test_dict["test_obj"]
-            # Get plot_method
-            if "method_name" in test_dict:
-                plot_meth = getattr(test_obj, test_dict["method_name"])
-            else:
-                plot_meth = getattr(test_obj, "plot_schematics")
             plot_meth(
                 is_default=test_dict["is_default"],
                 is_add_point_label=False,
@@ -458,11 +460,6 @@ class Test_plot_schematics(object):
             # Plot / Save schematics
             print("Generating " + file_name)
             test_obj = test_dict["test_obj"]
-            # Get plot_method
-            if "method_name" in test_dict:
-                plot_meth = getattr(test_obj, test_dict["method_name"])
-            else:
-                plot_meth = getattr(test_obj, "plot_schematics")
             plot_meth(
                 is_default=True,
                 is_add_point_label=False,
@@ -481,11 +478,6 @@ class Test_plot_schematics(object):
             # Plot / Save schematics
             print("Generating " + file_name)
             test_obj = test_dict["test_obj"]
-            # Get plot_method
-            if "method_name" in test_dict:
-                plot_meth = getattr(test_obj, test_dict["method_name"])
-            else:
-                plot_meth = getattr(test_obj, "plot_schematics")
             plot_meth(
                 is_default=True,
                 is_add_point_label=False,
@@ -505,11 +497,6 @@ class Test_plot_schematics(object):
             # Plot / Save
             print("Generating " + file_name)
             test_obj = test_dict["test_obj"]
-            # Get plot_method
-            if "method_name" in test_dict:
-                plot_meth = getattr(test_obj, test_dict["method_name"])
-            else:
-                plot_meth = getattr(test_obj, "plot_schematics")
             plot_meth(
                 is_default=True,
                 is_add_point_label=False,
@@ -585,10 +572,10 @@ if __name__ == "__main__":
     a = Test_plot_schematics()
     # a.test_BoreFlower()
     # a.test_BoreSinePole()
-    a.test_slot(slot_test[12])
-    a.test_slot(slot_test[13])
+    # a.test_slot(slot_test[21])
     # a.test_slot_point(slot_test[20])
-    # for slot in slot_test:
-    #    a.test_slot(slot)
-    #    a.test_slot_point(slot)
+    # a.test_slot_constant_tooth(slot_test[20])
+    for slot in slot_test:
+        a.test_slot(slot)
+        a.test_slot_point(slot)
     print("Done")

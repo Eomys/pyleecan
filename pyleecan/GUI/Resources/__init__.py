@@ -28,4 +28,8 @@ pixmap_dict = {
     "SlotW23_wedge_full.png": ":/images/images/MachineSetup/WSlot/SlotW23_wedge_full.png",
     "SlotW23_constant_tooth_wind": ":/images/images/MachineSetup/WSlot/SlotW23_constant_tooth_wind.png",
     "SlotW23_wind": ":/images/images/MachineSetup/WSlot/SlotW23_wind.png",
+    "SlotW11_constant_tooth_wedge_full": ":images/MachineSetup/WSlot/SlotW11_constant_tooth_wedge_full.png",
+    "SlotW11_wedge_full": ":images/MachineSetup/WSlot/SlotW11_wedge_full.png",
+    "SlotW11_constant_tooth_wind": ":/images/MachineSetup/WSlot/SlotW11_constant_tooth_wind.png",
+    "SlotW11_wind": ":images/MachineSetup/WSlot/SlotW11_wind.png",
 }

@@ -2,7 +2,7 @@
 import pytest
 
 from pyleecan.Classes.SlotW23 import SlotW23
-from numpy import ndarray, arcsin, pi
+from numpy import ndarray, arcsin, pi, exp
 from pyleecan.Classes.LamSlot import LamSlot
 from pyleecan.Classes.Slot import Slot
 from pyleecan.Methods.Slot.SlotW23 import S23_H1rCheckError
@@ -32,6 +32,7 @@ slotW23_test.append(
         "SO_exp": 3.24619910e-05,
         "SW_exp": 3.8834260e-04,
         "H_exp": 0.032438,
+        "name": "is_cstt_tooth",
     }
 )
 
@@ -55,6 +56,7 @@ slotW23_test.append(
         "SO_exp": 3.051338972e-05,
         "SW_exp": 3.906568e-04,
         "H_exp": 0.032455,
+        "name": "is_cstt_tooth",
     }
 )
 
@@ -78,6 +80,7 @@ slotW23_test.append(
         "SO_exp": 2.3990748216427426e-05,
         "SW_exp": 3.906592378431622e-4,
         "H_exp": 0.03195587242929246,
+        "name": "is_cstt_tooth",
     }
 )
 
@@ -103,6 +106,7 @@ slotW23_test.append(
         "SO_exp": 3.1473325433303185e-05,
         "SW_exp": 3.0051906471070296e-04,
         "H_exp": 0.03245132013168321,
+        "name": "is_cstt_tooth",
     }
 )
 
@@ -128,6 +132,7 @@ slotW23_test.append(
         "SO_exp": 1.3238508285680388e-05,
         "SW_exp": 1.4339836465567391e-04,
         "H_exp": 0.011203056674731204,
+        "name": "is_cstt_tooth",
     }
 )
 
@@ -424,6 +429,23 @@ class Test_SlotW23_meth(object):
         msg = "Return " + str(a) + " expected " + str(b)
         assert abs((a - b) / a - 0) < DELTA, msg
 
+    def test_is_cstt_tooth(self):
+        test_obj = lam_CT.copy()
+
+        point_dict = test_obj.slot._comp_point_coordinate()
+
+        sp = 2 * pi / test_obj.slot.Zs
+
+        a = point_dict["Z3"]
+        b = exp(-1j * sp) * point_dict["Z6"]
+        msg = "Return " + str(abs((a - b))) + " expected " + str(test_obj.slot.W3)
+        assert (abs((a - b)) - test_obj.slot.W3) < DELTA, msg
+
+        a = point_dict["Z4"]
+        b = exp(-1j * sp) * point_dict["Z5"]
+        msg = "Return " + str(abs((a - b))) + " expected " + str(test_obj.slot.W3)
+        assert (abs((a - b)) - test_obj.slot.W3) < DELTA, msg
+
 
 if __name__ == "__main__":
     a = Test_SlotW23_meth()
@@ -441,4 +463,5 @@ if __name__ == "__main__":
         a.test_comp_surface_change_W3()
         a.test_check_error()
         a.test_get_H1()
+        a.test_is_cstt_tooth()
         print("Done")
