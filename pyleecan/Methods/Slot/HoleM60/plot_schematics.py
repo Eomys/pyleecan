@@ -307,66 +307,6 @@ def plot_schematics(
             linestyle=MAIN_LINE_STYLE,
             linewidth=MAIN_LINE_WIDTH,
         )
-        # # H1 radius
-        # line = Arc1(
-        #     begin=(Rbo - self.H1) * exp(-1j * pi / 2 * 0.9) * exp(1j * alpha),
-        #     end=(Rbo - self.H1) * exp(1j * pi / 2 * 0.9) * exp(1j * alpha),
-        #     radius=Rbo - self.H1,
-        #     is_trigo_direction=True,
-        # )
-        # line.plot(
-        #     fig=fig,
-        #     ax=ax,
-        #     color=MAIN_LINE_COLOR,
-        #     linestyle=MAIN_LINE_STYLE,
-        #     linewidth=MAIN_LINE_WIDTH,
-        # )
-        # # W2 lines
-        # line = Segment(
-        #     point_dict["Z9"] * exp(1j * alpha),
-        #     point_dict["Z8"] * exp(1j * alpha),
-        # )
-        # line.plot(
-        #     fig=fig,
-        #     ax=ax,
-        #     color=MAIN_LINE_COLOR,
-        #     linestyle=MAIN_LINE_STYLE,
-        #     linewidth=MAIN_LINE_WIDTH,
-        # )
-        # line = Segment(
-        #     point_dict["Z9s"] * exp(1j * alpha),
-        #     point_dict["Z8s"] * exp(1j * alpha),
-        # )
-        # line.plot(
-        #     fig=fig,
-        #     ax=ax,
-        #     color=MAIN_LINE_COLOR,
-        #     linestyle=MAIN_LINE_STYLE,
-        #     linewidth=MAIN_LINE_WIDTH,
-        # )
-        # # Zc0 lines
-        # line = Segment(
-        #     point_dict["Zc0"] * exp(1j * alpha),
-        #     point_dict["Z4"] * exp(1j * alpha),
-        # )
-        # line.plot(
-        #     fig=fig,
-        #     ax=ax,
-        #     color=MAIN_LINE_COLOR,
-        #     linestyle=MAIN_LINE_STYLE,
-        #     linewidth=MAIN_LINE_WIDTH,
-        # )
-        # line = Segment(
-        #     point_dict["Zc0"] * exp(1j * alpha),
-        #     point_dict["Z4s"] * exp(1j * alpha),
-        # )
-        # line.plot(
-        #     fig=fig,
-        #     ax=ax,
-        #     color=MAIN_LINE_COLOR,
-        #     linestyle=MAIN_LINE_STYLE,
-        #     linewidth=MAIN_LINE_WIDTH,
-        # )
 
     # Zooming and cleaning
     W = (point_dict["Z"] * exp(1j * sp)).imag

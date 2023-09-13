@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 from numpy import pi, angle
-import matplotlib.pyplot as plt
 import pytest
 from pyleecan.Classes.Hole import Hole
 from pyleecan.Classes.LamHole import LamHole
@@ -15,9 +14,9 @@ test_obj.hole = list()
 test_obj.hole.append(
     HoleM60(
         Zh=4,
-        W0=pi * 0.8,
-        W1=10e-3,
-        W2=10e-2,
+        W0=pi * 0.2,
+        W1=1e-3,
+        W2=15e-2,
         W3=5e-3,
         H0=3e-3,
         H1=5e-3,
@@ -32,7 +31,7 @@ HoleM60_test.append(
         "carac": "no magnet",
         "Rmin_exp": 0.7067731287283922,
         "Rmax_exp": 0.7458565593569103,
-        "S_exp": 0.0005961365913508596,
+        "S_exp": 0.0008961365913508546,
         "SM_exp": 0,
         "hasmagnet_exp": False,
     }
@@ -44,12 +43,12 @@ test_obj.hole = list()
 test_obj.hole.append(
     HoleM60(
         Zh=4,
-        W0=pi * 0.8,
+        W0=pi * 0.4,
         W1=10e-3,
         W2=10e-2,
-        W3=5e-3,
+        W3=1e-3,
         H0=3e-3,
-        H1=5e-3,
+        H1=2e-3,
     )
 )
 
@@ -71,11 +70,11 @@ test_obj.hole = list()
 test_obj.hole.append(
     HoleM60(
         Zh=4,
-        W0=pi * 0.8,
+        W0=pi * 0.6,
         W1=10e-3,
         W2=10e-2,
         W3=5e-3,
-        H0=3e-3,
+        H0=6e-3,
         H1=5e-3,
         magnet_1=None,
     )
@@ -87,8 +86,8 @@ HoleM60_test.append(
         "carac": "magnet_0",
         "Rmin_exp": 0.7067731287283922,
         "Rmax_exp": 0.7458565593569103,
-        "S_exp": 0.0005961365913508596,
-        "SM_exp": 3e-5,
+        "S_exp": 0.0011845463654034398,
+        "SM_exp": 6e-05,
         "hasmagnet_exp": True,
     }
 )
