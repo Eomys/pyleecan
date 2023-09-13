@@ -5,7 +5,7 @@ from multiprocessing import cpu_count
 import pytest
 from Tests import save_validation_path as save_path
 import matplotlib.pyplot as plt
-from numpy import exp, sqrt, pi, max as np_max
+from numpy import exp, sqrt, pi, max as np_max, ones
 from numpy.testing import assert_array_almost_equal
 
 from pyleecan.Classes.OPdq import OPdq
@@ -18,6 +18,7 @@ from pyleecan.Classes.VentilationPolar import VentilationPolar
 from pyleecan.Classes.SlotCirc import SlotCirc
 from pyleecan.Classes.SlotM10 import SlotM10
 from pyleecan.Classes.SlotM18 import SlotM18
+from pyleecan.Classes.SlotM18_2 import SlotM18_2
 from pyleecan.Classes.NotchEvenDist import NotchEvenDist
 from pyleecan.Classes.BoreFlower import BoreFlower
 from pyleecan.Classes.MagFEMM import MagFEMM
@@ -28,7 +29,7 @@ from pyleecan.Functions.Plot import dict_2D
 
 from pyleecan.definitions import DATA_DIR
 
-
+# python -m pytest ./Tests/Validation/Magnetics/test_FEMM_periodicity.py
 @pytest.mark.long_5s
 @pytest.mark.long_1m
 @pytest.mark.MagFEMM
@@ -780,11 +781,136 @@ def test_Ring_Magnet():
     return out, out2
 
 
+def test_Ring_Magnet_2():
+    """Check that a machine with 2 Ring magnet can be simulated with sym"""
+    machine = load(join(DATA_DIR, "Machine", "SPMSM_001.json"))
+    Hmag = machine.rotor.slot.Hmag
+    machine.rotor.slot = SlotM18_2(init_dict=machine.rotor.slot.as_dict())
+    machine.rotor.slot.Hmag_bore = machine.rotor.Rext - machine.rotor.Rint - Hmag
+    machine.rotor.slot.Hmag_gap = Hmag
+    machine.rotor.Rext = machine.rotor.Rint
+
+    mur_lin = machine.rotor.magnet.mat_type.mag.mur_lin
+    Brm20 = machine.rotor.magnet.mat_type.mag.Brm20
+    machine.rotor.mur_lin_matrix= ones((2,1,8)) * mur_lin
+    machine.rotor.mur_lin_matrix[0,0,:] = mur_lin/2
+
+    # machine.plot(is_max_sym=True)
+    # plt.show()
+
+    mag_list = machine.rotor.get_all_mag_obj()
+    assert len(mag_list) == 2
+    assert mag_list[0].mat_type.name == "Magnet_1"
+    assert mag_list[0].mat_type.mag.mur_lin == mur_lin/2
+    assert mag_list[0].mat_type.mag.Brm20 == Brm20
+    assert mag_list[1].mat_type.name == "Magnet_2"
+    assert mag_list[1].mat_type.mag.mur_lin == mur_lin
+    assert mag_list[1].mat_type.mag.Brm20 == Brm20
+
+    machine.rotor.Brm20_matrix= ones((2,1,8)) * Brm20
+    machine.rotor.Brm20_matrix[0,0,:] = Brm20/4
+
+    mag_list = machine.rotor.get_all_mag_obj()
+    assert len(mag_list) == 2
+    assert mag_list[0].mat_type.name == "Magnet_1"
+    assert mag_list[0].mat_type.mag.mur_lin == mur_lin/2
+    assert mag_list[0].mat_type.mag.Brm20 == Brm20/4
+    assert mag_list[1].mat_type.name == "Magnet_2"
+    assert mag_list[1].mat_type.mag.mur_lin == mur_lin
+    assert mag_list[1].mat_type.mag.Brm20 == Brm20
+
+    simu = Simu1(name="test_FEMM_periodicity_RingMag", machine=machine)
+
+    # Definition of the enforced output of the electrical module
+    I0_rms = 250 / sqrt(2)
+    Phi0 = 140 * pi / 180  # Maximum Torque Per Amp
+
+    Id_ref = (I0_rms * exp(1j * Phi0)).real
+    Iq_ref = (I0_rms * exp(1j * Phi0)).imag
+
+    simu.input = InputCurrent(
+        OP=OPdq(Id_ref=Id_ref, Iq_ref=Iq_ref, N0=1000),
+        Na_tot=252 * 9,
+        Nt_tot=8 * 3,
+    )
+
+    # Definition of the magnetic simulation: with periodicity
+    simu.mag = MagFEMM(
+        type_BH_stator=1,
+        type_BH_rotor=1,
+        is_periodicity_a=False,
+        is_periodicity_t=True,
+        nb_worker=1,  # cpu_count()
+        is_fast_draw=True,
+        # Kmesh_fineness=2,
+    )
+    simu.force = ForceMT()
+
+    # Definition of the magnetic simulation: no periodicity
+    simu2 = simu.copy()
+    simu.name = simu.name + "_no_sym"
+    simu2.name = simu2.name + "_sym"
+    simu2.mag.is_periodicity_a = True
+
+    # Run simulations
+    out = simu.run()
+
+    out2 = simu2.run()
+
+    # Plot the result
+    out.mag.B.plot_2D_Data(
+        "time",
+        "angle[0]{°}",
+        data_list=[out2.mag.B],
+        legend_list=["Periodic", "Full"],
+        save_path=join(save_path, simu.name + "_B_time.png"),
+        is_show_fig=False,
+        **dict_2D
+    )
+
+    out.mag.B.plot_2D_Data(
+        "angle{°}",
+        "time[1]",
+        data_list=[out2.mag.B],
+        legend_list=["Periodic", "Full"],
+        save_path=join(save_path, simu.name + "_B_space.png"),
+        is_show_fig=False,
+        **dict_2D
+    )
+
+    out.mag.Tem.plot_2D_Data(
+        "time",
+        data_list=[out2.mag.Tem],
+        legend_list=["Periodic", "Full"],
+        save_path=join(save_path, simu.name + "_Tem_time.png"),
+        is_show_fig=False,
+        **dict_2D
+    )
+
+    Bflux = out.mag.B
+    arg_list = ["time"]
+    result = Bflux.get_rphiz_along(*arg_list)
+    Brad = result["radial"]
+    time = result["time"]
+
+    Bflux2 = out2.mag.B
+    arg_list = ["time"]
+    result2 = Bflux2.get_rphiz_along(*arg_list)
+    Brad2 = result2["radial"]
+    time2 = result2["time"]
+
+    # Compare both simu
+    assert_array_almost_equal((Brad - Brad2) / Brad2, 0, decimal=2)
+    assert_array_almost_equal(time, time2, decimal=6)
+
+    return out, out2
+
 # To run it without pytest
 if __name__ == "__main__":
-    test_Bore_sym()
-    out, out2 = test_FEMM_periodicity_angle()
+    # test_Bore_sym()
+    # out, out2 = test_FEMM_periodicity_angle()
     # out3, out4 = test_FEMM_periodicity_time()
     # out5, out6 = test_FEMM_periodicity_time_no_periodicity_a()
-    # test_Ring_Magnet()
+    test_Ring_Magnet()
+    test_Ring_Magnet_2()
     print("Done")

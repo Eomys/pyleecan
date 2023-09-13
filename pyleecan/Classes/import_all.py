@@ -206,6 +206,7 @@ from ..Classes.SlotM15 import SlotM15
 from ..Classes.SlotM16 import SlotM16
 from ..Classes.SlotM17 import SlotM17
 from ..Classes.SlotM18 import SlotM18
+from ..Classes.SlotM18_2 import SlotM18_2
 from ..Classes.SlotM19 import SlotM19
 from ..Classes.SlotUD import SlotUD
 from ..Classes.SlotUD2 import SlotUD2
