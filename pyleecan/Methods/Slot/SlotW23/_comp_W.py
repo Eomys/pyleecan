@@ -26,9 +26,9 @@ def _comp_W(self):
 
     # H0 and H1 are radial
     if self.is_outwards():
-        R1 = Rbo + self.H1 + self.H0
+        R1 = Rbo + self.get_H1() + self.H0
     else:
-        R1 = Rbo - self.H1 - self.H0
+        R1 = Rbo - self.get_H1() - self.H0
 
     alpha_T1 = float(arcsin(self.W3 / (2 * R1)))
     alpha_S1 = slot_pitch - 2 * alpha_T1

@@ -24,4 +24,8 @@ pixmap_dict = {
     "Cond11_single": ":/images/images/MachineSetup/WindParam/CondType11_single.png",
     "Cond12": ":/images/images/MachineSetup/WindParam/CondType12.png",
     "Cond12_single": ":/images/images/MachineSetup/WindParam/CondType12_single.png",
+    "SlotW23_constant_tooth_wedge_full": "/images/images/MachineSetup/WSlot/SlotW23_constant_tooth_wedge_full.png",
+    "SlotW23_wedge_full.png": ":/images/images/MachineSetup/WSlot/SlotW23_wedge_full.png",
+    "SlotW23_constant_tooth_wind": ":/images/images/MachineSetup/WSlot/SlotW23_constant_tooth_wind.png",
+    "SlotW23_wind": ":/images/images/MachineSetup/WSlot/SlotW23_wind.png",
 }

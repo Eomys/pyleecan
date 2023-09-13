@@ -134,8 +134,10 @@ class Test_Magnet_Type_19_meth(object):
         W0 = test_obj.slot.W0
         W1 = test_obj.slot.W1
         Hmag = test_obj.slot.Hmag
+        Rbo = test_obj.slot.get_Rbo()
 
-        assert abs(self.Rbo - (Z2 + Z3) / 2) == self.Hmag
+        msg = "Return " + str(Rbo - (Z2 + Z3) / 2) + "expected " + str(Hmag)
+        assert abs(Rbo - (Z2 + Z3) / 2) == pytest.approx(Hmag, rel=DELTA), msg
         assert abs(Z1 - Z4) == pytest.approx(W1, rel=DELTA)
         assert abs(Z2 - Z3) == pytest.approx(W0, rel=DELTA)
 
@@ -144,12 +146,12 @@ if __name__ == "__main__":
     a = Test_Magnet_Type_19_meth()
     for ii, test_dict in enumerate(Mag19_test):
         print("Running test for Slot[" + str(ii) + "]")
-        a.test_schematics(test_dict)
+
         a.test_comp_surface(test_dict)
         a.test_comp_surface_active(test_dict)
         a.test_comp_height(test_dict)
         a.test_comp_height_active(test_dict)
         a.test_comp_angle_opening(test_dict)
-        a.test_schematics(test_dict)
+        a.test_comp_point_coordinate(test_dict)
 
         print("Done")

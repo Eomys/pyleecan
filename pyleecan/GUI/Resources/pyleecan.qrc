@@ -1,5 +1,8 @@
 <RCC>
   <qresource prefix="/images">
+    <file>images/MachineSetup/WSlot/SlotW23_constant_tooth_empty.png</file>
+    <file>images/MachineSetup/WSlot/SlotW23_constant_tooth_wedge_full.png</file>
+    <file>images/MachineSetup/WSlot/SlotW23_constant_tooth_wind.png</file>
     <file>images/icon/help_16.png</file>
     <file>images/icon/search.png</file>
     <file>images/icon/check.png</file>
