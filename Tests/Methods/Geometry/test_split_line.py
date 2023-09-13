@@ -40,7 +40,6 @@ split_test.append(
 
 @pytest.mark.parametrize("test_dict", split_test)
 def test_split_line(test_dict):
-
     res_top_surf, res_bot_surf = test_dict["surf"].split_line(
         Z1=test_dict["Z1"],
         Z2=test_dict["Z2"],

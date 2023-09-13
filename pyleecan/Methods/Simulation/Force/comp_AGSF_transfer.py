@@ -43,8 +43,8 @@ def comp_AGSF_transfer(self, output, rnoise=None):
     Ratio = Rag / Rsbo
 
     # Transfer coefficients Eq. (46)
-    Sn = (Ratio ** 2) * (power(Ratio, wavenumber) + power(Ratio, -wavenumber)) / 2
-    Cn = (Ratio ** 2) * (power(Ratio, wavenumber) - power(Ratio, -wavenumber)) / 2
+    Sn = (Ratio**2) * (power(Ratio, wavenumber) + power(Ratio, -wavenumber)) / 2
+    Cn = (Ratio**2) * (power(Ratio, wavenumber) - power(Ratio, -wavenumber)) / 2
 
     # Noise filtering (useful with magnetic FEA)
     if rnoise is not None:

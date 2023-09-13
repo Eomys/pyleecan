@@ -58,7 +58,8 @@ class ParamExplorerInterval(ParamExplorer):
         get_value = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use ParamExplorerInterval method get_value: " + str(get_value)
+                    "Can't use ParamExplorerInterval method get_value: "
+                    + str(get_value)
                 )
             )
         )
@@ -102,7 +103,21 @@ class ParamExplorerInterval(ParamExplorer):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, min_value=0, max_value=1, N=4, type_value_gen=0, type_value=0, name="", symbol="", unit="", setter=None, getter=None, init_dict = None, init_str = None):
+    def __init__(
+        self,
+        min_value=0,
+        max_value=1,
+        N=4,
+        type_value_gen=0,
+        type_value=0,
+        name="",
+        symbol="",
+        unit="",
+        setter=None,
+        getter=None,
+        init_dict=None,
+        init_str=None,
+    ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -145,7 +160,9 @@ class ParamExplorerInterval(ParamExplorer):
         self.type_value_gen = type_value_gen
         self.type_value = type_value
         # Call ParamExplorer init
-        super(ParamExplorerInterval, self).__init__(name=name, symbol=symbol, unit=unit, setter=setter, getter=getter)
+        super(ParamExplorerInterval, self).__init__(
+            name=name, symbol=symbol, unit=unit, setter=setter, getter=getter
+        )
         # The class is frozen (in ParamExplorer init), for now it's impossible to
         # add new properties
 
@@ -158,7 +175,9 @@ class ParamExplorerInterval(ParamExplorer):
         ParamExplorerInterval_str += "min_value = " + str(self.min_value) + linesep
         ParamExplorerInterval_str += "max_value = " + str(self.max_value) + linesep
         ParamExplorerInterval_str += "N = " + str(self.N) + linesep
-        ParamExplorerInterval_str += "type_value_gen = " + str(self.type_value_gen) + linesep
+        ParamExplorerInterval_str += (
+            "type_value_gen = " + str(self.type_value_gen) + linesep
+        )
         ParamExplorerInterval_str += "type_value = " + str(self.type_value) + linesep
         return ParamExplorerInterval_str
 
@@ -183,53 +202,91 @@ class ParamExplorerInterval(ParamExplorer):
             return False
         return True
 
-    def compare(self, other, name='self', ignore_list=None, is_add_value=False):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
             ignore_list = list()
         if type(other) != type(self):
-            return ['type('+name+')']
+            return ["type(" + name + ")"]
         diff_list = list()
 
         # Check the properties inherited from ParamExplorer
-        diff_list.extend(super(ParamExplorerInterval, self).compare(other,name=name, ignore_list=ignore_list, is_add_value=is_add_value))
-        if other._min_value is not None and self._min_value is not None and isnan(other._min_value) and isnan(self._min_value):
+        diff_list.extend(
+            super(ParamExplorerInterval, self).compare(
+                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
+            )
+        )
+        if (
+            other._min_value is not None
+            and self._min_value is not None
+            and isnan(other._min_value)
+            and isnan(self._min_value)
+        ):
             pass
         elif other._min_value != self._min_value:
             if is_add_value:
-                val_str = ' (self='+str(self._min_value)+', other='+str(other._min_value)+')'
-                diff_list.append(name+'.min_value'+val_str)
+                val_str = (
+                    " (self="
+                    + str(self._min_value)
+                    + ", other="
+                    + str(other._min_value)
+                    + ")"
+                )
+                diff_list.append(name + ".min_value" + val_str)
             else:
-                diff_list.append(name+'.min_value')
-        if other._max_value is not None and self._max_value is not None and isnan(other._max_value) and isnan(self._max_value):
+                diff_list.append(name + ".min_value")
+        if (
+            other._max_value is not None
+            and self._max_value is not None
+            and isnan(other._max_value)
+            and isnan(self._max_value)
+        ):
             pass
         elif other._max_value != self._max_value:
             if is_add_value:
-                val_str = ' (self='+str(self._max_value)+', other='+str(other._max_value)+')'
-                diff_list.append(name+'.max_value'+val_str)
+                val_str = (
+                    " (self="
+                    + str(self._max_value)
+                    + ", other="
+                    + str(other._max_value)
+                    + ")"
+                )
+                diff_list.append(name + ".max_value" + val_str)
             else:
-                diff_list.append(name+'.max_value')
+                diff_list.append(name + ".max_value")
         if other._N != self._N:
             if is_add_value:
-                val_str = ' (self='+str(self._N)+', other='+str(other._N)+')'
-                diff_list.append(name+'.N'+val_str)
+                val_str = " (self=" + str(self._N) + ", other=" + str(other._N) + ")"
+                diff_list.append(name + ".N" + val_str)
             else:
-                diff_list.append(name+'.N')
+                diff_list.append(name + ".N")
         if other._type_value_gen != self._type_value_gen:
             if is_add_value:
-                val_str = ' (self='+str(self._type_value_gen)+', other='+str(other._type_value_gen)+')'
-                diff_list.append(name+'.type_value_gen'+val_str)
+                val_str = (
+                    " (self="
+                    + str(self._type_value_gen)
+                    + ", other="
+                    + str(other._type_value_gen)
+                    + ")"
+                )
+                diff_list.append(name + ".type_value_gen" + val_str)
             else:
-                diff_list.append(name+'.type_value_gen')
+                diff_list.append(name + ".type_value_gen")
         if other._type_value != self._type_value:
             if is_add_value:
-                val_str = ' (self='+str(self._type_value)+', other='+str(other._type_value)+')'
-                diff_list.append(name+'.type_value'+val_str)
+                val_str = (
+                    " (self="
+                    + str(self._type_value)
+                    + ", other="
+                    + str(other._type_value)
+                    + ")"
+                )
+                diff_list.append(name + ".type_value" + val_str)
             else:
-                diff_list.append(name+'.type_value')
+                diff_list.append(name + ".type_value")
         # Filter ignore differences
-        diff_list = list(filter(lambda x : x not in ignore_list, diff_list))
+        diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
 
     def __sizeof__(self):
@@ -253,12 +310,16 @@ class ParamExplorerInterval(ParamExplorer):
             How to handle ndarray (0: tolist, 1: copy, 2: nothing)
         keep_function : bool
             True to keep the function object, else return str
-        Optional keyword input parameter is for internal use only 
+        Optional keyword input parameter is for internal use only
         and may prevent json serializability.
         """
 
         # Get the properties inherited from ParamExplorer
-        ParamExplorerInterval_dict = super(ParamExplorerInterval, self).as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs)
+        ParamExplorerInterval_dict = super(ParamExplorerInterval, self).as_dict(
+            type_handle_ndarray=type_handle_ndarray,
+            keep_function=keep_function,
+            **kwargs
+        )
         ParamExplorerInterval_dict["min_value"] = self.min_value
         ParamExplorerInterval_dict["max_value"] = self.max_value
         ParamExplorerInterval_dict["N"] = self.N
@@ -268,7 +329,6 @@ class ParamExplorerInterval(ParamExplorer):
         # Overwrite the mother class name
         ParamExplorerInterval_dict["__class__"] = "ParamExplorerInterval"
         return ParamExplorerInterval_dict
-
 
     def copy(self):
         """Creates a deepcopy of the object"""
@@ -291,7 +351,18 @@ class ParamExplorerInterval(ParamExplorer):
         else:
             getter_val = self._getter_func
         # Creates new object of the same type with the copied properties
-        obj_copy = type(self)(min_value=min_value_val,max_value=max_value_val,N=N_val,type_value_gen=type_value_gen_val,type_value=type_value_val,name=name_val,symbol=symbol_val,unit=unit_val,setter=setter_val,getter=getter_val)
+        obj_copy = type(self)(
+            min_value=min_value_val,
+            max_value=max_value_val,
+            N=N_val,
+            type_value_gen=type_value_gen_val,
+            type_value=type_value_val,
+            name=name_val,
+            symbol=symbol_val,
+            unit=unit_val,
+            setter=setter_val,
+            getter=getter_val,
+        )
         return obj_copy
 
     def _set_None(self):
@@ -317,7 +388,7 @@ class ParamExplorerInterval(ParamExplorer):
     min_value = property(
         fget=_get_min_value,
         fset=_set_min_value,
-        doc=u"""Minumum value of the interval
+        doc="""Minumum value of the interval
 
         :Type: float
         """,
@@ -335,7 +406,7 @@ class ParamExplorerInterval(ParamExplorer):
     max_value = property(
         fget=_get_max_value,
         fset=_set_max_value,
-        doc=u"""Maximum value of the interval
+        doc="""Maximum value of the interval
 
         :Type: float
         """,
@@ -353,7 +424,7 @@ class ParamExplorerInterval(ParamExplorer):
     N = property(
         fget=_get_N,
         fset=_set_N,
-        doc=u"""Number of value to take in the interval
+        doc="""Number of value to take in the interval
 
         :Type: int
         :min: 2
@@ -372,7 +443,7 @@ class ParamExplorerInterval(ParamExplorer):
     type_value_gen = property(
         fget=_get_type_value_gen,
         fset=_set_type_value_gen,
-        doc=u"""How to generate the value list. 0: linspace, 1: random (Not available yet)
+        doc="""How to generate the value list. 0: linspace, 1: random (Not available yet)
 
         :Type: int
         :min: 0
@@ -392,7 +463,7 @@ class ParamExplorerInterval(ParamExplorer):
     type_value = property(
         fget=_get_type_value,
         fset=_set_type_value,
-        doc=u"""Type of the value: 0:float, 1:int
+        doc="""Type of the value: 0:float, 1:int
 
         :Type: int
         :min: 0

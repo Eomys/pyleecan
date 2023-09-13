@@ -93,7 +93,19 @@ class Electrical(FrozenClass):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, eec=None, logger_name="Pyleecan.Electrical", freq_max=40000, LUT_enforced=None, Tsta=20, Trot=20, type_skin_effect=1, is_skin_effect_inductance=True, init_dict = None, init_str = None):
+    def __init__(
+        self,
+        eec=None,
+        logger_name="Pyleecan.Electrical",
+        freq_max=40000,
+        LUT_enforced=None,
+        Tsta=20,
+        Trot=20,
+        type_skin_effect=1,
+        is_skin_effect_inductance=True,
+        init_dict=None,
+        init_str=None,
+    ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -149,20 +161,28 @@ class Electrical(FrozenClass):
             Electrical_str += "parent = " + str(type(self.parent)) + " object" + linesep
         if self.eec is not None:
             tmp = self.eec.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            Electrical_str += "eec = "+ tmp
+            Electrical_str += "eec = " + tmp
         else:
             Electrical_str += "eec = None" + linesep + linesep
         Electrical_str += 'logger_name = "' + str(self.logger_name) + '"' + linesep
         Electrical_str += "freq_max = " + str(self.freq_max) + linesep
         if self.LUT_enforced is not None:
-            tmp = self.LUT_enforced.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            Electrical_str += "LUT_enforced = "+ tmp
+            tmp = (
+                self.LUT_enforced.__str__()
+                .replace(linesep, linesep + "\t")
+                .rstrip("\t")
+            )
+            Electrical_str += "LUT_enforced = " + tmp
         else:
             Electrical_str += "LUT_enforced = None" + linesep + linesep
         Electrical_str += "Tsta = " + str(self.Tsta) + linesep
         Electrical_str += "Trot = " + str(self.Trot) + linesep
         Electrical_str += "type_skin_effect = " + str(self.type_skin_effect) + linesep
-        Electrical_str += "is_skin_effect_inductance = " + str(self.is_skin_effect_inductance) + linesep
+        Electrical_str += (
+            "is_skin_effect_inductance = "
+            + str(self.is_skin_effect_inductance)
+            + linesep
+        )
         return Electrical_str
 
     def __eq__(self, other):
@@ -188,66 +208,127 @@ class Electrical(FrozenClass):
             return False
         return True
 
-    def compare(self, other, name='self', ignore_list=None, is_add_value=False):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
             ignore_list = list()
         if type(other) != type(self):
-            return ['type('+name+')']
+            return ["type(" + name + ")"]
         diff_list = list()
-        if (other.eec is None and self.eec is not None) or (other.eec is not None and self.eec is None):
-            diff_list.append(name+'.eec None mismatch')
+        if (other.eec is None and self.eec is not None) or (
+            other.eec is not None and self.eec is None
+        ):
+            diff_list.append(name + ".eec None mismatch")
         elif self.eec is not None:
-            diff_list.extend(self.eec.compare(other.eec,name=name+'.eec',ignore_list=ignore_list,is_add_value=is_add_value))
+            diff_list.extend(
+                self.eec.compare(
+                    other.eec,
+                    name=name + ".eec",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
+            )
         if other._logger_name != self._logger_name:
             if is_add_value:
-                val_str = ' (self='+str(self._logger_name)+', other='+str(other._logger_name)+')'
-                diff_list.append(name+'.logger_name'+val_str)
+                val_str = (
+                    " (self="
+                    + str(self._logger_name)
+                    + ", other="
+                    + str(other._logger_name)
+                    + ")"
+                )
+                diff_list.append(name + ".logger_name" + val_str)
             else:
-                diff_list.append(name+'.logger_name')
-        if other._freq_max is not None and self._freq_max is not None and isnan(other._freq_max) and isnan(self._freq_max):
+                diff_list.append(name + ".logger_name")
+        if (
+            other._freq_max is not None
+            and self._freq_max is not None
+            and isnan(other._freq_max)
+            and isnan(self._freq_max)
+        ):
             pass
         elif other._freq_max != self._freq_max:
             if is_add_value:
-                val_str = ' (self='+str(self._freq_max)+', other='+str(other._freq_max)+')'
-                diff_list.append(name+'.freq_max'+val_str)
+                val_str = (
+                    " (self="
+                    + str(self._freq_max)
+                    + ", other="
+                    + str(other._freq_max)
+                    + ")"
+                )
+                diff_list.append(name + ".freq_max" + val_str)
             else:
-                diff_list.append(name+'.freq_max')
-        if (other.LUT_enforced is None and self.LUT_enforced is not None) or (other.LUT_enforced is not None and self.LUT_enforced is None):
-            diff_list.append(name+'.LUT_enforced None mismatch')
+                diff_list.append(name + ".freq_max")
+        if (other.LUT_enforced is None and self.LUT_enforced is not None) or (
+            other.LUT_enforced is not None and self.LUT_enforced is None
+        ):
+            diff_list.append(name + ".LUT_enforced None mismatch")
         elif self.LUT_enforced is not None:
-            diff_list.extend(self.LUT_enforced.compare(other.LUT_enforced,name=name+'.LUT_enforced',ignore_list=ignore_list,is_add_value=is_add_value))
-        if other._Tsta is not None and self._Tsta is not None and isnan(other._Tsta) and isnan(self._Tsta):
+            diff_list.extend(
+                self.LUT_enforced.compare(
+                    other.LUT_enforced,
+                    name=name + ".LUT_enforced",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
+            )
+        if (
+            other._Tsta is not None
+            and self._Tsta is not None
+            and isnan(other._Tsta)
+            and isnan(self._Tsta)
+        ):
             pass
         elif other._Tsta != self._Tsta:
             if is_add_value:
-                val_str = ' (self='+str(self._Tsta)+', other='+str(other._Tsta)+')'
-                diff_list.append(name+'.Tsta'+val_str)
+                val_str = (
+                    " (self=" + str(self._Tsta) + ", other=" + str(other._Tsta) + ")"
+                )
+                diff_list.append(name + ".Tsta" + val_str)
             else:
-                diff_list.append(name+'.Tsta')
-        if other._Trot is not None and self._Trot is not None and isnan(other._Trot) and isnan(self._Trot):
+                diff_list.append(name + ".Tsta")
+        if (
+            other._Trot is not None
+            and self._Trot is not None
+            and isnan(other._Trot)
+            and isnan(self._Trot)
+        ):
             pass
         elif other._Trot != self._Trot:
             if is_add_value:
-                val_str = ' (self='+str(self._Trot)+', other='+str(other._Trot)+')'
-                diff_list.append(name+'.Trot'+val_str)
+                val_str = (
+                    " (self=" + str(self._Trot) + ", other=" + str(other._Trot) + ")"
+                )
+                diff_list.append(name + ".Trot" + val_str)
             else:
-                diff_list.append(name+'.Trot')
+                diff_list.append(name + ".Trot")
         if other._type_skin_effect != self._type_skin_effect:
             if is_add_value:
-                val_str = ' (self='+str(self._type_skin_effect)+', other='+str(other._type_skin_effect)+')'
-                diff_list.append(name+'.type_skin_effect'+val_str)
+                val_str = (
+                    " (self="
+                    + str(self._type_skin_effect)
+                    + ", other="
+                    + str(other._type_skin_effect)
+                    + ")"
+                )
+                diff_list.append(name + ".type_skin_effect" + val_str)
             else:
-                diff_list.append(name+'.type_skin_effect')
+                diff_list.append(name + ".type_skin_effect")
         if other._is_skin_effect_inductance != self._is_skin_effect_inductance:
             if is_add_value:
-                val_str = ' (self='+str(self._is_skin_effect_inductance)+', other='+str(other._is_skin_effect_inductance)+')'
-                diff_list.append(name+'.is_skin_effect_inductance'+val_str)
+                val_str = (
+                    " (self="
+                    + str(self._is_skin_effect_inductance)
+                    + ", other="
+                    + str(other._is_skin_effect_inductance)
+                    + ")"
+                )
+                diff_list.append(name + ".is_skin_effect_inductance" + val_str)
             else:
-                diff_list.append(name+'.is_skin_effect_inductance')
+                diff_list.append(name + ".is_skin_effect_inductance")
         # Filter ignore differences
-        diff_list = list(filter(lambda x : x not in ignore_list, diff_list))
+        diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
 
     def __sizeof__(self):
@@ -271,7 +352,7 @@ class Electrical(FrozenClass):
             How to handle ndarray (0: tolist, 1: copy, 2: nothing)
         keep_function : bool
             True to keep the function object, else return str
-        Optional keyword input parameter is for internal use only 
+        Optional keyword input parameter is for internal use only
         and may prevent json serializability.
         """
 
@@ -279,13 +360,21 @@ class Electrical(FrozenClass):
         if self.eec is None:
             Electrical_dict["eec"] = None
         else:
-            Electrical_dict["eec"] = self.eec.as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs)
+            Electrical_dict["eec"] = self.eec.as_dict(
+                type_handle_ndarray=type_handle_ndarray,
+                keep_function=keep_function,
+                **kwargs
+            )
         Electrical_dict["logger_name"] = self.logger_name
         Electrical_dict["freq_max"] = self.freq_max
         if self.LUT_enforced is None:
             Electrical_dict["LUT_enforced"] = None
         else:
-            Electrical_dict["LUT_enforced"] = self.LUT_enforced.as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs)
+            Electrical_dict["LUT_enforced"] = self.LUT_enforced.as_dict(
+                type_handle_ndarray=type_handle_ndarray,
+                keep_function=keep_function,
+                **kwargs
+            )
         Electrical_dict["Tsta"] = self.Tsta
         Electrical_dict["Trot"] = self.Trot
         Electrical_dict["type_skin_effect"] = self.type_skin_effect
@@ -293,7 +382,6 @@ class Electrical(FrozenClass):
         # The class name is added to the dict for deserialisation purpose
         Electrical_dict["__class__"] = "Electrical"
         return Electrical_dict
-
 
     def copy(self):
         """Creates a deepcopy of the object"""
@@ -314,7 +402,16 @@ class Electrical(FrozenClass):
         type_skin_effect_val = self.type_skin_effect
         is_skin_effect_inductance_val = self.is_skin_effect_inductance
         # Creates new object of the same type with the copied properties
-        obj_copy = type(self)(eec=eec_val,logger_name=logger_name_val,freq_max=freq_max_val,LUT_enforced=LUT_enforced_val,Tsta=Tsta_val,Trot=Trot_val,type_skin_effect=type_skin_effect_val,is_skin_effect_inductance=is_skin_effect_inductance_val)
+        obj_copy = type(self)(
+            eec=eec_val,
+            logger_name=logger_name_val,
+            freq_max=freq_max_val,
+            LUT_enforced=LUT_enforced_val,
+            Tsta=Tsta_val,
+            Trot=Trot_val,
+            type_skin_effect=type_skin_effect_val,
+            is_skin_effect_inductance=is_skin_effect_inductance_val,
+        )
         return obj_copy
 
     def _set_None(self):
@@ -341,23 +438,26 @@ class Electrical(FrozenClass):
             try:
                 value = load_init_dict(value)[1]
             except Exception as e:
-                self.get_logger().error('Error while loading '+value+', setting None instead')
+                self.get_logger().error(
+                    "Error while loading " + value + ", setting None instead"
+                )
                 value = None
-        if isinstance(value, dict) and '__class__' in value:
-            class_obj = import_class('pyleecan.Classes', value.get('__class__'), 'eec')
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class("pyleecan.Classes", value.get("__class__"), "eec")
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
-            EEC = import_class('pyleecan.Classes', 'EEC', 'eec')
+            EEC = import_class("pyleecan.Classes", "EEC", "eec")
             value = EEC()
         check_var("eec", value, "EEC")
         self._eec = value
 
         if self._eec is not None:
             self._eec.parent = self
+
     eec = property(
         fget=_get_eec,
         fset=_set_eec,
-        doc=u"""Electrical Equivalent Circuit
+        doc="""Electrical Equivalent Circuit
 
         :Type: EEC
         """,
@@ -375,7 +475,7 @@ class Electrical(FrozenClass):
     logger_name = property(
         fget=_get_logger_name,
         fset=_set_logger_name,
-        doc=u"""Name of the logger to use
+        doc="""Name of the logger to use
 
         :Type: str
         """,
@@ -393,7 +493,7 @@ class Electrical(FrozenClass):
     freq_max = property(
         fget=_get_freq_max,
         fset=_set_freq_max,
-        doc=u"""Maximum frequency to calculate voltage and current harmonics
+        doc="""Maximum frequency to calculate voltage and current harmonics
 
         :Type: float
         """,
@@ -409,23 +509,28 @@ class Electrical(FrozenClass):
             try:
                 value = load_init_dict(value)[1]
             except Exception as e:
-                self.get_logger().error('Error while loading '+value+', setting None instead')
+                self.get_logger().error(
+                    "Error while loading " + value + ", setting None instead"
+                )
                 value = None
-        if isinstance(value, dict) and '__class__' in value:
-            class_obj = import_class('pyleecan.Classes', value.get('__class__'), 'LUT_enforced')
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class(
+                "pyleecan.Classes", value.get("__class__"), "LUT_enforced"
+            )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
-            LUT = import_class('pyleecan.Classes', 'LUT', 'LUT_enforced')
+            LUT = import_class("pyleecan.Classes", "LUT", "LUT_enforced")
             value = LUT()
         check_var("LUT_enforced", value, "LUT")
         self._LUT_enforced = value
 
         if self._LUT_enforced is not None:
             self._LUT_enforced.parent = self
+
     LUT_enforced = property(
         fget=_get_LUT_enforced,
         fset=_set_LUT_enforced,
-        doc=u"""Look-Up Tables to update equivalent circuit parameters
+        doc="""Look-Up Tables to update equivalent circuit parameters
 
         :Type: LUT
         """,
@@ -443,7 +548,7 @@ class Electrical(FrozenClass):
     Tsta = property(
         fget=_get_Tsta,
         fset=_set_Tsta,
-        doc=u"""Average stator temperature for Electrical calculation
+        doc="""Average stator temperature for Electrical calculation
 
         :Type: float
         """,
@@ -461,7 +566,7 @@ class Electrical(FrozenClass):
     Trot = property(
         fget=_get_Trot,
         fset=_set_Trot,
-        doc=u"""Average rotor temperature for Electrical calculation
+        doc="""Average rotor temperature for Electrical calculation
 
         :Type: float
         """,
@@ -479,7 +584,7 @@ class Electrical(FrozenClass):
     type_skin_effect = property(
         fget=_get_type_skin_effect,
         fset=_set_type_skin_effect,
-        doc=u"""Skin effect for resistance and inductance
+        doc="""Skin effect for resistance and inductance
 
         :Type: int
         """,
@@ -497,7 +602,7 @@ class Electrical(FrozenClass):
     is_skin_effect_inductance = property(
         fget=_get_is_skin_effect_inductance,
         fset=_set_is_skin_effect_inductance,
-        doc=u"""True to include skin effect on inductance if type_skin_effect != 0
+        doc="""True to include skin effect on inductance if type_skin_effect != 0
 
         :Type: bool
         """,

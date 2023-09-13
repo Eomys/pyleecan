@@ -20,8 +20,12 @@ def _comp_point_coordinate(self):
     # comp point coordinate (in complex)
     # Draw the left side with center P
     Z0 = 1j * self.H0 / (2 * sin(self.W0 / 2))
-    Z1 = -self.W3 / 2 + 1j * (Z0.imag + (self.W3 / 2) /tan(self.W0 / 2))
-    Z2 = Z1.real - sin(self.W0 / 2) * (self.W2 - self.H0) + 1j * (Z1.imag + cos(self.W0 / 2) * (self.W2 - self.H0))
+    Z1 = -self.W3 / 2 + 1j * (Z0.imag + (self.W3 / 2) / tan(self.W0 / 2))
+    Z2 = (
+        Z1.real
+        - sin(self.W0 / 2) * (self.W2 - self.H0)
+        + 1j * (Z1.imag + cos(self.W0 / 2) * (self.W2 - self.H0))
+    )
 
     # Draw the left hole with center P2
     Z3h = -self.H0 / 2 - 1j * self.H0 / 2
@@ -32,9 +36,8 @@ def _comp_point_coordinate(self):
     ZM1h = (w - self.W1) / 2 + self.W1
     ZM2h = (w - self.W1) / 2
     ZM4h = (w - self.W1) / 2 + self.W1 - 1j * self.H0
-    ZM3h = (w - self.W1) / 2- 1j * self.H0
-    
-    
+    ZM3h = (w - self.W1) / 2 - 1j * self.H0
+
     # Revert translation and rotation to center left hole in P
     Z3 = Z3h * exp(1j * angle(Z1 - Z2)) + Z2
     Z4 = Z4h * exp(1j * angle(Z1 - Z2)) + Z2
@@ -46,7 +49,7 @@ def _comp_point_coordinate(self):
     ZM4 = ZM4h * exp(1j * angle(Z1 - Z2)) + Z2
 
     # Revert translation to center left hole in machine's center
-    Z = 1j * (sqrt((Rbo - self.H1) ** 2 - Z3.real ** 2) - Z3.imag)
+    Z = 1j * (sqrt((Rbo - self.H1) ** 2 - Z3.real**2) - Z3.imag)
     Z0 += Z
     Z1 += Z
     Z2 += Z

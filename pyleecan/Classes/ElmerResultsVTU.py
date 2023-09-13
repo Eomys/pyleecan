@@ -49,7 +49,15 @@ class ElmerResultsVTU(Elmer):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, label="ElmerResults", file_path="", store_dict=-1, logger_name="Pyleecan.Elmer", init_dict = None, init_str = None):
+    def __init__(
+        self,
+        label="ElmerResults",
+        file_path="",
+        store_dict=-1,
+        logger_name="Pyleecan.Elmer",
+        init_dict=None,
+        init_str=None,
+    ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -110,37 +118,55 @@ class ElmerResultsVTU(Elmer):
             return False
         return True
 
-    def compare(self, other, name='self', ignore_list=None, is_add_value=False):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
             ignore_list = list()
         if type(other) != type(self):
-            return ['type('+name+')']
+            return ["type(" + name + ")"]
         diff_list = list()
 
         # Check the properties inherited from Elmer
-        diff_list.extend(super(ElmerResultsVTU, self).compare(other,name=name, ignore_list=ignore_list, is_add_value=is_add_value))
+        diff_list.extend(
+            super(ElmerResultsVTU, self).compare(
+                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
+            )
+        )
         if other._label != self._label:
             if is_add_value:
-                val_str = ' (self='+str(self._label)+', other='+str(other._label)+')'
-                diff_list.append(name+'.label'+val_str)
+                val_str = (
+                    " (self=" + str(self._label) + ", other=" + str(other._label) + ")"
+                )
+                diff_list.append(name + ".label" + val_str)
             else:
-                diff_list.append(name+'.label')
+                diff_list.append(name + ".label")
         if other._file_path != self._file_path:
             if is_add_value:
-                val_str = ' (self='+str(self._file_path)+', other='+str(other._file_path)+')'
-                diff_list.append(name+'.file_path'+val_str)
+                val_str = (
+                    " (self="
+                    + str(self._file_path)
+                    + ", other="
+                    + str(other._file_path)
+                    + ")"
+                )
+                diff_list.append(name + ".file_path" + val_str)
             else:
-                diff_list.append(name+'.file_path')
+                diff_list.append(name + ".file_path")
         if other._store_dict != self._store_dict:
             if is_add_value:
-                val_str = ' (self='+str(self._store_dict)+', other='+str(other._store_dict)+')'
-                diff_list.append(name+'.store_dict'+val_str)
+                val_str = (
+                    " (self="
+                    + str(self._store_dict)
+                    + ", other="
+                    + str(other._store_dict)
+                    + ")"
+                )
+                diff_list.append(name + ".store_dict" + val_str)
             else:
-                diff_list.append(name+'.store_dict')
+                diff_list.append(name + ".store_dict")
         # Filter ignore differences
-        diff_list = list(filter(lambda x : x not in ignore_list, diff_list))
+        diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
 
     def __sizeof__(self):
@@ -164,12 +190,16 @@ class ElmerResultsVTU(Elmer):
             How to handle ndarray (0: tolist, 1: copy, 2: nothing)
         keep_function : bool
             True to keep the function object, else return str
-        Optional keyword input parameter is for internal use only 
+        Optional keyword input parameter is for internal use only
         and may prevent json serializability.
         """
 
         # Get the properties inherited from Elmer
-        ElmerResultsVTU_dict = super(ElmerResultsVTU, self).as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs)
+        ElmerResultsVTU_dict = super(ElmerResultsVTU, self).as_dict(
+            type_handle_ndarray=type_handle_ndarray,
+            keep_function=keep_function,
+            **kwargs
+        )
         ElmerResultsVTU_dict["label"] = self.label
         ElmerResultsVTU_dict["file_path"] = self.file_path
         ElmerResultsVTU_dict["store_dict"] = (
@@ -179,7 +209,6 @@ class ElmerResultsVTU(Elmer):
         # Overwrite the mother class name
         ElmerResultsVTU_dict["__class__"] = "ElmerResultsVTU"
         return ElmerResultsVTU_dict
-
 
     def copy(self):
         """Creates a deepcopy of the object"""
@@ -193,7 +222,12 @@ class ElmerResultsVTU(Elmer):
             store_dict_val = self.store_dict.copy()
         logger_name_val = self.logger_name
         # Creates new object of the same type with the copied properties
-        obj_copy = type(self)(label=label_val,file_path=file_path_val,store_dict=store_dict_val,logger_name=logger_name_val)
+        obj_copy = type(self)(
+            label=label_val,
+            file_path=file_path_val,
+            store_dict=store_dict_val,
+            logger_name=logger_name_val,
+        )
         return obj_copy
 
     def _set_None(self):
@@ -217,7 +251,7 @@ class ElmerResultsVTU(Elmer):
     label = property(
         fget=_get_label,
         fset=_set_label,
-        doc=u"""Label of the resulting meshsolution
+        doc="""Label of the resulting meshsolution
 
         :Type: str
         """,
@@ -235,7 +269,7 @@ class ElmerResultsVTU(Elmer):
     file_path = property(
         fget=_get_file_path,
         fset=_set_file_path,
-        doc=u"""Filename of the results VTU data file
+        doc="""Filename of the results VTU data file
 
         :Type: str
         """,
@@ -255,7 +289,7 @@ class ElmerResultsVTU(Elmer):
     store_dict = property(
         fget=_get_store_dict,
         fset=_set_store_dict,
-        doc=u"""Dict containing the data names to store
+        doc="""Dict containing the data names to store
 
         :Type: dict
         """,

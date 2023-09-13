@@ -307,7 +307,6 @@ def plot(
                 patches.append(line)
 
     if is_display:
-
         # Display the result
         (fig, ax, patch_leg, label_leg) = init_fig(fig=fig, ax=ax, shape="rectangle")
 

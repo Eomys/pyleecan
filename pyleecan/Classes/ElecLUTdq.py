@@ -91,7 +91,32 @@ class ElecLUTdq(Electrical):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, n_interp=10, Id_min=None, Id_max=None, Iq_min=None, Iq_max=None, n_Id=1, n_Iq=1, LUT_simu=None, is_grid_dq=True, Urms_max=None, Jrms_max=None, Irms_max=None, load_rate=1, eec=None, logger_name="Pyleecan.Electrical", freq_max=40000, LUT_enforced=None, Tsta=20, Trot=20, type_skin_effect=1, is_skin_effect_inductance=True, init_dict = None, init_str = None):
+    def __init__(
+        self,
+        n_interp=10,
+        Id_min=None,
+        Id_max=None,
+        Iq_min=None,
+        Iq_max=None,
+        n_Id=1,
+        n_Iq=1,
+        LUT_simu=None,
+        is_grid_dq=True,
+        Urms_max=None,
+        Jrms_max=None,
+        Irms_max=None,
+        load_rate=1,
+        eec=None,
+        logger_name="Pyleecan.Electrical",
+        freq_max=40000,
+        LUT_enforced=None,
+        Tsta=20,
+        Trot=20,
+        type_skin_effect=1,
+        is_skin_effect_inductance=True,
+        init_dict=None,
+        init_str=None,
+    ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -164,7 +189,16 @@ class ElecLUTdq(Electrical):
         self.Irms_max = Irms_max
         self.load_rate = load_rate
         # Call Electrical init
-        super(ElecLUTdq, self).__init__(eec=eec, logger_name=logger_name, freq_max=freq_max, LUT_enforced=LUT_enforced, Tsta=Tsta, Trot=Trot, type_skin_effect=type_skin_effect, is_skin_effect_inductance=is_skin_effect_inductance)
+        super(ElecLUTdq, self).__init__(
+            eec=eec,
+            logger_name=logger_name,
+            freq_max=freq_max,
+            LUT_enforced=LUT_enforced,
+            Tsta=Tsta,
+            Trot=Trot,
+            type_skin_effect=type_skin_effect,
+            is_skin_effect_inductance=is_skin_effect_inductance,
+        )
         # The class is frozen (in Electrical init), for now it's impossible to
         # add new properties
 
@@ -183,7 +217,7 @@ class ElecLUTdq(Electrical):
         ElecLUTdq_str += "n_Iq = " + str(self.n_Iq) + linesep
         if self.LUT_simu is not None:
             tmp = self.LUT_simu.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            ElecLUTdq_str += "LUT_simu = "+ tmp
+            ElecLUTdq_str += "LUT_simu = " + tmp
         else:
             ElecLUTdq_str += "LUT_simu = None" + linesep + linesep
         ElecLUTdq_str += "is_grid_dq = " + str(self.is_grid_dq) + linesep
@@ -230,111 +264,228 @@ class ElecLUTdq(Electrical):
             return False
         return True
 
-    def compare(self, other, name='self', ignore_list=None, is_add_value=False):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
             ignore_list = list()
         if type(other) != type(self):
-            return ['type('+name+')']
+            return ["type(" + name + ")"]
         diff_list = list()
 
         # Check the properties inherited from Electrical
-        diff_list.extend(super(ElecLUTdq, self).compare(other,name=name, ignore_list=ignore_list, is_add_value=is_add_value))
+        diff_list.extend(
+            super(ElecLUTdq, self).compare(
+                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
+            )
+        )
         if other._n_interp != self._n_interp:
             if is_add_value:
-                val_str = ' (self='+str(self._n_interp)+', other='+str(other._n_interp)+')'
-                diff_list.append(name+'.n_interp'+val_str)
+                val_str = (
+                    " (self="
+                    + str(self._n_interp)
+                    + ", other="
+                    + str(other._n_interp)
+                    + ")"
+                )
+                diff_list.append(name + ".n_interp" + val_str)
             else:
-                diff_list.append(name+'.n_interp')
-        if other._Id_min is not None and self._Id_min is not None and isnan(other._Id_min) and isnan(self._Id_min):
+                diff_list.append(name + ".n_interp")
+        if (
+            other._Id_min is not None
+            and self._Id_min is not None
+            and isnan(other._Id_min)
+            and isnan(self._Id_min)
+        ):
             pass
         elif other._Id_min != self._Id_min:
             if is_add_value:
-                val_str = ' (self='+str(self._Id_min)+', other='+str(other._Id_min)+')'
-                diff_list.append(name+'.Id_min'+val_str)
+                val_str = (
+                    " (self="
+                    + str(self._Id_min)
+                    + ", other="
+                    + str(other._Id_min)
+                    + ")"
+                )
+                diff_list.append(name + ".Id_min" + val_str)
             else:
-                diff_list.append(name+'.Id_min')
-        if other._Id_max is not None and self._Id_max is not None and isnan(other._Id_max) and isnan(self._Id_max):
+                diff_list.append(name + ".Id_min")
+        if (
+            other._Id_max is not None
+            and self._Id_max is not None
+            and isnan(other._Id_max)
+            and isnan(self._Id_max)
+        ):
             pass
         elif other._Id_max != self._Id_max:
             if is_add_value:
-                val_str = ' (self='+str(self._Id_max)+', other='+str(other._Id_max)+')'
-                diff_list.append(name+'.Id_max'+val_str)
+                val_str = (
+                    " (self="
+                    + str(self._Id_max)
+                    + ", other="
+                    + str(other._Id_max)
+                    + ")"
+                )
+                diff_list.append(name + ".Id_max" + val_str)
             else:
-                diff_list.append(name+'.Id_max')
-        if other._Iq_min is not None and self._Iq_min is not None and isnan(other._Iq_min) and isnan(self._Iq_min):
+                diff_list.append(name + ".Id_max")
+        if (
+            other._Iq_min is not None
+            and self._Iq_min is not None
+            and isnan(other._Iq_min)
+            and isnan(self._Iq_min)
+        ):
             pass
         elif other._Iq_min != self._Iq_min:
             if is_add_value:
-                val_str = ' (self='+str(self._Iq_min)+', other='+str(other._Iq_min)+')'
-                diff_list.append(name+'.Iq_min'+val_str)
+                val_str = (
+                    " (self="
+                    + str(self._Iq_min)
+                    + ", other="
+                    + str(other._Iq_min)
+                    + ")"
+                )
+                diff_list.append(name + ".Iq_min" + val_str)
             else:
-                diff_list.append(name+'.Iq_min')
-        if other._Iq_max is not None and self._Iq_max is not None and isnan(other._Iq_max) and isnan(self._Iq_max):
+                diff_list.append(name + ".Iq_min")
+        if (
+            other._Iq_max is not None
+            and self._Iq_max is not None
+            and isnan(other._Iq_max)
+            and isnan(self._Iq_max)
+        ):
             pass
         elif other._Iq_max != self._Iq_max:
             if is_add_value:
-                val_str = ' (self='+str(self._Iq_max)+', other='+str(other._Iq_max)+')'
-                diff_list.append(name+'.Iq_max'+val_str)
+                val_str = (
+                    " (self="
+                    + str(self._Iq_max)
+                    + ", other="
+                    + str(other._Iq_max)
+                    + ")"
+                )
+                diff_list.append(name + ".Iq_max" + val_str)
             else:
-                diff_list.append(name+'.Iq_max')
+                diff_list.append(name + ".Iq_max")
         if other._n_Id != self._n_Id:
             if is_add_value:
-                val_str = ' (self='+str(self._n_Id)+', other='+str(other._n_Id)+')'
-                diff_list.append(name+'.n_Id'+val_str)
+                val_str = (
+                    " (self=" + str(self._n_Id) + ", other=" + str(other._n_Id) + ")"
+                )
+                diff_list.append(name + ".n_Id" + val_str)
             else:
-                diff_list.append(name+'.n_Id')
+                diff_list.append(name + ".n_Id")
         if other._n_Iq != self._n_Iq:
             if is_add_value:
-                val_str = ' (self='+str(self._n_Iq)+', other='+str(other._n_Iq)+')'
-                diff_list.append(name+'.n_Iq'+val_str)
+                val_str = (
+                    " (self=" + str(self._n_Iq) + ", other=" + str(other._n_Iq) + ")"
+                )
+                diff_list.append(name + ".n_Iq" + val_str)
             else:
-                diff_list.append(name+'.n_Iq')
-        if (other.LUT_simu is None and self.LUT_simu is not None) or (other.LUT_simu is not None and self.LUT_simu is None):
-            diff_list.append(name+'.LUT_simu None mismatch')
+                diff_list.append(name + ".n_Iq")
+        if (other.LUT_simu is None and self.LUT_simu is not None) or (
+            other.LUT_simu is not None and self.LUT_simu is None
+        ):
+            diff_list.append(name + ".LUT_simu None mismatch")
         elif self.LUT_simu is not None:
-            diff_list.extend(self.LUT_simu.compare(other.LUT_simu,name=name+'.LUT_simu',ignore_list=ignore_list,is_add_value=is_add_value))
+            diff_list.extend(
+                self.LUT_simu.compare(
+                    other.LUT_simu,
+                    name=name + ".LUT_simu",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
+            )
         if other._is_grid_dq != self._is_grid_dq:
             if is_add_value:
-                val_str = ' (self='+str(self._is_grid_dq)+', other='+str(other._is_grid_dq)+')'
-                diff_list.append(name+'.is_grid_dq'+val_str)
+                val_str = (
+                    " (self="
+                    + str(self._is_grid_dq)
+                    + ", other="
+                    + str(other._is_grid_dq)
+                    + ")"
+                )
+                diff_list.append(name + ".is_grid_dq" + val_str)
             else:
-                diff_list.append(name+'.is_grid_dq')
-        if other._Urms_max is not None and self._Urms_max is not None and isnan(other._Urms_max) and isnan(self._Urms_max):
+                diff_list.append(name + ".is_grid_dq")
+        if (
+            other._Urms_max is not None
+            and self._Urms_max is not None
+            and isnan(other._Urms_max)
+            and isnan(self._Urms_max)
+        ):
             pass
         elif other._Urms_max != self._Urms_max:
             if is_add_value:
-                val_str = ' (self='+str(self._Urms_max)+', other='+str(other._Urms_max)+')'
-                diff_list.append(name+'.Urms_max'+val_str)
+                val_str = (
+                    " (self="
+                    + str(self._Urms_max)
+                    + ", other="
+                    + str(other._Urms_max)
+                    + ")"
+                )
+                diff_list.append(name + ".Urms_max" + val_str)
             else:
-                diff_list.append(name+'.Urms_max')
-        if other._Jrms_max is not None and self._Jrms_max is not None and isnan(other._Jrms_max) and isnan(self._Jrms_max):
+                diff_list.append(name + ".Urms_max")
+        if (
+            other._Jrms_max is not None
+            and self._Jrms_max is not None
+            and isnan(other._Jrms_max)
+            and isnan(self._Jrms_max)
+        ):
             pass
         elif other._Jrms_max != self._Jrms_max:
             if is_add_value:
-                val_str = ' (self='+str(self._Jrms_max)+', other='+str(other._Jrms_max)+')'
-                diff_list.append(name+'.Jrms_max'+val_str)
+                val_str = (
+                    " (self="
+                    + str(self._Jrms_max)
+                    + ", other="
+                    + str(other._Jrms_max)
+                    + ")"
+                )
+                diff_list.append(name + ".Jrms_max" + val_str)
             else:
-                diff_list.append(name+'.Jrms_max')
-        if other._Irms_max is not None and self._Irms_max is not None and isnan(other._Irms_max) and isnan(self._Irms_max):
+                diff_list.append(name + ".Jrms_max")
+        if (
+            other._Irms_max is not None
+            and self._Irms_max is not None
+            and isnan(other._Irms_max)
+            and isnan(self._Irms_max)
+        ):
             pass
         elif other._Irms_max != self._Irms_max:
             if is_add_value:
-                val_str = ' (self='+str(self._Irms_max)+', other='+str(other._Irms_max)+')'
-                diff_list.append(name+'.Irms_max'+val_str)
+                val_str = (
+                    " (self="
+                    + str(self._Irms_max)
+                    + ", other="
+                    + str(other._Irms_max)
+                    + ")"
+                )
+                diff_list.append(name + ".Irms_max" + val_str)
             else:
-                diff_list.append(name+'.Irms_max')
-        if other._load_rate is not None and self._load_rate is not None and isnan(other._load_rate) and isnan(self._load_rate):
+                diff_list.append(name + ".Irms_max")
+        if (
+            other._load_rate is not None
+            and self._load_rate is not None
+            and isnan(other._load_rate)
+            and isnan(self._load_rate)
+        ):
             pass
         elif other._load_rate != self._load_rate:
             if is_add_value:
-                val_str = ' (self='+str(self._load_rate)+', other='+str(other._load_rate)+')'
-                diff_list.append(name+'.load_rate'+val_str)
+                val_str = (
+                    " (self="
+                    + str(self._load_rate)
+                    + ", other="
+                    + str(other._load_rate)
+                    + ")"
+                )
+                diff_list.append(name + ".load_rate" + val_str)
             else:
-                diff_list.append(name+'.load_rate')
+                diff_list.append(name + ".load_rate")
         # Filter ignore differences
-        diff_list = list(filter(lambda x : x not in ignore_list, diff_list))
+        diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
 
     def __sizeof__(self):
@@ -366,12 +517,16 @@ class ElecLUTdq(Electrical):
             How to handle ndarray (0: tolist, 1: copy, 2: nothing)
         keep_function : bool
             True to keep the function object, else return str
-        Optional keyword input parameter is for internal use only 
+        Optional keyword input parameter is for internal use only
         and may prevent json serializability.
         """
 
         # Get the properties inherited from Electrical
-        ElecLUTdq_dict = super(ElecLUTdq, self).as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs)
+        ElecLUTdq_dict = super(ElecLUTdq, self).as_dict(
+            type_handle_ndarray=type_handle_ndarray,
+            keep_function=keep_function,
+            **kwargs
+        )
         ElecLUTdq_dict["n_interp"] = self.n_interp
         ElecLUTdq_dict["Id_min"] = self.Id_min
         ElecLUTdq_dict["Id_max"] = self.Id_max
@@ -382,7 +537,11 @@ class ElecLUTdq(Electrical):
         if self.LUT_simu is None:
             ElecLUTdq_dict["LUT_simu"] = None
         else:
-            ElecLUTdq_dict["LUT_simu"] = self.LUT_simu.as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs)
+            ElecLUTdq_dict["LUT_simu"] = self.LUT_simu.as_dict(
+                type_handle_ndarray=type_handle_ndarray,
+                keep_function=keep_function,
+                **kwargs
+            )
         ElecLUTdq_dict["is_grid_dq"] = self.is_grid_dq
         ElecLUTdq_dict["Urms_max"] = self.Urms_max
         ElecLUTdq_dict["Jrms_max"] = self.Jrms_max
@@ -392,7 +551,6 @@ class ElecLUTdq(Electrical):
         # Overwrite the mother class name
         ElecLUTdq_dict["__class__"] = "ElecLUTdq"
         return ElecLUTdq_dict
-
 
     def copy(self):
         """Creates a deepcopy of the object"""
@@ -429,7 +587,29 @@ class ElecLUTdq(Electrical):
         type_skin_effect_val = self.type_skin_effect
         is_skin_effect_inductance_val = self.is_skin_effect_inductance
         # Creates new object of the same type with the copied properties
-        obj_copy = type(self)(n_interp=n_interp_val,Id_min=Id_min_val,Id_max=Id_max_val,Iq_min=Iq_min_val,Iq_max=Iq_max_val,n_Id=n_Id_val,n_Iq=n_Iq_val,LUT_simu=LUT_simu_val,is_grid_dq=is_grid_dq_val,Urms_max=Urms_max_val,Jrms_max=Jrms_max_val,Irms_max=Irms_max_val,load_rate=load_rate_val,eec=eec_val,logger_name=logger_name_val,freq_max=freq_max_val,LUT_enforced=LUT_enforced_val,Tsta=Tsta_val,Trot=Trot_val,type_skin_effect=type_skin_effect_val,is_skin_effect_inductance=is_skin_effect_inductance_val)
+        obj_copy = type(self)(
+            n_interp=n_interp_val,
+            Id_min=Id_min_val,
+            Id_max=Id_max_val,
+            Iq_min=Iq_min_val,
+            Iq_max=Iq_max_val,
+            n_Id=n_Id_val,
+            n_Iq=n_Iq_val,
+            LUT_simu=LUT_simu_val,
+            is_grid_dq=is_grid_dq_val,
+            Urms_max=Urms_max_val,
+            Jrms_max=Jrms_max_val,
+            Irms_max=Irms_max_val,
+            load_rate=load_rate_val,
+            eec=eec_val,
+            logger_name=logger_name_val,
+            freq_max=freq_max_val,
+            LUT_enforced=LUT_enforced_val,
+            Tsta=Tsta_val,
+            Trot=Trot_val,
+            type_skin_effect=type_skin_effect_val,
+            is_skin_effect_inductance=is_skin_effect_inductance_val,
+        )
         return obj_copy
 
     def _set_None(self):
@@ -464,7 +644,7 @@ class ElecLUTdq(Electrical):
     n_interp = property(
         fget=_get_n_interp,
         fset=_set_n_interp,
-        doc=u"""Number of id values used for interpolation
+        doc="""Number of id values used for interpolation
 
         :Type: int
         :min: 1
@@ -483,7 +663,7 @@ class ElecLUTdq(Electrical):
     Id_min = property(
         fget=_get_Id_min,
         fset=_set_Id_min,
-        doc=u"""Minimum Id for LUT calculation
+        doc="""Minimum Id for LUT calculation
 
         :Type: float
         """,
@@ -501,7 +681,7 @@ class ElecLUTdq(Electrical):
     Id_max = property(
         fget=_get_Id_max,
         fset=_set_Id_max,
-        doc=u"""Maximum Id for LUT calculation
+        doc="""Maximum Id for LUT calculation
 
         :Type: float
         """,
@@ -519,7 +699,7 @@ class ElecLUTdq(Electrical):
     Iq_min = property(
         fget=_get_Iq_min,
         fset=_set_Iq_min,
-        doc=u"""Minimum Iq for LUT calculation
+        doc="""Minimum Iq for LUT calculation
 
         :Type: float
         """,
@@ -537,7 +717,7 @@ class ElecLUTdq(Electrical):
     Iq_max = property(
         fget=_get_Iq_max,
         fset=_set_Iq_max,
-        doc=u"""Maximum Iq for LUT calculation
+        doc="""Maximum Iq for LUT calculation
 
         :Type: float
         """,
@@ -555,7 +735,7 @@ class ElecLUTdq(Electrical):
     n_Id = property(
         fget=_get_n_Id,
         fset=_set_n_Id,
-        doc=u"""Number of Id for LUT calculation
+        doc="""Number of Id for LUT calculation
 
         :Type: int
         """,
@@ -573,7 +753,7 @@ class ElecLUTdq(Electrical):
     n_Iq = property(
         fget=_get_n_Iq,
         fset=_set_n_Iq,
-        doc=u"""Number of Iq for LUT calculation
+        doc="""Number of Iq for LUT calculation
 
         :Type: int
         """,
@@ -589,23 +769,28 @@ class ElecLUTdq(Electrical):
             try:
                 value = load_init_dict(value)[1]
             except Exception as e:
-                self.get_logger().error('Error while loading '+value+', setting None instead')
+                self.get_logger().error(
+                    "Error while loading " + value + ", setting None instead"
+                )
                 value = None
-        if isinstance(value, dict) and '__class__' in value:
-            class_obj = import_class('pyleecan.Classes', value.get('__class__'), 'LUT_simu')
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class(
+                "pyleecan.Classes", value.get("__class__"), "LUT_simu"
+            )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
-            Simulation = import_class('pyleecan.Classes', 'Simulation', 'LUT_simu')
+            Simulation = import_class("pyleecan.Classes", "Simulation", "LUT_simu")
             value = Simulation()
         check_var("LUT_simu", value, "Simulation")
         self._LUT_simu = value
 
         if self._LUT_simu is not None:
             self._LUT_simu.parent = self
+
     LUT_simu = property(
         fget=_get_LUT_simu,
         fset=_set_LUT_simu,
-        doc=u"""Simulation object to run for LUT calculation
+        doc="""Simulation object to run for LUT calculation
 
         :Type: Simulation
         """,
@@ -623,7 +808,7 @@ class ElecLUTdq(Electrical):
     is_grid_dq = property(
         fget=_get_is_grid_dq,
         fset=_set_is_grid_dq,
-        doc=u"""True to build a n_Id*n_Iq grid, otherwise calculate n_Id+n_Iq simulations and extrapolate to the dq plane
+        doc="""True to build a n_Id*n_Iq grid, otherwise calculate n_Id+n_Iq simulations and extrapolate to the dq plane
 
         :Type: bool
         """,
@@ -641,7 +826,7 @@ class ElecLUTdq(Electrical):
     Urms_max = property(
         fget=_get_Urms_max,
         fset=_set_Urms_max,
-        doc=u"""Maximum rms phase voltage
+        doc="""Maximum rms phase voltage
 
         :Type: float
         :min: 0
@@ -660,7 +845,7 @@ class ElecLUTdq(Electrical):
     Jrms_max = property(
         fget=_get_Jrms_max,
         fset=_set_Jrms_max,
-        doc=u"""Maximum rms current density in slot
+        doc="""Maximum rms current density in slot
 
         :Type: float
         :min: 0
@@ -679,7 +864,7 @@ class ElecLUTdq(Electrical):
     Irms_max = property(
         fget=_get_Irms_max,
         fset=_set_Irms_max,
-        doc=u"""Maximum rms phase current
+        doc="""Maximum rms phase current
 
         :Type: float
         :min: 0
@@ -698,7 +883,7 @@ class ElecLUTdq(Electrical):
     load_rate = property(
         fget=_get_load_rate,
         fset=_set_load_rate,
-        doc=u"""Load rate between 0 (no-load) and 1 (full-load) for MTPA calculation
+        doc="""Load rate between 0 (no-load) and 1 (full-load) for MTPA calculation
 
         :Type: float
         :min: 0

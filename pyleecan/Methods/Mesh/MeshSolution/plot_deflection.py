@@ -88,7 +88,6 @@ def plot_deflection(
             p=p,
         )
     else:
-
         # Init figure
         if p is None:
             if title != "" and win_title == "":

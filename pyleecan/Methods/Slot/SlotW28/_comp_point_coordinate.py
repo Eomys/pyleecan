@@ -41,7 +41,7 @@ def _comp_point_coordinate(self):
         # x = x7 + sqrt(-4((y7-(W3/2+R1))²-R1²))/2
         Z6 = (
             Z7.real
-            + sqrt(-4 * ((Z7.imag - (self.W3 / 2.0 + self.R1)) ** 2 - self.R1 ** 2)) / 2
+            + sqrt(-4 * ((Z7.imag - (self.W3 / 2.0 + self.R1)) ** 2 - self.R1**2)) / 2
             + 1j * self.W3 / 2.0
         )
         Z5 = Z6 + self.H3
@@ -53,7 +53,7 @@ def _comp_point_coordinate(self):
         Z8 = Z8 * exp(1j * slot_pitch / 2)
         Z6 = (
             Z7.real
-            - sqrt(-4 * ((Z7.imag - (self.W3 / 2.0 + self.R1)) ** 2 - self.R1 ** 2)) / 2
+            - sqrt(-4 * ((Z7.imag - (self.W3 / 2.0 + self.R1)) ** 2 - self.R1**2)) / 2
             + 1j * self.W3 / 2.0
         )
         Z5 = Z6 - self.H3

@@ -152,7 +152,22 @@ class OPMatrix(FrozenClass):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, N0=None, Id_ref=None, Iq_ref=None, Ud_ref=None, Uq_ref=None, Tem_av_ref=None, Pem_av_ref=None, slip_ref=None, is_output_power=True, If_ref=None, col_names=None, init_dict = None, init_str = None):
+    def __init__(
+        self,
+        N0=None,
+        Id_ref=None,
+        Iq_ref=None,
+        Ud_ref=None,
+        Uq_ref=None,
+        Tem_av_ref=None,
+        Pem_av_ref=None,
+        slip_ref=None,
+        is_output_power=True,
+        If_ref=None,
+        col_names=None,
+        init_dict=None,
+        init_str=None,
+    ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -215,17 +230,76 @@ class OPMatrix(FrozenClass):
             OPMatrix_str += "parent = None " + linesep
         else:
             OPMatrix_str += "parent = " + str(type(self.parent)) + " object" + linesep
-        OPMatrix_str += "N0 = " + linesep + str(self.N0).replace(linesep, linesep + "\t") + linesep + linesep
-        OPMatrix_str += "Id_ref = " + linesep + str(self.Id_ref).replace(linesep, linesep + "\t") + linesep + linesep
-        OPMatrix_str += "Iq_ref = " + linesep + str(self.Iq_ref).replace(linesep, linesep + "\t") + linesep + linesep
-        OPMatrix_str += "Ud_ref = " + linesep + str(self.Ud_ref).replace(linesep, linesep + "\t") + linesep + linesep
-        OPMatrix_str += "Uq_ref = " + linesep + str(self.Uq_ref).replace(linesep, linesep + "\t") + linesep + linesep
-        OPMatrix_str += "Tem_av_ref = " + linesep + str(self.Tem_av_ref).replace(linesep, linesep + "\t") + linesep + linesep
-        OPMatrix_str += "Pem_av_ref = " + linesep + str(self.Pem_av_ref).replace(linesep, linesep + "\t") + linesep + linesep
-        OPMatrix_str += "slip_ref = " + linesep + str(self.slip_ref).replace(linesep, linesep + "\t") + linesep + linesep
+        OPMatrix_str += (
+            "N0 = "
+            + linesep
+            + str(self.N0).replace(linesep, linesep + "\t")
+            + linesep
+            + linesep
+        )
+        OPMatrix_str += (
+            "Id_ref = "
+            + linesep
+            + str(self.Id_ref).replace(linesep, linesep + "\t")
+            + linesep
+            + linesep
+        )
+        OPMatrix_str += (
+            "Iq_ref = "
+            + linesep
+            + str(self.Iq_ref).replace(linesep, linesep + "\t")
+            + linesep
+            + linesep
+        )
+        OPMatrix_str += (
+            "Ud_ref = "
+            + linesep
+            + str(self.Ud_ref).replace(linesep, linesep + "\t")
+            + linesep
+            + linesep
+        )
+        OPMatrix_str += (
+            "Uq_ref = "
+            + linesep
+            + str(self.Uq_ref).replace(linesep, linesep + "\t")
+            + linesep
+            + linesep
+        )
+        OPMatrix_str += (
+            "Tem_av_ref = "
+            + linesep
+            + str(self.Tem_av_ref).replace(linesep, linesep + "\t")
+            + linesep
+            + linesep
+        )
+        OPMatrix_str += (
+            "Pem_av_ref = "
+            + linesep
+            + str(self.Pem_av_ref).replace(linesep, linesep + "\t")
+            + linesep
+            + linesep
+        )
+        OPMatrix_str += (
+            "slip_ref = "
+            + linesep
+            + str(self.slip_ref).replace(linesep, linesep + "\t")
+            + linesep
+            + linesep
+        )
         OPMatrix_str += "is_output_power = " + str(self.is_output_power) + linesep
-        OPMatrix_str += "If_ref = " + linesep + str(self.If_ref).replace(linesep, linesep + "\t") + linesep + linesep
-        OPMatrix_str += "col_names = " + linesep + str(self.col_names).replace(linesep, linesep + "\t") + linesep
+        OPMatrix_str += (
+            "If_ref = "
+            + linesep
+            + str(self.If_ref).replace(linesep, linesep + "\t")
+            + linesep
+            + linesep
+        )
+        OPMatrix_str += (
+            "col_names = "
+            + linesep
+            + str(self.col_names).replace(linesep, linesep + "\t")
+            + linesep
+        )
         return OPMatrix_str
 
     def __eq__(self, other):
@@ -257,46 +331,58 @@ class OPMatrix(FrozenClass):
             return False
         return True
 
-    def compare(self, other, name='self', ignore_list=None, is_add_value=False):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
             ignore_list = list()
         if type(other) != type(self):
-            return ['type('+name+')']
+            return ["type(" + name + ")"]
         diff_list = list()
         if not array_equal(other.N0, self.N0):
-            diff_list.append(name+'.N0')
+            diff_list.append(name + ".N0")
         if not array_equal(other.Id_ref, self.Id_ref):
-            diff_list.append(name+'.Id_ref')
+            diff_list.append(name + ".Id_ref")
         if not array_equal(other.Iq_ref, self.Iq_ref):
-            diff_list.append(name+'.Iq_ref')
+            diff_list.append(name + ".Iq_ref")
         if not array_equal(other.Ud_ref, self.Ud_ref):
-            diff_list.append(name+'.Ud_ref')
+            diff_list.append(name + ".Ud_ref")
         if not array_equal(other.Uq_ref, self.Uq_ref):
-            diff_list.append(name+'.Uq_ref')
+            diff_list.append(name + ".Uq_ref")
         if not array_equal(other.Tem_av_ref, self.Tem_av_ref):
-            diff_list.append(name+'.Tem_av_ref')
+            diff_list.append(name + ".Tem_av_ref")
         if not array_equal(other.Pem_av_ref, self.Pem_av_ref):
-            diff_list.append(name+'.Pem_av_ref')
+            diff_list.append(name + ".Pem_av_ref")
         if not array_equal(other.slip_ref, self.slip_ref):
-            diff_list.append(name+'.slip_ref')
+            diff_list.append(name + ".slip_ref")
         if other._is_output_power != self._is_output_power:
             if is_add_value:
-                val_str = ' (self='+str(self._is_output_power)+', other='+str(other._is_output_power)+')'
-                diff_list.append(name+'.is_output_power'+val_str)
+                val_str = (
+                    " (self="
+                    + str(self._is_output_power)
+                    + ", other="
+                    + str(other._is_output_power)
+                    + ")"
+                )
+                diff_list.append(name + ".is_output_power" + val_str)
             else:
-                diff_list.append(name+'.is_output_power')
+                diff_list.append(name + ".is_output_power")
         if not array_equal(other.If_ref, self.If_ref):
-            diff_list.append(name+'.If_ref')
+            diff_list.append(name + ".If_ref")
         if other._col_names != self._col_names:
             if is_add_value:
-                val_str = ' (self='+str(self._col_names)+', other='+str(other._col_names)+')'
-                diff_list.append(name+'.col_names'+val_str)
+                val_str = (
+                    " (self="
+                    + str(self._col_names)
+                    + ", other="
+                    + str(other._col_names)
+                    + ")"
+                )
+                diff_list.append(name + ".col_names" + val_str)
             else:
-                diff_list.append(name+'.col_names')
+                diff_list.append(name + ".col_names")
         # Filter ignore differences
-        diff_list = list(filter(lambda x : x not in ignore_list, diff_list))
+        diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
 
     def __sizeof__(self):
@@ -325,7 +411,7 @@ class OPMatrix(FrozenClass):
             How to handle ndarray (0: tolist, 1: copy, 2: nothing)
         keep_function : bool
             True to keep the function object, else return str
-        Optional keyword input parameter is for internal use only 
+        Optional keyword input parameter is for internal use only
         and may prevent json serializability.
         """
 
@@ -333,110 +419,127 @@ class OPMatrix(FrozenClass):
         if self.N0 is None:
             OPMatrix_dict["N0"] = None
         else:
-            if type_handle_ndarray==0:
+            if type_handle_ndarray == 0:
                 OPMatrix_dict["N0"] = self.N0.tolist()
-            elif type_handle_ndarray==1:
+            elif type_handle_ndarray == 1:
                 OPMatrix_dict["N0"] = self.N0.copy()
-            elif type_handle_ndarray==2:
+            elif type_handle_ndarray == 2:
                 OPMatrix_dict["N0"] = self.N0
             else:
-                raise Exception ('Unknown type_handle_ndarray: '+str(type_handle_ndarray))
+                raise Exception(
+                    "Unknown type_handle_ndarray: " + str(type_handle_ndarray)
+                )
         if self.Id_ref is None:
             OPMatrix_dict["Id_ref"] = None
         else:
-            if type_handle_ndarray==0:
+            if type_handle_ndarray == 0:
                 OPMatrix_dict["Id_ref"] = self.Id_ref.tolist()
-            elif type_handle_ndarray==1:
+            elif type_handle_ndarray == 1:
                 OPMatrix_dict["Id_ref"] = self.Id_ref.copy()
-            elif type_handle_ndarray==2:
+            elif type_handle_ndarray == 2:
                 OPMatrix_dict["Id_ref"] = self.Id_ref
             else:
-                raise Exception ('Unknown type_handle_ndarray: '+str(type_handle_ndarray))
+                raise Exception(
+                    "Unknown type_handle_ndarray: " + str(type_handle_ndarray)
+                )
         if self.Iq_ref is None:
             OPMatrix_dict["Iq_ref"] = None
         else:
-            if type_handle_ndarray==0:
+            if type_handle_ndarray == 0:
                 OPMatrix_dict["Iq_ref"] = self.Iq_ref.tolist()
-            elif type_handle_ndarray==1:
+            elif type_handle_ndarray == 1:
                 OPMatrix_dict["Iq_ref"] = self.Iq_ref.copy()
-            elif type_handle_ndarray==2:
+            elif type_handle_ndarray == 2:
                 OPMatrix_dict["Iq_ref"] = self.Iq_ref
             else:
-                raise Exception ('Unknown type_handle_ndarray: '+str(type_handle_ndarray))
+                raise Exception(
+                    "Unknown type_handle_ndarray: " + str(type_handle_ndarray)
+                )
         if self.Ud_ref is None:
             OPMatrix_dict["Ud_ref"] = None
         else:
-            if type_handle_ndarray==0:
+            if type_handle_ndarray == 0:
                 OPMatrix_dict["Ud_ref"] = self.Ud_ref.tolist()
-            elif type_handle_ndarray==1:
+            elif type_handle_ndarray == 1:
                 OPMatrix_dict["Ud_ref"] = self.Ud_ref.copy()
-            elif type_handle_ndarray==2:
+            elif type_handle_ndarray == 2:
                 OPMatrix_dict["Ud_ref"] = self.Ud_ref
             else:
-                raise Exception ('Unknown type_handle_ndarray: '+str(type_handle_ndarray))
+                raise Exception(
+                    "Unknown type_handle_ndarray: " + str(type_handle_ndarray)
+                )
         if self.Uq_ref is None:
             OPMatrix_dict["Uq_ref"] = None
         else:
-            if type_handle_ndarray==0:
+            if type_handle_ndarray == 0:
                 OPMatrix_dict["Uq_ref"] = self.Uq_ref.tolist()
-            elif type_handle_ndarray==1:
+            elif type_handle_ndarray == 1:
                 OPMatrix_dict["Uq_ref"] = self.Uq_ref.copy()
-            elif type_handle_ndarray==2:
+            elif type_handle_ndarray == 2:
                 OPMatrix_dict["Uq_ref"] = self.Uq_ref
             else:
-                raise Exception ('Unknown type_handle_ndarray: '+str(type_handle_ndarray))
+                raise Exception(
+                    "Unknown type_handle_ndarray: " + str(type_handle_ndarray)
+                )
         if self.Tem_av_ref is None:
             OPMatrix_dict["Tem_av_ref"] = None
         else:
-            if type_handle_ndarray==0:
+            if type_handle_ndarray == 0:
                 OPMatrix_dict["Tem_av_ref"] = self.Tem_av_ref.tolist()
-            elif type_handle_ndarray==1:
+            elif type_handle_ndarray == 1:
                 OPMatrix_dict["Tem_av_ref"] = self.Tem_av_ref.copy()
-            elif type_handle_ndarray==2:
+            elif type_handle_ndarray == 2:
                 OPMatrix_dict["Tem_av_ref"] = self.Tem_av_ref
             else:
-                raise Exception ('Unknown type_handle_ndarray: '+str(type_handle_ndarray))
+                raise Exception(
+                    "Unknown type_handle_ndarray: " + str(type_handle_ndarray)
+                )
         if self.Pem_av_ref is None:
             OPMatrix_dict["Pem_av_ref"] = None
         else:
-            if type_handle_ndarray==0:
+            if type_handle_ndarray == 0:
                 OPMatrix_dict["Pem_av_ref"] = self.Pem_av_ref.tolist()
-            elif type_handle_ndarray==1:
+            elif type_handle_ndarray == 1:
                 OPMatrix_dict["Pem_av_ref"] = self.Pem_av_ref.copy()
-            elif type_handle_ndarray==2:
+            elif type_handle_ndarray == 2:
                 OPMatrix_dict["Pem_av_ref"] = self.Pem_av_ref
             else:
-                raise Exception ('Unknown type_handle_ndarray: '+str(type_handle_ndarray))
+                raise Exception(
+                    "Unknown type_handle_ndarray: " + str(type_handle_ndarray)
+                )
         if self.slip_ref is None:
             OPMatrix_dict["slip_ref"] = None
         else:
-            if type_handle_ndarray==0:
+            if type_handle_ndarray == 0:
                 OPMatrix_dict["slip_ref"] = self.slip_ref.tolist()
-            elif type_handle_ndarray==1:
+            elif type_handle_ndarray == 1:
                 OPMatrix_dict["slip_ref"] = self.slip_ref.copy()
-            elif type_handle_ndarray==2:
+            elif type_handle_ndarray == 2:
                 OPMatrix_dict["slip_ref"] = self.slip_ref
             else:
-                raise Exception ('Unknown type_handle_ndarray: '+str(type_handle_ndarray))
+                raise Exception(
+                    "Unknown type_handle_ndarray: " + str(type_handle_ndarray)
+                )
         OPMatrix_dict["is_output_power"] = self.is_output_power
         if self.If_ref is None:
             OPMatrix_dict["If_ref"] = None
         else:
-            if type_handle_ndarray==0:
+            if type_handle_ndarray == 0:
                 OPMatrix_dict["If_ref"] = self.If_ref.tolist()
-            elif type_handle_ndarray==1:
+            elif type_handle_ndarray == 1:
                 OPMatrix_dict["If_ref"] = self.If_ref.copy()
-            elif type_handle_ndarray==2:
+            elif type_handle_ndarray == 2:
                 OPMatrix_dict["If_ref"] = self.If_ref
             else:
-                raise Exception ('Unknown type_handle_ndarray: '+str(type_handle_ndarray))
+                raise Exception(
+                    "Unknown type_handle_ndarray: " + str(type_handle_ndarray)
+                )
         OPMatrix_dict["col_names"] = (
             self.col_names.copy() if self.col_names is not None else None
         )
         # The class name is added to the dict for deserialisation purpose
         OPMatrix_dict["__class__"] = "OPMatrix"
         return OPMatrix_dict
-
 
     def copy(self):
         """Creates a deepcopy of the object"""
@@ -484,7 +587,19 @@ class OPMatrix(FrozenClass):
         else:
             col_names_val = self.col_names.copy()
         # Creates new object of the same type with the copied properties
-        obj_copy = type(self)(N0=N0_val,Id_ref=Id_ref_val,Iq_ref=Iq_ref_val,Ud_ref=Ud_ref_val,Uq_ref=Uq_ref_val,Tem_av_ref=Tem_av_ref_val,Pem_av_ref=Pem_av_ref_val,slip_ref=slip_ref_val,is_output_power=is_output_power_val,If_ref=If_ref_val,col_names=col_names_val)
+        obj_copy = type(self)(
+            N0=N0_val,
+            Id_ref=Id_ref_val,
+            Iq_ref=Iq_ref_val,
+            Ud_ref=Ud_ref_val,
+            Uq_ref=Uq_ref_val,
+            Tem_av_ref=Tem_av_ref_val,
+            Pem_av_ref=Pem_av_ref_val,
+            slip_ref=slip_ref_val,
+            is_output_power=is_output_power_val,
+            If_ref=If_ref_val,
+            col_names=col_names_val,
+        )
         return obj_copy
 
     def _set_None(self):
@@ -521,7 +636,7 @@ class OPMatrix(FrozenClass):
     N0 = property(
         fget=_get_N0,
         fset=_set_N0,
-        doc=u"""Rotor speed
+        doc="""Rotor speed
 
         :Type: ndarray
         """,
@@ -546,7 +661,7 @@ class OPMatrix(FrozenClass):
     Id_ref = property(
         fget=_get_Id_ref,
         fset=_set_Id_ref,
-        doc=u"""d-axis current rms value
+        doc="""d-axis current rms value
 
         :Type: ndarray
         """,
@@ -571,7 +686,7 @@ class OPMatrix(FrozenClass):
     Iq_ref = property(
         fget=_get_Iq_ref,
         fset=_set_Iq_ref,
-        doc=u"""q-axis current rms value
+        doc="""q-axis current rms value
 
         :Type: ndarray
         """,
@@ -596,7 +711,7 @@ class OPMatrix(FrozenClass):
     Ud_ref = property(
         fget=_get_Ud_ref,
         fset=_set_Ud_ref,
-        doc=u"""d-axis voltage rms value
+        doc="""d-axis voltage rms value
 
         :Type: ndarray
         """,
@@ -621,7 +736,7 @@ class OPMatrix(FrozenClass):
     Uq_ref = property(
         fget=_get_Uq_ref,
         fset=_set_Uq_ref,
-        doc=u"""q-axis voltage rms value
+        doc="""q-axis voltage rms value
 
         :Type: ndarray
         """,
@@ -646,7 +761,7 @@ class OPMatrix(FrozenClass):
     Tem_av_ref = property(
         fget=_get_Tem_av_ref,
         fset=_set_Tem_av_ref,
-        doc=u"""Output average electromagnetic torque
+        doc="""Output average electromagnetic torque
 
         :Type: ndarray
         """,
@@ -671,7 +786,7 @@ class OPMatrix(FrozenClass):
     Pem_av_ref = property(
         fget=_get_Pem_av_ref,
         fset=_set_Pem_av_ref,
-        doc=u"""Output/Input average Electromagnetic Power
+        doc="""Output/Input average Electromagnetic Power
 
         :Type: ndarray
         """,
@@ -696,7 +811,7 @@ class OPMatrix(FrozenClass):
     slip_ref = property(
         fget=_get_slip_ref,
         fset=_set_slip_ref,
-        doc=u"""Rotor mechanical slip
+        doc="""Rotor mechanical slip
 
         :Type: ndarray
         """,
@@ -714,7 +829,7 @@ class OPMatrix(FrozenClass):
     is_output_power = property(
         fget=_get_is_output_power,
         fset=_set_is_output_power,
-        doc=u"""True if power given in OP_matrix is the output power, False if it is the input power
+        doc="""True if power given in OP_matrix is the output power, False if it is the input power
 
         :Type: bool
         """,
@@ -739,7 +854,7 @@ class OPMatrix(FrozenClass):
     If_ref = property(
         fget=_get_If_ref,
         fset=_set_If_ref,
-        doc=u"""DC rotor current
+        doc="""DC rotor current
 
         :Type: ndarray
         """,
@@ -759,7 +874,7 @@ class OPMatrix(FrozenClass):
     col_names = property(
         fget=_get_col_names,
         fset=_set_col_names,
-        doc=u"""Name of the columns from set_OP_matrix
+        doc="""Name of the columns from set_OP_matrix
 
         :Type: list
         """,

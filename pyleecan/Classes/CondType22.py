@@ -38,7 +38,9 @@ except ImportError as error:
     comp_height_wire = error
 
 try:
-    from ..Methods.Machine.CondType22.comp_nb_circumferential_wire import comp_nb_circumferential_wire
+    from ..Methods.Machine.CondType22.comp_nb_circumferential_wire import (
+        comp_nb_circumferential_wire,
+    )
 except ImportError as error:
     comp_nb_circumferential_wire = error
 
@@ -150,7 +152,9 @@ class CondType22(Conductor):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, Sbar=0.01, cond_mat=-1, ins_mat=-1, init_dict = None, init_str = None):
+    def __init__(
+        self, Sbar=0.01, cond_mat=-1, ins_mat=-1, init_dict=None, init_str=None
+    ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -201,27 +205,38 @@ class CondType22(Conductor):
             return False
         return True
 
-    def compare(self, other, name='self', ignore_list=None, is_add_value=False):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
             ignore_list = list()
         if type(other) != type(self):
-            return ['type('+name+')']
+            return ["type(" + name + ")"]
         diff_list = list()
 
         # Check the properties inherited from Conductor
-        diff_list.extend(super(CondType22, self).compare(other,name=name, ignore_list=ignore_list, is_add_value=is_add_value))
-        if other._Sbar is not None and self._Sbar is not None and isnan(other._Sbar) and isnan(self._Sbar):
+        diff_list.extend(
+            super(CondType22, self).compare(
+                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
+            )
+        )
+        if (
+            other._Sbar is not None
+            and self._Sbar is not None
+            and isnan(other._Sbar)
+            and isnan(self._Sbar)
+        ):
             pass
         elif other._Sbar != self._Sbar:
             if is_add_value:
-                val_str = ' (self='+str(self._Sbar)+', other='+str(other._Sbar)+')'
-                diff_list.append(name+'.Sbar'+val_str)
+                val_str = (
+                    " (self=" + str(self._Sbar) + ", other=" + str(other._Sbar) + ")"
+                )
+                diff_list.append(name + ".Sbar" + val_str)
             else:
-                diff_list.append(name+'.Sbar')
+                diff_list.append(name + ".Sbar")
         # Filter ignore differences
-        diff_list = list(filter(lambda x : x not in ignore_list, diff_list))
+        diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
 
     def __sizeof__(self):
@@ -241,18 +256,21 @@ class CondType22(Conductor):
             How to handle ndarray (0: tolist, 1: copy, 2: nothing)
         keep_function : bool
             True to keep the function object, else return str
-        Optional keyword input parameter is for internal use only 
+        Optional keyword input parameter is for internal use only
         and may prevent json serializability.
         """
 
         # Get the properties inherited from Conductor
-        CondType22_dict = super(CondType22, self).as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs)
+        CondType22_dict = super(CondType22, self).as_dict(
+            type_handle_ndarray=type_handle_ndarray,
+            keep_function=keep_function,
+            **kwargs
+        )
         CondType22_dict["Sbar"] = self.Sbar
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         CondType22_dict["__class__"] = "CondType22"
         return CondType22_dict
-
 
     def copy(self):
         """Creates a deepcopy of the object"""
@@ -268,7 +286,7 @@ class CondType22(Conductor):
         else:
             ins_mat_val = self.ins_mat.copy()
         # Creates new object of the same type with the copied properties
-        obj_copy = type(self)(Sbar=Sbar_val,cond_mat=cond_mat_val,ins_mat=ins_mat_val)
+        obj_copy = type(self)(Sbar=Sbar_val, cond_mat=cond_mat_val, ins_mat=ins_mat_val)
         return obj_copy
 
     def _set_None(self):
@@ -290,7 +308,7 @@ class CondType22(Conductor):
     Sbar = property(
         fget=_get_Sbar,
         fset=_set_Sbar,
-        doc=u"""Surface of the Slot
+        doc="""Surface of the Slot
 
         :Type: float
         :min: 0

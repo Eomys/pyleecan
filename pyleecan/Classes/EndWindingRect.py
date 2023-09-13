@@ -66,7 +66,15 @@ class EndWindingRect(EndWinding):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, coil_pitch=None, lambda_length=0, lambda_width=0, Lew_enforced=0, init_dict = None, init_str = None):
+    def __init__(
+        self,
+        coil_pitch=None,
+        lambda_length=0,
+        lambda_width=0,
+        Lew_enforced=0,
+        init_dict=None,
+        init_str=None,
+    ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -127,43 +135,80 @@ class EndWindingRect(EndWinding):
             return False
         return True
 
-    def compare(self, other, name='self', ignore_list=None, is_add_value=False):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
             ignore_list = list()
         if type(other) != type(self):
-            return ['type('+name+')']
+            return ["type(" + name + ")"]
         diff_list = list()
 
         # Check the properties inherited from EndWinding
-        diff_list.extend(super(EndWindingRect, self).compare(other,name=name, ignore_list=ignore_list, is_add_value=is_add_value))
-        if other._coil_pitch is not None and self._coil_pitch is not None and isnan(other._coil_pitch) and isnan(self._coil_pitch):
+        diff_list.extend(
+            super(EndWindingRect, self).compare(
+                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
+            )
+        )
+        if (
+            other._coil_pitch is not None
+            and self._coil_pitch is not None
+            and isnan(other._coil_pitch)
+            and isnan(self._coil_pitch)
+        ):
             pass
         elif other._coil_pitch != self._coil_pitch:
             if is_add_value:
-                val_str = ' (self='+str(self._coil_pitch)+', other='+str(other._coil_pitch)+')'
-                diff_list.append(name+'.coil_pitch'+val_str)
+                val_str = (
+                    " (self="
+                    + str(self._coil_pitch)
+                    + ", other="
+                    + str(other._coil_pitch)
+                    + ")"
+                )
+                diff_list.append(name + ".coil_pitch" + val_str)
             else:
-                diff_list.append(name+'.coil_pitch')
-        if other._lambda_length is not None and self._lambda_length is not None and isnan(other._lambda_length) and isnan(self._lambda_length):
+                diff_list.append(name + ".coil_pitch")
+        if (
+            other._lambda_length is not None
+            and self._lambda_length is not None
+            and isnan(other._lambda_length)
+            and isnan(self._lambda_length)
+        ):
             pass
         elif other._lambda_length != self._lambda_length:
             if is_add_value:
-                val_str = ' (self='+str(self._lambda_length)+', other='+str(other._lambda_length)+')'
-                diff_list.append(name+'.lambda_length'+val_str)
+                val_str = (
+                    " (self="
+                    + str(self._lambda_length)
+                    + ", other="
+                    + str(other._lambda_length)
+                    + ")"
+                )
+                diff_list.append(name + ".lambda_length" + val_str)
             else:
-                diff_list.append(name+'.lambda_length')
-        if other._lambda_width is not None and self._lambda_width is not None and isnan(other._lambda_width) and isnan(self._lambda_width):
+                diff_list.append(name + ".lambda_length")
+        if (
+            other._lambda_width is not None
+            and self._lambda_width is not None
+            and isnan(other._lambda_width)
+            and isnan(self._lambda_width)
+        ):
             pass
         elif other._lambda_width != self._lambda_width:
             if is_add_value:
-                val_str = ' (self='+str(self._lambda_width)+', other='+str(other._lambda_width)+')'
-                diff_list.append(name+'.lambda_width'+val_str)
+                val_str = (
+                    " (self="
+                    + str(self._lambda_width)
+                    + ", other="
+                    + str(other._lambda_width)
+                    + ")"
+                )
+                diff_list.append(name + ".lambda_width" + val_str)
             else:
-                diff_list.append(name+'.lambda_width')
+                diff_list.append(name + ".lambda_width")
         # Filter ignore differences
-        diff_list = list(filter(lambda x : x not in ignore_list, diff_list))
+        diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
 
     def __sizeof__(self):
@@ -185,12 +230,16 @@ class EndWindingRect(EndWinding):
             How to handle ndarray (0: tolist, 1: copy, 2: nothing)
         keep_function : bool
             True to keep the function object, else return str
-        Optional keyword input parameter is for internal use only 
+        Optional keyword input parameter is for internal use only
         and may prevent json serializability.
         """
 
         # Get the properties inherited from EndWinding
-        EndWindingRect_dict = super(EndWindingRect, self).as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs)
+        EndWindingRect_dict = super(EndWindingRect, self).as_dict(
+            type_handle_ndarray=type_handle_ndarray,
+            keep_function=keep_function,
+            **kwargs
+        )
         EndWindingRect_dict["coil_pitch"] = self.coil_pitch
         EndWindingRect_dict["lambda_length"] = self.lambda_length
         EndWindingRect_dict["lambda_width"] = self.lambda_width
@@ -198,7 +247,6 @@ class EndWindingRect(EndWinding):
         # Overwrite the mother class name
         EndWindingRect_dict["__class__"] = "EndWindingRect"
         return EndWindingRect_dict
-
 
     def copy(self):
         """Creates a deepcopy of the object"""
@@ -209,7 +257,12 @@ class EndWindingRect(EndWinding):
         lambda_width_val = self.lambda_width
         Lew_enforced_val = self.Lew_enforced
         # Creates new object of the same type with the copied properties
-        obj_copy = type(self)(coil_pitch=coil_pitch_val,lambda_length=lambda_length_val,lambda_width=lambda_width_val,Lew_enforced=Lew_enforced_val)
+        obj_copy = type(self)(
+            coil_pitch=coil_pitch_val,
+            lambda_length=lambda_length_val,
+            lambda_width=lambda_width_val,
+            Lew_enforced=Lew_enforced_val,
+        )
         return obj_copy
 
     def _set_None(self):
@@ -233,7 +286,7 @@ class EndWindingRect(EndWinding):
     coil_pitch = property(
         fget=_get_coil_pitch,
         fset=_set_coil_pitch,
-        doc=u"""effective coil pitch (override) for length calculation
+        doc="""effective coil pitch (override) for length calculation
 
         :Type: float
         """,
@@ -251,7 +304,7 @@ class EndWindingRect(EndWinding):
     lambda_length = property(
         fget=_get_lambda_length,
         fset=_set_lambda_length,
-        doc=u"""permeance factor related to end winding length
+        doc="""permeance factor related to end winding length
 
         :Type: float
         :min: 0
@@ -270,7 +323,7 @@ class EndWindingRect(EndWinding):
     lambda_width = property(
         fget=_get_lambda_width,
         fset=_set_lambda_width,
-        doc=u"""permeance factor related to end winding width
+        doc="""permeance factor related to end winding width
 
         :Type: float
         :min: 0

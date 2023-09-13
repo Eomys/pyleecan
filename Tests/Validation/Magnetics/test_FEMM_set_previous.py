@@ -123,5 +123,4 @@ def test_FEMM_set_previous():
 
 
 if __name__ == "__main__":
-
     out, out2 = test_FEMM_set_previous()

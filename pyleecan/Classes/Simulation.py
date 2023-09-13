@@ -95,7 +95,22 @@ class Simulation(FrozenClass):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, name="", desc="", machine=-1, input=-1, logger_name="Pyleecan.Simulation", var_simu=None, postproc_list=-1, index=None, path_result=None, layer=None, layer_log_warn=None, init_dict = None, init_str = None):
+    def __init__(
+        self,
+        name="",
+        desc="",
+        machine=-1,
+        input=-1,
+        logger_name="Pyleecan.Simulation",
+        var_simu=None,
+        postproc_list=-1,
+        index=None,
+        path_result=None,
+        layer=None,
+        layer_log_warn=None,
+        init_dict=None,
+        init_str=None,
+    ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -162,25 +177,30 @@ class Simulation(FrozenClass):
         Simulation_str += 'desc = "' + str(self.desc) + '"' + linesep
         if self.machine is not None:
             tmp = self.machine.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            Simulation_str += "machine = "+ tmp
+            Simulation_str += "machine = " + tmp
         else:
             Simulation_str += "machine = None" + linesep + linesep
         if self.input is not None:
             tmp = self.input.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            Simulation_str += "input = "+ tmp
+            Simulation_str += "input = " + tmp
         else:
             Simulation_str += "input = None" + linesep + linesep
         Simulation_str += 'logger_name = "' + str(self.logger_name) + '"' + linesep
         if self.var_simu is not None:
             tmp = self.var_simu.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            Simulation_str += "var_simu = "+ tmp
+            Simulation_str += "var_simu = " + tmp
         else:
             Simulation_str += "var_simu = None" + linesep + linesep
         if len(self.postproc_list) == 0:
             Simulation_str += "postproc_list = []" + linesep
         for ii in range(len(self.postproc_list)):
-            tmp = self.postproc_list[ii].__str__().replace(linesep, linesep + "\t") + linesep
-            Simulation_str += "postproc_list["+str(ii)+"] ="+ tmp + linesep + linesep
+            tmp = (
+                self.postproc_list[ii].__str__().replace(linesep, linesep + "\t")
+                + linesep
+            )
+            Simulation_str += (
+                "postproc_list[" + str(ii) + "] =" + tmp + linesep + linesep
+            )
         Simulation_str += "index = " + str(self.index) + linesep
         Simulation_str += 'path_result = "' + str(self.path_result) + '"' + linesep
         Simulation_str += "layer = " + str(self.layer) + linesep
@@ -216,79 +236,141 @@ class Simulation(FrozenClass):
             return False
         return True
 
-    def compare(self, other, name='self', ignore_list=None, is_add_value=False):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
             ignore_list = list()
         if type(other) != type(self):
-            return ['type('+name+')']
+            return ["type(" + name + ")"]
         diff_list = list()
         if other._name != self._name:
             if is_add_value:
-                val_str = ' (self='+str(self._name)+', other='+str(other._name)+')'
-                diff_list.append(name+'.name'+val_str)
+                val_str = (
+                    " (self=" + str(self._name) + ", other=" + str(other._name) + ")"
+                )
+                diff_list.append(name + ".name" + val_str)
             else:
-                diff_list.append(name+'.name')
+                diff_list.append(name + ".name")
         if other._desc != self._desc:
             if is_add_value:
-                val_str = ' (self='+str(self._desc)+', other='+str(other._desc)+')'
-                diff_list.append(name+'.desc'+val_str)
+                val_str = (
+                    " (self=" + str(self._desc) + ", other=" + str(other._desc) + ")"
+                )
+                diff_list.append(name + ".desc" + val_str)
             else:
-                diff_list.append(name+'.desc')
-        if (other.machine is None and self.machine is not None) or (other.machine is not None and self.machine is None):
-            diff_list.append(name+'.machine None mismatch')
+                diff_list.append(name + ".desc")
+        if (other.machine is None and self.machine is not None) or (
+            other.machine is not None and self.machine is None
+        ):
+            diff_list.append(name + ".machine None mismatch")
         elif self.machine is not None:
-            diff_list.extend(self.machine.compare(other.machine,name=name+'.machine',ignore_list=ignore_list,is_add_value=is_add_value))
-        if (other.input is None and self.input is not None) or (other.input is not None and self.input is None):
-            diff_list.append(name+'.input None mismatch')
+            diff_list.extend(
+                self.machine.compare(
+                    other.machine,
+                    name=name + ".machine",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
+            )
+        if (other.input is None and self.input is not None) or (
+            other.input is not None and self.input is None
+        ):
+            diff_list.append(name + ".input None mismatch")
         elif self.input is not None:
-            diff_list.extend(self.input.compare(other.input,name=name+'.input',ignore_list=ignore_list,is_add_value=is_add_value))
+            diff_list.extend(
+                self.input.compare(
+                    other.input,
+                    name=name + ".input",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
+            )
         if other._logger_name != self._logger_name:
             if is_add_value:
-                val_str = ' (self='+str(self._logger_name)+', other='+str(other._logger_name)+')'
-                diff_list.append(name+'.logger_name'+val_str)
+                val_str = (
+                    " (self="
+                    + str(self._logger_name)
+                    + ", other="
+                    + str(other._logger_name)
+                    + ")"
+                )
+                diff_list.append(name + ".logger_name" + val_str)
             else:
-                diff_list.append(name+'.logger_name')
-        if (other.var_simu is None and self.var_simu is not None) or (other.var_simu is not None and self.var_simu is None):
-            diff_list.append(name+'.var_simu None mismatch')
+                diff_list.append(name + ".logger_name")
+        if (other.var_simu is None and self.var_simu is not None) or (
+            other.var_simu is not None and self.var_simu is None
+        ):
+            diff_list.append(name + ".var_simu None mismatch")
         elif self.var_simu is not None:
-            diff_list.extend(self.var_simu.compare(other.var_simu,name=name+'.var_simu',ignore_list=ignore_list,is_add_value=is_add_value))
-        if (other.postproc_list is None and self.postproc_list is not None) or (other.postproc_list is not None and self.postproc_list is None):
-            diff_list.append(name+'.postproc_list None mismatch')
+            diff_list.extend(
+                self.var_simu.compare(
+                    other.var_simu,
+                    name=name + ".var_simu",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
+            )
+        if (other.postproc_list is None and self.postproc_list is not None) or (
+            other.postproc_list is not None and self.postproc_list is None
+        ):
+            diff_list.append(name + ".postproc_list None mismatch")
         elif self.postproc_list is None:
             pass
         elif len(other.postproc_list) != len(self.postproc_list):
-            diff_list.append('len('+name+'.postproc_list)')
+            diff_list.append("len(" + name + ".postproc_list)")
         else:
             for ii in range(len(other.postproc_list)):
-                diff_list.extend(self.postproc_list[ii].compare(other.postproc_list[ii],name=name+'.postproc_list['+str(ii)+']',ignore_list=ignore_list,is_add_value=is_add_value))
+                diff_list.extend(
+                    self.postproc_list[ii].compare(
+                        other.postproc_list[ii],
+                        name=name + ".postproc_list[" + str(ii) + "]",
+                        ignore_list=ignore_list,
+                        is_add_value=is_add_value,
+                    )
+                )
         if other._index != self._index:
             if is_add_value:
-                val_str = ' (self='+str(self._index)+', other='+str(other._index)+')'
-                diff_list.append(name+'.index'+val_str)
+                val_str = (
+                    " (self=" + str(self._index) + ", other=" + str(other._index) + ")"
+                )
+                diff_list.append(name + ".index" + val_str)
             else:
-                diff_list.append(name+'.index')
+                diff_list.append(name + ".index")
         if other._path_result != self._path_result:
             if is_add_value:
-                val_str = ' (self='+str(self._path_result)+', other='+str(other._path_result)+')'
-                diff_list.append(name+'.path_result'+val_str)
+                val_str = (
+                    " (self="
+                    + str(self._path_result)
+                    + ", other="
+                    + str(other._path_result)
+                    + ")"
+                )
+                diff_list.append(name + ".path_result" + val_str)
             else:
-                diff_list.append(name+'.path_result')
+                diff_list.append(name + ".path_result")
         if other._layer != self._layer:
             if is_add_value:
-                val_str = ' (self='+str(self._layer)+', other='+str(other._layer)+')'
-                diff_list.append(name+'.layer'+val_str)
+                val_str = (
+                    " (self=" + str(self._layer) + ", other=" + str(other._layer) + ")"
+                )
+                diff_list.append(name + ".layer" + val_str)
             else:
-                diff_list.append(name+'.layer')
+                diff_list.append(name + ".layer")
         if other._layer_log_warn != self._layer_log_warn:
             if is_add_value:
-                val_str = ' (self='+str(self._layer_log_warn)+', other='+str(other._layer_log_warn)+')'
-                diff_list.append(name+'.layer_log_warn'+val_str)
+                val_str = (
+                    " (self="
+                    + str(self._layer_log_warn)
+                    + ", other="
+                    + str(other._layer_log_warn)
+                    + ")"
+                )
+                diff_list.append(name + ".layer_log_warn" + val_str)
             else:
-                diff_list.append(name+'.layer_log_warn')
+                diff_list.append(name + ".layer_log_warn")
         # Filter ignore differences
-        diff_list = list(filter(lambda x : x not in ignore_list, diff_list))
+        diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
 
     def __sizeof__(self):
@@ -317,7 +399,7 @@ class Simulation(FrozenClass):
             How to handle ndarray (0: tolist, 1: copy, 2: nothing)
         keep_function : bool
             True to keep the function object, else return str
-        Optional keyword input parameter is for internal use only 
+        Optional keyword input parameter is for internal use only
         and may prevent json serializability.
         """
 
@@ -327,25 +409,43 @@ class Simulation(FrozenClass):
         if self.machine is None:
             Simulation_dict["machine"] = None
         else:
-            Simulation_dict["machine"] = self.machine.as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs)
+            Simulation_dict["machine"] = self.machine.as_dict(
+                type_handle_ndarray=type_handle_ndarray,
+                keep_function=keep_function,
+                **kwargs
+            )
         if self.input is None:
             Simulation_dict["input"] = None
         else:
-            Simulation_dict["input"] = self.input.as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs)
+            Simulation_dict["input"] = self.input.as_dict(
+                type_handle_ndarray=type_handle_ndarray,
+                keep_function=keep_function,
+                **kwargs
+            )
         Simulation_dict["logger_name"] = self.logger_name
         if self.var_simu is None:
             Simulation_dict["var_simu"] = None
         else:
-            Simulation_dict["var_simu"] = self.var_simu.as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs)
+            Simulation_dict["var_simu"] = self.var_simu.as_dict(
+                type_handle_ndarray=type_handle_ndarray,
+                keep_function=keep_function,
+                **kwargs
+            )
         if self.postproc_list is None:
-            Simulation_dict['postproc_list'] = None
+            Simulation_dict["postproc_list"] = None
         else:
-            Simulation_dict['postproc_list'] = list()
+            Simulation_dict["postproc_list"] = list()
             for obj in self.postproc_list:
                 if obj is not None:
-                    Simulation_dict['postproc_list'].append(obj.as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs))
+                    Simulation_dict["postproc_list"].append(
+                        obj.as_dict(
+                            type_handle_ndarray=type_handle_ndarray,
+                            keep_function=keep_function,
+                            **kwargs
+                        )
+                    )
                 else:
-                    Simulation_dict['postproc_list'].append(None)
+                    Simulation_dict["postproc_list"].append(None)
         Simulation_dict["index"] = self.index
         Simulation_dict["path_result"] = self.path_result
         Simulation_dict["layer"] = self.layer
@@ -353,7 +453,6 @@ class Simulation(FrozenClass):
         # The class name is added to the dict for deserialisation purpose
         Simulation_dict["__class__"] = "Simulation"
         return Simulation_dict
-
 
     def copy(self):
         """Creates a deepcopy of the object"""
@@ -385,7 +484,19 @@ class Simulation(FrozenClass):
         layer_val = self.layer
         layer_log_warn_val = self.layer_log_warn
         # Creates new object of the same type with the copied properties
-        obj_copy = type(self)(name=name_val,desc=desc_val,machine=machine_val,input=input_val,logger_name=logger_name_val,var_simu=var_simu_val,postproc_list=postproc_list_val,index=index_val,path_result=path_result_val,layer=layer_val,layer_log_warn=layer_log_warn_val)
+        obj_copy = type(self)(
+            name=name_val,
+            desc=desc_val,
+            machine=machine_val,
+            input=input_val,
+            logger_name=logger_name_val,
+            var_simu=var_simu_val,
+            postproc_list=postproc_list_val,
+            index=index_val,
+            path_result=path_result_val,
+            layer=layer_val,
+            layer_log_warn=layer_log_warn_val,
+        )
         return obj_copy
 
     def _set_None(self):
@@ -418,7 +529,7 @@ class Simulation(FrozenClass):
     name = property(
         fget=_get_name,
         fset=_set_name,
-        doc=u"""Name of the simulation
+        doc="""Name of the simulation
 
         :Type: str
         """,
@@ -436,7 +547,7 @@ class Simulation(FrozenClass):
     desc = property(
         fget=_get_desc,
         fset=_set_desc,
-        doc=u"""Simulation description
+        doc="""Simulation description
 
         :Type: str
         """,
@@ -452,23 +563,28 @@ class Simulation(FrozenClass):
             try:
                 value = load_init_dict(value)[1]
             except Exception as e:
-                self.get_logger().error('Error while loading '+value+', setting None instead')
+                self.get_logger().error(
+                    "Error while loading " + value + ", setting None instead"
+                )
                 value = None
-        if isinstance(value, dict) and '__class__' in value:
-            class_obj = import_class('pyleecan.Classes', value.get('__class__'), 'machine')
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class(
+                "pyleecan.Classes", value.get("__class__"), "machine"
+            )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
-            Machine = import_class('pyleecan.Classes', 'Machine', 'machine')
+            Machine = import_class("pyleecan.Classes", "Machine", "machine")
             value = Machine()
         check_var("machine", value, "Machine")
         self._machine = value
 
         if self._machine is not None:
             self._machine.parent = self
+
     machine = property(
         fget=_get_machine,
         fset=_set_machine,
-        doc=u"""Machine to simulate
+        doc="""Machine to simulate
 
         :Type: Machine
         """,
@@ -484,23 +600,28 @@ class Simulation(FrozenClass):
             try:
                 value = load_init_dict(value)[1]
             except Exception as e:
-                self.get_logger().error('Error while loading '+value+', setting None instead')
+                self.get_logger().error(
+                    "Error while loading " + value + ", setting None instead"
+                )
                 value = None
-        if isinstance(value, dict) and '__class__' in value:
-            class_obj = import_class('pyleecan.Classes', value.get('__class__'), 'input')
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class(
+                "pyleecan.Classes", value.get("__class__"), "input"
+            )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
-            Input = import_class('pyleecan.Classes', 'Input', 'input')
+            Input = import_class("pyleecan.Classes", "Input", "input")
             value = Input()
         check_var("input", value, "Input")
         self._input = value
 
         if self._input is not None:
             self._input.parent = self
+
     input = property(
         fget=_get_input,
         fset=_set_input,
-        doc=u"""Input of the simulation
+        doc="""Input of the simulation
 
         :Type: Input
         """,
@@ -518,7 +639,7 @@ class Simulation(FrozenClass):
     logger_name = property(
         fget=_get_logger_name,
         fset=_set_logger_name,
-        doc=u"""Name of the logger to use
+        doc="""Name of the logger to use
 
         :Type: str
         """,
@@ -534,23 +655,28 @@ class Simulation(FrozenClass):
             try:
                 value = load_init_dict(value)[1]
             except Exception as e:
-                self.get_logger().error('Error while loading '+value+', setting None instead')
+                self.get_logger().error(
+                    "Error while loading " + value + ", setting None instead"
+                )
                 value = None
-        if isinstance(value, dict) and '__class__' in value:
-            class_obj = import_class('pyleecan.Classes', value.get('__class__'), 'var_simu')
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class(
+                "pyleecan.Classes", value.get("__class__"), "var_simu"
+            )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
-            VarSimu = import_class('pyleecan.Classes', 'VarSimu', 'var_simu')
+            VarSimu = import_class("pyleecan.Classes", "VarSimu", "var_simu")
             value = VarSimu()
         check_var("var_simu", value, "VarSimu")
         self._var_simu = value
 
         if self._var_simu is not None:
             self._var_simu.parent = self
+
     var_simu = property(
         fget=_get_var_simu,
         fset=_set_var_simu,
-        doc=u"""Multi-simulation definition
+        doc="""Multi-simulation definition
 
         :Type: VarSimu
         """,
@@ -572,11 +698,15 @@ class Simulation(FrozenClass):
                     try:
                         obj = load_init_dict(obj)[1]
                     except Exception as e:
-                        self.get_logger().error('Error while loading '+obj+', setting None instead')
+                        self.get_logger().error(
+                            "Error while loading " + obj + ", setting None instead"
+                        )
                         obj = None
                         value[ii] = None
                 if type(obj) is dict:
-                    class_obj = import_class('pyleecan.Classes', obj.get('__class__'), 'postproc_list')
+                    class_obj = import_class(
+                        "pyleecan.Classes", obj.get("__class__"), "postproc_list"
+                    )
                     value[ii] = class_obj(init_dict=obj)
                 if value[ii] is not None:
                     value[ii].parent = self
@@ -588,7 +718,7 @@ class Simulation(FrozenClass):
     postproc_list = property(
         fget=_get_postproc_list,
         fset=_set_postproc_list,
-        doc=u"""List of postprocessings to run on Output after the simulation
+        doc="""List of postprocessings to run on Output after the simulation
 
         :Type: [Post]
         """,
@@ -606,7 +736,7 @@ class Simulation(FrozenClass):
     index = property(
         fget=_get_index,
         fset=_set_index,
-        doc=u"""Index of the simulation (if part of a multi-simulation)
+        doc="""Index of the simulation (if part of a multi-simulation)
 
         :Type: int
         :min: 0
@@ -625,7 +755,7 @@ class Simulation(FrozenClass):
     path_result = property(
         fget=_get_path_result,
         fset=_set_path_result,
-        doc=u"""Path to the Result folder to use (None to use default one)
+        doc="""Path to the Result folder to use (None to use default one)
 
         :Type: str
         """,
@@ -643,7 +773,7 @@ class Simulation(FrozenClass):
     layer = property(
         fget=_get_layer,
         fset=_set_layer,
-        doc=u"""Layer of the simulation in a multi-simulation (0 is top simulation)
+        doc="""Layer of the simulation in a multi-simulation (0 is top simulation)
 
         :Type: int
         :min: 0
@@ -662,7 +792,7 @@ class Simulation(FrozenClass):
     layer_log_warn = property(
         fget=_get_layer_log_warn,
         fset=_set_layer_log_warn,
-        doc=u"""Enable to set the log console_handler to warning starting from a particular layer. layer_log_warn=2 => layer 0 and 1 info, layer 2 warning
+        doc="""Enable to set the log console_handler to warning starting from a particular layer. layer_log_warn=2 => layer 0 and 1 info, layer 2 warning
 
         :Type: int
         :min: 0

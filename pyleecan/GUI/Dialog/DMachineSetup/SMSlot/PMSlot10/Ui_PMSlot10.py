@@ -18,16 +18,16 @@ from pyleecan.GUI.Resources import pyleecan_rc
 class Ui_PMSlot10(object):
     def setupUi(self, PMSlot10):
         if not PMSlot10.objectName():
-            PMSlot10.setObjectName(u"PMSlot10")
+            PMSlot10.setObjectName("PMSlot10")
         PMSlot10.resize(929, 470)
         PMSlot10.setMinimumSize(QSize(630, 470))
         PMSlot10.setMaximumSize(QSize(16777215, 16777215))
         self.horizontalLayout = QHBoxLayout(PMSlot10)
-        self.horizontalLayout.setObjectName(u"horizontalLayout")
+        self.horizontalLayout.setObjectName("horizontalLayout")
         self.verticalLayout_2 = QVBoxLayout()
-        self.verticalLayout_2.setObjectName(u"verticalLayout_2")
+        self.verticalLayout_2.setObjectName("verticalLayout_2")
         self.img_slot = QLabel(PMSlot10)
-        self.img_slot.setObjectName(u"img_slot")
+        self.img_slot.setObjectName("img_slot")
         sizePolicy = QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -35,7 +35,7 @@ class Ui_PMSlot10(object):
         self.img_slot.setSizePolicy(sizePolicy)
         self.img_slot.setMaximumSize(QSize(16777215, 16777215))
         self.img_slot.setPixmap(
-            QPixmap(u":/images/images/MachineSetup/WMSlot/SlotM10.png")
+            QPixmap(":/images/images/MachineSetup/WMSlot/SlotM10.png")
         )
         self.img_slot.setScaledContents(False)
         self.img_slot.setAlignment(Qt.AlignCenter)
@@ -43,7 +43,7 @@ class Ui_PMSlot10(object):
         self.verticalLayout_2.addWidget(self.img_slot)
 
         self.txt_constraint = QTextEdit(PMSlot10)
-        self.txt_constraint.setObjectName(u"txt_constraint")
+        self.txt_constraint.setObjectName("txt_constraint")
         sizePolicy1 = QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
         sizePolicy1.setHorizontalStretch(0)
         sizePolicy1.setVerticalStretch(0)
@@ -62,74 +62,74 @@ class Ui_PMSlot10(object):
         self.horizontalLayout.addLayout(self.verticalLayout_2)
 
         self.scrollArea = QScrollArea(PMSlot10)
-        self.scrollArea.setObjectName(u"scrollArea")
+        self.scrollArea.setObjectName("scrollArea")
         self.scrollArea.setMinimumSize(QSize(270, 0))
         self.scrollArea.setMaximumSize(QSize(270, 16777215))
         self.scrollArea.setWidgetResizable(True)
         self.scrollAreaWidgetContents = QWidget()
-        self.scrollAreaWidgetContents.setObjectName(u"scrollAreaWidgetContents")
+        self.scrollAreaWidgetContents.setObjectName("scrollAreaWidgetContents")
         self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 268, 446))
         self.verticalLayout_3 = QVBoxLayout(self.scrollAreaWidgetContents)
-        self.verticalLayout_3.setObjectName(u"verticalLayout_3")
+        self.verticalLayout_3.setObjectName("verticalLayout_3")
         self.gridLayout = QGridLayout()
-        self.gridLayout.setObjectName(u"gridLayout")
+        self.gridLayout.setObjectName("gridLayout")
         self.in_Wmag = QLabel(self.scrollAreaWidgetContents)
-        self.in_Wmag.setObjectName(u"in_Wmag")
+        self.in_Wmag.setObjectName("in_Wmag")
 
         self.gridLayout.addWidget(self.in_Wmag, 1, 0, 1, 1)
 
         self.unit_Wmag = QLabel(self.scrollAreaWidgetContents)
-        self.unit_Wmag.setObjectName(u"unit_Wmag")
+        self.unit_Wmag.setObjectName("unit_Wmag")
 
         self.gridLayout.addWidget(self.unit_Wmag, 1, 2, 1, 1)
 
         self.in_W0 = QLabel(self.scrollAreaWidgetContents)
-        self.in_W0.setObjectName(u"in_W0")
+        self.in_W0.setObjectName("in_W0")
 
         self.gridLayout.addWidget(self.in_W0, 0, 0, 1, 1)
 
         self.unit_W0 = QLabel(self.scrollAreaWidgetContents)
-        self.unit_W0.setObjectName(u"unit_W0")
+        self.unit_W0.setObjectName("unit_W0")
 
         self.gridLayout.addWidget(self.unit_W0, 0, 2, 1, 1)
 
         self.unit_H0 = QLabel(self.scrollAreaWidgetContents)
-        self.unit_H0.setObjectName(u"unit_H0")
+        self.unit_H0.setObjectName("unit_H0")
 
         self.gridLayout.addWidget(self.unit_H0, 2, 2, 1, 1)
 
         self.in_H0 = QLabel(self.scrollAreaWidgetContents)
-        self.in_H0.setObjectName(u"in_H0")
+        self.in_H0.setObjectName("in_H0")
 
         self.gridLayout.addWidget(self.in_H0, 2, 0, 1, 1)
 
         self.unit_Hmag = QLabel(self.scrollAreaWidgetContents)
-        self.unit_Hmag.setObjectName(u"unit_Hmag")
+        self.unit_Hmag.setObjectName("unit_Hmag")
 
         self.gridLayout.addWidget(self.unit_Hmag, 3, 2, 1, 1)
 
         self.lf_W0 = FloatEdit(self.scrollAreaWidgetContents)
-        self.lf_W0.setObjectName(u"lf_W0")
+        self.lf_W0.setObjectName("lf_W0")
 
         self.gridLayout.addWidget(self.lf_W0, 0, 1, 1, 1)
 
         self.in_Hmag = QLabel(self.scrollAreaWidgetContents)
-        self.in_Hmag.setObjectName(u"in_Hmag")
+        self.in_Hmag.setObjectName("in_Hmag")
 
         self.gridLayout.addWidget(self.in_Hmag, 3, 0, 1, 1)
 
         self.lf_H0 = FloatEdit(self.scrollAreaWidgetContents)
-        self.lf_H0.setObjectName(u"lf_H0")
+        self.lf_H0.setObjectName("lf_H0")
 
         self.gridLayout.addWidget(self.lf_H0, 2, 1, 1, 1)
 
         self.lf_Hmag = FloatEdit(self.scrollAreaWidgetContents)
-        self.lf_Hmag.setObjectName(u"lf_Hmag")
+        self.lf_Hmag.setObjectName("lf_Hmag")
 
         self.gridLayout.addWidget(self.lf_Hmag, 3, 1, 1, 1)
 
         self.lf_Wmag = FloatEdit(self.scrollAreaWidgetContents)
-        self.lf_Wmag.setObjectName(u"lf_Wmag")
+        self.lf_Wmag.setObjectName("lf_Wmag")
 
         self.gridLayout.addWidget(self.lf_Wmag, 1, 1, 1, 1)
 
@@ -142,7 +142,7 @@ class Ui_PMSlot10(object):
         self.verticalLayout_3.addItem(self.verticalSpacer)
 
         self.w_out = WWSlotOut(self.scrollAreaWidgetContents)
-        self.w_out.setObjectName(u"w_out")
+        self.w_out.setObjectName("w_out")
 
         self.verticalLayout_3.addWidget(self.w_out)
 
@@ -162,12 +162,12 @@ class Ui_PMSlot10(object):
     # setupUi
 
     def retranslateUi(self, PMSlot10):
-        PMSlot10.setWindowTitle(QCoreApplication.translate("PMSlot10", u"Form", None))
+        PMSlot10.setWindowTitle(QCoreApplication.translate("PMSlot10", "Form", None))
         self.img_slot.setText("")
         self.txt_constraint.setHtml(
             QCoreApplication.translate(
                 "PMSlot10",
-                u'<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN" "http://www.w3.org/TR/REC-html40/strict.dtd">\n'
+                '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN" "http://www.w3.org/TR/REC-html40/strict.dtd">\n'
                 '<html><head><meta name="qrichtext" content="1" /><style type="text/css">\n'
                 "p, li { white-space: pre-wrap; }\n"
                 "</style></head><body style=\" font-family:'DejaVu Sans'; font-size:7.8pt; font-weight:400; font-style:normal;\">\n"
@@ -176,13 +176,13 @@ class Ui_PMSlot10(object):
                 None,
             )
         )
-        self.in_Wmag.setText(QCoreApplication.translate("PMSlot10", u"Wmag", None))
-        self.unit_Wmag.setText(QCoreApplication.translate("PMSlot10", u"[m]", None))
-        self.in_W0.setText(QCoreApplication.translate("PMSlot10", u"W0", None))
-        self.unit_W0.setText(QCoreApplication.translate("PMSlot10", u"[m]", None))
-        self.unit_H0.setText(QCoreApplication.translate("PMSlot10", u"[m]", None))
-        self.in_H0.setText(QCoreApplication.translate("PMSlot10", u"H0", None))
-        self.unit_Hmag.setText(QCoreApplication.translate("PMSlot10", u"[m]", None))
-        self.in_Hmag.setText(QCoreApplication.translate("PMSlot10", u"Hmag", None))
+        self.in_Wmag.setText(QCoreApplication.translate("PMSlot10", "Wmag", None))
+        self.unit_Wmag.setText(QCoreApplication.translate("PMSlot10", "[m]", None))
+        self.in_W0.setText(QCoreApplication.translate("PMSlot10", "W0", None))
+        self.unit_W0.setText(QCoreApplication.translate("PMSlot10", "[m]", None))
+        self.unit_H0.setText(QCoreApplication.translate("PMSlot10", "[m]", None))
+        self.in_H0.setText(QCoreApplication.translate("PMSlot10", "H0", None))
+        self.unit_Hmag.setText(QCoreApplication.translate("PMSlot10", "[m]", None))
+        self.in_Hmag.setText(QCoreApplication.translate("PMSlot10", "Hmag", None))
 
     # retranslateUi

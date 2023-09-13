@@ -11,7 +11,7 @@ class Gen_PVentUD(Ui_PVentUD):
         Ui_PVentUD.setupUi(self, PVentUD)
         # Setup of in_Zh
         txt = self.tr(
-            u"""<qt><nobr>Number of Hole around the circumference</nobr></qt>"""
+            """<qt><nobr>Number of Hole around the circumference</nobr></qt>"""
         )
         self.in_Zh.setWhatsThis(txt)
         self.in_Zh.setToolTip(txt)
@@ -20,7 +20,7 @@ class Gen_PVentUD(Ui_PVentUD):
         self.si_Zh.setMinimum(0)
         self.si_Zh.setMaximum(999999)
         txt = self.tr(
-            u"""<qt><nobr>Number of Hole around the circumference</nobr></qt>"""
+            """<qt><nobr>Number of Hole around the circumference</nobr></qt>"""
         )
         self.si_Zh.setWhatsThis(txt)
         self.si_Zh.setToolTip(txt)

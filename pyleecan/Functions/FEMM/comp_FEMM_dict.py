@@ -161,7 +161,7 @@ def comp_FEMM_dict(
     if isinstance(machine.rotor, (LamSlotMag, LamH)):
         nb_mag = machine.rotor.get_magnet_number(sym=sym)
         ndigit = max(len(str(nb_mag)), len(str(grp_max)) - 1)
-        grp0 = FEMM_dict["groups"]["GROUP_RM"] * 10 ** ndigit
+        grp0 = FEMM_dict["groups"]["GROUP_RM"] * 10**ndigit
         list_mag = [grp0 + ii for ii in range(nb_mag)]
         FEMM_dict["groups"]["GROUP_RM"] = list_mag
         FEMM_dict["groups"]["lam_group_list"][machine.rotor.get_label()].extend(

@@ -454,7 +454,9 @@ class Slot(FrozenClass):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, Zs=36, wedge_mat=None, is_bore=True, init_dict = None, init_str = None):
+    def __init__(
+        self, Zs=36, wedge_mat=None, is_bore=True, init_dict=None, init_str=None
+    ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -496,7 +498,7 @@ class Slot(FrozenClass):
         Slot_str += "Zs = " + str(self.Zs) + linesep
         if self.wedge_mat is not None:
             tmp = self.wedge_mat.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            Slot_str += "wedge_mat = "+ tmp
+            Slot_str += "wedge_mat = " + tmp
         else:
             Slot_str += "wedge_mat = None" + linesep + linesep
         Slot_str += "is_bore = " + str(self.is_bore) + linesep
@@ -515,32 +517,47 @@ class Slot(FrozenClass):
             return False
         return True
 
-    def compare(self, other, name='self', ignore_list=None, is_add_value=False):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
             ignore_list = list()
         if type(other) != type(self):
-            return ['type('+name+')']
+            return ["type(" + name + ")"]
         diff_list = list()
         if other._Zs != self._Zs:
             if is_add_value:
-                val_str = ' (self='+str(self._Zs)+', other='+str(other._Zs)+')'
-                diff_list.append(name+'.Zs'+val_str)
+                val_str = " (self=" + str(self._Zs) + ", other=" + str(other._Zs) + ")"
+                diff_list.append(name + ".Zs" + val_str)
             else:
-                diff_list.append(name+'.Zs')
-        if (other.wedge_mat is None and self.wedge_mat is not None) or (other.wedge_mat is not None and self.wedge_mat is None):
-            diff_list.append(name+'.wedge_mat None mismatch')
+                diff_list.append(name + ".Zs")
+        if (other.wedge_mat is None and self.wedge_mat is not None) or (
+            other.wedge_mat is not None and self.wedge_mat is None
+        ):
+            diff_list.append(name + ".wedge_mat None mismatch")
         elif self.wedge_mat is not None:
-            diff_list.extend(self.wedge_mat.compare(other.wedge_mat,name=name+'.wedge_mat',ignore_list=ignore_list,is_add_value=is_add_value))
+            diff_list.extend(
+                self.wedge_mat.compare(
+                    other.wedge_mat,
+                    name=name + ".wedge_mat",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
+            )
         if other._is_bore != self._is_bore:
             if is_add_value:
-                val_str = ' (self='+str(self._is_bore)+', other='+str(other._is_bore)+')'
-                diff_list.append(name+'.is_bore'+val_str)
+                val_str = (
+                    " (self="
+                    + str(self._is_bore)
+                    + ", other="
+                    + str(other._is_bore)
+                    + ")"
+                )
+                diff_list.append(name + ".is_bore" + val_str)
             else:
-                diff_list.append(name+'.is_bore')
+                diff_list.append(name + ".is_bore")
         # Filter ignore differences
-        diff_list = list(filter(lambda x : x not in ignore_list, diff_list))
+        diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
 
     def __sizeof__(self):
@@ -559,7 +576,7 @@ class Slot(FrozenClass):
             How to handle ndarray (0: tolist, 1: copy, 2: nothing)
         keep_function : bool
             True to keep the function object, else return str
-        Optional keyword input parameter is for internal use only 
+        Optional keyword input parameter is for internal use only
         and may prevent json serializability.
         """
 
@@ -568,12 +585,15 @@ class Slot(FrozenClass):
         if self.wedge_mat is None:
             Slot_dict["wedge_mat"] = None
         else:
-            Slot_dict["wedge_mat"] = self.wedge_mat.as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs)
+            Slot_dict["wedge_mat"] = self.wedge_mat.as_dict(
+                type_handle_ndarray=type_handle_ndarray,
+                keep_function=keep_function,
+                **kwargs
+            )
         Slot_dict["is_bore"] = self.is_bore
         # The class name is added to the dict for deserialisation purpose
         Slot_dict["__class__"] = "Slot"
         return Slot_dict
-
 
     def copy(self):
         """Creates a deepcopy of the object"""
@@ -586,7 +606,7 @@ class Slot(FrozenClass):
             wedge_mat_val = self.wedge_mat.copy()
         is_bore_val = self.is_bore
         # Creates new object of the same type with the copied properties
-        obj_copy = type(self)(Zs=Zs_val,wedge_mat=wedge_mat_val,is_bore=is_bore_val)
+        obj_copy = type(self)(Zs=Zs_val, wedge_mat=wedge_mat_val, is_bore=is_bore_val)
         return obj_copy
 
     def _set_None(self):
@@ -609,7 +629,7 @@ class Slot(FrozenClass):
     Zs = property(
         fget=_get_Zs,
         fset=_set_Zs,
-        doc=u"""slot number
+        doc="""slot number
 
         :Type: int
         :min: 0
@@ -626,23 +646,28 @@ class Slot(FrozenClass):
             try:
                 value = load_init_dict(value)[1]
             except Exception as e:
-                self.get_logger().error('Error while loading '+value+', setting None instead')
+                self.get_logger().error(
+                    "Error while loading " + value + ", setting None instead"
+                )
                 value = None
-        if isinstance(value, dict) and '__class__' in value:
-            class_obj = import_class('pyleecan.Classes', value.get('__class__'), 'wedge_mat')
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class(
+                "pyleecan.Classes", value.get("__class__"), "wedge_mat"
+            )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
-            Material = import_class('pyleecan.Classes', 'Material', 'wedge_mat')
+            Material = import_class("pyleecan.Classes", "Material", "wedge_mat")
             value = Material()
         check_var("wedge_mat", value, "Material")
         self._wedge_mat = value
 
         if self._wedge_mat is not None:
             self._wedge_mat.parent = self
+
     wedge_mat = property(
         fget=_get_wedge_mat,
         fset=_set_wedge_mat,
-        doc=u"""Material for the wedge, if None no wedge
+        doc="""Material for the wedge, if None no wedge
 
         :Type: Material
         """,
@@ -660,7 +685,7 @@ class Slot(FrozenClass):
     is_bore = property(
         fget=_get_is_bore,
         fset=_set_is_bore,
-        doc=u"""True if the Slot is on the bore radius, False for yoke
+        doc="""True if the Slot is on the bore radius, False for yoke
 
         :Type: bool
         """,

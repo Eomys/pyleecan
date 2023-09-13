@@ -20,7 +20,6 @@ from ._check import InitUnKnowClassError
 
 
 class GUIOption(FrozenClass):
-
     VERSION = 1
 
     # generic save method is available in all object
@@ -28,7 +27,7 @@ class GUIOption(FrozenClass):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, unit=-1, init_dict = None, init_str = None):
+    def __init__(self, unit=-1, init_dict=None, init_str=None):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -63,7 +62,7 @@ class GUIOption(FrozenClass):
             GUIOption_str += "parent = " + str(type(self.parent)) + " object" + linesep
         if self.unit is not None:
             tmp = self.unit.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            GUIOption_str += "unit = "+ tmp
+            GUIOption_str += "unit = " + tmp
         else:
             GUIOption_str += "unit = None" + linesep + linesep
         return GUIOption_str
@@ -77,20 +76,29 @@ class GUIOption(FrozenClass):
             return False
         return True
 
-    def compare(self, other, name='self', ignore_list=None, is_add_value=False):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
             ignore_list = list()
         if type(other) != type(self):
-            return ['type('+name+')']
+            return ["type(" + name + ")"]
         diff_list = list()
-        if (other.unit is None and self.unit is not None) or (other.unit is not None and self.unit is None):
-            diff_list.append(name+'.unit None mismatch')
+        if (other.unit is None and self.unit is not None) or (
+            other.unit is not None and self.unit is None
+        ):
+            diff_list.append(name + ".unit None mismatch")
         elif self.unit is not None:
-            diff_list.extend(self.unit.compare(other.unit,name=name+'.unit',ignore_list=ignore_list,is_add_value=is_add_value))
+            diff_list.extend(
+                self.unit.compare(
+                    other.unit,
+                    name=name + ".unit",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
+            )
         # Filter ignore differences
-        diff_list = list(filter(lambda x : x not in ignore_list, diff_list))
+        diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
 
     def __sizeof__(self):
@@ -107,7 +115,7 @@ class GUIOption(FrozenClass):
             How to handle ndarray (0: tolist, 1: copy, 2: nothing)
         keep_function : bool
             True to keep the function object, else return str
-        Optional keyword input parameter is for internal use only 
+        Optional keyword input parameter is for internal use only
         and may prevent json serializability.
         """
 
@@ -115,11 +123,14 @@ class GUIOption(FrozenClass):
         if self.unit is None:
             GUIOption_dict["unit"] = None
         else:
-            GUIOption_dict["unit"] = self.unit.as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs)
+            GUIOption_dict["unit"] = self.unit.as_dict(
+                type_handle_ndarray=type_handle_ndarray,
+                keep_function=keep_function,
+                **kwargs
+            )
         # The class name is added to the dict for deserialisation purpose
         GUIOption_dict["__class__"] = "GUIOption"
         return GUIOption_dict
-
 
     def copy(self):
         """Creates a deepcopy of the object"""
@@ -149,23 +160,26 @@ class GUIOption(FrozenClass):
             try:
                 value = load_init_dict(value)[1]
             except Exception as e:
-                self.get_logger().error('Error while loading '+value+', setting None instead')
+                self.get_logger().error(
+                    "Error while loading " + value + ", setting None instead"
+                )
                 value = None
-        if isinstance(value, dict) and '__class__' in value:
-            class_obj = import_class('pyleecan.Classes', value.get('__class__'), 'unit')
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class("pyleecan.Classes", value.get("__class__"), "unit")
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
-            Unit = import_class('pyleecan.Classes', 'Unit', 'unit')
+            Unit = import_class("pyleecan.Classes", "Unit", "unit")
             value = Unit()
         check_var("unit", value, "Unit")
         self._unit = value
 
         if self._unit is not None:
             self._unit.parent = self
+
     unit = property(
         fget=_get_unit,
         fset=_set_unit,
-        doc=u"""Unit options
+        doc="""Unit options
 
         :Type: Unit
         """,

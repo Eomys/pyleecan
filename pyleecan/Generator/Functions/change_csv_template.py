@@ -5,9 +5,8 @@ from ...definitions import MAIN_DIR, DOC_DIR, INT_DIR
 import csv
 
 if __name__ == "__main__":
-
     # Read the open source doc
-    for (dirpath, dirnames, filenames) in walk(DOC_DIR):
+    for dirpath, dirnames, filenames in walk(DOC_DIR):
         for file_name in filenames:
             input_file = join(dirpath, file_name)
             output_file = join(dirpath, file_name[0:-4] + "_tmp.csv")

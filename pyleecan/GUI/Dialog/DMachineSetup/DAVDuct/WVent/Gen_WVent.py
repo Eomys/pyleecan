@@ -11,7 +11,7 @@ class Gen_WVent(Ui_WVent):
         Ui_WVent.setupUi(self, WVent)
         # Setup of in_Alpha0
         txt = self.tr(
-            u"""<qt><nobr>Shift angle of the holes around circumference</nobr></qt>"""
+            """<qt><nobr>Shift angle of the holes around circumference</nobr></qt>"""
         )
         self.in_Alpha0.setWhatsThis(txt)
         self.in_Alpha0.setToolTip(txt)
@@ -20,7 +20,7 @@ class Gen_WVent(Ui_WVent):
         self.lf_Alpha0.validator().setBottom(0)
         self.lf_Alpha0.validator().setTop(6.29)
         txt = self.tr(
-            u"""<qt><nobr>Shift angle of the holes around circumference</nobr></qt>"""
+            """<qt><nobr>Shift angle of the holes around circumference</nobr></qt>"""
         )
         self.lf_Alpha0.setWhatsThis(txt)
         self.lf_Alpha0.setToolTip(txt)

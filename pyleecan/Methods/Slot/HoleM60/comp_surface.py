@@ -21,5 +21,5 @@ def comp_surface(self):
     S1 = 2 * (pi * (self.H0 / 2) ** 2)
     # Two rectangles of dimensions (W2 - H0) x H0
     S2 = 2 * ((self.W2 - self.H0) * self.H0)
-    
+
     return S1 + S2

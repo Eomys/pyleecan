@@ -42,7 +42,6 @@ def comp_axis_angle(self, p, Rag, per_a=None, is_antiper_a=None, Angle_in=None):
 
     # Create angle axis
     elif self.angle is None:
-
         # Create angle axis as a DataLinspace
         Angle = DataLinspace(
             name="angle",

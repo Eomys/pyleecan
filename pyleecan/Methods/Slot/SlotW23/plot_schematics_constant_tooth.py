@@ -72,7 +72,9 @@ def plot_schematics_constant_tooth(
     # Use some default parameter
     if is_default:
         slot = type(self)(Zs=12, H0=20e-3, W0=20e-3, H1=20e-3, H2=80e-3, W3=20e-3)
-        lam = LamSlot(Rint=0.135, Rext=0.3, is_internal=False, is_stator=True, slot=slot)
+        lam = LamSlot(
+            Rint=0.135, Rext=0.3, is_internal=False, is_stator=True, slot=slot
+        )
         return slot.plot_schematics_constant_tooth(
             is_default=False,
             is_add_point_label=is_add_point_label,
@@ -111,7 +113,6 @@ def plot_schematics_constant_tooth(
 
         # Adding schematics
         if is_add_schematics:
-
             # W0
             line = Segment(point_dict["Z1"], point_dict["Z8"])
             line.plot(
@@ -319,7 +320,8 @@ def plot_schematics_constant_tooth(
             fig.show()
         return fig, ax
 
-#"""
+
+# """
 import pytest
 
 from pyleecan.Classes.LamSlotMag import LamSlotMag
@@ -342,4 +344,4 @@ if __name__ == "__main__":
     plot_schematics_constant_tooth(lam.slot)
     plt.show()
     sleep(60)
-#"""
+# """

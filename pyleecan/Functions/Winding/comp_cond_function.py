@@ -25,7 +25,6 @@ def comp_cond_function(alpha_cond, W0, alpha_rad):
     thi = 0
     thf = 2 * pi
     if W0 == 0:
-
         A = (alpha_rad < pi) * 1
         B = (alpha_rad > pi) * 1
 

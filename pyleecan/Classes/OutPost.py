@@ -29,7 +29,7 @@ class OutPost(FrozenClass):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, legend_name="", line_color="", init_dict = None, init_str = None):
+    def __init__(self, legend_name="", line_color="", init_dict=None, init_str=None):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -80,28 +80,40 @@ class OutPost(FrozenClass):
             return False
         return True
 
-    def compare(self, other, name='self', ignore_list=None, is_add_value=False):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
             ignore_list = list()
         if type(other) != type(self):
-            return ['type('+name+')']
+            return ["type(" + name + ")"]
         diff_list = list()
         if other._legend_name != self._legend_name:
             if is_add_value:
-                val_str = ' (self='+str(self._legend_name)+', other='+str(other._legend_name)+')'
-                diff_list.append(name+'.legend_name'+val_str)
+                val_str = (
+                    " (self="
+                    + str(self._legend_name)
+                    + ", other="
+                    + str(other._legend_name)
+                    + ")"
+                )
+                diff_list.append(name + ".legend_name" + val_str)
             else:
-                diff_list.append(name+'.legend_name')
+                diff_list.append(name + ".legend_name")
         if other._line_color != self._line_color:
             if is_add_value:
-                val_str = ' (self='+str(self._line_color)+', other='+str(other._line_color)+')'
-                diff_list.append(name+'.line_color'+val_str)
+                val_str = (
+                    " (self="
+                    + str(self._line_color)
+                    + ", other="
+                    + str(other._line_color)
+                    + ")"
+                )
+                diff_list.append(name + ".line_color" + val_str)
             else:
-                diff_list.append(name+'.line_color')
+                diff_list.append(name + ".line_color")
         # Filter ignore differences
-        diff_list = list(filter(lambda x : x not in ignore_list, diff_list))
+        diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
 
     def __sizeof__(self):
@@ -119,7 +131,7 @@ class OutPost(FrozenClass):
             How to handle ndarray (0: tolist, 1: copy, 2: nothing)
         keep_function : bool
             True to keep the function object, else return str
-        Optional keyword input parameter is for internal use only 
+        Optional keyword input parameter is for internal use only
         and may prevent json serializability.
         """
 
@@ -130,7 +142,6 @@ class OutPost(FrozenClass):
         OutPost_dict["__class__"] = "OutPost"
         return OutPost_dict
 
-
     def copy(self):
         """Creates a deepcopy of the object"""
 
@@ -138,7 +149,7 @@ class OutPost(FrozenClass):
         legend_name_val = self.legend_name
         line_color_val = self.line_color
         # Creates new object of the same type with the copied properties
-        obj_copy = type(self)(legend_name=legend_name_val,line_color=line_color_val)
+        obj_copy = type(self)(legend_name=legend_name_val, line_color=line_color_val)
         return obj_copy
 
     def _set_None(self):
@@ -159,7 +170,7 @@ class OutPost(FrozenClass):
     legend_name = property(
         fget=_get_legend_name,
         fset=_set_legend_name,
-        doc=u"""Name to use in the legend in case of comparison
+        doc="""Name to use in the legend in case of comparison
 
         :Type: str
         """,
@@ -177,7 +188,7 @@ class OutPost(FrozenClass):
     line_color = property(
         fget=_get_line_color,
         fset=_set_line_color,
-        doc=u"""Color to use in case of comparison
+        doc="""Color to use in case of comparison
 
         :Type: str
         """,

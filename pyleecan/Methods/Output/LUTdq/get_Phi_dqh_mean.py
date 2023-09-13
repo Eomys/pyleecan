@@ -20,7 +20,6 @@ def get_Phi_dqh_mean(self):
     """
 
     if self.Phi_dqh_mean is None:
-
         N_OP = len(self.output_list)
 
         Phi_dqh_mean = zeros((N_OP, 3))

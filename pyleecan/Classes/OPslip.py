@@ -191,7 +191,22 @@ class OPslip(OP):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, I0_ref=None, IPhi0_ref=None, slip_ref=0, U0_ref=None, UPhi0_ref=None, N0=None, felec=None, Tem_av_ref=None, Pem_av_ref=None, Pem_av_in=None, efficiency=None, init_dict = None, init_str = None):
+    def __init__(
+        self,
+        I0_ref=None,
+        IPhi0_ref=None,
+        slip_ref=0,
+        U0_ref=None,
+        UPhi0_ref=None,
+        N0=None,
+        felec=None,
+        Tem_av_ref=None,
+        Pem_av_ref=None,
+        Pem_av_in=None,
+        efficiency=None,
+        init_dict=None,
+        init_str=None,
+    ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -236,7 +251,14 @@ class OPslip(OP):
         self.U0_ref = U0_ref
         self.UPhi0_ref = UPhi0_ref
         # Call OP init
-        super(OPslip, self).__init__(N0=N0, felec=felec, Tem_av_ref=Tem_av_ref, Pem_av_ref=Pem_av_ref, Pem_av_in=Pem_av_in, efficiency=efficiency)
+        super(OPslip, self).__init__(
+            N0=N0,
+            felec=felec,
+            Tem_av_ref=Tem_av_ref,
+            Pem_av_ref=Pem_av_ref,
+            Pem_av_in=Pem_av_in,
+            efficiency=efficiency,
+        )
         # The class is frozen (in OP init), for now it's impossible to
         # add new properties
 
@@ -274,59 +296,118 @@ class OPslip(OP):
             return False
         return True
 
-    def compare(self, other, name='self', ignore_list=None, is_add_value=False):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
             ignore_list = list()
         if type(other) != type(self):
-            return ['type('+name+')']
+            return ["type(" + name + ")"]
         diff_list = list()
 
         # Check the properties inherited from OP
-        diff_list.extend(super(OPslip, self).compare(other,name=name, ignore_list=ignore_list, is_add_value=is_add_value))
-        if other._I0_ref is not None and self._I0_ref is not None and isnan(other._I0_ref) and isnan(self._I0_ref):
+        diff_list.extend(
+            super(OPslip, self).compare(
+                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
+            )
+        )
+        if (
+            other._I0_ref is not None
+            and self._I0_ref is not None
+            and isnan(other._I0_ref)
+            and isnan(self._I0_ref)
+        ):
             pass
         elif other._I0_ref != self._I0_ref:
             if is_add_value:
-                val_str = ' (self='+str(self._I0_ref)+', other='+str(other._I0_ref)+')'
-                diff_list.append(name+'.I0_ref'+val_str)
+                val_str = (
+                    " (self="
+                    + str(self._I0_ref)
+                    + ", other="
+                    + str(other._I0_ref)
+                    + ")"
+                )
+                diff_list.append(name + ".I0_ref" + val_str)
             else:
-                diff_list.append(name+'.I0_ref')
-        if other._IPhi0_ref is not None and self._IPhi0_ref is not None and isnan(other._IPhi0_ref) and isnan(self._IPhi0_ref):
+                diff_list.append(name + ".I0_ref")
+        if (
+            other._IPhi0_ref is not None
+            and self._IPhi0_ref is not None
+            and isnan(other._IPhi0_ref)
+            and isnan(self._IPhi0_ref)
+        ):
             pass
         elif other._IPhi0_ref != self._IPhi0_ref:
             if is_add_value:
-                val_str = ' (self='+str(self._IPhi0_ref)+', other='+str(other._IPhi0_ref)+')'
-                diff_list.append(name+'.IPhi0_ref'+val_str)
+                val_str = (
+                    " (self="
+                    + str(self._IPhi0_ref)
+                    + ", other="
+                    + str(other._IPhi0_ref)
+                    + ")"
+                )
+                diff_list.append(name + ".IPhi0_ref" + val_str)
             else:
-                diff_list.append(name+'.IPhi0_ref')
-        if other._slip_ref is not None and self._slip_ref is not None and isnan(other._slip_ref) and isnan(self._slip_ref):
+                diff_list.append(name + ".IPhi0_ref")
+        if (
+            other._slip_ref is not None
+            and self._slip_ref is not None
+            and isnan(other._slip_ref)
+            and isnan(self._slip_ref)
+        ):
             pass
         elif other._slip_ref != self._slip_ref:
             if is_add_value:
-                val_str = ' (self='+str(self._slip_ref)+', other='+str(other._slip_ref)+')'
-                diff_list.append(name+'.slip_ref'+val_str)
+                val_str = (
+                    " (self="
+                    + str(self._slip_ref)
+                    + ", other="
+                    + str(other._slip_ref)
+                    + ")"
+                )
+                diff_list.append(name + ".slip_ref" + val_str)
             else:
-                diff_list.append(name+'.slip_ref')
-        if other._U0_ref is not None and self._U0_ref is not None and isnan(other._U0_ref) and isnan(self._U0_ref):
+                diff_list.append(name + ".slip_ref")
+        if (
+            other._U0_ref is not None
+            and self._U0_ref is not None
+            and isnan(other._U0_ref)
+            and isnan(self._U0_ref)
+        ):
             pass
         elif other._U0_ref != self._U0_ref:
             if is_add_value:
-                val_str = ' (self='+str(self._U0_ref)+', other='+str(other._U0_ref)+')'
-                diff_list.append(name+'.U0_ref'+val_str)
+                val_str = (
+                    " (self="
+                    + str(self._U0_ref)
+                    + ", other="
+                    + str(other._U0_ref)
+                    + ")"
+                )
+                diff_list.append(name + ".U0_ref" + val_str)
             else:
-                diff_list.append(name+'.U0_ref')
-        if other._UPhi0_ref is not None and self._UPhi0_ref is not None and isnan(other._UPhi0_ref) and isnan(self._UPhi0_ref):
+                diff_list.append(name + ".U0_ref")
+        if (
+            other._UPhi0_ref is not None
+            and self._UPhi0_ref is not None
+            and isnan(other._UPhi0_ref)
+            and isnan(self._UPhi0_ref)
+        ):
             pass
         elif other._UPhi0_ref != self._UPhi0_ref:
             if is_add_value:
-                val_str = ' (self='+str(self._UPhi0_ref)+', other='+str(other._UPhi0_ref)+')'
-                diff_list.append(name+'.UPhi0_ref'+val_str)
+                val_str = (
+                    " (self="
+                    + str(self._UPhi0_ref)
+                    + ", other="
+                    + str(other._UPhi0_ref)
+                    + ")"
+                )
+                diff_list.append(name + ".UPhi0_ref" + val_str)
             else:
-                diff_list.append(name+'.UPhi0_ref')
+                diff_list.append(name + ".UPhi0_ref")
         # Filter ignore differences
-        diff_list = list(filter(lambda x : x not in ignore_list, diff_list))
+        diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
 
     def __sizeof__(self):
@@ -350,12 +431,16 @@ class OPslip(OP):
             How to handle ndarray (0: tolist, 1: copy, 2: nothing)
         keep_function : bool
             True to keep the function object, else return str
-        Optional keyword input parameter is for internal use only 
+        Optional keyword input parameter is for internal use only
         and may prevent json serializability.
         """
 
         # Get the properties inherited from OP
-        OPslip_dict = super(OPslip, self).as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs)
+        OPslip_dict = super(OPslip, self).as_dict(
+            type_handle_ndarray=type_handle_ndarray,
+            keep_function=keep_function,
+            **kwargs
+        )
         OPslip_dict["I0_ref"] = self.I0_ref
         OPslip_dict["IPhi0_ref"] = self.IPhi0_ref
         OPslip_dict["slip_ref"] = self.slip_ref
@@ -365,7 +450,6 @@ class OPslip(OP):
         # Overwrite the mother class name
         OPslip_dict["__class__"] = "OPslip"
         return OPslip_dict
-
 
     def copy(self):
         """Creates a deepcopy of the object"""
@@ -383,7 +467,19 @@ class OPslip(OP):
         Pem_av_in_val = self.Pem_av_in
         efficiency_val = self.efficiency
         # Creates new object of the same type with the copied properties
-        obj_copy = type(self)(I0_ref=I0_ref_val,IPhi0_ref=IPhi0_ref_val,slip_ref=slip_ref_val,U0_ref=U0_ref_val,UPhi0_ref=UPhi0_ref_val,N0=N0_val,felec=felec_val,Tem_av_ref=Tem_av_ref_val,Pem_av_ref=Pem_av_ref_val,Pem_av_in=Pem_av_in_val,efficiency=efficiency_val)
+        obj_copy = type(self)(
+            I0_ref=I0_ref_val,
+            IPhi0_ref=IPhi0_ref_val,
+            slip_ref=slip_ref_val,
+            U0_ref=U0_ref_val,
+            UPhi0_ref=UPhi0_ref_val,
+            N0=N0_val,
+            felec=felec_val,
+            Tem_av_ref=Tem_av_ref_val,
+            Pem_av_ref=Pem_av_ref_val,
+            Pem_av_in=Pem_av_in_val,
+            efficiency=efficiency_val,
+        )
         return obj_copy
 
     def _set_None(self):
@@ -409,7 +505,7 @@ class OPslip(OP):
     I0_ref = property(
         fget=_get_I0_ref,
         fset=_set_I0_ref,
-        doc=u"""Current rms value
+        doc="""Current rms value
 
         :Type: float
         """,
@@ -427,7 +523,7 @@ class OPslip(OP):
     IPhi0_ref = property(
         fget=_get_IPhi0_ref,
         fset=_set_IPhi0_ref,
-        doc=u"""Current phase
+        doc="""Current phase
 
         :Type: float
         """,
@@ -445,7 +541,7 @@ class OPslip(OP):
     slip_ref = property(
         fget=_get_slip_ref,
         fset=_set_slip_ref,
-        doc=u"""Rotor mechanical slip
+        doc="""Rotor mechanical slip
 
         :Type: float
         """,
@@ -463,7 +559,7 @@ class OPslip(OP):
     U0_ref = property(
         fget=_get_U0_ref,
         fset=_set_U0_ref,
-        doc=u"""stator voltage (phase to neutral)
+        doc="""stator voltage (phase to neutral)
 
         :Type: float
         """,
@@ -481,7 +577,7 @@ class OPslip(OP):
     UPhi0_ref = property(
         fget=_get_UPhi0_ref,
         fset=_set_UPhi0_ref,
-        doc=u"""Voltage phase
+        doc="""Voltage phase
 
         :Type: float
         """,

@@ -46,7 +46,27 @@ class Simu1(Simulation):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, elec=None, mag=None, struct=None, force=None, loss=None, name="", desc="", machine=-1, input=-1, logger_name="Pyleecan.Simulation", var_simu=None, postproc_list=-1, index=None, path_result=None, layer=None, layer_log_warn=None, init_dict = None, init_str = None):
+    def __init__(
+        self,
+        elec=None,
+        mag=None,
+        struct=None,
+        force=None,
+        loss=None,
+        name="",
+        desc="",
+        machine=-1,
+        input=-1,
+        logger_name="Pyleecan.Simulation",
+        var_simu=None,
+        postproc_list=-1,
+        index=None,
+        path_result=None,
+        layer=None,
+        layer_log_warn=None,
+        init_dict=None,
+        init_str=None,
+    ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -101,7 +121,19 @@ class Simu1(Simulation):
         self.force = force
         self.loss = loss
         # Call Simulation init
-        super(Simu1, self).__init__(name=name, desc=desc, machine=machine, input=input, logger_name=logger_name, var_simu=var_simu, postproc_list=postproc_list, index=index, path_result=path_result, layer=layer, layer_log_warn=layer_log_warn)
+        super(Simu1, self).__init__(
+            name=name,
+            desc=desc,
+            machine=machine,
+            input=input,
+            logger_name=logger_name,
+            var_simu=var_simu,
+            postproc_list=postproc_list,
+            index=index,
+            path_result=path_result,
+            layer=layer,
+            layer_log_warn=layer_log_warn,
+        )
         # The class is frozen (in Simulation init), for now it's impossible to
         # add new properties
 
@@ -113,27 +145,27 @@ class Simu1(Simulation):
         Simu1_str += super(Simu1, self).__str__()
         if self.elec is not None:
             tmp = self.elec.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            Simu1_str += "elec = "+ tmp
+            Simu1_str += "elec = " + tmp
         else:
             Simu1_str += "elec = None" + linesep + linesep
         if self.mag is not None:
             tmp = self.mag.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            Simu1_str += "mag = "+ tmp
+            Simu1_str += "mag = " + tmp
         else:
             Simu1_str += "mag = None" + linesep + linesep
         if self.struct is not None:
             tmp = self.struct.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            Simu1_str += "struct = "+ tmp
+            Simu1_str += "struct = " + tmp
         else:
             Simu1_str += "struct = None" + linesep + linesep
         if self.force is not None:
             tmp = self.force.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            Simu1_str += "force = "+ tmp
+            Simu1_str += "force = " + tmp
         else:
             Simu1_str += "force = None" + linesep + linesep
         if self.loss is not None:
             tmp = self.loss.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            Simu1_str += "loss = "+ tmp
+            Simu1_str += "loss = " + tmp
         else:
             Simu1_str += "loss = None" + linesep + linesep
         return Simu1_str
@@ -159,39 +191,88 @@ class Simu1(Simulation):
             return False
         return True
 
-    def compare(self, other, name='self', ignore_list=None, is_add_value=False):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
             ignore_list = list()
         if type(other) != type(self):
-            return ['type('+name+')']
+            return ["type(" + name + ")"]
         diff_list = list()
 
         # Check the properties inherited from Simulation
-        diff_list.extend(super(Simu1, self).compare(other,name=name, ignore_list=ignore_list, is_add_value=is_add_value))
-        if (other.elec is None and self.elec is not None) or (other.elec is not None and self.elec is None):
-            diff_list.append(name+'.elec None mismatch')
+        diff_list.extend(
+            super(Simu1, self).compare(
+                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
+            )
+        )
+        if (other.elec is None and self.elec is not None) or (
+            other.elec is not None and self.elec is None
+        ):
+            diff_list.append(name + ".elec None mismatch")
         elif self.elec is not None:
-            diff_list.extend(self.elec.compare(other.elec,name=name+'.elec',ignore_list=ignore_list,is_add_value=is_add_value))
-        if (other.mag is None and self.mag is not None) or (other.mag is not None and self.mag is None):
-            diff_list.append(name+'.mag None mismatch')
+            diff_list.extend(
+                self.elec.compare(
+                    other.elec,
+                    name=name + ".elec",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
+            )
+        if (other.mag is None and self.mag is not None) or (
+            other.mag is not None and self.mag is None
+        ):
+            diff_list.append(name + ".mag None mismatch")
         elif self.mag is not None:
-            diff_list.extend(self.mag.compare(other.mag,name=name+'.mag',ignore_list=ignore_list,is_add_value=is_add_value))
-        if (other.struct is None and self.struct is not None) or (other.struct is not None and self.struct is None):
-            diff_list.append(name+'.struct None mismatch')
+            diff_list.extend(
+                self.mag.compare(
+                    other.mag,
+                    name=name + ".mag",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
+            )
+        if (other.struct is None and self.struct is not None) or (
+            other.struct is not None and self.struct is None
+        ):
+            diff_list.append(name + ".struct None mismatch")
         elif self.struct is not None:
-            diff_list.extend(self.struct.compare(other.struct,name=name+'.struct',ignore_list=ignore_list,is_add_value=is_add_value))
-        if (other.force is None and self.force is not None) or (other.force is not None and self.force is None):
-            diff_list.append(name+'.force None mismatch')
+            diff_list.extend(
+                self.struct.compare(
+                    other.struct,
+                    name=name + ".struct",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
+            )
+        if (other.force is None and self.force is not None) or (
+            other.force is not None and self.force is None
+        ):
+            diff_list.append(name + ".force None mismatch")
         elif self.force is not None:
-            diff_list.extend(self.force.compare(other.force,name=name+'.force',ignore_list=ignore_list,is_add_value=is_add_value))
-        if (other.loss is None and self.loss is not None) or (other.loss is not None and self.loss is None):
-            diff_list.append(name+'.loss None mismatch')
+            diff_list.extend(
+                self.force.compare(
+                    other.force,
+                    name=name + ".force",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
+            )
+        if (other.loss is None and self.loss is not None) or (
+            other.loss is not None and self.loss is None
+        ):
+            diff_list.append(name + ".loss None mismatch")
         elif self.loss is not None:
-            diff_list.extend(self.loss.compare(other.loss,name=name+'.loss',ignore_list=ignore_list,is_add_value=is_add_value))
+            diff_list.extend(
+                self.loss.compare(
+                    other.loss,
+                    name=name + ".loss",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
+            )
         # Filter ignore differences
-        diff_list = list(filter(lambda x : x not in ignore_list, diff_list))
+        diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
 
     def __sizeof__(self):
@@ -215,37 +296,60 @@ class Simu1(Simulation):
             How to handle ndarray (0: tolist, 1: copy, 2: nothing)
         keep_function : bool
             True to keep the function object, else return str
-        Optional keyword input parameter is for internal use only 
+        Optional keyword input parameter is for internal use only
         and may prevent json serializability.
         """
 
         # Get the properties inherited from Simulation
-        Simu1_dict = super(Simu1, self).as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs)
+        Simu1_dict = super(Simu1, self).as_dict(
+            type_handle_ndarray=type_handle_ndarray,
+            keep_function=keep_function,
+            **kwargs
+        )
         if self.elec is None:
             Simu1_dict["elec"] = None
         else:
-            Simu1_dict["elec"] = self.elec.as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs)
+            Simu1_dict["elec"] = self.elec.as_dict(
+                type_handle_ndarray=type_handle_ndarray,
+                keep_function=keep_function,
+                **kwargs
+            )
         if self.mag is None:
             Simu1_dict["mag"] = None
         else:
-            Simu1_dict["mag"] = self.mag.as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs)
+            Simu1_dict["mag"] = self.mag.as_dict(
+                type_handle_ndarray=type_handle_ndarray,
+                keep_function=keep_function,
+                **kwargs
+            )
         if self.struct is None:
             Simu1_dict["struct"] = None
         else:
-            Simu1_dict["struct"] = self.struct.as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs)
+            Simu1_dict["struct"] = self.struct.as_dict(
+                type_handle_ndarray=type_handle_ndarray,
+                keep_function=keep_function,
+                **kwargs
+            )
         if self.force is None:
             Simu1_dict["force"] = None
         else:
-            Simu1_dict["force"] = self.force.as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs)
+            Simu1_dict["force"] = self.force.as_dict(
+                type_handle_ndarray=type_handle_ndarray,
+                keep_function=keep_function,
+                **kwargs
+            )
         if self.loss is None:
             Simu1_dict["loss"] = None
         else:
-            Simu1_dict["loss"] = self.loss.as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs)
+            Simu1_dict["loss"] = self.loss.as_dict(
+                type_handle_ndarray=type_handle_ndarray,
+                keep_function=keep_function,
+                **kwargs
+            )
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         Simu1_dict["__class__"] = "Simu1"
         return Simu1_dict
-
 
     def copy(self):
         """Creates a deepcopy of the object"""
@@ -297,7 +401,24 @@ class Simu1(Simulation):
         layer_val = self.layer
         layer_log_warn_val = self.layer_log_warn
         # Creates new object of the same type with the copied properties
-        obj_copy = type(self)(elec=elec_val,mag=mag_val,struct=struct_val,force=force_val,loss=loss_val,name=name_val,desc=desc_val,machine=machine_val,input=input_val,logger_name=logger_name_val,var_simu=var_simu_val,postproc_list=postproc_list_val,index=index_val,path_result=path_result_val,layer=layer_val,layer_log_warn=layer_log_warn_val)
+        obj_copy = type(self)(
+            elec=elec_val,
+            mag=mag_val,
+            struct=struct_val,
+            force=force_val,
+            loss=loss_val,
+            name=name_val,
+            desc=desc_val,
+            machine=machine_val,
+            input=input_val,
+            logger_name=logger_name_val,
+            var_simu=var_simu_val,
+            postproc_list=postproc_list_val,
+            index=index_val,
+            path_result=path_result_val,
+            layer=layer_val,
+            layer_log_warn=layer_log_warn_val,
+        )
         return obj_copy
 
     def _set_None(self):
@@ -326,23 +447,26 @@ class Simu1(Simulation):
             try:
                 value = load_init_dict(value)[1]
             except Exception as e:
-                self.get_logger().error('Error while loading '+value+', setting None instead')
+                self.get_logger().error(
+                    "Error while loading " + value + ", setting None instead"
+                )
                 value = None
-        if isinstance(value, dict) and '__class__' in value:
-            class_obj = import_class('pyleecan.Classes', value.get('__class__'), 'elec')
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class("pyleecan.Classes", value.get("__class__"), "elec")
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
-            Electrical = import_class('pyleecan.Classes', 'Electrical', 'elec')
+            Electrical = import_class("pyleecan.Classes", "Electrical", "elec")
             value = Electrical()
         check_var("elec", value, "Electrical")
         self._elec = value
 
         if self._elec is not None:
             self._elec.parent = self
+
     elec = property(
         fget=_get_elec,
         fset=_set_elec,
-        doc=u"""Electrical module
+        doc="""Electrical module
 
         :Type: Electrical
         """,
@@ -358,23 +482,26 @@ class Simu1(Simulation):
             try:
                 value = load_init_dict(value)[1]
             except Exception as e:
-                self.get_logger().error('Error while loading '+value+', setting None instead')
+                self.get_logger().error(
+                    "Error while loading " + value + ", setting None instead"
+                )
                 value = None
-        if isinstance(value, dict) and '__class__' in value:
-            class_obj = import_class('pyleecan.Classes', value.get('__class__'), 'mag')
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class("pyleecan.Classes", value.get("__class__"), "mag")
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
-            Magnetics = import_class('pyleecan.Classes', 'Magnetics', 'mag')
+            Magnetics = import_class("pyleecan.Classes", "Magnetics", "mag")
             value = Magnetics()
         check_var("mag", value, "Magnetics")
         self._mag = value
 
         if self._mag is not None:
             self._mag.parent = self
+
     mag = property(
         fget=_get_mag,
         fset=_set_mag,
-        doc=u"""Magnetic module
+        doc="""Magnetic module
 
         :Type: Magnetics
         """,
@@ -390,23 +517,28 @@ class Simu1(Simulation):
             try:
                 value = load_init_dict(value)[1]
             except Exception as e:
-                self.get_logger().error('Error while loading '+value+', setting None instead')
+                self.get_logger().error(
+                    "Error while loading " + value + ", setting None instead"
+                )
                 value = None
-        if isinstance(value, dict) and '__class__' in value:
-            class_obj = import_class('pyleecan.Classes', value.get('__class__'), 'struct')
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class(
+                "pyleecan.Classes", value.get("__class__"), "struct"
+            )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
-            Structural = import_class('pyleecan.Classes', 'Structural', 'struct')
+            Structural = import_class("pyleecan.Classes", "Structural", "struct")
             value = Structural()
         check_var("struct", value, "Structural")
         self._struct = value
 
         if self._struct is not None:
             self._struct.parent = self
+
     struct = property(
         fget=_get_struct,
         fset=_set_struct,
-        doc=u"""Structural module
+        doc="""Structural module
 
         :Type: Structural
         """,
@@ -422,23 +554,28 @@ class Simu1(Simulation):
             try:
                 value = load_init_dict(value)[1]
             except Exception as e:
-                self.get_logger().error('Error while loading '+value+', setting None instead')
+                self.get_logger().error(
+                    "Error while loading " + value + ", setting None instead"
+                )
                 value = None
-        if isinstance(value, dict) and '__class__' in value:
-            class_obj = import_class('pyleecan.Classes', value.get('__class__'), 'force')
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class(
+                "pyleecan.Classes", value.get("__class__"), "force"
+            )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
-            Force = import_class('pyleecan.Classes', 'Force', 'force')
+            Force = import_class("pyleecan.Classes", "Force", "force")
             value = Force()
         check_var("force", value, "Force")
         self._force = value
 
         if self._force is not None:
             self._force.parent = self
+
     force = property(
         fget=_get_force,
         fset=_set_force,
-        doc=u"""Force moduale
+        doc="""Force moduale
 
         :Type: Force
         """,
@@ -454,23 +591,26 @@ class Simu1(Simulation):
             try:
                 value = load_init_dict(value)[1]
             except Exception as e:
-                self.get_logger().error('Error while loading '+value+', setting None instead')
+                self.get_logger().error(
+                    "Error while loading " + value + ", setting None instead"
+                )
                 value = None
-        if isinstance(value, dict) and '__class__' in value:
-            class_obj = import_class('pyleecan.Classes', value.get('__class__'), 'loss')
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class("pyleecan.Classes", value.get("__class__"), "loss")
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
-            Loss = import_class('pyleecan.Classes', 'Loss', 'loss')
+            Loss = import_class("pyleecan.Classes", "Loss", "loss")
             value = Loss()
         check_var("loss", value, "Loss")
         self._loss = value
 
         if self._loss is not None:
             self._loss.parent = self
+
     loss = property(
         fget=_get_loss,
         fset=_set_loss,
-        doc=u"""Loss moduale
+        doc="""Loss moduale
 
         :Type: Loss
         """,

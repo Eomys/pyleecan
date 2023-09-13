@@ -23,17 +23,23 @@ except ImportError as error:
     check = error
 
 try:
-    from ..Methods.Machine.Conductor.comp_skin_effect_resistance import comp_skin_effect_resistance
+    from ..Methods.Machine.Conductor.comp_skin_effect_resistance import (
+        comp_skin_effect_resistance,
+    )
 except ImportError as error:
     comp_skin_effect_resistance = error
 
 try:
-    from ..Methods.Machine.Conductor.comp_skin_effect_inductance import comp_skin_effect_inductance
+    from ..Methods.Machine.Conductor.comp_skin_effect_inductance import (
+        comp_skin_effect_inductance,
+    )
 except ImportError as error:
     comp_skin_effect_inductance = error
 
 try:
-    from ..Methods.Machine.Conductor.comp_temperature_effect import comp_temperature_effect
+    from ..Methods.Machine.Conductor.comp_temperature_effect import (
+        comp_temperature_effect,
+    )
 except ImportError as error:
     comp_temperature_effect = error
 
@@ -98,7 +104,7 @@ class Conductor(FrozenClass):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, cond_mat=-1, ins_mat=-1, init_dict = None, init_str = None):
+    def __init__(self, cond_mat=-1, ins_mat=-1, init_dict=None, init_str=None):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -136,12 +142,12 @@ class Conductor(FrozenClass):
             Conductor_str += "parent = " + str(type(self.parent)) + " object" + linesep
         if self.cond_mat is not None:
             tmp = self.cond_mat.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            Conductor_str += "cond_mat = "+ tmp
+            Conductor_str += "cond_mat = " + tmp
         else:
             Conductor_str += "cond_mat = None" + linesep + linesep
         if self.ins_mat is not None:
             tmp = self.ins_mat.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            Conductor_str += "ins_mat = "+ tmp
+            Conductor_str += "ins_mat = " + tmp
         else:
             Conductor_str += "ins_mat = None" + linesep + linesep
         return Conductor_str
@@ -157,24 +163,42 @@ class Conductor(FrozenClass):
             return False
         return True
 
-    def compare(self, other, name='self', ignore_list=None, is_add_value=False):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
             ignore_list = list()
         if type(other) != type(self):
-            return ['type('+name+')']
+            return ["type(" + name + ")"]
         diff_list = list()
-        if (other.cond_mat is None and self.cond_mat is not None) or (other.cond_mat is not None and self.cond_mat is None):
-            diff_list.append(name+'.cond_mat None mismatch')
+        if (other.cond_mat is None and self.cond_mat is not None) or (
+            other.cond_mat is not None and self.cond_mat is None
+        ):
+            diff_list.append(name + ".cond_mat None mismatch")
         elif self.cond_mat is not None:
-            diff_list.extend(self.cond_mat.compare(other.cond_mat,name=name+'.cond_mat',ignore_list=ignore_list,is_add_value=is_add_value))
-        if (other.ins_mat is None and self.ins_mat is not None) or (other.ins_mat is not None and self.ins_mat is None):
-            diff_list.append(name+'.ins_mat None mismatch')
+            diff_list.extend(
+                self.cond_mat.compare(
+                    other.cond_mat,
+                    name=name + ".cond_mat",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
+            )
+        if (other.ins_mat is None and self.ins_mat is not None) or (
+            other.ins_mat is not None and self.ins_mat is None
+        ):
+            diff_list.append(name + ".ins_mat None mismatch")
         elif self.ins_mat is not None:
-            diff_list.extend(self.ins_mat.compare(other.ins_mat,name=name+'.ins_mat',ignore_list=ignore_list,is_add_value=is_add_value))
+            diff_list.extend(
+                self.ins_mat.compare(
+                    other.ins_mat,
+                    name=name + ".ins_mat",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
+            )
         # Filter ignore differences
-        diff_list = list(filter(lambda x : x not in ignore_list, diff_list))
+        diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
 
     def __sizeof__(self):
@@ -192,7 +216,7 @@ class Conductor(FrozenClass):
             How to handle ndarray (0: tolist, 1: copy, 2: nothing)
         keep_function : bool
             True to keep the function object, else return str
-        Optional keyword input parameter is for internal use only 
+        Optional keyword input parameter is for internal use only
         and may prevent json serializability.
         """
 
@@ -200,15 +224,22 @@ class Conductor(FrozenClass):
         if self.cond_mat is None:
             Conductor_dict["cond_mat"] = None
         else:
-            Conductor_dict["cond_mat"] = self.cond_mat.as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs)
+            Conductor_dict["cond_mat"] = self.cond_mat.as_dict(
+                type_handle_ndarray=type_handle_ndarray,
+                keep_function=keep_function,
+                **kwargs
+            )
         if self.ins_mat is None:
             Conductor_dict["ins_mat"] = None
         else:
-            Conductor_dict["ins_mat"] = self.ins_mat.as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs)
+            Conductor_dict["ins_mat"] = self.ins_mat.as_dict(
+                type_handle_ndarray=type_handle_ndarray,
+                keep_function=keep_function,
+                **kwargs
+            )
         # The class name is added to the dict for deserialisation purpose
         Conductor_dict["__class__"] = "Conductor"
         return Conductor_dict
-
 
     def copy(self):
         """Creates a deepcopy of the object"""
@@ -223,7 +254,7 @@ class Conductor(FrozenClass):
         else:
             ins_mat_val = self.ins_mat.copy()
         # Creates new object of the same type with the copied properties
-        obj_copy = type(self)(cond_mat=cond_mat_val,ins_mat=ins_mat_val)
+        obj_copy = type(self)(cond_mat=cond_mat_val, ins_mat=ins_mat_val)
         return obj_copy
 
     def _set_None(self):
@@ -244,23 +275,28 @@ class Conductor(FrozenClass):
             try:
                 value = load_init_dict(value)[1]
             except Exception as e:
-                self.get_logger().error('Error while loading '+value+', setting None instead')
+                self.get_logger().error(
+                    "Error while loading " + value + ", setting None instead"
+                )
                 value = None
-        if isinstance(value, dict) and '__class__' in value:
-            class_obj = import_class('pyleecan.Classes', value.get('__class__'), 'cond_mat')
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class(
+                "pyleecan.Classes", value.get("__class__"), "cond_mat"
+            )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
-            Material = import_class('pyleecan.Classes', 'Material', 'cond_mat')
+            Material = import_class("pyleecan.Classes", "Material", "cond_mat")
             value = Material()
         check_var("cond_mat", value, "Material")
         self._cond_mat = value
 
         if self._cond_mat is not None:
             self._cond_mat.parent = self
+
     cond_mat = property(
         fget=_get_cond_mat,
         fset=_set_cond_mat,
-        doc=u"""Material of the conductor
+        doc="""Material of the conductor
 
         :Type: Material
         """,
@@ -276,23 +312,28 @@ class Conductor(FrozenClass):
             try:
                 value = load_init_dict(value)[1]
             except Exception as e:
-                self.get_logger().error('Error while loading '+value+', setting None instead')
+                self.get_logger().error(
+                    "Error while loading " + value + ", setting None instead"
+                )
                 value = None
-        if isinstance(value, dict) and '__class__' in value:
-            class_obj = import_class('pyleecan.Classes', value.get('__class__'), 'ins_mat')
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class(
+                "pyleecan.Classes", value.get("__class__"), "ins_mat"
+            )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
-            Material = import_class('pyleecan.Classes', 'Material', 'ins_mat')
+            Material = import_class("pyleecan.Classes", "Material", "ins_mat")
             value = Material()
         check_var("ins_mat", value, "Material")
         self._ins_mat = value
 
         if self._ins_mat is not None:
             self._ins_mat.parent = self
+
     ins_mat = property(
         fget=_get_ins_mat,
         fset=_set_ins_mat,
-        doc=u"""Material of the insulation
+        doc="""Material of the insulation
 
         :Type: Material
         """,

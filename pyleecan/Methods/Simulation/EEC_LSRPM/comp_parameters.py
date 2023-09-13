@@ -46,7 +46,7 @@ def comp_parameters(self, output, Tsta=None, Trot=None):
         # 3 phase equivalent damper resistance
         # TODO have to defind the method"comp_resistance_damper_winding"
         R_a = machine.rotor.comp_resistance_damper_winding(T=Twr, qs=3)
-        self.parameters["R_a"] = norm ** 2 * R_a
+        self.parameters["R_a"] = norm**2 * R_a
 
     if "Phi_m" not in PAR:
         PAR["Phi_m"] = self.fluxlink.comp_fluxlinkage(output)

@@ -23,7 +23,9 @@ except ImportError as error:
     comp_surface = error
 
 try:
-    from ..Methods.Machine.NotchEvenDist.comp_periodicity_spatial import comp_periodicity_spatial
+    from ..Methods.Machine.NotchEvenDist.comp_periodicity_spatial import (
+        comp_periodicity_spatial,
+    )
 except ImportError as error:
     comp_periodicity_spatial = error
 
@@ -83,7 +85,7 @@ class NotchEvenDist(Notch):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, alpha=0, notch_shape=-1, init_dict = None, init_str = None):
+    def __init__(self, alpha=0, notch_shape=-1, init_dict=None, init_str=None):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -119,8 +121,10 @@ class NotchEvenDist(Notch):
         NotchEvenDist_str += super(NotchEvenDist, self).__str__()
         NotchEvenDist_str += "alpha = " + str(self.alpha) + linesep
         if self.notch_shape is not None:
-            tmp = self.notch_shape.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            NotchEvenDist_str += "notch_shape = "+ tmp
+            tmp = (
+                self.notch_shape.__str__().replace(linesep, linesep + "\t").rstrip("\t")
+            )
+            NotchEvenDist_str += "notch_shape = " + tmp
         else:
             NotchEvenDist_str += "notch_shape = None" + linesep + linesep
         return NotchEvenDist_str
@@ -140,31 +144,51 @@ class NotchEvenDist(Notch):
             return False
         return True
 
-    def compare(self, other, name='self', ignore_list=None, is_add_value=False):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
             ignore_list = list()
         if type(other) != type(self):
-            return ['type('+name+')']
+            return ["type(" + name + ")"]
         diff_list = list()
 
         # Check the properties inherited from Notch
-        diff_list.extend(super(NotchEvenDist, self).compare(other,name=name, ignore_list=ignore_list, is_add_value=is_add_value))
-        if other._alpha is not None and self._alpha is not None and isnan(other._alpha) and isnan(self._alpha):
+        diff_list.extend(
+            super(NotchEvenDist, self).compare(
+                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
+            )
+        )
+        if (
+            other._alpha is not None
+            and self._alpha is not None
+            and isnan(other._alpha)
+            and isnan(self._alpha)
+        ):
             pass
         elif other._alpha != self._alpha:
             if is_add_value:
-                val_str = ' (self='+str(self._alpha)+', other='+str(other._alpha)+')'
-                diff_list.append(name+'.alpha'+val_str)
+                val_str = (
+                    " (self=" + str(self._alpha) + ", other=" + str(other._alpha) + ")"
+                )
+                diff_list.append(name + ".alpha" + val_str)
             else:
-                diff_list.append(name+'.alpha')
-        if (other.notch_shape is None and self.notch_shape is not None) or (other.notch_shape is not None and self.notch_shape is None):
-            diff_list.append(name+'.notch_shape None mismatch')
+                diff_list.append(name + ".alpha")
+        if (other.notch_shape is None and self.notch_shape is not None) or (
+            other.notch_shape is not None and self.notch_shape is None
+        ):
+            diff_list.append(name + ".notch_shape None mismatch")
         elif self.notch_shape is not None:
-            diff_list.extend(self.notch_shape.compare(other.notch_shape,name=name+'.notch_shape',ignore_list=ignore_list,is_add_value=is_add_value))
+            diff_list.extend(
+                self.notch_shape.compare(
+                    other.notch_shape,
+                    name=name + ".notch_shape",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
+            )
         # Filter ignore differences
-        diff_list = list(filter(lambda x : x not in ignore_list, diff_list))
+        diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
 
     def __sizeof__(self):
@@ -185,22 +209,29 @@ class NotchEvenDist(Notch):
             How to handle ndarray (0: tolist, 1: copy, 2: nothing)
         keep_function : bool
             True to keep the function object, else return str
-        Optional keyword input parameter is for internal use only 
+        Optional keyword input parameter is for internal use only
         and may prevent json serializability.
         """
 
         # Get the properties inherited from Notch
-        NotchEvenDist_dict = super(NotchEvenDist, self).as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs)
+        NotchEvenDist_dict = super(NotchEvenDist, self).as_dict(
+            type_handle_ndarray=type_handle_ndarray,
+            keep_function=keep_function,
+            **kwargs
+        )
         NotchEvenDist_dict["alpha"] = self.alpha
         if self.notch_shape is None:
             NotchEvenDist_dict["notch_shape"] = None
         else:
-            NotchEvenDist_dict["notch_shape"] = self.notch_shape.as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs)
+            NotchEvenDist_dict["notch_shape"] = self.notch_shape.as_dict(
+                type_handle_ndarray=type_handle_ndarray,
+                keep_function=keep_function,
+                **kwargs
+            )
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         NotchEvenDist_dict["__class__"] = "NotchEvenDist"
         return NotchEvenDist_dict
-
 
     def copy(self):
         """Creates a deepcopy of the object"""
@@ -212,7 +243,7 @@ class NotchEvenDist(Notch):
         else:
             notch_shape_val = self.notch_shape.copy()
         # Creates new object of the same type with the copied properties
-        obj_copy = type(self)(alpha=alpha_val,notch_shape=notch_shape_val)
+        obj_copy = type(self)(alpha=alpha_val, notch_shape=notch_shape_val)
         return obj_copy
 
     def _set_None(self):
@@ -236,7 +267,7 @@ class NotchEvenDist(Notch):
     alpha = property(
         fget=_get_alpha,
         fset=_set_alpha,
-        doc=u"""angular positon of the first notch (0 is middle of first tooth)
+        doc="""angular positon of the first notch (0 is middle of first tooth)
 
         :Type: float
         """,
@@ -252,23 +283,28 @@ class NotchEvenDist(Notch):
             try:
                 value = load_init_dict(value)[1]
             except Exception as e:
-                self.get_logger().error('Error while loading '+value+', setting None instead')
+                self.get_logger().error(
+                    "Error while loading " + value + ", setting None instead"
+                )
                 value = None
-        if isinstance(value, dict) and '__class__' in value:
-            class_obj = import_class('pyleecan.Classes', value.get('__class__'), 'notch_shape')
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class(
+                "pyleecan.Classes", value.get("__class__"), "notch_shape"
+            )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
-            Slot = import_class('pyleecan.Classes', 'Slot', 'notch_shape')
+            Slot = import_class("pyleecan.Classes", "Slot", "notch_shape")
             value = Slot()
         check_var("notch_shape", value, "Slot")
         self._notch_shape = value
 
         if self._notch_shape is not None:
             self._notch_shape.parent = self
+
     notch_shape = property(
         fget=_get_notch_shape,
         fset=_set_notch_shape,
-        doc=u"""Shape of the Notch
+        doc="""Shape of the Notch
 
         :Type: Slot
         """,

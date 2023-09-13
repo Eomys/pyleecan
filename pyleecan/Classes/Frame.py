@@ -135,7 +135,9 @@ class Frame(FrozenClass):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, Lfra=0.35, Rint=0.2, Rext=0.2, mat_type=-1, init_dict = None, init_str = None):
+    def __init__(
+        self, Lfra=0.35, Rint=0.2, Rext=0.2, mat_type=-1, init_dict=None, init_str=None
+    ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -182,7 +184,7 @@ class Frame(FrozenClass):
         Frame_str += "Rext = " + str(self.Rext) + linesep
         if self.mat_type is not None:
             tmp = self.mat_type.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            Frame_str += "mat_type = "+ tmp
+            Frame_str += "mat_type = " + tmp
         else:
             Frame_str += "mat_type = None" + linesep + linesep
         return Frame_str
@@ -202,44 +204,74 @@ class Frame(FrozenClass):
             return False
         return True
 
-    def compare(self, other, name='self', ignore_list=None, is_add_value=False):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
             ignore_list = list()
         if type(other) != type(self):
-            return ['type('+name+')']
+            return ["type(" + name + ")"]
         diff_list = list()
-        if other._Lfra is not None and self._Lfra is not None and isnan(other._Lfra) and isnan(self._Lfra):
+        if (
+            other._Lfra is not None
+            and self._Lfra is not None
+            and isnan(other._Lfra)
+            and isnan(self._Lfra)
+        ):
             pass
         elif other._Lfra != self._Lfra:
             if is_add_value:
-                val_str = ' (self='+str(self._Lfra)+', other='+str(other._Lfra)+')'
-                diff_list.append(name+'.Lfra'+val_str)
+                val_str = (
+                    " (self=" + str(self._Lfra) + ", other=" + str(other._Lfra) + ")"
+                )
+                diff_list.append(name + ".Lfra" + val_str)
             else:
-                diff_list.append(name+'.Lfra')
-        if other._Rint is not None and self._Rint is not None and isnan(other._Rint) and isnan(self._Rint):
+                diff_list.append(name + ".Lfra")
+        if (
+            other._Rint is not None
+            and self._Rint is not None
+            and isnan(other._Rint)
+            and isnan(self._Rint)
+        ):
             pass
         elif other._Rint != self._Rint:
             if is_add_value:
-                val_str = ' (self='+str(self._Rint)+', other='+str(other._Rint)+')'
-                diff_list.append(name+'.Rint'+val_str)
+                val_str = (
+                    " (self=" + str(self._Rint) + ", other=" + str(other._Rint) + ")"
+                )
+                diff_list.append(name + ".Rint" + val_str)
             else:
-                diff_list.append(name+'.Rint')
-        if other._Rext is not None and self._Rext is not None and isnan(other._Rext) and isnan(self._Rext):
+                diff_list.append(name + ".Rint")
+        if (
+            other._Rext is not None
+            and self._Rext is not None
+            and isnan(other._Rext)
+            and isnan(self._Rext)
+        ):
             pass
         elif other._Rext != self._Rext:
             if is_add_value:
-                val_str = ' (self='+str(self._Rext)+', other='+str(other._Rext)+')'
-                diff_list.append(name+'.Rext'+val_str)
+                val_str = (
+                    " (self=" + str(self._Rext) + ", other=" + str(other._Rext) + ")"
+                )
+                diff_list.append(name + ".Rext" + val_str)
             else:
-                diff_list.append(name+'.Rext')
-        if (other.mat_type is None and self.mat_type is not None) or (other.mat_type is not None and self.mat_type is None):
-            diff_list.append(name+'.mat_type None mismatch')
+                diff_list.append(name + ".Rext")
+        if (other.mat_type is None and self.mat_type is not None) or (
+            other.mat_type is not None and self.mat_type is None
+        ):
+            diff_list.append(name + ".mat_type None mismatch")
         elif self.mat_type is not None:
-            diff_list.extend(self.mat_type.compare(other.mat_type,name=name+'.mat_type',ignore_list=ignore_list,is_add_value=is_add_value))
+            diff_list.extend(
+                self.mat_type.compare(
+                    other.mat_type,
+                    name=name + ".mat_type",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
+            )
         # Filter ignore differences
-        diff_list = list(filter(lambda x : x not in ignore_list, diff_list))
+        diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
 
     def __sizeof__(self):
@@ -259,7 +291,7 @@ class Frame(FrozenClass):
             How to handle ndarray (0: tolist, 1: copy, 2: nothing)
         keep_function : bool
             True to keep the function object, else return str
-        Optional keyword input parameter is for internal use only 
+        Optional keyword input parameter is for internal use only
         and may prevent json serializability.
         """
 
@@ -270,11 +302,14 @@ class Frame(FrozenClass):
         if self.mat_type is None:
             Frame_dict["mat_type"] = None
         else:
-            Frame_dict["mat_type"] = self.mat_type.as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs)
+            Frame_dict["mat_type"] = self.mat_type.as_dict(
+                type_handle_ndarray=type_handle_ndarray,
+                keep_function=keep_function,
+                **kwargs
+            )
         # The class name is added to the dict for deserialisation purpose
         Frame_dict["__class__"] = "Frame"
         return Frame_dict
-
 
     def copy(self):
         """Creates a deepcopy of the object"""
@@ -288,7 +323,9 @@ class Frame(FrozenClass):
         else:
             mat_type_val = self.mat_type.copy()
         # Creates new object of the same type with the copied properties
-        obj_copy = type(self)(Lfra=Lfra_val,Rint=Rint_val,Rext=Rext_val,mat_type=mat_type_val)
+        obj_copy = type(self)(
+            Lfra=Lfra_val, Rint=Rint_val, Rext=Rext_val, mat_type=mat_type_val
+        )
         return obj_copy
 
     def _set_None(self):
@@ -312,7 +349,7 @@ class Frame(FrozenClass):
     Lfra = property(
         fget=_get_Lfra,
         fset=_set_Lfra,
-        doc=u"""frame length [m]
+        doc="""frame length [m]
 
         :Type: float
         :min: 0
@@ -331,7 +368,7 @@ class Frame(FrozenClass):
     Rint = property(
         fget=_get_Rint,
         fset=_set_Rint,
-        doc=u"""frame internal radius
+        doc="""frame internal radius
 
         :Type: float
         :min: 0
@@ -350,7 +387,7 @@ class Frame(FrozenClass):
     Rext = property(
         fget=_get_Rext,
         fset=_set_Rext,
-        doc=u"""Frame external radius
+        doc="""Frame external radius
 
         :Type: float
         :min: 0
@@ -367,23 +404,28 @@ class Frame(FrozenClass):
             try:
                 value = load_init_dict(value)[1]
             except Exception as e:
-                self.get_logger().error('Error while loading '+value+', setting None instead')
+                self.get_logger().error(
+                    "Error while loading " + value + ", setting None instead"
+                )
                 value = None
-        if isinstance(value, dict) and '__class__' in value:
-            class_obj = import_class('pyleecan.Classes', value.get('__class__'), 'mat_type')
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class(
+                "pyleecan.Classes", value.get("__class__"), "mat_type"
+            )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
-            Material = import_class('pyleecan.Classes', 'Material', 'mat_type')
+            Material = import_class("pyleecan.Classes", "Material", "mat_type")
             value = Material()
         check_var("mat_type", value, "Material")
         self._mat_type = value
 
         if self._mat_type is not None:
             self._mat_type.parent = self
+
     mat_type = property(
         fget=_get_mat_type,
         fset=_set_mat_type,
-        doc=u"""Frame material
+        doc="""Frame material
 
         :Type: Material
         """,

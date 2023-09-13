@@ -273,7 +273,8 @@ class XOutput(Output):
         get_pareto_index = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use XOutput method get_pareto_index: " + str(get_pareto_index)
+                    "Can't use XOutput method get_pareto_index: "
+                    + str(get_pareto_index)
                 )
             )
         )
@@ -400,7 +401,27 @@ class XOutput(Output):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, paramexplorer_list=-1, output_list=-1, xoutput_dict=-1, nb_simu=0, xoutput_ref=None, xoutput_ref_index=None, simu=-1, path_result="", geo=-1, elec=-1, mag=-1, struct=-1, post=-1, logger_name="Pyleecan.Output", force=-1, loss=-1, init_dict = None, init_str = None):
+    def __init__(
+        self,
+        paramexplorer_list=-1,
+        output_list=-1,
+        xoutput_dict=-1,
+        nb_simu=0,
+        xoutput_ref=None,
+        xoutput_ref_index=None,
+        simu=-1,
+        path_result="",
+        geo=-1,
+        elec=-1,
+        mag=-1,
+        struct=-1,
+        post=-1,
+        logger_name="Pyleecan.Output",
+        force=-1,
+        loss=-1,
+        init_dict=None,
+        init_str=None,
+    ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -456,7 +477,18 @@ class XOutput(Output):
         self.xoutput_ref = xoutput_ref
         self.xoutput_ref_index = xoutput_ref_index
         # Call Output init
-        super(XOutput, self).__init__(simu=simu, path_result=path_result, geo=geo, elec=elec, mag=mag, struct=struct, post=post, logger_name=logger_name, force=force, loss=loss)
+        super(XOutput, self).__init__(
+            simu=simu,
+            path_result=path_result,
+            geo=geo,
+            elec=elec,
+            mag=mag,
+            struct=struct,
+            post=post,
+            logger_name=logger_name,
+            force=force,
+            loss=loss,
+        )
         # The class is frozen (in Output init), for now it's impossible to
         # add new properties
 
@@ -469,22 +501,35 @@ class XOutput(Output):
         if len(self.paramexplorer_list) == 0:
             XOutput_str += "paramexplorer_list = []" + linesep
         for ii in range(len(self.paramexplorer_list)):
-            tmp = self.paramexplorer_list[ii].__str__().replace(linesep, linesep + "\t") + linesep
-            XOutput_str += "paramexplorer_list["+str(ii)+"] ="+ tmp + linesep + linesep
+            tmp = (
+                self.paramexplorer_list[ii].__str__().replace(linesep, linesep + "\t")
+                + linesep
+            )
+            XOutput_str += (
+                "paramexplorer_list[" + str(ii) + "] =" + tmp + linesep + linesep
+            )
         if len(self.output_list) == 0:
             XOutput_str += "output_list = []" + linesep
         for ii in range(len(self.output_list)):
-            tmp = self.output_list[ii].__str__().replace(linesep, linesep + "\t") + linesep
-            XOutput_str += "output_list["+str(ii)+"] ="+ tmp + linesep + linesep
+            tmp = (
+                self.output_list[ii].__str__().replace(linesep, linesep + "\t")
+                + linesep
+            )
+            XOutput_str += "output_list[" + str(ii) + "] =" + tmp + linesep + linesep
         if len(self.xoutput_dict) == 0:
-            XOutput_str += "xoutput_dict = dict()"+linesep
+            XOutput_str += "xoutput_dict = dict()" + linesep
         for key, obj in self.xoutput_dict.items():
-            tmp = self.xoutput_dict[key].__str__().replace(linesep, linesep + "\t") + linesep 
-            XOutput_str += "xoutput_dict["+key+"] ="+ tmp + linesep + linesep
+            tmp = (
+                self.xoutput_dict[key].__str__().replace(linesep, linesep + "\t")
+                + linesep
+            )
+            XOutput_str += "xoutput_dict[" + key + "] =" + tmp + linesep + linesep
         XOutput_str += "nb_simu = " + str(self.nb_simu) + linesep
         if self.xoutput_ref is not None:
-            tmp = self.xoutput_ref.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            XOutput_str += "xoutput_ref = "+ tmp
+            tmp = (
+                self.xoutput_ref.__str__().replace(linesep, linesep + "\t").rstrip("\t")
+            )
+            XOutput_str += "xoutput_ref = " + tmp
         else:
             XOutput_str += "xoutput_ref = None" + linesep + linesep
         XOutput_str += "xoutput_ref_index = " + str(self.xoutput_ref_index) + linesep
@@ -513,62 +558,114 @@ class XOutput(Output):
             return False
         return True
 
-    def compare(self, other, name='self', ignore_list=None, is_add_value=False):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
             ignore_list = list()
         if type(other) != type(self):
-            return ['type('+name+')']
+            return ["type(" + name + ")"]
         diff_list = list()
 
         # Check the properties inherited from Output
-        diff_list.extend(super(XOutput, self).compare(other,name=name, ignore_list=ignore_list, is_add_value=is_add_value))
-        if (other.paramexplorer_list is None and self.paramexplorer_list is not None) or (other.paramexplorer_list is not None and self.paramexplorer_list is None):
-            diff_list.append(name+'.paramexplorer_list None mismatch')
+        diff_list.extend(
+            super(XOutput, self).compare(
+                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
+            )
+        )
+        if (
+            other.paramexplorer_list is None and self.paramexplorer_list is not None
+        ) or (other.paramexplorer_list is not None and self.paramexplorer_list is None):
+            diff_list.append(name + ".paramexplorer_list None mismatch")
         elif self.paramexplorer_list is None:
             pass
         elif len(other.paramexplorer_list) != len(self.paramexplorer_list):
-            diff_list.append('len('+name+'.paramexplorer_list)')
+            diff_list.append("len(" + name + ".paramexplorer_list)")
         else:
             for ii in range(len(other.paramexplorer_list)):
-                diff_list.extend(self.paramexplorer_list[ii].compare(other.paramexplorer_list[ii],name=name+'.paramexplorer_list['+str(ii)+']',ignore_list=ignore_list,is_add_value=is_add_value))
-        if (other.output_list is None and self.output_list is not None) or (other.output_list is not None and self.output_list is None):
-            diff_list.append(name+'.output_list None mismatch')
+                diff_list.extend(
+                    self.paramexplorer_list[ii].compare(
+                        other.paramexplorer_list[ii],
+                        name=name + ".paramexplorer_list[" + str(ii) + "]",
+                        ignore_list=ignore_list,
+                        is_add_value=is_add_value,
+                    )
+                )
+        if (other.output_list is None and self.output_list is not None) or (
+            other.output_list is not None and self.output_list is None
+        ):
+            diff_list.append(name + ".output_list None mismatch")
         elif self.output_list is None:
             pass
         elif len(other.output_list) != len(self.output_list):
-            diff_list.append('len('+name+'.output_list)')
+            diff_list.append("len(" + name + ".output_list)")
         else:
             for ii in range(len(other.output_list)):
-                diff_list.extend(self.output_list[ii].compare(other.output_list[ii],name=name+'.output_list['+str(ii)+']',ignore_list=ignore_list,is_add_value=is_add_value))
-        if (other.xoutput_dict is None and self.xoutput_dict is not None) or (other.xoutput_dict is not None and self.xoutput_dict is None):
-            diff_list.append(name+'.xoutput_dict None mismatch')
+                diff_list.extend(
+                    self.output_list[ii].compare(
+                        other.output_list[ii],
+                        name=name + ".output_list[" + str(ii) + "]",
+                        ignore_list=ignore_list,
+                        is_add_value=is_add_value,
+                    )
+                )
+        if (other.xoutput_dict is None and self.xoutput_dict is not None) or (
+            other.xoutput_dict is not None and self.xoutput_dict is None
+        ):
+            diff_list.append(name + ".xoutput_dict None mismatch")
         elif self.xoutput_dict is None:
             pass
         elif len(other.xoutput_dict) != len(self.xoutput_dict):
-            diff_list.append('len('+name+'xoutput_dict)')
+            diff_list.append("len(" + name + "xoutput_dict)")
         else:
             for key in self.xoutput_dict:
-                diff_list.extend(self.xoutput_dict[key].compare(other.xoutput_dict[key],name=name+'.xoutput_dict['+str(key)+']',ignore_list=ignore_list,is_add_value=is_add_value))
+                diff_list.extend(
+                    self.xoutput_dict[key].compare(
+                        other.xoutput_dict[key],
+                        name=name + ".xoutput_dict[" + str(key) + "]",
+                        ignore_list=ignore_list,
+                        is_add_value=is_add_value,
+                    )
+                )
         if other._nb_simu != self._nb_simu:
             if is_add_value:
-                val_str = ' (self='+str(self._nb_simu)+', other='+str(other._nb_simu)+')'
-                diff_list.append(name+'.nb_simu'+val_str)
+                val_str = (
+                    " (self="
+                    + str(self._nb_simu)
+                    + ", other="
+                    + str(other._nb_simu)
+                    + ")"
+                )
+                diff_list.append(name + ".nb_simu" + val_str)
             else:
-                diff_list.append(name+'.nb_simu')
-        if (other.xoutput_ref is None and self.xoutput_ref is not None) or (other.xoutput_ref is not None and self.xoutput_ref is None):
-            diff_list.append(name+'.xoutput_ref None mismatch')
+                diff_list.append(name + ".nb_simu")
+        if (other.xoutput_ref is None and self.xoutput_ref is not None) or (
+            other.xoutput_ref is not None and self.xoutput_ref is None
+        ):
+            diff_list.append(name + ".xoutput_ref None mismatch")
         elif self.xoutput_ref is not None:
-            diff_list.extend(self.xoutput_ref.compare(other.xoutput_ref,name=name+'.xoutput_ref',ignore_list=ignore_list,is_add_value=is_add_value))
+            diff_list.extend(
+                self.xoutput_ref.compare(
+                    other.xoutput_ref,
+                    name=name + ".xoutput_ref",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
+            )
         if other._xoutput_ref_index != self._xoutput_ref_index:
             if is_add_value:
-                val_str = ' (self='+str(self._xoutput_ref_index)+', other='+str(other._xoutput_ref_index)+')'
-                diff_list.append(name+'.xoutput_ref_index'+val_str)
+                val_str = (
+                    " (self="
+                    + str(self._xoutput_ref_index)
+                    + ", other="
+                    + str(other._xoutput_ref_index)
+                    + ")"
+                )
+                diff_list.append(name + ".xoutput_ref_index" + val_str)
             else:
-                diff_list.append(name+'.xoutput_ref_index')
+                diff_list.append(name + ".xoutput_ref_index")
         # Filter ignore differences
-        diff_list = list(filter(lambda x : x not in ignore_list, diff_list))
+        diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
 
     def __sizeof__(self):
@@ -599,50 +696,73 @@ class XOutput(Output):
             How to handle ndarray (0: tolist, 1: copy, 2: nothing)
         keep_function : bool
             True to keep the function object, else return str
-        Optional keyword input parameter is for internal use only 
+        Optional keyword input parameter is for internal use only
         and may prevent json serializability.
         """
 
         # Get the properties inherited from Output
-        XOutput_dict = super(XOutput, self).as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs)
+        XOutput_dict = super(XOutput, self).as_dict(
+            type_handle_ndarray=type_handle_ndarray,
+            keep_function=keep_function,
+            **kwargs
+        )
         if self.paramexplorer_list is None:
-            XOutput_dict['paramexplorer_list'] = None
+            XOutput_dict["paramexplorer_list"] = None
         else:
-            XOutput_dict['paramexplorer_list'] = list()
+            XOutput_dict["paramexplorer_list"] = list()
             for obj in self.paramexplorer_list:
                 if obj is not None:
-                    XOutput_dict['paramexplorer_list'].append(obj.as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs))
+                    XOutput_dict["paramexplorer_list"].append(
+                        obj.as_dict(
+                            type_handle_ndarray=type_handle_ndarray,
+                            keep_function=keep_function,
+                            **kwargs
+                        )
+                    )
                 else:
-                    XOutput_dict['paramexplorer_list'].append(None)
+                    XOutput_dict["paramexplorer_list"].append(None)
         if self.output_list is None:
-            XOutput_dict['output_list'] = None
+            XOutput_dict["output_list"] = None
         else:
-            XOutput_dict['output_list'] = list()
+            XOutput_dict["output_list"] = list()
             for obj in self.output_list:
                 if obj is not None:
-                    XOutput_dict['output_list'].append(obj.as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs))
+                    XOutput_dict["output_list"].append(
+                        obj.as_dict(
+                            type_handle_ndarray=type_handle_ndarray,
+                            keep_function=keep_function,
+                            **kwargs
+                        )
+                    )
                 else:
-                    XOutput_dict['output_list'].append(None)
+                    XOutput_dict["output_list"].append(None)
         if self.xoutput_dict is None:
             XOutput_dict["xoutput_dict"] = None
         else:
             XOutput_dict["xoutput_dict"] = dict()
             for key, obj in self.xoutput_dict.items():
                 if obj is not None:
-                    XOutput_dict["xoutput_dict"][key] = obj.as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs)
+                    XOutput_dict["xoutput_dict"][key] = obj.as_dict(
+                        type_handle_ndarray=type_handle_ndarray,
+                        keep_function=keep_function,
+                        **kwargs
+                    )
                 else:
                     XOutput_dict["xoutput_dict"][key] = None
         XOutput_dict["nb_simu"] = self.nb_simu
         if self.xoutput_ref is None:
             XOutput_dict["xoutput_ref"] = None
         else:
-            XOutput_dict["xoutput_ref"] = self.xoutput_ref.as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs)
+            XOutput_dict["xoutput_ref"] = self.xoutput_ref.as_dict(
+                type_handle_ndarray=type_handle_ndarray,
+                keep_function=keep_function,
+                **kwargs
+            )
         XOutput_dict["xoutput_ref_index"] = self.xoutput_ref_index
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         XOutput_dict["__class__"] = "XOutput"
         return XOutput_dict
-
 
     def copy(self):
         """Creates a deepcopy of the object"""
@@ -707,7 +827,24 @@ class XOutput(Output):
         else:
             loss_val = self.loss.copy()
         # Creates new object of the same type with the copied properties
-        obj_copy = type(self)(paramexplorer_list=paramexplorer_list_val,output_list=output_list_val,xoutput_dict=xoutput_dict_val,nb_simu=nb_simu_val,xoutput_ref=xoutput_ref_val,xoutput_ref_index=xoutput_ref_index_val,simu=simu_val,path_result=path_result_val,geo=geo_val,elec=elec_val,mag=mag_val,struct=struct_val,post=post_val,logger_name=logger_name_val,force=force_val,loss=loss_val)
+        obj_copy = type(self)(
+            paramexplorer_list=paramexplorer_list_val,
+            output_list=output_list_val,
+            xoutput_dict=xoutput_dict_val,
+            nb_simu=nb_simu_val,
+            xoutput_ref=xoutput_ref_val,
+            xoutput_ref_index=xoutput_ref_index_val,
+            simu=simu_val,
+            path_result=path_result_val,
+            geo=geo_val,
+            elec=elec_val,
+            mag=mag_val,
+            struct=struct_val,
+            post=post_val,
+            logger_name=logger_name_val,
+            force=force_val,
+            loss=loss_val,
+        )
         return obj_copy
 
     def _set_None(self):
@@ -739,11 +876,15 @@ class XOutput(Output):
                     try:
                         obj = load_init_dict(obj)[1]
                     except Exception as e:
-                        self.get_logger().error('Error while loading '+obj+', setting None instead')
+                        self.get_logger().error(
+                            "Error while loading " + obj + ", setting None instead"
+                        )
                         obj = None
                         value[ii] = None
                 if type(obj) is dict:
-                    class_obj = import_class('pyleecan.Classes', obj.get('__class__'), 'paramexplorer_list')
+                    class_obj = import_class(
+                        "pyleecan.Classes", obj.get("__class__"), "paramexplorer_list"
+                    )
                     value[ii] = class_obj(init_dict=obj)
                 if value[ii] is not None:
                     value[ii].parent = self
@@ -755,7 +896,7 @@ class XOutput(Output):
     paramexplorer_list = property(
         fget=_get_paramexplorer_list,
         fset=_set_paramexplorer_list,
-        doc=u"""List containing ParamExplorer
+        doc="""List containing ParamExplorer
 
         :Type: [ParamExplorer]
         """,
@@ -777,11 +918,15 @@ class XOutput(Output):
                     try:
                         obj = load_init_dict(obj)[1]
                     except Exception as e:
-                        self.get_logger().error('Error while loading '+obj+', setting None instead')
+                        self.get_logger().error(
+                            "Error while loading " + obj + ", setting None instead"
+                        )
                         obj = None
                         value[ii] = None
                 if type(obj) is dict:
-                    class_obj = import_class('pyleecan.Classes', obj.get('__class__'), 'output_list')
+                    class_obj = import_class(
+                        "pyleecan.Classes", obj.get("__class__"), "output_list"
+                    )
                     value[ii] = class_obj(init_dict=obj)
                 if value[ii] is not None:
                     value[ii].parent = self
@@ -793,7 +938,7 @@ class XOutput(Output):
     output_list = property(
         fget=_get_output_list,
         fset=_set_output_list,
-        doc=u"""List containing Output (or Xoutput) for each simulation
+        doc="""List containing Output (or Xoutput) for each simulation
 
         :Type: [Output]
         """,
@@ -815,11 +960,15 @@ class XOutput(Output):
                     try:
                         obj = load_init_dict(obj)[1]
                     except Exception as e:
-                        self.get_logger().error('Error while loading '+obj+', setting None instead')
+                        self.get_logger().error(
+                            "Error while loading " + obj + ", setting None instead"
+                        )
                         obj = None
                         value[key] = None
                 if type(obj) is dict:
-                    class_obj = import_class('pyleecan.Classes', obj.get('__class__'), 'xoutput_dict')
+                    class_obj = import_class(
+                        "pyleecan.Classes", obj.get("__class__"), "xoutput_dict"
+                    )
                     value[key] = class_obj(init_dict=obj)
         if type(value) is int and value == -1:
             value = dict()
@@ -829,7 +978,7 @@ class XOutput(Output):
     xoutput_dict = property(
         fget=_get_xoutput_dict,
         fset=_set_xoutput_dict,
-        doc=u"""dictionary containing DataKeeper
+        doc="""dictionary containing DataKeeper
 
         :Type: {DataKeeper}
         """,
@@ -847,7 +996,7 @@ class XOutput(Output):
     nb_simu = property(
         fget=_get_nb_simu,
         fset=_set_nb_simu,
-        doc=u"""Number of simulations excluding reference simulation
+        doc="""Number of simulations excluding reference simulation
 
         :Type: int
         :min: 0
@@ -864,23 +1013,28 @@ class XOutput(Output):
             try:
                 value = load_init_dict(value)[1]
             except Exception as e:
-                self.get_logger().error('Error while loading '+value+', setting None instead')
+                self.get_logger().error(
+                    "Error while loading " + value + ", setting None instead"
+                )
                 value = None
-        if isinstance(value, dict) and '__class__' in value:
-            class_obj = import_class('pyleecan.Classes', value.get('__class__'), 'xoutput_ref')
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class(
+                "pyleecan.Classes", value.get("__class__"), "xoutput_ref"
+            )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
-            Output = import_class('pyleecan.Classes', 'Output', 'xoutput_ref')
+            Output = import_class("pyleecan.Classes", "Output", "xoutput_ref")
             value = Output()
         check_var("xoutput_ref", value, "Output")
         self._xoutput_ref = value
 
         if self._xoutput_ref is not None:
             self._xoutput_ref.parent = self
+
     xoutput_ref = property(
         fget=_get_xoutput_ref,
         fset=_set_xoutput_ref,
-        doc=u"""Xoutput (or Output) of the reference simulation (only if is_keep_all_output is True and not included in output_list)
+        doc="""Xoutput (or Output) of the reference simulation (only if is_keep_all_output is True and not included in output_list)
 
         :Type: Output
         """,
@@ -898,7 +1052,7 @@ class XOutput(Output):
     xoutput_ref_index = property(
         fget=_get_xoutput_ref_index,
         fset=_set_xoutput_ref_index,
-        doc=u"""Index of the Xoutput (or Output) of the reference simulation in the output_list (only if is_keep_all_output is True)
+        doc="""Index of the Xoutput (or Output) of the reference simulation in the output_list (only if is_keep_all_output is True)
 
         :Type: int
         """,

@@ -27,7 +27,7 @@ if __name__ == "__main__":
         is_log = False
 
     ui_folder_path = join(
-        MAIN_DIR, "GUI", "Dialog", "DMachineSetup", "SMSlot", "PMSlot19"
+        MAIN_DIR, "GUI", "Dialog", "DMachineSetup", "SMHoleMag", "PHoleM60"
     )
     gen_dict = read_all(DOC_DIR, soft_name=soft_name)
     print("#############################\nGenerating gui....")

@@ -24,14 +24,14 @@ def _comp_point_coordinate(self):
 
     if self.is_outwards():
         Z2 = Z1 + self.H0
-        Zc1 = Z2.real + sqrt(self.R1 ** 2 - (self.W0 / 2.0) ** 2)
+        Zc1 = Z2.real + sqrt(self.R1**2 - (self.W0 / 2.0) ** 2)
         Z3 = Zc1 - self.R1 * 1j
         Zc2 = Zc1 + self.H1
         Z4 = Zc2 - 1j * self.R2
         Zbot = Zc2 + self.R2
     else:  # inward slot
         Z2 = Z1 - self.H0
-        Zc1 = Z2.real - sqrt(self.R1 ** 2 - (self.W0 / 2.0) ** 2)
+        Zc1 = Z2.real - sqrt(self.R1**2 - (self.W0 / 2.0) ** 2)
         Z3 = Zc1 - self.R1 * 1j
         Zc2 = Zc1 - self.H1
         Z4 = Zc2 - 1j * self.R2

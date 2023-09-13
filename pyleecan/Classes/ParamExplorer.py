@@ -84,7 +84,16 @@ class ParamExplorer(FrozenClass):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, name="", symbol="", unit="", setter=None, getter=None, init_dict = None, init_str = None):
+    def __init__(
+        self,
+        name="",
+        symbol="",
+        unit="",
+        setter=None,
+        getter=None,
+        init_dict=None,
+        init_str=None,
+    ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -128,7 +137,9 @@ class ParamExplorer(FrozenClass):
         if self.parent is None:
             ParamExplorer_str += "parent = None " + linesep
         else:
-            ParamExplorer_str += "parent = " + str(type(self.parent)) + " object" + linesep
+            ParamExplorer_str += (
+                "parent = " + str(type(self.parent)) + " object" + linesep
+            )
         ParamExplorer_str += 'name = "' + str(self.name) + '"' + linesep
         ParamExplorer_str += 'symbol = "' + str(self.symbol) + '"' + linesep
         ParamExplorer_str += 'unit = "' + str(self.unit) + '"' + linesep
@@ -163,38 +174,48 @@ class ParamExplorer(FrozenClass):
             return False
         return True
 
-    def compare(self, other, name='self', ignore_list=None, is_add_value=False):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
             ignore_list = list()
         if type(other) != type(self):
-            return ['type('+name+')']
+            return ["type(" + name + ")"]
         diff_list = list()
         if other._name != self._name:
             if is_add_value:
-                val_str = ' (self='+str(self._name)+', other='+str(other._name)+')'
-                diff_list.append(name+'.name'+val_str)
+                val_str = (
+                    " (self=" + str(self._name) + ", other=" + str(other._name) + ")"
+                )
+                diff_list.append(name + ".name" + val_str)
             else:
-                diff_list.append(name+'.name')
+                diff_list.append(name + ".name")
         if other._symbol != self._symbol:
             if is_add_value:
-                val_str = ' (self='+str(self._symbol)+', other='+str(other._symbol)+')'
-                diff_list.append(name+'.symbol'+val_str)
+                val_str = (
+                    " (self="
+                    + str(self._symbol)
+                    + ", other="
+                    + str(other._symbol)
+                    + ")"
+                )
+                diff_list.append(name + ".symbol" + val_str)
             else:
-                diff_list.append(name+'.symbol')
+                diff_list.append(name + ".symbol")
         if other._unit != self._unit:
             if is_add_value:
-                val_str = ' (self='+str(self._unit)+', other='+str(other._unit)+')'
-                diff_list.append(name+'.unit'+val_str)
+                val_str = (
+                    " (self=" + str(self._unit) + ", other=" + str(other._unit) + ")"
+                )
+                diff_list.append(name + ".unit" + val_str)
             else:
-                diff_list.append(name+'.unit')
+                diff_list.append(name + ".unit")
         if other._setter_str != self._setter_str:
-            diff_list.append(name+'.setter')
+            diff_list.append(name + ".setter")
         if other._getter_str != self._getter_str:
-            diff_list.append(name+'.getter')
+            diff_list.append(name + ".getter")
         # Filter ignore differences
-        diff_list = list(filter(lambda x : x not in ignore_list, diff_list))
+        diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
 
     def __sizeof__(self):
@@ -215,7 +236,7 @@ class ParamExplorer(FrozenClass):
             How to handle ndarray (0: tolist, 1: copy, 2: nothing)
         keep_function : bool
             True to keep the function object, else return str
-        Optional keyword input parameter is for internal use only 
+        Optional keyword input parameter is for internal use only
         and may prevent json serializability.
         """
 
@@ -231,7 +252,9 @@ class ParamExplorer(FrozenClass):
             ParamExplorer_dict["setter"] = None
             if self.setter is not None:
                 self.get_logger().warning(
-                    "ParamExplorer.as_dict(): " +f"Function {self.setter.__name__} is not serializable " + "and will be converted to None."
+                    "ParamExplorer.as_dict(): "
+                    + f"Function {self.setter.__name__} is not serializable "
+                    + "and will be converted to None."
                 )
         if self._getter_str is not None:
             ParamExplorer_dict["getter"] = self._getter_str
@@ -241,12 +264,13 @@ class ParamExplorer(FrozenClass):
             ParamExplorer_dict["getter"] = None
             if self.getter is not None:
                 self.get_logger().warning(
-                    "ParamExplorer.as_dict(): " +f"Function {self.getter.__name__} is not serializable " + "and will be converted to None."
+                    "ParamExplorer.as_dict(): "
+                    + f"Function {self.getter.__name__} is not serializable "
+                    + "and will be converted to None."
                 )
         # The class name is added to the dict for deserialisation purpose
         ParamExplorer_dict["__class__"] = "ParamExplorer"
         return ParamExplorer_dict
-
 
     def copy(self):
         """Creates a deepcopy of the object"""
@@ -264,7 +288,13 @@ class ParamExplorer(FrozenClass):
         else:
             getter_val = self._getter_func
         # Creates new object of the same type with the copied properties
-        obj_copy = type(self)(name=name_val,symbol=symbol_val,unit=unit_val,setter=setter_val,getter=getter_val)
+        obj_copy = type(self)(
+            name=name_val,
+            symbol=symbol_val,
+            unit=unit_val,
+            setter=setter_val,
+            getter=getter_val,
+        )
         return obj_copy
 
     def _set_None(self):
@@ -288,7 +318,7 @@ class ParamExplorer(FrozenClass):
     name = property(
         fget=_get_name,
         fset=_set_name,
-        doc=u"""Parameter name
+        doc="""Parameter name
 
         :Type: str
         """,
@@ -306,7 +336,7 @@ class ParamExplorer(FrozenClass):
     symbol = property(
         fget=_get_symbol,
         fset=_set_symbol,
-        doc=u"""Parameter symbol
+        doc="""Parameter symbol
 
         :Type: str
         """,
@@ -324,7 +354,7 @@ class ParamExplorer(FrozenClass):
     unit = property(
         fget=_get_unit,
         fset=_set_unit,
-        doc=u"""Parameter unit
+        doc="""Parameter unit
 
         :Type: str
         """,
@@ -337,7 +367,7 @@ class ParamExplorer(FrozenClass):
     setter = property(
         fget=_get_setter,
         fset=_set_setter,
-        doc=u"""Function that takes a Simulation and a value in argument and modifiers the simulation
+        doc="""Function that takes a Simulation and a value in argument and modifiers the simulation
 
         :Type: function
         """,
@@ -350,7 +380,7 @@ class ParamExplorer(FrozenClass):
     getter = property(
         fget=_get_getter,
         fset=_set_getter,
-        doc=u"""Function to return the reference value (simulation as argument)
+        doc="""Function to return the reference value (simulation as argument)
 
         :Type: function
         """,

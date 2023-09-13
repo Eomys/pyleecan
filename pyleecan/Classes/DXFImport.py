@@ -48,7 +48,9 @@ class DXFImport(FrozenClass):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, file_path="", surf_dict=-1, BC_list=-1, init_dict = None, init_str = None):
+    def __init__(
+        self, file_path="", surf_dict=-1, BC_list=-1, init_dict=None, init_str=None
+    ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -89,7 +91,12 @@ class DXFImport(FrozenClass):
             DXFImport_str += "parent = " + str(type(self.parent)) + " object" + linesep
         DXFImport_str += 'file_path = "' + str(self.file_path) + '"' + linesep
         DXFImport_str += "surf_dict = " + str(self.surf_dict) + linesep
-        DXFImport_str += "BC_list = " + linesep + str(self.BC_list).replace(linesep, linesep + "\t") + linesep
+        DXFImport_str += (
+            "BC_list = "
+            + linesep
+            + str(self.BC_list).replace(linesep, linesep + "\t")
+            + linesep
+        )
         return DXFImport_str
 
     def __eq__(self, other):
@@ -105,34 +112,52 @@ class DXFImport(FrozenClass):
             return False
         return True
 
-    def compare(self, other, name='self', ignore_list=None, is_add_value=False):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
             ignore_list = list()
         if type(other) != type(self):
-            return ['type('+name+')']
+            return ["type(" + name + ")"]
         diff_list = list()
         if other._file_path != self._file_path:
             if is_add_value:
-                val_str = ' (self='+str(self._file_path)+', other='+str(other._file_path)+')'
-                diff_list.append(name+'.file_path'+val_str)
+                val_str = (
+                    " (self="
+                    + str(self._file_path)
+                    + ", other="
+                    + str(other._file_path)
+                    + ")"
+                )
+                diff_list.append(name + ".file_path" + val_str)
             else:
-                diff_list.append(name+'.file_path')
+                diff_list.append(name + ".file_path")
         if other._surf_dict != self._surf_dict:
             if is_add_value:
-                val_str = ' (self='+str(self._surf_dict)+', other='+str(other._surf_dict)+')'
-                diff_list.append(name+'.surf_dict'+val_str)
+                val_str = (
+                    " (self="
+                    + str(self._surf_dict)
+                    + ", other="
+                    + str(other._surf_dict)
+                    + ")"
+                )
+                diff_list.append(name + ".surf_dict" + val_str)
             else:
-                diff_list.append(name+'.surf_dict')
+                diff_list.append(name + ".surf_dict")
         if other._BC_list != self._BC_list:
             if is_add_value:
-                val_str = ' (self='+str(self._BC_list)+', other='+str(other._BC_list)+')'
-                diff_list.append(name+'.BC_list'+val_str)
+                val_str = (
+                    " (self="
+                    + str(self._BC_list)
+                    + ", other="
+                    + str(other._BC_list)
+                    + ")"
+                )
+                diff_list.append(name + ".BC_list" + val_str)
             else:
-                diff_list.append(name+'.BC_list')
+                diff_list.append(name + ".BC_list")
         # Filter ignore differences
-        diff_list = list(filter(lambda x : x not in ignore_list, diff_list))
+        diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
 
     def __sizeof__(self):
@@ -155,7 +180,7 @@ class DXFImport(FrozenClass):
             How to handle ndarray (0: tolist, 1: copy, 2: nothing)
         keep_function : bool
             True to keep the function object, else return str
-        Optional keyword input parameter is for internal use only 
+        Optional keyword input parameter is for internal use only
         and may prevent json serializability.
         """
 
@@ -171,7 +196,6 @@ class DXFImport(FrozenClass):
         DXFImport_dict["__class__"] = "DXFImport"
         return DXFImport_dict
 
-
     def copy(self):
         """Creates a deepcopy of the object"""
 
@@ -186,7 +210,9 @@ class DXFImport(FrozenClass):
         else:
             BC_list_val = self.BC_list.copy()
         # Creates new object of the same type with the copied properties
-        obj_copy = type(self)(file_path=file_path_val,surf_dict=surf_dict_val,BC_list=BC_list_val)
+        obj_copy = type(self)(
+            file_path=file_path_val, surf_dict=surf_dict_val, BC_list=BC_list_val
+        )
         return obj_copy
 
     def _set_None(self):
@@ -208,7 +234,7 @@ class DXFImport(FrozenClass):
     file_path = property(
         fget=_get_file_path,
         fset=_set_file_path,
-        doc=u"""Path to the DXF file to import
+        doc="""Path to the DXF file to import
 
         :Type: str
         """,
@@ -228,7 +254,7 @@ class DXFImport(FrozenClass):
     surf_dict = property(
         fget=_get_surf_dict,
         fset=_set_surf_dict,
-        doc=u"""dictionary to assign the surfaces: key=complex reference point coordinate, value=label of the surface
+        doc="""dictionary to assign the surfaces: key=complex reference point coordinate, value=label of the surface
 
         :Type: dict
         """,
@@ -248,7 +274,7 @@ class DXFImport(FrozenClass):
     BC_list = property(
         fget=_get_BC_list,
         fset=_set_BC_list,
-        doc=u"""List of tuple to apply boundary conditions (complex reference point coordinate, is_arc, label of the BC to apply)
+        doc="""List of tuple to apply boundary conditions (complex reference point coordinate, is_arc, label of the BC to apply)
 
         :Type: list
         """,

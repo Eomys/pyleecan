@@ -38,12 +38,16 @@ except ImportError as error:
     plot = error
 
 try:
-    from ..Methods.Machine.LamSquirrelCageMag.get_pole_pair_number import get_pole_pair_number
+    from ..Methods.Machine.LamSquirrelCageMag.get_pole_pair_number import (
+        get_pole_pair_number,
+    )
 except ImportError as error:
     get_pole_pair_number = error
 
 try:
-    from ..Methods.Machine.LamSquirrelCageMag.set_pole_pair_number import set_pole_pair_number
+    from ..Methods.Machine.LamSquirrelCageMag.set_pole_pair_number import (
+        set_pole_pair_number,
+    )
 except ImportError as error:
     set_pole_pair_number = error
 
@@ -146,7 +150,32 @@ class LamSquirrelCageMag(LamSquirrelCage):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, hole=-1, Hscr=0.03, Lscr=0.015, ring_mat=-1, Ksfill=None, winding=-1, slot=-1, L1=0.35, mat_type=-1, Nrvd=0, Wrvd=0, Kf1=0.95, is_internal=True, Rint=0, Rext=1, is_stator=True, axial_vent=-1, notch=-1, skew=None, bore=None, yoke=None, init_dict = None, init_str = None):
+    def __init__(
+        self,
+        hole=-1,
+        Hscr=0.03,
+        Lscr=0.015,
+        ring_mat=-1,
+        Ksfill=None,
+        winding=-1,
+        slot=-1,
+        L1=0.35,
+        mat_type=-1,
+        Nrvd=0,
+        Wrvd=0,
+        Kf1=0.95,
+        is_internal=True,
+        Rint=0,
+        Rext=1,
+        is_stator=True,
+        axial_vent=-1,
+        notch=-1,
+        skew=None,
+        bore=None,
+        yoke=None,
+        init_dict=None,
+        init_str=None,
+    ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -207,7 +236,28 @@ class LamSquirrelCageMag(LamSquirrelCage):
         # Set the properties (value check and convertion are done in setter)
         self.hole = hole
         # Call LamSquirrelCage init
-        super(LamSquirrelCageMag, self).__init__(Hscr=Hscr, Lscr=Lscr, ring_mat=ring_mat, Ksfill=Ksfill, winding=winding, slot=slot, L1=L1, mat_type=mat_type, Nrvd=Nrvd, Wrvd=Wrvd, Kf1=Kf1, is_internal=is_internal, Rint=Rint, Rext=Rext, is_stator=is_stator, axial_vent=axial_vent, notch=notch, skew=skew, bore=bore, yoke=yoke)
+        super(LamSquirrelCageMag, self).__init__(
+            Hscr=Hscr,
+            Lscr=Lscr,
+            ring_mat=ring_mat,
+            Ksfill=Ksfill,
+            winding=winding,
+            slot=slot,
+            L1=L1,
+            mat_type=mat_type,
+            Nrvd=Nrvd,
+            Wrvd=Wrvd,
+            Kf1=Kf1,
+            is_internal=is_internal,
+            Rint=Rint,
+            Rext=Rext,
+            is_stator=is_stator,
+            axial_vent=axial_vent,
+            notch=notch,
+            skew=skew,
+            bore=bore,
+            yoke=yoke,
+        )
         # The class is frozen (in LamSquirrelCage init), for now it's impossible to
         # add new properties
 
@@ -221,7 +271,9 @@ class LamSquirrelCageMag(LamSquirrelCage):
             LamSquirrelCageMag_str += "hole = []" + linesep
         for ii in range(len(self.hole)):
             tmp = self.hole[ii].__str__().replace(linesep, linesep + "\t") + linesep
-            LamSquirrelCageMag_str += "hole["+str(ii)+"] ="+ tmp + linesep + linesep
+            LamSquirrelCageMag_str += (
+                "hole[" + str(ii) + "] =" + tmp + linesep + linesep
+            )
         return LamSquirrelCageMag_str
 
     def __eq__(self, other):
@@ -237,28 +289,41 @@ class LamSquirrelCageMag(LamSquirrelCage):
             return False
         return True
 
-    def compare(self, other, name='self', ignore_list=None, is_add_value=False):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
             ignore_list = list()
         if type(other) != type(self):
-            return ['type('+name+')']
+            return ["type(" + name + ")"]
         diff_list = list()
 
         # Check the properties inherited from LamSquirrelCage
-        diff_list.extend(super(LamSquirrelCageMag, self).compare(other,name=name, ignore_list=ignore_list, is_add_value=is_add_value))
-        if (other.hole is None and self.hole is not None) or (other.hole is not None and self.hole is None):
-            diff_list.append(name+'.hole None mismatch')
+        diff_list.extend(
+            super(LamSquirrelCageMag, self).compare(
+                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
+            )
+        )
+        if (other.hole is None and self.hole is not None) or (
+            other.hole is not None and self.hole is None
+        ):
+            diff_list.append(name + ".hole None mismatch")
         elif self.hole is None:
             pass
         elif len(other.hole) != len(self.hole):
-            diff_list.append('len('+name+'.hole)')
+            diff_list.append("len(" + name + ".hole)")
         else:
             for ii in range(len(other.hole)):
-                diff_list.extend(self.hole[ii].compare(other.hole[ii],name=name+'.hole['+str(ii)+']',ignore_list=ignore_list,is_add_value=is_add_value))
+                diff_list.extend(
+                    self.hole[ii].compare(
+                        other.hole[ii],
+                        name=name + ".hole[" + str(ii) + "]",
+                        ignore_list=ignore_list,
+                        is_add_value=is_add_value,
+                    )
+                )
         # Filter ignore differences
-        diff_list = list(filter(lambda x : x not in ignore_list, diff_list))
+        diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
 
     def __sizeof__(self):
@@ -280,26 +345,35 @@ class LamSquirrelCageMag(LamSquirrelCage):
             How to handle ndarray (0: tolist, 1: copy, 2: nothing)
         keep_function : bool
             True to keep the function object, else return str
-        Optional keyword input parameter is for internal use only 
+        Optional keyword input parameter is for internal use only
         and may prevent json serializability.
         """
 
         # Get the properties inherited from LamSquirrelCage
-        LamSquirrelCageMag_dict = super(LamSquirrelCageMag, self).as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs)
+        LamSquirrelCageMag_dict = super(LamSquirrelCageMag, self).as_dict(
+            type_handle_ndarray=type_handle_ndarray,
+            keep_function=keep_function,
+            **kwargs
+        )
         if self.hole is None:
-            LamSquirrelCageMag_dict['hole'] = None
+            LamSquirrelCageMag_dict["hole"] = None
         else:
-            LamSquirrelCageMag_dict['hole'] = list()
+            LamSquirrelCageMag_dict["hole"] = list()
             for obj in self.hole:
                 if obj is not None:
-                    LamSquirrelCageMag_dict['hole'].append(obj.as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs))
+                    LamSquirrelCageMag_dict["hole"].append(
+                        obj.as_dict(
+                            type_handle_ndarray=type_handle_ndarray,
+                            keep_function=keep_function,
+                            **kwargs
+                        )
+                    )
                 else:
-                    LamSquirrelCageMag_dict['hole'].append(None)
+                    LamSquirrelCageMag_dict["hole"].append(None)
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         LamSquirrelCageMag_dict["__class__"] = "LamSquirrelCageMag"
         return LamSquirrelCageMag_dict
-
 
     def copy(self):
         """Creates a deepcopy of the object"""
@@ -363,7 +437,29 @@ class LamSquirrelCageMag(LamSquirrelCage):
         else:
             yoke_val = self.yoke.copy()
         # Creates new object of the same type with the copied properties
-        obj_copy = type(self)(hole=hole_val,Hscr=Hscr_val,Lscr=Lscr_val,ring_mat=ring_mat_val,Ksfill=Ksfill_val,winding=winding_val,slot=slot_val,L1=L1_val,mat_type=mat_type_val,Nrvd=Nrvd_val,Wrvd=Wrvd_val,Kf1=Kf1_val,is_internal=is_internal_val,Rint=Rint_val,Rext=Rext_val,is_stator=is_stator_val,axial_vent=axial_vent_val,notch=notch_val,skew=skew_val,bore=bore_val,yoke=yoke_val)
+        obj_copy = type(self)(
+            hole=hole_val,
+            Hscr=Hscr_val,
+            Lscr=Lscr_val,
+            ring_mat=ring_mat_val,
+            Ksfill=Ksfill_val,
+            winding=winding_val,
+            slot=slot_val,
+            L1=L1_val,
+            mat_type=mat_type_val,
+            Nrvd=Nrvd_val,
+            Wrvd=Wrvd_val,
+            Kf1=Kf1_val,
+            is_internal=is_internal_val,
+            Rint=Rint_val,
+            Rext=Rext_val,
+            is_stator=is_stator_val,
+            axial_vent=axial_vent_val,
+            notch=notch_val,
+            skew=skew_val,
+            bore=bore_val,
+            yoke=yoke_val,
+        )
         return obj_copy
 
     def _set_None(self):
@@ -389,11 +485,15 @@ class LamSquirrelCageMag(LamSquirrelCage):
                     try:
                         obj = load_init_dict(obj)[1]
                     except Exception as e:
-                        self.get_logger().error('Error while loading '+obj+', setting None instead')
+                        self.get_logger().error(
+                            "Error while loading " + obj + ", setting None instead"
+                        )
                         obj = None
                         value[ii] = None
                 if type(obj) is dict:
-                    class_obj = import_class('pyleecan.Classes', obj.get('__class__'), 'hole')
+                    class_obj = import_class(
+                        "pyleecan.Classes", obj.get("__class__"), "hole"
+                    )
                     value[ii] = class_obj(init_dict=obj)
                 if value[ii] is not None:
                     value[ii].parent = self
@@ -405,7 +505,7 @@ class LamSquirrelCageMag(LamSquirrelCage):
     hole = property(
         fget=_get_hole,
         fset=_set_hole,
-        doc=u"""lamination Hole
+        doc="""lamination Hole
 
         :Type: [Hole]
         """,

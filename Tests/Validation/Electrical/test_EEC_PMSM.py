@@ -138,7 +138,6 @@ def test_EEC_PMSM_sync_rel(nb_worker=int(0.5 * cpu_count())):
     assert_almost_equal(Tem_eec - Tem2, 0, decimal=12)
 
     if is_show_fig:
-
         plot_2D(
             array([x * 180 / pi for x in out.xoutput_dict["Phi0"].result]),
             [Tem_eec, Tem_av_ref],

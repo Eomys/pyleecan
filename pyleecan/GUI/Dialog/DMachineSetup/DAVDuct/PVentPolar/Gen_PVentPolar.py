@@ -13,7 +13,7 @@ class Gen_PVentPolar(Ui_PVentPolar):
         Ui_PVentPolar.setupUi(self, PVentPolar)
         # Setup of in_Zh
         txt = self.tr(
-            u"""<qt><nobr>Number of Hole around the circumference</nobr></qt>"""
+            """<qt><nobr>Number of Hole around the circumference</nobr></qt>"""
         )
         self.in_Zh.setWhatsThis(txt)
         self.in_Zh.setToolTip(txt)
@@ -22,41 +22,41 @@ class Gen_PVentPolar(Ui_PVentPolar):
         self.si_Zh.setMinimum(0)
         self.si_Zh.setMaximum(999999)
         txt = self.tr(
-            u"""<qt><nobr>Number of Hole around the circumference</nobr></qt>"""
+            """<qt><nobr>Number of Hole around the circumference</nobr></qt>"""
         )
         self.si_Zh.setWhatsThis(txt)
         self.si_Zh.setToolTip(txt)
 
         # Setup of in_D0
-        txt = self.tr(u"""<qt><nobr>Height of the hole</nobr></qt>""")
+        txt = self.tr("""<qt><nobr>Height of the hole</nobr></qt>""")
         self.in_D0.setWhatsThis(txt)
         self.in_D0.setToolTip(txt)
 
         # Setup of lf_D0
         self.lf_D0.validator().setBottom(0)
-        txt = self.tr(u"""<qt><nobr>Height of the hole</nobr></qt>""")
+        txt = self.tr("""<qt><nobr>Height of the hole</nobr></qt>""")
         self.lf_D0.setWhatsThis(txt)
         self.lf_D0.setToolTip(txt)
 
         # Setup of in_H0
-        txt = self.tr(u"""<qt><nobr>Radius of the bottom of Hole</nobr></qt>""")
+        txt = self.tr("""<qt><nobr>Radius of the bottom of Hole</nobr></qt>""")
         self.in_H0.setWhatsThis(txt)
         self.in_H0.setToolTip(txt)
 
         # Setup of lf_H0
         self.lf_H0.validator().setBottom(0)
-        txt = self.tr(u"""<qt><nobr>Radius of the bottom of Hole</nobr></qt>""")
+        txt = self.tr("""<qt><nobr>Radius of the bottom of Hole</nobr></qt>""")
         self.lf_H0.setWhatsThis(txt)
         self.lf_H0.setToolTip(txt)
 
         # Setup of in_W1
-        txt = self.tr(u"""<qt><nobr>Hole angular width</nobr></qt>""")
+        txt = self.tr("""<qt><nobr>Hole angular width</nobr></qt>""")
         self.in_W1.setWhatsThis(txt)
         self.in_W1.setToolTip(txt)
 
         # Setup of lf_W1
         self.lf_W1.validator().setBottom(0)
         self.lf_W1.validator().setTop(6.29)
-        txt = self.tr(u"""<qt><nobr>Hole angular width</nobr></qt>""")
+        txt = self.tr("""<qt><nobr>Hole angular width</nobr></qt>""")
         self.lf_W1.setWhatsThis(txt)
         self.lf_W1.setToolTip(txt)

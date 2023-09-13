@@ -46,7 +46,15 @@ class DriveWave(Drive):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, wave=-1, Umax=800, Imax=800, is_current=False, init_dict = None, init_str = None):
+    def __init__(
+        self,
+        wave=-1,
+        Umax=800,
+        Imax=800,
+        is_current=False,
+        init_dict=None,
+        init_str=None,
+    ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -85,7 +93,7 @@ class DriveWave(Drive):
         DriveWave_str += super(DriveWave, self).__str__()
         if self.wave is not None:
             tmp = self.wave.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            DriveWave_str += "wave = "+ tmp
+            DriveWave_str += "wave = " + tmp
         else:
             DriveWave_str += "wave = None" + linesep + linesep
         return DriveWave_str
@@ -103,23 +111,36 @@ class DriveWave(Drive):
             return False
         return True
 
-    def compare(self, other, name='self', ignore_list=None, is_add_value=False):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
             ignore_list = list()
         if type(other) != type(self):
-            return ['type('+name+')']
+            return ["type(" + name + ")"]
         diff_list = list()
 
         # Check the properties inherited from Drive
-        diff_list.extend(super(DriveWave, self).compare(other,name=name, ignore_list=ignore_list, is_add_value=is_add_value))
-        if (other.wave is None and self.wave is not None) or (other.wave is not None and self.wave is None):
-            diff_list.append(name+'.wave None mismatch')
+        diff_list.extend(
+            super(DriveWave, self).compare(
+                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
+            )
+        )
+        if (other.wave is None and self.wave is not None) or (
+            other.wave is not None and self.wave is None
+        ):
+            diff_list.append(name + ".wave None mismatch")
         elif self.wave is not None:
-            diff_list.extend(self.wave.compare(other.wave,name=name+'.wave',ignore_list=ignore_list,is_add_value=is_add_value))
+            diff_list.extend(
+                self.wave.compare(
+                    other.wave,
+                    name=name + ".wave",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
+            )
         # Filter ignore differences
-        diff_list = list(filter(lambda x : x not in ignore_list, diff_list))
+        diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
 
     def __sizeof__(self):
@@ -139,21 +160,28 @@ class DriveWave(Drive):
             How to handle ndarray (0: tolist, 1: copy, 2: nothing)
         keep_function : bool
             True to keep the function object, else return str
-        Optional keyword input parameter is for internal use only 
+        Optional keyword input parameter is for internal use only
         and may prevent json serializability.
         """
 
         # Get the properties inherited from Drive
-        DriveWave_dict = super(DriveWave, self).as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs)
+        DriveWave_dict = super(DriveWave, self).as_dict(
+            type_handle_ndarray=type_handle_ndarray,
+            keep_function=keep_function,
+            **kwargs
+        )
         if self.wave is None:
             DriveWave_dict["wave"] = None
         else:
-            DriveWave_dict["wave"] = self.wave.as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs)
+            DriveWave_dict["wave"] = self.wave.as_dict(
+                type_handle_ndarray=type_handle_ndarray,
+                keep_function=keep_function,
+                **kwargs
+            )
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         DriveWave_dict["__class__"] = "DriveWave"
         return DriveWave_dict
-
 
     def copy(self):
         """Creates a deepcopy of the object"""
@@ -167,7 +195,9 @@ class DriveWave(Drive):
         Imax_val = self.Imax
         is_current_val = self.is_current
         # Creates new object of the same type with the copied properties
-        obj_copy = type(self)(wave=wave_val,Umax=Umax_val,Imax=Imax_val,is_current=is_current_val)
+        obj_copy = type(self)(
+            wave=wave_val, Umax=Umax_val, Imax=Imax_val, is_current=is_current_val
+        )
         return obj_copy
 
     def _set_None(self):
@@ -188,23 +218,26 @@ class DriveWave(Drive):
             try:
                 value = load_init_dict(value)[1]
             except Exception as e:
-                self.get_logger().error('Error while loading '+value+', setting None instead')
+                self.get_logger().error(
+                    "Error while loading " + value + ", setting None instead"
+                )
                 value = None
-        if isinstance(value, dict) and '__class__' in value:
-            class_obj = import_class('pyleecan.Classes', value.get('__class__'), 'wave')
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class("pyleecan.Classes", value.get("__class__"), "wave")
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
-            Import = import_class('pyleecan.Classes', 'Import', 'wave')
+            Import = import_class("pyleecan.Classes", "Import", "wave")
             value = Import()
         check_var("wave", value, "Import")
         self._wave = value
 
         if self._wave is not None:
             self._wave.parent = self
+
     wave = property(
         fget=_get_wave,
         fset=_set_wave,
-        doc=u"""Wave generator
+        doc="""Wave generator
 
         :Type: Import
         """,

@@ -10,12 +10,12 @@ class Gen_PMSlot18(Ui_PMSlot18):
         """Abstract class to update the widget according to the csv doc"""
         Ui_PMSlot18.setupUi(self, PMSlot18)
         # Setup of in_Hmag
-        txt = self.tr(u"""Magnet Height""")
+        txt = self.tr("""Magnet Height""")
         self.in_Hmag.setWhatsThis(txt)
         self.in_Hmag.setToolTip(txt)
 
         # Setup of lf_Hmag
         self.lf_Hmag.validator().setBottom(0)
-        txt = self.tr(u"""Magnet Height""")
+        txt = self.tr("""Magnet Height""")
         self.lf_Hmag.setWhatsThis(txt)
         self.lf_Hmag.setToolTip(txt)

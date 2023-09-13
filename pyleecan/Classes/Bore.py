@@ -182,7 +182,7 @@ class Bore(FrozenClass):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, type_merge_slot=1, alpha=0, init_dict = None, init_str = None):
+    def __init__(self, type_merge_slot=1, alpha=0, init_dict=None, init_str=None):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -233,30 +233,43 @@ class Bore(FrozenClass):
             return False
         return True
 
-    def compare(self, other, name='self', ignore_list=None, is_add_value=False):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
             ignore_list = list()
         if type(other) != type(self):
-            return ['type('+name+')']
+            return ["type(" + name + ")"]
         diff_list = list()
         if other._type_merge_slot != self._type_merge_slot:
             if is_add_value:
-                val_str = ' (self='+str(self._type_merge_slot)+', other='+str(other._type_merge_slot)+')'
-                diff_list.append(name+'.type_merge_slot'+val_str)
+                val_str = (
+                    " (self="
+                    + str(self._type_merge_slot)
+                    + ", other="
+                    + str(other._type_merge_slot)
+                    + ")"
+                )
+                diff_list.append(name + ".type_merge_slot" + val_str)
             else:
-                diff_list.append(name+'.type_merge_slot')
-        if other._alpha is not None and self._alpha is not None and isnan(other._alpha) and isnan(self._alpha):
+                diff_list.append(name + ".type_merge_slot")
+        if (
+            other._alpha is not None
+            and self._alpha is not None
+            and isnan(other._alpha)
+            and isnan(self._alpha)
+        ):
             pass
         elif other._alpha != self._alpha:
             if is_add_value:
-                val_str = ' (self='+str(self._alpha)+', other='+str(other._alpha)+')'
-                diff_list.append(name+'.alpha'+val_str)
+                val_str = (
+                    " (self=" + str(self._alpha) + ", other=" + str(other._alpha) + ")"
+                )
+                diff_list.append(name + ".alpha" + val_str)
             else:
-                diff_list.append(name+'.alpha')
+                diff_list.append(name + ".alpha")
         # Filter ignore differences
-        diff_list = list(filter(lambda x : x not in ignore_list, diff_list))
+        diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
 
     def __sizeof__(self):
@@ -274,7 +287,7 @@ class Bore(FrozenClass):
             How to handle ndarray (0: tolist, 1: copy, 2: nothing)
         keep_function : bool
             True to keep the function object, else return str
-        Optional keyword input parameter is for internal use only 
+        Optional keyword input parameter is for internal use only
         and may prevent json serializability.
         """
 
@@ -285,7 +298,6 @@ class Bore(FrozenClass):
         Bore_dict["__class__"] = "Bore"
         return Bore_dict
 
-
     def copy(self):
         """Creates a deepcopy of the object"""
 
@@ -293,7 +305,7 @@ class Bore(FrozenClass):
         type_merge_slot_val = self.type_merge_slot
         alpha_val = self.alpha
         # Creates new object of the same type with the copied properties
-        obj_copy = type(self)(type_merge_slot=type_merge_slot_val,alpha=alpha_val)
+        obj_copy = type(self)(type_merge_slot=type_merge_slot_val, alpha=alpha_val)
         return obj_copy
 
     def _set_None(self):
@@ -314,7 +326,7 @@ class Bore(FrozenClass):
     type_merge_slot = property(
         fget=_get_type_merge_slot,
         fset=_set_type_merge_slot,
-        doc=u"""how to merge slot/notch into the bore radius (0: connect the dot, 1: intersection, 2: translate)
+        doc="""how to merge slot/notch into the bore radius (0: connect the dot, 1: intersection, 2: translate)
 
         :Type: int
         :min: 0
@@ -334,7 +346,7 @@ class Bore(FrozenClass):
     alpha = property(
         fget=_get_alpha,
         fset=_set_alpha,
-        doc=u"""Angular offset for the bore shape
+        doc="""Angular offset for the bore shape
 
         :Type: float
         """,

@@ -29,7 +29,15 @@ class Solution(FrozenClass):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, type_cell="triangle", label=None, dimension=2, unit="", init_dict = None, init_str = None):
+    def __init__(
+        self,
+        type_cell="triangle",
+        label=None,
+        dimension=2,
+        unit="",
+        init_dict=None,
+        init_str=None,
+    ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -92,40 +100,56 @@ class Solution(FrozenClass):
             return False
         return True
 
-    def compare(self, other, name='self', ignore_list=None, is_add_value=False):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
             ignore_list = list()
         if type(other) != type(self):
-            return ['type('+name+')']
+            return ["type(" + name + ")"]
         diff_list = list()
         if other._type_cell != self._type_cell:
             if is_add_value:
-                val_str = ' (self='+str(self._type_cell)+', other='+str(other._type_cell)+')'
-                diff_list.append(name+'.type_cell'+val_str)
+                val_str = (
+                    " (self="
+                    + str(self._type_cell)
+                    + ", other="
+                    + str(other._type_cell)
+                    + ")"
+                )
+                diff_list.append(name + ".type_cell" + val_str)
             else:
-                diff_list.append(name+'.type_cell')
+                diff_list.append(name + ".type_cell")
         if other._label != self._label:
             if is_add_value:
-                val_str = ' (self='+str(self._label)+', other='+str(other._label)+')'
-                diff_list.append(name+'.label'+val_str)
+                val_str = (
+                    " (self=" + str(self._label) + ", other=" + str(other._label) + ")"
+                )
+                diff_list.append(name + ".label" + val_str)
             else:
-                diff_list.append(name+'.label')
+                diff_list.append(name + ".label")
         if other._dimension != self._dimension:
             if is_add_value:
-                val_str = ' (self='+str(self._dimension)+', other='+str(other._dimension)+')'
-                diff_list.append(name+'.dimension'+val_str)
+                val_str = (
+                    " (self="
+                    + str(self._dimension)
+                    + ", other="
+                    + str(other._dimension)
+                    + ")"
+                )
+                diff_list.append(name + ".dimension" + val_str)
             else:
-                diff_list.append(name+'.dimension')
+                diff_list.append(name + ".dimension")
         if other._unit != self._unit:
             if is_add_value:
-                val_str = ' (self='+str(self._unit)+', other='+str(other._unit)+')'
-                diff_list.append(name+'.unit'+val_str)
+                val_str = (
+                    " (self=" + str(self._unit) + ", other=" + str(other._unit) + ")"
+                )
+                diff_list.append(name + ".unit" + val_str)
             else:
-                diff_list.append(name+'.unit')
+                diff_list.append(name + ".unit")
         # Filter ignore differences
-        diff_list = list(filter(lambda x : x not in ignore_list, diff_list))
+        diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
 
     def __sizeof__(self):
@@ -145,7 +169,7 @@ class Solution(FrozenClass):
             How to handle ndarray (0: tolist, 1: copy, 2: nothing)
         keep_function : bool
             True to keep the function object, else return str
-        Optional keyword input parameter is for internal use only 
+        Optional keyword input parameter is for internal use only
         and may prevent json serializability.
         """
 
@@ -158,7 +182,6 @@ class Solution(FrozenClass):
         Solution_dict["__class__"] = "Solution"
         return Solution_dict
 
-
     def copy(self):
         """Creates a deepcopy of the object"""
 
@@ -168,7 +191,12 @@ class Solution(FrozenClass):
         dimension_val = self.dimension
         unit_val = self.unit
         # Creates new object of the same type with the copied properties
-        obj_copy = type(self)(type_cell=type_cell_val,label=label_val,dimension=dimension_val,unit=unit_val)
+        obj_copy = type(self)(
+            type_cell=type_cell_val,
+            label=label_val,
+            dimension=dimension_val,
+            unit=unit_val,
+        )
         return obj_copy
 
     def _set_None(self):
@@ -191,7 +219,7 @@ class Solution(FrozenClass):
     type_cell = property(
         fget=_get_type_cell,
         fset=_set_type_cell,
-        doc=u"""Type of cell (Point, Segment2, Triangle3, etc.)
+        doc="""Type of cell (Point, Segment2, Triangle3, etc.)
 
         :Type: str
         """,
@@ -209,7 +237,7 @@ class Solution(FrozenClass):
     label = property(
         fget=_get_label,
         fset=_set_label,
-        doc=u"""Label to identify the solution
+        doc="""Label to identify the solution
 
         :Type: str
         """,
@@ -227,7 +255,7 @@ class Solution(FrozenClass):
     dimension = property(
         fget=_get_dimension,
         fset=_set_dimension,
-        doc=u"""Dimension of the physical problem
+        doc="""Dimension of the physical problem
 
         :Type: int
         :min: 1
@@ -247,7 +275,7 @@ class Solution(FrozenClass):
     unit = property(
         fget=_get_unit,
         fset=_set_unit,
-        doc=u"""Unit of the solution
+        doc="""Unit of the solution
 
         :Type: str
         """,

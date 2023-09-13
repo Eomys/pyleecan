@@ -249,7 +249,6 @@ def test_EM_SCIM_006_varslip():
 
 
 if __name__ == "__main__":
-
     out = test_EM_SCIM_006_maxwell_current_enforced()
     out = test_EM_SCIM_006_varslip()
     print("Done")

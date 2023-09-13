@@ -82,7 +82,16 @@ class SolutionVector(Solution):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, field=None, type_cell="triangle", label=None, dimension=2, unit="", init_dict = None, init_str = None):
+    def __init__(
+        self,
+        field=None,
+        type_cell="triangle",
+        label=None,
+        dimension=2,
+        unit="",
+        init_dict=None,
+        init_str=None,
+    ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -111,7 +120,9 @@ class SolutionVector(Solution):
         # Set the properties (value check and convertion are done in setter)
         self.field = field
         # Call Solution init
-        super(SolutionVector, self).__init__(type_cell=type_cell, label=label, dimension=dimension, unit=unit)
+        super(SolutionVector, self).__init__(
+            type_cell=type_cell, label=label, dimension=dimension, unit=unit
+        )
         # The class is frozen (in Solution init), for now it's impossible to
         # add new properties
 
@@ -121,7 +132,7 @@ class SolutionVector(Solution):
         SolutionVector_str = ""
         # Get the properties inherited from Solution
         SolutionVector_str += super(SolutionVector, self).__str__()
-        SolutionVector_str += "field = "+ str(self.field) + linesep + linesep
+        SolutionVector_str += "field = " + str(self.field) + linesep + linesep
         return SolutionVector_str
 
     def __eq__(self, other):
@@ -137,23 +148,36 @@ class SolutionVector(Solution):
             return False
         return True
 
-    def compare(self, other, name='self', ignore_list=None, is_add_value=False):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
             ignore_list = list()
         if type(other) != type(self):
-            return ['type('+name+')']
+            return ["type(" + name + ")"]
         diff_list = list()
 
         # Check the properties inherited from Solution
-        diff_list.extend(super(SolutionVector, self).compare(other,name=name, ignore_list=ignore_list, is_add_value=is_add_value))
-        if (other.field is None and self.field is not None) or (other.field is not None and self.field is None):
-            diff_list.append(name+'.field None mismatch')
+        diff_list.extend(
+            super(SolutionVector, self).compare(
+                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
+            )
+        )
+        if (other.field is None and self.field is not None) or (
+            other.field is not None and self.field is None
+        ):
+            diff_list.append(name + ".field None mismatch")
         elif self.field is not None:
-            diff_list.extend(self.field.compare(other.field,name=name+'.field',ignore_list=ignore_list,is_add_value=is_add_value))
+            diff_list.extend(
+                self.field.compare(
+                    other.field,
+                    name=name + ".field",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
+            )
         # Filter ignore differences
-        diff_list = list(filter(lambda x : x not in ignore_list, diff_list))
+        diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
 
     def __sizeof__(self):
@@ -173,21 +197,28 @@ class SolutionVector(Solution):
             How to handle ndarray (0: tolist, 1: copy, 2: nothing)
         keep_function : bool
             True to keep the function object, else return str
-        Optional keyword input parameter is for internal use only 
+        Optional keyword input parameter is for internal use only
         and may prevent json serializability.
         """
 
         # Get the properties inherited from Solution
-        SolutionVector_dict = super(SolutionVector, self).as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs)
+        SolutionVector_dict = super(SolutionVector, self).as_dict(
+            type_handle_ndarray=type_handle_ndarray,
+            keep_function=keep_function,
+            **kwargs
+        )
         if self.field is None:
             SolutionVector_dict["field"] = None
         else:
-            SolutionVector_dict["field"] = self.field.as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs)
+            SolutionVector_dict["field"] = self.field.as_dict(
+                type_handle_ndarray=type_handle_ndarray,
+                keep_function=keep_function,
+                **kwargs
+            )
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         SolutionVector_dict["__class__"] = "SolutionVector"
         return SolutionVector_dict
-
 
     def copy(self):
         """Creates a deepcopy of the object"""
@@ -202,7 +233,13 @@ class SolutionVector(Solution):
         dimension_val = self.dimension
         unit_val = self.unit
         # Creates new object of the same type with the copied properties
-        obj_copy = type(self)(field=field_val,type_cell=type_cell_val,label=label_val,dimension=dimension_val,unit=unit_val)
+        obj_copy = type(self)(
+            field=field_val,
+            type_cell=type_cell_val,
+            label=label_val,
+            dimension=dimension_val,
+            unit=unit_val,
+        )
         return obj_copy
 
     def _set_None(self):
@@ -222,10 +259,14 @@ class SolutionVector(Solution):
             try:
                 value = load_init_dict(value)[1]
             except Exception as e:
-                self.get_logger().error('Error while loading '+value+', setting None instead')
+                self.get_logger().error(
+                    "Error while loading " + value + ", setting None instead"
+                )
                 value = None
-        if isinstance(value, dict) and '__class__' in value:
-            class_obj = import_class('SciDataTool.Classes', value.get('__class__'), 'field')
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class(
+                "SciDataTool.Classes", value.get("__class__"), "field"
+            )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
             value = VectorField()
@@ -235,7 +276,7 @@ class SolutionVector(Solution):
     field = property(
         fget=_get_field,
         fset=_set_field,
-        doc=u"""Data object containing the numerical values of a solution. One of the axis must be "Indices", a list of indices. If the solution is a vector, one of the axis must be "Direction", values ['x','y'] for example.
+        doc="""Data object containing the numerical values of a solution. One of the axis must be "Indices", a list of indices. If the solution is a vector, one of the axis must be "Direction", values ['x','y'] for example.
 
         :Type: SciDataTool.Classes.VectorField.VectorField
         """,

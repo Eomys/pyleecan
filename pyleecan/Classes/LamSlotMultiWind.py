@@ -28,7 +28,9 @@ except ImportError as error:
     build_geometry = error
 
 try:
-    from ..Methods.Machine.LamSlotMultiWind.get_pole_pair_number import get_pole_pair_number
+    from ..Methods.Machine.LamSlotMultiWind.get_pole_pair_number import (
+        get_pole_pair_number,
+    )
 except ImportError as error:
     get_pole_pair_number = error
 
@@ -167,7 +169,30 @@ class LamSlotMultiWind(LamSlotMulti):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, Ksfill=None, winding=-1, slot_list=-1, alpha=None, sym_dict_enforced=None, L1=0.35, mat_type=-1, Nrvd=0, Wrvd=0, Kf1=0.95, is_internal=True, Rint=0, Rext=1, is_stator=True, axial_vent=-1, notch=-1, skew=None, bore=None, yoke=None, init_dict = None, init_str = None):
+    def __init__(
+        self,
+        Ksfill=None,
+        winding=-1,
+        slot_list=-1,
+        alpha=None,
+        sym_dict_enforced=None,
+        L1=0.35,
+        mat_type=-1,
+        Nrvd=0,
+        Wrvd=0,
+        Kf1=0.95,
+        is_internal=True,
+        Rint=0,
+        Rext=1,
+        is_stator=True,
+        axial_vent=-1,
+        notch=-1,
+        skew=None,
+        bore=None,
+        yoke=None,
+        init_dict=None,
+        init_str=None,
+    ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -225,7 +250,25 @@ class LamSlotMultiWind(LamSlotMulti):
         self.Ksfill = Ksfill
         self.winding = winding
         # Call LamSlotMulti init
-        super(LamSlotMultiWind, self).__init__(slot_list=slot_list, alpha=alpha, sym_dict_enforced=sym_dict_enforced, L1=L1, mat_type=mat_type, Nrvd=Nrvd, Wrvd=Wrvd, Kf1=Kf1, is_internal=is_internal, Rint=Rint, Rext=Rext, is_stator=is_stator, axial_vent=axial_vent, notch=notch, skew=skew, bore=bore, yoke=yoke)
+        super(LamSlotMultiWind, self).__init__(
+            slot_list=slot_list,
+            alpha=alpha,
+            sym_dict_enforced=sym_dict_enforced,
+            L1=L1,
+            mat_type=mat_type,
+            Nrvd=Nrvd,
+            Wrvd=Wrvd,
+            Kf1=Kf1,
+            is_internal=is_internal,
+            Rint=Rint,
+            Rext=Rext,
+            is_stator=is_stator,
+            axial_vent=axial_vent,
+            notch=notch,
+            skew=skew,
+            bore=bore,
+            yoke=yoke,
+        )
         # The class is frozen (in LamSlotMulti init), for now it's impossible to
         # add new properties
 
@@ -238,7 +281,7 @@ class LamSlotMultiWind(LamSlotMulti):
         LamSlotMultiWind_str += "Ksfill = " + str(self.Ksfill) + linesep
         if self.winding is not None:
             tmp = self.winding.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            LamSlotMultiWind_str += "winding = "+ tmp
+            LamSlotMultiWind_str += "winding = " + tmp
         else:
             LamSlotMultiWind_str += "winding = None" + linesep + linesep
         return LamSlotMultiWind_str
@@ -258,31 +301,55 @@ class LamSlotMultiWind(LamSlotMulti):
             return False
         return True
 
-    def compare(self, other, name='self', ignore_list=None, is_add_value=False):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
             ignore_list = list()
         if type(other) != type(self):
-            return ['type('+name+')']
+            return ["type(" + name + ")"]
         diff_list = list()
 
         # Check the properties inherited from LamSlotMulti
-        diff_list.extend(super(LamSlotMultiWind, self).compare(other,name=name, ignore_list=ignore_list, is_add_value=is_add_value))
-        if other._Ksfill is not None and self._Ksfill is not None and isnan(other._Ksfill) and isnan(self._Ksfill):
+        diff_list.extend(
+            super(LamSlotMultiWind, self).compare(
+                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
+            )
+        )
+        if (
+            other._Ksfill is not None
+            and self._Ksfill is not None
+            and isnan(other._Ksfill)
+            and isnan(self._Ksfill)
+        ):
             pass
         elif other._Ksfill != self._Ksfill:
             if is_add_value:
-                val_str = ' (self='+str(self._Ksfill)+', other='+str(other._Ksfill)+')'
-                diff_list.append(name+'.Ksfill'+val_str)
+                val_str = (
+                    " (self="
+                    + str(self._Ksfill)
+                    + ", other="
+                    + str(other._Ksfill)
+                    + ")"
+                )
+                diff_list.append(name + ".Ksfill" + val_str)
             else:
-                diff_list.append(name+'.Ksfill')
-        if (other.winding is None and self.winding is not None) or (other.winding is not None and self.winding is None):
-            diff_list.append(name+'.winding None mismatch')
+                diff_list.append(name + ".Ksfill")
+        if (other.winding is None and self.winding is not None) or (
+            other.winding is not None and self.winding is None
+        ):
+            diff_list.append(name + ".winding None mismatch")
         elif self.winding is not None:
-            diff_list.extend(self.winding.compare(other.winding,name=name+'.winding',ignore_list=ignore_list,is_add_value=is_add_value))
+            diff_list.extend(
+                self.winding.compare(
+                    other.winding,
+                    name=name + ".winding",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
+            )
         # Filter ignore differences
-        diff_list = list(filter(lambda x : x not in ignore_list, diff_list))
+        diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
 
     def __sizeof__(self):
@@ -303,22 +370,29 @@ class LamSlotMultiWind(LamSlotMulti):
             How to handle ndarray (0: tolist, 1: copy, 2: nothing)
         keep_function : bool
             True to keep the function object, else return str
-        Optional keyword input parameter is for internal use only 
+        Optional keyword input parameter is for internal use only
         and may prevent json serializability.
         """
 
         # Get the properties inherited from LamSlotMulti
-        LamSlotMultiWind_dict = super(LamSlotMultiWind, self).as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs)
+        LamSlotMultiWind_dict = super(LamSlotMultiWind, self).as_dict(
+            type_handle_ndarray=type_handle_ndarray,
+            keep_function=keep_function,
+            **kwargs
+        )
         LamSlotMultiWind_dict["Ksfill"] = self.Ksfill
         if self.winding is None:
             LamSlotMultiWind_dict["winding"] = None
         else:
-            LamSlotMultiWind_dict["winding"] = self.winding.as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs)
+            LamSlotMultiWind_dict["winding"] = self.winding.as_dict(
+                type_handle_ndarray=type_handle_ndarray,
+                keep_function=keep_function,
+                **kwargs
+            )
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         LamSlotMultiWind_dict["__class__"] = "LamSlotMultiWind"
         return LamSlotMultiWind_dict
-
 
     def copy(self):
         """Creates a deepcopy of the object"""
@@ -380,7 +454,27 @@ class LamSlotMultiWind(LamSlotMulti):
         else:
             yoke_val = self.yoke.copy()
         # Creates new object of the same type with the copied properties
-        obj_copy = type(self)(Ksfill=Ksfill_val,winding=winding_val,slot_list=slot_list_val,alpha=alpha_val,sym_dict_enforced=sym_dict_enforced_val,L1=L1_val,mat_type=mat_type_val,Nrvd=Nrvd_val,Wrvd=Wrvd_val,Kf1=Kf1_val,is_internal=is_internal_val,Rint=Rint_val,Rext=Rext_val,is_stator=is_stator_val,axial_vent=axial_vent_val,notch=notch_val,skew=skew_val,bore=bore_val,yoke=yoke_val)
+        obj_copy = type(self)(
+            Ksfill=Ksfill_val,
+            winding=winding_val,
+            slot_list=slot_list_val,
+            alpha=alpha_val,
+            sym_dict_enforced=sym_dict_enforced_val,
+            L1=L1_val,
+            mat_type=mat_type_val,
+            Nrvd=Nrvd_val,
+            Wrvd=Wrvd_val,
+            Kf1=Kf1_val,
+            is_internal=is_internal_val,
+            Rint=Rint_val,
+            Rext=Rext_val,
+            is_stator=is_stator_val,
+            axial_vent=axial_vent_val,
+            notch=notch_val,
+            skew=skew_val,
+            bore=bore_val,
+            yoke=yoke_val,
+        )
         return obj_copy
 
     def _set_None(self):
@@ -404,7 +498,7 @@ class LamSlotMultiWind(LamSlotMulti):
     Ksfill = property(
         fget=_get_Ksfill,
         fset=_set_Ksfill,
-        doc=u"""Imposed Slot Fill factor (if None, will be computed according to the winding and the slot)
+        doc="""Imposed Slot Fill factor (if None, will be computed according to the winding and the slot)
 
         :Type: float
         :min: 0
@@ -422,23 +516,28 @@ class LamSlotMultiWind(LamSlotMulti):
             try:
                 value = load_init_dict(value)[1]
             except Exception as e:
-                self.get_logger().error('Error while loading '+value+', setting None instead')
+                self.get_logger().error(
+                    "Error while loading " + value + ", setting None instead"
+                )
                 value = None
-        if isinstance(value, dict) and '__class__' in value:
-            class_obj = import_class('pyleecan.Classes', value.get('__class__'), 'winding')
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class(
+                "pyleecan.Classes", value.get("__class__"), "winding"
+            )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
-            Winding = import_class('pyleecan.Classes', 'Winding', 'winding')
+            Winding = import_class("pyleecan.Classes", "Winding", "winding")
             value = Winding()
         check_var("winding", value, "Winding")
         self._winding = value
 
         if self._winding is not None:
             self._winding.parent = self
+
     winding = property(
         fget=_get_winding,
         fset=_set_winding,
-        doc=u"""Lamination's Winding
+        doc="""Lamination's Winding
 
         :Type: Winding
         """,

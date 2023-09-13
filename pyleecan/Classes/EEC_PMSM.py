@@ -219,7 +219,27 @@ class EEC_PMSM(EEC):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, Ld=None, Lq=None, Phid=None, Phiq=None, Phid_mag=None, Phiq_mag=None, type_skin_effect=1, OP=None, Tsta=20, Trot=20, Xkr_skinS=1, Xke_skinS=1, Xkr_skinR=1, Xke_skinR=1, R1=None, fluxlink=None, init_dict = None, init_str = None):
+    def __init__(
+        self,
+        Ld=None,
+        Lq=None,
+        Phid=None,
+        Phiq=None,
+        Phid_mag=None,
+        Phiq_mag=None,
+        type_skin_effect=1,
+        OP=None,
+        Tsta=20,
+        Trot=20,
+        Xkr_skinS=1,
+        Xke_skinS=1,
+        Xkr_skinR=1,
+        Xke_skinR=1,
+        R1=None,
+        fluxlink=None,
+        init_dict=None,
+        init_str=None,
+    ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -275,7 +295,18 @@ class EEC_PMSM(EEC):
         self.Phid_mag = Phid_mag
         self.Phiq_mag = Phiq_mag
         # Call EEC init
-        super(EEC_PMSM, self).__init__(type_skin_effect=type_skin_effect, OP=OP, Tsta=Tsta, Trot=Trot, Xkr_skinS=Xkr_skinS, Xke_skinS=Xke_skinS, Xkr_skinR=Xkr_skinR, Xke_skinR=Xke_skinR, R1=R1, fluxlink=fluxlink)
+        super(EEC_PMSM, self).__init__(
+            type_skin_effect=type_skin_effect,
+            OP=OP,
+            Tsta=Tsta,
+            Trot=Trot,
+            Xkr_skinS=Xkr_skinS,
+            Xke_skinS=Xke_skinS,
+            Xkr_skinR=Xkr_skinR,
+            Xke_skinR=Xke_skinR,
+            R1=R1,
+            fluxlink=fluxlink,
+        )
         # The class is frozen (in EEC init), for now it's impossible to
         # add new properties
 
@@ -316,67 +347,117 @@ class EEC_PMSM(EEC):
             return False
         return True
 
-    def compare(self, other, name='self', ignore_list=None, is_add_value=False):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
             ignore_list = list()
         if type(other) != type(self):
-            return ['type('+name+')']
+            return ["type(" + name + ")"]
         diff_list = list()
 
         # Check the properties inherited from EEC
-        diff_list.extend(super(EEC_PMSM, self).compare(other,name=name, ignore_list=ignore_list, is_add_value=is_add_value))
-        if other._Ld is not None and self._Ld is not None and isnan(other._Ld) and isnan(self._Ld):
+        diff_list.extend(
+            super(EEC_PMSM, self).compare(
+                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
+            )
+        )
+        if (
+            other._Ld is not None
+            and self._Ld is not None
+            and isnan(other._Ld)
+            and isnan(self._Ld)
+        ):
             pass
         elif other._Ld != self._Ld:
             if is_add_value:
-                val_str = ' (self='+str(self._Ld)+', other='+str(other._Ld)+')'
-                diff_list.append(name+'.Ld'+val_str)
+                val_str = " (self=" + str(self._Ld) + ", other=" + str(other._Ld) + ")"
+                diff_list.append(name + ".Ld" + val_str)
             else:
-                diff_list.append(name+'.Ld')
-        if other._Lq is not None and self._Lq is not None and isnan(other._Lq) and isnan(self._Lq):
+                diff_list.append(name + ".Ld")
+        if (
+            other._Lq is not None
+            and self._Lq is not None
+            and isnan(other._Lq)
+            and isnan(self._Lq)
+        ):
             pass
         elif other._Lq != self._Lq:
             if is_add_value:
-                val_str = ' (self='+str(self._Lq)+', other='+str(other._Lq)+')'
-                diff_list.append(name+'.Lq'+val_str)
+                val_str = " (self=" + str(self._Lq) + ", other=" + str(other._Lq) + ")"
+                diff_list.append(name + ".Lq" + val_str)
             else:
-                diff_list.append(name+'.Lq')
-        if other._Phid is not None and self._Phid is not None and isnan(other._Phid) and isnan(self._Phid):
+                diff_list.append(name + ".Lq")
+        if (
+            other._Phid is not None
+            and self._Phid is not None
+            and isnan(other._Phid)
+            and isnan(self._Phid)
+        ):
             pass
         elif other._Phid != self._Phid:
             if is_add_value:
-                val_str = ' (self='+str(self._Phid)+', other='+str(other._Phid)+')'
-                diff_list.append(name+'.Phid'+val_str)
+                val_str = (
+                    " (self=" + str(self._Phid) + ", other=" + str(other._Phid) + ")"
+                )
+                diff_list.append(name + ".Phid" + val_str)
             else:
-                diff_list.append(name+'.Phid')
-        if other._Phiq is not None and self._Phiq is not None and isnan(other._Phiq) and isnan(self._Phiq):
+                diff_list.append(name + ".Phid")
+        if (
+            other._Phiq is not None
+            and self._Phiq is not None
+            and isnan(other._Phiq)
+            and isnan(self._Phiq)
+        ):
             pass
         elif other._Phiq != self._Phiq:
             if is_add_value:
-                val_str = ' (self='+str(self._Phiq)+', other='+str(other._Phiq)+')'
-                diff_list.append(name+'.Phiq'+val_str)
+                val_str = (
+                    " (self=" + str(self._Phiq) + ", other=" + str(other._Phiq) + ")"
+                )
+                diff_list.append(name + ".Phiq" + val_str)
             else:
-                diff_list.append(name+'.Phiq')
-        if other._Phid_mag is not None and self._Phid_mag is not None and isnan(other._Phid_mag) and isnan(self._Phid_mag):
+                diff_list.append(name + ".Phiq")
+        if (
+            other._Phid_mag is not None
+            and self._Phid_mag is not None
+            and isnan(other._Phid_mag)
+            and isnan(self._Phid_mag)
+        ):
             pass
         elif other._Phid_mag != self._Phid_mag:
             if is_add_value:
-                val_str = ' (self='+str(self._Phid_mag)+', other='+str(other._Phid_mag)+')'
-                diff_list.append(name+'.Phid_mag'+val_str)
+                val_str = (
+                    " (self="
+                    + str(self._Phid_mag)
+                    + ", other="
+                    + str(other._Phid_mag)
+                    + ")"
+                )
+                diff_list.append(name + ".Phid_mag" + val_str)
             else:
-                diff_list.append(name+'.Phid_mag')
-        if other._Phiq_mag is not None and self._Phiq_mag is not None and isnan(other._Phiq_mag) and isnan(self._Phiq_mag):
+                diff_list.append(name + ".Phid_mag")
+        if (
+            other._Phiq_mag is not None
+            and self._Phiq_mag is not None
+            and isnan(other._Phiq_mag)
+            and isnan(self._Phiq_mag)
+        ):
             pass
         elif other._Phiq_mag != self._Phiq_mag:
             if is_add_value:
-                val_str = ' (self='+str(self._Phiq_mag)+', other='+str(other._Phiq_mag)+')'
-                diff_list.append(name+'.Phiq_mag'+val_str)
+                val_str = (
+                    " (self="
+                    + str(self._Phiq_mag)
+                    + ", other="
+                    + str(other._Phiq_mag)
+                    + ")"
+                )
+                diff_list.append(name + ".Phiq_mag" + val_str)
             else:
-                diff_list.append(name+'.Phiq_mag')
+                diff_list.append(name + ".Phiq_mag")
         # Filter ignore differences
-        diff_list = list(filter(lambda x : x not in ignore_list, diff_list))
+        diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
 
     def __sizeof__(self):
@@ -401,12 +482,16 @@ class EEC_PMSM(EEC):
             How to handle ndarray (0: tolist, 1: copy, 2: nothing)
         keep_function : bool
             True to keep the function object, else return str
-        Optional keyword input parameter is for internal use only 
+        Optional keyword input parameter is for internal use only
         and may prevent json serializability.
         """
 
         # Get the properties inherited from EEC
-        EEC_PMSM_dict = super(EEC_PMSM, self).as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs)
+        EEC_PMSM_dict = super(EEC_PMSM, self).as_dict(
+            type_handle_ndarray=type_handle_ndarray,
+            keep_function=keep_function,
+            **kwargs
+        )
         EEC_PMSM_dict["Ld"] = self.Ld
         EEC_PMSM_dict["Lq"] = self.Lq
         EEC_PMSM_dict["Phid"] = self.Phid
@@ -417,7 +502,6 @@ class EEC_PMSM(EEC):
         # Overwrite the mother class name
         EEC_PMSM_dict["__class__"] = "EEC_PMSM"
         return EEC_PMSM_dict
-
 
     def copy(self):
         """Creates a deepcopy of the object"""
@@ -446,7 +530,24 @@ class EEC_PMSM(EEC):
         else:
             fluxlink_val = self.fluxlink.copy()
         # Creates new object of the same type with the copied properties
-        obj_copy = type(self)(Ld=Ld_val,Lq=Lq_val,Phid=Phid_val,Phiq=Phiq_val,Phid_mag=Phid_mag_val,Phiq_mag=Phiq_mag_val,type_skin_effect=type_skin_effect_val,OP=OP_val,Tsta=Tsta_val,Trot=Trot_val,Xkr_skinS=Xkr_skinS_val,Xke_skinS=Xke_skinS_val,Xkr_skinR=Xkr_skinR_val,Xke_skinR=Xke_skinR_val,R1=R1_val,fluxlink=fluxlink_val)
+        obj_copy = type(self)(
+            Ld=Ld_val,
+            Lq=Lq_val,
+            Phid=Phid_val,
+            Phiq=Phiq_val,
+            Phid_mag=Phid_mag_val,
+            Phiq_mag=Phiq_mag_val,
+            type_skin_effect=type_skin_effect_val,
+            OP=OP_val,
+            Tsta=Tsta_val,
+            Trot=Trot_val,
+            Xkr_skinS=Xkr_skinS_val,
+            Xke_skinS=Xke_skinS_val,
+            Xkr_skinR=Xkr_skinR_val,
+            Xke_skinR=Xke_skinR_val,
+            R1=R1_val,
+            fluxlink=fluxlink_val,
+        )
         return obj_copy
 
     def _set_None(self):
@@ -473,7 +574,7 @@ class EEC_PMSM(EEC):
     Ld = property(
         fget=_get_Ld,
         fset=_set_Ld,
-        doc=u"""Stator winding inductance along d-axis
+        doc="""Stator winding inductance along d-axis
 
         :Type: float
         """,
@@ -491,7 +592,7 @@ class EEC_PMSM(EEC):
     Lq = property(
         fget=_get_Lq,
         fset=_set_Lq,
-        doc=u"""Stator winding inductance along q-axis
+        doc="""Stator winding inductance along q-axis
 
         :Type: float
         """,
@@ -509,7 +610,7 @@ class EEC_PMSM(EEC):
     Phid = property(
         fget=_get_Phid,
         fset=_set_Phid,
-        doc=u"""Stator winding flux along d-axis
+        doc="""Stator winding flux along d-axis
 
         :Type: float
         """,
@@ -527,7 +628,7 @@ class EEC_PMSM(EEC):
     Phiq = property(
         fget=_get_Phiq,
         fset=_set_Phiq,
-        doc=u"""Stator winding flux along q-axis
+        doc="""Stator winding flux along q-axis
 
         :Type: float
         """,
@@ -545,7 +646,7 @@ class EEC_PMSM(EEC):
     Phid_mag = property(
         fget=_get_Phid_mag,
         fset=_set_Phid_mag,
-        doc=u"""Stator winding flux along d-axis in open-circuit (rotor flux linkage)
+        doc="""Stator winding flux along d-axis in open-circuit (rotor flux linkage)
 
         :Type: float
         """,
@@ -563,7 +664,7 @@ class EEC_PMSM(EEC):
     Phiq_mag = property(
         fget=_get_Phiq_mag,
         fset=_set_Phiq_mag,
-        doc=u"""Stator winding flux along q-axis in open-circuit (rotor flux linkage)
+        doc="""Stator winding flux along q-axis in open-circuit (rotor flux linkage)
 
         :Type: float
         """,

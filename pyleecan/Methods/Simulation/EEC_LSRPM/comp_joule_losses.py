@@ -22,6 +22,6 @@ def comp_joule_losses(self, output):
     R_a = self.parameters["R_a"]
 
     # Id and Iq are in RMS
-    Pj_losses = qs * (R_s * (I_ds ** 2 + I_qs ** 2) + R_a * (I_da ** 2 + I_qa ** 2))
+    Pj_losses = qs * (R_s * (I_ds**2 + I_qs**2) + R_a * (I_da**2 + I_qa**2))
 
     output.elec.Pj_losses = Pj_losses

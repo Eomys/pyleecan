@@ -52,7 +52,7 @@ def check(self):
 
     h = self.H1 - self.H2
     w = self.W0 + self.W1
-    Z2 = sqrt((self.get_Rext() - self.H0) ** 2 - h ** 2) - h + 1j * w / 2
+    Z2 = sqrt((self.get_Rext() - self.H0) ** 2 - h**2) - h + 1j * w / 2
 
     if angle(Z2) >= pi / self.Zh:
         raise S52R_widthCheckError(

@@ -117,14 +117,14 @@ class PWSlot23(Gen_PWSlot23, QWidget):
         if self.g_wedge.isChecked():
             self.w_wedge_mat.show()
             self.img_slot.setPixmap(
-                QPixmap(u":/images/images/MachineSetup/WSlot/SlotW23_wedge_full.png")
+                QPixmap(":/images/images/MachineSetup/WSlot/SlotW23_wedge_full.png")
             )
             self.w_wedge_mat.update(self.slot, "wedge_mat", self.material_dict)
         else:
             self.w_wedge_mat.hide()
             self.slot.wedge_mat = None
             self.img_slot.setPixmap(
-                QPixmap(u":/images/images/MachineSetup/WSlot/SlotW23_wind.png")
+                QPixmap(":/images/images/MachineSetup/WSlot/SlotW23_wind.png")
             )
         # Notify the machine GUI that the machine has changed
         self.saveNeeded.emit()

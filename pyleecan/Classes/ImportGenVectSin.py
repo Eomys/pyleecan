@@ -48,7 +48,17 @@ class ImportGenVectSin(ImportMatrix):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, f=100, A=1, Phi=0, N=1024, Tf=1, is_transpose=False, init_dict = None, init_str = None):
+    def __init__(
+        self,
+        f=100,
+        A=1,
+        Phi=0,
+        N=1024,
+        Tf=1,
+        is_transpose=False,
+        init_dict=None,
+        init_str=None,
+    ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -121,57 +131,83 @@ class ImportGenVectSin(ImportMatrix):
             return False
         return True
 
-    def compare(self, other, name='self', ignore_list=None, is_add_value=False):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
             ignore_list = list()
         if type(other) != type(self):
-            return ['type('+name+')']
+            return ["type(" + name + ")"]
         diff_list = list()
 
         # Check the properties inherited from ImportMatrix
-        diff_list.extend(super(ImportGenVectSin, self).compare(other,name=name, ignore_list=ignore_list, is_add_value=is_add_value))
-        if other._f is not None and self._f is not None and isnan(other._f) and isnan(self._f):
+        diff_list.extend(
+            super(ImportGenVectSin, self).compare(
+                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
+            )
+        )
+        if (
+            other._f is not None
+            and self._f is not None
+            and isnan(other._f)
+            and isnan(self._f)
+        ):
             pass
         elif other._f != self._f:
             if is_add_value:
-                val_str = ' (self='+str(self._f)+', other='+str(other._f)+')'
-                diff_list.append(name+'.f'+val_str)
+                val_str = " (self=" + str(self._f) + ", other=" + str(other._f) + ")"
+                diff_list.append(name + ".f" + val_str)
             else:
-                diff_list.append(name+'.f')
-        if other._A is not None and self._A is not None and isnan(other._A) and isnan(self._A):
+                diff_list.append(name + ".f")
+        if (
+            other._A is not None
+            and self._A is not None
+            and isnan(other._A)
+            and isnan(self._A)
+        ):
             pass
         elif other._A != self._A:
             if is_add_value:
-                val_str = ' (self='+str(self._A)+', other='+str(other._A)+')'
-                diff_list.append(name+'.A'+val_str)
+                val_str = " (self=" + str(self._A) + ", other=" + str(other._A) + ")"
+                diff_list.append(name + ".A" + val_str)
             else:
-                diff_list.append(name+'.A')
-        if other._Phi is not None and self._Phi is not None and isnan(other._Phi) and isnan(self._Phi):
+                diff_list.append(name + ".A")
+        if (
+            other._Phi is not None
+            and self._Phi is not None
+            and isnan(other._Phi)
+            and isnan(self._Phi)
+        ):
             pass
         elif other._Phi != self._Phi:
             if is_add_value:
-                val_str = ' (self='+str(self._Phi)+', other='+str(other._Phi)+')'
-                diff_list.append(name+'.Phi'+val_str)
+                val_str = (
+                    " (self=" + str(self._Phi) + ", other=" + str(other._Phi) + ")"
+                )
+                diff_list.append(name + ".Phi" + val_str)
             else:
-                diff_list.append(name+'.Phi')
+                diff_list.append(name + ".Phi")
         if other._N != self._N:
             if is_add_value:
-                val_str = ' (self='+str(self._N)+', other='+str(other._N)+')'
-                diff_list.append(name+'.N'+val_str)
+                val_str = " (self=" + str(self._N) + ", other=" + str(other._N) + ")"
+                diff_list.append(name + ".N" + val_str)
             else:
-                diff_list.append(name+'.N')
-        if other._Tf is not None and self._Tf is not None and isnan(other._Tf) and isnan(self._Tf):
+                diff_list.append(name + ".N")
+        if (
+            other._Tf is not None
+            and self._Tf is not None
+            and isnan(other._Tf)
+            and isnan(self._Tf)
+        ):
             pass
         elif other._Tf != self._Tf:
             if is_add_value:
-                val_str = ' (self='+str(self._Tf)+', other='+str(other._Tf)+')'
-                diff_list.append(name+'.Tf'+val_str)
+                val_str = " (self=" + str(self._Tf) + ", other=" + str(other._Tf) + ")"
+                diff_list.append(name + ".Tf" + val_str)
             else:
-                diff_list.append(name+'.Tf')
+                diff_list.append(name + ".Tf")
         # Filter ignore differences
-        diff_list = list(filter(lambda x : x not in ignore_list, diff_list))
+        diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
 
     def __sizeof__(self):
@@ -195,12 +231,16 @@ class ImportGenVectSin(ImportMatrix):
             How to handle ndarray (0: tolist, 1: copy, 2: nothing)
         keep_function : bool
             True to keep the function object, else return str
-        Optional keyword input parameter is for internal use only 
+        Optional keyword input parameter is for internal use only
         and may prevent json serializability.
         """
 
         # Get the properties inherited from ImportMatrix
-        ImportGenVectSin_dict = super(ImportGenVectSin, self).as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs)
+        ImportGenVectSin_dict = super(ImportGenVectSin, self).as_dict(
+            type_handle_ndarray=type_handle_ndarray,
+            keep_function=keep_function,
+            **kwargs
+        )
         ImportGenVectSin_dict["f"] = self.f
         ImportGenVectSin_dict["A"] = self.A
         ImportGenVectSin_dict["Phi"] = self.Phi
@@ -210,7 +250,6 @@ class ImportGenVectSin(ImportMatrix):
         # Overwrite the mother class name
         ImportGenVectSin_dict["__class__"] = "ImportGenVectSin"
         return ImportGenVectSin_dict
-
 
     def copy(self):
         """Creates a deepcopy of the object"""
@@ -223,7 +262,14 @@ class ImportGenVectSin(ImportMatrix):
         Tf_val = self.Tf
         is_transpose_val = self.is_transpose
         # Creates new object of the same type with the copied properties
-        obj_copy = type(self)(f=f_val,A=A_val,Phi=Phi_val,N=N_val,Tf=Tf_val,is_transpose=is_transpose_val)
+        obj_copy = type(self)(
+            f=f_val,
+            A=A_val,
+            Phi=Phi_val,
+            N=N_val,
+            Tf=Tf_val,
+            is_transpose=is_transpose_val,
+        )
         return obj_copy
 
     def _set_None(self):
@@ -249,7 +295,7 @@ class ImportGenVectSin(ImportMatrix):
     f = property(
         fget=_get_f,
         fset=_set_f,
-        doc=u"""Frequency of the sinus to generate
+        doc="""Frequency of the sinus to generate
 
         :Type: float
         :min: 0
@@ -268,7 +314,7 @@ class ImportGenVectSin(ImportMatrix):
     A = property(
         fget=_get_A,
         fset=_set_A,
-        doc=u"""Amplitude of the sinus to generate
+        doc="""Amplitude of the sinus to generate
 
         :Type: float
         """,
@@ -286,7 +332,7 @@ class ImportGenVectSin(ImportMatrix):
     Phi = property(
         fget=_get_Phi,
         fset=_set_Phi,
-        doc=u"""Phase of the sinus to generate
+        doc="""Phase of the sinus to generate
 
         :Type: float
         :min: -6.29
@@ -306,7 +352,7 @@ class ImportGenVectSin(ImportMatrix):
     N = property(
         fget=_get_N,
         fset=_set_N,
-        doc=u"""Length of the vector to generate
+        doc="""Length of the vector to generate
 
         :Type: int
         :min: 0
@@ -325,7 +371,7 @@ class ImportGenVectSin(ImportMatrix):
     Tf = property(
         fget=_get_Tf,
         fset=_set_Tf,
-        doc=u"""End time of the sinus generation
+        doc="""End time of the sinus generation
 
         :Type: float
         :min: 0

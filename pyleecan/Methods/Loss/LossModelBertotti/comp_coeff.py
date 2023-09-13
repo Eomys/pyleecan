@@ -65,7 +65,7 @@ def comp_coeff(self, material):
                     loss for each value of f and B in the input array
                 """
                 B = xdata
-                return k_hy * f * B ** 2 + k_ed * (f * B) ** 2 + k_ex * (f * B) ** 1.5
+                return k_hy * f * B**2 + k_ed * (f * B) ** 2 + k_ex * (f * B) ** 1.5
 
         else:
             is_frequency_dependant = True
@@ -92,7 +92,7 @@ def comp_coeff(self, material):
                 """
                 f = xdata[0]
                 B = xdata[1]
-                return k_hy * f * B ** 2 + k_ed * (f * B) ** 2 + k_ex * (f * B) ** 1.5
+                return k_hy * f * B**2 + k_ed * (f * B) ** 2 + k_ex * (f * B) ** 1.5
 
         return comp_loss, returned_xdata, is_frequency_dependant
 

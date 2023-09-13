@@ -4,6 +4,7 @@ from numpy import abs as np_abs
 
 from pyleecan.Classes.Arc3 import Arc3
 
+
 def comp_radius(self):
     """Compute the radius of the min and max circle that contains the slot
 
@@ -25,7 +26,7 @@ def comp_radius(self):
     point_list.extend(curve.discretize())
     curve = Arc3(begin=point_dict["Z5"], end=point_dict["Z1"], is_trigo_direction=True)
     point_list.extend(curve.discretize())
-    
+
     abs_list = [np_abs(point) for point in point_list]
     Rmax = max(abs_list)
     Rmin = min(abs_list)

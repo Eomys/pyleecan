@@ -35,9 +35,9 @@ def _comp_point_coordinate(self):
     # Z3
     a3 = 1 + tan(self.W1) ** 2
     b3 = -2 * tan(self.W1) * self.W2 / cos(self.W1)
-    c3 = (self.W2 / cos(self.W1)) ** 2 - self.R2 ** 2
+    c3 = (self.W2 / cos(self.W1)) ** 2 - self.R2**2
 
-    x3 = (-b3 + sqrt(b3 ** 2 - 4 * a3 * c3)) / (2 * a3)
+    x3 = (-b3 + sqrt(b3**2 - 4 * a3 * c3)) / (2 * a3)
     y3 = -tan(self.W1) * x3 + self.W2 / cos(self.W1)
     Z3 = x3 + 1j * y3
     # Z5
@@ -49,10 +49,10 @@ def _comp_point_coordinate(self):
     yc2 = -self.W0 / 2
     Zc2 = xc2 + 1j * yc2
     # Z4
-    a4 = (xc2 - x3) ** 2 - self.R1 ** 2
+    a4 = (xc2 - x3) ** 2 - self.R1**2
     b4 = 2 * (xc2 - x3) * (y3 - yc2)
-    c4 = (y3 - yc2) ** 2 - self.R1 ** 2
-    alpha2 = (-b4 - sqrt(b4 ** 2 - 4 * a4 * c4)) / (2 * a4)
+    c4 = (y3 - yc2) ** 2 - self.R1**2
+    alpha2 = (-b4 - sqrt(b4**2 - 4 * a4 * c4)) / (2 * a4)
     x4 = (xc2 / alpha2 + yc2 + alpha2 * x3 - y3) / (alpha2 + 1 / alpha2)
     y4 = alpha2 * (x4 - x3) + y3
     Z4 = x4 + 1j * y4

@@ -59,6 +59,6 @@ def comp_inductance(self):
     # Eq (5.48) p 233
     Ntcoil = self.parent.Ntcoil
     mu0 = 4 * pi * 1e-7
-    Lw = mu0 * Re * Ntcoil ** 2 * (log(8 * Re / R) - 2)
+    Lw = mu0 * Re * Ntcoil**2 * (log(8 * Re / R) - 2)
 
     return Lw

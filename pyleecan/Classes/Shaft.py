@@ -77,7 +77,9 @@ class Shaft(FrozenClass):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, Lshaft=0.442, mat_type=-1, Drsh=0.045, init_dict = None, init_str = None):
+    def __init__(
+        self, Lshaft=0.442, mat_type=-1, Drsh=0.045, init_dict=None, init_str=None
+    ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -119,7 +121,7 @@ class Shaft(FrozenClass):
         Shaft_str += "Lshaft = " + str(self.Lshaft) + linesep
         if self.mat_type is not None:
             tmp = self.mat_type.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            Shaft_str += "mat_type = "+ tmp
+            Shaft_str += "mat_type = " + tmp
         else:
             Shaft_str += "mat_type = None" + linesep + linesep
         Shaft_str += "Drsh = " + str(self.Drsh) + linesep
@@ -138,36 +140,63 @@ class Shaft(FrozenClass):
             return False
         return True
 
-    def compare(self, other, name='self', ignore_list=None, is_add_value=False):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
             ignore_list = list()
         if type(other) != type(self):
-            return ['type('+name+')']
+            return ["type(" + name + ")"]
         diff_list = list()
-        if other._Lshaft is not None and self._Lshaft is not None and isnan(other._Lshaft) and isnan(self._Lshaft):
+        if (
+            other._Lshaft is not None
+            and self._Lshaft is not None
+            and isnan(other._Lshaft)
+            and isnan(self._Lshaft)
+        ):
             pass
         elif other._Lshaft != self._Lshaft:
             if is_add_value:
-                val_str = ' (self='+str(self._Lshaft)+', other='+str(other._Lshaft)+')'
-                diff_list.append(name+'.Lshaft'+val_str)
+                val_str = (
+                    " (self="
+                    + str(self._Lshaft)
+                    + ", other="
+                    + str(other._Lshaft)
+                    + ")"
+                )
+                diff_list.append(name + ".Lshaft" + val_str)
             else:
-                diff_list.append(name+'.Lshaft')
-        if (other.mat_type is None and self.mat_type is not None) or (other.mat_type is not None and self.mat_type is None):
-            diff_list.append(name+'.mat_type None mismatch')
+                diff_list.append(name + ".Lshaft")
+        if (other.mat_type is None and self.mat_type is not None) or (
+            other.mat_type is not None and self.mat_type is None
+        ):
+            diff_list.append(name + ".mat_type None mismatch")
         elif self.mat_type is not None:
-            diff_list.extend(self.mat_type.compare(other.mat_type,name=name+'.mat_type',ignore_list=ignore_list,is_add_value=is_add_value))
-        if other._Drsh is not None and self._Drsh is not None and isnan(other._Drsh) and isnan(self._Drsh):
+            diff_list.extend(
+                self.mat_type.compare(
+                    other.mat_type,
+                    name=name + ".mat_type",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
+            )
+        if (
+            other._Drsh is not None
+            and self._Drsh is not None
+            and isnan(other._Drsh)
+            and isnan(self._Drsh)
+        ):
             pass
         elif other._Drsh != self._Drsh:
             if is_add_value:
-                val_str = ' (self='+str(self._Drsh)+', other='+str(other._Drsh)+')'
-                diff_list.append(name+'.Drsh'+val_str)
+                val_str = (
+                    " (self=" + str(self._Drsh) + ", other=" + str(other._Drsh) + ")"
+                )
+                diff_list.append(name + ".Drsh" + val_str)
             else:
-                diff_list.append(name+'.Drsh')
+                diff_list.append(name + ".Drsh")
         # Filter ignore differences
-        diff_list = list(filter(lambda x : x not in ignore_list, diff_list))
+        diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
 
     def __sizeof__(self):
@@ -186,7 +215,7 @@ class Shaft(FrozenClass):
             How to handle ndarray (0: tolist, 1: copy, 2: nothing)
         keep_function : bool
             True to keep the function object, else return str
-        Optional keyword input parameter is for internal use only 
+        Optional keyword input parameter is for internal use only
         and may prevent json serializability.
         """
 
@@ -195,12 +224,15 @@ class Shaft(FrozenClass):
         if self.mat_type is None:
             Shaft_dict["mat_type"] = None
         else:
-            Shaft_dict["mat_type"] = self.mat_type.as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs)
+            Shaft_dict["mat_type"] = self.mat_type.as_dict(
+                type_handle_ndarray=type_handle_ndarray,
+                keep_function=keep_function,
+                **kwargs
+            )
         Shaft_dict["Drsh"] = self.Drsh
         # The class name is added to the dict for deserialisation purpose
         Shaft_dict["__class__"] = "Shaft"
         return Shaft_dict
-
 
     def copy(self):
         """Creates a deepcopy of the object"""
@@ -213,7 +245,7 @@ class Shaft(FrozenClass):
             mat_type_val = self.mat_type.copy()
         Drsh_val = self.Drsh
         # Creates new object of the same type with the copied properties
-        obj_copy = type(self)(Lshaft=Lshaft_val,mat_type=mat_type_val,Drsh=Drsh_val)
+        obj_copy = type(self)(Lshaft=Lshaft_val, mat_type=mat_type_val, Drsh=Drsh_val)
         return obj_copy
 
     def _set_None(self):
@@ -236,7 +268,7 @@ class Shaft(FrozenClass):
     Lshaft = property(
         fget=_get_Lshaft,
         fset=_set_Lshaft,
-        doc=u"""length of the rotor shaft [m] (used for weight & cost estimation only)
+        doc="""length of the rotor shaft [m] (used for weight & cost estimation only)
 
         :Type: float
         :min: 0
@@ -253,23 +285,28 @@ class Shaft(FrozenClass):
             try:
                 value = load_init_dict(value)[1]
             except Exception as e:
-                self.get_logger().error('Error while loading '+value+', setting None instead')
+                self.get_logger().error(
+                    "Error while loading " + value + ", setting None instead"
+                )
                 value = None
-        if isinstance(value, dict) and '__class__' in value:
-            class_obj = import_class('pyleecan.Classes', value.get('__class__'), 'mat_type')
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class(
+                "pyleecan.Classes", value.get("__class__"), "mat_type"
+            )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
-            Material = import_class('pyleecan.Classes', 'Material', 'mat_type')
+            Material = import_class("pyleecan.Classes", "Material", "mat_type")
             value = Material()
         check_var("mat_type", value, "Material")
         self._mat_type = value
 
         if self._mat_type is not None:
             self._mat_type.parent = self
+
     mat_type = property(
         fget=_get_mat_type,
         fset=_set_mat_type,
-        doc=u"""Shaft's Material
+        doc="""Shaft's Material
 
         :Type: Material
         """,
@@ -287,7 +324,7 @@ class Shaft(FrozenClass):
     Drsh = property(
         fget=_get_Drsh,
         fset=_set_Drsh,
-        doc=u"""diameter of the rotor shaft [m], used to estimate bearing diameter for friction losses
+        doc="""diameter of the rotor shaft [m], used to estimate bearing diameter for friction losses
 
         :Type: float
         :min: 0

@@ -71,7 +71,6 @@ def plot_schematics(
 
     # Use some default parameter
     if is_default:
-
         # definir paramètre par défault
         slot = type(self)(Zs=4, W0=30e-3, Hmag=17.5e-3, W1=20e-3)
         lam = LamSlot(

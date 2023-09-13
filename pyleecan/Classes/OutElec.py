@@ -119,7 +119,30 @@ class OutElec(FrozenClass):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, axes_dict=None, Is=None, Ir=None, logger_name="pyleecan.Electrical", Pj_losses=None, Us=None, internal=None, OP=None, Pem_av=None, Tem_av=None, phase_dir=None, current_dir=None, PWM=None, eec=None, P_out=None, Jrms=None, P_in=None, Arms=None, Erms=None, init_dict = None, init_str = None):
+    def __init__(
+        self,
+        axes_dict=None,
+        Is=None,
+        Ir=None,
+        logger_name="pyleecan.Electrical",
+        Pj_losses=None,
+        Us=None,
+        internal=None,
+        OP=None,
+        Pem_av=None,
+        Tem_av=None,
+        phase_dir=None,
+        current_dir=None,
+        PWM=None,
+        eec=None,
+        P_out=None,
+        Jrms=None,
+        P_in=None,
+        Arms=None,
+        Erms=None,
+        init_dict=None,
+        init_str=None,
+    ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -206,20 +229,20 @@ class OutElec(FrozenClass):
             OutElec_str += "parent = None " + linesep
         else:
             OutElec_str += "parent = " + str(type(self.parent)) + " object" + linesep
-        OutElec_str += "axes_dict = "+ str(self.axes_dict) + linesep + linesep
-        OutElec_str += "Is = "+ str(self.Is) + linesep + linesep
-        OutElec_str += "Ir = "+ str(self.Ir) + linesep + linesep
+        OutElec_str += "axes_dict = " + str(self.axes_dict) + linesep + linesep
+        OutElec_str += "Is = " + str(self.Is) + linesep + linesep
+        OutElec_str += "Ir = " + str(self.Ir) + linesep + linesep
         OutElec_str += 'logger_name = "' + str(self.logger_name) + '"' + linesep
         OutElec_str += "Pj_losses = " + str(self.Pj_losses) + linesep
-        OutElec_str += "Us = "+ str(self.Us) + linesep + linesep
+        OutElec_str += "Us = " + str(self.Us) + linesep + linesep
         if self.internal is not None:
             tmp = self.internal.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            OutElec_str += "internal = "+ tmp
+            OutElec_str += "internal = " + tmp
         else:
             OutElec_str += "internal = None" + linesep + linesep
         if self.OP is not None:
             tmp = self.OP.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            OutElec_str += "OP = "+ tmp
+            OutElec_str += "OP = " + tmp
         else:
             OutElec_str += "OP = None" + linesep + linesep
         OutElec_str += "Pem_av = " + str(self.Pem_av) + linesep
@@ -228,12 +251,12 @@ class OutElec(FrozenClass):
         OutElec_str += "current_dir = " + str(self.current_dir) + linesep
         if self.PWM is not None:
             tmp = self.PWM.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            OutElec_str += "PWM = "+ tmp
+            OutElec_str += "PWM = " + tmp
         else:
             OutElec_str += "PWM = None" + linesep + linesep
         if self.eec is not None:
             tmp = self.eec.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            OutElec_str += "eec = "+ tmp
+            OutElec_str += "eec = " + tmp
         else:
             OutElec_str += "eec = None" + linesep + linesep
         OutElec_str += "P_out = " + str(self.P_out) + linesep
@@ -288,135 +311,293 @@ class OutElec(FrozenClass):
             return False
         return True
 
-    def compare(self, other, name='self', ignore_list=None, is_add_value=False):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
             ignore_list = list()
         if type(other) != type(self):
-            return ['type('+name+')']
+            return ["type(" + name + ")"]
         diff_list = list()
-        if (other.axes_dict is None and self.axes_dict is not None) or (other.axes_dict is not None and self.axes_dict is None):
-            diff_list.append(name+'.axes_dict None mismatch')
+        if (other.axes_dict is None and self.axes_dict is not None) or (
+            other.axes_dict is not None and self.axes_dict is None
+        ):
+            diff_list.append(name + ".axes_dict None mismatch")
         elif self.axes_dict is None:
             pass
         elif len(other.axes_dict) != len(self.axes_dict):
-            diff_list.append('len('+name+'axes_dict)')
+            diff_list.append("len(" + name + "axes_dict)")
         else:
             for key in self.axes_dict:
-                diff_list.extend(self.axes_dict[key].compare(other.axes_dict[key],name=name+'.axes_dict['+str(key)+']',ignore_list=ignore_list,is_add_value=is_add_value))
-        if (other.Is is None and self.Is is not None) or (other.Is is not None and self.Is is None):
-            diff_list.append(name+'.Is None mismatch')
+                diff_list.extend(
+                    self.axes_dict[key].compare(
+                        other.axes_dict[key],
+                        name=name + ".axes_dict[" + str(key) + "]",
+                        ignore_list=ignore_list,
+                        is_add_value=is_add_value,
+                    )
+                )
+        if (other.Is is None and self.Is is not None) or (
+            other.Is is not None and self.Is is None
+        ):
+            diff_list.append(name + ".Is None mismatch")
         elif self.Is is not None:
-            diff_list.extend(self.Is.compare(other.Is,name=name+'.Is',ignore_list=ignore_list,is_add_value=is_add_value))
-        if (other.Ir is None and self.Ir is not None) or (other.Ir is not None and self.Ir is None):
-            diff_list.append(name+'.Ir None mismatch')
+            diff_list.extend(
+                self.Is.compare(
+                    other.Is,
+                    name=name + ".Is",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
+            )
+        if (other.Ir is None and self.Ir is not None) or (
+            other.Ir is not None and self.Ir is None
+        ):
+            diff_list.append(name + ".Ir None mismatch")
         elif self.Ir is not None:
-            diff_list.extend(self.Ir.compare(other.Ir,name=name+'.Ir',ignore_list=ignore_list,is_add_value=is_add_value))
+            diff_list.extend(
+                self.Ir.compare(
+                    other.Ir,
+                    name=name + ".Ir",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
+            )
         if other._logger_name != self._logger_name:
             if is_add_value:
-                val_str = ' (self='+str(self._logger_name)+', other='+str(other._logger_name)+')'
-                diff_list.append(name+'.logger_name'+val_str)
+                val_str = (
+                    " (self="
+                    + str(self._logger_name)
+                    + ", other="
+                    + str(other._logger_name)
+                    + ")"
+                )
+                diff_list.append(name + ".logger_name" + val_str)
             else:
-                diff_list.append(name+'.logger_name')
-        if other._Pj_losses is not None and self._Pj_losses is not None and isnan(other._Pj_losses) and isnan(self._Pj_losses):
+                diff_list.append(name + ".logger_name")
+        if (
+            other._Pj_losses is not None
+            and self._Pj_losses is not None
+            and isnan(other._Pj_losses)
+            and isnan(self._Pj_losses)
+        ):
             pass
         elif other._Pj_losses != self._Pj_losses:
             if is_add_value:
-                val_str = ' (self='+str(self._Pj_losses)+', other='+str(other._Pj_losses)+')'
-                diff_list.append(name+'.Pj_losses'+val_str)
+                val_str = (
+                    " (self="
+                    + str(self._Pj_losses)
+                    + ", other="
+                    + str(other._Pj_losses)
+                    + ")"
+                )
+                diff_list.append(name + ".Pj_losses" + val_str)
             else:
-                diff_list.append(name+'.Pj_losses')
-        if (other.Us is None and self.Us is not None) or (other.Us is not None and self.Us is None):
-            diff_list.append(name+'.Us None mismatch')
+                diff_list.append(name + ".Pj_losses")
+        if (other.Us is None and self.Us is not None) or (
+            other.Us is not None and self.Us is None
+        ):
+            diff_list.append(name + ".Us None mismatch")
         elif self.Us is not None:
-            diff_list.extend(self.Us.compare(other.Us,name=name+'.Us',ignore_list=ignore_list,is_add_value=is_add_value))
-        if (other.internal is None and self.internal is not None) or (other.internal is not None and self.internal is None):
-            diff_list.append(name+'.internal None mismatch')
+            diff_list.extend(
+                self.Us.compare(
+                    other.Us,
+                    name=name + ".Us",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
+            )
+        if (other.internal is None and self.internal is not None) or (
+            other.internal is not None and self.internal is None
+        ):
+            diff_list.append(name + ".internal None mismatch")
         elif self.internal is not None:
-            diff_list.extend(self.internal.compare(other.internal,name=name+'.internal',ignore_list=ignore_list,is_add_value=is_add_value))
-        if (other.OP is None and self.OP is not None) or (other.OP is not None and self.OP is None):
-            diff_list.append(name+'.OP None mismatch')
+            diff_list.extend(
+                self.internal.compare(
+                    other.internal,
+                    name=name + ".internal",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
+            )
+        if (other.OP is None and self.OP is not None) or (
+            other.OP is not None and self.OP is None
+        ):
+            diff_list.append(name + ".OP None mismatch")
         elif self.OP is not None:
-            diff_list.extend(self.OP.compare(other.OP,name=name+'.OP',ignore_list=ignore_list,is_add_value=is_add_value))
-        if other._Pem_av is not None and self._Pem_av is not None and isnan(other._Pem_av) and isnan(self._Pem_av):
+            diff_list.extend(
+                self.OP.compare(
+                    other.OP,
+                    name=name + ".OP",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
+            )
+        if (
+            other._Pem_av is not None
+            and self._Pem_av is not None
+            and isnan(other._Pem_av)
+            and isnan(self._Pem_av)
+        ):
             pass
         elif other._Pem_av != self._Pem_av:
             if is_add_value:
-                val_str = ' (self='+str(self._Pem_av)+', other='+str(other._Pem_av)+')'
-                diff_list.append(name+'.Pem_av'+val_str)
+                val_str = (
+                    " (self="
+                    + str(self._Pem_av)
+                    + ", other="
+                    + str(other._Pem_av)
+                    + ")"
+                )
+                diff_list.append(name + ".Pem_av" + val_str)
             else:
-                diff_list.append(name+'.Pem_av')
-        if other._Tem_av is not None and self._Tem_av is not None and isnan(other._Tem_av) and isnan(self._Tem_av):
+                diff_list.append(name + ".Pem_av")
+        if (
+            other._Tem_av is not None
+            and self._Tem_av is not None
+            and isnan(other._Tem_av)
+            and isnan(self._Tem_av)
+        ):
             pass
         elif other._Tem_av != self._Tem_av:
             if is_add_value:
-                val_str = ' (self='+str(self._Tem_av)+', other='+str(other._Tem_av)+')'
-                diff_list.append(name+'.Tem_av'+val_str)
+                val_str = (
+                    " (self="
+                    + str(self._Tem_av)
+                    + ", other="
+                    + str(other._Tem_av)
+                    + ")"
+                )
+                diff_list.append(name + ".Tem_av" + val_str)
             else:
-                diff_list.append(name+'.Tem_av')
+                diff_list.append(name + ".Tem_av")
         if other._phase_dir != self._phase_dir:
             if is_add_value:
-                val_str = ' (self='+str(self._phase_dir)+', other='+str(other._phase_dir)+')'
-                diff_list.append(name+'.phase_dir'+val_str)
+                val_str = (
+                    " (self="
+                    + str(self._phase_dir)
+                    + ", other="
+                    + str(other._phase_dir)
+                    + ")"
+                )
+                diff_list.append(name + ".phase_dir" + val_str)
             else:
-                diff_list.append(name+'.phase_dir')
+                diff_list.append(name + ".phase_dir")
         if other._current_dir != self._current_dir:
             if is_add_value:
-                val_str = ' (self='+str(self._current_dir)+', other='+str(other._current_dir)+')'
-                diff_list.append(name+'.current_dir'+val_str)
+                val_str = (
+                    " (self="
+                    + str(self._current_dir)
+                    + ", other="
+                    + str(other._current_dir)
+                    + ")"
+                )
+                diff_list.append(name + ".current_dir" + val_str)
             else:
-                diff_list.append(name+'.current_dir')
-        if (other.PWM is None and self.PWM is not None) or (other.PWM is not None and self.PWM is None):
-            diff_list.append(name+'.PWM None mismatch')
+                diff_list.append(name + ".current_dir")
+        if (other.PWM is None and self.PWM is not None) or (
+            other.PWM is not None and self.PWM is None
+        ):
+            diff_list.append(name + ".PWM None mismatch")
         elif self.PWM is not None:
-            diff_list.extend(self.PWM.compare(other.PWM,name=name+'.PWM',ignore_list=ignore_list,is_add_value=is_add_value))
-        if (other.eec is None and self.eec is not None) or (other.eec is not None and self.eec is None):
-            diff_list.append(name+'.eec None mismatch')
+            diff_list.extend(
+                self.PWM.compare(
+                    other.PWM,
+                    name=name + ".PWM",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
+            )
+        if (other.eec is None and self.eec is not None) or (
+            other.eec is not None and self.eec is None
+        ):
+            diff_list.append(name + ".eec None mismatch")
         elif self.eec is not None:
-            diff_list.extend(self.eec.compare(other.eec,name=name+'.eec',ignore_list=ignore_list,is_add_value=is_add_value))
-        if other._P_out is not None and self._P_out is not None and isnan(other._P_out) and isnan(self._P_out):
+            diff_list.extend(
+                self.eec.compare(
+                    other.eec,
+                    name=name + ".eec",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
+            )
+        if (
+            other._P_out is not None
+            and self._P_out is not None
+            and isnan(other._P_out)
+            and isnan(self._P_out)
+        ):
             pass
         elif other._P_out != self._P_out:
             if is_add_value:
-                val_str = ' (self='+str(self._P_out)+', other='+str(other._P_out)+')'
-                diff_list.append(name+'.P_out'+val_str)
+                val_str = (
+                    " (self=" + str(self._P_out) + ", other=" + str(other._P_out) + ")"
+                )
+                diff_list.append(name + ".P_out" + val_str)
             else:
-                diff_list.append(name+'.P_out')
-        if other._Jrms is not None and self._Jrms is not None and isnan(other._Jrms) and isnan(self._Jrms):
+                diff_list.append(name + ".P_out")
+        if (
+            other._Jrms is not None
+            and self._Jrms is not None
+            and isnan(other._Jrms)
+            and isnan(self._Jrms)
+        ):
             pass
         elif other._Jrms != self._Jrms:
             if is_add_value:
-                val_str = ' (self='+str(self._Jrms)+', other='+str(other._Jrms)+')'
-                diff_list.append(name+'.Jrms'+val_str)
+                val_str = (
+                    " (self=" + str(self._Jrms) + ", other=" + str(other._Jrms) + ")"
+                )
+                diff_list.append(name + ".Jrms" + val_str)
             else:
-                diff_list.append(name+'.Jrms')
-        if other._P_in is not None and self._P_in is not None and isnan(other._P_in) and isnan(self._P_in):
+                diff_list.append(name + ".Jrms")
+        if (
+            other._P_in is not None
+            and self._P_in is not None
+            and isnan(other._P_in)
+            and isnan(self._P_in)
+        ):
             pass
         elif other._P_in != self._P_in:
             if is_add_value:
-                val_str = ' (self='+str(self._P_in)+', other='+str(other._P_in)+')'
-                diff_list.append(name+'.P_in'+val_str)
+                val_str = (
+                    " (self=" + str(self._P_in) + ", other=" + str(other._P_in) + ")"
+                )
+                diff_list.append(name + ".P_in" + val_str)
             else:
-                diff_list.append(name+'.P_in')
-        if other._Arms is not None and self._Arms is not None and isnan(other._Arms) and isnan(self._Arms):
+                diff_list.append(name + ".P_in")
+        if (
+            other._Arms is not None
+            and self._Arms is not None
+            and isnan(other._Arms)
+            and isnan(self._Arms)
+        ):
             pass
         elif other._Arms != self._Arms:
             if is_add_value:
-                val_str = ' (self='+str(self._Arms)+', other='+str(other._Arms)+')'
-                diff_list.append(name+'.Arms'+val_str)
+                val_str = (
+                    " (self=" + str(self._Arms) + ", other=" + str(other._Arms) + ")"
+                )
+                diff_list.append(name + ".Arms" + val_str)
             else:
-                diff_list.append(name+'.Arms')
-        if other._Erms is not None and self._Erms is not None and isnan(other._Erms) and isnan(self._Erms):
+                diff_list.append(name + ".Arms")
+        if (
+            other._Erms is not None
+            and self._Erms is not None
+            and isnan(other._Erms)
+            and isnan(self._Erms)
+        ):
             pass
         elif other._Erms != self._Erms:
             if is_add_value:
-                val_str = ' (self='+str(self._Erms)+', other='+str(other._Erms)+')'
-                diff_list.append(name+'.Erms'+val_str)
+                val_str = (
+                    " (self=" + str(self._Erms) + ", other=" + str(other._Erms) + ")"
+                )
+                diff_list.append(name + ".Erms" + val_str)
             else:
-                diff_list.append(name+'.Erms')
+                diff_list.append(name + ".Erms")
         # Filter ignore differences
-        diff_list = list(filter(lambda x : x not in ignore_list, diff_list))
+        diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
 
     def __sizeof__(self):
@@ -453,7 +634,7 @@ class OutElec(FrozenClass):
             How to handle ndarray (0: tolist, 1: copy, 2: nothing)
         keep_function : bool
             True to keep the function object, else return str
-        Optional keyword input parameter is for internal use only 
+        Optional keyword input parameter is for internal use only
         and may prevent json serializability.
         """
 
@@ -464,31 +645,55 @@ class OutElec(FrozenClass):
             OutElec_dict["axes_dict"] = dict()
             for key, obj in self.axes_dict.items():
                 if obj is not None:
-                    OutElec_dict["axes_dict"][key] = obj.as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs)
+                    OutElec_dict["axes_dict"][key] = obj.as_dict(
+                        type_handle_ndarray=type_handle_ndarray,
+                        keep_function=keep_function,
+                        **kwargs
+                    )
                 else:
                     OutElec_dict["axes_dict"][key] = None
         if self.Is is None:
             OutElec_dict["Is"] = None
         else:
-            OutElec_dict["Is"] = self.Is.as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs)
+            OutElec_dict["Is"] = self.Is.as_dict(
+                type_handle_ndarray=type_handle_ndarray,
+                keep_function=keep_function,
+                **kwargs
+            )
         if self.Ir is None:
             OutElec_dict["Ir"] = None
         else:
-            OutElec_dict["Ir"] = self.Ir.as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs)
+            OutElec_dict["Ir"] = self.Ir.as_dict(
+                type_handle_ndarray=type_handle_ndarray,
+                keep_function=keep_function,
+                **kwargs
+            )
         OutElec_dict["logger_name"] = self.logger_name
         OutElec_dict["Pj_losses"] = self.Pj_losses
         if self.Us is None:
             OutElec_dict["Us"] = None
         else:
-            OutElec_dict["Us"] = self.Us.as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs)
+            OutElec_dict["Us"] = self.Us.as_dict(
+                type_handle_ndarray=type_handle_ndarray,
+                keep_function=keep_function,
+                **kwargs
+            )
         if self.internal is None:
             OutElec_dict["internal"] = None
         else:
-            OutElec_dict["internal"] = self.internal.as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs)
+            OutElec_dict["internal"] = self.internal.as_dict(
+                type_handle_ndarray=type_handle_ndarray,
+                keep_function=keep_function,
+                **kwargs
+            )
         if self.OP is None:
             OutElec_dict["OP"] = None
         else:
-            OutElec_dict["OP"] = self.OP.as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs)
+            OutElec_dict["OP"] = self.OP.as_dict(
+                type_handle_ndarray=type_handle_ndarray,
+                keep_function=keep_function,
+                **kwargs
+            )
         OutElec_dict["Pem_av"] = self.Pem_av
         OutElec_dict["Tem_av"] = self.Tem_av
         OutElec_dict["phase_dir"] = self.phase_dir
@@ -496,11 +701,19 @@ class OutElec(FrozenClass):
         if self.PWM is None:
             OutElec_dict["PWM"] = None
         else:
-            OutElec_dict["PWM"] = self.PWM.as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs)
+            OutElec_dict["PWM"] = self.PWM.as_dict(
+                type_handle_ndarray=type_handle_ndarray,
+                keep_function=keep_function,
+                **kwargs
+            )
         if self.eec is None:
             OutElec_dict["eec"] = None
         else:
-            OutElec_dict["eec"] = self.eec.as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs)
+            OutElec_dict["eec"] = self.eec.as_dict(
+                type_handle_ndarray=type_handle_ndarray,
+                keep_function=keep_function,
+                **kwargs
+            )
         OutElec_dict["P_out"] = self.P_out
         OutElec_dict["Jrms"] = self.Jrms
         OutElec_dict["P_in"] = self.P_in
@@ -509,7 +722,6 @@ class OutElec(FrozenClass):
         # The class name is added to the dict for deserialisation purpose
         OutElec_dict["__class__"] = "OutElec"
         return OutElec_dict
-
 
     def copy(self):
         """Creates a deepcopy of the object"""
@@ -561,7 +773,27 @@ class OutElec(FrozenClass):
         Arms_val = self.Arms
         Erms_val = self.Erms
         # Creates new object of the same type with the copied properties
-        obj_copy = type(self)(axes_dict=axes_dict_val,Is=Is_val,Ir=Ir_val,logger_name=logger_name_val,Pj_losses=Pj_losses_val,Us=Us_val,internal=internal_val,OP=OP_val,Pem_av=Pem_av_val,Tem_av=Tem_av_val,phase_dir=phase_dir_val,current_dir=current_dir_val,PWM=PWM_val,eec=eec_val,P_out=P_out_val,Jrms=Jrms_val,P_in=P_in_val,Arms=Arms_val,Erms=Erms_val)
+        obj_copy = type(self)(
+            axes_dict=axes_dict_val,
+            Is=Is_val,
+            Ir=Ir_val,
+            logger_name=logger_name_val,
+            Pj_losses=Pj_losses_val,
+            Us=Us_val,
+            internal=internal_val,
+            OP=OP_val,
+            Pem_av=Pem_av_val,
+            Tem_av=Tem_av_val,
+            phase_dir=phase_dir_val,
+            current_dir=current_dir_val,
+            PWM=PWM_val,
+            eec=eec_val,
+            P_out=P_out_val,
+            Jrms=Jrms_val,
+            P_in=P_in_val,
+            Arms=Arms_val,
+            Erms=Erms_val,
+        )
         return obj_copy
 
     def _set_None(self):
@@ -607,11 +839,15 @@ class OutElec(FrozenClass):
                     try:
                         obj = load_init_dict(obj)[1]
                     except Exception as e:
-                        self.get_logger().error('Error while loading '+obj+', setting None instead')
+                        self.get_logger().error(
+                            "Error while loading " + obj + ", setting None instead"
+                        )
                         obj = None
                         value[key] = None
                 if type(obj) is dict:
-                    class_obj = import_class('SciDataTool.Classes', obj.get('__class__'), 'axes_dict')
+                    class_obj = import_class(
+                        "SciDataTool.Classes", obj.get("__class__"), "axes_dict"
+                    )
                     value[key] = class_obj(init_dict=obj)
         if type(value) is int and value == -1:
             value = dict()
@@ -621,7 +857,7 @@ class OutElec(FrozenClass):
     axes_dict = property(
         fget=_get_axes_dict,
         fset=_set_axes_dict,
-        doc=u"""Dict containing axes data used for Electrical
+        doc="""Dict containing axes data used for Electrical
 
         :Type: {SciDataTool.Classes.DataND.Data}
         """,
@@ -637,10 +873,14 @@ class OutElec(FrozenClass):
             try:
                 value = load_init_dict(value)[1]
             except Exception as e:
-                self.get_logger().error('Error while loading '+value+', setting None instead')
+                self.get_logger().error(
+                    "Error while loading " + value + ", setting None instead"
+                )
                 value = None
-        if isinstance(value, dict) and '__class__' in value:
-            class_obj = import_class('SciDataTool.Classes', value.get('__class__'), 'Is')
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class(
+                "SciDataTool.Classes", value.get("__class__"), "Is"
+            )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
             value = DataND()
@@ -650,7 +890,7 @@ class OutElec(FrozenClass):
     Is = property(
         fget=_get_Is,
         fset=_set_Is,
-        doc=u"""Stator currents DataTime object
+        doc="""Stator currents DataTime object
 
         :Type: SciDataTool.Classes.DataND.DataND
         """,
@@ -666,10 +906,14 @@ class OutElec(FrozenClass):
             try:
                 value = load_init_dict(value)[1]
             except Exception as e:
-                self.get_logger().error('Error while loading '+value+', setting None instead')
+                self.get_logger().error(
+                    "Error while loading " + value + ", setting None instead"
+                )
                 value = None
-        if isinstance(value, dict) and '__class__' in value:
-            class_obj = import_class('SciDataTool.Classes', value.get('__class__'), 'Ir')
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class(
+                "SciDataTool.Classes", value.get("__class__"), "Ir"
+            )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
             value = DataND()
@@ -679,7 +923,7 @@ class OutElec(FrozenClass):
     Ir = property(
         fget=_get_Ir,
         fset=_set_Ir,
-        doc=u"""Rotor currents as a function of time (each column correspond to one phase)
+        doc="""Rotor currents as a function of time (each column correspond to one phase)
 
         :Type: SciDataTool.Classes.DataND.DataND
         """,
@@ -697,7 +941,7 @@ class OutElec(FrozenClass):
     logger_name = property(
         fget=_get_logger_name,
         fset=_set_logger_name,
-        doc=u"""Name of the logger to use
+        doc="""Name of the logger to use
 
         :Type: str
         """,
@@ -715,7 +959,7 @@ class OutElec(FrozenClass):
     Pj_losses = property(
         fget=_get_Pj_losses,
         fset=_set_Pj_losses,
-        doc=u"""Electrical Joule losses
+        doc="""Electrical Joule losses
 
         :Type: float
         """,
@@ -731,10 +975,14 @@ class OutElec(FrozenClass):
             try:
                 value = load_init_dict(value)[1]
             except Exception as e:
-                self.get_logger().error('Error while loading '+value+', setting None instead')
+                self.get_logger().error(
+                    "Error while loading " + value + ", setting None instead"
+                )
                 value = None
-        if isinstance(value, dict) and '__class__' in value:
-            class_obj = import_class('SciDataTool.Classes', value.get('__class__'), 'Us')
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class(
+                "SciDataTool.Classes", value.get("__class__"), "Us"
+            )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
             value = DataND()
@@ -744,7 +992,7 @@ class OutElec(FrozenClass):
     Us = property(
         fget=_get_Us,
         fset=_set_Us,
-        doc=u"""Stator voltage as a function of time (each column correspond to one phase)
+        doc="""Stator voltage as a function of time (each column correspond to one phase)
 
         :Type: SciDataTool.Classes.DataND.DataND
         """,
@@ -760,23 +1008,28 @@ class OutElec(FrozenClass):
             try:
                 value = load_init_dict(value)[1]
             except Exception as e:
-                self.get_logger().error('Error while loading '+value+', setting None instead')
+                self.get_logger().error(
+                    "Error while loading " + value + ", setting None instead"
+                )
                 value = None
-        if isinstance(value, dict) and '__class__' in value:
-            class_obj = import_class('pyleecan.Classes', value.get('__class__'), 'internal')
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class(
+                "pyleecan.Classes", value.get("__class__"), "internal"
+            )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
-            OutInternal = import_class('pyleecan.Classes', 'OutInternal', 'internal')
+            OutInternal = import_class("pyleecan.Classes", "OutInternal", "internal")
             value = OutInternal()
         check_var("internal", value, "OutInternal")
         self._internal = value
 
         if self._internal is not None:
             self._internal.parent = self
+
     internal = property(
         fget=_get_internal,
         fset=_set_internal,
-        doc=u"""OutInternal object containg outputs related to a specific model
+        doc="""OutInternal object containg outputs related to a specific model
 
         :Type: OutInternal
         """,
@@ -792,23 +1045,26 @@ class OutElec(FrozenClass):
             try:
                 value = load_init_dict(value)[1]
             except Exception as e:
-                self.get_logger().error('Error while loading '+value+', setting None instead')
+                self.get_logger().error(
+                    "Error while loading " + value + ", setting None instead"
+                )
                 value = None
-        if isinstance(value, dict) and '__class__' in value:
-            class_obj = import_class('pyleecan.Classes', value.get('__class__'), 'OP')
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class("pyleecan.Classes", value.get("__class__"), "OP")
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
-            OP = import_class('pyleecan.Classes', 'OP', 'OP')
+            OP = import_class("pyleecan.Classes", "OP", "OP")
             value = OP()
         check_var("OP", value, "OP")
         self._OP = value
 
         if self._OP is not None:
             self._OP.parent = self
+
     OP = property(
         fget=_get_OP,
         fset=_set_OP,
-        doc=u"""Operating Point
+        doc="""Operating Point
 
         :Type: OP
         """,
@@ -826,7 +1082,7 @@ class OutElec(FrozenClass):
     Pem_av = property(
         fget=_get_Pem_av,
         fset=_set_Pem_av,
-        doc=u"""Average Electromagnetic power
+        doc="""Average Electromagnetic power
 
         :Type: float
         """,
@@ -844,7 +1100,7 @@ class OutElec(FrozenClass):
     Tem_av = property(
         fget=_get_Tem_av,
         fset=_set_Tem_av,
-        doc=u"""Average Electromagnetic torque
+        doc="""Average Electromagnetic torque
 
         :Type: float
         """,
@@ -862,7 +1118,7 @@ class OutElec(FrozenClass):
     phase_dir = property(
         fget=_get_phase_dir,
         fset=_set_phase_dir,
-        doc=u"""Rotation direction of the stator phases (phase_dir*(n-1)*pi/qs, default value given by PHASE_DIR_REF)
+        doc="""Rotation direction of the stator phases (phase_dir*(n-1)*pi/qs, default value given by PHASE_DIR_REF)
 
         :Type: int
         :min: -1
@@ -882,7 +1138,7 @@ class OutElec(FrozenClass):
     current_dir = property(
         fget=_get_current_dir,
         fset=_set_current_dir,
-        doc=u"""Rotation direction of the stator currents (current_dir*2*pi*felec*time, default value given by CURRENT_DIR_REF)
+        doc="""Rotation direction of the stator currents (current_dir*2*pi*felec*time, default value given by CURRENT_DIR_REF)
 
         :Type: int
         :min: -1
@@ -900,23 +1156,26 @@ class OutElec(FrozenClass):
             try:
                 value = load_init_dict(value)[1]
             except Exception as e:
-                self.get_logger().error('Error while loading '+value+', setting None instead')
+                self.get_logger().error(
+                    "Error while loading " + value + ", setting None instead"
+                )
                 value = None
-        if isinstance(value, dict) and '__class__' in value:
-            class_obj = import_class('pyleecan.Classes', value.get('__class__'), 'PWM')
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class("pyleecan.Classes", value.get("__class__"), "PWM")
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
-            ImportGenPWM = import_class('pyleecan.Classes', 'ImportGenPWM', 'PWM')
+            ImportGenPWM = import_class("pyleecan.Classes", "ImportGenPWM", "PWM")
             value = ImportGenPWM()
         check_var("PWM", value, "ImportGenPWM")
         self._PWM = value
 
         if self._PWM is not None:
             self._PWM.parent = self
+
     PWM = property(
         fget=_get_PWM,
         fset=_set_PWM,
-        doc=u"""Object to generate PWM signal
+        doc="""Object to generate PWM signal
 
         :Type: ImportGenPWM
         """,
@@ -932,23 +1191,26 @@ class OutElec(FrozenClass):
             try:
                 value = load_init_dict(value)[1]
             except Exception as e:
-                self.get_logger().error('Error while loading '+value+', setting None instead')
+                self.get_logger().error(
+                    "Error while loading " + value + ", setting None instead"
+                )
                 value = None
-        if isinstance(value, dict) and '__class__' in value:
-            class_obj = import_class('pyleecan.Classes', value.get('__class__'), 'eec')
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class("pyleecan.Classes", value.get("__class__"), "eec")
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
-            EEC = import_class('pyleecan.Classes', 'EEC', 'eec')
+            EEC = import_class("pyleecan.Classes", "EEC", "eec")
             value = EEC()
         check_var("eec", value, "EEC")
         self._eec = value
 
         if self._eec is not None:
             self._eec.parent = self
+
     eec = property(
         fget=_get_eec,
         fset=_set_eec,
-        doc=u"""Electric Equivalent Circuit used for OP resolution
+        doc="""Electric Equivalent Circuit used for OP resolution
 
         :Type: EEC
         """,
@@ -966,7 +1228,7 @@ class OutElec(FrozenClass):
     P_out = property(
         fget=_get_P_out,
         fset=_set_P_out,
-        doc=u"""Output power
+        doc="""Output power
 
         :Type: float
         """,
@@ -984,7 +1246,7 @@ class OutElec(FrozenClass):
     Jrms = property(
         fget=_get_Jrms,
         fset=_set_Jrms,
-        doc=u"""RMS current density in slots
+        doc="""RMS current density in slots
 
         :Type: float
         :min: 0
@@ -1003,7 +1265,7 @@ class OutElec(FrozenClass):
     P_in = property(
         fget=_get_P_in,
         fset=_set_P_in,
-        doc=u"""Input power
+        doc="""Input power
 
         :Type: float
         """,
@@ -1021,7 +1283,7 @@ class OutElec(FrozenClass):
     Arms = property(
         fget=_get_Arms,
         fset=_set_Arms,
-        doc=u"""RMS linear current density along airgap
+        doc="""RMS linear current density along airgap
 
         :Type: float
         """,
@@ -1039,7 +1301,7 @@ class OutElec(FrozenClass):
     Erms = property(
         fget=_get_Erms,
         fset=_set_Erms,
-        doc=u"""RMS back-emf
+        doc="""RMS back-emf
 
         :Type: float
         """,

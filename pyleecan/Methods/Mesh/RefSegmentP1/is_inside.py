@@ -30,7 +30,7 @@ def is_inside(self, vertice, point, normal_t=None):
     t = point_ref[1]
 
     a = abs(s) - (1 + epsilon)
-    b = abs(t) - (epsilon * ((1 - s ** 2) + 1))
+    b = abs(t) - (epsilon * ((1 - s**2) + 1))
     is_inside = (a < 0) & (b < 0)  # >= in case the point is "just" on the border
 
     # Check that normals are almost aligned

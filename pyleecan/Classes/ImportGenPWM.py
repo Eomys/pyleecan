@@ -96,7 +96,30 @@ class ImportGenPWM(ImportMatrix):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, fs=96000, duration=10, f=50, fmax=0, fmode=0, fswimode=0, fswi=1000, fswi_max=3000, typePWM=8, Vdc1=2, U0=None, type_carrier=0, var_amp=20, qs=3, is_star=True, phase_dir=-1, current_dir=-1, Phi0=0, is_transpose=False, init_dict = None, init_str = None):
+    def __init__(
+        self,
+        fs=96000,
+        duration=10,
+        f=50,
+        fmax=0,
+        fmode=0,
+        fswimode=0,
+        fswi=1000,
+        fswi_max=3000,
+        typePWM=8,
+        Vdc1=2,
+        U0=None,
+        type_carrier=0,
+        var_amp=20,
+        qs=3,
+        is_star=True,
+        phase_dir=-1,
+        current_dir=-1,
+        Phi0=0,
+        is_transpose=False,
+        init_dict=None,
+        init_str=None,
+    ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -247,145 +270,258 @@ class ImportGenPWM(ImportMatrix):
             return False
         return True
 
-    def compare(self, other, name='self', ignore_list=None, is_add_value=False):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
             ignore_list = list()
         if type(other) != type(self):
-            return ['type('+name+')']
+            return ["type(" + name + ")"]
         diff_list = list()
 
         # Check the properties inherited from ImportMatrix
-        diff_list.extend(super(ImportGenPWM, self).compare(other,name=name, ignore_list=ignore_list, is_add_value=is_add_value))
-        if other._fs is not None and self._fs is not None and isnan(other._fs) and isnan(self._fs):
+        diff_list.extend(
+            super(ImportGenPWM, self).compare(
+                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
+            )
+        )
+        if (
+            other._fs is not None
+            and self._fs is not None
+            and isnan(other._fs)
+            and isnan(self._fs)
+        ):
             pass
         elif other._fs != self._fs:
             if is_add_value:
-                val_str = ' (self='+str(self._fs)+', other='+str(other._fs)+')'
-                diff_list.append(name+'.fs'+val_str)
+                val_str = " (self=" + str(self._fs) + ", other=" + str(other._fs) + ")"
+                diff_list.append(name + ".fs" + val_str)
             else:
-                diff_list.append(name+'.fs')
-        if other._duration is not None and self._duration is not None and isnan(other._duration) and isnan(self._duration):
+                diff_list.append(name + ".fs")
+        if (
+            other._duration is not None
+            and self._duration is not None
+            and isnan(other._duration)
+            and isnan(self._duration)
+        ):
             pass
         elif other._duration != self._duration:
             if is_add_value:
-                val_str = ' (self='+str(self._duration)+', other='+str(other._duration)+')'
-                diff_list.append(name+'.duration'+val_str)
+                val_str = (
+                    " (self="
+                    + str(self._duration)
+                    + ", other="
+                    + str(other._duration)
+                    + ")"
+                )
+                diff_list.append(name + ".duration" + val_str)
             else:
-                diff_list.append(name+'.duration')
-        if other._f is not None and self._f is not None and isnan(other._f) and isnan(self._f):
+                diff_list.append(name + ".duration")
+        if (
+            other._f is not None
+            and self._f is not None
+            and isnan(other._f)
+            and isnan(self._f)
+        ):
             pass
         elif other._f != self._f:
             if is_add_value:
-                val_str = ' (self='+str(self._f)+', other='+str(other._f)+')'
-                diff_list.append(name+'.f'+val_str)
+                val_str = " (self=" + str(self._f) + ", other=" + str(other._f) + ")"
+                diff_list.append(name + ".f" + val_str)
             else:
-                diff_list.append(name+'.f')
-        if other._fmax is not None and self._fmax is not None and isnan(other._fmax) and isnan(self._fmax):
+                diff_list.append(name + ".f")
+        if (
+            other._fmax is not None
+            and self._fmax is not None
+            and isnan(other._fmax)
+            and isnan(self._fmax)
+        ):
             pass
         elif other._fmax != self._fmax:
             if is_add_value:
-                val_str = ' (self='+str(self._fmax)+', other='+str(other._fmax)+')'
-                diff_list.append(name+'.fmax'+val_str)
+                val_str = (
+                    " (self=" + str(self._fmax) + ", other=" + str(other._fmax) + ")"
+                )
+                diff_list.append(name + ".fmax" + val_str)
             else:
-                diff_list.append(name+'.fmax')
+                diff_list.append(name + ".fmax")
         if other._fmode != self._fmode:
             if is_add_value:
-                val_str = ' (self='+str(self._fmode)+', other='+str(other._fmode)+')'
-                diff_list.append(name+'.fmode'+val_str)
+                val_str = (
+                    " (self=" + str(self._fmode) + ", other=" + str(other._fmode) + ")"
+                )
+                diff_list.append(name + ".fmode" + val_str)
             else:
-                diff_list.append(name+'.fmode')
+                diff_list.append(name + ".fmode")
         if other._fswimode != self._fswimode:
             if is_add_value:
-                val_str = ' (self='+str(self._fswimode)+', other='+str(other._fswimode)+')'
-                diff_list.append(name+'.fswimode'+val_str)
+                val_str = (
+                    " (self="
+                    + str(self._fswimode)
+                    + ", other="
+                    + str(other._fswimode)
+                    + ")"
+                )
+                diff_list.append(name + ".fswimode" + val_str)
             else:
-                diff_list.append(name+'.fswimode')
-        if other._fswi is not None and self._fswi is not None and isnan(other._fswi) and isnan(self._fswi):
+                diff_list.append(name + ".fswimode")
+        if (
+            other._fswi is not None
+            and self._fswi is not None
+            and isnan(other._fswi)
+            and isnan(self._fswi)
+        ):
             pass
         elif other._fswi != self._fswi:
             if is_add_value:
-                val_str = ' (self='+str(self._fswi)+', other='+str(other._fswi)+')'
-                diff_list.append(name+'.fswi'+val_str)
+                val_str = (
+                    " (self=" + str(self._fswi) + ", other=" + str(other._fswi) + ")"
+                )
+                diff_list.append(name + ".fswi" + val_str)
             else:
-                diff_list.append(name+'.fswi')
-        if other._fswi_max is not None and self._fswi_max is not None and isnan(other._fswi_max) and isnan(self._fswi_max):
+                diff_list.append(name + ".fswi")
+        if (
+            other._fswi_max is not None
+            and self._fswi_max is not None
+            and isnan(other._fswi_max)
+            and isnan(self._fswi_max)
+        ):
             pass
         elif other._fswi_max != self._fswi_max:
             if is_add_value:
-                val_str = ' (self='+str(self._fswi_max)+', other='+str(other._fswi_max)+')'
-                diff_list.append(name+'.fswi_max'+val_str)
+                val_str = (
+                    " (self="
+                    + str(self._fswi_max)
+                    + ", other="
+                    + str(other._fswi_max)
+                    + ")"
+                )
+                diff_list.append(name + ".fswi_max" + val_str)
             else:
-                diff_list.append(name+'.fswi_max')
+                diff_list.append(name + ".fswi_max")
         if other._typePWM != self._typePWM:
             if is_add_value:
-                val_str = ' (self='+str(self._typePWM)+', other='+str(other._typePWM)+')'
-                diff_list.append(name+'.typePWM'+val_str)
+                val_str = (
+                    " (self="
+                    + str(self._typePWM)
+                    + ", other="
+                    + str(other._typePWM)
+                    + ")"
+                )
+                diff_list.append(name + ".typePWM" + val_str)
             else:
-                diff_list.append(name+'.typePWM')
-        if other._Vdc1 is not None and self._Vdc1 is not None and isnan(other._Vdc1) and isnan(self._Vdc1):
+                diff_list.append(name + ".typePWM")
+        if (
+            other._Vdc1 is not None
+            and self._Vdc1 is not None
+            and isnan(other._Vdc1)
+            and isnan(self._Vdc1)
+        ):
             pass
         elif other._Vdc1 != self._Vdc1:
             if is_add_value:
-                val_str = ' (self='+str(self._Vdc1)+', other='+str(other._Vdc1)+')'
-                diff_list.append(name+'.Vdc1'+val_str)
+                val_str = (
+                    " (self=" + str(self._Vdc1) + ", other=" + str(other._Vdc1) + ")"
+                )
+                diff_list.append(name + ".Vdc1" + val_str)
             else:
-                diff_list.append(name+'.Vdc1')
-        if other._U0 is not None and self._U0 is not None and isnan(other._U0) and isnan(self._U0):
+                diff_list.append(name + ".Vdc1")
+        if (
+            other._U0 is not None
+            and self._U0 is not None
+            and isnan(other._U0)
+            and isnan(self._U0)
+        ):
             pass
         elif other._U0 != self._U0:
             if is_add_value:
-                val_str = ' (self='+str(self._U0)+', other='+str(other._U0)+')'
-                diff_list.append(name+'.U0'+val_str)
+                val_str = " (self=" + str(self._U0) + ", other=" + str(other._U0) + ")"
+                diff_list.append(name + ".U0" + val_str)
             else:
-                diff_list.append(name+'.U0')
+                diff_list.append(name + ".U0")
         if other._type_carrier != self._type_carrier:
             if is_add_value:
-                val_str = ' (self='+str(self._type_carrier)+', other='+str(other._type_carrier)+')'
-                diff_list.append(name+'.type_carrier'+val_str)
+                val_str = (
+                    " (self="
+                    + str(self._type_carrier)
+                    + ", other="
+                    + str(other._type_carrier)
+                    + ")"
+                )
+                diff_list.append(name + ".type_carrier" + val_str)
             else:
-                diff_list.append(name+'.type_carrier')
+                diff_list.append(name + ".type_carrier")
         if other._var_amp != self._var_amp:
             if is_add_value:
-                val_str = ' (self='+str(self._var_amp)+', other='+str(other._var_amp)+')'
-                diff_list.append(name+'.var_amp'+val_str)
+                val_str = (
+                    " (self="
+                    + str(self._var_amp)
+                    + ", other="
+                    + str(other._var_amp)
+                    + ")"
+                )
+                diff_list.append(name + ".var_amp" + val_str)
             else:
-                diff_list.append(name+'.var_amp')
+                diff_list.append(name + ".var_amp")
         if other._qs != self._qs:
             if is_add_value:
-                val_str = ' (self='+str(self._qs)+', other='+str(other._qs)+')'
-                diff_list.append(name+'.qs'+val_str)
+                val_str = " (self=" + str(self._qs) + ", other=" + str(other._qs) + ")"
+                diff_list.append(name + ".qs" + val_str)
             else:
-                diff_list.append(name+'.qs')
+                diff_list.append(name + ".qs")
         if other._is_star != self._is_star:
             if is_add_value:
-                val_str = ' (self='+str(self._is_star)+', other='+str(other._is_star)+')'
-                diff_list.append(name+'.is_star'+val_str)
+                val_str = (
+                    " (self="
+                    + str(self._is_star)
+                    + ", other="
+                    + str(other._is_star)
+                    + ")"
+                )
+                diff_list.append(name + ".is_star" + val_str)
             else:
-                diff_list.append(name+'.is_star')
+                diff_list.append(name + ".is_star")
         if other._phase_dir != self._phase_dir:
             if is_add_value:
-                val_str = ' (self='+str(self._phase_dir)+', other='+str(other._phase_dir)+')'
-                diff_list.append(name+'.phase_dir'+val_str)
+                val_str = (
+                    " (self="
+                    + str(self._phase_dir)
+                    + ", other="
+                    + str(other._phase_dir)
+                    + ")"
+                )
+                diff_list.append(name + ".phase_dir" + val_str)
             else:
-                diff_list.append(name+'.phase_dir')
+                diff_list.append(name + ".phase_dir")
         if other._current_dir != self._current_dir:
             if is_add_value:
-                val_str = ' (self='+str(self._current_dir)+', other='+str(other._current_dir)+')'
-                diff_list.append(name+'.current_dir'+val_str)
+                val_str = (
+                    " (self="
+                    + str(self._current_dir)
+                    + ", other="
+                    + str(other._current_dir)
+                    + ")"
+                )
+                diff_list.append(name + ".current_dir" + val_str)
             else:
-                diff_list.append(name+'.current_dir')
-        if other._Phi0 is not None and self._Phi0 is not None and isnan(other._Phi0) and isnan(self._Phi0):
+                diff_list.append(name + ".current_dir")
+        if (
+            other._Phi0 is not None
+            and self._Phi0 is not None
+            and isnan(other._Phi0)
+            and isnan(self._Phi0)
+        ):
             pass
         elif other._Phi0 != self._Phi0:
             if is_add_value:
-                val_str = ' (self='+str(self._Phi0)+', other='+str(other._Phi0)+')'
-                diff_list.append(name+'.Phi0'+val_str)
+                val_str = (
+                    " (self=" + str(self._Phi0) + ", other=" + str(other._Phi0) + ")"
+                )
+                diff_list.append(name + ".Phi0" + val_str)
             else:
-                diff_list.append(name+'.Phi0')
+                diff_list.append(name + ".Phi0")
         # Filter ignore differences
-        diff_list = list(filter(lambda x : x not in ignore_list, diff_list))
+        diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
 
     def __sizeof__(self):
@@ -422,12 +558,16 @@ class ImportGenPWM(ImportMatrix):
             How to handle ndarray (0: tolist, 1: copy, 2: nothing)
         keep_function : bool
             True to keep the function object, else return str
-        Optional keyword input parameter is for internal use only 
+        Optional keyword input parameter is for internal use only
         and may prevent json serializability.
         """
 
         # Get the properties inherited from ImportMatrix
-        ImportGenPWM_dict = super(ImportGenPWM, self).as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs)
+        ImportGenPWM_dict = super(ImportGenPWM, self).as_dict(
+            type_handle_ndarray=type_handle_ndarray,
+            keep_function=keep_function,
+            **kwargs
+        )
         ImportGenPWM_dict["fs"] = self.fs
         ImportGenPWM_dict["duration"] = self.duration
         ImportGenPWM_dict["f"] = self.f
@@ -450,7 +590,6 @@ class ImportGenPWM(ImportMatrix):
         # Overwrite the mother class name
         ImportGenPWM_dict["__class__"] = "ImportGenPWM"
         return ImportGenPWM_dict
-
 
     def copy(self):
         """Creates a deepcopy of the object"""
@@ -476,7 +615,27 @@ class ImportGenPWM(ImportMatrix):
         Phi0_val = self.Phi0
         is_transpose_val = self.is_transpose
         # Creates new object of the same type with the copied properties
-        obj_copy = type(self)(fs=fs_val,duration=duration_val,f=f_val,fmax=fmax_val,fmode=fmode_val,fswimode=fswimode_val,fswi=fswi_val,fswi_max=fswi_max_val,typePWM=typePWM_val,Vdc1=Vdc1_val,U0=U0_val,type_carrier=type_carrier_val,var_amp=var_amp_val,qs=qs_val,is_star=is_star_val,phase_dir=phase_dir_val,current_dir=current_dir_val,Phi0=Phi0_val,is_transpose=is_transpose_val)
+        obj_copy = type(self)(
+            fs=fs_val,
+            duration=duration_val,
+            f=f_val,
+            fmax=fmax_val,
+            fmode=fmode_val,
+            fswimode=fswimode_val,
+            fswi=fswi_val,
+            fswi_max=fswi_max_val,
+            typePWM=typePWM_val,
+            Vdc1=Vdc1_val,
+            U0=U0_val,
+            type_carrier=type_carrier_val,
+            var_amp=var_amp_val,
+            qs=qs_val,
+            is_star=is_star_val,
+            phase_dir=phase_dir_val,
+            current_dir=current_dir_val,
+            Phi0=Phi0_val,
+            is_transpose=is_transpose_val,
+        )
         return obj_copy
 
     def _set_None(self):
@@ -515,7 +674,7 @@ class ImportGenPWM(ImportMatrix):
     fs = property(
         fget=_get_fs,
         fset=_set_fs,
-        doc=u"""sample frequency
+        doc="""sample frequency
 
         :Type: float
         :min: 0
@@ -534,7 +693,7 @@ class ImportGenPWM(ImportMatrix):
     duration = property(
         fget=_get_duration,
         fset=_set_duration,
-        doc=u"""duration
+        doc="""duration
 
         :Type: float
         :min: 0
@@ -553,7 +712,7 @@ class ImportGenPWM(ImportMatrix):
     f = property(
         fget=_get_f,
         fset=_set_f,
-        doc=u"""fundamental frequency
+        doc="""fundamental frequency
 
         :Type: float
         :min: 0
@@ -572,7 +731,7 @@ class ImportGenPWM(ImportMatrix):
     fmax = property(
         fget=_get_fmax,
         fset=_set_fmax,
-        doc=u"""maximal fundamental frequency
+        doc="""maximal fundamental frequency
 
         :Type: float
         :min: 0
@@ -591,7 +750,7 @@ class ImportGenPWM(ImportMatrix):
     fmode = property(
         fget=_get_fmode,
         fset=_set_fmode,
-        doc=u"""speed mode: 0: Fixed speed, 1: Variable speed
+        doc="""speed mode: 0: Fixed speed, 1: Variable speed
 
         :Type: int
         :min: 0
@@ -610,7 +769,7 @@ class ImportGenPWM(ImportMatrix):
     fswimode = property(
         fget=_get_fswimode,
         fset=_set_fswimode,
-        doc=u"""switch mode: 0:Fixed fswi, 1:Variable fswi
+        doc="""switch mode: 0:Fixed fswi, 1:Variable fswi
 
         :Type: int
         """,
@@ -628,7 +787,7 @@ class ImportGenPWM(ImportMatrix):
     fswi = property(
         fget=_get_fswi,
         fset=_set_fswi,
-        doc=u"""switching frequency
+        doc="""switching frequency
 
         :Type: float
         """,
@@ -646,7 +805,7 @@ class ImportGenPWM(ImportMatrix):
     fswi_max = property(
         fget=_get_fswi_max,
         fset=_set_fswi_max,
-        doc=u"""maximal switching frequency
+        doc="""maximal switching frequency
 
         :Type: float
         """,
@@ -664,7 +823,7 @@ class ImportGenPWM(ImportMatrix):
     typePWM = property(
         fget=_get_typePWM,
         fset=_set_typePWM,
-        doc=u"""0: GDPWM 1: DPWMMIN 2: DPWMMAX 3: DPWM0 4: DPWM1 5: DPWM2 6: DPWM3 7: SVPWM 8: SPWM
+        doc="""0: GDPWM 1: DPWMMIN 2: DPWMMAX 3: DPWM0 4: DPWM1 5: DPWM2 6: DPWM3 7: SVPWM 8: SPWM
 
         :Type: int
         """,
@@ -682,7 +841,7 @@ class ImportGenPWM(ImportMatrix):
     Vdc1 = property(
         fget=_get_Vdc1,
         fset=_set_Vdc1,
-        doc=u"""DC BUS voltage
+        doc="""DC BUS voltage
 
         :Type: float
         """,
@@ -700,7 +859,7 @@ class ImportGenPWM(ImportMatrix):
     U0 = property(
         fget=_get_U0,
         fset=_set_U0,
-        doc=u"""reference voltage amplitude (rms)
+        doc="""reference voltage amplitude (rms)
 
         :Type: float
         """,
@@ -718,7 +877,7 @@ class ImportGenPWM(ImportMatrix):
     type_carrier = property(
         fget=_get_type_carrier,
         fset=_set_type_carrier,
-        doc=u"""1: forward toothsaw carrier 2: backwards toothsaw carrier 3: toothsaw carrier else: symetrical toothsaw carrier
+        doc="""1: forward toothsaw carrier 2: backwards toothsaw carrier 3: toothsaw carrier else: symetrical toothsaw carrier
 
         :Type: int
         """,
@@ -736,7 +895,7 @@ class ImportGenPWM(ImportMatrix):
     var_amp = property(
         fget=_get_var_amp,
         fset=_set_var_amp,
-        doc=u"""percentage of variation of carrier amplitude
+        doc="""percentage of variation of carrier amplitude
 
         :Type: int
         """,
@@ -754,7 +913,7 @@ class ImportGenPWM(ImportMatrix):
     qs = property(
         fget=_get_qs,
         fset=_set_qs,
-        doc=u"""number of phase
+        doc="""number of phase
 
         :Type: int
         """,
@@ -772,7 +931,7 @@ class ImportGenPWM(ImportMatrix):
     is_star = property(
         fget=_get_is_star,
         fset=_set_is_star,
-        doc=u"""True if star coupling, False if triangle coupling
+        doc="""True if star coupling, False if triangle coupling
 
         :Type: bool
         """,
@@ -790,7 +949,7 @@ class ImportGenPWM(ImportMatrix):
     phase_dir = property(
         fget=_get_phase_dir,
         fset=_set_phase_dir,
-        doc=u"""Rotation direction of the stator phases (phase_dir*(n-1)*pi/qs, default value given by PHASE_DIR_REF)
+        doc="""Rotation direction of the stator phases (phase_dir*(n-1)*pi/qs, default value given by PHASE_DIR_REF)
 
         :Type: int
         :min: -1
@@ -810,7 +969,7 @@ class ImportGenPWM(ImportMatrix):
     current_dir = property(
         fget=_get_current_dir,
         fset=_set_current_dir,
-        doc=u"""Rotation direction of the stator currents (current_dir*2*pi*felec*time, default value given by CURRENT_DIR_REF)
+        doc="""Rotation direction of the stator currents (current_dir*2*pi*felec*time, default value given by CURRENT_DIR_REF)
 
         :Type: int
         :min: -1
@@ -830,7 +989,7 @@ class ImportGenPWM(ImportMatrix):
     Phi0 = property(
         fget=_get_Phi0,
         fset=_set_Phi0,
-        doc=u"""reference voltage phase (rad)
+        doc="""reference voltage phase (rad)
 
         :Type: float
         """,

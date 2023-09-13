@@ -37,7 +37,8 @@ class FPGNSeg(GaussPoint):
         get_gauss_points = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use FPGNSeg method get_gauss_points: " + str(get_gauss_points)
+                    "Can't use FPGNSeg method get_gauss_points: "
+                    + str(get_gauss_points)
                 )
             )
         )
@@ -48,7 +49,7 @@ class FPGNSeg(GaussPoint):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, nb_gauss_point=4, init_dict = None, init_str = None):
+    def __init__(self, nb_gauss_point=4, init_dict=None, init_str=None):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -95,25 +96,35 @@ class FPGNSeg(GaussPoint):
             return False
         return True
 
-    def compare(self, other, name='self', ignore_list=None, is_add_value=False):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
             ignore_list = list()
         if type(other) != type(self):
-            return ['type('+name+')']
+            return ["type(" + name + ")"]
         diff_list = list()
 
         # Check the properties inherited from GaussPoint
-        diff_list.extend(super(FPGNSeg, self).compare(other,name=name, ignore_list=ignore_list, is_add_value=is_add_value))
+        diff_list.extend(
+            super(FPGNSeg, self).compare(
+                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
+            )
+        )
         if other._nb_gauss_point != self._nb_gauss_point:
             if is_add_value:
-                val_str = ' (self='+str(self._nb_gauss_point)+', other='+str(other._nb_gauss_point)+')'
-                diff_list.append(name+'.nb_gauss_point'+val_str)
+                val_str = (
+                    " (self="
+                    + str(self._nb_gauss_point)
+                    + ", other="
+                    + str(other._nb_gauss_point)
+                    + ")"
+                )
+                diff_list.append(name + ".nb_gauss_point" + val_str)
             else:
-                diff_list.append(name+'.nb_gauss_point')
+                diff_list.append(name + ".nb_gauss_point")
         # Filter ignore differences
-        diff_list = list(filter(lambda x : x not in ignore_list, diff_list))
+        diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
 
     def __sizeof__(self):
@@ -133,18 +144,21 @@ class FPGNSeg(GaussPoint):
             How to handle ndarray (0: tolist, 1: copy, 2: nothing)
         keep_function : bool
             True to keep the function object, else return str
-        Optional keyword input parameter is for internal use only 
+        Optional keyword input parameter is for internal use only
         and may prevent json serializability.
         """
 
         # Get the properties inherited from GaussPoint
-        FPGNSeg_dict = super(FPGNSeg, self).as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs)
+        FPGNSeg_dict = super(FPGNSeg, self).as_dict(
+            type_handle_ndarray=type_handle_ndarray,
+            keep_function=keep_function,
+            **kwargs
+        )
         FPGNSeg_dict["nb_gauss_point"] = self.nb_gauss_point
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         FPGNSeg_dict["__class__"] = "FPGNSeg"
         return FPGNSeg_dict
-
 
     def copy(self):
         """Creates a deepcopy of the object"""
@@ -174,7 +188,7 @@ class FPGNSeg(GaussPoint):
     nb_gauss_point = property(
         fget=_get_nb_gauss_point,
         fset=_set_nb_gauss_point,
-        doc=u"""Nb of gauss point to be used
+        doc="""Nb of gauss point to be used
 
         :Type: int
         """,

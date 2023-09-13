@@ -29,7 +29,7 @@ def comp_surface_opening(self):
 
     # The bottom is an arc
     alpha = self.comp_angle_opening()
-    Sarc = (Rbo ** 2.0) / 2.0 * (alpha - sin(alpha))
+    Sarc = (Rbo**2.0) / 2.0 * (alpha - sin(alpha))
 
     if self.is_outwards():
         return S1 + S0 - Sarc

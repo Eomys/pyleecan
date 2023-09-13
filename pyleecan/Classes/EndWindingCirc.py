@@ -66,7 +66,7 @@ class EndWindingCirc(EndWinding):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, coil_pitch=None, Lew_enforced=0, init_dict = None, init_str = None):
+    def __init__(self, coil_pitch=None, Lew_enforced=0, init_dict=None, init_str=None):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -115,27 +115,42 @@ class EndWindingCirc(EndWinding):
             return False
         return True
 
-    def compare(self, other, name='self', ignore_list=None, is_add_value=False):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
             ignore_list = list()
         if type(other) != type(self):
-            return ['type('+name+')']
+            return ["type(" + name + ")"]
         diff_list = list()
 
         # Check the properties inherited from EndWinding
-        diff_list.extend(super(EndWindingCirc, self).compare(other,name=name, ignore_list=ignore_list, is_add_value=is_add_value))
-        if other._coil_pitch is not None and self._coil_pitch is not None and isnan(other._coil_pitch) and isnan(self._coil_pitch):
+        diff_list.extend(
+            super(EndWindingCirc, self).compare(
+                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
+            )
+        )
+        if (
+            other._coil_pitch is not None
+            and self._coil_pitch is not None
+            and isnan(other._coil_pitch)
+            and isnan(self._coil_pitch)
+        ):
             pass
         elif other._coil_pitch != self._coil_pitch:
             if is_add_value:
-                val_str = ' (self='+str(self._coil_pitch)+', other='+str(other._coil_pitch)+')'
-                diff_list.append(name+'.coil_pitch'+val_str)
+                val_str = (
+                    " (self="
+                    + str(self._coil_pitch)
+                    + ", other="
+                    + str(other._coil_pitch)
+                    + ")"
+                )
+                diff_list.append(name + ".coil_pitch" + val_str)
             else:
-                diff_list.append(name+'.coil_pitch')
+                diff_list.append(name + ".coil_pitch")
         # Filter ignore differences
-        diff_list = list(filter(lambda x : x not in ignore_list, diff_list))
+        diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
 
     def __sizeof__(self):
@@ -155,18 +170,21 @@ class EndWindingCirc(EndWinding):
             How to handle ndarray (0: tolist, 1: copy, 2: nothing)
         keep_function : bool
             True to keep the function object, else return str
-        Optional keyword input parameter is for internal use only 
+        Optional keyword input parameter is for internal use only
         and may prevent json serializability.
         """
 
         # Get the properties inherited from EndWinding
-        EndWindingCirc_dict = super(EndWindingCirc, self).as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs)
+        EndWindingCirc_dict = super(EndWindingCirc, self).as_dict(
+            type_handle_ndarray=type_handle_ndarray,
+            keep_function=keep_function,
+            **kwargs
+        )
         EndWindingCirc_dict["coil_pitch"] = self.coil_pitch
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         EndWindingCirc_dict["__class__"] = "EndWindingCirc"
         return EndWindingCirc_dict
-
 
     def copy(self):
         """Creates a deepcopy of the object"""
@@ -175,7 +193,7 @@ class EndWindingCirc(EndWinding):
         coil_pitch_val = self.coil_pitch
         Lew_enforced_val = self.Lew_enforced
         # Creates new object of the same type with the copied properties
-        obj_copy = type(self)(coil_pitch=coil_pitch_val,Lew_enforced=Lew_enforced_val)
+        obj_copy = type(self)(coil_pitch=coil_pitch_val, Lew_enforced=Lew_enforced_val)
         return obj_copy
 
     def _set_None(self):
@@ -197,7 +215,7 @@ class EndWindingCirc(EndWinding):
     coil_pitch = property(
         fget=_get_coil_pitch,
         fset=_set_coil_pitch,
-        doc=u"""effective coil pitch (override) for length calculation
+        doc="""effective coil pitch (override) for length calculation
 
         :Type: float
         """,

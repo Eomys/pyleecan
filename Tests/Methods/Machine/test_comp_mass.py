@@ -74,13 +74,13 @@ test_obj.frame.mat_type.struct.rho = 4000
 M_test.append(
     {
         "test_obj": test_obj,
-        "Mfra": 4000 * pi * (0.114 ** 2 - 0.104 ** 2),
-        "Msha": 5000 * 1.2 * pi * 0.021 ** 2,
+        "Mfra": 4000 * pi * (0.114**2 - 0.104**2),
+        "Msha": 5000 * 1.2 * pi * 0.021**2,
     }
 )
 M_test[-1]["rotor"] = {
     "Slam": 1.2797e-2,
-    "Svent": 8 * pi * (2.5e-3 ** 2 + 3.5e-3 ** 2),
+    "Svent": 8 * pi * (2.5e-3**2 + 3.5e-3**2),
     "Smag": 6.8e-3 * 20.6e-3 * 2 * 8,
 }
 M_test[-1]["rotor"]["Vlam"] = M_test[-1]["rotor"]["Slam"] * 0.7

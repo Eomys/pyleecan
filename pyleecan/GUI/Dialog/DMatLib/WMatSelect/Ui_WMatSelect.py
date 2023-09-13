@@ -15,7 +15,7 @@ from pyleecan.GUI.Resources import pyleecan_rc
 class Ui_WMatSelect(object):
     def setupUi(self, WMatSelect):
         if not WMatSelect.objectName():
-            WMatSelect.setObjectName(u"WMatSelect")
+            WMatSelect.setObjectName("WMatSelect")
         WMatSelect.resize(283, 30)
         sizePolicy = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Minimum)
         sizePolicy.setHorizontalStretch(0)
@@ -25,10 +25,10 @@ class Ui_WMatSelect(object):
         WMatSelect.setMinimumSize(QSize(0, 0))
         self.horizontalLayout = QHBoxLayout(WMatSelect)
         self.horizontalLayout.setSpacing(2)
-        self.horizontalLayout.setObjectName(u"horizontalLayout")
+        self.horizontalLayout.setObjectName("horizontalLayout")
         self.horizontalLayout.setContentsMargins(4, 2, 4, 2)
         self.in_mat_type = QLabel(WMatSelect)
-        self.in_mat_type.setObjectName(u"in_mat_type")
+        self.in_mat_type.setObjectName("in_mat_type")
         sizePolicy1 = QSizePolicy(QSizePolicy.Minimum, QSizePolicy.Preferred)
         sizePolicy1.setHorizontalStretch(0)
         sizePolicy1.setVerticalStretch(0)
@@ -41,7 +41,7 @@ class Ui_WMatSelect(object):
         self.c_mat_type.addItem("")
         self.c_mat_type.addItem("")
         self.c_mat_type.addItem("")
-        self.c_mat_type.setObjectName(u"c_mat_type")
+        self.c_mat_type.setObjectName("c_mat_type")
         sizePolicy2 = QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
         sizePolicy2.setHorizontalStretch(0)
         sizePolicy2.setVerticalStretch(0)
@@ -51,7 +51,7 @@ class Ui_WMatSelect(object):
         self.horizontalLayout.addWidget(self.c_mat_type)
 
         self.b_matlib = QPushButton(WMatSelect)
-        self.b_matlib.setObjectName(u"b_matlib")
+        self.b_matlib.setObjectName("b_matlib")
 
         self.horizontalLayout.addWidget(self.b_matlib)
 
@@ -71,23 +71,23 @@ class Ui_WMatSelect(object):
 
     def retranslateUi(self, WMatSelect):
         WMatSelect.setWindowTitle(
-            QCoreApplication.translate("WMatSelect", u"Form", None)
+            QCoreApplication.translate("WMatSelect", "Form", None)
         )
         self.in_mat_type.setText(
-            QCoreApplication.translate("WMatSelect", u"mat_type :", None)
+            QCoreApplication.translate("WMatSelect", "mat_type :", None)
         )
         self.c_mat_type.setItemText(
-            0, QCoreApplication.translate("WMatSelect", u"M400-50A", None)
+            0, QCoreApplication.translate("WMatSelect", "M400-50A", None)
         )
         self.c_mat_type.setItemText(
-            1, QCoreApplication.translate("WMatSelect", u"M350-50A", None)
+            1, QCoreApplication.translate("WMatSelect", "M350-50A", None)
         )
         self.c_mat_type.setItemText(
-            2, QCoreApplication.translate("WMatSelect", u"M330-35A", None)
+            2, QCoreApplication.translate("WMatSelect", "M330-35A", None)
         )
 
         self.b_matlib.setText(
-            QCoreApplication.translate("WMatSelect", u"Edit Materials", None)
+            QCoreApplication.translate("WMatSelect", "Edit Materials", None)
         )
 
     # retranslateUi

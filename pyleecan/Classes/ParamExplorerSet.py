@@ -101,7 +101,17 @@ class ParamExplorerSet(ParamExplorer):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, value=-1, name="", symbol="", unit="", setter=None, getter=None, init_dict = None, init_str = None):
+    def __init__(
+        self,
+        value=-1,
+        name="",
+        symbol="",
+        unit="",
+        setter=None,
+        getter=None,
+        init_dict=None,
+        init_str=None,
+    ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -132,7 +142,9 @@ class ParamExplorerSet(ParamExplorer):
         # Set the properties (value check and convertion are done in setter)
         self.value = value
         # Call ParamExplorer init
-        super(ParamExplorerSet, self).__init__(name=name, symbol=symbol, unit=unit, setter=setter, getter=getter)
+        super(ParamExplorerSet, self).__init__(
+            name=name, symbol=symbol, unit=unit, setter=setter, getter=getter
+        )
         # The class is frozen (in ParamExplorer init), for now it's impossible to
         # add new properties
 
@@ -144,7 +156,7 @@ class ParamExplorerSet(ParamExplorer):
         ParamExplorerSet_str += super(ParamExplorerSet, self).__str__()
         if self.value is not None:
             tmp = self.value.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            ParamExplorerSet_str += "value = "+ tmp
+            ParamExplorerSet_str += "value = " + tmp
         else:
             ParamExplorerSet_str += "value = None" + linesep + linesep
         return ParamExplorerSet_str
@@ -162,31 +174,44 @@ class ParamExplorerSet(ParamExplorer):
             return False
         return True
 
-    def compare(self, other, name='self', ignore_list=None, is_add_value=False):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
             ignore_list = list()
         if type(other) != type(self):
-            return ['type('+name+')']
+            return ["type(" + name + ")"]
         diff_list = list()
 
         # Check the properties inherited from ParamExplorer
-        diff_list.extend(super(ParamExplorerSet, self).compare(other,name=name, ignore_list=ignore_list, is_add_value=is_add_value))
-        if (other.value is None and self.value is not None) or (other.value is not None and self.value is None):
-            diff_list.append(name+'.value None mismatch')
+        diff_list.extend(
+            super(ParamExplorerSet, self).compare(
+                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
+            )
+        )
+        if (other.value is None and self.value is not None) or (
+            other.value is not None and self.value is None
+        ):
+            diff_list.append(name + ".value None mismatch")
         elif self.value is None:
             pass
         elif len(other.value) != len(self.value):
-            diff_list.append('len('+name+'.value)')
+            diff_list.append("len(" + name + ".value)")
         else:
             for ii in range(len(other.value)):
-                if hasattr(self.value[ii], 'compare'):
-                    diff_list.extend(self.value[ii].compare(other.value[ii],name=name+'.value['+str(ii)+']',ignore_list=ignore_list,is_add_value=is_add_value))
+                if hasattr(self.value[ii], "compare"):
+                    diff_list.extend(
+                        self.value[ii].compare(
+                            other.value[ii],
+                            name=name + ".value[" + str(ii) + "]",
+                            ignore_list=ignore_list,
+                            is_add_value=is_add_value,
+                        )
+                    )
                 elif other._value[ii] != self._value[ii]:
-                    diff_list.append(name+'.value['+str(ii)+'])')
+                    diff_list.append(name + ".value[" + str(ii) + "])")
         # Filter ignore differences
-        diff_list = list(filter(lambda x : x not in ignore_list, diff_list))
+        diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
 
     def __sizeof__(self):
@@ -206,35 +231,44 @@ class ParamExplorerSet(ParamExplorer):
             How to handle ndarray (0: tolist, 1: copy, 2: nothing)
         keep_function : bool
             True to keep the function object, else return str
-        Optional keyword input parameter is for internal use only 
+        Optional keyword input parameter is for internal use only
         and may prevent json serializability.
         """
 
         # Get the properties inherited from ParamExplorer
-        ParamExplorerSet_dict = super(ParamExplorerSet, self).as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs)
+        ParamExplorerSet_dict = super(ParamExplorerSet, self).as_dict(
+            type_handle_ndarray=type_handle_ndarray,
+            keep_function=keep_function,
+            **kwargs
+        )
         if self.value is None:
-            ParamExplorerSet_dict['value'] = None
+            ParamExplorerSet_dict["value"] = None
         else:
-            ParamExplorerSet_dict['value'] = list()
+            ParamExplorerSet_dict["value"] = list()
             for obj in self.value:
                 if obj is None:
-                    ParamExplorerSet_dict['value'].append(None)
-                elif hasattr(obj, 'as_dict'):
-                    ParamExplorerSet_dict['value'].append(obj.as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs))
+                    ParamExplorerSet_dict["value"].append(None)
+                elif hasattr(obj, "as_dict"):
+                    ParamExplorerSet_dict["value"].append(
+                        obj.as_dict(
+                            type_handle_ndarray=type_handle_ndarray,
+                            keep_function=keep_function,
+                            **kwargs
+                        )
+                    )
                 elif isinstance(obj, ndarray):
-                    if type_handle_ndarray==0:
+                    if type_handle_ndarray == 0:
                         ParamExplorerSet_dict["value"].append(obj.tolist())
-                    elif type_handle_ndarray==1:
+                    elif type_handle_ndarray == 1:
                         ParamExplorerSet_dict["value"].append(obj.copy())
-                    elif type_handle_ndarray==2:
+                    elif type_handle_ndarray == 2:
                         ParamExplorerSet_dict["value"].append(obj)
                 else:
-                    ParamExplorerSet_dict['value'].append(obj)
+                    ParamExplorerSet_dict["value"].append(obj)
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         ParamExplorerSet_dict["__class__"] = "ParamExplorerSet"
         return ParamExplorerSet_dict
-
 
     def copy(self):
         """Creates a deepcopy of the object"""
@@ -256,7 +290,14 @@ class ParamExplorerSet(ParamExplorer):
         else:
             getter_val = self._getter_func
         # Creates new object of the same type with the copied properties
-        obj_copy = type(self)(value=value_val,name=name_val,symbol=symbol_val,unit=unit_val,setter=setter_val,getter=getter_val)
+        obj_copy = type(self)(
+            value=value_val,
+            name=name_val,
+            symbol=symbol_val,
+            unit=unit_val,
+            setter=setter_val,
+            getter=getter_val,
+        )
         return obj_copy
 
     def _set_None(self):
@@ -274,20 +315,26 @@ class ParamExplorerSet(ParamExplorer):
         """setter of value"""
         if type(value) is list:
             for ii, obj in enumerate(value):
-                if isinstance(obj, str) and '.json' in obj:
+                if isinstance(obj, str) and ".json" in obj:
                     try:  # pyleecan object from file
                         obj = load_init_dict(obj)[1]
                     except Exception as e:
-                        self.get_logger().error('Error while loading '+obj+', setting None instead')
+                        self.get_logger().error(
+                            "Error while loading " + obj + ", setting None instead"
+                        )
                         obj = None
                         value[ii] = None
-                if type(obj) is dict and '__class__' in obj:  # pyleecan object
+                if type(obj) is dict and "__class__" in obj:  # pyleecan object
                     try:
-                        class_obj = import_class('SciDataTool.Classes', obj.get('__class__'), 'value')
+                        class_obj = import_class(
+                            "SciDataTool.Classes", obj.get("__class__"), "value"
+                        )
                     except Exception:
-                        class_obj = import_class('pyleecan.Classes', obj.get('__class__'), 'value')
+                        class_obj = import_class(
+                            "pyleecan.Classes", obj.get("__class__"), "value"
+                        )
                     value[ii] = class_obj(init_dict=obj)
-                if value[ii] is not None and hasattr(value[ii], 'parent'):
+                if value[ii] is not None and hasattr(value[ii], "parent"):
                     value[ii].parent = self
                 if isinstance(obj, list):
                     try:  # list to array (for list of list use 'list')
@@ -302,7 +349,7 @@ class ParamExplorerSet(ParamExplorer):
     value = property(
         fget=_get_value,
         fset=_set_value,
-        doc=u"""List containing the different parameter values to explore
+        doc="""List containing the different parameter values to explore
 
         :Type: []
         """,

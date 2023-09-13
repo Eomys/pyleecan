@@ -6,7 +6,6 @@ from PySide2.QtCore import QEvent, Qt, Signal
 
 
 class CheckableComboBox(QComboBox):
-
     selectionChanged = Signal()
 
     # Subclass Delegate to increase item height
@@ -53,7 +52,6 @@ class CheckableComboBox(QComboBox):
         super().resizeEvent(event)
 
     def eventFilter(self, object, event):
-
         if object == self.lineEdit():
             if event.type() == QEvent.MouseButtonRelease:
                 if self.closeOnLineEditClick:

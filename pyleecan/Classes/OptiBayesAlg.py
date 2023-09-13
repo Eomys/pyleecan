@@ -29,7 +29,19 @@ class OptiBayesAlg(OptiSolver):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, nb_iter=15, nb_start=300, criterion="PI", kernel=0, problem=-1, xoutput=-1, logger_name="Pyleecan.OptiSolver", is_keep_all_output=False, init_dict = None, init_str = None):
+    def __init__(
+        self,
+        nb_iter=15,
+        nb_start=300,
+        criterion="PI",
+        kernel=0,
+        problem=-1,
+        xoutput=-1,
+        logger_name="Pyleecan.OptiSolver",
+        is_keep_all_output=False,
+        init_dict=None,
+        init_str=None,
+    ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -67,7 +79,12 @@ class OptiBayesAlg(OptiSolver):
         self.criterion = criterion
         self.kernel = kernel
         # Call OptiSolver init
-        super(OptiBayesAlg, self).__init__(problem=problem, xoutput=xoutput, logger_name=logger_name, is_keep_all_output=is_keep_all_output)
+        super(OptiBayesAlg, self).__init__(
+            problem=problem,
+            xoutput=xoutput,
+            logger_name=logger_name,
+            is_keep_all_output=is_keep_all_output,
+        )
         # The class is frozen (in OptiSolver init), for now it's impossible to
         # add new properties
 
@@ -102,43 +119,71 @@ class OptiBayesAlg(OptiSolver):
             return False
         return True
 
-    def compare(self, other, name='self', ignore_list=None, is_add_value=False):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
             ignore_list = list()
         if type(other) != type(self):
-            return ['type('+name+')']
+            return ["type(" + name + ")"]
         diff_list = list()
 
         # Check the properties inherited from OptiSolver
-        diff_list.extend(super(OptiBayesAlg, self).compare(other,name=name, ignore_list=ignore_list, is_add_value=is_add_value))
+        diff_list.extend(
+            super(OptiBayesAlg, self).compare(
+                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
+            )
+        )
         if other._nb_iter != self._nb_iter:
             if is_add_value:
-                val_str = ' (self='+str(self._nb_iter)+', other='+str(other._nb_iter)+')'
-                diff_list.append(name+'.nb_iter'+val_str)
+                val_str = (
+                    " (self="
+                    + str(self._nb_iter)
+                    + ", other="
+                    + str(other._nb_iter)
+                    + ")"
+                )
+                diff_list.append(name + ".nb_iter" + val_str)
             else:
-                diff_list.append(name+'.nb_iter')
+                diff_list.append(name + ".nb_iter")
         if other._nb_start != self._nb_start:
             if is_add_value:
-                val_str = ' (self='+str(self._nb_start)+', other='+str(other._nb_start)+')'
-                diff_list.append(name+'.nb_start'+val_str)
+                val_str = (
+                    " (self="
+                    + str(self._nb_start)
+                    + ", other="
+                    + str(other._nb_start)
+                    + ")"
+                )
+                diff_list.append(name + ".nb_start" + val_str)
             else:
-                diff_list.append(name+'.nb_start')
+                diff_list.append(name + ".nb_start")
         if other._criterion != self._criterion:
             if is_add_value:
-                val_str = ' (self='+str(self._criterion)+', other='+str(other._criterion)+')'
-                diff_list.append(name+'.criterion'+val_str)
+                val_str = (
+                    " (self="
+                    + str(self._criterion)
+                    + ", other="
+                    + str(other._criterion)
+                    + ")"
+                )
+                diff_list.append(name + ".criterion" + val_str)
             else:
-                diff_list.append(name+'.criterion')
+                diff_list.append(name + ".criterion")
         if other._kernel != self._kernel:
             if is_add_value:
-                val_str = ' (self='+str(self._kernel)+', other='+str(other._kernel)+')'
-                diff_list.append(name+'.kernel'+val_str)
+                val_str = (
+                    " (self="
+                    + str(self._kernel)
+                    + ", other="
+                    + str(other._kernel)
+                    + ")"
+                )
+                diff_list.append(name + ".kernel" + val_str)
             else:
-                diff_list.append(name+'.kernel')
+                diff_list.append(name + ".kernel")
         # Filter ignore differences
-        diff_list = list(filter(lambda x : x not in ignore_list, diff_list))
+        diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
 
     def __sizeof__(self):
@@ -161,12 +206,16 @@ class OptiBayesAlg(OptiSolver):
             How to handle ndarray (0: tolist, 1: copy, 2: nothing)
         keep_function : bool
             True to keep the function object, else return str
-        Optional keyword input parameter is for internal use only 
+        Optional keyword input parameter is for internal use only
         and may prevent json serializability.
         """
 
         # Get the properties inherited from OptiSolver
-        OptiBayesAlg_dict = super(OptiBayesAlg, self).as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs)
+        OptiBayesAlg_dict = super(OptiBayesAlg, self).as_dict(
+            type_handle_ndarray=type_handle_ndarray,
+            keep_function=keep_function,
+            **kwargs
+        )
         OptiBayesAlg_dict["nb_iter"] = self.nb_iter
         OptiBayesAlg_dict["nb_start"] = self.nb_start
         OptiBayesAlg_dict["criterion"] = self.criterion
@@ -175,7 +224,6 @@ class OptiBayesAlg(OptiSolver):
         # Overwrite the mother class name
         OptiBayesAlg_dict["__class__"] = "OptiBayesAlg"
         return OptiBayesAlg_dict
-
 
     def copy(self):
         """Creates a deepcopy of the object"""
@@ -196,7 +244,16 @@ class OptiBayesAlg(OptiSolver):
         logger_name_val = self.logger_name
         is_keep_all_output_val = self.is_keep_all_output
         # Creates new object of the same type with the copied properties
-        obj_copy = type(self)(nb_iter=nb_iter_val,nb_start=nb_start_val,criterion=criterion_val,kernel=kernel_val,problem=problem_val,xoutput=xoutput_val,logger_name=logger_name_val,is_keep_all_output=is_keep_all_output_val)
+        obj_copy = type(self)(
+            nb_iter=nb_iter_val,
+            nb_start=nb_start_val,
+            criterion=criterion_val,
+            kernel=kernel_val,
+            problem=problem_val,
+            xoutput=xoutput_val,
+            logger_name=logger_name_val,
+            is_keep_all_output=is_keep_all_output_val,
+        )
         return obj_copy
 
     def _set_None(self):
@@ -221,7 +278,7 @@ class OptiBayesAlg(OptiSolver):
     nb_iter = property(
         fget=_get_nb_iter,
         fset=_set_nb_iter,
-        doc=u"""Number of iterations
+        doc="""Number of iterations
 
         :Type: int
         :min: 1
@@ -240,7 +297,7 @@ class OptiBayesAlg(OptiSolver):
     nb_start = property(
         fget=_get_nb_start,
         fset=_set_nb_start,
-        doc=u"""Number of starting points
+        doc="""Number of starting points
 
         :Type: int
         :min: 1
@@ -259,7 +316,7 @@ class OptiBayesAlg(OptiSolver):
     criterion = property(
         fget=_get_criterion,
         fset=_set_criterion,
-        doc=u"""Point selection criteria
+        doc="""Point selection criteria
 
         :Type: str
         """,
@@ -277,7 +334,7 @@ class OptiBayesAlg(OptiSolver):
     kernel = property(
         fget=_get_kernel,
         fset=_set_kernel,
-        doc=u"""Type of kernel
+        doc="""Type of kernel
 
         :Type: int
         :min: 0

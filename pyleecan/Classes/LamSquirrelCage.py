@@ -38,7 +38,9 @@ except ImportError as error:
     plot = error
 
 try:
-    from ..Methods.Machine.LamSquirrelCage.comp_number_phase_eq import comp_number_phase_eq
+    from ..Methods.Machine.LamSquirrelCage.comp_number_phase_eq import (
+        comp_number_phase_eq,
+    )
 except ImportError as error:
     comp_number_phase_eq = error
 
@@ -48,7 +50,9 @@ except ImportError as error:
     comp_surface_ring = error
 
 try:
-    from ..Methods.Machine.LamSquirrelCage.comp_resistance_wind import comp_resistance_wind
+    from ..Methods.Machine.LamSquirrelCage.comp_resistance_wind import (
+        comp_resistance_wind,
+    )
 except ImportError as error:
     comp_resistance_wind = error
 
@@ -63,7 +67,9 @@ except ImportError as error:
     comp_angle_d_axis = error
 
 try:
-    from ..Methods.Machine.LamSquirrelCage.comp_periodicity_spatial import comp_periodicity_spatial
+    from ..Methods.Machine.LamSquirrelCage.comp_periodicity_spatial import (
+        comp_periodicity_spatial,
+    )
 except ImportError as error:
     comp_periodicity_spatial = error
 
@@ -73,7 +79,9 @@ except ImportError as error:
     comp_masses = error
 
 try:
-    from ..Methods.Machine.LamSquirrelCage.plot_schematics_scr import plot_schematics_scr
+    from ..Methods.Machine.LamSquirrelCage.plot_schematics_scr import (
+        plot_schematics_scr,
+    )
 except ImportError as error:
     plot_schematics_scr = error
 
@@ -246,7 +254,31 @@ class LamSquirrelCage(LamSlotWind):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, Hscr=0.03, Lscr=0.015, ring_mat=-1, Ksfill=None, winding=-1, slot=-1, L1=0.35, mat_type=-1, Nrvd=0, Wrvd=0, Kf1=0.95, is_internal=True, Rint=0, Rext=1, is_stator=True, axial_vent=-1, notch=-1, skew=None, bore=None, yoke=None, init_dict = None, init_str = None):
+    def __init__(
+        self,
+        Hscr=0.03,
+        Lscr=0.015,
+        ring_mat=-1,
+        Ksfill=None,
+        winding=-1,
+        slot=-1,
+        L1=0.35,
+        mat_type=-1,
+        Nrvd=0,
+        Wrvd=0,
+        Kf1=0.95,
+        is_internal=True,
+        Rint=0,
+        Rext=1,
+        is_stator=True,
+        axial_vent=-1,
+        notch=-1,
+        skew=None,
+        bore=None,
+        yoke=None,
+        init_dict=None,
+        init_str=None,
+    ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -307,7 +339,25 @@ class LamSquirrelCage(LamSlotWind):
         self.Lscr = Lscr
         self.ring_mat = ring_mat
         # Call LamSlotWind init
-        super(LamSquirrelCage, self).__init__(Ksfill=Ksfill, winding=winding, slot=slot, L1=L1, mat_type=mat_type, Nrvd=Nrvd, Wrvd=Wrvd, Kf1=Kf1, is_internal=is_internal, Rint=Rint, Rext=Rext, is_stator=is_stator, axial_vent=axial_vent, notch=notch, skew=skew, bore=bore, yoke=yoke)
+        super(LamSquirrelCage, self).__init__(
+            Ksfill=Ksfill,
+            winding=winding,
+            slot=slot,
+            L1=L1,
+            mat_type=mat_type,
+            Nrvd=Nrvd,
+            Wrvd=Wrvd,
+            Kf1=Kf1,
+            is_internal=is_internal,
+            Rint=Rint,
+            Rext=Rext,
+            is_stator=is_stator,
+            axial_vent=axial_vent,
+            notch=notch,
+            skew=skew,
+            bore=bore,
+            yoke=yoke,
+        )
         # The class is frozen (in LamSlotWind init), for now it's impossible to
         # add new properties
 
@@ -321,7 +371,7 @@ class LamSquirrelCage(LamSlotWind):
         LamSquirrelCage_str += "Lscr = " + str(self.Lscr) + linesep
         if self.ring_mat is not None:
             tmp = self.ring_mat.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            LamSquirrelCage_str += "ring_mat = "+ tmp
+            LamSquirrelCage_str += "ring_mat = " + tmp
         else:
             LamSquirrelCage_str += "ring_mat = None" + linesep + linesep
         return LamSquirrelCage_str
@@ -343,39 +393,66 @@ class LamSquirrelCage(LamSlotWind):
             return False
         return True
 
-    def compare(self, other, name='self', ignore_list=None, is_add_value=False):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
             ignore_list = list()
         if type(other) != type(self):
-            return ['type('+name+')']
+            return ["type(" + name + ")"]
         diff_list = list()
 
         # Check the properties inherited from LamSlotWind
-        diff_list.extend(super(LamSquirrelCage, self).compare(other,name=name, ignore_list=ignore_list, is_add_value=is_add_value))
-        if other._Hscr is not None and self._Hscr is not None and isnan(other._Hscr) and isnan(self._Hscr):
+        diff_list.extend(
+            super(LamSquirrelCage, self).compare(
+                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
+            )
+        )
+        if (
+            other._Hscr is not None
+            and self._Hscr is not None
+            and isnan(other._Hscr)
+            and isnan(self._Hscr)
+        ):
             pass
         elif other._Hscr != self._Hscr:
             if is_add_value:
-                val_str = ' (self='+str(self._Hscr)+', other='+str(other._Hscr)+')'
-                diff_list.append(name+'.Hscr'+val_str)
+                val_str = (
+                    " (self=" + str(self._Hscr) + ", other=" + str(other._Hscr) + ")"
+                )
+                diff_list.append(name + ".Hscr" + val_str)
             else:
-                diff_list.append(name+'.Hscr')
-        if other._Lscr is not None and self._Lscr is not None and isnan(other._Lscr) and isnan(self._Lscr):
+                diff_list.append(name + ".Hscr")
+        if (
+            other._Lscr is not None
+            and self._Lscr is not None
+            and isnan(other._Lscr)
+            and isnan(self._Lscr)
+        ):
             pass
         elif other._Lscr != self._Lscr:
             if is_add_value:
-                val_str = ' (self='+str(self._Lscr)+', other='+str(other._Lscr)+')'
-                diff_list.append(name+'.Lscr'+val_str)
+                val_str = (
+                    " (self=" + str(self._Lscr) + ", other=" + str(other._Lscr) + ")"
+                )
+                diff_list.append(name + ".Lscr" + val_str)
             else:
-                diff_list.append(name+'.Lscr')
-        if (other.ring_mat is None and self.ring_mat is not None) or (other.ring_mat is not None and self.ring_mat is None):
-            diff_list.append(name+'.ring_mat None mismatch')
+                diff_list.append(name + ".Lscr")
+        if (other.ring_mat is None and self.ring_mat is not None) or (
+            other.ring_mat is not None and self.ring_mat is None
+        ):
+            diff_list.append(name + ".ring_mat None mismatch")
         elif self.ring_mat is not None:
-            diff_list.extend(self.ring_mat.compare(other.ring_mat,name=name+'.ring_mat',ignore_list=ignore_list,is_add_value=is_add_value))
+            diff_list.extend(
+                self.ring_mat.compare(
+                    other.ring_mat,
+                    name=name + ".ring_mat",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
+            )
         # Filter ignore differences
-        diff_list = list(filter(lambda x : x not in ignore_list, diff_list))
+        diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
 
     def __sizeof__(self):
@@ -397,23 +474,30 @@ class LamSquirrelCage(LamSlotWind):
             How to handle ndarray (0: tolist, 1: copy, 2: nothing)
         keep_function : bool
             True to keep the function object, else return str
-        Optional keyword input parameter is for internal use only 
+        Optional keyword input parameter is for internal use only
         and may prevent json serializability.
         """
 
         # Get the properties inherited from LamSlotWind
-        LamSquirrelCage_dict = super(LamSquirrelCage, self).as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs)
+        LamSquirrelCage_dict = super(LamSquirrelCage, self).as_dict(
+            type_handle_ndarray=type_handle_ndarray,
+            keep_function=keep_function,
+            **kwargs
+        )
         LamSquirrelCage_dict["Hscr"] = self.Hscr
         LamSquirrelCage_dict["Lscr"] = self.Lscr
         if self.ring_mat is None:
             LamSquirrelCage_dict["ring_mat"] = None
         else:
-            LamSquirrelCage_dict["ring_mat"] = self.ring_mat.as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs)
+            LamSquirrelCage_dict["ring_mat"] = self.ring_mat.as_dict(
+                type_handle_ndarray=type_handle_ndarray,
+                keep_function=keep_function,
+                **kwargs
+            )
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         LamSquirrelCage_dict["__class__"] = "LamSquirrelCage"
         return LamSquirrelCage_dict
-
 
     def copy(self):
         """Creates a deepcopy of the object"""
@@ -471,7 +555,28 @@ class LamSquirrelCage(LamSlotWind):
         else:
             yoke_val = self.yoke.copy()
         # Creates new object of the same type with the copied properties
-        obj_copy = type(self)(Hscr=Hscr_val,Lscr=Lscr_val,ring_mat=ring_mat_val,Ksfill=Ksfill_val,winding=winding_val,slot=slot_val,L1=L1_val,mat_type=mat_type_val,Nrvd=Nrvd_val,Wrvd=Wrvd_val,Kf1=Kf1_val,is_internal=is_internal_val,Rint=Rint_val,Rext=Rext_val,is_stator=is_stator_val,axial_vent=axial_vent_val,notch=notch_val,skew=skew_val,bore=bore_val,yoke=yoke_val)
+        obj_copy = type(self)(
+            Hscr=Hscr_val,
+            Lscr=Lscr_val,
+            ring_mat=ring_mat_val,
+            Ksfill=Ksfill_val,
+            winding=winding_val,
+            slot=slot_val,
+            L1=L1_val,
+            mat_type=mat_type_val,
+            Nrvd=Nrvd_val,
+            Wrvd=Wrvd_val,
+            Kf1=Kf1_val,
+            is_internal=is_internal_val,
+            Rint=Rint_val,
+            Rext=Rext_val,
+            is_stator=is_stator_val,
+            axial_vent=axial_vent_val,
+            notch=notch_val,
+            skew=skew_val,
+            bore=bore_val,
+            yoke=yoke_val,
+        )
         return obj_copy
 
     def _set_None(self):
@@ -496,7 +601,7 @@ class LamSquirrelCage(LamSlotWind):
     Hscr = property(
         fget=_get_Hscr,
         fset=_set_Hscr,
-        doc=u"""short circuit ring section radial height [m]
+        doc="""short circuit ring section radial height [m]
 
         :Type: float
         :min: 0
@@ -515,7 +620,7 @@ class LamSquirrelCage(LamSlotWind):
     Lscr = property(
         fget=_get_Lscr,
         fset=_set_Lscr,
-        doc=u"""short circuit ring section axial length
+        doc="""short circuit ring section axial length
 
         :Type: float
         :min: 0
@@ -532,23 +637,28 @@ class LamSquirrelCage(LamSlotWind):
             try:
                 value = load_init_dict(value)[1]
             except Exception as e:
-                self.get_logger().error('Error while loading '+value+', setting None instead')
+                self.get_logger().error(
+                    "Error while loading " + value + ", setting None instead"
+                )
                 value = None
-        if isinstance(value, dict) and '__class__' in value:
-            class_obj = import_class('pyleecan.Classes', value.get('__class__'), 'ring_mat')
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class(
+                "pyleecan.Classes", value.get("__class__"), "ring_mat"
+            )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
-            Material = import_class('pyleecan.Classes', 'Material', 'ring_mat')
+            Material = import_class("pyleecan.Classes", "Material", "ring_mat")
             value = Material()
         check_var("ring_mat", value, "Material")
         self._ring_mat = value
 
         if self._ring_mat is not None:
             self._ring_mat.parent = self
+
     ring_mat = property(
         fget=_get_ring_mat,
         fset=_set_ring_mat,
-        doc=u"""Material of the Rotor short circuit ring
+        doc="""Material of the Rotor short circuit ring
 
         :Type: Material
         """,

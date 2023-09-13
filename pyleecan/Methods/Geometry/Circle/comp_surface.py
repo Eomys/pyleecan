@@ -17,4 +17,4 @@ def comp_surface(self):
 
     """
 
-    return pi * self.radius ** 2
+    return pi * self.radius**2

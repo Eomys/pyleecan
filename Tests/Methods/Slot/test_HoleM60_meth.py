@@ -7,6 +7,7 @@ from pyleecan.Classes.Hole import Hole
 from pyleecan.Classes.LamHole import LamHole
 from pyleecan.Classes.HoleM60 import HoleM60
 from pyleecan.Functions.Geometry.inter_line_line import inter_line_line
+
 HoleM60_test = list()
 # Tests without magnet
 test_obj = LamHole(is_internal=True, Rint=0.021, Rext=0.75, is_stator=False, L1=0.7)
@@ -135,7 +136,7 @@ class Test_HoleM60_meth(object):
         # test_obj.plot()
         # test_obj.hole[0].plot()
         # plt.show()
-                    
+
         # Check width
         assert abs(point_dict["Z2"] - point_dict["Z1"]) == pytest.approx(
             test_obj.hole[0].W2 - test_obj.hole[0].H0
@@ -149,9 +150,7 @@ class Test_HoleM60_meth(object):
         assert abs(point_dict["Z5s"] - point_dict["Z4s"]) == pytest.approx(
             test_obj.hole[0].W2 - test_obj.hole[0].H0
         )
-        assert point_dict["Z1"].imag == pytest.approx(
-            test_obj.hole[0].W3/2
-        )
+        assert point_dict["Z1"].imag == pytest.approx(test_obj.hole[0].W3 / 2)
         assert abs(point_dict["Z1s"] - point_dict["Z1"]) == pytest.approx(
             test_obj.hole[0].W3
         )
@@ -161,7 +160,7 @@ class Test_HoleM60_meth(object):
         assert abs(point_dict["Z3s"] - point_dict["Z6s"]) == pytest.approx(
             test_obj.hole[0].W2
         )
-        
+
         # Check height
         assert abs(point_dict["Z4"] - point_dict["Z2"]) == pytest.approx(
             test_obj.hole[0].H0
@@ -175,30 +174,22 @@ class Test_HoleM60_meth(object):
         assert abs(point_dict["Z5s"] - point_dict["Z1s"]) == pytest.approx(
             test_obj.hole[0].H0
         )
-        
+
         assert abs(point_dict["Z3"]) == pytest.approx(
             test_obj.hole[0].get_Rbo() - test_obj.hole[0].H1
         )
-        
+
         # Compute P
-        Z = inter_line_line(point_dict["Z3"], point_dict["Z6"], point_dict["Z3s"], point_dict["Z6s"])[0]
-        assert abs(point_dict["Z"]) == pytest.approx(
-            abs(Z)
-        )
-        
-        assert angle(point_dict["Z6"] - Z) == pytest.approx(
-            test_obj.hole[0].W0 / 2
-        )
-        assert angle(point_dict["Z3"] - Z) == pytest.approx(
-            test_obj.hole[0].W0 / 2
-        )
-        assert angle(point_dict["Z6s"] - Z) == pytest.approx(
-            - test_obj.hole[0].W0 / 2
-        )
-        assert angle(point_dict["Z3s"] - Z) == pytest.approx(
-            - test_obj.hole[0].W0 / 2
-        )
-        
+        Z = inter_line_line(
+            point_dict["Z3"], point_dict["Z6"], point_dict["Z3s"], point_dict["Z6s"]
+        )[0]
+        assert abs(point_dict["Z"]) == pytest.approx(abs(Z))
+
+        assert angle(point_dict["Z6"] - Z) == pytest.approx(test_obj.hole[0].W0 / 2)
+        assert angle(point_dict["Z3"] - Z) == pytest.approx(test_obj.hole[0].W0 / 2)
+        assert angle(point_dict["Z6s"] - Z) == pytest.approx(-test_obj.hole[0].W0 / 2)
+        assert angle(point_dict["Z3s"] - Z) == pytest.approx(-test_obj.hole[0].W0 / 2)
+
         # Magnets dimensions
         assert abs(point_dict["ZM1"] - point_dict["ZM2"]) == pytest.approx(
             test_obj.hole[0].W1
@@ -212,7 +203,7 @@ class Test_HoleM60_meth(object):
         assert abs(point_dict["ZM3s"] - point_dict["ZM4s"]) == pytest.approx(
             test_obj.hole[0].W1
         )
-        
+
         assert abs(point_dict["ZM1"] - point_dict["ZM4"]) == pytest.approx(
             test_obj.hole[0].H0
         )
@@ -234,14 +225,14 @@ class Test_HoleM60_meth(object):
 
         # Check that the analytical method returns the same result as the numerical one
         Rmin_a, Rmax_a = Hole.comp_radius(test_obj.hole[0])
-        
+
         a, b = Rmin, Rmin_a
         msg = "For Rmin: Return " + str(a) + " expected " + str(b)
         assert abs((a - b) / a - 0) < DELTA, msg
         a, b = Rmax, Rmax_a
         msg = "For Rmax: Return " + str(a) + " expected " + str(b)
         assert abs((a - b) / a - 0) < DELTA, msg
-        
+
     @pytest.mark.parametrize("test_dict", HoleM60_test)
     def test_comp_surface(self, test_dict):
         """Check that the computation of the surface is correct"""
@@ -257,7 +248,7 @@ class Test_HoleM60_meth(object):
         b = Hole.comp_surface(test_obj.hole[0])
         msg = "Return " + str(a) + " expected " + str(b)
         assert a == pytest.approx(b, rel=DELTA), msg
-        
+
     @pytest.mark.parametrize("test_dict", HoleM60_test)
     def test_comp_surface_mag(self, test_dict):
         """Check that the computation of the magnet surface is correct"""
@@ -270,7 +261,7 @@ class Test_HoleM60_meth(object):
             assert abs((a - b) / a - 0) < DELTA, msg
         else:
             assert abs((a - b) - 0) < DELTA, msg
-            
+
     @pytest.mark.parametrize("test_dict", HoleM60_test)
     def test_has_magnet(self, test_dict):
         """Check that the return of has_magnet if correct"""
@@ -280,6 +271,7 @@ class Test_HoleM60_meth(object):
         b = test_dict["hasmagnet_exp"]
         msg = "Return " + str(a) + " expected " + str(b)
         assert a == b, msg
+
 
 if __name__ == "__main__":
     a = Test_HoleM60_meth()

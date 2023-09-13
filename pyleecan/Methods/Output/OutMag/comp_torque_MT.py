@@ -25,7 +25,6 @@ def comp_torque_MT(self):
         and "radial" in B.components.keys()
         and "tangential" in B.components.keys()
     ):
-
         machine = self.parent.simu.machine
 
         # Load airgap Maxwell Stress Tensor
@@ -50,7 +49,7 @@ def comp_torque_MT(self):
         # Integrate over angle to get the electromagnetic torque per slice
         Nper, _ = B.get_axes()[1].get_periodicity()
         Tem_slice = (
-            R ** 2
+            R**2
             / mu_0
             * integrate(
                 values=Br * Bt,

@@ -96,7 +96,22 @@ class Mode(SolutionMat):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, nat_freq=None, order_circ=None, order_long=None, field=None, indice=None, axis_name=None, axis_size=None, type_cell="triangle", label=None, dimension=2, unit="", init_dict = None, init_str = None):
+    def __init__(
+        self,
+        nat_freq=None,
+        order_circ=None,
+        order_long=None,
+        field=None,
+        indice=None,
+        axis_name=None,
+        axis_size=None,
+        type_cell="triangle",
+        label=None,
+        dimension=2,
+        unit="",
+        init_dict=None,
+        init_str=None,
+    ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -139,7 +154,16 @@ class Mode(SolutionMat):
         self.order_circ = order_circ
         self.order_long = order_long
         # Call SolutionMat init
-        super(Mode, self).__init__(field=field, indice=indice, axis_name=axis_name, axis_size=axis_size, type_cell=type_cell, label=label, dimension=dimension, unit=unit)
+        super(Mode, self).__init__(
+            field=field,
+            indice=indice,
+            axis_name=axis_name,
+            axis_size=axis_size,
+            type_cell=type_cell,
+            label=label,
+            dimension=dimension,
+            unit=unit,
+        )
         # The class is frozen (in SolutionMat init), for now it's impossible to
         # add new properties
 
@@ -171,39 +195,66 @@ class Mode(SolutionMat):
             return False
         return True
 
-    def compare(self, other, name='self', ignore_list=None, is_add_value=False):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
             ignore_list = list()
         if type(other) != type(self):
-            return ['type('+name+')']
+            return ["type(" + name + ")"]
         diff_list = list()
 
         # Check the properties inherited from SolutionMat
-        diff_list.extend(super(Mode, self).compare(other,name=name, ignore_list=ignore_list, is_add_value=is_add_value))
-        if other._nat_freq is not None and self._nat_freq is not None and isnan(other._nat_freq) and isnan(self._nat_freq):
+        diff_list.extend(
+            super(Mode, self).compare(
+                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
+            )
+        )
+        if (
+            other._nat_freq is not None
+            and self._nat_freq is not None
+            and isnan(other._nat_freq)
+            and isnan(self._nat_freq)
+        ):
             pass
         elif other._nat_freq != self._nat_freq:
             if is_add_value:
-                val_str = ' (self='+str(self._nat_freq)+', other='+str(other._nat_freq)+')'
-                diff_list.append(name+'.nat_freq'+val_str)
+                val_str = (
+                    " (self="
+                    + str(self._nat_freq)
+                    + ", other="
+                    + str(other._nat_freq)
+                    + ")"
+                )
+                diff_list.append(name + ".nat_freq" + val_str)
             else:
-                diff_list.append(name+'.nat_freq')
+                diff_list.append(name + ".nat_freq")
         if other._order_circ != self._order_circ:
             if is_add_value:
-                val_str = ' (self='+str(self._order_circ)+', other='+str(other._order_circ)+')'
-                diff_list.append(name+'.order_circ'+val_str)
+                val_str = (
+                    " (self="
+                    + str(self._order_circ)
+                    + ", other="
+                    + str(other._order_circ)
+                    + ")"
+                )
+                diff_list.append(name + ".order_circ" + val_str)
             else:
-                diff_list.append(name+'.order_circ')
+                diff_list.append(name + ".order_circ")
         if other._order_long != self._order_long:
             if is_add_value:
-                val_str = ' (self='+str(self._order_long)+', other='+str(other._order_long)+')'
-                diff_list.append(name+'.order_long'+val_str)
+                val_str = (
+                    " (self="
+                    + str(self._order_long)
+                    + ", other="
+                    + str(other._order_long)
+                    + ")"
+                )
+                diff_list.append(name + ".order_long" + val_str)
             else:
-                diff_list.append(name+'.order_long')
+                diff_list.append(name + ".order_long")
         # Filter ignore differences
-        diff_list = list(filter(lambda x : x not in ignore_list, diff_list))
+        diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
 
     def __sizeof__(self):
@@ -225,12 +276,16 @@ class Mode(SolutionMat):
             How to handle ndarray (0: tolist, 1: copy, 2: nothing)
         keep_function : bool
             True to keep the function object, else return str
-        Optional keyword input parameter is for internal use only 
+        Optional keyword input parameter is for internal use only
         and may prevent json serializability.
         """
 
         # Get the properties inherited from SolutionMat
-        Mode_dict = super(Mode, self).as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs)
+        Mode_dict = super(Mode, self).as_dict(
+            type_handle_ndarray=type_handle_ndarray,
+            keep_function=keep_function,
+            **kwargs
+        )
         Mode_dict["nat_freq"] = self.nat_freq
         Mode_dict["order_circ"] = self.order_circ
         Mode_dict["order_long"] = self.order_long
@@ -238,7 +293,6 @@ class Mode(SolutionMat):
         # Overwrite the mother class name
         Mode_dict["__class__"] = "Mode"
         return Mode_dict
-
 
     def copy(self):
         """Creates a deepcopy of the object"""
@@ -268,7 +322,19 @@ class Mode(SolutionMat):
         dimension_val = self.dimension
         unit_val = self.unit
         # Creates new object of the same type with the copied properties
-        obj_copy = type(self)(nat_freq=nat_freq_val,order_circ=order_circ_val,order_long=order_long_val,field=field_val,indice=indice_val,axis_name=axis_name_val,axis_size=axis_size_val,type_cell=type_cell_val,label=label_val,dimension=dimension_val,unit=unit_val)
+        obj_copy = type(self)(
+            nat_freq=nat_freq_val,
+            order_circ=order_circ_val,
+            order_long=order_long_val,
+            field=field_val,
+            indice=indice_val,
+            axis_name=axis_name_val,
+            axis_size=axis_size_val,
+            type_cell=type_cell_val,
+            label=label_val,
+            dimension=dimension_val,
+            unit=unit_val,
+        )
         return obj_copy
 
     def _set_None(self):
@@ -292,7 +358,7 @@ class Mode(SolutionMat):
     nat_freq = property(
         fget=_get_nat_freq,
         fset=_set_nat_freq,
-        doc=u"""Natural frequency of the mode
+        doc="""Natural frequency of the mode
 
         :Type: float
         """,
@@ -310,7 +376,7 @@ class Mode(SolutionMat):
     order_circ = property(
         fget=_get_order_circ,
         fset=_set_order_circ,
-        doc=u"""Circumferential order
+        doc="""Circumferential order
 
         :Type: int
         :min: 0
@@ -329,7 +395,7 @@ class Mode(SolutionMat):
     order_long = property(
         fget=_get_order_long,
         fset=_set_order_long,
-        doc=u"""Longitudinal order
+        doc="""Longitudinal order
 
         :Type: int
         :min: 0

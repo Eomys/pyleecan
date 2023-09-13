@@ -177,7 +177,29 @@ class LUTdq(LUT):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, Phi_dqh_mean=None, Phi_dqh_mag=None, paramexplorer_list=-1, output_list=-1, xoutput_dict=-1, nb_simu=0, xoutput_ref=None, xoutput_ref_index=None, simu=-1, path_result="", geo=-1, elec=-1, mag=-1, struct=-1, post=-1, logger_name="Pyleecan.Output", force=-1, loss=-1, init_dict = None, init_str = None):
+    def __init__(
+        self,
+        Phi_dqh_mean=None,
+        Phi_dqh_mag=None,
+        paramexplorer_list=-1,
+        output_list=-1,
+        xoutput_dict=-1,
+        nb_simu=0,
+        xoutput_ref=None,
+        xoutput_ref_index=None,
+        simu=-1,
+        path_result="",
+        geo=-1,
+        elec=-1,
+        mag=-1,
+        struct=-1,
+        post=-1,
+        logger_name="Pyleecan.Output",
+        force=-1,
+        loss=-1,
+        init_dict=None,
+        init_str=None,
+    ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -233,7 +255,24 @@ class LUTdq(LUT):
         self.Phi_dqh_mean = Phi_dqh_mean
         self.Phi_dqh_mag = Phi_dqh_mag
         # Call LUT init
-        super(LUTdq, self).__init__(paramexplorer_list=paramexplorer_list, output_list=output_list, xoutput_dict=xoutput_dict, nb_simu=nb_simu, xoutput_ref=xoutput_ref, xoutput_ref_index=xoutput_ref_index, simu=simu, path_result=path_result, geo=geo, elec=elec, mag=mag, struct=struct, post=post, logger_name=logger_name, force=force, loss=loss)
+        super(LUTdq, self).__init__(
+            paramexplorer_list=paramexplorer_list,
+            output_list=output_list,
+            xoutput_dict=xoutput_dict,
+            nb_simu=nb_simu,
+            xoutput_ref=xoutput_ref,
+            xoutput_ref_index=xoutput_ref_index,
+            simu=simu,
+            path_result=path_result,
+            geo=geo,
+            elec=elec,
+            mag=mag,
+            struct=struct,
+            post=post,
+            logger_name=logger_name,
+            force=force,
+            loss=loss,
+        )
         # The class is frozen (in LUT init), for now it's impossible to
         # add new properties
 
@@ -243,8 +282,14 @@ class LUTdq(LUT):
         LUTdq_str = ""
         # Get the properties inherited from LUT
         LUTdq_str += super(LUTdq, self).__str__()
-        LUTdq_str += "Phi_dqh_mean = " + linesep + str(self.Phi_dqh_mean).replace(linesep, linesep + "\t") + linesep + linesep
-        LUTdq_str += "Phi_dqh_mag = "+ str(self.Phi_dqh_mag) + linesep + linesep
+        LUTdq_str += (
+            "Phi_dqh_mean = "
+            + linesep
+            + str(self.Phi_dqh_mean).replace(linesep, linesep + "\t")
+            + linesep
+            + linesep
+        )
+        LUTdq_str += "Phi_dqh_mag = " + str(self.Phi_dqh_mag) + linesep + linesep
         return LUTdq_str
 
     def __eq__(self, other):
@@ -262,25 +307,38 @@ class LUTdq(LUT):
             return False
         return True
 
-    def compare(self, other, name='self', ignore_list=None, is_add_value=False):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
             ignore_list = list()
         if type(other) != type(self):
-            return ['type('+name+')']
+            return ["type(" + name + ")"]
         diff_list = list()
 
         # Check the properties inherited from LUT
-        diff_list.extend(super(LUTdq, self).compare(other,name=name, ignore_list=ignore_list, is_add_value=is_add_value))
+        diff_list.extend(
+            super(LUTdq, self).compare(
+                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
+            )
+        )
         if not array_equal(other.Phi_dqh_mean, self.Phi_dqh_mean):
-            diff_list.append(name+'.Phi_dqh_mean')
-        if (other.Phi_dqh_mag is None and self.Phi_dqh_mag is not None) or (other.Phi_dqh_mag is not None and self.Phi_dqh_mag is None):
-            diff_list.append(name+'.Phi_dqh_mag None mismatch')
+            diff_list.append(name + ".Phi_dqh_mean")
+        if (other.Phi_dqh_mag is None and self.Phi_dqh_mag is not None) or (
+            other.Phi_dqh_mag is not None and self.Phi_dqh_mag is None
+        ):
+            diff_list.append(name + ".Phi_dqh_mag None mismatch")
         elif self.Phi_dqh_mag is not None:
-            diff_list.extend(self.Phi_dqh_mag.compare(other.Phi_dqh_mag,name=name+'.Phi_dqh_mag',ignore_list=ignore_list,is_add_value=is_add_value))
+            diff_list.extend(
+                self.Phi_dqh_mag.compare(
+                    other.Phi_dqh_mag,
+                    name=name + ".Phi_dqh_mag",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
+            )
         # Filter ignore differences
-        diff_list = list(filter(lambda x : x not in ignore_list, diff_list))
+        diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
 
     def __sizeof__(self):
@@ -301,32 +359,41 @@ class LUTdq(LUT):
             How to handle ndarray (0: tolist, 1: copy, 2: nothing)
         keep_function : bool
             True to keep the function object, else return str
-        Optional keyword input parameter is for internal use only 
+        Optional keyword input parameter is for internal use only
         and may prevent json serializability.
         """
 
         # Get the properties inherited from LUT
-        LUTdq_dict = super(LUTdq, self).as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs)
+        LUTdq_dict = super(LUTdq, self).as_dict(
+            type_handle_ndarray=type_handle_ndarray,
+            keep_function=keep_function,
+            **kwargs
+        )
         if self.Phi_dqh_mean is None:
             LUTdq_dict["Phi_dqh_mean"] = None
         else:
-            if type_handle_ndarray==0:
+            if type_handle_ndarray == 0:
                 LUTdq_dict["Phi_dqh_mean"] = self.Phi_dqh_mean.tolist()
-            elif type_handle_ndarray==1:
+            elif type_handle_ndarray == 1:
                 LUTdq_dict["Phi_dqh_mean"] = self.Phi_dqh_mean.copy()
-            elif type_handle_ndarray==2:
+            elif type_handle_ndarray == 2:
                 LUTdq_dict["Phi_dqh_mean"] = self.Phi_dqh_mean
             else:
-                raise Exception ('Unknown type_handle_ndarray: '+str(type_handle_ndarray))
+                raise Exception(
+                    "Unknown type_handle_ndarray: " + str(type_handle_ndarray)
+                )
         if self.Phi_dqh_mag is None:
             LUTdq_dict["Phi_dqh_mag"] = None
         else:
-            LUTdq_dict["Phi_dqh_mag"] = self.Phi_dqh_mag.as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs)
+            LUTdq_dict["Phi_dqh_mag"] = self.Phi_dqh_mag.as_dict(
+                type_handle_ndarray=type_handle_ndarray,
+                keep_function=keep_function,
+                **kwargs
+            )
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         LUTdq_dict["__class__"] = "LUTdq"
         return LUTdq_dict
-
 
     def copy(self):
         """Creates a deepcopy of the object"""
@@ -399,7 +466,26 @@ class LUTdq(LUT):
         else:
             loss_val = self.loss.copy()
         # Creates new object of the same type with the copied properties
-        obj_copy = type(self)(Phi_dqh_mean=Phi_dqh_mean_val,Phi_dqh_mag=Phi_dqh_mag_val,paramexplorer_list=paramexplorer_list_val,output_list=output_list_val,xoutput_dict=xoutput_dict_val,nb_simu=nb_simu_val,xoutput_ref=xoutput_ref_val,xoutput_ref_index=xoutput_ref_index_val,simu=simu_val,path_result=path_result_val,geo=geo_val,elec=elec_val,mag=mag_val,struct=struct_val,post=post_val,logger_name=logger_name_val,force=force_val,loss=loss_val)
+        obj_copy = type(self)(
+            Phi_dqh_mean=Phi_dqh_mean_val,
+            Phi_dqh_mag=Phi_dqh_mag_val,
+            paramexplorer_list=paramexplorer_list_val,
+            output_list=output_list_val,
+            xoutput_dict=xoutput_dict_val,
+            nb_simu=nb_simu_val,
+            xoutput_ref=xoutput_ref_val,
+            xoutput_ref_index=xoutput_ref_index_val,
+            simu=simu_val,
+            path_result=path_result_val,
+            geo=geo_val,
+            elec=elec_val,
+            mag=mag_val,
+            struct=struct_val,
+            post=post_val,
+            logger_name=logger_name_val,
+            force=force_val,
+            loss=loss_val,
+        )
         return obj_copy
 
     def _set_None(self):
@@ -429,7 +515,7 @@ class LUTdq(LUT):
     Phi_dqh_mean = property(
         fget=_get_Phi_dqh_mean,
         fset=_set_Phi_dqh_mean,
-        doc=u"""RMS stator winding flux table in dqh frame (including magnets and currents given by I_dqh)
+        doc="""RMS stator winding flux table in dqh frame (including magnets and currents given by I_dqh)
 
         :Type: ndarray
         """,
@@ -445,10 +531,14 @@ class LUTdq(LUT):
             try:
                 value = load_init_dict(value)[1]
             except Exception as e:
-                self.get_logger().error('Error while loading '+value+', setting None instead')
+                self.get_logger().error(
+                    "Error while loading " + value + ", setting None instead"
+                )
                 value = None
-        if isinstance(value, dict) and '__class__' in value:
-            class_obj = import_class('SciDataTool.Classes', value.get('__class__'), 'Phi_dqh_mag')
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class(
+                "SciDataTool.Classes", value.get("__class__"), "Phi_dqh_mag"
+            )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
             value = DataND()
@@ -458,7 +548,7 @@ class LUTdq(LUT):
     Phi_dqh_mag = property(
         fget=_get_Phi_dqh_mag,
         fset=_set_Phi_dqh_mag,
-        doc=u"""RMS stator winding flux linkage spectrum in dqh frame including harmonics (only magnets)
+        doc="""RMS stator winding flux linkage spectrum in dqh frame including harmonics (only magnets)
 
         :Type: SciDataTool.Classes.DataND.DataND
         """,

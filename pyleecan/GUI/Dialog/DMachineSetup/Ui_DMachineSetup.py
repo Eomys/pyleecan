@@ -15,19 +15,19 @@ from pyleecan.GUI.Resources import pyleecan_rc
 class Ui_DMachineSetup(object):
     def setupUi(self, DMachineSetup):
         if not DMachineSetup.objectName():
-            DMachineSetup.setObjectName(u"DMachineSetup")
+            DMachineSetup.setObjectName("DMachineSetup")
         DMachineSetup.resize(1076, 682)
         self.main_layout = QHBoxLayout(DMachineSetup)
-        self.main_layout.setObjectName(u"main_layout")
+        self.main_layout.setObjectName("main_layout")
         self.verticalLayout = QVBoxLayout()
-        self.verticalLayout.setObjectName(u"verticalLayout")
+        self.verticalLayout.setObjectName("verticalLayout")
         self.b_load = QPushButton(DMachineSetup)
-        self.b_load.setObjectName(u"b_load")
+        self.b_load.setObjectName("b_load")
 
         self.verticalLayout.addWidget(self.b_load)
 
         self.nav_step = QListWidget(DMachineSetup)
-        self.nav_step.setObjectName(u"nav_step")
+        self.nav_step.setObjectName("nav_step")
         sizePolicy = QSizePolicy(QSizePolicy.Fixed, QSizePolicy.Expanding)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -38,7 +38,7 @@ class Ui_DMachineSetup(object):
         self.verticalLayout.addWidget(self.nav_step)
 
         self.b_save = QPushButton(DMachineSetup)
-        self.b_save.setObjectName(u"b_save")
+        self.b_save.setObjectName("b_save")
 
         self.verticalLayout.addWidget(self.b_save)
 
@@ -51,7 +51,7 @@ class Ui_DMachineSetup(object):
         self.main_layout.addLayout(self.verticalLayout)
 
         self.w_step = QWidget(DMachineSetup)
-        self.w_step.setObjectName(u"w_step")
+        self.w_step.setObjectName("w_step")
         sizePolicy1 = QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
         sizePolicy1.setHorizontalStretch(0)
         sizePolicy1.setVerticalStretch(0)
@@ -69,9 +69,9 @@ class Ui_DMachineSetup(object):
 
     def retranslateUi(self, DMachineSetup):
         DMachineSetup.setWindowTitle(
-            QCoreApplication.translate("DMachineSetup", u"Pyleecan Machine Setup", None)
+            QCoreApplication.translate("DMachineSetup", "Pyleecan Machine Setup", None)
         )
-        self.b_load.setText(QCoreApplication.translate("DMachineSetup", u"Load", None))
-        self.b_save.setText(QCoreApplication.translate("DMachineSetup", u"Save", None))
+        self.b_load.setText(QCoreApplication.translate("DMachineSetup", "Load", None))
+        self.b_save.setText(QCoreApplication.translate("DMachineSetup", "Save", None))
 
     # retranslateUi

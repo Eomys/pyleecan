@@ -48,7 +48,15 @@ class LossModelMagnet(LossModel):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, name="", group="", is_show_fig=False, coeff_dict=None, init_dict = None, init_str = None):
+    def __init__(
+        self,
+        name="",
+        group="",
+        is_show_fig=False,
+        coeff_dict=None,
+        init_dict=None,
+        init_str=None,
+    ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -74,7 +82,9 @@ class LossModelMagnet(LossModel):
                 coeff_dict = init_dict["coeff_dict"]
         # Set the properties (value check and convertion are done in setter)
         # Call LossModel init
-        super(LossModelMagnet, self).__init__(name=name, group=group, is_show_fig=is_show_fig, coeff_dict=coeff_dict)
+        super(LossModelMagnet, self).__init__(
+            name=name, group=group, is_show_fig=is_show_fig, coeff_dict=coeff_dict
+        )
         # The class is frozen (in LossModel init), for now it's impossible to
         # add new properties
 
@@ -97,19 +107,23 @@ class LossModelMagnet(LossModel):
             return False
         return True
 
-    def compare(self, other, name='self', ignore_list=None, is_add_value=False):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
             ignore_list = list()
         if type(other) != type(self):
-            return ['type('+name+')']
+            return ["type(" + name + ")"]
         diff_list = list()
 
         # Check the properties inherited from LossModel
-        diff_list.extend(super(LossModelMagnet, self).compare(other,name=name, ignore_list=ignore_list, is_add_value=is_add_value))
+        diff_list.extend(
+            super(LossModelMagnet, self).compare(
+                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
+            )
+        )
         # Filter ignore differences
-        diff_list = list(filter(lambda x : x not in ignore_list, diff_list))
+        diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
 
     def __sizeof__(self):
@@ -128,17 +142,20 @@ class LossModelMagnet(LossModel):
             How to handle ndarray (0: tolist, 1: copy, 2: nothing)
         keep_function : bool
             True to keep the function object, else return str
-        Optional keyword input parameter is for internal use only 
+        Optional keyword input parameter is for internal use only
         and may prevent json serializability.
         """
 
         # Get the properties inherited from LossModel
-        LossModelMagnet_dict = super(LossModelMagnet, self).as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs)
+        LossModelMagnet_dict = super(LossModelMagnet, self).as_dict(
+            type_handle_ndarray=type_handle_ndarray,
+            keep_function=keep_function,
+            **kwargs
+        )
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         LossModelMagnet_dict["__class__"] = "LossModelMagnet"
         return LossModelMagnet_dict
-
 
     def copy(self):
         """Creates a deepcopy of the object"""
@@ -152,7 +169,12 @@ class LossModelMagnet(LossModel):
         else:
             coeff_dict_val = self.coeff_dict.copy()
         # Creates new object of the same type with the copied properties
-        obj_copy = type(self)(name=name_val,group=group_val,is_show_fig=is_show_fig_val,coeff_dict=coeff_dict_val)
+        obj_copy = type(self)(
+            name=name_val,
+            group=group_val,
+            is_show_fig=is_show_fig_val,
+            coeff_dict=coeff_dict_val,
+        )
         return obj_copy
 
     def _set_None(self):

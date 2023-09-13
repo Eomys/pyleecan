@@ -60,7 +60,6 @@ def solve_power(self, LUT, Rs):
         else int(self.n_Iq * self.n_interp / (self.n_Id + self.n_Iq))
     )
     while abs(delta_Pem) > delta_Pem_max and niter_Pem < Nmax:
-
         # Refine Id/Iq mesh
         Id_vect = np.linspace(Id_min, Id_max, Nd)
         Iq_vect = np.linspace(Iq_min, Iq_max, Nq)
@@ -68,7 +67,7 @@ def solve_power(self, LUT, Rs):
         Id, Iq = Id.ravel(), Iq.ravel()
 
         # Calculate maximum current
-        Imax_interp = np.sqrt(Id ** 2 + Iq ** 2)
+        Imax_interp = np.sqrt(Id**2 + Iq**2)
 
         # Interpolate Phid/Phiq on the refined mesh
         (Phid, Phiq, Phih) = LUT.interp_Phi_dqh(Id, Iq)
@@ -76,7 +75,7 @@ def solve_power(self, LUT, Rs):
         # Calculate voltage (Ud/Uq) for the refined mesh
         Ud = Rs * Id - Phiq * ws
         Uq = Rs * Iq + Phid * ws
-        Umax_interp = np.sqrt(Ud ** 2 + Uq ** 2)
+        Umax_interp = np.sqrt(Ud**2 + Uq**2)
 
         if is_loss_model:
             # Interpolate losses from LUT:
@@ -89,7 +88,7 @@ def solve_power(self, LUT, Rs):
             Ploss_ovl = np.sum(Ploss_dqh, axis=1)
         else:
             # Only consider stator Joule losses
-            Ploss_ovl = qs * Rs * (Id ** 2 + Iq ** 2)
+            Ploss_ovl = qs * Rs * (Id**2 + Iq**2)
 
         if is_loss_model:
             # The input power must cover electrical power + additional losses

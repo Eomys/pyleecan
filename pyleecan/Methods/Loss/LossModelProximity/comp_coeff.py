@@ -16,4 +16,4 @@ def comp_coeff(self):
     kf = self.parent.parent.machine.stator.comp_fill_factor()
 
     # Proximity loss coefficient [W/kg]
-    self.k_p = kf * pi ** 2 / 8 * sigma * d ** 2
+    self.k_p = kf * pi**2 / 8 * sigma * d**2

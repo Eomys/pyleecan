@@ -14,7 +14,6 @@ from .WTableParameterModel import WTableParameterModel
 
 
 class WTableParameterEdit(QWidget):
-
     dataChanged = Signal()
 
     def __init__(self, obj):

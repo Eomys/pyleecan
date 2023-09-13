@@ -46,7 +46,14 @@ class ImportMatlab(ImportMatrix):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, file_path="", var_name="", is_transpose=False, init_dict = None, init_str = None):
+    def __init__(
+        self,
+        file_path="",
+        var_name="",
+        is_transpose=False,
+        init_dict=None,
+        init_str=None,
+    ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -101,31 +108,47 @@ class ImportMatlab(ImportMatrix):
             return False
         return True
 
-    def compare(self, other, name='self', ignore_list=None, is_add_value=False):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
             ignore_list = list()
         if type(other) != type(self):
-            return ['type('+name+')']
+            return ["type(" + name + ")"]
         diff_list = list()
 
         # Check the properties inherited from ImportMatrix
-        diff_list.extend(super(ImportMatlab, self).compare(other,name=name, ignore_list=ignore_list, is_add_value=is_add_value))
+        diff_list.extend(
+            super(ImportMatlab, self).compare(
+                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
+            )
+        )
         if other._file_path != self._file_path:
             if is_add_value:
-                val_str = ' (self='+str(self._file_path)+', other='+str(other._file_path)+')'
-                diff_list.append(name+'.file_path'+val_str)
+                val_str = (
+                    " (self="
+                    + str(self._file_path)
+                    + ", other="
+                    + str(other._file_path)
+                    + ")"
+                )
+                diff_list.append(name + ".file_path" + val_str)
             else:
-                diff_list.append(name+'.file_path')
+                diff_list.append(name + ".file_path")
         if other._var_name != self._var_name:
             if is_add_value:
-                val_str = ' (self='+str(self._var_name)+', other='+str(other._var_name)+')'
-                diff_list.append(name+'.var_name'+val_str)
+                val_str = (
+                    " (self="
+                    + str(self._var_name)
+                    + ", other="
+                    + str(other._var_name)
+                    + ")"
+                )
+                diff_list.append(name + ".var_name" + val_str)
             else:
-                diff_list.append(name+'.var_name')
+                diff_list.append(name + ".var_name")
         # Filter ignore differences
-        diff_list = list(filter(lambda x : x not in ignore_list, diff_list))
+        diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
 
     def __sizeof__(self):
@@ -146,19 +169,22 @@ class ImportMatlab(ImportMatrix):
             How to handle ndarray (0: tolist, 1: copy, 2: nothing)
         keep_function : bool
             True to keep the function object, else return str
-        Optional keyword input parameter is for internal use only 
+        Optional keyword input parameter is for internal use only
         and may prevent json serializability.
         """
 
         # Get the properties inherited from ImportMatrix
-        ImportMatlab_dict = super(ImportMatlab, self).as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs)
+        ImportMatlab_dict = super(ImportMatlab, self).as_dict(
+            type_handle_ndarray=type_handle_ndarray,
+            keep_function=keep_function,
+            **kwargs
+        )
         ImportMatlab_dict["file_path"] = self.file_path
         ImportMatlab_dict["var_name"] = self.var_name
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         ImportMatlab_dict["__class__"] = "ImportMatlab"
         return ImportMatlab_dict
-
 
     def copy(self):
         """Creates a deepcopy of the object"""
@@ -168,7 +194,11 @@ class ImportMatlab(ImportMatrix):
         var_name_val = self.var_name
         is_transpose_val = self.is_transpose
         # Creates new object of the same type with the copied properties
-        obj_copy = type(self)(file_path=file_path_val,var_name=var_name_val,is_transpose=is_transpose_val)
+        obj_copy = type(self)(
+            file_path=file_path_val,
+            var_name=var_name_val,
+            is_transpose=is_transpose_val,
+        )
         return obj_copy
 
     def _set_None(self):
@@ -191,7 +221,7 @@ class ImportMatlab(ImportMatrix):
     file_path = property(
         fget=_get_file_path,
         fset=_set_file_path,
-        doc=u"""Path of the file to load
+        doc="""Path of the file to load
 
         :Type: str
         """,
@@ -209,7 +239,7 @@ class ImportMatlab(ImportMatrix):
     var_name = property(
         fget=_get_var_name,
         fset=_set_var_name,
-        doc=u"""Name of the variable to load
+        doc="""Name of the variable to load
 
         :Type: str
         """,

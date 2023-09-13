@@ -90,7 +90,15 @@ class NodeMat(FrozenClass):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, coordinate=None, nb_node=0, delta=1e-10, indice=None, init_dict = None, init_str = None):
+    def __init__(
+        self,
+        coordinate=None,
+        nb_node=0,
+        delta=1e-10,
+        indice=None,
+        init_dict=None,
+        init_str=None,
+    ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -132,10 +140,22 @@ class NodeMat(FrozenClass):
             NodeMat_str += "parent = None " + linesep
         else:
             NodeMat_str += "parent = " + str(type(self.parent)) + " object" + linesep
-        NodeMat_str += "coordinate = " + linesep + str(self.coordinate).replace(linesep, linesep + "\t") + linesep + linesep
+        NodeMat_str += (
+            "coordinate = "
+            + linesep
+            + str(self.coordinate).replace(linesep, linesep + "\t")
+            + linesep
+            + linesep
+        )
         NodeMat_str += "nb_node = " + str(self.nb_node) + linesep
         NodeMat_str += "delta = " + str(self.delta) + linesep
-        NodeMat_str += "indice = " + linesep + str(self.indice).replace(linesep, linesep + "\t") + linesep + linesep
+        NodeMat_str += (
+            "indice = "
+            + linesep
+            + str(self.indice).replace(linesep, linesep + "\t")
+            + linesep
+            + linesep
+        )
         return NodeMat_str
 
     def __eq__(self, other):
@@ -153,34 +173,47 @@ class NodeMat(FrozenClass):
             return False
         return True
 
-    def compare(self, other, name='self', ignore_list=None, is_add_value=False):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
             ignore_list = list()
         if type(other) != type(self):
-            return ['type('+name+')']
+            return ["type(" + name + ")"]
         diff_list = list()
         if not array_equal(other.coordinate, self.coordinate):
-            diff_list.append(name+'.coordinate')
+            diff_list.append(name + ".coordinate")
         if other._nb_node != self._nb_node:
             if is_add_value:
-                val_str = ' (self='+str(self._nb_node)+', other='+str(other._nb_node)+')'
-                diff_list.append(name+'.nb_node'+val_str)
+                val_str = (
+                    " (self="
+                    + str(self._nb_node)
+                    + ", other="
+                    + str(other._nb_node)
+                    + ")"
+                )
+                diff_list.append(name + ".nb_node" + val_str)
             else:
-                diff_list.append(name+'.nb_node')
-        if other._delta is not None and self._delta is not None and isnan(other._delta) and isnan(self._delta):
+                diff_list.append(name + ".nb_node")
+        if (
+            other._delta is not None
+            and self._delta is not None
+            and isnan(other._delta)
+            and isnan(self._delta)
+        ):
             pass
         elif other._delta != self._delta:
             if is_add_value:
-                val_str = ' (self='+str(self._delta)+', other='+str(other._delta)+')'
-                diff_list.append(name+'.delta'+val_str)
+                val_str = (
+                    " (self=" + str(self._delta) + ", other=" + str(other._delta) + ")"
+                )
+                diff_list.append(name + ".delta" + val_str)
             else:
-                diff_list.append(name+'.delta')
+                diff_list.append(name + ".delta")
         if not array_equal(other.indice, self.indice):
-            diff_list.append(name+'.indice')
+            diff_list.append(name + ".indice")
         # Filter ignore differences
-        diff_list = list(filter(lambda x : x not in ignore_list, diff_list))
+        diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
 
     def __sizeof__(self):
@@ -200,7 +233,7 @@ class NodeMat(FrozenClass):
             How to handle ndarray (0: tolist, 1: copy, 2: nothing)
         keep_function : bool
             True to keep the function object, else return str
-        Optional keyword input parameter is for internal use only 
+        Optional keyword input parameter is for internal use only
         and may prevent json serializability.
         """
 
@@ -208,31 +241,34 @@ class NodeMat(FrozenClass):
         if self.coordinate is None:
             NodeMat_dict["coordinate"] = None
         else:
-            if type_handle_ndarray==0:
+            if type_handle_ndarray == 0:
                 NodeMat_dict["coordinate"] = self.coordinate.tolist()
-            elif type_handle_ndarray==1:
+            elif type_handle_ndarray == 1:
                 NodeMat_dict["coordinate"] = self.coordinate.copy()
-            elif type_handle_ndarray==2:
+            elif type_handle_ndarray == 2:
                 NodeMat_dict["coordinate"] = self.coordinate
             else:
-                raise Exception ('Unknown type_handle_ndarray: '+str(type_handle_ndarray))
+                raise Exception(
+                    "Unknown type_handle_ndarray: " + str(type_handle_ndarray)
+                )
         NodeMat_dict["nb_node"] = self.nb_node
         NodeMat_dict["delta"] = self.delta
         if self.indice is None:
             NodeMat_dict["indice"] = None
         else:
-            if type_handle_ndarray==0:
+            if type_handle_ndarray == 0:
                 NodeMat_dict["indice"] = self.indice.tolist()
-            elif type_handle_ndarray==1:
+            elif type_handle_ndarray == 1:
                 NodeMat_dict["indice"] = self.indice.copy()
-            elif type_handle_ndarray==2:
+            elif type_handle_ndarray == 2:
                 NodeMat_dict["indice"] = self.indice
             else:
-                raise Exception ('Unknown type_handle_ndarray: '+str(type_handle_ndarray))
+                raise Exception(
+                    "Unknown type_handle_ndarray: " + str(type_handle_ndarray)
+                )
         # The class name is added to the dict for deserialisation purpose
         NodeMat_dict["__class__"] = "NodeMat"
         return NodeMat_dict
-
 
     def copy(self):
         """Creates a deepcopy of the object"""
@@ -249,7 +285,12 @@ class NodeMat(FrozenClass):
         else:
             indice_val = self.indice.copy()
         # Creates new object of the same type with the copied properties
-        obj_copy = type(self)(coordinate=coordinate_val,nb_node=nb_node_val,delta=delta_val,indice=indice_val)
+        obj_copy = type(self)(
+            coordinate=coordinate_val,
+            nb_node=nb_node_val,
+            delta=delta_val,
+            indice=indice_val,
+        )
         return obj_copy
 
     def _set_None(self):
@@ -279,7 +320,7 @@ class NodeMat(FrozenClass):
     coordinate = property(
         fget=_get_coordinate,
         fset=_set_coordinate,
-        doc=u"""Nodes coordinates
+        doc="""Nodes coordinates
 
         :Type: ndarray
         """,
@@ -297,7 +338,7 @@ class NodeMat(FrozenClass):
     nb_node = property(
         fget=_get_nb_node,
         fset=_set_nb_node,
-        doc=u"""Total number of nodes
+        doc="""Total number of nodes
 
         :Type: int
         """,
@@ -315,7 +356,7 @@ class NodeMat(FrozenClass):
     delta = property(
         fget=_get_delta,
         fset=_set_delta,
-        doc=u"""Sensibility for node searching
+        doc="""Sensibility for node searching
 
         :Type: float
         """,
@@ -340,7 +381,7 @@ class NodeMat(FrozenClass):
     indice = property(
         fget=_get_indice,
         fset=_set_indice,
-        doc=u"""Nodes unique indices
+        doc="""Nodes unique indices
 
         :Type: ndarray
         """,

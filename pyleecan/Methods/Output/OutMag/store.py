@@ -94,7 +94,6 @@ def store(self, out_dict, axes_dict):
         )
         and ax1_Tem is not None
     ):
-
         if "Tem" in out_dict:
             Tem_slice = out_dict.pop("Tem")
         else:

@@ -43,7 +43,9 @@ except ImportError as error:
     comp_radius_mec = error
 
 try:
-    from ..Methods.Machine.Lamination.comp_surface_axial_vent import comp_surface_axial_vent
+    from ..Methods.Machine.Lamination.comp_surface_axial_vent import (
+        comp_surface_axial_vent,
+    )
 except ImportError as error:
     comp_surface_axial_vent = error
 
@@ -113,7 +115,9 @@ except ImportError as error:
     comp_point_ref = error
 
 try:
-    from ..Methods.Machine.Lamination.comp_periodicity_spatial import comp_periodicity_spatial
+    from ..Methods.Machine.Lamination.comp_periodicity_spatial import (
+        comp_periodicity_spatial,
+    )
 except ImportError as error:
     comp_periodicity_spatial = error
 
@@ -133,7 +137,9 @@ except ImportError as error:
     get_notches_surf = error
 
 try:
-    from ..Methods.Machine.Lamination.comp_periodicity_duct_spatial import comp_periodicity_duct_spatial
+    from ..Methods.Machine.Lamination.comp_periodicity_duct_spatial import (
+        comp_periodicity_duct_spatial,
+    )
 except ImportError as error:
     comp_periodicity_duct_spatial = error
 
@@ -530,7 +536,25 @@ class Lamination(FrozenClass):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, L1=0.35, mat_type=-1, Nrvd=0, Wrvd=0, Kf1=0.95, is_internal=True, Rint=0, Rext=1, is_stator=True, axial_vent=-1, notch=-1, skew=None, bore=None, yoke=None, init_dict = None, init_str = None):
+    def __init__(
+        self,
+        L1=0.35,
+        mat_type=-1,
+        Nrvd=0,
+        Wrvd=0,
+        Kf1=0.95,
+        is_internal=True,
+        Rint=0,
+        Rext=1,
+        is_stator=True,
+        axial_vent=-1,
+        notch=-1,
+        skew=None,
+        bore=None,
+        yoke=None,
+        init_dict=None,
+        init_str=None,
+    ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -605,7 +629,7 @@ class Lamination(FrozenClass):
         Lamination_str += "L1 = " + str(self.L1) + linesep
         if self.mat_type is not None:
             tmp = self.mat_type.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            Lamination_str += "mat_type = "+ tmp
+            Lamination_str += "mat_type = " + tmp
         else:
             Lamination_str += "mat_type = None" + linesep + linesep
         Lamination_str += "Nrvd = " + str(self.Nrvd) + linesep
@@ -618,26 +642,28 @@ class Lamination(FrozenClass):
         if len(self.axial_vent) == 0:
             Lamination_str += "axial_vent = []" + linesep
         for ii in range(len(self.axial_vent)):
-            tmp = self.axial_vent[ii].__str__().replace(linesep, linesep + "\t") + linesep
-            Lamination_str += "axial_vent["+str(ii)+"] ="+ tmp + linesep + linesep
+            tmp = (
+                self.axial_vent[ii].__str__().replace(linesep, linesep + "\t") + linesep
+            )
+            Lamination_str += "axial_vent[" + str(ii) + "] =" + tmp + linesep + linesep
         if len(self.notch) == 0:
             Lamination_str += "notch = []" + linesep
         for ii in range(len(self.notch)):
             tmp = self.notch[ii].__str__().replace(linesep, linesep + "\t") + linesep
-            Lamination_str += "notch["+str(ii)+"] ="+ tmp + linesep + linesep
+            Lamination_str += "notch[" + str(ii) + "] =" + tmp + linesep + linesep
         if self.skew is not None:
             tmp = self.skew.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            Lamination_str += "skew = "+ tmp
+            Lamination_str += "skew = " + tmp
         else:
             Lamination_str += "skew = None" + linesep + linesep
         if self.bore is not None:
             tmp = self.bore.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            Lamination_str += "bore = "+ tmp
+            Lamination_str += "bore = " + tmp
         else:
             Lamination_str += "bore = None" + linesep + linesep
         if self.yoke is not None:
             tmp = self.yoke.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            Lamination_str += "yoke = "+ tmp
+            Lamination_str += "yoke = " + tmp
         else:
             Lamination_str += "yoke = None" + linesep + linesep
         return Lamination_str
@@ -677,108 +703,209 @@ class Lamination(FrozenClass):
             return False
         return True
 
-    def compare(self, other, name='self', ignore_list=None, is_add_value=False):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
             ignore_list = list()
         if type(other) != type(self):
-            return ['type('+name+')']
+            return ["type(" + name + ")"]
         diff_list = list()
-        if other._L1 is not None and self._L1 is not None and isnan(other._L1) and isnan(self._L1):
+        if (
+            other._L1 is not None
+            and self._L1 is not None
+            and isnan(other._L1)
+            and isnan(self._L1)
+        ):
             pass
         elif other._L1 != self._L1:
             if is_add_value:
-                val_str = ' (self='+str(self._L1)+', other='+str(other._L1)+')'
-                diff_list.append(name+'.L1'+val_str)
+                val_str = " (self=" + str(self._L1) + ", other=" + str(other._L1) + ")"
+                diff_list.append(name + ".L1" + val_str)
             else:
-                diff_list.append(name+'.L1')
-        if (other.mat_type is None and self.mat_type is not None) or (other.mat_type is not None and self.mat_type is None):
-            diff_list.append(name+'.mat_type None mismatch')
+                diff_list.append(name + ".L1")
+        if (other.mat_type is None and self.mat_type is not None) or (
+            other.mat_type is not None and self.mat_type is None
+        ):
+            diff_list.append(name + ".mat_type None mismatch")
         elif self.mat_type is not None:
-            diff_list.extend(self.mat_type.compare(other.mat_type,name=name+'.mat_type',ignore_list=ignore_list,is_add_value=is_add_value))
+            diff_list.extend(
+                self.mat_type.compare(
+                    other.mat_type,
+                    name=name + ".mat_type",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
+            )
         if other._Nrvd != self._Nrvd:
             if is_add_value:
-                val_str = ' (self='+str(self._Nrvd)+', other='+str(other._Nrvd)+')'
-                diff_list.append(name+'.Nrvd'+val_str)
+                val_str = (
+                    " (self=" + str(self._Nrvd) + ", other=" + str(other._Nrvd) + ")"
+                )
+                diff_list.append(name + ".Nrvd" + val_str)
             else:
-                diff_list.append(name+'.Nrvd')
-        if other._Wrvd is not None and self._Wrvd is not None and isnan(other._Wrvd) and isnan(self._Wrvd):
+                diff_list.append(name + ".Nrvd")
+        if (
+            other._Wrvd is not None
+            and self._Wrvd is not None
+            and isnan(other._Wrvd)
+            and isnan(self._Wrvd)
+        ):
             pass
         elif other._Wrvd != self._Wrvd:
             if is_add_value:
-                val_str = ' (self='+str(self._Wrvd)+', other='+str(other._Wrvd)+')'
-                diff_list.append(name+'.Wrvd'+val_str)
+                val_str = (
+                    " (self=" + str(self._Wrvd) + ", other=" + str(other._Wrvd) + ")"
+                )
+                diff_list.append(name + ".Wrvd" + val_str)
             else:
-                diff_list.append(name+'.Wrvd')
-        if other._Kf1 is not None and self._Kf1 is not None and isnan(other._Kf1) and isnan(self._Kf1):
+                diff_list.append(name + ".Wrvd")
+        if (
+            other._Kf1 is not None
+            and self._Kf1 is not None
+            and isnan(other._Kf1)
+            and isnan(self._Kf1)
+        ):
             pass
         elif other._Kf1 != self._Kf1:
             if is_add_value:
-                val_str = ' (self='+str(self._Kf1)+', other='+str(other._Kf1)+')'
-                diff_list.append(name+'.Kf1'+val_str)
+                val_str = (
+                    " (self=" + str(self._Kf1) + ", other=" + str(other._Kf1) + ")"
+                )
+                diff_list.append(name + ".Kf1" + val_str)
             else:
-                diff_list.append(name+'.Kf1')
+                diff_list.append(name + ".Kf1")
         if other._is_internal != self._is_internal:
             if is_add_value:
-                val_str = ' (self='+str(self._is_internal)+', other='+str(other._is_internal)+')'
-                diff_list.append(name+'.is_internal'+val_str)
+                val_str = (
+                    " (self="
+                    + str(self._is_internal)
+                    + ", other="
+                    + str(other._is_internal)
+                    + ")"
+                )
+                diff_list.append(name + ".is_internal" + val_str)
             else:
-                diff_list.append(name+'.is_internal')
-        if other._Rint is not None and self._Rint is not None and isnan(other._Rint) and isnan(self._Rint):
+                diff_list.append(name + ".is_internal")
+        if (
+            other._Rint is not None
+            and self._Rint is not None
+            and isnan(other._Rint)
+            and isnan(self._Rint)
+        ):
             pass
         elif other._Rint != self._Rint:
             if is_add_value:
-                val_str = ' (self='+str(self._Rint)+', other='+str(other._Rint)+')'
-                diff_list.append(name+'.Rint'+val_str)
+                val_str = (
+                    " (self=" + str(self._Rint) + ", other=" + str(other._Rint) + ")"
+                )
+                diff_list.append(name + ".Rint" + val_str)
             else:
-                diff_list.append(name+'.Rint')
-        if other._Rext is not None and self._Rext is not None and isnan(other._Rext) and isnan(self._Rext):
+                diff_list.append(name + ".Rint")
+        if (
+            other._Rext is not None
+            and self._Rext is not None
+            and isnan(other._Rext)
+            and isnan(self._Rext)
+        ):
             pass
         elif other._Rext != self._Rext:
             if is_add_value:
-                val_str = ' (self='+str(self._Rext)+', other='+str(other._Rext)+')'
-                diff_list.append(name+'.Rext'+val_str)
+                val_str = (
+                    " (self=" + str(self._Rext) + ", other=" + str(other._Rext) + ")"
+                )
+                diff_list.append(name + ".Rext" + val_str)
             else:
-                diff_list.append(name+'.Rext')
+                diff_list.append(name + ".Rext")
         if other._is_stator != self._is_stator:
             if is_add_value:
-                val_str = ' (self='+str(self._is_stator)+', other='+str(other._is_stator)+')'
-                diff_list.append(name+'.is_stator'+val_str)
+                val_str = (
+                    " (self="
+                    + str(self._is_stator)
+                    + ", other="
+                    + str(other._is_stator)
+                    + ")"
+                )
+                diff_list.append(name + ".is_stator" + val_str)
             else:
-                diff_list.append(name+'.is_stator')
-        if (other.axial_vent is None and self.axial_vent is not None) or (other.axial_vent is not None and self.axial_vent is None):
-            diff_list.append(name+'.axial_vent None mismatch')
+                diff_list.append(name + ".is_stator")
+        if (other.axial_vent is None and self.axial_vent is not None) or (
+            other.axial_vent is not None and self.axial_vent is None
+        ):
+            diff_list.append(name + ".axial_vent None mismatch")
         elif self.axial_vent is None:
             pass
         elif len(other.axial_vent) != len(self.axial_vent):
-            diff_list.append('len('+name+'.axial_vent)')
+            diff_list.append("len(" + name + ".axial_vent)")
         else:
             for ii in range(len(other.axial_vent)):
-                diff_list.extend(self.axial_vent[ii].compare(other.axial_vent[ii],name=name+'.axial_vent['+str(ii)+']',ignore_list=ignore_list,is_add_value=is_add_value))
-        if (other.notch is None and self.notch is not None) or (other.notch is not None and self.notch is None):
-            diff_list.append(name+'.notch None mismatch')
+                diff_list.extend(
+                    self.axial_vent[ii].compare(
+                        other.axial_vent[ii],
+                        name=name + ".axial_vent[" + str(ii) + "]",
+                        ignore_list=ignore_list,
+                        is_add_value=is_add_value,
+                    )
+                )
+        if (other.notch is None and self.notch is not None) or (
+            other.notch is not None and self.notch is None
+        ):
+            diff_list.append(name + ".notch None mismatch")
         elif self.notch is None:
             pass
         elif len(other.notch) != len(self.notch):
-            diff_list.append('len('+name+'.notch)')
+            diff_list.append("len(" + name + ".notch)")
         else:
             for ii in range(len(other.notch)):
-                diff_list.extend(self.notch[ii].compare(other.notch[ii],name=name+'.notch['+str(ii)+']',ignore_list=ignore_list,is_add_value=is_add_value))
-        if (other.skew is None and self.skew is not None) or (other.skew is not None and self.skew is None):
-            diff_list.append(name+'.skew None mismatch')
+                diff_list.extend(
+                    self.notch[ii].compare(
+                        other.notch[ii],
+                        name=name + ".notch[" + str(ii) + "]",
+                        ignore_list=ignore_list,
+                        is_add_value=is_add_value,
+                    )
+                )
+        if (other.skew is None and self.skew is not None) or (
+            other.skew is not None and self.skew is None
+        ):
+            diff_list.append(name + ".skew None mismatch")
         elif self.skew is not None:
-            diff_list.extend(self.skew.compare(other.skew,name=name+'.skew',ignore_list=ignore_list,is_add_value=is_add_value))
-        if (other.bore is None and self.bore is not None) or (other.bore is not None and self.bore is None):
-            diff_list.append(name+'.bore None mismatch')
+            diff_list.extend(
+                self.skew.compare(
+                    other.skew,
+                    name=name + ".skew",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
+            )
+        if (other.bore is None and self.bore is not None) or (
+            other.bore is not None and self.bore is None
+        ):
+            diff_list.append(name + ".bore None mismatch")
         elif self.bore is not None:
-            diff_list.extend(self.bore.compare(other.bore,name=name+'.bore',ignore_list=ignore_list,is_add_value=is_add_value))
-        if (other.yoke is None and self.yoke is not None) or (other.yoke is not None and self.yoke is None):
-            diff_list.append(name+'.yoke None mismatch')
+            diff_list.extend(
+                self.bore.compare(
+                    other.bore,
+                    name=name + ".bore",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
+            )
+        if (other.yoke is None and self.yoke is not None) or (
+            other.yoke is not None and self.yoke is None
+        ):
+            diff_list.append(name + ".yoke None mismatch")
         elif self.yoke is not None:
-            diff_list.extend(self.yoke.compare(other.yoke,name=name+'.yoke',ignore_list=ignore_list,is_add_value=is_add_value))
+            diff_list.extend(
+                self.yoke.compare(
+                    other.yoke,
+                    name=name + ".yoke",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
+            )
         # Filter ignore differences
-        diff_list = list(filter(lambda x : x not in ignore_list, diff_list))
+        diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
 
     def __sizeof__(self):
@@ -812,7 +939,7 @@ class Lamination(FrozenClass):
             How to handle ndarray (0: tolist, 1: copy, 2: nothing)
         keep_function : bool
             True to keep the function object, else return str
-        Optional keyword input parameter is for internal use only 
+        Optional keyword input parameter is for internal use only
         and may prevent json serializability.
         """
 
@@ -821,7 +948,11 @@ class Lamination(FrozenClass):
         if self.mat_type is None:
             Lamination_dict["mat_type"] = None
         else:
-            Lamination_dict["mat_type"] = self.mat_type.as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs)
+            Lamination_dict["mat_type"] = self.mat_type.as_dict(
+                type_handle_ndarray=type_handle_ndarray,
+                keep_function=keep_function,
+                **kwargs
+            )
         Lamination_dict["Nrvd"] = self.Nrvd
         Lamination_dict["Wrvd"] = self.Wrvd
         Lamination_dict["Kf1"] = self.Kf1
@@ -830,39 +961,62 @@ class Lamination(FrozenClass):
         Lamination_dict["Rext"] = self.Rext
         Lamination_dict["is_stator"] = self.is_stator
         if self.axial_vent is None:
-            Lamination_dict['axial_vent'] = None
+            Lamination_dict["axial_vent"] = None
         else:
-            Lamination_dict['axial_vent'] = list()
+            Lamination_dict["axial_vent"] = list()
             for obj in self.axial_vent:
                 if obj is not None:
-                    Lamination_dict['axial_vent'].append(obj.as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs))
+                    Lamination_dict["axial_vent"].append(
+                        obj.as_dict(
+                            type_handle_ndarray=type_handle_ndarray,
+                            keep_function=keep_function,
+                            **kwargs
+                        )
+                    )
                 else:
-                    Lamination_dict['axial_vent'].append(None)
+                    Lamination_dict["axial_vent"].append(None)
         if self.notch is None:
-            Lamination_dict['notch'] = None
+            Lamination_dict["notch"] = None
         else:
-            Lamination_dict['notch'] = list()
+            Lamination_dict["notch"] = list()
             for obj in self.notch:
                 if obj is not None:
-                    Lamination_dict['notch'].append(obj.as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs))
+                    Lamination_dict["notch"].append(
+                        obj.as_dict(
+                            type_handle_ndarray=type_handle_ndarray,
+                            keep_function=keep_function,
+                            **kwargs
+                        )
+                    )
                 else:
-                    Lamination_dict['notch'].append(None)
+                    Lamination_dict["notch"].append(None)
         if self.skew is None:
             Lamination_dict["skew"] = None
         else:
-            Lamination_dict["skew"] = self.skew.as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs)
+            Lamination_dict["skew"] = self.skew.as_dict(
+                type_handle_ndarray=type_handle_ndarray,
+                keep_function=keep_function,
+                **kwargs
+            )
         if self.bore is None:
             Lamination_dict["bore"] = None
         else:
-            Lamination_dict["bore"] = self.bore.as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs)
+            Lamination_dict["bore"] = self.bore.as_dict(
+                type_handle_ndarray=type_handle_ndarray,
+                keep_function=keep_function,
+                **kwargs
+            )
         if self.yoke is None:
             Lamination_dict["yoke"] = None
         else:
-            Lamination_dict["yoke"] = self.yoke.as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs)
+            Lamination_dict["yoke"] = self.yoke.as_dict(
+                type_handle_ndarray=type_handle_ndarray,
+                keep_function=keep_function,
+                **kwargs
+            )
         # The class name is added to the dict for deserialisation purpose
         Lamination_dict["__class__"] = "Lamination"
         return Lamination_dict
-
 
     def copy(self):
         """Creates a deepcopy of the object"""
@@ -905,7 +1059,22 @@ class Lamination(FrozenClass):
         else:
             yoke_val = self.yoke.copy()
         # Creates new object of the same type with the copied properties
-        obj_copy = type(self)(L1=L1_val,mat_type=mat_type_val,Nrvd=Nrvd_val,Wrvd=Wrvd_val,Kf1=Kf1_val,is_internal=is_internal_val,Rint=Rint_val,Rext=Rext_val,is_stator=is_stator_val,axial_vent=axial_vent_val,notch=notch_val,skew=skew_val,bore=bore_val,yoke=yoke_val)
+        obj_copy = type(self)(
+            L1=L1_val,
+            mat_type=mat_type_val,
+            Nrvd=Nrvd_val,
+            Wrvd=Wrvd_val,
+            Kf1=Kf1_val,
+            is_internal=is_internal_val,
+            Rint=Rint_val,
+            Rext=Rext_val,
+            is_stator=is_stator_val,
+            axial_vent=axial_vent_val,
+            notch=notch_val,
+            skew=skew_val,
+            bore=bore_val,
+            yoke=yoke_val,
+        )
         return obj_copy
 
     def _set_None(self):
@@ -942,7 +1111,7 @@ class Lamination(FrozenClass):
     L1 = property(
         fget=_get_L1,
         fset=_set_L1,
-        doc=u"""Lamination stack active length without radial ventilation airducts but including insulation layers between lamination sheets
+        doc="""Lamination stack active length without radial ventilation airducts but including insulation layers between lamination sheets
 
         :Type: float
         :min: 0
@@ -959,23 +1128,28 @@ class Lamination(FrozenClass):
             try:
                 value = load_init_dict(value)[1]
             except Exception as e:
-                self.get_logger().error('Error while loading '+value+', setting None instead')
+                self.get_logger().error(
+                    "Error while loading " + value + ", setting None instead"
+                )
                 value = None
-        if isinstance(value, dict) and '__class__' in value:
-            class_obj = import_class('pyleecan.Classes', value.get('__class__'), 'mat_type')
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class(
+                "pyleecan.Classes", value.get("__class__"), "mat_type"
+            )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
-            Material = import_class('pyleecan.Classes', 'Material', 'mat_type')
+            Material = import_class("pyleecan.Classes", "Material", "mat_type")
             value = Material()
         check_var("mat_type", value, "Material")
         self._mat_type = value
 
         if self._mat_type is not None:
             self._mat_type.parent = self
+
     mat_type = property(
         fget=_get_mat_type,
         fset=_set_mat_type,
-        doc=u"""Lamination's material
+        doc="""Lamination's material
 
         :Type: Material
         """,
@@ -993,7 +1167,7 @@ class Lamination(FrozenClass):
     Nrvd = property(
         fget=_get_Nrvd,
         fset=_set_Nrvd,
-        doc=u"""number of radial air ventilation ducts in lamination
+        doc="""number of radial air ventilation ducts in lamination
 
         :Type: int
         :min: 0
@@ -1012,7 +1186,7 @@ class Lamination(FrozenClass):
     Wrvd = property(
         fget=_get_Wrvd,
         fset=_set_Wrvd,
-        doc=u"""axial width of ventilation ducts in lamination
+        doc="""axial width of ventilation ducts in lamination
 
         :Type: float
         :min: 0
@@ -1031,7 +1205,7 @@ class Lamination(FrozenClass):
     Kf1 = property(
         fget=_get_Kf1,
         fset=_set_Kf1,
-        doc=u"""lamination stacking / packing factor
+        doc="""lamination stacking / packing factor
 
         :Type: float
         :min: 0
@@ -1051,7 +1225,7 @@ class Lamination(FrozenClass):
     is_internal = property(
         fget=_get_is_internal,
         fset=_set_is_internal,
-        doc=u"""1 for internal lamination topology, 0 for external lamination
+        doc="""1 for internal lamination topology, 0 for external lamination
 
         :Type: bool
         """,
@@ -1069,7 +1243,7 @@ class Lamination(FrozenClass):
     Rint = property(
         fget=_get_Rint,
         fset=_set_Rint,
-        doc=u"""To fill
+        doc="""To fill
 
         :Type: float
         :min: 0
@@ -1088,7 +1262,7 @@ class Lamination(FrozenClass):
     Rext = property(
         fget=_get_Rext,
         fset=_set_Rext,
-        doc=u"""To fill
+        doc="""To fill
 
         :Type: float
         :min: 0
@@ -1107,7 +1281,7 @@ class Lamination(FrozenClass):
     is_stator = property(
         fget=_get_is_stator,
         fset=_set_is_stator,
-        doc=u"""To fill
+        doc="""To fill
 
         :Type: bool
         """,
@@ -1129,11 +1303,15 @@ class Lamination(FrozenClass):
                     try:
                         obj = load_init_dict(obj)[1]
                     except Exception as e:
-                        self.get_logger().error('Error while loading '+obj+', setting None instead')
+                        self.get_logger().error(
+                            "Error while loading " + obj + ", setting None instead"
+                        )
                         obj = None
                         value[ii] = None
                 if type(obj) is dict:
-                    class_obj = import_class('pyleecan.Classes', obj.get('__class__'), 'axial_vent')
+                    class_obj = import_class(
+                        "pyleecan.Classes", obj.get("__class__"), "axial_vent"
+                    )
                     value[ii] = class_obj(init_dict=obj)
                 if value[ii] is not None:
                     value[ii].parent = self
@@ -1145,7 +1323,7 @@ class Lamination(FrozenClass):
     axial_vent = property(
         fget=_get_axial_vent,
         fset=_set_axial_vent,
-        doc=u"""Axial ventilation ducts
+        doc="""Axial ventilation ducts
 
         :Type: [Hole]
         """,
@@ -1167,11 +1345,15 @@ class Lamination(FrozenClass):
                     try:
                         obj = load_init_dict(obj)[1]
                     except Exception as e:
-                        self.get_logger().error('Error while loading '+obj+', setting None instead')
+                        self.get_logger().error(
+                            "Error while loading " + obj + ", setting None instead"
+                        )
                         obj = None
                         value[ii] = None
                 if type(obj) is dict:
-                    class_obj = import_class('pyleecan.Classes', obj.get('__class__'), 'notch')
+                    class_obj = import_class(
+                        "pyleecan.Classes", obj.get("__class__"), "notch"
+                    )
                     value[ii] = class_obj(init_dict=obj)
                 if value[ii] is not None:
                     value[ii].parent = self
@@ -1183,7 +1365,7 @@ class Lamination(FrozenClass):
     notch = property(
         fget=_get_notch,
         fset=_set_notch,
-        doc=u"""Lamination bore notches
+        doc="""Lamination bore notches
 
         :Type: [Notch]
         """,
@@ -1199,23 +1381,26 @@ class Lamination(FrozenClass):
             try:
                 value = load_init_dict(value)[1]
             except Exception as e:
-                self.get_logger().error('Error while loading '+value+', setting None instead')
+                self.get_logger().error(
+                    "Error while loading " + value + ", setting None instead"
+                )
                 value = None
-        if isinstance(value, dict) and '__class__' in value:
-            class_obj = import_class('pyleecan.Classes', value.get('__class__'), 'skew')
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class("pyleecan.Classes", value.get("__class__"), "skew")
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
-            Skew = import_class('pyleecan.Classes', 'Skew', 'skew')
+            Skew = import_class("pyleecan.Classes", "Skew", "skew")
             value = Skew()
         check_var("skew", value, "Skew")
         self._skew = value
 
         if self._skew is not None:
             self._skew.parent = self
+
     skew = property(
         fget=_get_skew,
         fset=_set_skew,
-        doc=u"""Skew object
+        doc="""Skew object
 
         :Type: Skew
         """,
@@ -1231,23 +1416,26 @@ class Lamination(FrozenClass):
             try:
                 value = load_init_dict(value)[1]
             except Exception as e:
-                self.get_logger().error('Error while loading '+value+', setting None instead')
+                self.get_logger().error(
+                    "Error while loading " + value + ", setting None instead"
+                )
                 value = None
-        if isinstance(value, dict) and '__class__' in value:
-            class_obj = import_class('pyleecan.Classes', value.get('__class__'), 'bore')
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class("pyleecan.Classes", value.get("__class__"), "bore")
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
-            Bore = import_class('pyleecan.Classes', 'Bore', 'bore')
+            Bore = import_class("pyleecan.Classes", "Bore", "bore")
             value = Bore()
         check_var("bore", value, "Bore")
         self._bore = value
 
         if self._bore is not None:
             self._bore.parent = self
+
     bore = property(
         fget=_get_bore,
         fset=_set_bore,
-        doc=u"""Bore Shape
+        doc="""Bore Shape
 
         :Type: Bore
         """,
@@ -1263,23 +1451,26 @@ class Lamination(FrozenClass):
             try:
                 value = load_init_dict(value)[1]
             except Exception as e:
-                self.get_logger().error('Error while loading '+value+', setting None instead')
+                self.get_logger().error(
+                    "Error while loading " + value + ", setting None instead"
+                )
                 value = None
-        if isinstance(value, dict) and '__class__' in value:
-            class_obj = import_class('pyleecan.Classes', value.get('__class__'), 'yoke')
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class("pyleecan.Classes", value.get("__class__"), "yoke")
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
-            Bore = import_class('pyleecan.Classes', 'Bore', 'yoke')
+            Bore = import_class("pyleecan.Classes", "Bore", "yoke")
             value = Bore()
         check_var("yoke", value, "Bore")
         self._yoke = value
 
         if self._yoke is not None:
             self._yoke.parent = self
+
     yoke = property(
         fget=_get_yoke,
         fset=_set_yoke,
-        doc=u"""Yoke Shape
+        doc="""Yoke Shape
 
         :Type: Bore
         """,

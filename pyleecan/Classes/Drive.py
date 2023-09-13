@@ -29,7 +29,9 @@ class Drive(FrozenClass):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, Umax=800, Imax=800, is_current=False, init_dict = None, init_str = None):
+    def __init__(
+        self, Umax=800, Imax=800, is_current=False, init_dict=None, init_str=None
+    ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -86,38 +88,58 @@ class Drive(FrozenClass):
             return False
         return True
 
-    def compare(self, other, name='self', ignore_list=None, is_add_value=False):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
             ignore_list = list()
         if type(other) != type(self):
-            return ['type('+name+')']
+            return ["type(" + name + ")"]
         diff_list = list()
-        if other._Umax is not None and self._Umax is not None and isnan(other._Umax) and isnan(self._Umax):
+        if (
+            other._Umax is not None
+            and self._Umax is not None
+            and isnan(other._Umax)
+            and isnan(self._Umax)
+        ):
             pass
         elif other._Umax != self._Umax:
             if is_add_value:
-                val_str = ' (self='+str(self._Umax)+', other='+str(other._Umax)+')'
-                diff_list.append(name+'.Umax'+val_str)
+                val_str = (
+                    " (self=" + str(self._Umax) + ", other=" + str(other._Umax) + ")"
+                )
+                diff_list.append(name + ".Umax" + val_str)
             else:
-                diff_list.append(name+'.Umax')
-        if other._Imax is not None and self._Imax is not None and isnan(other._Imax) and isnan(self._Imax):
+                diff_list.append(name + ".Umax")
+        if (
+            other._Imax is not None
+            and self._Imax is not None
+            and isnan(other._Imax)
+            and isnan(self._Imax)
+        ):
             pass
         elif other._Imax != self._Imax:
             if is_add_value:
-                val_str = ' (self='+str(self._Imax)+', other='+str(other._Imax)+')'
-                diff_list.append(name+'.Imax'+val_str)
+                val_str = (
+                    " (self=" + str(self._Imax) + ", other=" + str(other._Imax) + ")"
+                )
+                diff_list.append(name + ".Imax" + val_str)
             else:
-                diff_list.append(name+'.Imax')
+                diff_list.append(name + ".Imax")
         if other._is_current != self._is_current:
             if is_add_value:
-                val_str = ' (self='+str(self._is_current)+', other='+str(other._is_current)+')'
-                diff_list.append(name+'.is_current'+val_str)
+                val_str = (
+                    " (self="
+                    + str(self._is_current)
+                    + ", other="
+                    + str(other._is_current)
+                    + ")"
+                )
+                diff_list.append(name + ".is_current" + val_str)
             else:
-                diff_list.append(name+'.is_current')
+                diff_list.append(name + ".is_current")
         # Filter ignore differences
-        diff_list = list(filter(lambda x : x not in ignore_list, diff_list))
+        diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
 
     def __sizeof__(self):
@@ -136,7 +158,7 @@ class Drive(FrozenClass):
             How to handle ndarray (0: tolist, 1: copy, 2: nothing)
         keep_function : bool
             True to keep the function object, else return str
-        Optional keyword input parameter is for internal use only 
+        Optional keyword input parameter is for internal use only
         and may prevent json serializability.
         """
 
@@ -148,7 +170,6 @@ class Drive(FrozenClass):
         Drive_dict["__class__"] = "Drive"
         return Drive_dict
 
-
     def copy(self):
         """Creates a deepcopy of the object"""
 
@@ -157,7 +178,7 @@ class Drive(FrozenClass):
         Imax_val = self.Imax
         is_current_val = self.is_current
         # Creates new object of the same type with the copied properties
-        obj_copy = type(self)(Umax=Umax_val,Imax=Imax_val,is_current=is_current_val)
+        obj_copy = type(self)(Umax=Umax_val, Imax=Imax_val, is_current=is_current_val)
         return obj_copy
 
     def _set_None(self):
@@ -179,7 +200,7 @@ class Drive(FrozenClass):
     Umax = property(
         fget=_get_Umax,
         fset=_set_Umax,
-        doc=u"""Maximum RMS voltage of the Drive
+        doc="""Maximum RMS voltage of the Drive
 
         :Type: float
         :min: 0
@@ -198,7 +219,7 @@ class Drive(FrozenClass):
     Imax = property(
         fget=_get_Imax,
         fset=_set_Imax,
-        doc=u"""Maximum RMS current of the Drive
+        doc="""Maximum RMS current of the Drive
 
         :Type: float
         :min: 0
@@ -217,7 +238,7 @@ class Drive(FrozenClass):
     is_current = property(
         fget=_get_is_current,
         fset=_set_is_current,
-        doc=u"""True to generate current waveform, False for voltage
+        doc="""True to generate current waveform, False for voltage
 
         :Type: bool
         """,

@@ -171,7 +171,6 @@ def solve_FEMM(
     Nloop = end_t - start_t
     # Compute the data for each time step
     for ii in range(start_t, end_t):
-
         if Nloop > Nmess:
             if k1 >= round(k2 * Nloop / Nmess):
                 logger.info("Solving time steps: " + str(int(k2 / Nmess * 100)) + "%")

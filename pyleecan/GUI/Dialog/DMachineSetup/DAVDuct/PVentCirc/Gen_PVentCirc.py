@@ -13,7 +13,7 @@ class Gen_PVentCirc(Ui_PVentCirc):
         Ui_PVentCirc.setupUi(self, PVentCirc)
         # Setup of in_Zh
         txt = self.tr(
-            u"""<qt><nobr>Number of Hole around the circumference</nobr></qt>"""
+            """<qt><nobr>Number of Hole around the circumference</nobr></qt>"""
         )
         self.in_Zh.setWhatsThis(txt)
         self.in_Zh.setToolTip(txt)
@@ -22,29 +22,29 @@ class Gen_PVentCirc(Ui_PVentCirc):
         self.si_Zh.setMinimum(0)
         self.si_Zh.setMaximum(999999)
         txt = self.tr(
-            u"""<qt><nobr>Number of Hole around the circumference</nobr></qt>"""
+            """<qt><nobr>Number of Hole around the circumference</nobr></qt>"""
         )
         self.si_Zh.setWhatsThis(txt)
         self.si_Zh.setToolTip(txt)
 
         # Setup of in_D0
-        txt = self.tr(u"""<qt><nobr>Hole diameters</nobr></qt>""")
+        txt = self.tr("""<qt><nobr>Hole diameters</nobr></qt>""")
         self.in_D0.setWhatsThis(txt)
         self.in_D0.setToolTip(txt)
 
         # Setup of lf_D0
         self.lf_D0.validator().setBottom(0)
-        txt = self.tr(u"""<qt><nobr>Hole diameters</nobr></qt>""")
+        txt = self.tr("""<qt><nobr>Hole diameters</nobr></qt>""")
         self.lf_D0.setWhatsThis(txt)
         self.lf_D0.setToolTip(txt)
 
         # Setup of in_H0
-        txt = self.tr(u"""<qt><nobr>Radius of the hole centers</nobr></qt>""")
+        txt = self.tr("""<qt><nobr>Radius of the hole centers</nobr></qt>""")
         self.in_H0.setWhatsThis(txt)
         self.in_H0.setToolTip(txt)
 
         # Setup of lf_H0
         self.lf_H0.validator().setBottom(0)
-        txt = self.tr(u"""<qt><nobr>Radius of the hole centers</nobr></qt>""")
+        txt = self.tr("""<qt><nobr>Radius of the hole centers</nobr></qt>""")
         self.lf_H0.setWhatsThis(txt)
         self.lf_H0.setToolTip(txt)

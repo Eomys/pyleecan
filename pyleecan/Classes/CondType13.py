@@ -58,7 +58,9 @@ except ImportError as error:
     comp_height_wire = error
 
 try:
-    from ..Methods.Machine.CondType13.comp_nb_circumferential_wire import comp_nb_circumferential_wire
+    from ..Methods.Machine.CondType13.comp_nb_circumferential_wire import (
+        comp_nb_circumferential_wire,
+    )
 except ImportError as error:
     comp_nb_circumferential_wire = error
 
@@ -213,7 +215,19 @@ class CondType13(Conductor):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, Wwire=0.015, Wins_cond=0.015, Nwppc_rad=1, Nwppc_tan=1, Wins_wire=0, Kwoh=0.5, cond_mat=-1, ins_mat=-1, init_dict = None, init_str = None):
+    def __init__(
+        self,
+        Wwire=0.015,
+        Wins_cond=0.015,
+        Nwppc_rad=1,
+        Nwppc_tan=1,
+        Wins_wire=0,
+        Kwoh=0.5,
+        cond_mat=-1,
+        ins_mat=-1,
+        init_dict=None,
+        init_str=None,
+    ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -294,63 +308,115 @@ class CondType13(Conductor):
             return False
         return True
 
-    def compare(self, other, name='self', ignore_list=None, is_add_value=False):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
             ignore_list = list()
         if type(other) != type(self):
-            return ['type('+name+')']
+            return ["type(" + name + ")"]
         diff_list = list()
 
         # Check the properties inherited from Conductor
-        diff_list.extend(super(CondType13, self).compare(other,name=name, ignore_list=ignore_list, is_add_value=is_add_value))
-        if other._Wwire is not None and self._Wwire is not None and isnan(other._Wwire) and isnan(self._Wwire):
+        diff_list.extend(
+            super(CondType13, self).compare(
+                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
+            )
+        )
+        if (
+            other._Wwire is not None
+            and self._Wwire is not None
+            and isnan(other._Wwire)
+            and isnan(self._Wwire)
+        ):
             pass
         elif other._Wwire != self._Wwire:
             if is_add_value:
-                val_str = ' (self='+str(self._Wwire)+', other='+str(other._Wwire)+')'
-                diff_list.append(name+'.Wwire'+val_str)
+                val_str = (
+                    " (self=" + str(self._Wwire) + ", other=" + str(other._Wwire) + ")"
+                )
+                diff_list.append(name + ".Wwire" + val_str)
             else:
-                diff_list.append(name+'.Wwire')
-        if other._Wins_cond is not None and self._Wins_cond is not None and isnan(other._Wins_cond) and isnan(self._Wins_cond):
+                diff_list.append(name + ".Wwire")
+        if (
+            other._Wins_cond is not None
+            and self._Wins_cond is not None
+            and isnan(other._Wins_cond)
+            and isnan(self._Wins_cond)
+        ):
             pass
         elif other._Wins_cond != self._Wins_cond:
             if is_add_value:
-                val_str = ' (self='+str(self._Wins_cond)+', other='+str(other._Wins_cond)+')'
-                diff_list.append(name+'.Wins_cond'+val_str)
+                val_str = (
+                    " (self="
+                    + str(self._Wins_cond)
+                    + ", other="
+                    + str(other._Wins_cond)
+                    + ")"
+                )
+                diff_list.append(name + ".Wins_cond" + val_str)
             else:
-                diff_list.append(name+'.Wins_cond')
+                diff_list.append(name + ".Wins_cond")
         if other._Nwppc_rad != self._Nwppc_rad:
             if is_add_value:
-                val_str = ' (self='+str(self._Nwppc_rad)+', other='+str(other._Nwppc_rad)+')'
-                diff_list.append(name+'.Nwppc_rad'+val_str)
+                val_str = (
+                    " (self="
+                    + str(self._Nwppc_rad)
+                    + ", other="
+                    + str(other._Nwppc_rad)
+                    + ")"
+                )
+                diff_list.append(name + ".Nwppc_rad" + val_str)
             else:
-                diff_list.append(name+'.Nwppc_rad')
+                diff_list.append(name + ".Nwppc_rad")
         if other._Nwppc_tan != self._Nwppc_tan:
             if is_add_value:
-                val_str = ' (self='+str(self._Nwppc_tan)+', other='+str(other._Nwppc_tan)+')'
-                diff_list.append(name+'.Nwppc_tan'+val_str)
+                val_str = (
+                    " (self="
+                    + str(self._Nwppc_tan)
+                    + ", other="
+                    + str(other._Nwppc_tan)
+                    + ")"
+                )
+                diff_list.append(name + ".Nwppc_tan" + val_str)
             else:
-                diff_list.append(name+'.Nwppc_tan')
-        if other._Wins_wire is not None and self._Wins_wire is not None and isnan(other._Wins_wire) and isnan(self._Wins_wire):
+                diff_list.append(name + ".Nwppc_tan")
+        if (
+            other._Wins_wire is not None
+            and self._Wins_wire is not None
+            and isnan(other._Wins_wire)
+            and isnan(self._Wins_wire)
+        ):
             pass
         elif other._Wins_wire != self._Wins_wire:
             if is_add_value:
-                val_str = ' (self='+str(self._Wins_wire)+', other='+str(other._Wins_wire)+')'
-                diff_list.append(name+'.Wins_wire'+val_str)
+                val_str = (
+                    " (self="
+                    + str(self._Wins_wire)
+                    + ", other="
+                    + str(other._Wins_wire)
+                    + ")"
+                )
+                diff_list.append(name + ".Wins_wire" + val_str)
             else:
-                diff_list.append(name+'.Wins_wire')
-        if other._Kwoh is not None and self._Kwoh is not None and isnan(other._Kwoh) and isnan(self._Kwoh):
+                diff_list.append(name + ".Wins_wire")
+        if (
+            other._Kwoh is not None
+            and self._Kwoh is not None
+            and isnan(other._Kwoh)
+            and isnan(self._Kwoh)
+        ):
             pass
         elif other._Kwoh != self._Kwoh:
             if is_add_value:
-                val_str = ' (self='+str(self._Kwoh)+', other='+str(other._Kwoh)+')'
-                diff_list.append(name+'.Kwoh'+val_str)
+                val_str = (
+                    " (self=" + str(self._Kwoh) + ", other=" + str(other._Kwoh) + ")"
+                )
+                diff_list.append(name + ".Kwoh" + val_str)
             else:
-                diff_list.append(name+'.Kwoh')
+                diff_list.append(name + ".Kwoh")
         # Filter ignore differences
-        diff_list = list(filter(lambda x : x not in ignore_list, diff_list))
+        diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
 
     def __sizeof__(self):
@@ -375,12 +441,16 @@ class CondType13(Conductor):
             How to handle ndarray (0: tolist, 1: copy, 2: nothing)
         keep_function : bool
             True to keep the function object, else return str
-        Optional keyword input parameter is for internal use only 
+        Optional keyword input parameter is for internal use only
         and may prevent json serializability.
         """
 
         # Get the properties inherited from Conductor
-        CondType13_dict = super(CondType13, self).as_dict(type_handle_ndarray=type_handle_ndarray, keep_function=keep_function, **kwargs)
+        CondType13_dict = super(CondType13, self).as_dict(
+            type_handle_ndarray=type_handle_ndarray,
+            keep_function=keep_function,
+            **kwargs
+        )
         CondType13_dict["Wwire"] = self.Wwire
         CondType13_dict["Wins_cond"] = self.Wins_cond
         CondType13_dict["Nwppc_rad"] = self.Nwppc_rad
@@ -391,7 +461,6 @@ class CondType13(Conductor):
         # Overwrite the mother class name
         CondType13_dict["__class__"] = "CondType13"
         return CondType13_dict
-
 
     def copy(self):
         """Creates a deepcopy of the object"""
@@ -412,7 +481,16 @@ class CondType13(Conductor):
         else:
             ins_mat_val = self.ins_mat.copy()
         # Creates new object of the same type with the copied properties
-        obj_copy = type(self)(Wwire=Wwire_val,Wins_cond=Wins_cond_val,Nwppc_rad=Nwppc_rad_val,Nwppc_tan=Nwppc_tan_val,Wins_wire=Wins_wire_val,Kwoh=Kwoh_val,cond_mat=cond_mat_val,ins_mat=ins_mat_val)
+        obj_copy = type(self)(
+            Wwire=Wwire_val,
+            Wins_cond=Wins_cond_val,
+            Nwppc_rad=Nwppc_rad_val,
+            Nwppc_tan=Nwppc_tan_val,
+            Wins_wire=Wins_wire_val,
+            Kwoh=Kwoh_val,
+            cond_mat=cond_mat_val,
+            ins_mat=ins_mat_val,
+        )
         return obj_copy
 
     def _set_None(self):
@@ -439,7 +517,7 @@ class CondType13(Conductor):
     Wwire = property(
         fget=_get_Wwire,
         fset=_set_Wwire,
-        doc=u"""cf schematics, single wire diameter without insulation [m]
+        doc="""cf schematics, single wire diameter without insulation [m]
 
         :Type: float
         :min: 0
@@ -458,7 +536,7 @@ class CondType13(Conductor):
     Wins_cond = property(
         fget=_get_Wins_cond,
         fset=_set_Wins_cond,
-        doc=u"""(advanced) cf schematics, winding coil insulation diameter [m]
+        doc="""(advanced) cf schematics, winding coil insulation diameter [m]
 
         :Type: float
         :min: 0
@@ -477,7 +555,7 @@ class CondType13(Conductor):
     Nwppc_rad = property(
         fget=_get_Nwppc_rad,
         fset=_set_Nwppc_rad,
-        doc=u"""cf schematics, stator winding number of preformed wires (strands) in parallel per coil along radial (vertical) direction
+        doc="""cf schematics, stator winding number of preformed wires (strands) in parallel per coil along radial (vertical) direction
 
         :Type: int
         :min: 1
@@ -496,7 +574,7 @@ class CondType13(Conductor):
     Nwppc_tan = property(
         fget=_get_Nwppc_tan,
         fset=_set_Nwppc_tan,
-        doc=u"""cf schematics, stator winding number of preformed wires (strands) in parallel per coil along tangential (horizontal) direction
+        doc="""cf schematics, stator winding number of preformed wires (strands) in parallel per coil along tangential (horizontal) direction
 
         :Type: int
         :min: 1
@@ -515,7 +593,7 @@ class CondType13(Conductor):
     Wins_wire = property(
         fget=_get_Wins_wire,
         fset=_set_Wins_wire,
-        doc=u"""(advanced) cf schematics, winding strand insulation thickness [m]
+        doc="""(advanced) cf schematics, winding strand insulation thickness [m]
 
         :Type: float
         :min: 0
@@ -534,7 +612,7 @@ class CondType13(Conductor):
     Kwoh = property(
         fget=_get_Kwoh,
         fset=_set_Kwoh,
-        doc=u"""winding overhang factor which describes the fact that random round wire end-windings can be more or less compressed (0.5 for small motors, 0.8 for large motors) - can be used to tune the average turn length (relevant if type_cond==1)
+        doc="""winding overhang factor which describes the fact that random round wire end-windings can be more or less compressed (0.5 for small motors, 0.8 for large motors) - can be used to tune the average turn length (relevant if type_cond==1)
 
         :Type: float
         :min: 0

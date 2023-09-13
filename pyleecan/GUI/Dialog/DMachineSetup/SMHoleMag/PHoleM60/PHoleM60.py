@@ -6,7 +6,9 @@ from PySide2.QtGui import QPixmap
 from PySide2.QtWidgets import QWidget
 from pyleecan.Classes.HoleM60 import HoleM60
 from pyleecan.GUI import gui_option
-from pyleecan.GUI.Dialog.DMachineSetup.SMHoleMag.PHoleM60.Gen_PHoleM60 import Gen_PHoleM60
+from pyleecan.GUI.Dialog.DMachineSetup.SMHoleMag.PHoleM60.Gen_PHoleM60 import (
+    Gen_PHoleM60,
+)
 from pyleecan.Methods.Slot.Slot import SlotCheckError
 from pyleecan.GUI.Dialog.DMachineSetup.SMHoleMag import DEFAULT_MAG_MAT
 
@@ -159,7 +161,7 @@ class PHoleM60(Gen_PHoleM60, QWidget):
         self.comp_output()
         # Notify the machine GUI that the machine has changed
         self.saveNeeded.emit()
-    
+
     def set_H0(self):
         """Signal to update the value of H0 according to the line edit
 

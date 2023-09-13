@@ -321,7 +321,6 @@ def test_FEMM_Loss_Jaguar_no_skew():
 
 # To run it without pytest
 if __name__ == "__main__":
-
     # find_best_phi0_jaguar()
     # test_FEMM_Loss_Jaguar_no_skew()
     test_FEMM_Loss_Jaguar()

@@ -14,11 +14,11 @@ class Gen_SMachineType(Ui_SMachineType):
         # Setup of si_p
         self.si_p.setMinimum(1)
         self.si_p.setMaximum(999999)
-        txt = self.tr(u"""pole pairs number""")
+        txt = self.tr("""pole pairs number""")
         self.si_p.setWhatsThis(txt)
         self.si_p.setToolTip(txt)
 
         # Setup of in_p
-        txt = self.tr(u"""pole pairs number""")
+        txt = self.tr("""pole pairs number""")
         self.in_p.setWhatsThis(txt)
         self.in_p.setToolTip(txt)
