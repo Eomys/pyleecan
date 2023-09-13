@@ -297,8 +297,8 @@ class PWSlot23(Gen_PWSlot23, QWidget):
             State of the checkbox
         """
 
+        self.slot.is_cstt_tooth = is_checked
         if is_checked:
-            self.w_wedge_mat.update(self.slot, "wedge_mat", self.material_dict)
             self.slot.W1 = None
             self.slot.W2 = None
             self.lf_W1.clear()
@@ -307,7 +307,6 @@ class PWSlot23(Gen_PWSlot23, QWidget):
             self.lf_W2.setEnabled(False)
             self.lf_W3.setEnabled(True)
             self.txt_constraint.setEnabled(False)
-            self.w_wedge_mat.show()
 
         else:
             self.slot.W3 = None
@@ -316,7 +315,6 @@ class PWSlot23(Gen_PWSlot23, QWidget):
             self.lf_W1.setEnabled(True)
             self.lf_W2.setEnabled(True)
             self.txt_constraint.setEnabled(True)
-            self.w_wedge_mat.show()
 
         # Select the correct schematics
         self.update_schematics()
