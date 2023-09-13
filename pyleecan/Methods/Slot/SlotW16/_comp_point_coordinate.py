@@ -42,13 +42,13 @@ def _comp_point_coordinate(self):
     Z5t = Z5 * exp(1j * hsp)
     y5t = Z5t.imag
     xct = sqrt(
-        self.H0**2
+        self.H0 ** 2
         + 2 * self.H0 * self.R1
         - 2 * self.H0 * Rbo
         - 2 * self.R1 * Rbo
         - 2 * self.R1 * y5t
-        + Rbo**2
-        - y5t**2
+        + Rbo ** 2
+        - y5t ** 2
     )
     x3t = (self.H0 - Rbo) * xct / (self.H0 + self.R1 - Rbo)
     x4t = sqrt((self.H0 - Rbo - y5t) * (self.H0 + 2 * self.R1 - Rbo + y5t))

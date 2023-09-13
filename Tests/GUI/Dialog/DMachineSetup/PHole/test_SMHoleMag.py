@@ -417,7 +417,7 @@ class TestSMHoleMag(object):
         assert (
             self.widget.tab_hole.widget(0).c_hole_type.currentText() == "Hole Type 58"
         )
-        
+
     def test_set_type_60(self):
         """ """
         self.widget.tab_hole.widget(0).c_hole_type.setCurrentIndex(7)
