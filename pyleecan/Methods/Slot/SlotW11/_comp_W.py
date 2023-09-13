@@ -20,14 +20,14 @@ def _comp_W(self):
     """
     Rbo = self.get_Rbo()
 
-    # alpha is the angle to rotate Z0 so ||Z1,Z8|| = W0
+    # alpha is the angle to rotate Z0 so ||Z1,Z10|| = W0
     alpha = float(arcsin(self.W0 / (2 * Rbo)))
 
     # comp point coordinate (in complex)
     Z0 = Rbo * exp(1j * 0)
     Z1 = Z0 * exp(-1j * alpha)
 
-    Harc = abs(Z1.real - Rbo)
+    Harc = Rbo - abs(Z1.real)
 
     # To compute the slot width we use the fact that
     # alpha_tooth + alpha_slot = slot_pitch
@@ -43,31 +43,33 @@ def _comp_W(self):
     alpha_S1 = slot_pitch - 2 * alpha_T1
     self.W1 = 2 * tan(alpha_S1 / 2) * radius
 
+    # define W2
     if self.is_outwards():
-        self.W2 = 2 * (
+        self.W2 = (
             2
             * tan(slot_pitch / 2)
             * (
                 Rbo
-                + Harc
+                - Harc
                 + self.H0
-                + self.H1
+                + self.get_H1()
                 + self.H2
                 - self.R1
-                + self.W3 / 2 * tan(slot_pitch / 2) * cos(slot_pitch / 2)
+                - self.W3 / (2 * tan(slot_pitch / 2) * cos(slot_pitch / 2))
             )
         )
+
     else:
-        self.W2 = 2 * (
+        self.W2 = (
             2
             * tan(slot_pitch / 2)
             * (
                 Rbo
                 - Harc
                 - self.H0
-                - self.H1
+                - self.get_H1()
                 - self.H2
                 + self.R1
-                - self.W3 / 2 * tan(slot_pitch / 2) * cos(slot_pitch / 2)
+                + self.W3 / (2 * tan(slot_pitch / 2) * cos(slot_pitch / 2))
             )
         )

@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
-from numpy import cos, exp, arcsin
+from numpy import cos, exp, arcsin, array
+from ....Classes.Arc1 import Arc1
 
 
 def comp_height(self):
@@ -21,16 +22,30 @@ def comp_height(self):
     if self.is_cstt_tooth:
         # Compute W1 and W2 to match W3 tooth constraint
         self._comp_W()
+
     Rbo = self.get_Rbo()
-    point_dict = self._comp_point_coordinate()
-    Z1 = point_dict["Z1"]
-    Z5 = point_dict["Z5"]
-
-    Harc = abs(Z1.real - Rbo)
-
-    Harc2 = abs(Z5.real - Rbo)
 
     if self.is_outwards():
-        return abs(Z5) - Rbo
+        point_dict = self._comp_point_coordinate()
+        line_dict = dict()
+        Z6 = point_dict["Z6"]
+        Z7 = point_dict["Z7"]
+
+        Ndisc = 200
+
+        line_dict["6-7"] = Arc1(
+            Z6, Z7, 1 * self.R1, is_trigo_direction=self.is_outwards()
+        )
+        surf = self.get_surface()
+
+        point_list = surf.discretize(Ndisc)
+
+        point_list = array(point_list)
+
+        return max(abs(point_list)) - Rbo
+
     else:
-        return Rbo - Harc - abs(Z5)
+        # Computation of the arc height
+        alpha = self.comp_angle_opening() / 2
+        Harc = float(Rbo * (1 - cos(alpha)))
+        return self.H0 + self.get_H1() + self.H2 + Harc

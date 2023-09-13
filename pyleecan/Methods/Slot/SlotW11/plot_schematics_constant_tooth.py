@@ -144,7 +144,7 @@ def plot_schematics_constant_tooth(
                 color=ARROW_COLOR,
                 linewidth=ARROW_WIDTH,
                 label="W3",
-                offset_label=self.H1 * 0.2 - 0.001j,
+                offset_label=self.get_H1() * 0.2 - 0.001j,
                 is_arrow=True,
                 fontsize=SC_FONT_SIZE,
             )
@@ -383,36 +383,3 @@ def plot_schematics_constant_tooth(
         if is_show_fig:
             fig.show()
         return fig, ax
-
-
-"""
-import pytest
-
-from pyleecan.Classes.LamSlotMag import LamSlotMag
-from pyleecan.Classes.SlotW11 import SlotW11
-from pyleecan.Classes.Slot import Slot
-from pyleecan.Methods import ParentMissingError
-
-from numpy import exp
-from time import sleep
-
-Mag19_test = list()
-# Internal Slot
-lam = LamSlot(Rint=0.135, Rext=0.3, is_internal=False)
-lam.slot = SlotW11(
-    Zs=12,
-    H0=20e-3,
-    W0=30e-3,
-    H1=30e-3,
-    H2=80e-3,
-    W3=20e-3,
-    is_cstt_tooth=True,
-    R1=20e-3,
-)
-
-
-if __name__ == "__main__":
-    plot_schematics_constant_tooth(lam.slot)
-    plt.show()
-    sleep(60)
-"""
