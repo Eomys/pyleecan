@@ -293,7 +293,7 @@ class LossModelBertotti(LossModel):
     k_hy = property(
         fget=_get_k_hy,
         fset=_set_k_hy,
-        doc="""Hysteresis loss coefficient
+        doc=u"""Hysteresis loss coefficient
 
         :Type: float
         """,
@@ -311,7 +311,7 @@ class LossModelBertotti(LossModel):
     k_ed = property(
         fget=_get_k_ed,
         fset=_set_k_ed,
-        doc="""Eddy current loss coefficient
+        doc=u"""Eddy current loss coefficient
 
         :Type: float
         """,
@@ -329,7 +329,7 @@ class LossModelBertotti(LossModel):
     k_ex = property(
         fget=_get_k_ex,
         fset=_set_k_ex,
-        doc="""Excess loss coefficient
+        doc=u"""Excess loss coefficient
 
         :Type: float
         """,

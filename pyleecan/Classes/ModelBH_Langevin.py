@@ -33,7 +33,7 @@ from ._check import InitUnKnowClassError
 
 
 class ModelBH_Langevin(ModelBH):
-    """Abstract class for BH curve model"""
+    """Abstract class for BH curve model """
 
     VERSION = 1
 
@@ -312,7 +312,7 @@ class ModelBH_Langevin(ModelBH):
     Bs = property(
         fget=_get_Bs,
         fset=_set_Bs,
-        doc="""To enforc Saturation flux density
+        doc=u"""To enforc Saturation flux density
 
         :Type: float
         """,
@@ -330,7 +330,7 @@ class ModelBH_Langevin(ModelBH):
     a = property(
         fget=_get_a,
         fset=_set_a,
-        doc="""To enforce Saturation parameter a
+        doc=u"""To enforce Saturation parameter a
 
         :Type: float
         """,
@@ -348,7 +348,7 @@ class ModelBH_Langevin(ModelBH):
     param1 = property(
         fget=_get_param1,
         fset=_set_param1,
-        doc="""Init value for Bs for fitting algorithm
+        doc=u"""Init value for Bs for fitting algorithm
 
         :Type: float
         """,
@@ -366,7 +366,7 @@ class ModelBH_Langevin(ModelBH):
     param2 = property(
         fget=_get_param2,
         fset=_set_param2,
-        doc="""Init value for a for fitting algorithm
+        doc=u"""Init value for a for fitting algorithm
 
         :Type: float
         """,

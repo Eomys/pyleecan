@@ -215,7 +215,7 @@ class EndWindingCirc(EndWinding):
     coil_pitch = property(
         fget=_get_coil_pitch,
         fset=_set_coil_pitch,
-        doc="""effective coil pitch (override) for length calculation
+        doc=u"""effective coil pitch (override) for length calculation
 
         :Type: float
         """,

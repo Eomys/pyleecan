@@ -685,7 +685,7 @@ class Machine(FrozenClass):
     frame = property(
         fget=_get_frame,
         fset=_set_frame,
-        doc="""Machine's Frame
+        doc=u"""Machine's Frame
 
         :Type: Frame
         """,
@@ -722,7 +722,7 @@ class Machine(FrozenClass):
     shaft = property(
         fget=_get_shaft,
         fset=_set_shaft,
-        doc="""Machine's Shaft
+        doc=u"""Machine's Shaft
 
         :Type: Shaft
         """,
@@ -740,7 +740,7 @@ class Machine(FrozenClass):
     name = property(
         fget=_get_name,
         fset=_set_name,
-        doc="""Name of the machine
+        doc=u"""Name of the machine
 
         :Type: str
         """,
@@ -758,7 +758,7 @@ class Machine(FrozenClass):
     desc = property(
         fget=_get_desc,
         fset=_set_desc,
-        doc="""Machine description
+        doc=u"""Machine description
 
         :Type: str
         """,
@@ -776,7 +776,7 @@ class Machine(FrozenClass):
     type_machine = property(
         fget=_get_type_machine,
         fset=_set_type_machine,
-        doc="""Integer to store the machine type (for the GUI, should be replaced by a test of the object type)
+        doc=u"""Integer to store the machine type (for the GUI, should be replaced by a test of the object type)
 
         :Type: int
         """,
@@ -794,7 +794,7 @@ class Machine(FrozenClass):
     logger_name = property(
         fget=_get_logger_name,
         fset=_set_logger_name,
-        doc="""Name of the logger to use
+        doc=u"""Name of the logger to use
 
         :Type: str
         """,

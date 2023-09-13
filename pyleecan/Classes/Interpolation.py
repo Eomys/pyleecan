@@ -278,7 +278,7 @@ class Interpolation(FrozenClass):
     ref_cell = property(
         fget=_get_ref_cell,
         fset=_set_ref_cell,
-        doc="""
+        doc=u"""
 
         :Type: RefCell
         """,
@@ -315,7 +315,7 @@ class Interpolation(FrozenClass):
     gauss_point = property(
         fget=_get_gauss_point,
         fset=_set_gauss_point,
-        doc="""
+        doc=u"""
 
         :Type: GaussPoint
         """,
@@ -354,7 +354,7 @@ class Interpolation(FrozenClass):
     scalar_product = property(
         fget=_get_scalar_product,
         fset=_set_scalar_product,
-        doc="""
+        doc=u"""
 
         :Type: ScalarProduct
         """,

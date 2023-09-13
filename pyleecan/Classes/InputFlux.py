@@ -510,7 +510,7 @@ class InputFlux(InputCurrent):
     per_a = property(
         fget=_get_per_a,
         fset=_set_per_a,
-        doc="""Angle periodicity
+        doc=u"""Angle periodicity
 
         :Type: int
         """,
@@ -528,7 +528,7 @@ class InputFlux(InputCurrent):
     per_t = property(
         fget=_get_per_t,
         fset=_set_per_t,
-        doc="""Time periodicity
+        doc=u"""Time periodicity
 
         :Type: int
         """,
@@ -546,7 +546,7 @@ class InputFlux(InputCurrent):
     is_antiper_a = property(
         fget=_get_is_antiper_a,
         fset=_set_is_antiper_a,
-        doc="""If angle is antiperiodic
+        doc=u"""If angle is antiperiodic
 
         :Type: bool
         """,
@@ -564,7 +564,7 @@ class InputFlux(InputCurrent):
     is_antiper_t = property(
         fget=_get_is_antiper_t,
         fset=_set_is_antiper_t,
-        doc="""If time is antiperiodic
+        doc=u"""If time is antiperiodic
 
         :Type: bool
         """,
@@ -584,7 +584,7 @@ class InputFlux(InputCurrent):
     B_dict = property(
         fget=_get_B_dict,
         fset=_set_B_dict,
-        doc="""Dict of Import objects or lists for each component of the flux
+        doc=u"""Dict of Import objects or lists for each component of the flux
 
         :Type: dict
         """,
@@ -602,7 +602,7 @@ class InputFlux(InputCurrent):
     unit = property(
         fget=_get_unit,
         fset=_set_unit,
-        doc="""Unit of the flux if not T
+        doc=u"""Unit of the flux if not T
 
         :Type: str
         """,
@@ -627,7 +627,7 @@ class InputFlux(InputCurrent):
     slice = property(
         fget=_get_slice,
         fset=_set_slice,
-        doc="""Slice axis values
+        doc=u"""Slice axis values
 
         :Type: ndarray
         """,
@@ -660,7 +660,7 @@ class InputFlux(InputCurrent):
     B_enforced = property(
         fget=_get_B_enforced,
         fset=_set_B_enforced,
-        doc="""Airgap flux density as VectorField object
+        doc=u"""Airgap flux density as VectorField object
 
         :Type: SciDataTool.Classes.VectorField.VectorField
         """,

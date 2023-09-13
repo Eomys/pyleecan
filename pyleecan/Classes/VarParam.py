@@ -332,7 +332,7 @@ class VarParam(VarSimu):
     paramexplorer_list = property(
         fget=_get_paramexplorer_list,
         fset=_set_paramexplorer_list,
-        doc="""List containing ParamSetter to define every simulation
+        doc=u"""List containing ParamSetter to define every simulation
 
         :Type: [ParamExplorer]
         """,

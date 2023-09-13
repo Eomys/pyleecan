@@ -505,7 +505,7 @@ class OPslip(OP):
     I0_ref = property(
         fget=_get_I0_ref,
         fset=_set_I0_ref,
-        doc="""Current rms value
+        doc=u"""Current rms value
 
         :Type: float
         """,
@@ -523,7 +523,7 @@ class OPslip(OP):
     IPhi0_ref = property(
         fget=_get_IPhi0_ref,
         fset=_set_IPhi0_ref,
-        doc="""Current phase
+        doc=u"""Current phase
 
         :Type: float
         """,
@@ -541,7 +541,7 @@ class OPslip(OP):
     slip_ref = property(
         fget=_get_slip_ref,
         fset=_set_slip_ref,
-        doc="""Rotor mechanical slip
+        doc=u"""Rotor mechanical slip
 
         :Type: float
         """,
@@ -559,7 +559,7 @@ class OPslip(OP):
     U0_ref = property(
         fget=_get_U0_ref,
         fset=_set_U0_ref,
-        doc="""stator voltage (phase to neutral)
+        doc=u"""stator voltage (phase to neutral)
 
         :Type: float
         """,
@@ -577,7 +577,7 @@ class OPslip(OP):
     UPhi0_ref = property(
         fget=_get_UPhi0_ref,
         fset=_set_UPhi0_ref,
-        doc="""Voltage phase
+        doc=u"""Voltage phase
 
         :Type: float
         """,

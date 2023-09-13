@@ -349,7 +349,7 @@ class OutForce(FrozenClass):
     axes_dict = property(
         fget=_get_axes_dict,
         fset=_set_axes_dict,
-        doc="""Dict containing axes data used for Force
+        doc=u"""Dict containing axes data used for Force
 
         :Type: {SciDataTool.Classes.DataND.Data}
         """,
@@ -382,7 +382,7 @@ class OutForce(FrozenClass):
     AGSF = property(
         fget=_get_AGSF,
         fset=_set_AGSF,
-        doc="""Air Gap Surface Force (mainly computed with Maxwell stress tensor)
+        doc=u"""Air Gap Surface Force (mainly computed with Maxwell stress tensor)
 
         :Type: SciDataTool.Classes.VectorField.VectorField
         """,
@@ -400,7 +400,7 @@ class OutForce(FrozenClass):
     logger_name = property(
         fget=_get_logger_name,
         fset=_set_logger_name,
-        doc="""Name of the logger to use
+        doc=u"""Name of the logger to use
 
         :Type: str
         """,
@@ -418,7 +418,7 @@ class OutForce(FrozenClass):
     Rag = property(
         fget=_get_Rag,
         fset=_set_Rag,
-        doc="""Radius value for air-gap computation
+        doc=u"""Radius value for air-gap computation
 
         :Type: float
         """,
@@ -457,7 +457,7 @@ class OutForce(FrozenClass):
     meshsolution = property(
         fget=_get_meshsolution,
         fset=_set_meshsolution,
-        doc="""Force computed on a mesh
+        doc=u"""Force computed on a mesh
 
         :Type: MeshSolution
         """,

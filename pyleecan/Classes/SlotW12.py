@@ -88,6 +88,7 @@ from ._check import InitUnKnowClassError
 
 
 class SlotW12(Slot):
+
     VERSION = 1
     IS_SYMMETRICAL = 1
 
@@ -483,7 +484,7 @@ class SlotW12(Slot):
     H0 = property(
         fget=_get_H0,
         fset=_set_H0,
-        doc="""Slot isthmus height.
+        doc=u"""Slot isthmus height.
 
         :Type: float
         :min: 0
@@ -502,7 +503,7 @@ class SlotW12(Slot):
     H1 = property(
         fget=_get_H1,
         fset=_set_H1,
-        doc="""Slot middle height
+        doc=u"""Slot middle height
 
         :Type: float
         :min: 0
@@ -521,7 +522,7 @@ class SlotW12(Slot):
     R1 = property(
         fget=_get_R1,
         fset=_set_R1,
-        doc="""Wedges radius
+        doc=u"""Wedges radius
 
         :Type: float
         :min: 0
@@ -540,7 +541,7 @@ class SlotW12(Slot):
     R2 = property(
         fget=_get_R2,
         fset=_set_R2,
-        doc="""Slot bottom radius
+        doc=u"""Slot bottom radius
 
         :Type: float
         :min: 0

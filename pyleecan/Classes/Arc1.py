@@ -480,7 +480,7 @@ class Arc1(Arc):
     begin = property(
         fget=_get_begin,
         fset=_set_begin,
-        doc="""begin point of the arc
+        doc=u"""begin point of the arc
 
         :Type: complex
         """,
@@ -500,7 +500,7 @@ class Arc1(Arc):
     end = property(
         fget=_get_end,
         fset=_set_end,
-        doc="""end point of the arc
+        doc=u"""end point of the arc
 
         :Type: complex
         """,
@@ -518,7 +518,7 @@ class Arc1(Arc):
     radius = property(
         fget=_get_radius,
         fset=_set_radius,
-        doc="""Radius of the arc (can be + or -)
+        doc=u"""Radius of the arc (can be + or -)
 
         :Type: float
         """,
@@ -536,7 +536,7 @@ class Arc1(Arc):
     is_trigo_direction = property(
         fget=_get_is_trigo_direction,
         fset=_set_is_trigo_direction,
-        doc="""Rotation direction of the arc
+        doc=u"""Rotation direction of the arc
 
         :Type: bool
         """,

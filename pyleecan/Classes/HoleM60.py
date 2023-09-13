@@ -558,7 +558,7 @@ class HoleM60(HoleMag):
     W0 = property(
         fget=_get_W0,
         fset=_set_W0,
-        doc="""Hole angular width
+        doc=u"""Hole angular width
 
         :Type: float
         :min: 0
@@ -577,7 +577,7 @@ class HoleM60(HoleMag):
     W1 = property(
         fget=_get_W1,
         fset=_set_W1,
-        doc="""Magnet width
+        doc=u"""Magnet width
 
         :Type: float
         :min: 0
@@ -596,7 +596,7 @@ class HoleM60(HoleMag):
     W2 = property(
         fget=_get_W2,
         fset=_set_W2,
-        doc="""Hole width
+        doc=u"""Hole width
 
         :Type: float
         :min: 0
@@ -615,7 +615,7 @@ class HoleM60(HoleMag):
     W3 = property(
         fget=_get_W3,
         fset=_set_W3,
-        doc="""Tooth width
+        doc=u"""Tooth width
 
         :Type: float
         :min: 0
@@ -634,7 +634,7 @@ class HoleM60(HoleMag):
     H0 = property(
         fget=_get_H0,
         fset=_set_H0,
-        doc="""Magnet height
+        doc=u"""Magnet height
 
         :Type: float
         :min: 0
@@ -653,7 +653,7 @@ class HoleM60(HoleMag):
     H1 = property(
         fget=_get_H1,
         fset=_set_H1,
-        doc="""Distance from the lamination bore
+        doc=u"""Distance from the lamination bore
 
         :Type: float
         :min: 0
@@ -691,7 +691,7 @@ class HoleM60(HoleMag):
     magnet_0 = property(
         fget=_get_magnet_0,
         fset=_set_magnet_0,
-        doc="""First Magnet
+        doc=u"""First Magnet
 
         :Type: Magnet
         """,
@@ -728,7 +728,7 @@ class HoleM60(HoleMag):
     magnet_1 = property(
         fget=_get_magnet_1,
         fset=_set_magnet_1,
-        doc="""Second Magnet
+        doc=u"""Second Magnet
 
         :Type: Magnet
         """,

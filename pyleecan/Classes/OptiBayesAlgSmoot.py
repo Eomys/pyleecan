@@ -340,7 +340,7 @@ class OptiBayesAlgSmoot(OptiBayesAlg):
     size_pop = property(
         fget=_get_size_pop,
         fset=_set_size_pop,
-        doc="""Number of individuals for each generation
+        doc=u"""Number of individuals for each generation
 
         :Type: int
         :min: 1
@@ -359,7 +359,7 @@ class OptiBayesAlgSmoot(OptiBayesAlg):
     nb_gen = property(
         fget=_get_nb_gen,
         fset=_set_nb_gen,
-        doc="""Number of generations for the genetic part
+        doc=u"""Number of generations for the genetic part
 
         :Type: int
         :min: 1

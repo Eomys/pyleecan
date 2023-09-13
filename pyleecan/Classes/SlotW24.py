@@ -93,6 +93,7 @@ from ._check import InitUnKnowClassError
 
 
 class SlotW24(Slot):
+
     VERSION = 1
     IS_SYMMETRICAL = 1
 
@@ -450,7 +451,7 @@ class SlotW24(Slot):
     W3 = property(
         fget=_get_W3,
         fset=_set_W3,
-        doc="""Teeth width
+        doc=u"""Teeth width
 
         :Type: float
         :min: 0
@@ -469,7 +470,7 @@ class SlotW24(Slot):
     H2 = property(
         fget=_get_H2,
         fset=_set_H2,
-        doc="""Slot height
+        doc=u"""Slot height
 
         :Type: float
         :min: 0

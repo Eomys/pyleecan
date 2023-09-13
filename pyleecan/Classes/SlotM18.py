@@ -359,7 +359,7 @@ class SlotM18(Slot):
     Hmag = property(
         fget=_get_Hmag,
         fset=_set_Hmag,
-        doc="""Magnet Height
+        doc=u"""Magnet Height
 
         :Type: float
         :min: 0

@@ -83,6 +83,7 @@ from ._check import InitUnKnowClassError
 
 
 class SlotW15(Slot):
+
     VERSION = 1
     IS_SYMMETRICAL = 1
 
@@ -541,7 +542,7 @@ class SlotW15(Slot):
     W0 = property(
         fget=_get_W0,
         fset=_set_W0,
-        doc="""Slot isthmus width.
+        doc=u"""Slot isthmus width.
 
         :Type: float
         :min: 0
@@ -560,7 +561,7 @@ class SlotW15(Slot):
     W3 = property(
         fget=_get_W3,
         fset=_set_W3,
-        doc="""Tooth width
+        doc=u"""Tooth width
 
         :Type: float
         :min: 0
@@ -579,7 +580,7 @@ class SlotW15(Slot):
     H0 = property(
         fget=_get_H0,
         fset=_set_H0,
-        doc="""Slot isthmus height.
+        doc=u"""Slot isthmus height.
 
         :Type: float
         :min: 0
@@ -598,7 +599,7 @@ class SlotW15(Slot):
     H1 = property(
         fget=_get_H1,
         fset=_set_H1,
-        doc="""Slot intermediate height.
+        doc=u"""Slot intermediate height.
 
         :Type: float
         :min: 0
@@ -617,7 +618,7 @@ class SlotW15(Slot):
     H2 = property(
         fget=_get_H2,
         fset=_set_H2,
-        doc="""Slot height
+        doc=u"""Slot height
 
         :Type: float
         :min: 0
@@ -636,7 +637,7 @@ class SlotW15(Slot):
     R1 = property(
         fget=_get_R1,
         fset=_set_R1,
-        doc="""Top radius
+        doc=u"""Top radius
 
         :Type: float
         :min: 0
@@ -655,7 +656,7 @@ class SlotW15(Slot):
     R2 = property(
         fget=_get_R2,
         fset=_set_R2,
-        doc="""Bottom radius
+        doc=u"""Bottom radius
 
         :Type: float
         :min: 0

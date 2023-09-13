@@ -88,6 +88,7 @@ from ._check import InitUnKnowClassError
 
 
 class SlotW61(Slot):
+
     VERSION = 1
     IS_SYMMETRICAL = 0
 
@@ -608,7 +609,7 @@ class SlotW61(Slot):
     W0 = property(
         fget=_get_W0,
         fset=_set_W0,
-        doc="""Pole top width
+        doc=u"""Pole top width
 
         :Type: float
         :min: 0
@@ -627,7 +628,7 @@ class SlotW61(Slot):
     W1 = property(
         fget=_get_W1,
         fset=_set_W1,
-        doc="""Pole top width
+        doc=u"""Pole top width
 
         :Type: float
         :min: 0
@@ -646,7 +647,7 @@ class SlotW61(Slot):
     W2 = property(
         fget=_get_W2,
         fset=_set_W2,
-        doc="""Pole bottom width
+        doc=u"""Pole bottom width
 
         :Type: float
         :min: 0
@@ -665,7 +666,7 @@ class SlotW61(Slot):
     H0 = property(
         fget=_get_H0,
         fset=_set_H0,
-        doc="""Pole top height
+        doc=u"""Pole top height
 
         :Type: float
         :min: 0
@@ -684,7 +685,7 @@ class SlotW61(Slot):
     H1 = property(
         fget=_get_H1,
         fset=_set_H1,
-        doc="""Pole intermediate height
+        doc=u"""Pole intermediate height
 
         :Type: float
         :min: 0
@@ -703,7 +704,7 @@ class SlotW61(Slot):
     H2 = property(
         fget=_get_H2,
         fset=_set_H2,
-        doc="""Pole bottom height
+        doc=u"""Pole bottom height
 
         :Type: float
         :min: 0
@@ -722,7 +723,7 @@ class SlotW61(Slot):
     H3 = property(
         fget=_get_H3,
         fset=_set_H3,
-        doc="""Top Distance Ploe-coil 
+        doc=u"""Top Distance Ploe-coil 
 
         :Type: float
         :min: 0
@@ -741,7 +742,7 @@ class SlotW61(Slot):
     H4 = property(
         fget=_get_H4,
         fset=_set_H4,
-        doc="""Bottom Distance Ploe-coil 
+        doc=u"""Bottom Distance Ploe-coil 
 
         :Type: float
         :min: 0
@@ -760,7 +761,7 @@ class SlotW61(Slot):
     W3 = property(
         fget=_get_W3,
         fset=_set_W3,
-        doc="""Edge Distance Ploe-coil 
+        doc=u"""Edge Distance Ploe-coil 
 
         :Type: float
         :min: 0

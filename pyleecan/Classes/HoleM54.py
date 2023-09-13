@@ -397,7 +397,7 @@ class HoleM54(Hole):
     H0 = property(
         fget=_get_H0,
         fset=_set_H0,
-        doc="""Hole depth
+        doc=u"""Hole depth
 
         :Type: float
         :min: 0
@@ -416,7 +416,7 @@ class HoleM54(Hole):
     H1 = property(
         fget=_get_H1,
         fset=_set_H1,
-        doc="""Hole width
+        doc=u"""Hole width
 
         :Type: float
         :min: 0
@@ -435,7 +435,7 @@ class HoleM54(Hole):
     W0 = property(
         fget=_get_W0,
         fset=_set_W0,
-        doc="""Hole angular width
+        doc=u"""Hole angular width
 
         :Type: float
         :min: 0
@@ -454,7 +454,7 @@ class HoleM54(Hole):
     R1 = property(
         fget=_get_R1,
         fset=_set_R1,
-        doc="""Hole radius
+        doc=u"""Hole radius
 
         :Type: float
         :min: 0

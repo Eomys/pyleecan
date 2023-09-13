@@ -44,7 +44,7 @@ from ._check import InitUnKnowClassError
 
 
 class CellMat(FrozenClass):
-    """Define the connectivity under matricial format containing one type of element (example: only triangles with 3 nodes)."""
+    """Define the connectivity under matricial format containing one type of element (example: only triangles with 3 nodes). """
 
     VERSION = 1
 
@@ -366,7 +366,7 @@ class CellMat(FrozenClass):
     connectivity = property(
         fget=_get_connectivity,
         fset=_set_connectivity,
-        doc="""Matrix of connectivity for one element type
+        doc=u"""Matrix of connectivity for one element type
 
         :Type: ndarray
         """,
@@ -384,7 +384,7 @@ class CellMat(FrozenClass):
     nb_cell = property(
         fget=_get_nb_cell,
         fset=_set_nb_cell,
-        doc="""Total number of elements
+        doc=u"""Total number of elements
 
         :Type: int
         """,
@@ -402,7 +402,7 @@ class CellMat(FrozenClass):
     nb_node_per_cell = property(
         fget=_get_nb_node_per_cell,
         fset=_set_nb_node_per_cell,
-        doc="""Define the number of node per cell
+        doc=u"""Define the number of node per cell
 
         :Type: int
         """,
@@ -427,7 +427,7 @@ class CellMat(FrozenClass):
     indice = property(
         fget=_get_indice,
         fset=_set_indice,
-        doc="""Element indices
+        doc=u"""Element indices
 
         :Type: ndarray
         """,
@@ -466,7 +466,7 @@ class CellMat(FrozenClass):
     interpolation = property(
         fget=_get_interpolation,
         fset=_set_interpolation,
-        doc="""Define FEA interpolation
+        doc=u"""Define FEA interpolation
 
         :Type: Interpolation
         """,

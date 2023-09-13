@@ -238,7 +238,7 @@ class LossModelWinding(LossModel):
     type_skin_effect = property(
         fget=_get_type_skin_effect,
         fset=_set_type_skin_effect,
-        doc="""0 to ignore skin effect, 1 to consider it
+        doc=u"""0 to ignore skin effect, 1 to consider it
 
         :Type: int
         """,

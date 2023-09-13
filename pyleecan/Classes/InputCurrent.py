@@ -429,7 +429,7 @@ class InputCurrent(InputVoltage):
     Is = property(
         fget=_get_Is,
         fset=_set_Is,
-        doc="""Stator currents as a function of time (each column correspond to one phase) to import
+        doc=u"""Stator currents as a function of time (each column correspond to one phase) to import
 
         :Type: ImportMatrix
         """,
@@ -463,7 +463,7 @@ class InputCurrent(InputVoltage):
     Ir = property(
         fget=_get_Ir,
         fset=_set_Ir,
-        doc="""Rotor currents as a function of time (each column correspond to one phase) to import
+        doc=u"""Rotor currents as a function of time (each column correspond to one phase) to import
 
         :Type: ImportMatrix
         """,
@@ -500,7 +500,7 @@ class InputCurrent(InputVoltage):
     Is_harm = property(
         fget=_get_Is_harm,
         fset=_set_Is_harm,
-        doc="""Stator harmonic currents
+        doc=u"""Stator harmonic currents
 
         :Type: ImportData
         """,

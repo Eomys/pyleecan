@@ -83,6 +83,7 @@ from ._check import InitUnKnowClassError
 
 
 class SlotW28(Slot):
+
     VERSION = 1
     IS_SYMMETRICAL = 1
 
@@ -491,7 +492,7 @@ class SlotW28(Slot):
     W0 = property(
         fget=_get_W0,
         fset=_set_W0,
-        doc="""Slot isthmus width.
+        doc=u"""Slot isthmus width.
 
         :Type: float
         :min: 0
@@ -510,7 +511,7 @@ class SlotW28(Slot):
     H0 = property(
         fget=_get_H0,
         fset=_set_H0,
-        doc="""Slot isthmus height.
+        doc=u"""Slot isthmus height.
 
         :Type: float
         :min: 0
@@ -529,7 +530,7 @@ class SlotW28(Slot):
     R1 = property(
         fget=_get_R1,
         fset=_set_R1,
-        doc="""Slot edge radius
+        doc=u"""Slot edge radius
 
         :Type: float
         :min: 0
@@ -548,7 +549,7 @@ class SlotW28(Slot):
     W3 = property(
         fget=_get_W3,
         fset=_set_W3,
-        doc="""Tooth width
+        doc=u"""Tooth width
 
         :Type: float
         :min: 0
@@ -567,7 +568,7 @@ class SlotW28(Slot):
     H3 = property(
         fget=_get_H3,
         fset=_set_H3,
-        doc="""Tooth height
+        doc=u"""Tooth height
 
         :Type: float
         :min: 0

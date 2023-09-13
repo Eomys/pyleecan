@@ -352,7 +352,7 @@ class VarLoad(VarSimu):
     OP_matrix = property(
         fget=_get_OP_matrix,
         fset=_set_OP_matrix,
-        doc="""Operating point matrix object
+        doc=u"""Operating point matrix object
 
         :Type: OPMatrix
         """,

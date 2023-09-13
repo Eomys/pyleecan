@@ -573,7 +573,7 @@ class LamSlotMulti(Lamination):
     slot_list = property(
         fget=_get_slot_list,
         fset=_set_slot_list,
-        doc="""List of lamination Slot
+        doc=u"""List of lamination Slot
 
         :Type: [Slot]
         """,
@@ -598,7 +598,7 @@ class LamSlotMulti(Lamination):
     alpha = property(
         fget=_get_alpha,
         fset=_set_alpha,
-        doc="""Angular position of the Slots
+        doc=u"""Angular position of the Slots
 
         :Type: ndarray
         """,
@@ -618,7 +618,7 @@ class LamSlotMulti(Lamination):
     sym_dict_enforced = property(
         fget=_get_sym_dict_enforced,
         fset=_set_sym_dict_enforced,
-        doc="""Dictionary to enforce the lamination symmetry
+        doc=u"""Dictionary to enforce the lamination symmetry
 
         :Type: dict
         """,

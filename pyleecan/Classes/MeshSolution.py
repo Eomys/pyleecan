@@ -555,7 +555,7 @@ class MeshSolution(FrozenClass):
     label = property(
         fget=_get_label,
         fset=_set_label,
-        doc="""(Optional) Descriptive name of the mesh
+        doc=u"""(Optional) Descriptive name of the mesh
 
         :Type: str
         """,
@@ -597,7 +597,7 @@ class MeshSolution(FrozenClass):
     mesh = property(
         fget=_get_mesh,
         fset=_set_mesh,
-        doc="""A list of Mesh objects. 
+        doc=u"""A list of Mesh objects. 
 
         :Type: [Mesh]
         """,
@@ -615,7 +615,7 @@ class MeshSolution(FrozenClass):
     is_same_mesh = property(
         fget=_get_is_same_mesh,
         fset=_set_is_same_mesh,
-        doc="""1 if the mesh is the same at each step (time, mode etc.)
+        doc=u"""1 if the mesh is the same at each step (time, mode etc.)
 
         :Type: bool
         """,
@@ -657,7 +657,7 @@ class MeshSolution(FrozenClass):
     solution = property(
         fget=_get_solution,
         fset=_set_solution,
-        doc="""A list of Solution objects
+        doc=u"""A list of Solution objects
 
         :Type: [Solution]
         """,
@@ -677,7 +677,7 @@ class MeshSolution(FrozenClass):
     group = property(
         fget=_get_group,
         fset=_set_group,
-        doc="""Dict sorted by groups name with list of cells indices. 
+        doc=u"""Dict sorted by groups name with list of cells indices. 
 
         :Type: dict
         """,
@@ -695,7 +695,7 @@ class MeshSolution(FrozenClass):
     dimension = property(
         fget=_get_dimension,
         fset=_set_dimension,
-        doc="""Dimension of the physical problem
+        doc=u"""Dimension of the physical problem
 
         :Type: int
         :min: 1
@@ -715,7 +715,7 @@ class MeshSolution(FrozenClass):
     path = property(
         fget=_get_path,
         fset=_set_path,
-        doc="""Path where the MeshSolution is stored as a file
+        doc=u"""Path where the MeshSolution is stored as a file
 
         :Type: str
         """,

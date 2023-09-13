@@ -20,6 +20,7 @@ from ._check import InitUnKnowClassError
 
 
 class GUIOption(FrozenClass):
+
     VERSION = 1
 
     # generic save method is available in all object
@@ -179,7 +180,7 @@ class GUIOption(FrozenClass):
     unit = property(
         fget=_get_unit,
         fset=_set_unit,
-        doc="""Unit options
+        doc=u"""Unit options
 
         :Type: Unit
         """,

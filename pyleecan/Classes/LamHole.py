@@ -406,7 +406,7 @@ class LamHole(LamH):
     hole = property(
         fget=_get_hole,
         fset=_set_hole,
-        doc="""lamination Hole
+        doc=u"""lamination Hole
 
         :Type: [Hole]
         """,

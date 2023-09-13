@@ -276,7 +276,7 @@ class MatHT(FrozenClass):
     lambda_x = property(
         fget=_get_lambda_x,
         fset=_set_lambda_x,
-        doc="""thermal conductivity (XY is lamination plane, Z is rotation axis)
+        doc=u"""thermal conductivity (XY is lamination plane, Z is rotation axis)
 
         :Type: float
         :min: 0
@@ -295,7 +295,7 @@ class MatHT(FrozenClass):
     lambda_y = property(
         fget=_get_lambda_y,
         fset=_set_lambda_y,
-        doc="""thermal conductivity (XY is lamination plane, Z is rotation axis)
+        doc=u"""thermal conductivity (XY is lamination plane, Z is rotation axis)
 
         :Type: float
         :min: 0
@@ -314,7 +314,7 @@ class MatHT(FrozenClass):
     lambda_z = property(
         fget=_get_lambda_z,
         fset=_set_lambda_z,
-        doc="""thermal conductivity (XY is lamination plane, Z is rotation axis)
+        doc=u"""thermal conductivity (XY is lamination plane, Z is rotation axis)
 
         :Type: float
         :min: 0
@@ -333,7 +333,7 @@ class MatHT(FrozenClass):
     Cp = property(
         fget=_get_Cp,
         fset=_set_Cp,
-        doc="""specific heat capacity
+        doc=u"""specific heat capacity
 
         :Type: float
         :min: 0
@@ -352,7 +352,7 @@ class MatHT(FrozenClass):
     alpha = property(
         fget=_get_alpha,
         fset=_set_alpha,
-        doc="""thermal expansion coefficient
+        doc=u"""thermal expansion coefficient
 
         :Type: float
         :min: 0

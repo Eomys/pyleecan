@@ -328,7 +328,7 @@ class MachineSIPMSM(MachineSync):
     rotor = property(
         fget=_get_rotor,
         fset=_set_rotor,
-        doc="""Machine's Rotor
+        doc=u"""Machine's Rotor
 
         :Type: LamSlotMag
         """,
@@ -365,7 +365,7 @@ class MachineSIPMSM(MachineSync):
     stator = property(
         fget=_get_stator,
         fset=_set_stator,
-        doc="""Machine's Stator
+        doc=u"""Machine's Stator
 
         :Type: Lamination
         """,

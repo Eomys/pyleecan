@@ -241,7 +241,7 @@ class MatElectrical(FrozenClass):
     rho = property(
         fget=_get_rho,
         fset=_set_rho,
-        doc="""Resistivity at 20 deg C
+        doc=u"""Resistivity at 20 deg C
 
         :Type: float
         :min: 0
@@ -260,7 +260,7 @@ class MatElectrical(FrozenClass):
     epsr = property(
         fget=_get_epsr,
         fset=_set_epsr,
-        doc="""Relative dielectric constant
+        doc=u"""Relative dielectric constant
 
         :Type: float
         :min: 0
@@ -279,7 +279,7 @@ class MatElectrical(FrozenClass):
     alpha = property(
         fget=_get_alpha,
         fset=_set_alpha,
-        doc="""Thermal resistivity coefficient
+        doc=u"""Thermal resistivity coefficient
 
         :Type: float
         :min: 0

@@ -636,7 +636,7 @@ class HoleM53(HoleMag):
     H0 = property(
         fget=_get_H0,
         fset=_set_H0,
-        doc="""Slot depth
+        doc=u"""Slot depth
 
         :Type: float
         :min: 0
@@ -655,7 +655,7 @@ class HoleM53(HoleMag):
     H1 = property(
         fget=_get_H1,
         fset=_set_H1,
-        doc="""Distance from the lamination Bore
+        doc=u"""Distance from the lamination Bore
 
         :Type: float
         :min: 0
@@ -674,7 +674,7 @@ class HoleM53(HoleMag):
     W1 = property(
         fget=_get_W1,
         fset=_set_W1,
-        doc="""Tooth width (at V bottom)
+        doc=u"""Tooth width (at V bottom)
 
         :Type: float
         :min: 0
@@ -693,7 +693,7 @@ class HoleM53(HoleMag):
     H2 = property(
         fget=_get_H2,
         fset=_set_H2,
-        doc="""Magnet Height
+        doc=u"""Magnet Height
 
         :Type: float
         :min: 0
@@ -712,7 +712,7 @@ class HoleM53(HoleMag):
     W2 = property(
         fget=_get_W2,
         fset=_set_W2,
-        doc="""Distance Magnet to bottom of the V
+        doc=u"""Distance Magnet to bottom of the V
 
         :Type: float
         :min: 0
@@ -731,7 +731,7 @@ class HoleM53(HoleMag):
     H3 = property(
         fget=_get_H3,
         fset=_set_H3,
-        doc="""Additional depth for the magnet
+        doc=u"""Additional depth for the magnet
 
         :Type: float
         :min: 0
@@ -750,7 +750,7 @@ class HoleM53(HoleMag):
     W3 = property(
         fget=_get_W3,
         fset=_set_W3,
-        doc="""Magnet Width
+        doc=u"""Magnet Width
 
         :Type: float
         :min: 0
@@ -769,7 +769,7 @@ class HoleM53(HoleMag):
     W4 = property(
         fget=_get_W4,
         fset=_set_W4,
-        doc="""Slot angle
+        doc=u"""Slot angle
 
         :Type: float
         :min: 0
@@ -807,7 +807,7 @@ class HoleM53(HoleMag):
     magnet_0 = property(
         fget=_get_magnet_0,
         fset=_set_magnet_0,
-        doc="""First Magnet
+        doc=u"""First Magnet
 
         :Type: Magnet
         """,
@@ -844,7 +844,7 @@ class HoleM53(HoleMag):
     magnet_1 = property(
         fget=_get_magnet_1,
         fset=_set_magnet_1,
-        doc="""Second Magnet
+        doc=u"""Second Magnet
 
         :Type: Magnet
         """,

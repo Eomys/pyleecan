@@ -412,7 +412,7 @@ class SlotM19(Slot):
     W0 = property(
         fget=_get_W0,
         fset=_set_W0,
-        doc="""Slot/magnet width. (top)
+        doc=u"""Slot/magnet width. (top)
 
         :Type: float
         :min: 0
@@ -431,7 +431,7 @@ class SlotM19(Slot):
     W1 = property(
         fget=_get_W1,
         fset=_set_W1,
-        doc="""Slot/magnet width. (bottom)
+        doc=u"""Slot/magnet width. (bottom)
 
         :Type: float
         :min: 0
@@ -450,7 +450,7 @@ class SlotM19(Slot):
     Hmag = property(
         fget=_get_Hmag,
         fset=_set_Hmag,
-        doc="""Magnet Height
+        doc=u"""Magnet Height
 
         :Type: float
         :min: 0

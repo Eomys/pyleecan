@@ -88,6 +88,7 @@ from ._check import InitUnKnowClassError
 
 
 class SlotW26(Slot):
+
     VERSION = 1
     IS_SYMMETRICAL = 1
 
@@ -508,7 +509,7 @@ class SlotW26(Slot):
     W0 = property(
         fget=_get_W0,
         fset=_set_W0,
-        doc="""Slot isthmus width.
+        doc=u"""Slot isthmus width.
 
         :Type: float
         :min: 0
@@ -527,7 +528,7 @@ class SlotW26(Slot):
     H0 = property(
         fget=_get_H0,
         fset=_set_H0,
-        doc="""Slot isthmus height.
+        doc=u"""Slot isthmus height.
 
         :Type: float
         :min: 0
@@ -546,7 +547,7 @@ class SlotW26(Slot):
     H1 = property(
         fget=_get_H1,
         fset=_set_H1,
-        doc="""Slot depth 
+        doc=u"""Slot depth 
 
         :Type: float
         :min: 0
@@ -565,7 +566,7 @@ class SlotW26(Slot):
     R1 = property(
         fget=_get_R1,
         fset=_set_R1,
-        doc="""Slot edge radius
+        doc=u"""Slot edge radius
 
         :Type: float
         :min: 0
@@ -584,7 +585,7 @@ class SlotW26(Slot):
     R2 = property(
         fget=_get_R2,
         fset=_set_R2,
-        doc="""Slot top radius
+        doc=u"""Slot top radius
 
         :Type: float
         :min: 0

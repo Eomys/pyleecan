@@ -536,7 +536,7 @@ class MeshMat(Mesh):
     cell = property(
         fget=_get_cell,
         fset=_set_cell,
-        doc="""Storing connectivity
+        doc=u"""Storing connectivity
 
         :Type: {CellMat}
         """,
@@ -571,7 +571,7 @@ class MeshMat(Mesh):
     node = property(
         fget=_get_node,
         fset=_set_node,
-        doc="""Storing nodes
+        doc=u"""Storing nodes
 
         :Type: NodeMat
         """,
@@ -589,7 +589,7 @@ class MeshMat(Mesh):
     _is_renum = property(
         fget=_get__is_renum,
         fset=_set__is_renum,
-        doc="""True if renumering the nodes and cells is useful when renum method is called (saving calculation time)
+        doc=u"""True if renumering the nodes and cells is useful when renum method is called (saving calculation time)
 
         :Type: bool
         """,
@@ -607,7 +607,7 @@ class MeshMat(Mesh):
     sym = property(
         fget=_get_sym,
         fset=_set_sym,
-        doc="""Spatial symmetry factor
+        doc=u"""Spatial symmetry factor
 
         :Type: int
         """,
@@ -625,7 +625,7 @@ class MeshMat(Mesh):
     is_antiper_a = property(
         fget=_get_is_antiper_a,
         fset=_set_is_antiper_a,
-        doc="""True if there is a spatial antiperiod
+        doc=u"""True if there is a spatial antiperiod
 
         :Type: bool
         """,

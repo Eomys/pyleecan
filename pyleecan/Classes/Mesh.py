@@ -166,7 +166,7 @@ class Mesh(FrozenClass):
     label = property(
         fget=_get_label,
         fset=_set_label,
-        doc="""Description of the mesh
+        doc=u"""Description of the mesh
 
         :Type: str
         """,
@@ -184,7 +184,7 @@ class Mesh(FrozenClass):
     dimension = property(
         fget=_get_dimension,
         fset=_set_dimension,
-        doc="""Dimension of the physical problem
+        doc=u"""Dimension of the physical problem
 
         :Type: int
         :min: 1

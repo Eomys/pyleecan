@@ -489,7 +489,7 @@ class VarOpti(VarParam):
     objective_list = property(
         fget=_get_objective_list,
         fset=_set_objective_list,
-        doc="""List containing OptiObjective objects
+        doc=u"""List containing OptiObjective objects
 
         :Type: [OptiObjective]
         """,
@@ -531,7 +531,7 @@ class VarOpti(VarParam):
     constraint_list = property(
         fget=_get_constraint_list,
         fset=_set_constraint_list,
-        doc="""List containing OptiConstraint objects
+        doc=u"""List containing OptiConstraint objects
 
         :Type: [OptiConstraint]
         """,
@@ -568,7 +568,7 @@ class VarOpti(VarParam):
     solver = property(
         fget=_get_solver,
         fset=_set_solver,
-        doc="""Object that solve an OptiProblem
+        doc=u"""Object that solve an OptiProblem
 
         :Type: OptiSolver
         """,
