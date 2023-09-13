@@ -50,5 +50,4 @@ def test_FEMM_slotless():
 
 # To run it without pytest
 if __name__ == "__main__":
-
     out = test_FEMM_slotless()

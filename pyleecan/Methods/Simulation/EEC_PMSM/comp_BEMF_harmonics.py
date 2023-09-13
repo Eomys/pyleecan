@@ -129,7 +129,6 @@ def comp_BEMF_harmonics(Phi_A, Phi_B, Phi_C, delta, time):
 
 
 if __name__ == "__main__":
-
     # Example:
     N = 10000
     # sample spacing

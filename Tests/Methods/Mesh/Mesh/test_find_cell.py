@@ -106,6 +106,5 @@ def test_triangle3():
 
 
 if __name__ == "__main__":
-
     test_line()
     test_triangle3()

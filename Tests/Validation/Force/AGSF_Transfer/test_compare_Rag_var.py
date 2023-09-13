@@ -209,7 +209,6 @@ def test_compare_Rag_variation_Nmax_sensitivity():
 
 
 if __name__ == "__main__":
-
     # test_AC_IPMSM_AGSF_transfer_compare_Rag_variation()
 
     # test_compare_Rag_variation()

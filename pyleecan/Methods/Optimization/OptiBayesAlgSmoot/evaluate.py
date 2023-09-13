@@ -2,7 +2,6 @@ import numpy as np
 
 
 def evaluate(solver, input_x):
-
     # Clean previous obj value
     for obj in solver.problem.obj_func:
         obj.result.clear()

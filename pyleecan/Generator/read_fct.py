@@ -54,7 +54,7 @@ def read_all(path, is_internal=False, in_path="", soft_name=PACKAGE_NAME):
             "Error while scanning csv files, " + path + " is not a folder !"
         )
     # Read the open source doc
-    for (dirpath, _, filenames) in walk(path):
+    for dirpath, _, filenames in walk(path):
         for file_name in filenames:
             if file_name[-4:] == ".csv" and file_name[:2] != "~$":
                 # For all .csv file in the folder and subfolder ...
@@ -65,7 +65,7 @@ def read_all(path, is_internal=False, in_path="", soft_name=PACKAGE_NAME):
 
     # Read the Internal doc to adapt the classes (if needed)
     if is_internal:
-        for (dirpath, _, filenames) in walk(in_path):
+        for dirpath, _, filenames in walk(in_path):
             for file_name in filenames:
                 if file_name[-4:] == ".csv" and file_name[:2] != "~$":
                     # For all .csv file in the folder and subfolder ...

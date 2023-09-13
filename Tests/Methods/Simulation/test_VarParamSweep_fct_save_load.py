@@ -101,6 +101,5 @@ def test_VarParamSweep_fct_save_load():
 
 
 if __name__ == "__main__":
-
     test_VarParamSweep_fct_save_load()
     print("Done")

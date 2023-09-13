@@ -31,7 +31,7 @@ is_show_fig = False
 @pytest.mark.long_1m
 @pytest.mark.long_10m
 def test_LossFEA_SPMSM():
-    """Test to calculate losses in SPMSM using LossFEA model from https://www.femm.info/wiki/SPMLoss """
+    """Test to calculate losses in SPMSM using LossFEA model from https://www.femm.info/wiki/SPMLoss"""
 
     machine = load(join(DATA_DIR, "Machine", "SPMSM_18s16p_loss.json"))
 
@@ -135,6 +135,5 @@ def test_LossFEA_SPMSM():
 
 # To run it without pytest
 if __name__ == "__main__":
-
     # test_FEMM_Loss_SPMSM()
     test_LossFEA_SPMSM()

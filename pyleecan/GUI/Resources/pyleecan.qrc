@@ -1,5 +1,8 @@
 <RCC>
   <qresource prefix="/images">
+    <file>images/MachineSetup/WSlot/SlotW23_constant_tooth_empty.png</file>
+    <file>images/MachineSetup/WSlot/SlotW23_constant_tooth_wedge_full.png</file>
+    <file>images/MachineSetup/WSlot/SlotW23_constant_tooth_wind.png</file>
     <file>images/icon/help_16.png</file>
     <file>images/icon/search.png</file>
     <file>images/icon/check.png</file>
@@ -108,6 +111,8 @@
     <file>images/MachineSetup/SMHoleMag/HoleM57_no_mag.png</file>
     <file>images/MachineSetup/SMHoleMag/HoleM58.png</file>
     <file>images/MachineSetup/SMHoleMag/HoleM58_no_mag.png</file>
+    <file>images/MachineSetup/SMHoleMag/HoleM60.png</file>
+    <file>images/MachineSetup/SMHoleMag/HoleM60_no_mag.png</file>
     <file>images/MachineSetup/MachineDimension/Dimension_Rotor_Stator.png</file>
     <file>images/MachineSetup/MachineDimension/Dimension_Shaft_Rotor_Stator.png</file>
     <file>images/MachineSetup/MachineDimension/Dimension_Stator_Rotor.png</file>

@@ -54,6 +54,7 @@ IPMSM_dict = {
 }
 load_preview_test = [SCIM_dict, IPMSM_dict]
 
+
 # python -m pytest ./Tests/GUI/Dialog/DMachineSetup/test_SPreview.py
 class TestSPreview(object):
     def setup_method(self):

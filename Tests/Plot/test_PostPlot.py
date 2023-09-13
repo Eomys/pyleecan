@@ -162,5 +162,4 @@ def test_PostPlot():
 
 # To run it without pytest
 if __name__ == "__main__":
-
     out = test_PostPlot()

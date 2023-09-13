@@ -129,6 +129,5 @@ def test_FEMM_LamHoleNS():
 
 # To run it without pytest
 if __name__ == "__main__":
-
     out = test_FEMM_LamHoleNS()
     print("Done")

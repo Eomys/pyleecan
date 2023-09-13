@@ -20,7 +20,6 @@ def plot_mesh_field(
     phase=1,
     colormap=COLOR_MAP,
 ):
-
     mesh_pv[field_name] = real(field * phase)
     mesh_field = mesh_pv
 

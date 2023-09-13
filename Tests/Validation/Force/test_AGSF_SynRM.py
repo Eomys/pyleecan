@@ -208,5 +208,4 @@ def test_AGSF_SynRM(nb_worker=int(cpu_count() / 2)):
 
 # To run it without pytest
 if __name__ == "__main__":
-
     out = test_AGSF_SynRM()

@@ -3,6 +3,7 @@
 import sys
 
 import pytest
+from numpy import pi
 from PySide2 import QtWidgets
 from PySide2.QtTest import QTest
 from PySide2.QtCore import Qt, QPoint
@@ -137,21 +138,29 @@ class TestPWSlot23(object):
 
     def test_set_H1(self):
         """Check that the Widget allow to update H1"""
-        self.widget.lf_H1.clear()
+        self.widget.lf_H1.clear()  # Clear the field before writing
         QTest.keyClicks(self.widget.lf_H1, "0.35")
         self.widget.lf_H1.editingFinished.emit()  # To trigger the slot
-
-        assert self.widget.slot.H1 == 0.35
+        msg = str(self.widget.slot.H1)
+        assert self.widget.slot.H1 == 0.35, msg
         assert self.test_obj.slot.H1 == 0.35
 
-        #    def test_set_H1_is_rad(setUp):
-        #        """Check that the Widget allow to update H1_is_rad
-        #        """
-        #        self.assertTrue(not self.test_obj.slot.H1_is_rad)
-        #
-        #        self.widget.c_H1_unit.setCurrentIndex(1)#Index 1 is rad
-        #
-        #        self.assertTrue(self.test_obj.slot.H1_is_rad)
+        self.widget.c_H1_unit.setCurrentIndex(2)
+        assert str(self.widget.c_H1_unit.currentText()) == "[°]"
+
+        self.widget.lf_H1.clear()  # Clear the field before writing
+        value = 1.4
+        QTest.keyClicks(self.widget.lf_H1, str(value))
+        self.widget.lf_H1.editingFinished.emit()  # To trigger the slot
+
+        assert self.widget.slot.H1 == value / 180 * pi
+
+    def test_set_H1_is_rad(self):
+        """Check that the Widget allow to update H1_is_rad"""
+        assert not self.test_obj.slot.H1_is_rad
+        self.widget.c_H1_unit.setCurrentIndex(1)
+        assert str(self.widget.c_H1_unit.currentText()) == "[rad]"
+        assert self.test_obj.slot.H1_is_rad
 
     def test_set_H2(self):
         """Check that the Widget allow to update H2"""
@@ -192,10 +201,17 @@ class TestPWSlot23(object):
             Wrvd=0.02,
         )
         self.test_obj.slot = SlotW23(
-            Zs=6, W0=50e-3, W1=90e-3, W2=100e-3, H0=20e-3, H1=35e-3, H2=130e-3
+            Zs=6,
+            W0=50e-3,
+            W1=90e-3,
+            W2=100e-3,
+            H0=20e-3,
+            H1=35e-3,
+            H2=130e-3,
+            H1_is_rad=False,
         )
         self.widget = PWSlot23(self.test_obj)
-        assert self.widget.w_out.out_slot_height.text() == "Slot height: 0.1345 [m]"
+        assert self.widget.w_out.out_slot_height.text() == "Slot height: 0.1816 [m]"
 
     def test_check(self):
         """Check that the check function is correctly returning error messages"""
@@ -256,4 +272,6 @@ if __name__ == "__main__":
     a.setup_method()
     a.test_init()
     a.teardown_class()
+    a.test_output_txt()
+    a.test_set_H1()
     print("Done")

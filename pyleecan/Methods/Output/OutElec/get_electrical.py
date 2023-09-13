@@ -52,7 +52,6 @@ def get_electrical(
 
     # Get requested quantity in data_dict
     if obj is None:
-
         if Time is None:
             Time = self.axes_dict["time"]
 
@@ -126,7 +125,6 @@ def get_electrical(
                 )
 
     else:
-
         if Time is not None:
             # Interpolate values on Time vector
             obj = obj.get_data_along(
@@ -147,7 +145,6 @@ def get_electrical(
                 obj = n2dqh_DataTime(obj, is_dqh_rms=True, phase_dir=self.phase_dir)
 
     if is_fund_only or is_harm_only:
-
         if Time is None and not is_dqh:
             # Copy object to leave original object unchanged
             obj = obj.copy()

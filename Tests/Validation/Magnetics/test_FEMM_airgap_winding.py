@@ -79,6 +79,5 @@ def test_FEMM_airgap_winding():
 
 # To run it without pytest
 if __name__ == "__main__":
-
     out = test_FEMM_airgap_winding()
     print("Done")

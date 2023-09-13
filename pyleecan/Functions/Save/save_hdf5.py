@@ -143,7 +143,6 @@ def variable_to_hdf5(file, prefix, variable, name):
 
     # List
     elif isinstance(variable, list):
-
         # Call function to create groups and datasets recursively
         list_to_hdf5(file, prefix, name, variable)
     # Str

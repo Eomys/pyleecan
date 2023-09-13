@@ -111,7 +111,6 @@ def draw_FEMM_surfaces(
             or (type_assign == 1 and is_mag_wind_lab)
             or (type_assign == 2 and not is_mag_wind_lab)
         ):
-
             assign_FEMM_surface(femm, surf, prop_dict[label], FEMM_dict, machine)
 
     return FEMM_dict

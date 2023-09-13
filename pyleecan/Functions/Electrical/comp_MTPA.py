@@ -113,7 +113,6 @@ def comp_MTPA(
     I_MTPA = np.zeros((Nspeed, Ntorque, 3))
 
     for ii, N0 in enumerate(N0_vect):
-
         print("Speed " + str(ii + 1) + "/" + str(Nspeed))
 
         # Update operating point
@@ -154,7 +153,6 @@ def comp_MTPA(
         I_MTPA[ii, -1, 2] = Imax_interp[j0][jmax]
 
         for kk, Tem_rate in enumerate(Tem_vect[:-1]):
-
             if Tem_rate == 0:
                 Tem_k = 0.01 * Tem_max
                 # Finding indices of operating points satisfying Vmax voltage for no torque production
@@ -164,7 +162,6 @@ def comp_MTPA(
                 jmax = np.argmin(np.abs(Imax_interp[j0]))
 
             else:
-
                 # Finding indices of operating points satisfying maximum voltage and torque level
                 j0 = np.logical_and(
                     U_max_interp <= U_max, Tem_interp >= Tem_rate * Tem_max

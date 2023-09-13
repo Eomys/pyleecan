@@ -125,7 +125,6 @@ def test_mmf_dir(param_dict, nb_worker=int(cpu_count() / 2)):
         assert_almost_equal(out.mag.Tem_av, param_dict["Tem_av"], decimal=2)
 
         if is_show_fig:
-
             out.mag.Tem.plot_2D_Data("time")
 
             out.mag.B.components["radial"].plot_3D_Data("time", "angle")
@@ -138,7 +137,6 @@ def test_mmf_dir(param_dict, nb_worker=int(cpu_count() / 2)):
 
 
 if __name__ == "__main__":
-
     for param_dict in param_list:
         out = test_mmf_dir(param_dict)
 
