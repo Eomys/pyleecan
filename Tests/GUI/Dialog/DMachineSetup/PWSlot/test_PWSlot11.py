@@ -13,6 +13,7 @@ from Tests.GUI import gui_option  # Set unit as [m]
 from pyleecan.Classes.LamSlotWind import LamSlotWind
 from pyleecan.Classes.SlotW11 import SlotW11
 from pyleecan.GUI.Dialog.DMachineSetup.SWSlot.PWSlot11.PWSlot11 import PWSlot11
+from pyleecan.Classes.SlotW11 import check
 
 
 class TestPWSlot11(object):
@@ -240,31 +241,52 @@ class TestPWSlot11(object):
     def test_check(self):
         """Check that the check is working correctly"""
         self.test_obj = LamSlotWind(Rint=0.7, Rext=0.5)
-        self.test_obj.slot = SlotW11(
-            H0=None, H1=0.11, H2=0.12, W0=0.11, W1=0.14, W2=0.15, R1=0.6
-        )
-        self.widget = PWSlot11(self.test_obj)
-        assert self.widget.check(self.test_obj) == "You must set H0 !"
-        self.test_obj.slot = SlotW11(
-            H0=0.10, H1=None, H2=0.12, W0=0.11, W1=0.14, W2=0.15, R1=0.6
-        )
-        assert self.widget.check(self.test_obj) == "You must set H1 !"
-        self.test_obj.slot = SlotW11(
-            H0=0.10, H1=0.11, H2=None, W0=0.11, W1=0.14, W2=0.15, R1=0.6
-        )
-        assert self.widget.check(self.test_obj) == "You must set H2 !"
-        self.test_obj.slot = SlotW11(
-            H0=0.10, H1=0.11, H2=0.12, W0=None, W1=0.14, W2=0.15, R1=0.6
-        )
-        assert self.widget.check(self.test_obj) == "You must set W0 !"
 
         self.test_obj.slot = SlotW11(
-            H0=0.10, H1=0.5, H2=0.12, W0=0.11, W1=0.14, W2=0.15, R1=0.03
+            H0=None,
+            H1=0.11,
+            H2=0.12,
+            W0=0.11,
+            W1=0.14,
+            W2=0.15,
+            R1=0.5,
         )
-        assert (
-            self.widget.check(self.test_obj)
-            == "The slot height is greater than the lamination !"
+        # self.widget = PWSlot11(self.test_obj)
+        assert check(self.test_obj.slot) == "You must set H0 !"
+
+        self.test_obj.slot = SlotW11(
+            H0=0.10, H1=None, H2=0.12, W0=0.11, W1=0.14, W2=0.15, R1=0.5
         )
+        assert check(self.test_obj.slot) == "You must set H1 !"
+
+        self.test_obj.slot = SlotW11(
+            H0=0.10, H1=0.11, H2=None, W0=0.11, W1=0.14, W2=0.15, R1=0.5
+        )
+        assert check(self.test_obj.slot) == "You must set H2 !"
+
+        self.test_obj.slot = SlotW11(
+            H0=0.10, H1=0.11, H2=0.12, W0=None, W1=0.14, W2=0.15, R1=0.5
+        )
+        assert check(self.test_obj.slot) == "You must set W0 !"
+
+        self.test_obj.slot = SlotW11(
+            H0=0.10, H1=0.11, H2=0.12, W0=0.11, W1=None, W2=0.15, R1=0.5
+        )
+        assert check(self.test_obj.slot) == "You must set W1 !"
+        self.test_obj.slot = SlotW11(
+            H0=0.10, H1=0.11, H2=0.12, W0=0.11, W1=0.14, W2=None, R1=0.5
+        )
+        assert check(self.test_obj.slot) == "You must set W2 !"
+
+        self.test_obj.slot = SlotW11(
+            H0=0.10, H1=5.3, H2=0.12, W0=0.11, W1=0.14, W2=0.15, R1=None
+        )
+        assert check(self.test_obj.slot) == "You must set R1 !"
+
+        self.test_obj.slot = SlotW11(
+            H0=0.10, H1=5.3, H2=0.12, W0=0.11, W3=None, R1=0.5, is_cstt_tooth=True
+        )
+        assert check(self.test_obj.slot) == "In constant tooth mode, you must set W3 !"
 
 
 if __name__ == "__main__":
