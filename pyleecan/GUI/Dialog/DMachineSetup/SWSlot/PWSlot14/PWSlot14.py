@@ -70,6 +70,7 @@ class PWSlot14(Gen_PWSlot14, QWidget):
         # Wedge setup
         self.g_wedge.setChecked(self.slot.wedge_mat is not None)
         self.w_wedge_mat.setText("Wedge Material")
+        self.w_wedge_mat.setText("Wedge type")
         if lamination.mat_type is not None and lamination.mat_type.name not in [
             "",
             None,
@@ -89,6 +90,7 @@ class PWSlot14(Gen_PWSlot14, QWidget):
         self.lf_H1.editingFinished.connect(self.set_H1)
         self.lf_H3.editingFinished.connect(self.set_H3)
         self.g_wedge.toggled.connect(self.set_wedge)
+        self.type_wedge.toggled.connect(self.set_type_wedge)
 
     def set_wedge(self):
         """Setup the slot wedge according to the GUI"""
@@ -98,6 +100,7 @@ class PWSlot14(Gen_PWSlot14, QWidget):
                 QPixmap(":/images/images/MachineSetup/WSlot/SlotW14_wedge_full.png")
             )
             self.w_wedge_mat.update(self.slot, "wedge_mat", self.material_dict)
+
         else:
             self.w_wedge_mat.hide()
             self.slot.wedge_mat = None
@@ -106,6 +109,16 @@ class PWSlot14(Gen_PWSlot14, QWidget):
             )
         # Notify the machine GUI that the machine has changed
         self.saveNeeded.emit()
+
+    def set_type_wedge(self):
+        if self.type_wedge.isChecked():
+            self.img_slot.setPixmap(
+                QPixmap(":/images/images/MachineSetup/WSlot/SlotW14_wedge_type_1.png")
+            )
+            self.slot.wedge_type = 1
+        else:
+            self.slot.wedge_type = 0
+            self.set_wedge()
 
     def set_W0(self):
         """Signal to update the value of W0 according to the line edit

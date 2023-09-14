@@ -168,6 +168,12 @@ slot_test.append(
 )
 slot_test.append(
     {
+        "test_obj": SlotW14(),
+        "type_add_active": 4,
+    }
+)
+slot_test.append(
+    {
         "test_obj": SlotW15(),
         "type_add_active": 1,
     }
@@ -470,52 +476,44 @@ class Test_plot_schematics(object):
                 save_path=file_path,
                 is_show_fig=False,
             )
+            ## Wind and Wedge
+            file_name = schematics_name + "_wedge_full.png"
+            file_path = join(SCHEMATICS_PATH, file_name)
+            # Delete previous plot
+            if isfile(file_path):
+                remove(file_path)
+            # Plot / Save schematics
+            print("Generating " + file_name)
+            test_obj = test_dict["test_obj"]
+            plot_meth(
+                is_default=True,
+                is_add_point_label=False,
+                is_add_schematics=True,
+                is_add_main_line=True,
+                type_add_active=3,
+                save_path=file_path,
+                is_show_fig=False,
+            )
 
-            if hasattr(self, "wedge_type"):
-                wedge_type = self.wedge_type
-
-            else:
-                wedge_type = 0
-
-            if wedge_type == 1:
-                ## Wind and Wedge
-                file_name = schematics_name + "_wedge_type.png"
-                file_path = join(SCHEMATICS_PATH, file_name)
-                # Delete previous plot
-                if isfile(file_path):
-                    remove(file_path)
-                # Plot / Save schematics
-                print("Generating " + file_name)
-                test_obj = test_dict["test_obj"]
-                plot_meth(
-                    is_default=True,
-                    is_add_point_label=False,
-                    is_add_schematics=True,
-                    is_add_main_line=True,
-                    type_add_active=4,
-                    save_path=file_path,
-                    is_show_fig=False,
-                )
-
-            else:
-                ## Wind and Wedge
-                file_name = schematics_name + "_wedge_full.png"
-                file_path = join(SCHEMATICS_PATH, file_name)
-                # Delete previous plot
-                if isfile(file_path):
-                    remove(file_path)
-                # Plot / Save schematics
-                print("Generating " + file_name)
-                test_obj = test_dict["test_obj"]
-                plot_meth(
-                    is_default=True,
-                    is_add_point_label=False,
-                    is_add_schematics=True,
-                    is_add_main_line=True,
-                    type_add_active=3,
-                    save_path=file_path,
-                    is_show_fig=False,
-                )
+        if test_dict["type_add_active"] == 4:
+            ## wedge_type
+            file_name = schematics_name + "_wedge_type_1.png"
+            file_path = join(SCHEMATICS_PATH, file_name)
+            # Delete previous plot
+            if isfile(file_path):
+                remove(file_path)
+            # Plot / Save schematics
+            print("Generating " + file_name)
+            test_obj = test_dict["test_obj"]
+            plot_meth(
+                is_default=True,
+                is_add_point_label=False,
+                is_add_schematics=True,
+                is_add_main_line=True,
+                type_add_active=4,
+                save_path=file_path,
+                is_show_fig=False,
+            )
 
         elif test_dict["type_add_active"] == 2:
             ## Magnet only
@@ -604,6 +602,7 @@ if __name__ == "__main__":
     # a.test_BoreSinePole()
     a.test_slot(slot_test[16])
     a.test_slot_point(slot_test[16])
+    a.test_slot(slot_test[17])
     # for slot in slot_test:
     #    a.test_slot(slot)
     #    a.test_slot_point(slot)

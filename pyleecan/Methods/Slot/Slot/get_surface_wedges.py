@@ -26,6 +26,7 @@ def get_surface_wedges(self, alpha=0, delta=0):
 
     if self.wedge_mat is None:
         return []  # No wedges
+
     else:
         # By default Wedge is the full opening surface
         if wedge_type == 0:

@@ -20,14 +20,21 @@ def get_surface_opening(self, alpha=0, delta=0):
         list of surfaces objects
     """
 
+    if hasattr(self, "wedge_type"):
+        wedge_type = self.wedge_type
+    else:
+        wedge_type = 0
+
     # H0=H1=0 no opening
     if self.H0 == 0 and self.H1 == 0:
         return []
 
+    line_dict = self._comp_line_dict()
+
     # Selection type Wedge
-    if self.wedge_type == 0:
+    if wedge_type == 0:
         # Create curve list
-        line_dict = self._comp_line_dict()
+
         curve_list = [
             line_dict["1-2"],
             line_dict["2-3"],
@@ -44,7 +51,6 @@ def get_surface_opening(self, alpha=0, delta=0):
 
     else:
         # Create curve list
-        line_dict = self._comp_line_dict()
         curve_list = [
             line_dict["1-2"],
             line_dict["2-8"],

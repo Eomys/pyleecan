@@ -32,4 +32,7 @@ pixmap_dict = {
     "SlotW11_wedge_full": ":images/MachineSetup/WSlot/SlotW11_wedge_full.png",
     "SlotW11_constant_tooth_wind": ":/images/MachineSetup/WSlot/SlotW11_constant_tooth_wind.png",
     "SlotW11_wind": ":images/MachineSetup/WSlot/SlotW11_wind.png",
+    "SlotW14_wedge_full": "images/MachineSetup/WSlot/SlotW14_wedge_full.png",
+    "SlotW14_wedge_type_1": "images/MachineSetup/WSlot/SlotW14_wedge_type_1.png",
+    "SlotW14_ind": "images/MachineSetup/WSlot/SlotW14_wind.png",
 }

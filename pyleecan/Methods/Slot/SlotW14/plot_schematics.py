@@ -1,11 +1,11 @@
 import matplotlib.pyplot as plt
 from numpy import pi, exp
 
-from ....Classes.Arc1 import Arc1
-from ....Classes.LamSlot import LamSlot
-from ....Classes.Segment import Segment
-from ....definitions import config_dict
-from ....Functions.Plot import (
+from pyleecan.Classes.Arc1 import Arc1
+from pyleecan.Classes.LamSlot import LamSlot
+from pyleecan.Classes.Segment import Segment
+from pyleecan.definitions import config_dict
+from pyleecan.Functions.Plot import (
     ARROW_COLOR,
     ARROW_WIDTH,
     MAIN_LINE_COLOR,
@@ -19,7 +19,7 @@ from ....Functions.Plot import (
     TEXT_BOX,
     plot_quote,
 )
-from ....Methods import ParentMissingError
+from pyleecan.Methods import ParentMissingError
 
 MAGNET_COLOR = config_dict["PLOT"]["COLOR_DICT"]["MAGNET_COLOR"]
 
@@ -30,7 +30,7 @@ def plot_schematics(
     is_add_point_label=False,
     is_add_schematics=True,
     is_add_main_line=True,
-    type_add_active=1,
+    type_add_active=4,
     save_path=None,
     is_show_fig=True,
     fig=None,
@@ -51,7 +51,7 @@ def plot_schematics(
     is_add_main_line : bool
         True to display "main lines" (slot opening and 0x axis)
     type_add_active : int
-        0: No active surface, 1: active surface as winding, 2: active surface as magnet, 3: active surface as winding + wedges
+        0: No active surface, 1: active surface as winding, 2: active surface as magnet, 3: active surface as winding + wedges, 4: wedge_type = 1
     save_path : str
         full path including folder, name and extension of the file to save if save_path is not None
     is_show_fig : bool
@@ -69,9 +69,42 @@ def plot_schematics(
         Axis containing the schematics
     """
 
+    if type_add_active == 4 and is_default:  # type_wedge = 1
+        slot = type(self)(
+            Zs=12,
+            W0=30e-3,
+            W3=35e-3,
+            H0=15e-3,
+            H1=15e-3,
+            H3=50e-3,
+            wedge_type=1,
+        )
+        lam = LamSlot(
+            Rint=0.135, Rext=0.25, is_internal=False, is_stator=True, slot=slot
+        )
+        return slot.plot_schematics(
+            is_default=False,
+            is_add_point_label=is_add_point_label,
+            is_add_schematics=is_add_schematics,
+            is_add_main_line=is_add_main_line,
+            type_add_active=type_add_active,
+            save_path=save_path,
+            is_show_fig=is_show_fig,
+            fig=fig,
+            ax=ax,
+        )
+
     # Use some default parameter
     if is_default:
-        slot = type(self)(Zs=12, W0=30e-3, W3=35e-3, H0=15e-3, H1=15e-3, H3=50e-3)
+        slot = type(self)(
+            Zs=12,
+            W0=30e-3,
+            W3=35e-3,
+            H0=15e-3,
+            H1=15e-3,
+            H3=50e-3,
+            wedge_type=0,
+        )
         lam = LamSlot(
             Rint=0.135, Rext=0.25, is_internal=False, is_stator=True, slot=slot
         )
@@ -91,6 +124,7 @@ def plot_schematics(
         if self.parent is None:
             raise ParentMissingError("Error: The slot is not inside a Lamination")
         lam = self.parent
+
         fig, ax = lam.plot(
             alpha=pi / self.Zs, is_show_fig=False, fig=fig, ax=ax
         )  # center slot on Ox axis
@@ -116,6 +150,7 @@ def plot_schematics(
         # Adding schematics
         if is_add_schematics:
             # W0
+
             line = Segment(point_dict["Z2"], point_dict["Z8"])
             line.plot(
                 fig=fig,
@@ -247,8 +282,8 @@ def plot_schematics(
                 is_show_fig=False,
                 enforced_default_color=MAGNET_COLOR,
             )
-
         elif type_add_active == 4:  # type_wedge = 1
+            is_add_wedge = type_add_active == 4
             self.plot_active(
                 fig=fig, ax=ax, is_show_fig=False, is_add_wedge=is_add_wedge
             )
