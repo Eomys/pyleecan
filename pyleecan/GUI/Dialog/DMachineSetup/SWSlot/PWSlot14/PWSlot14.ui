@@ -194,19 +194,6 @@
               <height>0</height>
              </size>
             </property>
-            <widget class="QCheckBox" name="wedge_type">
-             <property name="geometry">
-              <rect>
-               <x>20</x>
-               <y>0</y>
-               <width>222</width>
-               <height>20</height>
-              </rect>
-             </property>
-             <property name="text">
-              <string>CheckBox</string>
-             </property>
-            </widget>
            </widget>
           </item>
          </layout>
