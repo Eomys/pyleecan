@@ -175,7 +175,7 @@ class TestPWSlot23(object):
         """Check that the Widget allow be checked"""
         assert self.widget.slot.W1 is not None
         assert self.widget.slot.W2 is not None
-        QTest.mouseClick(self.widget.is_cst_tooth, Qt.LeftButton)
+        self.widget.is_cst_tooth.setChecked(True)
         assert self.widget.is_cst_tooth.isChecked() == True
         assert self.widget.slot.W1 is None
         assert self.widget.slot.W2 is None
@@ -183,7 +183,7 @@ class TestPWSlot23(object):
         assert self.widget.lf_W2.isEnabled() == False
         assert self.widget.lf_W3.isEnabled() == True
 
-        QTest.mouseClick(self.widget.is_cst_tooth, Qt.LeftButton)
+        self.widget.is_cst_tooth.setChecked(False)
         assert self.widget.is_cst_tooth.isChecked() == False
         assert self.widget.lf_W1.isEnabled() == True
         assert self.widget.lf_W2.isEnabled() == True

@@ -143,6 +143,13 @@ slot_test.append(
 )
 slot_test.append(
     {
+        "test_obj": SlotW11(),
+        "type_add_active": 1,
+        "method_name": "plot_schematics_constant_tooth",
+    }
+)
+slot_test.append(
+    {
         "test_obj": SlotW12(),
         "type_add_active": 1,
     }
@@ -187,6 +194,13 @@ slot_test.append(
     {
         "test_obj": SlotW23(),
         "type_add_active": 1,
+    }
+)
+slot_test.append(
+    {
+        "test_obj": SlotW23(),
+        "type_add_active": 1,
+        "method_name": "plot_schematics_constant_tooth",
     }
 )
 slot_test.append(
@@ -392,7 +406,7 @@ class Test_plot_schematics(object):
             "method_name" in test_dict
             and test_dict["method_name"] == "plot_schematics_constant_tooth"
         ):
-            schematics_name = type(test_dict["test_obj"]).__name__ + "_tooth"
+            schematics_name = type(test_dict["test_obj"]).__name__ + "_constant_tooth"
         else:
             schematics_name = type(test_dict["test_obj"]).__name__
         if "is_default" in test_dict:
@@ -559,6 +573,7 @@ class Test_plot_schematics(object):
             save_path=file_path,
             is_show_fig=False,
         )
+
 
 if __name__ == "__main__":
     a = Test_plot_schematics()

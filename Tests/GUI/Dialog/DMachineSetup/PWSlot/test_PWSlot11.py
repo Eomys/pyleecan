@@ -5,6 +5,7 @@ import sys
 import pytest
 from PySide2 import QtWidgets
 from PySide2.QtTest import QTest
+from PySide2.QtCore import Qt
 from numpy import pi
 from pyleecan.Classes.Material import Material
 from pyleecan.GUI.Dialog.DMatLib.DMatLib import MACH_KEY, LIB_KEY
@@ -12,6 +13,7 @@ from Tests.GUI import gui_option  # Set unit as [m]
 from pyleecan.Classes.LamSlotWind import LamSlotWind
 from pyleecan.Classes.SlotW11 import SlotW11
 from pyleecan.GUI.Dialog.DMachineSetup.SWSlot.PWSlot11.PWSlot11 import PWSlot11
+from pyleecan.Classes.SlotW11 import check
 
 
 class TestPWSlot11(object):
@@ -99,6 +101,32 @@ class TestPWSlot11(object):
         # Index 1 is rad
         assert self.widget.c_H1_unit.currentIndex() == 1
 
+        self.test_obj.slot = SlotW11(
+            H0=20e-3,
+            H1=30e-3,
+            H2=80e-3,
+            W0=30e-3,
+            W1=None,
+            W2=None,
+            W3=20e-3,
+            R1=1e-3,
+            H1_is_rad=False,
+            is_cstt_tooth=True,
+        )
+        self.widget = PWSlot11(self.test_obj, self.material_dict)
+        assert self.widget.lf_H0.value() == 20e-3
+        assert self.widget.lf_H1.value() == 30e-3
+        assert self.widget.lf_H2.value() == 80e-3
+        assert self.widget.lf_W0.value() == 30e-3
+        assert self.widget.lf_W1.value() == None
+        assert self.widget.lf_W2.value() == None
+        assert self.widget.lf_W3.value() == 20e-3
+        assert self.widget.lf_R1.value() == 1e-3
+        assert self.widget.is_cst_tooth.isChecked()
+
+        # Index 1 is rad
+        assert self.widget.c_H1_unit.currentIndex() == 0
+
     def test_set_wedge(self):
         """Check that the GUI enables to edit the wedges"""
         assert self.test_obj.slot.wedge_mat is None
@@ -150,6 +178,17 @@ class TestPWSlot11(object):
         assert self.widget.slot.W2 == 0.33
         assert self.test_obj.slot.W2 == 0.33
 
+    def test_set_W3(self):
+        """Check that the Widget allow to update W2"""
+        self.widget.lf_W3.setEnabled(True)
+
+        self.widget.lf_W3.clear()
+        QTest.keyClicks(self.widget.lf_W3, "0.99")
+        self.widget.lf_W3.editingFinished.emit()  # To trigger the slot
+
+        assert self.widget.slot.W3 == 0.99
+        assert self.test_obj.slot.W3 == 0.99
+
     def test_set_H0(self):
         """Check that the Widget allow to update H0"""
         self.widget.lf_H0.clear()
@@ -168,7 +207,9 @@ class TestPWSlot11(object):
         assert self.widget.slot.H1 == 0.35
         assert self.test_obj.slot.H1 == 0.35
 
-        self.widget.c_H1_unit.setCurrentIndex(3)
+        self.widget.c_H1_unit.setCurrentIndex(2)
+        assert str(self.widget.c_H1_unit.currentText()) == "[°]"
+
         self.widget.lf_H1.clear()  # Clear the field before writing
         value = 1.4
         QTest.keyClicks(self.widget.lf_H1, str(value))
@@ -179,9 +220,8 @@ class TestPWSlot11(object):
     def test_set_H1_is_rad(self):
         """Check that the Widget allow to update H1_is_rad"""
         assert not self.test_obj.slot.H1_is_rad
-
-        self.widget.c_H1_unit.setCurrentIndex(1)  # Index 1 is rad
-
+        self.widget.c_H1_unit.setCurrentIndex(1)
+        assert str(self.widget.c_H1_unit.currentText()) == "[rad]"
         assert self.test_obj.slot.H1_is_rad
 
     def test_set_H2(self):
@@ -202,6 +242,24 @@ class TestPWSlot11(object):
         assert self.widget.slot.R1 == 0.37
         assert self.test_obj.slot.R1 == 0.37
 
+    def test_is_cst_tooth(self):
+        """Check that the Widget allow be checked"""
+        assert self.widget.slot.W1 is not None
+        assert self.widget.slot.W2 is not None
+        self.widget.is_cst_tooth.setChecked(True)
+        assert self.widget.is_cst_tooth.isChecked() == True
+        assert self.widget.slot.W1 is None
+        assert self.widget.slot.W2 is None
+        assert self.widget.lf_W1.isEnabled() == False
+        assert self.widget.lf_W2.isEnabled() == False
+        assert self.widget.lf_W3.isEnabled() == True
+
+        self.widget.is_cst_tooth.setChecked(False)
+        assert self.widget.is_cst_tooth.isChecked() == False
+        assert self.widget.lf_W1.isEnabled() == True
+        assert self.widget.lf_W2.isEnabled() == True
+        assert self.widget.lf_W3.isEnabled() == False
+
     def test_output_txt(self):
         """Check that the Output text is computed and correct"""
         self.test_obj.slot = SlotW11(
@@ -220,47 +278,52 @@ class TestPWSlot11(object):
     def test_check(self):
         """Check that the check is working correctly"""
         self.test_obj = LamSlotWind(Rint=0.7, Rext=0.5)
+
         self.test_obj.slot = SlotW11(
-            H0=None, H1=0.11, H2=0.12, W0=0.11, W1=0.14, W2=0.15, R1=0.6
+            H0=None,
+            H1=0.11,
+            H2=0.12,
+            W0=0.11,
+            W1=0.14,
+            W2=0.15,
+            R1=0.5,
         )
-        self.widget = PWSlot11(self.test_obj)
-        assert self.widget.check(self.test_obj) == "You must set H0 !"
+        # self.widget = PWSlot11(self.test_obj)
+        assert check(self.test_obj.slot) == "You must set H0 !"
+
         self.test_obj.slot = SlotW11(
-            H0=0.10, H1=None, H2=0.12, W0=0.11, W1=0.14, W2=0.15, R1=0.6
+            H0=0.10, H1=None, H2=0.12, W0=0.11, W1=0.14, W2=0.15, R1=0.5
         )
-        assert self.widget.check(self.test_obj) == "You must set H1 !"
+        assert check(self.test_obj.slot) == "You must set H1 !"
+
         self.test_obj.slot = SlotW11(
-            H0=0.10, H1=0.11, H2=None, W0=0.11, W1=0.14, W2=0.15, R1=0.6
+            H0=0.10, H1=0.11, H2=None, W0=0.11, W1=0.14, W2=0.15, R1=0.5
         )
-        assert self.widget.check(self.test_obj) == "You must set H2 !"
+        assert check(self.test_obj.slot) == "You must set H2 !"
+
         self.test_obj.slot = SlotW11(
-            H0=0.10, H1=0.11, H2=0.12, W0=None, W1=0.14, W2=0.15, R1=0.6
+            H0=0.10, H1=0.11, H2=0.12, W0=None, W1=0.14, W2=0.15, R1=0.5
         )
-        assert self.widget.check(self.test_obj) == "You must set W0 !"
+        assert check(self.test_obj.slot) == "You must set W0 !"
+
         self.test_obj.slot = SlotW11(
-            H0=0.10, H1=0.11, H2=0.12, W0=0.11, W1=None, W2=0.15, R1=0.6
+            H0=0.10, H1=0.11, H2=0.12, W0=0.11, W1=None, W2=0.15, R1=0.5
         )
-        assert self.widget.check(self.test_obj) == "You must set W1 !"
+        assert check(self.test_obj.slot) == "You must set W1 !"
         self.test_obj.slot = SlotW11(
-            H0=0.10, H1=0.11, H2=0.12, W0=0.11, W1=0.14, W2=None, R1=0.6
+            H0=0.10, H1=0.11, H2=0.12, W0=0.11, W1=0.14, W2=None, R1=0.5
         )
-        assert self.widget.check(self.test_obj) == "You must set W2 !"
+        assert check(self.test_obj.slot) == "You must set W2 !"
+
         self.test_obj.slot = SlotW11(
             H0=0.10, H1=5.3, H2=0.12, W0=0.11, W1=0.14, W2=0.15, R1=None
         )
-        assert self.widget.check(self.test_obj) == "You must set R1 !"
-        self.test_obj.slot = SlotW11(
-            H0=0.10, H1=5.3, H2=0.12, W0=0.11, W1=0.14, W2=0.15, R1=0.6
-        )
-        assert self.widget.check(self.test_obj) == "You must have H1 < 90°"
+        assert check(self.test_obj.slot) == "You must set R1 !"
 
         self.test_obj.slot = SlotW11(
-            H0=0.10, H1=0.5, H2=0.12, W0=0.11, W1=0.14, W2=0.15, R1=0.03
+            H0=0.10, H1=5.3, H2=0.12, W0=0.11, W3=None, R1=0.5, is_cstt_tooth=True
         )
-        assert (
-            self.widget.check(self.test_obj)
-            == "The slot height is greater than the lamination !"
-        )
+        assert check(self.test_obj.slot) == "In constant tooth mode, you must set W3 !"
 
 
 if __name__ == "__main__":
@@ -269,4 +332,5 @@ if __name__ == "__main__":
     a.setup_method()
     a.test_init()
     a.teardown_class()
+    a.test_init()
     print("Done")

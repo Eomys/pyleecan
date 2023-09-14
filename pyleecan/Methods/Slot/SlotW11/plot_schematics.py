@@ -162,7 +162,7 @@ def plot_schematics(
                 is_arrow=True,
                 fontsize=SC_FONT_SIZE,
             )
-            # H1
+            # H1 [m]
             line = Segment(point_dict["Z2"].real, point_dict["Z3"].real)
             line.plot(
                 fig=fig,
@@ -172,6 +172,25 @@ def plot_schematics(
                 linewidth=ARROW_WIDTH,
                 offset_label=1j * self.W0 * 0.15,
                 is_arrow=True,
+                fontsize=SC_FONT_SIZE,
+            )
+            # H1 [rad]
+            line = Arc1(
+                begin=(point_dict["Z2"] + point_dict["Z3"]) / 2
+                - self.get_H1() / 2
+                - 0.007j,
+                end=(((point_dict["Z2"] + point_dict["Z3"]) / 2) + point_dict["Z3"])
+                / 2,
+                radius=(self.get_H1() / 2),
+                is_trigo_direction=True,
+            )
+            line.plot(
+                fig=fig,
+                ax=ax,
+                color=ARROW_COLOR,
+                linewidth=ARROW_WIDTH,
+                label="H1 [rad]",
+                offset_label=-1j * sign * self.get_H1() * 0.5,
                 fontsize=SC_FONT_SIZE,
             )
             # H2

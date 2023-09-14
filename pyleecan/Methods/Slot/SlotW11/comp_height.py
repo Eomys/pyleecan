@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
-from numpy import cos
+from numpy import cos, exp, arcsin, array
+from ....Classes.Arc1 import Arc1
 
 
 def comp_height(self):
@@ -18,19 +19,23 @@ def comp_height(self):
         Height of the slot [m]
 
     """
+    if self.is_cstt_tooth and (self.W1 is None or self.W2 is None):
+        # Compute W1 and W2 to match W3 tooth constraint
+        self._comp_W()
 
     Rbo = self.get_Rbo()
 
-    H1 = self.get_H1()
-
-    # Computation of the arc height
-    alpha = self.comp_angle_opening() / 2
-    Harc = float(Rbo * (1 - cos(alpha)))
-
     if self.is_outwards():
-        return (
-            abs(Rbo - Harc + self.H0 + H1 + self.H2 + 1j * (self.W2 / 2.0 - self.R1))
-            - Rbo
-        )
+        line_dict = self._comp_line_dict()
+
+        Arc = line_dict["6-7"]
+        Ndisc = 200
+        point_list = Arc.discretize(Ndisc)
+        point_list = array(point_list)
+        return max(abs(point_list)) - Rbo
+
     else:
-        return self.H0 + H1 + self.H2 + Harc
+        # Computation of the arc height
+        alpha = self.comp_angle_opening() / 2
+        Harc = float(Rbo * (1 - cos(alpha)))
+        return self.H0 + self.get_H1() + self.H2 + Harc

@@ -1,11 +1,11 @@
 import matplotlib.pyplot as plt
 from numpy import pi, exp
 
-from pyleecan.Classes.Arc1 import Arc1
-from pyleecan.Classes.LamSlot import LamSlot
-from pyleecan.Classes.Segment import Segment
-from pyleecan.definitions import config_dict
-from pyleecan.Functions.Plot import (
+from ....Classes.Arc1 import Arc1
+from ....Classes.LamSlot import LamSlot
+from ....Classes.Segment import Segment
+from ....definitions import config_dict
+from ....Functions.Plot import (
     ARROW_COLOR,
     ARROW_WIDTH,
     MAIN_LINE_COLOR,
@@ -19,7 +19,7 @@ from pyleecan.Functions.Plot import (
     TEXT_BOX,
     plot_quote,
 )
-from pyleecan.Methods import ParentMissingError
+from ....Methods import ParentMissingError
 
 MAGNET_COLOR = config_dict["PLOT"]["COLOR_DICT"]["MAGNET_COLOR"]
 
@@ -241,7 +241,7 @@ def plot_schematics_constant_tooth(
                 linestyle=MAIN_LINE_STYLE,
                 linewidth=MAIN_LINE_WIDTH,
             )
-            # Tooth axis
+            # axis between Slot
             line = Segment(0, lam.Rext * 1.5 * exp(-1j * sp / 2))
             line.plot(
                 fig=fig,
