@@ -101,6 +101,32 @@ class TestPWSlot11(object):
         # Index 1 is rad
         assert self.widget.c_H1_unit.currentIndex() == 1
 
+        self.test_obj.slot = SlotW11(
+            H0=20e-3,
+            H1=30e-3,
+            H2=80e-3,
+            W0=30e-3,
+            W1=None,
+            W2=None,
+            W3=20e-3,
+            R1=1e-3,
+            H1_is_rad=False,
+            is_cstt_tooth=True,
+        )
+        self.widget = PWSlot11(self.test_obj, self.material_dict)
+        assert self.widget.lf_H0.value() == 20e-3
+        assert self.widget.lf_H1.value() == 30e-3
+        assert self.widget.lf_H2.value() == 80e-3
+        assert self.widget.lf_W0.value() == 30e-3
+        assert self.widget.lf_W1.value() == None
+        assert self.widget.lf_W2.value() == None
+        assert self.widget.lf_W3.value() == 20e-3
+        assert self.widget.lf_R1.value() == 1e-3
+        assert self.widget.is_cst_tooth.isChecked()
+
+        # Index 1 is rad
+        assert self.widget.c_H1_unit.currentIndex() == 0
+
     def test_set_wedge(self):
         """Check that the GUI enables to edit the wedges"""
         assert self.test_obj.slot.wedge_mat is None
@@ -151,6 +177,17 @@ class TestPWSlot11(object):
 
         assert self.widget.slot.W2 == 0.33
         assert self.test_obj.slot.W2 == 0.33
+
+    def test_set_W3(self):
+        """Check that the Widget allow to update W2"""
+        self.widget.lf_W3.setEnabled(True)
+
+        self.widget.lf_W3.clear()
+        QTest.keyClicks(self.widget.lf_W3, "0.99")
+        self.widget.lf_W3.editingFinished.emit()  # To trigger the slot
+
+        assert self.widget.slot.W3 == 0.99
+        assert self.test_obj.slot.W3 == 0.99
 
     def test_set_H0(self):
         """Check that the Widget allow to update H0"""
@@ -209,7 +246,7 @@ class TestPWSlot11(object):
         """Check that the Widget allow be checked"""
         assert self.widget.slot.W1 is not None
         assert self.widget.slot.W2 is not None
-        QTest.mouseClick(self.widget.is_cst_tooth, Qt.LeftButton)
+        self.widget.is_cst_tooth.setChecked(True)
         assert self.widget.is_cst_tooth.isChecked() == True
         assert self.widget.slot.W1 is None
         assert self.widget.slot.W2 is None
@@ -217,7 +254,7 @@ class TestPWSlot11(object):
         assert self.widget.lf_W2.isEnabled() == False
         assert self.widget.lf_W3.isEnabled() == True
 
-        QTest.mouseClick(self.widget.is_cst_tooth, Qt.LeftButton)
+        self.widget.is_cst_tooth.setChecked(False)
         assert self.widget.is_cst_tooth.isChecked() == False
         assert self.widget.lf_W1.isEnabled() == True
         assert self.widget.lf_W2.isEnabled() == True
@@ -295,4 +332,5 @@ if __name__ == "__main__":
     a.setup_method()
     a.test_init()
     a.teardown_class()
+    a.test_init()
     print("Done")

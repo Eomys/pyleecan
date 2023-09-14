@@ -1,11 +1,11 @@
 import matplotlib.pyplot as plt
 from numpy import pi, exp
 
-from pyleecan.Classes.Arc1 import Arc1
-from pyleecan.Classes.LamSlot import LamSlot
-from pyleecan.Classes.Segment import Segment
-from pyleecan.definitions import config_dict
-from pyleecan.Functions.Plot import (
+from ....Classes.Arc1 import Arc1
+from ....Classes.LamSlot import LamSlot
+from ....Classes.Segment import Segment
+from ....definitions import config_dict
+from ....Functions.Plot import (
     ARROW_COLOR,
     ARROW_WIDTH,
     MAIN_LINE_COLOR,
@@ -19,7 +19,7 @@ from pyleecan.Functions.Plot import (
     TEXT_BOX,
     plot_quote,
 )
-from pyleecan.Methods import ParentMissingError
+from ....Methods import ParentMissingError
 
 MAGNET_COLOR = config_dict["PLOT"]["COLOR_DICT"]["MAGNET_COLOR"]
 
@@ -162,7 +162,7 @@ def plot_schematics(
                 is_arrow=True,
                 fontsize=SC_FONT_SIZE,
             )
-            # H1
+            # H1 [m]
             line = Segment(point_dict["Z2"].real, point_dict["Z3"].real)
             line.plot(
                 fig=fig,
@@ -172,6 +172,25 @@ def plot_schematics(
                 linewidth=ARROW_WIDTH,
                 offset_label=1j * self.W0 * 0.15,
                 is_arrow=True,
+                fontsize=SC_FONT_SIZE,
+            )
+            # H1 [rad]
+            line = Arc1(
+                begin=(point_dict["Z2"] + point_dict["Z3"]) / 2
+                - self.get_H1() / 2
+                - 0.007j,
+                end=(((point_dict["Z2"] + point_dict["Z3"]) / 2) + point_dict["Z3"])
+                / 2,
+                radius=(self.get_H1() / 2),
+                is_trigo_direction=True,
+            )
+            line.plot(
+                fig=fig,
+                ax=ax,
+                color=ARROW_COLOR,
+                linewidth=ARROW_WIDTH,
+                label="H1 [rad]",
+                offset_label=-1j * sign * self.get_H1() * 0.5,
                 fontsize=SC_FONT_SIZE,
             )
             # H2
@@ -302,37 +321,3 @@ def plot_schematics(
         if is_show_fig:
             fig.show()
         return fig, ax
-
-
-"""
-import pytest
-
-from pyleecan.Classes.LamSlotMag import LamSlotMag
-from pyleecan.Classes.SlotW11 import SlotW11
-from pyleecan.Classes.Slot import Slot
-from pyleecan.Methods import ParentMissingError
-
-from numpy import exp
-from time import sleep
-
-Mag19_test = list()
-# Internal Slot
-lam = LamSlot(Rint=0.135, Rext=0.3, is_internal=False)
-lam.slot = SlotW11(
-    Zs=12,
-    H0=10e-3,
-    W0=20e-3,
-    H1=10e-3,
-    H2=40e-3,
-    W1=30e-3,
-    W2=20e-3,
-    is_cstt_tooth=False,
-    R1=1e-3,
-)
-
-
-if __name__ == "__main__":
-    plot_schematics(lam.slot)
-    plt.show()
-    sleep(60)
-"""

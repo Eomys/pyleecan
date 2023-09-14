@@ -9,6 +9,7 @@ from ......Classes.SlotW11 import SlotW11
 from ......GUI import gui_option
 from ......GUI.Dialog.DMachineSetup.SWSlot.PWSlot11.Gen_PWSlot11 import Gen_PWSlot11
 from ......Methods.Slot.Slot import SlotCheckError
+from ......GUI.Resources import pixmap_dict
 
 translate = PySide2.QtCore.QCoreApplication.translate
 
@@ -264,27 +265,19 @@ class PWSlot11(Gen_PWSlot11, QWidget):
         if self.g_wedge.isChecked():
             if self.is_cst_tooth.isChecked():
                 self.img_slot.setPixmap(
-                    QPixmap(
-                        ":/images/images/MachineSetup/WSlot/SlotW11_constant_tooth_wedge_full.png"
-                    )
+                    QPixmap(pixmap_dict["SlotW11_constant_tooth_wedge_full"])
                 )
 
             else:
-                self.img_slot.setPixmap(
-                    QPixmap(":/images/images/MachineSetup/WSlot/SlotW11_wedge_full.png")
-                )
+                self.img_slot.setPixmap(QPixmap(pixmap_dict["SlotW11_wedge_full"]))
 
         else:
             if self.is_cst_tooth.isChecked():
                 self.img_slot.setPixmap(
-                    QPixmap(
-                        ":/images/images/MachineSetup/WSlot/SlotW11_constant_tooth_wind.png"
-                    )
+                    QPixmap(pixmap_dict["SlotW11_constant_tooth_wind"])
                 )
             else:
-                self.img_slot.setPixmap(
-                    QPixmap(":/images/images/MachineSetup/WSlot/SlotW11_wind.png")
-                )
+                self.img_slot.setPixmap(QPixmap(pixmap_dict["SlotW11_wind"]))
 
     def set_wedge(self):
         """Setup the slot wedge according to the GUI"""
@@ -295,10 +288,8 @@ class PWSlot11(Gen_PWSlot11, QWidget):
         else:
             self.w_wedge_mat.hide()
             self.slot.wedge_mat = None
-        # Notify the machine GUI that the machine has changed
-        self.saveNeeded.emit()
 
-        """setup the picture"""
+        # setup the picture
         self.update_schematics()
 
         # Notify the machine GUI that the machine has changed
