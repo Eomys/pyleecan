@@ -83,7 +83,7 @@ class TestPMSlot19(object):
         """Check that the Output text is computed and correct"""
         self.test_obj.slot = SlotM19(Hmag=0.005, W0=0.01, W1=0.01)
         self.widget = PMSlot19(self.test_obj)
-        assert self.widget.w_out.out_slot_height.text() == "Slot height: 0.005063 [m]"
+        assert self.widget.w_out.out_slot_height.text() == "Slot height: 0.005 [m]"
 
     def test_check(self):
         """Check that the check is working correctly"""
@@ -105,4 +105,5 @@ if __name__ == "__main__":
     a.setup_method()
     a.test_init()
     a.teardown_class()
+    a.test_output_txt()
     print("Done")

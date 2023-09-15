@@ -19,29 +19,19 @@ def comp_height(self):
         Height of the slot [m]
 
     """
-    if self.is_cstt_tooth:
+    if self.is_cstt_tooth and (self.W1 is None or self.W2 is None):
         # Compute W1 and W2 to match W3 tooth constraint
         self._comp_W()
 
     Rbo = self.get_Rbo()
 
     if self.is_outwards():
-        point_dict = self._comp_point_coordinate()
-        line_dict = dict()
-        Z6 = point_dict["Z6"]
-        Z7 = point_dict["Z7"]
+        line_dict = self._comp_line_dict()
 
+        Arc = line_dict["6-7"]
         Ndisc = 200
-
-        line_dict["6-7"] = Arc1(
-            Z6, Z7, 1 * self.R1, is_trigo_direction=self.is_outwards()
-        )
-        surf = self.get_surface()
-
-        point_list = surf.discretize(Ndisc)
-
+        point_list = Arc.discretize(Ndisc)
         point_list = array(point_list)
-
         return max(abs(point_list)) - Rbo
 
     else:

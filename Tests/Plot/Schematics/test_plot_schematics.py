@@ -406,7 +406,7 @@ class Test_plot_schematics(object):
             "method_name" in test_dict
             and test_dict["method_name"] == "plot_schematics_constant_tooth"
         ):
-            schematics_name = type(test_dict["test_obj"]).__name__ + "_tooth"
+            schematics_name = type(test_dict["test_obj"]).__name__ + "_constant_tooth"
         else:
             schematics_name = type(test_dict["test_obj"]).__name__
         if "is_default" in test_dict:

@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 
-from ....Methods.Slot.SlotW23 import *
 from pyleecan.Classes._check import check_var, raise_
 
 
