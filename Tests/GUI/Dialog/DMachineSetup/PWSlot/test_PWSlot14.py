@@ -155,6 +155,10 @@ class TestPWSlot14(object):
         assert self.test_obj.slot.wedge_mat is not None
         assert self.test_obj.slot.wedge_mat.name == "M400-50A"
 
+        # Add new type wedge
+        self.widget.type_wedge.setChecked(True)
+        assert self.test_obj.slot.wedge_type == 1
+
 
 if __name__ == "__main__":
     a = TestPWSlot14()
@@ -162,4 +166,5 @@ if __name__ == "__main__":
     a.setup_method()
     a.test_init()
     a.teardown_class()
+    a.test_set_wedge()
     print("Done")

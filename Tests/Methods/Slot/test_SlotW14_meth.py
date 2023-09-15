@@ -7,6 +7,10 @@ from pyleecan.Classes.LamSlot import LamSlot
 from pyleecan.Classes.Slot import Slot
 from pyleecan.Methods.Slot.SlotW14 import S14_Rbo1CheckError
 
+from pyleecan.Functions.load import load
+from os.path import join
+from pyleecan.definitions import DATA_DIR
+
 # For AlmostEqual
 DELTA = 1e-4
 
@@ -20,7 +24,6 @@ lam.slot = SlotW14(
     H3=25e-3,
     W0=5e-3,
     W3=10e-3,
-    wedge_type=0,
 )
 slotW14_test.append(
     {
@@ -75,7 +78,10 @@ slotW14_test.append(
 )
 
 # Outward Slot
-lam = LamSlot(is_internal=False, Rint=0.1325)
+lam = LamSlot(
+    is_internal=False,
+    Rint=0.1325,
+)
 lam.slot = SlotW14(
     H0=5e-3,
     H1=5e-3,
@@ -187,7 +193,11 @@ class Test_SlotW14_meth(object):
     def test_comp_surface_wedge(self, test_dict):
         """Check that the computation of the surface is correct"""
         test_obj = test_dict["test_obj"].copy()
-        if lam.slot.wedge_type == 1:
+        slot = test_obj.slot
+
+        if test_obj.slot.wedge_type == 1:
+            M400 = load(join(DATA_DIR, "Material", "M400-50A.json"))
+            slot.wedge_mat = M400
             a = test_obj.slot.comp_surface_wedge()
             # Check that the analytical method returns the same result as the numerical one
             b = Slot.comp_surface_wedges(test_obj.slot)
@@ -283,4 +293,5 @@ if __name__ == "__main__":
         a.test_build_geometry_active(test_dict)
         a.test_comp_angle_opening(test_dict)
         a.test_comp_angle_active_eq(test_dict)
+        a.test_comp_surface_wedge(test_dict)
         print("Done")
