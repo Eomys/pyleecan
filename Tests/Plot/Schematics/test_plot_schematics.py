@@ -515,7 +515,7 @@ class Test_plot_schematics(object):
                 is_show_fig=False,
             )
 
-        elif test_dict["type_add_active"] == 2:
+        if test_dict["type_add_active"] == 2:
             ## Magnet only
             file_name = schematics_name + "_mag.png"
             file_path = join(SCHEMATICS_PATH, file_name)

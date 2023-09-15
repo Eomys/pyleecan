@@ -31,7 +31,7 @@ def get_surface_wedges(self, alpha=0, delta=0):
     if wedge_type == 0:
         surf_list = self.get_surface_opening()
 
-    if wedge_type == 1:
+    elif wedge_type == 1:
         surf_list = self.get_surface_wedge()
 
     else:
