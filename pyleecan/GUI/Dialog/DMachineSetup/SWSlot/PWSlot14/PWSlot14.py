@@ -80,6 +80,10 @@ class PWSlot14(Gen_PWSlot14, QWidget):
             self.w_wedge_mat.def_mat = "M400-50A"
         self.set_wedge()
 
+        # Update the unit combobox with the current m unit name
+        self.c_wedge_type.clear()
+        self.c_wedge_type.addItems(["Normal", "Full opening"])
+
         # Display the main output of the slot (surface, height...)
         self.w_out.comp_output()
 
@@ -90,7 +94,7 @@ class PWSlot14(Gen_PWSlot14, QWidget):
         self.lf_H1.editingFinished.connect(self.set_H1)
         self.lf_H3.editingFinished.connect(self.set_H3)
         self.g_wedge.toggled.connect(self.set_wedge)
-        self.type_wedge.toggled.connect(self.set_type_wedge)
+        self.c_wedge_type.currentIndexChanged.connect(self.set_type_wedge)
 
     def set_wedge(self):
         """Setup the slot wedge according to the GUI"""
@@ -111,14 +115,20 @@ class PWSlot14(Gen_PWSlot14, QWidget):
         self.saveNeeded.emit()
 
     def set_type_wedge(self):
-        if self.type_wedge.isChecked():
+        if self.c_wedge_type.currentIndex() == 1:
             self.img_slot.setPixmap(
                 QPixmap(":/images/images/MachineSetup/WSlot/SlotW14_wedge_type_1.png")
             )
             self.slot.wedge_type = 1
-        else:
+
+        if self.c_wedge_type.currentIndex() == 0:
+            self.img_slot.setPixmap(
+                QPixmap(":/images/images/MachineSetup/WSlot/SlotW14_wedge_full.png")
+            )
             self.slot.wedge_type = 0
-            self.set_wedge()
+
+        # Notify the machine GUI that the machine has changed
+        self.saveNeeded.emit()
 
     def set_W0(self):
         """Signal to update the value of W0 according to the line edit

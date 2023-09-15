@@ -194,18 +194,26 @@
               <height>200</height>
              </size>
             </property>
-            <widget class="QCheckBox" name="type_wedge">
+            <widget class="QComboBox" name="c_wedge_type">
              <property name="geometry">
               <rect>
                <x>10</x>
-               <y>170</y>
-               <width>222</width>
-               <height>20</height>
+               <y>160</y>
+               <width>191</width>
+               <height>31</height>
               </rect>
              </property>
-             <property name="text">
-              <string>Wedge_type</string>
+             <property name="editable">
+              <bool>true</bool>
              </property>
+             <property name="currentText">
+              <string extracomment="Normal">Normal</string>
+             </property>
+             <item>
+              <property name="text">
+               <string>Normal</string>
+              </property>
+             </item>
             </widget>
            </widget>
           </item>

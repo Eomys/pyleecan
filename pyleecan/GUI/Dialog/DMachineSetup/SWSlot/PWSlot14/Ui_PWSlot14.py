@@ -143,9 +143,11 @@ class Ui_PWSlot14(object):
         self.w_wedge_mat = WMatSelectV(self.g_wedge)
         self.w_wedge_mat.setObjectName(u"w_wedge_mat")
         self.w_wedge_mat.setMinimumSize(QSize(100, 200))
-        self.type_wedge = QCheckBox(self.w_wedge_mat)
-        self.type_wedge.setObjectName(u"type_wedge")
-        self.type_wedge.setGeometry(QRect(10, 170, 222, 20))
+        self.c_wedge_type = QComboBox(self.w_wedge_mat)
+        self.c_wedge_type.addItem("")
+        self.c_wedge_type.setObjectName(u"c_wedge_type")
+        self.c_wedge_type.setGeometry(QRect(10, 160, 191, 31))
+        self.c_wedge_type.setEditable(True)
 
         self.verticalLayout.addWidget(self.w_wedge_mat)
 
@@ -185,8 +187,12 @@ class Ui_PWSlot14(object):
         self.in_H0.setText(QCoreApplication.translate("PWSlot14", u"H0", None))
         self.unit_H1.setText(QCoreApplication.translate("PWSlot14", u"m", None))
         self.g_wedge.setTitle(QCoreApplication.translate("PWSlot14", u"Wedge", None))
-        self.type_wedge.setText(
-            QCoreApplication.translate("PWSlot14", u"Wedge_type", None)
+        self.c_wedge_type.setItemText(
+            0, QCoreApplication.translate("PWSlot14", u"Normal", None)
+        )
+
+        self.c_wedge_type.setCurrentText(
+            QCoreApplication.translate("PWSlot14", u"Normal", None)
         )
 
     # retranslateUi
