@@ -100,6 +100,8 @@ class PWSlot14(Gen_PWSlot14, QWidget):
         """Setup the slot wedge according to the GUI"""
         if self.g_wedge.isChecked():
             self.w_wedge_mat.show()
+            self.in_type.show()
+            self.c_wedge_type.show()
             self.img_slot.setPixmap(
                 QPixmap(":/images/images/MachineSetup/WSlot/SlotW14_wedge_full.png")
             )
@@ -107,7 +109,10 @@ class PWSlot14(Gen_PWSlot14, QWidget):
 
         else:
             self.w_wedge_mat.hide()
+            self.in_type.hide()
+            self.c_wedge_type.hide()
             self.slot.wedge_mat = None
+            self.c_wedge_type.setCurrentIndex(0)
             self.img_slot.setPixmap(
                 QPixmap(":/images/images/MachineSetup/WSlot/SlotW14_wind.png")
             )

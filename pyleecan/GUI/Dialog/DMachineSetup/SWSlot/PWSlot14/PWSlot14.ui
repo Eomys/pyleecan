@@ -185,36 +185,62 @@
          <property name="checked">
           <bool>false</bool>
          </property>
-         <layout class="QVBoxLayout" name="verticalLayout">
-          <item>
+         <layout class="QGridLayout" name="gridLayout_2">
+          <item row="0" column="0">
+           <widget class="QLabel" name="in_type">
+            <property name="maximumSize">
+             <size>
+              <width>50</width>
+              <height>16777215</height>
+             </size>
+            </property>
+            <property name="text">
+             <string>Type</string>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="1">
+           <spacer name="verticalSpacer">
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>17</width>
+              <height>37</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item row="2" column="0" colspan="2">
            <widget class="WMatSelectV" name="w_wedge_mat" native="true">
             <property name="minimumSize">
              <size>
               <width>100</width>
-              <height>200</height>
+              <height>100</height>
              </size>
             </property>
-            <widget class="QComboBox" name="c_wedge_type">
-             <property name="geometry">
-              <rect>
-               <x>10</x>
-               <y>160</y>
-               <width>191</width>
-               <height>31</height>
-              </rect>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QComboBox" name="c_wedge_type">
+            <property name="maximumSize">
+             <size>
+              <width>200</width>
+              <height>16777215</height>
+             </size>
+            </property>
+            <property name="editable">
+             <bool>true</bool>
+            </property>
+            <property name="currentText">
+             <string extracomment="Normal">Normal</string>
+            </property>
+            <item>
+             <property name="text">
+              <string>Normal</string>
              </property>
-             <property name="editable">
-              <bool>true</bool>
-             </property>
-             <property name="currentText">
-              <string extracomment="Normal">Normal</string>
-             </property>
-             <item>
-              <property name="text">
-               <string>Normal</string>
-              </property>
-             </item>
-            </widget>
+            </item>
            </widget>
           </item>
          </layout>

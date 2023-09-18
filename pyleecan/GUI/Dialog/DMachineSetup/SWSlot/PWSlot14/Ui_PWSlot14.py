@@ -138,18 +138,33 @@ class Ui_PWSlot14(object):
         self.g_wedge.setObjectName(u"g_wedge")
         self.g_wedge.setCheckable(True)
         self.g_wedge.setChecked(False)
-        self.verticalLayout = QVBoxLayout(self.g_wedge)
-        self.verticalLayout.setObjectName(u"verticalLayout")
+        self.gridLayout_2 = QGridLayout(self.g_wedge)
+        self.gridLayout_2.setObjectName(u"gridLayout_2")
+        self.in_type = QLabel(self.g_wedge)
+        self.in_type.setObjectName(u"in_type")
+        self.in_type.setMaximumSize(QSize(50, 16777215))
+
+        self.gridLayout_2.addWidget(self.in_type, 0, 0, 1, 1)
+
+        self.verticalSpacer = QSpacerItem(
+            17, 37, QSizePolicy.Minimum, QSizePolicy.Expanding
+        )
+
+        self.gridLayout_2.addItem(self.verticalSpacer, 3, 1, 1, 1)
+
         self.w_wedge_mat = WMatSelectV(self.g_wedge)
         self.w_wedge_mat.setObjectName(u"w_wedge_mat")
-        self.w_wedge_mat.setMinimumSize(QSize(100, 200))
-        self.c_wedge_type = QComboBox(self.w_wedge_mat)
+        self.w_wedge_mat.setMinimumSize(QSize(100, 100))
+
+        self.gridLayout_2.addWidget(self.w_wedge_mat, 2, 0, 1, 2)
+
+        self.c_wedge_type = QComboBox(self.g_wedge)
         self.c_wedge_type.addItem("")
         self.c_wedge_type.setObjectName(u"c_wedge_type")
-        self.c_wedge_type.setGeometry(QRect(10, 160, 191, 31))
+        self.c_wedge_type.setMaximumSize(QSize(200, 16777215))
         self.c_wedge_type.setEditable(True)
 
-        self.verticalLayout.addWidget(self.w_wedge_mat)
+        self.gridLayout_2.addWidget(self.c_wedge_type, 0, 1, 1, 1)
 
         self.verticalLayout_3.addWidget(self.g_wedge)
 
@@ -187,6 +202,7 @@ class Ui_PWSlot14(object):
         self.in_H0.setText(QCoreApplication.translate("PWSlot14", u"H0", None))
         self.unit_H1.setText(QCoreApplication.translate("PWSlot14", u"m", None))
         self.g_wedge.setTitle(QCoreApplication.translate("PWSlot14", u"Wedge", None))
+        self.in_type.setText(QCoreApplication.translate("PWSlot14", u"Type", None))
         self.c_wedge_type.setItemText(
             0, QCoreApplication.translate("PWSlot14", u"Normal", None)
         )
