@@ -232,7 +232,7 @@ class Test_SlotW14_meth(object):
 
         # Check that the analytical method returns the same result as the numerical one
         b = Slot.comp_surface_opening(test_obj.slot, Ndisc=400)
-        msg = "Return " + str(a) + " expected aie  " + str(b)
+        msg = "Return " + str(a) + " expected " + str(b)
         assert abs((a - b) / a - 0) < DELTA, msg
 
     @pytest.mark.parametrize("test_dict", slotW14_test)
