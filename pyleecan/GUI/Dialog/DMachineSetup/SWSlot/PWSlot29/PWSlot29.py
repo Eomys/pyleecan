@@ -81,6 +81,10 @@ class PWSlot29(Gen_PWSlot29, QWidget):
             self.w_wedge_mat.def_mat = "M400-50A"
         self.set_wedge()
 
+        # Update the unit combobox with the current m unit name
+        self.c_wedge_type.clear()
+        self.c_wedge_type.addItems(["Normal", "Full opening"])
+
         # Display the main output of the slot (surface, height...)
         self.w_out.comp_output()
 
@@ -92,21 +96,43 @@ class PWSlot29(Gen_PWSlot29, QWidget):
         self.lf_H1.editingFinished.connect(self.set_H1)
         self.lf_H2.editingFinished.connect(self.set_H2)
         self.g_wedge.toggled.connect(self.set_wedge)
+        self.c_wedge_type.currentIndexChanged.connect(self.set_type_wedge)
 
     def set_wedge(self):
         """Setup the slot wedge according to the GUI"""
         if self.g_wedge.isChecked():
             self.w_wedge_mat.show()
+            self.in_type.show()
+            self.c_wedge_type.show()
             self.img_slot.setPixmap(
                 QPixmap(":/images/images/MachineSetup/WSlot/SlotW29_wedge_full.png")
             )
             self.w_wedge_mat.update(self.slot, "wedge_mat", self.material_dict)
         else:
             self.w_wedge_mat.hide()
+            self.in_type.hide()
+            self.c_wedge_type.hide()
             self.slot.wedge_mat = None
+            self.c_wedge_type.setCurrentIndex(0)
             self.img_slot.setPixmap(
                 QPixmap(":/images/images/MachineSetup/WSlot/SlotW29_wind.png")
             )
+        # Notify the machine GUI that the machine has changed
+        self.saveNeeded.emit()
+
+    def set_type_wedge(self):
+        if self.c_wedge_type.currentIndex() == 1:
+            self.img_slot.setPixmap(
+                QPixmap(":/images/images/MachineSetup/WSlot/SlotW29_wedge_type_1.png")
+            )
+            self.slot.wedge_type = 1
+
+        if self.c_wedge_type.currentIndex() == 0:
+            self.img_slot.setPixmap(
+                QPixmap(":/images/images/MachineSetup/WSlot/SlotW29_wedge_full.png")
+            )
+            self.slot.wedge_type = 0
+
         # Notify the machine GUI that the machine has changed
         self.saveNeeded.emit()
 

@@ -68,6 +68,11 @@ except ImportError as error:
     comp_surface_active = error
 
 try:
+    from ..Methods.Slot.SlotW29.comp_surface_wedge import comp_surface_wedge
+except ImportError as error:
+    comp_surface_wedge = error
+
+try:
     from ..Methods.Slot.SlotW29.comp_surface_opening import comp_surface_opening
 except ImportError as error:
     comp_surface_opening = error
@@ -76,6 +81,11 @@ try:
     from ..Methods.Slot.SlotW29.get_surface_active import get_surface_active
 except ImportError as error:
     get_surface_active = error
+
+try:
+    from ..Methods.Slot.SlotW29.get_surface_wedge import get_surface_wedge
+except ImportError as error:
+    get_surface_wedge = error
 
 try:
     from ..Methods.Slot.SlotW29.get_surface_opening import get_surface_opening
@@ -209,6 +219,18 @@ class SlotW29(Slot):
         )
     else:
         comp_surface_active = comp_surface_active
+    # cf Methods.Slot.SlotW29.comp_surface_wedge
+    if isinstance(comp_surface_wedge, ImportError):
+        comp_surface_wedge = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use SlotW29 method comp_surface_wedge: "
+                    + str(comp_surface_wedge)
+                )
+            )
+        )
+    else:
+        comp_surface_wedge = comp_surface_wedge
     # cf Methods.Slot.SlotW29.comp_surface_opening
     if isinstance(comp_surface_opening, ImportError):
         comp_surface_opening = property(
@@ -233,6 +255,18 @@ class SlotW29(Slot):
         )
     else:
         get_surface_active = get_surface_active
+    # cf Methods.Slot.SlotW29.get_surface_wedge
+    if isinstance(get_surface_wedge, ImportError):
+        get_surface_wedge = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use SlotW29 method get_surface_wedge: "
+                    + str(get_surface_wedge)
+                )
+            )
+        )
+    else:
+        get_surface_wedge = get_surface_wedge
     # cf Methods.Slot.SlotW29.get_surface_opening
     if isinstance(get_surface_opening, ImportError):
         get_surface_opening = property(
@@ -267,6 +301,7 @@ class SlotW29(Slot):
         H0=0.001,
         H1=0.0015,
         W1=0.015,
+        wedge_type=0,
         H2=0.03,
         W2=0.2,
         Zs=36,
@@ -298,6 +333,8 @@ class SlotW29(Slot):
                 H1 = init_dict["H1"]
             if "W1" in list(init_dict.keys()):
                 W1 = init_dict["W1"]
+            if "wedge_type" in list(init_dict.keys()):
+                wedge_type = init_dict["wedge_type"]
             if "H2" in list(init_dict.keys()):
                 H2 = init_dict["H2"]
             if "W2" in list(init_dict.keys()):
@@ -313,6 +350,7 @@ class SlotW29(Slot):
         self.H0 = H0
         self.H1 = H1
         self.W1 = W1
+        self.wedge_type = wedge_type
         self.H2 = H2
         self.W2 = W2
         # Call Slot init
@@ -330,6 +368,7 @@ class SlotW29(Slot):
         SlotW29_str += "H0 = " + str(self.H0) + linesep
         SlotW29_str += "H1 = " + str(self.H1) + linesep
         SlotW29_str += "W1 = " + str(self.W1) + linesep
+        SlotW29_str += "wedge_type = " + str(self.wedge_type) + linesep
         SlotW29_str += "H2 = " + str(self.H2) + linesep
         SlotW29_str += "W2 = " + str(self.W2) + linesep
         return SlotW29_str
@@ -350,6 +389,8 @@ class SlotW29(Slot):
         if other.H1 != self.H1:
             return False
         if other.W1 != self.W1:
+            return False
+        if other.wedge_type != self.wedge_type:
             return False
         if other.H2 != self.H2:
             return False
@@ -424,6 +465,18 @@ class SlotW29(Slot):
                 diff_list.append(name + ".W1" + val_str)
             else:
                 diff_list.append(name + ".W1")
+        if other._wedge_type != self._wedge_type:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._wedge_type)
+                    + ", other="
+                    + str(other._wedge_type)
+                    + ")"
+                )
+                diff_list.append(name + ".wedge_type" + val_str)
+            else:
+                diff_list.append(name + ".wedge_type")
         if (
             other._H2 is not None
             and self._H2 is not None
@@ -465,6 +518,7 @@ class SlotW29(Slot):
         S += getsizeof(self.H0)
         S += getsizeof(self.H1)
         S += getsizeof(self.W1)
+        S += getsizeof(self.wedge_type)
         S += getsizeof(self.H2)
         S += getsizeof(self.W2)
         return S
@@ -490,6 +544,7 @@ class SlotW29(Slot):
         SlotW29_dict["H0"] = self.H0
         SlotW29_dict["H1"] = self.H1
         SlotW29_dict["W1"] = self.W1
+        SlotW29_dict["wedge_type"] = self.wedge_type
         SlotW29_dict["H2"] = self.H2
         SlotW29_dict["W2"] = self.W2
         # The class name is added to the dict for deserialisation purpose
@@ -505,6 +560,7 @@ class SlotW29(Slot):
         H0_val = self.H0
         H1_val = self.H1
         W1_val = self.W1
+        wedge_type_val = self.wedge_type
         H2_val = self.H2
         W2_val = self.W2
         Zs_val = self.Zs
@@ -519,6 +575,7 @@ class SlotW29(Slot):
             H0=H0_val,
             H1=H1_val,
             W1=W1_val,
+            wedge_type=wedge_type_val,
             H2=H2_val,
             W2=W2_val,
             Zs=Zs_val,
@@ -534,6 +591,7 @@ class SlotW29(Slot):
         self.H0 = None
         self.H1 = None
         self.W1 = None
+        self.wedge_type = None
         self.H2 = None
         self.W2 = None
         # Set to None the properties inherited from Slot
@@ -611,6 +669,25 @@ class SlotW29(Slot):
         doc=u"""Slot middle width.
 
         :Type: float
+        :min: 0
+        """,
+    )
+
+    def _get_wedge_type(self):
+        """getter of wedge_type"""
+        return self._wedge_type
+
+    def _set_wedge_type(self, value):
+        """setter of wedge_type"""
+        check_var("wedge_type", value, "int", Vmin=0)
+        self._wedge_type = value
+
+    wedge_type = property(
+        fget=_get_wedge_type,
+        fset=_set_wedge_type,
+        doc=u"""selection type wedge
+
+        :Type: int
         :min: 0
         """,
     )

@@ -179,6 +179,10 @@ class TestPWSlot29(object):
         assert self.widget.w_wedge_mat.c_mat_type.count() == 4
         assert self.test_obj.slot.wedge_mat is not None
         assert self.test_obj.slot.wedge_mat.name == "M400-50A"
+        # Add new type wedge
+        self.widget.c_wedge_type.setCurrentIndex(1)
+        assert str(self.widget.c_wedge_type.currentText()) == "Full opening"
+        assert self.test_obj.slot.wedge_type == 1
 
 
 if __name__ == "__main__":
