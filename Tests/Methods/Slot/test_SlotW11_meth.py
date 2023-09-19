@@ -39,6 +39,30 @@ slotW11_test.append(
     }
 )
 
+# Internal Slot / H1m / Cst slot/ R1*2 > W2
+lam = LamSlot(is_internal=True, Rext=0.1325)
+lam.slot = SlotW11(
+    H0=1e-3,
+    H1=1.5e-3,
+    H1_is_rad=False,
+    H2=30e-3,
+    W0=12e-3,
+    W1=14e-3,
+    W2=12e-3,
+    is_cstt_tooth=False,
+    R1=6e-3,
+)
+slotW11_test.append(
+    {
+        "test_obj": lam,
+        "S_exp": 0.0004011361295,
+        "Aw": 0.10695210774,
+        "SO_exp": 3.258746174548993e-05,
+        "SW_exp": 0.00036854866776,
+        "H_exp": 0.03263591876947885,
+    }
+)
+
 # External Slot  / H1m / Cst slot
 lam = LamSlot(is_internal=False, Rint=0.1325)
 lam.slot = SlotW11(

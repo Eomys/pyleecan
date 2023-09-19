@@ -8,6 +8,7 @@ from ......Classes.SlotW14 import SlotW14
 from ......GUI import gui_option
 from ......GUI.Dialog.DMachineSetup.SWSlot.PWSlot14.Gen_PWSlot14 import Gen_PWSlot14
 from ......Methods.Slot.Slot import SlotCheckError
+from ......GUI.Resources import pixmap_dict
 
 translate = PySide2.QtCore.QCoreApplication.translate
 
@@ -70,7 +71,6 @@ class PWSlot14(Gen_PWSlot14, QWidget):
         # Wedge setup
         self.g_wedge.setChecked(self.slot.wedge_mat is not None)
         self.w_wedge_mat.setText("Wedge Material")
-        self.w_wedge_mat.setText("Wedge type")
         if lamination.mat_type is not None and lamination.mat_type.name not in [
             "",
             None,
@@ -80,9 +80,10 @@ class PWSlot14(Gen_PWSlot14, QWidget):
             self.w_wedge_mat.def_mat = "M400-50A"
         self.set_wedge()
 
-        # Update the unit combobox with the current m unit name
+        # Update the combobox
         self.c_wedge_type.clear()
         self.c_wedge_type.addItems(["Normal", "Full opening"])
+        self.c_wedge_type.setCurrentIndex(self.slot.wedge_type)
 
         # Display the main output of the slot (surface, height...)
         self.w_out.comp_output()
@@ -102,9 +103,7 @@ class PWSlot14(Gen_PWSlot14, QWidget):
             self.w_wedge_mat.show()
             self.in_type.show()
             self.c_wedge_type.show()
-            self.img_slot.setPixmap(
-                QPixmap(":/images/images/MachineSetup/WSlot/SlotW14_wedge_full.png")
-            )
+            self.img_slot.setPixmap(QPixmap(pixmap_dict["SlotW14_wedge_full"]))
             self.w_wedge_mat.update(self.slot, "wedge_mat", self.material_dict)
 
         else:
@@ -113,23 +112,17 @@ class PWSlot14(Gen_PWSlot14, QWidget):
             self.c_wedge_type.hide()
             self.slot.wedge_mat = None
             self.c_wedge_type.setCurrentIndex(0)
-            self.img_slot.setPixmap(
-                QPixmap(":/images/images/MachineSetup/WSlot/SlotW14_wind.png")
-            )
+            self.img_slot.setPixmap(QPixmap(pixmap_dict["SlotW14_wind"]))
         # Notify the machine GUI that the machine has changed
         self.saveNeeded.emit()
 
     def set_type_wedge(self):
         if self.c_wedge_type.currentIndex() == 1:
-            self.img_slot.setPixmap(
-                QPixmap(":/images/images/MachineSetup/WSlot/SlotW14_wedge_type_1.png")
-            )
+            self.img_slot.setPixmap(QPixmap(pixmap_dict["SlotW14_wedge_type_1"]))
             self.slot.wedge_type = 1
 
         if self.c_wedge_type.currentIndex() == 0:
-            self.img_slot.setPixmap(
-                QPixmap(":/images/images/MachineSetup/WSlot/SlotW14_wedge_full.png")
-            )
+            self.img_slot.setPixmap(QPixmap(pixmap_dict["SlotW14_wedge_full"]))
             self.slot.wedge_type = 0
 
         # Notify the machine GUI that the machine has changed

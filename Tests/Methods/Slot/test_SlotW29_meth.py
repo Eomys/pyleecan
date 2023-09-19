@@ -83,6 +83,7 @@ slotW29_test.append(
         "SO_exp": 1.3087461745489922e-05,
         "SW_exp": 6e-4,
         "H_exp": 0.0326359,
+        "SWedge_exp": 2.1e-05,
     }
 )
 
@@ -109,6 +110,7 @@ slotW29_test.append(
         "SO_exp": 1.0912538254510078e-05,
         "SW_exp": 6e-4,
         "H_exp": 3.2667e-2,
+        "SWedge_exp": 2.1e-05,
     }
 )
 
@@ -254,7 +256,28 @@ class Test_SlotW29_meth(object):
         if test_obj.slot.wedge_type == 1:
             M400 = load(join(DATA_DIR, "Material", "M400-50A.json"))
             slot.wedge_mat = M400
-            a = test_obj.slot.comp_surface_wedge()
+            result = test_obj.slot.comp_surface_wedge()
+
+            a = result
+            b = test_dict["SWedge_exp"]
+            msg = "Return " + str(a) + " expected " + str(b)
+            assert abs((a - b) / a - 0) < DELTA, msg
+
+            # Check that the analytical method returns the same result as the numerical one
+            b = Slot.comp_surface_wedges(test_obj.slot)
+            msg = "Return " + str(a) + " expected " + str(b)
+            assert abs((a - b) / a - 0) < 1e-5, msg
+
+        if test_obj.slot.wedge_type == 0:
+            M400 = load(join(DATA_DIR, "Material", "M400-50A.json"))
+            slot.wedge_mat = M400
+            result = test_obj.slot.comp_surface_wedge()
+
+            a = result
+            b = test_dict["SO_exp"]
+            msg = "Return " + str(a) + " expected " + str(b)
+            assert abs((a - b) / a - 0) < DELTA, msg
+
             # Check that the analytical method returns the same result as the numerical one
             b = Slot.comp_surface_wedges(test_obj.slot)
             msg = "Return " + str(a) + " expected " + str(b)
@@ -404,4 +427,5 @@ if __name__ == "__main__":
         a.test_build_geometry_active(test_dict)
         a.test_comp_angle_opening(test_dict)
         a.test_comp_angle_active_eq(test_dict)
+        a.test_comp_surface_wedge(test_dict)
         print("Done")

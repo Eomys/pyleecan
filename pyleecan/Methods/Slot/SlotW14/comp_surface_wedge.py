@@ -18,16 +18,11 @@ def comp_surface_wedge(self):
         Slot wedge surface [m**2]
 
     """
-    if hasattr(self, "wedge_type"):
-        wedge_type = self.wedge_type
-    else:
-        wedge_type = 0
-
     # Selection type Wedge
-    if wedge_type == 0:
+    if self.wedge_type == 0:
         return self.comp_surface_opening()
 
-    if wedge_type == 1:
+    if self.wedge_type == 1:
         point_dict = self._comp_point_coordinate()
         Z7 = point_dict["Z7"]
         W1 = abs(Z7.imag) * 2

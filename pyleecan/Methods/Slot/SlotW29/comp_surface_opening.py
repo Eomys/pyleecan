@@ -16,10 +16,6 @@ def comp_surface_opening(self):
         Slot opening surface [m**2]
 
     """
-    if hasattr(self, "wedge_type"):
-        wedge_type = self.wedge_type
-    else:
-        wedge_type = 0
 
     Rbo = self.get_Rbo()
 
@@ -28,17 +24,17 @@ def comp_surface_opening(self):
 
     # The bottom is an arc
     alpha = self.comp_angle_opening()
-    Sarc = (Rbo ** 2.0) / 2.0 * (alpha - sin(alpha))
+    Sarc = (Rbo**2.0) / 2.0 * (alpha - sin(alpha))
 
     # Because Slamination = S - Zs * Sslot
     # Selection type Wedge
-    if wedge_type == 0:
+    if self.wedge_type == 0:
         if self.is_outwards():
             return S1 + S0 - Sarc
         else:
             return S1 + S0 + Sarc
 
-    if wedge_type == 1:
+    if self.wedge_type == 1:
         if self.is_outwards():
             return S0 - Sarc
         else:

@@ -1,7 +1,3 @@
-from numpy import sin
-from ....Methods.Slot.Slot.comp_surface_wedges import comp_surface_wedges
-
-
 def comp_surface(self):
     """Compute the Slot total surface (by analytical computation).
     Caution, the bottom of the Slot is an Arc
@@ -18,10 +14,7 @@ def comp_surface(self):
 
     """
 
-    if hasattr(self, "wedge_type"):
-        wedge_type = self.wedge_type
-
-    if wedge_type == 1:
+    if self.wedge_type == 1:
         return (
             self.comp_surface_active()
             + self.comp_surface_opening()

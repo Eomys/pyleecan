@@ -26,7 +26,7 @@ def comp_height(self):
     Rbo = self.get_Rbo()
 
     if self.is_outwards():
-        if self.R1 * 2 >= self.W2:
+        if self.R1 * 2 == self.W2:
             # Computation of the arc height
             alpha = self.comp_angle_opening() / 2
             Harc = float(Rbo * (1 - cos(alpha)))

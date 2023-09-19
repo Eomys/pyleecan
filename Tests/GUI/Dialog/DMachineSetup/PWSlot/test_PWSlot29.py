@@ -47,7 +47,13 @@ class TestPWSlot29(object):
         ]
         self.test_obj = LamSlotWind(Rint=0.1, Rext=0.2, mat_type=self.mat3)
         self.test_obj.slot = SlotW29(
-            H0=0.10, H1=0.11, H2=0.12, W0=0.13, W1=0.14, W2=0.15
+            H0=0.10,
+            H1=0.11,
+            H2=0.12,
+            W0=0.13,
+            W1=0.14,
+            W2=0.15,
+            wedge_type=1,
         )
         self.widget = PWSlot29(self.test_obj, self.material_dict)
 
@@ -61,6 +67,7 @@ class TestPWSlot29(object):
         assert self.widget.lf_W1.value() == 0.14
         assert self.widget.lf_W2.value() == 0.15
         assert not self.widget.g_wedge.isChecked()
+        assert self.widget.c_wedge_type.currentIndex() == 1
 
     def test_set_W0(self):
         """Check that the Widget allow to update W0"""

@@ -9,8 +9,8 @@ def comp_surface_wedge(self):
 
     Parameters
     ----------
-    self : SlotW14
-        A SlotW14 object
+    self : SlotW29
+        A SlotW29 object
 
     Returns
     -------
@@ -18,14 +18,9 @@ def comp_surface_wedge(self):
         Slot wedge surface [m**2]
 
     """
-    if hasattr(self, "wedge_type"):
-        wedge_type = self.wedge_type
-    else:
-        wedge_type = 0
-
     # Selection type Wedge
-    if wedge_type == 0:
+    if self.wedge_type == 0:
         return self.comp_surface_opening()
 
-    if wedge_type == 1:
+    if self.wedge_type == 1:
         return (self.W1) * self.H1
