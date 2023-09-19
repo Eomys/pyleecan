@@ -496,7 +496,7 @@ class Test_plot_schematics(object):
                 is_add_point_label=False,
                 is_add_schematics=True,
                 is_add_main_line=True,
-                type_add_active=3,
+                type_add_active=1,
                 save_path=file_path,
                 is_show_fig=False,
             )

@@ -82,7 +82,11 @@ class PWSlot14(Gen_PWSlot14, QWidget):
 
         # Update the combobox
         self.c_wedge_type.clear()
-        self.c_wedge_type.addItems(["Normal", "Full opening"])
+        self.c_wedge_type.addItems(["Full opening", "Normal"])
+
+        if self.slot.wedge_type == None:
+            self.slot.wedge_type = 0
+
         self.c_wedge_type.setCurrentIndex(self.slot.wedge_type)
 
         # Display the main output of the slot (surface, height...)

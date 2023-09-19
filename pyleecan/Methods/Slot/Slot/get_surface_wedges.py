@@ -20,18 +20,18 @@ def get_surface_wedges(self, alpha=0, delta=0):
     """
 
     if hasattr(self, "wedge_type"):
-        pass
+        wedge_type = self.wedge_type
     else:
-        self.wedge_type = 0
+        wedge_type = 0
 
     if self.wedge_mat is None:
         return []  # No wedges
 
     # By default Wedge is the full opening surface
-    if self.wedge_type == 0:
+    if wedge_type == 0:
         surf_list = self.get_surface_opening()
 
-    elif self.wedge_type == 1:
+    elif wedge_type == 1:
         surf_list = self.get_surface_wedge()
 
     else:
