@@ -167,10 +167,10 @@ def plot_schematics(
             line.plot(
                 fig=fig,
                 ax=ax,
-                label="H1",
+                label="H1 [m]",
                 color=ARROW_COLOR,
                 linewidth=ARROW_WIDTH,
-                offset_label=1j * self.W0 * 0.15,
+                offset_label=1j * self.W0 * 0.15 - self.get_H1() / 2,
                 is_arrow=True,
                 fontsize=SC_FONT_SIZE,
             )

@@ -496,7 +496,7 @@ class Test_plot_schematics(object):
                 is_add_point_label=False,
                 is_add_schematics=True,
                 is_add_main_line=True,
-                type_add_active=1,
+                type_add_active=3,
                 save_path=file_path,
                 is_show_fig=False,
             )
@@ -606,9 +606,9 @@ if __name__ == "__main__":
     a = Test_plot_schematics()
     # a.test_BoreFlower()
     # a.test_BoreSinePole()
-    a.test_slot(slot_test[34])
-    a.test_slot_point(slot_test[34])
-    # a.test_slot(slot_test[30])
+    a.test_slot(slot_test[12])
+    a.test_slot_point(slot_test[12])
+    a.test_slot(slot_test[13])
     # for slot in slot_test:
     #    a.test_slot(slot)
     #    a.test_slot_point(slot)

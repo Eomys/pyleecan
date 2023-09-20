@@ -72,10 +72,13 @@ class PWSlot11(Gen_PWSlot11, QWidget):
         if self.slot.W3 is None:
             self.lf_W3.clear()
             self.is_cst_tooth.setChecked(False)
-            self.lf_W3.setEnabled(False)
             # No W3 => Constant slot
             self.lf_W1.setValue(self.slot.W1)
             self.lf_W2.setValue(self.slot.W2)
+            self.lf_W3.hide()
+            self.in_W3.hide()
+            self.unit_W3.hide()
+
         else:  # Cste tooth
             self.lf_W3.setValue(self.slot.W3)
             # W3 is set => constant Tooth so W1 and W2 should be disabled
@@ -84,8 +87,13 @@ class PWSlot11(Gen_PWSlot11, QWidget):
             self.slot.W2 = None
             self.lf_W1.clear()
             self.lf_W2.clear()
-            self.lf_W1.setEnabled(False)
-            self.lf_W2.setEnabled(False)
+            self.lf_W1.hide()
+            self.lf_W2.hide()
+            self.in_W1.hide()
+            self.in_W2.hide()
+            self.unit_W1.hide()
+            self.unit_W2.hide()
+
         if self.slot.H1_is_rad is None:
             self.slot.H1_is_rad = False
         if self.slot.H1_is_rad:
@@ -313,18 +321,37 @@ class PWSlot11(Gen_PWSlot11, QWidget):
             self.slot.W2 = None
             self.lf_W1.clear()
             self.lf_W2.clear()
+            self.lf_W1.hide()
+            self.lf_W2.hide()
+            self.in_W1.hide()
+            self.in_W2.hide()
+            self.unit_W1.hide()
+            self.unit_W2.hide()
             self.lf_W1.setEnabled(False)
             self.lf_W2.setEnabled(False)
             self.lf_W3.setEnabled(True)
-            self.w_wedge_mat.show()
+
+            self.lf_W3.show()
+            self.in_W3.show()
+            self.unit_W3.show()
 
         else:
             self.slot.W3 = None
-            self.lf_W3.clear()
+            self.lf_W3.hide()
+            self.in_W3.hide()
+            self.unit_W3.hide()
+
+            self.lf_W1.show()
+            self.lf_W2.show()
+            self.in_W1.show()
+            self.in_W2.show()
+            self.unit_W1.show()
+            self.unit_W2.show()
             self.lf_W3.setEnabled(False)
             self.lf_W1.setEnabled(True)
             self.lf_W2.setEnabled(True)
-            self.w_wedge_mat.show()
+
+        self.w_wedge_mat.show()
         # Notify the machine GUI that the machine has changed
         self.saveNeeded.emit()
 
