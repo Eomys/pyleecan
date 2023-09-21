@@ -255,15 +255,14 @@ def plot_schematics(
             self.plot_active(
                 fig=fig, ax=ax, is_show_fig=False, is_add_wedge=is_add_wedge
             )
-        elif type_add_active == 2:  # Magnet
+        elif type_add_active == 4:  # type_wedge = 1
             self.plot_active(
                 fig=fig,
                 ax=ax,
                 is_show_fig=False,
                 enforced_default_color=MAGNET_COLOR,
             )
-        elif type_add_active == 4:  # type_wedge = 1
-            is_add_wedge = type_add_active == 4
+            is_add_wedge = type_add_active
             self.plot_active(
                 fig=fig, ax=ax, is_show_fig=False, is_add_wedge=is_add_wedge
             )
