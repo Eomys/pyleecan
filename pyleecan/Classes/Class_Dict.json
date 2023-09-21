@@ -2633,6 +2633,7 @@
             "HoleM57",
             "HoleM58",
             "HoleM60",
+            "HoleM61",
             "HoleMLSRPM",
             "HoleMag",
             "HoleUD",
@@ -3793,6 +3794,148 @@
             }
         ]
     },
+    "HoleM61": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            },
+            {
+                "name": "IS_SYMMETRICAL",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Hole M61",
+        "is_internal": false,
+        "methods": [
+            "_comp_point_coordinate",
+            "build_geometry",
+            "plot_schematics",
+            "remove_magnet",
+            "comp_surface_magnet_id",
+            "comp_radius",
+            "has_magnet",
+            "check",
+            "comp_magnetization_dict"
+        ],
+        "mother": "HoleMag",
+        "name": "HoleM61",
+        "package": "Slot",
+        "path": "pyleecan/Generator/ClassesRef/Slot/HoleM61.csv",
+        "properties": [
+            {
+                "as_dict": "",
+                "desc": "Distance beetween two Hole",
+                "max": "",
+                "min": "0",
+                "name": "W0",
+                "type": "float",
+                "unit": "m",
+                "value": null
+            },
+            {
+                "as_dict": "",
+                "desc": "Magnet width",
+                "max": "",
+                "min": "0",
+                "name": "W1",
+                "type": "float",
+                "unit": "m",
+                "value": null
+            },
+            {
+                "as_dict": "",
+                "desc": "Magnet width",
+                "max": "",
+                "min": "0",
+                "name": "W2",
+                "type": "float",
+                "unit": "m",
+                "value": null
+            },
+            {
+                "as_dict": "",
+                "desc": "Tooth width",
+                "max": "",
+                "min": "0",
+                "name": "W3",
+                "type": "float",
+                "unit": "m",
+                "value": null
+            },
+            {
+                "as_dict": "",
+                "desc": "Distance from the lamination bore",
+                "max": "",
+                "min": "0",
+                "name": "H0",
+                "type": "float",
+                "unit": "m",
+                "value": null
+            },
+            {
+                "as_dict": "",
+                "desc": "Magnet height",
+                "max": "",
+                "min": "0",
+                "name": "H1",
+                "type": "float",
+                "unit": "m",
+                "value": null
+            },
+            {
+                "as_dict": "",
+                "desc": "Distance beetween the lamination bore and top of the slot",
+                "max": "",
+                "min": "0",
+                "name": "H2",
+                "type": "float",
+                "unit": "m",
+                "value": null
+            },
+            {
+                "as_dict": "",
+                "desc": "First Magnet",
+                "max": "",
+                "min": "",
+                "name": "magnet_0",
+                "type": "Magnet",
+                "unit": "-",
+                "value": ""
+            },
+            {
+                "as_dict": "",
+                "desc": "Second Magnet",
+                "max": "",
+                "min": "",
+                "name": "magnet_1",
+                "type": "Magnet",
+                "unit": "-",
+                "value": ""
+            },
+            {
+                "as_dict": "",
+                "desc": "Third Magnet",
+                "max": "",
+                "min": "",
+                "name": "magnet_2",
+                "type": "Magnet",
+                "unit": "-",
+                "value": ""
+            },
+            {
+                "as_dict": "",
+                "desc": "Fourth Magnet",
+                "max": "",
+                "min": "",
+                "name": "magnet_3",
+                "type": "Magnet",
+                "unit": "-",
+                "value": ""
+            }
+        ]
+    },
     "HoleMLSRPM": {
         "constants": [
             {
@@ -3922,6 +4065,7 @@
             "HoleM57",
             "HoleM58",
             "HoleM60",
+            "HoleM61",
             "HoleMLSRPM",
             "HoleUD"
         ],
