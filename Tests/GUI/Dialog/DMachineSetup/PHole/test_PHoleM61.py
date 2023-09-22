@@ -32,9 +32,6 @@ class TestPHoleM61(object):
         test_obj = LamHole(Rint=0.1, Rext=0.5)
         test_obj.hole = list()
         test_obj.hole.append(
-            HoleM61(H0=0.11, H1=0.12, H2=0.18, W0=0.13, W1=0.14, W2=0.15, W3=0.17)
-        )
-        test_obj.hole.append(
             HoleM61(
                 H0=0.11,
                 H1=0.12,

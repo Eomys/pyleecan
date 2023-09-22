@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 
-from numpy import pi
 from PySide2.QtCore import Signal
 from PySide2.QtGui import QPixmap
 from PySide2.QtWidgets import QWidget

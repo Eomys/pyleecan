@@ -33,7 +33,6 @@ def _comp_point_coordinate(self):
 
     # point on line Z5, Z6
     Zc5 = Z6 + 1j * self.H1 + (self.H1 * tan(pi / 4))
-
     # radius Rbo - H2
     Zint5 = inter_line_circle(Z6, Zc5, Rbo - self.H2)
     # Select the point with Re(Z) > 0 and Im(z) >0
@@ -44,7 +43,6 @@ def _comp_point_coordinate(self):
 
     # point on line Z3, Z4
     Zc4 = Z3 + 1j * self.H1 + self.H1 * tan(pi / 4)
-
     # radius Rbo - H2
     Zint4 = inter_line_circle(Z3, Zc4, Rbo - self.H2)
     # Select the point with Re(Z) > 0 and Im(z) >0
