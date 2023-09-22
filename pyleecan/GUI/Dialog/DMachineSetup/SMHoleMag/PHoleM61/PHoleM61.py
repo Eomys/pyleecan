@@ -11,6 +11,7 @@ from pyleecan.GUI.Dialog.DMachineSetup.SMHoleMag.PHoleM61.Gen_PHoleM61 import (
 )
 from pyleecan.Methods.Slot.Slot import SlotCheckError
 from pyleecan.GUI.Dialog.DMachineSetup.SMHoleMag import DEFAULT_MAG_MAT
+from ......GUI.Resources import pixmap_dict
 
 
 class PHoleM61(Gen_PHoleM61, QWidget):
@@ -72,9 +73,7 @@ class PHoleM61(Gen_PHoleM61, QWidget):
         self.w_mat_3.is_hide_button = True
 
         if hole.magnet_0 is None:  # SyRM
-            self.img_slot.setPixmap(
-                QPixmap(":/images/images/MachineSetup/SMHoleMag/HoleM61_no_mag.png")
-            )
+            self.img_slot.setPixmap(QPixmap(pixmap_dict["HoleM61_no_mag"]))
             self.w_mat_4.update(self.hole, "mat_void", self.material_dict)
             self.w_mat_0.hide()
             self.w_mat_1.hide()
@@ -84,9 +83,9 @@ class PHoleM61(Gen_PHoleM61, QWidget):
             # Set current material
             self.w_mat_4.update(self.hole, "mat_void", self.material_dict)
             self.w_mat_0.update(self.hole.magnet_0, "mat_type", self.material_dict)
-            self.w_mat_1.update(self.hole.magnet_0, "mat_type", self.material_dict)
-            self.w_mat_2.update(self.hole.magnet_1, "mat_type", self.material_dict)
-            self.w_mat_3.update(self.hole.magnet_0, "mat_type", self.material_dict)
+            self.w_mat_1.update(self.hole.magnet_1, "mat_type", self.material_dict)
+            self.w_mat_2.update(self.hole.magnet_2, "mat_type", self.material_dict)
+            self.w_mat_3.update(self.hole.magnet_3, "mat_type", self.material_dict)
 
         # Set unit name (m ou mm)
         self.u = gui_option.unit

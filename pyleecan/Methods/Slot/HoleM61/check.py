@@ -21,8 +21,6 @@ def check(self):
         You must have W1+H0 <= W2
     """
     Rbo = self.get_Rbo()
-    point_dict = self._comp_point_coordinate()
-    Z4 = point_dict["Z4"]
     # Check that everything is set
     if self.W0 is None:
         raise S61_NoneError("You must set W0 !")
