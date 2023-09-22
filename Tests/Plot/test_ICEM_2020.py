@@ -465,7 +465,7 @@ def test_WindingUD_layer():
     )
     rotor.axial_vent = [VentilationCirc(Zh=6, Alpha0=0, D0=100e-3, H0=0.3)]
     rotor.slot = SlotW11(
-        Zs=6, H0=15e-3, W0=60e-3, W1=100e-3, W2=100e-3, H1=20e-3, H2=200e-3
+        Zs=6, H0=15e-3, W0=60e-3, W1=100e-3, W2=100e-3, H1=20e-3, H2=200e-3, R1=1e-3
     )
     rotor.slot = rotor.slot.convert_to_SlotUD2()
     assert isinstance(rotor.slot, SlotUD2)

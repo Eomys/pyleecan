@@ -26,16 +26,40 @@ def get_surface_opening(self, alpha=0, delta=0):
 
     # Create curve list
     line_dict = self._comp_line_dict()
-    curve_list = [
-        line_dict["1-2"],
-        line_dict["2-3"],
-        line_dict["3-4"],
-        line_dict["4-9"],
-        line_dict["9-10"],
-        line_dict["10-11"],
-        line_dict["11-12"],
-        line_dict["12-1"],
-    ]
+    # Selection type Wedge
+    if self.wedge_type == 0:
+        # Create curve list
+
+        curve_list = [
+            line_dict["1-2"],
+            line_dict["2-3"],
+            line_dict["3-4"],
+            line_dict["4-9"],
+            line_dict["9-10"],
+            line_dict["10-11"],
+            line_dict["11-12"],
+            line_dict["12-1"],
+        ]
+        # Create surface
+        if self.is_outwards():
+            Zmid = self.get_Rbo() + (self.H0 + self.H1) / 2
+        else:
+            Zmid = self.get_Rbo() - (self.H0 + self.H1) / 2
+
+    else:
+        # Create curve list
+        curve_list = [
+            line_dict["1-2"],
+            line_dict["2-11"],
+            line_dict["11-12"],
+            line_dict["12-1"],
+        ]
+        # Create surface
+        if self.is_outwards():
+            Zmid = self.get_Rbo() + self.H0 / 2
+        else:
+            Zmid = self.get_Rbo() - self.H0 / 2
+
     curve_list = [line for line in curve_list if line is not None]
 
     # Only the closing arc (12-1) needs to be drawn (in FEMM)

@@ -31,7 +31,15 @@ def comp_surface_opening(self):
     alpha = self.comp_angle_opening()
     Sarc = (Rbo ** 2.0) / 2.0 * (alpha - sin(alpha))
 
-    if self.is_outwards():
-        return S1 + S0 - Sarc
-    else:
-        return S1 + S0 + Sarc
+    # Selection type Wedge
+    if self.wedge_type == 0:
+        if self.is_outwards():
+            return S1 + S0 - Sarc
+        else:
+            return S1 + S0 + Sarc
+
+    if self.wedge_type == 1:
+        if self.is_outwards():
+            return S0 - Sarc
+        else:
+            return S0 + Sarc

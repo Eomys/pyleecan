@@ -24,16 +24,40 @@ def get_surface_opening(self, alpha=0, delta=0):
     if self.H0 == 0 and self.H1 == 0:
         return []
 
-    # Create curve list
     line_dict = self._comp_line_dict()
-    curve_list = [
-        line_dict["1-2"],
-        line_dict["2-3"],
-        line_dict["3-7"],
-        line_dict["7-8"],
-        line_dict["8-9"],
-        line_dict["9-1"],
-    ]
+
+    # Selection type Wedge
+    if self.wedge_type == 0:
+        # Create curve list
+
+        curve_list = [
+            line_dict["1-2"],
+            line_dict["2-3"],
+            line_dict["3-7"],
+            line_dict["7-8"],
+            line_dict["8-9"],
+            line_dict["9-1"],
+        ]
+        # Create surface
+        if self.is_outwards():
+            Zmid = self.get_Rbo() + (self.H0 + self.H1) / 2
+        else:
+            Zmid = self.get_Rbo() - (self.H0 + self.H1) / 2
+
+    else:
+        # Create curve list
+        curve_list = [
+            line_dict["1-2"],
+            line_dict["2-8"],
+            line_dict["8-9"],
+            line_dict["9-1"],
+        ]
+        # Create surface
+        if self.is_outwards():
+            Zmid = self.get_Rbo() + self.H0 / 2
+        else:
+            Zmid = self.get_Rbo() - self.H0 / 2
+
     curve_list = [line for line in curve_list if line is not None]
 
     # Only the closing arc (9-1) needs to be drawn (in FEMM)
@@ -42,11 +66,6 @@ def get_surface_opening(self, alpha=0, delta=0):
             curve.prop_dict = dict()
         curve.prop_dict.update({DRAW_PROP_LAB: False})
 
-    # Create surface
-    if self.is_outwards():
-        Zmid = self.get_Rbo() + (self.H0 + self.H1) / 2
-    else:
-        Zmid = self.get_Rbo() - (self.H0 + self.H1) / 2
     label = self.parent.get_label() + "_" + SOP_LAB + "_R0-T0-S0"
     surface = SurfLine(line_list=curve_list, label=label, point_ref=Zmid)
 
