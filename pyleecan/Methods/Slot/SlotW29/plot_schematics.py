@@ -51,7 +51,7 @@ def plot_schematics(
     is_add_main_line : bool
         True to display "main lines" (slot opening and 0x axis)
     type_add_active : int
-        0: No active surface, 1: active surface as winding, 2: active surface as magnet, 3: active surface as winding + wedges, 4: wedge_type = 1
+        0: No active surface, 1: active surface as winding, 2: active surface as magnet, 3: active surface as winding + wedges, 4: type_active =3 and wedge_type = 1
     save_path : str
         full path including folder, name and extension of the file to save if save_path is not None
     is_show_fig : bool
@@ -87,7 +87,7 @@ def plot_schematics(
             is_add_point_label=is_add_point_label,
             is_add_schematics=is_add_schematics,
             is_add_main_line=is_add_main_line,
-            type_add_active=type_add_active,
+            type_add_active=3,
             save_path=save_path,
             is_show_fig=is_show_fig,
             fig=fig,
@@ -255,16 +255,12 @@ def plot_schematics(
             self.plot_active(
                 fig=fig, ax=ax, is_show_fig=False, is_add_wedge=is_add_wedge
             )
-        elif type_add_active == 4:  # type_wedge = 1
+        elif type_add_active == 2:  # Magnet
             self.plot_active(
                 fig=fig,
                 ax=ax,
                 is_show_fig=False,
                 enforced_default_color=MAGNET_COLOR,
-            )
-            is_add_wedge = type_add_active
-            self.plot_active(
-                fig=fig, ax=ax, is_show_fig=False, is_add_wedge=is_add_wedge
             )
 
         # Zooming and cleaning
