@@ -7,7 +7,8 @@ from pyleecan.GUI.Dialog.DMachineSetup.SWSlot.PWSlot11.Ui_PWSlot11 import Ui_PWS
 
 class Gen_PWSlot11(Ui_PWSlot11):
     def setupUi(self, PWSlot11):
-        """Abstract class to update the widget according to the csv doc"""
+        """Abstract class to update the widget according to the csv doc
+        """
         Ui_PWSlot11.setupUi(self, PWSlot11)
         # Setup of in_W0
         txt = self.tr(u"""Slot isthmus width.""")

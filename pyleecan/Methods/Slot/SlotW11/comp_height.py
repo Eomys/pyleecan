@@ -26,13 +26,19 @@ def comp_height(self):
     Rbo = self.get_Rbo()
 
     if self.is_outwards():
-        line_dict = self._comp_line_dict()
+        if self.R1 * 2 == self.W2:
+            # Computation of the arc height
+            alpha = self.comp_angle_opening() / 2
+            Harc = float(Rbo * (1 - cos(alpha)))
+            return self.H0 + self.get_H1() + self.H2 - Harc
 
-        Arc = line_dict["6-7"]
-        Ndisc = 200
-        point_list = Arc.discretize(Ndisc)
-        point_list = array(point_list)
-        return max(abs(point_list)) - Rbo
+        else:
+            line_dict = self._comp_line_dict()
+            Arc = line_dict["6-7"]
+            Ndisc = 200
+            point_list = Arc.discretize(Ndisc)
+            point_list = array(point_list)
+            return max(abs(point_list)) - Rbo
 
     else:
         # Computation of the arc height

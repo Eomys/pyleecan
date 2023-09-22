@@ -168,6 +168,12 @@ slot_test.append(
 )
 slot_test.append(
     {
+        "test_obj": SlotW14(),
+        "type_add_active": 4,
+    }
+)
+slot_test.append(
+    {
         "test_obj": SlotW15(),
         "type_add_active": 1,
     }
@@ -203,13 +209,7 @@ slot_test.append(
         "method_name": "plot_schematics_constant_tooth",
     }
 )
-slot_test.append(
-    {
-        "test_obj": SlotW23(),
-        "type_add_active": 1,
-        "method_name": "plot_schematics_constant_tooth",
-    }
-)
+
 slot_test.append(
     {
         "test_obj": SlotW24(),
@@ -244,6 +244,12 @@ slot_test.append(
     {
         "test_obj": SlotW29(),
         "type_add_active": 1,
+    }
+)
+slot_test.append(
+    {
+        "test_obj": SlotW29(),
+        "type_add_active": 4,
     }
 )
 slot_test.append(
@@ -494,7 +500,28 @@ class Test_plot_schematics(object):
                 save_path=file_path,
                 is_show_fig=False,
             )
-        elif test_dict["type_add_active"] == 2:
+
+        if test_dict["type_add_active"] == 4:
+            ## wedge_type
+            file_name = schematics_name + "_wedge_type_1.png"
+            file_path = join(SCHEMATICS_PATH, file_name)
+            # Delete previous plot
+            if isfile(file_path):
+                remove(file_path)
+            # Plot / Save schematics
+            print("Generating " + file_name)
+            test_obj = test_dict["test_obj"]
+            plot_meth(
+                is_default=True,
+                is_add_point_label=False,
+                is_add_schematics=True,
+                is_add_main_line=True,
+                type_add_active=4,
+                save_path=file_path,
+                is_show_fig=False,
+            )
+
+        if test_dict["type_add_active"] == 2:
             ## Magnet only
             file_name = schematics_name + "_mag.png"
             file_path = join(SCHEMATICS_PATH, file_name)
@@ -579,10 +606,10 @@ if __name__ == "__main__":
     a = Test_plot_schematics()
     # a.test_BoreFlower()
     # a.test_BoreSinePole()
-    # a.test_slot(slot_test[21])
-    # a.test_slot_point(slot_test[20])
-    # a.test_slot_constant_tooth(slot_test[20])
-    for slot in slot_test:
-        a.test_slot(slot)
-        a.test_slot_point(slot)
+    a.test_slot(slot_test[12])
+    a.test_slot_point(slot_test[12])
+    a.test_slot(slot_test[13])
+    # for slot in slot_test:
+    #    a.test_slot(slot)
+    #    a.test_slot_point(slot)
     print("Done")
