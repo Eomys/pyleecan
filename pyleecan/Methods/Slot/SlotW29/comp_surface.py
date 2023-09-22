@@ -1,5 +1,4 @@
 from numpy import sin
-from ....Methods.Slot.Slot.comp_surface_wedges import comp_surface_wedges
 
 
 def comp_surface(self):

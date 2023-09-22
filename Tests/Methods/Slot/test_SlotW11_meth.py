@@ -39,7 +39,7 @@ slotW11_test.append(
     }
 )
 
-# Internal Slot / H1m / Cst slot/ R1*2 > W2
+# Internal Slot / H1m / Cst slot/ R1*2 == W2 (round top)
 lam = LamSlot(is_internal=True, Rext=0.1325)
 lam.slot = SlotW11(
     H0=1e-3,
