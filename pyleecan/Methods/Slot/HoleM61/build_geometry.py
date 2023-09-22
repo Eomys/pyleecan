@@ -215,7 +215,7 @@ def build_geometry(self, alpha=0, delta=0, is_simplified=False):
     curve_list.append(Segment(Z10, ZM14))
     curve_list.append(Segment(ZM14, ZM15))
 
-    point_ref = (Z5 + ZM6) / 2
+    point_ref = (Z10 + ZM15) / 2
     S3T = SurfLine(line_list=curve_list, point_ref=point_ref)
 
     # Air surface without magnet_2 but with magnet_3
