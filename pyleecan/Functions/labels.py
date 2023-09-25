@@ -35,6 +35,8 @@ VENT_LAB_S = "Vent"
 ## Line Property dict
 DRAW_PROP_LAB = "IS_DRAW"
 BOUNDARY_PROP_LAB = "Boundary"
+# Line where BC can be applied but not always
+COND_BOUNDARY_PROP_LAB = "ConditionalBoundary"
 RIGHT_LAB = "Right"  # Right is 0x line
 LEFT_LAB = "Left"
 BOT_LAB = "Bot"
@@ -177,7 +179,7 @@ def get_obj_from_label(machine, label=None, label_dict=None):
         hole = lam_obj.get_hole_list()[label_dict["R_id"]]
         return hole.get_magnet_dict()["magnet_" + str(label_dict["T_id"])]
     elif MAG_LAB in label_dict["surf_type"]:
-        return lam_obj.magnet
+        return lam_obj.get_magnet_by_label(label_dict=label_dict)
     raise NotImplementedError(label_dict["full"] + " is not available yet")
 
 
