@@ -78,6 +78,13 @@ machine21.rotor.slot = SlotW21(
 )
 machine_list.append(machine21)
 
+# SlotW22 In/Out H0=0 + W0 == W2
+machine22 = machine.copy()
+machine22.stator.slot.H0 = 0
+machine22.rotor.slot.H0 = 0
+machine22.rotor.slot.W0 = machine22.rotor.slot.W2
+machine_list.append(machine22)
+
 # SlotW23 In/Out
 machine23 = machine.copy()
 machine23.stator.slot = SlotW23(
@@ -103,6 +110,16 @@ machine29.rotor.slot = SlotW29(
     Zs=12, W0=5e-3, W1=5e-3, W2=30e-3, H0=10e-3, H1=10e-3, H2=50e-3
 )
 machine_list.append(machine29)
+
+# SlotW29 In/Out with strange parameters (H1=0 and W1=W2)
+machine292 = machine.copy()
+machine292.stator.slot = SlotW29(
+    Zs=12, W0=5e-3, W1=30e-3, W2=30e-3, H0=10e-3, H1=0, H2=50e-3
+)
+machine292.rotor.slot = SlotW29(
+    Zs=12, W0=5e-3, W1=30e-3, W2=30e-3, H0=10e-3, H1=0, H2=50e-3
+)
+machine_list.append(machine292)
 
 
 @pytest.mark.long_5s
@@ -163,6 +180,7 @@ def test_FEMM_fast_draw(test_machine, is_plot=False):
 
 # To run it without pytest
 if __name__ == "__main__":
+    test_FEMM_fast_draw(machine22, is_plot=True)
     for test_machine in machine_list:
-        test_FEMM_fast_draw(test_machine)
+        test_FEMM_fast_draw(test_machine, is_plot=True)
     print("Done")

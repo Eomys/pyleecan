@@ -119,7 +119,7 @@ def build_geometry_active(self, Nrad, Ntan, alpha=0, delta=0):
             surf_list.append(surface)
 
     # Correct bottom line for particular case (cf Tests\Validation\Magnetics\test_FEMM_fast_draw.py)
-    if Ntan == 2 and Nrad == 1:
+    if (Ntan == 2 and Nrad == 1) and self.W0 != self.W2:
         # Cut Ox- surface
         arc_to_cut = surf_list[0].line_list[0]
         arc1, arc2 = arc_to_cut.split_line(Z1=0, Z2=Rbo * exp(-1j * self.W0 / 2))

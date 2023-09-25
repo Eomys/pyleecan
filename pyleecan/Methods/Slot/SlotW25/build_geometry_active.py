@@ -37,7 +37,6 @@ def build_geometry_active(self, Nrad, Ntan, alpha=0, delta=0):
     Z5 = point_dict["Z5"]
     Z6 = point_dict["Z6"]
     X = linspace(Z3, Z4, Nrad + 1)
-    Rbo = self.get_Rbo()
 
     # Nrad+1 and Ntan+1 because 3 points => 2 zones
     Z = zeros((Nrad + 1, Ntan + 1), dtype=complex)
