@@ -107,15 +107,9 @@ class PWSlot29(Gen_PWSlot29, QWidget):
     def set_wedge(self):
         """Setup the slot wedge according to the GUI"""
         if self.g_wedge.isChecked():
-            self.w_wedge_mat.show()
-            self.in_type.show()
-            self.c_wedge_type.show()
             self.img_slot.setPixmap(QPixmap(pixmap_dict["SlotW29_wedge_full"]))
             self.w_wedge_mat.update(self.slot, "wedge_mat", self.material_dict)
         else:
-            self.w_wedge_mat.hide()
-            self.in_type.hide()
-            self.c_wedge_type.hide()
             self.slot.wedge_mat = None
             self.c_wedge_type.setCurrentIndex(0)
             self.img_slot.setPixmap(QPixmap(pixmap_dict["SlotW29_wind"]))
