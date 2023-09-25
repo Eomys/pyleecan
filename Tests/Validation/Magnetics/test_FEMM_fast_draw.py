@@ -109,7 +109,7 @@ machine_list.append(machine29)
 @pytest.mark.MagFEMM
 @pytest.mark.SingleOP
 @pytest.mark.parametrize("test_machine", machine_list)
-def test_FEMM_fast_draw(test_machine, is_plot=True):
+def test_FEMM_fast_draw(test_machine, is_plot=False):
     """Test to check that the fast draw method works on machine with overlapping winding/slot lines
     When a slot have a double layer tangential winding and that a line perfectly overlap the
     opening/active zone the copy/rotate method of fast draw fails (the closing line is missing):
