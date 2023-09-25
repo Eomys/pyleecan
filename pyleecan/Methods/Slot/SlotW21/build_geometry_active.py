@@ -1,4 +1,4 @@
-from numpy import linspace, zeros
+from numpy import linspace, zeros, exp
 
 from ....Classes.Segment import Segment
 from ....Classes.SurfLine import SurfLine
@@ -32,10 +32,12 @@ def build_geometry_active(self, Nrad, Ntan, alpha=0, delta=0):
     lam_label = self.parent.get_label()
 
     point_dict = self._comp_point_coordinate()
+    Z2 = point_dict["Z2"]
     Z3 = point_dict["Z3"]
     Z4 = point_dict["Z4"]
     Z5 = point_dict["Z5"]
     Z6 = point_dict["Z6"]
+    Z7 = point_dict["Z7"]
     X = linspace(Z3, Z4, Nrad + 1)
 
     # Nrad+1 and Ntan+1 because 3 points => 2 zones
@@ -84,6 +86,19 @@ def build_geometry_active(self, Nrad, Ntan, alpha=0, delta=0):
                 point_ref=point_ref,
             )
             surf_list.append(surface)
+
+    # Correct bottom line for particular case (cf Tests\Validation\Magnetics\test_FEMM_fast_draw.py)
+    if Ntan == 2 and Nrad == 1 and self.W1 != self.W0 and self.H1 == 0:
+        # Cut Ox- surface
+        arc_to_cut = surf_list[0].line_list[0]
+        arc1, arc2 = arc_to_cut.split_line(Z1=0, Z2=Z2)
+        surf_list[0].line_list = [arc1[0], arc2[0]] + surf_list[0].line_list[1:]
+        surf_list[0].line_list[1].prop_dict = {DRAW_PROP_LAB: False}
+        # Cut Ox+ surface
+        arc_to_cut = surf_list[1].line_list[0]
+        arc1, arc2 = arc_to_cut.split_line(Z1=0, Z2=Z7)
+        surf_list[1].line_list = [arc1[0], arc2[0]] + surf_list[1].line_list[1:]
+        surf_list[1].line_list[0].prop_dict = {DRAW_PROP_LAB: False}
 
     for surf in surf_list:
         surf.rotate(alpha)
