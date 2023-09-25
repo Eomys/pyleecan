@@ -18,7 +18,8 @@ def check(self):
     Raises
     _______
     S61_WCheckError
-        You must have W1+H0 <= W2
+        You must have H1 < H0
+        You must have H2 < H0
     """
     Rbo = self.get_Rbo()
     # Check that everything is set

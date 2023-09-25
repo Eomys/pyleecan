@@ -201,6 +201,33 @@ HoleM61_test.append(
     }
 )
 
+# test Zh = 6
+test_obj = LamHole(Rint=0.03, Rext=0.12, is_stator=False, is_internal=True, L1=0.7)
+test_obj.hole = list()
+test_obj.hole.append(
+    HoleM61(
+        Zh=6,
+        W0=10e-3,
+        W1=10e-3,
+        W2=10e-3,
+        W3=12e-3,
+        H0=61e-3,
+        H1=10e-3,
+        H2=10e-3,
+    )
+)
+HoleM61_test.append(
+    {
+        "test_obj": test_obj,
+        "carac": "all magnet",
+        "Rmin_exp": 0.05921148537234985,
+        "Rmax_exp": 0.11,
+        "S_exp": 0.0012221775834963798,
+        "SM_exp": 0.0004,
+        "hasmagnet_exp": True,
+    }
+)
+
 
 class Test_HoleM61_meth(object):
     """pytest for holeB61 methods"""
