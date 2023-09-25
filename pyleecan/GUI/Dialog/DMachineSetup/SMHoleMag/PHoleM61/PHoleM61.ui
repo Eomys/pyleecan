@@ -318,10 +318,12 @@
  <tabstops>
   <tabstop>lf_H0</tabstop>
   <tabstop>lf_H1</tabstop>
+  <tabstop>lf_H2</tabstop>
   <tabstop>lf_W0</tabstop>
   <tabstop>lf_W1</tabstop>
   <tabstop>lf_W2</tabstop>
   <tabstop>lf_W3</tabstop>
+  <tabstop>scrollArea</tabstop>
  </tabstops>
  <resources>
   <include location="../../../../Resources/pyleecan.qrc"/>

@@ -220,10 +220,12 @@ class Ui_PHoleM61(object):
         self.horizontalLayout.addWidget(self.scrollArea)
 
         QWidget.setTabOrder(self.lf_H0, self.lf_H1)
-        QWidget.setTabOrder(self.lf_H1, self.lf_W0)
+        QWidget.setTabOrder(self.lf_H1, self.lf_H2)
+        QWidget.setTabOrder(self.lf_H2, self.lf_W0)
         QWidget.setTabOrder(self.lf_W0, self.lf_W1)
         QWidget.setTabOrder(self.lf_W1, self.lf_W2)
         QWidget.setTabOrder(self.lf_W2, self.lf_W3)
+        QWidget.setTabOrder(self.lf_W3, self.scrollArea)
 
         self.retranslateUi(PHoleM61)
 

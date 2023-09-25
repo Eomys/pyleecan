@@ -376,11 +376,24 @@ class Test_HoleM61_meth(object):
         test_obj.hole = list()
         test_obj.hole.append(
             HoleM61(
-                Zh=4, W0=2e-2, W1=2e-2, W2=20e-3, W3=12e-3, H0=61e-3, H1=10e-3, H2=10e-3
+                Zh=4,
+                W0=2e-2,
+                W1=20e-3,
+                W2=40e-3,
+                W3=12e-3,
+                H0=61e-3,
+                H1=10e-3,
+                H2=10e-3,
             )
         )
-        result = test_obj.hole[0].comp_surface_magnet_id(5)
-        assert result == 0
+        result = test_obj.hole[0].comp_surface_magnet_id(0)
+        assert result == 0.0004
+        result = test_obj.hole[0].comp_surface_magnet_id(1)
+        assert result == 0.0002
+        result = test_obj.hole[0].comp_surface_magnet_id(2)
+        assert result == 0.0002
+        result = test_obj.hole[0].comp_surface_magnet_id(3)
+        assert result == 0.0004
 
     @pytest.mark.parametrize("test_dict", HoleM61_test)
     def test_has_magnet(self, test_dict):
