@@ -125,6 +125,7 @@ class WCondOut(QGroupBox):
             RwindLL = format(2 * lam.comp_resistance_wind(T=20), ".2g")
         except Exception:  # Unable to compute MLT
             Rwind = "?"
+            RwindLL = "?"
 
         # Update the GUI to display the Output
         self.out_Sslot.setText(Sslot_txt + Sslot + " [" + self.u.get_m2_name() + "]")
