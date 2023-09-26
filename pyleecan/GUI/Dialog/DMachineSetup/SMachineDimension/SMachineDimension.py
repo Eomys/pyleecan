@@ -354,8 +354,9 @@ class SMachineDimension(Ui_SMachineDimension, QWidget):
                 self.img_machine.setPixmap(QPixmap(pixmap_dict["Dim_In_Rotor_Shaft"]))
             # Set Drsh if machine.rotor.Rint is set
             if self.machine.rotor.Rint is not None:
-                self.machine.shaft = Shaft()
-                self.machine.shaft._set_None()
+                if self.machine.shaft is None:
+                    self.machine.shaft = Shaft()
+                    self.machine.shaft._set_None()
                 self.machine.shaft.Drsh = self.machine.rotor.Rint * 2
                 self.out_Drsh.setText(
                     self.tr("Drsh = ")
@@ -370,9 +371,6 @@ class SMachineDimension(Ui_SMachineDimension, QWidget):
             self.w_mat_0.update(self.machine.shaft, "mat_type", self.material_dict)
             # machine.rotor.Rint editable only if there is a shaft
             self.lf_RRint.setEnabled(True)
-            self.in_Lshaft.show()
-            self.lf_Lshaft.show()
-            self.unit_Lshaft.show()
 
         else:  # If there is no shaft
             # Set the corresponding image
