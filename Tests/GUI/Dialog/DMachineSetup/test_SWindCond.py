@@ -277,43 +277,43 @@ class TestSWindCond(object):
 
     def test_insulation_group(self):
         # CondType11
-        # Hide insulation
+        # Deactivate insulation
         self.widget.w_cond.g_ins.setChecked(False)
-        assert self.widget.w_cond.in_Wins_wire.isHidden()
-        assert self.widget.w_cond.lf_Wins_wire.isHidden()
-        assert self.widget.w_cond.unit_Wins_wire.isHidden()
-        assert self.widget.w_cond.w_mat_1.isHidden()
+        assert not self.widget.w_cond.in_Wins_wire.isEnabled()
+        assert not self.widget.w_cond.lf_Wins_wire.isEnabled()
+        assert not self.widget.w_cond.unit_Wins_wire.isEnabled()
+        assert not self.widget.w_cond.w_mat_1.isEnabled()
         assert self.test_obj.stator.winding.conductor.Wins_wire is None
-        # Show insulation
+        # Activate insulation
         self.widget.w_cond.g_ins.setChecked(True)
-        assert not self.widget.w_cond.in_Wins_wire.isHidden()
-        assert not self.widget.w_cond.lf_Wins_wire.isHidden()
-        assert not self.widget.w_cond.unit_Wins_wire.isHidden()
-        assert not self.widget.w_cond.w_mat_1.isHidden()
+        assert self.widget.w_cond.in_Wins_wire.isEnabled()
+        assert self.widget.w_cond.lf_Wins_wire.isEnabled()
+        assert self.widget.w_cond.unit_Wins_wire.isEnabled()
+        assert self.widget.w_cond.w_mat_1.isEnabled()
         assert self.widget.w_cond.lf_Wins_wire.value() == 0.03
         assert self.test_obj.stator.winding.conductor.Wins_wire == 0.03
 
         # CondType12
         # Hide insulation
         self.widget2.w_cond.g_ins.setChecked(False)
-        assert self.widget2.w_cond.in_Wins_wire.isHidden()
-        assert self.widget2.w_cond.lf_Wins_wire.isHidden()
-        assert self.widget2.w_cond.unit_Wins_wire.isHidden()
-        assert self.widget2.w_cond.in_Wins_cond.isHidden()
-        assert self.widget2.w_cond.lf_Wins_cond.isHidden()
-        assert self.widget2.w_cond.unit_Wins_cond.isHidden()
-        assert self.widget2.w_cond.w_mat_1.isHidden()
+        assert not self.widget2.w_cond.in_Wins_wire.isEnabled()
+        assert not self.widget2.w_cond.lf_Wins_wire.isEnabled()
+        assert not self.widget2.w_cond.unit_Wins_wire.isEnabled()
+        assert not self.widget2.w_cond.in_Wins_cond.isEnabled()
+        assert not self.widget2.w_cond.lf_Wins_cond.isEnabled()
+        assert not self.widget2.w_cond.unit_Wins_cond.isEnabled()
+        assert not self.widget2.w_cond.w_mat_1.isEnabled()
         assert self.test_obj.rotor.winding.conductor.Wins_wire is None
         assert self.test_obj.rotor.winding.conductor.Wins_cond is None
         # Show insulation
         self.widget2.w_cond.g_ins.setChecked(True)
-        assert not self.widget2.w_cond.in_Wins_wire.isHidden()
-        assert not self.widget2.w_cond.lf_Wins_wire.isHidden()
-        assert not self.widget2.w_cond.unit_Wins_wire.isHidden()
-        assert not self.widget2.w_cond.in_Wins_cond.isHidden()
-        assert not self.widget2.w_cond.lf_Wins_cond.isHidden()
-        assert not self.widget2.w_cond.unit_Wins_cond.isHidden()
-        assert not self.widget2.w_cond.w_mat_1.isHidden()
+        assert self.widget2.w_cond.in_Wins_wire.isEnabled()
+        assert self.widget2.w_cond.lf_Wins_wire.isEnabled()
+        assert self.widget2.w_cond.unit_Wins_wire.isEnabled()
+        assert self.widget2.w_cond.in_Wins_cond.isEnabled()
+        assert self.widget2.w_cond.lf_Wins_cond.isEnabled()
+        assert self.widget2.w_cond.unit_Wins_cond.isEnabled()
+        assert self.widget2.w_cond.w_mat_1.isEnabled()
         assert self.widget2.w_cond.lf_Wins_wire.value() == 0.021
         assert self.widget2.w_cond.lf_Wins_cond.value() == 0.031
         assert self.test_obj.rotor.winding.conductor.Wins_wire == 0.021
