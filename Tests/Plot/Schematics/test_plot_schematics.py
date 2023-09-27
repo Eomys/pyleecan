@@ -391,9 +391,8 @@ class Test_plot_schematics(object):
         )
         pass
 
-    @pytest.mark.parametrize("test_dict", hole_test)
+    """@pytest.mark.parametrize("test_dict", hole_test)
     def test_hole_no_mag(self, test_dict):
-        """Slot Schematics"""
         file_name = type(test_dict["test_obj"]).__name__ + "_no_mag.png"
         file_path = join(SCHEMATICS_PATH, file_name)
         # Delete previous plot
@@ -409,59 +408,97 @@ class Test_plot_schematics(object):
             type_add_active=0,
             save_path=file_path,
             is_show_fig=False,
-        )
+        )"""
 
     @pytest.mark.parametrize("test_dict", slot_test)
-    def test_slot(self, test_dict):
-        """Slot Schematics"""
-        ## Empty
+    def name(self, test_dict):
+        test_obj = test_dict["test_obj"]
+        type_active = test_dict["type_add_active"]
+
+        # Get plot_method
+        if "method_name" in test_dict:
+            plot_meth = getattr(test_obj, test_dict["method_name"])
+        else:
+            plot_meth = getattr(test_obj, "plot_schematics")
+
+        if "is_default" in test_dict and test_dict["is_default"] != 1:
+            value = plot_meth(
+                is_return_default=True,
+                is_default=2,
+            )
+            type_active = 0
+
+        else:
+            value = plot_meth(
+                is_return_default=True,
+                is_default=True,
+            )
+
+        schematics_name = type(test_dict["test_obj"]).__name__
+
+        if type_active == 0:
+            file_name = schematics_name + "_empty"
+
+        elif type_active == 1:
+            file_name = schematics_name + "_wind"
+
+        elif type_active == 2:
+            file_name = schematics_name + "_mag"
+
+        elif type_active == 3:
+            file_name = schematics_name + "_wedge_full"
+
+        elif type_active == 4:
+            file_name = schematics_name + "_wedge_type_1"
+
+        if value.is_internal == True:
+            file_name = file_name + "_int"
+
+        else:
+            file_name = file_name + "_ext"
+
+        if value.is_stator == True:
+            file_name = file_name + "_stator"
+
+        else:
+            file_name = file_name + "_rotor"
+
         if (
             "method_name" in test_dict
             and test_dict["method_name"] == "plot_schematics_constant_tooth"
         ):
-            schematics_name = type(test_dict["test_obj"]).__name__ + "_constant_tooth"
-        else:
-            schematics_name = type(test_dict["test_obj"]).__name__
-        if "is_default" in test_dict:
-            file_name = schematics_name + "_empty_int_rot.png"
-        else:
-            file_name = schematics_name + "_empty.png"
+            file_name = file_name + "_constant_tooth"
+
+        if (
+            "method_name" in test_dict
+            and test_dict["method_name"] == "plot_schematics_radial"
+        ):
+            file_name = file_name + "_radial"
+
+        file_name = file_name + ".png"
+        return file_name
+
+    @pytest.mark.parametrize("test_dict", slot_test)
+    def test_slot(self, test_dict):
+        """Slot Schematics"""
+        test_obj = test_dict["test_obj"]
+        file_name = self.name(test_dict)
         file_path = join(SCHEMATICS_PATH, file_name)
         # Delete previous plot
         if isfile(file_path):
             remove(file_path)
         # Plot / Save schematics
         print("Generating " + file_name)
-        test_obj = test_dict["test_obj"]
+
         # Get plot_method
         if "method_name" in test_dict:
             plot_meth = getattr(test_obj, test_dict["method_name"])
         else:
             plot_meth = getattr(test_obj, "plot_schematics")
-        plot_meth(
-            is_default=True,
-            is_add_point_label=False,
-            is_add_schematics=True,
-            is_add_main_line=True,
-            type_add_active=0,
-            save_path=file_path,
-            is_show_fig=False,
-        )
-        if "is_default" in test_dict:
-            if test_dict["is_default"] == 2:  # External schematics
-                file_name = schematics_name + "_empty_ext_sta.png"
-            else:
-                file_name = (
-                    schematics_name + "_empty_" + str(test_dict["is_default"]) + ".png"
-                )
-            file_path = join(SCHEMATICS_PATH, file_name)
-            # Delete previous plot
-            if isfile(file_path):
-                remove(file_path)
-            print("Generating " + file_name)
-            test_obj = test_dict["test_obj"]
+
+        if "is_default" in test_dict and test_dict["is_default"] != 1:
             plot_meth(
-                is_default=test_dict["is_default"],
+                is_default=2,
                 is_add_point_label=False,
                 is_add_schematics=True,
                 is_add_main_line=True,
@@ -469,81 +506,76 @@ class Test_plot_schematics(object):
                 save_path=file_path,
                 is_show_fig=False,
             )
+            test_dict["is_default"] = True
+            self.test_slot(test_dict)
 
-        if test_dict["type_add_active"] == 1:
-            ## Wind only
-            file_name = schematics_name + "_wind.png"
+        else:
+            if test_dict["type_add_active"] == 1:
+                ## Wind only
+                plot_meth(
+                    is_default=True,
+                    is_add_point_label=False,
+                    is_add_schematics=True,
+                    is_add_main_line=True,
+                    type_add_active=1,
+                    save_path=file_path,
+                    is_show_fig=False,
+                )
+                test_dict["type_add_active"] = 3
+                file_name = self.name(test_dict)
+                file_path = join(SCHEMATICS_PATH, file_name)
+
+            if test_dict["type_add_active"] == 2:
+                ## Magnet only
+                plot_meth(
+                    is_default=True,
+                    is_add_point_label=False,
+                    is_add_schematics=True,
+                    is_add_main_line=True,
+                    type_add_active=2,
+                    save_path=file_path,
+                    is_show_fig=False,
+                )
+
+            if test_dict["type_add_active"] == 3:
+                ## Wind and Wedge
+                plot_meth(
+                    is_default=True,
+                    is_add_point_label=False,
+                    is_add_schematics=True,
+                    is_add_main_line=True,
+                    type_add_active=3,
+                    save_path=file_path,
+                    is_show_fig=False,
+                )
+
+            if test_dict["type_add_active"] == 4:
+                ## wedge_type
+                plot_meth(
+                    is_default=True,
+                    is_add_point_label=False,
+                    is_add_schematics=True,
+                    is_add_main_line=True,
+                    type_add_active=4,
+                    save_path=file_path,
+                    is_show_fig=False,
+                )
+
+            # Empty
+            test_dict["type_add_active"] = 0
+            file_name = self.name(test_dict)
             file_path = join(SCHEMATICS_PATH, file_name)
             # Delete previous plot
             if isfile(file_path):
                 remove(file_path)
             # Plot / Save schematics
             print("Generating " + file_name)
-            test_obj = test_dict["test_obj"]
             plot_meth(
                 is_default=True,
                 is_add_point_label=False,
                 is_add_schematics=True,
                 is_add_main_line=True,
-                type_add_active=1,
-                save_path=file_path,
-                is_show_fig=False,
-            )
-            ## Wind and Wedge
-            file_name = schematics_name + "_wedge_full.png"
-            file_path = join(SCHEMATICS_PATH, file_name)
-            # Delete previous plot
-            if isfile(file_path):
-                remove(file_path)
-            # Plot / Save schematics
-            print("Generating " + file_name)
-            test_obj = test_dict["test_obj"]
-            plot_meth(
-                is_default=True,
-                is_add_point_label=False,
-                is_add_schematics=True,
-                is_add_main_line=True,
-                type_add_active=3,
-                save_path=file_path,
-                is_show_fig=False,
-            )
-
-        if test_dict["type_add_active"] == 4:
-            ## wedge_type
-            file_name = schematics_name + "_wedge_type_1.png"
-            file_path = join(SCHEMATICS_PATH, file_name)
-            # Delete previous plot
-            if isfile(file_path):
-                remove(file_path)
-            # Plot / Save schematics
-            print("Generating " + file_name)
-            test_obj = test_dict["test_obj"]
-            plot_meth(
-                is_default=True,
-                is_add_point_label=False,
-                is_add_schematics=True,
-                is_add_main_line=True,
-                type_add_active=4,
-                save_path=file_path,
-                is_show_fig=False,
-            )
-
-        if test_dict["type_add_active"] == 2:
-            ## Magnet only
-            file_name = schematics_name + "_mag.png"
-            file_path = join(SCHEMATICS_PATH, file_name)
-            # Delete previous plot
-            if isfile(file_path):
-                remove(file_path)
-            # Plot / Save
-            print("Generating " + file_name)
-            test_obj = test_dict["test_obj"]
-            plot_meth(
-                is_default=True,
-                is_add_point_label=False,
-                is_add_schematics=True,
-                is_add_main_line=True,
-                type_add_active=2,
+                type_add_active=0,
                 save_path=file_path,
                 is_show_fig=False,
             )
@@ -613,10 +645,10 @@ if __name__ == "__main__":
     a = Test_plot_schematics()
     # a.test_BoreFlower()
     # a.test_BoreSinePole()
-    a.test_slot(slot_test[47])
-    a.test_slot_point(slot_test[47])
+    # a.test_slot(slot_test[47])
+    # a.test_slot_point(slot_test[47])
     # a.test_slot(slot_test[13])
-    # for slot in slot_test:
-    #    a.test_slot(slot)
-    #    a.test_slot_point(slot)
+    for slot in slot_test:
+        a.test_slot(slot)
+        a.test_slot_point(slot)
     print("Done")

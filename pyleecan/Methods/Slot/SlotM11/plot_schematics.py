@@ -28,6 +28,7 @@ MAGNET_COLOR = config_dict["PLOT"]["COLOR_DICT"]["MAGNET_COLOR"]
 def plot_schematics(
     self,
     is_default=False,
+    is_return_default=False,
     is_add_point_label=False,
     is_add_schematics=True,
     is_add_main_line=True,
@@ -45,6 +46,8 @@ def plot_schematics(
         A SlotM11 object
     is_default : int
         0: current slot values, 1: default internal rotor schematics, 2: default external stator schematics
+    is_return_default : bool
+        True: return the default lamination used for the schematics (skip plot)
     is_add_point_label : bool
         True to display the name of the points (Z1, Z2....)
     is_add_schematics : bool
@@ -68,6 +71,9 @@ def plot_schematics(
         Figure containing the schematics
     ax : Matplotlib.axes.Axes object
         Axis containing the schematics
+    -------
+    lam : LamSlot
+        Default lamination used for the schematics
     """
 
     # Use some default parameter
@@ -77,12 +83,17 @@ def plot_schematics(
             lam = LamSlot(
                 Rint=0.1, Rext=0.135, is_internal=True, is_stator=False, slot=slot
             )
+            if is_return_default:
+                return lam
         else:  # External Stator schematics
             lam = LamSlot(
                 Rint=0.1, Rext=0.135, is_internal=False, is_stator=True, slot=slot
             )
+            if is_return_default:
+                return lam
         return slot.plot_schematics(
             is_default=False,
+            is_return_default=False,
             is_add_point_label=is_add_point_label,
             is_add_schematics=is_add_schematics,
             is_add_main_line=is_add_main_line,
