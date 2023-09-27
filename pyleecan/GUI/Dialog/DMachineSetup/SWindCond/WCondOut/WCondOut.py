@@ -122,7 +122,9 @@ class WCondOut(QGroupBox):
             Mwind = "?"
         try:
             Rwind = format(lam.comp_resistance_wind(T=20), ".2g")
-            RwindLL = format(2 * lam.comp_resistance_wind(T=20), ".2g")
+            RwindLL = format(
+                2 * lam.comp_resistance_wind(T=20), ".2g"
+            )  # *2 for star connection, *2/3 for delta connection /!\
         except Exception:  # Unable to compute MLT
             Rwind = "?"
             RwindLL = "?"
