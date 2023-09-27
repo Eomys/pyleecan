@@ -18,6 +18,7 @@ DELTA = 1e-4
 
 HoleM61_test = list()
 
+# No magnet case
 test_obj = LamHole(Rint=0.03, Rext=0.12, is_stator=False, is_internal=True, L1=0.7)
 test_obj.hole = list()
 test_obj.hole.append(
@@ -48,7 +49,7 @@ HoleM61_test.append(
     }
 )
 
-# Tests with both magnets
+# Tests with All magnets
 test_obj = LamHole(is_internal=True, Rint=0.03, Rext=0.12, is_stator=False, L1=0.7)
 test_obj.hole = list()
 test_obj.hole.append(
@@ -230,7 +231,7 @@ HoleM61_test.append(
 
 
 class Test_HoleM61_meth(object):
-    """pytest for holeB61 methods"""
+    """pytest for HoleM61 methods"""
 
     @pytest.mark.parametrize("test_dict", HoleM61_test)
     def test_schematics(self, test_dict):
