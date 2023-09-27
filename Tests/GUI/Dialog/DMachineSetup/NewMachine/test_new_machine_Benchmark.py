@@ -124,6 +124,8 @@ class TestNewMachineBenchmark(object):
         self.widget.w_step.lf_RRext.setText("0.04")
         self.widget.w_step.lf_RRext.editingFinished.emit()
         self.widget.w_step.g_shaft.setChecked(True)
+        self.widget.w_step.lf_Lshaft.setText("0.14")
+        self.widget.w_step.lf_Lshaft.editingFinished.emit()
         assert self.widget.w_step.lf_RRint.isEnabled()
         self.widget.w_step.lf_RRint.setText("0.0095")
         self.widget.w_step.lf_RRint.editingFinished.emit()
@@ -133,6 +135,7 @@ class TestNewMachineBenchmark(object):
         assert self.widget.machine.stator.Rint == pytest.approx(0.048)
         assert self.widget.machine.rotor.Rext == pytest.approx(0.04)
         assert self.widget.machine.rotor.Rint == pytest.approx(0.0095)
+        assert self.widget.machine.shaft.Lshaft == pytest.approx(0.14)
         assert self.widget.w_step.out_Drsh.text() == "Drsh = 0.019 [m]"
         assert self.widget.w_step.out_airgap.text() == "Airgap magnetic width = 8 [mm]"
         assert isinstance(self.widget.machine.shaft, Shaft)
@@ -362,7 +365,11 @@ class TestNewMachineBenchmark(object):
         )
         assert (
             self.widget.w_step.w_cond.w_out.out_Rwind.text()
-            == "Winding resistance at 20°C: ? [Ohm]"
+            == "Phase resistance at 20°C: ? [Ohm]"
+        )
+        assert (
+            self.widget.w_step.w_cond.w_out.out_RwindLL.text()
+            == "Line-to-line resistance at 20°C: ? [Ohm]"
         )
 
         ## Definition
@@ -406,7 +413,11 @@ class TestNewMachineBenchmark(object):
         )
         assert (
             self.widget.w_step.w_cond.w_out.out_Rwind.text()
-            == "Winding resistance at 20°C: 0.00039 [Ohm]"
+            == "Phase resistance at 20°C: 0.00039 [Ohm]"
+        )
+        assert (
+            self.widget.w_step.w_cond.w_out.out_RwindLL.text()
+            == "Line-to-line resistance at 20°C: 0.00078 [Ohm]"
         )
 
         # Is the stator winding conductors well defined ?
@@ -570,7 +581,7 @@ class TestNewMachineBenchmark(object):
             self.widget.w_step.tab_machine.tab_param.item(6, 0).text()
             == "Machine total mass"
         )
-        assert self.widget.w_step.tab_machine.tab_param.item(6, 1).text() == "12.89 kg"
+        assert self.widget.w_step.tab_machine.tab_param.item(6, 1).text() == "13.19 kg"
         assert (
             self.widget.w_step.tab_machine.tab_param.item(7, 0).text()
             == "Stator lamination mass"
@@ -594,7 +605,9 @@ class TestNewMachineBenchmark(object):
         assert (
             self.widget.w_step.tab_machine.tab_param.item(11, 0).text() == "Shaft mass"
         )
-        assert self.widget.w_step.tab_machine.tab_param.item(11, 1).text() == "0 kg"
+        assert (
+            self.widget.w_step.tab_machine.tab_param.item(11, 1).text() == "0.3037 kg"
+        )
 
         assert self.widget.w_step.tab_machine.tab_param.rowCount() == 12
 

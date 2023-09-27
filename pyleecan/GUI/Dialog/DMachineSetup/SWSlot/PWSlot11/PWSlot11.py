@@ -287,11 +287,9 @@ class PWSlot11(Gen_PWSlot11, QWidget):
     def set_wedge(self):
         """Setup the slot wedge according to the GUI"""
         if self.g_wedge.isChecked():
-            self.w_wedge_mat.show()
             self.w_wedge_mat.update(self.slot, "wedge_mat", self.material_dict)
 
         else:
-            self.w_wedge_mat.hide()
             self.slot.wedge_mat = None
 
         # setup the picture
@@ -328,7 +326,6 @@ class PWSlot11(Gen_PWSlot11, QWidget):
             self.lf_W1.setEnabled(True)
             self.lf_W2.setEnabled(True)
 
-        self.w_wedge_mat.show()
         # Notify the machine GUI that the machine has changed
         self.saveNeeded.emit()
 
