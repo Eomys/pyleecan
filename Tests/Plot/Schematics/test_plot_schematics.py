@@ -391,25 +391,6 @@ class Test_plot_schematics(object):
         )
         pass
 
-    """@pytest.mark.parametrize("test_dict", hole_test)
-    def test_hole_no_mag(self, test_dict):
-        file_name = type(test_dict["test_obj"]).__name__ + "_no_mag.png"
-        file_path = join(SCHEMATICS_PATH, file_name)
-        # Delete previous plot
-        if isfile(file_path):
-            remove(file_path)
-        # Plot / Save schematics
-        test_obj = test_dict["test_obj"]
-        test_obj.plot_schematics(
-            is_default=True,
-            is_add_point_label=False,
-            is_add_schematics=True,
-            is_add_main_line=True,
-            type_add_active=0,
-            save_path=file_path,
-            is_show_fig=False,
-        )"""
-
     @pytest.mark.parametrize("test_dict", slot_test)
     def name(self, test_dict):
         test_obj = test_dict["test_obj"]
