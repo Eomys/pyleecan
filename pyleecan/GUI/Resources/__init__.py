@@ -40,4 +40,8 @@ pixmap_dict = {
     "SlotW29_wind": ":/images/images/MachineSetup/WSlot/SlotW29_wind.png",
     "HoleM61": ":/images/images/MachineSetup/SMHoleMag/HoleM61.png",
     "HoleM61_no_mag": ":/images/images/MachineSetup/SMHoleMag/HoleM61_no_mag.png",
+    "HoleM62": ":/images/images/MachineSetup/SMHoleMag/HoleM62.png",
+    "HoleM62_no_mag": ":/images/images/MachineSetup/SMHoleMag/HoleM62_no_mag.png",
+    "HoleM62_W0_is_rad": ":/images/images/MachineSetup/SMHoleMag/HoleM62_W0_is_rad.png",
+    "HoleM62_W0_is_rad_no_mag": ":/images/images/MachineSetup/SMHoleMag/HoleM62_W0_is_rad_no_mag.png",
 }

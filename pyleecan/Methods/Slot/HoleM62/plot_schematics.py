@@ -141,22 +141,6 @@ def plot_schematics(
                 fontsize=SC_FONT_SIZE,
             )
 
-            # W0 [m]
-            line = Segment(
-                begin=((point_dict["Z8"] + point_dict["Z7"]) / 2 * exp(1j * alpha)),
-                end=((point_dict["Z5"] + point_dict["Z6"]) / 2 * exp(1j * alpha)),
-            )
-            line.plot(
-                fig=fig,
-                ax=ax,
-                color=ARROW_COLOR,
-                linewidth=ARROW_WIDTH,
-                label="W0 [m]",
-                offset_label=1j * self.H0 / 5 + 0.003,
-                is_arrow=True,
-                fontsize=SC_FONT_SIZE,
-            )
-
             # H0
             line = Segment(
                 point_dict["Z6"] * exp(1j * alpha),
@@ -171,6 +155,19 @@ def plot_schematics(
                 offset_label=0.003 - 1j * 0.004,
                 is_arrow=True,
                 fontsize=SC_FONT_SIZE,
+            )
+            # W0 [m]
+            Zlim1 = point_dict["Z8"] - self.H0 * 0.2
+            Zlim2 = point_dict["Z5"] - self.H0 * 0.2
+            plot_quote(
+                point_dict["Z8"] * exp(1j * alpha),
+                Zlim1 * exp(1j * alpha),
+                Zlim2 * exp(1j * alpha),
+                point_dict["Z5"] * exp(1j * alpha),
+                offset_label=-1j * self.H0 * 0.4,
+                fig=fig,
+                ax=ax,
+                label="W0 [m]",
             )
 
             if is_add_main_line:

@@ -39,15 +39,16 @@ from pyleecan.Classes.HoleM53 import HoleM53
 from pyleecan.Classes.HoleM54 import HoleM54
 from pyleecan.Classes.HoleM57 import HoleM57
 from pyleecan.Classes.HoleM58 import HoleM58
+from pyleecan.Classes.HoleM60 import HoleM60
+from pyleecan.Classes.HoleM61 import HoleM61
+from pyleecan.Classes.HoleM62 import HoleM62
 from pyleecan.Classes.VentilationCirc import VentilationCirc
 from pyleecan.Classes.VentilationPolar import VentilationPolar
 from pyleecan.Classes.VentilationTrap import VentilationTrap
 from pyleecan.Classes.HoleMLSRPM import HoleMLSRPM
 from pyleecan.Classes.BoreFlower import BoreFlower
 from pyleecan.Classes.BoreSinePole import BoreSinePole
-from pyleecan.Classes.HoleM60 import HoleM60
-from pyleecan.Classes.HoleM61 import HoleM61
-from pyleecan.Classes.HoleM62 import HoleM62
+
 from Tests import SCHEMATICS_PATH
 from os.path import join, isdir, isfile
 from os import makedirs, remove
@@ -410,7 +411,15 @@ class Test_plot_schematics(object):
     @pytest.mark.parametrize("test_dict", hole_test)
     def test_hole_no_mag(self, test_dict):
         """Slot Schematics"""
-        file_name = type(test_dict["test_obj"]).__name__ + "_no_mag.png"
+        if (
+            "method_name" in test_dict
+            and test_dict["method_name"] == "plot_schematics_W0_is_rad"
+        ):
+            schematics_name = type(test_dict["test_obj"]).__name__ + "_W0_is_rad"
+        else:
+            schematics_name = type(test_dict["test_obj"]).__name__
+
+        file_name = schematics_name + "_no_mag.png"
         file_path = join(SCHEMATICS_PATH, file_name)
         # Delete previous plot
         if isfile(file_path):
@@ -436,12 +445,19 @@ class Test_plot_schematics(object):
             and test_dict["method_name"] == "plot_schematics_constant_tooth"
         ):
             schematics_name = type(test_dict["test_obj"]).__name__ + "_constant_tooth"
+        elif (
+            "method_name" in test_dict
+            and test_dict["method_name"] == "plot_schematics_W0_is_rad"
+        ):
+            schematics_name = type(test_dict["test_obj"]).__name__ + "_W0_is_rad"
         else:
             schematics_name = type(test_dict["test_obj"]).__name__
+
         if "is_default" in test_dict:
             file_name = schematics_name + "_empty_int_rot.png"
         else:
             file_name = schematics_name + "_empty.png"
+
         file_path = join(SCHEMATICS_PATH, file_name)
         # Delete previous plot
         if isfile(file_path):
@@ -466,10 +482,12 @@ class Test_plot_schematics(object):
         if "is_default" in test_dict:
             if test_dict["is_default"] == 2:  # External schematics
                 file_name = schematics_name + "_empty_ext_sta.png"
+
             else:
                 file_name = (
                     schematics_name + "_empty_" + str(test_dict["is_default"]) + ".png"
                 )
+
             file_path = join(SCHEMATICS_PATH, file_name)
             # Delete previous plot
             if isfile(file_path):
@@ -629,9 +647,9 @@ if __name__ == "__main__":
     a = Test_plot_schematics()
     # a.test_BoreFlower()
     # a.test_BoreSinePole()
+    a.test_slot(slot_test[48])
+    a.test_slot_point(slot_test[48])
     a.test_slot(slot_test[49])
-    a.test_slot_point(slot_test[49])
-    a.test_slot(slot_test[50])
     # for slot in slot_test:
     #    a.test_slot(slot)
     #    a.test_slot_point(slot)
