@@ -46,6 +46,7 @@ from pyleecan.Classes.HoleMLSRPM import HoleMLSRPM
 from pyleecan.Classes.BoreFlower import BoreFlower
 from pyleecan.Classes.BoreSinePole import BoreSinePole
 from pyleecan.Classes.HoleM60 import HoleM60
+from pyleecan.Classes.HoleM61 import HoleM61
 from Tests import SCHEMATICS_PATH
 from os.path import join, isdir, isfile
 from os import makedirs, remove
@@ -343,6 +344,12 @@ hole_test.append(
         "type_add_active": 2,
     }
 )
+hole_test.append(
+    {
+        "test_obj": HoleM61(),
+        "type_add_active": 2,
+    }
+)
 slot_test.extend(hole_test)
 
 
@@ -606,9 +613,9 @@ if __name__ == "__main__":
     a = Test_plot_schematics()
     # a.test_BoreFlower()
     # a.test_BoreSinePole()
-    a.test_slot(slot_test[12])
-    a.test_slot_point(slot_test[12])
-    a.test_slot(slot_test[13])
+    a.test_slot(slot_test[47])
+    a.test_slot_point(slot_test[47])
+    # a.test_slot(slot_test[13])
     # for slot in slot_test:
     #    a.test_slot(slot)
     #    a.test_slot_point(slot)

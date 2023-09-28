@@ -212,7 +212,10 @@ class Ui_PWSlot29(object):
         QWidget.setTabOrder(self.lf_W2, self.lf_H0)
         QWidget.setTabOrder(self.lf_H0, self.lf_H1)
         QWidget.setTabOrder(self.lf_H1, self.lf_H2)
-        QWidget.setTabOrder(self.lf_H2, self.txt_constraint)
+        QWidget.setTabOrder(self.lf_H2, self.g_wedge)
+        QWidget.setTabOrder(self.g_wedge, self.c_wedge_type)
+        QWidget.setTabOrder(self.c_wedge_type, self.scrollArea)
+        QWidget.setTabOrder(self.scrollArea, self.txt_constraint)
 
         self.retranslateUi(PWSlot29)
 

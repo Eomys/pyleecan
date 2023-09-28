@@ -38,4 +38,6 @@ pixmap_dict = {
     "SlotW29_wedge_full": ":/images/images/MachineSetup/WSlot/SlotW29_wedge_full.png",
     "SlotW29_wedge_type_1": ":/images/images/MachineSetup/WSlot/SlotW29_wedge_type_1.png",
     "SlotW29_wind": ":/images/images/MachineSetup/WSlot/SlotW29_wind.png",
+    "HoleM61": ":/images/images/MachineSetup/SMHoleMag/HoleM61.png",
+    "HoleM61_no_mag": ":/images/images/MachineSetup/SMHoleMag/HoleM61_no_mag.png",
 }
