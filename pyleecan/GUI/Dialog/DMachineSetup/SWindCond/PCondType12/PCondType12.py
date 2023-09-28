@@ -120,10 +120,6 @@ class PCondType12(Gen_PCondType12, QWidget):
 
     def update_ins_layout(self):
         if self.g_ins.isChecked():
-            self.in_Wins_wire.show()
-            self.lf_Wins_wire.show()
-            self.unit_Wins_wire.show()
-            self.w_mat_1.show()
             self.set_Wins_wire()
             if self.si_Nwpc1.value() > 1:
                 self.in_Wins_cond.show()
@@ -136,15 +132,8 @@ class PCondType12(Gen_PCondType12, QWidget):
                 self.unit_Wins_cond.hide()
                 self.set_Wins_cond(Wins_cond=None)
         else:
-            self.in_Wins_wire.hide()
-            self.lf_Wins_wire.hide()
-            self.unit_Wins_wire.hide()
-            self.w_mat_1.hide()
             self.set_Wins_wire(Wins_wire=None)
             self.set_Wins_cond(Wins_cond=None)
-            self.in_Wins_cond.hide()
-            self.lf_Wins_cond.hide()
-            self.unit_Wins_cond.hide()
 
     def set_Nwppc(self):
         """Signal to update the value of Nwppc according to the line edit

@@ -276,11 +276,9 @@ class PWSlot23(Gen_PWSlot23, QWidget):
     def set_wedge(self):
         """Setup the slot wedge according to the GUI"""
         if self.g_wedge.isChecked():
-            self.w_wedge_mat.show()
             self.w_wedge_mat.update(self.slot, "wedge_mat", self.material_dict)
 
         else:
-            self.w_wedge_mat.hide()
             self.slot.wedge_mat = None
 
         # Select the correct schematics
