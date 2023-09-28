@@ -22,6 +22,7 @@ from pyleecan.Classes.HoleM57 import HoleM57
 from pyleecan.Classes.HoleM58 import HoleM58
 from pyleecan.Classes.HoleM60 import HoleM60
 from pyleecan.Classes.HoleM61 import HoleM61
+from pyleecan.Classes.HoleM62 import HoleM62
 from pyleecan.Classes.HoleUD import HoleUD
 from pyleecan.GUI.Dialog.DMatLib.DMatLib import LIB_KEY, MACH_KEY
 from pyleecan.GUI.Dialog.DMachineSetup.SMHoleMag.SMHoleMag import SMHoleMag
@@ -463,6 +464,20 @@ class TestSMHoleMag(object):
         assert self.widget.tab_hole.widget(0).c_hole_type.currentIndex() == 8
         assert (
             self.widget.tab_hole.widget(0).c_hole_type.currentText() == "Hole Type 61"
+        )
+
+    def test_set_type_62(self):
+        """ """
+        self.widget.tab_hole.widget(0).c_hole_type.setCurrentIndex(9)
+
+        assert type(self.test_obj.rotor.hole[0]) == HoleM62
+        assert (
+            self.widget.out_hole_pitch.text()
+            == "Slot pitch: 360 / 2p = 45 [°] = 0.7854 [rad]"
+        )
+        assert self.widget.tab_hole.widget(0).c_hole_type.currentIndex() == 9
+        assert (
+            self.widget.tab_hole.widget(0).c_hole_type.currentText() == "Hole Type 62"
         )
 
     def test_SyRM_set_type_54_51_54(self):

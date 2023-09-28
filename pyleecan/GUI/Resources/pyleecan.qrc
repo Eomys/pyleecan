@@ -124,6 +124,10 @@
     <file>images/MachineSetup/SMHoleMag/HoleM60_mag_int_rotor.png</file>
     <file>images/MachineSetup/SMHoleMag/HoleM61_empty_int_rotor.png</file>
     <file>images/MachineSetup/SMHoleMag/HoleM61_mag_int_rotor.png</file>
+    <file>images/MachineSetup/SMHoleMag/HoleM62_empty_int_rotor.png</file>
+    <file>images/MachineSetup/SMHoleMag/HoleM62_mag_int_rotor.png</file>
+    <file>images/MachineSetup/SMHoleMag/HoleM62_empty_int_rotor_radial.png</file>
+    <file>images/MachineSetup/SMHoleMag/HoleM62_mag_int_rotor_radial.png</file>
     <file>images/MachineSetup/MachineDimension/Dimension_Rotor_Stator.png</file>
     <file>images/MachineSetup/MachineDimension/Dimension_Shaft_Rotor_Stator.png</file>
     <file>images/MachineSetup/MachineDimension/Dimension_Stator_Rotor.png</file>

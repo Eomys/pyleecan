@@ -33,11 +33,9 @@ except ImportError as error:
     plot_schematics = error
 
 try:
-    from ..Methods.Slot.HoleM62.plot_schematics_W0_is_rad import (
-        plot_schematics_W0_is_rad,
-    )
+    from ..Methods.Slot.HoleM62.plot_schematics_radial import plot_schematics_radial
 except ImportError as error:
-    plot_schematics_W0_is_rad = error
+    plot_schematics_radial = error
 
 try:
     from ..Methods.Slot.HoleM62.remove_magnet import remove_magnet
@@ -110,18 +108,18 @@ class HoleM62(HoleMag):
         )
     else:
         plot_schematics = plot_schematics
-    # cf Methods.Slot.HoleM62.plot_schematics_W0_is_rad
-    if isinstance(plot_schematics_W0_is_rad, ImportError):
-        plot_schematics_W0_is_rad = property(
+    # cf Methods.Slot.HoleM62.plot_schematics_radial
+    if isinstance(plot_schematics_radial, ImportError):
+        plot_schematics_radial = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use HoleM62 method plot_schematics_W0_is_rad: "
-                    + str(plot_schematics_W0_is_rad)
+                    "Can't use HoleM62 method plot_schematics_radial: "
+                    + str(plot_schematics_radial)
                 )
             )
         )
     else:
-        plot_schematics_W0_is_rad = plot_schematics_W0_is_rad
+        plot_schematics_radial = plot_schematics_radial
     # cf Methods.Slot.HoleM62.remove_magnet
     if isinstance(remove_magnet, ImportError):
         remove_magnet = property(

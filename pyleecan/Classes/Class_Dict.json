@@ -3955,7 +3955,7 @@
             "_comp_point_coordinate",
             "build_geometry",
             "plot_schematics",
-            "plot_schematics_W0_is_rad",
+            "plot_schematics_radial",
             "remove_magnet",
             "comp_radius",
             "has_magnet",

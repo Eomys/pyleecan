@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>PHoleM61</class>
- <widget class="QWidget" name="PHoleM61">
+ <class>PHoleM62</class>
+ <widget class="QWidget" name="PHoleM62">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -52,7 +52,7 @@
         <string/>
        </property>
        <property name="pixmap">
-        <pixmap resource="../../../../Resources/pyleecan.qrc">:/images/images/MachineSetup/SMHoleMag/HoleM61.png</pixmap>
+        <pixmap resource="../../../../Resources/pyleecan.qrc">:/images/images/MachineSetup/SMHoleMag/HoleM62_mag_int_rotor.png</pixmap>
        </property>
        <property name="scaledContents">
         <bool>false</bool>
@@ -92,7 +92,7 @@
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_3">
        <item>
-        <widget class="QCheckBox" name="checkBox">
+        <widget class="QCheckBox" name="ck_is_radial">
          <property name="text">
           <string>Radial</string>
          </property>
@@ -100,20 +100,6 @@
        </item>
        <item>
         <layout class="QGridLayout" name="gridLayout">
-         <item row="1" column="2">
-          <widget class="QLabel" name="unit_H1">
-           <property name="text">
-            <string>m</string>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="2">
-          <widget class="QLabel" name="unit_H0">
-           <property name="text">
-            <string>m</string>
-           </property>
-          </widget>
-         </item>
          <item row="2" column="1">
           <widget class="FloatEdit" name="lf_W0"/>
          </item>
@@ -124,11 +110,22 @@
            </property>
           </widget>
          </item>
-         <item row="1" column="1">
-          <widget class="FloatEdit" name="lf_H1"/>
+         <item row="1" column="3">
+          <widget class="QLabel" name="unit_H1">
+           <property name="text">
+            <string>m</string>
+           </property>
+          </widget>
          </item>
          <item row="0" column="1">
           <widget class="FloatEdit" name="lf_H0"/>
+         </item>
+         <item row="1" column="0">
+          <widget class="QLabel" name="in_H1">
+           <property name="text">
+            <string>H1</string>
+           </property>
+          </widget>
          </item>
          <item row="2" column="0">
           <widget class="QLabel" name="in_W0">
@@ -137,18 +134,23 @@
            </property>
           </widget>
          </item>
-         <item row="2" column="2">
-          <widget class="QLabel" name="unit_W0">
+         <item row="0" column="3">
+          <widget class="QLabel" name="unit_H0">
            <property name="text">
             <string>m</string>
            </property>
           </widget>
          </item>
-         <item row="1" column="0">
-          <widget class="QLabel" name="in_H1">
-           <property name="text">
-            <string>H1</string>
-           </property>
+         <item row="1" column="1">
+          <widget class="FloatEdit" name="lf_H1"/>
+         </item>
+         <item row="2" column="3">
+          <widget class="QComboBox" name="c_W0_unit">
+           <item>
+            <property name="text">
+             <string>m</string>
+            </property>
+           </item>
           </widget>
          </item>
         </layout>
