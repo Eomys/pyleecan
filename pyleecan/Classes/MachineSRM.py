@@ -10,9 +10,9 @@ from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
-from ..Functions.copy import copy
 from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
+from copy import deepcopy
 from .MachineSync import MachineSync
 
 # Import all class method
@@ -38,11 +38,8 @@ except ImportError as error:
     set_pole_pair_number = error
 
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
-from .LamSlot import LamSlot
-from .LamSlotWind import LamSlotWind
-from .Frame import Frame
-from .Shaft import Shaft
 
 
 class MachineSRM(MachineSync):
@@ -96,9 +93,8 @@ class MachineSRM(MachineSync):
         )
     else:
         set_pole_pair_number = set_pole_pair_number
-    # save and copy methods are available in all object
+    # generic save method is available in all object
     save = save
-    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -194,7 +190,7 @@ class MachineSRM(MachineSync):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -204,19 +200,37 @@ class MachineSRM(MachineSync):
         diff_list = list()
 
         # Check the properties inherited from MachineSync
-        diff_list.extend(super(MachineSRM, self).compare(other, name=name))
+        diff_list.extend(
+            super(MachineSRM, self).compare(
+                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
+            )
+        )
         if (other.rotor is None and self.rotor is not None) or (
             other.rotor is not None and self.rotor is None
         ):
             diff_list.append(name + ".rotor None mismatch")
         elif self.rotor is not None:
-            diff_list.extend(self.rotor.compare(other.rotor, name=name + ".rotor"))
+            diff_list.extend(
+                self.rotor.compare(
+                    other.rotor,
+                    name=name + ".rotor",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
+            )
         if (other.stator is None and self.stator is not None) or (
             other.stator is not None and self.stator is None
         ):
             diff_list.append(name + ".stator None mismatch")
         elif self.stator is not None:
-            diff_list.extend(self.stator.compare(other.stator, name=name + ".stator"))
+            diff_list.extend(
+                self.stator.compare(
+                    other.stator,
+                    name=name + ".stator",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
+            )
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -270,6 +284,43 @@ class MachineSRM(MachineSync):
         MachineSRM_dict["__class__"] = "MachineSRM"
         return MachineSRM_dict
 
+    def copy(self):
+        """Creates a deepcopy of the object"""
+
+        # Handle deepcopy of all the properties
+        if self.rotor is None:
+            rotor_val = None
+        else:
+            rotor_val = self.rotor.copy()
+        if self.stator is None:
+            stator_val = None
+        else:
+            stator_val = self.stator.copy()
+        if self.frame is None:
+            frame_val = None
+        else:
+            frame_val = self.frame.copy()
+        if self.shaft is None:
+            shaft_val = None
+        else:
+            shaft_val = self.shaft.copy()
+        name_val = self.name
+        desc_val = self.desc
+        type_machine_val = self.type_machine
+        logger_name_val = self.logger_name
+        # Creates new object of the same type with the copied properties
+        obj_copy = type(self)(
+            rotor=rotor_val,
+            stator=stator_val,
+            frame=frame_val,
+            shaft=shaft_val,
+            name=name_val,
+            desc=desc_val,
+            type_machine=type_machine_val,
+            logger_name=logger_name_val,
+        )
+        return obj_copy
+
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""
 
@@ -287,13 +338,20 @@ class MachineSRM(MachineSync):
     def _set_rotor(self, value):
         """setter of rotor"""
         if isinstance(value, str):  # Load from file
-            value = load_init_dict(value)[1]
+            try:
+                value = load_init_dict(value)[1]
+            except Exception as e:
+                self.get_logger().error(
+                    "Error while loading " + value + ", setting None instead"
+                )
+                value = None
         if isinstance(value, dict) and "__class__" in value:
             class_obj = import_class(
                 "pyleecan.Classes", value.get("__class__"), "rotor"
             )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
+            LamSlot = import_class("pyleecan.Classes", "LamSlot", "rotor")
             value = LamSlot()
         check_var("rotor", value, "LamSlot")
         self._rotor = value
@@ -317,13 +375,20 @@ class MachineSRM(MachineSync):
     def _set_stator(self, value):
         """setter of stator"""
         if isinstance(value, str):  # Load from file
-            value = load_init_dict(value)[1]
+            try:
+                value = load_init_dict(value)[1]
+            except Exception as e:
+                self.get_logger().error(
+                    "Error while loading " + value + ", setting None instead"
+                )
+                value = None
         if isinstance(value, dict) and "__class__" in value:
             class_obj = import_class(
                 "pyleecan.Classes", value.get("__class__"), "stator"
             )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
+            LamSlotWind = import_class("pyleecan.Classes", "LamSlotWind", "stator")
             value = LamSlotWind()
         check_var("stator", value, "LamSlotWind")
         self._stator = value

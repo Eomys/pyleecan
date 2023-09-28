@@ -18,17 +18,4 @@ def comp_surface(self):
         Slot total surface [m**2]
 
     """
-
-    Rbo = self.get_Rbo()
-
-    Swind = self.comp_surface_active()
-
-    # The bottom is an arc
-    alpha = self.comp_angle_opening()
-    Sarc = (Rbo ** 2.0) / 2.0 * (alpha - sin(alpha))
-    Harc = float(Rbo * (1 - cos(alpha / 2)))
-    S1 = (self.H0 + Harc) * self.W0
-
-    # Because Slamination = S - Zs * Sslot
-    if self.is_outwards():
-        return S1 + Swind - Sarc
+    return self.comp_surface_active() + self.comp_surface_opening()

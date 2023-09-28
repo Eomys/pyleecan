@@ -5,6 +5,7 @@ import pytest
 from numpy import exp, sqrt, pi
 
 import matplotlib.pyplot as plt
+from pyleecan.Classes.OPdq import OPdq
 
 from pyleecan.Classes.Simu1 import Simu1
 
@@ -41,11 +42,9 @@ def test_PostPlot():
     Iq_ref = (I0_rms * exp(1j * Phi0)).imag
 
     simu.input = InputCurrent(
-        Id_ref=Id_ref,
-        Iq_ref=Iq_ref,
         Na_tot=252 * 8,
         Nt_tot=20 * 8,
-        N0=1000,
+        OP=OPdq(N0=1000, Id_ref=Id_ref, Iq_ref=Iq_ref),
     )
 
     # Definition of the magnetic simulation: with periodicity
@@ -135,7 +134,7 @@ def test_PostPlot():
     plot_Is = PostPlot(
         method="plot_2D_Data",
         quantity="elec.get_Is",
-        param_list=["time", "phase"],
+        param_list=["time", "phase[]"],
         param_dict=dict(
             {
                 "is_show_fig": False,
@@ -163,5 +162,4 @@ def test_PostPlot():
 
 # To run it without pytest
 if __name__ == "__main__":
-
     out = test_PostPlot()

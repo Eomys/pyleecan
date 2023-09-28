@@ -10,9 +10,9 @@ from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
-from ..Functions.copy import copy
 from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
+from copy import deepcopy
 from ._frozen import FrozenClass
 
 # Import all class method
@@ -53,8 +53,8 @@ except ImportError as error:
     plot = error
 
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
-from .Material import Material
 
 
 class Frame(FrozenClass):
@@ -130,9 +130,8 @@ class Frame(FrozenClass):
         )
     else:
         plot = plot
-    # save and copy methods are available in all object
+    # generic save method is available in all object
     save = save
-    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -205,7 +204,7 @@ class Frame(FrozenClass):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -213,19 +212,63 @@ class Frame(FrozenClass):
         if type(other) != type(self):
             return ["type(" + name + ")"]
         diff_list = list()
-        if other._Lfra != self._Lfra:
-            diff_list.append(name + ".Lfra")
-        if other._Rint != self._Rint:
-            diff_list.append(name + ".Rint")
-        if other._Rext != self._Rext:
-            diff_list.append(name + ".Rext")
+        if (
+            other._Lfra is not None
+            and self._Lfra is not None
+            and isnan(other._Lfra)
+            and isnan(self._Lfra)
+        ):
+            pass
+        elif other._Lfra != self._Lfra:
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._Lfra) + ", other=" + str(other._Lfra) + ")"
+                )
+                diff_list.append(name + ".Lfra" + val_str)
+            else:
+                diff_list.append(name + ".Lfra")
+        if (
+            other._Rint is not None
+            and self._Rint is not None
+            and isnan(other._Rint)
+            and isnan(self._Rint)
+        ):
+            pass
+        elif other._Rint != self._Rint:
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._Rint) + ", other=" + str(other._Rint) + ")"
+                )
+                diff_list.append(name + ".Rint" + val_str)
+            else:
+                diff_list.append(name + ".Rint")
+        if (
+            other._Rext is not None
+            and self._Rext is not None
+            and isnan(other._Rext)
+            and isnan(self._Rext)
+        ):
+            pass
+        elif other._Rext != self._Rext:
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._Rext) + ", other=" + str(other._Rext) + ")"
+                )
+                diff_list.append(name + ".Rext" + val_str)
+            else:
+                diff_list.append(name + ".Rext")
         if (other.mat_type is None and self.mat_type is not None) or (
             other.mat_type is not None and self.mat_type is None
         ):
             diff_list.append(name + ".mat_type None mismatch")
         elif self.mat_type is not None:
             diff_list.extend(
-                self.mat_type.compare(other.mat_type, name=name + ".mat_type")
+                self.mat_type.compare(
+                    other.mat_type,
+                    name=name + ".mat_type",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
             )
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
@@ -267,6 +310,23 @@ class Frame(FrozenClass):
         # The class name is added to the dict for deserialisation purpose
         Frame_dict["__class__"] = "Frame"
         return Frame_dict
+
+    def copy(self):
+        """Creates a deepcopy of the object"""
+
+        # Handle deepcopy of all the properties
+        Lfra_val = self.Lfra
+        Rint_val = self.Rint
+        Rext_val = self.Rext
+        if self.mat_type is None:
+            mat_type_val = None
+        else:
+            mat_type_val = self.mat_type.copy()
+        # Creates new object of the same type with the copied properties
+        obj_copy = type(self)(
+            Lfra=Lfra_val, Rint=Rint_val, Rext=Rext_val, mat_type=mat_type_val
+        )
+        return obj_copy
 
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""
@@ -341,13 +401,20 @@ class Frame(FrozenClass):
     def _set_mat_type(self, value):
         """setter of mat_type"""
         if isinstance(value, str):  # Load from file
-            value = load_init_dict(value)[1]
+            try:
+                value = load_init_dict(value)[1]
+            except Exception as e:
+                self.get_logger().error(
+                    "Error while loading " + value + ", setting None instead"
+                )
+                value = None
         if isinstance(value, dict) and "__class__" in value:
             class_obj = import_class(
                 "pyleecan.Classes", value.get("__class__"), "mat_type"
             )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
+            Material = import_class("pyleecan.Classes", "Material", "mat_type")
             value = Material()
         check_var("mat_type", value, "Material")
         self._mat_type = value

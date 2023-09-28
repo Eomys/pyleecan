@@ -61,7 +61,7 @@ def construct_dict_from_group(group):
                     value = float(value)
                 elif isinstance(value, int32):  # int
                     value = int(value)
-                elif isinstance(value, string_):  # String
+                elif isinstance(value, (string_, bytes)):  # String
                     value = value.decode("ISO-8859-2")
                     # None is not available in H5 => we use a string
                     if value == "NoneValue":
@@ -74,6 +74,9 @@ def construct_dict_from_group(group):
             # Check if key is an int
             if is_int(key):
                 key = int(key)
+            # Convert key in case of "/"
+            if isinstance(key, str):
+                key = key.replace("\\x2F", "/")
             # Check if val is a group or a dataset
             if isinstance(val, Group):  # Group
                 # Call the function recursively to load group

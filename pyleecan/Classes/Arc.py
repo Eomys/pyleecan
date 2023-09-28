@@ -10,9 +10,9 @@ from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
-from ..Functions.copy import copy
 from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
+from copy import deepcopy
 from .Line import Line
 
 # Import all class method
@@ -52,7 +52,18 @@ try:
 except ImportError as error:
     comp_maxseg = error
 
+try:
+    from ..Methods.Geometry.Arc.intersect_obj import intersect_obj
+except ImportError as error:
+    intersect_obj = error
 
+try:
+    from ..Methods.Geometry.Arc.is_arc import is_arc
+except ImportError as error:
+    is_arc = error
+
+
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 
@@ -127,9 +138,26 @@ class Arc(Line):
         )
     else:
         comp_maxseg = comp_maxseg
-    # save and copy methods are available in all object
+    # cf Methods.Geometry.Arc.intersect_obj
+    if isinstance(intersect_obj, ImportError):
+        intersect_obj = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use Arc method intersect_obj: " + str(intersect_obj))
+            )
+        )
+    else:
+        intersect_obj = intersect_obj
+    # cf Methods.Geometry.Arc.is_arc
+    if isinstance(is_arc, ImportError):
+        is_arc = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use Arc method is_arc: " + str(is_arc))
+            )
+        )
+    else:
+        is_arc = is_arc
+    # generic save method is available in all object
     save = save
-    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -176,7 +204,7 @@ class Arc(Line):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -186,7 +214,11 @@ class Arc(Line):
         diff_list = list()
 
         # Check the properties inherited from Line
-        diff_list.extend(super(Arc, self).compare(other, name=name))
+        diff_list.extend(
+            super(Arc, self).compare(
+                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
+            )
+        )
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -221,6 +253,18 @@ class Arc(Line):
         # Overwrite the mother class name
         Arc_dict["__class__"] = "Arc"
         return Arc_dict
+
+    def copy(self):
+        """Creates a deepcopy of the object"""
+
+        # Handle deepcopy of all the properties
+        if self.prop_dict is None:
+            prop_dict_val = None
+        else:
+            prop_dict_val = self.prop_dict.copy()
+        # Creates new object of the same type with the copied properties
+        obj_copy = type(self)(prop_dict=prop_dict_val)
+        return obj_copy
 
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""

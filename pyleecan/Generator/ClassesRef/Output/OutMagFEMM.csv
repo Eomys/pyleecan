@@ -1,3 +1,6 @@
-Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
-FEMM_dict,,dictionary containing the main FEMM parameters,,dict,None,,,,Output,OutInternal,clean,VERSION,1,Class to store outputs related to MagFEMM magnetic model
-handler_list,,List of FEMM Handler (more than 1 if nb_worker >1),,[_FEMMHandler],,,,,,,,,,
+Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,as_dict Type
+FEMM_dict,,dictionary containing the main FEMM parameters,,dict,None,,
+handler_list,,List of FEMM Handler (more than 1 if nb_worker >1),,[_FEMMHandler],,,
+,
+Package,Inherit,Methods,Constant Name,Constant Value,Class description
+Output,OutInternal,clean,VERSION,1,Class to store outputs related to MagFEMM magnetic model

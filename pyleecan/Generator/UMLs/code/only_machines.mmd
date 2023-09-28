@@ -1,0 +1,105 @@
+classDiagram
+direction TB
+class Machine{
+	frame : Frame
+	shaft : Shaft
+	name : str
+	desc : str
+	type_machine : int
+	logger_name : str
+	build_geometry()
+	check()
+	comp_angle_rotor_initial()
+	comp_desc_dict()
+	comp_length_airgap_active()
+	comp_masses()
+	comp_output_geo()
+	comp_Rgap_mec()
+	comp_periodicity_spatial()
+	comp_width_airgap_mag()
+	comp_width_airgap_mec()
+	get_material_dict()
+	get_polar_eq()
+	plot()
+	plot_anim_rotor()
+	get_lam_list()
+	get_lam_list_label()
+	get_lam_by_label()
+	get_lam_index()
+	get_pole_pair_number()
+	set_pole_pair_number()
+	comp_periodicity_time()
+}
+class MachineAsync{
+	is_synchronous()
+	comp_desc_dict()
+}
+class MachineDFIM{
+	rotor : LamSlotWind
+	stator : LamSlotWind
+	check()
+	get_machine_type()
+}
+class MachineIPMSM{
+	rotor : LamH
+	stator : Lamination
+	check()
+	get_machine_type()
+}
+class MachineLSPM{
+	rotor : LamSquirrelCageMag
+	stator : LamSlotWind
+	check()
+	get_machine_type()
+}
+class MachineSCIM{
+	check()
+	get_machine_type()
+}
+class MachineSIPMSM{
+	rotor : LamSlotMag
+	stator : Lamination
+	check()
+	get_machine_type()
+}
+class MachineSRM{
+	rotor : LamSlot
+	stator : LamSlotWind
+	check()
+	get_machine_type()
+	get_pole_pair_number()
+	set_pole_pair_number()
+}
+class MachineSyRM{
+	rotor : LamHole
+	stator : LamSlotWind
+	check()
+	get_machine_type()
+}
+class MachineSync{
+	is_synchronous()
+	comp_angle_rotor_initial()
+}
+class MachineUD{
+	lam_list : list~Lamination~
+	is_sync : bool
+	build_geometry()
+	is_synchronous()
+}
+class MachineWRSM{
+	rotor : LamSlotWind
+	stator : LamSlotWind
+	check()
+	get_machine_type()
+}
+Machine  <|--> MachineAsync
+Machine  <|--> MachineSync
+Machine  <|--> MachineUD
+MachineAsync  <|--> MachineDFIM
+MachineDFIM  <|--> MachineSCIM
+MachineSync  <|--> MachineIPMSM
+MachineSync  <|--> MachineLSPM
+MachineSync  <|--> MachineSIPMSM
+MachineSync  <|--> MachineSRM
+MachineSync  <|--> MachineSyRM
+MachineSync  <|--> MachineWRSM

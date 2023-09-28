@@ -1,2 +1,5 @@
-Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constante Name,Constante Value,Description classe,Classe fille
-logger_name,-,Name of the logger to use,0,str,Pyleecan.Elmer,,,,Elmer,,,VERSION,1,Abstract parent class for all Elmer related convienence classes,
+Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,as_dict Type
+logger_name,-,Name of the logger to use,0,str,Pyleecan.Elmer,,
+,
+Package,Inherit,Methods,Constante Name,Constante Value,Description classe,Classe fille
+Elmer,,,VERSION,1,Abstract parent class for all Elmer related convienence classes,

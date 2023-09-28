@@ -1,6 +1,6 @@
+from ....Classes.Arc1 import Arc1
 from ....Classes.Segment import Segment
 from ....Classes.SurfLine import SurfLine
-from ....Classes.Arc1 import Arc1
 from ....Functions.labels import HOLEM_LAB, MAGNET_PROP_LAB
 
 

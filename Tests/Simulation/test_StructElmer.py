@@ -1,8 +1,9 @@
-# -*- coding: utf-8 -*-
 from os.path import join
+from os import makedirs
 from numpy import pi
 import pytest
-from Tests import save_path, TEST_DATA_DIR
+from Tests import save_validation_path as save_path, TEST_DATA_DIR
+from pyleecan.Classes.OPdq import OPdq
 from pyleecan.definitions import DATA_DIR
 
 from pyleecan.Classes.LamSlotMag import LamSlotMag
@@ -10,14 +11,14 @@ from pyleecan.Classes.SlotM11 import SlotM11
 from pyleecan.Classes.MachineSIPMSM import MachineSIPMSM
 from pyleecan.Classes.Simu1 import Simu1
 from pyleecan.Classes.StructElmer import StructElmer
+from pyleecan.Classes.InputVoltage import InputVoltage
 from pyleecan.Classes.Output import Output
-from pyleecan.Classes.MeshSolution import MeshSolution
 from pyleecan.Functions.load import load
 
 
 # get the machine
 machine_1 = load(join(DATA_DIR, "Machine", "Toyota_Prius.json"))
-
+save_path = join(save_path, "StructElmer")
 # mesh settings, original line label names have to be used (not the translated)
 n1 = 3
 n2 = 20
@@ -50,7 +51,7 @@ mesh_dict_1 = {
 class Test_StructElmer(object):
     """Test some basic workflow of StructElmer simulations"""
 
-    def test_HoleM50(self):
+    def test_StructElmer_HoleM50(self):
         """Test StructElmer simulation with 2 magnets on HoleM50 rotor"""
 
         # copy the machine
@@ -62,19 +63,20 @@ class Test_StructElmer(object):
         # setup the simulation
         simu = Simu1(name="test_StructElmer_HoleM50", machine=machine)
         output = Output(simu=simu)
-        output.path_result = save_path
+        output.path_result = join(save_path, "Hole50")
+        makedirs(output.path_result)
 
         simu.struct = StructElmer()
         simu.struct.FEA_dict_enforced = mesh_dict_1
         simu.struct.is_get_mesh = True
 
         # set rotor speed and run simulation
-        simu.input.N0 = 10000  # rpm
+        simu.input = InputVoltage(OP=OPdq(N0=10000))  # rpm
         simu.run()
 
         return output
 
-    def test_HoleM50_no_magnets(self):
+    def test_StructElmer_HoleM50_no_magnets(self):
         """Test StructElmer simulation without magnets on HoleM50 rotor"""
 
         # get the machine
@@ -88,6 +90,8 @@ class Test_StructElmer(object):
         # setup the simulation
         simu = Simu1(name="test_StructElmer_HoleM50_no_magnets", machine=machine)
         output = Output(simu=simu)
+        output.path_result = join(save_path, "Hole50_no_mag")
+        makedirs(output.path_result)
 
         simu.struct = StructElmer()
         simu.struct.FEA_dict_enforced = mesh_dict_1
@@ -95,12 +99,12 @@ class Test_StructElmer(object):
         simu.struct.is_get_mesh = True
 
         # set rotor speed and run simulation
-        simu.input.N0 = 10000  # rpm
+        simu.input = InputVoltage(OP=OPdq(N0=10000))  # rpm
         simu.run()
 
         return output
 
-    def test_disk_geometry(self):
+    def test_StructElmer_disk(self):
         """Test StructElmer simulation with disc geometry (i.e. slotless rotor)"""
         # TODO compare to analytical values
 
@@ -108,7 +112,6 @@ class Test_StructElmer(object):
         machine = MachineSIPMSM()
         machine.stator = machine_1.stator.copy()
         machine.rotor = LamSlotMag()
-        machine.rotor.magnet = None
 
         machine.rotor.Rint = machine_1.rotor.Rint
         machine.rotor.Rext = machine_1.rotor.Rext
@@ -121,6 +124,8 @@ class Test_StructElmer(object):
         # setup the simulation
         simu = Simu1(name="test_StructElmer_disk", machine=machine)
         output = Output(simu=simu)
+        output.path_result = join(save_path, "disk")
+        makedirs(output.path_result)
 
         simu.struct = StructElmer()
         # simu.struct.FEA_dict_enforced = mesh_dict_1
@@ -128,7 +133,7 @@ class Test_StructElmer(object):
         simu.struct.is_get_mesh = True
 
         # set rotor speed and run simulation
-        simu.input.N0 = 10000  # rpm
+        simu.input = InputVoltage(OP=OPdq(N0=10000))  # rpm
         simu.run()
 
         return output
@@ -139,13 +144,13 @@ if __name__ == "__main__":
     # create test object
     obj = Test_StructElmer()
     # test Toyota_Prius (HoleM50-Rotor) with minor modification
-    out = obj.test_HoleM50()
-    # out = obj.test_HoleM50_wo_magnets()
+    out = obj.test_StructElmer_HoleM50()
+    out = obj.test_StructElmer_HoleM50_no_magnets()
 
     # test centrifugal force on a disc
-    # out = obj.test_disk_geometry()
+    out = obj.test_StructElmer_disk()
 
-    # plot some results
-    out.struct.meshsolution.plot_deflection(label="disp", factor=20)
-    # out.struct.meshsolution.plot_contour(label='disp')
+    # # plot some results
+    # out.struct.meshsolution.plot_deflection(label="disp", factor=20)
+    # out.struct.meshsolution.plot_contour(label="disp")
     # out.struct.meshsolution.plot_mesh()

@@ -1,5 +1,3 @@
-import itertools
-import numpy as np
 from ....Classes.ParamExplorerSet import ParamExplorerSet
 
 
@@ -8,8 +6,8 @@ def generate_simulation_list(self, ref_simu=None):
 
     Parameters
     ----------
-    self : VarSimu
-        A VarSimu object
+    self : VarLoadCurrent
+        A VarLoadCurrent object
     ref_simu : Simulation
         Reference simulation to copy / update
 
@@ -27,16 +25,6 @@ def generate_simulation_list(self, ref_simu=None):
         "simulation_list": [],
     }
 
-    # Create Simulations 1 per load
-    for input_obj in list_input:
-        # Generate the simulation
-        new_simu = ref_simu.copy(keep_function=True)
-
-        # Edit simulation
-        new_simu.input = input_obj
-        # Add simulation to the list
-        multisim_dict["simulation_list"].append(new_simu)
-
     # Create ParamExplorerSet
     #   This version uses a single ParamExplorerSet to define the simulation
     #   Other parameters can be stored in a dedicated ParamExplorerSet if needed
@@ -50,5 +38,15 @@ def generate_simulation_list(self, ref_simu=None):
             value=list_input,
         )
     )
+
+    # Create Simulations 1 per load
+    for input_obj in list_input:
+        # Generate the simulation
+        new_simu = ref_simu.copy()
+
+        # Edit simulation
+        new_simu.input = input_obj
+        # Add simulation to the list
+        multisim_dict["simulation_list"].append(new_simu)
 
     return multisim_dict

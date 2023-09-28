@@ -1,4 +1,8 @@
-Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
-Bmax,T,Max value of B for extrapolation,0,float,2.31,,,,Material,,get_BH,VERSION,1,Abstract class for BH curve model 
-Hmax,A/m,Max value of H for extrapolation,0,float,None,,,,,,fit_model,,,
-delta,A/m,Step value for H,0,float,100,,,,,,,,,
+Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,as_dict Type
+Bmax,T,Max value of B for extrapolation,0,float,2.31,,
+Hmax,A/m,Max value of H for extrapolation,0,float,None,,
+delta,A/m,Step value for H,0,float,100,,
+,
+Package,Inherit,Methods,Constant Name,Constant Value,Class description
+Material,,get_BH,VERSION,1,Abstract class for BH curve model 
+,,fit_model,,,

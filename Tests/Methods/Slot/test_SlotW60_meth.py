@@ -17,7 +17,7 @@ DELTA = 1e-5
 
 slotW60_test = list()
 
-# Internal Slot
+# Internal Slot Full winding
 lam = LamSlot(is_internal=True, Rext=0.1325)
 lam.slot = SlotW60(
     Zs=12, W1=25e-3, W2=12.5e-3, H1=20e-3, H2=20e-3, R1=0.1, H3=0, H4=0, W3=0
@@ -32,7 +32,7 @@ slotW60_test.append(
     }
 )
 
-# Internal Slot, R1=Rbo
+# Internal Slot, R1=Rbo + small winding in all direction
 lam = LamSlot(is_internal=True, Rext=0.1325)
 lam.slot = SlotW60(
     Zs=12,
@@ -183,6 +183,23 @@ class Test_SlotW60_meth(object):
         assert "Stator_Winding_R0-T0-S0" == a[0].label
 
     @pytest.mark.parametrize("test_dict", slotW60_test)
+    def test_get_surfaces(self, test_dict):
+        """Checks that the surfaces are correct"""
+        test_obj = test_dict["test_obj"]
+        Sact = test_obj.slot.build_geometry_active(Nrad=1, Ntan=2)
+        Sfull = test_obj.slot.get_surface()
+        Sop = test_obj.slot.get_surface_opening()
+
+        # Sop[0].plot()
+        assert len(Sact) == 2
+        assert len(Sop) == 1
+        S1 = Sact[0].comp_surface() + Sact[1].comp_surface() + Sop[0].comp_surface()
+        S2 = Sfull.comp_surface()
+
+        msg = "Act+Op=" + str(S1) + ", Full=" + str(S2)
+        assert abs((S1 - S2) / S1) < DELTA, msg
+
+    @pytest.mark.parametrize("test_dict", slotW60_test)
     def test_build_geometry_error(self, test_dict):
         """Check that the ERROR is raised"""
 
@@ -237,3 +254,10 @@ class Test_SlotW60_meth(object):
         )
         with pytest.raises(S60_WindWError) as context:
             lam.slot.check()
+
+
+if __name__ == "__main__":
+    a = Test_SlotW60_meth()
+    for test_dict in slotW60_test:
+        a.test_get_surfaces(test_dict)
+    print("Done")

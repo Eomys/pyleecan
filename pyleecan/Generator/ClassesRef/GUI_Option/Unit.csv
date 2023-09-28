@@ -1,7 +1,12 @@
-Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constante Name,Constante Value,Description classe,Classe fille
-unit_m,-,"0: use m, 1: use mm",0,int,0,0,1,,GUI_Option,,get_m,VERSION,1,,
-unit_rad,-,"0: use rad, 1: use deg",0,int,0,0,1,,,,get_m2,,,,
-unit_m2,-,"0: use m^2, 1: use mm^2",0,int,0,0,1,,,,get_m_name,,,,
-,,,,,,,,,,,get_m2_name,,,,
-,,,,,,,,,,,set_m,,,,
-,,,,,,,,,,,set_m2,,,,
+Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,as_dict Type
+unit_m,-,"0: use m, 1: use mm",0,int,0,0,1
+unit_rad,-,"0: use rad, 1: use deg",0,int,0,0,1
+unit_m2,-,"0: use m^2, 1: use mm^2",0,int,0,0,1
+,
+Package,Inherit,Methods,Constante Name,Constante Value,Description classe,Classe fille
+GUI_Option,,get_m,VERSION,1,,
+,,get_m2,,,,
+,,get_m_name,,,,
+,,get_m2_name,,,,
+,,set_m,,,,
+,,set_m2,,,,

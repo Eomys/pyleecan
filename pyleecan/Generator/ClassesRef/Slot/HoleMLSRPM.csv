@@ -1,11 +1,21 @@
-Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
-H1,m,Magnet depth,0,float,0.002373479,0,,,Slot,HoleMag,_comp_point_coordinate,VERSION,1,V shape slot for buried magnet
-W0,m,Magnet top width,0,float,3.88E-03,0,,,,,build_geometry,IS_SYMMETRICAL,1,
-W1,rad,Magnet width angular 1 ,0,float,"12.6/180*3,1415926",0,,,,,check,,,
-W2,m,Small distance,0,float,0.0007,0,,,,,comp_magnetization_dict,,,
-R1,m,Rounding radius,0,float,0.0003,0,,,,,comp_mass_magnet,,,
-R2,m,Radius 2,0,float,0.019327,,,,,,comp_surface_magnet,,,
-R3,m,Radius 3,0,float,0.0165,,,,,,comp_volume_magnet,,,
-magnet_0,-,Magnet of the hole,0,Magnet,,,,,,,plot_schematics,,,
-,,,,,,,,,,,remove_magnet,,,
-,,,,,,,,,,,has_magnet,,,
+Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,as_dict Type
+H1,m,Magnet depth,0,float,0.002373479,0,
+W0,m,Magnet top width,0,float,3.88E-03,0,
+W1,rad,Magnet width angular 1 ,0,float,"12.6/180*3,1415926",0,
+W2,m,Small distance,0,float,0.0007,0,
+R1,m,Rounding radius,0,float,0.0003,0,
+R2,m,Radius 2,0,float,0.019327,,
+R3,m,Radius 3,0,float,0.0165,,
+magnet_0,-,Magnet of the hole,0,Magnet,,,
+,
+Package,Inherit,Methods,Constant Name,Constant Value,Class description
+Slot,HoleMag,_comp_point_coordinate,VERSION,1,V shape slot for buried magnet
+,,build_geometry,IS_SYMMETRICAL,1,
+,,check,,,
+,,comp_magnetization_dict,,,
+,,comp_mass_magnet,,,
+,,comp_surface_magnet,,,
+,,comp_volume_magnet,,,
+,,plot_schematics,,,
+,,remove_magnet,,,
+,,has_magnet,,,

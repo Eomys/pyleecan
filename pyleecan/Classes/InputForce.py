@@ -10,9 +10,9 @@ from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
-from ..Functions.copy import copy
 from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
+from copy import deepcopy
 from .Input import Input
 
 # Import all class method
@@ -26,9 +26,8 @@ except ImportError as error:
 from ..Classes.ImportMatrixVal import ImportMatrixVal
 from numpy import ndarray
 from numpy import array, array_equal
+from numpy import isnan
 from ._check import InitUnKnowClassError
-from .ImportVectorField import ImportVectorField
-from .ImportMatrix import ImportMatrix
 
 
 class InputForce(Input):
@@ -45,9 +44,8 @@ class InputForce(Input):
         )
     else:
         gen_input = gen_input
-    # save and copy methods are available in all object
+    # generic save method is available in all object
     save = save
-    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -57,9 +55,10 @@ class InputForce(Input):
         time=None,
         angle=None,
         Nt_tot=2048,
-        Nrev=1,
+        Nrev=None,
         Na_tot=2048,
-        N0=None,
+        OP=None,
+        t_final=None,
         init_dict=None,
         init_str=None,
     ):
@@ -90,13 +89,21 @@ class InputForce(Input):
                 Nrev = init_dict["Nrev"]
             if "Na_tot" in list(init_dict.keys()):
                 Na_tot = init_dict["Na_tot"]
-            if "N0" in list(init_dict.keys()):
-                N0 = init_dict["N0"]
+            if "OP" in list(init_dict.keys()):
+                OP = init_dict["OP"]
+            if "t_final" in list(init_dict.keys()):
+                t_final = init_dict["t_final"]
         # Set the properties (value check and convertion are done in setter)
         self.P = P
         # Call Input init
         super(InputForce, self).__init__(
-            time=time, angle=angle, Nt_tot=Nt_tot, Nrev=Nrev, Na_tot=Na_tot, N0=N0
+            time=time,
+            angle=angle,
+            Nt_tot=Nt_tot,
+            Nrev=Nrev,
+            Na_tot=Na_tot,
+            OP=OP,
+            t_final=t_final,
         )
         # The class is frozen (in Input init), for now it's impossible to
         # add new properties
@@ -127,7 +134,7 @@ class InputForce(Input):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -137,13 +144,24 @@ class InputForce(Input):
         diff_list = list()
 
         # Check the properties inherited from Input
-        diff_list.extend(super(InputForce, self).compare(other, name=name))
+        diff_list.extend(
+            super(InputForce, self).compare(
+                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
+            )
+        )
         if (other.P is None and self.P is not None) or (
             other.P is not None and self.P is None
         ):
             diff_list.append(name + ".P None mismatch")
         elif self.P is not None:
-            diff_list.extend(self.P.compare(other.P, name=name + ".P"))
+            diff_list.extend(
+                self.P.compare(
+                    other.P,
+                    name=name + ".P",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
+            )
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -188,6 +206,43 @@ class InputForce(Input):
         InputForce_dict["__class__"] = "InputForce"
         return InputForce_dict
 
+    def copy(self):
+        """Creates a deepcopy of the object"""
+
+        # Handle deepcopy of all the properties
+        if self.P is None:
+            P_val = None
+        else:
+            P_val = self.P.copy()
+        if self.time is None:
+            time_val = None
+        else:
+            time_val = self.time.copy()
+        if self.angle is None:
+            angle_val = None
+        else:
+            angle_val = self.angle.copy()
+        Nt_tot_val = self.Nt_tot
+        Nrev_val = self.Nrev
+        Na_tot_val = self.Na_tot
+        if self.OP is None:
+            OP_val = None
+        else:
+            OP_val = self.OP.copy()
+        t_final_val = self.t_final
+        # Creates new object of the same type with the copied properties
+        obj_copy = type(self)(
+            P=P_val,
+            time=time_val,
+            angle=angle_val,
+            Nt_tot=Nt_tot_val,
+            Nrev=Nrev_val,
+            Na_tot=Na_tot_val,
+            OP=OP_val,
+            t_final=t_final_val,
+        )
+        return obj_copy
+
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""
 
@@ -203,11 +258,20 @@ class InputForce(Input):
     def _set_P(self, value):
         """setter of P"""
         if isinstance(value, str):  # Load from file
-            value = load_init_dict(value)[1]
+            try:
+                value = load_init_dict(value)[1]
+            except Exception as e:
+                self.get_logger().error(
+                    "Error while loading " + value + ", setting None instead"
+                )
+                value = None
         if isinstance(value, dict) and "__class__" in value:
             class_obj = import_class("pyleecan.Classes", value.get("__class__"), "P")
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
+            ImportVectorField = import_class(
+                "pyleecan.Classes", "ImportVectorField", "P"
+            )
             value = ImportVectorField()
         check_var("P", value, "ImportVectorField")
         self._P = value

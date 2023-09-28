@@ -1,11 +1,8 @@
-Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
-Is,A,Stator currents as a function of time (each column correspond to one phase) to import,"(Nt_tot, qs)",ImportMatrix,None,,,,Simulation,Input,gen_input,VERSION,1,Input to skip the electrical module and start with the magnetic one
-Ir,A,Rotor currents as a function of time (each column correspond to one phase) to import,"(Nt_tot, qs)",ImportMatrix,None,,,,,,set_Id_Iq,,,
-angle_rotor,rad,Rotor angular position as a function of time (if None computed according to Nr) to import,Nt_tot,Import,None,,,,,,set_OP_from_array,,,
-rot_dir,-,"Rotation direction of the rotor 1 trigo, -1 clockwise",,float,None,-1,1,,,,,,,
-angle_rotor_initial,,Initial angular position of the rotor at t=0,,float,0,,,,,,,,,
-Tem_av_ref,N.m,Theorical Average Electromagnetic torque,,float,None,,,,,,,,,
-Id_ref,A,d-axis current RMS magnitude,1,float,None,,,,,,,,,
-Iq_ref,A,q-axis current RMS magnitude,1,float,None,,,,,,,,,
-felec,Hz,electrical frequency,1,float,None,,,,,,,,,
-Pem_av_ref,W,Theorical Average Electromagnetic Power,1,float,None,,,,,,,,,
+Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,as_dict Type
+Is,A,Stator currents as a function of time (each column correspond to one phase) to import,"(Nt_tot, qs)",ImportMatrix,None,,
+Ir,A,Rotor currents as a function of time (each column correspond to one phase) to import,"(Nt_tot, qs)",ImportMatrix,None,,
+Is_harm,A,Stator harmonic currents,,ImportData,None,,
+,
+Package,Inherit,Methods,Constant Name,Constant Value,Class description
+Simulation,InputVoltage,gen_input,VERSION,1,Input to skip the electrical module and start with the magnetic one
+,,set_Id_Iq,,,

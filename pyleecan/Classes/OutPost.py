@@ -10,11 +10,12 @@ from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
-from ..Functions.copy import copy
 from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
+from copy import deepcopy
 from ._frozen import FrozenClass
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 
@@ -23,9 +24,8 @@ class OutPost(FrozenClass):
 
     VERSION = 1
 
-    # save and copy methods are available in all object
+    # generic save method is available in all object
     save = save
-    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -80,7 +80,7 @@ class OutPost(FrozenClass):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -89,9 +89,29 @@ class OutPost(FrozenClass):
             return ["type(" + name + ")"]
         diff_list = list()
         if other._legend_name != self._legend_name:
-            diff_list.append(name + ".legend_name")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._legend_name)
+                    + ", other="
+                    + str(other._legend_name)
+                    + ")"
+                )
+                diff_list.append(name + ".legend_name" + val_str)
+            else:
+                diff_list.append(name + ".legend_name")
         if other._line_color != self._line_color:
-            diff_list.append(name + ".line_color")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._line_color)
+                    + ", other="
+                    + str(other._line_color)
+                    + ")"
+                )
+                diff_list.append(name + ".line_color" + val_str)
+            else:
+                diff_list.append(name + ".line_color")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -121,6 +141,16 @@ class OutPost(FrozenClass):
         # The class name is added to the dict for deserialisation purpose
         OutPost_dict["__class__"] = "OutPost"
         return OutPost_dict
+
+    def copy(self):
+        """Creates a deepcopy of the object"""
+
+        # Handle deepcopy of all the properties
+        legend_name_val = self.legend_name
+        line_color_val = self.line_color
+        # Creates new object of the same type with the copied properties
+        obj_copy = type(self)(legend_name=legend_name_val, line_color=line_color_val)
+        return obj_copy
 
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""

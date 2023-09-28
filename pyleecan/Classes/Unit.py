@@ -10,9 +10,9 @@ from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
-from ..Functions.copy import copy
 from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
+from copy import deepcopy
 from ._frozen import FrozenClass
 
 # Import all class method
@@ -48,6 +48,7 @@ except ImportError as error:
     set_m2 = error
 
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 
@@ -110,9 +111,8 @@ class Unit(FrozenClass):
         )
     else:
         set_m2 = set_m2
-    # save and copy methods are available in all object
+    # generic save method is available in all object
     save = save
-    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -173,7 +173,7 @@ class Unit(FrozenClass):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -182,11 +182,41 @@ class Unit(FrozenClass):
             return ["type(" + name + ")"]
         diff_list = list()
         if other._unit_m != self._unit_m:
-            diff_list.append(name + ".unit_m")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._unit_m)
+                    + ", other="
+                    + str(other._unit_m)
+                    + ")"
+                )
+                diff_list.append(name + ".unit_m" + val_str)
+            else:
+                diff_list.append(name + ".unit_m")
         if other._unit_rad != self._unit_rad:
-            diff_list.append(name + ".unit_rad")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._unit_rad)
+                    + ", other="
+                    + str(other._unit_rad)
+                    + ")"
+                )
+                diff_list.append(name + ".unit_rad" + val_str)
+            else:
+                diff_list.append(name + ".unit_rad")
         if other._unit_m2 != self._unit_m2:
-            diff_list.append(name + ".unit_m2")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._unit_m2)
+                    + ", other="
+                    + str(other._unit_m2)
+                    + ")"
+                )
+                diff_list.append(name + ".unit_m2" + val_str)
+            else:
+                diff_list.append(name + ".unit_m2")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -218,6 +248,19 @@ class Unit(FrozenClass):
         # The class name is added to the dict for deserialisation purpose
         Unit_dict["__class__"] = "Unit"
         return Unit_dict
+
+    def copy(self):
+        """Creates a deepcopy of the object"""
+
+        # Handle deepcopy of all the properties
+        unit_m_val = self.unit_m
+        unit_rad_val = self.unit_rad
+        unit_m2_val = self.unit_m2
+        # Creates new object of the same type with the copied properties
+        obj_copy = type(self)(
+            unit_m=unit_m_val, unit_rad=unit_rad_val, unit_m2=unit_m2_val
+        )
+        return obj_copy
 
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""

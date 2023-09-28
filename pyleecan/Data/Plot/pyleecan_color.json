@@ -251,5 +251,6 @@
     "SHAFT_COLOR": "k",
     "STATOR_COLOR": "b",
     "VENT_COLOR": "w",
-    "VENT_EDGE": "k"
+    "VENT_EDGE": "k",
+    "WEDGE_COLOR": "y"
 }

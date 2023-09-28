@@ -1,6 +1,11 @@
-Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
-name,-,Parameter name,0,str,,,,,Simulation,,_set_setter,VERSION,1,Abstract class for the multi-simulation
-symbol,-,Parameter symbol,,str,,,,,,,_set_getter,,,
-unit,-,Parameter unit,,str,,,,,,,get_desc,,,
-setter,-,Function that takes a Simulation and a value in argument and modifiers the simulation,,function,None,,,,,,,,,
-getter,-,Function to return the reference value (simulation as argument),,function,None,,,,,,,,,
+Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,as_dict Type
+name,-,Parameter name,0,str,,,
+symbol,-,Parameter symbol,,str,,,
+unit,-,Parameter unit,,str,,,
+setter,-,Function that takes a Simulation and a value in argument and modifiers the simulation,,function,None,,
+getter,-,Function to return the reference value (simulation as argument),,function,None,,
+,
+Package,Inherit,Methods,Constant Name,Constant Value,Class description
+Simulation,,_set_setter,VERSION,1,Abstract class for the multi-simulation
+,,_set_getter,,,
+,,get_desc,,,

@@ -3,13 +3,15 @@
 
 from PySide2.QtCore import Signal
 from PySide2.QtWidgets import QMessageBox, QWidget, QSizePolicy
-
+from logging import getLogger
+from .....loggers import GUI_LOG_NAME
 from .....Classes.HoleM50 import HoleM50
 from .....Classes.Material import Material
 from .....GUI.Dialog.DMachineSetup.SMHoleMag.Ui_SMHoleMag import Ui_SMHoleMag
 from .....GUI.Dialog.DMachineSetup.SMHoleMag.WHoleMag.WHoleMag import WHoleMag
 from .....Methods.Slot.Slot import SlotCheckError
 from .....Functions.Plot.set_plot_gui_icon import set_plot_gui_icon
+from numpy import pi
 
 
 class SMHoleMag(Ui_SMHoleMag, QWidget):
@@ -42,6 +44,8 @@ class SMHoleMag(Ui_SMHoleMag, QWidget):
         self.machine = machine
         self.material_dict = material_dict
         self.is_stator = is_stator
+        self.is_test = False  # True to hide the plots
+        self.test_err_msg = None  # To test the error messages
 
         # Get the correct object to set
         if self.is_stator:
@@ -72,8 +76,8 @@ class SMHoleMag(Ui_SMHoleMag, QWidget):
         self.b_help.hide()
 
         # Connect the slot
+        self.tab_hole.tabCloseRequested.connect(self.s_remove)
         self.b_add.clicked.connect(self.s_add)
-        self.b_remove.clicked.connect(self.s_remove)
 
         self.b_plot.clicked.connect(self.s_plot)
 
@@ -91,12 +95,18 @@ class SMHoleMag(Ui_SMHoleMag, QWidget):
         Zh : int
             The current value of Zh
         """
-        Zh_txt = self.tr("Slot pitch = 360 / 2p = ")
+        Zh_txt = self.tr("Slot pitch: 360 / 2p = ")
         if Zh in [None, 0]:
             self.out_hole_pitch.setText(Zh_txt + "?")
         else:
             hole_pitch = 360.0 / Zh
-            self.out_hole_pitch.setText(Zh_txt + "%.4g" % (hole_pitch) + u" °")
+            self.out_hole_pitch.setText(
+                Zh_txt
+                + "%.4g" % (hole_pitch)
+                + " [°] = "
+                + "%.4g" % (hole_pitch * pi / 180)
+                + " [rad]"
+            )
 
     def s_add(self, hole=False):
         """Signal to add a new hole
@@ -131,9 +141,9 @@ class SMHoleMag(Ui_SMHoleMag, QWidget):
             self, is_mag=is_mag, index=hole_index, material_dict=self.material_dict
         )
         tab.saveNeeded.connect(self.emit_save)
-        self.tab_hole.addTab(tab, "Hole " + str(hole_index + 1))
+        self.tab_hole.addTab(tab, "Hole Set " + str(hole_index + 1))
 
-    def s_remove(self):
+    def s_remove(self, index):
         """Signal to remove the last hole
 
         Parameters
@@ -142,8 +152,17 @@ class SMHoleMag(Ui_SMHoleMag, QWidget):
             a SMHoleMag object
         """
         if len(self.obj.hole) > 1:
-            self.tab_hole.removeTab(len(self.obj.hole) - 1)
-            self.obj.hole.pop(-1)
+            self.tab_hole.removeTab(index)
+            self.obj.hole.pop(index)
+
+            self.emit_save()
+        else:
+            QMessageBox().warning(
+                self,
+                self.tr("Warning"),
+                "Impossible to remove the hole as it is the last one defined",
+            )
+            return
 
     def s_plot(self):
         """Try to plot the lamination
@@ -161,10 +180,19 @@ class SMHoleMag(Ui_SMHoleMag, QWidget):
         # We have to make sure the hole is right before trying to plot it
         error = self.check(self.obj)
         if error:  # Error => Display it
-            QMessageBox().critical(self, self.tr("Error"), error)
+            self.test_err_msg = "Error in Hole definition:\n" + error
+            getLogger(GUI_LOG_NAME).debug(self.test_err_msg)
+            QMessageBox().critical(self, self.tr("Error"), self.test_err_msg)
         else:  # No error => Plot the lamination
-            self.obj.plot(is_show_fig=True)
-            set_plot_gui_icon()
+            try:
+                self.obj.plot(is_show_fig=not self.is_test)
+                set_plot_gui_icon()
+            except Exception as e:
+                self.test_err_msg = (
+                    "Error while plotting Lamination in Hole definition:\n" + str(e)
+                )
+                getLogger(GUI_LOG_NAME).error(self.test_err_msg)
+                QMessageBox().critical(self, self.tr("Error"), self.test_err_msg)
 
     @staticmethod
     def check(lamination):

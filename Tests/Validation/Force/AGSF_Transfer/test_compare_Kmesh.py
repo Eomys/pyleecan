@@ -4,6 +4,7 @@ import pytest
 from os.path import join
 
 from pyleecan.Classes.ForceMT import ForceMT
+from pyleecan.Classes.OPdq import OPdq
 from pyleecan.Classes.Simu1 import Simu1
 from pyleecan.Classes.MagFEMM import MagFEMM
 from pyleecan.Classes.InputCurrent import InputCurrent
@@ -31,7 +32,10 @@ def test_compare_Kmesh():
     simu = Simu1(name="test_compare_Kmesh_direct", machine=Benchmark)
 
     simu.input = InputCurrent(
-        Id_ref=0, Iq_ref=0, Ir=None, Na_tot=5 * 2 ** 8, Nt_tot=2, N0=1200
+        OP=OPdq(N0=1200, Id_ref=0, Iq_ref=0),
+        Ir=None,
+        Na_tot=5 * 2 ** 8,
+        Nt_tot=2,
     )
 
     # Configure simulation
@@ -56,16 +60,15 @@ def test_compare_Kmesh():
     simu2.force.Rsbo_enforced_transfer = Rs
     simu2.force.max_wavenumber_transfer = 100
 
-    out2 = simu2.run()
-
     # Enforced Rag for ref
     simu.mag.Rag_enforced = Rs
-    out = simu.run()
 
     # Simu with low finesness
     simu3 = simu.copy()
     simu3.name = "test_compare_Kmesh_direct_fine"
     simu3.mag.Kmesh_fineness = 2  # 4
+    out = simu.run()
+    out2 = simu2.run()
     out3 = simu3.run()
 
     AGSF_list = list()
@@ -100,5 +103,4 @@ def test_compare_Kmesh():
 
 
 if __name__ == "__main__":
-
     out, out2, out3 = test_compare_Kmesh()

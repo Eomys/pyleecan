@@ -10,27 +10,37 @@ from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
-from ..Functions.copy import copy
 from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
+from copy import deepcopy
 from .Slot import Slot
 
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
+try:
+    from ..Methods.Slot.SlotW11._comp_line_dict import _comp_line_dict
+except ImportError as error:
+    _comp_line_dict = error
+
 try:
     from ..Methods.Slot.SlotW11._comp_point_coordinate import _comp_point_coordinate
 except ImportError as error:
     _comp_point_coordinate = error
 
 try:
+    from ..Methods.Slot.SlotW11._set_W3 import _set_W3
+except ImportError as error:
+    _set_W3 = error
+
+try:
+    from ..Methods.Slot.SlotW11._comp_W import _comp_W
+except ImportError as error:
+    _comp_W = error
+
+try:
     from ..Methods.Slot.SlotW11.build_geometry import build_geometry
 except ImportError as error:
     build_geometry = error
-
-try:
-    from ..Methods.Slot.SlotW11.get_surface_active import get_surface_active
-except ImportError as error:
-    get_surface_active = error
 
 try:
     from ..Methods.Slot.SlotW11.check import check
@@ -63,16 +73,39 @@ except ImportError as error:
     comp_surface_active = error
 
 try:
+    from ..Methods.Slot.SlotW11.comp_surface_opening import comp_surface_opening
+except ImportError as error:
+    comp_surface_opening = error
+
+try:
     from ..Methods.Slot.SlotW11.get_H1 import get_H1
 except ImportError as error:
     get_H1 = error
+
+try:
+    from ..Methods.Slot.SlotW11.get_surface_active import get_surface_active
+except ImportError as error:
+    get_surface_active = error
+
+try:
+    from ..Methods.Slot.SlotW11.get_surface_opening import get_surface_opening
+except ImportError as error:
+    get_surface_opening = error
 
 try:
     from ..Methods.Slot.SlotW11.plot_schematics import plot_schematics
 except ImportError as error:
     plot_schematics = error
 
+try:
+    from ..Methods.Slot.SlotW11.plot_schematics_constant_tooth import (
+        plot_schematics_constant_tooth,
+    )
+except ImportError as error:
+    plot_schematics_constant_tooth = error
 
+
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 
@@ -82,6 +115,17 @@ class SlotW11(Slot):
     IS_SYMMETRICAL = 1
 
     # Check ImportError to remove unnecessary dependencies in unused method
+    # cf Methods.Slot.SlotW11._comp_line_dict
+    if isinstance(_comp_line_dict, ImportError):
+        _comp_line_dict = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use SlotW11 method _comp_line_dict: " + str(_comp_line_dict)
+                )
+            )
+        )
+    else:
+        _comp_line_dict = _comp_line_dict
     # cf Methods.Slot.SlotW11._comp_point_coordinate
     if isinstance(_comp_point_coordinate, ImportError):
         _comp_point_coordinate = property(
@@ -94,6 +138,24 @@ class SlotW11(Slot):
         )
     else:
         _comp_point_coordinate = _comp_point_coordinate
+    # cf Methods.Slot.SlotW11._set_W3
+    if isinstance(_set_W3, ImportError):
+        _set_W3 = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use SlotW11 method _set_W3: " + str(_set_W3))
+            )
+        )
+    else:
+        _set_W3 = _set_W3
+    # cf Methods.Slot.SlotW11._comp_W
+    if isinstance(_comp_W, ImportError):
+        _comp_W = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use SlotW11 method _comp_W: " + str(_comp_W))
+            )
+        )
+    else:
+        _comp_W = _comp_W
     # cf Methods.Slot.SlotW11.build_geometry
     if isinstance(build_geometry, ImportError):
         build_geometry = property(
@@ -105,18 +167,6 @@ class SlotW11(Slot):
         )
     else:
         build_geometry = build_geometry
-    # cf Methods.Slot.SlotW11.get_surface_active
-    if isinstance(get_surface_active, ImportError):
-        get_surface_active = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use SlotW11 method get_surface_active: "
-                    + str(get_surface_active)
-                )
-            )
-        )
-    else:
-        get_surface_active = get_surface_active
     # cf Methods.Slot.SlotW11.check
     if isinstance(check, ImportError):
         check = property(
@@ -182,6 +232,18 @@ class SlotW11(Slot):
         )
     else:
         comp_surface_active = comp_surface_active
+    # cf Methods.Slot.SlotW11.comp_surface_opening
+    if isinstance(comp_surface_opening, ImportError):
+        comp_surface_opening = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use SlotW11 method comp_surface_opening: "
+                    + str(comp_surface_opening)
+                )
+            )
+        )
+    else:
+        comp_surface_opening = comp_surface_opening
     # cf Methods.Slot.SlotW11.get_H1
     if isinstance(get_H1, ImportError):
         get_H1 = property(
@@ -191,6 +253,30 @@ class SlotW11(Slot):
         )
     else:
         get_H1 = get_H1
+    # cf Methods.Slot.SlotW11.get_surface_active
+    if isinstance(get_surface_active, ImportError):
+        get_surface_active = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use SlotW11 method get_surface_active: "
+                    + str(get_surface_active)
+                )
+            )
+        )
+    else:
+        get_surface_active = get_surface_active
+    # cf Methods.Slot.SlotW11.get_surface_opening
+    if isinstance(get_surface_opening, ImportError):
+        get_surface_opening = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use SlotW11 method get_surface_opening: "
+                    + str(get_surface_opening)
+                )
+            )
+        )
+    else:
+        get_surface_opening = get_surface_opening
     # cf Methods.Slot.SlotW11.plot_schematics
     if isinstance(plot_schematics, ImportError):
         plot_schematics = property(
@@ -202,23 +288,38 @@ class SlotW11(Slot):
         )
     else:
         plot_schematics = plot_schematics
-    # save and copy methods are available in all object
+    # cf Methods.Slot.SlotW11.plot_schematics_constant_tooth
+    if isinstance(plot_schematics_constant_tooth, ImportError):
+        plot_schematics_constant_tooth = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use SlotW11 method plot_schematics_constant_tooth: "
+                    + str(plot_schematics_constant_tooth)
+                )
+            )
+        )
+    else:
+        plot_schematics_constant_tooth = plot_schematics_constant_tooth
+    # generic save method is available in all object
     save = save
-    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
     def __init__(
         self,
-        W0=0.003,
-        H0=0.003,
-        H1=0,
+        W0=None,
+        H0=None,
+        H1=None,
         H1_is_rad=False,
-        W1=0.013,
-        H2=0.02,
-        W2=0.01,
-        R1=0.001,
+        W1=None,
+        H2=None,
+        W2=None,
+        is_cstt_tooth=False,
+        W3=None,
+        R1=None,
         Zs=36,
+        wedge_mat=None,
+        is_bore=True,
         init_dict=None,
         init_str=None,
     ):
@@ -251,10 +352,18 @@ class SlotW11(Slot):
                 H2 = init_dict["H2"]
             if "W2" in list(init_dict.keys()):
                 W2 = init_dict["W2"]
+            if "is_cstt_tooth" in list(init_dict.keys()):
+                is_cstt_tooth = init_dict["is_cstt_tooth"]
+            if "W3" in list(init_dict.keys()):
+                W3 = init_dict["W3"]
             if "R1" in list(init_dict.keys()):
                 R1 = init_dict["R1"]
             if "Zs" in list(init_dict.keys()):
                 Zs = init_dict["Zs"]
+            if "wedge_mat" in list(init_dict.keys()):
+                wedge_mat = init_dict["wedge_mat"]
+            if "is_bore" in list(init_dict.keys()):
+                is_bore = init_dict["is_bore"]
         # Set the properties (value check and convertion are done in setter)
         self.W0 = W0
         self.H0 = H0
@@ -263,9 +372,11 @@ class SlotW11(Slot):
         self.W1 = W1
         self.H2 = H2
         self.W2 = W2
+        self.is_cstt_tooth = is_cstt_tooth
+        self.W3 = W3
         self.R1 = R1
         # Call Slot init
-        super(SlotW11, self).__init__(Zs=Zs)
+        super(SlotW11, self).__init__(Zs=Zs, wedge_mat=wedge_mat, is_bore=is_bore)
         # The class is frozen (in Slot init), for now it's impossible to
         # add new properties
 
@@ -282,6 +393,8 @@ class SlotW11(Slot):
         SlotW11_str += "W1 = " + str(self.W1) + linesep
         SlotW11_str += "H2 = " + str(self.H2) + linesep
         SlotW11_str += "W2 = " + str(self.W2) + linesep
+        SlotW11_str += "is_cstt_tooth = " + str(self.is_cstt_tooth) + linesep
+        SlotW11_str += "W3 = " + str(self.W3) + linesep
         SlotW11_str += "R1 = " + str(self.R1) + linesep
         return SlotW11_str
 
@@ -308,11 +421,15 @@ class SlotW11(Slot):
             return False
         if other.W2 != self.W2:
             return False
+        if other.is_cstt_tooth != self.is_cstt_tooth:
+            return False
+        if other.W3 != self.W3:
+            return False
         if other.R1 != self.R1:
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -322,23 +439,139 @@ class SlotW11(Slot):
         diff_list = list()
 
         # Check the properties inherited from Slot
-        diff_list.extend(super(SlotW11, self).compare(other, name=name))
-        if other._W0 != self._W0:
-            diff_list.append(name + ".W0")
-        if other._H0 != self._H0:
-            diff_list.append(name + ".H0")
-        if other._H1 != self._H1:
-            diff_list.append(name + ".H1")
+        diff_list.extend(
+            super(SlotW11, self).compare(
+                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
+            )
+        )
+        if (
+            other._W0 is not None
+            and self._W0 is not None
+            and isnan(other._W0)
+            and isnan(self._W0)
+        ):
+            pass
+        elif other._W0 != self._W0:
+            if is_add_value:
+                val_str = " (self=" + str(self._W0) + ", other=" + str(other._W0) + ")"
+                diff_list.append(name + ".W0" + val_str)
+            else:
+                diff_list.append(name + ".W0")
+        if (
+            other._H0 is not None
+            and self._H0 is not None
+            and isnan(other._H0)
+            and isnan(self._H0)
+        ):
+            pass
+        elif other._H0 != self._H0:
+            if is_add_value:
+                val_str = " (self=" + str(self._H0) + ", other=" + str(other._H0) + ")"
+                diff_list.append(name + ".H0" + val_str)
+            else:
+                diff_list.append(name + ".H0")
+        if (
+            other._H1 is not None
+            and self._H1 is not None
+            and isnan(other._H1)
+            and isnan(self._H1)
+        ):
+            pass
+        elif other._H1 != self._H1:
+            if is_add_value:
+                val_str = " (self=" + str(self._H1) + ", other=" + str(other._H1) + ")"
+                diff_list.append(name + ".H1" + val_str)
+            else:
+                diff_list.append(name + ".H1")
         if other._H1_is_rad != self._H1_is_rad:
-            diff_list.append(name + ".H1_is_rad")
-        if other._W1 != self._W1:
-            diff_list.append(name + ".W1")
-        if other._H2 != self._H2:
-            diff_list.append(name + ".H2")
-        if other._W2 != self._W2:
-            diff_list.append(name + ".W2")
-        if other._R1 != self._R1:
-            diff_list.append(name + ".R1")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._H1_is_rad)
+                    + ", other="
+                    + str(other._H1_is_rad)
+                    + ")"
+                )
+                diff_list.append(name + ".H1_is_rad" + val_str)
+            else:
+                diff_list.append(name + ".H1_is_rad")
+        if (
+            other._W1 is not None
+            and self._W1 is not None
+            and isnan(other._W1)
+            and isnan(self._W1)
+        ):
+            pass
+        elif other._W1 != self._W1:
+            if is_add_value:
+                val_str = " (self=" + str(self._W1) + ", other=" + str(other._W1) + ")"
+                diff_list.append(name + ".W1" + val_str)
+            else:
+                diff_list.append(name + ".W1")
+        if (
+            other._H2 is not None
+            and self._H2 is not None
+            and isnan(other._H2)
+            and isnan(self._H2)
+        ):
+            pass
+        elif other._H2 != self._H2:
+            if is_add_value:
+                val_str = " (self=" + str(self._H2) + ", other=" + str(other._H2) + ")"
+                diff_list.append(name + ".H2" + val_str)
+            else:
+                diff_list.append(name + ".H2")
+        if (
+            other._W2 is not None
+            and self._W2 is not None
+            and isnan(other._W2)
+            and isnan(self._W2)
+        ):
+            pass
+        elif other._W2 != self._W2:
+            if is_add_value:
+                val_str = " (self=" + str(self._W2) + ", other=" + str(other._W2) + ")"
+                diff_list.append(name + ".W2" + val_str)
+            else:
+                diff_list.append(name + ".W2")
+        if other._is_cstt_tooth != self._is_cstt_tooth:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._is_cstt_tooth)
+                    + ", other="
+                    + str(other._is_cstt_tooth)
+                    + ")"
+                )
+                diff_list.append(name + ".is_cstt_tooth" + val_str)
+            else:
+                diff_list.append(name + ".is_cstt_tooth")
+        if (
+            other._W3 is not None
+            and self._W3 is not None
+            and isnan(other._W3)
+            and isnan(self._W3)
+        ):
+            pass
+        elif other._W3 != self._W3:
+            if is_add_value:
+                val_str = " (self=" + str(self._W3) + ", other=" + str(other._W3) + ")"
+                diff_list.append(name + ".W3" + val_str)
+            else:
+                diff_list.append(name + ".W3")
+        if (
+            other._R1 is not None
+            and self._R1 is not None
+            and isnan(other._R1)
+            and isnan(self._R1)
+        ):
+            pass
+        elif other._R1 != self._R1:
+            if is_add_value:
+                val_str = " (self=" + str(self._R1) + ", other=" + str(other._R1) + ")"
+                diff_list.append(name + ".R1" + val_str)
+            else:
+                diff_list.append(name + ".R1")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -357,6 +590,8 @@ class SlotW11(Slot):
         S += getsizeof(self.W1)
         S += getsizeof(self.H2)
         S += getsizeof(self.W2)
+        S += getsizeof(self.is_cstt_tooth)
+        S += getsizeof(self.W3)
         S += getsizeof(self.R1)
         return S
 
@@ -384,11 +619,51 @@ class SlotW11(Slot):
         SlotW11_dict["W1"] = self.W1
         SlotW11_dict["H2"] = self.H2
         SlotW11_dict["W2"] = self.W2
+        SlotW11_dict["is_cstt_tooth"] = self.is_cstt_tooth
+        SlotW11_dict["W3"] = self.W3
         SlotW11_dict["R1"] = self.R1
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         SlotW11_dict["__class__"] = "SlotW11"
         return SlotW11_dict
+
+    def copy(self):
+        """Creates a deepcopy of the object"""
+
+        # Handle deepcopy of all the properties
+        W0_val = self.W0
+        H0_val = self.H0
+        H1_val = self.H1
+        H1_is_rad_val = self.H1_is_rad
+        W1_val = self.W1
+        H2_val = self.H2
+        W2_val = self.W2
+        is_cstt_tooth_val = self.is_cstt_tooth
+        W3_val = self.W3
+        R1_val = self.R1
+        Zs_val = self.Zs
+        if self.wedge_mat is None:
+            wedge_mat_val = None
+        else:
+            wedge_mat_val = self.wedge_mat.copy()
+        is_bore_val = self.is_bore
+        # Creates new object of the same type with the copied properties
+        obj_copy = type(self)(
+            W0=W0_val,
+            H0=H0_val,
+            H1=H1_val,
+            H1_is_rad=H1_is_rad_val,
+            W1=W1_val,
+            H2=H2_val,
+            W2=W2_val,
+            is_cstt_tooth=is_cstt_tooth_val,
+            W3=W3_val,
+            R1=R1_val,
+            Zs=Zs_val,
+            wedge_mat=wedge_mat_val,
+            is_bore=is_bore_val,
+        )
+        return obj_copy
 
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""
@@ -400,6 +675,8 @@ class SlotW11(Slot):
         self.W1 = None
         self.H2 = None
         self.W2 = None
+        self.is_cstt_tooth = None
+        self.W3 = None
         self.R1 = None
         # Set to None the properties inherited from Slot
         super(SlotW11, self)._set_None()
@@ -530,6 +807,38 @@ class SlotW11(Slot):
         fget=_get_W2,
         fset=_set_W2,
         doc=u"""Slot bottom width.
+
+        :Type: float
+        :min: 0
+        """,
+    )
+
+    def _get_is_cstt_tooth(self):
+        """getter of is_cstt_tooth"""
+        return self._is_cstt_tooth
+
+    def _set_is_cstt_tooth(self, value):
+        """setter of is_cstt_tooth"""
+        check_var("is_cstt_tooth", value, "bool")
+        self._is_cstt_tooth = value
+
+    is_cstt_tooth = property(
+        fget=_get_is_cstt_tooth,
+        fset=_set_is_cstt_tooth,
+        doc=u"""True: use W3 to define the slot, False: use W2 and W1
+
+        :Type: bool
+        """,
+    )
+
+    def _get_W3(self):
+        """getter of W3"""
+        return self._W3
+
+    W3 = property(
+        fget=_get_W3,
+        fset=_set_W3,
+        doc=u"""Tooth width
 
         :Type: float
         :min: 0

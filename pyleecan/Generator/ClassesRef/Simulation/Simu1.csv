@@ -1,6 +1,9 @@
-Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
-elec,-,Electrical module,0,Electrical,None,,,,Simulation,Simulation,run_single,VERSION,1,Five sequential weak coupling multi physics simulation
-mag,-,Magnetic module,0,Magnetics,None,,,,,,,,,
-struct,-,Structural module,0,Structural,None,,,,,,,,,
-force,-,Force moduale,0,Force,None,,,,,,,,,
-loss,-,Loss moduale,0,Loss,None,,,,,,,,,
+Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,as_dict Type
+elec,-,Electrical module,0,Electrical,None,,
+mag,-,Magnetic module,0,Magnetics,None,,
+struct,-,Structural module,0,Structural,None,,
+force,-,Force moduale,0,Force,None,,
+loss,-,Loss moduale,0,Loss,None,,
+,
+Package,Inherit,Methods,Constant Name,Constant Value,Class description
+Simulation,Simulation,run_single,VERSION,1,Five sequential weak coupling multi physics simulation

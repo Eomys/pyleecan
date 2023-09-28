@@ -10,9 +10,9 @@ from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
-from ..Functions.copy import copy
 from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
+from copy import deepcopy
 from .Frame import Frame
 
 # Import all class method
@@ -48,8 +48,8 @@ except ImportError as error:
     comp_surface_gap = error
 
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
-from .Material import Material
 
 
 class FrameBar(Frame):
@@ -127,9 +127,8 @@ class FrameBar(Frame):
         )
     else:
         comp_surface_gap = comp_surface_gap
-    # save and copy methods are available in all object
+    # generic save method is available in all object
     save = save
-    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -206,7 +205,7 @@ class FrameBar(Frame):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -216,11 +215,34 @@ class FrameBar(Frame):
         diff_list = list()
 
         # Check the properties inherited from Frame
-        diff_list.extend(super(FrameBar, self).compare(other, name=name))
+        diff_list.extend(
+            super(FrameBar, self).compare(
+                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
+            )
+        )
         if other._Nbar != self._Nbar:
-            diff_list.append(name + ".Nbar")
-        if other._wbar != self._wbar:
-            diff_list.append(name + ".wbar")
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._Nbar) + ", other=" + str(other._Nbar) + ")"
+                )
+                diff_list.append(name + ".Nbar" + val_str)
+            else:
+                diff_list.append(name + ".Nbar")
+        if (
+            other._wbar is not None
+            and self._wbar is not None
+            and isnan(other._wbar)
+            and isnan(self._wbar)
+        ):
+            pass
+        elif other._wbar != self._wbar:
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._wbar) + ", other=" + str(other._wbar) + ")"
+                )
+                diff_list.append(name + ".wbar" + val_str)
+            else:
+                diff_list.append(name + ".wbar")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -259,6 +281,30 @@ class FrameBar(Frame):
         # Overwrite the mother class name
         FrameBar_dict["__class__"] = "FrameBar"
         return FrameBar_dict
+
+    def copy(self):
+        """Creates a deepcopy of the object"""
+
+        # Handle deepcopy of all the properties
+        Nbar_val = self.Nbar
+        wbar_val = self.wbar
+        Lfra_val = self.Lfra
+        Rint_val = self.Rint
+        Rext_val = self.Rext
+        if self.mat_type is None:
+            mat_type_val = None
+        else:
+            mat_type_val = self.mat_type.copy()
+        # Creates new object of the same type with the copied properties
+        obj_copy = type(self)(
+            Nbar=Nbar_val,
+            wbar=wbar_val,
+            Lfra=Lfra_val,
+            Rint=Rint_val,
+            Rext=Rext_val,
+            mat_type=mat_type_val,
+        )
+        return obj_copy
 
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""

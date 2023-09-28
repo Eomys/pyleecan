@@ -1,8 +1,11 @@
-Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constante Name,Constante Value,Description classe,Classe fille
-selector,-,Selector of the genetic algorithm,1,function,None,,,,Optimization,OptiSolver,,VERSION,1,Genetic algorithm class,
-crossover,-,Crossover of the genetic algorithm,1,function,None,,,,,,,,,,
-mutator,-,Mutator of the genetic algorithm,1,function,None,,,,,,,,,,
-p_cross,-,Probability of crossover,1,float,0.9,0,1,,,,,,,,
-p_mutate,-,Probability of mutation ,1,float,0.1,0,1,,,,,,,,
-size_pop,-,Size of the population,1,int,40,1,,,,,,,,,
-nb_gen,-,Number of generations,1,int,100,1,,,,,,,,,
+Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,as_dict Type
+selector,-,Selector of the genetic algorithm,1,function,None,,
+crossover,-,Crossover of the genetic algorithm,1,function,None,,
+mutator,-,Mutator of the genetic algorithm,1,function,None,,
+p_cross,-,Probability of crossover,1,float,0.9,0,1
+p_mutate,-,Probability of mutation ,1,float,0.1,0,1
+size_pop,-,Size of the population,1,int,40,1,
+nb_gen,-,Number of generations,1,int,100,1,
+,
+Package,Inherit,Methods,Constante Name,Constante Value,Description classe,Classe fille
+Optimization,OptiSolver,,VERSION,1,Genetic algorithm class,

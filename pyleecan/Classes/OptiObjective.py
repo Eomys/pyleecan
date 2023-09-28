@@ -10,16 +10,18 @@ from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
-from ..Functions.copy import copy
 from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
+from copy import deepcopy
 from .DataKeeper import DataKeeper
 
+from numpy import array, ndarray
 from ntpath import basename
 from os.path import isfile
 from ._check import CheckTypeError
 import numpy as np
 import random
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 
@@ -28,9 +30,8 @@ class OptiObjective(DataKeeper):
 
     VERSION = 1
 
-    # save and copy methods are available in all object
+    # generic save method is available in all object
     save = save
-    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -43,6 +44,7 @@ class OptiObjective(DataKeeper):
         error_keeper=None,
         result=-1,
         result_ref=None,
+        physic=None,
         init_dict=None,
         init_str=None,
     ):
@@ -75,6 +77,8 @@ class OptiObjective(DataKeeper):
                 result = init_dict["result"]
             if "result_ref" in list(init_dict.keys()):
                 result_ref = init_dict["result_ref"]
+            if "physic" in list(init_dict.keys()):
+                physic = init_dict["physic"]
         # Set the properties (value check and convertion are done in setter)
         # Call DataKeeper init
         super(OptiObjective, self).__init__(
@@ -85,6 +89,7 @@ class OptiObjective(DataKeeper):
             error_keeper=error_keeper,
             result=result,
             result_ref=result_ref,
+            physic=physic,
         )
         # The class is frozen (in DataKeeper init), for now it's impossible to
         # add new properties
@@ -108,7 +113,7 @@ class OptiObjective(DataKeeper):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -118,7 +123,11 @@ class OptiObjective(DataKeeper):
         diff_list = list()
 
         # Check the properties inherited from DataKeeper
-        diff_list.extend(super(OptiObjective, self).compare(other, name=name))
+        diff_list.extend(
+            super(OptiObjective, self).compare(
+                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
+            )
+        )
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -153,6 +162,43 @@ class OptiObjective(DataKeeper):
         # Overwrite the mother class name
         OptiObjective_dict["__class__"] = "OptiObjective"
         return OptiObjective_dict
+
+    def copy(self):
+        """Creates a deepcopy of the object"""
+
+        # Handle deepcopy of all the properties
+        name_val = self.name
+        symbol_val = self.symbol
+        unit_val = self.unit
+        if self._keeper_str is not None:
+            keeper_val = self._keeper_str
+        else:
+            keeper_val = self._keeper_func
+        if self._error_keeper_str is not None:
+            error_keeper_val = self._error_keeper_str
+        else:
+            error_keeper_val = self._error_keeper_func
+        if self.result is None:
+            result_val = None
+        else:
+            result_val = self.result.copy()
+        if hasattr(self.result_ref, "copy"):
+            result_ref_val = self.result_ref.copy()
+        else:
+            result_ref_val = self.result_ref
+        physic_val = self.physic
+        # Creates new object of the same type with the copied properties
+        obj_copy = type(self)(
+            name=name_val,
+            symbol=symbol_val,
+            unit=unit_val,
+            keeper=keeper_val,
+            error_keeper=error_keeper_val,
+            result=result_val,
+            result_ref=result_ref_val,
+            physic=physic_val,
+        )
+        return obj_copy
 
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""

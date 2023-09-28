@@ -1,11 +1,14 @@
-Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
-rho,kg/m^3,mass per unit volume [kg/m3],0,float,7650,0,,,Material,,,VERSION,1,Material Structural properties
-Ex,Pa,"equivalent Young modulus (XY is lamination plane, Z is rotation axis)",0,float,2.15E+11,0,,,,,,,,
-Ey,Pa,"equivalent Young modulus (XY is lamination plane, Z is rotation axis)",0,float,2.15E+11,0,,,,,,,,
-Ez,Pa,"equivalent Young modulus (XY is lamination plane, Z is rotation axis)",0,float,80000000000,0,,,,,,,,
-nu_xy,-,"equivalent Poisson ratio in the XY plane (XY is lamination plane, Z is rotation axis)",0,float,0.3,0,,,,,,,,
-nu_xz,-,"equivalent Poisson ratio in the XZ plane (XY is lamination plane, Z is rotation axis)",0,float,0.03,0,,,,,,,,
-nu_yz,-,"equivalent Poisson ratio in the YZ plane (XY is lamination plane, Z is rotation axis)",0,float,0.03,0,,,,,,,,
-Gxz,Pa,"shear modulus in XY plane (XY is lamination plane, Z is rotation axis)",0,float,2000000000,0,,,,,,,,
-Gxy,Pa,"shear modulus in XZ plane (XY is lamination plane, Z is rotation axis)",0,float,0,0,,,,,,,,
-Gyz,Pa,"shear modulus in YZ plane (XY is lamination plane, Z is rotation axis)",0,float,2000000000,0,,,,,,,,
+Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,as_dict Type
+rho,kg/m^3,mass per unit volume [kg/m3],0,float,7650,0,
+Ex,Pa,"equivalent Young modulus (XY is lamination plane, Z is rotation axis)",0,float,2.15E+11,0,
+Ey,Pa,"equivalent Young modulus (XY is lamination plane, Z is rotation axis)",0,float,2.15E+11,0,
+Ez,Pa,"equivalent Young modulus (XY is lamination plane, Z is rotation axis)",0,float,80000000000,0,
+nu_xy,-,"equivalent Poisson ratio in the XY plane (XY is lamination plane, Z is rotation axis)",0,float,0.3,0,
+nu_xz,-,"equivalent Poisson ratio in the XZ plane (XY is lamination plane, Z is rotation axis)",0,float,0.03,0,
+nu_yz,-,"equivalent Poisson ratio in the YZ plane (XY is lamination plane, Z is rotation axis)",0,float,0.03,0,
+Gxz,Pa,"shear modulus in XY plane (XY is lamination plane, Z is rotation axis)",0,float,2000000000,0,
+Gxy,Pa,"shear modulus in XZ plane (XY is lamination plane, Z is rotation axis)",0,float,0,0,
+Gyz,Pa,"shear modulus in YZ plane (XY is lamination plane, Z is rotation axis)",0,float,2000000000,0,
+,
+Package,Inherit,Methods,Constant Name,Constant Value,Class description
+Material,,,VERSION,1,Material Structural properties

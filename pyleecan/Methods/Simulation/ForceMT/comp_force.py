@@ -33,8 +33,8 @@ def comp_force(self, output, axes_dict):
     out_dict["Rag"] = Rag
 
     # Get time and angular axes
-    Angle = axes_dict["Angle"]
-    Time = axes_dict["Time"]
+    Angle = axes_dict["angle"]
+    Time = axes_dict["time"]
 
     # Import angular vector from Angle Data object
     is_periodicity_a, is_antiper_a = Angle.get_periodicity()

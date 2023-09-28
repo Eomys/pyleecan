@@ -10,9 +10,9 @@ from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
-from ..Functions.copy import copy
 from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
+from copy import deepcopy
 from .Conductor import Conductor
 
 # Import all class method
@@ -52,9 +52,36 @@ try:
 except ImportError as error:
     plot_schematics = error
 
+try:
+    from ..Methods.Machine.CondType12.comp_width_wire import comp_width_wire
+except ImportError as error:
+    comp_width_wire = error
 
+try:
+    from ..Methods.Machine.CondType12.comp_height_wire import comp_height_wire
+except ImportError as error:
+    comp_height_wire = error
+
+try:
+    from ..Methods.Machine.CondType12.comp_nb_circumferential_wire import (
+        comp_nb_circumferential_wire,
+    )
+except ImportError as error:
+    comp_nb_circumferential_wire = error
+
+try:
+    from ..Methods.Machine.CondType12.comp_nb_radial_wire import comp_nb_radial_wire
+except ImportError as error:
+    comp_nb_radial_wire = error
+
+try:
+    from ..Methods.Machine.CondType12.is_round_wire import is_round_wire
+except ImportError as error:
+    is_round_wire = error
+
+
+from numpy import isnan
 from ._check import InitUnKnowClassError
-from .Material import Material
 
 
 class CondType12(Conductor):
@@ -138,9 +165,67 @@ class CondType12(Conductor):
         )
     else:
         plot_schematics = plot_schematics
-    # save and copy methods are available in all object
+    # cf Methods.Machine.CondType12.comp_width_wire
+    if isinstance(comp_width_wire, ImportError):
+        comp_width_wire = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use CondType12 method comp_width_wire: "
+                    + str(comp_width_wire)
+                )
+            )
+        )
+    else:
+        comp_width_wire = comp_width_wire
+    # cf Methods.Machine.CondType12.comp_height_wire
+    if isinstance(comp_height_wire, ImportError):
+        comp_height_wire = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use CondType12 method comp_height_wire: "
+                    + str(comp_height_wire)
+                )
+            )
+        )
+    else:
+        comp_height_wire = comp_height_wire
+    # cf Methods.Machine.CondType12.comp_nb_circumferential_wire
+    if isinstance(comp_nb_circumferential_wire, ImportError):
+        comp_nb_circumferential_wire = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use CondType12 method comp_nb_circumferential_wire: "
+                    + str(comp_nb_circumferential_wire)
+                )
+            )
+        )
+    else:
+        comp_nb_circumferential_wire = comp_nb_circumferential_wire
+    # cf Methods.Machine.CondType12.comp_nb_radial_wire
+    if isinstance(comp_nb_radial_wire, ImportError):
+        comp_nb_radial_wire = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use CondType12 method comp_nb_radial_wire: "
+                    + str(comp_nb_radial_wire)
+                )
+            )
+        )
+    else:
+        comp_nb_radial_wire = comp_nb_radial_wire
+    # cf Methods.Machine.CondType12.is_round_wire
+    if isinstance(is_round_wire, ImportError):
+        is_round_wire = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use CondType12 method is_round_wire: " + str(is_round_wire)
+                )
+            )
+        )
+    else:
+        is_round_wire = is_round_wire
+    # generic save method is available in all object
     save = save
-    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -230,7 +315,7 @@ class CondType12(Conductor):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -240,17 +325,87 @@ class CondType12(Conductor):
         diff_list = list()
 
         # Check the properties inherited from Conductor
-        diff_list.extend(super(CondType12, self).compare(other, name=name))
-        if other._Wwire != self._Wwire:
-            diff_list.append(name + ".Wwire")
-        if other._Wins_cond != self._Wins_cond:
-            diff_list.append(name + ".Wins_cond")
+        diff_list.extend(
+            super(CondType12, self).compare(
+                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
+            )
+        )
+        if (
+            other._Wwire is not None
+            and self._Wwire is not None
+            and isnan(other._Wwire)
+            and isnan(self._Wwire)
+        ):
+            pass
+        elif other._Wwire != self._Wwire:
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._Wwire) + ", other=" + str(other._Wwire) + ")"
+                )
+                diff_list.append(name + ".Wwire" + val_str)
+            else:
+                diff_list.append(name + ".Wwire")
+        if (
+            other._Wins_cond is not None
+            and self._Wins_cond is not None
+            and isnan(other._Wins_cond)
+            and isnan(self._Wins_cond)
+        ):
+            pass
+        elif other._Wins_cond != self._Wins_cond:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._Wins_cond)
+                    + ", other="
+                    + str(other._Wins_cond)
+                    + ")"
+                )
+                diff_list.append(name + ".Wins_cond" + val_str)
+            else:
+                diff_list.append(name + ".Wins_cond")
         if other._Nwppc != self._Nwppc:
-            diff_list.append(name + ".Nwppc")
-        if other._Wins_wire != self._Wins_wire:
-            diff_list.append(name + ".Wins_wire")
-        if other._Kwoh != self._Kwoh:
-            diff_list.append(name + ".Kwoh")
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._Nwppc) + ", other=" + str(other._Nwppc) + ")"
+                )
+                diff_list.append(name + ".Nwppc" + val_str)
+            else:
+                diff_list.append(name + ".Nwppc")
+        if (
+            other._Wins_wire is not None
+            and self._Wins_wire is not None
+            and isnan(other._Wins_wire)
+            and isnan(self._Wins_wire)
+        ):
+            pass
+        elif other._Wins_wire != self._Wins_wire:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._Wins_wire)
+                    + ", other="
+                    + str(other._Wins_wire)
+                    + ")"
+                )
+                diff_list.append(name + ".Wins_wire" + val_str)
+            else:
+                diff_list.append(name + ".Wins_wire")
+        if (
+            other._Kwoh is not None
+            and self._Kwoh is not None
+            and isnan(other._Kwoh)
+            and isnan(self._Kwoh)
+        ):
+            pass
+        elif other._Kwoh != self._Kwoh:
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._Kwoh) + ", other=" + str(other._Kwoh) + ")"
+                )
+                diff_list.append(name + ".Kwoh" + val_str)
+            else:
+                diff_list.append(name + ".Kwoh")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -296,6 +451,35 @@ class CondType12(Conductor):
         CondType12_dict["__class__"] = "CondType12"
         return CondType12_dict
 
+    def copy(self):
+        """Creates a deepcopy of the object"""
+
+        # Handle deepcopy of all the properties
+        Wwire_val = self.Wwire
+        Wins_cond_val = self.Wins_cond
+        Nwppc_val = self.Nwppc
+        Wins_wire_val = self.Wins_wire
+        Kwoh_val = self.Kwoh
+        if self.cond_mat is None:
+            cond_mat_val = None
+        else:
+            cond_mat_val = self.cond_mat.copy()
+        if self.ins_mat is None:
+            ins_mat_val = None
+        else:
+            ins_mat_val = self.ins_mat.copy()
+        # Creates new object of the same type with the copied properties
+        obj_copy = type(self)(
+            Wwire=Wwire_val,
+            Wins_cond=Wins_cond_val,
+            Nwppc=Nwppc_val,
+            Wins_wire=Wins_wire_val,
+            Kwoh=Kwoh_val,
+            cond_mat=cond_mat_val,
+            ins_mat=ins_mat_val,
+        )
+        return obj_copy
+
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""
 
@@ -319,7 +503,7 @@ class CondType12(Conductor):
     Wwire = property(
         fget=_get_Wwire,
         fset=_set_Wwire,
-        doc=u"""cf schematics, single wire diameter without insulation [m]
+        doc=u"""cf schematics, single strand diameter without insulation
 
         :Type: float
         :min: 0
@@ -338,7 +522,7 @@ class CondType12(Conductor):
     Wins_cond = property(
         fget=_get_Wins_cond,
         fset=_set_Wins_cond,
-        doc=u"""(advanced) cf schematics, winding coil insulation diameter [m]
+        doc=u"""(advanced) cf schematics, conductor diameter
 
         :Type: float
         :min: 0
@@ -357,7 +541,7 @@ class CondType12(Conductor):
     Nwppc = property(
         fget=_get_Nwppc,
         fset=_set_Nwppc,
-        doc=u"""cf schematics, winding number of random wires (strands) in parallel per coil
+        doc=u"""number of strands in parallel per conductor
 
         :Type: int
         :min: 1
@@ -376,7 +560,7 @@ class CondType12(Conductor):
     Wins_wire = property(
         fget=_get_Wins_wire,
         fset=_set_Wins_wire,
-        doc=u"""(advanced) cf schematics, winding strand insulation thickness [m]
+        doc=u"""(advanced) cf schematics, winding strand insulation thickness
 
         :Type: float
         :min: 0

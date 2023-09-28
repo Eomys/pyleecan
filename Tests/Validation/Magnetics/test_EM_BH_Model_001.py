@@ -2,6 +2,7 @@ from numpy import zeros, ones, pi, array
 from os.path import join
 import matplotlib.pyplot as plt
 from Tests import save_validation_path as save_path
+from pyleecan.Classes.OPdq import OPdq
 
 from pyleecan.Classes.Simu1 import Simu1
 
@@ -51,8 +52,7 @@ def test_EM_BH_Model_001_Toyota_Prius():
     simu.input = InputCurrent(
         Is=Is,
         Ir=None,  # No winding on the rotor
-        N0=N0,
-        angle_rotor=None,  # Will be computed
+        OP=OPdq(N0=N0),
         Nt_tot=Nt_tot,
         Na_tot=Na_tot,
         angle_rotor_initial=0.86,

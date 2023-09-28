@@ -1,5 +1,6 @@
 import pytest
 from os.path import join
+from pyleecan.Classes.OPdq import OPdq
 
 from pyleecan.Classes.Simu1 import Simu1
 from pyleecan.Classes.InputCurrent import InputCurrent
@@ -27,7 +28,10 @@ def test_FEMM_LamSlotMultiWind():
     #     "is_antiper_t": False,
     # }
     simu.input = InputCurrent(
-        Id_ref=0, Iq_ref=0, Ir=None, Na_tot=2 ** 6, Nt_tot=1, N0=1200
+        OP=OPdq(N0=1200, Id_ref=0, Iq_ref=0),
+        Ir=None,
+        Na_tot=2 ** 6,
+        Nt_tot=1,
     )
 
     simu.mag = MagFEMM(
@@ -35,6 +39,7 @@ def test_FEMM_LamSlotMultiWind():
         type_BH_rotor=0,
         is_periodicity_a=True,
         is_periodicity_t=False,
+        is_fast_draw=False,
     )
     simu.elec = None
     simu.force = None
@@ -45,5 +50,4 @@ def test_FEMM_LamSlotMultiWind():
 
 # To run it without pytest
 if __name__ == "__main__":
-
     out = test_FEMM_LamSlotMultiWind()

@@ -10,34 +10,39 @@ from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
-from ..Functions.copy import copy
 from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
+from copy import deepcopy
 from ._frozen import FrozenClass
 
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
-try:
-    from ..Methods.Simulation.Input.gen_input import gen_input
-except ImportError as error:
-    gen_input = error
-
 try:
     from ..Methods.Simulation.Input.comp_axes import comp_axes
 except ImportError as error:
     comp_axes = error
 
 try:
-    from ..Methods.Simulation.Input.comp_felec import comp_felec
+    from ..Methods.Simulation.Input.comp_axis_time import comp_axis_time
 except ImportError as error:
-    comp_felec = error
+    comp_axis_time = error
+
+try:
+    from ..Methods.Simulation.Input.comp_axis_angle import comp_axis_angle
+except ImportError as error:
+    comp_axis_angle = error
+
+try:
+    from ..Methods.Simulation.Input.comp_axis_phase import comp_axis_phase
+except ImportError as error:
+    comp_axis_phase = error
 
 
 from ..Classes.ImportMatrixVal import ImportMatrixVal
 from numpy import ndarray
 from numpy import array, array_equal
+from numpy import isnan
 from ._check import InitUnKnowClassError
-from .ImportMatrix import ImportMatrix
 
 
 class Input(FrozenClass):
@@ -46,15 +51,6 @@ class Input(FrozenClass):
     VERSION = 1
 
     # Check ImportError to remove unnecessary dependencies in unused method
-    # cf Methods.Simulation.Input.gen_input
-    if isinstance(gen_input, ImportError):
-        gen_input = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use Input method gen_input: " + str(gen_input))
-            )
-        )
-    else:
-        gen_input = gen_input
     # cf Methods.Simulation.Input.comp_axes
     if isinstance(comp_axes, ImportError):
         comp_axes = property(
@@ -64,18 +60,41 @@ class Input(FrozenClass):
         )
     else:
         comp_axes = comp_axes
-    # cf Methods.Simulation.Input.comp_felec
-    if isinstance(comp_felec, ImportError):
-        comp_felec = property(
+    # cf Methods.Simulation.Input.comp_axis_time
+    if isinstance(comp_axis_time, ImportError):
+        comp_axis_time = property(
             fget=lambda x: raise_(
-                ImportError("Can't use Input method comp_felec: " + str(comp_felec))
+                ImportError(
+                    "Can't use Input method comp_axis_time: " + str(comp_axis_time)
+                )
             )
         )
     else:
-        comp_felec = comp_felec
-    # save and copy methods are available in all object
+        comp_axis_time = comp_axis_time
+    # cf Methods.Simulation.Input.comp_axis_angle
+    if isinstance(comp_axis_angle, ImportError):
+        comp_axis_angle = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Input method comp_axis_angle: " + str(comp_axis_angle)
+                )
+            )
+        )
+    else:
+        comp_axis_angle = comp_axis_angle
+    # cf Methods.Simulation.Input.comp_axis_phase
+    if isinstance(comp_axis_phase, ImportError):
+        comp_axis_phase = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Input method comp_axis_phase: " + str(comp_axis_phase)
+                )
+            )
+        )
+    else:
+        comp_axis_phase = comp_axis_phase
+    # generic save method is available in all object
     save = save
-    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -84,9 +103,10 @@ class Input(FrozenClass):
         time=None,
         angle=None,
         Nt_tot=2048,
-        Nrev=1,
+        Nrev=None,
         Na_tot=2048,
-        N0=None,
+        OP=None,
+        t_final=None,
         init_dict=None,
         init_str=None,
     ):
@@ -115,8 +135,10 @@ class Input(FrozenClass):
                 Nrev = init_dict["Nrev"]
             if "Na_tot" in list(init_dict.keys()):
                 Na_tot = init_dict["Na_tot"]
-            if "N0" in list(init_dict.keys()):
-                N0 = init_dict["N0"]
+            if "OP" in list(init_dict.keys()):
+                OP = init_dict["OP"]
+            if "t_final" in list(init_dict.keys()):
+                t_final = init_dict["t_final"]
         # Set the properties (value check and convertion are done in setter)
         self.parent = None
         self.time = time
@@ -124,7 +146,8 @@ class Input(FrozenClass):
         self.Nt_tot = Nt_tot
         self.Nrev = Nrev
         self.Na_tot = Na_tot
-        self.N0 = N0
+        self.OP = OP
+        self.t_final = t_final
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -150,7 +173,12 @@ class Input(FrozenClass):
         Input_str += "Nt_tot = " + str(self.Nt_tot) + linesep
         Input_str += "Nrev = " + str(self.Nrev) + linesep
         Input_str += "Na_tot = " + str(self.Na_tot) + linesep
-        Input_str += "N0 = " + str(self.N0) + linesep
+        if self.OP is not None:
+            tmp = self.OP.__str__().replace(linesep, linesep + "\t").rstrip("\t")
+            Input_str += "OP = " + tmp
+        else:
+            Input_str += "OP = None" + linesep + linesep
+        Input_str += "t_final = " + str(self.t_final) + linesep
         return Input_str
 
     def __eq__(self, other):
@@ -168,11 +196,13 @@ class Input(FrozenClass):
             return False
         if other.Na_tot != self.Na_tot:
             return False
-        if other.N0 != self.N0:
+        if other.OP != self.OP:
+            return False
+        if other.t_final != self.t_final:
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -185,21 +215,98 @@ class Input(FrozenClass):
         ):
             diff_list.append(name + ".time None mismatch")
         elif self.time is not None:
-            diff_list.extend(self.time.compare(other.time, name=name + ".time"))
+            diff_list.extend(
+                self.time.compare(
+                    other.time,
+                    name=name + ".time",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
+            )
         if (other.angle is None and self.angle is not None) or (
             other.angle is not None and self.angle is None
         ):
             diff_list.append(name + ".angle None mismatch")
         elif self.angle is not None:
-            diff_list.extend(self.angle.compare(other.angle, name=name + ".angle"))
+            diff_list.extend(
+                self.angle.compare(
+                    other.angle,
+                    name=name + ".angle",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
+            )
         if other._Nt_tot != self._Nt_tot:
-            diff_list.append(name + ".Nt_tot")
-        if other._Nrev != self._Nrev:
-            diff_list.append(name + ".Nrev")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._Nt_tot)
+                    + ", other="
+                    + str(other._Nt_tot)
+                    + ")"
+                )
+                diff_list.append(name + ".Nt_tot" + val_str)
+            else:
+                diff_list.append(name + ".Nt_tot")
+        if (
+            other._Nrev is not None
+            and self._Nrev is not None
+            and isnan(other._Nrev)
+            and isnan(self._Nrev)
+        ):
+            pass
+        elif other._Nrev != self._Nrev:
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._Nrev) + ", other=" + str(other._Nrev) + ")"
+                )
+                diff_list.append(name + ".Nrev" + val_str)
+            else:
+                diff_list.append(name + ".Nrev")
         if other._Na_tot != self._Na_tot:
-            diff_list.append(name + ".Na_tot")
-        if other._N0 != self._N0:
-            diff_list.append(name + ".N0")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._Na_tot)
+                    + ", other="
+                    + str(other._Na_tot)
+                    + ")"
+                )
+                diff_list.append(name + ".Na_tot" + val_str)
+            else:
+                diff_list.append(name + ".Na_tot")
+        if (other.OP is None and self.OP is not None) or (
+            other.OP is not None and self.OP is None
+        ):
+            diff_list.append(name + ".OP None mismatch")
+        elif self.OP is not None:
+            diff_list.extend(
+                self.OP.compare(
+                    other.OP,
+                    name=name + ".OP",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
+            )
+        if (
+            other._t_final is not None
+            and self._t_final is not None
+            and isnan(other._t_final)
+            and isnan(self._t_final)
+        ):
+            pass
+        elif other._t_final != self._t_final:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._t_final)
+                    + ", other="
+                    + str(other._t_final)
+                    + ")"
+                )
+                diff_list.append(name + ".t_final" + val_str)
+            else:
+                diff_list.append(name + ".t_final")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -213,7 +320,8 @@ class Input(FrozenClass):
         S += getsizeof(self.Nt_tot)
         S += getsizeof(self.Nrev)
         S += getsizeof(self.Na_tot)
-        S += getsizeof(self.N0)
+        S += getsizeof(self.OP)
+        S += getsizeof(self.t_final)
         return S
 
     def as_dict(self, type_handle_ndarray=0, keep_function=False, **kwargs):
@@ -247,10 +355,50 @@ class Input(FrozenClass):
         Input_dict["Nt_tot"] = self.Nt_tot
         Input_dict["Nrev"] = self.Nrev
         Input_dict["Na_tot"] = self.Na_tot
-        Input_dict["N0"] = self.N0
+        if self.OP is None:
+            Input_dict["OP"] = None
+        else:
+            Input_dict["OP"] = self.OP.as_dict(
+                type_handle_ndarray=type_handle_ndarray,
+                keep_function=keep_function,
+                **kwargs
+            )
+        Input_dict["t_final"] = self.t_final
         # The class name is added to the dict for deserialisation purpose
         Input_dict["__class__"] = "Input"
         return Input_dict
+
+    def copy(self):
+        """Creates a deepcopy of the object"""
+
+        # Handle deepcopy of all the properties
+        if self.time is None:
+            time_val = None
+        else:
+            time_val = self.time.copy()
+        if self.angle is None:
+            angle_val = None
+        else:
+            angle_val = self.angle.copy()
+        Nt_tot_val = self.Nt_tot
+        Nrev_val = self.Nrev
+        Na_tot_val = self.Na_tot
+        if self.OP is None:
+            OP_val = None
+        else:
+            OP_val = self.OP.copy()
+        t_final_val = self.t_final
+        # Creates new object of the same type with the copied properties
+        obj_copy = type(self)(
+            time=time_val,
+            angle=angle_val,
+            Nt_tot=Nt_tot_val,
+            Nrev=Nrev_val,
+            Na_tot=Na_tot_val,
+            OP=OP_val,
+            t_final=t_final_val,
+        )
+        return obj_copy
 
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""
@@ -262,7 +410,9 @@ class Input(FrozenClass):
         self.Nt_tot = None
         self.Nrev = None
         self.Na_tot = None
-        self.N0 = None
+        if self.OP is not None:
+            self.OP._set_None()
+        self.t_final = None
 
     def _get_time(self):
         """getter of time"""
@@ -270,6 +420,8 @@ class Input(FrozenClass):
 
     def _set_time(self, value):
         """setter of time"""
+        ImportMatrix = import_class("pyleecan.Classes", "ImportMatrix", "time")
+        ImportMatrixVal = import_class("pyleecan.Classes", "ImportMatrixVal", "time")
         if isinstance(value, str):  # Load from file
             value = load_init_dict(value)[1]
         if isinstance(value, ndarray):
@@ -302,6 +454,8 @@ class Input(FrozenClass):
 
     def _set_angle(self, value):
         """setter of angle"""
+        ImportMatrix = import_class("pyleecan.Classes", "ImportMatrix", "angle")
+        ImportMatrixVal = import_class("pyleecan.Classes", "ImportMatrixVal", "angle")
         if isinstance(value, str):  # Load from file
             value = load_init_dict(value)[1]
         if isinstance(value, ndarray):
@@ -387,19 +541,54 @@ class Input(FrozenClass):
         """,
     )
 
-    def _get_N0(self):
-        """getter of N0"""
-        return self._N0
+    def _get_OP(self):
+        """getter of OP"""
+        return self._OP
 
-    def _set_N0(self, value):
-        """setter of N0"""
-        check_var("N0", value, "float")
-        self._N0 = value
+    def _set_OP(self, value):
+        """setter of OP"""
+        if isinstance(value, str):  # Load from file
+            try:
+                value = load_init_dict(value)[1]
+            except Exception as e:
+                self.get_logger().error(
+                    "Error while loading " + value + ", setting None instead"
+                )
+                value = None
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class("pyleecan.Classes", value.get("__class__"), "OP")
+            value = class_obj(init_dict=value)
+        elif type(value) is int and value == -1:  # Default constructor
+            OP = import_class("pyleecan.Classes", "OP", "OP")
+            value = OP()
+        check_var("OP", value, "OP")
+        self._OP = value
 
-    N0 = property(
-        fget=_get_N0,
-        fset=_set_N0,
-        doc=u"""Rotor speed
+        if self._OP is not None:
+            self._OP.parent = self
+
+    OP = property(
+        fget=_get_OP,
+        fset=_set_OP,
+        doc=u"""Operating Point
+
+        :Type: OP
+        """,
+    )
+
+    def _get_t_final(self):
+        """getter of t_final"""
+        return self._t_final
+
+    def _set_t_final(self, value):
+        """setter of t_final"""
+        check_var("t_final", value, "float")
+        self._t_final = value
+
+    t_final = property(
+        fget=_get_t_final,
+        fset=_set_t_final,
+        doc=u"""To enforce final time
 
         :Type: float
         """,

@@ -1,8 +1,4 @@
-# -*- coding: utf-8 -*-
-
-from matplotlib.patches import Patch, Polygon, Wedge
-from matplotlib.pyplot import axis, legend
-from numpy import array, exp, pi
+from matplotlib.patches import Patch, Wedge
 from ....Classes.LamSlotWind import LamSlotWind
 from ....Functions.init_fig import init_fig
 from ....definitions import config_dict
@@ -20,7 +16,10 @@ def plot(
     alpha=0,
     delta=0,
     is_edge_only=False,
+    edgecolor=None,
+    is_add_arrow=False,
     is_show_fig=True,
+    is_winding_connection=False,
 ):
     """Plot the Lamination in a matplotlib fig
 
@@ -42,21 +41,29 @@ def plot(
         Complex value for translation
     is_edge_only: bool
         To plot transparent Patches
+    edgecolor:
+        Color of the edges if is_edge_only=True
     is_show_fig : bool
         To call show at the end of the method
+    is_winding_connection : bool
+        True to display winding connections (not used)
 
     Returns
     -------
-    None
+    fig : Matplotlib.figure.Figure
+        Figure containing the plot
+    ax : Matplotlib.axes.Axes object
+        Axis containing the plot
     """
 
     # Lamination and ventilation ducts patches
-    (fig, axes, patch_leg, label_leg) = init_fig(fig=fig, ax=ax, shape="rectangle")
+    (fig, ax, patch_leg, label_leg) = init_fig(fig=fig, ax=ax, shape="rectangle")
 
     # Plot the lamination
     LamSlotWind.plot(
         self,
         fig=fig,
+        ax=ax,
         is_lam_only=is_lam_only,
         sym=sym,
         alpha=alpha,
@@ -66,7 +73,7 @@ def plot(
     )
 
     # init figure again to get updated label_leg and patch_leg
-    (fig, axes, patch_leg, label_leg) = init_fig(fig)
+    (fig, ax, patch_leg, label_leg) = init_fig(fig, ax=ax)
 
     # setup the patch of the short circuit ring if needed
     patches = list()
@@ -87,27 +94,28 @@ def plot(
             pass
 
     # Display the result
-    axes.set_xlabel("(m)")
-    axes.set_ylabel("(m)")
-    axes.set_title("Squirrel Cage Rotor")
+    ax.set_xlabel("(m)")
+    ax.set_ylabel("(m)")
+    ax.set_title("Squirrel Cage Rotor")
 
     # Axis Setup
-    axes.axis("equal")
+    ax.axis("equal")
     Lim = self.Rext * 1.5
-    axes.set_xlim(-Lim, Lim)
+    ax.set_xlim(-Lim, Lim)
     if sym == 1:
-        axes.set_ylim(-Lim, Lim)
+        ax.set_ylim(-Lim, Lim)
     else:
-        axes.set_ylim(-Lim * 0.3, Lim)
+        ax.set_ylim(-Lim * 0.3, Lim)
 
     if not is_lam_only:
         # Add the short ciruit ring to the fig
         for patch in patches:
-            axes.add_patch(patch)
+            ax.add_patch(patch)
         if "Short Circuit Ring" not in label_leg:
             patch_leg.append(Patch(color=SCR_COLOR))
             label_leg.append("Short Circuit Ring")
 
-        legend(patch_leg, label_leg)
+        ax.legend(patch_leg, label_leg)
     if is_show_fig:
         fig.show()
+    return fig, ax

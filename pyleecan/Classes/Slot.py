@@ -10,9 +10,9 @@ from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
-from ..Functions.copy import copy
 from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
+from copy import deepcopy
 from ._frozen import FrozenClass
 
 # Import all class method
@@ -78,6 +78,21 @@ except ImportError as error:
     comp_surface_active = error
 
 try:
+    from ..Methods.Slot.Slot.comp_surface_opening import comp_surface_opening
+except ImportError as error:
+    comp_surface_opening = error
+
+try:
+    from ..Methods.Slot.Slot.comp_surface_wedges import comp_surface_wedges
+except ImportError as error:
+    comp_surface_wedges = error
+
+try:
+    from ..Methods.Slot.Slot.comp_width import comp_width
+except ImportError as error:
+    comp_width = error
+
+try:
     from ..Methods.Slot.Slot.comp_width_opening import comp_width_opening
 except ImportError as error:
     comp_width_opening = error
@@ -113,6 +128,11 @@ except ImportError as error:
     get_surface_tooth = error
 
 try:
+    from ..Methods.Slot.Slot.get_surface_wedges import get_surface_wedges
+except ImportError as error:
+    get_surface_wedges = error
+
+try:
     from ..Methods.Slot.Slot.is_outwards import is_outwards
 except ImportError as error:
     is_outwards = error
@@ -127,7 +147,23 @@ try:
 except ImportError as error:
     plot_active = error
 
+try:
+    from ..Methods.Slot.Slot.set_label import set_label
+except ImportError as error:
+    set_label = error
 
+try:
+    from ..Methods.Slot.Slot.is_airgap_active import is_airgap_active
+except ImportError as error:
+    is_airgap_active = error
+
+try:
+    from ..Methods.Slot.Slot.is_full_pitch_active import is_full_pitch_active
+except ImportError as error:
+    is_full_pitch_active = error
+
+
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 
@@ -269,6 +305,39 @@ class Slot(FrozenClass):
         )
     else:
         comp_surface_active = comp_surface_active
+    # cf Methods.Slot.Slot.comp_surface_opening
+    if isinstance(comp_surface_opening, ImportError):
+        comp_surface_opening = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Slot method comp_surface_opening: "
+                    + str(comp_surface_opening)
+                )
+            )
+        )
+    else:
+        comp_surface_opening = comp_surface_opening
+    # cf Methods.Slot.Slot.comp_surface_wedges
+    if isinstance(comp_surface_wedges, ImportError):
+        comp_surface_wedges = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Slot method comp_surface_wedges: "
+                    + str(comp_surface_wedges)
+                )
+            )
+        )
+    else:
+        comp_surface_wedges = comp_surface_wedges
+    # cf Methods.Slot.Slot.comp_width
+    if isinstance(comp_width, ImportError):
+        comp_width = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use Slot method comp_width: " + str(comp_width))
+            )
+        )
+    else:
+        comp_width = comp_width
     # cf Methods.Slot.Slot.comp_width_opening
     if isinstance(comp_width_opening, ImportError):
         comp_width_opening = property(
@@ -342,6 +411,18 @@ class Slot(FrozenClass):
         )
     else:
         get_surface_tooth = get_surface_tooth
+    # cf Methods.Slot.Slot.get_surface_wedges
+    if isinstance(get_surface_wedges, ImportError):
+        get_surface_wedges = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Slot method get_surface_wedges: "
+                    + str(get_surface_wedges)
+                )
+            )
+        )
+    else:
+        get_surface_wedges = get_surface_wedges
     # cf Methods.Slot.Slot.is_outwards
     if isinstance(is_outwards, ImportError):
         is_outwards = property(
@@ -369,13 +450,46 @@ class Slot(FrozenClass):
         )
     else:
         plot_active = plot_active
-    # save and copy methods are available in all object
+    # cf Methods.Slot.Slot.set_label
+    if isinstance(set_label, ImportError):
+        set_label = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use Slot method set_label: " + str(set_label))
+            )
+        )
+    else:
+        set_label = set_label
+    # cf Methods.Slot.Slot.is_airgap_active
+    if isinstance(is_airgap_active, ImportError):
+        is_airgap_active = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Slot method is_airgap_active: " + str(is_airgap_active)
+                )
+            )
+        )
+    else:
+        is_airgap_active = is_airgap_active
+    # cf Methods.Slot.Slot.is_full_pitch_active
+    if isinstance(is_full_pitch_active, ImportError):
+        is_full_pitch_active = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Slot method is_full_pitch_active: "
+                    + str(is_full_pitch_active)
+                )
+            )
+        )
+    else:
+        is_full_pitch_active = is_full_pitch_active
+    # generic save method is available in all object
     save = save
-    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, Zs=36, init_dict=None, init_str=None):
+    def __init__(
+        self, Zs=36, wedge_mat=None, is_bore=True, init_dict=None, init_str=None
+    ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -393,9 +507,15 @@ class Slot(FrozenClass):
             # Overwrite default value with init_dict content
             if "Zs" in list(init_dict.keys()):
                 Zs = init_dict["Zs"]
+            if "wedge_mat" in list(init_dict.keys()):
+                wedge_mat = init_dict["wedge_mat"]
+            if "is_bore" in list(init_dict.keys()):
+                is_bore = init_dict["is_bore"]
         # Set the properties (value check and convertion are done in setter)
         self.parent = None
         self.Zs = Zs
+        self.wedge_mat = wedge_mat
+        self.is_bore = is_bore
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -409,6 +529,12 @@ class Slot(FrozenClass):
         else:
             Slot_str += "parent = " + str(type(self.parent)) + " object" + linesep
         Slot_str += "Zs = " + str(self.Zs) + linesep
+        if self.wedge_mat is not None:
+            tmp = self.wedge_mat.__str__().replace(linesep, linesep + "\t").rstrip("\t")
+            Slot_str += "wedge_mat = " + tmp
+        else:
+            Slot_str += "wedge_mat = None" + linesep + linesep
+        Slot_str += "is_bore = " + str(self.is_bore) + linesep
         return Slot_str
 
     def __eq__(self, other):
@@ -418,9 +544,13 @@ class Slot(FrozenClass):
             return False
         if other.Zs != self.Zs:
             return False
+        if other.wedge_mat != self.wedge_mat:
+            return False
+        if other.is_bore != self.is_bore:
+            return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -429,7 +559,36 @@ class Slot(FrozenClass):
             return ["type(" + name + ")"]
         diff_list = list()
         if other._Zs != self._Zs:
-            diff_list.append(name + ".Zs")
+            if is_add_value:
+                val_str = " (self=" + str(self._Zs) + ", other=" + str(other._Zs) + ")"
+                diff_list.append(name + ".Zs" + val_str)
+            else:
+                diff_list.append(name + ".Zs")
+        if (other.wedge_mat is None and self.wedge_mat is not None) or (
+            other.wedge_mat is not None and self.wedge_mat is None
+        ):
+            diff_list.append(name + ".wedge_mat None mismatch")
+        elif self.wedge_mat is not None:
+            diff_list.extend(
+                self.wedge_mat.compare(
+                    other.wedge_mat,
+                    name=name + ".wedge_mat",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
+            )
+        if other._is_bore != self._is_bore:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._is_bore)
+                    + ", other="
+                    + str(other._is_bore)
+                    + ")"
+                )
+                diff_list.append(name + ".is_bore" + val_str)
+            else:
+                diff_list.append(name + ".is_bore")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -439,6 +598,8 @@ class Slot(FrozenClass):
 
         S = 0  # Full size of the object
         S += getsizeof(self.Zs)
+        S += getsizeof(self.wedge_mat)
+        S += getsizeof(self.is_bore)
         return S
 
     def as_dict(self, type_handle_ndarray=0, keep_function=False, **kwargs):
@@ -454,14 +615,40 @@ class Slot(FrozenClass):
 
         Slot_dict = dict()
         Slot_dict["Zs"] = self.Zs
+        if self.wedge_mat is None:
+            Slot_dict["wedge_mat"] = None
+        else:
+            Slot_dict["wedge_mat"] = self.wedge_mat.as_dict(
+                type_handle_ndarray=type_handle_ndarray,
+                keep_function=keep_function,
+                **kwargs
+            )
+        Slot_dict["is_bore"] = self.is_bore
         # The class name is added to the dict for deserialisation purpose
         Slot_dict["__class__"] = "Slot"
         return Slot_dict
+
+    def copy(self):
+        """Creates a deepcopy of the object"""
+
+        # Handle deepcopy of all the properties
+        Zs_val = self.Zs
+        if self.wedge_mat is None:
+            wedge_mat_val = None
+        else:
+            wedge_mat_val = self.wedge_mat.copy()
+        is_bore_val = self.is_bore
+        # Creates new object of the same type with the copied properties
+        obj_copy = type(self)(Zs=Zs_val, wedge_mat=wedge_mat_val, is_bore=is_bore_val)
+        return obj_copy
 
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""
 
         self.Zs = None
+        if self.wedge_mat is not None:
+            self.wedge_mat._set_None()
+        self.is_bore = None
 
     def _get_Zs(self):
         """getter of Zs"""
@@ -479,5 +666,60 @@ class Slot(FrozenClass):
 
         :Type: int
         :min: 0
+        """,
+    )
+
+    def _get_wedge_mat(self):
+        """getter of wedge_mat"""
+        return self._wedge_mat
+
+    def _set_wedge_mat(self, value):
+        """setter of wedge_mat"""
+        if isinstance(value, str):  # Load from file
+            try:
+                value = load_init_dict(value)[1]
+            except Exception as e:
+                self.get_logger().error(
+                    "Error while loading " + value + ", setting None instead"
+                )
+                value = None
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class(
+                "pyleecan.Classes", value.get("__class__"), "wedge_mat"
+            )
+            value = class_obj(init_dict=value)
+        elif type(value) is int and value == -1:  # Default constructor
+            Material = import_class("pyleecan.Classes", "Material", "wedge_mat")
+            value = Material()
+        check_var("wedge_mat", value, "Material")
+        self._wedge_mat = value
+
+        if self._wedge_mat is not None:
+            self._wedge_mat.parent = self
+
+    wedge_mat = property(
+        fget=_get_wedge_mat,
+        fset=_set_wedge_mat,
+        doc=u"""Material for the wedge, if None no wedge
+
+        :Type: Material
+        """,
+    )
+
+    def _get_is_bore(self):
+        """getter of is_bore"""
+        return self._is_bore
+
+    def _set_is_bore(self, value):
+        """setter of is_bore"""
+        check_var("is_bore", value, "bool")
+        self._is_bore = value
+
+    is_bore = property(
+        fget=_get_is_bore,
+        fset=_set_is_bore,
+        doc=u"""True if the Slot is on the bore radius, False for yoke
+
+        :Type: bool
         """,
     )

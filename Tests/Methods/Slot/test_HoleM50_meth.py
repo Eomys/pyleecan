@@ -6,6 +6,7 @@ from pyleecan.Classes.HoleM50 import HoleM50
 from pyleecan.Classes.LamHole import LamHole
 from pyleecan.Classes.SurfLine import SurfLine
 from pyleecan.Classes.Magnet import Magnet
+from pyleecan.Methods.Slot.HoleM50 import *
 
 # For AlmostEqual
 DELTA = 1e-4
@@ -354,3 +355,91 @@ class Test_HoleM50_meth(object):
             H3=6.8e-3,
         )
         assert hole.comp_surface_magnet_id(3) == 0
+
+    def test_check(self):
+        """Check that the check method can detect incorrect definitions"""
+        # Prius config
+        lam = LamHole(is_internal=True, Rext=80.2e-3, Rint=55.32e-3)
+        lam.hole = list()
+        lam.hole.append(
+            HoleM50(
+                Zh=8,
+                W0=42e-3,
+                W1=0e-3,
+                W2=0e-3,
+                W3=14e-3,
+                W4=18.9e-3,
+                H0=10.96e-3,
+                H1=1.5e-3,
+                H2=1e-3,
+                H3=6.5e-3,
+                H4=0,
+            )
+        )
+
+        # Hole is correctly defined by default
+        lam.hole[0].check()
+        # Check all None parameters
+        with pytest.raises(S50_NoneError) as context:
+            test_obj = lam.copy()
+            test_obj.hole[0].W0 = None
+            test_obj.hole[0].check()
+        with pytest.raises(S50_NoneError) as context:
+            test_obj = lam.copy()
+            test_obj.hole[0].W1 = None
+            test_obj.hole[0].check()
+        with pytest.raises(S50_NoneError) as context:
+            test_obj = lam.copy()
+            test_obj.hole[0].W2 = None
+            test_obj.hole[0].check()
+        with pytest.raises(S50_NoneError) as context:
+            test_obj = lam.copy()
+            test_obj.hole[0].W3 = None
+            test_obj.hole[0].check()
+        with pytest.raises(S50_NoneError) as context:
+            test_obj = lam.copy()
+            test_obj.hole[0].W4 = None
+            test_obj.hole[0].check()
+        with pytest.raises(S50_NoneError) as context:
+            test_obj = lam.copy()
+            test_obj.hole[0].H0 = None
+            test_obj.hole[0].check()
+        with pytest.raises(S50_NoneError) as context:
+            test_obj = lam.copy()
+            test_obj.hole[0].H1 = None
+            test_obj.hole[0].check()
+        with pytest.raises(S50_NoneError) as context:
+            test_obj = lam.copy()
+            test_obj.hole[0].H2 = None
+            test_obj.hole[0].check()
+        with pytest.raises(S50_NoneError) as context:
+            test_obj = lam.copy()
+            test_obj.hole[0].H3 = None
+            test_obj.hole[0].check()
+        with pytest.raises(S50_NoneError) as context:
+            test_obj = lam.copy()
+            test_obj.hole[0].H4 = None
+            test_obj.hole[0].check()
+        # Wrong definition
+        with pytest.raises(S50_W01CheckError) as context:
+            test_obj = lam.copy()
+            test_obj.hole[0].W0 = test_obj.hole[0].W1 * 0.8
+            test_obj.hole[0].check()
+        with pytest.raises(S50_H23CheckError) as context:
+            test_obj = lam.copy()
+            test_obj.hole[0].H3 = test_obj.hole[0].H2 * 0.8
+            test_obj.hole[0].check()
+        with pytest.raises(S50_H01CheckError) as context:
+            test_obj = lam.copy()
+            test_obj.hole[0].H0 = test_obj.hole[0].H1 * 0.8
+            test_obj.hole[0].check()
+        with pytest.raises(S50_W3CheckError) as context:
+            test_obj = lam.copy()
+            test_obj.hole[0].W3 = 0.1 * 1e-3
+            test_obj.hole[0].check()
+
+
+if __name__ == "__main__":
+    a = Test_HoleM50_meth()
+    a.test_check()
+    print("Done")

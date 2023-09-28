@@ -10,9 +10,9 @@ from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
-from ..Functions.copy import copy
 from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
+from copy import deepcopy
 from .Output import Output
 
 # Import all class method
@@ -143,18 +143,8 @@ except ImportError as error:
     remove = error
 
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
-from .ParamExplorer import ParamExplorer
-from .Output import Output
-from .DataKeeper import DataKeeper
-from .Simulation import Simulation
-from .OutGeo import OutGeo
-from .OutElec import OutElec
-from .OutMag import OutMag
-from .OutStruct import OutStruct
-from .OutPost import OutPost
-from .OutForce import OutForce
-from .OutLoss import OutLoss
 
 
 class XOutput(Output):
@@ -406,9 +396,8 @@ class XOutput(Output):
         )
     else:
         remove = remove
-    # save and copy methods are available in all object
+    # generic save method is available in all object
     save = save
-    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -569,7 +558,7 @@ class XOutput(Output):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -579,7 +568,11 @@ class XOutput(Output):
         diff_list = list()
 
         # Check the properties inherited from Output
-        diff_list.extend(super(XOutput, self).compare(other, name=name))
+        diff_list.extend(
+            super(XOutput, self).compare(
+                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
+            )
+        )
         if (
             other.paramexplorer_list is None and self.paramexplorer_list is not None
         ) or (other.paramexplorer_list is not None and self.paramexplorer_list is None):
@@ -594,6 +587,8 @@ class XOutput(Output):
                     self.paramexplorer_list[ii].compare(
                         other.paramexplorer_list[ii],
                         name=name + ".paramexplorer_list[" + str(ii) + "]",
+                        ignore_list=ignore_list,
+                        is_add_value=is_add_value,
                     )
                 )
         if (other.output_list is None and self.output_list is not None) or (
@@ -610,6 +605,8 @@ class XOutput(Output):
                     self.output_list[ii].compare(
                         other.output_list[ii],
                         name=name + ".output_list[" + str(ii) + "]",
+                        ignore_list=ignore_list,
+                        is_add_value=is_add_value,
                     )
                 )
         if (other.xoutput_dict is None and self.xoutput_dict is not None) or (
@@ -624,21 +621,49 @@ class XOutput(Output):
             for key in self.xoutput_dict:
                 diff_list.extend(
                     self.xoutput_dict[key].compare(
-                        other.xoutput_dict[key], name=name + ".xoutput_dict"
+                        other.xoutput_dict[key],
+                        name=name + ".xoutput_dict[" + str(key) + "]",
+                        ignore_list=ignore_list,
+                        is_add_value=is_add_value,
                     )
                 )
         if other._nb_simu != self._nb_simu:
-            diff_list.append(name + ".nb_simu")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._nb_simu)
+                    + ", other="
+                    + str(other._nb_simu)
+                    + ")"
+                )
+                diff_list.append(name + ".nb_simu" + val_str)
+            else:
+                diff_list.append(name + ".nb_simu")
         if (other.xoutput_ref is None and self.xoutput_ref is not None) or (
             other.xoutput_ref is not None and self.xoutput_ref is None
         ):
             diff_list.append(name + ".xoutput_ref None mismatch")
         elif self.xoutput_ref is not None:
             diff_list.extend(
-                self.xoutput_ref.compare(other.xoutput_ref, name=name + ".xoutput_ref")
+                self.xoutput_ref.compare(
+                    other.xoutput_ref,
+                    name=name + ".xoutput_ref",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
             )
         if other._xoutput_ref_index != self._xoutput_ref_index:
-            diff_list.append(name + ".xoutput_ref_index")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._xoutput_ref_index)
+                    + ", other="
+                    + str(other._xoutput_ref_index)
+                    + ")"
+                )
+                diff_list.append(name + ".xoutput_ref_index" + val_str)
+            else:
+                diff_list.append(name + ".xoutput_ref_index")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -739,6 +764,89 @@ class XOutput(Output):
         XOutput_dict["__class__"] = "XOutput"
         return XOutput_dict
 
+    def copy(self):
+        """Creates a deepcopy of the object"""
+
+        # Handle deepcopy of all the properties
+        if self.paramexplorer_list is None:
+            paramexplorer_list_val = None
+        else:
+            paramexplorer_list_val = list()
+            for obj in self.paramexplorer_list:
+                paramexplorer_list_val.append(obj.copy())
+        if self.output_list is None:
+            output_list_val = None
+        else:
+            output_list_val = list()
+            for obj in self.output_list:
+                output_list_val.append(obj.copy())
+        if self.xoutput_dict is None:
+            xoutput_dict_val = None
+        else:
+            xoutput_dict_val = dict()
+            for key, obj in self.xoutput_dict.items():
+                xoutput_dict_val[key] = obj.copy()
+        nb_simu_val = self.nb_simu
+        if self.xoutput_ref is None:
+            xoutput_ref_val = None
+        else:
+            xoutput_ref_val = self.xoutput_ref.copy()
+        xoutput_ref_index_val = self.xoutput_ref_index
+        if self.simu is None:
+            simu_val = None
+        else:
+            simu_val = self.simu.copy()
+        path_result_val = self.path_result
+        if self.geo is None:
+            geo_val = None
+        else:
+            geo_val = self.geo.copy()
+        if self.elec is None:
+            elec_val = None
+        else:
+            elec_val = self.elec.copy()
+        if self.mag is None:
+            mag_val = None
+        else:
+            mag_val = self.mag.copy()
+        if self.struct is None:
+            struct_val = None
+        else:
+            struct_val = self.struct.copy()
+        if self.post is None:
+            post_val = None
+        else:
+            post_val = self.post.copy()
+        logger_name_val = self.logger_name
+        if self.force is None:
+            force_val = None
+        else:
+            force_val = self.force.copy()
+        if self.loss is None:
+            loss_val = None
+        else:
+            loss_val = self.loss.copy()
+        # Creates new object of the same type with the copied properties
+        obj_copy = type(self)(
+            paramexplorer_list=paramexplorer_list_val,
+            output_list=output_list_val,
+            xoutput_dict=xoutput_dict_val,
+            nb_simu=nb_simu_val,
+            xoutput_ref=xoutput_ref_val,
+            xoutput_ref_index=xoutput_ref_index_val,
+            simu=simu_val,
+            path_result=path_result_val,
+            geo=geo_val,
+            elec=elec_val,
+            mag=mag_val,
+            struct=struct_val,
+            post=post_val,
+            logger_name=logger_name_val,
+            force=force_val,
+            loss=loss_val,
+        )
+        return obj_copy
+
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""
 
@@ -764,6 +872,15 @@ class XOutput(Output):
         """setter of paramexplorer_list"""
         if type(value) is list:
             for ii, obj in enumerate(value):
+                if isinstance(obj, str):  # Load from file
+                    try:
+                        obj = load_init_dict(obj)[1]
+                    except Exception as e:
+                        self.get_logger().error(
+                            "Error while loading " + obj + ", setting None instead"
+                        )
+                        obj = None
+                        value[ii] = None
                 if type(obj) is dict:
                     class_obj = import_class(
                         "pyleecan.Classes", obj.get("__class__"), "paramexplorer_list"
@@ -797,6 +914,15 @@ class XOutput(Output):
         """setter of output_list"""
         if type(value) is list:
             for ii, obj in enumerate(value):
+                if isinstance(obj, str):  # Load from file
+                    try:
+                        obj = load_init_dict(obj)[1]
+                    except Exception as e:
+                        self.get_logger().error(
+                            "Error while loading " + obj + ", setting None instead"
+                        )
+                        obj = None
+                        value[ii] = None
                 if type(obj) is dict:
                     class_obj = import_class(
                         "pyleecan.Classes", obj.get("__class__"), "output_list"
@@ -830,6 +956,15 @@ class XOutput(Output):
         """setter of xoutput_dict"""
         if type(value) is dict:
             for key, obj in value.items():
+                if isinstance(obj, str):  # Load from file
+                    try:
+                        obj = load_init_dict(obj)[1]
+                    except Exception as e:
+                        self.get_logger().error(
+                            "Error while loading " + obj + ", setting None instead"
+                        )
+                        obj = None
+                        value[key] = None
                 if type(obj) is dict:
                     class_obj = import_class(
                         "pyleecan.Classes", obj.get("__class__"), "xoutput_dict"
@@ -875,13 +1010,20 @@ class XOutput(Output):
     def _set_xoutput_ref(self, value):
         """setter of xoutput_ref"""
         if isinstance(value, str):  # Load from file
-            value = load_init_dict(value)[1]
+            try:
+                value = load_init_dict(value)[1]
+            except Exception as e:
+                self.get_logger().error(
+                    "Error while loading " + value + ", setting None instead"
+                )
+                value = None
         if isinstance(value, dict) and "__class__" in value:
             class_obj = import_class(
                 "pyleecan.Classes", value.get("__class__"), "xoutput_ref"
             )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
+            Output = import_class("pyleecan.Classes", "Output", "xoutput_ref")
             value = Output()
         check_var("xoutput_ref", value, "Output")
         self._xoutput_ref = value

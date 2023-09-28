@@ -1,2 +1,5 @@
-Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constante Name,Constante Value,Description classe,Classe fille
-unit,-,Unit options,0,Unit,,,,,GUIOption,,,VERSION,1,,
+Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,as_dict Type
+unit,-,Unit options,0,Unit,,,
+,
+Package,Inherit,Methods,Constante Name,Constante Value,Description classe,Classe fille
+GUIOption,,,VERSION,1,,

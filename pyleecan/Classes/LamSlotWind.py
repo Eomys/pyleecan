@@ -10,9 +10,9 @@ from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
-from ..Functions.copy import copy
 from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
+from copy import deepcopy
 from .LamSlot import LamSlot
 
 # Import all class method
@@ -98,9 +98,9 @@ except ImportError as error:
     comp_mmf_unit = error
 
 try:
-    from ..Methods.Machine.LamSlotWind.comp_rot_dir import comp_rot_dir
+    from ..Methods.Machine.LamSlotWind.comp_mmf_dir import comp_mmf_dir
 except ImportError as error:
-    comp_rot_dir = error
+    comp_mmf_dir = error
 
 try:
     from ..Methods.Machine.LamSlotWind.comp_lengths_winding import comp_lengths_winding
@@ -113,9 +113,11 @@ except ImportError as error:
     comp_number_phase_eq = error
 
 try:
-    from ..Methods.Machine.LamSlotWind.comp_periodicity import comp_periodicity
+    from ..Methods.Machine.LamSlotWind.comp_periodicity_spatial import (
+        comp_periodicity_spatial,
+    )
 except ImportError as error:
-    comp_periodicity = error
+    comp_periodicity_spatial = error
 
 try:
     from ..Methods.Machine.LamSlotWind.set_pole_pair_number import set_pole_pair_number
@@ -123,14 +125,8 @@ except ImportError as error:
     set_pole_pair_number = error
 
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
-from .Winding import Winding
-from .Slot import Slot
-from .Material import Material
-from .Hole import Hole
-from .Notch import Notch
-from .Skew import Skew
-from .Bore import Bore
 
 
 class LamSlotWind(LamSlot):
@@ -318,17 +314,17 @@ class LamSlotWind(LamSlot):
         )
     else:
         comp_mmf_unit = comp_mmf_unit
-    # cf Methods.Machine.LamSlotWind.comp_rot_dir
-    if isinstance(comp_rot_dir, ImportError):
-        comp_rot_dir = property(
+    # cf Methods.Machine.LamSlotWind.comp_mmf_dir
+    if isinstance(comp_mmf_dir, ImportError):
+        comp_mmf_dir = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use LamSlotWind method comp_rot_dir: " + str(comp_rot_dir)
+                    "Can't use LamSlotWind method comp_mmf_dir: " + str(comp_mmf_dir)
                 )
             )
         )
     else:
-        comp_rot_dir = comp_rot_dir
+        comp_mmf_dir = comp_mmf_dir
     # cf Methods.Machine.LamSlotWind.comp_lengths_winding
     if isinstance(comp_lengths_winding, ImportError):
         comp_lengths_winding = property(
@@ -353,18 +349,18 @@ class LamSlotWind(LamSlot):
         )
     else:
         comp_number_phase_eq = comp_number_phase_eq
-    # cf Methods.Machine.LamSlotWind.comp_periodicity
-    if isinstance(comp_periodicity, ImportError):
-        comp_periodicity = property(
+    # cf Methods.Machine.LamSlotWind.comp_periodicity_spatial
+    if isinstance(comp_periodicity_spatial, ImportError):
+        comp_periodicity_spatial = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use LamSlotWind method comp_periodicity: "
-                    + str(comp_periodicity)
+                    "Can't use LamSlotWind method comp_periodicity_spatial: "
+                    + str(comp_periodicity_spatial)
                 )
             )
         )
     else:
-        comp_periodicity = comp_periodicity
+        comp_periodicity_spatial = comp_periodicity_spatial
     # cf Methods.Machine.LamSlotWind.set_pole_pair_number
     if isinstance(set_pole_pair_number, ImportError):
         set_pole_pair_number = property(
@@ -377,9 +373,8 @@ class LamSlotWind(LamSlot):
         )
     else:
         set_pole_pair_number = set_pole_pair_number
-    # save and copy methods are available in all object
+    # generic save method is available in all object
     save = save
-    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -400,8 +395,8 @@ class LamSlotWind(LamSlot):
         axial_vent=-1,
         notch=-1,
         skew=None,
-        yoke_notch=-1,
         bore=None,
+        yoke=None,
         init_dict=None,
         init_str=None,
     ):
@@ -450,10 +445,10 @@ class LamSlotWind(LamSlot):
                 notch = init_dict["notch"]
             if "skew" in list(init_dict.keys()):
                 skew = init_dict["skew"]
-            if "yoke_notch" in list(init_dict.keys()):
-                yoke_notch = init_dict["yoke_notch"]
             if "bore" in list(init_dict.keys()):
                 bore = init_dict["bore"]
+            if "yoke" in list(init_dict.keys()):
+                yoke = init_dict["yoke"]
         # Set the properties (value check and convertion are done in setter)
         self.Ksfill = Ksfill
         self.winding = winding
@@ -472,8 +467,8 @@ class LamSlotWind(LamSlot):
             axial_vent=axial_vent,
             notch=notch,
             skew=skew,
-            yoke_notch=yoke_notch,
             bore=bore,
+            yoke=yoke,
         )
         # The class is frozen (in LamSlot init), for now it's impossible to
         # add new properties
@@ -507,7 +502,7 @@ class LamSlotWind(LamSlot):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -517,16 +512,42 @@ class LamSlotWind(LamSlot):
         diff_list = list()
 
         # Check the properties inherited from LamSlot
-        diff_list.extend(super(LamSlotWind, self).compare(other, name=name))
-        if other._Ksfill != self._Ksfill:
-            diff_list.append(name + ".Ksfill")
+        diff_list.extend(
+            super(LamSlotWind, self).compare(
+                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
+            )
+        )
+        if (
+            other._Ksfill is not None
+            and self._Ksfill is not None
+            and isnan(other._Ksfill)
+            and isnan(self._Ksfill)
+        ):
+            pass
+        elif other._Ksfill != self._Ksfill:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._Ksfill)
+                    + ", other="
+                    + str(other._Ksfill)
+                    + ")"
+                )
+                diff_list.append(name + ".Ksfill" + val_str)
+            else:
+                diff_list.append(name + ".Ksfill")
         if (other.winding is None and self.winding is not None) or (
             other.winding is not None and self.winding is None
         ):
             diff_list.append(name + ".winding None mismatch")
         elif self.winding is not None:
             diff_list.extend(
-                self.winding.compare(other.winding, name=name + ".winding")
+                self.winding.compare(
+                    other.winding,
+                    name=name + ".winding",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
             )
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
@@ -574,6 +595,77 @@ class LamSlotWind(LamSlot):
         LamSlotWind_dict["__class__"] = "LamSlotWind"
         return LamSlotWind_dict
 
+    def copy(self):
+        """Creates a deepcopy of the object"""
+
+        # Handle deepcopy of all the properties
+        Ksfill_val = self.Ksfill
+        if self.winding is None:
+            winding_val = None
+        else:
+            winding_val = self.winding.copy()
+        if self.slot is None:
+            slot_val = None
+        else:
+            slot_val = self.slot.copy()
+        L1_val = self.L1
+        if self.mat_type is None:
+            mat_type_val = None
+        else:
+            mat_type_val = self.mat_type.copy()
+        Nrvd_val = self.Nrvd
+        Wrvd_val = self.Wrvd
+        Kf1_val = self.Kf1
+        is_internal_val = self.is_internal
+        Rint_val = self.Rint
+        Rext_val = self.Rext
+        is_stator_val = self.is_stator
+        if self.axial_vent is None:
+            axial_vent_val = None
+        else:
+            axial_vent_val = list()
+            for obj in self.axial_vent:
+                axial_vent_val.append(obj.copy())
+        if self.notch is None:
+            notch_val = None
+        else:
+            notch_val = list()
+            for obj in self.notch:
+                notch_val.append(obj.copy())
+        if self.skew is None:
+            skew_val = None
+        else:
+            skew_val = self.skew.copy()
+        if self.bore is None:
+            bore_val = None
+        else:
+            bore_val = self.bore.copy()
+        if self.yoke is None:
+            yoke_val = None
+        else:
+            yoke_val = self.yoke.copy()
+        # Creates new object of the same type with the copied properties
+        obj_copy = type(self)(
+            Ksfill=Ksfill_val,
+            winding=winding_val,
+            slot=slot_val,
+            L1=L1_val,
+            mat_type=mat_type_val,
+            Nrvd=Nrvd_val,
+            Wrvd=Wrvd_val,
+            Kf1=Kf1_val,
+            is_internal=is_internal_val,
+            Rint=Rint_val,
+            Rext=Rext_val,
+            is_stator=is_stator_val,
+            axial_vent=axial_vent_val,
+            notch=notch_val,
+            skew=skew_val,
+            bore=bore_val,
+            yoke=yoke_val,
+        )
+        return obj_copy
+
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""
 
@@ -610,13 +702,20 @@ class LamSlotWind(LamSlot):
     def _set_winding(self, value):
         """setter of winding"""
         if isinstance(value, str):  # Load from file
-            value = load_init_dict(value)[1]
+            try:
+                value = load_init_dict(value)[1]
+            except Exception as e:
+                self.get_logger().error(
+                    "Error while loading " + value + ", setting None instead"
+                )
+                value = None
         if isinstance(value, dict) and "__class__" in value:
             class_obj = import_class(
                 "pyleecan.Classes", value.get("__class__"), "winding"
             )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
+            Winding = import_class("pyleecan.Classes", "Winding", "winding")
             value = Winding()
         check_var("winding", value, "Winding")
         self._winding = value

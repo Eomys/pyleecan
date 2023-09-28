@@ -16,4 +16,4 @@ def comp_height(self):
 
     """
 
-    return self.Wins_cond
+    return self.comp_width()

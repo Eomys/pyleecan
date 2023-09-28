@@ -17,13 +17,13 @@ def comp_height_active(self):
         Height of the winding area [m]
     """
 
-    Rbo = self.get_Rbo()
-    alpha = self.comp_angle_opening()
+    if self.is_H0_bore is None:
+        self.is_H0_bore = True  # Set default value
 
-    Z1 = Rbo * exp(-1j * alpha / 2)
-    Z2 = Rbo * exp(1j * alpha / 2)
-    if self.is_outwards():
-        Zbot = (Z1 + Z2) / 2 + self.H0
+    if self.is_H0_bore:
+        return self.H0
     else:
-        Zbot = (Z1 + Z2) / 2 - self.H0
-    return abs(Rbo - abs(Zbot))
+        point_dict = self._comp_point_coordinate()
+        ZM = point_dict["ZM"]
+        Rbo = self.get_Rbo()
+        return abs(Rbo - abs(ZM))

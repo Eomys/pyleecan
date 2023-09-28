@@ -14,6 +14,8 @@ from ..labels import (
     HOLEV_LAB,
     WIND_LAB,
     NOTCH_LAB,
+    SOP_LAB,
+    WEDGE_LAB,
 )
 
 
@@ -34,73 +36,88 @@ def get_mesh_param(label_dict, FEMM_dict):
     mesh_dict = dict()
 
     # Default automesh except airgap
-    mesh_dict["automesh"] = FEMM_dict["automesh"]
+    mesh_dict["automesh"] = FEMM_dict["mesh"]["automesh"]
+    # Get the mesh sizes related to the lamination label
+    if label_dict["lam_label"] != "None":
+        lam_mesh_dict = FEMM_dict["mesh"][label_dict["lam_label"]]
+    else:
+        lam_mesh_dict = None
+    maxelementsize = FEMM_dict["mesh"]["maxelementsize"]
+    meshsize_air = FEMM_dict["mesh"]["meshsize_air"]
 
-    if LAM_LAB in label_dict["surf_type"] and STATOR_LAB in label_dict["lam_type"]:
-        # Stator Lamination
+    # Lamination
+    if LAM_LAB in label_dict["surf_type"]:
         if BORE_LAB in label_dict["surf_type"]:
-            mesh_dict["element_size"] = FEMM_dict["elementsize_slotS"]
-            mesh_dict["meshsize"] = FEMM_dict["meshsize_slotS"]
+            mesh_dict["element_size"] = FEMM_dict["mesh"]["elementsize_airgap"]
+            mesh_dict["meshsize"] = FEMM_dict["mesh"]["meshsize_airgap"]
         else:  # Yoke or other lines
-            mesh_dict["element_size"] = FEMM_dict["elementsize_yokeS"]
-            mesh_dict["meshsize"] = FEMM_dict["meshsize_yokeS"]
-        mesh_dict["group"] = FEMM_dict["groups"]["GROUP_SC"]
-    elif LAM_LAB in label_dict["surf_type"] and ROTOR_LAB in label_dict["lam_type"]:
-        # Rotor Lamination
-        if BORE_LAB in label_dict["surf_type"]:
-            mesh_dict["element_size"] = FEMM_dict["elementsize_slotR"]
-            mesh_dict["meshsize"] = FEMM_dict["meshsize_slotR"]
-        else:  # Yoke or other lines
-            mesh_dict["element_size"] = FEMM_dict["elementsize_yokeR"]
-            mesh_dict["meshsize"] = FEMM_dict["meshsize_yokeR"]
-        mesh_dict["group"] = FEMM_dict["groups"]["GROUP_RC"]
-    elif VENT_LAB in label_dict["surf_type"]:  # Ventilation
-        mesh_dict["element_size"] = FEMM_dict["maxelementsize"]
-        mesh_dict["meshsize"] = FEMM_dict["meshsize_air"]
+            mesh_dict["element_size"] = lam_mesh_dict["elementsize_yoke"]
+            mesh_dict["meshsize"] = lam_mesh_dict["meshsize_yoke"]
+        if STATOR_LAB in label_dict["lam_type"]:
+            mesh_dict["group"] = FEMM_dict["groups"]["GROUP_SC"]
+        elif ROTOR_LAB in label_dict["lam_type"]:
+            mesh_dict["group"] = FEMM_dict["groups"]["GROUP_RC"]
+    # Ventilation
+    elif VENT_LAB in label_dict["surf_type"]:
+        mesh_dict["element_size"] = maxelementsize
+        mesh_dict["meshsize"] = meshsize_air
         if STATOR_LAB in label_dict["lam_type"]:
             mesh_dict["group"] = FEMM_dict["groups"]["GROUP_SV"]
         else:  # if the Ventilation is on the Rotor
             mesh_dict["group"] = FEMM_dict["groups"]["GROUP_RV"]
+    # Hole Air zone
     elif HOLEV_LAB in label_dict["surf_type"]:
-        mesh_dict["element_size"] = FEMM_dict["maxelementsize"]
-        mesh_dict["meshsize"] = FEMM_dict["meshsize_air"]
+        mesh_dict["element_size"] = maxelementsize
+        mesh_dict["meshsize"] = meshsize_air
         if STATOR_LAB in label_dict["lam_type"]:  # if the Hole is on the Stator
             mesh_dict["group"] = FEMM_dict["groups"]["GROUP_SH"]
         else:  # if the Hole is on the Rotor
             mesh_dict["group"] = FEMM_dict["groups"]["GROUP_RH"]
+    # Magnet or HoleMagnet
     elif HOLEM_LAB in label_dict["surf_type"] or MAG_LAB in label_dict["surf_type"]:
-        # Magnet or HoleMagnet
+        mesh_dict["element_size"] = lam_mesh_dict["elementsize_magnet"]
+        mesh_dict["meshsize"] = lam_mesh_dict["meshsize_magnet"]
         if STATOR_LAB in label_dict["lam_type"]:  # if the Magnet is on the Stator
-            mesh_dict["element_size"] = FEMM_dict["elementsize_magnetS"]
-            mesh_dict["meshsize"] = FEMM_dict["meshsize_magnetS"]
             mesh_dict["group"] = FEMM_dict["groups"]["GROUP_SM"]
         else:  # if the Magnet is on the Rotor
-            mesh_dict["element_size"] = FEMM_dict["elementsize_magnetR"]
-            mesh_dict["meshsize"] = FEMM_dict["meshsize_magnetR"]
             mesh_dict["group"] = FEMM_dict["groups"]["GROUP_RM"]
+    # Winding or Bar
     elif WIND_LAB in label_dict["surf_type"] or BAR_LAB in label_dict["surf_type"]:
-        # Winding
+        mesh_dict["element_size"] = lam_mesh_dict["elementsize_slot"]
+        mesh_dict["meshsize"] = lam_mesh_dict["meshsize_slot"]
         if STATOR_LAB in label_dict["lam_type"]:  # if the winding is on the Stator
-            mesh_dict["element_size"] = FEMM_dict["elementsize_slotS"]
-            mesh_dict["meshsize"] = FEMM_dict["meshsize_slotS"]
             mesh_dict["group"] = FEMM_dict["groups"]["GROUP_SW"]
         else:  # if the winding is on the Rotor
-            mesh_dict["element_size"] = FEMM_dict["elementsize_slotR"]
-            mesh_dict["meshsize"] = FEMM_dict["meshsize_slotR"]
             mesh_dict["group"] = FEMM_dict["groups"]["GROUP_RW"]
-    elif NOTCH_LAB in label_dict["surf_type"]:  # Notches
+    # Slot opening
+    elif SOP_LAB in label_dict["surf_type"]:
+        mesh_dict["element_size"] = lam_mesh_dict["elementsize_slot"]
+        mesh_dict["meshsize"] = lam_mesh_dict["meshsize_slot"]
+        if STATOR_LAB in label_dict["lam_type"]:  # if the opening is on the Stator
+            mesh_dict["group"] = FEMM_dict["groups"]["GROUP_SSI"]
+        else:
+            mesh_dict["group"] = FEMM_dict["groups"]["GROUP_RSI"]
+    # Slot Notches
+    elif NOTCH_LAB in label_dict["surf_type"]:
+        mesh_dict["element_size"] = lam_mesh_dict["elementsize_slot"]
+        mesh_dict["meshsize"] = lam_mesh_dict["meshsize_slot"]
         if STATOR_LAB in label_dict["lam_type"]:  # if the notch is on the Stator
-            mesh_dict["element_size"] = FEMM_dict["elementsize_slotS"]
-            mesh_dict["meshsize"] = FEMM_dict["meshsize_slotS"]
             mesh_dict["group"] = FEMM_dict["groups"]["GROUP_SN"]
         else:  # if the notch is on the Rotor
-            mesh_dict["element_size"] = FEMM_dict["elementsize_slotR"]
-            mesh_dict["meshsize"] = FEMM_dict["meshsize_slotR"]
             mesh_dict["group"] = FEMM_dict["groups"]["GROUP_RN"]
+    # Slot Wedges
+    elif WEDGE_LAB in label_dict["surf_type"]:
+        mesh_dict["element_size"] = lam_mesh_dict["elementsize_slot"]
+        mesh_dict["meshsize"] = lam_mesh_dict["meshsize_slot"]
+        if STATOR_LAB in label_dict["lam_type"]:
+            mesh_dict["group"] = FEMM_dict["groups"]["GROUP_SWE"]
+        else:
+            mesh_dict["group"] = FEMM_dict["groups"]["GROUP_RWE"]
+    # Sliding Band / Airgap
     elif SLID_LAB in label_dict["surf_type"] or AIRGAP_LAB in label_dict["surf_type"]:
-        mesh_dict["automesh"] = FEMM_dict["automesh_airgap"]
-        mesh_dict["element_size"] = FEMM_dict["elementsize_airgap"]
-        mesh_dict["meshsize"] = FEMM_dict["meshsize_airgap"]
+        mesh_dict["automesh"] = FEMM_dict["mesh"]["automesh_airgap"]
+        mesh_dict["element_size"] = FEMM_dict["mesh"]["elementsize_airgap"]
+        mesh_dict["meshsize"] = FEMM_dict["mesh"]["meshsize_airgap"]
         mesh_dict["group"] = FEMM_dict["groups"]["GROUP_AG"]
     elif NO_MESH_LAB in label_dict["surf_type"]:
         mesh_dict["automesh"] = 0
@@ -109,11 +126,11 @@ def get_mesh_param(label_dict, FEMM_dict):
         mesh_dict["group"] = FEMM_dict["groups"]["GROUP_AG"]
     elif STATOR_LAB in label_dict["lam_type"]:
         # if label don't belong to any of the other groups
-        mesh_dict["element_size"] = FEMM_dict["maxelementsize"]
+        mesh_dict["element_size"] = maxelementsize
         mesh_dict["group"] = FEMM_dict["groups"]["GROUP_SC"]
     elif ROTOR_LAB in label_dict["lam_type"]:
         # if label don't belong to any of the other groups
-        mesh_dict["element_size"] = FEMM_dict["maxelementsize"]
+        mesh_dict["element_size"] = maxelementsize
         mesh_dict["group"] = FEMM_dict["groups"]["GROUP_RC"]
     else:
         raise Exception(

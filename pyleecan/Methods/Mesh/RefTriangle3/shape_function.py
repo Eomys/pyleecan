@@ -8,7 +8,6 @@ def shape_function(self, points, nb_pt):
     # nb_pt = points.shape[0]
     values = np.zeros([nb_pt, 1, 3], dtype=float)
     for i in range(nb_pt):
-
         if nb_pt == 1:
             [x, y] = points[0:2]
         else:

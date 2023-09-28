@@ -6,7 +6,7 @@ from scipy.optimize import curve_fit, root_scalar
 
 def fit_model(self, BH):
     """
-    Fit the BH model paramaters based on input B(H) curve of the material, and perform extrapolation.
+    Fit the BH model parameters based on input B(H) curve of the material, and perform extrapolation.
 
     Parameters
     ----------
@@ -62,7 +62,6 @@ def fit_model(self, BH):
 
     # Either imposed from method call or calculated from Bmax
     if Hmax is not None:
-
         added_H = np.linspace(H[-1], Hmax, iteration)
         new_H = np.hstack((H, added_H))
         new_B = self.BH_func(new_H, param1, param2)

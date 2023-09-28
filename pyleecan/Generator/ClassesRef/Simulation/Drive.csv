@@ -1,4 +1,7 @@
-Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constante Name,Constante Value,Description classe,Classe fille
-Umax,V,Maximum RMS voltage of the Drive,,float,800,0,,,Simulation,,,VERSION,1,Abstract Drive class,DriveWave
-Imax,A,Maximum RMS current of the Drive,,float,800,0,,,,,,,,,
-is_current,-,"True to generate current waveform, False for voltage",,bool,0,,,,,,,,,,
+Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,as_dict Type
+Umax,V,Maximum RMS voltage of the Drive,,float,800,0,
+Imax,A,Maximum RMS current of the Drive,,float,800,0,
+is_current,-,"True to generate current waveform, False for voltage",,bool,0,,
+,
+Package,Inherit,Methods,Constante Name,Constante Value,Description classe,Classe fille
+Simulation,,,VERSION,1,Abstract Drive class,DriveWave

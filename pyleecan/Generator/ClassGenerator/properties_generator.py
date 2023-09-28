@@ -1,5 +1,9 @@
-from ...Generator import PYTHON_TYPE, TAB, TAB2, TAB3, TAB4, TAB5, TAB6, TAB7
-from ...Generator.read_fct import is_list_pyleecan_type, is_dict_pyleecan_type
+from ...Generator import PYTHON_TYPE, TAB, TAB2, TAB3, TAB4, TAB5, TAB6
+from ...Generator.read_fct import (
+    is_list_pyleecan_type,
+    is_dict_pyleecan_type,
+    is_list_unknow_type,
+)
 
 
 def generate_properties(gen_dict, class_dict, soft_name="pyleecan"):
@@ -58,7 +62,10 @@ def generate_properties(gen_dict, class_dict, soft_name="pyleecan"):
             )
 
         ## For sphinx doc
-        desc_str = '"""' + prop["desc"] + "\n\n"
+        desc_str = '"""' + prop["desc"]
+        # if prop["unit"] != "":
+        #     desc_str += " [" + prop["unit"] + "]"
+        desc_str += "\n\n"
         desc_str += TAB2 + ":Type: " + prop["type"] + "\n"
         if str(prop["min"]):
             desc_str += TAB2 + ":min: " + str(prop["min"]) + "\n"
@@ -140,6 +147,22 @@ def generate_prop_setter(gen_dict, class_dict, prop, soft_name="pyleecan"):
         set_str += TAB2 + "if type(value) is int and value == -1:\n"
         set_str += TAB3 + "value = list()\n"
     elif prop["type"] == "ImportMatrix":
+        set_str += (
+            TAB2
+            + "ImportMatrix = import_class('"
+            + soft_name
+            + ".Classes', 'ImportMatrix', '"
+            + prop["name"]
+            + "')\n"
+        )
+        set_str += (
+            TAB2
+            + "ImportMatrixVal = import_class('"
+            + soft_name
+            + ".Classes', 'ImportMatrixVal', '"
+            + prop["name"]
+            + "')\n"
+        )
         set_str += TAB2 + "if isinstance(value, str):  # Load from file\n"
         set_str += TAB3 + "value = load_init_dict(value)[1]\n"
         set_str += TAB2 + "if isinstance(value,ndarray):\n"
@@ -159,6 +182,16 @@ def generate_prop_setter(gen_dict, class_dict, prop, soft_name="pyleecan"):
     elif is_dict_pyleecan_type(prop["type"]):
         set_str += TAB2 + "if type(value) is dict:\n"
         set_str += TAB3 + "for key, obj in value.items():\n"
+        set_str += TAB4 + "if isinstance(obj, str):  # Load from file\n"
+        set_str += TAB5 + "try:\n"
+        set_str += TAB6 + "obj = load_init_dict(obj)[1]\n"
+        set_str += TAB5 + "except Exception as e:\n"
+        set_str += (
+            TAB6
+            + "self.get_logger().error('Error while loading '+obj+', setting None instead')\n"
+        )
+        set_str += TAB6 + "obj = None\n"
+        set_str += TAB6 + "value[key] = None\n"
         set_str += TAB4 + "if type(obj) is dict:\n"
         if "SciDataTool" in prop["type"]:
             set_str += (
@@ -179,9 +212,61 @@ def generate_prop_setter(gen_dict, class_dict, prop, soft_name="pyleecan"):
         set_str += TAB5 + "value[key] = class_obj(init_dict=obj)\n"
         set_str += TAB2 + "if type(value) is int and value == -1:\n"
         set_str += TAB3 + "value = dict()\n"
+    elif is_list_unknow_type(prop["type"]):
+        set_str += TAB2 + "if type(value) is list:\n"
+        set_str += TAB3 + "for ii, obj in enumerate(value):\n"
+        set_str += TAB4 + "if isinstance(obj, str) and '.json' in obj:\n"
+        set_str += TAB5 + "try:  # pyleecan object from file\n"
+        set_str += TAB6 + "obj = load_init_dict(obj)[1]\n"
+        set_str += TAB5 + "except Exception as e:\n"
+        set_str += (
+            TAB6
+            + "self.get_logger().error('Error while loading '+obj+', setting None instead')\n"
+        )
+        set_str += TAB6 + "obj = None\n"
+        set_str += TAB6 + "value[ii] = None\n"
+        set_str += (
+            TAB4 + "if type(obj) is dict and '__class__' in obj:  # pyleecan object\n"
+        )
+        set_str += TAB5 + "try:\n"
+        set_str += (
+            TAB6
+            + "class_obj = import_class('SciDataTool.Classes', obj.get('__class__'), '"
+            + prop["name"]
+            + "')\n"
+        )
+        set_str += TAB5 + "except Exception:\n"
+        set_str += (
+            TAB6
+            + "class_obj = import_class('"
+            + soft_name
+            + ".Classes', obj.get('__class__'), '"
+            + prop["name"]
+            + "')\n"
+        )
+        set_str += TAB5 + "value[ii] = class_obj(init_dict=obj)\n"
+        set_str += TAB4 + "if value[ii] is not None and hasattr(value[ii], 'parent'):\n"
+        set_str += TAB5 + "value[ii].parent = self\n"
+        set_str += TAB4 + "if isinstance(obj, list):\n"
+        set_str += TAB5 + "try:  # list to array (for list of list use 'list')\n"
+        set_str += TAB6 + "value[ii] = array(obj)\n"
+        set_str += TAB5 + "except Exception as e:\n"
+        set_str += TAB6 + "pass\n"
+        set_str += TAB2 + "if value == -1:\n"
+        set_str += TAB3 + "value = list()\n"
     elif is_list_pyleecan_type(prop["type"]):
         set_str += TAB2 + "if type(value) is list:\n"
         set_str += TAB3 + "for ii, obj in enumerate(value):\n"
+        set_str += TAB4 + "if isinstance(obj, str):  # Load from file\n"
+        set_str += TAB5 + "try:\n"
+        set_str += TAB6 + "obj = load_init_dict(obj)[1]\n"
+        set_str += TAB5 + "except Exception as e:\n"
+        set_str += (
+            TAB6
+            + "self.get_logger().error('Error while loading '+obj+', setting None instead')\n"
+        )
+        set_str += TAB6 + "obj = None\n"
+        set_str += TAB6 + "value[ii] = None\n"
         set_str += TAB4 + "if type(obj) is dict:\n"
         if "SciDataTool" in prop["type"]:
             set_str += (
@@ -234,7 +319,14 @@ def generate_prop_setter(gen_dict, class_dict, prop, soft_name="pyleecan"):
         and prop["type"] != "function"
     ):  # pyleecan Type
         set_str += TAB2 + "if isinstance(value, str):  # Load from file\n"
-        set_str += TAB3 + "value = load_init_dict(value)[1]\n"
+        set_str += TAB3 + "try:\n"
+        set_str += TAB4 + "value = load_init_dict(value)[1]\n"
+        set_str += TAB3 + "except Exception as e:\n"
+        set_str += (
+            TAB4
+            + "self.get_logger().error('Error while loading '+value+', setting None instead')\n"
+        )
+        set_str += TAB4 + "value = None\n"
         set_str += TAB2 + "if isinstance(value, dict) and '__class__' in value:\n"
         if "SciDataTool" in prop["type"]:
             set_str += (
@@ -257,11 +349,36 @@ def generate_prop_setter(gen_dict, class_dict, prop, soft_name="pyleecan"):
             TAB2 + "elif type(value) is int and value == -1:  # Default constructor\n"
         )
         if prop["value"] is not None and "()" in prop["value"]:
+            set_str += (
+                TAB3
+                + prop["type"]
+                + " = import_class('"
+                + soft_name
+                + ".Classes', '"
+                + prop["type"]
+                + "', '"
+                + prop["name"]
+                + "')\n"
+            )
             set_str += TAB3 + "value = " + prop["value"] + "\n"
         elif "SciDataTool" in prop["type"]:
             set_str += TAB3 + "value = " + prop["type"].split(".")[-1] + "()\n"
         else:
+            set_str += (
+                TAB3
+                + prop["type"]
+                + " = import_class('"
+                + soft_name
+                + ".Classes', '"
+                + prop["type"]
+                + "', '"
+                + prop["name"]
+                + "')\n"
+            )
             set_str += TAB3 + "value = " + prop["type"] + "()\n"
+    elif "." in prop["type"]:
+        set_str += TAB2 + "if value == -1:\n"
+        set_str += TAB3 + "value = " + prop["type"].split(".")[-1] + "()\n"
 
     ## Add check_var("var_name",value, "var_type", min=var_min, max=var_max)
     if prop["type"] == "function":
@@ -324,6 +441,7 @@ def generate_prop_setter(gen_dict, class_dict, prop, soft_name="pyleecan"):
         and prop["type"] not in ["ndarray", "function", "{ndarray}", "[ndarray]"]
         and not is_dict_pyleecan_type(prop["type"])
         and not is_list_pyleecan_type(prop["type"])
+        and not is_list_unknow_type(prop["type"])
         and "." not in prop["type"]
     ):
         # pyleecan type

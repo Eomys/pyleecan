@@ -1,5 +1,5 @@
 from numpy import ndarray, min as np_min, max as np_max
-
+import numpy as np
 from SciDataTool import VectorField, Data
 from ....Functions.Load.import_class import import_class
 from ....Functions.Simulation.VarSimu.log_datakeeper_step_result import (
@@ -16,11 +16,10 @@ def run_multisim_step(
     post_keeper_postproc_list=None,
     simu_type=None,
 ):
-    """
-    Execute a simulation step of a multi-simulation and run datakeepers
+    """Execute a simulation step of a multi-simulation and run datakeepers
 
-    Parameters:
-    -----------
+    Parameters
+    ----------
     simulation: Simulation
         Simulation to run
     datakeeper_list

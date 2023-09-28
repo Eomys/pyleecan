@@ -1,45 +1,48 @@
-from numpy import pi, array, transpose
-
-from SciDataTool import Data1D, DataTime
-
-from ....Functions.Electrical.coordinate_transformation import dq2n
-from ....Functions.Winding.gen_phase_list import gen_name
-
-
-def get_Is(self):
-    """Return the stator current DataTime object
+def get_Is(
+    self, Time=None, is_dqh=False, is_fund_only=False, is_harm_only=False, is_freq=None
+):
+    """Return the stator current DataND object
 
     Parameters
     ----------
     self : OutElec
         an OutElec object
+    Time : Data
+        Time axis
+    is_dqh : bool
+        True to rotate in DQH frame
+    is_fund_only : bool
+        True to return only fundamental component
+    is_harm_only : bool
+        True to return only components at higher frequencies than fundamental component
+    is_freq: bool
+        True to calculate dqh transformation in frequency domain
 
+    Returns
+    -------
+    Is: DataND
+        stator current
     """
-    # Calculate stator currents if Is is not in OutElec
-    if self.Is is None:
-        # Generate current according to Id/Iq
-        Isdq = array([self.Id_ref, self.Iq_ref])
-        time = self.Time.get_values(is_oneperiod=True)
-        qs = self.parent.simu.machine.stator.winding.qs
-        felec = self.felec
 
-        # Get rotation direction of the fundamental magnetic field created by the winding
-        rot_dir = self.parent.get_rot_dir()
+    label = self.parent.simu.machine.stator.get_label()
+    Idq_dict = self.OP.get_Id_Iq()
 
-        # Get stator current function of time
-        Is = dq2n(Isdq, 2 * pi * felec * time, n=qs, rot_dir=rot_dir, is_n_rms=False)
+    data_dict = {
+        "name": "Stator current",
+        "unit": "A",
+        "symbol": "I_s",
+        "lam_label": label,
+        "Ad": Idq_dict["Id"],
+        "Aq": Idq_dict["Iq"],
+    }
 
-        Phase = Data1D(
-            name="phase",
-            unit="",
-            values=gen_name(qs),
-            is_components=True,
-        )
-        self.Is = DataTime(
-            name="Stator current",
-            unit="A",
-            symbol="Is",
-            axes=[Phase, self.Time.copy()],
-            values=transpose(Is),
-        )
-    return self.Is
+    Is = self.get_electrical(
+        data_dict,
+        Time=Time,
+        is_dqh=is_dqh,
+        is_fund_only=is_fund_only,
+        is_harm_only=is_harm_only,
+        is_freq=is_freq,
+    )
+
+    return Is

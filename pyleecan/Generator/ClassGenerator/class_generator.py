@@ -12,6 +12,7 @@ from ...Generator.ClassGenerator.import_method_generator import import_method
 from ...Generator.ClassGenerator.init_method_generator import generate_init
 from ...Generator.ClassGenerator.str_method_generator import generate_str
 from ...Generator.ClassGenerator.as_dict_method_generator import generate_as_dict
+from ...Generator.ClassGenerator.copy_method_generator import generate_copy
 from ...Generator.ClassGenerator.properties_generator import generate_properties
 from ...Generator.ClassGenerator.init_void_method_generator import generate_init_void
 from ...Generator.ClassGenerator.eq_method_generator import generate_eq
@@ -98,9 +99,10 @@ def generate_class(
 
     # Save function
     class_file.write("from ..Functions.save import save\n")
-    class_file.write("from ..Functions.copy import copy\n")
     class_file.write("from ..Functions.load import load_init_dict\n")
     class_file.write("from ..Functions.Load.import_class import import_class\n")
+    # Copy method
+    class_file.write("from copy import deepcopy\n")
 
     # Import of the mother_class (FrozenClass by default)
     # All the classes file are in the Classes folder (regardless of their main package)
@@ -148,7 +150,8 @@ def generate_class(
         import_type_list.remove("[ndarray]")
     if "ndarray" in import_type_list:
         import_type_list.remove("ndarray")
-
+    if "[]" in import_type_list:
+        class_file.write("from numpy import array, ndarray\n")
     if "function" in import_type_list:
         class_file.write("from ntpath import basename\n")
         class_file.write("from os.path import isfile\n")
@@ -156,6 +159,7 @@ def generate_class(
         class_file.write("import numpy as np\n")
         class_file.write("import random\n")
         import_type_list.remove("function")
+    class_file.write("from numpy import isnan\n")  # For compare
 
     # Import types from other package
     types_imported = []
@@ -185,12 +189,6 @@ def generate_class(
 
     # Import of all needed software type for empty init
     class_file.write("from ._check import InitUnKnowClassError\n")
-    for pyleecan_type in import_type_list:
-        if pyleecan_type:
-            if "." not in pyleecan_type and pyleecan_type != "FrozenClass":
-                class_file.write(
-                    "from ." + pyleecan_type + " import " + pyleecan_type + "\n"
-                )
 
     # Class declaration
     if class_dict["mother"] != "" and "." not in class_dict["mother"]:
@@ -274,12 +272,10 @@ def generate_class(
         class_file.write(TAB2 + ")\n")
         class_file.write(TAB + "else:\n")
         class_file.write(TAB2 + meth_name + " = " + meth_name + "\n")
-    # Save / copy methods
-    class_file.write(TAB + "# save and copy methods are available in all object\n")
+    # Save methods
+    class_file.write(TAB + "# generic save method is available in all object\n")
     if "save" not in class_dict["methods"]:
         class_file.write(TAB + "save = save\n")
-    if "copy" not in class_dict["methods"]:
-        class_file.write(TAB + "copy = copy\n")
 
     if is_log:
         class_file.write(TAB + "# get_logger method is available in all object\n")
@@ -312,6 +308,10 @@ def generate_class(
     # Add the as_dict method
     if "as_dict" not in class_dict["methods"]:
         class_file.write(generate_as_dict(gen_dict, class_dict) + "\n")
+
+    # Add the copy method
+    if "copy" not in class_dict["methods"]:
+        class_file.write(generate_copy(gen_dict, class_dict) + "\n")
 
     # Add the _set_None method
     if "_set_None" not in class_dict["methods"]:

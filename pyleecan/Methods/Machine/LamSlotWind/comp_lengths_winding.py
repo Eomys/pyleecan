@@ -7,7 +7,6 @@ def comp_lengths_winding(self):
     - Lewt : total end-winding length [m].
     - Lew : end-winding length on one side for a half-turn
     - Lwvent : length of lamination winding in the radial ventilation ducts [m]
-
     Parameters
     ----------
     self: LamSlotWind
@@ -25,7 +24,7 @@ def comp_lengths_winding(self):
     Lew = self.winding.comp_length_endwinding()
 
     # total end-winding length
-    Ntspc = self.winding.comp_Ntsp(self.slot.Zs)
+    Ntspc = self.winding.comp_Ntsp(self.get_Zs())
     qb = self.comp_number_phase_eq()
     Lewt = qb * Ntspc * self.winding.Npcp * 4 * Lew
 
@@ -46,4 +45,12 @@ def comp_lengths_winding(self):
     else:
         Lwvent = qb * Ntspc * self.winding.Npcp * 2 * self.Nrvd * self.Wrvd
 
-    return {"Lwtot": Lwtot, "Lwact": Lwact, "Lewt": Lewt, "Lwvent": Lwvent, "Lew": Lew}
+    return {
+        "Lwtot": Lwtot,
+        "Lwht": Lwht,
+        "Lwact": Lwact,
+        "Lewt": Lewt,
+        "Lwvent": Lwvent,
+        "Lew": Lew,
+        "MLT": Lwht * 2,
+    }

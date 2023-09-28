@@ -10,11 +10,12 @@ from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
-from ..Functions.copy import copy
 from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
+from copy import deepcopy
 from ._frozen import FrozenClass
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 
@@ -23,9 +24,8 @@ class MatStructural(FrozenClass):
 
     VERSION = 1
 
-    # save and copy methods are available in all object
+    # generic save method is available in all object
     save = save
-    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -144,7 +144,7 @@ class MatStructural(FrozenClass):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -152,26 +152,150 @@ class MatStructural(FrozenClass):
         if type(other) != type(self):
             return ["type(" + name + ")"]
         diff_list = list()
-        if other._rho != self._rho:
-            diff_list.append(name + ".rho")
-        if other._Ex != self._Ex:
-            diff_list.append(name + ".Ex")
-        if other._Ey != self._Ey:
-            diff_list.append(name + ".Ey")
-        if other._Ez != self._Ez:
-            diff_list.append(name + ".Ez")
-        if other._nu_xy != self._nu_xy:
-            diff_list.append(name + ".nu_xy")
-        if other._nu_xz != self._nu_xz:
-            diff_list.append(name + ".nu_xz")
-        if other._nu_yz != self._nu_yz:
-            diff_list.append(name + ".nu_yz")
-        if other._Gxz != self._Gxz:
-            diff_list.append(name + ".Gxz")
-        if other._Gxy != self._Gxy:
-            diff_list.append(name + ".Gxy")
-        if other._Gyz != self._Gyz:
-            diff_list.append(name + ".Gyz")
+        if (
+            other._rho is not None
+            and self._rho is not None
+            and isnan(other._rho)
+            and isnan(self._rho)
+        ):
+            pass
+        elif other._rho != self._rho:
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._rho) + ", other=" + str(other._rho) + ")"
+                )
+                diff_list.append(name + ".rho" + val_str)
+            else:
+                diff_list.append(name + ".rho")
+        if (
+            other._Ex is not None
+            and self._Ex is not None
+            and isnan(other._Ex)
+            and isnan(self._Ex)
+        ):
+            pass
+        elif other._Ex != self._Ex:
+            if is_add_value:
+                val_str = " (self=" + str(self._Ex) + ", other=" + str(other._Ex) + ")"
+                diff_list.append(name + ".Ex" + val_str)
+            else:
+                diff_list.append(name + ".Ex")
+        if (
+            other._Ey is not None
+            and self._Ey is not None
+            and isnan(other._Ey)
+            and isnan(self._Ey)
+        ):
+            pass
+        elif other._Ey != self._Ey:
+            if is_add_value:
+                val_str = " (self=" + str(self._Ey) + ", other=" + str(other._Ey) + ")"
+                diff_list.append(name + ".Ey" + val_str)
+            else:
+                diff_list.append(name + ".Ey")
+        if (
+            other._Ez is not None
+            and self._Ez is not None
+            and isnan(other._Ez)
+            and isnan(self._Ez)
+        ):
+            pass
+        elif other._Ez != self._Ez:
+            if is_add_value:
+                val_str = " (self=" + str(self._Ez) + ", other=" + str(other._Ez) + ")"
+                diff_list.append(name + ".Ez" + val_str)
+            else:
+                diff_list.append(name + ".Ez")
+        if (
+            other._nu_xy is not None
+            and self._nu_xy is not None
+            and isnan(other._nu_xy)
+            and isnan(self._nu_xy)
+        ):
+            pass
+        elif other._nu_xy != self._nu_xy:
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._nu_xy) + ", other=" + str(other._nu_xy) + ")"
+                )
+                diff_list.append(name + ".nu_xy" + val_str)
+            else:
+                diff_list.append(name + ".nu_xy")
+        if (
+            other._nu_xz is not None
+            and self._nu_xz is not None
+            and isnan(other._nu_xz)
+            and isnan(self._nu_xz)
+        ):
+            pass
+        elif other._nu_xz != self._nu_xz:
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._nu_xz) + ", other=" + str(other._nu_xz) + ")"
+                )
+                diff_list.append(name + ".nu_xz" + val_str)
+            else:
+                diff_list.append(name + ".nu_xz")
+        if (
+            other._nu_yz is not None
+            and self._nu_yz is not None
+            and isnan(other._nu_yz)
+            and isnan(self._nu_yz)
+        ):
+            pass
+        elif other._nu_yz != self._nu_yz:
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._nu_yz) + ", other=" + str(other._nu_yz) + ")"
+                )
+                diff_list.append(name + ".nu_yz" + val_str)
+            else:
+                diff_list.append(name + ".nu_yz")
+        if (
+            other._Gxz is not None
+            and self._Gxz is not None
+            and isnan(other._Gxz)
+            and isnan(self._Gxz)
+        ):
+            pass
+        elif other._Gxz != self._Gxz:
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._Gxz) + ", other=" + str(other._Gxz) + ")"
+                )
+                diff_list.append(name + ".Gxz" + val_str)
+            else:
+                diff_list.append(name + ".Gxz")
+        if (
+            other._Gxy is not None
+            and self._Gxy is not None
+            and isnan(other._Gxy)
+            and isnan(self._Gxy)
+        ):
+            pass
+        elif other._Gxy != self._Gxy:
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._Gxy) + ", other=" + str(other._Gxy) + ")"
+                )
+                diff_list.append(name + ".Gxy" + val_str)
+            else:
+                diff_list.append(name + ".Gxy")
+        if (
+            other._Gyz is not None
+            and self._Gyz is not None
+            and isnan(other._Gyz)
+            and isnan(self._Gyz)
+        ):
+            pass
+        elif other._Gyz != self._Gyz:
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._Gyz) + ", other=" + str(other._Gyz) + ")"
+                )
+                diff_list.append(name + ".Gyz" + val_str)
+            else:
+                diff_list.append(name + ".Gyz")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -217,6 +341,35 @@ class MatStructural(FrozenClass):
         # The class name is added to the dict for deserialisation purpose
         MatStructural_dict["__class__"] = "MatStructural"
         return MatStructural_dict
+
+    def copy(self):
+        """Creates a deepcopy of the object"""
+
+        # Handle deepcopy of all the properties
+        rho_val = self.rho
+        Ex_val = self.Ex
+        Ey_val = self.Ey
+        Ez_val = self.Ez
+        nu_xy_val = self.nu_xy
+        nu_xz_val = self.nu_xz
+        nu_yz_val = self.nu_yz
+        Gxz_val = self.Gxz
+        Gxy_val = self.Gxy
+        Gyz_val = self.Gyz
+        # Creates new object of the same type with the copied properties
+        obj_copy = type(self)(
+            rho=rho_val,
+            Ex=Ex_val,
+            Ey=Ey_val,
+            Ez=Ez_val,
+            nu_xy=nu_xy_val,
+            nu_xz=nu_xz_val,
+            nu_yz=nu_yz_val,
+            Gxz=Gxz_val,
+            Gxy=Gxy_val,
+            Gyz=Gyz_val,
+        )
+        return obj_copy
 
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""

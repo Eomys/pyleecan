@@ -9,8 +9,8 @@ from PySide2.QtCore import *
 from PySide2.QtGui import *
 from PySide2.QtWidgets import *
 
-from ......GUI.Tools.FloatEdit import FloatEdit
 from ......GUI.Dialog.DMatLib.WMatSelect.WMatSelect import WMatSelect
+from ......GUI.Tools.FloatEdit import FloatEdit
 
 from pyleecan.GUI.Resources import pyleecan_rc
 
@@ -19,7 +19,7 @@ class Ui_PHoleM52(object):
     def setupUi(self, PHoleM52):
         if not PHoleM52.objectName():
             PHoleM52.setObjectName(u"PHoleM52")
-        PHoleM52.resize(934, 440)
+        PHoleM52.resize(1153, 440)
         PHoleM52.setMinimumSize(QSize(740, 440))
         PHoleM52.setMaximumSize(QSize(16777215, 16777215))
         self.horizontalLayout = QHBoxLayout(PHoleM52)
@@ -53,7 +53,7 @@ class Ui_PHoleM52(object):
         )
         self.txt_constraint.setSizePolicy(sizePolicy1)
         self.txt_constraint.setMinimumSize(QSize(200, 0))
-        self.txt_constraint.setMaximumSize(QSize(16777215, 70))
+        self.txt_constraint.setMaximumSize(QSize(16777215, 50))
         self.txt_constraint.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self.txt_constraint.setTextInteractionFlags(
             Qt.TextSelectableByKeyboard | Qt.TextSelectableByMouse
@@ -222,9 +222,9 @@ class Ui_PHoleM52(object):
                 u'<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN" "http://www.w3.org/TR/REC-html40/strict.dtd">\n'
                 '<html><head><meta name="qrichtext" content="1" /><style type="text/css">\n'
                 "p, li { white-space: pre-wrap; }\n"
-                "</style></head><body style=\" font-family:'MS Shell Dlg 2'; font-size:7.8pt; font-weight:400; font-style:normal;\">\n"
-                '<p align="center" style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-size:12pt; font-weight:600; text-decoration: underline;">Constraints :</span></p>\n'
-                '<p align="center" style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-size:14pt;">H2 &lt; H1</span></p>\n'
+                "</style></head><body style=\" font-family:'DejaVu Sans'; font-size:7.8pt; font-weight:400; font-style:normal;\">\n"
+                '<p align="center" style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-family:\'DejaVu Sans\'; font-size:10pt; font-weight:600; text-decoration: underline;">Constraints :</span></p>\n'
+                '<p align="center" style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-family:\'DejaVu Sans\'; font-size:10pt;">H2 &lt; H1</span></p>\n'
                 '<p align="center" style="-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt;"><br /></p></body></html>',
                 None,
             )

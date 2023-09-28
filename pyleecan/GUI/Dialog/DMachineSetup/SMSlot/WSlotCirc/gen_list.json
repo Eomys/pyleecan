@@ -1,0 +1,20 @@
+[
+    {
+        "cls": "SlotCirc",
+        "name": "W0",
+        "widget": [
+            "in_W0",
+            "lf_W0"
+        ],
+        "xls": "Slot"
+    },
+    {
+        "cls": "SlotCirc",
+        "name": "H0",
+        "widget": [
+            "in_H0",
+            "lf_H0"
+        ],
+        "xls": "Slot"
+    }
+]

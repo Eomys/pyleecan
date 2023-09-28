@@ -10,11 +10,12 @@ from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
-from ..Functions.copy import copy
 from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
+from copy import deepcopy
 from ._frozen import FrozenClass
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 
@@ -23,9 +24,8 @@ class Drive(FrozenClass):
 
     VERSION = 1
 
-    # save and copy methods are available in all object
+    # generic save method is available in all object
     save = save
-    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -88,7 +88,7 @@ class Drive(FrozenClass):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -96,12 +96,48 @@ class Drive(FrozenClass):
         if type(other) != type(self):
             return ["type(" + name + ")"]
         diff_list = list()
-        if other._Umax != self._Umax:
-            diff_list.append(name + ".Umax")
-        if other._Imax != self._Imax:
-            diff_list.append(name + ".Imax")
+        if (
+            other._Umax is not None
+            and self._Umax is not None
+            and isnan(other._Umax)
+            and isnan(self._Umax)
+        ):
+            pass
+        elif other._Umax != self._Umax:
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._Umax) + ", other=" + str(other._Umax) + ")"
+                )
+                diff_list.append(name + ".Umax" + val_str)
+            else:
+                diff_list.append(name + ".Umax")
+        if (
+            other._Imax is not None
+            and self._Imax is not None
+            and isnan(other._Imax)
+            and isnan(self._Imax)
+        ):
+            pass
+        elif other._Imax != self._Imax:
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._Imax) + ", other=" + str(other._Imax) + ")"
+                )
+                diff_list.append(name + ".Imax" + val_str)
+            else:
+                diff_list.append(name + ".Imax")
         if other._is_current != self._is_current:
-            diff_list.append(name + ".is_current")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._is_current)
+                    + ", other="
+                    + str(other._is_current)
+                    + ")"
+                )
+                diff_list.append(name + ".is_current" + val_str)
+            else:
+                diff_list.append(name + ".is_current")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -133,6 +169,17 @@ class Drive(FrozenClass):
         # The class name is added to the dict for deserialisation purpose
         Drive_dict["__class__"] = "Drive"
         return Drive_dict
+
+    def copy(self):
+        """Creates a deepcopy of the object"""
+
+        # Handle deepcopy of all the properties
+        Umax_val = self.Umax
+        Imax_val = self.Imax
+        is_current_val = self.is_current
+        # Creates new object of the same type with the copied properties
+        obj_copy = type(self)(Umax=Umax_val, Imax=Imax_val, is_current=is_current_val)
+        return obj_copy
 
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""

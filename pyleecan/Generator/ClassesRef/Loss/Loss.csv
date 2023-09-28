@@ -1,0 +1,11 @@
+Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,as_dict Type
+logger_name,-,Name of the logger to use,0,str,Pyleecan.Loss,,
+model_dict,,Dict of loss model whose key is a lamination and value is the associated loss model (alternative to model_index/model_list),,{LossModel},None,,
+Tsta,deg Celsius,Average stator temperature for Electrical calculation,0,float,20,,
+Trot,deg Celsius,Average rotor temperature for Electrical calculation,0,float,20,,
+is_get_meshsolution,,True to save loss density map as meshsolution,,bool,0,,
+,
+Package,Inherit,Methods,Constant Name,Constant Value,Class description
+Loss,,run,VERSION,1,Loss module object that contain the loss models.
+,,comp_axes,,,
+,,comp_all_losses,,,

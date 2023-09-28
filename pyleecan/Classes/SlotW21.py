@@ -10,13 +10,18 @@ from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
-from ..Functions.copy import copy
 from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
+from copy import deepcopy
 from .Slot import Slot
 
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
+try:
+    from ..Methods.Slot.SlotW21._comp_line_dict import _comp_line_dict
+except ImportError as error:
+    _comp_line_dict = error
+
 try:
     from ..Methods.Slot.SlotW21._comp_point_coordinate import _comp_point_coordinate
 except ImportError as error:
@@ -63,6 +68,11 @@ except ImportError as error:
     comp_surface_active = error
 
 try:
+    from ..Methods.Slot.SlotW21.comp_surface_opening import comp_surface_opening
+except ImportError as error:
+    comp_surface_opening = error
+
+try:
     from ..Methods.Slot.SlotW21.get_H1 import get_H1
 except ImportError as error:
     get_H1 = error
@@ -73,11 +83,17 @@ except ImportError as error:
     get_surface_active = error
 
 try:
+    from ..Methods.Slot.SlotW21.get_surface_opening import get_surface_opening
+except ImportError as error:
+    get_surface_opening = error
+
+try:
     from ..Methods.Slot.SlotW21.plot_schematics import plot_schematics
 except ImportError as error:
     plot_schematics = error
 
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 
@@ -88,6 +104,17 @@ class SlotW21(Slot):
     IS_SYMMETRICAL = 1
 
     # Check ImportError to remove unnecessary dependencies in unused method
+    # cf Methods.Slot.SlotW21._comp_line_dict
+    if isinstance(_comp_line_dict, ImportError):
+        _comp_line_dict = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use SlotW21 method _comp_line_dict: " + str(_comp_line_dict)
+                )
+            )
+        )
+    else:
+        _comp_line_dict = _comp_line_dict
     # cf Methods.Slot.SlotW21._comp_point_coordinate
     if isinstance(_comp_point_coordinate, ImportError):
         _comp_point_coordinate = property(
@@ -188,6 +215,18 @@ class SlotW21(Slot):
         )
     else:
         comp_surface_active = comp_surface_active
+    # cf Methods.Slot.SlotW21.comp_surface_opening
+    if isinstance(comp_surface_opening, ImportError):
+        comp_surface_opening = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use SlotW21 method comp_surface_opening: "
+                    + str(comp_surface_opening)
+                )
+            )
+        )
+    else:
+        comp_surface_opening = comp_surface_opening
     # cf Methods.Slot.SlotW21.get_H1
     if isinstance(get_H1, ImportError):
         get_H1 = property(
@@ -209,6 +248,18 @@ class SlotW21(Slot):
         )
     else:
         get_surface_active = get_surface_active
+    # cf Methods.Slot.SlotW21.get_surface_opening
+    if isinstance(get_surface_opening, ImportError):
+        get_surface_opening = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use SlotW21 method get_surface_opening: "
+                    + str(get_surface_opening)
+                )
+            )
+        )
+    else:
+        get_surface_opening = get_surface_opening
     # cf Methods.Slot.SlotW21.plot_schematics
     if isinstance(plot_schematics, ImportError):
         plot_schematics = property(
@@ -220,9 +271,8 @@ class SlotW21(Slot):
         )
     else:
         plot_schematics = plot_schematics
-    # save and copy methods are available in all object
+    # generic save method is available in all object
     save = save
-    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -236,6 +286,8 @@ class SlotW21(Slot):
         H2=0.02,
         W2=0.01,
         Zs=36,
+        wedge_mat=None,
+        is_bore=True,
         init_dict=None,
         init_str=None,
     ):
@@ -270,6 +322,10 @@ class SlotW21(Slot):
                 W2 = init_dict["W2"]
             if "Zs" in list(init_dict.keys()):
                 Zs = init_dict["Zs"]
+            if "wedge_mat" in list(init_dict.keys()):
+                wedge_mat = init_dict["wedge_mat"]
+            if "is_bore" in list(init_dict.keys()):
+                is_bore = init_dict["is_bore"]
         # Set the properties (value check and convertion are done in setter)
         self.W0 = W0
         self.H0 = H0
@@ -279,7 +335,7 @@ class SlotW21(Slot):
         self.H2 = H2
         self.W2 = W2
         # Call Slot init
-        super(SlotW21, self).__init__(Zs=Zs)
+        super(SlotW21, self).__init__(Zs=Zs, wedge_mat=wedge_mat, is_bore=is_bore)
         # The class is frozen (in Slot init), for now it's impossible to
         # add new properties
 
@@ -323,7 +379,7 @@ class SlotW21(Slot):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -333,21 +389,101 @@ class SlotW21(Slot):
         diff_list = list()
 
         # Check the properties inherited from Slot
-        diff_list.extend(super(SlotW21, self).compare(other, name=name))
-        if other._W0 != self._W0:
-            diff_list.append(name + ".W0")
-        if other._H0 != self._H0:
-            diff_list.append(name + ".H0")
-        if other._H1 != self._H1:
-            diff_list.append(name + ".H1")
+        diff_list.extend(
+            super(SlotW21, self).compare(
+                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
+            )
+        )
+        if (
+            other._W0 is not None
+            and self._W0 is not None
+            and isnan(other._W0)
+            and isnan(self._W0)
+        ):
+            pass
+        elif other._W0 != self._W0:
+            if is_add_value:
+                val_str = " (self=" + str(self._W0) + ", other=" + str(other._W0) + ")"
+                diff_list.append(name + ".W0" + val_str)
+            else:
+                diff_list.append(name + ".W0")
+        if (
+            other._H0 is not None
+            and self._H0 is not None
+            and isnan(other._H0)
+            and isnan(self._H0)
+        ):
+            pass
+        elif other._H0 != self._H0:
+            if is_add_value:
+                val_str = " (self=" + str(self._H0) + ", other=" + str(other._H0) + ")"
+                diff_list.append(name + ".H0" + val_str)
+            else:
+                diff_list.append(name + ".H0")
+        if (
+            other._H1 is not None
+            and self._H1 is not None
+            and isnan(other._H1)
+            and isnan(self._H1)
+        ):
+            pass
+        elif other._H1 != self._H1:
+            if is_add_value:
+                val_str = " (self=" + str(self._H1) + ", other=" + str(other._H1) + ")"
+                diff_list.append(name + ".H1" + val_str)
+            else:
+                diff_list.append(name + ".H1")
         if other._H1_is_rad != self._H1_is_rad:
-            diff_list.append(name + ".H1_is_rad")
-        if other._W1 != self._W1:
-            diff_list.append(name + ".W1")
-        if other._H2 != self._H2:
-            diff_list.append(name + ".H2")
-        if other._W2 != self._W2:
-            diff_list.append(name + ".W2")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._H1_is_rad)
+                    + ", other="
+                    + str(other._H1_is_rad)
+                    + ")"
+                )
+                diff_list.append(name + ".H1_is_rad" + val_str)
+            else:
+                diff_list.append(name + ".H1_is_rad")
+        if (
+            other._W1 is not None
+            and self._W1 is not None
+            and isnan(other._W1)
+            and isnan(self._W1)
+        ):
+            pass
+        elif other._W1 != self._W1:
+            if is_add_value:
+                val_str = " (self=" + str(self._W1) + ", other=" + str(other._W1) + ")"
+                diff_list.append(name + ".W1" + val_str)
+            else:
+                diff_list.append(name + ".W1")
+        if (
+            other._H2 is not None
+            and self._H2 is not None
+            and isnan(other._H2)
+            and isnan(self._H2)
+        ):
+            pass
+        elif other._H2 != self._H2:
+            if is_add_value:
+                val_str = " (self=" + str(self._H2) + ", other=" + str(other._H2) + ")"
+                diff_list.append(name + ".H2" + val_str)
+            else:
+                diff_list.append(name + ".H2")
+        if (
+            other._W2 is not None
+            and self._W2 is not None
+            and isnan(other._W2)
+            and isnan(self._W2)
+        ):
+            pass
+        elif other._W2 != self._W2:
+            if is_add_value:
+                val_str = " (self=" + str(self._W2) + ", other=" + str(other._W2) + ")"
+                diff_list.append(name + ".W2" + val_str)
+            else:
+                diff_list.append(name + ".W2")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -396,6 +532,38 @@ class SlotW21(Slot):
         # Overwrite the mother class name
         SlotW21_dict["__class__"] = "SlotW21"
         return SlotW21_dict
+
+    def copy(self):
+        """Creates a deepcopy of the object"""
+
+        # Handle deepcopy of all the properties
+        W0_val = self.W0
+        H0_val = self.H0
+        H1_val = self.H1
+        H1_is_rad_val = self.H1_is_rad
+        W1_val = self.W1
+        H2_val = self.H2
+        W2_val = self.W2
+        Zs_val = self.Zs
+        if self.wedge_mat is None:
+            wedge_mat_val = None
+        else:
+            wedge_mat_val = self.wedge_mat.copy()
+        is_bore_val = self.is_bore
+        # Creates new object of the same type with the copied properties
+        obj_copy = type(self)(
+            W0=W0_val,
+            H0=H0_val,
+            H1=H1_val,
+            H1_is_rad=H1_is_rad_val,
+            W1=W1_val,
+            H2=H2_val,
+            W2=W2_val,
+            Zs=Zs_val,
+            wedge_mat=wedge_mat_val,
+            is_bore=is_bore_val,
+        )
+        return obj_copy
 
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""

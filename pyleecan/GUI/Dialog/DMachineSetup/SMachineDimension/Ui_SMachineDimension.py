@@ -19,7 +19,7 @@ class Ui_SMachineDimension(object):
     def setupUi(self, SMachineDimension):
         if not SMachineDimension.objectName():
             SMachineDimension.setObjectName(u"SMachineDimension")
-        SMachineDimension.resize(1065, 679)
+        SMachineDimension.resize(1062, 679)
         SMachineDimension.setMinimumSize(QSize(650, 550))
         self.verticalLayout_3 = QVBoxLayout(SMachineDimension)
         self.verticalLayout_3.setObjectName(u"verticalLayout_3")
@@ -34,7 +34,8 @@ class Ui_SMachineDimension(object):
                 u":/images/images/MachineSetup/MachineDimension/Dimension_Shaft_Rotor_Stator.png"
             )
         )
-        self.img_machine.setScaledContents(True)
+        self.img_machine.setScaledContents(False)
+        self.img_machine.setAlignment(Qt.AlignCenter)
 
         self.horizontalLayout_2.addWidget(self.img_machine)
 
@@ -158,6 +159,29 @@ class Ui_SMachineDimension(object):
 
         self.verticalLayout.addWidget(self.w_mat_0)
 
+        self.horizontalLayout_3 = QHBoxLayout()
+        self.horizontalLayout_3.setObjectName(u"horizontalLayout_3")
+        self.in_Lshaft = QLabel(self.g_shaft)
+        self.in_Lshaft.setObjectName(u"in_Lshaft")
+        self.in_Lshaft.setMinimumSize(QSize(30, 0))
+
+        self.horizontalLayout_3.addWidget(self.in_Lshaft)
+
+        self.lf_Lshaft = FloatEdit(self.g_shaft)
+        self.lf_Lshaft.setObjectName(u"lf_Lshaft")
+        self.lf_Lshaft.setMaximumSize(QSize(100, 100))
+
+        self.horizontalLayout_3.addWidget(self.lf_Lshaft)
+
+        self.unit_Lshaft = QLabel(self.g_shaft)
+        self.unit_Lshaft.setObjectName(u"unit_Lshaft")
+        sizePolicy.setHeightForWidth(self.unit_Lshaft.sizePolicy().hasHeightForWidth())
+        self.unit_Lshaft.setSizePolicy(sizePolicy)
+
+        self.horizontalLayout_3.addWidget(self.unit_Lshaft)
+
+        self.verticalLayout.addLayout(self.horizontalLayout_3)
+
         self.out_Drsh = QLabel(self.g_shaft)
         self.out_Drsh.setObjectName(u"out_Drsh")
 
@@ -246,10 +270,19 @@ class Ui_SMachineDimension(object):
 
         self.verticalLayout_3.addLayout(self.horizontalLayout)
 
+        QWidget.setTabOrder(self.scrollArea, self.lf_SRext)
+        QWidget.setTabOrder(self.lf_SRext, self.lf_SRint)
+        QWidget.setTabOrder(self.lf_SRint, self.lf_RRext)
+        QWidget.setTabOrder(self.lf_RRext, self.lf_RRint)
+        QWidget.setTabOrder(self.lf_RRint, self.g_shaft)
+        QWidget.setTabOrder(self.g_shaft, self.lf_Lshaft)
+        QWidget.setTabOrder(self.lf_Lshaft, self.g_frame)
+        QWidget.setTabOrder(self.g_frame, self.lf_Wfra)
+        QWidget.setTabOrder(self.lf_Wfra, self.lf_Lfra)
+        QWidget.setTabOrder(self.lf_Lfra, self.b_previous)
+        QWidget.setTabOrder(self.b_previous, self.b_next)
+
         self.retranslateUi(SMachineDimension)
-        self.g_shaft.toggled.connect(self.out_Drsh.setVisible)
-        self.g_frame.toggled.connect(self.in_Lfra.setVisible)
-        self.g_frame.toggled.connect(self.unit_Lfra.setVisible)
 
         QMetaObject.connectSlotsByName(SMachineDimension)
 
@@ -350,7 +383,7 @@ class Ui_SMachineDimension(object):
         self.out_airgap.setToolTip(
             QCoreApplication.translate(
                 "SMachineDimension",
-                u"mechanical airgap width (distance between stator bore and rotor bore radii)",
+                u"Magnetic airgap width (distance between stator bore and rotor bore radii)",
                 None,
             )
         )
@@ -360,6 +393,22 @@ class Ui_SMachineDimension(object):
         )
         self.g_shaft.setTitle(
             QCoreApplication.translate("SMachineDimension", u"Shaft", None)
+        )
+        # if QT_CONFIG(tooltip)
+        self.in_Lshaft.setToolTip(
+            QCoreApplication.translate("SMachineDimension", u"Shaft length", None)
+        )
+        # endif // QT_CONFIG(tooltip)
+        self.in_Lshaft.setText(
+            QCoreApplication.translate("SMachineDimension", u"Lshaft", None)
+        )
+        # if QT_CONFIG(tooltip)
+        self.lf_Lshaft.setToolTip(
+            QCoreApplication.translate("SMachineDimension", u"Shaft length", None)
+        )
+        # endif // QT_CONFIG(tooltip)
+        self.unit_Lshaft.setText(
+            QCoreApplication.translate("SMachineDimension", u"m", None)
         )
         # if QT_CONFIG(tooltip)
         self.out_Drsh.setToolTip(

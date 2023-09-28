@@ -14,15 +14,19 @@ from pyleecan.Classes.LamSlotMag import LamSlotMag
 from pyleecan.Classes.LamSlotWind import LamSlotWind
 from pyleecan.Classes.MachineSIPMSM import MachineSIPMSM
 from pyleecan.Classes.MagFEMM import MagFEMM
+from pyleecan.Classes.XOutput import XOutput
+from pyleecan.Classes.DataKeeper import DataKeeper
 from pyleecan.Classes.Output import Output
 from pyleecan.Classes.PostFunction import PostFunction
 from pyleecan.Classes.Shaft import Shaft
 from pyleecan.Classes.Simu1 import Simu1
 from pyleecan.Classes.SlotM11 import SlotM11
 from pyleecan.Classes.SlotW10 import SlotW10
+from pyleecan.Classes.SlotUD import SlotUD
+from pyleecan.Classes.HoleUD import HoleUD
 from pyleecan.Classes.Winding import Winding
+from pyleecan.Classes.OPdq import OPdq
 from pyleecan.Functions.load import (
-    LoadSwitchError,
     LoadWrongDictClassError,
     LoadWrongTypeError,
     load,
@@ -129,8 +133,7 @@ def test_save_load_folder_path():
     simu.input = InputCurrent(
         Is=Is,
         Ir=None,  # No winding on the rotor
-        N0=N0,
-        angle_rotor=None,  # Will be computed
+        OP=OPdq(N0=N0),
         time=time,
         angle=angle,
         rot_dir=-1,
@@ -245,6 +248,31 @@ def test_save_load_just_name():
     assert type(result) is SlotW10
     assert result.Zs == 10
     # remove(file_path)
+
+
+def test_save_load_DXF_flat():
+    """Check that you can save/load a machine with dxf slot/hole in flat mode"""
+    Prius_DXF = load(join(DATA_DIR, "Machine", "Toyota_Prius_DXF.json"))
+    save_dir = join(save_path, "Toyota_Prius_DXF")
+    # Check save
+    assert not isdir(save_dir)
+    Prius_DXF.save(save_path=save_dir, is_folder=True)
+    assert isdir(save_dir)
+    file_list = listdir(save_dir)
+    assert len(file_list) == 12
+    assert "hole.json" in file_list
+    assert "slot.json" in file_list
+    # Check load
+    Prius_2 = load(save_dir)
+    assert isinstance(Prius_2.stator.slot, SlotUD)
+    assert isinstance(Prius_2.rotor.hole[0], HoleUD)
+    assert len(Prius_DXF.compare(Prius_2)) == 0
+    # Remove file and check None
+    remove(join(save_dir, "hole.json"))
+    remove(join(save_dir, "slot.json"))
+    Prius_3 = load(save_dir)
+    assert Prius_3.stator.slot is None
+    assert Prius_3.rotor.hole[0] is None
 
 
 def test_load_error_missing():
@@ -375,8 +403,7 @@ def test_save_load_simu(type_file):
     simu.input = InputCurrent(
         Is=Is,
         Ir=None,  # No winding on the rotor
-        N0=N0,
-        angle_rotor=None,  # Will be computed
+        OP=OPdq(N0=N0),
         time=time,
         angle=angle,
         rot_dir=-1,
@@ -384,7 +411,7 @@ def test_save_load_simu(type_file):
 
     # Definition of the magnetic simulation (no symmetry)
     simu.mag = MagFEMM(
-        type_BH_stator=2, type_BH_rotor=0, is_periodicity_a=True, is_sliding_band=False
+        type_BH_stator=2, type_BH_rotor=0, is_periodicity_a=True, is_sliding_band=True
     )
     simu.force = None
     simu.struct = None
@@ -406,10 +433,29 @@ def test_save_load_simu(type_file):
     assert test_obj == test_obj2
 
 
+def test_save_load_slash_h5():
+    """Check that str with "/" can be save/load"""
+    test_obj = XOutput()
+    test_obj._set_None()
+    test_obj.xoutput_dict = {"x/y": DataKeeper(name="x/y")}
+
+    file_path = join(save_path, "test_save_slash.h5")
+    logger.debug(file_path)
+
+    if isfile(file_path):
+        remove(file_path)
+
+    assert not isfile(file_path)
+    test_obj.save(file_path)
+    assert isfile(file_path)
+    test_obj2 = load(file_path)
+    assert test_obj2 == test_obj
+
+
 if __name__ == "__main__":
-    test_save_load_folder_path()
-    test_save_load_json_compressed()
-    print("Done")
+    test_save_load_slash_h5()
+    # test_save_load_DXF_flat()
     # test_save_load_simu("json")
     # test_save_load_simu("h5")
     # test_save_load_simu("pkl")
+    print("Done")

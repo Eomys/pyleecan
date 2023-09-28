@@ -6,6 +6,7 @@ from PySide2.QtWidgets import QMessageBox, QWidget
 
 from .....Classes.Shaft import Shaft
 from .....Classes.Frame import Frame
+from .....Classes.LamSlotMag import LamSlotMag
 from .....GUI import gui_option
 from .....GUI.Dialog.DMachineSetup.SMachineDimension.Ui_SMachineDimension import (
     Ui_SMachineDimension,
@@ -52,6 +53,7 @@ class SMachineDimension(Ui_SMachineDimension, QWidget):
         self.lf_RRint.unit = "m"
         self.lf_Wfra.unit = "m"
         self.lf_Lfra.unit = "m"
+        self.lf_Lshaft.unit = "m"
         # Set unit name (m ou mm)
         wid_list = [
             self.unit_SRint,
@@ -60,6 +62,7 @@ class SMachineDimension(Ui_SMachineDimension, QWidget):
             self.unit_RRint,
             self.unit_Wfra,
             self.unit_Lfra,
+            self.unit_Lshaft,
         ]
         for wid in wid_list:
             wid.setText("[" + gui_option.unit.get_m_name() + "]")
@@ -77,6 +80,11 @@ class SMachineDimension(Ui_SMachineDimension, QWidget):
         self.w_mat_0.def_mat = "M400-50A"
         self.w_mat_1.setText("Frame Material")
         self.w_mat_1.def_mat = "M400-50A"
+
+        # Make sure that the Shaft/Frame is cleaned for External Rotor
+        if not machine.rotor.is_internal:
+            machine.shaft = None
+            machine.frame = None
 
         if (
             machine.frame is None
@@ -96,8 +104,12 @@ class SMachineDimension(Ui_SMachineDimension, QWidget):
             self.w_mat_1.update(self.machine.frame, "mat_type", self.material_dict)
 
         # Adapt the GUI to the topology of the machine
+        self.out_Drsh.hide()  # Never show Drsh, internal parameter
         if not machine.rotor.is_internal:  # External Rotor
-            self.img_machine.setPixmap(QPixmap(pixmap_dict["Dim_Ext_Rotor"]))
+            if isinstance(self.machine.rotor, LamSlotMag):
+                self.img_machine.setPixmap(QPixmap(pixmap_dict["Dim_Ext_Rotor_mag"]))
+            else:
+                self.img_machine.setPixmap(QPixmap(pixmap_dict["Dim_Ext_Rotor"]))
             self.g_shaft.hide()
             self.g_frame.hide()
         elif (
@@ -109,9 +121,15 @@ class SMachineDimension(Ui_SMachineDimension, QWidget):
             machine.shaft = None
             self.g_shaft.show()
             self.g_frame.show()
-            self.img_machine.setPixmap(QPixmap(pixmap_dict["Dim_In_Rotor_No_Shaft"]))
+            if isinstance(self.machine.rotor, LamSlotMag):
+                self.img_machine.setPixmap(
+                    QPixmap(pixmap_dict["Dim_In_Rotor_No_Shaft_mag"])
+                )
+            else:
+                self.img_machine.setPixmap(
+                    QPixmap(pixmap_dict["Dim_In_Rotor_No_Shaft"])
+                )
             self.g_shaft.setChecked(False)
-            self.out_Drsh.hide()
             # If there is no shaft, the rotor doesn't have internal radius
             self.lf_RRint.setValue(0)
             self.lf_RRint.setEnabled(False)
@@ -119,7 +137,12 @@ class SMachineDimension(Ui_SMachineDimension, QWidget):
         else:  # Internal Rotor with shaft
             self.g_shaft.show()
             self.g_frame.show()
-            self.img_machine.setPixmap(QPixmap(pixmap_dict["Dim_In_Rotor_Shaft"]))
+            if isinstance(self.machine.rotor, LamSlotMag):
+                self.img_machine.setPixmap(
+                    QPixmap(pixmap_dict["Dim_In_Rotor_Shaft_mag"])
+                )
+            else:
+                self.img_machine.setPixmap(QPixmap(pixmap_dict["Dim_In_Rotor_Shaft"]))
             self.g_shaft.setChecked(True)
             self.machine.shaft.Drsh = self.machine.rotor.Rint * 2
             self.out_Drsh.setText(
@@ -130,12 +153,18 @@ class SMachineDimension(Ui_SMachineDimension, QWidget):
                 + "]"
             )
             self.w_mat_0.update(self.machine.shaft, "mat_type", self.material_dict)
+            if self.machine.shaft.Lshaft is None:
+                Lshaft = 0
+            else:
+                Lshaft = self.machine.shaft.Lshaft
+            self.lf_Lshaft.setValue(Lshaft)
 
         # Connect the widget
         self.lf_SRint.editingFinished.connect(self.set_stator_Rint)
         self.lf_SRext.editingFinished.connect(self.set_stator_Rext)
         self.lf_RRint.editingFinished.connect(self.set_rotor_Rint)
         self.lf_RRext.editingFinished.connect(self.set_rotor_Rext)
+        self.lf_Lshaft.editingFinished.connect(self.set_Lshaft)
         self.lf_Wfra.editingFinished.connect(self.set_Wfra)
         self.lf_Lfra.editingFinished.connect(self.set_Lfra)
 
@@ -153,10 +182,11 @@ class SMachineDimension(Ui_SMachineDimension, QWidget):
         self : SMachineDimension
             A SMachineDimension object
         """
-        self.machine.stator.Rint = self.lf_SRint.value()
-        self.set_airgap()  # Update out_airgap if possible
-        # Notify the machine GUI that the machine has changed
-        self.saveNeeded.emit()
+        if self.machine.stator.Rint != self.lf_SRint.value():
+            self.machine.stator.Rint = self.lf_SRint.value()
+            self.set_airgap()  # Update out_airgap if possible
+            # Notify the machine GUI that the machine has changed
+            self.saveNeeded.emit()
 
     def set_stator_Rext(self):
         """Signal to update the value of stator.Rext according to the line edit
@@ -219,23 +249,35 @@ class SMachineDimension(Ui_SMachineDimension, QWidget):
         # For readibility
         rotor = self.machine.rotor
         stator = self.machine.stator
-        gap_txt = self.tr("gap = ")
+        gap_txt = self.tr("Airgap magnetic width = ")
         # Airgap definition change accoding to Topology
         if rotor.is_internal:
             # Update only if the needed parameters are set
             if rotor.Rext is not None and stator.Rint is not None:
                 gap = stator.Rint - rotor.Rext
                 airgap = format(gap * 1000, ".6g")
-                self.out_airgap.setText(gap_txt + airgap + " mm")
+                self.out_airgap.setText(gap_txt + airgap + " [mm]")
             else:
                 self.out_airgap.setText(gap_txt + "?")
         else:
             # Update only if the needed parameters are set
             if rotor.Rint is not None and stator.Rext is not None:
                 airgap = format((rotor.Rint - stator.Rext) * 1000, ".6g")
-                self.out_airgap.setText(gap_txt + airgap + " mm")
+                self.out_airgap.setText(gap_txt + airgap + " [mm]")
             else:
                 self.out_airgap.setText(gap_txt + "?")
+
+    def set_Lshaft(self):
+        """Signal to update the value of shaft.Lshaft according to the line edit
+
+        Parameters
+        ----------
+        self : SMachineDimension
+            A SMachineDimension object
+        """
+        self.machine.shaft.Lshaft = self.lf_Lshaft.value()
+        # Notify the machine GUI that the machine has changed
+        self.saveNeeded.emit()
 
     def set_Wfra(self):
         """Signal to update the value of Wfra according to the spinbox
@@ -304,11 +346,17 @@ class SMachineDimension(Ui_SMachineDimension, QWidget):
 
         if is_checked:  # If there is a shaft
             # Set the corresponding image
-            self.img_machine.setPixmap(QPixmap(pixmap_dict["Dim_In_Rotor_Shaft"]))
+            if isinstance(self.machine.rotor, LamSlotMag):
+                self.img_machine.setPixmap(
+                    QPixmap(pixmap_dict["Dim_In_Rotor_Shaft_mag"])
+                )
+            else:
+                self.img_machine.setPixmap(QPixmap(pixmap_dict["Dim_In_Rotor_Shaft"]))
             # Set Drsh if machine.rotor.Rint is set
             if self.machine.rotor.Rint is not None:
-                self.machine.shaft = Shaft()
-                self.machine.shaft._set_None()
+                if self.machine.shaft is None:
+                    self.machine.shaft = Shaft()
+                    self.machine.shaft._set_None()
                 self.machine.shaft.Drsh = self.machine.rotor.Rint * 2
                 self.out_Drsh.setText(
                     self.tr("Drsh = ")
@@ -326,7 +374,14 @@ class SMachineDimension(Ui_SMachineDimension, QWidget):
 
         else:  # If there is no shaft
             # Set the corresponding image
-            self.img_machine.setPixmap(QPixmap(pixmap_dict["Dim_In_Rotor_No_Shaft"]))
+            if isinstance(self.machine.rotor, LamSlotMag):
+                self.img_machine.setPixmap(
+                    QPixmap(pixmap_dict["Dim_In_Rotor_No_Shaft_mag"])
+                )
+            else:
+                self.img_machine.setPixmap(
+                    QPixmap(pixmap_dict["Dim_In_Rotor_No_Shaft"])
+                )
 
             self.machine.shaft = None
             self.machine.rotor.Rint = 0
@@ -362,6 +417,10 @@ class SMachineDimension(Ui_SMachineDimension, QWidget):
                 return "You must set Rotor.Rint !"
             if machine.rotor.Rext is None:
                 return "You must set Rotor.Rext !"
+            if machine.shaft is not None and machine.shaft.mat_type is None:
+                return "You must set the shaft material !"
+            if machine.frame is not None and machine.frame.mat_type is None:
+                return "You must set the frame material !"
 
             # Check that everything is set right
             if machine.stator.Rext <= machine.stator.Rint:
@@ -369,14 +428,12 @@ class SMachineDimension(Ui_SMachineDimension, QWidget):
             if machine.rotor.Rext <= machine.rotor.Rint:
                 return "The Rotor can't have an internal radius greater than the external one !"
             if machine.rotor.is_internal and machine.stator.Rint <= machine.rotor.Rext:
-                return (
-                    "For inner rotor machine, you must have: Rotor.Rext < Stator.Rint !"
-                )
+                return "For Internal Rotor machine, you must have: Rotor.Rext < Stator.Rint !"
             if (
                 not machine.rotor.is_internal
                 and machine.stator.Rext >= machine.rotor.Rint
             ):
-                return "For external rotor machine, you must have: Stator.Rext < Rotor.Rint !"
+                return "For External Rotor machine, you must have: Stator.Rext < Rotor.Rint !"
         except Exception as e:
             return str(e)
 

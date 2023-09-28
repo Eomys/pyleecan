@@ -20,7 +20,7 @@ from pyleecan.Classes.MagFEMM import MagFEMM
 from pyleecan.Classes.Simu1 import Simu1
 from pyleecan.Classes.Output import Output
 from pyleecan.Classes.SlotUD2 import SlotUD2
-from pyleecan.Classes.OptiDesignVar import OptiDesignVar
+from pyleecan.Classes.OptiDesignVarInterval import OptiDesignVarInterval
 from pyleecan.Classes.OptiObjective import OptiObjective
 from pyleecan.Classes.OptiProblem import OptiProblem
 from pyleecan.Classes.ImportMatrixVal import ImportMatrixVal
@@ -44,6 +44,8 @@ on Pyleecan open-source object-oriented software"
 """
 
 
+@pytest.mark.long_5s
+@pytest.mark.long_1m
 @pytest.mark.MagFEMM
 @pytest.mark.SCIM
 @pytest.mark.periodicity
@@ -65,8 +67,7 @@ def test_FEMM_sym():
     simu.input = InputCurrent(
         Is=Is,
         Ir=Ir,  # zero current for the rotor
-        N0=N0,
-        angle_rotor=None,  # Will be computed
+        OP=OPdq(N0=N0),
         Nt_tot=Nt_tot,
         Na_tot=Na_tot,
         angle_rotor_initial=0.2244,
@@ -74,7 +75,9 @@ def test_FEMM_sym():
 
     # Definition of the magnetic simulation
     # 2 sym + antiperiodicity = 1/4 Lamination
-    simu.mag = MagFEMM(type_BH_stator=2, type_BH_rotor=2, is_periodicity_a=True)
+    simu.mag = MagFEMM(
+        type_BH_stator=2, type_BH_rotor=2, is_periodicity_a=True, is_fast_draw=False
+    )
     # Stop after magnetic computation
     simu.force = None
     simu.struct = None
@@ -120,7 +123,7 @@ def test_gmsh_mesh_dict():
     fig = plt.gcf()
     fig.savefig(join(save_path, "fig_10_ref_lamination.png"))
     fig.savefig(join(save_path, "fig_10_ref_lamination.svg"), format="svg")
-    assert len(fig.axes[0].patches) == 2
+    assert len(fig.axes[0].patches) == 4
 
     # Definition of the number of each element on each line
     mesh_dict = {
@@ -234,12 +237,12 @@ def test_MachineUD():
     )
     lam1.winding = WindingUD(qs=3, p=3)
     lam1.winding.init_as_CW2LT()
-    # Outer rotor
+    # External Rotor
     lam2 = LamSlot(
         Rext=lam1.Rint - A1, Rint=lam1.Rint - A1 - W2, is_internal=True, is_stator=False
     )
     lam2.slot = SlotW10(Zs=22, W0=25e-3, W1=25e-3, W2=15e-3, H0=0, H1=0, H2=W2 * 0.75)
-    # Inner rotor
+    # Internal Rotor
     lam3 = LamSlot(
         Rext=lam2.Rint - A2,
         Rint=lam2.Rint - A2 - W3,
@@ -258,22 +261,23 @@ def test_MachineUD():
     lam4.winding.init_as_CW2LT()
     # Machine definition
     machine.lam_list = [lam1, lam2, lam3, lam4]
+    machine.shaft = Shaft(Drsh=lam4.Rint * 2)
 
     # Plot, check and save
-    machine.plot(is_show_fig=False)
+    machine.plot(is_show_fig=False, is_clean_plot=True)
     fig = plt.gcf()
     fig.savefig(join(save_path, "fig_12_MachineUD.png"))
     fig.savefig(join(save_path, "fig_12_MachineUD.svg"), format="svg")
-    assert len(fig.axes[0].patches) == 57
+    assert len(fig.axes[0].patches) == 61
 
     machine.frame = None
     machine.name = None
 
-    machine.plot(is_show_fig=False)
+    machine.plot(is_show_fig=False, is_clean_plot=True)
     fig = plt.gcf()
     fig.savefig(join(save_path, "fig_12_MachineUD_no_frame_no_name.png"))
     fig.savefig(join(save_path, "fig_12_MachineUD_no_frame_no_name.svg"), format="svg")
-    assert len(fig.axes[0].patches) == 57
+    assert len(fig.axes[0].patches) == 61
 
 
 def test_SlotMulti_rotor():
@@ -307,7 +311,7 @@ def test_SlotMulti_rotor():
     rotor.notch = [notch]
 
     # Plot, check and save
-    rotor.plot(is_show_fig=False)
+    rotor.plot(is_show_fig=False, is_clean_plot=True, edgecolor="k")
     fig = plt.gcf()
     fig.savefig(join(save_path, "fig_13_LamSlotMulti_rotor.png"))
     fig.savefig(join(save_path, "fig_13_LamSlotMulti_rotor.svg"), format="svg")
@@ -345,7 +349,7 @@ def test_SlotMulti_stator():
     stator.notch = [notch]
 
     # Plot, check and save
-    stator.plot(is_show_fig=False)
+    stator.plot(is_show_fig=False, is_clean_plot=True)
     fig = plt.gcf()
     fig.savefig(join(save_path, "fig_13_LamSlotMulti_stator.png"))
     fig.savefig(join(save_path, "fig_13_LamSlotMulti_stator.svg"), format="svg")
@@ -400,9 +404,9 @@ def test_SlotUD():
     machine.rotor.slot.set_from_point_list(is_sym=True, point_list=point_list)
 
     # Plot, check and save
-    machine.plot(is_show_fig=False)
+    machine.plot(is_show_fig=False, is_clean_plot=True)
     fig = plt.gcf()
-    assert len(fig.axes[0].patches) == 83
+    assert len(fig.axes[0].patches) == 85
     fig.savefig(join(save_path, "fig_14_SlotUD.png"))
     fig.savefig(join(save_path, "fig_14_SlotUD.svg"), format="svg")
 
@@ -419,7 +423,7 @@ def test_WindingUD():
         Rint=0.2, Rext=0.5, is_internal=True, is_stator=False, L1=0.9, Nrvd=2, Wrvd=0.05
     )
     machine.rotor.axial_vent = [
-        VentilationPolar(Zh=6, Alpha0=pi / 6, W1=pi / 6, D0=100e-3, H0=0.3)
+        VentilationPolar(Zh=6, Alpha0=0, W1=pi / 6, D0=100e-3, H0=0.3)
     ]
     machine.rotor.slot = SlotW12(Zs=6, R2=35e-3, H0=20e-3, R1=17e-3, H1=130e-3)
     machine.rotor.winding = WindingUD(wind_mat=wind_mat, qs=4, p=4, Lewout=60e-3)
@@ -449,7 +453,7 @@ def test_WindingUD():
     fig = plt.gcf()
     fig.savefig(join(save_path, "fig_16_WindingUD.png"))
     fig.savefig(join(save_path, "fig_16_WindingUD.svg"), format="svg")
-    assert len(fig.axes[0].patches) == 73
+    assert len(fig.axes[0].patches) == 77
 
 
 def test_WindingUD_layer():
@@ -459,9 +463,9 @@ def test_WindingUD_layer():
     rotor = LamSlotWind(
         Rint=0.2, Rext=0.5, is_internal=True, is_stator=False, L1=0.9, Nrvd=2, Wrvd=0.05
     )
-    rotor.axial_vent = [VentilationCirc(Zh=6, Alpha0=pi / 6, D0=100e-3, H0=0.3)]
+    rotor.axial_vent = [VentilationCirc(Zh=6, Alpha0=0, D0=100e-3, H0=0.3)]
     rotor.slot = SlotW11(
-        Zs=6, H0=15e-3, W0=60e-3, W1=100e-3, W2=100e-3, H1=20e-3, H2=200e-3
+        Zs=6, H0=15e-3, W0=60e-3, W1=100e-3, W2=100e-3, H1=20e-3, H2=200e-3, R1=1e-3
     )
     rotor.slot = rotor.slot.convert_to_SlotUD2()
     assert isinstance(rotor.slot, SlotUD2)
@@ -482,14 +486,14 @@ def test_WindingUD_layer():
     rotor = load(join(save_path, "Fig17_rotor_wind_layer.json"))
 
     # Plot, check and save
-    rotor.plot(is_show_fig=False)
+    rotor.plot(is_show_fig=False, is_clean_plot=True, edgecolor="k")
     fig = plt.gcf()
     fig.savefig(join(save_path, "fig_17_WindingUD_layer.png"))
     fig.savefig(join(save_path, "fig_17_WindingUD_layer.svg"), format="svg")
-    assert len(fig.axes[0].patches) == 32
+    assert len(fig.axes[0].patches) == 34
 
 
-def test_BoreFlower():
+def test_BoreFlower(is_show_fig=False):
     """Figure 18: LamHole with uneven bore shape
     From pyleecan/Tests/Plot/LamHole/test_Hole_50_plot.py
     """
@@ -519,14 +523,19 @@ def test_BoreFlower():
     rotor.hole[0].magnet_1 = None
     # Rotor bore shape
     rotor.bore = BoreFlower(N=8, Rarc=0.05, alpha=pi / 8)
+    rotor.yoke = BoreFlower(N=8, Rarc=0.05 / 4, alpha=pi / 8)
 
     # Plot, check and save
-    rotor.plot(is_show_fig=False)
-    fig = plt.gcf()
+    fig, _ = rotor.plot(is_show_fig=is_show_fig)
     fig.savefig(join(save_path, "fig_18_BoreFlower.png"))
     fig.savefig(join(save_path, "fig_18_BoreFlower.svg"), format="svg")
     # 2 for lam + 3*8 for holes + 16 vents
     assert len(fig.axes[0].patches) == 42
+    fig, _ = rotor.plot(is_show_fig=is_show_fig, sym=8)
+    fig.savefig(join(save_path, "fig_18_BoreFlower_sym.png"))
+    fig.savefig(join(save_path, "fig_18_BoreFlower_sym.svg"), format="svg")
+    # 1 for lam + 3*1 for holes + 3 vents
+    assert len(fig.axes[0].patches) == 7
 
 
 @pytest.mark.SPMSM
@@ -552,8 +561,7 @@ def test_ecc_FEMM():
     simu.input = InputCurrent(
         Is=Is,
         Ir=None,  # No winding on the rotor
-        N0=N0,
-        angle_rotor=None,
+        OP=OPdq(N0=N0),
         time=time,
         angle=angle,
         angle_rotor_initial=0,
@@ -567,6 +575,7 @@ def test_ecc_FEMM():
         is_periodicity_a=False,
         is_mmfs=False,
         is_get_meshsolution=True,
+        is_fast_draw=False,
     )
     simu.force = None
     simu.struct = None
@@ -680,8 +689,7 @@ def test_Optimization_problem():
     simu.input = InputCurrent(
         Is=Is,
         Ir=Ir,  # zero current for the rotor
-        N0=N0,
-        angle_rotor=None,  # Will be computed
+        OP=OPdq(N0=N0),
         Nt_tot=Nt_tot,
         Na_tot=Na_tot,
         angle_rotor_initial=0.39,
@@ -739,11 +747,10 @@ def test_Optimization_problem():
 
     # Design variables
     my_vars = [
-        OptiDesignVar(
+        OptiDesignVarInterval(
             name="Stator slot opening",
             symbol="W0",
             unit="m",
-            type_var="interval",
             space=[
                 0.2 * output.simu.machine.stator.slot.W2,
                 output.simu.machine.stator.slot.W2,
@@ -751,11 +758,10 @@ def test_Optimization_problem():
             get_value="lambda space: random.uniform(*space)",
             setter="simu.machine.stator.slot.W0",
         ),
-        OptiDesignVar(
+        OptiDesignVarInterval(
             name="Rotor magnet width",
             symbol="Wmag",
             unit="m",
-            type_var="interval",
             space=[
                 0.5 * output.simu.machine.rotor.slot.W0,
                 0.99 * output.simu.machine.rotor.slot.W0,
@@ -842,5 +848,12 @@ def test_Optimization_problem():
 
 
 if __name__ == "__main__":
-    test_FEMM_sym()
     # test_WindingUD_layer()
+    # test_FEMM_sym()
+    # test_gmsh_mesh_dict()
+    # test_SlotMulti_sym()
+    test_MachineUD()
+    # test_WindingUD()
+    # test_ecc_FEMM()
+    # test_WindingUD_layer()
+    print("Done")

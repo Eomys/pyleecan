@@ -10,9 +10,9 @@ from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
-from ..Functions.copy import copy
 from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
+from copy import deepcopy
 from .Elmer import Elmer
 
 # Import all class method
@@ -68,6 +68,7 @@ except ImportError as error:
     write = error
 
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 
@@ -169,9 +170,8 @@ class Section(Elmer):
         )
     else:
         write = write
-    # save and copy methods are available in all object
+    # generic save method is available in all object
     save = save
-    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -258,7 +258,7 @@ class Section(Elmer):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -268,17 +268,65 @@ class Section(Elmer):
         diff_list = list()
 
         # Check the properties inherited from Elmer
-        diff_list.extend(super(Section, self).compare(other, name=name))
+        diff_list.extend(
+            super(Section, self).compare(
+                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
+            )
+        )
         if other._section != self._section:
-            diff_list.append(name + ".section")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._section)
+                    + ", other="
+                    + str(other._section)
+                    + ")"
+                )
+                diff_list.append(name + ".section" + val_str)
+            else:
+                diff_list.append(name + ".section")
         if other._id != self._id:
-            diff_list.append(name + ".id")
+            if is_add_value:
+                val_str = " (self=" + str(self._id) + ", other=" + str(other._id) + ")"
+                diff_list.append(name + ".id" + val_str)
+            else:
+                diff_list.append(name + ".id")
         if other._comment != self._comment:
-            diff_list.append(name + ".comment")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._comment)
+                    + ", other="
+                    + str(other._comment)
+                    + ")"
+                )
+                diff_list.append(name + ".comment" + val_str)
+            else:
+                diff_list.append(name + ".comment")
         if other.__statements != self.__statements:
-            diff_list.append(name + "._statements")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self.__statements)
+                    + ", other="
+                    + str(other.__statements)
+                    + ")"
+                )
+                diff_list.append(name + "._statements" + val_str)
+            else:
+                diff_list.append(name + "._statements")
         if other.__comments != self.__comments:
-            diff_list.append(name + "._comments")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self.__comments)
+                    + ", other="
+                    + str(other.__comments)
+                    + ")"
+                )
+                diff_list.append(name + "._comments" + val_str)
+            else:
+                diff_list.append(name + "._comments")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -331,6 +379,33 @@ class Section(Elmer):
         # Overwrite the mother class name
         Section_dict["__class__"] = "Section"
         return Section_dict
+
+    def copy(self):
+        """Creates a deepcopy of the object"""
+
+        # Handle deepcopy of all the properties
+        section_val = self.section
+        id_val = self.id
+        comment_val = self.comment
+        if self._statements is None:
+            _statements_val = None
+        else:
+            _statements_val = self._statements.copy()
+        if self._comments is None:
+            _comments_val = None
+        else:
+            _comments_val = self._comments.copy()
+        logger_name_val = self.logger_name
+        # Creates new object of the same type with the copied properties
+        obj_copy = type(self)(
+            section=section_val,
+            id=id_val,
+            comment=comment_val,
+            _statements=_statements_val,
+            _comments=_comments_val,
+            logger_name=logger_name_val,
+        )
+        return obj_copy
 
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""

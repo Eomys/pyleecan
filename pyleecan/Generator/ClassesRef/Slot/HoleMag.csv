@@ -1,7 +1,9 @@
-Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
-,,,,,,,,,Slot,Hole,comp_mass_magnet_id,VERSION,1,Hole with magnets for lamination (abstract)
-,,,,,,,,,,,comp_mass_magnets,,,
-,,,,,,,,,,,comp_surface_magnets,,,
-,,,,,,,,,,,comp_volume_magnets,,,
-,,,,,,,,,,,get_magnet_list,,,
-,,,,,,,,,,,has_magnet,,,
+Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,as_dict Type
+,
+Package,Inherit,Methods,Constant Name,Constant Value,Class description
+Slot,Hole,comp_mass_magnet_id,VERSION,1,Hole with magnets for lamination (abstract)
+,,comp_mass_magnets,,,
+,,comp_surface_magnets,,,
+,,comp_volume_magnets,,,
+,,get_magnet_list,,,
+,,has_magnet,,,

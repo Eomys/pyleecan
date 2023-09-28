@@ -2,7 +2,7 @@
     "HT": {
         "Cp": 460.0,
         "__class__": "MatHT",
-        "alpha": null,
+        "alpha": 0,
         "lambda_x": 43.0,
         "lambda_y": 43.0,
         "lambda_z": 43.0
@@ -18,8 +18,8 @@
     },
     "elec": {
         "__class__": "MatElectrical",
-        "alpha": null,
-        "epsr": null,
+        "alpha": 0,
+        "epsr": 1,
         "rho": 1.43e-07
     },
     "is_isotropic": true,

@@ -1,4 +1,6 @@
-Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constante Name,Constante Value,Description classe,Classe fille
-type_var,,Type of the variable interval or set.,1,str,interval,,,,Optimization,ParamExplorer,,VERSION,1,Optimization,
-space,,Space of the variable,2,list,"[0,1]",,,,,,,,,,
-get_value,,Function of the space to initiate the variable,1,function,None,,,,,,,,,,
+Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,as_dict Type
+space,,Space of the variable,2,list,"[0,1]",,
+get_value,,Function of the space to initiate the variable,1,function,None,,
+,
+Package,Inherit,Methods,Constante Name,Constante Value,Description classe,Classe fille
+Optimization,ParamExplorer,,VERSION,1,Abstract class for OptiDesignVar (Optimization),

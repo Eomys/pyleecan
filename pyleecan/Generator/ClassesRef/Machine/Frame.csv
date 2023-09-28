@@ -1,8 +1,14 @@
-Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
-Lfra,m,frame length [m],0,float,3.50E-01,0,,,Machine,,build_geometry,VERSION,1,machine frame
-Rint,m,frame internal radius,0,float,0.2,0,,,,,comp_height_eq,,,
-Rext,m,Frame external radius,0,float,0.2,0,,,,,comp_mass,,,
-mat_type,,Frame material,,Material,,,,,,,comp_surface,,,
-,,,,,,,,,,,comp_volume,,,
-,,,,,,,,,,,get_length,,,
-,,,,,,,,,,,plot,,,
+Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,as_dict Type
+Lfra,m,frame length [m],0,float,3.50E-01,0,
+Rint,m,frame internal radius,0,float,0.2,0,
+Rext,m,Frame external radius,0,float,0.2,0,
+mat_type,,Frame material,,Material,,,
+,
+Package,Inherit,Methods,Constant Name,Constant Value,Class description
+Machine,,build_geometry,VERSION,1,machine frame
+,,comp_height_eq,,,
+,,comp_mass,,,
+,,comp_surface,,,
+,,comp_volume,,,
+,,get_length,,,
+,,plot,,,

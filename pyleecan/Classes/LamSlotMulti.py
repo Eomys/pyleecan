@@ -10,9 +10,9 @@ from logging import getLogger
 from ._check import set_array, check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
-from ..Functions.copy import copy
 from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
+from copy import deepcopy
 from .Lamination import Lamination
 
 # Import all class method
@@ -21,11 +21,6 @@ try:
     from ..Methods.Machine.LamSlotMulti.check import check
 except ImportError as error:
     check = error
-
-try:
-    from ..Methods.Machine.LamSlotMulti.comp_radius_mec import comp_radius_mec
-except ImportError as error:
-    comp_radius_mec = error
 
 try:
     from ..Methods.Machine.LamSlotMulti.comp_surfaces import comp_surfaces
@@ -53,24 +48,26 @@ except ImportError as error:
     get_Zs = error
 
 try:
-    from ..Methods.Machine.LamSlotMulti.get_bore_desc import get_bore_desc
+    from ..Methods.Machine.LamSlotMulti.comp_periodicity_spatial import (
+        comp_periodicity_spatial,
+    )
 except ImportError as error:
-    get_bore_desc = error
+    comp_periodicity_spatial = error
 
 try:
-    from ..Methods.Machine.LamSlotMulti.comp_periodicity import comp_periodicity
+    from ..Methods.Machine.LamSlotMulti.get_slot_desc_list import get_slot_desc_list
 except ImportError as error:
-    comp_periodicity = error
+    get_slot_desc_list = error
+
+try:
+    from ..Methods.Machine.LamSlotMulti.has_slot import has_slot
+except ImportError as error:
+    has_slot = error
 
 
 from numpy import array, array_equal
+from numpy import isnan
 from ._check import InitUnKnowClassError
-from .Slot import Slot
-from .Material import Material
-from .Hole import Hole
-from .Notch import Notch
-from .Skew import Skew
-from .Bore import Bore
 
 
 class LamSlotMulti(Lamination):
@@ -88,18 +85,6 @@ class LamSlotMulti(Lamination):
         )
     else:
         check = check
-    # cf Methods.Machine.LamSlotMulti.comp_radius_mec
-    if isinstance(comp_radius_mec, ImportError):
-        comp_radius_mec = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use LamSlotMulti method comp_radius_mec: "
-                    + str(comp_radius_mec)
-                )
-            )
-        )
-    else:
-        comp_radius_mec = comp_radius_mec
     # cf Methods.Machine.LamSlotMulti.comp_surfaces
     if isinstance(comp_surfaces, ImportError):
         comp_surfaces = property(
@@ -153,32 +138,41 @@ class LamSlotMulti(Lamination):
         )
     else:
         get_Zs = get_Zs
-    # cf Methods.Machine.LamSlotMulti.get_bore_desc
-    if isinstance(get_bore_desc, ImportError):
-        get_bore_desc = property(
+    # cf Methods.Machine.LamSlotMulti.comp_periodicity_spatial
+    if isinstance(comp_periodicity_spatial, ImportError):
+        comp_periodicity_spatial = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use LamSlotMulti method get_bore_desc: " + str(get_bore_desc)
+                    "Can't use LamSlotMulti method comp_periodicity_spatial: "
+                    + str(comp_periodicity_spatial)
                 )
             )
         )
     else:
-        get_bore_desc = get_bore_desc
-    # cf Methods.Machine.LamSlotMulti.comp_periodicity
-    if isinstance(comp_periodicity, ImportError):
-        comp_periodicity = property(
+        comp_periodicity_spatial = comp_periodicity_spatial
+    # cf Methods.Machine.LamSlotMulti.get_slot_desc_list
+    if isinstance(get_slot_desc_list, ImportError):
+        get_slot_desc_list = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use LamSlotMulti method comp_periodicity: "
-                    + str(comp_periodicity)
+                    "Can't use LamSlotMulti method get_slot_desc_list: "
+                    + str(get_slot_desc_list)
                 )
             )
         )
     else:
-        comp_periodicity = comp_periodicity
-    # save and copy methods are available in all object
+        get_slot_desc_list = get_slot_desc_list
+    # cf Methods.Machine.LamSlotMulti.has_slot
+    if isinstance(has_slot, ImportError):
+        has_slot = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use LamSlotMulti method has_slot: " + str(has_slot))
+            )
+        )
+    else:
+        has_slot = has_slot
+    # generic save method is available in all object
     save = save
-    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -199,8 +193,8 @@ class LamSlotMulti(Lamination):
         axial_vent=-1,
         notch=-1,
         skew=None,
-        yoke_notch=-1,
         bore=None,
+        yoke=None,
         init_dict=None,
         init_str=None,
     ):
@@ -249,10 +243,10 @@ class LamSlotMulti(Lamination):
                 notch = init_dict["notch"]
             if "skew" in list(init_dict.keys()):
                 skew = init_dict["skew"]
-            if "yoke_notch" in list(init_dict.keys()):
-                yoke_notch = init_dict["yoke_notch"]
             if "bore" in list(init_dict.keys()):
                 bore = init_dict["bore"]
+            if "yoke" in list(init_dict.keys()):
+                yoke = init_dict["yoke"]
         # Set the properties (value check and convertion are done in setter)
         self.slot_list = slot_list
         self.alpha = alpha
@@ -271,8 +265,8 @@ class LamSlotMulti(Lamination):
             axial_vent=axial_vent,
             notch=notch,
             skew=skew,
-            yoke_notch=yoke_notch,
             bore=bore,
+            yoke=yoke,
         )
         # The class is frozen (in Lamination init), for now it's impossible to
         # add new properties
@@ -319,7 +313,7 @@ class LamSlotMulti(Lamination):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -329,7 +323,11 @@ class LamSlotMulti(Lamination):
         diff_list = list()
 
         # Check the properties inherited from Lamination
-        diff_list.extend(super(LamSlotMulti, self).compare(other, name=name))
+        diff_list.extend(
+            super(LamSlotMulti, self).compare(
+                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
+            )
+        )
         if (other.slot_list is None and self.slot_list is not None) or (
             other.slot_list is not None and self.slot_list is None
         ):
@@ -342,13 +340,26 @@ class LamSlotMulti(Lamination):
             for ii in range(len(other.slot_list)):
                 diff_list.extend(
                     self.slot_list[ii].compare(
-                        other.slot_list[ii], name=name + ".slot_list[" + str(ii) + "]"
+                        other.slot_list[ii],
+                        name=name + ".slot_list[" + str(ii) + "]",
+                        ignore_list=ignore_list,
+                        is_add_value=is_add_value,
                     )
                 )
         if not array_equal(other.alpha, self.alpha):
             diff_list.append(name + ".alpha")
         if other._sym_dict_enforced != self._sym_dict_enforced:
-            diff_list.append(name + ".sym_dict_enforced")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._sym_dict_enforced)
+                    + ", other="
+                    + str(other._sym_dict_enforced)
+                    + ")"
+                )
+                diff_list.append(name + ".sym_dict_enforced" + val_str)
+            else:
+                diff_list.append(name + ".sym_dict_enforced")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -424,6 +435,82 @@ class LamSlotMulti(Lamination):
         LamSlotMulti_dict["__class__"] = "LamSlotMulti"
         return LamSlotMulti_dict
 
+    def copy(self):
+        """Creates a deepcopy of the object"""
+
+        # Handle deepcopy of all the properties
+        if self.slot_list is None:
+            slot_list_val = None
+        else:
+            slot_list_val = list()
+            for obj in self.slot_list:
+                slot_list_val.append(obj.copy())
+        if self.alpha is None:
+            alpha_val = None
+        else:
+            alpha_val = self.alpha.copy()
+        if self.sym_dict_enforced is None:
+            sym_dict_enforced_val = None
+        else:
+            sym_dict_enforced_val = self.sym_dict_enforced.copy()
+        L1_val = self.L1
+        if self.mat_type is None:
+            mat_type_val = None
+        else:
+            mat_type_val = self.mat_type.copy()
+        Nrvd_val = self.Nrvd
+        Wrvd_val = self.Wrvd
+        Kf1_val = self.Kf1
+        is_internal_val = self.is_internal
+        Rint_val = self.Rint
+        Rext_val = self.Rext
+        is_stator_val = self.is_stator
+        if self.axial_vent is None:
+            axial_vent_val = None
+        else:
+            axial_vent_val = list()
+            for obj in self.axial_vent:
+                axial_vent_val.append(obj.copy())
+        if self.notch is None:
+            notch_val = None
+        else:
+            notch_val = list()
+            for obj in self.notch:
+                notch_val.append(obj.copy())
+        if self.skew is None:
+            skew_val = None
+        else:
+            skew_val = self.skew.copy()
+        if self.bore is None:
+            bore_val = None
+        else:
+            bore_val = self.bore.copy()
+        if self.yoke is None:
+            yoke_val = None
+        else:
+            yoke_val = self.yoke.copy()
+        # Creates new object of the same type with the copied properties
+        obj_copy = type(self)(
+            slot_list=slot_list_val,
+            alpha=alpha_val,
+            sym_dict_enforced=sym_dict_enforced_val,
+            L1=L1_val,
+            mat_type=mat_type_val,
+            Nrvd=Nrvd_val,
+            Wrvd=Wrvd_val,
+            Kf1=Kf1_val,
+            is_internal=is_internal_val,
+            Rint=Rint_val,
+            Rext=Rext_val,
+            is_stator=is_stator_val,
+            axial_vent=axial_vent_val,
+            notch=notch_val,
+            skew=skew_val,
+            bore=bore_val,
+            yoke=yoke_val,
+        )
+        return obj_copy
+
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""
 
@@ -445,6 +532,15 @@ class LamSlotMulti(Lamination):
         """setter of slot_list"""
         if type(value) is list:
             for ii, obj in enumerate(value):
+                if isinstance(obj, str):  # Load from file
+                    try:
+                        obj = load_init_dict(obj)[1]
+                    except Exception as e:
+                        self.get_logger().error(
+                            "Error while loading " + obj + ", setting None instead"
+                        )
+                        obj = None
+                        value[ii] = None
                 if type(obj) is dict:
                     class_obj = import_class(
                         "pyleecan.Classes", obj.get("__class__"), "slot_list"

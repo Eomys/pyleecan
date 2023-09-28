@@ -10,21 +10,25 @@ from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
-from ..Functions.copy import copy
 from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
+from copy import deepcopy
 from .EndWinding import EndWinding
 
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
 try:
-    from ..Methods.Machine.EndWindingCirc.comp_length_endwinding import (
-        comp_length_endwinding,
-    )
+    from ..Methods.Machine.EndWindingCirc.comp_length import comp_length
 except ImportError as error:
-    comp_length_endwinding = error
+    comp_length = error
+
+try:
+    from ..Methods.Machine.EndWindingCirc.comp_inductance import comp_inductance
+except ImportError as error:
+    comp_inductance = error
 
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 
@@ -33,25 +37,36 @@ class EndWindingCirc(EndWinding):
 
     VERSION = 1
 
-    # cf Methods.Machine.EndWindingCirc.comp_length_endwinding
-    if isinstance(comp_length_endwinding, ImportError):
-        comp_length_endwinding = property(
+    # Check ImportError to remove unnecessary dependencies in unused method
+    # cf Methods.Machine.EndWindingCirc.comp_length
+    if isinstance(comp_length, ImportError):
+        comp_length = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use EndWindingCirc method comp_length_endwinding: "
-                    + str(comp_length_endwinding)
+                    "Can't use EndWindingCirc method comp_length: " + str(comp_length)
                 )
             )
         )
     else:
-        comp_length_endwinding = comp_length_endwinding
-    # save and copy methods are available in all object
+        comp_length = comp_length
+    # cf Methods.Machine.EndWindingCirc.comp_inductance
+    if isinstance(comp_inductance, ImportError):
+        comp_inductance = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use EndWindingCirc method comp_inductance: "
+                    + str(comp_inductance)
+                )
+            )
+        )
+    else:
+        comp_inductance = comp_inductance
+    # generic save method is available in all object
     save = save
-    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, coil_pitch=None, init_dict=None, init_str=None):
+    def __init__(self, coil_pitch=None, Lew_enforced=0, init_dict=None, init_str=None):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -69,10 +84,12 @@ class EndWindingCirc(EndWinding):
             # Overwrite default value with init_dict content
             if "coil_pitch" in list(init_dict.keys()):
                 coil_pitch = init_dict["coil_pitch"]
+            if "Lew_enforced" in list(init_dict.keys()):
+                Lew_enforced = init_dict["Lew_enforced"]
         # Set the properties (value check and convertion are done in setter)
         self.coil_pitch = coil_pitch
         # Call EndWinding init
-        super(EndWindingCirc, self).__init__()
+        super(EndWindingCirc, self).__init__(Lew_enforced=Lew_enforced)
         # The class is frozen (in EndWinding init), for now it's impossible to
         # add new properties
 
@@ -98,7 +115,7 @@ class EndWindingCirc(EndWinding):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -108,9 +125,30 @@ class EndWindingCirc(EndWinding):
         diff_list = list()
 
         # Check the properties inherited from EndWinding
-        diff_list.extend(super(EndWindingCirc, self).compare(other, name=name))
-        if other._coil_pitch != self._coil_pitch:
-            diff_list.append(name + ".coil_pitch")
+        diff_list.extend(
+            super(EndWindingCirc, self).compare(
+                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
+            )
+        )
+        if (
+            other._coil_pitch is not None
+            and self._coil_pitch is not None
+            and isnan(other._coil_pitch)
+            and isnan(self._coil_pitch)
+        ):
+            pass
+        elif other._coil_pitch != self._coil_pitch:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._coil_pitch)
+                    + ", other="
+                    + str(other._coil_pitch)
+                    + ")"
+                )
+                diff_list.append(name + ".coil_pitch" + val_str)
+            else:
+                diff_list.append(name + ".coil_pitch")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -147,6 +185,16 @@ class EndWindingCirc(EndWinding):
         # Overwrite the mother class name
         EndWindingCirc_dict["__class__"] = "EndWindingCirc"
         return EndWindingCirc_dict
+
+    def copy(self):
+        """Creates a deepcopy of the object"""
+
+        # Handle deepcopy of all the properties
+        coil_pitch_val = self.coil_pitch
+        Lew_enforced_val = self.Lew_enforced
+        # Creates new object of the same type with the copied properties
+        obj_copy = type(self)(coil_pitch=coil_pitch_val, Lew_enforced=Lew_enforced_val)
+        return obj_copy
 
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""

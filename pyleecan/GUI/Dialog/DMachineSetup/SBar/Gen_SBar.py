@@ -43,7 +43,7 @@ class Gen_SBar(Ui_SBar):
 
         # Setup of in_Lewout
         txt = self.tr(
-            u"""straight length of the conductors outside the lamination before the curved part of winding overhang [m] - can be negative to tune the average turn length """
+            u"""straight length of the conductors outside the lamination before the curved part of winding overhang [m] - can be negative to tune the average turn length (only used in voltage driven simulations)"""
         )
         self.in_Lewout.setWhatsThis(txt)
         self.in_Lewout.setToolTip(txt)
@@ -51,12 +51,12 @@ class Gen_SBar(Ui_SBar):
         # Setup of lf_Lewout
         self.lf_Lewout.validator().setBottom(0)
         txt = self.tr(
-            u"""straight length of the conductors outside the lamination before the curved part of winding overhang [m] - can be negative to tune the average turn length """
+            u"""straight length of the conductors outside the lamination before the curved part of winding overhang [m] - can be negative to tune the average turn length (only used in voltage driven simulations)"""
         )
         self.lf_Lewout.setWhatsThis(txt)
         self.lf_Lewout.setToolTip(txt)
 
-        # Setup of w_mat
+        # Setup of w_mat_scr
         txt = self.tr(u"""Material of the Rotor short circuit ring""")
-        self.w_mat.setWhatsThis(txt)
-        self.w_mat.setToolTip(txt)
+        self.w_mat_scr.setWhatsThis(txt)
+        self.w_mat_scr.setToolTip(txt)

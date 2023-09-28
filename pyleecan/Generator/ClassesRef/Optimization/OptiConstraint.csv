@@ -1,5 +1,6 @@
-Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constante Name,Constante Value,Description classe,Classe fille
-name,,name of the design variable,1,str,,,,,Optimization,,,VERSION,1,Constraint of the optimization problem,
-type_const,,"Type of comparison ( ""=="", ""<="", "">="", ""<"","">"")",1,str,<=,,,,,,,,,,
-value,,Value to compare,2,float,0,,,,,,,,,,
-get_variable,,Function to get the variable to compare,1,function,None,,,,,,,,,,
+Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,as_dict Type
+type_const,,"Type of comparison ( ""=="", ""<="", "">="", ""<"","">"")",1,str,<=,,
+value,,Value to compare,2,float,0,,
+,
+Package,Inherit,Methods,Constante Name,Constante Value,Description classe,Classe fille
+Optimization,DataKeeper,,VERSION,1,Constraint of the optimization problem,

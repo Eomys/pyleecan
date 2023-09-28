@@ -21,7 +21,6 @@ def get_fund_harm(self, data):
     """
 
     if data.symbol in ["B", "AGSF", "Is", "Phi_{wind}"]:
-
         # Init output dict
         fund_harm = dict()
 
@@ -31,7 +30,7 @@ def get_fund_harm(self, data):
         p = self.simu.machine.get_pole_pair_number()
 
         # Get electrical fundamental frequency
-        f_elec = self.simu.input.comp_felec()
+        f_elec = self.elec.OP.get_felec()
 
         # Loop on axes to express the fundamental harmonic of the Data object
         # including normalizations

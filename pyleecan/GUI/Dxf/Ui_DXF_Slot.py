@@ -111,12 +111,12 @@ class Ui_DXF_Slot(object):
 
         self.verticalLayout_2.addWidget(self.g_import)
 
-        self.gridLayout = QGridLayout()
-        self.gridLayout.setObjectName(u"gridLayout")
+        self.horizontalLayout_7 = QHBoxLayout()
+        self.horizontalLayout_7.setObjectName(u"horizontalLayout_7")
         self.in_Zs = QLabel(self.widget)
         self.in_Zs.setObjectName(u"in_Zs")
 
-        self.gridLayout.addWidget(self.in_Zs, 0, 0, 1, 1)
+        self.horizontalLayout_7.addWidget(self.in_Zs)
 
         self.si_Zs = QSpinBox(self.widget)
         self.si_Zs.setObjectName(u"si_Zs")
@@ -130,44 +130,16 @@ class Ui_DXF_Slot(object):
         self.si_Zs.setSingleStep(0)
         self.si_Zs.setValue(36)
 
-        self.gridLayout.addWidget(self.si_Zs, 0, 1, 1, 1)
+        self.horizontalLayout_7.addWidget(self.si_Zs)
 
-        self.in_wind_begin_index = QLabel(self.widget)
-        self.in_wind_begin_index.setObjectName(u"in_wind_begin_index")
+        self.verticalLayout_2.addLayout(self.horizontalLayout_7)
 
-        self.gridLayout.addWidget(self.in_wind_begin_index, 1, 0, 1, 1)
-
-        self.si_wind_begin_index = QSpinBox(self.widget)
-        self.si_wind_begin_index.setObjectName(u"si_wind_begin_index")
-
-        self.gridLayout.addWidget(self.si_wind_begin_index, 1, 1, 1, 1)
-
-        self.in_wind_end_index = QLabel(self.widget)
-        self.in_wind_end_index.setObjectName(u"in_wind_end_index")
-
-        self.gridLayout.addWidget(self.in_wind_end_index, 2, 0, 1, 1)
-
-        self.si_wind_end_index = QSpinBox(self.widget)
-        self.si_wind_end_index.setObjectName(u"si_wind_end_index")
-
-        self.gridLayout.addWidget(self.si_wind_end_index, 2, 1, 1, 1)
-
-        self.in_type_line = QLabel(self.widget)
-        self.in_type_line.setObjectName(u"in_type_line")
-
-        self.gridLayout.addWidget(self.in_type_line, 3, 0, 1, 1)
-
-        self.c_type_line = QComboBox(self.widget)
-        self.c_type_line.addItem("")
-        self.c_type_line.addItem("")
-        self.c_type_line.setObjectName(u"c_type_line")
-
-        self.gridLayout.addWidget(self.c_type_line, 3, 1, 1, 1)
-
+        self.horizontalLayout_6 = QHBoxLayout()
+        self.horizontalLayout_6.setObjectName(u"horizontalLayout_6")
         self.in_axe_angle = QLabel(self.widget)
         self.in_axe_angle.setObjectName(u"in_axe_angle")
 
-        self.gridLayout.addWidget(self.in_axe_angle, 4, 0, 1, 1)
+        self.horizontalLayout_6.addWidget(self.in_axe_angle)
 
         self.lf_axe_angle = FloatEdit(self.widget)
         self.lf_axe_angle.setObjectName(u"lf_axe_angle")
@@ -176,9 +148,47 @@ class Ui_DXF_Slot(object):
         )
         self.lf_axe_angle.setSizePolicy(sizePolicy1)
 
-        self.gridLayout.addWidget(self.lf_axe_angle, 4, 1, 1, 1)
+        self.horizontalLayout_6.addWidget(self.lf_axe_angle)
 
-        self.verticalLayout_2.addLayout(self.gridLayout)
+        self.verticalLayout_2.addLayout(self.horizontalLayout_6)
+
+        self.g_active = QGroupBox(self.widget)
+        self.g_active.setObjectName(u"g_active")
+        self.gridLayout = QGridLayout(self.g_active)
+        self.gridLayout.setObjectName(u"gridLayout")
+        self.c_type_line = QComboBox(self.g_active)
+        self.c_type_line.addItem("")
+        self.c_type_line.addItem("")
+        self.c_type_line.setObjectName(u"c_type_line")
+
+        self.gridLayout.addWidget(self.c_type_line, 0, 1, 1, 1)
+
+        self.in_wind_begin_index = QLabel(self.g_active)
+        self.in_wind_begin_index.setObjectName(u"in_wind_begin_index")
+
+        self.gridLayout.addWidget(self.in_wind_begin_index, 1, 0, 1, 1)
+
+        self.in_type_line = QLabel(self.g_active)
+        self.in_type_line.setObjectName(u"in_type_line")
+
+        self.gridLayout.addWidget(self.in_type_line, 0, 0, 1, 1)
+
+        self.si_wind_begin_index = QSpinBox(self.g_active)
+        self.si_wind_begin_index.setObjectName(u"si_wind_begin_index")
+
+        self.gridLayout.addWidget(self.si_wind_begin_index, 1, 1, 1, 1)
+
+        self.in_wind_end_index = QLabel(self.g_active)
+        self.in_wind_end_index.setObjectName(u"in_wind_end_index")
+
+        self.gridLayout.addWidget(self.in_wind_end_index, 2, 0, 1, 1)
+
+        self.si_wind_end_index = QSpinBox(self.g_active)
+        self.si_wind_end_index.setObjectName(u"si_wind_end_index")
+
+        self.gridLayout.addWidget(self.si_wind_end_index, 2, 1, 1, 1)
+
+        self.verticalLayout_2.addWidget(self.g_active)
 
         self.g_center = QGroupBox(self.widget)
         self.g_center.setObjectName(u"g_center")
@@ -285,18 +295,18 @@ class Ui_DXF_Slot(object):
                 u'<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN" "http://www.w3.org/TR/REC-html40/strict.dtd">\n'
                 '<html><head><meta name="qrichtext" content="1" /><style type="text/css">\n'
                 "p, li { white-space: pre-wrap; }\n"
-                "</style></head><body style=\" font-family:'MS Shell Dlg 2'; font-size:7.8pt; font-weight:400; font-style:normal;\">\n"
-                '<p align="justify" style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-family:\'MS Shell Dlg 2\'; font-size:12pt;">1) Import your DXF file in [m] or set a scaling factor</span></p>\n'
-                '<p align="justify" style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-family:\'MS Shell Dlg 2\'; font-size:12pt;">FEMM convertion enables to merge close points according to tolerance in [local unit] and converts lines to arcs and segments (splines need to be converted)</span></p>\n'
-                '<p align="justify" style=" margin-'
-                'top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-family:\'MS Shell Dlg 2\'; font-size:12pt;">2) Click on lines and arcs to draw the contour of a single slot</span></p>\n'
-                '<p align="justify" style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-family:\'MS Shell Dlg 2\'; font-size:12pt;">3) First point and last point must be on the bore radius (must match the lamination radius)</span></p>\n'
-                '<p align="justify" style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-family:\'MS Shell Dlg 2\'; font-size:12pt;">4) The winding area is defined by a part of the slot contour and a closing line:</span></p>\n'
-                '<p align="justify" style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-family:\'MS Shel'
-                "l Dlg 2'; font-size:12pt;\">- The points are ordered in trigonometrical order (from bore radius to bore radius)</span></p>\n"
-                '<p align="justify" style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-family:\'MS Shell Dlg 2\'; font-size:12pt;">- First point index is 0</span></p>\n'
-                '<p align="justify" style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-family:\'MS Shell Dlg 2\'; font-size:12pt;">- Closing line can be either a segment or an arc (centered on X=0, Y=0)</span></p>\n'
-                '<p align="justify" style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-family:\'MS Shell Dlg 2\'; font-size:12pt;">5) Plot to check and save</span></p></body></html>',
+                "</style></head><body style=\" font-family:'DejaVu Sans'; font-size:7.8pt; font-weight:400; font-style:normal;\">\n"
+                '<p align="justify" style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-family:\'DejaVu Sans\'; font-size:10pt;">1) Import your DXF file in [m] or set a scaling factor</span></p>\n'
+                '<p align="justify" style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-family:\'DejaVu Sans\'; font-size:10pt;">FEMM convertion enables to merge close points according to tolerance in [local unit] and converts lines to arcs and segments (splines need to be converted)</span></p>\n'
+                '<p align="justify" style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0p'
+                'x; -qt-block-indent:0; text-indent:0px;"><span style=" font-family:\'DejaVu Sans\'; font-size:10pt;">2) Click on lines and arcs to draw the contour of a single slot</span></p>\n'
+                '<p align="justify" style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-family:\'DejaVu Sans\'; font-size:10pt;">3) First point and last point must be on the bore radius (must match the lamination radius)</span></p>\n'
+                '<p align="justify" style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-family:\'DejaVu Sans\'; font-size:10pt;">4) The winding area is defined by a part of the slot contour and a closing line:</span></p>\n'
+                '<p align="justify" style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-family:\'DejaVu Sans\'; font-size:10pt;">- The points are ordered in trigonometrical order (from bore radius to bore radius)</span></p>\n'
+                '<p align="justify" style=" margin-top:0px; margin-'
+                'bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-family:\'DejaVu Sans\'; font-size:10pt;">- First point index is 0</span></p>\n'
+                '<p align="justify" style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-family:\'DejaVu Sans\'; font-size:10pt;">- Closing line can be either a segment or an arc (centered on X=0, Y=0)</span></p>\n'
+                '<p align="justify" style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-family:\'DejaVu Sans\'; font-size:10pt;">5) Plot to check and save</span></p></body></html>',
                 None,
             )
         )
@@ -313,15 +323,11 @@ class Ui_DXF_Slot(object):
         self.in_Zs.setText(
             QCoreApplication.translate("DXF_Slot", u"Number of slots", None)
         )
-        self.in_wind_begin_index.setText(
-            QCoreApplication.translate("DXF_Slot", u"Winding start index", None)
+        self.in_axe_angle.setText(
+            QCoreApplication.translate("DXF_Slot", u"Slot axe angle shift", None)
         )
-        self.in_wind_end_index.setText(
-            QCoreApplication.translate("DXF_Slot", u"Winding end index", None)
-        )
-        self.in_type_line.setText(
-            QCoreApplication.translate("DXF_Slot", u"Closing line type", None)
-        )
+        self.lf_axe_angle.setText(QCoreApplication.translate("DXF_Slot", u"0", None))
+        self.g_active.setTitle(QCoreApplication.translate("DXF_Slot", u"Winding", None))
         self.c_type_line.setItemText(
             0, QCoreApplication.translate("DXF_Slot", u"Segment", None)
         )
@@ -329,10 +335,15 @@ class Ui_DXF_Slot(object):
             1, QCoreApplication.translate("DXF_Slot", u"Arc1", None)
         )
 
-        self.in_axe_angle.setText(
-            QCoreApplication.translate("DXF_Slot", u"Slot axe angle shift", None)
+        self.in_wind_begin_index.setText(
+            QCoreApplication.translate("DXF_Slot", u"Winding start index", None)
         )
-        self.lf_axe_angle.setText(QCoreApplication.translate("DXF_Slot", u"0", None))
+        self.in_type_line.setText(
+            QCoreApplication.translate("DXF_Slot", u"Closing line type", None)
+        )
+        self.in_wind_end_index.setText(
+            QCoreApplication.translate("DXF_Slot", u"Winding end index", None)
+        )
         self.g_center.setTitle(
             QCoreApplication.translate("DXF_Slot", u"Machine Center", None)
         )

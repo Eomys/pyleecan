@@ -10,9 +10,9 @@ from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
-from ..Functions.copy import copy
 from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
+from copy import deepcopy
 from .Elmer import Elmer
 
 # Import all class method
@@ -23,6 +23,7 @@ except ImportError as error:
     build_meshsolution = error
 
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 
@@ -43,9 +44,8 @@ class ElmerResultsVTU(Elmer):
         )
     else:
         build_meshsolution = build_meshsolution
-    # save and copy methods are available in all object
+    # generic save method is available in all object
     save = save
-    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -118,7 +118,7 @@ class ElmerResultsVTU(Elmer):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -128,13 +128,43 @@ class ElmerResultsVTU(Elmer):
         diff_list = list()
 
         # Check the properties inherited from Elmer
-        diff_list.extend(super(ElmerResultsVTU, self).compare(other, name=name))
+        diff_list.extend(
+            super(ElmerResultsVTU, self).compare(
+                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
+            )
+        )
         if other._label != self._label:
-            diff_list.append(name + ".label")
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._label) + ", other=" + str(other._label) + ")"
+                )
+                diff_list.append(name + ".label" + val_str)
+            else:
+                diff_list.append(name + ".label")
         if other._file_path != self._file_path:
-            diff_list.append(name + ".file_path")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._file_path)
+                    + ", other="
+                    + str(other._file_path)
+                    + ")"
+                )
+                diff_list.append(name + ".file_path" + val_str)
+            else:
+                diff_list.append(name + ".file_path")
         if other._store_dict != self._store_dict:
-            diff_list.append(name + ".store_dict")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._store_dict)
+                    + ", other="
+                    + str(other._store_dict)
+                    + ")"
+                )
+                diff_list.append(name + ".store_dict" + val_str)
+            else:
+                diff_list.append(name + ".store_dict")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -179,6 +209,26 @@ class ElmerResultsVTU(Elmer):
         # Overwrite the mother class name
         ElmerResultsVTU_dict["__class__"] = "ElmerResultsVTU"
         return ElmerResultsVTU_dict
+
+    def copy(self):
+        """Creates a deepcopy of the object"""
+
+        # Handle deepcopy of all the properties
+        label_val = self.label
+        file_path_val = self.file_path
+        if self.store_dict is None:
+            store_dict_val = None
+        else:
+            store_dict_val = self.store_dict.copy()
+        logger_name_val = self.logger_name
+        # Creates new object of the same type with the copied properties
+        obj_copy = type(self)(
+            label=label_val,
+            file_path=file_path_val,
+            store_dict=store_dict_val,
+            logger_name=logger_name_val,
+        )
+        return obj_copy
 
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""

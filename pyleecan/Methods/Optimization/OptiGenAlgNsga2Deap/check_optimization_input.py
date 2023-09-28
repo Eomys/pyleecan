@@ -1,6 +1,8 @@
 from logging import Logger, FileHandler, Formatter, INFO, NOTSET
 from datetime import datetime
 from ....Classes.OptiObjective import OptiObjective
+from ....Classes.OptiDesignVarSet import OptiDesignVarSet
+from ....Classes.OptiDesignVarInterval import OptiDesignVarInterval
 
 
 class OptimizationAttributeError(Exception):
@@ -79,9 +81,11 @@ def check_optimization_input(self):
         )
     else:
         for design_var in self.problem.design_var:
-            if design_var.type_var not in ["set", "interval"]:
-                mess = 'The design variable \'{}\' has a wrong type_var got {} expected "set" or "interval".'.format(
-                    design_var.name, design_var.type_var
+            if not isinstance(design_var, OptiDesignVarInterval) and not isinstance(
+                design_var, OptiDesignVarSet
+            ):
+                mess = "The design variable '{}' is expected to be an OptiDesignVarSet or an OptiDesignVarInterval.".format(
+                    design_var.name
                 )
                 raise OptimizationAttributeError(mess)
             elif design_var.symbol in [None, ""]:
@@ -108,10 +112,8 @@ def check_optimization_input(self):
                 )
                 raise OptimizationAttributeError(mess)
             # Check getter
-            elif not callable(cstr.get_variable):
-                mess = (
-                    "The constraint '{}' function get_variable is not callable.".format(
-                        cstr.name
-                    )
+            elif not callable(cstr.keeper):
+                mess = "The constraint '{}' function keeper is not callable.".format(
+                    cstr.name
                 )
                 raise OptimizationAttributeError(mess)

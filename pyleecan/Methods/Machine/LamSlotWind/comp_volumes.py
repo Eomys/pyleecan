@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 
-from numpy import pi
 from ....Classes.LamSlot import LamSlot
 
 
@@ -23,7 +22,8 @@ def comp_volumes(self):
     Lf = self.comp_length()  # Include radial ventilation ducts
     if self.slot is None:
         V_dict["Vwind"] = 0
+        V_dict["Vwedge"] = 0
     else:
         V_dict["Vwind"] = Lf * self.get_Zs() * self.slot.comp_surface_active()
-
+        V_dict["Vwedge"] = Lf * self.get_Zs() * self.slot.comp_surface_wedges()
     return V_dict

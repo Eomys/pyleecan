@@ -1,3 +1,6 @@
-Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
-sin_list,-,List of sinus vector to generate the matrix lines,0,[ImportGenVectSin],,,,,Import,ImportMatrix,get_data,VERSION,1,To generate a Sinus matrix
-,,,,,,,,,,,init_vector,,,
+Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,as_dict Type
+sin_list,-,List of sinus vector to generate the matrix lines,0,[ImportGenVectSin],,,
+,
+Package,Inherit,Methods,Constant Name,Constant Value,Class description
+Import,ImportMatrix,get_data,VERSION,1,To generate a Sinus matrix
+,,init_vector,,,

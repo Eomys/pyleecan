@@ -1,4 +1,7 @@
-Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
-field,-,"Data object containing the numerical values of a solution. One of the axis must be ""Indices"", a list of indices. If the solution is a vector, one of the axis must be ""Direction"", values ['x','y'] for example.",,SciDataTool.Classes.VectorField.VectorField,None,,,,Mesh,Solution,get_field,VERSION,1,Define a Solution with SciDataTool objects.
-,,,,,,,,,,,get_axes_list,,,
-,,,,,,,,,,,get_solution,,,
+Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,as_dict Type
+field,-,"Data object containing the numerical values of a solution. One of the axis must be ""Indices"", a list of indices. If the solution is a vector, one of the axis must be ""Direction"", values ['x','y'] for example.",,SciDataTool.Classes.VectorField.VectorField,None,,
+,
+Package,Inherit,Methods,Constant Name,Constant Value,Class description
+Mesh,Solution,get_field,VERSION,1,Define a Solution with SciDataTool objects.
+,,get_axes_list,,,
+,,get_solution,,,

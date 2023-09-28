@@ -37,12 +37,12 @@ class WPathSelectorV(QGroupBox):
         self.verticalLayout = QVBoxLayout(self)
 
         self.b_path = QPushButton(self)
-        self.b_path.setObjectName(u"b_path")
+        self.b_path.setObjectName("b_path")
 
         self.verticalLayout.addWidget(self.b_path)
 
         self.le_path = QLineEdit(self)
-        self.le_path.setObjectName(u"le_path")
+        self.le_path.setObjectName("le_path")
         # sizePolicy2 = QSizePolicy(QSizePolicy.Maximum, QSizePolicy.Fixed)
         # sizePolicy2.setHorizontalStretch(0)
         # sizePolicy2.setVerticalStretch(0)

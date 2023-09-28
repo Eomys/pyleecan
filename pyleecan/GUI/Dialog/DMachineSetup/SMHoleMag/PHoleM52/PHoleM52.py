@@ -9,6 +9,7 @@ from ......Classes.HoleM52 import HoleM52
 from ......GUI import gui_option
 from ......GUI.Dialog.DMachineSetup.SMHoleMag.PHoleM52.Gen_PHoleM52 import Gen_PHoleM52
 from ......Methods.Slot.Slot import SlotCheckError
+from ......GUI.Dialog.DMachineSetup.SMHoleMag import DEFAULT_MAG_MAT
 
 
 class PHoleM52(Gen_PHoleM52, QWidget):
@@ -52,7 +53,7 @@ class PHoleM52(Gen_PHoleM52, QWidget):
         self.w_mat_0.is_hide_button = True
 
         self.w_mat_1.setText("magnet_0")
-        self.w_mat_1.def_mat = "Magnet1"
+        self.w_mat_1.def_mat = DEFAULT_MAG_MAT
         self.w_mat_1.is_hide_button = True
 
         # Set unit name (m ou mm)
@@ -192,9 +193,7 @@ class PHoleM52(Gen_PHoleM52, QWidget):
             self.out_magnet_surface.setText(
                 "Magnet surface: " + m_surf + " " + self.u.get_m2_name()
             )
-            self.out_alpha.setText(
-                "alpha: " + alpha_rad + u" rad (" + alpha_deg + u"°)"
-            )
+            self.out_alpha.setText("alpha: " + alpha_rad + " rad (" + alpha_deg + "°)")
             self.out_W1.setText("W1: " + W1 + " " + self.u.get_m_name())
 
         else:

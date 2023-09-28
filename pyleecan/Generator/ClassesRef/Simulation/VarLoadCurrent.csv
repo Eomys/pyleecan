@@ -1,5 +1,6 @@
-Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
-OP_matrix,-,"Operating point matrix (N0,I0,Phi0,T,P) or (N0,Id,Iq,T,P) ","(Nsimu, 5)",ndarray,None,,,,Simulation,VarLoad,get_input_list,VERSION,1,Generate a multisimulation with InputCurrent at variable operating point
-type_OP_matrix,-,"Select which kind of OP_matrix is used 0: (N0,I0,Phi0,T,P), 1:(N0,Id,Iq,T,P) ",,int,0,0,1,,,,generate_simulation_list,,,
-is_torque,-,True if the Torque is defined in OP_matrix,,bool,False,,,,,,check_param,,,
-is_power,,True if the Power is defined in OP_matrix,,bool,False,,,,,,get_elec_datakeeper,,,
+Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,as_dict Type
+,
+Package,Inherit,Methods,Constant Name,Constant Value,Class description
+Simulation,VarLoad,generate_simulation_list,VERSION,1,Generate a multisimulation with InputCurrent at variable operating point
+,,get_elec_datakeeper,,,
+,,get_input_list,,,

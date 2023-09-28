@@ -10,9 +10,9 @@ from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
-from ..Functions.copy import copy
 from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
+from copy import deepcopy
 from ._frozen import FrozenClass
 
 # Import all class method
@@ -88,8 +88,8 @@ except ImportError as error:
     get_R_id = error
 
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
-from .Material import Material
 
 
 class Hole(FrozenClass):
@@ -237,9 +237,8 @@ class Hole(FrozenClass):
         )
     else:
         get_R_id = get_R_id
-    # save and copy methods are available in all object
+    # generic save method is available in all object
     save = save
-    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -322,7 +321,7 @@ class Hole(FrozenClass):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -331,19 +330,55 @@ class Hole(FrozenClass):
             return ["type(" + name + ")"]
         diff_list = list()
         if other._Zh != self._Zh:
-            diff_list.append(name + ".Zh")
+            if is_add_value:
+                val_str = " (self=" + str(self._Zh) + ", other=" + str(other._Zh) + ")"
+                diff_list.append(name + ".Zh" + val_str)
+            else:
+                diff_list.append(name + ".Zh")
         if (other.mat_void is None and self.mat_void is not None) or (
             other.mat_void is not None and self.mat_void is None
         ):
             diff_list.append(name + ".mat_void None mismatch")
         elif self.mat_void is not None:
             diff_list.extend(
-                self.mat_void.compare(other.mat_void, name=name + ".mat_void")
+                self.mat_void.compare(
+                    other.mat_void,
+                    name=name + ".mat_void",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
             )
         if other._magnetization_dict_offset != self._magnetization_dict_offset:
-            diff_list.append(name + ".magnetization_dict_offset")
-        if other._Alpha0 != self._Alpha0:
-            diff_list.append(name + ".Alpha0")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._magnetization_dict_offset)
+                    + ", other="
+                    + str(other._magnetization_dict_offset)
+                    + ")"
+                )
+                diff_list.append(name + ".magnetization_dict_offset" + val_str)
+            else:
+                diff_list.append(name + ".magnetization_dict_offset")
+        if (
+            other._Alpha0 is not None
+            and self._Alpha0 is not None
+            and isnan(other._Alpha0)
+            and isnan(self._Alpha0)
+        ):
+            pass
+        elif other._Alpha0 != self._Alpha0:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._Alpha0)
+                    + ", other="
+                    + str(other._Alpha0)
+                    + ")"
+                )
+                diff_list.append(name + ".Alpha0" + val_str)
+            else:
+                diff_list.append(name + ".Alpha0")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -391,6 +426,29 @@ class Hole(FrozenClass):
         Hole_dict["__class__"] = "Hole"
         return Hole_dict
 
+    def copy(self):
+        """Creates a deepcopy of the object"""
+
+        # Handle deepcopy of all the properties
+        Zh_val = self.Zh
+        if self.mat_void is None:
+            mat_void_val = None
+        else:
+            mat_void_val = self.mat_void.copy()
+        if self.magnetization_dict_offset is None:
+            magnetization_dict_offset_val = None
+        else:
+            magnetization_dict_offset_val = self.magnetization_dict_offset.copy()
+        Alpha0_val = self.Alpha0
+        # Creates new object of the same type with the copied properties
+        obj_copy = type(self)(
+            Zh=Zh_val,
+            mat_void=mat_void_val,
+            magnetization_dict_offset=magnetization_dict_offset_val,
+            Alpha0=Alpha0_val,
+        )
+        return obj_copy
+
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""
 
@@ -426,13 +484,20 @@ class Hole(FrozenClass):
     def _set_mat_void(self, value):
         """setter of mat_void"""
         if isinstance(value, str):  # Load from file
-            value = load_init_dict(value)[1]
+            try:
+                value = load_init_dict(value)[1]
+            except Exception as e:
+                self.get_logger().error(
+                    "Error while loading " + value + ", setting None instead"
+                )
+                value = None
         if isinstance(value, dict) and "__class__" in value:
             class_obj = import_class(
                 "pyleecan.Classes", value.get("__class__"), "mat_void"
             )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
+            Material = import_class("pyleecan.Classes", "Material", "mat_void")
             value = Material()
         check_var("mat_void", value, "Material")
         self._mat_void = value

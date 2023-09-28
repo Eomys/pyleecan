@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 from PySide2 import QtWidgets, QtGui, QtCore
-from matplotlib.backends.backend_qt5agg import FigureCanvas
+from matplotlib.backends.backend_qt5agg import (
+    FigureCanvas,
+)  # needed for proper exe gen.
 
 import sys
 from os.path import dirname, join, isfile
@@ -79,7 +81,7 @@ def run_GUI(argv):
         window.addSubWindow("Plot", plt_widget, plt_widget.update)
 
         mat_widget.installEventFilter(window)
-        window.addSubWindow("MatLib", mat_widget, mat_widget.update_list_mat)
+        window.addSubWindow("MatLib", mat_widget, mat_widget.update_treeview_material)
 
         tree = WTreeEdit(c.machine)
         tree_fcn = lambda: tree.update(getattr(c, "machine"))

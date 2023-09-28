@@ -1,13 +1,13 @@
 from numpy import pi
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
-from matplotlib.pyplot import axis, subplots
-from matplotlib.patches import Polygon, Circle
+from matplotlib.pyplot import subplots
+from matplotlib.patches import Polygon
 
 
 def plot_anim_rotor(self, Nframe, Tanim, Nrot=1, is_loop=True):
     """Plot the machine with an animation of the rotor
-    (inner rotor for now ?)
+    (Internal Rotor for now ?)
 
     Parameters
     ----------
@@ -30,7 +30,7 @@ def plot_anim_rotor(self, Nframe, Tanim, Nrot=1, is_loop=True):
     axes.set_title("Machine")
 
     # Axis Setup
-    axis("equal")
+    axes.axis("equal")
 
     # The Lamination is centered in the figure
     Lim = (self.stator.Rext) * 1.5  # Axes limit for plot

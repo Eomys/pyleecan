@@ -3,7 +3,7 @@
 import PySide2.QtCore
 from PySide2.QtCore import Signal
 from PySide2.QtWidgets import QWidget
-
+from PySide2.QtGui import QPixmap
 from ......Classes.SlotW24 import SlotW24
 from ......GUI import gui_option
 from ......GUI.Dialog.DMachineSetup.SWSlot.PWSlot24.Gen_PWSlot24 import Gen_PWSlot24
@@ -21,7 +21,7 @@ class PWSlot24(Gen_PWSlot24, QWidget):
     slot_name = "Slot Type 24"
     slot_type = SlotW24
 
-    def __init__(self, lamination=None):
+    def __init__(self, lamination=None, material_dict=None):
         """Initialize the GUI according to current lamination
 
         Parameters
@@ -30,6 +30,8 @@ class PWSlot24(Gen_PWSlot24, QWidget):
             A PWSlot24 widget
         lamination : Lamination
             current lamination to edit
+        material_dict: dict
+            Materials dictionary (library + machine)
         """
         # Build the interface according to the .ui file
         QWidget.__init__(self)
@@ -37,6 +39,8 @@ class PWSlot24(Gen_PWSlot24, QWidget):
 
         self.lamination = lamination
         self.slot = lamination.slot
+        self.material_dict = material_dict
+
         # Set FloatEdit unit
         self.lf_W3.unit = "m"
         self.lf_H2.unit = "m"

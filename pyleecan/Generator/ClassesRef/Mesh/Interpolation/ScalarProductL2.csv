@@ -1,2 +1,4 @@
-Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
-,,,,,,,,,Mesh,ScalarProduct,scalar_product,VERSION,1,Store shape functions definition in the reference element
+Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,as_dict Type
+,
+Package,Inherit,Methods,Constant Name,Constant Value,Class description
+Mesh,ScalarProduct,scalar_product,VERSION,1,Store shape functions definition in the reference element

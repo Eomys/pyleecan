@@ -21,7 +21,7 @@ class Ui_PWSlot24(object):
             PWSlot24.setObjectName(u"PWSlot24")
         PWSlot24.resize(792, 470)
         PWSlot24.setMinimumSize(QSize(270, 470))
-        PWSlot24.setMaximumSize(QSize(1101, 16777215))
+        PWSlot24.setMaximumSize(QSize(16777215, 16777215))
         self.horizontalLayout = QHBoxLayout(PWSlot24)
         self.horizontalLayout.setObjectName(u"horizontalLayout")
         self.verticalLayout_2 = QVBoxLayout()
@@ -35,7 +35,7 @@ class Ui_PWSlot24(object):
         self.img_slot.setSizePolicy(sizePolicy)
         self.img_slot.setMaximumSize(QSize(16777215, 16777215))
         self.img_slot.setPixmap(
-            QPixmap(u":/images/images/MachineSetup/WSlot/SlotW24.png")
+            QPixmap(u":/images/images/MachineSetup/WSlot/SlotW24_wind.png")
         )
         self.img_slot.setScaledContents(False)
         self.img_slot.setAlignment(Qt.AlignCenter)
@@ -49,7 +49,7 @@ class Ui_PWSlot24(object):
         sizePolicy1.setVerticalStretch(0)
         sizePolicy1.setHeightForWidth(self.textEdit.sizePolicy().hasHeightForWidth())
         self.textEdit.setSizePolicy(sizePolicy1)
-        self.textEdit.setMaximumSize(QSize(16777215, 80))
+        self.textEdit.setMaximumSize(QSize(16777215, 50))
 
         self.verticalLayout_2.addWidget(self.textEdit)
 
@@ -129,9 +129,9 @@ class Ui_PWSlot24(object):
                 u'<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN" "http://www.w3.org/TR/REC-html40/strict.dtd">\n'
                 '<html><head><meta name="qrichtext" content="1" /><style type="text/css">\n'
                 "p, li { white-space: pre-wrap; }\n"
-                "</style></head><body style=\" font-family:'MS Shell Dlg 2'; font-size:7.8pt; font-weight:400; font-style:normal;\">\n"
-                '<p align="center" style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-size:14pt;">Constant tooth width</span></p>\n'
-                '<p align="center" style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-size:14pt;">Slot edges are not radial</span></p></body></html>',
+                "</style></head><body style=\" font-family:'DejaVu Sans'; font-size:7.8pt; font-weight:400; font-style:normal;\">\n"
+                '<p align="center" style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-family:\'DejaVu Sans\'; font-size:10pt;">Constant tooth width</span></p>\n'
+                '<p align="center" style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-family:\'DejaVu Sans\'; font-size:10pt;">Slot edges are not radial</span></p></body></html>',
                 None,
             )
         )

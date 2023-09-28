@@ -5,12 +5,13 @@ Test Pyleecan optimization module using Zitzler–Deb–Thiele's function N. 3
 """
 from os.path import join
 import pytest
+from pyleecan.Classes.OPslip import OPslip
 from pyleecan.definitions import PACKAGE_NAME
 from pyleecan.Classes.InputCurrent import InputCurrent
 from pyleecan.Classes.MagFEMM import MagFEMM
 from pyleecan.Classes.Simu1 import Simu1
 from pyleecan.Classes.Output import Output
-from pyleecan.Classes.OptiDesignVar import OptiDesignVar
+from pyleecan.Classes.OptiDesignVarInterval import OptiDesignVarInterval
 from pyleecan.Classes.OptiObjective import OptiObjective
 from pyleecan.Classes.OptiConstraint import OptiConstraint
 from pyleecan.Classes.OptiProblem import OptiProblem
@@ -34,7 +35,7 @@ from pyleecan.definitions import DATA_DIR, TEST_DIR
 @pytest.mark.SingleOP
 def test_zdt3():
     # ### Defining reference Output
-    SCIM_001 = load(join(DATA_DIR, "Machine", "SCIM_001.json"))
+    SCIM_001 = load(join(DATA_DIR, "Machine", "Railway_Traction.json"))
 
     # Definition of the enforced output of the electrical module
     Nt = 2
@@ -59,8 +60,7 @@ def test_zdt3():
     simu.input = InputCurrent(
         Is=Is,
         Ir=Ir,  # zero current for the rotor
-        N0=N0,
-        angle_rotor=None,  # Will be computed
+        OP=OPslip(N0=N0),
         time=time,
         Na_tot=Na_tot,
         angle_rotor_initial=0.5216 + np.pi,
@@ -87,10 +87,9 @@ def test_zdt3():
 
     for i in range(30):
         my_vars.append(
-            OptiDesignVar(
+            OptiDesignVarInterval(
                 name="Ir({})".format(i),
                 symbol="var_" + str(i),
-                type_var="interval",
                 space=[0, 1],
                 get_value=lambda space: np.random.uniform(*space),
                 setter=gen_setter(i),
@@ -145,3 +144,7 @@ def test_zdt3():
     axs[0].set_xlabel(r"$f_1(x)$")
     axs[0].set_ylabel(r"$f_2(x)$")
     fig.savefig(join(save_path, "test_zdt3.png"))
+
+
+if __name__ == "__main__":
+    test_zdt3()

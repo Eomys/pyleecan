@@ -6,6 +6,7 @@ from numpy import lcm, pi
 
 from pyleecan.Classes.InputCurrent import InputCurrent
 from pyleecan.Classes.MagFEMM import MagFEMM
+from pyleecan.Classes.OPdq import OPdq
 from pyleecan.Classes.Skew import Skew
 from pyleecan.Classes.Simu1 import Simu1
 
@@ -46,20 +47,14 @@ def test_FEMM_skew():
     simu_no_skew = Simu1(name=name + "_none", machine=SPMSM_no_skew)
 
     simu_no_skew.input = InputCurrent(
-        N0=1200,
-        Id_ref=0,
-        Iq_ref=0,
-        Tem_av_ref=0,
+        OP=OPdq(N0=1200, Id_ref=0, Iq_ref=0, Tem_av_ref=0),
         Na_tot=400 * 4,
         Nt_tot=40 * 4,
     )
 
     # Definition of the magnetic simulation (direct calculation with permeance mmf)
     simu_no_skew.mag = MagFEMM(
-        is_periodicity_a=True,
-        is_periodicity_t=True,
-        nb_worker=4,
-        Kmesh_fineness=0.5,
+        is_periodicity_a=True, is_periodicity_t=True, nb_worker=4, Kmesh_fineness=0.5
     )
 
     # Run reference simulation
@@ -72,10 +67,7 @@ def test_FEMM_skew():
         rate_kseg = comp_skew_angle(Zs, p, Nstep=k) / ssp
         SPMSM_skew_kseg = SPMSM_skew.copy()
         SPMSM_skew_kseg.rotor.skew = Skew(
-            type_skew="linear",
-            is_step=True,
-            rate=rate_kseg,
-            Nstep=k,
+            type_skew="linear", is_step=True, rate=rate_kseg, Nstep=k
         )
         simu_skew_kseg = simu_no_skew.copy()
         simu_skew_kseg.machine = SPMSM_skew_kseg
@@ -91,7 +83,6 @@ def test_FEMM_skew():
     linestyles = ["solid", "solid", "dashed", "dashdot", "dotted"]
 
     for out_skew in out_list:
-
         Nstep = out_skew.simu.machine.rotor.skew.Nstep
 
         # Plot skew pattern result
@@ -106,8 +97,7 @@ def test_FEMM_skew():
             x_max=30,
             **dict_2D,
             save_path=join(
-                save_path,
-                "test_FEMM_skew_Tem_slice_Nstep" + str(Nstep) + ".png",
+                save_path, "test_FEMM_skew_Tem_slice_Nstep" + str(Nstep) + ".png"
             ),
             is_show_fig=is_show_fig,
         )

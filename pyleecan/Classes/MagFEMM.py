@@ -10,9 +10,9 @@ from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
-from ..Functions.copy import copy
 from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
+from copy import deepcopy
 from .Magnetics import Magnetics
 
 # Import all class method
@@ -47,10 +47,14 @@ try:
 except ImportError as error:
     solve_FEMM_parallel = error
 
+try:
+    from ..Methods.Simulation.MagFEMM.build_MS_sliced import build_MS_sliced
+except ImportError as error:
+    build_MS_sliced = error
 
+
+from numpy import isnan
 from ._check import InitUnKnowClassError
-from .DXFImport import DXFImport
-from .SliceModel import SliceModel
 
 
 class MagFEMM(Magnetics):
@@ -127,9 +131,19 @@ class MagFEMM(Magnetics):
         )
     else:
         solve_FEMM_parallel = solve_FEMM_parallel
-    # save and copy methods are available in all object
+    # cf Methods.Simulation.MagFEMM.build_MS_sliced
+    if isinstance(build_MS_sliced, ImportError):
+        build_MS_sliced = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use MagFEMM method build_MS_sliced: " + str(build_MS_sliced)
+                )
+            )
+        )
+    else:
+        build_MS_sliced = build_MS_sliced
+    # generic save method is available in all object
     save = save
-    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -151,6 +165,8 @@ class MagFEMM(Magnetics):
         nb_worker=1,
         Rag_enforced=None,
         is_set_previous=True,
+        is_fast_draw=True,
+        is_calc_torque_energy=True,
         is_remove_slotS=False,
         is_remove_slotR=False,
         is_remove_ventS=False,
@@ -167,6 +183,9 @@ class MagFEMM(Magnetics):
         Slice_enforced=None,
         Nslices_enforced=None,
         type_distribution_enforced=None,
+        is_current_harm=True,
+        T_mag=20,
+        is_periodicity_rotor=False,
         init_dict=None,
         init_str=None,
     ):
@@ -217,6 +236,10 @@ class MagFEMM(Magnetics):
                 Rag_enforced = init_dict["Rag_enforced"]
             if "is_set_previous" in list(init_dict.keys()):
                 is_set_previous = init_dict["is_set_previous"]
+            if "is_fast_draw" in list(init_dict.keys()):
+                is_fast_draw = init_dict["is_fast_draw"]
+            if "is_calc_torque_energy" in list(init_dict.keys()):
+                is_calc_torque_energy = init_dict["is_calc_torque_energy"]
             if "is_remove_slotS" in list(init_dict.keys()):
                 is_remove_slotS = init_dict["is_remove_slotS"]
             if "is_remove_slotR" in list(init_dict.keys()):
@@ -249,6 +272,12 @@ class MagFEMM(Magnetics):
                 Nslices_enforced = init_dict["Nslices_enforced"]
             if "type_distribution_enforced" in list(init_dict.keys()):
                 type_distribution_enforced = init_dict["type_distribution_enforced"]
+            if "is_current_harm" in list(init_dict.keys()):
+                is_current_harm = init_dict["is_current_harm"]
+            if "T_mag" in list(init_dict.keys()):
+                T_mag = init_dict["T_mag"]
+            if "is_periodicity_rotor" in list(init_dict.keys()):
+                is_periodicity_rotor = init_dict["is_periodicity_rotor"]
         # Set the properties (value check and convertion are done in setter)
         self.Kmesh_fineness = Kmesh_fineness
         self.Kgeo_fineness = Kgeo_fineness
@@ -266,6 +295,8 @@ class MagFEMM(Magnetics):
         self.nb_worker = nb_worker
         self.Rag_enforced = Rag_enforced
         self.is_set_previous = is_set_previous
+        self.is_fast_draw = is_fast_draw
+        self.is_calc_torque_energy = is_calc_torque_energy
         # Call Magnetics init
         super(MagFEMM, self).__init__(
             is_remove_slotS=is_remove_slotS,
@@ -284,6 +315,9 @@ class MagFEMM(Magnetics):
             Slice_enforced=Slice_enforced,
             Nslices_enforced=Nslices_enforced,
             type_distribution_enforced=type_distribution_enforced,
+            is_current_harm=is_current_harm,
+            T_mag=T_mag,
+            is_periodicity_rotor=is_periodicity_rotor,
         )
         # The class is frozen (in Magnetics init), for now it's impossible to
         # add new properties
@@ -331,6 +365,10 @@ class MagFEMM(Magnetics):
         MagFEMM_str += "nb_worker = " + str(self.nb_worker) + linesep
         MagFEMM_str += "Rag_enforced = " + str(self.Rag_enforced) + linesep
         MagFEMM_str += "is_set_previous = " + str(self.is_set_previous) + linesep
+        MagFEMM_str += "is_fast_draw = " + str(self.is_fast_draw) + linesep
+        MagFEMM_str += (
+            "is_calc_torque_energy = " + str(self.is_calc_torque_energy) + linesep
+        )
         return MagFEMM_str
 
     def __eq__(self, other):
@@ -374,9 +412,13 @@ class MagFEMM(Magnetics):
             return False
         if other.is_set_previous != self.is_set_previous:
             return False
+        if other.is_fast_draw != self.is_fast_draw:
+            return False
+        if other.is_calc_torque_energy != self.is_calc_torque_energy:
+            return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -386,32 +428,145 @@ class MagFEMM(Magnetics):
         diff_list = list()
 
         # Check the properties inherited from Magnetics
-        diff_list.extend(super(MagFEMM, self).compare(other, name=name))
-        if other._Kmesh_fineness != self._Kmesh_fineness:
-            diff_list.append(name + ".Kmesh_fineness")
-        if other._Kgeo_fineness != self._Kgeo_fineness:
-            diff_list.append(name + ".Kgeo_fineness")
+        diff_list.extend(
+            super(MagFEMM, self).compare(
+                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
+            )
+        )
+        if (
+            other._Kmesh_fineness is not None
+            and self._Kmesh_fineness is not None
+            and isnan(other._Kmesh_fineness)
+            and isnan(self._Kmesh_fineness)
+        ):
+            pass
+        elif other._Kmesh_fineness != self._Kmesh_fineness:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._Kmesh_fineness)
+                    + ", other="
+                    + str(other._Kmesh_fineness)
+                    + ")"
+                )
+                diff_list.append(name + ".Kmesh_fineness" + val_str)
+            else:
+                diff_list.append(name + ".Kmesh_fineness")
+        if (
+            other._Kgeo_fineness is not None
+            and self._Kgeo_fineness is not None
+            and isnan(other._Kgeo_fineness)
+            and isnan(self._Kgeo_fineness)
+        ):
+            pass
+        elif other._Kgeo_fineness != self._Kgeo_fineness:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._Kgeo_fineness)
+                    + ", other="
+                    + str(other._Kgeo_fineness)
+                    + ")"
+                )
+                diff_list.append(name + ".Kgeo_fineness" + val_str)
+            else:
+                diff_list.append(name + ".Kgeo_fineness")
         if other._type_calc_leakage != self._type_calc_leakage:
-            diff_list.append(name + ".type_calc_leakage")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._type_calc_leakage)
+                    + ", other="
+                    + str(other._type_calc_leakage)
+                    + ")"
+                )
+                diff_list.append(name + ".type_calc_leakage" + val_str)
+            else:
+                diff_list.append(name + ".type_calc_leakage")
         if other._file_name != self._file_name:
-            diff_list.append(name + ".file_name")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._file_name)
+                    + ", other="
+                    + str(other._file_name)
+                    + ")"
+                )
+                diff_list.append(name + ".file_name" + val_str)
+            else:
+                diff_list.append(name + ".file_name")
         if other._FEMM_dict_enforced != self._FEMM_dict_enforced:
-            diff_list.append(name + ".FEMM_dict_enforced")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._FEMM_dict_enforced)
+                    + ", other="
+                    + str(other._FEMM_dict_enforced)
+                    + ")"
+                )
+                diff_list.append(name + ".FEMM_dict_enforced" + val_str)
+            else:
+                diff_list.append(name + ".FEMM_dict_enforced")
         if other._is_get_meshsolution != self._is_get_meshsolution:
-            diff_list.append(name + ".is_get_meshsolution")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._is_get_meshsolution)
+                    + ", other="
+                    + str(other._is_get_meshsolution)
+                    + ")"
+                )
+                diff_list.append(name + ".is_get_meshsolution" + val_str)
+            else:
+                diff_list.append(name + ".is_get_meshsolution")
         if other._is_save_meshsolution_as_file != self._is_save_meshsolution_as_file:
-            diff_list.append(name + ".is_save_meshsolution_as_file")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._is_save_meshsolution_as_file)
+                    + ", other="
+                    + str(other._is_save_meshsolution_as_file)
+                    + ")"
+                )
+                diff_list.append(name + ".is_save_meshsolution_as_file" + val_str)
+            else:
+                diff_list.append(name + ".is_save_meshsolution_as_file")
         if other._is_sliding_band != self._is_sliding_band:
-            diff_list.append(name + ".is_sliding_band")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._is_sliding_band)
+                    + ", other="
+                    + str(other._is_sliding_band)
+                    + ")"
+                )
+                diff_list.append(name + ".is_sliding_band" + val_str)
+            else:
+                diff_list.append(name + ".is_sliding_band")
         if other._transform_list != self._transform_list:
-            diff_list.append(name + ".transform_list")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._transform_list)
+                    + ", other="
+                    + str(other._transform_list)
+                    + ")"
+                )
+                diff_list.append(name + ".transform_list" + val_str)
+            else:
+                diff_list.append(name + ".transform_list")
         if (other.rotor_dxf is None and self.rotor_dxf is not None) or (
             other.rotor_dxf is not None and self.rotor_dxf is None
         ):
             diff_list.append(name + ".rotor_dxf None mismatch")
         elif self.rotor_dxf is not None:
             diff_list.extend(
-                self.rotor_dxf.compare(other.rotor_dxf, name=name + ".rotor_dxf")
+                self.rotor_dxf.compare(
+                    other.rotor_dxf,
+                    name=name + ".rotor_dxf",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
             )
         if (other.stator_dxf is None and self.stator_dxf is not None) or (
             other.stator_dxf is not None and self.stator_dxf is None
@@ -419,18 +574,104 @@ class MagFEMM(Magnetics):
             diff_list.append(name + ".stator_dxf None mismatch")
         elif self.stator_dxf is not None:
             diff_list.extend(
-                self.stator_dxf.compare(other.stator_dxf, name=name + ".stator_dxf")
+                self.stator_dxf.compare(
+                    other.stator_dxf,
+                    name=name + ".stator_dxf",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
             )
         if other._import_file != self._import_file:
-            diff_list.append(name + ".import_file")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._import_file)
+                    + ", other="
+                    + str(other._import_file)
+                    + ")"
+                )
+                diff_list.append(name + ".import_file" + val_str)
+            else:
+                diff_list.append(name + ".import_file")
         if other._is_close_femm != self._is_close_femm:
-            diff_list.append(name + ".is_close_femm")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._is_close_femm)
+                    + ", other="
+                    + str(other._is_close_femm)
+                    + ")"
+                )
+                diff_list.append(name + ".is_close_femm" + val_str)
+            else:
+                diff_list.append(name + ".is_close_femm")
         if other._nb_worker != self._nb_worker:
-            diff_list.append(name + ".nb_worker")
-        if other._Rag_enforced != self._Rag_enforced:
-            diff_list.append(name + ".Rag_enforced")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._nb_worker)
+                    + ", other="
+                    + str(other._nb_worker)
+                    + ")"
+                )
+                diff_list.append(name + ".nb_worker" + val_str)
+            else:
+                diff_list.append(name + ".nb_worker")
+        if (
+            other._Rag_enforced is not None
+            and self._Rag_enforced is not None
+            and isnan(other._Rag_enforced)
+            and isnan(self._Rag_enforced)
+        ):
+            pass
+        elif other._Rag_enforced != self._Rag_enforced:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._Rag_enforced)
+                    + ", other="
+                    + str(other._Rag_enforced)
+                    + ")"
+                )
+                diff_list.append(name + ".Rag_enforced" + val_str)
+            else:
+                diff_list.append(name + ".Rag_enforced")
         if other._is_set_previous != self._is_set_previous:
-            diff_list.append(name + ".is_set_previous")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._is_set_previous)
+                    + ", other="
+                    + str(other._is_set_previous)
+                    + ")"
+                )
+                diff_list.append(name + ".is_set_previous" + val_str)
+            else:
+                diff_list.append(name + ".is_set_previous")
+        if other._is_fast_draw != self._is_fast_draw:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._is_fast_draw)
+                    + ", other="
+                    + str(other._is_fast_draw)
+                    + ")"
+                )
+                diff_list.append(name + ".is_fast_draw" + val_str)
+            else:
+                diff_list.append(name + ".is_fast_draw")
+        if other._is_calc_torque_energy != self._is_calc_torque_energy:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._is_calc_torque_energy)
+                    + ", other="
+                    + str(other._is_calc_torque_energy)
+                    + ")"
+                )
+                diff_list.append(name + ".is_calc_torque_energy" + val_str)
+            else:
+                diff_list.append(name + ".is_calc_torque_energy")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -462,6 +703,8 @@ class MagFEMM(Magnetics):
         S += getsizeof(self.nb_worker)
         S += getsizeof(self.Rag_enforced)
         S += getsizeof(self.is_set_previous)
+        S += getsizeof(self.is_fast_draw)
+        S += getsizeof(self.is_calc_torque_energy)
         return S
 
     def as_dict(self, type_handle_ndarray=0, keep_function=False, **kwargs):
@@ -517,10 +760,110 @@ class MagFEMM(Magnetics):
         MagFEMM_dict["nb_worker"] = self.nb_worker
         MagFEMM_dict["Rag_enforced"] = self.Rag_enforced
         MagFEMM_dict["is_set_previous"] = self.is_set_previous
+        MagFEMM_dict["is_fast_draw"] = self.is_fast_draw
+        MagFEMM_dict["is_calc_torque_energy"] = self.is_calc_torque_energy
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         MagFEMM_dict["__class__"] = "MagFEMM"
         return MagFEMM_dict
+
+    def copy(self):
+        """Creates a deepcopy of the object"""
+
+        # Handle deepcopy of all the properties
+        Kmesh_fineness_val = self.Kmesh_fineness
+        Kgeo_fineness_val = self.Kgeo_fineness
+        type_calc_leakage_val = self.type_calc_leakage
+        file_name_val = self.file_name
+        if self.FEMM_dict_enforced is None:
+            FEMM_dict_enforced_val = None
+        else:
+            FEMM_dict_enforced_val = self.FEMM_dict_enforced.copy()
+        is_get_meshsolution_val = self.is_get_meshsolution
+        is_save_meshsolution_as_file_val = self.is_save_meshsolution_as_file
+        is_sliding_band_val = self.is_sliding_band
+        if self.transform_list is None:
+            transform_list_val = None
+        else:
+            transform_list_val = self.transform_list.copy()
+        if self.rotor_dxf is None:
+            rotor_dxf_val = None
+        else:
+            rotor_dxf_val = self.rotor_dxf.copy()
+        if self.stator_dxf is None:
+            stator_dxf_val = None
+        else:
+            stator_dxf_val = self.stator_dxf.copy()
+        import_file_val = self.import_file
+        is_close_femm_val = self.is_close_femm
+        nb_worker_val = self.nb_worker
+        Rag_enforced_val = self.Rag_enforced
+        is_set_previous_val = self.is_set_previous
+        is_fast_draw_val = self.is_fast_draw
+        is_calc_torque_energy_val = self.is_calc_torque_energy
+        is_remove_slotS_val = self.is_remove_slotS
+        is_remove_slotR_val = self.is_remove_slotR
+        is_remove_ventS_val = self.is_remove_ventS
+        is_remove_ventR_val = self.is_remove_ventR
+        is_mmfs_val = self.is_mmfs
+        is_mmfr_val = self.is_mmfr
+        type_BH_stator_val = self.type_BH_stator
+        type_BH_rotor_val = self.type_BH_rotor
+        is_periodicity_t_val = self.is_periodicity_t
+        is_periodicity_a_val = self.is_periodicity_a
+        angle_stator_shift_val = self.angle_stator_shift
+        angle_rotor_shift_val = self.angle_rotor_shift
+        logger_name_val = self.logger_name
+        if self.Slice_enforced is None:
+            Slice_enforced_val = None
+        else:
+            Slice_enforced_val = self.Slice_enforced.copy()
+        Nslices_enforced_val = self.Nslices_enforced
+        type_distribution_enforced_val = self.type_distribution_enforced
+        is_current_harm_val = self.is_current_harm
+        T_mag_val = self.T_mag
+        is_periodicity_rotor_val = self.is_periodicity_rotor
+        # Creates new object of the same type with the copied properties
+        obj_copy = type(self)(
+            Kmesh_fineness=Kmesh_fineness_val,
+            Kgeo_fineness=Kgeo_fineness_val,
+            type_calc_leakage=type_calc_leakage_val,
+            file_name=file_name_val,
+            FEMM_dict_enforced=FEMM_dict_enforced_val,
+            is_get_meshsolution=is_get_meshsolution_val,
+            is_save_meshsolution_as_file=is_save_meshsolution_as_file_val,
+            is_sliding_band=is_sliding_band_val,
+            transform_list=transform_list_val,
+            rotor_dxf=rotor_dxf_val,
+            stator_dxf=stator_dxf_val,
+            import_file=import_file_val,
+            is_close_femm=is_close_femm_val,
+            nb_worker=nb_worker_val,
+            Rag_enforced=Rag_enforced_val,
+            is_set_previous=is_set_previous_val,
+            is_fast_draw=is_fast_draw_val,
+            is_calc_torque_energy=is_calc_torque_energy_val,
+            is_remove_slotS=is_remove_slotS_val,
+            is_remove_slotR=is_remove_slotR_val,
+            is_remove_ventS=is_remove_ventS_val,
+            is_remove_ventR=is_remove_ventR_val,
+            is_mmfs=is_mmfs_val,
+            is_mmfr=is_mmfr_val,
+            type_BH_stator=type_BH_stator_val,
+            type_BH_rotor=type_BH_rotor_val,
+            is_periodicity_t=is_periodicity_t_val,
+            is_periodicity_a=is_periodicity_a_val,
+            angle_stator_shift=angle_stator_shift_val,
+            angle_rotor_shift=angle_rotor_shift_val,
+            logger_name=logger_name_val,
+            Slice_enforced=Slice_enforced_val,
+            Nslices_enforced=Nslices_enforced_val,
+            type_distribution_enforced=type_distribution_enforced_val,
+            is_current_harm=is_current_harm_val,
+            T_mag=T_mag_val,
+            is_periodicity_rotor=is_periodicity_rotor_val,
+        )
+        return obj_copy
 
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""
@@ -543,6 +886,8 @@ class MagFEMM(Magnetics):
         self.nb_worker = None
         self.Rag_enforced = None
         self.is_set_previous = None
+        self.is_fast_draw = None
+        self.is_calc_torque_energy = None
         # Set to None the properties inherited from Magnetics
         super(MagFEMM, self)._set_None()
 
@@ -721,13 +1066,20 @@ class MagFEMM(Magnetics):
     def _set_rotor_dxf(self, value):
         """setter of rotor_dxf"""
         if isinstance(value, str):  # Load from file
-            value = load_init_dict(value)[1]
+            try:
+                value = load_init_dict(value)[1]
+            except Exception as e:
+                self.get_logger().error(
+                    "Error while loading " + value + ", setting None instead"
+                )
+                value = None
         if isinstance(value, dict) and "__class__" in value:
             class_obj = import_class(
                 "pyleecan.Classes", value.get("__class__"), "rotor_dxf"
             )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
+            DXFImport = import_class("pyleecan.Classes", "DXFImport", "rotor_dxf")
             value = DXFImport()
         check_var("rotor_dxf", value, "DXFImport")
         self._rotor_dxf = value
@@ -751,13 +1103,20 @@ class MagFEMM(Magnetics):
     def _set_stator_dxf(self, value):
         """setter of stator_dxf"""
         if isinstance(value, str):  # Load from file
-            value = load_init_dict(value)[1]
+            try:
+                value = load_init_dict(value)[1]
+            except Exception as e:
+                self.get_logger().error(
+                    "Error while loading " + value + ", setting None instead"
+                )
+                value = None
         if isinstance(value, dict) and "__class__" in value:
             class_obj = import_class(
                 "pyleecan.Classes", value.get("__class__"), "stator_dxf"
             )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
+            DXFImport = import_class("pyleecan.Classes", "DXFImport", "stator_dxf")
             value = DXFImport()
         check_var("stator_dxf", value, "DXFImport")
         self._stator_dxf = value
@@ -859,6 +1218,42 @@ class MagFEMM(Magnetics):
         fget=_get_is_set_previous,
         fset=_set_is_set_previous,
         doc=u"""True set previous .ans result file in current .fem to use it as initialization and speed up calculation time
+
+        :Type: bool
+        """,
+    )
+
+    def _get_is_fast_draw(self):
+        """getter of is_fast_draw"""
+        return self._is_fast_draw
+
+    def _set_is_fast_draw(self, value):
+        """setter of is_fast_draw"""
+        check_var("is_fast_draw", value, "bool")
+        self._is_fast_draw = value
+
+    is_fast_draw = property(
+        fget=_get_is_fast_draw,
+        fset=_set_is_fast_draw,
+        doc=u"""True to use the symetry of the lamination to draw the machine faster
+
+        :Type: bool
+        """,
+    )
+
+    def _get_is_calc_torque_energy(self):
+        """getter of is_calc_torque_energy"""
+        return self._is_calc_torque_energy
+
+    def _set_is_calc_torque_energy(self, value):
+        """setter of is_calc_torque_energy"""
+        check_var("is_calc_torque_energy", value, "bool")
+        self._is_calc_torque_energy = value
+
+    is_calc_torque_energy = property(
+        fget=_get_is_calc_torque_energy,
+        fset=_set_is_calc_torque_energy,
+        doc=u"""True to calculate torque from integration of energy derivate over rotor elements
 
         :Type: bool
         """,

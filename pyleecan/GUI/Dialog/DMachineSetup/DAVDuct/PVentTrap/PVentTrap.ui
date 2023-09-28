@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>PVentTrap</class>
+ <widget class="QWidget" name="PVentTrap">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>700</width>
+    <height>470</height>
+   </rect>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>700</width>
+    <height>470</height>
+   </size>
+  </property>
+  <property name="maximumSize">
+   <size>
+    <width>16777215</width>
+    <height>16777215</height>
+   </size>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <layout class="QHBoxLayout" name="horizontalLayout">
+   <item>
+    <widget class="QLabel" name="img_vent">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="minimumSize">
+      <size>
+       <width>410</width>
+       <height>300</height>
+      </size>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>16777215</width>
+       <height>16777215</height>
+      </size>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="pixmap">
+      <pixmap>:/images/images/MachineSetup/LamParam/VentilationTrap.png</pixmap>
+     </property>
+     <property name="scaledContents">
+      <bool>false</bool>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QScrollArea" name="scrollArea">
+     <property name="minimumSize">
+      <size>
+       <width>300</width>
+       <height>0</height>
+      </size>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>300</width>
+       <height>16777215</height>
+      </size>
+     </property>
+     <property name="widgetResizable">
+      <bool>true</bool>
+     </property>
+     <widget class="QWidget" name="scrollAreaWidgetContents">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>298</width>
+        <height>446</height>
+       </rect>
+      </property>
+      <layout class="QVBoxLayout" name="verticalLayout">
+       <item>
+        <layout class="QGridLayout" name="gridLayout">
+         <item row="1" column="1">
+          <widget class="FloatEdit" name="lf_H0"/>
+         </item>
+         <item row="1" column="2">
+          <widget class="QLabel" name="unit_H0">
+           <property name="text">
+            <string>m</string>
+           </property>
+          </widget>
+         </item>
+         <item row="3" column="1">
+          <widget class="FloatEdit" name="lf_W1"/>
+         </item>
+         <item row="2" column="0">
+          <widget class="QLabel" name="in_D0">
+           <property name="text">
+            <string>D0 :</string>
+           </property>
+          </widget>
+         </item>
+         <item row="4" column="2">
+          <widget class="QLabel" name="unit_W2">
+           <property name="text">
+            <string>m</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="0">
+          <widget class="QLabel" name="in_H0">
+           <property name="text">
+            <string>H0 :</string>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="1">
+          <widget class="FloatEdit" name="lf_D0"/>
+         </item>
+         <item row="3" column="0">
+          <widget class="QLabel" name="in_W1">
+           <property name="text">
+            <string>W1 :</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="1">
+          <widget class="SpinBox" name="si_Zh"/>
+         </item>
+         <item row="4" column="1">
+          <widget class="FloatEdit" name="lf_W2"/>
+         </item>
+         <item row="0" column="0">
+          <widget class="QLabel" name="in_Zh">
+           <property name="text">
+            <string>Zh :</string>
+           </property>
+          </widget>
+         </item>
+         <item row="4" column="0">
+          <widget class="QLabel" name="in_W2">
+           <property name="text">
+            <string>W2 :</string>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="2">
+          <widget class="QLabel" name="unit_D0">
+           <property name="text">
+            <string>m</string>
+           </property>
+          </widget>
+         </item>
+         <item row="3" column="2">
+          <widget class="QLabel" name="unit_W1">
+           <property name="text">
+            <string>m</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <spacer name="verticalSpacer">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>228</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item>
+        <widget class="WVentOut" name="w_out" native="true"/>
+       </item>
+      </layout>
+     </widget>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>FloatEdit</class>
+   <extends>QLineEdit</extends>
+   <header>......GUI/Tools/FloatEdit.h</header>
+  </customwidget>
+  <customwidget>
+   <class>WVentOut</class>
+   <extends>QWidget</extends>
+   <header>......GUI.Dialog.DMachineSetup.DAVDuct.WVentOut.WVentOut.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>SpinBox</class>
+   <extends>QSpinBox</extends>
+   <header>......GUI/Tools/SpinBox.h</header>
+  </customwidget>
+ </customwidgets>
+ <tabstops>
+  <tabstop>lf_H0</tabstop>
+  <tabstop>lf_D0</tabstop>
+ </tabstops>
+ <resources>
+  <include location="../../../../../Resources/pyleecan.qrc"/>
+  <include location="../../../../../Resources/pyleecan.qrc"/>
+ </resources>
+ <connections/>
+</ui>

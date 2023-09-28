@@ -1,13 +1,12 @@
-# -*- coding: utf-8 -*-
 import pytest
+
+import numpy as np
+
 from pyleecan.Classes.MeshMat import MeshMat
 from pyleecan.Classes.NodeMat import NodeMat
 from pyleecan.Classes.CellMat import CellMat
 from pyleecan.Classes.MeshSolution import MeshSolution
 from pyleecan.Classes.SolutionMat import SolutionMat
-
-import numpy as np
-from os.path import join
 
 from Tests import save_plot_path as save_path
 

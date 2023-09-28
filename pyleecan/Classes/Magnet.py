@@ -10,13 +10,13 @@ from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
-from ..Functions.copy import copy
 from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
+from copy import deepcopy
 from ._frozen import FrozenClass
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
-from .Material import Material
 
 
 class Magnet(FrozenClass):
@@ -24,9 +24,8 @@ class Magnet(FrozenClass):
 
     VERSION = 1
 
-    # save and copy methods are available in all object
+    # generic save method is available in all object
     save = save
-    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -35,6 +34,7 @@ class Magnet(FrozenClass):
         mat_type=-1,
         type_magnetization=0,
         Lmag=0.95,
+        Nseg=1,
         init_dict=None,
         init_str=None,
     ):
@@ -59,11 +59,14 @@ class Magnet(FrozenClass):
                 type_magnetization = init_dict["type_magnetization"]
             if "Lmag" in list(init_dict.keys()):
                 Lmag = init_dict["Lmag"]
+            if "Nseg" in list(init_dict.keys()):
+                Nseg = init_dict["Nseg"]
         # Set the properties (value check and convertion are done in setter)
         self.parent = None
         self.mat_type = mat_type
         self.type_magnetization = type_magnetization
         self.Lmag = Lmag
+        self.Nseg = Nseg
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -83,6 +86,7 @@ class Magnet(FrozenClass):
             Magnet_str += "mat_type = None" + linesep + linesep
         Magnet_str += "type_magnetization = " + str(self.type_magnetization) + linesep
         Magnet_str += "Lmag = " + str(self.Lmag) + linesep
+        Magnet_str += "Nseg = " + str(self.Nseg) + linesep
         return Magnet_str
 
     def __eq__(self, other):
@@ -96,9 +100,11 @@ class Magnet(FrozenClass):
             return False
         if other.Lmag != self.Lmag:
             return False
+        if other.Nseg != self.Nseg:
+            return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -112,12 +118,48 @@ class Magnet(FrozenClass):
             diff_list.append(name + ".mat_type None mismatch")
         elif self.mat_type is not None:
             diff_list.extend(
-                self.mat_type.compare(other.mat_type, name=name + ".mat_type")
+                self.mat_type.compare(
+                    other.mat_type,
+                    name=name + ".mat_type",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
             )
         if other._type_magnetization != self._type_magnetization:
-            diff_list.append(name + ".type_magnetization")
-        if other._Lmag != self._Lmag:
-            diff_list.append(name + ".Lmag")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._type_magnetization)
+                    + ", other="
+                    + str(other._type_magnetization)
+                    + ")"
+                )
+                diff_list.append(name + ".type_magnetization" + val_str)
+            else:
+                diff_list.append(name + ".type_magnetization")
+        if (
+            other._Lmag is not None
+            and self._Lmag is not None
+            and isnan(other._Lmag)
+            and isnan(self._Lmag)
+        ):
+            pass
+        elif other._Lmag != self._Lmag:
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._Lmag) + ", other=" + str(other._Lmag) + ")"
+                )
+                diff_list.append(name + ".Lmag" + val_str)
+            else:
+                diff_list.append(name + ".Lmag")
+        if other._Nseg != self._Nseg:
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._Nseg) + ", other=" + str(other._Nseg) + ")"
+                )
+                diff_list.append(name + ".Nseg" + val_str)
+            else:
+                diff_list.append(name + ".Nseg")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -129,6 +171,7 @@ class Magnet(FrozenClass):
         S += getsizeof(self.mat_type)
         S += getsizeof(self.type_magnetization)
         S += getsizeof(self.Lmag)
+        S += getsizeof(self.Nseg)
         return S
 
     def as_dict(self, type_handle_ndarray=0, keep_function=False, **kwargs):
@@ -153,9 +196,30 @@ class Magnet(FrozenClass):
             )
         Magnet_dict["type_magnetization"] = self.type_magnetization
         Magnet_dict["Lmag"] = self.Lmag
+        Magnet_dict["Nseg"] = self.Nseg
         # The class name is added to the dict for deserialisation purpose
         Magnet_dict["__class__"] = "Magnet"
         return Magnet_dict
+
+    def copy(self):
+        """Creates a deepcopy of the object"""
+
+        # Handle deepcopy of all the properties
+        if self.mat_type is None:
+            mat_type_val = None
+        else:
+            mat_type_val = self.mat_type.copy()
+        type_magnetization_val = self.type_magnetization
+        Lmag_val = self.Lmag
+        Nseg_val = self.Nseg
+        # Creates new object of the same type with the copied properties
+        obj_copy = type(self)(
+            mat_type=mat_type_val,
+            type_magnetization=type_magnetization_val,
+            Lmag=Lmag_val,
+            Nseg=Nseg_val,
+        )
+        return obj_copy
 
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""
@@ -164,6 +228,7 @@ class Magnet(FrozenClass):
             self.mat_type._set_None()
         self.type_magnetization = None
         self.Lmag = None
+        self.Nseg = None
 
     def _get_mat_type(self):
         """getter of mat_type"""
@@ -172,13 +237,20 @@ class Magnet(FrozenClass):
     def _set_mat_type(self, value):
         """setter of mat_type"""
         if isinstance(value, str):  # Load from file
-            value = load_init_dict(value)[1]
+            try:
+                value = load_init_dict(value)[1]
+            except Exception as e:
+                self.get_logger().error(
+                    "Error while loading " + value + ", setting None instead"
+                )
+                value = None
         if isinstance(value, dict) and "__class__" in value:
             class_obj = import_class(
                 "pyleecan.Classes", value.get("__class__"), "mat_type"
             )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
+            Material = import_class("pyleecan.Classes", "Material", "mat_type")
             value = Material()
         check_var("mat_type", value, "Material")
         self._mat_type = value
@@ -231,5 +303,24 @@ class Magnet(FrozenClass):
 
         :Type: float
         :min: 0
+        """,
+    )
+
+    def _get_Nseg(self):
+        """getter of Nseg"""
+        return self._Nseg
+
+    def _set_Nseg(self, value):
+        """setter of Nseg"""
+        check_var("Nseg", value, "int", Vmin=1)
+        self._Nseg = value
+
+    Nseg = property(
+        fget=_get_Nseg,
+        fset=_set_Nseg,
+        doc=u"""Number of segments
+
+        :Type: int
+        :min: 1
         """,
     )

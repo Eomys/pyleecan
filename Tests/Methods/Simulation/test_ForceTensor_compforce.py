@@ -107,7 +107,6 @@ def test_comp_magnetostrictive_tensor_1cell():
 
 
 def test_comp_normal_to_edge():
-
     vec_x = []
     vec_y = []
     x_normal = []
@@ -134,7 +133,6 @@ def test_comp_normal_to_edge():
     dim = 2
 
     for key in mesh.cell:
-
         nb_node_per_cell = mesh.cell[
             key
         ].nb_node_per_cell  # Number of nodes per element
@@ -147,7 +145,6 @@ def test_comp_normal_to_edge():
 
         # Loop on element (elt)
         for elt_indice, elt_number in enumerate(indice):
-
             node_number = mesh_cell_key.get_connectivity(
                 elt_number
             )  # elt nodes numbers, can differ from indices
@@ -159,7 +156,6 @@ def test_comp_normal_to_edge():
             )
 
             for n in range(nb_node_per_cell):
-
                 edge_vector = (
                     vertice[(n + 1) % nb_node_per_cell] - vertice[n % nb_node_per_cell]
                 )  # coordonées du vecteur nn+1
@@ -210,7 +206,6 @@ def test_comp_normal_to_edge():
 
 
 if __name__ == "__main__":
-
     test_comp_normal_to_edge()
     test_comp_magnetostrictive_tensor_1cell()
     # test_element_loop_1cell()

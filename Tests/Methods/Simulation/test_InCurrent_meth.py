@@ -1,34 +1,29 @@
-# -*- coding: utf-8 -*-
-
 from os.path import join
 
 from numpy import (
     array,
     linspace,
-    ones,
     pi,
     sqrt,
     cos,
-    transpose,
     zeros,
     abs as np_abs,
     angle as np_angle,
 )
 from numpy.testing import assert_array_almost_equal
 import matplotlib.pyplot as plt
-from pyleecan.Classes.ImportGenMatrixSin import ImportGenMatrixSin
 from pyleecan.Classes.ImportGenVectLin import ImportGenVectLin
-from pyleecan.Classes.ImportGenVectSin import ImportGenVectSin
 from pyleecan.Classes.ImportMatrixVal import ImportMatrixVal
 from pyleecan.Classes.InputCurrent import InputCurrent
 from pyleecan.Classes.LamSlotWind import LamSlotWind
 from pyleecan.Classes.MachineDFIM import MachineDFIM
 from pyleecan.Classes.Output import Output
 from pyleecan.Classes.Simulation import Simulation
+from pyleecan.Classes.OPdq import OPdq
 from pyleecan.definitions import DATA_DIR
 from pyleecan.Functions.load import load
 from pyleecan.Functions.Plot import dict_2D
-from pyleecan.Methods.Simulation.Input import InputError
+from pyleecan.Methods.Simulation.Input import CURRENT_DIR_REF, ROT_DIR_REF, InputError
 import pytest
 from Tests import save_plot_path as save_path
 
@@ -74,13 +69,13 @@ M3.rotor.winding.qs = 2
 
 # Wrong time
 test_obj = Simulation(machine=Toyota_Prius)
-test_obj.input = InputCurrent(time=None)
+test_obj.input = InputCurrent(time=None, OP=OPdq())
 InputCurrent_Error_test.append(
     {"test_obj": test_obj, "exp": "ERROR: InputCurrent.time missing"}
 )
 # Wrong time shape
 test_obj = Simulation(machine=Toyota_Prius)
-test_obj.input = InputCurrent(time=time_wrong)
+test_obj.input = InputCurrent(time=time_wrong, OP=OPdq())
 InputCurrent_Error_test.append(
     {
         "test_obj": test_obj,
@@ -89,7 +84,7 @@ InputCurrent_Error_test.append(
 )
 # Wrong angle shape
 test_obj = Simulation(machine=Toyota_Prius)
-test_obj.input = InputCurrent(time=time, angle=angle_wrong)
+test_obj.input = InputCurrent(time=time, angle=angle_wrong, OP=OPdq())
 InputCurrent_Error_test.append(
     {
         "test_obj": test_obj,
@@ -98,7 +93,7 @@ InputCurrent_Error_test.append(
 )
 # Missing Is
 test_obj = Simulation(machine=M1)
-test_obj.input = InputCurrent(time=time, angle=angle, Is=None)
+test_obj.input = InputCurrent(time=time, angle=angle, Is=None, OP=OPdq())
 InputCurrent_Error_test.append(
     {
         "test_obj": test_obj,
@@ -107,7 +102,7 @@ InputCurrent_Error_test.append(
 )
 # Is wrong shape
 test_obj = Simulation(machine=M1)
-test_obj.input = InputCurrent(time=time, angle=angle, Is=I_3)
+test_obj.input = InputCurrent(time=time, angle=angle, Is=I_3, OP=OPdq())
 InputCurrent_Error_test.append(
     {
         "test_obj": test_obj,
@@ -115,7 +110,7 @@ InputCurrent_Error_test.append(
     }
 )
 test_obj = Simulation(machine=M1)
-test_obj.input = InputCurrent(time=time, angle=angle, Is=I_4)
+test_obj.input = InputCurrent(time=time, angle=angle, Is=I_4, OP=OPdq())
 InputCurrent_Error_test.append(
     {
         "test_obj": test_obj,
@@ -124,12 +119,12 @@ InputCurrent_Error_test.append(
 )
 # Wrong Ir
 test_obj = Simulation(machine=M2)
-test_obj.input = InputCurrent(time=time, angle=angle, Ir=None)
+test_obj.input = InputCurrent(time=time, angle=angle, Ir=None, OP=OPdq())
 InputCurrent_Error_test.append(
     {"test_obj": test_obj, "exp": "ERROR: InputCurrent.Ir missing"}
 )
 test_obj = Simulation(machine=M2)
-test_obj.input = InputCurrent(time=time, angle=angle, Ir=I_3)
+test_obj.input = InputCurrent(time=time, angle=angle, Ir=I_3, OP=OPdq())
 InputCurrent_Error_test.append(
     {
         "test_obj": test_obj,
@@ -137,42 +132,11 @@ InputCurrent_Error_test.append(
     }
 )
 test_obj = Simulation(machine=M2)
-test_obj.input = InputCurrent(time=time, angle=angle, Ir=I_4)
+test_obj.input = InputCurrent(time=time, angle=angle, Ir=I_4, OP=OPdq())
 InputCurrent_Error_test.append(
     {
         "test_obj": test_obj,
         "exp": "ERROR: InputCurrent.Ir must be a matrix with the shape (100, 2) (len(time), rotor phase number), (100,) returned",
-    }
-)
-# Wrong N0, alpha_rotor
-test_obj = Simulation(machine=M3)
-test_obj.input = InputCurrent(
-    time=time, angle=angle, Is=I_1, Ir=I_2, angle_rotor=None, N0=None
-)
-InputCurrent_Error_test.append(
-    {
-        "test_obj": test_obj,
-        "exp": "ERROR: InputCurrent.angle_rotor and InputCurrent.N0 can't be None at the same time",
-    }
-)
-test_obj = Simulation(machine=M3)
-test_obj.input = InputCurrent(
-    time=time, angle=angle, Is=I_1, Ir=I_2, angle_rotor=angle_rotor_wrong, N0=None
-)
-InputCurrent_Error_test.append(
-    {
-        "test_obj": test_obj,
-        "exp": "ERROR: InputCurrent.angle_rotor should be a vector of the same length as time, (10, 2) shape found, (100,) expected",
-    }
-)
-test_obj = Simulation(machine=M3)
-test_obj.input = InputCurrent(
-    time=time, angle=angle, Is=I_1, Ir=I_2, angle_rotor=angle_rotor_wrong2, N0=None
-)
-InputCurrent_Error_test.append(
-    {
-        "test_obj": test_obj,
-        "exp": "ERROR: InputCurrent.angle_rotor should be a vector of the same length as time, (102,) shape found, (100,) expected",
     }
 )
 
@@ -213,76 +177,73 @@ class Test_InCurrent_meth(object):
         p = Toyota_Prius.stator.get_pole_pair_number()
         time_exp = linspace(0, 60 / N0, Nt_tot, endpoint=False)
         felec = p * N0 / 60
-        rot_dir = Toyota_Prius.stator.comp_rot_dir()
+        current_dir = CURRENT_DIR_REF
+        assert current_dir == -1
+        rot_dir = ROT_DIR_REF
+        assert rot_dir == -1
+        # mmf_dir is the rotation direction of the fundamental magnetic field
+        mmf_dir = Toyota_Prius.stator.comp_mmf_dir(current_dir=current_dir)
+        assert mmf_dir == 1
         Ia = (
             A_rms
             * sqrt(2)
-            * cos(2 * pi * felec * time_exp + 0 * rot_dir * 2 * pi / qs + Phi0)
+            * cos(current_dir * (2 * pi * felec * time_exp + 0 * 2 * pi / qs) + Phi0)
         )
         Ib = (
             A_rms
             * sqrt(2)
-            * cos(2 * pi * felec * time_exp + 1 * rot_dir * 2 * pi / qs + Phi0)
+            * cos(current_dir * (2 * pi * felec * time_exp + 1 * 2 * pi / qs) + Phi0)
         )
         Ic = (
             A_rms
             * sqrt(2)
-            * cos(2 * pi * felec * time_exp + 2 * rot_dir * 2 * pi / qs + Phi0)
+            * cos(current_dir * (2 * pi * felec * time_exp + 2 * 2 * pi / qs) + Phi0)
         )
         Is_exp = array([Ia, Ib, Ic])
 
         # Compute expected rotor position
-        angle_rotor_initial = Toyota_Prius.comp_angle_offset_initial()
-        # rot_dir is the rotation direction of the fundamental magnetic field
-        # Then rotor position is -1 * rot_dir
+        angle_rotor_initial = Toyota_Prius.comp_angle_rotor_initial()
+
+        # Then rotor position is -1 * mmf_dir
         angle_rotor_exp = (
-            linspace(0, -1 * rot_dir * 2 * pi, Nt_tot, endpoint=False)
-            + angle_rotor_initial
+            linspace(0, rot_dir * 2 * pi, Nt_tot, endpoint=False) + angle_rotor_initial
         )
 
         test_obj.input = InputCurrent(
             Nt_tot=Nt_tot,
             Na_tot=Na_tot,
             Is=None,
-            Iq_ref=Iq_ref,
-            Id_ref=Id_ref,
+            OP=OPdq(Id_ref=Id_ref, Iq_ref=Iq_ref, N0=N0),
             Ir=None,
-            angle_rotor=None,  # Will be computed according to N0 and rot_dir
-            N0=N0,
-            rot_dir=None,
         )
 
         # Generate Is according to Id/Iq
         test_obj.input.gen_input()
         assert_array_almost_equal(
-            output.elec.Time.get_values(is_oneperiod=False),
+            output.geo.axes_dict["time"].get_values(is_oneperiod=False),
             time_exp,
         )
         assert_array_almost_equal(
-            output.elec.Angle.get_values(is_oneperiod=False),
+            output.geo.axes_dict["angle"].get_values(is_oneperiod=False),
             linspace(0, 2 * pi, Na_tot, endpoint=False),
         )
-        assert_array_almost_equal(output.elec.get_Is().values, Is_exp)
+        assert_array_almost_equal(output.elec.get_Is().values, Is_exp.T)
         assert_array_almost_equal(output.get_angle_rotor(), angle_rotor_exp)
-        assert_array_almost_equal(output.elec.N0, N0)
-        assert_array_almost_equal(output.geo.rot_dir, rot_dir)
+        assert_array_almost_equal(output.elec.OP.get_N0(), N0)
+        assert_array_almost_equal(output.geo.rot_dir, -mmf_dir)
 
         # Check Id/Iq by enforcing Is
         test_obj.input = InputCurrent(
             Nt_tot=Nt_tot,
             Na_tot=Na_tot,
             Is=Is_exp.transpose(),
-            Iq_ref=None,
-            Id_ref=None,
+            OP=OPdq(Id_ref=None, Iq_ref=None, N0=N0),
             Ir=None,
-            angle_rotor=None,  # Will be computed according to N0 and rot_dir
-            N0=N0,
-            rot_dir=None,
         )
         out = Output(simu=test_obj)
         test_obj.input.gen_input()
-        assert out.elec.Id_ref == pytest.approx(test_dict["Id"], abs=0.01)
-        assert out.elec.Iq_ref == pytest.approx(test_dict["Iq"], abs=0.01)
+        assert out.elec.OP.get_Id_Iq()["Id"] == pytest.approx(test_dict["Id"], abs=0.01)
+        assert out.elec.OP.get_Id_Iq()["Iq"] == pytest.approx(test_dict["Iq"], abs=0.01)
 
         # Plot 3-phase current function of time
         # out.plot_2D_Data("elec.Is", "time", "phase", is_show_fig=False)
@@ -309,13 +270,13 @@ class Test_InCurrent_meth(object):
 
 # To run it without pytest
 if __name__ == "__main__":
-
     obj = Test_InCurrent_meth()
 
     # test_dict = idq_test[0]
-    # obj.test_InputCurrent_DQ(test_dict)
     for test_dict in idq_test:
-        out = obj.test_InputCurrent_DQ(test_dict)
+        obj.test_InputCurrent_DQ(test_dict)
+    # for test_dict in InputCurrent_Error_test:
+    #     out = obj.test_InputCurrent_Error_test(test_dict)
     print("Done")
     # out.plot_2D_Data(
     #         "elec.Is",

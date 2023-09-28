@@ -12,7 +12,8 @@
         "cls": "Material",
         "name": "is_isotropic",
         "widget": [
-            "is_isotropic"
+            "cb_material_type",
+            "in_material_type"
         ],
         "xls": "Material"
     },
@@ -23,6 +24,16 @@
             "in_rho_elec",
             "lf_rho_elec",
             "unit_rho_elec"
+        ],
+        "xls": "Material"
+    },
+    {
+        "cls": "MatElectrical",
+        "name": "alpha",
+        "widget": [
+            "in_alpha_elec",
+            "lf_alpha_elec",
+            "unit_alpha_elec"
         ],
         "xls": "Material"
     },

@@ -10,9 +10,9 @@ from logging import getLogger
 from ._check import set_array, check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
-from ..Functions.copy import copy
 from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
+from copy import deepcopy
 from ._frozen import FrozenClass
 
 # Import all class method
@@ -34,6 +34,7 @@ except ImportError as error:
 
 
 from numpy import array, array_equal
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 
@@ -73,9 +74,8 @@ class SliceModel(FrozenClass):
         )
     else:
         plot = plot
-    # save and copy methods are available in all object
+    # generic save method is available in all object
     save = save
-    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -197,7 +197,7 @@ class SliceModel(FrozenClass):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -206,21 +206,82 @@ class SliceModel(FrozenClass):
             return ["type(" + name + ")"]
         diff_list = list()
         if other._type_distribution != self._type_distribution:
-            diff_list.append(name + ".type_distribution")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._type_distribution)
+                    + ", other="
+                    + str(other._type_distribution)
+                    + ")"
+                )
+                diff_list.append(name + ".type_distribution" + val_str)
+            else:
+                diff_list.append(name + ".type_distribution")
         if other._Nslices != self._Nslices:
-            diff_list.append(name + ".Nslices")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._Nslices)
+                    + ", other="
+                    + str(other._Nslices)
+                    + ")"
+                )
+                diff_list.append(name + ".Nslices" + val_str)
+            else:
+                diff_list.append(name + ".Nslices")
         if other._z_list != self._z_list:
-            diff_list.append(name + ".z_list")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._z_list)
+                    + ", other="
+                    + str(other._z_list)
+                    + ")"
+                )
+                diff_list.append(name + ".z_list" + val_str)
+            else:
+                diff_list.append(name + ".z_list")
         if not array_equal(other.angle_rotor, self.angle_rotor):
             diff_list.append(name + ".angle_rotor")
         if not array_equal(other.angle_stator, self.angle_stator):
             diff_list.append(name + ".angle_stator")
-        if other._L != self._L:
-            diff_list.append(name + ".L")
+        if (
+            other._L is not None
+            and self._L is not None
+            and isnan(other._L)
+            and isnan(self._L)
+        ):
+            pass
+        elif other._L != self._L:
+            if is_add_value:
+                val_str = " (self=" + str(self._L) + ", other=" + str(other._L) + ")"
+                diff_list.append(name + ".L" + val_str)
+            else:
+                diff_list.append(name + ".L")
         if other._is_step != self._is_step:
-            diff_list.append(name + ".is_step")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._is_step)
+                    + ", other="
+                    + str(other._is_step)
+                    + ")"
+                )
+                diff_list.append(name + ".is_step" + val_str)
+            else:
+                diff_list.append(name + ".is_step")
         if other._is_skew != self._is_skew:
-            diff_list.append(name + ".is_skew")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._is_skew)
+                    + ", other="
+                    + str(other._is_skew)
+                    + ")"
+                )
+                diff_list.append(name + ".is_skew" + val_str)
+            else:
+                diff_list.append(name + ".is_skew")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -290,6 +351,40 @@ class SliceModel(FrozenClass):
         # The class name is added to the dict for deserialisation purpose
         SliceModel_dict["__class__"] = "SliceModel"
         return SliceModel_dict
+
+    def copy(self):
+        """Creates a deepcopy of the object"""
+
+        # Handle deepcopy of all the properties
+        type_distribution_val = self.type_distribution
+        Nslices_val = self.Nslices
+        if self.z_list is None:
+            z_list_val = None
+        else:
+            z_list_val = self.z_list.copy()
+        if self.angle_rotor is None:
+            angle_rotor_val = None
+        else:
+            angle_rotor_val = self.angle_rotor.copy()
+        if self.angle_stator is None:
+            angle_stator_val = None
+        else:
+            angle_stator_val = self.angle_stator.copy()
+        L_val = self.L
+        is_step_val = self.is_step
+        is_skew_val = self.is_skew
+        # Creates new object of the same type with the copied properties
+        obj_copy = type(self)(
+            type_distribution=type_distribution_val,
+            Nslices=Nslices_val,
+            z_list=z_list_val,
+            angle_rotor=angle_rotor_val,
+            angle_stator=angle_stator_val,
+            L=L_val,
+            is_step=is_step_val,
+            is_skew=is_skew_val,
+        )
+        return obj_copy
 
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""

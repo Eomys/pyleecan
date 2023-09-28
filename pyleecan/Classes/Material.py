@@ -10,26 +10,21 @@ from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
-from ..Functions.copy import copy
 from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
+from copy import deepcopy
 from ._frozen import FrozenClass
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
-from .MatElectrical import MatElectrical
-from .MatMagnetics import MatMagnetics
-from .MatStructural import MatStructural
-from .MatHT import MatHT
-from .MatEconomical import MatEconomical
 
 
 class Material(FrozenClass):
 
     VERSION = 1
 
-    # save and copy methods are available in all object
+    # generic save method is available in all object
     save = save
-    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -159,7 +154,7 @@ class Material(FrozenClass):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -168,43 +163,106 @@ class Material(FrozenClass):
             return ["type(" + name + ")"]
         diff_list = list()
         if other._name != self._name:
-            diff_list.append(name + ".name")
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._name) + ", other=" + str(other._name) + ")"
+                )
+                diff_list.append(name + ".name" + val_str)
+            else:
+                diff_list.append(name + ".name")
         if other._is_isotropic != self._is_isotropic:
-            diff_list.append(name + ".is_isotropic")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._is_isotropic)
+                    + ", other="
+                    + str(other._is_isotropic)
+                    + ")"
+                )
+                diff_list.append(name + ".is_isotropic" + val_str)
+            else:
+                diff_list.append(name + ".is_isotropic")
         if (other.elec is None and self.elec is not None) or (
             other.elec is not None and self.elec is None
         ):
             diff_list.append(name + ".elec None mismatch")
         elif self.elec is not None:
-            diff_list.extend(self.elec.compare(other.elec, name=name + ".elec"))
+            diff_list.extend(
+                self.elec.compare(
+                    other.elec,
+                    name=name + ".elec",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
+            )
         if (other.mag is None and self.mag is not None) or (
             other.mag is not None and self.mag is None
         ):
             diff_list.append(name + ".mag None mismatch")
         elif self.mag is not None:
-            diff_list.extend(self.mag.compare(other.mag, name=name + ".mag"))
+            diff_list.extend(
+                self.mag.compare(
+                    other.mag,
+                    name=name + ".mag",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
+            )
         if (other.struct is None and self.struct is not None) or (
             other.struct is not None and self.struct is None
         ):
             diff_list.append(name + ".struct None mismatch")
         elif self.struct is not None:
-            diff_list.extend(self.struct.compare(other.struct, name=name + ".struct"))
+            diff_list.extend(
+                self.struct.compare(
+                    other.struct,
+                    name=name + ".struct",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
+            )
         if (other.HT is None and self.HT is not None) or (
             other.HT is not None and self.HT is None
         ):
             diff_list.append(name + ".HT None mismatch")
         elif self.HT is not None:
-            diff_list.extend(self.HT.compare(other.HT, name=name + ".HT"))
+            diff_list.extend(
+                self.HT.compare(
+                    other.HT,
+                    name=name + ".HT",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
+            )
         if (other.eco is None and self.eco is not None) or (
             other.eco is not None and self.eco is None
         ):
             diff_list.append(name + ".eco None mismatch")
         elif self.eco is not None:
-            diff_list.extend(self.eco.compare(other.eco, name=name + ".eco"))
+            diff_list.extend(
+                self.eco.compare(
+                    other.eco,
+                    name=name + ".eco",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
+            )
         if other._desc != self._desc:
-            diff_list.append(name + ".desc")
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._desc) + ", other=" + str(other._desc) + ")"
+                )
+                diff_list.append(name + ".desc" + val_str)
+            else:
+                diff_list.append(name + ".desc")
         if other._path != self._path:
-            diff_list.append(name + ".path")
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._path) + ", other=" + str(other._path) + ")"
+                )
+                diff_list.append(name + ".path" + val_str)
+            else:
+                diff_list.append(name + ".path")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -284,6 +342,48 @@ class Material(FrozenClass):
         Material_dict["__class__"] = "Material"
         return Material_dict
 
+    def copy(self):
+        """Creates a deepcopy of the object"""
+
+        # Handle deepcopy of all the properties
+        name_val = self.name
+        is_isotropic_val = self.is_isotropic
+        if self.elec is None:
+            elec_val = None
+        else:
+            elec_val = self.elec.copy()
+        if self.mag is None:
+            mag_val = None
+        else:
+            mag_val = self.mag.copy()
+        if self.struct is None:
+            struct_val = None
+        else:
+            struct_val = self.struct.copy()
+        if self.HT is None:
+            HT_val = None
+        else:
+            HT_val = self.HT.copy()
+        if self.eco is None:
+            eco_val = None
+        else:
+            eco_val = self.eco.copy()
+        desc_val = self.desc
+        path_val = self.path
+        # Creates new object of the same type with the copied properties
+        obj_copy = type(self)(
+            name=name_val,
+            is_isotropic=is_isotropic_val,
+            elec=elec_val,
+            mag=mag_val,
+            struct=struct_val,
+            HT=HT_val,
+            eco=eco_val,
+            desc=desc_val,
+            path=path_val,
+        )
+        return obj_copy
+
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""
 
@@ -332,7 +432,7 @@ class Material(FrozenClass):
     is_isotropic = property(
         fget=_get_is_isotropic,
         fset=_set_is_isotropic,
-        doc=u"""If True, uniformity in all orientations
+        doc=u"""If Isotropic, uniformity in all orientations
 
         :Type: bool
         """,
@@ -345,11 +445,18 @@ class Material(FrozenClass):
     def _set_elec(self, value):
         """setter of elec"""
         if isinstance(value, str):  # Load from file
-            value = load_init_dict(value)[1]
+            try:
+                value = load_init_dict(value)[1]
+            except Exception as e:
+                self.get_logger().error(
+                    "Error while loading " + value + ", setting None instead"
+                )
+                value = None
         if isinstance(value, dict) and "__class__" in value:
             class_obj = import_class("pyleecan.Classes", value.get("__class__"), "elec")
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
+            MatElectrical = import_class("pyleecan.Classes", "MatElectrical", "elec")
             value = MatElectrical()
         check_var("elec", value, "MatElectrical")
         self._elec = value
@@ -373,11 +480,18 @@ class Material(FrozenClass):
     def _set_mag(self, value):
         """setter of mag"""
         if isinstance(value, str):  # Load from file
-            value = load_init_dict(value)[1]
+            try:
+                value = load_init_dict(value)[1]
+            except Exception as e:
+                self.get_logger().error(
+                    "Error while loading " + value + ", setting None instead"
+                )
+                value = None
         if isinstance(value, dict) and "__class__" in value:
             class_obj = import_class("pyleecan.Classes", value.get("__class__"), "mag")
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
+            MatMagnetics = import_class("pyleecan.Classes", "MatMagnetics", "mag")
             value = MatMagnetics()
         check_var("mag", value, "MatMagnetics")
         self._mag = value
@@ -401,13 +515,20 @@ class Material(FrozenClass):
     def _set_struct(self, value):
         """setter of struct"""
         if isinstance(value, str):  # Load from file
-            value = load_init_dict(value)[1]
+            try:
+                value = load_init_dict(value)[1]
+            except Exception as e:
+                self.get_logger().error(
+                    "Error while loading " + value + ", setting None instead"
+                )
+                value = None
         if isinstance(value, dict) and "__class__" in value:
             class_obj = import_class(
                 "pyleecan.Classes", value.get("__class__"), "struct"
             )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
+            MatStructural = import_class("pyleecan.Classes", "MatStructural", "struct")
             value = MatStructural()
         check_var("struct", value, "MatStructural")
         self._struct = value
@@ -431,11 +552,18 @@ class Material(FrozenClass):
     def _set_HT(self, value):
         """setter of HT"""
         if isinstance(value, str):  # Load from file
-            value = load_init_dict(value)[1]
+            try:
+                value = load_init_dict(value)[1]
+            except Exception as e:
+                self.get_logger().error(
+                    "Error while loading " + value + ", setting None instead"
+                )
+                value = None
         if isinstance(value, dict) and "__class__" in value:
             class_obj = import_class("pyleecan.Classes", value.get("__class__"), "HT")
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
+            MatHT = import_class("pyleecan.Classes", "MatHT", "HT")
             value = MatHT()
         check_var("HT", value, "MatHT")
         self._HT = value
@@ -459,11 +587,18 @@ class Material(FrozenClass):
     def _set_eco(self, value):
         """setter of eco"""
         if isinstance(value, str):  # Load from file
-            value = load_init_dict(value)[1]
+            try:
+                value = load_init_dict(value)[1]
+            except Exception as e:
+                self.get_logger().error(
+                    "Error while loading " + value + ", setting None instead"
+                )
+                value = None
         if isinstance(value, dict) and "__class__" in value:
             class_obj = import_class("pyleecan.Classes", value.get("__class__"), "eco")
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
+            MatEconomical = import_class("pyleecan.Classes", "MatEconomical", "eco")
             value = MatEconomical()
         check_var("eco", value, "MatEconomical")
         self._eco = value

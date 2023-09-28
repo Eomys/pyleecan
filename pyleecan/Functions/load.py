@@ -12,6 +12,7 @@ from .Load.retrocompatibility import convert_init_dict
 # Matlib Keys
 LIB_KEY = "RefMatLib"
 MACH_KEY = "MachineMatLib"
+PATH_KEY = "MATLIB_PATH"
 
 
 def load(file_path):
@@ -170,7 +171,7 @@ def load_matlib_folder(matlib_path):
     # Get and Read all the file to create a list dictionary : variable name <=> value
     material_list = list()
     Material = import_class("pyleecan.Classes", "Material")
-    for (dirpath, _, filenames) in walk(matlib_path):
+    for dirpath, _, filenames in walk(matlib_path):
         for file_name in filenames:
             # For all json file in the folder and subfolder
             if file_name.endswith(".json") or file_name.endswith(".h5"):
@@ -237,7 +238,7 @@ def load_matlib(matlib_path=None, machine=None):
     material_dict: dict
         Materials dictionary (library + machine)
     """
-    material_dict = {LIB_KEY: list(), MACH_KEY: list(), "MATLIB_PATH": matlib_path}
+    material_dict = {LIB_KEY: list(), MACH_KEY: list(), PATH_KEY: matlib_path}
     if matlib_path is not None:
         material_dict[LIB_KEY] = load_matlib_folder(matlib_path)
     if machine is not None:

@@ -13,9 +13,16 @@
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <layout class="QHBoxLayout" name="horizontalLayout">
+  <layout class="QVBoxLayout" name="verticalLayout">
    <item>
-    <widget class="WMatSelect" name="w_mat" native="true"/>
+    <widget class="WMatSelectV" name="w_mat" native="true">
+     <property name="minimumSize">
+      <size>
+       <width>100</width>
+       <height>0</height>
+      </size>
+     </property>
+    </widget>
    </item>
    <item>
     <widget class="WBarOut" name="w_out" native="true"/>
@@ -24,9 +31,9 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>WMatSelect</class>
+   <class>WMatSelectV</class>
    <extends>QWidget</extends>
-   <header>......GUI.Dialog.DMatLib.WMatSelect.WMatSelect.h</header>
+   <header>......GUI.Dialog.DMatLib.WMatSelect.WMatSelectV.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>

@@ -44,9 +44,6 @@ class SSkew(Ui_SSkew, QWidget):
         sp_retain = self.tab_angle.sizePolicy()
         sp_retain.setRetainSizeWhenHidden(True)
         self.tab_angle.setSizePolicy(sp_retain)
-        self.label_deg.hide()
-        self.in_slot_pitch.hide()
-        self.tab_angle.hide()
         sp_retain = self.sb_nslice.sizePolicy()
         sp_retain.setRetainSizeWhenHidden(True)
         self.sb_nslice.setSizePolicy(sp_retain)
@@ -109,7 +106,7 @@ class SSkew(Ui_SSkew, QWidget):
                 self.rate = 1
                 self.tab_angle.clear()
                 self.set_table()
-
+            self.lf_angle.setValue(self.rate * self.slot_pitch)
             self.activate_skew()
 
         else:
@@ -163,11 +160,6 @@ class SSkew(Ui_SSkew, QWidget):
         """Hide / show widget depending on parameters"""
 
         if self.g_activate.isChecked():
-
-            # Show common widgets
-            self.cb_type.show()
-            self.cb_step.show()
-
             if self.is_step:
                 self.cb_type.setEnabled(True)
             else:
@@ -182,9 +174,6 @@ class SSkew(Ui_SSkew, QWidget):
             self.cb_type.setCurrentIndex(self.type_skew_list.index(self.type_skew))
 
             self.w_viewer.show()
-            self.in_type.show()
-            self.in_step.show()
-            self.tab_angle.show()
 
             if self.is_step:
                 # step skew
@@ -195,7 +184,13 @@ class SSkew(Ui_SSkew, QWidget):
             else:
                 # continuous skew
                 self.sb_nslice.setEnabled(False)
+                size = self.sb_nslice.sizePolicy()
+                size.setRetainSizeWhenHidden(False)
+                self.sb_nslice.setSizePolicy(size)
                 self.sb_nslice.hide()
+                size = self.label_segments.sizePolicy()
+                size.setRetainSizeWhenHidden(False)
+                self.label_segments.setSizePolicy(size)
                 self.label_segments.hide()
 
             if self.type_skew == "user-defined":
@@ -216,17 +211,12 @@ class SSkew(Ui_SSkew, QWidget):
 
         else:
             # Hide all widgets
-            self.cb_step.hide()
-            self.cb_type.hide()
-            self.sb_nslice.hide()
-            self.lf_angle.hide()
-            self.in_type.hide()
-            self.in_step.hide()
-            self.label_segments.hide()
-            self.label_rate.hide()
-            self.label_deg.hide()
-            self.in_slot_pitch.hide()
-            self.tab_angle.hide()
+            size = self.sb_nslice.sizePolicy()
+            size.setRetainSizeWhenHidden(False)
+            self.sb_nslice.setSizePolicy(size)
+            size = self.label_segments.sizePolicy()
+            size.setRetainSizeWhenHidden(False)
+            self.label_segments.setSizePolicy(size)
             self.w_viewer.axes.clear()
             self.w_viewer.draw()
             self.w_viewer.hide()
@@ -268,6 +258,7 @@ class SSkew(Ui_SSkew, QWidget):
         """Check if values are consistent"""
 
         if not self.is_step:
+            # Continuous skew can only be linear
             self.type_skew = "linear"
             self.cb_type.setCurrentIndex(self.type_skew_list.index(self.type_skew))
 
@@ -301,9 +292,9 @@ class SSkew(Ui_SSkew, QWidget):
             lam_name = "Rotor "
         self.in_slot_pitch.setText(
             lam_name
-            + "slot pitch ="
+            + "slot pitch: "
             + format(self.slot_pitch, ".2g")
-            + " [°] / Skew rate = "
+            + " [°] / Skew rate: "
             + format(self.rate * 100, ".3g")
             + "%"
         )
@@ -384,10 +375,15 @@ class SSkew(Ui_SSkew, QWidget):
                 # if wid.currentIndex() == 1:
                 #     angle_list = [a * pi / 180 for a in angle_list]
 
+        angle_overall = (
+            self.lf_angle.value() * pi / 180
+            if self.lf_angle.value() is not None
+            else None
+        )
         self.skew_object = Skew(
             type_skew=self.type_skew,
             is_step=is_step,
-            angle_overall=self.lf_angle.value() * pi / 180,
+            angle_overall=angle_overall,
             rate=rate,
             Nstep=Nslices,
             angle_list=angle_list,
@@ -430,6 +426,9 @@ class SSkew(Ui_SSkew, QWidget):
         # Update the Graph
         # self.w_viewer.fig.set_size_inches(8, 4)
         self.w_viewer.draw()
+
+    def emit_save(self):
+        self.saveNeeded.emit()
 
     @staticmethod
     def check(lamination):

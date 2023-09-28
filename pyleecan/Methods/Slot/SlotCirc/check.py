@@ -1,5 +1,4 @@
 from ....Methods.Slot.Slot import SlotCheckError
-from ....Methods.Slot.Slot19 import *
 
 
 def check(self):
@@ -14,5 +13,4 @@ def check(self):
     -------
     None
     """
-    if self.H0 < self.W0 / 2:
-        raise SC_WHCheckError("You must have W0/2 <= H0")
+    pass

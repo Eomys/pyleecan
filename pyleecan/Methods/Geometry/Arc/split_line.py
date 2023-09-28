@@ -1,8 +1,9 @@
 from numpy import exp, angle, abs as np_abs
+
 from ....Classes.Segment import Segment
 from ....definitions import PACKAGE_NAME
 
-DELTA = 1e-9  # To remove computing noise
+DELTA = 1e-7  # To remove computing/DXF noise
 
 
 def split_line(self, Z1, Z2, is_join=False, prop_dict_join=None):

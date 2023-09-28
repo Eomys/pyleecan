@@ -5,6 +5,13 @@ from numpy import linspace, zeros
 from ....Classes.Arc1 import Arc1
 from ....Classes.Segment import Segment
 from ....Classes.SurfLine import SurfLine
+from ....Functions.labels import (
+    WIND_LAB,
+    COND_BOUNDARY_PROP_LAB,
+    YSMR_LAB,
+    YSML_LAB,
+    YOKE_LAB,
+)
 
 
 def get_surface_active(self, alpha=0, delta=0):
@@ -36,19 +43,21 @@ def get_surface_active(self, alpha=0, delta=0):
     ZM4 = point_dict["ZM4"]
 
     curve_list = list()
-    curve_list.append(Segment(ZM1, ZM2))
+    curve_list.append(Segment(ZM1, ZM2, prop_dict={COND_BOUNDARY_PROP_LAB: YSMR_LAB}))
 
     if self.is_outwards():
         curve_list.append(Arc1(ZM2, ZM3, (Rbo - self.Hmag), is_trigo_direction=True))
     else:
         curve_list.append(Arc1(ZM2, ZM3, (Rbo + self.Hmag), is_trigo_direction=True))
 
-    curve_list.append(Segment(ZM3, ZM4))
+    curve_list.append(Segment(ZM3, ZM4, prop_dict={COND_BOUNDARY_PROP_LAB: YSML_LAB}))
 
     if self.is_outwards():
         curve_list.append(Arc1(ZM4, ZM1, -Rbo, is_trigo_direction=False))
     else:
         curve_list.append(Arc1(ZM4, ZM1, -Rbo, is_trigo_direction=False))
+    # If no lamination, BC is required on bore
+    curve_list[-1].prop_dict = {COND_BOUNDARY_PROP_LAB: YOKE_LAB}
 
     Zmid = (abs(ZM1) + abs(ZM3)) / 2
 
@@ -59,9 +68,5 @@ def get_surface_active(self, alpha=0, delta=0):
     # Apply transformation
     surface.rotate(alpha)
     surface.translate(delta)
-
-    # init prop_dict
-    for line in surface.line_list:
-        line.prop_dict = dict()
 
     return surface

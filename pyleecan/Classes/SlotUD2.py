@@ -10,9 +10,9 @@ from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
-from ..Functions.copy import copy
 from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
+from copy import deepcopy
 from .Slot import Slot
 
 # Import all class method
@@ -45,9 +45,8 @@ except ImportError as error:
     _set_split_active_surf_dict = error
 
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
-from .Line import Line
-from .Surface import Surface
 
 
 class SlotUD2(Slot):
@@ -112,9 +111,8 @@ class SlotUD2(Slot):
         )
     else:
         _set_split_active_surf_dict = _set_split_active_surf_dict
-    # save and copy methods are available in all object
+    # generic save method is available in all object
     save = save
-    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -125,6 +123,8 @@ class SlotUD2(Slot):
         split_active_surf_dict=None,
         name="",
         Zs=36,
+        wedge_mat=None,
+        is_bore=True,
         init_dict=None,
         init_str=None,
     ):
@@ -153,13 +153,17 @@ class SlotUD2(Slot):
                 name = init_dict["name"]
             if "Zs" in list(init_dict.keys()):
                 Zs = init_dict["Zs"]
+            if "wedge_mat" in list(init_dict.keys()):
+                wedge_mat = init_dict["wedge_mat"]
+            if "is_bore" in list(init_dict.keys()):
+                is_bore = init_dict["is_bore"]
         # Set the properties (value check and convertion are done in setter)
         self.line_list = line_list
         self.active_surf = active_surf
         self.split_active_surf_dict = split_active_surf_dict
         self.name = name
         # Call Slot init
-        super(SlotUD2, self).__init__(Zs=Zs)
+        super(SlotUD2, self).__init__(Zs=Zs, wedge_mat=wedge_mat, is_bore=is_bore)
         # The class is frozen (in Slot init), for now it's impossible to
         # add new properties
 
@@ -208,7 +212,7 @@ class SlotUD2(Slot):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -218,7 +222,11 @@ class SlotUD2(Slot):
         diff_list = list()
 
         # Check the properties inherited from Slot
-        diff_list.extend(super(SlotUD2, self).compare(other, name=name))
+        diff_list.extend(
+            super(SlotUD2, self).compare(
+                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
+            )
+        )
         if (other.line_list is None and self.line_list is not None) or (
             other.line_list is not None and self.line_list is None
         ):
@@ -231,7 +239,10 @@ class SlotUD2(Slot):
             for ii in range(len(other.line_list)):
                 diff_list.extend(
                     self.line_list[ii].compare(
-                        other.line_list[ii], name=name + ".line_list[" + str(ii) + "]"
+                        other.line_list[ii],
+                        name=name + ".line_list[" + str(ii) + "]",
+                        ignore_list=ignore_list,
+                        is_add_value=is_add_value,
                     )
                 )
         if (other.active_surf is None and self.active_surf is not None) or (
@@ -240,12 +251,33 @@ class SlotUD2(Slot):
             diff_list.append(name + ".active_surf None mismatch")
         elif self.active_surf is not None:
             diff_list.extend(
-                self.active_surf.compare(other.active_surf, name=name + ".active_surf")
+                self.active_surf.compare(
+                    other.active_surf,
+                    name=name + ".active_surf",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
             )
         if other._split_active_surf_dict != self._split_active_surf_dict:
-            diff_list.append(name + ".split_active_surf_dict")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._split_active_surf_dict)
+                    + ", other="
+                    + str(other._split_active_surf_dict)
+                    + ")"
+                )
+                diff_list.append(name + ".split_active_surf_dict" + val_str)
+            else:
+                diff_list.append(name + ".split_active_surf_dict")
         if other._name != self._name:
-            diff_list.append(name + ".name")
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._name) + ", other=" + str(other._name) + ")"
+                )
+                diff_list.append(name + ".name" + val_str)
+            else:
+                diff_list.append(name + ".name")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -318,6 +350,43 @@ class SlotUD2(Slot):
         SlotUD2_dict["__class__"] = "SlotUD2"
         return SlotUD2_dict
 
+    def copy(self):
+        """Creates a deepcopy of the object"""
+
+        # Handle deepcopy of all the properties
+        if self.line_list is None:
+            line_list_val = None
+        else:
+            line_list_val = list()
+            for obj in self.line_list:
+                line_list_val.append(obj.copy())
+        if self.active_surf is None:
+            active_surf_val = None
+        else:
+            active_surf_val = self.active_surf.copy()
+        if self.split_active_surf_dict is None:
+            split_active_surf_dict_val = None
+        else:
+            split_active_surf_dict_val = self.split_active_surf_dict.copy()
+        name_val = self.name
+        Zs_val = self.Zs
+        if self.wedge_mat is None:
+            wedge_mat_val = None
+        else:
+            wedge_mat_val = self.wedge_mat.copy()
+        is_bore_val = self.is_bore
+        # Creates new object of the same type with the copied properties
+        obj_copy = type(self)(
+            line_list=line_list_val,
+            active_surf=active_surf_val,
+            split_active_surf_dict=split_active_surf_dict_val,
+            name=name_val,
+            Zs=Zs_val,
+            wedge_mat=wedge_mat_val,
+            is_bore=is_bore_val,
+        )
+        return obj_copy
+
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""
 
@@ -341,6 +410,15 @@ class SlotUD2(Slot):
         """setter of line_list"""
         if type(value) is list:
             for ii, obj in enumerate(value):
+                if isinstance(obj, str):  # Load from file
+                    try:
+                        obj = load_init_dict(obj)[1]
+                    except Exception as e:
+                        self.get_logger().error(
+                            "Error while loading " + obj + ", setting None instead"
+                        )
+                        obj = None
+                        value[ii] = None
                 if type(obj) is dict:
                     class_obj = import_class(
                         "pyleecan.Classes", obj.get("__class__"), "line_list"
@@ -369,13 +447,20 @@ class SlotUD2(Slot):
     def _set_active_surf(self, value):
         """setter of active_surf"""
         if isinstance(value, str):  # Load from file
-            value = load_init_dict(value)[1]
+            try:
+                value = load_init_dict(value)[1]
+            except Exception as e:
+                self.get_logger().error(
+                    "Error while loading " + value + ", setting None instead"
+                )
+                value = None
         if isinstance(value, dict) and "__class__" in value:
             class_obj = import_class(
                 "pyleecan.Classes", value.get("__class__"), "active_surf"
             )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
+            Surface = import_class("pyleecan.Classes", "Surface", "active_surf")
             value = Surface()
         check_var("active_surf", value, "Surface")
         self._active_surf = value

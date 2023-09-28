@@ -11,6 +11,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 from pyleecan.Classes.ForceTensor import ForceTensor
+from pyleecan.Classes.OPdq import OPdq
 from pyleecan.Classes.Simu1 import Simu1
 from pyleecan.Classes.MagFEMM import MagFEMM
 from pyleecan.Classes.InputCurrent import InputCurrent
@@ -38,7 +39,10 @@ def test_Benchmark_Tensor():
     simu = Simu1(name="Benchmark_Tensor", machine=Benchmark)
 
     simu.input = InputCurrent(
-        Id_ref=0, Iq_ref=0, Ir=None, Na_tot=2 ** 6, Nt_tot=1, N0=1200
+        OP=OPdq(N0=1200, Id_ref=0, Iq_ref=0),
+        Ir=None,
+        Na_tot=2 ** 6,
+        Nt_tot=1,
     )
 
     simu.elec = None
@@ -213,5 +217,4 @@ def test_Benchmark_Tensor():
 
 
 if __name__ == "__main__":
-
     out = test_Benchmark_Tensor()

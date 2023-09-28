@@ -10,9 +10,9 @@ from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
-from ..Functions.copy import copy
 from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
+from copy import deepcopy
 from ._frozen import FrozenClass
 
 # Import all class method
@@ -22,9 +22,30 @@ try:
 except ImportError as error:
     check = error
 
+try:
+    from ..Methods.Machine.Conductor.comp_skin_effect_resistance import (
+        comp_skin_effect_resistance,
+    )
+except ImportError as error:
+    comp_skin_effect_resistance = error
 
+try:
+    from ..Methods.Machine.Conductor.comp_skin_effect_inductance import (
+        comp_skin_effect_inductance,
+    )
+except ImportError as error:
+    comp_skin_effect_inductance = error
+
+try:
+    from ..Methods.Machine.Conductor.comp_temperature_effect import (
+        comp_temperature_effect,
+    )
+except ImportError as error:
+    comp_temperature_effect = error
+
+
+from numpy import isnan
 from ._check import InitUnKnowClassError
-from .Material import Material
 
 
 class Conductor(FrozenClass):
@@ -32,6 +53,7 @@ class Conductor(FrozenClass):
 
     VERSION = 1
 
+    # Check ImportError to remove unnecessary dependencies in unused method
     # cf Methods.Machine.Conductor.check
     if isinstance(check, ImportError):
         check = property(
@@ -41,9 +63,44 @@ class Conductor(FrozenClass):
         )
     else:
         check = check
-    # save and copy methods are available in all object
+    # cf Methods.Machine.Conductor.comp_skin_effect_resistance
+    if isinstance(comp_skin_effect_resistance, ImportError):
+        comp_skin_effect_resistance = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Conductor method comp_skin_effect_resistance: "
+                    + str(comp_skin_effect_resistance)
+                )
+            )
+        )
+    else:
+        comp_skin_effect_resistance = comp_skin_effect_resistance
+    # cf Methods.Machine.Conductor.comp_skin_effect_inductance
+    if isinstance(comp_skin_effect_inductance, ImportError):
+        comp_skin_effect_inductance = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Conductor method comp_skin_effect_inductance: "
+                    + str(comp_skin_effect_inductance)
+                )
+            )
+        )
+    else:
+        comp_skin_effect_inductance = comp_skin_effect_inductance
+    # cf Methods.Machine.Conductor.comp_temperature_effect
+    if isinstance(comp_temperature_effect, ImportError):
+        comp_temperature_effect = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Conductor method comp_temperature_effect: "
+                    + str(comp_temperature_effect)
+                )
+            )
+        )
+    else:
+        comp_temperature_effect = comp_temperature_effect
+    # generic save method is available in all object
     save = save
-    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -106,7 +163,7 @@ class Conductor(FrozenClass):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -120,7 +177,12 @@ class Conductor(FrozenClass):
             diff_list.append(name + ".cond_mat None mismatch")
         elif self.cond_mat is not None:
             diff_list.extend(
-                self.cond_mat.compare(other.cond_mat, name=name + ".cond_mat")
+                self.cond_mat.compare(
+                    other.cond_mat,
+                    name=name + ".cond_mat",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
             )
         if (other.ins_mat is None and self.ins_mat is not None) or (
             other.ins_mat is not None and self.ins_mat is None
@@ -128,7 +190,12 @@ class Conductor(FrozenClass):
             diff_list.append(name + ".ins_mat None mismatch")
         elif self.ins_mat is not None:
             diff_list.extend(
-                self.ins_mat.compare(other.ins_mat, name=name + ".ins_mat")
+                self.ins_mat.compare(
+                    other.ins_mat,
+                    name=name + ".ins_mat",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
             )
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
@@ -174,6 +241,22 @@ class Conductor(FrozenClass):
         Conductor_dict["__class__"] = "Conductor"
         return Conductor_dict
 
+    def copy(self):
+        """Creates a deepcopy of the object"""
+
+        # Handle deepcopy of all the properties
+        if self.cond_mat is None:
+            cond_mat_val = None
+        else:
+            cond_mat_val = self.cond_mat.copy()
+        if self.ins_mat is None:
+            ins_mat_val = None
+        else:
+            ins_mat_val = self.ins_mat.copy()
+        # Creates new object of the same type with the copied properties
+        obj_copy = type(self)(cond_mat=cond_mat_val, ins_mat=ins_mat_val)
+        return obj_copy
+
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""
 
@@ -189,13 +272,20 @@ class Conductor(FrozenClass):
     def _set_cond_mat(self, value):
         """setter of cond_mat"""
         if isinstance(value, str):  # Load from file
-            value = load_init_dict(value)[1]
+            try:
+                value = load_init_dict(value)[1]
+            except Exception as e:
+                self.get_logger().error(
+                    "Error while loading " + value + ", setting None instead"
+                )
+                value = None
         if isinstance(value, dict) and "__class__" in value:
             class_obj = import_class(
                 "pyleecan.Classes", value.get("__class__"), "cond_mat"
             )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
+            Material = import_class("pyleecan.Classes", "Material", "cond_mat")
             value = Material()
         check_var("cond_mat", value, "Material")
         self._cond_mat = value
@@ -219,13 +309,20 @@ class Conductor(FrozenClass):
     def _set_ins_mat(self, value):
         """setter of ins_mat"""
         if isinstance(value, str):  # Load from file
-            value = load_init_dict(value)[1]
+            try:
+                value = load_init_dict(value)[1]
+            except Exception as e:
+                self.get_logger().error(
+                    "Error while loading " + value + ", setting None instead"
+                )
+                value = None
         if isinstance(value, dict) and "__class__" in value:
             class_obj = import_class(
                 "pyleecan.Classes", value.get("__class__"), "ins_mat"
             )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
+            Material = import_class("pyleecan.Classes", "Material", "ins_mat")
             value = Material()
         check_var("ins_mat", value, "Material")
         self._ins_mat = value

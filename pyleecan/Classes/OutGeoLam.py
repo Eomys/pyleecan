@@ -10,12 +10,13 @@ from logging import getLogger
 from ._check import set_array, check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
-from ..Functions.copy import copy
 from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
+from copy import deepcopy
 from ._frozen import FrozenClass
 
 from numpy import array, array_equal
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 
@@ -24,9 +25,8 @@ class OutGeoLam(FrozenClass):
 
     VERSION = 1
 
-    # save and copy methods are available in all object
+    # generic save method is available in all object
     save = save
-    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -154,7 +154,7 @@ class OutGeoLam(FrozenClass):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -163,25 +163,135 @@ class OutGeoLam(FrozenClass):
             return ["type(" + name + ")"]
         diff_list = list()
         if other._name_phase != self._name_phase:
-            diff_list.append(name + ".name_phase")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._name_phase)
+                    + ", other="
+                    + str(other._name_phase)
+                    + ")"
+                )
+                diff_list.append(name + ".name_phase" + val_str)
+            else:
+                diff_list.append(name + ".name_phase")
         if not array_equal(other.BH_curve, self.BH_curve):
             diff_list.append(name + ".BH_curve")
-        if other._Ksfill != self._Ksfill:
-            diff_list.append(name + ".Ksfill")
-        if other._S_slot != self._S_slot:
-            diff_list.append(name + ".S_slot")
-        if other._S_slot_wind != self._S_slot_wind:
-            diff_list.append(name + ".S_slot_wind")
-        if other._S_wind_act != self._S_wind_act:
-            diff_list.append(name + ".S_wind_act")
+        if (
+            other._Ksfill is not None
+            and self._Ksfill is not None
+            and isnan(other._Ksfill)
+            and isnan(self._Ksfill)
+        ):
+            pass
+        elif other._Ksfill != self._Ksfill:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._Ksfill)
+                    + ", other="
+                    + str(other._Ksfill)
+                    + ")"
+                )
+                diff_list.append(name + ".Ksfill" + val_str)
+            else:
+                diff_list.append(name + ".Ksfill")
+        if (
+            other._S_slot is not None
+            and self._S_slot is not None
+            and isnan(other._S_slot)
+            and isnan(self._S_slot)
+        ):
+            pass
+        elif other._S_slot != self._S_slot:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._S_slot)
+                    + ", other="
+                    + str(other._S_slot)
+                    + ")"
+                )
+                diff_list.append(name + ".S_slot" + val_str)
+            else:
+                diff_list.append(name + ".S_slot")
+        if (
+            other._S_slot_wind is not None
+            and self._S_slot_wind is not None
+            and isnan(other._S_slot_wind)
+            and isnan(self._S_slot_wind)
+        ):
+            pass
+        elif other._S_slot_wind != self._S_slot_wind:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._S_slot_wind)
+                    + ", other="
+                    + str(other._S_slot_wind)
+                    + ")"
+                )
+                diff_list.append(name + ".S_slot_wind" + val_str)
+            else:
+                diff_list.append(name + ".S_slot_wind")
+        if (
+            other._S_wind_act is not None
+            and self._S_wind_act is not None
+            and isnan(other._S_wind_act)
+            and isnan(self._S_wind_act)
+        ):
+            pass
+        elif other._S_wind_act != self._S_wind_act:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._S_wind_act)
+                    + ", other="
+                    + str(other._S_wind_act)
+                    + ")"
+                )
+                diff_list.append(name + ".S_wind_act" + val_str)
+            else:
+                diff_list.append(name + ".S_wind_act")
         if other._per_a != self._per_a:
-            diff_list.append(name + ".per_a")
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._per_a) + ", other=" + str(other._per_a) + ")"
+                )
+                diff_list.append(name + ".per_a" + val_str)
+            else:
+                diff_list.append(name + ".per_a")
         if other._is_antiper_a != self._is_antiper_a:
-            diff_list.append(name + ".is_antiper_a")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._is_antiper_a)
+                    + ", other="
+                    + str(other._is_antiper_a)
+                    + ")"
+                )
+                diff_list.append(name + ".is_antiper_a" + val_str)
+            else:
+                diff_list.append(name + ".is_antiper_a")
         if other._per_t != self._per_t:
-            diff_list.append(name + ".per_t")
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._per_t) + ", other=" + str(other._per_t) + ")"
+                )
+                diff_list.append(name + ".per_t" + val_str)
+            else:
+                diff_list.append(name + ".per_t")
         if other._is_antiper_t != self._is_antiper_t:
-            diff_list.append(name + ".is_antiper_t")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._is_antiper_t)
+                    + ", other="
+                    + str(other._is_antiper_t)
+                    + ")"
+                )
+                diff_list.append(name + ".is_antiper_t" + val_str)
+            else:
+                diff_list.append(name + ".is_antiper_t")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -243,6 +353,41 @@ class OutGeoLam(FrozenClass):
         # The class name is added to the dict for deserialisation purpose
         OutGeoLam_dict["__class__"] = "OutGeoLam"
         return OutGeoLam_dict
+
+    def copy(self):
+        """Creates a deepcopy of the object"""
+
+        # Handle deepcopy of all the properties
+        if self.name_phase is None:
+            name_phase_val = None
+        else:
+            name_phase_val = self.name_phase.copy()
+        if self.BH_curve is None:
+            BH_curve_val = None
+        else:
+            BH_curve_val = self.BH_curve.copy()
+        Ksfill_val = self.Ksfill
+        S_slot_val = self.S_slot
+        S_slot_wind_val = self.S_slot_wind
+        S_wind_act_val = self.S_wind_act
+        per_a_val = self.per_a
+        is_antiper_a_val = self.is_antiper_a
+        per_t_val = self.per_t
+        is_antiper_t_val = self.is_antiper_t
+        # Creates new object of the same type with the copied properties
+        obj_copy = type(self)(
+            name_phase=name_phase_val,
+            BH_curve=BH_curve_val,
+            Ksfill=Ksfill_val,
+            S_slot=S_slot_val,
+            S_slot_wind=S_slot_wind_val,
+            S_wind_act=S_wind_act_val,
+            per_a=per_a_val,
+            is_antiper_a=is_antiper_a_val,
+            per_t=per_t_val,
+            is_antiper_t=is_antiper_t_val,
+        )
+        return obj_copy
 
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""

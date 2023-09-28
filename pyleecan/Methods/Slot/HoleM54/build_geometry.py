@@ -1,12 +1,8 @@
-# -*- coding: utf-8 -*-
-
 from numpy import pi, exp
 
 from ....Classes.Arc1 import Arc1
 from ....Classes.Arc3 import Arc3
-from ....Classes.Segment import Segment
 from ....Classes.SurfLine import SurfLine
-from ....Functions.Geometry.inter_line_circle import inter_line_circle
 from ....Functions.labels import HOLEV_LAB, HOLEM_LAB
 
 

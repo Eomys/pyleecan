@@ -1,0 +1,4 @@
+Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,as_dict Type
+,
+Package,Inherit,Methods,Constant Name,Constant Value,Class description
+Loss,LossModel,comp_loss,VERSION,1,Windage loss model

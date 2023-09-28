@@ -4,7 +4,6 @@ import PySide2.QtCore
 from PySide2.QtCore import Signal
 from PySide2.QtWidgets import QWidget
 
-from ......Classes.SlotW60 import SlotW60
 from ......GUI import gui_option
 from ......GUI.Dialog.DMachineSetup.SWPole.PWSlot60.Gen_PWSlot60 import Gen_PWSlot60
 from ......Methods.Slot.Slot import SlotCheckError
@@ -208,11 +207,14 @@ class PWSlot60(Gen_PWSlot60, QWidget):
             gui_option.unit.get_m(self.lamination.Rext - self.lamination.Rint), ".4g"
         )
         self.out_Wlam.setText(
-            self.tr("Lamination width: ") + Wlam + gui_option.unit.get_m_name()
+            self.tr("Lamination width: ")
+            + Wlam
+            + " ["
+            + gui_option.unit.get_m_name()
+            + "]"
         )
         self.out_tooth_width.hide()
         if self.check(self.lamination) is None:
-
             # Compute all the needed output as string
             w_surf = format(
                 gui_option.unit.get_m2(self.slot.comp_surface_active()), ".4g"
@@ -228,19 +230,19 @@ class PWSlot60(Gen_PWSlot60, QWidget):
 
             # Update the GUI to display the Output
             self.out_wind_surface.setText(
-                WS_txt + w_surf + " " + gui_option.unit.get_m2_name()
+                WS_txt + w_surf + " [" + gui_option.unit.get_m2_name() + "]"
             )
             self.out_tot_surface.setText(
-                TS_txt + tot_surf + " " + gui_option.unit.get_m2_name()
+                TS_txt + tot_surf + " [" + gui_option.unit.get_m2_name() + "]"
             )
-            self.out_op_angle.setText(AO_txt + op_angle + u" rad")
+            self.out_op_angle.setText(AO_txt + op_angle + " [rad]")
             # self.out_tooth_width.setText(TW_txt + tooth_width + " " +
             #                             gui_option.unit.get_m_name())
             self.out_slot_height.setText(
-                SH_txt + slot_height + " " + gui_option.unit.get_m_name()
+                SH_txt + slot_height + " [" + gui_option.unit.get_m_name() + "]"
             )
             self.out_yoke_height.setText(
-                YH_txt + yoke_height + " " + gui_option.unit.get_m_name()
+                YH_txt + yoke_height + " [" + gui_option.unit.get_m_name() + "]"
             )
         else:
             # We can't compute the output => We erase the previous version

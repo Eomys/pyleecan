@@ -1,0 +1,73 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Python: Current File (Integrated Terminal)",
+            "type": "python",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal",
+            "cwd": "${workspaceFolder}",
+            "env": {
+                "PYTHONPATH": "${cwd}"
+            },
+        },
+        {
+            "name": "Python: Code gen (All)",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/pyleecan/Generator/run_generate_all.py",
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "Python: Code gen (GUI no R)",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/pyleecan/Generator/run_generate_GUI.py",
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "Python: Code gen (Classes)",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/pyleecan/Generator/run_generate_classes.py",
+            "console": "integratedTerminal",
+            "cwd": "${workspaceFolder}",
+            "env": {
+                "PYTHONPATH": "${cwd}"
+            },
+        },
+        {
+            "name": "Python: Run GUI",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/pyleecan/run_GUI.py",
+            "console": "integratedTerminal",
+            "cwd": "${workspaceFolder}",
+            "env": {
+                "PYTHONPATH": "${cwd}"
+            },
+        },
+        {
+            "name": "Python: Run script",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/script.py",
+            "console": "integratedTerminal",
+            "cwd": "${workspaceFolder}",
+            "env": {
+                "PYTHONPATH": "${cwd}"
+            },
+        },
+        {
+            "name": "Python: Current File (External Terminal)",
+            "type": "python",
+            "request": "launch",
+            "program": "${file}",
+            "console": "externalTerminal"
+        }
+    ]
+}

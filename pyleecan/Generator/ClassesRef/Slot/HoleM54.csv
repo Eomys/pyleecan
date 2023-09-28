@@ -1,8 +1,14 @@
-Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
-H0,m,Hole depth,0,float,3.00E-03,0,,,Slot,Hole,_comp_point_coordinate,VERSION,1,Arc Hole for SyRM
-H1,m,Hole width,0,float,0,0,,,,,build_geometry,IS_SYMMETRICAL,1,
-W0,rad,Hole angular width,0,float,1.30E-02,0,,,,,check,,,
-R1,m,Hole radius,0,float,2.00E-02,0,,,,,comp_magnetization_dict,,,
-,,,,,,,,,,,comp_radius,,,
-,,,,,,,,,,,comp_surface,,,
-,,,,,,,,,,,plot_schematics,,,
+Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,as_dict Type
+H0,m,Hole depth,0,float,3.00E-03,0,
+H1,m,Hole width,0,float,0,0,
+W0,rad,Hole angular width,0,float,1.30E-02,0,
+R1,m,Hole radius,0,float,2.00E-02,0,
+,
+Package,Inherit,Methods,Constant Name,Constant Value,Class description
+Slot,Hole,_comp_point_coordinate,VERSION,1,Arc Hole for SyRM
+,,build_geometry,IS_SYMMETRICAL,1,
+,,check,,,
+,,comp_magnetization_dict,,,
+,,comp_radius,,,
+,,comp_surface,,,
+,,plot_schematics,,,

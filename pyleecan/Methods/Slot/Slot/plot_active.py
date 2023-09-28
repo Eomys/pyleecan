@@ -1,25 +1,29 @@
-# -*- coding: utf-8 -*-
-
 from matplotlib.patches import Patch, Polygon
-from matplotlib.pyplot import axis, legend
 from numpy import array, exp, pi
 
 from ....definitions import config_dict
+from ....Classes.Material import Material
 from ....Functions.init_fig import init_fig
+from ....Functions.Plot import dict_2D
 from ....Functions.Winding.gen_phase_list import gen_name
 
 PHASE_COLORS = config_dict["PLOT"]["COLOR_DICT"]["PHASE_COLORS"]
+if "WEDGE_COLOR" not in config_dict["PLOT"]["COLOR_DICT"]:
+    config_dict["PLOT"]["COLOR_DICT"]["WEDGE_COLOR"] = "y"
+WEDGE_COLOR = config_dict["PLOT"]["COLOR_DICT"]["WEDGE_COLOR"]
 
 
 def plot_active(
     self,
     wind_mat=None,
     fig=None,
+    ax=None,
     is_bar=False,
     is_show_fig=True,
     enforced_default_color=None,
     alpha=0,
     delta=0,
+    is_add_wedge=False,
 ):
     """Plot the active area of the lamination according to the wind_mat
 
@@ -42,6 +46,9 @@ def plot_active(
         Angle for rotation (Default value = 0) [rad]
     delta : Complex
         complex for translation (Default value = 0)
+    is_add_wedge : bool
+        True to add the wedges surfaces
+
     Returns
     -------
     None
@@ -79,22 +86,39 @@ def plot_active(
             point_list = point_list * exp(1j * (2 * pi) / self.Zs)
 
     # Display the result
-    (fig, axes, patch_leg, label_leg) = init_fig(fig)
-    axes.set_xlabel("(m)")
-    axes.set_ylabel("(m)")
-    axes.set_title("Winding Pattern")
+    (fig, ax, patch_leg, label_leg) = init_fig(fig, ax=ax)
+    ax.set_xlabel("[m]")
+    ax.set_ylabel("[m]")
+    ax.set_title("Winding Pattern")
+
+    # Add wedges
+    if is_add_wedge:
+        # Add mp blanck wedge wedge for plot
+        to_clean = False
+        if self.wedge_mat is None:
+            self.wedge_mat = Material()
+            to_clean = True
+        wedge_surf_list = self.get_surface_wedges()
+        for surf in wedge_surf_list:
+            for ii in range(Zs):
+                surf2 = surf.copy()
+                surf2.rotate(angle=ii * (2 * pi) / self.Zs)
+                surf2.plot(fig=fig, ax=ax, color=WEDGE_COLOR, is_show_fig=False)
+        # Remove tmp blanck wedge
+        if to_clean:
+            self.wedge_mat = None
 
     # Add the magnet to the fig
     for patch in patches:
-        axes.add_patch(patch)
+        ax.add_patch(patch)
 
     # Axis Setup
-    axis("equal")
+    ax.axis("equal")
     Rbo = self.get_Rbo()
 
     Lim = Rbo * 1.2
-    axes.set_xlim(-Lim, Lim)
-    axes.set_ylim(-Lim, Lim)
+    ax.set_xlim(-Lim, Lim)
+    ax.set_ylim(-Lim, Lim)
 
     # Legend setup
     if wind_mat is None or len(surf_list) != Ntan * Nrad:
@@ -115,9 +139,23 @@ def plot_active(
                 patch_leg.append(Patch(color=PHASE_COLORS[index]))
                 label_leg.append("Phase " + qs_name[ii])
 
-    legend(patch_leg, label_leg)
+    ax.legend(
+        patch_leg,
+        label_leg,
+        prop={"family": dict_2D["font_name"], "size": dict_2D["font_size_legend"]},
+    )
+
+    for item in (
+        [ax.xaxis.label, ax.yaxis.label] + ax.get_xticklabels() + ax.get_yticklabels()
+    ):
+        item.set_fontname(dict_2D["font_name"])
+        item.set_fontsize(dict_2D["font_size_label"])
+    ax.title.set_fontname(dict_2D["font_name"])
+    ax.title.set_fontsize(dict_2D["font_size_title"])
+
     if is_show_fig:
         fig.show()
+    return fig, ax
 
 
 def get_color(wind_mat, Nrad, Ntan, Zs):

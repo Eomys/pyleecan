@@ -10,9 +10,9 @@ from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
-from ..Functions.copy import copy
 from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
+from copy import deepcopy
 from .HoleMag import HoleMag
 
 # Import all class method
@@ -73,9 +73,8 @@ except ImportError as error:
     remove_magnet = error
 
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
-from .Magnet import Magnet
-from .Material import Material
 
 
 class HoleM51(HoleMag):
@@ -199,9 +198,8 @@ class HoleM51(HoleMag):
         )
     else:
         remove_magnet = remove_magnet
-    # save and copy methods are available in all object
+    # generic save method is available in all object
     save = save
-    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -377,7 +375,7 @@ class HoleM51(HoleMag):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -387,36 +385,166 @@ class HoleM51(HoleMag):
         diff_list = list()
 
         # Check the properties inherited from HoleMag
-        diff_list.extend(super(HoleM51, self).compare(other, name=name))
-        if other._H0 != self._H0:
-            diff_list.append(name + ".H0")
-        if other._H1 != self._H1:
-            diff_list.append(name + ".H1")
-        if other._H2 != self._H2:
-            diff_list.append(name + ".H2")
-        if other._W0 != self._W0:
-            diff_list.append(name + ".W0")
-        if other._W1 != self._W1:
-            diff_list.append(name + ".W1")
-        if other._W2 != self._W2:
-            diff_list.append(name + ".W2")
-        if other._W3 != self._W3:
-            diff_list.append(name + ".W3")
-        if other._W4 != self._W4:
-            diff_list.append(name + ".W4")
-        if other._W5 != self._W5:
-            diff_list.append(name + ".W5")
-        if other._W6 != self._W6:
-            diff_list.append(name + ".W6")
-        if other._W7 != self._W7:
-            diff_list.append(name + ".W7")
+        diff_list.extend(
+            super(HoleM51, self).compare(
+                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
+            )
+        )
+        if (
+            other._H0 is not None
+            and self._H0 is not None
+            and isnan(other._H0)
+            and isnan(self._H0)
+        ):
+            pass
+        elif other._H0 != self._H0:
+            if is_add_value:
+                val_str = " (self=" + str(self._H0) + ", other=" + str(other._H0) + ")"
+                diff_list.append(name + ".H0" + val_str)
+            else:
+                diff_list.append(name + ".H0")
+        if (
+            other._H1 is not None
+            and self._H1 is not None
+            and isnan(other._H1)
+            and isnan(self._H1)
+        ):
+            pass
+        elif other._H1 != self._H1:
+            if is_add_value:
+                val_str = " (self=" + str(self._H1) + ", other=" + str(other._H1) + ")"
+                diff_list.append(name + ".H1" + val_str)
+            else:
+                diff_list.append(name + ".H1")
+        if (
+            other._H2 is not None
+            and self._H2 is not None
+            and isnan(other._H2)
+            and isnan(self._H2)
+        ):
+            pass
+        elif other._H2 != self._H2:
+            if is_add_value:
+                val_str = " (self=" + str(self._H2) + ", other=" + str(other._H2) + ")"
+                diff_list.append(name + ".H2" + val_str)
+            else:
+                diff_list.append(name + ".H2")
+        if (
+            other._W0 is not None
+            and self._W0 is not None
+            and isnan(other._W0)
+            and isnan(self._W0)
+        ):
+            pass
+        elif other._W0 != self._W0:
+            if is_add_value:
+                val_str = " (self=" + str(self._W0) + ", other=" + str(other._W0) + ")"
+                diff_list.append(name + ".W0" + val_str)
+            else:
+                diff_list.append(name + ".W0")
+        if (
+            other._W1 is not None
+            and self._W1 is not None
+            and isnan(other._W1)
+            and isnan(self._W1)
+        ):
+            pass
+        elif other._W1 != self._W1:
+            if is_add_value:
+                val_str = " (self=" + str(self._W1) + ", other=" + str(other._W1) + ")"
+                diff_list.append(name + ".W1" + val_str)
+            else:
+                diff_list.append(name + ".W1")
+        if (
+            other._W2 is not None
+            and self._W2 is not None
+            and isnan(other._W2)
+            and isnan(self._W2)
+        ):
+            pass
+        elif other._W2 != self._W2:
+            if is_add_value:
+                val_str = " (self=" + str(self._W2) + ", other=" + str(other._W2) + ")"
+                diff_list.append(name + ".W2" + val_str)
+            else:
+                diff_list.append(name + ".W2")
+        if (
+            other._W3 is not None
+            and self._W3 is not None
+            and isnan(other._W3)
+            and isnan(self._W3)
+        ):
+            pass
+        elif other._W3 != self._W3:
+            if is_add_value:
+                val_str = " (self=" + str(self._W3) + ", other=" + str(other._W3) + ")"
+                diff_list.append(name + ".W3" + val_str)
+            else:
+                diff_list.append(name + ".W3")
+        if (
+            other._W4 is not None
+            and self._W4 is not None
+            and isnan(other._W4)
+            and isnan(self._W4)
+        ):
+            pass
+        elif other._W4 != self._W4:
+            if is_add_value:
+                val_str = " (self=" + str(self._W4) + ", other=" + str(other._W4) + ")"
+                diff_list.append(name + ".W4" + val_str)
+            else:
+                diff_list.append(name + ".W4")
+        if (
+            other._W5 is not None
+            and self._W5 is not None
+            and isnan(other._W5)
+            and isnan(self._W5)
+        ):
+            pass
+        elif other._W5 != self._W5:
+            if is_add_value:
+                val_str = " (self=" + str(self._W5) + ", other=" + str(other._W5) + ")"
+                diff_list.append(name + ".W5" + val_str)
+            else:
+                diff_list.append(name + ".W5")
+        if (
+            other._W6 is not None
+            and self._W6 is not None
+            and isnan(other._W6)
+            and isnan(self._W6)
+        ):
+            pass
+        elif other._W6 != self._W6:
+            if is_add_value:
+                val_str = " (self=" + str(self._W6) + ", other=" + str(other._W6) + ")"
+                diff_list.append(name + ".W6" + val_str)
+            else:
+                diff_list.append(name + ".W6")
+        if (
+            other._W7 is not None
+            and self._W7 is not None
+            and isnan(other._W7)
+            and isnan(self._W7)
+        ):
+            pass
+        elif other._W7 != self._W7:
+            if is_add_value:
+                val_str = " (self=" + str(self._W7) + ", other=" + str(other._W7) + ")"
+                diff_list.append(name + ".W7" + val_str)
+            else:
+                diff_list.append(name + ".W7")
         if (other.magnet_0 is None and self.magnet_0 is not None) or (
             other.magnet_0 is not None and self.magnet_0 is None
         ):
             diff_list.append(name + ".magnet_0 None mismatch")
         elif self.magnet_0 is not None:
             diff_list.extend(
-                self.magnet_0.compare(other.magnet_0, name=name + ".magnet_0")
+                self.magnet_0.compare(
+                    other.magnet_0,
+                    name=name + ".magnet_0",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
             )
         if (other.magnet_1 is None and self.magnet_1 is not None) or (
             other.magnet_1 is not None and self.magnet_1 is None
@@ -424,7 +552,12 @@ class HoleM51(HoleMag):
             diff_list.append(name + ".magnet_1 None mismatch")
         elif self.magnet_1 is not None:
             diff_list.extend(
-                self.magnet_1.compare(other.magnet_1, name=name + ".magnet_1")
+                self.magnet_1.compare(
+                    other.magnet_1,
+                    name=name + ".magnet_1",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
             )
         if (other.magnet_2 is None and self.magnet_2 is not None) or (
             other.magnet_2 is not None and self.magnet_2 is None
@@ -432,7 +565,12 @@ class HoleM51(HoleMag):
             diff_list.append(name + ".magnet_2 None mismatch")
         elif self.magnet_2 is not None:
             diff_list.extend(
-                self.magnet_2.compare(other.magnet_2, name=name + ".magnet_2")
+                self.magnet_2.compare(
+                    other.magnet_2,
+                    name=name + ".magnet_2",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
             )
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
@@ -517,6 +655,66 @@ class HoleM51(HoleMag):
         # Overwrite the mother class name
         HoleM51_dict["__class__"] = "HoleM51"
         return HoleM51_dict
+
+    def copy(self):
+        """Creates a deepcopy of the object"""
+
+        # Handle deepcopy of all the properties
+        H0_val = self.H0
+        H1_val = self.H1
+        H2_val = self.H2
+        W0_val = self.W0
+        W1_val = self.W1
+        W2_val = self.W2
+        W3_val = self.W3
+        W4_val = self.W4
+        W5_val = self.W5
+        W6_val = self.W6
+        W7_val = self.W7
+        if self.magnet_0 is None:
+            magnet_0_val = None
+        else:
+            magnet_0_val = self.magnet_0.copy()
+        if self.magnet_1 is None:
+            magnet_1_val = None
+        else:
+            magnet_1_val = self.magnet_1.copy()
+        if self.magnet_2 is None:
+            magnet_2_val = None
+        else:
+            magnet_2_val = self.magnet_2.copy()
+        Zh_val = self.Zh
+        if self.mat_void is None:
+            mat_void_val = None
+        else:
+            mat_void_val = self.mat_void.copy()
+        if self.magnetization_dict_offset is None:
+            magnetization_dict_offset_val = None
+        else:
+            magnetization_dict_offset_val = self.magnetization_dict_offset.copy()
+        Alpha0_val = self.Alpha0
+        # Creates new object of the same type with the copied properties
+        obj_copy = type(self)(
+            H0=H0_val,
+            H1=H1_val,
+            H2=H2_val,
+            W0=W0_val,
+            W1=W1_val,
+            W2=W2_val,
+            W3=W3_val,
+            W4=W4_val,
+            W5=W5_val,
+            W6=W6_val,
+            W7=W7_val,
+            magnet_0=magnet_0_val,
+            magnet_1=magnet_1_val,
+            magnet_2=magnet_2_val,
+            Zh=Zh_val,
+            mat_void=mat_void_val,
+            magnetization_dict_offset=magnetization_dict_offset_val,
+            Alpha0=Alpha0_val,
+        )
+        return obj_copy
 
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""
@@ -757,13 +955,20 @@ class HoleM51(HoleMag):
     def _set_magnet_0(self, value):
         """setter of magnet_0"""
         if isinstance(value, str):  # Load from file
-            value = load_init_dict(value)[1]
+            try:
+                value = load_init_dict(value)[1]
+            except Exception as e:
+                self.get_logger().error(
+                    "Error while loading " + value + ", setting None instead"
+                )
+                value = None
         if isinstance(value, dict) and "__class__" in value:
             class_obj = import_class(
                 "pyleecan.Classes", value.get("__class__"), "magnet_0"
             )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
+            Magnet = import_class("pyleecan.Classes", "Magnet", "magnet_0")
             value = Magnet()
         check_var("magnet_0", value, "Magnet")
         self._magnet_0 = value
@@ -787,13 +992,20 @@ class HoleM51(HoleMag):
     def _set_magnet_1(self, value):
         """setter of magnet_1"""
         if isinstance(value, str):  # Load from file
-            value = load_init_dict(value)[1]
+            try:
+                value = load_init_dict(value)[1]
+            except Exception as e:
+                self.get_logger().error(
+                    "Error while loading " + value + ", setting None instead"
+                )
+                value = None
         if isinstance(value, dict) and "__class__" in value:
             class_obj = import_class(
                 "pyleecan.Classes", value.get("__class__"), "magnet_1"
             )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
+            Magnet = import_class("pyleecan.Classes", "Magnet", "magnet_1")
             value = Magnet()
         check_var("magnet_1", value, "Magnet")
         self._magnet_1 = value
@@ -817,13 +1029,20 @@ class HoleM51(HoleMag):
     def _set_magnet_2(self, value):
         """setter of magnet_2"""
         if isinstance(value, str):  # Load from file
-            value = load_init_dict(value)[1]
+            try:
+                value = load_init_dict(value)[1]
+            except Exception as e:
+                self.get_logger().error(
+                    "Error while loading " + value + ", setting None instead"
+                )
+                value = None
         if isinstance(value, dict) and "__class__" in value:
             class_obj = import_class(
                 "pyleecan.Classes", value.get("__class__"), "magnet_2"
             )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
+            Magnet = import_class("pyleecan.Classes", "Magnet", "magnet_2")
             value = Magnet()
         check_var("magnet_2", value, "Magnet")
         self._magnet_2 = value

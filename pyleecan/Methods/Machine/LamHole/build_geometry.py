@@ -11,7 +11,7 @@ from ....Functions.labels import update_RTS_index
 from ....Functions.Geometry.transform_hole_surf import transform_hole_surf
 
 
-def build_geometry(self, sym=1, alpha=0, delta=0, is_simplified=False):
+def build_geometry(self, sym=1, alpha=0, delta=0, is_circular_radius=False):
     """Build the geometry of the LamHole object
 
     Parameters
@@ -24,8 +24,8 @@ def build_geometry(self, sym=1, alpha=0, delta=0, is_simplified=False):
         Angle for rotation [rad]
     delta : complex
         Complex value for translation
-    is_simplified: bool
-        True to avoid line superposition
+    is_circular_radius : bool
+        True to add surfaces to "close" the Lamination radii
 
     Returns
     -------
@@ -35,7 +35,9 @@ def build_geometry(self, sym=1, alpha=0, delta=0, is_simplified=False):
     """
 
     # getting the Lamination surface
-    surf_list = Lamination.build_geometry(self, sym=sym, alpha=alpha, delta=delta)
+    surf_list = Lamination.build_geometry(
+        self, sym=sym, alpha=alpha, delta=delta, is_circular_radius=is_circular_radius
+    )
 
     # Holes surface(s)
     for hole in self.hole:

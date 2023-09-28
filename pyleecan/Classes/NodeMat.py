@@ -10,9 +10,9 @@ from logging import getLogger
 from ._check import set_array, check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
-from ..Functions.copy import copy
 from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
+from copy import deepcopy
 from ._frozen import FrozenClass
 
 # Import all class method
@@ -39,6 +39,7 @@ except ImportError as error:
 
 
 from numpy import array, array_equal
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 
@@ -84,15 +85,14 @@ class NodeMat(FrozenClass):
         )
     else:
         get_indice = get_indice
-    # save and copy methods are available in all object
+    # generic save method is available in all object
     save = save
-    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
     def __init__(
         self,
-        coordinate=[],
+        coordinate=None,
         nb_node=0,
         delta=1e-10,
         indice=None,
@@ -173,7 +173,7 @@ class NodeMat(FrozenClass):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -184,9 +184,32 @@ class NodeMat(FrozenClass):
         if not array_equal(other.coordinate, self.coordinate):
             diff_list.append(name + ".coordinate")
         if other._nb_node != self._nb_node:
-            diff_list.append(name + ".nb_node")
-        if other._delta != self._delta:
-            diff_list.append(name + ".delta")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._nb_node)
+                    + ", other="
+                    + str(other._nb_node)
+                    + ")"
+                )
+                diff_list.append(name + ".nb_node" + val_str)
+            else:
+                diff_list.append(name + ".nb_node")
+        if (
+            other._delta is not None
+            and self._delta is not None
+            and isnan(other._delta)
+            and isnan(self._delta)
+        ):
+            pass
+        elif other._delta != self._delta:
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._delta) + ", other=" + str(other._delta) + ")"
+                )
+                diff_list.append(name + ".delta" + val_str)
+            else:
+                diff_list.append(name + ".delta")
         if not array_equal(other.indice, self.indice):
             diff_list.append(name + ".indice")
         # Filter ignore differences
@@ -246,6 +269,29 @@ class NodeMat(FrozenClass):
         # The class name is added to the dict for deserialisation purpose
         NodeMat_dict["__class__"] = "NodeMat"
         return NodeMat_dict
+
+    def copy(self):
+        """Creates a deepcopy of the object"""
+
+        # Handle deepcopy of all the properties
+        if self.coordinate is None:
+            coordinate_val = None
+        else:
+            coordinate_val = self.coordinate.copy()
+        nb_node_val = self.nb_node
+        delta_val = self.delta
+        if self.indice is None:
+            indice_val = None
+        else:
+            indice_val = self.indice.copy()
+        # Creates new object of the same type with the copied properties
+        obj_copy = type(self)(
+            coordinate=coordinate_val,
+            nb_node=nb_node_val,
+            delta=delta_val,
+            indice=indice_val,
+        )
+        return obj_copy
 
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""

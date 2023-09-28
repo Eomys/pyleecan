@@ -10,9 +10,9 @@ from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
-from ..Functions.copy import copy
 from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
+from copy import deepcopy
 from ._frozen import FrozenClass
 
 # Import all class method
@@ -28,11 +28,11 @@ except ImportError as error:
     check = error
 
 try:
-    from ..Methods.Machine.Machine.comp_angle_offset_initial import (
-        comp_angle_offset_initial,
+    from ..Methods.Machine.Machine.comp_angle_rotor_initial import (
+        comp_angle_rotor_initial,
     )
 except ImportError as error:
-    comp_angle_offset_initial = error
+    comp_angle_rotor_initial = error
 
 try:
     from ..Methods.Machine.Machine.comp_desc_dict import comp_desc_dict
@@ -62,9 +62,11 @@ except ImportError as error:
     comp_Rgap_mec = error
 
 try:
-    from ..Methods.Machine.Machine.comp_periodicity import comp_periodicity
+    from ..Methods.Machine.Machine.comp_periodicity_spatial import (
+        comp_periodicity_spatial,
+    )
 except ImportError as error:
-    comp_periodicity = error
+    comp_periodicity_spatial = error
 
 try:
     from ..Methods.Machine.Machine.comp_width_airgap_mag import comp_width_airgap_mag
@@ -126,10 +128,14 @@ try:
 except ImportError as error:
     set_pole_pair_number = error
 
+try:
+    from ..Methods.Machine.Machine.comp_periodicity_time import comp_periodicity_time
+except ImportError as error:
+    comp_periodicity_time = error
 
+
+from numpy import isnan
 from ._check import InitUnKnowClassError
-from .Frame import Frame
-from .Shaft import Shaft
 
 
 class Machine(FrozenClass):
@@ -158,18 +164,18 @@ class Machine(FrozenClass):
         )
     else:
         check = check
-    # cf Methods.Machine.Machine.comp_angle_offset_initial
-    if isinstance(comp_angle_offset_initial, ImportError):
-        comp_angle_offset_initial = property(
+    # cf Methods.Machine.Machine.comp_angle_rotor_initial
+    if isinstance(comp_angle_rotor_initial, ImportError):
+        comp_angle_rotor_initial = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use Machine method comp_angle_offset_initial: "
-                    + str(comp_angle_offset_initial)
+                    "Can't use Machine method comp_angle_rotor_initial: "
+                    + str(comp_angle_rotor_initial)
                 )
             )
         )
     else:
-        comp_angle_offset_initial = comp_angle_offset_initial
+        comp_angle_rotor_initial = comp_angle_rotor_initial
     # cf Methods.Machine.Machine.comp_desc_dict
     if isinstance(comp_desc_dict, ImportError):
         comp_desc_dict = property(
@@ -224,18 +230,18 @@ class Machine(FrozenClass):
         )
     else:
         comp_Rgap_mec = comp_Rgap_mec
-    # cf Methods.Machine.Machine.comp_periodicity
-    if isinstance(comp_periodicity, ImportError):
-        comp_periodicity = property(
+    # cf Methods.Machine.Machine.comp_periodicity_spatial
+    if isinstance(comp_periodicity_spatial, ImportError):
+        comp_periodicity_spatial = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use Machine method comp_periodicity: "
-                    + str(comp_periodicity)
+                    "Can't use Machine method comp_periodicity_spatial: "
+                    + str(comp_periodicity_spatial)
                 )
             )
         )
     else:
-        comp_periodicity = comp_periodicity
+        comp_periodicity_spatial = comp_periodicity_spatial
     # cf Methods.Machine.Machine.comp_width_airgap_mag
     if isinstance(comp_width_airgap_mag, ImportError):
         comp_width_airgap_mag = property(
@@ -373,9 +379,20 @@ class Machine(FrozenClass):
         )
     else:
         set_pole_pair_number = set_pole_pair_number
-    # save and copy methods are available in all object
+    # cf Methods.Machine.Machine.comp_periodicity_time
+    if isinstance(comp_periodicity_time, ImportError):
+        comp_periodicity_time = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Machine method comp_periodicity_time: "
+                    + str(comp_periodicity_time)
+                )
+            )
+        )
+    else:
+        comp_periodicity_time = comp_periodicity_time
+    # generic save method is available in all object
     save = save
-    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -472,7 +489,7 @@ class Machine(FrozenClass):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -485,21 +502,67 @@ class Machine(FrozenClass):
         ):
             diff_list.append(name + ".frame None mismatch")
         elif self.frame is not None:
-            diff_list.extend(self.frame.compare(other.frame, name=name + ".frame"))
+            diff_list.extend(
+                self.frame.compare(
+                    other.frame,
+                    name=name + ".frame",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
+            )
         if (other.shaft is None and self.shaft is not None) or (
             other.shaft is not None and self.shaft is None
         ):
             diff_list.append(name + ".shaft None mismatch")
         elif self.shaft is not None:
-            diff_list.extend(self.shaft.compare(other.shaft, name=name + ".shaft"))
+            diff_list.extend(
+                self.shaft.compare(
+                    other.shaft,
+                    name=name + ".shaft",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
+            )
         if other._name != self._name:
-            diff_list.append(name + ".name")
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._name) + ", other=" + str(other._name) + ")"
+                )
+                diff_list.append(name + ".name" + val_str)
+            else:
+                diff_list.append(name + ".name")
         if other._desc != self._desc:
-            diff_list.append(name + ".desc")
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._desc) + ", other=" + str(other._desc) + ")"
+                )
+                diff_list.append(name + ".desc" + val_str)
+            else:
+                diff_list.append(name + ".desc")
         if other._type_machine != self._type_machine:
-            diff_list.append(name + ".type_machine")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._type_machine)
+                    + ", other="
+                    + str(other._type_machine)
+                    + ")"
+                )
+                diff_list.append(name + ".type_machine" + val_str)
+            else:
+                diff_list.append(name + ".type_machine")
         if other._logger_name != self._logger_name:
-            diff_list.append(name + ".logger_name")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._logger_name)
+                    + ", other="
+                    + str(other._logger_name)
+                    + ")"
+                )
+                diff_list.append(name + ".logger_name" + val_str)
+            else:
+                diff_list.append(name + ".logger_name")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -552,6 +615,33 @@ class Machine(FrozenClass):
         Machine_dict["__class__"] = "Machine"
         return Machine_dict
 
+    def copy(self):
+        """Creates a deepcopy of the object"""
+
+        # Handle deepcopy of all the properties
+        if self.frame is None:
+            frame_val = None
+        else:
+            frame_val = self.frame.copy()
+        if self.shaft is None:
+            shaft_val = None
+        else:
+            shaft_val = self.shaft.copy()
+        name_val = self.name
+        desc_val = self.desc
+        type_machine_val = self.type_machine
+        logger_name_val = self.logger_name
+        # Creates new object of the same type with the copied properties
+        obj_copy = type(self)(
+            frame=frame_val,
+            shaft=shaft_val,
+            name=name_val,
+            desc=desc_val,
+            type_machine=type_machine_val,
+            logger_name=logger_name_val,
+        )
+        return obj_copy
+
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""
 
@@ -571,13 +661,20 @@ class Machine(FrozenClass):
     def _set_frame(self, value):
         """setter of frame"""
         if isinstance(value, str):  # Load from file
-            value = load_init_dict(value)[1]
+            try:
+                value = load_init_dict(value)[1]
+            except Exception as e:
+                self.get_logger().error(
+                    "Error while loading " + value + ", setting None instead"
+                )
+                value = None
         if isinstance(value, dict) and "__class__" in value:
             class_obj = import_class(
                 "pyleecan.Classes", value.get("__class__"), "frame"
             )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
+            Frame = import_class("pyleecan.Classes", "Frame", "frame")
             value = Frame()
         check_var("frame", value, "Frame")
         self._frame = value
@@ -601,13 +698,20 @@ class Machine(FrozenClass):
     def _set_shaft(self, value):
         """setter of shaft"""
         if isinstance(value, str):  # Load from file
-            value = load_init_dict(value)[1]
+            try:
+                value = load_init_dict(value)[1]
+            except Exception as e:
+                self.get_logger().error(
+                    "Error while loading " + value + ", setting None instead"
+                )
+                value = None
         if isinstance(value, dict) and "__class__" in value:
             class_obj = import_class(
                 "pyleecan.Classes", value.get("__class__"), "shaft"
             )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
+            Shaft = import_class("pyleecan.Classes", "Shaft", "shaft")
             value = Shaft()
         check_var("shaft", value, "Shaft")
         self._shaft = value

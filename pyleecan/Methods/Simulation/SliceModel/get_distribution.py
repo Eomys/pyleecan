@@ -21,7 +21,6 @@ def get_distribution(self):
         z_list = [0]
 
     else:
-
         type_distribution = self.type_distribution
 
         if type_distribution not in ["uniform", "gauss", "user-defined"]:

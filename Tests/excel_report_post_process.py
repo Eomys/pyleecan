@@ -47,7 +47,6 @@ dict_markers = {
 dict_time = {"long_5s": 5, "long_1m": 60, "long_10m": 600}
 
 if __name__ == "__main__":
-
     nb_row = 0
     with open(join(TEST_DIR, "report.csv"), "r", encoding="utf8") as source:
         reader = csv.reader(
@@ -58,7 +57,6 @@ if __name__ == "__main__":
         ) as result:
             writer = csv.writer(result, delimiter=";")
             for row in reader:
-
                 # Copy Headers
                 if nb_row == 0:
                     headers = row[1:] + list(dict_markers.keys())

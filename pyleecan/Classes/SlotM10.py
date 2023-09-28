@@ -10,9 +10,9 @@ from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
-from ..Functions.copy import copy
 from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
+from copy import deepcopy
 from .Slot import Slot
 
 # Import all class method
@@ -67,7 +67,13 @@ try:
 except ImportError as error:
     plot_schematics = error
 
+try:
+    from ..Methods.Slot.SlotM10.is_airgap_active import is_airgap_active
+except ImportError as error:
+    is_airgap_active = error
 
+
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 
@@ -189,9 +195,20 @@ class SlotM10(Slot):
         )
     else:
         plot_schematics = plot_schematics
-    # save and copy methods are available in all object
+    # cf Methods.Slot.SlotM10.is_airgap_active
+    if isinstance(is_airgap_active, ImportError):
+        is_airgap_active = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use SlotM10 method is_airgap_active: "
+                    + str(is_airgap_active)
+                )
+            )
+        )
+    else:
+        is_airgap_active = is_airgap_active
+    # generic save method is available in all object
     save = save
-    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -202,6 +219,8 @@ class SlotM10(Slot):
         Wmag=0.0122,
         Hmag=0.001,
         Zs=36,
+        wedge_mat=None,
+        is_bore=True,
         init_dict=None,
         init_str=None,
     ):
@@ -230,13 +249,17 @@ class SlotM10(Slot):
                 Hmag = init_dict["Hmag"]
             if "Zs" in list(init_dict.keys()):
                 Zs = init_dict["Zs"]
+            if "wedge_mat" in list(init_dict.keys()):
+                wedge_mat = init_dict["wedge_mat"]
+            if "is_bore" in list(init_dict.keys()):
+                is_bore = init_dict["is_bore"]
         # Set the properties (value check and convertion are done in setter)
         self.W0 = W0
         self.H0 = H0
         self.Wmag = Wmag
         self.Hmag = Hmag
         # Call Slot init
-        super(SlotM10, self).__init__(Zs=Zs)
+        super(SlotM10, self).__init__(Zs=Zs, wedge_mat=wedge_mat, is_bore=is_bore)
         # The class is frozen (in Slot init), for now it's impossible to
         # add new properties
 
@@ -271,7 +294,7 @@ class SlotM10(Slot):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -281,15 +304,67 @@ class SlotM10(Slot):
         diff_list = list()
 
         # Check the properties inherited from Slot
-        diff_list.extend(super(SlotM10, self).compare(other, name=name))
-        if other._W0 != self._W0:
-            diff_list.append(name + ".W0")
-        if other._H0 != self._H0:
-            diff_list.append(name + ".H0")
-        if other._Wmag != self._Wmag:
-            diff_list.append(name + ".Wmag")
-        if other._Hmag != self._Hmag:
-            diff_list.append(name + ".Hmag")
+        diff_list.extend(
+            super(SlotM10, self).compare(
+                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
+            )
+        )
+        if (
+            other._W0 is not None
+            and self._W0 is not None
+            and isnan(other._W0)
+            and isnan(self._W0)
+        ):
+            pass
+        elif other._W0 != self._W0:
+            if is_add_value:
+                val_str = " (self=" + str(self._W0) + ", other=" + str(other._W0) + ")"
+                diff_list.append(name + ".W0" + val_str)
+            else:
+                diff_list.append(name + ".W0")
+        if (
+            other._H0 is not None
+            and self._H0 is not None
+            and isnan(other._H0)
+            and isnan(self._H0)
+        ):
+            pass
+        elif other._H0 != self._H0:
+            if is_add_value:
+                val_str = " (self=" + str(self._H0) + ", other=" + str(other._H0) + ")"
+                diff_list.append(name + ".H0" + val_str)
+            else:
+                diff_list.append(name + ".H0")
+        if (
+            other._Wmag is not None
+            and self._Wmag is not None
+            and isnan(other._Wmag)
+            and isnan(self._Wmag)
+        ):
+            pass
+        elif other._Wmag != self._Wmag:
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._Wmag) + ", other=" + str(other._Wmag) + ")"
+                )
+                diff_list.append(name + ".Wmag" + val_str)
+            else:
+                diff_list.append(name + ".Wmag")
+        if (
+            other._Hmag is not None
+            and self._Hmag is not None
+            and isnan(other._Hmag)
+            and isnan(self._Hmag)
+        ):
+            pass
+        elif other._Hmag != self._Hmag:
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._Hmag) + ", other=" + str(other._Hmag) + ")"
+                )
+                diff_list.append(name + ".Hmag" + val_str)
+            else:
+                diff_list.append(name + ".Hmag")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -332,6 +407,32 @@ class SlotM10(Slot):
         # Overwrite the mother class name
         SlotM10_dict["__class__"] = "SlotM10"
         return SlotM10_dict
+
+    def copy(self):
+        """Creates a deepcopy of the object"""
+
+        # Handle deepcopy of all the properties
+        W0_val = self.W0
+        H0_val = self.H0
+        Wmag_val = self.Wmag
+        Hmag_val = self.Hmag
+        Zs_val = self.Zs
+        if self.wedge_mat is None:
+            wedge_mat_val = None
+        else:
+            wedge_mat_val = self.wedge_mat.copy()
+        is_bore_val = self.is_bore
+        # Creates new object of the same type with the copied properties
+        obj_copy = type(self)(
+            W0=W0_val,
+            H0=H0_val,
+            Wmag=Wmag_val,
+            Hmag=Hmag_val,
+            Zs=Zs_val,
+            wedge_mat=wedge_mat_val,
+            is_bore=is_bore_val,
+        )
+        return obj_copy
 
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""

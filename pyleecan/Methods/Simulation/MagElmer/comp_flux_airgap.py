@@ -7,7 +7,7 @@ from ....Classes.OutMagElmer import OutMagElmer
 from ....Methods.Simulation.MagElmer import MagElmer_BP_dict
 
 
-def comp_flux_airgap(self, output, axes_dict):
+def comp_flux_airgap(self, output, axes_dict, Is_val=None, Ir_val=None):
     """Build and solve Elmer model to calculate and store magnetic quantities
 
     Parameters
@@ -26,8 +26,8 @@ def comp_flux_airgap(self, output, axes_dict):
         output.mag.internal = OutMagElmer()
 
     # Get time and angular axes
-    Angle = axes_dict["Angle"]
-    Time = axes_dict["Time"]
+    Angle = axes_dict["angle"]
+    Time = axes_dict["time"]
 
     # Set the angular symmetry factor according to the machine and check if it is anti-periodic
     sym, is_antiper_a = Angle.get_periodicity()
@@ -37,7 +37,7 @@ def comp_flux_airgap(self, output, axes_dict):
         is_oneperiod=self.is_periodicity_a,
         is_antiperiod=is_antiper_a and self.is_periodicity_a,
     )
-    Na = angle.size
+    # Na = angle.size
 
     # Check if the time axis is anti-periodic
     _, is_antiper_t = Time.get_periodicity()
@@ -51,18 +51,6 @@ def comp_flux_airgap(self, output, axes_dict):
 
     # Get rotor angular position
     angle_rotor = output.get_angle_rotor()[0:Nt]
-
-    # Interpolate current on magnetic model time axis
-    # Get stator current from elec out
-    if self.is_mmfs:
-        Is = output.elec.comp_I_mag(time, is_stator=True)
-    else:
-        Is = None
-    # Get rotor current from elec out
-    if self.is_mmfr:
-        Ir = output.elec.comp_I_mag(time, is_stator=False)
-    else:
-        Ir = None
 
     # Setup the Elmer simulation
     # Geometry building
@@ -118,13 +106,13 @@ def comp_flux_airgap(self, output, axes_dict):
 
     # Solve for all time step and store all the results in output
     Br, Bt, Bz, Tem, Phi_wind_stator = self.solve_FEA(
-        output, sym, angle, time, angle_rotor, Is, Ir
+        output, sym, angle, time, angle_rotor, Is_val, Ir_val
     )
 
     # Store standards Magnetics outputs in out_dict
-    out_dict["Br"] = Br
-    out_dict["Bt"] = Bt
-    out_dict["Bz"] = Bz
+    out_dict["B_{rad}"] = Br
+    out_dict["B_{circ}"] = Bt
+    out_dict["B_{ax}"] = Bz
     out_dict["Tem"] = Tem
     out_dict["Phi_wind_stator"] = Phi_wind_stator
 

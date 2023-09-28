@@ -4,10 +4,9 @@ import PySide2.QtCore
 from numpy import pi
 from PySide2.QtCore import Signal
 from PySide2.QtWidgets import QWidget
-
+from PySide2.QtGui import QPixmap
 from ......Classes.SlotW21 import SlotW21
 from ......GUI import gui_option
-
 from ......GUI.Dialog.DMachineSetup.SWSlot.PWSlot21.Gen_PWSlot21 import Gen_PWSlot21
 from ......Methods.Slot.Slot import SlotCheckError
 
@@ -23,15 +22,17 @@ class PWSlot21(Gen_PWSlot21, QWidget):
     slot_name = "Slot Type 21"
     slot_type = SlotW21
 
-    def __init__(self, lamination=None):
+    def __init__(self, lamination=None, material_dict=None):
         """Initialize the GUI according to current lamination
 
         Parameters
         ----------
-        self : PWSlot18
-            A PWSlot18 widget
+        self : PWSlot21
+            A PWSlot21 widget
         lamination : Lamination
             current lamination to edit
+        material_dict: dict
+            Materials dictionary (library + machine)
         """
 
         # Build the interface according to the .ui file
@@ -40,6 +41,8 @@ class PWSlot21(Gen_PWSlot21, QWidget):
 
         self.lamination = lamination
         self.slot = lamination.slot
+        self.material_dict = material_dict
+
         # Set FloatEdit unit
         self.lf_W0.unit = "m"
         self.lf_W1.unit = "m"
@@ -73,12 +76,24 @@ class PWSlot21(Gen_PWSlot21, QWidget):
         # Update the unit combobox with the current m unit name
         self.c_H1_unit.clear()
         self.c_H1_unit.addItems(
-            ["[" + gui_option.unit.get_m_name() + "]", "[rad]", "[deg]"]
+            ["[" + gui_option.unit.get_m_name() + "]", "[rad]", "[°]"]
         )
         if self.slot.H1_is_rad:  # rad
             self.c_H1_unit.setCurrentIndex(1)
         else:  # m
             self.c_H1_unit.setCurrentIndex(0)
+
+        # Wedge setup
+        self.g_wedge.setChecked(self.slot.wedge_mat is not None)
+        self.w_wedge_mat.setText("Wedge Material")
+        if lamination.mat_type is not None and lamination.mat_type.name not in [
+            "",
+            None,
+        ]:
+            self.w_wedge_mat.def_mat = lamination.mat_type.name
+        else:
+            self.w_wedge_mat.def_mat = "M400-50A"
+        self.set_wedge()
 
         # Display the main output of the slot (surface, height...)
         self.w_out.comp_output()
@@ -91,6 +106,22 @@ class PWSlot21(Gen_PWSlot21, QWidget):
         self.lf_H1.editingFinished.connect(self.set_H1)
         self.lf_H2.editingFinished.connect(self.set_H2)
         self.c_H1_unit.currentIndexChanged.connect(self.set_H1_unit)
+        self.g_wedge.toggled.connect(self.set_wedge)
+
+    def set_wedge(self):
+        """Setup the slot wedge according to the GUI"""
+        if self.g_wedge.isChecked():
+            self.img_slot.setPixmap(
+                QPixmap(":/images/images/MachineSetup/WSlot/SlotW21_wedge_full.png")
+            )
+            self.w_wedge_mat.update(self.slot, "wedge_mat", self.material_dict)
+        else:
+            self.slot.wedge_mat = None
+            self.img_slot.setPixmap(
+                QPixmap(":/images/images/MachineSetup/WSlot/SlotW21_wind.png")
+            )
+        # Notify the machine GUI that the machine has changed
+        self.saveNeeded.emit()
 
     def set_W0(self):
         """Signal to update the value of W0 according to the line edit
@@ -152,12 +183,15 @@ class PWSlot21(Gen_PWSlot21, QWidget):
         self : PWSlot21
             A PWSlot21 object
         """
-        if self.c_H1_unit.currentIndex() == 0:  # m or mm
-            self.slot.H1 = gui_option.unit.set_m(self.lf_H1.value())
-        elif self.c_H1_unit.currentIndex() == 1:  # rad
-            self.slot.H1 = self.lf_H1.value()
-        else:  # deg
-            self.slot.H1 = self.lf_H1.value() / 180 * pi
+        if self.lf_H1.value() is not None:
+            if self.c_H1_unit.currentIndex() == 0:  # m or mm
+                self.slot.H1 = gui_option.unit.set_m(self.lf_H1.value())
+            elif self.c_H1_unit.currentIndex() == 1:  # rad
+                self.slot.H1 = self.lf_H1.value()
+            else:  # °
+                self.slot.H1 = self.lf_H1.value() / 180 * pi
+        else:
+            self.slot.H1 = None
         self.w_out.comp_output()
         # Notify the machine GUI that the machine has changed
         self.saveNeeded.emit()
@@ -174,7 +208,7 @@ class PWSlot21(Gen_PWSlot21, QWidget):
         """
         self.slot.H1_is_rad = bool(value)
         if self.lf_H1.text() != "":
-            self.set_H1()  # Update for deg if needed and call comp_output
+            self.set_H1()  # Update for ° if needed and call comp_output
         # Notify the machine GUI that the machine has changed
         self.saveNeeded.emit()
 

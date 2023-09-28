@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
 
-from os.path import basename, join, dirname
-
+from os.path import basename, join, dirname, isfile
+from logging import getLogger
+from ....Functions.GUI.log_error import log_error
+from ....loggers import GUI_LOG_NAME
 from PySide2.QtCore import Qt, Signal
 from PySide2.QtWidgets import QFileDialog, QMessageBox, QWidget
 
@@ -9,6 +11,7 @@ from ....Functions.load import load, load_machine_materials
 from ....GUI.Dialog.DMachineSetup import mach_index, mach_list
 from ....GUI.Dialog.DMachineSetup.Ui_DMachineSetup import Ui_DMachineSetup
 from ....GUI.Dialog.DMachineSetup.SPreview.SPreview import SPreview
+from ....GUI.Dialog.DMachineSetup.SSimu.SSimu import SSimu
 from ....definitions import config_dict
 from ....Classes.Machine import Machine
 
@@ -41,6 +44,8 @@ class DMachineSetup(Ui_DMachineSetup, QWidget):
 
         # Build the interface according to the .ui file
         QWidget.__init__(self)
+        self.setWindowFlag(Qt.WindowMinimizeButtonHint, True)
+        self.setWindowFlag(Qt.WindowMaximizeButtonHint, True)
         self.setupUi(self)
 
         self.is_save_needed = False
@@ -50,9 +55,9 @@ class DMachineSetup(Ui_DMachineSetup, QWidget):
         # Saving arguments
         self.machine = machine
         if machine_path == "":
-            self.machine_path = config_dict["MAIN"]["MACHINE_DIR"]
+            self.machine_path = config_dict["MAIN"]["MACHINE_DIR"].replace("\\", "/")
         else:
-            self.machine_path = machine_path
+            self.machine_path = machine_path.replace("\\", "/")
 
         # Initialize the machine if needed
         if machine is None:
@@ -123,13 +128,24 @@ class DMachineSetup(Ui_DMachineSetup, QWidget):
             save_file_path = QFileDialog.getSaveFileName(
                 self, self.tr("Save file"), def_path, "Json (*.json)"
             )[0]
+        save_file_path = save_file_path.replace("\\", "/")
 
         # Avoid bug due to user closing the popup witout selecting a file
         if save_file_path != "":
             # Set the machine name to match the file name
             self.machine.name = str(basename(str(save_file_path)))[:-5]
             # Save the machine file
-            self.machine.save(save_file_path)
+            getLogger(GUI_LOG_NAME).info(
+                "Saving " + self.machine.name + " in folder " + dirname(save_file_path)
+            )
+            try:
+                self.machine.save(save_file_path)
+            except Exception as e:
+                err_msg = (
+                    "Error while saving machine " + self.machine.name + ":\n" + str(e)
+                )
+                log_error(self, err_msg)
+                return False
             # To update the machine name field (if first page)
             self.set_nav(self.nav_step.currentRow())
             # Update the machine path to remember the last used folder
@@ -219,11 +235,18 @@ class DMachineSetup(Ui_DMachineSetup, QWidget):
             else:
                 self.nav_step.addItem(str(index) + ": Rotor " + step.step_name)
             index += 1
-        # Adding last step Machine Summary
+        # Adding step Machine Summary
         if index < 10:
             self.nav_step.addItem(" " + str(index) + ": " + SPreview.step_name)
         else:
             self.nav_step.addItem(str(index) + ": " + SPreview.step_name)
+        index += 1
+        # Adding Simulation Step
+        if index < 10:
+            self.nav_step.addItem(" " + str(index) + ": " + SSimu.step_name)
+        else:
+            self.nav_step.addItem(str(index) + ": " + SSimu.step_name)
+        # Update GUI and select correct step
         self.update_enable_nav()
         self.nav_step.blockSignals(False)
         if next_step is None:
@@ -263,7 +286,9 @@ class DMachineSetup(Ui_DMachineSetup, QWidget):
                 return None  # Exit at the first fail
             nav.item(index).setFlags(ENABLE_ITEM)
             index += 1
-        self.last_index = index - 1
+        # Enable and select FEMM Simulation
+        nav.item(index).setFlags(ENABLE_ITEM)
+        self.last_index = index
 
     def get_machine_index(self):
         """Get the index corresponding to the current machine in the mach_list"""
@@ -297,6 +322,7 @@ class DMachineSetup(Ui_DMachineSetup, QWidget):
         step_list.extend(mach_dict["stator_step"])
         step_list.extend(mach_dict["rotor_step"])
         step_list.append(SPreview)
+        step_list.append(SSimu)
         is_stator = "Stator" in self.nav_step.currentItem().text()
 
         # Regenerate the step with the current values
@@ -306,11 +332,11 @@ class DMachineSetup(Ui_DMachineSetup, QWidget):
         )
         self.w_step.b_previous.clicked.connect(self.s_previous)
         if index != len(step_list) - 1:
-            self.w_step.b_next.setText(self.tr(u"Next"))
+            self.w_step.b_next.setText(self.tr("Next"))
             self.w_step.b_next.clicked.connect(self.s_next)
-        else:
-            self.w_step.b_next.setText(self.tr(u"Save and Close"))
-            self.w_step.b_next.clicked.connect(self.s_save_close)
+        # else:
+        #     self.w_step.b_next.setText(self.tr("Save and Close"))
+        #     self.w_step.b_next.clicked.connect(self.s_save_close)
 
         self.w_step.saveNeeded.connect(self.save_needed)
         # Refresh the GUI

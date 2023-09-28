@@ -1,14 +1,12 @@
-# -*- coding: utf-8 -*-
-
 from numpy import angle, exp, linspace, zeros
 
 from ....Classes.Arc1 import Arc1
 from ....Classes.Segment import Segment
 from ....Classes.SurfLine import SurfLine
-from ....Functions.labels import WIND_LAB
+from ....Functions.labels import WIND_LAB, DRAW_PROP_LAB
 
 
-def build_geometry_active(self, Nrad, Ntan, is_simplified=False, alpha=0, delta=0):
+def build_geometry_active(self, Nrad, Ntan, alpha=0, delta=0):
     """Split the slot winding area in several zone
 
     Parameters
@@ -19,8 +17,6 @@ def build_geometry_active(self, Nrad, Ntan, is_simplified=False, alpha=0, delta=
         Number of radial layer
     Ntan : int
         Number of tangentiel layer
-    is_simplified : bool
-        boolean to specify if coincident lines are considered as one or different lines (Default value = False)
     alpha : float
         Angle for rotation (Default value = 0) [rad]
     delta : Complex
@@ -67,46 +63,59 @@ def build_geometry_active(self, Nrad, Ntan, is_simplified=False, alpha=0, delta=
             Z4 = Z[ii + 1][jj]
             point_ref = (Z1 + Z2 + Z3 + Z4) / 4  # reference point of the surface
             # With one zone the order would be [Z7,Z4,Z5,Z6]
-            if is_simplified:
-                curve_list = list()
-                if ii == 0:
-                    curve_list.append(Arc1(Z1, Z2, abs(Z1), is_trigo_direction=True))
-                if jj != Ntan - 1:
-                    curve_list.append(Segment(Z2, Z3))
-                if ii != Nrad - 1:
-                    curve_list.append(Arc1(Z3, Z4, -abs(Z3), is_trigo_direction=False))
-                surface = SurfLine(
-                    line_list=curve_list,
-                    label=lam_label
-                    + "_"
-                    + WIND_LAB
-                    + "_R"
-                    + str(ii)
-                    + "-T"
-                    + str(jj)
-                    + "-S0",
-                    point_ref=point_ref,
+            curve_list = list()
+            curve_list.append(Arc1(Z1, Z2, abs(Z1), is_trigo_direction=True))
+            curve_list.append(
+                Segment(
+                    Z2,
+                    Z3,
+                    prop_dict={DRAW_PROP_LAB: False},
                 )
-                surf_list.append(surface)
-            else:
-                curve_list = list()
-                curve_list.append(Arc1(Z1, Z2, abs(Z1), is_trigo_direction=True))
-                curve_list.append(Segment(Z2, Z3))
-                curve_list.append(Arc1(Z3, Z4, -abs(Z3), is_trigo_direction=False))
-                curve_list.append(Segment(Z4, Z1))
-                surface = SurfLine(
-                    line_list=curve_list,
-                    label=lam_label
-                    + "_"
-                    + WIND_LAB
-                    + "_R"
-                    + str(ii)
-                    + "-T"
-                    + str(jj)
-                    + "-S0",
-                    point_ref=point_ref,
+            )
+            curve_list.append(
+                Arc1(
+                    Z3,
+                    Z4,
+                    -abs(Z3),
+                    is_trigo_direction=False,
+                    prop_dict={DRAW_PROP_LAB: False},
                 )
-                surf_list.append(surface)
+            )
+            curve_list.append(
+                Segment(
+                    Z4,
+                    Z1,
+                    prop_dict={DRAW_PROP_LAB: jj != 0},
+                )
+            )
+            surface = SurfLine(
+                line_list=curve_list,
+                label=lam_label
+                + "_"
+                + WIND_LAB
+                + "_R"
+                + str(ii)
+                + "-T"
+                + str(jj)
+                + "-S0",
+                point_ref=point_ref,
+            )
+            surf_list.append(surface)
+
+    # Correct bottom line for particular case (cf Tests\Validation\Magnetics\test_FEMM_fast_draw.py)
+    if Ntan == 2 and Nrad == 1:
+        Z2 = point_dict["Z2"]
+        Z7 = point_dict["Z7"]
+        # Cut Ox- surface
+        arc_to_cut = surf_list[0].line_list[0]
+        arc1, arc2 = arc_to_cut.split_line(Z1=0, Z2=Z2)
+        surf_list[0].line_list = [arc1[0], arc2[0]] + surf_list[0].line_list[1:]
+        surf_list[0].line_list[1].prop_dict = {DRAW_PROP_LAB: False}
+        # Cut Ox+ surface
+        arc_to_cut = surf_list[1].line_list[0]
+        arc1, arc2 = arc_to_cut.split_line(Z1=0, Z2=Z7)
+        surf_list[1].line_list = [arc1[0], arc2[0]] + surf_list[1].line_list[1:]
+        surf_list[1].line_list[0].prop_dict = {DRAW_PROP_LAB: False}
 
     for surf in surf_list:
         surf.rotate(alpha)

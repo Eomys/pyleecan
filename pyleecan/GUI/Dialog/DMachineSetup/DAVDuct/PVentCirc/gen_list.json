@@ -1,0 +1,29 @@
+[
+    {
+        "cls": "Hole",
+        "name": "Zh",
+        "widget": [
+            "in_Zh",
+            "si_Zh"
+        ],
+        "xls": "Slot"
+    },
+    {
+        "cls": "VentilationCirc",
+        "name": "D0",
+        "widget": [
+            "in_D0",
+            "lf_D0"
+        ],
+        "xls": "Slot"
+    },
+    {
+        "cls": "VentilationCirc",
+        "name": "H0",
+        "widget": [
+            "in_H0",
+            "lf_H0"
+        ],
+        "xls": "Slot"
+    }
+]

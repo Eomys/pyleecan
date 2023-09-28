@@ -1,0 +1,6 @@
+Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,as_dict Type
+,
+Package,Inherit,Methods,Constant Name,Constant Value,Class description
+Simulation,VarParam,check_param,VERSION,1,Handle multisimulation by varying parameters
+,,generate_simulation_list,NAME,"""Parameter Sweep""",
+,,get_simu_number,,,

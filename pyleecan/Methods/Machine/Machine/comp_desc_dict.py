@@ -59,9 +59,9 @@ def comp_desc_dict(self):
     )
     # is_inner_rotor
     if self.rotor.is_internal:
-        inner = "Inner Rotor"
+        inner = "Internal Rotor"
     else:
-        inner = "Outer Rotor"
+        inner = "External Rotor"
     desc_dict.append(
         dict(
             {
@@ -107,10 +107,13 @@ def comp_desc_dict(self):
             }
         )
     )
-    # Machine mass
+
+    # Machine masses
     try:
-        Mmach = self.comp_masses()["All"]
+        M_dict = self.comp_masses()
+        Mmach = M_dict["All"]
     except Exception:
+        M_dict = None
         Mmach = None
     desc_dict.append(
         dict(
@@ -125,5 +128,113 @@ def comp_desc_dict(self):
             }
         )
     )
+
+    # Stator lamination mass
+    if M_dict is not None and "Stator-0" in M_dict and "Mlam" in M_dict["Stator-0"]:
+        Mslam = M_dict["Stator-0"]["Mlam"]
+    else:
+        Mslam = None
+    desc_dict.append(
+        dict(
+            {
+                "name": "Mslam",
+                "path": "machine.comp_masses()['Stator-0']['Mlam']",
+                "verbose": "Stator lamination mass",
+                "type": float,
+                "unit": "kg",
+                "is_input": False,
+                "value": Mslam,
+            }
+        )
+    )
+
+    # Stator winding mass
+    if M_dict is not None and "Stator-0" in M_dict and "Mwind" in M_dict["Stator-0"]:
+        Mswind = M_dict["Stator-0"]["Mwind"]
+    else:
+        Mswind = None
+    desc_dict.append(
+        dict(
+            {
+                "name": "Mswind",
+                "path": "machine.comp_masses()['Stator-0']['Mwind']",
+                "verbose": "Stator winding mass",
+                "type": float,
+                "unit": "kg",
+                "is_input": False,
+                "value": Mswind,
+            }
+        )
+    )
+
+    # Rotor lamination mass
+    if M_dict is not None and "Rotor-0" in M_dict and "Mlam" in M_dict["Rotor-0"]:
+        Mrlam = M_dict["Rotor-0"]["Mlam"]
+    else:
+        Mrlam = None
+    desc_dict.append(
+        dict(
+            {
+                "name": "Mrlam",
+                "path": "machine.comp_masses()['Rotor-0']['Mlam']",
+                "verbose": "Rotor lamination mass",
+                "type": float,
+                "unit": "kg",
+                "is_input": False,
+                "value": Mrlam,
+            }
+        )
+    )
+
+    # Rotor winding mass only if necessary
+    if M_dict is not None and "Rotor-0" in M_dict and "Mwind" in M_dict["Rotor-0"]:
+        Mrwind = M_dict["Rotor-0"]["Mwind"]
+        desc_dict.append(
+            dict(
+                {
+                    "name": "Mrwind",
+                    "path": "machine.comp_masses()['Rotor-0']['Mwind']",
+                    "verbose": "Rotor winding mass",
+                    "type": float,
+                    "unit": "kg",
+                    "is_input": False,
+                    "value": Mrwind,
+                }
+            )
+        )
+
+    # Magnet mass only if necessary
+    if M_dict is not None and "Rotor-0" in M_dict and "Mmag" in M_dict["Rotor-0"]:
+        Mmag = M_dict["Rotor-0"]["Mmag"]
+        desc_dict.append(
+            dict(
+                {
+                    "name": "Mmag",
+                    "path": "machine.comp_masses()['Rotor-0']['Mmag']",
+                    "verbose": "Rotor magnet mass",
+                    "type": float,
+                    "unit": "kg",
+                    "is_input": False,
+                    "value": Mmag,
+                }
+            )
+        )
+
+    # Shaft mass only if necessary
+    if M_dict is not None and "Shaft" in M_dict:
+        Mshaft = M_dict["Shaft"]
+        desc_dict.append(
+            dict(
+                {
+                    "name": "Mshaft",
+                    "path": "machine.comp_masses()['Shaft']",
+                    "verbose": "Shaft mass",
+                    "type": float,
+                    "unit": "kg",
+                    "is_input": False,
+                    "value": Mshaft,
+                }
+            )
+        )
 
     return desc_dict

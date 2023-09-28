@@ -19,7 +19,7 @@ from ....Classes.SlotM10 import SlotM10
 from ....Classes.Winding import Winding
 from ....Classes.WindingSC import WindingSC
 from ....GUI.Dialog.DMachineSetup.SBar.SBar import SBar
-from ....GUI.Dialog.DMachineSetup.SLamParam.SLamParam import SLamParam
+from ....GUI.Dialog.DMachineSetup.SLamShape.SLamShape import SLamShape
 from ....GUI.Dialog.DMachineSetup.SMachineDimension.SMachineDimension import (
     SMachineDimension,
 )
@@ -34,19 +34,19 @@ from ....GUI.Dialog.DMachineSetup.SSkew.SSkew import SSkew
 from ....GUI.Resources import pixmap_dict
 
 # Steps needed to setup a LamSlotWind
-LSW_step = [SLamParam, SWSlot, SWinding, SWindCond]
+LSW_step = [SWSlot, SLamShape, SWinding, SWindCond]
 # Steps needed to setup a LamSlotWind for the rotor of a WRSM
-LP_step = [SLamParam, SWPole, SWinding, SWindCond, SSkew]
+LP_step = [SWPole, SLamShape, SWinding, SWindCond, SSkew]
 # Steps needed to setup a LamSquirrelCage
-LSC_step = [SLamParam, SWSlot, SBar, SSkew]
+LSC_step = [SWSlot, SBar, SLamShape, SSkew]
 # Steps needed to setup a LamSquirrelCageMag
-LSCM_step = [SLamParam, SWSlot, SBar, SMHoleMag, SSkew]
+LSCM_step = [SWSlot, SBar, SMHoleMag, SLamShape, SSkew]
 # Steps needed to setup a LamHole
-LH_step = [SLamParam, SMHoleMag, SSkew]
+LH_step = [SMHoleMag, SLamShape, SSkew]
 # Steps needed to setup a LamSlot
-LS_step = [SLamParam, SWSlot, SSkew]
+LS_step = [SWSlot, SLamShape, SSkew]
 # Steps needed to setup a LamSlotMag
-LSM_step = [SLamParam, SMSlot, SSkew]
+LSM_step = [SMSlot, SLamShape, SSkew]
 # Steps to start the design of a machine with 2 laminations
 S_step = [SMachineType, SMachineDimension]
 
@@ -60,6 +60,10 @@ machine1._set_None()  # Empty machine
 machine1.type_machine = 1
 machine1.stator.is_stator = True
 machine1.rotor.is_stator = False
+# Making sure that the winding parameter are defined as the user does have access to them in the GUI
+machine1.rotor.winding.Ntcoil = 1
+machine1.rotor.winding.Nlayer = 1
+machine1.rotor.winding.coil_pitch = 0
 
 machine4 = MachineDFIM(frame=None, shaft=None)
 machine4.stator = LamSlotWind()
@@ -75,10 +79,10 @@ machine5 = MachineSyRM(frame=None, shaft=None)
 machine5.stator = LamSlotWind()
 machine5.stator.winding = Winding()
 machine5.rotor = LamHole()
+machine5._set_None()  # Empty machine
 machine5.rotor.hole = list()
 machine5.rotor.hole.append(HoleM50())
-machine5.rotor.hole[0].remove_magnet()
-machine5._set_None()  # Empty machine
+machine5.rotor.hole[0]._set_None()
 machine5.type_machine = 5
 machine5.stator.is_stator = True
 machine5.rotor.is_stator = False
@@ -97,9 +101,10 @@ machine8 = MachineIPMSM(frame=None, shaft=None)
 machine8.stator = LamSlotWind()
 machine8.stator.winding = Winding()
 machine8.rotor = LamHole()
+machine8._set_None()  # Empty machine
 machine8.rotor.hole = list()
 machine8.rotor.hole.append(HoleM50())
-machine8._set_None()  # Empty machine
+machine8.rotor.hole[0]._set_None()
 machine8.type_machine = 8
 machine8.stator.is_stator = True
 machine8.rotor.is_stator = False
@@ -110,6 +115,11 @@ machine9.stator.winding = Winding()
 machine9.rotor = LamSlotWind()
 machine9.rotor.winding = Winding()
 machine9._set_None()  # Empty machine
+machine9.rotor.winding.qs = 1
+machine9.rotor.winding.Nlayer = 2
+machine9.rotor.winding.is_change_layer = False
+machine9.rotor.winding.coil_pitch = 1
+machine9.rotor.winding.Ntcoil = 1
 machine9.type_machine = 9
 machine9.stator.is_stator = True
 machine9.rotor.is_stator = False

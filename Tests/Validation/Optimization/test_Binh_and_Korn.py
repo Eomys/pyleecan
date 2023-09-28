@@ -13,8 +13,9 @@ from pyleecan.definitions import PACKAGE_NAME
 from pyleecan.Classes.InputCurrent import InputCurrent
 from pyleecan.Classes.MagFEMM import MagFEMM
 from pyleecan.Classes.Simu1 import Simu1
+from pyleecan.Classes.OPslip import OPslip
 from pyleecan.Classes.Output import Output
-from pyleecan.Classes.OptiDesignVar import OptiDesignVar
+from pyleecan.Classes.OptiDesignVarInterval import OptiDesignVarInterval
 from pyleecan.Classes.OptiObjective import OptiObjective
 from pyleecan.Classes.OptiConstraint import OptiConstraint
 from pyleecan.Classes.OptiProblem import OptiProblem
@@ -38,10 +39,10 @@ from pyleecan.definitions import DATA_DIR, TEST_DIR
 @pytest.mark.periodicity
 @pytest.mark.SingleOP
 def test_Binh_and_Korn():
-    SCIM_001 = load(join(DATA_DIR, "Machine", "SCIM_001.json"))
+    SCIM_001 = load(join(DATA_DIR, "Machine", "Railway_Traction.json"))
     # Defining reference Output
     # Definition of the enforced output of the electrical module
-    SCIM_001 = load(join(DATA_DIR, "Machine", "SCIM_001.json"))
+    SCIM_001 = load(join(DATA_DIR, "Machine", "Railway_Traction.json"))
     Nt = 2
     N0 = 3000
     Is = ImportMatrixVal(
@@ -64,8 +65,7 @@ def test_Binh_and_Korn():
     simu.input = InputCurrent(
         Is=Is,
         Ir=Ir,  # zero current for the rotor
-        N0=N0,
-        angle_rotor=None,  # Will be computed
+        OP=OPslip(N0=N0),
         time=time,
         Na_tot=Na_tot,
         angle_rotor_initial=0.5216 + np.pi,
@@ -79,18 +79,16 @@ def test_Binh_and_Korn():
 
     # ### Design variable
     my_vars = [
-        OptiDesignVar(
+        OptiDesignVarInterval(
             name="Rotor slot height",
             symbol="RH0",
-            type_var="interval",
             space=[0, 5],  # May generate error in FEMM
             get_value="lambda space: random.uniform(*space)",
             setter="simu.machine.rotor.slot.H0",
         ),
-        OptiDesignVar(
+        OptiDesignVarInterval(
             name="Stator slot height",
             symbol="SH0",
-            type_var="interval",
             space=[0, 3],  # May generate error in FEMM
             get_value="lambda space: random.uniform(*space)",
             setter="simu.machine.stator.slot.H0",
@@ -101,13 +99,13 @@ def test_Binh_and_Korn():
     cstrs = [
         OptiConstraint(
             name="first",
-            get_variable="lambda output: (output.simu.machine.rotor.slot.H0 - 5) ** 2 + output.simu.machine.stator.slot.H0 ** 2",
+            keeper="lambda output: (output.simu.machine.rotor.slot.H0 - 5) ** 2 + output.simu.machine.stator.slot.H0 ** 2",
             type_const="<=",
             value=25,
         ),
         OptiConstraint(
             name="second",
-            get_variable="lambda output: (output.simu.machine.rotor.slot.H0 - 5) ** 2 + (output.simu.machine.stator.slot.H0 + 3) ** 2",
+            keeper="lambda output: (output.simu.machine.rotor.slot.H0 - 5) ** 2 + (output.simu.machine.stator.slot.H0 + 3) ** 2",
             type_const=">=",
             value=7.7,
         ),

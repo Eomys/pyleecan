@@ -19,10 +19,15 @@ class Gen_DMatSetup(Ui_DMatSetup):
         self.le_name.setWhatsThis(txt)
         self.le_name.setToolTip(txt)
 
-        # Setup of is_isotropic
-        txt = self.tr(u"""If True, uniformity in all orientations""")
-        self.is_isotropic.setWhatsThis(txt)
-        self.is_isotropic.setToolTip(txt)
+        # Setup of cb_material_type
+        txt = self.tr(u"""If Isotropic, uniformity in all orientations""")
+        self.cb_material_type.setWhatsThis(txt)
+        self.cb_material_type.setToolTip(txt)
+
+        # Setup of in_material_type
+        txt = self.tr(u"""If Isotropic, uniformity in all orientations""")
+        self.in_material_type.setWhatsThis(txt)
+        self.in_material_type.setToolTip(txt)
 
         # Setup of in_rho_elec
         txt = self.tr(u"""Resistivity at 20 deg C""")
@@ -39,6 +44,22 @@ class Gen_DMatSetup(Ui_DMatSetup):
         txt = self.tr(u"""Resistivity at 20 deg C""")
         self.unit_rho_elec.setWhatsThis(txt)
         self.unit_rho_elec.setToolTip(txt)
+
+        # Setup of in_alpha_elec
+        txt = self.tr(u"""Thermal resistivity coefficient""")
+        self.in_alpha_elec.setWhatsThis(txt)
+        self.in_alpha_elec.setToolTip(txt)
+
+        # Setup of lf_alpha_elec
+        self.lf_alpha_elec.validator().setBottom(0)
+        txt = self.tr(u"""Thermal resistivity coefficient""")
+        self.lf_alpha_elec.setWhatsThis(txt)
+        self.lf_alpha_elec.setToolTip(txt)
+
+        # Setup of unit_alpha_elec
+        txt = self.tr(u"""Thermal resistivity coefficient""")
+        self.unit_alpha_elec.setWhatsThis(txt)
+        self.unit_alpha_elec.setToolTip(txt)
 
         # Setup of in_cost_unit
         txt = self.tr(u"""Cost of one kilo of material""")
@@ -387,16 +408,12 @@ class Gen_DMatSetup(Ui_DMatSetup):
         self.unit_Brm20.setToolTip(txt)
 
         # Setup of in_alpha_Br
-        txt = self.tr(
-            u"""temperature coefficient for remanent flux density /degC compared to 20degC"""
-        )
+        txt = self.tr(u"""temperature coefficient for remanent flux density""")
         self.in_alpha_Br.setWhatsThis(txt)
         self.in_alpha_Br.setToolTip(txt)
 
         # Setup of lf_alpha_Br
-        txt = self.tr(
-            u"""temperature coefficient for remanent flux density /degC compared to 20degC"""
-        )
+        txt = self.tr(u"""temperature coefficient for remanent flux density""")
         self.lf_alpha_Br.setWhatsThis(txt)
         self.lf_alpha_Br.setToolTip(txt)
 

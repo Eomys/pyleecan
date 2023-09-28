@@ -1,9 +1,14 @@
-Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
-type_skew,-,"Type of skew (""linear"", ""vshape"", ""function"", ""user-defined"")",0,str,None,,,,Machine,,comp_angle,VERSION,1,Class for the skew (rotor or stator)
-rate,-,"Skew rate expressed in terms of slot pitch (stator slot pitch for SCIM, rotor slot pitch for PMSM)",0,float,1,,,,,,comp_pattern,,,
-is_step,-,True to define skew as steps,0,bool,True,,,,,,plot,,,
-function,-,Function which describes skew pattern,0,function,None,,,,,,,,,
-angle_list,rad,List of skew angles,1,list,None,,,,,,,,,
-z_list,m,List of z axis positions for which skew angles are given,1,list,None,,,,,,,,,
-Nstep,,Number of steps if step skew,,int,None,2,,,,,,,,
-angle_overall,rad,Overall skewing angle,,float,None,0,,,,,,,,
+Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,as_dict Type
+type_skew,-,"Type of skew (""linear"", ""vshape"", ""function"", ""user-defined"")",0,str,None,,
+rate,-,"Skew rate expressed in terms of slot pitch (stator slot pitch for SCIM, rotor slot pitch for PMSM)",0,float,1,,
+is_step,-,True to define skew as steps,0,bool,True,,
+function,-,Function which describes skew pattern,0,function,None,,
+angle_list,rad,List of skew angles,1,list,None,,
+z_list,m,List of z axis positions for which skew angles are given,1,list,None,,
+Nstep,,Number of steps if step skew,,int,None,2,
+angle_overall,rad,Overall skewing angle,,float,None,0,
+,
+Package,Inherit,Methods,Constant Name,Constant Value,Class description
+Machine,,comp_angle,VERSION,1,Class for the skew (rotor or stator)
+,,comp_pattern,,,
+,,plot,,,

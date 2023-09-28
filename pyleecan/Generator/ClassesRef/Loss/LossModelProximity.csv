@@ -1,0 +1,6 @@
+Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,as_dict Type
+k_p,W/kg,Proximity loss coefficient,,float,None,,
+,
+Package,Inherit,Methods,Constant Name,Constant Value,Class description
+Loss,LossModel,comp_coeff,VERSION,1,Proximity Loss Model Class
+,,comp_loss,,,

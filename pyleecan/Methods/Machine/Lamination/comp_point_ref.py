@@ -34,17 +34,20 @@ def comp_point_ref(self, sym=1):
         else:
             Rref = (self.Rext + R2) / 2
 
-    # Find an angle without notches
-    if self.yoke_notch in [None, list()]:
+    # Find an angle without notches on the yoke
+    if not self.has_notch(is_bore=False):
         angle = pi / sym
     else:
-        yoke_desc, _ = self.get_yoke_desc(sym=sym, is_reversed=False)
+        yoke_desc_list = self.build_radius_desc(sym=sym, is_bore=False)
         ii = 0
-        while ii < len(yoke_desc) and not (
-            isinstance(yoke_desc[ii]["obj"], Arc)
-            and (yoke_desc[ii]["begin_angle"] < yoke_desc[ii]["end_angle"])
+        while (
+            ii < len(yoke_desc_list)
+            and yoke_desc_list[ii]["label"] != "Radius"
+            and (yoke_desc_list[ii]["begin_angle"] < yoke_desc_list[ii]["end_angle"])
         ):
             ii += 1
-        angle = (yoke_desc[ii]["begin_angle"] + yoke_desc[ii]["end_angle"]) / 2
+        angle = (
+            yoke_desc_list[ii]["begin_angle"] + yoke_desc_list[ii]["end_angle"]
+        ) / 2
 
     return Rref * exp(1j * angle)

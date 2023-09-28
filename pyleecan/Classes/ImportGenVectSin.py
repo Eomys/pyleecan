@@ -10,9 +10,9 @@ from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
-from ..Functions.copy import copy
 from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
+from copy import deepcopy
 from .ImportMatrix import ImportMatrix
 
 # Import all class method
@@ -23,6 +23,7 @@ except ImportError as error:
     get_data = error
 
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 
@@ -42,9 +43,8 @@ class ImportGenVectSin(ImportMatrix):
         )
     else:
         get_data = get_data
-    # save and copy methods are available in all object
+    # generic save method is available in all object
     save = save
-    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -131,7 +131,7 @@ class ImportGenVectSin(ImportMatrix):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -141,17 +141,71 @@ class ImportGenVectSin(ImportMatrix):
         diff_list = list()
 
         # Check the properties inherited from ImportMatrix
-        diff_list.extend(super(ImportGenVectSin, self).compare(other, name=name))
-        if other._f != self._f:
-            diff_list.append(name + ".f")
-        if other._A != self._A:
-            diff_list.append(name + ".A")
-        if other._Phi != self._Phi:
-            diff_list.append(name + ".Phi")
+        diff_list.extend(
+            super(ImportGenVectSin, self).compare(
+                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
+            )
+        )
+        if (
+            other._f is not None
+            and self._f is not None
+            and isnan(other._f)
+            and isnan(self._f)
+        ):
+            pass
+        elif other._f != self._f:
+            if is_add_value:
+                val_str = " (self=" + str(self._f) + ", other=" + str(other._f) + ")"
+                diff_list.append(name + ".f" + val_str)
+            else:
+                diff_list.append(name + ".f")
+        if (
+            other._A is not None
+            and self._A is not None
+            and isnan(other._A)
+            and isnan(self._A)
+        ):
+            pass
+        elif other._A != self._A:
+            if is_add_value:
+                val_str = " (self=" + str(self._A) + ", other=" + str(other._A) + ")"
+                diff_list.append(name + ".A" + val_str)
+            else:
+                diff_list.append(name + ".A")
+        if (
+            other._Phi is not None
+            and self._Phi is not None
+            and isnan(other._Phi)
+            and isnan(self._Phi)
+        ):
+            pass
+        elif other._Phi != self._Phi:
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._Phi) + ", other=" + str(other._Phi) + ")"
+                )
+                diff_list.append(name + ".Phi" + val_str)
+            else:
+                diff_list.append(name + ".Phi")
         if other._N != self._N:
-            diff_list.append(name + ".N")
-        if other._Tf != self._Tf:
-            diff_list.append(name + ".Tf")
+            if is_add_value:
+                val_str = " (self=" + str(self._N) + ", other=" + str(other._N) + ")"
+                diff_list.append(name + ".N" + val_str)
+            else:
+                diff_list.append(name + ".N")
+        if (
+            other._Tf is not None
+            and self._Tf is not None
+            and isnan(other._Tf)
+            and isnan(self._Tf)
+        ):
+            pass
+        elif other._Tf != self._Tf:
+            if is_add_value:
+                val_str = " (self=" + str(self._Tf) + ", other=" + str(other._Tf) + ")"
+                diff_list.append(name + ".Tf" + val_str)
+            else:
+                diff_list.append(name + ".Tf")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -196,6 +250,27 @@ class ImportGenVectSin(ImportMatrix):
         # Overwrite the mother class name
         ImportGenVectSin_dict["__class__"] = "ImportGenVectSin"
         return ImportGenVectSin_dict
+
+    def copy(self):
+        """Creates a deepcopy of the object"""
+
+        # Handle deepcopy of all the properties
+        f_val = self.f
+        A_val = self.A
+        Phi_val = self.Phi
+        N_val = self.N
+        Tf_val = self.Tf
+        is_transpose_val = self.is_transpose
+        # Creates new object of the same type with the copied properties
+        obj_copy = type(self)(
+            f=f_val,
+            A=A_val,
+            Phi=Phi_val,
+            N=N_val,
+            Tf=Tf_val,
+            is_transpose=is_transpose_val,
+        )
+        return obj_copy
 
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""

@@ -1,2 +1,5 @@
-Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
-prop_dict,-,Property dictionary,0,dict,None,,,,Geometry,,comp_normal,VERSION,1,Abstract geometry class (A line between two points)
+Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,as_dict Type
+prop_dict,-,Property dictionary,0,dict,None,,
+,
+Package,Inherit,Methods,Constant Name,Constant Value,Class description
+Geometry,,comp_normal,VERSION,1,Abstract geometry class (A line between two points)

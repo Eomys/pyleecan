@@ -10,14 +10,13 @@ from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
-from ..Functions.copy import copy
 from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
+from copy import deepcopy
 from ._frozen import FrozenClass
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
-from .OptiProblem import OptiProblem
-from .XOutput import XOutput
 
 
 class OptiSolver(FrozenClass):
@@ -25,9 +24,8 @@ class OptiSolver(FrozenClass):
 
     VERSION = 1
 
-    # save and copy methods are available in all object
+    # generic save method is available in all object
     save = save
-    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -112,7 +110,7 @@ class OptiSolver(FrozenClass):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -126,7 +124,12 @@ class OptiSolver(FrozenClass):
             diff_list.append(name + ".problem None mismatch")
         elif self.problem is not None:
             diff_list.extend(
-                self.problem.compare(other.problem, name=name + ".problem")
+                self.problem.compare(
+                    other.problem,
+                    name=name + ".problem",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
             )
         if (other.xoutput is None and self.xoutput is not None) or (
             other.xoutput is not None and self.xoutput is None
@@ -134,12 +137,37 @@ class OptiSolver(FrozenClass):
             diff_list.append(name + ".xoutput None mismatch")
         elif self.xoutput is not None:
             diff_list.extend(
-                self.xoutput.compare(other.xoutput, name=name + ".xoutput")
+                self.xoutput.compare(
+                    other.xoutput,
+                    name=name + ".xoutput",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
             )
         if other._logger_name != self._logger_name:
-            diff_list.append(name + ".logger_name")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._logger_name)
+                    + ", other="
+                    + str(other._logger_name)
+                    + ")"
+                )
+                diff_list.append(name + ".logger_name" + val_str)
+            else:
+                diff_list.append(name + ".logger_name")
         if other._is_keep_all_output != self._is_keep_all_output:
-            diff_list.append(name + ".is_keep_all_output")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._is_keep_all_output)
+                    + ", other="
+                    + str(other._is_keep_all_output)
+                    + ")"
+                )
+                diff_list.append(name + ".is_keep_all_output" + val_str)
+            else:
+                diff_list.append(name + ".is_keep_all_output")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -188,6 +216,29 @@ class OptiSolver(FrozenClass):
         OptiSolver_dict["__class__"] = "OptiSolver"
         return OptiSolver_dict
 
+    def copy(self):
+        """Creates a deepcopy of the object"""
+
+        # Handle deepcopy of all the properties
+        if self.problem is None:
+            problem_val = None
+        else:
+            problem_val = self.problem.copy()
+        if self.xoutput is None:
+            xoutput_val = None
+        else:
+            xoutput_val = self.xoutput.copy()
+        logger_name_val = self.logger_name
+        is_keep_all_output_val = self.is_keep_all_output
+        # Creates new object of the same type with the copied properties
+        obj_copy = type(self)(
+            problem=problem_val,
+            xoutput=xoutput_val,
+            logger_name=logger_name_val,
+            is_keep_all_output=is_keep_all_output_val,
+        )
+        return obj_copy
+
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""
 
@@ -205,13 +256,20 @@ class OptiSolver(FrozenClass):
     def _set_problem(self, value):
         """setter of problem"""
         if isinstance(value, str):  # Load from file
-            value = load_init_dict(value)[1]
+            try:
+                value = load_init_dict(value)[1]
+            except Exception as e:
+                self.get_logger().error(
+                    "Error while loading " + value + ", setting None instead"
+                )
+                value = None
         if isinstance(value, dict) and "__class__" in value:
             class_obj = import_class(
                 "pyleecan.Classes", value.get("__class__"), "problem"
             )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
+            OptiProblem = import_class("pyleecan.Classes", "OptiProblem", "problem")
             value = OptiProblem()
         check_var("problem", value, "OptiProblem")
         self._problem = value
@@ -235,13 +293,20 @@ class OptiSolver(FrozenClass):
     def _set_xoutput(self, value):
         """setter of xoutput"""
         if isinstance(value, str):  # Load from file
-            value = load_init_dict(value)[1]
+            try:
+                value = load_init_dict(value)[1]
+            except Exception as e:
+                self.get_logger().error(
+                    "Error while loading " + value + ", setting None instead"
+                )
+                value = None
         if isinstance(value, dict) and "__class__" in value:
             class_obj = import_class(
                 "pyleecan.Classes", value.get("__class__"), "xoutput"
             )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
+            XOutput = import_class("pyleecan.Classes", "XOutput", "xoutput")
             value = XOutput()
         check_var("xoutput", value, "XOutput")
         self._xoutput = value

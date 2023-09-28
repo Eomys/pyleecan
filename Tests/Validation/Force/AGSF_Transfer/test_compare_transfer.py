@@ -5,6 +5,7 @@ from os.path import join
 from multiprocessing import cpu_count
 
 from pyleecan.Classes.ForceMT import ForceMT
+from pyleecan.Classes.OPdq import OPdq
 from pyleecan.Classes.Simu1 import Simu1
 from pyleecan.Classes.MagFEMM import MagFEMM
 from pyleecan.Classes.InputCurrent import InputCurrent
@@ -33,7 +34,10 @@ def test_IPMSM():
     simu = Simu1(name="test_compare_transfer_IPMSM_no_transfer", machine=Toyota_Prius)
 
     simu.input = InputCurrent(
-        Id_ref=0, Iq_ref=0, Ir=None, Na_tot=2 ** 11, Nt_tot=2 ** 6, N0=1200
+        OP=OPdq(N0=1200, Id_ref=0, Iq_ref=0),
+        Ir=None,
+        Na_tot=2 ** 11,
+        Nt_tot=2 ** 6,
     )
 
     # Configure simulation
@@ -55,7 +59,10 @@ def test_IPMSM():
     simu2.name = "test_compare_transfer_IPMSM_with_transfer"
 
     simu2.input = InputCurrent(
-        Id_ref=0, Iq_ref=0, Ir=None, Na_tot=2 ** 11, Nt_tot=2 ** 6, N0=1200
+        OP=OPdq(N0=1200, Id_ref=0, Iq_ref=0),
+        Ir=None,
+        Na_tot=2 ** 11,
+        Nt_tot=2 ** 6,
     )
 
     simu2.mag = MagFEMM(
@@ -121,7 +128,10 @@ def test_Benchmark():
     simu = Simu1(name="test_compare_transfer_Benchmark_Rag", machine=Benchmark)
 
     simu.input = InputCurrent(
-        Id_ref=0, Iq_ref=0, Ir=None, Na_tot=5 * 2 ** 9, Nt_tot=2, N0=1200
+        OP=OPdq(N0=1200, Id_ref=0, Iq_ref=0),
+        Ir=None,
+        Na_tot=5 * 2 ** 9,
+        Nt_tot=2,
     )
 
     # Configure simulation
@@ -130,23 +140,17 @@ def test_Benchmark():
         is_periodicity_a=False,
         is_periodicity_t=False,
         is_sliding_band=False,
-        nb_worker=cpu_count(),
     )
     simu.force = ForceMT(
         is_periodicity_a=False,
         is_periodicity_t=False,
     )
 
-    # Run simulation with Rag in the middle of the air-gap
-    out = simu.run()
-
     # Test 2 : with transfer
     simu2 = simu.copy()
     simu2.name = "test_compare_transfer_Benchmark_Rag_Transfer"
     simu2.force.is_agsf_transfer = True
     simu2.force.max_wavenumber_transfer = 100
-
-    out2 = simu2.run()
 
     # simu 3 directly at Rsbo
     Rsbo = 0.0480
@@ -157,6 +161,9 @@ def test_Benchmark():
     simu3 = simu.copy()
     simu2.name = "test_compare_transfer_Benchmark_Rsbo"
     simu3.mag.Rag_enforced = Rag
+    # Run simulation with Rag in the middle of the air-gap
+    out = simu.run()
+    out2 = simu2.run()
     out3 = simu3.run()
 
     out2.force.AGSF.plot_2D_Data(
@@ -186,6 +193,5 @@ def test_Benchmark():
 
 
 if __name__ == "__main__":
-
-    out, out2 = test_IPMSM()
+    # out, out2 = test_IPMSM()
     out3, out4, out5 = test_Benchmark()

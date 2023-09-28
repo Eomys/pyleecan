@@ -20,28 +20,16 @@ def build_geometry(self):
 
     """
 
-    point_dict = self._comp_point_coordinate()
-    Z1 = point_dict["Z1"]
-    Z2 = point_dict["Z2"]
-    Z3 = point_dict["Z3"]
-    Z4 = point_dict["Z4"]
-    Z5 = point_dict["Z5"]
-    Z6 = point_dict["Z6"]
-    Z7 = point_dict["Z7"]
-    Z8 = point_dict["Z8"]
-    Z9 = point_dict["Z9"]
+    line_dict = self._comp_line_dict()
 
-    # Creation of curve
-    curve_list = list()
-    if self.H0 > 0:
-        curve_list.append(Segment(Z1, Z2))
-    curve_list.append(Segment(Z2, Z3))
-    curve_list.append(Segment(Z3, Z4))
-    curve_list.append(Segment(Z4, Z5))
-    curve_list.append(Segment(Z5, Z6))
-    curve_list.append(Segment(Z6, Z7))
-    curve_list.append(Segment(Z7, Z8))
-    if self.H0 > 0:
-        curve_list.append(Segment(Z8, Z9))
-
-    return curve_list
+    curve_list = [
+        line_dict["1-2"],
+        line_dict["2-3"],
+        line_dict["3-4"],
+        line_dict["4-5"],
+        line_dict["5-6"],
+        line_dict["6-7"],
+        line_dict["7-8"],
+        line_dict["8-9"],
+    ]
+    return [line for line in curve_list if line is not None]

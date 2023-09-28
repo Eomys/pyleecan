@@ -29,6 +29,11 @@ class Ui_WMatSelect(object):
         self.horizontalLayout.setContentsMargins(4, 2, 4, 2)
         self.in_mat_type = QLabel(WMatSelect)
         self.in_mat_type.setObjectName(u"in_mat_type")
+        sizePolicy1 = QSizePolicy(QSizePolicy.Minimum, QSizePolicy.Preferred)
+        sizePolicy1.setHorizontalStretch(0)
+        sizePolicy1.setVerticalStretch(0)
+        sizePolicy1.setHeightForWidth(self.in_mat_type.sizePolicy().hasHeightForWidth())
+        self.in_mat_type.setSizePolicy(sizePolicy1)
 
         self.horizontalLayout.addWidget(self.in_mat_type)
 
@@ -37,6 +42,11 @@ class Ui_WMatSelect(object):
         self.c_mat_type.addItem("")
         self.c_mat_type.addItem("")
         self.c_mat_type.setObjectName(u"c_mat_type")
+        sizePolicy2 = QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
+        sizePolicy2.setHorizontalStretch(0)
+        sizePolicy2.setVerticalStretch(0)
+        sizePolicy2.setHeightForWidth(self.c_mat_type.sizePolicy().hasHeightForWidth())
+        self.c_mat_type.setSizePolicy(sizePolicy2)
 
         self.horizontalLayout.addWidget(self.c_mat_type)
 
@@ -44,6 +54,12 @@ class Ui_WMatSelect(object):
         self.b_matlib.setObjectName(u"b_matlib")
 
         self.horizontalLayout.addWidget(self.b_matlib)
+
+        self.horizontalSpacer = QSpacerItem(
+            40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum
+        )
+
+        self.horizontalLayout.addItem(self.horizontalSpacer)
 
         QWidget.setTabOrder(self.c_mat_type, self.b_matlib)
 

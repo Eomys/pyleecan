@@ -1,5 +1,8 @@
-Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constante Name,Constante Value,Description classe,Classe fille
-problem,-,Problem to solve,1,OptiProblem,,,,,Optimization,,,VERSION,1,Optimization solver class,
-xoutput,-,Optimization results containing every output,1,XOutput,,,,,,,,,,,
-logger_name,-,Name of the logger to use,0,str,Pyleecan.OptiSolver,,,,,,,,,,
-is_keep_all_output,-,Boolean to keep every output,0,bool,False,,,,,,,,,,
+Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,as_dict Type
+problem,-,Problem to solve,1,OptiProblem,,,
+xoutput,-,Optimization results containing every output,1,XOutput,,,
+logger_name,-,Name of the logger to use,0,str,Pyleecan.OptiSolver,,
+is_keep_all_output,-,Boolean to keep every output,0,bool,False,,
+,
+Package,Inherit,Methods,Constante Name,Constante Value,Description classe,Classe fille
+Optimization,,,VERSION,1,Optimization solver class,

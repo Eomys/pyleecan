@@ -1,0 +1,22 @@
+Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,as_dict Type
+H0,m,Slot depth,0,float,3.00E-03,0,
+W0,m,Magnet width,0,float,3.00E-03,0,
+H1,m,Magnet height,0,float,0,0,
+W1,m,Void width,0,float,0.001,0,
+H2,m,Additional depth for the magnet,0,float,2.00E-02,0,
+magnet_0,-,Magnet of the hole,0,Magnet,,,
+R0,m,Void corner radius,0,float,0,0,
+,
+Package,Inherit,Methods,Constant Name,Constant Value,Class description
+Slot,HoleMag,_comp_point_coordinate,VERSION,1,Rectangular slot for buried magnet
+,,build_geometry,IS_SYMMETRICAL,1,
+,,check,,,
+,,comp_alpha,,,
+,,comp_magnetization_dict,,,
+,,comp_radius,,,
+,,comp_surface,,,
+,,comp_surface_magnet_id,,,
+,,has_magnet,,,
+,,plot_schematics,,,
+,,remove_magnet,,,
+,,get_height_magnet_id,,,

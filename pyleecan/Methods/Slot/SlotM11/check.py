@@ -17,7 +17,12 @@ def check(self):
     -------
     None
     """
+    # percentage of the slot pitch that W0 and Wmag should not exceed
+    slot_pitch_tol = 0.99
+
     if self.W0 < self.Wmag:
         raise SlotCheckError("You must have Wmag <= W0")
-    if self.Wmag >= 2 * pi / self.Zs:
+    if self.Wmag >= slot_pitch_tol * 2 * pi / self.Zs:
         raise SlotCheckError("You must have Wmag < pi/p (use ring magnet instead)")
+    if self.W0 >= slot_pitch_tol * 2 * pi / self.Zs:
+        raise SlotCheckError("You must have W0 < pi/p")

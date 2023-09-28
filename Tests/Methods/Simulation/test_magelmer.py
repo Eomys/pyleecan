@@ -7,6 +7,7 @@ from pyleecan.Classes.InputCurrent import InputCurrent
 from pyleecan.Classes.MagElmer import MagElmer
 from pyleecan.Classes.SlotM10 import SlotM10
 from pyleecan.Classes.Simu1 import Simu1
+from pyleecan.Classes.OPdq import OPdq
 from pyleecan.Classes.Output import Output
 from pyleecan.Functions.load import load
 from pyleecan.Functions.Plot import dict_2D
@@ -45,7 +46,6 @@ mesh_dict = {
 @pytest.mark.SingleOP
 @pytest.mark.periodicity
 def test_ipm_Elmer():
-
     Toyota_Prius = load(join(DATA_DIR, "Machine", "Toyota_Prius.json"))
     Toyota_Prius.stator.slot.H1 = 1e-3
     simu = Simu1(name="test_ipm_Elmer", machine=Toyota_Prius)
@@ -60,7 +60,6 @@ def test_ipm_Elmer():
     #     Is=Is,
     #     Ir=Ir,  # zero current for the rotor
     #     N0=N0,
-    #     angle_rotor=None,  # Will be computed
     #     Nt_tot=Nt_tot,
     #     Na_tot=Na_tot,
     #     angle_rotor_initial=0.2244,
@@ -72,14 +71,14 @@ def test_ipm_Elmer():
     # simu.input.Iq_ref = 250  # [A]
     # simu.input.Nt_tot = 32 * 8    # Number of time step
     # simu.input.Na_tot = 2048     # Spatial discretization
-    simu.input.N0 = 2000  # Rotor speed [rpm]
+    simu.input.OP = OPdq(N0=2000)  # Rotor speed [rpm]
     p = Toyota_Prius.stator.winding.p
-    time = linspace(0, 60 / simu.input.N0, num=32 * p, endpoint=False)
+    time = linspace(0, 60 / simu.input.OP.N0, num=32 * p, endpoint=False)
     simu.input.time = time
     simu.input.angle = linspace(0, 2 * pi, num=2048, endpoint=False)
     I0 = 250
-    felec = p * simu.input.N0 / 60
-    rot_dir = simu.machine.stator.comp_rot_dir()
+    felec = p * simu.input.OP.N0 / 60
+    rot_dir = simu.machine.stator.comp_mmf_dir()
     Phi0 = 140 * pi / 180
     Ia = I0 * cos(2 * pi * felec * time + 0 * rot_dir * 2 * pi / 3 + Phi0)
     Ib = I0 * cos(2 * pi * felec * time + 1 * rot_dir * 2 * pi / 3 + Phi0)
@@ -135,14 +134,14 @@ def test_spm_Elmer():
     # simu.input.Iq_ref = 250  # [A]
     # simu.input.Nt_tot = 32 * 8    # Number of time step
     # simu.input.Na_tot = 2048     # Spatial discretization
-    simu.input.N0 = 2000  # Rotor speed [rpm]
+    simu.input.OP = OPdq(N0=2000)  # Rotor speed [rpm]
     p = PMSM_A.stator.winding.p
-    time = linspace(0, 60 / simu.input.N0, num=32 * p, endpoint=False)
+    time = linspace(0, 60 / simu.input.OP.N0, num=32 * p, endpoint=False)
     simu.input.time = time
     simu.input.angle = linspace(0, 2 * pi, num=2048, endpoint=False)
     I0 = 150
-    felec = p * simu.input.N0 / 60
-    rot_dir = simu.machine.stator.comp_rot_dir()
+    felec = p * simu.input.OP.N0 / 60
+    rot_dir = simu.machine.stator.comp_mmf_dir()
     Phi0 = 140 * pi / 180
     Ia = I0 * cos(2 * pi * felec * time + 0 * rot_dir * 2 * pi / 3 + Phi0)
     Ib = I0 * cos(2 * pi * felec * time + 1 * rot_dir * 2 * pi / 3 + Phi0)

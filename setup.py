@@ -1,9 +1,9 @@
+from os import system
+from sys import executable
+
 try:
     import setuptools
 except ImportError:  # Install setuptools if needed
-    from os import system
-    from sys import executable
-
     # run 'pip install setuptools'
     system("{} -m pip install setuptools".format(executable))
 
@@ -11,6 +11,9 @@ except ImportError:  # Install setuptools if needed
 
 import platform
 
+system(
+    "{} -m pip install git+https://gitlab.com/CedMrnl/swat-em.git".format(executable)
+)
 
 # /!\ Increase the number before a release
 # See https://www.python.org/dev/peps/pep-0440/
@@ -21,47 +24,49 @@ import platform
 # Release 1.1.0 : 1.1.0
 # First post release of the release 1.1.0 : 1.1.0.post1
 
-PYLEECAN_VERSION = "1.3.6"
+PYLEECAN_VERSION = "1.5.1"
 
 
 with open("README.md", "r") as fh:
     long_description = fh.read()
 
-python_requires = ">= 3.6"
+python_requires = ">= 3.6, <3.11"
 
-# Pyleecan dependancies
+# Pyleecan main dependancies
 install_requires = [
-    "setuptools",
     "cloudpickle>=1.3.0",
-    "matplotlib>=3.3.2",
-    "numpy>1.19.5",
+    "ezdxf==0.14.2",
+    "h5py>=3.2.1",
+    "matplotlib>=3.3.2,<=3.3.4",
+    "meshio>=4.0.15,<=4.4.6",
+    "numpy>1.19.5,<=1.23.1",
     "pandas>=1.0.3",
-    'pyfemm>=0.1.1;platform_system=="Windows"',
+    "pyfemm>=0.1.3",
     "PySide2>=5.15.2",
-    "swat_em>=0.6.3",
+    "pyuff>=1.25",
+    "pyvista>=0.25.3,<=0.31.3",
+    "SciDataTool>=2.5.0",
     "scipy>=1.4.1",
+    "setuptools",
     "xlrd>=1.2.0",
     "xlwt>=1.3.0",
+]
+# Pyleecan optional dependancies
+full_require = [
     "deap>=1.3.1",
-    "SciDataTool>=1.4.9",
-    "pyvista>=0.25.3",
-    "meshio>=4.0.15",
-    "h5py>=3.2.1",
-    "nbformat",
-    "nbconvert",
-    "quadpy",
-    "ezdxf>=0.14.2",
-    "pytest-qt>=3.3.0",
-    "pyuff>=1.25",
+    "smoot>=0.1.0",
+    "gmsh-sdk>=4.6.0",
 ]
 
+# Pyleecan Test dependancies
 tests_require = [
     "ddt>=1.3.1",
+    "hypothesis",
+    "mock>=4.0.2",
+    "nbconvert",
+    "nbformat",
     "pytest>=5.4.1",
     "pytest-qt>=3.3.0",
-    "mock>=4.0.2",
-    "nbformat",
-    "nbconvert",
 ]
 
 setuptools.setup(
@@ -91,6 +96,7 @@ setuptools.setup(
     python_requires=python_requires,
     install_requires=install_requires,
     extras_require={
-        "test": tests_require
+        "test": tests_require,
+        "full": full_require,
     },  # Enables to install the test dependancies using pip install pyleecan[test]
 )

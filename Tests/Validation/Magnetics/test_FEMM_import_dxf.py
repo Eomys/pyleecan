@@ -2,6 +2,7 @@ from os.path import join
 import matplotlib.pyplot as plt
 from Tests import save_validation_path as save_path
 from Tests import TEST_DATA_DIR
+from pyleecan.Classes.OPdq import OPdq
 from pyleecan.Classes.Simu1 import Simu1
 
 from pyleecan.Classes.DXFImport import DXFImport
@@ -34,17 +35,16 @@ def test_FEMM_import_dxf():
         type_BH_rotor=0,
         is_periodicity_a=True,
         Kgeo_fineness=0.75,
+        is_fast_draw=False,
     )
     # Run only Magnetic module
     simu.force = None
     simu.struct = None
 
     simu.input = InputCurrent()
-    simu.input.Id_ref = -100  # [A]
-    simu.input.Iq_ref = 200  # [A]
+    simu.input.OP = OPdq(Id_ref=-100, Iq_ref=200, N0=2000)
     simu.input.Nt_tot = 1  # Number of time step
     simu.input.Na_tot = 2048  # Spatial discretization
-    simu.input.N0 = 2000  # Rotor speed [rpm]
     simu.input.rot_dir = 1  # To enforce the rotation direction
 
     # DXF import setup
@@ -67,12 +67,12 @@ def test_FEMM_import_dxf():
     BC_list.append((0.067, False, "bc_r1"))
     simu.mag.rotor_dxf.BC_list = BC_list
 
-    # Run DXF simulation
-    out = simu.run()
-
-    # Run Normal simulation
+    # Same without Dxf
     simu2 = simu.copy()
     simu2.mag.rotor_dxf = None
+
+    # Run both simulations
+    out = simu.run()
     out2 = simu2.run()
 
     # Plot/compare the flux

@@ -10,19 +10,24 @@ from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
-from ..Functions.copy import copy
 from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
+from copy import deepcopy
 from ._frozen import FrozenClass
 
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
 try:
-    from ..Methods.Output.Output.getter.get_angle_offset_initial import (
-        get_angle_offset_initial,
+    from ..Methods.Output.Output.getter.comp_angle_rotor import comp_angle_rotor
+except ImportError as error:
+    comp_angle_rotor = error
+
+try:
+    from ..Methods.Output.Output.getter.get_angle_rotor_initial import (
+        get_angle_rotor_initial,
     )
 except ImportError as error:
-    get_angle_offset_initial = error
+    get_angle_rotor_initial = error
 
 try:
     from ..Methods.Output.Output.getter.get_angle_rotor import get_angle_rotor
@@ -52,11 +57,6 @@ except ImportError as error:
     get_machine_periodicity = error
 
 try:
-    from ..Methods.Output.Output.getter.get_rot_dir import get_rot_dir
-except ImportError as error:
-    get_rot_dir = error
-
-try:
     from ..Methods.Output.Output.getter.get_fund_harm import get_fund_harm
 except ImportError as error:
     get_fund_harm = error
@@ -65,6 +65,11 @@ try:
     from ..Methods.Output.Output.getter.get_data_from_str import get_data_from_str
 except ImportError as error:
     get_data_from_str = error
+
+try:
+    from ..Methods.Output.Output.getter.export_to_mat import export_to_mat
+except ImportError as error:
+    export_to_mat = error
 
 try:
     from ..Methods.Output.Output.plot.Magnetic.plot_B_mesh import plot_B_mesh
@@ -77,15 +82,8 @@ except ImportError as error:
     print_memory = error
 
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
-from .Simulation import Simulation
-from .OutGeo import OutGeo
-from .OutElec import OutElec
-from .OutMag import OutMag
-from .OutStruct import OutStruct
-from .OutPost import OutPost
-from .OutForce import OutForce
-from .OutLoss import OutLoss
 
 
 class Output(FrozenClass):
@@ -94,18 +92,29 @@ class Output(FrozenClass):
     VERSION = 1
 
     # Check ImportError to remove unnecessary dependencies in unused method
-    # cf Methods.Output.Output.getter.get_angle_offset_initial
-    if isinstance(get_angle_offset_initial, ImportError):
-        get_angle_offset_initial = property(
+    # cf Methods.Output.Output.getter.comp_angle_rotor
+    if isinstance(comp_angle_rotor, ImportError):
+        comp_angle_rotor = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use Output method get_angle_offset_initial: "
-                    + str(get_angle_offset_initial)
+                    "Can't use Output method comp_angle_rotor: " + str(comp_angle_rotor)
                 )
             )
         )
     else:
-        get_angle_offset_initial = get_angle_offset_initial
+        comp_angle_rotor = comp_angle_rotor
+    # cf Methods.Output.Output.getter.get_angle_rotor_initial
+    if isinstance(get_angle_rotor_initial, ImportError):
+        get_angle_rotor_initial = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Output method get_angle_rotor_initial: "
+                    + str(get_angle_rotor_initial)
+                )
+            )
+        )
+    else:
+        get_angle_rotor_initial = get_angle_rotor_initial
     # cf Methods.Output.Output.getter.get_angle_rotor
     if isinstance(get_angle_rotor, ImportError):
         get_angle_rotor = property(
@@ -162,15 +171,6 @@ class Output(FrozenClass):
         )
     else:
         get_machine_periodicity = get_machine_periodicity
-    # cf Methods.Output.Output.getter.get_rot_dir
-    if isinstance(get_rot_dir, ImportError):
-        get_rot_dir = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use Output method get_rot_dir: " + str(get_rot_dir))
-            )
-        )
-    else:
-        get_rot_dir = get_rot_dir
     # cf Methods.Output.Output.getter.get_fund_harm
     if isinstance(get_fund_harm, ImportError):
         get_fund_harm = property(
@@ -194,6 +194,17 @@ class Output(FrozenClass):
         )
     else:
         get_data_from_str = get_data_from_str
+    # cf Methods.Output.Output.getter.export_to_mat
+    if isinstance(export_to_mat, ImportError):
+        export_to_mat = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Output method export_to_mat: " + str(export_to_mat)
+                )
+            )
+        )
+    else:
+        export_to_mat = export_to_mat
     # cf Methods.Output.Output.plot.Magnetic.plot_B_mesh
     if isinstance(plot_B_mesh, ImportError):
         plot_B_mesh = property(
@@ -214,9 +225,8 @@ class Output(FrozenClass):
         )
     else:
         print_memory = print_memory
-    # save and copy methods are available in all object
+    # generic save method is available in all object
     save = save
-    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -365,7 +375,7 @@ class Output(FrozenClass):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -378,53 +388,129 @@ class Output(FrozenClass):
         ):
             diff_list.append(name + ".simu None mismatch")
         elif self.simu is not None:
-            diff_list.extend(self.simu.compare(other.simu, name=name + ".simu"))
+            diff_list.extend(
+                self.simu.compare(
+                    other.simu,
+                    name=name + ".simu",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
+            )
         if other._path_result != self._path_result:
-            diff_list.append(name + ".path_result")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._path_result)
+                    + ", other="
+                    + str(other._path_result)
+                    + ")"
+                )
+                diff_list.append(name + ".path_result" + val_str)
+            else:
+                diff_list.append(name + ".path_result")
         if (other.geo is None and self.geo is not None) or (
             other.geo is not None and self.geo is None
         ):
             diff_list.append(name + ".geo None mismatch")
         elif self.geo is not None:
-            diff_list.extend(self.geo.compare(other.geo, name=name + ".geo"))
+            diff_list.extend(
+                self.geo.compare(
+                    other.geo,
+                    name=name + ".geo",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
+            )
         if (other.elec is None and self.elec is not None) or (
             other.elec is not None and self.elec is None
         ):
             diff_list.append(name + ".elec None mismatch")
         elif self.elec is not None:
-            diff_list.extend(self.elec.compare(other.elec, name=name + ".elec"))
+            diff_list.extend(
+                self.elec.compare(
+                    other.elec,
+                    name=name + ".elec",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
+            )
         if (other.mag is None and self.mag is not None) or (
             other.mag is not None and self.mag is None
         ):
             diff_list.append(name + ".mag None mismatch")
         elif self.mag is not None:
-            diff_list.extend(self.mag.compare(other.mag, name=name + ".mag"))
+            diff_list.extend(
+                self.mag.compare(
+                    other.mag,
+                    name=name + ".mag",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
+            )
         if (other.struct is None and self.struct is not None) or (
             other.struct is not None and self.struct is None
         ):
             diff_list.append(name + ".struct None mismatch")
         elif self.struct is not None:
-            diff_list.extend(self.struct.compare(other.struct, name=name + ".struct"))
+            diff_list.extend(
+                self.struct.compare(
+                    other.struct,
+                    name=name + ".struct",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
+            )
         if (other.post is None and self.post is not None) or (
             other.post is not None and self.post is None
         ):
             diff_list.append(name + ".post None mismatch")
         elif self.post is not None:
-            diff_list.extend(self.post.compare(other.post, name=name + ".post"))
+            diff_list.extend(
+                self.post.compare(
+                    other.post,
+                    name=name + ".post",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
+            )
         if other._logger_name != self._logger_name:
-            diff_list.append(name + ".logger_name")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._logger_name)
+                    + ", other="
+                    + str(other._logger_name)
+                    + ")"
+                )
+                diff_list.append(name + ".logger_name" + val_str)
+            else:
+                diff_list.append(name + ".logger_name")
         if (other.force is None and self.force is not None) or (
             other.force is not None and self.force is None
         ):
             diff_list.append(name + ".force None mismatch")
         elif self.force is not None:
-            diff_list.extend(self.force.compare(other.force, name=name + ".force"))
+            diff_list.extend(
+                self.force.compare(
+                    other.force,
+                    name=name + ".force",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
+            )
         if (other.loss is None and self.loss is not None) or (
             other.loss is not None and self.loss is None
         ):
             diff_list.append(name + ".loss None mismatch")
         elif self.loss is not None:
-            diff_list.extend(self.loss.compare(other.loss, name=name + ".loss"))
+            diff_list.extend(
+                self.loss.compare(
+                    other.loss,
+                    name=name + ".loss",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
+            )
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -527,6 +613,59 @@ class Output(FrozenClass):
         Output_dict["__class__"] = "Output"
         return Output_dict
 
+    def copy(self):
+        """Creates a deepcopy of the object"""
+
+        # Handle deepcopy of all the properties
+        if self.simu is None:
+            simu_val = None
+        else:
+            simu_val = self.simu.copy()
+        path_result_val = self.path_result
+        if self.geo is None:
+            geo_val = None
+        else:
+            geo_val = self.geo.copy()
+        if self.elec is None:
+            elec_val = None
+        else:
+            elec_val = self.elec.copy()
+        if self.mag is None:
+            mag_val = None
+        else:
+            mag_val = self.mag.copy()
+        if self.struct is None:
+            struct_val = None
+        else:
+            struct_val = self.struct.copy()
+        if self.post is None:
+            post_val = None
+        else:
+            post_val = self.post.copy()
+        logger_name_val = self.logger_name
+        if self.force is None:
+            force_val = None
+        else:
+            force_val = self.force.copy()
+        if self.loss is None:
+            loss_val = None
+        else:
+            loss_val = self.loss.copy()
+        # Creates new object of the same type with the copied properties
+        obj_copy = type(self)(
+            simu=simu_val,
+            path_result=path_result_val,
+            geo=geo_val,
+            elec=elec_val,
+            mag=mag_val,
+            struct=struct_val,
+            post=post_val,
+            logger_name=logger_name_val,
+            force=force_val,
+            loss=loss_val,
+        )
+        return obj_copy
+
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""
 
@@ -556,11 +695,18 @@ class Output(FrozenClass):
     def _set_simu(self, value):
         """setter of simu"""
         if isinstance(value, str):  # Load from file
-            value = load_init_dict(value)[1]
+            try:
+                value = load_init_dict(value)[1]
+            except Exception as e:
+                self.get_logger().error(
+                    "Error while loading " + value + ", setting None instead"
+                )
+                value = None
         if isinstance(value, dict) and "__class__" in value:
             class_obj = import_class("pyleecan.Classes", value.get("__class__"), "simu")
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
+            Simulation = import_class("pyleecan.Classes", "Simulation", "simu")
             value = Simulation()
         check_var("simu", value, "Simulation")
         self._simu = value
@@ -602,11 +748,18 @@ class Output(FrozenClass):
     def _set_geo(self, value):
         """setter of geo"""
         if isinstance(value, str):  # Load from file
-            value = load_init_dict(value)[1]
+            try:
+                value = load_init_dict(value)[1]
+            except Exception as e:
+                self.get_logger().error(
+                    "Error while loading " + value + ", setting None instead"
+                )
+                value = None
         if isinstance(value, dict) and "__class__" in value:
             class_obj = import_class("pyleecan.Classes", value.get("__class__"), "geo")
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
+            OutGeo = import_class("pyleecan.Classes", "OutGeo", "geo")
             value = OutGeo()
         check_var("geo", value, "OutGeo")
         self._geo = value
@@ -630,11 +783,18 @@ class Output(FrozenClass):
     def _set_elec(self, value):
         """setter of elec"""
         if isinstance(value, str):  # Load from file
-            value = load_init_dict(value)[1]
+            try:
+                value = load_init_dict(value)[1]
+            except Exception as e:
+                self.get_logger().error(
+                    "Error while loading " + value + ", setting None instead"
+                )
+                value = None
         if isinstance(value, dict) and "__class__" in value:
             class_obj = import_class("pyleecan.Classes", value.get("__class__"), "elec")
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
+            OutElec = import_class("pyleecan.Classes", "OutElec", "elec")
             value = OutElec()
         check_var("elec", value, "OutElec")
         self._elec = value
@@ -658,11 +818,18 @@ class Output(FrozenClass):
     def _set_mag(self, value):
         """setter of mag"""
         if isinstance(value, str):  # Load from file
-            value = load_init_dict(value)[1]
+            try:
+                value = load_init_dict(value)[1]
+            except Exception as e:
+                self.get_logger().error(
+                    "Error while loading " + value + ", setting None instead"
+                )
+                value = None
         if isinstance(value, dict) and "__class__" in value:
             class_obj = import_class("pyleecan.Classes", value.get("__class__"), "mag")
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
+            OutMag = import_class("pyleecan.Classes", "OutMag", "mag")
             value = OutMag()
         check_var("mag", value, "OutMag")
         self._mag = value
@@ -686,13 +853,20 @@ class Output(FrozenClass):
     def _set_struct(self, value):
         """setter of struct"""
         if isinstance(value, str):  # Load from file
-            value = load_init_dict(value)[1]
+            try:
+                value = load_init_dict(value)[1]
+            except Exception as e:
+                self.get_logger().error(
+                    "Error while loading " + value + ", setting None instead"
+                )
+                value = None
         if isinstance(value, dict) and "__class__" in value:
             class_obj = import_class(
                 "pyleecan.Classes", value.get("__class__"), "struct"
             )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
+            OutStruct = import_class("pyleecan.Classes", "OutStruct", "struct")
             value = OutStruct()
         check_var("struct", value, "OutStruct")
         self._struct = value
@@ -716,11 +890,18 @@ class Output(FrozenClass):
     def _set_post(self, value):
         """setter of post"""
         if isinstance(value, str):  # Load from file
-            value = load_init_dict(value)[1]
+            try:
+                value = load_init_dict(value)[1]
+            except Exception as e:
+                self.get_logger().error(
+                    "Error while loading " + value + ", setting None instead"
+                )
+                value = None
         if isinstance(value, dict) and "__class__" in value:
             class_obj = import_class("pyleecan.Classes", value.get("__class__"), "post")
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
+            OutPost = import_class("pyleecan.Classes", "OutPost", "post")
             value = OutPost()
         check_var("post", value, "OutPost")
         self._post = value
@@ -762,13 +943,20 @@ class Output(FrozenClass):
     def _set_force(self, value):
         """setter of force"""
         if isinstance(value, str):  # Load from file
-            value = load_init_dict(value)[1]
+            try:
+                value = load_init_dict(value)[1]
+            except Exception as e:
+                self.get_logger().error(
+                    "Error while loading " + value + ", setting None instead"
+                )
+                value = None
         if isinstance(value, dict) and "__class__" in value:
             class_obj = import_class(
                 "pyleecan.Classes", value.get("__class__"), "force"
             )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
+            OutForce = import_class("pyleecan.Classes", "OutForce", "force")
             value = OutForce()
         check_var("force", value, "OutForce")
         self._force = value
@@ -792,11 +980,18 @@ class Output(FrozenClass):
     def _set_loss(self, value):
         """setter of loss"""
         if isinstance(value, str):  # Load from file
-            value = load_init_dict(value)[1]
+            try:
+                value = load_init_dict(value)[1]
+            except Exception as e:
+                self.get_logger().error(
+                    "Error while loading " + value + ", setting None instead"
+                )
+                value = None
         if isinstance(value, dict) and "__class__" in value:
             class_obj = import_class("pyleecan.Classes", value.get("__class__"), "loss")
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
+            OutLoss = import_class("pyleecan.Classes", "OutLoss", "loss")
             value = OutLoss()
         check_var("loss", value, "OutLoss")
         self._loss = value

@@ -10,11 +10,12 @@ from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
-from ..Functions.copy import copy
 from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
+from copy import deepcopy
 from ._frozen import FrozenClass
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
 
 
@@ -23,9 +24,8 @@ class Solution(FrozenClass):
 
     VERSION = 1
 
-    # save and copy methods are available in all object
+    # generic save method is available in all object
     save = save
-    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -100,7 +100,7 @@ class Solution(FrozenClass):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -109,13 +109,45 @@ class Solution(FrozenClass):
             return ["type(" + name + ")"]
         diff_list = list()
         if other._type_cell != self._type_cell:
-            diff_list.append(name + ".type_cell")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._type_cell)
+                    + ", other="
+                    + str(other._type_cell)
+                    + ")"
+                )
+                diff_list.append(name + ".type_cell" + val_str)
+            else:
+                diff_list.append(name + ".type_cell")
         if other._label != self._label:
-            diff_list.append(name + ".label")
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._label) + ", other=" + str(other._label) + ")"
+                )
+                diff_list.append(name + ".label" + val_str)
+            else:
+                diff_list.append(name + ".label")
         if other._dimension != self._dimension:
-            diff_list.append(name + ".dimension")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._dimension)
+                    + ", other="
+                    + str(other._dimension)
+                    + ")"
+                )
+                diff_list.append(name + ".dimension" + val_str)
+            else:
+                diff_list.append(name + ".dimension")
         if other._unit != self._unit:
-            diff_list.append(name + ".unit")
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._unit) + ", other=" + str(other._unit) + ")"
+                )
+                diff_list.append(name + ".unit" + val_str)
+            else:
+                diff_list.append(name + ".unit")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -149,6 +181,23 @@ class Solution(FrozenClass):
         # The class name is added to the dict for deserialisation purpose
         Solution_dict["__class__"] = "Solution"
         return Solution_dict
+
+    def copy(self):
+        """Creates a deepcopy of the object"""
+
+        # Handle deepcopy of all the properties
+        type_cell_val = self.type_cell
+        label_val = self.label
+        dimension_val = self.dimension
+        unit_val = self.unit
+        # Creates new object of the same type with the copied properties
+        obj_copy = type(self)(
+            type_cell=type_cell_val,
+            label=label_val,
+            dimension=dimension_val,
+            unit=unit_val,
+        )
+        return obj_copy
 
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""

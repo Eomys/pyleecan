@@ -76,7 +76,6 @@ def get_data(self):
             return values_3d
 
     else:
-
         df = read_excel(
             file_path,
             self.sheet,

@@ -15,7 +15,7 @@ class Test_get_polar_eq(object):
 
     def test_get_polar_eq_SCIM(self):
         """Test that you can create polar equivalent of SCIM machine"""
-        SCIM_001 = load(join(DATA_DIR, "Machine", "SCIM_001.json"))
+        SCIM_001 = load(join(DATA_DIR, "Machine", "Railway_Traction.json"))
         polar_eq = SCIM_001.get_polar_eq()
 
         plt.close("all")
@@ -23,4 +23,9 @@ class Test_get_polar_eq(object):
 
         fig = plt.gcf()
         fig.savefig(join(save_path, "test_get_polar_eq_SCIM_001.png"))
-        assert len(fig.axes[0].patches) == 219
+        assert len(fig.axes[0].patches) == 227
+
+
+if __name__ == "__main__":
+    a = Test_get_polar_eq()
+    a.test_get_polar_eq_SCIM()

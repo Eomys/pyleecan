@@ -1,25 +1,23 @@
-# -*- coding: utf-8 -*-
-
 from numpy import pi
 
 
-def comp_torque(self, output):
+def comp_torque(self, out_dict, N0):
     """Compute the electrical average torque
 
     Parameters
     ----------
     self : Electrical
         an Electrical object
-    output : Output
-        an Output object
+    out_dict : dict
+        Dict containing all magnetic quantities that have been calculated in comp_parameters of EEC
     """
 
-    N0 = output.elec.N0
     omega = 2 * pi * N0 / 60
 
-    P = output.elec.Pem_av_ref
-    losses = output.elec.Pj_losses  # TODO update since there may also be other losses
+    P = out_dict["Pem_av"]
 
-    Tem_av_ref = (P - losses) / omega
+    Tem_av = (P - out_dict["Pj_losses"]) / omega
 
-    output.elec.Tem_av_ref = Tem_av_ref
+    out_dict["Tem_av"] = Tem_av
+
+    return out_dict

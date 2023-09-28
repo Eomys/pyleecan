@@ -135,6 +135,15 @@ def plot_B_mesh(
     )
 
     if is_contour:
+        lab_ind = None
+        for ii, sol in enumerate(MS_B_plot.solution):
+            if sol.label == "A_z" and sol.type_cell == "node":
+                lab_ind = ii
+                break
+        if lab_ind is None:
+            raise Exception(
+                "Cannot field lines if A_z calculated on nodes is not in meshsolution"
+            )
         mesh_pv_Az, field_A, field_name_A = MS_B_plot.get_mesh_field_pv(
             *args,
             label="A_z",
@@ -143,6 +152,7 @@ def plot_B_mesh(
             is_radial=is_radial,
             is_center=is_center,
             field_name=field_name,
+            index=lab_ind,
         )
         mesh_pv_Az[field_name_A] = field_A
         contours = mesh_pv_Az.contour()
@@ -151,7 +161,6 @@ def plot_B_mesh(
     ###########
     # Internal animation (cannot be combined with other plots)
     if is_animated:
-
         p.add_text(
             'Adjust 3D view and press "Q"',
             position="lower_edge",
@@ -172,7 +181,7 @@ def plot_B_mesh(
             )
             nframe = len(field_B)
             is_time = True
-        
+
             if is_contour:
                 mesh_pv_Az, field_A, field_name_A = MS_B_plot.get_mesh_field_pv(
                     "time",
@@ -196,7 +205,7 @@ def plot_B_mesh(
             else:
                 field = field_B
                 phase = exp(1j * 2 * pi * t[i])
-                        
+
                 if is_contour:
                     field_At = field_A
             # Compute pyvista object
@@ -211,7 +220,7 @@ def plot_B_mesh(
             )
 
             if is_contour:
-                mesh_pv_Az[field_name_A] = real(field_At*phase)
+                mesh_pv_Az[field_name_A] = real(field_At * phase)
                 contours = mesh_pv_Az.contour()
                 p.add_mesh(contours, color="black", line_width=5)
 

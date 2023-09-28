@@ -7,15 +7,14 @@ from numpy import exp, linspace, ones, pi, sqrt, zeros
 from pyleecan.Classes.DataKeeper import DataKeeper
 from pyleecan.Classes.DriveWave import DriveWave
 from pyleecan.Classes.EEC_PMSM import EEC_PMSM
-from pyleecan.Classes.FluxLinkFEMM import FluxLinkFEMM
 from pyleecan.Classes.ForceMT import ForceMT
 from pyleecan.Classes.ImportGenMatrixSin import ImportGenMatrixSin
 from pyleecan.Classes.ImportGenVectLin import ImportGenVectLin
 from pyleecan.Classes.ImportGenVectSin import ImportGenVectSin
 from pyleecan.Classes.ImportMatrixVal import ImportMatrixVal
-from pyleecan.Classes.IndMagFEMM import IndMagFEMM
 from pyleecan.Classes.InputCurrent import InputCurrent
 from pyleecan.Classes.MagFEMM import MagFEMM
+from pyleecan.Classes.OPdq import OPdq
 from pyleecan.Classes.Output import Output
 from pyleecan.Classes.ParamExplorerInterval import ParamExplorerInterval
 from pyleecan.Classes.ParamExplorerSet import ParamExplorerSet
@@ -23,7 +22,7 @@ from pyleecan.Classes.PostFunction import PostFunction
 from pyleecan.Classes.PostPlot import PostPlot
 from pyleecan.Classes.Simu1 import Simu1
 from pyleecan.Classes.VarLoadCurrent import VarLoadCurrent
-from pyleecan.Classes.VarParam import VarParam
+from pyleecan.Classes.VarParamSweep import VarParamSweep
 from pyleecan.definitions import DATA_DIR
 from pyleecan.Functions.load import load
 from Tests import save_validation_path as save_path
@@ -130,10 +129,7 @@ def test_multi_multi():
     simu.input = InputCurrent(
         Is=None,
         Ir=None,  # No winding on the rotor
-        N0=N0_MTPA[0],
-        Id_ref=Id_MTPA[0],
-        Iq_ref=Iq_MTPA[0],
-        angle_rotor=None,  # Will be computed
+        OP=OPdq(N0=N0_MTPA[0], Id_ref=Id_MTPA[0], Iq_ref=Iq_MTPA[0]),
         Nt_tot=Nt_tot,
         Na_tot=2048,
     )
@@ -148,20 +144,15 @@ def test_multi_multi():
         Kmesh_fineness=0.2,
         nb_worker=nb_worker,
     )
-    simu.force = ForceMT(
-        is_periodicity_a=True,
-        is_periodicity_t=True,
-    )
+    simu.force = ForceMT(is_periodicity_a=True, is_periodicity_t=True)
 
     # VarSpeed Definition
     varload = VarLoadCurrent(is_reuse_femm_file=True)
-    varload.type_OP_matrix = 1  # Matrix N0, Id, Iq
-
+    # Matrix N0, Id, Iq
     OP_matrix = zeros((Nspeed, 3))
     OP_matrix[:, 0] = N0_MTPA[:Nspeed]
     OP_matrix[:, 1] = Id_MTPA[:Nspeed]
     OP_matrix[:, 2] = Iq_MTPA[:Nspeed]
-    varload.OP_matrix = OP_matrix
     varload.datakeeper_list = [
         DataKeeper(
             name="Average Torque",
@@ -188,7 +179,7 @@ def test_multi_multi():
     varload.is_keep_all_output = False
 
     # Multi-simulation to change machine parameters
-    multisim = VarParam(
+    multisim = VarParamSweep(
         stop_if_error=True,
         is_reuse_femm_file=False,
     )
@@ -241,6 +232,7 @@ def test_multi_multi():
     ]
     multisim.datakeeper_list = datakeeper_list
     multisim.var_simu = varload  # Setup Multisim of Multi_sim
+    varload.set_OP_array(OP_matrix, "N0", "Id", "Iq")
 
     # Post-process
     Post1 = PostFunction(join(dirname(__file__), "plot_save.py"))

@@ -10,9 +10,9 @@ from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
-from ..Functions.copy import copy
 from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
+from copy import deepcopy
 from .Mesh import Mesh
 
 # Import all class method
@@ -83,9 +83,8 @@ except ImportError as error:
     clear_cell = error
 
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
-from .CellMat import CellMat
-from .NodeMat import NodeMat
 
 
 class MeshMat(Mesh):
@@ -217,9 +216,8 @@ class MeshMat(Mesh):
         )
     else:
         clear_cell = clear_cell
-    # save and copy methods are available in all object
+    # generic save method is available in all object
     save = save
-    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -317,7 +315,7 @@ class MeshMat(Mesh):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -327,7 +325,11 @@ class MeshMat(Mesh):
         diff_list = list()
 
         # Check the properties inherited from Mesh
-        diff_list.extend(super(MeshMat, self).compare(other, name=name))
+        diff_list.extend(
+            super(MeshMat, self).compare(
+                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
+            )
+        )
         if (other.cell is None and self.cell is not None) or (
             other.cell is not None and self.cell is None
         ):
@@ -339,20 +341,58 @@ class MeshMat(Mesh):
         else:
             for key in self.cell:
                 diff_list.extend(
-                    self.cell[key].compare(other.cell[key], name=name + ".cell")
+                    self.cell[key].compare(
+                        other.cell[key],
+                        name=name + ".cell[" + str(key) + "]",
+                        ignore_list=ignore_list,
+                        is_add_value=is_add_value,
+                    )
                 )
         if (other.node is None and self.node is not None) or (
             other.node is not None and self.node is None
         ):
             diff_list.append(name + ".node None mismatch")
         elif self.node is not None:
-            diff_list.extend(self.node.compare(other.node, name=name + ".node"))
+            diff_list.extend(
+                self.node.compare(
+                    other.node,
+                    name=name + ".node",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
+            )
         if other.__is_renum != self.__is_renum:
-            diff_list.append(name + "._is_renum")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self.__is_renum)
+                    + ", other="
+                    + str(other.__is_renum)
+                    + ")"
+                )
+                diff_list.append(name + "._is_renum" + val_str)
+            else:
+                diff_list.append(name + "._is_renum")
         if other._sym != self._sym:
-            diff_list.append(name + ".sym")
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._sym) + ", other=" + str(other._sym) + ")"
+                )
+                diff_list.append(name + ".sym" + val_str)
+            else:
+                diff_list.append(name + ".sym")
         if other._is_antiper_a != self._is_antiper_a:
-            diff_list.append(name + ".is_antiper_a")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._is_antiper_a)
+                    + ", other="
+                    + str(other._is_antiper_a)
+                    + ")"
+                )
+                diff_list.append(name + ".is_antiper_a" + val_str)
+            else:
+                diff_list.append(name + ".is_antiper_a")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -419,6 +459,37 @@ class MeshMat(Mesh):
         MeshMat_dict["__class__"] = "MeshMat"
         return MeshMat_dict
 
+    def copy(self):
+        """Creates a deepcopy of the object"""
+
+        # Handle deepcopy of all the properties
+        if self.cell is None:
+            cell_val = None
+        else:
+            cell_val = dict()
+            for key, obj in self.cell.items():
+                cell_val[key] = obj.copy()
+        if self.node is None:
+            node_val = None
+        else:
+            node_val = self.node.copy()
+        _is_renum_val = self._is_renum
+        sym_val = self.sym
+        is_antiper_a_val = self.is_antiper_a
+        label_val = self.label
+        dimension_val = self.dimension
+        # Creates new object of the same type with the copied properties
+        obj_copy = type(self)(
+            cell=cell_val,
+            node=node_val,
+            _is_renum=_is_renum_val,
+            sym=sym_val,
+            is_antiper_a=is_antiper_a_val,
+            label=label_val,
+            dimension=dimension_val,
+        )
+        return obj_copy
+
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""
 
@@ -443,6 +514,15 @@ class MeshMat(Mesh):
         """setter of cell"""
         if type(value) is dict:
             for key, obj in value.items():
+                if isinstance(obj, str):  # Load from file
+                    try:
+                        obj = load_init_dict(obj)[1]
+                    except Exception as e:
+                        self.get_logger().error(
+                            "Error while loading " + obj + ", setting None instead"
+                        )
+                        obj = None
+                        value[key] = None
                 if type(obj) is dict:
                     class_obj = import_class(
                         "pyleecan.Classes", obj.get("__class__"), "cell"
@@ -469,11 +549,18 @@ class MeshMat(Mesh):
     def _set_node(self, value):
         """setter of node"""
         if isinstance(value, str):  # Load from file
-            value = load_init_dict(value)[1]
+            try:
+                value = load_init_dict(value)[1]
+            except Exception as e:
+                self.get_logger().error(
+                    "Error while loading " + value + ", setting None instead"
+                )
+                value = None
         if isinstance(value, dict) and "__class__" in value:
             class_obj = import_class("pyleecan.Classes", value.get("__class__"), "node")
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
+            NodeMat = import_class("pyleecan.Classes", "NodeMat", "node")
             value = NodeMat()
         check_var("node", value, "NodeMat")
         self._node = value

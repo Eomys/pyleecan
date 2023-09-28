@@ -1,0 +1,20 @@
+[
+    {
+        "cls": "BoreFlower",
+        "name": "N",
+        "widget": [
+            "in_N",
+            "si_N"
+        ],
+        "xls": "Machine"
+    },
+    {
+        "cls": "BoreFlower",
+        "name": "Rarc",
+        "widget": [
+            "in_Rarc",
+            "lf_Rarc"
+        ],
+        "xls": "Machine"
+    }
+]

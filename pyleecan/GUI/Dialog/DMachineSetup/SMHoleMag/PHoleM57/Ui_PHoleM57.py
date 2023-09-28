@@ -19,7 +19,7 @@ class Ui_PHoleM57(object):
     def setupUi(self, PHoleM57):
         if not PHoleM57.objectName():
             PHoleM57.setObjectName(u"PHoleM57")
-        PHoleM57.resize(1099, 491)
+        PHoleM57.resize(1164, 491)
         PHoleM57.setMinimumSize(QSize(0, 0))
         PHoleM57.setMaximumSize(QSize(16777215, 16777215))
         self.horizontalLayout = QHBoxLayout(PHoleM57)

@@ -1,5 +1,6 @@
 # Multisimulation objects
-from pyleecan.Classes.VarParam import VarParam
+from pyleecan.Classes.OPdq import OPdq
+from pyleecan.Classes.VarParamSweep import VarParamSweep
 from pyleecan.Classes.ParamExplorerSet import ParamExplorerSet
 from pyleecan.Classes.DataKeeper import DataKeeper
 import numpy as np
@@ -21,8 +22,6 @@ from pyleecan.Classes.ImportMatrixVal import ImportMatrixVal
 from pyleecan.Classes.MagFEMM import MagFEMM
 from pyleecan.Classes.ForceMT import ForceMT
 from pyleecan.Classes.EEC_PMSM import EEC_PMSM
-from pyleecan.Classes.FluxLinkFEMM import FluxLinkFEMM
-from pyleecan.Classes.IndMagFEMM import IndMagFEMM
 from pyleecan.Classes.DriveWave import DriveWave
 from pyleecan.Classes.Output import Output
 
@@ -53,8 +52,7 @@ def test_slot_scale():
     ref_simu.input = InputCurrent(
         Is=Is,
         Ir=None,  # No winding on the rotor
-        N0=2504,
-        angle_rotor=None,  # Will be computed
+        OP=OPdq(N0=2504),
         time=time,
         Na_tot=Na_tot,
         angle_rotor_initial=0.86,
@@ -70,7 +68,7 @@ def test_slot_scale():
     )
 
     # Multi-simulation to variate the slot size
-    multisim = VarParam(
+    multisim = VarParamSweep(
         stop_if_error=True,
         is_reuse_femm_file=False,
     )
@@ -124,7 +122,7 @@ def test_slot_scale():
             name="Radial Airgap flux density",
             unit="H",
             symbol="B",
-            keeper="lambda output: output.mag.B.components['radial'].get_along('time','angle')['B_r']",
+            keeper="lambda output: output.mag.B.components['radial'].get_along('time','angle')['B_{rad}']",
             error_keeper=error_keeper_mag_flux,
         ),
     ]

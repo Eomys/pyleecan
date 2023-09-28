@@ -10,9 +10,9 @@ from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
-from ..Functions.copy import copy
 from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
+from copy import deepcopy
 from .HoleMag import HoleMag
 
 # Import all class method
@@ -43,10 +43,8 @@ except ImportError as error:
     remove_magnet = error
 
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
-from .Surface import Surface
-from .Magnet import Magnet
-from .Material import Material
 
 
 class HoleUD(HoleMag):
@@ -108,9 +106,8 @@ class HoleUD(HoleMag):
         )
     else:
         remove_magnet = remove_magnet
-    # save and copy methods are available in all object
+    # generic save method is available in all object
     save = save
-    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -210,7 +207,7 @@ class HoleUD(HoleMag):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -220,7 +217,11 @@ class HoleUD(HoleMag):
         diff_list = list()
 
         # Check the properties inherited from HoleMag
-        diff_list.extend(super(HoleUD, self).compare(other, name=name))
+        diff_list.extend(
+            super(HoleUD, self).compare(
+                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
+            )
+        )
         if (other.surf_list is None and self.surf_list is not None) or (
             other.surf_list is not None and self.surf_list is None
         ):
@@ -233,7 +234,10 @@ class HoleUD(HoleMag):
             for ii in range(len(other.surf_list)):
                 diff_list.extend(
                     self.surf_list[ii].compare(
-                        other.surf_list[ii], name=name + ".surf_list[" + str(ii) + "]"
+                        other.surf_list[ii],
+                        name=name + ".surf_list[" + str(ii) + "]",
+                        ignore_list=ignore_list,
+                        is_add_value=is_add_value,
                     )
                 )
         if (other.magnet_dict is None and self.magnet_dict is not None) or (
@@ -248,11 +252,20 @@ class HoleUD(HoleMag):
             for key in self.magnet_dict:
                 diff_list.extend(
                     self.magnet_dict[key].compare(
-                        other.magnet_dict[key], name=name + ".magnet_dict"
+                        other.magnet_dict[key],
+                        name=name + ".magnet_dict[" + str(key) + "]",
+                        ignore_list=ignore_list,
+                        is_add_value=is_add_value,
                     )
                 )
         if other._name != self._name:
-            diff_list.append(name + ".name")
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._name) + ", other=" + str(other._name) + ")"
+                )
+                diff_list.append(name + ".name" + val_str)
+            else:
+                diff_list.append(name + ".name")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -324,6 +337,45 @@ class HoleUD(HoleMag):
         HoleUD_dict["__class__"] = "HoleUD"
         return HoleUD_dict
 
+    def copy(self):
+        """Creates a deepcopy of the object"""
+
+        # Handle deepcopy of all the properties
+        if self.surf_list is None:
+            surf_list_val = None
+        else:
+            surf_list_val = list()
+            for obj in self.surf_list:
+                surf_list_val.append(obj.copy())
+        if self.magnet_dict is None:
+            magnet_dict_val = None
+        else:
+            magnet_dict_val = dict()
+            for key, obj in self.magnet_dict.items():
+                magnet_dict_val[key] = obj.copy()
+        name_val = self.name
+        Zh_val = self.Zh
+        if self.mat_void is None:
+            mat_void_val = None
+        else:
+            mat_void_val = self.mat_void.copy()
+        if self.magnetization_dict_offset is None:
+            magnetization_dict_offset_val = None
+        else:
+            magnetization_dict_offset_val = self.magnetization_dict_offset.copy()
+        Alpha0_val = self.Alpha0
+        # Creates new object of the same type with the copied properties
+        obj_copy = type(self)(
+            surf_list=surf_list_val,
+            magnet_dict=magnet_dict_val,
+            name=name_val,
+            Zh=Zh_val,
+            mat_void=mat_void_val,
+            magnetization_dict_offset=magnetization_dict_offset_val,
+            Alpha0=Alpha0_val,
+        )
+        return obj_copy
+
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""
 
@@ -345,6 +397,15 @@ class HoleUD(HoleMag):
         """setter of surf_list"""
         if type(value) is list:
             for ii, obj in enumerate(value):
+                if isinstance(obj, str):  # Load from file
+                    try:
+                        obj = load_init_dict(obj)[1]
+                    except Exception as e:
+                        self.get_logger().error(
+                            "Error while loading " + obj + ", setting None instead"
+                        )
+                        obj = None
+                        value[ii] = None
                 if type(obj) is dict:
                     class_obj = import_class(
                         "pyleecan.Classes", obj.get("__class__"), "surf_list"
@@ -378,6 +439,15 @@ class HoleUD(HoleMag):
         """setter of magnet_dict"""
         if type(value) is dict:
             for key, obj in value.items():
+                if isinstance(obj, str):  # Load from file
+                    try:
+                        obj = load_init_dict(obj)[1]
+                    except Exception as e:
+                        self.get_logger().error(
+                            "Error while loading " + obj + ", setting None instead"
+                        )
+                        obj = None
+                        value[key] = None
                 if type(obj) is dict:
                     class_obj = import_class(
                         "pyleecan.Classes", obj.get("__class__"), "magnet_dict"

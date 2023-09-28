@@ -10,9 +10,9 @@ from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
-from ..Functions.copy import copy
 from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
+from copy import deepcopy
 from .Magnetics import Magnetics
 
 # Import all class method
@@ -43,19 +43,13 @@ except ImportError as error:
     get_path_save = error
 
 try:
-    from ..Methods.Simulation.MagElmer.comp_axes import comp_axes
-except ImportError as error:
-    comp_axes = error
-
-try:
     from ..Methods.Simulation.MagElmer.gen_elmer_mesh import gen_elmer_mesh
 except ImportError as error:
     gen_elmer_mesh = error
 
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
-from .DXFImport import DXFImport
-from .SliceModel import SliceModel
 
 
 class MagElmer(Magnetics):
@@ -120,15 +114,6 @@ class MagElmer(Magnetics):
         )
     else:
         get_path_save = get_path_save
-    # cf Methods.Simulation.MagElmer.comp_axes
-    if isinstance(comp_axes, ImportError):
-        comp_axes = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use MagElmer method comp_axes: " + str(comp_axes))
-            )
-        )
-    else:
-        comp_axes = comp_axes
     # cf Methods.Simulation.MagElmer.gen_elmer_mesh
     if isinstance(gen_elmer_mesh, ImportError):
         gen_elmer_mesh = property(
@@ -140,9 +125,8 @@ class MagElmer(Magnetics):
         )
     else:
         gen_elmer_mesh = gen_elmer_mesh
-    # save and copy methods are available in all object
+    # generic save method is available in all object
     save = save
-    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -175,6 +159,9 @@ class MagElmer(Magnetics):
         Slice_enforced=None,
         Nslices_enforced=None,
         type_distribution_enforced=None,
+        is_current_harm=True,
+        T_mag=20,
+        is_periodicity_rotor=False,
         init_dict=None,
         init_str=None,
     ):
@@ -247,6 +234,12 @@ class MagElmer(Magnetics):
                 Nslices_enforced = init_dict["Nslices_enforced"]
             if "type_distribution_enforced" in list(init_dict.keys()):
                 type_distribution_enforced = init_dict["type_distribution_enforced"]
+            if "is_current_harm" in list(init_dict.keys()):
+                is_current_harm = init_dict["is_current_harm"]
+            if "T_mag" in list(init_dict.keys()):
+                T_mag = init_dict["T_mag"]
+            if "is_periodicity_rotor" in list(init_dict.keys()):
+                is_periodicity_rotor = init_dict["is_periodicity_rotor"]
         # Set the properties (value check and convertion are done in setter)
         self.Kmesh_fineness = Kmesh_fineness
         self.Kgeo_fineness = Kgeo_fineness
@@ -277,6 +270,9 @@ class MagElmer(Magnetics):
             Slice_enforced=Slice_enforced,
             Nslices_enforced=Nslices_enforced,
             type_distribution_enforced=type_distribution_enforced,
+            is_current_harm=is_current_harm,
+            T_mag=T_mag,
+            is_periodicity_rotor=is_periodicity_rotor,
         )
         # The class is frozen (in Magnetics init), for now it's impossible to
         # add new properties
@@ -348,7 +344,7 @@ class MagElmer(Magnetics):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -358,28 +354,121 @@ class MagElmer(Magnetics):
         diff_list = list()
 
         # Check the properties inherited from Magnetics
-        diff_list.extend(super(MagElmer, self).compare(other, name=name))
-        if other._Kmesh_fineness != self._Kmesh_fineness:
-            diff_list.append(name + ".Kmesh_fineness")
-        if other._Kgeo_fineness != self._Kgeo_fineness:
-            diff_list.append(name + ".Kgeo_fineness")
+        diff_list.extend(
+            super(MagElmer, self).compare(
+                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
+            )
+        )
+        if (
+            other._Kmesh_fineness is not None
+            and self._Kmesh_fineness is not None
+            and isnan(other._Kmesh_fineness)
+            and isnan(self._Kmesh_fineness)
+        ):
+            pass
+        elif other._Kmesh_fineness != self._Kmesh_fineness:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._Kmesh_fineness)
+                    + ", other="
+                    + str(other._Kmesh_fineness)
+                    + ")"
+                )
+                diff_list.append(name + ".Kmesh_fineness" + val_str)
+            else:
+                diff_list.append(name + ".Kmesh_fineness")
+        if (
+            other._Kgeo_fineness is not None
+            and self._Kgeo_fineness is not None
+            and isnan(other._Kgeo_fineness)
+            and isnan(self._Kgeo_fineness)
+        ):
+            pass
+        elif other._Kgeo_fineness != self._Kgeo_fineness:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._Kgeo_fineness)
+                    + ", other="
+                    + str(other._Kgeo_fineness)
+                    + ")"
+                )
+                diff_list.append(name + ".Kgeo_fineness" + val_str)
+            else:
+                diff_list.append(name + ".Kgeo_fineness")
         if other._file_name != self._file_name:
-            diff_list.append(name + ".file_name")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._file_name)
+                    + ", other="
+                    + str(other._file_name)
+                    + ")"
+                )
+                diff_list.append(name + ".file_name" + val_str)
+            else:
+                diff_list.append(name + ".file_name")
         if other._FEA_dict != self._FEA_dict:
-            diff_list.append(name + ".FEA_dict")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._FEA_dict)
+                    + ", other="
+                    + str(other._FEA_dict)
+                    + ")"
+                )
+                diff_list.append(name + ".FEA_dict" + val_str)
+            else:
+                diff_list.append(name + ".FEA_dict")
         if other._is_get_mesh != self._is_get_mesh:
-            diff_list.append(name + ".is_get_mesh")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._is_get_mesh)
+                    + ", other="
+                    + str(other._is_get_mesh)
+                    + ")"
+                )
+                diff_list.append(name + ".is_get_mesh" + val_str)
+            else:
+                diff_list.append(name + ".is_get_mesh")
         if other._is_save_FEA != self._is_save_FEA:
-            diff_list.append(name + ".is_save_FEA")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._is_save_FEA)
+                    + ", other="
+                    + str(other._is_save_FEA)
+                    + ")"
+                )
+                diff_list.append(name + ".is_save_FEA" + val_str)
+            else:
+                diff_list.append(name + ".is_save_FEA")
         if other._transform_list != self._transform_list:
-            diff_list.append(name + ".transform_list")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._transform_list)
+                    + ", other="
+                    + str(other._transform_list)
+                    + ")"
+                )
+                diff_list.append(name + ".transform_list" + val_str)
+            else:
+                diff_list.append(name + ".transform_list")
         if (other.rotor_dxf is None and self.rotor_dxf is not None) or (
             other.rotor_dxf is not None and self.rotor_dxf is None
         ):
             diff_list.append(name + ".rotor_dxf None mismatch")
         elif self.rotor_dxf is not None:
             diff_list.extend(
-                self.rotor_dxf.compare(other.rotor_dxf, name=name + ".rotor_dxf")
+                self.rotor_dxf.compare(
+                    other.rotor_dxf,
+                    name=name + ".rotor_dxf",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
             )
         if (other.stator_dxf is None and self.stator_dxf is not None) or (
             other.stator_dxf is not None and self.stator_dxf is None
@@ -387,12 +476,37 @@ class MagElmer(Magnetics):
             diff_list.append(name + ".stator_dxf None mismatch")
         elif self.stator_dxf is not None:
             diff_list.extend(
-                self.stator_dxf.compare(other.stator_dxf, name=name + ".stator_dxf")
+                self.stator_dxf.compare(
+                    other.stator_dxf,
+                    name=name + ".stator_dxf",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
             )
         if other._import_file != self._import_file:
-            diff_list.append(name + ".import_file")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._import_file)
+                    + ", other="
+                    + str(other._import_file)
+                    + ")"
+                )
+                diff_list.append(name + ".import_file" + val_str)
+            else:
+                diff_list.append(name + ".import_file")
         if other._nb_worker != self._nb_worker:
-            diff_list.append(name + ".nb_worker")
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._nb_worker)
+                    + ", other="
+                    + str(other._nb_worker)
+                    + ")"
+                )
+                diff_list.append(name + ".nb_worker" + val_str)
+            else:
+                diff_list.append(name + ".nb_worker")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -471,6 +585,90 @@ class MagElmer(Magnetics):
         # Overwrite the mother class name
         MagElmer_dict["__class__"] = "MagElmer"
         return MagElmer_dict
+
+    def copy(self):
+        """Creates a deepcopy of the object"""
+
+        # Handle deepcopy of all the properties
+        Kmesh_fineness_val = self.Kmesh_fineness
+        Kgeo_fineness_val = self.Kgeo_fineness
+        file_name_val = self.file_name
+        if self.FEA_dict is None:
+            FEA_dict_val = None
+        else:
+            FEA_dict_val = self.FEA_dict.copy()
+        is_get_mesh_val = self.is_get_mesh
+        is_save_FEA_val = self.is_save_FEA
+        if self.transform_list is None:
+            transform_list_val = None
+        else:
+            transform_list_val = self.transform_list.copy()
+        if self.rotor_dxf is None:
+            rotor_dxf_val = None
+        else:
+            rotor_dxf_val = self.rotor_dxf.copy()
+        if self.stator_dxf is None:
+            stator_dxf_val = None
+        else:
+            stator_dxf_val = self.stator_dxf.copy()
+        import_file_val = self.import_file
+        nb_worker_val = self.nb_worker
+        is_remove_slotS_val = self.is_remove_slotS
+        is_remove_slotR_val = self.is_remove_slotR
+        is_remove_ventS_val = self.is_remove_ventS
+        is_remove_ventR_val = self.is_remove_ventR
+        is_mmfs_val = self.is_mmfs
+        is_mmfr_val = self.is_mmfr
+        type_BH_stator_val = self.type_BH_stator
+        type_BH_rotor_val = self.type_BH_rotor
+        is_periodicity_t_val = self.is_periodicity_t
+        is_periodicity_a_val = self.is_periodicity_a
+        angle_stator_shift_val = self.angle_stator_shift
+        angle_rotor_shift_val = self.angle_rotor_shift
+        logger_name_val = self.logger_name
+        if self.Slice_enforced is None:
+            Slice_enforced_val = None
+        else:
+            Slice_enforced_val = self.Slice_enforced.copy()
+        Nslices_enforced_val = self.Nslices_enforced
+        type_distribution_enforced_val = self.type_distribution_enforced
+        is_current_harm_val = self.is_current_harm
+        T_mag_val = self.T_mag
+        is_periodicity_rotor_val = self.is_periodicity_rotor
+        # Creates new object of the same type with the copied properties
+        obj_copy = type(self)(
+            Kmesh_fineness=Kmesh_fineness_val,
+            Kgeo_fineness=Kgeo_fineness_val,
+            file_name=file_name_val,
+            FEA_dict=FEA_dict_val,
+            is_get_mesh=is_get_mesh_val,
+            is_save_FEA=is_save_FEA_val,
+            transform_list=transform_list_val,
+            rotor_dxf=rotor_dxf_val,
+            stator_dxf=stator_dxf_val,
+            import_file=import_file_val,
+            nb_worker=nb_worker_val,
+            is_remove_slotS=is_remove_slotS_val,
+            is_remove_slotR=is_remove_slotR_val,
+            is_remove_ventS=is_remove_ventS_val,
+            is_remove_ventR=is_remove_ventR_val,
+            is_mmfs=is_mmfs_val,
+            is_mmfr=is_mmfr_val,
+            type_BH_stator=type_BH_stator_val,
+            type_BH_rotor=type_BH_rotor_val,
+            is_periodicity_t=is_periodicity_t_val,
+            is_periodicity_a=is_periodicity_a_val,
+            angle_stator_shift=angle_stator_shift_val,
+            angle_rotor_shift=angle_rotor_shift_val,
+            logger_name=logger_name_val,
+            Slice_enforced=Slice_enforced_val,
+            Nslices_enforced=Nslices_enforced_val,
+            type_distribution_enforced=type_distribution_enforced_val,
+            is_current_harm=is_current_harm_val,
+            T_mag=T_mag_val,
+            is_periodicity_rotor=is_periodicity_rotor_val,
+        )
+        return obj_copy
 
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""
@@ -628,13 +826,20 @@ class MagElmer(Magnetics):
     def _set_rotor_dxf(self, value):
         """setter of rotor_dxf"""
         if isinstance(value, str):  # Load from file
-            value = load_init_dict(value)[1]
+            try:
+                value = load_init_dict(value)[1]
+            except Exception as e:
+                self.get_logger().error(
+                    "Error while loading " + value + ", setting None instead"
+                )
+                value = None
         if isinstance(value, dict) and "__class__" in value:
             class_obj = import_class(
                 "pyleecan.Classes", value.get("__class__"), "rotor_dxf"
             )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
+            DXFImport = import_class("pyleecan.Classes", "DXFImport", "rotor_dxf")
             value = DXFImport()
         check_var("rotor_dxf", value, "DXFImport")
         self._rotor_dxf = value
@@ -658,13 +863,20 @@ class MagElmer(Magnetics):
     def _set_stator_dxf(self, value):
         """setter of stator_dxf"""
         if isinstance(value, str):  # Load from file
-            value = load_init_dict(value)[1]
+            try:
+                value = load_init_dict(value)[1]
+            except Exception as e:
+                self.get_logger().error(
+                    "Error while loading " + value + ", setting None instead"
+                )
+                value = None
         if isinstance(value, dict) and "__class__" in value:
             class_obj = import_class(
                 "pyleecan.Classes", value.get("__class__"), "stator_dxf"
             )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
+            DXFImport = import_class("pyleecan.Classes", "DXFImport", "stator_dxf")
             value = DXFImport()
         check_var("stator_dxf", value, "DXFImport")
         self._stator_dxf = value

@@ -10,9 +10,9 @@ from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
-from ..Functions.copy import copy
 from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
+from copy import deepcopy
 from .Drive import Drive
 
 # Import all class method
@@ -23,8 +23,8 @@ except ImportError as error:
     get_wave = error
 
 
+from numpy import isnan
 from ._check import InitUnKnowClassError
-from .Import import Import
 
 
 class DriveWave(Drive):
@@ -41,9 +41,8 @@ class DriveWave(Drive):
         )
     else:
         get_wave = get_wave
-    # save and copy methods are available in all object
+    # generic save method is available in all object
     save = save
-    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -112,7 +111,7 @@ class DriveWave(Drive):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -122,13 +121,24 @@ class DriveWave(Drive):
         diff_list = list()
 
         # Check the properties inherited from Drive
-        diff_list.extend(super(DriveWave, self).compare(other, name=name))
+        diff_list.extend(
+            super(DriveWave, self).compare(
+                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
+            )
+        )
         if (other.wave is None and self.wave is not None) or (
             other.wave is not None and self.wave is None
         ):
             diff_list.append(name + ".wave None mismatch")
         elif self.wave is not None:
-            diff_list.extend(self.wave.compare(other.wave, name=name + ".wave"))
+            diff_list.extend(
+                self.wave.compare(
+                    other.wave,
+                    name=name + ".wave",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
+            )
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -173,6 +183,23 @@ class DriveWave(Drive):
         DriveWave_dict["__class__"] = "DriveWave"
         return DriveWave_dict
 
+    def copy(self):
+        """Creates a deepcopy of the object"""
+
+        # Handle deepcopy of all the properties
+        if self.wave is None:
+            wave_val = None
+        else:
+            wave_val = self.wave.copy()
+        Umax_val = self.Umax
+        Imax_val = self.Imax
+        is_current_val = self.is_current
+        # Creates new object of the same type with the copied properties
+        obj_copy = type(self)(
+            wave=wave_val, Umax=Umax_val, Imax=Imax_val, is_current=is_current_val
+        )
+        return obj_copy
+
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""
 
@@ -188,11 +215,18 @@ class DriveWave(Drive):
     def _set_wave(self, value):
         """setter of wave"""
         if isinstance(value, str):  # Load from file
-            value = load_init_dict(value)[1]
+            try:
+                value = load_init_dict(value)[1]
+            except Exception as e:
+                self.get_logger().error(
+                    "Error while loading " + value + ", setting None instead"
+                )
+                value = None
         if isinstance(value, dict) and "__class__" in value:
             class_obj = import_class("pyleecan.Classes", value.get("__class__"), "wave")
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
+            Import = import_class("pyleecan.Classes", "Import", "wave")
             value = Import()
         check_var("wave", value, "Import")
         self._wave = value

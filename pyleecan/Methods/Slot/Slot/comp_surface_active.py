@@ -15,7 +15,7 @@ def comp_surface_active(self, Ndisc=200):
     Returns
     -------
     S: float
-        Slot total surface [m**2]
+        Slot active surface [m**2]
 
     """
 

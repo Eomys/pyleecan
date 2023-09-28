@@ -38,6 +38,8 @@ class PCondType21(Gen_PCondType21, QWidget):
         # Setup material combobox according to matlib names
         self.material_dict = material_dict
         self.w_mat.def_mat = "Copper1"
+        self.w_mat.is_hide_button = True
+        self.w_mat.setText("Bar material")
 
         # Set FloatEdit unit
         self.lf_Hbar.unit = "m"
@@ -47,7 +49,7 @@ class PCondType21(Gen_PCondType21, QWidget):
         self.u = gui_option.unit
         wid_list = [self.unit_Hbar, self.unit_Wbar]
         for wid in wid_list:
-            wid.setText(self.u.get_m_name())
+            wid.setText("[" + self.u.get_m_name() + "]")
 
         # Fill the fields with the machine values (if they're filled)
         self.machine = machine
@@ -62,8 +64,12 @@ class PCondType21(Gen_PCondType21, QWidget):
 
         self.lf_Hbar.setValue(conductor.Hbar)
         self.lf_Wbar.setValue(conductor.Wbar)
-
         self.w_mat.update(conductor, "cond_mat", self.material_dict)
+
+        # No insulation for Bar
+        if conductor.Wins is None:
+            conductor.Wins = 0
+        conductor.ins_mat = None
 
         # Display the main output
         self.w_out.comp_output()

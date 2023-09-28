@@ -10,9 +10,9 @@ from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
-from ..Functions.copy import copy
 from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
+from copy import deepcopy
 from .Conductor import Conductor
 
 # Import all class method
@@ -27,9 +27,36 @@ try:
 except ImportError as error:
     comp_surface = error
 
+try:
+    from ..Methods.Machine.CondType22.comp_width_wire import comp_width_wire
+except ImportError as error:
+    comp_width_wire = error
 
+try:
+    from ..Methods.Machine.CondType22.comp_height_wire import comp_height_wire
+except ImportError as error:
+    comp_height_wire = error
+
+try:
+    from ..Methods.Machine.CondType22.comp_nb_circumferential_wire import (
+        comp_nb_circumferential_wire,
+    )
+except ImportError as error:
+    comp_nb_circumferential_wire = error
+
+try:
+    from ..Methods.Machine.CondType22.comp_nb_radial_wire import comp_nb_radial_wire
+except ImportError as error:
+    comp_nb_radial_wire = error
+
+try:
+    from ..Methods.Machine.CondType22.is_round_wire import is_round_wire
+except ImportError as error:
+    is_round_wire = error
+
+
+from numpy import isnan
 from ._check import InitUnKnowClassError
-from .Material import Material
 
 
 class CondType22(Conductor):
@@ -61,9 +88,67 @@ class CondType22(Conductor):
         )
     else:
         comp_surface = comp_surface
-    # save and copy methods are available in all object
+    # cf Methods.Machine.CondType22.comp_width_wire
+    if isinstance(comp_width_wire, ImportError):
+        comp_width_wire = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use CondType22 method comp_width_wire: "
+                    + str(comp_width_wire)
+                )
+            )
+        )
+    else:
+        comp_width_wire = comp_width_wire
+    # cf Methods.Machine.CondType22.comp_height_wire
+    if isinstance(comp_height_wire, ImportError):
+        comp_height_wire = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use CondType22 method comp_height_wire: "
+                    + str(comp_height_wire)
+                )
+            )
+        )
+    else:
+        comp_height_wire = comp_height_wire
+    # cf Methods.Machine.CondType22.comp_nb_circumferential_wire
+    if isinstance(comp_nb_circumferential_wire, ImportError):
+        comp_nb_circumferential_wire = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use CondType22 method comp_nb_circumferential_wire: "
+                    + str(comp_nb_circumferential_wire)
+                )
+            )
+        )
+    else:
+        comp_nb_circumferential_wire = comp_nb_circumferential_wire
+    # cf Methods.Machine.CondType22.comp_nb_radial_wire
+    if isinstance(comp_nb_radial_wire, ImportError):
+        comp_nb_radial_wire = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use CondType22 method comp_nb_radial_wire: "
+                    + str(comp_nb_radial_wire)
+                )
+            )
+        )
+    else:
+        comp_nb_radial_wire = comp_nb_radial_wire
+    # cf Methods.Machine.CondType22.is_round_wire
+    if isinstance(is_round_wire, ImportError):
+        is_round_wire = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use CondType22 method is_round_wire: " + str(is_round_wire)
+                )
+            )
+        )
+    else:
+        is_round_wire = is_round_wire
+    # generic save method is available in all object
     save = save
-    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -120,7 +205,7 @@ class CondType22(Conductor):
             return False
         return True
 
-    def compare(self, other, name="self", ignore_list=None):
+    def compare(self, other, name="self", ignore_list=None, is_add_value=False):
         """Compare two objects and return list of differences"""
 
         if ignore_list is None:
@@ -130,9 +215,26 @@ class CondType22(Conductor):
         diff_list = list()
 
         # Check the properties inherited from Conductor
-        diff_list.extend(super(CondType22, self).compare(other, name=name))
-        if other._Sbar != self._Sbar:
-            diff_list.append(name + ".Sbar")
+        diff_list.extend(
+            super(CondType22, self).compare(
+                other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
+            )
+        )
+        if (
+            other._Sbar is not None
+            and self._Sbar is not None
+            and isnan(other._Sbar)
+            and isnan(self._Sbar)
+        ):
+            pass
+        elif other._Sbar != self._Sbar:
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._Sbar) + ", other=" + str(other._Sbar) + ")"
+                )
+                diff_list.append(name + ".Sbar" + val_str)
+            else:
+                diff_list.append(name + ".Sbar")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -169,6 +271,23 @@ class CondType22(Conductor):
         # Overwrite the mother class name
         CondType22_dict["__class__"] = "CondType22"
         return CondType22_dict
+
+    def copy(self):
+        """Creates a deepcopy of the object"""
+
+        # Handle deepcopy of all the properties
+        Sbar_val = self.Sbar
+        if self.cond_mat is None:
+            cond_mat_val = None
+        else:
+            cond_mat_val = self.cond_mat.copy()
+        if self.ins_mat is None:
+            ins_mat_val = None
+        else:
+            ins_mat_val = self.ins_mat.copy()
+        # Creates new object of the same type with the copied properties
+        obj_copy = type(self)(Sbar=Sbar_val, cond_mat=cond_mat_val, ins_mat=ins_mat_val)
+        return obj_copy
 
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""
