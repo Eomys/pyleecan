@@ -1,5 +1,5 @@
 <RCC>
-  <qresource prefix="/images">
+  <qresource prefix="/images/">
     <file>images/icon/help_16.png</file>
     <file>images/icon/search.png</file>
     <file>images/icon/check.png</file>
@@ -10,8 +10,9 @@
     <file>images/MachineSetup/WSlot/SlotW11_empty_ext_stator.png</file>
     <file>images/MachineSetup/WSlot/SlotW11_wind_ext_stator.png</file>
     <file>images/MachineSetup/WSlot/SlotW11_wedge_full_ext_stator.png</file>
-    <file>images/MachineSetup/WSlot/SlotW11_constant_tooth_wind_ext_stator.png</file>
-    <file>images/MachineSetup/WSlot/SlotW11_constant_tooth_wedge_full_ext_stator.png</file>
+    <file>images/MachineSetup/WSlot/SlotW11_wedge_full_ext_stator_constant_tooth.png</file>
+    <file>images/MachineSetup/WSlot/SlotW11_empty_ext_stator_constant_tooth.png</file>
+    <file>images/MachineSetup/WSlot/SlotW11_wind_ext_stator_constant_tooth.png</file>
     <file>images/MachineSetup/WSlot/SlotW12_empty_ext_stator.png</file>
     <file>images/MachineSetup/WSlot/SlotW12_wind_ext_stator.png</file>
     <file>images/MachineSetup/WSlot/SlotW12_wedge_full_ext_stator.png</file>
@@ -25,9 +26,8 @@
     <file>images/MachineSetup/WSlot/SlotW15_empty_ext_stator.png</file>
     <file>images/MachineSetup/WSlot/SlotW15_wind_ext_stator.png</file>
     <file>images/MachineSetup/WSlot/SlotW15_wedge_full_ext_stator.png</file>
-    <file>images/MachineSetup/WSlot/SlotW16_empty_ext_stator.png</file>
-    <file>images/MachineSetup/WSlot/SlotW16_wind_ext_stator.png</file>
-    <file>images/MachineSetup/WSlot/SlotW16_wedge_full_ext_stator.png</file>
+    <file>images/MachineSetup/WSlot/SlotW16_wind_int_stator.png</file>
+    <file>images/MachineSetup/WSlot/SlotW16_wedge_full_int_stator.png</file>
     <file>images/MachineSetup/WSlot/SlotW21_empty_ext_stator.png</file>
     <file>images/MachineSetup/WSlot/SlotW21_wind_ext_stator.png</file>
     <file>images/MachineSetup/WSlot/SlotW21_wedge_full_ext_stator.png</file>
@@ -37,9 +37,9 @@
     <file>images/MachineSetup/WSlot/SlotW23_empty_ext_stator.png</file>
     <file>images/MachineSetup/WSlot/SlotW23_wind_ext_stator.png</file>
     <file>images/MachineSetup/WSlot/SlotW23_wedge_full_ext_stator.png</file>
-    <file>images/MachineSetup/WSlot/SlotW23_constant_tooth_empty_ext_stator.png</file>
-    <file>images/MachineSetup/WSlot/SlotW23_constant_tooth_wedge_full_ext_stator.png</file>
-    <file>images/MachineSetup/WSlot/SlotW23_constant_tooth_wind_ext_stator.png</file>
+    <file>images/MachineSetup/WSlot/SlotW23_wedge_full_ext_stator_constant_tooth.png</file>
+    <file>images/MachineSetup/WSlot/SlotW23_empty_ext_stator_constant_tooth.png</file>
+    <file>images/MachineSetup/WSlot/SlotW23_wind_ext_stator_constant_tooth.png</file>
     <file>images/MachineSetup/WSlot/SlotW24_empty_ext_stator.png</file>
     <file>images/MachineSetup/WSlot/SlotW24_wind_ext_stator.png</file>
     <file>images/MachineSetup/WSlot/SlotW24_wedge_full_ext_stator.png</file>
@@ -76,14 +76,14 @@
     <file>images/MachineSetup/WMSlot/SlotM11_empty_int_rotor.png</file>
     <file>images/MachineSetup/WMSlot/SlotM11_mag_int_rotor.png</file>
     <file>images/MachineSetup/WMSlot/SlotM12_empty_int_rotor.png</file>
-    <file>images/MachineSetup/WMSlot/SlotM12_mag_int_rotoor.png</file>
-    <file>images/MachineSetup/WMSlot/SlotM13_mag_int_rotoor.png</file>
-    <file>images/MachineSetup/WMSlot/SlotM14_mag_int_rotoor.png</file>
-    <file>images/MachineSetup/WMSlot/SlotM15_mag_int_rotoor.png</file>
-    <file>images/MachineSetup/WMSlot/SlotM16_mag_int_rotoor.png</file>
-    <file>images/MachineSetup/WMSlot/SlotM17_mag_int_rotoor.png</file>
-    <file>images/MachineSetup/WMSlot/SlotM18_mag_int_rotoor.png</file>
-    <file>images/MachineSetup/WMSlot/SlotM19_mag_int_rotoor.png</file>
+    <file>images/MachineSetup/WMSlot/SlotM12_mag_int_rotor.png</file>
+    <file>images/MachineSetup/WMSlot/SlotM13_mag_int_rotor.png</file>
+    <file>images/MachineSetup/WMSlot/SlotM14_mag_int_rotor.png</file>
+    <file>images/MachineSetup/WMSlot/SlotM15_mag_int_rotor.png</file>
+    <file>images/MachineSetup/WMSlot/SlotM16_mag_int_rotor.png</file>
+    <file>images/MachineSetup/WMSlot/SlotM17_mag_int_rotor.png</file>
+    <file>images/MachineSetup/WMSlot/SlotM18_mag_int_rotor.png</file>
+    <file>images/MachineSetup/WMSlot/SlotM19_mag_int_rotor.png</file>
     <file>images/MachineSetup/LamParam/CircVentDuct.png</file>
     <file>images/MachineSetup/LamParam/VentilationCirc.png</file>
     <file>images/MachineSetup/LamParam/VentilationPolar.png</file>

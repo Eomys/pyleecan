@@ -110,7 +110,9 @@ class PWSlot29(Gen_PWSlot29, QWidget):
             self.w_wedge_mat.show()
             self.in_type.show()
             self.c_wedge_type.show()
-            self.img_slot.setPixmap(QPixmap(pixmap_dict["SlotW29_wedge_full"]))
+            self.img_slot.setPixmap(
+                QPixmap(pixmap_dict["SlotW29_wedge_full_ext_stator"])
+            )
             self.w_wedge_mat.update(self.slot, "wedge_mat", self.material_dict)
         else:
             self.w_wedge_mat.hide()
@@ -118,17 +120,21 @@ class PWSlot29(Gen_PWSlot29, QWidget):
             self.c_wedge_type.hide()
             self.slot.wedge_mat = None
             self.c_wedge_type.setCurrentIndex(0)
-            self.img_slot.setPixmap(QPixmap(pixmap_dict["SlotW29_wind"]))
+            self.img_slot.setPixmap(QPixmap(pixmap_dict["SlotW29_wind_ext_stator"]))
         # Notify the machine GUI that the machine has changed
         self.saveNeeded.emit()
 
     def set_type_wedge(self):
         if self.c_wedge_type.currentIndex() == 1:
-            self.img_slot.setPixmap(QPixmap(pixmap_dict["SlotW29_wedge_type_1"]))
+            self.img_slot.setPixmap(
+                QPixmap(pixmap_dict["SlotW29_wedge_type_1_ext_stator"])
+            )
             self.slot.wedge_type = 1
 
         if self.c_wedge_type.currentIndex() == 0:
-            self.img_slot.setPixmap(QPixmap(pixmap_dict["SlotW29_wedge_full"]))
+            self.img_slot.setPixmap(
+                QPixmap(pixmap_dict["SlotW29_wedge_full_ext_stator"])
+            )
             self.slot.wedge_type = 0
 
         # Notify the machine GUI that the machine has changed

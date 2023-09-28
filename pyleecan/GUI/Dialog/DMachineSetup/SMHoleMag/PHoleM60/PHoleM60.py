@@ -11,6 +11,7 @@ from pyleecan.GUI.Dialog.DMachineSetup.SMHoleMag.PHoleM60.Gen_PHoleM60 import (
 )
 from pyleecan.Methods.Slot.Slot import SlotCheckError
 from pyleecan.GUI.Dialog.DMachineSetup.SMHoleMag import DEFAULT_MAG_MAT
+from ......GUI.Resources import pixmap_dict
 
 
 class PHoleM60(Gen_PHoleM60, QWidget):
@@ -63,9 +64,7 @@ class PHoleM60(Gen_PHoleM60, QWidget):
         self.w_mat_2.is_hide_button = True
 
         if hole.magnet_0 is None:  # SyRM
-            self.img_slot.setPixmap(
-                QPixmap(":/images/images/MachineSetup/SMHoleMag/HoleM60_no_mag.png")
-            )
+            self.img_slot.setPixmap(QPixmap(pixmap_dict["HoleM60_empty_int_rotor"]))
             self.w_mat_0.update(self.hole, "mat_void", self.material_dict)
             self.w_mat_1.hide()
             self.w_mat_2.hide()
