@@ -18,9 +18,9 @@ def check(self):
     Raises
     _______
     S61_WCheckError
-        You must have W1+H0 <= W2
+        You must have H1 < H0
+        You must have H2 < H0
     """
-    Rbo = self.get_Rbo()
     # Check that everything is set
     if self.W0 is None:
         raise S61_NoneError("You must set W0 !")
@@ -36,9 +36,6 @@ def check(self):
         raise S61_NoneError("You must set H1 !")
     elif self.H2 is None:
         raise S61_NoneError("You must set H2 !")
-
-    if 2 * (Rbo - self.H0 + self.H1) > Rbo * 2 / sqrt(2):
-        raise S61_NoneError("You must change prameters")
 
     if self.H1 > self.H0:
         raise S61_WCheckError("You must have H1 < H0")

@@ -17,12 +17,12 @@ def comp_surface_magnet_id(self, index):
         Surface of the Magnet [m**2]
     """
     # define sum all surface
-    sum = 0
     label = "magnet_" + str(index)
 
     if index in [1, 2] and getattr(self, label) is not None:
-        sum += self.W1 * self.H1
+        return self.W1 * self.H1
     if index in [0, 3] and getattr(self, label) is not None:
-        sum += self.W2 * self.H1
-
-    return sum
+        return self.W2 * self.H1
+    if index not in [0, 1, 2, 3]:
+        raise Exception("Error index isn't equal at 0, 1, 2 or 3")
+    return 0

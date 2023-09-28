@@ -52,7 +52,7 @@
         <string/>
        </property>
        <property name="pixmap">
-        <pixmap resource="../../../../Resources/pyleecan.qrc">:/images/images/MachineSetup/SMHoleMag/HoleM61.png</pixmap>
+        <pixmap resource="../../../../Resources/pyleecan.qrc">:/images/images/MachineSetup/SMHoleMag/HoleM61_mag_int_rotor.png</pixmap>
        </property>
        <property name="scaledContents">
         <bool>false</bool>
@@ -318,10 +318,12 @@
  <tabstops>
   <tabstop>lf_H0</tabstop>
   <tabstop>lf_H1</tabstop>
+  <tabstop>lf_H2</tabstop>
   <tabstop>lf_W0</tabstop>
   <tabstop>lf_W1</tabstop>
   <tabstop>lf_W2</tabstop>
   <tabstop>lf_W3</tabstop>
+  <tabstop>scrollArea</tabstop>
  </tabstops>
  <resources>
   <include location="../../../../Resources/pyleecan.qrc"/>

@@ -18,6 +18,7 @@ DELTA = 1e-4
 
 HoleM61_test = list()
 
+# No magnet case
 test_obj = LamHole(Rint=0.03, Rext=0.12, is_stator=False, is_internal=True, L1=0.7)
 test_obj.hole = list()
 test_obj.hole.append(
@@ -48,7 +49,7 @@ HoleM61_test.append(
     }
 )
 
-# Tests with both magnets
+# Tests with All magnets
 test_obj = LamHole(is_internal=True, Rint=0.03, Rext=0.12, is_stator=False, L1=0.7)
 test_obj.hole = list()
 test_obj.hole.append(
@@ -201,9 +202,36 @@ HoleM61_test.append(
     }
 )
 
+# test Zh = 6
+test_obj = LamHole(Rint=0.03, Rext=0.12, is_stator=False, is_internal=True, L1=0.7)
+test_obj.hole = list()
+test_obj.hole.append(
+    HoleM61(
+        Zh=6,
+        W0=10e-3,
+        W1=10e-3,
+        W2=10e-3,
+        W3=12e-3,
+        H0=61e-3,
+        H1=10e-3,
+        H2=10e-3,
+    )
+)
+HoleM61_test.append(
+    {
+        "test_obj": test_obj,
+        "carac": "all magnet",
+        "Rmin_exp": 0.05921148537234985,
+        "Rmax_exp": 0.11,
+        "S_exp": 0.0012221775834963798,
+        "SM_exp": 0.0004,
+        "hasmagnet_exp": True,
+    }
+)
+
 
 class Test_HoleM61_meth(object):
-    """pytest for holeB61 methods"""
+    """pytest for HoleM61 methods"""
 
     @pytest.mark.parametrize("test_dict", HoleM61_test)
     def test_schematics(self, test_dict):
@@ -349,11 +377,24 @@ class Test_HoleM61_meth(object):
         test_obj.hole = list()
         test_obj.hole.append(
             HoleM61(
-                Zh=4, W0=2e-2, W1=2e-2, W2=20e-3, W3=12e-3, H0=61e-3, H1=10e-3, H2=10e-3
+                Zh=4,
+                W0=2e-2,
+                W1=20e-3,
+                W2=40e-3,
+                W3=12e-3,
+                H0=61e-3,
+                H1=10e-3,
+                H2=10e-3,
             )
         )
-        result = test_obj.hole[0].comp_surface_magnet_id(5)
-        assert result == 0
+        result = test_obj.hole[0].comp_surface_magnet_id(0)
+        assert result == 0.0004
+        result = test_obj.hole[0].comp_surface_magnet_id(1)
+        assert result == 0.0002
+        result = test_obj.hole[0].comp_surface_magnet_id(2)
+        assert result == 0.0002
+        result = test_obj.hole[0].comp_surface_magnet_id(3)
+        assert result == 0.0004
 
     @pytest.mark.parametrize("test_dict", HoleM61_test)
     def test_has_magnet(self, test_dict):

@@ -8,6 +8,8 @@ from ......Classes.SlotW24 import SlotW24
 from ......GUI import gui_option
 from ......GUI.Dialog.DMachineSetup.SWSlot.PWSlot24.Gen_PWSlot24 import Gen_PWSlot24
 from ......Methods.Slot.Slot import SlotCheckError
+from ......GUI.Resources import pixmap_dict
+
 
 translate = PySide2.QtCore.QCoreApplication.translate
 

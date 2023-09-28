@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 from numpy import exp, pi
 
-from ...Classes.SlotM18 import SlotM18
 from ...Classes.Arc1 import Arc1
 from ...Classes.Circle import Circle
 from ...Classes.Segment import Segment
@@ -77,8 +76,9 @@ def get_sliding_band(sym, lam_int, lam_ext):
         )
     else:  # Symmetry
         # Bottom line
-        if hasattr(lam_int, "slot") and isinstance(lam_int.slot, SlotM18):
-            Z1 = Rgap_mec_int  # Cylinder magnet/winding => limit is mec airgap
+        if hasattr(lam_int, "slot") and lam_int.slot.is_full_pitch_active():
+            # Cylinder magnet/winding => limit is mec airgap
+            Z1 = Rgap_mec_int
         else:
             Z1 = Rgap_0_int
         Z2 = Rgap_mec_int + W_sb
@@ -107,8 +107,9 @@ def get_sliding_band(sym, lam_int, lam_ext):
             )
         )
         # Top line
-        if hasattr(lam_ext, "slot") and isinstance(lam_ext.slot, SlotM18):
-            Z5 = Rgap_mec_ext  # Cylinder magnet/winding => limit is mec airgap
+        if hasattr(lam_ext, "slot") and lam_ext.slot.is_full_pitch_active():
+            # Cylinder magnet/winding => limit is mec airgap
+            Z5 = Rgap_mec_ext
         else:
             Z5 = Rgap_0_ext
         Z6 = Rgap_mec_ext - W_sb

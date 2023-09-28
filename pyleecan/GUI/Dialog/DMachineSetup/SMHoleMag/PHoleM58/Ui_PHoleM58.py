@@ -36,7 +36,7 @@ class Ui_PHoleM58(object):
         self.img_slot.setMinimumSize(QSize(0, 0))
         self.img_slot.setMaximumSize(QSize(16777215, 16777215))
         self.img_slot.setPixmap(
-            QPixmap(u":/images/images/MachineSetup/SMHoleMag/HoleM58.png")
+            QPixmap(u":/images/images/MachineSetup/SMHoleMag/HoleM58_mag_int_rotor.png")
         )
         self.img_slot.setScaledContents(False)
         self.img_slot.setAlignment(Qt.AlignCenter)

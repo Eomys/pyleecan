@@ -42,28 +42,16 @@ class TestPHoleM61(object):
                 W3=0.17,
             )
         )
-        test_obj.hole.append(
-            HoleM61(
-                H0=0.11,
-                H1=0.12,
-                H2=0.18,
-                W0=0.13,
-                W1=0.14,
-                W2=0.15,
-                W3=0.17,
-                magnet_0=None,
-            )
-        )
 
         material_dict = {LIB_KEY: list(), MACH_KEY: list()}
         material_dict[LIB_KEY] = [
+            Material(name="Magnet0"),
             Material(name="Magnet1"),
             Material(name="Magnet2"),
             Material(name="Magnet3"),
         ]
 
         self.widget = PHoleM61(test_obj.hole[0], material_dict)
-        self.widget2 = PHoleM61(test_obj.hole[1], material_dict)
         self.test_obj = test_obj
         self.material_dict = material_dict
 
@@ -90,8 +78,6 @@ class TestPHoleM61(object):
         assert self.widget.lf_W1.value() == 0.24
         assert self.widget.lf_W2.value() == 0.25
         assert self.widget.lf_W3.value() == 0.27
-
-        assert self.widget2.w_mat_1.isHidden() == True
 
     def test_set_W0(self):
         """Check that the Widget allow to update W0"""

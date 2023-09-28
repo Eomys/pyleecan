@@ -18,10 +18,10 @@ def comp_radius(self):
     (Rmin,Rmax): tuple
         Radius of the circle that contains the slot [m]
     """
-    point_dict = self._comp_point_coordinate()
+
     Rbo = self.get_Rbo()
 
     Rmax = Rbo - self.H2
-    Rmin = abs(point_dict["Z1"])
+    Rmin = abs((Rbo - self.H0) + 1j * self.W0 / 2)
 
     return (Rmin, Rmax)

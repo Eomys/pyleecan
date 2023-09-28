@@ -270,19 +270,21 @@ class PWSlot11(Gen_PWSlot11, QWidget):
         if self.g_wedge.isChecked():
             if self.is_cst_tooth.isChecked():
                 self.img_slot.setPixmap(
-                    QPixmap(pixmap_dict["SlotW11_constant_tooth_wedge_full"])
+                    QPixmap(pixmap_dict["SlotW11_wedge_full_ext_stator_constant_tooth"])
                 )
 
             else:
-                self.img_slot.setPixmap(QPixmap(pixmap_dict["SlotW11_wedge_full"]))
+                self.img_slot.setPixmap(
+                    QPixmap(pixmap_dict["SlotW11_wedge_full_ext_stator"])
+                )
 
         else:
             if self.is_cst_tooth.isChecked():
                 self.img_slot.setPixmap(
-                    QPixmap(pixmap_dict["SlotW11_constant_tooth_wind"])
+                    QPixmap(pixmap_dict["SlotW11_wind_ext_stator_constant_tooth"])
                 )
             else:
-                self.img_slot.setPixmap(QPixmap(pixmap_dict["SlotW11_wind"]))
+                self.img_slot.setPixmap(QPixmap(pixmap_dict["SlotW11_wind_ext_stator"]))
 
     def set_wedge(self):
         """Setup the slot wedge according to the GUI"""

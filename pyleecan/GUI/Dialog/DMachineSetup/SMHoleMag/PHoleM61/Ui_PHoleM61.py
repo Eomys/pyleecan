@@ -36,7 +36,7 @@ class Ui_PHoleM61(object):
         self.img_slot.setMinimumSize(QSize(0, 0))
         self.img_slot.setMaximumSize(QSize(16777215, 16777215))
         self.img_slot.setPixmap(
-            QPixmap(u":/images/images/MachineSetup/SMHoleMag/HoleM61.png")
+            QPixmap(u":/images/images/MachineSetup/SMHoleMag/HoleM61_mag_int_rotor.png")
         )
         self.img_slot.setScaledContents(False)
         self.img_slot.setAlignment(Qt.AlignCenter)
@@ -220,10 +220,12 @@ class Ui_PHoleM61(object):
         self.horizontalLayout.addWidget(self.scrollArea)
 
         QWidget.setTabOrder(self.lf_H0, self.lf_H1)
-        QWidget.setTabOrder(self.lf_H1, self.lf_W0)
+        QWidget.setTabOrder(self.lf_H1, self.lf_H2)
+        QWidget.setTabOrder(self.lf_H2, self.lf_W0)
         QWidget.setTabOrder(self.lf_W0, self.lf_W1)
         QWidget.setTabOrder(self.lf_W1, self.lf_W2)
         QWidget.setTabOrder(self.lf_W2, self.lf_W3)
+        QWidget.setTabOrder(self.lf_W3, self.scrollArea)
 
         self.retranslateUi(PHoleM61)
 
