@@ -96,7 +96,7 @@ class TestSMHoleMag(object):
         assert (
             self.widget.tab_hole.widget(0).c_hole_type.currentText() == "Hole Type 50"
         )
-        assert self.widget.tab_hole.widget(0).c_hole_type.count() == 10
+        assert self.widget.tab_hole.widget(0).c_hole_type.count() == 11
 
         self.test_obj2 = MachineSyRM(type_machine=5)
         self.test_obj2.stator = LamSlotWind()
@@ -139,7 +139,7 @@ class TestSMHoleMag(object):
         assert (
             self.widget2.tab_hole.widget(0).c_hole_type.currentText() == "Hole Type 54"
         )
-        assert self.widget2.tab_hole.widget(0).c_hole_type.count() == 11
+        assert self.widget2.tab_hole.widget(0).c_hole_type.count() == 12
 
     def test_init_SyRM_51(self):
         """Check that the Widget initialize to the correct hole"""
@@ -176,7 +176,7 @@ class TestSMHoleMag(object):
         assert (
             self.widget2.tab_hole.widget(0).c_hole_type.currentText() == "Hole Type 51"
         )
-        assert self.widget2.tab_hole.widget(0).c_hole_type.count() == 11
+        assert self.widget2.tab_hole.widget(0).c_hole_type.count() == 12
 
         assert self.widget2.tab_hole.widget(0).w_hole.lf_W0.text() == "0.11"
         assert self.widget2.tab_hole.widget(0).w_hole.lf_W1.text() == "0.12"
@@ -348,7 +348,7 @@ class TestSMHoleMag(object):
             self.widget.out_hole_pitch.text()
             == "Slot pitch: 360 / 2p = 18 [°] = 0.3142 [rad]"
         )
-        assert self.widget.tab_hole.widget(0).c_hole_type.currentIndex() == 9
+        assert self.widget.tab_hole.widget(0).c_hole_type.currentIndex() == 10
         assert (
             self.widget.tab_hole.widget(0).c_hole_type.currentText()
             == "Import from DXF"

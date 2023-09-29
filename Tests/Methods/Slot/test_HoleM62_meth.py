@@ -18,22 +18,21 @@ DELTA = 1e-4
 
 HoleM62_test = list()
 
-test_obj = LamHole(Rint=0.03, Rext=0.12, is_stator=False, is_internal=True, L1=0.7)
+test_obj = LamHole(Rint=0.03, Rext=0.12, is_stator=False, is_internal=True)
 test_obj.hole = list()
-test_obj.hole.append(HoleM62(Zh=4, W0=2e-2, H0=30e-3, H1=10e-3, W0_is_rad=False))
+test_obj.hole.append(HoleM62(Zh=4, W0=80e-3, H0=20e-3, H1=30e-3, W0_is_rad=False))
 HoleM62_test.append(
     {
         "test_obj": test_obj,
         "carac": "all magnet",
-        "Rmin_exp": 0.08,
-        "Rmax_exp": 0.11,
-        "S_exp": 0.0005977030303444613,
+        "Rmin_exp": 0.0726298623204022,
+        "Rmax_exp": 0.09,
+        "S_exp": 0.0014538032055299562,
         "hasmagnet_exp": False,
     }
 )
-
 # W0 rad
-test_obj = LamHole(is_internal=True, Rint=0.03, Rext=0.12, is_stator=False, L1=0.7)
+test_obj = LamHole(is_internal=True, Rint=0.03, Rext=0.12, is_stator=False)
 test_obj.hole = list()
 test_obj.hole.append(HoleM62(Zh=4, W0=pi / 4, H0=30e-3, H1=10e-3, W0_is_rad=True))
 HoleM62_test.append(
@@ -117,6 +116,7 @@ class Test_HoleM62_meth(object):
         a, b = Rmin, Rmin_a
         msg = "For Rmin: Return " + str(a) + " expected " + str(b)
         assert abs((a - b) / a - 0) < DELTA, msg
+
         a, b = Rmax, Rmax_a
         msg = "For Rmax: Return " + str(a) + " expected " + str(b)
         assert abs((a - b) / a - 0) < DELTA, msg

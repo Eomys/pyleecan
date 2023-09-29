@@ -442,7 +442,7 @@ class TestNewMachinePrius(object):
         wid_hole = self.widget.w_step.tab_hole.currentWidget()
         assert isinstance(wid_hole, WHoleMag)
 
-        assert wid_hole.c_hole_type.count() == 10
+        assert wid_hole.c_hole_type.count() == 11
         assert wid_hole.c_hole_type.currentText() == "Hole Type 50"
         assert isinstance(wid_hole.w_hole, PHoleM50)
 

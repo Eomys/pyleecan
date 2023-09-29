@@ -35,16 +35,16 @@ def build_geometry(self, alpha=0, delta=0, is_simplified=False):
     R_id, surf_type = self.get_R_id()
     mag_label = lam_label + "_" + HOLEM_LAB + "_R" + str(R_id) + "-"
     point_dict = self._comp_point_coordinate()
+
+    surf_list = list()
+    # Create all the surfaces for all the case
+
     if self.W0_is_rad:
         # Get all the points
         Z1 = point_dict["Z1"]
         Z2 = point_dict["Z2"]
         Z3 = point_dict["Z3"]
         Z4 = point_dict["Z4"]
-
-        surf_list = list()
-        # Create all the surfaces for all the cases
-
         # surface Hole Radial
         curve_list = list()
         curve_list.append(Segment(Z1, Z2))
@@ -89,7 +89,7 @@ def build_geometry(self, alpha=0, delta=0, is_simplified=False):
             Arc1(
                 begin=Z8,
                 end=Z5,
-                radius=-(Rbo - self.H0 - self.H1),
+                radius=-(abs(Z5)),
                 is_trigo_direction=False,
             )
         )
