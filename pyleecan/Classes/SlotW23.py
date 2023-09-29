@@ -43,11 +43,6 @@ except ImportError as error:
     build_geometry = error
 
 try:
-    from ..Methods.Slot.SlotW23.build_geometry_active import build_geometry_active
-except ImportError as error:
-    build_geometry_active = error
-
-try:
     from ..Methods.Slot.SlotW23.check import check
 except ImportError as error:
     check = error
@@ -173,18 +168,6 @@ class SlotW23(Slot):
         )
     else:
         build_geometry = build_geometry
-    # cf Methods.Slot.SlotW23.build_geometry_active
-    if isinstance(build_geometry_active, ImportError):
-        build_geometry_active = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use SlotW23 method build_geometry_active: "
-                    + str(build_geometry_active)
-                )
-            )
-        )
-    else:
-        build_geometry_active = build_geometry_active
     # cf Methods.Slot.SlotW23.check
     if isinstance(check, ImportError):
         check = property(
