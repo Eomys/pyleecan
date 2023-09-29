@@ -166,7 +166,7 @@ def plot_schematics(
                 is_arrow=True,
                 fontsize=SC_FONT_SIZE,
             )
-            # W0 [m]
+            # W0
             Zlim1 = point_dict["Z4"] - self.H0 * 0.2
             Zlim2 = point_dict["Z1"] - self.H0 * 0.2
             plot_quote(
@@ -208,20 +208,10 @@ def plot_schematics(
                     linewidth=MAIN_LINE_WIDTH,
                 )
 
+                # line construction for W0
                 line = Segment(
                     point_dict["Z2"] * exp(1j * alpha),
                     point_dict["Z3"] * exp(1j * alpha),
-                )
-                line.plot(
-                    fig=fig,
-                    ax=ax,
-                    color=MAIN_LINE_COLOR,
-                    linestyle=MAIN_LINE_STYLE,
-                    linewidth=MAIN_LINE_WIDTH,
-                )
-                line = Segment(
-                    point_dict["Z1"] * exp(1j * alpha),
-                    point_dict["Z4"] * exp(1j * alpha),
                 )
                 line.plot(
                     fig=fig,

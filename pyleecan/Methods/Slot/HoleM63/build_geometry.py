@@ -25,7 +25,7 @@ def build_geometry(self, alpha=0, delta=0, is_simplified=False):
     Returns
     -------
     surf_list: list
-        List of SurfLine needed to draw the HoleM58
+        List of SurfLine needed to draw the HoleM63
 
     """
     Rbo = self.get_Rbo()

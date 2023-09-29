@@ -35,7 +35,7 @@ def comp_magnetization_dict(self, is_north=True):
         )
         mag_dict["magnet_0"] = S0.comp_normal()
 
-    elif self.Hole == 1:
+    elif self.top_flat == 1:
         S0 = Segment((point_dict["Z7"], point_dict["Z6"]))
         mag_dict["magnet_0"] = S0.comp_normal()
 

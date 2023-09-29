@@ -1,5 +1,4 @@
-from numpy import exp, pi, cos, sin, tan, angle, sqrt
-from ....Functions.Geometry.inter_line_circle import inter_line_circle
+from numpy import sqrt
 
 
 def _comp_point_coordinate(self):

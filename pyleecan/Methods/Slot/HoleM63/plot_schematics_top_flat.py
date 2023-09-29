@@ -1,7 +1,6 @@
 import matplotlib.pyplot as plt
 from numpy import pi, exp, angle
 
-from pyleecan.Classes.Arc1 import Arc1
 from pyleecan.Classes.LamHole import LamHole
 from pyleecan.Classes.Segment import Segment
 from pyleecan.definitions import config_dict
@@ -162,7 +161,7 @@ def plot_schematics_top_flat(
                 offset_label=-1j * self.H0 * 0.4,
                 fig=fig,
                 ax=ax,
-                label="W0 [m]",
+                label="W0",
             )
             # H0
             line = Segment(

@@ -2,8 +2,6 @@
 
 from numpy import abs
 
-from pyleecan.Classes.Arc1 import Arc1
-
 
 def comp_radius(self):
     """Compute the radius of the min and max circle that contains the slot
