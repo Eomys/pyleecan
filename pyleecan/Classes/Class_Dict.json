@@ -2635,6 +2635,7 @@
             "HoleM60",
             "HoleM61",
             "HoleM62",
+            "HoleM63",
             "HoleMLSRPM",
             "HoleMag",
             "HoleUD",
@@ -4019,6 +4020,88 @@
             }
         ]
     },
+    "HoleM63": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            },
+            {
+                "name": "IS_SYMMETRICAL",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Hole M63",
+        "is_internal": false,
+        "methods": [
+            "_comp_point_coordinate",
+            "build_geometry",
+            "plot_schematics",
+            "plot_schematics_top_flat",
+            "remove_magnet",
+            "comp_radius",
+            "has_magnet",
+            "check",
+            "comp_magnetization_dict"
+        ],
+        "mother": "HoleMag",
+        "name": "HoleM63",
+        "package": "Slot",
+        "path": "pyleecan/Generator/ClassesRef/Slot/HoleM63.csv",
+        "properties": [
+            {
+                "as_dict": "",
+                "desc": "Length or Angle Opening",
+                "max": "",
+                "min": "0",
+                "name": "W0",
+                "type": "float",
+                "unit": "m/rad",
+                "value": null
+            },
+            {
+                "as_dict": "",
+                "desc": "Distance from the lamination bore",
+                "max": "",
+                "min": "0",
+                "name": "H0",
+                "type": "float",
+                "unit": "m",
+                "value": null
+            },
+            {
+                "as_dict": "",
+                "desc": "Magnet height",
+                "max": "",
+                "min": "0",
+                "name": "H1",
+                "type": "float",
+                "unit": "m",
+                "value": null
+            },
+            {
+                "as_dict": "",
+                "desc": "top flat = 1, if curve top_flat = 0 ",
+                "max": "",
+                "min": "",
+                "name": "top_flat",
+                "type": "bool",
+                "unit": "",
+                "value": 0
+            },
+            {
+                "as_dict": "",
+                "desc": "First Magnet",
+                "max": "",
+                "min": "",
+                "name": "magnet_0",
+                "type": "Magnet",
+                "unit": "-",
+                "value": ""
+            }
+        ]
+    },
     "HoleMLSRPM": {
         "constants": [
             {
@@ -4150,6 +4233,7 @@
             "HoleM60",
             "HoleM61",
             "HoleM62",
+            "HoleM63",
             "HoleMLSRPM",
             "HoleUD"
         ],
