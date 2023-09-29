@@ -9,7 +9,6 @@ from ......Classes.SlotM13 import SlotM13
 from ......GUI import gui_option
 from ......GUI.Dialog.DMachineSetup.SMSlot.PMSlot13.Gen_PMSlot13 import Gen_PMSlot13
 from ......Methods.Slot.Slot import SlotCheckError
-from ......GUI.Resources import pixmap_dict
 
 
 translate = PySide2.QtCore.QCoreApplication.translate
