@@ -66,9 +66,7 @@ class PHoleM50(Gen_PHoleM50, QWidget):
 
         # Adapt GUI with/without magnet
         if hole.magnet_0 is None:  # SyRM
-            self.img_slot.setPixmap(
-                QPixmap(QPixmap(pixmap_dict["HoleM50_empty_int_rotor"]))
-            )
+            self.img_slot.setPixmap(QPixmap(pixmap_dict["HoleM50_empty_int_rotor"]))
             self.w_mat_0.update(self.hole, "mat_void", self.material_dict)
             self.w_mat_1.hide()
             self.w_mat_2.hide()
