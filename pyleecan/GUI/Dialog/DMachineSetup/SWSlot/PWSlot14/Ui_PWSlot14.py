@@ -181,6 +181,9 @@ class Ui_PWSlot14(object):
         QWidget.setTabOrder(self.lf_W3, self.lf_H0)
         QWidget.setTabOrder(self.lf_H0, self.lf_H1)
         QWidget.setTabOrder(self.lf_H1, self.lf_H3)
+        QWidget.setTabOrder(self.lf_H3, self.g_wedge)
+        QWidget.setTabOrder(self.g_wedge, self.c_wedge_type)
+        QWidget.setTabOrder(self.c_wedge_type, self.scrollArea)
 
         self.retranslateUi(PWSlot14)
 
