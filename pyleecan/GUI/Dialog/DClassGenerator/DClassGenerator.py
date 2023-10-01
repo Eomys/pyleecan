@@ -1,15 +1,12 @@
-# -*- coding: utf-8 -*-
-
-
-import numpy as np
-
-from os.path import basename, join, dirname, isfile
+from os.path import basename, join, dirname, isfile, isdir
 import os
 from logging import getLogger
 from ....Functions.GUI.log_error import log_error
 from ....loggers import GUI_LOG_NAME
-from PySide2.QtCore import Qt, Signal, QDir, QStringListModel
-from PySide2.QtGui import QStandardItemModel
+from PySide2.QtCore import Qt, Signal, QDir
+
+from functools import partial
+
 from PySide2.QtWidgets import (
     QFileDialog,
     QMessageBox,
@@ -17,7 +14,15 @@ from PySide2.QtWidgets import (
     QFileSystemModel,
     QLabel,
     QLineEdit,
+    QDesktopWidget,
+    QAbstractScrollArea,
+    QHeaderView,
+    QPushButton,
 )
+
+import subprocess
+
+from PySide2.QtGui import QColor
 
 from ....Functions.load import load, load_machine_materials
 from ..DMachineSetup import mach_index, mach_list
@@ -25,7 +30,7 @@ from ..DClassGenerator.Ui_DClassGenerator import Ui_DClassGenerator
 
 # from ..DMachineSetup.SPreview.SPreview import SPreview
 # from ..DMachineSetup.SSimu.SSimu import SSimu
-from ....definitions import config_dict, DOC_DIR, PACKAGE_NAME
+from ....definitions import config_dict, DOC_DIR, PACKAGE_NAME, MAIN_DIR
 
 from ....Classes.Machine import Machine
 from ...Tools.WPathSelector.WPathSelector import WPathSelector
@@ -35,6 +40,11 @@ from ....Generator.read_fct import read_file
 # Flag for set the enable property of w_nav (List_Widget)
 DISABLE_ITEM = Qt.NoItemFlags
 ENABLE_ITEM = Qt.ItemIsSelectable | Qt.ItemIsEnabled
+
+MAX_WIDTH_TREEVIEW = 300
+
+EDITOR_PATH = "C:\\Users\\emile\\AppData\\Local\\Programs\\Microsoft VS Code\\Code.exe"
+# EDITOR_PATH = "notepad.exe" ;
 
 
 class DClassGenerator(Ui_DClassGenerator, QWidget):
@@ -65,6 +75,9 @@ class DClassGenerator(Ui_DClassGenerator, QWidget):
         # self.material_dict = material_dict
         self.last_index = 0  # Index of the last step available
 
+        # Init class dict of current class
+        self.current_class_dict = None
+
         # Saving arguments
         self.class_gen_path = class_gen_path
         if class_gen_path == "":
@@ -80,15 +93,23 @@ class DClassGenerator(Ui_DClassGenerator, QWidget):
         self.path_selector.in_path.setText("Class generator path")
 
         # Init treeview
+        self.treeView.setMinimumWidth(200)
+        self.treeView.setMaximumWidth(MAX_WIDTH_TREEVIEW)
         self.dirModel = QFileSystemModel()
         self.dirModel.setRootPath(self.class_gen_path)
         self.dirModel.setFilter(QDir.NoDotAndDotDot | QDir.AllDirs | QDir.Files)
         self.treeView.setModel(self.dirModel)
         self.treeView.setRootIndex(self.dirModel.index(self.class_gen_path))
         self.treeView.setHeaderHidden(True)
-        self.treeView.resizeColumnToContents(0)
+        self.treeView.header().setSectionResizeMode(0, QHeaderView.ResizeToContents)
 
-        # Load csv file
+        # Get screen size
+        sizeObject = QDesktopWidget().screenGeometry(-1)
+        max_height = sizeObject.height()
+        max_width = sizeObject.width()
+        self.setMinimumWidth(max_width)
+
+        # Load csv file to init tables of properties, methods, and metadata
         folder_list = os.listdir(DOC_DIR)
         csv_path = None
         for folder in folder_list:
@@ -99,35 +120,95 @@ class DClassGenerator(Ui_DClassGenerator, QWidget):
                     break
             if csv_path is not None:
                 break
-        class_dict = read_file(csv_path, soft_name=PACKAGE_NAME)
-        self.list_prop = list(class_dict["properties"][0].keys())
-        # array_prop = np.array(list_prop).reshape((1, len(list_prop)))
+        class_dict_init = read_file(csv_path, soft_name=PACKAGE_NAME)
 
-        self.table_prop.setColumnCount(len(class_dict["properties"][0]))
-        self.table_prop.setRowCount(1)
-        for col in range(self.table_prop.columnCount()):
-            self.table_prop.setCellWidget(0, col, QLabel(self.list_prop[col]))
+        # Store list of properties for further use
+        self.list_prop = list(class_dict_init["properties"][0].keys())
 
-        # self.table_prop.setColumnCount(len(class_dict["properties"][0]))
+        # Store list of properties for further use
+        self.list_meta = [
+            val
+            for val in list(class_dict_init.keys())
+            if val not in ["name", "path", "properties", "methods"]
+        ]
 
         # Init table of properties
-        # self.table_prop = WTableView(data=array_prop, editable=True)
-        # self.table_prop.setParent(self)
-        # self.table_prop.setHidden(False)
+        self.table_prop.setMinimumWidth(max_width - MAX_WIDTH_TREEVIEW)
+        self.table_prop.setColumnCount(len(self.list_prop))
+        self.table_prop.setRowCount(1)
+        for col in range(self.table_prop.columnCount()):
+            qlabel = QLabel(self.list_prop[col])
+            qlabel.setAlignment(Qt.AlignCenter)
+            self.table_prop.setCellWidget(0, col, qlabel)
+            self.table_prop.cellWidget(0, col).setStyleSheet("background-color: grey")
+        self.table_prop.horizontalHeader().hide()
+        self.table_prop.verticalHeader().hide()
 
-        # model = QStandardItemModel()
+        # Init table of methods
+        self.table_meth.setMinimumWidth(max_width - MAX_WIDTH_TREEVIEW)
+        self.table_meth.setColumnCount(3)
+        self.table_meth.setRowCount(1)
+        qlabel = QLabel("Methods")
+        qlabel.setAlignment(Qt.AlignCenter)
+        self.table_meth.setCellWidget(0, 0, qlabel)
+        self.table_meth.cellWidget(0, 0).setStyleSheet("background-color: grey")
+        self.table_meth.horizontalHeader().hide()
+        self.table_meth.verticalHeader().hide()
 
-        # model.setHorizontalHeaderLabels(list_prop)
-        # self.table_prop.setModel(model)
+        # Init tables of metadata
+        self.table_meta.setMinimumWidth(max_width - MAX_WIDTH_TREEVIEW)
+        self.table_meta.setRowCount(1)
+        # Loop on rows to write methods each method name and create buttons
+        col = 0
+        for meta in self.list_meta:
+            if (
+                isinstance(class_dict_init[meta], list)
+                and len(class_dict_init[meta]) > 0
+                and isinstance(class_dict_init[meta][0], dict)
+            ):
+                # dict for constants name / value
+                for key in class_dict_init[meta][0].keys():
+                    self.table_meta.setColumnCount(col + 1)
+                    # Create FloatEdit or QLineEdit depending on parameter type
+                    qlabel = QLabel(str(meta + "_" + key))
+                    qlabel.setAlignment(Qt.AlignCenter)
+                    self.table_meta.setCellWidget(0, col, qlabel)
+                    self.table_meta.cellWidget(0, col).setStyleSheet(
+                        "background-color: grey"
+                    )
+                    col += 1
+            else:
+                # Create QLineEdit
+                self.table_meta.setColumnCount(col + 1)
+                qlabel = QLabel(str(meta))
+                qlabel.setAlignment(Qt.AlignCenter)
+                self.table_meta.setCellWidget(0, col, qlabel)
+                self.table_meta.cellWidget(0, col).setStyleSheet(
+                    "background-color: grey"
+                )
+                col += 1
+        self.table_meta.horizontalHeader().hide()
+        self.table_meta.verticalHeader().hide()
 
+        # Connect treeview to methods
         self.treeView.collapsed.connect(self.onItemCollapse)
         self.treeView.expanded.connect(self.onItemExpand)
-        self.treeView.clicked.connect(self.tree_click)
+        self.treeView.clicked.connect(self.update_class)
         self.treeView.customContextMenuRequested.connect(self.openContextMenu)
 
-        self.current_class_dict = None
+    def update_class(self, point):
+        """Update tables when clicking on a csv files
 
-    def tree_click(self, point):
+        Parameters
+        ----------
+        self : DClassGenerator
+            a DClassGenerator object
+        point : QModelIndex
+            Model index of current selected item in treeview
+
+        """
+
+        # Get parent folder in which the csv file is
         parent = point.parent()
 
         if self.dirModel.data(parent) == "ClassesRef":
@@ -140,49 +221,112 @@ class DClassGenerator(Ui_DClassGenerator, QWidget):
             else:
                 # User clicked on other properties than name, extract name by using parent
                 class_name = self.dirModel.data(parent.child(point.row(), 0))
-
+            # Get module name
             module = self.dirModel.data(parent)
 
             # Load csv file
             csv_path = DOC_DIR + "/" + module + "/" + class_name
-            self.current_class_dict = read_file(csv_path, soft_name=PACKAGE_NAME)
+            current_class_dict = read_file(csv_path, soft_name=PACKAGE_NAME)
 
-            self.update_class()
+            # Store current class dict for further use
+            self.current_class_dict = current_class_dict
 
-    def update_class(self):
-        class_dict = self.current_class_dict
+            # Update table of properties
+            # Set the number of rows to the number of properties (first row are labels)
+            self.table_prop.setRowCount(len(current_class_dict["properties"]) + 1)
 
-        self.table_prop.setRowCount(len(class_dict["properties"]) + 1)
+            # Loop on rows to write properties
+            for row, prop_dict in enumerate(current_class_dict["properties"]):
+                # Loop on columns to write parameters associated to each property
+                for prop, val in prop_dict.items():
+                    # Get property name index
+                    col = self.list_prop.index(prop)
+                    # Create FloatEdit or QLineEdit depending on parameter type
+                    if isinstance(val, (int, float)):
+                        self.table_prop.setCellWidget(row + 1, col, FloatEdit(val))
+                    else:
+                        line_edit = QLineEdit(str(val))
+                        line_edit.setAlignment(Qt.AlignLeft)
+                        self.table_prop.setCellWidget(row + 1, col, line_edit)
+            self.table_prop.resizeColumnsToContents()
 
-        for row, prop_dict in enumerate(class_dict["properties"]):
-            for prop, val in prop_dict.items():
-                col = self.list_prop.index(prop)
-                if val is None:
-                    val = "None"
-                elif isinstance(val, list):
-                    val = str(val)
-                if isinstance(val, (int, float)):
-                    self.table_prop.setCellWidget(row + 1, col, FloatEdit(val))
+            # Update table of methods
+            # Set the number of rows to the number of methods (first row are labels)
+            self.table_meth.setRowCount(len(current_class_dict["methods"]) + 1)
+
+            # Loop on rows to write methods each method name and create buttons
+            folder_path = join(MAIN_DIR, "Methods", module, class_name[:-4])
+
+            # Create Browse button
+            b_browse = QPushButton(text="Browse", parent=self.table_meth)
+            b_browse.clicked.connect(lambda: self.browseMethod(folder_path))
+            b_browse.setEnabled(isdir(folder_path))
+            self.table_meth.setCellWidget(0, 1, b_browse)
+
+            for row, meth in enumerate(current_class_dict["methods"]):
+                # Write method name
+                line_edit = QLineEdit(str(meth))
+                line_edit.setAlignment(Qt.AlignLeft)
+                self.table_meth.setCellWidget(row + 1, 0, line_edit)
+                # Create Open button
+                method_path = join(folder_path, meth + ".py")
+                b_open = QPushButton(text="Open", parent=self.table_meth)
+                # button.clicked.connect(lambda state, x=name: calluser(x))
+                b_open.clicked.connect(partial(self.openMethod, method_path))
+                b_open.setEnabled(isfile(method_path))
+                self.table_meth.setCellWidget(row + 1, 1, b_open)
+
+            self.table_meth.resizeColumnsToContents()
+
+            # Update table of metadata
+            # Set the number of rows to the number of metadata (first row are labels)
+            self.table_meta.setRowCount(2)
+
+            # Loop metadata and fill tables
+            col = 0
+            for meta in self.list_meta:
+                if (
+                    isinstance(current_class_dict[meta], list)
+                    and len(current_class_dict[meta]) > 0
+                    and isinstance(current_class_dict[meta][0], dict)
+                ):
+                    # dict for constants name / value
+                    for val in current_class_dict[meta][0].values():
+                        # Create FloatEdit or QLineEdit depending on parameter type
+                        if isinstance(val, (int, float)):
+                            self.table_meta.setCellWidget(1, col, FloatEdit(val))
+                        else:
+                            line_edit = QLineEdit(str(val))
+                            line_edit.setAlignment(Qt.AlignLeft)
+                            self.table_meta.setCellWidget(1, col, line_edit)
+                        col += 1
                 else:
-                    self.table_prop.setCellWidget(row + 1, col, QLineEdit(val))
-
-        pass
+                    # Create QLineEdit
+                    line_edit = QLineEdit(str(current_class_dict[meta]))
+                    line_edit.setAlignment(Qt.AlignLeft)
+                    self.table_meta.setCellWidget(1, col, line_edit)
+                    col += 1
 
     def onItemCollapse(self, index):
         """Slot for item collapsed"""
         # dynamic resize
-        print("toto3")
         for ii in range(3):
             self.treeView.resizeColumnToContents(ii)
 
     def onItemExpand(self, index):
         """Slot for item expand"""
-
-        print("toto4")
-
         # dynamic resize
         for ii in range(3):
             self.treeView.resizeColumnToContents(ii)
+
+    def browseMethod(self, folder_path):
+        path = os.path.realpath(folder_path)
+        if isdir(path):
+            os.startfile(path)
+
+    def openMethod(self, method_path):
+        if isfile(method_path):
+            p = subprocess.Popen([EDITOR_PATH, method_path])
 
     def openContextMenu(self, point):
         """Generate and open context the menu at the given point position."""

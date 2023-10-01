@@ -40,7 +40,6 @@ EXT_GUI = True
 
 
 def run_class_generator(argv):
-
     # Script to be used to test in dev
     a = QApplication(argv)
 
@@ -72,7 +71,7 @@ def run_class_generator(argv):
 
     # c.treeView.resizeColumnToContents(0)
 
-    c.show()
+    c.showMaximized()
 
     exit(a.exec_())
 
