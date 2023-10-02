@@ -13,7 +13,7 @@ from ..Functions.save import save
 from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
 from copy import deepcopy
-from .LamSlot import LamSlot
+from .LamSlotM import LamSlotM
 
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
@@ -43,31 +43,6 @@ except ImportError as error:
     comp_volumes = error
 
 try:
-    from ..Methods.Machine.LamSlotMag.plot import plot
-except ImportError as error:
-    plot = error
-
-try:
-    from ..Methods.Machine.LamSlotMag.comp_angle_d_axis import comp_angle_d_axis
-except ImportError as error:
-    comp_angle_d_axis = error
-
-try:
-    from ..Methods.Machine.LamSlotMag.get_magnet_number import get_magnet_number
-except ImportError as error:
-    get_magnet_number = error
-
-try:
-    from ..Methods.Machine.LamSlotMag.set_Lmag import set_Lmag
-except ImportError as error:
-    set_Lmag = error
-
-try:
-    from ..Methods.Machine.LamSlotMag.get_dim_active import get_dim_active
-except ImportError as error:
-    get_dim_active = error
-
-try:
     from ..Methods.Machine.LamSlotMag.get_all_mag_obj import get_all_mag_obj
 except ImportError as error:
     get_all_mag_obj = error
@@ -77,13 +52,18 @@ try:
 except ImportError as error:
     get_magnet_by_label = error
 
+try:
+    from ..Methods.Machine.LamSlotMag.set_Lmag import set_Lmag
+except ImportError as error:
+    set_Lmag = error
+
 
 from numpy import array, array_equal
 from numpy import isnan
 from ._check import InitUnKnowClassError
 
 
-class LamSlotMag(LamSlot):
+class LamSlotMag(LamSlotM):
     """Lamination with Slot for Magnets"""
 
     VERSION = 1
@@ -142,59 +122,6 @@ class LamSlotMag(LamSlot):
         )
     else:
         comp_volumes = comp_volumes
-    # cf Methods.Machine.LamSlotMag.plot
-    if isinstance(plot, ImportError):
-        plot = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use LamSlotMag method plot: " + str(plot))
-            )
-        )
-    else:
-        plot = plot
-    # cf Methods.Machine.LamSlotMag.comp_angle_d_axis
-    if isinstance(comp_angle_d_axis, ImportError):
-        comp_angle_d_axis = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use LamSlotMag method comp_angle_d_axis: "
-                    + str(comp_angle_d_axis)
-                )
-            )
-        )
-    else:
-        comp_angle_d_axis = comp_angle_d_axis
-    # cf Methods.Machine.LamSlotMag.get_magnet_number
-    if isinstance(get_magnet_number, ImportError):
-        get_magnet_number = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use LamSlotMag method get_magnet_number: "
-                    + str(get_magnet_number)
-                )
-            )
-        )
-    else:
-        get_magnet_number = get_magnet_number
-    # cf Methods.Machine.LamSlotMag.set_Lmag
-    if isinstance(set_Lmag, ImportError):
-        set_Lmag = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use LamSlotMag method set_Lmag: " + str(set_Lmag))
-            )
-        )
-    else:
-        set_Lmag = set_Lmag
-    # cf Methods.Machine.LamSlotMag.get_dim_active
-    if isinstance(get_dim_active, ImportError):
-        get_dim_active = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use LamSlotMag method get_dim_active: " + str(get_dim_active)
-                )
-            )
-        )
-    else:
-        get_dim_active = get_dim_active
     # cf Methods.Machine.LamSlotMag.get_all_mag_obj
     if isinstance(get_all_mag_obj, ImportError):
         get_all_mag_obj = property(
@@ -219,6 +146,15 @@ class LamSlotMag(LamSlot):
         )
     else:
         get_magnet_by_label = get_magnet_by_label
+    # cf Methods.Machine.LamSlotMag.set_Lmag
+    if isinstance(set_Lmag, ImportError):
+        set_Lmag = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use LamSlotMag method set_Lmag: " + str(set_Lmag))
+            )
+        )
+    else:
+        set_Lmag = set_Lmag
     # generic save method is available in all object
     save = save
     # get_logger method is available in all object
@@ -300,10 +236,10 @@ class LamSlotMag(LamSlot):
                 yoke = init_dict["yoke"]
         # Set the properties (value check and convertion are done in setter)
         self.magnet = magnet
-        self.mur_lin_matrix = mur_lin_matrix
-        self.Brm20_matrix = Brm20_matrix
-        # Call LamSlot init
+        # Call LamSlotM init
         super(LamSlotMag, self).__init__(
+            mur_lin_matrix=mur_lin_matrix,
+            Brm20_matrix=Brm20_matrix,
             slot=slot,
             L1=L1,
             mat_type=mat_type,
@@ -320,34 +256,20 @@ class LamSlotMag(LamSlot):
             bore=bore,
             yoke=yoke,
         )
-        # The class is frozen (in LamSlot init), for now it's impossible to
+        # The class is frozen (in LamSlotM init), for now it's impossible to
         # add new properties
 
     def __str__(self):
         """Convert this object in a readeable string (for print)"""
 
         LamSlotMag_str = ""
-        # Get the properties inherited from LamSlot
+        # Get the properties inherited from LamSlotM
         LamSlotMag_str += super(LamSlotMag, self).__str__()
         if self.magnet is not None:
             tmp = self.magnet.__str__().replace(linesep, linesep + "\t").rstrip("\t")
             LamSlotMag_str += "magnet = " + tmp
         else:
             LamSlotMag_str += "magnet = None" + linesep + linesep
-        LamSlotMag_str += (
-            "mur_lin_matrix = "
-            + linesep
-            + str(self.mur_lin_matrix).replace(linesep, linesep + "\t")
-            + linesep
-            + linesep
-        )
-        LamSlotMag_str += (
-            "Brm20_matrix = "
-            + linesep
-            + str(self.Brm20_matrix).replace(linesep, linesep + "\t")
-            + linesep
-            + linesep
-        )
         return LamSlotMag_str
 
     def __eq__(self, other):
@@ -356,14 +278,10 @@ class LamSlotMag(LamSlot):
         if type(other) != type(self):
             return False
 
-        # Check the properties inherited from LamSlot
+        # Check the properties inherited from LamSlotM
         if not super(LamSlotMag, self).__eq__(other):
             return False
         if other.magnet != self.magnet:
-            return False
-        if not array_equal(other.mur_lin_matrix, self.mur_lin_matrix):
-            return False
-        if not array_equal(other.Brm20_matrix, self.Brm20_matrix):
             return False
         return True
 
@@ -376,7 +294,7 @@ class LamSlotMag(LamSlot):
             return ["type(" + name + ")"]
         diff_list = list()
 
-        # Check the properties inherited from LamSlot
+        # Check the properties inherited from LamSlotM
         diff_list.extend(
             super(LamSlotMag, self).compare(
                 other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
@@ -395,10 +313,6 @@ class LamSlotMag(LamSlot):
                     is_add_value=is_add_value,
                 )
             )
-        if not array_equal(other.mur_lin_matrix, self.mur_lin_matrix):
-            diff_list.append(name + ".mur_lin_matrix")
-        if not array_equal(other.Brm20_matrix, self.Brm20_matrix):
-            diff_list.append(name + ".Brm20_matrix")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -408,11 +322,9 @@ class LamSlotMag(LamSlot):
 
         S = 0  # Full size of the object
 
-        # Get size of the properties inherited from LamSlot
+        # Get size of the properties inherited from LamSlotM
         S += super(LamSlotMag, self).__sizeof__()
         S += getsizeof(self.magnet)
-        S += getsizeof(self.mur_lin_matrix)
-        S += getsizeof(self.Brm20_matrix)
         return S
 
     def as_dict(self, type_handle_ndarray=0, keep_function=False, **kwargs):
@@ -426,7 +338,7 @@ class LamSlotMag(LamSlot):
         and may prevent json serializability.
         """
 
-        # Get the properties inherited from LamSlot
+        # Get the properties inherited from LamSlotM
         LamSlotMag_dict = super(LamSlotMag, self).as_dict(
             type_handle_ndarray=type_handle_ndarray,
             keep_function=keep_function,
@@ -440,32 +352,6 @@ class LamSlotMag(LamSlot):
                 keep_function=keep_function,
                 **kwargs
             )
-        if self.mur_lin_matrix is None:
-            LamSlotMag_dict["mur_lin_matrix"] = None
-        else:
-            if type_handle_ndarray == 0:
-                LamSlotMag_dict["mur_lin_matrix"] = self.mur_lin_matrix.tolist()
-            elif type_handle_ndarray == 1:
-                LamSlotMag_dict["mur_lin_matrix"] = self.mur_lin_matrix.copy()
-            elif type_handle_ndarray == 2:
-                LamSlotMag_dict["mur_lin_matrix"] = self.mur_lin_matrix
-            else:
-                raise Exception(
-                    "Unknown type_handle_ndarray: " + str(type_handle_ndarray)
-                )
-        if self.Brm20_matrix is None:
-            LamSlotMag_dict["Brm20_matrix"] = None
-        else:
-            if type_handle_ndarray == 0:
-                LamSlotMag_dict["Brm20_matrix"] = self.Brm20_matrix.tolist()
-            elif type_handle_ndarray == 1:
-                LamSlotMag_dict["Brm20_matrix"] = self.Brm20_matrix.copy()
-            elif type_handle_ndarray == 2:
-                LamSlotMag_dict["Brm20_matrix"] = self.Brm20_matrix
-            else:
-                raise Exception(
-                    "Unknown type_handle_ndarray: " + str(type_handle_ndarray)
-                )
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         LamSlotMag_dict["__class__"] = "LamSlotMag"
@@ -555,9 +441,7 @@ class LamSlotMag(LamSlot):
 
         if self.magnet is not None:
             self.magnet._set_None()
-        self.mur_lin_matrix = None
-        self.Brm20_matrix = None
-        # Set to None the properties inherited from LamSlot
+        # Set to None the properties inherited from LamSlotM
         super(LamSlotMag, self)._set_None()
 
     def _get_magnet(self):
@@ -594,55 +478,5 @@ class LamSlotMag(LamSlot):
         doc=u"""Magnet of the lamination
 
         :Type: Magnet
-        """,
-    )
-
-    def _get_mur_lin_matrix(self):
-        """getter of mur_lin_matrix"""
-        return self._mur_lin_matrix
-
-    def _set_mur_lin_matrix(self, value):
-        """setter of mur_lin_matrix"""
-        if type(value) is int and value == -1:
-            value = array([])
-        elif type(value) is list:
-            try:
-                value = array(value)
-            except:
-                pass
-        check_var("mur_lin_matrix", value, "ndarray")
-        self._mur_lin_matrix = value
-
-    mur_lin_matrix = property(
-        fget=_get_mur_lin_matrix,
-        fset=_set_mur_lin_matrix,
-        doc=u"""Matrix to enforce a different relative magnetic permeability for each magnet layer (shape: [Nrad, Ntan, Zs])
-
-        :Type: ndarray
-        """,
-    )
-
-    def _get_Brm20_matrix(self):
-        """getter of Brm20_matrix"""
-        return self._Brm20_matrix
-
-    def _set_Brm20_matrix(self, value):
-        """setter of Brm20_matrix"""
-        if type(value) is int and value == -1:
-            value = array([])
-        elif type(value) is list:
-            try:
-                value = array(value)
-            except:
-                pass
-        check_var("Brm20_matrix", value, "ndarray")
-        self._Brm20_matrix = value
-
-    Brm20_matrix = property(
-        fget=_get_Brm20_matrix,
-        fset=_set_Brm20_matrix,
-        doc=u"""Matrix to enforce a different magnet remanence induction at 20degC for each magnet layer (shape: [Nrad, Ntan, Zs])
-
-        :Type: ndarray
         """,
     )
