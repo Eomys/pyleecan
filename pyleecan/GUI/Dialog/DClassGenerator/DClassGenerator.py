@@ -1,8 +1,5 @@
-from os.path import basename, join, dirname, isfile, isdir
+from os.path import join, isfile, isdir
 import os
-from logging import getLogger
-from ....Functions.GUI.log_error import log_error
-from ....loggers import GUI_LOG_NAME
 from PySide2.QtCore import Qt, Signal, QDir
 
 from functools import partial
@@ -15,7 +12,6 @@ from PySide2.QtWidgets import (
     QLabel,
     QLineEdit,
     QDesktopWidget,
-    QAbstractScrollArea,
     QHeaderView,
     QPushButton,
     QTableWidgetItem,
@@ -23,26 +19,15 @@ from PySide2.QtWidgets import (
 
 import subprocess
 
-from PySide2.QtGui import QColor
-
-from ....Functions.load import load, load_machine_materials
-from ..DMachineSetup import mach_index, mach_list
 from ..DClassGenerator.Ui_DClassGenerator import Ui_DClassGenerator
 
-# from ..DMachineSetup.SPreview.SPreview import SPreview
-# from ..DMachineSetup.SSimu.SSimu import SSimu
-from ....definitions import config_dict, DOC_DIR, PACKAGE_NAME, MAIN_DIR, ROOT_DIR
+from ....definitions import DOC_DIR, PACKAGE_NAME, MAIN_DIR
 
-from ....Classes.Machine import Machine
 from ...Tools.WPathSelector.WPathSelector import WPathSelector
 from ...Tools.FloatEdit import FloatEdit
 from ....Generator.read_fct import read_file
 from ....Generator.run_generate_classes import run_generate_classes
 from ....Generator.write_fct import write_file, MATCH_META_DICT, MATCH_PROP_DICT
-
-# Flag for set the enable property of w_nav (List_Widget)
-DISABLE_ITEM = Qt.NoItemFlags
-ENABLE_ITEM = Qt.ItemIsSelectable | Qt.ItemIsEnabled
 
 MAX_WIDTH_TREEVIEW = 300
 
@@ -322,6 +307,8 @@ class DClassGenerator(Ui_DClassGenerator, QWidget):
         """
         new_class_dict = dict()
 
+        new_class_dict["name"] = self.current_class_dict["name"]
+
         new_class_dict["path"] = self.current_class_dict["path"]
 
         # Read property table
@@ -330,7 +317,7 @@ class DClassGenerator(Ui_DClassGenerator, QWidget):
             prop_dict = dict()
             for col in range(self.table_prop.columnCount()):
                 val = self.table_prop.cellWidget(row, col).text()
-                prop_dict[self.list_prop[col]] = val
+                prop_dict[MATCH_PROP_DICT[self.list_prop[col]]] = val
             prop_list.append(prop_dict)
         new_class_dict["properties"] = prop_list
 
@@ -342,9 +329,20 @@ class DClassGenerator(Ui_DClassGenerator, QWidget):
         new_class_dict["methods"] = meth_list
 
         # Read meta data table
+        # Handle constants separately
+        cst_list = list()
         for col in range(self.table_meta.columnCount()):
-            val = self.table_meth.cellWidget(row, 0).text()
-            new_class_dict[self.list_meta[0]] = val
+            if "Constant" in self.list_meta[col]:
+                # Recreate list of constants dict
+                for row in range(1, self.table_meta.rowCount(), 1):
+                    val = self.table_meta.cellWidget(row, col).text()
+                    if len(cst_list) < row:
+                        cst_list.append(dict())
+                    cst_list[row - 1][MATCH_META_DICT[self.list_meta[col]][1]] = val
+                new_class_dict[MATCH_META_DICT[self.list_meta[col]][0]] = cst_list
+            else:
+                val = self.table_meta.cellWidget(1, col).text()
+                new_class_dict[MATCH_META_DICT[self.list_meta[col]]] = val
 
         # Write class into csv format
         write_file(new_class_dict)

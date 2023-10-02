@@ -11,6 +11,7 @@ from PySide2.QtWidgets import *
 
 from pyleecan.GUI.Resources import pyleecan_rc
 
+
 class Ui_DClassGenerator(object):
     def setupUi(self, DClassGenerator):
         if not DClassGenerator.objectName():
@@ -50,7 +51,9 @@ class Ui_DClassGenerator(object):
         self.horizontalLayout = QHBoxLayout(self.widget)
         self.horizontalLayout.setObjectName(u"horizontalLayout")
         self.horizontalLayout.setContentsMargins(0, 0, 0, 0)
-        self.horizontalSpacer = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
+        self.horizontalSpacer = QSpacerItem(
+            40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum
+        )
 
         self.horizontalLayout.addItem(self.horizontalSpacer)
 
@@ -71,23 +74,52 @@ class Ui_DClassGenerator(object):
 
         self.gridLayout.addWidget(self.b_genclass, 1, 1, 1, 1)
 
-
         self.horizontalLayout.addLayout(self.gridLayout)
-
 
         self.retranslateUi(DClassGenerator)
 
         QMetaObject.connectSlotsByName(DClassGenerator)
+
     # setupUi
 
     def retranslateUi(self, DClassGenerator):
-        DClassGenerator.setWindowTitle(QCoreApplication.translate("DClassGenerator", u"Pyleecan Class Generator", None))
-        self.b_browse.setText(QCoreApplication.translate("DClassGenerator", u"Browse", None))
-        self.lab_param.setText(QCoreApplication.translate("DClassGenerator", u"<html><head/><body><p><span style=\" font-family:'DejaVu Sans'; font-size:12pt; font-weight:700;\">Properties</span></p></body></html>", None))
-        self.lab_methods.setText(QCoreApplication.translate("DClassGenerator", u"<html><head/><body><p><span style=\" font-family:'DejaVu Sans'; font-size:12pt; font-weight:700;\">Methods</span></p></body></html>", None))
-        self.lab_meta.setText(QCoreApplication.translate("DClassGenerator", u"<html><head/><body><p><span style=\" font-family:'DejaVu Sans'; font-size:12pt; font-weight:700;\">Metadata</span></p></body></html>", None))
-        self.b_saveclass.setText(QCoreApplication.translate("DClassGenerator", u"Save current class", None))
-        self.is_black.setText(QCoreApplication.translate("DClassGenerator", u"Format with black", None))
-        self.b_genclass.setText(QCoreApplication.translate("DClassGenerator", u"Generate all classes", None))
-    # retranslateUi
+        DClassGenerator.setWindowTitle(
+            QCoreApplication.translate(
+                "DClassGenerator", u"Pyleecan Class Generator", None
+            )
+        )
+        self.b_browse.setText(
+            QCoreApplication.translate("DClassGenerator", u"Browse", None)
+        )
+        self.lab_param.setText(
+            QCoreApplication.translate(
+                "DClassGenerator",
+                u"<html><head/><body><p><span style=\" font-family:'DejaVu Sans'; font-size:12pt; font-weight:700;\">Properties</span></p></body></html>",
+                None,
+            )
+        )
+        self.lab_methods.setText(
+            QCoreApplication.translate(
+                "DClassGenerator",
+                u"<html><head/><body><p><span style=\" font-family:'DejaVu Sans'; font-size:12pt; font-weight:700;\">Methods</span></p></body></html>",
+                None,
+            )
+        )
+        self.lab_meta.setText(
+            QCoreApplication.translate(
+                "DClassGenerator",
+                u"<html><head/><body><p><span style=\" font-family:'DejaVu Sans'; font-size:12pt; font-weight:700;\">Metadata</span></p></body></html>",
+                None,
+            )
+        )
+        self.b_saveclass.setText(
+            QCoreApplication.translate("DClassGenerator", u"Save current class", None)
+        )
+        self.is_black.setText(
+            QCoreApplication.translate("DClassGenerator", u"Format with black", None)
+        )
+        self.b_genclass.setText(
+            QCoreApplication.translate("DClassGenerator", u"Generate all classes", None)
+        )
 
+    # retranslateUi
