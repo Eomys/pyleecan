@@ -16,88 +16,59 @@ class Ui_DClassGenerator(object):
         if not DClassGenerator.objectName():
             DClassGenerator.setObjectName(u"DClassGenerator")
         DClassGenerator.resize(1828, 831)
+        self.treeView = QTreeView(DClassGenerator)
+        self.treeView.setObjectName(u"treeView")
+        self.treeView.setGeometry(QRect(12, 64, 256, 681))
+        self.path_selector = QWidget(DClassGenerator)
+        self.path_selector.setObjectName(u"path_selector")
+        self.path_selector.setGeometry(QRect(11, 1, 1809, 16))
+        self.path_selector.setMinimumSize(QSize(1039, 0))
+        self.b_browse = QPushButton(DClassGenerator)
+        self.b_browse.setObjectName(u"b_browse")
+        self.b_browse.setGeometry(QRect(360, 320, 81, 31))
+        self.lab_param = QLabel(DClassGenerator)
+        self.lab_param.setObjectName(u"lab_param")
+        self.lab_param.setGeometry(QRect(280, 35, 101, 21))
+        self.lab_methods = QLabel(DClassGenerator)
+        self.lab_methods.setObjectName(u"lab_methods")
+        self.lab_methods.setGeometry(QRect(280, 330, 101, 21))
+        self.lab_meta = QLabel(DClassGenerator)
+        self.lab_meta.setObjectName(u"lab_meta")
+        self.lab_meta.setGeometry(QRect(280, 640, 101, 21))
         self.widget = QWidget(DClassGenerator)
         self.widget.setObjectName(u"widget")
-        self.widget.setGeometry(QRect(10, 0, 1811, 828))
-        self.verticalLayout_2 = QVBoxLayout(self.widget)
-        self.verticalLayout_2.setObjectName(u"verticalLayout_2")
-        self.verticalLayout_2.setContentsMargins(0, 0, 0, 0)
-        self.path_selector = QWidget(self.widget)
-        self.path_selector.setObjectName(u"path_selector")
-        self.path_selector.setMinimumSize(QSize(1039, 0))
-
-        self.verticalLayout_2.addWidget(self.path_selector)
-
-        self.verticalSpacer_4 = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
-
-        self.verticalLayout_2.addItem(self.verticalSpacer_4)
-
-        self.horizontalLayout_4 = QHBoxLayout()
-        self.horizontalLayout_4.setObjectName(u"horizontalLayout_4")
-        self.treeView = QTreeView(self.widget)
-        self.treeView.setObjectName(u"treeView")
-
-        self.horizontalLayout_4.addWidget(self.treeView)
-
-        self.verticalLayout = QVBoxLayout()
-        self.verticalLayout.setObjectName(u"verticalLayout")
-        self.table_prop = QTableWidget(self.widget)
-        self.table_prop.setObjectName(u"table_prop")
-
-        self.verticalLayout.addWidget(self.table_prop)
-
-        self.verticalSpacer_2 = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
-
-        self.verticalLayout.addItem(self.verticalSpacer_2)
-
-        self.table_meth = QTableWidget(self.widget)
-        self.table_meth.setObjectName(u"table_meth")
-
-        self.verticalLayout.addWidget(self.table_meth)
-
-        self.verticalSpacer_3 = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
-
-        self.verticalLayout.addItem(self.verticalSpacer_3)
-
-        self.table_meta = QTableWidget(self.widget)
-        self.table_meta.setObjectName(u"table_meta")
-
-        self.verticalLayout.addWidget(self.table_meta)
-
-
-        self.horizontalLayout_4.addLayout(self.verticalLayout)
-
-
-        self.verticalLayout_2.addLayout(self.horizontalLayout_4)
-
-        self.verticalSpacer_5 = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
-
-        self.verticalLayout_2.addItem(self.verticalSpacer_5)
-
-        self.horizontalLayout_3 = QHBoxLayout()
+        self.widget.setGeometry(QRect(715, 799, 411, 28))
+        self.horizontalLayout_3 = QHBoxLayout(self.widget)
         self.horizontalLayout_3.setObjectName(u"horizontalLayout_3")
+        self.horizontalLayout_3.setContentsMargins(0, 0, 0, 0)
         self.horizontalSpacer = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
 
         self.horizontalLayout_3.addItem(self.horizontalSpacer)
 
         self.horizontalLayout = QHBoxLayout()
         self.horizontalLayout.setObjectName(u"horizontalLayout")
-        self.b_load = QPushButton(self.widget)
-        self.b_load.setObjectName(u"b_load")
+        self.b_genclass = QPushButton(self.widget)
+        self.b_genclass.setObjectName(u"b_genclass")
 
-        self.horizontalLayout.addWidget(self.b_load)
+        self.horizontalLayout.addWidget(self.b_genclass)
 
-        self.b_save = QPushButton(self.widget)
-        self.b_save.setObjectName(u"b_save")
+        self.b_saveclass = QPushButton(self.widget)
+        self.b_saveclass.setObjectName(u"b_saveclass")
 
-        self.horizontalLayout.addWidget(self.b_save)
+        self.horizontalLayout.addWidget(self.b_saveclass)
 
 
         self.horizontalLayout_3.addLayout(self.horizontalLayout)
 
-
-        self.verticalLayout_2.addLayout(self.horizontalLayout_3)
-
+        self.table_prop = QTableWidget(DClassGenerator)
+        self.table_prop.setObjectName(u"table_prop")
+        self.table_prop.setGeometry(QRect(275, 65, 851, 251))
+        self.table_meta = QTableWidget(DClassGenerator)
+        self.table_meta.setObjectName(u"table_meta")
+        self.table_meta.setGeometry(QRect(275, 664, 851, 81))
+        self.table_meth = QTableWidget(DClassGenerator)
+        self.table_meth.setObjectName(u"table_meth")
+        self.table_meth.setGeometry(QRect(280, 360, 841, 261))
 
         self.retranslateUi(DClassGenerator)
 
@@ -106,7 +77,11 @@ class Ui_DClassGenerator(object):
 
     def retranslateUi(self, DClassGenerator):
         DClassGenerator.setWindowTitle(QCoreApplication.translate("DClassGenerator", u"Pyleecan Class Generator", None))
-        self.b_load.setText(QCoreApplication.translate("DClassGenerator", u"Load", None))
-        self.b_save.setText(QCoreApplication.translate("DClassGenerator", u"Save", None))
+        self.b_browse.setText(QCoreApplication.translate("DClassGenerator", u"Browse", None))
+        self.lab_param.setText(QCoreApplication.translate("DClassGenerator", u"<html><head/><body><p><span style=\" font-family:'DejaVu Sans'; font-size:12pt; font-weight:700;\">Properties</span></p></body></html>", None))
+        self.lab_methods.setText(QCoreApplication.translate("DClassGenerator", u"<html><head/><body><p><span style=\" font-family:'DejaVu Sans'; font-size:12pt; font-weight:700;\">Methods</span></p></body></html>", None))
+        self.lab_meta.setText(QCoreApplication.translate("DClassGenerator", u"<html><head/><body><p><span style=\" font-family:'DejaVu Sans'; font-size:12pt; font-weight:700;\">Metadata</span></p></body></html>", None))
+        self.b_genclass.setText(QCoreApplication.translate("DClassGenerator", u"Generate all classes", None))
+        self.b_saveclass.setText(QCoreApplication.translate("DClassGenerator", u"Save current class", None))
     # retranslateUi
 
