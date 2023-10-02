@@ -37,6 +37,7 @@ from ....Classes.Machine import Machine
 from ...Tools.WPathSelector.WPathSelector import WPathSelector
 from ...Tools.FloatEdit import FloatEdit
 from ....Generator.read_fct import read_file
+from ....Generator.run_generate_classes import run_generate_classes
 from ....Generator.write_fct import write_file, MATCH_META_DICT, MATCH_PROP_DICT
 
 # Flag for set the enable property of w_nav (List_Widget)
@@ -153,7 +154,7 @@ class DClassGenerator(Ui_DClassGenerator, QWidget):
         # Connect treeview to methods
         self.treeView.collapsed.connect(self.onItemCollapse)
         self.treeView.expanded.connect(self.onItemExpand)
-        self.treeView.clicked.connect(self.update_class)
+        self.treeView.clicked.connect(self.load_class)
         self.treeView.customContextMenuRequested.connect(self.openContextMenu)
 
         # Disable browse button
@@ -164,9 +165,10 @@ class DClassGenerator(Ui_DClassGenerator, QWidget):
 
         # Connect generate class button
         self.b_genclass.clicked.connect(self.genClass)
+        self.is_black.setChecked(True)
 
-    def update_class(self, point):
-        """Update tables when clicking on a csv files
+    def load_class(self, point):
+        """Fill tables when clicking on a csv files
 
         Parameters
         ----------
@@ -209,7 +211,7 @@ class DClassGenerator(Ui_DClassGenerator, QWidget):
             # Store current class dict for further use
             self.current_class_dict = current_class_dict
 
-            # Update table of properties
+            # Fill table of properties
             prop_list = current_class_dict["properties"]
             # Set the number of rows to the number of properties (first row are labels)
             self.table_prop.setRowCount(len(prop_list) + 1)
@@ -232,7 +234,7 @@ class DClassGenerator(Ui_DClassGenerator, QWidget):
             self.b_browse.clicked.connect(lambda: self.browseMethod(folder_path))
             self.b_browse.setEnabled(isdir(folder_path))
 
-            # Update table of methods
+            # Fill table of methods
             # Set the number of rows to the number of methods (first row are labels)
             self.table_meth.setRowCount(len(current_class_dict["methods"]))
             for row, meth in enumerate(current_class_dict["methods"]):
@@ -251,11 +253,9 @@ class DClassGenerator(Ui_DClassGenerator, QWidget):
                 self.table_meth.setCellWidget(row, 1, b_open)
             self.table_meth.resizeColumnsToContents()
 
-            # Update table of metadata
+            # Fill metadata table
             # Set the number of rows to the number of metadata (first row are labels)
             self.table_meta.setRowCount(2)
-
-            # Loop metadata and fill tables
             for col, meta_name in enumerate(self.list_meta):
                 if isinstance(MATCH_META_DICT[meta_name], list):
                     meta_prop = current_class_dict[MATCH_META_DICT[meta_name][0]]
@@ -282,7 +282,7 @@ class DClassGenerator(Ui_DClassGenerator, QWidget):
                     line_edit.setAlignment(Qt.AlignLeft)
                     self.table_meta.setCellWidget(1, col, line_edit)
 
-            # Disable rows in case of several constants
+            # Disable unused rows in case of several constants
             if self.table_meta.rowCount() > 2:
                 for row in range(2, self.table_meta.rowCount(), 1):
                     for col, meta_name in enumerate(self.list_meta):
@@ -320,9 +320,34 @@ class DClassGenerator(Ui_DClassGenerator, QWidget):
         self : DClassGenerator
             A DClassGenerator object
         """
+        new_class_dict = dict()
+
+        new_class_dict["path"] = self.current_class_dict["path"]
+
+        # Read property table
+        prop_list = list()
+        for row in range(1, self.table_prop.rowCount(), 1):
+            prop_dict = dict()
+            for col in range(self.table_prop.columnCount()):
+                val = self.table_prop.cellWidget(row, col).text()
+                prop_dict[self.list_prop[col]] = val
+            prop_list.append(prop_dict)
+        new_class_dict["properties"] = prop_list
+
+        # Read method table
+        meth_list = list()
+        for row in range(self.table_meth.rowCount()):
+            val = self.table_meth.cellWidget(row, 0).text()
+            meth_list.append(val)
+        new_class_dict["methods"] = meth_list
+
+        # Read meta data table
+        for col in range(self.table_meta.columnCount()):
+            val = self.table_meth.cellWidget(row, 0).text()
+            new_class_dict[self.list_meta[0]] = val
 
         # Write class into csv format
-        write_file(self.current_class_dict)
+        write_file(new_class_dict)
 
     def genClass(self):
         """Generate class from csv files
@@ -332,8 +357,7 @@ class DClassGenerator(Ui_DClassGenerator, QWidget):
         self : DClassGenerator
             A DClassGenerator object
         """
-
-        pass
+        run_generate_classes(is_black=self.is_black.isChecked())
 
     def openContextMenu(self, point):
         """Generate and open context the menu at the given point position."""

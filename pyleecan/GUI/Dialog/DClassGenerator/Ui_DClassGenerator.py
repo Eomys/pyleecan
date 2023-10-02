@@ -35,31 +35,6 @@ class Ui_DClassGenerator(object):
         self.lab_meta = QLabel(DClassGenerator)
         self.lab_meta.setObjectName(u"lab_meta")
         self.lab_meta.setGeometry(QRect(280, 640, 101, 21))
-        self.widget = QWidget(DClassGenerator)
-        self.widget.setObjectName(u"widget")
-        self.widget.setGeometry(QRect(715, 799, 411, 28))
-        self.horizontalLayout_3 = QHBoxLayout(self.widget)
-        self.horizontalLayout_3.setObjectName(u"horizontalLayout_3")
-        self.horizontalLayout_3.setContentsMargins(0, 0, 0, 0)
-        self.horizontalSpacer = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
-
-        self.horizontalLayout_3.addItem(self.horizontalSpacer)
-
-        self.horizontalLayout = QHBoxLayout()
-        self.horizontalLayout.setObjectName(u"horizontalLayout")
-        self.b_genclass = QPushButton(self.widget)
-        self.b_genclass.setObjectName(u"b_genclass")
-
-        self.horizontalLayout.addWidget(self.b_genclass)
-
-        self.b_saveclass = QPushButton(self.widget)
-        self.b_saveclass.setObjectName(u"b_saveclass")
-
-        self.horizontalLayout.addWidget(self.b_saveclass)
-
-
-        self.horizontalLayout_3.addLayout(self.horizontalLayout)
-
         self.table_prop = QTableWidget(DClassGenerator)
         self.table_prop.setObjectName(u"table_prop")
         self.table_prop.setGeometry(QRect(275, 65, 851, 251))
@@ -69,6 +44,36 @@ class Ui_DClassGenerator(object):
         self.table_meth = QTableWidget(DClassGenerator)
         self.table_meth.setObjectName(u"table_meth")
         self.table_meth.setGeometry(QRect(280, 360, 841, 261))
+        self.widget = QWidget(DClassGenerator)
+        self.widget.setObjectName(u"widget")
+        self.widget.setGeometry(QRect(14, 760, 1111, 58))
+        self.horizontalLayout = QHBoxLayout(self.widget)
+        self.horizontalLayout.setObjectName(u"horizontalLayout")
+        self.horizontalLayout.setContentsMargins(0, 0, 0, 0)
+        self.horizontalSpacer = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
+
+        self.horizontalLayout.addItem(self.horizontalSpacer)
+
+        self.gridLayout = QGridLayout()
+        self.gridLayout.setObjectName(u"gridLayout")
+        self.b_saveclass = QPushButton(self.widget)
+        self.b_saveclass.setObjectName(u"b_saveclass")
+
+        self.gridLayout.addWidget(self.b_saveclass, 0, 1, 1, 1)
+
+        self.is_black = QCheckBox(self.widget)
+        self.is_black.setObjectName(u"is_black")
+
+        self.gridLayout.addWidget(self.is_black, 1, 0, 1, 1)
+
+        self.b_genclass = QPushButton(self.widget)
+        self.b_genclass.setObjectName(u"b_genclass")
+
+        self.gridLayout.addWidget(self.b_genclass, 1, 1, 1, 1)
+
+
+        self.horizontalLayout.addLayout(self.gridLayout)
+
 
         self.retranslateUi(DClassGenerator)
 
@@ -81,7 +86,8 @@ class Ui_DClassGenerator(object):
         self.lab_param.setText(QCoreApplication.translate("DClassGenerator", u"<html><head/><body><p><span style=\" font-family:'DejaVu Sans'; font-size:12pt; font-weight:700;\">Properties</span></p></body></html>", None))
         self.lab_methods.setText(QCoreApplication.translate("DClassGenerator", u"<html><head/><body><p><span style=\" font-family:'DejaVu Sans'; font-size:12pt; font-weight:700;\">Methods</span></p></body></html>", None))
         self.lab_meta.setText(QCoreApplication.translate("DClassGenerator", u"<html><head/><body><p><span style=\" font-family:'DejaVu Sans'; font-size:12pt; font-weight:700;\">Metadata</span></p></body></html>", None))
-        self.b_genclass.setText(QCoreApplication.translate("DClassGenerator", u"Generate all classes", None))
         self.b_saveclass.setText(QCoreApplication.translate("DClassGenerator", u"Save current class", None))
+        self.is_black.setText(QCoreApplication.translate("DClassGenerator", u"Format with black", None))
+        self.b_genclass.setText(QCoreApplication.translate("DClassGenerator", u"Generate all classes", None))
     # retranslateUi
 

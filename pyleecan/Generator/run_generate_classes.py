@@ -101,39 +101,49 @@ def generate_code(root_path, gen_dict=None, soft_name="pyleecan", is_log=True):
         json.dump(gen_dict, json_file, sort_keys=True, indent=4, separators=(",", ": "))
 
 
-if __name__ == "__main__":
+def run_generate_classes(
+    doc_dir=DOC_DIR,
+    int_dir=INT_DIR,
+    main_dir=MAIN_DIR,
+    is_black=True,
+    soft_name=soft_name,
+    is_log=is_log,
+):
+    """Main function to generate classes"""
+
     IS_SDT = False
     SDT_PATH = ""  # To fill
+
     if IS_SDT:
-        MAIN_DIR = join(SDT_PATH, "SciDataTool")
-        DOC_DIR = join(MAIN_DIR, "Generator", "ClassesRef")
-        INT_DIR = join(MAIN_DIR, "Generator", "Internal")
+        main_dir = join(SDT_PATH, "SciDataTool")
+        doc_dir = join(main_dir, "Generator", "ClassesRef")
+        int_dir = join(main_dir, "Generator", "Internal")
         soft_name = "SciDataTool"
         is_log = False
-    gen_dict = read_all(
-        DOC_DIR,
-        is_internal=False,
-        in_path=INT_DIR,
-        soft_name=soft_name,
-    )
-    generate_code(
-        MAIN_DIR,
-        gen_dict,
-        soft_name=soft_name,
-        is_log=is_log,
-    )
-    # Run black
-    try:
-        import black
 
-        system('"{}" -m black {}'.format(sys.executable, MAIN_DIR))
-        if black.__version__.split(".")[0] != "20":
-            print("\n############################################")
-            print(
-                "WARNING: The official version of black for pyleecan is 20, please update your black version"
-            )
-            print("############################################\n")
-    except ImportError:
-        print("/!\\ Please install and run black (version 20) /!\\")
+    gen_dict = read_all(
+        doc_dir, is_internal=False, in_path=int_dir, soft_name=soft_name
+    )
+
+    generate_code(main_dir, gen_dict, soft_name=soft_name, is_log=is_log)
+
+    if is_black:
+        # Run black
+        try:
+            import black
+
+            system('"{}" -m black {}'.format(sys.executable, main_dir))
+            if black.__version__.split(".")[0] != "20":
+                print("\n############################################")
+                print(
+                    "WARNING: The official version of black for pyleecan is 20, please update your black version"
+                )
+                print("############################################\n")
+        except ImportError:
+            print("/!\\ Please install and run black (version 20) /!\\")
     now = datetime.now()
     print("End at: ", now.strftime("%H:%M:%S"))
+
+
+if __name__ == "__main__":
+    run_generate_classes()
