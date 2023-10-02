@@ -1,4 +1,5 @@
 from os.path import join, isfile, isdir
+from shutil import copyfile
 import os
 from PySide2.QtCore import Qt, Signal, QDir
 
@@ -118,7 +119,7 @@ class DClassGenerator(Ui_DClassGenerator, QWidget):
 
         # Init table of methods
         self.table_meth.setMinimumWidth(max_width - MAX_WIDTH_TREEVIEW)
-        self.table_meth.setColumnCount(3)
+        self.table_meth.setColumnCount(4)
         self.table_meth.horizontalHeader().hide()
         self.table_meth.verticalHeader().hide()
 
@@ -239,14 +240,9 @@ class DClassGenerator(Ui_DClassGenerator, QWidget):
                     line_edit = QLineEdit(str(data))
                     line_edit.setAlignment(Qt.AlignLeft)
                     self.table_prop.setCellWidget(row + 1, col, line_edit)
-            # Add delete button
-            b_del_prop = QPushButton(text="Delete", parent=self.table_prop)
-            b_del_prop.clicked.connect(partial(self.deleteProp, row + 1))
-            self.table_prop.setCellWidget(row + 1, col + 1, b_del_prop)
-            # Add duplicate button
-            b_dup_prop = QPushButton(text="Duplicate", parent=self.table_prop)
-            b_dup_prop.clicked.connect(partial(self.duplicateProp, row + 1))
-            self.table_prop.setCellWidget(row + 1, col + 2, b_dup_prop)
+            # Add property buttons
+            self.addRowButtonsProp(row + 1)
+
         self.table_prop.resizeColumnsToContents()
 
     def fill_table_meth(self):
@@ -263,7 +259,12 @@ class DClassGenerator(Ui_DClassGenerator, QWidget):
         folder_path = join(
             MAIN_DIR, "Methods", self.current_module, self.current_class_dict["name"]
         )
-        self.b_browse.clicked.connect(lambda: self.browseMethod(folder_path))
+        try:
+            # Disconnect browse button in case it already contains a folder_path from previous class
+            self.b_browse.clicked.disconnect()
+        except Exception:
+            pass
+        self.b_browse.clicked.connect(partial(self.browseMethod, folder_path))
         self.b_browse.setEnabled(isdir(folder_path))
 
         # Fill table of methods
@@ -274,15 +275,13 @@ class DClassGenerator(Ui_DClassGenerator, QWidget):
             line_edit = QLineEdit(str(meth))
             line_edit.setAlignment(Qt.AlignLeft)
             self.table_meth.setCellWidget(row, 0, line_edit)
-            # Create Open button
+            # Add open button
             if "." in meth:
                 meth_split = meth.split(".")
                 meth = join(*meth_split)
             method_path = join(folder_path, meth + ".py")
-            b_open = QPushButton(text="Open", parent=self.table_meth)
-            b_open.clicked.connect(partial(self.openMethod, method_path))
-            b_open.setEnabled(isfile(method_path))
-            self.table_meth.setCellWidget(row, 1, b_open)
+            self.addRowButtonsMethod(row, method_path, folder_path)
+
         self.table_meth.resizeColumnsToContents()
 
     def fill_table_meta(self):
@@ -329,6 +328,133 @@ class DClassGenerator(Ui_DClassGenerator, QWidget):
                         item.setFlags(Qt.ItemIsSelectable | Qt.ItemIsEnabled)
                         self.table_meta.setItem(row, col, item)
 
+    def addRowButtonsMethod(self, row_index, method_path, folder_path):
+        """Delete row in table of properties given row index to delete
+
+        Parameters
+        ----------
+        self : DClassGenerator
+            a DClassGenerator object
+        row_index : str
+            Index of row to delete
+
+        """
+        # Add open button
+        b_open = QPushButton(text="Open", parent=self.table_meth)
+        b_open.clicked.connect(partial(self.openMethod, method_path))
+        b_open.setEnabled(isfile(method_path))
+        self.table_meth.setCellWidget(row_index, 1, b_open)
+        # Add delete button
+        b_del_meth = QPushButton(text="Delete", parent=self.table_meth)
+        b_del_meth.clicked.connect(partial(self.deleteMethod, row_index, folder_path))
+        self.table_meth.setCellWidget(row_index, 2, b_del_meth)
+        # Add duplicate button
+        b_dup_meth = QPushButton(text="Duplicate", parent=self.table_meth)
+        b_dup_meth.clicked.connect(
+            partial(self.duplicateMethod, row_index, folder_path)
+        )
+        self.table_meth.setCellWidget(row_index, 3, b_dup_meth)
+
+    def deleteMethod(self, row_index, folder_path):
+        """Delete row in table of methods given row index to delete
+
+        Parameters
+        ----------
+        self : DClassGenerator
+            a DClassGenerator object
+        row_index : str
+            Index of row to delete
+        folder_path: str
+            path to method folder
+
+        """
+        # Get method name
+        meth_name = self.table_meth.CellWidget(row_index, 0).text()
+
+        # Delete row at row_index
+        self.table_meth.removeRow(row_index)
+
+        # Check if there is a folder in method name
+        if "." in meth_name:
+            meth_split = meth_name.split(".")
+            meth_name = join(*meth_split)
+
+        # Duplicate method
+        method_path = join(folder_path, meth_name + ".py")
+        os.remove(method_path)
+
+        for row in range(1, self.table_prop.rowCount(), 1):
+            # Add buttons in row
+            self.addRowButtonsMethod(row, method_path, folder_path)
+
+    def duplicateMethod(self, row_index, folder_path):
+        """Duplicate method in table of methods given row index to duplicate
+
+        Parameters
+        ----------
+        self : DClassGenerator
+            a DClassGenerator object
+        row_index : str
+            Index of row to duplicate
+        folder_path : str
+            Path to folder containing method to duplicate
+        """
+
+        # Add empty row at the end
+        self.table_meth.setRowCount(self.table_meth.rowCount() + 1)
+        last_row = self.table_meth.rowCount() - 1
+
+        # Get name of method to duplicate
+        meth_name = self.table_meth.cellWidget(row_index, 0).text()
+
+        # Check that method name doesn't already exist, otherwise add _copy in the end
+        meth_name_dup = meth_name
+        for row in range(0, self.table_meth.rowCount() - 1, 1):
+            other = self.table_meth.cellWidget(row, 0).text()
+            if meth_name_dup == other:
+                meth_name_dup += "_copy"
+
+        # Set duplicated method name
+        self.table_meth.setCellWidget(
+            last_row, 0, type(self.table_meth.cellWidget(row_index, 0))(meth_name_dup)
+        )
+
+        # Check if there is a folder in method name
+        if "." in meth_name:
+            meth_split = meth_name.split(".")
+            meth_name = join(*meth_split)
+            meth_split_dup = meth_name_dup.split(".")
+            meth_name_dup = join(*meth_split_dup)
+
+        # Duplicate method
+        method_path = join(folder_path, meth_name + ".py")
+        method_path_dup = join(folder_path, meth_name_dup + ".py")
+        copyfile(method_path, method_path_dup)
+
+        # Add buttons in last row
+        self.addRowButtonsMethod(last_row, method_path_dup, folder_path)
+
+    def addRowButtonsProp(self, row_index):
+        """Delete row in table of properties given row index to delete
+
+        Parameters
+        ----------
+        self : DClassGenerator
+            a DClassGenerator object
+        row_index : str
+            Index of row to delete
+
+        """
+
+        # Add delete button
+        b_del_prop = QPushButton(text="Delete", parent=self.table_prop)
+        b_del_prop.clicked.connect(partial(self.deleteProp, row_index))
+        self.table_prop.setCellWidget(row_index, len(self.list_prop), b_del_prop)
+        # Add duplicate button
+        b_dup_prop = QPushButton(text="Duplicate", parent=self.table_prop)
+        b_dup_prop.clicked.connect(partial(self.duplicateProp, row_index))
+        self.table_prop.setCellWidget(row_index, len(self.list_prop) + 1, b_dup_prop)
+
     def deleteProp(self, row_index):
         """Delete row in table of properties given row index to delete
 
@@ -341,19 +467,12 @@ class DClassGenerator(Ui_DClassGenerator, QWidget):
 
         """
 
+        # Remove row at given index
         self.table_prop.removeRow(row_index)
 
-        Ncol = self.table_prop.columnCount()
-
         for row in range(1, self.table_prop.rowCount(), 1):
-            # Update delete button with new row index
-            b_del_prop = QPushButton(text="Delete", parent=self.table_prop)
-            b_del_prop.clicked.connect(partial(self.deleteProp, row))
-            self.table_prop.setCellWidget(row, Ncol - 2, b_del_prop)
-            # Update duplicate button with new row index
-            b_dup_prop = QPushButton(text="Duplicate", parent=self.table_prop)
-            b_dup_prop.clicked.connect(partial(self.duplicateProp, row))
-            self.table_prop.setCellWidget(row, Ncol - 1, b_dup_prop)
+            # Refresh buttons with new row index
+            self.addRowButtonsProp(row)
 
     def duplicateProp(self, row_index):
         """Duplicate row in table of properties given row index to duplicate
@@ -383,15 +502,8 @@ class DClassGenerator(Ui_DClassGenerator, QWidget):
                 last_row, col, type(self.table_prop.cellWidget(row_index, col))(val)
             )
 
-        # Add delete button
-        b_del_prop = QPushButton(text="Delete", parent=self.table_prop)
-        b_del_prop.clicked.connect(partial(self.deleteProp, last_row))
-        self.table_prop.setCellWidget(last_row, col + 1, b_del_prop)
-
-        # Add duplicate button
-        b_dup_prop = QPushButton(text="Duplicate", parent=self.table_prop)
-        b_dup_prop.clicked.connect(partial(self.duplicateProp, last_row))
-        self.table_prop.setCellWidget(last_row, col + 2, b_dup_prop)
+        # Add buttons in last row
+        self.addRowButtonsProp(last_row)
 
     def onItemCollapse(self, index):
         """Slot for item collapsed"""
