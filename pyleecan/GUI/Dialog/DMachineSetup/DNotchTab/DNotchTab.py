@@ -22,7 +22,7 @@ class DNotchTab(Ui_DNotchTab, QDialog):
     # Signal to DMachineSetup to know that the save popup is needed
     saveNeeded = Signal()
 
-    def __init__(self, machine, is_stator=False):
+    def __init__(self, machine, is_stator=False, material_dict=None):
         """Initialize the widget according to machine
 
         Parameters
@@ -45,15 +45,16 @@ class DNotchTab(Ui_DNotchTab, QDialog):
         # Saving arguments
         self.machine = machine.copy()
         self.is_stator = is_stator
+        self.material_dict = material_dict
 
         # String storing the last error message (used in test)
         self.err_msg = None
 
         # Get the correct object to set
         if self.is_stator:
-            self.obj = self.machine.stator
+            self.obj = self.machine.stator.copy()
         else:
-            self.obj = self.machine.rotor
+            self.obj = self.machine.rotor.copy()
 
         # Init notch
         if self.obj.notch is None:
@@ -69,7 +70,7 @@ class DNotchTab(Ui_DNotchTab, QDialog):
         # (the current notches types will be initialized)
         self.tab_notch.clear()
         for idx_notch, notch in enumerate(self.obj.notch):
-            self.s_add(notch, idx_notch)
+            self.s_add(notch, idx_notch, material_dict)
         self.tab_notch.setCurrentIndex(0)
 
         # Set Help URL
@@ -86,7 +87,7 @@ class DNotchTab(Ui_DNotchTab, QDialog):
         """Send a saveNeeded signal to the DMachineSetup"""
         self.saveNeeded.emit()
 
-    def s_add(self, notch=None, idx_notch=None):
+    def s_add(self, notch=None, idx_notch=None, material_dict=None):
         """Signal to add a new notch
 
         Parameters
@@ -96,19 +97,28 @@ class DNotchTab(Ui_DNotchTab, QDialog):
         notch : Notch
             Notch to initialize in the new page
             if None create a new Notch
+        material_dict: dict
+            Materials dictionary (library + machine)
         """
+        self.material_dict = material_dict
         # Create a new notch if needed
         if notch is None:
             self.obj.notch.append(
                 NotchEvenDist(
-                    alpha=0, notch_shape=SlotM10(Zs=self.obj.get_Zs(), W0=None, H0=None)
+                    alpha=0,
+                    notch_shape=SlotM10(
+                        Zs=self.obj.get_Zs(),
+                        W0=None,
+                        H0=None,
+                        material_dict=self.material_dict,
+                    ),
                 )
             )
             notch = self.obj.notch[-1]
             notch_index = len(self.obj.notch) - 1
         else:
             notch_index = idx_notch
-        tab = WNotch(self, index=notch_index)
+        tab = WNotch(self, index=notch_index, material_dict=self.material_dict)
         tab.saveNeeded.connect(self.emit_save)
         self.tab_notch.addTab(tab, "Notch Set " + str(notch_index + 1))
 

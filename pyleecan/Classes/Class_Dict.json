@@ -9218,7 +9218,7 @@
         "daughters": [
             "NotchEvenDist"
         ],
-        "desc": "Abstract class for notches",
+        "desc": "",
         "is_internal": false,
         "methods": [
             "get_Rbo",
@@ -9229,7 +9229,18 @@
         "name": "Notch",
         "package": "Machine",
         "path": "pyleecan/Generator/ClassesRef/Machine/Notch.csv",
-        "properties": []
+        "properties": [
+            {
+                "as_dict": "",
+                "desc": "The material of the key (if None, no key to add)",
+                "max": "",
+                "min": "",
+                "name": "key_mat",
+                "type": "Material",
+                "unit": "",
+                "value": ""
+            }
+        ]
     },
     "NotchEvenDist": {
         "constants": [

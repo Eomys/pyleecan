@@ -59,6 +59,8 @@ if not isdir(SCHEMATICS_PATH):
 slot_test = list()
 
 SlotM_list = [
+    SlotM10(),
+    SlotM11(),
     SlotM12(),
     SlotM13(),
     SlotM14(),
@@ -131,6 +133,13 @@ slot_test.append(
     {
         "test_obj": SlotM10(),
         "type_add_active": 2,
+        "is_default": 2,
+    }
+)
+slot_test.append(
+    {
+        "test_obj": SlotM10(),
+        "type_add_active": 5,
         "is_default": 2,
     }
 )
@@ -272,11 +281,19 @@ class Test_plot_schematics(object):
             plot_meth = getattr(test_obj, "plot_schematics")
 
         if "is_default" in test_dict and test_dict["is_default"] != 1:
-            value = plot_meth(
-                is_return_default=True,
-                is_default=2,
-            )
-            type_active = 0
+            if type_active == 5:
+                value = plot_meth(
+                    is_return_default=True,
+                    is_default=2,
+                )
+                type_active = 5
+
+            else:
+                value = plot_meth(
+                    is_return_default=True,
+                    is_default=2,
+                )
+                type_active = 0
 
         else:
             value = plot_meth(
@@ -300,6 +317,9 @@ class Test_plot_schematics(object):
 
         elif type_active == 4:
             file_name = schematics_name + "_wedge_type_1"
+
+        elif type_active == 5:
+            file_name = schematics_name + "_key"
 
         if value.is_internal == True:
             file_name = file_name + "_int"
@@ -353,6 +373,21 @@ class Test_plot_schematics(object):
             plot_meth = getattr(test_obj, "plot_schematics")
 
         if "is_default" in test_dict and test_dict["is_default"] != 1:
+            if test_dict["type_add_active"] == 5:
+                ## wedge_type
+                plot_meth(
+                    is_default=2,
+                    is_add_point_label=False,
+                    is_add_schematics=True,
+                    is_add_main_line=True,
+                    type_add_active=5,
+                    save_path=file_path,
+                    is_show_fig=False,
+                )
+                test_dict["type_add_active"] = 0
+                file_name = self.name(test_dict)
+                file_path = join(SCHEMATICS_PATH, file_name)
+
             plot_meth(
                 is_default=2,
                 is_add_point_label=False,
@@ -362,8 +397,8 @@ class Test_plot_schematics(object):
                 save_path=file_path,
                 is_show_fig=False,
             )
-            test_dict["is_default"] = True
-            self.test_slot(test_dict)
+            # test_dict["is_default"] = True
+            # self.test_slot(test_dict)
 
         else:
             if test_dict["type_add_active"] == 1:
@@ -413,6 +448,18 @@ class Test_plot_schematics(object):
                     is_add_schematics=True,
                     is_add_main_line=True,
                     type_add_active=4,
+                    save_path=file_path,
+                    is_show_fig=False,
+                )
+
+            if test_dict["type_add_active"] == 5:
+                ## wedge_type
+                plot_meth(
+                    is_default=True,
+                    is_add_point_label=False,
+                    is_add_schematics=True,
+                    is_add_main_line=True,
+                    type_add_active=5,
                     save_path=file_path,
                     is_show_fig=False,
                 )
@@ -501,9 +548,9 @@ if __name__ == "__main__":
     a = Test_plot_schematics()
     # a.test_BoreFlower()
     # a.test_BoreSinePole()
-    a.test_slot(slot_test[50])
-    a.test_slot_point(slot_test[50])
-    a.test_slot(slot_test[52])
+    a.test_slot(slot_test[0])
+    a.test_slot_point(slot_test[0])
+    a.test_slot(slot_test[11])
     #
 
     # for slot in slot_test:

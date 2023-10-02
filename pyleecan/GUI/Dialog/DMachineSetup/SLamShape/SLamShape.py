@@ -300,7 +300,7 @@ class SLamShape(Gen_SLamShape, QWidget):
         self : SLamShape
             A SLamShape object
         """
-        self.notches_win = DNotchTab(self.machine, self.is_stator)
+        self.notches_win = DNotchTab(self.machine, self.is_stator, self.material_dict)
         self.notches_win.show()
         self.notches_win.accepted.connect(self.validate_notches)
 

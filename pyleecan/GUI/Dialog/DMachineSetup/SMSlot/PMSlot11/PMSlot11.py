@@ -28,7 +28,7 @@ class PMSlot11(Gen_PMSlot11, QWidget):
     notch_name = "Polar"
     slot_type = SlotM11
 
-    def __init__(self, lamination=None, is_notch=False):
+    def __init__(self, lamination=None, notch_obj=None, material_dict=None):
         """Initialize the widget according to lamination
 
         Parameters
@@ -39,6 +39,8 @@ class PMSlot11(Gen_PMSlot11, QWidget):
             current lamination to edit
         is_notch : bool
             True to adapt the slot GUI for the notch setup
+        material_dict: dict
+            Materials dictionary (library + machine)
         """
 
         # Build the interface according to the .ui file
@@ -46,7 +48,9 @@ class PMSlot11(Gen_PMSlot11, QWidget):
         self.setupUi(self)
         self.lamination = lamination
         self.slot = lamination.slot
-        self.is_notch = is_notch
+        self.is_notch = notch_obj is not None
+        self.notch_obj = notch_obj
+        self.material_dict = material_dict
 
         # Set FloatEdit unit
         self.lf_W0.unit = "rad"
@@ -62,7 +66,7 @@ class PMSlot11(Gen_PMSlot11, QWidget):
             wid.setText("[" + gui_option.unit.get_m_name() + "]")
 
         # Notch setup
-        if is_notch:
+        if self.is_notch:
             # Hide magnet related widget
             wid_list = [self.in_Wmag, self.lf_Wmag, self.c_Wmag_unit]
             wid_list += [self.in_Hmag, self.lf_Hmag, self.unit_Hmag]

@@ -22,7 +22,7 @@ class PMSlot15(Gen_PMSlot15, QWidget):
     slot_name = "Polar Magnet with curved top and parallel sides"
     slot_type = SlotM15
 
-    def __init__(self, lamination=None):
+    def __init__(self, lamination=None, material_dict=None):
         """Initialize the widget according to lamination
 
         Parameters
@@ -31,6 +31,8 @@ class PMSlot15(Gen_PMSlot15, QWidget):
             A PMSlot15 widget
         lamination : Lamination
             current lamination to edit
+        material_dict: dict
+            Materials dictionary (library + machine)
         """
 
         # Build the interface according to the .ui file
@@ -38,6 +40,7 @@ class PMSlot15(Gen_PMSlot15, QWidget):
         self.setupUi(self)
         self.lamination = lamination
         self.slot = lamination.slot
+        self.material_dict = material_dict
 
         # Set FloatEdit unit
         self.lf_W0.unit = "rad"

@@ -21,7 +21,7 @@ class WNotch(Ui_WNotch, QWidget):
     # Signal to DMachineSetup to know that the save popup is needed
     saveNeeded = Signal()
 
-    def __init__(self, parent, index):
+    def __init__(self, parent, index, material_dict=None):
         """Initialize the GUI according to lamination
 
         Parameters
@@ -47,6 +47,7 @@ class WNotch(Ui_WNotch, QWidget):
             Rint=self.obj.Rint,
             Rext=self.obj.Rext,
         )
+        self.material_dict = material_dict
         self.lam_notch.slot = self.obj.notch[index].notch_shape
         self.index = index
         self.parent = parent
@@ -101,7 +102,8 @@ class WNotch(Ui_WNotch, QWidget):
         self.w_notch.setParent(None)
         self.w_notch = self.wid_list[self.c_notch_type.currentIndex()](
             lamination=self.lam_notch,
-            is_notch=True,
+            notch_obj=self.obj.notch[index],
+            material_dict=self.material_dict,
         )
         # Refresh the GUI
         self.main_layout.removeWidget(self.w_notch)
@@ -166,6 +168,8 @@ class WNotch(Ui_WNotch, QWidget):
             A WNotch object
         c_index : int
             Index of the selected notch type in the combobox
+        material_dict: dict
+            Materials dictionary (library + machine)
         """
 
         # Save the notch
@@ -187,8 +191,7 @@ class WNotch(Ui_WNotch, QWidget):
         # Update the GUI
         self.w_notch.setParent(None)
         self.w_notch = self.wid_list[c_index](
-            lamination=self.lam_notch,
-            is_notch=True,
+            lamination=self.lam_notch, is_notch=True, material_dict=self.material_dict
         )
         self.w_notch.saveNeeded.connect(self.emit_save)
         # Refresh the GUI

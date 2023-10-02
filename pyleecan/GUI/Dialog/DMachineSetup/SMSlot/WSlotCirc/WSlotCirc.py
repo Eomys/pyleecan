@@ -23,7 +23,7 @@ class WSlotCirc(Gen_WSlotCirc, QWidget):
     notch_name = "Circular"
     slot_type = SlotCirc
 
-    def __init__(self, lamination=None, is_notch=True):
+    def __init__(self, lamination=None, is_notch=True, material_dict=None):
         """Initialize the widget according to lamination
 
         Parameters
@@ -34,6 +34,8 @@ class WSlotCirc(Gen_WSlotCirc, QWidget):
             current lamination to edit
         is_notch : bool
             True to adapt the slot GUI for the notch setup
+        material_dict: dict
+            Materials dictionary (library + machine)
         """
 
         # Build the interface according to the .ui file
@@ -41,6 +43,7 @@ class WSlotCirc(Gen_WSlotCirc, QWidget):
         self.setupUi(self)
         self.lamination = lamination
         self.slot = lamination.slot
+        self.material_dict = material_dict
 
         # Set FloatEdit unit
         self.lf_W0.unit = "m"

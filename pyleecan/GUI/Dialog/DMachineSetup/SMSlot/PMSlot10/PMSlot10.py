@@ -24,7 +24,7 @@ class PMSlot10(Gen_PMSlot10, QWidget):
     notch_name = "Rectangular"
     slot_type = SlotM10
 
-    def __init__(self, lamination=None, is_notch=False):
+    def __init__(self, lamination=None, material_dict=None, notch_obj=None):
         """Initialize the widget according to lamination
 
         Parameters
@@ -34,7 +34,9 @@ class PMSlot10(Gen_PMSlot10, QWidget):
         lamination : Lamination
             current lamination to edit
         is_notch : bool
-            True to adapt the slot GUI for the notch setup
+            True to adapt the slot GUI for the notch setup.
+        material_dict: dict
+            Materials dictionary (library + machine)
         """
 
         # Build the interface according to the .ui file
@@ -42,7 +44,9 @@ class PMSlot10(Gen_PMSlot10, QWidget):
         self.setupUi(self)
         self.lamination = lamination
         self.slot = lamination.slot
-        self.is_notch = is_notch
+        self.is_notch = notch_obj is not None
+        self.notch_obj = notch_obj
+        self.material_dict = material_dict
 
         # Set FloatEdit unit
         self.lf_W0.unit = "m"
@@ -60,7 +64,7 @@ class PMSlot10(Gen_PMSlot10, QWidget):
             wid.setText("[" + gui_option.unit.get_m_name() + "]")
 
         # Notch setup
-        if is_notch:
+        if self.is_notch:
             # Hide magnet related widget
             wid_list = [self.in_Wmag, self.lf_Wmag, self.unit_Wmag]
             wid_list += [self.in_Hmag, self.lf_Hmag, self.unit_Hmag]
@@ -76,9 +80,48 @@ class PMSlot10(Gen_PMSlot10, QWidget):
                 self.img_slot.setPixmap(
                     QPixmap(pixmap_dict["SlotM10_empty_ext_stator"])
                 )
-            else:
-                # Use schematics on the inner without magnet
-                self.img_slot.setPixmap(QPixmap(pixmap_dict["SlotM10_empty_int_rotor"]))
+
+            self.lf_Wkey.unit = "m"
+            self.lf_Hkey.unit = "m"
+
+            # Set unit name (m ou mm)
+            wid_list = [
+                self.unit_Wkey,
+                self.unit_Hkey,
+            ]
+            for wid in wid_list:
+                wid.setText("[" + gui_option.unit.get_m_name() + "]")
+
+            # Fill the fields with the machine values (if they're filled)
+            self.lf_Wkey.setValue(self.slot.Wmag)
+            self.lf_Hkey.setValue(self.slot.Hmag)
+
+            # Connect the signal
+            self.lf_Wkey.editingFinished.connect(self.set_Wkey)
+            self.lf_Hkey.editingFinished.connect(self.set_Hkey)
+
+            self.g_key.toggled.connect(self.set_key)
+
+            # Key setup
+            self.g_key.setChecked(self.slot.wedge_mat is not None)
+
+            # Material setup
+            self.w_key_mat.setText("Key Material")
+            self.w_key_mat.def_mat = "Steel1"
+            self.w_key_mat.update(self.notch_obj, "key_mat", self.material_dict)
+
+            # widget
+            self.w_key_mat.hide()
+            self.lf_Wkey.hide()
+            self.lf_Hkey.hide()
+            self.unit_Hkey.hide()
+            self.unit_Wkey.hide()
+            self.in_Hkey.hide()
+            self.in_Wkey.hide()
+
+        else:
+            # Use schematics on the inner without magnet
+            self.img_slot.setPixmap(QPixmap(pixmap_dict["SlotM10_empty_int_rotor"]))
 
         # Fill the fields with the machine values (if they're filled)
         self.lf_W0.setValue(self.slot.W0)
@@ -94,6 +137,33 @@ class PMSlot10(Gen_PMSlot10, QWidget):
         self.lf_Wmag.editingFinished.connect(self.set_Wmag)
         self.lf_H0.editingFinished.connect(self.set_H0)
         self.lf_Hmag.editingFinished.connect(self.set_Hmag)
+
+    def set_key(self):
+        """Setup the slot key according to the GUI"""
+        if self.g_key.isChecked():
+            self.img_slot.setPixmap(QPixmap(pixmap_dict["SlotM10_key_ext_stator"]))
+            self.w_key_mat.def_mat = "Steel1"
+            self.w_key_mat.update(self.notch_obj, "key_mat", self.material_dict)
+            self.lf_Wkey.show()
+            self.lf_Hkey.show()
+            self.unit_Hkey.show()
+            self.unit_Wkey.show()
+            self.in_Hkey.show()
+            self.in_Wkey.show()
+            self.w_key_mat.show()
+
+        else:
+            self.notch_obj.key_mat = None
+            self.img_slot.setPixmap(QPixmap(pixmap_dict["SlotM10_empty_ext_stator"]))
+            self.lf_Wkey.hide()
+            self.lf_Hkey.hide()
+            self.unit_Hkey.hide()
+            self.unit_Wkey.hide()
+            self.in_Hkey.hide()
+            self.in_Wkey.hide()
+            self.w_key_mat.hide()
+        # Notify the machine GUI that the machine has changed
+        self.saveNeeded.emit()
 
     def set_W0(self):
         """Signal to update the value of W0 according to the line edit
@@ -143,6 +213,32 @@ class PMSlot10(Gen_PMSlot10, QWidget):
             A PMSlot10 object
         """
         self.slot.Hmag = self.lf_Hmag.value()
+        self.w_out.comp_output()
+        # Notify the machine GUI that the machine has changed
+        self.saveNeeded.emit()
+
+    def set_Wkey(self):
+        """Signal to update the value of Wkey according to the line edit
+
+        Parameters
+        ----------
+        self : PMSlot10
+            A PMSlot10 object
+        """
+        self.slot.Wmag = self.lf_Wkey.value()
+        self.w_out.comp_output()
+        # Notify the machine GUI that the machine has changed
+        self.saveNeeded.emit()
+
+    def set_Hkey(self):
+        """Signal to update the value of Hkey according to the line edit
+
+        Parameters
+        ----------
+        self : PMSlot10
+            A PMSlot10 object
+        """
+        self.slot.Hmag = self.lf_Hkey.value()
         self.w_out.comp_output()
         # Notify the machine GUI that the machine has changed
         self.saveNeeded.emit()

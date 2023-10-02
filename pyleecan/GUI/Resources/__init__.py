@@ -121,6 +121,7 @@ pixmap_dict = {
     "SlotM10_empty_ext_stator": ":/images/images/MachineSetup/WMSlot/SlotM10_empty_ext_stator.png",
     "SlotM10_empty_int_rotor": ":/images/images/MachineSetup/WMSlot/SlotM10_empty_int_rotor.png",
     "SlotM10_mag_int_rotor": ":/images/images/MachineSetup/WMSlot/SlotM10_mag_int_rotor.png",
+    "SlotM10_key_ext_stator": ":/images/images/MachineSetup/WMSlot/SlotM10_key_ext_stator.png",
     "SlotM11_empty_ext_stator": ":/images/images/MachineSetup/WMSlot/SlotM11_empty_ext_stator.png",
     "SlotM11_empty_int_rotor": ":/images/images/MachineSetup/WMSlot/SlotM11_empty_int_rotor.png",
     "SlotM11_mag_int_rotor": ":/images/images/MachineSetup/WMSlot/SlotM11_mag_int_rotor.png",
