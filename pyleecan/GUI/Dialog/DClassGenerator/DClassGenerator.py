@@ -12,10 +12,8 @@ from PySide2.QtWidgets import (
     QFileSystemModel,
     QLabel,
     QLineEdit,
-    QDesktopWidget,
     QHeaderView,
     QPushButton,
-    QTableWidgetItem,
     QMenu,
 )
 
@@ -25,7 +23,6 @@ from ..DClassGenerator.Ui_DClassGenerator import Ui_DClassGenerator
 
 from ....definitions import DOC_DIR, PACKAGE_NAME, MAIN_DIR
 
-from ...Tools.WPathSelector.WPathSelector import WPathSelector
 from ...Tools.FloatEdit import FloatEdit
 from ....Generator.read_fct import read_file
 from ....Generator.run_generate_classes import run_generate_classes
@@ -109,6 +106,7 @@ class DClassGenerator(Ui_DClassGenerator, QWidget):
         self.init_tables_buttons()
 
         # Connect treeview to methods
+        self.dirModel.fileRenamed.connect(self.renameClassMethods)
         self.treeView.collapsed.connect(self.onItemCollapse)
         self.treeView.expanded.connect(self.onItemExpand)
         self.treeView.clicked.connect(self.update_class_selected)
@@ -122,11 +120,27 @@ class DClassGenerator(Ui_DClassGenerator, QWidget):
         self.is_black.setChecked(True)
 
     def clear_current_class_data(self):
+        """Clear current class data stored in class generator GUI
+
+        Parameters
+        ----------
+        self : DClassGenerator
+            a DClassGenerator object
+
+        """
         self.current_class_dict = None
         self.current_module = None
         self.current_method_folder_path = None
 
     def init_tables_buttons(self):
+        """Init all tables and buttons of class properties and methods
+
+        Parameters
+        ----------
+        self : DClassGenerator
+            a DClassGenerator object
+
+        """
         # Init label
         self.set_label_classname("ClassName")
 
@@ -135,7 +149,7 @@ class DClassGenerator(Ui_DClassGenerator, QWidget):
 
         # Init table of properties
         self.table_prop.setColumnCount(len(self.list_prop) + 2)
-        self.table_prop.setRowCount(1)
+        self.table_prop.setRowCount(2)
         for col, prop_name in enumerate(self.list_prop):
             qlabel = QLabel(prop_name)
             qlabel.setAlignment(Qt.AlignCenter)
@@ -181,172 +195,6 @@ class DClassGenerator(Ui_DClassGenerator, QWidget):
 
         # Disable generate class button
         self.b_genclass.setEnabled(False)
-
-    def get_obj_name(self, index):
-        if index.column() == 0:
-            # User clicked directly on name, extract name
-            obj_name = self.dirModel.data(index)
-        else:
-            # User clicked on other properties than name, extract name by using parent
-            obj_name = self.dirModel.data(index.parent().child(index.row(), 0))
-
-        return obj_name
-
-    def openContextMenu(self, position):
-        """Generate and open context the menu at the given position
-
-        Parameters
-        ----------
-        self : DClassGenerator
-            a DClassGenerator object
-        position : QPoint
-            Position of treeview clicked element
-
-        """
-
-        index = self.treeView.indexAt(position)
-
-        if not index.isValid():
-            return
-
-        class_name = self.get_obj_name(index)
-
-        menu = QMenu()
-
-        if self.dirModel.isDir(index):
-            delete_module = menu.addAction(self.tr("Delete module"))
-            delete_module.triggered.connect(partial(self.deleteModule, index))
-            new_module = menu.addAction(self.tr("New module"))
-            new_module.triggered.connect(partial(self.createModule, index))
-            new_class = menu.addAction(self.tr("New class"))
-            new_class.triggered.connect(partial(self.createClass, index))
-
-        elif class_name[-4:] == ".csv":
-            delete_class = menu.addAction(self.tr("Delete class"))
-            delete_class.triggered.connect(partial(self.deleteClass, index))
-            dupli_class = menu.addAction(self.tr("Duplicate class"))
-            dupli_class.triggered.connect(partial(self.duplicateClass, index))
-
-        else:
-            return
-
-        menu.exec_(self.treeView.viewport().mapToGlobal(position))
-
-    def deleteClass(self, index):
-        """Delete csv file associated to class
-
-        Parameters
-        ----------
-        self : DClassGenerator
-            a DClassGenerator object
-        index : QModelIndex
-            Model index of current selected item in treeview
-
-        """
-
-        # Get class name
-        class_name = self.get_obj_name(index)
-
-        # Delete csv file associated to class
-        self.dirModel.remove(index)
-
-        # Delete methods folder
-        rmtree(self.current_method_folder_path)
-
-        if self.current_class_dict["name"] == class_name[:-4]:
-            # Reinit tables if deleted class is the selected class
-            self.init_tables_buttons()
-            self.clear_current_class_data()
-
-    def duplicateClass(self, index):
-        """Duplicate class by copying csv file
-
-        Parameters
-        ----------
-        self : DClassGenerator
-            a DClassGenerator object
-        index : QModelIndex
-            Model index of current selected item in treeview
-
-        """
-
-        # Copy csv file to the same folder
-        file_path = self.dirModel.filePath(index)
-        file_name = self.dirModel.fileName(index)
-        file_path_dup = file_path.replace(file_name, file_name[:-4] + "_copy.csv")
-        copyfile(file_path, file_path_dup)
-
-        # Copy methods folder
-        meth_folder = self.current_method_folder_path
-        meth_folder_dup = self.current_method_folder_path + "_copy"
-        copytree(meth_folder, meth_folder_dup)
-
-    def createClass(self, index):
-        """Create class by saving empty csv file
-
-        Parameters
-        ----------
-        self : DClassGenerator
-            a DClassGenerator object
-        index : QModelIndex
-            Model index of current selected item in treeview
-
-        """
-
-        # Get file path
-        file_path = join(self.dirModel.filePath(index), "new_class.csv")
-
-        # Init class dict
-        class_dict = dict()
-        class_dict["name"] = "new_class"
-        class_dict["path"] = file_path
-
-        # Init property table
-        prop_dict = dict()
-        for col in range(len(self.list_prop)):
-            prop_dict[MATCH_PROP_DICT[self.list_prop[col]]] = ""
-        class_dict["properties"] = [prop_dict]
-        class_dict["properties"][0]["name"] = "new_prop"
-
-        # Init method table
-        class_dict["methods"] = ["new_method"]
-
-        # Init meta data table
-        class_dict["package"] = self.dirModel.data(index)
-        class_dict["mother"] = ""
-        class_dict["desc"] = ""
-        class_dict["constants"] = [{"name": "VERSION", "value": 1}]
-
-        # Write empty class into csv format
-        write_file(class_dict)
-
-    def deleteModule(self, index):
-        """Delete folder associated to current module
-
-        Parameters
-        ----------
-        self : DClassGenerator
-            a DClassGenerator object
-        index : QModelIndex
-            Model index of current selected item in treeview
-
-        """
-
-        rmtree(self.dirModel.filePath(index), ignore_errors=True)
-
-    def createModule(self, index):
-        """Create new module by creating new folder
-
-        Parameters
-        ----------
-        self : DClassGenerator
-            a DClassGenerator object
-        index : QModelIndex
-            Model index of current selected item in treeview
-
-        """
-
-        self.dirModel.mkdir(index.parent(), "new_module")
 
     def update_class_selected(self, index):
         """Update GUI with selected class from TreeView
@@ -401,15 +249,6 @@ class DClassGenerator(Ui_DClassGenerator, QWidget):
             self.fill_table_meta()
             self.fill_table_const()
             self.set_label_classname(self.current_class_dict["name"])
-            
-
-    def set_label_classname(self, class_name):
-        # Set class name as title
-        self.label_classname.setText(
-            '<html><head/><body><p><span style=" font-size:14pt; font-weight:700; text-decoration: underline;">'
-            + class_name
-            + " </span></p></body></html>"
-        )
 
     def import_class_from_csv(self, csv_path):
         """Import class from csv file when clicking on a csv in TreeView
@@ -450,8 +289,15 @@ class DClassGenerator(Ui_DClassGenerator, QWidget):
         """
         # Fill table of properties
         prop_list = self.current_class_dict["properties"]
+
+        if len(prop_list) == 0:
+            # Set one empty property if there is no property in class to enable property adding
+            self.setPropEmpty()
+            return
+
         # Set the number of rows to the number of properties (first row are labels)
         self.table_prop.setRowCount(len(prop_list) + 1)
+
         # Loop on rows to write properties
         for row, prop_dict in enumerate(prop_list):
             # Loop on columns to write parameters associated to each property
@@ -474,6 +320,30 @@ class DClassGenerator(Ui_DClassGenerator, QWidget):
 
         # Adjust column width
         self.table_prop.resizeColumnsToContents()
+
+    def setPropEmpty(self):
+        """Set table of properties with one empty row
+
+        Parameters
+        ----------
+        self : DClassGenerator
+            a DClassGenerator object
+
+        """
+
+        self.table_prop.setRowCount(2)
+
+        for col in range(len(self.list_prop)):
+            line_edit = QLineEdit("")
+            line_edit.setAlignment(Qt.AlignLeft)
+            self.table_prop.setCellWidget(1, col, line_edit)
+
+        # Connect name QLineEdit to renameProp method
+        self.table_prop.cellWidget(1, 0).editingFinished.connect(
+            partial(self.renameProp, self.table_prop.cellWidget(1, 0))
+        )
+
+        self.addRowButtonsProp(1)
 
     def addRowButtonsProp(self, row_index):
         """Delete row in table of properties given row index to delete
@@ -514,11 +384,22 @@ class DClassGenerator(Ui_DClassGenerator, QWidget):
                 row_index = row
                 break
 
+        if (
+            self.table_prop.rowCount() == 2
+            and self.table_prop.cellWidget(1, 0).text() == ""
+        ):
+            # Don't delete anything if requested row is empty
+            return
+
         # Remove row at given index
         self.table_prop.removeRow(row_index)
 
         # Delete row in current class dict
         del self.current_class_dict["properties"][row_index - 1]
+
+        # Add empty row to enable
+        if self.table_prop.rowCount() == 1:
+            self.setPropEmpty()
 
     def duplicateProp(self, button):
         """Duplicate row in table of properties
@@ -538,6 +419,10 @@ class DClassGenerator(Ui_DClassGenerator, QWidget):
                 row_index = row
                 break
 
+        if self.table_prop.cellWidget(row_index, 0).text() == "":
+            # Don't duplicate if prop name is empty
+            return
+
         # Add empty row at the end
         self.table_prop.setRowCount(self.table_prop.rowCount() + 1)
         last_row = self.table_prop.rowCount() - 1
@@ -551,9 +436,9 @@ class DClassGenerator(Ui_DClassGenerator, QWidget):
                     other = self.table_prop.cellWidget(row, col).text()
                     if val == other:
                         val += "_copy"
-            self.table_prop.setCellWidget(
-                last_row, col, type(self.table_prop.cellWidget(row_index, col))(val)
-            )
+            cell_widget = type(self.table_prop.cellWidget(row_index, col))(val)
+            cell_widget.setAlignment(Qt.AlignLeft)
+            self.table_prop.setCellWidget(last_row, col, cell_widget)
 
         # Connect name QLineEdit to renameProp method
         self.table_prop.cellWidget(last_row, 0).editingFinished.connect(
@@ -604,8 +489,12 @@ class DClassGenerator(Ui_DClassGenerator, QWidget):
                 self.current_class_dict["properties"][row_index - 1]["name"]
             )
         else:
-            # Edit current class dict
-            self.current_class_dict["properties"][row_index - 1]["name"] = prop_name
+            if len(self.current_class_dict["properties"]) > 0:
+                # Edit current class dict
+                self.current_class_dict["properties"][row_index - 1]["name"] = prop_name
+            else:
+                # Create prop dict
+                self.current_class_dict["properties"] = [{"name": prop_name}]
 
     def fill_table_meth(self):
         """Fill tables of methods with current class dict content
@@ -1125,6 +1014,220 @@ class DClassGenerator(Ui_DClassGenerator, QWidget):
         """
         run_generate_classes(is_black=self.is_black.isChecked())
 
+    def openContextMenu(self, position):
+        """Generate and open context the menu at the given position
+
+        Parameters
+        ----------
+        self : DClassGenerator
+            a DClassGenerator object
+        position : QPoint
+            Position of treeview clicked element
+
+        """
+
+        index = self.treeView.indexAt(position)
+
+        if not index.isValid():
+            return
+
+        class_name = self.get_obj_name(index)
+
+        menu = QMenu()
+
+        if self.dirModel.isDir(index):
+            # Generate context menu for right click on folder
+            delete_module = menu.addAction(self.tr("Delete module"))
+            delete_module.triggered.connect(partial(self.deleteModule, index))
+            new_module = menu.addAction(self.tr("New module"))
+            new_module.triggered.connect(partial(self.createModule, index))
+            new_class = menu.addAction(self.tr("New class"))
+            new_class.triggered.connect(partial(self.createClass, index))
+
+        elif class_name[-4:] == ".csv":
+            # Generate context menu for right click on csv file
+            delete_class = menu.addAction(self.tr("Delete class"))
+            delete_class.triggered.connect(partial(self.deleteClass, index))
+            dupli_class = menu.addAction(self.tr("Duplicate class"))
+            dupli_class.triggered.connect(partial(self.duplicateClass, index))
+
+        else:
+            return
+
+        menu.exec_(self.treeView.viewport().mapToGlobal(position))
+
+    def deleteClass(self, index):
+        """Delete csv file associated to class
+
+        Parameters
+        ----------
+        self : DClassGenerator
+            a DClassGenerator object
+        index : QModelIndex
+            Model index of current selected item in treeview
+
+        """
+
+        # Get class name
+        class_name = self.get_obj_name(index)
+
+        # Delete csv file associated to class
+        self.dirModel.remove(index)
+
+        # Delete methods folder
+        if isdir(self.current_method_folder_path):
+            rmtree(self.current_method_folder_path, ignore_errors=True)
+
+        if self.current_class_dict["name"] == class_name[:-4]:
+            # Reinit tables if deleted class is the selected class
+            self.init_tables_buttons()
+            self.clear_current_class_data()
+
+    def duplicateClass(self, index):
+        """Duplicate class by copying csv file
+
+        Parameters
+        ----------
+        self : DClassGenerator
+            a DClassGenerator object
+        index : QModelIndex
+            Model index of current selected item in treeview
+
+        """
+
+        # Copy csv file to the same folder
+        file_path = self.dirModel.filePath(index)
+        file_name = self.dirModel.fileName(index)
+        file_path_dup = file_path.replace(file_name, file_name[:-4] + "_copy.csv")
+        copyfile(file_path, file_path_dup)
+
+        # Copy methods folder if it exists
+        meth_folder = self.current_method_folder_path
+        if isdir(meth_folder):
+            meth_folder_dup = self.current_method_folder_path + "_copy"
+            copytree(meth_folder, meth_folder_dup)
+
+    def createClass(self, index):
+        """Create class by saving empty csv file
+
+        Parameters
+        ----------
+        self : DClassGenerator
+            a DClassGenerator object
+        index : QModelIndex
+            Model index of current selected item in treeview
+
+        """
+
+        # Get file path
+        file_path = join(self.dirModel.filePath(index), "new_class.csv")
+
+        # Init class dict
+        class_dict = dict()
+        class_dict["name"] = "new_class"
+        class_dict["path"] = file_path
+
+        # Init property table
+        prop_dict = dict()
+        for col in range(len(self.list_prop)):
+            prop_dict[MATCH_PROP_DICT[self.list_prop[col]]] = ""
+        class_dict["properties"] = [prop_dict]
+        class_dict["properties"][0]["name"] = "new_prop"
+
+        # Init method table
+        class_dict["methods"] = ["new_method"]
+
+        # Init meta data table
+        class_dict["package"] = self.dirModel.data(index)
+        class_dict["mother"] = ""
+        class_dict["desc"] = ""
+        class_dict["constants"] = [{"name": "VERSION", "value": 1}]
+
+        # Write empty class into csv format
+        write_file(class_dict)
+
+    def renameClassMethods(self, path, oldName, newName):
+        """Rename methods after class renaming and prevent from folder renaming
+        to avoid conflict with package
+
+        Parameters
+        ----------
+        self : DClassGenerator
+            a DClassGenerator object
+
+        path : str
+            folder path of renamed csv file
+        oldName : str
+            old csv file name
+        newName : str
+            new csv file name
+
+        """
+        index = self.dirModel.index(join(path, newName))
+
+        if self.dirModel.isDir(index):
+            # Rename folder back to original name to prevent issues with package attribute
+            os.rename(join(path, newName), join(path, oldName))
+
+        elif newName[-4:] == ".csv":
+            if self.current_class_dict is not None:
+                # Update class name in current class dict
+                self.current_class_dict["name"] = newName[:-4]
+
+            self.set_label_classname(newName[:-4])
+
+            # New path to method folder after class renaming
+            method_path_new = self.current_method_folder_path.replace(
+                oldName[:-4], newName[:-4]
+            )
+
+            if isdir(self.current_method_folder_path):
+                # Rename methods folder if it exists
+                os.rename(self.current_method_folder_path, method_path_new)
+
+            # Update method folder path
+            self.current_method_folder_path = method_path_new
+
+    def deleteModule(self, index):
+        """Delete folder associated to current module
+
+        Parameters
+        ----------
+        self : DClassGenerator
+            a DClassGenerator object
+        index : QModelIndex
+            Model index of current selected item in treeview
+
+        """
+
+        if isdir(self.dirModel.filePath(index)):
+            rmtree(self.dirModel.filePath(index), ignore_errors=True)
+
+    def createModule(self, index):
+        """Create new module by creating new folder
+
+        Parameters
+        ----------
+        self : DClassGenerator
+            a DClassGenerator object
+        index : QModelIndex
+            Model index of current selected item in treeview
+
+        """
+
+        self.dirModel.mkdir(index.parent(), "new_module")
+
+    def get_obj_name(self, index):
+        """get object name from treeview at first column for given index"""
+        if index.column() == 0:
+            # User clicked directly on name, extract name
+            obj_name = self.dirModel.data(index)
+        else:
+            # User clicked on other properties than name, extract name by using parent
+            obj_name = self.dirModel.data(index.parent().child(index.row(), 0))
+
+        return obj_name
+
     def onItemCollapse(self, index):
         """Slot for item collapsed"""
         # dynamic resize
@@ -1136,3 +1239,12 @@ class DClassGenerator(Ui_DClassGenerator, QWidget):
         # dynamic resize
         for ii in range(3):
             self.treeView.resizeColumnToContents(ii)
+
+    def set_label_classname(self, class_name):
+        """Set label of class name with proper font"""
+        # Set class name as title
+        self.label_classname.setText(
+            '<html><head/><body><p><span style=" font-size:14pt; font-weight:700; text-decoration: underline;">'
+            + class_name
+            + " </span></p></body></html>"
+        )
