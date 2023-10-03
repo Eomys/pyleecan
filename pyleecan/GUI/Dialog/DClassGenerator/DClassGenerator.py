@@ -1,10 +1,7 @@
 from os.path import join, isfile, isdir
-from shutil import copyfile
+from shutil import copyfile, rmtree
 import os
-import types
-from PySide2.QtCore import Qt, Signal, QDir, QEvent
-
-from PySide2.QtGui import QCursor
+from PySide2.QtCore import Qt, Signal, QDir
 
 from functools import partial
 
@@ -173,21 +170,28 @@ class DClassGenerator(Ui_DClassGenerator, QWidget):
         if not index.isValid():
             return
 
+        if index.column() == 0:
+            # User clicked directly on name, extract name
+            class_name = self.dirModel.data(index)
+        else:
+            # User clicked on other properties than name, extract name by using parent
+            class_name = self.dirModel.data(index.parent().child(index.row(), 0))
+
         menu = QMenu()
 
         if self.dirModel.isDir(index):
             delete_module = menu.addAction(self.tr("Delete module"))
-            delete_module.triggered.connect(self.deleteModule)
+            delete_module.triggered.connect(partial(self.deleteModule, index))
             new_module = menu.addAction(self.tr("New module"))
-            new_module.triggered.connect(self.createModule)
+            new_module.triggered.connect(partial(self.createModule, index))
+            new_class = menu.addAction(self.tr("New class"))
+            new_class.triggered.connect(partial(self.createClass, index))
 
-        elif self.dirModel.data(index)[:-4] == ".csv":
+        elif class_name[-4:] == ".csv":
             delete_class = menu.addAction(self.tr("Delete class"))
             delete_class.triggered.connect(partial(self.deleteClass, index))
             dupli_class = menu.addAction(self.tr("Duplicate class"))
             dupli_class.triggered.connect(partial(self.duplicateClass, index))
-            new_class = menu.addAction(self.tr("New class"))
-            new_class.triggered.connect(partial(self.createClass, index))
 
         else:
             return
@@ -239,15 +243,13 @@ class DClassGenerator(Ui_DClassGenerator, QWidget):
 
         """
 
-        file_path = self.dirModel.filePath(index)
-        file_name = self.dirModel.fileName(index)
-
-        file_path_new = file_path.replace(file_name, "") + "new_class.csv"
+        # Get file path
+        file_path = join(self.dirModel.filePath(index), "new_class.csv")
 
         # Init class dict
         class_dict = dict()
         class_dict["name"] = "new_class"
-        class_dict["path"] = file_path_new
+        class_dict["path"] = file_path
 
         # Init property table
         prop_dict = dict()
@@ -260,7 +262,7 @@ class DClassGenerator(Ui_DClassGenerator, QWidget):
         class_dict["methods"] = ["new_method"]
 
         # Init meta data table
-        class_dict["package"] = self.dirModel.data(index.parent())
+        class_dict["package"] = self.dirModel.data(index)
         class_dict["mother"] = ""
         class_dict["desc"] = ""
         class_dict["constants"] = [{"name": "VERSION", "value": 1}]
@@ -280,10 +282,21 @@ class DClassGenerator(Ui_DClassGenerator, QWidget):
 
         """
 
-        self.dirModel.rmdir(index)
+        rmtree(self.dirModel.filePath(index), ignore_errors=True)
 
-    def createModule(self):
-        pass
+    def createModule(self, index):
+        """Create new module by creating new folder
+
+        Parameters
+        ----------
+        self : DClassGenerator
+            a DClassGenerator object
+        index : QModelIndex
+            Model index of current selected item in treeview
+
+        """
+
+        self.dirModel.mkdir(index.parent(), "new_module")
 
     def update_class_selected(self, index):
         """Update GUI with selected class from TreeView
@@ -330,7 +343,7 @@ class DClassGenerator(Ui_DClassGenerator, QWidget):
             # User clicked on other properties than name, extract name by using parent
             class_name = self.dirModel.data(parent.child(index.row(), 0))
 
-        if class_name[:-4] != ".csv":
+        if class_name[-4:] != ".csv":
             # Check if file is a csv
             return
 
