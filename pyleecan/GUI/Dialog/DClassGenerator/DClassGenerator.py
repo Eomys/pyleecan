@@ -215,6 +215,11 @@ class DClassGenerator(Ui_DClassGenerator, QWidget):
         self.current_class_dict = current_class_dict
         self.current_module = module
 
+        # Store path to method folder
+        self.path_method_folder = join(
+            MAIN_DIR, "Methods", self.current_module, self.current_class_dict["name"]
+        )
+
     def fill_table_prop(self):
         """Fill tables of properties with current class dict content
 
@@ -239,11 +244,149 @@ class DClassGenerator(Ui_DClassGenerator, QWidget):
                 else:
                     line_edit = QLineEdit(str(data))
                     line_edit.setAlignment(Qt.AlignLeft)
+                    if col == 0:
+                        # Add method to check that property can't be renamed to an existing one
+                        line_edit.editingFinished.connect(
+                            partial(self.renameProp, line_edit)
+                        )
                     self.table_prop.setCellWidget(row + 1, col, line_edit)
             # Add property buttons
             self.addRowButtonsProp(row + 1)
 
+        # Adjust column width
         self.table_prop.resizeColumnsToContents()
+
+    def addRowButtonsProp(self, row_index):
+        """Delete row in table of properties given row index to delete
+
+        Parameters
+        ----------
+        self : DClassGenerator
+            a DClassGenerator object
+        row_index : int
+            Index of row to delete
+
+        """
+
+        # Add delete button
+        b_del_prop = QPushButton(text="Delete", parent=self.table_prop)
+        b_del_prop.clicked.connect(partial(self.deleteProp, b_del_prop))
+        self.table_prop.setCellWidget(row_index, len(self.list_prop), b_del_prop)
+        # Add duplicate button
+        b_dup_prop = QPushButton(text="Duplicate", parent=self.table_prop)
+        b_dup_prop.clicked.connect(partial(self.duplicateProp, b_dup_prop))
+        self.table_prop.setCellWidget(row_index, len(self.list_prop) + 1, b_dup_prop)
+
+    def deleteProp(self, button):
+        """Delete row in table of properties
+
+        Parameters
+        ----------
+        self : DClassGenerator
+            a DClassGenerator object
+        button : QPushButton
+            Button that emits signal
+
+        """
+
+        # Get row_index of clicked delete button
+        for row in range(1, self.table_prop.rowCount(), 1):
+            if self.table_prop.cellWidget(row, len(self.list_prop)) == button:
+                row_index = row
+                break
+
+        # Remove row at given index
+        self.table_prop.removeRow(row_index)
+
+        # Delete row in current class dict
+        del self.current_class_dict["properties"][row_index - 1]
+
+    def duplicateProp(self, button):
+        """Duplicate row in table of properties
+
+        Parameters
+        ----------
+        self : DClassGenerator
+            a DClassGenerator object
+        button : QPushButton
+            Button that emits signal
+
+        """
+
+        # Get row_index of clicked duplicate button
+        for row in range(1, self.table_prop.rowCount(), 1):
+            if self.table_prop.cellWidget(row, len(self.list_prop) + 1) == button:
+                row_index = row
+                break
+
+        # Add empty row at the end
+        self.table_prop.setRowCount(self.table_prop.rowCount() + 1)
+        last_row = self.table_prop.rowCount() - 1
+
+        # Browse columns of the row to duplicate and add same items in last row
+        for col in range(len(self.list_prop)):
+            val = self.table_prop.cellWidget(row_index, col).text()
+            if col == 0:
+                # Check that property name doesn't already exist
+                for row in range(1, self.table_prop.rowCount() - 1, 1):
+                    other = self.table_prop.cellWidget(row, col).text()
+                    if val == other:
+                        val += "_copy"
+            self.table_prop.setCellWidget(
+                last_row, col, type(self.table_prop.cellWidget(row_index, col))(val)
+            )
+
+        # Connect name QLineEdit to renameProp method
+        self.table_prop.cellWidget(last_row, 0).editingFinished.connect(
+            partial(self.renameProp, self.table_prop.cellWidget(last_row, 0))
+        )
+
+        # Duplicate row in current class dict
+        self.current_class_dict["properties"].append(
+            dict(self.current_class_dict["properties"][row_index - 1])
+        )
+        self.current_class_dict["properties"][-1]["name"] = self.table_prop.cellWidget(
+            last_row, 0
+        ).text()
+
+        # Add buttons in last row
+        self.addRowButtonsProp(last_row)
+
+    def renameProp(self, line_edit):
+        """Check that renamed property doesn't already exists
+
+        Parameters
+        ----------
+        self : DClassGenerator
+            a DClassGenerator object
+        line_edit : QLineEdit
+            Line edit that emits signal
+        """
+
+        # Get row_index of clicked button
+        for row in range(1, self.table_prop.rowCount(), 1):
+            if self.table_prop.cellWidget(row, 0) == line_edit:
+                row_index = row
+                break
+
+        # Get property name that has been renamed
+        prop_name = self.table_prop.cellWidget(row_index, 0).text()
+
+        # Get the list of property names
+        prop_name_list = [
+            self.table_prop.cellWidget(row, 0).text()
+            for row in range(1, self.table_prop.rowCount(), 1)
+            if row != row_index
+        ]
+
+        if prop_name in prop_name_list:
+            # Cancel rename and use old property name
+            self.table_prop.cellWidget(row_index, 0).setText(
+                self.current_class_dict["properties"][row_index - 1]["name"]
+            )
+        else:
+            # Edit current class dict
+            self.current_class_dict["properties"][row_index - 1]["name"] = prop_name
 
     def fill_table_meth(self):
         """Fill tables of methods with current class dict content
@@ -256,33 +399,249 @@ class DClassGenerator(Ui_DClassGenerator, QWidget):
         """
 
         # Connect method folder button
-        folder_path = join(
-            MAIN_DIR, "Methods", self.current_module, self.current_class_dict["name"]
-        )
         try:
             # Disconnect browse button in case it already contains a folder_path from previous class
             self.b_browse.clicked.disconnect()
         except Exception:
             pass
-        self.b_browse.clicked.connect(partial(self.browseMethod, folder_path))
-        self.b_browse.setEnabled(isdir(folder_path))
+        self.b_browse.clicked.connect(
+            partial(self.browseMethod, self.path_method_folder)
+        )
 
         # Fill table of methods
         # Set the number of rows to the number of methods (first row are labels)
         self.table_meth.setRowCount(len(self.current_class_dict["methods"]))
         for row, meth in enumerate(self.current_class_dict["methods"]):
-            # Write method name
+            # Write method name in cell
             line_edit = QLineEdit(str(meth))
             line_edit.setAlignment(Qt.AlignLeft)
+            line_edit.editingFinished.connect(partial(self.renameMethod, line_edit))
             self.table_meth.setCellWidget(row, 0, line_edit)
-            # Add open button
-            if "." in meth:
-                meth_split = meth.split(".")
-                meth = join(*meth_split)
-            method_path = join(folder_path, meth + ".py")
-            self.addRowButtonsMethod(row, method_path, folder_path)
+            # Add open, duplicate and delete buttons
+            self.addRowButtonsMethod(row)
 
+        # Adjust column width
         self.table_meth.resizeColumnsToContents()
+
+    def addRowButtonsMethod(self, row_index):
+        """Delete row in table of properties given row index to delete
+
+        Parameters
+        ----------
+        self : DClassGenerator
+            a DClassGenerator object
+        row_index : int
+            Index of row to delete
+
+        """
+        # Add open button
+        b_open_meth = QPushButton(text="Open", parent=self.table_meth)
+        b_open_meth.clicked.connect(partial(self.openMethod, b_open_meth))
+        self.table_meth.setCellWidget(row_index, 1, b_open_meth)
+        # Add delete button
+        b_del_meth = QPushButton(text="Delete", parent=self.table_meth)
+        b_del_meth.clicked.connect(partial(self.deleteMethod, b_del_meth))
+        self.table_meth.setCellWidget(row_index, 2, b_del_meth)
+        # Add duplicate button
+        b_dup_meth = QPushButton(text="Duplicate", parent=self.table_meth)
+        b_dup_meth.clicked.connect(partial(self.duplicateMethod, b_dup_meth))
+        self.table_meth.setCellWidget(row_index, 3, b_dup_meth)
+
+    def deleteMethod(self, button):
+        """Delete row in table of methods
+
+        Parameters
+        ----------
+        self : DClassGenerator
+            a DClassGenerator object
+        button : QPushButton
+            Button that emits signal
+
+        """
+
+        # Get row_index of clicked delete button
+        for row in range(self.table_meth.rowCount()):
+            if self.table_meth.cellWidget(row, 2) == button:
+                row_index = row
+                break
+
+        # Get method name
+        meth_name = self.table_meth.cellWidget(row_index, 0).text()
+
+        # Delete row at row_index
+        self.table_meth.removeRow(row_index)
+
+        # Delete method in current_class_dict for renaming purpose
+        self.current_class_dict["methods"].remove(meth_name)
+
+        # Check if there is a folder in method name
+        if "." in meth_name:
+            meth_split = meth_name.split(".")
+            meth_name = join(*meth_split)
+
+        # Delete method if it exists
+        method_path = join(self.path_method_folder, meth_name + ".py")
+        if isfile(method_path):
+            os.remove(method_path)
+
+    def duplicateMethod(self, button):
+        """Duplicate method in table of methods
+
+        Parameters
+        ----------
+        self : DClassGenerator
+            a DClassGenerator object
+        button : QPushButton
+            Button that emits signal
+
+        """
+        # Get row_index of clicked duplicate button
+        for row in range(self.table_meth.rowCount()):
+            if self.table_meth.cellWidget(row, 3) == button:
+                row_index = row
+                break
+
+        # Add empty row at the end
+        self.table_meth.setRowCount(self.table_meth.rowCount() + 1)
+        last_row = self.table_meth.rowCount() - 1
+
+        # Get name of method to duplicate
+        meth_name = self.table_meth.cellWidget(row_index, 0).text()
+
+        # Check that method name doesn't already exist, otherwise add _copy in the end
+        meth_name_dup = meth_name
+        for row in range(0, self.table_meth.rowCount() - 1, 1):
+            other = self.table_meth.cellWidget(row, 0).text()
+            if meth_name_dup == other:
+                meth_name_dup += "_copy"
+
+        # Set duplicated method name
+        self.table_meth.setCellWidget(
+            last_row, 0, type(self.table_meth.cellWidget(row_index, 0))(meth_name_dup)
+        )
+
+        # Connect name QLineEdit to renameMeth method
+        self.table_meth.cellWidget(last_row, 0).editingFinished.connect(
+            partial(self.renameMethod, self.table_meth.cellWidget(last_row, 0))
+        )
+
+        # Add method name in current_class_dict for renaming purpose
+        self.current_class_dict["methods"].append(meth_name_dup)
+
+        # Check if there is a folder in method name
+        if "." in meth_name:
+            meth_split = meth_name.split(".")
+            meth_name = join(*meth_split)
+            meth_split_dup = meth_name_dup.split(".")
+            meth_name_dup = join(*meth_split_dup)
+
+        # Copy method file
+        method_path = join(self.path_method_folder, meth_name + ".py")
+        method_path_dup = join(self.path_method_folder, meth_name_dup + ".py")
+        copyfile(method_path, method_path_dup)
+
+        # Add buttons in last row
+        self.addRowButtonsMethod(last_row)
+
+    def renameMethod(self, line_edit):
+        """Rename method
+
+        Parameters
+        ----------
+        self : DClassGenerator
+            a DClassGenerator object
+        line_edit : QLineEdit
+            Line edit that emits signal
+        """
+
+        # Get row_index of clicked button
+        for row in range(self.table_meth.rowCount()):
+            if self.table_meth.cellWidget(row, 0) == line_edit:
+                row_index = row
+                break
+
+        # Get new method name from widget
+        meth_name = self.table_meth.cellWidget(row_index, 0).text()
+
+        # Check that renamed method doesn't already exists to avoid duplicates
+        if meth_name not in self.current_class_dict["methods"]:
+            # Get old method name path
+            old_meth_path = join(
+                self.path_method_folder,
+                self.current_class_dict["methods"][row_index] + ".py",
+            )
+            # Get new method name path
+            new_meth_path = join(self.path_method_folder, meth_name + ".py")
+
+            # Delete new file if it already exists
+            if isfile(new_meth_path):
+                os.remove(new_meth_path)
+
+            # Rename file if old file exists
+            if isfile(old_meth_path):
+                os.rename(old_meth_path, new_meth_path)
+
+            # Store new name in current class dict
+            self.current_class_dict["methods"][row_index] = meth_name
+        else:
+            # Set old method name
+            self.table_meth.cellWidget(row_index, 0).setText(
+                self.current_class_dict["methods"][row_index]
+            )
+
+    def browseMethod(self):
+        """Open explorer at folder path containing methods
+
+        Parameters
+        ----------
+        self : DClassGenerator
+            a DClassGenerator object
+        """
+        # Get full path to folder
+        path = os.path.realpath(self.path_method_folder)
+
+        # Create folder if not existing
+        if not isdir(path):
+            os.mkdir(path)
+
+        # Open folder in explorer
+        os.startfile(path)
+
+    def openMethod(self, button):
+        """Open method in editor given by EDITOR PATH
+
+        Parameters
+        ----------
+        self : DClassGenerator
+            a DClassGenerator object
+        button : QPushButton
+            Button that emits signal
+
+        """
+
+        # Get row_index of clicked duplicate button
+        for row in range(self.table_meth.rowCount()):
+            if self.table_meth.cellWidget(row, 1) == button:
+                row_index = row
+                break
+
+        # Get method name at given row index
+        meth = self.table_meth.cellWidget(row_index, 0).text()
+
+        # Check if there is a folder in the method name
+        if "." in meth:
+            meth_split = meth.split(".")
+            meth = join(*meth_split)
+
+        # Get method path
+        method_path = join(self.path_method_folder, meth + ".py")
+
+        if not isfile(method_path):
+            # Create method file
+            pass
+
+        # Open method with editor
+        p = subprocess.Popen([EDITOR_PATH, method_path])
 
     def fill_table_meta(self):
         """Fill tables of metadata with current class dict content
@@ -328,217 +687,19 @@ class DClassGenerator(Ui_DClassGenerator, QWidget):
                         item.setFlags(Qt.ItemIsSelectable | Qt.ItemIsEnabled)
                         self.table_meta.setItem(row, col, item)
 
-    def addRowButtonsMethod(self, row_index, method_path, folder_path):
-        """Delete row in table of properties given row index to delete
-
-        Parameters
-        ----------
-        self : DClassGenerator
-            a DClassGenerator object
-        row_index : str
-            Index of row to delete
-
-        """
-        # Add open button
-        b_open = QPushButton(text="Open", parent=self.table_meth)
-        b_open.clicked.connect(partial(self.openMethod, method_path))
-        b_open.setEnabled(isfile(method_path))
-        self.table_meth.setCellWidget(row_index, 1, b_open)
-        # Add delete button
-        b_del_meth = QPushButton(text="Delete", parent=self.table_meth)
-        b_del_meth.clicked.connect(partial(self.deleteMethod, row_index, folder_path))
-        self.table_meth.setCellWidget(row_index, 2, b_del_meth)
-        # Add duplicate button
-        b_dup_meth = QPushButton(text="Duplicate", parent=self.table_meth)
-        b_dup_meth.clicked.connect(
-            partial(self.duplicateMethod, row_index, folder_path)
-        )
-        self.table_meth.setCellWidget(row_index, 3, b_dup_meth)
-
-    def deleteMethod(self, row_index, folder_path):
-        """Delete row in table of methods given row index to delete
-
-        Parameters
-        ----------
-        self : DClassGenerator
-            a DClassGenerator object
-        row_index : str
-            Index of row to delete
-        folder_path: str
-            path to method folder
-
-        """
-        # Get method name
-        meth_name = self.table_meth.CellWidget(row_index, 0).text()
-
-        # Delete row at row_index
-        self.table_meth.removeRow(row_index)
-
-        # Check if there is a folder in method name
-        if "." in meth_name:
-            meth_split = meth_name.split(".")
-            meth_name = join(*meth_split)
-
-        # Duplicate method
-        method_path = join(folder_path, meth_name + ".py")
-        os.remove(method_path)
-
-        for row in range(1, self.table_prop.rowCount(), 1):
-            # Add buttons in row
-            self.addRowButtonsMethod(row, method_path, folder_path)
-
-    def duplicateMethod(self, row_index, folder_path):
-        """Duplicate method in table of methods given row index to duplicate
-
-        Parameters
-        ----------
-        self : DClassGenerator
-            a DClassGenerator object
-        row_index : str
-            Index of row to duplicate
-        folder_path : str
-            Path to folder containing method to duplicate
-        """
-
-        # Add empty row at the end
-        self.table_meth.setRowCount(self.table_meth.rowCount() + 1)
-        last_row = self.table_meth.rowCount() - 1
-
-        # Get name of method to duplicate
-        meth_name = self.table_meth.cellWidget(row_index, 0).text()
-
-        # Check that method name doesn't already exist, otherwise add _copy in the end
-        meth_name_dup = meth_name
-        for row in range(0, self.table_meth.rowCount() - 1, 1):
-            other = self.table_meth.cellWidget(row, 0).text()
-            if meth_name_dup == other:
-                meth_name_dup += "_copy"
-
-        # Set duplicated method name
-        self.table_meth.setCellWidget(
-            last_row, 0, type(self.table_meth.cellWidget(row_index, 0))(meth_name_dup)
-        )
-
-        # Check if there is a folder in method name
-        if "." in meth_name:
-            meth_split = meth_name.split(".")
-            meth_name = join(*meth_split)
-            meth_split_dup = meth_name_dup.split(".")
-            meth_name_dup = join(*meth_split_dup)
-
-        # Duplicate method
-        method_path = join(folder_path, meth_name + ".py")
-        method_path_dup = join(folder_path, meth_name_dup + ".py")
-        copyfile(method_path, method_path_dup)
-
-        # Add buttons in last row
-        self.addRowButtonsMethod(last_row, method_path_dup, folder_path)
-
-    def addRowButtonsProp(self, row_index):
-        """Delete row in table of properties given row index to delete
-
-        Parameters
-        ----------
-        self : DClassGenerator
-            a DClassGenerator object
-        row_index : str
-            Index of row to delete
-
-        """
-
-        # Add delete button
-        b_del_prop = QPushButton(text="Delete", parent=self.table_prop)
-        b_del_prop.clicked.connect(partial(self.deleteProp, row_index))
-        self.table_prop.setCellWidget(row_index, len(self.list_prop), b_del_prop)
-        # Add duplicate button
-        b_dup_prop = QPushButton(text="Duplicate", parent=self.table_prop)
-        b_dup_prop.clicked.connect(partial(self.duplicateProp, row_index))
-        self.table_prop.setCellWidget(row_index, len(self.list_prop) + 1, b_dup_prop)
-
-    def deleteProp(self, row_index):
-        """Delete row in table of properties given row index to delete
-
-        Parameters
-        ----------
-        self : DClassGenerator
-            a DClassGenerator object
-        row_index : str
-            Index of row to delete
-
-        """
-
-        # Remove row at given index
-        self.table_prop.removeRow(row_index)
-
-        for row in range(1, self.table_prop.rowCount(), 1):
-            # Refresh buttons with new row index
-            self.addRowButtonsProp(row)
-
-    def duplicateProp(self, row_index):
-        """Duplicate row in table of properties given row index to duplicate
-
-        Parameters
-        ----------
-        self : DClassGenerator
-            a DClassGenerator object
-        row_index : str
-            Index of row to duplicate
-        """
-
-        # Add empty row at the end
-        self.table_prop.setRowCount(self.table_prop.rowCount() + 1)
-        last_row = self.table_prop.rowCount() - 1
-
-        # Browse columns of the row to duplicate and add same items in last row
-        for col in range(len(self.list_prop)):
-            val = self.table_prop.cellWidget(row_index, col).text()
-            if col == 0:
-                # Check that property name doesn't already exist
-                for row in range(1, self.table_prop.rowCount() - 1, 1):
-                    other = self.table_prop.cellWidget(row, col).text()
-                    if val == other:
-                        val += "_copy"
-            self.table_prop.setCellWidget(
-                last_row, col, type(self.table_prop.cellWidget(row_index, col))(val)
-            )
-
-        # Add buttons in last row
-        self.addRowButtonsProp(last_row)
-
-    def onItemCollapse(self, index):
-        """Slot for item collapsed"""
-        # dynamic resize
-        for ii in range(3):
-            self.treeView.resizeColumnToContents(ii)
-
-    def onItemExpand(self, index):
-        """Slot for item expand"""
-        # dynamic resize
-        for ii in range(3):
-            self.treeView.resizeColumnToContents(ii)
-
-    def browseMethod(self, folder_path):
-        path = os.path.realpath(folder_path)
-        if isdir(path):
-            os.startfile(path)
-
-    def openMethod(self, method_path):
-        if isfile(method_path):
-            p = subprocess.Popen([EDITOR_PATH, method_path])
-
-    def saveClass(self):
-        """Save class as csv file
+    def get_current_class_dict_from_tables(self):
+        """Get current class dict by reading property, method and metadata tables
 
         Parameters
         ----------
         self : DClassGenerator
             A DClassGenerator object
         """
-        new_class_dict = dict()
 
-        new_class_dict["name"] = self.current_class_dict["name"]
-
-        new_class_dict["path"] = self.current_class_dict["path"]
+        # Init class dict
+        class_dict = dict()
+        class_dict["name"] = self.current_class_dict["name"]
+        class_dict["path"] = self.current_class_dict["path"]
 
         # Read property table
         prop_list = list()
@@ -548,14 +709,13 @@ class DClassGenerator(Ui_DClassGenerator, QWidget):
                 val = self.table_prop.cellWidget(row, col).text()
                 prop_dict[MATCH_PROP_DICT[self.list_prop[col]]] = val
             prop_list.append(prop_dict)
-        new_class_dict["properties"] = prop_list
+        class_dict["properties"] = prop_list
 
         # Read method table
-        meth_list = list()
-        for row in range(self.table_meth.rowCount()):
-            val = self.table_meth.cellWidget(row, 0).text()
-            meth_list.append(val)
-        new_class_dict["methods"] = meth_list
+        class_dict["methods"] = [
+            self.table_meth.cellWidget(row, 0).text()
+            for row in range(self.table_meth.rowCount())
+        ]
 
         # Read meta data table
         # Handle constants separately
@@ -568,13 +728,27 @@ class DClassGenerator(Ui_DClassGenerator, QWidget):
                     if len(cst_list) < row:
                         cst_list.append(dict())
                     cst_list[row - 1][MATCH_META_DICT[self.list_meta[col]][1]] = val
-                new_class_dict[MATCH_META_DICT[self.list_meta[col]][0]] = cst_list
+                class_dict[MATCH_META_DICT[self.list_meta[col]][0]] = cst_list
             else:
                 val = self.table_meta.cellWidget(1, col).text()
-                new_class_dict[MATCH_META_DICT[self.list_meta[col]]] = val
+                class_dict[MATCH_META_DICT[self.list_meta[col]]] = val
+
+        return class_dict
+
+    def saveClass(self):
+        """Save class as csv file
+
+        Parameters
+        ----------
+        self : DClassGenerator
+            A DClassGenerator object
+        """
+
+        # Get current class dict from tables
+        class_dict = self.get_current_class_dict_from_tables()
 
         # Write class into csv format
-        write_file(new_class_dict)
+        write_file(class_dict)
 
     def genClass(self):
         """Generate class from csv files
@@ -585,6 +759,18 @@ class DClassGenerator(Ui_DClassGenerator, QWidget):
             A DClassGenerator object
         """
         run_generate_classes(is_black=self.is_black.isChecked())
+
+    def onItemCollapse(self, index):
+        """Slot for item collapsed"""
+        # dynamic resize
+        for ii in range(3):
+            self.treeView.resizeColumnToContents(ii)
+
+    def onItemExpand(self, index):
+        """Slot for item expand"""
+        # dynamic resize
+        for ii in range(3):
+            self.treeView.resizeColumnToContents(ii)
 
     def openContextMenu(self, point):
         """Generate and open context the menu at the given point position."""
