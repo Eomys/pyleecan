@@ -22,6 +22,9 @@
      <height>681</height>
     </rect>
    </property>
+   <property name="contextMenuPolicy">
+    <enum>Qt::CustomContextMenu</enum>
+   </property>
   </widget>
   <widget class="QWidget" name="path_selector" native="true">
    <property name="geometry">
@@ -121,7 +124,7 @@
     </rect>
    </property>
   </widget>
-  <widget class="QWidget" name="">
+  <widget class="QWidget" name="layoutWidget">
    <property name="geometry">
     <rect>
      <x>14</x>

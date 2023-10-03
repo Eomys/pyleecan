@@ -1,7 +1,10 @@
 from os.path import join, isfile, isdir
 from shutil import copyfile
 import os
-from PySide2.QtCore import Qt, Signal, QDir
+import types
+from PySide2.QtCore import Qt, Signal, QDir, QEvent
+
+from PySide2.QtGui import QCursor
 
 from functools import partial
 
@@ -16,6 +19,7 @@ from PySide2.QtWidgets import (
     QHeaderView,
     QPushButton,
     QTableWidgetItem,
+    QMenu,
 )
 
 import subprocess
@@ -88,6 +92,8 @@ class DClassGenerator(Ui_DClassGenerator, QWidget):
         self.dirModel = QFileSystemModel()
         self.dirModel.setRootPath(self.class_gen_path)
         self.dirModel.setFilter(QDir.NoDotAndDotDot | QDir.AllDirs | QDir.Files)
+        self.dirModel.setReadOnly(False)
+        self.treeView.setContextMenuPolicy(Qt.CustomContextMenu)
         self.treeView.setModel(self.dirModel)
         self.treeView.setRootIndex(self.dirModel.index(self.class_gen_path))
         self.treeView.setHeaderHidden(True)
@@ -143,9 +149,6 @@ class DClassGenerator(Ui_DClassGenerator, QWidget):
         self.treeView.clicked.connect(self.update_class_selected)
         self.treeView.customContextMenuRequested.connect(self.openContextMenu)
 
-        # Disable browse button
-        self.b_browse.setEnabled(False)
-
         # Connect save class button
         self.b_saveclass.clicked.connect(self.saveClass)
 
@@ -153,48 +156,183 @@ class DClassGenerator(Ui_DClassGenerator, QWidget):
         self.b_genclass.clicked.connect(self.genClass)
         self.is_black.setChecked(True)
 
-    def update_class_selected(self, point):
+    def openContextMenu(self, position):
+        """Generate and open context the menu at the given position
+
+        Parameters
+        ----------
+        self : DClassGenerator
+            a DClassGenerator object
+        position : QPoint
+            Position of treeview clicked element
+
+        """
+
+        index = self.treeView.indexAt(position)
+
+        if not index.isValid():
+            return
+
+        menu = QMenu()
+
+        if self.dirModel.isDir(index):
+            delete_module = menu.addAction(self.tr("Delete module"))
+            delete_module.triggered.connect(self.deleteModule)
+            new_module = menu.addAction(self.tr("New module"))
+            new_module.triggered.connect(self.createModule)
+
+        elif self.dirModel.data(index)[:-4] == ".csv":
+            delete_class = menu.addAction(self.tr("Delete class"))
+            delete_class.triggered.connect(partial(self.deleteClass, index))
+            dupli_class = menu.addAction(self.tr("Duplicate class"))
+            dupli_class.triggered.connect(partial(self.duplicateClass, index))
+            new_class = menu.addAction(self.tr("New class"))
+            new_class.triggered.connect(partial(self.createClass, index))
+
+        else:
+            return
+
+        menu.exec_(self.treeView.viewport().mapToGlobal(position))
+
+    def deleteClass(self, index):
+        """Delete csv file associated to class
+
+        Parameters
+        ----------
+        self : DClassGenerator
+            a DClassGenerator object
+        index : QModelIndex
+            Model index of current selected item in treeview
+
+        """
+
+        self.dirModel.remove(index)
+
+    def duplicateClass(self, index):
+        """Duplicate class by copying csv file
+
+        Parameters
+        ----------
+        self : DClassGenerator
+            a DClassGenerator object
+        index : QModelIndex
+            Model index of current selected item in treeview
+
+        """
+
+        file_path = self.dirModel.filePath(index)
+        file_name = self.dirModel.fileName(index)
+
+        file_path_dup = file_path.replace(file_name, file_name[:-4] + "_copy.csv")
+
+        copyfile(file_path, file_path_dup)
+
+    def createClass(self, index):
+        """Create class by saving empty csv file
+
+        Parameters
+        ----------
+        self : DClassGenerator
+            a DClassGenerator object
+        index : QModelIndex
+            Model index of current selected item in treeview
+
+        """
+
+        file_path = self.dirModel.filePath(index)
+        file_name = self.dirModel.fileName(index)
+
+        file_path_new = file_path.replace(file_name, "") + "new_class.csv"
+
+        # Init class dict
+        class_dict = dict()
+        class_dict["name"] = "new_class"
+        class_dict["path"] = file_path_new
+
+        # Init property table
+        prop_dict = dict()
+        for col in range(len(self.list_prop)):
+            prop_dict[MATCH_PROP_DICT[self.list_prop[col]]] = ""
+        class_dict["properties"] = [prop_dict]
+        class_dict["properties"][0]["name"] = "new_prop"
+
+        # Init method table
+        class_dict["methods"] = ["new_method"]
+
+        # Init meta data table
+        class_dict["package"] = self.dirModel.data(index.parent())
+        class_dict["mother"] = ""
+        class_dict["desc"] = ""
+        class_dict["constants"] = [{"name": "VERSION", "value": 1}]
+
+        # Write empty class into csv format
+        write_file(class_dict)
+
+    def deleteModule(self, index):
+        """Delete folder associated to current module
+
+        Parameters
+        ----------
+        self : DClassGenerator
+            a DClassGenerator object
+        index : QModelIndex
+            Model index of current selected item in treeview
+
+        """
+
+        self.dirModel.rmdir(index)
+
+    def createModule(self):
+        pass
+
+    def update_class_selected(self, index):
         """Update GUI with selected class from TreeView
 
         Parameters
         ----------
         self : DClassGenerator
             a DClassGenerator object
-        point : QModelIndex
+        index : QModelIndex
             Model index of current selected item in treeview
 
         """
 
-        self.import_class_from_csv(point)
-        self.fill_table_prop()
-        self.fill_table_meth()
-        self.fill_table_meta()
+        self.import_class_from_csv(index)
 
-    def import_class_from_csv(self, point):
+        if self.current_class_dict is not None:
+            self.fill_table_prop()
+            self.fill_table_meth()
+            self.fill_table_meta()
+
+    def import_class_from_csv(self, index):
         """Import class from csv file when clicking on a csv in TreeView
 
         Parameters
         ----------
         self : DClassGenerator
             a DClassGenerator object
-        point : QModelIndex
+        index : QModelIndex
             Model index of current selected item in treeview
 
         """
 
         # Get parent folder in which the csv file is
-        parent = point.parent()
+        parent = index.parent()
 
-        if self.dirModel.data(parent) == "ClassesRef":
-            # Don't do anything if click on module (folder)
+        if self.dirModel.isDir(index):
+            # Don't do anything if click on folder
             return
 
-        if point.column() == 0:
+        if index.column() == 0:
             # User clicked directly on name, extract name
-            class_name = self.dirModel.data(point)
+            class_name = self.dirModel.data(index)
         else:
             # User clicked on other properties than name, extract name by using parent
-            class_name = self.dirModel.data(parent.child(point.row(), 0))
+            class_name = self.dirModel.data(parent.child(index.row(), 0))
+
+        if class_name[:-4] != ".csv":
+            # Check if file is a csv
+            return
 
         # Get full module name by recursion on parent folders
         module = self.dirModel.data(parent)
@@ -207,9 +345,12 @@ class DClassGenerator(Ui_DClassGenerator, QWidget):
 
         # Load csv file
         csv_path = join(DOC_DIR, module, class_name)
-        current_class_dict = read_file(
-            csv_path, soft_name=PACKAGE_NAME, is_get_size=True
-        )
+        try:
+            current_class_dict = read_file(
+                csv_path, soft_name=PACKAGE_NAME, is_get_size=True
+            )
+        except Exception as e:
+            return
 
         # Store current class information for further use
         self.current_class_dict = current_class_dict
@@ -771,283 +912,3 @@ class DClassGenerator(Ui_DClassGenerator, QWidget):
         # dynamic resize
         for ii in range(3):
             self.treeView.resizeColumnToContents(ii)
-
-    def openContextMenu(self, point):
-        """Generate and open context the menu at the given point position."""
-
-        index = self.treeView.indexAt(point)
-        # pos = QtGui.QCursor.pos()
-
-        # if not index.isValid():
-        #     return
-
-        # # get the data
-        # item = self.model.item(index)
-        # obj_info = self.model.get_obj_info(item)
-
-        # # init the menu
-        # menu = TreeEditContextMenu(obj_dict=obj_info, parent=self)
-        # menu.exec_(pos)
-
-        # self.onSelectionChanged(self.selectionModel.selection())
-
-        print("toto5")
-
-        # """Generate and open context the menu at the given point position."""
-        # index = self.treeView.indexAt(point)
-        # pos = QtGui.QCursor.pos()
-
-        # if not index.isValid():
-        #     return
-
-        # # get the data
-        # item = self.model.item(index)
-        # obj_info = self.model.get_obj_info(item)
-
-        # # init the menu
-        # menu = TreeEditContextMenu(obj_dict=obj_info, parent=self)
-        # menu.exec_(pos)
-
-        # self.onSelectionChanged(self.selectionModel.selection())
-
-        # # Initialize the machine if needed
-        # if machine is None:
-        #     self.machine = type(mach_list[0]["init_machine"])(
-        #         init_dict=mach_list[0]["init_machine"].as_dict()
-        #     )
-
-        # self.update_nav()
-        # self.set_nav(self.last_index)
-
-        # # Connect save/load button
-        # self.nav_step.currentRowChanged.connect(self.set_nav)
-        # self.b_save.clicked.connect(self.s_save)
-        # self.b_load.clicked.connect(self.s_load)
-
-        # self.qmessagebox_question = None
-
-    # def s_save_close(self):
-    #     """Signal to save and close
-
-    #     Parameters
-    #     ----------
-    #     self : DMachineSetup
-    #         A DMachineSetup object
-    #     """
-    #     to_close = self.s_save()
-    #     if to_close:
-    #         self.close()
-
-    # def s_load(self):
-    #     """Slot to load a machine from a .json file (triggered by b_load)
-
-    #     Parameters
-    #     ----------
-    #     self : DMachineSetup
-    #         A DMachineSetup object
-    #     """
-    #     ### TODO: handle material data, i.e. "connect", set new material, etc.
-
-    #     # Ask the user to select a .json file to load
-    #     load_path = str(
-    #         QFileDialog.getOpenFileName(
-    #             self, self.tr("Load file"), self.machine_path, "Json (*.json)"
-    #         )[0]
-    #     )
-    #     if load_path != "":
-    #         try:
-    #             # Update the machine path to remember the last used folder
-    #             self.machine_path = dirname(load_path)
-    #             # Load and check type of instance
-    #             machine = load(load_path)
-    #             if isinstance(machine, Machine):
-    #                 self.machine = machine
-    #                 load_machine_materials(self.material_dict, self.machine)
-    #             else:
-    #                 QMessageBox().critical(
-    #                     self,
-    #                     self.tr("Error"),
-    #                     self.tr("The choosen file is not a machine file."),
-    #                 )
-    #                 return
-    #             self.machineChanged.emit()
-    #             self.is_save_needed = False
-    #         except Exception as e:
-    #             QMessageBox().critical(
-    #                 self,
-    #                 self.tr("Error"),
-    #                 self.tr(
-    #                     "The machine file is incorrect:\n",
-    #                     "Please keep the \n, another " "message is following this one",
-    #                 )
-    #                 + type(e).__name__
-    #                 + ": "
-    #                 + str(e),
-    #             )
-    #             return
-    #         self.update_nav()
-
-    # def update_nav(self, next_step=None):
-    #     """Update the nav list to match the step of the current machine"""
-    #     mach_dict = mach_list[self.get_machine_index()]
-    #     self.nav_step.blockSignals(True)
-    #     self.nav_step.clear()
-    #     index = 1
-    #     for step in mach_dict["start_step"]:
-    #         self.nav_step.addItem(" " + str(index) + ": " + step.step_name)
-    #         index += 1
-    #     for step in mach_dict["stator_step"]:
-    #         self.nav_step.addItem(" " + str(index) + ": Stator " + step.step_name)
-    #         index += 1
-    #     for step in mach_dict["rotor_step"]:
-    #         if index < 10:
-    #             self.nav_step.addItem(" " + str(index) + ": Rotor " + step.step_name)
-    #         else:
-    #             self.nav_step.addItem(str(index) + ": Rotor " + step.step_name)
-    #         index += 1
-    #     # Adding step Machine Summary
-    #     if index < 10:
-    #         self.nav_step.addItem(" " + str(index) + ": " + SPreview.step_name)
-    #     else:
-    #         self.nav_step.addItem(str(index) + ": " + SPreview.step_name)
-    #     index += 1
-    #     # Adding Simulation Step
-    #     if index < 10:
-    #         self.nav_step.addItem(" " + str(index) + ": " + SSimu.step_name)
-    #     else:
-    #         self.nav_step.addItem(str(index) + ": " + SSimu.step_name)
-    #     # Update GUI and select correct step
-    #     self.update_enable_nav()
-    #     self.nav_step.blockSignals(False)
-    #     if next_step is None:
-    #         self.nav_step.setCurrentRow(self.last_index)
-    #     else:
-    #         self.nav_step.setCurrentRow(next_step)
-
-    # def update_enable_nav(self):
-    #     # Load for readibility
-    #     nav = self.nav_step
-    #     machine = self.machine
-    #     mach_dict = mach_list[self.get_machine_index()]
-    #     # First we disable all the item in the navigation widget
-    #     for ii in range(0, nav.count()):
-    #         nav.item(ii).setFlags(DISABLE_ITEM)
-    #     # First step is always available
-    #     nav.item(0).setFlags(ENABLE_ITEM)
-    #     index = 1
-    #     # Check the start steps
-    #     for step in mach_dict["start_step"]:
-    #         if step.check(machine) is not None:
-    #             self.last_index = index - 1
-    #             return None  # Exit at the first fail
-    #         nav.item(index).setFlags(ENABLE_ITEM)
-    #         index += 1
-    #     # Check the stator steps
-    #     for step in mach_dict["stator_step"]:
-    #         if step.check(machine.stator) is not None:
-    #             self.last_index = index - 1
-    #             return None  # Exit at the first fail
-    #         nav.item(index).setFlags(ENABLE_ITEM)
-    #         index += 1
-    #     # Check the rotor steps
-    #     for step in mach_dict["rotor_step"]:
-    #         if step.check(machine.rotor) is not None:
-    #             self.last_index = index - 1
-    #             return None  # Exit at the first fail
-    #         nav.item(index).setFlags(ENABLE_ITEM)
-    #         index += 1
-    #     # Enable and select FEMM Simulation
-    #     nav.item(index).setFlags(ENABLE_ITEM)
-    #     self.last_index = index
-
-    # def get_machine_index(self):
-    #     """Get the index corresponding to the current machine in the mach_list"""
-    #     # Get the correct machine dictionary
-    #     index = mach_index.index(type(self.machine))
-    #     if index == -1:
-    #         QMessageBox().critical(
-    #             self, self.tr("Error"), self.tr("Unknown machine type")
-    #         )
-    #         self.machine = type(mach_list[0]["init_machine"])(
-    #             init_dict=mach_list[0]["init_machine"].as_dict()
-    #         )
-    #         return self.get_machine_index()
-    #     return index
-
-    # def set_nav(self, index):
-    #     """Select the current widget according to the current machine type
-    #     and the current nav index
-
-    #     Parameters
-    #     ----------
-    #     self : DMachineSetup
-    #         A DMachineSetup object
-    #     index : int
-    #         Current index of nav_step
-    #     """
-    #     # Get the step list of the current machine
-    #     mach_dict = mach_list[self.get_machine_index()]
-    #     step_list = list()
-    #     step_list.extend(mach_dict["start_step"])
-    #     step_list.extend(mach_dict["stator_step"])
-    #     step_list.extend(mach_dict["rotor_step"])
-    #     step_list.append(SPreview)
-    #     step_list.append(SSimu)
-    #     is_stator = "Stator" in self.nav_step.currentItem().text()
-
-    #     # Regenerate the step with the current values
-    #     self.w_step.setParent(None)
-    #     self.w_step = step_list[index](
-    #         machine=self.machine, material_dict=self.material_dict, is_stator=is_stator
-    #     )
-    #     self.w_step.b_previous.clicked.connect(self.s_previous)
-    #     if index != len(step_list) - 1:
-    #         self.w_step.b_next.setText(self.tr("Next"))
-    #         self.w_step.b_next.clicked.connect(self.s_next)
-    #     # else:
-    #     #     self.w_step.b_next.setText(self.tr("Save and Close"))
-    #     #     self.w_step.b_next.clicked.connect(self.s_save_close)
-
-    #     self.w_step.saveNeeded.connect(self.save_needed)
-    #     # Refresh the GUI
-    #     self.main_layout.insertWidget(1, self.w_step)
-
-    # def s_next(self):
-    #     """Signal to set the next step as accessible (and selected)
-
-    #     Parameters
-    #     ----------
-    #     self : DMachineSetup
-    #         A DMachineSetup object
-    #     """
-    #     next_index = self.nav_step.currentRow() + 1
-    #     mach_dict = mach_list[self.get_machine_index()]
-
-    #     if next_index - 1 < len(mach_dict["start_step"]):
-    #         error = self.w_step.check(self.machine)
-    #     elif next_index - 1 < len(mach_dict["start_step"]) + len(
-    #         mach_dict["stator_step"]
-    #     ):
-    #         error = self.w_step.check(self.machine.stator)
-    #     else:
-    #         error = self.w_step.check(self.machine.rotor)
-
-    #     if error is not None:  # An error: display it in a popup
-    #         QMessageBox().critical(self, self.tr("Error"), error)
-    #     else:  # No error => Go to the next page
-    #         self.nav_step.item(next_index).setFlags(ENABLE_ITEM)
-    #         self.last_index = next_index
-    #         self.nav_step.setCurrentRow(next_index)
-    #         # As the current row have changed, set_nav is called
-
-    # def s_previous(self):
-    #     """Signal to set the previous page of w_page_stack as accessible (and selected)
-
-    #     Parameters
-    #     ----------
-    #     self : DMachineSetup
-    #         A DMachineSetup object
-    #     """
-    #     next_index = self.nav_step.currentRow() - 1
-    #     self.nav_step.setCurrentRow(next_index)
-    #     # As the current row have change, set_nav is called
