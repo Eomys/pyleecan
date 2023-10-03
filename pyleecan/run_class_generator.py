@@ -71,7 +71,7 @@ def run_class_generator(argv):
 
     # c.treeView.resizeColumnToContents(0)
 
-    c.showMaximized()
+    c.show()
 
     exit(a.exec_())
 

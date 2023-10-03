@@ -21,9 +21,12 @@ MATCH_PROP_DICT = {
 MATCH_META_DICT = {
     "Package": "package",
     "Inherit": "mother",
+    "Class description": "desc",
+}
+
+MATCH_CONST_DICT = {
     "Constant Name": ["constants", "name"],
     "Constant Value": ["constants", "value"],
-    "Class description": "desc",
 }
 
 
@@ -44,6 +47,7 @@ def write_file(class_dict, soft_name=PACKAGE_NAME):
 
     list_meta = list(MATCH_META_DICT.keys())
     list_prop = list(MATCH_PROP_DICT.keys())
+    list_const = list(MATCH_CONST_DICT.keys())
 
     # Get csv path
     csv_path = realpath(class_dict["path"])
@@ -62,17 +66,19 @@ def write_file(class_dict, soft_name=PACKAGE_NAME):
     # Copy the list of meta data
     meta_dict = dict()
     for meta_name in list_meta:
-        if isinstance(MATCH_META_DICT[meta_name], list):
-            meta_prop = class_dict[MATCH_META_DICT[meta_name][0]]
-            meta_dict[meta_name] = list()
-            # Browse list of constants
-            for const_dict in meta_prop:
-                meta_dict[meta_name].append(const_dict[MATCH_META_DICT[meta_name][1]])
-        else:
-            meta_prop = class_dict[MATCH_META_DICT[meta_name]]
-            meta_dict[meta_name] = meta_prop
-    cst_name_list = list(meta_dict["Constant Name"])
-    cst_val_list = list(meta_dict["Constant Value"])
+        meta_prop = class_dict[MATCH_META_DICT[meta_name]]
+        meta_dict[meta_name] = meta_prop
+
+    # Copy the list of constants
+    const_list = class_dict["constants"]
+    cst_name_list = list()
+    cst_val_list = list()
+    for const_dict in const_list:
+        for name, val in const_dict.items():
+            if name == MATCH_CONST_DICT["Constant Name"][1]:
+                cst_name_list.append(val)
+            else:
+                cst_val_list.append(val)
 
     # Number of properties
     Nprop = len(prop_list)
@@ -104,20 +110,21 @@ def write_file(class_dict, soft_name=PACKAGE_NAME):
     # Empty row between properties and methods/metadata
     class_array[Nprop + 1, :] = empty_row
 
-    # Fill line with methods and metadata names
-    list_meta.insert(2, "Methods")
-    for ii in range(len(list_meta), Ncol, 1):
-        list_meta.append("")
-    class_array[Nprop + 2 : Nprop + 3, :] = np.array(list_meta)
+    # Fill line with methods, metadata names and constants
+    # Package Inherit Methods Constant Name	Constant Value Class description
+    list_meta_meth_const = [*list_meta[:2], "Methods", *list_const, list_meta[2]]
+    for ii in range(len(list_meta_meth_const), Ncol, 1):
+        list_meta_meth_const.append("")
+    class_array[Nprop + 2 : Nprop + 3, :] = np.array(list_meta_meth_const)
 
     # Init last lines as empty rows
-    for ii in range(Nprop + 3, Nrow, 1):
-        class_array[ii, :] = empty_row
+    for row in range(Nprop + 3, Nrow, 1):
+        class_array[row, :] = empty_row
 
     # Fill values of metadata
-    for ii, data in enumerate(list_meta):
-        if data != "Methods" and "Constant" not in data and len(data) > 0:
-            class_array[Nprop + 3, ii] = meta_dict[data]
+    for meta_name in list_meta:
+        col = list_meta_meth_const.index(meta_name)
+        class_array[Nprop + 3, col] = meta_dict[meta_name]
 
     # Fill column of methods (3rd column)
     if Nmeth > 0:
