@@ -76,6 +76,7 @@
     <file>images/MachineSetup/WMSlot/SlotM11_empty_ext_stator.png</file>
     <file>images/MachineSetup/WMSlot/SlotM11_empty_int_rotor.png</file>
     <file>images/MachineSetup/WMSlot/SlotM11_mag_int_rotor.png</file>
+    <file>images/MachineSetup/WMSlot/SlotM11_key_ext_stator.png</file>
     <file>images/MachineSetup/WMSlot/SlotM12_empty_int_rotor.png</file>
     <file>images/MachineSetup/WMSlot/SlotM12_mag_int_rotor.png</file>
     <file>images/MachineSetup/WMSlot/SlotM13_mag_int_rotor.png</file>
@@ -85,6 +86,7 @@
     <file>images/MachineSetup/WMSlot/SlotM17_mag_int_rotor.png</file>
     <file>images/MachineSetup/WMSlot/SlotM18_mag_int_rotor.png</file>
     <file>images/MachineSetup/WMSlot/SlotM19_mag_int_rotor.png</file>
+    <file>images/MachineSetup/WMSlot/SlotM19_empty_ext_stator.png</file>
     <file>images/MachineSetup/LamParam/CircVentDuct.png</file>
     <file>images/MachineSetup/LamParam/VentilationCirc.png</file>
     <file>images/MachineSetup/LamParam/VentilationPolar.png</file>

@@ -4,11 +4,13 @@ import PySide2.QtCore
 from numpy import pi
 from PySide2.QtCore import Signal
 from PySide2.QtWidgets import QWidget
+from PySide2.QtGui import QPixmap
 
 from ......Classes.SlotM19 import SlotM19
 from ..... import gui_option
 from ..PMSlot19.Gen_PMSlot19 import Gen_PMSlot19
 from ......Methods.Slot.Slot import SlotCheckError
+from ......GUI.Resources import pixmap_dict
 
 translate = PySide2.QtCore.QCoreApplication.translate
 
@@ -20,9 +22,10 @@ class PMSlot19(Gen_PMSlot19, QWidget):
     saveNeeded = Signal()
     # Information for Slot combobox
     slot_name = "Trapezoidal Magnet with polar top"
+    notch_name = "Trapezoidal"
     slot_type = SlotM19
 
-    def __init__(self, lamination=None, material_dict=None):
+    def __init__(self, lamination=None, notch_obj=None, material_dict=None):
         """Initialize the widget according to lamination
 
         Parameters
@@ -40,6 +43,8 @@ class PMSlot19(Gen_PMSlot19, QWidget):
         self.setupUi(self)
         self.lamination = lamination
         self.slot = lamination.slot
+        self.is_notch = notch_obj is not None
+        self.notch_obj = notch_obj
         self.material_dict = material_dict
 
         # Set FloatEdit unit
@@ -54,6 +59,37 @@ class PMSlot19(Gen_PMSlot19, QWidget):
         ]
         for wid in wid_list:
             wid.setText("[" + gui_option.unit.get_m_name() + "]")
+
+        # Notch setup
+        if self.is_notch:
+            # Hide magnet related widget
+            wid_list = [self.in_Hmag, self.lf_Hmag, self.unit_Hmag]
+            for wid in wid_list:
+                wid.hide()
+            # Set values for check
+            self.slot.Hmag = 0
+
+            self.lf_Hkey.unit = "m"
+
+            # Set unit name (m ou mm)
+            wid_list = [
+                self.unit_Hkey,
+            ]
+            for wid in wid_list:
+                wid.setText("[" + gui_option.unit.get_m_name() + "]")
+
+            # Selecting the right image
+            if not self.lamination.is_internal:
+                # Use schematics on the external without magnet
+                self.img_slot.setPixmap(
+                    QPixmap(pixmap_dict["SlotM19_empty_ext_stator"])
+                )
+
+            self.lf_Hkey.editingFinished.connect(self.set_Hkey)
+
+        else:
+            # Use schematics on the inner without magnet
+            self.img_slot.setPixmap(QPixmap(pixmap_dict["SlotM19_empty_int_rotor"]))
 
         # Fill the fields with the machine values (if they're filled)
         self.lf_W0.setValue(self.slot.W0)
@@ -103,6 +139,19 @@ class PMSlot19(Gen_PMSlot19, QWidget):
             A PMSlot19 object
         """
         self.slot.Hmag = self.lf_Hmag.value()
+        self.w_out.comp_output()
+        # Notify the machine GUI that the machine has changed
+        self.saveNeeded.emit()
+
+    def set_Hkey(self):
+        """Signal to update the value of Hkey according to the line edit
+
+        Parameters
+        ----------
+        self : PMSlot19
+            A PMSlot19 object
+        """
+        self.slot.Hmag = self.lf_Hkey.value()
         self.w_out.comp_output()
         # Notify the machine GUI that the machine has changed
         self.saveNeeded.emit()

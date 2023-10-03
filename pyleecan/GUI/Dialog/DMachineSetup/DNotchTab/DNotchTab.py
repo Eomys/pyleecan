@@ -106,11 +106,11 @@ class DNotchTab(Ui_DNotchTab, QDialog):
             self.obj.notch.append(
                 NotchEvenDist(
                     alpha=0,
+                    key_mat=self.material_dict,
                     notch_shape=SlotM10(
                         Zs=self.obj.get_Zs(),
                         W0=None,
                         H0=None,
-                        material_dict=self.material_dict,
                     ),
                 )
             )
@@ -122,7 +122,7 @@ class DNotchTab(Ui_DNotchTab, QDialog):
         tab.saveNeeded.connect(self.emit_save)
         self.tab_notch.addTab(tab, "Notch Set " + str(notch_index + 1))
 
-    def s_remove(self, index):
+    def s_remove(self, index, material_dict):
         """Signal to remove the last notch
 
         Parameters
@@ -130,6 +130,7 @@ class DNotchTab(Ui_DNotchTab, QDialog):
         self : DNotchTab
             A DNotchTab widget
         """
+        self.material_dict = material_dict
         if len(self.obj.notch) > 1:
             self.tab_notch.removeTab(index)
             self.obj.notch.pop(index)
@@ -137,7 +138,7 @@ class DNotchTab(Ui_DNotchTab, QDialog):
         # Make sure that the tab have the correct number in their name
         self.tab_notch.clear()
         for idx_notch, notch in enumerate(self.obj.notch):
-            self.s_add(notch, idx_notch)
+            self.s_add(notch, idx_notch, self.material_dict)
         self.tab_notch.setCurrentIndex(0)
 
     def s_plot(self):

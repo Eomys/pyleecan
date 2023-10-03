@@ -23,6 +23,7 @@ from ....Functions.Plot import (
 from ....Methods import ParentMissingError
 
 MAGNET_COLOR = config_dict["PLOT"]["COLOR_DICT"]["MAGNET_COLOR"]
+KEY_COLOR = config_dict["PLOT"]["COLOR_DICT"]["KEY_COLOR"]
 
 
 def plot_schematics(
@@ -160,7 +161,38 @@ def plot_schematics(
                 is_arrow=True,
                 fontsize=SC_FONT_SIZE,
             )
-            if type_add_active != 0:
+            if type_add_active == 5:
+                # Wkey
+                R = self.get_Rbo() + sign * (self.H0 - self.Hmag * 1.1)
+                line = Arc1(
+                    begin=R * exp(-1j * self.Wmag / 2),
+                    end=R * exp(1j * self.Wmag / 2),
+                    radius=R,
+                    is_trigo_direction=True,
+                )
+                line.plot(
+                    fig=fig,
+                    ax=ax,
+                    color=ARROW_COLOR,
+                    linewidth=ARROW_WIDTH,
+                    label="Wkey",
+                    offset_label=-1 * sign * self.H0 * 0.2 - 0.3 * self.H0,
+                    fontsize=SC_FONT_SIZE,
+                )
+                # Hkey
+                line = Segment(point_dict["ZM3"], point_dict["ZM4"])
+                line.plot(
+                    fig=fig,
+                    ax=ax,
+                    color=ARROW_COLOR,
+                    linewidth=ARROW_WIDTH,
+                    label="Hkey",
+                    offset_label=1j * point_dict["Z4"].imag * 0.2 - 0.2 * self.H0,
+                    is_arrow=True,
+                    fontsize=SC_FONT_SIZE,
+                )
+
+            elif type_add_active != 0:
                 # Wmag
                 R = self.get_Rbo() + sign * (self.H0 - self.Hmag * 1.1)
                 line = Arc1(
@@ -258,6 +290,10 @@ def plot_schematics(
         elif type_add_active == 2:
             self.plot_active(
                 fig=fig, ax=ax, is_show_fig=False, enforced_default_color=MAGNET_COLOR
+            )
+        elif type_add_active == 5:
+            self.plot_active(
+                fig=fig, ax=ax, is_show_fig=False, enforced_default_color=KEY_COLOR
             )
 
         # Zooming and cleaning

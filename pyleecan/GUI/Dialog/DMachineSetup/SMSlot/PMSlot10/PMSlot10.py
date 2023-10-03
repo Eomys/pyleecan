@@ -74,6 +74,7 @@ class PMSlot10(Gen_PMSlot10, QWidget):
             # Set values for check
             self.slot.Hmag = 0
             self.slot.Wmag = 0
+
             # Selecting the right image
             if not self.lamination.is_internal:
                 # Use schematics on the external without magnet

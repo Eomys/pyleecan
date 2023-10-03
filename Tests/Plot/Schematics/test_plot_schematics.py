@@ -68,6 +68,7 @@ SlotM_list = [
     SlotM16(),
     SlotM17(),
     SlotM18(),
+    SlotM19(),
 ]
 
 SlotW_list = [
@@ -147,6 +148,13 @@ slot_test.append(
     {
         "test_obj": SlotM11(),
         "type_add_active": 2,
+        "is_default": 2,
+    }
+)
+slot_test.append(
+    {
+        "test_obj": SlotM11(),
+        "type_add_active": 5,
         "is_default": 2,
     }
 )
@@ -548,9 +556,9 @@ if __name__ == "__main__":
     a = Test_plot_schematics()
     # a.test_BoreFlower()
     # a.test_BoreSinePole()
-    a.test_slot(slot_test[0])
-    a.test_slot_point(slot_test[0])
-    a.test_slot(slot_test[11])
+    a.test_slot(slot_test[9])
+    a.test_slot_point(slot_test[9])
+    a.test_slot(slot_test[15])
     #
 
     # for slot in slot_test:
