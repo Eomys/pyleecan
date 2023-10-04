@@ -27,7 +27,7 @@ class Ui_DClassGenerator(object):
         self.treeView.setContextMenuPolicy(Qt.CustomContextMenu)
         self.layoutWidget = QWidget(DClassGenerator)
         self.layoutWidget.setObjectName(u"layoutWidget")
-        self.layoutWidget.setGeometry(QRect(14, 750, 1431, 58))
+        self.layoutWidget.setGeometry(QRect(14, 750, 1771, 58))
         self.horizontalLayout = QHBoxLayout(self.layoutWidget)
         self.horizontalLayout.setObjectName(u"horizontalLayout")
         self.horizontalLayout.setContentsMargins(0, 0, 0, 0)
@@ -50,25 +50,25 @@ class Ui_DClassGenerator(object):
 
         self.horizontalLayout.addLayout(self.gridLayout)
 
-        self.widget = QWidget(DClassGenerator)
-        self.widget.setObjectName(u"widget")
-        self.widget.setGeometry(QRect(275, 35, 1511, 711))
-        self.verticalLayout = QVBoxLayout(self.widget)
+        self.layoutWidget1 = QWidget(DClassGenerator)
+        self.layoutWidget1.setObjectName(u"layoutWidget1")
+        self.layoutWidget1.setGeometry(QRect(275, 35, 1511, 711))
+        self.verticalLayout = QVBoxLayout(self.layoutWidget1)
         self.verticalLayout.setObjectName(u"verticalLayout")
         self.verticalLayout.setContentsMargins(0, 0, 0, 0)
         self.gridLayout_4 = QGridLayout()
         self.gridLayout_4.setObjectName(u"gridLayout_4")
-        self.table_prop = QTableWidget(self.widget)
+        self.table_prop = QTableWidget(self.layoutWidget1)
         self.table_prop.setObjectName(u"table_prop")
 
         self.gridLayout_4.addWidget(self.table_prop, 4, 0, 1, 5)
 
-        self.label_classname = QLabel(self.widget)
+        self.label_classname = QLabel(self.layoutWidget1)
         self.label_classname.setObjectName(u"label_classname")
 
         self.gridLayout_4.addWidget(self.label_classname, 1, 0, 1, 2)
 
-        self.b_saveclass = QPushButton(self.widget)
+        self.b_saveclass = QPushButton(self.layoutWidget1)
         self.b_saveclass.setObjectName(u"b_saveclass")
 
         self.gridLayout_4.addWidget(self.b_saveclass, 1, 2, 1, 1)
@@ -77,7 +77,7 @@ class Ui_DClassGenerator(object):
 
         self.gridLayout_4.addItem(self.horizontalSpacer_4, 1, 3, 1, 1)
 
-        self.lab_param = QLabel(self.widget)
+        self.lab_param = QLabel(self.layoutWidget1)
         self.lab_param.setObjectName(u"lab_param")
 
         self.gridLayout_4.addWidget(self.lab_param, 2, 0, 1, 2)
@@ -86,47 +86,77 @@ class Ui_DClassGenerator(object):
 
         self.gridLayout_4.addItem(self.horizontalSpacer_3, 2, 3, 1, 1)
 
+        self.b_addprop = QPushButton(self.layoutWidget1)
+        self.b_addprop.setObjectName(u"b_addprop")
+
+        self.gridLayout_4.addWidget(self.b_addprop, 2, 2, 1, 1)
+
 
         self.verticalLayout.addLayout(self.gridLayout_4)
 
         self.gridLayout_3 = QGridLayout()
         self.gridLayout_3.setObjectName(u"gridLayout_3")
-        self.b_browse = QPushButton(self.widget)
-        self.b_browse.setObjectName(u"b_browse")
-
-        self.gridLayout_3.addWidget(self.b_browse, 0, 1, 1, 1)
-
-        self.table_meth = QTableWidget(self.widget)
-        self.table_meth.setObjectName(u"table_meth")
-
-        self.gridLayout_3.addWidget(self.table_meth, 1, 0, 1, 3)
-
-        self.lab_methods = QLabel(self.widget)
+        self.lab_methods = QLabel(self.layoutWidget1)
         self.lab_methods.setObjectName(u"lab_methods")
 
         self.gridLayout_3.addWidget(self.lab_methods, 0, 0, 1, 1)
 
+        self.table_meth = QTableWidget(self.layoutWidget1)
+        self.table_meth.setObjectName(u"table_meth")
+
+        self.gridLayout_3.addWidget(self.table_meth, 1, 0, 1, 5)
+
+        self.b_addmeth = QPushButton(self.layoutWidget1)
+        self.b_addmeth.setObjectName(u"b_addmeth")
+
+        self.gridLayout_3.addWidget(self.b_addmeth, 0, 2, 1, 1)
+
         self.horizontalSpacer_2 = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
 
-        self.gridLayout_3.addItem(self.horizontalSpacer_2, 0, 2, 1, 1)
+        self.gridLayout_3.addItem(self.horizontalSpacer_2, 0, 4, 1, 1)
+
+        self.b_browse = QPushButton(self.layoutWidget1)
+        self.b_browse.setObjectName(u"b_browse")
+
+        self.gridLayout_3.addWidget(self.b_browse, 0, 3, 1, 1)
 
 
         self.verticalLayout.addLayout(self.gridLayout_3)
 
         self.gridLayout_2 = QGridLayout()
         self.gridLayout_2.setObjectName(u"gridLayout_2")
-        self.table_meta = QTableWidget(self.widget)
+        self.table_meta = QTableWidget(self.layoutWidget1)
         self.table_meta.setObjectName(u"table_meta")
         sizePolicy1 = QSizePolicy(QSizePolicy.Maximum, QSizePolicy.Expanding)
         sizePolicy1.setHorizontalStretch(0)
         sizePolicy1.setVerticalStretch(0)
         sizePolicy1.setHeightForWidth(self.table_meta.sizePolicy().hasHeightForWidth())
         self.table_meta.setSizePolicy(sizePolicy1)
+        self.table_meta.setMinimumSize(QSize(400, 0))
         self.table_meta.setMaximumSize(QSize(500, 16777215))
 
-        self.gridLayout_2.addWidget(self.table_meta, 1, 0, 1, 1)
+        self.gridLayout_2.addWidget(self.table_meta, 5, 0, 1, 1)
 
-        self.table_const = QTableWidget(self.widget)
+        self.lab_meta = QLabel(self.layoutWidget1)
+        self.lab_meta.setObjectName(u"lab_meta")
+
+        self.gridLayout_2.addWidget(self.lab_meta, 2, 0, 1, 1)
+
+        self.b_addconst = QPushButton(self.layoutWidget1)
+        self.b_addconst.setObjectName(u"b_addconst")
+
+        self.gridLayout_2.addWidget(self.b_addconst, 2, 2, 1, 1)
+
+        self.lab_const = QLabel(self.layoutWidget1)
+        self.lab_const.setObjectName(u"lab_const")
+
+        self.gridLayout_2.addWidget(self.lab_const, 2, 1, 1, 1)
+
+        self.horizontalSpacer_5 = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
+
+        self.gridLayout_2.addItem(self.horizontalSpacer_5, 2, 3, 1, 1)
+
+        self.table_const = QTableWidget(self.layoutWidget1)
         self.table_const.setObjectName(u"table_const")
         sizePolicy2 = QSizePolicy(QSizePolicy.Minimum, QSizePolicy.Expanding)
         sizePolicy2.setHorizontalStretch(0)
@@ -136,33 +166,23 @@ class Ui_DClassGenerator(object):
         self.table_const.setMinimumSize(QSize(600, 0))
         self.table_const.setMaximumSize(QSize(1200, 16777215))
 
-        self.gridLayout_2.addWidget(self.table_const, 1, 1, 1, 1)
-
-        self.lab_const = QLabel(self.widget)
-        self.lab_const.setObjectName(u"lab_const")
-
-        self.gridLayout_2.addWidget(self.lab_const, 0, 1, 1, 1)
-
-        self.lab_meta = QLabel(self.widget)
-        self.lab_meta.setObjectName(u"lab_meta")
-
-        self.gridLayout_2.addWidget(self.lab_meta, 0, 0, 1, 1)
+        self.gridLayout_2.addWidget(self.table_const, 5, 1, 1, 3)
 
 
         self.verticalLayout.addLayout(self.gridLayout_2)
 
-        self.widget1 = QWidget(DClassGenerator)
-        self.widget1.setObjectName(u"widget1")
-        self.widget1.setGeometry(QRect(10, 0, 731, 28))
-        self.horizontalLayout_2 = QHBoxLayout(self.widget1)
+        self.layoutWidget2 = QWidget(DClassGenerator)
+        self.layoutWidget2.setObjectName(u"layoutWidget2")
+        self.layoutWidget2.setGeometry(QRect(10, 0, 731, 28))
+        self.horizontalLayout_2 = QHBoxLayout(self.layoutWidget2)
         self.horizontalLayout_2.setObjectName(u"horizontalLayout_2")
         self.horizontalLayout_2.setContentsMargins(0, 0, 0, 0)
-        self.label_path_classgen = QLabel(self.widget1)
+        self.label_path_classgen = QLabel(self.layoutWidget2)
         self.label_path_classgen.setObjectName(u"label_path_classgen")
 
         self.horizontalLayout_2.addWidget(self.label_path_classgen)
 
-        self.le_path_classgen = QLineEdit(self.widget1)
+        self.le_path_classgen = QLineEdit(self.layoutWidget2)
         self.le_path_classgen.setObjectName(u"le_path_classgen")
 
         self.horizontalLayout_2.addWidget(self.le_path_classgen)
@@ -175,15 +195,18 @@ class Ui_DClassGenerator(object):
 
     def retranslateUi(self, DClassGenerator):
         DClassGenerator.setWindowTitle(QCoreApplication.translate("DClassGenerator", u"Pyleecan Class Generator", None))
-        self.b_genclass.setText(QCoreApplication.translate("DClassGenerator", u"Generate all classes", None))
+        self.b_genclass.setText(QCoreApplication.translate("DClassGenerator", u"Generate classes", None))
         self.is_black.setText(QCoreApplication.translate("DClassGenerator", u"Format with black", None))
         self.label_classname.setText(QCoreApplication.translate("DClassGenerator", u"<html><head/><body><p><span style=\" font-family:'DejaVu Sans'; font-size:14pt; font-weight:700; text-decoration: underline;\">ClassName</span></p></body></html>", None))
         self.b_saveclass.setText(QCoreApplication.translate("DClassGenerator", u"Save current class", None))
         self.lab_param.setText(QCoreApplication.translate("DClassGenerator", u"<html><head/><body><p><span style=\" font-family:'DejaVu Sans'; font-size:12pt; font-weight:700;\">Properties</span></p></body></html>", None))
-        self.b_browse.setText(QCoreApplication.translate("DClassGenerator", u"Browse", None))
+        self.b_addprop.setText(QCoreApplication.translate("DClassGenerator", u"Add Property", None))
         self.lab_methods.setText(QCoreApplication.translate("DClassGenerator", u"<html><head/><body><p><span style=\" font-family:'DejaVu Sans'; font-size:12pt; font-weight:700;\">Methods</span></p></body></html>", None))
-        self.lab_const.setText(QCoreApplication.translate("DClassGenerator", u"<html><head/><body><p><span style=\" font-family:'DejaVu Sans'; font-size:12pt; font-weight:700;\">Constants</span></p></body></html>", None))
+        self.b_addmeth.setText(QCoreApplication.translate("DClassGenerator", u"Add Method", None))
+        self.b_browse.setText(QCoreApplication.translate("DClassGenerator", u"Browse Folder", None))
         self.lab_meta.setText(QCoreApplication.translate("DClassGenerator", u"<html><head/><body><p><span style=\" font-family:'DejaVu Sans'; font-size:12pt; font-weight:700;\">Metadata</span></p></body></html>", None))
+        self.b_addconst.setText(QCoreApplication.translate("DClassGenerator", u"Add Constant", None))
+        self.lab_const.setText(QCoreApplication.translate("DClassGenerator", u"<html><head/><body><p><span style=\" font-family:'DejaVu Sans'; font-size:12pt; font-weight:700;\">Constants</span></p></body></html>", None))
         self.label_path_classgen.setText(QCoreApplication.translate("DClassGenerator", u"Path to generator folder:", None))
     # retranslateUi
 

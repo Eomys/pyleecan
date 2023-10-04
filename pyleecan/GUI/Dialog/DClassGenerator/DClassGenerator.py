@@ -23,7 +23,6 @@ from ..DClassGenerator.Ui_DClassGenerator import Ui_DClassGenerator
 
 from ....definitions import DOC_DIR, PACKAGE_NAME, MAIN_DIR
 
-from ...Tools.FloatEdit import FloatEdit
 from ....Generator.read_fct import read_file
 from ....Generator.run_generate_classes import run_generate_classes
 from ....Generator.write_fct import (
@@ -40,9 +39,6 @@ EDITOR_PATH = "C:\\Users\\emile\\AppData\\Local\\Programs\\Microsoft VS Code\\Co
 
 class DClassGenerator(Ui_DClassGenerator, QWidget):
     """Main windows of the Machine Setup Tools"""
-
-    # Signal to update the simulation
-    path_Changed = Signal()
 
     def __init__(self, class_gen_path=""):
         """Initialize the class generator GUI
@@ -61,14 +57,11 @@ class DClassGenerator(Ui_DClassGenerator, QWidget):
         self.setWindowFlag(Qt.WindowMaximizeButtonHint, True)
         self.setupUi(self)
 
-        self.is_save_needed = False
-        # self.material_dict = material_dict
-        self.last_index = 0  # Index of the last step available
-
-        # Init current
+        # Init current variables
         self.current_class_dict = None
         self.current_module = None
         self.current_method_folder_path = None
+        self.current_class_index = None
 
         # Saving arguments
         self.class_gen_path = class_gen_path
@@ -115,6 +108,18 @@ class DClassGenerator(Ui_DClassGenerator, QWidget):
         # Connect save class button
         self.b_saveclass.clicked.connect(self.saveClass)
 
+        # Connect add property button
+        self.b_addprop.clicked.connect(self.addProp)
+
+        # Connect add method button
+        self.b_addmeth.clicked.connect(self.addMethod)
+
+        # Connect method folder button
+        self.b_browse.clicked.connect(self.browseMethod)
+
+        # Connect add constant button
+        self.b_addconst.clicked.connect(self.addConst)
+
         # Connect generate class button
         self.b_genclass.clicked.connect(self.genClass)
         self.is_black.setChecked(True)
@@ -147,6 +152,21 @@ class DClassGenerator(Ui_DClassGenerator, QWidget):
         # Disable save_class button
         self.b_saveclass.setEnabled(False)
 
+        # Disable add property button
+        self.b_addprop.setEnabled(False)
+
+        # Disable add method button
+        self.b_addmeth.setEnabled(False)
+
+        # Disable browse button
+        self.b_browse.setEnabled(False)
+
+        # Disable add constant button
+        self.b_addconst.setEnabled(False)
+
+        # Disable generate class button
+        self.b_genclass.setEnabled(False)
+
         # Init table of properties
         self.table_prop.setColumnCount(len(self.list_prop) + 2)
         self.table_prop.setRowCount(2)
@@ -164,15 +184,12 @@ class DClassGenerator(Ui_DClassGenerator, QWidget):
         self.table_meth.horizontalHeader().hide()
         self.table_meth.verticalHeader().hide()
 
-        # Disable browse button
-        self.b_browse.setEnabled(False)
-
         # Init table of metadata
         self.table_meta.setRowCount(1)
         self.table_meta.setColumnCount(len(self.list_meta))
         # Loop on columns to write metadata
         for col, meta_name in enumerate(self.list_meta):
-            # Create FloatEdit or QLineEdit depending on parameter type
+            # Create QLabel for each metadata label
             qlabel = QLabel(str(meta_name))
             qlabel.setAlignment(Qt.AlignCenter)
             self.table_meta.setCellWidget(0, col, qlabel)
@@ -185,16 +202,13 @@ class DClassGenerator(Ui_DClassGenerator, QWidget):
         self.table_const.setColumnCount(len(self.list_const) + 2)
         # Loop on columns to write metadata
         for col, const_name in enumerate(self.list_const):
-            # Create FloatEdit or QLineEdit depending on parameter type
+            # Create QLabel for each constant label
             qlabel = QLabel(str(const_name))
             qlabel.setAlignment(Qt.AlignCenter)
             self.table_const.setCellWidget(0, col, qlabel)
             self.table_const.cellWidget(0, col).setStyleSheet("background-color: grey")
         self.table_const.horizontalHeader().hide()
         self.table_const.verticalHeader().hide()
-
-        # Disable generate class button
-        self.b_genclass.setEnabled(False)
 
     def update_class_selected(self, index):
         """Update GUI with selected class from TreeView
@@ -207,6 +221,9 @@ class DClassGenerator(Ui_DClassGenerator, QWidget):
             Model index of current selected item in treeview
 
         """
+
+        # Store current class index
+        self.current_class_index = index
 
         # Get parent folder in which the csv file is
         parent = index.parent()
@@ -248,7 +265,27 @@ class DClassGenerator(Ui_DClassGenerator, QWidget):
             self.fill_table_meth()
             self.fill_table_meta()
             self.fill_table_const()
+
+            # Change head label to current class name
             self.set_label_classname(self.current_class_dict["name"])
+
+            # Enable save class button
+            self.b_saveclass.setEnabled(True)
+
+            # Disable add property button
+            self.b_addprop.setEnabled(True)
+
+            # Disable add method button
+            self.b_addmeth.setEnabled(True)
+
+            # Disable browse button
+            self.b_browse.setEnabled(True)
+
+            # Disable add constant button
+            self.b_addconst.setEnabled(True)
+
+            # Enable generate class button
+            self.b_genclass.setEnabled(True)
 
     def import_class_from_csv(self, csv_path):
         """Import class from csv file when clicking on a csv in TreeView
@@ -290,11 +327,6 @@ class DClassGenerator(Ui_DClassGenerator, QWidget):
         # Fill table of properties
         prop_list = self.current_class_dict["properties"]
 
-        if len(prop_list) == 0:
-            # Set one empty property if there is no property in class to enable property adding
-            self.setPropEmpty()
-            return
-
         # Set the number of rows to the number of properties (first row are labels)
         self.table_prop.setRowCount(len(prop_list) + 1)
 
@@ -303,47 +335,20 @@ class DClassGenerator(Ui_DClassGenerator, QWidget):
             # Loop on columns to write parameters associated to each property
             for col, val in enumerate(self.list_prop):
                 data = prop_dict[MATCH_PROP_DICT[val]]
-                # Create FloatEdit or QLineEdit depending on parameter type
-                if isinstance(data, (int, float)):
-                    self.table_prop.setCellWidget(row + 1, col, FloatEdit(data))
-                else:
-                    line_edit = QLineEdit(str(data))
-                    line_edit.setAlignment(Qt.AlignLeft)
-                    if col == 0:
-                        # Add method to check that property can't be renamed to an existing one
-                        line_edit.editingFinished.connect(
-                            partial(self.renameProp, line_edit)
-                        )
-                    self.table_prop.setCellWidget(row + 1, col, line_edit)
+                # Create QLineEdit for each parameter
+                line_edit = QLineEdit(str(data))
+                line_edit.setAlignment(Qt.AlignLeft)
+                if col == 0:
+                    # Add method to check that property can't be renamed to an existing one
+                    line_edit.editingFinished.connect(
+                        partial(self.renameProp, line_edit)
+                    )
+                self.table_prop.setCellWidget(row + 1, col, line_edit)
             # Add property buttons
             self.addRowButtonsProp(row + 1)
 
         # Adjust column width
         self.table_prop.resizeColumnsToContents()
-
-    def setPropEmpty(self):
-        """Set table of properties with one empty row
-
-        Parameters
-        ----------
-        self : DClassGenerator
-            a DClassGenerator object
-
-        """
-
-        self.table_prop.setRowCount(2)
-
-        for col in range(len(self.list_prop)):
-            line_edit = QLineEdit("")
-            line_edit.setAlignment(Qt.AlignLeft)
-            self.table_prop.setCellWidget(1, col, line_edit)
-
-        # Connect name QLineEdit to renameProp method
-        self.table_prop.cellWidget(1, 0).editingFinished.connect(
-            partial(self.renameProp, self.table_prop.cellWidget(1, 0))
-        )
-
-        self.addRowButtonsProp(1)
 
     def addRowButtonsProp(self, row_index):
         """Delete row in table of properties given row index to delete
@@ -366,6 +371,39 @@ class DClassGenerator(Ui_DClassGenerator, QWidget):
         b_dup_prop.clicked.connect(partial(self.duplicateProp, b_dup_prop))
         self.table_prop.setCellWidget(row_index, len(self.list_prop) + 1, b_dup_prop)
 
+    def addProp(self):
+        """Add one empty row at the end of table of properties
+
+        Parameters
+        ----------
+        self : DClassGenerator
+            a DClassGenerator object
+
+        """
+
+        self.table_prop.setRowCount(self.table_prop.rowCount() + 1)
+
+        last_row = self.table_prop.rowCount() - 1
+
+        for col in range(len(self.list_prop)):
+            line_edit = QLineEdit("")
+            line_edit.setAlignment(Qt.AlignLeft)
+            self.table_prop.setCellWidget(last_row, col, line_edit)
+
+        # Connect name QLineEdit to renameProp method
+        self.table_prop.cellWidget(last_row, 0).editingFinished.connect(
+            partial(self.renameProp, self.table_prop.cellWidget(last_row, 0))
+        )
+
+        # Add Delete and Duplicate buttons
+        self.addRowButtonsProp(last_row)
+
+        # Set Duplicate button to disabled since Name is empty
+        self.table_prop.cellWidget(last_row, len(self.list_prop) + 1).setEnabled(False)
+
+        # Add empty prop in current class dict
+        self.current_class_dict["properties"].append({"name": ""})
+
     def deleteProp(self, button):
         """Delete row in table of properties
 
@@ -384,22 +422,11 @@ class DClassGenerator(Ui_DClassGenerator, QWidget):
                 row_index = row
                 break
 
-        if (
-            self.table_prop.rowCount() == 2
-            and self.table_prop.cellWidget(1, 0).text() == ""
-        ):
-            # Don't delete anything if requested row is empty
-            return
-
         # Remove row at given index
         self.table_prop.removeRow(row_index)
 
         # Delete row in current class dict
         del self.current_class_dict["properties"][row_index - 1]
-
-        # Add empty row to enable
-        if self.table_prop.rowCount() == 1:
-            self.setPropEmpty()
 
     def duplicateProp(self, button):
         """Duplicate row in table of properties
@@ -418,10 +445,6 @@ class DClassGenerator(Ui_DClassGenerator, QWidget):
             if self.table_prop.cellWidget(row, len(self.list_prop) + 1) == button:
                 row_index = row
                 break
-
-        if self.table_prop.cellWidget(row_index, 0).text() == "":
-            # Don't duplicate if prop name is empty
-            return
 
         # Add empty row at the end
         self.table_prop.setRowCount(self.table_prop.rowCount() + 1)
@@ -489,12 +512,11 @@ class DClassGenerator(Ui_DClassGenerator, QWidget):
                 self.current_class_dict["properties"][row_index - 1]["name"]
             )
         else:
-            if len(self.current_class_dict["properties"]) > 0:
-                # Edit current class dict
-                self.current_class_dict["properties"][row_index - 1]["name"] = prop_name
-            else:
-                # Create prop dict
-                self.current_class_dict["properties"] = [{"name": prop_name}]
+            # Edit current class dict
+            self.current_class_dict["properties"][row_index - 1]["name"] = prop_name
+
+        # Enable Duplicate button
+        self.table_prop.cellWidget(row_index, len(self.list_prop) + 1).setEnabled(True)
 
     def fill_table_meth(self):
         """Fill tables of methods with current class dict content
@@ -508,8 +530,6 @@ class DClassGenerator(Ui_DClassGenerator, QWidget):
 
         # Enable browse button
         self.b_browse.setEnabled(True)
-        # Connect method folder button
-        self.b_browse.clicked.connect(self.browseMethod)
 
         # Fill table of methods
         # Set the number of rows to the number of methods (first row are labels)
@@ -537,18 +557,52 @@ class DClassGenerator(Ui_DClassGenerator, QWidget):
             Index of row to delete
 
         """
-        # Add open button
-        b_open_meth = QPushButton(text="Open", parent=self.table_meth)
-        b_open_meth.clicked.connect(partial(self.openMethod, b_open_meth))
-        self.table_meth.setCellWidget(row_index, 1, b_open_meth)
+
         # Add delete button
         b_del_meth = QPushButton(text="Delete", parent=self.table_meth)
         b_del_meth.clicked.connect(partial(self.deleteMethod, b_del_meth))
-        self.table_meth.setCellWidget(row_index, 2, b_del_meth)
+        self.table_meth.setCellWidget(row_index, 1, b_del_meth)
         # Add duplicate button
         b_dup_meth = QPushButton(text="Duplicate", parent=self.table_meth)
         b_dup_meth.clicked.connect(partial(self.duplicateMethod, b_dup_meth))
-        self.table_meth.setCellWidget(row_index, 3, b_dup_meth)
+        self.table_meth.setCellWidget(row_index, 2, b_dup_meth)
+        # Add open button
+        b_open_meth = QPushButton(text="Open", parent=self.table_meth)
+        b_open_meth.clicked.connect(partial(self.openMethod, b_open_meth))
+        self.table_meth.setCellWidget(row_index, 3, b_open_meth)
+
+    def addMethod(self):
+        """Add one empty row at the end of table of methods
+
+        Parameters
+        ----------
+        self : DClassGenerator
+            a DClassGenerator object
+
+        """
+
+        self.table_meth.setRowCount(self.table_meth.rowCount() + 1)
+
+        last_row = self.table_meth.rowCount() - 1
+
+        # Add line edit at first column to enter method name
+        line_edit = QLineEdit("")
+        line_edit.setAlignment(Qt.AlignLeft)
+        self.table_meth.setCellWidget(last_row, 0, line_edit)
+
+        # Connect name QLineEdit to renameMeth method
+        self.table_meth.cellWidget(last_row, 0).editingFinished.connect(
+            partial(self.renameMethod, self.table_meth.cellWidget(last_row, 0))
+        )
+
+        # Add Delete and Duplicate buttons
+        self.addRowButtonsMethod(last_row)
+
+        # Set Duplicate button to disabled since Name is empty
+        self.table_meth.cellWidget(last_row, 2).setEnabled(False)
+
+        # Add empty prop in current class dict
+        self.current_class_dict["methods"].append("")
 
     def deleteMethod(self, button):
         """Delete row in table of methods
@@ -564,7 +618,7 @@ class DClassGenerator(Ui_DClassGenerator, QWidget):
 
         # Get row_index of clicked delete button
         for row in range(self.table_meth.rowCount()):
-            if self.table_meth.cellWidget(row, 2) == button:
+            if self.table_meth.cellWidget(row, 1) == button:
                 row_index = row
                 break
 
@@ -600,7 +654,7 @@ class DClassGenerator(Ui_DClassGenerator, QWidget):
         """
         # Get row_index of clicked duplicate button
         for row in range(self.table_meth.rowCount()):
-            if self.table_meth.cellWidget(row, 3) == button:
+            if self.table_meth.cellWidget(row, 2) == button:
                 row_index = row
                 break
 
@@ -640,8 +694,11 @@ class DClassGenerator(Ui_DClassGenerator, QWidget):
 
         # Copy method file
         method_path = join(self.current_method_folder_path, meth_name + ".py")
-        method_path_dup = join(self.current_method_folder_path, meth_name_dup + ".py")
-        copyfile(method_path, method_path_dup)
+        if isfile(method_path):
+            method_path_dup = join(
+                self.current_method_folder_path, meth_name_dup + ".py"
+            )
+            copyfile(method_path, method_path_dup)
 
         # Add buttons in last row
         self.addRowButtonsMethod(last_row)
@@ -657,7 +714,7 @@ class DClassGenerator(Ui_DClassGenerator, QWidget):
             Line edit that emits signal
         """
 
-        # Get row_index of clicked button
+        # Get row_index of method name line edit
         for row in range(self.table_meth.rowCount()):
             if self.table_meth.cellWidget(row, 0) == line_edit:
                 row_index = row
@@ -692,6 +749,9 @@ class DClassGenerator(Ui_DClassGenerator, QWidget):
                 self.current_class_dict["methods"][row_index]
             )
 
+        # Enable Duplicate button
+        self.table_meth.cellWidget(row_index, 2).setEnabled(True)
+
     def browseMethod(self):
         """Open explorer at folder path containing methods
 
@@ -722,9 +782,9 @@ class DClassGenerator(Ui_DClassGenerator, QWidget):
 
         """
 
-        # Get row_index of clicked duplicate button
+        # Get row_index of clicked open button
         for row in range(self.table_meth.rowCount()):
-            if self.table_meth.cellWidget(row, 1) == button:
+            if self.table_meth.cellWidget(row, 3) == button:
                 row_index = row
                 break
 
@@ -791,20 +851,17 @@ class DClassGenerator(Ui_DClassGenerator, QWidget):
             # Browse list of constants
             for row, const_dict in enumerate(meta_const):
                 val = const_dict[MATCH_CONST_DICT[const_name][1]]
-                # Create FloatEdit or QLineEdit depending on parameter type
-                if isinstance(val, (int, float)):
-                    self.table_const.setCellWidget(row + 1, col + 1, FloatEdit(val))
-                else:
-                    line_edit = QLineEdit(str(val))
-                    line_edit.setAlignment(Qt.AlignLeft)
-                    if col == 0:
-                        # Add method to check that property can't be renamed to an existing one
-                        line_edit.editingFinished.connect(
-                            partial(self.renameConst, line_edit)
-                        )
-                        # Add property buttons
-                        self.addRowButtonsConst(row + 1)
-                    self.table_const.setCellWidget(row + 1, col, line_edit)
+                # Create line edit for each parameter
+                line_edit = QLineEdit(str(val))
+                line_edit.setAlignment(Qt.AlignLeft)
+                if col == 0:
+                    # Add method to check that property can't be renamed to an existing one
+                    line_edit.editingFinished.connect(
+                        partial(self.renameConst, line_edit)
+                    )
+                    # Add property buttons
+                    self.addRowButtonsConst(row + 1)
+                self.table_const.setCellWidget(row + 1, col, line_edit)
 
         # Adjust column width
         self.table_const.resizeColumnsToContents()
@@ -829,6 +886,41 @@ class DClassGenerator(Ui_DClassGenerator, QWidget):
         b_dup_const = QPushButton(text="Duplicate", parent=self.table_const)
         b_dup_const.clicked.connect(partial(self.duplicateConst, b_dup_const))
         self.table_const.setCellWidget(row_index, len(self.list_const) + 1, b_dup_const)
+
+    def addConst(self):
+        """Add one empty row at the end of table of properties
+
+        Parameters
+        ----------
+        self : DClassGenerator
+            a DClassGenerator object
+
+        """
+
+        self.table_const.setRowCount(self.table_const.rowCount() + 1)
+
+        last_row = self.table_const.rowCount() - 1
+
+        for col in range(len(self.list_const)):
+            line_edit = QLineEdit("")
+            line_edit.setAlignment(Qt.AlignLeft)
+            self.table_const.setCellWidget(last_row, col, line_edit)
+
+        # Connect name QLineEdit to renameconst method
+        self.table_const.cellWidget(last_row, 0).editingFinished.connect(
+            partial(self.renameConst, self.table_const.cellWidget(last_row, 0))
+        )
+
+        # Add Delete and Duplicate buttons
+        self.addRowButtonsConst(last_row)
+
+        # Set Duplicate button to disabled since Name is empty
+        self.table_const.cellWidget(last_row, len(self.list_const) + 1).setEnabled(
+            False
+        )
+
+        # Add constant in current class dict
+        self.current_class_dict["constants"].append({"name": "", "value": ""})
 
     def deleteConst(self, button):
         """Delete row in table of constants
@@ -941,6 +1033,11 @@ class DClassGenerator(Ui_DClassGenerator, QWidget):
             # Edit current class dict
             self.current_class_dict["constants"][row_index - 1]["name"] = const_name
 
+        # Enable Duplicate button
+        self.table_const.cellWidget(row_index, len(self.list_const) + 1).setEnabled(
+            True
+        )
+
     def get_current_class_dict_from_tables(self):
         """Get current class dict by reading property, method and metadata tables
 
@@ -962,14 +1059,30 @@ class DClassGenerator(Ui_DClassGenerator, QWidget):
             for col in range(len(self.list_prop)):
                 val = self.table_prop.cellWidget(row, col).text()
                 prop_dict[MATCH_PROP_DICT[self.list_prop[col]]] = val
-            prop_list.append(prop_dict)
+            if prop_dict["name"] != "" and prop_dict["type"] != "":
+                prop_list.append(prop_dict)
+            else:
+                # Ignore property with empty name or type since they will fail in class generator
+                print(
+                    "Ignore property with empty name or type at row="
+                    + str(row)
+                    + " in saved csv file"
+                )
         class_dict["properties"] = prop_list
 
         # Read method table
-        class_dict["methods"] = [
-            self.table_meth.cellWidget(row, 0).text()
-            for row in range(self.table_meth.rowCount())
-        ]
+        class_dict["methods"] = list()
+        for row in range(self.table_meth.rowCount()):
+            val = self.table_meth.cellWidget(row, 0).text()
+            if val != "":
+                class_dict["methods"].append(val)
+            else:
+                # Ignore method with empty name since it will fail in class generator
+                print(
+                    "Ignore method with empty name at row="
+                    + str(row)
+                    + " in saved csv file"
+                )
 
         # Read meta data table
         for col in range(self.table_meta.columnCount()):
@@ -985,7 +1098,16 @@ class DClassGenerator(Ui_DClassGenerator, QWidget):
                 if len(cst_list) < row:
                     cst_list.append(dict())
                 cst_list[row - 1][MATCH_CONST_DICT[self.list_const[col]][1]] = val
-            class_dict[MATCH_CONST_DICT[self.list_const[col]][0]] = cst_list
+            class_dict["constants"] = cst_list
+        for row, const_dict in enumerate(class_dict["constants"]):
+            if const_dict["name"] == "":
+                class_dict["constants"].remove(const_dict)
+                # Ignore constant with empty name since it will fail in class generator
+                print(
+                    "Ignore constant with empty name at row="
+                    + str(row)
+                    + " in saved csv file"
+                )
 
         return class_dict
 
@@ -1003,6 +1125,9 @@ class DClassGenerator(Ui_DClassGenerator, QWidget):
 
         # Write class into csv format
         write_file(class_dict)
+
+        # Reload csv to ignore empty fields
+        self.update_class_selected(self.current_class_index)
 
     def genClass(self):
         """Generate class from csv files
@@ -1098,8 +1223,9 @@ class DClassGenerator(Ui_DClassGenerator, QWidget):
         # Copy csv file to the same folder
         file_path = self.dirModel.filePath(index)
         file_name = self.dirModel.fileName(index)
-        file_path_dup = file_path.replace(file_name, file_name[:-4] + "_copy.csv")
-        copyfile(file_path, file_path_dup)
+        if isfile(file_path):
+            file_path_dup = file_path.replace(file_name, file_name[:-4] + "_copy.csv")
+            copyfile(file_path, file_path_dup)
 
         # Copy methods folder if it exists
         meth_folder = self.current_method_folder_path
