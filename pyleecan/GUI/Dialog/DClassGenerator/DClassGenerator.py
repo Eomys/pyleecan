@@ -1,12 +1,13 @@
-from os.path import join, isfile, isdir
-from shutil import copyfile, rmtree, copytree
 import os
-from PySide2.QtCore import Qt, Signal, QDir
+import subprocess
 
+from os.path import join, isfile, isdir, realpath
+from shutil import copyfile, rmtree, copytree
 from functools import partial
 
+from PySide2.QtCore import Qt, Signal, QDir
+from PySide2.QtGui import QIcon
 from PySide2.QtWidgets import (
-    QFileDialog,
     QMessageBox,
     QWidget,
     QFileSystemModel,
@@ -17,8 +18,8 @@ from PySide2.QtWidgets import (
     QMenu,
 )
 
-import subprocess
 
+from ...Resources import pixmap_dict
 from ..DClassGenerator.Ui_DClassGenerator import Ui_DClassGenerator
 
 from ....definitions import DOC_DIR, PACKAGE_NAME, MAIN_DIR
@@ -33,14 +34,10 @@ from ....Generator.write_fct import (
 )
 
 
-EDITOR_PATH = "C:\\Users\\emile\\AppData\\Local\\Programs\\Microsoft VS Code\\Code.exe"
-# EDITOR_PATH = "notepad.exe" ;
-
-
 class DClassGenerator(Ui_DClassGenerator, QWidget):
     """Main windows of the Machine Setup Tools"""
 
-    def __init__(self, class_gen_path=""):
+    def __init__(self, path_editor_py="", path_editor_csv=""):
         """Initialize the class generator GUI
 
         Parameters
@@ -57,18 +54,18 @@ class DClassGenerator(Ui_DClassGenerator, QWidget):
         self.setWindowFlag(Qt.WindowMaximizeButtonHint, True)
         self.setupUi(self)
 
+        # Setup windows icon
+        self.setWindowIcon(QIcon(pixmap_dict["soft_icon"]))
+
         # Init current variables
         self.current_class_dict = None
         self.current_module = None
         self.current_method_folder_path = None
         self.current_class_index = None
-
-        # Saving arguments
-        self.class_gen_path = class_gen_path
-        if class_gen_path == "":
-            self.class_gen_path = DOC_DIR.replace("\\", "/")
-        else:
-            self.class_gen_path = class_gen_path.replace("\\", "/")
+        self.list_class_modified = list()
+        self.path_editor_py = path_editor_py
+        self.path_editor_csv = path_editor_csv
+        self.class_gen_path = DOC_DIR.replace("\\", "/")
 
         # Show path to class generator
         self.le_path_classgen.setText(DOC_DIR)
@@ -123,19 +120,6 @@ class DClassGenerator(Ui_DClassGenerator, QWidget):
         # Connect generate class button
         self.b_genclass.clicked.connect(self.genClass)
         self.is_black.setChecked(True)
-
-    def clear_current_class_data(self):
-        """Clear current class data stored in class generator GUI
-
-        Parameters
-        ----------
-        self : DClassGenerator
-            a DClassGenerator object
-
-        """
-        self.current_class_dict = None
-        self.current_module = None
-        self.current_method_folder_path = None
 
     def init_tables_buttons(self):
         """Init all tables and buttons of class properties and methods
@@ -211,7 +195,7 @@ class DClassGenerator(Ui_DClassGenerator, QWidget):
         self.table_const.verticalHeader().hide()
 
     def update_class_selected(self, index):
-        """Update GUI with selected class from TreeView
+        """Update GUI with selected class from TreeView by loading csv file
 
         Parameters
         ----------
@@ -221,28 +205,51 @@ class DClassGenerator(Ui_DClassGenerator, QWidget):
             Model index of current selected item in treeview
 
         """
-
-        # Store current class index
-        self.current_class_index = index
-
-        # Get parent folder in which the csv file is
-        parent = index.parent()
-
         if self.dirModel.isDir(index):
             # Don't do anything if click on folder
             return
 
+        # Get class name of selected csv file
         class_name = self.get_obj_name(index)
-
-        if (
-            self.current_class_dict is not None
-            and class_name == self.current_class_dict["name"]
-        ):
-            return
 
         if class_name[-4:] != ".csv":
             # Check if file is a csv
             return
+
+        if self.current_class_dict is not None:
+            # Check if current class has been modified
+            is_modified_class = self.check_class_modified()
+
+            if is_modified_class:
+                if index == self.current_class_index:
+                    text = (
+                        "Save current class modifications before reloading same class ?"
+                    )
+                else:
+                    text = (
+                        "Save current class modifications before loading another class?"
+                    )
+                # Send toggel window to ask if save is required
+                reply = QMessageBox().question(
+                    self,
+                    "Warning: modifications not saved",
+                    text,
+                    QMessageBox.Yes,
+                    QMessageBox.No,
+                )
+
+                if reply == QMessageBox.Yes:
+                    # Save current class if yes
+                    self.saveClass()
+                    if index == self.current_class_index:
+                        # No need to reload interface with saved class since saveClass already did it
+                        return
+
+        # Store current class index to save class after modifications
+        self.current_class_index = index
+
+        # Get parent folder in which the csv file is
+        parent = index.parent()
 
         # Get full module name by recursion on parent folders
         module = self.dirModel.data(parent)
@@ -255,37 +262,137 @@ class DClassGenerator(Ui_DClassGenerator, QWidget):
 
         self.current_module = module
 
-        # Import csv at csv_path
+        # Import csv at csv_path and store class in self.current_class_dict
         csv_path = join(DOC_DIR, module, class_name)
         self.import_class_from_csv(csv_path)
 
         if self.current_class_dict is not None:
-            # Fill all tables
-            self.fill_table_prop()
-            self.fill_table_meth()
-            self.fill_table_meta()
-            self.fill_table_const()
+            # Update GUI with data contained in self.current_class_dict
+            self.set_class_selected()
 
-            # Change head label to current class name
-            self.set_label_classname(self.current_class_dict["name"])
+    def set_class_selected(self):
+        """Update GUI with data contained in
 
-            # Enable save class button
-            self.b_saveclass.setEnabled(True)
+        Parameters
+        ----------
+        self : DClassGenerator
+            a DClassGenerator object
+        """
+        # Fill all tables
+        self.fill_table_prop()
+        self.fill_table_meth()
+        self.fill_table_meta()
+        self.fill_table_const()
 
-            # Disable add property button
-            self.b_addprop.setEnabled(True)
+        # Change head label to current class name
+        self.set_label_classname(self.current_class_dict["name"])
 
-            # Disable add method button
-            self.b_addmeth.setEnabled(True)
+        # Enable save class button
+        self.b_saveclass.setEnabled(True)
 
-            # Disable browse button
-            self.b_browse.setEnabled(True)
+        # Disable add property button
+        self.b_addprop.setEnabled(True)
 
-            # Disable add constant button
-            self.b_addconst.setEnabled(True)
+        # Disable add method button
+        self.b_addmeth.setEnabled(True)
 
-            # Enable generate class button
-            self.b_genclass.setEnabled(True)
+        # Disable browse button
+        self.b_browse.setEnabled(True)
+
+        # Disable add constant button
+        self.b_addconst.setEnabled(True)
+
+        # Enable generate class button
+        self.b_genclass.setEnabled(True)
+
+    def check_class_modified(self):
+        """Check if class is modified
+
+        Parameters
+        ----------
+        self : DClassGenerator
+            a DClassGenerator object
+
+        Returns
+        -------
+        is_modified_class : bool
+            True if class has been modified in comparison with class csv file content
+        """
+
+        # Get current class dict from tables
+        current_class_dict = self.get_current_class_dict_from_tables()
+
+        # Check if current_class_dict is different from class_dict in .csv file
+        csv_path = join(
+            DOC_DIR, self.current_module, self.get_obj_name(self.current_class_index)
+        )
+
+        # Load csv file (meaning current class without modifications)
+        try:
+            class_dict_ref = read_file(
+                csv_path, soft_name=PACKAGE_NAME, is_get_size=True
+            )
+        except Exception as e:
+            print("Cannot load csv file: " + csv_path)
+            return True
+
+        # Compare class dict
+        is_modified_class = False
+        for key, val0 in class_dict_ref.items():
+            if key in ["daughters"]:
+                # Ignore daughters entry since it is not used
+                pass
+            elif key not in current_class_dict:
+                # Class dict are different if they don't have same keys
+                return True
+            else:
+                val1 = current_class_dict[key]
+                # Comparison of property and constant which are lists of dict
+                if (
+                    isinstance(val0, list)
+                    and len(val0) > 0
+                    and isinstance(val0[0], dict)
+                ):
+                    if (
+                        not isinstance(val1, list)
+                        or len(val1) == 0
+                        or not isinstance(val1[0], dict)
+                    ):
+                        return True
+
+                    for ii, dict0 in enumerate(val0):
+                        for name, data0 in dict0.items():
+                            if name not in val1[ii]:
+                                # Property/Constant dicts are different if they don't have same keys
+                                return True
+                            else:
+                                data1 = val1[ii][name]
+                            if data0 != data1:
+                                try:
+                                    # Try to set variables as float for comparison
+                                    is_modified_class = float(data0) != float(data1)
+                                    if is_modified_class:
+                                        return True
+                                except Exception as e:
+                                    # Try to set variables as str for comparison
+                                    is_modified_class = str(data0) != str(data1)
+                                    if is_modified_class:
+                                        return True
+
+                elif val0 != val1:
+                    # Comparison of other data: path, methods, class name etc
+                    try:
+                        # Try to set variables as float for comparison
+                        is_modified_class = float(val0) != float(val1)
+                        if is_modified_class:
+                            return True
+                    except Exception as e:
+                        # Try to set variables as str for comparison
+                        is_modified_class = str(val0) != str(val1)
+                        if is_modified_class:
+                            return True
+
+        return is_modified_class
 
     def import_class_from_csv(self, csv_path):
         """Import class from csv file when clicking on a csv in TreeView
@@ -305,6 +412,7 @@ class DClassGenerator(Ui_DClassGenerator, QWidget):
                 csv_path, soft_name=PACKAGE_NAME, is_get_size=True
             )
         except Exception as e:
+            print("Cannot load csf file: " + csv_path)
             return
 
         # Store current class information for further use
@@ -507,6 +615,7 @@ class DClassGenerator(Ui_DClassGenerator, QWidget):
         ]
 
         if prop_name in prop_name_list:
+            print("Cannot rename property with an existing name in property list")
             # Cancel rename and use old property name
             self.table_prop.cellWidget(row_index, 0).setText(
                 self.current_class_dict["properties"][row_index - 1]["name"]
@@ -641,6 +750,11 @@ class DClassGenerator(Ui_DClassGenerator, QWidget):
         if isfile(method_path):
             os.remove(method_path)
 
+            if isfile(method_path):
+                print("Cannot delete method file: " + method_path)
+            else:
+                print("Deleted method file: " + method_path)
+
     def duplicateMethod(self, button):
         """Duplicate method in table of methods
 
@@ -699,6 +813,10 @@ class DClassGenerator(Ui_DClassGenerator, QWidget):
                 self.current_method_folder_path, meth_name_dup + ".py"
             )
             copyfile(method_path, method_path_dup)
+            if isfile(method_path_dup):
+                print("Duplicated method file at: " + method_path_dup)
+            else:
+                print("Cannot duplicate method file: " + method_path_dup)
 
         # Add buttons in last row
         self.addRowButtonsMethod(last_row)
@@ -724,7 +842,14 @@ class DClassGenerator(Ui_DClassGenerator, QWidget):
         meth_name = self.table_meth.cellWidget(row_index, 0).text()
 
         # Check that renamed method doesn't already exists to avoid duplicates
-        if meth_name not in self.current_class_dict["methods"]:
+        if meth_name in self.current_class_dict["methods"]:
+            print("Cannot rename method with an existing name in method list")
+            # Set old method name
+            self.table_meth.cellWidget(row_index, 0).setText(
+                self.current_class_dict["methods"][row_index]
+            )
+
+        else:
             # Get old method name path
             old_meth_path = join(
                 self.current_method_folder_path,
@@ -743,11 +868,6 @@ class DClassGenerator(Ui_DClassGenerator, QWidget):
 
             # Store new name in current class dict
             self.current_class_dict["methods"][row_index] = meth_name
-        else:
-            # Set old method name
-            self.table_meth.cellWidget(row_index, 0).setText(
-                self.current_class_dict["methods"][row_index]
-            )
 
         # Enable Duplicate button
         self.table_meth.cellWidget(row_index, 2).setEnabled(True)
@@ -761,17 +881,18 @@ class DClassGenerator(Ui_DClassGenerator, QWidget):
             a DClassGenerator object
         """
         # Get full path to folder
-        path = os.path.realpath(self.current_method_folder_path)
+        path = realpath(self.current_method_folder_path)
 
         # Create folder if not existing
         if not isdir(path):
+            print("Method folder doesn't exist. Create method folder at: " + path)
             os.mkdir(path)
 
         # Open folder in explorer
         os.startfile(path)
 
     def openMethod(self, button):
-        """Open method in editor given by EDITOR PATH
+        """Open method in editor given by path_editor_py
 
         Parameters
         ----------
@@ -799,12 +920,17 @@ class DClassGenerator(Ui_DClassGenerator, QWidget):
         # Get method path
         method_path = join(self.current_method_folder_path, meth + ".py")
 
+        if not isdir(self.current_method_folder_path):
+            print(
+                "Method folder doesn't exist. Create method folder at: "
+                + self.current_method_folder_path
+            )
+
         if not isfile(method_path):
-            # Create method file
-            pass
+            print("Method file doesn't exist. Create method file at: " + method_path)
 
         # Open method with editor
-        p = subprocess.Popen([EDITOR_PATH, method_path])
+        p = subprocess.Popen([self.path_editor_py, method_path])
 
     def fill_table_meta(self):
         """Fill tables of metadata with current class dict content
@@ -1026,6 +1152,7 @@ class DClassGenerator(Ui_DClassGenerator, QWidget):
 
         if const_name in const_name_list:
             # Cancel rename and use old constant name
+            print("Cannot rename constant with an existing name in constant list")
             self.table_const.cellWidget(row_index, 0).setText(
                 self.current_class_dict["constants"][row_index - 1]["name"]
             )
@@ -1045,6 +1172,12 @@ class DClassGenerator(Ui_DClassGenerator, QWidget):
         ----------
         self : DClassGenerator
             A DClassGenerator object
+
+        Returns
+        -------
+        class_dict : dict
+            Dict containing all the class informations (properties, package, methods...)
+
         """
 
         # Init class dict
@@ -1058,6 +1191,10 @@ class DClassGenerator(Ui_DClassGenerator, QWidget):
             prop_dict = dict()
             for col in range(len(self.list_prop)):
                 val = self.table_prop.cellWidget(row, col).text()
+                try:
+                    val = float(val)
+                except Exception as e:
+                    pass
                 prop_dict[MATCH_PROP_DICT[self.list_prop[col]]] = val
             if prop_dict["name"] != "" and prop_dict["type"] != "":
                 prop_list.append(prop_dict)
@@ -1126,8 +1263,16 @@ class DClassGenerator(Ui_DClassGenerator, QWidget):
         # Write class into csv format
         write_file(class_dict)
 
-        # Reload csv to ignore empty fields
-        self.update_class_selected(self.current_class_index)
+        # Reload csv to ignore empty fields and update current_class_dict
+        csv_path = join(
+            DOC_DIR, self.current_module, self.get_obj_name(self.current_class_index)
+        )
+        self.import_class_from_csv(csv_path)
+        self.set_class_selected()
+
+        # Store class csv file path in list
+        if csv_path not in self.list_class_modified:
+            self.list_class_modified.append(csv_path)
 
     def genClass(self):
         """Generate class from csv files
@@ -1162,12 +1307,14 @@ class DClassGenerator(Ui_DClassGenerator, QWidget):
 
         if self.dirModel.isDir(index):
             # Generate context menu for right click on folder
-            delete_module = menu.addAction(self.tr("Delete module"))
-            delete_module.triggered.connect(partial(self.deleteModule, index))
-            new_module = menu.addAction(self.tr("New module"))
-            new_module.triggered.connect(partial(self.createModule, index))
+            # delete_module = menu.addAction(self.tr("Delete module"))
+            # delete_module.triggered.connect(partial(self.deleteModule, index))
+            # new_module = menu.addAction(self.tr("New module"))
+            # new_module.triggered.connect(partial(self.createModule, index))
             new_class = menu.addAction(self.tr("New class"))
             new_class.triggered.connect(partial(self.createClass, index))
+            open_module = menu.addAction(self.tr("Browse folder"))
+            open_module.triggered.connect(partial(self.browseModule, index))
 
         elif class_name[-4:] == ".csv":
             # Generate context menu for right click on csv file
@@ -1175,11 +1322,64 @@ class DClassGenerator(Ui_DClassGenerator, QWidget):
             delete_class.triggered.connect(partial(self.deleteClass, index))
             dupli_class = menu.addAction(self.tr("Duplicate class"))
             dupli_class.triggered.connect(partial(self.duplicateClass, index))
+            open_class = menu.addAction(self.tr("Open class"))
+            open_class.triggered.connect(partial(self.openClass, index))
 
         else:
             return
 
         menu.exec_(self.treeView.viewport().mapToGlobal(position))
+
+    def renameClassMethods(self, path, oldName, newName):
+        """Rename methods after class renaming and prevent from folder renaming
+        to avoid conflict with package
+
+        Parameters
+        ----------
+        self : DClassGenerator
+            a DClassGenerator object
+        path : str
+            folder path of renamed csv file
+        oldName : str
+            old csv file name
+        newName : str
+            new csv file name
+
+        """
+        index = self.dirModel.index(join(path, newName))
+
+        if self.dirModel.isDir(index):
+            print("Cannot rename module")
+            # Rename folder back to original name to prevent issues with package attribute
+            os.rename(join(path, newName), join(path, oldName))
+
+        elif newName[-4:] == ".csv":
+            if self.current_class_dict is not None:
+                # Update class name in current class dict
+                self.current_class_dict["name"] = newName[:-4]
+
+            # Update class name label
+            self.set_label_classname(newName[:-4])
+
+            # Update class name in list of modified class
+            if join(path, oldName) in self.list_class_modified:
+                ii = self.list_class_modified.index(join(path, oldName))
+                self.list_class_modified[ii] = join(path, newName)
+            elif realpath(oldName) in self.list_class_modified:
+                ii = self.list_class_modified.index(realpath(oldName))
+                self.list_class_modified[ii] = join(path, newName)
+
+            # New path to method folder after class renaming
+            method_path_new = self.current_method_folder_path.replace(
+                oldName[:-4], newName[:-4]
+            )
+
+            if isdir(self.current_method_folder_path):
+                # Rename methods folder if it exists
+                os.rename(self.current_method_folder_path, method_path_new)
+
+            # Update method folder path
+            self.current_method_folder_path = method_path_new
 
     def deleteClass(self, index):
         """Delete csv file associated to class
@@ -1193,20 +1393,41 @@ class DClassGenerator(Ui_DClassGenerator, QWidget):
 
         """
 
+        # Get class csv path
+        file_path = self.dirModel.filePath(index)
+
         # Get class name
         class_name = self.get_obj_name(index)
 
         # Delete csv file associated to class
         self.dirModel.remove(index)
 
+        if isfile(file_path):
+            print("Cannot delete class file: " + file_path)
+            print("Please check that file is not opened in csv editor")
+            return
+        else:
+            print("Deleted class file: " + file_path)
+
         # Delete methods folder
         if isdir(self.current_method_folder_path):
             rmtree(self.current_method_folder_path, ignore_errors=True)
 
+            if isdir(self.current_method_folder_path):
+                print(
+                    "Cannot delete class method folder: "
+                    + self.current_method_folder_path
+                )
+            else:
+                print("Deleted class method folder: " + self.current_method_folder_path)
+
         if self.current_class_dict["name"] == class_name[:-4]:
             # Reinit tables if deleted class is the selected class
             self.init_tables_buttons()
-            self.clear_current_class_data()
+            self.current_class_dict = None
+            self.current_module = None
+            self.current_method_folder_path = None
+            self.current_class_index = None
 
     def duplicateClass(self, index):
         """Duplicate class by copying csv file
@@ -1226,12 +1447,20 @@ class DClassGenerator(Ui_DClassGenerator, QWidget):
         if isfile(file_path):
             file_path_dup = file_path.replace(file_name, file_name[:-4] + "_copy.csv")
             copyfile(file_path, file_path_dup)
+            if isfile(file_path_dup):
+                print("Duplicated csv file at: " + file_path_dup)
+            else:
+                print("Cannot duplicate csv file at: " + file_path_dup)
 
         # Copy methods folder if it exists
         meth_folder = self.current_method_folder_path
         if isdir(meth_folder):
             meth_folder_dup = self.current_method_folder_path + "_copy"
             copytree(meth_folder, meth_folder_dup)
+            if isdir(meth_folder):
+                print("Duplicated method files at: " + meth_folder_dup)
+            else:
+                print("Cannot duplicate method files at: " + meth_folder_dup)
 
     def createClass(self, index):
         """Create class by saving empty csv file
@@ -1272,47 +1501,40 @@ class DClassGenerator(Ui_DClassGenerator, QWidget):
         # Write empty class into csv format
         write_file(class_dict)
 
-    def renameClassMethods(self, path, oldName, newName):
-        """Rename methods after class renaming and prevent from folder renaming
-        to avoid conflict with package
+    def openClass(self, index):
+        """Open class csv file in editor given by path_editor_csv
 
         Parameters
         ----------
         self : DClassGenerator
             a DClassGenerator object
-
-        path : str
-            folder path of renamed csv file
-        oldName : str
-            old csv file name
-        newName : str
-            new csv file name
+        index : QModelIndex
+            Model index of current selected item in treeview
 
         """
-        index = self.dirModel.index(join(path, newName))
 
-        if self.dirModel.isDir(index):
-            # Rename folder back to original name to prevent issues with package attribute
-            os.rename(join(path, newName), join(path, oldName))
+        # Get full path to class csv file
+        csv_path = self.dirModel.filePath(index)
 
-        elif newName[-4:] == ".csv":
-            if self.current_class_dict is not None:
-                # Update class name in current class dict
-                self.current_class_dict["name"] = newName[:-4]
+        # Open class csv file with editor
+        p = subprocess.Popen([self.path_editor_csv, csv_path])
 
-            self.set_label_classname(newName[:-4])
+    def browseModule(self, index):
+        """Open explorer at module folder path containing classes
 
-            # New path to method folder after class renaming
-            method_path_new = self.current_method_folder_path.replace(
-                oldName[:-4], newName[:-4]
-            )
+        Parameters
+        ----------
+        self : DClassGenerator
+            a DClassGenerator object
+        index : QModelIndex
+            Model index of current selected item in treeview
+        """
 
-            if isdir(self.current_method_folder_path):
-                # Rename methods folder if it exists
-                os.rename(self.current_method_folder_path, method_path_new)
+        # Get full path to module folder
+        folder_path = self.dirModel.filePath(index)
 
-            # Update method folder path
-            self.current_method_folder_path = method_path_new
+        # Open folder in explorer
+        os.startfile(folder_path)
 
     def deleteModule(self, index):
         """Delete folder associated to current module
@@ -1326,8 +1548,15 @@ class DClassGenerator(Ui_DClassGenerator, QWidget):
 
         """
 
-        if isdir(self.dirModel.filePath(index)):
-            rmtree(self.dirModel.filePath(index), ignore_errors=True)
+        folder_path = self.dirModel.filePath(index)
+
+        if isdir(folder_path):
+            rmtree(folder_path, ignore_errors=True)
+
+            if isdir(folder_path):
+                print("Cannot delete folder: " + folder_path)
+            else:
+                print("Deleted folder: " + folder_path)
 
     def createModule(self, index):
         """Create new module by creating new folder

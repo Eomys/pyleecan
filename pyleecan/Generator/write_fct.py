@@ -30,19 +30,14 @@ MATCH_CONST_DICT = {
 }
 
 
-def write_file(class_dict, soft_name=PACKAGE_NAME):
+def write_file(class_dict):
     """Write a csv file from a class dict
 
     Parameters
     ----------
-    file_path : str
-        path to the class csv file to read
-
-
-    Returns
-    -------
     class_dict : dict
         Dict containing all the class informations (properties, package, methods...)
+
     """
 
     list_meta = list(MATCH_META_DICT.keys())
@@ -139,8 +134,7 @@ def write_file(class_dict, soft_name=PACKAGE_NAME):
     # Replace None with "None"
     class_array[class_array == None] = "None"
 
-    # csv_path = csv_path.split(".")[0] + "_copy.csv"
-
     # Save as .csv using Panda framework
     df = pd.DataFrame(class_array)
+    print("Saving class " + class_dict["name"] + " to : " + csv_path)
     df.to_csv(csv_path, header=False, index=False)
