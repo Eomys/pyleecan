@@ -110,7 +110,7 @@ def plot_schematics(
             Zs=8, H0=10e-3, H1=20e-3, H2=60e-3, W0=20e-3, W1=40e-3, W2=60e-3
         )
         lam = LamSlot(
-            Rint=0.135, Rext=0.3, is_internal=False, is_stator=True, slot=slot
+            Rint=0.135, Rext=0.25, is_internal=False, is_stator=True, slot=slot
         )
         if is_return_default:
             return lam

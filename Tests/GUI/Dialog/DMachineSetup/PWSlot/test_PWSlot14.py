@@ -166,7 +166,7 @@ class TestPWSlot14(object):
 
         # Add new type wedge
         self.widget.c_wedge_type.setCurrentIndex(1)
-        assert str(self.widget.c_wedge_type.currentText()) == "Normal"
+        assert str(self.widget.c_wedge_type.currentText()) == "Standard"
         assert self.test_obj.slot.wedge_type == 1
 
 

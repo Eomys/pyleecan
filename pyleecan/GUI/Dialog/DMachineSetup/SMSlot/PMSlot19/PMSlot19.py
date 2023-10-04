@@ -69,11 +69,11 @@ class PMSlot19(Gen_PMSlot19, QWidget):
             # Set values for check
             self.slot.Hmag = 0
 
-            self.lf_Hkey.unit = "m"
+            self.lf_H0.unit = "m"
 
             # Set unit name (m ou mm)
             wid_list = [
-                self.unit_Hkey,
+                self.unit_H0,
             ]
             for wid in wid_list:
                 wid.setText("[" + gui_option.unit.get_m_name() + "]")
@@ -85,11 +85,11 @@ class PMSlot19(Gen_PMSlot19, QWidget):
                     QPixmap(pixmap_dict["SlotM19_empty_ext_stator"])
                 )
 
-            self.lf_Hkey.editingFinished.connect(self.set_Hkey)
+            self.lf_H0.editingFinished.connect(self.set_H0)
 
         else:
             # Use schematics on the inner without magnet
-            self.img_slot.setPixmap(QPixmap(pixmap_dict["SlotM19_empty_int_rotor"]))
+            self.img_slot.setPixmap(QPixmap(pixmap_dict["SlotM19_mag_int_rotor"]))
 
         # Fill the fields with the machine values (if they're filled)
         self.lf_W0.setValue(self.slot.W0)
@@ -143,15 +143,15 @@ class PMSlot19(Gen_PMSlot19, QWidget):
         # Notify the machine GUI that the machine has changed
         self.saveNeeded.emit()
 
-    def set_Hkey(self):
-        """Signal to update the value of Hkey according to the line edit
+    def set_H0(self):
+        """Signal to update the value of H0 according to the line edit
 
         Parameters
         ----------
         self : PMSlot19
             A PMSlot19 object
         """
-        self.slot.Hmag = self.lf_Hkey.value()
+        self.slot.Hmag = self.lf_H0.value()
         self.w_out.comp_output()
         # Notify the machine GUI that the machine has changed
         self.saveNeeded.emit()

@@ -70,7 +70,7 @@ class DNotchTab(Ui_DNotchTab, QDialog):
         # (the current notches types will be initialized)
         self.tab_notch.clear()
         for idx_notch, notch in enumerate(self.obj.notch):
-            self.s_add(notch, idx_notch, material_dict)
+            self.s_add(notch, idx_notch)
         self.tab_notch.setCurrentIndex(0)
 
         # Set Help URL
@@ -87,7 +87,7 @@ class DNotchTab(Ui_DNotchTab, QDialog):
         """Send a saveNeeded signal to the DMachineSetup"""
         self.saveNeeded.emit()
 
-    def s_add(self, notch=None, idx_notch=None, material_dict=None):
+    def s_add(self, notch=None, idx_notch=None):
         """Signal to add a new notch
 
         Parameters
@@ -97,16 +97,13 @@ class DNotchTab(Ui_DNotchTab, QDialog):
         notch : Notch
             Notch to initialize in the new page
             if None create a new Notch
-        material_dict: dict
-            Materials dictionary (library + machine)
         """
-        self.material_dict = material_dict
         # Create a new notch if needed
         if notch is None:
             self.obj.notch.append(
                 NotchEvenDist(
                     alpha=0,
-                    key_mat=self.material_dict,
+                    key_mat=None,
                     notch_shape=SlotM10(
                         Zs=self.obj.get_Zs(),
                         W0=None,
@@ -122,7 +119,7 @@ class DNotchTab(Ui_DNotchTab, QDialog):
         tab.saveNeeded.connect(self.emit_save)
         self.tab_notch.addTab(tab, "Notch Set " + str(notch_index + 1))
 
-    def s_remove(self, index, material_dict):
+    def s_remove(self, index):
         """Signal to remove the last notch
 
         Parameters
@@ -130,7 +127,6 @@ class DNotchTab(Ui_DNotchTab, QDialog):
         self : DNotchTab
             A DNotchTab widget
         """
-        self.material_dict = material_dict
         if len(self.obj.notch) > 1:
             self.tab_notch.removeTab(index)
             self.obj.notch.pop(index)
@@ -138,7 +134,7 @@ class DNotchTab(Ui_DNotchTab, QDialog):
         # Make sure that the tab have the correct number in their name
         self.tab_notch.clear()
         for idx_notch, notch in enumerate(self.obj.notch):
-            self.s_add(notch, idx_notch, self.material_dict)
+            self.s_add(notch, idx_notch)
         self.tab_notch.setCurrentIndex(0)
 
     def s_plot(self):

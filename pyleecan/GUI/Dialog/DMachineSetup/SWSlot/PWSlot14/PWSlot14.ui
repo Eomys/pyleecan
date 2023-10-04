@@ -234,11 +234,11 @@
              <bool>true</bool>
             </property>
             <property name="currentText">
-             <string extracomment="Normal">Normal</string>
+             <string extracomment="Normal">Standard</string>
             </property>
             <item>
              <property name="text">
-              <string>Normal</string>
+              <string>Standard</string>
              </property>
             </item>
            </widget>

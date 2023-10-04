@@ -19,7 +19,7 @@ class Ui_PMSlot19(object):
     def setupUi(self, PMSlot19):
         if not PMSlot19.objectName():
             PMSlot19.setObjectName(u"PMSlot19")
-        PMSlot19.resize(1075, 643)
+        PMSlot19.resize(1076, 643)
         PMSlot19.setMinimumSize(QSize(630, 470))
         PMSlot19.setMaximumSize(QSize(16777215, 16777215))
         self.horizontalLayout = QHBoxLayout(PMSlot19)
@@ -101,20 +101,20 @@ class Ui_PMSlot19(object):
 
         self.gridLayout.addWidget(self.unit_W1, 1, 2, 1, 1)
 
-        self.in_Hkey = QLabel(self.scrollAreaWidgetContents)
-        self.in_Hkey.setObjectName(u"in_Hkey")
+        self.in_H0 = QLabel(self.scrollAreaWidgetContents)
+        self.in_H0.setObjectName(u"in_H0")
 
-        self.gridLayout.addWidget(self.in_Hkey, 3, 0, 1, 1)
+        self.gridLayout.addWidget(self.in_H0, 3, 0, 1, 1)
 
-        self.unit_Hkey = QLabel(self.scrollAreaWidgetContents)
-        self.unit_Hkey.setObjectName(u"unit_Hkey")
+        self.unit_H0 = QLabel(self.scrollAreaWidgetContents)
+        self.unit_H0.setObjectName(u"unit_H0")
 
-        self.gridLayout.addWidget(self.unit_Hkey, 3, 2, 1, 1)
+        self.gridLayout.addWidget(self.unit_H0, 3, 2, 1, 1)
 
-        self.lf_Hkey = FloatEdit(self.scrollAreaWidgetContents)
-        self.lf_Hkey.setObjectName(u"lf_Hkey")
+        self.lf_H0 = FloatEdit(self.scrollAreaWidgetContents)
+        self.lf_H0.setObjectName(u"lf_H0")
 
-        self.gridLayout.addWidget(self.lf_Hkey, 3, 1, 1, 1)
+        self.gridLayout.addWidget(self.lf_H0, 3, 1, 1, 1)
 
         self.verticalLayout_3.addLayout(self.gridLayout)
 
@@ -151,7 +151,7 @@ class Ui_PMSlot19(object):
         self.in_W1.setText(QCoreApplication.translate("PMSlot19", u"W1", None))
         self.in_Hmag.setText(QCoreApplication.translate("PMSlot19", u"Hmag", None))
         self.unit_W1.setText(QCoreApplication.translate("PMSlot19", u"[m]", None))
-        self.in_Hkey.setText(QCoreApplication.translate("PMSlot19", u"Hkey", None))
-        self.unit_Hkey.setText(QCoreApplication.translate("PMSlot19", u"[m]", None))
+        self.in_H0.setText(QCoreApplication.translate("PMSlot19", u"H0", None))
+        self.unit_H0.setText(QCoreApplication.translate("PMSlot19", u"[m]", None))
 
     # retranslateUi

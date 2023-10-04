@@ -164,7 +164,7 @@ def plot_schematics(
                     ax=ax,
                     color=ARROW_COLOR,
                     linewidth=ARROW_WIDTH,
-                    label="Hkey",
+                    label="H0",
                     offset_label=1j * 0.1 * self.Hmag - 0.0025,
                     is_arrow=True,
                     fontsize=SC_FONT_SIZE,

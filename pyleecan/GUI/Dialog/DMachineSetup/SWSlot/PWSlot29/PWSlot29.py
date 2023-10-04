@@ -85,7 +85,7 @@ class PWSlot29(Gen_PWSlot29, QWidget):
 
         # Update the combobox
         self.c_wedge_type.clear()
-        self.c_wedge_type.addItems(["Full opening", "Normal"])
+        self.c_wedge_type.addItems(["Full opening", "Standard"])
         if self.slot.wedge_type == None:
             self.slot.wedge_type = 0
 

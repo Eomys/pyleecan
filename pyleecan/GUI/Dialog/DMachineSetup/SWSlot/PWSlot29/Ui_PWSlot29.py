@@ -254,7 +254,7 @@ class Ui_PWSlot29(object):
         self.g_wedge.setTitle(QCoreApplication.translate("PWSlot29", u"Wedge", None))
         self.in_type.setText(QCoreApplication.translate("PWSlot29", u"Type", None))
         self.c_wedge_type.setItemText(
-            0, QCoreApplication.translate("PWSlot29", u"Normal", None)
+            0, QCoreApplication.translate("PWSlot29", u"Standard", None)
         )
 
     # retranslateUi
