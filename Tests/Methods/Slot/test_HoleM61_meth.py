@@ -102,7 +102,7 @@ HoleM61_test.append(
         "carac": "magnet_0",
         "Rmin_exp": 0.05984145720150872,
         "Rmax_exp": 0.11,
-        "S_exp": 0.00136534350269306,
+        "S_exp": 0.0013668826437211769,
         "SM_exp": 0.00015,
         "hasmagnet_exp": True,
     }
@@ -196,7 +196,7 @@ HoleM61_test.append(
         "carac": "magnet_3",
         "Rmin_exp": 0.05984145720150872,
         "Rmax_exp": 0.11,
-        "S_exp": 0.00136688264372118,
+        "S_exp": 0.001365343502693063,
         "SM_exp": 0.0002,
         "hasmagnet_exp": True,
     }
