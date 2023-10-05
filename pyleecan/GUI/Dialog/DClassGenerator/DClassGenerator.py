@@ -224,7 +224,7 @@ class DClassGenerator(Ui_DClassGenerator, QWidget):
 
         if self.current_class_dict is not None:
             # Check if current class has been modified
-            is_modified = self.check_class_modified()
+            is_modified = self.check_class_modified(index)
             if not is_modified and index == self.current_class_index:
                 # No need to reload interface with saved class since saveClass already did it
                 return
@@ -308,9 +308,10 @@ class DClassGenerator(Ui_DClassGenerator, QWidget):
             print("Cannot check reference csv file: " + csv_path)
             is_modified_class = True
 
-        # Compare class dict keys        
+        # Compare class dict keys
         list_key_ref = list(class_dict_ref.keys())
         list_key_current = list(current_class_dict.keys())
+
         if list_key_ref.sort() != list_key_current.sort():
             is_modified_class = True
 
@@ -332,26 +333,42 @@ class DClassGenerator(Ui_DClassGenerator, QWidget):
         if str(class_dict_ref["mother"]) != str(current_class_dict["mother"]):
             is_modified_class = True
 
-        # Compare all fields except property and constants
-        for key in ["properties", "constants"]:
-            val0 = class_dict_ref[key]
-            val1 = current_class_dict[key]
-            for ii, dict0 in enumerate(val0):
-                for name, data0 in dict0.items():
-                    if name not in val1[ii]:
-                        # Property/Constant dicts are different if they don't have same keys
-                        is_modified_class = True
-                    else:
-                        data1 = val1[ii][name]
-                    if data0 != data1:
-                        try:
-                            # Try to set variables as float for comparison
-                            if float(data0) != float(data1):
-                                is_modified_class = True
-                        except Exception as e:
-                            # Try to set variables as str for comparison
-                            if str(data0) != str(data1):
-                                is_modified_class = True
+        if len(class_dict_ref["properties"]) != len(current_class_dict["properties"]):
+            is_modified_class = True
+
+        if len(class_dict_ref["constants"]) != len(current_class_dict["constants"]):
+            is_modified_class = True
+
+        if len(class_dict_ref["methods"]) != len(current_class_dict["methods"]):
+            is_modified_class = True
+        
+        if not is_modified_class:
+            # Compare property and constants values inside list of dict
+            for key in ["properties", "constants"]:
+                val0 = class_dict_ref[key]
+                val1 = current_class_dict[key]
+                for ii, dict0 in enumerate(val0):
+                    for name, data0 in dict0.items():
+                        if name not in val1[ii]:
+                            # Property/Constant dicts are different if they don't have same keys
+                            is_modified_class = True
+                        else:
+                            data1 = val1[ii][name]
+                        if data0 != data1:
+                            try:
+                                # Try to set variables as float for comparison
+                                if float(data0) != float(data1):
+                                    is_modified_class = True
+                            except Exception as e:
+                                # Try to set variables as str for comparison
+                                if str(data0) != str(data1):
+                                    is_modified_class = True
+
+        if not is_modified_class:
+            # Compare methods name list
+            for meth_name in class_dict_ref["methods"]:
+                if meth_name not in current_class_dict["methods"]:
+                    is_modified_class = True
 
         if is_modified_class:
             if index is None:
@@ -487,6 +504,9 @@ class DClassGenerator(Ui_DClassGenerator, QWidget):
 
         # Add empty prop in current class dict
         self.current_class_dict["properties"].append({"name": ""})
+
+        # Adjust column width
+        self.table_prop.resizeColumnsToContents()
 
     def deleteProp(self, button):
         """Delete row in table of properties
@@ -688,6 +708,9 @@ class DClassGenerator(Ui_DClassGenerator, QWidget):
 
         # Add empty prop in current class dict
         self.current_class_dict["methods"].append("")
+
+        # Adjust column width
+        self.table_meth.resizeColumnsToContents()
 
     def deleteMethod(self, button):
         """Delete row in table of methods
@@ -1032,6 +1055,9 @@ class DClassGenerator(Ui_DClassGenerator, QWidget):
         # Add constant in current class dict
         self.current_class_dict["constants"].append({"name": "", "value": ""})
 
+        # Adjust column width
+        self.table_const.resizeColumnsToContents()
+
     def deleteConst(self, button):
         """Delete row in table of constants
 
@@ -1184,11 +1210,7 @@ class DClassGenerator(Ui_DClassGenerator, QWidget):
                 prop_list.append(prop_dict)
             else:
                 # Ignore property with empty name or type since they will fail in class generator
-                print(
-                    "Ignoring property with empty name or type at row="
-                    + str(row)
-                    + " in saved csv file"
-                )
+                print("Ignoring property with empty name or type at row=" + str(row))
         class_dict["properties"] = prop_list
 
         # Read method table
@@ -1199,11 +1221,7 @@ class DClassGenerator(Ui_DClassGenerator, QWidget):
                 class_dict["methods"].append(val)
             else:
                 # Ignore method with empty name since it will fail in class generator
-                print(
-                    "Ignoring method with empty name at row="
-                    + str(row)
-                    + " in saved csv file"
-                )
+                print("Ignoring method with empty name at row=" + str(row))
 
         # Read meta data table
         for col in range(self.table_meta.columnCount()):
@@ -1224,11 +1242,7 @@ class DClassGenerator(Ui_DClassGenerator, QWidget):
             if const_dict["name"] == "":
                 class_dict["constants"].remove(const_dict)
                 # Ignore constant with empty name since it will fail in class generator
-                print(
-                    "Ignoring constant with empty name at row="
-                    + str(row)
-                    + " in saved csv file"
-                )
+                print("Ignoring constant with empty name at row=" + str(row))
 
         return class_dict
 
