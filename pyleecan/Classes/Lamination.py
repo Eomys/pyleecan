@@ -178,6 +178,11 @@ try:
 except ImportError as error:
     plot_preview_notch = error
 
+try:
+    from ..Methods.Machine.Lamination.has_key import has_key
+except ImportError as error:
+    has_key = error
+
 
 from numpy import isnan
 from ._check import InitUnKnowClassError
@@ -531,6 +536,15 @@ class Lamination(FrozenClass):
         )
     else:
         plot_preview_notch = plot_preview_notch
+    # cf Methods.Machine.Lamination.has_key
+    if isinstance(has_key, ImportError):
+        has_key = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use Lamination method has_key: " + str(has_key))
+            )
+        )
+    else:
+        has_key = has_key
     # generic save method is available in all object
     save = save
     # get_logger method is available in all object

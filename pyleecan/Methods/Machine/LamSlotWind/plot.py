@@ -11,13 +11,11 @@ from ....Functions.Plot import dict_2D
 from ....definitions import config_dict
 from ....Classes.WindingSC import WindingSC
 from ....Classes.WindingUD import WindingUD
+from ....Functions.Plot.get_patch_color_from_label import get_path_color_from_label
 
 PHASE_COLORS = config_dict["PLOT"]["COLOR_DICT"]["PHASE_COLORS"]
 ROTOR_COLOR = config_dict["PLOT"]["COLOR_DICT"]["ROTOR_COLOR"]
 STATOR_COLOR = config_dict["PLOT"]["COLOR_DICT"]["STATOR_COLOR"]
-if "WEDGE_COLOR" not in config_dict["PLOT"]["COLOR_DICT"]:
-    config_dict["PLOT"]["COLOR_DICT"]["WEDGE_COLOR"] = "y"
-WEDGE_COLOR = config_dict["PLOT"]["COLOR_DICT"]["WEDGE_COLOR"]
 PLUS_HATCH = "++"
 MINUS_HATCH = ".."
 
@@ -142,16 +140,7 @@ def plot(
 
     for surf in surf_list:
         label_dict = decode_label(surf.label)
-        if LAM_LAB in label_dict["surf_type"]:
-            patches = surf.get_patches(
-                color_lam, is_edge_only=is_edge_only, edgecolor=edgecolor
-            )
-            # Add transparency to stator lamination when arrows are added
-            if head is not None and self.is_stator:
-                # Only adding transparency to the first surface as the second is a white circle
-                patches[0]._alpha = 0.2
-            patches.extend(patches)
-        elif WIND_LAB in label_dict["surf_type"] or BAR_LAB in label_dict["surf_type"]:
+        if WIND_LAB in label_dict["surf_type"] or BAR_LAB in label_dict["surf_type"]:
             if not is_lam_only:
                 color, sign = find_wind_phase_color(wind_mat=wind_mat, label=surf.label)
                 if sign == "+" and is_add_sign:
@@ -168,11 +157,16 @@ def plot(
                         edgecolor=edgecolor,
                     )
                 )
-        elif WEDGE_LAB in label_dict["surf_type"] and not is_lam_only:
-            patches.extend(surf.get_patches(WEDGE_COLOR, is_edge_only=is_edge_only))
+        elif WEDGE_LAB in label_dict["surf_type"] and is_lam_only:
+            pass
         else:
+            color = get_path_color_from_label(surf.label, label_dict=label_dict)
             patches.extend(
-                surf.get_patches(is_edge_only=is_edge_only, edgecolor=edgecolor)
+                surf.get_patches(
+                    color=color,
+                    is_edge_only=is_edge_only,
+                    edgecolor=edgecolor,
+                )
             )
 
     # Adding arrows between slots for winding radial pattern

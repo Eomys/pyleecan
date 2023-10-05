@@ -3,10 +3,11 @@ import matplotlib.pyplot as plt
 from ....Functions.init_fig import init_fig
 from ....definitions import config_dict
 from ....Functions.labels import decode_label, MAG_LAB, LAM_LAB
+from ....Functions.Plot.get_patch_color_from_label import get_path_color_from_label
 
-MAGNET_COLOR = config_dict["PLOT"]["COLOR_DICT"]["MAGNET_COLOR"]
 ROTOR_COLOR = config_dict["PLOT"]["COLOR_DICT"]["ROTOR_COLOR"]
 STATOR_COLOR = config_dict["PLOT"]["COLOR_DICT"]["STATOR_COLOR"]
+MAGNET_COLOR = config_dict["PLOT"]["COLOR_DICT"]["MAGNET_COLOR"]
 
 
 def plot(
@@ -66,10 +67,8 @@ def plot(
 
     if self.is_stator:
         Lam_Name = "Stator"
-        lam_color = STATOR_COLOR
     else:
         Lam_Name = "Rotor"
-        lam_color = ROTOR_COLOR
 
     (fig, ax, patch_leg, label_leg) = init_fig(fig=fig, ax=ax, shape="rectangle")
 
@@ -78,24 +77,16 @@ def plot(
     patches = list()
     for surf in surf_list:
         label_dict = decode_label(surf.label)
-        if LAM_LAB in label_dict["surf_type"]:
+        if MAG_LAB in label_dict["surf_type"] and is_lam_only:
+            pass
+        else:
+            color = get_path_color_from_label(surf.label)
             patches.extend(
                 surf.get_patches(
-                    color=lam_color, is_edge_only=is_edge_only, edgecolor=edgecolor
+                    color=color,
+                    is_edge_only=is_edge_only,
+                    edgecolor=edgecolor,
                 )
-            )
-        elif MAG_LAB in label_dict["surf_type"]:
-            if not is_lam_only:
-                patches.extend(
-                    surf.get_patches(
-                        color=MAGNET_COLOR,
-                        is_edge_only=is_edge_only,
-                        edgecolor=edgecolor,
-                    )
-                )
-        else:
-            patches.extend(
-                surf.get_patches(is_edge_only=is_edge_only, edgecolor=edgecolor)
             )
     # Display the result
     (fig, ax, patch_leg, label_leg) = init_fig(fig)

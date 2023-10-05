@@ -32,6 +32,16 @@ try:
 except ImportError as error:
     is_outwards = error
 
+try:
+    from ..Methods.Machine.Notch.has_key import has_key
+except ImportError as error:
+    has_key = error
+
+try:
+    from ..Methods.Machine.Notch.get_label import get_label
+except ImportError as error:
+    get_label = error
+
 
 from numpy import isnan
 from ._check import InitUnKnowClassError
@@ -69,6 +79,24 @@ class Notch(FrozenClass):
         )
     else:
         is_outwards = is_outwards
+    # cf Methods.Machine.Notch.has_key
+    if isinstance(has_key, ImportError):
+        has_key = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use Notch method has_key: " + str(has_key))
+            )
+        )
+    else:
+        has_key = has_key
+    # cf Methods.Machine.Notch.get_label
+    if isinstance(get_label, ImportError):
+        get_label = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use Notch method get_label: " + str(get_label))
+            )
+        )
+    else:
+        get_label = get_label
     # generic save method is available in all object
     save = save
     # get_logger method is available in all object

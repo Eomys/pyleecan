@@ -6243,7 +6243,8 @@
             "build_radius_lines",
             "build_radius_desc",
             "has_slot",
-            "plot_preview_notch"
+            "plot_preview_notch",
+            "has_key"
         ],
         "mother": "",
         "name": "Lamination",
@@ -9223,7 +9224,9 @@
         "methods": [
             "get_Rbo",
             "get_Ryoke",
-            "is_outwards"
+            "is_outwards",
+            "has_key",
+            "get_label"
         ],
         "mother": "",
         "name": "Notch",
@@ -9255,7 +9258,8 @@
         "methods": [
             "comp_surface",
             "comp_periodicity_spatial",
-            "get_notch_desc_list"
+            "get_notch_desc_list",
+            "build_geometry_key"
         ],
         "mother": "Notch",
         "name": "NotchEvenDist",
