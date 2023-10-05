@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import sys
-from os.path import dirname, abspath, normpath, join, realpath
+from os.path import dirname, abspath, normpath, join, realpath, basename, isfile
 from os import listdir, remove, system
 import json
 from datetime import datetime
@@ -29,7 +29,9 @@ exec("from " + soft_name + ".definitions import MAIN_DIR, DOC_DIR, INT_DIR")
 PACKAGE_LIST = ["Geometry", "Machine", "Material", "Slot", "Import"]
 
 
-def generate_code(root_path, gen_dict=None, soft_name="pyleecan", is_log=True):
+def generate_code(
+    root_path, gen_dict=None, soft_name="pyleecan", is_log=True, class_list=None
+):
     """Generate the package Classes code according to doc in root_path
 
     Parameters
@@ -42,6 +44,8 @@ def generate_code(root_path, gen_dict=None, soft_name="pyleecan", is_log=True):
         Name of the software to generate
     is_log : bool
         True to add the log related code (get_logger...)
+    class_list : list
+        List of class csv path to generate
 
     Returns
     -------
@@ -53,11 +57,22 @@ def generate_code(root_path, gen_dict=None, soft_name="pyleecan", is_log=True):
     print("Reading classes csv in: " + DOC_DIR)
     print("Saving generated files in: " + CLASS_DIR)
 
-    # Deleting all the previous class
-    print("Deleting old class files...")
-    for file_name in listdir(CLASS_DIR):
-        if file_name[0] != "_":
-            remove(join(CLASS_DIR, file_name))
+    if class_list is None:
+        # Deleting all the previous class
+        print("Deleting old class files...")
+        for file_name in listdir(CLASS_DIR):
+            if file_name[0] != "_":
+                remove(join(CLASS_DIR, file_name))
+    else:
+        # Deleting only given classes in class_list
+        class_name_list = list()
+        for csv_path in class_list:
+            class_name = basename(csv_path)[:-4]
+            class_name_list.append(class_name)
+            class_path_py = realpath(join(CLASS_DIR, class_name + ".py"))
+            if isfile(class_path_py):
+                print("Deleting python class file: " + class_path_py)
+                remove(class_path_py)
 
     # A file to import every classes quickly
     import_file = open(join(CLASS_DIR, "import_all.py"), "w")
@@ -84,10 +99,18 @@ def generate_code(root_path, gen_dict=None, soft_name="pyleecan", is_log=True):
             "from ..Classes." + class_name + " import " + class_name + "\n"
         )
         load_file.write('    "' + class_name + '": ' + class_name + ",\n")
-        print("Generation of " + class_name + " class")
-        generate_class(
-            gen_dict, class_name, CLASS_DIR, soft_name=soft_name, is_log=is_log
-        )
+        if class_list is None:
+            print("Generation of " + class_name + " class")
+            generate_class(
+                gen_dict, class_name, CLASS_DIR, soft_name=soft_name, is_log=is_log
+            )
+        else:
+            if class_name in class_name_list:
+                print("Generation of " + class_name + " class")
+                generate_class(
+                    gen_dict, class_name, CLASS_DIR, soft_name=soft_name, is_log=is_log
+                )
+
     import_file.close()
     load_file.write("}\n")
     load_file.close()
@@ -108,6 +131,7 @@ def run_generate_classes(
     is_black=True,
     soft_name=soft_name,
     is_log=is_log,
+    class_list=None,
 ):
     """Main function to generate classes"""
 
@@ -125,14 +149,30 @@ def run_generate_classes(
         doc_dir, is_internal=False, in_path=int_dir, soft_name=soft_name
     )
 
-    generate_code(main_dir, gen_dict, soft_name=soft_name, is_log=is_log)
+    generate_code(
+        main_dir, gen_dict, soft_name=soft_name, is_log=is_log, class_list=class_list
+    )
 
     if is_black:
         # Run black
         try:
             import black
 
-            system('"{}" -m black {}'.format(sys.executable, main_dir))
+            if class_list is None:
+                system('"{}" -m black {}'.format(sys.executable, main_dir))
+            else:
+                for csv_path in class_list:
+                    class_name = basename(csv_path)[:-4]
+                    class_path_py = realpath(
+                        join(main_dir, "Classes", class_name + ".py")
+                    )
+                    out = system(
+                        '"{}" -m black --quiet {}'.format(sys.executable, class_path_py)
+                    )
+                    if out == 0:
+                        print("Reformatting python class file: " + class_path_py)
+                    else:
+                        print("Cannot reformat python class file: " + class_path_py)
             if black.__version__.split(".")[0] != "20":
                 print("\n############################################")
                 print(
