@@ -108,6 +108,9 @@ class DClassGenerator(Ui_DClassGenerator, QWidget):
         self.treeView.customContextMenuRequested.connect(self.openContextMenu)
 
         # Connect save class button
+        self.le_classname.editingFinished.connect(self.renameClass)
+
+        # Connect save class button
         self.b_saveclass.clicked.connect(self.saveClass)
 
         # Connect add property button
@@ -135,8 +138,8 @@ class DClassGenerator(Ui_DClassGenerator, QWidget):
             a DClassGenerator object
 
         """
-        # Init label
-        self.set_label_classname("ClassName")
+        # Init class name line edit
+        self.le_classname.setEnabled(False)
 
         # Disable save_class button
         self.b_saveclass.setEnabled(False)
@@ -256,7 +259,8 @@ class DClassGenerator(Ui_DClassGenerator, QWidget):
         self.fill_table_const()
 
         # Change head label to current class name
-        self.set_label_classname(self.current_class_dict["name"])
+        self.le_classname.setText(self.current_class_dict["name"])
+        self.le_classname.setEnabled(True)
 
         # Enable save class button
         self.b_saveclass.setEnabled(True)
@@ -341,7 +345,7 @@ class DClassGenerator(Ui_DClassGenerator, QWidget):
 
         if len(class_dict_ref["methods"]) != len(current_class_dict["methods"]):
             is_modified_class = True
-        
+
         if not is_modified_class:
             # Compare property and constants values inside list of dict
             for key in ["properties", "constants"]:
@@ -1178,6 +1182,66 @@ class DClassGenerator(Ui_DClassGenerator, QWidget):
             True
         )
 
+    def renameClass(self):
+        """Rename class with line edit -> triggers fileRenamed signal so
+        this methods is run twice. 
+        Parameters
+        ----------
+        self : DClassGenerator
+            A DClassGenerator object
+        """
+
+        # Get old and new class names
+        oldName = self.get_obj_name(self.current_class_index)
+        newName = self.le_classname.text() + ".csv"
+
+        # Get path to old csv file before renaming
+        path_old = self.dirModel.filePath(self.current_class_index)
+
+        # Get path to module folder
+        path = path_old.replace(oldName, "")
+
+        # Get path to new csv file after renaming
+        path_new = realpath(join(path, newName))
+
+        # Check that path_old is not the same as path_new to avoid second run
+        if isfile(path_old) and realpath(path_old) != realpath(path_new):
+            # Perform renaming
+            os.rename(path_old, path_new)
+            index = self.dirModel.index(path_new)
+            self.treeView.setCurrentIndex(index)
+            self.current_class_index = index
+            self.sortTreeView()
+
+            # Call same method as for renaming with double click on csv name in treeview
+            self.renameClassMethods(path, oldName, newName)
+
+    def saveClass(self):
+        """Save class as csv file
+
+        Parameters
+        ----------
+        self : DClassGenerator
+            A DClassGenerator object
+        """
+
+        # Get current class dict from tables
+        class_dict = self.get_current_class_dict_from_tables()
+
+        # Write class into csv format
+        write_file(class_dict)
+
+        # Reload csv to ignore empty fields and update current_class_dict
+        csv_path = realpath(self.dirModel.filePath(self.current_class_index))
+        self.import_class_from_csv(csv_path)
+
+        # Update tables in GUI
+        self.set_class_selected()
+
+        # Store class csv file path in list of modified classes
+        if csv_path not in self.list_class_modified:
+            self.list_class_modified.append(csv_path)
+
     def get_current_class_dict_from_tables(self):
         """Get current class dict by reading property, method and metadata tables
 
@@ -1245,32 +1309,6 @@ class DClassGenerator(Ui_DClassGenerator, QWidget):
                 print("Ignoring constant with empty name at row=" + str(row))
 
         return class_dict
-
-    def saveClass(self):
-        """Save class as csv file
-
-        Parameters
-        ----------
-        self : DClassGenerator
-            A DClassGenerator object
-        """
-
-        # Get current class dict from tables
-        class_dict = self.get_current_class_dict_from_tables()
-
-        # Write class into csv format
-        write_file(class_dict)
-
-        # Reload csv to ignore empty fields and update current_class_dict
-        csv_path = realpath(self.dirModel.filePath(self.current_class_index))
-        self.import_class_from_csv(csv_path)
-
-        # Update tables in GUI
-        self.set_class_selected()
-
-        # Store class csv file path in list of modified classes
-        if csv_path not in self.list_class_modified:
-            self.list_class_modified.append(csv_path)
 
     def genClass(self):
         """Generate class from csv files
@@ -1361,6 +1399,9 @@ class DClassGenerator(Ui_DClassGenerator, QWidget):
         # Get treeview index of renamed object
         index = self.dirModel.index(path_new)
 
+        if self.dirModel.data(index) in ["", None]:
+            return
+
         if self.dirModel.isDir(index):
             print("Cannot rename module")
             # Rename folder back to original name to prevent issues with package attribute
@@ -1374,7 +1415,7 @@ class DClassGenerator(Ui_DClassGenerator, QWidget):
                 self.current_class_dict["name"] = newName[:-4]
 
             # Update class name label
-            self.set_label_classname(newName[:-4])
+            self.le_classname.setText(newName[:-4])
 
             if path_old in self.list_class_modified:
                 # Update class name in list of modified class
@@ -1393,8 +1434,7 @@ class DClassGenerator(Ui_DClassGenerator, QWidget):
             )
 
             # Sort treeview alphabetically
-            self.dirModel.sort(1)  # Sort 2nd column first to trigger 1st column sort
-            self.dirModel.sort(0)
+            self.sortTreeView()
 
             if isdir(method_folder_path_old):
                 # Rename methods folder if it exists
@@ -1571,8 +1611,7 @@ class DClassGenerator(Ui_DClassGenerator, QWidget):
         self.treeView.setCurrentIndex(self.current_class_index)
 
         # Sort treeview alphabetically
-        self.dirModel.sort(1)  # Sort 2nd column first to trigger 1st column sort
-        self.dirModel.sort(0)
+        self.sortTreeView()
 
         # Update tables
         self.set_class_selected()
@@ -1721,14 +1760,20 @@ class DClassGenerator(Ui_DClassGenerator, QWidget):
         for ii in range(3):
             self.treeView.resizeColumnToContents(ii)
 
-    def set_label_classname(self, class_name):
-        """Set label of class name with proper font"""
-        # Set class name as title
-        self.label_classname.setText(
-            '<html><head/><body><p><span style=" font-size:14pt; font-weight:700; text-decoration: underline;">'
-            + class_name
-            + " </span></p></body></html>"
-        )
+    def sortTreeView(self):
+        """Sort treeview alphabetically"""
+        # Sort 2nd column first to trigger 1st column sort
+        self.dirModel.sort(1)
+        self.dirModel.sort(0)
+
+    # def set_le_classname(self, class_name):
+    #     """Set label of class name with proper font"""
+    #     # Set class name as title
+    #     self.le_classname.setText(
+    #         '<html><head/><body><p><span style=" font-size:14pt; font-weight:700; text-decoration: underline;">'
+    #         + class_name
+    #         + " </span></p></body></html>"
+    #     )
 
     # def single_click(self):
     #     self.single_click_timer.stop()

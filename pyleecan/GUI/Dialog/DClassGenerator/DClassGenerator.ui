@@ -87,23 +87,6 @@
    <layout class="QVBoxLayout" name="verticalLayout">
     <item>
      <layout class="QGridLayout" name="gridLayout_4">
-      <item row="4" column="0" colspan="5">
-       <widget class="QTableWidget" name="table_prop"/>
-      </item>
-      <item row="1" column="0" colspan="2">
-       <widget class="QLabel" name="label_classname">
-        <property name="text">
-         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:14pt; font-weight:700; text-decoration: underline;&quot;&gt;ClassName&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="2">
-       <widget class="QPushButton" name="b_saveclass">
-        <property name="text">
-         <string>Save current class</string>
-        </property>
-       </widget>
-      </item>
       <item row="1" column="3">
        <spacer name="horizontalSpacer_4">
         <property name="orientation">
@@ -116,6 +99,9 @@
          </size>
         </property>
        </spacer>
+      </item>
+      <item row="4" column="0" colspan="5">
+       <widget class="QTableWidget" name="table_prop"/>
       </item>
       <item row="2" column="0" colspan="2">
        <widget class="QLabel" name="lab_param">
@@ -137,10 +123,46 @@
         </property>
        </spacer>
       </item>
+      <item row="1" column="2">
+       <widget class="QPushButton" name="b_saveclass">
+        <property name="toolTip">
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Save modifications made to current class&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        </property>
+        <property name="text">
+         <string>Save current class</string>
+        </property>
+       </widget>
+      </item>
       <item row="2" column="2">
        <widget class="QPushButton" name="b_addprop">
+        <property name="toolTip">
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Add new row at the bottom of property table&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        </property>
         <property name="text">
          <string>Add Property</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0" colspan="2">
+       <widget class="QLineEdit" name="le_classname">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>400</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">font: 700 14pt &quot;Arial&quot;;
+text-decoration: underline;</string>
+        </property>
+        <property name="text">
+         <string>Class_name</string>
         </property>
        </widget>
       </item>
@@ -160,6 +182,9 @@
       </item>
       <item row="0" column="2">
        <widget class="QPushButton" name="b_addmeth">
+        <property name="toolTip">
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Add new row at the bottom of method list&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        </property>
         <property name="text">
          <string>Add Method</string>
         </property>
@@ -180,6 +205,9 @@
       </item>
       <item row="0" column="3">
        <widget class="QPushButton" name="b_browse">
+        <property name="toolTip">
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Browse to method folder in explorer&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        </property>
         <property name="text">
          <string>Browse Folder</string>
         </property>
@@ -220,6 +248,9 @@
       </item>
       <item row="2" column="2">
        <widget class="QPushButton" name="b_addconst">
+        <property name="toolTip">
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Add a new row at the bottom of constant table&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        </property>
         <property name="text">
          <string>Add Constant</string>
         </property>
