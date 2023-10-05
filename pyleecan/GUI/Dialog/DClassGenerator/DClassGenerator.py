@@ -336,61 +336,53 @@ class DClassGenerator(Ui_DClassGenerator, QWidget):
             print("Cannot load csv file: " + csv_path)
             return True
 
-        # Compare class dict
+        # Compare class dict keys
         is_modified_class = False
-        for key, val0 in class_dict_ref.items():
-            if key in ["daughters"]:
-                # Ignore daughters entry since it is not used
-                pass
-            elif key not in current_class_dict:
-                # Class dict are different if they don't have same keys
-                return True
-            else:
-                val1 = current_class_dict[key]
-                # Comparison of property and constant which are lists of dict
-                if (
-                    isinstance(val0, list)
-                    and len(val0) > 0
-                    and isinstance(val0[0], dict)
-                ):
-                    if (
-                        not isinstance(val1, list)
-                        or len(val1) == 0
-                        or not isinstance(val1[0], dict)
-                    ):
+        list_key_ref = list(class_dict_ref.keys())
+        list_key_current = list(current_class_dict.keys())
+        if list_key_ref.sort() != list_key_current.sort():
+            return True
+
+        if str(class_dict_ref["name"]) != str(current_class_dict["name"]):
+            return True
+
+        if realpath(class_dict_ref["path"]) != realpath(current_class_dict["path"]):
+            return True
+
+        if str(class_dict_ref["daughters"]) != str(current_class_dict["daughters"]):
+            return True
+
+        if str(class_dict_ref["desc"]) != str(current_class_dict["desc"]):
+            return True
+
+        if str(class_dict_ref["package"]) != str(current_class_dict["package"]):
+            return True
+
+        if str(class_dict_ref["mother"]) != str(current_class_dict["mother"]):
+            return True
+
+        # Compare all fields except property and constants
+        for key in ["properties", "constants"]:
+            val0 = class_dict_ref[key]
+            val1 = current_class_dict[key]
+            for ii, dict0 in enumerate(val0):
+                for name, data0 in dict0.items():
+                    if name not in val1[ii]:
+                        # Property/Constant dicts are different if they don't have same keys
                         return True
-
-                    for ii, dict0 in enumerate(val0):
-                        for name, data0 in dict0.items():
-                            if name not in val1[ii]:
-                                # Property/Constant dicts are different if they don't have same keys
+                    else:
+                        data1 = val1[ii][name]
+                    if data0 != data1:
+                        try:
+                            # Try to set variables as float for comparison
+                            is_modified_class = float(data0) != float(data1)
+                            if is_modified_class:
                                 return True
-                            else:
-                                data1 = val1[ii][name]
-                            if data0 != data1:
-                                try:
-                                    # Try to set variables as float for comparison
-                                    is_modified_class = float(data0) != float(data1)
-                                    if is_modified_class:
-                                        return True
-                                except Exception as e:
-                                    # Try to set variables as str for comparison
-                                    is_modified_class = str(data0) != str(data1)
-                                    if is_modified_class:
-                                        return True
-
-                elif val0 != val1:
-                    # Comparison of other data: path, methods, class name etc
-                    try:
-                        # Try to set variables as float for comparison
-                        is_modified_class = float(val0) != float(val1)
-                        if is_modified_class:
-                            return True
-                    except Exception as e:
-                        # Try to set variables as str for comparison
-                        is_modified_class = str(val0) != str(val1)
-                        if is_modified_class:
-                            return True
+                        except Exception as e:
+                            # Try to set variables as str for comparison
+                            is_modified_class = str(data0) != str(data1)
+                            if is_modified_class:
+                                return True
 
         return is_modified_class
 
@@ -412,7 +404,7 @@ class DClassGenerator(Ui_DClassGenerator, QWidget):
                 csv_path, soft_name=PACKAGE_NAME, is_get_size=True
             )
         except Exception as e:
-            print("Cannot load csf file: " + csv_path)
+            print("Cannot load csv file: " + csv_path)
             return
 
         # Store current class information for further use
@@ -614,7 +606,7 @@ class DClassGenerator(Ui_DClassGenerator, QWidget):
             if row != row_index
         ]
 
-        if prop_name in prop_name_list:
+        if prop_name in prop_name_list and prop_name_list.index(prop_name) != row_index:
             print("Cannot rename property with an existing name in property list")
             # Cancel rename and use old property name
             self.table_prop.cellWidget(row_index, 0).setText(
@@ -842,7 +834,10 @@ class DClassGenerator(Ui_DClassGenerator, QWidget):
         meth_name = self.table_meth.cellWidget(row_index, 0).text()
 
         # Check that renamed method doesn't already exists to avoid duplicates
-        if meth_name in self.current_class_dict["methods"]:
+        if (
+            meth_name in self.current_class_dict["methods"]
+            and self.current_class_dict["methods"].index(meth_name) != row_index
+        ):
             print("Cannot rename method with an existing name in method list")
             # Set old method name
             self.table_meth.cellWidget(row_index, 0).setText(
@@ -1150,7 +1145,10 @@ class DClassGenerator(Ui_DClassGenerator, QWidget):
             if row != row_index
         ]
 
-        if const_name in const_name_list:
+        if (
+            const_name in const_name_list
+            and const_name_list.index(const_name) != row_index
+        ):
             # Cancel rename and use old constant name
             print("Cannot rename constant with an existing name in constant list")
             self.table_const.cellWidget(row_index, 0).setText(
@@ -1182,8 +1180,9 @@ class DClassGenerator(Ui_DClassGenerator, QWidget):
 
         # Init class dict
         class_dict = dict()
-        class_dict["name"] = self.current_class_dict["name"]
-        class_dict["path"] = self.current_class_dict["path"]
+        class_dict["name"] = self.dirModel.fileName(self.current_class_index)[:-4]
+        class_dict["path"] = realpath(self.dirModel.filePath(self.current_class_index))
+        class_dict["daughters"] = list()
 
         # Read property table
         prop_list = list()
@@ -1191,10 +1190,6 @@ class DClassGenerator(Ui_DClassGenerator, QWidget):
             prop_dict = dict()
             for col in range(len(self.list_prop)):
                 val = self.table_prop.cellWidget(row, col).text()
-                try:
-                    val = float(val)
-                except Exception as e:
-                    pass
                 prop_dict[MATCH_PROP_DICT[self.list_prop[col]]] = val
             if prop_dict["name"] != "" and prop_dict["type"] != "":
                 prop_list.append(prop_dict)
@@ -1271,8 +1266,8 @@ class DClassGenerator(Ui_DClassGenerator, QWidget):
         self.set_class_selected()
 
         # Store class csv file path in list
-        if csv_path not in self.list_class_modified:
-            self.list_class_modified.append(csv_path)
+        if realpath(csv_path) not in self.list_class_modified:
+            self.list_class_modified.append(realpath(csv_path))
 
     def genClass(self):
         """Generate class from csv files
@@ -1361,13 +1356,13 @@ class DClassGenerator(Ui_DClassGenerator, QWidget):
             # Update class name label
             self.set_label_classname(newName[:-4])
 
-            # Update class name in list of modified class
-            if join(path, oldName) in self.list_class_modified:
-                ii = self.list_class_modified.index(join(path, oldName))
-                self.list_class_modified[ii] = join(path, newName)
-            elif realpath(oldName) in self.list_class_modified:
-                ii = self.list_class_modified.index(realpath(oldName))
-                self.list_class_modified[ii] = join(path, newName)
+            if realpath(join(path, oldName)) in self.list_class_modified:
+                # Update class name in list of modified class
+                ii = self.list_class_modified.index(realpath(join(path, oldName)))
+                self.list_class_modified[ii] = realpath(join(path, newName))
+            else:
+                # Add class name in list of modified class
+                self.list_class_modified.append(realpath(join(path, newName)))
 
             # New path to method folder after class renaming
             method_path_new = self.current_method_folder_path.replace(
@@ -1394,7 +1389,7 @@ class DClassGenerator(Ui_DClassGenerator, QWidget):
         """
 
         # Get class csv path
-        file_path = self.dirModel.filePath(index)
+        csv_path = self.dirModel.filePath(index)
 
         # Get class name
         class_name = self.get_obj_name(index)
@@ -1402,12 +1397,15 @@ class DClassGenerator(Ui_DClassGenerator, QWidget):
         # Delete csv file associated to class
         self.dirModel.remove(index)
 
-        if isfile(file_path):
-            print("Cannot delete class file: " + file_path)
+        if isfile(csv_path):
+            print("Cannot delete class file: " + csv_path)
             print("Please check that file is not opened in csv editor")
             return
         else:
-            print("Deleted class file: " + file_path)
+            print("Deleted class file: " + csv_path)
+            if realpath(csv_path) in self.list_class_modified:
+                # Remove deleted class from modified classes list
+                self.list_class_modified.remove(realpath(csv_path))
 
         # Delete methods folder
         if isdir(self.current_method_folder_path):
@@ -1442,19 +1440,20 @@ class DClassGenerator(Ui_DClassGenerator, QWidget):
         """
 
         # Copy csv file to the same folder
-        file_path = self.dirModel.filePath(index)
+        csv_path = self.dirModel.filePath(index)
         file_name = self.dirModel.fileName(index)
-        if isfile(file_path):
-            file_path_dup = file_path.replace(file_name, file_name[:-4] + "_copy.csv")
-            copyfile(file_path, file_path_dup)
-            if isfile(file_path_dup):
-                print("Duplicated csv file at: " + file_path_dup)
+        if isfile(csv_path):
+            csv_path_dup = csv_path.replace(file_name, file_name[:-4] + "_copy.csv")
+            copyfile(csv_path, csv_path_dup)
+            if isfile(csv_path_dup):
+                print("Duplicated csv file at: " + csv_path_dup)
+                self.list_class_modified.append(realpath(csv_path_dup))
             else:
-                print("Cannot duplicate csv file at: " + file_path_dup)
+                print("Cannot duplicate csv file at: " + csv_path_dup)
 
         # Copy methods folder if it exists
         meth_folder = self.current_method_folder_path
-        if isdir(meth_folder):
+        if meth_folder is not None and isdir(meth_folder):
             meth_folder_dup = self.current_method_folder_path + "_copy"
             copytree(meth_folder, meth_folder_dup)
             if isdir(meth_folder):
@@ -1474,32 +1473,52 @@ class DClassGenerator(Ui_DClassGenerator, QWidget):
 
         """
 
+        # Init new class name
+        class_name = "new_class"
+
         # Get file path
-        file_path = join(self.dirModel.filePath(index), "new_class.csv")
+        csv_path = realpath(join(self.dirModel.filePath(index), class_name + ".csv"))
+
+        # Loop on class name if file already exists
+        while isfile(csv_path):
+            class_name += "_copy"
+            csv_path = realpath(
+                join(self.dirModel.filePath(index), class_name + ".csv")
+            )
 
         # Init class dict
         class_dict = dict()
-        class_dict["name"] = "new_class"
-        class_dict["path"] = file_path
-
-        # Init property table
-        prop_dict = dict()
-        for col in range(len(self.list_prop)):
-            prop_dict[MATCH_PROP_DICT[self.list_prop[col]]] = ""
-        class_dict["properties"] = [prop_dict]
-        class_dict["properties"][0]["name"] = "new_prop"
-
-        # Init method table
-        class_dict["methods"] = ["new_method"]
-
-        # Init meta data table
+        class_dict["name"] = class_name
+        class_dict["path"] = csv_path
+        class_dict["properties"] = list()
+        class_dict["methods"] = list()
         class_dict["package"] = self.dirModel.data(index)
         class_dict["mother"] = ""
         class_dict["desc"] = ""
+        class_dict["daughters"] = list()
         class_dict["constants"] = [{"name": "VERSION", "value": 1}]
 
         # Write empty class into csv format
         write_file(class_dict)
+
+        # Store current class information for further use
+        self.current_class_dict = class_dict
+        self.current_module = self.dirModel.data(index.parent())
+
+        # Store path to method folder
+        self.current_method_folder_path = join(
+            MAIN_DIR, "Methods", self.current_module, self.current_class_dict["name"]
+        )
+
+        # Update tables
+        self.set_class_selected()
+
+        # Store class csv file path in list of modified classes
+        if realpath(csv_path) not in self.list_class_modified:
+            self.list_class_modified.append(realpath(csv_path))
+
+        # Set treeview index to new class
+        self.current_class_index = self.dirModel.index(csv_path)
 
     def openClass(self, index):
         """Open class csv file in editor given by path_editor_csv
