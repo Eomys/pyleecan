@@ -91,7 +91,14 @@ class WWSlotOut(QGroupBox):
             + gui_option.unit.get_m_name()
             + "]"
         )
-        if parent.check(lam) is None:
+        check = False
+        try:
+            parent.check(lam)
+            if parent.check(lam) is None:
+                check = True
+        except:
+            check = False
+        if check:
             # Compute all the needed output as string
             w_surf = format(
                 gui_option.unit.get_m2(lam.slot.comp_surface_active()), ".4g"

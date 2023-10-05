@@ -49,5 +49,6 @@ def _comp_line_dict(self):
     # Closing Active part
     line_dict["3-6"] = Segment(Z3, Z6)
     line_dict["6-3"] = Segment(Z6, Z3)
+    line_dict["7-2"] = Segment(Z7, Z2)
 
     return line_dict

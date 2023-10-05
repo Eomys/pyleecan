@@ -99,10 +99,8 @@ class PWSlotUD(Ui_PWSlotUD, QWidget):
                 log_error(self, self.test_err_msg)
                 self.g_wedge.setChecked(False)
                 return
-            self.w_wedge_mat.show()
             self.w_wedge_mat.update(self.slot, "wedge_mat", self.material_dict)
         else:
-            self.w_wedge_mat.hide()
             self.slot.wedge_mat = None
         self.update_graph()
         # Notify the machine GUI that the machine has changed
