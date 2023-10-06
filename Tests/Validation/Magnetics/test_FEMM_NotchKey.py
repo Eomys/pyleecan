@@ -28,14 +28,128 @@ from pyleecan.definitions import DATA_DIR
 @pytest.mark.SPMSM
 @pytest.mark.periodicity
 @pytest.mark.SingleOP
-def test_FEMM_NotchKey():
+def test_FEMM_NotchKey_Airgap():
     """Validation of NotchKey in FEMM"""
-    res_path = join(save_path, "NotchKey")
+    res_path = join(save_path, "NotchKey_Airgap")
     if not isdir(res_path):
         makedirs(res_path)
     B = load(join(DATA_DIR, "Machine", "Benchmark.json"))
     Steel = load(join(DATA_DIR, "Material", "Steel1.json"))
-    B.name = "Benchmark_NotchKey_FEMM"
+    B.name = "Benchmark_NotchKey_Airgap_FEMM"
+    # Reduce magnet width
+    B.rotor.slot.Wmag /= 2
+    B.rotor.slot.W0 /= 2
+    # Add notches with keys
+    B.rotor.notch = [
+        NotchEvenDist(
+            alpha=0,
+            key_mat=Steel,
+            notch_shape=SlotM11(
+                Hmag=B.rotor.slot.Hmag * 1.4,
+                H0=0,
+                Wmag=B.rotor.slot.Wmag,
+                W0=B.rotor.slot.W0,
+                Zs=B.rotor.slot.Zs,
+                is_bore=True,
+            ),
+        )
+    ]
+
+    # Check plot machine
+    fig, ax = B.plot(
+        is_max_sym=True,
+        is_clean_plot=True,
+        is_show_fig=False,
+    )
+    fig.savefig(join(res_path, "machine_sym.png"))
+    fig.savefig(join(res_path, "machine_sym.svg"), format="svg")
+
+    fig, ax = B.plot(
+        save_path=join(res_path, "machine_full.png"),
+        is_clean_plot=True,
+        is_show_fig=False,
+    )
+    fig.savefig(join(res_path, "machine_full.png"))
+    fig.savefig(join(res_path, "machine_full.svg"), format="svg")
+
+    fig, ax = B.rotor.plot(is_add_arrow=True, is_show_fig=False)
+    fig.savefig(join(res_path, "rotor.png"))
+    fig.savefig(join(res_path, "rotor.svg"), format="svg")
+
+    # plt.show()
+    # Check periodicity
+    assert B.comp_periodicity_spatial() == (1, True)
+
+    # Check machine in FEMM with sym
+    simu = Simu1(name="test_FEMM_Mag_Key", machine=B)
+    simu.path_result = join(save_path, simu.name)
+    simu.input = InputCurrent(
+        OP=OPdq(N0=1000, Id_ref=0, Iq_ref=0),
+        Na_tot=2048,
+        Nt_tot=1,
+    )
+
+    # Definition of the magnetic simulation: with periodicity
+    simu.mag = MagFEMM(
+        type_BH_stator=1,
+        type_BH_rotor=1,
+        is_periodicity_a=True,
+        is_periodicity_t=False,
+        nb_worker=cpu_count(),
+        # Kmesh_fineness=2,
+    )
+    simu.path_result = join(res_path, simu.name)
+
+    # Same simu without symetry
+    simu2 = simu.copy()
+    simu2.name = simu.name + "_Full"
+    simu2.path_result = join(res_path, simu2.name)
+    simu2.mag.is_periodicity_a = False
+
+    # Run simulations
+    out = simu.run()
+    out2 = simu2.run()
+
+    out.mag.B.plot_2D_Data(
+        "angle{°}",
+        "time[0]",
+        data_list=[out2.mag.B],
+        legend_list=["Periodic", "Full"],
+        save_path=join(save_path, simu.name + "_B_space.png"),
+        is_show_fig=False,
+        **dict_2D
+    )
+
+    # Compare both simu
+    Bflux = out.mag.B
+    arg_list = ["angle"]
+    result = Bflux.get_rphiz_along(*arg_list)
+    Brad = result["radial"]
+    angle = result["angle"]
+
+    Bflux2 = out2.mag.B
+    arg_list = ["angle"]
+    result2 = Bflux2.get_rphiz_along(*arg_list)
+    Brad2 = result2["radial"]
+
+    assert_array_almost_equal(Brad, Brad2, decimal=1)
+    return out
+
+
+@pytest.mark.long_5s
+@pytest.mark.long_1m
+@pytest.mark.MagFEMM
+@pytest.mark.SPMSM
+@pytest.mark.periodicity
+@pytest.mark.SingleOP
+def test_FEMM_NotchKey_inner():
+    """Validation of NotchKey in FEMM"""
+    res_path = join(save_path, "NotchKey_inner")
+    if not isdir(res_path):
+        makedirs(res_path)
+    B = load(join(DATA_DIR, "Machine", "Benchmark.json"))
+    Steel = load(join(DATA_DIR, "Material", "Steel1.json"))
+    B.name = "Benchmark_NotchKey_inner_FEMM"
     # Reduce magnet width
     B.rotor.slot.Wmag /= 2
     B.rotor.slot.W0 /= 2
@@ -46,7 +160,7 @@ def test_FEMM_NotchKey():
             key_mat=Steel,
             notch_shape=SlotM11(
                 Hmag=B.rotor.slot.Hmag * 0.8,
-                H0=0,
+                H0=B.rotor.slot.Hmag,
                 Wmag=B.rotor.slot.Wmag,
                 W0=B.rotor.slot.W0,
                 Zs=B.rotor.slot.Zs,
@@ -172,7 +286,7 @@ def test_FEMM_NotchKey_2():
             alpha=2 * pi / B.rotor.slot.Zs,
             key_mat=M400,
             notch_shape=SlotM11(
-                Hmag=B.rotor.slot.Hmag * 0.5,
+                Hmag=B.rotor.slot.Hmag * 1.2,
                 H0=0,
                 Wmag=B.rotor.slot.Wmag,
                 W0=B.rotor.slot.W0,
@@ -226,6 +340,7 @@ def test_FEMM_NotchKey_2():
 
 # To run it without pytest
 if __name__ == "__main__":
-    # out = test_FEMM_NotchKey()
+    # out = test_FEMM_NotchKey_Airgap()
+    out = test_FEMM_NotchKey_inner()
     out = test_FEMM_NotchKey_2()
     print("Done")
