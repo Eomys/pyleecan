@@ -9,6 +9,8 @@ from Tests.GUI import gui_option  # Set unit as [m]
 from pyleecan.Classes.LamSlotMag import LamSlotMag
 from pyleecan.Classes.SlotM17 import SlotM17
 from pyleecan.GUI.Dialog.DMachineSetup.SMSlot.PMSlot17.PMSlot17 import PMSlot17
+from pyleecan.Classes.Material import Material
+from pyleecan.GUI.Dialog.DMatLib.DMatLib import LIB_KEY, MACH_KEY
 
 
 import pytest
@@ -17,11 +19,21 @@ import pytest
 class TestPMSlot17(object):
     """Test that the widget PMSlot17 behave like it should"""
 
+    material_dict = {LIB_KEY: list(), MACH_KEY: list()}
+    material_dict[LIB_KEY] = [
+        Material(name="test1"),
+        Material(name="test2"),
+        Material(name="test3"),
+    ]
+    material_dict[LIB_KEY][0].elec.rho = 0.31
+    material_dict[LIB_KEY][1].elec.rho = 0.32
+    material_dict[LIB_KEY][2].elec.rho = 0.33
+
     def setup_method(self):
         self.test_obj = LamSlotMag(Rint=0.1, Rext=0.2)
         self.test_obj.slot = SlotM17(Zs=2)
         self.test_obj.magnet.Lmag = 0.12
-        self.widget = PMSlot17(self.test_obj)
+        self.widget = PMSlot17(self.test_obj, self.material_dict)
 
     @classmethod
     def setup_class(cls):
@@ -59,7 +71,7 @@ class TestPMSlot17(object):
         self.test_obj = LamSlotMag(Rint=0.1, Rext=0.9)
         # p check
         self.test_obj.slot = SlotM17(Zs=4)
-        self.widget = PMSlot17(self.test_obj)
+        self.widget = PMSlot17(self.test_obj, self.material_dict)
         assert self.widget.check(self.test_obj) == "SlotM17 must have p=1"
 
 

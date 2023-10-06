@@ -116,6 +116,9 @@ p, li { white-space: pre-wrap; }
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_3">
        <item>
+        <widget class="WWSlotMag" name="w_mag" native="true"/>
+       </item>
+       <item>
         <layout class="QGridLayout" name="gridLayout">
          <item row="1" column="0">
           <widget class="QLabel" name="in_Wmag">
@@ -219,6 +222,12 @@ p, li { white-space: pre-wrap; }
    <class>WWSlotOut</class>
    <extends>QWidget</extends>
    <header>......GUI.Dialog.DMachineSetup.SWSlot.WWSlotOut.WWSlotOut.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>WWSlotMag</class>
+   <extends>QWidget</extends>
+   <header>......GUI.Dialog.DMachineSetup.SMSlot.WWSlotMag.WWSlotMag</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

@@ -9,6 +9,8 @@ from Tests.GUI import gui_option  # Set unit as [m]
 from pyleecan.Classes.LamSlotMag import LamSlotMag
 from pyleecan.Classes.SlotM14 import SlotM14
 from pyleecan.GUI.Dialog.DMachineSetup.SMSlot.PMSlot14.PMSlot14 import PMSlot14
+from pyleecan.Classes.Material import Material
+from pyleecan.GUI.Dialog.DMatLib.DMatLib import LIB_KEY, MACH_KEY
 
 
 import pytest
@@ -17,10 +19,20 @@ import pytest
 class TestPMSlot14(object):
     """Test that the widget PMSlot14 behave like it should"""
 
+    material_dict = {LIB_KEY: list(), MACH_KEY: list()}
+    material_dict[LIB_KEY] = [
+        Material(name="test1"),
+        Material(name="test2"),
+        Material(name="test3"),
+    ]
+    material_dict[LIB_KEY][0].elec.rho = 0.31
+    material_dict[LIB_KEY][1].elec.rho = 0.32
+    material_dict[LIB_KEY][2].elec.rho = 0.33
+
     def setup_method(self):
         self.test_obj = LamSlotMag(Rint=0.1, Rext=0.2)
         self.test_obj.slot = SlotM14(H0=0.10, W0=0.13, Wmag=0.14, Hmag=0.15, Rtopm=0.16)
-        self.widget = PMSlot14(self.test_obj)
+        self.widget = PMSlot14(self.test_obj, self.material_dict)
 
     @classmethod
     def setup_class(cls):
@@ -110,7 +122,7 @@ class TestPMSlot14(object):
         self.test_obj.slot = SlotM14(
             H0=0.005, Hmag=0.005, W0=0.01, Wmag=0.01, Rtopm=0.02
         )
-        self.widget = PMSlot14(self.test_obj)
+        self.widget = PMSlot14(self.test_obj, self.material_dict)
         assert self.widget.w_out.out_slot_height.text() == "Slot height: 0.005 [m]"
 
     def test_check(self):
@@ -118,7 +130,7 @@ class TestPMSlot14(object):
         self.test_obj = LamSlotMag(Rint=0.1, Rext=0.2)
         # H0
         self.test_obj.slot = SlotM14(H0=None, Hmag=0.10, W0=0.10, Wmag=0.10, Rtopm=0.1)
-        self.widget = PMSlot14(self.test_obj)
+        self.widget = PMSlot14(self.test_obj, self.material_dict)
         assert self.widget.check(self.test_obj) == "You must set H0 !"
         # Hmag
         self.test_obj.slot = SlotM14(H0=0.10, Hmag=None, W0=0.10, Wmag=0.10, Rtopm=0.1)

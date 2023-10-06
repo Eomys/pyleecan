@@ -22,7 +22,7 @@ class PMSlot16(Gen_PMSlot16, QWidget):
     slot_name = "Spoke Rectangular Magnet"
     slot_type = SlotM16
 
-    def __init__(self, lamination=None):
+    def __init__(self, lamination=None, material_dict=None):
         """Initialize the widget according to lamination
 
         Parameters
@@ -38,6 +38,7 @@ class PMSlot16(Gen_PMSlot16, QWidget):
         self.setupUi(self)
         self.lamination = lamination
         self.slot = lamination.slot
+        self.material_dict = material_dict
 
         # Set FloatEdit unit
         self.lf_W0.unit = "m"
@@ -62,6 +63,11 @@ class PMSlot16(Gen_PMSlot16, QWidget):
 
         # Display the main output of the slot (surface, height...)
         self.w_out.comp_output()
+
+        self.key_mat = None
+        self.w_mag.w_mat.setText("Magnet Material")
+        self.w_mag.w_mat.def_mat = "MagnetPrius"
+        self.w_mag.w_mat.update(self.slot, "wedge_mat", self.material_dict)
 
         # Connect the signal
         self.lf_W0.editingFinished.connect(self.set_W0)

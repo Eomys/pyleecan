@@ -83,31 +83,10 @@ class TestSMSlot(object):
         """Check that the GUI initialize correctly"""
         # To remember to update after adding a new type
         assert self.widget.c_slot_type.count() == 10
-
-        assert self.widget.c_slot_type.currentIndex() == 1
-        assert self.widget.c_slot_type.currentText() == "Polar Magnet"
-        assert isinstance(self.widget.w_slot, PMSlot11)
-        assert self.widget.w_mat.in_mat_type.text() == "mat_mag:"
-        assert self.widget.w_mat.c_mat_type.count() == 3
-        assert self.widget.w_mat.c_mat_type.currentIndex() == 2
         assert (
             self.widget.w_slot.w_out.out_wind_surface.text()
             == "Active surface: 0.0003521 [m²]"
         )
-
-    def test_set_material(self):
-        """Check that you can change the material"""
-        self.widget.w_mat.c_mat_type.setCurrentIndex(0)
-        assert self.test_obj.rotor.magnet.mat_type.name == "test1"
-        assert self.test_obj.rotor.magnet.mat_type.elec.rho == 0.31
-
-    def test_set_type_magnetization(self):
-        """Check that you can change tha magnetization"""
-        # type_magnetization set test
-        self.widget.c_type_magnetization.setCurrentIndex(2)
-        assert self.test_obj.rotor.magnet.type_magnetization == 2
-        self.widget.c_type_magnetization.setCurrentIndex(0)
-        assert self.test_obj.rotor.magnet.type_magnetization == 0
 
     def test_set_type_10(self):
         """Check that the Widget is able to set Magnet type 10"""
