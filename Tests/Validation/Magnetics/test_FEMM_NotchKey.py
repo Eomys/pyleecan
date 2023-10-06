@@ -25,7 +25,7 @@ from pyleecan.definitions import DATA_DIR
 @pytest.mark.long_5s
 @pytest.mark.long_1m
 @pytest.mark.MagFEMM
-@pytest.mark.IPMSM
+@pytest.mark.SPMSM
 @pytest.mark.periodicity
 @pytest.mark.SingleOP
 def test_FEMM_NotchKey():
@@ -81,7 +81,7 @@ def test_FEMM_NotchKey():
     assert B.comp_periodicity_spatial() == (1, True)
 
     # Check machine in FEMM with sym
-    simu = Simu1(name="test_FEMM_LamHoleNS", machine=B)
+    simu = Simu1(name="test_FEMM_Mag_Key", machine=B)
     simu.path_result = join(save_path, simu.name)
     simu.input = InputCurrent(
         OP=OPdq(N0=1000, Id_ref=0, Iq_ref=0),
@@ -136,7 +136,96 @@ def test_FEMM_NotchKey():
     return out
 
 
+@pytest.mark.long_5s
+@pytest.mark.long_1m
+@pytest.mark.MagFEMM
+@pytest.mark.SPMSM
+@pytest.mark.periodicity
+@pytest.mark.SingleOP
+def test_FEMM_NotchKey_2():
+    """Validation of NotchKey in FEMM, 2 key with B(H) curves"""
+    res_path = join(save_path, "NotchKey_2")
+    if not isdir(res_path):
+        makedirs(res_path)
+    B = load(join(DATA_DIR, "Machine", "Benchmark.json"))
+    M400 = load(join(DATA_DIR, "Material", "M400-50A.json"))
+    M270 = load(join(DATA_DIR, "Material", "M270-35A.json"))
+    B.name = "Benchmark_NotchKey_FEMM_2"
+    # Reduce magnet width
+    B.rotor.slot.Wmag /= 2
+    B.rotor.slot.W0 /= 2
+    # Add notches with keys
+    B.rotor.notch = [
+        NotchEvenDist(
+            alpha=0,
+            key_mat=M270,
+            notch_shape=SlotM11(
+                Hmag=B.rotor.slot.Hmag * 0.8,
+                H0=0,
+                Wmag=B.rotor.slot.Wmag,
+                W0=B.rotor.slot.W0,
+                Zs=B.rotor.slot.Zs // 2,
+                is_bore=True,
+            ),
+        ),
+        NotchEvenDist(
+            alpha=2 * pi / B.rotor.slot.Zs,
+            key_mat=M400,
+            notch_shape=SlotM11(
+                Hmag=B.rotor.slot.Hmag * 0.5,
+                H0=0,
+                Wmag=B.rotor.slot.Wmag,
+                W0=B.rotor.slot.W0,
+                Zs=B.rotor.slot.Zs // 2,
+                is_bore=True,
+            ),
+        ),
+    ]
+
+    # Check plot machine
+    fig, ax = B.plot(
+        save_path=join(res_path, "machine_full.png"),
+        is_clean_plot=True,
+        is_show_fig=False,
+    )
+    fig.savefig(join(res_path, "machine_full.png"))
+    fig.savefig(join(res_path, "machine_full.svg"), format="svg")
+
+    fig, ax = B.rotor.plot(is_add_arrow=True, is_show_fig=False)
+    fig.savefig(join(res_path, "rotor.png"))
+    fig.savefig(join(res_path, "rotor.svg"), format="svg")
+
+    # plt.show()
+    # Check periodicity
+    assert B.comp_periodicity_spatial() == (1, False)
+
+    # Check machine in FEMM with sym
+    simu = Simu1(name="test_FEMM_Mag_Key_2", machine=B)
+    simu.path_result = join(save_path, simu.name)
+    simu.input = InputCurrent(
+        OP=OPdq(N0=1000, Id_ref=0, Iq_ref=0),
+        Na_tot=2048,
+        Nt_tot=1,
+    )
+
+    # Definition of the magnetic simulation: with periodicity
+    simu.mag = MagFEMM(
+        type_BH_stator=1,
+        type_BH_rotor=1,
+        is_periodicity_a=True,
+        is_periodicity_t=False,
+        nb_worker=cpu_count(),
+        # Kmesh_fineness=2,
+    )
+    simu.path_result = join(res_path, simu.name)
+
+    # Run simulations
+    out = simu.run()
+    return out
+
+
 # To run it without pytest
 if __name__ == "__main__":
-    out = test_FEMM_NotchKey()
+    # out = test_FEMM_NotchKey()
+    out = test_FEMM_NotchKey_2()
     print("Done")

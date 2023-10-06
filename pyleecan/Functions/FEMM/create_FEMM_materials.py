@@ -212,8 +212,9 @@ def create_FEMM_materials(
                     0,
                     0,
                 )
-                if key_mat.mag.BH_curve is not None and not isinstance(
-                    key_mat.mag.BH_curve, ImportMatrix  # abstract class
+                if (
+                    key_mat.mag.BH_curve is not None
+                    and not type(key_mat.mag.BH_curve) is ImportMatrix  # abstract class
                 ):
                     BH = key_mat.mag.BH_curve.get_data()
                     if BH.shape[0] > 1:
