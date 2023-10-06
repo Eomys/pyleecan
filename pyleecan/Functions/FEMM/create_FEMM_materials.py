@@ -11,6 +11,7 @@ from ...Functions.labels import (
     HOLEM_LAB,
     MAG_LAB,
     SOP_LAB,
+    KEY_LAB,
     WEDGE_LAB,
     WIND_LAB,
     BAR_LAB,
@@ -20,6 +21,7 @@ from ...Functions.labels import (
     decode_label,
 )
 from ...Functions.FEMM import LAM_MAT_NAME
+from ...Classes.ImportMatrix import ImportMatrix
 
 
 def create_FEMM_materials(
@@ -166,7 +168,9 @@ def create_FEMM_materials(
                     0,
                     0,
                 )
-                if wedge_mat.mag.BH_curve is not None:
+                if wedge_mat.mag.BH_curve is not None and not isinstance(
+                    wedge_mat.mag.BH_curve, ImportMatrix  # abstract class
+                ):
                     BH = wedge_mat.mag.BH_curve.get_data()
                     if BH.shape[0] > 1:
                         for ii in range(BH.shape[0]):
@@ -179,7 +183,44 @@ def create_FEMM_materials(
                 femm.mi_addmaterial("Air", 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0)
                 materials.append("Air")
             prop_dict[label_dict["full"]] = "Air"
-
+        elif KEY_LAB in label_dict["surf_type"]:  # Key in notches
+            # Get the material used for the wedge
+            key_mat = get_obj_from_label(machine, label_dict=label_dict)
+            mat_name = key_mat.name
+            # Check if the key has the same material as the lamination
+            if STATOR_LAB in label_dict["lam_type"]:
+                lam_mat = stator.mat_type
+            elif ROTOR_LAB in label_dict["lam_type"]:
+                lam_mat = rotor.mat_type
+            if mat_name == lam_mat.name:
+                mat_name = label_dict["lam_label"] + " " + LAM_MAT_NAME
+            elif mat_name not in materials:
+                # Create material if it doesn't already exist
+                femm.mi_addmaterial(
+                    mat_name,
+                    key_mat.mag.mur_lin,
+                    key_mat.mag.mur_lin,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    1,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                )
+                if key_mat.mag.BH_curve is not None and not isinstance(
+                    key_mat.mag.BH_curve, ImportMatrix  # abstract class
+                ):
+                    BH = key_mat.mag.BH_curve.get_data()
+                    if BH.shape[0] > 1:
+                        for ii in range(BH.shape[0]):
+                            femm.mi_addbhpoint(key_mat.name, BH[ii][1], BH[ii][0])
+                materials.append(mat_name)
+            prop_dict[label_dict["full"]] = mat_name
         elif VENT_LAB in label_dict["surf_type"]:  # Ventilation
             vent = get_obj_from_label(machine, label_dict=label_dict)
             material = vent.mat_void

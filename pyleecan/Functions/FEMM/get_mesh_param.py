@@ -10,6 +10,7 @@ from ..labels import (
     NO_MESH_LAB,
     SLID_LAB,
     VENT_LAB,
+    KEY_LAB,
     HOLEM_LAB,
     HOLEV_LAB,
     WIND_LAB,
@@ -113,6 +114,14 @@ def get_mesh_param(label_dict, FEMM_dict):
             mesh_dict["group"] = FEMM_dict["groups"]["GROUP_SWE"]
         else:
             mesh_dict["group"] = FEMM_dict["groups"]["GROUP_RWE"]
+    # Notches Keys
+    elif KEY_LAB in label_dict["surf_type"]:
+        mesh_dict["element_size"] = lam_mesh_dict["elementsize_key"]
+        mesh_dict["meshsize"] = lam_mesh_dict["meshsize_key"]
+        if STATOR_LAB in label_dict["lam_type"]:
+            mesh_dict["group"] = FEMM_dict["groups"]["GROUP_SK"]
+        else:
+            mesh_dict["group"] = FEMM_dict["groups"]["GROUP_RK"]
     # Sliding Band / Airgap
     elif SLID_LAB in label_dict["surf_type"] or AIRGAP_LAB in label_dict["surf_type"]:
         mesh_dict["automesh"] = FEMM_dict["mesh"]["automesh_airgap"]

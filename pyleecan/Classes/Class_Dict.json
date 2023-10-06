@@ -9241,7 +9241,7 @@
                 "name": "key_mat",
                 "type": "Material",
                 "unit": "",
-                "value": ""
+                "value": null
             }
         ]
     },

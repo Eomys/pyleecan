@@ -184,6 +184,8 @@ def get_obj_from_label(machine, label=None, label_dict=None):
         return hole.get_magnet_dict()["magnet_" + str(label_dict["T_id"])]
     elif MAG_LAB in label_dict["surf_type"]:
         return lam_obj.get_magnet_by_label(label_dict=label_dict)
+    elif KEY_LAB in label_dict["surf_type"]:
+        return lam_obj.notch[label_dict["R_id"]].key_mat
     raise NotImplementedError(label_dict["full"] + " is not available yet")
 
 

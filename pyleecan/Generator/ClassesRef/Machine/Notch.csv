@@ -1,5 +1,5 @@
 ﻿Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,as_dict Type
-key_mat,,"The material of the key (if None, no key to add)",0,Material,,,,
+key_mat,,"The material of the key (if None, no key to add)",0,Material,None,,,
 ,,,,,Class description,,,
 Package,Inherit,Methods,Constant Name,Constant Value,Abstract class for notches,,,
 Machine,,get_Rbo,VERSION,1,,,,

@@ -34,6 +34,7 @@ def test_FEMM_NotchKey():
     if not isdir(res_path):
         makedirs(res_path)
     B = load(join(DATA_DIR, "Machine", "Benchmark.json"))
+    Steel = load(join(DATA_DIR, "Material", "Steel1.json"))
     B.name = "Benchmark_NotchKey_FEMM"
     # Reduce magnet width
     B.rotor.slot.Wmag /= 2
@@ -42,8 +43,9 @@ def test_FEMM_NotchKey():
     B.rotor.notch = [
         NotchEvenDist(
             alpha=0,
+            key_mat=Steel,
             notch_shape=SlotM11(
-                Hmag=B.rotor.slot.Hmag * 1.2,
+                Hmag=B.rotor.slot.Hmag * 0.8,
                 H0=0,
                 Wmag=B.rotor.slot.Wmag,
                 W0=B.rotor.slot.W0,
@@ -74,7 +76,7 @@ def test_FEMM_NotchKey():
     fig.savefig(join(res_path, "rotor.png"))
     fig.savefig(join(res_path, "rotor.svg"), format="svg")
 
-    plt.show()
+    # plt.show()
     # Check periodicity
     assert B.comp_periodicity_spatial() == (1, True)
 

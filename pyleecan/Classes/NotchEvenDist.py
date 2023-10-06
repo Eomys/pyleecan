@@ -103,7 +103,7 @@ class NotchEvenDist(Notch):
     get_logger = get_logger
 
     def __init__(
-        self, alpha=0, notch_shape=-1, key_mat=-1, init_dict=None, init_str=None
+        self, alpha=0, notch_shape=-1, key_mat=None, init_dict=None, init_str=None
     ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values

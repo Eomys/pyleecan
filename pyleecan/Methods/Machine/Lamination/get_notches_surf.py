@@ -37,6 +37,8 @@ def get_notches_surf(self, sym):
     for ii, notch in enumerate(notch_list):
         # Method used for symetry (for now) so only NotchEvenDist
         assert isinstance(notch, NotchEvenDist)
+        if notch.has_key():
+            continue  # Key surface overlap closing surface
         # Get the original surface
         Nsurf = notch.notch_shape.get_surface()
         Nsurf.label = self.get_label() + "_" + NOTCH_LAB + "_R" + str(ii) + "-T0-S0"
