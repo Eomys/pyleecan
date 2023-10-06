@@ -123,16 +123,8 @@ class PCondType11(Gen_PCondType11, QWidget):
 
     def update_ins_layout(self):
         if self.g_ins.isChecked():
-            self.in_Wins_wire.show()
-            self.lf_Wins_wire.show()
-            self.unit_Wins_wire.show()
-            self.w_mat_1.show()
             self.set_Wins_wire()
         else:
-            self.in_Wins_wire.hide()
-            self.lf_Wins_wire.hide()
-            self.unit_Wins_wire.hide()
-            self.w_mat_1.hide()
             self.set_Wins_wire(Wins_wire=None)
 
     def set_Nwppc(self):

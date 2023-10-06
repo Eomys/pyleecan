@@ -111,6 +111,7 @@ class PMSlot10(Gen_PMSlot10, QWidget):
 
             # Material setup
             self.w_key_mat.setText("Key Material")
+            self.notch_obj.key_mat = None
             self.w_key_mat.def_mat = "Steel1"
             self.w_key_mat.update(self.notch_obj, "key_mat", self.material_dict)
 
@@ -146,8 +147,6 @@ class PMSlot10(Gen_PMSlot10, QWidget):
         """Setup the slot key according to the GUI"""
         if self.g_key.isChecked():
             self.img_slot.setPixmap(QPixmap(pixmap_dict["SlotM10_key_ext_stator"]))
-            self.w_key_mat.def_mat = "Steel1"
-            self.w_key_mat.update(self.notch_obj, "key_mat", self.material_dict)
             self.lf_Wkey.setEnabled(True)
             self.lf_Hkey.setEnabled(True)
             self.unit_Hkey.setEnabled(True)

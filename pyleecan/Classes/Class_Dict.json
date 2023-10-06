@@ -14881,7 +14881,6 @@
             "_set_W3",
             "_comp_W",
             "build_geometry",
-            "build_geometry_active",
             "check",
             "comp_angle_opening",
             "comp_height",

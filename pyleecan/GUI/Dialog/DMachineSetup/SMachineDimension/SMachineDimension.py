@@ -53,6 +53,7 @@ class SMachineDimension(Ui_SMachineDimension, QWidget):
         self.lf_RRint.unit = "m"
         self.lf_Wfra.unit = "m"
         self.lf_Lfra.unit = "m"
+        self.lf_Lshaft.unit = "m"
         # Set unit name (m ou mm)
         wid_list = [
             self.unit_SRint,
@@ -61,6 +62,7 @@ class SMachineDimension(Ui_SMachineDimension, QWidget):
             self.unit_RRint,
             self.unit_Wfra,
             self.unit_Lfra,
+            self.unit_Lshaft,
         ]
         for wid in wid_list:
             wid.setText("[" + gui_option.unit.get_m_name() + "]")
@@ -128,7 +130,6 @@ class SMachineDimension(Ui_SMachineDimension, QWidget):
                     QPixmap(pixmap_dict["Dim_In_Rotor_No_Shaft"])
                 )
             self.g_shaft.setChecked(False)
-            self.out_Drsh.hide()
             # If there is no shaft, the rotor doesn't have internal radius
             self.lf_RRint.setValue(0)
             self.lf_RRint.setEnabled(False)
@@ -152,12 +153,18 @@ class SMachineDimension(Ui_SMachineDimension, QWidget):
                 + "]"
             )
             self.w_mat_0.update(self.machine.shaft, "mat_type", self.material_dict)
+            if self.machine.shaft.Lshaft is None:
+                Lshaft = 0
+            else:
+                Lshaft = self.machine.shaft.Lshaft
+            self.lf_Lshaft.setValue(Lshaft)
 
         # Connect the widget
         self.lf_SRint.editingFinished.connect(self.set_stator_Rint)
         self.lf_SRext.editingFinished.connect(self.set_stator_Rext)
         self.lf_RRint.editingFinished.connect(self.set_rotor_Rint)
         self.lf_RRext.editingFinished.connect(self.set_rotor_Rext)
+        self.lf_Lshaft.editingFinished.connect(self.set_Lshaft)
         self.lf_Wfra.editingFinished.connect(self.set_Wfra)
         self.lf_Lfra.editingFinished.connect(self.set_Lfra)
 
@@ -260,6 +267,18 @@ class SMachineDimension(Ui_SMachineDimension, QWidget):
             else:
                 self.out_airgap.setText(gap_txt + "?")
 
+    def set_Lshaft(self):
+        """Signal to update the value of shaft.Lshaft according to the line edit
+
+        Parameters
+        ----------
+        self : SMachineDimension
+            A SMachineDimension object
+        """
+        self.machine.shaft.Lshaft = self.lf_Lshaft.value()
+        # Notify the machine GUI that the machine has changed
+        self.saveNeeded.emit()
+
     def set_Wfra(self):
         """Signal to update the value of Wfra according to the spinbox
 
@@ -335,8 +354,9 @@ class SMachineDimension(Ui_SMachineDimension, QWidget):
                 self.img_machine.setPixmap(QPixmap(pixmap_dict["Dim_In_Rotor_Shaft"]))
             # Set Drsh if machine.rotor.Rint is set
             if self.machine.rotor.Rint is not None:
-                self.machine.shaft = Shaft()
-                self.machine.shaft._set_None()
+                if self.machine.shaft is None:
+                    self.machine.shaft = Shaft()
+                    self.machine.shaft._set_None()
                 self.machine.shaft.Drsh = self.machine.rotor.Rint * 2
                 self.out_Drsh.setText(
                     self.tr("Drsh = ")

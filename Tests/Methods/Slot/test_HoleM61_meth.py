@@ -102,7 +102,7 @@ HoleM61_test.append(
         "carac": "magnet_0",
         "Rmin_exp": 0.05984145720150872,
         "Rmax_exp": 0.11,
-        "S_exp": 0.00136534350269306,
+        "S_exp": 0.0013668826437211769,
         "SM_exp": 0.00015,
         "hasmagnet_exp": True,
     }
@@ -196,7 +196,7 @@ HoleM61_test.append(
         "carac": "magnet_3",
         "Rmin_exp": 0.05984145720150872,
         "Rmax_exp": 0.11,
-        "S_exp": 0.00136688264372118,
+        "S_exp": 0.001365343502693063,
         "SM_exp": 0.0002,
         "hasmagnet_exp": True,
     }
@@ -314,6 +314,26 @@ class Test_HoleM61_meth(object):
         assert abs(point_dict["ZM16"] - point_dict["ZM15"]) == pytest.approx(
             test_obj.hole[0].W2
         )
+
+        # Check W3
+        sp = 2 * pi / test_obj.hole[0].Zh
+
+        assert abs(
+            point_dict["Z6"] - point_dict["Z12"] * exp(1j * sp)
+        ) == pytest.approx(test_obj.hole[0].W3)
+        assert abs(
+            point_dict["Z5"] - point_dict["Z11"] * exp(1j * sp)
+        ) == pytest.approx(test_obj.hole[0].W3)
+
+        # Check H0
+        assert abs(Rbo - point_dict["Z1"].real) == pytest.approx(test_obj.hole[0].H0)
+        assert abs(Rbo - point_dict["Z6"].real) == pytest.approx(test_obj.hole[0].H0)
+        assert abs(Rbo - point_dict["Z7"].real) == pytest.approx(test_obj.hole[0].H0)
+        assert abs(Rbo - point_dict["Z12"].real) == pytest.approx(test_obj.hole[0].H0)
+        assert abs(Rbo - point_dict["ZM4"].real) == pytest.approx(test_obj.hole[0].H0)
+        assert abs(Rbo - point_dict["ZM1"].real) == pytest.approx(test_obj.hole[0].H0)
+        assert abs(Rbo - point_dict["ZM9"].real) == pytest.approx(test_obj.hole[0].H0)
+        assert abs(Rbo - point_dict["ZM12"].real) == pytest.approx(test_obj.hole[0].H0)
 
         # magnet height
         assert abs(point_dict["Z4"]) == pytest.approx(Rbo - test_obj.hole[0].H2)

@@ -9,6 +9,9 @@ from Tests.GUI import gui_option  # Set unit as [m]
 from pyleecan.Classes.LamSlotMag import LamSlotMag
 from pyleecan.Classes.SlotM11 import SlotM11
 from pyleecan.GUI.Dialog.DMachineSetup.SMSlot.PMSlot11.PMSlot11 import PMSlot11
+from pyleecan.Classes.Notch import Notch
+from pyleecan.Classes.Material import Material
+from pyleecan.GUI.Dialog.DMatLib.DMatLib import MACH_KEY, LIB_KEY
 
 
 import pytest
@@ -191,6 +194,55 @@ class TestPMSlot11(object):
             Zs=8, H0=0.10, Hmag=0.10, W0=(pi / 4) * 0.98, Wmag=(pi / 4) * 0.98
         )
         assert self.widget.check(self.test_obj) is None
+
+    def test_set_Wkey(self):
+        """Check that the Widget allow to update Wkey"""
+        self.test_obj = LamSlotMag(Rint=0.1, Rext=0.2)
+        self.test_obj.slot = SlotM11(H0=0.10, W0=0.13, Wmag=0.14, Hmag=0.15)
+        self.material_dict = {LIB_KEY: list(), MACH_KEY: list()}
+        self.mat1 = Material(name="Steel1")
+        notch = Notch(self.mat1, None, None)
+        self.widget = PMSlot11(
+            self.test_obj, material_dict=self.material_dict, notch_obj=notch
+        )
+
+        self.widget.g_key.setChecked(True)
+        assert self.widget.g_key.isChecked()
+
+        self.widget.c_Wkey_unit.setCurrentIndex(0)
+        assert self.widget.c_Wkey_unit.currentText() == "rad"
+
+        self.widget.c_Wkey_unit.setCurrentIndex(1)
+        assert self.widget.c_Wkey_unit.currentText() == "deg"
+
+        self.widget.c_Wkey_unit.setCurrentIndex(0)
+        # Change value in GUI
+        self.widget.lf_Wkey.clear()
+        QTest.keyClicks(self.widget.lf_Wkey, "0.61")
+        self.widget.lf_Wkey.editingFinished.emit()  # To trigger the slot
+
+        assert self.widget.slot.Wmag == 0.61
+
+    def test_set_Hkey(self):
+        """Check that the Widget allow to update Hkey"""
+        self.test_obj = LamSlotMag(Rint=0.1, Rext=0.2)
+        self.test_obj.slot = SlotM11(H0=0.10, W0=0.13, Wmag=0.14, Hmag=0.15)
+        self.material_dict = {LIB_KEY: list(), MACH_KEY: list()}
+        self.mat1 = Material(name="Steel1")
+        notch = Notch(self.mat1, None, None)
+        self.widget = PMSlot11(
+            self.test_obj, material_dict=self.material_dict, notch_obj=notch
+        )
+        self.widget.g_key.setChecked(True)
+        assert self.widget.g_key.isChecked()
+        # Check Unit
+        assert self.widget.unit_Hkey.text() == "[m]"
+        # Change value in GUI
+        self.widget.lf_Hkey.clear()
+        QTest.keyClicks(self.widget.lf_Hkey, "0.61")
+        self.widget.lf_Hkey.editingFinished.emit()  # To trigger the slot
+
+        assert self.widget.slot.Hmag == 0.61
 
 
 if __name__ == "__main__":
