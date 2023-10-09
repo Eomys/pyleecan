@@ -9259,7 +9259,8 @@
             "comp_surface",
             "comp_periodicity_spatial",
             "get_notch_desc_list",
-            "build_geometry_key"
+            "build_geometry_key",
+            "get_key_Ox_radius"
         ],
         "mother": "Notch",
         "name": "NotchEvenDist",
@@ -16306,7 +16307,8 @@
             "draw_FEMM",
             "plot",
             "split_line",
-            "is_inside"
+            "is_inside",
+            "intersect_line"
         ],
         "mother": "",
         "name": "Surface",

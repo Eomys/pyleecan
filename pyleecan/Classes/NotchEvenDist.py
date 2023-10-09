@@ -39,6 +39,11 @@ try:
 except ImportError as error:
     build_geometry_key = error
 
+try:
+    from ..Methods.Machine.NotchEvenDist.get_key_Ox_radius import get_key_Ox_radius
+except ImportError as error:
+    get_key_Ox_radius = error
+
 
 from numpy import isnan
 from ._check import InitUnKnowClassError
@@ -97,6 +102,18 @@ class NotchEvenDist(Notch):
         )
     else:
         build_geometry_key = build_geometry_key
+    # cf Methods.Machine.NotchEvenDist.get_key_Ox_radius
+    if isinstance(get_key_Ox_radius, ImportError):
+        get_key_Ox_radius = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use NotchEvenDist method get_key_Ox_radius: "
+                    + str(get_key_Ox_radius)
+                )
+            )
+        )
+    else:
+        get_key_Ox_radius = get_key_Ox_radius
     # generic save method is available in all object
     save = save
     # get_logger method is available in all object

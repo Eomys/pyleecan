@@ -10,6 +10,7 @@ from numpy.testing import assert_array_almost_equal
 
 from pyleecan.Classes.OPdq import OPdq
 from pyleecan.Classes.Simu1 import Simu1
+from pyleecan.Classes.SlotM10 import SlotM10
 from pyleecan.Classes.SlotM11 import SlotM11
 from pyleecan.Classes.InputCurrent import InputCurrent
 from pyleecan.Classes.NotchEvenDist import NotchEvenDist
@@ -35,6 +36,9 @@ def test_FEMM_NotchKey_Airgap():
         makedirs(res_path)
     B = load(join(DATA_DIR, "Machine", "Benchmark.json"))
     Steel = load(join(DATA_DIR, "Material", "Steel1.json"))
+    Steel2 = Steel.copy()
+    Steel2.name = "Steel2"
+    Steel2.mag.mur_lin /= 2
     B.name = "Benchmark_NotchKey_Airgap_FEMM"
     # Reduce magnet width
     B.rotor.slot.Wmag /= 2
@@ -45,7 +49,7 @@ def test_FEMM_NotchKey_Airgap():
             alpha=0,
             key_mat=Steel,
             notch_shape=SlotM11(
-                Hmag=B.rotor.slot.Hmag * 1.4,
+                Hmag=B.rotor.slot.Hmag * 1.2,
                 H0=0,
                 Wmag=B.rotor.slot.Wmag,
                 W0=B.rotor.slot.W0,
@@ -54,7 +58,20 @@ def test_FEMM_NotchKey_Airgap():
             ),
         )
     ]
-
+    B.stator.notch = [
+        NotchEvenDist(
+            alpha=0,
+            key_mat=Steel2,
+            notch_shape=SlotM10(
+                Hmag=4e-3,
+                H0=3e-3,
+                Wmag=5e-3,
+                W0=5e-3,
+                Zs=B.stator.slot.Zs,
+                is_bore=True,
+            ),
+        )
+    ]
     # Check plot machine
     fig, ax = B.plot(
         is_max_sym=True,
@@ -168,7 +185,20 @@ def test_FEMM_NotchKey_inner():
             ),
         )
     ]
-
+    B.stator.notch = [
+        NotchEvenDist(
+            alpha=0,
+            key_mat=Steel,
+            notch_shape=SlotM10(
+                Hmag=2e-3,
+                H0=3e-3,
+                Wmag=5e-3,
+                W0=5e-3,
+                Zs=B.stator.slot.Zs,
+                is_bore=True,
+            ),
+        )
+    ]
     # Check plot machine
     fig, ax = B.plot(
         is_max_sym=True,
@@ -340,7 +370,7 @@ def test_FEMM_NotchKey_2():
 
 # To run it without pytest
 if __name__ == "__main__":
-    # out = test_FEMM_NotchKey_Airgap()
+    out = test_FEMM_NotchKey_Airgap()
     out = test_FEMM_NotchKey_inner()
     out = test_FEMM_NotchKey_2()
     print("Done")

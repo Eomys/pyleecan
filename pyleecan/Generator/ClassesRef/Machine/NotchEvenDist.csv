@@ -7,3 +7,4 @@ Machine,Notch,comp_surface,VERSION,1,Class for evenly distributed notches (accor
 ,,comp_periodicity_spatial,,,,,,
 ,,get_notch_desc_list,,,,,,
 ,,build_geometry_key,,,,,,
+,,get_key_Ox_radius,,,,,,
