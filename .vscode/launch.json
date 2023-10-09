@@ -52,6 +52,17 @@
             },
         },
         {
+            "name": "Python: Run class gen GUI",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/pyleecan/Generator/run_class_generator_GUI.py",
+            "console": "integratedTerminal",
+            "cwd": "${workspaceFolder}",
+            "env": {
+                "PYTHONPATH": "${cwd}"
+            },
+        },
+        {
             "name": "Python: Run script",
             "type": "python",
             "request": "launch",
