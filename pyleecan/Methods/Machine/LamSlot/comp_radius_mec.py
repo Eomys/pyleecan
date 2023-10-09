@@ -24,7 +24,7 @@ def comp_radius_mec(self):
             Rmec = min(Rmec, Rmin)
 
     # Handles key in the airgap
-    if self.notch not in [None, []]:
+    if self.notch not in [None, []] and self.has_key():
         for notch in self.notch:
             if notch.has_key():
                 (Rmin, Rmax) = notch.notch_shape.comp_radius()

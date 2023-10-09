@@ -95,11 +95,6 @@ def plot(
     style = "Simple, tail_width=2, head_width=8, head_length=12"
     kw = dict(arrowstyle=style, linewidth=0.8, edgecolor="k")
 
-    if self.is_stator:
-        color_lam = STATOR_COLOR
-    else:
-        color_lam = ROTOR_COLOR
-
     # If the winding is user defined, we can not plot the radial pattern
     if isinstance(self.winding, WindingUD):
         is_winding_connection = False

@@ -6,13 +6,9 @@ from numpy import array, pi, zeros
 
 from pyleecan.Classes.Frame import Frame
 from pyleecan.Classes.LamSlotWind import LamSlotWind
-from pyleecan.Classes.LamSquirrelCage import LamSquirrelCage
 from pyleecan.Classes.MachineDFIM import MachineDFIM
 from pyleecan.Classes.Shaft import Shaft
 from pyleecan.Classes.VentilationCirc import VentilationCirc
-from pyleecan.Classes.VentilationPolar import VentilationPolar
-from pyleecan.Classes.VentilationTrap import VentilationTrap
-from pyleecan.Classes.Winding import Winding
 from pyleecan.Classes.WindingUD import WindingUD
 from pyleecan.Classes.MatMagnetics import MatMagnetics
 from pyleecan.Classes.SlotW29 import SlotW29
