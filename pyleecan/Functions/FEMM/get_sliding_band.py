@@ -167,6 +167,9 @@ def _get_radius_boundary(sym, lam_int, lam_ext):
             # Only one set can intersect with Ox
             if notch.has_key() and Rint is None:
                 Rint = notch.get_key_Ox_radius()
+        # No key on Ox => Rbo (if notches, closing surface is added)
+        if Rint is None:
+            Rint = lam_int.get_Rbo()
     else:
         # With bore shape even with notches, we compute the first point coordinate
         bore_list = lam_int.build_radius_lines(sym=sym, is_bore=True)
@@ -182,6 +185,9 @@ def _get_radius_boundary(sym, lam_int, lam_ext):
             # Only one set can intersect with Ox
             if notch.has_key() and Rext is None:
                 Rext = notch.get_key_Ox_radius()
+        # No key on Ox => Rbo (if notches, closing surface is added)
+        if Rext is None:
+            Rext = lam_ext.get_Rbo()
     else:
         bore_list = lam_ext.build_radius_lines(sym=sym, is_bore=True)
         Rext = abs(bore_list[0].get_begin())
