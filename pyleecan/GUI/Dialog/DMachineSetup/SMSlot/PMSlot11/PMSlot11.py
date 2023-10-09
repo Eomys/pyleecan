@@ -35,6 +35,8 @@ class PMSlot11(Gen_PMSlot11, QWidget):
             A PMSlot11 widget
         lamination : Lamination
             current lamination to edit
+        material_dict: dict
+            Materials dictionary (library + machine)
         is_notch : bool
             True to adapt the slot GUI for the notch setup
         """
@@ -99,7 +101,11 @@ class PMSlot11(Gen_PMSlot11, QWidget):
         self.key_mat = None
         self.w_mag.w_mat.setText("Magnet Material")
         self.w_mag.w_mat.def_mat = "MagnetPrius"
-        self.w_mag.w_mat.update(self.slot, "wedge_mat", self.material_dict)
+        self.w_mag.w_mat.update(lamination.magnet, "mat_type", self.material_dict)
+
+        self.w_mag.c_type_magnetization.currentIndexChanged.connect(
+            self.set_type_magnetization
+        )
 
         # Connect the signal
         self.lf_W0.editingFinished.connect(self.set_W0)
@@ -108,6 +114,11 @@ class PMSlot11(Gen_PMSlot11, QWidget):
         self.lf_Hmag.editingFinished.connect(self.set_Hmag)
         self.c_W0_unit.currentIndexChanged.connect(self.set_W0)
         self.c_Wmag_unit.currentIndexChanged.connect(self.set_Wmag)
+
+    def set_type_magnetization(self, index):
+        self.lamination.magnet.type_magnetization = index
+        # Notify the machine GUI that the machine has changed
+        self.saveNeeded.emit()
 
     def set_W0(self):
         """Signal to update the value of W0 according to the line edit

@@ -49,18 +49,3 @@ class WWSlotMag(QGroupBox):
         self.w_mat = WMatSelectV(self)
         self.w_mat.setObjectName("w_mat")
         self.layout.addWidget(self.w_mat)
-
-    def set_type_magnetization(self, index, type_magnetization):
-        """Signal to update the value of type_magnetization according to the combobox
-
-        Parameters
-        ----------
-        self : SMagnet
-            A SMagnet object
-        index : int
-            Current index of the combobox
-        """
-        self.type_magnetization = type_magnetization
-        self.type_magnetization = index
-        # Notify the machine GUI that the machine has changed
-        self.saveNeeded.emit()

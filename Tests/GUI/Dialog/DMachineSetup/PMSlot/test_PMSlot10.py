@@ -19,19 +19,22 @@ import pytest
 class TestPMSlot10(object):
     """Test that the widget PMSlot10 behave like it should"""
 
-    material_dict = {LIB_KEY: list(), MACH_KEY: list()}
-    material_dict[LIB_KEY] = [
-        Material(name="test1"),
-        Material(name="test2"),
-        Material(name="test3"),
-    ]
-    material_dict[LIB_KEY][0].elec.rho = 0.31
-    material_dict[LIB_KEY][1].elec.rho = 0.32
-    material_dict[LIB_KEY][2].elec.rho = 0.33
-
     def setup_method(self):
         self.test_obj = LamSlotMag(Rint=0.1, Rext=0.2)
         self.test_obj.slot = SlotM10(H0=0.10, W0=0.13, Wmag=0.14, Hmag=0.15)
+
+        material_dict = {LIB_KEY: list(), MACH_KEY: list()}
+        material_dict[LIB_KEY] = [
+            Material(name="test1"),
+            Material(name="test2"),
+            Material(name="test3"),
+        ]
+        material_dict[LIB_KEY][0].elec.rho = 0.31
+        material_dict[LIB_KEY][1].elec.rho = 0.32
+        material_dict[LIB_KEY][2].elec.rho = 0.33
+
+        self.material_dict = material_dict
+
         self.widget = PMSlot10(self.test_obj, self.material_dict)
 
     @classmethod
@@ -130,15 +133,18 @@ class TestPMSlot10(object):
     def test_set_material(self):
         """Check that you can change the material"""
         self.widget.w_mag.w_mat.c_mat_type.setCurrentIndex(0)
-        assert self.test_obj.mat_type.name == "test1"
-        assert self.test_obj.mat_type.elec.rho == 0.31
+        assert self.test_obj.magnet.mat_type.name == "test1"
+        assert self.test_obj.magnet.mat_type.elec.rho == 0.31
+        self.widget.w_mag.w_mat.c_mat_type.setCurrentIndex(2)
+        assert self.test_obj.magnet.mat_type.name == "test3"
+        assert self.test_obj.magnet.mat_type.elec.rho == 0.33
 
     def test_set_type_magnetization(self):
         """Check that you can change tha magnetization"""
         # type_magnetization set test
         self.widget.w_mag.c_type_magnetization.setCurrentIndex(2)
         assert self.test_obj.magnet.type_magnetization == 2
-        self.widget.c_type_magnetization.setCurrentIndex(0)
+        self.widget.w_mag.c_type_magnetization.setCurrentIndex(0)
         assert self.test_obj.magnet.type_magnetization == 0
 
 
@@ -149,4 +155,5 @@ if __name__ == "__main__":
     a.test_init()
     a.test_output_txt()
     a.teardown_class()
+    a.test_set_material()
     print("Done")
