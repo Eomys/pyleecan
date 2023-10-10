@@ -99,7 +99,6 @@ Hole_list = [
     HoleM54(),
     HoleM57(),
     HoleM58(),
-    HoleM54(),
     HoleMLSRPM(),
     VentilationCirc(),
     VentilationPolar(),
@@ -198,7 +197,7 @@ for hole in Hole_list:
     hole_test.append(
         {
             "test_obj": hole,
-            "type_add_active": 1,
+            "type_add_active": 2,
         }
     )
 
@@ -245,6 +244,29 @@ class Test_plot_schematics(object):
         pass
 
     def get_schematics_name(self, test_dict):
+        """Genaration name for Slot/Hole schematics
+
+        Parameters
+        ----------
+        self : test_plot_schematics
+        test_dict: dict
+            Slot/Hole dictionary
+
+            "test_obj": Slot/Hole
+            "type_add_active":  int
+                0: No active surface, 1: active surface as winding, 2: active surface as magnet, 3: active surface as winding + wedges, 4: type_active =3 and wedge_type = 1
+            "is_default": booleen
+                True: plot default schematics, else use current slot values
+            "is_default": int
+                0: current slot values, 1: default internal rotor schematics, 2: default external stator schematics
+            "method_name": str
+                name specific methods (constant_tooth ...)
+
+        Returns
+        -------
+        file_name : str
+            file name
+        """
         test_obj = test_dict["test_obj"]
         type_active = test_dict["type_add_active"]
 
@@ -313,7 +335,26 @@ class Test_plot_schematics(object):
 
     @pytest.mark.parametrize("test_dict", plot_test)
     def test_plot(self, test_dict):
-        """Slot Schematics"""
+        """Generation Slot/Hole Schematics
+
+        Parameters
+        ----------
+        self : test_plot_schematics
+        test_dict: dict
+            Slot/Hole dictionary
+
+            "test_obj": Slot/Hole
+            "type_add_active":  int
+                0: No active surface, 1: active surface as winding, 2: active surface as magnet, 3: active surface as winding + wedges, 4: type_active =3 and wedge_type = 1
+            "is_default": booleen
+                True: plot default schematics, else use current slot values
+            "is_default": int
+                0: current slot values, 1: default internal rotor schematics, 2: default external stator schematics
+            "method_name": str
+                name specific methods (constant_tooth ...)
+
+        """
+
         test_obj = test_dict["test_obj"]
         file_name = self.get_schematics_name(test_dict)
         file_path = join(SCHEMATICS_PATH, file_name)
@@ -342,6 +383,7 @@ class Test_plot_schematics(object):
             test_dict["is_default"] = True
             self.test_plot(test_dict)
 
+        # Generation with correct type_add_active
         else:
             plot_meth(
                 is_default=True,
@@ -381,7 +423,24 @@ class Test_plot_schematics(object):
 
     @pytest.mark.parametrize("test_dict", plot_test)
     def test_plot_point(self, test_dict):
-        """Slot Schematics"""
+        """Genaration Slot/Hole Schematics with point
+        Parameters
+        ----------
+        self : test_plot_schematics
+        test_dict: dict
+            Slot/Hole dictionary
+
+            "test_obj": Slot/Hole
+            "type_add_active":  int
+                0: No active surface, 1: active surface as winding, 2: active surface as magnet, 3: active surface as winding + wedges, 4: type_active =3 and wedge_type = 1
+            "is_default": booleen
+                True: plot default schematics, else use current slot values
+            "is_default": int
+                0: current slot values, 1: default internal rotor schematics, 2: default external stator schematics
+            "method_name": str
+                name specific methods (constant_tooth ...)
+
+        """
         file_name = type(test_dict["test_obj"]).__name__ + "_point.png"
         file_path = join(SCHEMATICS_PATH, file_name)
         # Delete previous plot
@@ -444,7 +503,7 @@ if __name__ == "__main__":
     a = Test_plot_schematics()
     # a.test_BoreFlower()
     # a.test_BoreSinePole()
-    # a.test_plot(plot_test[47])
+    #a.test_plot(plot_test[44])
     # a.test_plot_point(plot_test[47])
     # a.test_plot(plot_test[13])
     #
