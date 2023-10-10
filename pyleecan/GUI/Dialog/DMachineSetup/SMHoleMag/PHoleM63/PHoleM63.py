@@ -61,9 +61,7 @@ class PHoleM63(Gen_PHoleM63, QWidget):
 
         if self.hole.top_flat is None:
             self.hole.top_flat = False
-            self.ck_is_top_flat.setChecked(False)
-        elif self.hole.top_flat == True:
-            self.ck_is_top_flat.setChecked(True)
+        self.ck_is_top_flat.setChecked(self.hole.top_flat)
 
         # Set unit name (m ou mm)
         self.u = gui_option.unit
@@ -144,11 +142,9 @@ class PHoleM63(Gen_PHoleM63, QWidget):
             self.img_slot.setPixmap(
                 QPixmap(pixmap_dict["HoleM63_mag_int_rotor_top_flat"])
             )
-            self.hole.top_flat = True
-
         else:
             self.img_slot.setPixmap(QPixmap(pixmap_dict["HoleM63_mag_int_rotor"]))
-            self.hole.top_flat = False
+        self.hole.top_flat = self.ck_is_top_flat.isChecked()
 
         # Notify the machine GUI that the machine has changed
         self.saveNeeded.emit()
@@ -167,7 +163,6 @@ class PHoleM63(Gen_PHoleM63, QWidget):
                 # We compute the output only if the hole is correctly set
                 # Compute all the needed output as string
                 s_surf = format(self.u.get_m2(self.hole.comp_surface()), ".4g")
-                m_surf = format(self.u.get_m2(self.hole.comp_surface_magnets()), ".4g")
 
                 # Update the GUI to display the Output
                 self.out_slot_surface.setText(
