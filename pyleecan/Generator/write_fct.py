@@ -3,9 +3,6 @@ import pandas as pd
 
 from os.path import realpath
 
-from ..definitions import PACKAGE_NAME
-
-
 MATCH_PROP_DICT = {
     "Variable name": "name",
     "Unit": "unit",
@@ -22,6 +19,7 @@ MATCH_META_DICT = {
     "Package": "package",
     "Inherit": "mother",
     "Class description": "desc",
+    "Children": "daughters",
 }
 
 MATCH_CONST_DICT = {
@@ -116,8 +114,8 @@ def write_file(class_dict):
     for row in range(Nprop + 3, Nrow, 1):
         class_array[row, :] = empty_row
 
-    # Fill values of metadata
-    for meta_name in list_meta:
+    # Fill values of metadata except for children
+    for meta_name in list_meta[:-1]:
         col = list_meta_meth_const.index(meta_name)
         class_array[Nprop + 3, col] = meta_dict[meta_name]
 

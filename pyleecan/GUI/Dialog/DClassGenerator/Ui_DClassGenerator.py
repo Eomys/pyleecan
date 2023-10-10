@@ -135,13 +135,13 @@ class Ui_DClassGenerator(object):
         self.gridLayout_2.setObjectName(u"gridLayout_2")
         self.table_meta = QTableWidget(self.layoutWidget1)
         self.table_meta.setObjectName(u"table_meta")
-        sizePolicy2 = QSizePolicy(QSizePolicy.Maximum, QSizePolicy.Expanding)
+        sizePolicy2 = QSizePolicy(QSizePolicy.Minimum, QSizePolicy.Expanding)
         sizePolicy2.setHorizontalStretch(0)
         sizePolicy2.setVerticalStretch(0)
         sizePolicy2.setHeightForWidth(self.table_meta.sizePolicy().hasHeightForWidth())
         self.table_meta.setSizePolicy(sizePolicy2)
-        self.table_meta.setMinimumSize(QSize(400, 0))
-        self.table_meta.setMaximumSize(QSize(500, 16777215))
+        self.table_meta.setMinimumSize(QSize(700, 0))
+        self.table_meta.setMaximumSize(QSize(750, 16777215))
 
         self.gridLayout_2.addWidget(self.table_meta, 5, 0, 1, 1)
 
@@ -166,12 +166,9 @@ class Ui_DClassGenerator(object):
 
         self.table_const = QTableWidget(self.layoutWidget1)
         self.table_const.setObjectName(u"table_const")
-        sizePolicy3 = QSizePolicy(QSizePolicy.Minimum, QSizePolicy.Expanding)
-        sizePolicy3.setHorizontalStretch(0)
-        sizePolicy3.setVerticalStretch(0)
-        sizePolicy3.setHeightForWidth(self.table_const.sizePolicy().hasHeightForWidth())
-        self.table_const.setSizePolicy(sizePolicy3)
-        self.table_const.setMinimumSize(QSize(600, 0))
+        sizePolicy2.setHeightForWidth(self.table_const.sizePolicy().hasHeightForWidth())
+        self.table_const.setSizePolicy(sizePolicy2)
+        self.table_const.setMinimumSize(QSize(400, 0))
         self.table_const.setMaximumSize(QSize(1200, 16777215))
 
         self.gridLayout_2.addWidget(self.table_const, 5, 1, 1, 3)

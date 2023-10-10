@@ -274,11 +274,13 @@ def update_all_daughters(gen_dict):
     for name, daughter in iter(sorted(list(daughter_dict.items()))):
         # Update the mother
         mother = gen_dict[daughter["mother"]]
-        mother["daughters"].append(name)
+        if name not in mother["daughters"]:
+            mother["daughters"].append(name)
         # Update all the mother of the mother
         while mother["mother"] not in ["", None]:
             mother = gen_dict[mother["mother"]]
-            mother["daughters"].append(name)
+            if name not in mother["daughters"]:
+                mother["daughters"].append(name)
 
 
 def get_value_str(value, type_val):
