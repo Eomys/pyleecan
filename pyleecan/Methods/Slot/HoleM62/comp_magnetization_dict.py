@@ -25,7 +25,7 @@ def comp_magnetization_dict(self, is_north=True):
     Rbo = self.get_Rbo()
 
     mag_dict = dict()
-    if self.W0_is_rad == 0:
+    if self.W0_is_rad:
         S0 = Arc1(
             begin=point_dict["Z2"],
             end=point_dict["Z3"],
@@ -34,7 +34,7 @@ def comp_magnetization_dict(self, is_north=True):
         )
         mag_dict["magnet_0"] = S0.comp_normal()
 
-    elif self.Hole == 1:
+    else:
         S0 = Arc1(
             begin=point_dict["Z6"],
             end=point_dict["Z7"],
