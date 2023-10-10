@@ -792,8 +792,8 @@ def test_Ring_Magnet_2():
 
     mur_lin = machine.rotor.magnet.mat_type.mag.mur_lin
     Brm20 = machine.rotor.magnet.mat_type.mag.Brm20
-    machine.rotor.mur_lin_matrix= ones((2,1,8)) * mur_lin
-    machine.rotor.mur_lin_matrix[0,0,:] = mur_lin/2
+    machine.rotor.mur_lin_matrix = ones((2, 1, 8)) * mur_lin
+    machine.rotor.mur_lin_matrix[0, 0, :] = mur_lin / 2
 
     # machine.plot(is_max_sym=True)
     # plt.show()
@@ -801,20 +801,20 @@ def test_Ring_Magnet_2():
     mag_list = machine.rotor.get_all_mag_obj()
     assert len(mag_list) == 2
     assert mag_list[0].mat_type.name == "Magnet_1"
-    assert mag_list[0].mat_type.mag.mur_lin == mur_lin/2
+    assert mag_list[0].mat_type.mag.mur_lin == mur_lin / 2
     assert mag_list[0].mat_type.mag.Brm20 == Brm20
     assert mag_list[1].mat_type.name == "Magnet_2"
     assert mag_list[1].mat_type.mag.mur_lin == mur_lin
     assert mag_list[1].mat_type.mag.Brm20 == Brm20
 
-    machine.rotor.Brm20_matrix= ones((2,1,8)) * Brm20
-    machine.rotor.Brm20_matrix[0,0,:] = Brm20/4
+    machine.rotor.Brm20_matrix = ones((2, 1, 8)) * Brm20
+    machine.rotor.Brm20_matrix[0, 0, :] = Brm20 / 4
 
     mag_list = machine.rotor.get_all_mag_obj()
     assert len(mag_list) == 2
     assert mag_list[0].mat_type.name == "Magnet_1"
-    assert mag_list[0].mat_type.mag.mur_lin == mur_lin/2
-    assert mag_list[0].mat_type.mag.Brm20 == Brm20/4
+    assert mag_list[0].mat_type.mag.mur_lin == mur_lin / 2
+    assert mag_list[0].mat_type.mag.Brm20 == Brm20 / 4
     assert mag_list[1].mat_type.name == "Magnet_2"
     assert mag_list[1].mat_type.mag.mur_lin == mur_lin
     assert mag_list[1].mat_type.mag.Brm20 == Brm20
@@ -904,6 +904,7 @@ def test_Ring_Magnet_2():
     assert_array_almost_equal(time, time2, decimal=6)
 
     return out, out2
+
 
 # To run it without pytest
 if __name__ == "__main__":

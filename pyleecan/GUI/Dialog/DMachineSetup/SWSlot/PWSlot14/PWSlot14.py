@@ -104,9 +104,6 @@ class PWSlot14(Gen_PWSlot14, QWidget):
     def set_wedge(self):
         """Setup the slot wedge according to the GUI"""
         if self.g_wedge.isChecked():
-            self.w_wedge_mat.show()
-            self.in_type.show()
-            self.c_wedge_type.show()
 
             self.img_slot.setPixmap(
                 QPixmap(pixmap_dict["SlotW14_wedge_full_ext_stator"])

@@ -135,17 +135,32 @@ def plot_schematics(
                 is_arrow=True,
                 fontsize=SC_FONT_SIZE,
             )
-            # Wmag
-            plot_quote(
-                Z1=point_dict["ZM2"],
-                Zlim1=point_dict["ZM2"] - sign * 0.5 * self.Hmag,
-                Zlim2=point_dict["ZM3"] - sign * 0.5 * self.Hmag,
-                Z2=point_dict["ZM3"],
-                offset_label=0.25 * self.Hmag,
-                fig=fig,
-                ax=ax,
-                label="Wmag",
-            )
+            if type_add_active != 0:
+                # Wmag
+                plot_quote(
+                    Z1=point_dict["ZM2"],
+                    Zlim1=point_dict["ZM2"] - sign * 0.5 * self.Hmag,
+                    Zlim2=point_dict["ZM3"] - sign * 0.5 * self.Hmag,
+                    Z2=point_dict["ZM3"],
+                    offset_label=0.25 * self.Hmag,
+                    fig=fig,
+                    ax=ax,
+                    label="Wmag",
+                )
+                # Hmag
+                mid = (point_dict["ZM1"] + point_dict["ZM4"]) / 2
+                line = Segment(mid, mid - sign * self.Hmag)
+                line.plot(
+                    fig=fig,
+                    ax=ax,
+                    color=ARROW_COLOR,
+                    linewidth=ARROW_WIDTH,
+                    label="Hmag",
+                    offset_label=1j * 0.1 * self.Wmag,
+                    is_arrow=True,
+                    fontsize=SC_FONT_SIZE,
+                )
+
             # H0
             line = Segment(point_dict["Z1"], point_dict["Z2"])
             line.plot(
@@ -155,19 +170,6 @@ def plot_schematics(
                 linewidth=ARROW_WIDTH,
                 label="H0",
                 offset_label=1j * -0.1 * self.W0,
-                is_arrow=True,
-                fontsize=SC_FONT_SIZE,
-            )
-            # Hmag
-            mid = (point_dict["ZM1"] + point_dict["ZM4"]) / 2
-            line = Segment(mid, mid - sign * self.Hmag)
-            line.plot(
-                fig=fig,
-                ax=ax,
-                color=ARROW_COLOR,
-                linewidth=ARROW_WIDTH,
-                label="Hmag",
-                offset_label=1j * 0.1 * self.Wmag,
                 is_arrow=True,
                 fontsize=SC_FONT_SIZE,
             )
@@ -196,20 +198,21 @@ def plot_schematics(
                 linestyle=MAIN_LINE_STYLE,
                 linewidth=MAIN_LINE_WIDTH,
             )
-            # Magnet Arc
-            line = Arc1(
-                begin=point_dict["ZM3"],
-                end=point_dict["ZM2"],
-                radius=-abs(point_dict["ZM3"]),
-                is_trigo_direction=True,
-            )
-            line.plot(
-                fig=fig,
-                ax=ax,
-                color=MAIN_LINE_COLOR,
-                linestyle=MAIN_LINE_STYLE,
-                linewidth=MAIN_LINE_WIDTH,
-            )
+            if type_add_active != 0:
+                # Magnet Arc
+                line = Arc1(
+                    begin=point_dict["ZM3"],
+                    end=point_dict["ZM2"],
+                    radius=-abs(point_dict["ZM3"]),
+                    is_trigo_direction=True,
+                )
+                line.plot(
+                    fig=fig,
+                    ax=ax,
+                    color=MAIN_LINE_COLOR,
+                    linestyle=MAIN_LINE_STYLE,
+                    linewidth=MAIN_LINE_WIDTH,
+                )
 
         if type_add_active == 1:
             self.plot_active(fig=fig, ax=ax, is_show_fig=False)
