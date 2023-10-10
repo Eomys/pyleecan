@@ -171,10 +171,10 @@ class PHoleM63(Gen_PHoleM63, QWidget):
 
                 # Update the GUI to display the Output
                 self.out_slot_surface.setText(
-                    "Slot suface (2 part): " + s_surf + " " + self.u.get_m2_name()
+                    f"Slot suface (2 part): {s_surf} {self.u.get_m2_name()}"
                 )
                 self.out_magnet_surface.setText(
-                    "Magnet surface: " + m_surf + " " + self.u.get_m2_name()
+                    f"Magnet surface:  {s_surf} {self.u.get_m2_name()}"
                 )
                 is_set = True
             except:
