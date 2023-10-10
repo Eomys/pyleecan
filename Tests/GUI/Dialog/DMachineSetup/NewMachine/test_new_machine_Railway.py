@@ -123,6 +123,8 @@ class TestNewMachineRailway(object):
         self.widget.w_step.lf_RRext.setText("0.131")
         self.widget.w_step.lf_RRext.editingFinished.emit()
         self.widget.w_step.g_shaft.setChecked(True)
+        self.widget.w_step.lf_Lshaft.setText("0.442")
+        self.widget.w_step.lf_Lshaft.editingFinished.emit()
         assert self.widget.w_step.lf_RRint.isEnabled()
         self.widget.w_step.lf_RRint.setText("0.045")
         self.widget.w_step.lf_RRint.editingFinished.emit()
@@ -132,6 +134,7 @@ class TestNewMachineRailway(object):
         assert self.widget.machine.stator.Rint == pytest.approx(0.1325)
         assert self.widget.machine.rotor.Rext == pytest.approx(0.131)
         assert self.widget.machine.rotor.Rint == pytest.approx(0.045)
+        assert self.widget.machine.shaft.Lshaft == pytest.approx(0.442)
         assert self.widget.w_step.out_Drsh.text() == "Drsh = 0.09 [m]"
         assert (
             self.widget.w_step.out_airgap.text() == "Airgap magnetic width = 1.5 [mm]"
@@ -399,7 +402,11 @@ class TestNewMachineRailway(object):
         )
         assert (
             self.widget.w_step.w_cond.w_out.out_Rwind.text()
-            == "Winding resistance at 20°C: 0.024 [Ohm]"
+            == "Phase resistance at 20°C: 0.024 [Ohm]"
+        )
+        assert (
+            self.widget.w_step.w_cond.w_out.out_RwindLL.text()
+            == "Line-to-line resistance at 20°C: 0.048 [Ohm]"
         )
 
         # Is the stator winding conductors well defined ?
@@ -615,7 +622,7 @@ class TestNewMachineRailway(object):
             self.widget.w_step.tab_machine.tab_param.item(7, 0).text()
             == "Machine total mass"
         )
-        assert self.widget.w_step.tab_machine.tab_param.item(7, 1).text() == "327.7 kg"
+        assert self.widget.w_step.tab_machine.tab_param.item(7, 1).text() == "349.2 kg"
         assert (
             self.widget.w_step.tab_machine.tab_param.item(8, 0).text()
             == "Stator lamination mass"
@@ -639,7 +646,7 @@ class TestNewMachineRailway(object):
         assert (
             self.widget.w_step.tab_machine.tab_param.item(12, 0).text() == "Shaft mass"
         )
-        assert self.widget.w_step.tab_machine.tab_param.item(12, 1).text() == "0 kg"
+        assert self.widget.w_step.tab_machine.tab_param.item(12, 1).text() == "21.51 kg"
         assert self.widget.w_step.tab_machine.tab_param.rowCount() == 13
 
         self.widget.w_step.tab_machine.b_plot_machine.clicked.emit()

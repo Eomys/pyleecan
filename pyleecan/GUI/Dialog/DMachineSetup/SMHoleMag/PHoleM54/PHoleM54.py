@@ -7,7 +7,6 @@ from ......Classes.HoleM54 import HoleM54
 from ......GUI import gui_option
 from ......GUI.Dialog.DMachineSetup.SMHoleMag.PHoleM54.Gen_PHoleM54 import Gen_PHoleM54
 from ......Methods.Slot.Slot import SlotCheckError
-from ......GUI.Resources import pixmap_dict
 
 
 class PHoleM54(Gen_PHoleM54, QWidget):

@@ -252,51 +252,52 @@ def plot_schematics(
                 ax=ax,
                 label=None,
             )
-            # W3
-            line = Segment(
-                ((point_dict["Zw5"] + point_dict["Z3"]) / 2),
-                ((point_dict["Zw4"] + point_dict["Zw3"]) / 2),
-            )
-            line.plot(
-                fig=fig,
-                ax=ax,
-                label="W3",
-                color=ARROW_COLOR,
-                linewidth=ARROW_WIDTH,
-                offset_label=(-4.8j * self.W0 * 0.1) - (0.007 + 0j),
-                is_arrow=True,
-                fontsize=SC_FONT_SIZE,
-            )
-            # H3
-            line = Segment(
-                ((point_dict["Z8"] + point_dict["Z7"]) / 2) - (0.008 + 0j),
-                ((point_dict["Zw4s"] + point_dict["Zw1s"]) / 2),
-            )
-            line.plot(
-                fig=fig,
-                ax=ax,
-                label="H3",
-                color=ARROW_COLOR,
-                linewidth=ARROW_WIDTH,
-                offset_label=(-0.2j * self.W0 * 0.1) + (0.008 - 0.002j),
-                is_arrow=True,
-                fontsize=SC_FONT_SIZE,
-            )
-            # H4
-            line = Segment(
-                ((point_dict["Z6"] + point_dict["Zw5s"]) / 2) - (0.008 + 0j),
-                ((point_dict["Zw2s"] + point_dict["Zw3s"]) / 2),
-            )
-            line.plot(
-                fig=fig,
-                ax=ax,
-                label="H4",
-                color=ARROW_COLOR,
-                linewidth=ARROW_WIDTH,
-                offset_label=(-0.2j * self.W0 * 0.1) + (0.008 - 0.002j),
-                is_arrow=True,
-                fontsize=SC_FONT_SIZE,
-            )
+            if type_add_active != 0:
+                # W3
+                line = Segment(
+                    ((point_dict["Zw5"] + point_dict["Z3"]) / 2),
+                    ((point_dict["Zw4"] + point_dict["Zw3"]) / 2),
+                )
+                line.plot(
+                    fig=fig,
+                    ax=ax,
+                    label="W3",
+                    color=ARROW_COLOR,
+                    linewidth=ARROW_WIDTH,
+                    offset_label=(-4.8j * self.W0 * 0.1) - (0.007 + 0j),
+                    is_arrow=True,
+                    fontsize=SC_FONT_SIZE,
+                )
+                # H3
+                line = Segment(
+                    ((point_dict["Z8"] + point_dict["Z7"]) / 2) - (0.008 + 0j),
+                    ((point_dict["Zw4s"] + point_dict["Zw1s"]) / 2),
+                )
+                line.plot(
+                    fig=fig,
+                    ax=ax,
+                    label="H3",
+                    color=ARROW_COLOR,
+                    linewidth=ARROW_WIDTH,
+                    offset_label=(-0.2j * self.W0 * 0.1) + (0.008 - 0.002j),
+                    is_arrow=True,
+                    fontsize=SC_FONT_SIZE,
+                )
+                # H4
+                line = Segment(
+                    ((point_dict["Z6"] + point_dict["Zw5s"]) / 2) - (0.008 + 0j),
+                    ((point_dict["Zw2s"] + point_dict["Zw3s"]) / 2),
+                )
+                line.plot(
+                    fig=fig,
+                    ax=ax,
+                    label="H4",
+                    color=ARROW_COLOR,
+                    linewidth=ARROW_WIDTH,
+                    offset_label=(-0.2j * self.W0 * 0.1) + (0.008 - 0.002j),
+                    is_arrow=True,
+                    fontsize=SC_FONT_SIZE,
+                )
 
         if is_add_main_line:
             # Ox axis

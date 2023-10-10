@@ -22,14 +22,28 @@ def get_surface_active(self, alpha=0, delta=0):
 
     # Create curve list
     line_dict = self._comp_line_dict()
-    curve_list = [
-        line_dict["3-4"],
-        line_dict["4-5"],
-        line_dict["5-6"],
-        line_dict["6-7"],
-        line_dict["7-8"],
-        line_dict["8-3"],
-    ]
+    if self.H1 != 0:
+        curve_list = [
+            line_dict["3-4"],
+            line_dict["4-5"],
+            line_dict["5-6"],
+            line_dict["6-7"],
+            line_dict["7-8"],
+            line_dict["8-3"],
+        ]
+    else:
+        # Add 2-3 and 9-3 to make sure that FEMM handles all the lines
+        # cf (Tests\Validation\Magnetics\test_FEMM_fast_draw.py)
+        curve_list = [
+            line_dict["2-3"],
+            line_dict["3-4"],
+            line_dict["4-5"],
+            line_dict["5-6"],
+            line_dict["6-7"],
+            line_dict["7-8"],
+            line_dict["8-9"],
+            line_dict["9-2"],
+        ]
     curve_list = [line for line in curve_list if line is not None]
 
     # Only the closing arc (8-3) needs to be drawn (in FEMM)
