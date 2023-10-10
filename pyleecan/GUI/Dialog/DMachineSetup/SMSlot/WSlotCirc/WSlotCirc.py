@@ -11,6 +11,7 @@ from ......GUI.Dialog.DMachineSetup.SMSlot.WSlotCirc.Gen_WSlotCirc import Gen_WS
 from ......Methods.Slot.Slot import SlotCheckError
 
 translate = PySide2.QtCore.QCoreApplication.translate
+from ......GUI.Resources import pixmap_dict
 
 
 class WSlotCirc(Gen_WSlotCirc, QWidget):
@@ -76,15 +77,24 @@ class WSlotCirc(Gen_WSlotCirc, QWidget):
         # Selecting the right image
         if not self.lamination.is_internal:
             # Use schematics on the external without magnet
-            path = ":/images/images/MachineSetup/WMSlot/SlotCirc_empty_ext_sta"
+            if not self.slot.is_H0_bore:
+                self.img_slot.setPixmap(
+                    QPixmap(pixmap_dict["SlotCirc_empty_ext_sta_old"])
+                )
+            else:
+                self.img_slot.setPixmap(
+                    QPixmap(pixmap_dict["SlotCirc_empty_ext_stator"])
+                )
         else:
             # Use schematics on the inner without magnet
-            path = ":/images/images/MachineSetup/WMSlot/SlotCirc_empty_int_rot"
-        # Old/New schematics
-        if not self.slot.is_H0_bore:
-            path += "_old"
-
-        self.img_slot.setPixmap(QPixmap(path + ".png"))
+            if not self.slot.is_H0_bore:
+                self.img_slot.setPixmap(
+                    QPixmap(pixmap_dict["SlotCirc_empty_int_rot_old"])
+                )
+            else:
+                self.img_slot.setPixmap(
+                    QPixmap(pixmap_dict["SlotCirc_empty_int_rotor"])
+                )
 
     def set_W0(self):
         """Signal to update the value of W0 according to the line edit

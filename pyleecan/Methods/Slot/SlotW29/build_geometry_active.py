@@ -96,6 +96,32 @@ def build_geometry_active(self, Nrad, Ntan, alpha=0, delta=0):
             )
             surf_list.append(surface)
 
+    # Correct bottom line for particular case (cf Tests\Validation\Magnetics\test_FEMM_fast_draw.py)
+    if (
+        Ntan == 2
+        and Nrad == 1
+        and (
+            (self.W1 != self.W2 and self.H1 != 0)
+            or (self.H1 == 0 and self.W0 != self.W2)
+        )
+    ):
+        if self.H1 > 0:  # Cut on W1
+            ZOm = point_dict["Z4"]
+            ZOp = point_dict["Z9"]
+        else:  # Cut on W0
+            ZOm = point_dict["Z2"]
+            ZOp = point_dict["Z11"]
+        # Cut Ox- surface
+        arc_to_cut = surf_list[0].line_list[0]
+        arc1, arc2 = arc_to_cut.split_line(Z1=0, Z2=ZOm)
+        surf_list[0].line_list = [arc1[0], arc2[0]] + surf_list[0].line_list[1:]
+        surf_list[0].line_list[1].prop_dict = {DRAW_PROP_LAB: False}
+        # Cut Ox+ surface
+        arc_to_cut = surf_list[1].line_list[0]
+        arc1, arc2 = arc_to_cut.split_line(Z1=0, Z2=ZOp)
+        surf_list[1].line_list = [arc1[0], arc2[0]] + surf_list[1].line_list[1:]
+        surf_list[1].line_list[0].prop_dict = {DRAW_PROP_LAB: False}
+
     for surf in surf_list:
         surf.rotate(alpha)
         surf.translate(delta)
