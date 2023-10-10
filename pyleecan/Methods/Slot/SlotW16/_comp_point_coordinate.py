@@ -23,7 +23,7 @@ def _comp_point_coordinate(self):
     hsp = pi / self.Zs  # Half slot pitch
 
     if self.is_outwards():
-        raise S16OutterError("Slot Type 16 can't be used on inner lamination")
+        raise S16OutterError("Slot Type 16 can't be used on outer lamination")
 
     # ZXt => Complex coordinate in the tooth ref
     Z1 = Rbo * exp(-1j * self.W0 / 2)

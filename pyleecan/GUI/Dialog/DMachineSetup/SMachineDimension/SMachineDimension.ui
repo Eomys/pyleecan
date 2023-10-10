@@ -311,6 +311,52 @@
              </widget>
             </item>
             <item>
+             <layout class="QHBoxLayout" name="horizontalLayout_3">
+              <item>
+               <widget class="QLabel" name="in_Lshaft">
+                <property name="minimumSize">
+                 <size>
+                  <width>30</width>
+                  <height>0</height>
+                 </size>
+                </property>
+                <property name="toolTip">
+                 <string>Shaft length</string>
+                </property>
+                <property name="text">
+                 <string>Lshaft</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="FloatEdit" name="lf_Lshaft">
+                <property name="maximumSize">
+                 <size>
+                  <width>100</width>
+                  <height>100</height>
+                 </size>
+                </property>
+                <property name="toolTip">
+                 <string>Shaft length</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QLabel" name="unit_Lshaft">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="text">
+                 <string>m</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+            <item>
              <widget class="QLabel" name="out_Drsh">
               <property name="toolTip">
                <string>Shaft Diameter</string>
@@ -498,59 +544,24 @@
    <container>1</container>
   </customwidget>
  </customwidgets>
+ <tabstops>
+  <tabstop>scrollArea</tabstop>
+  <tabstop>lf_SRext</tabstop>
+  <tabstop>lf_SRint</tabstop>
+  <tabstop>lf_RRext</tabstop>
+  <tabstop>lf_RRint</tabstop>
+  <tabstop>g_shaft</tabstop>
+  <tabstop>lf_Lshaft</tabstop>
+  <tabstop>g_frame</tabstop>
+  <tabstop>lf_Wfra</tabstop>
+  <tabstop>lf_Lfra</tabstop>
+  <tabstop>b_previous</tabstop>
+  <tabstop>b_next</tabstop>
+ </tabstops>
  <resources>
   <include location="../../../Resources/pyleecan.qrc"/>
   <include location="../../../Resources/pyleecan.qrc"/>
   <include location="../../../Resources/pyleecan.qrc"/>
  </resources>
- <connections>
-  <connection>
-   <sender>g_shaft</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>out_Drsh</receiver>
-   <slot>setVisible(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>251</x>
-     <y>213</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>253</x>
-     <y>235</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>g_frame</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>in_Lfra</receiver>
-   <slot>setVisible(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>282</x>
-     <y>273</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>292</x>
-     <y>292</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>g_frame</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>unit_Lfra</receiver>
-   <slot>setVisible(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>493</x>
-     <y>277</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>479</x>
-     <y>290</y>
-    </hint>
-   </hints>
-  </connection>
- </connections>
+ <connections/>
 </ui>
