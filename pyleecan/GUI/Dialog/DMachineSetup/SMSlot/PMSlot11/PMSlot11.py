@@ -9,6 +9,8 @@ from ......Classes.SlotM11 import SlotM11
 from ......GUI import gui_option
 from ......GUI.Dialog.DMachineSetup.SMSlot.PMSlot11.Gen_PMSlot11 import Gen_PMSlot11
 from ......Methods.Slot.Slot import SlotCheckError
+from ......GUI.Resources import pixmap_dict
+
 
 translate = PySide2.QtCore.QCoreApplication.translate
 
@@ -74,17 +76,11 @@ class PMSlot11(Gen_PMSlot11, QWidget):
             if not self.lamination.is_internal:
                 # Use schematics on the external without magnet
                 self.img_slot.setPixmap(
-                    QPixmap(
-                        ":/images/images/MachineSetup/WMSlot/SlotM11_empty_ext_sta.png"
-                    )
+                    QPixmap(pixmap_dict["SlotM11_empty_ext_stator"])
                 )
             else:
                 # Use schematics on the inner without magnet
-                self.img_slot.setPixmap(
-                    QPixmap(
-                        ":/images/images/MachineSetup/WMSlot/SlotM11_empty_int_rot.png"
-                    )
-                )
+                self.img_slot.setPixmap(QPixmap(pixmap_dict["SlotM11_empty_int_rotor"]))
 
         # Fill the fields with the machine values (if they're filled)
         self.lf_W0.setValue(self.slot.W0)

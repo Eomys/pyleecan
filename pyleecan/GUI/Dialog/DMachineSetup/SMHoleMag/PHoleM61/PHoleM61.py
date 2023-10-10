@@ -72,7 +72,7 @@ class PHoleM61(Gen_PHoleM61, QWidget):
         self.w_mat_3.is_hide_button = True
 
         if hole.magnet_0 is None:  # SyRM
-            self.img_slot.setPixmap(QPixmap(pixmap_dict["HoleM61_no_mag"]))
+            self.img_slot.setPixmap(QPixmap(pixmap_dict["HoleM61_empty_int_rotor"]))
             self.w_mat_4.update(self.hole, "mat_void", self.material_dict)
             self.w_mat_0.hide()
             self.w_mat_1.hide()

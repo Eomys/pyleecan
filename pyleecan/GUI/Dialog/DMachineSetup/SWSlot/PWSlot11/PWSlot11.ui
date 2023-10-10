@@ -46,7 +46,7 @@
         <string/>
        </property>
        <property name="pixmap">
-        <pixmap resource="../../../../Resources/pyleecan.qrc">:/images/images/MachineSetup/WSlot/SlotW11_wind.png</pixmap>
+        <pixmap resource="../../../../Resources/pyleecan.qrc">:/images/images/MachineSetup/WSlot/SlotW11_wind_ext_stator.png</pixmap>
        </property>
        <property name="scaledContents">
         <bool>false</bool>
@@ -297,6 +297,19 @@ p, li { white-space: pre-wrap; }
           </item>
          </layout>
         </widget>
+       </item>
+       <item>
+        <spacer name="verticalSpacer">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
        </item>
        <item>
         <widget class="WWSlotOut" name="w_out" native="true"/>
