@@ -84,13 +84,11 @@ class PWSlot12(Gen_PWSlot12, QWidget):
     def set_wedge(self):
         """Setup the slot wedge according to the GUI"""
         if self.g_wedge.isChecked():
-            self.w_wedge_mat.show()
             self.img_slot.setPixmap(
                 QPixmap(pixmap_dict["SlotW12_wedge_full_ext_stator"])
             )
             self.w_wedge_mat.update(self.slot, "wedge_mat", self.material_dict)
         else:
-            self.w_wedge_mat.hide()
             self.slot.wedge_mat = None
             self.img_slot.setPixmap(QPixmap(pixmap_dict["SlotW12_wind_ext_stator"]))
         # Notify the machine GUI that the machine has changed

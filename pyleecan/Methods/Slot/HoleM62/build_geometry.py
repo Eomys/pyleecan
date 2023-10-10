@@ -33,7 +33,7 @@ def build_geometry(self, alpha=0, delta=0, is_simplified=False):
     # Get correct label for surfaces
     lam_label = self.parent.get_label()
     R_id, surf_type = self.get_R_id()
-    mag_label = lam_label + "_" + HOLEM_LAB + "_R" + str(R_id) + "-"
+    mag_label = f"{lam_label}_{HOLEM_LAB}_R{R_id}-"
     point_dict = self._comp_point_coordinate()
 
     surf_list = list()

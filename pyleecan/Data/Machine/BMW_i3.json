@@ -867,7 +867,7 @@
     },
     "shaft": {
         "Drsh": 0.12,
-        "Lshaft": null,
+        "Lshaft": 0.132,
         "__class__": "Shaft",
         "mat_type": {
             "HT": {
