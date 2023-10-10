@@ -17,7 +17,6 @@ def comp_surface_magnet_id(self, index):
         Surface of the Magnet [m**2]
     """
 
-    # all magnet has the same surface
     if index != 0:
         raise Exception("Only one magnet for HoleM62")
     if self.magnet_0 is not None:
