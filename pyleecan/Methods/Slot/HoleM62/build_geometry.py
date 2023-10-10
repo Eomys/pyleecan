@@ -39,72 +39,39 @@ def build_geometry(self, alpha=0, delta=0, is_simplified=False):
     surf_list = list()
     # Create all the surfaces for all the case
 
-    if self.W0_is_rad:
-        # Get all the points
-        Z1 = point_dict["Z1"]
-        Z2 = point_dict["Z2"]
-        Z3 = point_dict["Z3"]
-        Z4 = point_dict["Z4"]
-        # surface Hole Radial
-        curve_list = list()
-        curve_list.append(Segment(Z1, Z2))
-        curve_list.append(
-            Arc1(
-                begin=Z2,
-                end=Z3,
-                radius=Rbo - self.H1,
-                is_trigo_direction=True,
-            )
-        )
-        curve_list.append(Segment(Z3, Z4))
-        curve_list.append(
-            Arc1(
-                begin=Z4,
-                end=Z1,
-                radius=-(Rbo - self.H0 - self.H1),
-                is_trigo_direction=False,
-            )
-        )
-        point_ref = (Z3 + Z1) / 2
-        S1 = SurfLine(line_list=curve_list, point_ref=point_ref)
+    # Get all the points
+    Z1 = point_dict["Z1"]
+    Z2 = point_dict["Z2"]
+    Z3 = point_dict["Z3"]
+    Z4 = point_dict["Z4"]
 
-    else:
-        Z5 = point_dict["Z5"]
-        Z6 = point_dict["Z6"]
-        Z7 = point_dict["Z7"]
-        Z8 = point_dict["Z8"]
-        # surface Hole flat
-        curve_list = list()
-        curve_list.append(Segment(Z5, Z6))
-        curve_list.append(
-            Arc1(
-                begin=Z6,
-                end=Z7,
-                radius=Rbo - self.H1,
-                is_trigo_direction=True,
-            )
+    # surface Hole Radial
+    curve_list = list()
+    curve_list.append(Segment(Z1, Z2))
+    curve_list.append(
+        Arc1(
+            begin=Z2,
+            end=Z3,
+            radius=Rbo - self.H1,
+            is_trigo_direction=True,
         )
-        curve_list.append(Segment(Z7, Z8))
-        curve_list.append(
-            Arc1(
-                begin=Z8,
-                end=Z5,
-                radius=-(abs(Z5)),
-                is_trigo_direction=False,
-            )
+    )
+    curve_list.append(Segment(Z3, Z4))
+    curve_list.append(
+        Arc1(
+            begin=Z4,
+            end=Z1,
+            radius=-(abs(Z1)),
+            is_trigo_direction=False,
         )
-        point_ref = (Z5 + Z7) / 2
-        S2 = SurfLine(line_list=curve_list, point_ref=point_ref)
+    )
+    point_ref = (Z3 + Z1) / 2
+    S1 = SurfLine(line_list=curve_list, point_ref=point_ref)
 
     # Create the surface list by selecting the correct ones
-    surf_list = list()
-    if self.W0_is_rad:
-        S1.label = mag_label + "T0-S0"
-        surf_list += [S1]
 
-    else:
-        S2.label = mag_label + "T0-S0"
-        surf_list += [S2]
+    S1.label = mag_label + "T0-S0"
+    surf_list = [S1]
 
     # Apply the transformations
     for surf in surf_list:

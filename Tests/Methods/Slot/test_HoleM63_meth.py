@@ -70,23 +70,23 @@ class Test_HoleM63_meth(object):
             assert abs(point_dict["Z2"]) == pytest.approx(Rbo - test_obj.hole[0].H1)
 
         else:
-            assert abs(point_dict["Z6"] - point_dict["Z5"]) == pytest.approx(
+            assert abs(point_dict["Z2"] - point_dict["Z1"]) == pytest.approx(
                 test_obj.hole[0].H0
             )
-            assert abs(point_dict["Z7"] - point_dict["Z8"]) == pytest.approx(
+            assert abs(point_dict["Z3"] - point_dict["Z4"]) == pytest.approx(
                 test_obj.hole[0].H0
             )
-            assert abs(point_dict["Z7"].real) == pytest.approx(
+            assert abs(point_dict["Z3"].real) == pytest.approx(
                 Rbo - test_obj.hole[0].H1
             )
-            assert abs(point_dict["Z6"].real) == pytest.approx(
+            assert abs(point_dict["Z2"].real) == pytest.approx(
                 Rbo - test_obj.hole[0].H1
             )
 
-            assert abs(point_dict["Z7"] - point_dict["Z6"]) == pytest.approx(
+            assert abs(point_dict["Z3"] - point_dict["Z2"]) == pytest.approx(
                 test_obj.hole[0].W0
             )
-            assert abs(point_dict["Z8"] - point_dict["Z5"]) == pytest.approx(
+            assert abs(point_dict["Z4"] - point_dict["Z1"]) == pytest.approx(
                 test_obj.hole[0].W0
             )
 

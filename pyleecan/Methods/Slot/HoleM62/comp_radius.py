@@ -25,6 +25,6 @@ def comp_radius(self):
     Rmin = Rbo - self.H1 - self.H0
 
     if not self.W0_is_rad:
-        Rmin = abs(point_dict["Z5"])
+        Rmin = abs(point_dict["Z1"])
 
     return (Rmin, Rmax)
