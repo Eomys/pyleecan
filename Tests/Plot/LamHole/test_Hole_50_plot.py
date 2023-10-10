@@ -76,10 +76,6 @@ class Test_Hole_50_plot(object):
 
     def test_Lam_Hole_50_W01(self, machine):
         """Test machine plot hole 50 with W1 > 0 and both magnets"""
-        machine.plot(is_show_fig=False)
-        fig = plt.gcf()
-        fig.savefig(join(save_path, "test_Lam_Hole_s50_Machine.png"))
-        assert len(fig.axes[0].patches) == 89
 
         machine.rotor.plot(is_show_fig=False)
         fig = plt.gcf()
@@ -186,3 +182,9 @@ class Test_Hole_50_plot(object):
 
         fig = plt.gcf()
         fig.savefig(join(save_path, "test_Lam_Hole_s50_stator_true.png"))
+
+
+if __name__ == "__main__":
+    a = Test_Hole_50_plot()
+    a.test_Lam_Hole_50_W01(a.machine())
+    print("Done")

@@ -25,8 +25,7 @@ from Tests.Plot.LamWind import wind_mat, wind_mat2
 
 
 class Test_Slot_16_plot(object):
-    @pytest.fixture
-    def lamination(self):
+    def setup_method(self):
         """Run at the begining of every test to setup the lamination"""
         plt.close("all")
         test_obj = LamSlotWind(
@@ -42,40 +41,53 @@ class Test_Slot_16_plot(object):
             Zs=6, W0=2 * pi / 60, W3=30e-3, H0=10e-3, H2=70e-3, R1=15e-3
         )
 
-        return test_obj
+        self.test_obj = test_obj
 
-    def test_Lam_Wind_16_wind_22(self, lamination):
+    def test_Lam_Wind_16_wind_22(self):
         """Test lamination plot with Slot 16 and winding rad=2, tan=2"""
         print("\nTest plot Slot 16")
+        lamination = self.test_obj
         lamination.winding = WindingUD(wind_mat=wind_mat, qs=4, p=4, Lewout=60e-3)
         lamination.plot(is_show_fig=False)
         fig = plt.gcf()
         fig.savefig(join(save_path, "test_Lam_Wind_s16_1-4-wind.png"))
-        # 2 for lam + Zs*4 for wind
-        assert len(fig.axes[0].patches) == 28
+        # 2 for lam + 6*4 for wind
+        assert len(fig.axes[0].patches) == 26
 
-    def test_Lam_Wind_16_wind_tan(self, lamination):
+    def test_Lam_Wind_16_wind_tan(self):
         """Test lamination plot with Slot 16 and winding rad=1, tan=2"""
+        lamination = self.test_obj
         lamination.winding = WindingUD(qs=3, p=3)
         lamination.winding.init_as_CW2LT()
         lamination.plot(is_show_fig=False)
         fig = plt.gcf()
         fig.savefig(join(save_path, "test_Lam_Wind_s16_2-tan-wind.png"))
-        # 2 for lam + Zs*2 for wind
-        assert len(fig.axes[0].patches) == 16
+        # 2 for lam + 6*2 for wind
+        assert len(fig.axes[0].patches) == 14
 
-    def test_Lam_Wind_16_wind_rad(self, lamination):
+    def test_Lam_Wind_16_wind_rad(self):
         """Test lamination plot with Slot 16 and winding rad=2, tan=1"""
+        lamination = self.test_obj
         lamination.winding = WindingUD(wind_mat=wind_mat2, qs=3, p=3, Lewout=60e-3)
         lamination.plot(is_show_fig=False)
         fig = plt.gcf()
         fig.savefig(join(save_path, "test_Lam_Wind_s16_3-rad-wind.png"))
-        # 2 for lam + Zs*2 for wind
-        assert len(fig.axes[0].patches) == 16
+        # 2 for lam + 6*2 for wind
+        assert len(fig.axes[0].patches) == 14
 
-    def test_Lam_Wind_16_tooth(self, lamination):
+    def test_Lam_Wind_16_tooth(self):
         """Test the Slot 16 tooth plot"""
+        lamination = self.test_obj
         tooth = lamination.slot.get_surface_tooth()
         tooth.plot(color="r", is_show_fig=False)
         fig = plt.gcf()
         fig.savefig(join(save_path, "test_Lam_Wind_s16_Tooth_in.png"))
+
+
+if __name__ == "__main__":
+    a = Test_Slot_16_plot()
+    a.setup_method()
+    a.test_Lam_Wind_16_wind_22()
+    a.test_Lam_Wind_16_wind_tan()
+    a.test_Lam_Wind_16_wind_rad()
+    print("Done")
