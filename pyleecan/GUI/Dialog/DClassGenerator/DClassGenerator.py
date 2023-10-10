@@ -1120,10 +1120,10 @@ class DClassGenerator(Ui_DClassGenerator, QWidget):
         parent_name = line_edit.text()
 
         # Update parent dict
-        if parent_name in self.parent_dict():
+        if parent_name in self.parent_dict:
             # Add current class name in parent_dict list
-            self.parent_dict.append(self.current_class_dict["name"])
-            self.parent_dict.sort(key=str.lower)
+            self.parent_dict[parent_name].append(self.current_class_dict["name"])
+            self.parent_dict[parent_name].sort(key=str.lower)
 
             # Activate save button
             self.b_saveclass.setEnabled(True)
@@ -1539,7 +1539,7 @@ class DClassGenerator(Ui_DClassGenerator, QWidget):
         # Compare parent_dict
         if len(parent_dict_new) != len(self.parent_dict):
             print("Error: wrong number of classes in parent dict")
-        for key0, key1, (val0, val1) in zip(
+        for (key0, val0), (key1, val1) in zip(
             parent_dict_new.items(), self.parent_dict.items()
         ):
             if key0 != key1:
@@ -1608,7 +1608,7 @@ class DClassGenerator(Ui_DClassGenerator, QWidget):
 
         menu.exec_(self.treeView.viewport().mapToGlobal(position))
 
-    def renameClassMethods(self, path, oldName, newName):
+    def renameClassMethods(self, path, oldName, newName, is_exit=False):
         """Rename methods after class renaming and prevent from folder renaming
         to avoid conflict with package
 
@@ -1641,6 +1641,33 @@ class DClassGenerator(Ui_DClassGenerator, QWidget):
             os.rename(path_new, path_old)
 
         elif newName[-4:] == ".csv":
+            # Check if class has daughters before renaming it
+            if len(self.current_class_dict["daughters"]) > 0:
+                # Send toggle window to ask if the class should still be renamed
+                reply = QMessageBox().question(
+                    self,
+                    "Warning: renaming class with children",
+                    "Class "
+                    + newName[:-4]
+                    + ' has children, press "yes" to resume renaming process',
+                    QMessageBox.Yes,
+                    QMessageBox.No,
+                )
+
+                if reply == QMessageBox.No:
+                    # Rename class back
+                    self.le_classname.setText(oldName[:-4])
+                    # Check that path_old is different from path_new to avoid second run
+                    if isfile(path_new) and realpath(path_old) != realpath(path_new):
+                        # Perform renaming
+                        print("Renaming back " + newName[:-4] + " to " + oldName[:-4])
+                        os.rename(path_new, path_old)
+                        index = self.dirModel.index(path_old)
+                        self.treeView.setCurrentIndex(index)
+                        self.current_class_index = index
+                        self.sortTreeView()
+                    return
+
             print("Renaming class " + oldName + " to " + newName)
 
             if self.current_class_dict is not None:
@@ -1667,9 +1694,6 @@ class DClassGenerator(Ui_DClassGenerator, QWidget):
                 newName[:-4], oldName[:-4]
             )
 
-            # Sort treeview alphabetically
-            self.sortTreeView()
-
             if isdir(method_folder_path_old):
                 # Rename methods folder if it exists
                 print(
@@ -1680,42 +1704,28 @@ class DClassGenerator(Ui_DClassGenerator, QWidget):
                 )
                 os.rename(method_folder_path_old, method_folder_path_new)
 
-            # Check if class has daughters before deleting it
-            if len(self.current_class_dict["daughters"]) > 0:
-                # Send toggle window to ask if the class should still be deleted
-                reply = QMessageBox().question(
-                    self,
-                    "Warning: renaming class with children",
-                    "Class "
+            # Rename current class in children csv files
+            for child_class in self.current_class_dict["daughters"]:
+                print(
+                    "Rename parent class "
                     + newName[:-4]
-                    + ' has children, press "yes" to resume renaming process',
-                    QMessageBox.Yes,
-                    QMessageBox.No,
+                    + " in child class "
+                    + child_class
                 )
-
-                if reply == QMessageBox.No:
-                    # Don't delete class
+                child_path = self.get_child_path(child_class)
+                # Load csv file
+                try:
+                    child_class_dict = read_file(child_path, is_get_size=True)
+                except Exception as e:
+                    print("Cannot load csv file: " + child_path)
                     return
+                child_class_dict["mother"] = newName[:-4]
+                write_file(child_class_dict)
+                self.list_class_modified.append(child_path)
+                self.b_genclass.setEnabled(True)
 
-                # Rename current class in children csv files
-                for child_class in self.current_class_dict["daughters"]:
-                    print(
-                        "Rename parent class "
-                        + newName[:-4]
-                        + " in child class "
-                        + child_class
-                    )
-                    child_path = self.get_child_path(child_class)
-                    # Load csv file
-                    try:
-                        child_class_dict = read_file(child_path, is_get_size=True)
-                    except Exception as e:
-                        print("Cannot load csv file: " + child_path)
-                        return
-                    child_class_dict["mother"] = newName[:-4]
-                    write_file(child_class_dict)
-                    self.list_class_modified.append(child_path)
-                    self.b_genclass.setEnabled(True)
+            # Sort treeview alphabetically
+            self.sortTreeView()
 
     def deleteClass(self, index):
         """Delete csv file associated to class
@@ -1752,25 +1762,25 @@ class DClassGenerator(Ui_DClassGenerator, QWidget):
                 # Don't delete class
                 return
 
-            # Delete current class from children
-            for child_class in self.current_class_dict["daughters"]:
-                print(
-                    "Remove deleted parent class "
-                    + class_name[:-4]
-                    + " from child class "
-                    + child_class
-                )
-                child_path = self.get_child_path(child_class)
-                # Load csv file
-                try:
-                    child_class_dict = read_file(child_path, is_get_size=True)
-                except Exception as e:
-                    print("Cannot load csv file: " + child_path)
-                    return
-                child_class_dict["mother"] = ""
-                write_file(child_class_dict)
-                self.list_class_modified.append(child_path)
-                self.b_genclass.setEnabled(True)
+        # Delete current class from children
+        for child_class in self.current_class_dict["daughters"]:
+            print(
+                "Remove deleted parent class "
+                + class_name[:-4]
+                + " from child class "
+                + child_class
+            )
+            child_path = self.get_child_path(child_class)
+            # Load csv file
+            try:
+                child_class_dict = read_file(child_path, is_get_size=True)
+            except Exception as e:
+                print("Cannot load csv file: " + child_path)
+                return
+            child_class_dict["mother"] = ""
+            write_file(child_class_dict)
+            self.list_class_modified.append(child_path)
+            self.b_genclass.setEnabled(True)
 
         # Delete csv file associated to class
         self.dirModel.remove(index)
