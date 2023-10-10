@@ -9,7 +9,7 @@ from pyleecan.Classes.LamHole import LamHole
 from pyleecan.Classes.HoleM62 import HoleM62
 
 from pyleecan.Classes.Magnet import Magnet
-from numpy import exp, arcsin, ndarray, pi
+from numpy import exp, arcsin, ndarray, pi, angle
 import matplotlib.pyplot as plt
 
 # For AlmostEqual
@@ -58,27 +58,31 @@ class Test_HoleM62_meth(object):
         point_dict = test_obj.hole[0]._comp_point_coordinate()
         Rbo = test_obj.hole[0].get_Rbo()
 
+        # H0
+        assert abs(point_dict["Z2"] - point_dict["Z1"]) == pytest.approx(
+            test_obj.hole[0].H0
+        )
+        assert abs(point_dict["Z3"] - point_dict["Z4"]) == pytest.approx(
+            test_obj.hole[0].H0
+        )
+        # H1
+        assert abs(point_dict["Z3"]) == pytest.approx(Rbo - test_obj.hole[0].H1)
+        assert abs(point_dict["Z2"]) == pytest.approx(Rbo - test_obj.hole[0].H1)
+        # W0
         if test_obj.hole[0].W0_is_rad:
-            # Check height
-            assert abs(point_dict["Z2"] - point_dict["Z1"]) == pytest.approx(
-                test_obj.hole[0].H0
+            assert 2 * abs(angle(point_dict["Z1"])) == pytest.approx(
+                test_obj.hole[0].W0
             )
-            assert abs(point_dict["Z3"] - point_dict["Z4"]) == pytest.approx(
-                test_obj.hole[0].H0
+            assert 2 * abs(angle(point_dict["Z2"])) == pytest.approx(
+                test_obj.hole[0].W0
             )
-            assert abs(point_dict["Z3"]) == pytest.approx(Rbo - test_obj.hole[0].H1)
-            assert abs(point_dict["Z2"]) == pytest.approx(Rbo - test_obj.hole[0].H1)
-
-        else:
-            assert abs(point_dict["Z2"] - point_dict["Z1"]) == pytest.approx(
-                test_obj.hole[0].H0
+            assert 2 * abs(angle(point_dict["Z3"])) == pytest.approx(
+                test_obj.hole[0].W0
             )
-            assert abs(point_dict["Z3"] - point_dict["Z4"]) == pytest.approx(
-                test_obj.hole[0].H0
+            assert 2 * abs(angle(point_dict["Z4"])) == pytest.approx(
+                test_obj.hole[0].W0
             )
-            assert abs(point_dict["Z3"]) == pytest.approx(Rbo - test_obj.hole[0].H1)
-            assert abs(point_dict["Z2"]) == pytest.approx(Rbo - test_obj.hole[0].H1)
-
+        else:  # W0 [m]
             assert abs(point_dict["Z3"] - point_dict["Z2"]) == pytest.approx(
                 test_obj.hole[0].W0
             )
@@ -90,7 +94,7 @@ class Test_HoleM62_meth(object):
     def test_comp_surface(self, test_dict):
         """Check that the computation of the surface is correct"""
         test_obj = test_dict["test_obj"]
-        result = Hole.comp_surface(test_obj.hole[0])
+        result = test_obj.comp_surface()
 
         a = result
         b = test_dict["S_exp"]

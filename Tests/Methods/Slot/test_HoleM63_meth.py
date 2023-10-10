@@ -58,24 +58,25 @@ class Test_HoleM63_meth(object):
         point_dict = test_obj.hole[0]._comp_point_coordinate()
         Rbo = test_obj.hole[0].get_Rbo()
 
+        # H0
+        assert abs(point_dict["Z2"] - point_dict["Z1"]) == pytest.approx(
+            test_obj.hole[0].H0
+        )
+        assert abs(point_dict["Z3"] - point_dict["Z4"]) == pytest.approx(
+            test_obj.hole[0].H0
+        )
+        # W0
+        assert abs(point_dict["Z3"] - point_dict["Z2"]) == pytest.approx(
+            test_obj.hole[0].W0
+        )
+        assert abs(point_dict["Z4"] - point_dict["Z1"]) == pytest.approx(
+            test_obj.hole[0].W0
+        )
+        # H1
         if not test_obj.hole[0].top_flat:
-            # Check height
-            assert abs(point_dict["Z2"] - point_dict["Z1"]) == pytest.approx(
-                test_obj.hole[0].H0
-            )
-            assert abs(point_dict["Z3"] - point_dict["Z4"]) == pytest.approx(
-                test_obj.hole[0].H0
-            )
             assert abs(point_dict["Z3"]) == pytest.approx(Rbo - test_obj.hole[0].H1)
             assert abs(point_dict["Z2"]) == pytest.approx(Rbo - test_obj.hole[0].H1)
-
         else:
-            assert abs(point_dict["Z2"] - point_dict["Z1"]) == pytest.approx(
-                test_obj.hole[0].H0
-            )
-            assert abs(point_dict["Z3"] - point_dict["Z4"]) == pytest.approx(
-                test_obj.hole[0].H0
-            )
             assert abs(point_dict["Z3"].real) == pytest.approx(
                 Rbo - test_obj.hole[0].H1
             )
@@ -83,18 +84,11 @@ class Test_HoleM63_meth(object):
                 Rbo - test_obj.hole[0].H1
             )
 
-            assert abs(point_dict["Z3"] - point_dict["Z2"]) == pytest.approx(
-                test_obj.hole[0].W0
-            )
-            assert abs(point_dict["Z4"] - point_dict["Z1"]) == pytest.approx(
-                test_obj.hole[0].W0
-            )
-
     @pytest.mark.parametrize("test_dict", holeM63_test)
     def test_comp_surface(self, test_dict):
         """Check that the computation of the surface is correct"""
         test_obj = test_dict["test_obj"]
-        result = Hole.comp_surface(test_obj.hole[0])
+        result = test_obj.comp_surface()
 
         a = result
         b = test_dict["S_exp"]
