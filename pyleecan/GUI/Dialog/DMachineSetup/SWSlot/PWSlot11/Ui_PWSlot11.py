@@ -218,6 +218,12 @@ class Ui_PWSlot11(object):
 
         self.verticalLayout_3.addWidget(self.g_wedge)
 
+        self.verticalSpacer = QSpacerItem(
+            20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding
+        )
+
+        self.verticalLayout_3.addItem(self.verticalSpacer)
+
         self.w_out = WWSlotOut(self.scrollAreaWidgetContents)
         self.w_out.setObjectName(u"w_out")
 
