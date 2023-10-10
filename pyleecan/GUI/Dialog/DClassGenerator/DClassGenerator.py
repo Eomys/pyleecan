@@ -24,7 +24,7 @@ from ..DClassGenerator.Ui_DClassGenerator import Ui_DClassGenerator
 
 from ....definitions import DOC_DIR, MAIN_DIR
 
-from ....Generator.read_fct import read_file, read_all, update_all_daughters
+from ....Generator.read_fct import read_file, read_all
 from ....Generator.run_generate_classes import run_generate_classes
 from ....Generator.write_fct import (
     write_file,
@@ -60,8 +60,7 @@ class DClassGenerator(Ui_DClassGenerator, QWidget):
         self.setWindowIcon(QIcon(pixmap_dict["soft_icon"]))
 
         # Get parent dict containing all children of each class
-        gen_dict = read_all(DOC_DIR)
-        update_all_daughters(gen_dict)
+        gen_dict = read_all(DOC_DIR, is_mother_of_mother=False)
         self.parent_dict = dict()
         for class_name, class_dict in gen_dict.items():
             self.parent_dict[class_name] = sorted(
@@ -144,6 +143,7 @@ class DClassGenerator(Ui_DClassGenerator, QWidget):
         """
         # Init class name line edit
         self.le_classname.setEnabled(False)
+        self.le_classname.setText("Class name")
 
         # Disable save_class button
         self.b_saveclass.setEnabled(False)
@@ -165,7 +165,7 @@ class DClassGenerator(Ui_DClassGenerator, QWidget):
 
         # Init table of properties
         self.table_prop.setColumnCount(len(self.list_prop) + 2)
-        self.table_prop.setRowCount(2)
+        self.table_prop.setRowCount(1)
         for col, prop_name in enumerate(self.list_prop):
             qlabel = QLabel(prop_name)
             qlabel.setAlignment(Qt.AlignCenter)
@@ -413,8 +413,14 @@ class DClassGenerator(Ui_DClassGenerator, QWidget):
             print("Cannot load csv file: " + csv_path)
             return
 
-        # Set daughters list from generation dict
-        current_class_dict["daughters"] = self.parent_dict[current_class_dict["name"]]
+        # Set children list from generation dict
+        if current_class_dict["name"] in self.parent_dict:
+            current_class_dict["daughters"] = self.parent_dict[
+                current_class_dict["name"]
+            ]
+        else:
+            print("Cannot set children class list from parent_dict")
+            current_class_dict["daughters"] = list()
 
         # Store current class information for further use
         self.current_class_dict = current_class_dict
@@ -1116,20 +1122,67 @@ class DClassGenerator(Ui_DClassGenerator, QWidget):
 
         """
 
-        # Get parent name
-        parent_name = line_edit.text()
+        class_name = self.current_class_dict["name"]
+
+        # Get new and old parent names
+        parent_new = line_edit.text()
+        parent_old = self.current_class_dict["mother"]
+
+        if parent_new == parent_old:
+            # No change
+            return
+
+        if parent_new != "" and parent_new not in self.parent_dict:
+            # Revert changes to parent
+            print(
+                "Cannot set "
+                + parent_new
+                + " as parent to "
+                + class_name
+                + ", class not found"
+            )
+            line_edit.blockSignals(True)
+            line_edit.setText("")
+            line_edit.blockSignals(False)
+            return
+
+        if parent_old != "" and parent_old not in self.parent_dict:
+            # Revert changes to parent
+            print(
+                "Removing "
+                + parent_old
+                + " as parent of "
+                + class_name
+                + ", class not found"
+            )
+            line_edit.blockSignals(True)
+            line_edit.setText("")
+            line_edit.blockSignals(False)
+            return
 
         # Update parent dict
-        if parent_name in self.parent_dict:
-            # Add current class name in parent_dict list
-            self.parent_dict[parent_name].append(self.current_class_dict["name"])
-            self.parent_dict[parent_name].sort(key=str.lower)
+        if parent_old != "" and parent_new != parent_old:
+            # Remove current class name from parent_dict list
+            if class_name in self.parent_dict[parent_old]:
+                print(
+                    "Removing child class "
+                    + class_name
+                    + " from parent class "
+                    + parent_old
+                )
+                self.parent_dict[parent_old].remove(class_name)
+                self.current_class_dict["mother"] = parent_new
+                # Activate save button
+                self.b_saveclass.setEnabled(True)
 
+        if parent_new != "" and parent_new != parent_old:
+            # Add current class name in parent_dict list
+            print("Adding child class " + class_name + " to parent class " + parent_new)
+            self.parent_dict[parent_new].append(self.current_class_dict["name"])
+            self.parent_dict[parent_new].sort(key=str.lower)
+            self.current_class_dict["mother"] = parent_new
             # Activate save button
             self.b_saveclass.setEnabled(True)
-        else:
-            print("Cannot set " + parent_name + " as parent class, class not found")
-            line_edit.setText("")
 
     def fill_table_const(self):
         """Fill tables of constants with current class dict content
@@ -1530,8 +1583,7 @@ class DClassGenerator(Ui_DClassGenerator, QWidget):
         self.b_genclass.setEnabled(False)
 
         # Get new parent_dict after class generation
-        gen_dict = read_all(DOC_DIR)
-        update_all_daughters(gen_dict)
+        gen_dict = read_all(DOC_DIR, is_mother_of_mother=False)
         parent_dict_new = dict()
         for class_name, class_dict in gen_dict.items():
             parent_dict_new[class_name] = sorted(class_dict["daughters"], key=str.lower)
@@ -1831,7 +1883,8 @@ class DClassGenerator(Ui_DClassGenerator, QWidget):
             self.b_genclass.setEnabled(True)
 
         # Update parent dict
-        self.parent_dict.pop(class_name)
+        if class_name in self.parent_dict:
+            self.parent_dict.pop(class_name)
 
     def duplicateClass(self, index):
         """Duplicate class by copying csv file

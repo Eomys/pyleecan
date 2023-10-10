@@ -30,7 +30,13 @@ CLASS_DEF_COL = 14  # class description
 COLUMN_OFFSET = PACK_COL
 
 
-def read_all(path, is_internal=False, in_path="", soft_name=PACKAGE_NAME):
+def read_all(
+    path,
+    is_internal=False,
+    in_path="",
+    soft_name=PACKAGE_NAME,
+    is_mother_of_mother=True,
+):
     """Read every csv files in a directory and subdirectory and create a structure for the
     code generation
 
@@ -42,6 +48,8 @@ def read_all(path, is_internal=False, in_path="", soft_name=PACKAGE_NAME):
         True to overwrite the open source csv files by internal ones
     soft_name : str
         Name of the generated software
+    is_mother_of_mother: bool
+        True to return mother of mother in update_all_daughters
 
     Returns
     -------
@@ -77,7 +85,7 @@ def read_all(path, is_internal=False, in_path="", soft_name=PACKAGE_NAME):
                     gen_dict[file_name[:-4]]["is_internal"] = True
 
     # Update all the "daughters" key according to "mother" key
-    update_all_daughters(gen_dict)
+    update_all_daughters(gen_dict, is_mother_of_mother=is_mother_of_mother)
 
     return gen_dict
 
@@ -254,13 +262,15 @@ def get_dict_from_columns(class_csv, class_dict, header_index, is_get_size=False
         )
 
 
-def update_all_daughters(gen_dict):
+def update_all_daughters(gen_dict, is_mother_of_mother=True):
     """This function update all the "daughters" key according to the "mother" key
 
     Parameters
     ----------
     gen_dict : dict
         gen_dict with no daughter set
+    is_mother_of_mother: bool
+        True to return mother of mother
     """
 
     # list of classes that have a mother
@@ -277,10 +287,11 @@ def update_all_daughters(gen_dict):
         if name not in mother["daughters"]:
             mother["daughters"].append(name)
         # Update all the mother of the mother
-        while mother["mother"] not in ["", None]:
-            mother = gen_dict[mother["mother"]]
-            if name not in mother["daughters"]:
-                mother["daughters"].append(name)
+        if is_mother_of_mother:
+            while mother["mother"] not in ["", None]:
+                mother = gen_dict[mother["mother"]]
+                if name not in mother["daughters"]:
+                    mother["daughters"].append(name)
 
 
 def get_value_str(value, type_val):
