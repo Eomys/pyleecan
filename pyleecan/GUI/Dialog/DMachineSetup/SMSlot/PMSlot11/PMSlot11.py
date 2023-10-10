@@ -108,13 +108,15 @@ class PMSlot11(Gen_PMSlot11, QWidget):
 
             # Key setup
             self.g_key.show()
-            self.g_key.setChecked(self.slot.wedge_mat is not None)
+            self.g_key.setChecked(self.notch_obj.key_mat is not None)
 
-            # Material setup
-            self.notch_obj.key_mat = None
             self.w_key_mat.setText("Key Material")
-            self.w_key_mat.def_mat = "Steel1"
-            self.w_key_mat.update(self.notch_obj, "key_mat", self.material_dict)
+            if self.notch_obj.key_mat is None:
+                self.notch_obj.key_mat = None
+
+            else:
+                self.w_key_mat.def_mat = "Steel1"
+            self.set_key()
 
             # widget
             self.w_key_mat.setEnabled(False)
@@ -149,6 +151,8 @@ class PMSlot11(Gen_PMSlot11, QWidget):
     def set_key(self):
         """Setup the slot key according to the GUI"""
         if self.g_key.isChecked():
+            self.w_key_mat.update(self.notch_obj, "key_mat", self.material_dict)
+
             self.img_slot.setPixmap(QPixmap(pixmap_dict["SlotM11_key_ext_stator"]))
             self.lf_Wkey.setEnabled(True)
             self.lf_Hkey.setEnabled(True)
@@ -160,6 +164,7 @@ class PMSlot11(Gen_PMSlot11, QWidget):
 
         else:
             self.notch_obj.key_mat = None
+
             self.img_slot.setPixmap(QPixmap(pixmap_dict["SlotM11_empty_ext_stator"]))
             self.lf_Wkey.setEnabled(False)
             self.lf_Hkey.setEnabled(False)
