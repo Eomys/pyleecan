@@ -1,0 +1,6 @@
+Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,as_dict Type
+airgap,,Airgap subdomain,,SubdomainModel,None,,,
+periodicity,,Periodicity,,dict,None,,,
+,,,,,,,,
+Package,Inherit,Methods,Constant Name,Constant Value,Class description,,,
+Simulation,,,VERSION,1,Abstract class for all the Subdomain model classes,,,

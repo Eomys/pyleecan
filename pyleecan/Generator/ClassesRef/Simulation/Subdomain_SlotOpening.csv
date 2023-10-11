@@ -1,0 +1,8 @@
+Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,as_dict Type
+A,,First integration constant function of harmonic number and time,"[Zs, Nt]",ndarray,None,,,
+B,,Second integration constant function of harmonic number and time,"[Zs, Nt]",ndarray,None,,,
+C,,Third integration constant function of harmonic number and time,"[K*Zs, Nt]",ndarray,None,,,
+D,,Fourth integration constant function of harmonic number and time,"[K*Zs, Nt]",ndarray,None,,,
+,,,,,,,,
+Package,Inherit,Methods,Constant Name,Constant Value,Class description,,,
+Simulation,Subdomain,comp_flux_density,VERSION,1,Subdomain class for slots regions,,,

@@ -1,0 +1,8 @@
+Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,as_dict Type
+Ji,A/m^2,Average current density in slots,"[Zs, Nt]",ndarray,None,,,
+Jik,A/m^2,Current density space harmonics in slots for concentrated double layer windings,"[K*Zs, Nt]",ndarray,None,,,
+,,,,,,,,
+Package,Inherit,Methods,Constant Name,Constant Value,Class description,,,
+Simulation,Subdomain_Slot,comp_current_solution,VERSION,1,Subdomain class for slots regions with windings,,,
+,,comp_current_source,,,,,,
+,,comp_flux_density,,,,,,

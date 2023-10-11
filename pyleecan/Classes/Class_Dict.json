@@ -7559,6 +7559,36 @@
             }
         ]
     },
+    "MagSDM": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "",
+        "is_internal": false,
+        "methods": [
+            "comp_flux_airgap"
+        ],
+        "mother": "Magnetics",
+        "name": "MagSDM",
+        "package": "Simulation",
+        "path": "pyleecan/Generator/ClassesRef/Simulation/MagSDM.csv",
+        "properties": [
+            {
+                "as_dict": "",
+                "desc": "The subdomain model object defined to calculate airgap flux density",
+                "max": "",
+                "min": "",
+                "name": "subdomain_model",
+                "type": "SubdomainModel",
+                "unit": "",
+                "value": null
+            }
+        ]
+    },
     "Magnet": {
         "constants": [
             {
@@ -7626,7 +7656,8 @@
         ],
         "daughters": [
             "MagElmer",
-            "MagFEMM"
+            "MagFEMM",
+            "MagSDM"
         ],
         "desc": "Magnetic module abstract object",
         "is_internal": false,
@@ -16010,6 +16041,435 @@
                 "type": "str",
                 "unit": "-",
                 "value": "Pyleecan.Structural"
+            }
+        ]
+    },
+    "Subdomain": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [
+            "Subdomain_Airgap",
+            "Subdomain_MagnetSurface",
+            "Subdomain_Slot",
+            "Subdomain_SlotOpening",
+            "Subdomain_SlotWinding"
+        ],
+        "desc": "Abstract class for all subdomains",
+        "is_internal": false,
+        "methods": [
+            "comp_polynoms"
+        ],
+        "mother": "",
+        "name": "Subdomain",
+        "package": "Simulation",
+        "path": "pyleecan/Generator/ClassesRef/Simulation/Subdomain.csv",
+        "properties": [
+            {
+                "as_dict": "",
+                "desc": "Minimum radius of subdomain",
+                "max": "",
+                "min": "0",
+                "name": "radius_min",
+                "type": "float",
+                "unit": "m",
+                "value": null
+            },
+            {
+                "as_dict": "",
+                "desc": "Maximum radius of subdomain",
+                "max": "",
+                "min": "0",
+                "name": "radius_max",
+                "type": "float",
+                "unit": "m",
+                "value": null
+            },
+            {
+                "as_dict": "",
+                "desc": "Angle value at subdomain center",
+                "max": "",
+                "min": "0",
+                "name": "center_angle",
+                "type": "float",
+                "unit": "rad",
+                "value": null
+            },
+            {
+                "as_dict": "",
+                "desc": "Angular width of subdomain",
+                "max": "",
+                "min": "0",
+                "name": "angular_width",
+                "type": "float",
+                "unit": "rad",
+                "value": null
+            },
+            {
+                "as_dict": "",
+                "desc": "Array of harmonic numbers",
+                "max": "",
+                "min": "0",
+                "name": "k",
+                "type": "ndarray",
+                "unit": "",
+                "value": null
+            },
+            {
+                "as_dict": "",
+                "desc": "Number of identical subdomains in model",
+                "max": "",
+                "min": "0",
+                "name": "periodicity",
+                "type": "int",
+                "unit": "",
+                "value": null
+            }
+        ]
+    },
+    "SubdomainModel": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [
+            "SubdomainModel_SPMSM"
+        ],
+        "desc": "Abstract class for all the Subdomain model classes",
+        "is_internal": false,
+        "methods": [],
+        "mother": "",
+        "name": "SubdomainModel",
+        "package": "Simulation",
+        "path": "pyleecan/Generator/ClassesRef/Simulation/SubdomainModel.csv",
+        "properties": [
+            {
+                "as_dict": "",
+                "desc": "Airgap subdomain",
+                "max": "",
+                "min": "",
+                "name": "airgap",
+                "type": "SubdomainModel",
+                "unit": "",
+                "value": null
+            },
+            {
+                "as_dict": "",
+                "desc": "Periodicity",
+                "max": "",
+                "min": "",
+                "name": "periodicity",
+                "type": "dict",
+                "unit": "",
+                "value": null
+            }
+        ]
+    },
+    "SubdomainModel_SPMSM": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Subdomain model for Surface Permanent Magnet Synchronous Machine assuming infinite permeability in yokes",
+        "is_internal": false,
+        "methods": [
+            "comp_interface_airgap_magnet",
+            "comp_interface_airgap_slot",
+            "set_geometry",
+            "set_harmonics",
+            "set_magnetic_properties",
+            "solve"
+        ],
+        "mother": "SubdomainModel",
+        "name": "SubdomainModel_SPMSM",
+        "package": "Simulation",
+        "path": "pyleecan/Generator/ClassesRef/Simulation/SubdomainModel_SPMSM.csv",
+        "properties": [
+            {
+                "as_dict": "",
+                "desc": "Subdomain for stator slots",
+                "max": "",
+                "min": "",
+                "name": "stator_slot",
+                "type": "Subdomain_Slot",
+                "unit": "",
+                "value": null
+            },
+            {
+                "as_dict": "",
+                "desc": "Subdomain for stator slot openings",
+                "max": "",
+                "min": "",
+                "name": "stator_slot_opening",
+                "type": "Subdomain_SlotOpening",
+                "unit": "",
+                "value": null
+            },
+            {
+                "as_dict": "",
+                "desc": "Subdomain for surface magnets",
+                "max": "",
+                "min": "",
+                "name": "rotor_magnet_surface",
+                "type": "Subdomain_MagnetSurface",
+                "unit": "",
+                "value": null
+            },
+            {
+                "as_dict": "",
+                "desc": "Subdomain for rotor yoke",
+                "max": "",
+                "min": "",
+                "name": "rotor_yoke",
+                "type": "Subdomain",
+                "unit": "",
+                "value": null
+            }
+        ]
+    },
+    "Subdomain_Airgap": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [
+            "Subdomain_MagnetSurface"
+        ],
+        "desc": "Subdomain class for airgap region",
+        "is_internal": false,
+        "methods": [
+            "comp_flux_density"
+        ],
+        "mother": "Subdomain",
+        "name": "Subdomain_Airgap",
+        "package": "Simulation",
+        "path": "pyleecan/Generator/ClassesRef/Simulation/Subdomain_Airgap.csv",
+        "properties": [
+            {
+                "as_dict": "",
+                "desc": "First integration constant function of harmonic number and time",
+                "max": "",
+                "min": "",
+                "name": "A",
+                "type": "ndarray",
+                "unit": "",
+                "value": null
+            },
+            {
+                "as_dict": "",
+                "desc": "Second integration constant function of harmonic number and time",
+                "max": "",
+                "min": "",
+                "name": "B",
+                "type": "ndarray",
+                "unit": "",
+                "value": null
+            },
+            {
+                "as_dict": "",
+                "desc": "Third integration constant function of harmonic number and time",
+                "max": "",
+                "min": "",
+                "name": "C",
+                "type": "ndarray",
+                "unit": "",
+                "value": null
+            },
+            {
+                "as_dict": "",
+                "desc": "Fourth integration constant function of harmonic number and time",
+                "max": "",
+                "min": "",
+                "name": "D",
+                "type": "ndarray",
+                "unit": "",
+                "value": null
+            }
+        ]
+    },
+    "Subdomain_MagnetSurface": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Subdomain class for surface permanent magnet region",
+        "is_internal": false,
+        "methods": [
+            "comp_flux_density",
+            "comp_magnet_solution",
+            "comp_magnet_source"
+        ],
+        "mother": "Subdomain_Airgap",
+        "name": "Subdomain_MagnetSurface",
+        "package": "Simulation",
+        "path": "pyleecan/Generator/ClassesRef/Simulation/Subdomain_MagnetSurface.csv",
+        "properties": [
+            {
+                "as_dict": "",
+                "desc": "Magnetization type given by machine properties",
+                "max": "3",
+                "min": "0",
+                "name": "type_magnetization",
+                "type": "int",
+                "unit": "",
+                "value": 0
+            }
+        ]
+    },
+    "Subdomain_Slot": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [
+            "Subdomain_SlotWinding"
+        ],
+        "desc": "Subdomain class for slots regions",
+        "is_internal": false,
+        "methods": [
+            "comp_flux_density"
+        ],
+        "mother": "Subdomain",
+        "name": "Subdomain_Slot",
+        "package": "Simulation",
+        "path": "pyleecan/Generator/ClassesRef/Simulation/Subdomain_Slot.csv",
+        "properties": [
+            {
+                "as_dict": "",
+                "desc": "First integration constant function of harmonic number and time",
+                "max": "",
+                "min": "",
+                "name": "A",
+                "type": "ndarray",
+                "unit": "",
+                "value": null
+            },
+            {
+                "as_dict": "",
+                "desc": "Second integration constant function of harmonic number and time",
+                "max": "",
+                "min": "",
+                "name": "B",
+                "type": "ndarray",
+                "unit": "",
+                "value": null
+            }
+        ]
+    },
+    "Subdomain_SlotOpening": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Subdomain class for slots regions",
+        "is_internal": false,
+        "methods": [
+            "comp_flux_density"
+        ],
+        "mother": "Subdomain",
+        "name": "Subdomain_SlotOpening",
+        "package": "Simulation",
+        "path": "pyleecan/Generator/ClassesRef/Simulation/Subdomain_SlotOpening.csv",
+        "properties": [
+            {
+                "as_dict": "",
+                "desc": "First integration constant function of harmonic number and time",
+                "max": "",
+                "min": "",
+                "name": "A",
+                "type": "ndarray",
+                "unit": "",
+                "value": null
+            },
+            {
+                "as_dict": "",
+                "desc": "Second integration constant function of harmonic number and time",
+                "max": "",
+                "min": "",
+                "name": "B",
+                "type": "ndarray",
+                "unit": "",
+                "value": null
+            },
+            {
+                "as_dict": "",
+                "desc": "Third integration constant function of harmonic number and time",
+                "max": "",
+                "min": "",
+                "name": "C",
+                "type": "ndarray",
+                "unit": "",
+                "value": null
+            },
+            {
+                "as_dict": "",
+                "desc": "Fourth integration constant function of harmonic number and time",
+                "max": "",
+                "min": "",
+                "name": "D",
+                "type": "ndarray",
+                "unit": "",
+                "value": null
+            }
+        ]
+    },
+    "Subdomain_SlotWinding": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Subdomain class for slots regions with windings",
+        "is_internal": false,
+        "methods": [
+            "comp_current_solution",
+            "comp_current_source",
+            "comp_flux_density"
+        ],
+        "mother": "Subdomain_Slot",
+        "name": "Subdomain_SlotWinding",
+        "package": "Simulation",
+        "path": "pyleecan/Generator/ClassesRef/Simulation/Subdomain_SlotWinding.csv",
+        "properties": [
+            {
+                "as_dict": "",
+                "desc": "Average current density in slots",
+                "max": "",
+                "min": "",
+                "name": "Ji",
+                "type": "ndarray",
+                "unit": "A/m^2",
+                "value": null
+            },
+            {
+                "as_dict": "",
+                "desc": "Current density space harmonics in slots for concentrated double layer windings",
+                "max": "",
+                "min": "",
+                "name": "Jik",
+                "type": "ndarray",
+                "unit": "A/m^2",
+                "value": null
             }
         ]
     },
