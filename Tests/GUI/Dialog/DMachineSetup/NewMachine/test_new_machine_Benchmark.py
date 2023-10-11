@@ -471,9 +471,10 @@ class TestNewMachineBenchmark(object):
         wid_slot.w_mag.c_type_magnetization.setCurrentIndex(index_magnetization)
 
         assert wid_slot.w_mag.c_type_magnetization.currentText() == "Radial"
-        assert wid_slot.w_mag.w_mat.c_mat_type.currentText() == "Magnet1"
 
         assert self.widget.machine.rotor.magnet.type_magnetization == 0
+
+        assert wid_slot.w_mag.w_mat.c_mat_type.currentText() == "Magnet1"
 
         assert wid_slot.w_out.out_Wlam.text() == "Rotor width: 0.0305 [m]"
         assert wid_slot.w_out.out_slot_height.text() == "Slot height: ?"

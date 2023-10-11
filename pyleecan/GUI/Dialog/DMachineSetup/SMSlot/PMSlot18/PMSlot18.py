@@ -56,21 +56,11 @@ class PMSlot18(Gen_PMSlot18, QWidget):
         # Display the main output of the slot (surface, height...)
         self.w_out.comp_output()
 
-        self.key_mat = None
-        self.w_mag.w_mat.setText("Magnet Material")
-        self.w_mag.w_mat.def_mat = "MagnetPrius"
-        self.w_mag.w_mat.update(lamination.magnet, "mat_type", self.material_dict)
+        # Setup the widgets according to current values
+        self.w_mag.update(lamination, self.material_dict)
 
-        self.w_mag.c_type_magnetization.currentIndexChanged.connect(
-            self.set_type_magnetization
-        )
         # Connect the signal
         self.lf_Hmag.editingFinished.connect(self.set_Hmag)
-
-    def set_type_magnetization(self, index):
-        self.lamination.magnet.type_magnetization = index
-        # Notify the machine GUI that the machine has changed
-        self.saveNeeded.emit()
 
     def set_Hmag(self):
         """Signal to update the value of Hmag according to the line edit
@@ -83,6 +73,10 @@ class PMSlot18(Gen_PMSlot18, QWidget):
         self.slot.Hmag = self.lf_Hmag.value()
         self.w_out.comp_output()
         # Notify the machine GUI that the machine has changed
+        self.saveNeeded.emit()
+
+    def emit_save(self):
+        """Send a saveNeeded signal to the DMachineSetup"""
         self.saveNeeded.emit()
 
     @staticmethod

@@ -86,13 +86,8 @@ class PMSlot11(Gen_PMSlot11, QWidget):
                 self.img_slot.setPixmap(QPixmap(pixmap_dict["SlotM11_empty_int_rotor"]))
 
         else:
-            self.key_mat = None
-            self.w_mag.w_mat.setText("Magnet Material")
-            self.w_mag.w_mat.def_mat = "MagnetPrius"
-            self.w_mag.w_mat.update(lamination.magnet, "mat_type", self.material_dict)
-            self.w_mag.c_type_magnetization.currentIndexChanged.connect(
-                self.set_type_magnetization
-            )
+            # Setup the widgets according to current values
+            self.w_mag.update(lamination, self.material_dict)
 
         # Fill the fields with the machine values (if they're filled)
         self.lf_W0.setValue(self.slot.W0)
@@ -110,11 +105,6 @@ class PMSlot11(Gen_PMSlot11, QWidget):
         self.lf_Hmag.editingFinished.connect(self.set_Hmag)
         self.c_W0_unit.currentIndexChanged.connect(self.set_W0)
         self.c_Wmag_unit.currentIndexChanged.connect(self.set_Wmag)
-
-    def set_type_magnetization(self, index):
-        self.w_mag.w_mat.machine.rotor.magnet.type_magnetization = index
-        # Notify the machine GUI that the machine has changed
-        self.saveNeeded.emit()
 
     def set_W0(self):
         """Signal to update the value of W0 according to the line edit

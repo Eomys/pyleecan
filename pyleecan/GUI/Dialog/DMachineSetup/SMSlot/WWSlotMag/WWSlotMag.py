@@ -64,8 +64,11 @@ class WWSlotMag(QGroupBox):
         self.w_mat.def_mat = "MagnetPrius"
         self.w_mat.update(lamination.magnet, "mat_type", self.material_dict)
 
-        if lamination.magnet is None:
+        if lamination.magnet.type_magnetization is None:
             lamination.magnet.type_magnetization = 0
+
+        # Notify the machine GUI that the machine has changed
+        self.saveNeeded.emit()
 
     def set_type_magnetization(self, index):
         self.lamination.magnet.type_magnetization = index
