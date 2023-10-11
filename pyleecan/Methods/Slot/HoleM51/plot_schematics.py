@@ -110,26 +110,17 @@ def plot_schematics(
                 fig=fig,
                 ax=ax,
             )
-    elif type_add_active == 0:
-        # Remove magnets
-        lam = self.parent.copy()
-        lam.hole[0].remove_magnet()
-        return lam.hole[0].plot_schematics(
-            is_default=False,
-            is_add_point_label=is_add_point_label,
-            is_add_schematics=is_add_schematics,
-            is_add_main_line=is_add_main_line,
-            type_add_active=2,
-            save_path=save_path,
-            is_show_fig=is_show_fig,
-            fig=fig,
-            ax=ax,
-        )
+
     else:
         # Getting the main plot
         if self.parent is None:
             raise ParentMissingError("Error: The hole is not inside a Lamination")
         lam = self.parent
+
+        # Remove the magnets
+        if type_add_active == 0:
+            lam.hole[0].remove_magnet()
+
         alpha = pi / 2  # To rotate the schematics
         fig, ax = lam.plot(
             alpha=pi / self.Zh + alpha,
@@ -186,93 +177,97 @@ def plot_schematics(
                 offset_label=1j * self.H2 * 0.3,
                 fontsize=SC_FONT_SIZE,
             )
-            # W2
-            line = Segment(
-                (point_dict["Z2"] + point_dict["Z12"]) / 2 * exp(1j * alpha),
-                (point_dict["Z1"] + point_dict["Z13"]) / 2 * exp(1j * alpha),
-            )
-            line.plot(
-                fig=fig,
-                ax=ax,
-                color=ARROW_COLOR,
-                linewidth=ARROW_WIDTH,
-                label="W2",
-                offset_label=-self.H2 * 0.2 - 1j * self.H2 * 0.5,
-                is_arrow=True,
-                fontsize=SC_FONT_SIZE,
-            )
-            # W3
-            line = Segment(
-                point_dict["Z13"] * exp(1j * alpha), point_dict["Z14"] * exp(1j * alpha)
-            )
-            line.plot(
-                fig=fig,
-                ax=ax,
-                color=ARROW_COLOR,
-                linewidth=ARROW_WIDTH,
-                label="W3",
-                offset_label=-1j * self.H2 * 0.5,
-                is_arrow=True,
-                fontsize=SC_FONT_SIZE,
-            )
-            # W4
-            line = Segment(
-                (point_dict["Z3"] + point_dict["Z9"]) / 2 * exp(1j * alpha),
-                (point_dict["Z10"] + point_dict["Z2"]) / 2 * exp(1j * alpha),
-            )
-            line.plot(
-                fig=fig,
-                ax=ax,
-                color=ARROW_COLOR,
-                linewidth=ARROW_WIDTH,
-                label="W4",
-                offset_label=-self.H2 * 0.2 - 1j * self.H2 * 0.5,
-                is_arrow=True,
-                fontsize=SC_FONT_SIZE,
-            )
-            # W5
-            line = Segment(
-                point_dict["Z9"] * exp(1j * alpha), point_dict["Z8"] * exp(1j * alpha)
-            )
-            line.plot(
-                fig=fig,
-                ax=ax,
-                color=ARROW_COLOR,
-                linewidth=ARROW_WIDTH,
-                label="W5",
-                offset_label=-self.H2 * 0.2 - 1j * self.H2 * 0.5,
-                is_arrow=True,
-                fontsize=SC_FONT_SIZE,
-            )
-            # W6
-            line = Segment(
-                (point_dict["Z25"] + point_dict["Z17"]) / 2 * exp(1j * alpha),
-                (point_dict["Z24"] + point_dict["Z18"]) / 2 * exp(1j * alpha),
-            )
-            line.plot(
-                fig=fig,
-                ax=ax,
-                color=ARROW_COLOR,
-                linewidth=ARROW_WIDTH,
-                label="W6",
-                offset_label=-1j * self.H2 * 0.5,
-                is_arrow=True,
-                fontsize=SC_FONT_SIZE,
-            )
-            # W7
-            line = Segment(
-                point_dict["Z18"] * exp(1j * alpha), point_dict["Z19"] * exp(1j * alpha)
-            )
-            line.plot(
-                fig=fig,
-                ax=ax,
-                color=ARROW_COLOR,
-                linewidth=ARROW_WIDTH,
-                label="W7",
-                offset_label=-1j * self.H2 * 0.5,
-                is_arrow=True,
-                fontsize=SC_FONT_SIZE,
-            )
+            if type_add_active != 0:
+                # W2
+                line = Segment(
+                    (point_dict["Z2"] + point_dict["Z12"]) / 2 * exp(1j * alpha),
+                    (point_dict["Z1"] + point_dict["Z13"]) / 2 * exp(1j * alpha),
+                )
+                line.plot(
+                    fig=fig,
+                    ax=ax,
+                    color=ARROW_COLOR,
+                    linewidth=ARROW_WIDTH,
+                    label="W2",
+                    offset_label=-self.H2 * 0.2 - 1j * self.H2 * 0.5,
+                    is_arrow=True,
+                    fontsize=SC_FONT_SIZE,
+                )
+                # W3
+                line = Segment(
+                    point_dict["Z13"] * exp(1j * alpha),
+                    point_dict["Z14"] * exp(1j * alpha),
+                )
+                line.plot(
+                    fig=fig,
+                    ax=ax,
+                    color=ARROW_COLOR,
+                    linewidth=ARROW_WIDTH,
+                    label="W3",
+                    offset_label=-1j * self.H2 * 0.5,
+                    is_arrow=True,
+                    fontsize=SC_FONT_SIZE,
+                )
+                # W4
+                line = Segment(
+                    (point_dict["Z3"] + point_dict["Z9"]) / 2 * exp(1j * alpha),
+                    (point_dict["Z10"] + point_dict["Z2"]) / 2 * exp(1j * alpha),
+                )
+                line.plot(
+                    fig=fig,
+                    ax=ax,
+                    color=ARROW_COLOR,
+                    linewidth=ARROW_WIDTH,
+                    label="W4",
+                    offset_label=-self.H2 * 0.2 - 1j * self.H2 * 0.5,
+                    is_arrow=True,
+                    fontsize=SC_FONT_SIZE,
+                )
+                # W5
+                line = Segment(
+                    point_dict["Z9"] * exp(1j * alpha),
+                    point_dict["Z8"] * exp(1j * alpha),
+                )
+                line.plot(
+                    fig=fig,
+                    ax=ax,
+                    color=ARROW_COLOR,
+                    linewidth=ARROW_WIDTH,
+                    label="W5",
+                    offset_label=-self.H2 * 0.2 - 1j * self.H2 * 0.5,
+                    is_arrow=True,
+                    fontsize=SC_FONT_SIZE,
+                )
+                # W6
+                line = Segment(
+                    (point_dict["Z25"] + point_dict["Z17"]) / 2 * exp(1j * alpha),
+                    (point_dict["Z24"] + point_dict["Z18"]) / 2 * exp(1j * alpha),
+                )
+                line.plot(
+                    fig=fig,
+                    ax=ax,
+                    color=ARROW_COLOR,
+                    linewidth=ARROW_WIDTH,
+                    label="W6",
+                    offset_label=-1j * self.H2 * 0.5,
+                    is_arrow=True,
+                    fontsize=SC_FONT_SIZE,
+                )
+                # W7
+                line = Segment(
+                    point_dict["Z18"] * exp(1j * alpha),
+                    point_dict["Z19"] * exp(1j * alpha),
+                )
+                line.plot(
+                    fig=fig,
+                    ax=ax,
+                    color=ARROW_COLOR,
+                    linewidth=ARROW_WIDTH,
+                    label="W7",
+                    offset_label=-1j * self.H2 * 0.5,
+                    is_arrow=True,
+                    fontsize=SC_FONT_SIZE,
+                )
             # H0
             line = Segment(
                 point_dict["Z1"].real * exp(1j * alpha), Rbo * exp(1j * alpha)

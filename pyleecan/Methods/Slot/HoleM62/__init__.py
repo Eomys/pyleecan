@@ -8,6 +8,6 @@ class S62_NoneError(SlotCheckError):
 
 
 class S62_WCheckError(SlotCheckError):
-    """ """
+    """Raised when a propery of HoleM62 is None"""
 
     pass
