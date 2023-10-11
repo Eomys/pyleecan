@@ -10,7 +10,6 @@ from PySide2.QtGui import *
 from PySide2.QtWidgets import *
 
 from pyleecan.GUI.Tools.HelpButton import HelpButton
-from .....GUI.Dialog.DMatLib.WMatSelect.WMatSelect import WMatSelect
 
 from pyleecan.GUI.Resources import pyleecan_rc
 
@@ -19,7 +18,7 @@ class Ui_SMSlot(object):
     def setupUi(self, SMSlot):
         if not SMSlot.objectName():
             SMSlot.setObjectName(u"SMSlot")
-        SMSlot.resize(650, 550)
+        SMSlot.resize(827, 644)
         SMSlot.setMinimumSize(QSize(650, 0))
         self.main_layout = QVBoxLayout(SMSlot)
         self.main_layout.setObjectName(u"main_layout")
@@ -52,28 +51,6 @@ class Ui_SMSlot(object):
 
         self.main_layout.addLayout(self.horizontalLayout_2)
 
-        self.horizontalLayout_3 = QHBoxLayout()
-        self.horizontalLayout_3.setObjectName(u"horizontalLayout_3")
-        self.w_mat = WMatSelect(SMSlot)
-        self.w_mat.setObjectName(u"w_mat")
-
-        self.horizontalLayout_3.addWidget(self.w_mat)
-
-        self.in_type_magnetization = QLabel(SMSlot)
-        self.in_type_magnetization.setObjectName(u"in_type_magnetization")
-
-        self.horizontalLayout_3.addWidget(self.in_type_magnetization)
-
-        self.c_type_magnetization = QComboBox(SMSlot)
-        self.c_type_magnetization.addItem("")
-        self.c_type_magnetization.addItem("")
-        self.c_type_magnetization.addItem("")
-        self.c_type_magnetization.setObjectName(u"c_type_magnetization")
-
-        self.horizontalLayout_3.addWidget(self.c_type_magnetization)
-
-        self.main_layout.addLayout(self.horizontalLayout_3)
-
         self.w_slot = QWidget(SMSlot)
         self.w_slot.setObjectName(u"w_slot")
         sizePolicy = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Expanding)
@@ -83,6 +60,12 @@ class Ui_SMSlot(object):
         self.w_slot.setSizePolicy(sizePolicy)
 
         self.main_layout.addWidget(self.w_slot)
+
+        self.verticalSpacer = QSpacerItem(
+            20, 1, QSizePolicy.Minimum, QSizePolicy.Minimum
+        )
+
+        self.main_layout.addItem(self.verticalSpacer)
 
         self.horizontalLayout = QHBoxLayout()
         self.horizontalLayout.setObjectName(u"horizontalLayout")
@@ -131,19 +114,6 @@ class Ui_SMSlot(object):
         self.out_Slot_pitch.setText(
             QCoreApplication.translate("SMSlot", u"p = ? Slot pitch = 1.35 rad", None)
         )
-        self.in_type_magnetization.setText(
-            QCoreApplication.translate("SMSlot", u"type_magnetization", None)
-        )
-        self.c_type_magnetization.setItemText(
-            0, QCoreApplication.translate("SMSlot", u"Radial", None)
-        )
-        self.c_type_magnetization.setItemText(
-            1, QCoreApplication.translate("SMSlot", u"Parallel", None)
-        )
-        self.c_type_magnetization.setItemText(
-            2, QCoreApplication.translate("SMSlot", u"HallBach", None)
-        )
-
         self.b_plot.setText(QCoreApplication.translate("SMSlot", u"Preview", None))
         self.b_previous.setText(QCoreApplication.translate("SMSlot", u"Previous", None))
         self.b_next.setText(QCoreApplication.translate("SMSlot", u"Next", None))

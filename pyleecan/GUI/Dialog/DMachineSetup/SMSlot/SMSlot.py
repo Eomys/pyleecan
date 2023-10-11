@@ -99,18 +99,6 @@ class SMSlot(Ui_SMSlot, QWidget):
 
         self.set_slot_pitch(self.obj.slot.Zs)
 
-        # Set magnetization
-        if self.obj.magnet.type_magnetization not in [0, 1, 2]:
-            self.obj.magnet.type_magnetization = 0  # Set default value
-        listView = QListView(self.c_type_magnetization)
-        self.c_type_magnetization.setView(listView)
-        self.c_type_magnetization.setCurrentIndex(self.obj.magnet.type_magnetization)
-
-        # Set material
-        self.w_mat.setText(self.tr("mat_mag:"))
-        self.w_mat.def_mat = "Magnet1"
-        self.w_mat.update(self.machine.rotor.magnet, "mat_type", self.material_dict)
-
         # Set the correct index for the type checkbox and display the object
         index = INIT_INDEX.index(type(self.obj.slot))
         self.c_slot_type.setCurrentIndex(index)
@@ -120,15 +108,8 @@ class SMSlot(Ui_SMSlot, QWidget):
 
         # Connect the slot
         self.c_slot_type.currentIndexChanged.connect(self.s_change_slot)
-        self.c_type_magnetization.currentIndexChanged.connect(
-            self.s_set_type_magnetization
-        )
-        self.b_plot.clicked.connect(self.s_plot)
-        self.w_mat.saveNeeded.connect(self.emit_save)
 
-    def emit_save(self):
-        """Send a saveNeeded signal to the DMachineSetup"""
-        self.saveNeeded.emit()
+        self.b_plot.clicked.connect(self.s_plot)
 
     def set_slot_type(self, index):
         """Initialize self.obj with the slot corresponding to index
@@ -157,6 +138,10 @@ class SMSlot(Ui_SMSlot, QWidget):
                 self.set_slot_pitch(self.obj.slot.Zs)
 
         # Notify the machine GUI that the machine has changed
+        self.saveNeeded.emit()
+
+    def emit_save(self):
+        """Send a saveNeeded signal to the DMachineSetup"""
         self.saveNeeded.emit()
 
     def set_slot_pitch(self, Zs):
@@ -207,7 +192,9 @@ class SMSlot(Ui_SMSlot, QWidget):
 
         # Regenerate the pages with the new values
         self.w_slot.setParent(None)
-        self.w_slot = WIDGET_LIST[self.c_slot_type.currentIndex()](self.obj)
+        self.w_slot = WIDGET_LIST[self.c_slot_type.currentIndex()](
+            self.obj, self.material_dict
+        )
         self.w_slot.saveNeeded.connect(self.emit_save)
         # Refresh the GUI
         self.main_layout.removeWidget(self.w_slot)

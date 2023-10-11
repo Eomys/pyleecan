@@ -451,8 +451,6 @@ class TestNewMachineBenchmark(object):
             == "p = 5 / Slot pitch = 36 [°] (0.6283 [rad])"
         )
         assert self.widget.w_step.c_slot_type.currentText() == "Rectangular Magnet"
-        assert self.widget.w_step.c_type_magnetization.currentText() == "Radial"
-        assert self.widget.w_step.w_mat.c_mat_type.currentText() == "Magnet1"
 
         assert self.widget.w_step.test_err_msg is None
         with mock.patch(
@@ -466,6 +464,17 @@ class TestNewMachineBenchmark(object):
         )
 
         wid_slot = self.widget.w_step.w_slot
+        index_magnet1 = wid_slot.w_mag.w_mat.c_mat_type.findText("Magnet1")
+        wid_slot.w_mag.w_mat.c_mat_type.setCurrentIndex(index_magnet1)
+
+        index_magnetization = wid_slot.w_mag.c_type_magnetization.findText("Radial")
+        wid_slot.w_mag.c_type_magnetization.setCurrentIndex(index_magnetization)
+
+        assert wid_slot.w_mag.c_type_magnetization.currentText() == "Radial"
+        assert wid_slot.w_mag.w_mat.c_mat_type.currentText() == "Magnet1"
+
+        assert self.widget.machine.rotor.magnet.type_magnetization == 0
+
         assert wid_slot.w_out.out_Wlam.text() == "Rotor width: 0.0305 [m]"
         assert wid_slot.w_out.out_slot_height.text() == "Slot height: ?"
         assert wid_slot.w_out.out_yoke_height.text() == "Yoke height: ?"
@@ -475,8 +484,11 @@ class TestNewMachineBenchmark(object):
 
         index_polar_magnet = self.widget.w_step.c_slot_type.findText("Polar Magnet")
         self.widget.w_step.c_slot_type.setCurrentIndex(index_polar_magnet)
-        index_magnetPrius = self.widget.w_step.w_mat.c_mat_type.findText("MagnetPrius")
-        self.widget.w_step.w_mat.c_mat_type.setCurrentIndex(index_magnetPrius)
+        index_magnetPrius = wid_slot.w_mag.w_mat.c_mat_type.findText("MagnetPrius")
+
+        wid_slot.w_mag.w_mat.c_mat_type.setCurrentIndex(index_magnetPrius)
+        assert wid_slot.w_mag.w_mat.c_mat_type.currentText() == "MagnetPrius"
+        assert wid_slot.w_mag.c_type_magnetization.currentText() == "Radial"
 
         wid_slot = self.widget.w_step.w_slot
         assert isinstance(wid_slot, PMSlot11)

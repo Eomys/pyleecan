@@ -28,7 +28,7 @@ class PMSlot11(Gen_PMSlot11, QWidget):
     notch_name = "Polar"
     slot_type = SlotM11
 
-    def __init__(self, lamination=None, is_notch=False):
+    def __init__(self, lamination=None, material_dict=None, is_notch=False):
         """Initialize the widget according to lamination
 
         Parameters
@@ -37,6 +37,8 @@ class PMSlot11(Gen_PMSlot11, QWidget):
             A PMSlot11 widget
         lamination : Lamination
             current lamination to edit
+        material_dict: dict
+            Materials dictionary (library + machine)
         is_notch : bool
             True to adapt the slot GUI for the notch setup
         """
@@ -47,6 +49,7 @@ class PMSlot11(Gen_PMSlot11, QWidget):
         self.lamination = lamination
         self.slot = lamination.slot
         self.is_notch = is_notch
+        self.material_dict = material_dict
 
         # Set FloatEdit unit
         self.lf_W0.unit = "rad"
@@ -82,6 +85,15 @@ class PMSlot11(Gen_PMSlot11, QWidget):
                 # Use schematics on the inner without magnet
                 self.img_slot.setPixmap(QPixmap(pixmap_dict["SlotM11_empty_int_rotor"]))
 
+        else:
+            self.key_mat = None
+            self.w_mag.w_mat.setText("Magnet Material")
+            self.w_mag.w_mat.def_mat = "MagnetPrius"
+            self.w_mag.w_mat.update(lamination.magnet, "mat_type", self.material_dict)
+            self.w_mag.c_type_magnetization.currentIndexChanged.connect(
+                self.set_type_magnetization
+            )
+
         # Fill the fields with the machine values (if they're filled)
         self.lf_W0.setValue(self.slot.W0)
         self.lf_Wmag.setValue(self.slot.Wmag)
@@ -98,6 +110,11 @@ class PMSlot11(Gen_PMSlot11, QWidget):
         self.lf_Hmag.editingFinished.connect(self.set_Hmag)
         self.c_W0_unit.currentIndexChanged.connect(self.set_W0)
         self.c_Wmag_unit.currentIndexChanged.connect(self.set_Wmag)
+
+    def set_type_magnetization(self, index):
+        self.w_mag.w_mat.machine.rotor.magnet.type_magnetization = index
+        # Notify the machine GUI that the machine has changed
+        self.saveNeeded.emit()
 
     def set_W0(self):
         """Signal to update the value of W0 according to the line edit
@@ -158,6 +175,10 @@ class PMSlot11(Gen_PMSlot11, QWidget):
         self.slot.Hmag = self.lf_Hmag.value()
         self.w_out.comp_output()
         # Notify the machine GUI that the machine has changed
+        self.saveNeeded.emit()
+
+    def emit_save(self):
+        """Send a saveNeeded signal to the DMachineSetup"""
         self.saveNeeded.emit()
 
     @staticmethod

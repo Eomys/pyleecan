@@ -10,6 +10,7 @@ from ......GUI import gui_option
 from ......GUI.Dialog.DMachineSetup.SMSlot.PMSlot10.Gen_PMSlot10 import Gen_PMSlot10
 from ......Methods.Slot.Slot import SlotCheckError
 from ......GUI.Resources import pixmap_dict
+from PySide2.QtWidgets import QMessageBox, QWidget, QListView
 
 translate = PySide2.QtCore.QCoreApplication.translate
 
@@ -24,7 +25,7 @@ class PMSlot10(Gen_PMSlot10, QWidget):
     notch_name = "Rectangular"
     slot_type = SlotM10
 
-    def __init__(self, lamination=None, is_notch=False):
+    def __init__(self, lamination=None, material_dict=None, is_notch=False):
         """Initialize the widget according to lamination
 
         Parameters
@@ -33,6 +34,8 @@ class PMSlot10(Gen_PMSlot10, QWidget):
             A PMSlot10 widget
         lamination : Lamination
             current lamination to edit
+        material_dict: dict
+            Materials dictionary (library + machine)
         is_notch : bool
             True to adapt the slot GUI for the notch setup
         """
@@ -40,9 +43,11 @@ class PMSlot10(Gen_PMSlot10, QWidget):
         # Build the interface according to the .ui file
         QWidget.__init__(self)
         self.setupUi(self)
+
         self.lamination = lamination
         self.slot = lamination.slot
         self.is_notch = is_notch
+        self.material_dict = material_dict
 
         # Set FloatEdit unit
         self.lf_W0.unit = "m"
@@ -79,6 +84,9 @@ class PMSlot10(Gen_PMSlot10, QWidget):
             else:
                 # Use schematics on the inner without magnet
                 self.img_slot.setPixmap(QPixmap(pixmap_dict["SlotM10_empty_int_rotor"]))
+        else:
+            # Setup the widgets according to current values
+            self.w_mag.update(lamination, self.material_dict)
 
         # Fill the fields with the machine values (if they're filled)
         self.lf_W0.setValue(self.slot.W0)
@@ -145,6 +153,10 @@ class PMSlot10(Gen_PMSlot10, QWidget):
         self.slot.Hmag = self.lf_Hmag.value()
         self.w_out.comp_output()
         # Notify the machine GUI that the machine has changed
+        self.saveNeeded.emit()
+
+    def emit_save(self):
+        """Send a saveNeeded signal to the DMachineSetup"""
         self.saveNeeded.emit()
 
     @staticmethod

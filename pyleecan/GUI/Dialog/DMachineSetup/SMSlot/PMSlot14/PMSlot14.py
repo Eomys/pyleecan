@@ -22,7 +22,7 @@ class PMSlot14(Gen_PMSlot14, QWidget):
     slot_name = "Polar Magnet with curved top"
     slot_type = SlotM14
 
-    def __init__(self, lamination=None):
+    def __init__(self, lamination=None, material_dict=None):
         """Initialize the widget according to lamination
 
         Parameters
@@ -31,6 +31,8 @@ class PMSlot14(Gen_PMSlot14, QWidget):
             A PMSlot14 widget
         lamination : Lamination
             current lamination to edit
+        material_dict: dict
+            Materials dictionary (library + machine)
         """
 
         # Build the interface according to the .ui file
@@ -38,6 +40,7 @@ class PMSlot14(Gen_PMSlot14, QWidget):
         self.setupUi(self)
         self.lamination = lamination
         self.slot = lamination.slot
+        self.material_dict = material_dict
 
         # Set FloatEdit unit
         self.lf_W0.unit = "rad"
@@ -64,12 +67,26 @@ class PMSlot14(Gen_PMSlot14, QWidget):
         # Display the main output of the slot (surface, height...)
         self.w_out.comp_output()
 
+        self.key_mat = None
+        self.w_mag.w_mat.setText("Magnet Material")
+        self.w_mag.w_mat.def_mat = "MagnetPrius"
+        self.w_mag.w_mat.update(lamination.magnet, "mat_type", self.material_dict)
+
+        self.w_mag.c_type_magnetization.currentIndexChanged.connect(
+            self.set_type_magnetization
+        )
+
         # Connect the signal
         self.lf_W0.editingFinished.connect(self.set_W0)
         self.lf_Wmag.editingFinished.connect(self.set_Wmag)
         self.lf_H0.editingFinished.connect(self.set_H0)
         self.lf_Hmag.editingFinished.connect(self.set_Hmag)
         self.lf_Rtopm.editingFinished.connect(self.set_Rtopm)
+
+    def set_type_magnetization(self, index):
+        self.lamination.magnet.type_magnetization = index
+        # Notify the machine GUI that the machine has changed
+        self.saveNeeded.emit()
 
     def set_W0(self):
         """Signal to update the value of W0 according to the line edit

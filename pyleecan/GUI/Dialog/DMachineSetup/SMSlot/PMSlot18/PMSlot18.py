@@ -22,7 +22,7 @@ class PMSlot18(Gen_PMSlot18, QWidget):
     slot_name = "Ring Magnet"
     slot_type = SlotM18
 
-    def __init__(self, lamination=None):
+    def __init__(self, lamination=None, material_dict=None):
         """Initialize the widget according to lamination
 
         Parameters
@@ -31,6 +31,8 @@ class PMSlot18(Gen_PMSlot18, QWidget):
             A PMSlot18 widget
         lamination : Lamination
             current lamination to edit
+        material_dict: dict
+            Materials dictionary (library + machine)
         """
 
         # Build the interface according to the .ui file
@@ -38,6 +40,7 @@ class PMSlot18(Gen_PMSlot18, QWidget):
         self.setupUi(self)
         self.lamination = lamination
         self.slot = lamination.slot
+        self.material_dict = material_dict
 
         # Set FloatEdit unit
         self.lf_Hmag.unit = "m"
@@ -53,8 +56,21 @@ class PMSlot18(Gen_PMSlot18, QWidget):
         # Display the main output of the slot (surface, height...)
         self.w_out.comp_output()
 
+        self.key_mat = None
+        self.w_mag.w_mat.setText("Magnet Material")
+        self.w_mag.w_mat.def_mat = "MagnetPrius"
+        self.w_mag.w_mat.update(lamination.magnet, "mat_type", self.material_dict)
+
+        self.w_mag.c_type_magnetization.currentIndexChanged.connect(
+            self.set_type_magnetization
+        )
         # Connect the signal
         self.lf_Hmag.editingFinished.connect(self.set_Hmag)
+
+    def set_type_magnetization(self, index):
+        self.lamination.magnet.type_magnetization = index
+        # Notify the machine GUI that the machine has changed
+        self.saveNeeded.emit()
 
     def set_Hmag(self):
         """Signal to update the value of Hmag according to the line edit
