@@ -89,6 +89,15 @@ class PMSlot11(Gen_PMSlot11, QWidget):
                     )
                 )
 
+        else:
+            self.key_mat = None
+            self.w_mag.w_mat.setText("Magnet Material")
+            self.w_mag.w_mat.def_mat = "MagnetPrius"
+            self.w_mag.w_mat.update(lamination.magnet, "mat_type", self.material_dict)
+            self.w_mag.c_type_magnetization.currentIndexChanged.connect(
+                self.set_type_magnetization
+            )
+
         # Fill the fields with the machine values (if they're filled)
         self.lf_W0.setValue(self.slot.W0)
         self.lf_Wmag.setValue(self.slot.Wmag)
@@ -97,15 +106,6 @@ class PMSlot11(Gen_PMSlot11, QWidget):
 
         # Display the main output of the slot (surface, height...)
         self.w_out.comp_output()
-
-        self.key_mat = None
-        self.w_mag.w_mat.setText("Magnet Material")
-        self.w_mag.w_mat.def_mat = "MagnetPrius"
-        self.w_mag.w_mat.update(lamination.magnet, "mat_type", self.material_dict)
-
-        self.w_mag.c_type_magnetization.currentIndexChanged.connect(
-            self.set_type_magnetization
-        )
 
         # Connect the signal
         self.lf_W0.editingFinished.connect(self.set_W0)
@@ -116,7 +116,7 @@ class PMSlot11(Gen_PMSlot11, QWidget):
         self.c_Wmag_unit.currentIndexChanged.connect(self.set_Wmag)
 
     def set_type_magnetization(self, index):
-        self.lamination.magnet.type_magnetization = index
+        self.w_mag.w_mat.machine.rotor.magnet.type_magnetization = index
         # Notify the machine GUI that the machine has changed
         self.saveNeeded.emit()
 
