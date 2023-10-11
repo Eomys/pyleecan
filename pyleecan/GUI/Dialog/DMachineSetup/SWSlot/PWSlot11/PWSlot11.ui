@@ -46,7 +46,7 @@
         <string/>
        </property>
        <property name="pixmap">
-        <pixmap resource="../../../../Resources/pyleecan.qrc">:/images/images/MachineSetup/WSlot/SlotW11_wind.png</pixmap>
+        <pixmap resource="../../../../Resources/pyleecan.qrc">:/images/images/MachineSetup/WSlot/SlotW11_wind_ext_stator.png</pixmap>
        </property>
        <property name="scaledContents">
         <bool>false</bool>
@@ -299,6 +299,19 @@ p, li { white-space: pre-wrap; }
         </widget>
        </item>
        <item>
+        <spacer name="verticalSpacer">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item>
         <widget class="WWSlotOut" name="w_out" native="true"/>
        </item>
       </layout>
@@ -334,6 +347,12 @@ p, li { white-space: pre-wrap; }
   <tabstop>lf_H0</tabstop>
   <tabstop>lf_H1</tabstop>
   <tabstop>lf_H2</tabstop>
+  <tabstop>lf_R1</tabstop>
+  <tabstop>g_wedge</tabstop>
+  <tabstop>c_H1_unit</tabstop>
+  <tabstop>is_cst_tooth</tabstop>
+  <tabstop>scrollArea</tabstop>
+  <tabstop>txt_constraint</tabstop>
  </tabstops>
  <resources>
   <include location="../../../../Resources/pyleecan.qrc"/>

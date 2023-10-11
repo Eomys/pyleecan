@@ -46,7 +46,7 @@
         <string/>
        </property>
        <property name="pixmap">
-        <pixmap resource="../../../../Resources/pyleecan.qrc">:/images/images/MachineSetup/WSlot/SlotW14_wind.png</pixmap>
+        <pixmap resource="../../../../Resources/pyleecan.qrc">:/images/images/MachineSetup/WSlot/SlotW14_wind_ext_stator.png</pixmap>
        </property>
        <property name="scaledContents">
         <bool>false</bool>
@@ -280,6 +280,9 @@
   <tabstop>lf_H0</tabstop>
   <tabstop>lf_H1</tabstop>
   <tabstop>lf_H3</tabstop>
+  <tabstop>g_wedge</tabstop>
+  <tabstop>c_wedge_type</tabstop>
+  <tabstop>scrollArea</tabstop>
  </tabstops>
  <resources>
   <include location="../../../../Resources/pyleecan.qrc"/>

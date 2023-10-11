@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import sys
-from os.path import dirname, abspath, normpath, join, realpath
+from os.path import dirname, abspath, normpath, join, realpath, basename, isfile
 from os import listdir, remove, system
 import json
 from datetime import datetime
@@ -29,7 +29,9 @@ exec("from " + soft_name + ".definitions import MAIN_DIR, DOC_DIR, INT_DIR")
 PACKAGE_LIST = ["Geometry", "Machine", "Material", "Slot", "Import"]
 
 
-def generate_code(root_path, gen_dict=None, soft_name="pyleecan", is_log=True):
+def generate_code(
+    root_path, gen_dict=None, soft_name="pyleecan", is_log=True, class_list=None
+):
     """Generate the package Classes code according to doc in root_path
 
     Parameters
@@ -42,6 +44,8 @@ def generate_code(root_path, gen_dict=None, soft_name="pyleecan", is_log=True):
         Name of the software to generate
     is_log : bool
         True to add the log related code (get_logger...)
+    class_list : list
+        List of class csv path to generate
 
     Returns
     -------
@@ -53,11 +57,22 @@ def generate_code(root_path, gen_dict=None, soft_name="pyleecan", is_log=True):
     print("Reading classes csv in: " + DOC_DIR)
     print("Saving generated files in: " + CLASS_DIR)
 
-    # Deleting all the previous class
-    print("Deleting old class files...")
-    for file_name in listdir(CLASS_DIR):
-        if file_name[0] != "_":
-            remove(join(CLASS_DIR, file_name))
+    if class_list is None:
+        # Deleting all the previous class
+        print("Deleting old class files...")
+        for file_name in listdir(CLASS_DIR):
+            if file_name[0] != "_":
+                remove(join(CLASS_DIR, file_name))
+    else:
+        # Deleting only given classes in class_list
+        class_name_list = list()
+        for csv_path in class_list:
+            class_name = basename(csv_path)[:-4]
+            class_name_list.append(class_name)
+            class_path_py = realpath(join(CLASS_DIR, class_name + ".py"))
+            if isfile(class_path_py):
+                print("Deleting python class file: " + class_path_py)
+                remove(class_path_py)
 
     # A file to import every classes quickly
     import_file = open(join(CLASS_DIR, "import_all.py"), "w")
@@ -84,10 +99,18 @@ def generate_code(root_path, gen_dict=None, soft_name="pyleecan", is_log=True):
             "from ..Classes." + class_name + " import " + class_name + "\n"
         )
         load_file.write('    "' + class_name + '": ' + class_name + ",\n")
-        print("Generation of " + class_name + " class")
-        generate_class(
-            gen_dict, class_name, CLASS_DIR, soft_name=soft_name, is_log=is_log
-        )
+        if class_list is None:
+            print("Generation of " + class_name + " class")
+            generate_class(
+                gen_dict, class_name, CLASS_DIR, soft_name=soft_name, is_log=is_log
+            )
+        else:
+            if class_name in class_name_list:
+                print("Generation of " + class_name + " class")
+                generate_class(
+                    gen_dict, class_name, CLASS_DIR, soft_name=soft_name, is_log=is_log
+                )
+
     import_file.close()
     load_file.write("}\n")
     load_file.close()
@@ -101,39 +124,66 @@ def generate_code(root_path, gen_dict=None, soft_name="pyleecan", is_log=True):
         json.dump(gen_dict, json_file, sort_keys=True, indent=4, separators=(",", ": "))
 
 
-if __name__ == "__main__":
+def run_generate_classes(
+    doc_dir=DOC_DIR,
+    int_dir=INT_DIR,
+    main_dir=MAIN_DIR,
+    is_black=True,
+    soft_name=soft_name,
+    is_log=is_log,
+    class_list=None,
+):
+    """Main function to generate classes"""
+
     IS_SDT = False
     SDT_PATH = ""  # To fill
+
     if IS_SDT:
-        MAIN_DIR = join(SDT_PATH, "SciDataTool")
-        DOC_DIR = join(MAIN_DIR, "Generator", "ClassesRef")
-        INT_DIR = join(MAIN_DIR, "Generator", "Internal")
+        main_dir = join(SDT_PATH, "SciDataTool")
+        doc_dir = join(main_dir, "Generator", "ClassesRef")
+        int_dir = join(main_dir, "Generator", "Internal")
         soft_name = "SciDataTool"
         is_log = False
-    gen_dict = read_all(
-        DOC_DIR,
-        is_internal=False,
-        in_path=INT_DIR,
-        soft_name=soft_name,
-    )
-    generate_code(
-        MAIN_DIR,
-        gen_dict,
-        soft_name=soft_name,
-        is_log=is_log,
-    )
-    # Run black
-    try:
-        import black
 
-        system('"{}" -m black {}'.format(sys.executable, MAIN_DIR))
-        if black.__version__.split(".")[0] != "20":
-            print("\n############################################")
-            print(
-                "WARNING: The official version of black for pyleecan is 20, please update your black version"
-            )
-            print("############################################\n")
-    except ImportError:
-        print("/!\\ Please install and run black (version 20) /!\\")
+    gen_dict = read_all(
+        doc_dir, is_internal=False, in_path=int_dir, soft_name=soft_name
+    )
+
+    generate_code(
+        main_dir, gen_dict, soft_name=soft_name, is_log=is_log, class_list=class_list
+    )
+
+    if is_black:
+        # Run black
+        try:
+            import black
+
+            if class_list is None:
+                system('"{}" -m black {}'.format(sys.executable, main_dir))
+            else:
+                for csv_path in class_list:
+                    class_name = basename(csv_path)[:-4]
+                    class_path_py = realpath(
+                        join(main_dir, "Classes", class_name + ".py")
+                    )
+                    out = system(
+                        '"{}" -m black --quiet {}'.format(sys.executable, class_path_py)
+                    )
+                    if out == 0:
+                        print("Reformatting python class file: " + class_path_py)
+                    else:
+                        print("Cannot reformat python class file: " + class_path_py)
+            if black.__version__.split(".")[0] != "20":
+                print("\n############################################")
+                print(
+                    "WARNING: The official version of black for pyleecan is 20, please update your black version"
+                )
+                print("############################################\n")
+        except ImportError:
+            print("/!\\ Please install and run black (version 20) /!\\")
     now = datetime.now()
     print("End at: ", now.strftime("%H:%M:%S"))
+
+
+if __name__ == "__main__":
+    run_generate_classes()

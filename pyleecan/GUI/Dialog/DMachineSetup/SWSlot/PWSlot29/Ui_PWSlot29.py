@@ -36,7 +36,7 @@ class Ui_PWSlot29(object):
         self.img_slot.setSizePolicy(sizePolicy)
         self.img_slot.setMaximumSize(QSize(16777215, 16777215))
         self.img_slot.setPixmap(
-            QPixmap(u":/images/images/MachineSetup/WSlot/SlotW29_wind.png")
+            QPixmap(u":/images/images/MachineSetup/WSlot/SlotW29_wind_ext_stator.png")
         )
         self.img_slot.setScaledContents(False)
         self.img_slot.setAlignment(Qt.AlignCenter)
@@ -212,7 +212,10 @@ class Ui_PWSlot29(object):
         QWidget.setTabOrder(self.lf_W2, self.lf_H0)
         QWidget.setTabOrder(self.lf_H0, self.lf_H1)
         QWidget.setTabOrder(self.lf_H1, self.lf_H2)
-        QWidget.setTabOrder(self.lf_H2, self.txt_constraint)
+        QWidget.setTabOrder(self.lf_H2, self.g_wedge)
+        QWidget.setTabOrder(self.g_wedge, self.c_wedge_type)
+        QWidget.setTabOrder(self.c_wedge_type, self.scrollArea)
+        QWidget.setTabOrder(self.scrollArea, self.txt_constraint)
 
         self.retranslateUi(PWSlot29)
 

@@ -172,6 +172,7 @@ class Test_Magnet_Type_12_meth(object):
         assert abs(ZM2) == pytest.approx(abs(ZM0), rel=DELTA)
         assert abs(ZM3) == pytest.approx(abs(ZM0), rel=DELTA)
 
+
 if __name__ == "__main__":
     a = Test_Magnet_Type_12_meth()
     for test_dict in Mag12_test:
