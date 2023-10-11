@@ -50,11 +50,14 @@ from pyleecan.Classes.HoleM61 import HoleM61
 from pyleecan.Classes.HoleM62 import HoleM62
 from pyleecan.Classes.HoleM63 import HoleM63
 from Tests import SCHEMATICS_PATH
+from Tests import SCHEMATICS_POINT_PATH
 from os.path import join, isdir, isfile
 from os import makedirs, remove
 
 if not isdir(SCHEMATICS_PATH):
     makedirs(SCHEMATICS_PATH)
+if not isdir(SCHEMATICS_POINT_PATH):
+    makedirs(SCHEMATICS_POINT_PATH)
 
 plot_test = list()
 
@@ -105,6 +108,7 @@ Hole_list = [
     HoleMLSRPM(),
     VentilationCirc(),
     VentilationPolar(),
+    VentilationTrap(),
     HoleM60(),
     HoleM61(),
     HoleM62(),
@@ -433,7 +437,7 @@ class Test_plot_schematics(object):
                     is_show_fig=False,
                 )
                 test_dict["type_add_active"] = 0
-                file_name = self.name(test_dict)
+                file_name = self.get_schematics_name(test_dict)
                 file_path = join(SCHEMATICS_PATH, file_name)
 
             plot_meth(
@@ -507,7 +511,7 @@ class Test_plot_schematics(object):
 
         """
         file_name = type(test_dict["test_obj"]).__name__ + "_point.png"
-        file_path = join(SCHEMATICS_PATH, file_name)
+        file_path = join(SCHEMATICS_POINT_PATH, file_name)
         # Delete previous plot
         if isfile(file_path):
             remove(file_path)
@@ -568,14 +572,16 @@ if __name__ == "__main__":
     a = Test_plot_schematics()
     # a.test_BoreFlower()
     # a.test_BoreSinePole()
-    a.test_slot(plot_test[53])
-    # a.test_slot_point(slot_test[9])
-    # a.test_slot(slot_test[15])
+    a.test_plot(plot_test[53])
+    a.test_plot_point(plot_test[53])
+    a.test_plot(plot_test[54])
+    a.test_plot_point(plot_test[54])
+    a.test_plot(plot_test[56])
     #
 
-    # for slot in slot_test:
-    #    a.test_slot(slot)
-    #   a.test_slot_point(slot)
+    # for plot in plot_test:
+    #    a.test_plot(plot)
+    #   a.test_plot_point(plot)
     #
     #
     # print("Done")
