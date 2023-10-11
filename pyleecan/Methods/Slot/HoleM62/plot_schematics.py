@@ -250,6 +250,7 @@ def plot_schematics(
         if save_path is not None:
             fig.savefig(save_path)
             plt.close(fig=fig)
+        fig.tight_layout()
 
         if is_show_fig:
             fig.show()

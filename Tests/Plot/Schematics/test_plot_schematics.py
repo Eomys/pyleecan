@@ -108,6 +108,7 @@ Hole_list = [
     HoleMLSRPM(),
     VentilationCirc(),
     VentilationPolar(),
+    VentilationTrap(),
     HoleM60(),
     HoleM61(),
     HoleM62(),
@@ -571,11 +572,11 @@ if __name__ == "__main__":
     a = Test_plot_schematics()
     # a.test_BoreFlower()
     # a.test_BoreSinePole()
-    a.test_plot(plot_test[52])
-    a.test_plot_point(plot_test[52])
     a.test_plot(plot_test[53])
     a.test_plot_point(plot_test[53])
-    a.test_plot(plot_test[55])
+    a.test_plot(plot_test[54])
+    a.test_plot_point(plot_test[54])
+    a.test_plot(plot_test[56])
     #
 
     # for plot in plot_test:
