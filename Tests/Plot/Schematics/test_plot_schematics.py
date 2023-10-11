@@ -47,6 +47,8 @@ from pyleecan.Classes.BoreFlower import BoreFlower
 from pyleecan.Classes.BoreSinePole import BoreSinePole
 from pyleecan.Classes.HoleM60 import HoleM60
 from pyleecan.Classes.HoleM61 import HoleM61
+from pyleecan.Classes.HoleM62 import HoleM62
+from pyleecan.Classes.HoleM63 import HoleM63
 from Tests import SCHEMATICS_PATH
 from os.path import join, isdir, isfile
 from os import makedirs, remove
@@ -104,6 +106,8 @@ Hole_list = [
     VentilationPolar(),
     HoleM60(),
     HoleM61(),
+    HoleM62(),
+    HoleM63(),
 ]
 
 
@@ -201,6 +205,20 @@ for hole in Hole_list:
         }
     )
 
+hole_test.append(
+    {
+        "test_obj": HoleM62(),
+        "type_add_active": 2,
+        "method_name": "plot_schematics_radial",
+    }
+)
+hole_test.append(
+    {
+        "test_obj": HoleM63(),
+        "type_add_active": 2,
+        "method_name": "plot_schematics_top_flat",
+    }
+)
 
 plot_test.extend(hole_test)
 
@@ -329,6 +347,12 @@ class Test_plot_schematics(object):
             and test_dict["method_name"] == "plot_schematics_radial"
         ):
             file_name = file_name + "_radial"
+
+        if (
+            "method_name" in test_dict
+            and test_dict["method_name"] == "plot_schematics_top_flat"
+        ):
+            file_name = file_name + "_top_flat"
 
         file_name = file_name + ".png"
         return file_name
@@ -503,14 +527,13 @@ if __name__ == "__main__":
     a = Test_plot_schematics()
     # a.test_BoreFlower()
     # a.test_BoreSinePole()
-    #a.test_plot(plot_test[44])
-    # a.test_plot_point(plot_test[47])
-    # a.test_plot(plot_test[13])
+    a.test_plot(plot_test[51])
+    a.test_plot_point(plot_test[51])
+    a.test_plot(plot_test[53])
     #
 
-    for slot in plot_test:
-        a.test_plot(slot)
-        a.test_plot_point(slot)
-    #
+    # for slot in slot_test:
+    #    a.test_slot(slot)
+    #    a.test_slot_point(slot)
     #
     # print("Done")
