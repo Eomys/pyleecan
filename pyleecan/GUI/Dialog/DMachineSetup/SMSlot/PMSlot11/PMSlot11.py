@@ -181,6 +181,10 @@ class PMSlot11(Gen_PMSlot11, QWidget):
         # Notify the machine GUI that the machine has changed
         self.saveNeeded.emit()
 
+    def emit_save(self):
+        """Send a saveNeeded signal to the DMachineSetup"""
+        self.saveNeeded.emit()
+
     @staticmethod
     def check(lam):
         """Check that the current machine have all the needed field set

@@ -25,6 +25,8 @@ class WWSlotMag(QGroupBox):
 
         QGroupBox.__init__(self, parent)
 
+        self.lamination = None  # lamination object to edit
+
         # Set main widget
         self.setTitle(self.tr("Magnet"))
         self.setMinimumSize(QSize(200, 0))
@@ -49,3 +51,24 @@ class WWSlotMag(QGroupBox):
         self.w_mat = WMatSelectV(self)
         self.w_mat.setObjectName("w_mat")
         self.layout.addWidget(self.w_mat)
+
+        self.c_type_magnetization.currentIndexChanged.connect(
+            self.set_type_magnetization
+        )
+
+    def update(self, lamination, material_dict):
+        self.lamination = lamination
+        self.material_dict = material_dict
+
+        self.w_mat.setText("Magnet Material")
+        self.w_mat.def_mat = "MagnetPrius"
+        self.w_mat.update(lamination.magnet, "mat_type", self.material_dict)
+
+        if lamination.magnet is None:
+            lamination.magnet.type_magnetization = 0
+
+    def set_type_magnetization(self, index):
+        self.lamination.magnet.type_magnetization = index
+
+        # Notify the machine GUI that the machine has changed
+        self.saveNeeded.emit()
