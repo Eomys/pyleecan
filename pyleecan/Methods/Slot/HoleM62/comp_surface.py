@@ -18,23 +18,23 @@ def comp_surface(self):
 
     """
     Rbo = self.get_Rbo()
-    if self.W0_is_rad:
+    if self.W0_is_rad:  # Polar Arc
         return (
             self.W0 * (Rbo - self.H1) ** 2 / 2
             - self.W0 * (Rbo - self.H1 - self.H0) ** 2 / 2
         )
 
-    else:
+    else:  # Parallel side
         Rbo = self.get_Rbo()
-
+        # Top surface
         alpha = 2 * arcsin((self.W0 / 2) / (Rbo - self.H1))
         Stop = ((Rbo - self.H1) ** 2) * (alpha - sin(alpha)) / 2
 
+        # Bottom surface
         point_dict = self._comp_point_coordinate()
         Z1 = point_dict["Z1"]
         R1 = abs(Z1)
-
         alpha = 2 * arcsin((self.W0 / 2) / R1)
-        R = R1**2 * (alpha - sin(alpha)) / 2
+        Sbot = R1 ** 2 * (alpha - sin(alpha)) / 2
 
-        return self.H0 * self.W0 + Stop - R
+        return self.H0 * self.W0 + Stop - Sbot
