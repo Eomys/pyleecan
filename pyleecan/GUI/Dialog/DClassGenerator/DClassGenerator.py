@@ -1,7 +1,7 @@
 import os
 import subprocess
 
-from os.path import join, isfile, isdir, realpath
+from os.path import join, isfile, isdir, realpath, basename
 from shutil import copyfile, rmtree, copytree
 from functools import partial
 from types import MethodType
@@ -245,7 +245,7 @@ class DClassGenerator(Ui_DClassGenerator, QWidget):
 
         if self.current_class_dict is not None:
             # Update GUI with data contained in self.current_class_dict
-            print("Selecting class: " + csv_path)
+            print("Selecting class " + class_name[-4:] + ": " + csv_path)
             self.set_class_selected()
 
     def set_class_selected(self):
@@ -947,13 +947,12 @@ class DClassGenerator(Ui_DClassGenerator, QWidget):
         # Get new method name path
         new_meth_path = join(current_method_folder_path, meth_name + ".py")
 
-        # Delete new file if it already exists since it should not be here
-        if isfile(new_meth_path):
-            print("Deleting method file that had same name and should not be here")
-            os.remove(new_meth_path)
-
         # Rename file if old file exists
         if isfile(old_meth_path):
+            # Delete new file if it already exists otherwise os.rename will crash
+            if isfile(new_meth_path):
+                print("Deleting method file that had same name and should not be here")
+                os.remove(new_meth_path)
             print("Renaming method file " + old_name + " to " + meth_name)
             os.rename(old_meth_path, new_meth_path)
 
@@ -1571,6 +1570,36 @@ class DClassGenerator(Ui_DClassGenerator, QWidget):
         # Check if current class is modified and should be saved
         self.check_class_modified()
 
+        # Check if each modified class has children and regenerate them
+        for csv_path in self.list_class_modified:
+            modified_class = basename(csv_path)[:-4]
+            if (
+                modified_class in self.parent_dict
+                and len(self.parent_dict[modified_class]) > 0
+            ):
+                print(
+                    "Regenerating classes: "
+                    + str(self.parent_dict[modified_class])
+                    + " as children of modified class: "
+                    + modified_class
+                )
+                self.list_class_modified.extend(self.parent_dict[modified_class])
+                # Check if each modified child has children and regenerate them
+                for modified_child in self.parent_dict[modified_class]:
+                    if (
+                        modified_child in self.parent_dict
+                        and len(self.parent_dict[modified_child]) > 0
+                    ):
+                        print(
+                            "Regenerating classes: "
+                            + str(self.parent_dict[modified_child])
+                            + " as children of modified class: "
+                            + modified_child
+                        )
+                        self.list_class_modified.extend(
+                            self.parent_dict[modified_child]
+                        )
+
         # Generate classes in list of modified classes
         run_generate_classes(
             is_black=self.is_black.isChecked(), class_list=self.list_class_modified
@@ -1582,37 +1611,37 @@ class DClassGenerator(Ui_DClassGenerator, QWidget):
         # Disable generate classes button
         self.b_genclass.setEnabled(False)
 
-        # Get new parent_dict after class generation
-        gen_dict = read_all(DOC_DIR, is_mother_of_mother=False)
-        parent_dict_new = dict()
-        for class_name, class_dict in gen_dict.items():
-            parent_dict_new[class_name] = sorted(class_dict["daughters"], key=str.lower)
+        # # Get new parent_dict after class generation
+        # gen_dict = read_all(DOC_DIR, is_mother_of_mother=False)
+        # parent_dict_new = dict()
+        # for class_name, class_dict in gen_dict.items():
+        #     parent_dict_new[class_name] = sorted(class_dict["daughters"], key=str.lower)
 
-        # Compare parent_dict
-        if len(parent_dict_new) != len(self.parent_dict):
-            print("Error: wrong number of classes in parent dict")
-        for (key0, val0), (key1, val1) in zip(
-            parent_dict_new.items(), self.parent_dict.items()
-        ):
-            if key0 != key1:
-                print(
-                    "Error: wrong class name in parent dict, got: " + str(key0),
-                    " expected: " + str(key1),
-                )
-            if len(val0) != len(val1):
-                print(
-                    "Error: wrong number of daughters for class "
-                    + key0
-                    + " in parent dict"
-                )
-            if val0 != val1:
-                print(
-                    "Error: wrong daughters names for class "
-                    + key0
-                    + " in parent dict, got: "
-                    + str(val0),
-                    " expected: " + str(val1),
-                )
+        # # Compare parent_dict
+        # if len(parent_dict_new) != len(self.parent_dict):
+        #     print("Error: wrong number of classes in parent dict")
+        # for (key0, val0), (key1, val1) in zip(
+        #     parent_dict_new.items(), self.parent_dict.items()
+        # ):
+        #     if key0 != key1:
+        #         print(
+        #             "Error: wrong class name in parent dict, got: " + str(key0),
+        #             " expected: " + str(key1),
+        #         )
+        #     if len(val0) != len(val1):
+        #         print(
+        #             "Error: wrong number of daughters for class "
+        #             + key0
+        #             + " in parent dict"
+        #         )
+        #     if val0 != val1:
+        #         print(
+        #             "Error: wrong daughters names for class "
+        #             + key0
+        #             + " in parent dict, got: "
+        #             + str(val0),
+        #             " expected: " + str(val1),
+        #         )
 
     def openContextMenu(self, position):
         """Generate and open context the menu at the given position
@@ -1728,6 +1757,11 @@ class DClassGenerator(Ui_DClassGenerator, QWidget):
 
             # Update class name label
             self.le_classname.setText(newName[:-4])
+
+            if oldName[:-4] in self.parent_dict:
+                # Update class name in parent_dict
+                children_list = self.parent_dict.pop(oldName[:-4])
+                self.parent_dict[newName[:-4]] = children_list
 
             if path_old in self.list_class_modified:
                 # Update class name in list of modified class
@@ -1941,9 +1975,10 @@ class DClassGenerator(Ui_DClassGenerator, QWidget):
                 )
 
         # Update parent dict
-        self.parent_dict[file_name[:-4] + "_copy"] = list(
-            self.parent_dict[file_name[:-4]]
-        )
+        if file_name[:-4] in self.parent_dict:
+            self.parent_dict[file_name[:-4] + "_copy"] = list(
+                self.parent_dict[file_name[:-4]]
+            )
 
     def createClass(self, index):
         """Create class by saving empty csv file

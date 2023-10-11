@@ -5705,16 +5705,17 @@
         "methods": [
             "build_geometry",
             "check",
+            "comp_angle_d_axis",
             "comp_masses",
             "comp_surfaces",
             "comp_volumes",
-            "plot",
-            "comp_angle_d_axis",
-            "get_magnet_number",
-            "set_Lmag",
-            "get_dim_active",
             "get_all_mag_obj",
-            "get_magnet_by_label"
+            "get_dim_active",
+            "get_magnet_by_label",
+            "get_magnet_number",
+            "get_polar_eq",
+            "plot",
+            "set_Lmag"
         ],
         "mother": "LamSlot",
         "name": "LamSlotMag",
@@ -7586,6 +7587,16 @@
                 "type": "SubdomainModel",
                 "unit": "",
                 "value": null
+            },
+            {
+                "as_dict": "",
+                "desc": "Scaling coefficient to calculate more or less harmonics in subdomains",
+                "max": "",
+                "min": "0",
+                "name": "Nharm_coeff",
+                "type": "float",
+                "unit": "",
+                "value": 1
             }
         ]
     },
@@ -16090,16 +16101,6 @@
             },
             {
                 "as_dict": "",
-                "desc": "Angle value at subdomain center",
-                "max": "",
-                "min": "0",
-                "name": "center_angle",
-                "type": "float",
-                "unit": "rad",
-                "value": null
-            },
-            {
-                "as_dict": "",
                 "desc": "Angular width of subdomain",
                 "max": "",
                 "min": "0",
@@ -16110,7 +16111,7 @@
             },
             {
                 "as_dict": "",
-                "desc": "Array of harmonic numbers",
+                "desc": "Array of harmonic numbers ",
                 "max": "",
                 "min": "0",
                 "name": "k",
@@ -16127,6 +16128,16 @@
                 "type": "int",
                 "unit": "",
                 "value": null
+            },
+            {
+                "as_dict": "",
+                "desc": "Relative permeability of subdomain",
+                "max": "",
+                "min": "1",
+                "name": "permeability_relative",
+                "type": "float",
+                "unit": "",
+                "value": 1
             }
         ]
     },
@@ -16154,17 +16165,37 @@
                 "max": "",
                 "min": "",
                 "name": "airgap",
-                "type": "SubdomainModel",
+                "type": "Subdomain_Airgap",
                 "unit": "",
                 "value": null
             },
             {
                 "as_dict": "",
-                "desc": "Periodicity",
+                "desc": "Spatial periodicity factor",
+                "max": "",
+                "min": "1",
+                "name": "per_a",
+                "type": "int",
+                "unit": "",
+                "value": null
+            },
+            {
+                "as_dict": "",
+                "desc": "Polar equivalent of machine",
                 "max": "",
                 "min": "",
-                "name": "periodicity",
-                "type": "dict",
+                "name": "machine_polar_eq",
+                "type": "Machine",
+                "unit": "",
+                "value": null
+            },
+            {
+                "as_dict": "",
+                "desc": "Spatial anti-periodicity factor",
+                "max": "",
+                "min": "1",
+                "name": "antiper_a",
+                "type": "int",
                 "unit": "",
                 "value": null
             }
@@ -16183,9 +16214,7 @@
         "methods": [
             "comp_interface_airgap_magnet",
             "comp_interface_airgap_slot",
-            "set_geometry",
-            "set_harmonics",
-            "set_magnetic_properties",
+            "set_subdomains",
             "solve"
         ],
         "mother": "SubdomainModel",
@@ -16365,6 +16394,16 @@
                 "max": "",
                 "min": "",
                 "name": "B",
+                "type": "ndarray",
+                "unit": "",
+                "value": null
+            },
+            {
+                "as_dict": "",
+                "desc": "Angle value at subdomain center",
+                "max": "",
+                "min": "",
+                "name": "center_angle",
                 "type": "ndarray",
                 "unit": "",
                 "value": null

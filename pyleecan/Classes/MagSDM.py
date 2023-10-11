@@ -50,6 +50,7 @@ class MagSDM(Magnetics):
     def __init__(
         self,
         subdomain_model=None,
+        Nharm_coeff=1,
         is_remove_slotS=False,
         is_remove_slotR=False,
         is_remove_ventS=False,
@@ -89,6 +90,8 @@ class MagSDM(Magnetics):
             # Overwrite default value with init_dict content
             if "subdomain_model" in list(init_dict.keys()):
                 subdomain_model = init_dict["subdomain_model"]
+            if "Nharm_coeff" in list(init_dict.keys()):
+                Nharm_coeff = init_dict["Nharm_coeff"]
             if "is_remove_slotS" in list(init_dict.keys()):
                 is_remove_slotS = init_dict["is_remove_slotS"]
             if "is_remove_slotR" in list(init_dict.keys()):
@@ -129,6 +132,7 @@ class MagSDM(Magnetics):
                 is_periodicity_rotor = init_dict["is_periodicity_rotor"]
         # Set the properties (value check and convertion are done in setter)
         self.subdomain_model = subdomain_model
+        self.Nharm_coeff = Nharm_coeff
         # Call Magnetics init
         super(MagSDM, self).__init__(
             is_remove_slotS=is_remove_slotS,
@@ -169,6 +173,7 @@ class MagSDM(Magnetics):
             MagSDM_str += "subdomain_model = " + tmp
         else:
             MagSDM_str += "subdomain_model = None" + linesep + linesep
+        MagSDM_str += "Nharm_coeff = " + str(self.Nharm_coeff) + linesep
         return MagSDM_str
 
     def __eq__(self, other):
@@ -181,6 +186,8 @@ class MagSDM(Magnetics):
         if not super(MagSDM, self).__eq__(other):
             return False
         if other.subdomain_model != self.subdomain_model:
+            return False
+        if other.Nharm_coeff != self.Nharm_coeff:
             return False
         return True
 
@@ -212,6 +219,25 @@ class MagSDM(Magnetics):
                     is_add_value=is_add_value,
                 )
             )
+        if (
+            other._Nharm_coeff is not None
+            and self._Nharm_coeff is not None
+            and isnan(other._Nharm_coeff)
+            and isnan(self._Nharm_coeff)
+        ):
+            pass
+        elif other._Nharm_coeff != self._Nharm_coeff:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._Nharm_coeff)
+                    + ", other="
+                    + str(other._Nharm_coeff)
+                    + ")"
+                )
+                diff_list.append(name + ".Nharm_coeff" + val_str)
+            else:
+                diff_list.append(name + ".Nharm_coeff")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -224,6 +250,7 @@ class MagSDM(Magnetics):
         # Get size of the properties inherited from Magnetics
         S += super(MagSDM, self).__sizeof__()
         S += getsizeof(self.subdomain_model)
+        S += getsizeof(self.Nharm_coeff)
         return S
 
     def as_dict(self, type_handle_ndarray=0, keep_function=False, **kwargs):
@@ -251,6 +278,7 @@ class MagSDM(Magnetics):
                 keep_function=keep_function,
                 **kwargs
             )
+        MagSDM_dict["Nharm_coeff"] = self.Nharm_coeff
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         MagSDM_dict["__class__"] = "MagSDM"
@@ -264,6 +292,7 @@ class MagSDM(Magnetics):
             subdomain_model_val = None
         else:
             subdomain_model_val = self.subdomain_model.copy()
+        Nharm_coeff_val = self.Nharm_coeff
         is_remove_slotS_val = self.is_remove_slotS
         is_remove_slotR_val = self.is_remove_slotR
         is_remove_ventS_val = self.is_remove_ventS
@@ -289,6 +318,7 @@ class MagSDM(Magnetics):
         # Creates new object of the same type with the copied properties
         obj_copy = type(self)(
             subdomain_model=subdomain_model_val,
+            Nharm_coeff=Nharm_coeff_val,
             is_remove_slotS=is_remove_slotS_val,
             is_remove_slotR=is_remove_slotR_val,
             is_remove_ventS=is_remove_ventS_val,
@@ -316,6 +346,7 @@ class MagSDM(Magnetics):
 
         if self.subdomain_model is not None:
             self.subdomain_model._set_None()
+        self.Nharm_coeff = None
         # Set to None the properties inherited from Magnetics
         super(MagSDM, self)._set_None()
 
@@ -355,5 +386,24 @@ class MagSDM(Magnetics):
         doc=u"""The subdomain model object defined to calculate airgap flux density
 
         :Type: SubdomainModel
+        """,
+    )
+
+    def _get_Nharm_coeff(self):
+        """getter of Nharm_coeff"""
+        return self._Nharm_coeff
+
+    def _set_Nharm_coeff(self, value):
+        """setter of Nharm_coeff"""
+        check_var("Nharm_coeff", value, "float", Vmin=0)
+        self._Nharm_coeff = value
+
+    Nharm_coeff = property(
+        fget=_get_Nharm_coeff,
+        fset=_set_Nharm_coeff,
+        doc=u"""Scaling coefficient to calculate more or less harmonics in subdomains
+
+        :Type: float
+        :min: 0
         """,
     )

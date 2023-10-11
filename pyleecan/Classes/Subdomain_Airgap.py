@@ -361,7 +361,7 @@ class Subdomain_Airgap(Subdomain):
     A = property(
         fget=_get_A,
         fset=_set_A,
-        doc=u"""First integration constant function of harmonic number and time
+        doc="""First integration constant function of harmonic number and time
 
         :Type: ndarray
         """,
@@ -386,7 +386,7 @@ class Subdomain_Airgap(Subdomain):
     B = property(
         fget=_get_B,
         fset=_set_B,
-        doc=u"""Second integration constant function of harmonic number and time
+        doc="""Second integration constant function of harmonic number and time
 
         :Type: ndarray
         """,
@@ -411,7 +411,7 @@ class Subdomain_Airgap(Subdomain):
     C = property(
         fget=_get_C,
         fset=_set_C,
-        doc=u"""Third integration constant function of harmonic number and time
+        doc="""Third integration constant function of harmonic number and time
 
         :Type: ndarray
         """,
@@ -436,7 +436,7 @@ class Subdomain_Airgap(Subdomain):
     D = property(
         fget=_get_D,
         fset=_set_D,
-        doc=u"""Fourth integration constant function of harmonic number and time
+        doc="""Fourth integration constant function of harmonic number and time
 
         :Type: ndarray
         """,

@@ -29,7 +29,15 @@ class SubdomainModel(FrozenClass):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, airgap=None, periodicity=None, init_dict=None, init_str=None):
+    def __init__(
+        self,
+        airgap=None,
+        per_a=None,
+        machine_polar_eq=None,
+        antiper_a=None,
+        init_dict=None,
+        init_str=None,
+    ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -47,12 +55,18 @@ class SubdomainModel(FrozenClass):
             # Overwrite default value with init_dict content
             if "airgap" in list(init_dict.keys()):
                 airgap = init_dict["airgap"]
-            if "periodicity" in list(init_dict.keys()):
-                periodicity = init_dict["periodicity"]
+            if "per_a" in list(init_dict.keys()):
+                per_a = init_dict["per_a"]
+            if "machine_polar_eq" in list(init_dict.keys()):
+                machine_polar_eq = init_dict["machine_polar_eq"]
+            if "antiper_a" in list(init_dict.keys()):
+                antiper_a = init_dict["antiper_a"]
         # Set the properties (value check and convertion are done in setter)
         self.parent = None
         self.airgap = airgap
-        self.periodicity = periodicity
+        self.per_a = per_a
+        self.machine_polar_eq = machine_polar_eq
+        self.antiper_a = antiper_a
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -72,7 +86,17 @@ class SubdomainModel(FrozenClass):
             SubdomainModel_str += "airgap = " + tmp
         else:
             SubdomainModel_str += "airgap = None" + linesep + linesep
-        SubdomainModel_str += "periodicity = " + str(self.periodicity) + linesep
+        SubdomainModel_str += "per_a = " + str(self.per_a) + linesep
+        if self.machine_polar_eq is not None:
+            tmp = (
+                self.machine_polar_eq.__str__()
+                .replace(linesep, linesep + "\t")
+                .rstrip("\t")
+            )
+            SubdomainModel_str += "machine_polar_eq = " + tmp
+        else:
+            SubdomainModel_str += "machine_polar_eq = None" + linesep + linesep
+        SubdomainModel_str += "antiper_a = " + str(self.antiper_a) + linesep
         return SubdomainModel_str
 
     def __eq__(self, other):
@@ -82,7 +106,11 @@ class SubdomainModel(FrozenClass):
             return False
         if other.airgap != self.airgap:
             return False
-        if other.periodicity != self.periodicity:
+        if other.per_a != self.per_a:
+            return False
+        if other.machine_polar_eq != self.machine_polar_eq:
+            return False
+        if other.antiper_a != self.antiper_a:
             return False
         return True
 
@@ -107,18 +135,39 @@ class SubdomainModel(FrozenClass):
                     is_add_value=is_add_value,
                 )
             )
-        if other._periodicity != self._periodicity:
+        if other._per_a != self._per_a:
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._per_a) + ", other=" + str(other._per_a) + ")"
+                )
+                diff_list.append(name + ".per_a" + val_str)
+            else:
+                diff_list.append(name + ".per_a")
+        if (other.machine_polar_eq is None and self.machine_polar_eq is not None) or (
+            other.machine_polar_eq is not None and self.machine_polar_eq is None
+        ):
+            diff_list.append(name + ".machine_polar_eq None mismatch")
+        elif self.machine_polar_eq is not None:
+            diff_list.extend(
+                self.machine_polar_eq.compare(
+                    other.machine_polar_eq,
+                    name=name + ".machine_polar_eq",
+                    ignore_list=ignore_list,
+                    is_add_value=is_add_value,
+                )
+            )
+        if other._antiper_a != self._antiper_a:
             if is_add_value:
                 val_str = (
                     " (self="
-                    + str(self._periodicity)
+                    + str(self._antiper_a)
                     + ", other="
-                    + str(other._periodicity)
+                    + str(other._antiper_a)
                     + ")"
                 )
-                diff_list.append(name + ".periodicity" + val_str)
+                diff_list.append(name + ".antiper_a" + val_str)
             else:
-                diff_list.append(name + ".periodicity")
+                diff_list.append(name + ".antiper_a")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -128,9 +177,9 @@ class SubdomainModel(FrozenClass):
 
         S = 0  # Full size of the object
         S += getsizeof(self.airgap)
-        if self.periodicity is not None:
-            for key, value in self.periodicity.items():
-                S += getsizeof(value) + getsizeof(key)
+        S += getsizeof(self.per_a)
+        S += getsizeof(self.machine_polar_eq)
+        S += getsizeof(self.antiper_a)
         return S
 
     def as_dict(self, type_handle_ndarray=0, keep_function=False, **kwargs):
@@ -153,9 +202,16 @@ class SubdomainModel(FrozenClass):
                 keep_function=keep_function,
                 **kwargs
             )
-        SubdomainModel_dict["periodicity"] = (
-            self.periodicity.copy() if self.periodicity is not None else None
-        )
+        SubdomainModel_dict["per_a"] = self.per_a
+        if self.machine_polar_eq is None:
+            SubdomainModel_dict["machine_polar_eq"] = None
+        else:
+            SubdomainModel_dict["machine_polar_eq"] = self.machine_polar_eq.as_dict(
+                type_handle_ndarray=type_handle_ndarray,
+                keep_function=keep_function,
+                **kwargs
+            )
+        SubdomainModel_dict["antiper_a"] = self.antiper_a
         # The class name is added to the dict for deserialisation purpose
         SubdomainModel_dict["__class__"] = "SubdomainModel"
         return SubdomainModel_dict
@@ -168,12 +224,19 @@ class SubdomainModel(FrozenClass):
             airgap_val = None
         else:
             airgap_val = self.airgap.copy()
-        if self.periodicity is None:
-            periodicity_val = None
+        per_a_val = self.per_a
+        if self.machine_polar_eq is None:
+            machine_polar_eq_val = None
         else:
-            periodicity_val = self.periodicity.copy()
+            machine_polar_eq_val = self.machine_polar_eq.copy()
+        antiper_a_val = self.antiper_a
         # Creates new object of the same type with the copied properties
-        obj_copy = type(self)(airgap=airgap_val, periodicity=periodicity_val)
+        obj_copy = type(self)(
+            airgap=airgap_val,
+            per_a=per_a_val,
+            machine_polar_eq=machine_polar_eq_val,
+            antiper_a=antiper_a_val,
+        )
         return obj_copy
 
     def _set_None(self):
@@ -181,7 +244,10 @@ class SubdomainModel(FrozenClass):
 
         if self.airgap is not None:
             self.airgap._set_None()
-        self.periodicity = None
+        self.per_a = None
+        if self.machine_polar_eq is not None:
+            self.machine_polar_eq._set_None()
+        self.antiper_a = None
 
     def _get_airgap(self):
         """getter of airgap"""
@@ -203,11 +269,11 @@ class SubdomainModel(FrozenClass):
             )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
-            SubdomainModel = import_class(
-                "pyleecan.Classes", "SubdomainModel", "airgap"
+            Subdomain_Airgap = import_class(
+                "pyleecan.Classes", "Subdomain_Airgap", "airgap"
             )
-            value = SubdomainModel()
-        check_var("airgap", value, "SubdomainModel")
+            value = Subdomain_Airgap()
+        check_var("airgap", value, "Subdomain_Airgap")
         self._airgap = value
 
         if self._airgap is not None:
@@ -218,26 +284,81 @@ class SubdomainModel(FrozenClass):
         fset=_set_airgap,
         doc=u"""Airgap subdomain
 
-        :Type: SubdomainModel
+        :Type: Subdomain_Airgap
         """,
     )
 
-    def _get_periodicity(self):
-        """getter of periodicity"""
-        return self._periodicity
+    def _get_per_a(self):
+        """getter of per_a"""
+        return self._per_a
 
-    def _set_periodicity(self, value):
-        """setter of periodicity"""
-        if type(value) is int and value == -1:
-            value = dict()
-        check_var("periodicity", value, "dict")
-        self._periodicity = value
+    def _set_per_a(self, value):
+        """setter of per_a"""
+        check_var("per_a", value, "int", Vmin=1)
+        self._per_a = value
 
-    periodicity = property(
-        fget=_get_periodicity,
-        fset=_set_periodicity,
-        doc=u"""Periodicity
+    per_a = property(
+        fget=_get_per_a,
+        fset=_set_per_a,
+        doc=u"""Spatial periodicity factor
 
-        :Type: dict
+        :Type: int
+        :min: 1
+        """,
+    )
+
+    def _get_machine_polar_eq(self):
+        """getter of machine_polar_eq"""
+        return self._machine_polar_eq
+
+    def _set_machine_polar_eq(self, value):
+        """setter of machine_polar_eq"""
+        if isinstance(value, str):  # Load from file
+            try:
+                value = load_init_dict(value)[1]
+            except Exception as e:
+                self.get_logger().error(
+                    "Error while loading " + value + ", setting None instead"
+                )
+                value = None
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class(
+                "pyleecan.Classes", value.get("__class__"), "machine_polar_eq"
+            )
+            value = class_obj(init_dict=value)
+        elif type(value) is int and value == -1:  # Default constructor
+            Machine = import_class("pyleecan.Classes", "Machine", "machine_polar_eq")
+            value = Machine()
+        check_var("machine_polar_eq", value, "Machine")
+        self._machine_polar_eq = value
+
+        if self._machine_polar_eq is not None:
+            self._machine_polar_eq.parent = self
+
+    machine_polar_eq = property(
+        fget=_get_machine_polar_eq,
+        fset=_set_machine_polar_eq,
+        doc=u"""Polar equivalent of machine
+
+        :Type: Machine
+        """,
+    )
+
+    def _get_antiper_a(self):
+        """getter of antiper_a"""
+        return self._antiper_a
+
+    def _set_antiper_a(self, value):
+        """setter of antiper_a"""
+        check_var("antiper_a", value, "int", Vmin=1)
+        self._antiper_a = value
+
+    antiper_a = property(
+        fget=_get_antiper_a,
+        fset=_set_antiper_a,
+        doc=u"""Spatial anti-periodicity factor
+
+        :Type: int
+        :min: 1
         """,
     )

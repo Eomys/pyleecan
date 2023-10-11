@@ -32,21 +32,9 @@ except ImportError as error:
     comp_interface_airgap_slot = error
 
 try:
-    from ..Methods.Simulation.SubdomainModel_SPMSM.set_geometry import set_geometry
+    from ..Methods.Simulation.SubdomainModel_SPMSM.set_subdomains import set_subdomains
 except ImportError as error:
-    set_geometry = error
-
-try:
-    from ..Methods.Simulation.SubdomainModel_SPMSM.set_harmonics import set_harmonics
-except ImportError as error:
-    set_harmonics = error
-
-try:
-    from ..Methods.Simulation.SubdomainModel_SPMSM.set_magnetic_properties import (
-        set_magnetic_properties,
-    )
-except ImportError as error:
-    set_magnetic_properties = error
+    set_subdomains = error
 
 try:
     from ..Methods.Simulation.SubdomainModel_SPMSM.solve import solve
@@ -88,42 +76,18 @@ class SubdomainModel_SPMSM(SubdomainModel):
         )
     else:
         comp_interface_airgap_slot = comp_interface_airgap_slot
-    # cf Methods.Simulation.SubdomainModel_SPMSM.set_geometry
-    if isinstance(set_geometry, ImportError):
-        set_geometry = property(
+    # cf Methods.Simulation.SubdomainModel_SPMSM.set_subdomains
+    if isinstance(set_subdomains, ImportError):
+        set_subdomains = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use SubdomainModel_SPMSM method set_geometry: "
-                    + str(set_geometry)
+                    "Can't use SubdomainModel_SPMSM method set_subdomains: "
+                    + str(set_subdomains)
                 )
             )
         )
     else:
-        set_geometry = set_geometry
-    # cf Methods.Simulation.SubdomainModel_SPMSM.set_harmonics
-    if isinstance(set_harmonics, ImportError):
-        set_harmonics = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use SubdomainModel_SPMSM method set_harmonics: "
-                    + str(set_harmonics)
-                )
-            )
-        )
-    else:
-        set_harmonics = set_harmonics
-    # cf Methods.Simulation.SubdomainModel_SPMSM.set_magnetic_properties
-    if isinstance(set_magnetic_properties, ImportError):
-        set_magnetic_properties = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use SubdomainModel_SPMSM method set_magnetic_properties: "
-                    + str(set_magnetic_properties)
-                )
-            )
-        )
-    else:
-        set_magnetic_properties = set_magnetic_properties
+        set_subdomains = set_subdomains
     # cf Methods.Simulation.SubdomainModel_SPMSM.solve
     if isinstance(solve, ImportError):
         solve = property(
@@ -147,7 +111,9 @@ class SubdomainModel_SPMSM(SubdomainModel):
         rotor_magnet_surface=None,
         rotor_yoke=None,
         airgap=None,
-        periodicity=None,
+        per_a=None,
+        machine_polar_eq=None,
+        antiper_a=None,
         init_dict=None,
         init_str=None,
     ):
@@ -176,8 +142,12 @@ class SubdomainModel_SPMSM(SubdomainModel):
                 rotor_yoke = init_dict["rotor_yoke"]
             if "airgap" in list(init_dict.keys()):
                 airgap = init_dict["airgap"]
-            if "periodicity" in list(init_dict.keys()):
-                periodicity = init_dict["periodicity"]
+            if "per_a" in list(init_dict.keys()):
+                per_a = init_dict["per_a"]
+            if "machine_polar_eq" in list(init_dict.keys()):
+                machine_polar_eq = init_dict["machine_polar_eq"]
+            if "antiper_a" in list(init_dict.keys()):
+                antiper_a = init_dict["antiper_a"]
         # Set the properties (value check and convertion are done in setter)
         self.stator_slot = stator_slot
         self.stator_slot_opening = stator_slot_opening
@@ -185,7 +155,10 @@ class SubdomainModel_SPMSM(SubdomainModel):
         self.rotor_yoke = rotor_yoke
         # Call SubdomainModel init
         super(SubdomainModel_SPMSM, self).__init__(
-            airgap=airgap, periodicity=periodicity
+            airgap=airgap,
+            per_a=per_a,
+            machine_polar_eq=machine_polar_eq,
+            antiper_a=antiper_a,
         )
         # The class is frozen (in SubdomainModel init), for now it's impossible to
         # add new properties
@@ -421,10 +394,12 @@ class SubdomainModel_SPMSM(SubdomainModel):
             airgap_val = None
         else:
             airgap_val = self.airgap.copy()
-        if self.periodicity is None:
-            periodicity_val = None
+        per_a_val = self.per_a
+        if self.machine_polar_eq is None:
+            machine_polar_eq_val = None
         else:
-            periodicity_val = self.periodicity.copy()
+            machine_polar_eq_val = self.machine_polar_eq.copy()
+        antiper_a_val = self.antiper_a
         # Creates new object of the same type with the copied properties
         obj_copy = type(self)(
             stator_slot=stator_slot_val,
@@ -432,7 +407,9 @@ class SubdomainModel_SPMSM(SubdomainModel):
             rotor_magnet_surface=rotor_magnet_surface_val,
             rotor_yoke=rotor_yoke_val,
             airgap=airgap_val,
-            periodicity=periodicity_val,
+            per_a=per_a_val,
+            machine_polar_eq=machine_polar_eq_val,
+            antiper_a=antiper_a_val,
         )
         return obj_copy
 

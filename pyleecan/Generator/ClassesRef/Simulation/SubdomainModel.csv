@@ -1,6 +1,8 @@
 Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,as_dict Type
-airgap,,Airgap subdomain,,SubdomainModel,None,,,
-periodicity,,Periodicity,,dict,None,,,
+airgap,,Airgap subdomain,,Subdomain_Airgap,None,,,
+per_a,,Spatial periodicity factor,,int,None,1,,
+machine_polar_eq,,Polar equivalent of machine,,Machine,None,,,
+antiper_a,,Spatial anti-periodicity factor,,int,None,1,,
 ,,,,,,,,
 Package,Inherit,Methods,Constant Name,Constant Value,Class description,,,
 Simulation,,,VERSION,1,Abstract class for all the Subdomain model classes,,,

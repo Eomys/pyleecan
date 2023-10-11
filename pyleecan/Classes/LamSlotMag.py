@@ -28,6 +28,11 @@ except ImportError as error:
     check = error
 
 try:
+    from ..Methods.Machine.LamSlotMag.comp_angle_d_axis import comp_angle_d_axis
+except ImportError as error:
+    comp_angle_d_axis = error
+
+try:
     from ..Methods.Machine.LamSlotMag.comp_masses import comp_masses
 except ImportError as error:
     comp_masses = error
@@ -43,24 +48,9 @@ except ImportError as error:
     comp_volumes = error
 
 try:
-    from ..Methods.Machine.LamSlotMag.plot import plot
+    from ..Methods.Machine.LamSlotMag.get_all_mag_obj import get_all_mag_obj
 except ImportError as error:
-    plot = error
-
-try:
-    from ..Methods.Machine.LamSlotMag.comp_angle_d_axis import comp_angle_d_axis
-except ImportError as error:
-    comp_angle_d_axis = error
-
-try:
-    from ..Methods.Machine.LamSlotMag.get_magnet_number import get_magnet_number
-except ImportError as error:
-    get_magnet_number = error
-
-try:
-    from ..Methods.Machine.LamSlotMag.set_Lmag import set_Lmag
-except ImportError as error:
-    set_Lmag = error
+    get_all_mag_obj = error
 
 try:
     from ..Methods.Machine.LamSlotMag.get_dim_active import get_dim_active
@@ -68,14 +58,29 @@ except ImportError as error:
     get_dim_active = error
 
 try:
-    from ..Methods.Machine.LamSlotMag.get_all_mag_obj import get_all_mag_obj
-except ImportError as error:
-    get_all_mag_obj = error
-
-try:
     from ..Methods.Machine.LamSlotMag.get_magnet_by_label import get_magnet_by_label
 except ImportError as error:
     get_magnet_by_label = error
+
+try:
+    from ..Methods.Machine.LamSlotMag.get_magnet_number import get_magnet_number
+except ImportError as error:
+    get_magnet_number = error
+
+try:
+    from ..Methods.Machine.LamSlotMag.get_polar_eq import get_polar_eq
+except ImportError as error:
+    get_polar_eq = error
+
+try:
+    from ..Methods.Machine.LamSlotMag.plot import plot
+except ImportError as error:
+    plot = error
+
+try:
+    from ..Methods.Machine.LamSlotMag.set_Lmag import set_Lmag
+except ImportError as error:
+    set_Lmag = error
 
 
 from numpy import array, array_equal
@@ -109,6 +114,18 @@ class LamSlotMag(LamSlot):
         )
     else:
         check = check
+    # cf Methods.Machine.LamSlotMag.comp_angle_d_axis
+    if isinstance(comp_angle_d_axis, ImportError):
+        comp_angle_d_axis = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use LamSlotMag method comp_angle_d_axis: "
+                    + str(comp_angle_d_axis)
+                )
+            )
+        )
+    else:
+        comp_angle_d_axis = comp_angle_d_axis
     # cf Methods.Machine.LamSlotMag.comp_masses
     if isinstance(comp_masses, ImportError):
         comp_masses = property(
@@ -142,59 +159,6 @@ class LamSlotMag(LamSlot):
         )
     else:
         comp_volumes = comp_volumes
-    # cf Methods.Machine.LamSlotMag.plot
-    if isinstance(plot, ImportError):
-        plot = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use LamSlotMag method plot: " + str(plot))
-            )
-        )
-    else:
-        plot = plot
-    # cf Methods.Machine.LamSlotMag.comp_angle_d_axis
-    if isinstance(comp_angle_d_axis, ImportError):
-        comp_angle_d_axis = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use LamSlotMag method comp_angle_d_axis: "
-                    + str(comp_angle_d_axis)
-                )
-            )
-        )
-    else:
-        comp_angle_d_axis = comp_angle_d_axis
-    # cf Methods.Machine.LamSlotMag.get_magnet_number
-    if isinstance(get_magnet_number, ImportError):
-        get_magnet_number = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use LamSlotMag method get_magnet_number: "
-                    + str(get_magnet_number)
-                )
-            )
-        )
-    else:
-        get_magnet_number = get_magnet_number
-    # cf Methods.Machine.LamSlotMag.set_Lmag
-    if isinstance(set_Lmag, ImportError):
-        set_Lmag = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use LamSlotMag method set_Lmag: " + str(set_Lmag))
-            )
-        )
-    else:
-        set_Lmag = set_Lmag
-    # cf Methods.Machine.LamSlotMag.get_dim_active
-    if isinstance(get_dim_active, ImportError):
-        get_dim_active = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use LamSlotMag method get_dim_active: " + str(get_dim_active)
-                )
-            )
-        )
-    else:
-        get_dim_active = get_dim_active
     # cf Methods.Machine.LamSlotMag.get_all_mag_obj
     if isinstance(get_all_mag_obj, ImportError):
         get_all_mag_obj = property(
@@ -207,6 +171,17 @@ class LamSlotMag(LamSlot):
         )
     else:
         get_all_mag_obj = get_all_mag_obj
+    # cf Methods.Machine.LamSlotMag.get_dim_active
+    if isinstance(get_dim_active, ImportError):
+        get_dim_active = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use LamSlotMag method get_dim_active: " + str(get_dim_active)
+                )
+            )
+        )
+    else:
+        get_dim_active = get_dim_active
     # cf Methods.Machine.LamSlotMag.get_magnet_by_label
     if isinstance(get_magnet_by_label, ImportError):
         get_magnet_by_label = property(
@@ -219,6 +194,47 @@ class LamSlotMag(LamSlot):
         )
     else:
         get_magnet_by_label = get_magnet_by_label
+    # cf Methods.Machine.LamSlotMag.get_magnet_number
+    if isinstance(get_magnet_number, ImportError):
+        get_magnet_number = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use LamSlotMag method get_magnet_number: "
+                    + str(get_magnet_number)
+                )
+            )
+        )
+    else:
+        get_magnet_number = get_magnet_number
+    # cf Methods.Machine.LamSlotMag.get_polar_eq
+    if isinstance(get_polar_eq, ImportError):
+        get_polar_eq = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use LamSlotMag method get_polar_eq: " + str(get_polar_eq)
+                )
+            )
+        )
+    else:
+        get_polar_eq = get_polar_eq
+    # cf Methods.Machine.LamSlotMag.plot
+    if isinstance(plot, ImportError):
+        plot = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use LamSlotMag method plot: " + str(plot))
+            )
+        )
+    else:
+        plot = plot
+    # cf Methods.Machine.LamSlotMag.set_Lmag
+    if isinstance(set_Lmag, ImportError):
+        set_Lmag = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use LamSlotMag method set_Lmag: " + str(set_Lmag))
+            )
+        )
+    else:
+        set_Lmag = set_Lmag
     # generic save method is available in all object
     save = save
     # get_logger method is available in all object

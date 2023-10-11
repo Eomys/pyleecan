@@ -1,5 +1,6 @@
 Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,as_dict Type
 subdomain_model,,The subdomain model object defined to calculate airgap flux density,,SubdomainModel,None,,,
+Nharm_coeff,,Scaling coefficient to calculate more or less harmonics in subdomains,,float,1,0,,
 ,,,,,,,,
 Package,Inherit,Methods,Constant Name,Constant Value,Class description,,,
 Simulation,Magnetics,comp_flux_airgap,VERSION,1,,,,

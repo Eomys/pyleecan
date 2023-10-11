@@ -3,9 +3,6 @@ from numpy import pi
 
 from ....Classes.MachineSIPMSM import MachineSIPMSM
 from ....Classes.SubdomainModel_SPMSM import SubdomainModel_SPMSM
-from ....Classes.Subdomain_Airgap import Subdomain_Airgap
-from ....Classes.Subdomain_MagnetSurface import Subdomain_MagnetSurface
-from ....Classes.Subdomain_SlotWinding import Subdomain_SlotWinding
 
 
 def comp_flux_airgap(self, output, axes_dict, Is_val=None, Ir_val=None):
@@ -68,20 +65,14 @@ def comp_flux_airgap(self, output, axes_dict, Is_val=None, Ir_val=None):
     angle_rotor = output.get_angle_rotor()[0:Nt]
 
     # Define SubDomain Model depending on machine type
-    if isinstance(output.simu.machine, MachineSIPMSM):
+    machine = output.simu.machine
+    if isinstance(machine, MachineSIPMSM):
         self.subdomain_model = SubdomainModel_SPMSM(
-            airgap=Subdomain_Airgap(
-                periodicity=1, center_angle=0, angular_width=2 * pi
-            ),
-            slot=Subdomain_SlotWinding(),
-            magnet_surface=Subdomain_MagnetSurface(
-                periodicity=1, center_angle=0, angular_width=2 * pi
-            ),
-            periodicity=sym,
+            per_a=sym, antiper_a=2 if is_antiper_a else 1
         )
 
-    self.subdomain_model.set_geometry()
+    self.subdomain_model.machine_polar_eq = machine.get_polar_eq()
 
-    self.subdomain_model.set_harmonics()
+    self.subdomain_model.set_subdomains(Nharm_coeff=self.Nharm_coeff)
 
     self.subdomain_model.solve()

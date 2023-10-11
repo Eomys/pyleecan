@@ -53,10 +53,10 @@ class Subdomain(FrozenClass):
         self,
         radius_min=None,
         radius_max=None,
-        center_angle=None,
         angular_width=None,
         k=None,
         periodicity=None,
+        permeability_relative=1,
         init_dict=None,
         init_str=None,
     ):
@@ -79,22 +79,22 @@ class Subdomain(FrozenClass):
                 radius_min = init_dict["radius_min"]
             if "radius_max" in list(init_dict.keys()):
                 radius_max = init_dict["radius_max"]
-            if "center_angle" in list(init_dict.keys()):
-                center_angle = init_dict["center_angle"]
             if "angular_width" in list(init_dict.keys()):
                 angular_width = init_dict["angular_width"]
             if "k" in list(init_dict.keys()):
                 k = init_dict["k"]
             if "periodicity" in list(init_dict.keys()):
                 periodicity = init_dict["periodicity"]
+            if "permeability_relative" in list(init_dict.keys()):
+                permeability_relative = init_dict["permeability_relative"]
         # Set the properties (value check and convertion are done in setter)
         self.parent = None
         self.radius_min = radius_min
         self.radius_max = radius_max
-        self.center_angle = center_angle
         self.angular_width = angular_width
         self.k = k
         self.periodicity = periodicity
+        self.permeability_relative = permeability_relative
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -109,7 +109,6 @@ class Subdomain(FrozenClass):
             Subdomain_str += "parent = " + str(type(self.parent)) + " object" + linesep
         Subdomain_str += "radius_min = " + str(self.radius_min) + linesep
         Subdomain_str += "radius_max = " + str(self.radius_max) + linesep
-        Subdomain_str += "center_angle = " + str(self.center_angle) + linesep
         Subdomain_str += "angular_width = " + str(self.angular_width) + linesep
         Subdomain_str += (
             "k = "
@@ -119,6 +118,9 @@ class Subdomain(FrozenClass):
             + linesep
         )
         Subdomain_str += "periodicity = " + str(self.periodicity) + linesep
+        Subdomain_str += (
+            "permeability_relative = " + str(self.permeability_relative) + linesep
+        )
         return Subdomain_str
 
     def __eq__(self, other):
@@ -130,13 +132,13 @@ class Subdomain(FrozenClass):
             return False
         if other.radius_max != self.radius_max:
             return False
-        if other.center_angle != self.center_angle:
-            return False
         if other.angular_width != self.angular_width:
             return False
         if not array_equal(other.k, self.k):
             return False
         if other.periodicity != self.periodicity:
+            return False
+        if other.permeability_relative != self.permeability_relative:
             return False
         return True
 
@@ -187,25 +189,6 @@ class Subdomain(FrozenClass):
             else:
                 diff_list.append(name + ".radius_max")
         if (
-            other._center_angle is not None
-            and self._center_angle is not None
-            and isnan(other._center_angle)
-            and isnan(self._center_angle)
-        ):
-            pass
-        elif other._center_angle != self._center_angle:
-            if is_add_value:
-                val_str = (
-                    " (self="
-                    + str(self._center_angle)
-                    + ", other="
-                    + str(other._center_angle)
-                    + ")"
-                )
-                diff_list.append(name + ".center_angle" + val_str)
-            else:
-                diff_list.append(name + ".center_angle")
-        if (
             other._angular_width is not None
             and self._angular_width is not None
             and isnan(other._angular_width)
@@ -238,6 +221,25 @@ class Subdomain(FrozenClass):
                 diff_list.append(name + ".periodicity" + val_str)
             else:
                 diff_list.append(name + ".periodicity")
+        if (
+            other._permeability_relative is not None
+            and self._permeability_relative is not None
+            and isnan(other._permeability_relative)
+            and isnan(self._permeability_relative)
+        ):
+            pass
+        elif other._permeability_relative != self._permeability_relative:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._permeability_relative)
+                    + ", other="
+                    + str(other._permeability_relative)
+                    + ")"
+                )
+                diff_list.append(name + ".permeability_relative" + val_str)
+            else:
+                diff_list.append(name + ".permeability_relative")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -248,10 +250,10 @@ class Subdomain(FrozenClass):
         S = 0  # Full size of the object
         S += getsizeof(self.radius_min)
         S += getsizeof(self.radius_max)
-        S += getsizeof(self.center_angle)
         S += getsizeof(self.angular_width)
         S += getsizeof(self.k)
         S += getsizeof(self.periodicity)
+        S += getsizeof(self.permeability_relative)
         return S
 
     def as_dict(self, type_handle_ndarray=0, keep_function=False, **kwargs):
@@ -268,7 +270,6 @@ class Subdomain(FrozenClass):
         Subdomain_dict = dict()
         Subdomain_dict["radius_min"] = self.radius_min
         Subdomain_dict["radius_max"] = self.radius_max
-        Subdomain_dict["center_angle"] = self.center_angle
         Subdomain_dict["angular_width"] = self.angular_width
         if self.k is None:
             Subdomain_dict["k"] = None
@@ -284,6 +285,7 @@ class Subdomain(FrozenClass):
                     "Unknown type_handle_ndarray: " + str(type_handle_ndarray)
                 )
         Subdomain_dict["periodicity"] = self.periodicity
+        Subdomain_dict["permeability_relative"] = self.permeability_relative
         # The class name is added to the dict for deserialisation purpose
         Subdomain_dict["__class__"] = "Subdomain"
         return Subdomain_dict
@@ -294,21 +296,21 @@ class Subdomain(FrozenClass):
         # Handle deepcopy of all the properties
         radius_min_val = self.radius_min
         radius_max_val = self.radius_max
-        center_angle_val = self.center_angle
         angular_width_val = self.angular_width
         if self.k is None:
             k_val = None
         else:
             k_val = self.k.copy()
         periodicity_val = self.periodicity
+        permeability_relative_val = self.permeability_relative
         # Creates new object of the same type with the copied properties
         obj_copy = type(self)(
             radius_min=radius_min_val,
             radius_max=radius_max_val,
-            center_angle=center_angle_val,
             angular_width=angular_width_val,
             k=k_val,
             periodicity=periodicity_val,
+            permeability_relative=permeability_relative_val,
         )
         return obj_copy
 
@@ -317,10 +319,10 @@ class Subdomain(FrozenClass):
 
         self.radius_min = None
         self.radius_max = None
-        self.center_angle = None
         self.angular_width = None
         self.k = None
         self.periodicity = None
+        self.permeability_relative = None
 
     def _get_radius_min(self):
         """getter of radius_min"""
@@ -354,25 +356,6 @@ class Subdomain(FrozenClass):
         fget=_get_radius_max,
         fset=_set_radius_max,
         doc=u"""Maximum radius of subdomain
-
-        :Type: float
-        :min: 0
-        """,
-    )
-
-    def _get_center_angle(self):
-        """getter of center_angle"""
-        return self._center_angle
-
-    def _set_center_angle(self, value):
-        """setter of center_angle"""
-        check_var("center_angle", value, "float", Vmin=0)
-        self._center_angle = value
-
-    center_angle = property(
-        fget=_get_center_angle,
-        fset=_set_center_angle,
-        doc=u"""Angle value at subdomain center
 
         :Type: float
         :min: 0
@@ -417,7 +400,7 @@ class Subdomain(FrozenClass):
     k = property(
         fget=_get_k,
         fset=_set_k,
-        doc=u"""Array of harmonic numbers
+        doc=u"""Array of harmonic numbers 
 
         :Type: ndarray
         :min: 0
@@ -440,5 +423,24 @@ class Subdomain(FrozenClass):
 
         :Type: int
         :min: 0
+        """,
+    )
+
+    def _get_permeability_relative(self):
+        """getter of permeability_relative"""
+        return self._permeability_relative
+
+    def _set_permeability_relative(self, value):
+        """setter of permeability_relative"""
+        check_var("permeability_relative", value, "float", Vmin=1)
+        self._permeability_relative = value
+
+    permeability_relative = property(
+        fget=_get_permeability_relative,
+        fset=_set_permeability_relative,
+        doc=u"""Relative permeability of subdomain
+
+        :Type: float
+        :min: 1
         """,
     )

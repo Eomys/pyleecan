@@ -54,9 +54,9 @@ class Subdomain_Slot(Subdomain):
         self,
         A=None,
         B=None,
+        center_angle=None,
         radius_min=None,
         radius_max=None,
-        center_angle=None,
         angular_width=None,
         k=None,
         periodicity=None,
@@ -82,12 +82,12 @@ class Subdomain_Slot(Subdomain):
                 A = init_dict["A"]
             if "B" in list(init_dict.keys()):
                 B = init_dict["B"]
+            if "center_angle" in list(init_dict.keys()):
+                center_angle = init_dict["center_angle"]
             if "radius_min" in list(init_dict.keys()):
                 radius_min = init_dict["radius_min"]
             if "radius_max" in list(init_dict.keys()):
                 radius_max = init_dict["radius_max"]
-            if "center_angle" in list(init_dict.keys()):
-                center_angle = init_dict["center_angle"]
             if "angular_width" in list(init_dict.keys()):
                 angular_width = init_dict["angular_width"]
             if "k" in list(init_dict.keys()):
@@ -97,11 +97,11 @@ class Subdomain_Slot(Subdomain):
         # Set the properties (value check and convertion are done in setter)
         self.A = A
         self.B = B
+        self.center_angle = center_angle
         # Call Subdomain init
         super(Subdomain_Slot, self).__init__(
             radius_min=radius_min,
             radius_max=radius_max,
-            center_angle=center_angle,
             angular_width=angular_width,
             k=k,
             periodicity=periodicity,
@@ -129,6 +129,13 @@ class Subdomain_Slot(Subdomain):
             + linesep
             + linesep
         )
+        Subdomain_Slot_str += (
+            "center_angle = "
+            + linesep
+            + str(self.center_angle).replace(linesep, linesep + "\t")
+            + linesep
+            + linesep
+        )
         return Subdomain_Slot_str
 
     def __eq__(self, other):
@@ -143,6 +150,8 @@ class Subdomain_Slot(Subdomain):
         if not array_equal(other.A, self.A):
             return False
         if not array_equal(other.B, self.B):
+            return False
+        if not array_equal(other.center_angle, self.center_angle):
             return False
         return True
 
@@ -165,6 +174,8 @@ class Subdomain_Slot(Subdomain):
             diff_list.append(name + ".A")
         if not array_equal(other.B, self.B):
             diff_list.append(name + ".B")
+        if not array_equal(other.center_angle, self.center_angle):
+            diff_list.append(name + ".center_angle")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -178,6 +189,7 @@ class Subdomain_Slot(Subdomain):
         S += super(Subdomain_Slot, self).__sizeof__()
         S += getsizeof(self.A)
         S += getsizeof(self.B)
+        S += getsizeof(self.center_angle)
         return S
 
     def as_dict(self, type_handle_ndarray=0, keep_function=False, **kwargs):
@@ -223,6 +235,19 @@ class Subdomain_Slot(Subdomain):
                 raise Exception(
                     "Unknown type_handle_ndarray: " + str(type_handle_ndarray)
                 )
+        if self.center_angle is None:
+            Subdomain_Slot_dict["center_angle"] = None
+        else:
+            if type_handle_ndarray == 0:
+                Subdomain_Slot_dict["center_angle"] = self.center_angle.tolist()
+            elif type_handle_ndarray == 1:
+                Subdomain_Slot_dict["center_angle"] = self.center_angle.copy()
+            elif type_handle_ndarray == 2:
+                Subdomain_Slot_dict["center_angle"] = self.center_angle
+            else:
+                raise Exception(
+                    "Unknown type_handle_ndarray: " + str(type_handle_ndarray)
+                )
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         Subdomain_Slot_dict["__class__"] = "Subdomain_Slot"
@@ -240,9 +265,12 @@ class Subdomain_Slot(Subdomain):
             B_val = None
         else:
             B_val = self.B.copy()
+        if self.center_angle is None:
+            center_angle_val = None
+        else:
+            center_angle_val = self.center_angle.copy()
         radius_min_val = self.radius_min
         radius_max_val = self.radius_max
-        center_angle_val = self.center_angle
         angular_width_val = self.angular_width
         if self.k is None:
             k_val = None
@@ -253,9 +281,9 @@ class Subdomain_Slot(Subdomain):
         obj_copy = type(self)(
             A=A_val,
             B=B_val,
+            center_angle=center_angle_val,
             radius_min=radius_min_val,
             radius_max=radius_max_val,
-            center_angle=center_angle_val,
             angular_width=angular_width_val,
             k=k_val,
             periodicity=periodicity_val,
@@ -267,6 +295,7 @@ class Subdomain_Slot(Subdomain):
 
         self.A = None
         self.B = None
+        self.center_angle = None
         # Set to None the properties inherited from Subdomain
         super(Subdomain_Slot, self)._set_None()
 
@@ -315,6 +344,31 @@ class Subdomain_Slot(Subdomain):
         fget=_get_B,
         fset=_set_B,
         doc=u"""Second integration constant function of harmonic number and time
+
+        :Type: ndarray
+        """,
+    )
+
+    def _get_center_angle(self):
+        """getter of center_angle"""
+        return self._center_angle
+
+    def _set_center_angle(self, value):
+        """setter of center_angle"""
+        if type(value) is int and value == -1:
+            value = array([])
+        elif type(value) is list:
+            try:
+                value = array(value)
+            except:
+                pass
+        check_var("center_angle", value, "ndarray")
+        self._center_angle = value
+
+    center_angle = property(
+        fget=_get_center_angle,
+        fset=_set_center_angle,
+        doc=u"""Angle value at subdomain center
 
         :Type: ndarray
         """,

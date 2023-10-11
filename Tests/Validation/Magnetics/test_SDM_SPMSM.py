@@ -33,7 +33,9 @@ def test_SDM_SPMSM_single_OP():
         OP=OPdq(N0=1200, Id_ref=0, Iq_ref=0),
         Ir=None,
         Na_tot=1024,
-        Nt_tot=1,
+        Nt_tot=8 * 2,
+        is_periodicity_a=True,
+        is_periodicity_t=True,
     )
 
     simu.mag = MagSDM(
