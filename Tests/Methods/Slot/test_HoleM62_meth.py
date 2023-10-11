@@ -99,7 +99,7 @@ class Test_HoleM62_meth(object):
         a = result
         b = test_dict["S_exp"]
         msg = f"Return {a} expected {b}"
-        # assert abs((a - b) / a - 0) < DELTA, msg
+        assert abs((a - b) / a - 0) < DELTA, msg
 
         # Check that the analytical method returns the same result as the numerical one
         b = Hole.comp_surface(test_obj.hole[0])
