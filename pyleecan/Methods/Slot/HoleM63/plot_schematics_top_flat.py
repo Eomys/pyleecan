@@ -151,13 +151,13 @@ def plot_schematics_top_flat(
             )
 
             # W0
-            Zlim1 = point_dict["Z8"] - self.H0 * 0.2
-            Zlim2 = point_dict["Z5"] - self.H0 * 0.2
+            Zlim1 = point_dict["Z4"] - self.H0 * 0.2
+            Zlim2 = point_dict["Z1"] - self.H0 * 0.2
             plot_quote(
-                point_dict["Z8"] * exp(1j * alpha),
+                point_dict["Z4"] * exp(1j * alpha),
                 Zlim1 * exp(1j * alpha),
                 Zlim2 * exp(1j * alpha),
-                point_dict["Z5"] * exp(1j * alpha),
+                point_dict["Z1"] * exp(1j * alpha),
                 offset_label=-1j * self.H0 * 0.4,
                 fig=fig,
                 ax=ax,
@@ -165,8 +165,8 @@ def plot_schematics_top_flat(
             )
             # H0
             line = Segment(
-                point_dict["Z6"] * exp(1j * alpha),
-                point_dict["Z5"] * exp(1j * alpha),
+                point_dict["Z2"] * exp(1j * alpha),
+                point_dict["Z1"] * exp(1j * alpha),
             )
             line.plot(
                 fig=fig,
@@ -208,7 +208,7 @@ def plot_schematics_top_flat(
                 )
 
         # Zooming and cleaning
-        W = (point_dict["Z5"] * exp(1j * sp)).imag
+        W = (point_dict["Z1"] * exp(1j * sp)).imag
 
         Rint = self.parent.Rint
         Rext = self.parent.Rext

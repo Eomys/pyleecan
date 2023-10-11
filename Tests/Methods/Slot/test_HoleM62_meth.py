@@ -9,19 +9,19 @@ from pyleecan.Classes.LamHole import LamHole
 from pyleecan.Classes.HoleM62 import HoleM62
 
 from pyleecan.Classes.Magnet import Magnet
-from numpy import exp, arcsin, ndarray, pi
+from numpy import exp, arcsin, ndarray, pi, angle
 import matplotlib.pyplot as plt
 
 # For AlmostEqual
 DELTA = 1e-4
 
 
-HoleM62_test = list()
+holeM62_test = list()
 
 test_obj = LamHole(Rint=0.03, Rext=0.12, is_stator=False, is_internal=True)
 test_obj.hole = list()
 test_obj.hole.append(HoleM62(Zh=4, W0=80e-3, H0=20e-3, H1=30e-3, W0_is_rad=False))
-HoleM62_test.append(
+holeM62_test.append(
     {
         "test_obj": test_obj,
         "carac": "all magnet",
@@ -35,7 +35,7 @@ HoleM62_test.append(
 test_obj = LamHole(is_internal=True, Rint=0.03, Rext=0.12, is_stator=False)
 test_obj.hole = list()
 test_obj.hole.append(HoleM62(Zh=4, W0=pi / 4, H0=30e-3, H1=10e-3, W0_is_rad=True))
-HoleM62_test.append(
+holeM62_test.append(
     {
         "test_obj": test_obj,
         "carac": "all magnet",
@@ -48,9 +48,9 @@ HoleM62_test.append(
 
 
 class Test_HoleM62_meth(object):
-    """pytest for holeB62 methods"""
+    """pytest for holeM62 methods"""
 
-    @pytest.mark.parametrize("test_dict", HoleM62_test)
+    @pytest.mark.parametrize("test_dict", holeM62_test)
     def test_schematics(self, test_dict):
         """Check that the schematics is correct"""
         test_obj = test_dict["test_obj"]
@@ -58,46 +58,55 @@ class Test_HoleM62_meth(object):
         point_dict = test_obj.hole[0]._comp_point_coordinate()
         Rbo = test_obj.hole[0].get_Rbo()
 
+        # H0
+        assert abs(point_dict["Z2"] - point_dict["Z1"]) == pytest.approx(
+            test_obj.hole[0].H0
+        )
+        assert abs(point_dict["Z3"] - point_dict["Z4"]) == pytest.approx(
+            test_obj.hole[0].H0
+        )
+        # H1
+        assert abs(point_dict["Z3"]) == pytest.approx(Rbo - test_obj.hole[0].H1)
+        assert abs(point_dict["Z2"]) == pytest.approx(Rbo - test_obj.hole[0].H1)
+        # W0
         if test_obj.hole[0].W0_is_rad:
-            # Check height
-            assert abs(point_dict["Z2"] - point_dict["Z1"]) == pytest.approx(
-                test_obj.hole[0].H0
-            )
-            assert abs(point_dict["Z3"] - point_dict["Z4"]) == pytest.approx(
-                test_obj.hole[0].H0
-            )
-            assert abs(point_dict["Z3"]) == pytest.approx(Rbo - test_obj.hole[0].H1)
-            assert abs(point_dict["Z2"]) == pytest.approx(Rbo - test_obj.hole[0].H1)
-
-        else:
-            assert abs(point_dict["Z6"] - point_dict["Z5"]) == pytest.approx(
-                test_obj.hole[0].H0
-            )
-            assert abs(point_dict["Z7"] - point_dict["Z8"]) == pytest.approx(
-                test_obj.hole[0].H0
-            )
-            assert abs(point_dict["Z7"]) == pytest.approx(Rbo - test_obj.hole[0].H1)
-            assert abs(point_dict["Z6"]) == pytest.approx(Rbo - test_obj.hole[0].H1)
-
-            assert abs(point_dict["Z7"] - point_dict["Z6"]) == pytest.approx(
+            assert 2 * abs(angle(point_dict["Z1"])) == pytest.approx(
                 test_obj.hole[0].W0
             )
-            assert abs(point_dict["Z8"] - point_dict["Z5"]) == pytest.approx(
+            assert 2 * abs(angle(point_dict["Z2"])) == pytest.approx(
+                test_obj.hole[0].W0
+            )
+            assert 2 * abs(angle(point_dict["Z3"])) == pytest.approx(
+                test_obj.hole[0].W0
+            )
+            assert 2 * abs(angle(point_dict["Z4"])) == pytest.approx(
+                test_obj.hole[0].W0
+            )
+        else:  # W0 [m]
+            assert abs(point_dict["Z3"] - point_dict["Z2"]) == pytest.approx(
+                test_obj.hole[0].W0
+            )
+            assert abs(point_dict["Z4"] - point_dict["Z1"]) == pytest.approx(
                 test_obj.hole[0].W0
             )
 
-    @pytest.mark.parametrize("test_dict", HoleM62_test)
+    @pytest.mark.parametrize("test_dict", holeM62_test)
     def test_comp_surface(self, test_dict):
         """Check that the computation of the surface is correct"""
-        test_obj = test_dict["test_obj"]
-        result = Hole.comp_surface(test_obj.hole[0])
+        test_obj = test_dict["test_obj"].copy()
+        result = test_obj.hole[0].comp_surface()
 
         a = result
         b = test_dict["S_exp"]
-        msg = "Return " + str(a) + " expected " + str(b)
+        msg = f"Return {a} expected {b}"
         assert abs((a - b) / a - 0) < DELTA, msg
 
-    @pytest.mark.parametrize("test_dict", HoleM62_test)
+        # Check that the analytical method returns the same result as the numerical one
+        b = Hole.comp_surface(test_obj.hole[0])
+        msg = f"Return {a} expected {b}"
+        assert abs((a - b) / a - 0) < DELTA, msg
+
+    @pytest.mark.parametrize("test_dict", holeM62_test)
     def test_comp_radius(self, test_dict):
         """Check that the computation of the radius is correct"""
         test_obj = test_dict["test_obj"]
@@ -106,25 +115,25 @@ class Test_HoleM62_meth(object):
         Rmax_a = test_dict["Rmax_exp"]
         Rmin_a = test_dict["Rmin_exp"]
         a, b = Rmin, Rmin_a
-        msg = "For Rmin: Return " + str(a) + " expected " + str(b)
+        msg = f"For Rmin: Return {a} expected {b}"
         assert abs((a - b) / a - 0) < DELTA, msg
         a, b = Rmax, Rmax_a
-        msg = "For Rmax: Return " + str(a) + " expected " + str(b)
+        msg = f"For Rmax: Return {a} expected {b}"
         assert abs((a - b) / a - 0) < DELTA, msg
 
         Rmin_a, Rmax_a = Hole.comp_radius(test_obj.hole[0])
         a, b = Rmin, Rmin_a
-        msg = "For Rmin: Return " + str(a) + " expected " + str(b)
+        msg = f"For Rmin: Return {a} expected {b}"
         assert abs((a - b) / a - 0) < DELTA, msg
 
         a, b = Rmax, Rmax_a
-        msg = "For Rmax: Return " + str(a) + " expected " + str(b)
+        msg = f"For Rmax: Return {a} expected {b}"
         assert abs((a - b) / a - 0) < DELTA, msg
 
 
 if __name__ == "__main__":
     a = Test_HoleM62_meth()
-    for test_dict in HoleM62_test:
+    for test_dict in holeM62_test:
         carac = test_dict["carac"]
         print("Test - %s - schematics" % carac)
         a.test_schematics(test_dict)

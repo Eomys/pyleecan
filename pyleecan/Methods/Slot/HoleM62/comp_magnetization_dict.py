@@ -25,23 +25,14 @@ def comp_magnetization_dict(self, is_north=True):
     Rbo = self.get_Rbo()
 
     mag_dict = dict()
-    if self.W0_is_rad == 0:
-        S0 = Arc1(
-            begin=point_dict["Z2"],
-            end=point_dict["Z3"],
-            radius=Rbo - self.H1,
-            is_trigo_direction=True,
-        )
-        mag_dict["magnet_0"] = S0.comp_normal()
 
-    elif self.Hole == 1:
-        S0 = Arc1(
-            begin=point_dict["Z6"],
-            end=point_dict["Z7"],
-            radius=Rbo - self.H1,
-            is_trigo_direction=True,
-        )
-        mag_dict["magnet_0"] = S0.comp_normal()
+    S0 = Arc1(
+        begin=point_dict["Z2"],
+        end=point_dict["Z3"],
+        radius=Rbo - self.H1,
+        is_trigo_direction=True,
+    )
+    mag_dict["magnet_0"] = S0.comp_normal()
 
     if not is_north:
         mag_dict["magnet_0"] += pi

@@ -24,10 +24,10 @@ def _comp_point_coordinate(self):
         Z7 = Rbo - self.H1 + 1j * self.W0 / 2
         Z5 = Z6 - self.H0
         Z8 = Z7 - self.H0
-        point_dict["Z5"] = Z5
-        point_dict["Z6"] = Z6
-        point_dict["Z7"] = Z7
-        point_dict["Z8"] = Z8
+        point_dict["Z1"] = Z5
+        point_dict["Z2"] = Z6
+        point_dict["Z3"] = Z7
+        point_dict["Z4"] = Z8
     else:
         Zc1 = ((Rbo - self.H1) ** 2) - ((self.W0 / 2) ** 2)
         Zc = sqrt(Zc1)

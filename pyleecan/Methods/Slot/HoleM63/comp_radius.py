@@ -20,8 +20,8 @@ def comp_radius(self):
     Rbo = self.get_Rbo()
 
     if self.top_flat:
-        Rmax = abs(point_dict["Z6"])
-        Rmin = abs((point_dict["Z5"] + point_dict["Z8"]) / 2)
+        Rmax = abs(point_dict["Z2"])
+        Rmin = abs((point_dict["Z1"] + point_dict["Z4"]) / 2)
 
     else:
         Rmax = Rbo - self.H1

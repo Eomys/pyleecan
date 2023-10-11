@@ -37,9 +37,9 @@ def _comp_point_coordinate(self):
         Z6 = Zc - 1j * self.W0 / 2
         Z8 = Z7 - self.H0
         Z5 = Z6 - self.H0
-        point_dict["Z5"] = Z5
-        point_dict["Z6"] = Z6
-        point_dict["Z7"] = Z7
-        point_dict["Z8"] = Z8
+        point_dict["Z1"] = Z5
+        point_dict["Z2"] = Z6
+        point_dict["Z3"] = Z7
+        point_dict["Z4"] = Z8
 
     return point_dict
