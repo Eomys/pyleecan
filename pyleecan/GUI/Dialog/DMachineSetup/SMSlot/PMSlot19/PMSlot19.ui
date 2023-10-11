@@ -46,7 +46,7 @@
         <string/>
        </property>
        <property name="pixmap">
-        <pixmap resource="../../../../Resources/pyleecan.qrc">:/images/images/MachineSetup/WMSlot/SlotM19.png</pixmap>
+        <pixmap resource="../../../../Resources/pyleecan.qrc">:/images/images/MachineSetup/WMSlot/SlotM19_mag_int_rotor.png</pixmap>
        </property>
        <property name="scaledContents">
         <bool>false</bool>
@@ -181,7 +181,6 @@
   <tabstop>lf_Hmag</tabstop>
  </tabstops>
  <resources>
-  <include location="../../../../Resources/pyleecan.qrc"/>
   <include location="../../../../Resources/pyleecan.qrc"/>
  </resources>
  <connections/>

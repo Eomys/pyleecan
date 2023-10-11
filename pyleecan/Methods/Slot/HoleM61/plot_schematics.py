@@ -27,6 +27,7 @@ MAGNET_COLOR = config_dict["PLOT"]["COLOR_DICT"]["MAGNET_COLOR"]
 
 def plot_schematics(
     self,
+    is_return_default=False,
     is_default=False,
     is_add_point_label=False,
     is_add_schematics=True,
@@ -45,6 +46,8 @@ def plot_schematics(
         A HoleM61 object
     is_default : bool
         True: plot default schematics, else use current slot values
+    is_return_default : bool
+        True: return the default lamination used for the schematics (skip plot)
     is_add_point_label : bool
         True to display the name of the points (Z1, Z2....)
     is_add_schematics : bool
@@ -68,6 +71,9 @@ def plot_schematics(
         Figure containing the schematics
     ax : Matplotlib.axes.Axes object
         Axis containing the schematics
+    -------
+    lam : LamHole / LamSlot
+        Default lamination used for the schematics
     """
 
     # Use some default parameter
@@ -81,23 +87,25 @@ def plot_schematics(
             H0=61e-3,
             H1=10e-3,
             H2=10e-3,
-            magnet_1=None,
-            magnet_2=None,
         )
         lam = LamHole(
             Rint=0.03, Rext=0.12, is_internal=True, is_stator=False, hole=[hole]
         )
-        return hole.plot_schematics(
-            is_default=False,
-            is_add_point_label=is_add_point_label,
-            is_add_schematics=is_add_schematics,
-            is_add_main_line=is_add_main_line,
-            type_add_active=type_add_active,
-            save_path=save_path,
-            is_show_fig=is_show_fig,
-            fig=fig,
-            ax=ax,
-        )
+        if is_return_default:
+            return lam
+        else:
+            return hole.plot_schematics(
+                is_default=False,
+                is_return_default=False,
+                is_add_point_label=is_add_point_label,
+                is_add_schematics=is_add_schematics,
+                is_add_main_line=is_add_main_line,
+                type_add_active=type_add_active,
+                save_path=save_path,
+                is_show_fig=is_show_fig,
+                fig=fig,
+                ax=ax,
+            )
     # Getting the main plot
     if self.parent is None:
         raise ParentMissingError("Error: The hole is not inside a Lamination")
