@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>964</width>
-    <height>503</height>
+    <width>960</width>
+    <height>494</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -46,7 +46,7 @@
         <string/>
        </property>
        <property name="pixmap">
-        <pixmap resource="../../../../Resources/pyleecan.qrc">:/images/images/MachineSetup/WSlot/SlotW12_wedge_full.png</pixmap>
+        <pixmap resource="../../../../Resources/pyleecan.qrc">:/images/images/MachineSetup/WSlot/SlotW12_wind_ext_stator.png</pixmap>
        </property>
        <property name="scaledContents">
         <bool>false</bool>
@@ -81,7 +81,7 @@
         <x>0</x>
         <y>0</y>
         <width>268</width>
-        <height>479</height>
+        <height>470</height>
        </rect>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_3">
@@ -230,7 +230,6 @@
   <tabstop>lf_H1</tabstop>
  </tabstops>
  <resources>
-  <include location="../../../../Resources/pyleecan.qrc"/>
   <include location="../../../../Resources/pyleecan.qrc"/>
  </resources>
  <connections/>

@@ -38,7 +38,7 @@ class Ui_PHoleM51(object):
         self.img_slot.setAutoFillBackground(False)
         self.img_slot.setFrameShape(QFrame.NoFrame)
         self.img_slot.setPixmap(
-            QPixmap(u":/images/images/MachineSetup/SMHoleMag/HoleM51.png")
+            QPixmap(u":/images/images/MachineSetup/SMHoleMag/HoleM51_mag_int_rotor.png")
         )
         self.img_slot.setScaledContents(False)
         self.img_slot.setAlignment(Qt.AlignCenter)

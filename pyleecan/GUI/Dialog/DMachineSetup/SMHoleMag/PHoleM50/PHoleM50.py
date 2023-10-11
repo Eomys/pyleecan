@@ -10,6 +10,7 @@ from ......GUI import gui_option
 from ......GUI.Dialog.DMachineSetup.SMHoleMag.PHoleM50.Gen_PHoleM50 import Gen_PHoleM50
 from ......Methods.Slot.Slot import SlotCheckError
 from ......GUI.Dialog.DMachineSetup.SMHoleMag import DEFAULT_MAG_MAT
+from ......GUI.Resources import pixmap_dict
 
 
 class PHoleM50(Gen_PHoleM50, QWidget):
@@ -65,9 +66,7 @@ class PHoleM50(Gen_PHoleM50, QWidget):
 
         # Adapt GUI with/without magnet
         if hole.magnet_0 is None:  # SyRM
-            self.img_slot.setPixmap(
-                QPixmap(":/images/images/MachineSetup/SMHoleMag/HoleM50_no_mag.png")
-            )
+            self.img_slot.setPixmap(QPixmap(pixmap_dict["HoleM50_empty_int_rotor"]))
             self.w_mat_0.update(self.hole, "mat_void", self.material_dict)
             self.w_mat_1.hide()
             self.w_mat_2.hide()
