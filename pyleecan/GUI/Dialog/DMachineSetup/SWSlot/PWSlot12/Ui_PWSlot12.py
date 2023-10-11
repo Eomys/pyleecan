@@ -20,7 +20,7 @@ class Ui_PWSlot12(object):
     def setupUi(self, PWSlot12):
         if not PWSlot12.objectName():
             PWSlot12.setObjectName(u"PWSlot12")
-        PWSlot12.resize(964, 503)
+        PWSlot12.resize(960, 494)
         PWSlot12.setMinimumSize(QSize(630, 470))
         PWSlot12.setMaximumSize(QSize(16777215, 16777215))
         self.horizontalLayout = QHBoxLayout(PWSlot12)
@@ -36,7 +36,7 @@ class Ui_PWSlot12(object):
         self.img_slot.setSizePolicy(sizePolicy)
         self.img_slot.setMaximumSize(QSize(16777215, 16777215))
         self.img_slot.setPixmap(
-            QPixmap(u":/images/images/MachineSetup/WSlot/SlotW12_wedge_full.png")
+            QPixmap(u":/images/images/MachineSetup/WSlot/SlotW12_wind_ext_stator.png")
         )
         self.img_slot.setScaledContents(False)
         self.img_slot.setAlignment(Qt.AlignCenter)
@@ -52,7 +52,7 @@ class Ui_PWSlot12(object):
         self.scrollArea.setWidgetResizable(True)
         self.scrollAreaWidgetContents = QWidget()
         self.scrollAreaWidgetContents.setObjectName(u"scrollAreaWidgetContents")
-        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 268, 479))
+        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 268, 470))
         self.verticalLayout_3 = QVBoxLayout(self.scrollAreaWidgetContents)
         self.verticalLayout_3.setObjectName(u"verticalLayout_3")
         self.gridLayout = QGridLayout()

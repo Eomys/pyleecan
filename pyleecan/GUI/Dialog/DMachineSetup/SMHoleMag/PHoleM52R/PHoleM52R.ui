@@ -52,7 +52,7 @@
         <string/>
        </property>
        <property name="pixmap">
-        <pixmap>:/images/images/MachineSetup/SMHoleMag/HoleM52R.png</pixmap>
+        <pixmap>:/images/images/MachineSetup/SMHoleMag/HoleM52R_mag_int_rotor.png</pixmap>
        </property>
        <property name="scaledContents">
         <bool>false</bool>

@@ -9,6 +9,8 @@ from ......Classes.SlotW23 import SlotW23
 from ......GUI import gui_option
 from ......GUI.Dialog.DMachineSetup.SWSlot.PWSlot23.Gen_PWSlot23 import Gen_PWSlot23
 from ......Methods.Slot.Slot import SlotCheckError
+from ......GUI.Resources import pixmap_dict
+
 
 translate = PySide2.QtCore.QCoreApplication.translate
 
@@ -255,27 +257,21 @@ class PWSlot23(Gen_PWSlot23, QWidget):
         if self.g_wedge.isChecked():
             if self.is_cst_tooth.isChecked():
                 self.img_slot.setPixmap(
-                    QPixmap(
-                        ":/images/images/MachineSetup/WSlot/SlotW23_constant_tooth_wedge_full.png"
-                    )
+                    QPixmap(pixmap_dict["SlotW23_wedge_full_ext_stator_constant_tooth"])
                 )
 
             else:
                 self.img_slot.setPixmap(
-                    QPixmap(":/images/images/MachineSetup/WSlot/SlotW23_wedge_full.png")
+                    QPixmap(pixmap_dict["SlotW23_wedge_full_ext_stator"])
                 )
 
         else:
             if self.is_cst_tooth.isChecked():
                 self.img_slot.setPixmap(
-                    QPixmap(
-                        ":/images/images/MachineSetup/WSlot/SlotW23_constant_tooth_wind.png"
-                    )
+                    QPixmap(pixmap_dict["SlotW23_wind_ext_stator_constant_tooth"])
                 )
             else:
-                self.img_slot.setPixmap(
-                    QPixmap(":/images/images/MachineSetup/WSlot/SlotW23_wind.png")
-                )
+                self.img_slot.setPixmap(QPixmap(pixmap_dict["SlotW23_wind_ext_stator"]))
 
     def set_wedge(self):
         """Setup the slot wedge according to the GUI"""

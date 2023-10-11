@@ -5,6 +5,8 @@ from numpy import pi
 from PySide2.QtGui import QPixmap
 from PySide2.QtCore import Signal
 from PySide2.QtWidgets import QWidget
+from ......GUI.Resources import pixmap_dict
+
 
 from ......Classes.SlotW10 import SlotW10
 from ......GUI import gui_option
@@ -111,14 +113,12 @@ class PWSlot10(Gen_PWSlot10, QWidget):
         """Setup the slot wedge according to the GUI"""
         if self.g_wedge.isChecked():
             self.img_slot.setPixmap(
-                QPixmap(":/images/images/MachineSetup/WSlot/SlotW10_wedge_full.png")
+                QPixmap(pixmap_dict["SlotW10_wedge_full_ext_stator"])
             )
             self.w_wedge_mat.update(self.slot, "wedge_mat", self.material_dict)
         else:
             self.slot.wedge_mat = None
-            self.img_slot.setPixmap(
-                QPixmap(":/images/images/MachineSetup/WSlot/SlotW10_wind.png")
-            )
+            self.img_slot.setPixmap(QPixmap(pixmap_dict["SlotW10_wind_ext_stator"]))
         # Notify the machine GUI that the machine has changed
         self.saveNeeded.emit()
 

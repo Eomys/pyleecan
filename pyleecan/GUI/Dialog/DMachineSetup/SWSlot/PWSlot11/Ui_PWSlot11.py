@@ -36,7 +36,7 @@ class Ui_PWSlot11(object):
         self.img_slot.setSizePolicy(sizePolicy)
         self.img_slot.setMaximumSize(QSize(16777215, 16777215))
         self.img_slot.setPixmap(
-            QPixmap(u":/images/images/MachineSetup/WSlot/SlotW11_wind.png")
+            QPixmap(u":/images/images/MachineSetup/WSlot/SlotW11_wind_ext_stator.png")
         )
         self.img_slot.setScaledContents(False)
         self.img_slot.setAlignment(Qt.AlignCenter)
@@ -217,6 +217,12 @@ class Ui_PWSlot11(object):
         self.verticalLayout.addWidget(self.w_wedge_mat)
 
         self.verticalLayout_3.addWidget(self.g_wedge)
+
+        self.verticalSpacer = QSpacerItem(
+            20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding
+        )
+
+        self.verticalLayout_3.addItem(self.verticalSpacer)
 
         self.w_out = WWSlotOut(self.scrollAreaWidgetContents)
         self.w_out.setObjectName(u"w_out")
