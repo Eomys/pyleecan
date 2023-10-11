@@ -3962,7 +3962,8 @@
             "has_magnet",
             "check",
             "comp_magnetization_dict",
-            "comp_surface_magnet_id"
+            "comp_surface_magnet_id",
+            "comp_surface"
         ],
         "mother": "HoleMag",
         "name": "HoleM62",
@@ -4045,7 +4046,8 @@
             "has_magnet",
             "check",
             "comp_magnetization_dict",
-            "comp_surface_magnet_id"
+            "comp_surface_magnet_id",
+            "comp_surface"
         ],
         "mother": "HoleMag",
         "name": "HoleM63",

@@ -67,6 +67,11 @@ try:
 except ImportError as error:
     comp_surface_magnet_id = error
 
+try:
+    from ..Methods.Slot.HoleM62.comp_surface import comp_surface
+except ImportError as error:
+    comp_surface = error
+
 
 from numpy import isnan
 from ._check import InitUnKnowClassError
@@ -187,6 +192,17 @@ class HoleM62(HoleMag):
         )
     else:
         comp_surface_magnet_id = comp_surface_magnet_id
+    # cf Methods.Slot.HoleM62.comp_surface
+    if isinstance(comp_surface, ImportError):
+        comp_surface = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use HoleM62 method comp_surface: " + str(comp_surface)
+                )
+            )
+        )
+    else:
+        comp_surface = comp_surface
     # generic save method is available in all object
     save = save
     # get_logger method is available in all object
