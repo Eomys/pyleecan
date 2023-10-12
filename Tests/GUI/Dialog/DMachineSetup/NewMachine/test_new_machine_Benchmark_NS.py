@@ -19,6 +19,7 @@ from pyleecan.GUI.Dialog.DMachineSetup.SMachineType.SMachineType import SMachine
 from pyleecan.GUI.Dialog.DMachineSetup.SMSlot.SMSlot import SMSlot
 from pyleecan.GUI.Dialog.DMachineSetup.SMSlot.WSlotMag.WSlotMag import WSlotMag
 from pyleecan.GUI.Dialog.DMachineSetup.SMSlot.PMSlot11.PMSlot11 import PMSlot11
+from pyleecan.GUI.Dialog.DMachineSetup.SMSlot.PMSlot12.PMSlot12 import PMSlot12
 from pyleecan.GUI.Dialog.DMachineSetup.SSimu.SSimu import SSimu
 from pyleecan.GUI.Dialog.DMachineSetup.SWindCond.SWindCond import SWindCond
 from pyleecan.GUI.Dialog.DMachineSetup.SWindCond.PCondType11.PCondType11 import (
@@ -48,8 +49,8 @@ if not isdir(save_path):
     makedirs(save_path)
 
 
-class TestNewMachineBenchmark(object):
-    """Test that you can create the Benchmark"""
+class TestNewMachineBenchmarkNS(object):
+    """Test that you can create the Benchmark with uneven North/South poles"""
 
     @classmethod
     def setup_class(cls):
@@ -463,6 +464,8 @@ class TestNewMachineBenchmark(object):
             == "Error in Rotor Slot definition:\nYou must set W0 !"
         )
 
+        # Set uneven poles
+        self.widget.w_step.c_NS_type.setCurrentIndex(1)
         wid_slot_mag = self.widget.w_step.tab_slot.currentWidget()
         assert isinstance(wid_slot_mag, WSlotMag)
         assert wid_slot_mag.c_slot_type.currentText() == "Rectangular Magnet"
@@ -480,7 +483,7 @@ class TestNewMachineBenchmark(object):
 
         assert wid_slot.w_mag.c_type_magnetization.currentText() == "Radial"
 
-        assert self.widget.machine.rotor.magnet.type_magnetization == 0
+        assert self.widget.machine.rotor.magnet_north.type_magnetization == 0
 
         assert wid_slot.w_mag.w_mat.c_mat_type.currentText() == "Magnet1"
 
@@ -523,7 +526,76 @@ class TestNewMachineBenchmark(object):
         assert self.widget.w_step.machine.rotor.slot.Wmag == 0.6048
         assert self.widget.w_step.machine.rotor.slot.H0 == 0
         assert self.widget.w_step.machine.rotor.slot.Hmag == 0.005
-        assert self.widget.w_step.machine.rotor.magnet.mat_type.name == "MagnetPrius"
+        assert (
+            self.widget.w_step.machine.rotor.magnet_north.mat_type.name == "MagnetPrius"
+        )
+
+        # Set south pole
+        self.widget.w_step.tab_slot.setCurrentIndex(1)
+        wid_slot_mag2 = self.widget.w_step.tab_slot.currentWidget()
+        assert isinstance(wid_slot_mag2, WSlotMag)
+        assert wid_slot_mag2.c_slot_type.currentText() == "Rectangular Magnet"
+        index_rect_polar_magnet = wid_slot_mag2.c_slot_type.findText(
+            "Rectangular Magnet with polar top"
+        )
+        wid_slot_mag2.c_slot_type.setCurrentIndex(index_rect_polar_magnet)
+
+        wid_slot2 = wid_slot_mag2.w_slot
+        assert isinstance(wid_slot2, PMSlot12)
+
+        index_magnet1 = wid_slot2.w_mag.w_mat.c_mat_type.findText("Magnet1")
+        wid_slot2.w_mag.w_mat.c_mat_type.setCurrentIndex(index_magnet1)
+
+        index_magnetization = wid_slot2.w_mag.c_type_magnetization.findText("Parallel")
+        wid_slot2.w_mag.c_type_magnetization.setCurrentIndex(index_magnetization)
+
+        assert wid_slot2.w_mag.c_type_magnetization.currentText() == "Parallel"
+
+        assert self.widget.machine.rotor.magnet_south.type_magnetization == 1
+
+        assert wid_slot2.w_mag.w_mat.c_mat_type.currentText() == "Magnet1"
+
+        assert wid_slot2.w_out.out_Wlam.text() == "Rotor width: 0.0305 [m]"
+        assert wid_slot2.w_out.out_slot_height.text() == "Slot height: ?"
+        assert wid_slot2.w_out.out_yoke_height.text() == "Yoke height: ?"
+        assert wid_slot2.w_out.out_wind_surface.text() == "Active surface: ?"
+        assert wid_slot2.w_out.out_tot_surface.text() == "Slot surface: ?"
+        assert wid_slot2.w_out.out_op_angle.text() == "Opening angle: ?"
+
+        index_magnet3 = wid_slot2.w_mag.w_mat.c_mat_type.findText("Magnet3")
+        wid_slot2.w_mag.w_mat.c_mat_type.setCurrentIndex(index_magnet3)
+        assert wid_slot2.w_mag.w_mat.c_mat_type.currentText() == "Magnet3"
+        assert wid_slot2.w_mag.c_type_magnetization.currentText() == "Parallel"
+
+        assert wid_slot2.lf_W0.value() is None
+        assert wid_slot2.lf_Wmag.value() is None
+        assert wid_slot2.lf_H0.value() is None
+        assert wid_slot2.lf_Hmag.value() is None
+
+        wid_slot2.lf_W0.setValue(0.010)
+        wid_slot2.lf_W0.editingFinished.emit()
+        wid_slot2.lf_Wmag.setValue(0.010)
+        wid_slot2.lf_Wmag.editingFinished.emit()
+        wid_slot2.lf_H0.setValue(0)
+        wid_slot2.lf_H0.editingFinished.emit()
+        wid_slot2.lf_Hmag.setValue(0.006)
+        wid_slot2.lf_Hmag.editingFinished.emit()
+
+        assert wid_slot2.w_out.out_Wlam.text() == "Rotor width: 0.0305 [m]"
+        assert wid_slot2.w_out.out_slot_height.text() == "Slot height: 0.0003137 [m]"
+        assert wid_slot2.w_out.out_yoke_height.text() == "Yoke height: 0.03019 [m]"
+        assert (
+            wid_slot2.w_out.out_wind_surface.text() == "Active surface: 5.909e-05 [m²]"
+        )
+        assert wid_slot2.w_out.out_tot_surface.text() == "Slot surface: 2.093e-06 [m²]"
+        assert wid_slot2.w_out.out_op_angle.text() == "Opening angle: 0.2507 [rad]"
+
+        assert self.widget.w_step.machine.rotor.slot_south.W0 == 0.010
+        assert self.widget.w_step.machine.rotor.slot_south.Wmag == 0.010
+        assert self.widget.w_step.machine.rotor.slot_south.H0 == 0
+        assert self.widget.w_step.machine.rotor.slot_south.Hmag == 0.006
+        assert self.widget.w_step.machine.rotor.magnet_south.mat_type.name == "Magnet3"
+
         self.widget.w_step.b_plot.clicked.emit()
 
         #####################
@@ -596,7 +668,7 @@ class TestNewMachineBenchmark(object):
             self.widget.w_step.tab_machine.tab_param.item(6, 0).text()
             == "Machine total mass"
         )
-        assert self.widget.w_step.tab_machine.tab_param.item(6, 1).text() == "13.19 kg"
+        assert self.widget.w_step.tab_machine.tab_param.item(6, 1).text() == "12.83 kg"
         assert (
             self.widget.w_step.tab_machine.tab_param.item(7, 0).text()
             == "Stator lamination mass"
@@ -616,7 +688,9 @@ class TestNewMachineBenchmark(object):
             self.widget.w_step.tab_machine.tab_param.item(10, 0).text()
             == "Rotor magnet mass"
         )
-        assert self.widget.w_step.tab_machine.tab_param.item(10, 1).text() == "1.349 kg"
+        assert (
+            self.widget.w_step.tab_machine.tab_param.item(10, 1).text() == "0.9849 kg"
+        )
         assert (
             self.widget.w_step.tab_machine.tab_param.item(11, 0).text() == "Shaft mass"
         )
@@ -673,7 +747,7 @@ class TestNewMachineBenchmark(object):
 
 
 if __name__ == "__main__":
-    a = TestNewMachineBenchmark()
+    a = TestNewMachineBenchmarkNS()
     a.setup_class()
     a.setup_method()
     a.test_Benchmark()
