@@ -31,10 +31,10 @@ class DNotchTab(Ui_DNotchTab, QDialog):
             A DNotchTab widget
         machine : Machine
             current machine to edit
-        material_dict: dict
-            Materials dictionary (library + machine)
         is_stator : bool
             To adapt the GUI to set either the stator or the rotor
+        material_dict: dict
+            Materials dictionary (library + machine)
         """
         # Build the interface according to the .ui file
         QDialog.__init__(self)
