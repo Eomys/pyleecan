@@ -30,7 +30,7 @@ class WNotch(Ui_WNotch, QWidget):
         self : WNotch
             A WNotch object
         parent :
-            A parent object containing the lamination to edit
+            A parent widget containing the lamination to edit
         index : int
             Index of the notch to edit
         material_dict: dict
