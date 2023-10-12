@@ -39,6 +39,8 @@ class WSlotMag(Ui_WSlotMag, QWidget):
 
     # Signal to DMachineSetup to know that the save popup is needed
     saveNeeded = Signal()
+    # Signal to SMSLotMag to know that a slot has changed
+    typeSlotShanged = Signal()
 
     def __init__(self, lam, material_dict):
         """Initialize the GUI according to lamination
@@ -116,6 +118,9 @@ class WSlotMag(Ui_WSlotMag, QWidget):
             self.lam.slot.Zs = Zs
         else:  # Load the previous slot of this type
             self.lam.slot = self.previous_slot[INIT_INDEX[c_index]]
+
+        # Notify SMSlot that the slot changed
+        self.typeSlotShanged.emit()
 
         # Notify the machine GUI that the machine has changed
         self.saveNeeded.emit()

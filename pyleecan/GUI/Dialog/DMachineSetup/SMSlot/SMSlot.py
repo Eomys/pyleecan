@@ -140,6 +140,7 @@ class SMSlot(Ui_SMSlot, QWidget):
                 lam=lam_north,
                 material_dict=self.material_dict,
             )
+            tab_north.typeSlotShanged.connect(self.update_slot_type)
             tab_north.saveNeeded.connect(self.emit_save)
             self.tab_slot.addTab(tab_north, "North Pole")
             # Adding south pole
@@ -150,11 +151,28 @@ class SMSlot(Ui_SMSlot, QWidget):
                 lam=lam_south,
                 material_dict=self.material_dict,
             )
+            tab_south.typeSlotShanged.connect(self.update_slot_type)
             tab_south.saveNeeded.connect(self.emit_save)
             self.tab_slot.addTab(tab_south, "South Pole")
         self.tab_slot.setCurrentIndex(0)
         if self.obj.slot.Zs is not None:
             self.set_slot_pitch(self.obj.slot.Zs)
+
+    def update_slot_type(self):
+        """Update the slot in the lamination when it changed in tab (for uneven case only)
+
+        Parameters
+        ----------
+        self : SMSlotMag
+            a SMSlotMag object
+        """
+        if not isinstance(self.obj, LamSlotMagNS):
+            return
+
+        if self.tab_slot.currentIndex() == 0:  # north pole
+            self.obj.slot = self.tab_slot.currentWidget().lam.slot
+        else:  # south pole
+            self.obj.slot_south = self.tab_slot.currentWidget().lam.slot
 
     def set_lam_type(self):
         "Update the type of lamination according to the combobox to allow/disallow uneven pole pairs"
