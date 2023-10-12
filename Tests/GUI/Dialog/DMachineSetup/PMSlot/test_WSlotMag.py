@@ -21,7 +21,7 @@ from pyleecan.Classes.SlotM18 import SlotM18
 from pyleecan.Classes.SlotM19 import SlotM19
 from pyleecan.Classes.Material import Material
 from pyleecan.GUI.Dialog.DMatLib.DMatLib import LIB_KEY, MACH_KEY
-from pyleecan.GUI.Dialog.DMachineSetup.SMSlot.SMSlot import SMSlot
+from pyleecan.GUI.Dialog.DMachineSetup.SMSlot.WSlotMag.WSlotMag import WSlotMag
 from pyleecan.GUI.Dialog.DMachineSetup.SMSlot.PMSlot10.PMSlot10 import PMSlot10
 from pyleecan.GUI.Dialog.DMachineSetup.SMSlot.PMSlot11.PMSlot11 import PMSlot11
 from pyleecan.GUI.Dialog.DMachineSetup.SMSlot.PMSlot12.PMSlot12 import PMSlot12
@@ -36,8 +36,8 @@ import pytest
 from Tests.GUI import gui_option  # Set unit as [m]
 
 
-class TestSMSlot(object):
-    """Test that the widget SMSlot behave like it should (for SIPMSM)"""
+class TestWSlotMag(object):
+    """Test that the widget WSlotMag behave like it should (for SIPMSM)"""
 
     def setup_method(self):
         test_obj = MachineSIPMSM()
@@ -59,16 +59,13 @@ class TestSMSlot(object):
         material_dict[LIB_KEY][1].elec.rho = 0.32
         material_dict[LIB_KEY][2].elec.rho = 0.33
 
-        self.widget = SMSlot(
-            machine=test_obj, material_dict=material_dict, is_stator=False
-        )
-        self.widget.is_test = True
+        self.widget = WSlotMag(lam=test_obj.rotor, material_dict=material_dict)
         self.test_obj = test_obj
 
     @classmethod
     def setup_class(cls):
         """Start the app for the test"""
-        print("\nStart Test TestSMSlot")
+        print("\nStart Test TestWSlotMag")
         if not QtWidgets.QApplication.instance():
             cls.app = QtWidgets.QApplication(sys.argv)
         else:
@@ -173,7 +170,7 @@ class TestSMSlot(object):
 
 
 if __name__ == "__main__":
-    a = TestSMSlot()
+    a = TestWSlotMag()
     a.setup_class()
     a.setup_method()
     a.teardown_class()
