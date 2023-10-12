@@ -17,7 +17,15 @@ def comp_angle_d_axis(self):
         angle between the X axis and the first d+ axis
     """
 
-    if self.has_magnet() and self.magnet.type_magnetization == 3:
-        return 0
-    else:
-        return pi / self.get_pole_pair_number() / 2
+    angle = pi / self.get_pole_pair_number() / 2
+
+    if self.has_magnet():
+        if hasattr(self, "magnet") and self.magnet.type_magnetization == 3:
+            angle = 0
+        elif (
+            self.magnet_north.type_magnetization == 3
+            and self.magnet_south.type_magnetization == 3
+        ):
+            angle = 0
+
+    return angle
