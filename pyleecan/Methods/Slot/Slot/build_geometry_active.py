@@ -40,6 +40,17 @@ def build_geometry_active(self, Nrad, Ntan, alpha=0, delta=0):
     if len(inter_list) == 3 and abs(inter_list[0] - inter_list[1]) < 1e-6:
         inter_list.pop(0)
     # When 4 lines at the bottom cross on X axis (ex SlotM17)
+    elif len(inter_list) == 4:
+        len_inter_list = 3
+        for i in range(len_inter_list):
+            for j in range(len_inter_list):
+                if i == j:
+                    pass
+                else:
+                    if abs(inter_list[i] - inter_list[j]) < 1e-6:
+                        inter_list.pop(i)
+                        len_inter_list -= 1
+
     elif (
         len(inter_list) == 4
         and abs(inter_list[0] - inter_list[1]) < 1e-6

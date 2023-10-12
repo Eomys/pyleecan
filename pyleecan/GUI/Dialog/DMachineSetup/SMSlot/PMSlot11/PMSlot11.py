@@ -37,8 +37,8 @@ class PMSlot11(Gen_PMSlot11, QWidget):
             A PMSlot11 widget
         lamination : Lamination
             current lamination to edit
-        is_notch : bool
-            True to adapt the slot GUI for the notch setup
+        notch_obj : notch
+            current notch to edit
         material_dict: dict
             Materials dictionary (library + machine)
         """
@@ -54,13 +54,10 @@ class PMSlot11(Gen_PMSlot11, QWidget):
 
         # Set FloatEdit unit
         self.lf_W0.unit = "rad"
-        self.lf_Wmag.unit = "rad"
         self.lf_H0.unit = "m"
-        self.lf_Hmag.unit = "m"
         # Set unit name (m ou mm)
         wid_list = [
             self.unit_H0,
-            self.unit_Hmag,
         ]
         for wid in wid_list:
             wid.setText("[" + gui_option.unit.get_m_name() + "]")
@@ -85,6 +82,7 @@ class PMSlot11(Gen_PMSlot11, QWidget):
                     QPixmap(pixmap_dict["SlotM11_empty_ext_stator"])
                 )
 
+            # H/Wkey is define for notch in GUI but change the value of H/Wmag
             self.lf_Wkey.unit = "rad"
             self.lf_Hkey.unit = "m"
 
@@ -113,66 +111,62 @@ class PMSlot11(Gen_PMSlot11, QWidget):
             self.w_key_mat.setText("Key Material")
             if self.notch_obj.key_mat is None:
                 self.notch_obj.key_mat = None
-
             else:
                 self.w_key_mat.def_mat = "Steel1"
             self.set_key()
 
-            # widget
-            self.w_key_mat.setEnabled(False)
-            self.lf_Wkey.setEnabled(False)
-            self.lf_Hkey.setEnabled(False)
-            self.unit_Hkey.setEnabled(False)
-            self.c_Wkey_unit.setEnabled(False)
-            self.in_Hkey.setEnabled(False)
-            self.in_Wkey.setEnabled(False)
-
         else:
+            self.lf_Wmag.unit = "rad"
+            self.lf_Hmag.unit = "m"
+            # Set unit name (m ou mm)
+            wid_list = [
+                self.unit_Hmag,
+            ]
+            for wid in wid_list:
+                wid.setText("[" + gui_option.unit.get_m_name() + "]")
+
             # Use schematics on the inner without magnet
             self.img_slot.setPixmap(QPixmap(pixmap_dict["SlotM11_mag_int_rotor"]))
 
+            # Fill the fields with the machine values (if they're filled)
+            self.lf_Wmag.setValue(self.slot.Wmag)
+            self.lf_Hmag.setValue(self.slot.Hmag)
+
+            # Connect the signal
+            self.lf_Wmag.editingFinished.connect(self.set_Wmag)
+            self.lf_Hmag.editingFinished.connect(self.set_Hmag)
+            self.c_Wmag_unit.currentIndexChanged.connect(self.set_Wmag)
+
         # Fill the fields with the machine values (if they're filled)
         self.lf_W0.setValue(self.slot.W0)
-        self.lf_Wmag.setValue(self.slot.Wmag)
         self.lf_H0.setValue(self.slot.H0)
-        self.lf_Hmag.setValue(self.slot.Hmag)
 
         # Display the main output of the slot (surface, height...)
         self.w_out.comp_output()
 
         # Connect the signal
         self.lf_W0.editingFinished.connect(self.set_W0)
-        self.lf_Wmag.editingFinished.connect(self.set_Wmag)
         self.lf_H0.editingFinished.connect(self.set_H0)
-        self.lf_Hmag.editingFinished.connect(self.set_Hmag)
         self.c_W0_unit.currentIndexChanged.connect(self.set_W0)
-        self.c_Wmag_unit.currentIndexChanged.connect(self.set_Wmag)
 
     def set_key(self):
         """Setup the slot key according to the GUI"""
+        widget_list = [self.lf_Wkey, self.c_Wkey_unit, self.in_Wkey]
+        widget_list += [self.lf_Hkey, self.unit_Hkey, self.in_Hkey]
+        widget_list += [self.w_key_mat]
+
         if self.g_key.isChecked():
             self.w_key_mat.update(self.notch_obj, "key_mat", self.material_dict)
-
             self.img_slot.setPixmap(QPixmap(pixmap_dict["SlotM11_key_ext_stator"]))
-            self.lf_Wkey.setEnabled(True)
-            self.lf_Hkey.setEnabled(True)
-            self.unit_Hkey.setEnabled(True)
-            self.c_Wkey_unit.setEnabled(True)
-            self.in_Hkey.setEnabled(True)
-            self.in_Wkey.setEnabled(True)
-            self.w_key_mat.setEnabled(True)
+            isEnabled = True
 
         else:
             self.notch_obj.key_mat = None
-
             self.img_slot.setPixmap(QPixmap(pixmap_dict["SlotM11_empty_ext_stator"]))
-            self.lf_Wkey.setEnabled(False)
-            self.lf_Hkey.setEnabled(False)
-            self.unit_Hkey.setEnabled(False)
-            self.c_Wkey_unit.setEnabled(False)
-            self.in_Hkey.setEnabled(False)
-            self.in_Wkey.setEnabled(False)
-            self.w_key_mat.setEnabled(False)
+            isEnabled = False
+
+        for widget in widget_list:
+            widget.setEnabled(isEnabled)
         # Notify the machine GUI that the machine has changed
         self.saveNeeded.emit()
 
