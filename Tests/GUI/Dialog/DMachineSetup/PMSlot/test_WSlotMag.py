@@ -176,6 +176,5 @@ if __name__ == "__main__":
     a = TestSMSlot()
     a.setup_class()
     a.setup_method()
-    a.test_plot_schematics()
     a.teardown_class()
     print("Done")

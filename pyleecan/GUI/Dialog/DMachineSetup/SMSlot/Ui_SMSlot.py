@@ -30,13 +30,18 @@ class Ui_SMSlot(object):
 
         self.horizontalLayout_2.addWidget(self.b_help)
 
-        self.c_slot_type = QComboBox(SMSlot)
-        self.c_slot_type.addItem("")
-        self.c_slot_type.addItem("")
-        self.c_slot_type.addItem("")
-        self.c_slot_type.setObjectName(u"c_slot_type")
+        self.in_NS_type = QLabel(SMSlot)
+        self.in_NS_type.setObjectName(u"in_NS_type")
 
-        self.horizontalLayout_2.addWidget(self.c_slot_type)
+        self.horizontalLayout_2.addWidget(self.in_NS_type)
+
+        self.c_NS_type = QComboBox(SMSlot)
+        self.c_NS_type.addItem("")
+        self.c_NS_type.addItem("")
+        self.c_NS_type.setObjectName(u"c_NS_type")
+        self.c_NS_type.setMinimumSize(QSize(180, 0))
+
+        self.horizontalLayout_2.addWidget(self.c_NS_type)
 
         self.out_Slot_pitch = QLabel(SMSlot)
         self.out_Slot_pitch.setObjectName(u"out_Slot_pitch")
@@ -51,15 +56,17 @@ class Ui_SMSlot(object):
 
         self.main_layout.addLayout(self.horizontalLayout_2)
 
-        self.w_slot = QWidget(SMSlot)
-        self.w_slot.setObjectName(u"w_slot")
+        self.tab_slot = QTabWidget(SMSlot)
+        self.tab_slot.setObjectName(u"tab_slot")
         sizePolicy = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Expanding)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.w_slot.sizePolicy().hasHeightForWidth())
-        self.w_slot.setSizePolicy(sizePolicy)
+        sizePolicy.setHeightForWidth(self.tab_slot.sizePolicy().hasHeightForWidth())
+        self.tab_slot.setSizePolicy(sizePolicy)
+        self.tab_slot.setMinimumSize(QSize(770, 550))
+        self.tab_slot.setTabsClosable(False)
 
-        self.main_layout.addWidget(self.w_slot)
+        self.main_layout.addWidget(self.tab_slot)
 
         self.verticalSpacer = QSpacerItem(
             20, 1, QSizePolicy.Minimum, QSizePolicy.Minimum
@@ -94,6 +101,8 @@ class Ui_SMSlot(object):
 
         self.retranslateUi(SMSlot)
 
+        self.tab_slot.setCurrentIndex(-1)
+
         QMetaObject.connectSlotsByName(SMSlot)
 
     # setupUi
@@ -101,16 +110,19 @@ class Ui_SMSlot(object):
     def retranslateUi(self, SMSlot):
         SMSlot.setWindowTitle(QCoreApplication.translate("SMSlot", u"Form", None))
         self.b_help.setText("")
-        self.c_slot_type.setItemText(
-            0, QCoreApplication.translate("SMSlot", u"Slot Type 10", None)
+        self.in_NS_type.setText(
+            QCoreApplication.translate("SMSlot", u"Pole distribution", None)
         )
-        self.c_slot_type.setItemText(
-            1, QCoreApplication.translate("SMSlot", u"Slot Type 11", None)
+        self.c_NS_type.setItemText(
+            0, QCoreApplication.translate("SMSlot", u"Even (default)", None)
         )
-        self.c_slot_type.setItemText(
-            2, QCoreApplication.translate("SMSlot", u"Slot Type 12", None)
+        self.c_NS_type.setItemText(
+            1, QCoreApplication.translate("SMSlot", u"North different than South", None)
         )
 
+        self.c_NS_type.setCurrentText(
+            QCoreApplication.translate("SMSlot", u"Even (default)", None)
+        )
         self.out_Slot_pitch.setText(
             QCoreApplication.translate("SMSlot", u"p = ? Slot pitch = 1.35 rad", None)
         )

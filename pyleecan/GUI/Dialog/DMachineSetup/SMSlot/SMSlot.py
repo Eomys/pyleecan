@@ -7,6 +7,9 @@ from logging import getLogger
 from .....loggers import GUI_LOG_NAME
 from .....Classes.Slot import Slot
 from .....Classes.SlotM10 import SlotM10
+from .....Classes.LamSlotMagNS import LamSlotMagNS
+from .....Classes.LamSlotMag import LamSlotMag
+from .....GUI.Dialog.DMachineSetup.SMSlot.WSlotMag.WSlotMag import WSlotMag
 from .....GUI.Dialog.DMachineSetup.SMSlot.Ui_SMSlot import Ui_SMSlot
 from .....GUI.Dialog.DMachineSetup.SMSlot.PMSlot10.PMSlot10 import PMSlot10
 from .....GUI.Dialog.DMachineSetup.SMSlot.PMSlot11.PMSlot11 import PMSlot11
@@ -72,73 +75,138 @@ class SMSlot(Ui_SMSlot, QWidget):
         self.is_test = False  # To skip show fig for tests
         self.test_err_msg = None  # To test the error messages
 
-        self.b_help.hide()
-
-        # Fill the combobox with the available slot
-        listView = QListView(self.c_slot_type)
-        self.c_slot_type.clear()
-        self.c_slot_type.setView(listView)
-        for slot in SLOT_NAME:
-            self.c_slot_type.addItem(slot)
-        # Avoid erase all the parameters when navigating though the slots
-        self.previous_slot = dict()
-        for slot_type in INIT_INDEX:
-            self.previous_slot[slot_type] = None
-
+        # Get the correct object to set
         if self.is_stator:
             self.obj = machine.stator
         else:
             self.obj = machine.rotor
-        if self.obj.magnet.Nseg is None:  # Set default value
-            self.obj.magnet.Nseg = 1
+        # Set default values
+        if isinstance(self.obj, LamSlotMag):
+            if self.obj.magnet.Nseg is None:
+                self.obj.magnet.Nseg = 1
+        elif isinstance(self.obj, LamSlotMagNS):
+            if self.obj.magnet_north.Nseg is None:
+                self.obj.magnet_north.Nseg = 1
+            if self.obj.magnet_south.Nseg is None:
+                self.obj.magnet_south.Nseg = 1
 
-        # If the Slot is not set, initialize it with a SlotM10
-        if self.obj.slot is None or type(self.obj.slot) is Slot:
-            self.obj.slot = SlotM10()
-            self.obj.slot._set_None()
+        if isinstance(self.obj, LamSlotMag):
+            self.c_NS_type.setCurrentIndex(0)
+            # If the Slot is not set, initialize it with a SlotM10
+            if self.obj.slot is None or type(self.obj.slot) is Slot:
+                self.obj.slot = SlotM10()
+                self.obj.slot._set_None()
+        elif isinstance(self.obj, LamSlotMagNS):
+            self.c_NS_type.setCurrentIndex(1)
+            # If the Slot are not set, initialize them with a SlotM10
+            if self.obj.slot is None or type(self.obj.slot) is Slot:  # north slot
+                self.obj.slot = SlotM10()
+                self.obj.slot._set_None()
+            if self.obj.slot_south is None or type(self.obj.slot_south) is Slot:
+                self.obj.slot_south = SlotM10()
+                self.obj.slot_south._set_None()
+
+        # Initialize tab widget
+        self.update_tab()
 
         self.set_slot_pitch(self.obj.slot.Zs)
 
-        # Set the correct index for the type checkbox and display the object
-        index = INIT_INDEX.index(type(self.obj.slot))
-        self.c_slot_type.setCurrentIndex(index)
-
-        # Update the slot widget
-        self.s_update_slot()
+        # Set Help URL
+        self.b_help.hide()
 
         # Connect the slot
-        self.c_slot_type.currentIndexChanged.connect(self.s_change_slot)
-
+        self.c_NS_type.currentIndexChanged.connect(self.set_lam_type)
         self.b_plot.clicked.connect(self.s_plot)
 
-    def set_slot_type(self, index):
-        """Initialize self.obj with the slot corresponding to index
+    def update_tab(self):
+        """Update the tab widget with one or two tabs
 
         Parameters
         ----------
-        self : SMSlot
-            A SMSlot object
-        index : int
-            Index of the selected slot type in the list
+        self : SMSlotMag
+            a SMSlotMag object
         """
+        self.tab_slot.clear()  # remove previous tabs
+        if isinstance(self.obj, LamSlotMag):  # one pole
+            tab = WSlotMag(lam=self.obj, material_dict=self.material_dict)
+            tab.saveNeeded.connect(self.emit_save)
+            self.tab_slot.addTab(tab, "Pole")
+        elif isinstance(self.obj, LamSlotMagNS):  # two poles
+            # Adding north pole
+            lam_north = LamSlotMag(init_dict=self.obj.as_dict())
+            lam_north.slot = self.obj.slot
+            lam_north.magnet = self.obj.magnet_north
+            tab_north = WSlotMag(
+                lam=lam_north,
+                material_dict=self.material_dict,
+            )
+            tab_north.saveNeeded.connect(self.emit_save)
+            self.tab_slot.addTab(tab_north, "North Pole")
+            # Adding south pole
+            lam_south = LamSlotMag(init_dict=self.obj.as_dict())
+            lam_south.slot = self.obj.slot_south
+            lam_south.magnet = self.obj.magnet_south
+            tab_south = WSlotMag(
+                lam=lam_south,
+                material_dict=self.material_dict,
+            )
+            tab_south.saveNeeded.connect(self.emit_save)
+            self.tab_slot.addTab(tab_south, "South Pole")
+        self.tab_slot.setCurrentIndex(0)
+        if self.obj.slot.Zs is not None:
+            self.set_slot_pitch(self.obj.slot.Zs)
 
-        # Save the slot
-        self.previous_slot[type(self.obj.slot)] = self.obj.slot
+    def set_lam_type(self):
+        "Update the type of lamination according to the combobox to allow/disallow uneven pole pairs"
 
-        # Call the corresponding constructor
-        Zs = self.obj.slot.Zs
-        if self.previous_slot[INIT_INDEX[index]] is None:
-            # No previous slot of this type
-            self.obj.slot = INIT_INDEX[index]()
-            self.obj.slot._set_None()  # No default value
-            self.obj.slot.Zs = Zs
-        else:  # Load the previous slot of this type
-            self.obj.slot = self.previous_slot[INIT_INDEX[index]]
-            if self.obj.slot.Zs is not None:
-                self.set_slot_pitch(self.obj.slot.Zs)
+        # From even to uneven
+        if self.c_NS_type.currentIndex() == 1:
+            if not isinstance(self.obj, LamSlotMagNS):
+                # Keeping the same slot if switching from even to uneven
+                previous_slot = self.obj.slot
+                # Keeping the same magnet if switching from even to uneven
+                previous_magnet = self.obj.magnet
+                # Changing the class of the lamination to have uneven pole pairs
+                self.obj = LamSlotMagNS(init_dict=self.obj.as_dict())
+                # Updating slots and magnets of the lamination
+                self.obj.slot = previous_slot.copy()  # north slot
+                self.obj.slot_south = previous_slot.copy()
+                self.obj.magnet_north = previous_magnet.copy()
+                self.obj.magnet_south = previous_magnet.copy()
 
-        # Notify the machine GUI that the machine has changed
-        self.saveNeeded.emit()
+                self.emit_save()
+
+            # if slots are not set, initialize them with a North SlotM10 and a South SlotM10
+            if self.obj.slot is None:
+                self.obj.slot = SlotM10()
+            if self.obj.slot_south is None:
+                self.obj.slot_south = SlotM10()
+
+        # From uneven to even
+        else:
+            if not isinstance(self.obj, LamSlotMag):
+                # Keeping the north slot
+                previous_slot = self.obj.slot
+                # Keeping the north magnet
+                previous_magnet = self.obj.magnet_north
+                # Changing the class of the lamination to have even pole pairs
+                self.obj = LamSlotMag(init_dict=self.obj.as_dict())
+                # Updating slot and magnet of the lamination
+                self.obj.slot = previous_slot.copy()
+                self.obj.magnet = previous_magnet.copy()
+
+                self.emit_save()
+
+            # # If the slot is not set, initialize it with a SlotM10
+            if self.obj.slot is None:
+                self.obj.slot = SlotM10()
+        # Updating the lamination
+        if self.is_stator:
+            self.machine.stator = self.obj
+        else:
+            self.machine.rotor = self.obj
+        # Updating tab widget
+        self.update_tab()
 
     def emit_save(self):
         """Send a saveNeeded signal to the DMachineSetup"""
@@ -166,53 +234,6 @@ class SMSlot(Ui_SMSlot, QWidget):
             + "%.4g" % (Slot_pitch_rad)
             + " [rad])"
         )
-
-    def s_set_type_magnetization(self, index):
-        """Signal to update the value of type_magnetization according to the combobox
-
-        Parameters
-        ----------
-        self : SMagnet
-            A SMagnet object
-        index : int
-            Current index of the combobox
-        """
-        self.machine.rotor.magnet.type_magnetization = index
-        # Notify the machine GUI that the machine has changed
-        self.saveNeeded.emit()
-
-    def s_update_slot(self):
-        """Update the slot widget
-
-        Parameters
-        ----------
-        self : SMSlot
-            A SMSlot object
-        """
-
-        # Regenerate the pages with the new values
-        self.w_slot.setParent(None)
-        self.w_slot = WIDGET_LIST[self.c_slot_type.currentIndex()](
-            self.obj, self.material_dict
-        )
-        self.w_slot.saveNeeded.connect(self.emit_save)
-        # Refresh the GUI
-        self.main_layout.removeWidget(self.w_slot)
-        self.main_layout.insertWidget(2, self.w_slot)
-
-    def s_change_slot(self, index):
-        """Signal to update the slot object and widget
-
-        Parameters
-        ----------
-        self : SMSlot
-            A SMSlot object
-        index : int
-            Current index of the combobox
-        """
-        # Current slot is removed and replaced by the new one
-        self.set_slot_type(index)
-        self.s_update_slot()
 
     def s_plot(self):
         """Try to plot the lamination
@@ -267,7 +288,17 @@ class SMSlot(Ui_SMSlot, QWidget):
         try:
             # Call the check method of the slot (every slot type have a
             # different check method)
+            err_msg = ""
             index = INIT_INDEX.index(type(lam.slot))
             return WIDGET_LIST[index].check(lam)
+            if isinstance(
+                lam, LamSlotMagNS
+            ):  # check also the south pole for LamSlotMagNS
+                index = INIT_INDEX.index(type(lam.slot_south))
+                lam_south = LamSlotMag(init_dict=lam.as_dict())
+                lam_south.slot = lam.slot_south
+                lam_south.magnet = lam.magnet_south
+                err_msg += WIDGET_LIST[index].check(lam)
+            return err_msg
         except Exception as e:
             return str(e)

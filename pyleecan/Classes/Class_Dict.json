@@ -5935,7 +5935,7 @@
         "mother": "LamSlotM",
         "name": "LamSlotMag",
         "package": "Machine",
-        "path": "pyleecan/Generator/ClassesRef/Machine/LamSlotMag.csv",
+        "path": "pyleecan/Generator/ClassesRef/Machine/.csv",
         "properties": [
             {
                 "as_dict": "",

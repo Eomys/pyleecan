@@ -8,6 +8,7 @@ from numpy import pi
 from Tests.GUI import gui_option  # Set unit as [m]
 from pyleecan.Classes.LamSlotMag import LamSlotMag
 from pyleecan.Classes.SlotM10 import SlotM10
+from pyleecan.Classes.Magnet import Magnet
 from pyleecan.GUI.Dialog.DMachineSetup.SMSlot.PMSlot10.PMSlot10 import PMSlot10
 from pyleecan.Classes.Material import Material
 from pyleecan.GUI.Dialog.DMatLib.DMatLib import LIB_KEY, MACH_KEY
@@ -22,6 +23,7 @@ class TestPMSlot10(object):
     def setup_method(self):
         self.test_obj = LamSlotMag(Rint=0.1, Rext=0.2)
         self.test_obj.slot = SlotM10(H0=0.10, W0=0.13, Wmag=0.14, Hmag=0.15)
+        self.test_obj.magnet = Magnet(type_magnetization=2)
 
         material_dict = {LIB_KEY: list(), MACH_KEY: list()}
         material_dict[LIB_KEY] = [
@@ -53,7 +55,7 @@ class TestPMSlot10(object):
 
     def test_init(self):
         """Check that the Widget spinbox initialise to the lamination value"""
-
+        assert self.widget.w_mag.c_type_magnetization.currentIndex() == 2
         assert self.widget.lf_H0.value() == 0.10
         assert self.widget.lf_Hmag.value() == 0.15
         assert self.widget.lf_W0.value() == 0.13

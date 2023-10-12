@@ -66,6 +66,7 @@ class WWSlotMag(QGroupBox):
 
         if lamination.magnet.type_magnetization is None:
             lamination.magnet.type_magnetization = 0
+        self.c_type_magnetization.setCurrentIndex(lamination.magnet.type_magnetization)
 
         # Notify the machine GUI that the machine has changed
         self.saveNeeded.emit()
