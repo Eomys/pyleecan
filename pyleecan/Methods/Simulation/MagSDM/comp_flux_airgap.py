@@ -75,4 +75,4 @@ def comp_flux_airgap(self, output, axes_dict, Is_val=None, Ir_val=None):
 
     self.subdomain_model.set_subdomains(Nharm_coeff=self.Nharm_coeff)
 
-    self.subdomain_model.solve()
+    self.subdomain_model.solve(angle_rotor)

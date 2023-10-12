@@ -1,5 +1,5 @@
-def solve(self):
-    """Method description 
+def solve(self, angle_rotor):
+    """Method description
 
     Parameters
     ----------
@@ -12,6 +12,4 @@ def solve(self):
         var description
     """
 
-    raise Exception("Method solve not implemented yet")
-
-    return var
+    self.comp_interface_airgap_slot()

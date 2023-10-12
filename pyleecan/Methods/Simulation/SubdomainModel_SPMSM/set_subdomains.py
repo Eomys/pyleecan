@@ -46,9 +46,10 @@ def set_subdomains(self, Nharm_coeff=1):
         Rsbo + sign_rot * polar_eq.stator.slot.H0,
         Rsbo + sign_rot * (polar_eq.stator.slot.H0 + polar_eq.stator.slot.H2),
     ]
+    theta_i0 = 0
     self.stator_slot = Subdomain_SlotWinding(
         periodicity=Zs,
-        center_angle=arange(0, Zs0) + 1,
+        center_angle=2 * pi / Zs * arange(0, Zs0) + theta_i0,
         angular_width=polar_eq.stator.slot.W2,
         radius_min=min(radii),
         radius_max=max(radii),
@@ -69,7 +70,7 @@ def set_subdomains(self, Nharm_coeff=1):
 
     if polar_eq.stator.slot.H0 > 0:
         # Define stator slots opening subdomains
-        Nhso = max([floor(d * Nhag / pi), 2])
+        Nhso = max([floor(polar_eq.stator.slot.W0 * Nhag / pi), 2])
         radii = [Rsbo, Rsbo + sign_rot * polar_eq.stator.slot.H0]
         self.stator_slot_opening = Subdomain_SlotOpening(
             periodicity=Zs,
