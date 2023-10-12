@@ -90,6 +90,9 @@ class PMSlot19(Gen_PMSlot19, QWidget):
         else:
             # Use schematics on the inner without magnet
             self.img_slot.setPixmap(QPixmap(pixmap_dict["SlotM19_mag_int_rotor"]))
+            self.lf_H0.hide()
+            self.unit_H0.hide()
+            self.in_H0.hide()
 
         # Fill the fields with the machine values (if they're filled)
         self.lf_W0.setValue(self.slot.W0)
