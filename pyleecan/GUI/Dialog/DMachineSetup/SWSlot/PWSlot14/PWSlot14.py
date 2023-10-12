@@ -104,16 +104,11 @@ class PWSlot14(Gen_PWSlot14, QWidget):
     def set_wedge(self):
         """Setup the slot wedge according to the GUI"""
         if self.g_wedge.isChecked():
-
             self.img_slot.setPixmap(
                 QPixmap(pixmap_dict["SlotW14_wedge_full_ext_stator"])
             )
             self.w_wedge_mat.update(self.slot, "wedge_mat", self.material_dict)
-
         else:
-            self.w_wedge_mat.hide()
-            self.in_type.hide()
-            self.c_wedge_type.hide()
             self.slot.wedge_mat = None
             self.c_wedge_type.setCurrentIndex(0)
 
