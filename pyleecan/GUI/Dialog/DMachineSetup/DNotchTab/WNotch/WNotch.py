@@ -33,6 +33,8 @@ class WNotch(Ui_WNotch, QWidget):
             A parent object containing the lamination to edit
         index : int
             Index of the notch to edit
+        material_dict: dict
+            Materials dictionary (library + machine)
         """
 
         # Build the interface according to the .ui file
@@ -232,9 +234,16 @@ class WNotch(Ui_WNotch, QWidget):
                 return "You must set W0 !"
             elif self.w_notch.lf_W0.value() <= 0:
                 return "W0 must be higher than 0"
-            # if self.w_notch.lf_H0.value() is None:
-            #    return "You must set H0 !"
-            # if self.w_notch.lf_H0.value() <= 0:
-            #    return "H0 must be higher than 0"
+            # In the Slot19, the lenght H0 doesn't exist (Hmag instead)
+            if not isinstance(self.w_notch, PMSlot19):
+                if self.w_notch.lf_H0.value() is None:
+                    return "You must set H0 !"
+                if self.w_notch.lf_H0.value() <= 0:
+                    return "H0 must be higher than 0"
+            if isinstance(self.w_notch, PMSlot19):
+                if self.w_notch.lf_Hmag.value() is None:
+                    return "You must set H0 !"
+                if self.w_notch.lf_Hmag.value() <= 0:
+                    return "H0 must be higher than 0"
 
         return self.w_notch.check(self.lam_notch)

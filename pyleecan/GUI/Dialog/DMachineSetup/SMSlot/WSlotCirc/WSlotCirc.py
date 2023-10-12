@@ -33,8 +33,8 @@ class WSlotCirc(Gen_WSlotCirc, QWidget):
             A SlotCirc widget
         lamination : Lamination
             current lamination to edit
-        is_notch : bool
-            True to adapt the slot GUI for the notch setup
+        notch_obj : notch
+            current notch to edit
         material_dict: dict
             Materials dictionary (library + machine)
         """

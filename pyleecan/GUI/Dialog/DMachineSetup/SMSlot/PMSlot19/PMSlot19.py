@@ -34,6 +34,8 @@ class PMSlot19(Gen_PMSlot19, QWidget):
             A PMSlot19 widget
         lamination : Lamination
             current lamination to edit
+        notch_obj : notch
+            current notch to edit
         material_dict: dict
             Materials dictionary (library + machine)
         """
@@ -50,12 +52,11 @@ class PMSlot19(Gen_PMSlot19, QWidget):
         # Set FloatEdit unit
         self.lf_W0.unit = "m"
         self.lf_W1.unit = "m"
-        self.lf_Hmag.unit = "m"
+
         # Set unit name (m ou mm)
         wid_list = [
             self.unit_W0,
             self.unit_W1,
-            self.unit_Hmag,
         ]
         for wid in wid_list:
             wid.setText("[" + gui_option.unit.get_m_name() + "]")
@@ -88,16 +89,25 @@ class PMSlot19(Gen_PMSlot19, QWidget):
             self.lf_H0.editingFinished.connect(self.set_H0)
 
         else:
+            self.lf_Hmag.unit = "m"
+            # Set unit name (m ou mm)
+            wid_list = [
+                self.unit_Hmag,
+            ]
+            for wid in wid_list:
+                wid.setText("[" + gui_option.unit.get_m_name() + "]")
+
             # Use schematics on the inner without magnet
             self.img_slot.setPixmap(QPixmap(pixmap_dict["SlotM19_mag_int_rotor"]))
             self.lf_H0.hide()
             self.unit_H0.hide()
             self.in_H0.hide()
+            self.lf_Hmag.setValue(self.slot.Hmag)
+            self.lf_Hmag.editingFinished.connect(self.set_Hmag)
 
         # Fill the fields with the machine values (if they're filled)
         self.lf_W0.setValue(self.slot.W0)
         self.lf_W1.setValue(self.slot.W1)
-        self.lf_Hmag.setValue(self.slot.Hmag)
 
         # Display the main output of the slot (surface, height...)
         self.w_out.comp_output()
@@ -105,7 +115,6 @@ class PMSlot19(Gen_PMSlot19, QWidget):
         # Connect the signal
         self.lf_W0.editingFinished.connect(self.set_W0)
         self.lf_W1.editingFinished.connect(self.set_W1)
-        self.lf_Hmag.editingFinished.connect(self.set_Hmag)
 
     def set_W0(self):
         """Signal to update the value of W0 according to the line edit

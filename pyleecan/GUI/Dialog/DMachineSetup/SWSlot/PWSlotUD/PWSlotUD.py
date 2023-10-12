@@ -38,8 +38,8 @@ class PWSlotUD(Ui_PWSlotUD, QWidget):
             current lamination to edit
         material_dict: dict
             Materials dictionary (library + machine)
-        is_notch : bool
-            True to adapt the slot GUI for the notch setup
+        notch_obj : notch
+            current notch to edit
         """
 
         # Build the interface according to the .ui file
