@@ -52,9 +52,9 @@ class DNotchTab(Ui_DNotchTab, QDialog):
 
         # Get the correct object to set
         if self.is_stator:
-            self.obj = self.machine.stator.copy()
+            self.obj = self.machine.stator
         else:
-            self.obj = self.machine.rotor.copy()
+            self.obj = self.machine.rotor
 
         # Init notch
         if self.obj.notch is None:
