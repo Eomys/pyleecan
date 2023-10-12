@@ -60,10 +60,10 @@ class Subdomain_SlotOpening(Subdomain):
         D=None,
         radius_min=None,
         radius_max=None,
-        center_angle=None,
         angular_width=None,
         k=None,
         periodicity=None,
+        permeability_relative=1,
         init_dict=None,
         init_str=None,
     ):
@@ -94,14 +94,14 @@ class Subdomain_SlotOpening(Subdomain):
                 radius_min = init_dict["radius_min"]
             if "radius_max" in list(init_dict.keys()):
                 radius_max = init_dict["radius_max"]
-            if "center_angle" in list(init_dict.keys()):
-                center_angle = init_dict["center_angle"]
             if "angular_width" in list(init_dict.keys()):
                 angular_width = init_dict["angular_width"]
             if "k" in list(init_dict.keys()):
                 k = init_dict["k"]
             if "periodicity" in list(init_dict.keys()):
                 periodicity = init_dict["periodicity"]
+            if "permeability_relative" in list(init_dict.keys()):
+                permeability_relative = init_dict["permeability_relative"]
         # Set the properties (value check and convertion are done in setter)
         self.A = A
         self.B = B
@@ -111,10 +111,10 @@ class Subdomain_SlotOpening(Subdomain):
         super(Subdomain_SlotOpening, self).__init__(
             radius_min=radius_min,
             radius_max=radius_max,
-            center_angle=center_angle,
             angular_width=angular_width,
             k=k,
             periodicity=periodicity,
+            permeability_relative=permeability_relative,
         )
         # The class is frozen (in Subdomain init), for now it's impossible to
         # add new properties
@@ -310,13 +310,13 @@ class Subdomain_SlotOpening(Subdomain):
             D_val = self.D.copy()
         radius_min_val = self.radius_min
         radius_max_val = self.radius_max
-        center_angle_val = self.center_angle
         angular_width_val = self.angular_width
         if self.k is None:
             k_val = None
         else:
             k_val = self.k.copy()
         periodicity_val = self.periodicity
+        permeability_relative_val = self.permeability_relative
         # Creates new object of the same type with the copied properties
         obj_copy = type(self)(
             A=A_val,
@@ -325,10 +325,10 @@ class Subdomain_SlotOpening(Subdomain):
             D=D_val,
             radius_min=radius_min_val,
             radius_max=radius_max_val,
-            center_angle=center_angle_val,
             angular_width=angular_width_val,
             k=k_val,
             periodicity=periodicity_val,
+            permeability_relative=permeability_relative_val,
         )
         return obj_copy
 

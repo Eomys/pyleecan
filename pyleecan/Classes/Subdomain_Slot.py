@@ -60,6 +60,7 @@ class Subdomain_Slot(Subdomain):
         angular_width=None,
         k=None,
         periodicity=None,
+        permeability_relative=1,
         init_dict=None,
         init_str=None,
     ):
@@ -94,6 +95,8 @@ class Subdomain_Slot(Subdomain):
                 k = init_dict["k"]
             if "periodicity" in list(init_dict.keys()):
                 periodicity = init_dict["periodicity"]
+            if "permeability_relative" in list(init_dict.keys()):
+                permeability_relative = init_dict["permeability_relative"]
         # Set the properties (value check and convertion are done in setter)
         self.A = A
         self.B = B
@@ -105,6 +108,7 @@ class Subdomain_Slot(Subdomain):
             angular_width=angular_width,
             k=k,
             periodicity=periodicity,
+            permeability_relative=permeability_relative,
         )
         # The class is frozen (in Subdomain init), for now it's impossible to
         # add new properties
@@ -277,6 +281,7 @@ class Subdomain_Slot(Subdomain):
         else:
             k_val = self.k.copy()
         periodicity_val = self.periodicity
+        permeability_relative_val = self.permeability_relative
         # Creates new object of the same type with the copied properties
         obj_copy = type(self)(
             A=A_val,
@@ -287,6 +292,7 @@ class Subdomain_Slot(Subdomain):
             angular_width=angular_width_val,
             k=k_val,
             periodicity=periodicity_val,
+            permeability_relative=permeability_relative_val,
         )
         return obj_copy
 

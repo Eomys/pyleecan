@@ -951,8 +951,12 @@ class DClassGenerator(Ui_DClassGenerator, QWidget):
         if isfile(old_meth_path):
             # Delete new file if it already exists otherwise os.rename will crash
             if isfile(new_meth_path):
-                print("Deleting method file that had same name and should not be here")
-                os.remove(new_meth_path)
+                print(
+                    "Cannot rename method to: "
+                    + meth_name
+                    + " since the file already exists"
+                )
+                return
             print("Renaming method file " + old_name + " to " + meth_name)
             os.rename(old_meth_path, new_meth_path)
 
@@ -1571,34 +1575,56 @@ class DClassGenerator(Ui_DClassGenerator, QWidget):
         self.check_class_modified()
 
         # Check if each modified class has children and regenerate them
-        for csv_path in self.list_class_modified:
-            modified_class = basename(csv_path)[:-4]
-            if (
-                modified_class in self.parent_dict
-                and len(self.parent_dict[modified_class]) > 0
-            ):
-                print(
-                    "Regenerating classes: "
-                    + str(self.parent_dict[modified_class])
-                    + " as children of modified class: "
-                    + modified_class
-                )
-                self.list_class_modified.extend(self.parent_dict[modified_class])
-                # Check if each modified child has children and regenerate them
-                for modified_child in self.parent_dict[modified_class]:
-                    if (
-                        modified_child in self.parent_dict
-                        and len(self.parent_dict[modified_child]) > 0
-                    ):
-                        print(
-                            "Regenerating classes: "
-                            + str(self.parent_dict[modified_child])
-                            + " as children of modified class: "
-                            + modified_child
-                        )
-                        self.list_class_modified.extend(
-                            self.parent_dict[modified_child]
-                        )
+        modified_list = [
+            basename(csv_path)[:-4] for csv_path in self.list_class_modified
+        ]
+        children_list = list()
+
+        # 6 nested for loops to include childs up to 6 generations
+        for modified_class in modified_list:
+            if modified_class in self.parent_dict:
+                children_list.extend(self.parent_dict[modified_class])
+                for modified_class1 in self.parent_dict[modified_class]:
+                    if modified_class1 in self.parent_dict:
+                        children_list.extend(self.parent_dict[modified_class1])
+                        for modified_class2 in self.parent_dict[modified_class1]:
+                            if modified_class2 in self.parent_dict:
+                                children_list.extend(self.parent_dict[modified_class2])
+                                for modified_class3 in self.parent_dict[
+                                    modified_class2
+                                ]:
+                                    if modified_class3 in self.parent_dict:
+                                        children_list.extend(
+                                            self.parent_dict[modified_class3]
+                                        )
+                                        for modified_class4 in self.parent_dict[
+                                            modified_class4
+                                        ]:
+                                            if modified_class4 in self.parent_dict:
+                                                children_list.extend(
+                                                    self.parent_dict[modified_class4]
+                                                )
+                                                for modified_class5 in self.parent_dict[
+                                                    modified_class4
+                                                ]:
+                                                    if (
+                                                        modified_class5
+                                                        in self.parent_dict
+                                                    ):
+                                                        children_list.extend(
+                                                            self.parent_dict[
+                                                                modified_class5
+                                                            ]
+                                                        )
+
+        if len(children_list) > 0:
+            print(
+                "Adding children classes: "
+                + str(children_list)
+                + " to list of classes to regenerate"
+            )
+            for child in children_list:
+                self.list_class_modified.append(self.get_child_path(child))
 
         # Generate classes in list of modified classes
         run_generate_classes(
@@ -1610,38 +1636,6 @@ class DClassGenerator(Ui_DClassGenerator, QWidget):
 
         # Disable generate classes button
         self.b_genclass.setEnabled(False)
-
-        # # Get new parent_dict after class generation
-        # gen_dict = read_all(DOC_DIR, is_mother_of_mother=False)
-        # parent_dict_new = dict()
-        # for class_name, class_dict in gen_dict.items():
-        #     parent_dict_new[class_name] = sorted(class_dict["daughters"], key=str.lower)
-
-        # # Compare parent_dict
-        # if len(parent_dict_new) != len(self.parent_dict):
-        #     print("Error: wrong number of classes in parent dict")
-        # for (key0, val0), (key1, val1) in zip(
-        #     parent_dict_new.items(), self.parent_dict.items()
-        # ):
-        #     if key0 != key1:
-        #         print(
-        #             "Error: wrong class name in parent dict, got: " + str(key0),
-        #             " expected: " + str(key1),
-        #         )
-        #     if len(val0) != len(val1):
-        #         print(
-        #             "Error: wrong number of daughters for class "
-        #             + key0
-        #             + " in parent dict"
-        #         )
-        #     if val0 != val1:
-        #         print(
-        #             "Error: wrong daughters names for class "
-        #             + key0
-        #             + " in parent dict, got: "
-        #             + str(val0),
-        #             " expected: " + str(val1),
-        #         )
 
     def openContextMenu(self, position):
         """Generate and open context the menu at the given position
@@ -1689,7 +1683,7 @@ class DClassGenerator(Ui_DClassGenerator, QWidget):
 
         menu.exec_(self.treeView.viewport().mapToGlobal(position))
 
-    def renameClassMethods(self, path, oldName, newName, is_exit=False):
+    def renameClassMethods(self, path, oldName, newName):
         """Rename methods after class renaming and prevent from folder renaming
         to avoid conflict with package
 
