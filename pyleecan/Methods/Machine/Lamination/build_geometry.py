@@ -79,7 +79,7 @@ def build_geometry(self, sym=1, alpha=0, delta=0, is_circular_radius=False):
     surf_list.extend(vent_surf_list)
 
     # Add keys if any
-    if self.has_key():
+    if self.notch is not None:
         for ii, notch in enumerate(self.notch):
             if notch.has_key():
                 surf_list.extend(notch.build_geometry_key(index=ii, sym=sym))
