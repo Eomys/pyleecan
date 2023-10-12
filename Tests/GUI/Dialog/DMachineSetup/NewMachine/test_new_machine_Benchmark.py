@@ -17,6 +17,7 @@ from pyleecan.GUI.Dialog.DMachineSetup.SMachineDimension.SMachineDimension impor
 )
 from pyleecan.GUI.Dialog.DMachineSetup.SMachineType.SMachineType import SMachineType
 from pyleecan.GUI.Dialog.DMachineSetup.SMSlot.SMSlot import SMSlot
+from pyleecan.GUI.Dialog.DMachineSetup.SMSlot.WSlotMag.WSlotMag import WSlotMag
 from pyleecan.GUI.Dialog.DMachineSetup.SMSlot.PMSlot11.PMSlot11 import PMSlot11
 from pyleecan.GUI.Dialog.DMachineSetup.SSimu.SSimu import SSimu
 from pyleecan.GUI.Dialog.DMachineSetup.SWindCond.SWindCond import SWindCond
@@ -450,7 +451,6 @@ class TestNewMachineBenchmark(object):
             self.widget.w_step.out_Slot_pitch.text()
             == "p = 5 / Slot pitch = 36 [°] (0.6283 [rad])"
         )
-        assert self.widget.w_step.c_slot_type.currentText() == "Rectangular Magnet"
 
         assert self.widget.w_step.test_err_msg is None
         with mock.patch(
@@ -463,7 +463,15 @@ class TestNewMachineBenchmark(object):
             == "Error in Rotor Slot definition:\nYou must set W0 !"
         )
 
-        wid_slot = self.widget.w_step.w_slot
+        wid_slot_mag = self.widget.w_step.tab_slot.currentWidget()
+        assert isinstance(wid_slot_mag, WSlotMag)
+        assert wid_slot_mag.c_slot_type.currentText() == "Rectangular Magnet"
+        index_polar_magnet = wid_slot_mag.c_slot_type.findText("Polar Magnet")
+        wid_slot_mag.c_slot_type.setCurrentIndex(index_polar_magnet)
+
+        wid_slot = wid_slot_mag.w_slot
+        assert isinstance(wid_slot, PMSlot11)
+
         index_magnet1 = wid_slot.w_mag.w_mat.c_mat_type.findText("Magnet1")
         wid_slot.w_mag.w_mat.c_mat_type.setCurrentIndex(index_magnet1)
 
@@ -483,16 +491,10 @@ class TestNewMachineBenchmark(object):
         assert wid_slot.w_out.out_tot_surface.text() == "Slot surface: ?"
         assert wid_slot.w_out.out_op_angle.text() == "Opening angle: ?"
 
-        index_polar_magnet = self.widget.w_step.c_slot_type.findText("Polar Magnet")
-        self.widget.w_step.c_slot_type.setCurrentIndex(index_polar_magnet)
         index_magnetPrius = wid_slot.w_mag.w_mat.c_mat_type.findText("MagnetPrius")
-
         wid_slot.w_mag.w_mat.c_mat_type.setCurrentIndex(index_magnetPrius)
         assert wid_slot.w_mag.w_mat.c_mat_type.currentText() == "MagnetPrius"
         assert wid_slot.w_mag.c_type_magnetization.currentText() == "Radial"
-
-        wid_slot = self.widget.w_step.w_slot
-        assert isinstance(wid_slot, PMSlot11)
 
         assert wid_slot.lf_W0.value() is None
         assert wid_slot.lf_Wmag.value() is None
