@@ -9,6 +9,7 @@ from .....Classes.Slot import Slot
 from .....Classes.SlotM10 import SlotM10
 from .....Classes.LamSlotMagNS import LamSlotMagNS
 from .....Classes.LamSlotMag import LamSlotMag
+from .....Methods.Slot.Slot import SlotCheckError
 from .....GUI.Dialog.DMachineSetup.SMSlot.WSlotMag.WSlotMag import WSlotMag
 from .....GUI.Dialog.DMachineSetup.SMSlot.Ui_SMSlot import Ui_SMSlot
 from .....GUI.Dialog.DMachineSetup.SMSlot.PMSlot10.PMSlot10 import PMSlot10
@@ -290,12 +291,15 @@ class SMSlot(Ui_SMSlot, QWidget):
                 log_error(self, self.test_err_msg)
 
     @staticmethod
-    def check(lam):
+    def check(lamination):
         """Check that the current lamination have all the needed field set
 
         Parameters
         ----------
-        lam: LamSlotMag
+        self: SMSlot
+            A SMSlot object
+
+        lamination: Lamination
             Lamination to check
 
         Returns
@@ -303,20 +307,34 @@ class SMSlot(Ui_SMSlot, QWidget):
         error: str
             Error message (return None if no error)
         """
-        try:
-            # Call the check method of the slot (every slot type have a
-            # different check method)
-            err_msg = ""
-            index = INIT_INDEX.index(type(lam.slot))
-            return WIDGET_LIST[index].check(lam)
-            if isinstance(
-                lam, LamSlotMagNS
-            ):  # check also the south pole for LamSlotMagNS
-                index = INIT_INDEX.index(type(lam.slot_south))
-                lam_south = LamSlotMag(init_dict=lam.as_dict())
-                lam_south.slot = lam.slot_south
-                lam_south.magnet = lam.magnet_south
-                err_msg += WIDGET_LIST[index].check(lam)
-            return err_msg
-        except Exception as e:
-            return str(e)
+        err_msg = None
+        if isinstance(lamination, LamSlotMag):  # even case
+            # Check that the slot is correctly set
+            try:
+                index = INIT_INDEX.index(type(lamination.slot))
+                err_msg = WIDGET_LIST[index].check(lamination)
+                if err_msg is not None:
+                    return err_msg
+            except SlotCheckError as error:
+                return str(error)
+        elif isinstance(lamination, LamSlotMagNS):  # uneven case
+            # Check that the slot for the north pole is correctly set
+            try:
+                index = INIT_INDEX.index(type(lamination.slot))
+                err_msg = WIDGET_LIST[index].check(lamination)
+                if err_msg is not None:
+                    return f"North Pole: {err_msg}"
+            except SlotCheckError as error:
+                return f"North Pole: {error}"
+            # Check that the slot for the south pole is correctly set
+            try:
+                # Create a LamSlotMag with the south pole of lamination
+                lamination_south = LamSlotMag(init_dict=lamination.as_dict())
+                lamination_south.slot = lamination.slot_south
+                lamination_south.magnet = lamination.magnet_south
+                index = INIT_INDEX.index(type(lamination_south.slot))
+                err_msg = WIDGET_LIST[index].check(lamination_south)
+                if err_msg is not None:
+                    return f"South Pole: {err_msg}"
+            except SlotCheckError as error:
+                return f"South Pole: {error}"
