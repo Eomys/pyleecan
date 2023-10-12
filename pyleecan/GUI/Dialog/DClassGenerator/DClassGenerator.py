@@ -949,7 +949,7 @@ class DClassGenerator(Ui_DClassGenerator, QWidget):
 
         # Rename file if old file exists
         if isfile(old_meth_path):
-            # Delete new file if it already exists otherwise os.rename will crash
+            # Can't rename to new file if it already exists otherwise os.rename will crash
             if isfile(new_meth_path):
                 print(
                     "Cannot rename method to: "
