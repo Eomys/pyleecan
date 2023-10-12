@@ -235,6 +235,7 @@ def plot_schematics(
 
         # magnet width only if magnet is visible
         if type_add_active == 2:
+            # Add magnet Id on the corresponding surfaces
             for surf in self.build_geometry():
                 label = surf.label
                 label_dict = decode_label(label)
