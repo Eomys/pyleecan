@@ -130,8 +130,8 @@ class Test_HoleM58_meth(object):
         assert result[1].label == "Rotor_HoleMag_R0-T0-S0"
 
     @pytest.mark.parametrize("test_dict", HoleM58_test)
-    def test_magnet_Parallel(self, test_dict):
-        """Type Magnetization Parallel"""
+    def test_comp_radius(self, test_dict):
+        """Check that comp_radius return the correct result (analytical+num)"""
         test_obj = test_dict["test_obj"]
         Rmin, Rmax = test_obj.hole[0].comp_radius()
 
