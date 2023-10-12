@@ -43,7 +43,7 @@ slotW16_wrong_test.append(
     }
 )
 
-
+# Small H0/W0/R1 
 lam = LamSlot(is_internal=True, Rint=0.04, Rext=0.0746, is_stator=False)
 lam.slot = SlotW16(Zs=76, H0=0.0008, H2=0.0172, R1=1e-6, W0=0.00001, W3=0.00299)
 slotW16_test.append(
@@ -66,10 +66,6 @@ class Test_SlotW16_meth(object):
         """Check that the schematics is correct"""
         test_obj = test_dict["test_obj"]
         point_dict = test_obj.slot._comp_point_coordinate()
-        # lam.plot()
-        # plt.show()
-        # surf_list = test_obj.slot.build_geometry()
-        # print(Arc1.get_angle(surf_list[2]))
 
         # Check width
         assert angle(point_dict["Z1"]) == pytest.approx(-test_obj.slot.W0 / 2)
