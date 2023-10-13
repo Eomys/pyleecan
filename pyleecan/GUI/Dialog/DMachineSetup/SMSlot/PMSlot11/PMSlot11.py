@@ -55,7 +55,7 @@ class PMSlot11(Gen_PMSlot11, QWidget):
         # Set FloatEdit unit
         self.lf_W0.unit = "rad"
         self.lf_H0.unit = "m"
-        
+
         # Set unit name (m ou mm)
         self.unit_H0.setText("[" + gui_option.unit.get_m_name() + "]")
 
@@ -111,7 +111,7 @@ class PMSlot11(Gen_PMSlot11, QWidget):
         else:
             self.lf_Wmag.unit = "rad"
             self.lf_Hmag.unit = "m"
-            
+
             # Set unit name (m ou mm)
             self.unit_Hmag.setText("[" + gui_option.unit.get_m_name() + "]")
 

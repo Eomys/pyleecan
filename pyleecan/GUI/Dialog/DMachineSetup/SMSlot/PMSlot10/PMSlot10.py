@@ -24,7 +24,7 @@ class PMSlot10(Gen_PMSlot10, QWidget):
     notch_name = "Rectangular"
     slot_type = SlotM10
 
-    def __init__(self, lamination=None, material_dict=None, notch_obj=None):
+    def __init__(self, lamination=None, notch_obj=None, material_dict=None):
         """Initialize the widget according to lamination
 
         Parameters
@@ -69,6 +69,7 @@ class PMSlot10(Gen_PMSlot10, QWidget):
             wid_list += [self.txt_constraint]  # Constraint Wmag < W0
             for wid in wid_list:
                 wid.hide()
+
             # Set values for check
             self.slot.Hmag = 0
             self.slot.Wmag = 0
@@ -112,6 +113,7 @@ class PMSlot10(Gen_PMSlot10, QWidget):
                 self.notch_obj.key_mat = None
             else:
                 self.w_key_mat.def_mat = "Steel1"
+
             self.set_key()
 
         else:  # magnet case
