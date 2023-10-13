@@ -275,7 +275,7 @@ class SMSlot(Ui_SMSlot, QWidget):
             QMessageBox().critical(self, self.tr("Error"), self.test_err_msg)
         else:  # No error => Plot the lamination
             try:
-                self.obj.plot(is_show_fig=not self.is_test)
+                self.obj.plot(is_show_fig=not self.is_test, is_add_arrow=True)
                 set_plot_gui_icon()
             except Exception as e:
                 if self.is_stator:
