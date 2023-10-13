@@ -94,7 +94,11 @@ def plot(
             )
             # Add the magnetization direction as arrow on top of the lamination
             if MAG_LAB in label_dict["surf_type"] and label_dict["S_id"] == 0:
-                if is_add_arrow:
+                if hasattr(self, "magnet"):
+                    mag_type = self.magnet.type_magnetization
+                else:
+                    mag_type = self.magnet_north.type_magnetization
+                if is_add_arrow and mag_type in [0, 1]:  # Radial or Parallel only
                     # Create arrow coordinates
                     Zs = self.slot.Zs
                     H = self.slot.comp_height_active()
@@ -107,6 +111,7 @@ def plot(
                         Z2 = (abs(surf.point_ref) + delta + H / 4) * exp(
                             1j * (ii * 2 * pi / Zs + pi / Zs + alpha)
                         )
+                        # Change arrow direction for North/South
                         if ii % 2 == 1:
                             ax.annotate(
                                 text="",
