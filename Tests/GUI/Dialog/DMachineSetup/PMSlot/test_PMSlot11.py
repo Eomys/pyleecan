@@ -213,19 +213,14 @@ class TestPMSlot11(object):
         assert self.widget.in_Wmag.isEnabled() == True
         assert self.widget.lf_Wmag.isEnabled() == True
 
-        self.test_obj = LamSlotMag(Rint=0.1, Rext=0.2)
-        self.test_obj.slot = SlotM11(H0=0.10, W0=0.13, Wmag=0.14, Hmag=0.15)
-        self.material_dict = {LIB_KEY: list(), MACH_KEY: list()}
-        self.mat1 = Material(name="Steel1")
-        notch = Notch(self.mat1, None, None)
         self.widget = PMSlot11(
             self.test_obj, material_dict=self.material_dict, notch_obj=notch
         )
-        self.widget.g_key.setChecked(False)
+
         assert self.widget.c_Wmag_unit.isHidden() == True
         assert self.widget.in_Wmag.isHidden() == True
         assert self.widget.lf_Wmag.isHidden() == True
-
+        self.widget.g_key.setChecked(False)
         assert self.widget.c_Wkey_unit.isEnabled() == False
         assert self.widget.in_Wkey.isEnabled() == False
         assert self.widget.lf_Wkey.isEnabled() == False
@@ -267,27 +262,22 @@ class TestPMSlot11(object):
         assert self.widget.in_Hmag.isEnabled() == True
         assert self.widget.lf_Hmag.isEnabled() == True
 
-        self.test_obj = LamSlotMag(Rint=0.1, Rext=0.2)
-        self.test_obj.slot = SlotM11(H0=0.10, W0=0.13, Wmag=0.14, Hmag=0.15)
-        self.material_dict = {LIB_KEY: list(), MACH_KEY: list()}
-        self.mat1 = Material(name="Steel1")
-        notch = Notch(self.mat1, None, None)
         self.widget = PMSlot11(
             self.test_obj, material_dict=self.material_dict, notch_obj=notch
         )
-        self.widget.g_key.setChecked(False)
-        assert self.widget.unit_Hmag.isHidden() == True
-        assert self.widget.in_Hmag.isHidden() == True
-        assert self.widget.lf_Hmag.isHidden() == True
 
-        assert self.widget.unit_Hkey.isEnabled() == False
-        assert self.widget.in_Hkey.isEnabled() == False
-        assert self.widget.lf_Hkey.isEnabled() == False
-        self.widget.g_key.setChecked(True)
         assert self.widget.g_key.isChecked()
         assert self.widget.unit_Hkey.isEnabled() == True
         assert self.widget.in_Hkey.isEnabled() == True
         assert self.widget.lf_Hkey.isEnabled() == True
+        assert self.widget.unit_Hmag.isHidden() == True
+        assert self.widget.in_Hmag.isHidden() == True
+        assert self.widget.lf_Hmag.isHidden() == True
+        self.widget.g_key.setChecked(False)
+        assert self.widget.unit_Hkey.isEnabled() == False
+        assert self.widget.in_Hkey.isEnabled() == False
+        assert self.widget.lf_Hkey.isEnabled() == False
+        self.widget.g_key.setChecked(True)
 
         # Check Unit
         assert self.widget.unit_Hkey.text() == "[m]"
