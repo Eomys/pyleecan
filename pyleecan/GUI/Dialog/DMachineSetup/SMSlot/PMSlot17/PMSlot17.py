@@ -64,6 +64,7 @@ class PMSlot17(Gen_PMSlot17, QWidget):
 
         # Connect the signal
         self.lf_Lmag.editingFinished.connect(self.set_Lmag)
+        self.w_mag.saveNeeded.connect(self.emit_save)
 
     def set_Lmag(self):
         """Signal to update the value of Lmag according to the line edit

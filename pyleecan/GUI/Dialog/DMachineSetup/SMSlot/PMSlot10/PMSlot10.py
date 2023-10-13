@@ -152,6 +152,7 @@ class PMSlot10(Gen_PMSlot10, QWidget):
         # Connect the signal
         self.lf_W0.editingFinished.connect(self.set_W0)
         self.lf_H0.editingFinished.connect(self.set_H0)
+        self.w_mag.saveNeeded.connect(self.emit_save)
 
     def set_key(self):
         """Setup the slot key according to the GUI"""

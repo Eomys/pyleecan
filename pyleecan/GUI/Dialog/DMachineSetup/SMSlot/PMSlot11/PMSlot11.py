@@ -141,6 +141,7 @@ class PMSlot11(Gen_PMSlot11, QWidget):
         self.lf_W0.editingFinished.connect(self.set_W0)
         self.lf_H0.editingFinished.connect(self.set_H0)
         self.c_W0_unit.currentIndexChanged.connect(self.set_W0)
+        self.w_mag.saveNeeded.connect(self.emit_save)
 
     def set_key(self):
         """Setup the slot key according to the GUI"""

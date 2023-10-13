@@ -112,6 +112,7 @@ class PMSlot19(Gen_PMSlot19, QWidget):
         # Connect the signal
         self.lf_W0.editingFinished.connect(self.set_W0)
         self.lf_W1.editingFinished.connect(self.set_W1)
+        self.w_mag.saveNeeded.connect(self.emit_save)
 
     def set_W0(self):
         """Signal to update the value of W0 according to the line edit

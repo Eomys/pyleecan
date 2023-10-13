@@ -80,11 +80,7 @@ class PMSlot13(Gen_PMSlot13, QWidget):
         self.lf_H0.editingFinished.connect(self.set_H0)
         self.lf_Hmag.editingFinished.connect(self.set_Hmag)
         self.lf_Rtopm.editingFinished.connect(self.set_Rtopm)
-
-    def set_type_magnetization(self, index):
-        self.lamination.magnet.type_magnetization = index
-        # Notify the machine GUI that the machine has changed
-        self.saveNeeded.emit()
+        self.w_mag.saveNeeded.connect(self.emit_save)
 
     def set_W0(self):
         """Signal to update the value of W0 according to the line edit

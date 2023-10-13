@@ -77,6 +77,7 @@ class PMSlot14(Gen_PMSlot14, QWidget):
         self.lf_H0.editingFinished.connect(self.set_H0)
         self.lf_Hmag.editingFinished.connect(self.set_Hmag)
         self.lf_Rtopm.editingFinished.connect(self.set_Rtopm)
+        self.w_mag.saveNeeded.connect(self.emit_save)
 
     def set_W0(self):
         """Signal to update the value of W0 according to the line edit

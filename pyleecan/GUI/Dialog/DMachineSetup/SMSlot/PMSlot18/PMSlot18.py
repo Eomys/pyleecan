@@ -61,6 +61,7 @@ class PMSlot18(Gen_PMSlot18, QWidget):
 
         # Connect the signal
         self.lf_Hmag.editingFinished.connect(self.set_Hmag)
+        self.w_mag.saveNeeded.connect(self.emit_save)
 
     def set_Hmag(self):
         """Signal to update the value of Hmag according to the line edit
