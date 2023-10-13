@@ -1,7 +1,6 @@
 from matplotlib.patches import Patch
 import matplotlib.pyplot as plt
 from numpy import pi, exp
-from ....Functions.Load.import_class import import_class
 from ....Functions.init_fig import init_fig
 from ....definitions import config_dict
 from ....Functions.labels import decode_label, MAG_LAB, LAM_LAB
@@ -104,17 +103,16 @@ def plot(
                     # Create arrow coordinates
                     Zs = self.slot.Zs
                     H = self.slot.comp_height_active()
-                    LamSlotMagNS = import_class("pyleecan.Classes", "LamSlotMagNS")
                     for ii in range(Zs // sym):
                         # if mag is not None and mag.type_magnetization == 3:
                         #     off -= pi / 2
-                        Z1 = (abs(surf.point_ref) + delta) * exp(
+                        Z1 = (abs(surf.point_ref) + delta - H / 4) * exp(
                             1j * (ii * 2 * pi / Zs + pi / Zs + alpha)
                         )
-                        Z2 = (abs(surf.point_ref) + delta + H / 5) * exp(
+                        Z2 = (abs(surf.point_ref) + delta + H / 4) * exp(
                             1j * (ii * 2 * pi / Zs + pi / Zs + alpha)
                         )
-                        if ii % 2 == 1 and isinstance(self, LamSlotMagNS):
+                        if ii % 2 == 1:
                             ax.annotate(
                                 text="",
                                 xy=(Z1.real, Z1.imag),
