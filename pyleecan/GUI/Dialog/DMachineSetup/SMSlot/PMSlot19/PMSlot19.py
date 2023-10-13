@@ -73,11 +73,7 @@ class PMSlot19(Gen_PMSlot19, QWidget):
             self.lf_H0.unit = "m"
 
             # Set unit name (m ou mm)
-            wid_list = [
-                self.unit_H0,
-            ]
-            for wid in wid_list:
-                wid.setText("[" + gui_option.unit.get_m_name() + "]")
+            self.unit_H0.setText("[" + gui_option.unit.get_m_name() + "]")
 
             # Selecting the right image
             if not self.lamination.is_internal:
@@ -90,12 +86,9 @@ class PMSlot19(Gen_PMSlot19, QWidget):
 
         else:
             self.lf_Hmag.unit = "m"
+            
             # Set unit name (m ou mm)
-            wid_list = [
-                self.unit_Hmag,
-            ]
-            for wid in wid_list:
-                wid.setText("[" + gui_option.unit.get_m_name() + "]")
+            self.unit_Hmag.setText("[" + gui_option.unit.get_m_name() + "]")
 
             # Use schematics on the inner without magnet
             self.img_slot.setPixmap(QPixmap(pixmap_dict["SlotM19_mag_int_rotor"]))
