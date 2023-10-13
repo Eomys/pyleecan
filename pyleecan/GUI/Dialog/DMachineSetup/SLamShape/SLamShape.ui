@@ -243,7 +243,7 @@
          <item>
           <widget class="QGroupBox" name="g_notches">
            <property name="title">
-            <string>Notches</string>
+            <string>Notches and Keys</string>
            </property>
            <property name="checkable">
             <bool>true</bool>

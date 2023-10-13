@@ -219,6 +219,69 @@ p, li { white-space: pre-wrap; }
         </layout>
        </item>
        <item>
+        <widget class="QGroupBox" name="g_key">
+         <property name="title">
+          <string>Key</string>
+         </property>
+         <property name="checkable">
+          <bool>true</bool>
+         </property>
+         <property name="checked">
+          <bool>false</bool>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_2">
+          <item row="10" column="0" colspan="2">
+           <widget class="WMatSelectV" name="w_key_mat" native="true"/>
+          </item>
+          <item row="0" column="0">
+           <layout class="QGridLayout" name="gridLayout_3" columnstretch="0,0,0,0,0" rowminimumheight="0,0">
+            <item row="0" column="2">
+             <widget class="FloatEdit" name="lf_Wkey"/>
+            </item>
+            <item row="1" column="2">
+             <widget class="FloatEdit" name="lf_Hkey"/>
+            </item>
+            <item row="0" column="0">
+             <widget class="QLabel" name="in_Wkey">
+              <property name="text">
+               <string>Wkey</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="0">
+             <widget class="QLabel" name="in_Hkey">
+              <property name="text">
+               <string>Hkey</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="4">
+             <widget class="QLabel" name="unit_Hkey">
+              <property name="text">
+               <string>[m]</string>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="4">
+             <widget class="QComboBox" name="c_Wkey_unit">
+              <item>
+               <property name="text">
+                <string>rad</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>deg</string>
+               </property>
+              </item>
+             </widget>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
         <spacer name="verticalSpacer">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
@@ -257,6 +320,11 @@ p, li { white-space: pre-wrap; }
    <extends>QWidget</extends>
    <header>......GUI.Dialog.DMachineSetup.SMSlot.WWSlotMag.WWSlotMag</header>
    <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>WMatSelectV</class>
+   <extends>QWidget</extends>
+   <header>......GUI.Dialog.DMatLib.WMatSelect.WMatSelectV</header>
   </customwidget>
  </customwidgets>
  <tabstops>

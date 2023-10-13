@@ -115,6 +115,12 @@ def comp_FEMM_dict(
             FEMM_dict["mesh"][label]["elementsize_yoke"] = Hsy / 4 / Kmesh_fineness
         # Wedge mesh
         FEMM_dict["mesh"][label]["meshsize_wedge"] = Hstot / 20 / Kmesh_fineness
+        # key mesh
+        if lam.has_key():
+            notch = [notch for notch in lam.notch if notch.has_key()][0]
+            Hkey = notch.notch_shape.comp_height_active()
+            FEMM_dict["mesh"][label]["meshsize_key"] = Hkey / 4 / Kmesh_fineness
+            FEMM_dict["mesh"][label]["elementsize_key"] = Hkey / 4 / Kmesh_fineness
 
         # mesh parameter for stator and rotor slot region
         if type_calc_leakage == 1:

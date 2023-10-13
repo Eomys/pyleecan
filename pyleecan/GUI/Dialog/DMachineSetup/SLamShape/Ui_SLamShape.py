@@ -255,7 +255,7 @@ class Ui_SLamShape(object):
             )
         )
         self.g_notches.setTitle(
-            QCoreApplication.translate("SLamShape", u"Notches", None)
+            QCoreApplication.translate("SLamShape", u"Notches and Keys", None)
         )
         self.out_notch.setText(
             QCoreApplication.translate("SLamShape", u"0 set (0 notches)", None)

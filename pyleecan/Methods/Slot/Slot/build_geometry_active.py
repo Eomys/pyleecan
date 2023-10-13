@@ -36,22 +36,20 @@ def build_geometry_active(self, Nrad, Ntan, alpha=0, delta=0):
     inter_list = list()
     for line in surf_act.get_lines():
         inter_list.extend(line.intersect_line(0, 100))
-    # When the two lines at the bottom cross on X axis (ex SlotW14)
-    if len(inter_list) == 3 and abs(inter_list[0] - inter_list[1]) < 1e-6:
-        inter_list.pop(0)
-    # When 4 lines at the bottom cross on X axis (ex SlotM17)
-    elif (
-        len(inter_list) == 4
-        and abs(inter_list[0] - inter_list[1]) < 1e-6
-        and abs(inter_list[2] - inter_list[3]) < 1e-6
-    ):
-        inter_list.pop(0)
-        inter_list.pop(1)
+    # Remove/Merge intersection that are too close
+    duplicate_list = list()
+    for ii in range(len(inter_list)):
+        for jj in range(ii + 1, len(inter_list)):  # Avoid comparing twice
+            if jj not in duplicate_list and abs(inter_list[ii] - inter_list[jj]) < 1e-6:
+                duplicate_list.append(jj)
+    for duplicate in duplicate_list[::-1]:
+        inter_list.pop(duplicate)
 
     assert (
         len(inter_list) == 2
     ), "Can't find the two points of the intersection with 0x axis"
 
+    # Sort the intersection points (Ztan1 is closest to the bore)
     if abs(inter_list[0]) < abs(inter_list[1]) and self.is_outwards():
         Ztan1 = inter_list[0]
         Ztan2 = inter_list[1]

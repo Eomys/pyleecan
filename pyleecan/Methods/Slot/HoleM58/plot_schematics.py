@@ -83,10 +83,10 @@ def plot_schematics(
             W1=12e-3,
             W2=6e-3,
             W3=2 * pi / 8 * 0.6,
-            H0=15e-3,
+            H0=17e-3,
             H1=5e-3,
             H2=5e-3,
-            R0=2.5e-3,
+            R0=1.7e-3,
         )
         lam = LamHole(
             Rint=0.021, Rext=0.075, is_internal=True, is_stator=False, hole=[hole]
@@ -154,7 +154,7 @@ def plot_schematics(
                 color=ARROW_COLOR,
                 linewidth=ARROW_WIDTH,
                 label="H0",
-                offset_label=self.H2 * 0.2 + 1j * self.H0 * 0.25,
+                offset_label=self.H2 * 0.2 + 1j * self.H0 * 0.35,
                 is_arrow=True,
                 fontsize=SC_FONT_SIZE,
             )
@@ -189,22 +189,21 @@ def plot_schematics(
                 fontsize=SC_FONT_SIZE,
             )
             # R0
-            line = Segment(
+            Zlim1 = (Rbo - self.H1) * exp(1j * angle(point_dict["Zc1"]))
+            Zlim2 = (Rbo - self.H1 - self.R0) * exp(1j * angle(point_dict["Zc1"]))
+            plot_quote(
                 (Rbo - self.H1) * exp(1j * angle(point_dict["Zc1"])) * exp(1j * alpha),
+                Zlim1 * exp(1.02j * alpha),
+                Zlim2 * exp(1.02j * alpha),
                 (Rbo - self.H1 - self.R0)
                 * exp(1j * angle(point_dict["Zc1"]))
                 * exp(1j * alpha),
-            )
-            line.plot(
+                offset_label=-self.H2 * 0.8,
                 fig=fig,
                 ax=ax,
-                color=ARROW_COLOR,
-                linewidth=ARROW_WIDTH,
                 label="R0",
-                offset_label=-self.H2 * 0.8,
-                is_arrow=True,
-                fontsize=SC_FONT_SIZE,
             )
+
             # W0
             Zlim1 = point_dict["Z2"] + 0.2 * self.H0
             Zlim2 = point_dict["Z11"] + 0.2 * self.H0
@@ -278,8 +277,8 @@ def plot_schematics(
             )
             # H1 radius
             line = Arc1(
-                begin=(Rbo - self.H1) * exp(-1j * pi / 2 * 0.9) * exp(1j * alpha),
-                end=(Rbo - self.H1) * exp(1j * pi / 2 * 0.9) * exp(1j * alpha),
+                begin=(Rbo - self.H1) * exp(-1j * pi / 2) * exp(1j * alpha),
+                end=(Rbo - self.H1) * exp(1j * pi / 2) * exp(1j * alpha),
                 radius=Rbo - self.H1,
                 is_trigo_direction=True,
             )
@@ -371,6 +370,7 @@ def plot_schematics(
         ax.set_title("")
         ax.get_legend().remove()
         ax.set_axis_off()
+        fig.tight_layout()
 
         # Save / Show
         if save_path is not None:

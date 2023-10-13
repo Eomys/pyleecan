@@ -27,7 +27,7 @@ class PWSlotUD(Ui_PWSlotUD, QWidget):
     notch_name = "Import from DXF"
     slot_type = SlotUD
 
-    def __init__(self, lamination=None, material_dict=None, is_notch=False):
+    def __init__(self, lamination=None, material_dict=None, notch_obj=None):
         """Initialize the widget according to lamination
 
         Parameters
@@ -38,8 +38,8 @@ class PWSlotUD(Ui_PWSlotUD, QWidget):
             current lamination to edit
         material_dict: dict
             Materials dictionary (library + machine)
-        is_notch : bool
-            True to adapt the slot GUI for the notch setup
+        notch_obj : notch
+            current notch to edit
         """
 
         # Build the interface according to the .ui file
@@ -52,7 +52,8 @@ class PWSlotUD(Ui_PWSlotUD, QWidget):
         self.u = gui_option.unit
         self.material_dict = material_dict
         self.dxf_gui = None  # Link to the popup
-        self.is_notch = is_notch
+        self.is_notch = notch_obj is not None
+        self.notch_obj = notch_obj
         self.test_err_msg = None  # To store error message for tests
 
         # Setup Path selector for Json files

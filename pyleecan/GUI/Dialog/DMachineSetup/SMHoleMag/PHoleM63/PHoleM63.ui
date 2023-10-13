@@ -94,7 +94,7 @@
        <item>
         <widget class="QCheckBox" name="ck_is_top_flat">
          <property name="text">
-          <string>top_flat</string>
+          <string>Flat top</string>
          </property>
         </widget>
        </item>
@@ -213,15 +213,15 @@
  </widget>
  <customwidgets>
   <customwidget>
+   <class>FloatEdit</class>
+   <extends>QLineEdit</extends>
+   <header>......GUI/Tools/FloatEdit.h</header>
+  </customwidget>
+  <customwidget>
    <class>WMatSelect</class>
    <extends>QWidget</extends>
    <header>......GUI.Dialog.DMatLib.WMatSelect.WMatSelect.h</header>
    <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>FloatEdit</class>
-   <extends>QLineEdit</extends>
-   <header>......GUI/Tools/FloatEdit.h</header>
   </customwidget>
  </customwidgets>
  <tabstops>

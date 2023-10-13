@@ -25,6 +25,7 @@ VENT_LAB = "Ventilation"
 TOOTH_LAB = "Tooth"
 AIRBOX_LAB = "Airbox"
 NOTCH_LAB = "Notch"
+KEY_LAB = "Key"
 # Short Surface label alternative
 LAM_LAB_S = "Lam"
 HOLEV_LAB_S = "HV"
@@ -44,12 +45,15 @@ TOP_LAB = "Top"
 YS_LAB = "YokeSide"
 YSN_LAB = YS_LAB + NOTCH_LAB
 YSM_LAB = YS_LAB + MAG_LAB
+YSK_LAB = YS_LAB + KEY_LAB
 YSR_LAB = YS_LAB + "-" + RIGHT_LAB
 YSL_LAB = YS_LAB + "-" + LEFT_LAB
 YSNR_LAB = YSN_LAB + "-" + RIGHT_LAB
 YSNL_LAB = YSN_LAB + "-" + LEFT_LAB
 YSMR_LAB = YSM_LAB + "-" + RIGHT_LAB
 YSML_LAB = YSM_LAB + "-" + LEFT_LAB
+YSKR_LAB = YSK_LAB + "-" + RIGHT_LAB
+YSKL_LAB = YSK_LAB + "-" + LEFT_LAB
 # Shaft BC properties
 SHAFTS_LAB = "ShaftSide"
 SHAFTSR_LAB = SHAFTS_LAB + "-" + RIGHT_LAB
@@ -180,6 +184,8 @@ def get_obj_from_label(machine, label=None, label_dict=None):
         return hole.get_magnet_dict()["magnet_" + str(label_dict["T_id"])]
     elif MAG_LAB in label_dict["surf_type"]:
         return lam_obj.get_magnet_by_label(label_dict=label_dict)
+    elif KEY_LAB in label_dict["surf_type"]:
+        return lam_obj.notch[label_dict["R_id"]].key_mat
     raise NotImplementedError(label_dict["full"] + " is not available yet")
 
 

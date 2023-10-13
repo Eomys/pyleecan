@@ -6333,7 +6333,8 @@
             "build_radius_lines",
             "build_radius_desc",
             "has_slot",
-            "plot_preview_notch"
+            "plot_preview_notch",
+            "has_key"
         ],
         "mother": "",
         "name": "Lamination",
@@ -9308,18 +9309,31 @@
         "daughters": [
             "NotchEvenDist"
         ],
-        "desc": "Abstract class for notches",
+        "desc": "",
         "is_internal": false,
         "methods": [
             "get_Rbo",
             "get_Ryoke",
-            "is_outwards"
+            "is_outwards",
+            "has_key",
+            "get_label"
         ],
         "mother": "",
         "name": "Notch",
         "package": "Machine",
         "path": "pyleecan/Generator/ClassesRef/Machine/Notch.csv",
-        "properties": []
+        "properties": [
+            {
+                "as_dict": "",
+                "desc": "The material of the key (if None, no key to add)",
+                "max": "",
+                "min": "",
+                "name": "key_mat",
+                "type": "Material",
+                "unit": "",
+                "value": null
+            }
+        ]
     },
     "NotchEvenDist": {
         "constants": [
@@ -9334,7 +9348,9 @@
         "methods": [
             "comp_surface",
             "comp_periodicity_spatial",
-            "get_notch_desc_list"
+            "get_notch_desc_list",
+            "build_geometry_key",
+            "get_key_Ox_radius"
         ],
         "mother": "Notch",
         "name": "NotchEvenDist",
@@ -16381,7 +16397,8 @@
             "draw_FEMM",
             "plot",
             "split_line",
-            "is_inside"
+            "is_inside",
+            "intersect_line"
         ],
         "mother": "",
         "name": "Surface",

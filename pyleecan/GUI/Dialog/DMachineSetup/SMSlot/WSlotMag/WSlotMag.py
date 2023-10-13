@@ -137,7 +137,7 @@ class WSlotMag(Ui_WSlotMag, QWidget):
         # Regenerate the pages with the new values
         self.w_slot.setParent(None)
         self.w_slot = WIDGET_LIST[self.c_slot_type.currentIndex()](
-            self.lam, self.material_dict
+            self.lam, material_dict=self.material_dict
         )
         self.w_slot.saveNeeded.connect(self.emit_save)
         # Refresh the GUI
