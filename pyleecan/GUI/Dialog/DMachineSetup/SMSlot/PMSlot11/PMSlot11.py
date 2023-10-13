@@ -55,12 +55,9 @@ class PMSlot11(Gen_PMSlot11, QWidget):
         # Set FloatEdit unit
         self.lf_W0.unit = "rad"
         self.lf_H0.unit = "m"
+        
         # Set unit name (m ou mm)
-        wid_list = [
-            self.unit_H0,
-        ]
-        for wid in wid_list:
-            wid.setText("[" + gui_option.unit.get_m_name() + "]")
+        self.unit_H0.setText("[" + gui_option.unit.get_m_name() + "]")
 
         self.g_key.hide()
 
@@ -87,11 +84,7 @@ class PMSlot11(Gen_PMSlot11, QWidget):
             self.lf_Hkey.unit = "m"
 
             # Set unit name (m ou mm)
-            wid_list = [
-                self.unit_Hkey,
-            ]
-            for wid in wid_list:
-                wid.setText("[" + gui_option.unit.get_m_name() + "]")
+            self.unit_Hkey.setText("[" + gui_option.unit.get_m_name() + "]")
 
             # Fill the fields with the machine values (if they're filled)
             self.lf_Wkey.setValue(self.slot.Wmag)
@@ -118,12 +111,9 @@ class PMSlot11(Gen_PMSlot11, QWidget):
         else:
             self.lf_Wmag.unit = "rad"
             self.lf_Hmag.unit = "m"
+            
             # Set unit name (m ou mm)
-            wid_list = [
-                self.unit_Hmag,
-            ]
-            for wid in wid_list:
-                wid.setText("[" + gui_option.unit.get_m_name() + "]")
+            self.unit_Hmag.setText("[" + gui_option.unit.get_m_name() + "]")
 
             # Use schematics on the inner without magnet
             self.img_slot.setPixmap(QPixmap(pixmap_dict["SlotM11_mag_int_rotor"]))
@@ -158,15 +148,15 @@ class PMSlot11(Gen_PMSlot11, QWidget):
         if self.g_key.isChecked():
             self.w_key_mat.update(self.notch_obj, "key_mat", self.material_dict)
             self.img_slot.setPixmap(QPixmap(pixmap_dict["SlotM11_key_ext_stator"]))
-            isEnabled = True
+            is_enabled = True
 
         else:
             self.notch_obj.key_mat = None
             self.img_slot.setPixmap(QPixmap(pixmap_dict["SlotM11_empty_ext_stator"]))
-            isEnabled = False
+            is_enabled = False
 
         for widget in widget_list:
-            widget.setEnabled(isEnabled)
+            widget.setEnabled(is_enabled)
         # Notify the machine GUI that the machine has changed
         self.saveNeeded.emit()
 
