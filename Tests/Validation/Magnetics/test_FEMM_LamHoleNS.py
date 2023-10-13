@@ -124,6 +124,7 @@ def test_FEMM_LamHoleNS():
     Brad2 = result2["radial"]
 
     assert_array_almost_equal(Brad, Brad2, decimal=1)
+    plt.close()
     return out
 
 
