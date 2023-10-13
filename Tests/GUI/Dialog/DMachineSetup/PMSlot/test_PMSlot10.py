@@ -38,7 +38,7 @@ class TestPMSlot10(object):
 
         self.material_dict = material_dict
 
-        self.widget = PMSlot10(self.test_obj, self.material_dict)
+        self.widget = PMSlot10(self.test_obj, material_dict=self.material_dict)
 
     @classmethod
     def setup_class(cls):
@@ -113,7 +113,7 @@ class TestPMSlot10(object):
     def test_output_txt(self):
         """Check that the Output text is computed and correct"""
         self.test_obj.slot = SlotM10(H0=0.005, Hmag=0.005, W0=0.01, Wmag=0.01)
-        self.widget = PMSlot10(self.test_obj, self.material_dict)
+        self.widget = PMSlot10(self.test_obj, material_dict=self.material_dict)
         assert self.widget.w_out.out_slot_height.text() == "Slot height: 0.005063 [m]"
 
     def test_check(self):
@@ -121,7 +121,7 @@ class TestPMSlot10(object):
         self.test_obj = LamSlotMag(Rint=0.1, Rext=0.2)
         # H0
         self.test_obj.slot = SlotM10(H0=None, Hmag=0.10, W0=0.10, Wmag=0.10)
-        self.widget = PMSlot10(self.test_obj, self.material_dict)
+        self.widget = PMSlot10(self.test_obj, material_dict=self.material_dict)
         assert self.widget.check(self.test_obj) == "You must set H0 !"
         # Hmag
         self.test_obj.slot = SlotM10(H0=0.10, Hmag=None, W0=0.10, Wmag=0.10)
@@ -149,7 +149,6 @@ class TestPMSlot10(object):
         assert self.test_obj.magnet.type_magnetization == 2
         self.widget.w_mag.c_type_magnetization.setCurrentIndex(0)
         assert self.test_obj.magnet.type_magnetization == 0
-
 
     def test_set_Wkey(self):
         """Check that the Widget allow to update Wkey"""
