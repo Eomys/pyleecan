@@ -9,6 +9,8 @@ from Tests.GUI import gui_option  # Set unit as [m]
 from pyleecan.Classes.LamSlotMag import LamSlotMag
 from pyleecan.Classes.SlotM16 import SlotM16
 from pyleecan.GUI.Dialog.DMachineSetup.SMSlot.PMSlot16.PMSlot16 import PMSlot16
+from pyleecan.Classes.Material import Material
+from pyleecan.GUI.Dialog.DMatLib.DMatLib import LIB_KEY, MACH_KEY
 
 
 import pytest
@@ -20,7 +22,20 @@ class TestPMSlot16(object):
     def setup_method(self):
         self.test_obj = LamSlotMag(Rint=0.1, Rext=0.2)
         self.test_obj.slot = SlotM16(H0=0.10, W0=0.13, W1=0.14, H1=0.15)
-        self.widget = PMSlot16(self.test_obj)
+
+        material_dict = {LIB_KEY: list(), MACH_KEY: list()}
+        material_dict[LIB_KEY] = [
+            Material(name="test1"),
+            Material(name="test2"),
+            Material(name="test3"),
+        ]
+        material_dict[LIB_KEY][0].elec.rho = 0.31
+        material_dict[LIB_KEY][1].elec.rho = 0.32
+        material_dict[LIB_KEY][2].elec.rho = 0.33
+
+        self.material_dict = material_dict
+
+        self.widget = PMSlot16(self.test_obj, self.material_dict)
 
     @classmethod
     def setup_class(cls):
@@ -95,7 +110,7 @@ class TestPMSlot16(object):
     def test_output_txt(self):
         """Check that the Output text is computed and correct"""
         self.test_obj.slot = SlotM16(H0=0.005, H1=0.05, W0=0.01, W1=0.05)
-        self.widget = PMSlot16(self.test_obj)
+        self.widget = PMSlot16(self.test_obj, self.material_dict)
         assert self.widget.w_out.out_slot_height.text() == "Slot height: 0.05506 [m]"
 
     def test_check(self):
@@ -103,7 +118,7 @@ class TestPMSlot16(object):
         self.test_obj = LamSlotMag(Rint=0.1, Rext=0.2)
         # H0
         self.test_obj.slot = SlotM16(H0=None, H1=0.10, W0=0.10, W1=0.10)
-        self.widget = PMSlot16(self.test_obj)
+        self.widget = PMSlot16(self.test_obj, self.material_dict)
         assert self.widget.check(self.test_obj) == "You must set H0 !"
         # H1
         self.test_obj.slot = SlotM16(H0=0.10, H1=None, W0=0.10, W1=0.10)
@@ -114,6 +129,23 @@ class TestPMSlot16(object):
         # W1
         self.test_obj.slot = SlotM16(H0=0.10, H1=0.10, W0=0.10, W1=None)
         assert self.widget.check(self.test_obj) == "You must set W1 !"
+
+    def test_set_material(self):
+        """Check that you can change the material"""
+        self.widget.w_mag.w_mat.c_mat_type.setCurrentIndex(0)
+        assert self.test_obj.magnet.mat_type.name == "test1"
+        assert self.test_obj.magnet.mat_type.elec.rho == 0.31
+        self.widget.w_mag.w_mat.c_mat_type.setCurrentIndex(2)
+        assert self.test_obj.magnet.mat_type.name == "test3"
+        assert self.test_obj.magnet.mat_type.elec.rho == 0.33
+
+    def test_set_type_magnetization(self):
+        """Check that you can change tha magnetization"""
+        # type_magnetization set test
+        self.widget.w_mag.c_type_magnetization.setCurrentIndex(2)
+        assert self.test_obj.magnet.type_magnetization == 2
+        self.widget.w_mag.c_type_magnetization.setCurrentIndex(0)
+        assert self.test_obj.magnet.type_magnetization == 0
 
 
 if __name__ == "__main__":

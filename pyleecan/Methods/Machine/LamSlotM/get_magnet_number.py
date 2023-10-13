@@ -3,8 +3,8 @@ def get_magnet_number(self, sym=1):
 
     Parameters
     ----------
-    self : LamSlotMag
-        A LamSlotMag object
+    self : LamSlotM
+        A LamSlotM object
     sym : int
         Symmetry factor (1= full machine, 2= half of the machine...)
 

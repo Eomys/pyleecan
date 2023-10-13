@@ -3,8 +3,8 @@ def get_dim_active(self):
 
     Parameters
     ----------
-    self : LamSlotMag
-        A LamSlotMag object
+    self : LamSlotM
+        A LamSlotM object
 
     Returns
     -------

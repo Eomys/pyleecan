@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from ....Classes.LamSlotMag import LamSlotMag
+from ....Classes.LamSlotM import LamSlotM
 from ....Classes.LamSlotWind import LamSlotWind
 from ....Methods.Machine import MachineCheckError
 
@@ -20,7 +20,7 @@ def check(self):
     Raises
     _______
     M2C_WrongRotor
-        The Rotor of a Machine_Type_2 must be a LamSlotMag
+        The Rotor of a Machine_Type_2 must be a LamSlotM
     M2C_WrongStator
         The Stator of a Machine_Type_2 must be a LamSlotWind
     M2C_PError
@@ -31,8 +31,8 @@ def check(self):
 
     super(type(self), self).check()
 
-    if not isinstance(self.rotor, LamSlotMag):
-        raise M2C_WrongRotor("The Rotor of a Machine_Type_2 must be a " "LamSlotMag")
+    if not isinstance(self.rotor, LamSlotM):
+        raise M2C_WrongRotor("The Rotor of a Machine_Type_2 must be a " "LamSlotM")
     if not isinstance(self.stator, LamSlotWind):
         raise M2C_WrongStator("The Stator of a Machine_Type_2 must be a " "LamSlotWind")
 

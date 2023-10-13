@@ -107,8 +107,11 @@ class PMSlot11(Gen_PMSlot11, QWidget):
             else:
                 self.w_key_mat.def_mat = "Steel1"
             self.set_key()
-
+            # Hide magnet widgets
+            self.w_mag.hide()
         else:
+            # Setup the widgets according to current values
+            self.w_mag.update(lamination, self.material_dict)
             self.lf_Wmag.unit = "rad"
             self.lf_Hmag.unit = "m"
 
@@ -138,6 +141,7 @@ class PMSlot11(Gen_PMSlot11, QWidget):
         self.lf_W0.editingFinished.connect(self.set_W0)
         self.lf_H0.editingFinished.connect(self.set_H0)
         self.c_W0_unit.currentIndexChanged.connect(self.set_W0)
+        self.w_mag.saveNeeded.connect(self.emit_save)
 
     def set_key(self):
         """Setup the slot key according to the GUI"""
@@ -219,6 +223,10 @@ class PMSlot11(Gen_PMSlot11, QWidget):
         self.slot.Hmag = self.lf_Hmag.value()
         self.w_out.comp_output()
         # Notify the machine GUI that the machine has changed
+        self.saveNeeded.emit()
+
+    def emit_save(self):
+        """Send a saveNeeded signal to the DMachineSetup"""
         self.saveNeeded.emit()
 
     def set_Wkey(self):

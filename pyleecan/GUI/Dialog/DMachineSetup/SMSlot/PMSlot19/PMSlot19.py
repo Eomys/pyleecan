@@ -83,12 +83,16 @@ class PMSlot19(Gen_PMSlot19, QWidget):
                 )
 
             self.lf_H0.editingFinished.connect(self.set_H0)
-
+            # Hide magnet widgets
+            self.w_mag.hide()
         else:
             self.lf_Hmag.unit = "m"
-            
+
             # Set unit name (m ou mm)
             self.unit_Hmag.setText("[" + gui_option.unit.get_m_name() + "]")
+
+            # Setup the widgets according to current values
+            self.w_mag.update(lamination, self.material_dict)
 
             # Use schematics on the inner without magnet
             self.img_slot.setPixmap(QPixmap(pixmap_dict["SlotM19_mag_int_rotor"]))
@@ -108,6 +112,7 @@ class PMSlot19(Gen_PMSlot19, QWidget):
         # Connect the signal
         self.lf_W0.editingFinished.connect(self.set_W0)
         self.lf_W1.editingFinished.connect(self.set_W1)
+        self.w_mag.saveNeeded.connect(self.emit_save)
 
     def set_W0(self):
         """Signal to update the value of W0 according to the line edit
@@ -159,6 +164,10 @@ class PMSlot19(Gen_PMSlot19, QWidget):
         self.slot.Hmag = self.lf_H0.value()
         self.w_out.comp_output()
         # Notify the machine GUI that the machine has changed
+        self.saveNeeded.emit()
+
+    def emit_save(self):
+        """Send a saveNeeded signal to the DMachineSetup"""
         self.saveNeeded.emit()
 
     @staticmethod

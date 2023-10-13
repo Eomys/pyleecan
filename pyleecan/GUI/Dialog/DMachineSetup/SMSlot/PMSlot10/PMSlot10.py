@@ -10,6 +10,7 @@ from ......GUI import gui_option
 from ......GUI.Dialog.DMachineSetup.SMSlot.PMSlot10.Gen_PMSlot10 import Gen_PMSlot10
 from ......Methods.Slot.Slot import SlotCheckError
 from ......GUI.Resources import pixmap_dict
+from PySide2.QtWidgets import QMessageBox, QWidget, QListView
 
 translate = PySide2.QtCore.QCoreApplication.translate
 
@@ -42,6 +43,7 @@ class PMSlot10(Gen_PMSlot10, QWidget):
         # Build the interface according to the .ui file
         QWidget.__init__(self)
         self.setupUi(self)
+
         self.lamination = lamination
         self.slot = lamination.slot
         self.is_notch = notch_obj is not None
@@ -113,10 +115,13 @@ class PMSlot10(Gen_PMSlot10, QWidget):
                 self.notch_obj.key_mat = None
             else:
                 self.w_key_mat.def_mat = "Steel1"
-
             self.set_key()
+            # Hide magnet widgets
+            self.w_mag.hide()
 
         else:  # magnet case
+            # Setup the widgets according to current values
+            self.w_mag.update(lamination, self.material_dict)
             self.lf_Wmag.unit = "m"
             self.lf_Hmag.unit = "m"
             # Set unit name (m ou mm)
@@ -147,6 +152,7 @@ class PMSlot10(Gen_PMSlot10, QWidget):
         # Connect the signal
         self.lf_W0.editingFinished.connect(self.set_W0)
         self.lf_H0.editingFinished.connect(self.set_H0)
+        self.w_mag.saveNeeded.connect(self.emit_save)
 
     def set_key(self):
         """Setup the slot key according to the GUI"""
@@ -220,6 +226,10 @@ class PMSlot10(Gen_PMSlot10, QWidget):
         self.slot.Hmag = self.lf_Hmag.value()
         self.w_out.comp_output()
         # Notify the machine GUI that the machine has changed
+        self.saveNeeded.emit()
+
+    def emit_save(self):
+        """Send a saveNeeded signal to the DMachineSetup"""
         self.saveNeeded.emit()
 
     def set_Wkey(self):
