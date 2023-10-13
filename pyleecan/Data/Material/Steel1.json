@@ -24,10 +24,7 @@
     },
     "is_isotropic": true,
     "mag": {
-        "BH_curve": {
-            "__class__": "ImportMatrix",
-            "is_transpose": false
-        },
+        "BH_curve": null,
         "Brm20": null,
         "Hc": null,
         "LossData": {

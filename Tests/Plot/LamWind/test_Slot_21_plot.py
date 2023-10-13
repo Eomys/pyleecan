@@ -53,10 +53,10 @@ class Test_Slot_21_plot(object):
             H1_is_rad=False,
         )
         test_obj.rotor.axial_vent.append(
-            VentilationTrap(Zh=6, Alpha0=pi / 6, W1=30e-3, W2=60e-3, D0=0.05, H0=0.3)
+            VentilationTrap(Zh=6, Alpha0=0, W1=30e-3, W2=60e-3, D0=0.05, H0=0.3)
         )
         test_obj.rotor.axial_vent.append(
-            VentilationTrap(Zh=6, Alpha0=pi / 6, W1=60e-3, W2=90e-3, D0=0.05, H0=0.4)
+            VentilationTrap(Zh=6, Alpha0=0, W1=60e-3, W2=90e-3, D0=0.05, H0=0.4)
         )
         test_obj.rotor.winding = WindingUD(wind_mat=wind_mat, qs=4, p=4, Lewout=60e-3)
         test_obj.rotor.mat_type.mag = MatMagnetics(Wlam=0.5e-3)
@@ -89,23 +89,23 @@ class Test_Slot_21_plot(object):
         test_obj.stator.winding.Lewout = 60e-3
         test_obj.frame = Frame(Rint=0.8, Rext=1, Lfra=1)
 
-        test_obj.plot(is_show_fig=False)
-        fig = plt.gcf()
-        fig.savefig(join(save_path, "test_Lam_Wind_s21_1-Machine.png"))
-        # Rotor + Stator + 2 for frame + 1 for shaft
-        assert len(fig.axes[0].patches) == 95
-
         test_obj.rotor.plot(is_show_fig=False)
         fig = plt.gcf()
         fig.savefig(join(save_path, "test_Lam_Wind_s21_2-Rotor.png"))
-        # 2 for lam + 4*Zs for wind + 6 vents + 6 vents
-        assert len(fig.axes[0].patches) == 40
+        # 2 for lam + 4*6 for wind + 6 vents + 6 vents
+        assert len(fig.axes[0].patches) == 38
 
         test_obj.stator.plot(is_show_fig=False)
         fig = plt.gcf()
         fig.savefig(join(save_path, "test_Lam_Wind_s21_3-Stator.png"))
-        # 2 for lam + Zs*2 for wind + 12 vents
-        assert len(fig.axes[0].patches) == 52
+        # 2 for lam + 18*2 for wind + 12 vents
+        assert len(fig.axes[0].patches) == 50
+
+        test_obj.plot(is_show_fig=False)
+        fig = plt.gcf()
+        fig.savefig(join(save_path, "test_Lam_Wind_s21_1-Machine.png"))
+        # Rotor + Stator + 2 for frame + 1 for shaft
+        assert len(fig.axes[0].patches) == 91
 
         tooth = test_obj.rotor.slot.get_surface_tooth()
         tooth.plot(color="r", is_show_fig=False)
@@ -116,3 +116,9 @@ class Test_Slot_21_plot(object):
         tooth.plot(color="r", is_show_fig=False)
         fig = plt.gcf()
         fig.savefig(join(save_path, "test_Lam_Wind_s21_Tooth_out.png"))
+
+
+if __name__ == "__main__":
+    a = Test_Slot_21_plot()
+    a.test_Lam_Wind_21_wind_22()
+    print("Done")

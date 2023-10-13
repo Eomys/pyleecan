@@ -9,8 +9,8 @@ from PySide2.QtCore import *
 from PySide2.QtGui import *
 from PySide2.QtWidgets import *
 
-from ......GUI.Dialog.DMatLib.WMatSelect.WMatSelect import WMatSelect
 from ......GUI.Tools.FloatEdit import FloatEdit
+from ......GUI.Dialog.DMatLib.WMatSelect.WMatSelect import WMatSelect
 
 from pyleecan.GUI.Resources import pyleecan_rc
 
@@ -155,7 +155,7 @@ class Ui_PHoleM63(object):
         PHoleM63.setWindowTitle(QCoreApplication.translate("PHoleM63", u"Form", None))
         self.img_slot.setText("")
         self.ck_is_top_flat.setText(
-            QCoreApplication.translate("PHoleM63", u"top_flat", None)
+            QCoreApplication.translate("PHoleM63", u"Flat top", None)
         )
         self.in_H0.setText(QCoreApplication.translate("PHoleM63", u"H0", None))
         self.unit_H1.setText(QCoreApplication.translate("PHoleM63", u"m", None))

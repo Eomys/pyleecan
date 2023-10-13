@@ -3,10 +3,9 @@ from matplotlib.patches import Patch
 from matplotlib.pyplot import legend
 
 from ....Functions.init_fig import init_fig
+from ....Functions.Plot.get_patch_color_from_label import get_path_color_from_label
 from ....definitions import config_dict
 
-VENT_COLOR = config_dict["PLOT"]["COLOR_DICT"]["VENT_COLOR"]
-VENT_EDGE = config_dict["PLOT"]["COLOR_DICT"]["VENT_EDGE"]
 ROTOR_COLOR = config_dict["PLOT"]["COLOR_DICT"]["ROTOR_COLOR"]
 STATOR_COLOR = config_dict["PLOT"]["COLOR_DICT"]["STATOR_COLOR"]
 
@@ -62,33 +61,21 @@ def plot(
     ax : Matplotlib.axes.Axes object
         Axis containing the plot
     """
-    if self.is_stator:
-        lam_color = STATOR_COLOR
-    else:
-        lam_color = ROTOR_COLOR
     (fig, ax, patch_leg, label_leg) = init_fig(fig=fig, ax=ax, shape="rectangle")
 
     surf_list = self.build_geometry(sym=sym, alpha=alpha, delta=delta)
     patches = list()
 
-    # Color Selection for Lamination
+    # Color Selection for Surfaces
     for surf in surf_list:
-        if surf.label is not None and "Lamination" in surf.label:
-            patches.extend(
-                surf.get_patches(
-                    color=lam_color, is_edge_only=is_edge_only, edgecolor=edgecolor
-                )
+        color = get_path_color_from_label(surf.label)
+        patches.extend(
+            surf.get_patches(
+                color=color,
+                is_edge_only=is_edge_only,
+                edgecolor=edgecolor,
             )
-        elif surf.label is not None and "Ventilation_" in surf.label:
-            patches.extend(
-                surf.get_patches(
-                    color=VENT_COLOR, edgecolor=edgecolor, is_edge_only=is_edge_only
-                )
-            )
-        else:
-            patches.extend(
-                surf.get_patches(is_edge_only=is_edge_only, edgecolor=edgecolor)
-            )
+        )
 
     # Display the result
     ax.set_xlabel("(m)")

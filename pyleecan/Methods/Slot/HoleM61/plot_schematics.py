@@ -1,5 +1,5 @@
 import matplotlib.pyplot as plt
-from numpy import pi, exp, angle
+from numpy import pi, exp, angle, floor_divide
 
 from pyleecan.Classes.Arc1 import Arc1
 from pyleecan.Classes.LamHole import LamHole
@@ -19,6 +19,12 @@ from pyleecan.Functions.Plot import (
     SC_LINE_WIDTH,
     TEXT_BOX,
     plot_quote,
+)
+
+from ....Functions.FEMM.get_mesh_param import get_mesh_param
+from ....Functions.labels import (
+    decode_label,
+    HOLEM_LAB,
 )
 from pyleecan.Methods import ParentMissingError
 
@@ -229,6 +235,21 @@ def plot_schematics(
 
         # magnet width only if magnet is visible
         if type_add_active == 2:
+            # Add magnet Id on the corresponding surfaces
+            for surf in self.build_geometry():
+                label = surf.label
+                label_dict = decode_label(label)
+                point_ref = surf.point_ref
+
+                if HOLEM_LAB in label_dict["surf_type"]:  # LamHole
+                    T_id = label_dict["T_id"]
+                    point_ref = point_ref * exp(1j * alpha)
+                    ax.text(
+                        point_ref.real,
+                        point_ref.imag,
+                        T_id,
+                    )
+
             # W2
             line = Segment(
                 point_dict["ZM6"] * exp(1j * alpha),
@@ -244,6 +265,7 @@ def plot_schematics(
                 is_arrow=True,
                 fontsize=SC_FONT_SIZE,
             )
+
             line = Segment(
                 point_dict["ZM13"] * exp(1j * alpha),
                 point_dict["ZM14"] * exp(1j * alpha),
@@ -523,6 +545,7 @@ def plot_schematics(
     ax.set_title("")
     ax.get_legend().remove()
     ax.set_axis_off()
+    fig.tight_layout()
 
     # Save / Show
     if save_path is not None:

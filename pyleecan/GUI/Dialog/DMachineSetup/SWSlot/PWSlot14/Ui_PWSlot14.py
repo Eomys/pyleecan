@@ -146,12 +146,6 @@ class Ui_PWSlot14(object):
 
         self.gridLayout_2.addWidget(self.in_type, 0, 0, 1, 1)
 
-        self.verticalSpacer = QSpacerItem(
-            17, 37, QSizePolicy.Minimum, QSizePolicy.Expanding
-        )
-
-        self.gridLayout_2.addItem(self.verticalSpacer, 3, 1, 1, 1)
-
         self.w_wedge_mat = WMatSelectV(self.g_wedge)
         self.w_wedge_mat.setObjectName(u"w_wedge_mat")
         self.w_wedge_mat.setMinimumSize(QSize(100, 100))
@@ -162,11 +156,17 @@ class Ui_PWSlot14(object):
         self.c_wedge_type.addItem("")
         self.c_wedge_type.setObjectName(u"c_wedge_type")
         self.c_wedge_type.setMaximumSize(QSize(200, 16777215))
-        self.c_wedge_type.setEditable(True)
+        self.c_wedge_type.setEditable(False)
 
         self.gridLayout_2.addWidget(self.c_wedge_type, 0, 1, 1, 1)
 
         self.verticalLayout_3.addWidget(self.g_wedge)
+
+        self.verticalSpacer = QSpacerItem(
+            17, 37, QSizePolicy.Minimum, QSizePolicy.Expanding
+        )
+
+        self.verticalLayout_3.addItem(self.verticalSpacer)
 
         self.w_out = WWSlotOut(self.scrollAreaWidgetContents)
         self.w_out.setObjectName(u"w_out")
@@ -207,11 +207,11 @@ class Ui_PWSlot14(object):
         self.g_wedge.setTitle(QCoreApplication.translate("PWSlot14", u"Wedge", None))
         self.in_type.setText(QCoreApplication.translate("PWSlot14", u"Type", None))
         self.c_wedge_type.setItemText(
-            0, QCoreApplication.translate("PWSlot14", u"Normal", None)
+            0, QCoreApplication.translate("PWSlot14", u"Standard", None)
         )
 
         self.c_wedge_type.setCurrentText(
-            QCoreApplication.translate("PWSlot14", u"Normal", None)
+            QCoreApplication.translate("PWSlot14", u"Standard", None)
         )
 
     # retranslateUi

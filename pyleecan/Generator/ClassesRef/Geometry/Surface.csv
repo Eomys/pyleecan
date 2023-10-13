@@ -1,10 +1,11 @@
 Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,as_dict Type
-point_ref,-,Center of symmetry,0,complex,0,,
-label,-,Label of the surface,0,str,,,
-,
-Package,Inherit,Methods,Constant Name,Constant Value,Class description
-Geometry,,comp_mesh_dict,VERSION,1,SurfLine define by list of lines that delimit it, label and point reference.
-,,draw_FEMM,,,
-,,plot,,,
-,,split_line,,,
-,,is_inside,,,
+point_ref,-,Center of symmetry,0,complex,0,,,
+label,-,Label of the surface,0,str,,,,
+,,,,,,,,
+Package,Inherit,Methods,Constant Name,Constant Value,Class description,,,
+Geometry,,comp_mesh_dict,VERSION,1,SurfLine define by list of lines that delimit it, label and point reference.,,
+,,draw_FEMM,,,,,,
+,,plot,,,,,,
+,,split_line,,,,,,
+,,is_inside,,,,,,
+,,intersect_line,,,,,,

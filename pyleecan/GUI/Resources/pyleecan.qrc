@@ -69,11 +69,14 @@
     <file>images/MachineSetup/WMSlot/SlotCirc_empty_int_rot_old.png</file>
     <file>images/MachineSetup/WMSlot/SlotCirc_empty_ext_sta_old.png</file>
     <file>images/MachineSetup/WMSlot/SlotM10_empty_ext_stator.png</file>
+    <file>images/MachineSetup/WMSlot/SlotM10_key_ext_stator.png</file>
     <file>images/MachineSetup/WMSlot/SlotM10_empty_int_rotor.png</file>
     <file>images/MachineSetup/WMSlot/SlotM10_mag_int_rotor.png</file>
     <file>images/MachineSetup/WMSlot/SlotM11_empty_ext_stator.png</file>
     <file>images/MachineSetup/WMSlot/SlotM11_empty_int_rotor.png</file>
     <file>images/MachineSetup/WMSlot/SlotM11_mag_int_rotor.png</file>
+    <file>images/MachineSetup/WMSlot/SlotM11_key_ext_stator.png</file>
+    <file>images/MachineSetup/WMSlot/SlotM12_empty_int_rotor.png</file>
     <file>images/MachineSetup/WMSlot/SlotM12_mag_int_rotor.png</file>
     <file>images/MachineSetup/WMSlot/SlotM13_mag_int_rotor.png</file>
     <file>images/MachineSetup/WMSlot/SlotM14_mag_int_rotor.png</file>
@@ -82,10 +85,11 @@
     <file>images/MachineSetup/WMSlot/SlotM17_mag_int_rotor.png</file>
     <file>images/MachineSetup/WMSlot/SlotM18_mag_int_rotor.png</file>
     <file>images/MachineSetup/WMSlot/SlotM19_mag_int_rotor.png</file>
+    <file>images/MachineSetup/WMSlot/SlotM19_empty_ext_stator.png</file>
     <file>images/MachineSetup/LamParam/CircVentDuct.png</file>
-    <file>images/MachineSetup/LamParam/VentilationCirc.png</file>
-    <file>images/MachineSetup/LamParam/VentilationPolar.png</file>
-    <file>images/MachineSetup/LamParam/VentilationTrap.png</file>
+    <file>images/MachineSetup/LamParam/VentilationCirc_empty_int_rotor.png</file>
+    <file>images/MachineSetup/LamParam/VentilationPolar_empty_int_rotor.png</file>
+    <file>images/MachineSetup/LamParam/VentilationTrap_empty_int_rotor.png</file>
     <file>images/MachineSetup/LamParam/BoreFlower.png</file>
     <file>images/MachineSetup/LamParam/BoreSinePole.png</file>
     <file>images/MachineSetup/Bar/ShortCircuitRing_schematics.png</file>

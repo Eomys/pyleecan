@@ -40,9 +40,7 @@ class Test_Slot_11_plot(object):
             Nrvd=2,
             Wrvd=0.05,
         )
-        test_obj.rotor.axial_vent = [
-            VentilationCirc(Zh=6, Alpha0=pi / 6, D0=60e-3, H0=0.35)
-        ]
+        test_obj.rotor.axial_vent = [VentilationCirc(Zh=6, Alpha0=0, D0=60e-3, H0=0.35)]
         test_obj.rotor.slot = SlotW11(
             Zs=6,
             W0=50e-3,
@@ -83,24 +81,23 @@ class Test_Slot_11_plot(object):
         test_obj.stator.mat_type.mag = MatMagnetics(Wlam=0.5e-3)
         test_obj.frame = Frame(Rint=0.8, Rext=0.9, Lfra=1)
 
-        test_obj.plot(is_show_fig=False)
-        fig = plt.gcf()
-        fig.savefig(join(save_path, "test_Lam_Wind_s11_1-Machine.png"))
-        # Rotor + Stator + 2 for frame + 1 for Shaft
-        assert len(fig.axes[0].patches) == 77
-
         test_obj.rotor.plot(is_show_fig=False)
         fig = plt.gcf()
         fig.savefig(join(save_path, "test_Lam_Wind_s11_2-Rotor.png"))
-        # 2 for lam + Zs*4 for wind + 6 vents
-        assert len(fig.axes[0].patches) == 34
+        # 2 for lam + 6*4 for wind + 6 vents
+        assert len(fig.axes[0].patches) == 32
 
         test_obj.stator.plot(is_show_fig=False)
         fig = plt.gcf()
         fig.savefig(join(save_path, "test_Lam_Wind_s11_3-Stator.png"))
-        # 2 for lam + Zs*2 for wind
-        assert len(fig.axes[0].patches) == 40
+        # 2 for lam + 18*2 for wind
+        assert len(fig.axes[0].patches) == 38
 
+        test_obj.plot(is_show_fig=False)
+        fig = plt.gcf()
+        fig.savefig(join(save_path, "test_Lam_Wind_s11_1-Machine.png"))
+        # Rotor + Stator + 2 for frame + 1 for Shaft
+        assert len(fig.axes[0].patches) == 73
         tooth = test_obj.rotor.slot.get_surface_tooth()
         tooth.plot(color="r", is_show_fig=False)
         fig = plt.gcf()
@@ -110,3 +107,9 @@ class Test_Slot_11_plot(object):
         tooth.plot(color="r", is_show_fig=False)
         fig = plt.gcf()
         fig.savefig(join(save_path, "test_Lam_Wind_s11_Tooth_out.png"))
+
+
+if __name__ == "__main__":
+    a = Test_Slot_11_plot()
+    a.test_Lam_Wind_11_wind_22()
+    print("Done")
