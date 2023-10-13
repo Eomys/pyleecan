@@ -12,6 +12,6 @@ def has_key(self):
         True if the Lamination has at least one key
     """
 
-    if self.notch in [[], None]:
+    if self.notch is None:
         return False
     return any([notch.has_key() for notch in self.notch])
