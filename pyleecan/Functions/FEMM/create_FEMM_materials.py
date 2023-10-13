@@ -98,9 +98,7 @@ def create_FEMM_materials(
                 )
                 if type_BH_stator == 0:
                     BHs = lam_obj.mat_type.mag.get_BH()
-                    if BHs is not None and BHs.shape[0] > 1:
-                        for ii in range(BHs.shape[0]):
-                            femm.mi_addbhpoint(mat_name, BHs[ii][1], BHs[ii][0])
+                    add_BH_curve(femm, BHs, mat_name)
                 materials.append(mat_name)
             prop_dict[label_dict["full"]] = mat_name
         elif LAM_LAB in label_dict["surf_type"] and ROTOR_LAB in label_dict["lam_type"]:
@@ -119,9 +117,7 @@ def create_FEMM_materials(
                 )
                 if type_BH_rotor == 0:
                     BHr = lam_obj.mat_type.mag.get_BH()
-                    if BHr is not None and BHr.shape[0] > 1:
-                        for ii in range(BHr.shape[0]):
-                            femm.mi_addbhpoint(mat_name, BHr[ii][1], BHr[ii][0])
+                    add_BH_curve(femm, BHr, mat_name)
                 materials.append(mat_name)
             prop_dict[label_dict["full"]] = mat_name
         elif (
@@ -172,9 +168,7 @@ def create_FEMM_materials(
                     wedge_mat.mag.BH_curve, ImportMatrix  # abstract class
                 ):
                     BH = wedge_mat.mag.BH_curve.get_data()
-                    if BH.shape[0] > 1:
-                        for ii in range(BH.shape[0]):
-                            femm.mi_addbhpoint(wedge_mat.name, BH[ii][1], BH[ii][0])
+                    add_BH_curve(femm, BH, wedge_mat.name)
                 materials.append(mat_name)
             prop_dict[label_dict["full"]] = mat_name
         elif NOTCH_LAB in label_dict["surf_type"]:  # Notches
@@ -217,9 +211,7 @@ def create_FEMM_materials(
                     and not type(key_mat.mag.BH_curve) is ImportMatrix  # abstract class
                 ):
                     BH = key_mat.mag.BH_curve.get_data()
-                    if BH.shape[0] > 1:
-                        for ii in range(BH.shape[0]):
-                            femm.mi_addbhpoint(key_mat.name, BH[ii][1], BH[ii][0])
+                    add_BH_curve(femm, BH, key_mat.name)
                 materials.append(mat_name)
             prop_dict[label_dict["full"]] = mat_name
         elif VENT_LAB in label_dict["surf_type"]:  # Ventilation
@@ -272,3 +264,19 @@ def create_FEMM_materials(
     FEMM_dict["materials"] = materials
     FEMM_dict["circuits"] = circuits
     return prop_dict, FEMM_dict
+
+def add_BH_curve(femm, BH, mat_name):
+    """Add the BH curve of a lamination on femm
+
+    Parameters
+    ----------
+    femm : FEMMHandler
+        client to send command to a FEMM instance
+    BH : ndarray
+        BH curve of the material
+    mat_name : string
+        material name
+    """
+    if BH is not None and BH.shape[0] > 1:
+        for B, H in BH:
+            femm.mi_addbhpoint(mat_name, H, B)

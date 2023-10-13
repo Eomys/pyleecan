@@ -24,7 +24,7 @@ class PMSlot10(Gen_PMSlot10, QWidget):
     notch_name = "Rectangular"
     slot_type = SlotM10
 
-    def __init__(self, lamination=None, material_dict=None, notch_obj=None):
+    def __init__(self, lamination=None, notch_obj=None, material_dict=None):
         """Initialize the widget according to lamination
 
         Parameters
@@ -54,9 +54,7 @@ class PMSlot10(Gen_PMSlot10, QWidget):
         # Set unit name (m ou mm)
         wid_list = [
             self.unit_W0,
-            self.unit_Wmag,
             self.unit_H0,
-            self.unit_Hmag,
         ]
         for wid in wid_list:
             wid.setText("[" + gui_option.unit.get_m_name() + "]")
@@ -71,6 +69,7 @@ class PMSlot10(Gen_PMSlot10, QWidget):
             wid_list += [self.txt_constraint]  # Constraint Wmag < W0
             for wid in wid_list:
                 wid.hide()
+
             # Set values for check
             self.slot.Hmag = 0
             self.slot.Wmag = 0
@@ -114,6 +113,7 @@ class PMSlot10(Gen_PMSlot10, QWidget):
                 self.notch_obj.key_mat = None
             else:
                 self.w_key_mat.def_mat = "Steel1"
+
             self.set_key()
 
         else:  # magnet case
@@ -157,15 +157,15 @@ class PMSlot10(Gen_PMSlot10, QWidget):
         if self.g_key.isChecked():
             self.w_key_mat.update(self.notch_obj, "key_mat", self.material_dict)
             self.img_slot.setPixmap(QPixmap(pixmap_dict["SlotM10_key_ext_stator"]))
-            isEnabled = True
+            is_enabled = True
 
         else:
             self.notch_obj.key_mat = None
             self.img_slot.setPixmap(QPixmap(pixmap_dict["SlotM10_empty_ext_stator"]))
-            isEnabled = False
+            is_enabled = False
 
         for widget in widget_list:
-            widget.setEnabled(isEnabled)
+            widget.setEnabled(is_enabled)
 
         # Notify the machine GUI that the machine has changed
         self.saveNeeded.emit()
