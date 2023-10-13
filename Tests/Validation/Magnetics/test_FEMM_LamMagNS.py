@@ -58,9 +58,7 @@ def test_FEMM_LamSlotMagNS():
     fig.savefig(join(res_path, "machine.png"))
     fig.savefig(join(res_path, "machine.svg"), format="svg")
 
-    fig, ax = BNS.rotor.plot(
-        is_add_arrow=True, is_max_sym=True, is_clean_plot=True, is_show_fig=False
-    )
+    fig, ax = BNS.rotor.plot(is_add_arrow=True, is_clean_plot=True, is_show_fig=False)
     fig.savefig(join(res_path, "rotor_sym.png"))
     fig.savefig(join(res_path, "rotor_sym.svg"), format="svg")
 
