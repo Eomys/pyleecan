@@ -54,9 +54,7 @@ class PMSlot10(Gen_PMSlot10, QWidget):
         # Set unit name (m ou mm)
         wid_list = [
             self.unit_W0,
-            self.unit_Wmag,
             self.unit_H0,
-            self.unit_Hmag,
         ]
         for wid in wid_list:
             wid.setText("[" + gui_option.unit.get_m_name() + "]")
