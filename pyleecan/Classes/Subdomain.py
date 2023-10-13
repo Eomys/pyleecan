@@ -53,9 +53,8 @@ class Subdomain(FrozenClass):
         self,
         radius_min=None,
         radius_max=None,
-        angular_width=None,
         k=None,
-        periodicity=None,
+        number=None,
         permeability_relative=1,
         init_dict=None,
         init_str=None,
@@ -79,21 +78,18 @@ class Subdomain(FrozenClass):
                 radius_min = init_dict["radius_min"]
             if "radius_max" in list(init_dict.keys()):
                 radius_max = init_dict["radius_max"]
-            if "angular_width" in list(init_dict.keys()):
-                angular_width = init_dict["angular_width"]
             if "k" in list(init_dict.keys()):
                 k = init_dict["k"]
-            if "periodicity" in list(init_dict.keys()):
-                periodicity = init_dict["periodicity"]
+            if "number" in list(init_dict.keys()):
+                number = init_dict["number"]
             if "permeability_relative" in list(init_dict.keys()):
                 permeability_relative = init_dict["permeability_relative"]
         # Set the properties (value check and convertion are done in setter)
         self.parent = None
         self.radius_min = radius_min
         self.radius_max = radius_max
-        self.angular_width = angular_width
         self.k = k
-        self.periodicity = periodicity
+        self.number = number
         self.permeability_relative = permeability_relative
 
         # The class is frozen, for now it's impossible to add new properties
@@ -109,7 +105,6 @@ class Subdomain(FrozenClass):
             Subdomain_str += "parent = " + str(type(self.parent)) + " object" + linesep
         Subdomain_str += "radius_min = " + str(self.radius_min) + linesep
         Subdomain_str += "radius_max = " + str(self.radius_max) + linesep
-        Subdomain_str += "angular_width = " + str(self.angular_width) + linesep
         Subdomain_str += (
             "k = "
             + linesep
@@ -117,7 +112,7 @@ class Subdomain(FrozenClass):
             + linesep
             + linesep
         )
-        Subdomain_str += "periodicity = " + str(self.periodicity) + linesep
+        Subdomain_str += "number = " + str(self.number) + linesep
         Subdomain_str += (
             "permeability_relative = " + str(self.permeability_relative) + linesep
         )
@@ -132,11 +127,9 @@ class Subdomain(FrozenClass):
             return False
         if other.radius_max != self.radius_max:
             return False
-        if other.angular_width != self.angular_width:
-            return False
         if not array_equal(other.k, self.k):
             return False
-        if other.periodicity != self.periodicity:
+        if other.number != self.number:
             return False
         if other.permeability_relative != self.permeability_relative:
             return False
@@ -188,39 +181,20 @@ class Subdomain(FrozenClass):
                 diff_list.append(name + ".radius_max" + val_str)
             else:
                 diff_list.append(name + ".radius_max")
-        if (
-            other._angular_width is not None
-            and self._angular_width is not None
-            and isnan(other._angular_width)
-            and isnan(self._angular_width)
-        ):
-            pass
-        elif other._angular_width != self._angular_width:
-            if is_add_value:
-                val_str = (
-                    " (self="
-                    + str(self._angular_width)
-                    + ", other="
-                    + str(other._angular_width)
-                    + ")"
-                )
-                diff_list.append(name + ".angular_width" + val_str)
-            else:
-                diff_list.append(name + ".angular_width")
         if not array_equal(other.k, self.k):
             diff_list.append(name + ".k")
-        if other._periodicity != self._periodicity:
+        if other._number != self._number:
             if is_add_value:
                 val_str = (
                     " (self="
-                    + str(self._periodicity)
+                    + str(self._number)
                     + ", other="
-                    + str(other._periodicity)
+                    + str(other._number)
                     + ")"
                 )
-                diff_list.append(name + ".periodicity" + val_str)
+                diff_list.append(name + ".number" + val_str)
             else:
-                diff_list.append(name + ".periodicity")
+                diff_list.append(name + ".number")
         if (
             other._permeability_relative is not None
             and self._permeability_relative is not None
@@ -250,9 +224,8 @@ class Subdomain(FrozenClass):
         S = 0  # Full size of the object
         S += getsizeof(self.radius_min)
         S += getsizeof(self.radius_max)
-        S += getsizeof(self.angular_width)
         S += getsizeof(self.k)
-        S += getsizeof(self.periodicity)
+        S += getsizeof(self.number)
         S += getsizeof(self.permeability_relative)
         return S
 
@@ -270,7 +243,6 @@ class Subdomain(FrozenClass):
         Subdomain_dict = dict()
         Subdomain_dict["radius_min"] = self.radius_min
         Subdomain_dict["radius_max"] = self.radius_max
-        Subdomain_dict["angular_width"] = self.angular_width
         if self.k is None:
             Subdomain_dict["k"] = None
         else:
@@ -284,7 +256,7 @@ class Subdomain(FrozenClass):
                 raise Exception(
                     "Unknown type_handle_ndarray: " + str(type_handle_ndarray)
                 )
-        Subdomain_dict["periodicity"] = self.periodicity
+        Subdomain_dict["number"] = self.number
         Subdomain_dict["permeability_relative"] = self.permeability_relative
         # The class name is added to the dict for deserialisation purpose
         Subdomain_dict["__class__"] = "Subdomain"
@@ -296,20 +268,18 @@ class Subdomain(FrozenClass):
         # Handle deepcopy of all the properties
         radius_min_val = self.radius_min
         radius_max_val = self.radius_max
-        angular_width_val = self.angular_width
         if self.k is None:
             k_val = None
         else:
             k_val = self.k.copy()
-        periodicity_val = self.periodicity
+        number_val = self.number
         permeability_relative_val = self.permeability_relative
         # Creates new object of the same type with the copied properties
         obj_copy = type(self)(
             radius_min=radius_min_val,
             radius_max=radius_max_val,
-            angular_width=angular_width_val,
             k=k_val,
-            periodicity=periodicity_val,
+            number=number_val,
             permeability_relative=permeability_relative_val,
         )
         return obj_copy
@@ -319,9 +289,8 @@ class Subdomain(FrozenClass):
 
         self.radius_min = None
         self.radius_max = None
-        self.angular_width = None
         self.k = None
-        self.periodicity = None
+        self.number = None
         self.permeability_relative = None
 
     def _get_radius_min(self):
@@ -362,25 +331,6 @@ class Subdomain(FrozenClass):
         """,
     )
 
-    def _get_angular_width(self):
-        """getter of angular_width"""
-        return self._angular_width
-
-    def _set_angular_width(self, value):
-        """setter of angular_width"""
-        check_var("angular_width", value, "float", Vmin=0)
-        self._angular_width = value
-
-    angular_width = property(
-        fget=_get_angular_width,
-        fset=_set_angular_width,
-        doc=u"""Angular width of subdomain
-
-        :Type: float
-        :min: 0
-        """,
-    )
-
     def _get_k(self):
         """getter of k"""
         return self._k
@@ -407,18 +357,18 @@ class Subdomain(FrozenClass):
         """,
     )
 
-    def _get_periodicity(self):
-        """getter of periodicity"""
-        return self._periodicity
+    def _get_number(self):
+        """getter of number"""
+        return self._number
 
-    def _set_periodicity(self, value):
-        """setter of periodicity"""
-        check_var("periodicity", value, "int", Vmin=0)
-        self._periodicity = value
+    def _set_number(self, value):
+        """setter of number"""
+        check_var("number", value, "int", Vmin=0)
+        self._number = value
 
-    periodicity = property(
-        fget=_get_periodicity,
-        fset=_set_periodicity,
+    number = property(
+        fget=_get_number,
+        fset=_set_number,
         doc=u"""Number of identical subdomains in model
 
         :Type: int

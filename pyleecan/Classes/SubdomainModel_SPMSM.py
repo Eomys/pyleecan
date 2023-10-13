@@ -18,20 +18,6 @@ from .SubdomainModel import SubdomainModel
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
 try:
-    from ..Methods.Simulation.SubdomainModel_SPMSM.comp_interface_airgap_magnet import (
-        comp_interface_airgap_magnet,
-    )
-except ImportError as error:
-    comp_interface_airgap_magnet = error
-
-try:
-    from ..Methods.Simulation.SubdomainModel_SPMSM.comp_interface_airgap_slot import (
-        comp_interface_airgap_slot,
-    )
-except ImportError as error:
-    comp_interface_airgap_slot = error
-
-try:
     from ..Methods.Simulation.SubdomainModel_SPMSM.set_subdomains import set_subdomains
 except ImportError as error:
     set_subdomains = error
@@ -52,30 +38,6 @@ class SubdomainModel_SPMSM(SubdomainModel):
     VERSION = 1
 
     # Check ImportError to remove unnecessary dependencies in unused method
-    # cf Methods.Simulation.SubdomainModel_SPMSM.comp_interface_airgap_magnet
-    if isinstance(comp_interface_airgap_magnet, ImportError):
-        comp_interface_airgap_magnet = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use SubdomainModel_SPMSM method comp_interface_airgap_magnet: "
-                    + str(comp_interface_airgap_magnet)
-                )
-            )
-        )
-    else:
-        comp_interface_airgap_magnet = comp_interface_airgap_magnet
-    # cf Methods.Simulation.SubdomainModel_SPMSM.comp_interface_airgap_slot
-    if isinstance(comp_interface_airgap_slot, ImportError):
-        comp_interface_airgap_slot = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use SubdomainModel_SPMSM method comp_interface_airgap_slot: "
-                    + str(comp_interface_airgap_slot)
-                )
-            )
-        )
-    else:
-        comp_interface_airgap_slot = comp_interface_airgap_slot
     # cf Methods.Simulation.SubdomainModel_SPMSM.set_subdomains
     if isinstance(set_subdomains, ImportError):
         set_subdomains = property(
@@ -107,13 +69,12 @@ class SubdomainModel_SPMSM(SubdomainModel):
     def __init__(
         self,
         stator_slot=None,
-        stator_slot_opening=None,
         rotor_magnet_surface=None,
         rotor_yoke=None,
         airgap=None,
         per_a=None,
         machine_polar_eq=None,
-        antiper_a=None,
+        is_antiper_a=None,
         init_dict=None,
         init_str=None,
     ):
@@ -134,8 +95,6 @@ class SubdomainModel_SPMSM(SubdomainModel):
             # Overwrite default value with init_dict content
             if "stator_slot" in list(init_dict.keys()):
                 stator_slot = init_dict["stator_slot"]
-            if "stator_slot_opening" in list(init_dict.keys()):
-                stator_slot_opening = init_dict["stator_slot_opening"]
             if "rotor_magnet_surface" in list(init_dict.keys()):
                 rotor_magnet_surface = init_dict["rotor_magnet_surface"]
             if "rotor_yoke" in list(init_dict.keys()):
@@ -146,11 +105,10 @@ class SubdomainModel_SPMSM(SubdomainModel):
                 per_a = init_dict["per_a"]
             if "machine_polar_eq" in list(init_dict.keys()):
                 machine_polar_eq = init_dict["machine_polar_eq"]
-            if "antiper_a" in list(init_dict.keys()):
-                antiper_a = init_dict["antiper_a"]
+            if "is_antiper_a" in list(init_dict.keys()):
+                is_antiper_a = init_dict["is_antiper_a"]
         # Set the properties (value check and convertion are done in setter)
         self.stator_slot = stator_slot
-        self.stator_slot_opening = stator_slot_opening
         self.rotor_magnet_surface = rotor_magnet_surface
         self.rotor_yoke = rotor_yoke
         # Call SubdomainModel init
@@ -158,7 +116,7 @@ class SubdomainModel_SPMSM(SubdomainModel):
             airgap=airgap,
             per_a=per_a,
             machine_polar_eq=machine_polar_eq,
-            antiper_a=antiper_a,
+            is_antiper_a=is_antiper_a,
         )
         # The class is frozen (in SubdomainModel init), for now it's impossible to
         # add new properties
@@ -176,15 +134,6 @@ class SubdomainModel_SPMSM(SubdomainModel):
             SubdomainModel_SPMSM_str += "stator_slot = " + tmp
         else:
             SubdomainModel_SPMSM_str += "stator_slot = None" + linesep + linesep
-        if self.stator_slot_opening is not None:
-            tmp = (
-                self.stator_slot_opening.__str__()
-                .replace(linesep, linesep + "\t")
-                .rstrip("\t")
-            )
-            SubdomainModel_SPMSM_str += "stator_slot_opening = " + tmp
-        else:
-            SubdomainModel_SPMSM_str += "stator_slot_opening = None" + linesep + linesep
         if self.rotor_magnet_surface is not None:
             tmp = (
                 self.rotor_magnet_surface.__str__()
@@ -216,8 +165,6 @@ class SubdomainModel_SPMSM(SubdomainModel):
             return False
         if other.stator_slot != self.stator_slot:
             return False
-        if other.stator_slot_opening != self.stator_slot_opening:
-            return False
         if other.rotor_magnet_surface != self.rotor_magnet_surface:
             return False
         if other.rotor_yoke != self.rotor_yoke:
@@ -248,21 +195,6 @@ class SubdomainModel_SPMSM(SubdomainModel):
                 self.stator_slot.compare(
                     other.stator_slot,
                     name=name + ".stator_slot",
-                    ignore_list=ignore_list,
-                    is_add_value=is_add_value,
-                )
-            )
-        if (
-            other.stator_slot_opening is None and self.stator_slot_opening is not None
-        ) or (
-            other.stator_slot_opening is not None and self.stator_slot_opening is None
-        ):
-            diff_list.append(name + ".stator_slot_opening None mismatch")
-        elif self.stator_slot_opening is not None:
-            diff_list.extend(
-                self.stator_slot_opening.compare(
-                    other.stator_slot_opening,
-                    name=name + ".stator_slot_opening",
                     ignore_list=ignore_list,
                     is_add_value=is_add_value,
                 )
@@ -307,7 +239,6 @@ class SubdomainModel_SPMSM(SubdomainModel):
         # Get size of the properties inherited from SubdomainModel
         S += super(SubdomainModel_SPMSM, self).__sizeof__()
         S += getsizeof(self.stator_slot)
-        S += getsizeof(self.stator_slot_opening)
         S += getsizeof(self.rotor_magnet_surface)
         S += getsizeof(self.rotor_yoke)
         return S
@@ -333,16 +264,6 @@ class SubdomainModel_SPMSM(SubdomainModel):
             SubdomainModel_SPMSM_dict["stator_slot"] = None
         else:
             SubdomainModel_SPMSM_dict["stator_slot"] = self.stator_slot.as_dict(
-                type_handle_ndarray=type_handle_ndarray,
-                keep_function=keep_function,
-                **kwargs
-            )
-        if self.stator_slot_opening is None:
-            SubdomainModel_SPMSM_dict["stator_slot_opening"] = None
-        else:
-            SubdomainModel_SPMSM_dict[
-                "stator_slot_opening"
-            ] = self.stator_slot_opening.as_dict(
                 type_handle_ndarray=type_handle_ndarray,
                 keep_function=keep_function,
                 **kwargs
@@ -378,10 +299,6 @@ class SubdomainModel_SPMSM(SubdomainModel):
             stator_slot_val = None
         else:
             stator_slot_val = self.stator_slot.copy()
-        if self.stator_slot_opening is None:
-            stator_slot_opening_val = None
-        else:
-            stator_slot_opening_val = self.stator_slot_opening.copy()
         if self.rotor_magnet_surface is None:
             rotor_magnet_surface_val = None
         else:
@@ -399,17 +316,16 @@ class SubdomainModel_SPMSM(SubdomainModel):
             machine_polar_eq_val = None
         else:
             machine_polar_eq_val = self.machine_polar_eq.copy()
-        antiper_a_val = self.antiper_a
+        is_antiper_a_val = self.is_antiper_a
         # Creates new object of the same type with the copied properties
         obj_copy = type(self)(
             stator_slot=stator_slot_val,
-            stator_slot_opening=stator_slot_opening_val,
             rotor_magnet_surface=rotor_magnet_surface_val,
             rotor_yoke=rotor_yoke_val,
             airgap=airgap_val,
             per_a=per_a_val,
             machine_polar_eq=machine_polar_eq_val,
-            antiper_a=antiper_a_val,
+            is_antiper_a=is_antiper_a_val,
         )
         return obj_copy
 
@@ -418,8 +334,6 @@ class SubdomainModel_SPMSM(SubdomainModel):
 
         if self.stator_slot is not None:
             self.stator_slot._set_None()
-        if self.stator_slot_opening is not None:
-            self.stator_slot_opening._set_None()
         if self.rotor_magnet_surface is not None:
             self.rotor_magnet_surface._set_None()
         if self.rotor_yoke is not None:
@@ -463,45 +377,6 @@ class SubdomainModel_SPMSM(SubdomainModel):
         doc=u"""Subdomain for stator slots
 
         :Type: Subdomain_Slot
-        """,
-    )
-
-    def _get_stator_slot_opening(self):
-        """getter of stator_slot_opening"""
-        return self._stator_slot_opening
-
-    def _set_stator_slot_opening(self, value):
-        """setter of stator_slot_opening"""
-        if isinstance(value, str):  # Load from file
-            try:
-                value = load_init_dict(value)[1]
-            except Exception as e:
-                self.get_logger().error(
-                    "Error while loading " + value + ", setting None instead"
-                )
-                value = None
-        if isinstance(value, dict) and "__class__" in value:
-            class_obj = import_class(
-                "pyleecan.Classes", value.get("__class__"), "stator_slot_opening"
-            )
-            value = class_obj(init_dict=value)
-        elif type(value) is int and value == -1:  # Default constructor
-            Subdomain_SlotOpening = import_class(
-                "pyleecan.Classes", "Subdomain_SlotOpening", "stator_slot_opening"
-            )
-            value = Subdomain_SlotOpening()
-        check_var("stator_slot_opening", value, "Subdomain_SlotOpening")
-        self._stator_slot_opening = value
-
-        if self._stator_slot_opening is not None:
-            self._stator_slot_opening.parent = self
-
-    stator_slot_opening = property(
-        fget=_get_stator_slot_opening,
-        fset=_set_stator_slot_opening,
-        doc=u"""Subdomain for stator slot openings
-
-        :Type: Subdomain_SlotOpening
         """,
     )
 

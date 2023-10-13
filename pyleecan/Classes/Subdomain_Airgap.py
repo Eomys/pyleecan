@@ -60,9 +60,8 @@ class Subdomain_Airgap(Subdomain):
         D=None,
         radius_min=None,
         radius_max=None,
-        angular_width=None,
         k=None,
-        periodicity=None,
+        number=None,
         permeability_relative=1,
         init_dict=None,
         init_str=None,
@@ -94,12 +93,10 @@ class Subdomain_Airgap(Subdomain):
                 radius_min = init_dict["radius_min"]
             if "radius_max" in list(init_dict.keys()):
                 radius_max = init_dict["radius_max"]
-            if "angular_width" in list(init_dict.keys()):
-                angular_width = init_dict["angular_width"]
             if "k" in list(init_dict.keys()):
                 k = init_dict["k"]
-            if "periodicity" in list(init_dict.keys()):
-                periodicity = init_dict["periodicity"]
+            if "number" in list(init_dict.keys()):
+                number = init_dict["number"]
             if "permeability_relative" in list(init_dict.keys()):
                 permeability_relative = init_dict["permeability_relative"]
         # Set the properties (value check and convertion are done in setter)
@@ -111,9 +108,8 @@ class Subdomain_Airgap(Subdomain):
         super(Subdomain_Airgap, self).__init__(
             radius_min=radius_min,
             radius_max=radius_max,
-            angular_width=angular_width,
             k=k,
-            periodicity=periodicity,
+            number=number,
             permeability_relative=permeability_relative,
         )
         # The class is frozen (in Subdomain init), for now it's impossible to
@@ -310,12 +306,11 @@ class Subdomain_Airgap(Subdomain):
             D_val = self.D.copy()
         radius_min_val = self.radius_min
         radius_max_val = self.radius_max
-        angular_width_val = self.angular_width
         if self.k is None:
             k_val = None
         else:
             k_val = self.k.copy()
-        periodicity_val = self.periodicity
+        number_val = self.number
         permeability_relative_val = self.permeability_relative
         # Creates new object of the same type with the copied properties
         obj_copy = type(self)(
@@ -325,9 +320,8 @@ class Subdomain_Airgap(Subdomain):
             D=D_val,
             radius_min=radius_min_val,
             radius_max=radius_max_val,
-            angular_width=angular_width_val,
             k=k_val,
-            periodicity=periodicity_val,
+            number=number_val,
             permeability_relative=permeability_relative_val,
         )
         return obj_copy

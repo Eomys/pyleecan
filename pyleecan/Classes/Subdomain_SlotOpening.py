@@ -13,7 +13,7 @@ from ..Functions.save import save
 from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
 from copy import deepcopy
-from .Subdomain import Subdomain
+from .Subdomain_Slot import Subdomain_Slot
 
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
@@ -30,7 +30,7 @@ from numpy import isnan
 from ._check import InitUnKnowClassError
 
 
-class Subdomain_SlotOpening(Subdomain):
+class Subdomain_SlotOpening(Subdomain_Slot):
     """Subdomain class for slots regions"""
 
     VERSION = 1
@@ -54,15 +54,22 @@ class Subdomain_SlotOpening(Subdomain):
 
     def __init__(
         self,
-        A=None,
-        B=None,
         C=None,
         D=None,
+        E=None,
+        F=None,
+        opening_width=None,
+        v=None,
+        A=None,
+        B=None,
+        center_angle=None,
+        slot_width=None,
+        Ji=None,
+        Jik=None,
         radius_min=None,
         radius_max=None,
-        angular_width=None,
         k=None,
-        periodicity=None,
+        number=None,
         permeability_relative=1,
         init_dict=None,
         init_str=None,
@@ -82,63 +89,70 @@ class Subdomain_SlotOpening(Subdomain):
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
-            if "A" in list(init_dict.keys()):
-                A = init_dict["A"]
-            if "B" in list(init_dict.keys()):
-                B = init_dict["B"]
             if "C" in list(init_dict.keys()):
                 C = init_dict["C"]
             if "D" in list(init_dict.keys()):
                 D = init_dict["D"]
+            if "E" in list(init_dict.keys()):
+                E = init_dict["E"]
+            if "F" in list(init_dict.keys()):
+                F = init_dict["F"]
+            if "opening_width" in list(init_dict.keys()):
+                opening_width = init_dict["opening_width"]
+            if "v" in list(init_dict.keys()):
+                v = init_dict["v"]
+            if "A" in list(init_dict.keys()):
+                A = init_dict["A"]
+            if "B" in list(init_dict.keys()):
+                B = init_dict["B"]
+            if "center_angle" in list(init_dict.keys()):
+                center_angle = init_dict["center_angle"]
+            if "slot_width" in list(init_dict.keys()):
+                slot_width = init_dict["slot_width"]
+            if "Ji" in list(init_dict.keys()):
+                Ji = init_dict["Ji"]
+            if "Jik" in list(init_dict.keys()):
+                Jik = init_dict["Jik"]
             if "radius_min" in list(init_dict.keys()):
                 radius_min = init_dict["radius_min"]
             if "radius_max" in list(init_dict.keys()):
                 radius_max = init_dict["radius_max"]
-            if "angular_width" in list(init_dict.keys()):
-                angular_width = init_dict["angular_width"]
             if "k" in list(init_dict.keys()):
                 k = init_dict["k"]
-            if "periodicity" in list(init_dict.keys()):
-                periodicity = init_dict["periodicity"]
+            if "number" in list(init_dict.keys()):
+                number = init_dict["number"]
             if "permeability_relative" in list(init_dict.keys()):
                 permeability_relative = init_dict["permeability_relative"]
         # Set the properties (value check and convertion are done in setter)
-        self.A = A
-        self.B = B
         self.C = C
         self.D = D
-        # Call Subdomain init
+        self.E = E
+        self.F = F
+        self.opening_width = opening_width
+        self.v = v
+        # Call Subdomain_Slot init
         super(Subdomain_SlotOpening, self).__init__(
+            A=A,
+            B=B,
+            center_angle=center_angle,
+            slot_width=slot_width,
+            Ji=Ji,
+            Jik=Jik,
             radius_min=radius_min,
             radius_max=radius_max,
-            angular_width=angular_width,
             k=k,
-            periodicity=periodicity,
+            number=number,
             permeability_relative=permeability_relative,
         )
-        # The class is frozen (in Subdomain init), for now it's impossible to
+        # The class is frozen (in Subdomain_Slot init), for now it's impossible to
         # add new properties
 
     def __str__(self):
         """Convert this object in a readeable string (for print)"""
 
         Subdomain_SlotOpening_str = ""
-        # Get the properties inherited from Subdomain
+        # Get the properties inherited from Subdomain_Slot
         Subdomain_SlotOpening_str += super(Subdomain_SlotOpening, self).__str__()
-        Subdomain_SlotOpening_str += (
-            "A = "
-            + linesep
-            + str(self.A).replace(linesep, linesep + "\t")
-            + linesep
-            + linesep
-        )
-        Subdomain_SlotOpening_str += (
-            "B = "
-            + linesep
-            + str(self.B).replace(linesep, linesep + "\t")
-            + linesep
-            + linesep
-        )
         Subdomain_SlotOpening_str += (
             "C = "
             + linesep
@@ -153,6 +167,30 @@ class Subdomain_SlotOpening(Subdomain):
             + linesep
             + linesep
         )
+        Subdomain_SlotOpening_str += (
+            "E = "
+            + linesep
+            + str(self.E).replace(linesep, linesep + "\t")
+            + linesep
+            + linesep
+        )
+        Subdomain_SlotOpening_str += (
+            "F = "
+            + linesep
+            + str(self.F).replace(linesep, linesep + "\t")
+            + linesep
+            + linesep
+        )
+        Subdomain_SlotOpening_str += (
+            "opening_width = " + str(self.opening_width) + linesep
+        )
+        Subdomain_SlotOpening_str += (
+            "v = "
+            + linesep
+            + str(self.v).replace(linesep, linesep + "\t")
+            + linesep
+            + linesep
+        )
         return Subdomain_SlotOpening_str
 
     def __eq__(self, other):
@@ -161,16 +199,20 @@ class Subdomain_SlotOpening(Subdomain):
         if type(other) != type(self):
             return False
 
-        # Check the properties inherited from Subdomain
+        # Check the properties inherited from Subdomain_Slot
         if not super(Subdomain_SlotOpening, self).__eq__(other):
-            return False
-        if not array_equal(other.A, self.A):
-            return False
-        if not array_equal(other.B, self.B):
             return False
         if not array_equal(other.C, self.C):
             return False
         if not array_equal(other.D, self.D):
+            return False
+        if not array_equal(other.E, self.E):
+            return False
+        if not array_equal(other.F, self.F):
+            return False
+        if other.opening_width != self.opening_width:
+            return False
+        if not array_equal(other.v, self.v):
             return False
         return True
 
@@ -183,20 +225,41 @@ class Subdomain_SlotOpening(Subdomain):
             return ["type(" + name + ")"]
         diff_list = list()
 
-        # Check the properties inherited from Subdomain
+        # Check the properties inherited from Subdomain_Slot
         diff_list.extend(
             super(Subdomain_SlotOpening, self).compare(
                 other, name=name, ignore_list=ignore_list, is_add_value=is_add_value
             )
         )
-        if not array_equal(other.A, self.A):
-            diff_list.append(name + ".A")
-        if not array_equal(other.B, self.B):
-            diff_list.append(name + ".B")
         if not array_equal(other.C, self.C):
             diff_list.append(name + ".C")
         if not array_equal(other.D, self.D):
             diff_list.append(name + ".D")
+        if not array_equal(other.E, self.E):
+            diff_list.append(name + ".E")
+        if not array_equal(other.F, self.F):
+            diff_list.append(name + ".F")
+        if (
+            other._opening_width is not None
+            and self._opening_width is not None
+            and isnan(other._opening_width)
+            and isnan(self._opening_width)
+        ):
+            pass
+        elif other._opening_width != self._opening_width:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._opening_width)
+                    + ", other="
+                    + str(other._opening_width)
+                    + ")"
+                )
+                diff_list.append(name + ".opening_width" + val_str)
+            else:
+                diff_list.append(name + ".opening_width")
+        if not array_equal(other.v, self.v):
+            diff_list.append(name + ".v")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -206,12 +269,14 @@ class Subdomain_SlotOpening(Subdomain):
 
         S = 0  # Full size of the object
 
-        # Get size of the properties inherited from Subdomain
+        # Get size of the properties inherited from Subdomain_Slot
         S += super(Subdomain_SlotOpening, self).__sizeof__()
-        S += getsizeof(self.A)
-        S += getsizeof(self.B)
         S += getsizeof(self.C)
         S += getsizeof(self.D)
+        S += getsizeof(self.E)
+        S += getsizeof(self.F)
+        S += getsizeof(self.opening_width)
+        S += getsizeof(self.v)
         return S
 
     def as_dict(self, type_handle_ndarray=0, keep_function=False, **kwargs):
@@ -225,38 +290,12 @@ class Subdomain_SlotOpening(Subdomain):
         and may prevent json serializability.
         """
 
-        # Get the properties inherited from Subdomain
+        # Get the properties inherited from Subdomain_Slot
         Subdomain_SlotOpening_dict = super(Subdomain_SlotOpening, self).as_dict(
             type_handle_ndarray=type_handle_ndarray,
             keep_function=keep_function,
             **kwargs
         )
-        if self.A is None:
-            Subdomain_SlotOpening_dict["A"] = None
-        else:
-            if type_handle_ndarray == 0:
-                Subdomain_SlotOpening_dict["A"] = self.A.tolist()
-            elif type_handle_ndarray == 1:
-                Subdomain_SlotOpening_dict["A"] = self.A.copy()
-            elif type_handle_ndarray == 2:
-                Subdomain_SlotOpening_dict["A"] = self.A
-            else:
-                raise Exception(
-                    "Unknown type_handle_ndarray: " + str(type_handle_ndarray)
-                )
-        if self.B is None:
-            Subdomain_SlotOpening_dict["B"] = None
-        else:
-            if type_handle_ndarray == 0:
-                Subdomain_SlotOpening_dict["B"] = self.B.tolist()
-            elif type_handle_ndarray == 1:
-                Subdomain_SlotOpening_dict["B"] = self.B.copy()
-            elif type_handle_ndarray == 2:
-                Subdomain_SlotOpening_dict["B"] = self.B
-            else:
-                raise Exception(
-                    "Unknown type_handle_ndarray: " + str(type_handle_ndarray)
-                )
         if self.C is None:
             Subdomain_SlotOpening_dict["C"] = None
         else:
@@ -283,6 +322,46 @@ class Subdomain_SlotOpening(Subdomain):
                 raise Exception(
                     "Unknown type_handle_ndarray: " + str(type_handle_ndarray)
                 )
+        if self.E is None:
+            Subdomain_SlotOpening_dict["E"] = None
+        else:
+            if type_handle_ndarray == 0:
+                Subdomain_SlotOpening_dict["E"] = self.E.tolist()
+            elif type_handle_ndarray == 1:
+                Subdomain_SlotOpening_dict["E"] = self.E.copy()
+            elif type_handle_ndarray == 2:
+                Subdomain_SlotOpening_dict["E"] = self.E
+            else:
+                raise Exception(
+                    "Unknown type_handle_ndarray: " + str(type_handle_ndarray)
+                )
+        if self.F is None:
+            Subdomain_SlotOpening_dict["F"] = None
+        else:
+            if type_handle_ndarray == 0:
+                Subdomain_SlotOpening_dict["F"] = self.F.tolist()
+            elif type_handle_ndarray == 1:
+                Subdomain_SlotOpening_dict["F"] = self.F.copy()
+            elif type_handle_ndarray == 2:
+                Subdomain_SlotOpening_dict["F"] = self.F
+            else:
+                raise Exception(
+                    "Unknown type_handle_ndarray: " + str(type_handle_ndarray)
+                )
+        Subdomain_SlotOpening_dict["opening_width"] = self.opening_width
+        if self.v is None:
+            Subdomain_SlotOpening_dict["v"] = None
+        else:
+            if type_handle_ndarray == 0:
+                Subdomain_SlotOpening_dict["v"] = self.v.tolist()
+            elif type_handle_ndarray == 1:
+                Subdomain_SlotOpening_dict["v"] = self.v.copy()
+            elif type_handle_ndarray == 2:
+                Subdomain_SlotOpening_dict["v"] = self.v
+            else:
+                raise Exception(
+                    "Unknown type_handle_ndarray: " + str(type_handle_ndarray)
+                )
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         Subdomain_SlotOpening_dict["__class__"] = "Subdomain_SlotOpening"
@@ -292,14 +371,6 @@ class Subdomain_SlotOpening(Subdomain):
         """Creates a deepcopy of the object"""
 
         # Handle deepcopy of all the properties
-        if self.A is None:
-            A_val = None
-        else:
-            A_val = self.A.copy()
-        if self.B is None:
-            B_val = None
-        else:
-            B_val = self.B.copy()
         if self.C is None:
             C_val = None
         else:
@@ -308,26 +379,66 @@ class Subdomain_SlotOpening(Subdomain):
             D_val = None
         else:
             D_val = self.D.copy()
+        if self.E is None:
+            E_val = None
+        else:
+            E_val = self.E.copy()
+        if self.F is None:
+            F_val = None
+        else:
+            F_val = self.F.copy()
+        opening_width_val = self.opening_width
+        if self.v is None:
+            v_val = None
+        else:
+            v_val = self.v.copy()
+        if self.A is None:
+            A_val = None
+        else:
+            A_val = self.A.copy()
+        if self.B is None:
+            B_val = None
+        else:
+            B_val = self.B.copy()
+        if self.center_angle is None:
+            center_angle_val = None
+        else:
+            center_angle_val = self.center_angle.copy()
+        slot_width_val = self.slot_width
+        if self.Ji is None:
+            Ji_val = None
+        else:
+            Ji_val = self.Ji.copy()
+        if self.Jik is None:
+            Jik_val = None
+        else:
+            Jik_val = self.Jik.copy()
         radius_min_val = self.radius_min
         radius_max_val = self.radius_max
-        angular_width_val = self.angular_width
         if self.k is None:
             k_val = None
         else:
             k_val = self.k.copy()
-        periodicity_val = self.periodicity
+        number_val = self.number
         permeability_relative_val = self.permeability_relative
         # Creates new object of the same type with the copied properties
         obj_copy = type(self)(
-            A=A_val,
-            B=B_val,
             C=C_val,
             D=D_val,
+            E=E_val,
+            F=F_val,
+            opening_width=opening_width_val,
+            v=v_val,
+            A=A_val,
+            B=B_val,
+            center_angle=center_angle_val,
+            slot_width=slot_width_val,
+            Ji=Ji_val,
+            Jik=Jik_val,
             radius_min=radius_min_val,
             radius_max=radius_max_val,
-            angular_width=angular_width_val,
             k=k_val,
-            periodicity=periodicity_val,
+            number=number_val,
             permeability_relative=permeability_relative_val,
         )
         return obj_copy
@@ -335,62 +446,14 @@ class Subdomain_SlotOpening(Subdomain):
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""
 
-        self.A = None
-        self.B = None
         self.C = None
         self.D = None
-        # Set to None the properties inherited from Subdomain
+        self.E = None
+        self.F = None
+        self.opening_width = None
+        self.v = None
+        # Set to None the properties inherited from Subdomain_Slot
         super(Subdomain_SlotOpening, self)._set_None()
-
-    def _get_A(self):
-        """getter of A"""
-        return self._A
-
-    def _set_A(self, value):
-        """setter of A"""
-        if type(value) is int and value == -1:
-            value = array([])
-        elif type(value) is list:
-            try:
-                value = array(value)
-            except:
-                pass
-        check_var("A", value, "ndarray")
-        self._A = value
-
-    A = property(
-        fget=_get_A,
-        fset=_set_A,
-        doc=u"""First integration constant function of harmonic number and time
-
-        :Type: ndarray
-        """,
-    )
-
-    def _get_B(self):
-        """getter of B"""
-        return self._B
-
-    def _set_B(self, value):
-        """setter of B"""
-        if type(value) is int and value == -1:
-            value = array([])
-        elif type(value) is list:
-            try:
-                value = array(value)
-            except:
-                pass
-        check_var("B", value, "ndarray")
-        self._B = value
-
-    B = property(
-        fget=_get_B,
-        fset=_set_B,
-        doc=u"""Second integration constant function of harmonic number and time
-
-        :Type: ndarray
-        """,
-    )
 
     def _get_C(self):
         """getter of C"""
@@ -411,7 +474,7 @@ class Subdomain_SlotOpening(Subdomain):
     C = property(
         fget=_get_C,
         fset=_set_C,
-        doc=u"""Third integration constant function of harmonic number and time
+        doc=u"""First integration constant function of harmonic number and time in slot opening subdomain
 
         :Type: ndarray
         """,
@@ -436,7 +499,101 @@ class Subdomain_SlotOpening(Subdomain):
     D = property(
         fget=_get_D,
         fset=_set_D,
-        doc=u"""Fourth integration constant function of harmonic number and time
+        doc=u"""Second integration constant function of harmonic number and time in slot opening subdomain
+
+        :Type: ndarray
+        """,
+    )
+
+    def _get_E(self):
+        """getter of E"""
+        return self._E
+
+    def _set_E(self, value):
+        """setter of E"""
+        if type(value) is int and value == -1:
+            value = array([])
+        elif type(value) is list:
+            try:
+                value = array(value)
+            except:
+                pass
+        check_var("E", value, "ndarray")
+        self._E = value
+
+    E = property(
+        fget=_get_E,
+        fset=_set_E,
+        doc=u"""Third integration constant function of harmonic number and time in slot opening subdomain
+
+        :Type: ndarray
+        """,
+    )
+
+    def _get_F(self):
+        """getter of F"""
+        return self._F
+
+    def _set_F(self, value):
+        """setter of F"""
+        if type(value) is int and value == -1:
+            value = array([])
+        elif type(value) is list:
+            try:
+                value = array(value)
+            except:
+                pass
+        check_var("F", value, "ndarray")
+        self._F = value
+
+    F = property(
+        fget=_get_F,
+        fset=_set_F,
+        doc=u"""Fourth integration constant function of harmonic number and time in slot opening subdomain
+
+        :Type: ndarray
+        """,
+    )
+
+    def _get_opening_width(self):
+        """getter of opening_width"""
+        return self._opening_width
+
+    def _set_opening_width(self, value):
+        """setter of opening_width"""
+        check_var("opening_width", value, "float", Vmin=0)
+        self._opening_width = value
+
+    opening_width = property(
+        fget=_get_opening_width,
+        fset=_set_opening_width,
+        doc=u"""Angular width of slot opening
+
+        :Type: float
+        :min: 0
+        """,
+    )
+
+    def _get_v(self):
+        """getter of v"""
+        return self._v
+
+    def _set_v(self, value):
+        """setter of v"""
+        if type(value) is int and value == -1:
+            value = array([])
+        elif type(value) is list:
+            try:
+                value = array(value)
+            except:
+                pass
+        check_var("v", value, "ndarray")
+        self._v = value
+
+    v = property(
+        fget=_get_v,
+        fset=_set_v,
+        doc=u"""Harmonic vector for slot opening
 
         :Type: ndarray
         """,

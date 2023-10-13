@@ -245,7 +245,6 @@ from ..Classes.Subdomain_Airgap import Subdomain_Airgap
 from ..Classes.Subdomain_MagnetSurface import Subdomain_MagnetSurface
 from ..Classes.Subdomain_Slot import Subdomain_Slot
 from ..Classes.Subdomain_SlotOpening import Subdomain_SlotOpening
-from ..Classes.Subdomain_SlotWinding import Subdomain_SlotWinding
 from ..Classes.SurfLine import SurfLine
 from ..Classes.SurfRing import SurfRing
 from ..Classes.Surface import Surface

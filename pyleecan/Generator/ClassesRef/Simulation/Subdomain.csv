@@ -1,9 +1,8 @@
 Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,as_dict Type
 radius_min,m,Minimum radius of subdomain,1,float,None,0,,
 radius_max,m,Maximum radius of subdomain,1,float,None,0,,
-angular_width,rad,Angular width of subdomain,1,float,None,0,,
 k,,Array of harmonic numbers ,,ndarray,None,0,,
-periodicity,,Number of identical subdomains in model,,int,None,0,,
+number,,Number of identical subdomains in model,,int,None,0,,
 permeability_relative,,Relative permeability of subdomain,,float,1,1,,
 ,,,,,,,,
 Package,Inherit,Methods,Constant Name,Constant Value,Class description,,,

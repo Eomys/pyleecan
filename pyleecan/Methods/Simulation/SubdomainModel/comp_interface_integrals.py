@@ -26,7 +26,18 @@ def I_cni(a, ni, theta_in, is_antisyma=False, per_a=1):
         return val, val_a
 
     else:
-        return val
+        return val, val
+
+
+def I_sni(a, ni, theta_in, is_antisyma=False, per_a=1):
+    val = 2 * sin(a * ni / 2) * sin(theta_in * ni) / ni
+
+    if is_antisyma:
+        val_a = val - I_sni(a, ni, theta_in + pi / per_a)
+        return val, val_a
+
+    else:
+        return val, val
 
 
 def I_ckni(a, nik, kni, theta_ikn, is_antisyma=False, per_a=1):
@@ -55,7 +66,7 @@ def I_ckni(a, nik, kni, theta_ikn, is_antisyma=False, per_a=1):
         return val, val_a
 
     else:
-        return val
+        return val, val
 
 
 def I_skni(a, nik, kni, theta_ikn, is_antisyma=False, per_a=1):
@@ -84,4 +95,4 @@ def I_skni(a, nik, kni, theta_ikn, is_antisyma=False, per_a=1):
         return val, val_a
 
     else:
-        return val
+        return val, val

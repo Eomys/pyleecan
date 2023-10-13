@@ -1574,10 +1574,13 @@ class DClassGenerator(Ui_DClassGenerator, QWidget):
         # Check if current class is modified and should be saved
         self.check_class_modified()
 
+        list_class_modified = list()
+        for c in self.list_class_modified:
+            if c is not None and c not in list_class_modified:
+                list_class_modified.append(c)
+
         # Check if each modified class has children and regenerate them
-        modified_list = [
-            basename(csv_path)[:-4] for csv_path in self.list_class_modified
-        ]
+        modified_list = [basename(csv_path)[:-4] for csv_path in list_class_modified]
         children_list = list()
 
         # 6 nested for loops to include childs up to 6 generations
@@ -1616,19 +1619,31 @@ class DClassGenerator(Ui_DClassGenerator, QWidget):
                                                                 modified_class5
                                                             ]
                                                         )
+        # Only keep unique children
+        children_list_unique = list()
+        for c in children_list:
+            if c is not None and c not in children_list_unique:
+                children_list_unique.append(c)
 
-        if len(children_list) > 0:
-            print(
-                "Adding children classes: "
-                + str(children_list)
-                + " to list of classes to regenerate"
-            )
-            for child in children_list:
-                self.list_class_modified.append(self.get_child_path(child))
+        if len(children_list_unique) > 0:
+            for child in children_list_unique:
+                # Store child csv path if the file exists
+                child_path = self.get_child_path(child)
+                if (
+                    child_path is not None
+                    and child_path not in list_class_modified
+                    and isfile(child_path)
+                ):
+                    print(
+                        "Adding child class "
+                        + child
+                        + " to the list of classes to regenerate"
+                    )
+                    list_class_modified.append(child_path)
 
         # Generate classes in list of modified classes
         run_generate_classes(
-            is_black=self.is_black.isChecked(), class_list=self.list_class_modified
+            is_black=self.is_black.isChecked(), class_list=list_class_modified
         )
 
         # Empty the list of modified classes

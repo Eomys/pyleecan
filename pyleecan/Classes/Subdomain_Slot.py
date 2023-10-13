@@ -18,9 +18,30 @@ from .Subdomain import Subdomain
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
 try:
+    from ..Methods.Simulation.Subdomain_Slot.comp_current_solution import (
+        comp_current_solution,
+    )
+except ImportError as error:
+    comp_current_solution = error
+
+try:
+    from ..Methods.Simulation.Subdomain_Slot.comp_current_source import (
+        comp_current_source,
+    )
+except ImportError as error:
+    comp_current_source = error
+
+try:
     from ..Methods.Simulation.Subdomain_Slot.comp_flux_density import comp_flux_density
 except ImportError as error:
     comp_flux_density = error
+
+try:
+    from ..Methods.Simulation.Subdomain_Slot.comp_interface_airgap import (
+        comp_interface_airgap,
+    )
+except ImportError as error:
+    comp_interface_airgap = error
 
 
 from numpy import array, array_equal
@@ -29,10 +50,35 @@ from ._check import InitUnKnowClassError
 
 
 class Subdomain_Slot(Subdomain):
-    """Subdomain class for slots regions"""
+    """Subdomain class for slots regions without openings and with windings"""
 
     VERSION = 1
 
+    # Check ImportError to remove unnecessary dependencies in unused method
+    # cf Methods.Simulation.Subdomain_Slot.comp_current_solution
+    if isinstance(comp_current_solution, ImportError):
+        comp_current_solution = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Subdomain_Slot method comp_current_solution: "
+                    + str(comp_current_solution)
+                )
+            )
+        )
+    else:
+        comp_current_solution = comp_current_solution
+    # cf Methods.Simulation.Subdomain_Slot.comp_current_source
+    if isinstance(comp_current_source, ImportError):
+        comp_current_source = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Subdomain_Slot method comp_current_source: "
+                    + str(comp_current_source)
+                )
+            )
+        )
+    else:
+        comp_current_source = comp_current_source
     # cf Methods.Simulation.Subdomain_Slot.comp_flux_density
     if isinstance(comp_flux_density, ImportError):
         comp_flux_density = property(
@@ -45,6 +91,18 @@ class Subdomain_Slot(Subdomain):
         )
     else:
         comp_flux_density = comp_flux_density
+    # cf Methods.Simulation.Subdomain_Slot.comp_interface_airgap
+    if isinstance(comp_interface_airgap, ImportError):
+        comp_interface_airgap = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Subdomain_Slot method comp_interface_airgap: "
+                    + str(comp_interface_airgap)
+                )
+            )
+        )
+    else:
+        comp_interface_airgap = comp_interface_airgap
     # generic save method is available in all object
     save = save
     # get_logger method is available in all object
@@ -55,11 +113,13 @@ class Subdomain_Slot(Subdomain):
         A=None,
         B=None,
         center_angle=None,
+        slot_width=None,
+        Ji=None,
+        Jik=None,
         radius_min=None,
         radius_max=None,
-        angular_width=None,
         k=None,
-        periodicity=None,
+        number=None,
         permeability_relative=1,
         init_dict=None,
         init_str=None,
@@ -85,29 +145,35 @@ class Subdomain_Slot(Subdomain):
                 B = init_dict["B"]
             if "center_angle" in list(init_dict.keys()):
                 center_angle = init_dict["center_angle"]
+            if "slot_width" in list(init_dict.keys()):
+                slot_width = init_dict["slot_width"]
+            if "Ji" in list(init_dict.keys()):
+                Ji = init_dict["Ji"]
+            if "Jik" in list(init_dict.keys()):
+                Jik = init_dict["Jik"]
             if "radius_min" in list(init_dict.keys()):
                 radius_min = init_dict["radius_min"]
             if "radius_max" in list(init_dict.keys()):
                 radius_max = init_dict["radius_max"]
-            if "angular_width" in list(init_dict.keys()):
-                angular_width = init_dict["angular_width"]
             if "k" in list(init_dict.keys()):
                 k = init_dict["k"]
-            if "periodicity" in list(init_dict.keys()):
-                periodicity = init_dict["periodicity"]
+            if "number" in list(init_dict.keys()):
+                number = init_dict["number"]
             if "permeability_relative" in list(init_dict.keys()):
                 permeability_relative = init_dict["permeability_relative"]
         # Set the properties (value check and convertion are done in setter)
         self.A = A
         self.B = B
         self.center_angle = center_angle
+        self.slot_width = slot_width
+        self.Ji = Ji
+        self.Jik = Jik
         # Call Subdomain init
         super(Subdomain_Slot, self).__init__(
             radius_min=radius_min,
             radius_max=radius_max,
-            angular_width=angular_width,
             k=k,
-            periodicity=periodicity,
+            number=number,
             permeability_relative=permeability_relative,
         )
         # The class is frozen (in Subdomain init), for now it's impossible to
@@ -140,6 +206,21 @@ class Subdomain_Slot(Subdomain):
             + linesep
             + linesep
         )
+        Subdomain_Slot_str += "slot_width = " + str(self.slot_width) + linesep
+        Subdomain_Slot_str += (
+            "Ji = "
+            + linesep
+            + str(self.Ji).replace(linesep, linesep + "\t")
+            + linesep
+            + linesep
+        )
+        Subdomain_Slot_str += (
+            "Jik = "
+            + linesep
+            + str(self.Jik).replace(linesep, linesep + "\t")
+            + linesep
+            + linesep
+        )
         return Subdomain_Slot_str
 
     def __eq__(self, other):
@@ -156,6 +237,12 @@ class Subdomain_Slot(Subdomain):
         if not array_equal(other.B, self.B):
             return False
         if not array_equal(other.center_angle, self.center_angle):
+            return False
+        if other.slot_width != self.slot_width:
+            return False
+        if not array_equal(other.Ji, self.Ji):
+            return False
+        if not array_equal(other.Jik, self.Jik):
             return False
         return True
 
@@ -180,6 +267,29 @@ class Subdomain_Slot(Subdomain):
             diff_list.append(name + ".B")
         if not array_equal(other.center_angle, self.center_angle):
             diff_list.append(name + ".center_angle")
+        if (
+            other._slot_width is not None
+            and self._slot_width is not None
+            and isnan(other._slot_width)
+            and isnan(self._slot_width)
+        ):
+            pass
+        elif other._slot_width != self._slot_width:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._slot_width)
+                    + ", other="
+                    + str(other._slot_width)
+                    + ")"
+                )
+                diff_list.append(name + ".slot_width" + val_str)
+            else:
+                diff_list.append(name + ".slot_width")
+        if not array_equal(other.Ji, self.Ji):
+            diff_list.append(name + ".Ji")
+        if not array_equal(other.Jik, self.Jik):
+            diff_list.append(name + ".Jik")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -194,6 +304,9 @@ class Subdomain_Slot(Subdomain):
         S += getsizeof(self.A)
         S += getsizeof(self.B)
         S += getsizeof(self.center_angle)
+        S += getsizeof(self.slot_width)
+        S += getsizeof(self.Ji)
+        S += getsizeof(self.Jik)
         return S
 
     def as_dict(self, type_handle_ndarray=0, keep_function=False, **kwargs):
@@ -252,6 +365,33 @@ class Subdomain_Slot(Subdomain):
                 raise Exception(
                     "Unknown type_handle_ndarray: " + str(type_handle_ndarray)
                 )
+        Subdomain_Slot_dict["slot_width"] = self.slot_width
+        if self.Ji is None:
+            Subdomain_Slot_dict["Ji"] = None
+        else:
+            if type_handle_ndarray == 0:
+                Subdomain_Slot_dict["Ji"] = self.Ji.tolist()
+            elif type_handle_ndarray == 1:
+                Subdomain_Slot_dict["Ji"] = self.Ji.copy()
+            elif type_handle_ndarray == 2:
+                Subdomain_Slot_dict["Ji"] = self.Ji
+            else:
+                raise Exception(
+                    "Unknown type_handle_ndarray: " + str(type_handle_ndarray)
+                )
+        if self.Jik is None:
+            Subdomain_Slot_dict["Jik"] = None
+        else:
+            if type_handle_ndarray == 0:
+                Subdomain_Slot_dict["Jik"] = self.Jik.tolist()
+            elif type_handle_ndarray == 1:
+                Subdomain_Slot_dict["Jik"] = self.Jik.copy()
+            elif type_handle_ndarray == 2:
+                Subdomain_Slot_dict["Jik"] = self.Jik
+            else:
+                raise Exception(
+                    "Unknown type_handle_ndarray: " + str(type_handle_ndarray)
+                )
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         Subdomain_Slot_dict["__class__"] = "Subdomain_Slot"
@@ -273,25 +413,35 @@ class Subdomain_Slot(Subdomain):
             center_angle_val = None
         else:
             center_angle_val = self.center_angle.copy()
+        slot_width_val = self.slot_width
+        if self.Ji is None:
+            Ji_val = None
+        else:
+            Ji_val = self.Ji.copy()
+        if self.Jik is None:
+            Jik_val = None
+        else:
+            Jik_val = self.Jik.copy()
         radius_min_val = self.radius_min
         radius_max_val = self.radius_max
-        angular_width_val = self.angular_width
         if self.k is None:
             k_val = None
         else:
             k_val = self.k.copy()
-        periodicity_val = self.periodicity
+        number_val = self.number
         permeability_relative_val = self.permeability_relative
         # Creates new object of the same type with the copied properties
         obj_copy = type(self)(
             A=A_val,
             B=B_val,
             center_angle=center_angle_val,
+            slot_width=slot_width_val,
+            Ji=Ji_val,
+            Jik=Jik_val,
             radius_min=radius_min_val,
             radius_max=radius_max_val,
-            angular_width=angular_width_val,
             k=k_val,
-            periodicity=periodicity_val,
+            number=number_val,
             permeability_relative=permeability_relative_val,
         )
         return obj_copy
@@ -302,6 +452,9 @@ class Subdomain_Slot(Subdomain):
         self.A = None
         self.B = None
         self.center_angle = None
+        self.slot_width = None
+        self.Ji = None
+        self.Jik = None
         # Set to None the properties inherited from Subdomain
         super(Subdomain_Slot, self)._set_None()
 
@@ -374,7 +527,76 @@ class Subdomain_Slot(Subdomain):
     center_angle = property(
         fget=_get_center_angle,
         fset=_set_center_angle,
-        doc=u"""Angle value at subdomain center
+        doc=u"""Angle value at slot center
+
+        :Type: ndarray
+        """,
+    )
+
+    def _get_slot_width(self):
+        """getter of slot_width"""
+        return self._slot_width
+
+    def _set_slot_width(self, value):
+        """setter of slot_width"""
+        check_var("slot_width", value, "float", Vmin=0)
+        self._slot_width = value
+
+    slot_width = property(
+        fget=_get_slot_width,
+        fset=_set_slot_width,
+        doc=u"""Angular width of slot
+
+        :Type: float
+        :min: 0
+        """,
+    )
+
+    def _get_Ji(self):
+        """getter of Ji"""
+        return self._Ji
+
+    def _set_Ji(self, value):
+        """setter of Ji"""
+        if type(value) is int and value == -1:
+            value = array([])
+        elif type(value) is list:
+            try:
+                value = array(value)
+            except:
+                pass
+        check_var("Ji", value, "ndarray")
+        self._Ji = value
+
+    Ji = property(
+        fget=_get_Ji,
+        fset=_set_Ji,
+        doc=u"""Average current density in slots
+
+        :Type: ndarray
+        """,
+    )
+
+    def _get_Jik(self):
+        """getter of Jik"""
+        return self._Jik
+
+    def _set_Jik(self, value):
+        """setter of Jik"""
+        if type(value) is int and value == -1:
+            value = array([])
+        elif type(value) is list:
+            try:
+                value = array(value)
+            except:
+                pass
+        check_var("Jik", value, "ndarray")
+        self._Jik = value
+
+    Jik = property(
+        fget=_get_Jik,
+        fset=_set_Jik,
+        doc=u"""Current density space harmonics in slots for concentrated double layer windings
 
         :Type: ndarray
         """,

@@ -1,7 +1,9 @@
 Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,as_dict Type
 type_magnetization,,Magnetization type given by machine properties,,int,0,0,3,
+magnet_width,rad,Angular width of a magnet,,float,None,0,,
 ,,,,,,,,
 Package,Inherit,Methods,Constant Name,Constant Value,Class description,,,
 Simulation,Subdomain_Airgap,comp_flux_density,VERSION,1,Subdomain class for surface permanent magnet region,,,
+,,comp_interface_airgap,,,,,,
 ,,comp_magnet_solution,,,,,,
 ,,comp_magnet_source,,,,,,

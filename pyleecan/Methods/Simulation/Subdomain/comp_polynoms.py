@@ -1,5 +1,5 @@
 def comp_polynoms(self):
-    """Method description 
+    """Abstract method to store polynoms functions
 
     Parameters
     ----------
@@ -12,6 +12,12 @@ def comp_polynoms(self):
         var description
     """
 
-    raise Exception("Method comp_polynoms not implemented yet")
+    return
 
-    return var
+
+def E(n, r, R):
+    return (r / R) ** n - (R / r) ** n
+
+
+def P(n, r, R):
+    return (r / R) ** n + (R / r) ** n

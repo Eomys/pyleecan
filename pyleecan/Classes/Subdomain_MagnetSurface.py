@@ -25,6 +25,13 @@ except ImportError as error:
     comp_flux_density = error
 
 try:
+    from ..Methods.Simulation.Subdomain_MagnetSurface.comp_interface_airgap import (
+        comp_interface_airgap,
+    )
+except ImportError as error:
+    comp_interface_airgap = error
+
+try:
     from ..Methods.Simulation.Subdomain_MagnetSurface.comp_magnet_solution import (
         comp_magnet_solution,
     )
@@ -62,6 +69,18 @@ class Subdomain_MagnetSurface(Subdomain_Airgap):
         )
     else:
         comp_flux_density = comp_flux_density
+    # cf Methods.Simulation.Subdomain_MagnetSurface.comp_interface_airgap
+    if isinstance(comp_interface_airgap, ImportError):
+        comp_interface_airgap = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Subdomain_MagnetSurface method comp_interface_airgap: "
+                    + str(comp_interface_airgap)
+                )
+            )
+        )
+    else:
+        comp_interface_airgap = comp_interface_airgap
     # cf Methods.Simulation.Subdomain_MagnetSurface.comp_magnet_solution
     if isinstance(comp_magnet_solution, ImportError):
         comp_magnet_solution = property(
@@ -94,15 +113,15 @@ class Subdomain_MagnetSurface(Subdomain_Airgap):
     def __init__(
         self,
         type_magnetization=0,
+        magnet_width=None,
         A=None,
         B=None,
         C=None,
         D=None,
         radius_min=None,
         radius_max=None,
-        angular_width=None,
         k=None,
-        periodicity=None,
+        number=None,
         permeability_relative=1,
         init_dict=None,
         init_str=None,
@@ -124,6 +143,8 @@ class Subdomain_MagnetSurface(Subdomain_Airgap):
             # Overwrite default value with init_dict content
             if "type_magnetization" in list(init_dict.keys()):
                 type_magnetization = init_dict["type_magnetization"]
+            if "magnet_width" in list(init_dict.keys()):
+                magnet_width = init_dict["magnet_width"]
             if "A" in list(init_dict.keys()):
                 A = init_dict["A"]
             if "B" in list(init_dict.keys()):
@@ -136,16 +157,15 @@ class Subdomain_MagnetSurface(Subdomain_Airgap):
                 radius_min = init_dict["radius_min"]
             if "radius_max" in list(init_dict.keys()):
                 radius_max = init_dict["radius_max"]
-            if "angular_width" in list(init_dict.keys()):
-                angular_width = init_dict["angular_width"]
             if "k" in list(init_dict.keys()):
                 k = init_dict["k"]
-            if "periodicity" in list(init_dict.keys()):
-                periodicity = init_dict["periodicity"]
+            if "number" in list(init_dict.keys()):
+                number = init_dict["number"]
             if "permeability_relative" in list(init_dict.keys()):
                 permeability_relative = init_dict["permeability_relative"]
         # Set the properties (value check and convertion are done in setter)
         self.type_magnetization = type_magnetization
+        self.magnet_width = magnet_width
         # Call Subdomain_Airgap init
         super(Subdomain_MagnetSurface, self).__init__(
             A=A,
@@ -154,9 +174,8 @@ class Subdomain_MagnetSurface(Subdomain_Airgap):
             D=D,
             radius_min=radius_min,
             radius_max=radius_max,
-            angular_width=angular_width,
             k=k,
-            periodicity=periodicity,
+            number=number,
             permeability_relative=permeability_relative,
         )
         # The class is frozen (in Subdomain_Airgap init), for now it's impossible to
@@ -171,6 +190,9 @@ class Subdomain_MagnetSurface(Subdomain_Airgap):
         Subdomain_MagnetSurface_str += (
             "type_magnetization = " + str(self.type_magnetization) + linesep
         )
+        Subdomain_MagnetSurface_str += (
+            "magnet_width = " + str(self.magnet_width) + linesep
+        )
         return Subdomain_MagnetSurface_str
 
     def __eq__(self, other):
@@ -183,6 +205,8 @@ class Subdomain_MagnetSurface(Subdomain_Airgap):
         if not super(Subdomain_MagnetSurface, self).__eq__(other):
             return False
         if other.type_magnetization != self.type_magnetization:
+            return False
+        if other.magnet_width != self.magnet_width:
             return False
         return True
 
@@ -213,6 +237,25 @@ class Subdomain_MagnetSurface(Subdomain_Airgap):
                 diff_list.append(name + ".type_magnetization" + val_str)
             else:
                 diff_list.append(name + ".type_magnetization")
+        if (
+            other._magnet_width is not None
+            and self._magnet_width is not None
+            and isnan(other._magnet_width)
+            and isnan(self._magnet_width)
+        ):
+            pass
+        elif other._magnet_width != self._magnet_width:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._magnet_width)
+                    + ", other="
+                    + str(other._magnet_width)
+                    + ")"
+                )
+                diff_list.append(name + ".magnet_width" + val_str)
+            else:
+                diff_list.append(name + ".magnet_width")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -225,6 +268,7 @@ class Subdomain_MagnetSurface(Subdomain_Airgap):
         # Get size of the properties inherited from Subdomain_Airgap
         S += super(Subdomain_MagnetSurface, self).__sizeof__()
         S += getsizeof(self.type_magnetization)
+        S += getsizeof(self.magnet_width)
         return S
 
     def as_dict(self, type_handle_ndarray=0, keep_function=False, **kwargs):
@@ -245,6 +289,7 @@ class Subdomain_MagnetSurface(Subdomain_Airgap):
             **kwargs
         )
         Subdomain_MagnetSurface_dict["type_magnetization"] = self.type_magnetization
+        Subdomain_MagnetSurface_dict["magnet_width"] = self.magnet_width
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         Subdomain_MagnetSurface_dict["__class__"] = "Subdomain_MagnetSurface"
@@ -255,6 +300,7 @@ class Subdomain_MagnetSurface(Subdomain_Airgap):
 
         # Handle deepcopy of all the properties
         type_magnetization_val = self.type_magnetization
+        magnet_width_val = self.magnet_width
         if self.A is None:
             A_val = None
         else:
@@ -273,25 +319,24 @@ class Subdomain_MagnetSurface(Subdomain_Airgap):
             D_val = self.D.copy()
         radius_min_val = self.radius_min
         radius_max_val = self.radius_max
-        angular_width_val = self.angular_width
         if self.k is None:
             k_val = None
         else:
             k_val = self.k.copy()
-        periodicity_val = self.periodicity
+        number_val = self.number
         permeability_relative_val = self.permeability_relative
         # Creates new object of the same type with the copied properties
         obj_copy = type(self)(
             type_magnetization=type_magnetization_val,
+            magnet_width=magnet_width_val,
             A=A_val,
             B=B_val,
             C=C_val,
             D=D_val,
             radius_min=radius_min_val,
             radius_max=radius_max_val,
-            angular_width=angular_width_val,
             k=k_val,
-            periodicity=periodicity_val,
+            number=number_val,
             permeability_relative=permeability_relative_val,
         )
         return obj_copy
@@ -300,6 +345,7 @@ class Subdomain_MagnetSurface(Subdomain_Airgap):
         """Set all the properties to None (except pyleecan object)"""
 
         self.type_magnetization = None
+        self.magnet_width = None
         # Set to None the properties inherited from Subdomain_Airgap
         super(Subdomain_MagnetSurface, self)._set_None()
 
@@ -320,5 +366,24 @@ class Subdomain_MagnetSurface(Subdomain_Airgap):
         :Type: int
         :min: 0
         :max: 3
+        """,
+    )
+
+    def _get_magnet_width(self):
+        """getter of magnet_width"""
+        return self._magnet_width
+
+    def _set_magnet_width(self, value):
+        """setter of magnet_width"""
+        check_var("magnet_width", value, "float", Vmin=0)
+        self._magnet_width = value
+
+    magnet_width = property(
+        fget=_get_magnet_width,
+        fset=_set_magnet_width,
+        doc=u"""Angular width of a magnet
+
+        :Type: float
+        :min: 0
         """,
     )

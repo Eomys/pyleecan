@@ -34,7 +34,7 @@ class SubdomainModel(FrozenClass):
         airgap=None,
         per_a=None,
         machine_polar_eq=None,
-        antiper_a=None,
+        is_antiper_a=None,
         init_dict=None,
         init_str=None,
     ):
@@ -59,14 +59,14 @@ class SubdomainModel(FrozenClass):
                 per_a = init_dict["per_a"]
             if "machine_polar_eq" in list(init_dict.keys()):
                 machine_polar_eq = init_dict["machine_polar_eq"]
-            if "antiper_a" in list(init_dict.keys()):
-                antiper_a = init_dict["antiper_a"]
+            if "is_antiper_a" in list(init_dict.keys()):
+                is_antiper_a = init_dict["is_antiper_a"]
         # Set the properties (value check and convertion are done in setter)
         self.parent = None
         self.airgap = airgap
         self.per_a = per_a
         self.machine_polar_eq = machine_polar_eq
-        self.antiper_a = antiper_a
+        self.is_antiper_a = is_antiper_a
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -96,7 +96,7 @@ class SubdomainModel(FrozenClass):
             SubdomainModel_str += "machine_polar_eq = " + tmp
         else:
             SubdomainModel_str += "machine_polar_eq = None" + linesep + linesep
-        SubdomainModel_str += "antiper_a = " + str(self.antiper_a) + linesep
+        SubdomainModel_str += "is_antiper_a = " + str(self.is_antiper_a) + linesep
         return SubdomainModel_str
 
     def __eq__(self, other):
@@ -110,7 +110,7 @@ class SubdomainModel(FrozenClass):
             return False
         if other.machine_polar_eq != self.machine_polar_eq:
             return False
-        if other.antiper_a != self.antiper_a:
+        if other.is_antiper_a != self.is_antiper_a:
             return False
         return True
 
@@ -156,18 +156,18 @@ class SubdomainModel(FrozenClass):
                     is_add_value=is_add_value,
                 )
             )
-        if other._antiper_a != self._antiper_a:
+        if other._is_antiper_a != self._is_antiper_a:
             if is_add_value:
                 val_str = (
                     " (self="
-                    + str(self._antiper_a)
+                    + str(self._is_antiper_a)
                     + ", other="
-                    + str(other._antiper_a)
+                    + str(other._is_antiper_a)
                     + ")"
                 )
-                diff_list.append(name + ".antiper_a" + val_str)
+                diff_list.append(name + ".is_antiper_a" + val_str)
             else:
-                diff_list.append(name + ".antiper_a")
+                diff_list.append(name + ".is_antiper_a")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -179,7 +179,7 @@ class SubdomainModel(FrozenClass):
         S += getsizeof(self.airgap)
         S += getsizeof(self.per_a)
         S += getsizeof(self.machine_polar_eq)
-        S += getsizeof(self.antiper_a)
+        S += getsizeof(self.is_antiper_a)
         return S
 
     def as_dict(self, type_handle_ndarray=0, keep_function=False, **kwargs):
@@ -211,7 +211,7 @@ class SubdomainModel(FrozenClass):
                 keep_function=keep_function,
                 **kwargs
             )
-        SubdomainModel_dict["antiper_a"] = self.antiper_a
+        SubdomainModel_dict["is_antiper_a"] = self.is_antiper_a
         # The class name is added to the dict for deserialisation purpose
         SubdomainModel_dict["__class__"] = "SubdomainModel"
         return SubdomainModel_dict
@@ -229,13 +229,13 @@ class SubdomainModel(FrozenClass):
             machine_polar_eq_val = None
         else:
             machine_polar_eq_val = self.machine_polar_eq.copy()
-        antiper_a_val = self.antiper_a
+        is_antiper_a_val = self.is_antiper_a
         # Creates new object of the same type with the copied properties
         obj_copy = type(self)(
             airgap=airgap_val,
             per_a=per_a_val,
             machine_polar_eq=machine_polar_eq_val,
-            antiper_a=antiper_a_val,
+            is_antiper_a=is_antiper_a_val,
         )
         return obj_copy
 
@@ -247,7 +247,7 @@ class SubdomainModel(FrozenClass):
         self.per_a = None
         if self.machine_polar_eq is not None:
             self.machine_polar_eq._set_None()
-        self.antiper_a = None
+        self.is_antiper_a = None
 
     def _get_airgap(self):
         """getter of airgap"""
@@ -344,21 +344,20 @@ class SubdomainModel(FrozenClass):
         """,
     )
 
-    def _get_antiper_a(self):
-        """getter of antiper_a"""
-        return self._antiper_a
+    def _get_is_antiper_a(self):
+        """getter of is_antiper_a"""
+        return self._is_antiper_a
 
-    def _set_antiper_a(self, value):
-        """setter of antiper_a"""
-        check_var("antiper_a", value, "int", Vmin=1)
-        self._antiper_a = value
+    def _set_is_antiper_a(self, value):
+        """setter of is_antiper_a"""
+        check_var("is_antiper_a", value, "bool")
+        self._is_antiper_a = value
 
-    antiper_a = property(
-        fget=_get_antiper_a,
-        fset=_set_antiper_a,
-        doc=u"""Spatial anti-periodicity factor
+    is_antiper_a = property(
+        fget=_get_is_antiper_a,
+        fset=_set_is_antiper_a,
+        doc=u"""True if there is spatial anti-periodicity
 
-        :Type: int
-        :min: 1
+        :Type: bool
         """,
     )

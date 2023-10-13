@@ -42,7 +42,7 @@ def comp_flux_airgap(self, output, axes_dict, Is_val=None, Ir_val=None):
     Time = axes_dict["time"]
 
     # Set the angular symmetry factor according to the machine and check if it is anti-periodic
-    sym, is_antiper_a = Angle.get_periodicity()
+    per_a, is_antiper_a = Angle.get_periodicity()
 
     # Import angular vector from Data object
     angle = Angle.get_values(
@@ -64,15 +64,18 @@ def comp_flux_airgap(self, output, axes_dict, Is_val=None, Ir_val=None):
     # Get rotor angular position
     angle_rotor = output.get_angle_rotor()[0:Nt]
 
-    # Define SubDomain Model depending on machine type
-    machine = output.simu.machine
-    if isinstance(machine, MachineSIPMSM):
-        self.subdomain_model = SubdomainModel_SPMSM(
-            per_a=sym, antiper_a=2 if is_antiper_a else 1
-        )
+    self.subdomain_model.per_a = per_a
+    self.subdomain_model.is_antiper_a = is_antiper_a
 
-    self.subdomain_model.machine_polar_eq = machine.get_polar_eq()
+    self.subdomain_model.machine_polar_eq = output.simu.machine.get_polar_eq()
 
     self.subdomain_model.set_subdomains(Nharm_coeff=self.Nharm_coeff)
+
+    # Set stator currents
+    self.subdomain_model.stator_slot.comp_current_source(
+        Is_val, self.subdomain_model.machine_polar_eq.stator
+    )
+
+    self.subdomain_model.rotor_magnet_surface.comp_magnet_source()
 
     self.subdomain_model.solve(angle_rotor)

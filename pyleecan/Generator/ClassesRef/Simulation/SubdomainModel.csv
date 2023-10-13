@@ -2,7 +2,7 @@ Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximu
 airgap,,Airgap subdomain,,Subdomain_Airgap,None,,,
 per_a,,Spatial periodicity factor,,int,None,1,,
 machine_polar_eq,,Polar equivalent of machine,,Machine,None,,,
-antiper_a,,Spatial anti-periodicity factor,,int,None,1,,
+is_antiper_a,,True if there is spatial anti-periodicity,,bool,None,,,
 ,,,,,,,,
 Package,Inherit,Methods,Constant Name,Constant Value,Class description,,,
 Simulation,,,VERSION,1,Abstract class for all the Subdomain model classes,,,

@@ -247,7 +247,6 @@ load_switch = {
     "Subdomain_MagnetSurface": Subdomain_MagnetSurface,
     "Subdomain_Slot": Subdomain_Slot,
     "Subdomain_SlotOpening": Subdomain_SlotOpening,
-    "Subdomain_SlotWinding": Subdomain_SlotWinding,
     "SurfLine": SurfLine,
     "SurfRing": SurfRing,
     "Surface": Surface,

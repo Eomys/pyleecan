@@ -16066,8 +16066,7 @@
             "Subdomain_Airgap",
             "Subdomain_MagnetSurface",
             "Subdomain_Slot",
-            "Subdomain_SlotOpening",
-            "Subdomain_SlotWinding"
+            "Subdomain_SlotOpening"
         ],
         "desc": "Abstract class for all subdomains",
         "is_internal": false,
@@ -16101,16 +16100,6 @@
             },
             {
                 "as_dict": "",
-                "desc": "Angular width of subdomain",
-                "max": "",
-                "min": "0",
-                "name": "angular_width",
-                "type": "float",
-                "unit": "rad",
-                "value": null
-            },
-            {
-                "as_dict": "",
                 "desc": "Array of harmonic numbers ",
                 "max": "",
                 "min": "0",
@@ -16124,7 +16113,7 @@
                 "desc": "Number of identical subdomains in model",
                 "max": "",
                 "min": "0",
-                "name": "periodicity",
+                "name": "number",
                 "type": "int",
                 "unit": "",
                 "value": null
@@ -16191,11 +16180,11 @@
             },
             {
                 "as_dict": "",
-                "desc": "Spatial anti-periodicity factor",
+                "desc": "True if there is spatial anti-periodicity",
                 "max": "",
-                "min": "1",
-                "name": "antiper_a",
-                "type": "int",
+                "min": "",
+                "name": "is_antiper_a",
+                "type": "bool",
                 "unit": "",
                 "value": null
             }
@@ -16212,8 +16201,6 @@
         "desc": "Subdomain model for Surface Permanent Magnet Synchronous Machine assuming infinite permeability in yokes",
         "is_internal": false,
         "methods": [
-            "comp_interface_airgap_magnet",
-            "comp_interface_airgap_slot",
             "set_subdomains",
             "solve"
         ],
@@ -16229,16 +16216,6 @@
                 "min": "",
                 "name": "stator_slot",
                 "type": "Subdomain_Slot",
-                "unit": "",
-                "value": null
-            },
-            {
-                "as_dict": "",
-                "desc": "Subdomain for stator slot openings",
-                "max": "",
-                "min": "",
-                "name": "stator_slot_opening",
-                "type": "Subdomain_SlotOpening",
                 "unit": "",
                 "value": null
             },
@@ -16338,6 +16315,7 @@
         "is_internal": false,
         "methods": [
             "comp_flux_density",
+            "comp_interface_airgap",
             "comp_magnet_solution",
             "comp_magnet_source"
         ],
@@ -16355,6 +16333,16 @@
                 "type": "int",
                 "unit": "",
                 "value": 0
+            },
+            {
+                "as_dict": "",
+                "desc": "Angular width of a magnet",
+                "max": "",
+                "min": "0",
+                "name": "magnet_width",
+                "type": "float",
+                "unit": "rad",
+                "value": null
             }
         ]
     },
@@ -16366,12 +16354,15 @@
             }
         ],
         "daughters": [
-            "Subdomain_SlotWinding"
+            "Subdomain_SlotOpening"
         ],
-        "desc": "Subdomain class for slots regions",
+        "desc": "Subdomain class for slots regions without openings and with windings",
         "is_internal": false,
         "methods": [
-            "comp_flux_density"
+            "comp_current_solution",
+            "comp_current_source",
+            "comp_flux_density",
+            "comp_interface_airgap"
         ],
         "mother": "Subdomain",
         "name": "Subdomain_Slot",
@@ -16400,96 +16391,24 @@
             },
             {
                 "as_dict": "",
-                "desc": "Angle value at subdomain center",
+                "desc": "Angle value at slot center",
                 "max": "",
                 "min": "",
                 "name": "center_angle",
                 "type": "ndarray",
-                "unit": "",
-                "value": null
-            }
-        ]
-    },
-    "Subdomain_SlotOpening": {
-        "constants": [
-            {
-                "name": "VERSION",
-                "value": "1"
-            }
-        ],
-        "daughters": [],
-        "desc": "Subdomain class for slots regions",
-        "is_internal": false,
-        "methods": [
-            "comp_flux_density"
-        ],
-        "mother": "Subdomain",
-        "name": "Subdomain_SlotOpening",
-        "package": "Simulation",
-        "path": "pyleecan/Generator/ClassesRef/Simulation/Subdomain_SlotOpening.csv",
-        "properties": [
-            {
-                "as_dict": "",
-                "desc": "First integration constant function of harmonic number and time",
-                "max": "",
-                "min": "",
-                "name": "A",
-                "type": "ndarray",
-                "unit": "",
+                "unit": "rad",
                 "value": null
             },
             {
                 "as_dict": "",
-                "desc": "Second integration constant function of harmonic number and time",
+                "desc": "Angular width of slot",
                 "max": "",
-                "min": "",
-                "name": "B",
-                "type": "ndarray",
-                "unit": "",
+                "min": "0",
+                "name": "slot_width",
+                "type": "float",
+                "unit": "rad",
                 "value": null
             },
-            {
-                "as_dict": "",
-                "desc": "Third integration constant function of harmonic number and time",
-                "max": "",
-                "min": "",
-                "name": "C",
-                "type": "ndarray",
-                "unit": "",
-                "value": null
-            },
-            {
-                "as_dict": "",
-                "desc": "Fourth integration constant function of harmonic number and time",
-                "max": "",
-                "min": "",
-                "name": "D",
-                "type": "ndarray",
-                "unit": "",
-                "value": null
-            }
-        ]
-    },
-    "Subdomain_SlotWinding": {
-        "constants": [
-            {
-                "name": "VERSION",
-                "value": "1"
-            }
-        ],
-        "daughters": [],
-        "desc": "Subdomain class for slots regions with windings",
-        "is_internal": false,
-        "methods": [
-            "comp_current_solution",
-            "comp_current_source",
-            "comp_flux_density"
-        ],
-        "mother": "Subdomain_Slot",
-        "name": "Subdomain_SlotWinding",
-        "package": "Simulation",
-        "path": "pyleecan/Generator/ClassesRef/Simulation/Subdomain_SlotWinding.csv",
-        "properties": [
             {
                 "as_dict": "",
                 "desc": "Average current density in slots",
@@ -16508,6 +16427,86 @@
                 "name": "Jik",
                 "type": "ndarray",
                 "unit": "A/m^2",
+                "value": null
+            }
+        ]
+    },
+    "Subdomain_SlotOpening": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Subdomain class for slots regions",
+        "is_internal": false,
+        "methods": [
+            "comp_flux_density"
+        ],
+        "mother": "Subdomain_Slot",
+        "name": "Subdomain_SlotOpening",
+        "package": "Simulation",
+        "path": "pyleecan/Generator/ClassesRef/Simulation/Subdomain_SlotOpening.csv",
+        "properties": [
+            {
+                "as_dict": "",
+                "desc": "First integration constant function of harmonic number and time in slot opening subdomain",
+                "max": "",
+                "min": "",
+                "name": "C",
+                "type": "ndarray",
+                "unit": "",
+                "value": null
+            },
+            {
+                "as_dict": "",
+                "desc": "Second integration constant function of harmonic number and time in slot opening subdomain",
+                "max": "",
+                "min": "",
+                "name": "D",
+                "type": "ndarray",
+                "unit": "",
+                "value": null
+            },
+            {
+                "as_dict": "",
+                "desc": "Third integration constant function of harmonic number and time in slot opening subdomain",
+                "max": "",
+                "min": "",
+                "name": "E",
+                "type": "ndarray",
+                "unit": "",
+                "value": null
+            },
+            {
+                "as_dict": "",
+                "desc": "Fourth integration constant function of harmonic number and time in slot opening subdomain",
+                "max": "",
+                "min": "",
+                "name": "F",
+                "type": "ndarray",
+                "unit": "",
+                "value": null
+            },
+            {
+                "as_dict": "",
+                "desc": "Angular width of slot opening",
+                "max": "",
+                "min": "0",
+                "name": "opening_width",
+                "type": "float",
+                "unit": "rad",
+                "value": null
+            },
+            {
+                "as_dict": "",
+                "desc": "Harmonic vector for slot opening",
+                "max": "",
+                "min": "",
+                "name": "v",
+                "type": "ndarray",
+                "unit": "",
                 "value": null
             }
         ]
