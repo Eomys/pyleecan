@@ -34,7 +34,9 @@ class TestPMSlot19(object):
         material_dict[LIB_KEY][2].elec.rho = 0.33
 
         self.material_dict = material_dict
-        self.widget = PMSlot19(self.test_obj, self.material_dict)
+        self.widget = PMSlot19(
+            lamination=self.test_obj, material_dict=self.material_dict
+        )
 
     @classmethod
     def setup_class(cls):
@@ -96,7 +98,9 @@ class TestPMSlot19(object):
     def test_output_txt(self):
         """Check that the Output text is computed and correct"""
         self.test_obj.slot = SlotM19(Hmag=0.005, W0=0.01, W1=0.01)
-        self.widget = PMSlot19(self.test_obj, self.material_dict)
+        self.widget = PMSlot19(
+            lamination=self.test_obj, material_dict=self.material_dict
+        )
         assert self.widget.w_out.out_slot_height.text() == "Slot height: 0.005 [m]"
 
     def test_check(self):
