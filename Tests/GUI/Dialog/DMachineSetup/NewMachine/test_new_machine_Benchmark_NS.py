@@ -44,7 +44,7 @@ mpl_logger = logging.getLogger("matplotlib")
 mpl_logger.setLevel(logging.WARNING)
 
 matlib_path = join(DATA_DIR, "Material")
-save_path = join(save_path, "Test_New_Bechmark")
+save_path = join(save_path, "Test_New_Bechmark_NS")
 if not isdir(save_path):
     makedirs(save_path)
 
@@ -89,14 +89,14 @@ class TestNewMachineBenchmarkNS(object):
         index_SPMSM = self.widget.w_step.c_type.findText("SPMSM")
         self.widget.w_step.c_type.setCurrentIndex(index_SPMSM)
         assert self.widget.w_step.c_type.currentText() == "SPMSM"
-        self.widget.w_step.le_name.setText("Benchmark_Test")
+        self.widget.w_step.le_name.setText("Benchmark_Test_NS")
         self.widget.w_step.le_name.editingFinished.emit()
         self.widget.w_step.si_p.setValue(5)
         self.widget.w_step.si_p.editingFinished.emit()
         assert self.widget.w_step.si_p.value() == 5
         ## Check modif
         assert isinstance(self.widget.machine, MachineSIPMSM)
-        assert self.widget.machine.name == "Benchmark_Test"
+        assert self.widget.machine.name == "Benchmark_Test_NS"
         assert self.widget.machine.stator.winding.p == 5
         assert self.widget.machine.rotor.slot.Zs == 10
         assert not self.widget.machine.stator.is_internal
@@ -720,7 +720,7 @@ class TestNewMachineBenchmarkNS(object):
         assert self.widget.w_step.is_per_t.isChecked()
         assert self.widget.w_step.lf_Kmesh.value() == 1
         assert self.widget.w_step.si_nb_worker.value() == cpu_count()
-        assert self.widget.w_step.le_name.text() == "FEMM_Benchmark_Test"
+        assert self.widget.w_step.le_name.text() == "FEMM_Benchmark_Test_NS"
 
         ## Define
         res_path = join(save_path, "Simu_Results")
