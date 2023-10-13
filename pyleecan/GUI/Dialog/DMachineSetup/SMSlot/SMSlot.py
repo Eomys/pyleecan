@@ -43,7 +43,7 @@ SLOT_NAME = [wid.slot_name for wid in WIDGET_LIST]
 
 
 class SMSlot(Ui_SMSlot, QWidget):
-    """Step to set the slot with winding"""
+    """Step to set the slot with magnet"""
 
     # Signal to DMachineSetup to know that the save popup is needed
     saveNeeded = Signal()
@@ -124,8 +124,8 @@ class SMSlot(Ui_SMSlot, QWidget):
 
         Parameters
         ----------
-        self : SMSlotMag
-            a SMSlotMag object
+        self : SMSlot
+            a SMSlot object
         """
         self.tab_slot.clear()  # remove previous tabs
         if isinstance(self.obj, LamSlotMag):  # one pole
@@ -164,8 +164,8 @@ class SMSlot(Ui_SMSlot, QWidget):
 
         Parameters
         ----------
-        self : SMSlotMag
-            a SMSlotMag object
+        self : SMSlot
+            a SMSlot object
         """
         if not isinstance(self.obj, LamSlotMagNS):
             return
