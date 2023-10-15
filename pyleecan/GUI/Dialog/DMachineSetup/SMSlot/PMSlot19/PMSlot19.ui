@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1075</width>
+    <width>1076</width>
     <height>643</height>
    </rect>
   </property>
@@ -81,32 +81,15 @@
         <x>0</x>
         <y>0</y>
         <width>268</width>
-        <height>619</height>
+        <height>623</height>
        </rect>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_3">
        <item>
+        <widget class="WWSlotMag" name="w_mag" native="true"/>
+       </item>
+       <item>
         <layout class="QGridLayout" name="gridLayout">
-         <item row="0" column="0">
-          <widget class="QLabel" name="in_W0">
-           <property name="text">
-            <string>W0</string>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="1">
-          <widget class="FloatEdit" name="lf_W1"/>
-         </item>
-         <item row="1" column="2">
-          <widget class="QLabel" name="unit_W1">
-           <property name="text">
-            <string>[m]</string>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="1">
-          <widget class="FloatEdit" name="lf_W0"/>
-         </item>
          <item row="2" column="2">
           <widget class="QLabel" name="unit_Hmag">
            <property name="text">
@@ -117,10 +100,10 @@
          <item row="2" column="1">
           <widget class="FloatEdit" name="lf_Hmag"/>
          </item>
-         <item row="2" column="0">
-          <widget class="QLabel" name="in_Hmag">
+         <item row="0" column="0">
+          <widget class="QLabel" name="in_W0">
            <property name="text">
-            <string>Hmag</string>
+            <string>W0</string>
            </property>
           </widget>
          </item>
@@ -137,6 +120,43 @@
             <string>W1</string>
            </property>
           </widget>
+         </item>
+         <item row="0" column="1">
+          <widget class="FloatEdit" name="lf_W0"/>
+         </item>
+         <item row="1" column="1">
+          <widget class="FloatEdit" name="lf_W1"/>
+         </item>
+         <item row="2" column="0">
+          <widget class="QLabel" name="in_Hmag">
+           <property name="text">
+            <string>Hmag</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="2">
+          <widget class="QLabel" name="unit_W1">
+           <property name="text">
+            <string>[m]</string>
+           </property>
+          </widget>
+         </item>
+         <item row="3" column="0">
+          <widget class="QLabel" name="in_H0">
+           <property name="text">
+            <string>H0</string>
+           </property>
+          </widget>
+         </item>
+         <item row="3" column="2">
+          <widget class="QLabel" name="unit_H0">
+           <property name="text">
+            <string>[m]</string>
+           </property>
+          </widget>
+         </item>
+         <item row="3" column="1">
+          <widget class="FloatEdit" name="lf_H0"/>
          </item>
         </layout>
        </item>
@@ -172,6 +192,12 @@
    <class>WWSlotOut</class>
    <extends>QWidget</extends>
    <header>......GUI.Dialog.DMachineSetup.SWSlot.WWSlotOut.WWSlotOut.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>WWSlotMag</class>
+   <extends>QWidget</extends>
+   <header>......GUI.Dialog.DMachineSetup.SMSlot.WWSlotMag.WWSlotMag</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

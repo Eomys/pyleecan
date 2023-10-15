@@ -1,12 +1,13 @@
 from matplotlib.patches import Patch
 import matplotlib.pyplot as plt
 
-from ....Functions.labels import decode_label, WIND_LAB, BAR_LAB, LAM_LAB
+from ....Functions.labels import decode_label, WIND_LAB, BAR_LAB, WEDGE_LAB
 from ....Functions.Winding.find_wind_phase_color import find_wind_phase_color
 from ....Functions.Winding.gen_phase_list import gen_name
 from ....Functions.init_fig import init_fig
 from ....definitions import config_dict
 from ....Classes.WindingSC import WindingSC
+from ....Functions.Plot.get_patch_color_from_label import get_path_color_from_label
 
 PHASE_COLORS = config_dict["PLOT"]["COLOR_DICT"]["PHASE_COLORS"]
 ROTOR_COLOR = config_dict["PLOT"]["COLOR_DICT"]["ROTOR_COLOR"]
@@ -100,13 +101,7 @@ def plot(
     patches = list()
     for surf in surf_list:
         label_dict = decode_label(surf.label)
-        if LAM_LAB in label_dict["surf_type"]:
-            patches.extend(
-                surf.get_patches(
-                    color=lam_color, is_edge_only=is_edge_only, edgecolor=edgecolor
-                )
-            )
-        elif WIND_LAB in label_dict["surf_type"] or BAR_LAB in label_dict["surf_type"]:
+        if WIND_LAB in label_dict["surf_type"] or BAR_LAB in label_dict["surf_type"]:
             if not is_lam_only:
                 color, sign = find_wind_phase_color(wind_mat=wind_mat, label=surf.label)
                 if sign == "+" and is_add_sign:
@@ -123,9 +118,16 @@ def plot(
                         edgecolor=edgecolor,
                     )
                 )
+        elif WEDGE_LAB in label_dict["surf_type"] and is_lam_only:
+            pass
         else:
+            color = get_path_color_from_label(surf.label, label_dict=label_dict)
             patches.extend(
-                surf.get_patches(is_edge_only=is_edge_only, edgecolor=edgecolor)
+                surf.get_patches(
+                    color=color,
+                    is_edge_only=is_edge_only,
+                    edgecolor=edgecolor,
+                )
             )
 
     # Display the result

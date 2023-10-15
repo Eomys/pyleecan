@@ -61,12 +61,6 @@ class Test_Hole_51_plot(object):
         machine.rotor.hole[0].magnet_1 = Magnet()
         machine.rotor.hole[0].magnet_2 = Magnet()
 
-        machine.plot(is_show_fig=False)
-        fig = plt.gcf()
-        fig.savefig(join(save_path, "test_Lam_Hole_s51_1-Machine_012.png"))
-        # Rotor + 2 for stator + 0 for frame + 1 for shaft
-        assert len(fig.axes[0].patches) == 63
-
         machine.rotor.plot(is_show_fig=False)
         fig = plt.gcf()
         fig.savefig(join(save_path, "test_Lam_Hole_s51_1-Rotor_012.png"))

@@ -23,9 +23,11 @@ class Test_get_polar_eq(object):
 
         fig = plt.gcf()
         fig.savefig(join(save_path, "test_get_polar_eq_SCIM_001.png"))
-        assert len(fig.axes[0].patches) == 227
+        # 8 Vent + 1 shaft + (2 stator + 2 rotor + 36 slot *2 layers + 28 slot * 1 layer+ 1 SCR)*2
+        assert len(fig.axes[0].patches) == 219
 
 
 if __name__ == "__main__":
     a = Test_get_polar_eq()
     a.test_get_polar_eq_SCIM()
+    print("Done")

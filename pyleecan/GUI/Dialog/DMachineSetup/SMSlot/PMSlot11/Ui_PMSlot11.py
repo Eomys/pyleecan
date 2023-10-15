@@ -11,6 +11,8 @@ from PySide2.QtWidgets import *
 
 from ......GUI.Tools.FloatEdit import FloatEdit
 from ......GUI.Dialog.DMachineSetup.SWSlot.WWSlotOut.WWSlotOut import WWSlotOut
+from ......GUI.Dialog.DMachineSetup.SMSlot.WWSlotMag.WWSlotMag import WWSlotMag
+from ......GUI.Dialog.DMatLib.WMatSelect.WMatSelectV import WMatSelectV
 
 from pyleecan.GUI.Resources import pyleecan_rc
 
@@ -66,9 +68,14 @@ class Ui_PMSlot11(object):
         self.scrollArea.setWidgetResizable(True)
         self.scrollAreaWidgetContents = QWidget()
         self.scrollAreaWidgetContents.setObjectName(u"scrollAreaWidgetContents")
-        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 268, 531))
+        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 268, 535))
         self.verticalLayout = QVBoxLayout(self.scrollAreaWidgetContents)
         self.verticalLayout.setObjectName(u"verticalLayout")
+        self.w_mag = WWSlotMag(self.scrollAreaWidgetContents)
+        self.w_mag.setObjectName(u"w_mag")
+
+        self.verticalLayout.addWidget(self.w_mag)
+
         self.gridLayout = QGridLayout()
         self.gridLayout.setObjectName(u"gridLayout")
         self.in_Wmag = QLabel(self.scrollAreaWidgetContents)
@@ -138,6 +145,55 @@ class Ui_PMSlot11(object):
 
         self.verticalLayout.addLayout(self.gridLayout)
 
+        self.g_key = QGroupBox(self.scrollAreaWidgetContents)
+        self.g_key.setObjectName(u"g_key")
+        self.g_key.setCheckable(True)
+        self.g_key.setChecked(False)
+        self.gridLayout_2 = QGridLayout(self.g_key)
+        self.gridLayout_2.setObjectName(u"gridLayout_2")
+        self.w_key_mat = WMatSelectV(self.g_key)
+        self.w_key_mat.setObjectName(u"w_key_mat")
+
+        self.gridLayout_2.addWidget(self.w_key_mat, 10, 0, 1, 2)
+
+        self.gridLayout_3 = QGridLayout()
+        self.gridLayout_3.setObjectName(u"gridLayout_3")
+        self.lf_Wkey = FloatEdit(self.g_key)
+        self.lf_Wkey.setObjectName(u"lf_Wkey")
+
+        self.gridLayout_3.addWidget(self.lf_Wkey, 0, 2, 1, 1)
+
+        self.lf_Hkey = FloatEdit(self.g_key)
+        self.lf_Hkey.setObjectName(u"lf_Hkey")
+
+        self.gridLayout_3.addWidget(self.lf_Hkey, 1, 2, 1, 1)
+
+        self.in_Wkey = QLabel(self.g_key)
+        self.in_Wkey.setObjectName(u"in_Wkey")
+
+        self.gridLayout_3.addWidget(self.in_Wkey, 0, 0, 1, 1)
+
+        self.in_Hkey = QLabel(self.g_key)
+        self.in_Hkey.setObjectName(u"in_Hkey")
+
+        self.gridLayout_3.addWidget(self.in_Hkey, 1, 0, 1, 1)
+
+        self.unit_Hkey = QLabel(self.g_key)
+        self.unit_Hkey.setObjectName(u"unit_Hkey")
+
+        self.gridLayout_3.addWidget(self.unit_Hkey, 1, 4, 1, 1)
+
+        self.c_Wkey_unit = QComboBox(self.g_key)
+        self.c_Wkey_unit.addItem("")
+        self.c_Wkey_unit.addItem("")
+        self.c_Wkey_unit.setObjectName(u"c_Wkey_unit")
+
+        self.gridLayout_3.addWidget(self.c_Wkey_unit, 0, 4, 1, 1)
+
+        self.gridLayout_2.addLayout(self.gridLayout_3, 0, 0, 1, 1)
+
+        self.verticalLayout.addWidget(self.g_key)
+
         self.verticalSpacer = QSpacerItem(
             20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding
         )
@@ -173,7 +229,7 @@ class Ui_PMSlot11(object):
                 u'<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN" "http://www.w3.org/TR/REC-html40/strict.dtd">\n'
                 '<html><head><meta name="qrichtext" content="1" /><style type="text/css">\n'
                 "p, li { white-space: pre-wrap; }\n"
-                "</style></head><body style=\" font-family:'DejaVu Sans'; font-size:7.8pt; font-weight:400; font-style:normal;\">\n"
+                "</style></head><body style=\" font-family:'DejaVu Sans'; font-size:8.15094pt; font-weight:400; font-style:normal;\">\n"
                 '<p align="center" style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-family:\'DejaVu Sans\'; font-size:10pt; font-weight:600; text-decoration: underline;">Constraints :</span></p>\n'
                 '<p align="center" style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-family:\'DejaVu Sans\'; font-size:10pt;">Wmag \u2264 W0</span></p>\n'
                 '<p align="center" style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-family:\'DejaVu Sans\'; font-size:10pt;">Wmag &lt; \u03c0 / p</span></p></body></html>',
@@ -197,6 +253,17 @@ class Ui_PMSlot11(object):
             0, QCoreApplication.translate("PMSlot11", u"rad", None)
         )
         self.c_W0_unit.setItemText(
+            1, QCoreApplication.translate("PMSlot11", u"deg", None)
+        )
+
+        self.g_key.setTitle(QCoreApplication.translate("PMSlot11", u"Key", None))
+        self.in_Wkey.setText(QCoreApplication.translate("PMSlot11", u"Wkey", None))
+        self.in_Hkey.setText(QCoreApplication.translate("PMSlot11", u"Hkey", None))
+        self.unit_Hkey.setText(QCoreApplication.translate("PMSlot11", u"[m]", None))
+        self.c_Wkey_unit.setItemText(
+            0, QCoreApplication.translate("PMSlot11", u"rad", None)
+        )
+        self.c_Wkey_unit.setItemText(
             1, QCoreApplication.translate("PMSlot11", u"deg", None)
         )
 

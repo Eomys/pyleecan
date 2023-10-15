@@ -251,7 +251,7 @@ p, li { white-space: pre-wrap; }
            <widget class="QComboBox" name="c_wedge_type">
             <item>
              <property name="text">
-              <string>Normal</string>
+              <string>Standard</string>
              </property>
             </item>
            </widget>

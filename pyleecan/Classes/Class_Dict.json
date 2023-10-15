@@ -2634,6 +2634,8 @@
             "HoleM58",
             "HoleM60",
             "HoleM61",
+            "HoleM62",
+            "HoleM63",
             "HoleMLSRPM",
             "HoleMag",
             "HoleUD",
@@ -3936,6 +3938,174 @@
             }
         ]
     },
+    "HoleM62": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            },
+            {
+                "name": "IS_SYMMETRICAL",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Hole M62",
+        "is_internal": false,
+        "methods": [
+            "_comp_point_coordinate",
+            "build_geometry",
+            "plot_schematics",
+            "plot_schematics_radial",
+            "remove_magnet",
+            "comp_radius",
+            "has_magnet",
+            "check",
+            "comp_magnetization_dict",
+            "comp_surface_magnet_id",
+            "comp_surface"
+        ],
+        "mother": "HoleMag",
+        "name": "HoleM62",
+        "package": "Slot",
+        "path": "pyleecan/Generator/ClassesRef/Slot/HoleM62.csv",
+        "properties": [
+            {
+                "as_dict": "",
+                "desc": "Length or Angle Opening",
+                "max": "",
+                "min": "0",
+                "name": "W0",
+                "type": "float",
+                "unit": "m/rad",
+                "value": null
+            },
+            {
+                "as_dict": "",
+                "desc": "Distance from the lamination bore",
+                "max": "",
+                "min": "0",
+                "name": "H0",
+                "type": "float",
+                "unit": "m",
+                "value": null
+            },
+            {
+                "as_dict": "",
+                "desc": "Magnet height",
+                "max": "",
+                "min": "0",
+                "name": "H1",
+                "type": "float",
+                "unit": "m",
+                "value": null
+            },
+            {
+                "as_dict": "",
+                "desc": "W0  unit, 0 for m, 1 for rad",
+                "max": "",
+                "min": "",
+                "name": "W0_is_rad",
+                "type": "bool",
+                "unit": "",
+                "value": 0
+            },
+            {
+                "as_dict": "",
+                "desc": "First Magnet",
+                "max": "",
+                "min": "",
+                "name": "magnet_0",
+                "type": "Magnet",
+                "unit": "-",
+                "value": ""
+            }
+        ]
+    },
+    "HoleM63": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            },
+            {
+                "name": "IS_SYMMETRICAL",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Hole M63",
+        "is_internal": false,
+        "methods": [
+            "_comp_point_coordinate",
+            "build_geometry",
+            "plot_schematics",
+            "plot_schematics_top_flat",
+            "remove_magnet",
+            "comp_radius",
+            "has_magnet",
+            "check",
+            "comp_magnetization_dict",
+            "comp_surface_magnet_id",
+            "comp_surface"
+        ],
+        "mother": "HoleMag",
+        "name": "HoleM63",
+        "package": "Slot",
+        "path": "pyleecan/Generator/ClassesRef/Slot/HoleM63.csv",
+        "properties": [
+            {
+                "as_dict": "",
+                "desc": "Length or Angle Opening",
+                "max": "",
+                "min": "0",
+                "name": "W0",
+                "type": "float",
+                "unit": "m/rad",
+                "value": null
+            },
+            {
+                "as_dict": "",
+                "desc": "Distance from the lamination bore",
+                "max": "",
+                "min": "0",
+                "name": "H0",
+                "type": "float",
+                "unit": "m",
+                "value": null
+            },
+            {
+                "as_dict": "",
+                "desc": "Magnet height",
+                "max": "",
+                "min": "0",
+                "name": "H1",
+                "type": "float",
+                "unit": "m",
+                "value": null
+            },
+            {
+                "as_dict": "",
+                "desc": "top flat = 1, if curve top_flat = 0 ",
+                "max": "",
+                "min": "",
+                "name": "top_flat",
+                "type": "bool",
+                "unit": "",
+                "value": 0
+            },
+            {
+                "as_dict": "",
+                "desc": "First Magnet",
+                "max": "",
+                "min": "",
+                "name": "magnet_0",
+                "type": "Magnet",
+                "unit": "-",
+                "value": ""
+            }
+        ]
+    },
     "HoleMLSRPM": {
         "constants": [
             {
@@ -4066,6 +4236,8 @@
             "HoleM58",
             "HoleM60",
             "HoleM61",
+            "HoleM62",
+            "HoleM63",
             "HoleMLSRPM",
             "HoleUD"
         ],
@@ -5653,7 +5825,9 @@
             }
         ],
         "daughters": [
+            "LamSlotM",
             "LamSlotMag",
+            "LamSlotMagNS",
             "LamSlotWind",
             "LamSquirrelCage",
             "LamSquirrelCageMag"
@@ -5692,45 +5866,30 @@
             }
         ]
     },
-    "LamSlotMag": {
+    "LamSlotM": {
         "constants": [
             {
                 "name": "VERSION",
                 "value": "1"
             }
         ],
-        "daughters": [],
+        "daughters": [
+            "LamSlotMag",
+            "LamSlotMagNS"
+        ],
         "desc": "Lamination with Slot for Magnets",
         "is_internal": false,
         "methods": [
-            "build_geometry",
-            "check",
-            "comp_masses",
-            "comp_surfaces",
-            "comp_volumes",
-            "plot",
             "comp_angle_d_axis",
-            "get_magnet_number",
-            "set_Lmag",
             "get_dim_active",
-            "get_all_mag_obj",
-            "get_magnet_by_label"
+            "get_magnet_number",
+            "plot"
         ],
         "mother": "LamSlot",
-        "name": "LamSlotMag",
+        "name": "LamSlotM",
         "package": "Machine",
-        "path": "pyleecan/Generator/ClassesRef/Machine/LamSlotMag.csv",
+        "path": "pyleecan/Generator/ClassesRef/Machine/LamSlotM.csv",
         "properties": [
-            {
-                "as_dict": "",
-                "desc": "Magnet of the lamination",
-                "max": "",
-                "min": "",
-                "name": "magnet",
-                "type": "Magnet",
-                "unit": "-",
-                "value": ""
-            },
             {
                 "as_dict": "",
                 "desc": "Matrix to enforce a different relative magnetic permeability for each magnet layer (shape: [Nrad, Ntan, Zs])",
@@ -5750,6 +5909,103 @@
                 "type": "ndarray",
                 "unit": "-",
                 "value": null
+            }
+        ]
+    },
+    "LamSlotMag": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Lamination with Slot for Magnets",
+        "is_internal": false,
+        "methods": [
+            "build_geometry",
+            "check",
+            "comp_masses",
+            "comp_surfaces",
+            "comp_volumes",
+            "get_all_mag_obj",
+            "get_magnet_by_label",
+            "set_Lmag"
+        ],
+        "mother": "LamSlotM",
+        "name": "LamSlotMag",
+        "package": "Machine",
+        "path": "pyleecan/Generator/ClassesRef/Machine/.csv",
+        "properties": [
+            {
+                "as_dict": "",
+                "desc": "Magnet of the lamination",
+                "max": "",
+                "min": "",
+                "name": "magnet",
+                "type": "Magnet",
+                "unit": "-",
+                "value": ""
+            }
+        ]
+    },
+    "LamSlotMagNS": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Lamination with Slot for Magnets with uneven north/south",
+        "is_internal": false,
+        "methods": [
+            "build_geometry",
+            "check",
+            "comp_masses",
+            "comp_periodicity_geo",
+            "comp_periodicity_spatial",
+            "comp_surfaces",
+            "comp_volumes",
+            "get_all_mag_obj",
+            "get_magnet_by_label",
+            "get_slot_desc_list",
+            "set_Lmag"
+        ],
+        "mother": "LamSlotM",
+        "name": "LamSlotMagNS",
+        "package": "Machine",
+        "path": "pyleecan/Generator/ClassesRef/Machine/LamSlotMagNS.csv",
+        "properties": [
+            {
+                "as_dict": "",
+                "desc": "North Magnet of the lamination",
+                "max": "",
+                "min": "",
+                "name": "magnet_north",
+                "type": "Magnet",
+                "unit": "-",
+                "value": ""
+            },
+            {
+                "as_dict": "",
+                "desc": "South Magnet of the lamination",
+                "max": "",
+                "min": "",
+                "name": "magnet_south",
+                "type": "Magnet",
+                "unit": "-",
+                "value": ""
+            },
+            {
+                "as_dict": "",
+                "desc": "South slot of the lamination",
+                "max": "",
+                "min": "",
+                "name": "slot_south",
+                "type": "Slot",
+                "unit": "",
+                "value": ""
             }
         ]
     },
@@ -6035,7 +6291,9 @@
             "LamHole",
             "LamHoleNS",
             "LamSlot",
+            "LamSlotM",
             "LamSlotMag",
+            "LamSlotMagNS",
             "LamSlotMulti",
             "LamSlotMultiWind",
             "LamSlotWind",
@@ -6075,7 +6333,8 @@
             "build_radius_lines",
             "build_radius_desc",
             "has_slot",
-            "plot_preview_notch"
+            "plot_preview_notch",
+            "has_key"
         ],
         "mother": "",
         "name": "Lamination",
@@ -7009,7 +7268,7 @@
                 "max": "",
                 "min": "",
                 "name": "rotor",
-                "type": "LamSlotMag",
+                "type": "LamSlotM",
                 "unit": "",
                 "value": ""
             },
@@ -9050,18 +9309,31 @@
         "daughters": [
             "NotchEvenDist"
         ],
-        "desc": "Abstract class for notches",
+        "desc": "",
         "is_internal": false,
         "methods": [
             "get_Rbo",
             "get_Ryoke",
-            "is_outwards"
+            "is_outwards",
+            "has_key",
+            "get_label"
         ],
         "mother": "",
         "name": "Notch",
         "package": "Machine",
         "path": "pyleecan/Generator/ClassesRef/Machine/Notch.csv",
-        "properties": []
+        "properties": [
+            {
+                "as_dict": "",
+                "desc": "The material of the key (if None, no key to add)",
+                "max": "",
+                "min": "",
+                "name": "key_mat",
+                "type": "Material",
+                "unit": "",
+                "value": null
+            }
+        ]
     },
     "NotchEvenDist": {
         "constants": [
@@ -9076,7 +9348,9 @@
         "methods": [
             "comp_surface",
             "comp_periodicity_spatial",
-            "get_notch_desc_list"
+            "get_notch_desc_list",
+            "build_geometry_key",
+            "get_key_Ox_radius"
         ],
         "mother": "Notch",
         "name": "NotchEvenDist",
@@ -16123,7 +16397,8 @@
             "draw_FEMM",
             "plot",
             "split_line",
-            "is_inside"
+            "is_inside",
+            "intersect_line"
         ],
         "mother": "",
         "name": "Surface",

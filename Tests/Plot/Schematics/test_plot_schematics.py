@@ -47,12 +47,17 @@ from pyleecan.Classes.BoreFlower import BoreFlower
 from pyleecan.Classes.BoreSinePole import BoreSinePole
 from pyleecan.Classes.HoleM60 import HoleM60
 from pyleecan.Classes.HoleM61 import HoleM61
+from pyleecan.Classes.HoleM62 import HoleM62
+from pyleecan.Classes.HoleM63 import HoleM63
 from Tests import SCHEMATICS_PATH
+from Tests import SCHEMATICS_POINT_PATH
 from os.path import join, isdir, isfile
 from os import makedirs, remove
 
 if not isdir(SCHEMATICS_PATH):
     makedirs(SCHEMATICS_PATH)
+if not isdir(SCHEMATICS_POINT_PATH):
+    makedirs(SCHEMATICS_POINT_PATH)
 
 plot_test = list()
 
@@ -66,6 +71,7 @@ SlotM_list = [
     SlotM16(),
     SlotM17(),
     SlotM18(),
+    SlotM19(),
 ]
 
 SlotW_list = [
@@ -102,8 +108,11 @@ Hole_list = [
     HoleMLSRPM(),
     VentilationCirc(),
     VentilationPolar(),
+    VentilationTrap(),
     HoleM60(),
     HoleM61(),
+    HoleM62(),
+    HoleM63(),
 ]
 
 
@@ -133,8 +142,22 @@ plot_test.append(
 )
 plot_test.append(
     {
+        "test_obj": SlotM10(),
+        "type_add_active": 5,
+        "is_default": 2,
+    }
+)
+plot_test.append(
+    {
         "test_obj": SlotM11(),
         "type_add_active": 2,
+        "is_default": 2,
+    }
+)
+plot_test.append(
+    {
+        "test_obj": SlotM11(),
+        "type_add_active": 5,
         "is_default": 2,
     }
 )
@@ -201,6 +224,20 @@ for hole in Hole_list:
         }
     )
 
+hole_test.append(
+    {
+        "test_obj": HoleM62(),
+        "type_add_active": 2,
+        "method_name": "plot_schematics_radial",
+    }
+)
+hole_test.append(
+    {
+        "test_obj": HoleM63(),
+        "type_add_active": 2,
+        "method_name": "plot_schematics_top_flat",
+    }
+)
 
 plot_test.extend(hole_test)
 
@@ -277,11 +314,19 @@ class Test_plot_schematics(object):
             plot_meth = getattr(test_obj, "plot_schematics")
 
         if "is_default" in test_dict and test_dict["is_default"] != 1:
-            value = plot_meth(
-                is_return_default=True,
-                is_default=2,
-            )
-            type_active = 0
+            if type_active == 5:
+                value = plot_meth(
+                    is_return_default=True,
+                    is_default=2,
+                )
+                type_active = 5
+
+            else:
+                value = plot_meth(
+                    is_return_default=True,
+                    is_default=2,
+                )
+                type_active = 0
 
         else:
             value = plot_meth(
@@ -306,6 +351,9 @@ class Test_plot_schematics(object):
         elif type_active == 4:
             file_name = schematics_name + "_wedge_type_1"
 
+        elif type_active == 5:
+            file_name = schematics_name + "_key"
+
         if value.is_internal == True:
             file_name = file_name + "_int"
 
@@ -329,6 +377,12 @@ class Test_plot_schematics(object):
             and test_dict["method_name"] == "plot_schematics_radial"
         ):
             file_name = file_name + "_radial"
+
+        if (
+            "method_name" in test_dict
+            and test_dict["method_name"] == "plot_schematics_top_flat"
+        ):
+            file_name = file_name + "_top_flat"
 
         file_name = file_name + ".png"
         return file_name
@@ -371,6 +425,21 @@ class Test_plot_schematics(object):
             plot_meth = getattr(test_obj, "plot_schematics")
 
         if "is_default" in test_dict and test_dict["is_default"] != 1:
+            if test_dict["type_add_active"] == 5:
+                ## wedge_type
+                plot_meth(
+                    is_default=2,
+                    is_add_point_label=False,
+                    is_add_schematics=True,
+                    is_add_main_line=True,
+                    type_add_active=5,
+                    save_path=file_path,
+                    is_show_fig=False,
+                )
+                test_dict["type_add_active"] = 0
+                file_name = self.get_schematics_name(test_dict)
+                file_path = join(SCHEMATICS_PATH, file_name)
+
             plot_meth(
                 is_default=2,
                 is_add_point_label=False,
@@ -442,7 +511,7 @@ class Test_plot_schematics(object):
 
         """
         file_name = type(test_dict["test_obj"]).__name__ + "_point.png"
-        file_path = join(SCHEMATICS_PATH, file_name)
+        file_path = join(SCHEMATICS_POINT_PATH, file_name)
         # Delete previous plot
         if isfile(file_path):
             remove(file_path)
@@ -503,14 +572,16 @@ if __name__ == "__main__":
     a = Test_plot_schematics()
     # a.test_BoreFlower()
     # a.test_BoreSinePole()
-    #a.test_plot(plot_test[44])
-    # a.test_plot_point(plot_test[47])
-    # a.test_plot(plot_test[13])
+    a.test_plot(plot_test[53])
+    a.test_plot_point(plot_test[53])
+    a.test_plot(plot_test[54])
+    a.test_plot_point(plot_test[54])
+    a.test_plot(plot_test[56])
     #
 
-    for slot in plot_test:
-        a.test_plot(slot)
-        a.test_plot_point(slot)
+    # for plot in plot_test:
+    #    a.test_plot(plot)
+    #   a.test_plot_point(plot)
     #
     #
     # print("Done")

@@ -22,7 +22,7 @@ class PMSlot14(Gen_PMSlot14, QWidget):
     slot_name = "Polar Magnet with curved top"
     slot_type = SlotM14
 
-    def __init__(self, lamination=None):
+    def __init__(self, lamination=None, material_dict=None):
         """Initialize the widget according to lamination
 
         Parameters
@@ -31,6 +31,8 @@ class PMSlot14(Gen_PMSlot14, QWidget):
             A PMSlot14 widget
         lamination : Lamination
             current lamination to edit
+        material_dict: dict
+            Materials dictionary (library + machine)
         """
 
         # Build the interface according to the .ui file
@@ -38,6 +40,7 @@ class PMSlot14(Gen_PMSlot14, QWidget):
         self.setupUi(self)
         self.lamination = lamination
         self.slot = lamination.slot
+        self.material_dict = material_dict
 
         # Set FloatEdit unit
         self.lf_W0.unit = "rad"
@@ -64,12 +67,17 @@ class PMSlot14(Gen_PMSlot14, QWidget):
         # Display the main output of the slot (surface, height...)
         self.w_out.comp_output()
 
+        self.key_mat = None
+        # Setup the widgets according to current values
+        self.w_mag.update(lamination, self.material_dict)
+
         # Connect the signal
         self.lf_W0.editingFinished.connect(self.set_W0)
         self.lf_Wmag.editingFinished.connect(self.set_Wmag)
         self.lf_H0.editingFinished.connect(self.set_H0)
         self.lf_Hmag.editingFinished.connect(self.set_Hmag)
         self.lf_Rtopm.editingFinished.connect(self.set_Rtopm)
+        self.w_mag.saveNeeded.connect(self.emit_save)
 
     def set_W0(self):
         """Signal to update the value of W0 according to the line edit
@@ -134,6 +142,10 @@ class PMSlot14(Gen_PMSlot14, QWidget):
         self.slot.Rtopm = self.lf_Rtopm.value()
         self.w_out.comp_output()
         # Notify the machine GUI that the machine has changed
+        self.saveNeeded.emit()
+
+    def emit_save(self):
+        """Send a saveNeeded signal to the DMachineSetup"""
         self.saveNeeded.emit()
 
     @staticmethod

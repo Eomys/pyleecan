@@ -78,6 +78,12 @@ def build_geometry(self, sym=1, alpha=0, delta=0, is_circular_radius=False):
             vent_surf_list.extend(surf)
     surf_list.extend(vent_surf_list)
 
+    # Add keys if any
+    if self.notch is not None:
+        for ii, notch in enumerate(self.notch):
+            if notch.has_key():
+                surf_list.extend(notch.build_geometry_key(index=ii, sym=sym))
+
     # Add the closing surfaces if requested
     if is_circular_radius:
         surf_list.extend(self.get_surfaces_closing(sym=sym))

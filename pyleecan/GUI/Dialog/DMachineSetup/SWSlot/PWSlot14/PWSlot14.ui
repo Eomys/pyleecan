@@ -199,19 +199,6 @@
             </property>
            </widget>
           </item>
-          <item row="3" column="1">
-           <spacer name="verticalSpacer">
-            <property name="orientation">
-             <enum>Qt::Vertical</enum>
-            </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>17</width>
-              <height>37</height>
-             </size>
-            </property>
-           </spacer>
-          </item>
           <item row="2" column="0" colspan="2">
            <widget class="WMatSelectV" name="w_wedge_mat" native="true">
             <property name="minimumSize">
@@ -231,20 +218,33 @@
              </size>
             </property>
             <property name="editable">
-             <bool>true</bool>
+             <bool>false</bool>
             </property>
             <property name="currentText">
-             <string extracomment="Normal">Normal</string>
+             <string extracomment="Normal">Standard</string>
             </property>
             <item>
              <property name="text">
-              <string>Normal</string>
+              <string>Standard</string>
              </property>
             </item>
            </widget>
           </item>
          </layout>
         </widget>
+       </item>
+       <item>
+        <spacer name="verticalSpacer">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>17</width>
+           <height>37</height>
+          </size>
+         </property>
+        </spacer>
        </item>
        <item>
         <widget class="WWSlotOut" name="w_out" native="true"/>

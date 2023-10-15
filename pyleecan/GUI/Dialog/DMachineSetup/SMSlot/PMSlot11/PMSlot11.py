@@ -28,7 +28,7 @@ class PMSlot11(Gen_PMSlot11, QWidget):
     notch_name = "Polar"
     slot_type = SlotM11
 
-    def __init__(self, lamination=None, is_notch=False):
+    def __init__(self, lamination=None, notch_obj=None, material_dict=None):
         """Initialize the widget according to lamination
 
         Parameters
@@ -37,8 +37,10 @@ class PMSlot11(Gen_PMSlot11, QWidget):
             A PMSlot11 widget
         lamination : Lamination
             current lamination to edit
-        is_notch : bool
-            True to adapt the slot GUI for the notch setup
+        notch_obj : notch
+            current notch to edit
+        material_dict: dict
+            Materials dictionary (library + machine)
         """
 
         # Build the interface according to the .ui file
@@ -46,23 +48,21 @@ class PMSlot11(Gen_PMSlot11, QWidget):
         self.setupUi(self)
         self.lamination = lamination
         self.slot = lamination.slot
-        self.is_notch = is_notch
+        self.is_notch = notch_obj is not None
+        self.notch_obj = notch_obj
+        self.material_dict = material_dict
 
         # Set FloatEdit unit
         self.lf_W0.unit = "rad"
-        self.lf_Wmag.unit = "rad"
         self.lf_H0.unit = "m"
-        self.lf_Hmag.unit = "m"
+
         # Set unit name (m ou mm)
-        wid_list = [
-            self.unit_H0,
-            self.unit_Hmag,
-        ]
-        for wid in wid_list:
-            wid.setText("[" + gui_option.unit.get_m_name() + "]")
+        self.unit_H0.setText("[" + gui_option.unit.get_m_name() + "]")
+
+        self.g_key.hide()
 
         # Notch setup
-        if is_notch:
+        if self.is_notch:
             # Hide magnet related widget
             wid_list = [self.in_Wmag, self.lf_Wmag, self.c_Wmag_unit]
             wid_list += [self.in_Hmag, self.lf_Hmag, self.unit_Hmag]
@@ -78,26 +78,91 @@ class PMSlot11(Gen_PMSlot11, QWidget):
                 self.img_slot.setPixmap(
                     QPixmap(pixmap_dict["SlotM11_empty_ext_stator"])
                 )
+
+            # H/Wkey is define for notch in GUI but change the value of H/Wmag
+            self.lf_Wkey.unit = "rad"
+            self.lf_Hkey.unit = "m"
+
+            # Set unit name (m ou mm)
+            self.unit_Hkey.setText("[" + gui_option.unit.get_m_name() + "]")
+
+            # Fill the fields with the machine values (if they're filled)
+            self.lf_Wkey.setValue(self.slot.Wmag)
+            self.lf_Hkey.setValue(self.slot.Hmag)
+
+            # Connect the signal
+            self.lf_Wkey.editingFinished.connect(self.set_Wkey)
+            self.lf_Hkey.editingFinished.connect(self.set_Hkey)
+            self.c_Wkey_unit.currentIndexChanged.connect(self.set_Wkey)
+
+            self.g_key.toggled.connect(self.set_key)
+
+            # Key setup
+            self.g_key.show()
+            self.g_key.setChecked(self.notch_obj.key_mat is not None)
+
+            self.w_key_mat.setText("Key Material")
+            if self.notch_obj.key_mat is None:
+                self.notch_obj.key_mat = None
             else:
-                # Use schematics on the inner without magnet
-                self.img_slot.setPixmap(QPixmap(pixmap_dict["SlotM11_empty_int_rotor"]))
+                self.w_key_mat.def_mat = "Steel1"
+            self.set_key()
+            # Hide magnet widgets
+            self.w_mag.hide()
+        else:
+            # Setup the widgets according to current values
+            self.w_mag.update(lamination, self.material_dict)
+            self.lf_Wmag.unit = "rad"
+            self.lf_Hmag.unit = "m"
+
+            # Set unit name (m ou mm)
+            self.unit_Hmag.setText("[" + gui_option.unit.get_m_name() + "]")
+
+            # Use schematics on the inner without magnet
+            self.img_slot.setPixmap(QPixmap(pixmap_dict["SlotM11_mag_int_rotor"]))
+
+            # Fill the fields with the machine values (if they're filled)
+            self.lf_Wmag.setValue(self.slot.Wmag)
+            self.lf_Hmag.setValue(self.slot.Hmag)
+
+            # Connect the signal
+            self.lf_Wmag.editingFinished.connect(self.set_Wmag)
+            self.lf_Hmag.editingFinished.connect(self.set_Hmag)
+            self.c_Wmag_unit.currentIndexChanged.connect(self.set_Wmag)
 
         # Fill the fields with the machine values (if they're filled)
         self.lf_W0.setValue(self.slot.W0)
-        self.lf_Wmag.setValue(self.slot.Wmag)
         self.lf_H0.setValue(self.slot.H0)
-        self.lf_Hmag.setValue(self.slot.Hmag)
 
         # Display the main output of the slot (surface, height...)
         self.w_out.comp_output()
 
         # Connect the signal
         self.lf_W0.editingFinished.connect(self.set_W0)
-        self.lf_Wmag.editingFinished.connect(self.set_Wmag)
         self.lf_H0.editingFinished.connect(self.set_H0)
-        self.lf_Hmag.editingFinished.connect(self.set_Hmag)
         self.c_W0_unit.currentIndexChanged.connect(self.set_W0)
-        self.c_Wmag_unit.currentIndexChanged.connect(self.set_Wmag)
+        self.w_mag.saveNeeded.connect(self.emit_save)
+
+    def set_key(self):
+        """Setup the slot key according to the GUI"""
+        widget_list = [self.lf_Wkey, self.c_Wkey_unit, self.in_Wkey]
+        widget_list += [self.lf_Hkey, self.unit_Hkey, self.in_Hkey]
+        widget_list += [self.w_key_mat]
+
+        if self.g_key.isChecked():
+            self.w_key_mat.update(self.notch_obj, "key_mat", self.material_dict)
+            self.img_slot.setPixmap(QPixmap(pixmap_dict["SlotM11_key_ext_stator"]))
+            is_enabled = True
+
+        else:
+            self.notch_obj.key_mat = None
+            self.img_slot.setPixmap(QPixmap(pixmap_dict["SlotM11_empty_ext_stator"]))
+            is_enabled = False
+
+        for widget in widget_list:
+            widget.setEnabled(is_enabled)
+        # Notify the machine GUI that the machine has changed
+        self.saveNeeded.emit()
 
     def set_W0(self):
         """Signal to update the value of W0 according to the line edit
@@ -156,6 +221,39 @@ class PMSlot11(Gen_PMSlot11, QWidget):
             A PMSlot11 object
         """
         self.slot.Hmag = self.lf_Hmag.value()
+        self.w_out.comp_output()
+        # Notify the machine GUI that the machine has changed
+        self.saveNeeded.emit()
+
+    def emit_save(self):
+        """Send a saveNeeded signal to the DMachineSetup"""
+        self.saveNeeded.emit()
+
+    def set_Wkey(self):
+        """Signal to update the value of Wkey according to the line edit
+
+        Parameters
+        ----------
+        self : PMSlot11
+            A PMSlot11 object
+        """
+        if self.c_Wkey_unit.currentIndex() == RAD_ID:
+            self.slot.Wmag = self.lf_Wkey.value()
+        else:
+            self.slot.Wmag = self.lf_Wkey.value() * pi / 180
+        self.w_out.comp_output()
+        # Notify the machine GUI that the machine has changed
+        self.saveNeeded.emit()
+
+    def set_Hkey(self):
+        """Signal to update the value of Hkey according to the line edit
+
+        Parameters
+        ----------
+        self : PMSlot11
+            A PMSlot11 object
+        """
+        self.slot.Hmag = self.lf_Hkey.value()
         self.w_out.comp_output()
         # Notify the machine GUI that the machine has changed
         self.saveNeeded.emit()

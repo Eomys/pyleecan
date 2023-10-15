@@ -22,6 +22,7 @@ from pyleecan.Functions.Plot import dict_2D
 from pyleecan.definitions import DATA_DIR
 
 
+# python -m pytest ./Tests/Validation/Magnetics/test_FEMM_LamHoleNS.py
 @pytest.mark.long_5s
 @pytest.mark.long_1m
 @pytest.mark.MagFEMM
@@ -34,6 +35,7 @@ def test_FEMM_LamHoleNS():
     if not isdir(res_path):
         makedirs(res_path)
     TP = load(join(DATA_DIR, "Machine", "Toyota_Prius.json"))
+    TP.name = "Toyota_Prius_HoleNS_FEMM"
     TPNS = TP.copy()
     # Change rotor type to have different North/South Pole
     TPNS.rotor = LamHoleNS(init_dict=TP.rotor.as_dict())
@@ -124,6 +126,7 @@ def test_FEMM_LamHoleNS():
     Brad2 = result2["radial"]
 
     assert_array_almost_equal(Brad, Brad2, decimal=1)
+    plt.close()
     return out
 
 

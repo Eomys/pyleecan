@@ -79,24 +79,32 @@ def plot_schematics(
     if is_default:
         # definir paramètre par défault
         slot = type(self)(Zs=4, W0=30e-3, Hmag=17.5e-3, W1=20e-3)
-        lam = LamSlot(
-            Rint=0.1, Rext=0.135, is_internal=True, is_stator=False, slot=slot
-        )
-        if is_return_default:
-            return lam
-        else:
-            return slot.plot_schematics(
-                is_default=False,
-                is_return_default=False,
-                is_add_point_label=is_add_point_label,
-                is_add_schematics=is_add_schematics,
-                is_add_main_line=is_add_main_line,
-                type_add_active=type_add_active,
-                save_path=save_path,
-                is_show_fig=is_show_fig,
-                fig=fig,
-                ax=ax,
+        if is_default == 1:  # Internal Rotor schematics
+            lam = LamSlot(
+                Rint=0.1, Rext=0.135, is_internal=True, is_stator=False, slot=slot
             )
+            if is_return_default:
+                return lam
+
+        else:  # External Stator schematics
+            lam = LamSlot(
+                Rint=0.1, Rext=0.135, is_internal=False, is_stator=True, slot=slot
+            )
+            if is_return_default:
+                return lam
+
+        return slot.plot_schematics(
+            is_default=False,
+            is_return_default=False,
+            is_add_point_label=is_add_point_label,
+            is_add_schematics=is_add_schematics,
+            is_add_main_line=is_add_main_line,
+            type_add_active=type_add_active,
+            save_path=save_path,
+            is_show_fig=is_show_fig,
+            fig=fig,
+            ax=ax,
+        )
     else:
         # Getting the main plot
         if self.parent is None:
@@ -147,19 +155,35 @@ def plot_schematics(
                 ax=ax,
                 label="W1",
             )
-            # Hmag
-            mid = point_dict["Zmid"]
-            line = Segment(mid, mid - sign * self.Hmag)
-            line.plot(
-                fig=fig,
-                ax=ax,
-                color=ARROW_COLOR,
-                linewidth=ARROW_WIDTH,
-                label="Hmag",
-                offset_label=1j * 0.1 * self.Hmag - 0.0025,
-                is_arrow=True,
-                fontsize=SC_FONT_SIZE,
-            )
+            if lam.is_internal == False and lam.is_stator == True:
+                # Hkey
+                mid = point_dict["Zmid"]
+                line = Segment(mid, mid - sign * self.Hmag)
+                line.plot(
+                    fig=fig,
+                    ax=ax,
+                    color=ARROW_COLOR,
+                    linewidth=ARROW_WIDTH,
+                    label="H0",
+                    offset_label=1j * 0.1 * self.Hmag - 0.0025,
+                    is_arrow=True,
+                    fontsize=SC_FONT_SIZE,
+                )
+
+            elif type_add_active != 0:
+                # Hmag
+                mid = point_dict["Zmid"]
+                line = Segment(mid, mid - sign * self.Hmag)
+                line.plot(
+                    fig=fig,
+                    ax=ax,
+                    color=ARROW_COLOR,
+                    linewidth=ARROW_WIDTH,
+                    label="Hmag",
+                    offset_label=1j * 0.1 * self.Hmag - 0.0025,
+                    is_arrow=True,
+                    fontsize=SC_FONT_SIZE,
+                )
 
         if is_add_main_line:
             # Ox axis
@@ -206,6 +230,7 @@ def plot_schematics(
         ax.set_title("")
         ax.get_legend().remove()
         ax.set_axis_off()
+        fig.tight_layout()
 
         # Save / Show
         if save_path is not None:

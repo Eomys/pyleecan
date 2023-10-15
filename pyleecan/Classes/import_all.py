@@ -57,6 +57,8 @@ from ..Classes.HoleM57 import HoleM57
 from ..Classes.HoleM58 import HoleM58
 from ..Classes.HoleM60 import HoleM60
 from ..Classes.HoleM61 import HoleM61
+from ..Classes.HoleM62 import HoleM62
+from ..Classes.HoleM63 import HoleM63
 from ..Classes.HoleMLSRPM import HoleMLSRPM
 from ..Classes.HoleMag import HoleMag
 from ..Classes.HoleUD import HoleUD
@@ -87,7 +89,9 @@ from ..Classes.LamH import LamH
 from ..Classes.LamHole import LamHole
 from ..Classes.LamHoleNS import LamHoleNS
 from ..Classes.LamSlot import LamSlot
+from ..Classes.LamSlotM import LamSlotM
 from ..Classes.LamSlotMag import LamSlotMag
+from ..Classes.LamSlotMagNS import LamSlotMagNS
 from ..Classes.LamSlotMulti import LamSlotMulti
 from ..Classes.LamSlotMultiWind import LamSlotMultiWind
 from ..Classes.LamSlotWind import LamSlotWind

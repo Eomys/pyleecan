@@ -81,10 +81,13 @@
         <x>0</x>
         <y>0</y>
         <width>268</width>
-        <height>446</height>
+        <height>450</height>
        </rect>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout">
+       <item>
+        <widget class="WWSlotMag" name="w_mag" native="true"/>
+       </item>
        <item>
         <layout class="QGridLayout" name="gridLayout">
          <item row="0" column="2">
@@ -138,6 +141,12 @@
    <class>WWSlotOut</class>
    <extends>QWidget</extends>
    <header>......GUI.Dialog.DMachineSetup.SWSlot.WWSlotOut.WWSlotOut.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>WWSlotMag</class>
+   <extends>QWidget</extends>
+   <header>......GUI.Dialog.DMachineSetup.SMSlot.WWSlotMag.WWSlotMag</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

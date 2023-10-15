@@ -534,7 +534,11 @@ def qrc_to_py(path, file_name):
     (output, err) = p.communicate()
 
     # Print the name of the converted file for check
-    print(file_name[:-4] + " resources added")
+    if output != b"":
+        print("Error while generating the Ressources:")
+        print(output)
+    else:
+        print(file_name[:-4] + " resources added in " + path_out)
 
 
 def ui_to_py(path, file_name):

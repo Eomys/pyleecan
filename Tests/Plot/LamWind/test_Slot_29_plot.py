@@ -6,13 +6,9 @@ from numpy import array, pi, zeros
 
 from pyleecan.Classes.Frame import Frame
 from pyleecan.Classes.LamSlotWind import LamSlotWind
-from pyleecan.Classes.LamSquirrelCage import LamSquirrelCage
 from pyleecan.Classes.MachineDFIM import MachineDFIM
 from pyleecan.Classes.Shaft import Shaft
 from pyleecan.Classes.VentilationCirc import VentilationCirc
-from pyleecan.Classes.VentilationPolar import VentilationPolar
-from pyleecan.Classes.VentilationTrap import VentilationTrap
-from pyleecan.Classes.Winding import Winding
 from pyleecan.Classes.WindingUD import WindingUD
 from pyleecan.Classes.MatMagnetics import MatMagnetics
 from pyleecan.Classes.SlotW29 import SlotW29
@@ -64,19 +60,19 @@ class Test_Slot_29_plot(object):
         fig = plt.gcf()
         fig.savefig(join(save_path, "test_Lam_Wind_s29_1-Machine.png"))
         # rotor+stator+ 2 for frame + 1 for Shaft
-        assert len(fig.axes[0].patches) == 65
+        assert len(fig.axes[0].patches) == 61
 
         test_obj.rotor.plot(is_show_fig=False)
         fig = plt.gcf()
         fig.savefig(join(save_path, "test_Lam_Wind_s29_2-Rotor.png"))
-        # 2 for lam, 4*Zs for wind + 6 vent
-        assert len(fig.axes[0].patches) == 34
+        # 2 for lam, 4*6 for wind + 6 vent
+        assert len(fig.axes[0].patches) == 32
 
         test_obj.stator.plot(is_show_fig=False)
         fig = plt.gcf()
         fig.savefig(join(save_path, "test_Lam_Wind_s29_3-Stator.png"))
-        # 2 for lam, 4*Zs for wind
-        assert len(fig.axes[0].patches) == 28
+        # 2 for lam, 4*6 for wind
+        assert len(fig.axes[0].patches) == 26
 
         tooth = test_obj.rotor.slot.get_surface_tooth()
         tooth.plot(color="r", is_show_fig=False)
@@ -87,3 +83,9 @@ class Test_Slot_29_plot(object):
         tooth.plot(color="r", is_show_fig=False)
         fig = plt.gcf()
         fig.savefig(join(save_path, "test_Lam_Wind_s29_Tooth_out.png"))
+
+
+if __name__ == "__main__":
+    a = Test_Slot_29_plot()
+    a.test_Lam_Wind_29_wind_22()
+    print("Done")
