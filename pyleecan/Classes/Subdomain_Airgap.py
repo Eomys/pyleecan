@@ -58,8 +58,8 @@ class Subdomain_Airgap(Subdomain):
         B=None,
         C=None,
         D=None,
-        radius_min=None,
-        radius_max=None,
+        Rrbo=None,
+        Rsbo=None,
         k=None,
         number=None,
         permeability_relative=1,
@@ -89,10 +89,10 @@ class Subdomain_Airgap(Subdomain):
                 C = init_dict["C"]
             if "D" in list(init_dict.keys()):
                 D = init_dict["D"]
-            if "radius_min" in list(init_dict.keys()):
-                radius_min = init_dict["radius_min"]
-            if "radius_max" in list(init_dict.keys()):
-                radius_max = init_dict["radius_max"]
+            if "Rrbo" in list(init_dict.keys()):
+                Rrbo = init_dict["Rrbo"]
+            if "Rsbo" in list(init_dict.keys()):
+                Rsbo = init_dict["Rsbo"]
             if "k" in list(init_dict.keys()):
                 k = init_dict["k"]
             if "number" in list(init_dict.keys()):
@@ -104,13 +104,11 @@ class Subdomain_Airgap(Subdomain):
         self.B = B
         self.C = C
         self.D = D
+        self.Rrbo = Rrbo
+        self.Rsbo = Rsbo
         # Call Subdomain init
         super(Subdomain_Airgap, self).__init__(
-            radius_min=radius_min,
-            radius_max=radius_max,
-            k=k,
-            number=number,
-            permeability_relative=permeability_relative,
+            k=k, number=number, permeability_relative=permeability_relative
         )
         # The class is frozen (in Subdomain init), for now it's impossible to
         # add new properties
@@ -149,6 +147,8 @@ class Subdomain_Airgap(Subdomain):
             + linesep
             + linesep
         )
+        Subdomain_Airgap_str += "Rrbo = " + str(self.Rrbo) + linesep
+        Subdomain_Airgap_str += "Rsbo = " + str(self.Rsbo) + linesep
         return Subdomain_Airgap_str
 
     def __eq__(self, other):
@@ -167,6 +167,10 @@ class Subdomain_Airgap(Subdomain):
         if not array_equal(other.C, self.C):
             return False
         if not array_equal(other.D, self.D):
+            return False
+        if other.Rrbo != self.Rrbo:
+            return False
+        if other.Rsbo != self.Rsbo:
             return False
         return True
 
@@ -193,6 +197,36 @@ class Subdomain_Airgap(Subdomain):
             diff_list.append(name + ".C")
         if not array_equal(other.D, self.D):
             diff_list.append(name + ".D")
+        if (
+            other._Rrbo is not None
+            and self._Rrbo is not None
+            and isnan(other._Rrbo)
+            and isnan(self._Rrbo)
+        ):
+            pass
+        elif other._Rrbo != self._Rrbo:
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._Rrbo) + ", other=" + str(other._Rrbo) + ")"
+                )
+                diff_list.append(name + ".Rrbo" + val_str)
+            else:
+                diff_list.append(name + ".Rrbo")
+        if (
+            other._Rsbo is not None
+            and self._Rsbo is not None
+            and isnan(other._Rsbo)
+            and isnan(self._Rsbo)
+        ):
+            pass
+        elif other._Rsbo != self._Rsbo:
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._Rsbo) + ", other=" + str(other._Rsbo) + ")"
+                )
+                diff_list.append(name + ".Rsbo" + val_str)
+            else:
+                diff_list.append(name + ".Rsbo")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -208,6 +242,8 @@ class Subdomain_Airgap(Subdomain):
         S += getsizeof(self.B)
         S += getsizeof(self.C)
         S += getsizeof(self.D)
+        S += getsizeof(self.Rrbo)
+        S += getsizeof(self.Rsbo)
         return S
 
     def as_dict(self, type_handle_ndarray=0, keep_function=False, **kwargs):
@@ -279,6 +315,8 @@ class Subdomain_Airgap(Subdomain):
                 raise Exception(
                     "Unknown type_handle_ndarray: " + str(type_handle_ndarray)
                 )
+        Subdomain_Airgap_dict["Rrbo"] = self.Rrbo
+        Subdomain_Airgap_dict["Rsbo"] = self.Rsbo
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         Subdomain_Airgap_dict["__class__"] = "Subdomain_Airgap"
@@ -304,8 +342,8 @@ class Subdomain_Airgap(Subdomain):
             D_val = None
         else:
             D_val = self.D.copy()
-        radius_min_val = self.radius_min
-        radius_max_val = self.radius_max
+        Rrbo_val = self.Rrbo
+        Rsbo_val = self.Rsbo
         if self.k is None:
             k_val = None
         else:
@@ -318,8 +356,8 @@ class Subdomain_Airgap(Subdomain):
             B=B_val,
             C=C_val,
             D=D_val,
-            radius_min=radius_min_val,
-            radius_max=radius_max_val,
+            Rrbo=Rrbo_val,
+            Rsbo=Rsbo_val,
             k=k_val,
             number=number_val,
             permeability_relative=permeability_relative_val,
@@ -333,6 +371,8 @@ class Subdomain_Airgap(Subdomain):
         self.B = None
         self.C = None
         self.D = None
+        self.Rrbo = None
+        self.Rsbo = None
         # Set to None the properties inherited from Subdomain
         super(Subdomain_Airgap, self)._set_None()
 
@@ -433,5 +473,41 @@ class Subdomain_Airgap(Subdomain):
         doc=u"""Fourth integration constant function of harmonic number and time
 
         :Type: ndarray
+        """,
+    )
+
+    def _get_Rrbo(self):
+        """getter of Rrbo"""
+        return self._Rrbo
+
+    def _set_Rrbo(self, value):
+        """setter of Rrbo"""
+        check_var("Rrbo", value, "float")
+        self._Rrbo = value
+
+    Rrbo = property(
+        fget=_get_Rrbo,
+        fset=_set_Rrbo,
+        doc=u"""Rotor bore radius
+
+        :Type: float
+        """,
+    )
+
+    def _get_Rsbo(self):
+        """getter of Rsbo"""
+        return self._Rsbo
+
+    def _set_Rsbo(self, value):
+        """setter of Rsbo"""
+        check_var("Rsbo", value, "float")
+        self._Rsbo = value
+
+    Rsbo = property(
+        fget=_get_Rsbo,
+        fset=_set_Rsbo,
+        doc=u"""Stator bore radius
+
+        :Type: float
         """,
     )

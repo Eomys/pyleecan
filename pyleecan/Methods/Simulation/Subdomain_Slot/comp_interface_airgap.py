@@ -24,9 +24,9 @@ def comp_interface_airgap(self, mat, vect):
     theta_i = self.stator_slot.center_angle
     n = self.airgap.k
     d = self.stator_slot.angular_width
-    R_3 = self.airgap.radius_min
-    R_4 = self.airgap.radius_max
-    R_5 = self.stator_slot.radius_max
+    R_3 = self.airgap.Rrbo
+    R_4 = self.airgap.Rsbo
+    R_5 = self.stator_slot.Ryoke
 
     N, V, Zs0 = n.size, v.size, theta_i.size
 
@@ -60,9 +60,8 @@ def comp_interface_airgap(self, mat, vect):
     M43 = 2 * R_4 / d * I_cosvcosni * P_niv_R3_R4 / (niv * E_niv_R3_R4)
     M44 = 2 * R_4 / d * I_cosvsinni * P_niv_R3_R4 / (niv * E_niv_R3_R4)
 
-    if self.stator_slot_opening is None:
-        M16 = -per_a / (R_4 * d) * I_cosvcosni_a * vni * E_vni_R4_R5 / P_vni_R4_R5
-        M26 = -per_a / (R_4 * d) * I_cosvsinni_a * vni * E_vni_R4_R5 / P_vni_R4_R5
+    M16 = -per_a / (R_4 * d) * I_cosvcosni_a * vni * E_vni_R4_R5 / P_vni_R4_R5
+    M26 = -per_a / (R_4 * d) * I_cosvsinni_a * vni * E_vni_R4_R5 / P_vni_R4_R5
 
     #     MatS = [zeros(N, N)  zeros(N, N)  eye(N, N)  zeros(N, N)  zeros(N, Zs0)  M16   ; ...
     #         zeros(N, N)  zeros(N, N)  zeros(N, N)  eye(N, N)  zeros(N, Zs0)  M26   ; ...

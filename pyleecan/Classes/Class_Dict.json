@@ -16080,26 +16080,6 @@
         "properties": [
             {
                 "as_dict": "",
-                "desc": "Minimum radius of subdomain",
-                "max": "",
-                "min": "0",
-                "name": "radius_min",
-                "type": "float",
-                "unit": "m",
-                "value": null
-            },
-            {
-                "as_dict": "",
-                "desc": "Maximum radius of subdomain",
-                "max": "",
-                "min": "0",
-                "name": "radius_max",
-                "type": "float",
-                "unit": "m",
-                "value": null
-            },
-            {
-                "as_dict": "",
                 "desc": "Array of harmonic numbers ",
                 "max": "",
                 "min": "0",
@@ -16248,9 +16228,7 @@
                 "value": "1"
             }
         ],
-        "daughters": [
-            "Subdomain_MagnetSurface"
-        ],
+        "daughters": [],
         "desc": "Subdomain class for airgap region",
         "is_internal": false,
         "methods": [
@@ -16300,6 +16278,26 @@
                 "type": "ndarray",
                 "unit": "",
                 "value": null
+            },
+            {
+                "as_dict": "",
+                "desc": "Rotor bore radius",
+                "max": "",
+                "min": "",
+                "name": "Rrbo",
+                "type": "float",
+                "unit": "",
+                "value": null
+            },
+            {
+                "as_dict": "",
+                "desc": "Stator bore radius",
+                "max": "",
+                "min": "",
+                "name": "Rsbo",
+                "type": "float",
+                "unit": "",
+                "value": null
             }
         ]
     },
@@ -16319,7 +16317,7 @@
             "comp_magnet_solution",
             "comp_magnet_source"
         ],
-        "mother": "Subdomain_Airgap",
+        "mother": "Subdomain",
         "name": "Subdomain_MagnetSurface",
         "package": "Simulation",
         "path": "pyleecan/Generator/ClassesRef/Simulation/Subdomain_MagnetSurface.csv",
@@ -16342,6 +16340,66 @@
                 "name": "magnet_width",
                 "type": "float",
                 "unit": "rad",
+                "value": null
+            },
+            {
+                "as_dict": "",
+                "desc": "Radius at magnet / yoke interface",
+                "max": "",
+                "min": "0",
+                "name": "Ryoke",
+                "type": "float",
+                "unit": "m",
+                "value": null
+            },
+            {
+                "as_dict": "",
+                "desc": "First integration constant function of harmonic number and time",
+                "max": "",
+                "min": "",
+                "name": "A",
+                "type": "ndarray",
+                "unit": "",
+                "value": null
+            },
+            {
+                "as_dict": "",
+                "desc": "Second integration constant function of harmonic number and time",
+                "max": "",
+                "min": "",
+                "name": "B",
+                "type": "ndarray",
+                "unit": "",
+                "value": null
+            },
+            {
+                "as_dict": "",
+                "desc": "Third integration constant function of harmonic number and time",
+                "max": "",
+                "min": "",
+                "name": "C",
+                "type": "ndarray",
+                "unit": "",
+                "value": null
+            },
+            {
+                "as_dict": "",
+                "desc": "Fourth integration constant function of harmonic number and time",
+                "max": "",
+                "min": "",
+                "name": "D",
+                "type": "ndarray",
+                "unit": "",
+                "value": null
+            },
+            {
+                "as_dict": "",
+                "desc": "Radius at magnet / airgap interface",
+                "max": "",
+                "min": "0",
+                "name": "Rbore",
+                "type": "float",
+                "unit": "m",
                 "value": null
             }
         ]
@@ -16428,6 +16486,26 @@
                 "type": "ndarray",
                 "unit": "A/m^2",
                 "value": null
+            },
+            {
+                "as_dict": "",
+                "desc": "Radius at slot / yoke interface",
+                "max": "",
+                "min": "0",
+                "name": "Ryoke",
+                "type": "float",
+                "unit": "m",
+                "value": null
+            },
+            {
+                "as_dict": "",
+                "desc": "Radius at slot / airgap interface",
+                "max": "",
+                "min": "0",
+                "name": "Rbore",
+                "type": "float",
+                "unit": "m",
+                "value": null
             }
         ]
     },
@@ -16507,6 +16585,16 @@
                 "name": "v",
                 "type": "ndarray",
                 "unit": "",
+                "value": null
+            },
+            {
+                "as_dict": "",
+                "desc": "Radius of slot opening / slot interface",
+                "max": "",
+                "min": "0",
+                "name": "Ropening",
+                "type": "float",
+                "unit": "m",
                 "value": null
             }
         ]

@@ -5,6 +5,7 @@ E,,Third integration constant function of harmonic number and time in slot openi
 F,,Fourth integration constant function of harmonic number and time in slot opening subdomain,"[K*Zs, Nt]",ndarray,None,,,
 opening_width,rad,Angular width of slot opening,,float,None,0,,
 v,,Harmonic vector for slot opening,"[V,1]",ndarray,None,,,
+Ropening,m,Radius of slot opening / slot interface,,float,None,0,,
 ,,,,,,,,
 Package,Inherit,Methods,Constant Name,Constant Value,Class description,,,
 Simulation,Subdomain_Slot,comp_flux_density,VERSION,1,Subdomain class for slots regions,,,

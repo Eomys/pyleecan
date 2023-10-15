@@ -51,8 +51,6 @@ class Subdomain(FrozenClass):
 
     def __init__(
         self,
-        radius_min=None,
-        radius_max=None,
         k=None,
         number=None,
         permeability_relative=1,
@@ -74,10 +72,6 @@ class Subdomain(FrozenClass):
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
-            if "radius_min" in list(init_dict.keys()):
-                radius_min = init_dict["radius_min"]
-            if "radius_max" in list(init_dict.keys()):
-                radius_max = init_dict["radius_max"]
             if "k" in list(init_dict.keys()):
                 k = init_dict["k"]
             if "number" in list(init_dict.keys()):
@@ -86,8 +80,6 @@ class Subdomain(FrozenClass):
                 permeability_relative = init_dict["permeability_relative"]
         # Set the properties (value check and convertion are done in setter)
         self.parent = None
-        self.radius_min = radius_min
-        self.radius_max = radius_max
         self.k = k
         self.number = number
         self.permeability_relative = permeability_relative
@@ -103,8 +95,6 @@ class Subdomain(FrozenClass):
             Subdomain_str += "parent = None " + linesep
         else:
             Subdomain_str += "parent = " + str(type(self.parent)) + " object" + linesep
-        Subdomain_str += "radius_min = " + str(self.radius_min) + linesep
-        Subdomain_str += "radius_max = " + str(self.radius_max) + linesep
         Subdomain_str += (
             "k = "
             + linesep
@@ -123,10 +113,6 @@ class Subdomain(FrozenClass):
 
         if type(other) != type(self):
             return False
-        if other.radius_min != self.radius_min:
-            return False
-        if other.radius_max != self.radius_max:
-            return False
         if not array_equal(other.k, self.k):
             return False
         if other.number != self.number:
@@ -143,44 +129,6 @@ class Subdomain(FrozenClass):
         if type(other) != type(self):
             return ["type(" + name + ")"]
         diff_list = list()
-        if (
-            other._radius_min is not None
-            and self._radius_min is not None
-            and isnan(other._radius_min)
-            and isnan(self._radius_min)
-        ):
-            pass
-        elif other._radius_min != self._radius_min:
-            if is_add_value:
-                val_str = (
-                    " (self="
-                    + str(self._radius_min)
-                    + ", other="
-                    + str(other._radius_min)
-                    + ")"
-                )
-                diff_list.append(name + ".radius_min" + val_str)
-            else:
-                diff_list.append(name + ".radius_min")
-        if (
-            other._radius_max is not None
-            and self._radius_max is not None
-            and isnan(other._radius_max)
-            and isnan(self._radius_max)
-        ):
-            pass
-        elif other._radius_max != self._radius_max:
-            if is_add_value:
-                val_str = (
-                    " (self="
-                    + str(self._radius_max)
-                    + ", other="
-                    + str(other._radius_max)
-                    + ")"
-                )
-                diff_list.append(name + ".radius_max" + val_str)
-            else:
-                diff_list.append(name + ".radius_max")
         if not array_equal(other.k, self.k):
             diff_list.append(name + ".k")
         if other._number != self._number:
@@ -222,8 +170,6 @@ class Subdomain(FrozenClass):
         """Return the size in memory of the object (including all subobject)"""
 
         S = 0  # Full size of the object
-        S += getsizeof(self.radius_min)
-        S += getsizeof(self.radius_max)
         S += getsizeof(self.k)
         S += getsizeof(self.number)
         S += getsizeof(self.permeability_relative)
@@ -241,8 +187,6 @@ class Subdomain(FrozenClass):
         """
 
         Subdomain_dict = dict()
-        Subdomain_dict["radius_min"] = self.radius_min
-        Subdomain_dict["radius_max"] = self.radius_max
         if self.k is None:
             Subdomain_dict["k"] = None
         else:
@@ -266,8 +210,6 @@ class Subdomain(FrozenClass):
         """Creates a deepcopy of the object"""
 
         # Handle deepcopy of all the properties
-        radius_min_val = self.radius_min
-        radius_max_val = self.radius_max
         if self.k is None:
             k_val = None
         else:
@@ -276,60 +218,16 @@ class Subdomain(FrozenClass):
         permeability_relative_val = self.permeability_relative
         # Creates new object of the same type with the copied properties
         obj_copy = type(self)(
-            radius_min=radius_min_val,
-            radius_max=radius_max_val,
-            k=k_val,
-            number=number_val,
-            permeability_relative=permeability_relative_val,
+            k=k_val, number=number_val, permeability_relative=permeability_relative_val
         )
         return obj_copy
 
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""
 
-        self.radius_min = None
-        self.radius_max = None
         self.k = None
         self.number = None
         self.permeability_relative = None
-
-    def _get_radius_min(self):
-        """getter of radius_min"""
-        return self._radius_min
-
-    def _set_radius_min(self, value):
-        """setter of radius_min"""
-        check_var("radius_min", value, "float", Vmin=0)
-        self._radius_min = value
-
-    radius_min = property(
-        fget=_get_radius_min,
-        fset=_set_radius_min,
-        doc=u"""Minimum radius of subdomain
-
-        :Type: float
-        :min: 0
-        """,
-    )
-
-    def _get_radius_max(self):
-        """getter of radius_max"""
-        return self._radius_max
-
-    def _set_radius_max(self, value):
-        """setter of radius_max"""
-        check_var("radius_max", value, "float", Vmin=0)
-        self._radius_max = value
-
-    radius_max = property(
-        fget=_get_radius_max,
-        fset=_set_radius_max,
-        doc=u"""Maximum radius of subdomain
-
-        :Type: float
-        :min: 0
-        """,
-    )
 
     def _get_k(self):
         """getter of k"""

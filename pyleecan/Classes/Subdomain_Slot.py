@@ -116,8 +116,8 @@ class Subdomain_Slot(Subdomain):
         slot_width=None,
         Ji=None,
         Jik=None,
-        radius_min=None,
-        radius_max=None,
+        Ryoke=None,
+        Rbore=None,
         k=None,
         number=None,
         permeability_relative=1,
@@ -151,10 +151,10 @@ class Subdomain_Slot(Subdomain):
                 Ji = init_dict["Ji"]
             if "Jik" in list(init_dict.keys()):
                 Jik = init_dict["Jik"]
-            if "radius_min" in list(init_dict.keys()):
-                radius_min = init_dict["radius_min"]
-            if "radius_max" in list(init_dict.keys()):
-                radius_max = init_dict["radius_max"]
+            if "Ryoke" in list(init_dict.keys()):
+                Ryoke = init_dict["Ryoke"]
+            if "Rbore" in list(init_dict.keys()):
+                Rbore = init_dict["Rbore"]
             if "k" in list(init_dict.keys()):
                 k = init_dict["k"]
             if "number" in list(init_dict.keys()):
@@ -168,13 +168,11 @@ class Subdomain_Slot(Subdomain):
         self.slot_width = slot_width
         self.Ji = Ji
         self.Jik = Jik
+        self.Ryoke = Ryoke
+        self.Rbore = Rbore
         # Call Subdomain init
         super(Subdomain_Slot, self).__init__(
-            radius_min=radius_min,
-            radius_max=radius_max,
-            k=k,
-            number=number,
-            permeability_relative=permeability_relative,
+            k=k, number=number, permeability_relative=permeability_relative
         )
         # The class is frozen (in Subdomain init), for now it's impossible to
         # add new properties
@@ -221,6 +219,8 @@ class Subdomain_Slot(Subdomain):
             + linesep
             + linesep
         )
+        Subdomain_Slot_str += "Ryoke = " + str(self.Ryoke) + linesep
+        Subdomain_Slot_str += "Rbore = " + str(self.Rbore) + linesep
         return Subdomain_Slot_str
 
     def __eq__(self, other):
@@ -243,6 +243,10 @@ class Subdomain_Slot(Subdomain):
         if not array_equal(other.Ji, self.Ji):
             return False
         if not array_equal(other.Jik, self.Jik):
+            return False
+        if other.Ryoke != self.Ryoke:
+            return False
+        if other.Rbore != self.Rbore:
             return False
         return True
 
@@ -290,6 +294,36 @@ class Subdomain_Slot(Subdomain):
             diff_list.append(name + ".Ji")
         if not array_equal(other.Jik, self.Jik):
             diff_list.append(name + ".Jik")
+        if (
+            other._Ryoke is not None
+            and self._Ryoke is not None
+            and isnan(other._Ryoke)
+            and isnan(self._Ryoke)
+        ):
+            pass
+        elif other._Ryoke != self._Ryoke:
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._Ryoke) + ", other=" + str(other._Ryoke) + ")"
+                )
+                diff_list.append(name + ".Ryoke" + val_str)
+            else:
+                diff_list.append(name + ".Ryoke")
+        if (
+            other._Rbore is not None
+            and self._Rbore is not None
+            and isnan(other._Rbore)
+            and isnan(self._Rbore)
+        ):
+            pass
+        elif other._Rbore != self._Rbore:
+            if is_add_value:
+                val_str = (
+                    " (self=" + str(self._Rbore) + ", other=" + str(other._Rbore) + ")"
+                )
+                diff_list.append(name + ".Rbore" + val_str)
+            else:
+                diff_list.append(name + ".Rbore")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -307,6 +341,8 @@ class Subdomain_Slot(Subdomain):
         S += getsizeof(self.slot_width)
         S += getsizeof(self.Ji)
         S += getsizeof(self.Jik)
+        S += getsizeof(self.Ryoke)
+        S += getsizeof(self.Rbore)
         return S
 
     def as_dict(self, type_handle_ndarray=0, keep_function=False, **kwargs):
@@ -392,6 +428,8 @@ class Subdomain_Slot(Subdomain):
                 raise Exception(
                     "Unknown type_handle_ndarray: " + str(type_handle_ndarray)
                 )
+        Subdomain_Slot_dict["Ryoke"] = self.Ryoke
+        Subdomain_Slot_dict["Rbore"] = self.Rbore
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         Subdomain_Slot_dict["__class__"] = "Subdomain_Slot"
@@ -422,8 +460,8 @@ class Subdomain_Slot(Subdomain):
             Jik_val = None
         else:
             Jik_val = self.Jik.copy()
-        radius_min_val = self.radius_min
-        radius_max_val = self.radius_max
+        Ryoke_val = self.Ryoke
+        Rbore_val = self.Rbore
         if self.k is None:
             k_val = None
         else:
@@ -438,8 +476,8 @@ class Subdomain_Slot(Subdomain):
             slot_width=slot_width_val,
             Ji=Ji_val,
             Jik=Jik_val,
-            radius_min=radius_min_val,
-            radius_max=radius_max_val,
+            Ryoke=Ryoke_val,
+            Rbore=Rbore_val,
             k=k_val,
             number=number_val,
             permeability_relative=permeability_relative_val,
@@ -455,6 +493,8 @@ class Subdomain_Slot(Subdomain):
         self.slot_width = None
         self.Ji = None
         self.Jik = None
+        self.Ryoke = None
+        self.Rbore = None
         # Set to None the properties inherited from Subdomain
         super(Subdomain_Slot, self)._set_None()
 
@@ -599,5 +639,43 @@ class Subdomain_Slot(Subdomain):
         doc=u"""Current density space harmonics in slots for concentrated double layer windings
 
         :Type: ndarray
+        """,
+    )
+
+    def _get_Ryoke(self):
+        """getter of Ryoke"""
+        return self._Ryoke
+
+    def _set_Ryoke(self, value):
+        """setter of Ryoke"""
+        check_var("Ryoke", value, "float", Vmin=0)
+        self._Ryoke = value
+
+    Ryoke = property(
+        fget=_get_Ryoke,
+        fset=_set_Ryoke,
+        doc=u"""Radius at slot / yoke interface
+
+        :Type: float
+        :min: 0
+        """,
+    )
+
+    def _get_Rbore(self):
+        """getter of Rbore"""
+        return self._Rbore
+
+    def _set_Rbore(self, value):
+        """setter of Rbore"""
+        check_var("Rbore", value, "float", Vmin=0)
+        self._Rbore = value
+
+    Rbore = property(
+        fget=_get_Rbore,
+        fset=_set_Rbore,
+        doc=u"""Radius at slot / airgap interface
+
+        :Type: float
+        :min: 0
         """,
     )

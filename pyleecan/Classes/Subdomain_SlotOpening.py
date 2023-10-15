@@ -60,14 +60,15 @@ class Subdomain_SlotOpening(Subdomain_Slot):
         F=None,
         opening_width=None,
         v=None,
+        Ropening=None,
         A=None,
         B=None,
         center_angle=None,
         slot_width=None,
         Ji=None,
         Jik=None,
-        radius_min=None,
-        radius_max=None,
+        Ryoke=None,
+        Rbore=None,
         k=None,
         number=None,
         permeability_relative=1,
@@ -101,6 +102,8 @@ class Subdomain_SlotOpening(Subdomain_Slot):
                 opening_width = init_dict["opening_width"]
             if "v" in list(init_dict.keys()):
                 v = init_dict["v"]
+            if "Ropening" in list(init_dict.keys()):
+                Ropening = init_dict["Ropening"]
             if "A" in list(init_dict.keys()):
                 A = init_dict["A"]
             if "B" in list(init_dict.keys()):
@@ -113,10 +116,10 @@ class Subdomain_SlotOpening(Subdomain_Slot):
                 Ji = init_dict["Ji"]
             if "Jik" in list(init_dict.keys()):
                 Jik = init_dict["Jik"]
-            if "radius_min" in list(init_dict.keys()):
-                radius_min = init_dict["radius_min"]
-            if "radius_max" in list(init_dict.keys()):
-                radius_max = init_dict["radius_max"]
+            if "Ryoke" in list(init_dict.keys()):
+                Ryoke = init_dict["Ryoke"]
+            if "Rbore" in list(init_dict.keys()):
+                Rbore = init_dict["Rbore"]
             if "k" in list(init_dict.keys()):
                 k = init_dict["k"]
             if "number" in list(init_dict.keys()):
@@ -130,6 +133,7 @@ class Subdomain_SlotOpening(Subdomain_Slot):
         self.F = F
         self.opening_width = opening_width
         self.v = v
+        self.Ropening = Ropening
         # Call Subdomain_Slot init
         super(Subdomain_SlotOpening, self).__init__(
             A=A,
@@ -138,8 +142,8 @@ class Subdomain_SlotOpening(Subdomain_Slot):
             slot_width=slot_width,
             Ji=Ji,
             Jik=Jik,
-            radius_min=radius_min,
-            radius_max=radius_max,
+            Ryoke=Ryoke,
+            Rbore=Rbore,
             k=k,
             number=number,
             permeability_relative=permeability_relative,
@@ -191,6 +195,7 @@ class Subdomain_SlotOpening(Subdomain_Slot):
             + linesep
             + linesep
         )
+        Subdomain_SlotOpening_str += "Ropening = " + str(self.Ropening) + linesep
         return Subdomain_SlotOpening_str
 
     def __eq__(self, other):
@@ -213,6 +218,8 @@ class Subdomain_SlotOpening(Subdomain_Slot):
         if other.opening_width != self.opening_width:
             return False
         if not array_equal(other.v, self.v):
+            return False
+        if other.Ropening != self.Ropening:
             return False
         return True
 
@@ -260,6 +267,25 @@ class Subdomain_SlotOpening(Subdomain_Slot):
                 diff_list.append(name + ".opening_width")
         if not array_equal(other.v, self.v):
             diff_list.append(name + ".v")
+        if (
+            other._Ropening is not None
+            and self._Ropening is not None
+            and isnan(other._Ropening)
+            and isnan(self._Ropening)
+        ):
+            pass
+        elif other._Ropening != self._Ropening:
+            if is_add_value:
+                val_str = (
+                    " (self="
+                    + str(self._Ropening)
+                    + ", other="
+                    + str(other._Ropening)
+                    + ")"
+                )
+                diff_list.append(name + ".Ropening" + val_str)
+            else:
+                diff_list.append(name + ".Ropening")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -277,6 +303,7 @@ class Subdomain_SlotOpening(Subdomain_Slot):
         S += getsizeof(self.F)
         S += getsizeof(self.opening_width)
         S += getsizeof(self.v)
+        S += getsizeof(self.Ropening)
         return S
 
     def as_dict(self, type_handle_ndarray=0, keep_function=False, **kwargs):
@@ -362,6 +389,7 @@ class Subdomain_SlotOpening(Subdomain_Slot):
                 raise Exception(
                     "Unknown type_handle_ndarray: " + str(type_handle_ndarray)
                 )
+        Subdomain_SlotOpening_dict["Ropening"] = self.Ropening
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         Subdomain_SlotOpening_dict["__class__"] = "Subdomain_SlotOpening"
@@ -392,6 +420,7 @@ class Subdomain_SlotOpening(Subdomain_Slot):
             v_val = None
         else:
             v_val = self.v.copy()
+        Ropening_val = self.Ropening
         if self.A is None:
             A_val = None
         else:
@@ -413,8 +442,8 @@ class Subdomain_SlotOpening(Subdomain_Slot):
             Jik_val = None
         else:
             Jik_val = self.Jik.copy()
-        radius_min_val = self.radius_min
-        radius_max_val = self.radius_max
+        Ryoke_val = self.Ryoke
+        Rbore_val = self.Rbore
         if self.k is None:
             k_val = None
         else:
@@ -429,14 +458,15 @@ class Subdomain_SlotOpening(Subdomain_Slot):
             F=F_val,
             opening_width=opening_width_val,
             v=v_val,
+            Ropening=Ropening_val,
             A=A_val,
             B=B_val,
             center_angle=center_angle_val,
             slot_width=slot_width_val,
             Ji=Ji_val,
             Jik=Jik_val,
-            radius_min=radius_min_val,
-            radius_max=radius_max_val,
+            Ryoke=Ryoke_val,
+            Rbore=Rbore_val,
             k=k_val,
             number=number_val,
             permeability_relative=permeability_relative_val,
@@ -452,6 +482,7 @@ class Subdomain_SlotOpening(Subdomain_Slot):
         self.F = None
         self.opening_width = None
         self.v = None
+        self.Ropening = None
         # Set to None the properties inherited from Subdomain_Slot
         super(Subdomain_SlotOpening, self)._set_None()
 
@@ -596,5 +627,24 @@ class Subdomain_SlotOpening(Subdomain_Slot):
         doc=u"""Harmonic vector for slot opening
 
         :Type: ndarray
+        """,
+    )
+
+    def _get_Ropening(self):
+        """getter of Ropening"""
+        return self._Ropening
+
+    def _set_Ropening(self, value):
+        """setter of Ropening"""
+        check_var("Ropening", value, "float", Vmin=0)
+        self._Ropening = value
+
+    Ropening = property(
+        fget=_get_Ropening,
+        fset=_set_Ropening,
+        doc=u"""Radius of slot opening / slot interface
+
+        :Type: float
+        :min: 0
         """,
     )
