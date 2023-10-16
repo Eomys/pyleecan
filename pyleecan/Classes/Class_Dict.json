@@ -13193,7 +13193,7 @@
                 "name": "W0",
                 "type": "float",
                 "unit": "m",
-                "value": null
+                "value": 0
             },
             {
                 "as_dict": "",
@@ -13203,7 +13203,7 @@
                 "name": "H0",
                 "type": "float",
                 "unit": "m",
-                "value": null
+                "value": 0
             },
             {
                 "as_dict": "",
@@ -13213,7 +13213,7 @@
                 "name": "W1",
                 "type": "float",
                 "unit": "m",
-                "value": null
+                "value": 0
             },
             {
                 "as_dict": "",
@@ -13223,7 +13223,7 @@
                 "name": "H1",
                 "type": "float",
                 "unit": "m",
-                "value": null
+                "value": 0
             }
         ]
     },
@@ -13268,7 +13268,7 @@
                 "name": "W0",
                 "type": "float",
                 "unit": "rad",
-                "value": null
+                "value": 0
             },
             {
                 "as_dict": "",
@@ -13278,7 +13278,7 @@
                 "name": "H0",
                 "type": "float",
                 "unit": "m",
-                "value": null
+                "value": 0
             },
             {
                 "as_dict": "",
@@ -13288,7 +13288,7 @@
                 "name": "W1",
                 "type": "float",
                 "unit": "rad",
-                "value": null
+                "value": 0
             },
             {
                 "as_dict": "",
@@ -13298,7 +13298,7 @@
                 "name": "H1",
                 "type": "float",
                 "unit": "m",
-                "value": null
+                "value": 0
             }
         ]
     },
@@ -13875,7 +13875,7 @@
                 "name": "W0",
                 "type": "float",
                 "unit": "m",
-                "value": null
+                "value": 0
             },
             {
                 "as_dict": "",
@@ -13885,7 +13885,7 @@
                 "name": "W1",
                 "type": "float",
                 "unit": "m",
-                "value": null
+                "value": 0
             },
             {
                 "as_dict": "",
@@ -13895,7 +13895,7 @@
                 "name": "H0",
                 "type": "float",
                 "unit": "m",
-                "value": null
+                "value": 0
             }
         ]
     },

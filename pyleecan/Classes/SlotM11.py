@@ -231,10 +231,10 @@ class SlotM11(Slot):
 
     def __init__(
         self,
-        W0=None,
-        H0=None,
-        W1=None,
-        H1=None,
+        W0=0,
+        H0=0,
+        W1=0,
+        H1=0,
         Zs=36,
         wedge_mat=None,
         is_bore=True,
