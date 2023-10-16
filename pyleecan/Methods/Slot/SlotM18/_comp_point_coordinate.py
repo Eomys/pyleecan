@@ -22,9 +22,9 @@ def _comp_point_coordinate(self):
     ZM1 = Rbo * exp(-1j * sp / 2)
 
     if self.is_outwards():
-        ZM2 = (Rbo - self.Hmag) * exp(-1j * sp / 2)
+        ZM2 = (Rbo - self.H0) * exp(-1j * sp / 2)
     else:  # inward slot
-        ZM2 = (Rbo + self.Hmag) * exp(-1j * sp / 2)
+        ZM2 = (Rbo + self.H0) * exp(-1j * sp / 2)
 
     point_dict = dict()
     point_dict["Z1"] = Z1

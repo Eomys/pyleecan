@@ -27,11 +27,11 @@ def _comp_point_coordinate(self):
         Z2 = Z1 + self.H0
     else:  # inward slot
         Z2 = Z1 - self.H0
-    ZM1 = Z2.real - 1j * self.Wmag / 2
+    ZM1 = Z2.real - 1j * self.W1 / 2
     if self.is_outwards():
-        ZM2 = ZM1 - self.Hmag
+        ZM2 = ZM1 - self.H1
     else:  # inward slot
-        ZM2 = ZM1 + self.Hmag
+        ZM2 = ZM1 + self.H1
 
     point_dict["Z1"] = Z1
     point_dict["Z2"] = Z2

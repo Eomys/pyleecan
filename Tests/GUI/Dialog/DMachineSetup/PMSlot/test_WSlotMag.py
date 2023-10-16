@@ -44,9 +44,7 @@ class TestWSlotMag(object):
         # For comp_output compatibility
         test_obj.stator = LamSlotWind(Rint=0.95, Rext=0.99)
         test_obj.rotor = LamSlotMag(Rint=0.1, Rext=0.9)
-        test_obj.rotor.slot = SlotM11(
-            Zs=8, W0=pi / 24, H0=5e-3, Wmag=pi / 24, Hmag=3e-3
-        )
+        test_obj.rotor.slot = SlotM11(Zs=8, W0=pi / 24, H0=5e-3, W1=pi / 24, H1=3e-3)
         test_obj.rotor.magnet.mat_type.name = "test3"
 
         material_dict = {LIB_KEY: list(), MACH_KEY: list()}

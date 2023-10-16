@@ -43,7 +43,7 @@ slotW16_wrong_test.append(
     }
 )
 
-# Small H0/W0/R1 
+# Small H0/W0/R1
 lam = LamSlot(is_internal=True, Rint=0.04, Rext=0.0746, is_stator=False)
 lam.slot = SlotW16(Zs=76, H0=0.0008, H2=0.0172, R1=1e-6, W0=0.00001, W3=0.00299)
 slotW16_test.append(

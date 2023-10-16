@@ -77,7 +77,7 @@ def plot_schematics(
 
     # Use some default parameter
     if is_default:
-        slot = type(self)(Zs=16, Hmag=15e-3)
+        slot = type(self)(Zs=16, H0=15e-3)
         lam = LamSlot(
             Rint=0.1, Rext=0.135, is_internal=True, is_stator=False, slot=slot
         )
@@ -124,15 +124,15 @@ def plot_schematics(
 
         # Adding schematics
         if is_add_schematics:
-            # Hmag
+            # H0
             line = Segment(point_dict["ZM3"], point_dict["ZM4"])
             line.plot(
                 fig=fig,
                 ax=ax,
                 color=ARROW_COLOR,
                 linewidth=ARROW_WIDTH,
-                label="Hmag",
-                offset_label=1j * self.Hmag * 0.7,
+                label="H0",
+                offset_label=1j * self.H0 * 0.7,
                 is_arrow=True,
                 fontsize=SC_FONT_SIZE,
             )

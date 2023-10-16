@@ -187,13 +187,15 @@ class PWSlotUD(Ui_PWSlotUD, QWidget):
         self.dxf_gui = None
 
     @staticmethod
-    def check(lam):
+    def check(lam, is_notch=False):
         """Check that the current machine have all the needed field set
 
         Parameters
         ----------
         lam: LamSlotWind
             Lamination to check
+        is_notch : bool
+            True if the slot is used as a notch
 
         Returns
         -------

@@ -46,9 +46,9 @@ def get_surface_active(self, alpha=0, delta=0):
     curve_list.append(Segment(ZM1, ZM2, prop_dict={COND_BOUNDARY_PROP_LAB: YSMR_LAB}))
 
     if self.is_outwards():
-        curve_list.append(Arc1(ZM2, ZM3, (Rbo - self.Hmag), is_trigo_direction=True))
+        curve_list.append(Arc1(ZM2, ZM3, (Rbo - self.H0), is_trigo_direction=True))
     else:
-        curve_list.append(Arc1(ZM2, ZM3, (Rbo + self.Hmag), is_trigo_direction=True))
+        curve_list.append(Arc1(ZM2, ZM3, (Rbo + self.H0), is_trigo_direction=True))
 
     curve_list.append(Segment(ZM3, ZM4, prop_dict={COND_BOUNDARY_PROP_LAB: YSML_LAB}))
 

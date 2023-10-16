@@ -77,7 +77,7 @@ def plot_schematics(
 
     # Use some default parameter
     if is_default:
-        slot = type(self)(Zs=4, W0=0.05, H0=0.02, Hmag=0.02, Wmag=0.04, Rtopm=0.04)
+        slot = type(self)(Zs=4, W0=0.05, H0=0.02, H1=0.02, W1=0.04, Rtopm=0.04)
         lam = LamSlot(
             Rint=0.1, Rext=0.135, is_internal=True, is_stator=False, slot=slot
         )
@@ -131,20 +131,20 @@ def plot_schematics(
                 color=ARROW_COLOR,
                 linewidth=ARROW_WIDTH,
                 label="W0",
-                offset_label=-1 * sign * self.Hmag * 0.1 + 1j * self.Hmag * 0.2,
+                offset_label=-1 * sign * self.H1 * 0.1 + 1j * self.H1 * 0.2,
                 is_arrow=True,
                 fontsize=SC_FONT_SIZE,
             )
-            # Wmag
+            # W1
             plot_quote(
                 Z1=point_dict["ZM2"],
-                Zlim1=point_dict["ZM2"] - sign * 0.5 * self.Hmag,
-                Zlim2=point_dict["ZM3"] - sign * 0.5 * self.Hmag,
+                Zlim1=point_dict["ZM2"] - sign * 0.5 * self.H1,
+                Zlim2=point_dict["ZM3"] - sign * 0.5 * self.H1,
                 Z2=point_dict["ZM3"],
-                offset_label=0.25 * self.Hmag,
+                offset_label=0.25 * self.H1,
                 fig=fig,
                 ax=ax,
-                label="Wmag",
+                label="W1",
             )
             # H0
             line = Segment(point_dict["Z1"], point_dict["Z2"])
@@ -158,17 +158,17 @@ def plot_schematics(
                 is_arrow=True,
                 fontsize=SC_FONT_SIZE,
             )
-            # Hmag
-            Zlim1 = point_dict["ZM4"] - 1j * sign * 0.3 * self.Hmag
+            # H1
+            Zlim1 = point_dict["ZM4"] - 1j * sign * 0.3 * self.H1
             plot_quote(
                 Z1=point_dict["ZM4"],
                 Zlim1=Zlim1,
                 Zlim2=point_dict["ZM0"].real + 1j * Zlim1.imag,
                 Z2=point_dict["ZM0"],
-                offset_label=1j * 0.1 * self.Wmag,
+                offset_label=1j * 0.1 * self.W1,
                 fig=fig,
                 ax=ax,
-                label="Hmag",
+                label="H1",
             )
             # Rtopm
             line = Segment(point_dict["Zc"], point_dict["ZM0"])
@@ -178,7 +178,7 @@ def plot_schematics(
                 color=ARROW_COLOR,
                 linewidth=ARROW_WIDTH,
                 label="Rtopm",
-                offset_label=sign * self.Rtopm * 0.4 + 1j * 0.1 * self.Wmag,
+                offset_label=sign * self.Rtopm * 0.4 + 1j * 0.1 * self.W1,
                 is_arrow=True,
                 fontsize=SC_FONT_SIZE,
             )

@@ -65,6 +65,8 @@ def _search_and_update(obj_dict, parent=None, parent_index=None, update_dict=Non
         parent[parent_index] = convert_opticonstraint(obj_dict)
     elif update_dict["OptiDesignVar"] and is_OptiDesignVar_dict(obj_dict):
         parent[parent_index] = convert_optidesignvar(obj_dict)
+    elif update_dict["WmagHmag"] and is_Wmag_Hmag(obj_dict):
+        parent[parent_index] = convert_Wmag_Hmag(obj_dict)
     else:
         # walk through the dict
         for key, value in obj_dict.items():
@@ -430,6 +432,35 @@ def convert_optidesignvar(optidesignvar_dict):
         return OptiDesignVarInterval(init_dict=optidesignvar_dict_new)
 
 
+######################
+# v 1.5.1 => 1.5.2
+# Wmag/Hmag renamed as W1/H1
+######################
+WmagRenaming_VERSION = "1.5.2"
+
+
+def is_Wmag_Hmag(obj_dict):
+    """Check if the object need to be updated for Hmag/Wmag"""
+    return "__class__" in obj_dict.keys() and (
+        "Hmag" in obj_dict.keys() or "Wmag" in obj_dict.keys()
+    )
+
+
+def convert_Wmag_Hmag(Wmag_Hmag_dict):
+    """Update the old Wmag_Hmag_dict to the new Wmag_Hmag_dict"""
+    getLogger(GUI_LOG_NAME).info("Old machine version detected, Updating Wmag_Hmag")
+    # Copy dict to keep original version
+    Wmag_Hmag_dict = Wmag_Hmag_dict.copy()
+
+    if "Hmag" in Wmag_Hmag_dict.keys():
+        Wmag_Hmag_dict["H1"] = Wmag_Hmag_dict.pop("Hmag")
+
+    if "Wmag" in Wmag_Hmag_dict.keys():
+        Wmag_Hmag_dict["W1"] = Wmag_Hmag_dict.pop("Wmag")
+
+    return Wmag_Hmag_dict
+
+
 def is_before_version(ref_version, check_version):
     """Check if a version str is before another version str
 
@@ -487,6 +518,8 @@ def create_update_dict(file_version):
         update_dict["VarParam"] = True
         update_dict["OptiConstraint"] = True
         update_dict["OptiDesignVar"] = True
+        update_dict["WmagHmag"] = True
+
     else:
         update_dict["Winding"] = is_before_version(WIND_VERSION, file_version)
         update_dict["HoleUD"] = is_before_version(HoleUD_VERSION, file_version)
@@ -500,4 +533,5 @@ def create_update_dict(file_version):
         update_dict["OptiDesignVar"] = is_before_version(
             OptiDesignVar_VERSION, file_version
         )
+        update_dict["WmagHmag"] = is_before_version(WmagRenaming_VERSION, file_version)
     return update_dict

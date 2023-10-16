@@ -79,7 +79,7 @@ def plot_schematics(
 
     # Use some default parameter
     if is_default:
-        slot = type(self)(Zs=8, H0=20e-3, W0=pi / 8, Hmag=15e-3, Wmag=pi / 8 * 0.75)
+        slot = type(self)(Zs=8, H0=20e-3, W0=pi / 8, H1=15e-3, W1=pi / 8 * 0.75)
         if is_default == 1:  # Internal Rotor schematics
             lam = LamSlot(
                 Rint=0.1, Rext=0.135, is_internal=True, is_stator=False, slot=slot
@@ -163,10 +163,10 @@ def plot_schematics(
             )
             if type_add_active == 5:
                 # Wkey
-                R = self.get_Rbo() + sign * (self.H0 - self.Hmag * 1.1)
+                R = self.get_Rbo() + sign * (self.H0 - self.H1 * 1.1)
                 line = Arc1(
-                    begin=R * exp(-1j * self.Wmag / 2),
-                    end=R * exp(1j * self.Wmag / 2),
+                    begin=R * exp(-1j * self.W1 / 2),
+                    end=R * exp(1j * self.W1 / 2),
                     radius=R,
                     is_trigo_direction=True,
                 )
@@ -175,7 +175,7 @@ def plot_schematics(
                     ax=ax,
                     color=ARROW_COLOR,
                     linewidth=ARROW_WIDTH,
-                    label="Wkey",
+                    label="W1",
                     offset_label=-1 * sign * self.H0 * 0.2 - 0.3 * self.H0,
                     fontsize=SC_FONT_SIZE,
                 )
@@ -186,18 +186,18 @@ def plot_schematics(
                     ax=ax,
                     color=ARROW_COLOR,
                     linewidth=ARROW_WIDTH,
-                    label="Hkey",
+                    label="H1",
                     offset_label=1j * point_dict["Z4"].imag * 0.2 - 0.2 * self.H0,
                     is_arrow=True,
                     fontsize=SC_FONT_SIZE,
                 )
 
             elif type_add_active != 0:
-                # Wmag
-                R = self.get_Rbo() + sign * (self.H0 - self.Hmag * 1.1)
+                # W1
+                R = self.get_Rbo() + sign * (self.H0 - self.H1 * 1.1)
                 line = Arc1(
-                    begin=R * exp(-1j * self.Wmag / 2),
-                    end=R * exp(1j * self.Wmag / 2),
+                    begin=R * exp(-1j * self.W1 / 2),
+                    end=R * exp(1j * self.W1 / 2),
                     radius=R,
                     is_trigo_direction=True,
                 )
@@ -206,18 +206,18 @@ def plot_schematics(
                     ax=ax,
                     color=ARROW_COLOR,
                     linewidth=ARROW_WIDTH,
-                    label="Wmag",
+                    label="W1",
                     offset_label=-1 * sign * self.H0 * 0.2,
                     fontsize=SC_FONT_SIZE,
                 )
-                # Hmag
+                # H1
                 line = Segment(point_dict["ZM3"], point_dict["ZM4"])
                 line.plot(
                     fig=fig,
                     ax=ax,
                     color=ARROW_COLOR,
                     linewidth=ARROW_WIDTH,
-                    label="Hmag",
+                    label="H1",
                     offset_label=1j * point_dict["Z4"].imag * 0.2,
                     is_arrow=True,
                     fontsize=SC_FONT_SIZE,
@@ -253,7 +253,7 @@ def plot_schematics(
             )
             if type_add_active != 0:
                 # ZM1 Line
-                line = Segment(0, Rbo * 2 * exp(-1j * self.Wmag / 2))
+                line = Segment(0, Rbo * 2 * exp(-1j * self.W1 / 2))
                 line.plot(
                     fig=fig,
                     ax=ax,
@@ -262,7 +262,7 @@ def plot_schematics(
                     linewidth=MAIN_LINE_WIDTH,
                 )
                 # ZM2 Line
-                line = Segment(0, Rbo * 2 * exp(1j * self.Wmag / 2))
+                line = Segment(0, Rbo * 2 * exp(1j * self.W1 / 2))
                 line.plot(
                     fig=fig,
                     ax=ax,

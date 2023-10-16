@@ -21,10 +21,10 @@ def comp_surface_active(self):
     ZM0 = point_dict["ZM0"]
     ZM1 = point_dict["ZM1"]
     ZM2 = point_dict["ZM2"]
-    alpha = 2 * float(arcsin(self.Wmag / (2 * abs(ZM0))))
+    alpha = 2 * float(arcsin(self.W1 / (2 * abs(ZM0))))
     Sarc = (abs(ZM0) ** 2.0) / 2.0 * (alpha - sin(alpha))
 
-    S1 = abs(ZM1 - ZM2) * self.Wmag
+    S1 = abs(ZM1 - ZM2) * self.W1
     if self.is_outwards():
         return S1 - Sarc
     else:

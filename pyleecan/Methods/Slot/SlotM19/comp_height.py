@@ -33,4 +33,4 @@ def comp_height(self):
         return np_abs(sqrt(Z2.real ** 2 + Z2.imag ** 2)) - np_abs(Rbo)
 
     else:
-        return self.Hmag
+        return self.H0

@@ -139,13 +139,15 @@ class WSlotCirc(Gen_WSlotCirc, QWidget):
         self.saveNeeded.emit()
 
     @staticmethod
-    def check(lam):
+    def check(lam, is_notch=False):
         """Check that the current machine have all the needed field set
 
         Parameters
         ----------
         lam: LamSlotMag
             Lamination to check
+        is_notch : bool
+            True to ignore magnet related parameters
 
         Returns
         -------

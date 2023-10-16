@@ -79,15 +79,15 @@ class Ui_PMSlot12(object):
 
         self.gridLayout = QGridLayout()
         self.gridLayout.setObjectName(u"gridLayout")
-        self.in_Wmag = QLabel(self.scrollAreaWidgetContents)
-        self.in_Wmag.setObjectName(u"in_Wmag")
+        self.in_W1 = QLabel(self.scrollAreaWidgetContents)
+        self.in_W1.setObjectName(u"in_W1")
 
-        self.gridLayout.addWidget(self.in_Wmag, 1, 0, 1, 1)
+        self.gridLayout.addWidget(self.in_W1, 1, 0, 1, 1)
 
-        self.unit_Wmag = QLabel(self.scrollAreaWidgetContents)
-        self.unit_Wmag.setObjectName(u"unit_Wmag")
+        self.unit_W1 = QLabel(self.scrollAreaWidgetContents)
+        self.unit_W1.setObjectName(u"unit_W1")
 
-        self.gridLayout.addWidget(self.unit_Wmag, 1, 2, 1, 1)
+        self.gridLayout.addWidget(self.unit_W1, 1, 2, 1, 1)
 
         self.in_W0 = QLabel(self.scrollAreaWidgetContents)
         self.in_W0.setObjectName(u"in_W0")
@@ -109,35 +109,35 @@ class Ui_PMSlot12(object):
 
         self.gridLayout.addWidget(self.in_H0, 2, 0, 1, 1)
 
-        self.unit_Hmag = QLabel(self.scrollAreaWidgetContents)
-        self.unit_Hmag.setObjectName(u"unit_Hmag")
+        self.unit_H1 = QLabel(self.scrollAreaWidgetContents)
+        self.unit_H1.setObjectName(u"unit_H1")
 
-        self.gridLayout.addWidget(self.unit_Hmag, 3, 2, 1, 1)
+        self.gridLayout.addWidget(self.unit_H1, 3, 2, 1, 1)
 
         self.lf_W0 = FloatEdit(self.scrollAreaWidgetContents)
         self.lf_W0.setObjectName(u"lf_W0")
 
         self.gridLayout.addWidget(self.lf_W0, 0, 1, 1, 1)
 
-        self.in_Hmag = QLabel(self.scrollAreaWidgetContents)
-        self.in_Hmag.setObjectName(u"in_Hmag")
+        self.in_H1 = QLabel(self.scrollAreaWidgetContents)
+        self.in_H1.setObjectName(u"in_H1")
 
-        self.gridLayout.addWidget(self.in_Hmag, 3, 0, 1, 1)
+        self.gridLayout.addWidget(self.in_H1, 3, 0, 1, 1)
 
         self.lf_H0 = FloatEdit(self.scrollAreaWidgetContents)
         self.lf_H0.setObjectName(u"lf_H0")
 
         self.gridLayout.addWidget(self.lf_H0, 2, 1, 1, 1)
 
-        self.lf_Hmag = FloatEdit(self.scrollAreaWidgetContents)
-        self.lf_Hmag.setObjectName(u"lf_Hmag")
+        self.lf_H1 = FloatEdit(self.scrollAreaWidgetContents)
+        self.lf_H1.setObjectName(u"lf_H1")
 
-        self.gridLayout.addWidget(self.lf_Hmag, 3, 1, 1, 1)
+        self.gridLayout.addWidget(self.lf_H1, 3, 1, 1, 1)
 
-        self.lf_Wmag = FloatEdit(self.scrollAreaWidgetContents)
-        self.lf_Wmag.setObjectName(u"lf_Wmag")
+        self.lf_W1 = FloatEdit(self.scrollAreaWidgetContents)
+        self.lf_W1.setObjectName(u"lf_W1")
 
-        self.gridLayout.addWidget(self.lf_Wmag, 1, 1, 1, 1)
+        self.gridLayout.addWidget(self.lf_W1, 1, 1, 1, 1)
 
         self.verticalLayout_3.addLayout(self.gridLayout)
 
@@ -156,10 +156,10 @@ class Ui_PMSlot12(object):
 
         self.horizontalLayout.addWidget(self.scrollArea)
 
-        QWidget.setTabOrder(self.lf_W0, self.lf_Wmag)
-        QWidget.setTabOrder(self.lf_Wmag, self.lf_H0)
-        QWidget.setTabOrder(self.lf_H0, self.lf_Hmag)
-        QWidget.setTabOrder(self.lf_Hmag, self.txt_constraint)
+        QWidget.setTabOrder(self.lf_W0, self.lf_W1)
+        QWidget.setTabOrder(self.lf_W1, self.lf_H0)
+        QWidget.setTabOrder(self.lf_H0, self.lf_H1)
+        QWidget.setTabOrder(self.lf_H1, self.txt_constraint)
 
         self.retranslateUi(PMSlot12)
 
@@ -178,17 +178,17 @@ class Ui_PMSlot12(object):
                 "p, li { white-space: pre-wrap; }\n"
                 "</style></head><body style=\" font-family:'DejaVu Sans'; font-size:8.15094pt; font-weight:400; font-style:normal;\">\n"
                 '<p align="center" style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-family:\'DejaVu Sans\'; font-size:10pt; font-weight:600; text-decoration: underline;">Constraints :</span></p>\n'
-                '<p align="center" style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-family:\'DejaVu Sans\'; font-size:10pt;">Wmag \u2264 W0</span></p></body></html>',
+                '<p align="center" style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-family:\'DejaVu Sans\'; font-size:10pt;">W1 \u2264 W0</span></p></body></html>',
                 None,
             )
         )
-        self.in_Wmag.setText(QCoreApplication.translate("PMSlot12", u"Wmag", None))
-        self.unit_Wmag.setText(QCoreApplication.translate("PMSlot12", u"[m]", None))
+        self.in_W1.setText(QCoreApplication.translate("PMSlot12", u"W1", None))
+        self.unit_W1.setText(QCoreApplication.translate("PMSlot12", u"[m]", None))
         self.in_W0.setText(QCoreApplication.translate("PMSlot12", u"W0", None))
         self.unit_W0.setText(QCoreApplication.translate("PMSlot12", u"[m]", None))
         self.unit_H0.setText(QCoreApplication.translate("PMSlot12", u"[m]", None))
         self.in_H0.setText(QCoreApplication.translate("PMSlot12", u"H0", None))
-        self.unit_Hmag.setText(QCoreApplication.translate("PMSlot12", u"[m]", None))
-        self.in_Hmag.setText(QCoreApplication.translate("PMSlot12", u"Hmag", None))
+        self.unit_H1.setText(QCoreApplication.translate("PMSlot12", u"[m]", None))
+        self.in_H1.setText(QCoreApplication.translate("PMSlot12", u"H1", None))
 
     # retranslateUi
