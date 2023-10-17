@@ -11,6 +11,7 @@ from PySide2.QtWidgets import *
 
 from ......GUI.Tools.FloatEdit import FloatEdit
 from ......GUI.Dialog.DMachineSetup.SWSlot.WWSlotOut.WWSlotOut import WWSlotOut
+from ......GUI.Dialog.DMachineSetup.SMSlot.WWSlotMag.WWSlotMag import WWSlotMag
 
 from pyleecan.GUI.Resources import pyleecan_rc
 
@@ -51,9 +52,14 @@ class Ui_PMSlot19(object):
         self.scrollArea.setWidgetResizable(True)
         self.scrollAreaWidgetContents = QWidget()
         self.scrollAreaWidgetContents.setObjectName(u"scrollAreaWidgetContents")
-        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 268, 619))
+        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 268, 623))
         self.verticalLayout_3 = QVBoxLayout(self.scrollAreaWidgetContents)
         self.verticalLayout_3.setObjectName(u"verticalLayout_3")
+        self.w_mag = WWSlotMag(self.scrollAreaWidgetContents)
+        self.w_mag.setObjectName(u"w_mag")
+
+        self.verticalLayout_3.addWidget(self.w_mag)
+
         self.gridLayout = QGridLayout()
         self.gridLayout.setObjectName(u"gridLayout")
         self.unit_Hmag = QLabel(self.scrollAreaWidgetContents)

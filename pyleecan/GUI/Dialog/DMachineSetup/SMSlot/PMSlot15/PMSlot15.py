@@ -68,12 +68,16 @@ class PMSlot15(Gen_PMSlot15, QWidget):
         # Display the main output of the slot (surface, height...)
         self.w_out.comp_output()
 
+        # Setup the widgets according to current values
+        self.w_mag.update(lamination, self.material_dict)
+
         # Connect the signal
         self.lf_W0.editingFinished.connect(self.set_W0)
         self.lf_Wmag.editingFinished.connect(self.set_Wmag)
         self.lf_H0.editingFinished.connect(self.set_H0)
         self.lf_Hmag.editingFinished.connect(self.set_Hmag)
         self.lf_Rtopm.editingFinished.connect(self.set_Rtopm)
+        self.w_mag.saveNeeded.connect(self.emit_save)
 
     def set_W0(self):
         """Signal to update the value of W0 according to the line edit
@@ -138,6 +142,10 @@ class PMSlot15(Gen_PMSlot15, QWidget):
         self.slot.Rtopm = self.lf_Rtopm.value()
         self.w_out.comp_output()
         # Notify the machine GUI that the machine has changed
+        self.saveNeeded.emit()
+
+    def emit_save(self):
+        """Send a saveNeeded signal to the DMachineSetup"""
         self.saveNeeded.emit()
 
     @staticmethod

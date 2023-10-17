@@ -150,6 +150,7 @@ def test_FEMM_NotchKey_Airgap():
     Brad2 = result2["radial"]
 
     assert_array_almost_equal(Brad, Brad2, decimal=1)
+    plt.close()
     return out
 
 
@@ -277,6 +278,7 @@ def test_FEMM_NotchKey_inner():
     Brad2 = result2["radial"]
 
     assert_array_almost_equal(Brad, Brad2, decimal=1)
+    plt.close()
     return out
 
 
@@ -365,6 +367,7 @@ def test_FEMM_NotchKey_2():
 
     # Run simulations
     out = simu.run()
+    plt.close()
     return out
 
 
@@ -497,6 +500,7 @@ def test_FEMM_NotchKey_NoCut():
     Brad2 = result2["radial"]
 
     assert_array_almost_equal(Brad, Brad2, decimal=1)
+    plt.close()
     return out
 
 

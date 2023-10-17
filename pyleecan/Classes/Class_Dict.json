@@ -5825,7 +5825,9 @@
             }
         ],
         "daughters": [
+            "LamSlotM",
             "LamSlotMag",
+            "LamSlotMagNS",
             "LamSlotWind",
             "LamSquirrelCage",
             "LamSquirrelCageMag"
@@ -5864,45 +5866,30 @@
             }
         ]
     },
-    "LamSlotMag": {
+    "LamSlotM": {
         "constants": [
             {
                 "name": "VERSION",
                 "value": "1"
             }
         ],
-        "daughters": [],
+        "daughters": [
+            "LamSlotMag",
+            "LamSlotMagNS"
+        ],
         "desc": "Lamination with Slot for Magnets",
         "is_internal": false,
         "methods": [
-            "build_geometry",
-            "check",
-            "comp_masses",
-            "comp_surfaces",
-            "comp_volumes",
-            "plot",
             "comp_angle_d_axis",
-            "get_magnet_number",
-            "set_Lmag",
             "get_dim_active",
-            "get_all_mag_obj",
-            "get_magnet_by_label"
+            "get_magnet_number",
+            "plot"
         ],
         "mother": "LamSlot",
-        "name": "LamSlotMag",
+        "name": "LamSlotM",
         "package": "Machine",
-        "path": "pyleecan/Generator/ClassesRef/Machine/LamSlotMag.csv",
+        "path": "pyleecan/Generator/ClassesRef/Machine/LamSlotM.csv",
         "properties": [
-            {
-                "as_dict": "",
-                "desc": "Magnet of the lamination",
-                "max": "",
-                "min": "",
-                "name": "magnet",
-                "type": "Magnet",
-                "unit": "-",
-                "value": ""
-            },
             {
                 "as_dict": "",
                 "desc": "Matrix to enforce a different relative magnetic permeability for each magnet layer (shape: [Nrad, Ntan, Zs])",
@@ -5922,6 +5909,103 @@
                 "type": "ndarray",
                 "unit": "-",
                 "value": null
+            }
+        ]
+    },
+    "LamSlotMag": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Lamination with Slot for Magnets",
+        "is_internal": false,
+        "methods": [
+            "build_geometry",
+            "check",
+            "comp_masses",
+            "comp_surfaces",
+            "comp_volumes",
+            "get_all_mag_obj",
+            "get_magnet_by_label",
+            "set_Lmag"
+        ],
+        "mother": "LamSlotM",
+        "name": "LamSlotMag",
+        "package": "Machine",
+        "path": "pyleecan/Generator/ClassesRef/Machine/.csv",
+        "properties": [
+            {
+                "as_dict": "",
+                "desc": "Magnet of the lamination",
+                "max": "",
+                "min": "",
+                "name": "magnet",
+                "type": "Magnet",
+                "unit": "-",
+                "value": ""
+            }
+        ]
+    },
+    "LamSlotMagNS": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Lamination with Slot for Magnets with uneven north/south",
+        "is_internal": false,
+        "methods": [
+            "build_geometry",
+            "check",
+            "comp_masses",
+            "comp_periodicity_geo",
+            "comp_periodicity_spatial",
+            "comp_surfaces",
+            "comp_volumes",
+            "get_all_mag_obj",
+            "get_magnet_by_label",
+            "get_slot_desc_list",
+            "set_Lmag"
+        ],
+        "mother": "LamSlotM",
+        "name": "LamSlotMagNS",
+        "package": "Machine",
+        "path": "pyleecan/Generator/ClassesRef/Machine/LamSlotMagNS.csv",
+        "properties": [
+            {
+                "as_dict": "",
+                "desc": "North Magnet of the lamination",
+                "max": "",
+                "min": "",
+                "name": "magnet_north",
+                "type": "Magnet",
+                "unit": "-",
+                "value": ""
+            },
+            {
+                "as_dict": "",
+                "desc": "South Magnet of the lamination",
+                "max": "",
+                "min": "",
+                "name": "magnet_south",
+                "type": "Magnet",
+                "unit": "-",
+                "value": ""
+            },
+            {
+                "as_dict": "",
+                "desc": "South slot of the lamination",
+                "max": "",
+                "min": "",
+                "name": "slot_south",
+                "type": "Slot",
+                "unit": "",
+                "value": ""
             }
         ]
     },
@@ -6207,7 +6291,9 @@
             "LamHole",
             "LamHoleNS",
             "LamSlot",
+            "LamSlotM",
             "LamSlotMag",
+            "LamSlotMagNS",
             "LamSlotMulti",
             "LamSlotMultiWind",
             "LamSlotWind",
@@ -7182,7 +7268,7 @@
                 "max": "",
                 "min": "",
                 "name": "rotor",
-                "type": "LamSlotMag",
+                "type": "LamSlotM",
                 "unit": "",
                 "value": ""
             },

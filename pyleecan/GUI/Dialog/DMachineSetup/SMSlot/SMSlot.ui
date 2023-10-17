@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>650</width>
-    <height>550</height>
+    <width>827</width>
+    <height>644</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -33,20 +33,31 @@
       </widget>
      </item>
      <item>
-      <widget class="QComboBox" name="c_slot_type">
+      <widget class="QLabel" name="in_NS_type">
+       <property name="text">
+        <string>Pole distribution</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QComboBox" name="c_NS_type">
+       <property name="minimumSize">
+        <size>
+         <width>180</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="currentText">
+        <string>Even (default)</string>
+       </property>
        <item>
         <property name="text">
-         <string>Slot Type 10</string>
+         <string>Even (default)</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>Slot Type 11</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Slot Type 12</string>
+         <string>North different than South</string>
         </property>
        </item>
       </widget>
@@ -74,47 +85,42 @@
     </layout>
    </item>
    <item>
-    <layout class="QHBoxLayout" name="horizontalLayout_3">
-     <item>
-      <widget class="WMatSelect" name="w_mat" native="true"/>
-     </item>
-     <item>
-      <widget class="QLabel" name="in_type_magnetization">
-       <property name="text">
-        <string>type_magnetization</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QComboBox" name="c_type_magnetization">
-       <item>
-        <property name="text">
-         <string>Radial</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Parallel</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>HallBach</string>
-        </property>
-       </item>
-      </widget>
-     </item>
-    </layout>
-   </item>
-   <item>
-    <widget class="QWidget" name="w_slot" native="true">
+    <widget class="QTabWidget" name="tab_slot">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
        <horstretch>0</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>
      </property>
+     <property name="minimumSize">
+      <size>
+       <width>770</width>
+       <height>550</height>
+      </size>
+     </property>
+     <property name="currentIndex">
+      <number>-1</number>
+     </property>
+     <property name="tabsClosable">
+      <bool>false</bool>
+     </property>
     </widget>
+   </item>
+   <item>
+    <spacer name="verticalSpacer">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeType">
+      <enum>QSizePolicy::Minimum</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>1</height>
+      </size>
+     </property>
+    </spacer>
    </item>
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout">
@@ -161,12 +167,6 @@
    <class>HelpButton</class>
    <extends>QLabel</extends>
    <header>pyleecan/GUI/Tools/HelpButton.h</header>
-  </customwidget>
-  <customwidget>
-   <class>WMatSelect</class>
-   <extends>QWidget</extends>
-   <header>.....GUI.Dialog.DMatLib.WMatSelect.WMatSelect.h</header>
-   <container>1</container>
   </customwidget>
  </customwidgets>
  <resources>

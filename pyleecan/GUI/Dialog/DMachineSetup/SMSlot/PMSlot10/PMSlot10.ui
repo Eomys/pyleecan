@@ -116,6 +116,9 @@ p, li { white-space: pre-wrap; }
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_3">
        <item>
+        <widget class="WWSlotMag" name="w_mag" native="true"/>
+       </item>
+       <item>
         <layout class="QGridLayout" name="gridLayout">
          <item row="1" column="0">
           <widget class="QLabel" name="in_Wmag">
@@ -203,7 +206,7 @@ p, li { white-space: pre-wrap; }
            <widget class="WMatSelectV" name="w_key_mat" native="true"/>
           </item>
           <item row="0" column="0">
-           <layout class="QGridLayout" name="gridLayout_3" columnstretch="0,0,0,0" rowminimumheight="0,0,0">
+           <layout class="QGridLayout" name="gridLayout_3" columnstretch="0,0,0,0" rowminimumheight="0,0">
             <item row="1" column="0">
              <widget class="QLabel" name="in_Hkey">
               <property name="text">
@@ -278,10 +281,15 @@ p, li { white-space: pre-wrap; }
    <container>1</container>
   </customwidget>
   <customwidget>
+   <class>WWSlotMag</class>
+   <extends>QWidget</extends>
+   <header>......GUI.Dialog.DMachineSetup.SMSlot.WWSlotMag.WWSlotMag</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
    <class>WMatSelectV</class>
    <extends>QWidget</extends>
-   <header>......GUI.Dialog.DMatLib.WMatSelect.WMatSelectV.h</header>
-   <container>1</container>
+   <header>......GUI.Dialog.DMatLib.WMatSelect.WMatSelectV</header>
   </customwidget>
  </customwidgets>
  <tabstops>

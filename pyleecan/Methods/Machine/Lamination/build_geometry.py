@@ -152,9 +152,7 @@ def build_geometry(self, sym=1, alpha=0, delta=0, is_circular_radius=False):
 
     # apply the transformation
     for surf in surf_list:
-        if alpha != 0:
-            surf.rotate(alpha)
-        if delta != 0:
-            surf.translate(delta)
+        surf.rotate(alpha)
+        surf.translate(delta)
 
     return surf_list

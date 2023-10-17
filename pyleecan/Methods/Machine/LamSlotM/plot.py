@@ -1,14 +1,11 @@
 from matplotlib.patches import Patch
 import matplotlib.pyplot as plt
+from numpy import pi, exp
 from ....Functions.init_fig import init_fig
-from ....definitions import config_dict
+from ....Functions.labels import decode_label, MAG_LAB, LAM_LAB
 from ....Functions.Plot.get_color_legend_from_surface import (
     get_color_legend_from_surface,
 )
-
-ROTOR_COLOR = config_dict["PLOT"]["COLOR_DICT"]["ROTOR_COLOR"]
-STATOR_COLOR = config_dict["PLOT"]["COLOR_DICT"]["STATOR_COLOR"]
-MAGNET_COLOR = config_dict["PLOT"]["COLOR_DICT"]["MAGNET_COLOR"]
 
 
 def plot(
@@ -25,14 +22,15 @@ def plot(
     is_show_fig=True,
     win_title=None,
     is_legend=True,
+    is_clean_plot=False,
     is_winding_connection=False,
 ):
     """Plot a Lamination with Magnets in a matplotlib fig
 
     Parameters
     ----------
-    self : LamSlotMag
-        A LamSlotMag object
+    self : LamSlotM
+        A LamSlotM object
     fig : Matplotlib.figure.Figure
         existing figure to use if None create a new one
     ax : Matplotlib.axes.Axes object
@@ -55,6 +53,8 @@ def plot(
         Window title
     is_legend : bool
         True to add the legend
+    is_clean_plot : bool
+        True to remove title, legend, axis (only machine on plot with white background)
     is_winding_connection : bool
         True to display winding connections (not used)
 
@@ -77,6 +77,7 @@ def plot(
     surf_list = self.build_geometry(sym=sym, alpha=alpha, delta=delta)
     patches = list()
     for surf in surf_list:
+        label_dict = decode_label(surf.label)
         color, legend = get_color_legend_from_surface(surf, is_lam_only)
 
         patches.extend(
@@ -89,6 +90,45 @@ def plot(
         if not is_edge_only and legend is not None and legend not in label_leg:
             label_leg.append(legend)
             patch_leg.append(Patch(color=color))
+
+        # Add the magnetization direction as arrow on top of the lamination
+        if (
+            not is_lam_only
+            and MAG_LAB in label_dict["surf_type"]
+            and label_dict["S_id"] == 0
+        ):
+            if hasattr(self, "magnet"):
+                mag_type = self.magnet.type_magnetization
+            else:
+                mag_type = self.magnet_north.type_magnetization
+            if is_add_arrow and mag_type in [0, 1]:  # Radial or Parallel only
+                # Create arrow coordinates
+                Zs = self.slot.Zs
+                H = self.slot.comp_height_active()
+                for ii in range(Zs // sym):
+                    # if mag is not None and mag.type_magnetization == 3:
+                    #     off -= pi / 2
+                    Z1 = (abs(surf.point_ref) + delta - H / 4) * exp(
+                        1j * (ii * 2 * pi / Zs + pi / Zs + alpha)
+                    )
+                    Z2 = (abs(surf.point_ref) + delta + H / 4) * exp(
+                        1j * (ii * 2 * pi / Zs + pi / Zs + alpha)
+                    )
+                    # Change arrow direction for North/South
+                    if ii % 2 == 1:
+                        ax.annotate(
+                            text="",
+                            xy=(Z1.real, Z1.imag),
+                            xytext=(Z2.real, Z2.imag),
+                            arrowprops=dict(arrowstyle="->", linewidth=1, color="b"),
+                        )
+                    else:
+                        ax.annotate(
+                            text="",
+                            xy=(Z2.real, Z2.imag),
+                            xytext=(Z1.real, Z1.imag),
+                            arrowprops=dict(arrowstyle="->", linewidth=1, color="b"),
+                        )
 
     ax.set_xlabel("(m)")
     ax.set_ylabel("(m)")
@@ -122,6 +162,15 @@ def plot(
 
         if is_legend:
             ax.legend(patch_leg, label_leg)
+
+    # Clean figure
+    if is_clean_plot:
+        ax.set_axis_off()
+        ax.axis("equal")
+        if ax.get_legend() is not None:
+            ax.get_legend().remove()
+        ax.set_title("")
+
     if is_show_fig:
         fig.show()
     return fig, ax

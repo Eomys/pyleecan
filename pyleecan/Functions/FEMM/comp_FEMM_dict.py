@@ -1,5 +1,5 @@
 from ...Classes.LamH import LamH
-from ...Classes.LamSlotMag import LamSlotMag
+from ...Classes.LamSlotM import LamSlotM
 from ...Classes.MachineSIPMSM import MachineSIPMSM
 
 from ...Functions.FEMM import FEMM_GROUPS
@@ -102,7 +102,7 @@ def comp_FEMM_dict(
             )
         else:
             # rotor slot region mesh and segments max element size parameter
-            if isinstance(lam, (LamSlotMag, LamH)):
+            if isinstance(lam, (LamSlotM, LamH)):
                 FEMM_dict["mesh"][label]["meshsize_slot"] = Hsy / 4 / Kmesh_fineness
                 FEMM_dict["mesh"][label]["elementsize_slot"] = Hsy / 4 / Kmesh_fineness
             else:
@@ -127,8 +127,10 @@ def comp_FEMM_dict(
             FEMM_dict["mesh"][label]["meshsize_slot"] = Hstot / 50
 
         # magnet region mesh and segments max element size parameter
-        if isinstance(lam, LamSlotMag):
-            Hmag = lam.slot.comp_height_active()
+        if isinstance(lam, LamSlotM):
+            Hmag = (
+                lam.slot.comp_height_active()
+            )  # For LamSlotMagNS => slot is North slot
             FEMM_dict["mesh"][label]["meshsize_magnet"] = Hmag / 4 / Kmesh_fineness
             FEMM_dict["mesh"][label]["elementsize_magnet"] = Hmag / 4 / Kmesh_fineness
         elif isinstance(lam, LamH):
@@ -164,7 +166,7 @@ def comp_FEMM_dict(
         FEMM_dict["groups"]["lam_group_list"][key] = list(val)
 
     # Adding a group for each magnet on the lamination
-    if isinstance(machine.rotor, (LamSlotMag, LamH)):
+    if isinstance(machine.rotor, (LamSlotM, LamH)):
         nb_mag = machine.rotor.get_magnet_number(sym=sym)
         ndigit = max(len(str(nb_mag)), len(str(grp_max)) - 1)
         grp0 = FEMM_dict["groups"]["GROUP_RM"] * 10 ** ndigit

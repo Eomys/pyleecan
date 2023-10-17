@@ -238,8 +238,11 @@ class WNotch(Ui_WNotch, QWidget):
             if not isinstance(self.w_notch, PMSlot19):
                 if self.w_notch.lf_H0.value() is None:
                     return "You must set H0 !"
-                if self.w_notch.lf_H0.value() <= 0:
-                    return "H0 must be higher than 0"
+                if (
+                    self.w_notch.lf_H0.value() <= 0
+                    and not self.w_notch.notch_obj.has_key()
+                ):
+                    return "H0 must be higher than 0 or a key must be added"
             if isinstance(self.w_notch, PMSlot19):
                 if self.w_notch.lf_Hmag.value() is None:
                     return "You must set H0 !"

@@ -160,8 +160,8 @@ def plot_schematics(
                 # WKey
                 plot_quote(
                     Z1=point_dict["ZM2"],
-                    Zlim1=point_dict["ZM2"] - sign * 0.5 * self.Hmag,
-                    Zlim2=point_dict["ZM3"] - sign * 0.5 * self.Hmag,
+                    Zlim1=point_dict["ZM2"] - sign * 0.2 * self.Hmag,
+                    Zlim2=point_dict["ZM3"] - sign * 0.2 * self.Hmag,
                     Z2=point_dict["ZM3"],
                     offset_label=-0.55 * self.Hmag,
                     fig=fig,
@@ -169,25 +169,24 @@ def plot_schematics(
                     label="Wkey",
                 )
                 # HKey
-                Zlim1 = point_dict["Z3"] - sign * self.Hmag
-                Zlim2 = point_dict["Z3"]
-                plot_quote(
-                    point_dict["ZM3"],
-                    Zlim1,
-                    Zlim2,
-                    point_dict["ZM4"],
-                    offset_label=1j * 0.2 * self.Hmag - 0.2 * self.Hmag,
+                line = Segment(point_dict["ZM3"], point_dict["ZM4"])
+                line.plot(
                     fig=fig,
                     ax=ax,
+                    color=ARROW_COLOR,
+                    linewidth=ARROW_WIDTH,
                     label="Hkey",
+                    offset_label=1j * 0.05 * self.W0 - 0.2 * self.Hmag,
+                    is_arrow=True,
+                    fontsize=SC_FONT_SIZE,
                 )
 
             elif type_add_active != 0:
                 # Wmag
                 plot_quote(
                     Z1=point_dict["ZM2"],
-                    Zlim1=point_dict["ZM2"] - sign * 0.5 * self.Hmag,
-                    Zlim2=point_dict["ZM3"] - sign * 0.5 * self.Hmag,
+                    Zlim1=point_dict["ZM2"] - sign * 0.2 * self.Hmag,
+                    Zlim2=point_dict["ZM3"] - sign * 0.2 * self.Hmag,
                     Z2=point_dict["ZM3"],
                     offset_label=0.25 * self.Hmag,
                     fig=fig,
@@ -195,17 +194,16 @@ def plot_schematics(
                     label="Wmag",
                 )
                 # Hmag
-                Zlim1 = point_dict["Z3"] - sign * self.Hmag
-                Zlim2 = point_dict["Z3"]
-                plot_quote(
-                    point_dict["ZM3"],
-                    Zlim1,
-                    Zlim2,
-                    point_dict["ZM4"],
-                    offset_label=1j * 0.2 * self.Hmag,
+                line = Segment(point_dict["ZM3"], point_dict["ZM4"])
+                line.plot(
                     fig=fig,
                     ax=ax,
+                    color=ARROW_COLOR,
+                    linewidth=ARROW_WIDTH,
                     label="Hmag",
+                    offset_label=1j * 0.05 * self.W0 - 0.2 * self.Hmag,
+                    is_arrow=True,
+                    fontsize=SC_FONT_SIZE,
                 )
 
         if is_add_main_line:
