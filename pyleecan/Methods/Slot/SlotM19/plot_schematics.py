@@ -170,20 +170,19 @@ def plot_schematics(
                     fontsize=SC_FONT_SIZE,
                 )
 
-            elif type_add_active != 0:
-                # H0
-                mid = point_dict["Zmid"]
-                line = Segment(mid, mid - sign * self.H0)
-                line.plot(
-                    fig=fig,
-                    ax=ax,
-                    color=ARROW_COLOR,
-                    linewidth=ARROW_WIDTH,
-                    label="H0",
-                    offset_label=1j * 0.1 * self.H0 - 0.0025,
-                    is_arrow=True,
-                    fontsize=SC_FONT_SIZE,
-                )
+            # H0
+            mid = point_dict["Zmid"]
+            line = Segment(mid, mid - sign * self.H0)
+            line.plot(
+                fig=fig,
+                ax=ax,
+                color=ARROW_COLOR,
+                linewidth=ARROW_WIDTH,
+                label="H0",
+                offset_label=1j * 0.1 * self.H0 - 0.0025,
+                is_arrow=True,
+                fontsize=SC_FONT_SIZE,
+            )
 
         if is_add_main_line:
             # Ox axis
