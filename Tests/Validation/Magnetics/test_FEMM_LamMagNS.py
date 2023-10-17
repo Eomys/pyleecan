@@ -44,8 +44,8 @@ def test_FEMM_LamSlotMagNS():
     BNS.rotor.magnet_south = B.rotor.magnet.copy()
     # Change magnet dimensions on south pole
     BNS.rotor.slot_south = B.rotor.slot.copy()
-    BNS.rotor.slot_south.Hmag /= 2
-    BNS.rotor.slot_south.Wmag /= 2
+    BNS.rotor.slot_south.H1 /= 2
+    BNS.rotor.slot_south.W1 /= 2
     # South magnet have different material
     BNS.rotor.magnet_south.mat_type.name += "_2"
     BNS.rotor.magnet_south.mat_type.mag.mur_lin = 2

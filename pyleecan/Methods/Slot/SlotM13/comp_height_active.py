@@ -30,4 +30,4 @@ def comp_height_active(self):
         R2 = np_abs(ZM1)
         return R2 - R1
     else:
-        return self.Hmag
+        return self.H1

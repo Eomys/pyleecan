@@ -149,6 +149,12 @@ plot_test.append(
 )
 plot_test.append(
     {
+        "test_obj": SlotM10(),
+        "type_add_active": 5,
+    }
+)
+plot_test.append(
+    {
         "test_obj": SlotM11(),
         "type_add_active": 2,
         "is_default": 2,
@@ -159,6 +165,12 @@ plot_test.append(
         "test_obj": SlotM11(),
         "type_add_active": 5,
         "is_default": 2,
+    }
+)
+plot_test.append(
+    {
+        "test_obj": SlotM11(),
+        "type_add_active": 5,
     }
 )
 

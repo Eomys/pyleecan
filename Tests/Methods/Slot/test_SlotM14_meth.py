@@ -11,7 +11,7 @@ from pyleecan.Methods import ParentMissingError
 Mag14_test = list()
 # Internal Slot inset
 lam = LamSlotMag(Rint=40e-3, Rext=90e-3, is_internal=True)
-lam.slot = SlotM14(Zs=4, W0=0.628, H0=0.02, Hmag=0.02, Wmag=0.628, Rtopm=0.04)
+lam.slot = SlotM14(Zs=4, W0=0.628, H0=0.02, H1=0.02, W1=0.628, Rtopm=0.04)
 Mag14_test.append(
     {
         "test_obj": lam,
@@ -26,7 +26,7 @@ Mag14_test.append(
 
 # Internal slot surface
 lam = LamSlotMag(Rint=40e-3, Rext=90e-3, is_internal=True)
-lam.slot = SlotM14(Zs=8, W0=0.628, H0=0, Hmag=0.02, Wmag=0.628, Rtopm=0.05)
+lam.slot = SlotM14(Zs=8, W0=0.628, H0=0, H1=0.02, W1=0.628, Rtopm=0.05)
 Mag14_test.append(
     {
         "test_obj": lam,
@@ -152,8 +152,8 @@ class Test_Magnet_Type_14_meth(object):
         ZM4 = point_dict["ZM4"]
         W0 = test_obj.slot.W0
         H0 = test_obj.slot.H0
-        Wmag = test_obj.slot.Wmag
-        Hmag = test_obj.slot.Hmag
+        W1 = test_obj.slot.W1
+        H1 = test_obj.slot.H1
         Rbo = test_obj.get_Rbo()
 
         assert abs(Z1) == pytest.approx(Rbo, rel=DELTA)
@@ -170,11 +170,11 @@ class Test_Magnet_Type_14_meth(object):
         assert angle(Z3) == pytest.approx(W0 / 2, rel=DELTA)
 
         assert angle(ZM1) == pytest.approx(angle(ZM2), rel=DELTA)
-        assert angle(ZM1) == pytest.approx(-Wmag / 2, rel=DELTA)
+        assert angle(ZM1) == pytest.approx(-W1 / 2, rel=DELTA)
         assert angle(ZM3) == pytest.approx(angle(ZM4), rel=DELTA)
-        assert angle(ZM3) == pytest.approx(Wmag / 2, rel=DELTA)
+        assert angle(ZM3) == pytest.approx(W1 / 2, rel=DELTA)
 
         if test_obj.is_internal:
-            assert ZM0 == pytest.approx(Rbo + Hmag - H0, rel=DELTA)
+            assert ZM0 == pytest.approx(Rbo + H1 - H0, rel=DELTA)
         else:
-            assert ZM0 == pytest.approx(Rbo - Hmag + H0, rel=DELTA)
+            assert ZM0 == pytest.approx(Rbo - H1 + H0, rel=DELTA)

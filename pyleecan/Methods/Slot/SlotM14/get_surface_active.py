@@ -39,7 +39,7 @@ def get_surface_active(self, alpha=0, delta=0):
 
     curve_list = list()
     # Case Z2-Z1 overlapping with ZM1-ZM2
-    if self.H0 != 0 and self.H0 < self.Hmag and self.W0 == self.Wmag:
+    if self.H0 != 0 and self.H0 < self.H1 and self.W0 == self.W1:
         curve_list.append(Segment(ZM1, Z1))
         curve_list.append(Segment(Z1, ZM2))
     else:
@@ -51,7 +51,7 @@ def get_surface_active(self, alpha=0, delta=0):
         curve_list.append(Arc1(ZM2, ZM3, self.Rtopm, is_trigo_direction=True))
 
     # Case Z3-Z4 overlapping with ZM3-ZM4
-    if self.H0 != 0 and self.H0 < self.Hmag and self.W0 == self.Wmag:
+    if self.H0 != 0 and self.H0 < self.H1 and self.W0 == self.W1:
         curve_list.append(Segment(ZM3, Z4))
         curve_list.append(Segment(Z4, ZM4))
     else:

@@ -500,18 +500,18 @@ class TestNewMachineBenchmarkNS(object):
         assert wid_slot.w_mag.c_type_magnetization.currentText() == "Radial"
 
         assert wid_slot.lf_W0.value() is None
-        assert wid_slot.lf_Wmag.value() is None
+        assert wid_slot.lf_W1.value() is None
         assert wid_slot.lf_H0.value() is None
-        assert wid_slot.lf_Hmag.value() is None
+        assert wid_slot.lf_H1.value() is None
 
         wid_slot.lf_W0.setValue(0.6048)
         wid_slot.lf_W0.editingFinished.emit()
-        wid_slot.lf_Wmag.setValue(0.6048)
-        wid_slot.lf_Wmag.editingFinished.emit()
+        wid_slot.lf_W1.setValue(0.6048)
+        wid_slot.lf_W1.editingFinished.emit()
         wid_slot.lf_H0.setValue(0)
         wid_slot.lf_H0.editingFinished.emit()
-        wid_slot.lf_Hmag.setValue(0.005)
-        wid_slot.lf_Hmag.editingFinished.emit()
+        wid_slot.lf_H1.setValue(0.005)
+        wid_slot.lf_H1.editingFinished.emit()
 
         assert wid_slot.w_out.out_Wlam.text() == "Rotor width: 0.0305 [m]"
         assert wid_slot.w_out.out_slot_height.text() == "Slot height: 0 [m]"
@@ -523,9 +523,9 @@ class TestNewMachineBenchmarkNS(object):
         assert wid_slot.w_out.out_op_angle.text() == "Opening angle: 0.6048 [rad]"
 
         assert self.widget.w_step.machine.rotor.slot.W0 == 0.6048
-        assert self.widget.w_step.machine.rotor.slot.Wmag == 0.6048
+        assert self.widget.w_step.machine.rotor.slot.W1 == 0.6048
         assert self.widget.w_step.machine.rotor.slot.H0 == 0
-        assert self.widget.w_step.machine.rotor.slot.Hmag == 0.005
+        assert self.widget.w_step.machine.rotor.slot.H1 == 0.005
         assert (
             self.widget.w_step.machine.rotor.magnet_north.mat_type.name == "MagnetPrius"
         )
@@ -568,18 +568,18 @@ class TestNewMachineBenchmarkNS(object):
         assert wid_slot2.w_mag.c_type_magnetization.currentText() == "Parallel"
 
         assert wid_slot2.lf_W0.value() is None
-        assert wid_slot2.lf_Wmag.value() is None
+        assert wid_slot2.lf_W1.value() is None
         assert wid_slot2.lf_H0.value() is None
-        assert wid_slot2.lf_Hmag.value() is None
+        assert wid_slot2.lf_H1.value() is None
 
         wid_slot2.lf_W0.setValue(0.6)
         wid_slot2.lf_W0.editingFinished.emit()
-        wid_slot2.lf_Wmag.setValue(0.6)
-        wid_slot2.lf_Wmag.editingFinished.emit()
+        wid_slot2.lf_W1.setValue(0.6)
+        wid_slot2.lf_W1.editingFinished.emit()
         wid_slot2.lf_H0.setValue(0)
         wid_slot2.lf_H0.editingFinished.emit()
-        wid_slot2.lf_Hmag.setValue(0.004)
-        wid_slot2.lf_Hmag.editingFinished.emit()
+        wid_slot2.lf_H1.setValue(0.004)
+        wid_slot2.lf_H1.editingFinished.emit()
         wid_slot2.lf_Rtopm.setValue(0.02)
         wid_slot2.lf_Rtopm.editingFinished.emit()
 
@@ -593,9 +593,9 @@ class TestNewMachineBenchmarkNS(object):
         assert wid_slot2.w_out.out_op_angle.text() == "Opening angle: 0.6 [rad]"
 
         assert self.widget.w_step.machine.rotor.slot_south.W0 == 0.6
-        assert self.widget.w_step.machine.rotor.slot_south.Wmag == 0.6
+        assert self.widget.w_step.machine.rotor.slot_south.W1 == 0.6
         assert self.widget.w_step.machine.rotor.slot_south.H0 == 0
-        assert self.widget.w_step.machine.rotor.slot_south.Hmag == 0.004
+        assert self.widget.w_step.machine.rotor.slot_south.H1 == 0.004
         assert self.widget.w_step.machine.rotor.slot_south.Rtopm == 0.02
         assert self.widget.w_step.machine.rotor.magnet_south.mat_type.name == "Magnet3"
 

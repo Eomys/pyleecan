@@ -10,7 +10,7 @@ from pyleecan.Classes.Slot import Slot
 Mag13_test = list()
 # Internal Slot inset
 lam = LamSlotMag(Rint=40e-3, Rext=90e-3, is_internal=True)
-lam.slot = SlotM13(Zs=8, W0=0.04, H0=0.02, Hmag=0.02, Wmag=0.04, Rtopm=0.04)
+lam.slot = SlotM13(Zs=8, W0=0.04, H0=0.02, H1=0.02, W1=0.04, Rtopm=0.04)
 Mag13_test.append(
     {
         "test_obj": lam,
@@ -25,7 +25,7 @@ Mag13_test.append(
 
 # external slot inset
 lam = LamSlotMag(Rint=110e-3, Rext=200e-3, is_internal=False)
-lam.slot = SlotM13(Zs=4, W0=0.04, H0=0.025, Hmag=0.02, Wmag=0.04, Rtopm=0.04)
+lam.slot = SlotM13(Zs=4, W0=0.04, H0=0.025, H1=0.02, W1=0.04, Rtopm=0.04)
 Mag13_test.append(
     {
         "test_obj": lam,
@@ -40,7 +40,7 @@ Mag13_test.append(
 
 # Internal slot surface
 lam = LamSlotMag(Rint=40e-3, Rext=90e-3, is_internal=True)
-lam.slot = SlotM13(Zs=4, W0=0.08, H0=0, Hmag=0.02, Wmag=0.08, Rtopm=0.0601)
+lam.slot = SlotM13(Zs=4, W0=0.08, H0=0, H1=0.02, W1=0.08, Rtopm=0.0601)
 Mag13_test.append(
     {
         "test_obj": lam,
@@ -166,8 +166,8 @@ class Test_Magnet_Type_13_meth(object):
         ZM4 = point_dict["ZM4"]
         W0 = test_obj.slot.W0
         H0 = test_obj.slot.H0
-        Wmag = test_obj.slot.Wmag
-        Hmag = test_obj.slot.Hmag
+        W1 = test_obj.slot.W1
+        H1 = test_obj.slot.H1
 
         assert abs(Z1 - Z4) == pytest.approx(W0, rel=DELTA)
         assert abs(Z2 - Z3) == pytest.approx(W0, rel=DELTA)
@@ -175,9 +175,9 @@ class Test_Magnet_Type_13_meth(object):
         assert abs(Z3 - Z4) == pytest.approx(H0, rel=DELTA)
 
         if test_obj.is_internal:
-            assert ZM0 == pytest.approx(Z1.real + Hmag - H0, rel=DELTA)
+            assert ZM0 == pytest.approx(Z1.real + H1 - H0, rel=DELTA)
         else:
-            assert ZM0 == pytest.approx(Z1.real - Hmag + H0, rel=DELTA)
-        assert abs(ZM1 - ZM4) == pytest.approx(Wmag, rel=DELTA)
-        assert abs(ZM2 - ZM3) == pytest.approx(Wmag, rel=DELTA)
-        assert abs(ZM0 - (Z2 + Z3) / 2) == pytest.approx(Hmag, rel=DELTA)
+            assert ZM0 == pytest.approx(Z1.real - H1 + H0, rel=DELTA)
+        assert abs(ZM1 - ZM4) == pytest.approx(W1, rel=DELTA)
+        assert abs(ZM2 - ZM3) == pytest.approx(W1, rel=DELTA)
+        assert abs(ZM0 - (Z2 + Z3) / 2) == pytest.approx(H1, rel=DELTA)

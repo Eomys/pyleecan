@@ -77,9 +77,7 @@ def plot_schematics(
 
     # Use some default parameter
     if is_default:
-        slot = type(self)(
-            Zs=2, W0=60 * pi / 180, H0=0.03, Hmag=0.02, Wmag=0.05, Rtopm=0.05
-        )
+        slot = type(self)(Zs=2, W0=60 * pi / 180, H0=0.03, H1=0.02, W1=0.05, Rtopm=0.05)
         lam = LamSlot(
             Rint=40e-3, Rext=0.11, is_internal=True, is_stator=False, slot=slot
         )
@@ -143,16 +141,16 @@ def plot_schematics(
                 offset_label=point_dict["Z3"] - line.get_middle(),
                 fontsize=SC_FONT_SIZE,
             )
-            # Wmag
+            # W1
             plot_quote(
                 Z1=point_dict["ZM2"],
-                Zlim1=point_dict["ZM2"] - sign * self.Hmag,
-                Zlim2=point_dict["ZM3"] - sign * self.Hmag,
+                Zlim1=point_dict["ZM2"] - sign * self.H1,
+                Zlim2=point_dict["ZM3"] - sign * self.H1,
                 Z2=point_dict["ZM3"],
-                offset_label=0.25 * self.Hmag,
+                offset_label=0.25 * self.H1,
                 fig=fig,
                 ax=ax,
-                label="Wmag",
+                label="W1",
             )
             # H0
             line = Segment(point_dict["Z1"], point_dict["Z2"])
@@ -166,16 +164,16 @@ def plot_schematics(
                 is_arrow=True,
                 fontsize=SC_FONT_SIZE,
             )
-            # Hmag
+            # H1
             plot_quote(
                 Z1=point_dict["ZM0"],
-                Zlim1=point_dict["ZM0"] - 1j * 0.5 * self.Wmag,
-                Zlim2=point_dict["ZM0"] + sign * self.Hmag - 1j * 0.5 * self.Wmag,
-                Z2=point_dict["ZM0"] + sign * self.Hmag,
-                offset_label=-1j * 0.2 * self.Wmag,
+                Zlim1=point_dict["ZM0"] - 1j * 0.5 * self.W1,
+                Zlim2=point_dict["ZM0"] + sign * self.H1 - 1j * 0.5 * self.W1,
+                Z2=point_dict["ZM0"] + sign * self.H1,
+                offset_label=-1j * 0.2 * self.W1,
                 fig=fig,
                 ax=ax,
-                label="Hmag",
+                label="H1",
             )
             # Rtopm
             line = Segment(point_dict["Zc"], point_dict["ZM0"])

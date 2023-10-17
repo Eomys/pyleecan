@@ -203,7 +203,7 @@ class TestNotcheAddition(object):
         assert notche_wid.w_notch.lf_W0.value() == W0
         notche_wid.w_notch.lf_W0.editingFinished.emit()
 
-        assert notche_wid.check() == "H0 must be higher than 0 or a key must be added"
+        assert notche_wid.check() == "H0 must be higher than 0"
 
         # Removing the notches with null dimensions
         b_remove = self.widget.w_step.notches_win.tab_notch.tabBar().tabButton(

@@ -78,7 +78,7 @@ def plot_schematics(
 
     # Use some default parameter
     if is_default:
-        slot = type(self)(Zs=8, H0=20e-3, W0=45e-3, Hmag=17.5e-3, Wmag=30e-3)
+        slot = type(self)(Zs=8, H0=20e-3, W0=45e-3, H1=17.5e-3, W1=30e-3)
         if is_default == 1:  # Internal Rotor schematics
             lam = LamSlot(
                 Rint=0.1, Rext=0.135, is_internal=True, is_stator=False, slot=slot
@@ -139,7 +139,7 @@ def plot_schematics(
                 color=ARROW_COLOR,
                 linewidth=ARROW_WIDTH,
                 label="W0",
-                offset_label=self.Hmag * 0.1,
+                offset_label=self.H1 * 0.1,
                 is_arrow=True,
                 fontsize=SC_FONT_SIZE,
             )
@@ -156,52 +156,27 @@ def plot_schematics(
                 fontsize=SC_FONT_SIZE,
             )
 
-            if type_add_active == 5:
-                # WKey
+            if type_add_active != 0:
+                # W1
                 plot_quote(
                     Z1=point_dict["ZM2"],
-                    Zlim1=point_dict["ZM2"] - sign * 0.2 * self.Hmag,
-                    Zlim2=point_dict["ZM3"] - sign * 0.2 * self.Hmag,
+                    Zlim1=point_dict["ZM2"] - sign * 0.2 * self.H1,
+                    Zlim2=point_dict["ZM3"] - sign * 0.2 * self.H1,
                     Z2=point_dict["ZM3"],
-                    offset_label=-0.55 * self.Hmag,
+                    offset_label=-sign * 0.4 * self.H1,
                     fig=fig,
                     ax=ax,
-                    label="Wkey",
+                    label="W1",
                 )
-                # HKey
+                # H1
                 line = Segment(point_dict["ZM3"], point_dict["ZM4"])
                 line.plot(
                     fig=fig,
                     ax=ax,
                     color=ARROW_COLOR,
                     linewidth=ARROW_WIDTH,
-                    label="Hkey",
-                    offset_label=1j * 0.05 * self.W0 - 0.2 * self.Hmag,
-                    is_arrow=True,
-                    fontsize=SC_FONT_SIZE,
-                )
-
-            elif type_add_active != 0:
-                # Wmag
-                plot_quote(
-                    Z1=point_dict["ZM2"],
-                    Zlim1=point_dict["ZM2"] - sign * 0.2 * self.Hmag,
-                    Zlim2=point_dict["ZM3"] - sign * 0.2 * self.Hmag,
-                    Z2=point_dict["ZM3"],
-                    offset_label=0.25 * self.Hmag,
-                    fig=fig,
-                    ax=ax,
-                    label="Wmag",
-                )
-                # Hmag
-                line = Segment(point_dict["ZM3"], point_dict["ZM4"])
-                line.plot(
-                    fig=fig,
-                    ax=ax,
-                    color=ARROW_COLOR,
-                    linewidth=ARROW_WIDTH,
-                    label="Hmag",
-                    offset_label=1j * 0.05 * self.W0 - 0.2 * self.Hmag,
+                    label="H1",
+                    offset_label=1j * 0.05 * self.W0 - 0.2 * self.H1,
                     is_arrow=True,
                     fontsize=SC_FONT_SIZE,
                 )

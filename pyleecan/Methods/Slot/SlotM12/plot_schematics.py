@@ -77,7 +77,7 @@ def plot_schematics(
 
     # Use some default parameter
     if is_default:
-        slot = type(self)(Zs=8, H0=20e-3, W0=45e-3, Hmag=17.5e-3, Wmag=30e-3)
+        slot = type(self)(Zs=8, H0=20e-3, W0=45e-3, H1=17.5e-3, W1=30e-3)
         lam = LamSlot(
             Rint=0.1, Rext=0.135, is_internal=True, is_stator=False, slot=slot
         )
@@ -131,32 +131,32 @@ def plot_schematics(
                 color=ARROW_COLOR,
                 linewidth=ARROW_WIDTH,
                 label="W0",
-                offset_label=sign * self.Hmag * 0.4,
+                offset_label=sign * self.H1 * 0.4,
                 is_arrow=True,
                 fontsize=SC_FONT_SIZE,
             )
             if type_add_active != 0:
-                # Wmag
+                # W1
                 plot_quote(
                     Z1=point_dict["ZM2"],
-                    Zlim1=point_dict["ZM2"] - sign * 0.5 * self.Hmag,
-                    Zlim2=point_dict["ZM3"] - sign * 0.5 * self.Hmag,
+                    Zlim1=point_dict["ZM2"] - sign * 0.5 * self.H1,
+                    Zlim2=point_dict["ZM3"] - sign * 0.5 * self.H1,
                     Z2=point_dict["ZM3"],
-                    offset_label=0.25 * self.Hmag,
+                    offset_label=0.25 * self.H1,
                     fig=fig,
                     ax=ax,
-                    label="Wmag",
+                    label="W1",
                 )
-                # Hmag
+                # H1
                 mid = (point_dict["ZM1"] + point_dict["ZM4"]) / 2
-                line = Segment(mid, mid - sign * self.Hmag)
+                line = Segment(mid, mid - sign * self.H1)
                 line.plot(
                     fig=fig,
                     ax=ax,
                     color=ARROW_COLOR,
                     linewidth=ARROW_WIDTH,
-                    label="Hmag",
-                    offset_label=1j * 0.1 * self.Wmag,
+                    label="H1",
+                    offset_label=1j * 0.1 * self.W1,
                     is_arrow=True,
                     fontsize=SC_FONT_SIZE,
                 )

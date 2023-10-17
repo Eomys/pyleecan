@@ -52,59 +52,39 @@ class PMSlot19(Gen_PMSlot19, QWidget):
         # Set FloatEdit unit
         self.lf_W0.unit = "m"
         self.lf_W1.unit = "m"
+        self.lf_H0.unit = "m"
 
         # Set unit name (m ou mm)
         wid_list = [
             self.unit_W0,
             self.unit_W1,
+            self.unit_H0,
         ]
         for wid in wid_list:
             wid.setText("[" + gui_option.unit.get_m_name() + "]")
 
         # Notch setup
         if self.is_notch:
-            # Hide magnet related widget
-            wid_list = [self.in_Hmag, self.lf_Hmag, self.unit_Hmag]
-            for wid in wid_list:
-                wid.hide()
-            # Set values for check
-            self.slot.Hmag = 0
-
-            self.lf_H0.unit = "m"
-
-            # Set unit name (m ou mm)
-            self.unit_H0.setText("[" + gui_option.unit.get_m_name() + "]")
-
             # Selecting the right image
-            if not self.lamination.is_internal:
-                # Use schematics on the external without magnet
+            if self.lamination.is_internal:
+                self.img_slot.setPixmap(QPixmap(pixmap_dict["SlotM19_empty_int_rotor"]))
+            else:
+                # Use schematics on the external without magnet.
                 self.img_slot.setPixmap(
                     QPixmap(pixmap_dict["SlotM19_empty_ext_stator"])
                 )
-
-            self.lf_H0.editingFinished.connect(self.set_H0)
             # Hide magnet widgets
             self.w_mag.hide()
         else:
-            self.lf_Hmag.unit = "m"
-
-            # Set unit name (m ou mm)
-            self.unit_Hmag.setText("[" + gui_option.unit.get_m_name() + "]")
-
             # Setup the widgets according to current values
             self.w_mag.update(lamination, self.material_dict)
-
             # Use schematics on the inner without magnet
             self.img_slot.setPixmap(QPixmap(pixmap_dict["SlotM19_mag_int_rotor"]))
-            self.lf_H0.hide()
-            self.unit_H0.hide()
-            self.in_H0.hide()
-            self.lf_Hmag.setValue(self.slot.Hmag)
-            self.lf_Hmag.editingFinished.connect(self.set_Hmag)
 
         # Fill the fields with the machine values (if they're filled)
         self.lf_W0.setValue(self.slot.W0)
         self.lf_W1.setValue(self.slot.W1)
+        self.lf_H0.setValue(self.slot.H0)
 
         # Display the main output of the slot (surface, height...)
         self.w_out.comp_output()
@@ -112,6 +92,7 @@ class PMSlot19(Gen_PMSlot19, QWidget):
         # Connect the signal
         self.lf_W0.editingFinished.connect(self.set_W0)
         self.lf_W1.editingFinished.connect(self.set_W1)
+        self.lf_H0.editingFinished.connect(self.set_H0)
         self.w_mag.saveNeeded.connect(self.emit_save)
 
     def set_W0(self):
@@ -140,19 +121,6 @@ class PMSlot19(Gen_PMSlot19, QWidget):
         # Notify the machine GUI that the machine has changed
         self.saveNeeded.emit()
 
-    def set_Hmag(self):
-        """Signal to update the value of Hmag according to the line edit
-
-        Parameters
-        ----------
-        self : PMSlot19
-            A PMSlot19 object
-        """
-        self.slot.Hmag = self.lf_Hmag.value()
-        self.w_out.comp_output()
-        # Notify the machine GUI that the machine has changed
-        self.saveNeeded.emit()
-
     def set_H0(self):
         """Signal to update the value of H0 according to the line edit
 
@@ -161,7 +129,7 @@ class PMSlot19(Gen_PMSlot19, QWidget):
         self : PMSlot19
             A PMSlot19 object
         """
-        self.slot.Hmag = self.lf_H0.value()
+        self.slot.H0 = self.lf_H0.value()
         self.w_out.comp_output()
         # Notify the machine GUI that the machine has changed
         self.saveNeeded.emit()
@@ -190,8 +158,8 @@ class PMSlot19(Gen_PMSlot19, QWidget):
             return "You must set W0 !"
         elif lam.slot.W1 is None:
             return "You must set W1 !"
-        elif lam.slot.Hmag is None:
-            return "You must set Hmag !"
+        elif lam.slot.H0 is None:
+            return "You must set H0 !"
 
         # Constraints
         try:

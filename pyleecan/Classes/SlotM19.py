@@ -197,9 +197,9 @@ class SlotM19(Slot):
 
     def __init__(
         self,
-        W0=0.03,
-        W1=0.02,
-        Hmag=0.00175,
+        W0=0,
+        W1=0,
+        H0=0,
         Zs=36,
         wedge_mat=None,
         is_bore=True,
@@ -225,8 +225,8 @@ class SlotM19(Slot):
                 W0 = init_dict["W0"]
             if "W1" in list(init_dict.keys()):
                 W1 = init_dict["W1"]
-            if "Hmag" in list(init_dict.keys()):
-                Hmag = init_dict["Hmag"]
+            if "H0" in list(init_dict.keys()):
+                H0 = init_dict["H0"]
             if "Zs" in list(init_dict.keys()):
                 Zs = init_dict["Zs"]
             if "wedge_mat" in list(init_dict.keys()):
@@ -236,7 +236,7 @@ class SlotM19(Slot):
         # Set the properties (value check and convertion are done in setter)
         self.W0 = W0
         self.W1 = W1
-        self.Hmag = Hmag
+        self.H0 = H0
         # Call Slot init
         super(SlotM19, self).__init__(Zs=Zs, wedge_mat=wedge_mat, is_bore=is_bore)
         # The class is frozen (in Slot init), for now it's impossible to
@@ -250,7 +250,7 @@ class SlotM19(Slot):
         SlotM19_str += super(SlotM19, self).__str__()
         SlotM19_str += "W0 = " + str(self.W0) + linesep
         SlotM19_str += "W1 = " + str(self.W1) + linesep
-        SlotM19_str += "Hmag = " + str(self.Hmag) + linesep
+        SlotM19_str += "H0 = " + str(self.H0) + linesep
         return SlotM19_str
 
     def __eq__(self, other):
@@ -266,7 +266,7 @@ class SlotM19(Slot):
             return False
         if other.W1 != self.W1:
             return False
-        if other.Hmag != self.Hmag:
+        if other.H0 != self.H0:
             return False
         return True
 
@@ -312,20 +312,18 @@ class SlotM19(Slot):
             else:
                 diff_list.append(name + ".W1")
         if (
-            other._Hmag is not None
-            and self._Hmag is not None
-            and isnan(other._Hmag)
-            and isnan(self._Hmag)
+            other._H0 is not None
+            and self._H0 is not None
+            and isnan(other._H0)
+            and isnan(self._H0)
         ):
             pass
-        elif other._Hmag != self._Hmag:
+        elif other._H0 != self._H0:
             if is_add_value:
-                val_str = (
-                    " (self=" + str(self._Hmag) + ", other=" + str(other._Hmag) + ")"
-                )
-                diff_list.append(name + ".Hmag" + val_str)
+                val_str = " (self=" + str(self._H0) + ", other=" + str(other._H0) + ")"
+                diff_list.append(name + ".H0" + val_str)
             else:
-                diff_list.append(name + ".Hmag")
+                diff_list.append(name + ".H0")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -339,7 +337,7 @@ class SlotM19(Slot):
         S += super(SlotM19, self).__sizeof__()
         S += getsizeof(self.W0)
         S += getsizeof(self.W1)
-        S += getsizeof(self.Hmag)
+        S += getsizeof(self.H0)
         return S
 
     def as_dict(self, type_handle_ndarray=0, keep_function=False, **kwargs):
@@ -361,7 +359,7 @@ class SlotM19(Slot):
         )
         SlotM19_dict["W0"] = self.W0
         SlotM19_dict["W1"] = self.W1
-        SlotM19_dict["Hmag"] = self.Hmag
+        SlotM19_dict["H0"] = self.H0
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         SlotM19_dict["__class__"] = "SlotM19"
@@ -373,7 +371,7 @@ class SlotM19(Slot):
         # Handle deepcopy of all the properties
         W0_val = self.W0
         W1_val = self.W1
-        Hmag_val = self.Hmag
+        H0_val = self.H0
         Zs_val = self.Zs
         if self.wedge_mat is None:
             wedge_mat_val = None
@@ -384,7 +382,7 @@ class SlotM19(Slot):
         obj_copy = type(self)(
             W0=W0_val,
             W1=W1_val,
-            Hmag=Hmag_val,
+            H0=H0_val,
             Zs=Zs_val,
             wedge_mat=wedge_mat_val,
             is_bore=is_bore_val,
@@ -396,7 +394,7 @@ class SlotM19(Slot):
 
         self.W0 = None
         self.W1 = None
-        self.Hmag = None
+        self.H0 = None
         # Set to None the properties inherited from Slot
         super(SlotM19, self)._set_None()
 
@@ -438,18 +436,18 @@ class SlotM19(Slot):
         """,
     )
 
-    def _get_Hmag(self):
-        """getter of Hmag"""
-        return self._Hmag
+    def _get_H0(self):
+        """getter of H0"""
+        return self._H0
 
-    def _set_Hmag(self, value):
-        """setter of Hmag"""
-        check_var("Hmag", value, "float", Vmin=0)
-        self._Hmag = value
+    def _set_H0(self, value):
+        """setter of H0"""
+        check_var("H0", value, "float", Vmin=0)
+        self._H0 = value
 
-    Hmag = property(
-        fget=_get_Hmag,
-        fset=_set_Hmag,
+    H0 = property(
+        fget=_get_H0,
+        fset=_set_H0,
         doc=u"""Magnet Height
 
         :Type: float

@@ -58,11 +58,11 @@ def build_geometry_active(self, Nrad, Ntan, alpha=0, delta=0):
 
         if self.is_outwards():
             curve_list.append(
-                Arc1(ZM2, ZM5, (Rbo - self.Hmag_bore), is_trigo_direction=True)
+                Arc1(ZM2, ZM5, (Rbo - self.H0_bore), is_trigo_direction=True)
             )
         else:
             curve_list.append(
-                Arc1(ZM2, ZM5, (Rbo + self.Hmag_bore), is_trigo_direction=True)
+                Arc1(ZM2, ZM5, (Rbo + self.H0_bore), is_trigo_direction=True)
             )
 
         curve_list.append(
@@ -97,7 +97,7 @@ def build_geometry_active(self, Nrad, Ntan, alpha=0, delta=0):
                 Arc1(
                     ZM3,
                     ZM4,
-                    (Rbo - self.Hmag_bore - self.Hmag_gap),
+                    (Rbo - self.H0_bore - self.H0_gap),
                     is_trigo_direction=True,
                 )
             )
@@ -106,7 +106,7 @@ def build_geometry_active(self, Nrad, Ntan, alpha=0, delta=0):
                 Arc1(
                     ZM3,
                     ZM4,
-                    (Rbo + self.Hmag_bore + self.Hmag_gap),
+                    (Rbo + self.H0_bore + self.H0_gap),
                     is_trigo_direction=True,
                 )
             )
@@ -117,11 +117,11 @@ def build_geometry_active(self, Nrad, Ntan, alpha=0, delta=0):
 
         if self.is_outwards():
             curve_list.append(
-                Arc1(ZM5, ZM2, -Rbo + self.Hmag_bore, is_trigo_direction=False)
+                Arc1(ZM5, ZM2, -Rbo + self.H0_bore, is_trigo_direction=False)
             )
         else:
             curve_list.append(
-                Arc1(ZM5, ZM2, -Rbo - self.Hmag_bore, is_trigo_direction=False)
+                Arc1(ZM5, ZM2, -Rbo - self.H0_bore, is_trigo_direction=False)
             )
 
         Zmid = (abs(ZM2) + abs(ZM3)) / 2

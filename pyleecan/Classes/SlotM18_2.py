@@ -251,8 +251,8 @@ class SlotM18_2(Slot):
 
     def __init__(
         self,
-        Hmag_bore=0.001,
-        Hmag_gap=0.001,
+        H0_bore=0.001,
+        H0_gap=0.001,
         Zs=36,
         wedge_mat=None,
         is_bore=True,
@@ -274,10 +274,10 @@ class SlotM18_2(Slot):
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
-            if "Hmag_bore" in list(init_dict.keys()):
-                Hmag_bore = init_dict["Hmag_bore"]
-            if "Hmag_gap" in list(init_dict.keys()):
-                Hmag_gap = init_dict["Hmag_gap"]
+            if "H0_bore" in list(init_dict.keys()):
+                H0_bore = init_dict["H0_bore"]
+            if "H0_gap" in list(init_dict.keys()):
+                H0_gap = init_dict["H0_gap"]
             if "Zs" in list(init_dict.keys()):
                 Zs = init_dict["Zs"]
             if "wedge_mat" in list(init_dict.keys()):
@@ -285,8 +285,8 @@ class SlotM18_2(Slot):
             if "is_bore" in list(init_dict.keys()):
                 is_bore = init_dict["is_bore"]
         # Set the properties (value check and convertion are done in setter)
-        self.Hmag_bore = Hmag_bore
-        self.Hmag_gap = Hmag_gap
+        self.H0_bore = H0_bore
+        self.H0_gap = H0_gap
         # Call Slot init
         super(SlotM18_2, self).__init__(Zs=Zs, wedge_mat=wedge_mat, is_bore=is_bore)
         # The class is frozen (in Slot init), for now it's impossible to
@@ -298,8 +298,8 @@ class SlotM18_2(Slot):
         SlotM18_2_str = ""
         # Get the properties inherited from Slot
         SlotM18_2_str += super(SlotM18_2, self).__str__()
-        SlotM18_2_str += "Hmag_bore = " + str(self.Hmag_bore) + linesep
-        SlotM18_2_str += "Hmag_gap = " + str(self.Hmag_gap) + linesep
+        SlotM18_2_str += "H0_bore = " + str(self.H0_bore) + linesep
+        SlotM18_2_str += "H0_gap = " + str(self.H0_gap) + linesep
         return SlotM18_2_str
 
     def __eq__(self, other):
@@ -311,9 +311,9 @@ class SlotM18_2(Slot):
         # Check the properties inherited from Slot
         if not super(SlotM18_2, self).__eq__(other):
             return False
-        if other.Hmag_bore != self.Hmag_bore:
+        if other.H0_bore != self.H0_bore:
             return False
-        if other.Hmag_gap != self.Hmag_gap:
+        if other.H0_gap != self.H0_gap:
             return False
         return True
 
@@ -333,43 +333,43 @@ class SlotM18_2(Slot):
             )
         )
         if (
-            other._Hmag_bore is not None
-            and self._Hmag_bore is not None
-            and isnan(other._Hmag_bore)
-            and isnan(self._Hmag_bore)
+            other._H0_bore is not None
+            and self._H0_bore is not None
+            and isnan(other._H0_bore)
+            and isnan(self._H0_bore)
         ):
             pass
-        elif other._Hmag_bore != self._Hmag_bore:
+        elif other._H0_bore != self._H0_bore:
             if is_add_value:
                 val_str = (
                     " (self="
-                    + str(self._Hmag_bore)
+                    + str(self._H0_bore)
                     + ", other="
-                    + str(other._Hmag_bore)
+                    + str(other._H0_bore)
                     + ")"
                 )
-                diff_list.append(name + ".Hmag_bore" + val_str)
+                diff_list.append(name + ".H0_bore" + val_str)
             else:
-                diff_list.append(name + ".Hmag_bore")
+                diff_list.append(name + ".H0_bore")
         if (
-            other._Hmag_gap is not None
-            and self._Hmag_gap is not None
-            and isnan(other._Hmag_gap)
-            and isnan(self._Hmag_gap)
+            other._H0_gap is not None
+            and self._H0_gap is not None
+            and isnan(other._H0_gap)
+            and isnan(self._H0_gap)
         ):
             pass
-        elif other._Hmag_gap != self._Hmag_gap:
+        elif other._H0_gap != self._H0_gap:
             if is_add_value:
                 val_str = (
                     " (self="
-                    + str(self._Hmag_gap)
+                    + str(self._H0_gap)
                     + ", other="
-                    + str(other._Hmag_gap)
+                    + str(other._H0_gap)
                     + ")"
                 )
-                diff_list.append(name + ".Hmag_gap" + val_str)
+                diff_list.append(name + ".H0_gap" + val_str)
             else:
-                diff_list.append(name + ".Hmag_gap")
+                diff_list.append(name + ".H0_gap")
         # Filter ignore differences
         diff_list = list(filter(lambda x: x not in ignore_list, diff_list))
         return diff_list
@@ -381,8 +381,8 @@ class SlotM18_2(Slot):
 
         # Get size of the properties inherited from Slot
         S += super(SlotM18_2, self).__sizeof__()
-        S += getsizeof(self.Hmag_bore)
-        S += getsizeof(self.Hmag_gap)
+        S += getsizeof(self.H0_bore)
+        S += getsizeof(self.H0_gap)
         return S
 
     def as_dict(self, type_handle_ndarray=0, keep_function=False, **kwargs):
@@ -402,8 +402,8 @@ class SlotM18_2(Slot):
             keep_function=keep_function,
             **kwargs
         )
-        SlotM18_2_dict["Hmag_bore"] = self.Hmag_bore
-        SlotM18_2_dict["Hmag_gap"] = self.Hmag_gap
+        SlotM18_2_dict["H0_bore"] = self.H0_bore
+        SlotM18_2_dict["H0_gap"] = self.H0_gap
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         SlotM18_2_dict["__class__"] = "SlotM18_2"
@@ -413,8 +413,8 @@ class SlotM18_2(Slot):
         """Creates a deepcopy of the object"""
 
         # Handle deepcopy of all the properties
-        Hmag_bore_val = self.Hmag_bore
-        Hmag_gap_val = self.Hmag_gap
+        H0_bore_val = self.H0_bore
+        H0_gap_val = self.H0_gap
         Zs_val = self.Zs
         if self.wedge_mat is None:
             wedge_mat_val = None
@@ -423,8 +423,8 @@ class SlotM18_2(Slot):
         is_bore_val = self.is_bore
         # Creates new object of the same type with the copied properties
         obj_copy = type(self)(
-            Hmag_bore=Hmag_bore_val,
-            Hmag_gap=Hmag_gap_val,
+            H0_bore=H0_bore_val,
+            H0_gap=H0_gap_val,
             Zs=Zs_val,
             wedge_mat=wedge_mat_val,
             is_bore=is_bore_val,
@@ -434,23 +434,23 @@ class SlotM18_2(Slot):
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""
 
-        self.Hmag_bore = None
-        self.Hmag_gap = None
+        self.H0_bore = None
+        self.H0_gap = None
         # Set to None the properties inherited from Slot
         super(SlotM18_2, self)._set_None()
 
-    def _get_Hmag_bore(self):
-        """getter of Hmag_bore"""
-        return self._Hmag_bore
+    def _get_H0_bore(self):
+        """getter of H0_bore"""
+        return self._H0_bore
 
-    def _set_Hmag_bore(self, value):
-        """setter of Hmag_bore"""
-        check_var("Hmag_bore", value, "float", Vmin=0)
-        self._Hmag_bore = value
+    def _set_H0_bore(self, value):
+        """setter of H0_bore"""
+        check_var("H0_bore", value, "float", Vmin=0)
+        self._H0_bore = value
 
-    Hmag_bore = property(
-        fget=_get_Hmag_bore,
-        fset=_set_Hmag_bore,
+    H0_bore = property(
+        fget=_get_H0_bore,
+        fset=_set_H0_bore,
         doc=u"""Height of the magnet near the bore
 
         :Type: float
@@ -458,18 +458,18 @@ class SlotM18_2(Slot):
         """,
     )
 
-    def _get_Hmag_gap(self):
-        """getter of Hmag_gap"""
-        return self._Hmag_gap
+    def _get_H0_gap(self):
+        """getter of H0_gap"""
+        return self._H0_gap
 
-    def _set_Hmag_gap(self, value):
-        """setter of Hmag_gap"""
-        check_var("Hmag_gap", value, "float", Vmin=0)
-        self._Hmag_gap = value
+    def _set_H0_gap(self, value):
+        """setter of H0_gap"""
+        check_var("H0_gap", value, "float", Vmin=0)
+        self._H0_gap = value
 
-    Hmag_gap = property(
-        fget=_get_Hmag_gap,
-        fset=_set_Hmag_gap,
+    H0_gap = property(
+        fget=_get_H0_gap,
+        fset=_set_H0_gap,
         doc=u"""Height of the magnet near the airgap
 
         :Type: float

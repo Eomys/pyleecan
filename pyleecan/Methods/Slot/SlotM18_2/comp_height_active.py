@@ -12,4 +12,4 @@ def comp_height_active(self):
         Height of the active area [m]
     """
 
-    return self.Hmag_bore + self.Hmag_gap
+    return self.H0_bore + self.H0_gap
