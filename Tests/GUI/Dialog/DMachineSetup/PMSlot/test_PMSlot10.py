@@ -162,18 +162,22 @@ class TestPMSlot10(object):
         # test if widget is disabled if notch_obj=None
         self.test_obj = LamSlotMag(Rint=0.1, Rext=0.2)
         self.test_obj.slot = SlotM10(H0=0.10, W0=0.13, W1=0.14, H1=0.15)
-        self.material_dict = {LIB_KEY: list(), MACH_KEY: list()}
         self.mat1 = Material(name="Steel1")
-        notch = Notch(None, None, None)
+        self.mat2 = Material(name="Steel2")
+        self.material_dict = {LIB_KEY: [self.mat2, self.mat1], MACH_KEY: list()}
+
+        # Empty notch
+        notch = Notch()
         self.widget = PMSlot10(
             self.test_obj, material_dict=self.material_dict, notch_obj=notch
         )
-
+        assert not self.widget.g_key.isChecked()
         assert self.widget.unit_W1.isEnabled() == False
         assert self.widget.in_W1.isEnabled() == False
         assert self.widget.lf_W1.isEnabled() == False
 
-        notch = Notch(self.mat1, None, None)
+        # Notch with key
+        notch = Notch(key_mat=self.mat1)
         self.widget = PMSlot10(
             self.test_obj, material_dict=self.material_dict, notch_obj=notch
         )
@@ -183,10 +187,14 @@ class TestPMSlot10(object):
         assert self.widget.in_W1.isEnabled() == True
         assert self.widget.lf_W1.isEnabled() == True
         self.widget.g_key.setChecked(False)
+        assert self.widget.notch_obj.key_mat is None
         assert self.widget.unit_W1.isEnabled() == False
         assert self.widget.in_W1.isEnabled() == False
         assert self.widget.lf_W1.isEnabled() == False
         self.widget.g_key.setChecked(True)
+        assert self.widget.notch_obj.key_mat.name == "Steel1"
+        assert self.widget.w_key_mat.c_mat_type.currentIndex() == 1
+        assert self.widget.w_key_mat.c_mat_type.currentText() == "Steel1"  # default
         # Check Unit
         assert self.widget.unit_W1.text() == "[m]"
         # Change value in GUI
@@ -200,18 +208,21 @@ class TestPMSlot10(object):
         """Check that the Widget allow to update Hkey"""
         self.test_obj = LamSlotMag(Rint=0.1, Rext=0.2)
         self.test_obj.slot = SlotM10(H0=0.10, W0=0.13, W1=0.14, H1=0.15)
-        self.material_dict = {LIB_KEY: list(), MACH_KEY: list()}
         self.mat1 = Material(name="Steel1")
-        notch = Notch(None, None, None)
+        self.mat2 = Material(name="Steel2")
+        self.material_dict = {LIB_KEY: [self.mat2, self.mat1], MACH_KEY: list()}
+        # Empty notch
+        notch = Notch()
         self.widget = PMSlot10(
             self.test_obj, material_dict=self.material_dict, notch_obj=notch
         )
-
+        assert not self.widget.g_key.isChecked()
         assert self.widget.unit_H1.isEnabled() == False
         assert self.widget.in_H1.isEnabled() == False
         assert self.widget.lf_H1.isEnabled() == False
 
-        notch = Notch(self.mat1, None, None)
+        # Notch with key
+        notch = Notch(key_mat=self.mat1)
         self.widget = PMSlot10(
             self.test_obj, material_dict=self.material_dict, notch_obj=notch
         )
@@ -221,10 +232,14 @@ class TestPMSlot10(object):
         assert self.widget.lf_H1.isEnabled() == True
 
         self.widget.g_key.setChecked(False)
+        assert self.widget.notch_obj.key_mat is None
         assert self.widget.unit_H1.isEnabled() == False
         assert self.widget.in_H1.isEnabled() == False
         assert self.widget.lf_H1.isEnabled() == False
         self.widget.g_key.setChecked(True)
+        assert self.widget.notch_obj.key_mat.name == "Steel1"
+        assert self.widget.w_key_mat.c_mat_type.currentIndex() == 1
+        assert self.widget.w_key_mat.c_mat_type.currentText() == "Steel1"  # default
 
         # Check Unit
         assert self.widget.unit_H1.text() == "[m]"
