@@ -55,7 +55,9 @@ def get_color_legend_from_surface(surf, is_lam_only=False):
 
     elif LAM_LAB in label_dict["surf_type"] and ROTOR_LAB in label_dict["lam_type"]:
         return ROTOR_COLOR, "Rotor"
-    elif VENT_LAB in label_dict["surf_type"] or HOLEV_LAB in label_dict["surf_type"]:
+    elif VENT_LAB in label_dict["surf_type"]:
+        return VENT_COLOR, None
+    elif HOLEV_LAB in label_dict["surf_type"]:
         return VENT_COLOR, None
     elif is_lam_only:
         return None, None
